@@ -1,0 +1,802 @@
+{
+  "결투의 호흡: 적의 공격을 회피할 때마다 다음 턴 공격력 35% 증폭 및 마나 10 회복.": {
+    "en": "Breath of the Duel: Whenever evading an enemy attack, amplifies next turn ATK by 35% and restores 10 Mana.",
+    "ja": "決闘の呼吸：敵の攻撃を回避するたび次ターンの攻撃力35%増幅＆マナ10回復。"
+  },
+  "결투장 수비 리더": {
+    "en": "Arena Defense Leader",
+    "ja": "決闘場守備リーダー"
+  },
+  "경감+": {
+    "en": "Mitigation+",
+    "ja": "軽減+"
+  },
+  "경갑": {
+    "en": "Light Armor",
+    "ja": "軽甲"
+  },
+  "경갑 방어구 단조": {
+    "en": "Forge Light Armor",
+    "ja": "軽甲防具鍛造"
+  },
+  "경건히 묵념한 뒤 지나쳤습니다.": {
+    "en": "Paid silent tribute reverently and passed by.",
+    "ja": "敬虔に黙祷を捧げた後、通り過ぎた。"
+  },
+  "경비병 흉갑": {
+    "en": "Guard Cuirass",
+    "ja": "警備兵の胸甲"
+  },
+  "경험치 +": {
+    "en": "EXP +",
+    "ja": "経験値 +"
+  },
+  "경험치 +{0}%": {
+    "en": "EXP +{0}%",
+    "ja": "経験値 +{0}%"
+  },
+  "경험치 획득 +5% & 파티 피해 감소 +2%": {
+    "en": "EXP Gain +5% & Party Damage Taken -2%",
+    "ja": "経験値獲得 +5%＆パーティ被ダメージ軽減 +2%"
+  },
+  "계단식 유지비 부과, 3대 인프라 감면 테크 시너지, 블랙 마켓 유지비 주기 연장, 3레벨 이후 병기창/블랙마켓 건설비 증가 등 방주 거점 경제의 핵심 메커니즘을 총괄합니다.": {
+    "en": "Governs core economy mechanisms of the Ark citadel, including tiered upkeep, 3 major infra reduction tech synergies, Black Market upkeep cycle extension, and post-Lv.3 Armory/Black Market cost scaling.",
+    "ja": "段階的維持費の賦課、3大インフラ減免テックシナジー、ブラックマーケット維持費周期延長、3レベル以降の兵器廠/ブラックマーケット建設費増加など、方舟拠点経済の核心メカニズムを統括します。"
+  },
+  "계단식 유지비: Lv.1~3은 전면 무료(Tier 0), Lv.4~6은 완만한 유지비(Tier 1), Lv.7~10은 계단식 점증(Tier 2)으로 부과됩니다.": {
+    "en": "Tiered Upkeep: Lv.1-3 is completely free (Tier 0), Lv.4-6 incurs moderate upkeep (Tier 1), Lv.7-10 incurs scaled steep upkeep (Tier 2).",
+    "ja": "段階的維持費：Lv.1〜3は全面無料（Tier 0）、Lv.4〜6は緩やかな維持費（Tier 1）、Lv.7〜10は段階的な漸増（Tier 2）として賦課されます。"
+  },
+  "계속 시청하기": {
+    "en": "Keep Watching",
+    "ja": "視聴を続ける"
+  },
+  "계속 진행 시": {
+    "en": "Upon Continuing",
+    "ja": "継続進行時"
+  },
+  "계정 이메일 기억하기": {
+    "en": "Remember Account Email",
+    "ja": "アカウントのメールアドレスを記憶"
+  },
+  "계통 직업": {
+    "en": "Class Branch",
+    "ja": "系統職業"
+  },
+  "계통: {0} • 역할군: {1}{2} • {3}": {
+    "en": "Branch: {0} • Role: {1}{2} • {3}",
+    "ja": "系統: {0} • 役割: {1}{2} • {3}"
+  },
+  "고강도 마도 합금의 기초가 되는 순수 철광석입니다. 대장간에서 기사와 전사의 무기 및 중갑 방어구를 단조하고 장비를 강화하는 핵심 광물입니다.": {
+    "en": "Pure iron ore serving as the foundation for high-strength magic alloys. A key mineral used at the Forge to craft knight/warrior weapons, heavy armor, and enhance equipment.",
+    "ja": "高強度魔導合金の基礎となる純粋な鉄鉱石。鍛冶屋で騎士や戦士の武器・重甲防具を鍛造し、装備を強化する核心鉱物。"
+  },
+  "고급 마도 인챈트 공방은 대장간을": {
+    "en": "The Advanced Magic Enchant Lab requires Blacksmith",
+    "ja": "高級魔導エンチャント工房は鍛冶屋を"
+  },
+  "고급 서브 퀘스트 의뢰 접수 개방": {
+    "en": "Advanced Sub-quest Commission Opened",
+    "ja": "高級サブクエスト依頼受付開放"
+  },
+  "고급 지팡이 및 악세서리 단조": {
+    "en": "Forge Advanced Staves & Accessories",
+    "ja": "高級杖およびアクセサリー鍛造"
+  },
+  "고대 납골당의 망령들이 사령 군주의 지휘 아래 방주를 위협하고 있다. 사령 군주를 토벌하고 영혼수정을 확보하라.": {
+    "en": "Phantoms of the Ancient Ossuary threaten the Ark under the Necrolord's command. Vanquish the Necrolord and secure Soul Crystals.",
+    "ja": "古代納骨堂の亡霊たちが死霊軍主の指揮下で方舟を脅かしている。死霊軍主を討伐し、魂の水晶を確保せよ。"
+  },
+  "고대 대장간": {
+    "en": "Ancient Forge",
+    "ja": "古代の鍛冶屋"
+  },
+  "고대 마도서: 라그나로크": {
+    "en": "Ancient Grimoire: Ragnarok",
+    "ja": "古代魔導書：ラグナロク"
+  },
+  "고대 마도서: 신의 은총": {
+    "en": "Ancient Grimoire: Divine Grace",
+    "ja": "古代魔導書：神の恩寵"
+  },
+  "고대 마도서: 아마겟돈": {
+    "en": "Ancient Grimoire: Armageddon",
+    "ja": "古代魔導書：ハルマゲドン"
+  },
+  "고대 마도서: 영겁의 수호 결계": {
+    "en": "Ancient Grimoire: Aeon Guardian Barrier",
+    "ja": "古代魔導書：永劫の守護結界"
+  },
+  "고대 모노리스의 파편으로 기동하는 거대한 골렘. 철벽의 방패와 무거운 석퇴로 침입자를 짓밟는다.": {
+    "en": "A massive golem powered by fragments of an ancient monolith. Tramples invaders with an ironclad shield and a heavy stone hammer.",
+    "ja": "古代モノリスの破片で起動する巨大ゴーレム。鉄壁の盾と重い石槌で侵入者をもみ潰す。"
+  },
+  "고대 문명이 멸망할 때 하늘을 뒤덮었던 원초의 멸망 마법.": {
+    "en": "The primordial cataclysmic magic that darkened the skies when ancient civilizations fell.",
+    "ja": "古代文明が滅亡した際、天を覆い尽くした原初の滅亡魔法。"
+  },
+  "고대 방주의 잔류 사념": {
+    "en": "Residual Thoughts of the Ancient Ark",
+    "ja": "古代方舟の残留思念"
+  },
+  "고대 보스의 유물이 제단에 바쳐지며 해당 층의 심연 연무가 완전히 걷힙니다. 차후 반복 파밍 시": {
+    "en": "With ancient boss relics offered at the altar, the abyssal haze on this floor clears completely. During future farming",
+    "ja": "古代ボスの遺物が祭壇に捧げられ、該当フロアの深淵の煙霧が完全に晴れます。今後の周回ファーミング時"
+  },
+  "고대 서사 & 컬렉션": {
+    "en": "Ancient Epics & Collection",
+    "ja": "古代叙事＆コレクション"
+  },
+  "고대 석관": {
+    "en": "Ancient Sarcophagus",
+    "ja": "古代の石棺"
+  },
+  "고대 석관 독가스": {
+    "en": "Ancient Sarcophagus Poison Gas",
+    "ja": "古代石棺の毒ガス"
+  },
+  "고대 석관 안치대에서": {
+    "en": "At the Ancient Sarcophagus Dais",
+    "ja": "古代石棺の安置台にて"
+  },
+  "고대 석벽 결계": {
+    "en": "Ancient Stone Wall Barrier",
+    "ja": "古代石壁結界"
+  },
+  "고대 성기사단장": {
+    "en": "Ancient Paladin Grandmaster",
+    "ja": "古代聖騎士団長"
+  },
+  "고대 성역을 전개하여 아군 전체에게 공격력 비례 180%의 대형 보호막을 씌웁니다.": {
+    "en": "Deploys an ancient sanctuary, granting all allies a large Shield equal to 180% of ATK.",
+    "ja": "古代聖域を展開し、味方全員に攻撃力比例180%の大型シールドを張る。"
+  },
+  "고대 심연의 탐욕을 머금은 황금 두꺼비 유물입니다. 던전에서 획득하는 장비, 오파츠, 수집품을 제외한 모든 자원류(목재, 석재, 철광석, 약초, 가죽 등)를 얻는 즉시 블랙마켓 기본 시세에 따라 골드로 환전하여 배낭에 입고합니다.": {
+    "en": "A golden toad relic imbued with the ancient abyss's greed. Except for gear, Ooparts, and collectibles, all gathered resources (wood, stone, iron ore, herbs, leather, etc.) are immediately converted into gold at Black Market market rates and stored in the pack.",
+    "ja": "古代深淵の貪欲を宿した金色のヒキガエルの遺物。ダンジョンで獲得する装備、オーパーツ、収集品を除くすべての資源類（木材、石材、鉄鉱石、薬草、革など）を取得時、ブラックマーケットの相場に応じ即座にゴールドへと換金してバッグに納めます。"
+  },
+  "고대 에테르를 주입한 마도 전술 장비가 필수적이다. 병기창의 모루를 달구어 첫 전술 장비를 단조하라.": {
+    "en": "Magical tactical gear infused with ancient ether is vital. Heat the forge's anvil to craft your first tactical gear.",
+    "ja": "古代エーテルを注入した魔導戦術装備が不可欠だ。兵器廠の金床を熱し、最初の戦術装備を鍛造せよ。"
+  },
+  "고대 연금술로 만들어진 철제 자동 병기의 잔해. 방어력이 매우 높고 둔중한 강타로 전열을 부순다.": {
+    "en": "Wreckage of an iron automaton forged through ancient alchemy. Boasts high DEF and crushes the front row with heavy smashes.",
+    "ja": "古代錬金術で造られた鉄製自動兵器の残骸。防御力が非常に高く、鈍重な強打で前衛を粉砕する。"
+  },
+  "고대 영웅들의 영혼 기억을 전수하여 1차 각성 클래스의 경험치 획득량을 +30%로 증폭시키고 등급 승격률을 24%로 높입니다.": {
+    "en": "Passes down soul memories of ancient heroes, boosting 1st Awakened class EXP gain to +30% and grade promotion rate to 24%.",
+    "ja": "古代の英雄たちの魂の記憶を伝授し、1次覚醒クラスの経験値獲得量を+30%に増幅させ、等級昇格率を24%に引き上げます。"
+  },
+  "고대 영웅의 안식을 방해하지 않고 지나쳤습니다.": {
+    "en": "Passed by without disturbing the ancient hero's rest.",
+    "ja": "古代英雄の安息を妨げることなく通り過ぎた。"
+  },
+  "고대 오파츠": {
+    "en": "Ancient Ooparts",
+    "ja": "古代オーパーツ"
+  },
+  "고대 유물의 잔류 마기를 차단하는 차원 격리 금고를 완공하여 심연 희귀품 보관 한도를 800개로 늘렸습니다.": {
+    "en": "Constructed a dimensional isolation vault to seal residual miasma from ancient relics, expanding abyss rare item storage cap to 800.",
+    "ja": "古代遺物の残留魔気を遮断する次元隔離金庫を完成させ、深淵希少品の保管上限を800個に拡張した。"
+  },
+  "고대 인챈트 석판과 장비의 공명 유도 중...": {
+    "en": "Inducing resonance between Ancient Enchant Slate and gear...",
+    "ja": "古代エンチャント石版と装備の共鳴を誘導中..."
+  },
+  "고마워. 네가 곁에 있어 준 덕분에 이 끔찍한 심연에서도 버틸 수 있어.": {
+    "en": "Thank you. Thanks to you staying by my side, I can endure even this dreadful abyss.",
+    "ja": "ありがとう。お前がそばにいてくれたおかげで、この忌まわしい深淵でも耐え抜くことができる。"
+  },
+  "고문실을 뒤로하고 전진합니다.": {
+    "en": "Leave behind the torture chamber and advance.",
+    "ja": "拷問室を後にして前進する。"
+  },
+  "고밀도 룬 철광석 층을 집중 타격하여 철광석 생산량을 극대화하고 자동 채굴 라인으로 유지비를 35% 감면합니다.": {
+    "en": "Focus mining high-density runic iron ore veins to maximize iron output, reducing upkeep by 35% through automated mining lines.",
+    "ja": "高密度ルーン鉄鉱石層を集中的に採掘して鉄鉱石生産量を極大化し、自動採掘ラインにより維持費を35%減免します。"
+  },
+  "고밀도 에테르와 마력수정의 파동을 동기화하여 지혜의 마력을 각성합니다.": {
+    "en": "Synchronizes dense ether with mana crystal waves to awaken arcane wisdom.",
+    "ja": "高密度エーテルと魔力水晶の波動を同調させ、知恵の魔力を覚醒させる。"
+  },
+  "고속 2.5x": {
+    "en": "Fast 2.5x",
+    "ja": "高速 2.5x"
+  },
+  "고속으로 날며 음파 충격을 가하는 동굴 군집 몬스터. 속도가 가장 빠르다.": {
+    "en": "A swarming cave monster that flies at high speed and emits sonic shockwaves. Has the highest speed.",
+    "ja": "高速で飛行し音波衝撃を与える洞窟の群集モンスター。速度が最も速い。"
+  },
+  "고순도 광맥 채굴 극대화 및 지름길 개척": {
+    "en": "Maximize High-Purity Vein Mining & Shortcut Opening",
+    "ja": "高純度鉱脈採掘の極大化＆近道開拓"
+  },
+  "고순도 철광석과 가공된 석탄으로 방어구를 단련합니다.": {
+    "en": "Tempers armor using high-purity iron ore and refined coal.",
+    "ja": "高純度の鉄鉱石と加工された石炭で防具を鍛錬する。"
+  },
+  "고압 에테르 추출 챔버를 도입하여 미세한 마나 손실 없이 고순도 에테르 액적을 고속으로 추출합니다.": {
+    "en": "Introduced a high-pressure ether extraction chamber to rapidly harvest high-purity ether droplets without mana dissipation.",
+    "ja": "高圧エーテル抽出チャンバーを導入し、微細なマナ損失なしに高純度エーテル液滴を高速抽出する。"
+  },
+  "고압 전격을 방출하여 적 전체에 120% 전격 마법 피해를 가합니다.": {
+    "en": "Discharges high-voltage lightning to deal 120% Lightning Magic damage to all enemies.",
+    "ja": "高圧電撃を放出し、敵全体に120%の電撃魔法ダメージを与える。"
+  },
+  "고압 증기 파쇄 드릴을 가동하여 거대한 암반을 신속히 부수고 광석 채굴량을 한 단계 끌어올립니다.": {
+    "en": "Operates high-pressure steam demolition drills to swiftly shatter bedrock and boost mineral yield.",
+    "ja": "高圧蒸気破砕ドリルを稼働させて巨大な岩盤を迅速に粉砕し、鉱石採掘量を一段階引き上げる。"
+  },
+  "고열 압축 폭발 & 인접 적 35% 파편 피해": {
+    "en": "Superheated Compression Blast & 35% Shard Damage to Adjacent Enemies",
+    "ja": "高熱圧縮爆発＆隣接する敵へ35%破片ダメージ"
+  },
+  "고열 에테르 탄환을 고속 연사하는 차원 아레나 제식 마총.": {
+    "en": "Dimensional Arena service magic gun rapid-firing superheated ether rounds.",
+    "ja": "高熱エーテル弾を高速連射する次元アリーナ制式魔銃。"
+  },
+  "고열 제련 및 횃불 제작": {
+    "en": "High-Heat Smelting & Torch Crafting",
+    "ja": "高熱製錬および松明製作"
+  },
+  "고요한": {
+    "en": "Tranquil",
+    "ja": "静けき"
+  },
+  "고용": {
+    "en": "Hire",
+    "ja": "雇用"
+  },
+  "고위 마도서: 발할라 참격": {
+    "en": "High Grimoire: Valhalla Cleave",
+    "ja": "高位魔導書：ヴァルハラ斬撃"
+  },
+  "고위 마도서: 분신 난무": {
+    "en": "High Grimoire: Clone Flurry",
+    "ja": "高位魔導書：分身乱舞"
+  },
+  "고위 마도서: 불멸의 성역": {
+    "en": "High Grimoire: Immortal Sanctuary",
+    "ja": "高位魔導書：不滅の聖域"
+  },
+  "고위 마도서: 위성 궤도포": {
+    "en": "High Grimoire: Orbital Cannon",
+    "ja": "高位魔導書：衛星軌道砲"
+  },
+  "고위 마도서: 종말의 메테오": {
+    "en": "High Grimoire: Doomsday Meteor",
+    "ja": "高位魔導書：終末のメテオ"
+  },
+  "고위 마도서: 흡혈의 흉인": {
+    "en": "High Grimoire: Vampiric Blade",
+    "ja": "高位魔導書：吸血の凶刃"
+  },
+  "고유": {
+    "en": "Unique",
+    "ja": "固有"
+  },
+  "고유 특수 능력 (Special Stats)": {
+    "en": "Unique Special Abilities (Special Stats)",
+    "ja": "固有特殊能力（Special Stats）"
+  },
+  "고유 패시브 능력": {
+    "en": "Unique Passive Ability",
+    "ja": "固有パッシブ能力"
+  },
+  "고유 효과": {
+    "en": "Unique Effect",
+    "ja": "固有効果"
+  },
+  "고유기": {
+    "en": "Unique Skill",
+    "ja": "固有技"
+  },
+  "고유기:": {
+    "en": "Unique Skill:",
+    "ja": "固有技:"
+  },
+  "고정": {
+    "en": "Fixed",
+    "ja": "固定"
+  },
+  "고정 2종 + 카테고리별 랜덤 3종": {
+    "en": "2 Fixed + 3 Random by Category",
+    "ja": "固定2種＋カテゴリー別ランダム3種"
+  },
+  "고정 수치 (강화불가)": {
+    "en": "Fixed Value (Cannot Enhance)",
+    "ja": "固定値（強化不可）"
+  },
+  "고정 약탈": {
+    "en": "Guaranteed Pillage",
+    "ja": "固定略奪"
+  },
+  "고정 약탈 (30%)": {
+    "en": "Guaranteed Pillage (30%)",
+    "ja": "固定略奪（30%）"
+  },
+  "고출력 에테르 레일을 형성하여 적의 방어선을 일격에 꿰뚫어버리는 마총사 계열의 결전 중화기.": {
+    "en": "A decisive heavy weapon for magic gunners that forms a high-output ether rail to pierce enemy battle lines in a single strike.",
+    "ja": "高出力エーテルレールを形成し、敵の防衛線を一撃で貫く魔銃士系の決戦重火器。"
+  },
+  "고층 석조 주택과 상업 가로수가 늘어서며 방주의 핵심 신도시로 급부상하고, 대규모 주민 세수가 거점 금고를 가득 채웁니다.": {
+    "en": "Multi-story stone houses and commercial avenues rise as a bustling metropolis within the Ark, filling citadel vaults with large citizen tax revenues.",
+    "ja": "高層の石造住宅と商業路が立ち並び方舟の核心新都市として急浮上し、大規模な住民税収が拠点の金庫を満たします。"
+  },
+  "고층 적재 랙을 전면 증설하여 기초 생산물, 파밍 재료, 심연 희귀품의 모든 보관 상한을 2배로 확장했습니다.": {
+    "en": "Fully expanded high-bay storage racks, doubling storage caps for all basic goods, farming materials, and abyssal rarities.",
+    "ja": "高層積載ラックを全面増設し、基礎生産物、ファーミング素材、深淵希少品の全保管上限を2倍に拡張した。"
+  },
+  "고통을 분노로 바꾸고 흘린 피를 양분 삼아 전장의 야수가 깨어난다.": {
+    "en": "Turning pain into rage and feeding upon spilled blood, the beast of the battlefield awakens.",
+    "ja": "苦痛を怒りに変え、流した血を糧として戦場の野獣が目覚める。"
+  },
+  "고해실을 지나쳐 예배당 안쪽으로 향합니다.": {
+    "en": "Pass past the confessional and head into the chapel.",
+    "ja": "告解室を通り過ぎて礼拝堂の奥へと向かう。"
+  },
+  "곡괭이": {
+    "en": "Pickaxe",
+    "ja": "ツルハシ"
+  },
+  "골드": {
+    "en": "Gold",
+    "ja": "ゴールド"
+  },
+  "골드 +{0}%": {
+    "en": "Gold +{0}%",
+    "ja": "ゴールド +{0}%"
+  },
+  "골드 0G": {
+    "en": "Gold 0G",
+    "ja": "ゴールド 0G"
+  },
+  "골드 등급 투사를 위한 희귀~에픽(Epic) 무구 1종 확정": {
+    "en": "Guaranteed 1 Rare-to-Epic Gear for Gold Grade Gladiators",
+    "ja": "ゴールド等級闘士のための希少〜エピック（Epic）武具1種確定"
+  },
+  "골드 부족": {
+    "en": "Insufficient Gold",
+    "ja": "ゴールド不足"
+  },
+  "골드 상자": {
+    "en": "Gold Chest",
+    "ja": "ゴールドの宝箱"
+  },
+  "골드 세금 정기 수급": {
+    "en": "Regular Gold Tax Revenue",
+    "ja": "ゴールド税金の定期受給"
+  },
+  "골드 세금 정기 징수 (미건설)": {
+    "en": "Regular Gold Tax Collection (Unbuilt)",
+    "ja": "ゴールド税金定期徴収（未建設）"
+  },
+  "골드 세금 🪙 +{0}/13초 자동 수급{1}": {
+    "en": "Auto-collected Gold Tax 🪙 +{0}/13s{1}",
+    "ja": "ゴールド税金 🪙 +{0}/13秒 自動受給{1}"
+  },
+  "골드 유지비 -25%": {
+    "en": "Gold Upkeep -25%",
+    "ja": "ゴールド維持費 -25%"
+  },
+  "골드 획득 +": {
+    "en": "Gold Gain +",
+    "ja": "ゴールド獲得 +"
+  },
+  "골드 획득 +10% & 행운 +6": {
+    "en": "Gold Gain +10% & Luck +6",
+    "ja": "ゴールド獲得 +10%＆幸運 +6"
+  },
+  "골드 획득 +5% & 파티 행운 +3": {
+    "en": "Gold Gain +5% & Party Luck +3",
+    "ja": "ゴールド獲得 +5%＆パーティ幸運 +3"
+  },
+  "골드 획득 +8% & 경험치 +8%": {
+    "en": "Gold Gain +8% & EXP +8%",
+    "ja": "ゴールド獲得 +8%＆経験値 +8%"
+  },
+  "골드 획득 배율": {
+    "en": "Gold Multiplier",
+    "ja": "ゴールド獲得倍率"
+  },
+  "골드 🪙": {
+    "en": "Gold 🪙",
+    "ja": "ゴールド 🪙"
+  },
+  "골드 🪙 · 에테르 ✨": {
+    "en": "Gold 🪙 · Ether ✨",
+    "ja": "ゴールド 🪙 · エーテル ✨"
+  },
+  "골드:": {
+    "en": "Gold:",
+    "ja": "ゴールド:"
+  },
+  "골드가 부족하여 스킬북을 구매할 수 없습니다! (필요: {0}G)": {
+    "en": "Insufficient gold to purchase the skill book! (Requires: {0}G)",
+    "ja": "ゴールドが不足しているためスキルブックを購入できません！（必要: {0}G）"
+  },
+  "골드가 부족하여 용병을 고용할 수 없습니다!": {
+    "en": "Insufficient gold to hire mercenaries!",
+    "ja": "ゴールドが不足しているため傭兵を雇用できません！"
+  },
+  "골드가 부족합니다! (갱신 비용: 🪙{0}G 필요)": {
+    "en": "Insufficient gold! (Refresh Cost: 🪙{0}G required)",
+    "ja": "ゴールドが不足しています！（更新費用: 🪙{0}G必要）"
+  },
+  "골드로 매각": {
+    "en": "Sell for Gold",
+    "ja": "ゴールドで売却"
+  },
+  "골렘": {
+    "en": "Golem",
+    "ja": "ゴーレム"
+  },
+  "공+": {
+    "en": "ATK+",
+    "ja": "攻+"
+  },
+  "공/방 +15% & 전투 개시 시 유대 100 달성자 마나(MP) 30% 회복 (파티 전원 상호 최대 유대 시 50% 회복).": {
+    "en": "ATK/DEF +15% & at combat start, Bond 100 units restore 30% MP (restores 50% MP if all party members share max bond).",
+    "ja": "攻/防 +15%＆戦闘開始時、絆100達成者のMP 30%回復（パーティ全員が相互最大絆時は50%回復）。"
+  },
+  "공간 결계를 펼쳐 아군 전체의 피해를 30% 감소시키는 [천상의 방벽] 스킬이 깃든 로브.": {
+    "en": "A robe imbued with the [Celestial Barrier] skill, casting a spatial boundary to reduce damage taken by all allies by 30%.",
+    "ja": "空間結界を展開し味方全体の被ダメージを30%軽減する[天上の防壁]スキルが宿るローブ。"
+  },
+  "공간 왜곡": {
+    "en": "Spatial Distortion",
+    "ja": "空間歪曲"
+  },
+  "공간 왜곡 신호를 보내는 비상 호각입니다. 파티 전멸 시 구조대를 긴급 호출하여 배낭 전리품의 10~50%를 회수합니다. (미장착 시 전멸하면 배낭 전리품 100% 소실)": {
+    "en": "An emergency whistle that emits spatial distortion signals. In the event of a party wipe, summons rescue to recover 10-50% of backpack spoils. (Without this equipped, 100% of spoils are lost upon wipe)",
+    "ja": "空間歪曲信号を発信する緊急ホイッスル。パーティ全滅時に救助隊を緊急要請し、バックパック戦利品の10〜50%を回収します。（未装備時に全滅すると戦利品は100%消失）"
+  },
+  "공간이 붕괴하며 아군 전체를 집어삼키는 공허의 폭풍이 몰아칩니다.": {
+    "en": "Space collapses, unleashing a void tempest that engulfs all allies.",
+    "ja": "空間が崩壊し、味方全体を飲み込む虚空の嵐が吹き荒れる。"
+  },
+  "공간이 유리창처럼 금이 가더니, 그 틈으로 우리 세계의 것이 아닌 눈동자들이 쏟아져 들어왔다. 물리학도, 마법의 공식도 통하지 않았다. 어제 떠났던 정찰대가 오늘 늙어 죽은 채로 문밖에서 발견되거나, 아직 태어나지 않은 아이의 목소리가 균열 너머에서 들려왔다. 차원의 닻을 내리지 않는다면 우리 모두 시공의 파편이 되리라.": {
+    "en": "Space cracked like window glass, and through the fissures poured eyes that did not belong to our world. Neither physics nor magical formulas applied. A scout party that left yesterday was found outside the gates today, dead of old age, and the voice of an unborn child echoed from beyond the rift. Unless we drop the dimensional anchor, we shall all become shattered fragments of space-time.",
+    "ja": "空間が窓ガラスのようにひび割れ、その隙間からこの世のものではない無数の瞳が雪崩れ込んできた。物理学も、魔法の公式も通用しなかった。昨日旅立った偵察隊が今日老衰して扉の前で発見され、まだ生まれていない子の声が亀裂の向こうから聞こえた。次元の錨を下ろさなければ、我らは皆時空の破片と化すだろう。"
+  },
+  "공격": {
+    "en": "Attack",
+    "ja": "攻撃"
+  },
+  "공격 약화": {
+    "en": "ATK Weakened",
+    "ja": "攻撃弱体化"
+  },
+  "공격 약화 상태의 적에게 신성 일격 적중 시 단죄 폭발 및 아군 전원 HP 대량 치유 + MP 10 반환": {
+    "en": "When Holy Strike hits an ATK-weakened enemy, triggers Condemnation Blast, massively heals all allies, and returns 10 MP.",
+    "ja": "攻撃弱体化状態の敵に神聖一撃命中時、断罪爆発および味方全員のHP大量回復＋MP 10返還"
+  },
+  "공격 약화/기절": {
+    "en": "ATK Weakened / Stun",
+    "ja": "攻撃弱体化/気絶"
+  },
+  "공격 전술": {
+    "en": "Offensive Tactics",
+    "ja": "攻撃戦術"
+  },
+  "공격 전술 타워: 에테르 증폭탑(공격력 증폭), 치명 증폭기(치명타율 증폭), 자동 심연 포탑(매 라운드 시작 시 침입자 전원에게 화염 포격 투하)": {
+    "en": "Offensive Tactical Towers: Ether Amplification Tower (ATK Boost), Crit Amplifier (Crit Rate Boost), Automated Abyss Turret (Fire barrage on all invaders at round start)",
+    "ja": "攻撃戦術タワー：エーテル増幅塔（攻撃力増幅）、会心増幅器（会心率増幅）、自動深淵砲塔（毎ラウンド開始時に侵入者全員へ火炎砲撃投下）"
+  },
+  "공격 전술, 방어 전술, 유틸 전술 3개 분과의 전술 타워를 연구하여 침공해 오는 적군을 요격하고 아군 방어 부대에 막강한 지속 버프를 부여합니다.": {
+    "en": "Researches tactical towers across 3 branches (Offensive, Defensive, Utility) to intercept invading forces and grant powerful sustained buffs to defense squads.",
+    "ja": "攻撃戦術、防御戦術、ユーティリティ戦術の3部門の戦術タワーを研究し、侵攻してくる敵軍を迎撃して味方防衛部隊に強力な持続バフを付与します。"
+  },
+  "공격+": {
+    "en": "ATK+",
+    "ja": "攻撃+"
+  },
+  "공격/속성/스킬 (+3강)": {
+    "en": "Attack/Element/Skill (+3 Enhance)",
+    "ja": "攻撃/属性/スキル（+3強化）"
+  },
+  "공격/스킬 시전 시 25% 확률로 유대 동료가 원호 공격(80% 위력).": {
+    "en": "Upon attack/skill cast, 25% chance for a bonded ally to assist attack (80% power).",
+    "ja": "攻撃/スキル発動時、25%の確率で絆を結んだ仲間が援護攻撃（80%威力）。"
+  },
+  "공격력": {
+    "en": "ATK",
+    "ja": "攻撃力"
+  },
+  "공격력 (ATK)": {
+    "en": "Attack (ATK)",
+    "ja": "攻撃力 (ATK)"
+  },
+  "공격력 +": {
+    "en": "ATK +",
+    "ja": "攻撃力 +"
+  },
+  "공격력 +10, 행운 +6": {
+    "en": "ATK +10, Luck +6",
+    "ja": "攻撃力 +10, 幸運 +6"
+  },
+  "공격력 +12%, 체력 +5%, 행운 +5": {
+    "en": "ATK +12%, HP +5%, Luck +5",
+    "ja": "攻撃力 +12%, HP +5%, 幸運 +5"
+  },
+  "공격력 +13, 속도 +3, 행운 +4": {
+    "en": "ATK +13, Speed +3, Luck +4",
+    "ja": "攻撃力 +13, 速度 +3, 幸運 +4"
+  },
+  "공격력 +14, 마나 +35": {
+    "en": "ATK +14, MP +35",
+    "ja": "攻撃力 +14, MP +35"
+  },
+  "공격력 +14, 속도 +4, 치명타율 +3%": {
+    "en": "ATK +14, Speed +4, Crit Rate +3%",
+    "ja": "攻撃力 +14, 速度 +4, 会心率 +3%"
+  },
+  "공격력 +14, 행운 +4": {
+    "en": "ATK +14, Luck +4",
+    "ja": "攻撃力 +14, 幸運 +4"
+  },
+  "공격력 +14, 행운 +4, 방어 관통 10%": {
+    "en": "ATK +14, Luck +4, Armor Penetration 10%",
+    "ja": "攻撃力 +14, 幸運 +4, 防御貫通 10%"
+  },
+  "공격력 +15, 속도 +5, 치명타율 +4%": {
+    "en": "ATK +15, Speed +5, Crit Rate +4%",
+    "ja": "攻撃力 +15, 速度 +5, 会心率 +4%"
+  },
+  "공격력 +15, 피해의 12% 체력 흡수": {
+    "en": "ATK +15, 12% Damage Lifesteal",
+    "ja": "攻撃力 +15, ダメージの12%吸血"
+  },
+  "공격력 +16%, 체력 +8%, 행운 +6": {
+    "en": "ATK +16%, HP +8%, Luck +6",
+    "ja": "攻撃力 +16%, HP +8%, 幸運 +6"
+  },
+  "공격력 +16, 방어력 +10, 고유스킬 [동결 타격] 부여 (기본 공격 대체)": {
+    "en": "ATK +16, DEF +10, Grants Unique Skill [Freezing Strike] (Replaces Basic Attack)",
+    "ja": "攻撃力 +16, 防御力 +10, 固有スキル[凍結打撃]付与（通常攻撃を代替）"
+  },
+  "공격력 +16, 피해량 +8%": {
+    "en": "ATK +16, Damage +8%",
+    "ja": "攻撃力 +16, 与ダメージ +8%"
+  },
+  "공격력 +16, 행운 +6, 방어 관통 10%": {
+    "en": "ATK +16, Luck +6, Armor Penetration 10%",
+    "ja": "攻撃力 +16, 幸運 +6, 防御貫通 10%"
+  },
+  "공격력 +18, 방어 관통 15%": {
+    "en": "ATK +18, Armor Penetration 15%",
+    "ja": "攻撃力 +18, 防御貫通 15%"
+  },
+  "공격력 +18, 치명타율 +5%": {
+    "en": "ATK +18, Crit Rate +5%",
+    "ja": "攻撃力 +18, 会心率 +5%"
+  },
+  "공격력 +18, 피해량 +8%": {
+    "en": "ATK +18, Damage +8%",
+    "ja": "攻撃力 +18, 与ダメージ +8%"
+  },
+  "공격력 +20, 마나 +40": {
+    "en": "ATK +20, MP +40",
+    "ja": "攻撃力 +20, MP +40"
+  },
+  "공격력 +20, 피해량 +6%": {
+    "en": "ATK +20, Damage +6%",
+    "ja": "攻撃力 +20, 与ダメージ +6%"
+  },
+  "공격력 +21, 행운 +10": {
+    "en": "ATK +21, Luck +10",
+    "ja": "攻撃力 +21, 幸運 +10"
+  },
+  "공격력 +22, 마나 +120, 지팡이 전용 [혹한의 서리꽃] 부여 (빙결 부여 / 기본 공격 대체)": {
+    "en": "ATK +22, MP +120, Grants Staff-exclusive [Frostbloom of Deep Winter] (Inflicts Freeze / Replaces Basic Attack)",
+    "ja": "攻撃力 +22, MP +120, 杖専用[極寒の霜花]付与（凍結付与 / 通常攻撃を代替）"
+  },
+  "공격력 +22, 방어력 +8": {
+    "en": "ATK +22, DEF +8",
+    "ja": "攻撃力 +22, 防御力 +8"
+  },
+  "공격력 +22, 속도 +8, 치명타율 +6%, 단검 전용 [맹독 비수] 부여 (중독 부여 / 기본 공격 대체)": {
+    "en": "ATK +22, Speed +8, Crit Rate +6%, Grants Dagger-exclusive [Venom Dagger] (Inflicts Poison / Replaces Basic Attack)",
+    "ja": "攻撃力 +22, 速度 +8, 会心率 +6%, 短剣専用[猛毒の短刀]付与（中毒付与 / 通常攻撃を代替）"
+  },
+  "공격력 +24, 속도 +7, 치명타율 +6%": {
+    "en": "ATK +24, Speed +7, Crit Rate +6%",
+    "ja": "攻撃力 +24, 速度 +7, 会心率 +6%"
+  },
+  "공격력 +24, 치명타율 +7%, 활 전용 [화염 화살] 부여 (화상 부여 / 기본 공격 대체)": {
+    "en": "ATK +24, Crit Rate +7%, Grants Bow-exclusive [Flaming Arrow] (Inflicts Burn / Replaces Basic Attack)",
+    "ja": "攻撃力 +24, 会心率 +7%, 弓専用[火炎の矢]付与（火傷付与 / 通常攻撃を代替）"
+  },
+  "공격력 +25, 속도 +6, 창 전용 [뇌광 파쇄창] 부여 (기절 부여 / 기본 공격 대체)": {
+    "en": "ATK +25, Speed +6, Grants Spear-exclusive [Lightning Shatter Spear] (Inflicts Stun / Replaces Basic Attack)",
+    "ja": "攻撃力 +25, 速度 +6, 槍専用[雷光破砕槍]付与（気絶付与 / 通常攻撃を代替）"
+  },
+  "공격력 +26, 피해량 +10%, 검 전용 [혈풍검] 부여 (출혈 부여 / 기본 공격 대체)": {
+    "en": "ATK +26, Damage +10%, Grants Sword-exclusive [Bloodwind Blade] (Inflicts Bleed / Replaces Basic Attack)",
+    "ja": "攻撃力 +26, 与ダメージ +10%, 剣専用[血風剣]付与（出血付与 / 通常攻撃を代替）"
+  },
+  "공격력 +28, 방어 관통 15%, 총 전용 [유황탄 사격] 부여 (화상 부여 / 기본 공격 대체)": {
+    "en": "ATK +28, Armor Penetration 15%, Grants Gun-exclusive [Brimstone Shot] (Inflicts Burn / Replaces Basic Attack)",
+    "ja": "攻撃力 +28, 防御貫通 15%, 銃専用[硫黄弾射撃]付与（火傷付与 / 通常攻撃を代替）"
+  },
+  "공격력 +28, 피해량 +15%, 고유스킬 [작열탄] 부여 (기본 공격 대체)": {
+    "en": "ATK +28, Damage +15%, Grants Unique Skill [Scorching Bullet] (Replaces Basic Attack)",
+    "ja": "攻撃力 +28, 与ダメージ +15%, 固有スキル[灼熱弾]付与（通常攻撃を代替）"
+  },
+  "공격력 +30, 마나 +80, 고유스킬 [신성 심판] 부여 (기본 공격 대체)": {
+    "en": "ATK +30, MP +80, Grants Unique Skill [Holy Judgment] (Replaces Basic Attack)",
+    "ja": "攻撃力 +30, MP +80, 固有スキル[神聖裁判]付与（通常攻撃を代替）"
+  },
+  "공격력 +30, 피해량 +10%": {
+    "en": "ATK +30, Damage +10%",
+    "ja": "攻撃力 +30, 与ダメージ +10%"
+  },
+  "공격력 +32, 치명타율 +7%, 입힌 피해의 15% 체력 흡수": {
+    "en": "ATK +32, Crit Rate +7%, 15% Damage Lifesteal",
+    "ja": "攻撃力 +32, 会心率 +7%, 与えたダメージの15%吸血"
+  },
+  "공격력 +35, 행운 +15": {
+    "en": "ATK +35, Luck +15",
+    "ja": "攻撃力 +35, 幸運 +15"
+  },
+  "공격력 +35, 행운 +7, 피해의 8% 체력 흡수": {
+    "en": "ATK +35, Luck +7, 8% Damage Lifesteal",
+    "ja": "攻撃力 +35, 幸運 +7, ダメージの8%吸血"
+  },
+  "공격력 +42, 마나 +80, 방어관통 20%": {
+    "en": "ATK +42, MP +80, Armor Penetration 20%",
+    "ja": "攻撃力 +42, MP +80, 防御貫通 20%"
+  },
+  "공격력 +45, 속도 +9, 방어 관통 15%": {
+    "en": "ATK +45, Speed +9, Armor Penetration 15%",
+    "ja": "攻撃力 +45, 速度 +9, 防御貫通 15%"
+  },
+  "공격력 +52, 치명타율 +10%, 방어관통 25%, 고유스킬 [파멸 강타] 부여 (기본 공격 대체)": {
+    "en": "ATK +52, Crit Rate +10%, Armor Penetration 25%, Grants Unique Skill [Ruin Strike] (Replaces Basic Attack)",
+    "ja": "攻撃力 +52, 会心率 +10%, 防御貫通 25%, 固有スキル[破滅強打]付与（通常攻撃を代替）"
+  },
+  "공격력 +6, 마나 +18": {
+    "en": "ATK +6, MP +18",
+    "ja": "攻撃力 +6, MP +18"
+  },
+  "공격력 +6, 속도 +2": {
+    "en": "ATK +6, Speed +2",
+    "ja": "攻撃力 +6, 速度 +2"
+  },
+  "공격력 +6, 속도 +2, 행운 +3": {
+    "en": "ATK +6, Speed +2, Luck +3",
+    "ja": "攻撃力 +6, 速度 +2, 幸運 +3"
+  },
+  "공격력 +6, 행운 +3": {
+    "en": "ATK +6, Luck +3",
+    "ja": "攻撃力 +6, 幸運 +3"
+  },
+  "공격력 +60, 피해량 +20%": {
+    "en": "ATK +60, Damage +20%",
+    "ja": "攻撃力 +60, 与ダメージ +20%"
+  },
+  "공격력 +7, HP +21": {
+    "en": "ATK +7, HP +21",
+    "ja": "攻撃力 +7, HP +21"
+  },
+  "공격력 +7, HP +49, 속도 +2": {
+    "en": "ATK +7, HP +49, Speed +2",
+    "ja": "攻撃力 +7, HP +49, 速度 +2"
+  },
+  "공격력 +7, 행운 +7": {
+    "en": "ATK +7, Luck +7",
+    "ja": "攻撃力 +7, 幸運 +7"
+  },
+  "공격력 +8, 마나 +18, 행운 +4": {
+    "en": "ATK +8, MP +18, Luck +4",
+    "ja": "攻撃力 +8, MP +18, 幸運 +4"
+  },
+  "공격력 +8, 마나 +28, 행운 +4": {
+    "en": "ATK +8, MP +28, Luck +4",
+    "ja": "攻撃力 +8, MP +28, 幸運 +4"
+  },
+  "공격력 +8, 방어력 +6, 마나 +28": {
+    "en": "ATK +8, DEF +6, MP +28",
+    "ja": "攻撃力 +8, 防御力 +6, MP +28"
+  },
+  "공격력 +{0}": {
+    "en": "ATK +{0}",
+    "ja": "攻撃力 +{0}"
+  },
+  "공격력 +{0}%": {
+    "en": "ATK +{0}%",
+    "ja": "攻撃力 +{0}%"
+  },
+  "공격력 -40% & 턴당 최대 HP 7% 출혈 피해": {
+    "en": "ATK -40% & 7% Max HP Bleed damage per turn",
+    "ja": "攻撃力 -40%＆ターン毎最大HP 7%の出血ダメージ"
+  },
+  "공격력 ATK": {
+    "en": "Attack ATK",
+    "ja": "攻撃力 ATK"
+  },
+  "공격력 {0}": {
+    "en": "ATK {0}",
+    "ja": "攻撃力 {0}"
+  },
+  "공격력 감소": {
+    "en": "ATK Decrease",
+    "ja": "攻撃力減少"
+  },
+  "공격력 강화": {
+    "en": "ATK Boost",
+    "ja": "攻撃力強化"
+  },
+  "공격력 약화": {
+    "en": "ATK Weakened",
+    "ja": "攻撃力弱体化"
+  },
+  "공격력 증가": {
+    "en": "ATK Increase",
+    "ja": "攻撃力増加"
+  },
+  "공격력(ATK)": {
+    "en": "Attack (ATK)",
+    "ja": "攻撃力(ATK)"
+  },
+  "공격력이 약화된 적의 영혼 정수를 갈고리로 낚아채 30% 암흑 피해를 입히고 시전자의 마나를 25 즉시 충전합니다.": {
+    "en": "Snags the soul essence of an ATK-weakened enemy with a hook to deal 30% Dark damage and immediately restores 25 MP to the caster.",
+    "ja": "攻撃力が弱体化した敵の魂のエッセンスを鉤爪で引き寄せ、30%の暗黒ダメージを与えて術者のMPを即座に25回復する。"
+  },
+  "공격증폭(+{0}%)": {
+    "en": "ATK Boost (+{0}%)",
+    "ja": "攻撃増幅(+{0}%)"
+  },
+  "공략 & 팁": {
+    "en": "Guides & Tips",
+    "ja": "攻略＆ヒント"
+  },
+  "공명하는 에테르 에너지: 공격력 +12%, 방어 관통 +10%, 턴당 마나 4 MP 재생": {
+    "en": "Resonating Ether Energy: ATK +12%, Armor Penetration +10%, 4 MP Regen per turn",
+    "ja": "共鳴するエーテルエネルギー：攻撃力 +12%, 防御貫通 +10%, ターン毎MP 4再生"
+  },
+  "공물에 필요한 에테르({0}개)가 부족합니다. (현재 보유: {1}개)": {
+    "en": "Insufficient Ether ({0}) required for tribute. (Currently owned: {1})",
+    "ja": "供物に必要なエーテル（{0}個）が不足しています。（現在所持: {1}個）"
+  },
+  "공물을 바친 영웅은 1시간 동안 안식 상태에 들어가며 재공물이 제한됩니다.": {
+    "en": "The hero who offered tribute enters rest for 1 hour, restricting further tribute.",
+    "ja": "供物を捧げた英雄は1時間休息状態に入り、再度の供物が制限されます。"
+  },
+  "공방": {
+    "en": "Workshop",
+    "ja": "工房"
+  },
+  "공방 Lv.": {
+    "en": "Workshop Lv.",
+    "ja": "工房 Lv."
+  },
+  "공방 Lv.{0} 필요": {
+    "en": "Requires Workshop Lv.{0}",
+    "ja": "工房 Lv.{0} 必要"
+  },
+  "공방 가동 중단": {
+    "en": "Workshop Halted",
+    "ja": "工房稼働停止"
+  },
+  "공방 가동 중단 상태": {
+    "en": "Workshop Halted Status",
+    "ja": "工房稼働停止状態"
+  },
+  "공방 증축 필요 (최대 Lv.{0})": {
+    "en": "Workshop Upgrade Required (Max Lv.{0})",
+    "ja": "工房の増築が必要（最大 Lv.{0}）"
+  },
+  "공용": {
+    "en": "Common",
+    "ja": "共用"
+  },
+  "공중에 부유하는 거대한 만화경 거울 표면에 대원들의 내면과 숨겨진 약점이 투영됩니다.": {
+    "en": "Upon the surface of a giant kaleidoscope mirror floating in midair, the squad members' inner minds and hidden weaknesses are reflected.",
+    "ja": "宙に浮遊する巨大な万華鏡の鏡面に、隊員たちの内面と隠された弱点が投影される。"
+  },
+  "공포의 사자후": {
+    "en": "Terrifying Lion's Roar",
+    "ja": "恐怖の獅子吼"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "{0}을 착용한 영웅은 기본 공격 및 관련 전투 행동 시 위 고유 메커니즘이 상시 적용됩니다. 시너지 효과를 가진 클래스와 조합하면 전투 효율이 극대화됩니다.": {
+    "en": "Heroes equipped with {0} always benefit from the unique mechanism above during basic attacks and related actions. Combining them with classes possessing synergy yields maximum combat efficiency.",
+    "ja": "{0}を装備した英雄は通常攻撃および関連する戦闘行動時、上記の固有メカニズムが常時適用されます。相乗効果を持つクラスと組み合わせることで戦闘効率が最大化されます。"
+  },
+  "경험치": {
+    "en": "EXP",
+    "ja": "経験値"
+  },
+  "무기 특성": {
+    "en": "Weapon Trait",
+    "ja": "武器特性"
+  },
+  "병기창에서 마도석을 소비하여 해당 부위의 장비 슬롯에 각인할 수 있습니다.": {
+    "en": "Can be inscribed onto the corresponding equipment slot by consuming Magicite at the Forge.",
+    "ja": "兵器廠で魔導石を消費し、該当部位の装備スロットに刻印できます。"
+  },
+  "부위": {
+    "en": "Slot",
+    "ja": "部位"
+  },
+  "유형": {
+    "en": "Type",
+    "ja": "タイプ"
+  },
+  "장비 부위": {
+    "en": "Equipment Slot",
+    "ja": "装備部位"
+  },
+  "전술 운용 팁:": {
+    "en": "Tactical Tip:",
+    "ja": "戦術運用のヒント:"
+  },
+  "최대 {0}단계까지 증축 가능하며, 레벨이 상승함에 따라 생산량이 비약적으로 증가하거나 새로운 제작 레시피 및 특수 기능이 해금됩니다. 시설 Lv.4부터는 골드 또는 식량 등의 유지비가 부과될 수 있습니다.": {
+    "en": "Can be upgraded up to Rank {0}. As its level rises, production increases drastically, and new crafting recipes or special features are unlocked. Maintenance costs (Gold/Food) may apply starting at Lv.4.",
+    "ja": "最大{0}段階まで増築可能で、レベル上昇に伴い生産量が飛躍的に増加するか新しい製作レシピや特殊機能が解放されます。施設Lv.4からはゴールドや食糧などの維持費が発生する場合があります。"
+  },
+  "카테고리": {
+    "en": "Category",
+    "ja": "カテゴリー"
+  }
+}

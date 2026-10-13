@@ -1,0 +1,802 @@
+{
+  "철혈의 패황": {
+    "en": "Ironblood Overlord",
+    "ja": "鉄血の覇王"
+  },
+  "첫 번째 심연 강하에서 살아 돌아왔다. 하지만 차가운 흑무 속에서 끝내 방주로 돌아오지 못한 개척자들의 영혼이 성채 묘지에 잠들어 있다. 성채 묘지를 찾아가 영령의 묘비에 등불과 꽃을 바치고 넋을 위로하라. (헌화 시 5분간 전투 획득 경험치 증가 가호가 적용됩니다.)": {
+    "en": "You returned alive from the first abyssal descent. However, the souls of pioneers who never returned to the Ark in the cold black mist sleep in the Citadel cemetery. Visit the Citadel cemetery to offer lanterns and flowers to the heroic spirits' tombstones and console their souls. (Offering flowers grants a 5-minute combat EXP gain increase blessing.)",
+    "ja": "最初の深淵降下から生還した。しかし冷たい黒霧の中で最後まで方舟へ戻れなかった開拓者たちの魂が城塞の墓地に眠っている。城塞墓地を訪れ英霊の墓石に灯火と花を捧げ、その魂を慰めよ。(献花時、5分間戦闘獲得経験値増加の加護が適用されます。)"
+  },
+  "첫 번째 척후 퀘스트 완료 후 병기창과 생체 복원 병동이 병렬로 동시 해금되어 장비/마도 라인과 의료/영혼 승격 라인이 유기적으로 전개됩니다.": {
+    "en": "Upon completing the first reconnaissance quest, the Armory and Bio-Restoration Ward are unlocked simultaneously in parallel, organically unfolding the equipment/magitech and medical/soul promotion lines.",
+    "ja": "最初の斥候クエスト完了後、兵器廠と生体復元病棟が並行して同時解放され、装備/魔導ラインと医療/魂昇格ラインが有機的に展開されます。"
+  },
+  "첫 척후 보상으로 병기창과 생체 복원 병동이 동시 개방됩니다. 무기 6종의 고유 특성(검: 출혈절개, 창: 쉴드파쇄, 활: 급소치명, 총: 점사)에 맞춰 장비를 단조하고, 부상 대원은 병동에 입원시켜 안전하게 완치시키세요.": {
+    "en": "As a reward for the first scout, the Armory and Bio-Restoration Ward unlock simultaneously. Forge equipment matching the unique traits of 6 weapon types (Sword: Bleed Incision, Spear: Shield Shatter, Bow: Vital Crit, Gun: Burst Fire), and admit injured members to the ward for safe full recovery.",
+    "ja": "最初の斥候報酬として兵器廠と生体復元病棟が同時開放されます。武器6種の固有特性(剣: 出血切開、槍: シールド破砕、弓: 急所会心、銃: 点射)に合わせて装備を鍛造し、負傷隊員は病棟に入院させて安全に完治させてください。"
+  },
+  "첫 척후 완료 보상으로 [심연의 병기창]과 [생체 복원 병동]이 동시에 해금됩니다! 병기창에서는 무기 6종의 고유 특성(검: 출혈절개, 창: 쉴드파쇄, 활: 급소치명, 총: 점사)에 맞춰 장비를 단조하고, 부상당한 대원은 생체 병동 병상에 입원시켜 안전하게 회복시키세요.": {
+    "en": "As completion reward for the first scout, [Ark Armory & Forge] and [Bio-Restoration Ward] unlock at once! Forge gear in the armory suited to the 6 weapon traits (Sword: Bleed Incision, Spear: Shield Shatter, Bow: Vital Crit, Gun: Burst Fire), and hospitalize injured comrades in bio-ward beds to recover safely.",
+    "ja": "最初の斥候完了報酬として[深淵の兵器廠]と[生体復元病棟]が同時に解放されます！兵器廠では武器6種の固有特性(剣: 出血切開、槍: シールド破砕、弓: 急所会心、銃: 点射)に合わせて装備を鍛造し、負傷した隊員は生体病棟のベッドに入院させて安全に回復させましょう。"
+  },
+  "첫 퀘스트 확인하러 가기": {
+    "en": "Go Check First Quest",
+    "ja": "最初のクエストを確認しに行く"
+  },
+  "청명한": {
+    "en": "Serene",
+    "ja": "清澄な"
+  },
+  "체+": {
+    "en": "HP+",
+    "ja": "体+"
+  },
+  "체계적인 도시 구획과 상업 지구 활성화로 주민들의 소득이 급증하며, 레벨당 30% 복리 증산 특화가 가동되어 막대한 세수가 쏟아집니다.": {
+    "en": "Systematic urban zoning and vitalization of commercial districts surge residents' incomes, activating a 30% compound production boost per level that floods in massive tax revenues.",
+    "ja": "体系的な都市区画と商業地区の活性化により住民の所得が急増し、レベルごとに30%の複利増産特化が稼働して莫大な税収がもたらされる。"
+  },
+  "체납 시: 시설이 일시 휴면(레벨 다운) 상태가 되지만 영구 증축 레벨(maxLevel)은 보존되어 자원 재확보 시 즉시 복구": {
+    "en": "Upon Default: Facility temporarily enters dormancy (level down), but permanent expansion level (maxLevel) is preserved and instantly restored once resources are secured",
+    "ja": "滞納時: 施設が一時休眠(レベルダウン)状態となるが、永久増築レベル(maxLevel)は保持され資源の再確保時に即時復旧"
+  },
+  "체내에 독이 퍼진 적을 강타로 충격하면 신경계가 붕괴하여 1턴간 완전히 기절하며 차징 행동을 취소시킵니다.": {
+    "en": "Smashing an enemy coursing with internal poison collapses their nervous system, stunning them completely for 1 turn and canceling charging actions.",
+    "ja": "体内に毒が回った敵を強打で衝撃すると神経系が崩壊し、1ターンの間完全に気絶してチャージ行動をキャンセルさせる。"
+  },
+  "체내에 퍼진 맹독 부위를 둔기로 강타하여 신경계를 마비시키고 1턴간 완전히 기절시켰습니다!": {
+    "en": "Smote the lethal poisoned area with a blunt weapon, paralyzing the nervous system and stunning completely for 1 turn!",
+    "ja": "体内に回った猛毒部位を鈍器で強打し、神経系を麻痺させて1ターンの間完全に気絶させた！"
+  },
+  "체력 (HP)": {
+    "en": "HP",
+    "ja": "体力 (HP)"
+  },
+  "체력 +10%, 마나 +15%, 방어력 +10%, 행운 +2": {
+    "en": "HP +10%, MP +15%, DEF +10%, LUCK +2",
+    "ja": "HP +10%、MP +15%、防御力 +10%、幸運 +2"
+  },
+  "체력 +12%, 방어력 +8%, 속도 +1, 행운 +3": {
+    "en": "HP +12%, DEF +8%, SPD +1, LUCK +3",
+    "ja": "HP +12%、防御力 +8%、速度 +1、幸運 +3"
+  },
+  "체력 25% 즉시 회복 및 방어력 30% 증폭": {
+    "en": "Instantly restores 25% HP and amplifies DEF by 30%",
+    "ja": "HPを即時25%回復し、防御力を30%増幅"
+  },
+  "체력 HP": {
+    "en": "HP",
+    "ja": "体力 HP"
+  },
+  "체력 비례 600% 극딜 & 불멸 포효": {
+    "en": "HP-Scaling 600% Nuke & Immortal Roar",
+    "ja": "HP比例600%極大火力 & 不滅の咆哮"
+  },
+  "체력 비례 극딜러": {
+    "en": "HP-Scaling Burst Dealer",
+    "ja": "HP比例極大アタッカー"
+  },
+  "체력 자연 회복": {
+    "en": "Natural HP Regen",
+    "ja": "HP自然回復"
+  },
+  "체력 포션": {
+    "en": "Health Potion",
+    "ja": "体力ポーション"
+  },
+  "체력 회복": {
+    "en": "HP Recovery",
+    "ja": "HP回復"
+  },
+  "체력 회복도": {
+    "en": "HP Recovery Amount",
+    "ja": "HP回復度"
+  },
+  "체력(HP)": {
+    "en": "HP",
+    "ja": "体力(HP)"
+  },
+  "체력을 30% 즉시 회복하고 1턴간 방어 태세를 취합니다.": {
+    "en": "Instantly restores 30% HP and adopts defensive stance for 1 turn.",
+    "ja": "HPを即時30%回復し、1ターンの間防御態勢を取る。"
+  },
+  "체중을 실어 단일 적에게 130% 물리 피해를 입힙니다.": {
+    "en": "Puts full body weight into striking a single enemy for 130% physical damage.",
+    "ja": "体重を乗せて単体の敵に130%の物理ダメージを与える。"
+  },
+  "초": {
+    "en": "s",
+    "ja": "秒"
+  },
+  "초 (": {
+    "en": "s (",
+    "ja": "秒 ("
+  },
+  "초 남음 (": {
+    "en": "s left (",
+    "ja": "秒残り ("
+  },
+  "초 후 보상 지급": {
+    "en": "Rewards granted in s",
+    "ja": "秒後に報酬支給"
+  },
+  "초)": {
+    "en": "s)",
+    "ja": "秒)"
+  },
+  "초거대 총력전 레이드: 전 방주 지휘관 연합의 총력전 레이드로서 장기 토벌전의 웅장한 스케일 확립": {
+    "en": "Colossal All-Out War Raid: An all-out alliance raid uniting all Ark commanders, establishing an epic scale for long-term subjugation",
+    "ja": "超巨大総力戦レイド: 全方舟指揮官連合の総力戦レイドとして、長期討伐戦の雄大なスケールを確立"
+  },
+  "초고속 화망과 저격: 속도 +20%, 행운 +18, 치명타 피해 +25%, 중열 회피율 +15%": {
+    "en": "Hyper-speed Barrage and Snipe: SPD +20%, LUCK +18, Crit Damage +25%, Mid row Evasion Rate +15%",
+    "ja": "超高速火網と狙撃: 速度+20%、幸運+18、会心ダメージ+25%、中衛回避率+15%"
+  },
+  "초기 2인 결사대": {
+    "en": "Initial 2-Member Strike Team",
+    "ja": "初期2名決死隊"
+  },
+  "초기 비전서 전수 & 진형 세팅 (탱·딜·힐 배치)": {
+    "en": "Initial Grimoire Imparting & Formation Setup (Tank/DPS/Healer placement)",
+    "ja": "初期魔導書伝授 & 陣形設定 (タンク・アタッカー・ヒーラー配置)"
+  },
+  "초기 자본: 200G • 목재 50": {
+    "en": "Initial Capital: 200G • Wood 50",
+    "ja": "初期資本: 200G • 木材 50"
+  },
+  "초기화": {
+    "en": "Reset",
+    "ja": "初期化"
+  },
+  "초기화 대상 항목": {
+    "en": "Reset Target Item",
+    "ja": "初期化対象項目"
+  },
+  "초기화 실패: 에테르(50)가 부족합니다!": {
+    "en": "Reset failed: Insufficient Ether (50)!",
+    "ja": "初期化失敗: エーテル(50)が不足しています！"
+  },
+  "초기화 중...": {
+    "en": "Resetting...",
+    "ja": "初期化中..."
+  },
+  "초마다": {
+    "en": "Every sec",
+    "ja": "秒ごと"
+  },
+  "초면": {
+    "en": "First Meeting",
+    "ja": "初対面"
+  },
+  "초반 6단계 완벽 생존 & 번영 로드맵": {
+    "en": "Early Game 6-Step Total Survival & Prosperity Roadmap",
+    "ja": "序盤6段階完全生存 & 繁栄ロードマップ"
+  },
+  "초반 가이드 • {0}": {
+    "en": "Beginner Guide • {0}",
+    "ja": "序盤ガイド • {0}"
+  },
+  "초반 공략": {
+    "en": "Early Game Strategy",
+    "ja": "序盤攻略"
+  },
+  "초반 공략 로드맵": {
+    "en": "Early Game Strategy Roadmap",
+    "ja": "序盤攻略ロードマップ"
+  },
+  "초반 기틀이 완성된 지금, 피난민들과 원정대 결사대가 지휘관님의 노고에 깊이 감사하며 특별한 진상품을 준비했습니다. 앞으로 방주가 나아갈 우선 방향을 선택해 주십시오!": {
+    "en": "Now that initial foundations are set, the refugees and expedition strike team deeply appreciate your dedication, Commander, and prepared special tributes. Please choose the primary path forward for the Ark!",
+    "ja": "序盤の基盤が完成した今、避難民と遠征隊決死隊が指揮官の尽力に深く感謝し、特別な進上品を用意しました。今後方舟が進むべき優先方針を選択してください！"
+  },
+  "초반 세계관 및 작전 지침 서사": {
+    "en": "Early Lore & Operation Guidelines Narrative",
+    "ja": "序盤世界観および作戦指針叙事"
+  },
+  "초신성": {
+    "en": "Supernova",
+    "ja": "超新星"
+  },
+  "초신성 폭발": {
+    "en": "Supernova Explosion",
+    "ja": "超新星爆発"
+  },
+  "초신성의 별빛 로브 +10": {
+    "en": "Starlight Robe of the Supernova +10",
+    "ja": "超新星の星光ローブ +10"
+  },
+  "초신성의 잔향": {
+    "en": "Supernova Reverberation",
+    "ja": "超新星の残響"
+  },
+  "초심자의 방패": {
+    "en": "Beginner's Shield",
+    "ja": "初心者の盾"
+  },
+  "초월 각성 (": {
+    "en": "Transcendent Awakening (",
+    "ja": "超越覚醒 ("
+  },
+  "초월 엔드 컨텐츠: 1,000 위험도 단위 세부 진입로 개방 (현재 해금: 무간도 1~{0}계층 / 몹 Lv.20~520)": {
+    "en": "Transcendent Endgame Content: Detailed access routes opened in units of 1,000 Hazard (Currently Unlocked: Avici Floors 1~{0} / Mob Lv.20~520)",
+    "ja": "超越エンドコンテンツ: 危険度1,000単位の詳細進入路を開放 (現在解放: 無間道1~{0}階層 / モブLv.20~520)"
+  },
+  "초월적 깨달음의 불꽃을 밝혀 1차 각성 클래스의 경험치 획득량을 +10% 추가 증폭시키기 시작합니다.": {
+    "en": "Ignites the flame of transcendent enlightenment, beginning to further amplify EXP gains of 1st awakening classes by +10%.",
+    "ja": "超越的悟りの炎を灯し、1次覚醒クラスの経験値獲得量をさらに+10%増幅させ始める。"
+  },
+  "초음파": {
+    "en": "Ultrasonic",
+    "ja": "超音波"
+  },
+  "초음파 강타": {
+    "en": "Ultrasonic Strike",
+    "ja": "超音波強打"
+  },
+  "초전도": {
+    "en": "Superconductor",
+    "ja": "超電導"
+  },
+  "초전도 감전": {
+    "en": "Superconduct Shock",
+    "ja": "超電導感電"
+  },
+  "초전도 감전 (Superconduct)": {
+    "en": "Superconduct Shock (Superconduct)",
+    "ja": "超電導感電 (Superconduct)"
+  },
+  "초전도 에테르 유로를 매설하여 방주 전체의 마도 네트워크와 직결하고 정제 효율을 극대화했습니다.": {
+    "en": "Buried superconducting ether flow channels directly linking to the Ark's entire magitech network, maximizing refining efficiency.",
+    "ja": "超電導エーテル流路を敷設して方舟全体の魔導ネットワークと直結し、精製効率を極大化した。"
+  },
+  "초전도 저항 분쇄": {
+    "en": "Superconduct Resistance Shatter",
+    "ja": "超電導抵抗粉砕"
+  },
+  "초커": {
+    "en": "Choker",
+    "ja": "チョーカー"
+  },
+  "촉매": {
+    "en": "Catalyst",
+    "ja": "触媒"
+  },
+  "촉매를 장착했다면 전멸 위기 시 구조 신호가 발동하여 배낭 전리품의 10~50%를 랜덤하게 회수하여 복귀합니다. 호각이 없이 전멸하면 배낭의 모든 전리품을 100% 잃어버립니다. (탐험 도중 안전 귀환을 원할 경우 소모품": {
+    "en": "If a catalyst is equipped, a rescue signal triggers upon wipeout crisis, recovering 10-50% of backpack loot at random upon return. Without a whistle, 100% of all backpack loot is lost upon wipeout. (If safe return during exploration is desired, consumable",
+    "ja": "触媒を装着していれば全滅の危機に救助信号が発動し、リュックの戦利品の10~50%をランダムに回収して帰還します。角笛なしで全滅するとリュックの全戦利品を100%失います。(探検中に安全帰還を望む場合は消耗品"
+  },
+  "총": {
+    "en": "Gun",
+    "ja": "銃"
+  },
+  "총 Lv.": {
+    "en": "Total Lv.",
+    "ja": "総Lv."
+  },
+  "총 {0}종 품목": {
+    "en": "Total {0} Items",
+    "ja": "全{0}品目"
+  },
+  "총 계열": {
+    "en": "Gun Type",
+    "ja": "銃系列"
+  },
+  "총 전투력: ⚡": {
+    "en": "Total Power: ⚡",
+    "ja": "総戦闘力: ⚡"
+  },
+  "총 채비 소모 자원": {
+    "en": "Total Prep Consumed Resources",
+    "ja": "総支度消費資源"
+  },
+  "총 체력 30,000,000에 달하는 심연의 절대 지배자 네메시스를 전 방주 지휘관들이 협력하여 누적 피해로 토벌하는 최고위 월드 레이드입니다.": {
+    "en": "The supreme world raid where Ark commanders cooperate to subjugate Nemesis, absolute ruler of the Abyss boasting 30,000,000 total HP, through cumulative damage.",
+    "ja": "総体力が30,000,000に達する深淵の絶対支配者ネメシスを、全方舟指揮官が協力して累積ダメージで討伐する最高峰のワールドレイドです。"
+  },
+  "총 최대 4개 시너지 상한: 2(직업군) + 1(진형) + 1(숙련도) = 총 4개 이하로 전략적 파티 구성을 유도": {
+    "en": "Total Max 4 Synergy Cap: 2 (Class) + 1 (Formation) + 1 (Mastery) = 4 or fewer in total, encouraging strategic party composition",
+    "ja": "総最大4個のシナジー上限: 2(職業群) + 1(陣形) + 1(熟練度) = 合計4個以下で戦略的なパーティ構成を誘導"
+  },
+  "총 판매 대금:": {
+    "en": "Total Sales Revenue:",
+    "ja": "総売却代金:"
+  },
+  "총 필요 골드:": {
+    "en": "Total Required Gold:",
+    "ja": "必要ゴールド合計:"
+  },
+  "총 획득 골드:": {
+    "en": "Total Acquired Gold:",
+    "ja": "獲得ゴールド合計:"
+  },
+  "총공격 섬멸령": {
+    "en": "All-Out Attack Annihilation Order",
+    "ja": "総攻撃殲滅令"
+  },
+  "총공격 진격령": {
+    "en": "All-Out Attack Advance Order",
+    "ja": "総攻撃進撃令"
+  },
+  "총기": {
+    "en": "Firearms",
+    "ja": "銃器"
+  },
+  "총력 섬멸": {
+    "en": "All-Out Annihilation",
+    "ja": "総力殲滅"
+  },
+  "총진격": {
+    "en": "All-Out Advance",
+    "ja": "総進撃"
+  },
+  "촬영 즉시 화학 반응으로 소중한 순간을 필름에 담아낸 가족의 사진입니다. 뒷면에 날짜가 적혀 있습니다.": {
+    "en": "A family photo captured on film via chemical reaction immediately upon taking. A date is written on the back.",
+    "ja": "撮影直後に化学反応で大切な瞬間をフィルムに収めた家族の写真。裏面に日付が書かれている。"
+  },
+  "최고 딜러": {
+    "en": "Top DPS",
+    "ja": "最高アタッカー"
+  },
+  "최고 레벨 도달 또는 증축 필요": {
+    "en": "Max Level Reached or Expansion Required",
+    "ja": "最高レベル到達または増築が必要"
+  },
+  "최고 방어": {
+    "en": "Top Tank",
+    "ja": "最高防御"
+  },
+  "최고 치유": {
+    "en": "Top Healer",
+    "ja": "最高治癒"
+  },
+  "최고등급": {
+    "en": "Highest Grade",
+    "ja": "最高等級"
+  },
+  "최고레벨": {
+    "en": "Max Level",
+    "ja": "最高レベル"
+  },
+  "최대": {
+    "en": "Max",
+    "ja": "最大"
+  },
+  "최대 +": {
+    "en": "Max +",
+    "ja": "最大 +"
+  },
+  "최대 15턴 전투 & 마일스톤": {
+    "en": "Max 15-Turn Battle & Milestones",
+    "ja": "最大15ターン戦闘 & マイルストーン"
+  },
+  "최대 3명까지만 잠금할 수 있습니다.": {
+    "en": "You can only lock up to 3 members.",
+    "ja": "最大3名までしかロックできません。"
+  },
+  "최대 4개 동시 연구 가능": {
+    "en": "Up to 4 can be researched simultaneously",
+    "ja": "最大4個同時研究可能"
+  },
+  "최대 4개 습득 · 2개 장착": {
+    "en": "Learn up to 4 · Equip up to 2",
+    "ja": "最大4個習得 · 2個装着"
+  },
+  "최대 HP": {
+    "en": "Max HP",
+    "ja": "最大HP"
+  },
+  "최대 HP +": {
+    "en": "Max HP +",
+    "ja": "最大HP +"
+  },
+  "최대 HP +5% 및 야영 휴식 시 회복량 +5% 상승.": {
+    "en": "Max HP +5% and campsite rest recovery increased by +5%.",
+    "ja": "最大HP +5%および野営休息時の回復量+5%上昇。"
+  },
+  "최대 HP +{0}%": {
+    "en": "Max HP +{0}%",
+    "ja": "最大HP +{0}%"
+  },
+  "최대 MP +": {
+    "en": "Max MP +",
+    "ja": "最大MP +"
+  },
+  "최대 각성 도달": {
+    "en": "Max Awakening Reached",
+    "ja": "最大覚醒到達"
+  },
+  "최대 강화 한도:": {
+    "en": "Max Enhancement Limit:",
+    "ja": "最大強化限界:"
+  },
+  "최대 강화 한도: Lv.": {
+    "en": "Max Enhancement Limit: Lv.",
+    "ja": "最大強化限界: Lv."
+  },
+  "최대 마나 (MP)": {
+    "en": "Max MP",
+    "ja": "最大マナ (MP)"
+  },
+  "최대 매입 가능:": {
+    "en": "Max Purchase Available:",
+    "ja": "最大買入可能:"
+  },
+  "최대 보관 중": {
+    "en": "Stored at Capacity",
+    "ja": "最大保管中"
+  },
+  "최대 위험도 10,000: 1~10층의 모든 마물이 [정예 광폭화] 기본 스탯으로 출현": {
+    "en": "Max Hazard 10,000: All monsters on Floors 1-10 spawn with [Elite Berserk] base stats",
+    "ja": "最大危険度 10,000: 1~10層の全魔物が[精鋭狂暴化]基本ステータスで出現"
+  },
+  "최대 증축:": {
+    "en": "Max Expansion:",
+    "ja": "最大増築:"
+  },
+  "최대 체력 (HP)": {
+    "en": "Max HP",
+    "ja": "最大体力 (HP)"
+  },
+  "최대 체력 +140, 마나 +60, 방어력 +10": {
+    "en": "Max HP +140, MP +60, DEF +10",
+    "ja": "最大HP +140、MP +60、防御力 +10"
+  },
+  "최대 체력 +180, 속도 +4, 공격력 +8": {
+    "en": "Max HP +180, SPD +4, ATK +8",
+    "ja": "最大HP +180、速度 +4、攻撃力 +8"
+  },
+  "최대 체력 +200, 방어력 +12": {
+    "en": "Max HP +200, DEF +12",
+    "ja": "最大HP +200、防御力 +12"
+  },
+  "최대 체력 +300, 방어력 +20": {
+    "en": "Max HP +300, DEF +20",
+    "ja": "最大HP +300、防御力 +20"
+  },
+  "최대 체력 +450, 마나 +120, 공격력 +20, 방어력 +20, 속도 +8": {
+    "en": "Max HP +450, MP +120, ATK +20, DEF +20, SPD +8",
+    "ja": "最大HP +450、MP +120、攻撃力 +20、防御力 +20、速度 +8"
+  },
+  "최대 활성화": {
+    "en": "Max Activation",
+    "ja": "最大活性化"
+  },
+  "최대(MAX)": {
+    "en": "Max (MAX)",
+    "ja": "最大(MAX)"
+  },
+  "최대:": {
+    "en": "Max:",
+    "ja": "最大:"
+  },
+  "최대HP +{0}": {
+    "en": "Max HP +{0}",
+    "ja": "最大HP +{0}"
+  },
+  "최대HP +{0}%": {
+    "en": "Max HP +{0}%",
+    "ja": "最大HP +{0}%"
+  },
+  "최대MP +{0}": {
+    "en": "Max MP +{0}",
+    "ja": "最大MP +{0}"
+  },
+  "최상급 마수의 가죽을 완벽한 가공품으로 전환하는 극대화 라인을 가동하여 전략 군수 가죽을 대량 공급합니다.": {
+    "en": "Operating a maximization line that turns supreme magical beast leather into perfected finished goods, supplying strategic military leather in bulk.",
+    "ja": "最上級魔獣の革を完全な加工品へと転換する極大化ラインを稼働させ、戦略軍需革を大量供給する。"
+  },
+  "최상단/최하단 리더 통합 정보 패널, 3인 선발 카드별 실시간 상태이상 뱃지, 기본 2.0배속 및 2.5배속 고속 스위치로 박진감 넘치는 전략 전장을 제공합니다.": {
+    "en": "Provides an exhilarating strategic battlefield with top/bottom integrated leader info panels, real-time status effect badges on the 3 active cards, and standard 2.0x / 2.5x high-speed toggles.",
+    "ja": "最上段/最下段のリーダー統合情報パネル、3名先発カード別のリアルタイム状態異常バッジ、標準2.0倍速および2.5倍速高速切り替えにより迫力あふれる戦略戦場を提供します。"
+  },
+  "최상위 마스터를 위한 전설(Legendary) 무구 1종 확정": {
+    "en": "1 Guaranteed Legendary Armament for Top Masters",
+    "ja": "最上位マスターのための伝説(Legendary)武具1種確定"
+  },
+  "최소 3인의 정예 원정대": {
+    "en": "Elite Expedition of at least 3 members",
+    "ja": "最低3名の精鋭遠征隊"
+  },
+  "최신 로그 보기": {
+    "en": "View Recent Logs",
+    "ja": "最新ログを見る"
+  },
+  "최신 업데이트 및 변경 사항": {
+    "en": "Latest Updates & Patch Notes",
+    "ja": "最新アップデートおよび変更事項"
+  },
+  "최저 HP 아군의 체력을 150% 회복.": {
+    "en": "Restores 150% HP to the ally with lowest HP.",
+    "ja": "最低HPの味方のHPを150%回復。"
+  },
+  "최적 3+1+1 자동 편성": {
+    "en": "Auto-compose optimal 3+1+1",
+    "ja": "最適3+1+1自動編成"
+  },
+  "최초 지휘관의 유서": {
+    "en": "First Commander's Will",
+    "ja": "初代指揮官の遺書"
+  },
+  "추적": {
+    "en": "Pursuit",
+    "ja": "追跡"
+  },
+  "축복": {
+    "en": "Blessing",
+    "ja": "祝福"
+  },
+  "축복받은 마나 샘: 공격력 +10%, 최대 체력 +8%, 턴당 체력 2% 회복, 턴당 마나 4 MP 재생": {
+    "en": "Blessed Mana Spring: ATK +10%, Max HP +8%, HP 2% regen per turn, MP 4 regen per turn",
+    "ja": "祝福されしマナの泉: 攻撃力+10%、最大HP+8%、ターンごとにHP 2%回復、ターンごとにMP 4再生"
+  },
+  "축복의 베일": {
+    "en": "Veil of Blessing",
+    "ja": "祝福のベール"
+  },
+  "축복의 성수": {
+    "en": "Blessed Holy Water",
+    "ja": "祝福の聖水"
+  },
+  "축복의 성홀 +1": {
+    "en": "Blessed Holy Scepter +1",
+    "ja": "祝福の聖笏 +1"
+  },
+  "축복의 오라: 아군이 스킬 사용 후 체력 5% 자동 회복.": {
+    "en": "Aura of Blessing: Allies automatically recover 5% HP after using a skill.",
+    "ja": "祝福のオーラ: 味方がスキル使用後、HPを5%自動回復。"
+  },
+  "축성된 성수와 굳건한 열쇠로 악령의 저주를 원천 차단합니다.": {
+    "en": "Consecrated holy water and a steadfast key block the curse of evil spirits at its root.",
+    "ja": "祝聖された聖水と頑丈な鍵で悪霊の呪いを根本から遮断する。"
+  },
+  "출격 활성": {
+    "en": "Sortie Active",
+    "ja": "出撃有効"
+  },
+  "출전 원정대 (3선발 + 1리더 + 1서포터)": {
+    "en": "Deploying Expedition (3 Vanguard + 1 Leader + 1 Supporter)",
+    "ja": "出陣遠征隊 (3先発 + 1リーダー + 1サポーター)"
+  },
+  "출전할 용병이 없습니다! 주점에서 용병을 고용해 주세요.": {
+    "en": "No mercenaries available to deploy! Please recruit mercenaries at the tavern.",
+    "ja": "出撃可能な傭兵がいません！酒場で傭兵を雇用してください。"
+  },
+  "출정": {
+    "en": "Embark",
+    "ja": "出撃"
+  },
+  "출정 & 탐험 시스템": {
+    "en": "Embark & Exploration System",
+    "ja": "出撃 & 探検システム"
+  },
+  "출정 보급품 및 촉매 유물 준비": {
+    "en": "Prepare Expedition Supplies and Catalyst Relics",
+    "ja": "出撃補給品および触媒遺物の準備"
+  },
+  "출정 식량 보급": {
+    "en": "Expedition Food Supply",
+    "ja": "出撃食糧補給"
+  },
+  "출혈": {
+    "en": "Bleed",
+    "ja": "出血"
+  },
+  "출혈 발톱": {
+    "en": "Bleeding Claws",
+    "ja": "出血の爪"
+  },
+  "출혈 상태의 적을 베기/관통으로 타격 시 상처가 일제히 터져나가며 대량 즉발 폭발 및 2턴간 공격력 25% 감소": {
+    "en": "Striking a bleeding enemy with slash/pierce tears open wounds at once, triggering a massive instant burst and reducing ATK by 25% for 2 turns",
+    "ja": "出血状態の敵を斬撃/貫通で攻撃時、傷口が一斉に破裂して大量の即時爆発を起こし、2ターンの間攻撃力を25%減少"
+  },
+  "출혈 중인 상처에서 피의 마력을 강탈하여 아군 전체에 수호 방벽을 둘렀습니다!": {
+    "en": "Siphoned blood mana from bleeding wounds, enveloping all allies in a protective barrier!",
+    "ja": "出血中の傷口から血の魔力を奪い取り、味方全体に守護の障壁を展開した！"
+  },
+  "출혈 중인 적의 상처에서 피의 마력을 강탈하여 적에게 35% 암흑 피해를 입히고 가한 피해의 60%를 아군 전체 보호막으로 부여": {
+    "en": "Siphons blood mana from bleeding enemy wounds, dealing 35% dark damage to the enemy and granting 60% of damage dealt as shields to all allies",
+    "ja": "出血中の敵の傷口から血の魔力を奪い取り、敵に35%の暗黒ダメージを与え、与えたダメージの60%を味方全体のシールドとして付与"
+  },
+  "출혈/방어약화": {
+    "en": "Bleed/DEF Down",
+    "ja": "出血/防御弱化"
+  },
+  "춤추듯 흩날리는 칼날 속에서 마물들의 비명이 메아리친다.": {
+    "en": "Monsters' screams echo amidst blades scattering like a dance.",
+    "ja": "舞い散る刃の中で魔物たちの悲鳴が木霊する。"
+  },
+  "충격": {
+    "en": "Shock",
+    "ja": "衝撃"
+  },
+  "취소": {
+    "en": "Cancel",
+    "ja": "キャンセル"
+  },
+  "층": {
+    "en": "Floor",
+    "ja": "層"
+  },
+  "층 원정 탐험 완료": {
+    "en": "Floor Expedition Exploration Completed",
+    "ja": "層 遠征探検完了"
+  },
+  "층별 보스 처치 시 고유 비기 마도서가 드랍될 기본 확률 (기본 0.04 = 4.0%)": {
+    "en": "Base drop rate of unique secret grimoires upon slaying floor bosses (Base 0.04 = 4.0%)",
+    "ja": "各層のボス撃破時に固有秘技魔導書がドロップする基本確率 (基本 0.04 = 4.0%)"
+  },
+  "층에서 전사": {
+    "en": "Fallen on Floor",
+    "ja": "層で戦死"
+  },
+  "치료": {
+    "en": "Treatment",
+    "ja": "治療"
+  },
+  "치료 및 부상 회복": {
+    "en": "Treatment & Injury Recovery",
+    "ja": "治療および負傷回復"
+  },
+  "치료 주기 10% 단축 · 4초마다 HP +5 치료 (인당 틱당 🍖식량 2 소모)": {
+    "en": "Treatment cycle reduced by 10% · Restores +5 HP every 4s (Consumes 🍖 Food 2 per person per tick)",
+    "ja": "治療周期10%短縮 · 4秒ごとにHP+5治療 (1人あたり1ティック🍖食糧2消費)"
+  },
+  "치료/충전이 필요한 용병을 선택하세요. (파티 편성 중인 용병은 입원 시 파티에서 자동 제외됩니다)": {
+    "en": "Select mercenaries requiring treatment/recharge. (Mercenaries currently in party are automatically removed upon admission)",
+    "ja": "治療/充電が必要な傭兵を選択してください。(パーティ編成中の傭兵は入院時に自動的にパーティから除外されます)"
+  },
+  "치료소": {
+    "en": "Infirmary",
+    "ja": "治療所"
+  },
+  "치명": {
+    "en": "Crit",
+    "ja": "会心"
+  },
+  "치명 암살 & 출혈": {
+    "en": "Crit Assassination & Bleed",
+    "ja": "会心暗殺 & 出血"
+  },
+  "치명 일격": {
+    "en": "Critical Strike",
+    "ja": "会心の一撃"
+  },
+  "치명 처형 & 맹독": {
+    "en": "Crit Execution & Lethal Poison",
+    "ja": "会心処刑 & 猛毒"
+  },
+  "치명+": {
+    "en": "Crit+",
+    "ja": "会心+"
+  },
+  "치명/행운 (LUCK)": {
+    "en": "Crit/Luck (LUCK)",
+    "ja": "会心/幸運 (LUCK)"
+  },
+  "치명상을 입은 대원을 병동에 입원시키면 성화의 온기와 연금 용액으로 신속히 회복된다. 육신을 온전히 보전해야 영혼의 한계 돌파가 가능하다.": {
+    "en": "Admitting critically injured comrades to the ward swiftly restores them via the Sacred Flame's warmth and alchemical solutions. Only by preserving the physical vessel can the spirit transcend its limits.",
+    "ja": "致命傷を負った隊員を病棟に入院させると、聖火の温もりと錬金溶液で迅速に回復する。肉体を完全に保全してこそ、魂の限界突破が可能となる。"
+  },
+  "치명상을 입힌 마물": {
+    "en": "Monster that dealt fatal blow",
+    "ja": "致命傷を負わせた魔物"
+  },
+  "치명적 급소": {
+    "en": "Fatal Weakpoint",
+    "ja": "致命的急所"
+  },
+  "치명적 본능: 치명타 적중 시 30% 확률(행운 비례)로 대상에게 즉시 추가 공격을 가합니다.": {
+    "en": "Fatal Instinct: On landing a critical hit, 30% chance (scales with Luck) to immediately launch an extra attack against the target.",
+    "ja": "致命的本能: 会心命中時、30%の確率(幸運比例)で対象に即座に追加攻撃を加える。"
+  },
+  "치명적 피해 시 1회 체력 1로 생존(불굴) & 스탯 +10%": {
+    "en": "Upon lethal damage, survives with 1 HP once (Indomitable) & Stats +10%",
+    "ja": "致命的なダメージを受けた際、1回HP 1で生存(不屈) & ステータス+10%"
+  },
+  "치명적 헤드샷": {
+    "en": "Fatal Headshot",
+    "ja": "致命的ヘッドショット"
+  },
+  "치명타": {
+    "en": "Crit",
+    "ja": "会心"
+  },
+  "치명타 +": {
+    "en": "Crit +",
+    "ja": "会心 +"
+  },
+  "치명타 +{0}%": {
+    "en": "Crit +{0}%",
+    "ja": "会心 +{0}%"
+  },
+  "치명타 폭발!": {
+    "en": "Critical Burst!",
+    "ja": "会心爆発！"
+  },
+  "치명타 피해 +{0}%": {
+    "en": "Crit Damage +{0}%",
+    "ja": "会心ダメージ +{0}%"
+  },
+  "치명타 확률 +3% 영구 증가": {
+    "en": "Permanently increases Crit Chance by +3%",
+    "ja": "会心率+3%永久増加"
+  },
+  "치명타+10% 회피+10%": {
+    "en": "Crit +10% Evasion +10%",
+    "ja": "会心+10% 回避+10%"
+  },
+  "치명타:": {
+    "en": "Crit:",
+    "ja": "会心:"
+  },
+  "치명타율 +4% & 공격력 +15": {
+    "en": "Crit Rate +4% & ATK +15",
+    "ja": "会心率 +4% & 攻撃力 +15"
+  },
+  "치명타율 +4% & 공격력 +18": {
+    "en": "Crit Rate +4% & ATK +18",
+    "ja": "会心率 +4% & 攻撃力 +18"
+  },
+  "치명타율 +5% · 치명타 피해 +5%": {
+    "en": "Crit Rate +5% · Crit Damage +5%",
+    "ja": "会心率 +5% · 会心ダメージ +5%"
+  },
+  "치명타율 +5% 및 치명타 피해 +5%": {
+    "en": "Crit Rate +5% and Crit Damage +5%",
+    "ja": "会心率 +5% および 会心ダメージ +5%"
+  },
+  "치명타율 +8% & 아군 빈사 시 50 HP 수호 보호막 자동 발동": {
+    "en": "Crit Rate +8% & automatically activates 50 HP guardian shield when an ally is near death",
+    "ja": "会心率 +8% & 味方瀕死時に50 HP守護シールド自動発動"
+  },
+  "치명타율 +{0}%": {
+    "en": "Crit Rate +{0}%",
+    "ja": "会心率 +{0}%"
+  },
+  "치명피해 +{0}%": {
+    "en": "Crit Damage +{0}%",
+    "ja": "会心ダメージ +{0}%"
+  },
+  "치유": {
+    "en": "Heal",
+    "ja": "治癒"
+  },
+  "치유 물약 및 정화 성수 (+30% 매입가)": {
+    "en": "Healing Potion and Holy Water of Purification (+30% Purchase Price)",
+    "ja": "治癒ポーションおよび浄化の聖水 (+30% 買取価格)"
+  },
+  "치유 붕대": {
+    "en": "Healing Bandage",
+    "ja": "治癒包帯"
+  },
+  "치유/지원": {
+    "en": "Heal/Support",
+    "ja": "治癒/支援"
+  },
+  "치유의 기도": {
+    "en": "Prayer of Healing",
+    "ja": "治癒の祈り"
+  },
+  "치유의 로사리오 +1": {
+    "en": "Rosary of Healing +1",
+    "ja": "治癒のロザリオ +1"
+  },
+  "치유의 은총": {
+    "en": "Grace of Healing",
+    "ja": "治癒の恩寵"
+  },
+  "칠흑 같은 심연의 안개 속에서 고대의 방주가 서서히 그 위용을 되찾고 있다. 모든 거점 시설의 불빛이 밝혀지는 순간, 방주는 단순한 피난처를 넘어 심연을 정복할 결사대의 기동 사령부로 깨어날 것이다.": {
+    "en": "Amidst pitch-black abyssal mist, the ancient Ark slowly regains its former glory. The moment lights illuminate all outpost facilities, the Ark will awaken beyond a mere refuge into a mobile command post for the strike team to conquer the Abyss.",
+    "ja": "漆黒の深淵の霧の中、古代の方舟が徐々にその威容を取り戻しつつある。すべての拠点施設に灯りがともる瞬間、方舟は単なる避難所を超え、深淵を征服する決死隊の機動司令部として目覚めるだろう。"
+  },
+  "칠흑 같은 어둠 속에서 타오르는 성화의 불씨는 공포를 씻어내고 전우들의 마음을 하나로 묶는다.": {
+    "en": "The ember of the Sacred Flame burning in pitch darkness cleanses fear and unites the hearts of comrades.",
+    "ja": "漆黒の闇の中で燃え上がる聖火の残り火は恐怖を洗い流し、戦友たちの心を一つに結ぶ。"
+  },
+  "칠흑 같은 어둠을 가르는 푸른 뇌광의 심판.": {
+    "en": "Judgment of blue lightning tearing through pitch-black darkness.",
+    "ja": "漆黒の闇を切り裂く青き雷光の審判。"
+  },
+  "칠흑 단죄 성의": {
+    "en": "Pitch-Black Condemnation Vestment",
+    "ja": "漆黒断罪聖衣"
+  }
+}

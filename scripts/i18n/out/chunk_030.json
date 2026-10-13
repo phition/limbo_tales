@@ -1,0 +1,802 @@
+{
+  "적 1체에 130% 피해를 입히고 2턴간 회피율 60% 상승 및 피격 시 즉시 반격합니다.": {
+    "en": "Deals 130% DMG to 1 enemy, increases Evasion by 60% for 2 turns, and immediately counterattacks upon being hit.",
+    "ja": "敵1体に130%ダメージを与え、2ターンの間回避率が60%上昇し被撃時に即座に反撃する。"
+  },
+  "적 1체에 160% 신성 피해를 가하고 아군 전원의 HP를 20% 회복합니다.": {
+    "en": "Deals 160% Holy DMG to 1 enemy and restores 20% HP to all allies.",
+    "ja": "敵1体に160%の神聖ダメージを与え、味方全員のHPを20%回復する。"
+  },
+  "적 1체에 200%의 파멸적인 강타를 가하고 2턴간 적 방어력을 35% 파쇄합니다. (기본 공격 대체)": {
+    "en": "Deals a devastating blow of 200% to 1 enemy and shreds enemy DEF by 35% for 2 turns. (Replaces Basic Attack)",
+    "ja": "敵1体に200%の破滅的な強打を与え、2ターンの間敵の防御力を35%破砕する。(通常攻撃置き換え)"
+  },
+  "적 1체에 방어력 30% 무시 220% 암습": {
+    "en": "220% Ambush ignoring 30% DEF to 1 enemy",
+    "ja": "敵1体に防御力30%無視の220%奇襲"
+  },
+  "적 1체에게 130% 물리 피해를 입히고 1턴간 기절시킵니다.": {
+    "en": "Deals 130% Physical DMG to 1 enemy and Stuns for 1 turn.",
+    "ja": "敵1体に130%の物理ダメージを与え、1ターンの間気絶させる。"
+  },
+  "적 1체에게 130% 빙결 피해를 입히고 1턴간 기절(동결)시킵니다. (기본 공격 대체)": {
+    "en": "Deals 130% Frost DMG to 1 enemy and Stuns (Freezes) for 1 turn. (Replaces Basic Attack)",
+    "ja": "敵1体に130%の凍結ダメージを与え、1ターンの間気絶(凍結)させる。(通常攻撃置き換え)"
+  },
+  "적 1체에게 130% 신성 마법 피해를 입히고 언데드/악마에게 1.5배 피해를 줍니다.": {
+    "en": "Deals 130% Holy Magic DMG to 1 enemy, dealing 1.5x damage against Undead/Demons.",
+    "ja": "敵1体に130%の神聖魔法ダメージを与え、アンデッド/悪魔に1.5倍のダメージを与える。"
+  },
+  "적 1체에게 135% 치명 참격을 가합니다. (치명타율 +30%)": {
+    "en": "Delivers a 135% critical slash to 1 enemy. (Crit Rate +30%)",
+    "ja": "敵1体に135%の会心斬撃を放つ。(会心率+30%)"
+  },
+  "적 1체에게 140% 돌격 강타를 가하고 1턴간 기절시킵니다.": {
+    "en": "Deals 140% Charge Strike to 1 enemy and Stuns for 1 turn.",
+    "ja": "敵1体に140%の突撃強打を与え、1ターンの間気絶させる。"
+  },
+  "적 1체에게 150% 뇌전 피해를 입히고 1턴간 뇌격(기절)을 부여합니다. (창 전용 / 기본 공격 대체)": {
+    "en": "Deals 150% Lightning DMG to 1 enemy and inflicts Shock (Stun) for 1 turn. (Spear only / Replaces Basic Attack)",
+    "ja": "敵1体に150%の雷電ダメージを与え、1ターンの間雷撃(気絶)を付与する。(槍専用 / 通常攻撃置き換え)"
+  },
+  "적 1체에게 150% 물리 피해를 입히고 1턴간 기절시킵니다.": {
+    "en": "Deals 150% Physical DMG to 1 enemy and Stuns for 1 turn.",
+    "ja": "敵1体に150%の物理ダメージを与え、1ターンの間気絶させる。"
+  },
+  "적 1체에게 150% 빙결 피해를 입히고 1턴간 빙결(행동 불가)을 부여합니다. (지팡이 전용 / 기본 공격 대체)": {
+    "en": "Deals 150% Frost DMG to 1 enemy and inflicts Freeze (Incapacitate) for 1 turn. (Staff only / Replaces Basic Attack)",
+    "ja": "敵1体に150%の凍結ダメージを与え、1ターンの間凍結(行動不能)を付与する。(杖専用 / 通常攻撃置き換え)"
+  },
+  "적 1체에게 150% 암습 피해를 입히고 3턴간 치명적인 중독을 부여합니다. (단검 전용 / 기본 공격 대체)": {
+    "en": "Deals 150% Ambush DMG to 1 enemy and inflicts lethal Poison for 3 turns. (Dagger only / Replaces Basic Attack)",
+    "ja": "敵1体に150%の奇襲ダメージを与え、3ターンの間致命的な中毒を付与する。(短剣専用 / 通常攻撃置き換え)"
+  },
+  "적 1체에게 150%의 화염 물리 피해를 입히고 2턴간 지속 화상/출혈을 부여합니다. (기본 공격 대체)": {
+    "en": "Deals 150% Flame Physical DMG to 1 enemy and inflicts Burn/Bleed for 2 turns. (Replaces Basic Attack)",
+    "ja": "敵1体に150%の火炎物理ダメージを与え、2ターンの間持続火傷/出血を付与する。(通常攻撃置き換え)"
+  },
+  "적 1체에게 155% 화염 관통 피해를 입히고 2턴간 지속 화상을 부여합니다. (활 전용 / 기본 공격 대체)": {
+    "en": "Deals 155% Flame Piercing DMG to 1 enemy and inflicts Burn for 2 turns. (Bow only / Replaces Basic Attack)",
+    "ja": "敵1体に155%の火炎貫通ダメージを与え、2ターンの間持続火傷を付与する。(弓専用 / 通常攻撃置き換え)"
+  },
+  "적 1체에게 160% 물리 피해를 입히고 2턴간 깊은 출혈을 부여합니다. (검 전용 / 기본 공격 대체)": {
+    "en": "Deals 160% Physical DMG to 1 enemy and inflicts Deep Bleed for 2 turns. (Sword only / Replaces Basic Attack)",
+    "ja": "敵1体に160%の物理ダメージを与え、2ターンの間深い出血を付与する。(剣専用 / 通常攻撃置き換え)"
+  },
+  "적 1체에게 160% 신성 강타를 가하고 2턴간 방어력을 20% 감소시킵니다.": {
+    "en": "Deals 160% Holy Strike to 1 enemy and reduces DEF by 20% for 2 turns.",
+    "ja": "敵1体に160%の神聖強打を与え、2ターンの間防御力を20%減少させる。"
+  },
+  "적 1체에게 160% 신성 관통 피해를 가하고 2턴간 실명을 부여합니다. (기본 공격 대체)": {
+    "en": "Deals 160% Holy Piercing DMG to 1 enemy and inflicts Blind for 2 turns. (Replaces Basic Attack)",
+    "ja": "敵1体に160%の神聖貫通ダメージを与え、2ターンの間盲目を付与する。(通常攻撃置き換え)"
+  },
+  "적 1체에게 160% 참격을 가하고 2턴간 치명적 출혈을 유발합니다.": {
+    "en": "Deals 160% Slash DMG to 1 enemy and causes lethal Bleed for 2 turns.",
+    "ja": "敵1体に160%の斬撃を放ち、2ターンの間致命的な出血を誘発する。"
+  },
+  "적 1체에게 160% 폭발 관통 피해를 입히고 2턴간 지속 화상을 부여합니다. (총 전용 / 기본 공격 대체)": {
+    "en": "Deals 160% Explosive Piercing DMG to 1 enemy and inflicts Burn for 2 turns. (Gun only / Replaces Basic Attack)",
+    "ja": "敵1体に160%の爆発貫通ダメージを与え、2ターンの間持続火傷を付与する。(銃専用 / 通常攻撃置き換え)"
+  },
+  "적 1체에게 4연속 고속 참격을 퍼부어 총 170% 피해를 입힙니다. (치명타율 +40%)": {
+    "en": "Unleashes 4 rapid slashes on 1 enemy for 170% total DMG. (Crit Rate +40%)",
+    "ja": "敵1体に4連続の高速斬撃を浴びせ、計170%のダメージを与える。(会心率+40%)"
+  },
+  "적 1체에게 기본 물리 공격을 가합니다. (마나 소모 없음)": {
+    "en": "Deals basic physical attack to 1 enemy. (No MP cost)",
+    "ja": "敵1体に基本物理攻撃を行う。(MP消費なし)"
+  },
+  "적 1체에게 재빠른 2연속 사격으로 125% 물리 피해를 입힙니다.": {
+    "en": "Deals 125% Physical DMG to 1 enemy with 2 quick consecutive shots.",
+    "ja": "敵1体に素早い2連続射撃で125%の物理ダメージを与える。"
+  },
+  "적 단일 MP 30 강탈 + 자신 공격력 30% 증폭 2턴": {
+    "en": "Steals 30 MP from a single enemy + amplifies own ATK by 30% for 2 turns",
+    "ja": "敵単体のMP 30強奪 + 自身の攻撃力30%増幅(2ターン)"
+  },
+  "적 상태이상 시 발동": {
+    "en": "Triggers on enemy status ailment",
+    "ja": "敵の状態異常時に発動"
+  },
+  "적 상태이상 시 일치 태그 스킬로 공격 시 연계 폭발": {
+    "en": "Combo burst when attacking afflicted enemies with matching tag skills",
+    "ja": "敵の状態異常時、一致タグスキルで攻撃すると連携爆発"
+  },
+  "적 영지 방어 리더": {
+    "en": "Enemy Territory Defense Leader",
+    "ja": "敵領地防衛リーダー"
+  },
+  "적 일렬": {
+    "en": "Enemy Row",
+    "ja": "敵一列"
+  },
+  "적 전열": {
+    "en": "Enemy Front Row",
+    "ja": "敵前衛"
+  },
+  "적 전열·중앙에 200% 관통 피해": {
+    "en": "200% Piercing DMG to enemy front and mid rows",
+    "ja": "敵前衛・中衛に200%貫通ダメージ"
+  },
+  "적 전열에 110% 광역 참격 피해": {
+    "en": "110% AoE Slash DMG to enemy front row",
+    "ja": "敵前衛に110%範囲斬撃ダメージ"
+  },
+  "적 전원에게 강력한 차원 총폭격을 가합니다.": {
+    "en": "Unleashes a powerful dimensional barrage on all enemies.",
+    "ja": "敵全員に強力な次元銃爆撃を放つ。"
+  },
+  "적 전체": {
+    "en": "All Enemies",
+    "ja": "敵全体"
+  },
+  "적 전체 (광역)": {
+    "en": "All Enemies (AoE)",
+    "ja": "敵全体 (範囲)"
+  },
+  "적 전체 110% 대검 충격파 + 공격력 30% 감소 & 아군 전체 25% 보호막": {
+    "en": "110% Greatsword Shockwave to all enemies + 30% ATK reduction & 25% Shield to all allies",
+    "ja": "敵全体に110%大剣衝撃波 + 攻撃力30%減少＆味方全体に25%シールド"
+  },
+  "적 전체 110% 얼음 피해 + 2턴 냉각": {
+    "en": "110% Ice DMG to all enemies + Chill for 2 turns",
+    "ja": "敵全体に110%氷ダメージ + 2ターン冷却"
+  },
+  "적 전체 120% 광역 난무 물리 피해": {
+    "en": "120% AoE Flurry Physical DMG to all enemies",
+    "ja": "敵全体に120%範囲乱舞物理ダメージ"
+  },
+  "적 전체 120% 전격 마법 피해": {
+    "en": "120% Lightning Magic DMG to all enemies",
+    "ja": "敵全体に120%電撃魔法ダメージ"
+  },
+  "적 전체 125% 물리 피해 + 2턴 출혈": {
+    "en": "125% Physical DMG to all enemies + Bleed for 2 turns",
+    "ja": "敵全体に125%物理ダメージ + 2ターン出血"
+  },
+  "적 전체 130% 방어무시 참격 피해": {
+    "en": "130% DEF-piercing Slash DMG to all enemies",
+    "ja": "敵全体に130%防御無視斬撃ダメージ"
+  },
+  "적 전체 130% 참격 피해 + 2턴간 적 공격력 30% 감소": {
+    "en": "130% Slash DMG to all enemies + 30% enemy ATK reduction for 2 turns",
+    "ja": "敵全体に130%斬撃ダメージ + 2ターン敵攻撃力30%減少"
+  },
+  "적 전체 160% 파멸 암흑 피해": {
+    "en": "160% Ruin Dark DMG to all enemies",
+    "ja": "敵全体に160%破滅暗黒ダメージ"
+  },
+  "적 전체 161% 비전 마법 피해 + 방어력 -35% 분쇄 (2턴)": {
+    "en": "161% Arcane Magic DMG to all enemies + -35% DEF Shred (2 turns)",
+    "ja": "敵全体に161%秘術魔法ダメージ + 防御力-35%粉砕 (2ターン)"
+  },
+  "적 전체 173% 파멸의 암흑 폭발 + 출혈": {
+    "en": "173% Ruin Dark Explosion to all enemies + Bleed",
+    "ja": "敵全体に173%破滅の暗黒爆発 + 出血"
+  },
+  "적 전체 180% 궤도 폭격 피해": {
+    "en": "180% Orbital Bombardment DMG to all enemies",
+    "ja": "敵全体に180%軌道爆撃ダメージ"
+  },
+  "적 전체 185% 화염 피해 + 2턴 화상": {
+    "en": "185% Flame DMG to all enemies + Burn for 2 turns",
+    "ja": "敵全体に185%火炎ダメージ + 2ターン火傷"
+  },
+  "적 전체 190% 화염 폭발 + 3턴 화상": {
+    "en": "190% Flame Explosion to all enemies + Burn for 3 turns",
+    "ja": "敵全体に190%火炎爆発 + 3ターン火傷"
+  },
+  "적 전체 220% 신성 피해 & 아군 35% 치유": {
+    "en": "220% Holy DMG to all enemies & 35% Heal to allies",
+    "ja": "敵全体に220%神聖ダメージ＆味方35%治癒"
+  },
+  "적 전체 240% 공허 피해 + 2턴 맹독": {
+    "en": "240% Void DMG to all enemies + Deadly Poison for 2 turns",
+    "ja": "敵全体に240%虚無ダメージ + 2ターン猛毒"
+  },
+  "적 전체 공격력 20% 감소 디버프 (2턴)": {
+    "en": "-20% ATK debuff to all enemies (2 turns)",
+    "ja": "敵全体の攻撃力20%減少デバフ (2ターン)"
+  },
+  "적 전체 명중률 40% 감소, 자신 회피율 증가": {
+    "en": "Reduces all enemies' Accuracy by 40%, increases own Evasion",
+    "ja": "敵全体の命中率40%減少、自身の回避率増加"
+  },
+  "적 전체 방어력 -35% 디버프 (2턴)": {
+    "en": "-35% DEF debuff to all enemies (2 turns)",
+    "ja": "敵全体の防御力-35%デバフ (2ターン)"
+  },
+  "적 전체를 한 점으로 응축하여 184% 피해 및 1턴 기절(행동 불가).": {
+    "en": "Condenses all enemies to a single point, dealing 184% DMG and Stun (incapacitate) for 1 turn.",
+    "ja": "敵全体を一点に凝縮し184%ダメージおよび1ターン気絶(行動不能)。"
+  },
+  "적 전체를 휩쓰는 벼락 폭풍 35% 연쇄 타격": {
+    "en": "Lightning storm sweeping all enemies with 35% chain strikes",
+    "ja": "敵全体を一掃する雷嵐35%連鎖打撃"
+  },
+  "적 전체에 104% 전격 마법 피해 + 60% 기절.": {
+    "en": "Deals 104% Lightning Magic DMG to all enemies + 60% chance to Stun.",
+    "ja": "敵全体に104%の電撃魔法ダメージ + 60%確率で気絶。"
+  },
+  "적 전체에 104% 중력 마법 피해 및 2턴간 공격력 30% 감소": {
+    "en": "Deals 104% Gravity Magic DMG to all enemies and reduces ATK by 30% for 2 turns",
+    "ja": "敵全体に104%重力魔法ダメージおよび2ターンの間攻撃力30%減少"
+  },
+  "적 전체에 105% 산탄 광역 피해": {
+    "en": "Deals 105% Shotgun AoE DMG to all enemies",
+    "ja": "敵全体に105%散弾範囲ダメージ"
+  },
+  "적 전체에 110% 대검 충격파를 가하고 공격력을 30% 약화 & 아군 전체 25% 보호막 부여": {
+    "en": "Deals 110% Greatsword Shockwave to all enemies, weakens ATK by 30%, and grants 25% Shield to all allies",
+    "ja": "敵全体に110%大剣衝撃波を与え攻撃力を30%弱体化＆味方全体に25%シールド付与"
+  },
+  "적 전체에 110% 얼음 피해를 입히고 2턴간 냉각(빙결 유도) 상태로 만듭니다.": {
+    "en": "Deals 110% Frost DMG to all enemies and inflicts Chill (inducing Freeze) for 2 turns.",
+    "ja": "敵全体に110%の氷ダメージを与え、2ターンの間冷却(凍結誘導)状態にする。"
+  },
+  "적 전체에 120% 대검 충격파를 가해 2턴간 공격력을 30% 약화시키고 모든 아군에게 최대 HP 25% 보호막을 부여합니다.": {
+    "en": "Deals 120% Greatsword Shockwave to all enemies, weakening ATK by 30% for 2 turns, and grants a shield of 25% max HP to all allies.",
+    "ja": "敵全体に120%の大剣衝撃波を与えて2ターンの間攻撃力を30%弱体化させ、全味方に最大HP25%のシールドを付与する。"
+  },
+  "적 전체에 120% 방어무시 참격 피해": {
+    "en": "120% DEF-piercing Slash DMG to all enemies",
+    "ja": "敵全体に120%防御無視斬撃ダメージ"
+  },
+  "적 전체에 130% 방어무시 암영 참격 피해를 가합니다.": {
+    "en": "Deals 130% DEF-piercing Shadow Slash DMG to all enemies.",
+    "ja": "敵全体に130%の防御無視暗影斬撃ダメージを与える。"
+  },
+  "적 전체에 140% 폭발 대미지 및 2턴간 받는 피해 60% 증폭 디버프 부여.": {
+    "en": "Deals 140% Explosion DMG to all enemies and inflicts a 60% damage taken amplification debuff for 2 turns.",
+    "ja": "敵全体に140%爆発ダメージおよび2ターンの間被ダメージ60%増幅デバフを付与。"
+  },
+  "적 전체에 160% 파멸의 암흑 마법 폭발 피해를 가합니다.": {
+    "en": "Deals 160% Ruin Dark Magic Explosion DMG to all enemies.",
+    "ja": "敵全体に160%の破滅の暗黒魔法爆発ダメージを与える。"
+  },
+  "적 전체에 173% 지속 비전 대미지.": {
+    "en": "173% continuous Arcane DMG to all enemies.",
+    "ja": "敵全体に173%の持続秘術ダメージ。"
+  },
+  "적 전체에 180% 피해를 입히고 100% 확률로 1턴 기절시킵니다.": {
+    "en": "Deals 180% DMG to all enemies and Stuns for 1 turn with 100% chance.",
+    "ja": "敵全体に180%のダメージを与え、100%の確率で1ターン気絶させる。"
+  },
+  "적 전체에 184% 비전 마법 피해를 입히고 3턴간 적 전체의 속도를 -15 감소 및 받는 피해 30% 증폭": {
+    "en": "Deals 184% Arcane Magic DMG to all enemies, reduces all enemies' SPD by -15, and amplifies damage taken by 30% for 3 turns",
+    "ja": "敵全体に184%秘術魔法ダメージを与え、3ターンの間敵全体の速度を-15減少および被ダメージ30%増幅"
+  },
+  "적 전체에 185% 화염 폭발을 일으키고 2턴간 격렬한 화상을 입힙니다.": {
+    "en": "Triggers a 185% Flame Explosion on all enemies and inflicts fierce Burn for 2 turns.",
+    "ja": "敵全体に185%の火炎爆発を起こし、2ターンの間激しい火傷を負わせる。"
+  },
+  "적 전체에 220% 창세의 신성 피해를 퍼붓고, 아군 전체 HP를 35% 치유합니다.": {
+    "en": "Unleashes 220% Genesis Holy DMG on all enemies and heals all allies' HP by 35%.",
+    "ja": "敵全体に220%の創世の神聖ダメージを浴びせ、味方全体のHPを35%回復する。"
+  },
+  "적 전체에 240% 공허 절대 피해를 입히고 2턴간 치명적 맹독을 누적시킵니다.": {
+    "en": "Deals 240% Void Absolute DMG to all enemies and stacks deadly poison for 2 turns.",
+    "ja": "敵全体に240%の虚無絶対ダメージを与え、2ターンの間致命的な猛毒を蓄積させる。"
+  },
+  "적 전체에 350% 마법 관통 파동 [집중 차징 & 진형 셔플]": {
+    "en": "350% Magic Piercing Wave to all enemies [Focused Charging & Formation Shuffle]",
+    "ja": "敵全体に350%魔法貫通波動 [集中チャージ＆陣形シャッフル]"
+  },
+  "적 전체에 50% 피해 및 2턴간 적 공격력 30% 감소": {
+    "en": "Deals 50% DMG to all enemies and reduces enemy ATK by 30% for 2 turns",
+    "ja": "敵全体に50%ダメージおよび2ターンの間敵攻撃力30%減少"
+  },
+  "적 전체에 80% 대미지 + 3턴간 중독(누적 지속 피해)": {
+    "en": "Deals 80% DMG to all enemies + Poison for 3 turns (stacking damage over time)",
+    "ja": "敵全体に80%ダメージ + 3ターンの間中毒(累積持続ダメージ)"
+  },
+  "적 전체에 81% 빙결 피해 및 동상/냉각(행동 불가) 부여.": {
+    "en": "Deals 81% Frost DMG to all enemies and inflicts Frostbite/Chill (incapacitate).",
+    "ja": "敵全体に81%凍結ダメージおよび凍傷/冷却(行動不能)付与。"
+  },
+  "적 전체에게 강력한 리더 궁극기를 가합니다.": {
+    "en": "Unleashes a powerful Leader Ultimate on all enemies.",
+    "ja": "敵全体に強力なリーダーアルティメットを放つ。"
+  },
+  "적 전체의 공격을 자신에게 집중시키고 1턴간 받는 모든 피해를 70% 경감합니다.": {
+    "en": "Focuses all enemy attacks on self and reduces all damage taken by 70% for 1 turn.",
+    "ja": "敵全体の攻撃を自身に集中させ、1ターンの間受ける全ダメージを70%軽減する。"
+  },
+  "적 전체의 시간을 왜곡하여 207% 비전 피해를 입히고 1턴간 완전 행동 불가(시간 정지)": {
+    "en": "Distorts time for all enemies, dealing 207% Arcane DMG and complete incapacitation (Time Stop) for 1 turn",
+    "ja": "敵全体の時間を歪曲して207%秘術ダメージを与え、1ターンの間完全行動不能(時間停止)"
+  },
+  "적 차징 100 파쇄 및 아군 전체 최대 HP 12% 보호막 전개": {
+    "en": "Shreds 100 enemy Charging and deploys a shield of 12% max HP to all allies",
+    "ja": "敵チャージ100粉砕および味方全体に最大HP12%のシールド展開"
+  },
+  "적 피버 게이지 만충! 아군 전원에게 방어막 과부하 반격!": {
+    "en": "Enemy FEVER gauge full! Barrier overload counterattack against all allies!",
+    "ja": "敵FEVERゲージ満タン！味方全員にシールド過負荷反撃！"
+  },
+  "적 후열": {
+    "en": "Enemy Back Row",
+    "ja": "敵後衛"
+  },
+  "적 후열로 도약하여 180% 치명 일격을 가합니다.": {
+    "en": "Leaps to the enemy back row, dealing a 180% critical strike.",
+    "ja": "敵後衛へ跳躍し、180%の会心一撃を与える。"
+  },
+  "적 후열의 급소를 저격하여 220% 초치명타 일격을 꽂아넣습니다.": {
+    "en": "Snipes the vitals of the enemy back row, delivering a 220% super-critical strike.",
+    "ja": "敵後衛の急所を狙撃し、220%の超会心一撃を叩き込む。"
+  },
+  "적군": {
+    "en": "Enemy Force",
+    "ja": "敵軍"
+  },
+  "적군 공격 대기 중": {
+    "en": "Awaiting Enemy Attack",
+    "ja": "敵軍攻撃待機中"
+  },
+  "적군 공격자": {
+    "en": "Enemy Attacker",
+    "ja": "敵軍攻撃者"
+  },
+  "적에게 173% 마법 대미지.": {
+    "en": "173% Magic DMG to enemy.",
+    "ja": "敵に173%の魔法ダメージ。"
+  },
+  "적에게 특정 상태이상이 걸려 있을 때, 일치하는 고유 태그(강타, 베기, 관통, 마법, 신성, 저격 등) 스킬로 공격하면 강력한 연계 콤보가 폭발합니다.": {
+    "en": "When an enemy suffers from a specific status ailment, attacking with a skill of a matching tag (Strike, Slash, Pierce, Magic, Holy, Snipe, etc.) triggers a powerful combo explosion.",
+    "ja": "敵に特定の状態異常がかかっている際、一致する固有タグ(強打、斬撃、貫通、魔法、神聖、狙撃など)スキルで攻撃すると強力な連携コンボが爆発します。"
+  },
+  "적에게 해당 상태이상이 걸려 있을 때 일치하는 태그 스킬로 공격하면 연계 콤보가 폭발합니다.": {
+    "en": "Attacking with a matching tag skill while the enemy has the status ailment triggers a combo explosion.",
+    "ja": "敵に該当の状態異常がかかっている際、一致するタグスキルで攻撃すると連携コンボが爆発します。"
+  },
+  "적용": {
+    "en": "Apply",
+    "ja": "適用"
+  },
+  "적의 그림자를 타고 넘어가 155%의 관통 일격을 가합니다.": {
+    "en": "Flips through the enemy's shadow to deliver a 155% piercing strike.",
+    "ja": "敵の影を飛び越え、155%の貫通一撃を与える。"
+  },
+  "적의 단단한": {
+    "en": "Enemy's solid",
+    "ja": "敵の堅牢な"
+  },
+  "적의 보호막(Shield)에 50% 추가 피해를 입혀 방어선을 신속히 붕괴": {
+    "en": "Deals 50% bonus damage to enemy Shields, rapidly collapsing defensive lines",
+    "ja": "敵のシールドに50%追加ダメージを与え防衛線を迅速に崩壊"
+  },
+  "적의 뼈와 살을 분쇄하는 거대한 혈풍 대검": {
+    "en": "A colossal blood-wind greatsword that crushes enemy bone and flesh",
+    "ja": "敵の骨と肉を粉砕する巨大な血風の大剣"
+  },
+  "적의 전열을 분쇄하는 거대한 투사의 전술 장창.": {
+    "en": "A massive gladiator tactical pike that crushes the enemy front row.",
+    "ja": "敵の前衛を粉砕する巨大な闘士の戦術長槍。"
+  },
+  "적의 차징 캔슬 및 그로기 유발": {
+    "en": "Cancels enemy Charging and inflicts Stagger",
+    "ja": "敵のチャージキャンセルおよびグロッキー誘発"
+  },
+  "적의 틈새를 찔러 100% 피해를 주고 2턴간 출혈 상태를 유발합니다.": {
+    "en": "Pierces an enemy's opening, dealing 100% DMG and inflicting Bleed for 2 turns.",
+    "ja": "敵の隙を突いて100%ダメージを与え、2ターンの間出血状態を誘発する。"
+  },
+  "적의 표적에서 벗어나 피격되지 않으며 다음 공격 위력이 대폭 증폭됩니다": {
+    "en": "Escapes enemy targeting to avoid hits, greatly amplifying next attack power",
+    "ja": "敵の標的から外れて被撃せず、次の攻撃威力が大幅に増幅されます"
+  },
+  "적재 한도 도달": {
+    "en": "Cargo Limit Reached",
+    "ja": "積載限界到達"
+  },
+  "적재 한도: 🏰영지 생산물 {0}개 | 🌿던전 파밍 {1}개 | 🔮심연 희귀품 {2}개": {
+    "en": "Cargo Limit: 🏰Domain Goods {0} | 🌿Dungeon Loot {1} | 🔮Abyssal Rarities {2}",
+    "ja": "積載限界: 🏰領地生産物 {0}個 | 🌿ダンジョン採集 {1}個 | 🔮深淵希少品 {2}個"
+  },
+  "적합": {
+    "en": "Suitable",
+    "ja": "適合"
+  },
+  "전 거주민을 아우르는 고농축 영양 배급제를 완벽히 정착시켜 방주의 만성적인 식량 불안을 종식시켰습니다.": {
+    "en": "Fully established a concentrated nutrition rationing system for all residents, ending the Ark's chronic food insecurity.",
+    "ja": "全住民を包括する高濃縮栄養配給制を完全に定着させ、方舟の慢性的な食糧不安に終止符を打ちました。"
+  },
+  "전 건물 Lv.10 · 최대 자원 · 보스 비전서 10종 · Lv.30 히어로 5인 · 10층 던전 해금": {
+    "en": "All Buildings Lv.10 · Max Resources · 10 Boss Grimoires · 5 Lv.30 Heroes · Floor 10 Dungeon Unlocked",
+    "ja": "全建物Lv.10・最大資源・ボス魔導書10種・Lv.30ヒーロー5名・10層ダンジョン解放"
+  },
+  "전 능력치 +5%, 속도 +1, 행운 +4": {
+    "en": "All Stats +5%, SPD +1, LUCK +4",
+    "ja": "全ステータス+5%、速度+1、幸運+4"
+  },
+  "전 능력치 +{0}%": {
+    "en": "All Stats +{0}%",
+    "ja": "全ステータス+{0}%"
+  },
+  "전 방주 지휘관 연합이 도전하는 심연의 절대자 네메시스의 전체 체력을 30,000,000으로 대폭 확장하여 더욱 웅장하고 긴장감 넘치는 월드 레이드 토벌전 밸런스를 구축했습니다.": {
+    "en": "Greatly expanded the total HP of Nemesis, the Abyssal Sovereign challenged by all Ark Commander coalitions, to 30,000,000, establishing a more epic and tense World Raid balance.",
+    "ja": "全方舟指揮官連合が挑む深淵の絶対者ネメシスの総HPを30,000,000へ大幅拡張し、より雄大で緊張感あふれるワールドレイド討伐戦のバランスを構築しました。"
+  },
+  "전 서버 지휘관 토벌 랭킹 (시즌 누적)": {
+    "en": "All-Server Commander Subjugation Ranking (Season Cumulative)",
+    "ja": "全サーバー指揮官討伐ランキング (シーズン累計)"
+  },
+  "전 클래스": {
+    "en": "All Classes",
+    "ja": "全クラス"
+  },
+  "전 클래스 공용": {
+    "en": "Universal for All Classes",
+    "ja": "全クラス共通"
+  },
+  "전 파티원 ATK/HP +15% · 식량 소모 -20% · 희귀 드랍률 +25%": {
+    "en": "All Party Members ATK/HP +15% · Food Cost -20% · Rare Drop Rate +25%",
+    "ja": "全パーティメンバーATK/HP+15%・食糧消費-20%・希少ドロップ率+25%"
+  },
+  "전 파티원 HP 및 MP +35% 회복": {
+    "en": "All Party Members HP & MP +35% Recovery",
+    "ja": "全パーティメンバーHPおよびMP+35%回復"
+  },
+  "전 파티원 최대 HP 60% 에테르 방벽 부여 + 2턴간 100% 환영 반격 결계": {
+    "en": "Grants 60% Max HP Ether Barrier to all party members + 100% Phantom Counterattack Barrier for 2 turns",
+    "ja": "全パーティメンバーに最大HP60%のエーテル障壁付与 + 2ターンの間100%幻影反撃結界"
+  },
+  "전/후열 대응": {
+    "en": "Front/Back Row Response",
+    "ja": "前衛/後衛対応"
+  },
+  "전격": {
+    "en": "Lightning",
+    "ja": "電撃"
+  },
+  "전능력치 +": {
+    "en": "All Stats +",
+    "ja": "全ステータス +"
+  },
+  "전능력치 +{0}%": {
+    "en": "All Stats +{0}%",
+    "ja": "全ステータス +{0}%"
+  },
+  "전략 참모부": {
+    "en": "Strategic General Staff",
+    "ja": "戦略参謀部"
+  },
+  "전력 증폭 진지": {
+    "en": "Power Amplification Post",
+    "ja": "戦力増幅陣地"
+  },
+  "전리품 100% 안전 보존 상태로 즉시 성채 안전 귀환": {
+    "en": "Immediately return safely to Citadel with 100% loot safely preserved",
+    "ja": "戦利品を100%安全保存した状態で即座に城塞へ安全帰還"
+  },
+  "전리품 80% 유실": {
+    "en": "80% Loot Lost",
+    "ja": "戦利品80%喪失"
+  },
+  "전리품 모두 포기": {
+    "en": "Forfeit All Loot",
+    "ja": "戦利品をすべて放棄"
+  },
+  "전리품 선별 및 배낭 공간 확보": {
+    "en": "Filter loot and free backpack space",
+    "ja": "戦利品選別およびバックパック空き確保"
+  },
+  "전리품 정산 보고서와 함께 성채 창고로 100% 입고": {
+    "en": "100% stored in Citadel warehouse along with loot settlement report",
+    "ja": "戦利品精算報告書と共に城塞倉庫へ100%入庫"
+  },
+  "전리품을 두고 떠날까요?": {
+    "en": "Leave the loot behind and depart?",
+    "ja": "戦利品を残して立ち去りますか？"
+  },
+  "전면 대체 제작": {
+    "en": "Full Replacement Crafting",
+    "ja": "全面代替製作"
+  },
+  "전멸 방지 & 보관 수칙": {
+    "en": "Wipe Prevention & Storage Rules",
+    "ja": "全滅防止＆保管心得"
+  },
+  "전멸 시 배낭 전리품 10~50% 회수": {
+    "en": "Recover 10-50% backpack loot on wipe",
+    "ja": "全滅時バックパック戦利品の10~50%回収"
+  },
+  "전문 무두질 장인들을 배치하여 가죽 생산량을 늘리고 식량 가공 라인을 2배로 확장했습니다.": {
+    "en": "Assigned expert tanners to increase leather production and doubled food processing capacity.",
+    "ja": "専門の皮なめし職人を配置して革の生産量を増やし、食糧加工ラインを2倍に拡張しました。"
+  },
+  "전방위 파괴 공격: 공격력 +12%, 치명타 피해 +15%, 속도 +8%": {
+    "en": "Omnidirectional Destructive Strike: ATK +12%, Crit DMG +15%, SPD +8%",
+    "ja": "全方位破壊攻撃: 攻撃力+12%、会心ダメージ+15%、速度+8%"
+  },
+  "전사": {
+    "en": "Warrior",
+    "ja": "戦士"
+  },
+  "전사 영웅 장착 장비 유품 보관함 100% 안전 회수": {
+    "en": "100% safe recovery of fallen heroes' equipped gear to memento chest",
+    "ja": "戦死した英雄の装備品を遺品保管箱へ100%安全回収"
+  },
+  "전사 층계": {
+    "en": "Warrior Tier",
+    "ja": "戦士階層"
+  },
+  "전사의 투혼": {
+    "en": "Warrior's Fighting Spirit",
+    "ja": "戦士の闘魂"
+  },
+  "전사의 함성": {
+    "en": "Warrior's Battle Cry",
+    "ja": "戦士の咆哮"
+  },
+  "전사자": {
+    "en": "The Fallen",
+    "ja": "戦死者"
+  },
+  "전사자 [{0}] 유해 운구 & [{1}] 후방 호출 ({2}턴 소요{3})": {
+    "en": "Transport remains of fallen [{0}] & recall [{1}] from rear (takes {2} turns{3})",
+    "ja": "戦死者[{0}]の遺体搬送＆[{1}]後方召集 ({2}ターン所要{3})"
+  },
+  "전사자 유해 운구 또는 생존자 귀환 즉시 슬롯이 비워지며, 소환된 대원은 차원 균열을 통해": {
+    "en": "The slot is cleared immediately upon carrying the fallen's remains or survivor's return, and the summoned operative arrives through the dimensional rift",
+    "ja": "戦死者の遺体搬送または生存者帰還で即座にスロットが空き、召喚された隊員は次元の亀裂を通じて"
+  },
+  "전사한 [{0}] 계열 결속": {
+    "en": "Bond with fallen [{0}] class",
+    "ja": "戦死した[{0}]系列の結束"
+  },
+  "전사한 영웅들의 넋을 기리는 성채 묘지가 강력한 계승 시스템으로 전면 개편되었습니다.": {
+    "en": "The Citadel Cemetery honoring the souls of fallen heroes has been completely revamped into a powerful succession system.",
+    "ja": "戦死した英雄たちの魂を称える城塞墓地が、強力な継承システムとして全面改編されました。"
+  },
+  "전사한 영웅들의 장착 장비를 성채 보관함으로 100% 안전하게 회수하고, 묘지 전체 헌화로 전투 경험치 버프를 얻으며, 24종 영령의 가호를 결속하여 다음 원정 1회 동안 강력한 시너지를 누리는 계승 시스템입니다.": {
+    "en": "A succession system that safely recovers fallen heroes' equipment to the Citadel storage at 100%, grants combat EXP buffs through cemetery offerings, and bonds 24 types of heroic spirit blessings for potent synergy on the next expedition.",
+    "ja": "戦死した英雄の装備品を城塞保管庫へ100%安全に回収し、墓地全体の献花で戦闘経験値バフを得て、24種の英霊の加護を結束し次の遠征1回で強力なシナジーを享受する継承システムです。"
+  },
+  "전사한 용병은 스킬을 변경할 수 없습니다.": {
+    "en": "Fallen mercenaries cannot change skills.",
+    "ja": "戦死した傭兵はスキルを変更できません。"
+  },
+  "전설": {
+    "en": "Legendary",
+    "ja": "伝説"
+  },
+  "전설 (L)": {
+    "en": "Legendary (L)",
+    "ja": "伝説 (L)"
+  },
+  "전설 장비": {
+    "en": "Legendary Equipment",
+    "ja": "伝説装備"
+  },
+  "전설 장신구: 투사의 영광 반지": {
+    "en": "Legendary Accessory: Champion's Glory Ring",
+    "ja": "伝説の装飾品: 闘士の栄光の指輪"
+  },
+  "전설의 권능: 전 스탯 +65% 극대화": {
+    "en": "Legendary Might: Maximizes all stats by +65%",
+    "ja": "伝説の権能: 全ステータス+65%極大化"
+  },
+  "전설의 영웅단": {
+    "en": "Legendary Hero Guild",
+    "ja": "伝説の英雄団"
+  },
+  "전설적인 영웅들이 모여드는 명소가 되어 용병 풀이 6명으로 늘어나고, 일기당천의 [E] 에픽 등급 용병이 출현합니다.": {
+    "en": "Becoming a renowned gathering spot for legendary heroes, the mercenary pool expands to 6 and matchless [E] Epic mercenaries appear.",
+    "ja": "伝説的な英雄が集まる名所となり、傭兵プールが6名に増え、一騎当千の[E]エピック等級傭兵が出現します。"
+  },
+  "전수 스킬: [": {
+    "en": "Transferred Skill: [",
+    "ja": "伝授スキル: ["
+  },
+  "전수:": {
+    "en": "Transfer:",
+    "ja": "伝授:"
+  },
+  "전술 드론 호출": {
+    "en": "Call Tactical Drone",
+    "ja": "戦術ドローン呼出"
+  },
+  "전술 마도 저격": {
+    "en": "Tactical Arcane Snipe",
+    "ja": "戦術魔導狙撃"
+  },
+  "전술 모멘텀 FEVER 뱃지": {
+    "en": "Tactical Momentum FEVER Badge",
+    "ja": "戦術モメンタム FEVER バッジ"
+  },
+  "전술 모멘텀 FEVER 뱃지 (": {
+    "en": "Tactical Momentum FEVER Badge (",
+    "ja": "戦術モメンタム FEVER バッジ ("
+  },
+  "전술 모멘텀 • {0}": {
+    "en": "Tactical Momentum • {0}",
+    "ja": "戦術モメンタム • {0}"
+  },
+  "전술 모멘텀으로 뱃지 수집": {
+    "en": "Collect badges with Tactical Momentum",
+    "ja": "戦術モメンタムでバッジ収集"
+  },
+  "전술 방진을 펼쳐 아군 전체의 방어력을 25% 상승시킵니다.": {
+    "en": "Deploys a tactical square formation, increasing all allies' DEF by 25%.",
+    "ja": "戦術方陣を展開し、味方全体の防御力を25%上昇させる。"
+  },
+  "전술 분석망": {
+    "en": "Tactical Analysis Grid",
+    "ja": "戦術分析網"
+  },
+  "전술 스킬 1": {
+    "en": "Tactical Skill 1",
+    "ja": "戦術スキル 1"
+  },
+  "전술 스킬 2": {
+    "en": "Tactical Skill 2",
+    "ja": "戦術スキル 2"
+  },
+  "전술 원호 가동 중 ✨🛡️": {
+    "en": "Tactical Assist Active ✨🛡️",
+    "ja": "戦術援護稼働中 ✨🛡️"
+  },
+  "전술 장비 단조 및 강화 병기창 (미건설)": {
+    "en": "Tactical Equipment Forging & Enhancement Armory (Not Built)",
+    "ja": "戦術装備鍛造および強化兵器廠 (未建設)"
+  },
+  "전술 지휘관": {
+    "en": "Tactical Commander",
+    "ja": "戦術指揮官"
+  },
+  "전술 지휘관의 진격: 파티 전능력치 +6%, 속도 +8%, 받는 피해 5% 감소": {
+    "en": "Tactical Commander's Advance: Party All Stats +6%, SPD +8%, Damage Taken -5%",
+    "ja": "戦術指揮官の進撃: パーティ全ステータス+6%、速度+8%、被ダメージ5%減少"
+  },
+  "전술 타워": {
+    "en": "Tactical Tower",
+    "ja": "戦術タワー"
+  },
+  "전술 파동": {
+    "en": "Tactical Wave",
+    "ja": "戦術波動"
+  },
+  "전술 파동 발동": {
+    "en": "Tactical Wave Triggered",
+    "ja": "戦術波動発動"
+  },
+  "전술 파동 발동!": {
+    "en": "Tactical Wave Activated!",
+    "ja": "戦術波動発動！"
+  },
+  "전술 포수": {
+    "en": "Tactical Gunner",
+    "ja": "戦術砲手"
+  },
+  "전술 포수의 궤도 분석: 적 방어 관통 +12%, 파티 속도 +8%": {
+    "en": "Tactical Gunner's Trajectory Analysis: Enemy DEF Pierce +12%, Party SPD +8%",
+    "ja": "戦術砲手の弾道分析: 敵防御貫通+12%、パーティ速度+8%"
+  },
+  "전술 효과 수치": {
+    "en": "Tactical Effect Value",
+    "ja": "戦術効果数値"
+  },
+  "전술의 극의": {
+    "en": "Culmination of Tactics",
+    "ja": "戦術の極意"
+  },
+  "전술적 호흡": {
+    "en": "Tactical Harmony",
+    "ja": "戦術的息吹"
+  },
+  "전열": {
+    "en": "Front Row",
+    "ja": "前衛"
+  },
+  "전열 1명 + 중열 1명 + 후열 1명 (균등 배치)": {
+    "en": "1 Front row + 1 Mid row + 1 Back row (Balanced formation)",
+    "ja": "前衛1名 + 中衛1名 + 後衛1名 (均等配置)"
+  },
+  "전열 1체": {
+    "en": "1 Front-row enemy",
+    "ja": "前衛1体"
+  },
+  "전열 2명 이상 전진 배치": {
+    "en": "Deploy 2 or more members forward in Front row",
+    "ja": "前衛に2名以上前進配置"
+  },
+  "전열 가르기": {
+    "en": "Front Row Cleave",
+    "ja": "前衛裂き"
+  },
+  "전열 대상에게 180% 물리 피해 (넉백)": {
+    "en": "180% Physical DMG to front-row target (Knockback)",
+    "ja": "前衛対象に180%物理ダメージ (ノックバック)"
+  },
+  "전열 대상에게 240% 피해 + 1턴 기절": {
+    "en": "240% DMG to front-row target + 1 turn Stun",
+    "ja": "前衛対象に240%ダメージ + 1ターン気絶"
+  },
+  "전열 방어 탱커": {
+    "en": "Front-row Defense Tank",
+    "ja": "前衛防衛タンク"
+  },
+  "전열 방호선: 전열 적이 생존해 있을 때 근접 공격으로 후열 적을 타격하면 피해량 25% 감소": {
+    "en": "Front Row Defense Line: Melee attacks on back-row enemies deal 25% less damage while front-row enemies are alive",
+    "ja": "前衛防護線: 前衛の敵が生存している際、近接攻撃で後衛の敵を攻撃するとダメージが25%減少"
+  },
+  "전열 수호": {
+    "en": "Front Row Guardian",
+    "ja": "前衛守護"
+  },
+  "전열 수호 엄호: 전열 아군이 후열 아군 피격 시 전선에 개입하여 피해 경감": {
+    "en": "Front Row Guardian Cover: Front-row allies intervene and reduce damage when back-row allies are hit",
+    "ja": "前衛守護援護: 前衛の味方が後衛の味方の被撃時に介入してダメージを軽減"
+  },
+  "전열 압도": {
+    "en": "Front Row Overwhelm",
+    "ja": "前衛圧倒"
+  },
+  "전열 엄호 -{0}%": {
+    "en": "Front Row Cover -{0}%",
+    "ja": "前衛援護 -{0}%"
+  },
+  "전열 엄호율 +{0}%": {
+    "en": "Front Row Cover Rate +{0}%",
+    "ja": "前衛援護率 +{0}%"
+  },
+  "전열 영웅에게 130% 물리 피해": {
+    "en": "130% Physical DMG to front-row hero",
+    "ja": "前衛英雄に130%物理ダメージ"
+  },
+  "전열 적": {
+    "en": "Front-row Enemies",
+    "ja": "前衛の敵"
+  },
+  "전열 전체 150% 마법 피해": {
+    "en": "150% Magic DMG to entire front row",
+    "ja": "前衛全体に150%魔法ダメージ"
+  },
+  "전열 타격 시 +25% & 보호막 연계": {
+    "en": "Striking Front row: +25% DMG & Shield combo",
+    "ja": "前衛攻撃時+25%＆シールド連携"
+  },
+  "전열 탱커, 중앙 딜러, 후방 지원의 완벽한 조화: 전원 모든 스탯 +6%, 매 턴 체력 2% 재생 및 마나 4 MP 회복": {
+    "en": "Harmonious synergy of Front Tank, Mid Dealer, and Back Support: All Stats +6% for all, 2% HP regen and 4 MP recovery every turn",
+    "ja": "前衛タンク、中央アタッカー、後方サポートの調和: 全員の全ステータス+6%、毎ターンHP 2%再生およびMP 4回復"
+  },
+  "전열 특화": {
+    "en": "Front Row Specialization",
+    "ja": "前衛特化"
+  },
+  "전열 특화: 전열 적 타격 시 피해 +25% 증폭 및 자신에게 보호막(가한 피해의 25%) 생성": {
+    "en": "Front Row Specialty: +25% damage when striking front-row enemies and generates a shield for self (25% of damage dealt)",
+    "ja": "前衛特化: 前衛の敵を攻撃時にダメージ+25%増幅および自身にシールド(与えたダメージの25%)生成"
+  },
+  "전열 후열보호 {0}%": {
+    "en": "Front row Back row cover {0}%",
+    "ja": "前衛の後衛保護 {0}%"
+  },
+  "전열/중열 (front)": {
+    "en": "Front/Mid row (front)",
+    "ja": "前衛/中衛 (front)"
+  },
+  "전열/중열 아군에게 115% 암흑 피해": {
+    "en": "115% Dark DMG to Front/Mid row allies",
+    "ja": "前衛/中衛の味方に115%暗黒ダメージ"
+  },
+  "전열/후열 대응": {
+    "en": "Front/Back Row Response",
+    "ja": "前衛/後衛対応"
+  },
+  "전열·중앙 동시 관통 160% 피해": {
+    "en": "160% Piercing DMG penetrating Front and Mid rows simultaneously",
+    "ja": "前衛・中央同時貫通160%ダメージ"
+  },
+  "전열에서 적진을 분쇄하는 전사 계열의 처형도끼. 강력한 타격과 생존 체력을 제공합니다.": {
+    "en": "A warrior executioner's axe that shatters enemy lines from the front row. Provides heavy strikes and survivability HP.",
+    "ja": "前衛から敵陣を粉砕する戦士系の処刑斧。強力な打撃と生存HPを提供する。"
+  },
+  "전장에 거대 천체 유성을 낙하시켜 적 전체에게 253% 파멸 마법 피해를 입히고 3턴간 화상(지속 피해 및 방어 50% 분쇄)을 부여합니다.": {
+    "en": "Calls down a colossal celestial meteor onto the battlefield, dealing 253% Ruin Magic DMG to all enemies and inflicting Burn (DoT and 50% DEF shred) for 3 turns.",
+    "ja": "戦場に巨大な天体流星を落下させ敵全体に253%の破滅魔法ダメージを与え、3ターンの間火傷(持続ダメージおよび防御50%粉砕)を付与する。"
+  }
+}

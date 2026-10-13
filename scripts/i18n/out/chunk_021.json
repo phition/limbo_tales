@@ -1,0 +1,802 @@
+{
+  "생체 병동": {
+    "en": "Bio-Ward",
+    "ja": "生体病棟"
+  },
+  "생체 복원": {
+    "en": "Bio-Restoration",
+    "ja": "生体復元"
+  },
+  "생체 복원 병동": {
+    "en": "Bio-Restoration Ward",
+    "ja": "生体復元病棟"
+  },
+  "생체 복원 병동 (Bio-Restoration Ward)": {
+    "en": "Bio-Restoration Ward",
+    "ja": "生体復元病棟 (Bio-Restoration Ward)"
+  },
+  "생체 복원 병동 건설": {
+    "en": "Build Bio-Restoration Ward",
+    "ja": "生体復元病棟の建設"
+  },
+  "생체 복원 병동 입원 치료 틱 소모": {
+    "en": "Consumes Bio-Restoration Ward hospitalization treatment ticks",
+    "ja": "生体復元病棟入院治療ティック消費"
+  },
+  "생체 복원 병동에 입원 중인 용병이 파티에 있습니다. 퇴원하거나 다른 용병으로 교체하세요.": {
+    "en": "A mercenary hospitalized in the Bio-Restoration Ward is in the party. Discharge them or swap with another mercenary.",
+    "ja": "生体復元病棟に入院中の傭兵がパーティにいます。退院させるか別の傭兵と交代してください。"
+  },
+  "생체 복원 병동에서 집중 치료 중입니다. 완치 후 퇴원하거나 병동에서 수동 퇴원시켜야 파티 편성이 가능합니다. (클릭하여 병동으로 바로가기 ▶)": {
+    "en": "Under intensive treatment in the Bio-Restoration Ward. Can only join party after full recovery or manual discharge from the ward. (Click to go to Ward ▶)",
+    "ja": "生体復元病棟で集中治療中です。完治後に退院するか、病棟で手動退院させると編成可能になります。(クリックで病棟へ移動 ▶)"
+  },
+  "생체 복원 병동으로 즉시 이동": {
+    "en": "Go to Bio-Restoration Ward immediately",
+    "ja": "生体復元病棟へ即時移動"
+  },
+  "생체 복원 병동을 개설했습니다. 병상 2개를 가동하여 부상당한 대원들의 체력을 5초마다 +5씩 안정적으로 치료합니다.": {
+    "en": "Opened the Bio-Restoration Ward. Operating 2 beds to steadily restore +5 HP to injured squad members every 5s.",
+    "ja": "生体復元病棟を開設しました。病床2基を稼働させ、負傷した隊員のHPを5秒ごとに+5ずつ安定して治療します。"
+  },
+  "생체 인증 동기화 완료. 방주 성채로 진입합니다.": {
+    "en": "Biometric sync complete. Entering the Ark Citadel.",
+    "ja": "生体認証の同期完了。方舟城塞へ進入します。"
+  },
+  "섀도우 블레이드": {
+    "en": "Shadow Blade",
+    "ja": "シャドウブレード"
+  },
+  "섀도우 스파이어 은신처": {
+    "en": "Shadow Spire Hideout",
+    "ja": "シャドウスパイアの隠れ家"
+  },
+  "서고 보유:": {
+    "en": "Archives Owned:",
+    "ja": "書庫保有:"
+  },
+  "서고 상태": {
+    "en": "Archives Status",
+    "ja": "書庫状態"
+  },
+  "서로의 상처를 보듬으며 끈끈한 전우애를 형성합니다.": {
+    "en": "Tending to each other's wounds, forging a tight bond of camaraderie.",
+    "ja": "互いの傷を労わり合い、熱い戦友愛を育む。"
+  },
+  "서리": {
+    "en": "Frost",
+    "ja": "霜"
+  },
+  "서린": {
+    "en": "Seorin",
+    "ja": "ソリン"
+  },
+  "서버 응답 오류": {
+    "en": "Server Response Error",
+    "ja": "サーバー応答エラー"
+  },
+  "서버 응답 오류 (Vite dev server 확인 필요)": {
+    "en": "Server Response Error (Check Vite dev server)",
+    "ja": "サーバー応答エラー (Vite dev serverの確認が必要)"
+  },
+  "서브": {
+    "en": "Sub",
+    "ja": "サブ"
+  },
+  "서브 의뢰 도착": {
+    "en": "Side Request Arrived",
+    "ja": "サブ依頼到着"
+  },
+  "서브 퀘스트 보상 강화 (입소문 확산)": {
+    "en": "Sub Quest Rewards Boosted (Word of Mouth Spread)",
+    "ja": "サブクエスト報酬強化 (口コミ拡散)"
+  },
+  "서브 퀘스트 완료 보상": {
+    "en": "Sub Quest Completion Reward",
+    "ja": "サブクエスト完了報酬"
+  },
+  "서브 퀘스트는 해결 시 새로운 의뢰가 계속 생성됩니다.": {
+    "en": "Completing sub quests continuously generates new requests.",
+    "ja": "サブクエストは解決すると新しい依頼が継続して生成されます。"
+  },
+  "서사 설명": {
+    "en": "Narrative Description",
+    "ja": "叙事の説明"
+  },
+  "서사 확인 및 분기 보상 수령": {
+    "en": "Check Narrative & Claim Branch Rewards",
+    "ja": "叙事確認および分岐報酬受取"
+  },
+  "서사 회고록": {
+    "en": "Narrative Memoir",
+    "ja": "叙事回顧録"
+  },
+  "서약 완료! 방주 성채로 진입합니다...": {
+    "en": "Pledge complete! Entering the Ark Citadel...",
+    "ja": "誓約完了！方舟城塞へ進入します…"
+  },
+  "서큐버스": {
+    "en": "Succubus",
+    "ja": "サキュバス"
+  },
+  "서포터": {
+    "en": "Supporter",
+    "ja": "サポーター"
+  },
+  "서포터 공석": {
+    "en": "Supporter Vacant",
+    "ja": "サポーター空席"
+  },
+  "서포터 미편성": {
+    "en": "Supporter Unassigned",
+    "ja": "サポーター未編成"
+  },
+  "서포터 해제": {
+    "en": "Remove Supporter",
+    "ja": "サポーター解除"
+  },
+  "석관 개방 보상": {
+    "en": "Sarcophagus Opening Reward",
+    "ja": "石棺開放報酬"
+  },
+  "석관 열쇠": {
+    "en": "Sarcophagus Key",
+    "ja": "石棺の鍵"
+  },
+  "석벽 틈새에서 치명적인 부식성 독안개가 뿜어져 나옵니다!": {
+    "en": "A deadly corrosive poison mist spews from the stone wall cracks!",
+    "ja": "石壁の隙間から致命的な腐食性の毒霧が噴き出します！"
+  },
+  "석재": {
+    "en": "Stone",
+    "ja": "石材"
+  },
+  "석재 & 철광 채굴": {
+    "en": "Mine Stone & Iron Ore",
+    "ja": "石材＆鉄鉱採掘"
+  },
+  "석재 {0}개 납품": {
+    "en": "Deliver {0} Stone",
+    "ja": "石材{0}個納品"
+  },
+  "석재 조각": {
+    "en": "Stone Fragment",
+    "ja": "石材の欠片"
+  },
+  "석재 조각상에 에테르 마력이 스며들어 깨어난 비행 가고일. 고속으로 급강하하여 후열을 노린다.": {
+    "en": "A flying gargoyle awakened by ether magic permeating a stone statue. Dives at high speed targeting the back row.",
+    "ja": "石像にエーテル魔力が宿り目覚めた飛行ガーゴイル。高速で急降下し後衛を狙う。"
+  },
+  "석재 🪨": {
+    "en": "Stone 🪨",
+    "ja": "石材 🪨"
+  },
+  "석재 🪨 +{0}, 철광석 ⚙️ +{1}/11초 채굴{2}": {
+    "en": "Stone 🪨 +{0}, Iron Ore ⚙️ +{1}/11s mined{2}",
+    "ja": "石材 🪨 +{0}、鉄鉱石 ⚙️ +{1}/11秒 採掘{2}"
+  },
+  "석재 🪨 +{0}/11초 채굴{1}": {
+    "en": "Stone 🪨 +{0}/11s mined{1}",
+    "ja": "石材 🪨 +{0}/11秒 採掘{1}"
+  },
+  "석재를 11초마다 정기 생산하며, Lv.3부터 철광석도 함께 채굴합니다. (Lv.5+ 골드 감면, Lv.7+ 30% 감축 및 식량 유지비 분담)": {
+    "en": "Regularly produces stone every 11s, and also mines iron ore starting at Lv.3. (Lv.5+ gold discount, Lv.7+ 30% reduction & food upkeep sharing)",
+    "ja": "石材を11秒ごとに定期生産し、Lv.3から鉄鉱石も同時に採掘します。(Lv.5+ ゴールド削減、Lv.7+ 30%短縮および食料維持費分担)"
+  },
+  "석탄": {
+    "en": "Coal",
+    "ja": "石炭"
+  },
+  "석탄 열기로 강철을 단련하여 기본 성능을 배가한 [일반] 강화": {
+    "en": "[Normal] Enhancement: Tempered steel with coal heat, doubling basic stats",
+    "ja": "石炭の熱気で鋼を鍛錬し、基本性能を倍増させた[一般]強化"
+  },
+  "선대 견습 기사의 숭고한 방진: 파티 방어력 +8%, 받는 피해 3% 경감": {
+    "en": "Ancestral Squire's Sublime Phalanx: Party DEF +8%, DMG taken -3%",
+    "ja": "先代見習い騎士の崇高な方陣: パーティ防御力+8%、被ダメージ3%軽減"
+  },
+  "선대 영령의 영구 가호 효과 발동 중": {
+    "en": "Ancestral Spirits' Permanent Blessing Active",
+    "ja": "先代英霊の永久加護効果が発動中"
+  },
+  "선대 지휘관의 유지를 가슴에 품고 나아갑니다.": {
+    "en": "Presses onward, keeping the previous commander's will close at heart.",
+    "ja": "先代指揮官の遺志を胸に抱いて前進する。"
+  },
+  "선대의 결전 맹세": {
+    "en": "Ancestral Decisive Battle Oath",
+    "ja": "先代の決戦誓約"
+  },
+  "선두 파쇄 진격: 공격력 +9%, 방어력 +11%, 전열의 후열 엄호 15%": {
+    "en": "Vanguard Breaker Charge: ATK +9%, DEF +11%, front row back cover 15%",
+    "ja": "先頭破砕進撃: 攻撃力+9%、防御力+11%、前衛の後衛援護15%"
+  },
+  "선발": {
+    "en": "Starter",
+    "ja": "先発"
+  },
+  "선발 3인 중 1인 전사 시 즉시 난입": {
+    "en": "Immediately joins battle if 1 of 3 starters falls",
+    "ja": "先発3人のうち1人戦死時に即時乱入"
+  },
+  "선발 3인 필드 전투원 (던전 진형 시너지 적용)": {
+    "en": "3 Starter Field Combatants (Dungeon Formation Synergy Applied)",
+    "ja": "先発3人フィールド戦闘員 (ダンジョン陣形シナジー適用)"
+  },
+  "선발 3인의 직업 조합에 따라 진형 시너지가 발동합니다.": {
+    "en": "Formation synergy activates based on the class combination of the 3 starters.",
+    "ja": "先発3人の職業の組み合わせに応じて陣形シナジーが発動します。"
+  },
+  "선발 {0}": {
+    "en": "Starter {0}",
+    "ja": "先発 {0}"
+  },
+  "선발 해제": {
+    "en": "Remove Starter",
+    "ja": "先発解除"
+  },
+  "선봉 압박 전술: 파티 공격력 +6%, 방어력 +8%, 전열의 후열 엄호 20%, 전투 개시 시 15% 보호막 (전투 첫 턴 한정)": {
+    "en": "Vanguard Pressure Tactics: Party ATK +6%, DEF +8%, front row back cover 20%, 15% Shield at battle start (first turn only)",
+    "ja": "先鋒圧迫戦術: パーティ攻撃力+6%、防御力+8%、前衛の後衛援護20%、戦闘開始時に15%シールド (戦闘最初のターン限定)"
+  },
+  "선봉대장 로이드": {
+    "en": "Vanguard Captain Lloyd",
+    "ja": "先鋒隊長ロイド"
+  },
+  "선택": {
+    "en": "Select",
+    "ja": "選択"
+  },
+  "선택 종료": {
+    "en": "End Selection",
+    "ja": "選択終了"
+  },
+  "선택 취소": {
+    "en": "Cancel Selection",
+    "ja": "選択解除"
+  },
+  "선택 항목 초기화": {
+    "en": "Reset Selected",
+    "ja": "選択項目初期化"
+  },
+  "선택 항목 초기화 또는 전체 초기화": {
+    "en": "Reset Selected or Reset All",
+    "ja": "選択項目初期化または全体初期化"
+  },
+  "선택 해제": {
+    "en": "Deselect",
+    "ja": "選択解除"
+  },
+  "선택된 슬롯: 슬롯": {
+    "en": "Selected Slot: Slot",
+    "ja": "選択されたスロット: スロット"
+  },
+  "선택된 용병": {
+    "en": "Selected Mercenary",
+    "ja": "選択された傭兵"
+  },
+  "선택된 장비:": {
+    "en": "Selected Equipment:",
+    "ja": "選択された装備:"
+  },
+  "선택하신": {
+    "en": "Your selected",
+    "ja": "選択された"
+  },
+  "선택한 항목 [{0}]을(를) 초기화하시겠습니까?": {
+    "en": "Do you want to reset the selected item [{0}]?",
+    "ja": "選択した項目 [{0}] を初期化しますか？"
+  },
+  "선행 기술인": {
+    "en": "Prerequisite tech",
+    "ja": "前提技術である"
+  },
+  "선행 기술인 1차 테크를 최소 1레벨 이상 활성화해야 합니다.": {
+    "en": "Prerequisite Tier 1 tech must be activated to at least Lv.1.",
+    "ja": "前提技術である1次テックを最低1レベル以上有効化する必要があります。"
+  },
+  "선행 기술인 2차 테크를 최소 1레벨 이상 활성화해야 합니다.": {
+    "en": "Prerequisite Tier 2 tech must be activated to at least Lv.1.",
+    "ja": "前提技術である2次テックを最低1レベル以上有効化する必要があります。"
+  },
+  "선행 시설 [{0} 건설(Lv.1 이상)] 필요 (현재 미건설) - {1}": {
+    "en": "Prerequisite facility [{0} (Lv.1+)] required (Not yet built) - {1}",
+    "ja": "前提施設 [{0} 建設(Lv.1以上)] が必要 (現在未建設) - {1}"
+  },
+  "선행 조건 필요": {
+    "en": "Prerequisite Required",
+    "ja": "前提条件が必要"
+  },
+  "선행 필요": {
+    "en": "Prerequisite Required",
+    "ja": "前提が必要"
+  },
+  "선혈": {
+    "en": "Fresh Blood",
+    "ja": "鮮血"
+  },
+  "선혈 섬광 창": {
+    "en": "Blood Flash Spear",
+    "ja": "鮮血の閃光槍"
+  },
+  "선혈 유령도": {
+    "en": "Blood Ghost Blade",
+    "ja": "鮮血の幽霊刀"
+  },
+  "선혈을 흡수하여 착용자를 끝없이 전장에 머물게 하는 흉갑": {
+    "en": "A breastplate that absorbs fresh blood, keeping its wearer endlessly upon the battlefield.",
+    "ja": "鮮血を吸収し、着用者を果てしなく戦場に留まらせる胸当て。"
+  },
+  "선혈의 갈증": {
+    "en": "Thirst for Fresh Blood",
+    "ja": "鮮血の渇き"
+  },
+  "섬광": {
+    "en": "Flash",
+    "ja": "閃光"
+  },
+  "섬광탄 사격": {
+    "en": "Flashbang Shot",
+    "ja": "閃光弾射撃"
+  },
+  "섭취": {
+    "en": "Consume",
+    "ja": "摂取"
+  },
+  "성공": {
+    "en": "Success",
+    "ja": "成功"
+  },
+  "성공 시 현재 +10강의 모든 능력치를": {
+    "en": "Upon success, transfer all stats of current +10 enhancement",
+    "ja": "成功時、現在の+10強化の全ステータスを"
+  },
+  "성공 확률 30%": {
+    "en": "Success Rate 30%",
+    "ja": "成功確率 30%"
+  },
+  "성공: {0}%": {
+    "en": "Success: {0}%",
+    "ja": "成功: {0}%"
+  },
+  "성공률": {
+    "en": "Success Rate",
+    "ja": "成功率"
+  },
+  "성공률 50% / 실패 시 파괴": {
+    "en": "Success Rate 50% / Destroyed on Failure",
+    "ja": "成功率 50% / 失敗時破壊"
+  },
+  "성관": {
+    "en": "Holy Crown",
+    "ja": "聖冠"
+  },
+  "성광": {
+    "en": "Holy Light",
+    "ja": "聖光"
+  },
+  "성광 대검": {
+    "en": "Greatsword of Holy Light",
+    "ja": "聖光の大剣"
+  },
+  "성광의 치유": {
+    "en": "Healing of Holy Light",
+    "ja": "聖光の治癒"
+  },
+  "성기사": {
+    "en": "Paladin",
+    "ja": "聖騎士"
+  },
+  "성기사 올리버": {
+    "en": "Paladin Oliver",
+    "ja": "聖騎士オリバー"
+  },
+  "성기사단 부관": {
+    "en": "Holy Paladin Adjutant",
+    "ja": "聖騎士団副官"
+  },
+  "성기사단의 거룩한 맹세를 방주에 봉헌하여 전 대원의 신성 저항과 방어 결계를 강화합니다.": {
+    "en": "Consecrates the holy oath of the Paladin Order to the Ark, bolstering Holy RES and defensive barriers for all squad members.",
+    "ja": "聖騎士団の崇高な誓いを方舟に奉納し、全隊員の神聖耐性と防御結界を強化します。"
+  },
+  "성기사단장의 신념이 새겨진 성스러운 휘장": {
+    "en": "A sacred insignia engraved with the Templar Grandmaster's conviction.",
+    "ja": "聖騎士団長の信念が刻まれた聖なる記章。"
+  },
+  "성기사의 거룩한 성역: 받는 피해 6% 경감, 매 턴 체력 1.5% 재생": {
+    "en": "Paladin's Sacred Sanctuary: DMG taken -6%, 1.5% HP regen per turn",
+    "ja": "聖騎士の聖なる聖域: 被ダメージ6%軽減、毎ターンHP1.5%自動回復"
+  },
+  "성기사의 영광 판금갑": {
+    "en": "Paladin's Glory Plate Armor",
+    "ja": "聖騎士の栄光の板金甲"
+  },
+  "성녀 발키리아": {
+    "en": "Saintess Valkyria",
+    "ja": "聖女ヴァルキリア"
+  },
+  "성녀 엘레나": {
+    "en": "Saintess Elena",
+    "ja": "聖女エレナ"
+  },
+  "성녀의 영원한 결계: 전투 개시 시 최대 HP 15% 보호막(3턴), 받는 피해 8% 감소": {
+    "en": "Saintess's Eternal Barrier: 15% Max HP Shield at battle start (3 turns), DMG taken -8%",
+    "ja": "聖女の永遠の結界: 戦闘開始時に最大HP15%シールド(3ターン)、被ダメージ8%減少"
+  },
+  "성령": {
+    "en": "Holy Spirit",
+    "ja": "聖霊"
+  },
+  "성령 로드": {
+    "en": "Holy Spirit Rod",
+    "ja": "聖霊のロッド"
+  },
+  "성령의": {
+    "en": "Holy Spirit's",
+    "ja": "聖霊の"
+  },
+  "성령의 구원자": {
+    "en": "Holy Spirit Savior",
+    "ja": "聖霊の救済者"
+  },
+  "성령의 구원자: [궁극기] 부활의 성가 — 사망 아군 50% 부활 + 생존 아군 HP 100% 완전 회복": {
+    "en": "Holy Spirit Savior: [Ultimate] Chant of Resurrection — Revives fallen allies with 50% HP + fully heals surviving allies' HP to 100%",
+    "ja": "聖霊の救済者: [アルティメット] 復活の聖歌 — 死亡味方50%蘇生 + 生存味方HP100%完全回復"
+  },
+  "성령의 기적": {
+    "en": "Miracle of the Holy Spirit",
+    "ja": "聖霊の奇跡"
+  },
+  "성령의 사제": {
+    "en": "Priest of the Holy Spirit",
+    "ja": "聖霊の司祭"
+  },
+  "성령의 은총을 소환하여 아군 전체의 체력을 63% 즉시 회복하고 모든 상태이상을 완전 정화하며 2턴간 디버프 면역을 부여합니다.": {
+    "en": "Invokes the Holy Spirit's grace to instantly restore 63% HP to all allies, purge all status effects, and grant Debuff Immunity for 2 turns.",
+    "ja": "聖霊の恩寵を召喚し、味方全体のHPを63%即時回復、すべての状態異常を完全浄化し、2ターン間デバフ無効を付与します。"
+  },
+  "성배의 무한한 생명 마력을 방주 의료소와 병참고에 환류하여 대량의 금화, 에테르, 희귀 마도 자원을 영지에 비축합니다.": {
+    "en": "Channels the Holy Grail's infinite life mana into the Ark's infirmary and logistics depot, stockpiling vast gold, ether, and rare arcane resources in the citadel.",
+    "ja": "聖杯の無限の生命魔力を方舟診療所と兵站庫に還流させ、大量のゴールド、エーテル、希少魔導資源を領地に備蓄します。"
+  },
+  "성벽": {
+    "en": "Rampart",
+    "ja": "城壁"
+  },
+  "성벽 전개": {
+    "en": "Deploy Rampart",
+    "ja": "城壁展開"
+  },
+  "성소": {
+    "en": "Sanctuary",
+    "ja": "聖所"
+  },
+  "성스러운 가호 목걸이": {
+    "en": "Sacred Blessing Necklace",
+    "ja": "聖なる加護の首飾り"
+  },
+  "성스러운 구원의 빛": {
+    "en": "Holy Light of Salvation",
+    "ja": "聖なる救済の光"
+  },
+  "성스러운 기도를 바쳐 단일 아군의 HP를 52% 회복합니다.": {
+    "en": "Offers a sacred prayer to restore 52% HP to a single ally.",
+    "ja": "聖なる祈りを捧げ、単体の味方のHPを52%回復します。"
+  },
+  "성스러운 기름을 적신 정화의 붕대입니다. 야영 시 모든 악성 디버프를 즉시 치료하고 다음 3턴간 상태이상 면역 결계를 두릅니다.": {
+    "en": "A purification bandage soaked in sacred oil. Clears all malignant debuffs during camp and erects a status immunity barrier for the next 3 turns.",
+    "ja": "聖油に浸した浄化の包帯。野営時にすべての悪性デバフを即時治療し、続く3ターン間状態異常無効結界を張ります。"
+  },
+  "성스러운 마나의 샘을 연결하여 기본 클래스 경험치 획득량을 +30%로 강화하고 전직 등급 승격률을 9%로 높입니다.": {
+    "en": "Connects a sacred mana spring to boost base class EXP gain by +30% and raise class promotion rate to 9%.",
+    "ja": "聖なるマナの泉を繋ぎ、基本クラスの経験値獲得量を+30%強化し、転職ランク昇格率を9%に引き上げます。"
+  },
+  "성스러운 맹세의 기운이 깃든 8티어 단죄의 장비를 단조하며, 공방 설비 최적화로 전 제작/강화 비용을 16% 영구 감면합니다.": {
+    "en": "Forges Tier 8 Condemnation equipment imbued with holy oaths, and permanently reduces all crafting/enhancement costs by 16% via workshop optimization.",
+    "ja": "聖なる誓いの気が宿るTier 8断罪の装備を鍛造し、工房設備の最適化により全製作/強化費用を永久に16%削減します。"
+  },
+  "성스러운 빛줄기를 소환하여 아군 전체의 HP를 35% 회복시키고 모든 해로운 상태이상을 완전 정화하며 2턴간 디버프 면역을 부여합니다.": {
+    "en": "Summons holy rays of light to heal all allies by 35% HP, cleanse all harmful status effects, and grant Debuff Immunity for 2 turns.",
+    "ja": "聖なる光条を召喚して味方全体のHPを35%回復し、有害な状態異常を完全浄化して2ターン間デバフ無効を付与します。"
+  },
+  "성스러운 오라: 파티 전체가 받는 마법 피해가 15% 감소합니다.": {
+    "en": "Holy Aura: Reduces magic damage taken by the entire party by 15%.",
+    "ja": "聖なるオーラ: パーティ全体が受ける魔法ダメージが15%減少します。"
+  },
+  "성스러운 축복": {
+    "en": "Sacred Blessing",
+    "ja": "聖なる祝福"
+  },
+  "성스러운 파동": {
+    "en": "Sacred Wave",
+    "ja": "聖なる波動"
+  },
+  "성역": {
+    "en": "Sanctuary",
+    "ja": "聖域"
+  },
+  "성역 심판궁": {
+    "en": "Sanctuary Judgment Bow",
+    "ja": "聖域審判の弓"
+  },
+  "성역 재생(+{0}%)": {
+    "en": "Sanctuary Regen (+{0}%)",
+    "ja": "聖域再生(+{0}%)"
+  },
+  "성역 전개": {
+    "en": "Deploy Sanctuary",
+    "ja": "聖域展開"
+  },
+  "성역 지속 재생": {
+    "en": "Continuous Sanctuary Regen",
+    "ja": "聖域持続再生"
+  },
+  "성역을 배회하는 마수들이 방주 후방을 교란하고 있다. 척후대를 파견해 소탕하라.": {
+    "en": "Demonic beasts roaming the sanctuary are disrupting the Ark's rear. Dispatch scouts to eliminate them.",
+    "ja": "聖域を徘徊する魔獣たちが方舟の後方を攪乱している。斥候隊を派遣して掃討せよ。"
+  },
+  "성역의 결계": {
+    "en": "Barrier of the Sanctuary",
+    "ja": "聖域の結界"
+  },
+  "성역의 광채": {
+    "en": "Radiance of the Sanctuary",
+    "ja": "聖域の光彩"
+  },
+  "성역의 퇴마 구비품": {
+    "en": "Sanctuary Exorcism Supplies",
+    "ja": "聖域の退魔備品"
+  },
+  "성역재생(+{0}%)": {
+    "en": "Sanctuary Regen (+{0}%)",
+    "ja": "聖域再生(+{0}%)"
+  },
+  "성염": {
+    "en": "Holy Flame",
+    "ja": "聖炎"
+  },
+  "성염 융화": {
+    "en": "Holy Conflagration",
+    "ja": "聖炎融和"
+  },
+  "성염 융화 (Holy Conflagration)": {
+    "en": "Holy Conflagration",
+    "ja": "聖炎融和 (Holy Conflagration)"
+  },
+  "성염 정화": {
+    "en": "Holy Flame Cleansing",
+    "ja": "聖炎浄化"
+  },
+  "성운궁": {
+    "en": "Astral Bow",
+    "ja": "星雲の弓"
+  },
+  "성운의": {
+    "en": "Astral",
+    "ja": "星雲の"
+  },
+  "성유 붕대": {
+    "en": "Holy Oil Bandage",
+    "ja": "聖油包帯"
+  },
+  "성유 붕대 (강화)": {
+    "en": "Holy Oil Bandage (Enhanced)",
+    "ja": "聖油包帯 (強化)"
+  },
+  "성유물": {
+    "en": "Holy Relic",
+    "ja": "聖遺物"
+  },
+  "성의": {
+    "en": "Holy Vestment",
+    "ja": "聖衣"
+  },
+  "성자의 기도: 최대 체력 +12%, 턴당 체력 4% 자동 회복, 전투 개시 시 10% 보호막": {
+    "en": "Saint's Prayer: Max HP +12%, 4% HP auto-regen per turn, 10% Shield at battle start",
+    "ja": "聖者の祈り: 最大HP+12%、ターン毎にHP4%自動回復、戦闘開始時に10%シールド"
+  },
+  "성자의 유골함": {
+    "en": "Saint's Reliquary",
+    "ja": "聖者の骨壺"
+  },
+  "성자의 은총이 깃든 순백의 베일이 모든 사악한 저주와 한기를 튕겨낸다.": {
+    "en": "A pure white veil imbued with a saint's grace repels all wicked curses and chills.",
+    "ja": "聖者の恩寵が宿る純白のヴェールがあらゆる邪悪な呪いと冷気を弾き返す。"
+  },
+  "성자의 정화 가호": {
+    "en": "Saint's Purifying Blessing",
+    "ja": "聖者の浄化加護"
+  },
+  "성장 시스템": {
+    "en": "Progression System",
+    "ja": "成長システム"
+  },
+  "성전": {
+    "en": "Crusade",
+    "ja": "聖戦"
+  },
+  "성전 강타": {
+    "en": "Crusade Strike",
+    "ja": "聖戦強打"
+  },
+  "성전 결계": {
+    "en": "Crusade Barrier",
+    "ja": "聖戦結界"
+  },
+  "성전 결계 전개": {
+    "en": "Deploy Crusade Barrier",
+    "ja": "聖戦結界展開"
+  },
+  "성전 선포": {
+    "en": "Proclaim Crusade",
+    "ja": "聖戦布告"
+  },
+  "성전 심판관의 권능: 파티 공격력 +12%, 매 턴 체력 3% 재생, 흡혈 +7%": {
+    "en": "Power of Crusade Inquisitor: Party ATK +12%, 3% HP regen per turn, Lifesteal +7%",
+    "ja": "聖戦審判官の権能: パーティ攻撃力+12%、毎ターンHP3%自動回復、吸血+7%"
+  },
+  "성전사의 투지": {
+    "en": "Crusader's Fighting Spirit",
+    "ja": "聖戦士の闘志"
+  },
+  "성전의 수호 방진": {
+    "en": "Phalanx of the Crusade",
+    "ja": "聖戦の守護方陣"
+  },
+  "성전의 심판관": {
+    "en": "Inquisitor of the Crusade",
+    "ja": "聖戦の審判官"
+  },
+  "성전의 심판령": {
+    "en": "Judgment decree of the Crusade",
+    "ja": "聖戦の審判令"
+  },
+  "성전의 저격 지원": {
+    "en": "Crusade Sniping Support",
+    "ja": "聖戦の狙撃支援"
+  },
+  "성전의 카시안": {
+    "en": "Cassian of the Crusade",
+    "ja": "聖戦のカシアン"
+  },
+  "성지": {
+    "en": "Holy Land",
+    "ja": "聖地"
+  },
+  "성지 정화 결계": {
+    "en": "Holy Land Purification Barrier",
+    "ja": "聖地浄化結界"
+  },
+  "성직자의 축복 로브": {
+    "en": "Cleric's Blessed Robe",
+    "ja": "聖職者の祝福ローブ"
+  },
+  "성채": {
+    "en": "Citadel",
+    "ja": "城塞"
+  },
+  "성채 거점 & 시설": {
+    "en": "Citadel Stronghold & Facilities",
+    "ja": "城塞拠点＆施設"
+  },
+  "성채 둘러보기": {
+    "en": "Look around Citadel",
+    "ja": "城塞見学"
+  },
+  "성채 레벨, 보유 자원, 용병 파티, 장비/스킬 데이터, 던전 진행도, 퀘스트 달성 정보": {
+    "en": "Citadel level, owned resources, mercenary party, gear/skill data, dungeon progress, quest completion info",
+    "ja": "城塞レベル、所持資源、傭兵パーティ、装備/スキルデータ、ダンジョン進行度、クエスト達成情報"
+  },
+  "성채 묘비명": {
+    "en": "Citadel Epitaph",
+    "ja": "城塞墓碑銘"
+  },
+  "성채 묘비명: 영원한 불꽃의 결사대": {
+    "en": "Citadel Epitaph: Suicide Squad of the Eternal Flame",
+    "ja": "城塞墓碑銘: 永遠の炎の決死隊"
+  },
+  "성채 묘지": {
+    "en": "Citadel Graveyard",
+    "ja": "城塞墓地"
+  },
+  "성채 묘지 & 영령의 가호": {
+    "en": "Citadel Graveyard & Ancestral Blessing",
+    "ja": "城塞墓地＆英霊の加護"
+  },
+  "성채 묘지 방문 및 헌화 1회 완료": {
+    "en": "Visited Citadel Graveyard and offered flowers once",
+    "ja": "城塞墓地訪問および献花1回完了"
+  },
+  "성채 묘지 시스템 개편 & 24종 영령의 가호(Ancestral Blessing) 신설": {
+    "en": "Citadel Graveyard revamp & 24 types of Ancestral Blessings introduced",
+    "ja": "城塞墓地システム改編＆24種の英霊の加護(Ancestral Blessing)新設"
+  },
+  "성채 묘지 헌화 (전체 추모)": {
+    "en": "Citadel Graveyard Floral Tribute (Memorial for All)",
+    "ja": "城塞墓地献花 (全体追悼)"
+  },
+  "성채 묘지 헌화 (전체 추모): 안장된 영웅 1명당 목재 20개(최대 100개)를 바쳐 5분(300초)간 영웅 1명당 전투 획득 경험치 +5%(최대 +25%) 가호를 획득하며, 안장된 영웅이 없을 시 헌화가 제한됩니다. 반복 헌화 시 지속 시간이 5분씩 누적 연장됩니다.": {
+    "en": "Citadel Graveyard Floral Tribute (Memorial for All): Offer 20 Wood per buried hero (up to 100) to gain +5% Combat EXP blessing per hero (up to +25%) for 5 minutes (300s). Offerings are restricted if no heroes are buried. Repeated offerings stack duration by 5 minutes.",
+    "ja": "城塞墓地献花 (全体追悼): 埋葬された英雄1人につき木材20個(最大100個)を捧げ、5分間(300秒)英雄1人につき戦闘獲得経験値+5%(最大+25%)の加護を獲得。埋葬英雄がいない場合は献花不可。繰り返し献花すると効果時間が5分ずつ蓄積延長されます。"
+  },
+  "성채 묘지에 안장된 영령이 없습니다.": {
+    "en": "No ancestral spirits are entombed in the Citadel Graveyard.",
+    "ja": "城塞墓地に埋葬された英霊がいません。"
+  },
+  "성채 묘지에 잠든 결사대원들의 숭고한 넋을 기리고 비문을 수습하여 기록한 서사록. (최초로 영웅이 전사하여 묘비명이 새겨져야 등록 가능)": {
+    "en": "A chronicles volume memorializing the noble souls of the squad resting in the Citadel Graveyard and recording their epitaphs. (Can only be registered after a hero falls and an epitaph is engraved)",
+    "ja": "城塞墓地に眠る決死隊員たちの崇高な魂を讃え、碑文を収拾して記録した叙事録。(初めて英雄が戦死して墓碑銘が刻まれると登録可能)"
+  },
+  "성채 묘지에 잠든 결사대원의 묘비명(사망 기록)이 필요합니다. (필요: {0}, 보유: {1})": {
+    "en": "Epitaph (death record) of squad members resting in the Citadel Graveyard required. (Required: {0}, Owned: {1})",
+    "ja": "城塞墓地に眠る決死隊員の墓碑銘(死亡記録)が必要です。(必要: {0}、所持: {1})"
+  },
+  "성채 묘지의 모든 영령": {
+    "en": "All Spirits in the Citadel Graveyard",
+    "ja": "城塞墓地のすべての英霊"
+  },
+  "성채 벌목소": {
+    "en": "Citadel Lumber Camp",
+    "ja": "城塞伐採所"
+  },
+  "성채 보급품 [{0}]": {
+    "en": "Citadel Supplies [{0}]",
+    "ja": "城塞補給品 [{0}]"
+  },
+  "성채 보급품 [{0}]이(가) 부족합니다. (필요: {1}, 보유: {2})": {
+    "en": "Insufficient Citadel supplies [{0}]. (Required: {1}, Owned: {2})",
+    "ja": "城塞補給品 [{0}] が不足しています。(必要: {1}、所持: {2})"
+  },
+  "성채 원정 보급품 사전 제작소": {
+    "en": "Citadel Expedition Supply Workshop",
+    "ja": "城塞遠征補給品事前製作所"
+  },
+  "성채 중심을 지탱하는 생명의 불꽃": {
+    "en": "Flame of life supporting the citadel's core",
+    "ja": "城塞の中心を支える生命の炎"
+  },
+  "성채 차원 게이트를 통해 다른 방주 지휘관의 영지를 침공하는 약탈전이 공식 오픈되었습니다.": {
+    "en": "Pillage battles invading other Ark commanders' domains through the Citadel Dimensional Gate are officially open.",
+    "ja": "城塞次元ゲートを通じて他の指揮官の領地へ侵攻する略奪戦が公式オープンしました。"
+  },
+  "성채 특수 강화 보급품 제작소 (병기창 Lv.6+ 전면 대체)": {
+    "en": "Citadel Special Enhanced Supply Workshop (Completely replaces Armory Lv.6+)",
+    "ja": "城塞特殊強化補給品製作所 (兵器廠Lv.6+で全面代替)"
+  },
+  "성채(Citadel)에서": {
+    "en": "At the Citadel",
+    "ja": "城塞(Citadel)にて"
+  },
+  "성채로 귀환": {
+    "en": "Return to Citadel",
+    "ja": "城塞へ帰還"
+  },
+  "성채로 돌아가기": {
+    "en": "Return to Citadel",
+    "ja": "城塞へ戻る"
+  },
+  "성채에서 [차원 게이트]를 완공하면 비동기 3v3 아레나, 주간 차원 네메시스 월드 레이드, 그리고 5인 결사대(선발 3인 + 리더 1인 + 서포터 1인)로 출격하는 [차원 영지 침공]이 모두 개방됩니다. 침공 승리 시 상대 영지의 핵심 자원 2종과 무작위 3종을 30% 복합 약탈할 수 있습니다!": {
+    "en": "Completing the [Dimensional Gate] in the Citadel unlocks async 3v3 Arena, weekly Dimensional Nemesis World Raid, and [Dimensional Domain Invasion] deployed with a 5-member squad (3 Starters + 1 Leader + 1 Supporter). Victorious invasions pillage 30% of 2 core and 3 random resources from the opponent's territory!",
+    "ja": "城塞で[次元ゲート]を完成させると、非同期3v3アリーナ、週間次元ネメシスワールドレイド、そして5人決死隊(先発3人+リーダー1人+サポーター1人)で出撃する[次元領地侵攻]がすべて開放されます。侵攻勝利時、相手領地の主要資源2種とランダム3種を30%複合略奪できます！"
+  },
+  "성채의 성화가 전 우주로 뻗어나가는 성스러운 황금빛 날개가 되었습니다! 심연의 모든 균열이 닫히고, 방주가 대지 위로 찬란히 안착합니다! 사령관님, 우리가 세상을 구원했습니다!": {
+    "en": "The citadel's sacred flame has become radiant golden wings reaching across the universe! All abyssal rifts close, and the Ark lands gloriously upon the earth! Commander, we have saved the world!",
+    "ja": "城塞の聖火が全宇宙へ広がる聖なる黄金の翼となりました！深淵のすべての亀裂が閉じ、方舟が大地の上に輝かしく着陸します！指揮官殿、私たちが世界を救いました！"
+  },
+  "성혈의 정수가 담긴 10티어 전설 성유물 [순결한 성혈의 묵주]를 방주 중앙에 안치하여 전 대원 회복을 증폭합니다.": {
+    "en": "Enshrines the Tier 10 Legendary Relic [Rosary of Pure Holy Blood] in the Ark's center, amplifying healing for all squad members.",
+    "ja": "聖血の真髄が宿るTier 10伝説の聖遺物[純潔な聖血のロザリオ]を方舟中央に安置し、全隊員の回復を増幅します。"
+  },
+  "성혈의 정화와 해방": {
+    "en": "Purification and Liberation of Holy Blood",
+    "ja": "聖血の浄化と解放"
+  },
+  "성혈의 처녀 실비아": {
+    "en": "Silvia, Maiden of Holy Blood",
+    "ja": "聖血の処女シルヴィア"
+  },
+  "성홀": {
+    "en": "Holy Scepter",
+    "ja": "聖笏"
+  }
+}

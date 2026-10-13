@@ -1,0 +1,802 @@
+{
+  "조건 미충족": {
+    "en": "Conditions Not Met",
+    "ja": "条件未達成"
+  },
+  "조건에 부합하는 장비가 없습니다.": {
+    "en": "No equipment matches the criteria.",
+    "ja": "条件に一致する装備がありません。"
+  },
+  "조용히 모닥불을 바라보며 휴식을 취합니다...": {
+    "en": "Quietly resting while gazing at the bonfire...",
+    "ja": "静かに焚火を見つめながら休息を取る..."
+  },
+  "조합 확인 ➔": {
+    "en": "Check Combination ➔",
+    "ja": "組み合わせ確認 ➔"
+  },
+  "존재하지 않는 컬렉션 항목입니다.": {
+    "en": "This collection item does not exist.",
+    "ja": "存在しないコレクション項目です。"
+  },
+  "종": {
+    "en": "Types",
+    "ja": "種"
+  },
+  "종 • 마도석": {
+    "en": "Types • Mana Stone",
+    "ja": "種 • 魔導石"
+  },
+  "종)": {
+    "en": "Types)",
+    "ja": "種)"
+  },
+  "종결": {
+    "en": "Endgame",
+    "ja": "終結"
+  },
+  "종말": {
+    "en": "Apocalypse",
+    "ja": "終末"
+  },
+  "종말 멸망 신창": {
+    "en": "Apocalypse Ruin Godspear",
+    "ja": "終末破滅神槍"
+  },
+  "종말 심연 극갑": {
+    "en": "Apocalypse Abyssal Apex Armor",
+    "ja": "終末深淵極甲"
+  },
+  "종말 심연 대궁": {
+    "en": "Apocalypse Abyssal Greatbow",
+    "ja": "終末深淵大弓"
+  },
+  "종말 암흑 절멸도": {
+    "en": "Apocalypse Dark Annihilation Blade",
+    "ja": "終末暗黒絶滅刀"
+  },
+  "종말 절대 부적": {
+    "en": "Apocalypse Absolute Talisman",
+    "ja": "終末絶対符"
+  },
+  "종말 절대 성의": {
+    "en": "Apocalypse Absolute Vestment",
+    "ja": "終末絶対聖衣"
+  },
+  "종말의 마력핵": {
+    "en": "Mana Core of the Apocalypse",
+    "ja": "終末の魔力核"
+  },
+  "종말의 메테오": {
+    "en": "Meteor of the Apocalypse",
+    "ja": "終末のメ테오"
+  },
+  "종말의 메테오 & 공허 특이점": {
+    "en": "Meteor of the Apocalypse & Void Singularity",
+    "ja": "終末のメテオ & 虚無の特異点"
+  },
+  "종말의 숨결": {
+    "en": "Breath of the Apocalypse",
+    "ja": "終末の息吹"
+  },
+  "종말의 심연 군주": {
+    "en": "Abyssal Lord of the Apocalypse",
+    "ja": "終末の深淵軍主"
+  },
+  "종말의 심연 아마게돈": {
+    "en": "Abyssal Armageddon of the Apocalypse",
+    "ja": "終末の深淵アルマゲドン"
+  },
+  "종말의 심연 파멸검": {
+    "en": "Abyssal Ruin Blade of the Apocalypse",
+    "ja": "終末の深淵破滅剣"
+  },
+  "종말의 에테르 지팡이 +10": {
+    "en": "Ether Staff of the Apocalypse +10",
+    "ja": "終末のエーテル杖 +10"
+  },
+  "종말의 탄환 갓 킬러 & 사형 선고": {
+    "en": "Apocalypse Bullet God Killer & Death Sentence",
+    "ja": "終末の弾丸ゴッドキラー & 死刑宣告"
+  },
+  "종언의 제단 광신도": {
+    "en": "Fanatic of the Altar of the End",
+    "ja": "終焉の祭壇の狂信者"
+  },
+  "종자": {
+    "en": "Squire",
+    "ja": "従者"
+  },
+  "좋아요! 그때까지 살아남기만 한다면요!": {
+    "en": "Great! As long as we survive until then!",
+    "ja": "いいですね！それまで生き残れさえすれば！"
+  },
+  "좌우 드래그로 빠른 메뉴 탐색": {
+    "en": "Drag left or right for quick menu navigation",
+    "ja": "左右ドラッグで素早くメニューを探索"
+  },
+  "주거": {
+    "en": "Housing",
+    "ja": "住居"
+  },
+  "주거 구역": {
+    "en": "Residential Area",
+    "ja": "居住区"
+  },
+  "주거와 소규모 공방이 결합된 상업 거주 복합 단지를 조성하여, 거점 내부 경제 순환의 중대한 전환점을 마련했습니다.": {
+    "en": "By establishing a commercial-residential complex combining housing and small workshops, a major turning point in the outpost's internal economic circulation was achieved.",
+    "ja": "住居と小規模工房が融合した商業居住複合区を造成し、拠点内部の経済循環において重大な転換点を築いた。"
+  },
+  "주교": {
+    "en": "Bishop",
+    "ja": "司教"
+  },
+  "주교의 자애: 파티 방어력 +10%, 매 턴 체력 2.5% 재생, 개시 보호막 +10%": {
+    "en": "Bishop's Benevolence: Party DEF +10%, HP 2.5% regen per turn, Initial Shield +10%",
+    "ja": "司教の慈愛: パーティ防御力+10%、毎ターンHP 2.5%再生、開始シールド+10%"
+  },
+  "주민 자치회가 조직되어 질서 있는 자원 배급과 세금 징수 체계가 확립되었으며, 안정적인 식량 공급을 기반으로 거점이 번영하기 시작합니다.": {
+    "en": "A residents' council was organized, establishing an orderly resource rationing and tax collection system, and the outpost began to prosper backed by a stable food supply.",
+    "ja": "住民自治会が組織され、秩序ある資源配給と徴税体系が確立され、安定した食糧供給を基盤に拠点が繁栄し始める。"
+  },
+  "주요 계수 및 부가 효과 동반 상승 (+12%)": {
+    "en": "Main scaling and secondary effects increased simultaneously (+12%)",
+    "ja": "主要係数および追加効果が同時に上昇 (+12%)"
+  },
+  "주요 활용처": {
+    "en": "Primary Uses",
+    "ja": "主な用途"
+  },
+  "주요 획득처": {
+    "en": "Primary Sources",
+    "ja": "主な獲得先"
+  },
+  "주의:": {
+    "en": "Warning:",
+    "ja": "注意:"
+  },
+  "주점": {
+    "en": "Tavern",
+    "ja": "酒場"
+  },
+  "주점 방문": {
+    "en": "Visit Tavern",
+    "ja": "酒場訪問"
+  },
+  "주점 백과": {
+    "en": "Tavern Encyclopedia",
+    "ja": "酒場百科"
+  },
+  "주점 식당을 증축하여 식량 생산량을 늘리고, 매일 1회 무료로 용병 명단을 갱신하는 특권을 해금했습니다.": {
+    "en": "Expanded the tavern dining hall to increase food production and unlocked the privilege of refreshing the mercenary roster once daily for free.",
+    "ja": "酒場の食堂を増築して食糧生産量を増やし、毎日1回無料で傭兵名簿を更新できる特権を解放した。"
+  },
+  "주점 영입 용병": {
+    "en": "Tavern Recruited Mercenaries",
+    "ja": "酒場雇用傭兵"
+  },
+  "주점 자체 식량 수급을 극대화하고 강력한 교섭력을 바탕으로 전 용병의 고용 계약금을 안정화했습니다.": {
+    "en": "Maximized the tavern's own food supply and stabilized hiring contract fees for all mercenaries through strong bargaining power.",
+    "ja": "酒場独自の食糧需給を最大化し、強力な交渉力を基に全傭兵の雇用契約金を安定させた。"
+  },
+  "주점 정지 연계: 방랑자의 라운지(주점) 정지 시 신규 서브 퀘스트의 자동 갱신 및 신규 모험가 도착이 일시 중단": {
+    "en": "Tavern Halt Link: When Wanderer Lounge (Tavern) is halted, automatic updates of new sub-quests and arrivals of new adventurers are temporarily suspended",
+    "ja": "酒場停止連動: 放浪者のラウンジ(酒場)停止時、新規サブクエストの自動更新および新規冒険者の到着が一時中断"
+  },
+  "주점에 용병이 없습니다. [갱신] 버튼을 눌러보세요.": {
+    "en": "There are no mercenaries in the tavern. Try pressing the [Refresh] button.",
+    "ja": "酒場に傭兵がいません。[更新]ボタンを押してみてください。"
+  },
+  "죽어가는 자에게 즉시 생명을 불어넣는 신성 홀": {
+    "en": "A sacred scepter that instantly breathes life into the dying",
+    "ja": "死にゆく者に即座に命を吹き込む神聖笏"
+  },
+  "죽은 자들을 위한 안식처였던 납골당은, 심연의 안개가 스며들자 살아남은 자들을 집어삼키는 감옥이 되었다. 원혼들은 차가운 돌벽을 긁어대며 자신들의 이름을 기억해달라고 절규한다. \"우리는 죽은 것이 아니라, 영원히 잊혀진 것이다.\" 그들의 한 맺힌 울부짖음이 지금도 회랑을 울린다.": {
+    "en": "The ossuary, once a sanctuary for the dead, became a prison that swallows the living as abyssal mist seeped in. Vengeful spirits claw at the cold stone walls, screaming for their names to be remembered. \"We are not dead; we are forgotten forever.\" Their sorrowful cries still echo through the cloister.",
+    "ja": "死者のための安息所だった納骨堂は、深淵の霧が染み込むと生存者を呑み込む監獄と化した。怨霊たちは冷たい石壁を掻き毟り、自らの名を覚えていてくれと絶叫する。「我らは死んだのではない、永遠に忘れ去られたのだ。」彼らの無念の叫びが今も回廊に響き渡る。"
+  },
+  "죽음을 초월한 고대 영웅들의 영혼이 원정대의 방패가 된다.": {
+    "en": "The souls of ancient heroes transcending death become the expedition's shield.",
+    "ja": "死を超越した古代の英雄たちの魂が遠征隊の盾となる。"
+  },
+  "죽음조차 잊혀진 자들이 모이는 묘역. 사신의 낫을 휘두르는 묘지기를 잠재우고 억울한 영혼들을 성불시켜라.": {
+    "en": "A cemetery where those forgotten even by death gather. Subdue the gravedigger wielding the Reaper's scythe and deliver the wronged souls to peace.",
+    "ja": "死すら忘れ去られた者たちが集う墓域。死神の鎌を振るう墓守を鎮め、無念の魂たちを成仏させよ。"
+  },
+  "중 선택하여 출정합니다.": {
+    "en": "Select among them to embark.",
+    "ja": "の中から選択して出撃する。"
+  },
+  "중갑": {
+    "en": "Heavy Armor",
+    "ja": "重甲"
+  },
+  "중도 포기": {
+    "en": "Give Up Midway",
+    "ja": "途中放棄"
+  },
+  "중독": {
+    "en": "Poison",
+    "ja": "中毒"
+  },
+  "중독 독액에 방패 파쇄 공격을 가해 산성 반응을 극대화하여 3턴간 방어력을 50% 격하하고 30% 산성 파열 피해": {
+    "en": "Strike poisoned venom with shield bash to maximize the acidic reaction, reducing DEF by 50% for 3 turns and dealing 30% acidic rupture damage",
+    "ja": "中毒毒液に盾破壊攻撃を加えて酸性反応を最大化し、3ターンの間防御力を50%低下させ30%の酸性破裂ダメージ"
+  },
+  "중독 상태의 적을 마법/원소로 타격 시 독소가 마력과 반응하여 최대 HP 12% 폭발 및 적 전체 맹독 전이": {
+    "en": "When striking a poisoned enemy with magic/elemental attacks, the toxin reacts with mana, triggering a 12% Max HP explosion and spreading lethal poison to all enemies",
+    "ja": "中毒状態の敵を魔法/元素で攻撃時、毒素が魔力と反応して最大HP 12%の爆発を起こし敵全体に猛毒を伝播"
+  },
+  "중력": {
+    "en": "Gravity",
+    "ja": "重力"
+  },
+  "중력 감속 역장": {
+    "en": "Gravity Deceleration Field",
+    "ja": "重力減速力場"
+  },
+  "중력 붕괴": {
+    "en": "Gravitational Collapse",
+    "ja": "重力崩壊"
+  },
+  "중력 붕괴로 암석 파편과 보물 상자가 허공에 둥둥 떠다니고 있습니다. 중심부에는 공허의 흡인구가 입을 벌리고 있습니다.": {
+    "en": "Rock debris and treasure chests float in the air due to gravitational collapse. In the center, a void intake gapes open.",
+    "ja": "重力崩壊により岩石の破片と宝箱が空中に浮かんでいます。中心部では虚無の吸引口が口を開けています。"
+  },
+  "중력 붕괴장": {
+    "en": "Gravitational Collapse Field",
+    "ja": "重力崩壊場"
+  },
+  "중력 압쇄": {
+    "en": "Gravitational Crush",
+    "ja": "重力圧砕"
+  },
+  "중력 왜곡파": {
+    "en": "Gravitational Distortion Wave",
+    "ja": "重力歪曲波"
+  },
+  "중력장 & 시공 왜곡": {
+    "en": "Gravity Field & Spacetime Distortion",
+    "ja": "重力場 & 時空歪曲"
+  },
+  "중력장 소환": {
+    "en": "Summon Gravity Field",
+    "ja": "重力場召喚"
+  },
+  "중반 1차: 물류 확장 인프라": {
+    "en": "Midgame Phase 1: Logistics Expansion Infrastructure",
+    "ja": "中盤第1次: 物流拡張インフラ"
+  },
+  "중반 2차: 마도 공학 인프라": {
+    "en": "Midgame Phase 2: Magitech Infrastructure",
+    "ja": "中盤第2次: 魔導工学インフラ"
+  },
+  "중앙": {
+    "en": "Center",
+    "ja": "中央"
+  },
+  "중앙 보관고": {
+    "en": "Central Vault",
+    "ja": "中央保管庫"
+  },
+  "중앙 성채 및 7대 특화 시설(생존자 안식처, 방주 중앙 병참고, 원정 연무장, 병기창, 블랙 마켓 등) 건설·승급, 자원(금화, 식량, 목재, 석재, 철광, 에테르) 생산 및 적재 용량 확장": {
+    "en": "Central Citadel and 7 Specialized Facilities (Survivor Haven, Central Logistics Depot, Expedition Training Ground, Armory, Black Market, etc.) construction & upgrade, resource (gold, food, wood, stone, iron, ether) production and cargo capacity expansion",
+    "ja": "中央城塞および7大特化施設(生存者の安息所、方舟中央兵站庫、遠征練武場、兵器廠、ブラックマーケットなど)の建設・昇格、資源(金貨、食糧、木材、石材、鉄鉱、エーテル)の生産および積載容量の拡張"
+  },
+  "중앙 집중식 자동 승강 물류 타워를 가동하여 던전 파밍 재료의 적재 한도를 3,200개로 넓혔습니다.": {
+    "en": "Operated a centralized automated elevator logistics tower, expanding the cargo limit for dungeon farming materials to 3,200.",
+    "ja": "集中型自動昇降物流タワーを稼働させ、ダンジョンファーミング材料の積載上限を3,200個に拡大した。"
+  },
+  "중앙 창고 적재량:": {
+    "en": "Central Warehouse Cargo:",
+    "ja": "中央倉庫積載量:"
+  },
+  "중열": {
+    "en": "Mid row",
+    "ja": "中衛"
+  },
+  "중열 2명 이상 유격 배치": {
+    "en": "Deploy 2 or more in mid row skirmish",
+    "ja": "中衛に2名以上遊撃配置"
+  },
+  "중열 회피 +{0}%": {
+    "en": "Mid row Evasion +{0}%",
+    "ja": "中衛回避 +{0}%"
+  },
+  "중열 회피율 +{0}%": {
+    "en": "Mid row Evasion Rate +{0}%",
+    "ja": "中衛回避率 +{0}%"
+  },
+  "중장 보병": {
+    "en": "Heavy Infantry",
+    "ja": "重装歩兵"
+  },
+  "중장 보병의 굳건한 벽: 파티 방어력 +12%, 전열 엄호율 +15%": {
+    "en": "Heavy Infantry's Solid Wall: Party DEF +12%, Front row cover rate +15%",
+    "ja": "重装歩兵の堅牢な壁: パーティ防御力+12%、前衛援護率+15%"
+  },
+  "중장갑": {
+    "en": "Heavy Armor",
+    "ja": "重装甲"
+  },
+  "중장갑 격벽: 물리 공격을 받을 시 30% 확률로 대미지를 완전 무효화.": {
+    "en": "Heavy Armored Bulkhead: 30% chance to completely nullify damage when hit by physical attacks.",
+    "ja": "重装甲隔壁: 物理攻撃を受けた際、30%の確率でダメージを完全無効化。"
+  },
+  "중장갑 전선 구축: 파티 방어력 +18%, 받는 피해 8% 경감, 전열의 후열 엄호 20%": {
+    "en": "Heavy Armor Frontline Formation: Party DEF +18%, Damage Taken -8%, Front row covers back row by 20%",
+    "ja": "重装甲前線構築: パーティ防御力+18%、被ダメージ8%軽減、前衛の後衛援護20%"
+  },
+  "즉시 복수전": {
+    "en": "Instant Revenge Match",
+    "ja": "即時復讐戦"
+  },
+  "증기 구동식 자동 제재 기계를 도입하여 벌채된 통나무를 규격화된 건축 자재로 신속하게 가공합니다.": {
+    "en": "Introduced steam-driven automated sawmill machinery to swiftly process harvested logs into standardized construction materials.",
+    "ja": "蒸気駆動の自動製材機械を導入し、伐採された丸太を規格化された建築資材へと迅速に加工する。"
+  },
+  "증기 궤도 운반차와 고속 톱날 기구를 전면 도입하여 벌목부터 제재까지의 전 공정을 기계화하고 유지비를 21% 절감합니다.": {
+    "en": "Fully adopted steam rail transport cars and high-speed sawblade mechanisms to mechanize the entire process from logging to sawing, cutting upkeep by 21%.",
+    "ja": "蒸気軌道運搬車と高速丸鋸器具を全面導入し、伐採から製材までの全工程を機械化して維持費を21%削減する。"
+  },
+  "증축": {
+    "en": "Expansion",
+    "ja": "増築"
+  },
+  "증축 공사 진행 중...": {
+    "en": "Expansion in progress...",
+    "ja": "増築工事進行中..."
+  },
+  "지각": {
+    "en": "Crust",
+    "ja": "地殻"
+  },
+  "지각 변동": {
+    "en": "Crustal Shift",
+    "ja": "地殻変動"
+  },
+  "지각 파괴": {
+    "en": "Crust Shatter",
+    "ja": "地殻破壊"
+  },
+  "지금 나가시면 성화, 짐수레, 헌화 버프 및 심연 촉매 활성화 혜택을 받을 수 없습니다.": {
+    "en": "If you leave now, you will not receive the benefits of the Sacred Flame, Cart, Flower Offering buffs, and Abyss Catalyst activation.",
+    "ja": "今退出すると、聖火、荷車、献花バフおよび深淵触媒の活性化効果を受けられなくなります。"
+  },
+  "지반 시추탑": {
+    "en": "Subterranean Drill Tower",
+    "ja": "地盤掘削塔"
+  },
+  "지반 심층 에테르 석재 및 룬 철광 시추 (미건설)": {
+    "en": "Deep-ground Ether Stone & Runic Iron Drill (Unbuilt)",
+    "ja": "地盤深層エーテル石材およびルーン鉄鉱掘削 (未建設)"
+  },
+  "지반 심층부에서 룬 마력이 깃든 고순도 철광맥을 발견하여, 석재와 함께 귀중한 룬 철광석을 동시 채굴하기 시작합니다.": {
+    "en": "Discovered a high-purity iron vein imbued with runic mana in the deep ground, beginning simultaneous mining of precious runic iron ore along with stone.",
+    "ja": "地盤深層部でルーン魔力が宿る高純度鉄鉱脈を発見し、石材とともに貴重なルーン鉄鉱石の同時採掘を開始する。"
+  },
+  "지배자의 비전서: 1~5층편": {
+    "en": "Ruler's Grimoire: Floors 1-5",
+    "ja": "支配者の魔導書: 1~5層編"
+  },
+  "지배자의 심연 목걸이": {
+    "en": "Ruler's Abyssal Necklace",
+    "ja": "支配者の深淵ネックレス"
+  },
+  "지속 동상 피해: 매 턴 최대 체력의 4% 지속 냉기 피해 적용": {
+    "en": "Continuous Frostbite Damage: Deals 4% of Max HP as continuous cold damage each turn",
+    "ja": "持続凍傷ダメージ: 毎ターン最大体力の4%の持続冷気ダメージを適用"
+  },
+  "지속 재생": {
+    "en": "Continuous Regeneration",
+    "ja": "持続再生"
+  },
+  "지속 출혈 피해": {
+    "en": "Continuous Bleed Damage",
+    "ja": "持続出血ダメージ"
+  },
+  "지속 치유": {
+    "en": "Continuous Healing",
+    "ja": "持続治癒"
+  },
+  "지식의 힘: 마법 시전 시 15% 확률로 마나 소모 없이 시전.": {
+    "en": "Power of Knowledge: When casting magic, 15% chance to cast without consuming mana.",
+    "ja": "知識の力: 魔法詠唱時、15%の確率でマナ消費なしで詠唱。"
+  },
+  "지옥불의": {
+    "en": "Hellfire's",
+    "ja": "地獄火の"
+  },
+  "지원/마법": {
+    "en": "Support/Magic",
+    "ja": "支援/魔法"
+  },
+  "지진": {
+    "en": "Earthquake",
+    "ja": "地震"
+  },
+  "지진 분쇄타": {
+    "en": "Earthquake Crushing Strike",
+    "ja": "地震破砕撃"
+  },
+  "지침 숙지 완료 닫기": {
+    "en": "Guidelines Understood Close",
+    "ja": "指針の確認完了 閉じる"
+  },
+  "지팡이": {
+    "en": "Staff",
+    "ja": "杖"
+  },
+  "지팡이 계열": {
+    "en": "Staff Type",
+    "ja": "杖系列"
+  },
+  "지팡이/부적 단조 & 나침반": {
+    "en": "Staff/Talisman Forging & Compass",
+    "ja": "杖/お札鍛造 & 羅針盤"
+  },
+  "지하 갱도를 지탱할 영목 벌채소(Lv.1 이상) 기반이 필요합니다.": {
+    "en": "Requires a Lumber Camp (Lv.1 or higher) foundation to support underground shafts.",
+    "ja": "地下坑道を支える霊木伐採所(Lv.1以上)の基盤が必要です。"
+  },
+  "지하 마나 광맥의 핵이 박동하는 살아있는 암석 심장입니다. 3티어 보스 고유 장비를 단조합니다.": {
+    "en": "A living stone heart pulsating with the core of an underground mana vein. Used to forge Tier 3 boss unique gear.",
+    "ja": "地下マナ鉱脈の核が脈打つ生きた岩石の心臓。ティア3ボスの固有装備を鍛造します。"
+  },
+  "지하 암반에서 발굴되는 흑탄입니다. 대장간 화로의 화력을 극대화하여 고순도 제련을 돕고, 던전 탐험 시 어둠을 밝히는 횃불의 주 연료가 됩니다.": {
+    "en": "Black coal excavated from underground bedrock. Maximizes forge furnace heat to aid high-purity smelting, and serves as primary fuel for torches lighting the dark during dungeon exploration.",
+    "ja": "地下岩盤から発掘される黒炭。鍛冶屋の炉の火力を極大化して高純度の製錬を助け、ダンジョン探検時に闇を照らす松明の主燃料となる。"
+  },
+  "지하 탐색에 필수적인 장비들을 완비하여 흑무의 공포를 늦춥니다.": {
+    "en": "Equipped with essential underground exploration gear, staving off the terror of the Black Mist.",
+    "ja": "地下探索に不可欠な装備を完備し、黒霧の恐怖を遅らせる。"
+  },
+  "지혈 붕대 보급품 제작": {
+    "en": "Craft Hemostatic Bandage Supplies",
+    "ja": "止血包帯補給品の製作"
+  },
+  "지혜": {
+    "en": "Wisdom",
+    "ja": "知恵"
+  },
+  "지휘관": {
+    "en": "Commander",
+    "ja": "指揮官"
+  },
+  "지휘관 계정 이메일": {
+    "en": "Commander Account Email",
+    "ja": "指揮官アカウントメール"
+  },
+  "지휘관 공략 & FAQ": {
+    "en": "Commander Strategy & FAQ",
+    "ja": "指揮官攻略 & FAQ"
+  },
+  "지휘관 닉네임, 아레나 랭킹 레이팅(Rating), 방어 덱 편성 정보": {
+    "en": "Commander Nickname, Arena Rating, Defense Deck Composition",
+    "ja": "指揮官ニックネーム、アリーナランキングレーティング(Rating)、防衛デッキ編成情報"
+  },
+  "지휘관 로그인": {
+    "en": "Commander Login",
+    "ja": "指揮官ログイン"
+  },
+  "지휘관 서약 완료! 방주 성채로 진입합니다...": {
+    "en": "Commander Oath complete! Entering the Ark Citadel...",
+    "ja": "指揮官の誓約完了！方舟城塞へ進入します..."
+  },
+  "지휘관 성명 (호출부호)": {
+    "en": "Commander Name (Callsign)",
+    "ja": "指揮官氏名 (コールサイン)"
+  },
+  "지휘관 원정대 간 3v3 PvP 레이팅 기반 명예 결투 및 전적 / 등급 관리": {
+    "en": "3v3 PvP rating-based honor duels between Commander expeditions and record / tier management",
+    "ja": "指揮官遠征隊間の3v3 PvPレーティング基盤名誉決闘および戦績/ランク管理"
+  },
+  "지휘관 인증 확인 완료": {
+    "en": "Commander Authentication Verified",
+    "ja": "指揮官認証確認完了"
+  },
+  "지휘관 정보": {
+    "en": "Commander Info",
+    "ja": "指揮官情報"
+  },
+  "지휘관 최고 전력 활성화": {
+    "en": "Activate Commander Max Power",
+    "ja": "指揮官最高戦力活性化"
+  },
+  "지휘관 퀘스트 & 작전 지도": {
+    "en": "Commander Quests & Operation Map",
+    "ja": "指揮官クエスト & 作戦地図"
+  },
+  "지휘관 확인 중{0}": {
+    "en": "Verifying Commander{0}",
+    "ja": "指揮官確認中{0}"
+  },
+  "지휘관{0}": {
+    "en": "Commander{0}",
+    "ja": "指揮官{0}"
+  },
+  "지휘관님! 보십시오! 방주 성채의 마지막 핵심 시설까지 가동을 시작했습니다! 성화의 온기를 중심으로 정제소, 오두막, 벌채소, 광산, 병참고, 주점, 병기창, 연금공방, 병동, 블랙마켓, 그리고 영혼의 제단까지... 마침내 11개 모든 거점의 마나선이 온전히 이어졌습니다!": {
+    "en": "Commander! Look! Even the last core facility of the Ark Citadel has begun operation! Centered on the warmth of the Sacred Flame: the Refinery, Cabin, Lumber Camp, Quarry, Logistics Depot, Tavern, Armory, Alchemy Lab, Ward, Black Market, and Soul Sanctuary... At last, the mana lines of all 11 outpost facilities are fully connected!",
+    "ja": "指揮官！ご覧ください！方舟城塞の最後の重要施設まで稼働を開始しました！聖火の温もりを中心に、精製所、小屋、伐採所、鉱山、兵站庫、酒場、兵器廠、錬金工房、病棟、ブラックマーケット、そして魂の祭壇まで... ついに11の全拠点の魔力線が完全に繋がりました！"
+  },
+  "지휘관님! 아스모데우스의 흑관이 무너지며 심연의 균열이 닫히고 있습니다! 하늘 위로 태양의 빛이 비쳐듭니다!": {
+    "en": "Commander! Asmodeus's black coffin collapses and the Abyssal Rift is closing! Sunlight shines down from the sky!",
+    "ja": "指揮官！アスモデウスの黒棺が崩れ、深淵の亀裂が閉じていきます！空の上から太陽の光が差し込んできました！"
+  },
+  "지휘관님! 핏빛 대공의 성배에 깃든 피의 갈증을 성화의 불꽃으로 정화했습니다. 그와 동시에 심연 6층과 7층을 짓누르던 피와 망각의 연무가 걷히고 완벽히 정화되었습니다! 이제 6~7층 마물들의 연무 강화(공/방 +30%, +35%)가 해제되었습니다. 묘지기의 영혼 나침반이 심연의 어둠 속에서도 길을 잃지 않도록 은빛 광채를 뿜어내고 있습니다!": {
+    "en": "Commander! The bloodthirst dwelling within the Blood Archduke's grail has been purified by the Sacred Flame! At the same time, the mist of blood and oblivion weighing upon Abyss Floors 6 and 7 has cleared and is completely purified! The mist buffs (ATK/DEF +30%, +35%) on monsters in Floors 6-7 are now removed. The gravedigger's Soul Compass radiates silver radiance so we won't lose our way even in the darkness of the Abyss!",
+    "ja": "指揮官！深紅の大公の聖杯に宿る血の渇きを聖火の炎で浄化しました。それと同時に深淵6層と7層を覆っていた血と忘却の煙霧が晴れ、完全に浄化されました！これで6~7層の魔物たちの煙霧強化(攻/防+30%、+35%)が解除されました。墓守の魂羅針盤が深淵の闇の中でも道を見失わないよう銀の輝きを放っています！"
+  },
+  "지휘관님, 5층의 원초의 제단에서 뿜어져 나오는 공허의 살기가 성채에까지 닿고 있습니다. 우리의 칼날을 벼릴 때입니다!": {
+    "en": "Commander, the void killing intent emanating from the Primordial Altar on the 5th floor reaches even to our Citadel. It is time to hone our blades!",
+    "ja": "指揮官、5層の原初の祭壇から放たれる虚無の殺気が城塞にまで届いています。我らの刃を研ぎ澄ます時です！"
+  },
+  "지휘관님, 보십시오! 두 보스의 유물이 제단에 바쳐지자, 심연 1층과 2층을 뒤덮고 있던 짙은 심연의 연무가 완전히 걷히고 정화되었습니다! 이제 해당 층의 마물들은 더 이상 연무로 인한 공격력과 방어력 강화(+5%, +10%)를 받지 않아 향후 반복 파밍이 한결 수월해질 것입니다. 나아가 두 군주의 정수에서 정제된 에테르를 영지 재건에 비축할 수도 있고, 결사대의 무구로 하사할 수도 있습니다. 결단을 내려주십시오.": {
+    "en": "Commander, look! As the relics of the two bosses were offered to the altar, the thick abyssal mist shrouding Abyss Floors 1 and 2 cleared completely and was purified! Now the monsters on those floors no longer receive ATK and DEF buffs (+5%, +10%) from the mist, making future repetitive farming much easier. Furthermore, the ether refined from the essences of the two lords can be stockpiled for rebuilding the territory or bestowed as armaments for the death squad. Please make your decision.",
+    "ja": "指揮官、ご覧ください！二体のボスの遺物が祭壇に捧げられると、深淵1層と2層を覆っていた濃い深淵の煙霧が完全に晴れ、浄化されました！これで該当層の魔物は煙霧による攻撃力・防御力強化(+5%、+10%)を受けなくなり、今後の反復ファーミングが格段に容易になります。さらに二人の軍主のエッセンスから精製されたエーテルを領地再建に備蓄することも、決死隊の武具として下賜することもできます。ご決断をお下しください。"
+  },
+  "지휘관님, 승리를 경축하며 모노리스의 태초 에너지를 영지의 완전한 번영을 위해 방주 전체에 공급할지, 제2장 심연 너머로 진격할 결사대에게 신화의 성휘를 하사할지 명을 내려주십시오!": {
+    "en": "Commander, in celebration of victory, please give the order whether to channel the Monolith's primordial energy throughout the Ark for the total prosperity of the territory, or bestow the mythical radiant halo upon the strike team advancing beyond the Abyss into Chapter 2!",
+    "ja": "指揮官、勝利を祝し、モノリスの太古のエネルギーを領地の完全な繁栄のために方舟全体に供給するか、第2章深淵の彼方へ進撃する決死隊に神話の聖輝を下賜するかご命令を！"
+  },
+  "지휘관님, 이제 방주는 스스로 자원을 축적하고 원정대를 지원하는 \"완전한 자립형 기동 사령부\"로 승격되었습니다. 앞으로 지휘관님께서 마주하실 거대한 3가지 게임 흐름에 대한 인사이트를 전해드립니다: 1️⃣ [심연 심층 강하 & 고대 렐릭 회수]: 2층 이상의 심연으로 나아갈수록 원초적 저주와 광폭화 보스들이 도사립니다. 층별 보스를 토벌하고 고대 유물(렐릭)을 회수하여 방주의 봉인된 시공간 능력을 해방하십시오. 2️⃣ [용병 승격 & 비전 마도서 시너지]: 영혼의 제단에서 베테랑 용병들을 1차 상위 및 2차 심연 클래스로 승격시키고, 연금 공방에서 마도서를 연성하여 독창적인 스킬 연계(체인 콤보)를 완성하십시오. 3️⃣ [시설 증축 & 3대 인프라 시너지]: 거점을 4~6레벨 이상으로 증축하면 유지비가 발생하지만, [대량 배급제(정제소)], [상업 네트워크(블랙마켓)], [에테르 환류관(연금공방)]의 3대 시너지가 해금되어 유지비를 대폭 절감하고 방주를 번영의 대도시로 진화시킵니다.": {
+    "en": "Commander, the Ark has now been promoted to a \"fully self-sufficient mobile command post\" that gathers its own resources and supports expeditions. Here are insights into the 3 major game loops you will encounter ahead: 1️⃣ [Deep Abyssal Descent & Ancient Relic Recovery]: As you advance into Abyss Floor 2 and beyond, primal curses and berserk bosses lurk. Subdue floor bosses and retrieve ancient relics to unlock the Ark's sealed spacetime capabilities. 2️⃣ [Mercenary Promotion & Arcane Grimoire Synergy]: Promote veteran mercenaries into Tier 1 advanced and Tier 2 abyssal classes at the Soul Sanctuary, and synthesize grimoires at the Alchemy Lab to achieve unique skill chains (combo links). 3️⃣ [Facility Expansion & 3 Major Infrastructure Synergies]: Expanding outposts to Lv.4-6 or higher incurs upkeep costs, but unlocking the 3 major synergies—[Mass Rationing (Refinery)], [Commercial Network (Black Market)], and [Ether Reflux Conduit (Alchemy Lab)]—drastically reduces upkeep and evolves the Ark into a thriving metropolis.",
+    "ja": "指揮官、今や方舟は自ら資源を蓄積し遠征隊を支援する「完全自立型機動司令部」へと昇格しました。今後指揮官が直面する3大ゲームフローの知見をお伝えします: 1️⃣ [深淵深層降下 & 古代レリック回収]: 2層以上の深淵に進むほど、原初の呪いと狂暴化ボスが潜んでいます。各層のボスを討伐して古代遺物(レリック)を回収し、方舟の封印された時空間能力を解放してください。 2️⃣ [傭兵昇格 & 秘伝魔導書シナジー]: 魂の祭壇でベテラン傭兵を1次上位および2次深淵クラスへ昇格させ、錬金工房で魔導書を錬成して独創的なスキル連携(チェインコンボ)を完成させましょう。 3️⃣ [施設増築 & 3大インフラシナジー]: 拠点をLv.4~6以上に増築すると維持費が発生しますが、[大量配給制(精製所)]、[商業ネットワーク(ブラックマーケット)]、[エーテル還流管(錬金工房)]の3大シナジーが解放され、維持費を大幅に削減して方舟を繁栄の大都市へと進化させます。"
+  },
+  "지휘관님… 우리가 마침내 심연의 억겁을 끝냈습니다! 방주의 모든 대원과 피난민들이 총사령관님께 승리의 경례를 올립니다! 영원히 빛날 우리의 승리입니다!": {
+    "en": "Commander... We have finally brought an end to the endless aeons of the Abyss! All crew members and refugees of the Ark salute you in victory, Supreme Commander! A glorious victory that will shine forever!",
+    "ja": "指揮官…ついに我らは深淵の永劫の時を終わらせました！方舟の全隊員と避難民が総司令官殿へ勝利の敬礼を捧げます！永遠に輝く我らの勝利です！"
+  },
+  "지휘관님은 인류 최후의 생존자들을 이끌고 방주 성채를 총괄 지휘하는": {
+    "en": "As Commander, you lead humanity's last survivors and command the Ark Citadel",
+    "ja": "指揮官は人類最後の生存者を率いて方舟城塞を統括指揮する"
+  },
+  "지휘관님이 자리를 비우신 동안에도 방주 시설이 멈추지 않고 가동되었습니다.": {
+    "en": "Even while you were away, Commander, the Ark facilities continued operating without pause.",
+    "ja": "指揮官が席を外している間も、方舟の施設は休まず稼働し続けました。"
+  },
+  "지휘관의 불굴": {
+    "en": "Commander's Indomitability",
+    "ja": "指揮官の不屈"
+  },
+  "지휘관의 중대 결단 : 보상 노선 선택": {
+    "en": "Commander's Crucial Decision: Select Reward Path",
+    "ja": "指揮官の重大な決断 : 報酬ルート選択"
+  },
+  "직업 & 전직": {
+    "en": "Class & Promotion",
+    "ja": "職業 & 転職"
+  },
+  "직업 & 전직 계통 도감 (": {
+    "en": "Class & Promotion Tree Codex (",
+    "ja": "職業 & 転職系統図鑑 ("
+  },
+  "직업 고유 스킬": {
+    "en": "Class Unique Skill",
+    "ja": "職業固有スキル"
+  },
+  "직업, 전직 계통, 몬스터 기믹, 영지 시설, 장비 인챈트, 상태이상 및 주요 시스템 가이드": {
+    "en": "Guide to Classes, Promotion Trees, Monster Gimmicks, Territory Facilities, Equipment Enchants, Status Effects, and Core Systems",
+    "ja": "職業、転職系統、モンスターギミック、領地施設、装備エンチャント、状態異常および主要システムガイド"
+  },
+  "직업군 계열 불일치 페널티 경고": {
+    "en": "Class Lineage Mismatch Penalty Warning",
+    "ja": "職業群系列不一致ペナルティ警告"
+  },
+  "직업군 맞춤 제작 재료: 로브/사제복은 실크, 검/판금은 철광석, 스태프는 목재·석탄을 다량 소모하며, 고등급 장비일수록 에테르·마법 수정·공허 파편 등 심연 고급 자원을 적극 소모": {
+    "en": "Class-Tailored Crafting Materials: Robes/vestments require silk, swords/plate armor require iron ore, staves consume large amounts of wood and coal; higher-tier gear actively consumes advanced abyssal resources such as ether, magic crystals, and void shards",
+    "ja": "職業群別製作材料: ローブ/祭服はシルク、剣/板金は鉄鉱石、杖は木材・石炭を大量に消費し、高等級装備ほどエーテル・魔力結晶・虚無の欠片など深淵の高級資源を積極的に消費"
+  },
+  "직업군 조합 시너지 (최대 2개): 3인 순수 특화(100점) > 삼위일체(90점) > 2인 단일(70점) > 2인 복합(50~55점) 우선순위에 따라 상위 최대 2개 선별 적용": {
+    "en": "Class Synergy (Up to 2): Selected and applied up to the top 2 according to priority: 3-Member Pure Specialization (100 pts) > Trinity (90 pts) > 2-Member Pure (70 pts) > 2-Member Hybrid (50-55 pts)",
+    "ja": "職業群シナジー (最大2個): 3名純粋特化(100点) > 三位一体(90点) > 2名単一(70点) > 2名複合(50~55点) の優先順位に従い上位最大2個を選択適用"
+  },
+  "직업군 최대 2개": {
+    "en": "Class Max 2",
+    "ja": "職業群最大2個"
+  },
+  "직업군(role) 시너지가 무분별하게 중복 발동되던 현상을 정비하여 우선순위에 따라 최대 2개만 선별 적용되도록 개선했습니다. 진형 1개, 전직/숙련도 1개와 함께 원정대 전체 시너지가 총 최대 4개로 제한되어 더욱 전략적인 파티 편성을 제공합니다. 아울러 '돌격 배수진' 시너지의 15% 보호막이 전투 첫 턴(1라운드 전체) 동안 유지된 후 2라운드 시작 시점에 안전하게 만료되도록 개선되었습니다.": {
+    "en": "Reformed the issue where class (role) synergies overlapped indiscriminately, now selectively applying up to 2 based on priority. Along with 1 formation and 1 promotion/mastery, total expedition synergies are capped at 4, enabling more strategic party setups. Furthermore, the 15% shield from the 'Charge Last Stand' synergy now persists through the first combat turn (entire Round 1) and safely expires at the start of Round 2.",
+    "ja": "職業群(role)シナジーが無差別に重複発動していた現象を整理し、優先順位に従って最大2個のみ選択適用されるよう改善しました。陣形1個、転職/熟練度1個とともに遠征隊全体のシナジーが合計最大4個に制限され、より戦略的なパーティ編成が可能になります。併せて「突撃背水の陣」シナジーの15%シールドが戦闘第1ターン(1ラウンド全体)の間維持された後、第2ラウンド開始時点で安全に消滅するよう改善されました。"
+  },
+  "진 최종 보스 아르케오스: 위험도 10,000 도달 시 강림하며, 토벌 후 광폭화 보스 격파 시 최종 심연 봉인 엔딩 달성": {
+    "en": "True Final Boss Archeos: Descends upon reaching Hazard 10,000; defeating the berserk boss after subjugation achieves the True Abyss Sealing Ending",
+    "ja": "真の最終ボス・アルケオス: 危険度10,000到達時に降臨し、討伐後に狂暴化ボス撃破で最終深淵封印エンディングを達成"
+  },
+  "진격": {
+    "en": "Advance",
+    "ja": "進撃"
+  },
+  "진격 함성 & 전열 파쇄": {
+    "en": "Advance Shout & Front Row Breaker",
+    "ja": "進撃の叫び & 前衛粉砕"
+  },
+  "진격의 지휘 함성": {
+    "en": "Command Shout of Advance",
+    "ja": "進撃の指揮の叫び"
+  },
+  "진솔한 격려와 조언 속에서 [{0}]과의 신뢰와 전우애가 싹틉니다!": {
+    "en": "Amid sincere encouragement and advice, trust and camaraderie with [{0}] begin to bloom!",
+    "ja": "心からの激励と助言の中で、[{0}]との信頼と戦友愛が芽生える！"
+  },
+  "진실 거울 파편": {
+    "en": "Truth Mirror Shard",
+    "ja": "真実の鏡の破片"
+  },
+  "진실의 거울 마도 파편": {
+    "en": "Magic Shard of the Mirror of Truth",
+    "ja": "真実の鏡の魔導破片"
+  },
+  "진실의 거울이 완성되자 심연 8층과 9층의 연무가 걷히고 완전히 정화되었습니다! 8~9층 마물들의 연무 강화(공/방 +40%, +45%)가 해제되었으며, 10층 심연의 심장부로 통하는 시공의 장벽이 열렸습니다! 눈앞에 아스모데우스의 옥좌가 보입니다!": {
+    "en": "Upon completing the Mirror of Truth, the mist over Abyss Floors 8 and 9 cleared and was completely purified! The mist buffs (ATK/DEF +40%, +45%) on monsters in Floors 8-9 are removed, and the spacetime barrier leading to Floor 10 Heart of the Abyss has opened! Asmodeus's throne lies right before your eyes!",
+    "ja": "真実の鏡が完成すると、深淵8層と9層の煙霧が晴れ、完全に浄化されました！8~9層の魔物たちの煙霧強化(攻/防+40%、+45%)が解除され、10層「深淵の心臓部」へ通じる時空の障壁が開かれました！目の前にアスモデウスの玉座が見えます！"
+  },
+  "진입": {
+    "en": "Enter",
+    "ja": "進入"
+  },
+  "진입 구역 선택 ▶": {
+    "en": "Select Entry Zone ▶",
+    "ja": "進入区域選択 ▶"
+  },
+  "진입 차단 모달: 정지된 건물 클릭 시 [⚠️ 해당 건물은 중지중입니다] 모달이 출력되며 [▶️ 가동 재개 및 입장] 지원": {
+    "en": "Entry Block Modal: Clicking a halted building displays the [⚠️ This building is halted] modal and supports [▶️ Resume Operation & Enter]",
+    "ja": "進入遮断モーダル: 停止中の建物をクリックすると[⚠️ 該当施設は停止中です]モーダルが表示され、[▶️ 稼働再開および入場]をサポート"
+  },
+  "진척도: {0} / 10 계층 해금": {
+    "en": "Progress: {0} / 10 Floors Unlocked",
+    "ja": "進捗度: {0} / 10階層解放"
+  },
+  "진행 중": {
+    "en": "In Progress",
+    "ja": "進行中"
+  },
+  "진행 중...": {
+    "en": "In progress...",
+    "ja": "進行中..."
+  },
+  "진형 & 전직 & 장비 관리": {
+    "en": "Formation & Class & Gear Management",
+    "ja": "陣形 & 転職 & 装備管理"
+  },
+  "진형 1개": {
+    "en": "Formation 1",
+    "ja": "陣形 1個"
+  },
+  "진형 배치 시너지 (최대 1개): 삼각 편대(균등 배치), 돌격 배수진(전열 2+), 후방 집중 화망(후열 2+), 신속 유격 진형(중열 2+) 중 상위 1개 적용": {
+    "en": "Formation Synergy (Max 1): Top 1 applied among Triangle Formation (even spread), Charge Last Stand (Front row 2+), Rear Focus Barrage (Back row 2+), Swift Skirmish (Mid row 2+)",
+    "ja": "陣形配置シナジー (最大1個): 三角編隊(均等配置)、突撃背水の陣(前衛2+)、後方集中火網(後衛2+)、迅速遊撃陣形(中衛2+)のうち上位1個を適用"
+  },
+  "진형 포지션 배치 · 스킬 교체 · 균열의 닻 긴급 이송": {
+    "en": "Formation Positioning · Skill Swapping · Rift Anchor Emergency Transport",
+    "ja": "陣形ポジション配置 · スキル変更 · 亀裂の錨緊急移送"
+  },
+  "진홍 군주의 흡혈 마검": {
+    "en": "Vampiric Demon Sword of the Crimson Lord",
+    "ja": "深紅軍主の吸血魔剣"
+  },
+  "진홍 마안의 흡혈 루비": {
+    "en": "Vampiric Ruby of the Crimson Evil Eye",
+    "ja": "深紅魔眼の吸血ルビー"
+  },
+  "진홍 선혈 로브": {
+    "en": "Crimson Fresh Blood Robe",
+    "ja": "深紅鮮血ローブ"
+  },
+  "진홍 성배": {
+    "en": "Crimson Holy Grail",
+    "ja": "深紅の聖杯"
+  },
+  "진홍 성배와 영혼 나침반의 힘이 깃든 전설 장신구 [진홍 성배의 불멸 성휘]를 하사합니다.": {
+    "en": "Bestows the legendary accessory [Immortal Radiance of the Crimson Grail], imbued with the power of the Crimson Holy Grail and the Soul Compass.",
+    "ja": "深紅の聖杯と魂羅針盤の力が宿る伝説の装飾品[深紅聖杯の不滅聖輝]を下賜します。"
+  },
+  "진홍 천상봉": {
+    "en": "Crimson Celestial Rod",
+    "ja": "深紅天上棒"
+  },
+  "진홍 혈염 경갑": {
+    "en": "Crimson Bloodflame Light Armor",
+    "ja": "深紅血炎軽甲"
+  },
+  "진홍 혈염 판금갑": {
+    "en": "Crimson Bloodflame Plate Armor",
+    "ja": "深紅血炎板金甲"
+  },
+  "진홍 혈염의 결전 사격 무구": {
+    "en": "Crimson Bloodflame Decisive Ranged Armament",
+    "ja": "深紅血炎の決戦射撃武具"
+  },
+  "진홍 혈염의 결전검": {
+    "en": "Crimson Bloodflame Decisive Sword",
+    "ja": "深紅血炎の決戦剣"
+  },
+  "진홍 혈염의 화덕을 완성하여 6티어 결전 장비를 단조하고, 정밀 마도 계측을 통해 강화 성공률을 보정합니다.": {
+    "en": "Complete the Crimson Bloodflame Hearth to forge Tier 6 decisive gear and calibrate enhancement success rate via precision magitech measurement.",
+    "ja": "深紅血炎の炉を完成させてティア6決戦装備を鍛造し、精密魔導計測により強化成功率を補正します。"
+  },
+  "진홍 흡혈 마총": {
+    "en": "Crimson Vampiric Magic Gun",
+    "ja": "深紅吸血魔銃"
+  },
+  "진홍빛 혈염의 마도 권능이 깃들어 4대 전투 능력을 극대화한 [영웅]": {
+    "en": "Imbued with the arcane power of crimson bloodflame, maximizing the 4 core combat stats: [Hero]",
+    "ja": "深紅の血炎の魔導権能が宿り、4大戦闘能力を極大化した[英雄]"
+  },
+  "진홍의 불멸 흉갑 +10": {
+    "en": "Crimson Immortal Breastplate +10",
+    "ja": "深紅の不滅胸甲 +10"
+  },
+  "진홍의 성배에서 끝없이 솟구치는 생명 에너지는 부상자들의 육신을 완벽히 재생시킬 수 있으며, 정화된 혈맥의 힘으로 영웅들에게 전설의 진홍 장신구를 하사할 수도 있습니다.": {
+    "en": "The life energy endlessly welling up from the Crimson Holy Grail can fully regenerate the wounded, and the power of purified bloodlines can bestow legendary crimson accessories upon heroes.",
+    "ja": "深紅の聖杯から絶え間なく湧き出る生命エネルギーは負傷者の肉体を完全に再生させ、浄化された血脈の力で英雄たちに伝説の深紅装飾品を下賜することもできます。"
+  },
+  "진홍의 피의 지배": {
+    "en": "Dominion of Crimson Blood",
+    "ja": "深紅の血の支配"
+  },
+  "진홍의 학살자들": {
+    "en": "Crimson Slayers",
+    "ja": "深紅の虐殺者たち"
+  },
+  "질풍": {
+    "en": "Gale",
+    "ja": "疾風"
+  },
+  "질풍 4연참": {
+    "en": "Gale 4-Strike Slash",
+    "ja": "疾風4連斬"
+  },
+  "질풍노도": {
+    "en": "Storm and Stress",
+    "ja": "疾風怒濤"
+  },
+  "질풍의 칼바람": {
+    "en": "Gale Razor Wind",
+    "ja": "疾風の刃風"
+  },
+  "질풍참": {
+    "en": "Gale Slash",
+    "ja": "疾風斬"
+  },
+  "짐수레 3회 인가 & 심연 촉매 슬롯 개방": {
+    "en": "Cart 3 Permits & Abyss Catalyst Slot Unlocked",
+    "ja": "荷車3回認可 & 深淵触媒スロット開放"
+  },
+  "짐승 뼈": {
+    "en": "Bone",
+    "ja": "骨"
+  },
+  "집중 치료 병실 슬롯 (최대 7병상)": {
+    "en": "Intensive Care Ward Slots (Max 7 Beds)",
+    "ja": "集中治療病室スロット (最大7病床)"
+  },
+  "집행자의 심판": {
+    "en": "Executioner's Judgment",
+    "ja": "執行者の審判"
+  },
+  "짙은 보랏빛 안개가 대원들의 뇌리를 흐리며 가장 소중한 기억들을 지워가기 시작합니다.": {
+    "en": "A thick violet mist clouds the minds of the crew, beginning to erase their most treasured memories.",
+    "ja": "濃い紫色の霧が隊員たちの脳裏を曇らせ、最も大切な記憶を消し去り始める。"
+  },
+  "짙은 연무 영구 정화!": {
+    "en": "Permanent Purification of Dense Mist!",
+    "ja": "濃い煙霧の永久浄化！"
+  },
+  "찌그러진 티타늄 안경테": {
+    "en": "Bent Titanium Glasses",
+    "ja": "歪んだチタン眼鏡"
+  },
+  "찢겨진 지하철 노선도": {
+    "en": "Torn Subway Map",
+    "ja": "破れた地下鉄路線図"
+  },
+  "차": {
+    "en": "Tier",
+    "ja": "次"
+  },
+  "차 Lv.1 필요": {
+    "en": "Tier Lv.1 Required",
+    "ja": "次 Lv.1 必要"
+  }
+}

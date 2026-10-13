@@ -1,0 +1,802 @@
+{
+  "전장을 가르며 적 전체에 130% 참격을 가하고 2턴간 적들의 공격력을 30% 감소시킵니다.": {
+    "en": "Cleaves through the battlefield, dealing 130% Slash DMG to all enemies and reducing enemy ATK by 30% for 2 turns.",
+    "ja": "戦場を切り裂き敵全体に130%の斬撃を与え、2ターンの間敵の攻撃力を30%減少させる。"
+  },
+  "전장을 뒤흔드는 원소 폭풍: 공격력 +25%, 행운 +12, 방어 관통 +18%, 턴당 마나 8 MP 재생 (방어력 -8%)": {
+    "en": "Battlefield-shaking Elemental Storm: ATK +25%, LUCK +12, DEF Pierce +18%, regenerate 8 MP per turn (DEF -8%)",
+    "ja": "戦場を揺るがす元素の嵐: 攻撃力+25%、幸運+12、防御貫通+18%、毎ターンMP 8回復 (防御力-8%)"
+  },
+  "전장을 시공간 분신으로 가득 채워 적 전체를 6연속 난무(총 200% 광역 피해)합니다.": {
+    "en": "Fills the battlefield with spatiotemporal clones, unleashing a 6-hit flurry on all enemies (200% total AoE DMG).",
+    "ja": "戦場を時空の分身で満たし、敵全体に6連続乱舞(計200%範囲ダメージ)を浴びせる。"
+  },
+  "전장의 분노 추격타": {
+    "en": "Battlefield Rage Pursuit",
+    "ja": "戦場の怒りの追撃"
+  },
+  "전장의 파괴자": {
+    "en": "Battlefield Destroyer",
+    "ja": "戦場の破壊者"
+  },
+  "전장의 포효": {
+    "en": "Battlefield Roar",
+    "ja": "戦場の咆哮"
+  },
+  "전장의 화신: 치명타 적중 시 파티 전원의 공격력 15% 1턴간 강화.": {
+    "en": "Avatar of Battle: Increases all party members' ATK by 15% for 1 turn upon landing a critical hit.",
+    "ja": "戦場の化身: 会心命中時、パーティ全員の攻撃力を1ターン15%強化。"
+  },
+  "전직": {
+    "en": "Class Change",
+    "ja": "転職"
+  },
+  "전직 각성 특화 스탯 선택 (1종 +30% 집중 강화)": {
+    "en": "Select Class Awakening Specialized Stat (Concentrated +30% boost to 1 stat)",
+    "ja": "転職覚醒特化ステータス選択 (1種+30%集中強化)"
+  },
+  "전직 고유기": {
+    "en": "Class Unique Skill",
+    "ja": "転職固有技"
+  },
+  "전직 궁극기": {
+    "en": "Class Ultimate",
+    "ja": "転職アルティメット"
+  },
+  "전직 및 각성 미리보기 시 착용 장비 스탯이 합산되어 상승분이 왜곡되어 보이던 현상을 바로잡고, 전직 전후의 순수 기본 스탯만을 직관적이고 투명하게 비교 표시하도록 수정하였습니다.": {
+    "en": "Fixed the issue where equipped gear stats were combined during class change and awakening preview distorting gains, updating it to intuitively and transparently compare only pure base stats before and after.",
+    "ja": "転職および覚醒プレビュー時に装備ステータスが合算され上昇分が歪んで見えていた現象を修正し、転職前後の純粋な基本ステータスのみを直感的かつ透明に比較表示するよう改善しました。"
+  },
+  "전직 및 각성 순수 기본 스탯(Base Stat) 비교 개편": {
+    "en": "Revamped pure base stat comparison for Class Change and Awakening",
+    "ja": "転職および覚醒の純粋な基本ステータス(Base Stat)比較改編"
+  },
+  "전직 승급 및 마도 연구/유지비": {
+    "en": "Class Promotion & Arcane Research / Upkeep",
+    "ja": "転職昇格および魔導研究/維持費"
+  },
+  "전직 시 선택한 1가지 핵심 능력치가": {
+    "en": "Upon class change, 1 selected core stat is",
+    "ja": "転職時に選択した1つの主要能力値が"
+  },
+  "전직 실패: 에테르({0}) 또는 골드({1})가 부족합니다.": {
+    "en": "Class Change Failed: Insufficient Ether ({0}) or Gold ({1}).",
+    "ja": "転職失敗: エーテル({0})またはゴールド({1})が不足しています。"
+  },
+  "전직 흐름:": {
+    "en": "Class Progression:",
+    "ja": "転職フロー:"
+  },
+  "전천후 초토화 폭격": {
+    "en": "All-Weather Scorched Earth Bombardment",
+    "ja": "全天候焦土化爆撃"
+  },
+  "전체": {
+    "en": "All",
+    "ja": "全体"
+  },
+  "전체 (": {
+    "en": "All (",
+    "ja": "全体 ("
+  },
+  "전체 (12)": {
+    "en": "All (12)",
+    "ja": "全体 (12)"
+  },
+  "전체 ({0})": {
+    "en": "All ({0})",
+    "ja": "全体 ({0})"
+  },
+  "전체 140% 물리 피해 + 공격력 20% 감소 2턴": {
+    "en": "140% Physical DMG to all + 20% ATK reduction for 2 turns",
+    "ja": "全体に140%物理ダメージ + 攻撃力20%減少(2ターン)"
+  },
+  "전체 150% 대지진 [집중 차징 & 넉백]": {
+    "en": "150% Earthquake to all [Focused Charging & Knockback]",
+    "ja": "全体に150%大地震 [集中チャージ＆ノックバック]"
+  },
+  "전체 150% 피해 + 출혈 [집중 차징]": {
+    "en": "150% DMG to all + Bleed [Focused Charging]",
+    "ja": "全体に150%ダメージ + 出血 [集中チャージ]"
+  },
+  "전체 180% 고열 화염 마법 피해": {
+    "en": "180% Scorching Flame Magic DMG to all",
+    "ja": "全体に180%高熱火炎魔法ダメージ"
+  },
+  "전체 180% 마법 피해 + 생명 강탈 [집중 차징]": {
+    "en": "180% Magic DMG to all + Lifesteal [Focused Charging]",
+    "ja": "全体に180%魔法ダメージ + 生命強奪 [集中チャージ]"
+  },
+  "전체 200% 방어 관통 심판 [집중 차징 & 넉백]": {
+    "en": "200% DEF-piercing Judgement to all [Focused Charging & Knockback]",
+    "ja": "全体に200%防御貫通審判 [集中チャージ＆ノックバック]"
+  },
+  "전체 210% 비전 마법 피해 + 아군 속도 30% 감속 2턴": {
+    "en": "210% Arcane Magic DMG to all + Ally SPD reduced by 30% for 2 turns",
+    "ja": "全体に210%秘術魔法ダメージ + 味方速度30%減速(2ターン)"
+  },
+  "전체 220% 거울 폭풍 [집중 차징 & 진형 셔플]": {
+    "en": "220% Mirror Storm to all [Focused Charging & Formation Shuffle]",
+    "ja": "全体に220%鏡の嵐 [集中チャージ＆陣形シャッフル]"
+  },
+  "전체 240% 마법 피해": {
+    "en": "240% Magic DMG to all",
+    "ja": "全体に240%魔法ダメージ"
+  },
+  "전체 300% 종말 마법 피해 [집중 차징]": {
+    "en": "300% Doomsday Magic DMG to all [Focused Charging]",
+    "ja": "全体に300%終末魔法ダメージ [集中チャージ]"
+  },
+  "전체 80% 피해 (방어 관통 25%)": {
+    "en": "80% DMG to all (25% DEF Pierce)",
+    "ja": "全体に80%ダメージ (防御貫通25%)"
+  },
+  "전체 MP 25 흡수 + 자신 HP 대량 회복": {
+    "en": "Absorbs 25 MP from all + greatly restores self HP",
+    "ja": "全体からMP 25吸収 + 自身のHP大量回復"
+  },
+  "전체 공격력 감소": {
+    "en": "All ATK Reduced",
+    "ja": "全体攻撃力減少"
+  },
+  "전체 공격력 감소 디버프": {
+    "en": "All ATK Reduction Debuff",
+    "ja": "全体攻撃力減少デバフ"
+  },
+  "전체 공격력 증가": {
+    "en": "All ATK Increased",
+    "ja": "全体攻撃力増加"
+  },
+  "전체 기절": {
+    "en": "All Stun",
+    "ja": "全体気絶"
+  },
+  "전체 선택": {
+    "en": "Select All",
+    "ja": "すべて選択"
+  },
+  "전체 선택 (": {
+    "en": "Select All (",
+    "ja": "すべて選択 ("
+  },
+  "전체 시설 레벨을 1레벨 및 기본 상태로 초기화": {
+    "en": "Reset all facilities to Lv.1 and initial state",
+    "ja": "全施設レベルをLv.1および初期状態に初期化"
+  },
+  "전체 아군을 즉시 HP 46% 회복하고 2턴간 모든 피해를 20% 경감합니다.": {
+    "en": "Instantly restores 46% HP to all allies and reduces all damage taken by 20% for 2 turns.",
+    "ja": "味方全体のHPを即時46%回復し、2ターンの間被ダメージを20%軽減する。"
+  },
+  "전체 완전 초기화": {
+    "en": "Complete Reset All",
+    "ja": "完全初期化"
+  },
+  "전체 용병": {
+    "en": "All Mercenaries",
+    "ja": "全傭兵"
+  },
+  "전체 장비": {
+    "en": "All Equipment",
+    "ja": "全装備"
+  },
+  "전체 장비 보관함 열기 및 필터/일괄 판매 관리": {
+    "en": "Open all equipment storage and manage filter/batch sell",
+    "ja": "全装備保管庫の開放およびフィルター/一括売却管理"
+  },
+  "전체 적에게 120% 피해 + 방어력↓ 2턴": {
+    "en": "120% DMG to all enemies + DEF↓ for 2 turns",
+    "ja": "敵全体に120%ダメージ + 防御力↓(2ターン)"
+  },
+  "전체 적에게 130% 물리 피해 + 2턴 출혈": {
+    "en": "130% Physical DMG to all enemies + Bleed for 2 turns",
+    "ja": "敵全体に130%物理ダメージ + 2ターン出血"
+  },
+  "전체 적에게 150% 마법 피해 + 2턴 출혈": {
+    "en": "150% Magic DMG to all enemies + Bleed for 2 turns",
+    "ja": "敵全体に150%魔法ダメージ + 2ターン出血"
+  },
+  "전체 적에게 180% 강력한 흑마법 피해": {
+    "en": "180% Powerful Dark Magic DMG to all enemies",
+    "ja": "敵全体に180%強力な黒魔法ダメージ"
+  },
+  "전체 적에게 80% 피해 + 2턴 출혈": {
+    "en": "80% DMG to all enemies + Bleed for 2 turns",
+    "ja": "敵全体に80%ダメージ + 2ターン出血"
+  },
+  "전체 전투 상세 기록 모달 열기": {
+    "en": "Open full battle details log modal",
+    "ja": "全戦闘詳細記録モーダルを開く"
+  },
+  "전체 출혈 3턴 부여": {
+    "en": "Inflict Bleed on all for 3 turns",
+    "ja": "全体に出血を3ターン付与"
+  },
+  "전체 컬렉션": {
+    "en": "All Collections",
+    "ja": "全コレクション"
+  },
+  "전체 화면 모드로 전환되었습니다": {
+    "en": "Switched to fullscreen mode",
+    "ja": "全画面モードに切り替わりました"
+  },
+  "전탄 일제 사격": {
+    "en": "All-Out Volley",
+    "ja": "全弾一斉射撃"
+  },
+  "전투 & 유대·인챈트": {
+    "en": "Combat & Bond / Enchant",
+    "ja": "戦闘＆絆・エンチャント"
+  },
+  "전투 & 장비 시스템": {
+    "en": "Combat & Equipment System",
+    "ja": "戦闘＆装備システム"
+  },
+  "전투 EXP +": {
+    "en": "Combat EXP +",
+    "ja": "戦闘EXP +"
+  },
+  "전투 EXP +{0}% 가호 (5분) & 심연 촉매 슬롯 개방": {
+    "en": "Combat EXP +{0}% Blessing (5 min) & Unlock Abyss Catalyst Slot",
+    "ja": "戦闘EXP +{0}%加護 (5分)＆深淵触媒スロット開放"
+  },
+  "전투 개시 보호막 {0}%": {
+    "en": "Battle Start Shield {0}%",
+    "ja": "戦闘開始時シールド {0}%"
+  },
+  "전투 경험치(EXP) 획득 배율": {
+    "en": "Combat EXP Gain Multiplier",
+    "ja": "戦闘経験値(EXP)獲得倍率"
+  },
+  "전투 마도 효과": {
+    "en": "Combat Arcane Effects",
+    "ja": "戦闘魔導効果"
+  },
+  "전투 보상 전리품 모달 오파츠 명칭 정규화": {
+    "en": "Normalized Ooparts names in combat reward loot modal",
+    "ja": "戦闘報酬戦利品モーダルのオーパーツ名称正規化"
+  },
+  "전투 본능: 체력이 50% 이하일 때 공격력 25% 증가.": {
+    "en": "Battle Instinct: Increases ATK by 25% when HP is below 50%.",
+    "ja": "戦闘本能: HPが50%以下の時、攻撃力25%増加。"
+  },
+  "전투 부상자 치료, 출혈 정화 및 빠른 생체 회복": {
+    "en": "Treat wounded combatants, cleanse bleeding, and rapid biological recovery",
+    "ja": "戦闘負傷者の治療、出血浄化および迅速な生体回復"
+  },
+  "전투 사제": {
+    "en": "War Priest",
+    "ja": "戦闘司祭"
+  },
+  "전투 사제의 신앙: 파티 공격력 +8%, 치명타율 +6%, 흡혈 +5%": {
+    "en": "Faith of the War Priest: Party ATK +8%, Crit Rate +6%, Lifesteal +5%",
+    "ja": "戦闘司祭の信仰: パーティ攻撃力+8%、会心率+6%、吸血+5%"
+  },
+  "전투 상성, 전열/후열, 유대, 위험도, 유지비": {
+    "en": "Combat Matchups, Front/Back Row, Bonds, Hazard, Upkeep",
+    "ja": "戦闘相性、前衛/後衛、絆、危険度、維持費"
+  },
+  "전투 상태이상 메커니즘": {
+    "en": "Combat Status Ailment Mechanics",
+    "ja": "戦闘状態異常メカニズム"
+  },
+  "전투 속도 2.0x ↔ 2.5x 고속 전환: 기본 2.0배속으로 시작하며, 상단 [⚡ 고속 2.5x] 토글 스위치를 통해 더욱 빠른 템포로 턴 연출과 타격을 감상할 수 있습니다.": {
+    "en": "Combat Speed 2.0x ↔ 2.5x High-Speed Switch: Starts at 2.0x speed by default, and can be toggled via the top [⚡ Fast 2.5x] switch for even faster turn animations and impact.",
+    "ja": "戦闘速度2.0x ↔ 2.5x高速切替: 基本2.0倍速から始まり、上部の[⚡ 高速2.5x]トグルスイッチでさらにテンポの良いターン演出と打撃を楽しめます。"
+  },
+  "전투 속도 전환 (기본 2배 / 고속 2.5배)": {
+    "en": "Switch Combat Speed (Default 2x / Fast 2.5x)",
+    "ja": "戦闘速度切替 (基本2倍 / 高速2.5倍)"
+  },
+  "전투 스킬": {
+    "en": "Combat Skill",
+    "ja": "戦闘スキル"
+  },
+  "전투 스킬 (": {
+    "en": "Combat Skill (",
+    "ja": "戦闘スキル ("
+  },
+  "전투 스킬 슬롯 (고유기 1 + 장착 2)": {
+    "en": "Combat Skill Slots (1 Unique + 2 Equipped)",
+    "ja": "戦闘スキルスロット (固有1 + 装着2)"
+  },
+  "전투 승리 모달에서 오파츠 전리품이 파일명이 아닌 정식 한글 명칭과 고유 아이콘으로 정확하게 표기됩니다.": {
+    "en": "Ooparts loot in the victory modal is now accurately displayed with official names and unique icons instead of filenames.",
+    "ja": "戦闘勝利モーダルでオーパーツの戦利品がファイル名ではなく正式名称と固有アイコンで正確に表示されます。"
+  },
+  "전투 승리 시 파티원이 획득하는 기본 경험치 배율 (기본 1.0)": {
+    "en": "Base EXP multiplier earned by party members upon combat victory (Base 1.0)",
+    "ja": "戦闘勝利時にパーティメンバーが獲得する基本経験値倍率 (基本 1.0)"
+  },
+  "전투 시스템": {
+    "en": "Combat System",
+    "ja": "戦闘システム"
+  },
+  "전투 시작 시 MP 30% 회복 (전원 최대 유대 시 50% 회복) & 공/방 +15%": {
+    "en": "Recovers 30% MP at battle start (50% at max bond for all) & ATK/DEF +15%",
+    "ja": "戦闘開始時にMP 30%回復 (全員最大絆時50%回復)＆攻/防+15%"
+  },
+  "전투 시작 시 아군 평균 방어력에 비례한 차원 보호막을 수비 부대에 전개합니다. (1턴 유지)": {
+    "en": "Deploys a dimensional shield proportional to average ally DEF on defending squad at battle start. (Lasts 1 turn)",
+    "ja": "戦闘開始時、味方の平均防御力に比例した次元シールドを防衛部隊に展開します。(1ターン維持)"
+  },
+  "전투 시작 시 아군 평균 방어력의 {0}% 보호막 획득 (1턴)": {
+    "en": "Gain a shield equal to {0}% of allies' average DEF at battle start (1 turn)",
+    "ja": "戦闘開始時、味方の平均防御力の{0}%シールド獲得 (1ターン)"
+  },
+  "전투 연계: DETONATION (연계 폭발)": {
+    "en": "Combat Combo: DETONATION",
+    "ja": "戦闘連携: DETONATION (連携爆発)"
+  },
+  "전투 적 체력 패널 정리 & 특수 스탯(관통·흡혈) 상세창 분리": {
+    "en": "Streamlined enemy HP panels & separated special stats (Pierce/Lifesteal) detail window",
+    "ja": "戦闘中の敵HPパネル整理＆特殊ステータス(貫通・吸血)詳細ウィンドウ分離"
+  },
+  "전투 전리품 및 경험치": {
+    "en": "Combat Loot & EXP",
+    "ja": "戦闘戦利品および経験値"
+  },
+  "전투 준비 중...": {
+    "en": "Preparing for battle...",
+    "ja": "戦闘準備中..."
+  },
+  "전투 중 부상당한 용병을 병상에 입원시켜 완치시킵니다. (1~3레벨 틱당 식량 2, 4레벨부터 식량 1 및 MP 충전(에테르 1) 해금, 병상 최대 7개)": {
+    "en": "Admit mercenaries wounded in battle to recover fully. (Lv.1-3 uses 2 Food per tick; Lv.4+ uses 1 Food and unlocks MP recovery for 1 Ether; max 7 beds)",
+    "ja": "戦闘で負傷した傭兵を病床に入院させ完治させます。(Lv.1~3は毎ティック食糧2、Lv.4から食糧1およびMP回復(エーテル1)解放、病床最大7床)"
+  },
+  "전투 중 유대(Bond Lv.2) 및 원정대 직업군 시너지(거너·암영·마도 등) 발동 시 동료가 전선에 즉시 개입하여 가하는 원호 및 추가 타격 시스템입니다.": {
+    "en": "A support and extra attack system where allies immediately intervene on the front line upon triggering Bond (Bond Lv.2) and expedition class synergy (Gunner, Shadow, Arcane, etc.).",
+    "ja": "戦闘中に絆(Bond Lv.2)および遠征隊の職業群シナジー(ガンナー・暗影・魔導など)発動時、仲間が前線に即時介入して行う援護および追加打撃システムです。"
+  },
+  "전투 중 적 카드 체력바 아래에는 현재 활성화된 버프/디버프만 간결히 표시되며, 방어 관통·흡혈 등 고유 특수 스탯은 적 상세 정보 모달에서 명확히 확인할 수 있도록 정돈되었습니다.": {
+    "en": "Under enemy card HP bars, only active buffs/debuffs are concisely shown, while unique special stats like DEF Pierce and Lifesteal are clearly organized in the enemy detail modal.",
+    "ja": "戦闘中の敵カードHPバー下には有効なバフ/デバフのみが簡潔に表示され、防御貫通・吸血などの固有特殊ステータスは敵詳細モーダルで明確に確認できるよう整理されました。"
+  },
+  "전투 중 특정 전술 행동 시 획득, 5개 완충 시 궁극기로 FEVER 폭발": {
+    "en": "Acquired upon specific tactical actions in combat; filling all 5 triggers FEVER explosion with Ultimate",
+    "ja": "戦闘中の特定の戦術行動時に獲得、5個満充填でアルティメットによるFEVER爆発"
+  },
+  "전투 중 특정 전술적 조건(원호, 연계, 치명타, 수호, 신성 치유, 반격, 차징 붕괴)을 달성할 때마다 뱃지를 수집하여 파티 전술 FEVER 게이지를 충전합니다.": {
+    "en": "Collect badges and charge the party tactical FEVER gauge whenever specific conditions are met in battle (Assist, Combo, Crit, Guard, Holy Heal, Counter, Charge Collapse).",
+    "ja": "戦闘中に特定の戦術条件(援護、連携、会心、守護、神聖治癒、反撃、チャージ崩壊)を達成するたびにバッジを収集し、パーティ戦術FEVERゲージを充填します。"
+  },
+  "전투 중 해당 조건이 달성되면 파티 공용 FEVER 게이지 슬롯에 뱃지가 즉시 적립됩니다.": {
+    "en": "When conditions are met during combat, badges are immediately credited to the shared party FEVER gauge slots.",
+    "ja": "戦闘中に該当条件が達成されると、パーティ共有FEVERゲージスロットにバッジが即座に蓄積されます。"
+  },
+  "전투 중 흘린 피를 지혈하는 필수 응급 기술.": {
+    "en": "Essential first aid skill to staunch bleeding sustained in battle.",
+    "ja": "戦闘中に流した血を止血する必須の応急技術。"
+  },
+  "전투 팁, 클래스, 장비, 몬스터 정보": {
+    "en": "Combat Tips, Classes, Equipment, Monster Info",
+    "ja": "戦闘のヒント、クラス、装備、モンスター情報"
+  },
+  "전투 패널 미표기 고유 스탯": {
+    "en": "Unique Stats Hidden on Combat Panel",
+    "ja": "戦闘パネル非表示の固有ステータス"
+  },
+  "전투 패배": {
+    "en": "Defeat",
+    "ja": "戦闘敗北"
+  },
+  "전투에 나서는 용병들을 수용하고 부상자를 즉시 치료하기 위해 방랑자의 라운지(Lv.1 이상)가 선행되어야 합니다.": {
+    "en": "Wanderer Lounge (Lv.1+) is required first to accommodate mercenaries heading into battle and promptly treat the wounded.",
+    "ja": "戦闘に赴く傭兵を受け入れ負傷者を直ちに治療するため、放浪者のラウンジ(Lv.1以上)が先行して必要です。"
+  },
+  "전투에서 중상을 입고 쓰러진 용병들을 치료할 의료 시설이 없습니다.": {
+    "en": "There are no medical facilities to treat mercenaries heavily wounded in battle.",
+    "ja": "戦闘で重傷を負い倒れた傭兵を治療する医療施設がありません。"
+  },
+  "전투원": {
+    "en": "Combatant",
+    "ja": "戦闘員"
+  },
+  "전투의 신앙: 피해를 받을 때마다 마나 5 회복, 공격 시 5% 확률로 즉시 치유.": {
+    "en": "Faith of Battle: Restores 5 MP whenever taking damage, 5% chance to heal immediately on attack.",
+    "ja": "戦闘の信仰: 被ダメージ時にMP 5回復、攻撃時5%の確率で即時治癒。"
+  },
+  "전파를 이용해 수 킬로미터 밖의 동료와 실시간으로 음성 교신하던 휴대용 통신 장비입니다.": {
+    "en": "A portable communication device once used to transmit real-time voice communications via radio waves with comrades kilometers away.",
+    "ja": "電波を利用して数キロ離れた仲間とリアルタイムで音声通信を行っていた携帯無線機。"
+  },
+  "전환 체력 비율 (0.1 ~ 1.0)": {
+    "en": "Transition HP Ratio (0.1 - 1.0)",
+    "ja": "フェーズ移行HP比率 (0.1 ~ 1.0)"
+  },
+  "절단": {
+    "en": "Sever",
+    "ja": "切断"
+  },
+  "절대 방진": {
+    "en": "Absolute Phalanx",
+    "ja": "絶対方陣"
+  },
+  "절대 성벽 방진": {
+    "en": "Absolute Rampart Phalanx",
+    "ja": "絶対城壁方陣"
+  },
+  "절대 암살 참수단": {
+    "en": "Absolute Decapitation Syndicate",
+    "ja": "絶対暗殺斬首団"
+  },
+  "절대 요새": {
+    "en": "Absolute Fortress",
+    "ja": "絶対要塞"
+  },
+  "절대 요새 (무적)": {
+    "en": "Absolute Fortress (Invulnerable)",
+    "ja": "絶対要塞 (無敵)"
+  },
+  "절대 요새 (피해 50% 경감)": {
+    "en": "Absolute Fortress (50% DMG Reduction)",
+    "ja": "絶対要塞 (ダメージ50%軽減)"
+  },
+  "절대 요새의 성역 & 지진 분쇄타": {
+    "en": "Sanctuary of Absolute Fortress & Earthquake Shatter",
+    "ja": "絶対要塞の聖域＆地震粉砕打"
+  },
+  "절대 종말 반지": {
+    "en": "Absolute Apocalypse Ring",
+    "ja": "絶対終末の指輪"
+  },
+  "절대 종말의 심연 신화 무구": {
+    "en": "Abyssal Mythic Armament of Absolute Apocalypse",
+    "ja": "絶対終末の深淵神話武具"
+  },
+  "절대 종말의 심연검": {
+    "en": "Abyssal Sword of Absolute Apocalypse",
+    "ja": "絶対終末の深淵剣"
+  },
+  "절대 철옹성: 전열 배치 시 받는 모든 물리/마법 피해 30% 상시 경감 및 아군 피격 대미지의 20%를 대신 흡수.": {
+    "en": "Absolute Impregnable Bastion: Permanently reduces all incoming physical/magic damage by 30% when in front row, absorbing 20% of allies' damage taken.",
+    "ja": "絶対鉄壁: 前衛配置時、受ける全物理/魔法ダメージを常時30%軽減し味方被ダメージの20%を肩代わり吸収。"
+  },
+  "절대갑": {
+    "en": "Absolute Armor",
+    "ja": "絶対鎧"
+  },
+  "절대영도": {
+    "en": "Absolute Zero",
+    "ja": "絶対零度"
+  },
+  "절대의": {
+    "en": "Absolute",
+    "ja": "絶対の"
+  },
+  "절망의 장막": {
+    "en": "Shroud of Despair",
+    "ja": "絶望の帳"
+  },
+  "절멸": {
+    "en": "Annihilation",
+    "ja": "絶滅"
+  },
+  "절멸기 충전:": {
+    "en": "Annihilation Skill Charge:",
+    "ja": "絶滅技チャージ:"
+  },
+  "점성 포획": {
+    "en": "Viscous Snare",
+    "ja": "粘性捕獲"
+  },
+  "접두": {
+    "en": "Prefix",
+    "ja": "接頭"
+  },
+  "접두사": {
+    "en": "Prefix",
+    "ja": "接頭辞"
+  },
+  "접두사: {0}": {
+    "en": "Prefix: {0}",
+    "ja": "接頭辞: {0}"
+  },
+  "접두석": {
+    "en": "Prefix Stone",
+    "ja": "接頭石"
+  },
+  "접두석과 접미석의 양극 마력을 조화시켜 궁극의 일격을 구현합니다.": {
+    "en": "Harmonizes dipolar magic of prefix and suffix stones to unleash an ultimate strike.",
+    "ja": "接頭石と接尾石の両極の魔力を調和させ、究極の一撃を具現化する。"
+  },
+  "접두어": {
+    "en": "Prefix",
+    "ja": "接頭辞"
+  },
+  "접미": {
+    "en": "Suffix",
+    "ja": "接尾"
+  },
+  "접미사": {
+    "en": "Suffix",
+    "ja": "接尾辞"
+  },
+  "접미사: {0}": {
+    "en": "Suffix: {0}",
+    "ja": "接尾辞: {0}"
+  },
+  "접미석": {
+    "en": "Suffix Stone",
+    "ja": "接尾石"
+  },
+  "접미어": {
+    "en": "Suffix",
+    "ja": "接尾辞"
+  },
+  "접속 시도가 너무 많아 일시적으로 제한되었습니다. 잠시 후 다시 시도해 주세요.": {
+    "en": "Temporarily restricted due to too many connection attempts. Please try again shortly.",
+    "ja": "アクセス試行が多すぎるため一時的に制限されました。しばらくしてから再試行してください。"
+  },
+  "접속 일시, 단말기 OS 종류, 서비스 크래시/오류 로그": {
+    "en": "Connection timestamp, device OS type, service crash/error logs",
+    "ja": "接続日時、端末OS種別、サービスクラッシュ/エラーログ"
+  },
+  "정갈하게 포장된 고영양 전투 도시락입니다. 냄새를 완전히 차단하여 야영 중 마물에게 발각될 위험을 절반으로 줄이며 체력과 마나를 45% 회복합니다.": {
+    "en": "A neatly packaged high-nutrition battle lunchbox. Completely seals aroma, halving the risk of monster detection while camping and restoring 45% HP and MP.",
+    "ja": "綺麗に包装された高栄養の戦闘弁当。匂いを完全に遮断し野営中に魔物に見つかる危険を半減させ、HPとMPを45%回復する。"
+  },
+  "정련 강철 판금갑": {
+    "en": "Refined Steel Plate Armor",
+    "ja": "精錬鋼鉄の板金鎧"
+  },
+  "정령의 비단(실크)을 에테르 마나 기류로 직조한 마도 로브. 마법 공격력과 마나 수용량을 확장합니다.": {
+    "en": "A sorcerous robe woven from spirit silk and ether mana streams. Expands magic attack and mana capacity.",
+    "ja": "精霊のシルクをエーテルマナ気流で織り上げた魔導ローブ。魔法攻撃力とマナ許容量を拡張する。"
+  },
+  "정리 완료": {
+    "en": "Sorted",
+    "ja": "整理完了"
+  },
+  "정말 모든 게임 데이터(로컬 및 Firebase 클라우드 세이브)를 완전 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.": {
+    "en": "Are you sure you want to completely reset all game data (local and Firebase cloud saves)? This action cannot be undone.",
+    "ja": "本当にすべてのゲームデータ(ローカルおよびFirebaseクラウドセーブ)を完全初期化しますか？この操作は取り消せません。"
+  },
+  "정말로": {
+    "en": "Are you sure",
+    "ja": "本当に"
+  },
+  "정말로 모든 위험을 감수하고 비상 탈출을 감행하시겠습니까?": {
+    "en": "Are you sure you want to take all risks and attempt an emergency escape?",
+    "ja": "本当にすべてのリスクを冒して緊急脱出を敢行しますか？"
+  },
+  "정밀 강화 마총": {
+    "en": "Precision Enhanced Magic Gun",
+    "ja": "精密強化魔銃"
+  },
+  "정밀 사격": {
+    "en": "Precision Shot",
+    "ja": "精密射撃"
+  },
+  "정밀 저격수": {
+    "en": "Precision Sniper",
+    "ja": "精密狙撃手"
+  },
+  "정밀 저격안": {
+    "en": "Precision Sniper Eye",
+    "ja": "精密狙撃眼"
+  },
+  "정밀 조준사격": {
+    "en": "Precision Aimed Shot",
+    "ja": "精密照準射撃"
+  },
+  "정밀 헤드샷": {
+    "en": "Precision Headshot",
+    "ja": "精密ヘッドショット"
+  },
+  "정밀한": {
+    "en": "Precise",
+    "ja": "精密な"
+  },
+  "정수 스탯 성장 보너스: N(+0), V(+1), H(+2), E(+3), L(+5) - 레벨업 시 HP, MP, ATK, DEF, SPD 정수 스탯 상승폭 차등 적용": {
+    "en": "Integer stat growth bonus: N(+0), V(+1), H(+2), E(+3), L(+5) - Differential integer increases applied to HP, MP, ATK, DEF, and SPD on level up",
+    "ja": "整数ステータス成長ボーナス: N(+0), V(+1), H(+2), E(+3), L(+5) - レベルアップ時にHP、MP、ATK、DEF、SPD整数ステータスの上昇幅を差別適用"
+  },
+  "정식 습득 완료된 스킬이 없습니다.": {
+    "en": "No officially learned skills.",
+    "ja": "正式に習得完了したスキルがありません。"
+  },
+  "정예 마물 처치": {
+    "en": "Slay Elite Monster",
+    "ja": "エリート魔物討伐"
+  },
+  "정원 초과": {
+    "en": "Capacity Exceeded",
+    "ja": "定員超過"
+  },
+  "정제": {
+    "en": "Refine",
+    "ja": "精製"
+  },
+  "정제 마나 로브": {
+    "en": "Refined Mana Robe",
+    "ja": "精製マナローブ"
+  },
+  "정제 마력 지팡이": {
+    "en": "Refined Magic Staff",
+    "ja": "精製魔力の杖"
+  },
+  "정제소": {
+    "en": "Refinery",
+    "ja": "精製所"
+  },
+  "정제소 Lv.5 필요 ({0}/5)": {
+    "en": "Refinery Lv.5 Required ({0}/5)",
+    "ja": "精製所Lv.5必要 ({0}/5)"
+  },
+  "정조준": {
+    "en": "True Aim",
+    "ja": "真照準"
+  },
+  "정찰 중...": {
+    "en": "Scouting...",
+    "ja": "偵察中..."
+  },
+  "정화": {
+    "en": "Purify",
+    "ja": "浄化"
+  },
+  "정화 백과": {
+    "en": "Purification Encyclopedia",
+    "ja": "浄化百科"
+  },
+  "정화 비용 (-": {
+    "en": "Purification Cost (-",
+    "ja": "浄化費用 (-"
+  },
+  "정화 성공 시 극옵 확정: 일반부터 전설까지 모든 등급 풀에서 결정되며, 어떤 등급이 나오더라도 해당 등급의 상한을 초과하는 최고 수준(최상급 극옵)의 스탯 보유 장비로 정화": {
+    "en": "Guaranteed god-roll upon purification success: Determined across all tiers from Common to Legendary, purifying into gear with peak top-tier stats surpassing that tier's caps",
+    "ja": "浄化成功時は極上OP確定: 一般から伝説までの全等級プールから決定され、どの等級であっても該当等級の上限を超える最高水準(最上級極上OP)のステータス保有装備へ浄化"
+  },
+  "정화 성수": {
+    "en": "Purifying Holy Water",
+    "ja": "浄化の聖水"
+  },
+  "정화 실패 (장비 영구 파괴)": {
+    "en": "Purification Failed (Gear permanently destroyed)",
+    "ja": "浄化失敗 (装備永久破壊)"
+  },
+  "정화된 구역: 심연의 연무 강화 해제": {
+    "en": "Purified Zone: Abyssal Haze boost dispelled",
+    "ja": "浄化された区域: 深淵の煙霧強化解除"
+  },
+  "정화의 비전 부적": {
+    "en": "Arcane Talisman of Purification",
+    "ja": "浄化の秘術護符"
+  },
+  "정화의 빛": {
+    "en": "Light of Purification",
+    "ja": "浄化の光"
+  },
+  "정화의 성수": {
+    "en": "Holy Water",
+    "ja": "浄化の聖水"
+  },
+  "정화의 성수 조제": {
+    "en": "Brew Holy Water",
+    "ja": "浄化の聖水調合"
+  },
+  "제 {0}병상": {
+    "en": "Bed #{0}",
+    "ja": "第{0}病床"
+  },
+  "제 {0}병상 (잠김)": {
+    "en": "Bed #{0} (Locked)",
+    "ja": "第{0}病床 (施錠)"
+  },
+  "제 {0}병상 입원 - 용병 선택": {
+    "en": "Bed #{0} Admission - Select Mercenary",
+    "ja": "第{0}病床入院 - 傭兵選択"
+  },
+  "제1장: 망령의 군주를 잠재워라 (2F 보스 토벌 & 3F 해금)": {
+    "en": "Chapter 1: Put the Phantom Lord to Rest (Slay 2F Boss & Unlock 3F)",
+    "ja": "第1章: 亡霊の君主を鎮めよ (2Fボスト討伐＆3F解放)"
+  },
+  "제1장: 시공간의 균열을 닫아라 (4F 보스 토벌 & 5F 해금)": {
+    "en": "Chapter 1: Close the Rift of Space-Time (Slay 4F Boss & Unlock 5F)",
+    "ja": "第1章: 時空の亀裂を閉じよ (4Fボス討伐＆5F解放)"
+  },
+  "제1장: 심연의 어둠 속에서": {
+    "en": "Chapter 1: In the Abyssal Darkness",
+    "ja": "第1章: 深淵の闇の中で"
+  },
+  "제1장: 원초의 공허를 정복하라 (5F 최종 결전)": {
+    "en": "Chapter 1: Conquer the Primordial Void (5F Final Showdown)",
+    "ja": "第1章: 原初の虚無を征服せよ (5F最終決戦)"
+  },
+  "제1장: 첫 번째 척후 파견": {
+    "en": "Chapter 1: First Scout Dispatch",
+    "ja": "第1章: 最初の斥候派遣"
+  },
+  "제1장: 침묵을 부수는 거신 (1F 보스 토벌 & 2F 해금)": {
+    "en": "Chapter 1: Colossus Shattering Silence (Slay 1F Boss & Unlock 2F)",
+    "ja": "第1章: 沈黙を破る巨神 (1Fボス討伐＆2F解放)"
+  },
+  "제1장: 태고의 광맥을 깨우는 자 (3F 보스 토벌 & 4F 해금)": {
+    "en": "Chapter 1: Awakener of the Primordial Vein (Slay 3F Boss & Unlock 4F)",
+    "ja": "第1章: 太古の鉱脈を呼び覚ます者 (3Fボス討伐＆4F解放)"
+  },
+  "제2장: 거울의 미궁 (9F 보스 토벌 & 10F 해금)": {
+    "en": "Chapter 2: Mirror Labyrinth (Slay 9F Boss & Unlock 10F)",
+    "ja": "第2章: 鏡の迷宮 (9Fボス討伐＆10F解放)"
+  },
+  "제2장: 망각의 묘지기 (7F 보스 토벌 & 8F 해금)": {
+    "en": "Chapter 2: Graveyard Keeper of Oblivion (Slay 7F Boss & Unlock 8F)",
+    "ja": "第2章: 忘却の墓守 (7Fボス討伐＆8F解放)"
+  },
+  "제2장: 심연의 군주 (10F 최종 결전)": {
+    "en": "Chapter 2: Lord of the Abyss (10F Final Showdown)",
+    "ja": "第2章: 深淵の覇王 (10F最終決戦)"
+  },
+  "제2장: 타락한 기사단장 (8F 보스 토벌 & 9F 해금)": {
+    "en": "Chapter 2: Fallen Knight Commander (Slay 8F Boss & Unlock 9F)",
+    "ja": "第2章: 堕落した騎士団長 (8Fボス討伐＆9F解放)"
+  },
+  "제2장: 핏빛 대공 토벌 (6F 보스 토벌 & 7F 해금)": {
+    "en": "Chapter 2: Subjugate the Crimson Grand Duke (Slay 6F Boss & Unlock 7F)",
+    "ja": "第2章: 深紅の大公討伐 (6Fボス討伐＆7F解放)"
+  },
+  "제가 제 몫을 했는지 모르겠네요... 아직 두 분의 움직임에 따라가기가 벅찹니다.": {
+    "en": "I don't know if I did my part... It's still tough keeping up with both of your movements.",
+    "ja": "私の役目を果たせたか分かりません... まだお二人の動きについていくのが精一杯です。"
+  },
+  "제거": {
+    "en": "Remove",
+    "ja": "除去"
+  },
+  "제노": {
+    "en": "Xeno",
+    "ja": "ゼノ"
+  },
+  "제단": {
+    "en": "Altar",
+    "ja": "祭壇"
+  },
+  "제단 Lv.{0} 필요": {
+    "en": "Altar Lv.{0} Required",
+    "ja": "祭壇Lv.{0}必要"
+  },
+  "제단 입구를 지키는 거대한 석상이 손에 부서진 대검을 쥔 채 눈을 감고 서 있습니다.": {
+    "en": "A colossal stone statue guarding the altar entrance stands with eyes closed, holding a broken greatsword in hand.",
+    "ja": "祭壇の入口を守る巨大な石像が、手にした壊れた大剣を握りしめ目を閉じて立っている。"
+  },
+  "제식 무기 단조와 심연 탐험으로 물자가 넘쳐난다. 중앙 병참고를 증축하여 전 자원 보관 한도를 500개로 확장하라.": {
+    "en": "Supplies overflow from standard weapon forging and abyss exploration. Expand the Central Logistics Depot to increase the storage cap for all resources to 500.",
+    "ja": "制式武器の鍛造と深淵探検で物資があふれている。中央兵站庫を増築し全資源の保管上限を500個に拡張せよ。"
+  },
+  "제작 가능": {
+    "en": "Craftable",
+    "ja": "製作可能"
+  },
+  "제작 범위:": {
+    "en": "Crafting Range:",
+    "ja": "製作範囲:"
+  },
+  "제작 불가: 에테르 연금 공방 Lv.{0} 이상 증축이 필요합니다.": {
+    "en": "Cannot Craft: Aether Alchemy Lab must be upgraded to Lv.{0} or higher.",
+    "ja": "製作不可: エーテル錬金工房Lv.{0}以上の増築が必要です。"
+  },
+  "제작 불가: 에테르 연금 공방(Lv.1 이상) 시설이 필요합니다.": {
+    "en": "Cannot Craft: Aether Alchemy Lab (Lv.1+) facility is required.",
+    "ja": "製作不可: エーテル錬金工房(Lv.1以上)施設が必要です。"
+  },
+  "제작 실패: [{0}]에 필요한 재화가 부족합니다!": {
+    "en": "Crafting Failed: Insufficient currency required for [{0}]!",
+    "ja": "製作失敗: [{0}]に必要な財貨が不足しています！"
+  },
+  "제작 실패: 재료가 부족합니다! [부족: {0}]": {
+    "en": "Crafting Failed: Insufficient materials! [Missing: {0}]",
+    "ja": "製作失敗: 材料が不足しています！[不足: {0}]"
+  },
+  "제작 예상 스탯 (±30% 무작위 편차)": {
+    "en": "Estimated Crafting Stats (±30% random variance)",
+    "ja": "製作予想ステータス (±30%ランダム偏差)"
+  },
+  "제작 재료 부족": {
+    "en": "Insufficient Crafting Materials",
+    "ja": "製作材料不足"
+  },
+  "제작된 소모품은 창고에 적재되며, 탐험 채비 시 무료로 우선 불출됩니다.": {
+    "en": "Crafted consumables are loaded into storage and distributed free of charge with priority during expedition preparation.",
+    "ja": "製作された消費アイテムは倉庫に保管され、探検準備時に無料で優先支給されます。"
+  }
+}

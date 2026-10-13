@@ -1,0 +1,802 @@
+{
+  "우측 상단 ✕ 버튼을 누르면 게임으로 복귀합니다.": {
+    "en": "Press the ✕ button in the top right to return to the game.",
+    "ja": "右上の✕ボタンを押すとゲームに復帰します。"
+  },
+  "운영 유지비 절감을 위해 시설을 일시 정지(Pause)하면 유지비와 생산이 중단되며 진입이 안전하게 차단됩니다.": {
+    "en": "Pausing a facility to reduce upkeep halts maintenance costs and production, safely blocking access.",
+    "ja": "運営維持費削減のため施設を一時停止(Pause)すると、維持費と生産が停止し進入が安全に遮断されます。"
+  },
+  "울부짖음": {
+    "en": "Howl",
+    "ja": "咆哮"
+  },
+  "울음": {
+    "en": "Cry",
+    "ja": "慟哭"
+  },
+  "원거리 저격 & 관통": {
+    "en": "Ranged Sniping & Piercing",
+    "ja": "遠距離狙撃＆貫通"
+  },
+  "원거리 정밀 조준으로 치명타율이 +5%, 치명타 피해량이 +5% 증가합니다.": {
+    "en": "Precise ranged aiming increases Crit Rate by +5% and Crit DMG by +5%.",
+    "ja": "遠距離精密照準により会心率が+5%、会心ダメージが+5%増加します。"
+  },
+  "원거리 치명타율 +5% 및 치명타 피해 +5% 증폭으로 저격 특화": {
+    "en": "Specialized in sniping with +5% Ranged Crit Rate and +5% Crit DMG amplification",
+    "ja": "遠距離会心率+5%および会心ダメージ+5%増幅で狙撃に特化"
+  },
+  "원거리 화력 집중: 파티 공격력 +9%, 행운 +8, 턴당 마나 5 MP 재생": {
+    "en": "Focused Ranged Firepower: Party ATK +9%, LUCK +8, regenerate 5 MP per turn",
+    "ja": "遠距離火力集中: パーティ攻撃力+9%、幸運+8、毎ターンMP 5回復"
+  },
+  "원격 DB에 백업된 사용자 저장 데이터 삭제": {
+    "en": "Delete user save data backed up in the remote DB",
+    "ja": "リモートDBにバックアップされたユーザーセーブデータを削除"
+  },
+  "원기": {
+    "en": "Vigor",
+    "ja": "活力"
+  },
+  "원소": {
+    "en": "Element",
+    "ja": "元素"
+  },
+  "원소 결합 & 연쇄 번개": {
+    "en": "Elemental Fusion & Chain Lightning",
+    "ja": "元素結合＆連鎖稲妻"
+  },
+  "원소 공명 로브": {
+    "en": "Elemental Resonance Robe",
+    "ja": "元素共鳴のローブ"
+  },
+  "원소 과부하: 3연속 마법 시전 시 다음 마법의 대미지 100% 증폭.": {
+    "en": "Elemental Overload: Casting spells 3 times in a row amplifies next spell's damage by 100%.",
+    "ja": "元素過負荷: 魔法を3回連続詠唱時、次の魔法ダメージが100%増幅。"
+  },
+  "원소 광역 폭격": {
+    "en": "Elemental AoE Bombardment",
+    "ja": "元素範囲爆撃"
+  },
+  "원소 마도 지팡이": {
+    "en": "Elemental Sorcery Staff",
+    "ja": "元素魔導の杖"
+  },
+  "원소 마도계": {
+    "en": "Elemental Sorcery",
+    "ja": "元素魔導系"
+  },
+  "원소 보호막이 둘러쳐진 고대 마도사의 비단 로브": {
+    "en": "Ancient mage's silk robe surrounded by an elemental shield",
+    "ja": "元素シールドを纏った古代魔導士のシルクローブ"
+  },
+  "원소 초신성": {
+    "en": "Elemental Supernova",
+    "ja": "元素超新星"
+  },
+  "원소 폭발": {
+    "en": "Elemental Explosion",
+    "ja": "元素爆発"
+  },
+  "원소 학도": {
+    "en": "Elemental Apprentice",
+    "ja": "元素の学徒"
+  },
+  "원소 학도 ➔ [대마도사 ➔ 아크 메이지] / [비전 학자 ➔ 시공의 조율사]": {
+    "en": "Elemental Apprentice ➔ [Grand Mage ➔ Archmage] / [Arcane Scholar ➔ Spatiotemporal Tuner]",
+    "ja": "元素の学徒 ➔ [大魔導士 ➔ アークメイジ] / [秘術の学者 ➔ 時空の調律者]"
+  },
+  "원소 학도 계통": {
+    "en": "Elemental Apprentice Line",
+    "ja": "元素の学徒系統"
+  },
+  "원소 학도의 마법봉": {
+    "en": "Elemental Apprentice's Wand",
+    "ja": "元素の学徒の魔法の杖"
+  },
+  "원소의 대마도사": {
+    "en": "Elemental Archmage",
+    "ja": "元素の大魔導士"
+  },
+  "원소의 통찰": {
+    "en": "Elemental Insight",
+    "ja": "元素の洞察"
+  },
+  "원정 1회 동안 촉매 4종 중 최대 2개 무료 장착": {
+    "en": "Equip up to 2 of 4 catalysts for free during 1 expedition",
+    "ja": "遠征1回の間、触媒4種のうち最大2個を無料装着"
+  },
+  "원정 1회 적용:": {
+    "en": "Applies to 1 expedition:",
+    "ja": "遠征1回適用:"
+  },
+  "원정 도축장": {
+    "en": "Expedition Slaughterhouse",
+    "ja": "遠征屠殺場"
+  },
+  "원정 보급품": {
+    "en": "Expedition Supplies",
+    "ja": "遠征補給品"
+  },
+  "원정 보급품 (강화)": {
+    "en": "Expedition Supplies (Enhanced)",
+    "ja": "遠征補給品 (強化)"
+  },
+  "원정 보급품 창고 재고 현황": {
+    "en": "Expedition Supply Depot Inventory Status",
+    "ja": "遠征補給品倉庫の在庫状況"
+  },
+  "원정 부대 전체 올스탯 증폭": {
+    "en": "All stats amplified for the entire expedition force",
+    "ja": "遠征部隊全体の全ステータス増幅"
+  },
+  "원정 전리품 자원 2배": {
+    "en": "2x Expedition Loot Resources",
+    "ja": "遠征戦利品資源2倍"
+  },
+  "원정단 병영 & 전략 작전실": {
+    "en": "Expedition Barracks & Strategic War Room",
+    "ja": "遠征隊兵舎＆戦略作戦室"
+  },
+  "원정단 편성": {
+    "en": "Expedition Formation",
+    "ja": "遠征隊編成"
+  },
+  "원정대": {
+    "en": "Expedition",
+    "ja": "遠征隊"
+  },
+  "원정대 보급 및 영지 운영 유지비": {
+    "en": "Expedition supplies and territory operation upkeep",
+    "ja": "遠征隊補給および領地運営維持費"
+  },
+  "원정대 복귀 준비 완료": {
+    "en": "Expedition Ready to Return",
+    "ja": "遠征隊帰還準備完了"
+  },
+  "원정대 사령관": {
+    "en": "Expedition Commander",
+    "ja": "遠征隊指揮官"
+  },
+  "원정대 시너지 도감": {
+    "en": "Expedition Synergy Codex",
+    "ja": "遠征隊シナジー図鑑"
+  },
+  "원정대 시너지 상한(최대 4개) 및 돌격 배수진 1턴 보호막 한정": {
+    "en": "Expedition synergy cap (max 4) and Last Stand 1-turn shield limit",
+    "ja": "遠征隊シナジー上限(最大4個)および背水の陣1ターンシールド限定"
+  },
+  "원정대 시너지 상한:": {
+    "en": "Expedition Synergy Cap:",
+    "ja": "遠征隊シナジー上限:"
+  },
+  "원정대 용병 관리": {
+    "en": "Expedition Mercenary Management",
+    "ja": "遠征隊傭兵管理"
+  },
+  "원정대 용병 관리 (1회 사용 가능 - 야영 시 충전)": {
+    "en": "Expedition Mercenary Management (Usable once - recharged when camping)",
+    "ja": "遠征隊傭兵管理 (1回使用可能 - キャンプ時に再充填)"
+  },
+  "원정대 인원 부족 (": {
+    "en": "Insufficient expedition members (",
+    "ja": "遠征隊の人員不足 ("
+  },
+  "원정대 출격 및 침공 시작": {
+    "en": "Expedition Sortie & Invasion Start",
+    "ja": "遠征隊出撃および侵攻開始"
+  },
+  "원정대 파티는 최대 3명까지 편성할 수 있습니다. 기존 파티원을 먼저 제외하세요.": {
+    "en": "An expedition party can include up to 3 members. Please remove an existing party member first.",
+    "ja": "遠征隊パーティは最大3人まで編成できます。既存のパーティメンバーを先に除外してください。"
+  },
+  "원정대가 토벌한 마물의 사체를 정제하는 기초 해체 시설. 독소를 걸러내어 방주 거주민과 원정대를 위한 보급 식량을 생산합니다.": {
+    "en": "A basic dismantling facility that refines the carcasses of monsters slain by the expedition. Filters out toxins to produce supply rations for Ark residents and expeditions.",
+    "ja": "遠征隊が討伐した魔物の死骸を精製する基礎解体施設。毒素を濾過し、方舟の住民と遠征隊のための補給食糧を生産します。"
+  },
+  "원정대원이 처음으로 전사하여 묘지에 묘비명이 새겨지는 순간 백과사전 회고록 컬렉션에 즉시 등록되도록 트리거가 정비되었습니다.": {
+    "en": "The trigger has been updated so that the moment an expedition member falls for the first time and an epitaph is engraved in the cemetery, it is immediately registered in the Encyclopedia Memoir collection.",
+    "ja": "遠征隊員が初めて戦死し墓地に墓碑銘が刻まれた瞬間、百科事典の回顧録コレクションに即座に登録されるようトリガーが整備されました。"
+  },
+  "원정을 떠나기에 앞서, 방주 관리국에서 하달된 작전 지침을 확인해야 합니다.": {
+    "en": "Before setting out on an expedition, you must check the operational directives issued by the Ark Administration.",
+    "ja": "遠征に出る前に、方舟管理局から下達された作戦指針を確認しなければなりません。"
+  },
+  "원초의 공허 묵시록": {
+    "en": "Primordial Void Apocalypse",
+    "ja": "原初の虚無黙示録"
+  },
+  "원초의 광맥 심장": {
+    "en": "Primal Vein Heart",
+    "ja": "原初の鉱脈心臓"
+  },
+  "원초의 에테르를 흡수하여 거대해진 베히모스가 광맥을 독점하고 있다. 녀석을 굴복시키고 시공간 균열로 향하는 길을 열어라.": {
+    "en": "A behemoth enlarged by absorbing primal ether monopolizes the vein. Subdue it and clear the path to the space-time rift.",
+    "ja": "原初のエーテルを吸収して巨大化したベヒモスが鉱脈を独占している。奴を屈服させ、時空の亀裂へと続く道を切り開け。"
+  },
+  "원초의 제단 서판": {
+    "en": "Primordial Altar Tablet",
+    "ja": "原初の祭壇の石版"
+  },
+  "원초의 제단을 수호하던 거신의 이마에서 추출한 칠흑의 눈입니다. 5티어 보스 고유 장비를 단조합니다.": {
+    "en": "A pitch-black eye extracted from the forehead of the colossus guarding the Primordial Altar. Used to forge Tier 5 boss unique equipment.",
+    "ja": "原初の祭壇を守護していた巨神の額から抽出した漆黒の目。Tier 5ボス固有装備を鍛造する。"
+  },
+  "원하는 보상 방침을 클릭하세요": {
+    "en": "Click your desired reward policy",
+    "ja": "希望する報酬方針をクリックしてください"
+  },
+  "원하는 항목만 선택하여 초기화하거나, 하단의": {
+    "en": "Select only the desired items to reset, or use the bottom",
+    "ja": "希望する項目だけを選択して初期化するか、下部の"
+  },
+  "원하는 핵심 스탯 1종을 선택하여": {
+    "en": "Select 1 desired core stat and",
+    "ja": "希望する主要ステータス1種を選択して"
+  },
+  "원한의 영혼석 목걸이": {
+    "en": "Necklace of Spiteful Soulstone",
+    "ja": "怨恨のソウルストーンネックレス"
+  },
+  "원호": {
+    "en": "Assist",
+    "ja": "援護"
+  },
+  "원호 사격 개시!": {
+    "en": "Assist fire commenced!",
+    "ja": "援護射撃開始！"
+  },
+  "원호 추격": {
+    "en": "Assist Pursuit",
+    "ja": "援護追撃"
+  },
+  "원호: {0}": {
+    "en": "Assist: {0}",
+    "ja": "援護: {0}"
+  },
+  "원혼들의 항아리를 건드리지 않고 지나쳤습니다.": {
+    "en": "Passed by without disturbing the urn of vengeful spirits.",
+    "ja": "怨霊たちの壺に触れずに通り過ぎた。"
+  },
+  "원혼의 격노": {
+    "en": "Fury of Vengeful Spirits",
+    "ja": "怨霊の激怒"
+  },
+  "원혼의 마력이 깃들어 착용자의 마나를 대폭 늘리고 불굴의 방어력을 부여합니다.": {
+    "en": "Imbued with the magic of vengeful spirits, drastically increasing wearer's MP and granting indomitable DEF.",
+    "ja": "怨霊の魔力が宿り、着用者のMPを大幅に増やし不屈の防御力を付与する。"
+  },
+  "원혼의 속박": {
+    "en": "Binding of Vengeful Spirits",
+    "ja": "怨霊の束縛"
+  },
+  "원혼의 파멸 오라": {
+    "en": "Doom Aura of Vengeful Spirits",
+    "ja": "怨霊の破滅オーラ"
+  },
+  "월도": {
+    "en": "Glaive",
+    "ja": "月刀"
+  },
+  "위기 순간 착용자의 생체 에너지를 지탱하는 결전 펜던트.": {
+    "en": "A decisive battle pendant that sustains wearer's bio-energy in critical moments.",
+    "ja": "危機の瞬間に着用者の生体エネルギーを支える決戦のペンダント。"
+  },
+  "위력": {
+    "en": "Power",
+    "ja": "威力"
+  },
+  "위력 +80%, 치명타 +50%, 관통 50%, 파티 MP 100% 즉시 완충, 적 전체 1턴 완전 그로기": {
+    "en": "Power +80%, Crit +50%, Pierce 50%, instantly fully recharge party MP 100%, all enemies fully staggered for 1 turn",
+    "ja": "威力+80%、会心+50%、貫通50%、パーティMP 100%即時全回復、敵全体1ターン完全グロッキー"
+  },
+  "위력 계수": {
+    "en": "Power Coefficient",
+    "ja": "威力係数"
+  },
+  "위력 계수 +12% 성장": {
+    "en": "Power coefficient growth +12%",
+    "ja": "威力係数+12%成長"
+  },
+  "위력 배율": {
+    "en": "Power Multiplier",
+    "ja": "威力倍率"
+  },
+  "위력 배율 (1.0 = 100%)": {
+    "en": "Power Multiplier (1.0 = 100%)",
+    "ja": "威力倍率 (1.0 = 100%)"
+  },
+  "위력 배율(1.0=100%)": {
+    "en": "Power Multiplier (1.0=100%)",
+    "ja": "威力倍率(1.0=100%)"
+  },
+  "위령비에 등불을 바치고 5분간 전투 EXP +{0}% 가호를 얻습니다.": {
+    "en": "Offer a lantern to the memorial and receive combat EXP +{0}% blessing for 5 min.",
+    "ja": "慰霊碑に灯火を捧げ、5分間戦闘EXP +{0}%の加護を得る。"
+  },
+  "위성 궤도포": {
+    "en": "Orbital Satellite Cannon",
+    "ja": "衛星軌道砲"
+  },
+  "위성 궤도포 관통 240% 폭격": {
+    "en": "Orbital Satellite Cannon 240% piercing bombardment",
+    "ja": "衛星軌道砲 貫通240%爆撃"
+  },
+  "위치: {0}": {
+    "en": "Location: {0}",
+    "ja": "位置: {0}"
+  },
+  "위태로운 성화와 지휘관의 서약": {
+    "en": "Perilous Sacred Flame and Commander's Oath",
+    "ja": "危うい聖火と指揮官の誓約"
+  },
+  "위험 오브젝트를 건드리지 않고 안전하게 통과하여 파티의 체력을 보존합니다.": {
+    "en": "Safely bypass hazardous objects without touching them to preserve party HP.",
+    "ja": "危険オブジェクトに触れず安全に通過し、パーティのHPを温存する。"
+  },
+  "위험도 {0} / 10,000 ({1}%)": {
+    "en": "Hazard {0} / 10,000 ({1}%)",
+    "ja": "危険度 {0} / 10,000 ({1}%)"
+  },
+  "위험도 {0} 돌파 시 해금": {
+    "en": "Unlocked upon breaking through Hazard {0}",
+    "ja": "危険度 {0} 突破時に解放"
+  },
+  "위험도 {0}%": {
+    "en": "Hazard {0}%",
+    "ja": "危険度 {0}%"
+  },
+  "유니크": {
+    "en": "Unique",
+    "ja": "ユニーク"
+  },
+  "유대 원호 공격 (Bond 40+): 유대 40 이상 동료와 출전 시 25% 확률로 개입하여 적에게 강력한 원호 타격 (공격력 80% + 치명타 독립 판정)": {
+    "en": "Bond Assist Attack (Bond 40+): When deployed with an ally with Bond 40+, 25% chance to intervene and deliver a powerful assist strike (80% ATK + independent crit check)",
+    "ja": "絆援護攻撃 (Bond 40+): 絆40以上の仲間と出撃時、25%の確率で介入し敵に強力な援護打撃 (攻撃力80% + 会心独立判定)"
+  },
+  "유령": {
+    "en": "Ghost",
+    "ja": "幽霊"
+  },
+  "유령도": {
+    "en": "Ghost Blade",
+    "ja": "幽霊刀"
+  },
+  "유리엘": {
+    "en": "Uriel",
+    "ja": "ウリエル"
+  },
+  "유물": {
+    "en": "Relic",
+    "ja": "遺物"
+  },
+  "유성": {
+    "en": "Meteor",
+    "ja": "流星"
+  },
+  "유연한": {
+    "en": "Flexible",
+    "ja": "しなやかな"
+  },
+  "유연한 목재와 질긴 가죽 시위로 탄성을 극대화한 장궁. [🏹 급소] 특성으로 치명타율 +15% 및 치명타 피해 +30%를 제공합니다.": {
+    "en": "A longbow with maximized elasticity crafted from flexible wood and tough leather string. Grants +15% Crit Rate and +30% Crit DMG via [🏹 Vital Point] trait.",
+    "ja": "しなやかな木材と強靭な革の弦で弾性を極限まで高めた長弓。[🏹 急所]特性により会心率+15%および会心ダメージ+30%を付与する。"
+  },
+  "유지 중": {
+    "en": "Active",
+    "ja": "維持中"
+  },
+  "유지비 -": {
+    "en": "Upkeep -",
+    "ja": "維持費 -"
+  },
+  "유지비 -{0}%": {
+    "en": "Upkeep -{0}%",
+    "ja": "維持費 -{0}%"
+  },
+  "유지비 면제": {
+    "en": "Upkeep Waived",
+    "ja": "維持費免除"
+  },
+  "유지비 미납으로 일시 하향됨 (원래 Lv.{0}, 유지비 지불 시 자동 복구)": {
+    "en": "Temporarily downgraded due to unpaid upkeep (originally Lv.{0}, auto-restored upon payment)",
+    "ja": "維持費未納により一時ダウングレード (本来 Lv.{0}、維持費支払い時に自動復旧)"
+  },
+  "유지비 완전 면제": {
+    "en": "Full Upkeep Exemption",
+    "ja": "維持費完全免除"
+  },
+  "유지비 주기: {0}초": {
+    "en": "Upkeep Period: {0}s",
+    "ja": "維持費周期: {0}秒"
+  },
+  "유지비가 결제되었습니다.": {
+    "en": "Upkeep has been paid.",
+    "ja": "維持費が支払われました。"
+  },
+  "유지비가 결제되었습니다. ({0})": {
+    "en": "Upkeep has been paid. ({0})",
+    "ja": "維持費が支払われました。({0})"
+  },
+  "유틸 전술": {
+    "en": "Utility Tactics",
+    "ja": "ユーティリティ戦術"
+  },
+  "유틸 전술 타워: 시간 왜곡 역장(침입자 전체 행동 속도 감속), 마나 누출 방출기(침입자 매 라운드 MP 누출), 공허의 저주탑(침입자 치명/행운 분쇄 및 방어 파쇄)": {
+    "en": "Utility Tactical Tower: Time Warp Field (reduces all invaders' action speed), Mana Leak Emitter (invaders leak MP every round), Void Curse Tower (crushes invaders' Crit/LUCK and shreds DEF)",
+    "ja": "ユーティリティ戦術タワー: 時間歪曲力場(侵入者全体の行動速度低下)、マナ漏出放射器(侵入者は毎ラウンドMP漏出)、虚無の呪い塔(侵入者の会心/幸運粉砕および防御破砕)"
+  },
+  "유품 무구 안전 회수: 결사대원이 사경 카운트다운 소진 또는 전멸로 전사하여 묘지에 안장될 때, 착용 중이던 무기·방어구·장신구가 소멸되지 않고 성채 인벤토리(보관함)로 전리품처럼 100% 안전하게 회수됩니다.": {
+    "en": "Safe Recovery of Memento Gear: When an expedition member perishes due to death countdown exhaustion or total wipe and is buried in the cemetery, equipped weapons, armor, and accessories are not destroyed and are 100% safely recovered to Citadel inventory (storage) like loot.",
+    "ja": "遺品武具の安全回収: 決死隊員が臨死カウントダウン切れまたは全滅により戦死して墓地に埋葬される際、装備していた武器・防具・装飾品が消滅せず、戦利品のように城塞インベントリ(保管庫)へ100%安全に回収されます。"
+  },
+  "유효하지 않은 이메일 형식입니다. (예: user@example.com)": {
+    "en": "Invalid email format. (e.g., user@example.com)",
+    "ja": "無効なメールアドレス形式です。(例: user@example.com)"
+  },
+  "유효한 이메일 형식이 아닙니다.": {
+    "en": "Not a valid email format.",
+    "ja": "有効なメールアドレス形式ではありません。"
+  },
+  "융단 폭격 섬멸전": {
+    "en": "Carpet Bombing Annihilation",
+    "ja": "絨毯爆撃殲滅戦"
+  },
+  "으로 흡수 보존하고,": {
+    "en": "absorbed and preserved into,",
+    "ja": "として吸収保存し、"
+  },
+  "으로서 거점을 재건하고 심연 10층의 심층부를 돌파하십시오.": {
+    "en": "rebuild the stronghold and break through the depths of Abyss Floor 10.",
+    "ja": "として拠点を再建し、深淵10層の深層部を突破してください。"
+  },
+  "은빛 반지": {
+    "en": "Silver Ring",
+    "ja": "銀の指輪"
+  },
+  "은빛 수호단": {
+    "en": "Silver Guardians",
+    "ja": "銀色守護団"
+  },
+  "은빛 여명회": {
+    "en": "Silver Dawn",
+    "ja": "白銀の黎明会"
+  },
+  "은신": {
+    "en": "Stealth",
+    "ja": "隠密"
+  },
+  "은총의": {
+    "en": "Blessed",
+    "ja": "恩寵の"
+  },
+  "을 감수합니다.": {
+    "en": "is borne.",
+    "ja": "を甘受します。"
+  },
+  "을 건설(Lv.": {
+    "en": "Construct (Lv.",
+    "ja": "を建設(Lv."
+  },
+  "을 나눌수록 유대가 깊어집니다.": {
+    "en": "The more shared, the deeper the bond grows.",
+    "ja": "を分かち合うほど絆が深まります。"
+  },
+  "을 누르거나": {
+    "en": "Press or",
+    "ja": "を押すか"
+  },
+  "을 먼저 세운 후": {
+    "en": "Build first, then",
+    "ja": "を先に建てた後"
+  },
+  "을 사용하세요)": {
+    "en": "Use )",
+    "ja": "を使用してください)"
+  },
+  "을 연속 격발합니다. 행운 스탯이 높을수록 연사 빈도가 비약적으로 상승합니다.": {
+    "en": "fires in rapid succession. Higher LUCK stat dramatically increases rapid-fire rate.",
+    "ja": "を連続発射します。幸運ステータスが高いほど連射頻度が飛躍的に上昇します。"
+  },
+  "을 완공하면 각 층 광폭화 보스 토벌 및 고대 방주의 기원을 추적하는": {
+    "en": "Upon completion, defeat enrage bosses on each floor and trace the origins of the ancient Ark",
+    "ja": "を完工すると各階層の狂暴化ボス討伐および古代の方舟の起源を追跡する"
+  },
+  "을 재건하고, 생존자들의 안식처를 마련하며, 정예 결사대를 심연의 탑 밑바닥으로 급파하여": {
+    "en": "rebuild, provide shelter for survivors, and dispatch elite squads to the bottom of the Abyss Tower",
+    "ja": "を再建し、生存者の安息所を用意し、精鋭決死隊を深淵の塔の最下層へ急派して"
+  },
+  "을 지참하려면": {
+    "en": "To carry ",
+    "ja": "を携帯するには"
+  },
+  "을 착용한 영웅은 기본 공격 및 관련 전투 행동 시 위 고유 메커니즘이 상시 적용됩니다. 시너지 효과를 가진 클래스(출혈 스킬러에게 검 장착, 속도가 빠른 영웅에게 단검 장착 등)와 조합하면 전투 효율이 극대화됩니다.": {
+    "en": "Heroes equipping this always apply the above unique mechanic during basic attacks and related combat actions. Combines with synergistic classes (equipping swords on bleed specialists, daggers on fast heroes, etc.) to maximize combat efficiency.",
+    "ja": "を装備した英雄は通常攻撃および関連する戦闘行動時に上記の固有メカニズムが常時適用されます。シナジー効果を持つクラス(出血スキル役に剣を装備、素早い英雄に短剣を装備など)と組み合わせると戦闘効率が最大化されます。"
+  },
+  "을 타고 무사히 귀환했을 때": {
+    "en": "When returning safely aboard",
+    "ja": "に乗って無事帰還した際"
+  },
+  "음향 효과 설정": {
+    "en": "Sound Effects Settings",
+    "ja": "音響効果設定"
+  },
+  "응급 처치": {
+    "en": "First Aid",
+    "ja": "応急処置"
+  },
+  "응급 회복": {
+    "en": "Emergency Recovery",
+    "ja": "応急回復"
+  },
+  "응축된 마력을 일거에 터뜨려 적 전체에 161% 광역 비전 마법 피해를 가하고 2턴간 방어력을 35% 분쇄합니다.": {
+    "en": "Detonates condensed magic all at once, dealing 161% AoE arcane magic damage to all enemies and shredding DEF by 35% for 2 turns.",
+    "ja": "凝縮された魔力を一気に爆発させ、敵全体に161%の範囲秘術魔法ダメージを与え、2ターンの間防御力を35%粉砕する。"
+  },
+  "응축된 순수 마나 화살을 쏘아 적 1체에게 135% 마법 피해를 가합니다.": {
+    "en": "Fires a condensed pure mana arrow, dealing 135% magic damage to 1 enemy.",
+    "ja": "凝縮された純粋なマナの矢を放ち、敵1体に135%の魔法ダメージを与える。"
+  },
+  "응축된 에테르 탄환을 날려 단일 적에게 144% 마법 피해를 입힙니다.": {
+    "en": "Fires a condensed ether bullet, dealing 144% magic damage to a single enemy.",
+    "ja": "凝縮されたエーテル弾を放ち、単体の敵に144%の魔法ダメージを与える。"
+  },
+  "의": {
+    "en": "'s",
+    "ja": "の"
+  },
+  "의 궁극기 폭발!": {
+    "en": "'s Ultimate Eruption!",
+    "ja": "のアルティメット爆発！"
+  },
+  "의 기본 전투 스탯, 3단계 페이즈 전환 임계치, 4종 고유 스킬을 실시간 편집합니다.": {
+    "en": "Edit basic combat stats, 3-phase transition thresholds, and 4 unique skills in real time.",
+    "ja": "の基本戦闘ステータス、3段階フェーズ移行閾値、4種の固有スキルをリアルタイムで編集します。"
+  },
+  "의 미착용 장비를 일괄 매각하여": {
+    "en": "Batch sell unequipped gear of ",
+    "ja": "の未装備品を一括売却して"
+  },
+  "의 스킬북 서고": {
+    "en": "'s Skill Book Library",
+    "ja": "のスキルブック書庫"
+  },
+  "의 습득 기술": {
+    "en": "'s Learned Skills",
+    "ja": "の習得スキル"
+  },
+  "의 심연 궁극기 발동!": {
+    "en": "'s Abyssal Ultimate Activated!",
+    "ja": "の深淵アルティメット発動！"
+  },
+  "의 위력 배율(Power), 소모 마나(MP), 쿨다운(턴), 효과 설명, 상점가를 실시간 편집합니다.": {
+    "en": "Edit Power Multiplier, MP cost, cooldown (turns), effect description, and shop price in real time.",
+    "ja": "の威力倍率(Power)、消費MP、クールダウン(ターン)、効果説明、ショップ価格をリアルタイム編集します。"
+  },
+  "의 장착 슬롯 (슬롯 클릭 시 카테고리 전환 / 관리)": {
+    "en": "'s Equipment Slots (Click slot to switch category / manage)",
+    "ja": "の装備スロット (スロットクリック時にカテゴリ切替 / 管理)"
+  },
+  "의 학습(연독)을 중도 포기하시겠습니까?": {
+    "en": "Do you want to abandon study (reading) of ?",
+    "ja": "の学習(読破)を中断しますか？"
+  },
+  "의 행동 선택": {
+    "en": "'s Action Selection",
+    "ja": "の行動選択"
+  },
+  "의뢰소": {
+    "en": "Commission Office",
+    "ja": "依頼所"
+  },
+  "의뢰소 백과": {
+    "en": "Commission Encyclopedia",
+    "ja": "依頼所百科"
+  },
+  "의료 & 영혼 승격 라인: 생체 복원 병동 완공 ➔ 영혼의 제단 해금 ➔ 1차 상위 클래스 전직으로 이어지는 부대원 육성 및 승격 테크": {
+    "en": "Medical & Soul Promotion Line: Complete Bio-Restoration Ward ➔ Unlock Soul Sanctuary ➔ 1st Advanced Class Promotion tech path for troop growth",
+    "ja": "医療＆魂昇格ライン: 生体復元病棟完工 ➔ 魂の祭壇解放 ➔ 1次上位クラス転職へと繋がる部隊員育成・昇格テック"
+  },
+  "의료 시설. 부상당한 용병을 입원시켜 체력과 마나를 복원합니다.": {
+    "en": "Medical ward. Hospitalizes wounded heroes to recover HP and MP.",
+    "ja": "医療施設。負傷した傭兵を入院させHPとMPを復元します。"
+  },
+  "의료소": {
+    "en": "Infirmary",
+    "ja": "診療所"
+  },
+  "의료소 병상이 가득 찼습니다.": {
+    "en": "The infirmary beds are full.",
+    "ja": "診療所の病床が満杯です。"
+  },
+  "의료소에 약초 {0}개 기부": {
+    "en": "Donate {0} herbs to the infirmary",
+    "ja": "診療所に薬草を{0}個寄付"
+  },
+  "의식 거행: 영혼의 제단 Lv.5 이상 필요, 방주 성채 [원정단 편성 (병영)]에서 진행": {
+    "en": "Ritual Ceremony: Requires Soul Sanctuary Lv.5+, conducted in Ark Citadel [Expedition Formation (Barracks)]",
+    "ja": "儀式挙行: 魂の祭壇Lv.5以上が必要、方舟城塞 [遠征隊編成 (兵舎)]にて進行"
+  },
+  "이 두 개의 유물은 멸망 이전 인류가 가장 흔하게 지니고 다녔던 쌍둥이 같은 물건이었다. 한 손에는 밤새 충전된 네모난 판(스마트폰)을 들고 손가락을 분주히 움직이며, 다른 한 손에는 얼음이나 뜨거운 커피를 반나절 넘게 지켜주던 텀블러를 쥐었다. 그들은 만원 열차에 몸을 싣고 매일 아침 '직장'이라는 곳으로 향했다. 매일 반복되는 피로 속에서도 그들은 불평을 늘어놓을 뿐, 이 거대한 회색 도시와 따뜻한 커피가 영원히 사라질 것이라곤 꿈에도 상상하지 못했다.": {
+    "en": "These two relics were twin-like items that humanity carried most commonly before the fall. In one hand was a rectangular slab (smartphone) charged overnight with fingers moving busily, and in the other was a tumbler preserving ice or hot coffee for more than half a day. They boarded crowded trains every morning heading for a place called 'work'. Amid repetitive exhaustion, they merely grumbled, never dreaming that this vast gray city and warm coffee would vanish forever.",
+    "ja": "この2つの遺物は滅亡前の人類が最も当たり前に持ち歩いていた双子のような品だった。片手には一晩中充電された四角い板(スマートフォン)を持ち忙しく指を動かし、もう片方の手には氷や温かいコーヒーを半日以上守り続けたタンブラーを握っていた。彼らは満員電車に乗り込み、毎朝「職場」という場所へ向かった。繰り返される疲労の中で彼らは不平を漏らすばかりで、この巨大な灰色の都市と温かいコーヒーが永遠に消え去るなど夢にも思わなかった。"
+  },
+  "이 미궁에 들어선 자는 누구나 자신이 가장 갈망하는 환상을 보게 된다. 죽었던 가족이 웃으며 달려오고, 폐허가 되었던 고향 마을이 눈부시게 번영해 있다. 수많은 원정대가 그 달콤한 환영에 취해 스스로 눈을 감고 칼을 내려놓았다. 그러나 거울의 뒷면에는 살점을 발라먹는 차가운 미궁의 악귀들이 웃고 있을 뿐이다.": {
+    "en": "Anyone who enters this labyrinth sees the vision they desire most. Deceased family members run forward smiling, and a ruined hometown flourishes brilliantly. Countless expeditions, intoxicated by those sweet illusions, closed their eyes and laid down their blades. But on the reverse of the mirror, the cold fiends of the labyrinth merely smile as they strip the flesh from their bones.",
+    "ja": "この迷宮に足を踏み入れた者は誰もが最も切望する幻を見る。死んだ家族が笑いながら駆け寄り、廃墟となった故郷の村が眩しいほど繁栄している。数多の遠征隊がその甘美な幻影に酔いしれ、自ら目を閉じて剣を置いた。しかし鏡の裏側では、肉を削ぎ喰らう冷酷な迷宮の悪鬼たちが嘲笑っているだけだ。"
+  },
+  "이 소요됩니다.": {
+    "en": "is required.",
+    "ja": "が必要です。"
+  },
+  "이 손목시계의 초침은 11시 47분 23초에 정확히 얼어붙어 있다. 광화문과 강남을 잇는 거대한 지하철 노선도가 피와 진흙에 젖어 구겨진 것은 바로 그 시각이었다. 하늘에서 정체불명의 보랏빛 흑무가 쏟아져 내리자 수십만 명의 시민들이 지하 대피소로 지정된 지하철 승강장으로 밀려들었다. 열차의 전기가 끊기고 비상등이 깜빡이며 문이 닫히지 않던 그 찰나의 공포. 초침은 멈췄지만, 그들이 필사적으로 도망치려 했던 발걸음의 흔적은 지하 4층의 암반 속에 깊이 각인되었다.": {
+    "en": "The second hand of this wristwatch is frozen precisely at 11:47:23. That was the exact moment when the massive subway map connecting Gwanghwamun and Gangnam was crumpled in blood and mud. As mysterious purple black fog poured from the sky, hundreds of thousands of citizens flooded into subway platforms designated as underground shelters. The power failed, emergency lights flickered, doors wouldn't close—terror seized the fleeting instant. The second hand stopped, but traces of their desperate flight remain deeply etched into the bedrock of the 4th basement floor.",
+    "ja": "この腕時計の秒針は11時47分23秒で正確に凍りついている。光化門と江南を結ぶ巨大な地下鉄路線図が血と泥に濡れてくしゃくしゃになったのは、まさにその時刻だった。空から正体不明の紫色の黒霧が降り注ぐと、数十万人の市民が地下シェルターに指定された地下鉄ホームへと押し寄せた。列車の電気が途絶え非常灯が点滅し扉が閉まらなかったその刹那の恐怖。秒針は止まったが、彼らが必死に逃げようとした足跡の痕跡は地下4階の岩盤に深く刻み込まれた。"
+  },
+  "이 아이템을 배낭에서 버려 공간을 확보하시겠습니까?": {
+    "en": "Discard this item from your backpack to free up space?",
+    "ja": "このアイテムをバックパックから捨てて空きスペースを確保しますか？"
+  },
+  "이 영혼 나침반의 금속을 녹여내면 어떤 어둠 속에서도 급소를 꿰뚫는 불멸의 성물이 탄생하네! 지휘관님의 영단을 기다리겠네!": {
+    "en": "If we melt down the metal of this soul compass, an immortal relic that pierces vitals in any darkness will be born! I await your decision, Commander!",
+    "ja": "この魂の羅針盤の金属を溶かせば、いかなる闇の中でも急所を貫く不滅の聖物が誕生します！指揮官の英断をお待ちしております！"
+  },
+  "이 작은 얇은 플라스틱 조각 하나만 긁으면 산더미 같은 옷과 음식이 손에 들어왔다. 인류는 물물교환의 시대를 아득히 넘어 보이지 않는 '신용'이라는 숫자의 신기루 위에서 끝없는 번영을 누렸다. 카세트 플레이어에서는 그 여름 젊은이들의 심장을 뛰게 했던 사랑의 노랫소리가 흘러나왔다. 하지만 흑무가 하늘을 가린 그 날, 은행의 서버가 꺼지고 신용은 단 1초 만에 휴짓조각이 되었으며, 카세트 테이프엔 영원히 끝나지 않는 정적과 잡음만이 봉인되었다.": {
+    "en": "With just a swipe of this tiny, thin plastic piece, mountains of clothes and food were obtained. Humanity went far beyond the era of barter to enjoy endless prosperity atop the mirage of invisible numbers called 'credit'. From cassette players flowed love songs that set the hearts of youth racing that summer. But the day the black fog shrouded the sky, bank servers shut down, credit turned to scrap paper in a single second, and only unending silence and noise were sealed within cassette tapes.",
+    "ja": "この小さく薄いプラスチック片を1枚擦るだけで、山のような服や食べ物が手に入った。人類は物々交換の時代を遥かに超え、目に見えない「信用」という数字の蜃気楼の上で果てしない繁栄を享受した。カセットプレイヤーからはあの夏の若者たちの心を躍らせた愛の歌が流れていた。しかし黒霧が空を覆ったあの日、銀行のサーバーは停止し信用はわずか1秒で紙くずとなり、カセットテープには永遠に終わらない静寂とノイズだけが封じられた。"
+  },
+  "이끼 낀 석벽 구석에 성채 선발대 척후병의 유골이 놓여 있습니다. 주변에는 마물을 유인하는 심연 경보 룬이 설치되어 있습니다.": {
+    "en": "In a corner of the mossy stone wall lie the remains of a Citadel vanguard scout. Nearby, an Abyssal alarm rune is set to lure monsters.",
+    "ja": "苔むした石壁の隅に城塞先発隊斥候の遺骨が置かれている。周辺には魔物を誘引する深淵警報ルーンが設置されている。"
+  },
+  "이단 심문관": {
+    "en": "Inquisitor",
+    "ja": "異端審問官"
+  },
+  "이단 심문관: 행운 +9, 모든 스탯 +4%, 턴당 체력 2% 회복": {
+    "en": "Inquisitor: LUCK +9, All Stats +4%, recover 2% HP per turn",
+    "ja": "異端審問官: 幸運+9、全ステータス+4%、毎ターンHP 2%回復"
+  },
+  "이메일 가입 시 이메일 주소, 일방향 암호화된 비밀번호, 회원 고유 식별자(UID) / 게스트 로그인 시 임의 식별자(UID)": {
+    "en": "Email sign-up: email address, one-way encrypted password, unique member identifier (UID) / Guest login: random identifier (UID)",
+    "ja": "メール登録時: メールアドレス、一方向暗号化パスワード、会員固有識別子(UID) / ゲストログイン時: ランダム識別子(UID)"
+  },
+  "이메일 또는 비밀번호가 올바르지 않습니다. 처음 접속하신다면 [신규 가입] 탭에서 계정을 등록해 주세요.": {
+    "en": "Incorrect email or password. If this is your first visit, please register an account in the [Sign Up] tab.",
+    "ja": "メールアドレスまたはパスワードが正しくありません。初めてご利用の場合は[新規登録]タブでアカウントを登録してください。"
+  },
+  "이메일과 비밀번호를 모두 입력해 주세요.": {
+    "en": "Please enter both email and password.",
+    "ja": "メールアドレスとパスワードを両方入力してください。"
+  },
+  "이미 등록된 이메일 계정입니다. [로그인] 탭에서 로그인해 주세요.": {
+    "en": "This email account is already registered. Please log in via the [Log In] tab.",
+    "ja": "既に登録されているメールアカウントです。[ログイン]タブからログインしてください。"
+  },
+  "이미 완성된 컬렉션입니다.": {
+    "en": "This collection is already completed.",
+    "ja": "既に完成したコレクションです。"
+  },
+  "이미 최고 레벨(Lv.3)에 도달했습니다.": {
+    "en": "Already reached the maximum level (Lv.3).",
+    "ja": "既に最高レベル(Lv.3)に達しています。"
+  },
+  "이미 최고 레벨입니다.": {
+    "en": "Already at the maximum level.",
+    "ja": "既に最高レベルです。"
+  },
+  "이번 전투 가한 누적 피해:": {
+    "en": "Cumulative DMG dealt this battle:",
+    "ja": "今回の戦闘で与えた累計ダメージ:"
+  },
+  "이벤트 발견율 +20%, 기습 억제 -20%, 위험도 축적 2배 (심연 고속 돌파)": {
+    "en": "Event Discovery Rate +20%, Ambush Suppression -20%, Hazard Accumulation x2 (Abyssal High-Speed Breakthrough)",
+    "ja": "イベント発見率+20%、奇襲抑制-20%、危険度蓄積2倍 (深淵高速突破)"
+  },
+  "이사벨라": {
+    "en": "Isabella",
+    "ja": "イザベラ"
+  },
+  "이상 필요": {
+    "en": "or higher required",
+    "ja": "以上必要"
+  },
+  "이상으로 증축하면 일반 보급품이 7종의 강화 보급품(에테르 횃불, 던전 도시락, 심연 곡괭이 등)으로": {
+    "en": "Expanding to this level or higher upgrades normal supplies into 7 kinds of enhanced supplies (Ether Torch, Dungeon Lunchbox, Abyssal Pickaxe, etc.)",
+    "ja": "以上に増築すると通常の補給品が7種の強化補給品(エーテル松明、ダンジョン弁当、深淵のツルハシなど)に"
+  },
+  "이상으로 증축하면 해금됩니다.": {
+    "en": "Unlocked upon upgrading to this level or higher.",
+    "ja": "以上に増築すると解放されます。"
+  },
+  "이상으로 증축하면, 3인 선발 + 1인 리더 + 1인 서포터 차원 부대를 결성하여 다른 사령관의 영지를 침공하고 영지 자원의": {
+    "en": "Upgrading to this level or higher allows forming a dimensional squad of 3 frontliners + 1 leader + 1 supporter to invade other commanders' territories and seize territory resources",
+    "ja": "以上に増築すると、3人の先発+1人のリーダー+1人のサポーターによる次元部隊を結成して他の指揮官の領地へ侵攻し、領地資源の"
+  },
+  "이상적인 전술 삼각 배치: 모든 스탯 +4%, 속도 +5%, 중열 회피율 +15%, 전열의 후열 엄호 15%": {
+    "en": "Ideal Tactical Triangle Formation: All Stats +4%, SPD +5%, Mid row Evasion +15%, Front row covers Back row 15%",
+    "ja": "理想的な戦術三角配置: 全ステータス+4%、速度+5%、中衛回避率+15%、前衛の後衛援護15%"
+  },
+  "이송 규칙:": {
+    "en": "Transfer Rules:",
+    "ja": "移送規則:"
+  },
+  "이송 턴이 1턴 단축": {
+    "en": "Transfer turns reduced by 1 turn",
+    "ja": "移送ターンが1ターン短縮"
+  },
+  "이송이 완료된 후 다음 긴급 이송을 요청할 수 있습니다.": {
+    "en": "You can request the next emergency transfer after the transfer is complete.",
+    "ja": "移送完了後、次の緊急移送を要請できます。"
+  },
+  "이송중": {
+    "en": "Transferring",
+    "ja": "移送中"
+  },
+  "이전 메뉴": {
+    "en": "Previous Menu",
+    "ja": "前のメニュー"
+  },
+  "이전 층의 정예 마물이나 보스를 토벌하고 다음 층으로 이동해야 영구 해금됩니다.": {
+    "en": "Permanently unlocked only after defeating elite monsters or the boss on the previous floor and moving to the next floor.",
+    "ja": "前層のエリート魔物やボスを討伐し次層へ移動することで恒久解放されます。"
+  },
+  "익명 계정": {
+    "en": "Anonymous Account",
+    "ja": "匿名アカウント"
+  },
+  "익명 탐험 세션 생성 중...": {
+    "en": "Creating anonymous exploration session...",
+    "ja": "匿名探検セッションを生成中..."
+  },
+  "인)": {
+    "en": " members)",
+    "ja": "人)"
+  },
+  "인내": {
+    "en": "Endurance",
+    "ja": "忍耐"
+  },
+  "인류의 마지막 요람,": {
+    "en": "Humanity's last cradle,",
+    "ja": "人類最後の揺籃、"
+  },
+  "인연 & 영혼 공명 (Bond Synergy) & 클래스 특성": {
+    "en": "Bond & Soul Resonance (Bond Synergy) & Class Traits",
+    "ja": "絆＆魂の共鳴 (Bond Synergy)＆クラス特性"
+  },
+  "인장": {
+    "en": "Seal",
+    "ja": "印章"
+  },
+  "인증": {
+    "en": "Authentication",
+    "ja": "認証"
+  },
+  "인증 완료! 방주 성채로 진입합니다...": {
+    "en": "Authentication complete! Entering the Ark Citadel...",
+    "ja": "認証完了！方舟城塞へ進入します..."
+  },
+  "인증 요청이 취소되었습니다.": {
+    "en": "Authentication request has been cancelled.",
+    "ja": "認証リクエストがキャンセルされました。"
+  },
+  "인증 정보:": {
+    "en": "Authentication Info:",
+    "ja": "認証情報:"
+  },
+  "인증 중 오류가 발생했습니다.": {
+    "en": "An error occurred during authentication.",
+    "ja": "認証中にエラーが発生しました。"
+  },
+  "인증 처리 중 오류가 발생했습니다.": {
+    "en": "An error occurred while processing authentication.",
+    "ja": "認証処理中にエラーが発生しました。"
+  },
+  "인증된 지휘관": {
+    "en": "Authenticated Commander",
+    "ja": "認証済み指揮官"
+  }
+}

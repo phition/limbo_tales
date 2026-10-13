@@ -1,0 +1,802 @@
+{
+  "학습(연독) 중:": {
+    "en": "Studying (Reading):",
+    "ja": "学習（読解）中:"
+  },
+  "학습을 중도 포기하고 연독률을 초기화합니다": {
+    "en": "Abandon study and reset reading progress.",
+    "ja": "学習を中断し、読解率を初期化します"
+  },
+  "한계에 다다른 육신에 영혼의 제단을 통한 세례를 내려 진정한 수호자로 거듭나게 하라.": {
+    "en": "Bestow baptism through the Soul Sanctuary upon flesh that has reached its limit, rebirthing them as true guardians.",
+    "ja": "限界に達した肉体に魂の祭壇を通じた洗礼を授け、真の守護者へと生まれ変わらせよ。"
+  },
+  "한기": {
+    "en": "Chill",
+    "ja": "寒気"
+  },
+  "한기 서린 손아귀": {
+    "en": "Chilling Grasp",
+    "ja": "寒気まとう掌握"
+  },
+  "한때 고결했던 기사단장의 맹세와 진실을 왜곡하는 거울의 미궁. 이 두 시련을 극복해야만 10층 심연의 군주에게 도달하는 진실의 문이 열린다.": {
+    "en": "The once-noble Commander's oath and the Mirror Labyrinth that distorts truth. Only by overcoming these two trials will the Door of Truth open, leading to the 10F Abyssal Overlord.",
+    "ja": "かつて高潔だった騎士団長の誓いと、真実を歪める鏡の迷宮。この二つの試練を克服してこそ、10層の深淵の君主に至る真実の扉が開く。"
+  },
+  "한때 빛을 따르던 성기사단장이 심연의 저주에 굴복했다. 그에게 영원한 안식과 명예로운 최후를 안겨주어라.": {
+    "en": "The Paladin Commander who once followed the light has succumbed to the curse of the Abyss. Grant him eternal rest and an honorable end.",
+    "ja": "かつて光に従った聖騎士団長が深淵の呪いに屈服した。彼に永遠の安息と名誉ある最期をもたらすのだ。"
+  },
+  "한때 실물 금화 없이도 신뢰와 신용만으로 물품을 거래할 수 있게 했던 얇은 플라스틱 카드입니다.": {
+    "en": "A thin plastic card that once allowed goods to be traded based solely on trust and credit, without physical gold coins.",
+    "ja": "かつて現物の金貨がなくとも信頼と信用だけで物品の取引を可能にした薄いプラスチックカードです。"
+  },
+  "한때 전 인류를 초연결하던 손바닥 안의 컴퓨터 화면 파편입니다. 액정에 희미한 배터리 잔량 아이콘이 각인되어 있습니다.": {
+    "en": "A fragment of a palm-sized computer screen that once hyper-connected all humanity. A faint battery icon is burned into the display.",
+    "ja": "かつて全人類を繋いでいた手のひらの中のコンピュータ画面の破片です。液晶に微かなバッテリー残量アイコンが焼き付いています。"
+  },
+  "할 수 있습니다.": {
+    "en": "can be done.",
+    "ja": "できます。"
+  },
+  "할퀴기": {
+    "en": "Claw",
+    "ja": "ひっかき"
+  },
+  "함께 출정하고 캠프에서 담소를 나누면 유대 수치가 상승하여 강력한 결속 효과를 얻습니다.": {
+    "en": "Deploying together and conversing at camp raises Bond levels, granting powerful cohesion effects.",
+    "ja": "共に出撃しキャンプで談笑すると絆値が上昇し、強力な結束効果を得られます。"
+  },
+  "함께 파티를 맺고 심연 던전에서 모닥불 담소를 나눠보세요.": {
+    "en": "Form a party together and share campfire chats in the Abyssal Dungeon.",
+    "ja": "パーティを組み、深淵ダンジョンで焚火の談笑を交わしてみてください。"
+  },
+  "함성": {
+    "en": "War Cry",
+    "ja": "叫び"
+  },
+  "함정, 파편 반동, 위험도 상승": {
+    "en": "Traps, Shrapnel Recoil, Hazard Increase",
+    "ja": "罠、破片反動、危険度上昇"
+  },
+  "함정: 극저온 서리 룬": {
+    "en": "Trap: Cryo Frost Rune",
+    "ja": "罠: 極低温霜ルーン"
+  },
+  "함정: 낙석 충격 트랩": {
+    "en": "Trap: Rockfall Impact Trap",
+    "ja": "罠: 落石衝撃トラップ"
+  },
+  "함정: 부식성 맹독 분출구": {
+    "en": "Trap: Corrosive Venom Vent",
+    "ja": "罠: 腐食性猛毒噴出口"
+  },
+  "함정: 화염 폭발 룬": {
+    "en": "Trap: Fire Explosion Rune",
+    "ja": "罠: 火炎爆発ルーン"
+  },
+  "함정: 흑철 가시 덫": {
+    "en": "Trap: Dark Iron Spike Trap",
+    "ja": "罠: 黒鉄トゲ罠"
+  },
+  "합금 시추 드릴을 보강하고 유압식 암반 파쇄기를 장착하여 단단한 심층 지반을 거침없이 뚫고 들어갑니다.": {
+    "en": "Reinforce alloy drill bits and equip hydraulic rock breakers to relentlessly bore through dense deep-layer strata.",
+    "ja": "合金試掘ドリルを補強し油圧式岩盤破砕機を装着して、強固な深層地盤を容赦なく貫通します。"
+  },
+  "합니다. 야영을 통해 유대를 골고루 쌓아주세요.": {
+    "en": "is required. Build bonds evenly through camping.",
+    "ja": "します。野営を通じて絆を満遍なく築いてください。"
+  },
+  "합니다. 장기전에서 아군 마법사의 마나 유지력을 안정적으로 지켜줍니다.": {
+    "en": "ensuring the mana sustainability of allied mages in prolonged battles.",
+    "ja": "します。長期戦において味方魔法使いのマナ維持力を安定して守ります。"
+  },
+  "합성궁": {
+    "en": "Composite Bow",
+    "ja": "コンポジットボウ"
+  },
+  "항목 (": {
+    "en": "Items (",
+    "ja": "項目 ("
+  },
+  "항목 완성 (": {
+    "en": "Items Complete (",
+    "ja": "項目完成 ("
+  },
+  "해고 불가: 원정 파티(3인) 편성을 위해 용병단에 최소 3명의 대원은 유지해야 합니다!": {
+    "en": "Cannot Dismiss: At least 3 members must remain in the mercenary company to form an expedition party (3 members)!",
+    "ja": "解雇不可: 遠征パーティ（3人）編成のため、傭兵団に最低3人の隊員を維持する必要があります！"
+  },
+  "해고하기": {
+    "en": "Dismiss",
+    "ja": "解雇する"
+  },
+  "해골": {
+    "en": "Skeleton",
+    "ja": "骸骨"
+  },
+  "해골 열쇠": {
+    "en": "Skeleton Key",
+    "ja": "骸骨の鍵"
+  },
+  "해골환": {
+    "en": "Skull Pill",
+    "ja": "骸骨丸"
+  },
+  "해금 조건: 선행 연계 퀘스트 수행 필요": {
+    "en": "Unlock Condition: Prerequisite chain quest required",
+    "ja": "解放条件: 前提連係クエストの達成が必要"
+  },
+  "해금 주기: 2차 전직 클래스 Lv.40(1단계), Lv.50(2단계), Lv.60(3단계)... (요구 레벨 = Lv.30 + N×10)": {
+    "en": "Unlock Interval: Tier 2 Class Lv.40 (Stage 1), Lv.50 (Stage 2), Lv.60 (Stage 3)... (Required Level = Lv.30 + N×10)",
+    "ja": "解放周期: 2次転職クラスLv.40（段階1）、Lv.50（段階2）、Lv.60（段階3）…（要求レベル = Lv.30 + N×10）"
+  },
+  "해당 건물은 중지중입니다.": {
+    "en": "This building is currently suspended.",
+    "ja": "該当の建物は停止中です。"
+  },
+  "해당 등급의 제작 가능한 마도서가 없습니다.": {
+    "en": "No craftable grimoires of that rank.",
+    "ja": "該当ランクの製作可能な魔導書がありません。"
+  },
+  "해당 층의 오파츠 페어를 모두 발굴하여 기증하면 구세계의 과거 기록이 해금됩니다.": {
+    "en": "Excavating and donating both Ooparts from this floor unlocks past archives of the Old World.",
+    "ja": "該当層のオーパーツペアをすべて発掘して寄贈すると、旧世界の過去の記録が解放されます。"
+  },
+  "해당 층의 쪽지를 모두 모아 등록하면 회고록이 해금됩니다.": {
+    "en": "Collecting and registering all memoir notes from this floor unlocks the memoir.",
+    "ja": "該当層のメモをすべて集めて登録すると、回顧録が解放されます。"
+  },
+  "해두어야 하며, 창고 재고가 채비 시 최우선 불출됩니다!": {
+    "en": "must be arranged, and warehouse stock is dispensed with top priority during preparations!",
+    "ja": "しておく必要があり、出撃準備時に倉庫在庫が最優先で支給されます！"
+  },
+  "해머": {
+    "en": "Hammer",
+    "ja": "ハンマー"
+  },
+  "해방된 성녀": {
+    "en": "Liberated Saintess",
+    "ja": "解放された聖女"
+  },
+  "해제": {
+    "en": "Unequip",
+    "ja": "解除"
+  },
+  "핵심 기능 및 증축 혜택": {
+    "en": "Core Functions & Expansion Perks",
+    "ja": "コア機能および増築特典"
+  },
+  "핵심 룰 & 시스템 가이드 (": {
+    "en": "Core Rules & System Guide (",
+    "ja": "コア要領＆システムガイド ("
+  },
+  "핵심 인프라 테크 시너지": {
+    "en": "Core Infrastructure Tech Synergy",
+    "ja": "基幹インフラテックシナジー"
+  },
+  "행동 불가": {
+    "en": "Incapacitated",
+    "ja": "行動不能"
+  },
+  "행동 불가 & 방어력 +40% (외피 동결 유지력 보전) & 턴당 최대 HP 4% 동상 피해": {
+    "en": "Incapacitated & DEF +40% (preserves frozen shell durability) & 4% Max HP Frostbite damage per turn",
+    "ja": "行動不能＆防御力+40%（外皮凍結耐久力保持）＆ターン毎に最大HP4%の凍傷ダメージ"
+  },
+  "행동 불능 기절": {
+    "en": "Incapacitating Stun",
+    "ja": "行動不能気絶"
+  },
+  "행동 불능 상태의 적에게 폭풍을 일으켜 전장에 거대한 뇌운을 소환하고 모든 적에게 35% 전격 폭풍 광역 피해": {
+    "en": "Whips up a tempest against incapacitated enemies, summoning a massive thundercloud to inflict 35% lightning storm AoE damage on all enemies",
+    "ja": "行動不能状態の敵に嵐を巻き起こして戦場に巨大な雷雲を召喚し、すべての敵に35%の電撃嵐範囲ダメージ"
+  },
+  "행동 속도 (SPD)": {
+    "en": "Speed (SPD)",
+    "ja": "行動速度 (SPD)"
+  },
+  "행동 속도가 빠를수록 피해량이 최대 20%까지 증폭": {
+    "en": "The higher the Speed, the more damage is amplified up to 20%",
+    "ja": "行動速度が速いほどダメージが最大20%まで増幅"
+  },
+  "행동 시 Firebase 자동 저장": {
+    "en": "Auto-save to Firebase on action",
+    "ja": "行動時にFirebase自動保存"
+  },
+  "행동속도(SPD)": {
+    "en": "Speed (SPD)",
+    "ja": "行動速度(SPD)"
+  },
+  "행운": {
+    "en": "LUCK",
+    "ja": "幸運"
+  },
+  "행운 (LUCK)": {
+    "en": "Luck (LUCK)",
+    "ja": "幸運 (LUCK)"
+  },
+  "행운 (LUK)": {
+    "en": "Luck (LUK)",
+    "ja": "幸運 (LUK)"
+  },
+  "행운 +": {
+    "en": "LUCK +",
+    "ja": "幸運 +"
+  },
+  "행운 +5, 속도 +3, 마나 +60": {
+    "en": "LUCK +5, SPD +3, Mana +60",
+    "ja": "幸運+5、速度+3、マナ+60"
+  },
+  "행운 +8 & 동료 빈사(HP 25% 이하) 시 즉시 [50 HP 보호막] 전개.": {
+    "en": "LUCK +8 & immediately deploy [50 HP Shield] when an ally is near death (HP <= 25%).",
+    "ja": "幸運+8＆仲間瀕死(HP25%以下)時に即座に[50 HPシールド]展開。"
+  },
+  "행운 +{0}": {
+    "en": "LUCK +{0}",
+    "ja": "幸運 +{0}"
+  },
+  "행운 LUCK": {
+    "en": "LUCK",
+    "ja": "幸運 LUCK"
+  },
+  "행운(LUK)": {
+    "en": "Luck (LUK)",
+    "ja": "幸運(LUK)"
+  },
+  "행운(Luck) 성장 보너스: N(+0%), V(+10%), H(+20%), E(+30%), L(+50%) - 10% 단위 증폭": {
+    "en": "Luck Growth Bonus: N(+0%), V(+10%), H(+20%), E(+30%), L(+50%) - amplified in 10% steps",
+    "ja": "幸運(Luck)成長ボーナス: N(+0%), V(+10%), H(+20%), E(+30%), L(+50%) - 10%単位で増幅"
+  },
+  "행운(Luck)은 치명타 확률, 치명타 피해량, 상태이상(CC/디버프) 저항, 적중/회피, 전투 철수 등 전투 전반의 핵심 보정 수치를 총괄합니다.": {
+    "en": "Luck governs core combat modifiers across the board, including Crit Rate, Crit DMG, debuff/CC resistance, hit/evasion, and combat retreat.",
+    "ja": "幸運(Luck)は会心率、会心ダメージ、状態異常(CC/デバフ)耐性、命中/回避、戦闘撤退など戦闘全般の主要補正数値を統括します。"
+  },
+  "허공에 빛으로 입체 영상과 데이터를 띄우던 미래형 디스플레이입니다. 마력을 넣으면 지지직거리는 잔상이 떠오릅니다.": {
+    "en": "A futuristic display that once projected volumetric images and data into thin air with light. Infusing it with magic makes flickering afterimages appear.",
+    "ja": "虚空に光で立体映像やデータを浮かび上がらせていた未来型ディスプレイです。魔力を注ぐとノイズ混じりの残像が浮かび上がります。"
+  },
+  "헌화 가호:": {
+    "en": "Floral Blessing:",
+    "ja": "献花の加護:"
+  },
+  "헤드샷": {
+    "en": "Headshot",
+    "ja": "ヘッドショット"
+  },
+  "헤이즐": {
+    "en": "Hazel",
+    "ja": "ヘーゼル"
+  },
+  "헥터": {
+    "en": "Hector",
+    "ja": "ヘクター"
+  },
+  "헬레나": {
+    "en": "Helena",
+    "ja": "ヘレナ"
+  },
+  "혁신적인 [대량 배급제] 시스템을 확립하여 방주 전역 시설의 식량 유지비를 30% 영구 감면하고 식량 생산량을 80% 대폭 증산합니다.": {
+    "en": "Establishes an innovative [Mass Rationing] system, permanently reducing food upkeep by 30% across Ark facilities and increasing food production by 80%.",
+    "ja": "革新的な[配給制]システムを確立し、方舟全域の施設の食糧維持費を30%永久軽減、食糧生産量を80%大幅に増産します。"
+  },
+  "혁신적인 [상업 네트워크]를 가동하여 방주 전체의 골드 유지비를 25% 영구 감면하고 2티어 고급 비전서를 입고합니다.": {
+    "en": "Launches an innovative [Commercial Network], permanently reducing gold upkeep across the Ark by 25% and stocking Tier 2 advanced grimoires.",
+    "ja": "革新的な[商業ネットワーク]を稼働させ、方舟全体のゴールド維持費を25%永久軽減し、Tier 2の高級秘伝書を入荷します。"
+  },
+  "혁신적인 [에테르 환류관]을 연결하여 병기창, 제단, 게이트 등 모든 마도 시설의 에테르 유지비를 25% 영구 감면합니다.": {
+    "en": "Connects innovative [Ether Recirculation Pipes], permanently reducing ether upkeep by 25% across all arcane facilities including Armory, Altar, and Gate.",
+    "ja": "革新的な[エーテル還流管]を接続し、兵器廠、祭壇、ゲートなど全魔導施設のエーテル維持費を25%永久軽減します。"
+  },
+  "현상금 퀘스트": {
+    "en": "Bounty Quest",
+    "ja": "賞金首クエスト"
+  },
+  "현자의 로브 +1": {
+    "en": "Sage Robe +1",
+    "ja": "賢者のローブ+1"
+  },
+  "현재": {
+    "en": "Current",
+    "ja": "現在"
+  },
+  "현재 Lv.": {
+    "en": "Current Lv.",
+    "ja": "現在 Lv."
+  },
+  "현재 Lv.{0}": {
+    "en": "Current Lv.{0}",
+    "ja": "現在 Lv.{0}"
+  },
+  "현재 강화 단계": {
+    "en": "Current Enhancement Tier",
+    "ja": "現在の強化段階"
+  },
+  "현재 갱신비:": {
+    "en": "Current Refresh Cost:",
+    "ja": "現在の更新費用:"
+  },
+  "현재 계정의 로컬 및 Firebase 클라우드 데이터가 모두 초기화되고 처음부터 다시 시작합니다. 정말 초기화하시겠습니까?": {
+    "en": "All local and Firebase cloud data for this account will be reset, restarting from the beginning. Are you sure you want to reset?",
+    "ja": "現在のアカウントのローカルおよびFirebaseクラウドデータがすべて初期化され、最初からやり直します。本当に初期化しますか？"
+  },
+  "현재 발동된 원정대 시너지가 없습니다.": {
+    "en": "No active expedition synergies currently.",
+    "ja": "現在発動している遠征隊シナジーはありません。"
+  },
+  "현재 배낭 아이템 (": {
+    "en": "Current Backpack Items (",
+    "ja": "現在のバックパックアイテム ("
+  },
+  "현재 보급품 [균열의 닻]이 소진된 상태입니다!": {
+    "en": "Current supply of [Rift Anchor] has been exhausted!",
+    "ja": "現在補給品[亀裂の錨]が尽きている状態です！"
+  },
+  "현재 보유:": {
+    "en": "Currently Owned:",
+    "ja": "現在の所持:"
+  },
+  "현재 부여된 상태이상이나 버프/디버프가 없습니다.": {
+    "en": "No debuffs, buffs, or status effects currently applied.",
+    "ja": "現在付与されている状態異常やバフ/デバフはありません。"
+  },
+  "현재 상태 (Lv.": {
+    "en": "Current Status (Lv.",
+    "ja": "現在の状態 (Lv."
+  },
+  "현재 연구 상태": {
+    "en": "Current Research Status",
+    "ja": "現在の研究状態"
+  },
+  "현재 원정대로": {
+    "en": "To Current Expedition",
+    "ja": "現在の遠征隊へ"
+  },
+  "현재 원정대에 편성된 용병이 없습니다.": {
+    "en": "No mercenaries currently assigned to the expedition.",
+    "ja": "現在遠征隊に編成された傭兵がいません。"
+  },
+  "현재 장착 중": {
+    "en": "Currently Equipped",
+    "ja": "現在装備中"
+  },
+  "현재 적용 중인 상태이상이 없습니다.": {
+    "en": "No status effects currently active.",
+    "ja": "現在適用中の状態異常はありません。"
+  },
+  "현재 적재량 / 최대 한도": {
+    "en": "Current Load / Max Capacity",
+    "ja": "現在の積載量 / 最大上限"
+  },
+  "현재 직업": {
+    "en": "Current Class",
+    "ja": "現在のクラス"
+  },
+  "현재 차원 게이트 레벨:": {
+    "en": "Current Dimensional Gate Level:",
+    "ja": "現在の次元ゲートレベル:"
+  },
+  "현재 차원 이송 작전이 진행 중입니다!": {
+    "en": "Dimensional transport operation is currently in progress!",
+    "ja": "現在次元移送作戦が進行中です！"
+  },
+  "현재 착용 중인": {
+    "en": "Currently equipped",
+    "ja": "現在着用中の"
+  },
+  "현재 출전 인원:": {
+    "en": "Currently Deployed:",
+    "ja": "現在の出撃人数:"
+  },
+  "현재 파티 조합 시너지는 없으나, 심연의 백과 도감 가호가 상시 적용 중입니다.": {
+    "en": "No party combination synergy is active, but Abyssal Codex Blessing is continuously in effect.",
+    "ja": "現在パーティの組み合わせシナジーはありませんが、深淵の百科図鑑の加護が常時適用されています。"
+  },
+  "현재 학습 중인 스킬이 없습니다.": {
+    "en": "No skill currently being studied.",
+    "ja": "現在学習中のスキルはありません。"
+  },
+  "현재 해당 탭의 진행 가능한 퀘스트가 없습니다.": {
+    "en": "No quests available in this tab currently.",
+    "ja": "現在このタブで進行可能なクエストはありません。"
+  },
+  "현재 효과:": {
+    "en": "Current Effect:",
+    "ja": "現在の効果:"
+  },
+  "현재까지 달성한 연독률(": {
+    "en": "Reading progress achieved so far (",
+    "ja": "現在まで達成した読解率("
+  },
+  "현혹의 거울": {
+    "en": "Mirror of Bewitchment",
+    "ja": "幻惑の鏡"
+  },
+  "혈": {
+    "en": "Blood",
+    "ja": "血"
+  },
+  "혈계 계약 부적": {
+    "en": "Bloodline Pact Talisman",
+    "ja": "血契約の護符"
+  },
+  "혈기 넘치는 돌진: 공격력 +10%, 흡혈 +10%, 빈사 적 처형 피해 +15%": {
+    "en": "Spirited Charge: ATK +10%, Lifesteal +10%, Execute Damage +15% on near-death enemies",
+    "ja": "血気あふれる突進: 攻撃力+10%、吸血+10%、瀕死の敵への処刑ダメージ+15%"
+  },
+  "혈염": {
+    "en": "Blood Flame",
+    "ja": "血炎"
+  },
+  "혈염 대검": {
+    "en": "Blood Flame Greatsword",
+    "ja": "血炎の大剣"
+  },
+  "혈염 환영궁": {
+    "en": "Blood Flame Phantom Bow",
+    "ja": "血炎幻影弓"
+  },
+  "혈염의": {
+    "en": "Blood Flame's",
+    "ja": "血炎の"
+  },
+  "혈옥의 인장 반지": {
+    "en": "Blood Jade Signet Ring",
+    "ja": "血玉の印章指輪"
+  },
+  "혈풍": {
+    "en": "Blood Wind",
+    "ja": "血風"
+  },
+  "혈풍참": {
+    "en": "Blood Wind Slash",
+    "ja": "血風斬"
+  },
+  "혈풍참 & 피의 폭주": {
+    "en": "Blood Wind Slash & Blood Rampage",
+    "ja": "血風斬＆血の暴走"
+  },
+  "호출 가능한 대기 용병이 없습니다 (성채 대기소에 다른 용병이 필요합니다).": {
+    "en": "No reserve mercenaries available to call (other mercenaries required in Citadel Barracks).",
+    "ja": "呼び出し可能な待機傭兵がいません（城塞待機所に他の傭兵が必要です）。"
+  },
+  "혹한": {
+    "en": "Severe Cold",
+    "ja": "酷寒"
+  },
+  "혹한의": {
+    "en": "Frigid",
+    "ja": "酷寒の"
+  },
+  "혹한의 눈보라": {
+    "en": "Frigid Blizzard",
+    "ja": "酷寒の吹雪"
+  },
+  "혼란의 울음": {
+    "en": "Cry of Chaos",
+    "ja": "混乱の叫び"
+  },
+  "홀로 선 방패는 부서지지만, 함께 엮은 방진은 무너지지 않는다.": {
+    "en": "A lone shield may shatter, but an intertwined phalanx never falls.",
+    "ja": "孤立した盾は砕かれるが、組み合わされた方陣は崩れない。"
+  },
+  "홀로그램 디스플레이 큐브": {
+    "en": "Hologram Display Cube",
+    "ja": "ホログラムキューブ"
+  },
+  "홀리 오라": {
+    "en": "Holy Aura",
+    "ja": "ホーリーオーラ"
+  },
+  "화덕을 내화 석재로 보강하고 통풍 구조를 개량하여, 적은 영목으로도 성화의 화력을 더욱 길고 안정적으로 유지합니다.": {
+    "en": "Reinforce the hearth with refractory stone and improve ventilation to maintain the Sacred Flame's intensity longer and more stably with less spiritual wood.",
+    "ja": "炉を耐火石材で補強し通風構造を改良して、少ない霊木でも聖火の火力をより長く安定して維持します。"
+  },
+  "화망 전개! 일제 사격!": {
+    "en": "Deploy crossfire! Volley fire!",
+    "ja": "弾幕展開！ 一斉射撃！"
+  },
+  "화면 컷인 오버레이: 발동 시 화면을 가로지르는 고유 테마 컷인 배너(★ ASSIST ATTACK ★, ★ SYNERGY COMBO ★, 🛡️ GUARDIAN INTERVENTION 🛡️, ⚔️ COUNTER RIPOSTE ⚔️) 및 VFX 연출 출력": {
+    "en": "Screen Cut-in Overlay: On trigger, displays unique theme cut-in banner across screen (★ ASSIST ATTACK ★, ★ SYNERGY COMBO ★, 🛡️ GUARDIAN INTERVENTION 🛡️, ⚔️ COUNTER RIPOSTE ⚔️) and VFX animation",
+    "ja": "画面カットインオーバーレイ: 発動時、画面を横切る固有テーマカットインバナー（★ ASSIST ATTACK ★, ★ SYNERGY COMBO ★, 🛡️ GUARDIAN INTERVENTION 🛡️, ⚔️ COUNTER RIPOSTE ⚔️）およびVFX演出を出力"
+  },
+  "화살": {
+    "en": "Arrow",
+    "ja": "矢"
+  },
+  "화살비": {
+    "en": "Arrow Rain",
+    "ja": "矢の雨"
+  },
+  "화상": {
+    "en": "Burn",
+    "ja": "火傷"
+  },
+  "화상 상태의 적에게 신성 마법을 융합시켜 정화의 불꽃 폭발(45% 추가 피해)을 일으키고 적의 모든 강화 효과를 일제 해제": {
+    "en": "Fuses holy magic against burned enemies, triggering a cleansing flame explosion (45% bonus damage) and dispelling all enemy buffs",
+    "ja": "火傷状態の敵に神聖魔法を融合させ、浄化の炎爆発（45%追加ダメージ）を起こして敵の全強化効果を一斉解除"
+  },
+  "화상 상태의 적을 거센 폭풍/바람 공격으로 강타 시 거센 불길 소용돌이가 일어나며 40% 추가 폭발 및 적 전체 화상 전염": {
+    "en": "Striking burned enemies with storm/wind attacks unleashes a raging vortex of flames, causing 40% bonus explosion damage and spreading Burn to all enemies",
+    "ja": "火傷状態の敵を激しい嵐/風攻撃で強打時、激しい炎の渦が発生して40%の追加爆発および敵全体に火傷を伝染"
+  },
+  "화염": {
+    "en": "Flame",
+    "ja": "火炎"
+  },
+  "화염 강타": {
+    "en": "Flame Strike",
+    "ja": "火炎強打"
+  },
+  "화염 폭발 룬": {
+    "en": "Fire Explosion Rune",
+    "ja": "火炎爆発ルーン"
+  },
+  "화염 폭풍": {
+    "en": "Firestorm",
+    "ja": "火炎嵐"
+  },
+  "화염 폭풍 (Inferno Burst)": {
+    "en": "Firestorm (Inferno Burst)",
+    "ja": "火炎嵐 (Inferno Burst)"
+  },
+  "화염 폭풍 확산": {
+    "en": "Firestorm Spread",
+    "ja": "火炎嵐の拡散"
+  },
+  "화염, 냉기, 뇌전의 근원 원소를 다루는 비전 마법서 3종을 등록합니다.": {
+    "en": "Registers 3 arcane grimoires manipulating the primal elements of flame, frost, and lightning.",
+    "ja": "火炎、冷気、雷電の根源元素を操る秘伝魔導書3種を登録します。"
+  },
+  "화염/빙결/전격 3대 원소 마법과 메테오 스트라이크로 적 편대 전체를 일망타진합니다.": {
+    "en": "Obliterates entire enemy formations with three elemental magics—Flame, Freeze, and Lightning—along with Meteor Strike.",
+    "ja": "火炎/氷結/電撃の三大元素魔法とメテオストライクで敵編隊全体を一網打尽にします。"
+  },
+  "화염과 냉기를 융합하여 적 전체에 150% 복합 속성 피해 및 화염 지속 피해를 가합니다.": {
+    "en": "Combines flame and frost to deal 150% composite elemental damage and flame damage over time to all enemies.",
+    "ja": "火炎と冷気を融合させ、敵全体に150%の複合属性ダメージおよび火炎持続ダメージを与えます。"
+  },
+  "화염의": {
+    "en": "Flame's",
+    "ja": "火炎の"
+  },
+  "화학 반응을 통해 전기를 저장하고 모바일 기기를 구동하던 휴대용 에너지원 셀입니다.": {
+    "en": "A portable energy cell that stored electricity through chemical reactions and powered mobile devices.",
+    "ja": "化学反応を通じて電気を蓄え、モバイル機器を駆動していた携帯用エネルギー源セルです。"
+  },
+  "화형": {
+    "en": "Pyre",
+    "ja": "火刑"
+  },
+  "화형 선고": {
+    "en": "Pyre Sentence",
+    "ja": "火刑宣告"
+  },
+  "확인": {
+    "en": "Confirm",
+    "ja": "確認"
+  },
+  "확인 (2초 후 자동 닫힘)": {
+    "en": "Confirm (Auto-closes in 2s)",
+    "ja": "確認 (2秒後自動で閉じる)"
+  },
+  "확인 (닫기)": {
+    "en": "Confirm (Close)",
+    "ja": "確認 (閉じる)"
+  },
+  "확인 및 닫기": {
+    "en": "Confirm & Close",
+    "ja": "確認および閉じる"
+  },
+  "확인 및 영지로 복귀": {
+    "en": "Confirm & Return to Estate",
+    "ja": "確認および領地へ帰還"
+  },
+  "확인하고 보상 받기 ➔": {
+    "en": "Confirm & Claim Rewards ➔",
+    "ja": "確認して報酬を受け取る ➔"
+  },
+  "환영": {
+    "en": "Phantom",
+    "ja": "幻影"
+  },
+  "환영 거울 반지": {
+    "en": "Phantom Mirror Ring",
+    "ja": "幻影鏡の指輪"
+  },
+  "환영 검성의 극의: 파티 속도 +12%, 회피율 +15%, 치명타 피해 +30%": {
+    "en": "Phantom Blade Lord's Mastery: Party SPD +12%, EVA +15%, Crit DMG +30%",
+    "ja": "幻影剣仙の極意: パーティ速度+12%、回避率+15%、会心ダメージ+30%"
+  },
+  "환영 굴절": {
+    "en": "Phantom Refraction",
+    "ja": "幻影屈折"
+  },
+  "환영 굴절 마총": {
+    "en": "Phantom Refraction Magic Gun",
+    "ja": "幻影屈折魔銃"
+  },
+  "환영 굴절 비수": {
+    "en": "Phantom Refraction Dagger",
+    "ja": "幻影屈折の短剣"
+  },
+  "환영 난무 왈츠": {
+    "en": "Phantom Flurry Waltz",
+    "ja": "幻影乱舞ワルツ"
+  },
+  "환영 반격": {
+    "en": "Phantom Counter",
+    "ja": "幻影反撃"
+  },
+  "환영 차원의 거울 외투": {
+    "en": "Phantom Dimensional Mirror Coat",
+    "ja": "幻影次元の鏡の外套"
+  },
+  "환영 흑요석 단검": {
+    "en": "Phantom Obsidian Dagger",
+    "ja": "幻影黒曜石の短剣"
+  },
+  "환영궁": {
+    "en": "Phantom Bow",
+    "ja": "幻影弓"
+  },
+  "환영반격": {
+    "en": "Phantom Counter",
+    "ja": "幻影反撃"
+  },
+  "환영의 검무": {
+    "en": "Sword Dance of Illusions",
+    "ja": "幻影の剣舞"
+  },
+  "환영의 검성": {
+    "en": "Phantom Blade Lord",
+    "ja": "幻影の剣仙"
+  },
+  "환영의 미궁": {
+    "en": "Labyrinth of Illusions",
+    "ja": "幻影の迷宮"
+  },
+  "환영의 미궁 중심에서 차원 공간을 뒤틀어놓는 환각의 대마도사. 수많은 거울 파편으로 전장을 유린합니다.": {
+    "en": "The Archmage of Hallucinations twisting dimensional space at the center of the Labyrinth of Illusions. Devastates the battlefield with myriad mirror shards.",
+    "ja": "幻影の迷宮の中心で次元空間を歪める幻覚の大魔導士。無数の鏡の破片で戦場を蹂躙します。"
+  },
+  "환영의 미궁에 반사된 다중 차원의 그림자 분신. 실체 없는 공격으로 적의 급소를 유린합니다.": {
+    "en": "A multi-dimensional shadow clone reflected in the Labyrinth of Illusions. Devastates enemy weak points with intangible attacks.",
+    "ja": "幻影の迷宮に反射した多重次元の影の分身。実体のない攻撃で敵の急所を蹂躙します。"
+  },
+  "환영의 반격": {
+    "en": "Phantom's Counter",
+    "ja": "幻影の反撃"
+  },
+  "환영의 영혼 가죽옷 +10": {
+    "en": "Soul Leather Armor of Illusions +10",
+    "ja": "幻影の魂革服+10"
+  },
+  "환율 우대율 추가 상향 & 🪙 +14G/15초 & 유지비 주기 28초": {
+    "en": "Exchange rate bonus increased & 🪙 +14G/15s & Upkeep cycle 28s",
+    "ja": "為替優遇率追加上方修正＆🪙 +14G/15秒＆維持費周期28秒"
+  },
+  "활": {
+    "en": "Bow",
+    "ja": "弓"
+  },
+  "활 계열": {
+    "en": "Bow Type",
+    "ja": "弓系列"
+  },
+  "활력": {
+    "en": "Vitality",
+    "ja": "活力"
+  },
+  "활성화": {
+    "en": "Activate",
+    "ja": "有効化"
+  },
+  "활성화 중": {
+    "en": "Active",
+    "ja": "有効化中"
+  },
+  "활성화된 진형 시너지 없음": {
+    "en": "No active formation synergy",
+    "ja": "有効な陣形シナジーなし"
+  },
+  "황금 독수리단": {
+    "en": "Golden Eagles",
+    "ja": "黄金の鷲団"
+  },
+  "황금 두꺼비": {
+    "en": "Golden Toad",
+    "ja": "黄金のヒキガエル"
+  },
+  "황금 열쇠": {
+    "en": "Golden Key",
+    "ja": "黄金の鍵"
+  },
+  "황금 열쇠 (강화)": {
+    "en": "Golden Key (Enhanced)",
+    "ja": "黄金の鍵 (強化)"
+  },
+  "황금 열쇠의 신비한 공명으로": {
+    "en": "Through the mysterious resonance of the Golden Key,",
+    "ja": "黄金の鍵の神秘的な共鳴により"
+  },
+  "황금의 아라나": {
+    "en": "Arana of Gold",
+    "ja": "黄金のアラナ"
+  },
+  "황혼의 교역소": {
+    "en": "Twilight Trading Post",
+    "ja": "黄昏の交易所"
+  },
+  "황혼의 블랙 마켓": {
+    "en": "Twilight Black Market",
+    "ja": "黄昏のブラックマーケット"
+  },
+  "황혼의 블랙 마켓 (Twilight Black Market)": {
+    "en": "Twilight Black Market",
+    "ja": "黄昏のブラックマーケット (Twilight Black Market)"
+  },
+  "황혼의 블랙 마켓 개설": {
+    "en": "Establish Twilight Black Market",
+    "ja": "黄昏のブラックマーケット開設"
+  },
+  "황혼의 상권을 장악한 완전한 암시장. 최상위 비급서 출현과 함께 전 품목 20% 특별 할인을 제공하며 유지비 주기를 30초로 최대 연장합니다.": {
+    "en": "A fully developed black market dominating the twilight commercial zone. Offers 20% special discount on all items alongside top-tier secret tomes, extending the upkeep interval to 30s.",
+    "ja": "黄昏の商権を掌握した完全なる闇市。最上位の秘伝書の出現とともに全品20%特別割引を提供し、維持費周期を最長の30秒に延長します。"
+  },
+  "황혼의 암시장 거래소 및 비전서 서고 (미건설)": {
+    "en": "Twilight Black Market Exchange & Arcane Library (Unbuilt)",
+    "ja": "黄昏の闇市取引所および秘伝書書庫 (未建設)"
+  },
+  "황혼의 주점": {
+    "en": "Twilight Tavern",
+    "ja": "黄昏の酒場"
+  },
+  "횃불": {
+    "en": "Torch",
+    "ja": "松明"
+  },
+  "횃불 그물망 설치 (조명 범위 확대)": {
+    "en": "Install Torch Grid (Expand Illumination Range)",
+    "ja": "松明ネット設置（照明範囲拡大）"
+  },
+  "횃불 및 채굴 곡괭이 보급품 제작": {
+    "en": "Craft Torch & Mining Pickaxe Supplies",
+    "ja": "松明および採掘用ツルハシ補給品の製作"
+  },
+  "횃불 점등 (보유: {0}개)": {
+    "en": "Light Torch (Owned: {0})",
+    "ja": "松明点灯 (所持: {0}個)"
+  },
+  "횃불 제작 & 대장간 제련": {
+    "en": "Craft Torches & Forge Smelting",
+    "ja": "松明製作＆鍛冶屋製錬"
+  },
+  "횃불({0})": {
+    "en": "Torch ({0})",
+    "ja": "松明({0})"
+  },
+  "회 / 자원 발견↑)": {
+    "en": "times / Resource Discovery ↑)",
+    "ja": "回 / 資源発見↑)"
+  },
+  "회고록 열람": {
+    "en": "Read Memoir",
+    "ja": "回顧録閲覧"
+  },
+  "회랑": {
+    "en": "Cloister",
+    "ja": "回廊"
+  },
+  "회랑 깊은 곳에서 고대 석조 거신이 냉기를 내뿜고 있다. 거신을 무너뜨리고 그 흑핵으로 영혼의 제단을 세우고 더 깊은 층으로 진격하라.": {
+    "en": "Deep within the cloister, an ancient stone colossus emanates frost. Slay the colossus, build the Soul Sanctuary with its Black Core, and advance to deeper floors.",
+    "ja": "回廊の深部で古代の石造巨神が冷気を放っている。巨神を倒しその黒核で魂の祭壇を築き、さらに深き層へと進撃せよ。"
+  },
+  "회복": {
+    "en": "Recovery",
+    "ja": "回復"
+  },
+  "회복/재생 스킬로 자신 이외의 아군 치료": {
+    "en": "Heal an ally other than oneself using Recovery/Regeneration skills",
+    "ja": "回復/再生スキルで自身以外の味方を治療"
+  }
+}

@@ -1,0 +1,974 @@
+{
+  "확인": {
+    "en": "Confirm",
+    "ja": "確認"
+  },
+  "취소": {
+    "en": "Cancel",
+    "ja": "キャンセル"
+  },
+  "닫기": {
+    "en": "Close",
+    "ja": "閉じる"
+  },
+  "뒤로": {
+    "en": "Back",
+    "ja": "戻る"
+  },
+  "뒤로가기": {
+    "en": "Back",
+    "ja": "戻る"
+  },
+  "저장": {
+    "en": "Save",
+    "ja": "保存"
+  },
+  "삭제": {
+    "en": "Delete",
+    "ja": "削除"
+  },
+  "초기화": {
+    "en": "Reset",
+    "ja": "初期化"
+  },
+  "적용": {
+    "en": "Apply",
+    "ja": "適用"
+  },
+  "수령": {
+    "en": "Claim",
+    "ja": "受取"
+  },
+  "보상 수령": {
+    "en": "Claim Reward",
+    "ja": "報酬受取"
+  },
+  "보상 받기": {
+    "en": "Claim Reward",
+    "ja": "報酬受取"
+  },
+  "완료": {
+    "en": "Complete",
+    "ja": "完了"
+  },
+  "진행 중": {
+    "en": "In Progress",
+    "ja": "進行中"
+  },
+  "성공": {
+    "en": "Success",
+    "ja": "成功"
+  },
+  "실패": {
+    "en": "Failed",
+    "ja": "失敗"
+  },
+  "레벨": {
+    "en": "Level",
+    "ja": "レベル"
+  },
+  "골드": {
+    "en": "Gold",
+    "ja": "ゴールド"
+  },
+  "에테르": {
+    "en": "Ether",
+    "ja": "エーテル"
+  },
+  "목재": {
+    "en": "Wood",
+    "ja": "木材"
+  },
+  "석재": {
+    "en": "Stone",
+    "ja": "石材"
+  },
+  "철광석": {
+    "en": "Iron Ore",
+    "ja": "鉄鉱石"
+  },
+  "식량": {
+    "en": "Food",
+    "ja": "食糧"
+  },
+  "체력": {
+    "en": "HP",
+    "ja": "HP"
+  },
+  "마나": {
+    "en": "MP",
+    "ja": "MP"
+  },
+  "공격력": {
+    "en": "ATK",
+    "ja": "攻撃力"
+  },
+  "방어력": {
+    "en": "DEF",
+    "ja": "防御力"
+  },
+  "속도": {
+    "en": "SPD",
+    "ja": "速度"
+  },
+  "행운": {
+    "en": "LUCK",
+    "ja": "幸運"
+  },
+  "치명타율": {
+    "en": "CRIT",
+    "ja": "会心率"
+  },
+  "전열": {
+    "en": "Front",
+    "ja": "前衛"
+  },
+  "중열": {
+    "en": "Mid",
+    "ja": "中衛"
+  },
+  "후열": {
+    "en": "Back",
+    "ja": "後衛"
+  },
+  "장착": {
+    "en": "Equip",
+    "ja": "装備"
+  },
+  "해제": {
+    "en": "Unequip",
+    "ja": "解除"
+  },
+  "장착 해제": {
+    "en": "Unequip",
+    "ja": "装備解除"
+  },
+  "장착 중": {
+    "en": "Equipped",
+    "ja": "装備中"
+  },
+  "보유": {
+    "en": "Owned",
+    "ja": "所持"
+  },
+  "수량": {
+    "en": "Qty",
+    "ja": "数量"
+  },
+  "강화": {
+    "en": "Enhance",
+    "ja": "強化"
+  },
+  "단조": {
+    "en": "Craft",
+    "ja": "鍛造"
+  },
+  "인챈트": {
+    "en": "Enchant",
+    "ja": "エンチャント"
+  },
+  "승격": {
+    "en": "Promote",
+    "ja": "昇格"
+  },
+  "전직": {
+    "en": "Class Change",
+    "ja": "転職"
+  },
+  "고용": {
+    "en": "Hire",
+    "ja": "雇用"
+  },
+  "퇴원": {
+    "en": "Discharge",
+    "ja": "退院"
+  },
+  "입원": {
+    "en": "Hospitalize",
+    "ja": "入院"
+  },
+  "치료": {
+    "en": "Treat",
+    "ja": "治療"
+  },
+  "출전": {
+    "en": "Deploy",
+    "ja": "出撃"
+  },
+  "편성": {
+    "en": "Form Party",
+    "ja": "編成"
+  },
+  "자동전투": {
+    "en": "Auto Battle",
+    "ja": "オートバトル"
+  },
+  "자동전투 시작": {
+    "en": "Start Auto Battle",
+    "ja": "オート戦闘開始"
+  },
+  "자동전투 중지": {
+    "en": "Stop Auto Battle",
+    "ja": "オート戦闘停止"
+  },
+  "전투 철수": {
+    "en": "Retreat from Battle",
+    "ja": "戦闘から撤退"
+  },
+  "철수 불가": {
+    "en": "Cannot Retreat",
+    "ja": "撤退不可"
+  },
+  "전투 승리": {
+    "en": "Battle Victory",
+    "ja": "戦闘勝利"
+  },
+  "전투 패배": {
+    "en": "Battle Defeat",
+    "ja": "戦闘敗北"
+  },
+  "보스 토벌 대승리": {
+    "en": "Boss Slain - Grand Victory",
+    "ja": "ボストヴァル大勝利"
+  },
+  "상세 로그": {
+    "en": "Detailed Logs",
+    "ja": "詳細ログ"
+  },
+  "전투 상세 기록": {
+    "en": "Combat Detailed Record",
+    "ja": "戦闘詳細記録"
+  },
+  "기본 공격": {
+    "en": "Basic Attack",
+    "ja": "通常攻撃"
+  },
+  "MP 부족": {
+    "en": "Not Enough MP",
+    "ja": "MP不足"
+  },
+  "쿨다운": {
+    "en": "Cooldown",
+    "ja": "クールダウン"
+  },
+  "턴": {
+    "en": "Turn",
+    "ja": "ターン"
+  },
+  "라운드": {
+    "en": "Round",
+    "ja": "ラウンド"
+  },
+  "심연 전진 탐색": {
+    "en": "Advance into Abyss",
+    "ja": "深淵前進探索"
+  },
+  "야영 및 모닥불 휴식": {
+    "en": "Camp & Rest at Bonfire",
+    "ja": "野営と焚火休息"
+  },
+  "성채로 안전 귀환": {
+    "en": "Safely Return to Citadel",
+    "ja": "城塞へ安全帰還"
+  },
+  "심연 위험도": {
+    "en": "Abyssal Hazard",
+    "ja": "深淵危険度"
+  },
+  "안정": {
+    "en": "Safe",
+    "ja": "安定"
+  },
+  "위험": {
+    "en": "Hazardous",
+    "ja": "危険"
+  },
+  "치명적 위험": {
+    "en": "Deadly Hazard",
+    "ja": "致命的危険"
+  },
+  "귀환 포탈 발견": {
+    "en": "Return Portal Discovered",
+    "ja": "帰還ポータル発見"
+  },
+  "포탈을 타고 성채로 귀환": {
+    "en": "Enter Portal to Citadel",
+    "ja": "ポータルで帰還"
+  },
+  "심연 탐험 계속하기": {
+    "en": "Continue Abyssal Expedition",
+    "ja": "探検を続ける"
+  },
+  "심연 오버차지 발동 중": {
+    "en": "Abyssal Overcharge Active",
+    "ja": "深淵オーバーチャージ発動中"
+  },
+  "영광의 결투장": {
+    "en": "Colosseum of Glory",
+    "ja": "栄光の闘技場"
+  },
+  "대전 상대 탐색": {
+    "en": "Search Opponent",
+    "ja": "対戦相手検索"
+  },
+  "매칭 중...": {
+    "en": "Matching...",
+    "ja": "マッチング中..."
+  },
+  "결투 시작": {
+    "en": "Begin Duel",
+    "ja": "決闘開始"
+  },
+  "최근 전적": {
+    "en": "Recent History",
+    "ja": "最近の戦績"
+  },
+  "현재 레이팅": {
+    "en": "Current Rating",
+    "ja": "現在のレーティング"
+  },
+  "시스템 & 클라우드": {
+    "en": "System & Cloud",
+    "ja": "システム & クラウド"
+  },
+  "지휘관 프로필": {
+    "en": "Commander Profile",
+    "ja": "指揮官プロフィール"
+  },
+  "인증 완료": {
+    "en": "Linked",
+    "ja": "連携完了"
+  },
+  "게스트 계정": {
+    "en": "Guest Account",
+    "ja": "ゲストアカウント"
+  },
+  "오디오 & 사운드 설정": {
+    "en": "Audio & Sound Settings",
+    "ja": "オーディオ & サウンド設定"
+  },
+  "배경음악 (BGM)": {
+    "en": "Background Music (BGM)",
+    "ja": "BGM"
+  },
+  "효과음 (SFX)": {
+    "en": "Sound Effects (SFX)",
+    "ja": "SE (効果音)"
+  },
+  "사운드 테스트": {
+    "en": "Sound Test",
+    "ja": "サウンドテスト"
+  },
+  "실시간 클라우드 동기화": {
+    "en": "Real-time Cloud Sync",
+    "ja": "リアルタイムクラウド同期"
+  },
+  "전체화면 모드": {
+    "en": "Fullscreen Mode",
+    "ja": "全画面モード"
+  },
+  "언어 설정": {
+    "en": "Language Settings",
+    "ja": "言語設定"
+  },
+  "방주 백과사전 & 도감": {
+    "en": "Ark Encyclopedia & Compendium",
+    "ja": "方舟百科事典 & 図鑑"
+  },
+  "버전 정보 & 패치노트": {
+    "en": "Version & Patch Notes",
+    "ja": "バージョン情報 & 更新履歴"
+  },
+  "지휘관 로그아웃": {
+    "en": "Commander Logout",
+    "ja": "指揮官ログアウト"
+  },
+  "게임 데이터 초기화": {
+    "en": "Reset Game Data",
+    "ja": "ゲームデータ初期化"
+  },
+  "전체": {
+    "en": "All",
+    "ja": "全て"
+  },
+  "초반 공략": {
+    "en": "Starter Guide",
+    "ja": "序盤攻略"
+  },
+  "직업 & 전직": {
+    "en": "Classes & Trees",
+    "ja": "職業 & 転職"
+  },
+  "몬스터 & 보스": {
+    "en": "Monsters & Bosses",
+    "ja": "魔物 & ボス"
+  },
+  "영지 시설": {
+    "en": "Citadel Facility",
+    "ja": "領地施設"
+  },
+  "장비 & 인챈트": {
+    "en": "Gear & Enchants",
+    "ja": "装備 & 付呪"
+  },
+  "스킬 & 상태이상": {
+    "en": "Skills & Statuses",
+    "ja": "スキル & 状態異常"
+  },
+  "시스템 & 가이드": {
+    "en": "Systems & Guides",
+    "ja": "システム & ガイド"
+  },
+  "방주의 성화": {
+    "en": "Primal Bonfire",
+    "ja": "方舟の聖火"
+  },
+  "생존자 안식처": {
+    "en": "Survivor Haven",
+    "ja": "生存者の安息所"
+  },
+  "영목 벌채소": {
+    "en": "Lumber Camp",
+    "ja": "霊木伐採所"
+  },
+  "에테르 광맥 시추소": {
+    "en": "Aether Quarry",
+    "ja": "エーテル鉱脈採掘所"
+  },
+  "심연 생체 정제소": {
+    "en": "Abyssal Refinery",
+    "ja": "深淵生体精製所"
+  },
+  "방랑자의 라운지": {
+    "en": "Wanderer Lounge",
+    "ja": "放浪者のラウンジ"
+  },
+  "심연의 병기창": {
+    "en": "Ark Armory & Forge",
+    "ja": "深淵の兵器廠"
+  },
+  "영혼의 제단": {
+    "en": "Soul Sanctuary",
+    "ja": "魂の祭壇"
+  },
+  "에테르 연금 공방": {
+    "en": "Aether Alchemy Lab",
+    "ja": "エーテル錬金工房"
+  },
+  "차원 앵커 게이트": {
+    "en": "Dimensional Gate",
+    "ja": "次元アンカーゲート"
+  },
+  "방주 중앙 병참고": {
+    "en": "Central Logistics Depot",
+    "ja": "方舟中央兵站庫"
+  },
+  "생체 복원 병동": {
+    "en": "Bio-Restoration Ward",
+    "ja": "生体復元病棟"
+  },
+  "황혼의 블랙 마켓": {
+    "en": "Twilight Black Market",
+    "ja": "黄昏のブラックマーケット"
+  },
+  "침묵의 회랑": {
+    "en": "Silent Cloister",
+    "ja": "沈黙の回廊"
+  },
+  "망령의 납골당": {
+    "en": "Ossuary of Phantoms",
+    "ja": "亡霊の納骨堂"
+  },
+  "에테르 광맥": {
+    "en": "Ether Vein",
+    "ja": "エーテル鉱脈"
+  },
+  "심연의 균열": {
+    "en": "Abyssal Rift",
+    "ja": "深淵の亀裂"
+  },
+  "원초의 제단": {
+    "en": "Primordial Altar",
+    "ja": "原初の祭壇"
+  },
+  "핏빛 성역": {
+    "en": "Crimson Sanctuary",
+    "ja": "血塗られた聖域"
+  },
+  "망각의 묘지": {
+    "en": "Graveyard of Oblivion",
+    "ja": "忘却の墓地"
+  },
+  "단죄의 성채": {
+    "en": "Citadel of Condemnation",
+    "ja": "断罪の城塞"
+  },
+  "환영의 미궁": {
+    "en": "Labyrinth of Illusions",
+    "ja": "幻影の迷宮"
+  },
+  "심연의 심장부": {
+    "en": "Heart of the Abyss",
+    "ja": "深淵の心臓部"
+  },
+  "무간도": {
+    "en": "Avici",
+    "ja": "無間道"
+  },
+  "접두어 인챈트": {
+    "en": "Prefix Enchant",
+    "ja": "接頭辞エンチャント"
+  },
+  "접미어 인챈트": {
+    "en": "Suffix Enchant",
+    "ja": "接尾辞エンチャント"
+  },
+  "순수 마도석": {
+    "en": "Pure Runestone",
+    "ja": "純粋魔導石"
+  },
+  "강화 성공률": {
+    "en": "Success Rate",
+    "ja": "強化成功率"
+  },
+  "단조 레시피": {
+    "en": "Craft Recipes",
+    "ja": "鍛造レシピ"
+  },
+  "제작 비용": {
+    "en": "Crafting Cost",
+    "ja": "製造費用"
+  },
+  "필요 재료": {
+    "en": "Required Materials",
+    "ja": "必要素材"
+  },
+  "보유 재료": {
+    "en": "Materials Owned",
+    "ja": "所持素材"
+  },
+  "재료 부족": {
+    "en": "Insufficient Materials",
+    "ja": "素材不足"
+  },
+  "골드 부족": {
+    "en": "Insufficient Gold",
+    "ja": "ゴールド不足"
+  },
+  "강화 시도": {
+    "en": "Attempt Enhance",
+    "ja": "強化を試みる"
+  },
+  "병상": {
+    "en": "Beds",
+    "ja": "病床"
+  },
+  "입원 환자": {
+    "en": "Patients",
+    "ja": "入院患者"
+  },
+  "집중 치료": {
+    "en": "Intensive Care",
+    "ja": "集中治療"
+  },
+  "치료 중": {
+    "en": "Under Treatment",
+    "ja": "治療中"
+  },
+  "퇴원시키기": {
+    "en": "Discharge",
+    "ja": "退院させる"
+  },
+  "전원 퇴원": {
+    "en": "Discharge All",
+    "ja": "全員退院"
+  },
+  "방랑 용병 계약": {
+    "en": "Mercenary Contract",
+    "ja": "放浪傭兵契約"
+  },
+  "용병 영입": {
+    "en": "Recruit Hero",
+    "ja": "傭兵雇用"
+  },
+  "새로고침": {
+    "en": "Refresh",
+    "ja": "更新"
+  },
+  "현상금 의뢰": {
+    "en": "Bounty Board",
+    "ja": "賞金首依頼"
+  },
+  "서브 퀘스트": {
+    "en": "Side Quests",
+    "ja": "サブクエスト"
+  },
+  "의뢰 수락": {
+    "en": "Accept Quest",
+    "ja": "依頼受諾"
+  },
+  "에테르 연금": {
+    "en": "Aether Alchemy",
+    "ja": "エーテル錬金"
+  },
+  "마도 비전서 제본": {
+    "en": "Craft Grimoire",
+    "ja": "魔導秘伝書の製本"
+  },
+  "비전서 전수": {
+    "en": "Teach Grimoire",
+    "ja": "秘伝書伝授"
+  },
+  "클래스 승격": {
+    "en": "Class Promotion",
+    "ja": "クラス昇格"
+  },
+  "1차 전직": {
+    "en": "1st Promotion",
+    "ja": "1次転職"
+  },
+  "2차 심연 승격": {
+    "en": "2nd Abyssal Promotion",
+    "ja": "2次深淵昇格"
+  },
+  "2차 초월 각성": {
+    "en": "2nd Transcendent Awakening",
+    "ja": "2次超越覚醒"
+  },
+  "승격 조건": {
+    "en": "Promotion Requirements",
+    "ja": "昇格条件"
+  },
+  "승격 단행": {
+    "en": "Undergo Promotion",
+    "ja": "昇格断行"
+  },
+  "적재 용량": {
+    "en": "Storage Capacity",
+    "ja": "積載容量"
+  },
+  "보관 한도": {
+    "en": "Storage Limit",
+    "ja": "保管上限"
+  },
+  "창고 확장": {
+    "en": "Expand Storage",
+    "ja": "倉庫拡張"
+  },
+  "자원 매각": {
+    "en": "Sell Resources",
+    "ja": "資源売却"
+  },
+  "골드 환전": {
+    "en": "Exchange for Gold",
+    "ja": "ゴールド換金"
+  },
+  "암시장 유물": {
+    "en": "Black Market Relics",
+    "ja": "闇市遺物"
+  },
+  "일괄 판매": {
+    "en": "Sell All",
+    "ja": "一括売却"
+  },
+  "원정대 편성": {
+    "en": "Party Formation",
+    "ja": "遠征隊編成"
+  },
+  "용병 관리": {
+    "en": "Manage Mercenaries",
+    "ja": "傭兵管理"
+  },
+  "진형 배치": {
+    "en": "Formation Layout",
+    "ja": "陣形配置"
+  },
+  "해고": {
+    "en": "Dismiss",
+    "ja": "解雇"
+  },
+  "목재 투입": {
+    "en": "Contribute Wood",
+    "ja": "木材投入"
+  },
+  "온기 버프": {
+    "en": "Warmth Buff",
+    "ja": "温もりバフ"
+  },
+  "불씨 지피기": {
+    "en": "Stoke Fire",
+    "ja": "火を焚く"
+  },
+  "성화 완전 점화": {
+    "en": "Ignite Bonfire Fully",
+    "ja": "聖火完全点火"
+  },
+  "광고 충전": {
+    "en": "Ad Recharge",
+    "ja": "広告チャージ"
+  },
+  "탐험 채비실": {
+    "en": "Expedition Prep Room",
+    "ja": "探検準備室"
+  },
+  "배낭 선택": {
+    "en": "Select Backpack",
+    "ja": "バックパック選択"
+  },
+  "보급품 챙기기": {
+    "en": "Pack Supplies",
+    "ja": "補給品準備"
+  },
+  "심연 촉매": {
+    "en": "Abyssal Catalysts",
+    "ja": "深淵触媒"
+  },
+  "출전 불가": {
+    "en": "Cannot Deploy",
+    "ja": "出撃不可"
+  },
+  "강하 구역 선택": {
+    "en": "Select Descent Floor",
+    "ja": "降下階層選択"
+  },
+  "전술 모멘텀": {
+    "en": "Tactical Momentum",
+    "ja": "戦術モメンタム"
+  },
+  "모멘텀 뱃지": {
+    "en": "Momentum Badges",
+    "ja": "モメンタムバッジ"
+  },
+  "FEVER 폭발": {
+    "en": "FEVER Burst",
+    "ja": "FEVERバースト"
+  },
+  "원호 공격": {
+    "en": "Assist Attack",
+    "ja": "援護攻撃"
+  },
+  "연계 콤보": {
+    "en": "Synergy Combo",
+    "ja": "連携コンボ"
+  },
+  "차징 브레이크": {
+    "en": "Charging Break",
+    "ja": "チャージブレイク"
+  },
+  "수호 개입": {
+    "en": "Guard Intervention",
+    "ja": "守護介入"
+  },
+  "환영 반격": {
+    "en": "Phantom Riposte",
+    "ja": "幻影反撃"
+  },
+  "치명타": {
+    "en": "Critical Hit",
+    "ja": "会心の一撃"
+  },
+  "패치노트": {
+    "en": "Patch Notes",
+    "ja": "更新履歴"
+  },
+  "백과사전": {
+    "en": "Encyclopedia",
+    "ja": "百科事典"
+  },
+  "도감": {
+    "en": "Codex",
+    "ja": "図鑑"
+  },
+  "계정 연동": {
+    "en": "Link Account",
+    "ja": "アカウント連携"
+  },
+  "클라우드 저장": {
+    "en": "Cloud Save",
+    "ja": "クラウド保存"
+  },
+  "클라우드 불러오기": {
+    "en": "Cloud Load",
+    "ja": "クラウド読込"
+  },
+  "저장 완료": {
+    "en": "Save Complete",
+    "ja": "保存完了"
+  },
+  "불러오기 완료": {
+    "en": "Load Complete",
+    "ja": "読込完了"
+  },
+  "방주 13대 영지 시설 도감": {
+    "en": "Ark 13 Citadel Facilities Codex",
+    "ja": "方舟13大領地施設図鑑"
+  },
+  "핵심 기능 및 증축 혜택": {
+    "en": "Core Features & Expansion Perks",
+    "ja": "主要機能＆増築恩恵"
+  },
+  "식별자": {
+    "en": "ID",
+    "ja": "識別子"
+  },
+  "최대 증축": {
+    "en": "Max Expansion",
+    "ja": "最大増築"
+  },
+  "시설 증축 및 운용 안내": {
+    "en": "Facility Expansion & Operation Guide",
+    "ja": "施設増築・運用案内"
+  },
+  "동": {
+    "en": " Facilities",
+    "ja": "棟"
+  },
+  "종": {
+    "en": " Types",
+    "ja": "種"
+  },
+  "건": {
+    "en": " Entries",
+    "ja": "件"
+  },
+  "초반 공략 로드맵": {
+    "en": "Starter Strategy Roadmap",
+    "ja": "序盤攻略ロードマップ"
+  },
+  "초반 가이드": {
+    "en": "Starter Guide",
+    "ja": "序盤ガイド"
+  },
+  "무기 고유 특성": {
+    "en": "Weapon Traits",
+    "ja": "武器固有特性"
+  },
+  "생존 FAQ": {
+    "en": "Survival FAQ",
+    "ja": "生存FAQ"
+  },
+  "방주 백과사전": {
+    "en": "Ark Encyclopedia",
+    "ja": "方舟百科事典"
+  },
+  "방주 백과사전 상세 열람": {
+    "en": "Ark Encyclopedia Detailed View",
+    "ja": "方舟百科事典 詳細閲覧"
+  },
+  "심연 몬스터 & 보스 기믹 도감": {
+    "en": "Abyss Monster & Boss Gimmick Codex",
+    "ja": "深淵モンスター＆ボスギミック図鑑"
+  },
+  "1층 ~ 10층 심연의 탑 서식 마물": {
+    "en": "Monsters Inhabiting Floors 1 - 10 of Abyss Tower",
+    "ja": "1層〜10層 深淵の塔生息魔物"
+  },
+  "사용 스킬 & 특수 공격 패턴": {
+    "en": "Active Skills & Special Attack Patterns",
+    "ja": "使用スキル＆特殊攻撃パターン"
+  },
+  "사용 스킬 및 기믹:": {
+    "en": "Active Skills & Gimmicks:",
+    "ja": "使用スキルおよびギミック:"
+  },
+  "토벌 전리품 보상": {
+    "en": "Conquest Loot Rewards",
+    "ja": "討伐戦利品報酬"
+  },
+  "심연 몬스터 도감": {
+    "en": "Abyss Monster Codex",
+    "ja": "深淵モンスター図鑑"
+  },
+  "장비 단조 & 마도석 인챈트 도감": {
+    "en": "Equipment Craft & Magicite Enchant Codex",
+    "ja": "装備鍛造＆魔導石エンチャント図鑑"
+  },
+  "마도석": {
+    "en": "Magicite",
+    "ja": "魔導石"
+  },
+  "기본 단조 장비": {
+    "en": "Basic Craftable Equipment",
+    "ja": "基本鍛造装備"
+  },
+  "장비 기본 능력치 보정": {
+    "en": "Equipment Base Stat Modifiers",
+    "ja": "装備基本能力値補正"
+  },
+  "단조 필요 재료": {
+    "en": "Craft Materials Required",
+    "ja": "鍛造必要素材"
+  },
+  "장비 단조": {
+    "en": "Equipment Craft",
+    "ja": "装備鍛造"
+  },
+  "인챈트 마도석 옵션": {
+    "en": "Magicite Enchant Options",
+    "ja": "エンチャント魔導石オプション"
+  },
+  "인챈트 마도석": {
+    "en": "Enchant Magicite",
+    "ja": "エンチャント魔導石"
+  },
+  "인챈트 부여 고유 스킬": {
+    "en": "Enchant Granted Unique Skill",
+    "ja": "付与固有スキル"
+  },
+  "핵심 룰 & 시스템 가이드": {
+    "en": "Core Rules & System Guide",
+    "ja": "核心ルール＆システムガイド"
+  },
+  "시스템 가이드": {
+    "en": "System Guide",
+    "ja": "システムガイド"
+  },
+  "세부 가이드 & 룰 설명:": {
+    "en": "Detailed Guide & Rule Explanation:",
+    "ja": "詳細ガイド＆ルール説明:"
+  },
+  "전투 상성, 전열/후열, 유대, 위험도, 유지비": {
+    "en": "Combat Affinity, Formations, Bonds, Hazard & Upkeep",
+    "ja": "戦闘相性、前列/後列、絆、危険度、維持費"
+  },
+  "확인 (닫기)": {
+    "en": "Confirm (Close)",
+    "ja": "確認（閉じる）"
+  },
+  "확대": {
+    "en": "Expand",
+    "ja": "拡大"
+  },
+  "병기창 무기 계열 고유 특성 뱃지": {
+    "en": "Armory Weapon Trait Badges",
+    "ja": "兵器廠 武器系統固有特性バッジ"
+  },
+  "신임 지휘관 초반 생존 & 번영 로드맵": {
+    "en": "Commander Survival & Prosperity Roadmap",
+    "ja": "新任指揮官 序盤生存＆繁栄ロードマップ"
+  },
+  "단계별 핵심 미션 완수 가이드": {
+    "en": "Step-by-step Core Mission Guide",
+    "ja": "段階別主要ミッション達成ガイド"
+  },
+  "초반 6단계 완벽 생존 & 번영 로드맵": {
+    "en": "Early 6-Step Survival & Prosperity Roadmap",
+    "ja": "序盤6段階 完璧生存＆繁栄ロードマップ"
+  },
+  "무기 6종 고유 특성 뱃지 (Weapon Traits) 완전 해설": {
+    "en": "Comprehensive Weapon Traits Guide (6 Types)",
+    "ja": "武器6種固有特性バッジ（Weapon Traits）完全解説"
+  },
+  "병기창 단조 시 무기별 고유 메커니즘": {
+    "en": "Unique Mechanisms by Weapon Type at Forge",
+    "ja": "兵器廠鍛造時 武器別固有メカニズム"
+  },
+  "자주 묻는 질문 (FAQ) & 방주 생존 수칙": {
+    "en": "Frequently Asked Questions (FAQ) & Survival Rules",
+    "ja": "よくある質問（FAQ）＆方舟生存規則"
+  },
+  "전멸 방지 & 보관 수칙": {
+    "en": "Wipe Prevention & Safe Storage Rules",
+    "ja": "全滅防止＆保管規則"
+  }
+}

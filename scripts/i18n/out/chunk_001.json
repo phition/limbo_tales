@@ -1,0 +1,802 @@
+{
+  "16종 군수 물자 적재 용량 관리 및 증축 (유지비 면제)": {
+    "en": "Manage & expand storage capacity for 16 military supply types (Upkeep exempt)",
+    "ja": "16種の軍需物資積載容量の管理および増築（維持費免除）"
+  },
+  "16종 자원 보관": {
+    "en": "Store 16 Resource Types",
+    "ja": "16種の資源保管"
+  },
+  "17종 군수 물자 및 암시장 자원 거래": {
+    "en": "Trade 17 military supply & black market resource types",
+    "ja": "17種の軍需物資および闇市資源取引"
+  },
+  "17종 자원 환전 & 🪙 +2G/15초 골드 수급 & 유지비 지불 주기 21초 (+1초)": {
+    "en": "Exchange 17 resource types & earn 🪙 +2G/15s & Upkeep payment cycle 21s (+1s)",
+    "ja": "17種の資源換金＆🪙 +2G/15秒ゴールド獲得＆維持費支払周期21秒 (+1秒)"
+  },
+  "1F 보스 [침묵의 감시자]의 갑각을 가공하여 만든 단단한 고유 흉갑.": {
+    "en": "Sturdy unique breastplate crafted from the carapace of 1F Boss [Silent Watcher].",
+    "ja": "1層ボス［沈黙の監視者］の甲殻を加工して作られた頑丈な固有胸甲。"
+  },
+  "1F 보스 [침묵의 감시자]의 눈동자가 세공된 신비로운 고유 반지.": {
+    "en": "Mysterious unique ring crafted with the eyeball of 1F Boss [Silent Watcher].",
+    "ja": "1層ボス［沈黙の監視者］の瞳が細工された神秘的な固有指輪。"
+  },
+  "1F 보스 [침묵의 감시자]의 예리한 시선이 깃든 고유 대검.": {
+    "en": "Unique greatsword imbued with the keen gaze of 1F Boss [Silent Watcher].",
+    "ja": "1層ボス［沈黙の監視者］の鋭い視線が宿る固有大剣。"
+  },
+  "1F 보스 처치 (100% 확정)": {
+    "en": "Defeat 1F Boss (100% Guaranteed)",
+    "ja": "1層ボス撃破 (100%確定)"
+  },
+  "1F 비기 마도서: 흑핵의 영구동결": {
+    "en": "1F Secret Grimoire: Permafrost of the Black Core",
+    "ja": "1層秘技魔導書: 黒核の永久凍結"
+  },
+  "1F 오파츠: 도시의 아침 (스마트폰 & 텀블러)": {
+    "en": "1F Ooparts: City Morning (Smartphone & Tumbler)",
+    "ja": "1層オーパーツ: 都市の朝 (スマートフォン＆タンブラー)"
+  },
+  "1F 침묵의 감시자 보스 세트": {
+    "en": "1F Silent Watcher Boss Set",
+    "ja": "1層沈黙の監視者ボスセット"
+  },
+  "1F 침묵의 감시자 세트": {
+    "en": "1F Silent Watcher Set",
+    "ja": "1層沈黙の監視者セット"
+  },
+  "1F 침묵의 주시자 처치 정수": {
+    "en": "1F Silent Beholder Slaying Essence",
+    "ja": "1層沈黙の注視者討伐のエッセンス"
+  },
+  "1F 침묵의 회랑 던전 상자 / 보스 드랍": {
+    "en": "1F Silent Cloister Dungeon Chest / Boss Drop",
+    "ja": "1層沈黙の回廊 ダンジョン宝箱 / ボスドロップ"
+  },
+  "1F 침묵의 회랑 발굴품 페어. 손바닥 안의 검은 유리판(스마트폰)과 온기를 보존하던 금속 용기(텀블러). 매일 아침 만원 열차에 몸을 싣던 구세계 시민들의 평온한 출근길 일상.": {
+    "en": "1F Silent Cloister excavation pair: A black glass pane in hand (Smartphone) and a metal vessel preserving warmth (Tumbler). The peaceful morning commute of Old World citizens boarding crowded trains.",
+    "ja": "1層沈黙の回廊の発掘品ペア。手のひらの黒いガラス板(スマホ)と温もりを保つ金属容器(タンブラー)。毎朝満員電車に揺られていた旧世界の市民たちの穏やかな通勤風景。"
+  },
+  "1F 회고록: 침묵의 회랑과 부서진 성문": {
+    "en": "1F Memoir: Silent Cloister and the Shattered Gate",
+    "ja": "1層回顧録: 沈黙の回廊と壊れた城門"
+  },
+  "1F~5F 보스들의 특수 비기가 담긴 고유 마도서 5종을 모두 수집한 위업.": {
+    "en": "A feat of collecting all 5 unique grimoires containing special secret arts of 1F-5F bosses.",
+    "ja": "1層〜5層ボスの特殊秘技が込められた固有魔導書5種をすべて集めた偉業。"
+  },
+  "1~2층 수호자의 정수가 깃든 고유 에픽 장비 [흑핵의 고대 파쇄검]을 결사대에 하사합니다.": {
+    "en": "Bestow unique epic equipment [Ancient Crusher of the Black Core] imbued with the guardian essences of 1F-2F upon the expedition.",
+    "ja": "1〜2層守護者のエッセンスが宿る固有エピック装備［黒核の古代破砕剣］を決死隊に下賜する。"
+  },
+  "1·2차 상위 직업 승격을 수행하며, Lv.2~5는 기본 클래스 EXP(+20%~50%), Lv.6~10은 1차 각성 클래스 EXP(+10%~40%), Lv.10 전원 올스탯 +10%를 증폭합니다. (Lv.4+ 에테르 유지비)": {
+    "en": "Performs Tier 1 & 2 advanced class promotions; Lv.2-5 boosts Base Class EXP (+20%-50%), Lv.6-10 boosts Tier 1 Awakened Class EXP (+10%-40%), and Lv.10 boosts All Stats +10% for everyone. (Lv.4+ Ether upkeep)",
+    "ja": "1・2次上位クラス昇格を行い、Lv.2〜5は基本クラスEXP(+20%〜50%)、Lv.6〜10は1次覚醒クラスEXP(+10%〜40%)、Lv.10で全員の全ステータス+10%を増幅。(Lv.4+ エーテル維持費)"
+  },
+  "1·2차 전직 & EXP 증폭": {
+    "en": "Tier 1 & 2 Class Change & EXP Boost",
+    "ja": "1・2次転職＆EXP増幅"
+  },
+  "1개": {
+    "en": "1",
+    "ja": "1個"
+  },
+  "1개 선택": {
+    "en": "Select 1",
+    "ja": "1個選択"
+  },
+  "1개 선택 필수": {
+    "en": "Must select 1",
+    "ja": "1個選択必須"
+  },
+  "1개 제작": {
+    "en": "Craft 1",
+    "ja": "1個製作"
+  },
+  "1개만 버리기": {
+    "en": "Discard only 1",
+    "ja": "1個だけ捨てる"
+  },
+  "1단계 100G": {
+    "en": "Stage 1: 100G",
+    "ja": "1段階 100G"
+  },
+  "1단계: [차원의 문을 열어라] - 영혼의 제단 완공 후 차원 앵커 게이트 건설": {
+    "en": "Stage 1: [Open the Dimensional Gate] - Build Dimensional Gate after completing Soul Sanctuary",
+    "ja": "1段階: ［次元の扉を開け］ - 魂の祭壇完成後に次元アンカーゲートを建設"
+  },
+  "1단계: 귀환/운구 대상을 선택하세요": {
+    "en": "Stage 1: Select target for return/transport",
+    "ja": "1段階: 帰還/搬送対象を選択してください"
+  },
+  "1단계: 방주로 복귀/운구할 원정대원 선택": {
+    "en": "Stage 1: Select expedition member to return/transport to Ark",
+    "ja": "1段階: 方舟へ復帰/搬送する遠征隊員を選択"
+  },
+  "1단계: 차원의 균열 타격자": {
+    "en": "Stage 1: Dimensional Rift Striker",
+    "ja": "1段階: 次元の亀裂打撃者"
+  },
+  "1단계: 채비": {
+    "en": "Stage 1: Preparation",
+    "ja": "1段階: 準備"
+  },
+  "1번 슬롯 장착": {
+    "en": "Equip Slot 1",
+    "ja": "1番スロット装備"
+  },
+  "1번 장착": {
+    "en": "Equip #1",
+    "ja": "1番装備"
+  },
+  "1시간 쿨다운:": {
+    "en": "1-Hour Cooldown:",
+    "ja": "1時間クールダウン:"
+  },
+  "1차 상위 클래스": {
+    "en": "Tier 1 Advanced Class",
+    "ja": "1次上位クラス"
+  },
+  "1차 상위 클래스 전직 해금 (성기사, 암살자, 대마도사 등)": {
+    "en": "Unlock Tier 1 Advanced Class Change (Paladin, Assassin, Archmage, etc.)",
+    "ja": "1次上位クラス転職開放 (聖騎士、暗殺者、大魔導士など)"
+  },
+  "1차 영지 재건 완성! (대서사 확인)": {
+    "en": "Citadel Reconstruction Phase 1 Complete! (Check Epic Quest)",
+    "ja": "1次領地再建完了！(大叙事詩を確認)"
+  },
+  "1차 전직": {
+    "en": "Tier 1 Class Change",
+    "ja": "1次転職"
+  },
+  "1차 전직 (Tier 1)": {
+    "en": "Tier 1 Class Change (Tier 1)",
+    "ja": "1次転職 (Tier 1)"
+  },
+  "1차 전직 용병 1명 달성": {
+    "en": "Achieve 1 Tier 1 Promoted Mercenary",
+    "ja": "1次転職傭兵1名達成"
+  },
+  "1차 테크": {
+    "en": "Tech Tier 1",
+    "ja": "1次テック"
+  },
+  "1차(감속)": {
+    "en": "Phase 1 (Slow)",
+    "ja": "1次(減速)"
+  },
+  "1차(결계)": {
+    "en": "Phase 1 (Barrier)",
+    "ja": "1次(結界)"
+  },
+  "1차(진지)": {
+    "en": "Phase 1 (Position)",
+    "ja": "1次(陣地)"
+  },
+  "1층": {
+    "en": "1F",
+    "ja": "1層"
+  },
+  "1층 (표준): 기본 MP 소모량 (1.0배, +0%)": {
+    "en": "1F (Standard): Base MP cost (1.0x, +0%)",
+    "ja": "1層 (標準): 基本MP消費量 (1.0倍, +0%)"
+  },
+  "1층 ~ 10층 심연의 탑 서식 마물": {
+    "en": "Monsters inhabiting 1F - 10F Tower of Abyss",
+    "ja": "1層〜10層 深淵の塔に生息する魔物"
+  },
+  "1층 군주의 심장에 응축되어 있던 순수 암흑 핵입니다. 마도 대장간에서 1티어 보스 고유 장비를 단조하는 핵심 매개체입니다.": {
+    "en": "A pure dark core condensed in the heart of the 1F Overlord. Core material to forge Tier 1 boss unique equipment at the Arcane Forge.",
+    "ja": "1層君主の心臓に凝縮されていた純粋な暗黒核。魔導鍛冶屋でTier 1ボス固有装備を鍛造するための中核素材。"
+  },
+  "1층 보스 [침묵의 흑핵 거신] 토벌 & 2층 해금": {
+    "en": "Subjugate 1F Boss [Silent Black Core Colossus] & Unlock 2F",
+    "ja": "1層ボス［沈黙の黒核巨神］討伐＆2層開放"
+  },
+  "1층 지배자 [침묵의 감시자]를 처치하고 회수한 전설의 고유 3종 무구 세트.": {
+    "en": "Legendary 3-piece unique equipment set retrieved by slaying 1F Ruler [Silent Watcher].",
+    "ja": "1層支配者［沈黙の監視者］を撃破して回収した伝説の固有3種武具セット。"
+  },
+  "1층 척후병의 유언 수습 ➔ 3층 보급관 엘릭 접선 ➔ 8층 기사단장 베른하르트 결판으로 이어지는 3단계 대형 연계 서사입니다.": {
+    "en": "A major 3-part linked saga: Retrieve 1F Scout's dying wish ➔ Contact 3F Quartermaster Elric ➔ Settle with 8F Knight Commander Bernhardt.",
+    "ja": "1層斥候兵の遺言回収 ➔ 3層補給官エルリックと接触 ➔ 8層騎士団長ベルンハルトとの決着へと続く3段階大型連係叙事詩。"
+  },
+  "1층 침묵의 회랑 바닥에 흩뿌려진 쪽지들을 모아 복원한 최초의 참상 기록.": {
+    "en": "The first record of tragedy reconstructed from notes scattered across the floor of 1F Silent Cloister.",
+    "ja": "1層沈黙の回廊の床に散らばったメモを集めて復元した最初の惨状記録。"
+  },
+  "1층 침묵의 회랑 심부에 도달하여 수호 보스 [침묵의 흑핵 거신]을 토벌하고 2층 [망령의 납골당] 진입로를 개방하세요.": {
+    "en": "Reach the deep interior of 1F Silent Cloister, subjugate guardian boss [Silent Black Core Colossus], and open the path to 2F [Ossuary of Phantoms].",
+    "ja": "1層沈黙の回廊深部に到達して守護ボス［沈黙の黒核巨神］を討伐し、2層［亡霊の納骨堂］進入路を開放せよ。"
+  },
+  "1층 침묵의 회랑부터 시작하여 3층 에테르 광맥을 거쳐, 5층 고대 제단에 도사린": {
+    "en": "Starting from 1F Silent Cloister, through 3F Ether Vein, to 5F Primordial Altar lurking with",
+    "ja": "1層沈黙の回廊から始まり、3層エーテル鉱脈を経て、5層古代祭壇に潜む"
+  },
+  "1층 회고록 쪽지": {
+    "en": "1F Memoir Note",
+    "ja": "1層の回顧録メモ"
+  },
+  "1층 흑핵 거신의 핵을 녹여 단조한 고대 대검. 묵직한 타격과 함께 방어력을 보강한다.": {
+    "en": "An ancient greatsword forged by melting the core of 1F Black Core Colossus. Enhances DEF alongside heavy strikes.",
+    "ja": "1層黒核巨神のコアを溶かして鍛造した古代の大剣。重い一撃と共に防御力を補強する。"
+  },
+  "1층: 침묵의 회랑 (위험도 하)": {
+    "en": "1F: Silent Cloister (Low Hazard)",
+    "ja": "1層: 沈黙の回廊 (危険度・低)"
+  },
+  "1층과 2층의 광폭화 보스를 격파하고 [침묵의 흑핵]과 [망령의 영혼수정]을 회수하여 제1 기동 룬을 깨우세요.": {
+    "en": "Defeat berserk bosses of 1F and 2F, retrieve [Silent Black Core] and [Phantom Soul Crystal] to awaken Activation Rune I.",
+    "ja": "1層と2層の狂暴化ボスを撃破し、［沈黙の黒核］と［亡霊の魂結晶］を回収して第1起動ルーンを目覚めさせよ。"
+  },
+  "1층부터 11층 무간도(무한 난이도 도약 계층)까지 이어지는 턴제 던전 탐험, 심연 위험도 오버차지, 귀환 포탈 발견, 야영 및 모닥불 온기 버프": {
+    "en": "Turn-based dungeon exploration from 1F to 11F Avici (infinite scaling tier), Abyssal Hazard Overcharge, return portals, camping and bonfire warmth buffs",
+    "ja": "1層から11層無間道(無限難易度跳躍階層)まで続くターン制ダンジョン探検、深淵危険度オーバーチャージ、帰還ポータル発見、野営および焚火温もりバフ"
+  },
+  "1턴 기절 & 차징 브레이크 150 파쇄": {
+    "en": "1-Turn Stun & Charge Break 150 Shatter",
+    "ja": "1ターン気絶＆チャージブレイク150破砕"
+  },
+  "1턴 확정 기절 & 신경 마비 행동 저지": {
+    "en": "1-Turn Guaranteed Stun & Neural Paralysis Action Interruption",
+    "ja": "1ターン確定気絶＆神経麻痺 行動阻止"
+  },
+  "1턴간 그로기 (받는 피해 +50%)": {
+    "en": "Groggy for 1 turn (Damage Taken +50%)",
+    "ja": "1ターン行動不能（被ダメージ+50%）"
+  },
+  "1턴간 행동 불가": {
+    "en": "Incapacitated for 1 turn",
+    "ja": "1ターン行動不能"
+  },
+  "1턴의 재탈출 준비 쿨다운": {
+    "en": "1-Turn Escape Prep Cooldown",
+    "ja": "1ターンの再脱出準備クールダウン"
+  },
+  "1티어 순수 기본 장비 단조 해금 (강화 탭 미해금)": {
+    "en": "Unlock Tier 1 pure basic equipment forging (Enhancement tab locked)",
+    "ja": "Tier 1純粋基本装備の鍛造開放（強化タブ未開放）"
+  },
+  "1티어 전술 비전서 품목 다양화 & 🪙 +7G/15초 & 유지비 주기 24초": {
+    "en": "Tier 1 tactical grimoire variety & 🪙 +7G/15s & Upkeep cycle 24s",
+    "ja": "Tier 1戦術魔導書の品目多様化＆🪙 +7G/15秒＆維持費周期24秒"
+  },
+  "1티어 전술 비전서의 품목을 클래스별로 다양화하고 유지비 지불 주기를 24초로 연장합니다.": {
+    "en": "Diversifies Tier 1 tactical grimoire items by class and extends upkeep payment cycle to 24s.",
+    "ja": "Tier 1戦術魔導書の品目をクラス別に多様化し、維持費支払周期を24秒へ延長。"
+  },
+  "2. 3단계 페이즈 전환 임계치 & 서사 (Phases Threshold)": {
+    "en": "2. 3-Phase Transition Threshold & Narrative (Phases Threshold)",
+    "ja": "2. 3段階フェーズ移行閾値＆叙事詩 (Phases Threshold)"
+  },
+  "2. 그림자 수련생 (Rogue)": {
+    "en": "2. Shadow Apprentice (Rogue)",
+    "ja": "2. 影の見習い (Rogue)"
+  },
+  "2. 비전서 전수 & 진형: 기본 지급된 비전서(강타, 출혈/암습)를 영웅에게 전수하고, 전열(탱커), 중열(근접딜러), 후열(원거리/힐러)로 배치하여 진형 보너스를 챙기세요.": {
+    "en": "2. Grimoire Mastery & Formation: Teach default grimoires (Smite, Bleed/Ambush) to heroes, and deploy them in Front (Tank), Mid (Melee DPS), Back (Ranged/Healer) for formation bonuses.",
+    "ja": "2. 魔導書伝授＆陣形: 基本支給の魔導書(強打、出血/奇襲)を英雄に伝授し、前衛(タンク)、中衛(近接火力)、後衛(遠距離/回復)に配置して陣形ボーナスを獲得しよう。"
+  },
+  "2. 수집 및 이용 목적": {
+    "en": "2. Purpose of Collection and Use",
+    "ja": "2. 収集および利用目的"
+  },
+  "2. 영지 테크 퀘스트: 기초 4대 생산 시설(정제소, 안식처, 벌채소, 시추소)부터 병기창, 병동, 연금 공방, 블랙 마켓으로 이어지는 방주 재건 마일스톤입니다.": {
+    "en": "2. Domain Tech Quests: Ark reconstruction milestones progressing from basic 4 production facilities (Refinery, Haven, Lumber Camp, Quarry) to Armory, Ward, Alchemy Lab, and Black Market.",
+    "ja": "2. 領地テッククエスト: 基礎4大生産施設(精製所、安息所、伐採所、採掘所)から兵器廠、病棟、錬金工房、ブラックマーケットへと続く方舟再建マイルストーン。"
+  },
+  "20 회복": {
+    "en": "Restore 20",
+    "ja": "20 回復"
+  },
+  "20% 추가 물리 피해": {
+    "en": "20% Additional Physical Damage",
+    "ja": "20% 追加物理ダメージ"
+  },
+  "2026년 10월 2일": {
+    "en": "October 2, 2026",
+    "ja": "2026年10月2日"
+  },
+  "24개 전 클래스 영령의 가호: 기본 및 1차·2차 전직을 포함한 24종 전 클래스에 특화된 고유 시너지가 존재합니다 (방어, 재생, 보호막, 치명타, 방어 관통, 흡혈, 마나 회복 등).": {
+    "en": "Blessing of Heroic Spirits for all 24 classes: Unique synergies specialized for all 24 classes including Base, Tier 1, and Tier 2 promotions (DEF, Regen, Shield, Crit, Armor Pen, Lifesteal, Mana Regen, etc.).",
+    "ja": "全24クラス英霊の加護: 基本および1次・2次転職を含む全24クラスに特化した固有シナジーが存在 (防御、再生、シールド、会心、防御貫通、吸血、マナ回復など)。"
+  },
+  "24종 전 클래스 영령의 가호": {
+    "en": "Blessing of Heroic Spirits for All 24 Classes",
+    "ja": "全24クラス英霊の加護"
+  },
+  "27종 전략 군수 물자 보관 및 적재 한도 확장 (미건설)": {
+    "en": "Store 27 Strategic Military Supplies & Expand Cargo Limit (Not Built)",
+    "ja": "27種の戦略軍需物資保管および積載上限拡張（未建設）"
+  },
+  "27종의 모든 원자재와 무기, 방어구, 전리품을 안전하게 보관 및 적재 한도를 확장합니다. (Lv.1~10 소량의 골드 유지비 소모)": {
+    "en": "Safely store all 27 raw materials, weapons, armor, and loot while expanding cargo limits. (Lv.1-10 requires small gold upkeep)",
+    "ja": "全27種の原材料や武器・防具・戦利品を安全に保管し、積載上限を拡張。(Lv.1〜10は少量のゴールド維持費を消費)"
+  },
+  "2F 망령 군주 처치 정수": {
+    "en": "2F Phantom Lord Slaying Essence",
+    "ja": "2層亡霊の君主討伐のエッセンス"
+  },
+  "2F 망령의 군주 보스 세트": {
+    "en": "2F Lord of Phantoms Boss Set",
+    "ja": "2層亡霊の君主ボスセット"
+  },
+  "2F 망령의 군주 세트": {
+    "en": "2F Lord of Phantoms Set",
+    "ja": "2層亡霊の君主セット"
+  },
+  "2F 망령의 납골당 던전 상자 / 보스 드랍": {
+    "en": "2F Ossuary of Phantoms Dungeon Chest / Boss Drop",
+    "ja": "2層亡霊の納骨堂 ダンジョン宝箱 / ボスドロップ"
+  },
+  "2F 망령의 납골당 발굴품 페어. 실물 화폐 대신 신용이라는 숫자로 물건을 사고, 자성 띠에 녹음된 사랑의 유행가에 울고 웃던 대중문화의 황금기.": {
+    "en": "2F Ossuary of Phantoms excavation pair: Purchasing goods with numbers of credit instead of physical cash, crying and laughing to pop love songs on magnetic tapes—the golden age of pop culture.",
+    "ja": "2層亡霊の納骨堂の発掘品ペア。実物貨幣の代わりに信用という数字で物を買い、磁気テープに吹き込まれた愛の流行歌に泣き笑いした大衆文化の黄金期。"
+  },
+  "2F 보스 [망령의 군주]가 수많은 원혼을 베어 넘기던 전설의 낫.": {
+    "en": "Legendary scythe with which 2F Boss [Lord of Phantoms] cleaved countless vengeful spirits.",
+    "ja": "2層ボス［亡霊の君主］が数多くの怨霊を薙ぎ払った伝説の鎌。"
+  },
+  "2F 보스 [망령의 군주]의 유체 기운이 감도는 음산한 고유 로브.": {
+    "en": "Sinister unique robe shrouding ethereal energy of 2F Boss [Lord of Phantoms].",
+    "ja": "2層ボス［亡霊の君主］の幽体オーラが漂う陰鬱な固有ローブ。"
+  },
+  "2F 보스 [망령의 군주]의 응축된 원혼석이 박힌 고유 목걸이.": {
+    "en": "Unique necklace studded with condensed soulstone of 2F Boss [Lord of Phantoms].",
+    "ja": "2層ボス［亡霊の君主］の凝縮された怨霊石が嵌め込まれた固有ネックレス。"
+  },
+  "2F 보스 처치 (100% 확정)": {
+    "en": "Defeat 2F Boss (100% Guaranteed)",
+    "ja": "2層ボス撃破 (100%確定)"
+  },
+  "2F 비기 마도서: 사령의 영혼 수확": {
+    "en": "2F Secret Grimoire: Necrotic Soul Harvest",
+    "ja": "2層秘技魔導書: 死霊の魂収穫"
+  },
+  "2F 오파츠: 소비와 멜로디 (신용카드 & 카세트)": {
+    "en": "2F Ooparts: Consumerism & Melody (Credit Card & Cassette)",
+    "ja": "2層オーパーツ: 消費とメロディ (クレジットカード＆カセット)"
+  },
+  "2F 회고록: 망령의 납골당과 잠들지 못하는 자들": {
+    "en": "2F Memoir: Ossuary of Phantoms and the Restless",
+    "ja": "2層回顧録: 亡霊の納骨堂と眠れぬ者たち"
+  },
+  "2~3턴 후 원정대에 도착": {
+    "en": "Arrives at Expedition in 2-3 Turns",
+    "ja": "2〜3ターン後に遠征隊へ到着"
+  },
+  "2단계 400G": {
+    "en": "Stage 2: 400G",
+    "ja": "2段階 400G"
+  },
+  "2단계: [명예의 결투] - 차원 아레나 3v3 결투 1회 출전 및 완수": {
+    "en": "Stage 2: [Duel of Honor] - Participate in and complete 1 Dimension Arena 3v3 duel",
+    "ja": "2段階: ［名誉の決闘］ - 次元アリーナ3v3決闘に1回出場・完了"
+  },
+  "2단계: 방주 대기소에서 호출할 후방 용병 선택": {
+    "en": "Stage 2: Select rear mercenary to summon from Ark waiting area",
+    "ja": "2段階: 方舟待機所から呼び出す後方傭兵を選択"
+  },
+  "2단계: 시공의 균열 분쇄자": {
+    "en": "Stage 2: Chrono Rift Crusher",
+    "ja": "2段階: 時空の亀裂粉砕者"
+  },
+  "2단계: 진입": {
+    "en": "Stage 2: Entry",
+    "ja": "2段階: 進入"
+  },
+  "2단계: 호출할 후방 용병을 선택하세요": {
+    "en": "Stage 2: Select rear mercenary to summon",
+    "ja": "2段階: 呼び出す後方傭兵を選択してください"
+  },
+  "2번 슬롯 장착": {
+    "en": "Equip Slot 2",
+    "ja": "2番スロット装備"
+  },
+  "2번 장착": {
+    "en": "Equip #2",
+    "ja": "2番装備"
+  },
+  "2차 승격 & 기본 EXP +50% & 1차 각성 클래스 EXP +20% 증폭 (등급 상승 +21%)": {
+    "en": "Tier 2 Promotion & Base EXP +50% & Tier 1 Awakened Class EXP +20% (Rank Up +21%)",
+    "ja": "2次昇格＆基本EXP +50%＆1次覚醒クラスEXP +20%増幅（等級上昇 +21%）"
+  },
+  "2차 승격 & 기본 EXP +50% & 1차 각성 클래스 EXP +30% 증폭 (등급 상승 +24%)": {
+    "en": "Tier 2 Promotion & Base EXP +50% & Tier 1 Awakened Class EXP +30% (Rank Up +24%)",
+    "ja": "2次昇格＆基本EXP +50%＆1次覚醒クラスEXP +30%増幅（等級上昇 +24%）"
+  },
+  "2차 승격 & 기본 EXP +50% & 1차 각성 클래스 EXP +40% 최대 (등급 상승 +27%)": {
+    "en": "Tier 2 Promotion & Base EXP +50% & Tier 1 Awakened Class EXP +40% Max (Rank Up +27%)",
+    "ja": "2次昇格＆基本EXP +50%＆1次覚醒クラスEXP +40%最大（等級上昇 +27%）"
+  },
+  "2차 승격 & 기본 EXP +50% & ★ 1차 각성 클래스 EXP +10% 가동 (등급 상승 +18%)": {
+    "en": "Tier 2 Promotion & Base EXP +50% & ★ Tier 1 Awakened Class EXP +10% Active (Rank Up +18%)",
+    "ja": "2次昇格＆基本EXP +50%＆★ 1次覚醒クラスEXP +10%稼働（等級上昇 +18%）"
+  },
+  "2차 전설 전직 의식": {
+    "en": "Tier 2 Legendary Promotion Ritual",
+    "ja": "2次伝説転職の儀式"
+  },
+  "2차 전설 클래스": {
+    "en": "Tier 2 Legendary Class",
+    "ja": "2次伝説クラス"
+  },
+  "2차 전직 용병 1명 달성": {
+    "en": "Achieve 1 Tier 2 Promoted Mercenary",
+    "ja": "2次転職傭兵1名達成"
+  },
+  "2차 전직 이후 10레벨마다 영혼을 초월하여": {
+    "en": "Transcend soul every 10 levels after Tier 2 promotion to",
+    "ja": "2次転職以降10レベルごとに魂を超越して"
+  },
+  "2차 전직(Tier 2)을 완료한 영웅이 10레벨 성장할 때마다(Lv.40, Lv.50, Lv.60...) 핵심 스탯 1종을 +15% 영구 집중 상향하고 상위 등급으로 진화시키는 최고위 성장 의식입니다.": {
+    "en": "The pinnacle growth ritual: every 10 levels after Tier 2 promotion (Lv.40, 50, 60...), permanently enhances 1 core stat by +15% and evolves to a higher tier.",
+    "ja": "2次転職(Tier 2)を完了した英雄が10レベル成長するたびに(Lv.40、Lv.50、Lv.60...)、主要ステータス1種を+15%永久集中強化し上位等級へ進化させる最高位成長の儀式。"
+  },
+  "2차 전직을 완료한 영웅은 전장의 판도를 단숨에 뒤집는 초월적 위력의 [궁극기]를 개화합니다.": {
+    "en": "Heroes completing Tier 2 promotion awaken transcendent [Ultimate Skills] that turn the tide of battle in an instant.",
+    "ja": "2次転職を完了した英雄は、戦況を一変させる超越的威力の［究極技］を開花させます。"
+  },
+  "2차 최종 전직 영웅 1명 이상 포함": {
+    "en": "Includes at least 1 Tier 2 Final Promoted Hero",
+    "ja": "2次最終転職英雄を1名以上含む"
+  },
+  "2차 테크": {
+    "en": "Tech Tier 2",
+    "ja": "2次テック"
+  },
+  "2차(누출)": {
+    "en": "Phase 2 (Leak)",
+    "ja": "2次(漏出)"
+  },
+  "2차(재생)": {
+    "en": "Phase 2 (Regen)",
+    "ja": "2次(再生)"
+  },
+  "2차(포격)": {
+    "en": "Phase 2 (Bombardment)",
+    "ja": "2次(砲撃)"
+  },
+  "2층 납골당의 무덤 틈새에서 수습한 3장의 쪽지로 완성한 비가.": {
+    "en": "An elegy completed from 3 notes recovered between tombs in 2F Ossuary.",
+    "ja": "2層納骨堂の墓の隙間から回収した3枚のメモで完成させた悲歌。"
+  },
+  "2층 망령의 납골당 최심부를 평정했으나, 3층 에테르 광맥의 마수들은 한층 더 두터운 마도 장갑을 두르고 있다. 병기창을 3레벨로 증축하여 +7강 강화와 마도 인챈트 설비를 가동하라.": {
+    "en": "The depths of 2F Ossuary of Phantoms have been subdued, but beasts in 3F Ether Vein wear even thicker arcane armor. Expand the Armory to Lv.3 to operate +7 enhancement and arcane enchant facilities.",
+    "ja": "2層亡霊の納骨堂最深部を平定したが、3層エーテル鉱脈の魔獣はさらに厚い魔導装甲を纏っている。兵器廠をLv.3に増築し、+7強化と魔導エンチャント設備を稼働せよ。"
+  },
+  "2층 망령의 납골당 최심부의 [망령의 사령 군주]를 토벌하고 3층 [에테르 광맥] 진입로를 개방하세요.": {
+    "en": "Subjugate [Phantom Necro Lord] in the depths of 2F Ossuary of Phantoms and open the path to 3F [Ether Vein].",
+    "ja": "2層亡霊の納骨堂最深部の［亡霊の死霊君主］を討伐し、3層［エーテル鉱脈］進入路を開放せよ。"
+  },
+  "2층 보스 [망령의 사령 군주] 토벌 & 3층 해금": {
+    "en": "Subjugate 2F Boss [Phantom Necro Lord] & Unlock 3F",
+    "ja": "2層ボス［亡霊の死霊君主］討伐＆3層開放"
+  },
+  "2층 사령 군주의 잔재와 영혼 수정을 분석하여 심연의 병기창을 Lv.3으로 증축하세요.": {
+    "en": "Analyze remnants and soul crystals of 2F Necro Lord to expand Ark Armory to Lv.3.",
+    "ja": "2層死霊君主の残骸と魂結晶を分析し、深淵の兵器廠をLv.3へ増築せよ。"
+  },
+  "2층 지배자 [망령의 군주]가 수많은 원혼을 수확하던 사신의 무구 세트.": {
+    "en": "Reaper's equipment set with which 2F Ruler [Lord of Phantoms] harvested countless vengeful spirits.",
+    "ja": "2層支配者［亡霊の君主］が数多の怨霊を刈り取った死神の武具セット。"
+  },
+  "2층 회고록 쪽지": {
+    "en": "2F Memoir Note",
+    "ja": "2層の回顧録メモ"
+  },
+  "2층: MP 소모량 1.1배 (+10%)": {
+    "en": "2F: MP cost x1.1 (+10%)",
+    "ja": "2層: MP消費量1.1倍 (+10%)"
+  },
+  "2층: 망령의 납골당 (위험도 중하)": {
+    "en": "2F: Ossuary of Phantoms (Low-Mid Hazard)",
+    "ja": "2層: 亡霊の納骨堂 (危険度・中下)"
+  },
+  "2턴간 공격력 45% 증가 및 모든 공격에 흡혈 25% 부여": {
+    "en": "ATK increased by 45% and grants 25% Lifesteal to all attacks for 2 turns",
+    "ja": "2ターン攻撃力45%増加＆全攻撃に吸血25%を付与"
+  },
+  "2턴간 모든 피해 40% 흡수 보호막 전개": {
+    "en": "Deploy shield absorbing 40% of all damage for 2 turns",
+    "ja": "2ターン全ダメージを40%吸収するシールドを展開"
+  },
+  "2턴간 받는 피해 50% 반사 및 체력 회복": {
+    "en": "Reflect 50% damage taken and restore HP for 2 turns",
+    "ja": "2ターン被ダメージの50%を反射＆HP回復"
+  },
+  "2턴간 아군 전체 공격력 46% 상승 및 치명타율 20% 증가. 선포 후 자신은 HP 20% 희생.": {
+    "en": "Increases all allies' ATK by 46% and Crit Rate by 20% for 2 turns. Sacrifices 20% own HP upon declaration.",
+    "ja": "2ターン味方全体の攻撃力46%上昇＆会心率20%増加。発動後自身はHP20%を犠牲にする。"
+  },
+  "2턴간 자신 피해 40% 감소 보호막": {
+    "en": "Shield reducing own damage taken by 40% for 2 turns",
+    "ja": "2ターン自身の被ダメージを40%減少させるシールド"
+  },
+  "2티어 단련된 강철 단조 & 단조 비용 10% 할인 (강화 탭 미해금)": {
+    "en": "Tier 2 tempered steel forging & 10% forging cost discount (Enhancement tab locked)",
+    "ja": "Tier 2鍛錬鋼鉄の鍛造＆鍛造費用10%割引（強化タブ未開放）"
+  },
+  "3. 개인정보 처리 위탁": {
+    "en": "3. Consignment of Personal Information Processing",
+    "ja": "3. 個人情報処理の委託"
+  },
+  "3. 견습 마법사 (Mage)": {
+    "en": "3. Apprentice Mage (Mage)",
+    "ja": "3. 見習い魔法使い (Mage)"
+  },
+  "3. 네메시스 고유 레이드 스킬 (Boss Skills 4종)": {
+    "en": "3. Nemesis Unique Raid Skills (4 Boss Skills)",
+    "ja": "3. ネメシス固有レイドスキル (Boss Skills 4種)"
+  },
+  "3. 방랑자 서브 의뢰 (주점 게시판): 방랑자의 라운지에서 갱신되는 몬스터 토벌 및 자원 조달 의뢰로, 정기적인 골드 및 희귀 식량, 마도 자원을 획득할 수 있습니다.": {
+    "en": "3. Wanderer Sub-quests (Tavern Board): Monster subjugation and supply quests renewed at the Wanderer Lounge to regularly earn gold, rare food, and arcane materials.",
+    "ja": "3. 放浪者のサブ依頼 (酒場掲示板): 放浪者のラウンジで更新される魔物討伐や資源調達の依頼で、定期的にゴールド、希少食糧、魔導資源を獲得可能。"
+  },
+  "3. 성화 온기 관리: 성화에 목재를 투입하여 온기 버프를 활성화하면 시설 생산량 +15% 증산과 거점 회복 효과를 누립니다.": {
+    "en": "3. Bonfire Warmth Management: Feeding wood into the Bonfire activates the warmth buff, granting +15% facility production and base recovery effects.",
+    "ja": "3. 聖火の温もり管理: 聖火に木材を投入して温もりバフを有効化すると、施設生産量+15%増産と拠点回復効果を獲得。"
+  },
+  "3. 필수 소모품 보급": {
+    "en": "3. Essential Consumables Supply",
+    "ja": "3. 必須消耗品の補給"
+  },
+  "30% 복합 자원 약탈": {
+    "en": "30% Compound Resource Plunder",
+    "ja": "30% 複合資源略奪"
+  },
+  "30% 복합 자원 약탈: 침공 승리 시 골드 30%와 에테르 30%가 확정 약탈되며, 영지 생산자원(목재/석재/철광/식량) 중 1종, 파밍 재료(약초/가죽/실크/석탄/뼈) 중 1종, 심연 재료(마법수정/공허파편/접두석/접미석) 중 1종이 무작위로 각각 30%씩 일괄 약탈됩니다.": {
+    "en": "30% Compound Resource Plunder: Invasion victory guarantees 30% Gold and 30% Ether plundered, plus 30% from 1 random domain resource (Wood/Stone/Iron/Food), 1 farming material (Herb/Leather/Silk/Coal/Bone), and 1 abyssal material (Magic Crystal/Void Shard/Prefix Stone/Suffix Stone).",
+    "ja": "30%複合資源略奪: 侵攻勝利時、ゴールド30%とエーテル30%を確定略奪。さらに領地生産資源(木材/石材/鉄鉱/食糧)から1種、収集素材(薬草/革/シルク/石炭/骨)から1種、深淵素材(魔力結晶/虚無の欠片/接頭石/接尾石)から1種がランダムに各30%ずつ略奪されます。"
+  },
+  "30% 암흑 피해 & 시전자 MP 25 즉시 충전": {
+    "en": "30% Dark Damage & instantly charges 25 MP to caster",
+    "ja": "30% 暗黒ダメージ＆術者のMPを即座に25回復"
+  },
+  "30%를 약탈": {
+    "en": "Plunder 30%",
+    "ja": "30%を略奪"
+  },
+  "30칸 & 자원 스택 99": {
+    "en": "30 Slots & Resource Stack 99",
+    "ja": "30枠＆資源スタック99"
+  },
+  "3F 광맥 수호자 처치 정수": {
+    "en": "3F Vein Guardian Slaying Essence",
+    "ja": "3層鉱脈守護者討伐のエッセンス"
+  },
+  "3F 보스 [원초의 골렘]의 거대 암석 표피로 단조된 초중장갑.": {
+    "en": "Super-heavy armor forged from the massive rock skin of 3F Boss [Primal Golem].",
+    "ja": "3層ボス［原初のゴーレム］の巨大岩石表皮で鍛造された超重装甲。"
+  },
+  "3F 보스 [원초의 골렘]의 거암을 깎아 만든 묵직한 파쇄 망치.": {
+    "en": "Heavy crush hammer carved from the boulder of 3F Boss [Primal Golem].",
+    "ja": "3層ボス［原初のゴーレム］の巨岩を削り出した重厚な破砕ハンマー。"
+  },
+  "3F 보스 [원초의 골렘]의 고동치는 맥박을 품은 대지의 인장.": {
+    "en": "Earth seal bearing the throbbing pulse of 3F Boss [Primal Golem].",
+    "ja": "3層ボス［原初のゴーレム］の鼓動を宿した大地の印章。"
+  },
+  "3F 보스 처치 (100% 확정)": {
+    "en": "Defeat 3F Boss (100% Guaranteed)",
+    "ja": "3層ボス撃破 (100%確定)"
+  },
+  "3F 비기 마도서: 광맥의 마도 분출": {
+    "en": "3F Secret Grimoire: Arcane Eruption of the Vein",
+    "ja": "3層秘技魔導書: 鉱脈の魔導噴出"
+  },
+  "3F 에테르 광맥 던전 상자 / 광맥 발굴 / 보스 드랍": {
+    "en": "3F Ether Vein Dungeon Chest / Vein Excavation / Boss Drop",
+    "ja": "3層エーテル鉱脈 ダンジョン宝箱 / 鉱脈発掘 / ボスドロップ"
+  },
+  "3F 에테르 광맥 발굴품 페어. 고갈되는 자원을 대체할 무한 에너지를 찾기 위해 연구실에서 커피를 들이켜며 밤을 지새우던 과학자들의 흔적.": {
+    "en": "3F Ether Vein excavation pair: Traces of scientists staying up all night chugging coffee in laboratories to find infinite energy replacing depleted resources.",
+    "ja": "3層エーテル鉱脈の発掘品ペア。枯渇する資源に代わる無限エネルギーを求め、研究室でコーヒーをあおり夜を明かした科学者たちの痕跡。"
+  },
+  "3F 오파츠: 철야의 연구실 (리튬 배터리 & 머그잔)": {
+    "en": "3F Ooparts: All-night Lab (Lithium Battery & Mug)",
+    "ja": "3層オーパーツ: 徹夜の研究室 (リチウム電池＆マグカップ)"
+  },
+  "3F 원초의 골렘 보스 세트": {
+    "en": "3F Primal Golem Boss Set",
+    "ja": "3層原初のゴーレムボスセット"
+  },
+  "3F 원초의 골렘 세트": {
+    "en": "3F Primal Golem Set",
+    "ja": "3層原初のゴーレムセット"
+  },
+  "3F 회고록: 에테르 광맥의 탐욕과 붕괴": {
+    "en": "3F Memoir: Greed and Collapse of Ether Vein",
+    "ja": "3層回顧録: エーテル鉱脈の貪欲と崩壊"
+  },
+  "3v3 실시간 전장: 전/중/후열 진형 배치 기반 실시간 교전 및 수동 스킬 조작, 자동 전투(Auto), 2x 고속 배속, 즉시 스킵(Skip) 완벽 지원": {
+    "en": "3v3 Real-time Battlefield: Real-time engagement based on Front/Mid/Back formation, manual skill controls, Auto-battle, 2x speed, and instant Skip supported",
+    "ja": "3v3リアルタイム戦場: 前/中/後衛の陣形配置に基づくリアルタイム交戦および手動スキル操作、オート戦闘(Auto)、2倍速、即時スキップ(Skip)に完全対応"
+  },
+  "3v3 실시간 턴제 인터랙티브 전장에서 경쟁 지휘관과 겨루고, 승리로 획득한 투사의 인장을 모아 명예 암시장에서 최고급 장비와 보급함을 교환하는 PVP 시스템입니다.": {
+    "en": "A PVP system where commanders clash on a 3v3 real-time turn-based interactive battlefield, collecting Fighter's Seals from victories to exchange for top-tier gear and supply chests at the Black Market of Honor.",
+    "ja": "3v3リアルタイム・ターン制インタラクティブ戦場でライバル指揮官と競い合い、勝利で得た闘士の印章を集めて名誉ブラックマーケットで最高級装備や補給箱と交換するPVPシステム。"
+  },
+  "3v3 영광의 결투장 (Dimension Arena)": {
+    "en": "3v3 Colosseum of Glory (Dimension Arena)",
+    "ja": "3v3 栄光の闘技場 (Dimension Arena)"
+  },
+  "3v3 차원 아레나 제": {
+    "en": "3v3 Dimension Arena Tier",
+    "ja": "3v3 次元アリーナ第"
+  },
+  "3단계 1,000G": {
+    "en": "Stage 3: 1,000G",
+    "ja": "3段階 1,000G"
+  },
+  "3단계: [시공의 균열과 네메시스] - 차원 앵커 게이트 Lv.3 증축으로 균열 안정화": {
+    "en": "Stage 3: [Chrono Rift & Nemesis] - Stabilize rift by upgrading Dimensional Gate to Lv.3",
+    "ja": "3段階: ［時空の亀裂とネメシス］ - 次元アンカーゲートLv.3増築で亀裂を安定化"
+  },
+  "3단계: 차원의 왜곡 억제자": {
+    "en": "Stage 3: Dimensional Distortion Suppressor",
+    "ja": "3段階: 次元の歪み抑制者"
+  },
+  "3대 복합": {
+    "en": "3 Complex",
+    "ja": "3大複合"
+  },
+  "3대 분과 연구": {
+    "en": "3 Branch Studies",
+    "ja": "3大分科研究"
+  },
+  "3레벨로 증축된 병기창 모루에 고순도 에테르와 철광을 주입하면 무구의 숨겨진 힘이 깨어난다. 장비를 3강 이상으로 단련하여 잠재된 위력을 개방하라.": {
+    "en": "Infusing high-purity ether and iron ore into the forge anvil at Lv.3 awakens weapons' hidden power. Hone equipment to +3 or higher to unlock latent might.",
+    "ja": "Lv.3に増築された兵器廠の金床に高純度エーテルと鉄鉱石を注入すると、武具の秘められた力が目覚める。装備を+3以上に鍛錬し潜在威力を開放せよ。"
+  },
+  "3번째 동료 영입": {
+    "en": "Recruit 3rd Companion",
+    "ja": "3人目の仲間を雇用"
+  },
+  "3부작 에픽 시나리오": {
+    "en": "Trilogy Epic Scenario",
+    "ja": "3部作エピックシナリオ"
+  },
+  "3선발 + 1리더 + 1서포터": {
+    "en": "3 Starters + 1 Leader + 1 Supporter",
+    "ja": "3名先発 + 1名リーダー + 1名サポーター"
+  },
+  "3열 포지션 보너스": {
+    "en": "3-Row Position Bonus",
+    "ja": "3列ポジションボーナス"
+  },
+  "3인 선발 + 1인 리더 + 1인 서포터 교전 진행 중...": {
+    "en": "Combat in progress: 3 Starters + 1 Leader + 1 Supporter...",
+    "ja": "3名先発 + 1名リーダー + 1名サポーター 交戦中..."
+  },
+  "3인 선발 + 1인 리더 + 1인 서포터로 구성된 5인 차원 부대를 파견하여 다른 사령관의 영지를 침공하고 핵심 자원을 약탈하는 엔드 콘텐츠입니다.": {
+    "en": "Endgame content dispatching a 5-member dimensional squad (3 Starters + 1 Leader + 1 Supporter) to invade rival commanders' domains and plunder core resources.",
+    "ja": "3名先発＋1名リーダー＋1名サポーターで構成された5名の次元部隊を派遣し、他司令官の領地へ侵攻して中核資源を略奪するエンドコンテンツ。"
+  },
+  "3차 테크": {
+    "en": "Tech Tier 3",
+    "ja": "3次テック"
+  },
+  "3차(시들음)": {
+    "en": "Phase 3 (Wither)",
+    "ja": "3次(衰弱)"
+  },
+  "3차(저주)": {
+    "en": "Phase 3 (Curse)",
+    "ja": "3次(呪い)"
+  },
+  "3차(파쇄)": {
+    "en": "Phase 3 (Crush)",
+    "ja": "3次(破砕)"
+  },
+  "3층 광맥의 수호자 [원초의 골렘]의 거암을 깎아 만든 중장갑 세트.": {
+    "en": "Heavy armor set carved from the boulders of 3F Vein Guardian [Primal Golem].",
+    "ja": "3層鉱脈の守護者［原初のゴーレム］の巨岩を削り出した重装甲セット。"
+  },
+  "3층 광산 카트와 광부들의 유골 사이에서 찾아낸 3장의 채굴 일지 쪽지.": {
+    "en": "Three mining log notes retrieved from mine carts and miners' skeletons on 3F.",
+    "ja": "3層の鉱山トロッコと鉱夫たちの白骨の間から見つかった3枚の採掘日誌メモ。"
+  },
+  "3층 보스 [태고의 광맥 베히모스] 토벌 & 4층 해금": {
+    "en": "Subjugate 3F Boss [Ancient Vein Behemoth] & Unlock 4F",
+    "ja": "3層ボス［太古の鉱脈ベヒモス］討伐＆4層開放"
+  },
+  "3층 에테르 광맥의 수호 거수 [태고의 광맥 베히모스]를 토벌하고 4층 [심연의 균열] 진입로를 개방하세요.": {
+    "en": "Subjugate guardian behemoth [Ancient Vein Behemoth] in 3F Ether Vein and open the path to 4F [Abyssal Rift].",
+    "ja": "3層エーテル鉱脈の守護巨獣［太古の鉱脈ベヒモス］を討伐し、4層［深淵の亀裂］進入路を開放せよ。"
+  },
+  "3층 연금술사 이안 접선 ➔ 6층 자홍빛 시약 3병 회수 ➔ 9층 만화경 속 복제 자아와의 결판으로 이어지는 3단계 연계 서사입니다.": {
+    "en": "A 3-part linked saga: Contact 3F Alchemist Ian ➔ Recover 3 bottles of magenta reagent on 6F ➔ Settle with the mirror self in 9F Kaleidoscope.",
+    "ja": "3層錬金術師イアンと接触 ➔ 6層深紅の試薬3瓶回収 ➔ 9層万華鏡の複製自我との決着へと続く3段階連係叙事詩。"
+  },
+  "3층 회고록 쪽지": {
+    "en": "3F Memoir Note",
+    "ja": "3層の回顧録メモ"
+  },
+  "3층: MP 소모량 1.2배 (+20%)": {
+    "en": "3F: MP cost x1.2 (+20%)",
+    "ja": "3層: MP消費量1.2倍 (+20%)"
+  },
+  "3층: 에테르 광맥 (위험도 중)": {
+    "en": "3F: Ether Vein (Medium Hazard)",
+    "ja": "3層: エーテル鉱脈 (危険度・中)"
+  },
+  "3층과 4층의 광폭화 지배자를 쓰러뜨리고 [원초의 광맥 심장]과 [심연의 시공 닻]을 회수하여 차원 축을 고정하세요.": {
+    "en": "Defeat berserk rulers of 3F and 4F, retrieve [Primal Vein Heart] and [Chrono Anchor of Abyss] to anchor the dimensional axis.",
+    "ja": "3層と4層の狂暴化支配者を倒し、［原初の鉱脈心臓］と［深淵の時空錨］を回収して次元軸を固定せよ。"
+  },
+  "3턴 충전 후 아군 전체에게 350% 궤멸적 전멸 피해!": {
+    "en": "Charges for 3 turns, then deals 350% annihilating damage to all allies!",
+    "ja": "3ターンチャージ後、味方全体に350%の壊滅的壊滅ダメージ！"
+  },
+  "3턴간 사망에 이르는 피해를 받아도 체력 1로 생존 및 공격력 100% 강화": {
+    "en": "Survives lethal damage with 1 HP and boosts ATK by 100% for 3 turns",
+    "ja": "3ターン致死ダメージを受けてもHP1で生存＆攻撃力100%強化"
+  },
+  "3턴간 회피율 50% 증폭 및 회피 성공 시마다 공격자에게 즉시 140% 환영 반격": {
+    "en": "Increases EVA by 50% for 3 turns; each successful evade instantly counterattacks with 140% phantom strike",
+    "ja": "3ターン回避率50%増幅＆回避成功ごとに攻撃者へ即座に140%幻影反撃"
+  },
+  "4. 3인 파티 완성: 주점(라운지)을 건설하고 3번째 용병을 영입해야 침묵의 회랑 출전이 가능해집니다.": {
+    "en": "4. Form 3-Hero Party: Build the Tavern (Lounge) and recruit a 3rd mercenary to embark into Silent Cloister.",
+    "ja": "4. 3人パーティ結成: 酒場(ラウンジ)を建設し、3人目の傭兵を雇用することで沈黙の回廊へ出撃可能になります。"
+  },
+  "4. 견습 사제 (Cleric)": {
+    "en": "4. Apprentice Cleric (Cleric)",
+    "ja": "4. 見習い僧侶 (Cleric)"
+  },
+  "4. 보유 기간 및 파기 절차": {
+    "en": "4. Retention Period and Destruction Procedures",
+    "ja": "4. 保有期間および破棄手続き"
+  },
+  "4. 💡 보상 즉시 수령 원칙: 퀘스트 완수 후 의뢰소 상단에서 깜빡이는 [보상 수령]을 터치해야만 다음 연계 퀘스트 및 상위 시설 건설 권한이 순차적으로 개방됩니다.": {
+    "en": "4. 💡 Instant Reward Claim: Tap the flashing [Claim Reward] at the top of the quest board upon completion to unlock subsequent quests and higher facility construction.",
+    "ja": "4. 💡 報酬即時受取の原則: クエスト完了後、依頼所上部で点滅する［報酬受取］をタップして初めて次の連係クエストと上位施設建設権限が順次開放されます。"
+  },
+  "40% 화염 소용돌이 폭발 & 적 전체 화상 확산": {
+    "en": "40% Flame Vortex explosion & spreads Burn to all enemies",
+    "ja": "40% 火炎の渦爆発＆敵全体に火傷拡散"
+  },
+  "4F 보스 [심연의 시공 왜곡자]가 시공간 균열을 개방하고 비전 마력을 방출하던 고유 지팡이.": {
+    "en": "Unique staff with which 4F Boss [Abyssal Chrono Warper] tore open space-time rifts and unleashed arcane mana.",
+    "ja": "4層ボス［深淵の時空歪曲者］が時空の亀裂を開き秘術魔力を放出した固有杖。"
+  },
+  "4F 보스 [심연의 시공 왜곡자]의 시공간 왜곡 에테르가 응축된 신비로운 마도 장신구.": {
+    "en": "Mysterious arcane accessory condensing space-time warping ether of 4F Boss [Abyssal Chrono Warper].",
+    "ja": "4層ボス［深淵の時空歪曲者］の時空歪曲エーテルが凝縮された神秘的な魔導装飾品。"
+  },
+  "4F 보스 [심연의 시공 왜곡자]의 왜곡된 마력 결계와 성운 기류가 깃든 고유 로브.": {
+    "en": "Unique robe imbued with warped mana barrier and astral airflow of 4F Boss [Abyssal Chrono Warper].",
+    "ja": "4層ボス［深淵の時空歪曲者］の歪んだ魔力結界と星雲気流が宿る固有ローブ。"
+  },
+  "4F 보스 처치 (100% 확정)": {
+    "en": "Defeat 4F Boss (100% Guaranteed)",
+    "ja": "4層ボス撃破 (100%確定)"
+  },
+  "4F 비기 마도서: 시공간 차원 붕괴": {
+    "en": "4F Secret Grimoire: Spatiotemporal Dimensional Collapse",
+    "ja": "4層秘技魔導書: 時空間次元崩壊"
+  },
+  "4F 시공 지배자 처치 정수": {
+    "en": "4F Chrono Ruler Slaying Essence",
+    "ja": "4層時空の支配者討伐のエッセンス"
+  },
+  "4F 심연 시공왜곡 세트": {
+    "en": "4F Abyssal Chrono Distortion Set",
+    "ja": "4層深淵時空歪曲セット"
+  },
+  "4F 심연의 균열 던전 상자 / 보스 드랍": {
+    "en": "4F Abyssal Rift Dungeon Chest / Boss Drop",
+    "ja": "4層深淵の亀裂 ダンジョン宝箱 / ボスドロップ"
+  },
+  "4F 심연의 균열 발굴품 페어. 거대 도시의 지하 신경망 노선도와 공습 사이렌 속에서 11시 47분에 멈춰버린 정밀 바늘 시계의 비극.": {
+    "en": "4F Abyssal Rift excavation pair: The tragedy of an underground transit map of a metropolis, and a precision needle watch frozen at 11:47 amid air raid sirens.",
+    "ja": "4層深淵の亀裂の発掘品ペア。大都市の地下神経網路線図と、空襲サイレンの中11時47分で止まった精密針時計の悲劇。"
+  },
+  "4F 심연의 시공 왜곡자 보스 세트": {
+    "en": "4F Abyssal Chrono Warper Boss Set",
+    "ja": "4層深淵の時空歪曲者ボスセット"
+  }
+}

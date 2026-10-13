@@ -1,0 +1,802 @@
+{
+  "인증에 실패했습니다.": {
+    "en": "Authentication failed.",
+    "ja": "認証に失敗しました。"
+  },
+  "인챈트": {
+    "en": "Enchant",
+    "ja": "エンチャント"
+  },
+  "인챈트 마도석 • {0}": {
+    "en": "Enchant Magic Stone • {0}",
+    "ja": "エンチャント魔導石 • {0}"
+  },
+  "인챈트 마도석 재고 확대 & 🪙 +10G/15초 & 유지비 주기 26초": {
+    "en": "Expand Enchant Magic Stone stock & 🪙 +10G/15s & Upkeep period 26s",
+    "ja": "エンチャント魔導石の在庫拡大＆🪙 +10G/15秒＆維持費周期26秒"
+  },
+  "인챈트 마도석의 암시장 재고를 대폭 확충하고 유지비 지불 주기를 26초로 연장합니다.": {
+    "en": "Greatly expands black market stock of enchant magic stones and extends upkeep payment interval to 26s.",
+    "ja": "エンチャント魔導石の闇市在庫を大幅に拡充し、維持費支払周期を26秒に延長します。"
+  },
+  "인챈트 백과": {
+    "en": "Enchant Encyclopedia",
+    "ja": "エンチャント百科"
+  },
+  "인챈트 부여 고유 스킬: [": {
+    "en": "Enchant Granted Unique Skill: [",
+    "ja": "エンチャント付与固有スキル: ["
+  },
+  "인챈트 불가: [접두어] 인챈트는 +3강 이상 장비에만 가능합니다! (현재 +{0})": {
+    "en": "Cannot Enchant: [Prefix] enchant is only available on gear enhanced to +3 or higher! (Currently +{0})",
+    "ja": "エンチャント不可: [接頭辞]エンチャントは+3強化以上の装備にのみ可能です！(現在 +{0})"
+  },
+  "인챈트 불가: [접미어] 인챈트는 +7강 이상 장비에만 가능합니다! (현재 +{0})": {
+    "en": "Cannot Enchant: [Suffix] enchant is only available on gear enhanced to +7 or higher! (Currently +{0})",
+    "ja": "エンチャント不可: [接尾辞]エンチャントは+7強化以上の装備にのみ可能です！(現在 +{0})"
+  },
+  "인챈트 불가: 마도 대장간 Lv.{0} 이상 증축이 필요합니다!": {
+    "en": "Cannot Enchant: Arcane Forge must be upgraded to Lv.{0} or higher!",
+    "ja": "エンチャント不可: 魔導鍛冶屋Lv.{0}以上の増築が必要です！"
+  },
+  "인챈트 성공 확률 & 무페널티: 기본 20%에서 시작하며, 병기창 Lv.6 초과 시 1레벨당 +5%씩 증가 (Lv.1~6: 20%, Lv.7: 25%, Lv.8: 30%, Lv.9: 35%, Lv.10: 40%). 실패 시 장비 파괴나 하락 페널티가 없습니다.": {
+    "en": "Enchant Success Rate & No Penalties: Starts at base 20%, increases by +5% per level above Armory Lv.6 (Lv.1-6: 20%, Lv.7: 25%, Lv.8: 30%, Lv.9: 35%, Lv.10: 40%). No gear destruction or downgrade penalty on failure.",
+    "ja": "エンチャント成功確率＆ペナルティなし: 基本20%から始まり、兵器廠Lv.6超過時は1レベルごとに+5%ずつ増加 (Lv.1~6: 20%, Lv.7: 25%, Lv.8: 30%, Lv.9: 35%, Lv.10: 40%)。失敗時の装備破壊や低下ペナルティはありません。"
+  },
+  "인챈트 속성은 강화되지 않습니다.": {
+    "en": "Enchanted attributes are not enhanced.",
+    "ja": "エンチャント属性は強化されません。"
+  },
+  "인챈트 실패: [{0}]이(가) 부족합니다! ({1}/{2}개 필요)": {
+    "en": "Enchant Failed: Not enough [{0}]! ({1}/{2} needed)",
+    "ja": "エンチャント失敗: [{0}]が不足しています！({1}/{2}個必要)"
+  },
+  "인챈트 실패: 골드({0}) 또는 에테르({1})가 부족합니다!": {
+    "en": "Enchant Failed: Insufficient Gold ({0}) or Ether ({1})!",
+    "ja": "エンチャント失敗: ゴールド({0})またはエーテル({1})が不足しています！"
+  },
+  "인챈트석 소모량: 장비 등급에 비례하여 소모 (일반: 1개, 희귀: 2개, 에픽: 3개, 고유: 4개, 전설: 5개)": {
+    "en": "Enchant Stone Cost: Consumed in proportion to gear rarity (Common: 1, Rare: 2, Epic: 3, Unique: 4, Legendary: 5)",
+    "ja": "エンチャント石消費量: 装備等級に比例して消費 (一般: 1個、希少: 2個、エピック: 3個、固有: 4個、伝説: 5個)"
+  },
+  "인터넷 연결이 불안정합니다. 네트워크 상태를 확인해 주세요.": {
+    "en": "Internet connection is unstable. Please check your network status.",
+    "ja": "インターネット接続が不安定です。ネットワーク状態を確認してください。"
+  },
+  "인프라": {
+    "en": "Infrastructure",
+    "ja": "インフラ"
+  },
+  "일격": {
+    "en": "Strike",
+    "ja": "一撃"
+  },
+  "일괄 판매": {
+    "en": "Batch Sell",
+    "ja": "一括売却"
+  },
+  "일괄 판매 (": {
+    "en": "Batch Sell (",
+    "ja": "一括売却 ("
+  },
+  "일괄 판매 모드": {
+    "en": "Batch Sell Mode",
+    "ja": "一括売却モード"
+  },
+  "일괄 판매 실행 (+🪙{0}G)": {
+    "en": "Execute Batch Sell (+🪙{0}G)",
+    "ja": "一括売却実行 (+🪙{0}G)"
+  },
+  "일레인": {
+    "en": "Elaine",
+    "ja": "エレイン"
+  },
+  "일루전": {
+    "en": "Illusion",
+    "ja": "イリュージョン"
+  },
+  "일루전 스트라이크": {
+    "en": "Illusion Strike",
+    "ja": "イリュージョンストライク"
+  },
+  "일반": {
+    "en": "Normal",
+    "ja": "一般"
+  },
+  "일반 (N)": {
+    "en": "Common (N)",
+    "ja": "一般 (N)"
+  },
+  "일반 공격": {
+    "en": "Basic Attack",
+    "ja": "通常攻撃"
+  },
+  "일반 공격 시 25% 확률로 동료의 원호 공격(Assist Attack)": {
+    "en": "25% chance of ally Assist Attack on basic attack",
+    "ja": "通常攻撃時25%の確率で仲間の援護攻撃(Assist Attack)"
+  },
+  "일반 및 희귀 등급 장비만 원클릭 선택": {
+    "en": "One-click select Common and Rare gear only",
+    "ja": "一般および希少等級の装備のみワンクリック選択"
+  },
+  "일반 보급품": {
+    "en": "Normal Supplies",
+    "ja": "通常補給品"
+  },
+  "일반 인챈트": {
+    "en": "Normal Enchant",
+    "ja": "一般エンチャント"
+  },
+  "일반 접두석": {
+    "en": "Prefix Stone",
+    "ja": "一般接頭石"
+  },
+  "일반 접미석": {
+    "en": "Suffix Stone",
+    "ja": "一般接尾石"
+  },
+  "일반(N)부터 전설(L) 등급까지 레벨업 시 상승하는 기본 스탯 폭과 행운 성장률을 차등화하여, 고등급 영웅의 위상과 육성의 보람을 극대화했습니다.": {
+    "en": "Differentiated base stat increases and LUCK growth rates upon leveling up from Common (N) to Legendary (L) to maximize the prestige and rewards of high-tier heroes.",
+    "ja": "一般(N)から伝説(L)等級までレベルアップ時に上昇する基本ステータス幅と幸運成長率を差別化し、高階級の英雄の地位と育成の手応えを最大化しました。"
+  },
+  "일반/희귀 선택": {
+    "en": "Select Common/Rare",
+    "ja": "一般/希少選択"
+  },
+  "일반석 후보 풀 (희귀~에픽)": {
+    "en": "Standard Stone Pool (Rare to Epic)",
+    "ja": "一般石候補プール (希少~エピック)"
+  },
+  "일반적인 강철은 흑무의 산성에 녹아내린다. 심연의 마물에 맞설 전술 무구를 단조하기 위해 먼저 병기창을 복원하라.": {
+    "en": "Ordinary steel melts away in the acidity of the black fog. Restore the armory first to forge tactical weaponry against abyssal fiends.",
+    "ja": "通常の鋼は黒霧の酸性に溶けてしまう。深淵の魔物に立ち向かう戦術武具を鍛造するため、まず兵器廠を復元せよ。"
+  },
+  "일부만 담았습니다": {
+    "en": "Only partially loaded",
+    "ja": "一部のみ収録しました"
+  },
+  "일일 도전 횟수": {
+    "en": "Daily Challenges",
+    "ja": "デイリー挑戦回数"
+  },
+  "일일 침공 3회 & 8시간 자동 보호막": {
+    "en": "3 Daily Invasions & 8-hour Auto Shield",
+    "ja": "デイリー侵攻3回＆8時間自動シールド"
+  },
+  "일일 토벌 도전 횟수를 모두 소진했습니다! 에테르로 충전 가능합니다.": {
+    "en": "You have used all daily subjugation attempts! Can be recharged with Ether.",
+    "ja": "デイリー討伐挑戦回数を使い果たしました！エーテルで再充電可能です。"
+  },
+  "잃어버린 에테르 동력핵과 태초의 모노리스": {
+    "en": "Lost Ether Power Core and Primordial Monolith",
+    "ja": "失われたエーテル動力核と太古のモノリス"
+  },
+  "임무": {
+    "en": "Mission",
+    "ja": "任務"
+  },
+  "입니다.": {
+    "en": "is.",
+    "ja": "です。"
+  },
+  "입니다. 월등한 효과의": {
+    "en": ". With superior effects,",
+    "ja": "です。格段の効果を持つ"
+  },
+  "입문 ~ 중급": {
+    "en": "Introductory - Intermediate",
+    "ja": "入門〜中級"
+  },
+  "입원 중": {
+    "en": "Hospitalized",
+    "ja": "入院中"
+  },
+  "입원 중인 용병은 해고할 수 없습니다": {
+    "en": "Hospitalized mercenaries cannot be dismissed",
+    "ja": "入院中の傭兵は解雇できません"
+  },
+  "입원 환자 포함 (출전 불가)": {
+    "en": "Includes hospitalized patients (Cannot deploy)",
+    "ja": "入院患者を含む (出撃不可)"
+  },
+  "입장": {
+    "en": "Enter",
+    "ja": "入場"
+  },
+  "자기 테이프에 소리와 음악을 기록하여 재생하던 아날로그 저장 매체입니다. 손글씨로 앨범 제목이 적혀 있습니다.": {
+    "en": "An analog storage medium that recorded and played sound and music on magnetic tape. The album title is handwritten on it.",
+    "ja": "磁気テープに音や音楽を記録して再生していたアナログ記憶媒体。手書きでアルバム名が記されている。"
+  },
+  "자동 전투 1.5배 가속 및 스킬 콤보 / 막타 스마트 AI 알고리즘 적용": {
+    "en": "1.5x Auto-battle speedup with skill combos / smart last-hit AI algorithms",
+    "ja": "自動戦闘1.5倍加速＆スキルコンボ/トドメのスマートAIアルゴリズム適用"
+  },
+  "자동 전투 진행 시 턴 연출 및 전투 속도가 1.5배 가속되며, 아군 간 상태이상 콤보 폭발을 최우선으로 시전하고 일반 공격으로 처치 가능한 체력일 경우 마나를 아끼는 스마트 전투 알고리즘이 적용되었습니다.": {
+    "en": "During auto-battle, turn animations and battle speed are accelerated by 1.5x. A smart combat algorithm prioritizes status ailment combo bursts between allies and conserves MP if the target can be finished with basic attacks.",
+    "ja": "自動戦闘時、ターン演出と戦闘速度が1.5倍に加速され、味方間の状態異常コンボ爆発を最優先で発動し、通常攻撃で撃破可能なHPの場合はマナを温存するスマート戦闘アルゴリズムが適用されました。"
+  },
+  "자동 치료 및 충전 중...": {
+    "en": "Auto-healing and charging...",
+    "ja": "自動治療および充電中..."
+  },
+  "자동 타워 포격": {
+    "en": "Auto Tower Bombardment",
+    "ja": "自動タワー砲撃"
+  },
+  "자동 포격 & 성역 재생": {
+    "en": "Auto Bombardment & Sanctuary Regeneration",
+    "ja": "自動砲撃＆聖域再生"
+  },
+  "자동 포격(-{0})": {
+    "en": "Auto Bombardment (-{0})",
+    "ja": "自動砲撃(-{0})"
+  },
+  "자세 붕괴": {
+    "en": "Stance Collapse",
+    "ja": "体勢崩壊"
+  },
+  "자세 붕괴 (Stance Collapse)": {
+    "en": "Stance Collapse",
+    "ja": "体勢崩壊 (Stance Collapse)"
+  },
+  "자신": {
+    "en": "Self",
+    "ja": "自身"
+  },
+  "자신 (시전자)": {
+    "en": "Self (Caster)",
+    "ja": "自身 (詠唱者)"
+  },
+  "자신 100% 보호막 (2턴)": {
+    "en": "100% Shield to self (2 turns)",
+    "ja": "自身に100%シールド (2ターン)"
+  },
+  "자신 200% 보호막 + 2턴 도발": {
+    "en": "200% Shield to self + Taunt for 2 turns",
+    "ja": "自身に200%シールド + 2ターン挑発"
+  },
+  "자신 체력": {
+    "en": "Self HP",
+    "ja": "自身のHP"
+  },
+  "자신에게 100% 보호막을 2턴간 부여합니다.": {
+    "en": "Grants a 100% Shield to self for 2 turns.",
+    "ja": "自身に100%シールドを2ターン付与する。"
+  },
+  "자신에게 120% 보호막 부여 (2턴)": {
+    "en": "Grants a 120% Shield to self (2 turns)",
+    "ja": "自身に120%シールド付与 (2ターン)"
+  },
+  "자신에게 200% 대형 보호막을 치고 2턴간 도발 상태에 돌입합니다.": {
+    "en": "Deploys a 200% large shield on self and enters taunt state for 2 turns.",
+    "ja": "自身に200%大型シールドを展開し、2ターンの間挑発状態に突入する。"
+  },
+  "자신에게 2턴간 30% 피해 흡수 방벽 전개": {
+    "en": "Deploys a 30% damage absorption barrier on self for 2 turns",
+    "ja": "自身に2ターン30%ダメージ吸収障壁を展開"
+  },
+  "자신에게 2턴간 30% 회피율 및 치명타율 버프": {
+    "en": "Buffs self with +30% Evasion and Crit Rate for 2 turns",
+    "ja": "自身に2ターン回避率および会心率+30%バフ"
+  },
+  "자신에게 2턴간 [은신] 및 다음 턴 공격 대미지 70% 증폭 버프": {
+    "en": "Buffs self with [Stealth] for 2 turns and 70% amplified attack damage next turn",
+    "ja": "自身に2ターン[隠密]および次ターン攻撃ダメージ70%増幅バフ"
+  },
+  "자신에게 2턴간 [은신] 부여 및 다음 공격 대미지 100% 폭풍 증폭": {
+    "en": "Grants [Stealth] to self for 2 turns and heavily amplifies next attack damage by 100%",
+    "ja": "自身に2ターン[隠密]付与および次の攻撃ダメージ100%爆発的増幅"
+  },
+  "자신에게 2턴간 받는 피해 35% 감소 방벽": {
+    "en": "Barrier that reduces damage taken by 35% for 2 turns on self",
+    "ja": "自身に2ターン被ダメージ35%減少障壁"
+  },
+  "자신에게 300% 보호막": {
+    "en": "300% Shield to self",
+    "ja": "自身に300%シールド"
+  },
+  "자신에게 최대 체력 50%의 난공불락 방벽을 전개하고 2턴간 적들의 모든 공격을 도발": {
+    "en": "Deploys an impregnable barrier of 50% max HP on self and taunts all enemy attacks for 2 turns",
+    "ja": "自身に最大HPの50%の難攻不落障壁を展開し、2ターン敵の全攻撃を挑発"
+  },
+  "자신에게 최대 체력의 35% 보호막 전개 2턴": {
+    "en": "Deploys a shield equal to 35% max HP on self for 2 turns",
+    "ja": "自身に最大HPの35%シールドを展開 (2ターン)"
+  },
+  "자신의 공격력을 2턴간 25% 상승시키고 마나를 10 회복": {
+    "en": "Increases own ATK by 25% for 2 turns and restores 10 MP",
+    "ja": "自身の攻撃力を2ターン25%上昇させマナを10回復"
+  },
+  "자신의 방어력을 2턴간 40% 강화": {
+    "en": "Enhances own DEF by 40% for 2 turns",
+    "ja": "自身の防御力を2ターン40%強化"
+  },
+  "자신의 방어력을 3턴간 50% 증폭": {
+    "en": "Amplifies own DEF by 50% for 3 turns",
+    "ja": "自身の防御力を3ターン50%増幅"
+  },
+  "자신의 잃은 체력에 비례하여 최대 250% 파멸의 참격을 적 1체에 꽂아넣습니다.": {
+    "en": "Delivers a devastating slash of up to 250% to 1 enemy, scaling with lost HP.",
+    "ja": "自身の失ったHPに比例して最大250%の破滅の斬撃を敵1体に叩き込む。"
+  },
+  "자신의 잃은 체력에 비례하여 최대 450%의 행성 파괴급 일격을 적 전체에 퍼붓습니다.": {
+    "en": "Unleashes a planet-shattering blow of up to 450% on all enemies, scaling with lost HP.",
+    "ja": "自身の失ったHPに比例して最大450%の惑星破壊級の一撃を敵全体に浴びせる。"
+  },
+  "자신의 체력을 25% 회복하고 방어력 20% 증가": {
+    "en": "Restores 25% HP to self and increases DEF by 20%",
+    "ja": "自身のHPを25%回復し防御力20%増加"
+  },
+  "자신의 체력을 30% 즉시 재생": {
+    "en": "Instantly regenerates 30% HP of self",
+    "ja": "自身のHPを30%即時再生"
+  },
+  "자신의 체력이 낮아질수록 공격력이 기하급수적으로 폭증하며 흡혈 일격으로 자가 회복합니다.": {
+    "en": "ATK increases exponentially the lower self HP falls, self-healing with lifesteal strikes.",
+    "ja": "自身のHPが下がるほど攻撃力が指数関数的に激増し、吸血一撃で自己回復する。"
+  },
+  "자신의 치명타율을 3턴간 50% 증폭하고 아군 전체의 모든 스킬 쿨다운 1턴 단축": {
+    "en": "Amplifies own Crit Rate by 50% for 3 turns and reduces all allies' skill cooldowns by 1 turn",
+    "ja": "自身の会心率を3ターン50%増幅し味方全員の全スキルクールダウンを1ターン短縮"
+  },
+  "자애로운 대성녀 예복 +10": {
+    "en": "Benevolent Saintess Vestment +10",
+    "ja": "慈愛の大聖女の礼服 +10"
+  },
+  "자애로운 마음: 치료 대상 아군에게 1턴간 방어력 +15% 버프.": {
+    "en": "Benevolent Heart: Buffs healed ally with +15% DEF for 1 turn.",
+    "ja": "慈愛の心: 治療対象の味方に1ターン防御力+15%バフ。"
+  },
+  "자원": {
+    "en": "Resources",
+    "ja": "資源"
+  },
+  "자원 (16)": {
+    "en": "Resources (16)",
+    "ja": "資源 (16)"
+  },
+  "자원 도감 —": {
+    "en": "Resource Codex —",
+    "ja": "資源図鑑 —"
+  },
+  "자원 부족": {
+    "en": "Insufficient Resources",
+    "ja": "資源不足"
+  },
+  "자원 상세 설명": {
+    "en": "Resource Details",
+    "ja": "資源詳細説明"
+  },
+  "자원 생산 +": {
+    "en": "Resource Production +",
+    "ja": "資源生産 +"
+  },
+  "자원 생산력 +8% & 방어력 +10": {
+    "en": "Resource Production +8% & DEF +10",
+    "ja": "資源生産力+8%＆防御力+10"
+  },
+  "자원 일괄 거래 — {0}": {
+    "en": "Batch Resource Trade — {0}",
+    "ja": "資源一括取引 — {0}"
+  },
+  "자원 최적화: 불필요한 시설을 선택적으로 정지하여 식량/골드/에테르 흑자 유지 가능": {
+    "en": "Resource Optimization: Selectively pause unnecessary facilities to maintain surplus Food/Gold/Ether",
+    "ja": "資源最適化: 不要な施設を選択的に停止し食糧/ゴールド/エーテルの黒字を維持可能"
+  },
+  "자원 환전 & 비전서 거래": {
+    "en": "Resource Exchange & Grimoire Trade",
+    "ja": "資源換金＆魔導書取引"
+  },
+  "자원이 부족합니다! 부족한 자원: {0}": {
+    "en": "Insufficient resources! Missing: {0}",
+    "ja": "資源が不足しています！不足資源: {0}"
+  },
+  "자원이 부족합니다: {0} 필요량({1}) > 보유량({2})": {
+    "en": "Insufficient resources: {0} required ({1}) > in possession ({2})",
+    "ja": "資源が不足しています: {0} 必要量({1}) > 所持量({2})"
+  },
+  "자유 용병단": {
+    "en": "Free Mercenary Guild",
+    "ja": "自由傭兵団"
+  },
+  "자유 위치": {
+    "en": "Free Position",
+    "ja": "自由位置"
+  },
+  "자주 묻는 질문 (FAQ)": {
+    "en": "Frequently Asked Questions (FAQ)",
+    "ja": "よくある質問 (FAQ)"
+  },
+  "자주 묻는 질문 (FAQ) & 방주 생존 수칙": {
+    "en": "Frequently Asked Questions (FAQ) & Ark Survival Guidelines",
+    "ja": "よくある質問 (FAQ)＆方舟生存心得"
+  },
+  "자체 주방과 농장 네트워크를 통한 식량 자체 조달을 가동하여 주점 자체에서 15초마다 식량을 생산하기 시작합니다.": {
+    "en": "Initiates in-house food production through kitchens and farm networks, producing food in the tavern every 15s.",
+    "ja": "自前の厨房と農場ネットワークによる食糧自給を稼働させ、酒場自体で15秒ごとに食糧を生産し始めます。"
+  },
+  "작열": {
+    "en": "Scorching",
+    "ja": "灼熱"
+  },
+  "작열의 혈염파": {
+    "en": "Scorching Bloodflame Wave",
+    "ja": "灼熱の血炎波"
+  },
+  "작은 마력 구체가 임계점을 넘는 순간, 전장은 푸른 섬광의 지옥으로 화한다.": {
+    "en": "The moment the tiny magical sphere exceeds its critical point, the battlefield turns into a hell of blue flashes.",
+    "ja": "小さな魔力球が臨界点を超えた瞬間、戦場は青い閃光の地獄と化す。"
+  },
+  "작전 지침: 첫 번째 임무를 확인하십시오": {
+    "en": "Operational Directives: Check your first mission",
+    "ja": "作戦指針: 最初の任務を確認してください"
+  },
+  "잠금": {
+    "en": "Lock",
+    "ja": "ロック"
+  },
+  "잠긴 고대 석관 및 보물 상자 안전 개방": {
+    "en": "Safely open locked ancient sarcophagi and treasure chests",
+    "ja": "施錠された古代石棺および宝箱の安全開放"
+  },
+  "잠긴 보물 상자 및 고대 석관 100% 안전 개방": {
+    "en": "100% safely open locked treasure chests and ancient sarcophagi",
+    "ja": "施錠された宝箱および古代石棺を100%安全に開放"
+  },
+  "잠긴 보물 상자 안전 개방 및 고급 전리품 획득": {
+    "en": "Safely open locked treasure chests and obtain premium loot",
+    "ja": "施錠された宝箱の安全開放および高級戦利品の獲得"
+  },
+  "잠긴 상자/석관 100% 안전 개방 (귀환 보존)": {
+    "en": "100% safely open locked chests/sarcophagi (Retained on return)",
+    "ja": "施錠された箱/石棺を100%安全に開放 (帰還時保存)"
+  },
+  "잠긴 상자/석관 100% 안전 개방 + 저주받은 장비 획득 확률 +50% 추가": {
+    "en": "100% safely open locked chests/sarcophagi + Cursed gear drop rate +50%",
+    "ja": "施錠された箱/石棺を100%安全に開放 + 呪われた装備獲得確率+50%追加"
+  },
+  "잠김": {
+    "en": "Locked",
+    "ja": "ロック中"
+  },
+  "장궁": {
+    "en": "Longbow",
+    "ja": "長弓"
+  },
+  "장벽": {
+    "en": "Barrier",
+    "ja": "障壁"
+  },
+  "장비": {
+    "en": "Equipment",
+    "ja": "装備"
+  },
+  "장비 & 마도 라인: 심연의 병기창 ➔ 첫 장비 단조 ➔ 에테르 연금 공방 ➔ 비전 마도서 제본 ➔ 황혼의 블랙 마켓으로 이어지는 제작 및 무역 테크": {
+    "en": "Equipment & Arcane Line: Crafting and trade tech tree connecting Ark Armory & Forge ➔ First gear forge ➔ Aether Alchemy Lab ➔ Arcane Grimoire binding ➔ Twilight Black Market",
+    "ja": "装備＆魔導ライン: 深淵の兵器廠 ➔ 最初の装備鍛造 ➔ エーテル錬金工房 ➔ 秘術魔導書の製本 ➔ 黄昏のブラックマーケットへと繋がる製作・貿易テック"
+  },
+  "장비 & 인챈트": {
+    "en": "Equipment & Enchant",
+    "ja": "装備＆エンチャント"
+  },
+  "장비 ({0})": {
+    "en": "Equipment ({0})",
+    "ja": "装備 ({0})"
+  },
+  "장비 각성 (Awakening) - ★": {
+    "en": "Equipment Awakening - ★",
+    "ja": "装備覚醒 (Awakening) - ★"
+  },
+  "장비 각성 불가: 마도 병기창 Lv.10 이상 증축이 필요합니다!": {
+    "en": "Cannot Awaken Equipment: Ark Armory & Forge Lv.10 or higher required!",
+    "ja": "装備覚醒不可: 魔導兵器廠Lv.10以上の増築が必要です！"
+  },
+  "장비 강화 레벨업": {
+    "en": "Equipment Enhancement Level Up",
+    "ja": "装備強化レベルアップ"
+  },
+  "장비 강화 보너스 & 추가 인장 획득": {
+    "en": "Equipment Enhancement Bonus & Extra Sigil Acquisition",
+    "ja": "装備強化ボーナス＆追加印章獲得"
+  },
+  "장비 강화 시설은 대장간을": {
+    "en": "For equipment enhancement, forge",
+    "ja": "装備強化施設は鍛冶屋を"
+  },
+  "장비 공방. 전술 무기 및 방어구 단조, 장비 강화 및 인챈트를 수행합니다.": {
+    "en": "Tactical armory. Forge weapons/armor, enhance up to +10, apply enchants.",
+    "ja": "装備工房。戦術武器・防具の鍛造、装備強化およびエンチャントを行います。"
+  },
+  "장비 기본 능력치 보정": {
+    "en": "Equipment Base Stat Calibration",
+    "ja": "装備基本能力値補正"
+  },
+  "장비 단조 & 마도석 인챈트 도감": {
+    "en": "Equipment Forging & Magic Stone Enchant Codex",
+    "ja": "装備鍛造＆魔導石エンチャント図鑑"
+  },
+  "장비 단조 • {0}": {
+    "en": "Forge Equipment • {0}",
+    "ja": "装備鍛造 • {0}"
+  },
+  "장비 단조 공정": {
+    "en": "Equipment Forging Process",
+    "ja": "装備鍛造工程"
+  },
+  "장비 단조 상세 모달 (스탯 ±30% 랜덤 편차) & 직업군 제작 재료 테마 연계": {
+    "en": "Equipment Forge Detail Modal (Stats ±30% random variance) & Class-linked crafting materials",
+    "ja": "装備鍛造詳細モーダル (ステータス±30%ランダム偏差)＆職業群別製作材料連動"
+  },
+  "장비 단조 완성!": {
+    "en": "Equipment Forging Complete!",
+    "ja": "装備鍛造完了！"
+  },
+  "장비 단조, 강화 및 인챈트": {
+    "en": "Forge, Enhance, and Enchant Equipment",
+    "ja": "装備鍛造、強化およびエンチャント"
+  },
+  "장비 레시피, 완제품 및 전리품 기본 드랍 확률 배율 (기본 1.0)": {
+    "en": "Base drop rate multiplier for gear recipes, finished items, and loot (Base 1.0)",
+    "ja": "装備レシピ、完成品および戦利品の基本ドロップ確率倍率 (基本 1.0)"
+  },
+  "장비 부위: {0} • 등급: {1}": {
+    "en": "Slot: {0} • Tier: {1}",
+    "ja": "装備部位: {0} • 等級: {1}"
+  },
+  "장비 상세 도감 —": {
+    "en": "Detailed Equipment Codex —",
+    "ja": "装備詳細図鑑 —"
+  },
+  "장비 스탯 옵션": {
+    "en": "Equipment Stat Options",
+    "ja": "装備ステータスオプション"
+  },
+  "장비 시스템": {
+    "en": "Equipment System",
+    "ja": "装備システム"
+  },
+  "장비 인계 장착": {
+    "en": "Transfer & Equip Gear",
+    "ja": "装備引き継ぎ装着"
+  },
+  "장비 제련 및 강화": {
+    "en": "Equipment Smelting & Enhancement",
+    "ja": "装備精錬および強化"
+  },
+  "장비 제작": {
+    "en": "Equipment Crafting",
+    "ja": "装備製作"
+  },
+  "장비 제조 & 인챈트": {
+    "en": "Equipment Crafting & Enchanting",
+    "ja": "装備製造＆エンチャント"
+  },
+  "장비 파괴됨": {
+    "en": "Equipment Destroyed",
+    "ja": "装備破壊"
+  },
+  "장비를 +5강까지 한계 돌파하여 에테르 광맥의 거수들에 맞설 압도적인 무장을 완성하세요.": {
+    "en": "Breakthrough gear limits up to +5 to complete overwhelming armaments against behemoths of the Ether Vein.",
+    "ja": "装備を+5まで限界突破し、エーテル鉱脈の巨獣たちに対抗する圧倒的な武装を完成させよ。"
+  },
+  "장비의 기본 스탯이 성공적으로 강화되었습니다! (새 강화 수치: +{0})": {
+    "en": "Equipment base stats successfully enhanced! (New enhancement: +{0})",
+    "ja": "装備の基本ステータスが正常に強化されました！(新強化値: +{0})"
+  },
+  "장신구": {
+    "en": "Accessory",
+    "ja": "装飾品"
+  },
+  "장신구 (3)": {
+    "en": "Accessories (3)",
+    "ja": "装飾品 (3)"
+  },
+  "장신구 ({0})": {
+    "en": "Accessories ({0})",
+    "ja": "装飾品 ({0})"
+  },
+  "장착 불가: 먼저 해당 스킬을 습득해야 합니다.": {
+    "en": "Cannot Equip: You must learn the skill first.",
+    "ja": "装着不可: 先に該当スキルを習得する必要があります。"
+  },
+  "장착 스킬:": {
+    "en": "Equipped Skills:",
+    "ja": "装着スキル:"
+  },
+  "장착 중": {
+    "en": "Equipped",
+    "ja": "装着中"
+  },
+  "장착 해제": {
+    "en": "Unequip",
+    "ja": "装備解除"
+  },
+  "장착된 스킬 없음": {
+    "en": "No Skills Equipped",
+    "ja": "装着スキルなし"
+  },
+  "장착하기": {
+    "en": "Equip",
+    "ja": "装着する"
+  },
+  "장창": {
+    "en": "Spear",
+    "ja": "長槍"
+  },
+  "재료 부족": {
+    "en": "Insufficient Materials",
+    "ja": "材料不足"
+  },
+  "재료 부족으로 강화 불가": {
+    "en": "Cannot enhance due to insufficient materials",
+    "ja": "材料不足のため強化不可"
+  },
+  "재료 확인": {
+    "en": "Check Materials",
+    "ja": "材料確認"
+  },
+  "재생": {
+    "en": "Regeneration",
+    "ja": "再生"
+  },
+  "재의 방주단": {
+    "en": "Ashen Ark Guild",
+    "ja": "灰の方舟団"
+  },
+  "재입고까지": {
+    "en": "Until Restock",
+    "ja": "再入荷まで"
+  },
+  "재화 부족": {
+    "en": "Insufficient Currency",
+    "ja": "財貨不足"
+  },
+  "재화/인챈트석 부족": {
+    "en": "Insufficient Currency / Enchant Stones",
+    "ja": "財貨/エンチャント石不足"
+  },
+  "저격": {
+    "en": "Snipe",
+    "ja": "狙撃"
+  },
+  "저격수": {
+    "en": "Sniper",
+    "ja": "狙撃手"
+  },
+  "저주": {
+    "en": "Curse",
+    "ja": "呪い"
+  },
+  "저주 정화 불가: 병기창 Lv.{0} 이상 시설이 필요합니다!": {
+    "en": "Cannot Purify Curse: Armory Lv.{0} or higher facility required!",
+    "ja": "呪い浄化不可: 兵器廠Lv.{0}以上の施設が必要です！"
+  },
+  "저주 제단 정화 시 HP/MP 50% 회복 & 디버프 해제 & 면역 3턴": {
+    "en": "Purifying cursed altars restores 50% HP/MP & cleanses debuffs & grants immunity for 3 turns",
+    "ja": "呪いの祭壇浄化時HP/MP 50%回復＆デバフ解除＆免疫3ターン"
+  },
+  "저주 제단 정화 시 전원 HP/MP 50% 회복 + 디버프 해제 + 면역 3턴 (귀환 보존)": {
+    "en": "Purifying cursed altars restores 50% HP/MP to all + cleanses debuffs + grants immunity for 3 turns (Retained on return)",
+    "ja": "呪いの祭壇浄化時全員HP/MP 50%回復 + デバフ解除 + 免疫3ターン (帰還時保存)"
+  },
+  "저주를 정화하기 위한 골드({0}) 또는 에테르({1})가 부족합니다.": {
+    "en": "Insufficient Gold ({0}) or Ether ({1}) to cleanse the curse.",
+    "ja": "呪いを浄化するためのゴールド({0})またはエーテル({1})が不足しています。"
+  },
+  "저주받은 망자": {
+    "en": "Cursed Dead",
+    "ja": "呪われた亡者"
+  },
+  "저주받은 보물상자 안전 정화": {
+    "en": "Safely purify cursed treasure chests",
+    "ja": "呪われた宝箱の安全浄化"
+  },
+  "저주받은 장비 1회 정화": {
+    "en": "Purify cursed gear 1 time",
+    "ja": "呪われた装備を1回浄化"
+  },
+  "저주받은 장비 드랍: 심연 6층 이상의 고대 석관 및 보물 상자에서 중간 확률로 [저주받은][장비명] 드랍 (저주받은 상태로는 착용 불가)": {
+    "en": "Cursed Gear Drop: Ancient sarcophagi and treasure chests in Abyss 6F+ have a moderate chance to drop [Cursed][Gear Name] (cannot be equipped while cursed)",
+    "ja": "呪われた装備ドロップ: 深淵6層以上の古代石棺および宝箱から中確率で[呪われた][装備名]ドロップ (呪われた状態では装備不可)"
+  },
+  "저주받은 장비 신성 정화": {
+    "en": "Holy Purification of Cursed Gear",
+    "ja": "呪われた装備の神聖浄化"
+  },
+  "저주받은 장비가 아닙니다.": {
+    "en": "Not a cursed piece of equipment.",
+    "ja": "呪われた装備ではありません。"
+  },
+  "저주받은 제단/상자 정화 & 축복 (귀환 보존)": {
+    "en": "Purify & bless cursed altars/chests (Retained on return)",
+    "ja": "呪われた祭壇/箱の浄化＆祝福 (帰還時保存)"
+  },
+  "저주받은 페널티가 부여되어 있습니다.": {
+    "en": "A cursed penalty is applied.",
+    "ja": "呪いのペナルティが付与されています。"
+  },
+  "저주받음": {
+    "en": "Cursed",
+    "ja": "呪縛"
+  },
+  "저주의 포옹": {
+    "en": "Curse's Embrace",
+    "ja": "呪いの抱擁"
+  },
+  "저항": {
+    "en": "Resist",
+    "ja": "抵抗"
+  },
+  "적": {
+    "en": "Enemy",
+    "ja": "敵"
+  },
+  "적 1체 120% 물리 피해": {
+    "en": "120% Physical DMG to 1 enemy",
+    "ja": "敵1体に120%物理ダメージ"
+  },
+  "적 1체 125% 고속 사격 피해": {
+    "en": "125% Rapid Fire DMG to 1 enemy",
+    "ja": "敵1体に125%高速射撃ダメージ"
+  },
+  "적 1체 130% 물리 피해 + 1턴 기절": {
+    "en": "130% Physical DMG to 1 enemy + 1 turn Stun",
+    "ja": "敵1体に130%物理ダメージ + 1ターン気絶"
+  },
+  "적 1체 130% 신성 피해 (언데드 특효)": {
+    "en": "130% Holy DMG to 1 enemy (Undead bonus)",
+    "ja": "敵1体に130%神聖ダメージ (アンデッド特効)"
+  },
+  "적 1체 130% 피해 + 2턴 회피 60% 및 즉시 반격": {
+    "en": "130% DMG to 1 enemy + 60% Evasion and instant counterattack for 2 turns",
+    "ja": "敵1体に130%ダメージ + 2ターン回避60%および即時反撃"
+  },
+  "적 1체 135% 순수 마법 피해": {
+    "en": "135% Pure Magic DMG to 1 enemy",
+    "ja": "敵1体に135%純粋魔法ダメージ"
+  },
+  "적 1체 135% 참격 피해 (치명타율 +30%)": {
+    "en": "135% Slash DMG to 1 enemy (Crit Rate +30%)",
+    "ja": "敵1体に135%斬撃ダメージ (会心率+30%)"
+  },
+  "적 1체 140% 돌격 강타 + 1턴 기절": {
+    "en": "140% Charge Slam to 1 enemy + 1 turn Stun",
+    "ja": "敵1体に140%突撃強打 + 1ターン気絶"
+  },
+  "적 1체 140% 피해 + 2턴간 출혈": {
+    "en": "140% DMG to 1 enemy + Bleed for 2 turns",
+    "ja": "敵1体に140%ダメージ + 2ターン出血"
+  },
+  "적 1체 150% 강타 + 1턴 기절": {
+    "en": "150% Heavy Strike to 1 enemy + 1 turn Stun",
+    "ja": "敵1体に150%強打 + 1ターン気絶"
+  },
+  "적 1체 160% 신성 피해 & 아군 전원 20% 치유": {
+    "en": "160% Holy DMG to 1 enemy & Heal all allies by 20%",
+    "ja": "敵1体に160%神聖ダメージ＆味方全員20%治癒"
+  },
+  "적 1체 160% 신성 피해 + 2턴 방어 20% 감소": {
+    "en": "160% Holy DMG to 1 enemy + 20% DEF reduction for 2 turns",
+    "ja": "敵1体に160%神聖ダメージ + 2ターン防御20%減少"
+  },
+  "적 1체 160% 참격 + 2턴 출혈": {
+    "en": "160% Slash DMG to 1 enemy + Bleed for 2 turns",
+    "ja": "敵1体に160%斬撃 + 2ターン出血"
+  },
+  "적 1체 최대 250% 역전 참격 (잃은 체력 비례)": {
+    "en": "Up to 250% Reversal Slash to 1 enemy (proportional to lost HP)",
+    "ja": "敵1体に最大250%逆転斬撃 (失ったHPに比例)"
+  },
+  "적 1체에 110% 피해 + 2턴 출혈(ATK 15%)": {
+    "en": "110% DMG to 1 enemy + 2-turn Bleed (15% ATK)",
+    "ja": "敵1体に110%ダメージ + 2ターン出血(ATK 15%)"
+  },
+  "적 1체에 115% 신성 피해 및 2턴간 실명 부여.": {
+    "en": "Deals 115% Holy DMG to 1 enemy and inflicts Blind for 2 turns.",
+    "ja": "敵1体に115%の神聖ダメージを与え、2ターンの間盲目を付与。"
+  },
+  "적 1체에 130% 피해 + 2턴간 회피율 60% 증가 및 피격 시 즉시 반격": {
+    "en": "130% DMG to 1 enemy + increases Evasion by 60% for 2 turns and instantly counterattacks when hit",
+    "ja": "敵1体に130%ダメージ + 2ターンの間回避率60%増加および被撃時に即時反撃"
+  }
+}

@@ -1,0 +1,802 @@
+{
+  "비전서: 만화경 환영 폭풍 [9F 보스]": {
+    "en": "Grimoire: Kaleidoscope Illusion Storm [9F Boss]",
+    "ja": "魔導書: 万華鏡幻影嵐 [9Fボス]"
+  },
+  "비전서: 망각의 사신 낫 [7F 보스]": {
+    "en": "Grimoire: Reaper Scythe of Oblivion [7F Boss]",
+    "ja": "魔導書: 忘却の死神の鎌 [7Fボス]"
+  },
+  "비전서: 망각의 사신 낫 [7F]": {
+    "en": "Grimoire: Reaper Scythe of Oblivion [7F]",
+    "ja": "魔導書: 忘却の死神の鎌 [7F]"
+  },
+  "비전서: 맹독 다트": {
+    "en": "Grimoire: Venom Dart",
+    "ja": "魔導書: 猛毒ダート"
+  },
+  "비전서: 방패 가격": {
+    "en": "Grimoire: Shield Bash",
+    "ja": "魔導書: シールドバッシュ"
+  },
+  "비전서: 방패 방어": {
+    "en": "Grimoire: Shield Block",
+    "ja": "魔導書: 盾防御"
+  },
+  "비전서: 빛의 축복": {
+    "en": "Grimoire: Blessing of Light",
+    "ja": "魔導書: 光の祝福"
+  },
+  "비전서: 사령의 영혼 수확 [2F 보스]": {
+    "en": "Grimoire: Soul Harvest of the Undead [2F Boss]",
+    "ja": "魔導書: 死霊の魂収穫 [2Fボス]"
+  },
+  "비전서: 사령의 영혼 수확 [2F]": {
+    "en": "Grimoire: Soul Harvest of the Undead [2F]",
+    "ja": "魔導書: 死霊の魂収穫 [2F]"
+  },
+  "비전서: 서리 발산": {
+    "en": "Grimoire: Frost Emanation",
+    "ja": "魔導書: 霜の放射"
+  },
+  "비전서: 성령의 기적": {
+    "en": "Grimoire: Miracle of the Holy Spirit",
+    "ja": "魔導書: 聖霊の奇跡"
+  },
+  "비전서: 성역 결계": {
+    "en": "Grimoire: Sanctuary Barrier",
+    "ja": "魔導書: 聖域結界"
+  },
+  "비전서: 성역의 결계": {
+    "en": "Grimoire: Barrier of the Sanctuary",
+    "ja": "魔導書: 聖域の結界"
+  },
+  "비전서: 성전의 수호 방진": {
+    "en": "Grimoire: Phalanx of the Crusade",
+    "ja": "魔導書: 聖戦の守護方陣"
+  },
+  "비전서: 수호의 방패": {
+    "en": "Grimoire: Shield of Protection",
+    "ja": "魔導書: 守護の盾"
+  },
+  "비전서: 시공간 차원 붕괴 [4F 보스]": {
+    "en": "Grimoire: Spacetime Dimensional Collapse [4F Boss]",
+    "ja": "魔導書: 時空次元崩壊 [4Fボス]"
+  },
+  "비전서: 시공간 차원 붕괴 [4F]": {
+    "en": "Grimoire: Spacetime Dimensional Collapse [4F]",
+    "ja": "魔導書: 時空次元崩壊 [4F]"
+  },
+  "비전서: 신성 치유": {
+    "en": "Grimoire: Holy Heal",
+    "ja": "魔導書: 神聖治癒"
+  },
+  "비전서: 신성한 축복": {
+    "en": "Grimoire: Divine Blessing",
+    "ja": "魔導書: 神聖な祝福"
+  },
+  "비전서: 심연의 저주": {
+    "en": "Grimoire: Abyssal Curse",
+    "ja": "魔導書: 深淵の呪い"
+  },
+  "비전서: 아스모데우스 아마겟돈 [10F]": {
+    "en": "Grimoire: Asmodeus Armageddon [10F]",
+    "ja": "魔導書: アスモデウス・ハルマゲドン [10F]"
+  },
+  "비전서: 약점 찌르기": {
+    "en": "Grimoire: Weakness Thrust",
+    "ja": "魔導書: 急所突き"
+  },
+  "비전서: 에테르 화살": {
+    "en": "Grimoire: Ether Arrow",
+    "ja": "魔導書: エーテルアロー"
+  },
+  "비전서: 연쇄 번개": {
+    "en": "Grimoire: Chain Lightning",
+    "ja": "魔導書: 連鎖電撃"
+  },
+  "비전서: 원초의 공허 묵시록 [5F 보스]": {
+    "en": "Grimoire: Primordial Void Apocalypse [5F Boss]",
+    "ja": "魔導書: 原初の虚無黙示録 [5Fボス]"
+  },
+  "비전서: 원초의 공허 묵시록 [5F]": {
+    "en": "Grimoire: Primordial Void Apocalypse [5F]",
+    "ja": "魔導書: 原初の虚無黙示録 [5F]"
+  },
+  "비전서: 응급 처치": {
+    "en": "Grimoire: First Aid",
+    "ja": "魔導書: 応急手当"
+  },
+  "비전서: 응급 회복": {
+    "en": "Grimoire: Emergency Recovery",
+    "ja": "魔導書: 応急回復"
+  },
+  "비전서: 전장의 포효": {
+    "en": "Grimoire: Battlefield Roar",
+    "ja": "魔導書: 戦場の咆哮"
+  },
+  "비전서: 정밀 저격": {
+    "en": "Grimoire: Precision Snipe",
+    "ja": "魔導書: 精密狙撃"
+  },
+  "비전서: 정화의 빛": {
+    "en": "Grimoire: Light of Purification",
+    "ja": "魔導書: 浄化の光"
+  },
+  "비전서: 종말의 심연 아마게돈 [10F 보스]": {
+    "en": "Grimoire: Abyssal Doom Armageddon [10F Boss]",
+    "ja": "魔導書: 終末の深淵ハルマゲドン [10Fボス]"
+  },
+  "비전서: 진홍의 피의 지배 [6F 보스]": {
+    "en": "Grimoire: Crimson Blood Dominion [6F Boss]",
+    "ja": "魔導書: 真紅の血の支配 [6Fボス]"
+  },
+  "비전서: 진홍의 피의 지배 [6F]": {
+    "en": "Grimoire: Crimson Blood Dominion [6F]",
+    "ja": "魔導書: 真紅の血の支配 [6F]"
+  },
+  "비전서: 천둥의 벼락": {
+    "en": "Grimoire: Thunder Strike",
+    "ja": "魔導書: 雷鳴の雷撃"
+  },
+  "비전서: 철벽의 방진": {
+    "en": "Grimoire: Iron Wall Phalanx",
+    "ja": "魔導書: 鉄壁の方陣"
+  },
+  "비전서: 초신성 폭발": {
+    "en": "Grimoire: Supernova Explosion",
+    "ja": "魔導書: 超新星爆発"
+  },
+  "비전서: 축복의 베일": {
+    "en": "Grimoire: Veil of Blessing",
+    "ja": "魔導書: 祝福のヴェール"
+  },
+  "비전서: 쾌속 베기": {
+    "en": "Grimoire: Swift Slash",
+    "ja": "魔導書: 快速斬り"
+  },
+  "비전서: 폭풍의 화살비": {
+    "en": "Grimoire: Storm Arrow Rain",
+    "ja": "魔導書: 嵐の矢の雨"
+  },
+  "비전서: 플라즈마 파쇄포": {
+    "en": "Grimoire: Plasma Crushing Cannon",
+    "ja": "魔導書: プラズマ破砕砲"
+  },
+  "비전서: 피의 광란참": {
+    "en": "Grimoire: Blood Frenzy Slash",
+    "ja": "魔導書: 血の狂乱斬り"
+  },
+  "비전서: 화염 강타": {
+    "en": "Grimoire: Flame Smash",
+    "ja": "魔導書: 火炎強打"
+  },
+  "비전서: 화염구": {
+    "en": "Grimoire: Fireball",
+    "ja": "魔導書: 火の玉"
+  },
+  "비전서: 흑핵의 영구동결 [1F 보스]": {
+    "en": "Grimoire: Dark Core Permafrost [1F Boss]",
+    "ja": "魔導書: 黒核の永久凍結 [1Fボス]"
+  },
+  "비전서: 흑핵의 영구동결 [1F]": {
+    "en": "Grimoire: Dark Core Permafrost [1F]",
+    "ja": "魔導書: 黒核の永久凍結 [1F]"
+  },
+  "비전의 빛이여, 꿰뚫어라!": {
+    "en": "Light of the Arcane, pierce through!",
+    "ja": "秘術の光よ、貫け！"
+  },
+  "비전의 탑": {
+    "en": "Tower of Arcana",
+    "ja": "秘術の塔"
+  },
+  "비탄의 절규": {
+    "en": "Wail of Sorrow",
+    "ja": "悲嘆の絶叫"
+  },
+  "비호환": {
+    "en": "Incompatible",
+    "ja": "非互換"
+  },
+  "비활성": {
+    "en": "Inactive",
+    "ja": "非アクティブ"
+  },
+  "비활성 (헌화 시 5분 부여)": {
+    "en": "Inactive (Granted for 5m upon flower offering)",
+    "ja": "非アクティブ（献花時に5分付与）"
+  },
+  "비활성화": {
+    "en": "Deactivated",
+    "ja": "無効化"
+  },
+  "빅터": {
+    "en": "Victor",
+    "ja": "ヴィクター"
+  },
+  "빈 병상": {
+    "en": "Empty Bed",
+    "ja": "空き病床"
+  },
+  "빈 병상 클릭 시 입원": {
+    "en": "Click empty bed to admit",
+    "ja": "空き病床クリックで入院"
+  },
+  "빈틈이다. 급소 포착!": {
+    "en": "An opening. Vital spot locked!",
+    "ja": "隙あり。急所を捉えた！"
+  },
+  "빗나감": {
+    "en": "Miss",
+    "ja": "ミス"
+  },
+  "빙결": {
+    "en": "Freeze",
+    "ja": "凍結"
+  },
+  "빙결 분쇄": {
+    "en": "Freeze Shatter",
+    "ja": "氷結粉砕"
+  },
+  "빙결 분쇄 (Shatter)": {
+    "en": "Freeze Shatter (Shatter)",
+    "ja": "氷結粉砕 (Shatter)"
+  },
+  "빙결 쇄골 분쇄": {
+    "en": "Frozen Clavicle Crush",
+    "ja": "氷結鎖骨粉砕"
+  },
+  "빙결 표면에 벼락이 격돌하여 마법 저항이 50% 분쇄되고 연쇄 전격이 폭발합니다!": {
+    "en": "Lightning strikes the frozen surface, crushing Magic RES by 50% and triggering an explosive chain shock!",
+    "ja": "氷結の表面に雷撃が激突し、魔法抵抗が50%粉砕され連鎖電撃が爆発します！"
+  },
+  "빙결/기절": {
+    "en": "Freeze/Stun",
+    "ja": "凍結/気絶"
+  },
+  "빙결/기절 상태의 적을 강타/베기로 타격 시 외피가 산산조각나며 주변 적들에게 45% 파편 피해": {
+    "en": "Striking a Frozen/Stunned enemy with Strike/Slash shatters their outer shell, dealing 45% shard damage to nearby enemies.",
+    "ja": "凍結/気絶状態の敵を強打/斬撃で攻撃時、外皮が粉砕され周囲の敵に45%の破片ダメージ"
+  },
+  "빙결/냉각": {
+    "en": "Freeze/Chill",
+    "ja": "凍結/冷却"
+  },
+  "빙결된 외피가 산산조각나며 주변 적들에게 얼음 파편 폭풍을 흩뿌립니다!": {
+    "en": "The frozen outer shell shatters, spraying an ice shard storm upon nearby enemies!",
+    "ja": "凍結した外皮が粉々に砕け散り、周囲の敵へ氷破片の嵐を撒き散らします！"
+  },
+  "빛바랜 폴라로이드 사진": {
+    "en": "Faded Polaroid Photo",
+    "ja": "色褪せたポラロイド写真"
+  },
+  "빛바랜 플라스틱 신용카드": {
+    "en": "Faded Plastic Credit Card",
+    "ja": "色褪せたプラスチッククレジットカード"
+  },
+  "빛의 가호: 받는 피해 6% 감소, 턴당 체력 3% 재생, 방어력 +8%, 전열의 후열 엄호 15%": {
+    "en": "Blessing of Light: DMG taken -6%, 3% HP regen per turn, DEF +8%, front row back cover 15%",
+    "ja": "光の加護: 被ダメージ6%減少、ターン毎にHP3%自動回復、防御力+8%、前衛の後衛援護15%"
+  },
+  "빛의 단죄와 가호": {
+    "en": "Condemnation and Blessing of Light",
+    "ja": "光の断罪と加護"
+  },
+  "빛의 방주": {
+    "en": "Ark of Light",
+    "ja": "光の方舟"
+  },
+  "빛의 성기사단": {
+    "en": "Holy Paladins of Light",
+    "ja": "光の聖騎士団"
+  },
+  "빛의 성역": {
+    "en": "Sanctuary of Light",
+    "ja": "光の聖域"
+  },
+  "뼈": {
+    "en": "Bone",
+    "ja": "骨"
+  },
+  "뼈 골렘": {
+    "en": "Bone Golem",
+    "ja": "ボーンゴーレム"
+  },
+  "뼈 분쇄": {
+    "en": "Bone Crush",
+    "ja": "骨粉砕"
+  },
+  "뿌리 깊은 고목이 밀집된 심층 벌목 구역을 개방하여 고품질의 두꺼운 마도 영목을 대량으로 수확하기 시작합니다.": {
+    "en": "Unlocks the deep logging zone dense with ancient trees to harvest high-quality, thick Arcane Lumber in large quantities.",
+    "ja": "根深い古木が密集した深層伐採区域を開放し、高品質で太い魔導霊木を大量に収穫し始めます。"
+  },
+  "사격": {
+    "en": "Shoot",
+    "ja": "射撃"
+  },
+  "사경 ({0}턴)": {
+    "en": "Near Death ({0} turns)",
+    "ja": "死線 ({0}ターン)"
+  },
+  "사경을 헤매다 끝내 전사한 대원입니다. [긴급 이송] 탭에서 유해를 방주(영주 성채 묘지)로 운구하고 대기소의 후방 지원 용병을 소환하세요.": {
+    "en": "A mercenary who hovered near death and finally fell. Transport the remains to the Ark (Citadel Graveyard) under [Emergency Transport] tab and summon backline support mercenaries from the barracks.",
+    "ja": "死線をさまよった末に戦死した隊員です。[緊急移送]タブで遺体を方舟(城塞墓地)へ運送し、待機所の後方支援傭兵を召喚してください。"
+  },
+  "사냥꾼 ➔ 저격수 / 레인저 ➔ 👑 하이퍼 레인저 (Hyper Ranger)": {
+    "en": "Hunter ➔ Sniper / Ranger ➔ 👑 Hyper Ranger",
+    "ja": "狩人 ➔ 狙撃手 / レンジャー ➔ 👑 ハイパーレンジャー (Hyper Ranger)"
+  },
+  "사령": {
+    "en": "Undead",
+    "ja": "死霊"
+  },
+  "사령 속박 반지": {
+    "en": "Soulbinding Ring of the Undead",
+    "ja": "死霊束縛の指輪"
+  },
+  "사령 절단 극창": {
+    "en": "Soul-Cleaving Pike",
+    "ja": "死霊切断の極槍"
+  },
+  "사령관 바르가스": {
+    "en": "Commander Vargas",
+    "ja": "指揮官バルガス"
+  },
+  "사령관:": {
+    "en": "Commander:",
+    "ja": "指揮官:"
+  },
+  "사령관님, 기사단의 고대 군자금과 마도 보물을 영지의 방벽과 성채에 축적할 수도 있고, 10층 최종 결전에 맞서 기사단장의 신성 결계가 깃든 전설 판금 갑주를 전열 영웅에게 수여할 수도 있습니다.": {
+    "en": "Commander, you may hoard the order's ancient war funds and arcane treasures in the territory's walls and citadel, or bestow the Grandmaster's legendary holy-barrier plate armor upon a front-row hero for the final battle on 10F.",
+    "ja": "指揮官殿、騎士団の古代軍資金と魔導の宝物を領地の防壁と城塞に蓄積することも、10層の最終決戦に備えて騎士団長の神聖結界が宿る伝説の板金鎧を前衛の英雄へ授与することもできます。"
+  },
+  "사령의": {
+    "en": "Undead's",
+    "ja": "死霊の"
+  },
+  "사령의 영혼 수확": {
+    "en": "Soul Harvest of the Undead",
+    "ja": "死霊の魂収穫"
+  },
+  "사망 아군 1인 HP 60% 기적의 부활 + 생존 아군 전원 HP 50% 회복 & 디버프 완전 정화": {
+    "en": "Revives 1 fallen ally with 60% HP + restores 50% HP to all surviving allies & completely purges debuffs",
+    "ja": "死亡した味方1体をHP60%で奇跡の蘇生 + 生存味方全員のHP50%回復＆デバフ完全浄化"
+  },
+  "사망 아군 부활 및 생존 아군 완전 치유!": {
+    "en": "Revives fallen ally and fully heals surviving allies!",
+    "ja": "死亡した味方の蘇生および生存味方の完全治癒！"
+  },
+  "사망 아군 전원 50% HP 부활 + 생존 아군 HP 100% 완전 회복 + 2턴간 [디버프 면역]": {
+    "en": "Revives all fallen allies with 50% HP + restores 100% HP to all surviving allies + [Debuff Immunity] for 2 turns",
+    "ja": "死亡した味方全員をHP50%で蘇生 + 生存味方のHP100%完全回復 + 2ターン間[デバフ無効]"
+  },
+  "사망 임박(사경) 동료 기적의 소생!": {
+    "en": "Miraculous revival of near-death ally!",
+    "ja": "死線に瀕した仲間の奇跡の蘇生！"
+  },
+  "사망 임박(사경) 상태인 아군 1명을 부활시켜 체력 1로 소생시킵니다. (사망/사경 아군 없을 시 최저 체력 아군 115% 치유)": {
+    "en": "Revives 1 near-death ally with 1 HP. (If no fallen/near-death allies, heals the ally with lowest HP by 115%)",
+    "ja": "死線状態の味方1体をHP1で奇跡の蘇生。(死亡/死線の味方がいない場合、最低HPの味方を115%治癒)"
+  },
+  "사망한 모든 아군을 HP 58%로 부활시키고 생존 아군의 체력을 288% 완전 회복합니다.": {
+    "en": "Revives all fallen allies with 58% HP and restores 288% HP to all surviving allies.",
+    "ja": "死亡したすべての味方をHP58%で蘇生し、生存味方のHPを288%完全回復します。"
+  },
+  "사선의 맹세": {
+    "en": "Oath of the Deathline",
+    "ja": "死線の誓い"
+  },
+  "사수": {
+    "en": "Marksman",
+    "ja": "射手"
+  },
+  "사신": {
+    "en": "Reaper",
+    "ja": "死神"
+  },
+  "사신 낫": {
+    "en": "Reaper Scythe",
+    "ja": "死神の鎌"
+  },
+  "사신 저격수": {
+    "en": "Reaper Sniper",
+    "ja": "死神の狙撃手"
+  },
+  "사신 저격수의 암살안: 파티 치명타율 +15%, 치명타 피해 +35%, 방어 관통 +20%": {
+    "en": "Reaper Sniper's Assassination Eye: Party Crit Rate +15%, Crit DMG +35%, Armor Penetration +20%",
+    "ja": "死神の狙撃手の暗殺眼: パーティ会心率+15%、会心ダメージ+35%、防御貫通+20%"
+  },
+  "사신의": {
+    "en": "Reaper's",
+    "ja": "死神の"
+  },
+  "사신의 가호": {
+    "en": "Blessing of the Reaper",
+    "ja": "死神の加護"
+  },
+  "사신의 낫": {
+    "en": "Reaper's Scythe",
+    "ja": "死神の鎌"
+  },
+  "사신의 밤안개 비도": {
+    "en": "Reaper's Night Mist Flying Dagger",
+    "ja": "死神の夜霧飛刀"
+  },
+  "사신의 살기": {
+    "en": "Reaper's Bloodlust",
+    "ja": "死神の殺気"
+  },
+  "사신의 안식": {
+    "en": "Reaper's Rest",
+    "ja": "死神の安息"
+  },
+  "사신의 저울을 뒤로하고 전진합니다.": {
+    "en": "Leaves the Reaper's scales behind and presses forward.",
+    "ja": "死神の天秤を背にして前進する。"
+  },
+  "사신의 절대 탄환": {
+    "en": "Reaper's Absolute Bullet",
+    "ja": "死神の絶対弾丸"
+  },
+  "사신의 조준경: 후열 배치 시 치명타율 +25%, 치명타 대미지가 기본 200%에서 250%로 증폭.": {
+    "en": "Reaper's Scope: When placed in the back row, Crit Rate +25%, Crit DMG amplified from 200% base to 250%.",
+    "ja": "死神の照準器: 後衛配置時、会心率+25%、会心ダメージが基本200%から250%に増幅。"
+  },
+  "사신의 징표: 치명타 피해량이 기본 200%에서 280%로 증폭.": {
+    "en": "Mark of the Reaper: Crit DMG amplified from 200% base to 280%.",
+    "ja": "死神の証: 会心ダメージが基本200%から280%に増幅。"
+  },
+  "사신의 처형 비수": {
+    "en": "Reaper's Execution Dagger",
+    "ja": "死神の処刑ダガー"
+  },
+  "사용 스킬 & 특수 공격 패턴 (": {
+    "en": "Used Skills & Special Attack Patterns (",
+    "ja": "使用スキル＆特殊攻撃パターン ("
+  },
+  "사이클론": {
+    "en": "Cyclone",
+    "ja": "サイクロン"
+  },
+  "사자후": {
+    "en": "Lion's Roar",
+    "ja": "獅子吼"
+  },
+  "사자후를 질러 적 전체의 공격력을 20% 약화시킵니다.": {
+    "en": "Unleashes a Lion's Roar, reducing all enemies' ATK by 20%.",
+    "ja": "獅子吼を放ち、敵全体の攻撃力を20%弱体化させます。"
+  },
+  "사제": {
+    "en": "Priest",
+    "ja": "司祭"
+  },
+  "사제 계열의 숭고한 성의. 높은 생존력과 아군 치유를 위한 지속적인 마나 흐름을 제공합니다.": {
+    "en": "A sublime holy vestment of the priest class. Provides high survivability and a continuous mana flow for healing allies.",
+    "ja": "司祭系統の崇高な聖衣。高い生存力と味方治癒のための持続的なマナの流れをもたらす。"
+  },
+  "사제 디버프 정화 & 면역: 사제 계열 성전 스킬(정화의 기도, 신성 성역 등)을 통해 냉각 상태이상을 즉시 해제하거나 사전에 무효화 가능": {
+    "en": "Priest Debuff Purge & Immunity: Instantly clears or preemptively nullifies Chill status via Priest Holy War skills (Prayer of Purification, Divine Sanctuary, etc.)",
+    "ja": "司祭デバフ浄化＆無効: 司祭系統の聖戦スキル(浄化の祈り、神聖聖域など)により冷却状態異常を即座に解除または事前無効化可能"
+  },
+  "사제 예복 +1": {
+    "en": "Priest Vestments +1",
+    "ja": "司祭の礼服 +1"
+  },
+  "사제·마법": {
+    "en": "Priest/Mage",
+    "ja": "司祭・魔法"
+  },
+  "사제·마법 계열": {
+    "en": "Priest/Mage Class",
+    "ja": "司祭・魔法系統"
+  },
+  "사형 선고": {
+    "en": "Death Sentence",
+    "ja": "死刑宣告"
+  },
+  "사형 선고 조준": {
+    "en": "Death Sentence Aim",
+    "ja": "死刑宣告照準"
+  },
+  "산성": {
+    "en": "Acid",
+    "ja": "酸性"
+  },
+  "산성 부식": {
+    "en": "Acid Corrosion",
+    "ja": "酸性腐食"
+  },
+  "산성 외골격 융해": {
+    "en": "Acidic Exoskeleton Meltdown",
+    "ja": "酸性外骨格融解"
+  },
+  "산성 외골격 융해 (Acidic Meltdown)": {
+    "en": "Acidic Meltdown",
+    "ja": "酸性外骨格融解 (Acidic Meltdown)"
+  },
+  "산탄 사격": {
+    "en": "Buckshot",
+    "ja": "散弾射撃"
+  },
+  "산탄을 넓게 발사하여 적 전체에 105% 물리 피해를 가합니다.": {
+    "en": "Fires a wide spread of buckshot, dealing 105% Physical DMG to all enemies.",
+    "ja": "散弾を広く発射し、敵全体に105%の物理ダメージを与えます。"
+  },
+  "살점을 뜯는 구울": {
+    "en": "Flesh-Ripping Ghoul",
+    "ja": "肉を裂くグール"
+  },
+  "삼위일체 밸런스": {
+    "en": "Trinity Balance",
+    "ja": "三位一体のバランス"
+  },
+  "삼중 룬 잠금장치로 봉인된 무기고 철문 너머로 서늘한 명검의 기운이 뿜어져 나옵니다.": {
+    "en": "A chilling aura of a master blade radiates from beyond the armory's iron door sealed by a triple rune lock.",
+    "ja": "三重ルーン錠で封印された兵器廠の鉄扉の向こうから、冷ややかな名剣の気配が漂ってくる。"
+  },
+  "상급 ~ 엔드게임": {
+    "en": "Advanced - Endgame",
+    "ja": "上級〜エンドゲーム"
+  },
+  "상급 에픽 단조 레시피를 해금하여 5티어 심연 파멸 장비를 제작하고, 강력한 특수 능력을 부여하는 [접미어 인챈트] 슬롯을 개방합니다.": {
+    "en": "Unlocks advanced Epic forge recipes to craft Tier 5 Abyss Ruin equipment, and opens a [Suffix Enchant] slot to grant powerful special abilities.",
+    "ja": "上級エピック鍛造レシピを解放してTier 5深淵破滅装備を製作し、強力な特殊能力を付与する[接尾辞エンチャント]スロットを開放します。"
+  },
+  "상대": {
+    "en": "Opponent",
+    "ja": "相手"
+  },
+  "상대 결투 리더": {
+    "en": "Opponent Duel Leader",
+    "ja": "相手決闘リーダー"
+  },
+  "상대 결투 부대 능력치 증폭": {
+    "en": "Opponent Duel Squad Stat Amplification",
+    "ja": "相手決闘部隊ステータス増幅"
+  },
+  "상대 리더": {
+    "en": "Opponent Leader",
+    "ja": "相手リーダー"
+  },
+  "상대 마물보다 속도가 빠를수록 피해량 비례 증가 (최대 20% 증폭)": {
+    "en": "Deals increased DMG the faster your SPD is compared to the enemy monster (up to +20% amplification)",
+    "ja": "相手モンスターより速度が速いほどダメージが比例増加 (最大20%増幅)"
+  },
+  "상대 방어 전술 타워 구축 현황": {
+    "en": "Opponent Defensive Tactical Tower Status",
+    "ja": "相手防御戦術タワー構築状況"
+  },
+  "상대 방어 총 전투력": {
+    "en": "Opponent Total Defense Power",
+    "ja": "相手防御総戦闘力"
+  },
+  "상대 아레나 방어자": {
+    "en": "Opponent Arena Defender",
+    "ja": "相手アリーナ防衛者"
+  },
+  "상대 영지를 정찰하여 자원 30%를 약탈하고, 방어 전술 타워를 연구하여 내 영지를 결속하세요.": {
+    "en": "Scout enemy territories to plunder 30% of their resources, and research defensive tactical towers to fortify your own domain.",
+    "ja": "相手の領地を偵察して資源の30%を略奪し、防御戦術タワーを研究して自領地を結束させよう。"
+  },
+  "상대보다 속도가 빠를수록 피해량 최대 20% 증폭": {
+    "en": "Deals up to 20% amplified DMG the faster your SPD is compared to the opponent",
+    "ja": "相手より速度が速いほどダメージ最大20%増幅"
+  },
+  "상세": {
+    "en": "Details",
+    "ja": "詳細"
+  },
+  "상세 규칙 & 24종 가호:": {
+    "en": "Detailed Rules & 24 Blessings:",
+    "ja": "詳細ルール＆24種の加護:"
+  },
+  "상세 로그": {
+    "en": "Detailed Log",
+    "ja": "詳細ログ"
+  },
+  "상세 정보 보기": {
+    "en": "View Details",
+    "ja": "詳細情報を見る"
+  },
+  "상세 정찰 ➔": {
+    "en": "Detailed Scout ➔",
+    "ja": "詳細偵察 ➔"
+  },
+  "상세보기": {
+    "en": "View Details",
+    "ja": "詳細を見る"
+  },
+  "상세보기 ➔": {
+    "en": "View Details ➔",
+    "ja": "詳細を見る ➔"
+  },
+  "상업 네트워크": {
+    "en": "Commercial Network",
+    "ja": "商業ネットワーク"
+  },
+  "상업 네트워크 (블랙 마켓 Lv.5+): 전 시설 골드 유지비 -25% 영구 감면.": {
+    "en": "Commercial Network (Black Market Lv.5+): Permanently reduces gold maintenance cost of all facilities by 25%.",
+    "ja": "商業ネットワーク (ブラックマーケットLv.5+): 全施設のゴールド維持費を永久に25%削減。"
+  },
+  "상위 등급(": {
+    "en": "Higher Tier (",
+    "ja": "上位ランク("
+  },
+  "상위 장비 단조 및 나침반 (+50% 매입가)": {
+    "en": "High-tier Equipment Forging & Compass (+50% buy price)",
+    "ja": "上位装備鍛造および羅針盤 (+50% 買取価格)"
+  },
+  "상점 재고:": {
+    "en": "Shop Stock:",
+    "ja": "ショップ在庫:"
+  },
+  "상점가(G)": {
+    "en": "Shop District (G)",
+    "ja": "商店街(G)"
+  },
+  "상처 절개": {
+    "en": "Wound Incision",
+    "ja": "創傷切開"
+  },
+  "상처 찢기": {
+    "en": "Rend Flesh",
+    "ja": "傷口裂き"
+  },
+  "상처가 벌어지거나 방어가 무너진 적의 급소를 저격으로 꿰뚫어 방어력을 100% 무시하는 1.6배 확정 치명타를 가합니다.": {
+    "en": "Snipes the vitals of an enemy with open wounds or shattered guard, dealing guaranteed 1.6x Crit DMG that ignores 100% DEF.",
+    "ja": "傷口が開くか防御が崩れた敵の急所を狙撃で貫き、防御力を100%無視する1.6倍の確定会心ダメージを与える。"
+  },
+  "상처가 터져나가며 {0}의 과출혈 즉시 폭발 및 공격력이 25% 약화됩니다!": {
+    "en": "Wounds burst open, instantly detonating excessive bleed for {0} and reducing ATK by 25%!",
+    "ja": "傷口が弾け飛び、{0}の過出血が即時爆発して攻撃力が25%弱体化します！"
+  },
+  "상처는 좀 어때? 아까 무리해서 날 감싸지 않아도 됐는데...": {
+    "en": "How is your wound? You didn't have to push yourself to shield me earlier...",
+    "ja": "怪我の具合はどう？さっき無理して私を庇わなくてもよかったのに…"
+  },
+  "상태가 부여되어 있을 때, 해당 태그가 부여된 스킬이나 기본 공격을 가하면 즉시 연계 콤보가 폭발합니다.": {
+    "en": "When the status is inflicted, attacking with a skill or basic attack with that tag immediately triggers a combo explosion.",
+    "ja": "状態が付与されている時、該当タグが付いたスキルや通常攻撃を行うと即座に連携コンボが爆発します。"
+  },
+  "상태이상": {
+    "en": "Status Effect",
+    "ja": "状態異常"
+  },
+  "상태이상 • {0}": {
+    "en": "Status Effect • {0}",
+    "ja": "状態異常 • {0}"
+  },
+  "상태이상 대상에게 일치 태그 스킬로 공격 시 폭발": {
+    "en": "Explodes when attacking an enemy afflicted with status effect using a matching tag skill",
+    "ja": "状態異常の対象へ一致するタグのスキルで攻撃時に爆発"
+  },
+  "상태이상 저항:": {
+    "en": "Status RES:",
+    "ja": "状態異常耐性:"
+  },
+  "상태이상 폭발 연계 우선": {
+    "en": "Prioritize Status Effect Detonation Combo",
+    "ja": "状態異常爆発連携優先"
+  },
+  "상호 보완 구조: 병기창의 무구로 생존력을 높이고, 생체 병동의 빠른 완치로 쉼 없는 탐험 사이클을 유지할 수 있습니다.": {
+    "en": "Complementary structure: Armory gear boosts survivability, while the Bio-Ward's swift recovery sustains an uninterrupted expedition cycle.",
+    "ja": "相互補完構造: 兵器廠の武具で生存力を高め、生体病棟の迅速な完治で途切れのない探検サイクルを維持できます。"
+  },
+  "상흔": {
+    "en": "Scar",
+    "ja": "傷跡"
+  },
+  "새 지휘관 서약 및 거점 생성": {
+    "en": "Pledge New Commander & Establish Base",
+    "ja": "新たな指揮官の誓詞および拠点生成"
+  },
+  "새로운 퀘스트 달성": {
+    "en": "New Quest Completed",
+    "ja": "新たなクエスト達成"
+  },
+  "새벽의 기도": {
+    "en": "Prayer of Dawn",
+    "ja": "夜明けの祈り"
+  },
+  "새벽의 눈동자": {
+    "en": "Eye of Dawn",
+    "ja": "夜明けの瞳"
+  },
+  "새벽의 방패. 아군을 대신해 적의 맹공을 받아내며 보호막과 자가 치유로 전선을 결사 방어합니다.": {
+    "en": "Shield of Dawn. Endures fierce onslaughts in place of allies, desperately holding the front line with shields and self-healing.",
+    "ja": "夜明けの盾。味方に代わって敵の猛攻を受け止め、シールドと自己治癒で前線を決死防御する。"
+  },
+  "샛길을 피하고 본래 탐험로를 유지합니다.": {
+    "en": "Avoids side paths and stays on the primary exploration route.",
+    "ja": "脇道を避け、本来の探検ルートを維持します。"
+  },
+  "생명": {
+    "en": "Life",
+    "ja": "生命"
+  },
+  "생명 펜던트": {
+    "en": "Life Pendant",
+    "ja": "生命のペンダント"
+  },
+  "생명력 갈취": {
+    "en": "Life Siphon",
+    "ja": "生命力強奪"
+  },
+  "생명력 치유": {
+    "en": "Life Healing",
+    "ja": "生命力治癒"
+  },
+  "생명력 흡수": {
+    "en": "Life Drain",
+    "ja": "生命力吸収"
+  },
+  "생명력/마나 흡수": {
+    "en": "Life/Mana Drain",
+    "ja": "生命力/マナ吸収"
+  },
+  "생명의 샘: 아군이 턴을 소모할 때마다 자동으로 대상의 체력 10% 회복.": {
+    "en": "Fountain of Life: Automatically restores 10% HP of the ally whenever they spend a turn.",
+    "ja": "生命の泉: 味方がターンを消費するたびに、対象のHPを自動で10%回復。"
+  },
+  "생명의 펜던트": {
+    "en": "Pendant of Life",
+    "ja": "生命のペンダント"
+  },
+  "생산 +{0}%": {
+    "en": "Production +{0}%",
+    "ja": "生産 +{0}%"
+  },
+  "생산량으로 자동 충당": {
+    "en": "Automatically covered by production",
+    "ja": "生産量で自動充当"
+  },
+  "생전 유품 무구": {
+    "en": "Keepsake Armament of the Fallen",
+    "ja": "生前の遺品武具"
+  },
+  "생존 FAQ": {
+    "en": "Survival FAQ",
+    "ja": "生存FAQ"
+  },
+  "생존 화톳불 개방 (목재 공헌 시 생산 +15%, 전투 EXP +20%, 6초당 HP/MP +1 재생 온기 활성화)": {
+    "en": "Unlocks Survival Bonfire (Contribute wood to activate warmth: Production +15%, Combat EXP +20%, +1 HP/MP regen per 6s)",
+    "ja": "生存の焚火開放 (木材貢献時に生産+15%、戦闘EXP+20%、6秒毎にHP/MP+1回復の温もり有効化)"
+  },
+  "생존의 달인": {
+    "en": "Master of Survival",
+    "ja": "生存の達人"
+  },
+  "생존의 불씨를 지핀 기초 성화. 거친 바람을 겨우 막아내는 작은 불꽃이지만, 방주 전역에 생명의 온기를 전파하고 지친 용병들에게 희망을 비춥니다.": {
+    "en": "A rudimentary sacred flame kindling the embers of survival. Though a frail spark barely withstanding harsh winds, it spreads life's warmth across the Ark and shines hope upon weary mercenaries.",
+    "ja": "生存の火種を灯した基礎聖火。荒い風を辛うじて防ぐ小さな炎だが、方舟全域に生命の温もりを広げ、疲れ切った傭兵たちに希望を照らす。"
+  },
+  "생존자 안식처": {
+    "en": "Survivor Haven",
+    "ja": "生存者の安息所"
+  },
+  "생존자 안식처 건설": {
+    "en": "Build Survivor Haven",
+    "ja": "生存者の安息所の建設"
+  },
+  "생존자 안식처에 식량 {0}개 지원": {
+    "en": "Supply {0} Food to Survivor Haven",
+    "ja": "生存者の安息所に食料{0}個を支援"
+  },
+  "생존자들이 굶주리지 않고 거주할 수 있도록 심연 생체 정제소(Lv.1 이상)의 식량 배급망이 선행되어야 합니다.": {
+    "en": "A food rationing network from the Abyssal Refinery (Lv. 1+) is required so survivors can reside without starving.",
+    "ja": "生存者たちが飢えずに暮らせるよう、深淵生体精製所(Lv.1以上)の食料配給網が先行して必要です。"
+  },
+  "생존자들이 늘어날수록 성화의 연료가 필요하다. 흑무에 잠식되지 않은 고대 영목을 벌채하라.": {
+    "en": "As survivors increase, more fuel for the sacred flame is required. Fell ancient lumber untouched by the black mist.",
+    "ja": "生存者が増えるほど聖火の燃料が必要となる。黒霧に侵食されていない古代霊木を伐採せよ。"
+  },
+  "생존자들이 쉴 수 있는 첫 번째 생존자 안식처를 건설하세요.": {
+    "en": "Construct the first Survivor Haven where survivors can rest.",
+    "ja": "生存者たちが休息できる最初の生存者の安息所を建設してください。"
+  },
+  "생체 독소와 잔류 마기를 완벽히 중화하는 다단계 여과 필터를 장착하여 안전하고 영양가 높은 식량 생산을 보장합니다.": {
+    "en": "Equipped with multi-stage filtration filters to completely neutralize bio-toxins and residual demonic energy, ensuring safe and nutritious food production.",
+    "ja": "生体毒素と残留魔気を完全に中和する多段階ろ過フィルターを装着し、安全で栄養価の高い食料生産を保証します。"
+  }
+}

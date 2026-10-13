@@ -1,0 +1,802 @@
+{
+  "마나 +160, 공격력 +20, 속도 +7": {
+    "en": "MP +160, ATK +20, SPD +7",
+    "ja": "マナ+160、攻撃力+20、速度+7"
+  },
+  "마나 +180, 속도 +7, 행운 +6": {
+    "en": "MP +180, SPD +7, LUCK +6",
+    "ja": "マナ+180、速度+7、幸運+6"
+  },
+  "마나 +20%, 공격력 +8%, 행운 +4": {
+    "en": "MP +20%, ATK +8%, LUCK +4",
+    "ja": "マナ+20%、攻撃力+8%、幸運+4"
+  },
+  "마나 +200, 최대 체력 +200, 행운 +7": {
+    "en": "MP +200, Max HP +200, LUCK +7",
+    "ja": "マナ+200、最大HP+200、幸運+7"
+  },
+  "마나 +240, 최대 체력 +300, 속도 +10, 행운 +10": {
+    "en": "MP +240, Max HP +300, SPD +10, LUCK +10",
+    "ja": "マナ+240、最大HP+300、速度+10、幸運+10"
+  },
+  "마나 +300, 공격력 +25, 방어력 +25, 속도 +8": {
+    "en": "MP +300, ATK +25, DEF +25, SPD +8",
+    "ja": "マナ+300、攻撃力+25、防御力+25、速度+8"
+  },
+  "마나 +70, 최대 체력 +100, 행운 +5": {
+    "en": "MP +70, Max HP +100, LUCK +5",
+    "ja": "マナ+70、最大HP+100、幸運+5"
+  },
+  "마나 +80, 공격력 +12, 방어력 +12": {
+    "en": "MP +80, ATK +12, DEF +12",
+    "ja": "マナ+80、攻撃力+12、防御力+12"
+  },
+  "마나 +90, 공격력 +10, 행운 +5": {
+    "en": "MP +90, ATK +10, LUCK +5",
+    "ja": "マナ+90、攻撃力+10、幸運+5"
+  },
+  "마나 누출 균열": {
+    "en": "Mana Leak Rift",
+    "ja": "マナ漏出の亀裂"
+  },
+  "마나 반지": {
+    "en": "Mana Ring",
+    "ja": "マナリング"
+  },
+  "마나 소모": {
+    "en": "MP Cost",
+    "ja": "マナ消費"
+  },
+  "마나 소모(MP)": {
+    "en": "Mana Cost (MP)",
+    "ja": "マナ消費(MP)"
+  },
+  "마나 순환과 보호 결계를 증폭하는 투사의 마도 로브.": {
+    "en": "A fighter's arcane robe that amplifies mana circulation and protective barriers.",
+    "ja": "マナ循環と保護結界を増幅する闘士の魔導ローブ。"
+  },
+  "마나 절감": {
+    "en": "MP Cost Reduction",
+    "ja": "マナ節減"
+  },
+  "마나 증폭 링 +1": {
+    "en": "Mana Amplification Ring +1",
+    "ja": "マナ増幅リング +1"
+  },
+  "마나 촉매 반응로를 설치하여 원석과 대기 마나의 합성 반응을 촉진하고 정제 속도를 끌어올렸습니다.": {
+    "en": "Installed a mana catalytic reactor to accelerate synthesis of raw ore and ambient mana, boosting refining speed.",
+    "ja": "マナ触媒反応炉を設置し、原石と大気マナの合成反応を促進して精製速度を引き上げました。"
+  },
+  "마나(MP)": {
+    "en": "MP",
+    "ja": "マナ(MP)"
+  },
+  "마나(MP) 소모량을 5% 상시 절감": {
+    "en": "Permanently reduces MP cost by 5%",
+    "ja": "マナ(MP)消費量を常時5%節減"
+  },
+  "마나/속도/행운 (+3강)": {
+    "en": "MP/SPD/LUCK (+3 Enhanced)",
+    "ja": "マナ/速度/幸運 (+3強化)"
+  },
+  "마나누출(+{0}%)": {
+    "en": "Mana Leak (+{0}%)",
+    "ja": "マナ漏出(+{0}%)"
+  },
+  "마나소모-15% 마법+15%": {
+    "en": "MP Cost -15%, Magic +15%",
+    "ja": "マナ消費-15% 魔法+15%"
+  },
+  "마도": {
+    "en": "Arcane",
+    "ja": "魔導"
+  },
+  "마도 각인 안정화 및 정착 중...": {
+    "en": "Stabilizing and settling arcane inscription...",
+    "ja": "魔導刻印の安定化および定着中..."
+  },
+  "마도 각인의 잔향": {
+    "en": "Echo of Arcane Inscription",
+    "ja": "魔導刻印の残響"
+  },
+  "마도 결정 쇄도": {
+    "en": "Arcane Crystal Surge",
+    "ja": "魔導結晶殺到"
+  },
+  "마도 광맥의 핵으로 깎아낸 지팡이. 강력한 화염 작열탄 스킬을 시전할 수 있습니다.": {
+    "en": "A staff carved from the core of an arcane ore vein. Can cast powerful Flame Blast skills.",
+    "ja": "魔導鉱脈のコアを削り出した杖。強力な火炎炸裂弾スキルを詠唱できる。"
+  },
+  "마도 대장간 10티어 신화 장비 단조": {
+    "en": "Arcane Forge Tier 10 Mythic Gear Crafting",
+    "ja": "魔導鍛冶屋 Tier 10 神話装備鍛造"
+  },
+  "마도 대장간 Lv.3 필요": {
+    "en": "Requires Arcane Forge Lv.3",
+    "ja": "魔導鍛冶屋 Lv.3 必要"
+  },
+  "마도 대장간 Lv.6 필요": {
+    "en": "Requires Arcane Forge Lv.6",
+    "ja": "魔導鍛冶屋 Lv.6 必要"
+  },
+  "마도 대장간 강화제작소 (골드 240 + 목재 6 + 석탄 6)": {
+    "en": "Arcane Forge Workshop (240 Gold + 6 Wood + 6 Coal)",
+    "ja": "魔導鍛冶屋 強化製作所 (ゴールド 240 + 木材 6 + 石炭 6)"
+  },
+  "마도 대장간 강화제작소 (골드 240 + 식량 12)": {
+    "en": "Arcane Forge Workshop (240 Gold + 12 Food)",
+    "ja": "魔導鍛冶屋 強化製作所 (ゴールド 240 + 食糧 12)"
+  },
+  "마도 대장간 강화제작소 (골드 270 + 약초 6 + 가죽 3)": {
+    "en": "Arcane Forge Workshop (270 Gold + 6 Herbs + 3 Leather)",
+    "ja": "魔導鍛冶屋 強化製作所 (ゴールド 270 + 薬草 6 + 革 3)"
+  },
+  "마도 대장간 강화제작소 (골드 300 + 석재 18 + 목재 3)": {
+    "en": "Arcane Forge Workshop (300 Gold + 18 Stone + 3 Wood)",
+    "ja": "魔導鍛冶屋 強化製作所 (ゴールド 300 + 石材 18 + 木材 3)"
+  },
+  "마도 대장간 강화제작소 (골드 300 + 철광석 20 + 석재 12)": {
+    "en": "Arcane Forge Workshop (300 Gold + 20 Iron Ore + 12 Stone)",
+    "ja": "魔導鍛冶屋 強化製作所 (ゴールド 300 + 鉄鉱石 20 + 石材 12)"
+  },
+  "마도 대장간 강화제작소 (골드 360 + 약초 6 + 에테르 60)": {
+    "en": "Arcane Forge Workshop (360 Gold + 6 Herbs + 60 Ether)",
+    "ja": "魔導鍛冶屋 強化製作所 (ゴールド 360 + 薬草 6 + エーテル 60)"
+  },
+  "마도 대장간 강화제작소 (골드 720 + 석재 12 + 에테르 50)": {
+    "en": "Arcane Forge Workshop (720 Gold + 12 Stone + 50 Ether)",
+    "ja": "魔導鍛冶屋 強化製作所 (ゴールド 720 + 石材 12 + エーテル 50)"
+  },
+  "마도 대장간 바로가기": {
+    "en": "Go to Arcane Forge",
+    "ja": "魔導鍛冶屋へ移動"
+  },
+  "마도 대장간 보급품 제작소 (골드 120 + 석재 4 + 에테르 5)": {
+    "en": "Arcane Forge Supply Workshop (120 Gold + 4 Stone + 5 Ether)",
+    "ja": "魔導鍛冶屋 補給品製作所 (ゴールド 120 + 石材 4 + エーテル 5)"
+  },
+  "마도 대장간 보급품 제작소 (목재 2 + 석탄 2 + 40G)": {
+    "en": "Arcane Forge Supply Workshop (2 Wood + 2 Coal + 40G)",
+    "ja": "魔導鍛冶屋 補給品製作所 (木材 2 + 石炭 2 + 40G)"
+  },
+  "마도 대장간 보급품 제작소 (석재 6 + 목재 1 + 50G)": {
+    "en": "Arcane Forge Supply Workshop (6 Stone + 1 Wood + 50G)",
+    "ja": "魔導鍛冶屋 補給品製作所 (石材 6 + 木材 1 + 50G)"
+  },
+  "마도 대장간 보급품 제작소 (식량 4 + 40G)": {
+    "en": "Arcane Forge Supply Workshop (4 Food + 40G)",
+    "ja": "魔導鍛冶屋 補給品製作所 (食糧 4 + 40G)"
+  },
+  "마도 대장간 보급품 제작소 (약초 1 + 가죽 1 + 45G)": {
+    "en": "Arcane Forge Supply Workshop (1 Herb + 1 Leather + 45G)",
+    "ja": "魔導鍛冶屋 補給品製作所 (薬草 1 + 革 1 + 45G)"
+  },
+  "마도 대장간 보급품 제작소 (약초 2 + 에테르 5 + 60G)": {
+    "en": "Arcane Forge Supply Workshop (2 Herbs + 5 Ether + 60G)",
+    "ja": "魔導鍛冶屋 補給品製作所 (薬草 2 + エーテル 5 + 60G)"
+  },
+  "마도 대장간 보급품 제작소 (철광석 2 + 석재 4 + 50G)": {
+    "en": "Arcane Forge Supply Workshop (2 Iron Ore + 4 Stone + 50G)",
+    "ja": "魔導鍛冶屋 補給品製作所 (鉄鉱石 2 + 石材 4 + 50G)"
+  },
+  "마도 대장간 보스 고유 장비 단조": {
+    "en": "Arcane Forge Boss Unique Gear Crafting",
+    "ja": "魔導鍛冶屋 ボス固有装備鍛造"
+  },
+  "마도 로브 및 부적 직조 (+30% 매입가)": {
+    "en": "Weave Arcane Robes & Talismans (+30% Buy Price)",
+    "ja": "魔導ローブおよび護符の織成 (+30% 買取価格)"
+  },
+  "마도 룬": {
+    "en": "Arcane Rune",
+    "ja": "魔導ルーン"
+  },
+  "마도 룬 가죽갑": {
+    "en": "Arcane Runic Leather Armor",
+    "ja": "魔導ルーン革鎧"
+  },
+  "마도 룬 각인 기술을 완성하여 3티어 희귀 장비를 단조하고, +7강 강화와 함께 장비에 특별한 힘을 부여하는 [접두어 인챈트] 슬롯을 개방합니다.": {
+    "en": "Master arcane runic engraving to craft Tier 3 Rare equipment, enhancing up to +7 and unlocking the [Prefix Enchant] slot to bestow unique power.",
+    "ja": "魔導ルーン刻印技術を完成させてTier 3の希少装備を鍛造し、+7強化と共に装備に特別な力を付与する【接頭辞エンチャント】スロットを開放します。"
+  },
+  "마도 룬 각인 명검": {
+    "en": "Arcane Rune-Engraved Master Sword",
+    "ja": "魔導ルーン刻印名剣"
+  },
+  "마도 룬 각인 원소 학도 세트": {
+    "en": "Arcane Rune-Engraved Element Scholar Set",
+    "ja": "魔導ルーン刻印元素学徒セット"
+  },
+  "마도 룬 형상 주조 및 모루 타격 중...": {
+    "en": "Casting arcane rune shape and striking anvil...",
+    "ja": "魔導ルーン形状鋳造および金床打撃中..."
+  },
+  "마도 물리 융합 타격: 공격력 +10%, 행운 +9, 방어 관통 +8%, 턴당 마나 2 MP 재생": {
+    "en": "Arcane Physical Fusion Strike: ATK +10%, LUCK +9, DEF Pierce +8%, Restores 2 MP per turn",
+    "ja": "魔導物理融合打撃：攻撃力+10%、幸運+9、防御貫通+8%、毎ターン2 MP再生"
+  },
+  "마도 보호막 발생 장치 (야간 방어 강화)": {
+    "en": "Arcane Shield Generator (Night Defense Boost)",
+    "ja": "魔導シールド発生装置 (夜間防御強化)"
+  },
+  "마도 비전서 • {0}": {
+    "en": "Arcane Grimoire • {0}",
+    "ja": "魔導秘伝書 • {0}"
+  },
+  "마도 성역 수호": {
+    "en": "Arcane Sanctuary Guardian",
+    "ja": "魔導聖域守護"
+  },
+  "마도 속사 마총": {
+    "en": "Arcane Rapid Magigun",
+    "ja": "魔導速射魔銃"
+  },
+  "마도 수정 전갈": {
+    "en": "Arcane Crystal Scorpion",
+    "ja": "魔導水晶サソリ"
+  },
+  "마도 수호 판금갑": {
+    "en": "Arcane Guardian Plate Armor",
+    "ja": "魔導守護板金鎧"
+  },
+  "마도 에너지를 폭발시켜 적 전체에 173% 비전 피해 및 모든 버프 해제.": {
+    "en": "Detonates arcane energy dealing 173% Arcane DMG to all enemies and dispelling all buffs.",
+    "ja": "魔導エネルギーを爆発させ、敵全体に173%の秘術ダメージおよびすべてのバフを解除。"
+  },
+  "마도 에테르 -25%": {
+    "en": "Arcane Ether -25%",
+    "ja": "魔導エーテル -25%"
+  },
+  "마도 인챈트 옵션": {
+    "en": "Arcane Enchant Option",
+    "ja": "魔導エンチャントオプション"
+  },
+  "마도 인챈트석": {
+    "en": "Arcane Enchant Stone",
+    "ja": "魔導エンチャント石"
+  },
+  "마도 장비 강화": {
+    "en": "Enhance Arcane Gear",
+    "ja": "魔導装備強化"
+  },
+  "마도 장비 단조/강화": {
+    "en": "Forge/Enhance Arcane Gear",
+    "ja": "魔導装備鍛造/強化"
+  },
+  "마도 장비 인챈트": {
+    "en": "Enchant Arcane Gear",
+    "ja": "魔導装備エンチャント"
+  },
+  "마도 장비를 단조하고 무구를 강화할 모루와 화덕이 없습니다.": {
+    "en": "No anvil or hearth available to forge arcane equipment and enhance armaments.",
+    "ja": "魔導装備を鍛造し武具を強化するための金床と火床がありません。"
+  },
+  "마도 점사": {
+    "en": "Arcane Burst",
+    "ja": "魔導バースト"
+  },
+  "마도 정제소 생산 & 승급/전직 및 정화": {
+    "en": "Arcane Refinery Production & Promotion/Class Change & Purification",
+    "ja": "魔導精製所生産 ＆ 昇格/転職および浄化"
+  },
+  "마도 정제소(Ether Refinery) 틱 생산": {
+    "en": "Arcane Refinery (Ether Refinery) Tick Production",
+    "ja": "魔導精製所(Ether Refinery) ティック生産"
+  },
+  "마도 조준경": {
+    "en": "Arcane Scope",
+    "ja": "魔導照準器"
+  },
+  "마도 중화기 공학": {
+    "en": "Arcane Heavy Ordnance Engineering",
+    "ja": "魔導重火器工学"
+  },
+  "마도 중화기 포격": {
+    "en": "Arcane Heavy Artillery Barrage",
+    "ja": "魔導重火器砲撃"
+  },
+  "마도 지반 고주파 굴착 진동파 시스템을 도입하여 단단한 금강 암반도 모래처럼 분쇄하며 유지비를 21% 감면합니다.": {
+    "en": "Introduced high-frequency seismic drilling system into arcane ground to crush diamond bedrock like sand, reducing upkeep by 21%.",
+    "ja": "魔導地盤高周波掘削振動波システムを導入し、硬質な金剛岩盤も砂のように粉砕して維持費を21%減免します。"
+  },
+  "마도 채석장": {
+    "en": "Arcane Quarry",
+    "ja": "魔導採石場"
+  },
+  "마도 총사 ➔ 헤비 거너 / 에테르 메카닉 ➔ 👑 아포칼립스 캐논 (Apocalypse Cannon)": {
+    "en": "Magic Gunner ➔ Heavy Gunner / Ether Mechanic ➔ 👑 Apocalypse Cannon",
+    "ja": "魔銃士 ➔ ヘビーガンナー / エーテルメカニック ➔ 👑 アポカリプスキャノン (Apocalypse Cannon)"
+  },
+  "마도 탄도학 마스터: 치명타 공격 적중 시 방어력을 50% 관통하고 마나 15 자동 충전.": {
+    "en": "Arcane Ballistics Master: On critical hit, ignores 50% DEF and automatically restores 15 MP.",
+    "ja": "魔導弾道学マスター：会心攻撃命中時、防御力を50%貫通しマナ15を自動チャージ。"
+  },
+  "마도 폭주 결사단": {
+    "en": "Arcane Berserk Legion",
+    "ja": "魔導暴走決死隊"
+  },
+  "마도 항온 격납고를 완공하여 변질되기 쉬운 에테르와 목재, 식량 등 영지 생산품의 적재량을 2,000개로 늘렸습니다.": {
+    "en": "Completed arcane climate hangar, expanding storage capacity for perishable ether, wood, food, and other domain products to 2,000.",
+    "ja": "魔導恒温格納庫を完成させ、変質しやすいエーテルや木材、食糧など領地生産物の積載量を2,000個に増やしました。"
+  },
+  "마도봉": {
+    "en": "Arcane Wand",
+    "ja": "魔導棒"
+  },
+  "마도서": {
+    "en": "Grimoire",
+    "ja": "魔導書"
+  },
+  "마도서 [{0}]이(가) 서고에 부족합니다. (필요: {1}, 보유: {2})": {
+    "en": "Grimoire [{0}] is insufficient in library. (Required: {1}, Owned: {2})",
+    "ja": "魔導書【{0}】が書庫に不足しています。(必要: {1}, 所持: {2})"
+  },
+  "마도서 부족": {
+    "en": "Insufficient Grimoires",
+    "ja": "魔導書不足"
+  },
+  "마도서 제작 & 강화": {
+    "en": "Craft & Enhance Grimoire",
+    "ja": "魔導書製作 ＆ 強化"
+  },
+  "마도서 제작 ({0}종)": {
+    "en": "Craft Grimoires ({0} Types)",
+    "ja": "魔導書製作 ({0}種)"
+  },
+  "마도서 제작 및 최고 10레벨 비전 마도 강화": {
+    "en": "Grimoire crafting and max Lv.10 arcane grimoire enhancement",
+    "ja": "魔導書製作および最大10レベル秘伝魔導強化"
+  },
+  "마도서 제작하기": {
+    "en": "Craft Grimoire",
+    "ja": "魔導書を製作する"
+  },
+  "마도서 집필 완료!": {
+    "en": "Grimoire Compilation Complete!",
+    "ja": "魔導書の執筆完了！"
+  },
+  "마도서 추가 수집 필요": {
+    "en": "Need to Collect More Grimoires",
+    "ja": "魔導書の追加収集が必要"
+  },
+  "마도서/비전서 위력": {
+    "en": "Grimoire Power",
+    "ja": "魔導書/秘伝書の威力"
+  },
+  "마도서: {0}": {
+    "en": "Grimoire: {0}",
+    "ja": "魔導書: {0}"
+  },
+  "마도서: 그림자 걸음": {
+    "en": "Grimoire: Shadow Step",
+    "ja": "魔導書: 影歩"
+  },
+  "마도서: 그림자 베기": {
+    "en": "Grimoire: Shadow Slash",
+    "ja": "魔導書: 影斬り"
+  },
+  "마도서: 급소 찌르기": {
+    "en": "Grimoire: Vital Strike",
+    "ja": "魔導書: 急所突き"
+  },
+  "마도서: 단련된 일격": {
+    "en": "Grimoire: Tempered Strike",
+    "ja": "魔導書: 鍛錬された一撃"
+  },
+  "마도서: 돌파 돌격": {
+    "en": "Grimoire: Breaching Charge",
+    "ja": "魔導書: 突破突撃"
+  },
+  "마도서: 레일건 관통포": {
+    "en": "Grimoire: Railgun Piercing Cannon",
+    "ja": "魔導書: レールガン貫通砲"
+  },
+  "마도서: 방패 강타": {
+    "en": "Grimoire: Shield Slam",
+    "ja": "魔導書: シールドスラム"
+  },
+  "마도서: 산탄 사격": {
+    "en": "Grimoire: Buckshot",
+    "ja": "魔導書: 散弾射撃"
+  },
+  "마도서: 성광의 치유": {
+    "en": "Grimoire: Holy Light Healing",
+    "ja": "魔導書: 聖光の治癒"
+  },
+  "마도서: 성역 전개": {
+    "en": "Grimoire: Sanctuary Deployment",
+    "ja": "魔導書: 聖域展開"
+  },
+  "마도서: 속사": {
+    "en": "Grimoire: Rapid Fire",
+    "ja": "魔導書: 速射"
+  },
+  "마도서: 신성 방벽": {
+    "en": "Grimoire: Holy Barrier",
+    "ja": "魔導書: 神聖防壁"
+  },
+  "마도서: 신성 일격": {
+    "en": "Grimoire: Holy Strike",
+    "ja": "魔導書: 神聖一撃"
+  },
+  "마도서: 심판의 빛": {
+    "en": "Grimoire: Light of Judgment",
+    "ja": "魔導書: 審判の光"
+  },
+  "마도서: 십자군 강타": {
+    "en": "Grimoire: Crusader Strike",
+    "ja": "魔導書: 十字軍強打"
+  },
+  "마도서: 암영 난무": {
+    "en": "Grimoire: Dark Flurry",
+    "ja": "魔導書: 暗影乱舞"
+  },
+  "마도서: 에테르 볼트": {
+    "en": "Grimoire: Ether Bolt",
+    "ja": "魔導書: エーテルボルト"
+  },
+  "마도서: 연쇄 번개": {
+    "en": "Grimoire: Chain Lightning",
+    "ja": "魔導書: 連鎖稲妻"
+  },
+  "마도서: 원소 폭발": {
+    "en": "Grimoire: Elemental Burst",
+    "ja": "魔導書: 元素爆発"
+  },
+  "마도서: 전열 가르기": {
+    "en": "Grimoire: Frontline Cleave",
+    "ja": "魔導書: 前衛薙ぎ払い"
+  },
+  "마도서: 전열 압도": {
+    "en": "Grimoire: Overwhelm Frontline",
+    "ja": "魔導書: 前衛圧倒"
+  },
+  "마도서: 정밀 헤드샷": {
+    "en": "Grimoire: Precision Headshot",
+    "ja": "魔導書: 精密ヘッドショット"
+  },
+  "마도서: 질풍 4연참": {
+    "en": "Grimoire: Gale Quad-Slash",
+    "ja": "魔導書: 疾風四連斬"
+  },
+  "마도서: 철벽 방어": {
+    "en": "Grimoire: Ironclad Defense",
+    "ja": "魔導書: 鉄壁防御"
+  },
+  "마도서: 철퇴 강타": {
+    "en": "Grimoire: Mace Smash",
+    "ja": "魔導書: 鉄槌強打"
+  },
+  "마도서: 혈풍참": {
+    "en": "Grimoire: Blood Wind Slash",
+    "ja": "魔導書: 血風斬"
+  },
+  "마도서: 혹한의 눈보라": {
+    "en": "Grimoire: Frost Blizzard",
+    "ja": "魔導書: 酷寒の吹雪"
+  },
+  "마도서: 환영 난무 왈츠": {
+    "en": "Grimoire: Phantom Flurry Waltz",
+    "ja": "魔導書: 幻影乱舞ワルツ"
+  },
+  "마도서: 환영의 반격": {
+    "en": "Grimoire: Phantom Riposte",
+    "ja": "魔導書: 幻影の反撃"
+  },
+  "마도서를 찾을 수 없습니다.": {
+    "en": "Grimoire cannot be found.",
+    "ja": "魔導書が見つかりません。"
+  },
+  "마도의 지혜가 응축된 비전 마도서를 제본하여 용병들에게 강력한 전술 스킬을 전수하라.": {
+    "en": "Bind arcane grimoires condensing arcane wisdom to teach mercenaries powerful tactical skills.",
+    "ja": "魔導の知恵が凝縮された秘伝魔導書を製本し、傭兵たちに強力な戦術スキルを伝授せよ。"
+  },
+  "마력": {
+    "en": "Magic Power",
+    "ja": "魔力"
+  },
+  "마력 공명": {
+    "en": "Magic Resonance",
+    "ja": "魔力共鳴"
+  },
+  "마력 깃든 활": {
+    "en": "Magic-Imbued Bow",
+    "ja": "魔力宿る弓"
+  },
+  "마력 수정": {
+    "en": "Magic Crystal",
+    "ja": "魔力水晶"
+  },
+  "마력 수정을 주입해 룬을 각인하고 3개 복합 스탯을 발현한 [희귀]": {
+    "en": "[Rare] Injected with magic crystals to engrave runes, manifesting 3 composite stats",
+    "ja": "魔力水晶を注入してルーンを刻印し、3つの複合ステータスを発現した【希少】"
+  },
+  "마력 역류 충격으로 인해 강화 단계가 1단계 하락했습니다.": {
+    "en": "Enhancement tier decreased by 1 due to mana backlash shock.",
+    "ja": "魔力逆流の衝撃により強化段階が1段階下落しました。"
+  },
+  "마력 역류 충격으로 인해 스킬 레벨이 1단계 하락했습니다.": {
+    "en": "Skill level decreased by 1 due to mana backlash shock.",
+    "ja": "魔力逆流の衝撃によりスキルレベルが1段階下落しました。"
+  },
+  "마력 온실에서 영목 묘목을 집중 증식하는 순환 조림 시스템을 가동하여, 자체 자립도가 상승하고 골드 유지비가 7% 감면됩니다.": {
+    "en": "Operating a rotational afforestation system intensively multiplying sacred tree saplings in magic greenhouses, increasing self-sufficiency and reducing Gold upkeep by 7%.",
+    "ja": "魔力温室で霊木の苗木を集中的に増殖させる循環造林システムを稼働し、自立度が上昇してゴールド維持費が7%減免されます。"
+  },
+  "마력 응축 반지": {
+    "en": "Mana Condensation Ring",
+    "ja": "魔力凝縮の指輪"
+  },
+  "마력 응축: 매 턴 시작 시 마나 5 자동 회복.": {
+    "en": "Mana Condensation: Restores 5 MP automatically at the start of each turn.",
+    "ja": "魔力凝縮：毎ターン開始時にマナ5を自動回復。"
+  },
+  "마력 저항으로 인해 강화에 실패했습니다. 장비 수치는 유지되며 재료만 소모되었습니다.": {
+    "en": "Enhancement failed due to magic resistance. Equipment values are preserved and only materials were consumed.",
+    "ja": "魔力抵抗により強化に失敗しました。装備の数値は維持され、材料のみ消費されました。"
+  },
+  "마력 지원 들어간다!": {
+    "en": "Magic support incoming!",
+    "ja": "魔力支援いくぞ！"
+  },
+  "마력 침식 가고일": {
+    "en": "Mana-Eroded Gargoyle",
+    "ja": "魔力侵食ガーゴイル"
+  },
+  "마력 특이점 보옥 +10": {
+    "en": "Magic Singularity Jewel +10",
+    "ja": "魔力特異点の宝玉 +10"
+  },
+  "마력봉": {
+    "en": "Magic Wand",
+    "ja": "魔力棒"
+  },
+  "마력수정": {
+    "en": "Magic Crystal",
+    "ja": "魔力水晶"
+  },
+  "마물": {
+    "en": "Monster",
+    "ja": "魔物"
+  },
+  "마물 마도서/스킬 설명": {
+    "en": "Monster Grimoire/Skill Description",
+    "ja": "魔物魔導書/スキル説明"
+  },
+  "마물 사체를 정제하여 13초마다 식량을 생산하며, Lv.3부터 가죽을 추출합니다. (80% 증산 특화 & Lv.5 [대량 배급제] 전 식량 유지비 30%~35% 감면)": {
+    "en": "Refines monster corpses to produce Food every 13s, and extracts Leather from Lv.3. (80% production boost specialization & Lv.5 [Rationing System] reduces all food upkeep by 30%~35%)",
+    "ja": "魔物の死骸を精製して13秒ごとに食糧を生産し、Lv.3から革を抽出します。(80%増産特化 ＆ Lv.5【大量配給制】全食糧維持費30%〜35%減免)"
+  },
+  "마물 정제소": {
+    "en": "Monster Refinery",
+    "ja": "魔物精製所"
+  },
+  "마물 토벌 및 던전 상자에서 획득하는 기본 골드 배율 (기본 1.0)": {
+    "en": "Base gold multiplier obtained from slaying monsters and opening dungeon chests (Default 1.0)",
+    "ja": "魔物討伐およびダンジョン宝箱から獲得する基本ゴールド倍率 (基本 1.0)"
+  },
+  "마물/보스 능력치": {
+    "en": "Monster/Boss Stats",
+    "ja": "魔物/ボスの能力値"
+  },
+  "마물들의 공격력과 방어력 강화(+": {
+    "en": "Enhances monsters' ATK and DEF (+",
+    "ja": "魔物たちの攻撃力と防御力強化(+"
+  },
+  "마물의 비기": {
+    "en": "Monster Secret Art",
+    "ja": "魔物の秘技"
+  },
+  "마물의 피와 약초, 질긴 가죽에 새긴 피의 계약입니다. 몬스터 조우 확률이 상승하지만, 탐험에서 획득하는 모든 골드 전리품이 2배로 증폭됩니다.": {
+    "en": "A blood contract inscribed with monster blood, herbs, and tough leather. Increases monster encounter rates, but doubles all gold loot obtained from exploration.",
+    "ja": "魔物の血と薬草、強靭な革に刻まれた血の契約。モンスター遭遇率が上昇するが、探検で獲得するすべてのゴールド戦利品が2倍に増幅される。"
+  },
+  "마법": {
+    "en": "Magic",
+    "ja": "魔法"
+  },
+  "마법 광역 탄막 연타 및 아군 파티 전원 MP 10 반환": {
+    "en": "Magic AoE barrage strikes and refunds 10 MP to all party allies",
+    "ja": "魔法範囲弾幕連続攻撃 ＆ 味方パーティ全員にMP 10返還"
+  },
+  "마법 딜러": {
+    "en": "Magic DPS",
+    "ja": "魔法ディーラー"
+  },
+  "마법 딜러 + 거너 조합": {
+    "en": "Magic DPS + Gunner Combo",
+    "ja": "魔法ディーラー + ガンナー構成"
+  },
+  "마법 딜러 + 물리 딜러 조합": {
+    "en": "Magic DPS + Physical DPS Combo",
+    "ja": "魔法ディーラー + 物理ディーラー構成"
+  },
+  "마법 딜러 + 힐러 조합": {
+    "en": "Magic DPS + Healer Combo",
+    "ja": "魔法ディーラー + ヒーラー構成"
+  },
+  "마법 딜러 2인": {
+    "en": "2 Magic DPS",
+    "ja": "魔法ディーラー2人"
+  },
+  "마법 딜러 3인 (순수 비전 학회)": {
+    "en": "3 Magic DPS (Pure Arcane Society)",
+    "ja": "魔法ディーラー3人 (純粋秘術学会)"
+  },
+  "마법 로브 및 부적 악세서리 단조": {
+    "en": "Forge Magic Robes & Talisman Accessories",
+    "ja": "魔法ローブおよび護符アクセサリーの鍛造"
+  },
+  "마법 로브/부적 단조 & 고급 마도 직조": {
+    "en": "Forge Magic Robes/Talismans & Advanced Arcane Weaving",
+    "ja": "魔法ローブ/護符鍛造 ＆ 高級魔導織成"
+  },
+  "마법 수정": {
+    "en": "Magic Crystal",
+    "ja": "魔法水晶"
+  },
+  "마법 수정 🔮": {
+    "en": "Magic Crystal 🔮",
+    "ja": "魔法水晶 🔮"
+  },
+  "마법 저항 50% 분쇄 & 연쇄 전격 40% 폭발": {
+    "en": "Shreds 50% Magic Resistance & 40% Chain Lightning Blast",
+    "ja": "魔法抵抗50%粉砕 ＆ 連鎖電撃40%爆発"
+  },
+  "마법 폭발 & 적 전체 맹독 전이": {
+    "en": "Magic Explosion & Spreads Deadly Poison to All Enemies",
+    "ja": "魔法爆発 ＆ 敵全体に猛毒転移"
+  },
+  "마법사": {
+    "en": "Mage",
+    "ja": "魔法使い"
+  },
+  "마법사 계열을 위해 가공된 에테르 완드. 마법 공격력과 최대 마나를 균형 있게 상승시킵니다.": {
+    "en": "An ether wand crafted for Mage classes. Balancedly boosts Magic ATK and Max MP.",
+    "ja": "魔法使い系列のために加工されたエーテルワンド。魔法攻撃力と最大マナをバランスよく上昇させる。"
+  },
+  "마법사, 원소술사, 주교, 성녀": {
+    "en": "Mage, Elementalist, Bishop, Saintess",
+    "ja": "魔法使い、元素術士、司教、聖女"
+  },
+  "마법수정🔮, 공허파편🌌, 접두석💎, 접미석💠": {
+    "en": "Magic Crystal🔮, Void Shard🌌, Prefix Stone💎, Suffix Stone💠",
+    "ja": "魔法水晶🔮、虚空破片🌌、接頭石💎、接尾石💠"
+  },
+  "마비": {
+    "en": "Paralysis",
+    "ja": "麻痺"
+  },
+  "마수의 순수 생체 에너지만을 추출하여 농축 캡슐로 제조하는 첨단 라인을 신설해 고밀도 영양을 보급합니다.": {
+    "en": "Established a cutting-edge line to extract pure bio-energy from magical beasts and manufacture concentrated capsules, providing high-density nutrition.",
+    "ja": "魔獣の純粋生体エネルギーのみを抽出して濃縮カプセルを製造する先端ラインを新設し、高密度栄養を補給します。"
+  },
+  "마수의 질긴 가죽을 손상 없이 벗겨내어 방어구 및 고급 자재로 가공하는 전문 무두질 공정을 해금했습니다.": {
+    "en": "Unlocked specialized tanning processes to strip tough beast hides undamaged and process them into armor and advanced materials.",
+    "ja": "魔獣の強靭な革を傷つけずに剥ぎ取り、防具や高級資材に加工する専門なめし工程を解放しました。"
+  },
+  "마스터 권한이 없습니다. (현재 계정: {0} / @bumpcat.net 이메일 필요)": {
+    "en": "No master authority. (Current Account: {0} / @bumpcat.net email required)",
+    "ja": "マスター権限がありません。(現在のアカウント: {0} / @bumpcat.net メールが必要)"
+  },
+  "마스터 데이터 Firebase 시딩": {
+    "en": "Master Data Firebase Seeding",
+    "ja": "マスターデータ Firebase シーディング"
+  },
+  "마스터 데이터 스튜디오": {
+    "en": "Master Data Studio",
+    "ja": "マスターデータスタジオ"
+  },
+  "마왕": {
+    "en": "Demon Lord",
+    "ja": "魔王"
+  },
+  "마총": {
+    "en": "Magigun",
+    "ja": "魔銃"
+  },
+  "마총 수련생": {
+    "en": "Magigun Trainee",
+    "ja": "魔銃修練生"
+  },
+  "마총 수련생 ➔ [전술 포수 ➔ 하이퍼 레인저] / [심연의 저격수 ➔ 사신 저격수]": {
+    "en": "Magigun Trainee ➔ [Tactical Gunner ➔ Hyper Ranger] / [Abyssal Sniper ➔ Reaper Sniper]",
+    "ja": "魔銃修練生 ➔ 【戦術砲手 ➔ ハイパーレンジャー】 / 【深淵の狙撃手 ➔ 死神狙撃手】"
+  },
+  "마총 수련생 계통": {
+    "en": "Magigun Trainee Line",
+    "ja": "魔銃修練生系統"
+  },
+  "마총 저격계": {
+    "en": "Magigun Sniper Line",
+    "ja": "魔銃狙撃系"
+  },
+  "마총/원거리": {
+    "en": "Magigun / Ranged",
+    "ja": "魔銃/遠距離"
+  },
+  "마총·암살": {
+    "en": "Magigun & Assassin",
+    "ja": "魔銃・暗殺"
+  },
+  "마총·암살 계열": {
+    "en": "Magigun & Assassin Line",
+    "ja": "魔銃・暗殺系列"
+  },
+  "마총사": {
+    "en": "Magic Gunner",
+    "ja": "魔銃士"
+  },
+  "마총사 계열의 전술 기동 사격용 리볼버. 빠른 연사력과 안정적인 치명타를 자랑합니다.": {
+    "en": "A revolver for tactical mobile shooting suited for Magic Gunners. Boasts rapid fire rate and reliable critical strikes.",
+    "ja": "魔銃士系列の戦術機動射撃用リボルバー。素早い連射力と安定した会心を誇る。"
+  },
+  "마총사(거너) 2인": {
+    "en": "2 Magic Gunners",
+    "ja": "魔銃士(ガンナー)2人"
+  },
+  "마총사(거너) 3인 (순수 저격 여단)": {
+    "en": "3 Magic Gunners (Pure Sniper Brigade)",
+    "ja": "魔銃士(ガンナー)3人 (純粋狙撃旅団)"
+  },
+  "마총사의 사격술: 파티 치명타율 +6%, 속도 +5%": {
+    "en": "Magic Gunner's Marksmanship: Party Crit Rate +6%, SPD +5%",
+    "ja": "魔銃士の射撃術：パーティ会心率+6%、速度+5%"
+  },
+  "마총사의 전술 리볼버": {
+    "en": "Magic Gunner's Tactical Revolver",
+    "ja": "魔銃士の戦術リボルバー"
+  },
+  "마침내 심연의 근원에 도달했다. 공허의 지배자를 쓰러뜨리고 세계를 파멸로부터 구원하라!": {
+    "en": "At last, reached the source of the Abyss. Defeat the Ruler of the Void and save the world from ruin!",
+    "ja": "ついに深淵の根源に到達した。虚空の支配者を打ち倒し、世界を破滅から救え！"
+  },
+  "마침내 심연의 근원에 도달했다. 광폭화한 공허의 지배자를 쓰러뜨리고 모노리스 핵을 정화하면, 방주는 마침내 완전한 빛의 방주로 재탄생할 것이다!": {
+    "en": "At last, reached the source of the Abyss. Defeat the berserk Ruler of the Void and purify the Monolith Core, and the Ark will finally be reborn as the Ark of Light!",
+    "ja": "ついに深淵の根源に到達した。狂暴化した虚空の支配者を打ち倒しモノリス核を浄化すれば、方舟はついに完全なる光の方舟として生まれ変わるだろう！"
+  },
+  "마침내... 저주가 풀렸습니다. 제 피는 더는 마물의 먹이가 아니라, 방주를 지키는 거룩한 가호가 될 것입니다.": {
+    "en": "At last... the curse is lifted. My blood shall no longer be prey for monsters, but a sacred blessing that guards the Ark.",
+    "ja": "ついに…呪いが解けました。私の血はもはや魔物の餌食ではなく、方舟を守る神聖なる加護となるでしょう。"
+  },
+  "마켓": {
+    "en": "Market",
+    "ja": "マーケット"
+  },
+  "마켓 Lv.": {
+    "en": "Market Lv.",
+    "ja": "マーケット Lv."
+  },
+  "마켓 백과": {
+    "en": "Market Encyclopedia",
+    "ja": "マーケット百科"
+  },
+  "만능 열쇠": {
+    "en": "Skeleton Key",
+    "ja": "万能鍵"
+  },
+  "만능열쇠": {
+    "en": "Skeleton Key",
+    "ja": "万能鍵"
+  },
+  "만이 심연의 차가운 정적 위를 떠돌고 있습니다.": {
+    "en": "only drifts upon the cold silence of the abyss.",
+    "ja": "だけが深淵の冷たい静寂の上を漂っています。"
+  },
+  "만화경 거울 파편": {
+    "en": "Kaleidoscope Mirror Shard",
+    "ja": "万華鏡の鏡の破片"
+  },
+  "만화경 차원 로브": {
+    "en": "Kaleidoscope Dimensional Robe",
+    "ja": "万華鏡次元ローブ"
+  },
+  "만화경 환영 경갑": {
+    "en": "Kaleidoscope Illusion Light Armor",
+    "ja": "万華鏡幻影軽甲"
+  },
+  "만화경 환영 명검": {
+    "en": "Kaleidoscope Illusion Master Sword",
+    "ja": "万華鏡幻影名剣"
+  }
+}

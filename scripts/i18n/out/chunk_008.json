@@ -1,0 +1,802 @@
+{
+  "✨ [희귀]": {
+    "en": "✨ [Rare]",
+    "ja": "✨ [希少]"
+  },
+  "✨ {0} [{1}] → 파티 전원 치유! [{2}]": {
+    "en": "✨ {0} [{1}] → All party members healed! [{2}]",
+    "ja": "✨ {0} [{1}] → パーティ全員回復！[{2}]"
+  },
+  "✨ {0} 에테르": {
+    "en": "✨ {0} Ether",
+    "ja": "✨ {0} エーテル"
+  },
+  "✨ {0}에테르": {
+    "en": "✨ {0} Ether",
+    "ja": "✨ {0}エーテル"
+  },
+  "✨ ★{0}단계 각성 시도 (성공 20% / 실패 시 파괴)": {
+    "en": "✨ ★Attempt Stage {0} Awakening (20% Success / Destroyed on Failure)",
+    "ja": "✨ ★ステージ{0}覚醒試行（成功20% / 失敗時破壊）"
+  },
+  "✨ 각성 가능": {
+    "en": "✨ Awakening Available",
+    "ja": "✨ 覚醒可能"
+  },
+  "✨ 각성 성공 확률": {
+    "en": "✨ Awakening Success Rate",
+    "ja": "✨ 覚醒成功確率"
+  },
+  "✨ 개인 성향:": {
+    "en": "✨ Personal Trait:",
+    "ja": "✨ 個人傾向:"
+  },
+  "✨ 결속 발동 중": {
+    "en": "✨ Bond Active",
+    "ja": "✨ 結束発動中"
+  },
+  "✨ 결속 중": {
+    "en": "✨ Bound",
+    "ja": "✨ 結束中"
+  },
+  "✨ 결속 중 (1회)": {
+    "en": "✨ Bound (1 time)",
+    "ja": "✨ 結束中（1回）"
+  },
+  "✨ 고농도 에테르 급랭 중... (희귀 등급 각성!)": {
+    "en": "✨ Quenching dense Ether... (Rare Grade Awakened!)",
+    "ja": "✨ 高濃度エーテル急冷中...（希少等級覚醒！）"
+  },
+  "✨ 고대 마도 룬 영구 결속 성공!": {
+    "en": "✨ Ancient Magic Rune Permanently Bound!",
+    "ja": "✨ 古代魔導ルーンの永久結束に成功！"
+  },
+  "✨ 다음 레벨 강화 시 [Lv.": {
+    "en": "✨ Next Level Enhance [Lv.",
+    "ja": "✨ 次のレベル強化時 [Lv."
+  },
+  "✨ 단계 효과:": {
+    "en": "✨ Stage Effect:",
+    "ja": "✨ 段階効果:"
+  },
+  "✨ 등록 가능": {
+    "en": "✨ Can Register",
+    "ja": "✨ 登録可能"
+  },
+  "✨ 마나 충전도": {
+    "en": "✨ Mana Charge",
+    "ja": "✨ マナ充填度"
+  },
+  "✨ 마도 각인 안정화 성공!": {
+    "en": "✨ Magic Imprint Successfully Stabilized!",
+    "ja": "✨ 魔導刻印の安定化に成功！"
+  },
+  "✨ 마도 각인 완전 정착 성공!": {
+    "en": "✨ Magic Imprint Fully Settled!",
+    "ja": "✨ 魔導刻印の完全定着に成功！"
+  },
+  "✨ 마도 인챈트석": {
+    "en": "✨ Magic Enchant Stone",
+    "ja": "✨ 魔導エンチャント石"
+  },
+  "✨ 무간 심연 완전 정화": {
+    "en": "✨ Avici Abyss Fully Purified",
+    "ja": "✨ 無間深淵完全浄化"
+  },
+  "✨ 무작위 귀환 포탈 발견": {
+    "en": "✨ Random Return Portal Discovered",
+    "ja": "✨ ランダム帰還ポータル発見"
+  },
+  "✨ 복합 효과 동반 강화": {
+    "en": "✨ Combined Effect Simultaneous Enhancement",
+    "ja": "✨ 複合効果の同時強化"
+  },
+  "✨ 부여된 마도 인챈트 속성": {
+    "en": "✨ Imbued Magic Enchant Properties",
+    "ja": "✨ 付与された魔導エンチャント属性"
+  },
+  "✨ 성공 확률": {
+    "en": "✨ Success Rate",
+    "ja": "✨ 成功確率"
+  },
+  "✨ 성역 정화 (맑아진 심연)": {
+    "en": "✨ Sanctuary Purified (Cleared Abyss)",
+    "ja": "✨ 聖域浄化（晴れ渡る深淵）"
+  },
+  "✨ 성역 정화 완료: 짙은 연무가 걷혀 마물들의 마기 강화가 영구히 소멸했습니다.": {
+    "en": "✨ Sanctuary Purification Complete: The dense haze has lifted, permanently dispelling the monsters' demonic empowerment.",
+    "ja": "✨ 聖域浄化完了：濃い煙霧が晴れ、魔物たちの魔気強化が永久に消滅した。"
+  },
+  "✨ 성화 가동 중: 영지 생산 +15%, 전투 EXP +20%, 영지 용병 지속 회복": {
+    "en": "✨ Sacred Flame Active: Territory Production +15%, Combat EXP +20%, Continuous Mercenary HP Recovery",
+    "ja": "✨ 聖火稼働中：領地生産+15%、戦闘EXP+20%、領地傭兵の持続回復"
+  },
+  "✨ 신비로운 에테르 기류": {
+    "en": "✨ Mysterious Ether Currents",
+    "ja": "✨ 神秘的なエーテル気流"
+  },
+  "✨ 신성 속성 & 불경한 존재 정화 메커니즘": {
+    "en": "✨ Holy Attribute & Unholy Entity Purification Mechanism",
+    "ja": "✨ 神聖属性＆不浄な存在の浄化メカニズム"
+  },
+  "✨ 신성 치유사": {
+    "en": "✨ Holy Healer",
+    "ja": "✨ 神聖治癒士"
+  },
+  "✨ 심연 정화 완료": {
+    "en": "✨ Abyss Purification Complete",
+    "ja": "✨ 深淵浄化完了"
+  },
+  "✨ 에테르": {
+    "en": "✨ Ether",
+    "ja": "✨ エーテル"
+  },
+  "✨ 에테르 -": {
+    "en": "✨ Ether -",
+    "ja": "✨ エーテル -"
+  },
+  "✨ 에테르 {0}": {
+    "en": "✨ Ether {0}",
+    "ja": "✨ エーテル {0}"
+  },
+  "✨ 에테르 보급팩 구매 ({0}G 소모 ➔ ✨ 에테르 +25)": {
+    "en": "✨ Purchase Ether Supply Pack (Costs {0}G ➔ ✨ Ether +25)",
+    "ja": "✨ エーテル補給パック購入（{0}G消費 ➔ ✨ エーテル+25）"
+  },
+  "✨ 에테르 보급팩 구매 ({0}G 필요 - 골드 부족)": {
+    "en": "✨ Purchase Ether Supply Pack (Requires {0}G - Insufficient Gold)",
+    "ja": "✨ エーテル補給パック購入（{0}G必要 - ゴールド不足）"
+  },
+  "✨ 영구 효과": {
+    "en": "✨ Permanent Effect",
+    "ja": "✨ 永久効果"
+  },
+  "✨ 완치 및 충전 완료": {
+    "en": "✨ Fully Healed & Charged",
+    "ja": "✨ 完治および充填完了"
+  },
+  "✨ 용병 습득 스킬 비전 강화": {
+    "en": "✨ Mercenary Skill Arcane Enhancement",
+    "ja": "✨ 傭兵習得スキルの秘伝強化"
+  },
+  "✨ 원정대 활성 시너지": {
+    "en": "✨ Active Expedition Synergy",
+    "ja": "✨ 遠征隊発動シナジー"
+  },
+  "✨ 유대 깊어짐": {
+    "en": "✨ Deepened Bond",
+    "ja": "✨ 絆の深化"
+  },
+  "✨ 인챈트": {
+    "en": "✨ Enchant",
+    "ja": "✨ エンチャント"
+  },
+  "✨ 인챈트 마도석 옵션 (": {
+    "en": "✨ Enchant Magic Stone Option (",
+    "ja": "✨ エンチャント魔導石オプション（"
+  },
+  "✨ 인챈트 스킬 공격": {
+    "en": "✨ Enchant Skill Attack",
+    "ja": "✨ エンチャントスキル攻撃"
+  },
+  "✨ 일반 접두석": {
+    "en": "✨ Common Prefix Stone",
+    "ja": "✨ 一般接頭石"
+  },
+  "✨ 전직 가능": {
+    "en": "✨ Class Change Available",
+    "ja": "✨ 転職可能"
+  },
+  "✨ 전직/상세": {
+    "en": "✨ Class Change / Details",
+    "ja": "✨ 転職/詳細"
+  },
+  "✨ 접두석:": {
+    "en": "✨ Prefix Stone:",
+    "ja": "✨ 接頭石:"
+  },
+  "✨ 접두어 슬롯": {
+    "en": "✨ Prefix Slot",
+    "ja": "✨ 接頭辞スロット"
+  },
+  "✨ 정화됨": {
+    "en": "✨ Purified",
+    "ja": "✨ 浄化済み"
+  },
+  "✨ 즉시 완전 습득 가능": {
+    "en": "✨ Instant Master Available",
+    "ja": "✨ 即時完全習得可能"
+  },
+  "✨ 차원 지름길 발견": {
+    "en": "✨ Dimensional Shortcut Discovered",
+    "ja": "✨ 次元の近道発見"
+  },
+  "✨ 컬렉션 활성화 효과:": {
+    "en": "✨ Collection Active Effect:",
+    "ja": "✨ コレクション活性化効果:"
+  },
+  "✨ 현재 가동 효과 (Lv.": {
+    "en": "✨ Current Active Effect (Lv.",
+    "ja": "✨ 現在の稼働効果（Lv."
+  },
+  "✨ 현재 원정에 결속됨 (활성)": {
+    "en": "✨ Bound to Current Expedition (Active)",
+    "ja": "✨ 現在の遠征に結束中（有効）"
+  },
+  "✨ 현재 인챈트 현황": {
+    "en": "✨ Current Enchant Status",
+    "ja": "✨ 現在のエンチャント状況"
+  },
+  "✨ 활성화된 상태이상 / 버프 / 디버프": {
+    "en": "✨ Active Status Effects / Buffs / Debuffs",
+    "ja": "✨ 有効な状態異常 / バフ / デバフ"
+  },
+  "✨ 희귀": {
+    "en": "✨ Rare",
+    "ja": "✨ 希少"
+  },
+  "✨{0}개 강화품 우선": {
+    "en": "✨Prioritize {0} Enhanced Items",
+    "ja": "✨{0}個の強化品を優先"
+  },
+  "✨⚖️ [신성 정벌]: 공격 약화 상태의 적에게 신성 일격 적중 시 30% 추가 피해 및 아군 전원 치유 + MP 10 반환": {
+    "en": "✨⚖️ [Holy Conquest]: When Holy Strike hits an ATK-weakened enemy, deals 30% bonus damage, heals all allies, and restores 10 MP.",
+    "ja": "✨⚖️ [神聖征伐]：攻撃弱体化状態の敵に神聖一撃命中時、30%追加ダメージを与え、味方全員回復＋MP 10返還"
+  },
+  "✨강화": {
+    "en": "✨Enhance",
+    "ja": "✨強化"
+  },
+  "✨에테르 -{0}": {
+    "en": "✨Ether -{0}",
+    "ja": "✨エーテル -{0}"
+  },
+  "✨인챈트": {
+    "en": "✨Enchant",
+    "ja": "✨エンチャント"
+  },
+  "✨전직": {
+    "en": "✨Class Change",
+    "ja": "✨転職"
+  },
+  "✨전직가능": {
+    "en": "✨Class Change Available",
+    "ja": "✨転職可能"
+  },
+  "✨접두가능": {
+    "en": "✨Prefix Available",
+    "ja": "✨接頭可能"
+  },
+  "✨희귀↑": {
+    "en": "✨Rare+",
+    "ja": "✨希少↑"
+  },
+  "✨🌌 [태초의 창세 승리] 무간도의 지배자 아르케오스의 광폭화를 잠재우고 모든 심연을 영구 봉인했습니다!": {
+    "en": "✨🌌 [Primordial Genesis Victory] Quelled the frenzy of Archeos, Lord of Avici, and permanently sealed all abysses!",
+    "ja": "✨🌌 [太初の創世勝利] 無間道の支配者アルケオスの狂暴化を鎮め、すべての深淵を永久封印した！"
+  },
+  "✨🔋 [에테르 과충전] 마나 +20 MP를 회복하고 다음 공격력이 100% 폭풍 증폭되었습니다!": {
+    "en": "✨🔋 [Ether Overcharge] Restored +20 MP and next ATK surged by 100%!",
+    "ja": "✨🔋 [エーテル過充填] MPを+20回復し、次の攻撃力が100%猛烈に増幅された！"
+  },
+  "✨🔥 [방주의 성화 완전 점화!] 신성한 성화의 온기가 방주 전체를 감쌉니다! (점화 횟수 1회 차감, 잔여: {0}/5회) [전투 EXP +20%, 영지 생산 +15%, 6초당 전원 HP/MP +1 재생]": {
+    "en": "✨🔥 [Primal Bonfire Fully Ignited!] The sacred warmth embraces the entire Ark! (Ignition count -1, Remaining: {0}/5) [Combat EXP +20%, Territory Production +15%, All allies HP/MP +1 Regen every 6s]",
+    "ja": "✨🔥 [方舟の聖火完全点火！] 神聖なる聖火の温もりが方舟全体を包み込む！（点火回数1回消費、残り: {0}/5回）[戦闘EXP +20%、領地生産 +15%、6秒ごとに全員HP/MP +1再生]"
+  },
+  "✨🔥 [병기창 Lv.6 특화: 강화 보급품 전면 해금!] 일반 보급품이 에테르 횃불 등 7종의 강화 보급품으로 전면 대체되었습니다! 에테르 횃불 제작 퀘스트가 개방되었습니다.": {
+    "en": "✨🔥 [Armory Lv.6 Specialization: Enhanced Supplies Fully Unlocked!] Regular supplies are now fully replaced with 7 enhanced supplies including Ether Torches! Ether Torch crafting quest is unlocked.",
+    "ja": "✨🔥 [兵器廠 Lv.6 特化：強化補給品全面解放！] 通常補給品がエーテル松明など7種の強化補給品に全面置き換わりました！エーテル松明製作クエストが開放されました。"
+  },
+  "✨🛡️ [면역 결계] {0}의 성스러운 정화 결계가 [{1}] 효과를 완전히 차단했습니다!": {
+    "en": "✨🛡️ [Immunity Barrier] {0}'s sacred purification barrier completely blocked the [{1}] effect!",
+    "ja": "✨🛡️ [免疫結界] {0}の聖なる浄化結界が[{1}]効果を完全に遮断した！"
+  },
+  "❄️ [냉각 동결] {0}에게 빙결/냉각이 부여되었습니다! (1턴 행동불가, 지속 중 외피 동결 방어력 +40%)": {
+    "en": "❄️ [Chill Freeze] Freeze/Chill inflicted on {0}! (1 turn incapacitated, while active: Frozen Crust DEF +40%)",
+    "ja": "❄️ [冷却凍結] {0}に凍結/冷却が付与された！（1ターン行動不能、持続中外皮凍結防御力+40%）"
+  },
+  "❄️ [동상 행동불가] {0} 결빙 동상 피해(-{1})! 외피 동결(방어력 +40%) 상태로 이번 턴 행동이 완전히 취소되고 턴이 넘어갑니다.": {
+    "en": "❄️ [Frostbite Incapacitated] {0} took frostbite freeze damage (-{1})! Frozen Crust (DEF +40%) canceled action this turn, passing to next turn.",
+    "ja": "❄️ [凍傷行動不能] {0}は結氷凍傷ダメージ（-{1}）！外皮凍結（防御力+40%）状態で今ターンの行動がキャンセルされターンが経過した。"
+  },
+  "❄️ [동상] {0} 결빙 동상 지속 피해 (-{1}) [방어력 +40%]": {
+    "en": "❄️ [Frostbite] {0} took continuous freeze frostbite damage (-{1}) [DEF +40%]",
+    "ja": "❄️ [凍傷] {0} 結氷凍傷の持続ダメージ（-{1}）[防御力+40%]"
+  },
+  "❄️ [빙결 파편 폭풍] {0}에게 {1} 얼음 파편 피해!": {
+    "en": "❄️ [Ice Shard Storm] {1} ice shard damage dealt to {0}!",
+    "ja": "❄️ [氷結破片嵐] {0}に{1}の氷破片ダメージ！"
+  },
+  "❄️ [빙결/냉각] {0}에게 1턴간 빙결(행동 불가 & 4% 동상 피해)을 부여했습니다!": {
+    "en": "❄️ [Freeze/Chill] Inflicted Freeze (incapacitated & 4% frostbite damage) on {0} for 1 turn!",
+    "ja": "❄️ [凍結/冷却] {0}に1ターン凍結（行動不能＆4%凍傷ダメージ）を付与した！"
+  },
+  "❄️ 냉각(동상) 상태이상 & 방어 보전 메커니즘": {
+    "en": "❄️ Chill (Frostbite) Status Effect & Defense Conservation Mechanism",
+    "ja": "❄️ 冷却（凍傷）状態異常＆防御保全メカニズム"
+  },
+  "❄️💥 [빙결 분쇄]: 빙결/기절 상태의 적에게 강타/베기 적중 시 45% 광역 얼음 파편 폭풍 피해": {
+    "en": "❄️💥 [Shatter]: When Crush/Slash hits a frozen or stunned enemy, deals 45% AoE Ice Shard Storm damage.",
+    "ja": "❄️💥 [氷結粉砕]：凍結/気絶状態の敵に強打/斬撃命中時、45%範囲氷破片嵐ダメージ"
+  },
+  "❄️🛡️ [흑핵 방벽] 절대 영도의 에너지로 전열 아군에게 보호막({0})을 부여했습니다!": {
+    "en": "❄️🛡️ [Black Core Barrier] Absolute zero energy granted a Shield ({0}) to frontline allies!",
+    "ja": "❄️🛡️ [黒核防壁] 絶対零度のエネルギーで前衛の味方にシールド（{0}）を付与した！"
+  },
+  "❌ PERMISSION_DENIED: Firebase 콘솔 > Realtime Database > 규칙 탭에 game_data 쓰기 규칙을 게시해 주세요!": {
+    "en": "❌ PERMISSION_DENIED: Please publish write rules for game_data in Firebase Console > Realtime Database > Rules tab!",
+    "ja": "❌ PERMISSION_DENIED: Firebaseコンソール > Realtime Database > ルールタブでgame_dataの書き込みルールを公開してください！"
+  },
+  "❌ 불러오기 실패 (저장된 데이터 없음)": {
+    "en": "❌ Load Failed (No saved data)",
+    "ja": "❌ 読み込み失敗（セーブデータなし）"
+  },
+  "❌ 시딩 실패: {0}": {
+    "en": "❌ Seeding Failed: {0}",
+    "ja": "❌ シーディング失敗: {0}"
+  },
+  "❌ 재료 부족": {
+    "en": "❌ Insufficient Materials",
+    "ja": "❌ 素材不足"
+  },
+  "❌ 저장 실패 (네트워크 확인)": {
+    "en": "❌ Save Failed (Check network)",
+    "ja": "❌ 保存失敗（ネットワークを確認）"
+  },
+  "❤️ {0} 회복!": {
+    "en": "❤️ Restored {0}!",
+    "ja": "❤️ {0} 回復！"
+  },
+  "➔ ✨ [접두어 인챈트] 슬롯이 해금되었습니다!": {
+    "en": "➔ ✨ [Prefix Enchant] slot unlocked!",
+    "ja": "➔ ✨ [接頭辞エンチャント]スロットが解放されました！"
+  },
+  "➔ 건설 시: 17종 자원 환전 & 골드 🪙+2/15초 & 유지비 주기 21초": {
+    "en": "➔ Upon Construction: 17 Resource Exchanges & Gold 🪙+2/15s & Upkeep Cycle 21s",
+    "ja": "➔ 建設時: 17種資源の両替＆ゴールド🪙+2/15秒＆維持費周期21秒"
+  },
+  "➔ 건설 시: 1차 상위 클래스 전직 해금": {
+    "en": "➔ Upon Construction: 1st Tier Advanced Class Change unlocked",
+    "ja": "➔ 建設時: 1次上位クラス転職解放"
+  },
+  "➔ 건설 시: 1티어 순수 기본 장비 단조 해금 (강화 탭 미해금)": {
+    "en": "➔ Upon Construction: Tier 1 Basic Gear Crafting unlocked (Enhance tab locked)",
+    "ja": "➔ 建設時: ティア1基本装備鍛造解放（強化タブ未解放）"
+  },
+  "➔ 건설 시: 방랑 주점 개방 & 용병 후보 3명 풀 & 서브 퀘스트 해금": {
+    "en": "➔ Upon Construction: Wanderer Lounge opened & 3 Mercenary recruits & Sub-quests unlocked",
+    "ja": "➔ 建設時: 放浪者のラウンジ開放＆傭兵候補3名プール＆サブクエスト解放"
+  },
+  "➔ 건설 시: 병상 2개 해금 & HP 치료(+5/5초, 식량2 소모)": {
+    "en": "➔ Upon Construction: 2 Infirmary Beds unlocked & HP Treatment (+5/5s, costs 2 food)",
+    "ja": "➔ 建設時: 病床2つ解放＆HP治療（+5/5秒、食糧2消費）"
+  },
+  "➔ 건설 시: 실시간 비동기 PVP 매칭 & 명예 상점 1단계(보급/기초) 해금": {
+    "en": "➔ Upon Construction: Asynchronous PVP Matchmaking & Honor Shop Tier 1 (Supplies/Basic) unlocked",
+    "ja": "➔ 建設時: 非同期PVPマッチング＆名誉ショップ1段階（補給/基礎）解放"
+  },
+  "➔ 다음 Lv.10: ★ [완전 각성]: 전 파티원 올스탯 +10% 버프 (등급상승 30%)": {
+    "en": "➔ Next Lv.10: ★ [Complete Awakening]: All Party Members All Stats +10% Buff (Grade Upgrade 30%)",
+    "ja": "➔ 次のLv.10: ★ [完全覚醒]: 全パーティメンバー全ステータス+10%バフ（等級上昇30%）"
+  },
+  "➔ 다음 Lv.10: ★ [장비 각성] 해금 (20% 성공 시 스탯 보존 + 0강 초기화, 실패 시 파괴) & 전 비용 -20% 할인": {
+    "en": "➔ Next Lv.10: ★ [Gear Awakening] unlocked (20% Success: Retains Stats + Resets to +0, Fail: Destroyed) & -20% All Costs",
+    "ja": "➔ 次のLv.10: ★ [装備覚醒]解放（成功20%: ステータス維持+0強化初期化、失敗時破壊）＆全費用20%割引"
+  },
+  "➔ 다음 Lv.10: ★ 궁극 생체 챔버: 1초당 HP+5/MP+4 초고속 완치": {
+    "en": "➔ Next Lv.10: ★ Ultimate Bio-Chamber: Rapid healing of HP +5/MP +4 per second",
+    "ja": "➔ 次のLv.10: ★ 究極生体チャンバー: 1秒ごとにHP+5/MP+4超高速完治"
+  },
+  "➔ 다음 Lv.10: ★ 전 용병 영입 비용 -20% 영구 할인 & 최고 명성": {
+    "en": "➔ Next Lv.10: ★ Permanent -20% Recruitment Cost for all Mercenaries & Peak Renown",
+    "ja": "➔ 次のLv.10: ★ 全傭兵雇用費用-20%永久割引＆最高名声"
+  },
+  "➔ 다음 Lv.10: 랭커 달성 PVE 특권 버프 50% 증폭 & 10단계(차원 패왕의 보관함) 해금": {
+    "en": "➔ Next Lv.10: Ranker PvE Privilege Buff +50% & Stage 10 (Dimensional Overlord Chest) unlocked",
+    "ja": "➔ 次のLv.10: ランカー達成PVE特権バフ50%増幅＆10段階（次元覇王の保管箱）解放"
+  },
+  "➔ 다음 Lv.10: 최상위 비급서 출현 & 전 품목 20% 특별 할인 & 골드 🪙+17/15초 & 주기 30초": {
+    "en": "➔ Next Lv.10: Supreme Grimoires spawn & 20% Special Discount on all items & Gold 🪙+17/15s & Cycle 30s",
+    "ja": "➔ 次のLv.10: 最上位秘伝書出現＆全品目20%特別割引＆ゴールド🪙+17/15秒＆周期30秒"
+  },
+  "➔ 다음 Lv.2: 2티어 단련된 강철 단조 & 단조 10% 할인": {
+    "en": "➔ Next Lv.2: Tier 2 Tempered Steel Crafting & 10% Crafting Discount",
+    "ja": "➔ 次のLv.2: ティア2鍛錬鋼鉄の鍛造＆鍛造10%割引"
+  },
+  "➔ 다음 Lv.2: ★ 기본 클래스 경험치 +20% 상시 증폭! (등급상승 6%)": {
+    "en": "➔ Next Lv.2: ★ Permanent +20% Basic Class EXP! (Grade Upgrade 6%)",
+    "ja": "➔ 次のLv.2: ★ 基本クラス経験値+20%常時増幅！（等級上昇6%）"
+  },
+  "➔ 다음 Lv.2: 거래 한도 확장 & 골드 🪙+3/15초 & 유지비 주기 22초": {
+    "en": "➔ Next Lv.2: Trading Limit Expanded & Gold 🪙+3/15s & Upkeep Cycle 22s",
+    "ja": "➔ 次のLv.2: 取引限度拡張＆ゴールド🪙+3/15秒＆維持費周期22秒"
+  },
+  "➔ 다음 Lv.2: 명예 상점 2단계(인챈트 마도석) & 매칭 보상 증가": {
+    "en": "➔ Next Lv.2: Honor Shop Tier 2 (Enchant Magic Stones) & Increased Match Rewards",
+    "ja": "➔ 次のLv.2: 名誉ショップ2段階（エンチャント魔導石）＆マッチング報酬増加"
+  },
+  "➔ 다음 Lv.2: 서브 퀘스트 보상 강화 (입소문 확산)": {
+    "en": "➔ Next Lv.2: Enhanced Sub-quest Rewards (Word of Mouth)",
+    "ja": "➔ 次のLv.2: サブクエスト報酬強化（噂の拡散）"
+  },
+  "➔ 다음 Lv.2: 치료 주기 10% 단축 (4초당 HP +5 회복)": {
+    "en": "➔ Next Lv.2: Treatment Cycle reduced by 10% (HP +5 every 4s)",
+    "ja": "➔ 次のLv.2: 治療周期10%短縮（4秒ごとにHP+5回復）"
+  },
+  "➔ 다음 Lv.3: ★ [장비 강화] 탭 해금 & 최대 +5강 돌파 & [접두어 인챈트] 해금": {
+    "en": "➔ Next Lv.3: ★ [Gear Enhance] tab unlocked & Max +5 Enhance & [Prefix Enchant] unlocked",
+    "ja": "➔ 次のLv.3: ★ [装備強化]タブ解放＆最大+5強化突破＆[接頭辞エンチャント]解放"
+  },
+  "➔ 다음 Lv.3: ⚙️ 철광석 동시 채굴 해금 (🪨+{0}, ⚙️+1/11초)": {
+    "en": "➔ Next Lv.3: ⚙️ Simultaneous Iron Mining unlocked (🪨+{0}, ⚙️+1/11s)",
+    "ja": "➔ 次のLv.3: ⚙️ 鉄鉱石の同時採掘解放（🪨+{0}、⚙️+1/11秒）"
+  },
+  "➔ 다음 Lv.3: 거래 수수료 -10% & 1티어 비전서 & 🪙+5/15초 & 주기 23초": {
+    "en": "➔ Next Lv.3: Trade Fee -10% & Tier 1 Grimoire & 🪙+5/15s & Cycle 23s"
+    ,"ja": "➔ 次のLv.3: 取引手数料-10%＆ティア1秘伝書＆🪙+5/15秒＆周期23秒"
+  },
+  "➔ 다음 Lv.3: 고급 서브 퀘스트 의뢰 접수 개방": {
+    "en": "➔ Next Lv.3: Advanced Sub-quest Requests Opened",
+    "ja": "➔ 次のLv.3: 高級サブクエスト依頼受付開放"
+  },
+  "➔ 다음 Lv.3: 기본 클래스 경험치 +30% 강화 (등급상승 9%)": {
+    "en": "➔ Next Lv.3: Basic Class EXP +30% (Grade Upgrade 9%)",
+    "ja": "➔ 次のLv.3: 基本クラス経験値+30%強化（等級上昇9%）"
+  },
+  "➔ 다음 Lv.3: 병상 3개 증설 & 신체 재생 안정화": {
+    "en": "➔ Next Lv.3: Expanded to 3 Beds & Stabilized Physical Regeneration",
+    "ja": "➔ 次のLv.3: 病床3つ増設＆身体再生の安定化"
+  },
+  "➔ 다음 Lv.3: 🌌 [차원 네메시스 월드 레이드] 관문 개방 & 명예 상점 3단계 해금": {
+    "en": "➔ Next Lv.3: 🌌 [Dimensional Nemesis World Raid] Gate Opened & Honor Shop Tier 3 unlocked",
+    "ja": "➔ 次のLv.3: 🌌 [次元ネメシスワールドレイド]関門開放＆名誉ショップ3段階解放"
+  },
+  "➔ 다음 Lv.3: 🥋 가죽 무두질 공정 해금 (🍖+{0}, 🥋+1/13초)": {
+    "en": "➔ Next Lv.3: 🥋 Leather Tanning Process unlocked (🍖+{0}, 🥋+1/13s)",
+    "ja": "➔ 次のLv.3: 🥋 皮なめし工程解放（🍖+{0}、🥋+1/13秒）"
+  },
+  "➔ 다음 Lv.4: 1티어 비전서 품목 다양화 & 골드 🪙+7/15초 & 주기 24초": {
+    "en": "➔ Next Lv.4: Tier 1 Grimoire Variety Expanded & Gold 🪙+7/15s & Cycle 24s",
+    "ja": "➔ 次のLv.4: ティア1秘伝書品目多様化＆ゴールド🪙+7/15秒＆周期24秒"
+  },
+  "➔ 다음 Lv.4: 4티어 흑요석 정예 장비 단조 & 12% 할인": {
+    "en": "➔ Next Lv.4: Tier 4 Elite Obsidian Gear Crafting & 12% Discount",
+    "ja": "➔ 次のLv.4: ティア4黒曜石精鋭装備鍛造＆12%割引"
+  },
+  "➔ 다음 Lv.4: ★ MP 충전 캡슐 해금! (5초당 MP +4, 에테르1 소모)": {
+    "en": "➔ Next Lv.4: ★ MP Charge Capsule unlocked! (MP +4 every 5s, costs 1 Ether)",
+    "ja": "➔ 次のLv.4: ★ MP充填カプセル解放！（5秒ごとにMP+4、エーテル1消費）"
+  },
+  "➔ 다음 Lv.4: 기본 클래스 경험치 +40% 강화 (등급상승 12%)": {
+    "en": "➔ Next Lv.4: Basic Class EXP +40% (Grade Upgrade 12%)",
+    "ja": "➔ 次のLv.4: 基本クラス経験値+40%強化（等級上昇12%）"
+  },
+  "➔ 다음 Lv.4: 명예 상점 4단계(고급 장신구 [투사의 용맹 목걸이]) 해금": {
+    "en": "➔ Next Lv.4: Honor Shop Tier 4 (Rare Accessory [Fighter's Valor Necklace]) unlocked",
+    "ja": "➔ 次のLv.4: 名誉ショップ4段階（高級装飾品[闘士の勇猛の首飾り]）解放"
+  },
+  "➔ 다음 Lv.4: 용병 풀 4명 & [V] 베테랑 등급 출현 해금!": {
+    "en": "➔ Next Lv.4: Mercenary Pool of 4 & [V] Veteran Grade spawn unlocked!",
+    "ja": "➔ 次のLv.4: 傭兵プール4名＆[V]ベテラン等級出現解放！"
+  },
+  "➔ 다음 Lv.5: 2티어 스킬북 & ★[상업 네트워크] 전 골드 유지비 -25% 감면 해금! (🪙+9/15초)": {
+    "en": "➔ Next Lv.5: Tier 2 Skill Book & ★[Commercial Network] -25% All Gold Upkeep unlocked! (🪙+9/15s)",
+    "ja": "➔ 次のLv.5: ティア2スキルブック＆★[商業ネットワーク]全ゴールド維持費-25%減免解放！（🪙+9/15秒）"
+  },
+  "➔ 다음 Lv.5: ★ 2차 심연 승격 해금! & 기본 EXP +50% (등급상승 15%)": {
+    "en": "➔ Next Lv.5: ★ 2nd Abyss Promotion unlocked! & Basic EXP +50% (Grade Upgrade 15%)",
+    "ja": "➔ 次のLv.5: ★ 2次深淵昇格解放！＆基本EXP+50%（等級上昇15%）"
+  },
+  "➔ 다음 Lv.5: ★ 식량 자체 조달(🍖+3/15초) 생산 가동!": {
+    "en": "➔ Next Lv.5: ★ Self-sufficient Food Production (🍖+3/15s) Activated!",
+    "ja": "➔ 次のLv.5: ★ 食糧自給自足（🍖+3/15秒）生産稼働！"
+  },
+  "➔ 다음 Lv.5: ★ 에테르 증산 가속 (✨+{0}/15초)": {
+    "en": "➔ Next Lv.5: ★ Ether Production Accelerated (✨+{0}/15s)",
+    "ja": "➔ 次のLv.5: ★ エーテル増産加速（✨+{0}/15秒）"
+  },
+  "➔ 다음 Lv.5: ★ 최대 +8강 강화 한계 돌파 & [접미어 인챈트] 해금 (5티어)": {
+    "en": "➔ Next Lv.5: ★ Max +8 Enhance Limit Break & [Suffix Enchant] unlocked (Tier 5)",
+    "ja": "➔ 次のLv.5: ★ 最大+8強化限界突破＆[接尾辞エンチャント]解放（ティア5）"
+  },
+  "➔ 다음 Lv.5: ★[대량 배급제] 해금 & 식량 대폭 증산 (🍖+{0}/13초)": {
+    "en": "➔ Next Lv.5: ★[Mass Rationing System] unlocked & Massive Food Production Boost (🍖+{0}/13s)",
+    "ja": "➔ 次のLv.5: ★[大量配給制]解放＆食糧大幅増産（🍖+{0}/13秒）"
+  },
+  "➔ 다음 Lv.5: 명예 암시장 5단계(전설 장신구 [투사의 영광 반지]) 해금": {
+    "en": "➔ Next Lv.5: Honor Black Market Tier 5 (Legendary Accessory [Fighter's Glory Ring]) unlocked",
+    "ja": "➔ 次のLv.5: 名誉ブラックマーケット5段階（伝説装飾品[闘士の栄光の指輪]）解放"
+  },
+  "➔ 다음 Lv.5: 병상 4개 증설 & MP 충전 주기 단축 (4초당 MP +4)": {
+    "en": "➔ Next Lv.5: Expanded to 4 Beds & Shortened MP Charge Cycle (MP +4 every 4s)",
+    "ja": "➔ 次のLv.5: 病床4つ増設＆MP充填周期短縮（4秒ごとにMP+4）"
+  },
+  "➔ 다음 Lv.6: ★ 1차 각성 클래스 경험치 +10% 가동! (등급상승 18%)": {
+    "en": "➔ Next Lv.6: ★ 1st Awakened Class EXP +10% Activated! (Grade Upgrade 18%)",
+    "ja": "➔ 次のLv.6: ★ 1次覚醒クラス経験値+10%稼働！（等級上昇18%）"
+  },
+  "➔ 다음 Lv.6: ★ [강화 보급품 7종] 전면 대체 생산 해금 (일반 보급품 ➔ 에테르 횃불 등 대체)": {
+    "en": "➔ Next Lv.6: ★ [7 Enhanced Supplies] Full Replacement Production unlocked (Regular Supplies ➔ Ether Torch, etc.)",
+    "ja": "➔ 次のLv.6: ★ [強化補給品7種]全面代替生産解放（通常補給品➔エーテル松明などに代替）"
+  },
+  "➔ 다음 Lv.6: ★[에테르 환류관] 마도 에테르 유지비 감면 해금 (✨+{0}/15초)": {
+    "en": "➔ Next Lv.6: ★[Ether Reflux Tube] Magic Ether Upkeep Reduction unlocked (✨+{0}/15s)",
+    "ja": "➔ 次のLv.6: ★[エーテル還流管]魔導エーテル維持費減免解放（✨+{0}/15秒）"
+  },
+  "➔ 다음 Lv.6: ⚙️ 철광석 증산 (🪨+{0}, ⚙️+2/11초)": {
+    "en": "➔ Next Lv.6: ⚙️ Iron Ore Boost (🪨+{0}, ⚙️+2/11s)",
+    "ja": "➔ 次のLv.6: ⚙️ 鉄鉱石増産（🪨+{0}、⚙️+2/11秒）"
+  },
+  "➔ 다음 Lv.6: 마도석 재고 확대 & 골드 🪙+10/15초 & 유지비 주기 26초": {
+    "en": "➔ Next Lv.6: Magic Stone Stock Expanded & Gold 🪙+10/15s & Upkeep Cycle 26s",
+    "ja": "➔ 次のLv.6: 魔導石の在庫拡大＆ゴールド🪙+10/15秒＆維持費周期26秒"
+  },
+  "➔ 다음 Lv.6: 명예 상점 6단계(순수 마도석 & 고대 비전서팩) 해금": {
+    "en": "➔ Next Lv.6: Honor Shop Tier 6 (Pure Magic Stone & Ancient Grimoire Pack) unlocked",
+    "ja": "➔ 次のLv.6: 名誉ショップ6段階（純粋な魔導石＆古代秘伝書パック）解放"
+  },
+  "➔ 다음 Lv.6: 병상 5개 증설 & 에테르 생체 캡슐 가속": {
+    "en": "➔ Next Lv.6: Expanded to 5 Beds & Accelerated Ether Bio-Capsule",
+    "ja": "➔ 次のLv.6: 病床5つ増設＆エーテル生体カプセル加速"
+  },
+  "➔ 다음 Lv.6: 용병 풀 5명 & [H] 히어로 등급 출현 해금!": {
+    "en": "➔ Next Lv.6: Mercenary Pool of 5 & [H] Hero Grade spawn unlocked!",
+    "ja": "➔ 次のLv.6: 傭兵プール5名＆[H]ヒーロー等級出現解放！"
+  },
+  "➔ 다음 Lv.6: 🥋 가죽 및 식량 증산 (🍖+{0}, 🥋+2/13초)": {
+    "en": "➔ Next Lv.6: 🥋 Leather & Food Boost (🍖+{0}, 🥋+2/13s)",
+    "ja": "➔ 次のLv.6: 🥋 皮および食糧増産（🍖+{0}、🥋+2/13秒）"
+  },
+  "➔ 다음 Lv.7: ★ 1차 각성 EXP +20% 증폭 (등급상승 21%)": {
+    "en": "➔ Next Lv.7: ★ 1st Awakened EXP +20% (Grade Upgrade 21%)",
+    "ja": "➔ 次のLv.7: ★ 1次覚醒EXP+20%増幅（等級上昇21%）"
+  },
+  "➔ 다음 Lv.7: ★ 식량 증산(🍖+7/15초) & 일일 무료 새로고침 해금!": {
+    "en": "➔ Next Lv.7: ★ Food Boost (🍖+7/15s) & Daily Free Refresh unlocked!",
+    "ja": "➔ 次のLv.7: ★ 食糧増産（🍖+7/15秒）＆デイリー無料更新解放！"
+  },
+  "➔ 다음 Lv.7: ★ 최대 +10강 최고 강화 돌파 & [순수 마도석] 인챈트 해금 (7티어)": {
+    "en": "➔ Next Lv.7: ★ Max +10 Highest Enhance Limit Break & [Pure Magic Stone] Enchant unlocked (Tier 7)",
+    "ja": "➔ 次のLv.7: ★ 最大+10最高強化突破＆[純粋な魔導石]エンチャント解放（ティア7）"
+  },
+  "➔ 다음 Lv.7: 마도석 재고 확대 & 골드 🪙+12/15초 & 유지비 주기 27초": {
+    "en": "➔ Next Lv.7: Magic Stone Stock Expanded & Gold 🪙+12/15s & Upkeep Cycle 27s",
+    "ja": "➔ 次のLv.7: 魔導石の在庫拡大＆ゴールド🪙+12/15秒＆維持費周期27秒"
+  },
+  "➔ 다음 Lv.7: 명예 상점 7단계(신화 전설 성유물 상자) 해금": {
+    "en": "➔ Next Lv.7: Honor Shop Tier 7 (Mythic Legendary Relic Chest) unlocked",
+    "ja": "➔ 次のLv.7: 名誉ショップ7段階（神話伝説聖遺物箱）解放"
+  },
+  "➔ 다음 Lv.7: 병상 6개 증설 & HP(2초)/MP(3초) 치료 가속": {
+    "en": "➔ Next Lv.7: Expanded to 6 Beds & Accelerated HP (2s)/MP (3s) Treatment",
+    "ja": "➔ 次のLv.7: 病床6つ増設＆HP（2秒）/MP（3秒）治療加速"
+  },
+  "➔ 다음 Lv.8: MP 충전 주기 단축 (2초당 MP +4)": {
+    "en": "➔ Next Lv.8: Shortened MP Charge Cycle (MP +4 every 2s)",
+    "ja": "➔ 次のLv.8: MP充填周期短縮（2秒ごとにMP+4）"
+  },
+  "➔ 다음 Lv.8: ★ 1차 각성 EXP +30% 증폭 (등급상승 24%)": {
+    "en": "➔ Next Lv.8: ★ 1st Awakened EXP +30% (Grade Upgrade 24%)",
+    "ja": "➔ 次のLv.8: ★ 1次覚醒EXP+30%増幅（等級上昇24%）"
+  },
+  "➔ 다음 Lv.8: 랭커 PVE 버프 강화 & 8단계(궁극의 마도석) 해금": {
+    "en": "➔ Next Lv.8: Ranker PvE Buff Boosted & Stage 8 (Ultimate Magic Stone) unlocked",
+    "ja": "➔ 次のLv.8: ランカーPVEバフ強化＆8段階（究極の魔導石）解放"
+  },
+  "➔ 다음 Lv.8: 용병 풀 6명 & [E] 에픽 등급 출현 해금!": {
+    "en": "➔ Next Lv.8: Mercenary Pool of 6 & [E] Epic Grade spawn unlocked!",
+    "ja": "➔ 次のLv.8: 傭兵プール6名＆[E]エピック等級出現解放！"
+  },
+  "➔ 다음 Lv.8: 전 제작/강화 비용 16% 영구 할인 & 8티어 단조": {
+    "en": "➔ Next Lv.8: Permanent 16% Discount on All Crafting/Enhancing Costs & Tier 8 Crafting",
+    "ja": "➔ 次のLv.8: 全製作/強化費用16%永久割引＆ティア8鍛造"
+  },
+  "➔ 다음 Lv.8: 환율 우대 & 골드 🪙+14/15초 & 유지비 주기 28초": {
+    "en": "➔ Next Lv.8: Preferential Exchange Rate & Gold 🪙+14/15s & Upkeep Cycle 28s",
+    "ja": "➔ 次のLv.8: 為替優遇＆ゴールド🪙+14/15秒＆維持費周期28秒"
+  },
+  "➔ 다음 Lv.9: ★ 1차 각성 EXP +40% 최대 (등급상승 27%)": {
+    "en": "➔ Next Lv.9: ★ 1st Awakened EXP +40% Max (Grade Upgrade 27%)",
+    "ja": "➔ 次のLv.9: ★ 1次覚醒EXP+40%最大（等級上昇27%）"
+  },
+  "➔ 다음 Lv.9: ★ 병상 7개 & HP 1초 초고속 회복!": {
+    "en": "➔ Next Lv.9: ★ 7 Beds & Super Fast HP Recovery every 1s!",
+    "ja": "➔ 次のLv.9: ★ 病床7つ＆HP 1秒超高速回復！"
+  },
+  "➔ 다음 Lv.9: ★ 식량 증산(🍖+10/15초) & 영입 비용 안정화": {
+    "en": "➔ Next Lv.9: ★ Food Boost (🍖+10/15s) & Recruitment Cost Stabilization",
+    "ja": "➔ 次のLv.9: ★ 食糧増産（🍖+10/15秒）＆雇用費用安定化"
+  },
+  "➔ 다음 Lv.9: ⚙️ 철광석 증산 (🪨+{0}, ⚙️+3/11초)": {
+    "en": "➔ Next Lv.9: ⚙️ Iron Ore Boost (🪨+{0}, ⚙️+3/11s)",
+    "ja": "➔ 次のLv.9: ⚙️ 鉄鉱石増産（🪨+{0}、⚙️+3/11秒）"
+  },
+  "➔ 다음 Lv.9: 거래 수수료 추가 인하 & 골드 🪙+15/15초 & 주기 29초": {
+    "en": "➔ Next Lv.9: Additional Trade Fee Cut & Gold 🪙+15/15s & Cycle 29s",
+    "ja": "➔ 次のLv.9: 取引手数料の追加引き下げ＆ゴールド🪙+15/15秒＆周期29秒"
+  },
+  "➔ 다음 Lv.9: 랭커 PVE 버프 강화 & 9단계(초월의 전직 비전서) 해금": {
+    "en": "➔ Next Lv.9: Ranker PvE Buff Boosted & Stage 9 (Transcendent Class Change Grimoire) unlocked",
+    "ja": "➔ 次のLv.9: ランカーPVEバフ強化＆9段階（超越の転職秘伝書）解放"
+  },
+  "➔ 다음 Lv.9: 전 제작/강화 비용 18% 영구 할인 & 9티어 단조": {
+    "en": "➔ Next Lv.9: Permanent 18% Discount on All Crafting/Enhancing Costs & Tier 9 Crafting",
+    "ja": "➔ 次のLv.9: 全製作/強化費用18%永久割引＆ティア9鍛造"
+  },
+  "➔ 다음 Lv.{0}: {1}": {
+    "en": "➔ Next Lv.{0}: {1}",
+    "ja": "➔ 次のLv.{0}: {1}"
+  },
+  "➔ 다음 Lv.{0}: ✨ +{1}/15초": {
+    "en": "➔ Next Lv.{0}: ✨ +{1}/15s",
+    "ja": "➔ 次のLv.{0}: ✨ +{1}/15秒"
+  },
+  "➔ 다음 Lv.{0}: 🍖 +{1}/13초": {
+    "en": "➔ Next Lv.{0}: 🍖 +{1}/13s",
+    "ja": "➔ 次のLv.{0}: 🍖 +{1}/13秒"
+  },
+  "➔ 다음 Lv.{0}: 🏰영지 {1}개, 🌿파밍 {2}개, 🔮심연 {3}개로 확장": {
+    "en": "➔ Next Lv.{0}: Expand to 🏰Territories {1}, 🌿Farming {2}, 🔮Abyss {3}",
+    "ja": "➔ 次のLv.{0}: 🏰領地{1}個、🌿ファーミング{2}個、🔮深淵{3}個に拡張"
+  },
+  "➔ 다음 Lv.{0}: 🪙 +{1}/13초 (+{2}G)": {
+    "en": "➔ Next Lv.{0}: 🪙 +{1}/13s (+{2}G)",
+    "ja": "➔ 次のLv.{0}: 🪙 +{1}/13秒 (+{2}G)"
+  },
+  "➔ 다음 Lv.{0}: 🪨 +{1}/11초": {
+    "en": "➔ Next Lv.{0}: 🪨 +{1}/11s",
+    "ja": "➔ 次のLv.{0}: 🪨 +{1}/11秒"
+  },
+  "➔ 다음 Lv.{0}: 🪵 +{1}/9초 (+{2})": {
+    "en": "➔ Next Lv.{0}: 🪵 +{1}/9s (+{2})",
+    "ja": "➔ 次のLv.{0}: 🪵 +{1}/9秒 (+{2})"
+  },
+  "➔ 할인가:": {
+    "en": "➔ Discount Price:",
+    "ja": "➔ 割引価格:"
+  },
+  "➔ 🔮 [접미어 인챈트] 슬롯이 해금되었습니다!": {
+    "en": "➔ 🔮 [Suffix Enchant] slot unlocked!",
+    "ja": "➔ 🔮 [接尾辞エンチャント]スロットが解放されました！"
+  },
+  "⬛ 석탄": {
+    "en": "⬛ Coal",
+    "ja": "⬛ 石炭"
+  },
+  "⭐ [정예 마물 전리품] [{0}] 1개를 획득했습니다!": {
+    "en": "⭐ [Elite Monster Spoils] Acquired 1 [{0}]!",
+    "ja": "⭐ [精鋭魔物の戦利品] [{0}]を1個獲得した！"
+  },
+  "⭐ 광전사": {
+    "en": "⭐ Berserker",
+    "ja": "⭐ 狂戦士"
+  },
+  "⭐ 대마도사": {
+    "en": "⭐ Archmage",
+    "ja": "⭐ 大魔導士"
+  },
+  "⭐ 성기사": {
+    "en": "⭐ Paladin",
+    "ja": "⭐ 聖騎士"
+  },
+  "⭐ 순수 인챈트석": {
+    "en": "⭐ Pure Enchant Stone",
+    "ja": "⭐ 純粋なエンチャント石"
+  },
+  "⭐ 순수 접두석": {
+    "en": "⭐ Pure Prefix Stone",
+    "ja": "⭐ 純粋な接頭石"
+  },
+  "⭐ 순수 접두석:": {
+    "en": "⭐ Pure Prefix Stone:",
+    "ja": "⭐ 純粋な接頭石:"
+  },
+  "⭐ 암살자": {
+    "en": "⭐ Assassin",
+    "ja": "⭐ 暗殺者"
+  },
+  "⭐ 용병 등급별 레벨업 스탯 성장치 차등화 (N ~ L)": {
+    "en": "⭐ Differentiated Level-Up Stat Growth by Mercenary Grade (N - L)",
+    "ja": "⭐ 傭兵等級別レベルアップステータス成長値の差別化（N〜L）"
+  },
+  "⭐ 전술 포수": {
+    "en": "⭐ Tactical Gunner",
+    "ja": "⭐ 戦術砲手"
+  },
+  "⭐ 주교": {
+    "en": "⭐ Bishop",
+    "ja": "⭐ 主教"
+  },
+  "⭐🌌 [광폭화 보스 마도석] [순수한 접두석] 1개와 [순수한 접미석] 1개를 모두 획득했습니다!": {
+    "en": "⭐🌌 [Frenzied Boss Magic Stone] Acquired both 1 [Pure Prefix Stone] and 1 [Pure Suffix Stone]!",
+    "ja": "⭐🌌 [狂暴化ボスの魔導石] [純粋な接頭石]1個と[純粋な接尾石]1個をすべて獲得した！"
+  },
+  "「시공의 침식자, 네메시스」": {
+    "en": "「Eroder of Space-Time, Nemesis」",
+    "ja": "「時空の侵食者、ネメシス」"
+  },
+  "『{0}』의 5인 방어 부대를 전멸시키고 영지 자원을 약탈했습니다!": {
+    "en": "Annihilated the 5-man defense squad of 『{0}』 and pillaged territory resources!",
+    "ja": "『{0}』の5人防衛部隊を全滅させ、領地資源を略奪した！"
+  },
+  "『{0}』의 방어 부대가 강력하여 약탈에 실패하고 퇴각했습니다.": {
+    "en": "Pillage failed and retreated due to 『{0}』's strong defense squad.",
+    "ja": "『{0}』の防衛部隊が強力だったため、略奪に失敗して退却した。"
+  },
+  "가 상시 가산됩니다. 후열에서 적의 약점을 노려 일격필살의 치명 피해를 꽂아넣습니다.": {
+    "en": " is permanently added. Strikes enemy weaknesses from the back row to deliver a lethal critical blow.",
+    "ja": "が常時加算される。後衛から敵の弱点を突いて一撃必殺の会心ダメージを叩き込む。"
+  },
+  "가 없습니다. 아래 목록에서 장비를 선택해 장착하세요.": {
+    "en": " not equipped. Select equipment from the list below to equip.",
+    "ja": "がありません。下のリストから装備を選択して装着してください。"
+  },
+  "가 해금됩니다.": {
+    "en": " is unlocked.",
+    "ja": "が解放されます。"
+  },
+  "가공소": {
+    "en": "Processing Plant",
+    "ja": "加工所"
+  },
+  "가공소 생산 & 던전 야영 및 병동 치료": {
+    "en": "Processing Plant Production & Dungeon Camping and Ward Treatment",
+    "ja": "加工所生産＆ダンジョン野営および病棟治療"
+  },
+  "가동 재개 및 입장": {
+    "en": "Resume Operation & Enter",
+    "ja": "稼働再開および入場"
+  },
+  "가동 중": {
+    "en": "Operating",
+    "ja": "稼働中"
+  },
+  "가락지": {
+    "en": "Ring",
+    "ja": "指輪"
+  },
+  "가벼운 백팩": {
+    "en": "Light Backpack",
+    "ja": "軽量バックパック"
+  },
+  "가벼운 백팩(12칸) / 표준 군장(16칸) / 완전 군장(20칸)": {
+    "en": "Light Backpack (12 slots) / Standard Pack (16 slots) / Full Military Pack (20 slots)",
+    "ja": "軽量バックパック（12枠）/ 標準軍装（16枠）/ 完全軍装（20枠）"
+  },
+  "가브리엘": {
+    "en": "Gabriel",
+    "ja": "ガブリエル"
+  },
+  "가시 갑옷": {
+    "en": "Thorn Armor",
+    "ja": "棘の鎧"
+  },
+  "가시 갑옷 +1": {
+    "en": "Thorn Armor +1",
+    "ja": "棘の鎧 +1"
+  },
+  "가시덤불을 우회하여 전진합니다.": {
+    "en": "Bypass the briars and advance forward.",
+    "ja": "茨を迂回して前進する。"
+  },
+  "가시에 찔려 자상 발생": {
+    "en": "Pierced by thorns, causing stab wounds",
+    "ja": "棘に刺されて刺傷発生"
+  },
+  "가웨인": {
+    "en": "Gawain",
+    "ja": "ガウェイン"
+  },
+  "가장 기초적이지만 실전에서 결코 배신하지 않는 묵직한 일격.": {
+    "en": "The most basic, yet dependable heavy strike that never fails in battle.",
+    "ja": "最も基本的だが、実戦で決して裏切らない重い一撃。"
+  },
+  "가장 체력이 낮은 아군 1명의 HP를 공격력의 150%만큼 즉시 회복시킵니다.": {
+    "en": "Immediately restores HP of the ally with the lowest HP by 150% of ATK.",
+    "ja": "最もHPが低い味方1人のHPを攻撃力の150%分即座に回復する。"
+  },
+  "가장 체력이 낮은 아군 치유 (최대 체력의 28% 회복)": {
+    "en": "Heals ally with lowest HP (restores 28% of Max HP)",
+    "ja": "最もHPが低い味方を治癒（最大HPの28%回復）"
+  }
+}

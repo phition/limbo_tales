@@ -1,0 +1,802 @@
+{
+  "에서 각성하여 상위 영혼의 전투 기술을 발현합니다.": {
+    "en": "awaken in, unleashing combat techniques of higher souls.",
+    "ja": "で覚醒し、上位の魂の戦闘技術を発現する。"
+  },
+  "에서 용병 3명을 파티에 출전시킨 후 다시 출정 채비를 진행해주세요!": {
+    "en": ", please deploy 3 mercenaries to the party before proceeding with departure prep again!",
+    "ja": "で傭兵3名をパーティに出撃させた後、再び出撃準備を行ってください！"
+  },
+  "에셋 & 사운드 스튜디오": {
+    "en": "Asset & Sound Studio",
+    "ja": "アセット＆サウンドスタジオ"
+  },
+  "에테르": {
+    "en": "Ether",
+    "ja": "エーテル"
+  },
+  "에테르 2점사": {
+    "en": "Ether 2-Burst",
+    "ja": "エーテル2点射"
+  },
+  "에테르 50개로 +1회 충전": {
+    "en": "+1 Recharge with 50 Ether",
+    "ja": "エーテル50個で+1回チャージ"
+  },
+  "에테르 ✨": {
+    "en": "Ether ✨",
+    "ja": "エーテル ✨"
+  },
+  "에테르 공명 검기": {
+    "en": "Ether Resonance Sword Energy",
+    "ja": "エーテル共鳴剣気"
+  },
+  "에테르 공명 탄막": {
+    "en": "Ether Resonance Barrage",
+    "ja": "エーテル共鳴弾幕"
+  },
+  "에테르 공방": {
+    "en": "Ether Lab",
+    "ja": "エーテル工房"
+  },
+  "에테르 공방 현황": {
+    "en": "Ether Lab Status",
+    "ja": "エーテル工房現況"
+  },
+  "에테르 과충전": {
+    "en": "Ether Overcharge",
+    "ja": "エーテル過充電"
+  },
+  "에테르 광맥": {
+    "en": "Ether Vein",
+    "ja": "エーテル鉱脈"
+  },
+  "에테르 광맥 깊은 곳에서 결정을 먹고 자란 태고의 마도 생명체. 폭발적인 광맥 에너지를 방출한다.": {
+    "en": "A primordial magical lifeform grown feeding on crystals deep within the Ether Vein. Releases explosive vein energy.",
+    "ja": "エーテル鉱脈の深部で結晶を喰らって育った太古の魔導生命体。爆発的な鉱脈エネルギーを放出する。"
+  },
+  "에테르 광맥 시추소": {
+    "en": "Aether Quarry",
+    "ja": "エーテル鉱脈採掘所"
+  },
+  "에테르 광맥 시추소 건설": {
+    "en": "Construct Aether Quarry",
+    "ja": "エーテル鉱脈採掘所の建設"
+  },
+  "에테르 광맥 시추소를 건설하여 석재와 철광을 자동 발굴하세요.": {
+    "en": "Construct the Aether Quarry to automatically excavate stone and iron ore.",
+    "ja": "エーテル鉱脈採掘所を建設し、石材と鉄鉱石を自動発掘せよ。"
+  },
+  "에테르 광채를 머금은 마력 수정 세공 반지. 착용자의 공격 집중력을 높여줍니다.": {
+    "en": "A magic crystal ring holding an ether luminescence. Enhances the wearer's attack concentration.",
+    "ja": "エーテルの輝きを帯びた魔力水晶の指輪。装備者の攻撃集中力を高める。"
+  },
+  "에테르 기동 마력과 석탄 화약으로 탄환을 추진하는 전술 마총. [🔫 연사] 특성으로 기본 30% + 행운 보정 추가 점사 탄환을 격발합니다.": {
+    "en": "A tactical magic gun propelling bullets with ether mobility mana and coal gunpowder. Its [🔫 Rapid Fire] trait fires additional burst bullets with base 30% + luck correction.",
+    "ja": "エーテル機動魔力と石炭火薬で弾丸を推進する戦術魔銃。「🔫 連射」特性により基本30%＋幸運補正で追加の点射弾を撃ち出す。"
+  },
+  "에테르 기동대": {
+    "en": "Ether Mobile Squad",
+    "ja": "エーテル機動隊"
+  },
+  "에테르 기류": {
+    "en": "Ether Current",
+    "ja": "エーテル気流"
+  },
+  "에테르 기류 불안정으로 강화에 실패했습니다. 스킬 레벨은 유지되며 연금 재료만 소모되었습니다.": {
+    "en": "Enhancement failed due to ether current instability. Skill level is preserved, only alchemy materials were consumed.",
+    "ja": "エーテル気流の不安定により強化に失敗した。スキルレベルは維持され錬金材料のみ消費された。"
+  },
+  "에테르 기류 정제 및 마도 촉매 합성 (미건설)": {
+    "en": "Ether current refining and magic catalyst synthesis (Not Built)",
+    "ja": "エーテル気流精製および魔導触媒合成 (未建設)"
+  },
+  "에테르 기류를 성화 불길과 직접 융합시켜 푸른빛 신성 화염을 일으키며, 방주 거주민의 기력을 빠르게 회복시킵니다.": {
+    "en": "Directly fuses ether currents with the sacred flame to evoke a blue holy flame, rapidly restoring the vitality of Ark residents.",
+    "ja": "エーテル気流を聖火の炎と直接融合させ青い神聖火炎を生み出し、方舟住民の気力を素早く回復させる。"
+  },
+  "에테르 기화 촉매 공정을 완성하여 생산량을 60% 추가 증산하며, 틱당 막대한 양의 에테르를 쏟아냅니다.": {
+    "en": "Completes the ether vaporization catalyst process, increasing production by +60% and generating massive ether per tick.",
+    "ja": "エーテル気化触媒工程を完成させ生産量を60%追加増産、1ティックあたり莫大なエーテルを産出する。"
+  },
+  "에테르 난방 도관과 마도 편의 시설이 완비된 중핵 메트로폴리스로 진화하여, 수많은 생존자들이 선망하는 최고의 안식처가 되었습니다.": {
+    "en": "Evolved into a core metropolis fully equipped with ether heating conduits and magic amenities, becoming the ultimate haven coveted by countless survivors.",
+    "ja": "エーテル暖房導管と魔導利便施設が完備された中核メトロポリスへと進化し、数多くの生存者が羨望する最高の安息所となった。"
+  },
+  "에테르 레일건과 유도 드론 폭격으로 적진 전체의 방어력을 50% 분쇄하는 화력의 정점입니다.": {
+    "en": "The pinnacle of firepower, shredding the entire enemy line's DEF by 50% with an ether railgun and guided drone bombardment.",
+    "ja": "エーテルレールガンと誘導ドローン爆撃で敵陣全体の防御力を50%粉砕する火力の頂点。"
+  },
+  "에테르 룬 장비 단조, 강화 및 접두/접미 인챈트": {
+    "en": "Forge, enhance, and apply prefix/suffix enchants to ether rune gear",
+    "ja": "エーテルルーン装備の鍛造、強化および接頭/接尾エンチャント"
+  },
+  "에테르 마나 순환을 안정화하여 모든 스킬의 마나 소모량을 5% 절감합니다.": {
+    "en": "Stabilizes ether mana circulation, reducing MP consumption of all skills by 5%.",
+    "ja": "エーテルマナ循環を安定化させ、全スキルの消費MPを5%削減する。"
+  },
+  "에테르 마도 공명": {
+    "en": "Ether Magic Resonance",
+    "ja": "エーテル魔導共鳴"
+  },
+  "에테르 마도 공학이 융합된 자동 벌채 골렘 시스템을 배치하여 인력 소모 없이 목재를 쏟아내고 유지비를 35% 절감합니다.": {
+    "en": "Deploys an automated lumber golem system integrated with ether magic engineering, yielding timber without manpower and reducing upkeep by 35%.",
+    "ja": "エーテル魔導工学が融合した自動伐採ゴーレムシステムを配備し、人員消費なく木材を産出し維持費を35%削減する。"
+  },
+  "에테르 마력 차징": {
+    "en": "Ether Mana Charging",
+    "ja": "エーテル魔力チャージ"
+  },
+  "에테르 방벽": {
+    "en": "Ether Barrier",
+    "ja": "エーテル防壁"
+  },
+  "에테르 볼트": {
+    "en": "Ether Bolt",
+    "ja": "エーテルボルト"
+  },
+  "에테르 부족": {
+    "en": "Insufficient Ether",
+    "ja": "エーテル不足"
+  },
+  "에테르 불길을 폭발시켜 모든 적에게 81% 화염 광역 피해를 가하고 화상을 부여합니다.": {
+    "en": "Detonates ether flames, dealing 81% AoE fire damage to all enemies and inflicting Burn.",
+    "ja": "エーテルの炎を爆発させ全敵に81%の火炎範囲ダメージを与え、火傷を付与する。"
+  },
+  "에테르 불꽃 융합 (방주 거점 회복 가속)": {
+    "en": "Ether Flame Fusion (Accelerate Ark Outpost Recovery)",
+    "ja": "エーテル火炎融合 (方舟拠点回復加速)"
+  },
+  "에테르 생산 & 마도서 제본": {
+    "en": "Ether Production & Grimoire Crafting",
+    "ja": "エーテル生産＆魔導書製本"
+  },
+  "에테르 생체 캡슐을 장착하여 고갈된 마나(MP)를 5초마다 +4씩 충전하는 [MP 회복 시스템]을 전면 해금했습니다.": {
+    "en": "Fully unlocked the [MP Recovery System], equipping ether bio-capsules to charge depleted MP by +4 every 5 seconds.",
+    "ja": "エーテル生体カプセルを装着し、枯渇したMPを5秒ごとに+4ずつチャージする「MP回復システム」を全面開放した。"
+  },
+  "에테르 순환을 최적화하여 모든 액티브 전투 스킬의": {
+    "en": "Optimizes ether circulation, reducing all active combat skills'",
+    "ja": "エーテル循環を最適化し、全アクティブ戦闘スキルの"
+  },
+  "에테르 심장 반지": {
+    "en": "Ether Heart Ring",
+    "ja": "エーテルハートリング"
+  },
+  "에테르 에너지 탄환: 공격력 +10%, 방어 관통 +10%, 행운 +8, 턴당 마나 3 MP 재생": {
+    "en": "Ether Energy Bullet: ATK +10%, Armor Penetration +10%, LUCK +8, MP Regen +3 per turn",
+    "ja": "エーテルエネルギー弾: 攻撃力+10%、防御貫通+10%、幸運+8、ターン毎MP3再生"
+  },
+  "에테르 연금 공방": {
+    "en": "Aether Alchemy Lab",
+    "ja": "エーテル錬金工房"
+  },
+  "에테르 연금 공방 (Aether Alchemy Workshop)": {
+    "en": "Aether Alchemy Lab (Aether Alchemy Workshop)",
+    "ja": "エーテル錬金工房 (Aether Alchemy Workshop)"
+  },
+  "에테르 연금 공방 건설": {
+    "en": "Construct Aether Alchemy Lab",
+    "ja": "エーテル錬金工房の建設"
+  },
+  "에테르 연금 공방 바로가기": {
+    "en": "Go to Aether Alchemy Lab",
+    "ja": "エーテル錬金工房へ移動"
+  },
+  "에테르 연금 공방에서 마도서 1회 제작": {
+    "en": "Craft 1 Grimoire at Aether Alchemy Lab",
+    "ja": "エーテル錬金工房で魔導書を1回製作"
+  },
+  "에테르 연금 공방에서 비전 마도서를 1회 연성(제작)하여 비전 연구를 개시하세요.": {
+    "en": "Synthesize (craft) 1 Arcane Grimoire at the Aether Alchemy Lab to commence arcane research.",
+    "ja": "エーテル錬金工房で秘術魔導書を1回錬成(製作)し、秘術研究を開始せよ。"
+  },
+  "에테르 연금 공방에서 스킬을 비전 강화합니다": {
+    "en": "Arcane-enhances skills at the Aether Alchemy Lab",
+    "ja": "エーテル錬金工房でスキルを秘術強化する"
+  },
+  "에테르 연금 공방을 건설하여 마도 촉매와 비전 마도서 집필 설비를 구축하세요.": {
+    "en": "Construct the Aether Alchemy Lab to build facilities for magic catalysts and arcane grimoires.",
+    "ja": "エーテル錬金工房を建設し、魔導触媒と秘術魔導書の執筆設備を構築せよ。"
+  },
+  "에테르 연금 공방이 필요합니다.": {
+    "en": "Aether Alchemy Lab is required.",
+    "ja": "エーテル錬金工房が必要です。"
+  },
+  "에테르 연금 및 마도 시설. 15초마다 에테르를 정기 생산하고 마도서를 제본합니다.": {
+    "en": "Ether alchemy and magic facility. Regularly produces ether every 15s and crafts grimoires.",
+    "ja": "エーテル錬金および魔導施設。15秒ごとにエーテルを定期生産し魔導書を製本します。"
+  },
+  "에테르 연금 시약과 가공 물자가 원활히 유통되어야 암시장이 형성됩니다.": {
+    "en": "A black market can form only when ether alchemy reagents and processed goods circulate smoothly.",
+    "ja": "エーテル錬金試薬と加工物資が円滑に流通してこそ闇市が形成される。"
+  },
+  "에테르 연금 집필": {
+    "en": "Aether Alchemy Inscription",
+    "ja": "エーテル錬金執筆"
+  },
+  "에테르 연금공방장": {
+    "en": "Aether Alchemy Lab Master",
+    "ja": "エーテル錬金工房長"
+  },
+  "에테르 정제 ✨ +{0}/15초 생산{1}": {
+    "en": "Ether Refinement ✨ +{0}/15s Production{1}",
+    "ja": "エーテル精製 ✨ +{0}/15秒生産{1}"
+  },
+  "에테르 정제 도구와 도가니를 제작할 심연의 병기창(Lv.1 이상)이 필요합니다.": {
+    "en": "Ark Armory & Forge (Lv.1+) is required to craft ether refining tools and crucibles.",
+    "ja": "エーテル精製道具とるつぼを製作する深淵の兵器廠 (Lv.1以上) が必要です。"
+  },
+  "에테르 정제 보상:": {
+    "en": "Ether Refinement Reward:",
+    "ja": "エーテル精製報酬:"
+  },
+  "에테르 중화 마총": {
+    "en": "Ether Heavy Magic Gun",
+    "ja": "エーテル重火魔銃"
+  },
+  "에테르 지팡이": {
+    "en": "Ether Staff",
+    "ja": "エーテル杖"
+  },
+  "에테르 지팡이 +2": {
+    "en": "Ether Staff +2",
+    "ja": "エーテル杖 +2"
+  },
+  "에테르 탄환을 고속 연사하는 차원 아레나 제식 마총.": {
+    "en": "A dimensional arena standard magic gun firing high-speed bursts of ether bullets.",
+    "ja": "エーテル弾丸を高速連射する次元闘技場の制式魔銃。"
+  },
+  "에테르 파동포": {
+    "en": "Ether Wave Cannon",
+    "ja": "エーテル波動砲"
+  },
+  "에테르 화로 도입 (온기 지속 시간 증대)": {
+    "en": "Install Ether Brazier (Extend warmth duration)",
+    "ja": "エーテル火鉢の導入 (温もり持続時間の延長)"
+  },
+  "에테르 화살": {
+    "en": "Ether Arrow",
+    "ja": "エーテル矢"
+  },
+  "에테르 환류관": {
+    "en": "Ether Reflux Tube",
+    "ja": "エーテル還流管"
+  },
+  "에테르 환류관 (연금 공방 Lv.6+): 마도 시설(병기창, 제단, 게이트) 에테르 유지비 -25% 영구 감면.": {
+    "en": "Ether Reflux Tube (Alchemy Lab Lv.6+): Permanently reduces ether upkeep of magic facilities (Armory, Altar, Gate) by -25%.",
+    "ja": "エーテル還流管 (錬金工房 Lv.6+): 魔導施設(兵器廠、祭壇、ゲート)のエーテル維持費を-25%永久減免。"
+  },
+  "에테르 횃불": {
+    "en": "Ether Torch",
+    "ja": "エーテル松明"
+  },
+  "에테르 횃불 (강화)": {
+    "en": "Ether Torch (Enhanced)",
+    "ja": "エーテル松明 (強化)"
+  },
+  "에테르 횃불 연료 세트": {
+    "en": "Ether Torch Fuel Set",
+    "ja": "エーテル松明燃料セット"
+  },
+  "에테르 횃불 점등 (보유: {0}개)": {
+    "en": "Light Ether Torch (Owned: {0})",
+    "ja": "エーテル松明点灯 (所持: {0}個)"
+  },
+  "에테르 획득 배율": {
+    "en": "Ether Gain Multiplier",
+    "ja": "エーテル獲得倍率"
+  },
+  "에테르({0})": {
+    "en": "Ether ({0})",
+    "ja": "エーテル({0})"
+  },
+  "에테르:": {
+    "en": "Ether:",
+    "ja": "エーテル:"
+  },
+  "에테르가 고온고압으로 결정화된 푸른 마법 보석입니다. 마법사의 비전 지팡이와 나침반 촉매를 연성하는 데 필수 불가결한 촉매체입니다.": {
+    "en": "A blue magical gem of ether crystallized under high temperature and pressure. An indispensable catalyst for crafting mages' arcane staves and compass catalysts.",
+    "ja": "エーテルが高温高圧で結晶化した青い魔法の宝石。魔法使いの秘術杖や羅針盤触媒を錬成するのに不可欠な触媒。"
+  },
+  "에테르가 부족합니다! (필요: 50개)": {
+    "en": "Not enough Ether! (Required: 50)",
+    "ja": "エーテルが不足しています！(必要: 50個)"
+  },
+  "에테르를 15초마다 정기 생산하고 마도서를 제본/강화(+10강)하며, Lv.6 시 [에테르 환류관]으로 마도 에테르 유지비 25%를 영구 감면합니다. (Lv.4+ 골드/식량 유지비)": {
+    "en": "Regularly produces ether every 15s, crafts/enhances grimoires (up to +10), and permanently reduces magic ether upkeep by 25% with [Ether Reflux Tube] at Lv.6. (Lv.4+ Gold/Food upkeep)",
+    "ja": "15秒ごとにエーテルを定期生産し魔導書を製本・強化(+10強化)、Lv.6達成時に「エーテル還流管」で魔導エーテル維持費を25%永久減免。(Lv.4+ ゴールド/食糧維持費)"
+  },
+  "에테르와 성스러운 약초를 축성한 물입니다. 심연의 타락한 제단을 정화하여 파티원 전원의 HP/MP 50% 회복, 디버프 해제 및 3턴간 상태이상 면역 결계를 부여합니다.": {
+    "en": "Water consecrated with ether and sacred herbs. Purifies fallen altars in the Abyss, restoring 50% HP/MP to all party members, dispelling debuffs, and granting a 3-turn status immunity barrier.",
+    "ja": "エーテルと聖なる薬草を調合した祝別水。深淵の堕落した祭壇を浄化し、パーティ全員のHP/MP50%回復、デバフ解除および3ターン状態異常免疫結界を付与する。"
+  },
+  "에테르와 성스러운 약초를 축성한 물입니다. 심연의 타락한 제단이나 저주받은 보물상자를 정화하여 강력한 영구 축복으로 변환합니다. 미사용 잔여분은 성채 귀환 시 영구 보존됩니다.": {
+    "en": "Water consecrated with ether and sacred herbs. Purifies corrupted altars or cursed treasure chests in the Abyss into powerful permanent blessings. Unused remaining quantities are permanently preserved upon returning to the Citadel.",
+    "ja": "エーテルと聖なる薬草を調合した祝別水。深淵の堕落祭壇や呪われし宝箱を浄化し、強力な永久祝福へと変換する。未使用の残量は城塞帰還時に永久保存される。"
+  },
+  "에테르의": {
+    "en": "Ether's",
+    "ja": "エーテルの"
+  },
+  "에테르의 무한 순환을 이룩한 전설의 무한 에테르 코어. 거대한 마나 기둥을 형성하며 방주 최강의 에테르 생산력을 영구 공급합니다.": {
+    "en": "A legendary Infinite Ether Core achieving endless ether circulation. Forms a colossal mana pillar, permanently providing the Ark's greatest ether output.",
+    "ja": "エーテルの無限循環を成し遂げた伝説の無限エーテルコア。巨大なマナの柱を形成し、方舟最強のエーテル生産力を永続供給する。"
+  },
+  "에픽": {
+    "en": "Epic",
+    "ja": "エピック"
+  },
+  "에픽 (E)": {
+    "en": "Epic (E)",
+    "ja": "エピック (E)"
+  },
+  "에픽 장비 및 2차 전설 승급 (+50% 매입가)": {
+    "en": "Epic Gear and Tier 2 Legendary Promotion (+50% Buyout Price)",
+    "ja": "エピック装備および2次伝説昇級 (+50%買取価格)"
+  },
+  "에픽(E)": {
+    "en": "Epic (E)",
+    "ja": "エピック (E)"
+  },
+  "에픽(EPIC)": {
+    "en": "Epic (EPIC)",
+    "ja": "エピック (EPIC)"
+  },
+  "에픽/전설 접두어 확정 인챈트": {
+    "en": "Guaranteed Epic/Legendary Prefix Enchant",
+    "ja": "エピック/伝説接頭辞確定エンチャント"
+  },
+  "에픽/전설 접미어 확정 인챈트": {
+    "en": "Guaranteed Epic/Legendary Suffix Enchant",
+    "ja": "エピック/伝説接尾辞確定エンチャント"
+  },
+  "에픽: [고대 방주의 기원] 침묵과 망령의 잔재": {
+    "en": "Epic: [Origins of Ancient Ark] Remnants of Silence and Phantoms",
+    "ja": "エピック: [古代方舟の起源] 沈黙と亡霊の残滓"
+  },
+  "에픽: [기사의 맹세와 진실의 거울] 단죄와 환영의 결속": {
+    "en": "Epic: [Knight's Oath and Mirror of Truth] Bond of Condemnation and Illusion",
+    "ja": "エピック: [騎士の誓いと真実の鏡] 断罪と幻影の結束"
+  },
+  "에픽: [무간의 종언] 태초의 공허를 닫는 자": {
+    "en": "Epic: [Avici's End] One Who Closes Primordial Void",
+    "ja": "エピック: [無間の終焉] 原初の虚無を閉ざす者"
+  },
+  "에픽: [심연의 심장] 광맥과 시공의 닻": {
+    "en": "Epic: [Heart of the Abyss] Vein and Chrono Anchor",
+    "ja": "エピック: [深淵の心臓] 鉱脈と時空の錨"
+  },
+  "에픽: [진정한 종언과 재탄생] 모노리스의 구원": {
+    "en": "Epic: [True Demise and Rebirth] Salvation of the Monolith",
+    "ja": "エピック: [真の終焉と再誕] モノリスの救い"
+  },
+  "에픽: [진홍과 망각의 맹세] 핏빛 성배와 영혼의 나침반": {
+    "en": "Epic: [Crimson and Oblivion Oath] Crimson Grail and Soul Compass",
+    "ja": "エピック: [深紅と忘却の誓い] 鮮血の聖杯と魂の羅針盤"
+  },
+  "엘레나": {
+    "en": "Elena",
+    "ja": "エレナ"
+  },
+  "엘리트": {
+    "en": "Elite",
+    "ja": "エリート"
+  },
+  "엘리트 (H)": {
+    "en": "Elite (H)",
+    "ja": "エリート (H)"
+  },
+  "여러 장비를 한 번에 선택하여 일괄 판매(매각)합니다": {
+    "en": "Select multiple items at once to sell (liquidate) in bulk",
+    "ja": "複数の装備を一度に選択して一括売却します"
+  },
+  "여명검": {
+    "en": "Dawnblade",
+    "ja": "夜明けの剣"
+  },
+  "여신의 눈물이라 불리는 기적의 성수입니다. 심연의 오염된 제단을 정화하고 아군 전원의 체력과 마나를 풍족하게 회복시킵니다.": {
+    "en": "A miraculous holy water known as the Goddess's Tears. Purifies contaminated altars in the Abyss and abundantly restores HP and MP to all allies.",
+    "ja": "女神の涙と呼ばれる奇跡の聖水。深淵の汚染された祭壇を浄化し、味方全員のHPとMPを豊かに回復させる。"
+  },
+  "여신의 성수": {
+    "en": "Goddess Holy Water",
+    "ja": "女神の聖水"
+  },
+  "여신의 성수 (강화)": {
+    "en": "Goddess Holy Water (Enhanced)",
+    "ja": "女神の聖水 (強化)"
+  },
+  "여신의 제단": {
+    "en": "Goddess Altar",
+    "ja": "女神の祭壇"
+  },
+  "역할군:": {
+    "en": "Role:",
+    "ja": "役割:"
+  },
+  "역행": {
+    "en": "Retrograde",
+    "ja": "逆行"
+  },
+  "연계": {
+    "en": "Combo",
+    "ja": "連携"
+  },
+  "연계 백과": {
+    "en": "Combo Codex",
+    "ja": "連携百科"
+  },
+  "연계 스킬 태그:": {
+    "en": "Link Skill Tag:",
+    "ja": "連携スキルタグ:"
+  },
+  "연계 콤보 스킬 상태이상": {
+    "en": "Link Combo Skill Status Ailments",
+    "ja": "連携コンボスキル状態異常"
+  },
+  "연계 퀘스트": {
+    "en": "Chain Quest",
+    "ja": "連携クエスト"
+  },
+  "연계 퀘스트 (1/2): 심연의 병기창 복원": {
+    "en": "Chain Quest (1/2): Restore Ark Armory & Forge",
+    "ja": "連携クエスト (1/2): 深淵の兵器廠の復元"
+  },
+  "연계 퀘스트 (1/2): 에테르 연금 공방 재건": {
+    "en": "Chain Quest (1/2): Rebuild Aether Alchemy Lab",
+    "ja": "連携クエスト (1/2): エーテル錬金工房の再建"
+  },
+  "연계 퀘스트 (2/2): 병기창 - 전술 장비 단조": {
+    "en": "Chain Quest (2/2): Armory - Forge Tactical Equipment",
+    "ja": "連携クエスト (2/2): 兵器廠 - 戦術装備の鍛造"
+  },
+  "연계 퀘스트 (2/2): 연금 공방 - 비전 마도서 연성": {
+    "en": "Chain Quest (2/2): Alchemy Lab - Synthesize Arcane Grimoire",
+    "ja": "連携クエスト (2/2): 錬金工房 - 秘術魔導書の錬成"
+  },
+  "연계 퀘스트: 마도 제식 강화 (+3강 이상 달성)": {
+    "en": "Chain Quest: Arcane Arsenal Enhancement (Reach +3 or higher)",
+    "ja": "連携クエスト: 魔導制式強化 (+3強化以上達成)"
+  },
+  "연계 퀘스트: 명예의 결투 (차원 아레나)": {
+    "en": "Chain Quest: Duel of Honor (Dimensional Arena)",
+    "ja": "連携クエスト: 名誉の決闘 (次元闘技場)"
+  },
+  "연계 퀘스트: 방어 전술 타워 연구": {
+    "en": "Chain Quest: Defensive Tactics Tower Research",
+    "ja": "連携クエスト: 防御戦術タワー研究"
+  },
+  "연계 퀘스트: 방주 중앙 병참고 증축": {
+    "en": "Chain Quest: Central Logistics Depot Expansion",
+    "ja": "連携クエスト: 方舟中央兵站庫の増築"
+  },
+  "연계 퀘스트: 생체 복원 병동 복구": {
+    "en": "Chain Quest: Bio-Restoration Ward Recovery",
+    "ja": "連携クエスト: 生体復元病棟の復旧"
+  },
+  "연계 퀘스트: 시공의 균열과 네메시스": {
+    "en": "Chain Quest: Spacetime Rift and Nemesis",
+    "ja": "連携クエスト: 時空の亀裂とネメシス"
+  },
+  "연계 퀘스트: 시공의 억제자": {
+    "en": "Chain Quest: Suppressor of Spacetime",
+    "ja": "連携クエスト: 時空の抑制者"
+  },
+  "연계 퀘스트: 심연 마도 인챈트 극의": {
+    "en": "Chain Quest: Master of Abyssal Arcane Enchanting",
+    "ja": "連携クエスト: 深淵魔導エンチャントの極意"
+  },
+  "연계 퀘스트: 심연을 밝히는 에테르 불꽃 (강화 보급품)": {
+    "en": "Chain Quest: Ether Flame Illuminating the Abyss (Enhanced Supplies)",
+    "ja": "連携クエスト: 深淵を照らすエーテル火炎 (強化補給品)"
+  },
+  "연계 퀘스트: 심연의 병기창 개수 (병기창 Lv.3)": {
+    "en": "Chain Quest: Ark Armory Renovation (Armory Lv.3)",
+    "ja": "連携クエスト: 深淵の兵器廠改修 (兵器廠 Lv.3)"
+  },
+  "연계 퀘스트: 심연의 온기와 결속": {
+    "en": "Chain Quest: Warmth and Bond of the Abyss",
+    "ja": "連携クエスト: 深淵の温もりと結束"
+  },
+  "연계 퀘스트: 쓰러진 자들을 위한 진혼곡 (묘지 헌화)": {
+    "en": "Chain Quest: Requiem for the Fallen (Cemetery Flowers)",
+    "ja": "連携クエスト: 倒れし者への鎮魂歌 (墓地献花)"
+  },
+  "연계 퀘스트: 안식의 보금자리": {
+    "en": "Chain Quest: Haven of Rest",
+    "ja": "連携クエスト: 安息の住処"
+  },
+  "연계 퀘스트: 에테르 광맥 시추소 개척": {
+    "en": "Chain Quest: Pioneer Aether Quarry",
+    "ja": "連携クエスト: エーテル鉱脈採掘所の開拓"
+  },
+  "연계 퀘스트: 영목 벌채소 복원": {
+    "en": "Chain Quest: Restore Lumber Camp",
+    "ja": "連携クエスト: 霊木伐採所の復元"
+  },
+  "연계 퀘스트: 영웅들의 한계 돌파 (2차 승급)": {
+    "en": "Chain Quest: Heroes' Limit Break (2nd Promotion)",
+    "ja": "連携クエスト: 英雄たちの限界突破 (2次昇級)"
+  },
+  "연계 퀘스트: 영혼의 각성 (영혼의 제단)": {
+    "en": "Chain Quest: Soul Awakening (Soul Sanctuary)",
+    "ja": "連携クエスト: 魂の覚醒 (魂の祭壇)"
+  },
+  "연계 퀘스트: 저주를 씻는 불꽃": {
+    "en": "Chain Quest: Flame Cleansing Curses",
+    "ja": "連携クエスト: 呪いを浄化する炎"
+  },
+  "연계 퀘스트: 정예의 결전 무구 (+5강 한계 돌파)": {
+    "en": "Chain Quest: Elite Decisive Arms (+5 Limit Break)",
+    "ja": "連携クエスト: 精鋭の決戦武具 (+5強化限界突破)"
+  },
+  "연계 퀘스트: 차원 네메시스 요격 작전": {
+    "en": "Chain Quest: Intercept Dimensional Nemesis Operation",
+    "ja": "連携クエスト: 次元ネメシス迎撃作戦"
+  },
+  "연계 퀘스트: 차원 영지 침공 작전": {
+    "en": "Chain Quest: Dimensional Territory Invasion Operation",
+    "ja": "連携クエスト: 次元領地侵攻作戦"
+  },
+  "연계 퀘스트: 차원 침공의 서막 (게이트 Lv.6 증축)": {
+    "en": "Chain Quest: Prelude to Dimensional Invasion (Gate Lv.6 Expansion)",
+    "ja": "連携クエスト: 次元侵攻の序幕 (ゲート Lv.6増築)"
+  },
+  "연계 퀘스트: 차원의 문을 열어라 (차원 앵커 게이트)": {
+    "en": "Chain Quest: Open the Dimensional Gate (Dimensional Gate)",
+    "ja": "連携クエスト: 次元の扉を開け (次元アンカーゲート)"
+  },
+  "연계 퀘스트: 핏빛 성역의 정화 작전": {
+    "en": "Chain Quest: Crimson Sanctuary Purification Operation",
+    "ja": "連携クエスト: 鮮血の聖域浄化作戦"
+  },
+  "연계 퀘스트: 황혼의 블랙 마켓 개설": {
+    "en": "Chain Quest: Open Twilight Black Market",
+    "ja": "連携クエスト: 黄昏のブラックマーケット開設"
+  },
+  "연계!": {
+    "en": "Combo!",
+    "ja": "連携！"
+  },
+  "연구 단계:": {
+    "en": "Research Stage:",
+    "ja": "研究段階:"
+  },
+  "연구 습득률 100%를 달성하여 습득된 스킬은 이곳 에테르 공방에서 연금 재료를 바쳐 최대 Lv.10까지 비전 강화할 수 있습니다!": {
+    "en": "Skills learned by reaching 100% research progress can be arcane-enhanced up to Lv.10 here at the Ether Lab using alchemy materials!",
+    "ja": "研究習得率100%を達成して習得したスキルは、このエーテル工房で錬金材料を捧げて最大Lv.10まで秘術強化できます！"
+  },
+  "연구 자원: 전술 타워 연구에는 골드와 에테르뿐만 아니라 마법 수정(Crystal), 공허 파편(Void Shard) 등 희귀 심연 재료가 투입됩니다.": {
+    "en": "Research Resources: Tactical tower research requires not only Gold and Ether, but also rare abyssal materials such as Magic Crystals and Void Shards.",
+    "ja": "研究資源: 戦術タワー研究にはゴールドやエーテルだけでなく、魔法水晶(Crystal)や虚無の欠片(Void Shard)などの希少深淵材料が投入されます。"
+  },
+  "연구 진행 (Lv.": {
+    "en": "Research in Progress (Lv.",
+    "ja": "研究進行 (Lv."
+  },
+  "연구소의 차가운 금속 테이블 위에는 늘 식어버린 커피가 담긴 머그잔과 방전된 고밀도 배터리 셀들이 굴러다녔다. 화석 연료가 바닥나고 세계가 에너지 전쟁의 벼랑 끝으로 몰리자, 그들은 손가락만 한 배터리에 벼락 수백 번 분량의 힘을 압축하거나 차원 너머의 에테르 기류를 끌어오려는 위험한 실험을 감행했다. \"새로운 지평이 열릴 것이다\"라고 머그잔을 쥐며 웃던 연구원들의 마지막 일지 뒤편에는, 통제를 벗어난 차원 균열의 비명만이 기록되어 있다.": {
+    "en": "On the cold metal tables of the laboratory always rolled depleted high-density battery cells alongside mugs of long-cold coffee. As fossil fuels ran out and the world was driven to the brink of energy wars, they undertook perilous experiments to compress the power of hundreds of lightning bolts into finger-sized batteries or harness ether currents from beyond dimensions. Behind the final journal of researchers who smiled holding their mugs, proclaiming \"A new horizon will open,\" only screams of uncontrollable dimensional rifts remain recorded.",
+    "ja": "研究所の冷たい金属テーブルの上には、いつも冷めきったコーヒーの入ったマグカップと放電した高密度バッテリーセルが転がっていた。化石燃料が底をつき世界がエネルギー戦争の崖っぷちに追い込まれると、彼らは指ほどの大きさのバッテリーに数百回分の雷の力を圧縮したり、次元の彼方からエーテル気流を引き込もうとする危険な実験を敢行した。「新たな地平が開かれるだろう」とマグカップを握り笑っていた研究員たちの最後の日誌の裏には、制御を失った次元の亀裂の悲鳴だけが記録されている。"
+  },
+  "연금": {
+    "en": "Alchemy",
+    "ja": "錬金"
+  },
+  "연금 공방": {
+    "en": "Alchemy Lab",
+    "ja": "錬金工房"
+  },
+  "연금 공방 증축 필요 (최대 Lv.{0})": {
+    "en": "Alchemy Lab expansion required (Max Lv.{0})",
+    "ja": "錬金工房の増築が必要 (最大Lv.{0})"
+  },
+  "연금 백과": {
+    "en": "Alchemy Codex",
+    "ja": "錬金百科"
+  },
+  "연금공방 Lv.6 필요 ({0}/6)": {
+    "en": "Alchemy Lab Lv.6 Required ({0}/6)",
+    "ja": "錬金工房 Lv.6が必要 ({0}/6)"
+  },
+  "연금술 공방": {
+    "en": "Alchemy Lab",
+    "ja": "錬金術工房"
+  },
+  "연금술사 이안": {
+    "en": "Alchemist Ian",
+    "ja": "錬金術士イアン"
+  },
+  "연독 중": {
+    "en": "Poisoning active",
+    "ja": "連毒中"
+  },
+  "연막": {
+    "en": "Smoke",
+    "ja": "煙幕"
+  },
+  "연막 회피": {
+    "en": "Smoke Evasion",
+    "ja": "煙幕回避"
+  },
+  "연막탄": {
+    "en": "Smoke Grenade",
+    "ja": "煙幕弾"
+  },
+  "연사": {
+    "en": "Rapid Fire",
+    "ja": "連射"
+  },
+  "연성": {
+    "en": "Synthesize",
+    "ja": "錬成"
+  },
+  "연쇄 번개": {
+    "en": "Chain Lightning",
+    "ja": "連鎖稲妻"
+  },
+  "연승": {
+    "en": "Win Streak",
+    "ja": "連勝"
+  },
+  "연승 기록": {
+    "en": "Win Streak Record",
+    "ja": "連勝記録"
+  },
+  "연승 진행 중!": {
+    "en": "Win Streak in progress!",
+    "ja": "連勝進行中！"
+  },
+  "연승 🔥": {
+    "en": "Win Streak 🔥",
+    "ja": "連勝 🔥"
+  },
+  "연승(Streak) 특전: 연속 승리 달성 시 연승 보너스 인장을 추가 획득하여 명예 암시장의 고급 장비 상자를 빠르게 개봉 가능": {
+    "en": "Streak Perk: Earning win streaks grants bonus streak seals to quickly open high-tier equipment chests in the Honor Black Market",
+    "ja": "連勝(Streak)特典: 連続勝利達成時に連勝ボーナス印章を追加獲得し、名誉闇市の上級装備箱を素早く開封可能"
+  },
+  "연장 및 경고: 자원바에 🔥 불꽃 아이콘으로 표시되며, 잔여 시간 1분 이하 시 깜빡임 경고": {
+    "en": "Extension & Warning: Displayed with a 🔥 flame icon on the resource bar, flashing warning when under 1 minute remaining",
+    "ja": "延長および警告: 資源バーに🔥炎アイコンで表示され、残り1分以下の際に点滅警告"
+  },
+  "연회와 만찬에서 코르크 마개를 뽑아 숙성된 포도주를 개봉하던 나선형 지렛대 기구입니다.": {
+    "en": "A spiral lever tool used to pull corks and unseal aged wine at banquets and feasts.",
+    "ja": "宴や晩餐でコルク栓を抜き、熟成されたワインを開封していた螺旋レバー器具。"
+  },
+  "열쇠": {
+    "en": "Key",
+    "ja": "鍵"
+  },
+  "열쇠, 곡괭이, 성수, 붕대 등을 소모하여": {
+    "en": "By consuming keys, pickaxes, holy water, bandages, etc.,",
+    "ja": "鍵、ツルハシ、聖水、包帯などを消費して"
+  },
+  "열압력 열폭": {
+    "en": "Thermobaric Thermal Explosion",
+    "ja": "熱圧力熱爆"
+  },
+  "열압력 열폭 (Thermal Compression)": {
+    "en": "Thermobaric Thermal Explosion (Thermal Compression)",
+    "ja": "熱圧力熱爆 (Thermal Compression)"
+  },
+  "열폭": {
+    "en": "Thermal Explosion",
+    "ja": "熱爆"
+  },
+  "염장 식량과 가죽 배낭으로 원정대의 기초 생명력을 강화합니다.": {
+    "en": "Strengthens the expedition's basic vitality with salted provisions and leather backpacks.",
+    "ja": "塩漬け食糧と革のバックパックで遠征隊の基礎生命力を強化する。"
+  },
+  "염화의": {
+    "en": "Flame's",
+    "ja": "炎火の"
+  },
+  "영겁의 불굴 방벽": {
+    "en": "Aeon's Indomitable Barrier",
+    "ja": "永劫の不屈防壁"
+  },
+  "영겁의 수호 결계": {
+    "en": "Aeon's Guardian Barrier",
+    "ja": "永劫の守護結界"
+  },
+  "영구 기본 스탯": {
+    "en": "Permanent Base Stats",
+    "ja": "永久基本ステータス"
+  },
+  "영구 보관 및 도감 수집 아이템": {
+    "en": "Permanent Storage & Codex Collection Item",
+    "ja": "永久保管＆図鑑収集アイテム"
+  },
+  "영구 불꽃 심장 형성 (성화 코어 안정)": {
+    "en": "Form Permanent Flame Heart (Stabilize Bonfire Core)",
+    "ja": "永久火炎心臓形成 (聖火コア安定)"
+  },
+  "영구 안치 잠금은 최대 3명까지만 설정할 수 있습니다.": {
+    "en": "Permanent Enshrinement Lock can only be set for up to 3 heroes.",
+    "ja": "永久安置ロックは最大3人までしか設定できません。"
+  },
+  "영구 증폭됩니다. (용병 순수 기본 스탯 기준이며, 장비 스탯은 각성 후에도 그대로 가산 유지됩니다.)": {
+    "en": "Permanently amplified. (Based on mercenary pure base stats; equipment stats remain added after awakening.)",
+    "ja": "永久増幅されます。(傭兵の純粋基本ステータス基準であり、装備ステータスは覚醒後もそのまま加算維持されます。)"
+  },
+  "영구 증폭됩니다. (용병 순수 기본 스탯 기준이며, 장비 스탯은 전직 후에도 그대로 가산 유지됩니다.)": {
+    "en": "Permanently amplified. (Based on mercenary pure base stats; equipment stats remain added after class change.)",
+    "ja": "永久増幅されます。(傭兵の純粋基本ステータス基準であり、装備ステータスは転職後もそのまま加算維持されます。)"
+  },
+  "영구 패시브": {
+    "en": "Permanent Passive",
+    "ja": "永久パッシブ"
+  },
+  "영구동결": {
+    "en": "Permafrost",
+    "ja": "永久凍結"
+  },
+  "영구동토의": {
+    "en": "Permafrost's",
+    "ja": "永久凍土の"
+  },
+  "영구적으로 타오르는 마도 불꽃 심장을 구축하여, 불씨가 꺼지지 않는 불멸의 거점 중심핵을 완성했습니다.": {
+    "en": "Constructed an eternally burning magic flame heart, completing an undying core for the outpost that never extinguishes.",
+    "ja": "永久に燃え盛る魔導火炎心臓を構築し、火種の消えない不滅の拠点中心核を完成させた。"
+  },
+  "영령 가호 및 피버 궁극기 전담": {
+    "en": "Spirits' Blessing and Fever Ultimate Dedicated",
+    "ja": "英霊加護およびフィーバー究極技専任"
+  },
+  "영령 결속 가호:": {
+    "en": "Spirits' Bond Blessing:",
+    "ja": "英霊結束加護:"
+  },
+  "영령 결속: {0}": {
+    "en": "Spirits' Bond: {0}",
+    "ja": "英霊結束: {0}"
+  },
+  "영령 추모 헌화": {
+    "en": "Tribute Flowers for Spirits",
+    "ja": "英霊追悼献花"
+  },
+  "영령의 가호 발동": {
+    "en": "Spirits' Blessing Triggered",
+    "ja": "英霊の加護発動"
+  },
+  "영령의 가호 상세 확인 및 공물 결속": {
+    "en": "Check Spirits' Blessing Details & Bind Tribute",
+    "ja": "英霊の加護の詳細確認および供物結束"
+  },
+  "영령의 가호:": {
+    "en": "Spirits' Blessing:",
+    "ja": "英霊の加護:"
+  },
+  "영령의 심판": {
+    "en": "Judgment of the Spirits",
+    "ja": "英霊の審判"
+  },
+  "영령의 안식처": {
+    "en": "Spirits' Haven",
+    "ja": "英霊の安息所"
+  },
+  "영령의 안식처 & 추모": {
+    "en": "Spirits' Haven & Memorial",
+    "ja": "英霊の安息所＆追悼"
+  },
+  "영목": {
+    "en": "Spirit Wood",
+    "ja": "霊木"
+  },
+  "영목 벌목 🪵 +{0}/9초 생산{1}": {
+    "en": "Spirit Wood Logging 🪵 +{0}/9s Production{1}",
+    "ja": "霊木伐採 🪵 +{0}/9秒生産{1}"
+  },
+  "영목 벌채소": {
+    "en": "Lumber Camp",
+    "ja": "霊木伐採所"
+  },
+  "영목 벌채소 건설": {
+    "en": "Construct Lumber Camp",
+    "ja": "霊木伐採所の建設"
+  },
+  "영목 벌채소를 건설하여 목재를 자동으로 수급하세요.": {
+    "en": "Construct the Lumber Camp to automatically gather timber.",
+    "ja": "霊木伐採所を建設し、木材を自動で調達せよ。"
+  }
+}

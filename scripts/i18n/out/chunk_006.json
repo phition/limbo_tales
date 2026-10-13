@@ -1,0 +1,802 @@
+{
+  "★ 초월 엔드 컨텐츠: 정예 광폭화 마물 군단, 위험도 10,000 돌파, 진 최종 보스 토벌 (몹 Lv.20~520)": {
+    "en": "★ Transcendence Endgame Content: Elite Berserk Monster Legion, Hazard 10,000 Breakthrough, True Final Boss Subjugation (Monster Lv.20~520)",
+    "ja": "★ 超越エンドコンテンツ: エリート狂暴化魔物軍団、危険度10,000突破、真・最終ボス討伐 (モンスター Lv.20~520)"
+  },
+  "★ 최고 강화 단계 (+10)": {
+    "en": "★ Max Enhancement Stage (+10)",
+    "ja": "★ 最高強化段階 (+10)"
+  },
+  "★ 최고 등급 도달": {
+    "en": "★ Max Grade Reached",
+    "ja": "★ 最高等級到達"
+  },
+  "★ 최고 레벨": {
+    "en": "★ Max Level",
+    "ja": "★ 最高レベル"
+  },
+  "★ 최고 레벨 (+10)": {
+    "en": "★ Max Level (+10)",
+    "ja": "★ 最高レベル (+10)"
+  },
+  "★ 최고 레벨 도달": {
+    "en": "★ Max Level Reached",
+    "ja": "★ 最高レベル到達"
+  },
+  "★ 최고 레벨 연구 완료": {
+    "en": "★ Max Level Research Complete",
+    "ja": "★ 最高レベル研究完了"
+  },
+  "★ 최고 연구 단계": {
+    "en": "★ Max Research Stage",
+    "ja": "★ 最高研究段階"
+  },
+  "★ 최고 위력 달성": {
+    "en": "★ Max Power Achieved",
+    "ja": "★ 最高威力達成"
+  },
+  "★ 최대 +10강 최고 강화 돌파 & [순수 마도석] 인챈트 슬롯 해금 (7티어 망각 사신)": {
+    "en": "★ Max +10 Enhancement Breakthrough & [Pure Mana Stone] Enchant Slot Unlocked (Tier 7 Reaper of Oblivion)",
+    "ja": "★ 最大+10最高強化突破＆[純粋魔導石] エンチャントスロット解放 (Tier 7 忘却の死神)"
+  },
+  "★ 최대 +8강 강화 한계 돌파 & [접미어 인챈트] 슬롯 해금 (5티어 심연 파멸 에픽)": {
+    "en": "★ Max +8 Enhancement Limit Breakthrough & [Suffix Enchant] Slot Unlocked (Tier 5 Abyssal Ruin Epic)",
+    "ja": "★ 最大+8強化限界突破＆[接尾辞エンチャント] スロット解放 (Tier 5 深淵破滅エピック)"
+  },
+  "★ 최종 결전: 신화급 장비, 궁극의 심연 정수, 대량 골드 & 에테르 (보스 Lv.28)": {
+    "en": "★ Final Decisive Battle: Mythic Equipment, Ultimate Abyssal Essence, Massive Gold & Ether (Boss Lv.28)",
+    "ja": "★ 最終決戦: 神話級装備、究極の深淵の真髄、大量ゴールド＆エーテル (ボス Lv.28)"
+  },
+  "★ 출전 중": {
+    "en": "★ Deployed",
+    "ja": "★ 出撃中"
+  },
+  "★ 파티원": {
+    "en": "★ Party Member",
+    "ja": "★ パーティ員"
+  },
+  "★ 현재 장착중": {
+    "en": "★ Currently Equipped",
+    "ja": "★ 現在装備中"
+  },
+  "★ 황혼 암시장 완성: 최상위 비급서 & 전 품목 -20% 특별할인 & 🪙 +17G/15초 & 주기 30초": {
+    "en": "★ Twilight Black Market Completed: Top Secret Grimoires & 20% Discount on All Items & 🪙 +17G/15s & 30s Cycle",
+    "ja": "★ 黄昏ブラックマーケット完成: 最上位秘伝書＆全品20%特別割引＆🪙 +17G/15秒＆周期30秒"
+  },
+  "★ 🌌 [차원 네메시스 월드 레이드] 관문 개방 & 명예 상점 3단계 & PVE 공격력 +5%": {
+    "en": "★ 🌌 [Dimensional Nemesis World Raid] Gate Opened & Honor Shop Stage 3 & PVE ATK +5%",
+    "ja": "★ 🌌 [次元ネメシスワールドレイド] ゲート開放＆名誉商店3段階＆PVE攻撃力+5%"
+  },
+  "★ 🌌 무간도 (Avici) [위험도 10,000]": {
+    "en": "★ 🌌 Avici [Hazard 10,000]",
+    "ja": "★ 🌌 無間道 (Avici) [危険度 10,000]"
+  },
+  "★ 👑 랭커 PVE 특권 버프 +50% 궁극 증폭 & 명예 상점 10단계 ([차원 패왕의 보관함])": {
+    "en": "★ 👑 Ranker PVE Privilege Buff +50% Ultimate Boost & Honor Shop Stage 10 ([Dimensional Overlord's Coffer])",
+    "ja": "★ 👑 ランカーPVE特権バフ+50%究極増幅＆名誉商店10段階 ([次元覇王の宝箱])"
+  },
+  "☠️ [맹독 주입] {0}에게 {1}턴간 맹독(매 턴 최대 HP {2}% 치명 피해)을 주입했습니다!": {
+    "en": "☠️ [Poison Injection] Injected lethal poison into {0} for {1} turns ({2}% max HP lethal DMG each turn)!",
+    "ja": "☠️ [猛毒注入] {0}に{1}ターンの間、猛毒(毎ターン最大HP{2}%の致命的ダメージ)を注入！"
+  },
+  "☠️ [맹독] {0} 중독 지속 피해 (-{1})": {
+    "en": "☠️ [Poison] {0} Continuous Poison DMG (-{1})",
+    "ja": "☠️ [猛毒] {0} 中毒持続ダメージ (-{1})"
+  },
+  "☠️ [맹독] {0}에게 맹독이 중독되었습니다! (매 턴 14% 치명적 독 피해)": {
+    "en": "☠️ [Poison] {0} has been poisoned! (14% lethal poison DMG each turn)",
+    "ja": "☠️ [猛毒] {0}が猛毒に冒された！ (毎ターン14%の致命的毒ダメージ)"
+  },
+  "☠️ [석관 함정] 봉인 독가스 폭발! 파티 전원 HP 15% 피해 및 🩸 출혈 부여": {
+    "en": "☠️ [Sarcophagus Trap] Sealed poison gas exploded! All party members took 15% HP DMG and inflicted with 🩸 Bleed",
+    "ja": "☠️ [石棺の罠] 封印毒ガス爆発！ パーティ全員HP15%ダメージ＆🩸出血付与"
+  },
+  "☣️ [독액 비산] {0}에게 중독이 튀었습니다!": {
+    "en": "☣️ [Venom Splatter] Poison splashed onto {0}!",
+    "ja": "☣️ [毒液飛散] {0}に毒が飛散した！"
+  },
+  "☣️ [맹독 전이] {0}에게 2턴간 중독이 전염되었습니다!": {
+    "en": "☣️ [Poison Transmission] Poison spread to {0} for 2 turns!",
+    "ja": "☣️ [猛毒転移] {0}に2ターンの間、毒が感染した！"
+  },
+  "☣️💥 [독성 기화 폭발]: 중독 상태의 적에게 마법/원소 적중 시 최대 HP 12% 폭발 및 적 전체 맹독 전이": {
+    "en": "☣️💥 [Toxic Vaporization Blast]: Hitting poisoned enemies with magic/elemental attacks triggers a 12% max HP explosion and spreads deadly poison to all enemies",
+    "ja": "☣️💥 [毒性気化爆発]: 中毒状態の敵に魔法/元素攻撃が命中時、最大HP12%爆発＆敵全体に猛毒転移"
+  },
+  "⚒️ +10강/순수석": {
+    "en": "⚒️ +10/Pure Stone",
+    "ja": "⚒️ +10強化/純粋石"
+  },
+  "⚒️ +5강/강화해금": {
+    "en": "⚒️ +5/Enhance Unlock",
+    "ja": "⚒️ +5強化/強化解放"
+  },
+  "⚒️ +8강/접미어": {
+    "en": "⚒️ +8/Suffix",
+    "ja": "⚒️ +8強化/接尾辞"
+  },
+  "⚒️ 3. 심연 장비 단조 & 3단계 인챈트 마도석": {
+    "en": "⚒️ 3. Abyssal Equipment Forging & Stage 3 Enchant Mana Stones",
+    "ja": "⚒️ 3. 深淵装備鍛造＆3段階エンチャント魔導石"
+  },
+  "⚒️ [{0}] Lv.{1} 공사를 시작했습니다!{2} (예상 소요: {3}초)": {
+    "en": "⚒️ Started [{0}] Lv.{1} construction!{2} (Estimated time: {3}s)",
+    "ja": "⚒️ [{0}] Lv.{1}の工事を開始しました！{2} (予想所要時間: {3}秒)"
+  },
+  "⚒️ [대장간 단조 완성] [{0}] ({1}) 단조 완료!": {
+    "en": "⚒️ [Forge Craft Complete] [{0}] ({1}) forged!",
+    "ja": "⚒️ [鍛冶屋鍛造完了] [{0}] ({1}) 鍛造完了！"
+  },
+  "⚒️ [병기창 제작] {0} {1} +{2}개를 제작하여 성채 창고에 적재했습니다.": {
+    "en": "⚒️ [Armory Crafting] Crafted +{2} {0} {1} and stored in the Citadel Warehouse.",
+    "ja": "⚒️ [兵器廠製作] {0} {1} +{2}個を製作し、城塞倉庫に格納しました。"
+  },
+  "⚒️ [심연의 병기창 Lv.3 증축 완료] +7강 장비 한계 돌파 및 마도 제식 강화 퀘스트가 개방되었습니다!": {
+    "en": "⚒️ [Ark Armory & Forge Lv.3 Expansion Complete] +7 Equipment Breakthrough and Magitech Standard Enhancement Quests unlocked!",
+    "ja": "⚒️ [深淵の兵器廠 Lv.3 増築完了] +7強化装備の限界突破および魔導制式強化クエストが開放されました！"
+  },
+  "⚒️ 강화보급품": {
+    "en": "⚒️ Enhanced Supplies",
+    "ja": "⚒️ 強化補給品"
+  },
+  "⚒️ 단조": {
+    "en": "⚒️ Forge",
+    "ja": "⚒️ 鍛造"
+  },
+  "⚒️ 단조 스탯 편차(±30%) & [저주받은 장비] 정화 의식": {
+    "en": "⚒️ Forge Stat Variance (±30%) & [Cursed Equipment] Purification Ritual",
+    "ja": "⚒️ 鍛造ステータス偏差(±30%)＆[呪われた装備] 浄化の儀式"
+  },
+  "⚒️ 모루": {
+    "en": "⚒️ Anvil",
+    "ja": "⚒️ 金床"
+  },
+  "⚒️ 장비 각성": {
+    "en": "⚒️ Equipment Awakening",
+    "ja": "⚒️ 装備覚醒"
+  },
+  "⚒️ 장비 단조 공방": {
+    "en": "⚒️ Equipment Forge Workshop",
+    "ja": "⚒️ 装備鍛造工房"
+  },
+  "⚒️ 장비 단조 시작": {
+    "en": "⚒️ Start Equipment Forging",
+    "ja": "⚒️ 装備鍛造開始"
+  },
+  "⚒️ 장비 등급별 제작 체계 & 5% 강화 공식 & 인챈트 시스템": {
+    "en": "⚒️ Equipment Grade Crafting System & 5% Enhancement Formula & Enchant System",
+    "ja": "⚒️ 装備等級別製作体系＆5%強化公式＆エンチャントシステム"
+  },
+  "⚒️✨ [병기창 강화제작] {0} {1} +{2}개를 제작하여 성채 창고에 적재했습니다.": {
+    "en": "⚒️✨ [Armory Enhanced Crafting] Crafted +{2} {0} {1} and stored in the Citadel Warehouse.",
+    "ja": "⚒️✨ [兵器廠強化製作] {0} {1} +{2}個を製作し、城塞倉庫に格納しました。"
+  },
+  "⚓ [균열의 닻 사용] 차원의 닻을 작동하여 성채로 귀환합니다! (일부 자원 분실 주의)": {
+    "en": "⚓ [Rift Anchor Used] Activated Dimensional Anchor to return to Citadel! (Beware: some resources may be lost)",
+    "ja": "⚓ [亀裂のアンカー使用] 次元のアンカーを作動し城塞へ帰還します！ (一部資源の紛失に注意)"
+  },
+  "⚓ [심연의 시공 닻] (4F 광폭화 보스 전리품) 회수": {
+    "en": "⚓ Recovered [Abyssal Spacetime Anchor] (4F Berserk Boss Spoils)",
+    "ja": "⚓ [深淵の時空アンカー] (4F狂暴化ボス戦利品) 回収"
+  },
+  "⚓✨ [심연의 닻 사용] 심연의 닻을 작동하여 배낭 자원 분실 없이 완벽하게 성채로 안전 귀환합니다!": {
+    "en": "⚓✨ [Abyssal Anchor Used] Activated Abyssal Anchor to return safely to Citadel without losing any backpack resources!",
+    "ja": "⚓✨ [深淵のアンカー使用] 深淵のアンカーを作動し、リュックの資源を失うことなく無事城塞へ安全帰還！"
+  },
+  "⚔️ 1. 속도(SPD) 기반 턴제 배틀 & 3열 포지션": {
+    "en": "⚔️ 1. SPD-Based Turn Battle & 3-Row Positions",
+    "ja": "⚔️ 1. 速度(SPD)ベースのターン制バトル＆3列ポジション"
+  },
+  "⚔️ 3 vs 3 차원 영지 침공 프로토콜 가동": {
+    "en": "⚔️ 3 vs 3 Dimensional Territory Invasion Protocol Active",
+    "ja": "⚔️ 3 vs 3 次元領地侵攻プロトコル発動"
+  },
+  "⚔️ 3v3 아레나 전투 리포트": {
+    "en": "⚔️ 3v3 Arena Combat Report",
+    "ja": "⚔️ 3v3 アリーナ戦闘レポート"
+  },
+  "⚔️ 3v3 영지 침공 전투 리포트": {
+    "en": "⚔️ 3v3 Territory Invasion Combat Report",
+    "ja": "⚔️ 3v3 領地侵攻戦闘レポート"
+  },
+  "⚔️ SFX 효과음": {
+    "en": "⚔️ SFX Sound Effects",
+    "ja": "⚔️ SFX効果音"
+  },
+  "⚔️ [{0}] {1} (속도 {2})": {
+    "en": "⚔️ [{0}] {1} (SPD {2})",
+    "ja": "⚔️ [{0}] {1} (速度 {2})"
+  },
+  "⚔️ [{0}](SPD {1}) {2} [{3}]! {4} 피해! {5}": {
+    "en": "⚔️ [{0}](SPD {1}) {2} [{3}]! {4} DMG! {5}",
+    "ja": "⚔️ [{0}](SPD {1}) {2} [{3}]！ {4} ダメージ！ {5}"
+  },
+  "⚔️ [망령 기사의 사형선고검]": {
+    "en": "⚔️ [Specter Knight's Death Sentence Sword]",
+    "ja": "⚔️ [亡霊騎士の死刑宣告剣]"
+  },
+  "⚔️ [스킬 장착] [{0}] 슬롯 {1}에 [{2}] 장착 완료!": {
+    "en": "⚔️ [Skill Equipped] Equipped [{2}] in [{0}] Slot {1}!",
+    "ja": "⚔️ [スキル装備] [{0}] スロット{1}に [{2}] 装備完了！"
+  },
+  "⚔️ [심연 강하] {0}과 보급품을 채비하고 {1}으로 진입합니다!{2}": {
+    "en": "⚔️ [Abyssal Descent] Prepared {0} and supplies, entering {1}!{2}",
+    "ja": "⚔️ [深淵降下] {0}と補給品を整え、{1}へ突入します！{2}"
+  },
+  "⚔️ [아레나 결투 패배] 투사의 인장 🪙 +{0}개 위로 획득": {
+    "en": "⚔️ [Arena Duel Defeat] Consolation Fighter Seals 🪙 +{0} acquired",
+    "ja": "⚔️ [アリーナ決闘敗北] 闘士の印章 🪙 +{0}個 慰労獲得"
+  },
+  "⚔️ [원정 결사대 육성 선택] {0}": {
+    "en": "⚔️ [Expedition Vanguard Training Choice] {0}",
+    "ja": "⚔️ [遠征決死隊育成選択] {0}"
+  },
+  "⚔️ [전투 개시] 속도순 턴 시작": {
+    "en": "⚔️ [Battle Start] SPD-order turn begins",
+    "ja": "⚔️ [戦闘開始] 速度順ターン開始"
+  },
+  "⚔️ [전투 돌입] 몬스터와의 전투가 시작되었습니다!": {
+    "en": "⚔️ [Combat Initiated] Battle with monsters has begun!",
+    "ja": "⚔️ [戦闘突入] 魔物との戦闘が始まりました！"
+  },
+  "⚔️ 검격": {
+    "en": "⚔️ Slash",
+    "ja": "⚔️ 剣撃"
+  },
+  "⚔️ 결전 시작": {
+    "en": "⚔️ Decisive Battle Start",
+    "ja": "⚔️ 決戦開始"
+  },
+  "⚔️ 결투 시작": {
+    "en": "⚔️ Duel Start",
+    "ja": "⚔️ 決闘開始"
+  },
+  "⚔️ 고유 스킬: [": {
+    "en": "⚔️ Unique Skill: [",
+    "ja": "⚔️ 固有スキル: ["
+  },
+  "⚔️ 남겨진 2인의 원정대원(아이리스, 시안)으로 결원이 발생했습니다. 방랑자의 라운지를 건설하여 새로운 대원을 영입해야 합니다.": {
+    "en": "⚔️ A vacancy has opened with only 2 expedition members remaining (Iris, Cyan). Build Wanderer Lounge to recruit a new member.",
+    "ja": "⚔️ 残された2名の遠征隊員(アイリス、シアン)に欠員が生じました。放浪者のラウンジを建設し、新たな隊員を雇用してください。"
+  },
+  "⚔️ 단죄의 성검 계승 (원정대 8티어 성검 하사)": {
+    "en": "⚔️ Succession of Condemnation Holy Sword (Tier 8 Holy Sword bestowed upon Expedition)",
+    "ja": "⚔️ 断罪の聖剣継承 (遠征隊にTier 8聖剣を下賜)"
+  },
+  "⚔️ 대형 연계 에픽: 몰락한 성기사단의 맹세": {
+    "en": "⚔️ Grand Linked Epic: Oath of the Fallen Paladin Order",
+    "ja": "⚔️ 大型連携エピック: 没落した聖騎士団の誓い"
+  },
+  "⚔️ 만화경의 기억 비전서 (원정대 초월 마도서 수여)": {
+    "en": "⚔️ Kaleidoscope Memory Grimoire (Transcendence Grimoire bestowed upon Expedition)",
+    "ja": "⚔️ 万華鏡の記憶魔導書 (遠征隊に超越魔導書を授与)"
+  },
+  "⚔️ 몬스터 사용 스킬": {
+    "en": "⚔️ Monster Skills",
+    "ja": "⚔️ 魔物の使用スキル"
+  },
+  "⚔️ 무장 보급": {
+    "en": "⚔️ Armament Supply",
+    "ja": "⚔️ 武装補給"
+  },
+  "⚔️ 물리 딜러": {
+    "en": "⚔️ Physical DPS",
+    "ja": "⚔️ 物理アタッカー"
+  },
+  "⚔️ 발굴된 룬 마도 장비": {
+    "en": "⚔️ Excavated Runic Magitech Equipment",
+    "ja": "⚔️ 発掘されたルーン魔導装備"
+  },
+  "⚔️ 사용 스킬 및 기믹:": {
+    "en": "⚔️ Skills & Mechanics Used:",
+    "ja": "⚔️ 使用スキルおよびギミック:"
+  },
+  "⚔️ 습득 스킬 (": {
+    "en": "⚔️ Learned Skills (",
+    "ja": "⚔️ 習得スキル ("
+  },
+  "⚔️ 습득 전투 스킬": {
+    "en": "⚔️ Learned Combat Skills",
+    "ja": "⚔️ 習得戦闘スキル"
+  },
+  "⚔️ 시간의 권능과 결사대 축복 ([시공간의 나침반] + 대량 자원)": {
+    "en": "⚔️ Temporal Authority & Vanguard Blessing ([Spacetime Compass] + Massive Resources)",
+    "ja": "⚔️ 時間の権能と決死隊の祝福 ([時空間の羅針盤] ＋ 大量資源)"
+  },
+  "⚔️ 심연 개척 및 결사대 무장 (원정 강화)": {
+    "en": "⚔️ Abyssal Pioneering & Vanguard Armament (Expedition Enhancement)",
+    "ja": "⚔️ 深淵開拓および決死隊武装 (遠征強化)"
+  },
+  "⚔️ 아군 진격": {
+    "en": "⚔️ Ally Advance",
+    "ja": "⚔️ 味方進撃"
+  },
+  "⚔️ 영원한 전설 [불멸의 수호 성단 (원정단 육성)]": {
+    "en": "⚔️ Eternal Legend [Immortal Guardian Constellation (Expedition Training)]",
+    "ja": "⚔️ 永遠の伝説 [不滅の守護星団 (遠征隊育成)]"
+  },
+  "⚔️ 원정단 육성 선택 [단죄 기사단의 성역 판금갑 수여]": {
+    "en": "⚔️ Expedition Training Choice [Sanctuary Plate Armor of Condemnation Knights Bestowed]",
+    "ja": "⚔️ 遠征隊育成選択 [断罪騎士団の聖域甲冑授与]"
+  },
+  "⚔️ 원정단 육성 선택 [시공의 성유물 장비 하사]": {
+    "en": "⚔️ Expedition Training Choice [Spacetime Relic Equipment Bestowed]",
+    "ja": "⚔️ 遠征隊育成選択 [時空の聖遺物装備下賜]"
+  },
+  "⚔️ 원정단 육성 선택 [신화의 성휘 수여]": {
+    "en": "⚔️ Expedition Training Choice [Mythic Sacred Radiance Bestowed]",
+    "ja": "⚔️ 遠征隊育成選択 [神話の聖輝授与]"
+  },
+  "⚔️ 원정단 육성 선택 [심연 군주의 절대 성관 수여]": {
+    "en": "⚔️ Expedition Training Choice [Abyssal Lord's Absolute Diadem Bestowed]",
+    "ja": "⚔️ 遠征隊育成選択 [深淵君主の絶対冠授与]"
+  },
+  "⚔️ 원정단 육성 선택 [진홍 성배의 흡혈 성물 하사]": {
+    "en": "⚔️ Expedition Training Choice [Crimson Grail Vampiric Relic Bestowed]",
+    "ja": "⚔️ 遠征隊育成選択 [真紅の聖杯の吸血聖物下賜]"
+  },
+  "⚔️ 적군 공습": {
+    "en": "⚔️ Enemy Air Raid",
+    "ja": "⚔️ 敵軍空爆"
+  },
+  "⚔️ 전설의 무구 보관실 금고": {
+    "en": "⚔️ Vault of Legendary Armaments",
+    "ja": "⚔️ 伝説の武具保管庫金庫"
+  },
+  "⚔️ 전용 전술 스킬 (기본 2종 자동 습득)": {
+    "en": "⚔️ Exclusive Tactical Skills (2 base skills auto-learned)",
+    "ja": "⚔️ 専用戦術スキル (基本2種自動習得)"
+  },
+  "⚔️ 전투 사제": {
+    "en": "⚔️ Battle Priest",
+    "ja": "⚔️ 戦闘司祭"
+  },
+  "⚔️ 정식 습득 스킬": {
+    "en": "⚔️ Officially Learned Skills",
+    "ja": "⚔️ 正式習得スキル"
+  },
+  "⚔️ 즉시 결전 돌입!": {
+    "en": "⚔️ Immediately Engage in Decisive Battle!",
+    "ja": "⚔️ 即座に決戦突入！"
+  },
+  "⚔️ 직업군 조합": {
+    "en": "⚔️ Class Combinations",
+    "ja": "⚔️ 職業系統の組み合わせ"
+  },
+  "⚔️ 진홍 혈염의 파멸 대검 (결사대 10티어 신화 대검)": {
+    "en": "⚔️ Destruction Greatsword of Crimson Bloodflame (Tier 10 Mythic Greatsword)",
+    "ja": "⚔️ 真紅血炎の破滅大剣 (決死隊 Tier 10 神話大剣)"
+  },
+  "⚔️ 차원 매칭": {
+    "en": "⚔️ Dimensional Matchmaking",
+    "ja": "⚔️ 次元マッチング"
+  },
+  "⚔️ 최전선 결사대 전력 증강 (원정단 육성)": {
+    "en": "⚔️ Frontline Vanguard Force Amplification (Expedition Training)",
+    "ja": "⚔️ 最前線決死隊の戦力増強 (遠征隊育成)"
+  },
+  "⚔️ 침공 전장 리더 전술 체계 & 실시간 버프·디버프·2.5배속 전투": {
+    "en": "⚔️ Invasion Battlefield Leader Tactics System & Real-Time Buffs/Debuffs/2.5x Speed Combat",
+    "ja": "⚔️ 侵攻戦場リーダー戦術体系＆リアルタイムバフ・デバフ・2.5倍速戦闘"
+  },
+  "⚔️ 토벌전 출격": {
+    "en": "⚔️ Subjugation Sortie",
+    "ja": "⚔️ 討伐戦出撃"
+  },
+  "⚔️ 투사 무구": {
+    "en": "⚔️ Fighter Armaments",
+    "ja": "⚔️ 闘士の武具"
+  },
+  "⚔️ 파티에 출전": {
+    "en": "⚔️ Deploy to Party",
+    "ja": "⚔️ パーティに出撃"
+  },
+  "⚔️ 현재 원정대로 [{0}] 대원이 결성되어 있습니다.": {
+    "en": "⚔️ Currently formed expedition with member [{0}].",
+    "ja": "⚔️ 現在、遠征隊として[{0}]隊員が結成されています。"
+  },
+  "⚔️ 현재 원정대로 [{0}] 대원이 결성되어 있습니다. 방랑자의 라운지를 건설하여 3번째 대원을 모집하세요.": {
+    "en": "⚔️ Currently formed expedition with [{0}] members. Construct Wanderer Lounge to recruit a 3rd member.",
+    "ja": "⚔️ 現在、遠征隊として[{0}]隊員が結成されています。放浪者のラウンジを建設し、3人目の隊員を募集してください。"
+  },
+  "⚔️ 현재 원정대에 편성된 대원이 없습니다. 병영에서 대원을 편성하세요.": {
+    "en": "⚔️ No members currently assigned to expedition. Assign members in the Barracks.",
+    "ja": "⚔️ 現在、遠征隊に編成された隊員がいません。兵舎で隊員を編成してください。"
+  },
+  "⚔️ 현재 장착 스킬 슬롯 (교체할 슬롯을 클릭)": {
+    "en": "⚔️ Currently Equipped Skill Slots (Click slot to replace)",
+    "ja": "⚔️ 現在装備中のスキルスロット (入れ替えるスロットをクリック)"
+  },
+  "⚔️ 환영 반격 (COUNTER): 회피 또는 반격 태세로 적의 공격을 맞받아칠 때 획득": {
+    "en": "⚔️ Phantom Counter (COUNTER): Obtained when retaliating against enemy attacks via Evasion or Counter Stance",
+    "ja": "⚔️ 幻影反撃 (COUNTER): 回避または反撃態勢で敵の攻撃を受け流し反撃した際に獲得"
+  },
+  "⚔️ 환영의 검성": {
+    "en": "⚔️ Phantom Blade Saint",
+    "ja": "⚔️ 幻影の剣聖"
+  },
+  "⚔️⬇️ [공격력 약화] {0}의 공격력을 {1}턴간 {2}% 감소시켰습니다!": {
+    "en": "⚔️⬇️ [ATK Weakened] Reduced {0}'s ATK by {2}% for {1} turns!",
+    "ja": "⚔️⬇️ [攻撃力弱体化] {0}の攻撃力を{1}ターンの間{2}%減少させました！"
+  },
+  "⚔️⬇️ [공격력 약화] {0}의 공격력이 {1}% 감소했습니다!": {
+    "en": "⚔️⬇️ [ATK Weakened] {0}'s ATK decreased by {1}%!",
+    "ja": "⚔️⬇️ [攻撃力弱体化] {0}の攻撃力が{1}%減少しました！"
+  },
+  "⚔️⬇️ [원호 공격력 약화] {0}의 공격력이 2턴간 25% 감소했습니다!": {
+    "en": "⚔️⬇️ [Assist ATK Weakened] {0}'s ATK decreased by 25% for 2 turns!",
+    "ja": "⚔️⬇️ [援護攻撃力弱体化] {0}の攻撃力が2ターンの間25%減少しました！"
+  },
+  "⚔️공격력": {
+    "en": "⚔️ATK",
+    "ja": "⚔️攻撃力"
+  },
+  "⚔️피해증폭": {
+    "en": "⚔️DMG Amplification",
+    "ja": "⚔️ダメージ増幅"
+  },
+  "⚔️💨 [{0}] 파티 전원에게 {1}턴간 100% 환영 반격 결계를 전개했습니다!": {
+    "en": "⚔️💨 [{0}] Deployed a 100% Phantom Counter barrier on all party members for {1} turns!",
+    "ja": "⚔️💨 [{0}] パーティ全員に{1}ターンの間、100%幻影反撃結界を展開！"
+  },
+  "⚔️💨 [환영 반격 태세] {0}이(가) 2턴간 회피율 60% 상승 및 피격 시 즉시 130% 환영 반격 태세를 전개했습니다!": {
+    "en": "⚔️💨 [Phantom Counter Stance] {0} gained +60% EVA for 2 turns and readied a 130% Phantom Counter when struck!",
+    "ja": "⚔️💨 [幻影反撃態勢] {0}が2ターンの間回避率60%上昇＆被弾時に即座に130%幻影反撃態勢を展開！"
+  },
+  "⚔️🔰 [성전 결계 전개] 3턴간 아군 전체의 공격력과 방어력이 {0}% 증폭되었습니다!": {
+    "en": "⚔️🔰 [Crusade Barrier Deployed] Boosted all allies' ATK and DEF by {0}% for 3 turns!",
+    "ja": "⚔️🔰 [聖戦結界展開] 3ターンの間、味方全体の攻撃力と防御力が{0}%増幅されました！"
+  },
+  "⚖️ 상업 네트워크 (황혼의 블랙 마켓 Lv.5): 전 시설 골드 유지비 25% 일괄 감면 및 유지비 주기 연장": {
+    "en": "⚖️ Commercial Network (Twilight Black Market Lv.5): 25% reduction on all facility gold upkeep and extended upkeep interval",
+    "ja": "⚖️ 商業ネットワーク (黄昏のブラックマーケット Lv.5): 全施設のゴールド維持費を一括25%減免＆維持費周期延長"
+  },
+  "⚖️ 성전의 심판관": {
+    "en": "⚖️ Arbiter of the Crusade",
+    "ja": "⚖️ 聖戦の審判官"
+  },
+  "⚖️ 영혼의 무게를 재는 사신의 저울": {
+    "en": "⚖️ Scales of the Reaper Weighing Souls",
+    "ja": "⚖️ 魂の重さを測る死神の天秤"
+  },
+  "⚖️✨ [심판관의 성전] 가한 총 피해의 50%인 +{0} HP를 파티 전원에게 치유로 환원했습니다!": {
+    "en": "⚖️✨ [Arbiter's Crusade] Converted 50% of total damage dealt (+{0} HP) into healing for the entire party!",
+    "ja": "⚖️✨ [審判官の聖戦] 与えた総ダメージの50%である +{0} HPをパーティ全員に治療還元！"
+  },
+  "⚙️ 스킬 관리 (습득:": {
+    "en": "⚙️ Skill Management (Learned:",
+    "ja": "⚙️ スキル管理 (習得:"
+  },
+  "⚙️ 시설 특화: 골드 유지비 -": {
+    "en": "⚙️ Facility Specialization: Gold Upkeep -",
+    "ja": "⚙️ 施設特化: ゴールド維持費 -"
+  },
+  "⚙️ 철광": {
+    "en": "⚙️ Iron Mine",
+    "ja": "⚙️ 鉄鉱"
+  },
+  "⚙️ 철광석": {
+    "en": "⚙️ Iron Ore",
+    "ja": "⚙️ 鉄鉱石"
+  },
+  "⚙️🎯 [오버클럭 리로드] 아군 전체 스킬 쿨다운 1턴 단축 및 3턴간 치명 공격력 50% 증폭!": {
+    "en": "⚙️🎯 [Overclock Reload] Reduced all allies' skill cooldowns by 1 turn and boosted Crit ATK by 50% for 3 turns!",
+    "ja": "⚙️🎯 [オーバークロックリロード] 味方全員のスキルクールダウン1ターン短縮＆3ターンの間会心攻撃力50%増幅！"
+  },
+  "⚠️ 3인 파티 필요": {
+    "en": "⚠️ 3-Member Party Required",
+    "ja": "⚠️ 3人パーティが必要"
+  },
+  "⚠️ Firebase 콘솔에서 [이메일/비밀번호] 인증이 비활성화되어 있습니다. Firebase Console > Authentication > Sign-in method에서 '이메일/비밀번호'를 [사용 설정]해 주세요.": {
+    "en": "⚠️ [Email/Password] authentication is disabled in Firebase console. Please enable 'Email/Password' in Firebase Console > Authentication > Sign-in method.",
+    "ja": "⚠️ Firebaseコンソールで [メール/パスワード] 認証が無効化されています。Firebase Console > Authentication > Sign-in methodで「メール/パスワード」を [有効] に設定してください。"
+  },
+  "⚠️ [강화 실패] 강화에 실패하여 재료만 소모되었습니다. (현재 수치 +{0} 유지)": {
+    "en": "⚠️ [Enhance Failed] Enhancement failed; materials consumed. (Retained current value +{0})",
+    "ja": "⚠️ [強化失敗] 強化に失敗し材料のみ消費されました。(現在の数値 +{0} 維持)"
+  },
+  "⚠️ [계열 부조화] {0}의 클래스와 맞지 않는 [{1}] 스킬로 인해 위력이 50% 반감됩니다!": {
+    "en": "⚠️ [Class Mismatch] [{1}] does not match {0}'s class; power halved by 50%!",
+    "ja": "⚠️ [系列不一致] {0}のクラスに合わないスキル [{1}] のため威力が50%半減！"
+  },
+  "⚠️ [계열 부조화] {0}의 클래스와 맞지 않는 [{1}] 스킬로 인해 지원/치유 효율이 50% 반감됩니다!": {
+    "en": "⚠️ [Class Mismatch] [{1}] does not match {0}'s class; support/heal efficiency halved by 50%!",
+    "ja": "⚠️ [系列不一致] {0}のクラスに合わないスキル [{1}] のため支援/治癒効率が50%半減！"
+  },
+  "⚠️ [공허의 전조] 시공간이 일그러지며 공허의 침식자의 살기가 감지됩니다! (위험도 100% 임박!)": {
+    "en": "⚠️ [Omen of the Void] Spacetime distorts as the Void Corruptor's bloodlust is detected! (Hazard nearing 100%!)",
+    "ja": "⚠️ [虚空の前兆] 時空間が歪み、虚空の侵食者の殺気が感知されます！ (危険度100%目前！)"
+  },
+  "⚠️ [긴급 이송 진행 중] 이미 차원 이송 중인 용병이 있습니다!": {
+    "en": "⚠️ [Emergency Transport in Progress] A mercenary is already undergoing dimensional transport!",
+    "ja": "⚠️ [緊急移送中] すでに次元移送中の傭兵がいます！"
+  },
+  "⚠️ [긴급 탈출 난항] 마물들의 포위망을 뚫고 도주하던 중 배낭에서 [{0} ×{1}]을(를) 떨어뜨렸습니다!": {
+    "en": "⚠️ [Emergency Escape Hardship] While fleeing through enemy encirclement, [{0} x{1}] was dropped from the backpack!",
+    "ja": "⚠️ [緊急脱出難航] 魔物の包囲網を突破し逃亡中、リュックから [{0} ×{1}] を落としてしまいました！"
+  },
+  "⚠️ [네메시스 페이즈 전환] 보스가 Phase {0} 상태로 돌입했습니다!": {
+    "en": "⚠️ [Nemesis Phase Shift] Boss has entered Phase {0}!",
+    "ja": "⚠️ [ネメシスフェーズ移行] ボスがPhase {0}に突入しました！"
+  },
+  "⚠️ [대상 오류] 이미 원정대에 출전 중인 용병입니다.": {
+    "en": "⚠️ [Target Error] Mercenary is already deployed in the expedition.",
+    "ja": "⚠️ [対象エラー] すでに遠征隊に出撃中の傭兵です。"
+  },
+  "⚠️ [대상 오류] 출전 중인 파티원을 찾을 수 없습니다.": {
+    "en": "⚠️ [Target Error] Cannot find the deployed party member.",
+    "ja": "⚠️ [対象エラー] 出撃中のパーティ員が見つかりません。"
+  },
+  "⚠️ [대상 오류] 호출할 대기 용병을 찾을 수 없습니다.": {
+    "en": "⚠️ [Target Error] Cannot find the standby mercenary to summon.",
+    "ja": "⚠️ [対象エラー] 呼び出す待機傭兵が見つかりません。"
+  },
+  "⚠️ [마스터 시딩 실패] {0}": {
+    "en": "⚠️ [Master Seeding Failed] {0}",
+    "ja": "⚠️ [マスターシーディング失敗] {0}"
+  },
+  "⚠️ [비상 탈출 대기] 탈출로를 재탐색 중입니다. (탐색 {0}회 후 시도 가능)": {
+    "en": "⚠️ [Emergency Escape Standby] Re-scanning escape route. (Available after {0} searches)",
+    "ja": "⚠️ [非常脱出待機] 脱出路を再探索中。(探索{0}回後に試行可能)"
+  },
+  "⚠️ [비호환 장비] {0}의 클래스에 맞지 않는 장비입니다! (장비 스탯 50% 반감 및 SPD -3 페널티 적용)": {
+    "en": "⚠️ [Incompatible Equipment] Equipment does not match {0}'s class! (Equipment stats halved by 50% and SPD -3 penalty applied)",
+    "ja": "⚠️ [非互換装備] {0}のクラスに合わない装備です！ (装備ステータス50%半減およびSPD -3ペナルティ適用)"
+  },
+  "⚠️ [비호환 페널티] 스탯 50% 반감 & SPD -3 페널티가 적용됩니다.": {
+    "en": "⚠️ [Incompatibility Penalty] Stats halved by 50% & SPD -3 penalty applied.",
+    "ja": "⚠️ [非互換ペナルティ] ステータス50%半減＆SPD -3ペナルティが適用されます。"
+  },
+  "⚠️ [상자 함정] 숨겨진 독침 트랩 발동! 파티 전원 HP 8% 피해 (🪙 {0}G 회수)": {
+    "en": "⚠️ [Chest Trap] Hidden poison needle trap triggered! All party members took 8% HP DMG (Recovered 🪙 {0}G)",
+    "ja": "⚠️ [宝箱の罠] 隠された毒針トラップ発動！ パーティ全員HP8%ダメージ (🪙 {0}G 回収)"
+  },
+  "⚠️ [생체 복원 병동] [{0}]은(는) 현재 입원 치료 중이므로 파티에 편성할 수 없습니다.": {
+    "en": "⚠️ [Bio-Restoration Ward] [{0}] is currently hospitalized for treatment and cannot be assigned to the party.",
+    "ja": "⚠️ [生体復元病棟] [{0}]は現在入院治療中のため、パーティに編成できません。"
+  },
+  "⚠️ [생체 복원 병동] {0}은(는) 현재 입원 치료 중이므로 파티에 출전할 수 없습니다. 병동에서 퇴원 후 편성해 주세요.": {
+    "en": "⚠️ [Bio-Restoration Ward] {0} is currently hospitalized for treatment and cannot deploy. Please discharge from the ward before forming the party.",
+    "ja": "⚠️ [生体復元病棟] {0}は現在入院治療中のため、パーティに出撃できません。病棟を退院後に編成してください。"
+  },
+  "⚠️ [생체 복원 병동] 식량이 고갈되어 부상병 치료가 일시 중단되었습니다! (치료 틱당 식량 {0} 소모)": {
+    "en": "⚠️ [Bio-Restoration Ward] Food depleted; wounded treatment temporarily halted! (Consumes {0} food per treatment tick)",
+    "ja": "⚠️ [生体復元病棟] 食料が枯渇したため負傷兵の治療が一時中断されました！ (治療1ティックにつき食料{0}消費)"
+  },
+  "⚠️ [생체 복원 병동] 에테르가 고갈되어 마나 충전이 일시 중단되었습니다! (충전 틱당 에테르 1 소모)": {
+    "en": "⚠️ [Bio-Restoration Ward] Ether depleted; mana recharge temporarily halted! (Consumes 1 ether per recharge tick)",
+    "ja": "⚠️ [生体復元病棟] エーテルが枯渇したためマナ充填が一時中断されました！ (充填1ティックにつきエーテル1消費)"
+  },
+  "⚠️ [성화 완전 점화 불가] 오늘의 성화 점화 횟수를 모두 소진했습니다. 광고를 시청하고 5회를 재충전하세요!": {
+    "en": "⚠️ [Cannot Fully Kindle Flame] Today's flame kindle attempts exhausted. Watch an ad to recharge 5 attempts!",
+    "ja": "⚠️ [聖火完全点火不可] 本日の聖火点火回数を使い切りました。広告を視聴して5回リチャージしてください！"
+  },
+  "⚠️ [숏컷 기습] 샛길 안쪽에 잠복해 있던 마물과 마주쳤습니다!": {
+    "en": "⚠️ [Shortcut Ambush] Ambushed by monsters lurking inside the side path!",
+    "ja": "⚠️ [近道奇襲] 抜け道の奥に潜伏していた魔物と遭遇しました！"
+  },
+  "⚠️ [스킬 비전 강화 실패] 마력 불안정으로 강화에 실패하여 연금 재료만 소모되었습니다. (현재 Lv.{0} 유지)": {
+    "en": "⚠️ [Skill Secret Enhancement Failed] Failed due to mana instability; alchemy materials consumed. (Retained current Lv.{0})",
+    "ja": "⚠️ [スキル秘伝強化失敗] 魔力不安定により強化に失敗、錬金材料のみ消費されました。(現在のLv.{0}維持)"
+  },
+  "⚠️ [심연의 전조] 깊은 어둠 속에서 강력한 마력과 군주의 포효가 울려 퍼집니다! (보스 출현 임박!)": {
+    "en": "⚠️ [Abyssal Omen] Powerful magic and a lord's roar echo from the deep dark! (Boss appearance imminent!)",
+    "ja": "⚠️ [深淵の前兆] 深き闇の中から強大な魔力と君主の咆哮が響き渡る！ (ボス出現目前！)"
+  },
+  "⚠️ [아이템 부족] 긴급 이송을 위해 [균열의 닻] 또는 [심연의 닻] 1개가 필요합니다.": {
+    "en": "⚠️ [Item Insufficient] Requires 1 [Rift Anchor] or [Abyssal Anchor] for emergency transport.",
+    "ja": "⚠️ [アイテム不足] 緊急移送のために[亀裂のアンカー]または[深淵のアンカー]が1個必要です。"
+  },
+  "⚠️ [야영지 기습!] 휴식 도중 어둠 속 마물들에게 기습당했습니다! (생존 대원 HP/MP {0}% 회복{1}, 기습 피해 발생, 위험도 +{2})": {
+    "en": "⚠️ [Camp Ambush!] Ambushed by monsters in the dark while resting! (Surviving members HP/MP +{0}%{1}, ambush damage taken, Hazard +{2})",
+    "ja": "⚠️ [野営地奇襲！] 休息中に闇の魔物たちから奇襲を受けました！ (生存隊員のHP/MP {0}%回復{1}、奇襲被害発生、危険度+{2})"
+  },
+  "⚠️ [영지 피침공 경보] 『{0}』의 침공으로 방어 부대가 패배하여 {1} {2}개를 약탈당했습니다! (3시간 긴급 보호막 가동)": {
+    "en": "⚠️ [Territory Invasion Alert] Defense defeated by 『{0}』's invasion; {1} x{2} pillaged! (3-hour emergency shield active)",
+    "ja": "⚠️ [領地被侵攻警報] 『{0}』の侵攻により防衛部隊が敗北し、{1} {2}個を略奪されました！ (3時間緊急シールド発動)"
+  },
+  "⚠️ [위기 경고] {0}이(가) 강력한 일격 [{1}] 시전을 위해 힘을 모으기 시작합니다! (브레이크 저지 요구치: {2} 피해 또는 기절/빙결)": {
+    "en": "⚠️ [Crisis Warning] {0} begins gathering power to cast a mighty blow [{1}]! (Break requirement: {2} DMG or Stun/Freeze)",
+    "ja": "⚠️ [危機警告] {0}が強力な一撃 [{1}] の詠唱に向け力を溜め始めた！ (ブレイク阻止要求値: {2}ダメージ または 気絶/氷結)"
+  },
+  "⚠️ [유지비 체납!] {0} 부족으로 인해 [{1}]의 시설 유지가 중단되어 기능이 일시 하향되었습니다. (Lv.{2} ➔ Lv.{3}, 유지비 확보 시 자동 복구)": {
+    "en": "⚠️ [Upkeep Delinquent!] Due to insufficient {0}, facility upkeep for [{1}] halted; functions temporarily downgraded. (Lv.{2} ➔ Lv.{3}, auto-restores when upkeep secured)",
+    "ja": "⚠️ [維持費滞納！] {0}不足により[{1}]の施設維持が停止し、機能が一時低下しました。(Lv.{2} ➔ Lv.{3}、維持費確保時に自動復旧)"
+  },
+  "⚠️ [장비 각성 경고 - 영구 파괴 위험] 각성 실패 시 [{0}]이(가) 완전히 파괴되어 영구 소멸합니다! • 성공 확률: 20% • 성공 시: 현재 +10강의 모든 능력치를 영구 보존하고 +0강으로 초기화 (최대 3각성까지 누적 강화) • 실패 시: 장비 영구 소멸 (복구 불가) 정말로 [★{1}단계 각성]을 감행하시겠습니까?": {
+    "en": "⚠️ [Equipment Awakening Warning - Risk of Permanent Destruction] If awakening fails, [{0}] will be completely destroyed and permanently lost! • Success Rate: 20% • On Success: Permanently preserves all stats of current +10 and resets to +0 (cumulative up to 3 awakenings) • On Failure: Equipment permanently destroyed (irrecoverable) Do you really want to proceed with [★Stage {1} Awakening]?",
+    "ja": "⚠️ [装備覚醒警告 - 永久破壊の危機] 覚醒失敗時、[{0}]は完全に破壊され永久に消滅します！ • 成功率: 20% • 成功時: 現在の+10強化の全能力値を永久保存し+0へ初期化 (最大3覚醒まで累積強化) • 失敗時: 装備の永久消滅 (復旧不可) 本当に [★{1}段階覚醒] を行いますか？"
+  },
+  "⚠️ [적 연계] {0}": {
+    "en": "⚠️ [Enemy Synergy] {0}",
+    "ja": "⚠️ [敵の連携] {0}"
+  },
+  "⚠️ [전투 철수 실패!] 퇴로가 막혀 도주에 실패했습니다! (성공률: {0}% 실패, 적 반격 턴)": {
+    "en": "⚠️ [Retreat Failed!] Escape path blocked; failed to flee! ({0}% success rate failed, enemy counter turn)",
+    "ja": "⚠️ [戦闘撤退失敗！] 退路が塞がれ逃走に失敗しました！ (成功率: {0}%失敗、敵の反撃ターン)"
+  },
+  "⚠️ [진형 시너지 해제] 진형이 무너져 [{0}] 시너지가 해제되었습니다!": {
+    "en": "⚠️ [Formation Synergy Lost] Formation broken; [{0}] synergy deactivated!",
+    "ja": "⚠️ [陣形シナジー解除] 陣形が崩れ [{0}] シナジーが解除されました！"
+  },
+  "⚠️ [차원 균열 귀환 손실] 일반 균열의 닻을 통한 시공간 이동 중 차원 불안정으로 배낭에서 [{0} ×{1}]을(를) 떨어뜨려 분실했습니다! (심연의 닻 사용 시 방지 가능)": {
+    "en": "⚠️ [Dimensional Rift Return Loss] Due to dimensional instability during travel with a Standard Rift Anchor, [{0} x{1}] fell from your backpack and was lost! (Preventable by using an Abyssal Anchor)",
+    "ja": "⚠️ [次元亀裂帰還損失] 通常の亀裂のアンカーによる時空移動中の次元不安定により、リュックから [{0} ×{1}] を落として紛失しました！ (深淵のアンカー使用で防止可能)"
+  },
+  "⚠️ [차징 경고] {0}": {
+    "en": "⚠️ [Charging Warning] {0}",
+    "ja": "⚠️ [チャージ警告] {0}"
+  },
+  "⚠️ [차징 저지 중] {0} 남은 브레이크 요구치: {1} / {2}": {
+    "en": "⚠️ [Interrupting Charge] {0} Remaining Break Requirement: {1} / {2}",
+    "ja": "⚠️ [チャージ阻止中] {0} 残りブレイク要求値: {1} / {2}"
+  },
+  "⚠️ [착용 불가] [{0}]은(는) 심연의 저주에 침식되어 있습니다. 병기창 정화 시설에서 정화하기 전에는 착용할 수 없습니다!": {
+    "en": "⚠️ [Cannot Equip] [{0}] is corrupted by the Abyssal curse. Cannot be equipped before purifying at the Armory purification facility!",
+    "ja": "⚠️ [装備不可] [{0}]は深淵の呪いに侵食されています。兵器廠の浄化施設で浄化するまでは装備できません！"
+  },
+  "⚠️ [출전 불가] 생체 복원 병동에 입원 중인 용병이 파티에 포함되어 있습니다. 퇴원 후 출전하세요.": {
+    "en": "⚠️ [Cannot Deploy] A hospitalized mercenary in the Bio-Restoration Ward is included in the party. Please discharge before deploying.",
+    "ja": "⚠️ [出撃不可] 生体復元病棟に入院中の傭兵がパーティに含まれています。退院後に出撃してください。"
+  },
+  "⚠️ [출전 불가] 치료실에 입원 중인 용병은 소환할 수 없습니다.": {
+    "en": "⚠️ [Cannot Deploy] Hospitalized mercenaries in the clinic cannot be summoned.",
+    "ja": "⚠️ [出撃不可] 治療室に入院中の傭兵は召喚できません。"
+  },
+  "⚠️ [컬렉션 등록 실패] {0}": {
+    "en": "⚠️ [Collection Registration Failed] {0}",
+    "ja": "⚠️ [コレクション登録失敗] {0}"
+  },
+  "⚠️ [피격 {0}명 / 회피 {1}명]": {
+    "en": "⚠️ [Hit: {0} / Evaded: {1}]",
+    "ja": "⚠️ [被弾 {0}名 / 回避 {1}名]"
+  },
+  "⚠️ [학습 슬롯 초과] [{0}]님은 이미 최대치(4개)의 마도서를 동시에 학습 중입니다! 기존 학습 중인 스킬을 완료하거나 중도 포기하세요.": {
+    "en": "⚠️ [Learning Slots Full] [{0}] is already studying the maximum number (4) of grimoires simultaneously! Finish current skills or forfeit them.",
+    "ja": "⚠️ [学習スロット超過] [{0}]はすでに最大数(4個)の魔導書を同時学習中です！ 既存の学習中スキルを完了するか中断してください。"
+  },
+  "⚠️ [함정 발동] {0}": {
+    "en": "⚠️ [Trap Triggered] {0}",
+    "ja": "⚠️ [罠発動] {0}"
+  },
+  "⚠️ 게임 데이터 초기화": {
+    "en": "⚠️ Reset Game Data",
+    "ja": "⚠️ ゲームデータ初期化"
+  },
+  "⚠️ 게임 초기화": {
+    "en": "⚠️ Reset Game",
+    "ja": "⚠️ ゲーム初期化"
+  },
+  "⚠️ 계열 부조화 (위력 50% 반감)": {
+    "en": "⚠️ Class Mismatch (Power halved by 50%)",
+    "ja": "⚠️ 系列不一致 (威力50%半減)"
+  },
+  "⚠️ 공방 가동 중단됨": {
+    "en": "⚠️ Workshop Operation Halted",
+    "ja": "⚠️ 工房の稼働停止"
+  },
+  "⚠️ 광폭화된 심연 결계로 인해 전투에서 철수할 수 없습니다!": {
+    "en": "⚠️ Cannot retreat from combat due to the berserk Abyssal Barrier!",
+    "ja": "⚠️ 狂暴化した深淵結界により戦闘から撤退できません！"
+  },
+  "⚠️ 다음 턴 소멸선 발동!": {
+    "en": "⚠️ Oblivion Line triggers next turn!",
+    "ja": "⚠️ 次のターン消滅線発動！"
+  },
+  "⚠️ 닻 없이 위험을 무릅쓰고 비상 탈출 시도 (성공률 30%)": {
+    "en": "⚠️ Attempt emergency escape without anchor despite danger (30% success rate)",
+    "ja": "⚠️ アンカーなしで危険を冒して非常脱出を試みる (成功率30%)"
+  },
+  "⚠️ 룬 결속 실패": {
+    "en": "⚠️ Rune Binding Failed",
+    "ja": "⚠️ ルーン結合失敗"
+  },
+  "⚠️ 마력 공명 붕괴": {
+    "en": "⚠️ Mana Resonance Collapsed",
+    "ja": "⚠️ 魔力共鳴崩壊"
+  },
+  "⚠️ 마력 분산! 룬 결속 불안정...": {
+    "en": "⚠️ Mana Dissipated! Rune binding unstable...",
+    "ja": "⚠️ 魔力分散！ ルーン結合が不安定..."
+  },
+  "⚠️ 마력 불안정화! 마도 공명 붕괴 중...": {
+    "en": "⚠️ Mana Destabilized! Magic resonance collapsing...",
+    "ja": "⚠️ 魔力不安定化！ 魔導共鳴崩壊中..."
+  },
+  "⚠️ 마력 역류 발생": {
+    "en": "⚠️ Mana Backflow Occurred",
+    "ja": "⚠️ 魔力逆流発生"
+  },
+  "⚠️ 무너져 내리는 폐광의 버팀목": {
+    "en": "⚠️ Collapsing Abandoned Mine Props",
+    "ja": "⚠️ 崩れ落ちる廃鉱山の支柱"
+  },
+  "⚠️ 미반영 변경 사항 있음": {
+    "en": "⚠️ Unsaved Changes Exist",
+    "ja": "⚠️ 未反映の変更事項あり"
+  },
+  "⚠️ 버린 아이템은 다시 회수할 수 없습니다.": {
+    "en": "⚠️ Discarded items cannot be recovered.",
+    "ja": "⚠️ 破棄したアイテムは再び回収できません。"
+  },
+  "⚠️ 보스전조 {0}%": {
+    "en": "⚠️ Boss Omen {0}%",
+    "ja": "⚠️ ボス前兆 {0}%"
+  },
+  "⚠️ 부족:": {
+    "en": "⚠️ Insufficient:",
+    "ja": "⚠️ 不足:"
+  },
+  "⚠️ 비상 탈출 시도 (균열의 닻 부재)": {
+    "en": "⚠️ Attempt Emergency Escape (No Rift Anchor)",
+    "ja": "⚠️ 非常脱出試行 (亀裂のアンカー不在)"
+  },
+  "⚠️ 비적합 클래스가 장착/사용 시 전투 중 위력이 50% 반감됩니다.": {
+    "en": "⚠️ Equipping/using on non-matching classes halves power by 50% during combat.",
+    "ja": "⚠️ 不適合クラスが装備/使用した場合、戦闘中の威力が50%半減します。"
+  },
+  "⚠️ 비호환(-50%)": {
+    "en": "⚠️ Incompatible (-50%)",
+    "ja": "⚠️ 非互換 (-50%)"
+  },
+  "⚠️ 사경 위기": {
+    "en": "⚠️ Near-Death Crisis",
+    "ja": "⚠️ 瀕死の危機"
+  },
+  "⚠️ 상대 피버 게이지 만충! 아군 전원에게 강력한 참격!": {
+    "en": "⚠️ Enemy Fever Gauge full! Powerful slash across all allies!",
+    "ja": "⚠️ 相手のFEVERゲージ満タン！ 味方全員に強力な斬撃！"
+  },
+  "⚠️ 선택 장비 일괄 판매 확인": {
+    "en": "⚠️ Confirm Bulk Sale of Selected Equipment",
+    "ja": "⚠️ 選択装備の一括売却確認"
+  },
+  "⚠️ 습득 슬롯 가득 참 (4/4)": {
+    "en": "⚠️ Learned Slots Full (4/4)",
+    "ja": "⚠️ 習得スロット満杯 (4/4)"
+  },
+  "⚠️ 습득 슬롯 가득 참 (4/4). 새 스킬을 배우려면 [습득 스킬] 탭에서 기존 스킬을 망각하세요.": {
+    "en": "⚠️ Learned slots full (4/4). To learn a new skill, forget an existing skill in the [Learned Skills] tab.",
+    "ja": "⚠️ 習得スロット満杯 (4/4)。新しいスキルを習得するには [習得スキル] タブで既存のスキルを忘却してください。"
+  },
+  "⚠️ 심연의 저주 페널티": {
+    "en": "⚠️ Abyssal Curse Penalty",
+    "ja": "⚠️ 深淵の呪いペナルティ"
+  },
+  "⚠️ 용병단 정원 초과 (7/7명). 새 용병을 영입하려면 기존 용병을 해고해야 합니다.": {
+    "en": "⚠️ Mercenary Band at Capacity (7/7). To recruit a new mercenary, dismiss an existing one.",
+    "ja": "⚠️ 傭兵団定員超過 (7/7名)。新しい傭兵を雇用するには既存の傭兵を解雇する必要があります。"
+  },
+  "⚠️ 원정대 인원 부족 (파티 3인 필수)": {
+    "en": "⚠️ Insufficient Expedition Members (Party of 3 required)",
+    "ja": "⚠️ 遠征隊の人数不足 (パーティ3名必須)"
+  },
+  "⚠️ 위력 50%": {
+    "en": "⚠️ Power 50%",
+    "ja": "⚠️ 威力50%"
+  },
+  "⚠️ 유효하지 않은 JSON 파일 형식입니다.": {
+    "en": "⚠️ Invalid JSON file format.",
+    "ja": "⚠️ 無効なJSONファイル形式です。"
+  },
+  "⚠️ 일부 자원 부족": {
+    "en": "⚠️ Some Resources Insufficient",
+    "ja": "⚠️ 一部の資源が不足"
+  },
+  "⚠️ 입원 환자 출전 불가": {
+    "en": "⚠️ Hospitalized Patients Cannot Deploy",
+    "ja": "⚠️ 入院患者は出撃不可"
+  },
+  "⚠️ 전투 철수": {
+    "en": "⚠️ Combat Retreat",
+    "ja": "⚠️ 戦闘撤退"
+  },
+  "⚠️💥 [비상 탈출 실패!] 도주로가 차단되고 마물들에게 기습 습격을 당했습니다!": {
+    "en": "⚠️💥 [Emergency Escape Failed!] Escape route blocked and ambushed by monsters!",
+    "ja": "⚠️💥 [非常脱出失敗！] 逃走経路が遮断され、魔物たちに奇襲されました！"
+  },
+  "⚠️💥 [적의 상태이상 연계!] {0}의 {1} [{2}] 발동! {3}": {
+    "en": "⚠️💥 [Enemy Status Synergy!] {0}'s {1} [{2}] activated! {3}",
+    "ja": "⚠️💥 [敵の状態異常連携！] {0}の{1} [{2}] 発動！ {3}"
+  }
+}

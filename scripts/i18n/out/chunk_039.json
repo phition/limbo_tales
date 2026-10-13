@@ -1,0 +1,803 @@
+{
+  "🍷 [진홍의 피의 지배] 흡혈로 HP +{0} 자가 회복 및 적 전체에게 3턴간 치명 출혈을 확산시켰습니다!": {
+    "en": "🍷 [Crimson Blood Domination] Self-recovered +{0} HP via lifesteal and spread fatal Bleed to all enemies for 3 turns!",
+    "ja": "🍷 [深紅の血の支配] 吸血によりHP+{0}自己回復および敵全体に3ターン間致命的な出血を拡散させました！"
+  },
+  "🍷 고딕 참회실의 은밀한 고해": {
+    "en": "🍷 Secret Confession in the Gothic Confessional",
+    "ja": "🍷 ゴシック告解室の密やかな懺悔"
+  },
+  "🍷✨ [{0} 흡혈] 가한 피해의 {1}%(+{2} HP)를 파티 전원에게 치유로 환원했습니다!": {
+    "en": "🍷✨ [{0} Lifesteal] Returned {1}% (+{2} HP) of damage dealt as healing to all party members!",
+    "ja": "🍷✨ [{0} 吸血] 与えたダメージの{1}%(+{2} HP)をパーティ全員に治癒として還元しました！"
+  },
+  "🍷🩸 [흡혈 진혼곡]: 카운터 2개 이상 또는 브레이크 2개 이상. 가한 피해의 100%를 파티 전원에게 균등 흡혈 회복 + 초과분 보호막 전환": {
+    "en": "🍷🩸 [Lifesteal Requiem]: 2+ Counters or 2+ Breaks. Evenly heals all party members for 100% of damage dealt via lifesteal + converts excess into Shield",
+    "ja": "🍷🩸 [吸血のレクイエム]: カウンター2個以上またはブレイク2個以上。与えたダメージの100%をパーティ全員に均等吸血回復＋超過分をシールドに変換"
+  },
+  "🍸 [라운지 갱신] 골드 🪙{0}G를 지불하여 새로운 용병 후보를 탐색했습니다. (다음 갱신 비용: 🪙{1}G)": {
+    "en": "🍸 [Lounge Refresh] Paid 🪙{0}G to scout new mercenary candidates. (Next refresh cost: 🪙{1}G)",
+    "ja": "🍸 [ラウンジ更新] ゴールド🪙{0}Gを支払い、新たな傭兵候補を探索しました。（次の更新費用: 🪙{1}G）"
+  },
+  "🍸 [방랑자의 라운지 Lv.{0} 증축] 명성이 높아져 더욱 보상이 풍성한 고급 서브 의뢰들이 접수됩니다! (요구치 및 골드·에테르·마도석 보상 강화)": {
+    "en": "🍸 [Wanderer Lounge Lv.{0} Expanded] With rising renown, high-grade sub-contracts with richer rewards are received! (Requirements and Gold/Ether/Magic Stone rewards boosted)",
+    "ja": "🍸 [放浪者のラウンジ Lv.{0} 増築] 名声が高まり、より報酬の豪華な高級サブレポートが受け付けられます！（要求値およびゴールド・エーテル・魔導石報酬強化）"
+  },
+  "🍸 [방랑자의 라운지] 새로운 방랑 모험가들이 라운지에 도착했습니다! (새로고침 비용 100G 초기화)": {
+    "en": "🍸 [Wanderer Lounge] New wandering adventurers have arrived at the lounge! (Refresh cost reset to 100G)",
+    "ja": "🍸 [放浪者のラウンジ] 新たな放浪冒険者たちがラウンジに到着しました！（更新費用100G初期化）"
+  },
+  "🍸 방랑자의 라운지 건설 & 3번째 용병 영입 (3인 정예 결사대 완성)": {
+    "en": "🍸 Build Wanderer Lounge & Recruit 3rd Mercenary (Complete 3-Member Elite Cohort)",
+    "ja": "🍸 放浪者のラウンジ建設＆3人目の傭兵雇用（3人精鋭決死隊完成）"
+  },
+  "🍺 후보 {0}명": {
+    "en": "🍺 {0} Candidates",
+    "ja": "🍺 候補 {0}人"
+  },
+  "🍺 후보 {0}명 (🍖+{1}/15s)": {
+    "en": "🍺 {0} Candidates (🍖+{1}/15s)",
+    "ja": "🍺 候補 {0}人 (🍖+{1}/15s)"
+  },
+  "🎁 2. 던전 이벤트 3단계 상호작용 선택지": {
+    "en": "🎁 2. Dungeon Event 3-Stage Interaction Choices",
+    "ja": "🎁 2. ダンジョンイベント3段階相互作用選択肢"
+  },
+  "🎁 [네메시스 마일스톤] [{0}] 달성 보상을 모두 수령했습니다!": {
+    "en": "🎁 [Nemesis Milestone] Claimed all milestone rewards for [{0}]!",
+    "ja": "🎁 [ネメシスマイルストーン] [{0}]達成報酬をすべて受け取りました！"
+  },
+  "🎁 [명예 상점] [{0}]을 개봉하여 [{1}] {2}을(를) 획득했습니다!": {
+    "en": "🎁 [Honor Shop] Opened [{0}] and acquired [{1}] {2}!",
+    "ja": "🎁 [名誉商店] [{0}]を開封し、[{1}] {2}を獲得しました！"
+  },
+  "🎁 [전설 장비 획득] [{0}]을(를) 획득했습니다!": {
+    "en": "🎁 [Legendary Gear Acquired] Acquired [{0}]!",
+    "ja": "🎁 [伝説装備獲得] [{0}]を獲得しました！"
+  },
+  "🎁 대형 보물 상자 (피의 서약)": {
+    "en": "🎁 Large Treasure Chest (Blood Contract)",
+    "ja": "🎁 大型宝箱 (血の契約)"
+  },
+  "🎁 마일스톤 ({0}/{1})": {
+    "en": "🎁 Milestone ({0}/{1})",
+    "ja": "🎁 マイルストーン ({0}/{1})"
+  },
+  "🎁 버려진 고대 보물 상자": {
+    "en": "🎁 Abandoned Ancient Treasure Chest",
+    "ja": "🎁 捨て去られた古代の宝箱"
+  },
+  "🎁 완료! 수령 대기": {
+    "en": "🎁 Complete! Awaiting Claim",
+    "ja": "🎁 完了！ 受取待機"
+  },
+  "🎁 장비 보급함": {
+    "en": "🎁 Equipment Supply Chest",
+    "ja": "🎁 装備補給箱"
+  },
+  "🎉 [{0}] (Lv.{1}) 공사가 완료되었습니다!": {
+    "en": "🎉 Construction of [{0}] (Lv.{1}) is complete!",
+    "ja": "🎉 [{0}] (Lv.{1}) の工事が完了しました！"
+  },
+  "🎉 [레벨업] {0} Lv.{1}! (HP+{2} MP+{3} ATK+{4} DEF+{5} SPD+{6} 🍀행운+{7}){8}": {
+    "en": "🎉 [Level Up] {0} Lv.{1}! (HP+{2} MP+{3} ATK+{4} DEF+{5} SPD+{6} 🍀LUCK+{7}){8}",
+    "ja": "🎉 [レベルアップ] {0} Lv.{1}! (HP+{2} MP+{3} ATK+{4} DEF+{5} SPD+{6} 🍀幸運+{7}){8}"
+  },
+  "🎉 [원군 합류] 차원의 틈새를 뚫고 달려온 [{0}] 대원이 원정대 전열에 굳건히 합류했습니다!": {
+    "en": "🎉 [Reinforcements Joined] Rushing through the dimensional rift, [{0}] has firmly joined the expedition front row!",
+    "ja": "🎉 [援軍合流] 次元の狭間を突破して駆けつけた[{0}]隊員が遠征隊の前衛に堅固に合流しました！"
+  },
+  "🎉 [장비 각성 대성공!] [{0}]이(가) ★{1}단계 각성에 도달했습니다! 현재 누적 스탯이 영구 보존되고 +0강으로 초기화되었습니다.": {
+    "en": "🎉 [Equipment Awakening Great Success!] [{0}] reached ★Stage {1} Awakening! Current accumulated stats are permanently preserved and enhancement tier reset to +0.",
+    "ja": "🎉 [装備覚醒大成功！] [{0}]が★{1}段階覚醒に到達しました！ 現在の累積ステータスが永久保存され、+0強化に初期化されました。"
+  },
+  "🎉 [퀘스트 보상 수령 완료!] '{0}' ➔ 수령 보상: {1}": {
+    "en": "🎉 [Quest Reward Claimed!] '{0}' ➔ Received Reward: {1}",
+    "ja": "🎉 [クエスト報酬受取完了！] '{0}' ➔ 獲得報酬: {1}"
+  },
+  "🎉 영웅 레벨업 달성:": {
+    "en": "🎉 Hero Level Up Achieved:",
+    "ja": "🎉 英雄レベルアップ達成:"
+  },
+  "🎉 전투 승리!": {
+    "en": "🎉 Victory!",
+    "ja": "🎉 戦闘勝利！"
+  },
+  "🎉 전투 승리! (획득: 🪙 {0}G, {1}, ⚔️ {2} EXP)": {
+    "en": "🎉 Victory! (Obtained: 🪙 {0}G, {1}, ⚔️ {2} EXP)",
+    "ja": "🎉 戦闘勝利！ (獲得: 🪙 {0}G, {1}, ⚔️ {2} EXP)"
+  },
+  "🎒 1. 출정 채비실 & 던전 임시 보관함(배낭)": {
+    "en": "🎒 1. Expedition Staging Room & Temporary Dungeon Storage (Backpack)",
+    "ja": "🎒 1. 出撃準備室＆ダンジョン臨時保管箱(バックパック)"
+  },
+  "🎒 배낭이 가득 찼습니다! ({0}/{1}칸) [{2} ×{3}]이(가) 미수령 보관함으로 이동했습니다.": {
+    "en": "🎒 Backpack is full! ({0}/{1} slots) [{2} x{3}] was moved to unclaimed storage.",
+    "ja": "🎒 バックパックが満杯です！ ({0}/{1}枠) [{2} ×{3}]が未受取保管箱へ移動しました。"
+  },
+  "🎒 심연 탐험 위험도(Hazard) & 5대 전술 보급품": {
+    "en": "🎒 Abyssal Exploration Hazard & 5 Major Tactical Supplies",
+    "ja": "🎒 深淵探検危険度(Hazard)＆5大戦術補給品"
+  },
+  "🎒 전체 장비 관리 / 일괄 판매": {
+    "en": "🎒 Manage All Gear / Bulk Sell",
+    "ja": "🎒 全装備管理 / 一括売却"
+  },
+  "🎒 탐험 보급품": {
+    "en": "🎒 Exploration Supplies",
+    "ja": "🎒 探検補給品"
+  },
+  "🎖️ [맹세 휘장] (8F 광폭화 보스 전리품) 회수": {
+    "en": "🎖️ [Order Commander Crest] (8F Berserk Boss Loot) Retrieved",
+    "ja": "🎖️ [断罪騎士団長の紋章] (8F狂暴化ボスの戦利品) 回収"
+  },
+  "🎖️ [명예 상점] [{0}] {1} [{2}]을(를) 획득하여 장비함에 보관했습니다!": {
+    "en": "🎖️ [Honor Shop] Acquired [{0}] {1} [{2}] and stored in equipment inventory!",
+    "ja": "🎖️ [名誉商店] [{0}] {1} [{2}]を獲得し、装備箱に保管しました！"
+  },
+  "🎖️ [명예 상점] 순수 접두 마도석 1개를 획득했습니다!": {
+    "en": "🎖️ [Honor Shop] Acquired 1 Pure Prefix Magic Stone!",
+    "ja": "🎖️ [名誉商店] 純粋接頭魔導石1個を獲得しました！"
+  },
+  "🎖️ [명예 상점] 순수 접미 마도석 1개를 획득했습니다!": {
+    "en": "🎖️ [Honor Shop] Acquired 1 Pure Suffix Magic Stone!",
+    "ja": "🎖️ [名誉商店] 純粋接尾魔導石1個を獲得しました！"
+  },
+  "🎖️ [명예 상점] 에테르 횃불 세트를 구매했습니다! (석탄 +20)": {
+    "en": "🎖️ [Honor Shop] Purchased Ether Torch Set! (Coal +20)",
+    "ja": "🎖️ [名誉商店] エーテル松明セットを購入しました！（石炭+20）"
+  },
+  "🎖️ [명예 상점] 에픽 무기 [{0}]을(를) 장비함에 보관했습니다!": {
+    "en": "🎖️ [Honor Shop] Stored Epic Weapon [{0}] in equipment inventory!",
+    "ja": "🎖️ [名誉商店] エピック武器[{0}]を装備箱に保管しました！"
+  },
+  "🎖️ [명예 상점] 에픽 방어구 [{0}]을(를) 장비함에 보관했습니다!": {
+    "en": "🎖️ [Honor Shop] Stored Epic Armor [{0}] in equipment inventory!",
+    "ja": "🎖️ [名誉商店] エピック防具[{0}]を装備箱に保管しました！"
+  },
+  "🎖️ [명예 상점] 전설 아티팩트 [{0}]을(를) 획득하여 장비함에 보관했습니다!": {
+    "en": "🎖️ [Honor Shop] Acquired Legendary Artifact [{0}] and stored in equipment inventory!",
+    "ja": "🎖️ [名誉商店] 伝説アーティファクト[{0}]を獲得し、装備箱に保管しました！"
+  },
+  "🎖️ [명예 상점] 특제 보급 식량 세트를 구매했습니다! (식량 +25)": {
+    "en": "🎖️ [Honor Shop] Purchased Special Ration Set! (Food +25)",
+    "ja": "🎖️ [名誉商店] 特製補給食料セットを購入しました！（食糧+25）"
+  },
+  "🎖️ [명예 상점] 희귀 장신구 [{0}]을(를) 장비함에 보관했습니다!": {
+    "en": "🎖️ [Honor Shop] Stored Rare Accessory [{0}] in equipment inventory!",
+    "ja": "🎖️ [名誉商店] 希少装飾品[{0}]を装備箱に保管しました！"
+  },
+  "🎖️ 명예 암시장": {
+    "en": "🎖️ Honor Black Market",
+    "ja": "🎖️ 名誉闇市"
+  },
+  "🎖️ 전직/숙련도": {
+    "en": "🎖️ Class Change / Mastery",
+    "ja": "🎖️ 転職/熟練度"
+  },
+  "🎬 광고 3회 충전": {
+    "en": "🎬 3 Ad Charges",
+    "ja": "🎬 広告3回チャージ"
+  },
+  "🎯 [약점 분석] {0}의 사격으로 {1}의 방어력이 15% 분쇄되었습니다!": {
+    "en": "🎯 [Weakness Analysis] {0}'s shot shredded {1}'s DEF by 15%!",
+    "ja": "🎯 [弱点分析] {0}の射撃により{1}の防御力が15%粉砕されました！"
+  },
+  "🎯 [후열 저격] {0}(후열) 약점 관통 저격! (+20% 피해 증폭{1})": {
+    "en": "🎯 [Back Row Snipe] {0} (Back Row) weakness piercing snipe! (+20% Damage Amp{1})",
+    "ja": "🎯 [後衛狙撃] {0}(後衛) 弱点貫通狙撃！ (+20%ダメージ増幅{1})"
+  },
+  "🎯 사신 저격수": {
+    "en": "🎯 Reaper Sniper",
+    "ja": "🎯 死神の狙撃手"
+  },
+  "🎯 심연의 저격수": {
+    "en": "🎯 Abyssal Sniper",
+    "ja": "🎯 深淵の狙撃手"
+  },
+  "🎯 아군 피격": {
+    "en": "🎯 Ally Hit",
+    "ja": "🎯 味方被弾"
+  },
+  "🎯 원거리 관통 & 전술 저격 (원거리 딜러)": {
+    "en": "🎯 Ranged Penetration & Tactical Sniping (Ranged DPS)",
+    "ja": "🎯 遠距離貫通＆戦術狙撃（遠距離DPS）"
+  },
+  "🎯 원호 추격 (ASSIST): 아군 공격 후 원호 공격 또는 약점 추격 공격 발동 시 획득": {
+    "en": "🎯 Assist Pursuit (ASSIST): Acquired when triggering an assist attack or weakness pursuit attack after an ally attacks",
+    "ja": "🎯 援護追撃 (ASSIST): 味方攻撃後に援護攻撃または弱点追撃攻撃発動時に獲得"
+  },
+  "🎯 적군 피격": {
+    "en": "🎯 Enemy Hit",
+    "ja": "🎯 敵軍被弾"
+  },
+  "🎯 적중 및 회피: 공격자 행운(+0.2%) vs 피격자 회피보정(-0.3%) 대조 판정 (회피 보정 최대 70% 상한선 적용, 기본 명중률 90% 기준 30%~99% 보정)": {
+    "en": "🎯 Hit & Evasion: Attacker Luck (+0.2%) vs Target EVA mod (-0.3%) comparison check (Max 70% EVA mod cap applied, 30%–99% modified based on 90% base accuracy)",
+    "ja": "🎯 命中および回避: 攻撃側幸運(+0.2%) vs 被弾側回避補正(-0.3%)対照判定（回避補正最大70%上限適用、基本命中率90%基準30%〜99%補正）"
+  },
+  "🎯 적합:": {
+    "en": "🎯 Suitable:",
+    "ja": "🎯 適合:"
+  },
+  "🎯 정찰할 사령관을 선택하여 부대 편성을 확인하고 목표 자원(30%)을 약탈하세요.": {
+    "en": "🎯 Select a Commander to scout, inspect troop layout, and plunder target resources (30%).",
+    "ja": "🎯 偵察する指揮官を選択して部隊編成を確認し、目標資源（30%）を略奪してください。"
+  },
+  "🎯 중열": {
+    "en": "🎯 Mid row",
+    "ja": "🎯 中衛"
+  },
+  "🎯약점 원호: {0}": {
+    "en": "🎯Weakness Assist: {0}",
+    "ja": "🎯弱点援護: {0}"
+  },
+  "🎯🚀 [총력 섬멸]: 어시스트 3개 이상 또는 어시스트 2개 + 엑스트라 2개. 궁극기 범위 적 전체로 강제 확장 + 최종 위력 +120% 증폭 + 방어 관통 40%": {
+    "en": "🎯🚀 [All-Out Annihilation]: 3+ Assists or 2 Assists + 2 Extras. Ultimate range forcibly expanded to all enemies + Final power amplified by +120% + 40% DEF Pierce",
+    "ja": "🎯🚀 [総力殲滅]: アシスト3個以上またはアシスト2個＋エクストラ2個。アルティメット範囲を敵全体に強制拡張＋最終威力+120%増幅＋防御貫通40%"
+  },
+  "🎯🩸 [급소 처형 낙인]: 출혈/방어약화 상태의 적에게 저격/관통 적중 시 방어 100% 무시 1.6배 확정 치명타": {
+    "en": "🎯🩸 [Vitals Execution Brand]: Sniping/penetrating hits on bleeding/DEF-down enemies completely ignore 100% DEF with 1.6x guaranteed Crit",
+    "ja": "🎯🩸 [急所処刑の烙印]: 出血/防御弱化状態の敵に狙撃/貫通ヒット時、防御100%無視1.6倍確定会心"
+  },
+  "🎲 3. 심연 위험도(Danger) 기반 3단계 탐색 확률": {
+    "en": "🎲 3. 3-Stage Exploration Rate Based on Abyssal Hazard (Danger)",
+    "ja": "🎲 3. 深淵危険度(Danger)基準の3段階探索確率"
+  },
+  "🎲 강화 확률 분석": {
+    "en": "🎲 Enhancement Rate Analysis",
+    "ja": "🎲 強化確率分析"
+  },
+  "🎲 단조 등급 확률 (병기창 Lv.": {
+    "en": "🎲 Forge Tier Rates (Armory Lv.",
+    "ja": "🎲 鍛造ランク確率 (兵器廠 Lv."
+  },
+  "🎲 등급 승격률:": {
+    "en": "🎲 Tier Promotion Rate:",
+    "ja": "🎲 ランク昇格率:"
+  },
+  "🎲 등급 진화율:": {
+    "en": "🎲 Tier Evolution Rate:",
+    "ja": "🎲 ランク進化率:"
+  },
+  "🎲 승격 확률:": {
+    "en": "🎲 Promotion Rate:",
+    "ja": "🎲 昇格確率:"
+  },
+  "🎲 인챈트 성공 확률:": {
+    "en": "🎲 Enchant Success Rate:",
+    "ja": "🎲 エンチャント成功確率:"
+  },
+  "🎲 진화율": {
+    "en": "🎲 Evolution Rate",
+    "ja": "🎲 進化率"
+  },
+  "🎵 BGM 배경음": {
+    "en": "🎵 BGM Music",
+    "ja": "🎵 BGM背景音"
+  },
+  "🏃 [전투 철수 성공!] 적의 추격을 뿌리치고 안전하게 후퇴했습니다. (탈출 확률: {0}%, 행운 보정: {1}{2}%)": {
+    "en": "🏃 [Retreat Success!] Shook off enemy pursuit and safely retreated. (Escape Rate: {0}%, Luck Mod: {1}{2}%)",
+    "ja": "🏃 [戦闘撤退成功！] 敵の追撃を振り切り安全に後退しました。（脱出確率: {0}%, 幸運補正: {1}{2}%）"
+  },
+  "🏃 [포기] 건드리지 않고 지나친다": {
+    "en": "🏃 [Abandon] Leave untouched and pass by",
+    "ja": "🏃 [諦める] 触れずに通り過ぎる"
+  },
+  "🏃 보스의 살기를 피해 물러서기 (위험도 -10 감소)": {
+    "en": "🏃 Back off to evade Boss's bloodlust (Hazard reduced by -10)",
+    "ja": "🏃 ボスの殺気を避けて身を引く（危険度-10減少）"
+  },
+  "🏃 보스의 살기를 피해 침착하게 뒤로 물러섰습니다. (위험도 -10 감소)": {
+    "en": "🏃 Calmly backed away to avoid the Boss's bloodlust. (Hazard reduced by -10)",
+    "ja": "🏃 ボスの殺気を避けて冷静に後退しました。（危険度-10減少）"
+  },
+  "🏃 전력 질주로 낙석 구간 통과": {
+    "en": "🏃 Sprint through the falling rock section",
+    "ja": "🏃 全力疾走で落石区間を通過"
+  },
+  "🏃 전투 철수(도주) 성공률: 파티 평균 행운과 적 몬스터 평균 행운의 차이에 따라 도주 확률 보정 (행운차 × 0.5%)": {
+    "en": "🏃 Combat Retreat (Escape) Success Rate: Escape chance modified based on difference between party average Luck and enemy monster average Luck (Luck difference x 0.5%)",
+    "ja": "🏃 戦闘撤退(逃走)成功率: パーティ平均幸運と敵モンスター平均幸運の差に応じて逃走確率を補正（幸運差 × 0.5%）"
+  },
+  "🏃💨 [사투 끝의 비상 탈출 성공!] 마물들의 포위망을 뚫고 가까스로 탈출했습니다! (전리품 80% [{0}개] 유실, {1}개 보존)": {
+    "en": "🏃💨 [Desperate Emergency Escape Success!] Narrowly broke through the monsters' siege and escaped! (Lost 80% of loot [{0} items], {1} items preserved)",
+    "ja": "🏃💨 [死闘の果ての緊急脱出成功！] 魔物の包囲網を突破して辛うじて脱出しました！（戦利品の80% [{0}個] 喪失、{1}個保存）"
+  },
+  "🏆 [아레나 결투 승리] {0}투사의 인장 🪙 +{1}개 획득! (명예 상점에서 장비 및 보급함 교환 가능)": {
+    "en": "🏆 [Arena Duel Victory] {0}Champion's Seal 🪙 +{1} obtained! (Can be exchanged for equipment and supply boxes in Honor Shop)",
+    "ja": "🏆 [アリーナ決闘勝利] {0}闘士の印章🪙 +{1}個獲得！（名誉商店で装備や補給箱と交換可能）"
+  },
+  "🏆 결투 결과 확인 (아레나 로비 복귀)": {
+    "en": "🏆 View Duel Results (Return to Arena Lobby)",
+    "ja": "🏆 決闘結果確認 (アリーナロビー帰還)"
+  },
+  "🏆 명예 상점 Lv.{0}": {
+    "en": "🏆 Honor Shop Lv.{0}",
+    "ja": "🏆 名誉商店 Lv.{0}"
+  },
+  "🏆 차원 아레나 & 명예 암시장 무구": {
+    "en": "🏆 Dimensional Arena & Honor Black Market Gear",
+    "ja": "🏆 次元アリーナ＆名誉闇市武具"
+  },
+  "🏆 클라우드 랭킹": {
+    "en": "🏆 Cloud Rankings",
+    "ja": "🏆 クラウドランキング"
+  },
+  "🏆 토벌 랭킹": {
+    "en": "🏆 Subjugation Rankings",
+    "ja": "🏆 討伐ランキング"
+  },
+  "🏆⚡ [심연 오버차지 정복 대승리!] {0} 광폭화 보스를 격파했습니다! (EXP +30%, 전리품 +50%)": {
+    "en": "🏆⚡ [Abyssal Overcharge Conquered: Great Victory!] Defeated {0} Berserk Boss! (EXP +30%, Loot +50%)"
+  ,
+    "ja": "🏆⚡ [深淵オーバーチャージ征服大勝利！] {0} 狂暴化ボスを撃破しました！ (EXP +30%、戦利品 +50%)"
+  },
+  "🏕️ [안전 야영] 모닥불 주위에서 식량을 섭취하며 휴식을 취했습니다. (생존 대원 HP/MP 35% 회복)": {
+    "en": "🏕️ [Safe Camp] Rested around the campfire while consuming rations. (Surviving members recover 35% HP/MP)",
+    "ja": "🏕️ [安全野営] 焚火の周りで食糧を摂りながら休息を取りました。（生存隊員HP/MP 35%回復）"
+  },
+  "🏕️ [야영 쿨다운] 던전을 {0}회 더 탐색해야 안전한 야영지를 확보할 수 있습니다! (탐색 3회당 1회 가능)": {
+    "en": "🏕️ [Camp Cooldown] Must explore dungeon {0} more times to secure a safe campsite! (Available once per 3 explorations)",
+    "ja": "🏕️ [野営クールダウン] ダンジョンをあと{0}回探索しなければ安全な野営地を確保できません！（探索3回につき1回可能）"
+  },
+  "🏕️ 식량이 없어 야영을 할 수 없습니다! 채비실에서 식량을 준비해야 합니다.": {
+    "en": "🏕️ Cannot camp due to lack of food! Prepare food in the Staging Room.",
+    "ja": "🏕️ 食糧がないため野営できません！ 準備室で食糧を用意する必要があります。"
+  },
+  "🏕️ 심연 강하: 탐험 채비실": {
+    "en": "🏕️ Abyssal Descent: Expedition Staging Room",
+    "ja": "🏕️ 深淵降下: 探検準備室"
+  },
+  "🏕️ 심연 던전 야영 — 모닥불 담소 (Campfire Banter)": {
+    "en": "🏕️ Abyssal Dungeon Camp — Campfire Banter",
+    "ja": "🏕️ 深淵ダンジョン野営 — 焚火の談笑 (Campfire Banter)"
+  },
+  "🏕️ 영지로 안전 귀환 (전리품 정산)": {
+    "en": "🏕️ Safe Return to Estate (Settle Loot)",
+    "ja": "🏕️ 領地へ安全帰還 (戦利品精算)"
+  },
+  "🏗️ [방어 전술 타워 강화] {0} - {1}이(가) Lv.{2}(으)로 연구 완료되었습니다!": {
+    "en": "🏗️ [Defensive Tactical Tower Upgrade] Research complete for {0} - {1} to Lv.{2}!",
+    "ja": "🏗️ [防衛戦術タワー強化] {0} - {1}の研究がLv.{2}に完了しました！"
+  },
+  "🏛️ [{0}] 건설 해금": {
+    "en": "🏛️ [{0}] Construction Unlocked",
+    "ja": "🏛️ [{0}] 建設解放"
+  },
+  "🏛️ [{0}] 구세계 발굴 기록": {
+    "en": "🏛️ [{0}] Old World Excavation Archive",
+    "ja": "🏛️ [{0}] 旧世界発掘記録"
+  },
+  "🏛️ [영지 재건 선택] {0}": {
+    "en": "🏛️ [Estate Reconstruction Choice] {0}",
+    "ja": "🏛️ [領地再建選択] {0}"
+  },
+  "🏛️ 방주 3대 핵심 인프라 시너지": {
+    "en": "🏛️ Ark's 3 Core Infrastructure Synergies",
+    "ja": "🏛️ 方舟の3大基幹インフラシナジー"
+  },
+  "🏛️ 병기창 & 생체 복원 병동 동시 해금 (이중 테크 전개)": {
+    "en": "🏛️ Armory & Bio-Restoration Ward Simultaneous Unlock (Dual-Tech Deployment)",
+    "ja": "🏛️ 兵器廠＆生体復元病棟同時開放（二重テック展開）"
+  },
+  "🏛️ 병기창 & 생체 복원 병동 동시 해금 및 이중 테크트리 라인": {
+    "en": "🏛️ Armory & Bio-Restoration Ward Simultaneous Unlock and Dual Tech Tree Line",
+    "ja": "🏛️ 兵器廠＆生体復元病棟同時開放および二重テックツリーライン"
+  },
+  "🏛️ 성기사단의 명예 복원 (영지 성유물 봉헌)": {
+    "en": "🏛️ Restoring Paladin Order's Honor (Estate Holy Relic Consecration)",
+    "ja": "🏛️ 聖騎士団の名誉回復 (領地聖遺物奉納)"
+  },
+  "🏛️ 순결한 성혈의 묵주 (영지 신성 가호 봉헌)": {
+    "en": "🏛️ Rosary of Pure Holy Blood (Estate Divine Blessing Consecration)",
+    "ja": "🏛️ 純潔なる聖血のロザリオ (領地神聖加護奉納)"
+  },
+  "🏛️ 신규 시설 해금": {
+    "en": "🏛️ New Facility Unlocked",
+    "ja": "🏛️ 新規施設解放"
+  },
+  "🏛️ 신세계의 개벽 [태양의 제국 건설 (영지 발전)]": {
+    "en": "🏛️ Dawn of a New World [Empire of the Sun Construction (Estate Development)]",
+    "ja": "🏛️ 新世界の開闢 [太陽の帝国建設 (領地発展)]"
+  },
+  "🏛️ 영지 경제 밸런스 & 3대 핵심 인프라 테크 시너지": {
+    "en": "🏛️ Estate Economy Balance & 3 Core Infrastructure Tech Synergies",
+    "ja": "🏛️ 領地経済バランス＆3大基幹インフラテックシナジー"
+  },
+  "🏛️ 영지 발전 선택 [기사단의 고대 성채 요새화]": {
+    "en": "🏛️ Estate Development Choice [Fortifying Knights' Ancient Citadel]",
+    "ja": "🏛️ 領地発展選択 [騎士団の古代城塞要塞化]"
+  },
+  "🏛️ 영지 발전 선택 [마도 광맥 완전 환류]": {
+    "en": "🏛️ Estate Development Choice [Arcane Vein Complete Recirculation]",
+    "ja": "🏛️ 領地発展選択 [魔導鉱脈完全還流]"
+  },
+  "🏛️ 영지 발전 선택 [영원한 태평성대와 지상 비상]": {
+    "en": "🏛️ Estate Development Choice [Eternal Golden Age & Surface Ascent]",
+    "ja": "🏛️ 領地発展選択 [永遠の泰平の世と地上飛翔]"
+  },
+  "🏛️ 영지 발전 선택 [진홍 에테르 생명 환류]": {
+    "en": "🏛️ Estate Development Choice [Crimson Ether Life Recirculation]",
+    "ja": "🏛️ 領地発展選択 [真紅エーテル生命還流]"
+  },
+  "🏛️ 영지 발전 선택 [태초의 황금기 도래]": {
+    "en": "🏛️ Estate Development Choice [Advent of Primordial Golden Age]",
+    "ja": "🏛️ 領地発展選択 [太初の黄金期到来]"
+  },
+  "🏛️ 영지 번영 및 물자 축적 (내정 강화)": {
+    "en": "🏛️ Estate Prosperity & Resource Stockpiling (Domestic Affairs Boost)",
+    "ja": "🏛️ 領地繁栄および物資蓄積 (内政強化)"
+  },
+  "🏛️ 영지 재건 및 인프라 축적 (영지 발전)": {
+    "en": "🏛️ Estate Reconstruction & Infrastructure Stockpiling (Estate Development)",
+    "ja": "🏛️ 領地再建およびインフラ蓄積 (領地発展)"
+  },
+  "🏛️ 영지로 돌아가 건물 건설하기": {
+    "en": "🏛️ Return to Estate to Construct Buildings",
+    "ja": "🏛️ 領地に戻り建物を建設する"
+  },
+  "🏛️ 오파츠 ({0})": {
+    "en": "🏛️ Ooparts ({0})",
+    "ja": "🏛️ オーパーツ ({0})"
+  },
+  "🏛️ 초월의 현자의 돌 연성 (영지 연금술 대폭 강화)": {
+    "en": "🏛️ Transmute Transcendent Philosopher's Stone (Greatly Enhance Estate Alchemy)",
+    "ja": "🏛️ 超越の賢者の石錬成 (領地錬金術大幅強化)"
+  },
+  "🏛️ 타락한 여신의 제단": {
+    "en": "🏛️ Altar of the Fallen Goddess",
+    "ja": "🏛️ 堕落した女神の祭壇"
+  },
+  "🏛️✨ [멸망 이전 유물 발굴] 고대 석관 안치대에서 구세계의 오파츠 [{0}]을(를) 발굴했습니다! (심연의 백과 등록용)": {
+    "en": "🏛️✨ [Pre-Fall Relic Excavation] Excavated Old World Ooparts [{0}] from the ancient sarcophagus pedestal! (For Abyssal Encyclopedia)",
+    "ja": "🏛️✨ [滅亡以前遺物発掘] 古代石棺安置台から旧世界のオーパーツ[{0}]を発掘しました！（深淵の百科事典登録用）"
+  },
+  "🏛️✨ [멸망 이전 유물 발굴] 구세계의 오파츠 [{0}]을(를) 발굴했습니다! (심연의 백과 등록용)": {
+    "en": "🏛️✨ [Pre-Fall Relic Excavation] Excavated Old World Ooparts [{0}]! (For Abyssal Encyclopedia)",
+    "ja": "🏛️✨ [滅亡以前遺物発掘] 旧世界のオーパーツ[{0}]を発掘しました！（深淵の百科事典登録用）"
+  },
+  "🏛️✨ [멸망 이전 유물 발굴] 상자 밑바닥에서 구세계의 오파츠 [{0}]을(를) 발굴했습니다! (심연의 백과 등록용)": {
+    "en": "🏛️✨ [Pre-Fall Relic Excavation] Excavated Old World Ooparts [{0}] from the bottom of the chest! (For Abyssal Encyclopedia)",
+    "ja": "🏛️✨ [滅亡以前遺物発掘] 箱の底から旧世界のオーパーツ[{0}]を発掘しました！（深淵の百科事典登録用）"
+  },
+  "🏛️🎉 [대서사 에픽 달성!] 방주 성채 11대 핵심 거점 시설의 1차 영지 재건이 모두 완료되었습니다! 의뢰소에서 완수 서사를 확인하세요.": {
+    "en": "🏛️🎉 [Grand Epic Achieved!] Phase 1 reconstruction of all 11 core Citadel facilities is complete! Check the completion narrative at the Bounty Board.",
+    "ja": "🏛️🎉 [大叙事詩エピック達成！] 方舟城塞の11大中核拠点施設の第1次領地再建がすべて完了しました！ 依頼所で達成の物語を確認してください。"
+  },
+  "🏥 병상 {0}개": {
+    "en": "🏥 {0} Hospital Beds",
+    "ja": "🏥 病床 {0}床"
+  },
+  "🏥 입원 중": {
+    "en": "🏥 Hospitalized",
+    "ja": "🏥 入院中"
+  },
+  "🏥 입원중": {
+    "en": "🏥 Hospitalized",
+    "ja": "🏥 入院中"
+  },
+  "🏥입원중": {
+    "en": "🏥Hospitalized",
+    "ja": "🏥入院中"
+  },
+  "🏰 [방어 태세] {0}이(가) 1턴간 방어 태세(방어력 +{1}%)를 취합니다!": {
+    "en": "🏰 [Defense Stance] {0} takes a defensive stance (DEF +{1}%) for 1 turn!",
+    "ja": "🏰 [防御態勢] {0}が1ターン間防御態勢（防御力+{1}%）を取ります！"
+  },
+  "🏰 [성채 귀환] 배낭의 전리품({0}슬롯, 금화 +{1}G 등)을 성채 창고로 무사히 정산했습니다!": {
+    "en": "🏰 [Citadel Return] Safely settled backpack loot ({0} slots, Gold +{1}G, etc.) into the Citadel warehouse!",
+    "ja": "🏰 [城塞帰還] バックパックの戦利品（{0}スロット、金貨+{1}Gなど）を城塞倉庫へ無事精算しました！"
+  },
+  "🏰 [차원 영지 침공 개방!] 차원 앵커 게이트가 Lv.6에 도달하여 5인 부대 영지 침공 및 전술 타워 방어 시스템이 해금되었습니다!": {
+    "en": "🏰 [Dimensional Estate Invasion Unlocked!] Dimensional Gate reached Lv.6, unlocking 5-hero squad Estate Invasions and tactical tower defense systems!",
+    "ja": "🏰 [次元領地侵攻開放！] 次元アンカーゲートがLv.6に到達し、5人部隊の領地侵攻および戦術タワー防衛システムが解放されました！"
+  },
+  "🏰 [차원 침공 대승리] 『{0}』({1}) 영지를 함락하고 각 30%를 약탈했습니다! ({2})": {
+    "en": "🏰 [Dimensional Invasion Victory] Captured 『{0}』 ({1}) estate and plundered 30% each! ({2})",
+    "ja": "🏰 [次元侵攻大勝利] 『{0}』({1})の領地を陥落させ、各30%を略奪しました！ ({2})"
+  },
+  "🏰 던전 원정 귀환 — 전리품 정산 보고서": {
+    "en": "🏰 Dungeon Expedition Return — Loot Settlement Report",
+    "ja": "🏰 ダンジョン遠征帰還 — 戦利品精算報告書"
+  },
+  "🏰 방주 성채 업무 시작": {
+    "en": "🏰 Begin Ark Citadel Operations",
+    "ja": "🏰 方舟城塞の業務開始"
+  },
+  "🏰 방주 성채(Citadel) 영지 발전 & 건물 해금 체계": {
+    "en": "🏰 Ark Citadel Estate Development & Building Unlock System",
+    "ja": "🏰 方舟城塞(Citadel)領地発展＆建物解放体系"
+  },
+  "🏰 방주 성채로 귀환": {
+    "en": "🏰 Return to Ark Citadel",
+    "ja": "🏰 方舟城塞へ帰還"
+  },
+  "🏰 방주 성채로 돌아가기": {
+    "en": "🏰 Return to Ark Citadel",
+    "ja": "🏰 方舟城塞に戻る"
+  },
+  "🏰 방주 성채로 무사히 귀환했습니다.": {
+    "en": "🏰 Safely returned to Ark Citadel.",
+    "ja": "🏰 方舟城塞へ無事帰還しました。"
+  },
+  "🏰 성채로 안전 귀환 (전리품 정산)": {
+    "en": "🏰 Safe Return to Citadel (Settle Loot)",
+    "ja": "🏰 城塞へ安全帰還 (戦利品精算)"
+  },
+  "🏰 안전 귀환의 원칙 & 자원 유지비 체납 방지": {
+    "en": "🏰 Safe Return Principles & Avoiding Resource Upkeep Arrears",
+    "ja": "🏰 安全帰還の原則＆資源維持費の滞納防止"
+  },
+  "🏰 전리품 귀환 정산": {
+    "en": "🏰 Loot Return Settlement",
+    "ja": "🏰 戦利品帰還精算"
+  },
+  "🏰 차원 영지 침공 & 5인 부대 30% 복합 약탈 시스템": {
+    "en": "🏰 Dimensional Estate Invasion & 5-Hero Squad 30% Compound Plunder System",
+    "ja": "🏰 次元領地侵攻＆5人部隊30%複合略奪システム"
+  },
+  "🏰 포트리스": {
+    "en": "🏰 Fortress",
+    "ja": "🏰 フォートレス"
+  },
+  "🏰⚔️ [칠흑 성역] 파티 전원의 공격력이 3턴간 {0}% 상승했습니다!": {
+    "en": "🏰⚔️ [Pitch-Black Sanctuary] All party members' ATK increased by {0}% for 3 turns!",
+    "ja": "🏰⚔️ [漆黒の聖域] パーティ全員の攻撃力が3ターン間{0}%上昇しました！"
+  },
+  "🏰🌟 [절대 요새의 성역] 아군 전원 1턴 완전 무적 및 2턴간 받는 피해 50% 절대 경감 결계를 전개했습니다!": {
+    "en": "🏰🌟 [Absolute Bastion Sanctuary] Deployed barrier granting complete invulnerability for 1 turn and 50% absolute damage reduction for 2 turns to all allies!",
+    "ja": "🏰🌟 [絶対要塞の聖域] 味方全員に1ターン完全無敵および2ターン間被ダメージ50%絶対軽減結界を展開しました！"
+  },
+  "🏳️ 철수": {
+    "en": "🏳️ Retreat",
+    "ja": "🏳️ 撤退"
+  },
+  "🏷️ 4. 무기 6종 고유 특성(Weapon Traits) & 전투 활용": {
+    "en": "🏷️ 4. 6 Weapon Traits & Combat Utilization",
+    "ja": "🏷️ 4. 武器6種の固有特性(Weapon Traits)＆戦闘活用"
+  },
+  "🏷️ 무기 6종 고유 특성 뱃지(Weapon Traits) & 전투 메커니즘": {
+    "en": "🏷️ 6 Weapon Trait Badges & Combat Mechanisms",
+    "ja": "🏷️ 武器6種の固有特性バッジ(Weapon Traits)＆戦闘メカニズム"
+  },
+  "🏹 [급소] 활 계열 (Bow)": {
+    "en": "🏹 [Vital Point] Bow Type",
+    "ja": "🏹 [急所] 弓系列 (Bow)"
+  },
+  "🏹 [급소] 활 계열: 치명타율 +5% 및 치명타 피해 +5%가 상시 적용되어 강력한 단일 저격 화력을 발휘합니다.": {
+    "en": "🏹 [Vital Point] Bow: Crit Rate +5% and Crit DMG +5% are permanently applied, delivering powerful single-target sniping firepower.",
+    "ja": "🏹 [急所] 弓系列: 会心率+5%および会心ダメージ+5%が常時適用され、強力な単体狙撃火力を発揮します。"
+  },
+  "🏹 [심연 균열의 사냥활]": {
+    "en": "🏹 [Hunting Bow of the Abyssal Rift]",
+    "ja": "🏹 [深淵亀裂の狩猟弓]"
+  },
+  "🏹 급소 사격": {
+    "en": "🏹 Vital Shot",
+    "ja": "🏹 急所射撃"
+  },
+  "🐸 [황금 두꺼비] {0} ×{1}개가 {2}G(개당 {3}G)로 변환되어 입고되었습니다.": {
+    "en": "🐸 [Golden Toad] {0} x{1} converted into {2}G ({3}G each) and deposited.",
+    "ja": "🐸 [黄金のヒキガエル] {0} ×{1}個が{2}G（1個あたり{3}G）に変換されて入庫しました。"
+  },
+  "🐸 황금 두꺼비": {
+    "en": "🐸 Golden Toad",
+    "ja": "🐸 黄金のヒキガエル"
+  },
+  "👁️ [네메시스](SPD {0}) [{1}] ➔ [{2}]에게 {3} 피해!": {
+    "en": "👁️ [Nemesis] (SPD {0}) [{1}] ➔ {3} damage to [{2}]!",
+    "ja": "👁️ [ネメシス](SPD {0}) [{1}] ➔ [{2}]に{3}ダメージ！"
+  },
+  "👁️ [정적] 긴장된 정적 속에서 주변을 경계하며 발걸음을 옮깁니다.": {
+    "en": "👁️ [Silence] Moving forward vigilantly in the tense silence.",
+    "ja": "👁️ [静寂] 緊張感漂う静寂の中、周囲を警戒しながら歩みを進めます。"
+  },
+  "👁️‍🗨️ [실명/명중저하] {0}에게 {1}턴간 명중률 {2}% 저하를 부여했습니다!": {
+    "en": "👁️‍🗨️ [Blind/Accuracy Down] Inflicted {2}% Accuracy reduction on {0} for {1} turns!",
+    "ja": "👁️‍🗨️ [盲目/命中低下] {0}に{1}ターン間命中率{2}%低下を付与しました！"
+  },
+  "👁️❌ [실명] {0}의 시야가 가려져 명중률이 50% 급감했습니다!": {
+    "en": "👁️❌ [Blind] {0}'s vision was clouded, drastically decreasing Accuracy by 50%!",
+    "ja": "👁️❌ [盲目] {0}の視界が遮られ、命中率が50%急減しました！"
+  },
+  "👈 선택됨": {
+    "en": "👈 Selected",
+    "ja": "👈 選択中"
+  },
+  "👋 [용병 해고] [{0}] {1} 용병과의 고용 계약을 해지했습니다. 장착 중이던 장비는 보관함으로 반환되었습니다.": {
+    "en": "👋 [Dismiss Mercenary] Terminated employment contract with mercenary [{0}] {1}. Equipped gear has been returned to inventory.",
+    "ja": "👋 [傭兵解雇] [{0}] {1} 傭兵との雇用契約を解除しました。装備していた武具は保管箱へ返却されました。"
+  },
+  "👋 인사만 나누고 지나친다": {
+    "en": "👋 Exchange greetings and pass by",
+    "ja": "👋 挨拶だけ交わして通り過ぎる"
+  },
+  "👋 해고": {
+    "en": "👋 Dismiss",
+    "ja": "👋 解雇"
+  },
+  "👑 2차 전직 클래스 고유 [궁극기] 시스템": {
+    "en": "👑 Tier 2 Class Unique [Ultimate] System",
+    "ja": "👑 2次転職クラス固有[アルティメット]システム"
+  },
+  "👑 7대 기본 직업군 및 20종 상위 전직 계보도": {
+    "en": "👑 7 Core Classes & 20 Advanced Promotion Lineage Tree",
+    "ja": "👑 7大基本職業および20種上位転職系譜図"
+  },
+  "👑 [{0}] {1}에게 종말의 심연 군주 권능(올스탯 +30%) 발현!": {
+    "en": "👑 [{0}] Abyssal Overlord's Power of Doom (All Stats +30%) manifested on {1}!",
+    "ja": "👑 [{0}] {1}に終末の深淵覇王権能（全ステータス+30%）発現！"
+  },
+  "👑 [{0}] {1}에게 최대 HP의 25%(🛡️{2}) 거암 결계 보호막 전개!": {
+    "en": "👑 [{0}] Giant Rock Barrier Shield of 25% Max HP (🛡️{2}) deployed on {1}!",
+    "ja": "👑 [{0}] {1}に最大HPの25%（🛡️{2}）の巨岩結界シールド展開！"
+  },
+  "👑 [{0}] {1}에게 침묵의 주시(방어력+15%, 행운+10) 상시 활성!": {
+    "en": "👑 [{0}] Gaze of Silence (DEF +15%, LUCK +10) permanently active on {1}!",
+    "ja": "👑 [{0}] {1}に沈黙の注視（防御力+15%、幸運+10）常時発動！"
+  },
+  "👑 [공허 지배자의 모노리스 핵] (5F 광폭화 최종보스 전리품) 회수": {
+    "en": "👑 [Void Monolith Core] (5F Berserk Boss Loot) Retrieved",
+    "ja": "👑 [虚無のモノリス核] (5F狂暴化ボスの戦利品) 回収"
+  },
+  "👑 [광폭화 보스 전리품] 보스 고유 비보 [{0}]을(를) 획득했습니다!": {
+    "en": "👑 [Berserk Boss Loot] Acquired boss unique treasure [{0}]!",
+    "ja": "👑 [狂暴化ボス戦利品] ボス固有の秘宝[{0}]を獲得しました！"
+  },
+  "👑 [광폭화 보스 토벌 신화 유물] 에픽 퀘스트 핵심 전리품 [{0} {1}]을(를) 100% 확정 획득했습니다!": {
+    "en": "👑 [Berserk Boss Mythic Relic] Guaranteed 100% drop of Epic Quest core loot [{0} {1}]!",
+    "ja": "👑 [狂暴化ボス討伐神話遺物] エピッククエスト中核戦利品[{0} {1}]を100%確定獲得しました！"
+  },
+  "👑 [네메시스 신기록] 단일 토벌 최고 피해량 {0} DMG 달성!": {
+    "en": "👑 [Nemesis New Record] Achieved single subjugation high damage record of {0} DMG!",
+    "ja": "👑 [ネメシス新記録] 単一討伐最高ダメージ記録 {0} DMG達成！"
+  },
+  "👑 [리더의 가호] {0}: {1} 효과 발동!": {
+    "en": "👑 [Leader's Blessing] {0}: {1} effect triggered!",
+    "ja": "👑 [リーダーの加護] {0}: {1}効果発動！"
+  },
+  "👑 [마스터 계정 상태] 차원 앵커 멀티 요소 관리자 모드가 {0}되었습니다.": {
+    "en": "👑 [Master Account Status] Dimensional Anchor multi-element admin mode has been {0}.",
+    "ja": "👑 [マスターアカウント状態] 次元アンカーマルチ要素管理者モードが{0}されました。"
+  },
+  "👑 [마스터 시딩] 몬스터·장비·밸런스 마스터 데이터가 Firebase DB에 성공적으로 동기화되었습니다.": {
+    "en": "👑 [Master Seeding] Monster, gear, and balance master data successfully synced to Firebase DB.",
+    "ja": "👑 [マスターシーディング] モンスター・装備・バランスマスターデータがFirebase DBに正常に同期されました。"
+  },
+  "👑 [명예 상점] [{0}]을 개봉하여 [{1}] {2}을(를) 획득했습니다!": {
+    "en": "👑 [Honor Shop] Opened [{0}] and acquired [{1}] {2}!",
+    "ja": "👑 [名誉商店] [{0}]を開封し、[{1}] {2}を獲得しました！"
+  },
+  "👑 [명예 상점] 최고위 신화 아티팩트 [{0}]을(를) 영구 획득했습니다!": {
+    "en": "👑 [Honor Shop] Permanently acquired supreme Mythic Artifact [{0}]!",
+    "ja": "👑 [名誉商店] 最高位の神話アーティファクト[{0}]を永久獲得しました！"
+  },
+  "👑 [보스 고유 장비 획득!] {0}층 보스 세트 비보 [{1}]을(를) 획득했습니다! (드랍율: {2}%)": {
+    "en": "👑 [Boss Unique Equipment Dropped!] Acquired {0}F Boss set treasure [{1}]! (Drop rate: {2}%)",
+    "ja": "👑 [ボス固有装備獲得！] {0}層ボスセット秘宝[{1}]を獲得しました！（ドロップ率: {2}%）"
+  },
+  "👑 [심연 지배자의 종언 대검]": {
+    "en": "👑 [Abyssal Overlord's End Greatsword]",
+    "ja": "👑 [深淵覇王の終焉大剣]"
+  },
+  "👑 [에픽 시나리오 해금] 영혼의 제단이 완공되어 고대 방주의 기원 에픽 스토리가 개방되었습니다!": {
+    "en": "👑 [Epic Scenario Unlocked] Soul Sanctuary completed; Origins of the Ancient Ark epic story unlocked!",
+    "ja": "👑 [エピックシナリオ開放] 魂の祭壇が完成し、古代方舟の起源エピックストーリーが開放されました！"
+  },
+  "👑 [영혼 등급 진화 대성공!] 각성({0}단계, 진화율 {1}%)의 기적으로 [{2}]님의 등급이 [{3}] ➔ [{4}] (으)로 초월 진화하여 기본 잠재력이 대폭 폭증했습니다!": {
+    "en": "👑 [Soul Tier Evolution Great Success!] Through the miracle of Awakening (Stage {0}, Evolution Rate {1}%), [{2}]'s tier transcended from [{3}] ➔ [{4}], vastly surging base potential!",
+    "ja": "👑 [魂ランク進化大成功！] 覚醒（{0}段階、進化率{1}%）の奇跡により[{2}]のランクが[{3}] ➔ [{4}]へと超越進化し、基本潜在能力が大幅に急増しました！"
+  },
+  "👑 [영혼 승격 대성공!] 제단(Lv.{0}, 확률 {1}%)의 축복으로 [{2}]님의 등급이 [{3}] ➔ [{4}] (으)로 각성하여 모든 스탯이 대폭 상승했습니다!": {
+    "en": "👑 [Soul Promotion Great Success!] Blessed by Altar (Lv.{0}, Rate {1}%), [{2}]'s tier awakened from [{3}] ➔ [{4}], massively increasing all stats!",
+    "ja": "👑 [魂昇格大成功！] 祭壇（Lv.{0}、確率{1}%）の祝福により[{2}]のランクが[{3}] ➔ [{4}]へと覚醒し、全ステータスが大幅に上昇しました！"
+  },
+  "👑 [위험도 10,000 극한 도달!] 무간도의 심연 속에서 진 최종 보스 [{0}]이(가) 강림했습니다!": {
+    "en": "👑 [Hazard 10,000 Peak Reached!] In the depths of Avici, True Final Boss [{0}] has descended!",
+    "ja": "👑 [危険度10,000極限到達！] 無間道の深淵から真最終ボス[{0}]が降臨しました！"
+  },
+  "👑 [전설 신화 단조 대성공!!!] [{0}] ({1}) 단조 완료! {2}": {
+    "en": "👑 [Legendary/Mythic Forging Great Success!!!] [{0}] ({1}) Forging complete! {2}",
+    "ja": "👑 [伝説神話鍛造大成功!!!] [{0}] ({1}) 鍛造完了！ {2}"
+  },
+  "👑 [전설]": {
+    "en": "👑 [Legendary]",
+    "ja": "👑 [伝説]"
+  },
+  "👑 [지휘관 최고 전력 활성화] 13개 전 건물 10레벨 증축, 전 자원 최대치 완충, 10종 보스 비전서 서고 입고, 5인의 30레벨 히어로급 원정대 집결, 심연 10층까지의 던전이 전면 해금되었습니다!": {
+    "en": "👑 [Commander Maximum Power Activated] All 13 facilities expanded to Lv.10, all resources fully maxed, 10 Boss grimoires stocked, 5 Lv.30 Heroic expedition members assembled, and dungeons up to Abyss 10F fully unlocked!",
+    "ja": "👑 [指揮官最高戦力有効化] 全13施設レベル10増築、全資源最大値満杯、10種ボス秘伝書書庫入荷、5人のレベル30ヒーロー級遠征隊集結、深淵10層までのダンジョンが全面開放されました！"
+  },
+  "👑 [차원 네메시스 완전 토벌] 지휘관들의 총력전으로 시공의 침식자 네메시스가 격퇴되었습니다! 다음 재소환 주기까지 영지에 평화가 유지됩니다.": {
+    "en": "👑 [Dimensional Nemesis Completely Slain!] Through the Commanders' all-out assault, Nemesis, Corruptor of Spacetime, was repelled! Peace reigns over the estate until the next summoning cycle.",
+    "ja": "👑 [次元ネメシス完全討伐] 指揮官たちの総力戦により時空の侵食者ネメシスが撃退されました！ 次の再召喚周期まで領地に平和が維持されます。"
+  },
+  "👑 {0} 편대 출현!": {
+    "en": "👑 {0} Formation Appeared!",
+    "ja": "👑 {0}編隊出現！"
+  },
+  "👑 ★ 3단계 최종 각성 달성 (신화 초월의 경지에 오른 무기입니다)": {
+    "en": "👑 Achieved ★ Stage 3 Final Awakening (A weapon that reached Mythic Transcendence)",
+    "ja": "👑 ★ 3段階最終覚醒達成 (神話超越の境地に達した武器です)"
+  },
+  "👑 개인 단일 최고 피해량 신기록 달성!": {
+    "en": "👑 New personal single high damage record achieved!",
+    "ja": "👑 個人単一最高ダメージ新記録達成！"
+  },
+  "👑 고유/보스": {
+    "en": "👑 Unique/Boss",
+    "ja": "👑 固有/ボス"
+  },
+  "👑 리더": {
+    "en": "👑 Leader",
+    "ja": "👑 リーダー"
+  },
+  "👑 리더 궁극기: {0} ➔ {1}!": {
+    "en": "👑 Leader Ultimate: {0} ➔ {1}!",
+    "ja": "👑 リーダーアルティメット: {0} ➔ {1}!"
+  },
+  "👑 마스터 계정": {
+    "en": "👑 Master Account",
+    "ja": "👑 マスターアカウント"
+  },
+  "👑 발키리": {
+    "en": "👑 Valkyrie",
+    "ja": "👑 ヴァルキリー"
+  },
+  "👑 보스 유물 ({0})": {
+    "en": "👑 Boss Relic ({0})",
+    "ja": "👑 ボス遺物 ({0})"
+  },
+  "👑 보스 토벌 대승리!": {
+    "en": "👑 Boss Subjugation Victory!",
+    "ja": "👑 ボス討伐大勝利！"
+  },
+  "👑 심연의 절대 재앙 '네메시스' 3,000만 체력 협력 월드 레이드": {
+    "en": "👑 Abyssal Calamity 'Nemesis' 30M HP Cooperative World Raid",
+    "ja": "👑 深淵の絶対災厄『ネメシス』3,000万HP協力ワールドレイド"
+  },
+  "👑 아군 리더 궁극기: [{0}] ➔ {1}!": {
+    "en": "👑 Ally Leader Ultimate: [{0}] ➔ {1}!",
+    "ja": "👑 味方リーダーアルティメット: [{0}] ➔ {1}!"
+  },
+  "👑 아군 차원 총공격: ALL-OUT FEVER BURST!": {
+    "en": "👑 Allied Dimensional All-Out Assault: ALL-OUT FEVER BURST!",
+    "ja": "👑 味方次元総攻撃: ALL-OUT FEVER BURST!"
+  },
+  "👑 에픽 스토리": {
+    "en": "👑 Epic Story",
+    "ja": "👑 エピックストーリー"
+  },
+  "👑 이번 주기 토벌 완료 (재소환 대기 중: {0})": {
+    "en": "👑 Subjugation complete for this cycle (Awaiting re-summon: {0})",
+    "ja": "👑 今周期討伐完了 (再召喚待機中: {0})"
+  },
+  "👑 전설": {
+    "en": "👑 Legendary",
+    "ja": "👑 伝説"
+  },
+  "👑 지휘관 최고 전력 적용 완료! (10층 던전 해금)": {
+    "en": "👑 Commander Maximum Power Applied! (10F Dungeon Unlocked)",
+    "ja": "👑 指揮官最高戦力適用完了！ (10層ダンジョン解放)"
+  },
+  "👑 차원 게이트 및 멀티 컨텐츠 개방 완료!": {
+    "en": "👑 Dimensional Gate & Multi-Content Fully Unlocked!",
+    "ja": "👑 次元ゲートおよびマルチコンテンツ開放完了！"
+  },
+  "👑 챕터 1: 심연의 태동 (1F ~ 5F)": {
+    "en": "👑 Chapter 1: Stirrings of the Abyss (1F ~ 5F)",
+    "ja": "👑 チャプター1: 深淵の胎動 (1F ~ 5F)"
+  },
+  "👑 태초의 신성 마도핵 융합 중... (★ 전설 신화 강림!)": {
+    "en": "👑 Fusing Primordial Divine Arcane Core... (★ Legendary Mythic Descent!)",
+    "ja": "👑 太初の神聖魔導核融合中… (★伝説神話降臨！)"
+  },
+  "👑 토벌 완료 (평화 상태 · 재소환까지": {
+    "en": "👑 Subjugation Complete (Peaceful State · Until Re-summon",
+    "ja": "👑 討伐完了 (平和状態・再召喚まで"
+  },
+  "👑리더": {
+    "en": "👑Leader",
+    "ja": "👑リーダー"
+  }
+}

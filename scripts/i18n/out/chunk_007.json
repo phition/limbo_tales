@@ -1,0 +1,802 @@
+{
+  "⚠️💥[적 연계 폭발! {0} {1}] -{2}": {
+    "en": "⚠️💥[Enemy Combo Blast! {0} {1}] -{2}",
+    "ja": "⚠️💥[敵連携爆発！ {0} {1}] -{2}"
+  },
+  "⚡ +{0}강 강화 시도": {
+    "en": "⚡ Attempt +{0} Enhancement",
+    "ja": "⚡ +{0}強化試行"
+  },
+  "⚡ 3인 선발 전투원 + 1인 리더 + 1인 서포터 원정대가 진입했습니다!": {
+    "en": "⚡ The expedition of 3 Frontline Combatants + 1 Leader + 1 Supporter has entered!",
+    "ja": "⚡ 3名の先発戦闘員＋リーダー1名＋サポーター1名の遠征隊が進入しました！"
+  },
+  "⚡ 5. 1.5배 스마트 자동 전투 AI 가이드": {
+    "en": "⚡ 5. 1.5x Smart Auto-Combat AI Guide",
+    "ja": "⚡ 5. 1.5倍スマート自動戦闘AIガイド"
+  },
+  "⚡ [{0}] 연계 폭발 가능! 대상: {1}({2})": {
+    "en": "⚡ [{0}] Combo Blast available! Target: {1}({2})",
+    "ja": "⚡ [{0}] 連携爆発可能！ 対象: {1}({2})"
+  },
+  "⚡ [브레이크 강타] {0}의 차징 게이지를 추가로 150 파쇄했습니다!": {
+    "en": "⚡ [Break Smite] Smashed an additional 150 of {0}'s charge gauge!",
+    "ja": "⚡ [ブレイク強打] {0}のチャージゲージを追加で150粉砕！"
+  },
+  "⚡ [심연 급행로] 보스 방으로 직행하는 위험한 급행로 (위험도 +25 상승 / 진척도 대폭 가속 & ✨ 에테르 +30)": {
+    "en": "⚡ [Abyssal Express Path] Dangerous direct express route to boss room (Hazard +25 / Progress vastly accelerated & ✨ Ether +30)",
+    "ja": "⚡ [深淵急行路] ボス部屋へ直行する危険な急行ルート (危険度+25上昇 / 進捗大幅加速＆✨エーテル+30)"
+  },
+  "⚡ [암습] {0}의 속도 우위(+ {1})로 {2}에게 피해량이 {3}% 증폭되었습니다!": {
+    "en": "⚡ [Ambush] Due to {0}'s speed advantage (+{1}), damage dealt to {2} amplified by {3}%!",
+    "ja": "⚡ [奇襲] {0}の速度優位(+{1})により、{2}への与ダメージが{3}%増幅！"
+  },
+  "⚡ [암습] 단검 계열 (Dagger)": {
+    "en": "⚡ [Ambush] Daggers",
+    "ja": "⚡ [奇襲] 短剣系列 (Dagger)"
+  },
+  "⚡ [암습] 단검 계열: 대상보다 속도가 빠를수록 피해량이 최대 20%까지 비례 증폭됩니다.": {
+    "en": "⚡ [Ambush] Daggers: The faster your SPD compared to the target, the more damage is amplified up to 20%.",
+    "ja": "⚡ [奇襲] 短剣系列: 対象より速度が速いほど、与ダメージが最大20%まで比例増幅。"
+  },
+  "⚡ [진척도 가속] 가시덤불을 돌파하며 진홍 장미 정수를 흡수했습니다! (위험도 +25, 전원 영구 공격력 +3)": {
+    "en": "⚡ [Progress Accelerated] Absorbed Crimson Rose Essence while breaking through brambles! (Hazard +25, all allies permanent ATK +3)",
+    "ja": "⚡ [進捗加速] 茨の茂みを突破し真紅の薔薇のエッセンスを吸収！ (危険度+25、全員永久攻撃力+3)"
+  },
+  "⚡ [진척도 가속] 가짜를 일격에 쓰러뜨리고 복제된 9티어 보구를 강탈했습니다! (위험도 +30, 9티어 장비 복제)": {
+    "en": "⚡ [Progress Accelerated] Struck down the imposter in one blow and plundered a duplicated Tier 9 relic! (Hazard +30, Tier 9 equipment duplicated)",
+    "ja": "⚡ [進捗加速] 偽物を一撃で倒し、複製されたTier 9宝具を強奪！ (危険度+30、Tier 9装備複製)"
+  },
+  "⚡ [진척도 가속] 간수실 경보를 울려 정예 유인 (위험도 +30 / 8티어 흑철 판금 갑옷 / 군사 열쇠)": {
+    "en": "⚡ [Progress Accelerated] Sounded jailer room alarm to lure elites (Hazard +30 / Tier 8 Dark Iron Plate Armor / Military Key)",
+    "ja": "⚡ [進捗加速] 看守室の警報を鳴らしエリートを誘引 (危険度+30 / Tier 8黒鉄甲冑 / 軍事の鍵)"
+  },
+  "⚡ [진척도 가속] 거신의 핵을 뜯어내어 던전 전체의 마기가 흉포해졌습니다! (위험도 +25 상승, 공허의 파편 ×4)": {
+    "en": "⚡ [Progress Accelerated] Tore out the Colossus Core; demonic energy throughout the dungeon grew ferocious! (Hazard +25, Void Shards x4)",
+    "ja": "⚡ [進捗加速] 巨神の核を抉り出し、ダンジョン全体の魔気が凶暴化！ (危険度+25上昇、虚空の破片×4)"
+  },
+  "⚡ [진척도 가속] 거울을 박살내어 미궁 결계 파괴 (위험도 +35 급상승 / 🪞 거울 파편 유물 선취)": {
+    "en": "⚡ [Progress Accelerated] Shattered the mirror to destroy labyrinth barrier (Hazard +35 spike / Preemptively gained 🪞 Mirror Shard Relic)",
+    "ja": "⚡ [進捗加速] 鏡を粉砕し迷宮結界を破壊 (危険度+35急上昇 / 🪞鏡の破片遺物を先取)"
+  },
+  "⚡ [진척도 가속] 경보 룬 고의 격발 (위험도 +20 상승 / 3턴간 공격력 +20% / 군번줄 수습)": {
+    "en": "⚡ [Progress Accelerated] Intentionally detonated alarm rune (Hazard +20 / ATK +20% for 3 turns / Recovered Dog Tag)",
+    "ja": "⚡ [進捗加速] 警報ルーンを故意に起爆 (危険度+20上昇 / 3ターン攻撃力+20% / 認識票回収)"
+  },
+  "⚡ [진척도 가속] 고문실 정예 간수들을 제압하고 8티어 중갑을 노획했습니다! (위험도 +30, 비밀 서신 획득)": {
+    "en": "⚡ [Progress Accelerated] Subdued elite torture chamber jailers and looted Tier 8 heavy armor! (Hazard +30, obtained Secret Letter)",
+    "ja": "⚡ [進捗加速] 拷問室のエリート看守を制圧しTier 8重甲を鹵獲！ (危険度+30、秘密の書簡獲得)"
+  },
+  "⚡ [진척도 가속] 단지가 깨지며 분출된 원혼의 마기가 던전을 뒤흔듭니다! (위험도 +25 급상승, 🪙 80G, 마력 수정 ×2, 파티 공격력 +25%)": {
+    "en": "⚡ [Progress Accelerated] The jar shattered, releasing vengeful demonic energy that shakes the dungeon! (Hazard +25 spike, 🪙 80G, Mana Crystals x2, Party ATK +25%)",
+    "ja": "⚡ [進捗加速] 壺が割れ噴出した怨霊の魔気がダンジョンを揺るがす！ (危険度+25急上昇、🪙 80G、魔力水晶×2、パーティ攻撃力+25%)"
+  },
+  "⚡ [진척도 가속] 단지를 깨뜨려 원혼 해방 (위험도 +25 상승 / 🪙 80G, 💎 마력 수정 ×2, 3턴 공격력 +25%)": {
+    "en": "⚡ [Progress Accelerated] Smashed the jar to release vengeful spirits (Hazard +25 / 🪙 80G, 💎 Mana Crystals x2, 3-turn ATK +25%)",
+    "ja": "⚡ [進捗加速] 壺を叩き割って怨霊を解放 (危険度+25上昇 / 🪙 80G、💎 魔力水晶×2、3ターン攻撃力+25%)"
+  },
+  "⚡ [진척도 가속] 대원의 피를 바쳐 제단 각성 (HP 20% 소모 / 위험도 +30 / 흡혈 15% 영구 버프)": {
+    "en": "⚡ [Progress Accelerated] Sacrificed member's blood to awaken altar (HP 20% consumed / Hazard +30 / 15% Lifesteal permanent buff)",
+    "ja": "⚡ [進捗加速] 隊員の血を捧げ祭壇を覚醒 (HP 20%消費 / 危険度+30 / 吸血15%永久バフ)"
+  },
+  "⚡ [진척도 가속] 마력 폭탄으로 철문 폭파 (위험도 +35 폭증 / 8티어 단죄의 무기 / ⚙️ 철광석 ×25)": {
+    "en": "⚡ [Progress Accelerated] Blasted iron gate with mana bomb (Hazard +35 surge / Tier 8 Weapon of Condemnation / ⚙️ Iron Ore x25)",
+    "ja": "⚡ [進捗加速] 魔力爆弾で鉄扉を爆破 (危険度+35急増 / Tier 8断罪の武器 / ⚙️鉄鉱石×25)"
+  },
+  "⚡ [진척도 가속] 마핵 액체 강제 추출 (위험도 +40 폭증 / 🖤 심연 군주 마핵 유물 선취 / HP -100)": {
+    "en": "⚡ [Progress Accelerated] Forcefully extracted magic core liquid (Hazard +40 surge / Preemptively gained 🖤 Abyssal Lord Core Relic / HP -100)",
+    "ja": "⚡ [進捗加速] 魔核液体を強制抽出 (危険度+40急増 / 🖤深淵君主の魔核遺物を先取 / HP -100)"
+  },
+  "⚡ [진척도 가속] 모놀리스 과충전 공명 (위험도 +500 / 10티어 신화 제작 재료 획득)": {
+    "en": "⚡ [Progress Accelerated] Monolith overcharge resonance (Hazard +500 / Obtained Tier 10 Mythic crafting materials)",
+    "ja": "⚡ [進捗加速] モノリス過充電共鳴 (危険度+500 / Tier 10神話製作材料獲得)"
+  },
+  "⚡ [진척도 가속] 미래의 결전 기억을 계승하여 전열의 전투 감각이 극대화되었습니다! (위험도 +25 상승, 공격력 +35%)": {
+    "en": "⚡ [Progress Accelerated] Inherited memories of future battle; frontline combat senses maximized! (Hazard +25, ATK +35%)",
+    "ja": "⚡ [進捗加速] 未来の決戦の記憶を継承し、前衛の戦闘感覚が極大化！ (危険度+25上昇、攻撃力+35%)"
+  },
+  "⚡ [진척도 가속] 미래의 기억 동기화 (위험도 +25 / 다음 3회 전투 선제공격 및 치명타 100%)": {
+    "en": "⚡ [Progress Accelerated] Synchronized future memories (Hazard +25 / Next 3 battles preemptive strike & 100% Crit Rate)",
+    "ja": "⚡ [進捗加速] 未来の記憶を同期 (危険度+25 / 次の3回の戦闘で先制攻撃＆会心率100%)"
+  },
+  "⚡ [진척도 가속] 버팀목을 폭파하여 단축로 개척 (위험도 +30 / 광부 보물함 🪙 120G, ✨ 50 발굴)": {
+    "en": "⚡ [Progress Accelerated] Blasted props to open shortcut (Hazard +30 / Miner Treasure Chest 🪙 120G, ✨ 50 excavated)",
+    "ja": "⚡ [進捗加速] 支柱を爆破し短縮路を開拓 (危険度+30 / 鉱夫の宝箱 🪙 120G、✨ 50 発掘)"
+  },
+  "⚡ [진척도 가속] 석상 이마의 붉은 마핵 강제 적출 (위험도 +25 / 🌌 공허 파편 ×4)": {
+    "en": "⚡ [Progress Accelerated] Forcibly gouged out red magic core from statue's forehead (Hazard +25 / 🌌 Void Shards x4)",
+    "ja": "⚡ [進捗加速] 石像の額の紅い魔核を強制摘出 (危険度+25 / 🌌 虚空の破片×4)"
+  },
+  "⚡ [진척도 가속] 선대의 10티어 종말 무기를 계승하고 결전 의지를 불태웁니다! (위험도 +30, 공격력 +25% 영구 버프)": {
+    "en": "⚡ [Progress Accelerated] Inherited ancestor's Tier 10 Doomsday Weapon and ignited battle resolve! (Hazard +30, permanent ATK +25% buff)",
+    "ja": "⚡ [進捗加速] 先代のTier 10終末武器を継承し決戦の意志を燃やす！ (危険度+30、攻撃力+25%永久バフ)"
+  },
+  "⚡ [진척도 가속] 선제 결투 돌입 (위험도 +30 / 리더 무기와 동일한 9티어 장비 복제 획득)": {
+    "en": "⚡ [Progress Accelerated] Initiated preemptive duel (Hazard +30 / Obtained duplicated Tier 9 gear matching Leader's weapon)",
+    "ja": "⚡ [進捗加速] 先制決闘に突入 (危険度+30 / リーダーの武器と同じTier 9装備を複製獲得)"
+  },
+  "⚡ [진척도 가속] 수정에 충격을 가해 과부하 유도 (위험도 +30 상승 / 순수 인챈트석 획득 / HP 8% 반동)": {
+    "en": "⚡ [Progress Accelerated] Struck crystals to induce overload (Hazard +30 / Obtained Pure Enchant Stone / 8% HP recoil)",
+    "ja": "⚡ [進捗加速] 水晶に衝撃を与え過負荷を誘発 (危険度+30上昇 / 純粋エンチャント石獲得 / HP 8%反動)"
+  },
+  "⚡ [진척도 가속] 순교자의 결투 환영을 극복하여 귀중한 검술 경험과 유품 검을 계승했습니다! (위험도 +20, 전원 EXP +200)": {
+    "en": "⚡ [Progress Accelerated] Overcame the martyr's dueling phantom to inherit precious swordplay experience and relic sword! (Hazard +20, all allies EXP +200)",
+    "ja": "⚡ [進捗加速] 殉教者の決闘幻影を克服し、貴重な剣術経験と遺品の剣を継承！ (危険度+20、全員EXP+200)"
+  },
+  "⚡ [진척도 가속] 안개 속으로 살기 방출 (위험도 +30 / 파티 치명타율 +20% / 사신의 낫 파편)": {
+    "en": "⚡ [Progress Accelerated] Released bloodlust into the mist (Hazard +30 / Party Crit Rate +20% / Reaper Scythe Shard)",
+    "ja": "⚡ [進捗加速] 霧の中へ殺気を放出 (危険度+30 / パーティ会心率+20% / 死神の鎌の破片)"
+  },
+  "⚡ [진척도 가속] 온몸으로 가시밭을 부수며 혈로 돌파 (위험도 +25 / HP 10% 출혈 / 공격력 +3 영구 물약)": {
+    "en": "⚡ [Progress Accelerated] Smashed through brambles with bare bodies to carve a blood path (Hazard +25 / 10% HP Bleed / Permanent ATK +3 Potion)",
+    "ja": "⚡ [進捗加速] 全身で荊棘を粉砕し血路を開く (危険度+25 / HP 10%出血 / 攻撃力+3永久ポーション)"
+  },
+  "⚡ [진척도 가속] 윤회의 고리 1,000 위험도 점프 (위험도 +1,000 / 📜 초월 비전서 ×3 획득)": {
+    "en": "⚡ [Progress Accelerated] Reincarnation Ring 1,000 Hazard Jump (Hazard +1,000 / 📜 Transcendence Grimoires x3 obtained)",
+    "ja": "⚡ [進捗加速] 輪廻の環1,000危険度ジャンプ (危険度+1,000 / 📜 超越魔導書×3 獲得)"
+  },
+  "⚡ [진척도 가속] 자극적인 마기 포자가 터져 원정대의 투기가 타오릅니다! (위험도 +20 상승, 5턴간 치명타/공격력 +15%)": {
+    "en": "⚡ [Progress Accelerated] Pungent demonic spores burst, stoking the expedition's fighting spirit! (Hazard +20, Crit Rate/ATK +15% for 5 turns)",
+    "ja": "⚡ [進捗加速] 刺激的な魔気胞子が弾け、遠征隊の闘気が燃え盛る！ (危険度+20上昇、5ターン会心率/攻撃力+15%)"
+  },
+  "⚡ [진척도 가속] 저울을 무력으로 내리치기 (위험도 +35 / 💎 순수 접미석 1개, 🪙 200G 강탈)": {
+    "en": "⚡ [Progress Accelerated] Smashed scales by force (Hazard +35 / 💎 Pure Suffix Stone x1, looted 🪙 200G)",
+    "ja": "⚡ [進捗加速] 天秤を武力で叩き割る (危険度+35 / 💎 純粋接尾石1個、🪙 200G 強奪)"
+  },
+  "⚡ [진척도 가속] 중력 폭풍이 몰아치며 떠다니던 심연 희귀 보물들이 쏟아졌습니다! (위험도 +25, 공허 파편 ×3, 마력 수정 ×2, 🪙 150G)": {
+    "en": "⚡ [Progress Accelerated] Gravity storm raged and floating abyssal rare treasures poured down! (Hazard +25, Void Shards x3, Mana Crystals x2, 🪙 150G)",
+    "ja": "⚡ [進捗加速] 重力嵐が吹き荒れ、漂っていた深淵の希少宝物が降り注ぐ！ (危険度+25、虚空の破片×3、魔力水晶×2、🪙 150G)"
+  },
+  "⚡ [진척도 가속] 중력 흡인구 자극 (위험도 +25 / 🌌 공허 파편 ×3, 💎 마력 수정 ×2, 🪙 150G)": {
+    "en": "⚡ [Progress Accelerated] Stimulated gravitational vortex (Hazard +25 / 🌌 Void Shards x3, 💎 Mana Crystals x2, 🪙 150G)",
+    "ja": "⚡ [進捗加速] 重力吸引口を刺激 (危険度+25 / 🌌 虚空の破片×3、💎 魔力水晶×2、🪙 150G)"
+  },
+  "⚡ [진척도 가속] 지휘관의 검을 뽑아 결전 맹세 (위험도 +30 / 10티어 종말 무기 / 공격력 +25%)": {
+    "en": "⚡ [Progress Accelerated] Drew Commander's sword to swear decisive oath (Hazard +30 / Tier 10 Doomsday Weapon / ATK +25%)",
+    "ja": "⚡ [進捗加速] 指揮官の剣を抜き決戦の誓い (危険度+30 / Tier 10終末武器 / 攻撃力+25%)"
+  },
+  "⚡ [진척도 가속] 참회실 문을 박차고 도발 (위험도 +30 / 6티어 희귀 무기 드랍 / 정예 전투)": {
+    "en": "⚡ [Progress Accelerated] Kicked open confession booth door to taunt (Hazard +30 / Tier 6 Rare Weapon Drop / Elite Combat)",
+    "ja": "⚡ [進捗加速] 懺悔室の扉を蹴破り挑発 (危険度+30 / Tier 6レア武器ドロップ / エリート戦闘)"
+  },
+  "⚡ [진척도 가속] 포자 주머니를 터뜨리기 (위험도 +20 상승 / 5턴간 공속·치명타 +15% 각성)": {
+    "en": "⚡ [Progress Accelerated] Popped spore sacs (Hazard +20 / Awakened +15% ATK SPD & Crit Rate for 5 turns)",
+    "ja": "⚡ [進捗加速] 胞子嚢を破裂させる (危険度+20上昇 / 5ターン攻速・会心率+15%覚醒)"
+  },
+  "⚡ [진척도 가속] 폭파로 낙석을 뚫고 지름길을 뚫어 숨겨진 광부의 수납함을 발굴했습니다! (위험도 +30, 🪙 120G, 에테르 +50)": {
+    "en": "⚡ [Progress Accelerated] Blasted through fallen rocks to open a shortcut and excavated hidden Miner's Coffer! (Hazard +30, 🪙 120G, Ether +50)",
+    "ja": "⚡ [進捗加速] 爆破で落石を貫き近道を開通、隠された鉱夫の収納箱を発掘！ (危険度+30、🪙 120G、エーテル+50)"
+  },
+  "⚡ [진척도 가속] 피로 룬을 적셔 결투 환영 소환 (위험도 +20 / 순교자의 제식 검 + EXP 200)": {
+    "en": "⚡ [Progress Accelerated] Soaked rune in blood to summon duel phantom (Hazard +20 / Martyr Standard Sword + EXP 200)",
+    "ja": "⚡ [進捗加速] 血でルーンを濡らし決闘幻影を召喚 (危険度+20 / 殉教者の制式剣＋EXP 200)"
+  },
+  "⚡ [진척도 극한 가속] 거석을 깨워 무간도의 군주들을 소환했습니다! (위험도 +500 상승, 10티어 제작 재료 대량 획득)": {
+    "en": "⚡ [Extreme Progress Acceleration] Awakened monolith to summon Lords of Avici! (Hazard +500, massive Tier 10 crafting materials obtained)",
+    "ja": "⚡ [進捗極限加速] 巨石を目覚めさせ無間道の君主たちを召喚！ (危険度+500上昇、Tier 10製作材料を大量獲得)"
+  },
+  "⚡ [진척도 극한 가속] 시간선을 강제로 뛰어넘어 상위 계층으로 직행했습니다! (무간도 위험도 +1,000 폭발적 도약, 전원 EXP +1,000)": {
+    "en": "⚡ [Extreme Progress Acceleration] Forcibly leaped timelines straight to upper strata! (Avici Hazard +1,000 explosive surge, all allies EXP +1,000)",
+    "ja": "⚡ [進捗極限加速] 時間軸を強制跳躍し上位階層へ直行！ (無間道危険度+1,000爆発的跳躍、全員EXP+1,000)"
+  },
+  "⚡ [진척도 급가속] 거울 결계가 깨지며 미궁 중심부 직통로가 열렸습니다! (위험도 +35 급상승, 거울 파편 유물 선취)": {
+    "en": "⚡ [Rapid Progress Acceleration] Mirror barrier broke, opening direct path to labyrinth center! (Hazard +35 spike, preemptively gained Mirror Shard Relic)",
+    "ja": "⚡ [進捗急加速] 鏡の結界が砕け迷宮中心部への直通路が開通！ (危険度+35急上昇、鏡の破片遺物を先取)"
+  },
+  "⚡ [진척도 급가속] 경보 룬을 격발하여 마물들을 유인했습니다! (위험도 +20, 파티 3턴간 공격력 +20% 사기 진작, 낡은 군번줄 수습)": {
+    "en": "⚡ [Rapid Progress Acceleration] Detonated alarm rune to lure monsters! (Hazard +20, party ATK +20% morale boost for 3 turns, recovered Old Dog Tag)",
+    "ja": "⚡ [進捗急加速] 警報ルーンを起爆して魔物を誘引！ (危険度+20、パーティ3ターン攻撃力+20%士気高揚、古びた認識票回収)"
+  },
+  "⚡ [진척도 급가속] 굉음과 함께 철문이 날아가며 8티어 무구를 강탈했습니다! (위험도 +35, 보스 강림 임박)": {
+    "en": "⚡ [Rapid Progress Acceleration] Iron gate blasted away with a roar, looting Tier 8 armaments! (Hazard +35, Boss descent imminent)",
+    "ja": "⚡ [進捗急加速] 轟音と共に鉄扉が吹き飛びTier 8武具を強奪！ (危険度+35、ボス降臨目前)"
+  },
+  "⚡ [진척도 급가속] 마물들이 우글거리는 심연의 최단 급행로로 과감히 돌파했습니다! (위험도 +25 급상승, 보스 출현 게이지 가속, ✨에테르 +30 획득)": {
+    "en": "⚡ [Rapid Progress Acceleration] Boldly breached the shortest express path teeming with monsters! (Hazard +25 spike, boss gauge accelerated, ✨ Ether +30 obtained)",
+    "ja": "⚡ [進捗急加速] 魔物が蠢く深淵の最短急行路を果敢に突破！ (危険度+25急上昇、ボス出現ゲージ加速、✨エーテル+30獲得)"
+  },
+  "⚡ [진척도 급가속] 사신의 저울추를 강제로 뜯어내어 귀중한 마도석을 강탈했습니다! (위험도 +35 폭증, 보스 출현 임박)": {
+    "en": "⚡ [Rapid Progress Acceleration] Forcibly ripped out Reaper's counterweight to loot precious mana stones! (Hazard +35 surge, Boss appearance imminent)",
+    "ja": "⚡ [進捗急加速] 死神の分銅を無理やり毟り取り貴重な魔導石を強奪！ (危険度+35急増、ボス出現目前)"
+  },
+  "⚡ [진척도 급가속] 살기를 방출하여 망각의 군주들을 불러 모았습니다! (위험도 +30 상승, 6턴간 치명타/공격력 +30%)": {
+    "en": "⚡ [Rapid Progress Acceleration] Radiated bloodlust to gather Lords of Oblivion! (Hazard +30, Crit Rate/ATK +30% for 6 turns)",
+    "ja": "⚡ [進捗急加速] 殺気を放出して忘却の君主たちを呼び集めた！ (危険度+30上昇、6ターン会心率/攻撃力+30%)"
+  },
+  "⚡ [진척도 급가속] 수정 과부하 폭발로 광맥 파편에서 [{0}]을(를) 추출했습니다! (위험도 +30, 파티 HP 8% 반동)": {
+    "en": "⚡ [Rapid Progress Acceleration] Extracted [{0}] from vein shards via crystal overload explosion! (Hazard +30, party 8% HP recoil)",
+    "ja": "⚡ [進捗急加速] 水晶過負荷爆発により鉱脈の破片から [{0}] を抽出！ (危険度+30、パーティHP 8%反動)"
+  },
+  "⚡ [진척도 급가속] 숨어있던 흡혈 귀족을 제압하고 6티어 보구를 강탈했습니다! (위험도 +30 급상승, 보스 출현 가속)": {
+    "en": "⚡ [Rapid Progress Acceleration] Subdued lurking vampire noble and looted Tier 6 relic! (Hazard +30 spike, boss spawn accelerated)",
+    "ja": "⚡ [進捗急加速] 潜んでいた吸血貴族を制圧しTier 6宝具を強奪！ (危険度+30急上昇、ボス出現加速)"
+  },
+  "⚡ [진척도 급가속] 심연의 핵을 강탈하여 최종 군주의 격노를 샀습니다! (위험도 +40 폭증, 보스 강림 임박, 마핵 유물 획득)": {
+    "en": "⚡ [Rapid Progress Acceleration] Plundered Abyssal Core, drawing the Final Lord's wrath! (Hazard +40 surge, boss descent imminent, obtained Core Relic)",
+    "ja": "⚡ [進捗急加速] 深淵の核を強奪し最終君主の逆鱗に触れた！ (危険度+40急増、ボス降臨目前、魔核遺物獲得)"
+  },
+  "⚡ [진척도 급가속] 제단이 붉게 타오르며 5층 수호 거신의 시선이 쏠립니다! (위험도 +30 급상승, 원정 종료 시까지 공격력 +20% & 흡혈 부여)": {
+    "en": "⚡ [Rapid Progress Acceleration] Altar blazed crimson, drawing Floor 5 Guardian Colossus's gaze! (Hazard +30 spike, ATK +20% & Lifesteal until expedition end)",
+    "ja": "⚡ [進捗急加速] 祭壇が赤く燃え上がり5層守護巨神の視線が集中！ (危険度+30急上昇、遠征終了まで攻撃力+20%＆吸血付与)"
+  },
+  "⚡ [진형 시너지 변경] 진형 변동으로 [{0}] ({1}) 시너지가 즉시 활성화되었습니다! ({2})": {
+    "en": "⚡ [Formation Synergy Changed] Due to formation shift, [{0}] ({1}) synergy activated immediately! ({2})",
+    "ja": "⚡ [陣形シナジー変更] 陣形変動により [{0}] ({1}) シナジーが即座に活性化！ ({2})"
+  },
+  "⚡ [진형 시너지 전환] {0}": {
+    "en": "⚡ [Formation Synergy Shift] {0}",
+    "ja": "⚡ [陣形シナジー転換] {0}"
+  },
+  "⚡ {0} [{1}] → {2}에게 [{3}] 증폭 효과 부여": {
+    "en": "⚡ {0} [{1}] → Granted [{3}] amplify effect to {2}",
+    "ja": "⚡ {0} [{1}] → {2}に [{3}] 増幅効果を付与"
+  },
+  "⚡ {0} [{1}] → 파티 전원 [{2}] 증폭 효과 부여!": {
+    "en": "⚡ {0} [{1}] → Granted [{2}] amplify effect to all party members!",
+    "ja": "⚡ {0} [{1}] → パーティ全員に [{2}] 増幅効果を付与！"
+  },
+  "⚡ 강화": {
+    "en": "⚡ Enhance",
+    "ja": "⚡ 強化"
+  },
+  "⚡ 강화 필요 자원": {
+    "en": "⚡ Required Resources for Enhancement",
+    "ja": "⚡ 強化必要資源"
+  },
+  "⚡ 레벨업 공사 시작": {
+    "en": "⚡ Start Level Up Construction",
+    "ja": "⚡ レベルアップ工事開始"
+  },
+  "⚡ 마도 강화 (": {
+    "en": "⚡ Magitech Enhance (",
+    "ja": "⚡ 魔導強化 ("
+  },
+  "⚡ 마도 장비 강화 공방": {
+    "en": "⚡ Magitech Equipment Enhancement Workshop",
+    "ja": "⚡ 魔導装備強化工房"
+  },
+  "⚡ 마력 불안정! 파동 억제 중...": {
+    "en": "⚡ Mana Instability! Suppressing waves...",
+    "ja": "⚡ 魔力不安定！ 波動抑制中..."
+  },
+  "⚡ 비전 강화": {
+    "en": "⚡ Secret Art Enhancement",
+    "ja": "⚡ 秘伝強化"
+  },
+  "⚡ 상태이상 스킬 연계 콤보 메커니즘 (": {
+    "en": "⚡ Status Ailment Skill Combo Mechanism (",
+    "ja": "⚡ 状態異常スキル連携コンボメカニズム ("
+  },
+  "⚡ 상태이상 스킬 연계(Combo) 메커니즘 10선": {
+    "en": "⚡ 10 Status Ailment Skill Combo Mechanisms",
+    "ja": "⚡ 状態異常スキル連携(Combo)メカニズム10選"
+  },
+  "⚡ 상태이상 연계 메커니즘": {
+    "en": "⚡ Status Ailment Synergy Mechanism",
+    "ja": "⚡ 状態異常連携メカニズム"
+  },
+  "⚡ 스킬 비전 강화 시도 (성공률 {0}%)": {
+    "en": "⚡ Attempt Skill Secret Enhancement ({0}% Success Rate)",
+    "ja": "⚡ スキル秘伝強化試行 (成功率{0}%)"
+  },
+  "⚡ 스킬 연계 (EXTRA): 클래스 간 상태이상 시너지 콤보 연계 성공 시 획득": {
+    "en": "⚡ Skill Synergy (EXTRA): Acquired upon successfully chaining status synergy combos across classes",
+    "ja": "⚡ スキル連携 (EXTRA): クラス間の状態異常シナジーコンボ連携成功時に獲得"
+  },
+  "⚡ 암습": {
+    "en": "⚡ Ambush",
+    "ja": "⚡ 奇襲"
+  },
+  "⚡ 위력 및 마나(MP) 변화": {
+    "en": "⚡ Power & Mana (MP) Changes",
+    "ja": "⚡ 威力およびマナ(MP)変化"
+  },
+  "⚡ 전술 파동 FEVER 폭발 & 궁극기 시너지 조합 8선": {
+    "en": "⚡ Tactical Wave FEVER Burst & 8 Ultimate Synergy Combinations",
+    "ja": "⚡ 戦術波動FEVER爆発＆必殺技シナジー組み合わせ8選"
+  },
+  "⚡ 차징": {
+    "en": "⚡ Charging",
+    "ja": "⚡ チャージ"
+  },
+  "⚡ 최대 15턴 동안 생존하며 최대한의 피해를 입히십시오!": {
+    "en": "⚡ Survive up to 15 turns and deal maximum damage!",
+    "ja": "⚡ 最大15ターンの間生存し、最大限のダメージを与えてください！"
+  },
+  "⚡ 침공 가능": {
+    "en": "⚡ Invasion Available",
+    "ja": "⚡ 侵攻可能"
+  },
+  "⚡❄️ [초전도 감전]: 빙결/기절 상태의 적에게 벼락/마법 적중 시 2턴간 방어/마법저항 -50% 분쇄 및 연쇄 전격 40%": {
+    "en": "⚡❄️ [Superconduct Shock]: Hitting frozen/stunned enemies with lightning/magic shreds DEF/Magic RES by 50% for 2 turns and deals 40% chain shock",
+    "ja": "⚡❄️ [超伝導感電]: 凍結/気絶状態の敵に雷/魔法攻撃命中時、2ターン防御/魔法抵抗-50%粉砕＆連鎖電撃40%"
+  },
+  "⚡속도": {
+    "en": "⚡SPD",
+    "ja": "⚡速度"
+  },
+  "⚡🌟 [전술 파동]: 특수 시너지 조건 미충족 시 기본 발동. 모인 뱃지 종류별로 위력, 치명타, 관통, 흡혈, 보호막 수치가 정밀 누적 계산되어 폭발": {
+    "en": "⚡🌟 [Tactical Wave]: Default trigger when special synergy conditions aren't met. Power, crit, pierce, lifesteal, and shield are calculated based on collected badges to explode",
+    "ja": "⚡🌟 [戦術波動]: 特殊シナジー条件未達時に基本発動。集まったバッジの種類ごとに威力、会心、貫通、吸血、シールド数値が精密累積計算されて爆発"
+  },
+  "⚡💥 [질풍노도]: 크리티컬 3개 이상 또는 크리티컬 2개 + 엑스트라 2개. 방어력 100% 완전 무시 관통 + 확정 치명타 + 치명 피해 +150% 폭발": {
+    "en": "⚡💥 [Storm and Stress]: 3+ Critical badges or 2 Critical + 2 Extra badges. 100% DEF piercing + guaranteed Crit + Crit DMG +150% blast",
+    "ja": "⚡💥 [疾風怒濤]: クリティカル3個以上またはクリティカル2個＋エクストラ2個。防御力100%完全無視貫通＋確定会心＋会心ダメージ+150%爆発"
+  },
+  "⚡💨 [신기루 검무] 3턴간 회피율 50% 증폭 및 회피 성공 시마다 140% 환영 반격 태세를 전개했습니다!": {
+    "en": "⚡💨 [Mirage Sword Dance] Boosted EVA by 50% for 3 turns and assumed 140% Phantom Counter stance upon each successful dodge!",
+    "ja": "⚡💨 [蜃気楼の剣舞] 3ターンの間回避率50%増幅＆回避成功ごとに140%幻影反撃態勢を展開！"
+  },
+  "⚡🗡️ [치명적 본능] {0}(암살자)의 치명타 적중으로 그림자 추가 연격이 발동했습니다! (발동 확률: {1}% [기본 30% + 행운 🍀{2}])": {
+    "en": "⚡🗡️ [Lethal Instinct] {0}'s (Assassin) critical hit triggered a bonus shadow combo! (Trigger Rate: {1}% [Base 30% + LUCK 🍀{2}])",
+    "ja": "⚡🗡️ [致命的本能] {0}(暗殺者)の会心命中により影追撃連撃が発動！ (発動確率: {1}% [基本30%＋幸運 🍀{2}])"
+  },
+  "⚪ 채비실 선택 가능": {
+    "en": "⚪ Selectable in Prep Room",
+    "ja": "⚪ 準備室で選択可能"
+  },
+  "⚫ 석탄": {
+    "en": "⚫ Coal",
+    "ja": "⚫ 石炭"
+  },
+  "⚰️ [고대 석관 무구 안치] 석관 속에서 {0}[{1}] (T{2}, [{3}])을(를) 발굴했습니다! (도감 등록 가능)": {
+    "en": "⚰️ [Ancient Sarcophagus Armament Entombed] Excavated {0}[{1}] (T{2}, [{3}]) from the sarcophagus! (Codex registerable)",
+    "ja": "⚰️ [古代石棺武具安置] 石棺の中から {0}[{1}] (T{2}, [{3}]) を発掘！ (図鑑登録可能)"
+  },
+  "⚰️ [영구 사망] [{0} (Lv.{1} {2})] 결사대원이 사경을 헤매다 끝내 전사하여 성채 묘지에 안장되었습니다...": {
+    "en": "⚰️ [Permanent Death] Vanguard member [{0} (Lv.{1} {2})] succumbed to fatal wounds and was laid to rest in the Citadel Cemetery...",
+    "ja": "⚰️ [永久死亡] [{0} (Lv.{1} {2})] 決死隊員が瀕死の末に戦死し、城塞墓地に埋葬されました…"
+  },
+  "⚰️ [영령의 가호 교체] 이전 [{0}] 결속이 해제되고, 전사한 [{1} ({2})]의 영령에 에테르 {3}개를 바쳐 [{4}] 시너지를 새로 결속했습니다! (다음 원정 1회 적용, 1시간 쿨다운)": {
+    "en": "⚰️ [Heroic Blessing Swapped] Previous [{0}] bond dissolved; offered {3} Ether to fallen [{1} ({2})]'s spirit to bind [{4}] synergy! (Applies to next expedition once, 1h cooldown)",
+    "ja": "⚰️ [英霊の加護交代] 以前の [{0}] 結束が解除され、戦死した [{1} ({2})] の英霊にエーテル{3}個を捧げて [{4}] シナジーを新たに結束！ (次回遠征1回適用、1時間クールダウン)"
+  },
+  "⚰️ [영령의 가호] 전사한 [{0} ({1})]의 영령에 공물(에테르 {2}개)을 바치고 [{3}] 시너지를 결속했습니다! (다음 원정 1회 적용, 1시간 쿨다운)": {
+    "en": "⚰️ [Heroic Blessing] Offered tribute ({2} Ether) to fallen [{0} ({1})]'s spirit and bound [{3}] synergy! (Applies to next expedition once, 1h cooldown)",
+    "ja": "⚰️ [英霊の加護] 戦死した [{0} ({1})] の英霊に供物(エーテル{2}個)を捧げ、[{3}] シナジーを結束！ (次回遠征1回適用、1時間クールダウン)"
+  },
+  "⚰️ [영령의 안식] 원정이 종료되어 결속되었던 [{0}] 가호가 영령의 곁으로 돌아갔습니다.": {
+    "en": "⚰️ [Heroic Spirit Rest] Expedition ended; bound [{0}] blessing has returned to the spirits.",
+    "ja": "⚰️ [英霊の安息] 遠征が終了し、結束されていた [{0}] の加護が英霊の元へ還りました。"
+  },
+  "⚰️ [영령의 안식] 이번 원정이 종료되어 결속되었던 [{0}] 가호가 영령의 곁으로 돌아갔습니다.": {
+    "en": "⚰️ [Heroic Spirit Rest] This expedition ended; bound [{0}] blessing has returned to the spirits.",
+    "ja": "⚰️ [英霊の安息] 今回の遠征が終了し、結束されていた [{0}] の加護が英霊の元へ還りました。"
+  },
+  "⚰️ [영면] 차가운 심연의 바닥에서 {0} 대원의 맥박이 완전히 멎었습니다... 동료의 영혼이 영겁의 어둠 속으로 흩어집니다.": {
+    "en": "⚰️ [Eternal Sleep] On the cold floor of the Abyss, {0}'s pulse has stopped completely... Your comrade's soul scatters into eternal darkness.",
+    "ja": "⚰️ [永眠] 冷たい深淵の底で{0}隊員の脈拍が完全に止まりました…仲間の魂が永劫の闇の中へと散っていきます。"
+  },
+  "⚰️ 기도와 공물 바치기 (에테르 {0}개)": {
+    "en": "⚰️ Pray and Offer Tribute ({0} Ether)",
+    "ja": "⚰️ 祈りと供物を捧げる (エーテル{0}個)"
+  },
+  "⚰️ 기존 가호 교체 & 결속 (에테르 {0}개)": {
+    "en": "⚰️ Replace & Bind Existing Blessing ({0} Ether)",
+    "ja": "⚰️ 既存の加護交代＆結束 (エーテル{0}個)"
+  },
+  "⚰️ 심연에서 전사 (유해 긴급 이송 필요)": {
+    "en": "⚰️ Fallen in the Abyss (Emergency body transport required)",
+    "ja": "⚰️ 深淵で戦死 (遺体の緊急搬送が必要)"
+  },
+  "⚰️ 영구 사망": {
+    "en": "⚰️ Permanent Death",
+    "ja": "⚰️ 永久死亡"
+  },
+  "⚰️ 영령의 가호 (24종)": {
+    "en": "⚰️ Heroic Spirit Blessings (24 types)",
+    "ja": "⚰️ 英霊の加護 (24種)"
+  },
+  "⚰️ 영혼 결속": {
+    "en": "⚰️ Soul Binding",
+    "ja": "⚰️ 魂の結束"
+  },
+  "⚰️ 유해 운구": {
+    "en": "⚰️ Transport Remains",
+    "ja": "⚰️ 遺体搬送"
+  },
+  "⚰️ 유해 운구 필요": {
+    "en": "⚰️ Body Transport Required",
+    "ja": "⚰️ 遺体搬送が必要"
+  },
+  "⚰️ 잠긴 고대 영웅의 석관": {
+    "en": "⚰️ Locked Ancient Hero Sarcophagus",
+    "ja": "⚰️ 施錠された古代英雄の石棺"
+  },
+  "⚰️🕊️ [유해 안치] [{0}]의 영혼 인도 주술로 [{1}] 대원의 유해를 성채 묘역으로 경건히 운구했습니다.": {
+    "en": "⚰️🕊️ [Remains Entombed] With [{0}]'s soul guidance incantation, [{1}]'s remains were reverently transported to Citadel Cemetery.",
+    "ja": "⚰️🕊️ [遺体安置] [{0}]の魂導きの呪術により、[{1}]隊員の遺体を城塞墓地へ敬虔に搬送しました。"
+  },
+  "⚰️🕊️ [유해 안치와 전열 재정비] [{0}]의 영혼 인도 주술이 발동하여 숨을 거둔 [{1}] 대원의 유해를 성채 묘역으로 경건히 운구하고 유품을 안전히 회수했습니다. 이 숭고한 빈자리를 지키기 위해 방주의 [{2}] 대원이 차원 통로를 향해 전력 질주합니다.": {
+    "en": "⚰️🕊️ [Remains Entombed & Reforming] [{0}]'s soul guidance incantation activated, reverently transporting fallen [{1}]'s remains to Citadel Cemetery and recovering relics. To fill this noble vacancy, Ark's [{2}] rushes toward the dimensional passage.",
+    "ja": "⚰️🕊️ [遺体安置と戦列再編] [{0}]の魂導きの呪術が発動し、息を引き取った[{1}]隊員の遺体を城塞墓地へ敬虔に搬送して遺品を無事回収しました。この崇高な空席を埋めるため、方舟の[{2}]隊員が次元通路へ向け全力疾走します。"
+  },
+  "⛏️ [곡괭이 사용] 낙석 통로 개척 (100% 안전 / 위험도 -25 대폭 감소 + 🪨석재 +10)": {
+    "en": "⛏️ [Pickaxe Used] Cleared fallen rock passage (100% Safe / Hazard -25 massive reduction + 🪨 Stone +10)",
+    "ja": "⛏️ [ツルハシ使用] 落石通路開拓 (100%安全 / 危険度-25大幅減少 ＋ 🪨石材+10)"
+  },
+  "⛏️ [곡괭이 사용] 정밀 안전 채굴 (자원 2배: {0}{1} ×{2} + ⚙️철광석 +5 + 🪙{3}G)": {
+    "en": "⛏️ [Pickaxe Used] Precision safe mining (2x Resources: {0}{1} x{2} + ⚙️ Iron Ore +5 + 🪙 {3}G)",
+    "ja": "⛏️ [ツルハシ使用] 精密安全採掘 (資源2倍: {0}{1} ×{2} ＋ ⚙️鉄鉱石+5 ＋ 🪙{3}G)"
+  },
+  "⛏️ [곡괭이 숏컷 개척 대성공] 곡괭이로 낙석을 뚫고 안전한 비밀 숏컷을 개척했습니다! (위험도 -25 감소, 석재 +10 획득)": {
+    "en": "⛏️ [Pickaxe Shortcut Great Success] Pickaxe pierced fallen rocks to open a safe secret shortcut! (Hazard -25, Stone +10 obtained)",
+    "ja": "⛏️ [ツルハシ近道開拓大成功] ツルハシで落石を貫き安全な秘密の近道を開拓！ (危険度-25減少、石材+10獲得)"
+  },
+  "⛏️ [곡괭이 정밀 채굴 대성공] 곡괭이로 암반을 정밀 파쇄하여 골드 {0}G, [{1} ×{2}], ⚙️철광석 +5를 100% 안전하게 채굴했습니다!": {
+    "en": "⛏️ [Pickaxe Precision Mining Great Success] Crushed bedrock with pickaxe, safely mining {0}G Gold, [{1} x{2}], and ⚙️ Iron Ore +5!",
+    "ja": "⛏️ [ツルハシ精密採掘大成功] ツルハシで岩盤を精密粉砕し、ゴールド{0}G、[{1} ×{2}]、⚙️鉄鉱石+5を100%安全に採掘！"
+  },
+  "⛏️ [곡괭이 필요] 숏컷 개척 도구 없음 (곡괭이 필요 - 선택 불가)": {
+    "en": "⛏️ [Pickaxe Required] No shortcut clearance tool (Pickaxe required - unavailable)",
+    "ja": "⛏️ [ツルハシ必要] 近道開拓道具なし (ツルハシが必要 - 選択不可)"
+  },
+  "⛏️ [곡괭이 필요] 채굴 도구 없음 (곡괭이 필요 - 선택 불가)": {
+    "en": "⛏️ [Pickaxe Required] No mining tool (Pickaxe required - unavailable)",
+    "ja": "⛏️ [ツルハシ必要] 採掘道具なし (ツルハシが必要 - 選択不可)"
+  },
+  "⛏️ [맨손 채굴 완료] 골드 {0}G 및 [{1} ×{2}] 채굴 완료!": {
+    "en": "⛏️ [Barehanded Mining Complete] Mined {0}G Gold and [{1} x{2}]!",
+    "ja": "⛏️ [素手採掘完了] ゴールド{0}Gおよび [{1} ×{2}] 採掘完了！"
+  },
+  "⛏️ [맨손 채굴] 골드 {0}G 및 [{1} ×{2}] 수습 (파편 반동으로 파티원 HP 8% 피해)": {
+    "en": "⛏️ [Barehanded Mining] Recovered {0}G Gold and [{1} x{2}] (Party took 8% HP damage from shard recoil)",
+    "ja": "⛏️ [素手採掘] ゴールド{0}Gおよび [{1} ×{2}] 回収 (破片反動でパーティHP 8%ダメージ)"
+  },
+  "⛏️ 곡괭이": {
+    "en": "⛏️ Pickaxe",
+    "ja": "⛏️ ツルハシ"
+  },
+  "⛏️ 곡괭이: 함몰된 낙석 통로 개척 및 대량 광물(석재/철광/마도석) 획득": {
+    "en": "⛏️ Pickaxe: Opens collapsed rock passages and yields vast minerals (Stone/Iron/Mana Stone)",
+    "ja": "⛏️ ツルハシ: 崩落した落石通路の開拓および大量の鉱物(石材/鉄鉱/魔導石)を獲得"
+  },
+  "⛏️ 에테르 광맥 발견": {
+    "en": "⛏️ Ether Vein Discovered",
+    "ja": "⛏️ エーテル鉱脈発見"
+  },
+  "⛏️✨ [심연 곡괭이 대성공] 심연 곡괭이의 마력으로 채굴량 2배 극대화(골드 {0}G, [{1} ×{2}], ⚙️철광석 +10)를 완벽하게 채굴했습니다!": {
+    "en": "⛏️✨ [Abyssal Pickaxe Great Success] Abyssal Pickaxe magic maximized mining yield by 2x ({0}G Gold, [{1} x{2}], ⚙️ Iron Ore +10)!",
+    "ja": "⛏️✨ [深淵ツルハシ大成功] 深淵ツルハシの魔力で採掘量2倍極大化(ゴールド{0}G、[{1} ×{2}]、⚙️鉄鉱石+10)を完璧に採掘！"
+  },
+  "⛏️✨ [심연 곡괭이 사용] 초고속 낙석 돌파 (위험도 -50 대폭 감소 + 🪨석재 +20 + ⚙️철광석 +10)": {
+    "en": "⛏️✨ [Abyssal Pickaxe Used] Ultra-fast rock breakthrough (Hazard -50 massive reduction + 🪨 Stone +20 + ⚙️ Iron Ore +10)",
+    "ja": "⛏️✨ [深淵ツルハシ使用] 超高速落石突破 (危険度-50大幅減少 ＋ 🪨石材+20 ＋ ⚙️鉄鉱石+10)"
+  },
+  "⛏️✨ [심연 곡괭이 사용] 초정밀 폭격 채굴 (채굴량 2배: {0}{1} ×{2} + ⚙️철광석 +10 + 🪙{3}G)": {
+    "en": "⛏️✨ [Abyssal Pickaxe Used] Ultra-precision blasting mining (2x Yield: {0}{1} x{2} + ⚙️ Iron Ore +10 + 🪙 {3}G)",
+    "ja": "⛏️✨ [深淵ツルハシ使用] 超精密爆撃採掘 (採掘量2倍: {0}{1} ×{2} ＋ ⚙️鉄鉱石+10 ＋ 🪙{3}G)"
+  },
+  "⛏️✨ [심연 곡괭이 숏컷 개척 대성공] 심연 곡괭이의 마력으로 암반을 한순간에 파쇄하여 최단거리 숏컷을 개척했습니다! (위험도 -50 감소, 🪨석재 +20, ⚙️철광석 +10 획득)": {
+    "en": "⛏️✨ [Abyssal Pickaxe Shortcut Great Success] Abyssal Pickaxe shattered bedrock instantly to forge shortest shortcut! (Hazard -50, 🪨 Stone +20, ⚙️ Iron Ore +10)",
+    "ja": "⛏️✨ [深淵ツルハシ近道開拓大成功] 深淵ツルハシの魔力で岩盤を一瞬で粉砕し最短近道を開拓！ (危険度-50減少、🪨石材+20、⚙️鉄鉱石+10獲得)"
+  },
+  "⛓️ [{0}] 원혼의 속박 발동: {1} 1턴간 [빙결] 행동 불능!": {
+    "en": "⛓️ [{0}] Wraith Binding triggered: {1} [Frozen] unable to act for 1 turn!",
+    "ja": "⛓️ [{0}] 怨霊の束縛発動: {1} 1ターンの間 [氷結] 行動不能！"
+  },
+  "⛓️ 흑철 족쇄에 묶인 배교자 성기사": {
+    "en": "⛓️ Apostate Paladin Bound in Dark Iron Shackles",
+    "ja": "⛓️ 黒鉄の足枷に繋がれた背教の聖騎士"
+  },
+  "⛓️💫 [망각의 사슬] 적 전열 마물들에게 2턴간 사신의 침묵과 완전 기절을 부여했습니다!": {
+    "en": "⛓️💫 [Chains of Oblivion] Inflicted Reaper's Silence and complete Stun on front-row enemies for 2 turns!",
+    "ja": "⛓️💫 [忘却の鎖] 敵前衛の魔物たちに2ターンの間、死神の沈黙と完全気絶を付与！"
+  },
+  "⛺ [용병 관리 불가] 현재 사용 횟수가 소진되었습니다. 야영(Camp)을 진행하면 재충전됩니다! (최대 1회)": {
+    "en": "⛺ [Mercenary Management Unavailable] Usage attempts exhausted. Rest at Camp to recharge! (Max 1 time)",
+    "ja": "⛺ [傭兵管理不可] 現在の使用可能回数を使い切りました。野営(Camp)を行うと再充填されます！ (最大1回)"
+  },
+  "✅ Firebase /game_data 노드에 마스터 데이터가 성공적으로 저장되었습니다!": {
+    "en": "✅ Master data successfully saved to Firebase /game_data node!",
+    "ja": "✅ Firebase /game_data ノードにマスターデータが正常に保存されました！"
+  },
+  "✅ Firebase 저장 완료!": {
+    "en": "✅ Firebase Save Complete!",
+    "ja": "✅ Firebase 保存完了！"
+  },
+  "✅ [클래스 적합] 이 영웅의 클래스에 완벽히 호환됩니다.": {
+    "en": "✅ [Class Compatible] Perfectly compatible with this hero's class.",
+    "ja": "✅ [クラス適合] この英雄のクラスに完全互換です。"
+  },
+  "✅ 데이터 불러오기 완료!": {
+    "en": "✅ Data Load Complete!",
+    "ja": "✅ データロード完了！"
+  },
+  "✅ 로컬 배포 파일(public/assets/custom_game_data.json)에 성공적으로 저장되었습니다!": {
+    "en": "✅ Successfully saved to local distribution file (public/assets/custom_game_data.json)!",
+    "ja": "✅ ローカル配信ファイル (public/assets/custom_game_data.json) に正常に保存されました！"
+  },
+  "✅ 모든 재료 보유": {
+    "en": "✅ All Materials Owned",
+    "ja": "✅ 全材料所持"
+  },
+  "✅ 정리 완료": {
+    "en": "✅ Cleanup Complete",
+    "ja": "✅ 整理完了"
+  },
+  "✅ 정리 완료 (탐험으로 이동)": {
+    "en": "✅ Cleanup Complete (Proceed to Exploration)",
+    "ja": "✅ 整理完了 (探検へ移動)"
+  },
+  "✅ 준비 완료": {
+    "en": "✅ Ready",
+    "ja": "✅ 準備完了"
+  },
+  "✓ 1번 슬롯 해제": {
+    "en": "✓ Unequip Slot 1",
+    "ja": "✓ スロット1解除"
+  },
+  "✓ 1번 해제": {
+    "en": "✓ Unequip 1",
+    "ja": "✓ 1番解除"
+  },
+  "✓ 2번 슬롯 해제": {
+    "en": "✓ Unequip Slot 2",
+    "ja": "✓ スロット2解除"
+  },
+  "✓ 2번 해제": {
+    "en": "✓ Unequip 2",
+    "ja": "✓ 2番解除"
+  },
+  "✓ 계열 적합 (위력 100%)": {
+    "en": "✓ Class Match (100% Power)",
+    "ja": "✓ 系列適合 (威力100%)"
+  },
+  "✓ 선택됨 (+15%)": {
+    "en": "✓ Selected (+15%)",
+    "ja": "✓ 選択中 (+15%)"
+  },
+  "✓ 선택됨 (+30%)": {
+    "en": "✓ Selected (+30%)",
+    "ja": "✓ 選択中 (+30%)"
+  },
+  "✓ 습득 완료": {
+    "en": "✓ Learned",
+    "ja": "✓ 習得完了"
+  },
+  "✓ 습득 완료 (대기 상태)": {
+    "en": "✓ Learned (Standby)",
+    "ja": "✓ 習得完了 (待機状態)"
+  },
+  "✓ 습득완료": {
+    "en": "✓ Learned",
+    "ja": "✓ 習得完了"
+  },
+  "✓ 완성됨": {
+    "en": "✓ Completed",
+    "ja": "✓ 完成"
+  },
+  "✓ 인프라 시너지 감면 적용 중 (정가:": {
+    "en": "✓ Infrastructure Synergy Discount Applied (Base:",
+    "ja": "✓ インフラシナジー減免適用中 (定価:"
+  },
+  "✓ 장착됨": {
+    "en": "✓ Equipped",
+    "ja": "✓ 装備済み"
+  },
+  "✓ 장착중": {
+    "en": "✓ Equipped",
+    "ja": "✓ 装備中"
+  },
+  "✓ 지급 완료": {
+    "en": "✓ Delivered",
+    "ja": "✓ 配布完了"
+  },
+  "✕ 닫기": {
+    "en": "✕ Close",
+    "ja": "✕ 閉じる"
+  },
+  "✕ 초기화 (에테르 50)": {
+    "en": "✕ Reset (50 Ether)",
+    "ja": "✕ 初期化 (エーテル50)"
+  },
+  "✕ 포기": {
+    "en": "✕ Abandon",
+    "ja": "✕ 諦める"
+  },
+  "✝️ [전투 신앙 기적] {0}의 신앙으로 체력 +{1} 즉시 치유!": {
+    "en": "✝️ [Combat Faith Miracle] {0}'s faith heals +{1} HP instantly!",
+    "ja": "✝️ [戦闘信仰奇跡] {0}の信仰によりHP+{1}即時治癒！"
+  },
+  "✝️[심판자의 은총 파티 치유 +{0}]": {
+    "en": "✝️[Judge's Grace Party Heal +{0}]",
+    "ja": "✝️[審判者の恩恵パーティ治癒 +{0}]"
+  },
+  "✝️[전투 신앙 MP +{0}]": {
+    "en": "✝️[Combat Faith MP +{0}]",
+    "ja": "✝️[戦闘信仰 MP +{0}]"
+  },
+  "✝️✨ [성전 타격 치유] 공격의 신성력으로 {0}의 체력이 +{1}({2}%) 회복되었습니다!": {
+    "en": "✝️✨ [Crusade Strike Heal] Holy power of attack restored +{1} ({2}%) HP to {0}!",
+    "ja": "✝️✨ [聖戦打撃治癒] 攻撃の神聖力で{0}のHPが+{1}({2}%)回復！"
+  },
+  "✝️✨ [전투 신앙 기적] {0}의 신앙으로 파티 전원 체력 +{1} 치유!": {
+    "en": "✝️✨ [Combat Faith Miracle] {0}'s faith healed +{1} HP for all party members!",
+    "ja": "✝️✨ [戦闘信仰奇跡] {0}の信仰によりパーティ全員のHP+{1}治癒！"
+  },
+  "✝️✨ [천벌의 성십자가] 신성 성광의 은총으로 생존 아군 전원의 체력이 +{0}% 치유되었습니다!": {
+    "en": "✝️✨ [Holy Cross of Wrath] Grace of holy radiance healed all surviving allies for +{0}% HP!",
+    "ja": "✝️✨ [天罰の聖十字] 神聖なる聖光の恩恵により生存味方全員のHPが+{0}%治癒！"
+  },
+  "✝️✨ [축복의 은혜] {0}이(가) 스킬 시전에 공명하여 체력 +{1} 회복!": {
+    "en": "✝️✨ [Grace of Blessing] {0} resonated with skill cast, restoring +{1} HP!",
+    "ja": "✝️✨ [祝福の恵み] {0}がスキル詠唱に共鳴しHP+{1}回復！"
+  },
+  "✝️🔥 [성전 선포] 자신의 체력 -{0}(20%)를 봉헌하여 아군을 강화합니다!": {
+    "en": "✝️🔥 [Crusade Proclamation] Sacrifices -{0} (20%) HP to empower allies!",
+    "ja": "✝️🔥 [聖戦布告] 自身のHP-{0}(20%)を奉献し味方を強化！"
+  },
+  "✦ 고유 전술 비주얼 활성화됨": {
+    "en": "✦ Unique Tactical Visual Active",
+    "ja": "✦ 固有戦術ビジュアル有効化"
+  },
+  "✨ +{0}/15초": {
+    "en": "✨ +{0}/15s",
+    "ja": "✨ +{0}/15秒"
+  },
+  "✨ 1차 전직": {
+    "en": "✨ 1st Class Change",
+    "ja": "✨ 1次転職"
+  },
+  "✨ 1차전직 (기본EXP+{0}%)": {
+    "en": "✨ 1st Class Change (Base EXP +{0}%)",
+    "ja": "✨ 1次転職 (基本EXP+{0}%)"
+  },
+  "✨ 2차승격 (1차EXP+{0}%)": {
+    "en": "✨ 2nd Promotion (1st EXP +{0}%)",
+    "ja": "✨ 2次昇格 (1次EXP+{0}%)"
+  },
+  "✨ 2차승격 (기본EXP+{0}%)": {
+    "en": "✨ 2nd Promotion (Base EXP +{0}%)",
+    "ja": "✨ 2次昇格 (基本EXP+{0}%)"
+  },
+  "✨ 3/3 풀세트 완성!": {
+    "en": "✨ 3/3 Full Set Complete!",
+    "ja": "✨ 3/3 フルセット完成！"
+  },
+  "✨ 3강 달성 시 접두 인챈트 해금!": {
+    "en": "✨ Reach +3 to unlock Prefix Enchant!",
+    "ja": "✨ +3強化達成で接頭エンチャント解放！"
+  },
+  "✨ Lv.8 특전 활성: 매입가 -10% 할인 | 매각가 +15% 우대 환율": {
+    "en": "✨ Lv.8 Perk Active: Buy Price -10% Discount | Sell Price +15% Rate",
+    "ja": "✨ Lv.8 特典発動: 購入価格-10%割引 | 売却価格+15%優遇レート"
+  },
+  "✨ [{0} +15%] 초월 각성 확정": {
+    "en": "✨ [{0} +15%] Transcendence Awakening Confirmed",
+    "ja": "✨ [{0} +15%] 超越覚醒確定"
+  },
+  "✨ [{0} +30%] 특화로 [{1}] 전직 확정": {
+    "en": "✨ [{0} +30%] Specialization confirms promotion to [{1}]",
+    "ja": "✨ [{0} +30%] 特化で [{1}] 転職確定"
+  },
+  "✨ [{0}] {1} 시너지 체력 회복 (+{2})": {
+    "en": "✨ [{0}] {1} Synergy HP Restored (+{2})",
+    "ja": "✨ [{0}] {1} シナジーHP回復 (+{2})"
+  },
+  "✨ [공용 장신구] 누구나 100% 효과를 발휘합니다.": {
+    "en": "✨ [Universal Accessory] 100% effectiveness for all classes.",
+    "ja": "✨ [共用装飾品] 誰でも100%効果を発揮します。"
+  },
+  "✨ [마도서 강화 성공!] [{0}] (Lv.{1}) 강화 완료! (스킬 위력: {2}%)": {
+    "en": "✨ [Grimoire Enhanced!] [{0}] (Lv.{1}) enhancement complete! (Skill Power: {2}%)",
+    "ja": "✨ [魔導書強化成功！] [{0}] (Lv.{1}) 強化完了！ (スキル威力: {2}%)"
+  },
+  "✨ [마력 해제 성공] MP 20을 소모하여 안전하게 골드 {0}G, [{1} ×{2}], ✨에테르 +10 획득!": {
+    "en": "✨ [Mana Release Success] Consumed 20 MP to safely obtain {0}G Gold, [{1} x{2}], and ✨ Ether +10!",
+    "ja": "✨ [魔力解除成功] MP 20を消費して安全にゴールド{0}G、[{1} ×{2}]、✨エーテル+10獲得！"
+  },
+  "✨ [마력 해제] 마력 공명 해제 (파티 전원 MP 20 소모 ➔ 80% 장비 및 100% 안전)": {
+    "en": "✨ [Mana Release] Release mana resonance (All party 20 MP consumed ➔ 80% Equipment & 100% Safe)",
+    "ja": "✨ [魔力解除] 魔力共鳴解除 (パーティ全員MP 20消費 ➔ 80%装備および100%安全)"
+  },
+  "✨ [상인 거래] 골드 {0}G로 ✨ 에테르 25개를 보급받았습니다!": {
+    "en": "✨ [Merchant Trade] Supplied 25 ✨ Ether for {0}G Gold!",
+    "ja": "✨ [商人取引] ゴールド{0}Gで✨エーテル25個の補給を受けました！"
+  },
+  "✨ [생체 복원 병동] {0}의 마나가 완전히 충전되었습니다!": {
+    "en": "✨ [Bio-Restoration Ward] {0}'s mana is fully recharged!",
+    "ja": "✨ [生体復元病棟] {0}のマナが完全に充填されました！"
+  },
+  "✨ [스킬 비전 강화 성공!] (성공률 {0}%) [{1}]의 [{2}] 스킬이 Lv.{3}로 승급했습니다! (위력 +12% / 소모 MP +25% 증가)": {
+    "en": "✨ [Skill Secret Enhanced!] ({0}% Success Rate) {1}'s [{2}] skill promoted to Lv.{3}! (Power +12% / MP Cost +25%)",
+    "ja": "✨ [スキル秘伝強化成功！] (成功率{0}%) [{1}]の [{2}] スキルがLv.{3}へ昇格！ (威力+12% / 消費MP+25%増加)"
+  },
+  "✨ [시설 복구] 충분한 유지비가 확보되어 [{0}]의 기능이 정상 레벨(Lv.{1})로 복구되었습니다!": {
+    "en": "✨ [Facility Restored] Sufficient upkeep secured; [{0}] functions restored to normal level (Lv.{1})!",
+    "ja": "✨ [施設復旧] 十分な維持費が確保され、[{0}]の機能が通常レベル(Lv.{1})へ復旧しました！"
+  },
+  "✨ [신규 서브 의뢰 도착] 10분의 대기 시간이 지나 새로운 의뢰 '{0}'이(가) 도착했습니다!": {
+    "en": "✨ [New Sub-Request Arrived] 10-minute waiting time passed; new request '{0}' has arrived!",
+    "ja": "✨ [新規サブ依頼到着] 10分の待機時間が経過し、新たな依頼「{0}」が届きました！"
+  },
+  "✨ [신규 서브 의뢰 도착] 대기 시간이 지나 새로운 서브 의뢰 {0}건이 도착했습니다!": {
+    "en": "✨ [New Sub-Request Arrived] Waiting time passed; {0} new sub-requests have arrived!",
+    "ja": "✨ [新規サブ依頼到着] 待機時間が経過し、新たなサブ依頼{0}件が届きました！"
+  },
+  "✨ [신성 정화 대성공] 심연의 저주를 씻어내고 [{0}] ({1} 등급 최상급 스탯)으로 찬란히 각성했습니다!": {
+    "en": "✨ [Holy Purification Great Success] Cleansed the Abyssal curse, brilliantly awakening into [{0}] ({1} Grade Supreme Stats)!",
+    "ja": "✨ [神聖浄化大成功] 深淵の呪いを清め、[{0}] ({1}等級最上級ステータス)として燦然と覚醒！"
+  },
+  "✨ [신성 정화] 신성 속성의 빛이 {0}(불경한 존재)에게 30% 증폭 피해!": {
+    "en": "✨ [Holy Purification] Holy light deals 30% amplified damage to {0} (unholy entity)!",
+    "ja": "✨ [神聖浄化] 神聖属性の光が{0}(不浄なる存在)に30%増幅ダメージ！"
+  },
+  "✨ [심연 정화] 보스의 마도 유핵을 성채 제단에 헌정하자 거룩한 정화의 빛이 심연 {0}을 집어삼키던 칠흑 같은 연무를 걷어냅니다! 마물들의 흉폭한 발톱과 질긴 가죽을 옥죄던 원초의 마기가 흩어져, 결사대의 진군로가 한결 맑고 안전해졌습니다.": {
+    "en": "✨ [Abyssal Purification] Presenting the boss's core at the Citadel Altar unleashes sacred light, dispelling the pitch-black haze consuming Abyss {0}! The primordial evil empowering monster claws and hide scatters, clearing a safer advance for the vanguard.",
+    "ja": "✨ [深淵浄化] ボスの魔導遺核を城塞の祭壇に捧げると、神聖なる浄化の光が深淵{0}を呑み込んでいた漆黒の煙霧を晴らす！ 魔物の凶暴な爪や強靭な皮を覆っていた原初の魔気が霧散し、決死隊の進軍路が一段と晴れ渡り安全となった。"
+  },
+  "✨ [심연 정화] 심연 {0} 마기 정화 및 연무 해제": {
+    "en": "✨ [Abyssal Purification] Abyss {0} Demonic Purge & Haze Cleared",
+    "ja": "✨ [深淵浄化] 深淵{0}の魔気浄化および煙霧解除"
+  },
+  "✨ [심연 촉매 충전] 광고 시청 혜택으로 탐험 채비실의 심연 촉매 슬롯(최대 2개)이 개방되었습니다!": {
+    "en": "✨ [Abyssal Catalyst Charged] Ad watched benefit: Opened Abyssal Catalyst slots (up to 2) in the Expedition Prep Room!",
+    "ja": "✨ [深淵触媒充填] 広告視聴特典により、探検準備室の深淵触媒スロット(最大2個)が開放されました！"
+  },
+  "✨ [심층 수색 대성공] 골드 {0}G, [{1} ×{2}], ✨ 에테르 +{3} 추가 발굴!": {
+    "en": "✨ [Deep Search Great Success] Unearthed {0}G Gold, [{1} x{2}], and +{3} ✨ Ether!",
+    "ja": "✨ [深層捜索大成功] ゴールド{0}G、[{1} ×{2}]、✨エーテル+{3}を追加発掘！"
+  },
+  "✨ [에테르 명상] 신비로운 기운을 흡수하여 생존 대원 MP 10% 회복!": {
+    "en": "✨ [Ether Meditation] Absorbed mystic aura, restoring 10% MP to surviving members!",
+    "ja": "✨ [エーテル瞑想] 神秘的な気配を吸収し、生存隊員のMP10%回復！"
+  },
+  "✨ [영혼의 결속] 최고조 유대를 맺은 [{0}]의 마나(MP)가 30% 회복된 상태로 전투를 시작합니다!": {
+    "en": "✨ [Soul Bond] With max bond formed, [{0}] begins battle with 30% MP restored!",
+    "ja": "✨ [魂の結束] 最高の絆を結んだ [{0}] のマナ(MP)が30%回復した状態で戦闘開始！"
+  },
+  "✨ [영혼의 결속] 파티 전원이 상호 최고조 유대(Bond 100)를 달성하여 특별 공명 보너스로 마나(MP)가 50% 회복된 상태로 전투를 시작합니다!": {
+    "en": "✨ [Soul Bond] All party members reached max bond (Bond 100), starting combat with 50% MP restored via resonance bonus!",
+    "ja": "✨ [魂の結束] パーティ全員が相互に最高の絆(Bond 100)を達成し、特別共鳴ボーナスでマナ(MP)が50%回復した状態で戦闘開始！"
+  },
+  "✨ [원호 마나 공급] {0}의 지원으로 파티 전원 마나 +8 MP 회복!": {
+    "en": "✨ [Assist Mana Supply] With {0}'s support, restored +8 MP to all party members!",
+    "ja": "✨ [援護マナ供給] {0}の支援によりパーティ全員のマナ+8 MP回復！"
+  },
+  "✨ [의뢰 완수] '{0}' 의뢰를 성공적으로 완수하고 방주의 주민들로부터 감사의 보수를 건네받았습니다. 새로운 전갈과 방랑자들의 소문이 모여들 때까지 잠시 숨을 고릅니다.": {
+    "en": "✨ [Request Complete] Successfully completed '{0}' and received grateful rewards from Ark residents. Catching your breath until new messages and wanderer rumors arrive.",
+    "ja": "✨ [依頼完遂] 「{0}」の依頼を無事達成し、方舟の住民たちから感謝の報酬を受け取りました。新たな伝令や放浪者の噂が集まるまで一息つきます。"
+  },
+  "✨ [인챈트 초기화 완료] [{0}]의 모든 인챈트가 초기화되었습니다.": {
+    "en": "✨ [Enchants Reset Complete] All enchants on [{0}] have been reset.",
+    "ja": "✨ [エンチャント初期化完了] [{0}]の全エンチャントが初期化されました。"
+  },
+  "✨ [장비 강화 성공!] (성공률 {0}%) [{1}]로 강화되었습니다!{2}": {
+    "en": "✨ [Equipment Enhanced!] ({0}% Success Rate) Enhanced to [{1}]!{2}",
+    "ja": "✨ [装備強化成功！] (成功率{0}%) [{1}] に強化されました！{2}"
+  },
+  "✨ [전원 무사] 대열을 유지하며 전진": {
+    "en": "✨ [All Safe] Advancing while maintaining formation",
+    "ja": "✨ [全員無事] 隊列を維持して前進"
+  },
+  "✨ [전원 회피 완벽 성공!]": {
+    "en": "✨ [Perfect Team Evade!]",
+    "ja": "✨ [全員回避完全成功！]"
+  },
+  "✨ [접두]": {
+    "en": "✨ [Prefix]",
+    "ja": "✨ [接頭]"
+  },
+  "✨ [정화된] {0}": {
+    "en": "✨ [Purified] {0}",
+    "ja": "✨ [浄化された] {0}"
+  },
+  "✨ [차원 네메시스] 에테르 50개를 소모하여 토벌 도전 횟수를 1회 충전했습니다! (잔여: {0}회)": {
+    "en": "✨ [Dimensional Nemesis] Consumed 50 Ether to recharge 1 subjugation attempt! (Remaining: {0})",
+    "ja": "✨ [次元ネメシス] エーテル50個を消費して討伐挑戦回数を1回チャージ！ (残り: {0}回)"
+  },
+  "✨ [효과 만료] {0}의 [{1}] 효과가 만료되어 해제되었습니다.": {
+    "en": "✨ [Effect Expired] {0}'s [{1}] effect has expired and ended.",
+    "ja": "✨ [効果満了] {0}の [{1}] 効果が満了し解除されました。"
+  },
+  "✨ [후열 전술 사격] {0}이(가) 후열 연계로 마나 +{1} MP를 환급받았습니다!": {
+    "en": "✨ [Back Row Tactical Shot] {0} refunded +{1} MP via back row synergy!",
+    "ja": "✨ [後衛戦術射撃] {0}が後衛連携によりマナ+{1} MPを返還！"
+  },
+  "✨ [희귀 단조 성공!] [{0}] ({1}) 단조 완료! {2}": {
+    "en": "✨ [Rare Forge Success!] [{0}] ({1}) forged! {2}",
+    "ja": "✨ [レア鍛造成功！] [{0}] ({1}) 鍛造完了！ {2}"
+  }
+}

@@ -1,0 +1,802 @@
+{
+  "가죽": {
+    "en": "Leather",
+    "ja": "革"
+  },
+  "가죽 갑옷": {
+    "en": "Leather Armor",
+    "ja": "革の鎧"
+  },
+  "가죽옷": {
+    "en": "Leather Outfit",
+    "ja": "革の服"
+  },
+  "가짜의 환영을 무시하고 갈 길을 재촉합니다.": {
+    "en": "Ignore the fake illusions and hurry along your path.",
+    "ja": "偽りの幻影を無視し、先を急ぐ。"
+  },
+  "가한 실제 피해의": {
+    "en": "of actual damage dealt",
+    "ja": "与えた実ダメージの"
+  },
+  "가한 총 피해량:": {
+    "en": "Total Damage Dealt:",
+    "ja": "与えた総ダメージ量:"
+  },
+  "가한 피해의 100%를 파티 전원에게 균등 흡혈 회복 + 초과분은 에테르 보호막으로 전환": {
+    "en": "100% of damage dealt is equally lifestealed and healed to all party members + excess converts into an Ether Shield",
+    "ja": "与えたダメージの100%をパーティ全員に均等に吸血回復＋超過分はエーテルシールドに変換"
+  },
+  "가호": {
+    "en": "Blessing",
+    "ja": "加護"
+  },
+  "가호 결속": {
+    "en": "Blessing Bound",
+    "ja": "加護結束"
+  },
+  "가호 덮어쓰기 & 1시간 쿨다운: 영웅 등급에 따른 공물 에테르(N: 30개, V: 45개, H: 60개, E: 80개, L: 100개)를 바치면 기존 가호를 즉시 해제하고 새로운 영령의 가호로 교체할 수 있으며, 공물을 바친 영웅은 1시간의 안식 쿨다운이 적용됩니다.": {
+    "en": "Overwrite Blessing & 1-Hour Cooldown: Offer tribute Ether based on Hero grade (N: 30, V: 45, H: 60, E: 80, L: 100) to immediately dispel the existing blessing and replace it with a new Heroic Spirit's Blessing; the hero offering tribute receives a 1-hour rest cooldown.",
+    "ja": "加護の上書き＆1時間クールダウン：英雄の等級に応じた供物エーテル（N: 30個、V: 45個、H: 60個、E: 80個、L: 100個）を捧げると、既存の加護を即座に解除して新たな英霊の加護に交換でき、供物を捧げた英雄には1時間の休息クールダウンが適用されます。"
+  },
+  "가호 덮어쓰기:": {
+    "en": "Overwrite Blessing:",
+    "ja": "加護の上書き:"
+  },
+  "가호 발동": {
+    "en": "Blessing Triggered",
+    "ja": "加護発動"
+  },
+  "가호 활성 중 (": {
+    "en": "Blessing Active (",
+    "ja": "加護発動中（"
+  },
+  "가호는 다음 심연 탐험 1회 동안만 지속되며, 원정 귀환이나 전멸 정산 시 자동으로 해제됩니다.": {
+    "en": "The blessing lasts only for the next Abyss exploration and is automatically removed upon return or party wipe settlement.",
+    "ja": "加護は次の深淵探検1回のみ持続し、遠征帰還や全滅精算時に自動で解除されます。"
+  },
+  "각 클래스의 핵심 비전 스킬 마도서를 제작합니다. 목록을 클릭하여 상세 스펙, 특성 태그, 연계 메커니즘을 확인하고 제본할 수 있습니다.": {
+    "en": "Craft core arcane skill grimoires for each class. Click the list to check detailed specs, trait tags, and combo mechanisms before binding.",
+    "ja": "各クラスの核となる秘伝スキル魔導書を製作します。リストをクリックして詳細スペック、特性タグ、連携メカニズムを確認して製本できます。"
+  },
+  "각성 불가: 2차 전직을 완료한 용병만 초월 각성을 진행할 수 있습니다.": {
+    "en": "Cannot Awaken: Only mercenaries who have completed the 2nd class change can undergo transcendent awakening.",
+    "ja": "覚醒不可：2次転職を完了した傭兵のみ超越覚醒を行えます。"
+  },
+  "각성 불가: Lv.{0} 이상에 도달해야 {1}단계 각성을 진행할 수 있습니다. (현재 Lv.{2})": {
+    "en": "Cannot Awaken: Must reach Lv.{0} or higher to proceed with Stage {1} Awakening. (Current Lv.{2})",
+    "ja": "覚醒不可：Lv.{0}以上に到達しなければ{1}段階の覚醒を行えません。（現在Lv.{2}）"
+  },
+  "각성 불가: [{0}]은(는) +10강에 도달해야 각성을 시도할 수 있습니다!": {
+    "en": "Cannot Awaken: [{0}] must reach +10 enhancement to attempt awakening!",
+    "ja": "覚醒不可：[{0}]は+10強化に到達しなければ覚醒を試行できません！"
+  },
+  "각성 불가: [{0}]은(는) 이미 최고 각성 단계(★3단계 각성)에 도달했습니다!": {
+    "en": "Cannot Awaken: [{0}] has already reached the maximum awakening stage (★Stage 3 Awakening)!",
+    "ja": "覚醒不可：[{0}]はすでに最高覚醒段階（★3段階覚醒）に到達しています！"
+  },
+  "각성 불가: 영혼의 제단이 Lv.5 이상이어야 초월 각성을 거행할 수 있습니다.": {
+    "en": "Cannot Awaken: Soul Sanctuary must be Lv.5 or higher to perform transcendent awakening.",
+    "ja": "覚醒不可：魂の祭壇がLv.5以上でなければ超越覚醒を執り行えません。"
+  },
+  "각성 시 선택한 핵심 능력치가": {
+    "en": "Upon awakening, the chosen core stat is",
+    "ja": "覚醒時、選択した主要能力値が"
+  },
+  "각성 실패: 에테르({0}) 또는 골드({1})가 부족합니다.": {
+    "en": "Awakening Failed: Insufficient Ether ({0}) or Gold ({1}).",
+    "ja": "覚醒失敗：エーテル（{0}）またはゴールド（{1}）が不足しています。"
+  },
+  "각성 실패: 필요 재화가 부족합니다! [부족: {0}]": {
+    "en": "Awakening Failed: Insufficient required currency! [Shortage: {0}]",
+    "ja": "覚醒失敗：必要な財貨が不足しています！[不足: {0}]"
+  },
+  "각성 특화 스탯 선택 (1종 +15% 영구 증폭)": {
+    "en": "Select Awakening Specialized Stat (1 Stat Permanently Boosted by +15%)",
+    "ja": "覚醒特化ステータス選択（1種+15%永久増幅）"
+  },
+  "각성한 신화의 군단": {
+    "en": "Awakened Mythic Legion",
+    "ja": "覚醒した神話の軍団"
+  },
+  "갈림길 & 샛길": {
+    "en": "Crossroads & Byways",
+    "ja": "分かれ道＆脇道"
+  },
+  "감소": {
+    "en": "Decrease",
+    "ja": "減少"
+  },
+  "감속": {
+    "en": "Slow",
+    "ja": "減速"
+  },
+  "감속(-{0})": {
+    "en": "Slow (-{0})",
+    "ja": "減速(-{0})"
+  },
+  "감시자의 심안 대검": {
+    "en": "Watcher's Mind's Eye Greatsword",
+    "ja": "監視者の心眼大剣"
+  },
+  "갑주": {
+    "en": "Armor",
+    "ja": "甲冑"
+  },
+  "강": {
+    "en": "Enhance",
+    "ja": "強化"
+  },
+  "강)": {
+    "en": "Enhance)",
+    "ja": "強化)"
+  },
+  "강궁": {
+    "en": "Strongbow",
+    "ja": "強弓"
+  },
+  "강력한 치명타 적중": {
+    "en": "Powerful Critical Hit",
+    "ja": "強力な会心命中"
+  },
+  "강력한 칼날과 방패를 만들기 위해 단단한 마도 원석이 지속적으로 필요하다.": {
+    "en": "Solid magic ores are continuously needed to forge powerful blades and shields.",
+    "ja": "強力な刃と盾を作るため、硬質な魔導原石が継続的に必要だ。"
+  },
+  "강적 출현율 증가 & 전리품 2배": {
+    "en": "Increased Tough Enemy Spawn Rate & 2x Spoils",
+    "ja": "強敵出現率増加＆戦利品2倍"
+  },
+  "강철": {
+    "en": "Steel",
+    "ja": "鋼鉄"
+  },
+  "강철 기병창": {
+    "en": "Steel Lance",
+    "ja": "鋼鉄の騎兵槍"
+  },
+  "강철 기사의 검": {
+    "en": "Steel Knight's Sword",
+    "ja": "鋼鉄騎士の剣"
+  },
+  "강철 창날과 탄성 목재 자루를 결합한 견고한 창. [🔱 방어 파쇄] 특성으로 적의 보호막에 50% 추가 피해를 줍니다.": {
+    "en": "A sturdy spear combining a steel blade and elastic wooden shaft. Inflicts +50% bonus damage to enemy shields with the [🔱 Shield Break] trait.",
+    "ja": "鋼鉄の槍先としなやかな木製の柄を組み合わせた堅牢な槍。[🔱 防御破砕]特性により敵のシールドに50%の追加ダメージを与える。"
+  },
+  "강철검": {
+    "en": "Steel Sword",
+    "ja": "鋼鉄の剣"
+  },
+  "강철의": {
+    "en": "Steel",
+    "ja": "鋼鉄の"
+  },
+  "강철의 수호자": {
+    "en": "Steel Guardian",
+    "ja": "鋼鉄の守護者"
+  },
+  "강철의 여명회": {
+    "en": "Steel Dawn Order",
+    "ja": "鋼鉄の黎明会"
+  },
+  "강철의 철벽 방진": {
+    "en": "Steel Ironclad Phalanx",
+    "ja": "鋼鉄の鉄壁方陣"
+  },
+  "강타": {
+    "en": "Crush",
+    "ja": "強打"
+  },
+  "강하": {
+    "en": "Descent",
+    "ja": "降下"
+  },
+  "강하 ⚔️": {
+    "en": "Descent ⚔️",
+    "ja": "降下 ⚔️"
+  },
+  "강하 개시 ⚔️": {
+    "en": "Begin Descent ⚔️",
+    "ja": "降下開始 ⚔️"
+  },
+  "강한 성벽과 제식 무기를 위해선 단단한 원석이 필요하다. 부유성 지반을 파헤쳐라.": {
+    "en": "Solid ore is essential for strong castle walls and standard-issue weaponry. Excavate the floating fortress foundation.",
+    "ja": "強固な城壁と制式武器のためには硬質な原石が必要だ。浮遊城の地盤を掘り起こせ。"
+  },
+  "강화": {
+    "en": "Enhance",
+    "ja": "強化"
+  },
+  "강화 5% 성장 공식: 현재 스탯 × 1.05 + 고정 가산치 (ATK +4, DEF +3, HP +25, MP +15, SPD +1, LUK +1)": {
+    "en": "Enhance 5% Growth Formula: Current Stat × 1.05 + Flat Bonus (ATK +4, DEF +3, HP +25, MP +15, SPD +1, LUK +1)",
+    "ja": "強化5%成長公式: 現在のステータス × 1.05 + 固定加算値（ATK +4, DEF +3, HP +25, MP +15, SPD +1, LUK +1）"
+  },
+  "강화 가죽 갑옷": {
+    "en": "Hardened Leather Armor",
+    "ja": "強化革の鎧"
+  },
+  "강화 강철 도끼와 견인 수송로를 정비하여 거친 삼림 지대에서의 목재 운반 효율을 비약적으로 개선했습니다.": {
+    "en": "Overhauled reinforced steel axes and transport routes, drastically improving timber haul efficiency in rough woodlands.",
+    "ja": "強化鋼鉄の斧と牽引輸送路を整備し、険しい森林地帯での木材運搬効率を飛躍的に向上させた。"
+  },
+  "강화 단계를 +0강으로 초기화": {
+    "en": "Reset enhancement stage to +0",
+    "ja": "強化段階を+0強化に初期化"
+  },
+  "강화 대실패! 단계 하락 (+{0} ➔ +{1})": {
+    "en": "Enhancement Major Failure! Level Dropped (+{0} ➔ +{1})",
+    "ja": "強化大失敗！段階下落（+{0} ➔ +{1}）"
+  },
+  "강화 대실패! 레벨 하락 (Lv.{0})": {
+    "en": "Enhancement Major Failure! Level Dropped (Lv.{0})",
+    "ja": "強化大失敗！レベル下落（Lv.{0}）"
+  },
+  "강화 마도석과 장비의 공명 유도 중...": {
+    "en": "Inducing resonance between Enhancement Magic Stone and gear...",
+    "ja": "強化魔導石と装備の共鳴を誘導中..."
+  },
+  "강화 미적용 고정 옵션": {
+    "en": "Fixed Options (Unenhanced)",
+    "ja": "強化未適用固定オプション"
+  },
+  "강화 백과": {
+    "en": "Enhancement Encyclopedia",
+    "ja": "強化百科"
+  },
+  "강화 보급품 전면 가동": {
+    "en": "Enhanced Supplies Fully Activated",
+    "ja": "強化補給品全面稼働"
+  },
+  "강화 보급품(에테르 횃불 등)": {
+    "en": "Enhanced Supplies (Ether Torch, etc.)",
+    "ja": "強化補給品（エーテル松明など）"
+  },
+  "강화 불가 원인: {0}": {
+    "en": "Enhancement Unavailable Reason: {0}",
+    "ja": "強化不可の原因: {0}"
+  },
+  "강화 불가: 마도 대장간 Lv.{0} 이상 증축이 필요합니다!": {
+    "en": "Cannot Enhance: Magic Blacksmith must be upgraded to Lv.{0} or higher!",
+    "ja": "強化不可：魔導鍛冶屋Lv.{0}以上の増築が必要です！"
+  },
+  "강화 불가: 에테르 연금 공방(Lv.1 이상) 시설이 필요합니다.": {
+    "en": "Cannot Enhance: Aether Alchemy Lab (Lv.1 or higher) facility required.",
+    "ja": "強化不可：エーテル錬金工房（Lv.1以上）の施設が必要です。"
+  },
+  "강화 성공! (+{0} ➔ +{1})": {
+    "en": "Enhancement Success! (+{0} ➔ +{1})",
+    "ja": "強化成功！（+{0} ➔ +{1}）"
+  },
+  "강화 시 전체 계수 +12% / 소모 MP +25%": {
+    "en": "Upon Enhancement: All Multipliers +12% / MP Cost +25%",
+    "ja": "強化時 全体係数+12% / 消費MP +25%"
+  },
+  "강화 실패 ({0})": {
+    "en": "Enhancement Failed ({0})",
+    "ja": "強化失敗（{0}）"
+  },
+  "강화 실패 (현재 수치 +{0} 유지)": {
+    "en": "Enhancement Failed (Maintained current value +{0})",
+    "ja": "強化失敗（現在の数値+{0}維持）"
+  },
+  "강화 실패 (현재 수치 Lv.{0} 유지)": {
+    "en": "Enhancement Failed (Maintained current Lv.{0})",
+    "ja": "強化失敗（現在の数値Lv.{0}維持）"
+  },
+  "강화 실패: 필요 재화가 부족합니다! [부족: {0}]": {
+    "en": "Enhancement Failed: Insufficient required currency! [Shortage: {0}]",
+    "ja": "強化失敗：必要な財貨が不足しています！[不足: {0}]"
+  },
+  "강화 제한: 현재 심연의 병기창(Lv.{0})에서는 장비를 최대 +{1}강까지만 강화할 수 있습니다! (병기창 증축 필요)": {
+    "en": "Enhance Limit: At current Ark Armory & Forge (Lv.{0}), gear can only be enhanced up to +{1}! (Armory upgrade required)",
+    "ja": "強化制限：現在の深淵の兵器廠（Lv.{0}）では装備を最大+{1}までしか強化できません！（兵器廠の増築が必要）"
+  },
+  "강화 제한: 현재 에테르 연금 공방(Lv.{0})에서는 마도서를 최대 Lv.{1}까지만 강화할 수 있습니다! (공방 증축 필요)": {
+    "en": "Enhance Limit: At current Aether Alchemy Lab (Lv.{0}), Grimoires can only be enhanced up to Lv.{1}! (Lab upgrade required)",
+    "ja": "強化制限：現在のエーテル錬金工房（Lv.{0}）では魔導書を最大Lv.{1}までしか強化できません！（工房の増築が必要）"
+  },
+  "강화 제한: 현재 에테르 연금 공방(Lv.{0})에서는 스킬을 최대 Lv.{1}까지만 강화할 수 있습니다! (공방 증축 필요)": {
+    "en": "Enhance Limit: At current Aether Alchemy Lab (Lv.{0}), Skills can only be enhanced up to Lv.{1}! (Lab upgrade required)",
+    "ja": "強化制限：現在のエーテル錬金工房（Lv.{0}）ではスキルを最大Lv.{1}までしか強化できません！（工房の増築が必要）"
+  },
+  "강화 합금 대용량 격벽 창고를 증축하여 영지 생산물의 보관 한도를 6,000개로 비약적으로 확장했습니다.": {
+    "en": "Constructed high-capacity reinforced alloy bulkhead storage, drastically expanding territory production storage cap to 6,000.",
+    "ja": "強化合金大容量隔壁倉庫を増築し、領地生産物の保管上限を6,000個へ飛躍的に拡張した。"
+  },
+  "강화 후 (Lv.": {
+    "en": "After Enhancement (Lv.",
+    "ja": "強化後（Lv."
+  },
+  "강화 후 단계": {
+    "en": "Post-Enhancement Stage",
+    "ja": "強化後の段階"
+  },
+  "강화/인챈트 모달: 강화 전/후 상세 비교, 슬롯별 후보군 풀 미리보기 및 인챈트 초기화 기능 완비 (에테르 50 소모)": {
+    "en": "Enhance/Enchant Modal: Detailed pre/post comparison, candidate pool preview by slot, and enchant reset feature (costs 50 Ether)",
+    "ja": "強化/エンチャントモーダル：強化前後詳細比較、スロット別候補プールプレビューおよびエンチャント初期化機能を完備（エーテル50消費）"
+  },
+  "강화된 강철검 +2": {
+    "en": "Enhanced Steel Sword +2",
+    "ja": "強化された鋼鉄の剣 +2"
+  },
+  "강화된 특수 보급품 (7종) 잠금": {
+    "en": "Enhanced Special Supplies (7 Types) Locked",
+    "ja": "強化された特殊補給品（7種）ロック"
+  },
+  "개": {
+    "en": " items",
+    "ja": "個"
+  },
+  "개 (최대": {
+    "en": " (Max",
+    "ja": "個（最大"
+  },
+  "개 (최대)": {
+    "en": " (Max)",
+    "ja": "個（最大）"
+  },
+  "개 / 총": {
+    "en": " / Total",
+    "ja": "個 / 総"
+  },
+  "개 | 🌌 순수 접미석:": {
+    "en": " | 🌌 Pure Suffix Stone:",
+    "ja": "個 | 🌌 純粋な接尾石:"
+  },
+  "개 | 🔮 접미석:": {
+    "en": " | 🔮 Suffix Stone:",
+    "ja": "個 | 🔮 接尾石:"
+  },
+  "개 ➔": {
+    "en": " ➔",
+    "ja": "個 ➔"
+  },
+  "개 계통)": {
+    "en": " branches)",
+    "ja": "系統）"
+  },
+  "개 기준)": {
+    "en": " base)",
+    "ja": "個基準）"
+  },
+  "개 발동 중": {
+    "en": " Active",
+    "ja": "個発動中"
+  },
+  "개 배낭 슬롯 전리품 안전 수납": {
+    "en": " backpack slots safely store spoils",
+    "ja": "個のバックパックスロットで戦利品を安全収納"
+  },
+  "개 유지비 소모 (Lv.1~3 무료 유지)": {
+    "en": " upkeep consumed (Lv.1-3 upkeep free)",
+    "ja": "個の維持費消費（Lv.1〜3無料維持）"
+  },
+  "개 추가 시 FEVER 완충": {
+    "en": " more to fully charge FEVER",
+    "ja": "個追加時FEVER満タン"
+  },
+  "개 활성": {
+    "en": " Active",
+    "ja": "個有効"
+  },
+  "개)": {
+    "en": ")",
+    "ja": "個）"
+  },
+  "개):": {
+    "en": "):",
+    "ja": "個）:"
+  },
+  "개방": {
+    "en": "Open",
+    "ja": "開放"
+  },
+  "개방됨": {
+    "en": "Opened",
+    "ja": "開放済み"
+  },
+  "개설": {
+    "en": "Establish",
+    "ja": "開設"
+  },
+  "개시 보호막 {0}%{1}": {
+    "en": "Starting Shield {0}%{1}",
+    "ja": "開始時シールド {0}%{1}"
+  },
+  "개인에게만 생생한 입체 음향을 전달하던 소형 스피커 헤드셋입니다. 푹신한 이어패드가 삭아 있습니다.": {
+    "en": "A compact speaker headset that once delivered vivid 3D audio exclusively to its wearer. The soft ear pads have rotted away.",
+    "ja": "個人にのみ臨場感あふれる立体音響を届けていた小型スピーカーヘッドセット。ふかふかのイヤーパッドが朽ちている。"
+  },
+  "개인정보처리방침": {
+    "en": "Privacy Policy",
+    "ja": "プライバシーポリシー"
+  },
+  "개척자의 완비 장구": {
+    "en": "Pioneer's Complete Kit",
+    "ja": "開拓者の完備装具"
+  },
+  "갱도 천장을 받치던 통나무 지지대가 삐걱거리며 거대한 낙석이 쏟아져 내리기 직전입니다.": {
+    "en": "The timber supports propping up the tunnel ceiling creak ominously as a massive rockfall is about to come crashing down.",
+    "ja": "坑道の天井を支えていた丸太の支柱がきしみ、巨大な落石が雪崩れ落ちる寸前です。"
+  },
+  "거너 원호 사격: 거너 시너지(전탄 일제 사격, 융단 폭격, 성전 저격) 활성 시 30% 확률로 지원 사격 발동 (총탄 VFX)": {
+    "en": "Gunner Assist Shot: 30% chance to trigger fire support when Gunner synergy (Volley Barrage, Carpet Bombing, Holy Snipe) is active (Bullet VFX)",
+    "ja": "ガンナー援護射撃：ガンナーシナジー（全弾一斉射撃、絨毯爆撃、聖戦狙撃）発動時、30%の確率で支援射撃が発動（銃弾VFX）"
+  },
+  "거너, 전술포수, 하이퍼레인저": {
+    "en": "Gunner, Tactical Gunner, Hyper Ranger",
+    "ja": "ガンナー、戦術砲手、ハイパーレンジャー"
+  },
+  "거대 수정 기둥을 뒤로하고 전진합니다.": {
+    "en": "Leave behind the giant crystal pillar and advance.",
+    "ja": "巨大な水晶柱を背にして前進する。"
+  },
+  "거대한 고치 형태의 심연 심장이 쿵, 쿵 고동치며 던전 전체로 암흑 마기를 뿜어내고 있습니다.": {
+    "en": "The giant cocoon-shaped Abyss Heart thumps heavily, spewing dark miasma across the entire dungeon.",
+    "ja": "巨大な繭の形をした深淵の心臓がドクン、ドクンと鼓動し、ダンジョン全体へ暗黒の魔気を噴き出している。"
+  },
+  "거대한 신성 십자가를 강림시켜 적 전체에 207% 신성 피해를 퍼붓고, 사망한 아군을 HP 46%로 부활시킵니다.": {
+    "en": "Descends a colossal holy cross, raining 207% Holy damage upon all enemies and resurrecting fallen allies with 46% HP.",
+    "ja": "巨大な神聖十字を降臨させて敵全体に207%の神聖ダメージを浴びせ、倒れた味方をHP 46%で復活させる。"
+  },
+  "거대한 운석을 소환하여 적 전체에 190% 화염 폭발 피해 및 3턴간 화상을 입힙니다.": {
+    "en": "Summons a massive meteor to deal 190% Fire explosion damage to all enemies and inflicts Burn for 3 turns.",
+    "ja": "巨大な隕石を召喚して敵全体に190%の火炎爆発ダメージを与え、3ターンの間火傷を負わせる。"
+  },
+  "거래 수량 선택": {
+    "en": "Select Trade Quantity",
+    "ja": "取引数量の選択"
+  },
+  "거래 수수료 -10% & 1티어 비전서 입고 & 🪙 +5G/15초 & 주기 23초": {
+    "en": "Trade Fee -10% & Tier 1 Grimoire Stocked & 🪙 +5G/15s & Cycle 23s",
+    "ja": "取引手数料-10%＆ティア1秘伝書入荷＆🪙 +5G/15秒＆周期23秒"
+  },
+  "거래 수수료 추가 인하 & 🪙 +15G/15초 & 유지비 주기 29초": {
+    "en": "Additional Trade Fee Reduction & 🪙 +15G/15s & Upkeep Cycle 29s",
+    "ja": "取引手数料の追加引き下げ＆🪙 +15G/15秒＆維持費周期29秒"
+  },
+  "거래 수수료를 10% 인하하고 용병들의 잠재력을 깨우는 1티어 전술 비전서를 정기 입고하기 시작합니다.": {
+    "en": "Reduces trade fee by 10% and begins regular stocking of Tier 1 tactical grimoires to awaken mercenaries' potential.",
+    "ja": "取引手数料を10%引き下げ、傭兵の潜在能力を呼び覚ますティア1戦術秘伝書を定期入荷し始める。"
+  },
+  "거래 수수료를 추가 인하하여 자원 환전 손실을 최소화하고 유지비 주기를 29초로 늘립니다.": {
+    "en": "Further reduces trade fee to minimize resource exchange losses and extends upkeep cycle to 29s.",
+    "ja": "取引手数料をさらに入り下げて資源両替の損失を最小化し、維持費周期を29秒に延長する。"
+  },
+  "거래 한도 확장 & 🪙 +3G/15초 골드 수급 & 유지비 지불 주기 22초 (+2초)": {
+    "en": "Trade Limit Expanded & 🪙 +3G/15s Gold Income & Upkeep Cycle 22s (+2s)",
+    "ja": "取引限度拡張＆🪙 +3G/15秒ゴールド受給＆維持費支払周期22秒（+2秒）"
+  },
+  "거래 한도를 확장하고 비밀 유통망을 정비하여 유지비 지불 주기를 22초로 연장하고 골드 수입을 늘립니다.": {
+    "en": "Expands trade limits and overhauls secret distribution channels to extend upkeep payment cycle to 22s and increase gold revenue.",
+    "ja": "取引限度を拡張して秘密流通網を整備し、維持費支払周期を22秒に延長してゴールド収入を増やす。"
+  },
+  "거룩한 성역 결계": {
+    "en": "Holy Sanctuary Barrier",
+    "ja": "聖なる聖域結界"
+  },
+  "거신의 가호": {
+    "en": "Colossus's Blessing",
+    "ja": "巨神の加護"
+  },
+  "거신의 석상을 뒤로하고 전진합니다.": {
+    "en": "Leave behind the Colossus statue and advance.",
+    "ja": "巨神の石像を背にして前進する。"
+  },
+  "거울": {
+    "en": "Mirror",
+    "ja": "鏡"
+  },
+  "거울 굴절 판금갑": {
+    "en": "Mirror Refraction Plate Armor",
+    "ja": "鏡屈折板金鎧"
+  },
+  "거울 만화경 환영": {
+    "en": "Mirror Kaleidoscope Illusion",
+    "ja": "鏡万華鏡幻影"
+  },
+  "거울 미궁 마도봉": {
+    "en": "Mirror Labyrinth Magic Wand",
+    "ja": "鏡の迷宮魔導棒"
+  },
+  "거울 앞에 앉아 입술을 붉게 물들이던 여인의 손길과, 코르크 마개를 경쾌하게 뽑아내며 붉은 포도주를 따르던 남자의 웃음소리. 사람들은 국경선 너머에서 흑무가 모든 도시를 집어삼키고 있다는 뉴스를 애써 외면했다. \"오늘 밤만큼은 우리만을 위해 마시자.\" 화려한 스카이라인을 배경으로 와인잔이 부딪치던 멸망 전야의 만찬. 남겨진 립스틱 케이스 밑면에는 희미하게 지워진 필체로 '나를 잊지 말아줘'라는 글귀가 새겨져 있다.": {
+    "en": "A woman's touch coloring her lips red before a mirror, and a man's laughter as he popped the cork and poured red wine. People deliberately ignored the news that black fog was devouring every city beyond the border. \"Tonight, let's drink just for us.\" The banquet on the eve of doom where wine glasses clinked against a dazzling skyline. At the bottom of the remaining lipstick case, faintly erased handwriting reads: 'Don't forget me.'",
+    "ja": "鏡の前に座り唇を赤く染めていた女性の手つき、コルクを軽快に抜いて赤ワインを注いでいた男の笑い声。人々は国境の向こうで黒霧があらゆる都市を飲み込んでいるというニュースを必死に目を背けた。「今夜だけは、俺たちだけのために飲もう。」華やかなスカイラインを背景にワイングラスが触れ合った滅亡前夜の晩餐。遺された口紅ケースの底には、かすれ消えかけた筆跡で『私を忘れないで』と刻まれている。"
+  },
+  "거울 차원 극창": {
+    "en": "Mirror Dimension Halberd",
+    "ja": "鏡次元戟槍"
+  },
+  "거울 차원의 굴절 마력을 담아 5대 능력치를 초월적으로 증폭한 [전설]": {
+    "en": "[Legendary] Channeling mirror dimension refractive magic to transcendently boost 5 primary stats",
+    "ja": "鏡次元の屈折魔力を込め、5大能力値を超越的に増幅させた[伝説]"
+  },
+  "거울 파편": {
+    "en": "Mirror Shard",
+    "ja": "鏡の破片"
+  },
+  "거울에서 아군 리더와 완벽히 동일한 장비와 기술을 갖춘 도플갱어가 오만한 미소를 지으며 걸어 나옵니다.": {
+    "en": "A doppelganger equipped with the exact gear and skills of your squad leader steps out of the mirror with an arrogant smile.",
+    "ja": "鏡から味方リーダーと完全に同じ装備と技を備えたドッペルゲンガーが、傲慢な笑みを浮かべて歩み出てくる。"
+  },
+  "거울의 환영": {
+    "en": "Mirror Illusion",
+    "ja": "鏡の幻影"
+  },
+  "거울의 환영을 뒤로하고 전진합니다.": {
+    "en": "Leave behind the mirror illusion and advance.",
+    "ja": "鏡の幻影を背にして前進する。"
+  },
+  "거점 건물": {
+    "en": "Base Building",
+    "ja": "拠点建物"
+  },
+  "거점 외곽에 고대 영목 벌채 시설을 재건했습니다. 단단하고 마력을 머금은 영목을 정기적으로 수확하여 시설 건설과 성화의 땔감으로 공급합니다.": {
+    "en": "Rebuilt ancient timber harvesting facilities on the citadel outskirts. Regularly harvests mana-infused wood for facility construction and sacred flame fuel.",
+    "ja": "拠点郊外に古代の霊木伐採施設を再建した。硬く魔力を宿した霊木を定期的に収穫し、施設建設と聖火の薪として供給する。"
+  },
+  "건)": {
+    "en": " cases)",
+    "ja": "件）"
+  },
+  "건물 건설/강화 자원": {
+    "en": "Building Construction/Enhancement Resources",
+    "ja": "建物建設/強化資源"
+  },
+  "건물 소모 자원, 단조/강화 비용, 마물 스탯, 초기 용병, 스킬/마도서 위력을 실시간 편집하고 배포 파일에 적용합니다.": {
+    "en": "Edit building costs, forge/enhance costs, monster stats, starting mercenaries, and skill/grimoire power in real-time and apply them to distribution files.",
+    "ja": "建物消費資源、鍛造/強化費用、魔物ステータス、初期傭兵、スキル/魔導書威力をリアルタイムで編集し、配布ファイルに適用します。"
+  },
+  "건물 특전: 소모 자원/가격 -{0}% 할인 적용중": {
+    "en": "Building Perk: Resource cost/price -{0}% discount active",
+    "ja": "建物特典: 消費資源/価格 -{0}%割引適用中"
+  },
+  "건물·단조 자원, 마물·초기 용병, 스킬 위력 편집 & 배포": {
+    "en": "Building & Forge Resources, Monsters, Starter Mercenaries, Skill Power Editing & Deployment",
+    "ja": "建物・鍛造資源、魔物・初期傭兵、スキル威力の編集＆配布"
+  },
+  "건설": {
+    "en": "Construct",
+    "ja": "建設"
+  },
+  "건설 & 자원 관리": {
+    "en": "Construction & Resource Management",
+    "ja": "建設＆資源管理"
+  },
+  "건설 불가: {0}": {
+    "en": "Cannot Construct: {0}",
+    "ja": "建設不可: {0}"
+  },
+  "건설 비용: 🪨 석재 120, ⚙️ 철광 50, ✨ 에테르 30, 🪙 1,000G": {
+    "en": "Construction Cost: 🪨 Stone 120, ⚙️ Iron Ore 50, ✨ Ether 30, 🪙 1,000G",
+    "ja": "建設費用: 🪨 石材 120, ⚙️ 鉄鉱 50, ✨ エーテル 30, 🪙 1,000G"
+  },
+  "건설 비용: 🪵 목재 80, 🪨 석재 50, 🪙 300G": {
+    "en": "Construction Cost: 🪵 Wood 80, 🪨 Stone 50, 🪙 300G",
+    "ja": "建設費用: 🪵 木材 80, 🪨 石材 50, 🪙 300G"
+  },
+  "건설 실패: [{0}]에 필요한 자원이 부족합니다!": {
+    "en": "Construction Failed: Insufficient resources required for [{0}]!",
+    "ja": "建設失敗：[{0}]に必要な資源が不足しています！"
+  },
+  "건설 자원 가중 규칙: 생존자 안식처(Lv.4+ 목재 2배, Lv.8+ 3배), 광맥시추소(Lv.5+ 목재 3배), 심연의 병기창(Lv.4+ 목재 2배, Lv.6+ 석재 2배, Lv.8+ 철제 3배), 영혼 제단(Lv.5+ 에테르 2배), 연금 공방(Lv.4+ 철광석 2배), 병참고(Lv.4+ 전 자원 2배), 병원(Lv.4+ 목재 1.5배, 철광석·에테르 2배), 블랙 마켓(전 구간 골드 2배, Lv.4+ 건설 자원 1.5배, Lv.5+ 석재 30% 감축) 특수 밸런싱이 적용됩니다.": {
+    "en": "Construction Resource Scaling: Survivor Haven (Lv.4+ 2x Wood, Lv.8+ 3x), Aether Quarry (Lv.5+ 3x Wood), Ark Armory (Lv.4+ 2x Wood, Lv.6+ 2x Stone, Lv.8+ 3x Iron), Soul Sanctuary (Lv.5+ 2x Ether), Alchemy Lab (Lv.4+ 2x Iron), Logistics Depot (Lv.4+ 2x All Resources), Ward (Lv.4+ 1.5x Wood, 2x Iron/Ether), Black Market (2x Gold across all tiers, Lv.4+ 1.5x building resources, Lv.5+ 30% less stone) special balancing applies.",
+    "ja": "建設資源加重規則：生存者の安息所（Lv.4+ 木材2倍、Lv.8+ 3倍）、鉱脈採掘所（Lv.5+ 木材3倍）、深淵の兵器廠（Lv.4+ 木材2倍、Lv.6+ 石材2倍、Lv.8+ 鉄材3倍）、魂の祭壇（Lv.5+ エーテル2倍）、錬金工房（Lv.4+ 鉄鉱石2倍）、兵站庫（Lv.4+ 全資源2倍）、病棟（Lv.4+ 木材1.5倍、鉄鉱石・エーテル2倍）、ブラックマーケット（全区間ゴールド2倍、Lv.4+ 建設資源1.5倍、Lv.5+ 石材30%削減）特殊バランシングが適用されます。"
+  },
+  "건의 전투 기록": {
+    "en": " combat logs",
+    "ja": "件の戦闘記録"
+  },
+  "검": {
+    "en": "Sword",
+    "ja": "剣"
+  },
+  "검 계열": {
+    "en": "Swords",
+    "ja": "剣系"
+  },
+  "검, 창, 활, 마총, 단검, 지팡이 6종 무기군에 고유 특성 뱃지와 고유 전투 발동 효과가 적용되어 전략적인 무구 세팅이 가능합니다.": {
+    "en": "Unique trait badges and combat activation effects apply across 6 weapon types (Swords, Spears, Bows, Magic Guns, Daggers, Staves), enabling tactical gear setups.",
+    "ja": "剣、槍、弓、魔銃、短剣、杖の6種武器群に固有特性バッジと固有戦闘発動効果が適用され、戦略的な装備セッティングが可能です。"
+  },
+  "검무": {
+    "en": "Sword Dance",
+    "ja": "剣舞"
+  },
+  "검무의 극의: 회피 성공 시 다음 턴 공격력 40% 즉시 증폭 및 치명타 피해 +50% 상시 적용.": {
+    "en": "Secret of Sword Dance: Upon successful evasion, immediately amplifies next turn ATK by 40% and permanently adds +50% Crit Damage.",
+    "ja": "剣舞の極意：回避成功時、次ターンの攻撃力を即座に40%増幅＆会心ダメージ+50%が常時適用。"
+  },
+  "검색 조건에 맞는 원정대 시너지가 없습니다.": {
+    "en": "No expedition synergy matches the search conditions.",
+    "ja": "検索条件に一致する遠征隊シナジーがありません。"
+  },
+  "검색어 초기화": {
+    "en": "Reset Search",
+    "ja": "検索語を初期化"
+  },
+  "검은 권능": {
+    "en": "Dark Authority",
+    "ja": "黒き権能"
+  },
+  "검정, 빨강, 파랑 잉크를 하나의 자루에 담아 손쉽게 기록을 남기던 편리한 도구입니다.": {
+    "en": "A convenient tool that held black, red, and blue ink in a single barrel to easily record notes.",
+    "ja": "黒、赤、青のインクを1本の軸に収め、手軽に記録を残せた便利な道具。"
+  },
+  "게스트 계정": {
+    "en": "Guest Account",
+    "ja": "ゲストアカウント"
+  },
+  "게스트 로그인에 실패했습니다.": {
+    "en": "Failed to log in as guest.",
+    "ja": "ゲストログインに失敗しました。"
+  },
+  "게스트 접속에 실패했습니다.": {
+    "en": "Failed to connect as guest.",
+    "ja": "ゲスト接続に失敗しました。"
+  },
+  "게이트": {
+    "en": "Gate",
+    "ja": "ゲート"
+  },
+  "게이트 Lv.": {
+    "en": "Gate Lv.",
+    "ja": "ゲート Lv."
+  },
+  "게이트 Lv.{0}": {
+    "en": "Gate Lv.{0}",
+    "ja": "ゲート Lv.{0}"
+  },
+  "게이트 완공부터 첫 아레나 결투, 승리, 네메시스 레이드 참전 및 토벌, 영지 정찰, 영지 침공 약탈, 전술 타워 테크 연구로 이어지는 8단계 연계 퀘스트 체인이 신설되어 풍성한 자원 보상과 함께 단계별 가이드를 제공합니다.": {
+    "en": "An 8-stage linked quest chain has been established from Gate completion to first Arena duel, victory, Nemesis raid participation and conquest, territory scouting, pillage invasion, and tactical tower tech research, providing generous resource rewards and step-by-step guidance.",
+    "ja": "ゲート完成から初のアリーナ決闘、勝利、ネメシスレイド参戦および討伐、領地偵察、領地侵攻略奪、戦術タワーテック研究へと続く8段階の連携クエストチェーンが新設され、豊富な資源報酬とともに段階別ガイドを提供します。"
+  },
+  "게임 실행 중 예기치 못한 오류 발생": {
+    "en": "An unexpected error occurred while running the game",
+    "ja": "ゲーム実行中に予期せぬエラーが発生しました"
+  },
+  "게임 진행 데이터:": {
+    "en": "Game Progress Data:",
+    "ja": "ゲーム進行データ:"
+  },
+  "게임을 종료하시겠습니까?": {
+    "en": "Do you want to exit the game?",
+    "ja": "ゲームを終了しますか？"
+  },
+  "격진": {
+    "en": "Upheaval",
+    "ja": "激震"
+  },
+  "격파": {
+    "en": "Defeat",
+    "ja": "撃破"
+  },
+  "견고한": {
+    "en": "Sturdy",
+    "ja": "堅固な"
+  },
+  "견고한 짐수레": {
+    "en": "Sturdy Cart",
+    "ja": "堅固な荷車"
+  },
+  "견고한 짐수레 3회 인가": {
+    "en": "Authorize 3 Sturdy Carts",
+    "ja": "堅固な荷車3回認可"
+  },
+  "견고한 판금 갑옷 +2": {
+    "en": "Sturdy Plate Armor +2",
+    "ja": "堅固な板金鎧 +2"
+  },
+  "견습 기사": {
+    "en": "Apprentice Knight",
+    "ja": "見習い騎士"
+  },
+  "견습 기사 • 전열 탱커": {
+    "en": "Apprentice Knight • Front Tanker",
+    "ja": "見習い騎士 • 前衛タンカー"
+  },
+  "견습 기사 ➔ [성기사 ➔ 발키리] / [중장 보병 ➔ 포트리스]": {
+    "en": "Apprentice Knight ➔ [Paladin ➔ Valkyrie] / [Heavy Infantry ➔ Fortress]",
+    "ja": "見習い騎士 ➔ [聖騎士 ➔ ヴァルキリー] / [重装歩兵 ➔ フォートレス]"
+  },
+  "견습 기사 ➔ 성기사 / 중장 보병 ➔ 👑 발키리 (Aegis Valkyrie)": {
+    "en": "Apprentice Knight ➔ Paladin / Heavy Infantry ➔ 👑 Valkyrie (Aegis Valkyrie)",
+    "ja": "見習い騎士 ➔ 聖騎士 / 重装歩兵 ➔ 👑 ヴァルキリー (Aegis Valkyrie)"
+  },
+  "견습 기사 계통": {
+    "en": "Apprentice Knight Branch",
+    "ja": "見習い騎士系統"
+  },
+  "견습 기사, 성기사, 발키리, 중장 보병, 포트리스, 용병 전사, 광전사, 철혈의 패황, 무사, 환영의 검성 등": {
+    "en": "Apprentice Knight, Paladin, Valkyrie, Heavy Infantry, Fortress, Mercenary Warrior, Berserker, Ironblood Overlord, Samurai, Blade Lord of Illusions, etc.",
+    "ja": "見習い騎士、聖騎士、ヴァルキリー、重装歩兵、フォートレス、傭兵戦士、狂戦士、鉄血の覇皇、武士、幻影の剣聖など"
+  },
+  "견습 마법사 ➔ 원소술사 / 흑마도사 ➔ 👑 대마도사 (Archmage)": {
+    "en": "Apprentice Mage ➔ Elementalist / Warlock ➔ 👑 Archmage (Archmage)",
+    "ja": "見習い魔法使い ➔ 元素術士 / 黒魔導士 ➔ 👑 大魔導士 (Archmage)"
+  },
+  "견습 사제": {
+    "en": "Apprentice Priest",
+    "ja": "見習い司祭"
+  },
+  "견습 사제 ➔ [주교 ➔ 성령의 구원자] / [전투 사제 ➔ 성전의 심판관]": {
+    "en": "Apprentice Priest ➔ [Bishop ➔ Holy Savior] / [Battle Priest ➔ Inquisitor of the Crusade]",
+    "ja": "見習い司祭 ➔ [主教 ➔ 聖霊の救済者] / [戦闘司祭 ➔ 聖戦の審判官]"
+  },
+  "견습 사제 ➔ 주교 / 심판관 ➔ 👑 천상 대주교 (Celestial Hierophant)": {
+    "en": "Apprentice Priest ➔ Bishop / Inquisitor ➔ 👑 Celestial Hierophant",
+    "ja": "見習い司祭 ➔ 主教 / 審判官 ➔ 👑 天重大主教 (Celestial Hierophant)"
+  },
+  "견습 사제 계통": {
+    "en": "Apprentice Priest Branch",
+    "ja": "見習い司祭系統"
+  },
+  "견습 사제, 주교, 성령의 구원자, 전투 사제, 성전의 심판관, 원소 학도, 대마도사, 아크 메이지, 비전 학자, 시공의 조율사 등": {
+    "en": "Apprentice Priest, Bishop, Holy Savior, Battle Priest, Inquisitor of the Crusade, Element Scholar, Archmage, Arcane Scholar, Chrono Tuner, etc.",
+    "ja": "見習い司祭、主教、聖霊の救済者、戦闘司祭、聖戦の審判官、元素学徒、大魔導士、アークメイジ、秘術学者、時空の調律者など"
+  },
+  "견습 사제의 기도: 매 턴 체력 2% 재생, 파티 최대 체력 +8%": {
+    "en": "Apprentice Priest's Prayer: 2% HP Regen per turn, Party Max HP +8%",
+    "ja": "見習い司祭の祈り：毎ターンHP 2%再生、パーティ最大HP +8%"
+  },
+  "결계": {
+    "en": "Barrier",
+    "ja": "結界"
+  },
+  "결계(+{0})": {
+    "en": "Barrier (+{0})",
+    "ja": "結界(+{0})"
+  },
+  "결빙": {
+    "en": "Freezing",
+    "ja": "結氷"
+  },
+  "결사대 무장 (여명검 & 보급품 풀세트)": {
+    "en": "Suicide Squad Gear (Dawn Sword & Full Supply Set)",
+    "ja": "決死隊武装（黎明の剣＆補給品フルセット）"
+  },
+  "결사대 무장 보상 수령": {
+    "en": "Claim Suicide Squad Gear Reward",
+    "ja": "決死隊武装報酬の受取"
+  },
+  "결사대 최고 사령관": {
+    "en": "Suicide Squad Supreme Commander",
+    "ja": "決死隊最高司令官"
+  },
+  "결사대원": {
+    "en": "Suicide Squad Member",
+    "ja": "決死隊員"
+  },
+  "결사대원이 사경 카운트다운 소진 또는 전멸 등으로 전사하여 묘지에 안장될 때, 착용 중이던 무기·방어구·장신구가 영구 소멸되지 않고 성채 인벤토리(보관함)로 전리품처럼 안전하게 회수됩니다.": {
+    "en": "When a squad member falls in battle due to death countdown expiry or total party wipe and is buried in the cemetery, equipped weapons, armor, and accessories are not permanently lost, but safely recovered to Citadel storage like spoils.",
+    "ja": "決死隊員が臨死カウントダウン切れや全滅などで戦死し墓地に埋葬される際、装着中だった武器・防具・装飾品は永久消滅せず、城塞インベントリ（保管箱）へ戦利品のように安全に回収されます。"
+  },
+  "결속 가능": {
+    "en": "Binding Available",
+    "ja": "結束可能"
+  },
+  "결속 확인": {
+    "en": "Confirm Binding",
+    "ja": "結束確認"
+  },
+  "결속된 영령:": {
+    "en": "Bound Heroic Spirit:",
+    "ja": "結束された英霊:"
+  },
+  "결전검": {
+    "en": "Decisive Battle Sword",
+    "ja": "決戦の剣"
+  },
+  "결전분노": {
+    "en": "Decisive Fury",
+    "ja": "決戦の怒り"
+  },
+  "결투": {
+    "en": "Duel",
+    "ja": "決闘"
+  },
+  "결투사의 유려한 칼날: 치명타 피해 +20%, 중열 회피율 +10%": {
+    "en": "Duelist's Graceful Blade: Crit Damage +20%, Mid Row Evasion +10%",
+    "ja": "決闘者の優麗な刃：会心ダメージ+20%、中衛回避率+10%"
+  }
+}

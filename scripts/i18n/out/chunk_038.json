@@ -1,0 +1,802 @@
+{
+  "회오리": {
+    "en": "Whirlwind",
+    "ja": "竜巻"
+  },
+  "회원 식별, 기기 간 클라우드 세이브(Cloud Save) 동기화, 비동기 아레나 랭킹 대전 매칭, 서비스 무결성 및 안정성 유지": {
+    "en": "Member identification, cross-device Cloud Save synchronization, asynchronous arena ranking match matchmaking, maintenance of service integrity and stability",
+    "ja": "会員識別、端末間クラウドセーブ（Cloud Save）同期、非同期アリーナランキング対戦マッチング、サービス整合性および安定性維持"
+  },
+  "회원가입 중 오류가 발생했습니다.": {
+    "en": "An error occurred during registration.",
+    "ja": "会員登録中にエラーが発生しました。"
+  },
+  "회원가입에 실패했습니다.": {
+    "en": "Registration failed.",
+    "ja": "会員登録に失敗しました。"
+  },
+  "회피": {
+    "en": "Dodge",
+    "ja": "回避"
+  },
+  "회피 또는 반격 태세로 공격 맞받아침": {
+    "en": "Counters attack in evasion or counter stance",
+    "ja": "回避または反撃態勢で攻撃を迎え撃つ"
+  },
+  "회피 반격 & 질풍 난무": {
+    "en": "Evasion Counter & Gale Flurry",
+    "ja": "回避反撃＆疾風乱舞"
+  },
+  "회피:": {
+    "en": "EVA:",
+    "ja": "回避:"
+  },
+  "회피보정:": {
+    "en": "EVA Mod:",
+    "ja": "回避補正:"
+  },
+  "회피율 60% 증가 & 피격/회피 시 즉시 130% 환영 반격": {
+    "en": "EVA +60% & on hit/dodge, immediately trigger 130% Phantom Counter",
+    "ja": "回避率60%増加＆被弾/回避時に即座に130%幻影反撃"
+  },
+  "획득 골드": {
+    "en": "Acquired Gold",
+    "ja": "獲得ゴールド"
+  },
+  "획득한 모든 수량성 파밍 자원을 2배로 증폭하여 입고합니다.": {
+    "en": "Amplifies and stocks all acquired quantitative farmed resources by 2x.",
+    "ja": "獲得したすべての採取資源を2倍に増幅して入庫します。"
+  },
+  "획득한 자원이 없습니다. (빈손 귀환)": {
+    "en": "No resources obtained. (Returned empty-handed)",
+    "ja": "獲得した資源はありません。（空手帰還）"
+  },
+  "효과 속성:": {
+    "en": "Effect Attribute:",
+    "ja": "効果属性:"
+  },
+  "효과 없음": {
+    "en": "No Effect",
+    "ja": "効果なし"
+  },
+  "효과 요약:": {
+    "en": "Effect Summary:",
+    "ja": "効果概要:"
+  },
+  "효과 적용 중": {
+    "en": "Effect Active",
+    "ja": "効果適用中"
+  },
+  "효과:": {
+    "en": "Effect:",
+    "ja": "効果:"
+  },
+  "후 입고)": {
+    "en": "then stocked)",
+    "ja": "後に入庫)"
+  },
+  "후반 3차: 영혼 결계 인프라": {
+    "en": "Late Stage 3: Soul Barrier Infrastructure",
+    "ja": "後半第3段階: 魂の結界インフラ"
+  },
+  "후방": {
+    "en": "Rear",
+    "ja": "後方"
+  },
+  "후방 집중 화망": {
+    "en": "Rear Focused Fire",
+    "ja": "後方集中弾幕"
+  },
+  "후보 서포터 (실시간 교체)": {
+    "en": "Reserve Supporter (Real-Time Sub)",
+    "ja": "控えサポーター（リアルタイム交代）"
+  },
+  "후열": {
+    "en": "Back row",
+    "ja": "後衛"
+  },
+  "후열 2명 이상 후방 배치": {
+    "en": "Deploy 2 or more in Back row",
+    "ja": "後衛2人以上後方配置"
+  },
+  "후열 단일 대상 190% 치명 기습": {
+    "en": "190% Critical Ambush on a single Back row target",
+    "ja": "後衛単体対象190%会心奇襲"
+  },
+  "후열 저격": {
+    "en": "Back Row Snipe",
+    "ja": "後衛狙撃"
+  },
+  "후열 저격 시 +20% & 치명타": {
+    "en": "+20% & Crit on Back Row Snipe",
+    "ja": "後衛狙撃時+20%＆会心"
+  },
+  "후열 저격: 후열 적 타격 시 피해 +20% 증폭 및 확정 치명타 적중, 마나 35% 환급": {
+    "en": "Back Row Snipe: Amplifies damage by +20% with guaranteed Critical Hit when striking Back row enemies, refunding 35% MP",
+    "ja": "後衛狙撃: 後衛の敵攻撃時ダメージ+20%増幅および確定会心ヒット、マナ35%還元"
+  },
+  "후열 적": {
+    "en": "Back row enemy",
+    "ja": "後衛の敵"
+  },
+  "후열의 적을 정확히 꿰뚫는 투사의 초장거리 강궁.": {
+    "en": "A champion's ultra long-range heavy bow accurately piercing enemies in the back row.",
+    "ja": "後衛の敵を正確に射抜く闘士の超長距離強弓。"
+  },
+  "휴식 중 원정대의 허기를 채워줍니다. 야영(Camp)을 진행할 때 1개를 소모하여 파티원 전원의 HP와 MP를 35% 회복합니다. (방주 식량 4개 소모)": {
+    "en": "Satiates the expedition's hunger during rests. Consume 1 during Camp to recover 35% HP and MP for all party members. (Consumes 4 Ark Food)",
+    "ja": "休息中に遠征隊の飢えを満たします。野営（Camp）を行う際に1個を消費してパーティ全員のHPとMPを35%回復します。（方舟食糧4個消費）"
+  },
+  "휴식 중 원정대의 허기를 채워줍니다. 야영을 거행할 때 1개를 소모하여 파티원 전원의 HP와 MP를 35% 즉시 회복합니다. (던전 귀환 시 휘발/소멸)": {
+    "en": "Satiates the expedition's hunger during rests. Consume 1 during Camp to instantly recover 35% HP and MP for all party members. (Evaporates/expires upon returning from dungeon)",
+    "ja": "休息中に遠征隊の飢えを満たします。野営を行う際に1個を消費してパーティ全員のHPとMPを35%即時回復します。（ダンジョン帰還時に揮発/消滅）"
+  },
+  "흉갑": {
+    "en": "Breastplate",
+    "ja": "胸甲"
+  },
+  "흑무 속에서 붉게 번뜩이는 눈동자들이 방주 성채를 노리고 있다. 비록 전멸하더라도 심연의 지형을 확인하는 첫 진입 자체가 값진 경험이다. 진입 후 귀환한 부상자들을 치료할 생체 복원 병동과 심연의 병기창이 개방된다.": {
+    "en": "Crimson glittering eyes in the black fog target the Ark Citadel. Even if wiped out, the first entry itself to scout the Abyss's terrain is valuable experience. Upon return, the Bio-Restoration Ward and Ark Armory & Forge unlock to treat wounded.",
+    "ja": "黒霧の中で赤く光る瞳が方舟の城塞を狙っている。全滅しても深淵の地形を確認する初進入自体が価値ある経験だ。進入後に帰還した負傷者を治療する生体復元病棟と深淵の兵器廠が開放される。"
+  },
+  "흑무 속에서 뻗어나오는 발톱들을 베어넘겨 방주의 안전지대를 수호하라.": {
+    "en": "Sever the claws reaching from the black fog to defend the Ark's safe zone.",
+    "ja": "黒霧の中から伸びる爪を切り伏せ、方舟の安全地帯を守護せよ。"
+  },
+  "흑무 속에서도 착용자의 감각과 행동 속도를 비약적으로 증폭시키는 고대 목걸이.": {
+    "en": "An ancient necklace that dramatically amplifies the wearer's senses and speed even within the black fog.",
+    "ja": "黒霧の中でも着用者の感覚と行動速度を飛躍的に増幅させる古代のネックレス。"
+  },
+  "흑무 흡수": {
+    "en": "Black Fog Absorption",
+    "ja": "黒霧吸収"
+  },
+  "흑무의 잠식": {
+    "en": "Black Fog Encroachment",
+    "ja": "黒霧の侵食"
+  },
+  "흑야의 성자": {
+    "en": "Saint of the Dark Night",
+    "ja": "黒夜の聖者"
+  },
+  "흑염": {
+    "en": "Black Flame",
+    "ja": "黒炎"
+  },
+  "흑염의 모건": {
+    "en": "Morgan of Black Flame",
+    "ja": "黒炎のモーガン"
+  },
+  "흑요석 관통 대궁": {
+    "en": "Obsidian Piercing Greatbow",
+    "ja": "黒曜石の貫通大弓"
+  },
+  "흑요석 관통 월도": {
+    "en": "Obsidian Piercing Glaive",
+    "ja": "黒曜石の貫通月刀"
+  },
+  "흑요석 그림자 암살 장구": {
+    "en": "Obsidian Shadow Assassin Gear",
+    "ja": "黒曜石の影暗殺装具"
+  },
+  "흑요석 정예 경갑": {
+    "en": "Obsidian Elite Light Armor",
+    "ja": "黒曜石のエリート軽甲"
+  },
+  "흑요석 정예 기사검": {
+    "en": "Obsidian Elite Knight Sword",
+    "ja": "黒曜石のエリート騎士剣"
+  },
+  "흑요석 철벽 중갑": {
+    "en": "Obsidian Ironclad Heavy Armor",
+    "ja": "黒曜石の鉄壁重甲"
+  },
+  "흑요석과 에테르를 융합하여 강력한 3대 전투 성능을 부여한 [희귀]": {
+    "en": "[Rare] infused with obsidian and ether, granting 3 formidable combat capabilities",
+    "ja": "黒曜石とエーテルを融合し、強力な3大戦闘性能を付与した[希少]"
+  },
+  "흑철 가시 덫": {
+    "en": "Dark Iron Spike Trap",
+    "ja": "黒鉄トゲ罠"
+  },
+  "흑핵의 영구동결": {
+    "en": "Permanent Freezing of the Black Core",
+    "ja": "黒核の永久凍結"
+  },
+  "흡혈": {
+    "en": "Lifesteal",
+    "ja": "吸血"
+  },
+  "흡혈 +{0}%": {
+    "en": "Lifesteal +{0}%",
+    "ja": "吸血 +{0}%"
+  },
+  "흡혈 진혼곡": {
+    "en": "Lifesteal Requiem",
+    "ja": "吸血のレクイエム"
+  },
+  "흡혈귀": {
+    "en": "Vampire",
+    "ja": "吸血鬼"
+  },
+  "흡혈의 일격": {
+    "en": "Strike of Vampirism",
+    "ja": "吸血の一撃"
+  },
+  "흡혈의 저주를 역이용한 궁극의 10티어 무기 [진홍 혈염의 파멸 대검]을 결사대 전사에게 하사합니다.": {
+    "en": "Bestow the ultimate Tier 10 weapon [Crimson Blood Flame Greatsword of Ruin], turning the vampire curse inside out, upon the vanguard warrior.",
+    "ja": "吸血の呪いを逆利用した究極のTier 10武器[深紅血炎の破滅大剣]を決死隊の戦士に下賜します。"
+  },
+  "흡혈의 흉인": {
+    "en": "Fellblade of Vampirism",
+    "ja": "吸血の凶刃"
+  },
+  "희귀": {
+    "en": "Rare",
+    "ja": "希少"
+  },
+  "희귀 장신구": {
+    "en": "Rare Accessory",
+    "ja": "希少装飾品"
+  },
+  "희귀 장신구: 투사의 용맹 목걸이": {
+    "en": "Rare Accessory: Warrior's Valor Necklace",
+    "ja": "希少装飾品: 闘士の武勇ネックレス"
+  },
+  "희귀 재료 및 마도석 공급선 확대 & 🪙 +12G/15초 & 유지비 주기 27초": {
+    "en": "Expand rare material & magic stone supply line & 🪙 +12G/15s & Upkeep cycle 27s",
+    "ja": "希少素材および魔導石供給ライン拡大＆🪙 +12G/15秒＆維持費周期27秒"
+  },
+  "희귀 파밍 재료와 상급 마도석의 직통 공급선을 확보하여 거점 경제의 자립도를 한층 끌어올립니다.": {
+    "en": "Secure a direct supply line of rare farming materials and advanced magic stones to greatly enhance the outpost's economic self-reliance.",
+    "ja": "希少採取素材と上級魔導石の直通供給ラインを確保し、拠点経済の自立度を一段と高めます。"
+  },
+  "희귀(RARE)": {
+    "en": "Rare (RARE)",
+    "ja": "希少(RARE)"
+  },
+  "희귀~전설 등급 장비 단조, 순수 접두/접미 인챈트석을 활용한 2중 스탯 강화, 클래스 맞춤형 유니크 보스 드랍 장비": {
+    "en": "Rare to Legendary gear forging, dual stat enhancement using pure prefix/suffix enchant stones, class-tailored unique boss drop equipment",
+    "ja": "希少〜伝説ランク装備の鍛造、純粋接頭/接尾エンチャント石を活用した2重ステータス強化、クラス特化ユニークボスドロップ装備"
+  },
+  "히어로(H)": {
+    "en": "Hero (H)",
+    "ja": "ヒーロー(H)"
+  },
+  "힐러 2인": {
+    "en": "2 Healers",
+    "ja": "ヒーラー2人"
+  },
+  "힐러 3인 (순수 성직자)": {
+    "en": "3 Healers (Pure Clerics)",
+    "ja": "ヒーラー3人（純粋聖職者）"
+  },
+  "🇰🇷 한국어": {
+    "en": "🇰🇷 Korean",
+    "ja": "🇰🇷 韓国語"
+  },
+  "🌀 [{0}] 시공 왜곡장 발동: {1} 마나 즉시 회복 (+{2} MP)": {
+    "en": "🌀 [{0}] Spacetime Distortion Field activated: {1} immediately recovered (+{2} MP)",
+    "ja": "🌀 [{0}] 時空歪曲フィールド発動: {1}マナ即時回復 (+{2} MP)"
+  },
+  "🌀 [네메시스](SPD {0}) [{1}] 광역 강타! 아군 전체가 피해를 입었습니다!": {
+    "en": "🌀 [Nemesis] (SPD {0}) [{1}] AoE Strike! All allies took damage!",
+    "ja": "🌀 [ネメシス](SPD {0}) [{1}] 範囲強打！ 味方全体がダメージを受けました！"
+  },
+  "🌀 [마나 순환] {0} 고유 패시브 마나 회복 (+{1} MP)": {
+    "en": "🌀 [Mana Circulation] {0} innate passive mana recovery (+{1} MP)",
+    "ja": "🌀 [マナ循環] {0}固有パッシブマナ回復 (+{1} MP)"
+  },
+  "🌀 [심연 진입로 개방] {0}층 보스를 토벌하여 심연 {1}층 진입 포인트가 성채 채비실에 영구 해금되었습니다!": {
+    "en": "🌀 [Abyssal Entryway Unlocked] Slew the {0}F Boss! Entry point for Abyss {1}F is permanently unlocked in the Citadel Staging Room!",
+    "ja": "🌀 [深淵進入路開放] {0}層ボスを討伐し、深淵{1}層進入ポイントが城塞準備室に永久解放されました！"
+  },
+  "🌀 [이동] {0}({1}층)에 도착했습니다.": {
+    "en": "🌀 [Move] Arrived at {0} ({1}F).",
+    "ja": "🌀 [移動] {0}({1}層)に到着しました。"
+  },
+  "🌀 [진형 붕괴] {0}이(가) {1}되어 [{2}]로 이동했습니다!": {
+    "en": "🌀 [Formation Collapse] {0} was {1} and moved to [{2}]!",
+    "ja": "🌀 [陣形崩壊] {0}が{1}され、[{2}]へ移動しました！"
+  },
+  "🌀 [차원 철수 및 원군 급파] [{0}]의 공간 도약 마법으로 한계에 다다른 [{1}] 대원을 방주로 안전히 후송했습니다. 긴급 지원 요청에 응답한 [{2}] 대원이 차원의 틈을 넘어 전장으로 달려옵니다.": {
+    "en": "🌀 [Dimensional Retreat & Reinforcement Dispatch] Safely evacuated [{1}] who reached their limit back to the Ark using [{0}]'s spatial leap magic. Responding to the emergency support request, [{2}] rushes across the dimensional rift onto the battlefield.",
+    "ja": "🌀 [次元撤退および援軍急派] [{0}]の空間跳躍魔法により限界に達した[{1}]隊員を方舟へ安全に後送しました。緊急支援要請に応じた[{2}]隊員が次元の狭間を越えて戦場へと駆けつけます。"
+  },
+  "🌀 [차원 철수] [{0}]의 공간 도약 마법으로 [{1}] 대원을 방주로 안전히 후송했습니다.": {
+    "en": "🌀 [Dimensional Retreat] Safely evacuated [{1}] back to the Ark using [{0}]'s spatial leap magic.",
+    "ja": "🌀 [次元撤退] [{0}]の空間跳躍魔法により[{1}]隊員を方舟へ安全に後送しました。"
+  },
+  "🌀 강하 구역(층) 선택": {
+    "en": "🌀 Select Descent Zone (Floor)",
+    "ja": "🌀 降下区域(層)選択"
+  },
+  "🌀 다음 층으로 이동 (안전 진행)": {
+    "en": "🌀 Proceed to Next Floor (Safe Path)",
+    "ja": "🌀 次の層へ移動 (安全進行)"
+  },
+  "🌀 차원 포탈 & 심연 오버차지": {
+    "en": "🌀 Dimensional Portal & Abyssal Overcharge",
+    "ja": "🌀 次元ポータル＆深淵オーバーチャージ"
+  },
+  "🌀 포탈을 타고 계속 탐험": {
+    "en": "🌀 Enter Portal and Continue Exploration",
+    "ja": "🌀 ポータルに入り探検を続行"
+  },
+  "🌀[{0}! {1}로 이동]": {
+    "en": "🌀[{0}! Moved to {1}]",
+    "ja": "🌀[{0}! {1}へ移動]"
+  },
+  "🌈 성령의 구원자": {
+    "en": "🌈 Savior of the Holy Spirit",
+    "ja": "🌈 聖霊の救済者"
+  },
+  "🌋 전열 분쇄 & 피의 폭주 (근접 딜탱)": {
+    "en": "🌋 Front Row Shatter & Blood Rampage (Melee Bruiser)",
+    "ja": "🌋 前衛粉砕＆血の暴走（近接ブルーザー）"
+  },
+  "🌋🔥 [광맥 분출] 고열 폭발로 대상의 방어력을 50% 분쇄하고 3턴간 화상을 부여했습니다!": {
+    "en": "🌋🔥 [Vein Eruption] Shattered target's DEF by 50% with high-heat explosion and inflicted Burn for 3 turns!",
+    "ja": "🌋🔥 [鉱脈噴出] 高熱爆発で対象の防御力を50%粉砕し、3ターン間火傷を付与しました！"
+  },
+  "🌌 3+1+1 차원 전술 덱 편성": {
+    "en": "🌌 3+1+1 Tactical Dimensional Deck Build",
+    "ja": "🌌 3+1+1次元戦術デッキ編成"
+  },
+  "🌌 [네메시스 토벌] 가한 피해량 {0}! 투사의 인장 🪙+{1}, 에테르 ✨+{2}, 파티 경험치 +{3} 획득!": {
+    "en": "🌌 [Nemesis Subjugation] Damage dealt {0}! Champion's Seal 🪙+{1}, Ether ✨+{2}, Party EXP +{3} obtained!",
+    "ja": "🌌 [ネメシス討伐] 与ダメージ量{0}！ 闘士の印章🪙+{1}、エーテル✨+{2}、パーティ経験値+{3}獲得！"
+  },
+  "🌌 [명예 상점] [{0}]을 개봉하여 신화급 [{1}] {2}을(를) 획득했습니다!": {
+    "en": "🌌 [Honor Shop] Opened [{0}] and acquired Mythic [{1}] {2}!",
+    "ja": "🌌 [名誉商店] [{0}]を開封し、神話級[{1}] {2}を獲得しました！"
+  },
+  "🌌 [무간도 진입로 개방] 위험도 {0} 보스 격파 돌파! 성채 채비실에 [무간도 {1}계층 (시작 위험도 {2})] 진입로가 영구 해금되었습니다!": {
+    "en": "🌌 [Avici Entryway Unlocked] Hazard {0} Boss breached and slain! [Avici Layer {1} (Starting Hazard {2})] entryway permanently unlocked in Citadel Staging Room!",
+    "ja": "🌌 [無間道進入路開放] 危険度{0}のボスを撃破突破！ 城塞準備室に[無間道{1}階層 (開始危険度{2})]進入路が永久解放されました！"
+  },
+  "🌌 [무간도 탐험 지속] 중간 보스를 격파하고 위험도 {0}의 심연 탐색을 계속 진행합니다!": {
+    "en": "🌌 [Avici Exploration Continued] Slew mid-boss and continuing Abyssal exploration at Hazard {0}!",
+    "ja": "🌌 [無間道探検継続] 中間ボスを撃破し、危険度{0}の深淵探索を継続します！"
+  },
+  "🌌 [무간도] 위험도 10,000 광폭화 진 최종 보스(아르케오스) 토벌": {
+    "en": "🌌 [Avici] Slew Hazard 10,000 Berserk True Final Boss (Archeos)",
+    "ja": "🌌 [無間道] 危険度10,000狂暴化真最終ボス（アルケオス）討伐"
+  },
+  "🌌 [시공간 도약] 차원 균열을 통해 위험도 +{0}만큼 심연 속으로 고속 전진했습니다! (현재 위험도: {1})": {
+    "en": "🌌 [Spacetime Leap] Advanced rapidly through dimensional rift into the Abyss by Hazard +{0}! (Current Hazard: {1})",
+    "ja": "🌌 [時空跳躍] 次元亀裂を通じて危険度+{0}分深淵へと高速前進しました！（現在の危険度: {1}）"
+  },
+  "🌌 [차원 네메시스 강림] 시공의 균열이 다시 열리고 '시공의 침식자, 네메시스'가 완전히 재소환되었습니다! 6일간의 침식 활동이 시작됩니다.": {
+    "en": "🌌 [Dimensional Nemesis Descent] Spacetime rift reopened and 'Spacetime Corruptor, Nemesis' has fully resummoned! 6 days of corruption begin.",
+    "ja": "🌌 [次元ネメシス降臨] 時空の亀裂が再び開き、『時空の侵食者、ネメシス』が完全に再召喚されました！ 6日間の侵食活動が始まります。"
+  },
+  "🌌 [차원 네메시스 관문 개방!] 차원 앵커 게이트가 Lv.3에 도달하여 시공의 침식자 네메시스 월드 레이드가 해금되었습니다!": {
+    "en": "🌌 [Dimensional Nemesis Portal Unlocked!] Dimensional Gate reached Lv.3, unlocking the Spacetime Corruptor Nemesis World Raid!",
+    "ja": "🌌 [次元ネメシス関門開放！] 次元アンカーゲートがLv.3に到達し、時空の侵食者ネメシスワールドレイドが解放されました！"
+  },
+  "🌌 [차원 네메시스] 새로운 날이 밝아 일일 토벌 도전 횟수(3회)가 충전되었습니다!": {
+    "en": "🌌 [Dimensional Nemesis] A new day dawns, recharging daily subjugation attempts (3 times)!",
+    "ja": "🌌 [次元ネメシス] 新しい日が昇り、デイリー討伐挑戦回数（3回）がチャージされました！"
+  },
+  "🌌 [차원의 침식] 시공의 침식자 네메시스와의 결전이 시작되었습니다!": {
+    "en": "🌌 [Dimensional Erosion] Decisive battle against Nemesis, Corruptor of Spacetime, has begun!",
+    "ja": "🌌 [次元の侵食] 時空の侵食者ネメシスとの決戦が始まりました！"
+  },
+  "🌌 [초월 엔드 컨텐츠 해금] 심연의 군주 아스모데우스를 완전 굴복시켰습니다! 끝없는 억겁의 심연 [무간도 (Avici, 11F)]가 개방되었습니다!": {
+    "en": "🌌 [Transcendent End Content Unlocked] Completely subjugated Abyssal Overlord Asmodeus! The endless eons of the Abyss, [Avici (11F)], has opened!",
+    "ja": "🌌 [超越エンドコンテンツ開放] 深淵の君主アスモデウスを完全に屈服させました！ 終わりなき億劫の深淵[無間道 (Avici, 11F)]が開放されました！"
+  },
+  "🌌 네메시스 개방 Lv.{0}": {
+    "en": "🌌 Nemesis Unlocked Lv.{0}",
+    "ja": "🌌 ネメシス開放 Lv.{0}"
+  },
+  "🌌 네메시스 토벌전 출격 (전투 시작)": {
+    "en": "🌌 Sortie for Nemesis Subjugation (Battle Start)",
+    "ja": "🌌 ネメシス討伐戦出撃 (戦闘開始)"
+  },
+  "🌌 무간도 시공간 균열 발견": {
+    "en": "🌌 Discovered Avici Spacetime Rift",
+    "ja": "🌌 無間道時空亀裂発見"
+  },
+  "🌌 무간도 심연 계속 탐험 (다음 마일스톤 도전)": {
+    "en": "🌌 Continue Avici Abyssal Exploration (Challenge Next Milestone)",
+    "ja": "🌌 無間道の深淵探検続行 (次のマイルストーン挑戦)"
+  },
+  "🌌 무간도 중간 보스 토벌 완료!": {
+    "en": "🌌 Avici Mid-Boss Subjugation Complete!",
+    "ja": "🌌 無間道中間ボス討伐完了！"
+  },
+  "🌌 무중력 공허 포켓": {
+    "en": "🌌 Zero-G Void Pocket",
+    "ja": "🌌 無重力虚空ポケット"
+  },
+  "🌌 순수 접미석": {
+    "en": "🌌 Pure Suffix Stone",
+    "ja": "🌌 純粋接尾石"
+  },
+  "🌌 억겁의 윤회 나선": {
+    "en": "🌌 Reincarnation Spiral of Kalpas",
+    "ja": "🌌 億劫の輪廻螺旋"
+  },
+  "🌌 차원 게이트 & 전장 8단계 연계 퀘스트 라인": {
+    "en": "🌌 Dimensional Gate & Battlefield 8-Stage Chain Questline",
+    "ja": "🌌 次元ゲート＆戦場8段階連係クエストライン"
+  },
+  "🌌 차원 네메시스 전투 리포트": {
+    "en": "🌌 Dimensional Nemesis Combat Report",
+    "ja": "🌌 次元ネメシス戦闘レポート"
+  },
+  "🌌 초월 심연 11층 '무간도 (Avici)' & 진 최종 보스": {
+    "en": "🌌 Transcendent Abyss 11F 'Avici' & True Final Boss",
+    "ja": "🌌 超越深淵11層『無間道 (Avici)』＆真最終ボス"
+  },
+  "🌌⌛ [신화 촉매 획득] 시공간 초월자 아르케오스의 유산 [시공간의 나침반]을 계승했습니다! 채비실의 차원의 나침반이 시공간의 나침반으로 완전히 대체되어, 용병 긴급 이송 대기 시간이 영구히 소멸(0턴 즉시 합류)합니다!": {
+    "en": "🌌⌛ [Mythic Catalyst Acquired] Inherited [Spacetime Compass], legacy of Spacetime Transcender Archeos! The Dimensional Compass in the Staging Room is completely replaced by the Spacetime Compass, permanently eliminating mercenary emergency transport cooldown (0 turns, joins instantly)!",
+    "ja": "🌌⌛ [神話触媒獲得] 時空超越者アルケオスの遺産[時空の羅針盤]を継承しました！ 準備室の次元の羅針盤が時空の羅針盤に完全に置き換わり、傭兵緊急移送待機時間が永久に消滅（0ターン即時合流）します！"
+  },
+  "🌐 공용": {
+    "en": "🌐 Common",
+    "ja": "🌐 共通"
+  },
+  "🌐 언어가 한국어로 설정되었습니다.": {
+    "en": "🌐 Language has been set to Korean.",
+    "ja": "🌐 言語が韓国語に設定されました。"
+  },
+  "🌐 웹 브라우저로 열기": {
+    "en": "🌐 Open in Web Browser",
+    "ja": "🌐 ウェブブラウザで開く"
+  },
+  "🌐 지휘관": {
+    "en": "🌐 Commander",
+    "ja": "🌐 指揮官"
+  },
+  "🌐👑 [전술의 극의]: 5개 뱃지가 모두 서로 다를 때 발동. 궁극기 위력 +80%, 치명타 +50%, 관통 50%, 파티 MP 100% 완충, 적 전체 1턴 완전 그로기": {
+    "en": "🌐👑 [Apex of Tactics]: Triggers when all 5 Badges are distinct. Ultimate Power +80%, Crit +50%, Penetration 50%, Party MP 100% charged, all enemies completely groggy for 1 turn",
+    "ja": "🌐👑 [戦術の極意]: 5つのバッジがすべて異なるとき発動。アルティメット威力+80%、会心+50%、貫通50%、パーティMP100%フルチャージ、敵全体1ターン完全グロッキー"
+  },
+  "🌙 [오프라인 정산 ({0} 경과)] 부재 중 영지 활동이 정산되었습니다.": {
+    "en": "🌙 [Offline Settlement ({0} elapsed)] Estate activities during your absence have been settled.",
+    "ja": "🌙 [オフライン精算 ({0}経過)] 不在中の領地活動が精算されました。"
+  },
+  "🌙 부재 중 영지 활동 정산 보고서": {
+    "en": "🌙 Absence Estate Activity Settlement Report",
+    "ja": "🌙 不在中領地活動精算報告書"
+  },
+  "🌟 [3층 진행 복원] 심연 3층 [에테르 광맥] 및 차원 게이트 건설 준비가 완료되었습니다!": {
+    "en": "🌟 [3F Progress Restored] Abyss 3F [Ether Vein] and Dimensional Gate construction preparations are complete!",
+    "ja": "🌟 [3層進行復元] 深淵3層[エーテル鉱脈]および次元ゲート建設の準備が完了しました！"
+  },
+  "🌟 [{0} 특기] 그림자 가시 걷기 (출혈 0 / 위험도 변동 없음 / 💎 진홍 루비 보석 획득)": {
+    "en": "🌟 [{0} Specialty] Shadow Thorn Walk (Bleed 0 / No Hazard change / 💎 Crimson Ruby Gem acquired)",
+    "ja": "🌟 [{0}特技] 影の棘歩き (出血0 / 危険度変動なし / 💎深紅ルビー宝石獲得)"
+  },
+  "🌟 [{0} 특기] 기사도의 맹세 계승 (물리 방어력 영구 +5 각성 & 비전서 획득)": {
+    "en": "🌟 [{0} Specialty] Chivalric Oath Succession (Physical DEF permanent +5 awakening & Grimoire acquired)",
+    "ja": "🌟 [{0}特技] 騎士道の誓い継承 (物理防御力永久+5覚醒＆秘伝書獲得)"
+  },
+  "🌟 [{0} 특기] 마력 수정 정제 (파티 전원 MP +100 회복 / 위험도 -25 안전화 / 💎 마력 수정 ×3)": {
+    "en": "🌟 [{0} Specialty] Magic Crystal Refining (All party members recover +100 MP / Hazard -25 stabilized / 💎 Magic Crystal x3)",
+    "ja": "🌟 [{0}特技] 魔力結晶精製 (パーティ全員MP+100回復 / 危険度-25安定化 / 💎魔力結晶×3)"
+  },
+  "🌟 [{0} 특기] 마스터 픽링 (100% 무소음 해제 / 8티어 무구 + 💎 순수 접두석)": {
+    "en": "🌟 [{0} Specialty] Master Lockpick (100% silent unlock / Tier 8 gear + 💎 Pure Prefix Stone)",
+    "ja": "🌟 [{0}特技] マスターピッキング (100%無音解除 / Tier 8武具＋💎純粋接頭石)"
+  },
+  "🌟 [{0} 특기] 만화경 굴절 제어 (위험도 -35 감소 / 전원 영구 올스탯 +3 각성)": {
+    "en": "🌟 [{0} Specialty] Kaleidoscope Refraction Control (Hazard -35 / All members permanently awaken +3 All Stats)",
+    "ja": "🌟 [{0}特技] 万華鏡屈折制御 (危険度-35減少 / 全員永久全ステータス+3覚醒)"
+  },
+  "🌟 [{0} 특기] 비전 등대 결계 (위험도 -35 감소 / 7층 전역 시야 개방 / ✨ 50)": {
+    "en": "🌟 [{0} Specialty] Arcane Lighthouse Barrier (Hazard -35 / 7F full vision unlocked / ✨ 50)",
+    "ja": "🌟 [{0}特技] 秘術の灯台結界 (危険度-35減少 / 7層全域の視界開放 / ✨ 50)"
+  },
+  "🌟 [{0} 특기] 사념 마력 구속 (위험도 +25 또는 -20 자유 선택 / 접두석 연성)": {
+    "en": "🌟 [{0} Specialty] Thought Mana Binding (Free choice of Hazard +25 or -20 / Prefix Stone transmuted)",
+    "ja": "🌟 [{0}特技] 思念魔力拘束 (危険度+25または-20を自由に選択 / 接頭石錬成)"
+  },
+  "🌟 [{0} 특기] 시간 틈새 도약 (미래의 전리품 탈취 / 4티어 무기 복제 / 위험도 0)": {
+    "en": "🌟 [{0} Specialty] Time Gap Leap (Plunder future loot / Replicate Tier 4 weapon / Hazard 0)",
+    "ja": "🌟 [{0}特技] 時の狭間跳躍 (未来の戦利品強奪 / Tier 4武器複製 / 危険度0)"
+  },
+  "🌟 [{0} 특기] 시공간 위상 정밀 조율 (위험도 -500 감소 & 🌌 공허 파편 ×5 획득)": {
+    "en": "🌟 [{0} Specialty] Spacetime Phase Precision Tuning (Hazard -500 & 🌌 Void Shard x5 acquired)",
+    "ja": "🌟 [{0}特技] 時空位相精密同調 (危険度-500減少＆🌌虚無の欠片×5獲得)"
+  },
+  "🌟 [{0} 특기] 신성 정화의 찬가 (위험도 -25 대폭 감소 / 전원 HP 25% 회복 / 신성 약초 정수 획득)": {
+    "en": "🌟 [{0} Specialty] Hymn of Holy Cleansing (Hazard greatly reduced by -25 / All members recover 25% HP / Holy Herb Essence acquired)",
+    "ja": "🌟 [{0}特技] 神聖浄化の賛歌 (危険度-25大幅減少 / 全員HP25%回復 / 神聖薬草エキス獲得)"
+  },
+  "🌟 [{0} 특기] 신성 축성 기도 (✨ 에테르 100 소모 ➔ 전원 HP/MP 35% 회복 & 디버프 해제)": {
+    "en": "🌟 [{0} Specialty] Holy Consecration Prayer (Consume ✨ 100 Ether ➔ All members recover 35% HP/MP & cleanse debuffs)",
+    "ja": "🌟 [{0}特技] 神聖祝聖祈祷 (✨エーテル100消費 ➔ 全員HP/MP 35%回復＆デバフ解除)"
+  },
+  "🌟 [{0} 특기] 신성 축성 기도 (✨ 에테르 100 필요 - 보유 에테르 부족: {1}/100)": {
+    "en": "🌟 [{0} Specialty] Holy Consecration Prayer (Requires ✨ 100 Ether - Insufficient Ether: {1}/100)",
+    "ja": "🌟 [{0}特技] 神聖祝聖祈祷 (✨エーテル100必要 - 所持エーテル不足: {1}/100)"
+  },
+  "🌟 [{0} 특기] 신성한 영혼의 증명 (골드 소모 0 / 위험도 -30 / 사신의 가호 무료 획득)": {
+    "en": "🌟 [{0} Specialty] Sacred Soul Proof (Gold cost 0 / Hazard -30 / Reaper's Blessing obtained free)",
+    "ja": "🌟 [{0}特技] 神聖なる魂の証明 (ゴールド消費0 / 危険度-30 / 死神の加護無料獲得)"
+  },
+  "🌟 [{0} 특기] 안식의 성역 (위험도 -30 대폭 감소 / 영혼의 잔재 오파츠 획득)": {
+    "en": "🌟 [{0} Specialty] Sanctuary of Repose (Hazard greatly reduced by -30 / Soul Remnants Ooparts acquired)",
+    "ja": "🌟 [{0}特技] 安息の聖域 (危険度-30大幅減少 / 魂の残滓オーパーツ獲得)"
+  },
+  "🌟 [{0} 특기] 영원의 성역 봉인 (위험도 -40 대폭 감소 / 결전 1회 무적 방벽 부여)": {
+    "en": "🌟 [{0} Specialty] Seal of Eternal Sanctuary (Hazard greatly reduced by -40 / Grants 1-time Invincible Barrier for final battle)",
+    "ja": "🌟 [{0}特技] 永遠の聖域封印 (危険度-40大幅減少 / 決戦1回無敵バリア付与)"
+  },
+  "🌟 [{0} 특기] 영혼의 축복 안식 (위험도 -30 / 전원 영구 최대 HP +5% 축복)": {
+    "en": "🌟 [{0} Specialty] Soul's Blessed Repose (Hazard -30 / All members permanent Max HP +5% blessing)",
+    "ja": "🌟 [{0}特技] 魂の祝福安息 (危険度-30 / 全員永久最大HP+5%祝福)"
+  },
+  "🌟 [{0} 특기] 완력 흑철 파괴 (경보 0 / 위험도 -25 감소 / 단죄의 서약 검 획득)": {
+    "en": "🌟 [{0} Specialty] Might Dark Iron Crush (Alert 0 / Hazard -25 / Blade of Condemnation Pledge acquired)",
+    "ja": "🌟 [{0}特技] 腕力黒鉄破壊 (警報0 / 危険度-25減少 / 断罪の誓約剣獲得)"
+  },
+  "🌟 [{0} 특기] 이단 축출의 성언 (위험도 -30 / 성자의 유골함 오파츠 획득)": {
+    "en": "🌟 [{0} Specialty] Holy Word of Heresy Purge (Hazard -30 / Saint's Reliquary Ooparts acquired)",
+    "ja": "🌟 [{0}特技] 異端追放の聖言 (危険度-30 / 聖者の骨壷オーパーツ獲得)"
+  },
+  "🌟 [{0} 특기] 절대 방패 지지 (피해 0 / 위험도 -30 감소 / 🪨 석재 +15, ⚙️ 철광석 +10)": {
+    "en": "🌟 [{0} Specialty] Absolute Shield Support (Damage 0 / Hazard -30 / 🪨 Stone +15, ⚙️ Iron Ore +10)",
+    "ja": "🌟 [{0}特技] 絶対盾支持 (ダメージ0 / 危険度-30減少 / 🪨石材+15, ⚙️鉄鉱石+10)"
+  },
+  "🌟 [{0} 특기] 지휘관의 전술 계승 (파티 전체 방어력/공격력 영구 +20% 강화)": {
+    "en": "🌟 [{0} Specialty] Commander's Tactical Succession (Entire party DEF/ATK permanently boosted by +20%)",
+    "ja": "🌟 [{0}特技] 指揮官の戦術継承 (パーティ全体の防御力/攻撃力永久+20%強化)"
+  },
+  "🌟 [{0} 특기] 진실의 성광 투사 (위험도 -30 대폭 감소 / 도플갱어 즉시 소멸 / 9티어 장비 획득)": {
+    "en": "🌟 [{0} Specialty] True Holy Light Projection (Hazard greatly reduced by -30 / Doppelganger extinguished instantly / Tier 9 gear acquired)",
+    "ja": "🌟 [{0}特技] 真実の聖光投射 (危険度-30大幅減少 / ドッペルゲンガー即時消滅 / Tier 9装備獲得)"
+  },
+  "🌟 [{0} 특기] 태초의 신성 각인 (전원 영구 HP/MP +20% 상승 / 위험도 -500)": {
+    "en": "🌟 [{0} Specialty] Primordial Divine Imprint (All members permanently gain HP/MP +20% / Hazard -500)",
+    "ja": "🌟 [{0}特技] 太初の神聖刻印 (全員永久HP/MP+20%上昇 / 危険度-500)"
+  },
+  "🌟 [{0} 특기] 트랩 해체 및 위험도 조율 (100% 무소음 / 마력 수정 +1, 제식 단검 획득)": {
+    "en": "🌟 [{0} Specialty] Trap Disarm & Hazard Tuning (100% silent / Magic Crystal +1, Standard Dagger acquired)",
+    "ja": "🌟 [{0}特技] 罠解除および危険度調整 (100%無音 / 魔力結晶+1、制式短剣獲得)"
+  },
+  "🌟 [{0} 특기] 피의 광기 포효 (체력 소모 0 / 위험도 +35 폭증 / 치명타 피해 +50%)": {
+    "en": "🌟 [{0} Specialty] Blood Frenzy Roar (HP cost 0 / Hazard surges by +35 / Crit DMG +50%)",
+    "ja": "🌟 [{0}特技] 血の狂気咆哮 (体力消費0 / 危険度+35急増 / 会心ダメージ+50%)"
+  },
+  "🌟 [가디언 특기] [{0}]이(가) 거대한 방패로 낙석을 완벽히 막아냈습니다! (피해 0, 위험도 -30 대폭 감소)": {
+    "en": "🌟 [Guardian Specialty] [{0}] completely blocked the falling rocks with a massive shield! (Damage 0, Hazard greatly reduced by -30)",
+    "ja": "🌟 [ガーディアン特技] [{0}]が巨大な盾で落石を完全に防ぎました！ (ダメージ0、危険度-30大幅減少)"
+  },
+  "🌟 [광전사 특기] [{0}]이(가) 제단 앞에서 야수의 포효를 내질렀습니다! (위험도 +35 폭증, 보스 조우 임박!)": {
+    "en": "🌟 [Berserker Specialty] [{0}] unleashed a beastly roar before the altar! (Hazard surged by +35, Boss encounter imminent!)",
+    "ja": "🌟 [狂戦士特技] [{0}]が祭壇の前で獣の咆哮を上げました！ (危険度+35急増、ボス遭遇間近！)"
+  },
+  "🌟 [기사 특기] [{0}]이(가) 비문의 고대 검술을 계승하여 물리 방어력이 영구 +5 상승했습니다!": {
+    "en": "🌟 [Knight Specialty] [{0}] inherited ancient swordsmanship from the inscription, permanently gaining Physical DEF +5!",
+    "ja": "🌟 [騎士特技] [{0}]が碑文の古代剣術を継承し、物理防御力が永久+5上昇しました！"
+  },
+  "🌟 [대마도사 특기] [{0}]이(가) 사념 에너지를 정제하여 접두석을 연성했습니다! (위험도 -20 감소)": {
+    "en": "🌟 [Archmage Specialty] [{0}] refined thought energy and transmuted a Prefix Stone! (Hazard reduced by -20)",
+    "ja": "🌟 [大魔導士特技] [{0}]が思念エネルギーを精製して接頭石を錬成しました！ (危険度-20減少)"
+  },
+  "🌟 [마도 인챈트 대성공!] (성공 확률: {0}%) [{1} +{2}]에 [{3}] 부여! ({4}){5}": {
+    "en": "🌟 [Arcane Enchant Great Success!] (Success Rate: {0}%) Granted [{3}] to [{1} +{2}]! ({4}){5}",
+    "ja": "🌟 [魔導エンチャント大成功！] (成功確率: {0}%) [{1} +{2}]に[{3}]を付与！ ({4}){5}"
+  },
+  "🌟 [마도사 특기] [{0}]이(가) 수정의 마력을 정제했습니다! (전원 MP +100 회복, 위험도 -25, 마력 수정 ×3)": {
+    "en": "🌟 [Mage Specialty] [{0}] refined the crystal's magic! (All members recover +100 MP, Hazard -25, Magic Crystal x3)",
+    "ja": "🌟 [魔導士特技] [{0}]が水晶の魔力を精製しました！ (全員MP+100回復、危険度-25、魔力結晶×3)"
+  },
+  "🌟 [발키리 특기] [{0}]이(가) 심연의 심장을 신성 결계로 봉인했습니다! (위험도 -40 감소, 최종 결전 1회 무적)": {
+    "en": "🌟 [Valkyrie Specialty] [{0}] sealed the Heart of the Abyss in a holy barrier! (Hazard -40, 1-time invulnerability in final battle)",
+    "ja": "🌟 [ヴァルキリー特技] [{0}]が深淵の心臓を神聖結界で封印しました！ (危険度-40減少、最終決戦1回無敵)"
+  },
+  "🌟 [사제 특기] [{0}]의 성언으로 흡혈귀가 자멸하며 [성자의 유골함]을 남겼습니다! (위험도 -30)": {
+    "en": "🌟 [Priest Specialty] [{0}]'s Holy Word caused the vampire to self-destruct, leaving behind the [Saint's Reliquary]! (Hazard -30)",
+    "ja": "🌟 [神官特技] [{0}]の聖言により吸血鬼が自滅し、[聖者の骨壷]を残しました！ (危険度-30)"
+  },
+  "🌟 [성기사 특기] [{0}]의 성스러운 기도로 납골당 전역에 안식이 깃들었습니다! (위험도 -30 대폭 감소, 오파츠 발굴)": {
+    "en": "🌟 [Paladin Specialty] [{0}]'s holy prayer brought rest to the entire Ossuary! (Hazard greatly reduced by -30, Ooparts excavated)",
+    "ja": "🌟 [聖騎士特技] [{0}]の聖なる祈りで納骨堂全域に安息が宿りました！ (危険度-30大幅減少、オーパーツ発掘)"
+  },
+  "🌟 [성기사 특기] [{0}]의 순결한 맹세로 저울이 스스로 기울어졌습니다! (위험도 -30 대폭 감소, 가호 획득)": {
+    "en": "🌟 [Paladin Specialty] [{0}]'s pure oath tipped the scales! (Hazard greatly reduced by -30, Blessing acquired)",
+    "ja": "🌟 [聖騎士特技] [{0}]の純潔な誓いにより天秤が自然と傾きました！ (危険度-30大幅減少、加護獲得)"
+  },
+  "🌟 [성기사 특기] [{0}]의 축복으로 거신의 영혼이 정화되었습니다! (위험도 -30, 전원 최대 HP 영구 +5%)": {
+    "en": "🌟 [Paladin Specialty] [{0}]'s blessing cleansed the colossus's soul! (Hazard -30, all members permanent Max HP +5%)",
+    "ja": "🌟 [聖騎士特技] [{0}]の祝福で巨神の魂が浄化されました！ (危険度-30、全員最大HP永久+5%)"
+  },
+  "🌟 [성녀 특기] [{0}]이(가) 공허 거석을 신성 모놀리스로 정화했습니다! (위험도 -500, 전원 HP/MP +20% 영구 상승)": {
+    "en": "🌟 [Saintess Specialty] [{0}] purified the Void Megalith into a Holy Monolith! (Hazard -500, all members permanently gain HP/MP +20%)",
+    "ja": "🌟 [聖女特技] [{0}]が虚無の巨石を神聖モノリスとして浄化しました！ (危険度-500、全員HP/MP+20%永久上昇)"
+  },
+  "🌟 [성직자 특기] [{0}]의 성광 앞에 가짜가 비명을 지르며 소멸했습니다! (위험도 -30, 9티어 장비 획득)": {
+    "en": "🌟 [Cleric Specialty] The impostor screamed and vanished before [{0}]'s holy light! (Hazard -30, Tier 9 gear acquired)",
+    "ja": "🌟 [聖職者特技] [{0}]の聖光の前に偽物が悲鳴を上げて消滅しました！ (危険度-30、Tier 9装備獲得)"
+  },
+  "🌟 [시공간 특기] [{0}]이(가) 무간도의 나선을 안정화하여 공허 파편을 다량 수습했습니다! (위험도 -500)": {
+    "en": "🌟 [Spacetime Specialty] [{0}] stabilized the Avici spiral, retrieving numerous Void Shards! (Hazard -500)",
+    "ja": "🌟 [時空特技] [{0}]が無間道の螺旋を安定させ、虚無の欠片を大量に回収しました！ (危険度-500)"
+  },
+  "🌟 [신성 원호] 아군 전체 HP +{0} (시전자 공격력의 25%) 치유 및 MP +10 환원!": {
+    "en": "🌟 [Divine Assist] Heals all allies HP +{0} (25% of caster's ATK) and restores MP +10!",
+    "ja": "🌟 [神聖援護] 味方全体HP+{0}（術者の攻撃力の25%）治癒およびMP+10還元！"
+  },
+  "🌟 [신성 특기 발동] [{0}]의 신성 찬가로 마기가 완전 정화되었습니다! (위험도 -25 대폭 감소, 전원 체력 25% 회복)": {
+    "en": "🌟 [Divine Specialty Triggered] Demonic energy was completely cleansed by [{0}]'s holy hymn! (Hazard greatly reduced by -25, all members recover 25% HP)",
+    "ja": "🌟 [神聖特技発動] [{0}]の神聖賛歌により魔気が完全に浄化されました！ (危険度-25大幅減少、全員体力25%回復)"
+  },
+  "🌟 [신성 특기] [{0}]의 경건한 기도로 여신의 제단이 성결해졌습니다! (✨ 에테르 100 소모, 위험도 -20 감소, 생존 대원 전원 HP/MP 35% 회복 및 디버프 해제)": {
+    "en": "🌟 [Divine Specialty] The Goddess Altar became sanctified through [{0}]'s reverent prayer! (Consumes ✨ 100 Ether, Hazard -20, all surviving members recover 35% HP/MP & cleanse debuffs)",
+    "ja": "🌟 [神聖特技] [{0}]の敬虔な祈りで女神の祭壇が聖別されました！ (✨エーテル100消費、危険度-20減少、生存隊員全員HP/MP 35%回復およびデバフ解除)"
+  },
+  "🌟 [아크메이지 특기] [{0}]의 비전 등대로 망각의 안개가 순식간에 증발했습니다! (위험도 -35 감소)": {
+    "en": "🌟 [Archmage Specialty] The fog of oblivion instantly evaporated under [{0}]'s arcane beacon! (Hazard reduced by -35)",
+    "ja": "🌟 [大魔導士特技] [{0}]の秘術の灯台により忘却の霧が瞬く間に蒸発しました！ (危険度-35減少)"
+  },
+  "🌟 [아크메이지 특기] [{0}]이(가) 환영의 굴절을 흡수하여 파티 전원의 올스탯을 +3 영구 각성시켰습니다! (위험도 -35)": {
+    "en": "🌟 [Archmage Specialty] [{0}] absorbed the illusion refraction, permanently awakening all party stats by +3! (Hazard -35)",
+    "ja": "🌟 [大魔導士特技] [{0}]が幻影の屈折を吸収し、パーティ全員の全ステータスを+3永久覚醒させました！ (危険度-35)"
+  },
+  "🌟 [암살자 특기 발동] [{0}]이(가) 완벽하게 경보 룬을 해체하여 마력 수정과 제식 무기를 노획했습니다! (위험도 -20 감소)": {
+    "en": "🌟 [Assassin Specialty Triggered] [{0}] flawlessly disarmed the alarm rune, seizing a Magic Crystal and standard weapon! (Hazard reduced by -20)",
+    "ja": "🌟 [暗殺者特技発動] [{0}]が警報ルーンを完璧に解除し、魔力結晶と制式武器を鹵獲しました！ (危険度-20減少)"
+  },
+  "🌟 [암살자 특기] [{0}]이(가) 가시덤불 깊숙한 곳에서 진홍 보석을 완벽히 건져냈습니다!": {
+    "en": "🌟 [Assassin Specialty] [{0}] flawlessly retrieved a crimson gem from deep within the thorn bushes!",
+    "ja": "🌟 [暗殺者特技] [{0}]がイバラの奥深くから深紅の宝石を完璧に回収しました！"
+  },
+  "🌟 [암살자 특기] [{0}]이(가) 시간 틈새에서 미래의 4티어 무구를 낚아챘습니다! (위험도 변동 없음)": {
+    "en": "🌟 [Assassin Specialty] [{0}] snatched Tier 4 equipment of the future from the time rift! (No Hazard change)",
+    "ja": "🌟 [暗殺者特技] [{0}]が時の狭間から未来のTier 4武具を奪取しました！ (危険度変動なし)"
+  },
+  "🌟 [암살자 특기] [{0}]이(가) 완벽한 정숙 속에 봉인을 해제하여 8티어 무구와 순수 접두석을 탈취했습니다!": {
+    "en": "🌟 [Assassin Specialty] [{0}] broke the seal in total silence, seizing Tier 8 gear and a Pure Prefix Stone!",
+    "ja": "🌟 [暗殺者特技] [{0}]が完全な静寂の中で封印を解除し、Tier 8武具と純粋接頭石を奪取しました！"
+  },
+  "🌟 [영웅 대박 단조!!] [{0}] ({1}) 단조 완료! {2}": {
+    "en": "🌟 [Jackpot Heroic Forging!!] [{0}] ({1}) Forging complete! {2}",
+    "ja": "🌟 [英雄大当たり鍛造!!] [{0}] ({1}) 鍛造完了！ {2}"
+  },
+  "🌟 [영웅]": {
+    "en": "🌟 [Heroic]",
+    "ja": "🌟 [英雄]"
+  },
+  "🌟 [워로드 특기] [{0}]이(가) 선대 지휘관의 전술을 완벽히 계승하여 전원 공격/방어 영구 +20% 강화!": {
+    "en": "🌟 [Warlord Specialty] [{0}] flawlessly inherited the former Commander's tactics, permanently boosting all members' ATK/DEF by +20%!",
+    "ja": "🌟 [軍主特技] [{0}]が先代指揮官の戦術を完璧に継承し、全員の攻撃/防御を永久+20%強化！"
+  },
+  "🌟 [전사 특기] [{0}]이(가) 맨손으로 흑철 족쇄를 뜯어내고 성기사를 무사히 구출했습니다!": {
+    "en": "🌟 [Warrior Specialty] [{0}] ripped apart the dark iron shackles barehanded, safely rescuing the Paladin!",
+    "ja": "🌟 [戦士特技] [{0}]が素手で黒鉄の足枷を引き裂き、聖騎士を無事救出しました！"
+  },
+  "🌟 고유 패시브:": {
+    "en": "🌟 Innate Passive:",
+    "ja": "🌟 固有パッシブ:"
+  },
+  "🌟 심연의 마도 룬 공명 폭발 중... (영웅 등급 개화!)": {
+    "en": "🌟 Abyssal Arcane Rune resonance exploding... (Heroic tier blooming!)",
+    "ja": "🌟 深淵の魔導ルーン共鳴爆発中… (英雄ランク開花！)"
+  },
+  "🌟 영웅": {
+    "en": "🌟 Heroic",
+    "ja": "🌟 英雄"
+  },
+  "🌟 원정대 시너지 규칙 (최대 4개) & 진형 보호막": {
+    "en": "🌟 Expedition Synergy Rules (Max 4) & Formation Shield",
+    "ja": "🌟 遠征隊シナジー規則 (最大4個)＆陣形シールド"
+  },
+  "🌟 전체보기": {
+    "en": "🌟 View All",
+    "ja": "🌟 すべて表示"
+  },
+  "🌟✨ [장비 각성 대성공!] (확률 20%) [{0}]이(가) ★{1}단계 각성에 도달했습니다! 누적된 막강한 스탯이 기본 스탯으로 영구 보존되며, 강화 단계가 +0으로 초기화되었습니다! (다시 +10강까지 재강화 가능)": {
+    "en": "🌟✨ [Equipment Awakening Great Success!] (Rate 20%) [{0}] reached ★Stage {1} Awakening! Accumulated powerful stats are permanently preserved as base stats, and enhancement tier reset to +0! (Can re-enhance up to +10 again)",
+    "ja": "🌟✨ [装備覚醒大成功！] (確率20%) [{0}]が★{1}段階覚醒に到達しました！ 累積された強力なステータスが基本ステータスとして永久保存され、強化段階が+0に初期化されました！（再び+10まで再強化可能）"
+  },
+  "🌟에픽↑": {
+    "en": "🌟 Epic ↑",
+    "ja": "🌟 エピック↑"
+  },
+  "🌧️ 마음의 거리감": {
+    "en": "🌧️ Distance of Hearts",
+    "ja": "🌧️ 心の距離感"
+  },
+  "🌪️ [뇌폭 회오리] {0}에게 {1} 폭풍 피해!": {
+    "en": "🌪️ [Thunderstorm Whirlwind] {1} storm damage to {0}!",
+    "ja": "🌪️ [雷爆旋風] {0}に{1}の嵐ダメージ！"
+  },
+  "🌪️⚔️ [환영 난무 왈츠] {0}의 화려한 분신 검무가 적 전체를 난도질하고 공격력을 2턴간 {1}% 약화시켰습니다!": {
+    "en": "🌪️⚔️ [Phantom Flurry Waltz] {0}'s dazzling clone sword dance slashed all enemies, reducing their ATK by {1}% for 2 turns!",
+    "ja": "🌪️⚔️ [幻影乱舞ワルツ] {0}の華麗な分身剣舞が敵全体を切り刻み、攻撃力を2ターン間{1}%低下させました！"
+  },
+  "🌫️ 망각의 안개와 잃어버린 기억의 등불": {
+    "en": "🌫️ Mist of Oblivion and Lantern of Lost Memories",
+    "ja": "🌫️ 忘却の霧と失われた記憶の灯火"
+  },
+  "🌫️ 연무 +": {
+    "en": "🌫️ Haze +",
+    "ja": "🌫️ 煙霧 +"
+  },
+  "🌫️ 연무 잠식 (공/방 +": {
+    "en": "🌫️ Haze Encroachment (ATK/DEF +",
+    "ja": "🌫️ 煙霧の侵食 (攻/防 +"
+  },
+  "🌫️ 원초의 마기 잠식 중: 마물 흉폭화 (+": {
+    "en": "🌫️ Primordial Demonic Energy encroaching: Monster Frenzy (+",
+    "ja": "🌫️ 原初の魔気侵食中: 魔物凶暴化 (+"
+  },
+  "🌫️ 원초의 연무 (공/방 +50%)": {
+    "en": "🌫️ Primordial Haze (ATK/DEF +50%)",
+    "ja": "🌫️ 原初の煙霧 (攻/防 +50%)"
+  },
+  "🌫️ 원초의 연무 (마기 잠식 +": {
+    "en": "🌫️ Primordial Haze (Demonic Encroachment +",
+    "ja": "🌫️ 原初の煙霧 (魔気侵食 +"
+  },
+  "🌱 분당 +0.05% (+": {
+    "en": "🌱 +0.05%/min (+",
+    "ja": "🌱 分あたり+0.05% (+"
+  },
+  "🌹 가시 돋친 피의 장미 덤불": {
+    "en": "🌹 Thorny Blood Rose Bush",
+    "ja": "🌹 棘だらけの血の薔薇の茂み"
+  },
+  "🌿 던전 파밍 재료": {
+    "en": "🌿 Dungeon Farming Materials",
+    "ja": "🌿 ダンジョン採取素材"
+  },
+  "🌿 석벽의 발광 핏빛 이끼 군락": {
+    "en": "🌿 Luminescent Blood Moss Colony on Stone Wall",
+    "ja": "🌿 石壁の発光血苔群落"
+  },
+  "🌿 약초": {
+    "en": "🌿 Herb",
+    "ja": "🌿 薬草"
+  },
+  "🍀 행운 (Luck) & 통합 보정 메커니즘": {
+    "en": "🍀 Luck & Integrated Modifier Mechanism",
+    "ja": "🍀 幸運 (Luck)＆統合補正メカニズム"
+  },
+  "🍀행운": {
+    "en": "🍀 Luck",
+    "ja": "🍀 幸運"
+  },
+  "🍖 보급품": {
+    "en": "🍖 Supplies",
+    "ja": "🍖 補給品"
+  },
+  "🍖 식량": {
+    "en": "🍖 Food",
+    "ja": "🍖 食糧"
+  },
+  "🍖 식량 -": {
+    "en": "🍖 Food -",
+    "ja": "🍖 食糧 -"
+  },
+  "🍖 식량 -1": {
+    "en": "🍖 Food -1",
+    "ja": "🍖 食糧 -1"
+  },
+  "🍖+{0}/13초": {
+    "en": "🍖+{0}/13s",
+    "ja": "🍖+{0}/13秒"
+  },
+  "🍖+{0}/13초, 🥋+{1}/13초": {
+    "en": "🍖+{0}/13s, 🥋+{1}/13s",
+    "ja": "🍖+{0}/13秒, 🥋+{1}/13秒"
+  },
+  "🍖식량 -{0}": {
+    "en": "🍖Food -{0}",
+    "ja": "🍖食糧 -{0}"
+  },
+  "🍱✨ [던전 도시락 안전 야영] 영양 가득한 던전 도시락을 섭취하며 안전하게 휴식했습니다! (생존 대원 HP/MP 45% 회복 [추가 회복 +10%], 기습 위협 50% 억제)": {
+    "en": "🍱✨ [Dungeon Lunchbox Safe Camping] Rested safely while enjoying a nutritious Dungeon Lunchbox! (Surviving members HP/MP +45% [Bonus Recovery +10%], Ambush risk suppressed by 50%)",
+    "ja": "🍱✨ [ダンジョン弁当安全野営] 栄養満点のダンジョン弁当を食べて安全に休息しました！ (生存隊員HP/MP 45%回復 [追加回復+10%]、奇襲の脅威50%抑制)"
+  },
+  "🍷 [진홍 성배] (6F 광폭화 보스 전리품) 회수": {
+    "en": "🍷 [Crimson Grail] (6F Berserk Boss Loot) Retrieved",
+    "ja": "🍷 [深紅聖杯] (6F狂暴化ボスの戦利品) 回収"
+  }
+}

@@ -1,0 +1,802 @@
+{
+  "특전 할인 -": {
+    "en": "Perk Discount -",
+    "ja": "特典割引 -"
+  },
+  "특정 생산 시설을 육성하면 전 영지 시설의 유지비를 대폭 절감하는 시너지가 활성화됩니다.": {
+    "en": "Upgrading specific production facilities activates synergy that significantly reduces maintenance costs across all estate facilities.",
+    "ja": "特定の生産施設を育成すると、全領地施設の維持費を大幅に削減するシナジーが発動します。"
+  },
+  "특제 원정 보급 식량 세트": {
+    "en": "Special Expedition Ration Set",
+    "ja": "特製遠征補給食料セット"
+  },
+  "틈을 놓칠 순 없지!": {
+    "en": "Can't miss this opening!",
+    "ja": "隙を見逃すわけにはいかない！"
+  },
+  "티어:": {
+    "en": "Tier:",
+    "ja": "ティア:"
+  },
+  "파견": {
+    "en": "Dispatch",
+    "ja": "派遣"
+  },
+  "파괴": {
+    "en": "Destruction",
+    "ja": "破壊"
+  },
+  "파동": {
+    "en": "Wave",
+    "ja": "波動"
+  },
+  "파멸": {
+    "en": "Ruin",
+    "ja": "破滅"
+  },
+  "파멸검": {
+    "en": "Blade of Ruin",
+    "ja": "破滅剣"
+  },
+  "파멸의": {
+    "en": "Ruinous",
+    "ja": "破滅の"
+  },
+  "파멸의 공허 폭풍": {
+    "en": "Void Storm of Ruin",
+    "ja": "破滅の虚空嵐"
+  },
+  "파멸의 모노리스 강타": {
+    "en": "Ruinous Monolith Strike",
+    "ja": "破滅のモノリス強打"
+  },
+  "파멸의 일격": {
+    "en": "Strike of Ruin",
+    "ja": "破滅の一撃"
+  },
+  "파멸포": {
+    "en": "Ruin Cannon",
+    "ja": "破滅砲"
+  },
+  "파밍": {
+    "en": "Farming",
+    "ja": "ファーミング"
+  },
+  "파밍 자원 2배 & 심연 촉매 슬롯 개방": {
+    "en": "2x Farmed Resources & Abyssal Catalyst Slot Unlocked",
+    "ja": "採取資源2倍＆深淵触媒スロット開放"
+  },
+  "파밍 자원 2배 획득 완료 & 심연 촉매 슬롯 동시 개방!": {
+    "en": "Obtained 2x Farmed Resources & Abyssal Catalyst Slot Unlocked!",
+    "ja": "採取資源2倍獲得完了＆深淵触媒スロット同時開放！"
+  },
+  "파밍 재료": {
+    "en": "Farming Materials",
+    "ja": "採取素材"
+  },
+  "파밍 재료 1종 랜덤 (30%)": {
+    "en": "Random Farming Material x1 (30%)",
+    "ja": "採取素材1種ランダム (30%)"
+  },
+  "파성추 강타": {
+    "en": "Battering Ram Strike",
+    "ja": "破城槌強打"
+  },
+  "파쇄": {
+    "en": "Crush",
+    "ja": "破砕"
+  },
+  "파수대 확장 (방어 세력권 증대)": {
+    "en": "Watchtower Expansion (Increase Defense Influence)",
+    "ja": "見張り台拡張（防衛勢力圏拡大）"
+  },
+  "파열": {
+    "en": "Rupture",
+    "ja": "破裂"
+  },
+  "파이어베이스 마스터 데이터 시딩 중...": {
+    "en": "Seeding Firebase master data...",
+    "ja": "Firebaseマスターデータシーディング中..."
+  },
+  "파티": {
+    "en": "Party",
+    "ja": "パーティ"
+  },
+  "파티 공격력 +10 & 방어력 +8": {
+    "en": "Party ATK +10 & DEF +8",
+    "ja": "パーティ攻撃力+10＆防御力+8"
+  },
+  "파티 공격력 +10 & 최대 MP +30": {
+    "en": "Party ATK +10 & Max MP +30",
+    "ja": "パーティ攻撃力+10＆最大MP+30"
+  },
+  "파티 공격력 +10 & 파티 행운 +4": {
+    "en": "Party ATK +10 & Party LUCK +4",
+    "ja": "パーティ攻撃力+10＆パーティ幸運+4"
+  },
+  "파티 공격력 +12 & 최대 HP +80": {
+    "en": "Party ATK +12 & Max HP +80",
+    "ja": "パーティ攻撃力+12＆最大HP+80"
+  },
+  "파티 공격력 +12 & 최대 MP +40": {
+    "en": "Party ATK +12 & Max MP +40",
+    "ja": "パーティ攻撃力+12＆最大MP+40"
+  },
+  "파티 공격력 +15 영구 증가": {
+    "en": "Party ATK permanently increased by +15",
+    "ja": "パーティ攻撃力+15 永久増加"
+  },
+  "파티 공격력 +16 & 최대 HP +100": {
+    "en": "Party ATK +16 & Max HP +100",
+    "ja": "パーティ攻撃力+16＆最大HP+100"
+  },
+  "파티 공격력 +18 & 치명타율 +4%": {
+    "en": "Party ATK +18 & Crit Rate +4%",
+    "ja": "パーティ攻撃力+18＆会心率+4%"
+  },
+  "파티 공격력 +20 & 방어력 +15": {
+    "en": "Party ATK +20 & DEF +15",
+    "ja": "パーティ攻撃力+20＆防御力+15"
+  },
+  "파티 공격력 +8 & 방어력 +5": {
+    "en": "Party ATK +8 & DEF +5",
+    "ja": "パーティ攻撃力+8＆防御力+5"
+  },
+  "파티 공격력 +8 & 시설 유지비 -3% 감면": {
+    "en": "Party ATK +8 & Facility Upkeep -3%",
+    "ja": "パーティ攻撃力+8＆施設維持費-3%軽減"
+  },
+  "파티 마법 공격력 +12 & 최대 MP +30": {
+    "en": "Party Magic ATK +12 & Max MP +30",
+    "ja": "パーティ魔法攻撃力+12＆最大MP+30"
+  },
+  "파티 마법 공격력 +15 & 최대 MP +40": {
+    "en": "Party Magic ATK +15 & Max MP +40",
+    "ja": "パーティ魔法攻撃力+15＆最大MP+40"
+  },
+  "파티 모든 피해 +15% & 올스탯 +15 & 피해 감소 +5%": {
+    "en": "Party All Damage +15% & All Stats +15 & Damage Taken -5%",
+    "ja": "パーティ全ダメージ+15%＆全ステータス+15＆被ダメージ軽減+5%"
+  },
+  "파티 물리 공격력 +10 & 방어력 +6": {
+    "en": "Party Physical ATK +10 & DEF +6",
+    "ja": "パーティ物理攻撃力+10＆防御力+6"
+  },
+  "파티 방어력 +10 & HP +50 & 자원 생산 +5%": {
+    "en": "Party DEF +10 & HP +50 & Resource Production +5%",
+    "ja": "パーティ防御力+10＆HP+50＆資源生産+5%"
+  },
+  "파티 방어력 +10 영구 증가": {
+    "en": "Party DEF permanently increased by +10",
+    "ja": "パーティ防御力+10 永久増加"
+  },
+  "파티 방어력 +12 & 최대 MP +30": {
+    "en": "Party DEF +12 & Max MP +30",
+    "ja": "パーティ防御力+12＆最大MP+30"
+  },
+  "파티 방어력 +14 & 치명타율 +3%": {
+    "en": "Party DEF +14 & Crit Rate +3%",
+    "ja": "パーティ防御力+14＆会心率+3%"
+  },
+  "파티 방어력 +15 & 피해 감소 +3%": {
+    "en": "Party DEF +15 & Damage Reduction +3%",
+    "ja": "パーティ防御力+15＆被ダメージ軽減+3%"
+  },
+  "파티 방어력 +18 & 피해 감소 +3%": {
+    "en": "Party DEF +18 & Damage Reduction +3%",
+    "ja": "パーティ防御力+18＆被ダメージ軽減+3%"
+  },
+  "파티 방어력 +18 & 피해 감소 +4%": {
+    "en": "Party DEF +18 & Damage Reduction +4%",
+    "ja": "パーティ防御力+18＆被ダメージ軽減+4%"
+  },
+  "파티 방어력 +20 & 피해 감소 +4%": {
+    "en": "Party DEF +20 & Damage Reduction +4%",
+    "ja": "パーティ防御力+20＆被ダメージ軽減+4%"
+  },
+  "파티 방어력 +8 & 최대 HP +50": {
+    "en": "Party DEF +8 & Max HP +50",
+    "ja": "パーティ防御力+8＆最大HP+50"
+  },
+  "파티 방어력 +8 & 행운 +5": {
+    "en": "Party DEF +8 & LUCK +5",
+    "ja": "パーティ防御力+8＆幸運+5"
+  },
+  "파티 속도 +4 & 방어력 +10": {
+    "en": "Party SPD +4 & DEF +10",
+    "ja": "パーティ速度+4＆防御力+10"
+  },
+  "파티 유지를 위해 최소 3명의 용병이 필요합니다": {
+    "en": "At least 3 mercenaries are required to maintain a party.",
+    "ja": "パーティ維持には最低3人の傭兵が必要です。"
+  },
+  "파티 인원이 3명 미만입니다!": {
+    "en": "Party has fewer than 3 members!",
+    "ja": "パーティ人数が3人未満です！"
+  },
+  "파티 전능력치 +2% & 피해 감소 +3%": {
+    "en": "Party All Stats +2% & Damage Reduction +3%",
+    "ja": "パーティ全能力値+2%＆被ダメージ軽減+3%"
+  },
+  "파티 전원": {
+    "en": "All Party Members",
+    "ja": "パーティ全員"
+  },
+  "파티 전원 HP 50% 즉시 회복 + 해로운 디버프 일괄 정화 + 1턴간 [디버프 면역 결계]": {
+    "en": "Immediately recover 50% HP for all party members + cleanse all harmful debuffs + [Debuff Immunity Barrier] for 1 turn",
+    "ja": "パーティ全員のHP50%即時回復＋デバフ一括浄化＋1ターン間[デバフ無効結界]"
+  },
+  "파티 전원 체력 100% 회복 및 자동 부활": {
+    "en": "Restore 100% HP to all party members and auto-revive",
+    "ja": "パーティ全員の体力を100%回復および自動復活"
+  },
+  "파티 전체": {
+    "en": "Entire Party",
+    "ja": "パーティ全体"
+  },
+  "파티 전체 체력 회복": {
+    "en": "Restore HP to entire party",
+    "ja": "パーティ全体の体力回復"
+  },
+  "파티 최대 HP +100 & 방어력 +12": {
+    "en": "Party Max HP +100 & DEF +12",
+    "ja": "パーティ最大HP+100＆防御力+12"
+  },
+  "파티 최대 HP +100 & 피해 감소 +3%": {
+    "en": "Party Max HP +100 & Damage Reduction +3%",
+    "ja": "パーティ最大HP+100＆被ダメージ軽減+3%"
+  },
+  "파티 최대 HP +40 & 최대 MP +25": {
+    "en": "Party Max HP +40 & Max MP +25",
+    "ja": "パーティ最大HP+40＆最大MP+25"
+  },
+  "파티 최대 HP +60 영구 증가": {
+    "en": "Party Max HP permanently increased by +60",
+    "ja": "パーティ最大HP+60 永久増加"
+  },
+  "파티 최대 HP +80 & 방어력 +8": {
+    "en": "Party Max HP +80 & DEF +8",
+    "ja": "パーティ最大HP+80＆防御力+8"
+  },
+  "파티 최대 MP +50 & 공격력 +14": {
+    "en": "Party Max MP +50 & ATK +14",
+    "ja": "パーティ最大MP+50＆攻撃力+14"
+  },
+  "파티 치유 & 성역": {
+    "en": "Party Heal & Sanctuary",
+    "ja": "パーティ治癒＆聖域"
+  },
+  "파티 피해 감소 +3% & 최대 HP +50": {
+    "en": "Party Damage Reduction +3% & Max HP +50",
+    "ja": "パーティ被ダメージ軽減+3%＆最大HP+50"
+  },
+  "파티 피해 감소 +5% & 방어력 +18": {
+    "en": "Party Damage Reduction +5% & DEF +18",
+    "ja": "パーティ被ダメージ軽減+5%＆防御力+18"
+  },
+  "파티 피해 감소 3% & 행동속도 +3": {
+    "en": "Party Damage Reduction 3% & SPD +3",
+    "ja": "パーティ被ダメージ軽減3%＆行動速度+3"
+  },
+  "파티 행동속도 +3 & 치명타율 +2%": {
+    "en": "Party SPD +3 & Crit Rate +2%",
+    "ja": "パーティ行動速度+3＆会心率+2%"
+  },
+  "파티 행동속도 +4 & 모든 피해 +6%": {
+    "en": "Party SPD +4 & All Damage +6%",
+    "ja": "パーティ行動速度+4＆全ダメージ+6%"
+  },
+  "파티 행동속도 +4 & 치명타율 +4%": {
+    "en": "Party SPD +4 & Crit Rate +4%",
+    "ja": "パーティ行動速度+4＆会心率+4%"
+  },
+  "파티 행동속도 +4 & 회피/행운 +5": {
+    "en": "Party SPD +4 & EVA/LUCK +5",
+    "ja": "パーティ行動速度+4＆回避/幸運+5"
+  },
+  "파티 행동속도 +5 & 치명타율 +3%": {
+    "en": "Party SPD +5 & Crit Rate +3%",
+    "ja": "パーティ行動速度+5＆会心率+3%"
+  },
+  "파티 행동속도 +6 & 치명타율 +5%": {
+    "en": "Party SPD +6 & Crit Rate +5%",
+    "ja": "パーティ行動速度+6＆会心率+5%"
+  },
+  "파티 행운 +10 & 치명타율 +5%": {
+    "en": "Party LUCK +10 & Crit Rate +5%",
+    "ja": "パーティ幸運+10＆会心率+5%"
+  },
+  "파티 행운 +10 & 행동속도 +5": {
+    "en": "Party LUCK +10 & SPD +5",
+    "ja": "パーティ幸運+10＆行動速度+5"
+  },
+  "파티 행운 +8 & 치명타율 +5%": {
+    "en": "Party LUCK +8 & Crit Rate +5%",
+    "ja": "パーティ幸運+8＆会心率+5%"
+  },
+  "파티에 용병이 없습니다.": {
+    "en": "There are no mercenaries in the party.",
+    "ja": "パーティに傭兵がいません。"
+  },
+  "파티에 활성화되는 시너지는 최대 4개(직업군 조합 최대 2개 + 진형 1개 + 숙련도 1개)가 적용되며, 진형 배치에 따라 전투 개시 보호막을 얻습니다.": {
+    "en": "Up to 4 synergies can be active on the party (up to 2 Class combinations + 1 Formation + 1 Mastery), and a battle-start shield is granted based on formation layout.",
+    "ja": "パーティに発動するシナジーは最大4個（職業の組み合わせ最大2個＋陣形1個＋熟練度1個）が適用され、陣形の配置に応じて戦闘開始シールドを獲得します。"
+  },
+  "파티에는 최소 1명의 용병이 출전해야 합니다.": {
+    "en": "At least 1 mercenary must be deployed in the party.",
+    "ja": "パーティには最低1人の傭兵が出撃しなければなりません。"
+  },
+  "파티원 3명 전원 2차 최종 전직 (Tier 2)": {
+    "en": "All 3 party members promoted to Final Class (Tier 2)",
+    "ja": "パーティ3人全員が2次最終転職（Tier 2）"
+  },
+  "파티원 전원 1차 전직 이상 (Tier >= 1)": {
+    "en": "All party members promoted to Tier 1 or higher (Tier >= 1)",
+    "ja": "パーティ全員が1次転職以上（Tier >= 1）"
+  },
+  "파티원 전체의 생명력을 수호하고 기적의 치유를 베푸는 사제 계열 최고위 성홀.": {
+    "en": "The supreme holy scepter of the cleric class, protecting the life of all party members and bestowing miraculous healing.",
+    "ja": "パーティ全員の生命を守護し、奇跡の治癒をもたらす神官系最高峰の聖笏。"
+  },
+  "파편 충격으로 휘청임": {
+    "en": "Staggered by shrapnel impact",
+    "ja": "破片の衝撃でよろめき"
+  },
+  "파편의 폭풍": {
+    "en": "Shrapnel Storm",
+    "ja": "破片の嵐"
+  },
+  "판금": {
+    "en": "Plate",
+    "ja": "板金"
+  },
+  "판금 갑옷": {
+    "en": "Plate Armor",
+    "ja": "プレートアーマー"
+  },
+  "판매할 장비를 탭하여 선택/해제": {
+    "en": "Tap equipment to select/deselect for sale",
+    "ja": "売却する装備をタップして選択/解除"
+  },
+  "패왕 네메시스 파멸 관": {
+    "en": "Overlord Nemesis Ruin Sarcophagus",
+    "ja": "覇王ネメシス破滅の棺"
+  },
+  "패왕의": {
+    "en": "Overlord's",
+    "ja": "覇王の"
+  },
+  "페이즈 명칭": {
+    "en": "Phase Name",
+    "ja": "フェーズ名称"
+  },
+  "펜던트": {
+    "en": "Pendant",
+    "ja": "ペンダント"
+  },
+  "펠릭스": {
+    "en": "Felix",
+    "ja": "フェリックス"
+  },
+  "편성이 필수적입니다.": {
+    "en": "Formation is required.",
+    "ja": "編成が必須です。"
+  },
+  "평온": {
+    "en": "Serenity",
+    "ja": "平穏"
+  },
+  "폐허 철제 골렘": {
+    "en": "Ruins Iron Golem",
+    "ja": "廃墟のアイアンゴーレム"
+  },
+  "포": {
+    "en": "Cannon",
+    "ja": "砲"
+  },
+  "포격": {
+    "en": "Bombardment",
+    "ja": "砲撃"
+  },
+  "포지션 & 시너지": {
+    "en": "Position & Synergy",
+    "ja": "ポジション＆シナジー"
+  },
+  "포지션 교란": {
+    "en": "Position Disruption",
+    "ja": "ポジション攪乱"
+  },
+  "포탈": {
+    "en": "Portal",
+    "ja": "ポータル"
+  },
+  "포트리스": {
+    "en": "Fortress",
+    "ja": "フォートレス"
+  },
+  "포트리스의 거신 방벽: 파티 방어력 +18%, 받는 피해 12% 감소, 전열 엄호율 +25%": {
+    "en": "Fortress's Colossus Bulwark: Party DEF +18%, Damage Taken -12%, Front Row Cover Rate +25%",
+    "ja": "フォートレスの巨神障壁: パーティ防御力+18%、被ダメージ12%減少、前衛援護率+25%"
+  },
+  "포효": {
+    "en": "Roar",
+    "ja": "咆哮"
+  },
+  "폭격": {
+    "en": "Airstrike",
+    "ja": "爆撃"
+  },
+  "폭발에 휘말려 화상 발생": {
+    "en": "Caught in explosion, inflicting Burn",
+    "ja": "爆発に巻き込まれ火傷発生"
+  },
+  "폭풍": {
+    "en": "Storm",
+    "ja": "嵐"
+  },
+  "폭풍의 저격수": {
+    "en": "Storm Sniper",
+    "ja": "嵐の狙撃手"
+  },
+  "폭풍의 제라드": {
+    "en": "Gerard of the Storm",
+    "ja": "嵐のジェラード"
+  },
+  "폭풍의 화살비": {
+    "en": "Storm Arrow Rain",
+    "ja": "嵐の矢の雨"
+  },
+  "폭풍처럼 회전하며 적 전체를 3연속 난무하여 총 120% 피해를 입힙니다.": {
+    "en": "Spins like a tempest, delivering 3 consecutive strikes to all enemies for a total of 120% damage.",
+    "ja": "嵐のように回転しながら敵全体を3連続乱舞し、合計120%のダメージを与えます。"
+  },
+  "표시 중:": {
+    "en": "Displaying:",
+    "ja": "表示中:"
+  },
+  "표시할 기본 스탯이 없습니다.": {
+    "en": "No base stats to display.",
+    "ja": "表示する基本ステータスがありません。"
+  },
+  "표적": {
+    "en": "Target",
+    "ja": "標的"
+  },
+  "표준 군장": {
+    "en": "Standard Gear",
+    "ja": "標準軍装"
+  },
+  "표준 밸런스형": {
+    "en": "Standard Balanced",
+    "ja": "標準バランス型"
+  },
+  "표준 삼각 편대": {
+    "en": "Standard Triangle Formation",
+    "ja": "標準三角編隊"
+  },
+  "표준/완전 군장 배낭 제작": {
+    "en": "Craft Standard / Full Field Pack",
+    "ja": "標準/完全軍装バックパック製作"
+  },
+  "풍부한 룬 철광맥의 본류에 도달하여 철광석 생산량을 대폭 증산하고 설비 최적화로 유지비를 14% 감면합니다.": {
+    "en": "Reached the main vein of the rich Runic Iron Ore, greatly increasing iron ore output and reducing maintenance costs by 14% through facility optimization.",
+    "ja": "豊かなルーン鉄鉱脈の本流に到達し、鉄鉱石の生産量を大幅に増産、設備最適化により維持費を14%軽減します。"
+  },
+  "프로젝트 림보 : 방주의 이야기 • 세계관 대서사 & 영지 재건 & 탐험/전투/전직 완벽 공략": {
+    "en": "Project Limbo: Tale of the Ark • Lore Epic & Estate Reconstruction & Complete Guide to Exploration / Combat / Class Change",
+    "ja": "プロジェクト・リンボ：方舟の物語 • 世界観叙事詩＆領地再建＆探検/戦闘/転職完全攻略"
+  },
+  "플라즈마 파쇄포": {
+    "en": "Plasma Crushing Cannon",
+    "ja": "プラズマ破砕砲"
+  },
+  "플래티넘 사령관을 위한 에픽(Epic) 무구 1종 확정": {
+    "en": "Guaranteed 1 Epic equipment for Platinum Commanders",
+    "ja": "プラチナ指揮官のためのエピック（Epic）武具1種確定"
+  },
+  "플래티넘 상자": {
+    "en": "Platinum Chest",
+    "ja": "プラチナの箱"
+  },
+  "피": {
+    "en": "Blood",
+    "ja": "血"
+  },
+  "피격률↑ 피해 -10%": {
+    "en": "Aggro Rate ↑ Damage Taken -10%",
+    "ja": "被弾率↑ 被ダメージ-10%"
+  },
+  "피격률↑ 피해-10%": {
+    "en": "Aggro Rate ↑ Damage Taken -10%",
+    "ja": "被弾率↑ 被ダメージ-10%"
+  },
+  "피난민": {
+    "en": "Refugee",
+    "ja": "避難民"
+  },
+  "피난민 오두막": {
+    "en": "Refugee Cabin",
+    "ja": "避難民の小屋"
+  },
+  "피난민들의 거주 환경을 개선하고 성채를 수호하기 위해 대량의 금화와 마도 건자재, 에테르를 영지 창고에 비축합니다.": {
+    "en": "To improve refugees' living conditions and defend the Citadel, stock abundant gold, arcane building materials, and ether in the estate warehouse.",
+    "ja": "避難民の居住環境を改善し城塞を守護するため、大量の金貨と魔導建材、エーテルを領地倉庫に備蓄します。"
+  },
+  "피난민들이 거주하며 13초마다 방주 국고에 골드(세금)를 자동으로 납부합니다. (Lv.6 손익분기점, Lv.7+ 레벨당 30% 복리 증산, Lv.4+ 식량 유지비)": {
+    "en": "Refugees reside here, automatically paying gold (taxes) into the Ark treasury every 13s. (Lv.6 break-even, Lv.7+ 30% compounding increase per level, Lv.4+ food upkeep)",
+    "ja": "避難民が居住し、13秒ごとに方舟国庫へゴールド（税金）を自動納付します。（Lv.6損益分岐点、Lv.7+レベル毎に30%複利増産、Lv.4+食糧維持費）"
+  },
+  "피버 모멘텀 뱃지 전술 궁극기": {
+    "en": "Fever Momentum Badge Tactical Ultimate",
+    "ja": "FEVERモメンタムバッジ戦術アルティメット"
+  },
+  "피와 전투에 굶주린 전사 계열 최고위 결전 대검. 전열을 일격에 휩쓰는 광란의 공격력을 뿜어냅니다.": {
+    "en": "The supreme decisive greatsword of the warrior class, thirsting for blood and battle. Radiates frenzied power that sweeps the front row in a single stroke.",
+    "ja": "血と戦いに飢えた戦士系最高峰の決戦大剣。前衛を一撃で薙ぎ払う狂乱の攻撃力を放ちます。"
+  },
+  "피의 갈증: 적을 처치할 때마다 즉시 공격력 +10% 중첩 (최대 5회).": {
+    "en": "Bloodthirst: Each time an enemy is slain, immediately stack ATK +10% (Max 5 stacks).",
+    "ja": "血の渇き: 敵を撃破するたび即座に攻撃力+10%重複（最大5回）。"
+  },
+  "피의 공양대를 지나쳤습니다.": {
+    "en": "Passed by the Altar of Blood Offering.",
+    "ja": "血の供物台を通り過ぎました。"
+  },
+  "피의 광란참": {
+    "en": "Blood Frenzy Slash",
+    "ja": "血の狂乱斬"
+  },
+  "피의 맹세": {
+    "en": "Blood Oath",
+    "ja": "血の誓い"
+  },
+  "피의 서약서": {
+    "en": "Blood Contract",
+    "ja": "血の契約書"
+  },
+  "피의 서약서 촉매 제작": {
+    "en": "Craft Blood Contract Catalyst",
+    "ja": "血の契約書触媒の製作"
+  },
+  "피의 의식": {
+    "en": "Blood Ritual",
+    "ja": "血の儀式"
+  },
+  "피의 제단 각성": {
+    "en": "Awaken Altar of Blood",
+    "ja": "血の祭壇の覚醒"
+  },
+  "피의 축제": {
+    "en": "Blood Feast",
+    "ja": "血の祝祭"
+  },
+  "피의 폭주": {
+    "en": "Blood Rampage",
+    "ja": "血の暴走"
+  },
+  "피의 회오리를 일으켜 적 전체에 125% 물리 피해를 입히고 출혈을 유발합니다.": {
+    "en": "Unleashes a whirlwind of blood, dealing 125% physical damage to all enemies and inflicting Bleed.",
+    "ja": "血の旋風を巻き起こし、敵全体に125%の物理ダメージを与え、出血を付与します。"
+  },
+  "피해 경감": {
+    "en": "Damage Mitigation",
+    "ja": "被ダメージ軽減"
+  },
+  "피해 없음": {
+    "en": "No Damage",
+    "ja": "ノーダメージ"
+  },
+  "피해 증폭": {
+    "en": "Damage Amplification",
+    "ja": "ダメージ増幅"
+  },
+  "피해 흡수": {
+    "en": "Damage Absorption",
+    "ja": "ダメージ吸収"
+  },
+  "피해!": {
+    "en": "Damage!",
+    "ja": "被弾！"
+  },
+  "피해감소 +": {
+    "en": "Damage Reduction +",
+    "ja": "被ダメージ軽減 +"
+  },
+  "피해감소 -{0}%": {
+    "en": "Damage Reduction -{0}%",
+    "ja": "被ダメージ軽減 -{0}%"
+  },
+  "피해량 60% 아군 전체 수호 방벽 전환": {
+    "en": "Convert 60% of damage into Guardian Barrier for all allies",
+    "ja": "ダメージの60%を味方全体の守護障壁に変換"
+  },
+  "피해의 일부": {
+    "en": "Part of Damage",
+    "ja": "ダメージの一部"
+  },
+  "피해증폭/흡혈/관통 (+7강)": {
+    "en": "Damage Amp/Lifesteal/Penetration (+7 Enhanced)",
+    "ja": "ダメージ増幅/吸血/貫通 (+7強化)"
+  },
+  "필드 3인 선발 전투 + 1인 리더(영령 가호 및 100% 피버 궁극기) + 1인 서포터(선발 사망 시 실시간 교체 투입)": {
+    "en": "Field 3-Member Vanguard Battle + 1 Leader (Heroic Spirit Blessing & 100% Fever Ultimate) + 1 Supporter (Real-time sub on vanguard death)",
+    "ja": "フィールド3人先発戦闘＋1人リーダー（英霊の加護＆100%FEVERアルティメット）＋1人サポーター（先発死亡時にリアルタイム交代投入）"
+  },
+  "필멸자의 발걸음이 마침내 시간의 끝에 닿았구나. 윤회의 굴레를 넘은 자여, 네가 지닌 차원의 나침반에 영구한 시간의 숨결을 불어넣어 [시공간의 나침반]으로 각성시키노라!": {
+    "en": "A mortal's footsteps have finally reached the end of time. One who transcended the wheel of reincarnation, I shall breathe eternal temporal breath into your Dimensional Compass, awakening it into the [Spacetime Compass]!",
+    "ja": "定命の者の足取りがついに時の果てに届いたな。輪廻の軛を超えし者よ、汝が持つ次元の羅針盤に永久なる時の息吹を吹き込み、[時空の羅針盤]へと覚醒させん！"
+  },
+  "필수 소모품": {
+    "en": "Essential Consumables",
+    "ja": "必須消耗品"
+  },
+  "필수 소모품 6종": {
+    "en": "6 Essential Consumables",
+    "ja": "必須消耗品6種"
+  },
+  "필요": {
+    "en": "Required",
+    "ja": "必要"
+  },
+  "필요 공물:": {
+    "en": "Required Tribute:",
+    "ja": "必要な供物:"
+  },
+  "필요 소모 재료": {
+    "en": "Required Consumable Materials",
+    "ja": "必要消費素材"
+  },
+  "필요 스킬 태그:": {
+    "en": "Required Skill Tag:",
+    "ja": "必要スキルタグ:"
+  },
+  "필요 심연 연구 재료": {
+    "en": "Required Abyssal Research Materials",
+    "ja": "必要な深淵研究素材"
+  },
+  "필요 자원:": {
+    "en": "Required Resources:",
+    "ja": "必要資源:"
+  },
+  "필요 재화 또는 공방 조건이 부족합니다.": {
+    "en": "Insufficient required currency or workshop conditions.",
+    "ja": "必要な財貨または工房の条件が不足しています。"
+  },
+  "필요 적 상태:": {
+    "en": "Required Enemy State:",
+    "ja": "必要な敵状態:"
+  },
+  "필요 적 상태이상:": {
+    "en": "Required Enemy Debuff:",
+    "ja": "必要な敵状態異常:"
+  },
+  "필터 조건을 완화하거나 병기창(대장간)에서 새 장비를 단조하세요.": {
+    "en": "Loosen filter criteria or forge new equipment at the Armory (Blacksmith).",
+    "ja": "フィルター条件を緩和するか、兵器廠（鍛冶屋）で新しい装備を鍛造してください。"
+  },
+  "핏빛 늑대": {
+    "en": "Blood Wolf",
+    "ja": "深血の狼"
+  },
+  "핏빛 대공 (6F 보스)": {
+    "en": "Blood Archduke (6F Boss)",
+    "ja": "深紅の大公 (6Fボス)"
+  },
+  "핏빛 대공의 선혈 예복": {
+    "en": "Blood Archduke's Fresh Blood Robe",
+    "ja": "深紅の大公の鮮血礼服"
+  },
+  "핏빛 대공의 진홍 성배": {
+    "en": "Blood Archduke Grail",
+    "ja": "深紅の大公聖杯"
+  },
+  "핏빛 성역": {
+    "en": "Crimson Sanctuary",
+    "ja": "血塗られた聖域"
+  },
+  "핏빛 성역을 배회하는 흉포한 마수. 피 냄새를 맡으면 무리를 이끌고 광포화합니다.": {
+    "en": "A ferocious beast roaming the Crimson Sanctuary. Smelling blood, it leads its pack into a frenzy.",
+    "ja": "血塗られた聖域を徘徊する凶暴な魔獣。血の匂いを嗅ぐと群れを率いて狂暴化します。"
+  },
+  "핏빛 성역의 지배자. 거대한 박쥐 날개와 피의 마법으로 침입자의 생명력을 흡수합니다.": {
+    "en": "Ruler of the Crimson Sanctuary. Drains invaders' life force using massive bat wings and blood magic.",
+    "ja": "血塗られた聖域の支配者。巨大なコウモリの翼と血の魔法で侵入者の生命力を吸収します。"
+  },
+  "핏빛 스테인드글라스 너머 오래된 고해성사실에서 정체불명의 귀족적인 목소리가 참회를 권유합니다.": {
+    "en": "Beyond the crimson stained glass in an old confessional, an unidentified noble voice urges repentance.",
+    "ja": "血塗られたステンドグラスの向こう、古い告解室から正体不明の貴族的な声が懺悔を勧めてきます。"
+  },
+  "핏빛 심연 원정기지": {
+    "en": "Crimson Abyss Expedition Outpost",
+    "ja": "血塗られた深淵遠征基地"
+  },
+  "핏빛 파동": {
+    "en": "Crimson Wave",
+    "ja": "深紅の波動"
+  },
+  "핏빛 포자": {
+    "en": "Crimson Spores",
+    "ja": "深紅の胞子"
+  },
+  "하는 엔드 전략 컨텐츠가 영구 해금됩니다.": {
+    "en": "end-game strategic content is permanently unlocked.",
+    "ja": "するエンド戦略コンテンツが永久解放されます。"
+  },
+  "하늘에서 뇌운을 소환하여 단일 적에게 190% 피해를 입히고 1턴간 기절시킵니다.": {
+    "en": "Summons thunderclouds from the heavens, dealing 190% damage to a single enemy and stunning them for 1 turn.",
+    "ja": "天から雷雲を召喚して敵単体に190%のダメージを与え、1ターン間気絶させます。"
+  },
+  "하늘을 날던 방주였다고…?! 1층 거신과 2층 망령 군주의 핵이 성화와 맞물리며 고대의 에테르 동력로가 다시 가동되고 있소!": {
+    "en": "It was an Ark that flew across the sky...?! With the cores of the 1F Colossus and 2F Phantom Lord engaging with the Sacred Flame, the ancient ether reactor is running once again!",
+    "ja": "空を飛んでいた方舟だったと…？！ 1層の巨神と2層の亡霊君主の核が聖火と噛み合い、古代のエーテル動力炉が再び稼働を始めているぞ！"
+  },
+  "하늘이 무너져 내리던 날, 지상의 대도시는 순식간에 지하 심연의 입구로 변해버렸다. 피난민들은 성벽 안으로 몰려들었으나 성문은 안쪽에서 굳게 잠겨 있었다. 침묵의 감시자들이 성벽 위에서 내려다보았을 때, 사람들은 비로소 깨달았다. 우리를 지켜주던 자들이 가장 먼저 심연의 어둠에 굴복했음을...": {
+    "en": "The day the sky collapsed, the great metropolises on the surface turned into entrances to the subterranean Abyss in an instant. Refugees swarmed to the citadel walls, but the gates were firmly bolted from within. When the Silent Watchers looked down from the parapets, the people finally realized: those who were meant to protect us were the very first to succumb to the darkness of the Abyss...",
+    "ja": "天が崩れ落ちた日、地上の大都市は瞬く間に地下の深淵の入口へと変貌した。避難民たちは城壁の内側へと押し寄せたが、城門は内側から固く閉ざされていた。沈黙の監視者たちが城壁の上から見下ろしたとき、人々は初めて悟った。我らを守るはずだった者たちが、真っ先に深淵の闇に屈服したのだと……"
+  },
+  "하단 휠 네비게이션 동선을 [성채 ➔ 심연 탐사 ➔ 차원 게이트 ➔ ...] 순서로 자연스럽게 정렬하였으며, 마스터 계정 제한을 해제하여 모든 일반 지휘관에게 게이트 건설과 3v3 아레나, 네메시스 레이드, 영지 침공을 정식 개방했습니다.": {
+    "en": "Naturally arranged the bottom wheel navigation route in the order of [Citadel ➔ Abyssal Exploration ➔ Dimensional Gate ➔ ...], and removed master account restrictions to officially open Gate construction, 3v3 Arena, Nemesis Raids, and Estate Invasions to all Commander personnel.",
+    "ja": "下部ホイールナビゲーション動線を[城塞 ➔ 深淵探検 ➔ 次元ゲート ➔ ...]の順序で自然に整理し、マスターアカウント制限を解除して全指揮官にゲート建設と3v3アリーナ、ネメシスレイド、領地侵攻を正式開放しました。"
+  },
+  "하비": {
+    "en": "Harvey",
+    "ja": "ハーヴェイ"
+  },
+  "하여 10강까지 재강화가 가능해집니다! (최대 3단계 누적)": {
+    "en": "allowing re-enhancement up to +10! (Cumulative up to 3 stages)",
+    "ja": "して+10まで再強化が可能になります！（最大3段階累積）"
+  },
+  "하여 유품을 회수하고 방주 대기소의 후방 용병을 원정대로 호출합니다.": {
+    "en": "to retrieve relics and summon reserve mercenaries from the Ark Staging Area into the expedition.",
+    "ja": "して遺品を回収し、方舟待機所の後方傭兵を遠征隊へ呼び出します。"
+  },
+  "하여 합류합니다. (차원의 나침반 촉매 채비 시 1턴 단축)": {
+    "en": "to join. (Reduced by 1 turn when equipped with Dimensional Compass catalyst)",
+    "ja": "して合流します。（次元の羅針盤触媒を装備時1ターン短縮）"
+  },
+  "하이퍼 레인저": {
+    "en": "Hyper Ranger",
+    "ja": "ハイパーレンジャー"
+  },
+  "하이퍼 레인저: [궁극기] 궤도 에테르 버스터 — 방주 위성 융합 빔 폭격 (적 전체 480% 초극딜)": {
+    "en": "Hyper Ranger: [Ultimate] Orbital Ether Buster — Ark Satellite Convergence Beam Bombardment (480% extreme damage to all enemies)",
+    "ja": "ハイパーレンジャー: [アルティメット] 軌道エーテルバスター — 方舟衛星融合ビーム爆撃（敵全体480%超極大ダメージ）"
+  },
+  "하이퍼 레인저의 레일 버스터": {
+    "en": "Hyper Ranger's Rail Buster",
+    "ja": "ハイパーレンジャーのレールバスター"
+  },
+  "하이퍼 레인저의 출력: 방어 관통 +18%, 치명타율 +12%, 턴당 마나 +4 MP": {
+    "en": "Hyper Ranger's Output: Armor Piercing +18%, Crit Rate +12%, Mana per Turn +4 MP",
+    "ja": "ハイパーレンジャーの出力: 防御貫通+18%、会心率+12%、ターン毎のマナ+4 MP"
+  },
+  "하이퍼 에테르 코어": {
+    "en": "Hyper Ether Core",
+    "ja": "ハイパーエーテルコア"
+  },
+  "하이퍼 펄스 버스터": {
+    "en": "Hyper Pulse Buster",
+    "ja": "ハイパーパルスバスター"
+  },
+  "학도의 순수한 마도: 매 턴 마나 +3 MP 회복, 파티 속도 +5%": {
+    "en": "Scholar's Pure Arcana: Recover +3 MP each turn, Party SPD +5%",
+    "ja": "学徒の純粋な魔導: 毎ターンマナ+3 MP回復、パーティ速度+5%"
+  },
+  "학살": {
+    "en": "Slaughter",
+    "ja": "虐殺"
+  },
+  "학생증 속 소년은 둥근 안경 너머로 쑥스러운 미소를 짓고 있다. 목에 걸린 커다란 헤드폰은 세상의 모든 소음을 지우고 오직 좋아하는 음악만이 귓가에 울리게 해주던 물건이었다. '3학년 2반 민우'. 소년은 시험 걱정을 하며 교문을 나섰을 것이다. 하굣길 노을빛이 보랏빛 심연으로 물들었을 때, 소년은 헤드폰을 벗고 도대체 무슨 소리를 들었던 것일까? 돌아오지 못한 책가방과 학생증만이 방주의 깊은 회랑에서 발견되었다.": {
+    "en": "The boy in the student ID has a shy smile behind round glasses. The large headphones around his neck were something that blocked out all the noise of the world, leaving only his favorite music echoing in his ears. 'Class 3-2, Minwoo.' The boy probably left the school gates worrying about exams. When the sunset on his walk home was dyed in violet Abyss, what sound did he hear after taking off his headphones? Only the unreturned school bag and student ID were discovered in the deep cloisters of the Ark.",
+    "ja": "学生証の中の少年は丸眼鏡の向こうで照れくさそうに微笑んでいる。首にかけた大きなヘッドホンは世界のあらゆる騒音を消し、大好きな音楽だけを耳元に響かせてくれた品だった。『3年2組 ミヌ』。少年はテストの心配をしながら校門を出たはずだ。下校時の夕焼けが紫色の深淵に染まったとき、少年はヘッドホンを外し、一体どんな音を聴いたのだろうか？ 帰らぬカバンと学生証だけが方舟の深い回廊で発見された。"
+  },
+  "학습 슬롯이 가득 찼습니다 (4/4). 새 마도서를 읽으려면 기존 학습을 완료하거나 중도 포기하세요.": {
+    "en": "Study slots are full (4/4). To read a new grimoire, complete ongoing study or abandon it.",
+    "ja": "学習スロットが満杯です (4/4)。新しい魔導書を読むには既存の学習を完了するか中断してください。"
+  },
+  "학습 중도 포기 확인": {
+    "en": "Confirm Abandoning Study",
+    "ja": "学習の中断確認"
+  }
+}

@@ -1,0 +1,802 @@
+{
+  "칠흑 성역의 불패 판금갑": {
+    "en": "Invincible Plate Armor of the Pitch-Black Sanctuary",
+    "ja": "漆黒聖域の不敗板金甲"
+  },
+  "칠흑 심판 단도": {
+    "en": "Pitch-Black Judgment Dagger",
+    "ja": "漆黒審判短刀"
+  },
+  "칠흑의 검": {
+    "en": "Sword of Pitch Black",
+    "ja": "漆黒の剣"
+  },
+  "침공": {
+    "en": "Invasion",
+    "ja": "侵攻"
+  },
+  "침공 가능": {
+    "en": "Invasion Available",
+    "ja": "侵攻可能"
+  },
+  "침공 승리 시 기본 목표 자원 2종(골드/식량)과 4개 카테고리(영지 기초 자원, 심연 정제 자원, 심연 파밍 전리품, 소모품)에서 각각 무작위로 추첨된 3종의 자원을 상대 영지 보유량의 최대 30%까지 대량 약탈합니다. 단, 하루 3회 침공 제한 및 피침공 시 8시간 보호막이 적용됩니다.": {
+    "en": "Upon invasion victory, heavily plunders 2 base target resources (Gold/Food) and 3 randomly drawn resources from each of the 4 categories (Territory Base Resources, Abyss Refined Resources, Abyss Farming Loot, Consumables) up to 30% of the rival territory's reserves. However, limited to 3 invasions daily and an 8-hour shield applies when invaded.",
+    "ja": "侵攻勝利時、基本目標資源2種(ゴールド/食糧)と4つのカテゴリー(領地基礎資源、深淵精製資源、深淵ファーミング戦利品、消耗品)からそれぞれ無作為に選ばれた3種の資源を、相手領地保有量の最大30%まで大量略奪します。ただし1日3回の侵攻制限および被侵攻時に8時間のシールドが適用されます。"
+  },
+  "침공 전장 UI 리더 전술 체계 & 실시간 버프·디버프 뱃지 & 2.5배속 고속 전투": {
+    "en": "Invasion Battlefield UI Leader Tactical System & Real-Time Buff/Debuff Badges & 2.5x High-Speed Battle",
+    "ja": "侵攻戦場UIリーダー戦術体系 & リアルタイムバフ・デバフバッジ & 2.5倍速高速戦闘"
+  },
+  "침공 전장의 정보 표현력과 편의성이 대폭 향상되었습니다.": {
+    "en": "Information readability and convenience on the invasion battlefield have been significantly enhanced.",
+    "ja": "侵攻戦場の情報表現力と利便性が大幅に向上しました。"
+  },
+  "침공당해 패배 시 3시간 자동 보호막이 전개되며, 수동으로 즉시 3시간 전개할 수도 있습니다.": {
+    "en": "Upon defeat from an invasion, a 3-hour automatic shield activates; a 3-hour shield can also be deployed immediately manually.",
+    "ja": "侵攻され敗北した場合は3時間の自動シールドが展開され、手動で即座に3時間展開することもできます。"
+  },
+  "침공에만 치중해선 영지를 지킬 수 없다. 전술 타워에 에테르와 심연 재료를 공급하여 난공불락의 요새를 구축하라.": {
+    "en": "Focusing solely on invasion cannot defend the territory. Supply ether and abyssal materials to tactical towers to build an impregnable fortress.",
+    "ja": "侵攻ばかりに傾倒していては領地を守れない。戦術タワーにエーテルと深淵材料を供給し、難攻不落の要塞を構築せよ。"
+  },
+  "침공자:": {
+    "en": "Invader:",
+    "ja": "侵攻者:"
+  },
+  "침묵에 잠긴 세계, 최후의 부유 요새": {
+    "en": "A world sunken in silence, the last floating fortress",
+    "ja": "沈黙に沈んだ世界、最後の浮遊要塞"
+  },
+  "침묵의 대지 분쇄": {
+    "en": "Silent Earth Shatter",
+    "ja": "沈黙の大地粉砕"
+  },
+  "침묵의 시선 반지": {
+    "en": "Ring of Silent Gaze",
+    "ja": "沈黙の視線の指輪"
+  },
+  "침묵의 심연과 최후의 부유 요새, 방주 성채(Ark Citadel)": {
+    "en": "Silent Abyss and the Last Floating Fortress, Ark Citadel",
+    "ja": "沈黙の深淵と最後の浮遊要塞、方舟城塞 (Ark Citadel)"
+  },
+  "침묵의 주시": {
+    "en": "Silent Gaze",
+    "ja": "沈黙の注視"
+  },
+  "침묵의 회랑": {
+    "en": "Silent Cloister",
+    "ja": "沈黙の回廊"
+  },
+  "침묵의 회랑 1구역 진입": {
+    "en": "Enter Silent Cloister Zone 1",
+    "ja": "沈黙の回廊第1区域進入"
+  },
+  "침묵의 회랑 5층 탐험 채비 및 전술 보급품 편성": {
+    "en": "Silent Cloister 5F Exploration Prep & Tactical Supplies Setup",
+    "ja": "沈黙の回廊5層探検支度および戦術補給品編成"
+  },
+  "침묵의 회랑 마물 토벌": {
+    "en": "Subjugate Silent Cloister Monsters",
+    "ja": "沈黙の回廊の魔物討伐"
+  },
+  "침묵의 회랑 수호자가 사용하던 서리빛 비수. 동결 타격 고유 스킬이 내재되어 있습니다.": {
+    "en": "A frost-tinted dagger used by the guardian of the Silent Cloister. Contains the Freeze Strike unique skill.",
+    "ja": "沈黙の回廊の守護者が使用していた霜色の短刀。凍結打撃の固有スキルを内蔵している。"
+  },
+  "침묵의 회랑 심부에 잠들어 있던 고대 석조 거신. 가슴의 흑핵에서 뿜어져 나오는 한기로 침입자를 얼어붙게 한다.": {
+    "en": "An ancient stone colossus slumbering in the depths of the Silent Cloister. Freezes intruders with the bitter cold radiating from the black core in its chest.",
+    "ja": "沈黙の回廊深部に眠っていた古代の石造巨神。胸の黒核から放たれる冷気で侵入者を凍てつかせる。"
+  },
+  "침묵의 회랑 첫 척후 임무 완료 시 병기창과 생체 복원 병동이 병렬로 동시 해금됩니다.": {
+    "en": "Upon completing the first reconnaissance mission in the Silent Cloister, the Armory and Bio-Restoration Ward are unlocked simultaneously in parallel.",
+    "ja": "沈黙の回廊の最初の斥候任務完了時、兵器廠と生体復元病棟が並行して同時解放されます。"
+  },
+  "침묵의 흑핵": {
+    "en": "Silent Black Core",
+    "ja": "沈黙の黒核"
+  },
+  "침묵의 흑핵 거신": {
+    "en": "Silent Black Core Colossus",
+    "ja": "沈黙の黒核巨神"
+  },
+  "침묵의 흑핵 거신을 토벌하고 획득한 정수로 [영혼의 제단]을 건설하고, 용병을 1차 상위 직업으로 승격시키세요.": {
+    "en": "Subjugate the Silent Black Core Colossus and use the acquired essence to construct the [Soul Sanctuary], promoting mercenaries to Tier 1 advanced classes.",
+    "ja": "沈黙の黒核巨神を討伐し獲得したエッセンスで[魂の祭壇]を建設し、傭兵を1次上位職業へ昇格させましょう。"
+  },
+  "침식": {
+    "en": "Erosion",
+    "ja": "浸食"
+  },
+  "침입 부대 전원": {
+    "en": "All Invading Squad Members",
+    "ja": "侵入部隊全員"
+  },
+  "침입자 부대를 에워싸는 저주의 안개를 피워 침입자 전체의 치명타 및 회피 판정 행운(LUCK)을 감소시킵니다.": {
+    "en": "Conjures a cursed mist surrounding the invading squad, reducing the Luck (LUCK) for crit and evasion checks across all intruders.",
+    "ja": "侵入者部隊を取り囲む呪いの霧を発生させ、侵入者全員の会心および回避判定の幸運(LUCK)を減少させる。"
+  },
+  "침입자 스킬 MP 소모량 +{0}%": {
+    "en": "Intruder Skill MP Cost +{0}%",
+    "ja": "侵入者のスキルMP消費量 +{0}%"
+  },
+  "침입자 전체 속도(SPD) -{0}": {
+    "en": "All Intruders SPD -{0}",
+    "ja": "侵入者全体の速度(SPD) -{0}"
+  },
+  "침입자 전체 행운(LUCK) -{0}%": {
+    "en": "All Intruders Luck (LUCK) -{0}%",
+    "ja": "侵入者全体の幸運(LUCK) -{0}%"
+  },
+  "침입자 턴 시작마다 해당 적 체력 {0}% 감소": {
+    "en": "Reduces that enemy's HP by {0}% at the start of each intruder turn",
+    "ja": "侵入者のターン開始ごとに対象の敵HPが{0}%減少"
+  },
+  "침입자들의 시간축을 침식하여, 침입자의 행동 턴 시작 시마다 해당 적의 체력을 침식 감소시킵니다.": {
+    "en": "Erodes the time axis of intruders, eroding and reducing that enemy's HP at the start of each of their action turns.",
+    "ja": "侵入者たちの時間軸を浸食し、侵入者の行動ターン開始ごとに対象の敵のHPを浸食減少させる。"
+  },
+  "카밀라": {
+    "en": "Camilla",
+    "ja": "カミラ"
+  },
+  "카엘": {
+    "en": "Kael",
+    "ja": "カエル"
+  },
+  "카이엔": {
+    "en": "Kaien",
+    "ja": "カイエン"
+  },
+  "카이저": {
+    "en": "Kaiser",
+    "ja": "カイザー"
+  },
+  "카테고리: {0}": {
+    "en": "Category: {0}",
+    "ja": "カテゴリー: {0}"
+  },
+  "카테고리별 전문 수납 시스템을 구축하여 보관이 까다로운 심연 희귀 유물과 인챈트석을 500개까지 안전하게 격리 보관합니다.": {
+    "en": "Constructed specialized categorization storage systems to safely segregate and store up to 500 delicate abyssal rare relics and enchant stones.",
+    "ja": "カテゴリー別専門収納システムを構築し、保管が難しい深淵希少遺物とエンチャント石を500個まで安全に隔離保管する。"
+  },
+  "칸": {
+    "en": "Slot",
+    "ja": "枠"
+  },
+  "칼날": {
+    "en": "Blade",
+    "ja": "刃"
+  },
+  "캐논": {
+    "en": "Cannon",
+    "ja": "キャノン"
+  },
+  "코트": {
+    "en": "Coat",
+    "ja": "コート"
+  },
+  "쿨다운": {
+    "en": "Cooldown",
+    "ja": "クールダウン"
+  },
+  "쿨다운(턴)": {
+    "en": "Cooldown (Turns)",
+    "ja": "クールダウン(ターン)"
+  },
+  "쿨다운:": {
+    "en": "Cooldown:",
+    "ja": "クールダウン:"
+  },
+  "퀘스트": {
+    "en": "Quest",
+    "ja": "クエスト"
+  },
+  "퀘스트 & 연계": {
+    "en": "Quest & Link",
+    "ja": "クエスト & 連動"
+  },
+  "퀘스트 & 연계 시스템": {
+    "en": "Quest & Link System",
+    "ja": "クエスト & 連動システム"
+  },
+  "퀘스트 ({0})": {
+    "en": "Quests ({0})",
+    "ja": "クエスト ({0})"
+  },
+  "퀘스트 목표 달성!": {
+    "en": "Quest Objective Achieved!",
+    "ja": "クエスト目標達成！"
+  },
+  "퀘스트 창으로 이동하여 보상과 다음 연계 퀘스트를 확인합니다": {
+    "en": "Go to Quest Window to check rewards and next linked quest",
+    "ja": "クエストウィンドウへ移動して報酬と次の連動クエストを確認します"
+  },
+  "퀘스트 확인": {
+    "en": "Check Quest",
+    "ja": "クエスト確認"
+  },
+  "큐브에 미세한 마력을 주입하면, 지지직거리는 노이즈 속에서 구세계의 마천루와 하늘을 가르는 비행체들의 입체 잔상이 유령처럼 허공에 떠오른다. 그리고 그 옆에는 고열에 조리개가 녹아붙은 고배율 카메라 렌즈가 놓여 있다. 그 기록자는 도망치는 대신 무너져 내리는 문명의 중심탑 꼭대기로 올라가 셔터를 눌렀다. \"후대에 이 기록을 발견할 누군가에게. 우리는 교만하여 별을 손에 쥐려 했고, 그 대가로 대지를 잃었다. 그러나 우리의 실패가 너희의 길잡이가 되기를 바란다.\"": {
+    "en": "Infusing subtle mana into the cube conjures holographic afterimages of Old World skyscrapers and aircraft streaking across the sky amidst crackling static. Beside it lies a high-magnification camera lens with its aperture melted from extreme heat. Rather than flee, the chronicler climbed atop the crumbling central tower of civilization and pressed the shutter. \"To whoever discovers this record in future ages: We were arrogant enough to reach for the stars, and lost the earth in return. Yet may our failure serve as your guide.\"",
+    "ja": "キューブに微小な魔力を注入すると、ジジジというノイズの中で旧世界の摩天楼と空を切り裂く飛行体の立体残像が幽霊のように虚空に浮かび上がる。その隣には高熱で絞りが溶け付いた高倍率カメラレンズが置かれている。記録者は逃げる代わりに崩れ落ちる文明の中心塔の頂上へ登りシャッターを切った。「後世にこの記録を発見する誰かへ。我らは傲慢にも星を手中に収めようとし、その代償に大地を失った。しかし我らの失敗が汝らの道標となることを願う。」"
+  },
+  "크림슨 타이탄": {
+    "en": "Crimson Titan",
+    "ja": "クリムゾンタイタン"
+  },
+  "크윽... 지휘관인가... 내가 심연의 마기에 굴복하기 전에... 나를 끝내다오... 나의 성검이 더는 더럽혀져서는 안 된다!": {
+    "en": "Urgh... Is that the Commander...? Before I succumb to the Abyssal demonic energy... end me... My holy sword must be defiled no longer!",
+    "ja": "くっ... 指揮官か... 我が深淵の魔気に屈する前に... 私を終わらせてくれ... 我が聖剣がこれ以上穢されてはならぬ！"
+  },
+  "크하하! 심연의 끝에서 건져 올린 태초의 빛으로 불멸의 창세 무구를 벼려냈네! 인류 역사상 가장 위대한 영웅에게 바치겠네!": {
+    "en": "Bwahaha! With the primordial light dredged from the edge of the Abyss, I have forged the immortal Genesis Armament! I dedicate it to the greatest hero in human history!",
+    "ja": "クハハ！深淵の果てから引き揚げた太古の光で不滅の創世武具を鍛え上げたぞ！人類史上最も偉大な英雄に捧げよう！"
+  },
+  "클라우드 데이터 조회 중...": {
+    "en": "Querying cloud data...",
+    "ja": "クラウドデータ照会中..."
+  },
+  "클라우드 세이브": {
+    "en": "Cloud Save",
+    "ja": "クラウドセーブ"
+  },
+  "클라우드 실시간 동기화": {
+    "en": "Real-time Cloud Sync",
+    "ja": "クラウドリアルタイム同期"
+  },
+  "클라우드 저장 중...": {
+    "en": "Saving to cloud...",
+    "ja": "クラウド保存中..."
+  },
+  "클래스 ·": {
+    "en": "Class ·",
+    "ja": "クラス ·"
+  },
+  "클래스 간 시너지 콤보 연계 성공": {
+    "en": "Cross-Class Synergy Combo Link Successful",
+    "ja": "クラス間シナジーコンボ連携成功"
+  },
+  "클래스 고유 패시브": {
+    "en": "Class Unique Passive",
+    "ja": "クラス固有パッシブ"
+  },
+  "클래스 승격 및 영혼 한계 돌파 제단 (미건설)": {
+    "en": "Class Promotion & Soul Limit Break Altar (Unbuilt)",
+    "ja": "クラス昇格および魂の限界突破祭壇 (未建設)"
+  },
+  "클래스 승격 시설. 용병들의 상위 클래스 전직과 초월 각성을 집전합니다.": {
+    "en": "Class promotion facility. Conducts class promotions and transcendent awakenings for mercenaries.",
+    "ja": "クラス昇格施設。傭兵の上位クラス転職と超越覚醒を執り行います。"
+  },
+  "클래스 초기 스탯": {
+    "en": "Class Initial Stats",
+    "ja": "クラス初期ステータス"
+  },
+  "클레어": {
+    "en": "Claire",
+    "ja": "クレア"
+  },
+  "클로에": {
+    "en": "Chloe",
+    "ja": "クロエ"
+  },
+  "클릭 시 상세 정보 및 강화/장착": {
+    "en": "Click for details and enhance/equip",
+    "ja": "クリック時に詳細情報および強化/装備"
+  },
+  "클릭하여 상세 정보 및 강화/해제 관리": {
+    "en": "Click to manage details and enhance/unequip",
+    "ja": "クリックして詳細情報および強化/解除管理"
+  },
+  "클릭하여 심연의 백과 도감 열기": {
+    "en": "Click to open Codex of the Abyss",
+    "ja": "クリックして深淵の百科事典を開く"
+  },
+  "클릭하여 치료/충전할 용병을 선택하세요": {
+    "en": "Click to select mercenary to treat/recharge",
+    "ja": "クリックして治療/充電する傭兵を選択してください"
+  },
+  "타겟 범위": {
+    "en": "Target Range",
+    "ja": "ターゲット範囲"
+  },
+  "타겟:": {
+    "en": "Target:",
+    "ja": "ターゲット:"
+  },
+  "타락 기사단장의 단죄 성검": {
+    "en": "Fallen Order Commander's Holy Sword of Condemnation",
+    "ja": "堕落した騎士団長の断罪聖剣"
+  },
+  "타락 제단 봉헌 시 전원 HP 30%/MP 40% 회복 + 모든 디버프 해제": {
+    "en": "Upon offering at Corrupted Altar: All members recover 30% HP / 40% MP + All debuffs cleansed",
+    "ja": "堕落の祭壇への奉納時、全員のHP 30%/MP 40%回復 + 全デバフ解除"
+  },
+  "타락에서 해방된 기사단장의 영혼": {
+    "en": "Order Commander's Soul Liberated from Corruption",
+    "ja": "堕落から解放された騎士団長の魂"
+  },
+  "타락을 이겨낸 기사단장 베른하르트의 유품. 신성한 단죄의 불꽃이 깃들어 있다.": {
+    "en": "A memento of Commander Bernhardt who overcame corruption. Imbued with the sacred flames of condemnation.",
+    "ja": "堕落に打ち勝った騎士団長ベルンハルトの遺品。神聖なる断罪の炎が宿っている。"
+  },
+  "타락한 기사": {
+    "en": "Fallen Knight",
+    "ja": "堕落した騎士"
+  },
+  "타락한 기사단장 (8F 보스)": {
+    "en": "Fallen Order Commander (8F Boss)",
+    "ja": "堕落した騎士団長 (8Fボス)"
+  },
+  "타락한 망령 기사의 저주받은 대검. 적에게 입힌 대미지의 15%를 흡혈합니다.": {
+    "en": "Cursed greatsword of the fallen phantom knight. Siphons 15% of damage dealt as HP.",
+    "ja": "堕落した亡霊騎士の呪われし大剣。敵に与えたダメージの15%を吸血する。"
+  },
+  "타락한 사제": {
+    "en": "Fallen Priest",
+    "ja": "堕落した司祭"
+  },
+  "타락한 성기사단장": {
+    "en": "Fallen Holy Order Commander",
+    "ja": "堕落した聖騎士団長"
+  },
+  "타락한 성역": {
+    "en": "Fallen Sanctuary",
+    "ja": "堕落した聖域"
+  },
+  "타리크": {
+    "en": "Tariq",
+    "ja": "タリク"
+  },
+  "타오르는 불꽃을 칼날에 둘러 단일 적에게 145% 피해를 입히고 화상과 출혈을 각각 1턴씩 부여합니다.": {
+    "en": "Wreathes blade in blazing flames to deal 145% damage to a single enemy, applying Burn and Bleed for 1 turn each.",
+    "ja": "燃え盛る炎を刃に纏わせ、単体の敵に145%のダメージを与え、火傷と出血をそれぞれ1ターン付与する。"
+  },
+  "타임캡슐 황동 열쇠": {
+    "en": "Time Capsule Brass Key",
+    "ja": "タイムカプセル真鍮の鍵"
+  },
+  "탄도 계산: 후방 배치 시 원거리 치명타율 +15%.": {
+    "en": "Ballistics Calculation: Ranged Crit Rate +15% when placed in the back row.",
+    "ja": "弾道計算: 後衛配置時、遠距離会心率+15%。"
+  },
+  "탄성 강화 강궁": {
+    "en": "Elasticity Reinforced Composite Bow",
+    "ja": "弾性強化剛弓"
+  },
+  "탄환": {
+    "en": "Bullet",
+    "ja": "弾丸"
+  },
+  "탄환을 일제 사격하여 기본 15%에 행운(🍀) 보정을 더한 확률로 공격력의 45% 위력을 지닌 추가 점사 탄환을 격발합니다.": {
+    "en": "Fires a volley of bullets; with a base 15% chance plus Luck (🍀) scaling, triggers an additional burst bullet dealing 45% ATK.",
+    "ja": "弾丸を一斉射撃し、基本15%に幸運(🍀)補正を加えた確率で、攻撃力の45%の威力を誇る追加点射弾丸を発射する。"
+  },
+  "탈리스만": {
+    "en": "Talisman",
+    "ja": "タリスマン"
+  },
+  "탈출({0})": {
+    "en": "Escape ({0})",
+    "ja": "脱出({0})"
+  },
+  "탐색": {
+    "en": "Search",
+    "ja": "探索"
+  },
+  "탐색 중...": {
+    "en": "Searching...",
+    "ja": "探索中..."
+  },
+  "탐험": {
+    "en": "Exploration",
+    "ja": "探検"
+  },
+  "탐험 계속하기": {
+    "en": "Continue Exploration",
+    "ja": "探検を続ける"
+  },
+  "탐험 곡괭이": {
+    "en": "Exploration Pickaxe",
+    "ja": "探検ツルハシ"
+  },
+  "탐험 백과": {
+    "en": "Exploration Encyclopedia",
+    "ja": "探検百科"
+  },
+  "탐험 보급": {
+    "en": "Exploration Supplies",
+    "ja": "探検補給"
+  },
+  "탐험 시스템": {
+    "en": "Exploration System",
+    "ja": "探検システム"
+  },
+  "탐험 전리품은 던전 배낭에 임시 보관되므로 무리하게 전멸하지 말고 위험도 70% 이상이거나 위기 시 [성채 귀환]을 눌러 전리품을 안전 입고하세요. 시설 Lv.4부터는 골드/식량 유지비가 발생하므로 기초 생산량을 충분히 다지며 증축하는 것이 핵심입니다.": {
+    "en": "Exploration loot is temporarily kept in the dungeon backpack, so avoid reckless wipeouts—if Hazard exceeds 70% or in crisis, press [Return to Citadel] to safely deposit loot. From Facility Lv.4 onwards, gold/food upkeep occurs, so solidly fortifying base production while expanding is key.",
+    "ja": "探検の戦利品はダンジョンリュックに一時保管されるため、無理に全滅せず危険度70%以上や危機の際は[城塞帰還]を押して戦利品を安全に保管してください。施設Lv.4からはゴールド/食糧の維持費が発生するため、基礎生産量を十分に固めながら増築するのが鍵です。"
+  },
+  "탐험 전리품은 어디로 가나요?": {
+    "en": "Where does exploration loot go?",
+    "ja": "探検の戦利品はどこへ行きますか？"
+  },
+  "탐험 중 언제든 성채로 즉시 안전 귀환": {
+    "en": "Safely return to Citadel immediately at any time during exploration",
+    "ja": "探検中いつでも即座に城塞へ安全帰還"
+  },
+  "탐험 중 언제든 즉시 안전 귀환 (귀환 보존)": {
+    "en": "Safely return immediately at any time during exploration (Preserve on Return)",
+    "ja": "探検中いつでも即座に安全帰還 (帰還保存)"
+  },
+  "탐험 중 전멸하면 어떻게 되나요?": {
+    "en": "What happens if wiped out during exploration?",
+    "ja": "探検中に全滅するとどうなりますか？"
+  },
+  "탐험 중 즉시 성채 안전 귀환 (귀환 보존)": {
+    "en": "Safely return to Citadel immediately during exploration (Preserve on Return)",
+    "ja": "探検中即座に城塞へ安全帰還 (帰還保存)"
+  },
+  "탐험 중 획득한 아이템과 자원은 던전 배낭에 임시 보관되며, [성채 귀환]을 누르거나 포탈을 타면 성채 창고로 100% 안전하게 입고됩니다.": {
+    "en": "Items and resources acquired during exploration are temporarily stored in the dungeon backpack, and are 100% safely deposited into Citadel storage upon pressing [Return to Citadel] or taking a portal.",
+    "ja": "探検中に獲得したアイテムと資源はダンジョンリュックに一時保管され、[城塞帰還]を押すかポータルに乗ると城塞倉庫へ100%安全に入庫されます。"
+  },
+  "탐험 중 획득한 전리품은 가방에 보관되므로 무리하게 전멸하지 말고 위험도 70% 이상이거나 체력이 부족하면 [성채 귀환]을 눌러 안전 입고하세요! 또한 시설 Lv.4부터는 골드/식량 유지비가 발생하므로 기초 생산량을 충분히 다지며 증축하는 것이 핵심입니다.": {
+    "en": "Loot acquired during exploration is stored in the bag, so do not recklessly wipe out—if Hazard is over 70% or HP is low, press [Return to Citadel] to safely deposit! Also, from Facility Lv.4 onwards, gold/food upkeep occurs, so solidly fortifying base production while expanding is key.",
+    "ja": "探検中に獲得した戦利品はカバンに保管されるため、無理に全滅せず危険度70%以上やHP不足時は[城塞帰還]を押して安全に入庫してください！また施設Lv.4からはゴールド/食糧の維持費が発生するため、基礎生産量を十分に固めながら増築するのが鍵です。"
+  },
+  "탐험 진행 시 위험도(0~100)가 증가하며, 전술 보급품을 활용해 위험을 극복할 수 있습니다.": {
+    "en": "Hazard (0-100) increases as exploration progresses, and tactical supplies can be used to overcome perils.",
+    "ja": "探検進行時に危険度(0~100)が増加し、戦術補給品を活用して危険を乗り越えることができます。"
+  },
+  "탐험 채굴 곡괭이 제작": {
+    "en": "Craft Exploration Mining Pickaxe",
+    "ja": "探検採掘ツルハシ製作"
+  },
+  "탐험 채비실 사전 구매": {
+    "en": "Prep Room Advance Purchase",
+    "ja": "探検準備室事前購入"
+  },
+  "탐험 채비실 촉매 제작 (골드 1000 + 철광석 20 + 에테르 50)": {
+    "en": "Prep Room Catalyst Crafting (Gold 1000 + Iron Ore 20 + Ether 50)",
+    "ja": "探検準備室触媒製作 (ゴールド 1000 + 鉄鉱石 20 + エーテル 50)"
+  },
+  "탐험 채비실 촉매 제작 (골드 150 + 에테르 20 + 공허의 파편 1)": {
+    "en": "Prep Room Catalyst Crafting (Gold 150 + Ether 20 + Void Shard 1)",
+    "ja": "探検準備室触媒製作 (ゴールド 150 + エーテル 20 + 虚無の欠片 1)"
+  },
+  "탐험 채비실 촉매 제작 (골드 50 + 가죽 2 + 약초 2)": {
+    "en": "Prep Room Catalyst Crafting (Gold 50 + Leather 2 + Herb 2)",
+    "ja": "探検準備室触媒製作 (ゴールド 50 + 革 2 + 薬草 2)"
+  },
+  "탐험 채비실 촉매 제작 (골드 50 + 마력 수정 1 + 에테르 10)": {
+    "en": "Prep Room Catalyst Crafting (Gold 50 + Magic Crystal 1 + Ether 10)",
+    "ja": "探検準備室触媒製作 (ゴールド 50 + 魔力結晶 1 + エーテル 10)"
+  },
+  "탐험 횃불": {
+    "en": "Exploration Torch",
+    "ja": "探検松明"
+  },
+  "탐험 횃불 제작": {
+    "en": "Craft Exploration Torch",
+    "ja": "探検松明製作"
+  },
+  "태고 광맥의 거인 갑주": {
+    "en": "Giant Armor of the Primordial Vein",
+    "ja": "太古鉱脈の巨人甲冑"
+  },
+  "태고 현자의 지팡이": {
+    "en": "Staff of the Primordial Sage",
+    "ja": "太古の賢者の杖"
+  },
+  "태고의 광맥 베히모스": {
+    "en": "Behemoth of the Primordial Vein",
+    "ja": "太古の鉱脈ベヒモス"
+  },
+  "태고의 불꽃 점화 (한기 저항력 극대화)": {
+    "en": "Ignite Primordial Flame (Maximize Cold Resistance)",
+    "ja": "太古の炎点火 (冷気耐性極大化)"
+  },
+  "태고의 원초적 불꽃 심지를 점화하여, 심연 가장 깊은 곳에서 불어오는 절대 영도의 혹한마저 완전히 녹여냅니다.": {
+    "en": "Igniting the primordial wick completely thaws even the absolute zero bitter chill blowing from the deepest recesses of the Abyss.",
+    "ja": "太古の原初の炎の芯を点火し、深淵の最深部から吹き荒れる絶対零度の極寒すら完全に溶かし去る。"
+  },
+  "태양의 파편이라 불리는 불멸의 태양 성화. 영구적인 신성 결계가 거점 전체를 감싸며 암흑의 바다 속에서 영원히 꺼지지 않는 구원의 등대가 됩니다.": {
+    "en": "The immortal Solar Sacred Flame called the shard of the sun. A permanent divine barrier envelops the entire outpost, serving as a beacon of salvation that never extinguishes amidst the sea of darkness.",
+    "ja": "太陽の破片と呼ばれる不滅の太陽聖火。永久的な神聖結界が拠点全体を包み込み、暗黒の海の中で永遠に消えない救済の灯台となる。"
+  },
+  "태초의 공허 깊은 곳, 마침내 모든 붕괴의 근원인 아스모데우스와 대면했다. 인류의 미래를 걸고 최후의 일격을 날려라!": {
+    "en": "Deep within the primordial void, you finally face Asmodeus, the source of all collapse. Strike the final blow for the future of humanity!",
+    "ja": "太古の虚無の深淵にて、ついにすべての崩壊の根源であるアスモデウスと対峙した。人類の未来を賭け、最後の一撃を放て！"
+  },
+  "태초의 공허 창조주": {
+    "en": "Creator of the Primordial Void",
+    "ja": "太古の虚無の創造主"
+  },
+  "태초의 공허를 다스리는 무간의 절대자 [아르케오스]가 강림했습니다! 모든 심연을 닫기 위한 최후의 결전입니다!": {
+    "en": "Archeos, absolute overlord of Avici ruling the primordial void, has descended! The decisive final battle to seal all abysses begins!",
+    "ja": "太古の虚無を統べる無間の絶対者[アルケオス]が降臨した！すべての深淵を閉ざすための最後の決戦だ！"
+  },
+  "태초의 마도서: 공허의 종말": {
+    "en": "Primordial Grimoire: Void Apocalypse",
+    "ja": "太古の魔導書: 虚無の終末"
+  },
+  "태초의 마도서: 창세의 여명": {
+    "en": "Primordial Grimoire: Dawn of Genesis",
+    "ja": "太古の魔導書: 創世の夜明け"
+  },
+  "태초의 모노리스 핵을 가공하여 만든 전설의 반지. 파티 전체의 잠재력을 극한으로 일깨운다.": {
+    "en": "A legendary ring crafted from the Primordial Monolith Core. Awakens the entire party's latent power to its limits.",
+    "ja": "太古のモノリス核を加工して作られた伝説の指輪。パーティ全体の潜在能力を極限まで呼び覚ます。"
+  },
+  "태초의 빛을 강림시켜 아군 전체의 체력을 81% 즉시 회복시킵니다.": {
+    "en": "Summons primordial light to immediately restore 81% HP to all allies.",
+    "ja": "太古の光を降臨させ、味方全体のHPを即座に81%回復させる。"
+  },
+  "태초의 성전: 창세의 성령": {
+    "en": "Primordial Scripture: Holy Spirit of Genesis",
+    "ja": "太古の聖典: 創世の聖霊"
+  },
+  "태초의 심연 군주": {
+    "en": "Primordial Abyssal Lord",
+    "ja": "太古の深淵軍主"
+  },
+  "태초의 창세 에너지가 깃든 궁극의 초월 무기 [태초의 창세 성검]을 결사대에 영구 하사합니다.": {
+    "en": "Permanently bestows upon the strike team the ultimate transcendent weapon [Primordial Genesis Holy Sword], imbued with primordial genesis energy.",
+    "ja": "太古の創世エネルギーが宿る究極の超越武器[太古の創世聖剣]を決死隊へ永久下賜します。"
+  },
+  "탭하여 상세 설명 및 획득처 확인": {
+    "en": "Tap to view description and sources",
+    "ja": "タップして詳細説明および獲得先を確認"
+  },
+  "탭하여 상세 설명 확인": {
+    "en": "Tap to view description",
+    "ja": "タップして詳細説明を確認"
+  },
+  "탭하여 상세 정보 확인": {
+    "en": "Tap to view details",
+    "ja": "タップして詳細情報を確認"
+  },
+  "탭하여 영웅 상세 스탯 및 장비 확인": {
+    "en": "Tap to view hero stats and gear",
+    "ja": "タップして英雄の詳細ステータスおよび装備を確認"
+  },
+  "탭하여 장비 상세 스탯 확인": {
+    "en": "Tap to view equipment stats",
+    "ja": "タップして装備の詳細ステータスを確認"
+  },
+  "탭하여 장착/해제": {
+    "en": "Tap to Equip/Unequip",
+    "ja": "タップして装着/解除"
+  },
+  "탱/딜/힐 역할군 조합, 진형 배치, 성채 묘지 영혼 결속, 또는 심연의 백과(도감) 수집을 통해 시너지를 발동할 수 있습니다.": {
+    "en": "Synergies can be activated through Tank/DPS/Healer role combinations, formation positioning, Citadel cemetery soul binding, or Abyss Codex collection.",
+    "ja": "タンク/アタッカー/ヒーラーの役割群の組み合わせ、陣形配置、城塞墓地の魂の結束、または深淵の百科(図鑑)収集を通じてシナジーを発動できます。"
+  },
+  "탱커 + 거너 조합": {
+    "en": "Tank + Gunner Synergy",
+    "ja": "タンク + ガンナーの組み合わせ"
+  },
+  "탱커 + 광전사 조합": {
+    "en": "Tank + Berserker Synergy",
+    "ja": "タンク + 狂戦士の組み合わせ"
+  },
+  "탱커 + 힐러 조합": {
+    "en": "Tank + Healer Synergy",
+    "ja": "タンク + ヒーラーの組み合わせ"
+  },
+  "탱커 1 + 딜러 1 + 서포터 1 (역할군 균형)": {
+    "en": "Tank 1 + DPS 1 + Supporter 1 (Role Balance)",
+    "ja": "タンク 1 + アタッカー 1 + サポーター 1 (役割群の均衡)"
+  },
+  "탱커 2인": {
+    "en": "Tank 2-Member",
+    "ja": "タンク2名"
+  },
+  "탱커 3인 (순수 수호대)": {
+    "en": "Tank 3-Member (Pure Guardians)",
+    "ja": "タンク3名 (純粋守護隊)"
+  },
+  "탱커/수호": {
+    "en": "Tank/Guardian",
+    "ja": "タンク/守護"
+  },
+  "턴": {
+    "en": "Turn",
+    "ja": "ターン"
+  },
+  "턴 남음": {
+    "en": "Turns Left",
+    "ja": "ターン残り"
+  },
+  "턴 남음)": {
+    "en": "Turns Left)",
+    "ja": "ターン残り)"
+  },
+  "턴 스킵 & 방어력 +40%: 대상의 턴 행동이 완전히 취소되지만, 방어력이 40% 증가하여 빙결 중 급사하지 않는 유지력 보전형 CC 메커니즘": {
+    "en": "Turn Skip & DEF +40%: The target's turn action is completely canceled, but DEF increases by 40%, functioning as a sustainability-preserving CC mechanism preventing instant death while frozen",
+    "ja": "ターンスキップ & 防御力+40%: 対象のターン行動が完全キャンセルされるが、防御力が40%増加して凍結中の即死を防ぐ持続力保全型CCメカニズム"
+  },
+  "턴 후 합류": {
+    "en": "Joins after turns",
+    "ja": "ターン後に合流"
+  },
+  "턴)": {
+    "en": "Turns)",
+    "ja": "ターン)"
+  },
+  "턴당 마나 +{0} MP": {
+    "en": "+{0} MP per Turn",
+    "ja": "ターンごとにマナ +{0} MP"
+  },
+  "턴당 체력 +{0}%": {
+    "en": "+{0}% HP per Turn",
+    "ja": "ターンごとにHP +{0}%"
+  },
+  "턴당 체력 {0}% 재생": {
+    "en": "Regenerates {0}% HP per turn",
+    "ja": "ターンごとにHP {0}%再生"
+  },
+  "턴당 체력 회복": {
+    "en": "HP Recovery per Turn",
+    "ja": "ターンごとのHP回復"
+  },
+  "턴당 최대 HP 14% 치명적 맹독 피해 (최대 DoT)": {
+    "en": "Deals 14% Max HP fatal poison damage per turn (Max DoT)",
+    "ja": "ターンごとに最大HP 14%の致命的猛毒ダメージ (最大DoT)"
+  },
+  "테스트 모드": {
+    "en": "Test Mode",
+    "ja": "テストモード"
+  },
+  "테크트리 선행 조건 미달": {
+    "en": "Tech Tree Prerequisite Not Met",
+    "ja": "テックツリー前提条件未達"
+  },
+  "템페스트": {
+    "en": "Tempest",
+    "ja": "テンペスト"
+  },
+  "토벌 전리품 보상": {
+    "en": "Subjugation Loot Rewards",
+    "ja": "討伐戦利品報酬"
+  },
+  "토벌한 심연 마물의 사체에서 식량과 생체 재료를 가공할 시설이 없습니다.": {
+    "en": "Lacks facilities to process food and biomaterials from the carcasses of subjugated abyssal monsters.",
+    "ja": "討伐した深淵の魔物の死骸から食糧と生体材料を加工する施設がありません。"
+  },
+  "퇴각": {
+    "en": "Retreat",
+    "ja": "撤退"
+  },
+  "퇴마의": {
+    "en": "Exorcism",
+    "ja": "退魔の"
+  },
+  "퇴원 조치": {
+    "en": "Discharge Procedure",
+    "ja": "退院処置"
+  },
+  "투구": {
+    "en": "Helmet",
+    "ja": "兜"
+  },
+  "투기장": {
+    "en": "Colosseum",
+    "ja": "闘技場"
+  },
+  "투사의": {
+    "en": "Gladiator's",
+    "ja": "闘士の"
+  },
+  "투사의 결전 마총": {
+    "en": "Gladiator's Decisive Magic Gun",
+    "ja": "闘士の決戦魔銃"
+  },
+  "투사의 결전 목걸이": {
+    "en": "Gladiator's Decisive Necklace",
+    "ja": "闘士の決戦ネックレス"
+  },
+  "투사의 마나 성의": {
+    "en": "Gladiator's Mana Vestment",
+    "ja": "闘士のマナ聖衣"
+  },
+  "투사의 불패 판금갑": {
+    "en": "Gladiator's Invincible Plate Armor",
+    "ja": "闘士の不敗板金甲"
+  },
+  "투사의 불패 판금갑 [{0}]": {
+    "en": "Gladiator's Invincible Plate Armor [{0}]",
+    "ja": "闘士の不敗板金甲 [{0}]"
+  },
+  "투사의 신속 경갑주": {
+    "en": "Gladiator's Swift Light Armor",
+    "ja": "闘士の迅速軽甲冑"
+  },
+  "투사의 암살 비수": {
+    "en": "Gladiator's Assassination Dagger",
+    "ja": "闘士の暗殺短刀"
+  },
+  "투사의 연속 승리 특전:": {
+    "en": "Gladiator's Win-Streak Perk:",
+    "ja": "闘士の連勝特典:"
+  },
+  "투사의 영광 반지": {
+    "en": "Gladiator's Ring of Glory",
+    "ja": "闘士の栄光の指輪"
+  },
+  "투사의 용맹 목걸이": {
+    "en": "Gladiator's Valor Necklace",
+    "ja": "闘士の勇猛ネックレス"
+  },
+  "투사의 원소 마도봉": {
+    "en": "Gladiator's Elemental Wand",
+    "ja": "闘士の元素魔導棒"
+  },
+  "투사의 인장": {
+    "en": "Gladiator's Seal",
+    "ja": "闘士の印章"
+  },
+  "투사의 인장 & 레이팅 획득: 결투 승리 시 레이팅 점수와 함께 투사의 인장을 대량 획득하며, 연승이 길어질수록 추가 인장 보너스가 대폭 증폭": {
+    "en": "Gladiator Seal & Rating Gain: Winning duels grants large amounts of Gladiator Seals alongside rating points, with longer win streaks greatly amplifying bonus seals",
+    "ja": "闘士の印章 & レーティング獲得: 決闘勝利時にレーティングスコアとともに闘士の印章を大量獲得し、連勝が伸びるほど追加印章ボーナスが大幅に増幅"
+  },
+  "투사의 인장 획득:": {
+    "en": "Gladiator Seals Acquired:",
+    "ja": "闘士の印章獲得:"
+  },
+  "투사의 인장이 부족합니다!": {
+    "en": "Insufficient Gladiator Seals!",
+    "ja": "闘士の印章が不足しています！"
+  },
+  "투사의 저격궁": {
+    "en": "Gladiator's Sniper Bow",
+    "ja": "闘士の狙撃弓"
+  },
+  "투사의 처형검": {
+    "en": "Gladiator's Execution Sword",
+    "ja": "闘士の処刑剣"
+  },
+  "투사의 파쇄창": {
+    "en": "Gladiator's Shatter Spear",
+    "ja": "闘士の破砕槍"
+  },
+  "투신의 분노 해골환 +10": {
+    "en": "Skull Ring of the War God's Wrath +10",
+    "ja": "闘神の憤怒髑髏環 +10"
+  },
+  "트라이던트": {
+    "en": "Trident",
+    "ja": "トライデント"
+  },
+  "트리스탄": {
+    "en": "Tristan",
+    "ja": "トリスタン"
+  },
+  "특수 결속 및 마도 보조 장비 가공 (+30% 매입가)": {
+    "en": "Special Binding and Magitech Auxiliary Equipment Processing (+30% Purchase Price)",
+    "ja": "特殊結束および魔導補助装備加工 (+30% 買取価格)"
+  },
+  "특수 담금질 공정을 도입하여 2티어 단련된 강철 장비를 단조하고, +5강 한계 돌파와 함께 단조 비용 10% 할인을 적용합니다.": {
+    "en": "Introduced a specialized quenching process to forge Tier 2 tempered steel gear, applying a 10% forge discount alongside the +5 enhancement limit break.",
+    "ja": "特殊焼入れ工程を導入してティア2鍛錬鋼鉄装備を鍛造し、+5強化限界突破とともに鍛造費用10%割引を適用する。"
+  },
+  "특수 및 기타 클래스": {
+    "en": "Special & Other Classes",
+    "ja": "特殊およびその他クラス"
+  },
+  "특수 장비 단조 & 시설 강화 재료": {
+    "en": "Special Gear Forging & Facility Enhancement Materials",
+    "ja": "特殊装備鍛造 & 施設強化材料"
+  },
+  "특이점": {
+    "en": "Singularity",
+    "ja": "特異点"
+  },
+  "특이점 보옥": {
+    "en": "Singularity Jewel",
+    "ja": "特異点の宝玉"
+  },
+  "특전 -": {
+    "en": "Perk -",
+    "ja": "特典 -"
+  }
+}

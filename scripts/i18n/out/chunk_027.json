@@ -1,0 +1,802 @@
+{
+  "영목 연소 효율 안정화 (성화 화력 지속)": {
+    "en": "Stabilize Spirit Wood Combustion Efficiency (Sustain Bonfire Firepower)",
+    "ja": "霊木燃焼効率の安定化 (聖火火力維持)"
+  },
+  "영목 파편": {
+    "en": "Spirit Wood Shard",
+    "ja": "霊木の破片"
+  },
+  "영목을 공급해 5분간 생산량 +15%, 전투 EXP +20%, 영지 용병 지속 회복(6초당 HP/MP +1)을 부여합니다. (유지비 완전 면제)": {
+    "en": "Supplies spirit wood to grant production +15%, combat EXP +20%, and continuous territory mercenary recovery (HP/MP +1 per 6s) for 5 minutes. (Maintenance completely waived)",
+    "ja": "霊木を供給して5分間生産量+15%、戦闘EXP+20%、領地傭兵の持続回復(6秒毎HP/MP+1)を付与する。(維持費完全免除)"
+  },
+  "영목을 단계별로 바쳐 성화를 완충하면 5분간 온기 버프가 지속됩니다.": {
+    "en": "Offer spirit wood in stages to fully charge the sacred flame, sustaining the warmth buff for 5 minutes.",
+    "ja": "霊木を段階ごとに捧げて聖火を最大充填すると、5分間温もりバフが持続する。"
+  },
+  "영목을 정제하고 마력 수정을 얹은 마도 지팡이. [🪄 공명] 특성으로 모든 스킬의 마나 소모량을 5% 절감합니다.": {
+    "en": "A magic staff of refined spirit wood topped with a magic crystal. Its [🪄 Resonance] trait reduces all skills' MP cost by 5%.",
+    "ja": "霊木を精製し魔力水晶を乗せた魔導杖。「🪄 共鳴」特性により全スキルの消費MPを5%削減する。"
+  },
+  "영목의 심층 수지를 온전히 연소시키는 특수 송풍 장치를 장착하여 불꽃의 열효율을 비약적으로 끌어올렸습니다.": {
+    "en": "Equipped a special blower device to fully combust deep resin of spirit wood, dramatically boosting flame thermal efficiency.",
+    "ja": "霊木の深層樹脂を完全に燃焼させる特殊送風装置を装着し、炎の熱効率を飛躍的に向上させた。"
+  },
+  "영웅": {
+    "en": "Hero",
+    "ja": "英雄"
+  },
+  "영웅 (H)": {
+    "en": "Hero (H)",
+    "ja": "英雄 (H)"
+  },
+  "영웅을 찾을 수 없습니다.": {
+    "en": "Hero not found.",
+    "ja": "英雄が見つかりません。"
+  },
+  "영웅의 진형 배치(전열/중열/후열)와 스킬 특성에 따라 강력한 연계 보너스가 발동합니다.": {
+    "en": "Powerful combo bonuses trigger according to hero formation placement (Front/Mid/Back row) and skill traits.",
+    "ja": "英雄の陣形配置(前衛/中衛/後衛)とスキル特性に応じて強力な連携ボーナスが発動する。"
+  },
+  "영웅의 통솔력: 파티 전체 공격력 +8%, 최대 체력 +8%": {
+    "en": "Hero's Leadership: Entire Party ATK +8%, Max HP +8%",
+    "ja": "英雄の統率力: パーティ全体の攻撃力+8%、最大HP+8%"
+  },
+  "영웅이 전사하면 장비는 소멸되나요?": {
+    "en": "If a hero falls in battle, is their equipment lost?",
+    "ja": "英雄が戦死した場合、装備は消滅しますか？"
+  },
+  "영원의 성광 대검 +10": {
+    "en": "Greatsword of Eternal Holy Light +10",
+    "ja": "永遠の聖光大剣 +10"
+  },
+  "영원의 성역": {
+    "en": "Eternal Sanctuary",
+    "ja": "永遠の聖域"
+  },
+  "영원의 시공간": {
+    "en": "Eternal Spacetime",
+    "ja": "永遠の時空間"
+  },
+  "영원한 구원의 빛": {
+    "en": "Eternal Light of Salvation",
+    "ja": "永遠の救いの光"
+  },
+  "영원히 기억될 결사대의 비문": {
+    "en": "Epitaph of the Vanguard to be Remembered Forever",
+    "ja": "永遠に記憶される決死隊の碑文"
+  },
+  "영입": {
+    "en": "Recruit",
+    "ja": "雇用"
+  },
+  "영주": {
+    "en": "Lord",
+    "ja": "領主"
+  },
+  "영지 & 로그라이크 시스템": {
+    "en": "Territory & Roguelike System",
+    "ja": "領地＆ローグライクシステム"
+  },
+  "영지 & 시설 시스템": {
+    "en": "Territory & Facility System",
+    "ja": "領地＆施設システム"
+  },
+  "영지 & 전투 시스템": {
+    "en": "Territory & Combat System",
+    "ja": "領地＆戦闘システム"
+  },
+  "영지 & 퀘스트 시스템": {
+    "en": "Territory & Quest System",
+    "ja": "領地＆クエストシステム"
+  },
+  "영지 30% 전리품 약탈 완료 (고정 2종 + 카테고리별 랜덤 3종)": {
+    "en": "Territory 30% Loot Pillage Complete (Fixed 2 types + Random 3 types by category)",
+    "ja": "領地30%戦利品略奪完了 (固定2種＋カテゴリ別ランダム3種)"
+  },
+  "영지 건설 (방랑 주점)": {
+    "en": "Territory Construction (Wanderer Lounge)",
+    "ja": "領地建設 (放浪酒場)"
+  },
+  "영지 건설 바로가기": {
+    "en": "Go to Territory Construction",
+    "ja": "領地建設へ移動"
+  },
+  "영지 건설 바로가기 (방랑 주점)": {
+    "en": "Go to Territory Construction (Wanderer Lounge)",
+    "ja": "領地建設へ移動 (放浪酒場)"
+  },
+  "영지 내 11대 핵심 거점 시설 1레벨 이상 완공": {
+    "en": "Complete all 11 core outpost facilities in territory to Lv.1 or higher",
+    "ja": "領地内の11大核心拠点施設をLv.1以上完成"
+  },
+  "영지 메뉴 닫기": {
+    "en": "Close Territory Menu",
+    "ja": "領地メニューを閉じる"
+  },
+  "영지 발전 (대량 자원 & 재료)": {
+    "en": "Territory Development (Massive Resources & Materials)",
+    "ja": "領地発展 (大量資源＆材料)"
+  },
+  "영지 발전 보상 수령": {
+    "en": "Claim Territory Development Rewards",
+    "ja": "領地発展報酬の受取"
+  },
+  "영지 방어 부대 능력치 증폭": {
+    "en": "Territory Defense Squad Stat Amplification",
+    "ja": "領地防衛部隊の能力値増幅"
+  },
+  "영지 방어 전술 타워 연구소": {
+    "en": "Territory Defense Tactical Tower Lab",
+    "ja": "領地防衛戦術タワー研究所"
+  },
+  "영지 방어 전술 타워(Tactical Towers) 3대 테크 & 라운드 개시 연출": {
+    "en": "Territory Defense Tactical Towers 3 Tech Trees & Round Start Cutscene",
+    "ja": "領地防衛戦術タワー(Tactical Towers) 3大テック＆ラウンド開始演出"
+  },
+  "영지 방어 전술 타워의 효과는 어떻게 적용되나요?": {
+    "en": "How are the effects of Territory Defense Tactical Towers applied?",
+    "ja": "領地防衛戦術タワーの効果はどのように適用されますか？"
+  },
+  "영지 방어를 위한 전술 타워(공격/방어/유틸 전술 테크)를 1회 연구하여 강화하세요.": {
+    "en": "Research and enhance a Tactical Tower (Offensive/Defensive/Utility tactical tech) once for territory defense.",
+    "ja": "領地防衛のための戦術タワー(攻撃/防御/ユーティリティ戦術テック)を1回研究して強化せよ。"
+  },
+  "영지 백과": {
+    "en": "Territory Codex",
+    "ja": "領地百科"
+  },
+  "영지 보상": {
+    "en": "Territory Reward",
+    "ja": "領地報酬"
+  },
+  "영지 보호막: 침공을 당하거나 수동으로 활성화한 영지 보호막(Peace Shield)이 켜져 있는 동안에는 외부 침입자로부터 영지 자원이 안전하게 보호됩니다.": {
+    "en": "Territory Shield: While the Peace Shield (triggered upon invasion or activated manually) is active, territory resources are safely protected from outside invaders.",
+    "ja": "領地シールド: 侵攻を受けた際や手動で発動した領地シールド(Peace Shield)が有効な間は、外部の侵入者から領地資源が安全に保護されます。"
+  },
+  "영지 생산자원": {
+    "en": "Territory Production Resources",
+    "ja": "領地生産資源"
+  },
+  "영지 생산자원 1종 랜덤 (30%)": {
+    "en": "Random Territory Production Resource x1 (30%)",
+    "ja": "領地生産資源ランダム1種 (30%)"
+  },
+  "영지 생산품": {
+    "en": "Territory Products",
+    "ja": "領地生産品"
+  },
+  "영지 수호를 위한 전술 타워 연구 시스템이 추가되었습니다.": {
+    "en": "Tactical Tower research system for territory defense has been added.",
+    "ja": "領地守護のための戦術タワー研究システムが追加されました。"
+  },
+  "영지 시설": {
+    "en": "Territory Facilities",
+    "ja": "領地施設"
+  },
+  "영지 시설 Lv.4부터 골드/식량 유지비가 차감됩니다. 유지비가 체납되면 생산이 멈추거나 패널티가 발생하므로 벌채소/시추소/안식처/정제소 생산량을 균형 있게 성장시키세요.": {
+    "en": "Gold/Food upkeep is deducted starting from Territory Facility Lv.4. If upkeep is overdue, production halts or penalties occur, so develop Lumber Camp/Quarry/Haven/Refinery output in balance.",
+    "ja": "領地施設Lv.4からゴールド/食糧の維持費が差し引かれます。維持費が滞納すると生産停止やペナルティが発生するため、伐採所/採掘所/安息所/精製所の生産量をバランスよく成長させてください。"
+  },
+  "영지 시설 • {0}": {
+    "en": "Territory Facility • {0}",
+    "ja": "領地施設 • {0}"
+  },
+  "영지 시설 건축 및 레벨업": {
+    "en": "Territory Facility Construction & Level Up",
+    "ja": "領地施設の建築およびレベルアップ"
+  },
+  "영지 시설 건축/증축": {
+    "en": "Territory Facility Construction/Expansion",
+    "ja": "領地施設の建築/増築"
+  },
+  "영지 시설 관리": {
+    "en": "Territory Facility Management",
+    "ja": "領地施設管理"
+  },
+  "영지 시설 유지비 -5% 감면": {
+    "en": "Territory Facility Upkeep -5% Reduction",
+    "ja": "領地施設維持費-5%減免"
+  },
+  "영지 시설을 확장하거나 심연을 탐험하세요.": {
+    "en": "Expand territory facilities or explore the Abyss.",
+    "ja": "領地施設を拡張するか、深淵を探検してください。"
+  },
+  "영지 시스템": {
+    "en": "Territory System",
+    "ja": "領地システム"
+  },
+  "영지 용병 재생: 6초마다 영지 대기 용병 및 생체 복원 병동 입원 환자 HP/MP +1 자동 소생 회복": {
+    "en": "Territory Mercenary Regeneration: Automatically recovers +1 HP/MP every 6s for standby mercenaries and hospitalized patients in Bio-Restoration Ward",
+    "ja": "領地傭兵再生: 6秒ごとに領地待機傭兵および生体復元病棟入院患者のHP/MP+1自動蘇生回復"
+  },
+  "영지 전장에 중력 감속 왜곡장을 형성하여 침입자(적군) 전체의 속도(SPD)를 감속시킵니다.": {
+    "en": "Forms a gravity deceleration distortion field on the territory battlefield to slow down the speed (SPD) of all invaders (enemies).",
+    "ja": "領地戦場に重力減速歪曲場を形成し、侵入者(敵軍)全体の速度(SPD)を減速させる。"
+  },
+  "영지 정찰": {
+    "en": "Scout Territory",
+    "ja": "領地偵察"
+  },
+  "영지 침공": {
+    "en": "Territory Invasion",
+    "ja": "領地侵攻"
+  },
+  "영지 침공 자원 약탈 규칙은 어떻게 되나요?": {
+    "en": "What are the resource pillaging rules for territory invasion?",
+    "ja": "領地侵攻の資源略奪ルールはどうなっていますか？"
+  },
+  "영지 통화 & 고용/제작/강화 비용": {
+    "en": "Territory Currency & Recruit/Craft/Enhance Cost",
+    "ja": "領地通貨＆雇用/製作/強化費用"
+  },
+  "영지 함락 (약탈당함)": {
+    "en": "Territory Fallen (Pillaged)",
+    "ja": "領地陥落 (略奪被害)"
+  },
+  "영지:": {
+    "en": "Territory:",
+    "ja": "領地:"
+  },
+  "영지에": {
+    "en": "in Territory",
+    "ja": "領地に"
+  },
+  "영지에서": {
+    "en": "in Territory",
+    "ja": "領地で"
+  },
+  "영지에서 제단 건설하러 가기 ▶": {
+    "en": "Go to build Altar in Territory ▶",
+    "ja": "領地で祭壇を建設しに行く ▶"
+  },
+  "영지에서 주점 건설하러 가기 ▶": {
+    "en": "Go to build Lounge in Territory ▶",
+    "ja": "領地で酒場を建設しに行く ▶"
+  },
+  "영혼": {
+    "en": "Soul",
+    "ja": "魂"
+  },
+  "영혼 가죽옷": {
+    "en": "Soul Leather Clothes",
+    "ja": "魂の革服"
+  },
+  "영혼 각성 의식을 고도화하여 기본 클래스 경험치 획득량을 +40%로 끌어올리고 전직 등급 승격률을 12%로 높입니다.": {
+    "en": "Advances the Soul Awakening ritual, boosting base class EXP gain to +40% and increasing promotion rate to 12%.",
+    "ja": "魂の覚醒儀式を高度化し、基本クラスの経験値獲得量を+40%に引き上げ、転職ランク昇格率を12%に高める。"
+  },
+  "영혼 공명 부적": {
+    "en": "Soul Resonance Talisman",
+    "ja": "魂の共鳴護符"
+  },
+  "영혼 나침반": {
+    "en": "Soul Compass",
+    "ja": "魂の羅針盤"
+  },
+  "영혼 나침반 바늘": {
+    "en": "Soul Compass Needle",
+    "ja": "魂の羅針盤の針"
+  },
+  "영혼 분리 흡수": {
+    "en": "Soul Severing Absorption",
+    "ja": "魂の分離吸収"
+  },
+  "영혼 분리 흡수 (Soul Harvest)": {
+    "en": "Soul Severing Absorption (Soul Harvest)",
+    "ja": "魂の分離吸収 (Soul Harvest)"
+  },
+  "영혼 속박의 사슬 인장": {
+    "en": "Soul Bound Chain Seal",
+    "ja": "魂束縛の鎖印章"
+  },
+  "영혼 수확": {
+    "en": "Soul Harvest",
+    "ja": "魂の収穫"
+  },
+  "영혼 수확 암살검": {
+    "en": "Soul Harvest Assassin Blade",
+    "ja": "魂収穫の暗殺剣"
+  },
+  "영혼 수확자의 사신 낫": {
+    "en": "Soul Reaper's Scythe",
+    "ja": "魂の収穫者の死神の大鎌"
+  },
+  "영혼 승격 제단 Lv.": {
+    "en": "Soul Ascension Altar Lv.",
+    "ja": "魂の昇格祭壇 Lv."
+  },
+  "영혼 승격의 정점에 도달하여 1차 각성 클래스 경험치 증폭을 최대 +40%까지 달성하고 등급 승격률을 27%로 높입니다.": {
+    "en": "Reaches the pinnacle of Soul Ascension, amplifying 1st Awakening class EXP by up to +40% and increasing rank promotion rate to 27%.",
+    "ja": "魂の昇格の頂点に到達し、1次覚醒クラス経験値増幅を最大+40%まで達成、ランク昇格率を27%に引き上げる。"
+  },
+  "영혼 제단": {
+    "en": "Soul Altar",
+    "ja": "魂の祭壇"
+  },
+  "영혼 착취": {
+    "en": "Soul Drain",
+    "ja": "魂の搾取"
+  },
+  "영혼 침식": {
+    "en": "Soul Erosion",
+    "ja": "魂の侵蝕"
+  },
+  "영혼 포식 대궁": {
+    "en": "Soul Devourer Greatbow",
+    "ja": "魂捕食の大弓"
+  },
+  "영혼 해방 목걸이": {
+    "en": "Soul Liberation Necklace",
+    "ja": "魂解放のネックレス"
+  },
+  "영혼 흡수": {
+    "en": "Soul Absorption",
+    "ja": "魂の吸収"
+  },
+  "영혼의 가호": {
+    "en": "Soul's Blessing",
+    "ja": "魂の加護"
+  },
+  "영혼의 결속": {
+    "en": "Soul Bond",
+    "ja": "魂の結束"
+  },
+  "영혼의 묵주": {
+    "en": "Rosary of Souls",
+    "ja": "魂のロザリオ"
+  },
+  "영혼의 성소": {
+    "en": "Soul Sanctuary",
+    "ja": "魂の聖所"
+  },
+  "영혼의 성소에서 용병 1명을 2차 상위 직업(마스터 티어)으로 승급시키세요.": {
+    "en": "Promote 1 mercenary to Tier 2 advanced class (Master Tier) at the Soul Sanctuary.",
+    "ja": "魂の聖所で傭兵1名を2次上位職業(マスターTier)に昇格させよ。"
+  },
+  "영혼의 잔재": {
+    "en": "Remnants of Soul",
+    "ja": "魂の残滓"
+  },
+  "영혼의 제단": {
+    "en": "Soul Sanctuary",
+    "ja": "魂の祭壇"
+  },
+  "영혼의 제단 건설": {
+    "en": "Construct Soul Sanctuary",
+    "ja": "魂の祭壇の建設"
+  },
+  "영혼의 제단 건설 필요": {
+    "en": "Soul Sanctuary Construction Required",
+    "ja": "魂の祭壇の建設が必要"
+  },
+  "영혼의 제단 이후 차원의 문을 열어 3v3 아레나, 시공의 침식자 네메시스 월드 레이드, 5v5 영지 침공 및 전술 타워 연구로 이어지는 8단계 정식 퀘스트 체인입니다.": {
+    "en": "An 8-stage official quest chain opening the Dimensional Gate after Soul Sanctuary, leading to 3v3 Arena, Chrono Corruptor Nemesis World Raid, 5v5 Territory Invasion, and Tactical Tower Research.",
+    "ja": "魂の祭壇以降、次元の扉を開き3v3闘技場、時空の侵蝕者ネメシスワールドレイド、5v5領地侵攻および戦術タワー研究へと続く8段階の正規クエストチェーン。"
+  },
+  "영혼의 제단 전직 각성 의식": {
+    "en": "Soul Sanctuary Class Change Awakening Ritual",
+    "ja": "魂の祭壇 転職覚醒儀式"
+  },
+  "영혼의 제단(Lv.1)": {
+    "en": "Soul Sanctuary (Lv.1)",
+    "ja": "魂の祭壇 (Lv.1)"
+  },
+  "영혼의 제단과 공명하는 [차원 앵커 게이트]를 건설하여 비동기 차원 아레나 및 차원 교신을 개방하세요.": {
+    "en": "Construct the [Dimensional Gate] resonating with the Soul Sanctuary to unlock asynchronous Dimensional Arena and dimensional communications.",
+    "ja": "魂の祭壇と共鳴する「次元アンカーゲート」を建設し、非同期次元闘技場および次元通信を開放せよ。"
+  },
+  "영혼의 제단을 개방했습니다. 용병들이 영혼의 벽을 깨고 성기사, 암살자, 대마도사 등 1차 상위 클래스로 전직할 수 있는 성소가 마련됩니다.": {
+    "en": "Unlocked the Soul Sanctuary. A sanctuary is established where mercenaries can break the wall of souls and promote to Tier 1 advanced classes such as Paladin, Assassin, and Archmage.",
+    "ja": "魂の祭壇を開放した。傭兵たちが魂の壁を破り、聖騎士、暗殺者、大魔導士などの1次上位クラスへ転職できる聖所が整う。"
+  },
+  "영혼의 파동을 조율하여 기본 클래스 경험치 획득량을 +20% 상시 증폭시키고, 전직 시 등급 승격 확률을 6% 부여합니다.": {
+    "en": "Attunes soul waves to permanently amplify base class EXP gain by +20% and grants a 6% rank promotion chance upon class change.",
+    "ja": "魂の波動を調律して基本クラスの経験値獲得量を常時+20%増幅し、転職時にランク昇格確率を6%付与する。"
+  },
+  "영혼의 한계를 돌파하고 승격 의식을 치르기 위해 용병들의 육체를 완치할 생체 복원 병동(Lv.1 이상)이 선행되어야 합니다.": {
+    "en": "To surpass soul limits and undergo ascension rites, the Bio-Restoration Ward (Lv.1+) must first be built to fully heal mercenaries' bodies.",
+    "ja": "魂の限界を突破し昇格儀式を執り行うには、傭兵たちの肉体を完治させる生体復元病棟(Lv.1以上)が先行されなければならない。"
+  },
+  "예리한 강철 비수": {
+    "en": "Sharp Steel Dagger",
+    "ja": "鋭利な鋼鉄の短刀"
+  },
+  "예리한 강철과 가죽 손잡이를 깎아 맞춘 기습용 단검. [⚡ 암습] 특성으로 상대보다 속도가 빠를수록 피해량이 최대 20% 증폭됩니다.": {
+    "en": "An ambush dagger crafted with sharp steel and a carved leather hilt. Its [⚡ Backstab] trait amplifies damage up to 20% the faster your SPD is compared to the foe.",
+    "ja": "鋭利な鋼鉄と革の柄を削り合わせた奇襲用短剣。「⚡ 暗襲」特性により相手より速度が速いほどダメージが最大20%増幅する。"
+  },
+  "예리한 대검 +1": {
+    "en": "Sharp Greatsword +1",
+    "ja": "鋭利な大剣 +1"
+  },
+  "예리한 칼날로 대상을 베어내 기본 공격 시 대상에게 1턴간 출혈(Bleed) 상태이상을 부여합니다.": {
+    "en": "Slashes the target with a keen blade, inflicting Bleed status ailment for 1 turn upon basic attack.",
+    "ja": "鋭利な刃で対象を切り裂き、基本攻撃時に対象へ1ターン出血(Bleed)状態異常を付与する。"
+  },
+  "예배당 중앙 회랑 전체를 핏빛 가시 장미 덤불이 가로막고 있습니다. 꽃잎마다 마력이 서려 있습니다.": {
+    "en": "Crimson thorny rose brambles block the entire central corridor of the chapel. Magic power lingers on every petal.",
+    "ja": "礼拝堂の中央回廊全体を血塗られた茨の薔薇の茂みが遮っている。花びらごとに魔力が宿っている。"
+  },
+  "예복": {
+    "en": "Vestment",
+    "ja": "礼服"
+  },
+  "예상 보상: 고순도 에테르, 마력수정, 룬 철광, 순수 접두석 (몬스터 Lv.7~9)": {
+    "en": "Estimated Rewards: High-Purity Ether, Magic Crystal, Runic Iron Ore, Pure Prefix Stone (Monsters Lv.7-9)",
+    "ja": "予想報酬: 高純度エーテル、魔力結晶、ルーン鉄鉱、純粋接頭石 (モンスター Lv.7〜9)"
+  },
+  "예상 보상: 골드, 식량, 약초, 가죽, 일반 접두석 (몬스터 Lv.1~3)": {
+    "en": "Estimated Rewards: Gold, Food, Herb, Leather, Prefix Stone (Monsters Lv.1-3)",
+    "ja": "予想報酬: ゴールド、食糧、薬草、革、一般接頭石 (モンスター Lv.1〜3)"
+  },
+  "예상 보상: 공허 파편, 순수 접미석, 농축 수정, 대량 에테르 (몬스터 Lv.10~12)": {
+    "en": "Estimated Rewards: Void Shard, Pure Suffix Stone, Concentrated Crystal, Bulk Ether (Monsters Lv.10-12)",
+    "ja": "予想報酬: 虚無の欠片、純粋接尾石、濃縮結晶、大量エーテル (モンスター Lv.10〜12)"
+  },
+  "예상 보상: 단죄의 강철, 신성 에테르 룬, 순수 접두석 (몬스터 Lv.19~21)": {
+    "en": "Estimated Rewards: Steel of Condemnation, Holy Ether Rune, Pure Prefix Stone (Monsters Lv.19-21)",
+    "ja": "予想報酬: 断罪の鋼鉄、神聖エーテルルーン、純粋接頭石 (モンスター Lv.19〜21)"
+  },
+  "예상 보상: 망각의 유골, 고대 마력 수정, 저주 정화수, 고급 접미석 (몬스터 Lv.16~18)": {
+    "en": "Estimated Rewards: Remains of Oblivion, Ancient Magic Crystal, Curse Cleansing Water, High-Grade Suffix Stone (Monsters Lv.16-18)",
+    "ja": "予想報酬: 忘却の遺骨、古代魔力結晶、呪い浄化水、高級接尾石 (モンスター Lv.16〜18)"
+  },
+  "예상 보상: 철광석, 석탄, 실크, 일반 접미석 (몬스터 Lv.4~6)": {
+    "en": "Estimated Rewards: Iron Ore, Coal, Silk, Suffix Stone (Monsters Lv.4-6)",
+    "ja": "予想報酬: 鉄鉱石、石炭、シルク、一般接尾石 (モンスター Lv.4〜6)"
+  },
+  "예상 보상: 핏빛 에센스, 농축 약초, 마수의 가죽, 고급 접두석 (몬스터 Lv.13~16)": {
+    "en": "Estimated Rewards: Crimson Essence, Concentrated Herb, Beast Leather, High-Grade Prefix Stone (Monsters Lv.13-16)",
+    "ja": "予想報酬: 鮮血のエッセンス、濃縮薬草、魔獣の革、高級接頭石 (モンスター Lv.13〜16)"
+  },
+  "예상 보상: 환영의 거울 파편, 시공간 공허정수, 순수 접미석 (몬스터 Lv.22~25)": {
+    "en": "Estimated Rewards: Illusion Mirror Shard, Spacetime Void Essence, Pure Suffix Stone (Monsters Lv.22-25)",
+    "ja": "予想報酬: 幻影の鏡の破片、時空間虚無エッセンス、純粋接尾石 (モンスター Lv.22〜25)"
+  },
+  "오두막": {
+    "en": "Cabin",
+    "ja": "小屋"
+  },
+  "오라": {
+    "en": "Aura",
+    "ja": "オーラ"
+  },
+  "오리온": {
+    "en": "Orion",
+    "ja": "オリオン"
+  },
+  "오버로드": {
+    "en": "Overlord",
+    "ja": "オーバーロード"
+  },
+  "오버클럭 리로드": {
+    "en": "Overclock Reload",
+    "ja": "オーバークロックリロード"
+  },
+  "오브": {
+    "en": "Orb",
+    "ja": "オーブ"
+  },
+  "오스카": {
+    "en": "Oscar",
+    "ja": "オスカー"
+  },
+  "오파츠 유물": {
+    "en": "Ooparts Relic",
+    "ja": "オーパーツ遺物"
+  },
+  "오파츠(고대 아티팩트)는 어떻게 사용하나요?": {
+    "en": "How do I use Ooparts (ancient artifacts)?",
+    "ja": "オーパーツ(古代のアーティファクト)はどうやって使いますか？"
+  },
+  "오파츠·회고록·신화 유물·촉매": {
+    "en": "Ooparts · Memoirs · Mythic Relics · Catalysts",
+    "ja": "オーパーツ・回顧録・神話遺物・触媒"
+  },
+  "오프라인 영지 수익 정산": {
+    "en": "Offline Territory Income Settlement",
+    "ja": "オフライン領地収益清算"
+  },
+  "옥좌 바로 앞, 검은 수정에 박힌 채 부식된 최초 탐험대장의 갑주와 피로 쓴 양피지가 놓여 있습니다.": {
+    "en": "Directly before the throne lies the corroded armor of the first expedition captain embedded in black crystal, along with a blood-written parchment.",
+    "ja": "玉座の真正面、黒い水晶に突き刺さり腐食した初代探検隊長の甲冑と血で書かれた羊皮紙が置かれている。"
+  },
+  "올+": {
+    "en": "All+",
+    "ja": "全+"
+  },
+  "와류": {
+    "en": "Vortex",
+    "ja": "渦潮"
+  },
+  "완공": {
+    "en": "Complete",
+    "ja": "完工"
+  },
+  "완드": {
+    "en": "Wand",
+    "ja": "ワンド"
+  },
+  "완료": {
+    "en": "Complete",
+    "ja": "完了"
+  },
+  "완료됨": {
+    "en": "Completed",
+    "ja": "完了"
+  },
+  "완성된 기억으로 전설의 오파츠 [초월의 현자의 돌]을 연성하여 방주 연금 공방에 영구 안치합니다.": {
+    "en": "Transmutes the legendary Ooparts [Philosopher's Stone of Transcendence] with completed memories and permanently enshrines it in the Ark Alchemy Lab.",
+    "ja": "完成した記憶で伝説のオーパーツ「超越の賢者の石」を錬成し、方舟錬金工房に永久安置する。"
+  },
+  "완전 군장": {
+    "en": "Full Military Pack",
+    "ja": "完全軍装"
+  },
+  "완전 군장 & 2차 전직 및 차원의 호각": {
+    "en": "Full Military Pack & 2nd Class Change and Tactical Whistle",
+    "ja": "完全軍装＆2次転職および次元の角笛"
+  },
+  "완전 군장(20칸) 배낭 제작": {
+    "en": "Craft Full Military Pack (20 Slots) Backpack",
+    "ja": "完全軍装(20枠)バックパック製作"
+  },
+  "완전 무적 결계 & 불멸의 수호": {
+    "en": "Absolute Invincibility Barrier & Immortal Guardian",
+    "ja": "完全無敵結界＆不滅の守護"
+  },
+  "완전 사망 카운트다운": {
+    "en": "Permadeath Countdown",
+    "ja": "完全死亡カウントダウン"
+  },
+  "완전 습득까지 약": {
+    "en": "Approx. until complete mastery",
+    "ja": "完全習得まで約"
+  },
+  "완전 습득까지 필요한 연독:": {
+    "en": "Continuous reading needed until complete mastery:",
+    "ja": "完全習得に必要な読書:"
+  },
+  "완전 전사한 용병의 유해를 영주(성채 묘지)로 안전히 운구": {
+    "en": "Safely transport the remains of fully fallen mercenaries to the Citadel Cemetery",
+    "ja": "戦死した傭兵の遺骨を城塞墓地へ安全に移送"
+  },
+  "완전 탐사 (3,3,올1)": {
+    "en": "Full Exploration (3, 3, All 1)",
+    "ja": "完全探査 (3,3,全1)"
+  },
+  "완전 탐사 프리셋 (횃불 3, 식량 3, 나머지 각 1개)": {
+    "en": "Full Exploration Preset (3 Torches, 3 Food, 1 of each remaining)",
+    "ja": "完全探査プリセット (松明3、食糧3、残り各1個)"
+  },
+  "완전 회복 (100%)": {
+    "en": "Full Recovery (100%)",
+    "ja": "完全回復 (100%)"
+  },
+  "완전한 신성 각성의 전당. 모든 파티원의 올스탯을 상시 +10% 증가시키는 영구 축복을 내리며 전직 등급 승격률을 +30%로 완성합니다.": {
+    "en": "The Hall of Complete Holy Awakening. Bestows a permanent blessing increasing all stats of all party members by +10% and perfects rank promotion rate to +30%.",
+    "ja": "完全なる神聖覚醒の殿堂。全パーティメンバーの全ステータスを常時+10%増加させる永久祝福を授け、転職ランク昇格率を+30%として完成させる。"
+  },
+  "왈츠": {
+    "en": "Waltz",
+    "ja": "ワルツ"
+  },
+  "왜곡": {
+    "en": "Distortion",
+    "ja": "歪曲"
+  },
+  "왜곡 펜던트": {
+    "en": "Distortion Pendant",
+    "ja": "歪曲ペンダント"
+  },
+  "왜곡된 시공간을 떠도는 방랑자 크로노스의 회중시계를 수리하여 차원의 나침반을 완전한 [시공간의 나침반]으로 각성시키세요.": {
+    "en": "Repair the pocket watch of Chronos, the wanderer drifting through distorted spacetime, to awaken the Dimensional Compass into the complete [Compass of Spacetime].",
+    "ja": "歪んだ時空間を彷徨う放浪者クロノスの懐中時計を修理し、次元の羅針盤を完全なる「時空間の羅針盤」へと覚醒させよ。"
+  },
+  "외투": {
+    "en": "Cloak",
+    "ja": "外套"
+  },
+  "요새 결계": {
+    "en": "Fortress Barrier",
+    "ja": "要塞結界"
+  },
+  "용병": {
+    "en": "Mercenary",
+    "ja": "傭兵"
+  },
+  "용병 1명 이상 고용": {
+    "en": "Hire 1 or more mercenaries",
+    "ja": "傭兵を1名以上雇用"
+  },
+  "용병 Lv.": {
+    "en": "Mercenary Lv.",
+    "ja": "傭兵 Lv."
+  },
+  "용병 Lv.{0} 필요": {
+    "en": "Mercenary Lv.{0} Required",
+    "ja": "傭兵 Lv.{0}が必要"
+  },
+  "용병 Lv.{0} 필요 ({1}/{2})": {
+    "en": "Mercenary Lv.{0} Required ({1}/{2})",
+    "ja": "傭兵 Lv.{0}が必要 ({1}/{2})"
+  },
+  "용병 각성 및 전직": {
+    "en": "Mercenary Awakening & Class Change",
+    "ja": "傭兵覚醒および転職"
+  },
+  "용병 검사": {
+    "en": "Mercenary Swordsman",
+    "ja": "傭兵剣士"
+  },
+  "용병 검사 ➔ [광전사 ➔ 발할라 블레이드] / [전술 지휘관 ➔ 철혈의 패황]": {
+    "en": "Mercenary Swordsman ➔ [Berserker ➔ Valhalla Blade] / [Tactical Commander ➔ Iron-Blooded Overlord]",
+    "ja": "傭兵剣士 ➔ [狂戦士 ➔ ヴァルハラブレード] / [戦術指揮官 ➔ 鉄血の覇皇]"
+  },
+  "용병 검사 계통": {
+    "en": "Mercenary Swordsman Lineage",
+    "ja": "傭兵剣士系統"
+  },
+  "용병 검사의 처형도끼": {
+    "en": "Mercenary Swordsman's Execution Axe",
+    "ja": "傭兵剣士の処刑斧"
+  },
+  "용병 검사의 투지: 파티 공격력 +8%, 최대 체력 +6%": {
+    "en": "Mercenary Swordsman's Fighting Spirit: Party ATK +8%, Max HP +6%",
+    "ja": "傭兵剣士の闘志: パーティ攻撃力+8%、最大HP+6%"
+  },
+  "용병 계약 해지": {
+    "en": "Terminate Mercenary Contract",
+    "ja": "傭兵契約解除"
+  },
+  "용병 고용소. 방랑 용병을 계약 영입하고 서브 퀘스트를 수주하며 식량을 조달합니다.": {
+    "en": "Mercenary guild. Recruits wandering mercenaries, accepts sub-quests, and procures food.",
+    "ja": "傭兵雇用所。放浪傭兵を契約加入させ、サブクエストを受注し食糧を調達します。"
+  },
+  "용병 관리": {
+    "en": "Mercenary Management",
+    "ja": "傭兵管理"
+  },
+  "용병 관리 소진 (야영 시 1회 재충전)": {
+    "en": "Mercenary management depleted (Recharge 1 time when camping)",
+    "ja": "傭兵管理消費 (野営時1回再チャージ)"
+  },
+  "용병 긴급 이송 턴 1턴 단축 & 차원 포탈 발견↑": {
+    "en": "Mercenary emergency transport turns -1 & Dimensional portal discovery ↑",
+    "ja": "傭兵緊急移送ターン1ターン短縮＆次元ポータル発見↑"
+  },
+  "용병 등급 승격 진화:": {
+    "en": "Mercenary Rank Promotion Evolution:",
+    "ja": "傭兵ランク昇格進化:"
+  },
+  "용병 등급별 가호 강화 배율: N(1.0배), V(1.25배), H(1.5배), E(1.8배), L(2.2배)로 전사한 영웅의 등급에 따라 시너지 효과가 최대 2.2배까지 대폭 증폭됩니다.": {
+    "en": "Mercenary Blessing Enhancement Multiplier by Rank: N (1.0x), V (1.25x), H (1.5x), E (1.8x), L (2.2x), greatly amplifying synergy effects up to 2.2x according to the fallen hero's rank.",
+    "ja": "傭兵ランク別加護強化倍率: N(1.0倍)、V(1.25倍)、H(1.5倍)、E(1.8倍)、L(2.2倍)で、戦死した英雄のランクに応じてシナジー効果が最大2.2倍まで大幅に増幅されます。"
+  },
+  "용병 등급별 레벨업 스탯 성장치 차등화": {
+    "en": "Differentiated Level-up Stat Growth by Mercenary Rank",
+    "ja": "傭兵ランク別レベルアップステータス成長値の差別化"
+  },
+  "용병 모집 및 유대": {
+    "en": "Mercenary Recruitment & Bonds",
+    "ja": "傭兵募集および絆"
+  },
+  "용병 병영 바로가기": {
+    "en": "Go to Mercenary Barracks",
+    "ja": "遠征隊兵舎へ移動"
+  },
+  "용병 영입 & 서브 의뢰 & 식량": {
+    "en": "Mercenary Recruitment & Sub Bounties & Food",
+    "ja": "傭兵加入＆サブ依頼＆食糧"
+  },
+  "용병 영입 & 식량 조달": {
+    "en": "Mercenary Recruitment & Food Procurement",
+    "ja": "傭兵加入＆食糧調達"
+  },
+  "용병 영입 완료!": {
+    "en": "Mercenary Recruited!",
+    "ja": "傭兵加入完了！"
+  },
+  "용병 유대": {
+    "en": "Mercenary Bonds",
+    "ja": "傭兵の絆"
+  },
+  "용병 입원시키기": {
+    "en": "Hospitalize Mercenary",
+    "ja": "傭兵を入院させる"
+  },
+  "용병 조합 시너지, MP 영혼 공명 회복(개별 30%, 파티 50%), 암살자 패시브 \"치명적 본능\" 치명타 시 30%(+행운 보정) 추가 공격 개편": {
+    "en": "Mercenary combination synergy, MP soul resonance recovery (individual 30%, party 50%), Assassin passive \"Deadly Instinct\" reworked with 30% (+luck correction) bonus attack on crit",
+    "ja": "傭兵編成シナジー、MP魂共鳴回復(個別30%、パーティ50%)、暗殺者パッシブ「致命的本能」会心時30%(+幸運補正)追加攻撃の改変"
+  },
+  "용병 풀 4명 증설 & [V] 베테랑 등급 용병 출현 해금": {
+    "en": "Expand mercenary pool to 4 & Unlock [V] Veteran rank mercenary appearance",
+    "ja": "傭兵プール4名増設＆[V]ベテランランク傭兵出現開放"
+  },
+  "용병 풀 5명 증설 & [H] 히어로 등급 용병 출현 해금 & 🍖+3/15초": {
+    "en": "Expand mercenary pool to 5 & Unlock [H] Hero rank mercenary appearance & 🍖+3/15s",
+    "ja": "傭兵プール5名増設＆[H]ヒーローランク傭兵出現開放＆🍖+3/15秒"
+  },
+  "용병 풀 6명 증설 & [E] 에픽 등급 용병 출현 해금 & 🍖+7/15초": {
+    "en": "Expand mercenary pool to 6 & Unlock [E] Epic rank mercenary appearance & 🍖+7/15s",
+    "ja": "傭兵プール6名増設＆[E]エピックランク傭兵出現開放＆🍖+7/15秒"
+  },
+  "용병 해고": {
+    "en": "Dismiss Mercenary",
+    "ja": "傭兵解雇"
+  },
+  "용병 후보 3명 풀 & 서브 퀘스트 의뢰 게시판 개방": {
+    "en": "Mercenary candidate pool of 3 & Sub-quest bounty board unlocked",
+    "ja": "傭兵候補3名プール＆サブクエスト依頼掲示板開放"
+  },
+  "용병_{0}": {
+    "en": "Mercenary_{0}",
+    "ja": "傭兵_{0}"
+  },
+  "용병단 & 20종 전직": {
+    "en": "Mercenary Corps & 20 Class Changes",
+    "ja": "傭兵団＆20種転職"
+  },
+  "용병단 & 장비 인벤토리": {
+    "en": "Mercenary Corps & Equipment Inventory",
+    "ja": "傭兵団＆装備インベントリ"
+  },
+  "용병단 메뉴에서 기본 지급된 마도 비전서를 전수하세요. 전열 아이리스에게 [강타], 중앙 시안에게 [출혈/암습]을 세팅합니다. 진형 효과로 전열은 피해 -10%, 중열은 치명타 +5%, 후열은 스킬 위력 +10%를 받습니다.": {
+    "en": "Teach the default arcane grimoires provided in the Mercenary menu. Equip [Smite] to Iris in the front row, and [Bleed/Ambush] to Cyan in the mid row. As formation bonuses, Front row gains Damage -10%, Mid row Crit +5%, and Back row Skill Power +10%.",
+    "ja": "傭兵団メニューで基本支給された魔導書を伝授してください。前衛アイリスに「強打」、中衛シアンに「出血/暗襲」をセットします。陣形効果により前衛は被ダメージ-10%、中衛は会心率+5%、後衛はスキル威力+10%を獲得します。"
+  },
+  "용병단 메뉴에서 기본 지급된 마도 비전서를 전수하세요: 전열 아이리스에게 [강타], 중앙 시안에게 [출혈/암습]을 세팅합니다. 3열 포지션 효과로 전열은 피해 -10%, 중열은 치명타 +5%, 후열은 스킬 위력 +10% 보너스를 받습니다.": {
+    "en": "Teach the default arcane grimoires provided in the Mercenary menu: Equip [Smite] to Iris in the front row, and [Bleed/Ambush] to Cyan in the mid row. With the 3-row position effect, Front row gets Damage -10%, Mid row Crit +5%, and Back row Skill Power +10% bonus.",
+    "ja": "傭兵団メニューで基本支給された魔導書を伝授してください: 前衛アイリスに「強打」、中衛シアンに「出血/暗襲」をセットします。3列ポジション効果により前衛は被ダメージ-10%、中衛は会心率+5%、後衛はスキル威力+10%のボーナスを獲得します。"
+  },
+  "용병단 모집 및 고용": {
+    "en": "Mercenary Recruitment & Hiring",
+    "ja": "傭兵団の募集および雇用"
+  },
+  "용병단 및 장비": {
+    "en": "Mercenary Corps & Equipment",
+    "ja": "傭兵団および装備"
+  },
+  "용병단 정원 초과: 용병단은 최대 7명까지만 수용할 수 있습니다! 기존 용병을 해고해야 합니다.": {
+    "en": "Mercenary roster full: The mercenary corps can hold up to 7 members only! You must dismiss an existing mercenary.",
+    "ja": "傭兵団定員超過: 傭兵団は最大7名までしか収容できません！既存の傭兵を解雇する必要があります。"
+  },
+  "용병들이 습득한 스킬을 강화합니다. 강화 시 위력(+12%)과 소모 MP(+25%)가 증가합니다.": {
+    "en": "Enhances skills learned by mercenaries. Enhancement increases power (+12%) and MP cost (+25%).",
+    "ja": "傭兵たちが習得したスキルを強化する。強化時に威力(+12%)と消費MP(+25%)が増加する。"
+  },
+  "용병을 찾을 수 없습니다.": {
+    "en": "Mercenary not found.",
+    "ja": "傭兵が見つかりません。"
+  },
+  "용병을 해고하시겠습니까?": {
+    "en": "Do you want to dismiss this mercenary?",
+    "ja": "傭兵を解雇しますか？"
+  },
+  "용병의 레벨과 영혼의 성소(Sanctuary) 퀘스트를 완료하면 상위 클래스로 영혼을 승격시켜 결전 오의 스킬을 해금합니다.": {
+    "en": "Completing mercenary levels and the Soul Sanctuary quest promotes the soul to an advanced class, unlocking decisive secret skills.",
+    "ja": "傭兵のレベルと魂の聖所(Sanctuary)クエストを完了すると、上位クラスへと魂を昇格させ決戦奥義スキルを解放します。"
+  },
+  "용병의 영혼을 인도하고 상위 클래스로 승격시킬 신성한 제단이 없습니다.": {
+    "en": "There is no sacred altar to guide mercenaries' souls and promote them to advanced classes.",
+    "ja": "傭兵の魂を導き上位クラスへと昇格させる神聖な祭壇がありません。"
+  },
+  "용병이 습득하지 않은 스킬입니다.": {
+    "en": "This skill has not been learned by the mercenary.",
+    "ja": "傭兵が習得していないスキルです。"
+  },
+  "우리가 함께하는 한, 어떤 어둠도 우리를 무너뜨릴 수 없어. 내가 널 지킬게.": {
+    "en": "As long as we are together, no darkness can tear us down. I will protect you.",
+    "ja": "私たちが共にいる限り、どんな闇も私たちを打ち砕くことはできない。私があなたを守る。"
+  },
+  "우리가 해냈습니다… 지휘관님의 지혜와 결사대의 헌신이 인류의 방주를 구원하였습니다. 최후의 전리품으로 영지의 영원한 태평성대를 선포할지, 결사대에게 군주의 신화 성관을 하사할지 명을 내려주십시오!": {
+    "en": "We did it... The Commander's wisdom and the Vanguard's devotion have saved humanity's Ark. Please give the command whether to proclaim eternal prosperity for the territory as the final trophy, or bestow the Lord's Mythic Holy Crown upon the Vanguard!",
+    "ja": "私たちが成し遂げました…指揮官様の英知と決死隊の献身が人類の方舟を救いました。最後の戦利品として領地の永遠の太平聖代を宣言するか、決死隊に君主の神話聖冠を下賜するか、ご命令を下してください！"
+  },
+  "우주 궤도에서 에테르 빔을 투하하여 적 전체에 180% 폭발 피해를 입힙니다.": {
+    "en": "Drops an ether beam from orbital space, dealing 180% explosive damage to all enemies.",
+    "ja": "宇宙軌道からエーテルビームを投下し、敵全体に180%の爆発ダメージを与える。"
+  }
+}

@@ -1,0 +1,802 @@
+{
+  "💬 \"기사단의 명예는 꺾이지 않았다. 이 성스러운 유품을 방주의 제단에 영구 봉헌하노라!\"": {
+    "en": "💬 \"The honor of the Knights remains unbroken. I permanently consecrate this sacred relic upon the Ark's altar!\"",
+    "ja": "💬 「騎士団の名誉は折れていない。この神聖なる遺品を方舟の祭壇に永久奉納する！」"
+  },
+  "💬 \"기사단의 영광을 영지의 요새로 계승하라. 방주를 난공불락의 철벽 성채로 강화한다!\"": {
+    "en": "💬 \"Inherit the glory of the Knights into the fortress of the territory. Fortify the Ark into an impregnable ironclad citadel!\"",
+    "ja": "💬 「騎士団の栄光を領地の要塞へと継承せよ。方舟を難攻不落の鉄壁の城塞へと強化する！」"
+  },
+  "💬 \"단장님의 뜻을 이어받아 심연의 어둠을 가르리라. 단죄의 성검을 결사대에 부여하라!\"": {
+    "en": "💬 \"Carrying on the Grandmaster's will, we shall cleave through the abyssal darkness. Bestow the Holy Sword of Condemnation upon the vanguard!\"",
+    "ja": "💬 「団長の遺志を継ぎ深淵の闇を切り裂く。断罪の聖剣を決死隊に授けよ！」"
+  },
+  "💬 \"방주의 모든 생존자들에게 풍요를! 영지를 불멸의 이상향으로 완성하라.\"": {
+    "en": "💬 \"Abundance to all survivors of the Ark! Complete the territory into an immortal utopia.\"",
+    "ja": "💬 「方舟の全生存者に豊穣を！領地を不滅のユートピアとして完成させよ」"
+  },
+  "💬 \"성배의 마력을 방주 전역에 순환시켜라. 모든 대원과 피난민들에게 영원한 활력을 불어넣는다.\"": {
+    "en": "💬 \"Circulate the Holy Grail's mana throughout the Ark. Breathe eternal vitality into all members and refugees.\"",
+    "ja": "💬 「聖杯の魔力を方舟全域に循環させよ。すべての隊員と避難民に永遠の活力を吹き込むのだ」"
+  },
+  "💬 \"성혈의 묵주를 거점에 봉헌하라! 방주의 모든 대원에게 영구 안식과 재생의 축복을!\"": {
+    "en": "💬 \"Consecrate the Rosary of Holy Blood at the base! Bless all members of the Ark with eternal rest and regeneration!\"",
+    "ja": "💬 「聖血のロザリオを拠点に奉納せよ！方舟の全隊員に永久の安息と再生の祝福を！」"
+  },
+  "💬 \"시간의 지혜를 결사대의 검에 깃들이리라! 시공간의 나침반과 함께 무간도를 돌파하라!\"": {
+    "en": "💬 \"Imbue the wisdom of time into the vanguard's blades! Break through Avici alongside the Spacetime Compass!\"",
+    "ja": "💬 「時の知恵を決死隊の剣に宿さん！時空間の羅針盤と共に無間道を突破せよ！」"
+  },
+  "💬 \"시공간의 나침반으로 방주의 모든 원정대를 시공간의 제약에서 해방하노라!\"": {
+    "en": "💬 \"With the Spacetime Compass, I liberate all Ark expeditions from the bounds of space and time!\"",
+    "ja": "💬 「時空間の羅針盤により、方舟のすべての遠征隊を時空間の制約から解放せん！」"
+  },
+  "💬 \"심연을 닫은 영웅들의 검은 영원히 빛나리라. 불멸의 성검을 수호자에게 하사하라!\"": {
+    "en": "💬 \"The blades of the heroes who sealed the Abyss shall shine forever. Bestow the Immortal Holy Sword upon the guardian!\"",
+    "ja": "💬 「深淵を閉ざした英雄たちの剣は永遠に輝かん。不滅の聖剣を守護者に下賜せよ！」"
+  },
+  "💬 \"심연의 심장부로 나아갈 결사대에게 피의 권능을 다스리는 전설의 성유물을 하사하라.\"": {
+    "en": "💬 \"Bestow the legendary holy relic governing the power of blood upon the vanguard heading into the Heart of the Abyss.\"",
+    "ja": "💬 「深淵の心臓部へ進む決死隊に、血の権能を司る伝説の聖遺物を下賜せよ」"
+  },
+  "💬 \"어둠을 가를 칼날이 없다면 방주의 내일도 없다. 원정대에게 고대 무구를 하사하라.\"": {
+    "en": "💬 \"Without a blade to cleave the dark, the Ark has no tomorrow. Bestow ancient armaments upon the expedition.\"",
+    "ja": "💬 「闇を裂く刃なくして方舟の明日はない。遠征隊に古代の武具を下賜せよ」"
+  },
+  "💬 \"영웅들의 헌신에 최고의 경의를. 군주의 성관을 수호자에게 하사하라.\"": {
+    "en": "💬 \"Highest respect to the heroes' dedication. Bestow the Sovereign's Holy Crown upon the guardian.\"",
+    "ja": "💬 「英雄たちの献身に最高の敬意を。君主の聖冠を守護者に下賜せよ」"
+  },
+  "💬 \"우리는 살아남았다. 지상 위에서 영원한 번영을 누리리라.\"": {
+    "en": "💬 \"We have survived. We shall enjoy eternal prosperity above ground.\"",
+    "ja": "💬 「我らは生き残った。地上にて永遠の繁栄を享受せん」"
+  },
+  "💬 \"우리는 어둠을 이겨냈다. 이제 지상 위에 영원히 번영할 태양의 제국을 세우리라!\"": {
+    "en": "💬 \"We conquered the darkness. Now, upon the earth, we shall build a Solar Empire that prospers forever!\"",
+    "ja": "💬 「我らは闇を乗り越えた。今こそ地上に永遠に繁栄する太陽の帝国を築かん！」"
+  },
+  "💬 \"우리의 원정은 멈추지 않는다. 제2장의 어둠을 가를 신화의 무구를 하사하라!\"": {
+    "en": "💬 \"Our expedition will not cease. Bestow mythical armaments to cleave Chapter 2's darkness!\"",
+    "ja": "💬 「我らの遠征は止まらない。第2章の闇を切り裂く神話の武具を下賜せよ！」"
+  },
+  "💬 \"이 비전으로 차원을 굴절시켜라! 결사대에게 초월의 마도서를 하사하노라!\"": {
+    "en": "💬 \"Warp dimensions with this arcanum! I bestow the Grimoire of Transcendence upon the vanguard!\"",
+    "ja": "💬 「この奥義で次元を屈折させよ！決死隊に超越の魔導書を下賜せん！」"
+  },
+  "💬 \"적들의 피를 심판의 불꽃으로 바꾸어라! 결사대에게 진홍 혈염의 대검을 수여한다!\"": {
+    "en": "💬 \"Turn enemy blood into the flames of judgment! Bestow the Greatsword of Crimson Bloodflame upon the vanguard!\"",
+    "ja": "💬 「敵の血を裁きの炎へと変えよ！決死隊に深紅の血炎の大剣を授与する！」"
+  },
+  "💬 \"튼튼한 기틀이 있어야 심연도 버텨낼 수 있다. 영지의 내정과 인프라를 우선하라.\"": {
+    "en": "💬 \"Only with a sturdy foundation can we endure the Abyss. Prioritize territory domestic affairs and infrastructure.\"",
+    "ja": "💬 「強固な基盤があってこそ深淵にも耐えられる。領地の内政とインフラを優先せよ」"
+  },
+  "💬 \"피난민들의 지붕과 식량이 우선이다. 방주의 기초를 견고히 하라.\"": {
+    "en": "💬 \"Shelter and food for the refugees come first. Solidify the foundations of the Ark.\"",
+    "ja": "💬 「避難民の屋根と食糧が最優先だ。方舟の基礎を堅固にせよ」"
+  },
+  "💬 \"현자의 돌을 방주에 안치하라! 모든 에테르와 마도 재화의 변환이 극대화되리라!\"": {
+    "en": "💬 \"Enshrine the Philosopher's Stone in the Ark! The transmutation of all ether and arcane currencies will be maximized!\"",
+    "ja": "💬 「賢者の石を方舟に安置せよ！すべてのエーテルと魔導財貨の変換が極大化されん！」"
+  },
+  "💰 영지 시설 유지비 및 휴면 복구 룰": {
+    "en": "💰 Territory Facility Upkeep & Dormant Recovery Rules",
+    "ja": "💰 領地施設の維持費および休眠復帰ルール"
+  },
+  "💾 브라우저 및 인게임에 즉시 적용되었습니다! (배포 파일 미연결 시 로컬 보관)": {
+    "en": "💾 Instantly applied to browser and in-game! (Stored locally if distribution file is unlinked)",
+    "ja": "💾 ブラウザおよびゲーム内に即時適用されました！(配布ファイル未連携時はローカル保管)"
+  },
+  "📂 가져오기": {
+    "en": "📂 Import",
+    "ja": "📂 インポート"
+  },
+  "📂 밸런스 JSON 데이터를 불러왔습니다. 확인 후 [배포용 저장]을 눌러주세요.": {
+    "en": "📂 Loaded balance JSON data. Please review and click [Save for Distribution].",
+    "ja": "📂 バランスJSONデータを読み込みました。確認後[配布用保存]を押してください。"
+  },
+  "📉 [시설 유지비] {0} 지출 (생산량으로 지속 충당 및 창고 상한 보전)": {
+    "en": "📉 [Facility Upkeep] Expended {0} (Continuously covered by production, preserving warehouse cap)",
+    "ja": "📉 [施設維持費] {0}支出 (生産量で継続充当および倉庫上限保持)"
+  },
+  "📉 시설 운영 유지비 정산": {
+    "en": "📉 Settle Facility Operation Upkeep",
+    "ja": "📉 施設運営維持費の精算"
+  },
+  "📊 개별 능력치 (RPG Stat Profile)": {
+    "en": "📊 Individual Stats (RPG Stat Profile)",
+    "ja": "📊 個別ステータス (RPG Stat Profile)"
+  },
+  "📊 장비 기본 스탯 강화 상세 비교": {
+    "en": "📊 Equipment Base Stat Enhancement Detail Comparison",
+    "ja": "📊 装備基本ステータス強化詳細比較"
+  },
+  "📊 전체 종합 능력치:": {
+    "en": "📊 Total Overall Stats:",
+    "ja": "📊 全体総合ステータス:"
+  },
+  "📊 전투 리포트": {
+    "en": "📊 Battle Report",
+    "ja": "📊 戦闘レポート"
+  },
+  "📋 [결산 확인] 부재 중 영지 활동 결산 확인을 마치고 방주 성채 업무를 개시합니다.": {
+    "en": "📋 [Settlement Confirmed] Finished reviewing offline territory settlement. Commencing Ark Citadel duties.",
+    "ja": "📋 [決算確認] 不在中の領地活動決算確認を終え、方舟城塞の業務を開始します。"
+  },
+  "📍 진입 계층 선택 (위험도 1,000 단위 세부 진입로)": {
+    "en": "📍 Select Entry Floor (Hazard 1,000 unit detailed entry paths)",
+    "ja": "📍 進入階層選択 (危険度1,000単位の詳細進入路)"
+  },
+  "📍 포지션 특화:": {
+    "en": "📍 Position Specialization:",
+    "ja": "📍 ポジション特化:"
+  },
+  "📐 진형 배치": {
+    "en": "📐 Formation Setup",
+    "ja": "📐 陣形配置"
+  },
+  "📖 [{0}] 회고록": {
+    "en": "📖 [{0}] Memoirs",
+    "ja": "📖 [{0}] 回顧録"
+  },
+  "📖 [마도서 드랍!] [{0}]에게서 대표 마도서 [{1} {2}] ({3} · {4})을(를) 획득했습니다!": {
+    "en": "📖 [Grimoire Dropped!] Obtained signature grimoire [{1} {2}] ({3} · {4}) from [{0}]!",
+    "ja": "📖 [魔導書ドロップ！] [{0}]から代表魔導書[{1} {2}] ({3} · {4})を獲得しました！"
+  },
+  "📖 [마도서 연독] [{0}]님이 [{1}]을(를) 정독했습니다. 습득률: {2}% ➔ {3}% (+{4}%, 완전 습득까지 약 {5}권 필요)": {
+    "en": "📖 [Grimoire Study] {0} studied [{1}]. Mastery: {2}% ➔ {3}% (+{4}%, approx. {5} books needed for full mastery)",
+    "ja": "📖 [魔導書研読] {0}が[{1}]を精読しました。習得率: {2}% ➔ {3}% (+{4}%, 完全習得まで約{5}冊必要)"
+  },
+  "📖 [마도서 연성 성공!] [{0}] ({1}) 제작 완료! 서고에 보관되었습니다.": {
+    "en": "📖 [Grimoire Transmutation Success!] [{0}] ({1}) crafting complete! Stored in the library.",
+    "ja": "📖 [魔導書錬成成功！] [{0}] ({1}) 製作完了！書庫に保管されました。"
+  },
+  "📖 [보스 대표 마도서 드랍!] [{0}]에게서 대표 비전서 [{1}] ({2})을(를) 획득했습니다!": {
+    "en": "📖 [Boss Signature Grimoire Dropped!] Obtained signature grimoire [{1}] ({2}) from [{0}]!",
+    "ja": "📖 [ボス代表魔導書ドロップ！] [{0}]から代表魔導書[{1}] ({2})を獲得しました！"
+  },
+  "📖 [스킬 강화 전수] [{0}]님의 [{1}] 스킬이 Lv.{2}로 승급되었습니다! (위력 상승)": {
+    "en": "📖 [Skill Enhancement Taught] {0}'s [{1}] skill upgraded to Lv.{2}! (Power increased)",
+    "ja": "📖 [スキル強化伝授] {0}の[{1}]スキルがLv.{2}に昇級しました！(威力上昇)"
+  },
+  "📖 마도서 비전 효과": {
+    "en": "📖 Grimoire Secret Effect",
+    "ja": "📖 魔導書奥義効果"
+  },
+  "📖 마도서 연독 ({0}% / +{1}%)": {
+    "en": "📖 Grimoire Study ({0}% / +{1}%)",
+    "ja": "📖 魔導書研読 ({0}% / +{1}%)"
+  },
+  "📖 방주 고대 비전 마도서": {
+    "en": "📖 Ark Ancient Arcanum Grimoire",
+    "ja": "📖 方舟古代秘術魔導書"
+  },
+  "📖 스킬 상세 효과": {
+    "en": "📖 Skill Detailed Effect",
+    "ja": "📖 スキル詳細効果"
+  },
+  "📖 에테르 제본 마도서": {
+    "en": "📖 Ether Bound Grimoire",
+    "ja": "📖 エーテル製本魔導書"
+  },
+  "📖 연구 습득률": {
+    "en": "📖 Research Mastery Rate",
+    "ja": "📖 研究習得率"
+  },
+  "📖 연독 ({0}% / +{1}%)": {
+    "en": "📖 Study ({0}% / +{1}%)",
+    "ja": "📖 研読 ({0}% / +{1}%)"
+  },
+  "📖 이어서 연독 (+{0}%)": {
+    "en": "📖 Continue Study (+{0}%)",
+    "ja": "📖 続けて研読 (+{0}%)"
+  },
+  "📖 전술 마도 비전서 (": {
+    "en": "📖 Tactical Arcane Grimoire (",
+    "ja": "📖 戦術魔導秘伝書 ("
+  },
+  "📖 초기 지급 비전서 전수 & 진형 세팅 (탱·딜·힐 배치)": {
+    "en": "📖 Teach Initial Grimoire & Setup Formation (Tank/DPS/Healer placement)",
+    "ja": "📖 初期支給魔導書の伝授＆陣形設定 (タンク・アタッカー・ヒーラー配置)"
+  },
+  "📖 표준 비전서 (": {
+    "en": "📖 Standard Grimoire (",
+    "ja": "📖 標準秘伝書 ("
+  },
+  "📖 학습(연독) 중인 스킬": {
+    "en": "📖 Skills Currently Learning (Studying)",
+    "ja": "📖 学習(研読)中のスキル"
+  },
+  "📖⚠️ [습득 슬롯 가득 참] [{0}]님의 [{1}] 연독률이 99%에 도달했습니다! 정식 습득(100%)하려면 기존 습득 스킬(4개) 중 하나를 망각해야 합니다.": {
+    "en": "📖⚠️ [Mastery Slots Full] {0}'s study rate of [{1}] reached 99%! To fully master (100%), one of the 4 mastered skills must be forgotten.",
+    "ja": "📖⚠️ [習得スロット満杯] {0}の[{1}]研読率が99%に達しました！正式習得(100%)するには既存習得スキル(4個)のうち1つを忘却する必要があります。"
+  },
+  "📖✨ [기술 완전 습득!] [{0}]님이 [{1}] 연구를 완료하여 [{2}] ({3} Lv.{4}) 스킬을 완벽하게 터득했습니다! (습득률 100%)": {
+    "en": "📖✨ [Skill Fully Mastered!] {0} completed research of [{1}] and mastered [{2}] ({3} Lv.{4})! (Mastery 100%)",
+    "ja": "📖✨ [スキル完全習得！] {0}が[{1}]の研究を完了し、[{2}] ({3} Lv.{4})スキルを完全に体得しました！(習得率 100%)"
+  },
+  "📚 보유 스킬북 (": {
+    "en": "📚 Owned Skill Books (",
+    "ja": "📚 所持スキルブック ("
+  },
+  "📚 비전 학자": {
+    "en": "📚 Arcanum Scholar",
+    "ja": "📚 秘術学者"
+  },
+  "📚✨ [지식의 힘] {0}의 비전 지식으로 마나 소모 없이 [{1}]을(를) 시전합니다! (소모 MP 0)": {
+    "en": "📚✨ [Power of Knowledge] {0}'s arcane knowledge casts [{1}] without MP cost! (MP Cost 0)",
+    "ja": "📚✨ [知識の力] {0}の秘術知識によりMP消費なしで[{1}]を発動します！(消費MP 0)"
+  },
+  "📜 [방주 회고록: 선발 원정대의 비극] 심연으로 강하했던 3인의 선발대 중 견습 사제 [엘레나]가 마물의 습격에 쓰러져 성채 묘지에 안치되었습니다.": {
+    "en": "📜 [Ark Memoirs: Tragedy of Vanguard] Among the 3 vanguard members who descended into the Abyss, apprentice priest Elena fell to monster ambush and was laid to rest in the Citadel cemetery.",
+    "ja": "📜 [方舟回顧録: 先発遠征隊の悲劇] 深淵へ降下した3人の先発隊のうち、見習い司祭エレナが魔物の襲撃に倒れ、城塞墓地に安置されました。"
+  },
+  "📜 [서브 의뢰 게시판 해금] 방랑자의 라운지가 완공되어 주민들의 서브 의뢰가 개방되었습니다!": {
+    "en": "📜 [Sub Quest Board Unlocked] The Wanderer Lounge has been constructed, opening citizens' sub quests!",
+    "ja": "📜 [サブ依頼掲示板解放] 放浪者のラウンジが完成し、住民たちのサブ依頼が開放されました！"
+  },
+  "📜 [장비 도안 획득] [{0}] 단조 레시피를 해금했습니다!": {
+    "en": "📜 [Equipment Blueprint Acquired] Unlocked forging recipe for [{0}]!",
+    "ja": "📜 [装備図面獲得] [{0}]の鍛造レシピを解放しました！"
+  },
+  "📜 [지혜의 봉헌] 결사대의 전력 손실을 최소화할 수 있는 소장품([{0}])을 엄선하여 심연 백과의 연구 제단에 경건히 바쳤습니다.": {
+    "en": "📜 [Offering of Wisdom] Carefully selected relic ([{0}]) to minimize vanguard losses and reverently offered it upon the Abyssal Codex research altar.",
+    "ja": "📜 [知恵の奉納] 決死隊の戦力損失を最小限に抑える所蔵品([{0}])を厳選し、深淵百科の研究祭壇に恭しく捧げました。"
+  },
+  "📜 [퀘스트 목표 달성!] '{0}'의 모든 조건을 완수했습니다! [퀘스트 & 연계] 메뉴에서 [보상 수령]을 누르세요.": {
+    "en": "📜 [Quest Objective Complete!] Fulfilled all requirements for '{0}'! Tap [Claim Reward] in [Quests & Chains].",
+    "ja": "📜 [クエスト目標達成！] '{0}'の全条件を完了しました！[クエスト＆連携]メニューで[報酬受取]を押してください。"
+  },
+  "📜 [회고록 쪽지 발견] {0}층의 서사가 적힌 [{1}층 회고록 쪽지]를 발견했습니다! (심연의 백과 등록용)": {
+    "en": "📜 [Memoir Scrap Found] Discovered [Floor {1} Memoir Scrap] describing Floor {0}! (For Abyssal Codex registration)",
+    "ja": "📜 [回顧録の断片発見] {0}層の物語が記された[{1}層回顧録の断片]を発見しました！(深淵百科登録用)"
+  },
+  "📜 개인정보처리방침 (Privacy Policy)": {
+    "en": "📜 Privacy Policy",
+    "ja": "📜 個人情報処理方針 (Privacy Policy)"
+  },
+  "📜 도감 완성 (": {
+    "en": "📜 Codex Completion (",
+    "ja": "📜 図鑑完成 ("
+  },
+  "📜 방주 현상금 및 서사 의뢰소(Quests) 체계 & 진행 가이드": {
+    "en": "📜 Ark Bounty & Narrative Quest System & Progression Guide",
+    "ja": "📜 方舟賞金首および叙事依頼所(Quests)体系＆進行ガイド"
+  },
+  "📜 버전 정보 & 패치노트": {
+    "en": "📜 Version Info & Patch Notes",
+    "ja": "📜 バージョン情報＆パッチノート"
+  },
+  "📜 수납된 보스 마도 비전서": {
+    "en": "📜 Stored Boss Arcane Grimoires",
+    "ja": "📜 格納されたボスの魔導秘伝書"
+  },
+  "📜 습득 완료 스킬 목록 (": {
+    "en": "📜 Mastered Skills List (",
+    "ja": "📜 習得完了スキル一覧 ("
+  },
+  "📜 시설 서사 및 배경": {
+    "en": "📜 Facility Lore & Background",
+    "ja": "📜 施設の物語と背景"
+  },
+  "📜 심연의 백과 & 회고록 — 고대 컬렉션 (Abyssal Codex)": {
+    "en": "📜 Abyssal Encyclopedia & Memoirs — Ancient Collection (Abyssal Codex)",
+    "ja": "📜 深淵の百科＆回顧録 — 古代コレクション (Abyssal Codex)"
+  },
+  "📜 에픽 서사: 단죄의 맹세 복원과 진실의 거울 완성": {
+    "en": "📜 Epic Narrative: Restoration of Condemnation Oath & Completion of Truth Mirror",
+    "ja": "📜 エピック叙事: 断罪の誓いの復元と真実の鏡の完成"
+  },
+  "📜 에픽 서사: 모노리스 핵의 정화와 방주의 비상": {
+    "en": "📜 Epic Narrative: Purification of Monolith Core & Flight of the Ark",
+    "ja": "📜 エピック叙事: モノリス核の浄化と方舟の飛翔"
+  },
+  "📜 에픽 서사: 방주의 고대 룬이 깨어나다": {
+    "en": "📜 Epic Narrative: The Ark's Ancient Runes Awaken",
+    "ja": "📜 エピック叙事: 方舟の古代ルーンが目覚める"
+  },
+  "📜 에픽 서사: 시공간의 닻이 고정되다": {
+    "en": "📜 Epic Narrative: The Spacetime Anchor is Fixed",
+    "ja": "📜 エピック叙事: 時空間の錨が固定される"
+  },
+  "📜 에픽 서사: 심연의 종언과 신세계의 개벽": {
+    "en": "📜 Epic Narrative: End of the Abyss & Genesis of the New World",
+    "ja": "📜 エピック叙事: 深淵の終焉と新世界の夜明け"
+  },
+  "📜 에픽 서사: 피의 저주를 씻고 영혼의 길을 열다": {
+    "en": "📜 Epic Narrative: Cleansing Blood Curse & Opening the Soul Path",
+    "ja": "📜 エピック叙事: 血の呪いを清め魂の道を開く"
+  },
+  "📜 용병 영입 계약서 — [{0}]": {
+    "en": "📜 Mercenary Recruitment Contract — [{0}]",
+    "ja": "📜 傭兵契約書 — [{0}]"
+  },
+  "📜 전설의 대서사: 모든 심연의 영구 봉인과 여명의 방주": {
+    "en": "📜 Legendary Grand Narrative: Permanent Seal of All Abysses & Ark of Dawn",
+    "ja": "📜 伝説の大叙事: すべての深淵の永久封印と黎明の方舟"
+  },
+  "📜 전투 상세 기록 (전체 로그)": {
+    "en": "📜 Detailed Battle Log (Full Log)",
+    "ja": "📜 戦闘詳細記録 (全体ログ)"
+  },
+  "📜 최초의 방주 지휘관의 유서": {
+    "en": "📜 Last Will of the First Ark Commander",
+    "ja": "📜 最初の方舟指揮官の遺書"
+  },
+  "📜 피의 서약서": {
+    "en": "📜 Blood Covenant",
+    "ja": "📜 血の誓約書"
+  },
+  "📜 회고록 ({0})": {
+    "en": "📜 Memoirs ({0})",
+    "ja": "📜 回顧録 ({0})"
+  },
+  "📜✨ [심연의 백과 등록] [{0}] 연구가 결실을 맺어 방주에 영구한 지혜의 축복 [{1}]이(가) 깃들었습니다!": {
+    "en": "📜✨ [Abyssal Codex Registered] Research on [{0}] bore fruit, blessing the Ark with eternal wisdom [{1}]!",
+    "ja": "📜✨ [深淵の百科登録] [{0}]の研究が実を結び、方舟に永久なる知恵の祝福[{1}]が宿りました！"
+  },
+  "📜✨ [장비 마도 공명!] {0}의 {1} → {2}에게 {3} 추가 마도 피해!": {
+    "en": "📜✨ [Equipment Arcane Resonance!] {0}'s {1} → Dealt {3} additional arcane damage to {2}!",
+    "ja": "📜✨ [装備魔導共鳴！] {0}の{1} → {2}に{3}の追加魔導ダメージ！"
+  },
+  "📥 가능한 전리품 모두 담기": {
+    "en": "📥 Take All Possible Loot",
+    "ja": "📥 可能な戦利品をすべて取得"
+  },
+  "📥 내보내기": {
+    "en": "📥 Export",
+    "ja": "📥 エクスポート"
+  },
+  "📥 밸런스 설정 JSON이 다운로드되었습니다.": {
+    "en": "📥 Balance settings JSON has been downloaded.",
+    "ja": "📥 バランス設定JSONがダウンロードされました。"
+  },
+  "📥 챙기기": {
+    "en": "📥 Collect",
+    "ja": "📥 取得"
+  },
+  "📦 [블랙 마켓] [{0}] 품목이 전량 소진되어 매진되었습니다! (10분 후 재입고)": {
+    "en": "📦 [Black Market] [{0}] is completely out of stock and sold out! (Restocks in 10m)",
+    "ja": "📦 [ブラックマーケット] [{0}]が完売しました！(10分後に再入荷)"
+  },
+  "📦 [유품 회수] 전사한 [{0}]의 유품 장비({1})를 성채 인벤토리(보관함)로 전리품처럼 안전하게 회수했습니다!": {
+    "en": "📦 [Relic Retrieved] Safely retrieved fallen [{0}]'s relic equipment ({1}) to Citadel Storage!",
+    "ja": "📦 [遺品回収] 戦死した[{0}]の遺品装備({1})を城塞保管庫へ安全に回収しました！"
+  },
+  "📦 [자원 총 생산] {0}": {
+    "en": "📦 [Total Resource Production] {0}",
+    "ja": "📦 [資源総生産] {0}"
+  },
+  "📦 [제식 장비 발굴] 상자에서 {0}[{1}] (T{2}, [{3}])을(를) 획득했습니다! (도감 등록 가능)": {
+    "en": "📦 [Standard Gear Unearthed] Obtained {0}[{1}] (T{2}, [{3}]) from chest! (Can register in Codex)",
+    "ja": "📦 [制式装備発掘] 箱から{0}[{1}] (T{2}, [{3}])を獲得しました！(図鑑登録可能)"
+  },
+  "📦 매입": {
+    "en": "📦 Purchase",
+    "ja": "📦 買入"
+  },
+  "📦 모든 전리품을 방주 창고에 입고하고 확인": {
+    "en": "📦 Store all loot in Ark Storage and confirm",
+    "ja": "📦 すべての戦利品を方舟倉庫に保管して確認"
+  },
+  "📦 부재 중 총 생산 자원": {
+    "en": "📦 Total Offline Produced Resources",
+    "ja": "📦 不在中の総生産資源"
+  },
+  "📦 성채 보관함으로 회수 완료": {
+    "en": "📦 Successfully retrieved to Citadel Storage",
+    "ja": "📦 城塞保管庫への回収完了"
+  },
+  "📦 수납된 원정 자원 & 전리품": {
+    "en": "📦 Stored Expedition Resources & Loot",
+    "ja": "📦 格納された遠征資源＆戦利品"
+  },
+  "📦 영지 재건 자원": {
+    "en": "📦 Territory Reconstruction Resources",
+    "ja": "📦 領地再建資源"
+  },
+  "📦 전리품 정리 ({0})": {
+    "en": "📦 Organize Loot ({0})",
+    "ja": "📦 戦利品整理 ({0})"
+  },
+  "📦 필요 자원 / 영지 현재 자원": {
+    "en": "📦 Required Resources / Territory Current Resources",
+    "ja": "📦 必要資源 / 領地現在資源"
+  },
+  "📦 필터링된 장비 (": {
+    "en": "📦 Filtered Equipment (",
+    "ja": "📦 フィルターされた装備 ("
+  },
+  "📯 [차원의 호각 발동] 비상 구조 신호를 포착한 구조대에 의해 배낭 전리품의 {0}%를 긴급 회수하여 성채로 후송되었습니다!": {
+    "en": "📯 [Dimensional Whistle Triggered] Emergency rescue squad retrieved {0}% of backpack loot and evacuated to Citadel!",
+    "ja": "📯 [次元の呼子発動] 緊急救助信号を捉えた救助隊により、リュックの戦利品の{0}%を緊急回収して城塞へ搬送されました！"
+  },
+  "📯 차원의 호각": {
+    "en": "📯 Dimensional Whistle",
+    "ja": "📯 次元の呼子"
+  },
+  "📿 [에테르 심장 목걸이]": {
+    "en": "📿 [Ether Heart Necklace]",
+    "ja": "📿 [エーテルハートの首飾り]"
+  },
+  "📿 [침묵의 회랑 목걸이]": {
+    "en": "📿 [Silent Cloister Necklace]",
+    "ja": "📿 [沈黙の回廊の首飾り]"
+  },
+  "🔄 5개가 채워진 상태에서 새 뱃지를 얻으면 맨 앞의 오래된 뱃지가 밀려나며 실시간으로 최종 시너지가 갱신됩니다.": {
+    "en": "🔄 When 5 badges are full, obtaining a new badge pushes out the oldest badge at the front, updating final synergy in real time.",
+    "ja": "🔄 5個満杯の状態で新しいバッジを獲得すると、先頭の古いバッジが押し出され、リアルタイムで最終シナジーが更新されます。"
+  },
+  "🔄 [선택 초기화 완료] ({0}) 항목이 초기화되었습니다.": {
+    "en": "🔄 [Selection Reset Complete] ({0}) item has been reset.",
+    "ja": "🔄 [選択リセット完了] ({0})項目が初期化されました。"
+  },
+  "🔄 [완전 초기화] 모든 게임 데이터가 초기화되었습니다. 처음부터 다시 시작합니다.": {
+    "en": "🔄 [Full Reset] All game data has been reset. Starting over from the beginning.",
+    "ja": "🔄 [完全初期化] 全ゲームデータが初期化されました。最初から再開します。"
+  },
+  "🔄 [장비 인계] {0}이(가) 착용 중이던 [{1}]을(를) {2}에게 인계했습니다.": {
+    "en": "🔄 [Gear Handover] Transferred [{1}] equipped by {0} to {2}.",
+    "ja": "🔄 [装備引継ぎ] {0}が装備していた[{1}]を{2}に引き継ぎました。"
+  },
+  "🔄 [전투 재개] 중단되었던 전투 세션(턴 {0})을 이어서 진행합니다.": {
+    "en": "🔄 [Resume Battle] Continuing suspended battle session (Turn {0}).",
+    "ja": "🔄 [戦闘再開] 中断されていた戦闘セッション(ターン{0})を再開します。"
+  },
+  "🔄 갱신": {
+    "en": "🔄 Refresh",
+    "ja": "🔄 更新"
+  },
+  "🔄 갱신 (🪙{0}G)": {
+    "en": "🔄 Refresh (🪙{0}G)",
+    "ja": "🔄 更新 (🪙{0}G)"
+  },
+  "🔄 교체 장착": {
+    "en": "🔄 Swap Equip",
+    "ja": "🔄 付け替え"
+  },
+  "🔄 모든 수치가 원본 기본값으로 초기화되었습니다. [배포용 저장]을 누르면 영구 적용됩니다.": {
+    "en": "🔄 All values reset to original defaults. Press [Save for Distribution] to permanently apply.",
+    "ja": "🔄 全数値が初期値にリセットされました。[配布用保存]を押すと永久適用されます。"
+  },
+  "🔄 반복": {
+    "en": "🔄 Repeat",
+    "ja": "🔄 反復"
+  },
+  "🔄 뱃지 큐 순환: 뱃지가 최대 5개 채워진 상태에서 새로운 뱃지를 획득하면 맨 앞의 오래된 뱃지가 밀려나고 새로운 뱃지가 추가되어 실시간으로 최종 시너지가 갱신됩니다.": {
+    "en": "🔄 Badge Queue Cycle: When 5 badges are full, gaining a new badge pushes out the oldest badge and adds the new one, updating final synergy in real time.",
+    "ja": "🔄 バッジキュー循環: バッジが最大5個満杯の状態で新たなバッジを獲得すると、先頭の古いバッジが押し出され新たなバッジが追加され、リアルタイムで最終シナジーが更新されます。"
+  },
+  "🔄 새로고침": {
+    "en": "🔄 Refresh",
+    "ja": "🔄 更新"
+  },
+  "🔄 선발 전사 시 난입 (시너지 즉시 갱신)": {
+    "en": "🔄 Intervene on Vanguard Death (Synergy updates immediately)",
+    "ja": "🔄 先発戦死時に乱入 (シナジー即時更新)"
+  },
+  "🔄 초기화": {
+    "en": "🔄 Reset",
+    "ja": "🔄 初期化"
+  },
+  "🔄 파티에서 제외": {
+    "en": "🔄 Remove from Party",
+    "ja": "🔄 パーティから除外"
+  },
+  "🔇 BGM 배경음": {
+    "en": "🔇 BGM Background Music",
+    "ja": "🔇 BGM 背景音"
+  },
+  "🔇 SFX 효과음": {
+    "en": "🔇 SFX Sound Effects",
+    "ja": "🔇 SFX 効果音"
+  },
+  "🔋 [마도 탄도학] 치명타 적중으로 {0}의 방어력을 50% 추가 관통하고 마나 +{1} MP를 충전합니다.": {
+    "en": "🔋 [Arcane Ballistics] Critical hit pierces 50% more DEF of {0} and charges +{1} MP.",
+    "ja": "🔋 [魔導弾道学] 会心命中により{0}の防御力を50%追加貫通し、MP +{1}をチャージします。"
+  },
+  "🔋👑 [{0}] 파티 전원의 마나(MP)를 100% 즉시 완충했습니다!": {
+    "en": "🔋👑 [{0}] Instantly recharged 100% MP for the entire party!",
+    "ja": "🔋👑 [{0}] パーティ全員のMPを100%即時全回復しました！"
+  },
+  "🔍 [강제 수색] 샅샅이 파헤치기 (70% 장비 및 에테르 추가 / 35% 독침 트랩 피해)": {
+    "en": "🔍 [Forced Search] Scour thoroughly (70% extra gear & ether / 35% poison dart trap damage)",
+    "ja": "🔍 [強制捜索] 徹底的に掘り返す (70%装備およびエーテル追加 / 35%毒針トラップ被弾)"
+  },
+  "🔍 각성 상세 정보": {
+    "en": "🔍 Awakening Details",
+    "ja": "🔍 覚醒詳細情報"
+  },
+  "🔍 검색 (이름, ID)...": {
+    "en": "🔍 Search (Name, ID)...",
+    "ja": "🔍 検索 (名前, ID)..."
+  },
+  "🔍 관리": {
+    "en": "🔍 Manage",
+    "ja": "🔍 管理"
+  },
+  "🔍 상세": {
+    "en": "🔍 Details",
+    "ja": "🔍 詳細"
+  },
+  "🔍 상세 보기": {
+    "en": "🔍 View Details",
+    "ja": "🔍 詳細を見る"
+  },
+  "🔍 상세 정보": {
+    "en": "🔍 Detailed Info",
+    "ja": "🔍 詳細情報"
+  },
+  "🔍 상세/제작": {
+    "en": "🔍 Details/Craft",
+    "ja": "🔍 詳細/製作"
+  },
+  "🔍 상세보기": {
+    "en": "🔍 View Details",
+    "ja": "🔍 詳細表示"
+  },
+  "🔍 확대": {
+    "en": "🔍 Zoom In",
+    "ja": "🔍 拡大"
+  },
+  "🔒 +3강 이상 필요": {
+    "en": "🔒 +3 Enhance or higher required",
+    "ja": "🔒 +3強化以上必要"
+  },
+  "🔒 +7강 이상 필요": {
+    "en": "🔒 +7 Enhance or higher required",
+    "ja": "🔒 +7強化以上必要"
+  },
+  "🔒 Lv.3 희귀 해금": {
+    "en": "🔒 Lv.3 Rare Unlock",
+    "ja": "🔒 Lv.3 希少解放"
+  },
+  "🔒 [안치 보존 잠금] [{0}] 영령을 영구 안치 대상으로 고정했습니다. 새 유해가 들어와도 밀려나지 않습니다! (현재 {1}/3명 잠금)": {
+    "en": "🔒 [Enshrinement Lock] Fixed spirit [{0}] for permanent enshrinement. Won't be pushed out by new remains! (Currently {1}/3 locked)",
+    "ja": "🔒 [安置保存ロック] 英霊[{0}]を永久安置対象として固定しました。新たな遺骨が入っても押し出されません！(現在{1}/3名ロック)"
+  },
+  "🔒 [출격 불가] 차원 네메시스는 차원 앵커 게이트 Lv.3 이상에 개방됩니다. (현재 Lv.{0})": {
+    "en": "🔒 [Deployment Unavailable] Dimensional Nemesis unlocks at Dimensional Gate Lv.3 or higher. (Current Lv.{0})",
+    "ja": "🔒 [出撃不可] 次元ネメシスは次元アンカーゲートLv.3以上で開放されます。(現在 Lv.{0})"
+  },
+  "🔒 각성 조건 확인": {
+    "en": "🔒 Check Awakening Conditions",
+    "ja": "🔒 覚醒条件確認"
+  },
+  "🔒 마도 강화 (병기창 Lv.3 필요)": {
+    "en": "🔒 Arcane Enhancement (Requires Armory Lv.3)",
+    "ja": "🔒 魔導強化 (兵器廠Lv.3必要)"
+  },
+  "🔒 병기창 Lv.10 도달 시 [장비 각성] 단계가 해금됩니다. (현재 병기창 Lv.": {
+    "en": "🔒 [Equipment Awakening] unlocks upon reaching Armory Lv.10. (Current Armory Lv.",
+    "ja": "🔒 兵器廠Lv.10到達時に[装備覚醒]段階が解放されます。(現在兵器廠 Lv."
+  },
+  "🔒 선행": {
+    "en": "🔒 Prerequisite",
+    "ja": "🔒 先行"
+  },
+  "🔒 심연 11층: 무간도 (미해금)": {
+    "en": "🔒 Abyss Floor 11: Avici (Locked)",
+    "ja": "🔒 深淵11層: 無間道 (未解放)"
+  },
+  "🔒 심연 {0}층 (미해금)": {
+    "en": "🔒 Abyss Floor {0} (Locked)",
+    "ja": "🔒 深淵{0}層 (未解放)"
+  },
+  "🔒 안치 잠금 해제": {
+    "en": "🔒 Unlock Enshrinement",
+    "ja": "🔒 安置ロック解除"
+  },
+  "🔒 영구 안치 ({0}/3)": {
+    "en": "🔒 Permanent Enshrinement ({0}/3)",
+    "ja": "🔒 永久安置 ({0}/3)"
+  },
+  "🔒 일일 도전 횟수 소진 (에테르 충전 필요)": {
+    "en": "🔒 Daily attempts exhausted (Ether recharge required)",
+    "ja": "🔒 デイリー挑戦回数消費 (エーテル充電必要)"
+  },
+  "🔒 전직 조건 확인": {
+    "en": "🔒 Check Promotion Conditions",
+    "ja": "🔒 転職条件確認"
+  },
+  "🔒 차원 게이트 비활성화됨": {
+    "en": "🔒 Dimensional Gate Deactivated",
+    "ja": "🔒 次元ゲート非活性化"
+  },
+  "🔒 차원 앵커 게이트 Lv.3 필요 (현재 Lv.{0})": {
+    "en": "🔒 Requires Dimensional Gate Lv.3 (Current Lv.{0})",
+    "ja": "🔒 次元アンカーゲートLv.3必要 (現在 Lv.{0})"
+  },
+  "🔒 철수 불가": {
+    "en": "🔒 Cannot Retreat",
+    "ja": "🔒 撤退不可"
+  },
+  "🔒 해고(최소 3명)": {
+    "en": "🔒 Dismiss (Minimum 3 members)",
+    "ja": "🔒 解雇(最低3人)"
+  },
+  "🔒+3강": {
+    "en": "🔒+3 Enhance",
+    "ja": "🔒+3強化"
+  },
+  "🔒+7강": {
+    "en": "🔒+7 Enhance",
+    "ja": "🔒+7強化"
+  },
+  "🔓 [안치 잠금 해제] [{0}] 영령의 영구 안치 보존 잠금을 해제했습니다.": {
+    "en": "🔓 [Enshrinement Lock Released] Released permanent enshrinement lock for spirit [{0}].",
+    "ja": "🔓 [安置ロック解除] 英霊[{0}]の永久安置保存ロックを解除しました。"
+  },
+  "🔥 Lv.{0} 온기": {
+    "en": "🔥 Lv.{0} Warmth",
+    "ja": "🔥 Lv.{0} 温もり"
+  },
+  "🔥 [{0} 조명] 밝은 불빛으로 탐색을 진행합니다. (남은 지속: {1}회, 위험도 +{2})": {
+    "en": "🔥 [{0} Illumination] Exploring with bright light. (Remaining: {1} times, Hazard +{2})",
+    "ja": "🔥 [{0}照明] 明るい光で探索を進行します。(残り持続: {1}回、危険度+{2})"
+  },
+  "🔥 [광전사의 화신] {0}의 치명타로 파티 전원 공격력 15% 강화!": {
+    "en": "🔥 [Incarnation of Berserker] {0}'s crit increased party ATK by 15%!",
+    "ja": "🔥 [狂戦士の化身] {0}の会心によりパーティ全員の攻撃力15%強化！"
+  },
+  "🔥 [방주의 성화 유지] 영목 {0}개를 더해 성화의 온기를 연장합니다. (남은 온기: {1}분 {2}초)": {
+    "en": "🔥 [Maintain Primal Bonfire] Added {0} sacred wood to extend bonfire warmth. (Remaining Warmth: {1}m {2}s)",
+    "ja": "🔥 [方舟の聖火維持] 霊木{0}個を投じて聖火の温もりを延長します。(残りの温もり: {1}分{2}秒)"
+  },
+  "🔥 [방주의 성화] 강렬한 성화의 불꽃이 타오르기 시작합니다! (다음 투입 시 완전 점화)": {
+    "en": "🔥 [Primal Bonfire] The blazing sacred flames begin to burn! (Full ignition on next input)",
+    "ja": "🔥 [方舟の聖火] 強烈な聖火の炎が燃え上がり始めました！(次回投入時に完全点火)"
+  },
+  "🔥 [방주의 성화] 부재 중 성화가 소멸하여 온기 버프가 만료되었습니다.": {
+    "en": "🔥 [Primal Bonfire] Sacred flame extinguished while away, warmth buff expired.",
+    "ja": "🔥 [方舟の聖火] 不在中に聖火が消滅し、温もりバフが満了しました。"
+  },
+  "🔥 [방주의 성화] 성화 주위에 따스한 온기가 퍼져나갑니다.": {
+    "en": "🔥 [Primal Bonfire] Warmth spreads around the sacred flame.",
+    "ja": "🔥 [方舟の聖火] 聖火の周囲に温もりが広がっていきます。"
+  },
+  "🔥 [방주의 성화] 성화가 유지 중입니다. (남은 온기: {0}분)": {
+    "en": "🔥 [Primal Bonfire] Sacred flame is maintained. (Remaining Warmth: {0}m)",
+    "ja": "🔥 [方舟の聖火] 聖火が維持されています。(残りの温もり: {0}分)"
+  },
+  "🔥 [방주의 성화] 성화에 첫 불씨가 지펴졌습니다.": {
+    "en": "🔥 [Primal Bonfire] The first ember has been lit on the sacred flame.",
+    "ja": "🔥 [方舟の聖火] 聖火に最初の火種が灯されました。"
+  },
+  "🔥 [방주의 성화] 성화의 불꽃이 조금 더 밝아집니다.": {
+    "en": "🔥 [Primal Bonfire] The flame burns a little brighter.",
+    "ja": "🔥 [方舟の聖火] 聖火の炎が少し明るくなります。"
+  },
+  "🔥 [불씨 확산] {0}에게 2턴간 화상이 확산되었습니다!": {
+    "en": "🔥 [Ember Spread] Burn spread to {0} for 2 turns!",
+    "ja": "🔥 [火種拡散] {0}に2ターンの間火傷が拡散しました！"
+  },
+  "🔥 [성화 5회 충전] 광고 시청으로 신성한 성화 점화 5회가 충전되었습니다! (심연 촉매 슬롯 동시 개방)": {
+    "en": "🔥 [Bonfire 5 Recharges] Recharged 5 Sacred Flame ignitions via ad! (Simultaneously unlocked Abyss catalyst slot)",
+    "ja": "🔥 [聖火5回チャージ] 広告視聴により神聖なる聖火点火5回がチャージされました！(深淵触媒スロットも同時解放)"
+  },
+  "🔥 [화상 부여] {0}에게 {1}턴간 화상(매 턴 {2}% 지속 피해)을 부여했습니다!": {
+    "en": "🔥 [Burn Inflicted] Inflicted Burn on {0} for {1} turns ({2}% DoT each turn)!",
+    "ja": "🔥 [火傷付与] {0}に{1}ターンの間火傷(毎ターン{2}%持続ダメージ)を付与しました！"
+  },
+  "🔥 [화상] {0} 화염 지속 피해 (-{1})": {
+    "en": "🔥 [Burn] {0} Fire DoT (-{1})",
+    "ja": "🔥 [火傷] {0} 火炎持続ダメージ (-{1})"
+  },
+  "🔥 [화상] {0}에게 {1}턴간 화상이 부여되었습니다! (매 턴 8% 피해, 방어력 50% 분쇄)": {
+    "en": "🔥 [Burn] Inflicted Burn on {0} for {1} turns! (8% damage per turn, crushes 50% DEF)",
+    "ja": "🔥 [火傷] {0}に{1}ターンの間火傷が付与されました！(毎ターン8%ダメージ、防御力50%粉砕)"
+  },
+  "🔥 [화상] {0}에게 화상이 부여되었습니다! (매 턴 8% 피해, 방어력 50% 분쇄)": {
+    "en": "🔥 [Burn] Inflicted Burn on {0}! (8% damage per turn, crushes 50% DEF)",
+    "ja": "🔥 [火傷] {0}に火傷が付与されました！(毎ターン8%ダメージ、防御力50%粉砕)"
+  },
+  "🔥 [횃불 소진] 횃불의 불씨가 완전히 사그라들고 다시 깊은 어둠이 깔렸습니다.": {
+    "en": "🔥 [Torch Extinguished] The torch embers faded completely and deep darkness returned.",
+    "ja": "🔥 [松明消滅] 松明の火種が完全に消え、再び深い闇が漂いました。"
+  },
+  "🔥 [횃불 점등] 주위가 환해졌습니다! (3회 탐색 동안 자원/광맥/보물 발견율↑, 몬스터 조우율↓, 위험도 축적 속도↑)": {
+    "en": "🔥 [Torch Lit] The surroundings brighten! (For 3 searches: Resource/vein/treasure find rate↑, monster encounter↓, hazard build-up speed↑)",
+    "ja": "🔥 [松明点灯] 周囲が明るくなりました！(3回探索の間、資源/鉱脈/宝の発見率↑、魔物遭遇率↓、危険度蓄積速度↑)"
+  },
+  "🔥 [횃불 추가] 횃불을 더 피워 시야 확보 시간을 3회 연장했습니다! (남은 탐색: {0}회)": {
+    "en": "🔥 [More Torches] Lit more torches to extend visibility by 3 searches! (Remaining: {0} searches)",
+    "ja": "🔥 [松明追加] 松明を追加で灯し、視界確保を3回延長しました！(残り探索: {0}回)"
+  },
+  "🔥 {0}연승!": {
+    "en": "🔥 {0} Win Streak!",
+    "ja": "🔥 {0}連勝！"
+  },
+  "🔥 방주의 성화": {
+    "en": "🔥 Primal Bonfire",
+    "ja": "🔥 方舟の聖火"
+  },
+  "🔥 방주의 성화 온기 유지 중 (남은 시간: {0}분 {1}초)": {
+    "en": "🔥 Primal Bonfire warmth active (Remaining: {0}m {1}s)",
+    "ja": "🔥 方舟の聖火の温もり維持中 (残り時間: {0}分{1}秒)"
+  },
+  "🔥 불씨 지피기 (-{0} 목재) [{1}/5]": {
+    "en": "🔥 Stoke Embers (-{0} Wood) [{1}/5]",
+    "ja": "🔥 火種を灯す (-{0} 木材) [{1}/5]"
+  },
+  "🔥 성화 (Bonfire Warmth) & 영지 재생 축복": {
+    "en": "🔥 Bonfire Warmth & Territory Regeneration Blessing",
+    "ja": "🔥 聖火 (Bonfire Warmth) ＆ 領地再生祝福"
+  },
+  "🔥 성화 온기 연장 (-{0} 목재)": {
+    "en": "🔥 Extend Bonfire Warmth (-{0} Wood)",
+    "ja": "🔥 聖火の温もり延長 (-{0} 木材)"
+  },
+  "🔥 성화 온기 활성화 & 🌌 침묵의 회랑 1구역 첫 척후 출정": {
+    "en": "🔥 Activate Bonfire Warmth & 🌌 First Scout Expedition to Silent Cloister Area 1",
+    "ja": "🔥 聖火の温もり活性化＆🌌 沈黙の回廊第1区域への初斥候出撃"
+  },
+  "🔥 성화 완전 점화 (-{0} 목재) [점화권 {1}/5회]": {
+    "en": "🔥 Fully Ignite Sacred Flame (-{0} Wood) [Ignitions {1}/5]",
+    "ja": "🔥 聖火完全点火 (-{0} 木材) [点火権 {1}/5回]"
+  },
+  "🔥 아군 피버 게이지 만충! 적 진영 전체 강타!": {
+    "en": "🔥 Ally Fever gauge full! Striking entire enemy ranks!",
+    "ja": "🔥 味方FEVERゲージMAX！敵陣全体を強打！"
+  },
+  "🔥 아군 피버 총공격: ALL-OUT FEVER BURST!": {
+    "en": "🔥 Ally Fever All-Out Attack: ALL-OUT FEVER BURST!",
+    "ja": "🔥 味方FEVER総攻撃: ALL-OUT FEVER BURST!"
+  },
+  "🔥 온기 {0}분 {1}초 남음 (생산량 +15%)": {
+    "en": "🔥 Warmth {0}m {1}s remaining (+15% Production)",
+    "ja": "🔥 温もり残り{0}分{1}秒 (生産量+15%)"
+  },
+  "🔥 온기 버프": {
+    "en": "🔥 Warmth Buff",
+    "ja": "🔥 温もりバフ"
+  },
+  "🔥 이미 횃불이 켜져 있습니다. (남은 탐색: {0}회)": {
+    "en": "🔥 Torch already lit. (Remaining searches: {0})",
+    "ja": "🔥 既に松明が灯されています。(残り探索: {0}回)"
+  },
+  "🔥 전술 모멘텀(Tactical Momentum) & 7대 모멘텀 뱃지 수집 메커니즘": {
+    "en": "🔥 Tactical Momentum & 7 Major Momentum Badges Collection Mechanism",
+    "ja": "🔥 戦術モメンタム(Tactical Momentum)＆7大モメンタムバッジ収集メカニズム"
+  },
+  "🔥 점화 중: {0}/5 스택": {
+    "en": "🔥 Igniting: {0}/5 Stacks",
+    "ja": "🔥 点火中: {0}/5 スタック"
+  },
+  "🔥 차원 공성전 전면 돌격 개시! 🔥": {
+    "en": "🔥 Dimensional Siege All-Out Assault Commencing! 🔥",
+    "ja": "🔥 次元攻城戦 全面突撃開始！🔥"
+  },
+  "🔥 치명타!": {
+    "en": "🔥 Critical Hit!",
+    "ja": "🔥 会心の一撃！"
+  },
+  "🔥 횃불": {
+    "en": "🔥 Torch",
+    "ja": "🔥 松明"
+  },
+  "🔥 횃불 조명 중 (남은 탐색:": {
+    "en": "🔥 Torch lit (Remaining searches:",
+    "ja": "🔥 松明照明中 (残り探索:"
+  },
+  "🔥 횃불: 어둠을 밝혀 위험도 대폭 감소 및 조우율 안정화": {
+    "en": "🔥 Torch: Illuminates darkness, greatly reduces hazard, and stabilizes encounter rate",
+    "ja": "🔥 松明: 暗闇を照らし危険度を大幅減少＆遭遇率を安定化"
+  },
+  "🔥 횃불이 부족합니다! 채비실에서 미리 횃불을 구비해야 합니다.": {
+    "en": "🔥 Not enough torches! Prepare torches in advance in the Preparation Room.",
+    "ja": "🔥 松明が不足しています！準備室で事前に松明を用意してください。"
+  },
+  "🔥⚡ [FEVER 궁극기 폭발] {0}의 궁극기에 【{1}】 시너지 방출! - {2}": {
+    "en": "🔥⚡ [FEVER Ultimate Burst] Unleashed [{1}] synergy on {0}'s ultimate! - {2}",
+    "ja": "🔥⚡ [FEVER究極技爆発] {0}の究極技に【{1}】シナジー放出！ - {2}"
+  },
+  "🔥✨ [에테르 횃불 연장] 에테르 횃불을 추가 점등하여 시야 확보를 3회 연장했습니다! (남은 탐색: {0}회, 위험도 상승 2배 가속)": {
+    "en": "🔥✨ [Ether Torch Extended] Lit extra Ether Torch, extending vision by 3 searches! (Remaining: {0}, hazard rise accelerated 2x)",
+    "ja": "🔥✨ [エーテル松明延長] エーテル松明を追加点灯し視界確保を3回延長しました！(残り探索: {0}回、危険度上昇2倍加速)"
+  },
+  "🔥✨ [에테르 횃불 점등] 강력한 에테르 불꽃으로 심연을 환히 밝힙니다! (탐험 시 위험도 상승 2배, 이벤트 발견율 2배↑, 몬스터 조우율 대폭 억제)": {
+    "en": "🔥✨ [Ether Torch Lit] Brightly illuminates the Abyss with potent Ether flames! (Hazard rate 2x, event find rate 2x↑, monster encounters greatly suppressed)",
+    "ja": "🔥✨ [エーテル松明点灯] 強力なエーテルの炎で深淵を明るく照らします！(探索時の危険度上昇2倍、イベント発見率2倍↑、魔物遭遇率大幅抑制)"
+  }
+}

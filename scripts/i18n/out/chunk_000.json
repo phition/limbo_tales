@@ -1,0 +1,802 @@
+{
+  "\"마력 파동 증폭, 일제 방출!\"": {
+    "en": "\"Mana surge amplified, full discharge!\"",
+    "ja": "「魔力波動増幅、一斉放出！」"
+  },
+  "\"방어선은 내가 지킨다! 연계 돌파!\"": {
+    "en": "\"I'll hold the defense line! Linked breakthrough!\"",
+    "ja": "「防衛線は我が守る！連携突破！」"
+  },
+  "\"빈틈이다. 급소 포착!\"": {
+    "en": "\"An opening. Vital point acquired!\"",
+    "ja": "「隙あり。急所を捉えた！」"
+  },
+  "\"빛의 정의가 함께하길! 정화하라!\"": {
+    "en": "\"May the justice of Light be with us! Purify!\"",
+    "ja": "「光の正義と共にあらんことを！浄化せよ！」"
+  },
+  "\"사선 확보 완료. 격발!\"": {
+    "en": "\"Line of fire secured. Fire!\"",
+    "ja": "「射線確保完了。撃て！」"
+  },
+  "\"지금이다! 뼈까지 부숴주마!\"": {
+    "en": "\"Now! I'll crush you to the bone!\"",
+    "ja": "「今だ！骨まで砕いてやる！」"
+  },
+  "\"태양이 영겁의 어둠 속에 삼켜지고, 대륙 전체가 광기와 침식의 검은 바다 [림보(Limbo)] 속으로 가라앉은 그날.": {
+    "en": "\"On that day when the sun was swallowed into eternal darkness, and the entire continent sank into [Limbo], a black sea of madness and erosion.",
+    "ja": "「太陽が永劫の闇に呑まれ、大陸全土が狂気と侵食の黒い海［リンボ（Limbo）］へと沈んだあの日。"
+  },
+  "% (제단 Lv당 +3%)": {
+    "en": "% (+3% per Altar Lv)",
+    "ja": "% (祭壇Lvごとに+3%)"
+  },
+  "% (제단+": {
+    "en": "% (Altar +",
+    "ja": "% (祭壇+"
+  },
+  "% 가호 & 심연 촉매 슬롯 동시 개방!": {
+    "en": "% Blessing & Abyss Catalyst Slot Unlocked Simultaneously!",
+    "ja": "% 加護＆深淵触媒スロット同時開放！"
+  },
+  "% 고유 감면 적용": {
+    "en": "% Unique Reduction Applied",
+    "ja": "% 固有減免適用"
+  },
+  "% 달성": {
+    "en": "% Achieved",
+    "ja": "% 達成"
+  },
+  "% 무시하고 타격": {
+    "en": "% Ignored and Struck",
+    "ja": "% 無視して攻撃"
+  },
+  "% 위력": {
+    "en": "% Potency",
+    "ja": "% 威力"
+  },
+  "% 이하": {
+    "en": "% or less",
+    "ja": "% 以下"
+  },
+  "% 적용": {
+    "en": "% Applied",
+    "ja": "% 適用"
+  },
+  "% 주계수": {
+    "en": "% Main Scaling",
+    "ja": "% 主係数"
+  },
+  "% 할인 적용)": {
+    "en": "% Discount Applied)",
+    "ja": "% 割引適用)"
+  },
+  "% 할인)": {
+    "en": "% Discount)",
+    "ja": "% 割引)"
+  },
+  "% 확률)": {
+    "en": "% Chance)",
+    "ja": "% 確率)"
+  },
+  "%) · 보스 유물 봉헌 시 정화": {
+    "en": "%) · Purified when offering Boss Relic",
+    "ja": "%) · ボス遺物奉納時に浄化"
+  },
+  "%만큼 체력 회복": {
+    "en": "% HP Restored",
+    "ja": "%分 HP回復"
+  },
+  "& 치명타 적중!": {
+    "en": "& Critical Hit!",
+    "ja": "＆ 会心命中！"
+  },
+  "&ldquo;어둠이 깊을수록, 성화의 불꽃은 더욱 찬란히 타오른다.&rdquo;": {
+    "en": "&ldquo;The deeper the darkness, the brighter the sacred flame burns.&rdquo;",
+    "ja": "&ldquo;闇が深まるほど、聖火の炎はより眩く燃え盛る。&rdquo;"
+  },
+  "'Firebase Realtime DB 실시간 시즌 랭킹'": {
+    "en": "'Firebase Realtime DB Real-time Season Ranking'",
+    "ja": "'Firebase Realtime DB リアルタイムシーズンランキング'"
+  },
+  "'⚔️ 기본공격 대체: '[": {
+    "en": "'⚔️ Basic Attack Replaced: '[\"",
+    "ja": "'⚔️ 通常攻撃代替: '[\""
+  },
+  "'✨ 접두사: '": {
+    "en": "'✨ Prefix: '",
+    "ja": "'✨ 接頭辞: '"
+  },
+  "'강화 규칙:'": {
+    "en": "'Enhancement Rules:'",
+    "ja": "'強化規則:'"
+  },
+  "'게이트 증축에 따라 상위 장비·보급함·마도석이 개방됩니다.'": {
+    "en": "'Higher-tier gear, supply chests, and magic stones unlock as the Gate expands.'",
+    "ja": "'ゲートの増築に伴い、上位装備・補給箱・魔導石が開放されます。'"
+  },
+  "'내 원정단 (지휘관)'": {
+    "en": "'My Expedition (Commander)'",
+    "ja": "'我が遠征隊 (指揮官)'"
+  },
+  "'명예 암시장 오픈'": {
+    "en": "'Honor Black Market Open'",
+    "ja": "'名誉ブラックマーケット開店'"
+  },
+  "'명예의 암시장'": {
+    "en": "'Black Market of Honor'",
+    "ja": "'名誉のブラックマーケット'"
+  },
+  "'방주 성채 수호단'": {
+    "en": "'Ark Citadel Guardians'",
+    "ja": "'方舟城塞守護団'"
+  },
+  "'보유 투사의 인장'": {
+    "en": "'Fighter's Seals Owned'",
+    "ja": "'所持している闘士の印章'"
+  },
+  "'상점 이동 ➔'": {
+    "en": "'Go to Shop ➔'",
+    "ja": "'ショップへ移動 ➔'"
+  },
+  "'에 대한 검색 결과가 없습니다.": {
+    "en": "' - No search results found.",
+    "ja": "' の検索結果はありません。"
+  },
+  "'인장 획득 ➔ 명예 상점에서 장비 교환'": {
+    "en": "'Earn Seals ➔ Exchange Gear at Honor Shop'",
+    "ja": "'印章獲得 ➔ 名誉ショップで装備交換'"
+  },
+  "'현상금 및 서사 의뢰소'": {
+    "en": "'Bounty & Epic Quest Board'",
+    "ja": "'賞金首および叙事詩依頼所'"
+  },
+  "'현재 선택:'": {
+    "en": "'Current Selection:'",
+    "ja": "'現在の選択:'"
+  },
+  "'획득한 인장으로 등급별 장비함 및 무구를 구매하세요'": {
+    "en": "'Purchase tiered equipment chests and arms with acquired seals'",
+    "ja": "'獲得した印章で等級別装備箱や武具を購入しよう'"
+  },
+  "'🌀 성채로 통하는 차원 귀환 포탈이 개방되었습니다!'": {
+    "en": "'🌀 Dimensional Return Portal to the Citadel is now open!'",
+    "ja": "'🌀 城塞へと通じる次元帰還ポータルが開放されました！'"
+  },
+  "'🔮 접미사: '": {
+    "en": "'🔮 Suffix: '",
+    "ja": "'🔮 接尾辞: '"
+  },
+  "(3/3 세트 완성)": {
+    "en": "(3/3 Set Completed)",
+    "ja": "(3/3 セット完成)"
+  },
+  "(30% 식량 분담)": {
+    "en": "(30% Food Shared)",
+    "ja": "(30% 食糧分担)"
+  },
+  "({0}/3 세트 장착 중)": {
+    "en": "({0}/3 Set Equipped)",
+    "ja": "({0}/3 セット装備中)"
+  },
+  "({0}턴)": {
+    "en": "({0} Turns)",
+    "ja": "({0}ターン)"
+  },
+  "(개당": {
+    "en": "(Per unit",
+    "ja": "(1個あたり"
+  },
+  "(골드 전리품 2배 & 강적 출현↑),": {
+    "en": "(2x Gold Loot & Strong Foes Spawn↑),",
+    "ja": "(ゴールド戦利品2倍＆強敵出現↑)、"
+  },
+  "(광맥 정밀 채굴),": {
+    "en": "(Precision Vein Mining),",
+    "ja": "(鉱脈精密採掘)、"
+  },
+  "(기본명 유지 시 UID 순번 자동 부여)": {
+    "en": "(Auto-assigns UID sequence if default name is kept)",
+    "ja": "(デフォルト名を維持する場合UID連番を自動付与)"
+  },
+  "(길게 눌러 스킬 상세)": {
+    "en": "(Hold for skill details)",
+    "ja": "(長押しでスキル詳細)"
+  },
+  "(로컬 세션)": {
+    "en": "(Local Session)",
+    "ja": "(ローカルセッション)"
+  },
+  "(매진: {0})": {
+    "en": "(Sold Out: {0})",
+    "ja": "(完売: {0})"
+  },
+  "(묘지·성화·짐수레 광고로도 동시 개방)": {
+    "en": "(Also unlocked via Graveyard, Bonfire, Cart ads)",
+    "ja": "(墓地・聖火・荷車広告でも同時開放)"
+  },
+  "(미착용 장비만 선택 가능 / 착용 장비 보호)": {
+    "en": "(Only unequipped gear selectable / Equipped gear protected)",
+    "ja": "(未装備のアイテムのみ選択可能 / 装備中アイテムを保護)"
+  },
+  "(방어력 차단)": {
+    "en": "(DEF Blocked)",
+    "ja": "(防御力遮断)"
+  },
+  "(보호막 {0} 흡수)": {
+    "en": "(Absorbs {0} Shield)",
+    "ja": "(シールド {0} 吸収)"
+  },
+  "(석관/상자 안전 개방),": {
+    "en": "(Safe Sarcophagus/Chest Opening),",
+    "ja": "(石棺/宝箱の安全開放)、"
+  },
+  "(소모: {0})": {
+    "en": "(Cost: {0})",
+    "ja": "(消費: {0})"
+  },
+  "(수량:": {
+    "en": "(Qty:",
+    "ja": "(数量:"
+  },
+  "(순수석 50% 반감)": {
+    "en": "(Pure Stone 50% Reduced)",
+    "ja": "(純粋石50%半減)"
+  },
+  "(시야/위험도 완화),": {
+    "en": "(Sight/Hazard Eased),",
+    "ja": "(視界/危険度緩和)、"
+  },
+  "(시작 위험도: {0})": {
+    "en": "(Starting Hazard: {0})",
+    "ja": "(開始危険度: {0})"
+  },
+  "(야영 체력/마나 35% 회복),": {
+    "en": "(Camp HP/MP 35% Restored),",
+    "ja": "(野営HP/MP 35%回復)、"
+  },
+  "(온기+15%)": {
+    "en": "(Warmth +15%)",
+    "ja": "(温もり+15%)"
+  },
+  "(용병 긴급 이송 1턴 단축 & 차원 포탈 발견↑),": {
+    "en": "(Mercenary Evac -1 Turn & Portal Discovery↑),",
+    "ja": "(傭兵緊急搬送1ターン短縮＆次元ポータル発見↑)、"
+  },
+  "(원래 Lv.$": {
+    "en": "(Original Lv.$",
+    "ja": "(元Lv.$"
+  },
+  "(위력": {
+    "en": "(Potency",
+    "ja": "(威力"
+  },
+  "(으)로 증축하면 거래가 해금됩니다.": {
+    "en": " to unlock trading.",
+    "ja": "に増築すると取引が解禁されます。"
+  },
+  "(자원 즉시 골드 환전).": {
+    "en": "(Convert resources into gold immediately).",
+    "ja": "(資源を即座にゴールドへ換金)。"
+  },
+  "(재고:": {
+    "en": "(Stock:",
+    "ja": "(在庫:"
+  },
+  "(저주장비 확률 +50%)": {
+    "en": "(Cursed Gear Rate +50%)",
+    "ja": "(呪い装備確率 +50%)"
+  },
+  "(전멸 시 배낭 10~50% 회수),": {
+    "en": "(Retrieve 10-50% backpack upon wipeout),",
+    "ja": "(全滅時バッグの10〜50%回収)、"
+  },
+  "(전열)": {
+    "en": "(Front row)",
+    "ja": "(前衛)"
+  },
+  "(전투 첫 {0}턴 한정)": {
+    "en": "(Combat first {0} turns only)",
+    "ja": "(戦闘開始{0}ターン限定)"
+  },
+  "(제단 EXP +{0}%)": {
+    "en": "(Altar EXP +{0}%)",
+    "ja": "(祭壇EXP +{0}%)"
+  },
+  "(제단 완전 축성).": {
+    "en": "(Altar fully consecrated).",
+    "ja": "(祭壇の完全祝聖)。"
+  },
+  "(차징 브레이크: 받는 피해 +50%)": {
+    "en": "(Charge Break: Damage Taken +50%)",
+    "ja": "(チャージブレイク: 被ダメージ+50%)"
+  },
+  "(착용 중인 무기, 방어구, 장신구는 모두 영지 보관함으로 자동 회수됩니다.)": {
+    "en": "(All equipped weapons, armor, and accessories are automatically returned to Citadel storage.)",
+    "ja": "(装備中の武器・防具・装飾品はすべて領地保管庫へ自動回収されます。)"
+  },
+  "(초기": {
+    "en": "(Initial",
+    "ja": "(初期"
+  },
+  "(총 최대 4개 정예 적용)": {
+    "en": "(Applies to up to 4 elites total)",
+    "ja": "(合計最大4体のエリートに適用)"
+  },
+  "(최대 강화 한도: Lv.": {
+    "en": "(Max Enhancement Limit: Lv.",
+    "ja": "(最大強化上限: Lv."
+  },
+  "(추모 헌화 EXP +{0}%)": {
+    "en": "(Memorial Offering EXP +{0}%)",
+    "ja": "(追悼献花EXP +{0}%)"
+  },
+  "(클릭 시 상세 정보 / 강화 / 해제)": {
+    "en": "(Click for Details / Enhance / Dismantle)",
+    "ja": "(クリックで詳細情報 / 強化 / 解除)"
+  },
+  "(특수 각성기)": {
+    "en": "(Special Awakening Skill)",
+    "ja": "(特殊覚醒技)"
+  },
+  "(피버 궁극기 준비)": {
+    "en": "(Fever Ultimate Ready)",
+    "ja": "(FEVER究極技準備)"
+  },
+  "(필요 등급: [{0}] 이상)": {
+    "en": "(Required Rank: [{0}] or higher)",
+    "ja": "(必要等級: [{0}]以上)"
+  },
+  "(할인)": {
+    "en": "(Discount)",
+    "ja": "(割引)"
+  },
+  "(함정 방호 및 야영 시 모든 디버프 치료),": {
+    "en": "(Trap protection & cure all debuffs when camping),",
+    "ja": "(罠防御＆野営時に全デバフ治療)、"
+  },
+  "(항목 탭 시 상세/재료 확인)": {
+    "en": "(Tap item to check details/materials)",
+    "ja": "(タップで詳細/素材を確認)"
+  },
+  "(현재 대장간: Lv.": {
+    "en": "(Current Forge: Lv.",
+    "ja": "(現在の鍛冶屋: Lv."
+  },
+  "(후열)": {
+    "en": "(Back row)",
+    "ja": "(後衛)"
+  },
+  "(🛡️{0}의 원호 방어 -40%)": {
+    "en": "(🛡️{0}'s Assist Defense -40%)",
+    "ja": "(🛡️{0}の援護防御 -40%)"
+  },
+  ") | 공격력:": {
+    "en": ") | ATK:",
+    "ja": ") | 攻撃力:"
+  },
+  ") · 차원 게이트 Lv.": {
+    "en": ") · Dimensional Gate Lv.",
+    "ja": ") · 次元ゲート Lv."
+  },
+  ")가 영구 해제": {
+    "en": ") permanently unlocked",
+    "ja": ")が永久解除"
+  },
+  ")으로 진화": {
+    "en": ") evolved into",
+    "ja": ")に進化"
+  },
+  ")의 계열과 맞지 않는 비전서입니다. 전투 중 사용 시 스킬의 모든 위력(피해/치유/보호막/버프)이": {
+    "en": ") grimoire does not match this class. If used in combat, all skill potency (damage/healing/shield/buff) will",
+    "ja": ")の系統と一致しない魔導書です。戦闘中使用時、スキルのすべての威力（ダメージ/回復/シールド/バフ）が"
+  },
+  ")이 완전히 초기화되며, 학습 슬롯(1칸)이 반환됩니다.": {
+    "en": ") will be completely reset, and 1 learning slot will be refunded.",
+    "ja": ")が完全に初期化され、習得スロット(1枠)が返却されます。"
+  },
+  ")해야 전직 의식을 거행할 수 있습니다.": {
+    "en": ") to perform the class promotion ritual.",
+    "ja": ")して初めて転職の儀式を執り行えます。"
+  },
+  "* 4레벨부터": {
+    "en": "* From Level 4",
+    "ja": "* レベル4から"
+  },
+  "* 위 성향 효과는 고용 시 용병의 기본 능력치에 영구 합산되어 적용됩니다.": {
+    "en": "* The trait effects above are permanently added to the mercenary's base stats upon recruitment.",
+    "ja": "* 上記の傾向効果は雇用時、傭兵の基本ステータスに永久加算されて適用されます。"
+  },
+  "+ 3시간 보호막 전개": {
+    "en": "+ Deploy 3-Hour Shield",
+    "ja": "+ 3時間シールド展開"
+  },
+  "+ 리더 지정": {
+    "en": "+ Set Leader",
+    "ja": "+ リーダー指定"
+  },
+  "+ 서포터 지정": {
+    "en": "+ Set Supporter",
+    "ja": "+ サポーター指定"
+  },
+  "+ 장착": {
+    "en": "+ Equip",
+    "ja": "+ 装備"
+  },
+  "+0~+3강": {
+    "en": "+0~+3 Enhance",
+    "ja": "+0〜+3強化"
+  },
+  "+10 강화 (순수 마도석 결속)": {
+    "en": "+10 Enhance (Pure Magic Stone Bound)",
+    "ja": "+10 強化 (純粋魔導石結束)"
+  },
+  "+10강 전용 최고급 접두 옵션 (+50% 매입가)": {
+    "en": "+10 Exclusive Supreme Prefix (+50% sell price)",
+    "ja": "+10強化専用 最高級接頭OP (+50%買取価格)"
+  },
+  "+10강 전용 최고급 접미 옵션 (+50% 매입가)": {
+    "en": "+10 Exclusive Supreme Suffix (+50% sell price)",
+    "ja": "+10強化専用 最高級接尾OP (+50%買取価格)"
+  },
+  "+10개": {
+    "en": "+10",
+    "ja": "+10個"
+  },
+  "+15% 영구 증폭": {
+    "en": "+15% Permanent Boost",
+    "ja": "+15% 永久増幅"
+  },
+  "+15% 증폭": {
+    "en": "+15% Boost",
+    "ja": "+15% 増幅"
+  },
+  "+3 강화 (접두석 부여)": {
+    "en": "+3 Enhance (Prefix Stone Applied)",
+    "ja": "+3 強化 (接頭石付与)"
+  },
+  "+30% 강화": {
+    "en": "+30% Enhance",
+    "ja": "+30% 強化"
+  },
+  "+3강 이상 공격 옵션 부여 (+50% 매입가)": {
+    "en": "+3 or higher ATK Option Applied (+50% sell price)",
+    "ja": "+3強化以上 攻撃OP付与 (+50%買取価格)"
+  },
+  "+3강 이상 장비 1개 달성 (또는 보유)": {
+    "en": "Reach +3 or higher on 1 equipment (or own)",
+    "ja": "+3強化以上の装備を1個達成 (または所持)"
+  },
+  "+3강 장비 희귀 접두어 부여": {
+    "en": "Apply Rare Prefix to +3 Gear",
+    "ja": "+3装備に希少接頭辞を付与"
+  },
+  "+50개": {
+    "en": "+50",
+    "ja": "+50個"
+  },
+  "+5강 이상 장비 1개 달성 (또는 보유)": {
+    "en": "Reach +5 or higher on 1 equipment (or own)",
+    "ja": "+5強化以上の装備を1個達成 (または所持)"
+  },
+  "+5강에 도달한 무구는 심연의 탁기마저 튕겨내는 마도 방벽을 형성한다. 원정대의 핵심 장비를 5강까지 끌어올려 진정한 정예의 위용을 갖추어라.": {
+    "en": "Arms reaching +5 forge an arcane barrier deflecting even abyssal corruption. Enhance the expedition's core gear to +5 and claim true elite might.",
+    "ja": "+5強化に達した武具は、深淵の濁気すら跳ね返す魔導防壁を形成する。遠征隊の中核装備を+5まで引き上げ、真のエリートの威容を備えよ。"
+  },
+  "+5분 연장": {
+    "en": "+5 Min Extension",
+    "ja": "+5分延長"
+  },
+  "+7 강화 (접미석 부여)": {
+    "en": "+7 Enhance (Suffix Stone Applied)",
+    "ja": "+7 強化 (接尾石付与)"
+  },
+  "+7강 이상 보조 옵션 부여 (+50% 매입가)": {
+    "en": "+7 or higher Sub-Option Applied (+50% sell price)",
+    "ja": "+7強化以上 補助OP付与 (+50%買取価格)"
+  },
+  "+7강 이상 장비에 수호/생명 상위 접미어 부여": {
+    "en": "Apply Superior Guardian/Life Suffix to +7 or higher Gear",
+    "ja": "+7強化以上の装備に守護/生命の上位接尾辞を付与"
+  },
+  "+7강 이상 장비에 파괴적 상위 접두어 마법 부여": {
+    "en": "Apply Destructive Superior Prefix to +7 or higher Gear",
+    "ja": "+7強化以上の装備に破壊的な上位接頭辞を付与"
+  },
+  "+7강 장비 희귀 접미어 부여": {
+    "en": "Apply Rare Suffix to +7 Gear",
+    "ja": "+7装備に希少接尾辞を付与"
+  },
+  "+{0} 💖 원호 치유": {
+    "en": "+{0} 💖 Assist Heal",
+    "ja": "+{0} 💖 援護回復"
+  },
+  "+{0} 💚 원호 치유": {
+    "en": "+{0} 💚 Assist Heal",
+    "ja": "+{0} 💚 援護回復"
+  },
+  "+{0}/초": {
+    "en": "+{0}/s",
+    "ja": "+{0}/秒"
+  },
+  "+{0}강 비전 각인": {
+    "en": "+{0} Arcane Engraving",
+    "ja": "+{0}強化 秘術刻印"
+  },
+  "+{0}강 시도": {
+    "en": "Attempt +{0} Enhance",
+    "ja": "+{0}強化 試行"
+  },
+  "+{0}강 에테르 방벽": {
+    "en": "+{0} Ether Barrier",
+    "ja": "+{0}強化 エーテル防壁"
+  },
+  "+충전": {
+    "en": "+Charge",
+    "ja": "+チャージ"
+  },
+  ", {0}개 구매": {
+    "en": ", Buy {0}",
+    "ja": "、{0}個購入"
+  },
+  ", 고유스킬 [동결 타격] 부여 (기본 공격 대체)": {
+    "en": ", Grants Unique Skill [Freezing Strike] (Replaces Basic Attack)",
+    "ja": "、固有スキル［凍結打撃］付与（通常攻撃代替）"
+  },
+  ", 고유스킬 [신성 심판] 부여 (기본 공격 대체)": {
+    "en": ", Grants Unique Skill [Divine Judgment] (Replaces Basic Attack)",
+    "ja": "、固有スキル［神聖審判］付与（通常攻撃代替）"
+  },
+  ", 고유스킬 [작열탄] 부여 (기본 공격 대체)": {
+    "en": ", Grants Unique Skill [Incendiary Shell] (Replaces Basic Attack)",
+    "ja": "、固有スキル［灼熱弾］付与（通常攻撃代替）"
+  },
+  ", 고유스킬 [파멸 강타] 부여 (기본 공격 대체)": {
+    "en": ", Grants Unique Skill [Ruin Strike] (Replaces Basic Attack)",
+    "ja": "、固有スキル［破滅強打］付与（通常攻撃代替）"
+  },
+  ", 몬스터 조우 25%, 오브젝트 이벤트 25% (모달 방해 없이 쾌적한 연속 탐색 진행)": {
+    "en": ", Monster Encounter 25%, Object Event 25% (Smooth continuous exploration without modal interruptions)",
+    "ja": "、モンスター遭遇25%、オブジェクトイベント25%（モーダルの邪魔なく快適な連続探索進行）"
+  },
+  ", 아무 일 없음 25%, 오브젝트 이벤트 25% (위험도 100% 도달 시 확정보스 출현)": {
+    "en": ", Nothing Happened 25%, Object Event 25% (Guaranteed boss appears upon reaching 100% hazard)",
+    "ja": "、何事もなし25%、オブジェクトイベント25%（危険度100%到達時確定ボス出現）"
+  },
+  "-{0} 💥 원호 추가타": {
+    "en": "-{0} 💥 Assist Follow-up",
+    "ja": "-{0} 💥 援護追撃"
+  },
+  "...(둘의 화기애애한 대화에 끼어들지 못하고 조용히 모닥불만 응시한다)": {
+    "en": "...(Unable to join the lively conversation, silently stares into the bonfire)",
+    "ja": "…(二人の和気藹々とした会話に入れず、静かに焚火を見つめている)"
+  },
+  "...(말없이 굳은 표정으로 심연의 어둠을 경계하고 있다)": {
+    "en": "...(Silently watches the abyssal darkness with a tense expression)",
+    "ja": "…(無言の硬い表情で深淵の闇を警戒している)"
+  },
+  "...(어색한 침묵 속에 무기를 손질하며 한숨을 쉰다)": {
+    "en": "...(Sighs while maintaining weapons amidst awkward silence)",
+    "ja": "…(気まずい沈黙の中、武器を手入れしながらため息をつく)"
+  },
+  "/ 10강": {
+    "en": "/ +10 Enhance",
+    "ja": "/ +10強化"
+  },
+  "/ 3명": {
+    "en": "/ 3 members",
+    "ja": "/ 3名"
+  },
+  "/ 3회": {
+    "en": "/ 3 times",
+    "ja": "/ 3回"
+  },
+  "/ 초기 {0}%": {
+    "en": "/ Initial {0}%",
+    "ja": "/ 初期 {0}%"
+  },
+  "/ 총": {
+    "en": "/ Total",
+    "ja": "/ 合計"
+  },
+  "/10강)": {
+    "en": "/+10 Enhance)",
+    "ja": "/+10強化)"
+  },
+  "/1회": {
+    "en": "/1 time",
+    "ja": "/1回"
+  },
+  "/3 슬롯": {
+    "en": "/3 Slots",
+    "ja": "/3 スロット"
+  },
+  "/3단계": {
+    "en": "/Tier 3",
+    "ja": "/3段階"
+  },
+  "/3명 배치됨": {
+    "en": "/3 Assigned",
+    "ja": "/3名配置済み"
+  },
+  "/3명)": {
+    "en": "/3 members)",
+    "ja": "/3名)"
+  },
+  "/3회": {
+    "en": "/3 times",
+    "ja": "/3回"
+  },
+  "/5명": {
+    "en": "/5 members",
+    "ja": "/5名"
+  },
+  "0 MP (부족)": {
+    "en": "0 MP (Insufficient)",
+    "ja": "0 MP (不足)"
+  },
+  "0/0 잠김": {
+    "en": "0/0 Locked",
+    "ja": "0/0 ロック"
+  },
+  "0/0개 선택 가능": {
+    "en": "0/0 Selectable",
+    "ja": "0/0個 選択可能"
+  },
+  "0강(노강) 지급": {
+    "en": "Granted at +0 (Unenhanced)",
+    "ja": "+0強化(未強化) 支給"
+  },
+  "0초": {
+    "en": "0s",
+    "ja": "0秒"
+  },
+  "1. 견습 기사 (Squire)": {
+    "en": "1. Apprentice Knight (Squire)",
+    "ja": "1. 見習い騎士 (Squire)"
+  },
+  "1. 네메시스 기본 정보 & 전투 스탯 (Base Combat Stats)": {
+    "en": "1. Nemesis Basic Info & Combat Stats (Base Combat Stats)",
+    "ja": "1. ネメシス基本情報＆戦闘ステータス (Base Combat Stats)"
+  },
+  "1. 메인 서사 퀘스트: 침묵의 회랑 1층 척후부터 10층 심연의 군주 토벌, 11층 무간도까지 이어지는 대서사입니다. 클리어 시 핵심 시설 해금과 대량의 보상을 제공합니다.": {
+    "en": "1. Main Epic Quest: An epic chronicle from 1F Silent Cloister scouting to 10F Abyssal Lord subjugation and 11F Avici. Clearing unlocks core facilities and grants massive rewards.",
+    "ja": "1. メイン叙事詩クエスト: 沈黙の回廊1層の斥候から10層の深淵の君主討伐、11層の無間道へと続く大叙事詩。クリア時に中核施設開放と大量の報酬を獲得可能。"
+  },
+  "1. 수집하는 개인정보 항목": {
+    "en": "1. Collected Personal Information Items",
+    "ja": "1. 収集する個人情報の項目"
+  },
+  "1. 퀘스트 보상 즉각 수령: 정제소, 안식처, 벌채소, 시추소 건설 퀘스트 달성 즉시 상단 퀘스트 메뉴에서 보상을 수령하여 다음 시설 해금 및 초기 자금을 확보하세요.": {
+    "en": "1. Claim Quest Rewards Immediately: As soon as the construction quests for Refinery, Haven, Lumber Camp, and Quarry are completed, claim your rewards from the top quest menu to unlock next facilities and secure starting funds.",
+    "ja": "1. クエスト報酬の即時受取: 精製所、安息所、伐採所、採掘所の建設クエスト達成後、直ちに上部クエストメニューから報酬を受け取り、次の施設開放と初期資金を確保してください。"
+  },
+  "1.5배속 전투 연출": {
+    "en": "1.5x Battle Speed",
+    "ja": "1.5倍速戦闘演出"
+  },
+  "100% 안전하게 2배의 보상과 에테르": {
+    "en": "100% Safely Double Rewards & Ether",
+    "ja": "100%安全に2倍の報酬とエーテル"
+  },
+  "10F 보스 [심연의 군주 아스모데우스]가 세계의 종말을 집행하던 신화 파멸검.": {
+    "en": "The mythical ruin blade with which 10F Boss [Abyssal Lord Asmodeus] executed the end of the world.",
+    "ja": "10層ボス［深淵の君主アスモデウス］が世界の終末を執行した神話の破滅剣。"
+  },
+  "10F 보스 [심연의 군주 아스모데우스]의 심연 패권을 상징하는 종말의 절대 왕관.": {
+    "en": "The absolute crown of doom symbolizing the abyssal supremacy of 10F Boss [Abyssal Lord Asmodeus].",
+    "ja": "10層ボス［深淵の君主アスモデウス］の深淵覇権を象徴する終末の絶対王冠。"
+  },
+  "10F 보스 [심연의 군주 아스모데우스]의 종말 권능이 깃든 절대 방호의 성의.": {
+    "en": "The vestment of absolute ward imbued with the apocalyptic authority of 10F Boss [Abyssal Lord Asmodeus].",
+    "ja": "10層ボス［深淵の君主アスモデウス］の終末権能が宿る絶対防護の聖衣。"
+  },
+  "10F 보스 처치 (100% 확정)": {
+    "en": "Defeat 10F Boss (100% Guaranteed)",
+    "ja": "10層ボス撃破 (100%確定)"
+  },
+  "10F 비기 마도서: 종말의 심연 아마게돈": {
+    "en": "10F Secret Grimoire: Abyssal Armageddon of Doomsday",
+    "ja": "10層秘技魔導書: 終末の深淵アルマゲドン"
+  },
+  "10F 심연 종말 군주 처치 정수": {
+    "en": "10F Abyssal Doomsday Lord Slaying Essence",
+    "ja": "10層深淵終末君主討伐のエッセンス"
+  },
+  "10F 심연의 군주 아스모데우스 보스 세트": {
+    "en": "10F Abyssal Lord Asmodeus Boss Set",
+    "ja": "10層深淵の君主アスモデウス ボスセット"
+  },
+  "10F 심연의 심장부 던전 상자 / 보스 드랍": {
+    "en": "10F Heart of the Abyss Dungeon Chest / Boss Drop",
+    "ja": "10層深淵の心臓部 ダンジョン宝箱 / ボスドロップ"
+  },
+  "10F 심연의 심장부 발굴품 페어. 인공지능이 스스로 사유하던 특이점의 칩셋과 최후의 방공호 타임캡슐을 열 황동 마스터 키.": {
+    "en": "10F Heart of the Abyss excavation pair: The Singularity chipset where AI contemplated itself, and the brass master key to unseal the final fallout shelter time capsule.",
+    "ja": "10層深淵の心臓部の発掘品ペア。人工知能が自ら思索した特異点チップセットと、最後の防空壕タイムカプセルを開く真鍮のマスターキー。"
+  },
+  "10F 오파츠: 타임캡슐 특이점 (양자 코어 & 황동 열쇠)": {
+    "en": "10F Ooparts: Time Capsule Singularity (Quantum Core & Brass Key)",
+    "ja": "10層オーパーツ: タイムカプセル特異点 (量子コア＆真鍮の鍵)"
+  },
+  "10F 종말의 심연군주 세트": {
+    "en": "10F Abyssal Lord of Doom Set",
+    "ja": "10層終末の深淵君主セット"
+  },
+  "10F 회고록: 심연의 심장부, 종말의 독백": {
+    "en": "10F Memoir: Heart of the Abyss, Monologue of the End",
+    "ja": "10層回顧録: 深淵の心臓部、終末の独白"
+  },
+  "10강 미달": {
+    "en": "Below +10 Enhance",
+    "ja": "+10強化未満"
+  },
+  "10대 상태이상 메커니즘 & 마도 비전서 스킬": {
+    "en": "10 Status Effect Mechanisms & Arcane Grimoire Skills",
+    "ja": "10大状態異常メカニズム＆魔導秘術書スキル"
+  },
+  "10분 쿨타임": {
+    "en": "10 Min Cooldown",
+    "ja": "10分クールダウン"
+  },
+  "10층 (심연 최심부): MP 소모량 1.9배 (+90%)로 고위력 스킬의 전략적 자원 분배 필수": {
+    "en": "10F (Deepest Abyss): MP cost x1.9 (+90%), strategic resource allocation for high-potency skills is essential",
+    "ja": "10層 (深淵最深部): MP消費量1.9倍 (+90%)、高威力スキルの戦略的リソース配分が必須"
+  },
+  "10층 광폭화 심연 군주를 토벌하고 유물 [👑 심연 군주의 옥새]를 획득하면 영구 개방되는 최고난도 엔드 컨텐츠입니다.": {
+    "en": "The pinnacle endgame content permanently unlocked upon slaying the Enraged Abyssal Lord on 10F and claiming the relic [👑 Abyssal Overlord Seal].",
+    "ja": "10層の狂暴化深淵君主を討伐し、遺物［👑 深淵覇王の玉璽］を獲得すると永久開放される最高難易度エンドコンテンツ。"
+  },
+  "10층 보스 [심연의 군주 아스모데우스] 토벌": {
+    "en": "Subjugate 10F Boss [Abyssal Lord Asmodeus]",
+    "ja": "10層ボス［深淵の君主アスモデウス］討伐"
+  },
+  "10층 보스 아스모데우스를 토벌해야 무간도 진입로가 영구 해금됩니다.": {
+    "en": "Defeat 10F Boss Asmodeus to permanently unlock the entrance to Avici.",
+    "ja": "10層ボス アスモデウスを討伐して初めて無間道への進入路が永久解禁されます。"
+  },
+  "10층 심연의 군주 아스모데우스가 착용하던 절대 권능의 성관.": {
+    "en": "The sacred crown of absolute authority worn by 10F Abyssal Lord Asmodeus.",
+    "ja": "10層深淵の君主アスモデウスが戴いていた絶対権能の聖冠。"
+  },
+  "10층 심연의 심장부 정점에 군림하던 [심연의 군주 아스모데우스]의 파멸검과 종말 왕관. [에픽 등급 이상]": {
+    "en": "Ruin blade and doomsday crown of [Abyssal Lord Asmodeus], who reigned at the pinnacle of 10F Heart of the Abyss. [Epic or higher]",
+    "ja": "10層深淵の心臓部の頂点に君臨した［深淵の君主アスモデウス］の破滅剣と終末王冠。［エピック等級以上］"
+  },
+  "10층 심연의 심장부에 군림하는 [심연의 군주 아스모데우스]를 토벌하고 제2장 심연의 종언을 선포하세요.": {
+    "en": "Subjugate [Abyssal Lord Asmodeus] reigning over 10F Heart of the Abyss and declare Chapter 2: The End of the Abyss.",
+    "ja": "10層深淵の心臓部に君臨する［深淵の君主アスモデウス］を討伐し、第2章 深淵の終焉を告げよ。"
+  },
+  "10층 최심부, 종말의 군주 아스모데우스의 옥좌 밑에서 수습한 5장의 고대 쪽지.": {
+    "en": "Five ancient notes retrieved from beneath the throne of Asmodeus, Lord of Doom, in the deepest depths of 10F.",
+    "ja": "10層最深部、終末の君主アスモデウスの玉座の下から回収された5枚の古代のメモ。"
+  },
+  "10층 회고록 쪽지": {
+    "en": "10F Memoir Note",
+    "ja": "10層の回顧録メモ"
+  },
+  "10층: ★ 심연의 심장부 (최종 결전)": {
+    "en": "10F: ★ Heart of the Abyss (Final Battle)",
+    "ja": "10層: ★ 深淵の心臓部 (最終決戦)"
+  },
+  "11층 심연 던전 & 무간도 (Avici) 강하 탐험": {
+    "en": "11F Abyssal Dungeon & Avici Descent Exploration",
+    "ja": "11層深淵ダンジョン＆無間道 (Avici) 降下探検"
+  },
+  "11층: ★ 🌌 무간도 (Avici) [위험도 10,000 - 초월 엔드 컨텐츠]": {
+    "en": "11F: ★ 🌌 Avici [Hazard 10,000 - Transcendent Endgame Content]",
+    "ja": "11層: ★ 🌌 無間道 (Avici) [危険度 10,000 - 超越エンドコンテンツ]"
+  },
+  "13대 성채 영지 시설": {
+    "en": "13 Citadel Domain Facilities",
+    "ja": "13大城塞領地施設"
+  },
+  "13대 시설 완비": {
+    "en": "All 13 Facilities Completed",
+    "ja": "13大施設完備"
+  },
+  "15종 자원을 골드로 환전하고 15초마다 상업 골드를 수급하며, 유지비 주기를 +1초/Lv 연장하고 Lv.5 시 [상업 네트워크]로 전 골드 유지비 25%를 영구 감면합니다. (Lv.3+ 건설자원 50% 증가, Lv.5+ 석재 30% 감축)": {
+    "en": "Exchanges 15 resources into gold, earns commerce gold every 15s, extends upkeep cycle by +1s/Lv, and permanently reduces all gold upkeep by 25% with [Commercial Network] at Lv.5. (Lv.3+ Construction resources +50%, Lv.5+ Stone -30%)",
+    "ja": "15種の資源をゴールドに換金し、15秒ごとに商業ゴールドを獲得。維持費周期を+1秒/Lv延長し、Lv.5達成時は［商業ネットワーク］により全ゴールド維持費を25%永久減免。(Lv.3+ 建設資源50%増加、Lv.5+ 石材30%削減)"
+  }
+}

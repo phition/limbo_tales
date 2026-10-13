@@ -1,0 +1,802 @@
+{
+  "4F 오파츠: 11시 47분의 대피령 (지하철 노선도 & 쿼츠 시계)": {
+    "en": "4F Ooparts: 11:47 Evacuation Order (Subway Map & Quartz Watch)",
+    "ja": "4層オーパーツ: 11時47分の避難令 (地下鉄路線図＆クォーツ時計)"
+  },
+  "4F 회고록: 심연의 균열, 차원 너머의 시선": {
+    "en": "4F Memoir: Abyssal Rift, Gaze Beyond Dimensions",
+    "ja": "4層回顧録: 深淵の亀裂、次元の彼方からの視線"
+  },
+  "4단계: [차원 네메시스 요격 작전] - 네메시스 월드 레이드 1회 출격": {
+    "en": "Stage 4: [Dimensional Nemesis Interception] - Sortie into Nemesis World Raid once",
+    "ja": "4段階: ［次元ネメシス迎撃作戦］ - ネメシスワールドレイドに1回出撃"
+  },
+  "4단계: 공허의 폭풍 파쇄자": {
+    "en": "Stage 4: Void Storm Crusher",
+    "ja": "4段階: 虚無の嵐破砕者"
+  },
+  "4대 특화": {
+    "en": "4 Major Specializations",
+    "ja": "4大特化"
+  },
+  "4레벨 이상 중반 설비 증축을 수용하기 위해선 방주 중앙 병참고(Lv.3 이상)의 물류 적재 용량이 선행되어야 합니다.": {
+    "en": "To support mid-tier facility expansions above Lv.4, the logistics capacity of the Central Logistics Depot (Lv.3+) is required first.",
+    "ja": "レベル4以上の中盤施設増築を受け入れるには、方舟中央兵站庫(Lv.3以上)の物流積載容量が前提となります。"
+  },
+  "4층 보스 [심연의 시공 왜곡자] 토벌 & 5층 해금": {
+    "en": "Subjugate 4F Boss [Abyssal Chrono Warper] & Unlock 5F",
+    "ja": "4層ボス［深淵の時空歪曲者］討伐＆5層開放"
+  },
+  "4층 시공의 뒤틀림 속에서 흩어진 4장의 쪽지를 엮어 복원한 관측 보고서.": {
+    "en": "Observation report reconstructed from 4 scattered notes amid the spatiotemporal distortions of 4F.",
+    "ja": "4層の時空の歪みの中に散らばった4枚のメモを編纂して復元した観測報告書。"
+  },
+  "4층 심연의 균열 수호자 [심연의 시공 왜곡자]를 토벌하고 최심부 5층 [원초의 제단] 진입로를 개방하세요.": {
+    "en": "Subjugate 4F Abyssal Rift guardian [Abyssal Chrono Warper] and open the path to the deepest 5F [Primordial Altar].",
+    "ja": "4層深淵の亀裂の守護者［深淵の時空歪曲者］を討伐し、最深部5層［原初の祭壇］への進入路を開放せよ。"
+  },
+  "4층 차원 균열을 지배하던 [심연의 시공 왜곡자]의 잔해로 완성된 시공간 장구. [희귀 등급 이상]": {
+    "en": "Spatiotemporal equipment crafted from the remnants of [Abyssal Chrono Warper] ruling 4F dimensional rift. [Rare or higher]",
+    "ja": "4層次元の亀裂を支配した［深淵の時空歪曲者］の残骸から完成した時空間装備。［希少等級以上］"
+  },
+  "4층 크로노스 회중시계 조각 수습 ➔ 5층 시간 앵커 정렬 ➔ 11층 시간 종착역 아르케오스 대면으로 이어지는 3단계 연계 서사입니다.": {
+    "en": "A 3-part linked saga: Retrieve Chronos pocket watch fragment on 4F ➔ Align time anchor on 5F ➔ Confront Archeos at 11F Time Terminus.",
+    "ja": "4層クロノス懐中時計の破片回収 ➔ 5層時間アンカー整列 ➔ 11層時間の終着駅アルケオスとの対面へと続く3段階連係叙事詩。"
+  },
+  "4층 회고록 쪽지": {
+    "en": "4F Memoir Note",
+    "ja": "4層の回顧録メモ"
+  },
+  "4층/5층 보스 토벌 전리품": {
+    "en": "4F/5F Boss Subjugation Loot",
+    "ja": "4層/5層ボス討伐戦利品"
+  },
+  "4층: 심연의 균열 (위험도 중상)": {
+    "en": "4F: Abyssal Rift (Mid-High Hazard)",
+    "ja": "4層: 深淵の亀裂 (危険度・中上)"
+  },
+  "4티어 흑요석 정예 단조 & 단조 비용 12% 할인 (최대 +5강 유지)": {
+    "en": "Tier 4 obsidian elite forging & 12% forging cost discount (Maintains up to +5 enhance)",
+    "ja": "Tier 4黒曜石精鋭鍛造＆鍛造費用12%割引（最大+5強化維持）"
+  },
+  "5. 기술적·관리적 보호 조치": {
+    "en": "5. Technical and Administrative Protective Measures",
+    "ja": "5. 技術的・管理的な保護措置"
+  },
+  "5. 사냥꾼 (Hunter)": {
+    "en": "5. Hunter",
+    "ja": "5. 狩人 (Hunter)"
+  },
+  "5. 안전 귀환 원칙: 탐험 전리품은 가방에 임시 저장되므로, 위험도 70% 이상이거나 위기 시에는 [성채 귀환]을 통해 전리품을 안전하게 입고하세요.": {
+    "en": "5. Safe Return Rule: Exploration loot is temporarily stored in the bag; when hazard reaches 70%+ or in peril, use [Return to Citadel] to safely stash your loot.",
+    "ja": "5. 安全帰還の原則: 探検の戦利品はバッグに一時保管されるため、危険度70%以上や危機時には［城塞帰還］で安全に入庫してください。"
+  },
+  "50% 반감": {
+    "en": "Halved by 50%",
+    "ja": "50%半減"
+  },
+  "5F 공허 거신 처치 정수": {
+    "en": "5F Void Colossus Slaying Essence",
+    "ja": "5層虚無の巨神討伐のエッセンス"
+  },
+  "5F 공허의 지배자 보스 세트": {
+    "en": "5F Void Ruler Boss Set",
+    "ja": "5層虚無の支配者ボスセット"
+  },
+  "5F 공허의 지배자 세트": {
+    "en": "5F Void Ruler Set",
+    "ja": "5層虚無の支配者セット"
+  },
+  "5F 보스 [공허의 지배자]의 멸망 에너지로 응축된 칠흑의 고유 갑옷.": {
+    "en": "Pitch-black unique armor condensed from extinction energy of 5F Boss [Void Ruler].",
+    "ja": "5層ボス［虚無の支配者］の滅亡エネルギーが凝縮された漆黒の固有鎧。"
+  },
+  "5F 보스 [공허의 지배자]의 모노리스 파편을 포신으로 개조한 결전포.": {
+    "en": "Decisive cannon converted from monolith fragments of 5F Boss [Void Ruler] as barrel.",
+    "ja": "5層ボス［虚無の支配者］のモノリス破片を砲身に改造した決戦砲。"
+  },
+  "5F 보스 [공허의 지배자]의 파멸 모노리스 핵이 박힌 결전의 성물.": {
+    "en": "Holy relic of decisive battle embedded with doom monolith core of 5F Boss [Void Ruler].",
+    "ja": "5層ボス［虚無の支配者］の破滅モノリス核が嵌め込まれた決戦の聖物。"
+  },
+  "5F 보스 처치 (100% 확정)": {
+    "en": "Defeat 5F Boss (100% Guaranteed)",
+    "ja": "5層ボス撃破 (100%確定)"
+  },
+  "5F 비기 마도서: 원초의 공허 묵시록": {
+    "en": "5F Secret Grimoire: Primal Void Apocalypse",
+    "ja": "5層秘技魔導書: 原初の虚無黙示録"
+  },
+  "5F 오파츠: 마지막 등굣길 (부서진 헤드폰 & 학생증)": {
+    "en": "5F Ooparts: Last Way to School (Broken Headphones & Student ID)",
+    "ja": "5層オーパーツ: 最後の登校路 (壊れたヘッドホン＆学生証)"
+  },
+  "5F 원초의 제단 던전 상자 / 보스 드랍": {
+    "en": "5F Primordial Altar Dungeon Chest / Boss Drop",
+    "ja": "5層原初の祭壇 ダンジョン宝箱 / ボスドロップ"
+  },
+  "5F 원초의 제단 발굴품 페어. 소음을 차단하고 음악에 몰입하던 귀마개와 책가방을 메고 학교로 향하던 어느 소년의 앳된 사진.": {
+    "en": "5F Primordial Altar excavation pair: Earphones blocking noise to immerse in music, and a youthful photo of a boy heading to school with a backpack.",
+    "ja": "5層原初の祭壇の発掘品ペア。騒音を遮断し音楽に浸ったヘッドホンと、カバンを背負い学校へ向かった少年の幼い写真。"
+  },
+  "5F 회고록: 원초의 제단, 신을 죽인 의식": {
+    "en": "5F Memoir: Primordial Altar, the Deicide Ritual",
+    "ja": "5層回顧録: 原初の祭壇、神を殺した儀式"
+  },
+  "5개 일괄": {
+    "en": "All 5 at once",
+    "ja": "5個一括"
+  },
+  "5단계 점화 온기 버프": {
+    "en": "Stage 5 Ignition Warmth Buff",
+    "ja": "5段階点火の温もりバフ"
+  },
+  "5단계: [시공의 억제자] - 차원 네메시스 누적 100,000 피해 달성": {
+    "en": "Stage 5: [Chrono Suppressor] - Deal cumulative 100,000 damage to Dimensional Nemesis",
+    "ja": "5段階: ［時空の抑制者］ - 次元ネメシスに累計100,000ダメージ達成"
+  },
+  "5단계: 시공의 심판관": {
+    "en": "Stage 5: Chrono Arbiter",
+    "ja": "5段階: 時空の審判官"
+  },
+  "5대 특화": {
+    "en": "5 Major Specializations",
+    "ja": "5大特化"
+  },
+  "5인 정예 원정대 편성": {
+    "en": "Form 5-Hero Elite Expedition",
+    "ja": "5名精鋭遠征隊編成"
+  },
+  "5인 차원 부대 편성: 병영에서 3인의 선발 돌격대, 1인의 전술 리더(고유 가호 발동), 1인의 서포터를 자유롭게 지정하여 최적의 진형을 구축합니다.": {
+    "en": "Form 5-Member Dimensional Squad: Assign 3 vanguard assault members, 1 tactical leader (activates unique blessing), and 1 supporter in the barracks to build optimal formation.",
+    "ja": "5名次元部隊編成: 兵舎で3名の先発突撃隊、1名の戦術リーダー(固有加護発動)、1名のサポーターを自由に指定し最適な陣形を構築。"
+  },
+  "5인의 정예 부대가 차원 통로를 건넜다. 적의 방어 타워와 수비대를 격파하고 귀중한 심연 자원을 약탈하라!": {
+    "en": "A 5-member elite squad crossed the dimensional portal. Shatter enemy defense towers and garrisons to plunder precious abyssal resources!",
+    "ja": "5名の精鋭部隊が次元通路を渡った。敵の防衛タワーと守備隊を撃破し、貴重な深淵資源を略奪せよ！"
+  },
+  "5층 나락의 심연에서 군림하던 [공허의 지배자]의 모노리스 파멸 세트. [희귀 등급 이상]": {
+    "en": "Monolith ruin set of [Void Ruler] reigning in the abyssal abyss of 5F. [Rare or higher]",
+    "ja": "5層奈落の深淵に君臨した［虚無の支配者］のモノリス破滅セット。［希少等級以上］"
+  },
+  "5층 원초의 제단 최심부의 [공허의 침식자]를 토벌하고 태초의 모노리스 핵을 회수하여 인류의 방주를 완성하세요.": {
+    "en": "Subjugate [Void Corruptor] in the depths of 5F Primordial Altar and recover the primordial monolith core to complete humanity's Ark.",
+    "ja": "5層原初の祭壇最深部の［虚無の侵食者］を討伐し、原初のモノリス核を回収して人類の方舟を完成させよ。"
+  },
+  "5층 최심부의 [공허의 침식자]를 극한의 광폭화 상태에서 토벌하고 [공허 지배자의 모노리스 핵]을 회수하세요.": {
+    "en": "Subjugate [Void Corruptor] in the deepest reaches of 5F under extreme enrage and retrieve [Void Monolith Core].",
+    "ja": "5層最深部の［虚無の侵食者］を極限の狂暴化状態で討伐し、［虚無のモノリス核］を回収せよ。"
+  },
+  "5층 최종 보스 [공허의 침식자] 격파": {
+    "en": "Defeat 5F Final Boss [Void Corruptor]",
+    "ja": "5層最終ボス［虚無の侵食者］撃破"
+  },
+  "5층 최종 보스 토벌": {
+    "en": "Subjugate 5F Final Boss",
+    "ja": "5層最終ボス討伐"
+  },
+  "5층 피 묻은 제단 모서리에서 발견된 4장의 금기된 제사 수기 쪽지.": {
+    "en": "Four forbidden ritual handwritten notes discovered at the bloody edge of the 5F altar.",
+    "ja": "5層の血塗られた祭壇の隅から見つかった4枚の禁忌の儀式手記メモ。"
+  },
+  "5층 회고록 쪽지": {
+    "en": "5F Memoir Note",
+    "ja": "5層の回顧録メモ"
+  },
+  "5층: ★ 원초의 제단 (Chapter 1 보스)": {
+    "en": "5F: ★ Primordial Altar (Chapter 1 Boss)",
+    "ja": "5層: ★ 原初の祭壇 (Chapter 1 ボス)"
+  },
+  "6. 마도 총사 (Gunner)": {
+    "en": "6. Arcane Gunner (Gunner)",
+    "ja": "6. 魔導銃士 (Gunner)"
+  },
+  "6. 유지비 주의: 시설 레벨 4부터는 골드/식량 유지비가 발생하므로, 기초 생산 시설이 탄탄해지기 전에는 무리한 고레벨 증축을 자제하세요.": {
+    "en": "6. Beware Upkeep: Facility Lv.4 and above incurs gold/food upkeep; avoid excessive high-level expansions before basic production facilities are well-established.",
+    "ja": "6. 維持費の注意: 施設レベル4からはゴールド/食糧の維持費が発生するため、基礎生産施設が安定する前の無理な高レベル増築はお控えください。"
+  },
+  "6F 보스 [핏빛 성역의 지배자]가 피의 갈증을 채우던 진홍빛 고유 마검.": {
+    "en": "Crimson unique demonic sword with which 6F Boss [Ruler of Crimson Sanctuary] quenched bloodthirst.",
+    "ja": "6層ボス［血塗られた聖域の支配者］が血の渇きを潤した深紅の固有魔剣。"
+  },
+  "6F 보스 [핏빛 성역의 지배자]의 마안이 응축된 진홍의 루비 장신구.": {
+    "en": "Crimson ruby accessory condensing the demon eye of 6F Boss [Ruler of Crimson Sanctuary].",
+    "ja": "6層ボス［血塗られた聖域の支配者］の魔眼が凝縮された深紅のルビー装飾品。"
+  },
+  "6F 보스 [핏빛 성역의 지배자]의 붉은 피로 물든 고결한 고유 예복.": {
+    "en": "Noble unique vestment dyed in the scarlet blood of 6F Boss [Ruler of Crimson Sanctuary].",
+    "ja": "6層ボス［血塗られた聖域の支配者］の赤き血に染まった高潔な固有礼服。"
+  },
+  "6F 보스 처치 (100% 확정)": {
+    "en": "Defeat 6F Boss (100% Guaranteed)",
+    "ja": "6層ボス撃破 (100%確定)"
+  },
+  "6F 비기 마도서: 진홍의 피의 지배": {
+    "en": "6F Secret Grimoire: Reign of Crimson Blood",
+    "ja": "6層秘技魔導書: 深紅の血の支配"
+  },
+  "6F 오파츠: 멸망 전야의 낭만 (와인 오프너 & 립스틱)": {
+    "en": "6F Ooparts: Romance on the Eve of Ruin (Wine Opener & Lipstick)",
+    "ja": "6層オーパーツ: 滅亡前夜のロマン (ワインオープナー＆口紅)"
+  },
+  "6F 핏빛 대공 처치 정수": {
+    "en": "6F Blood Archduke Slaying Essence",
+    "ja": "6層深紅の大公討伐のエッセンス"
+  },
+  "6F 핏빛 대공의 성배와 7F 영혼 나침반을 결합해 정제한 전설 성유물. 공격 시 생명력을 흡수하고 치명타 확률을 대폭 상승시킨다.": {
+    "en": "Legendary relic refined by combining 6F Blood Archduke's Grail with 7F Soul Compass. Absorbs HP upon attacking and significantly increases Crit Rate.",
+    "ja": "6層深紅の大公の聖杯と7層魂の羅針盤を結合し精製した伝説の聖遺物。攻撃時に生命力を吸収し会心率を大幅に上昇させる。"
+  },
+  "6F 핏빛 성역 던전 상자 / 보스 드랍": {
+    "en": "6F Crimson Sanctuary Dungeon Chest / Boss Drop",
+    "ja": "6層血塗られた聖域 ダンジョン宝箱 / ボスドロップ"
+  },
+  "6F 핏빛 성역 발굴품 페어. 종말이 문턱까지 다가왔음을 잊으려 화려하게 꾸미고 붉은 포도주 축배를 들었던 연인들의 마지막 잔해.": {
+    "en": "6F Crimson Sanctuary excavation pair: The last remnants of lovers dressing extravagantly and toasting red wine to forget the impending apocalypse.",
+    "ja": "6層血塗られた聖域の発掘品ペア。終末が目の前に迫るのを忘れようと華やかに装い、赤ワインの乾杯を交わした恋人たちの最後の残骸。"
+  },
+  "6F 핏빛 성역 세트": {
+    "en": "6F Crimson Sanctuary Set",
+    "ja": "6層血塗られた聖域セット"
+  },
+  "6F 핏빛 성역의 지배자 보스 세트": {
+    "en": "6F Ruler of Crimson Sanctuary Boss Set",
+    "ja": "6層血塗られた聖域の支配者ボスセット"
+  },
+  "6F 회고록: 핏빛 성역, 광기의 연회": {
+    "en": "6F Memoir: Crimson Sanctuary, Banquet of Madness",
+    "ja": "6層回顧録: 血塗られた聖域、狂気の宴"
+  },
+  "6F~10F 심연 최심부 군주들의 궁극 절기가 봉인된 고유 마도서 5종.": {
+    "en": "Five unique grimoires sealing ultimate techniques of overlords in deepest Abyss 6F-10F.",
+    "ja": "6層〜10層深淵最深部の君主たちの究極絶技が封印された固有魔導書5種。"
+  },
+  "6단계: [차원 침공의 서막] - 차원 앵커 게이트 Lv.6 증축으로 차원 통로 완전 개방": {
+    "en": "Stage 6: [Prelude to Dimensional Invasion] - Fully open dimensional passage by upgrading Dimensional Gate to Lv.6",
+    "ja": "6段階: ［次元侵攻の幕開け］ - 次元アンカーゲートLv.6増築で次元通路を完全開放"
+  },
+  "6단계: 차원의 절대 지배자": {
+    "en": "Stage 6: Absolute Dimensional Overlord",
+    "ja": "6段階: 次元の絶対支配者"
+  },
+  "6레벨": {
+    "en": "Level 6",
+    "ja": "レベル6"
+  },
+  "6시간 저지 목표 (체력 1/24 삭감)": {
+    "en": "6-Hour Hold Goal (Deduct 1/24 HP)",
+    "ja": "6時間阻止目標 (体力1/24削減)"
+  },
+  "6시간 주기 20% 약탈": {
+    "en": "20% Plunder Every 6 Hours",
+    "ja": "6時間周期 20%略奪"
+  },
+  "6시간 침식 약탈 [휴무 중] (영지 자원 완전 보호)": {
+    "en": "6-Hour Erosion Plunder [Inactive] (Citadel resources fully protected)",
+    "ja": "6時間侵食略奪［休止中］（領地資源完全保護）"
+  },
+  "6연속 난무 & 방어무시 극딜": {
+    "en": "6-Hit Flurry & Armor-Piercing Burst",
+    "ja": "6連続乱舞＆防御無視極大ダメージ"
+  },
+  "6일 활동 & 1일 재소환 주기": {
+    "en": "6-Day Active & 1-Day Resummon Cycle",
+    "ja": "6日活動＆1日再召喚周期"
+  },
+  "6종 보급품 재고": {
+    "en": "6 Supply Items Stock",
+    "ja": "6種補給品在庫"
+  },
+  "6층 귀족들의 연회장 카펫 밑에 숨겨져 있던 4장의 일기장 쪽지.": {
+    "en": "Four diary notes hidden beneath the banquet carpet of 6F nobles.",
+    "ja": "6層貴族たちの宴会場の絨毯の下に隠されていた4枚の日記メモ。"
+  },
+  "6층 발키리 실비아 구호 ➔ 7층 은둔사제 카엘 접선 ➔ 10층 심연의 옥좌 제단 정화로 이어지는 3단계 연계 서사입니다.": {
+    "en": "A 3-part linked saga: Rescue Valkyrie Sylvia on 6F ➔ Contact Hermit Priest Kael on 7F ➔ Purify Abyssal Throne Altar on 10F.",
+    "ja": "6層ヴァルキリー・シルヴィア救助 ➔ 7層隠遁司祭カエルと接触 ➔ 10層深淵の玉座祭壇浄化へと続く3段階連係叙事詩。"
+  },
+  "6층 보스 [핏빛 대공] 토벌 & 7층 해금": {
+    "en": "Subjugate 6F Boss [Blood Archduke] & Unlock 7F",
+    "ja": "6層ボス［深紅の大公］討伐＆7層開放"
+  },
+  "6층 심연 마물 3회 토벌": {
+    "en": "Subjugate 6F Abyssal Monsters 3 Times",
+    "ja": "6層深淵の魔物を3回討伐"
+  },
+  "6층 핏빛 나락, 7층 망각의 묘지, 8층 기사단의 무덤을 지나 10층 심연의 옥좌에 안치된": {
+    "en": "Passing through 6F Crimson Abyss, 7F Graveyard of Oblivion, and 8F Tomb of Knights, enshrined at 10F Throne of the Abyss",
+    "ja": "6層血塗られた奈落、7層忘却の墓地、8層騎士団の墓を越え、10層深淵の玉座に安置された"
+  },
+  "6층 핏빛 성역을 탐험하며 핏빛 늑대와 타락한 사제 무리를 격퇴하세요.": {
+    "en": "Explore 6F Crimson Sanctuary and defeat blood wolves and corrupted priests.",
+    "ja": "6層血塗られた聖域を探検し、血濡れの狼と堕落した司祭の群れを撃退せよ。"
+  },
+  "6층 핏빛 성역의 지배자 [핏빛 대공]을 토벌하고 7층 [망각의 묘역] 진입로를 개방하세요.": {
+    "en": "Subjugate [Blood Archduke] ruling 6F Crimson Sanctuary and open the path to 7F [Graveyard of Oblivion].",
+    "ja": "6層血塗られた聖域の支配者［深紅の大公］を討伐し、7層［忘却の墓地］進入路を開放せよ。"
+  },
+  "6층 핏빛 성역의 지배자 [핏빛 대공]의 선혈 예복과 흡혈 마검. [희귀 등급 이상]": {
+    "en": "Blood vestment and vampiric demonic sword of [Blood Archduke], ruler of 6F Crimson Sanctuary. [Rare or higher]",
+    "ja": "6層血塗られた聖域の支配者［深紅の大公］の鮮血礼服と吸血魔剣。［希少等級以上］"
+  },
+  "6층 회고록 쪽지": {
+    "en": "6F Memoir Note",
+    "ja": "6層の回顧録メモ"
+  },
+  "6층: 핏빛 성역 (위험도 상)": {
+    "en": "6F: Crimson Sanctuary (High Hazard)",
+    "ja": "6層: 血塗られた聖域 (危険度・上)"
+  },
+  "6층과 7층의 광폭화 보스를 격파하고 [핏빛 대공의 진홍 성배]와 [망각 묘지기의 영혼 나침반]을 회수하여 심연 중층부를 정화하세요.": {
+    "en": "Defeat berserk bosses of 6F and 7F, retrieve [Blood Archduke Grail] and [Graveyard Soul Compass] to cleanse the mid Abyss.",
+    "ja": "6層と7層の狂暴化ボスを撃破し、［深紅の大公聖杯］と［忘却墓守の魂羅針盤］を回収して深淵中層部を浄化せよ。"
+  },
+  "6층의 핏빛 성역과 7층의 망각 묘역은 방주가 심연의 심장으로 진입하지 못하도록 막는 저주의 결계다. 두 군주의 성유물을 회수하여 심연의 길을 밝혀라.": {
+    "en": "6F Crimson Sanctuary and 7F Graveyard of Oblivion are cursed barriers barring the Ark from reaching the Heart of the Abyss. Recover relics of the two lords to illuminate the abyssal path.",
+    "ja": "6層の血塗られた聖域と7層の忘却墓地は、方舟が深淵の心臓へ進むのを拒む呪いの結界だ。二人の君主の聖遺物を回収し、深淵の道を切り拓け。"
+  },
+  "7. 광전사 (Berserker)": {
+    "en": "7. Berserker",
+    "ja": "7. 狂戦士 (Berserker)"
+  },
+  "70% ~ 130% 수치 롤": {
+    "en": "70% - 130% Stat Roll",
+    "ja": "70%〜130% 数値ロール"
+  },
+  "7F 망각 사신 처치 정수": {
+    "en": "7F Oblivion Reaper Slaying Essence",
+    "ja": "7層忘却の死神討伐のエッセンス"
+  },
+  "7F 망각의 묘지 던전 상자 / 보스 드랍": {
+    "en": "7F Graveyard of Oblivion Dungeon Chest / Boss Drop",
+    "ja": "7層忘却の墓地 ダンジョン宝箱 / ボスドロップ"
+  },
+  "7F 망각의 묘지 발굴품 페어. 눈부신 모래사장과 에메랄드빛 파도, 그리고 사진 뒤편에 꾹꾹 눌러쓴 영원의 약속.": {
+    "en": "7F Graveyard of Oblivion excavation pair: Dazzling sandy beaches, emerald waves, and a promise of eternity firmly written behind the photo.",
+    "ja": "7層忘却の墓地の発掘品ペア。眩しい砂浜とエメラルド色の波、そして写真の裏に力強く刻まれた永遠の約束。"
+  },
+  "7F 망각의 묘지기 보스 세트": {
+    "en": "7F Graveyard Keeper of Oblivion Boss Set",
+    "ja": "7層忘却の墓守ボスセット"
+  },
+  "7F 망각의 묘지기 세트": {
+    "en": "7F Graveyard Keeper of Oblivion Set",
+    "ja": "7層忘却の墓守セット"
+  },
+  "7F 보스 [망각의 묘지기]가 원혼들의 육신과 영혼을 영구 절단하던 사신의 낫.": {
+    "en": "Reaper's scythe with which 7F Boss [Graveyard Keeper of Oblivion] permanently severed flesh and soul of spirits.",
+    "ja": "7層ボス［忘霊の墓守］が怨霊の肉体と魂を永久切断した死神の鎌。"
+  },
+  "7F 보스 [망각의 묘지기]의 영혼 억제 사슬이 각인된 고유 인장.": {
+    "en": "Unique seal engraved with soul restraint chains of 7F Boss [Graveyard Keeper of Oblivion].",
+    "ja": "7層ボス［忘霊の墓守］の魂拘束の鎖が刻印された固有印章。"
+  },
+  "7F 보스 [망각의 묘지기]의 칠흑빛 사령 안개가 깃든 고유 로브.": {
+    "en": "Unique robe shrouded in pitch-black necrotic mist of 7F Boss [Graveyard Keeper of Oblivion].",
+    "ja": "7層ボス［忘霊の墓守］の漆黒の死霊霧が宿る固有ローブ。"
+  },
+  "7F 보스 처치 (100% 확정)": {
+    "en": "Defeat 7F Boss (100% Guaranteed)",
+    "ja": "7層ボス撃破 (100%確定)"
+  },
+  "7F 비기 마도서: 망각의 사신 낫": {
+    "en": "7F Secret Grimoire: Scythe of the Oblivion Reaper",
+    "ja": "7層秘技魔導書: 忘却の死神の大鎌"
+  },
+  "7F 오파츠: 빛바랜 바다의 맹세 (폴라로이드 & 3색 볼펜)": {
+    "en": "7F Ooparts: Faded Vow of the Sea (Polaroid & 3-Color Ballpoint Pen)",
+    "ja": "7層オーパーツ: 色褪せた海の誓い (ポラロイド＆3色ボールペン)"
+  },
+  "7F 회고록: 망각의 묘지, 잃어버린 이름들": {
+    "en": "7F Memoir: Graveyard of Oblivion, Lost Names",
+    "ja": "7層回顧録: 忘却の墓地、失われた名たち"
+  },
+  "7단계: [차원 영지 침공 작전] - 상대 방주 영지 1회 침공 및 자원 약탈": {
+    "en": "Stage 7: [Dimensional Domain Invasion] - Invade rival Ark domain once & plunder resources",
+    "ja": "7段階: ［次元領地侵攻作戦］ - 相手の方舟領地へ1回侵攻＆資源略奪"
+  },
+  "7레벨 이상 고급 설비에 주입할 고밀도 에테르 촉매 공급을 위해 에테르 연금 공방(Lv.5 이상)이 선행되어야 합니다.": {
+    "en": "Aether Alchemy Lab (Lv.5+) is required first to supply high-density ether catalyst for advanced facilities Lv.7 and above.",
+    "ja": "レベル7以上の高級施設に注入する高密度エーテル触媒供給のため、エーテル錬金工房(Lv.5以上)が前提となります。"
+  },
+  "7종의 강화 보급품으로 전면 대체": {
+    "en": "Completely replaced with 7 enhanced supplies",
+    "ja": "7種の強化補給品へ全面代替"
+  },
+  "7층 망각 묘역에서 시신을 파헤치고 영혼을 참살하던 [망각의 묘지기]의 사령 장구. [희귀 등급 이상]": {
+    "en": "Necrotic gear of [Graveyard Keeper of Oblivion] unearthing corpses and slaying souls in 7F Graveyard. [Rare or higher]",
+    "ja": "7層忘却の墓地で死体を暴き魂を屠った［忘却の墓守］の死霊装備。［希少等級以上］"
+  },
+  "7층 망각의 묘역 최심부의 [망각의 묘지기]를 토벌하고 8층 [단죄의 성채] 진입로를 개방하세요.": {
+    "en": "Subjugate [Graveyard Keeper of Oblivion] in the depths of 7F Graveyard and open the path to 8F [Citadel of Condemnation].",
+    "ja": "7層忘却の墓地最深部の［忘却の墓守］を討伐し、8層［단죄의 성채］進入路を開放せよ。"
+  },
+  "7층 무명용사들의 묘비명 조각 4장을 모아 맞춘 최후의 유서록.": {
+    "en": "Final testament assembled from 4 fragments of epitaphs of unknown soldiers on 7F.",
+    "ja": "7層無名戦士たちの墓碑銘の破片4枚を集めて繋ぎ合わせた最後の遺書録。"
+  },
+  "7층 보스 [망각의 묘지기] 토벌 & 8층 해금": {
+    "en": "Subjugate 7F Boss [Graveyard Keeper of Oblivion] & Unlock 8F",
+    "ja": "7層ボス［忘却の墓守］討伐＆8層開放"
+  },
+  "7층 회고록 쪽지": {
+    "en": "7F Memoir Note",
+    "ja": "7層の回顧録メモ"
+  },
+  "7층: 망각의 묘지 (위험도 상)": {
+    "en": "7F: Graveyard of Oblivion (High Hazard)",
+    "ja": "7層: 忘却の墓地 (危険度・上)"
+  },
+  "8F 기사단장의 맹세 휘장과 9F 진실의 거울 파편으로 담금질한 전설 갑주. 받는 모든 피해를 15% 감소시키고 치명타 공격을 굴절시킨다.": {
+    "en": "Legendary armor tempered with 8F Order Commander Crest and 9F Mirror Shard of Truth. Reduces all damage taken by 15% and deflects critical hits.",
+    "ja": "8層騎士団長の誓いの紋章と9層真実の鏡の破片で鍛え上げた伝説の甲冑。受ける全ダメージを15%軽減し会心攻撃を屈折させる。"
+  },
+  "8F 단죄의 성기사 세트": {
+    "en": "8F Paladin of Condemnation Set",
+    "ja": "8層断罪の聖騎士セット"
+  },
+  "8F 단죄의 성채 던전 상자 / 보스 드랍": {
+    "en": "8F Citadel of Condemnation Dungeon Chest / Boss Drop",
+    "ja": "8層断罪の城塞 ダンジョン宝箱 / ボスドロップ"
+  },
+  "8F 단죄의 성채 발굴품 페어. 핏빛으로 물든 안경 너머로 쏟아지는 괴수들을 보며 마지막 조난 신호를 타전했던 방위군의 유품.": {
+    "en": "8F Citadel of Condemnation excavation pair: Defense force relics who radioed the final distress signal watching pouring monsters through blood-stained spectacles.",
+    "ja": "8層断罪の城塞の発掘品ペア。血染めの眼鏡越しに押し寄せる怪獣を見つめ、最後の遭難信号を発信した防衛軍の遺品。"
+  },
+  "8F 보스 [타락한 성기사단장]의 맹세가 서린 칠흑의 단죄 성배.": {
+    "en": "Pitch-black condemnation chalice bearing the oath of 8F Boss [Fallen Grand Templar].",
+    "ja": "8層ボス［堕ちた聖騎士団長］の誓いが宿る漆黒の断罪聖杯。"
+  },
+  "8F 보스 [타락한 성기사단장]의 성역 가호가 부여된 최정예 중장갑.": {
+    "en": "Elite heavy armor blessed with sanctuary ward of 8F Boss [Fallen Grand Templar].",
+    "ja": "8層ボス［堕ちた聖騎士団長］の聖域の加護が施された最精鋭重装甲。"
+  },
+  "8F 보스 [타락한 성기사단장]이 단죄의 요새를 호령하던 불패의 성검.": {
+    "en": "Invincible holy sword with which 8F Boss [Fallen Grand Templar] commanded the fortress of condemnation.",
+    "ja": "8層ボス［堕ちた聖騎士団長］が断罪の要塞を指揮した不敗の聖剣。"
+  },
+  "8F 보스 처치 (100% 확정)": {
+    "en": "Defeat 8F Boss (100% Guaranteed)",
+    "ja": "8層ボス撃破 (100%確定)"
+  },
+  "8F 비기 마도서: 단죄의 칠흑 성역": {
+    "en": "8F Secret Grimoire: Pitch-Black Sanctuary of Condemnation",
+    "ja": "8層秘技魔導書: 断罪の漆黒聖域"
+  },
+  "8F 오파츠: 최후 방어선의 SOS (무전기 트랜시버 & 안경테)": {
+    "en": "8F Ooparts: SOS of the Final Defense Line (Radio Transceiver & Glasses Frame)",
+    "ja": "8層オーパーツ: 最後防衛線のSOS (無線トランシーバー＆眼鏡フレーム)"
+  },
+  "8F 타락한 기사단장 처치 정수": {
+    "en": "8F Fallen Knight Commander Slaying Essence",
+    "ja": "8層堕ちた騎士団長討伐のエッセンス"
+  },
+  "8F 타락한 성기사단장 보스 세트": {
+    "en": "8F Fallen Grand Templar Boss Set",
+    "ja": "8層堕ちた聖騎士団長ボスセット"
+  },
+  "8F 회고록: 단죄의 성채, 배반자의 요새": {
+    "en": "8F Memoir: Citadel of Condemnation, Fortress of Betrayers",
+    "ja": "8層回顧録: 断罪の城塞、裏切り者の要塞"
+  },
+  "8단계: [방어 전술 타워 연구] - 영지 방어 전술 타워 테크 1회 연구 완료": {
+    "en": "Stage 8: [Defense Tactical Tower Research] - Complete 1 Domain Defense Tactical Tower research",
+    "ja": "8段階: ［防衛戦術タワー研究］ - 領地防衛戦術タワーテックを1回研究完了"
+  },
+  "8층 단죄의 성채를 방어하던 [타락한 성기사단장]의 단죄 성검과 불패 판금갑. [에픽 등급 이상]": {
+    "en": "Condemnation holy sword and invincible plate armor of [Fallen Grand Templar] who defended 8F Citadel of Condemnation. [Epic or higher]",
+    "ja": "8層断罪の城塞を防衛した［堕ちた聖騎士団長］の断罪聖剣と不敗の板金鎧。［エピック等級以上］"
+  },
+  "8층 단죄의 성채를 수호하는 [타락한 기사단장]을 처치하여 9층 [환영의 미궁] 진입로를 개방하세요.": {
+    "en": "Defeat [Fallen Knight Commander] defending 8F Citadel of Condemnation to open the path to 9F [Labyrinth of Illusions].",
+    "ja": "8層断罪の城塞を守護する［堕ちた騎士団長］を撃破し、9層［幻影の迷宮］進入路を開放せよ。"
+  },
+  "8층 보스 [타락한 기사단장] 토벌 & 9층 해금": {
+    "en": "Subjugate 8F Boss [Fallen Knight Commander] & Unlock 9F",
+    "ja": "8層ボス［堕ちた騎士団長］討伐＆9層開放"
+  },
+  "8층 철통같던 성채 사령실의 책상 서랍에서 찾아낸 5장의 군사 기밀 쪽지.": {
+    "en": "Five military secret notes retrieved from desk drawers of the ironclad citadel command room on 8F.",
+    "ja": "8層の堅牢な城塞司令室の机の引き出しから見つかった5枚の軍事機密メモ。"
+  },
+  "8층 회고록 쪽지": {
+    "en": "8F Memoir Note",
+    "ja": "8層の回顧録メモ"
+  },
+  "8층: 단죄의 성채 (위험도 최상)": {
+    "en": "8F: Citadel of Condemnation (Extreme Hazard)",
+    "ja": "8層: 断罪の城塞 (危険度・最上)"
+  },
+  "8층과 9층의 광폭화 지배자를 쓰러뜨리고 [단죄의 기사단장 맹세 휘장]과 [미궁 지배자의 진실 거울 파편]을 회수하여 최종 결전의 문을 여세요.": {
+    "en": "Defeat berserk rulers of 8F and 9F, retrieve [Order Commander Crest] and [Mirror Shard of Truth] to unlock the final battle.",
+    "ja": "8層と9層の狂暴化支配者を倒し、［断罪騎士団長の紋章］と［真実の鏡の破片］を回収して最終決戦の扉を開け。"
+  },
+  "8티어 단죄의 맹세 단조 & 전 제작/강화 비용 16% 영구 할인": {
+    "en": "Tier 8 Condemnation Vow forging & 16% permanent discount on all craft/enhancement costs",
+    "ja": "Tier 8断罪の誓い鍛造＆全製作/強化費用16%永久割引"
+  },
+  "9F 거울 미궁 세트": {
+    "en": "9F Mirror Labyrinth Set",
+    "ja": "9層鏡の迷宮セット"
+  },
+  "9F 거울 미궁의 지배자 보스 세트": {
+    "en": "9F Ruler of Mirror Labyrinth Boss Set",
+    "ja": "9層鏡の迷宮の支配者ボスセット"
+  },
+  "9F 보스 [거울 미궁의 지배자]의 모든 타격을 굴절시키는 환영의 외투.": {
+    "en": "Phantom cloak refracting all attacks of 9F Boss [Ruler of Mirror Labyrinth].",
+    "ja": "9層ボス［鏡の迷宮の支配者］の全攻撃を屈折させる幻影の外衣。"
+  },
+  "9F 보스 [거울 미궁의 지배자]의 본체 거울 파편으로 세공된 전설의 성물.": {
+    "en": "Legendary relic crafted from mirror shards of 9F Boss [Ruler of Mirror Labyrinth].",
+    "ja": "9層ボス［鏡の迷宮の支配者］の本体鏡の破片で細工された伝説の聖物。"
+  },
+  "9F 보스 [거울 미궁의 지배자]의 환영 차원을 현실로 투영하는 신비로운 마도봉.": {
+    "en": "Mysterious arcane wand projecting phantom dimensions into reality of 9F Boss [Ruler of Mirror Labyrinth].",
+    "ja": "9層ボス［鏡の迷宮の支配者］の幻影次元を現実へ投影する神秘的な魔導杖。"
+  },
+  "9F 보스 처치 (100% 확정)": {
+    "en": "Defeat 9F Boss (100% Guaranteed)",
+    "ja": "9層ボス撃破 (100%確定)"
+  },
+  "9F 비기 마도서: 만화경 환영 폭풍": {
+    "en": "9F Secret Grimoire: Kaleidoscope Illusion Storm",
+    "ja": "9層秘技魔導書: 万華鏡幻影嵐"
+  },
+  "9F 오파츠: 빛의 기록관 (홀로그램 큐브 & 카메라 렌즈)": {
+    "en": "9F Ooparts: Light Archivist (Hologram Cube & Camera Lens)",
+    "ja": "9層オーパーツ: 光の記録官 (ホログラムキューブ＆カメラレンズ)"
+  },
+  "9F 환영 군주 처치 정수": {
+    "en": "9F Illusion Lord Slaying Essence",
+    "ja": "9層幻影の君主討伐のエッセンス"
+  },
+  "9F 환영의 미궁 던전 상자 / 보스 드랍": {
+    "en": "9F Labyrinth of Illusions Dungeon Chest / Boss Drop",
+    "ja": "9層幻影の迷宮 ダンジョン宝箱 / ボスドロップ"
+  },
+  "9F 환영의 미궁 발굴품 페어. 허공에 광자로 도시를 세우던 기술과, 멸망의 순간마저 렌즈에 담아 후대에 전하려 했던 기록자.": {
+    "en": "9F Labyrinth of Illusions excavation pair: The technology of erecting cities with photons in thin air, and the archivist who captured even doom's moment to pass down.",
+    "ja": "9層幻影の迷宮の発掘品ペア。虚空に光子で都市を築いた技術と、滅亡の瞬間すらレンズに収め後世に伝えようとした記録者。"
+  },
+  "9F 회고록: 환영의 미궁, 진실의 거울": {
+    "en": "9F Memoir: Labyrinth of Illusions, Mirror of Truth",
+    "ja": "9層回顧録: 幻影の迷宮、真実の鏡"
+  },
+  "9레벨 이상 심층부 심연 침식을 원천 차단하고 영구 결계를 유지하기 위해 영혼의 제단(Lv.6 이상)이 선행되어야 합니다.": {
+    "en": "Soul Sanctuary (Lv.6+) is required first to fundamentally block deep abyss erosion Lv.9+ and sustain permanent wards.",
+    "ja": "レベル9以上の深層部深淵侵食を根源から遮断し永久結界を維持するため、魂の祭壇(Lv.6以上)が前提となります。"
+  },
+  "9층 거울 파편에 비친 문구들을 기록한 5장의 유리 석판 쪽지.": {
+    "en": "Five glass slab notes recording sentences reflected in 9F mirror shards.",
+    "ja": "9層鏡の破片に映った文言を記録した5枚のガラス石板メモ。"
+  },
+  "9층 보스 [미궁의 지배자] 토벌 & 10층 해금": {
+    "en": "Subjugate 9F Boss [Ruler of the Labyrinth] & Unlock 10F",
+    "ja": "9層ボス［迷宮の支配者］討伐＆10層開放"
+  },
+  "9층 환영의 미궁 중심에서 [미궁의 지배자]를 물리치고 마침내 최종 10층 [심연의 심장]으로 진입하세요.": {
+    "en": "Defeat [Ruler of the Labyrinth] at the heart of 9F Labyrinth of Illusions to enter final 10F [Heart of the Abyss].",
+    "ja": "9層幻影の迷宮の中心で［迷宮の支配者］を打ち倒し、ついに最終10層［深淵の心臓］へ進入せよ。"
+  },
+  "9층 환영의 미궁을 뒤흔들던 [거울 미궁의 지배자]의 차원 마도봉과 거울 외투. [에픽 등급 이상]": {
+    "en": "Dimensional wand and mirror cloak of [Ruler of Mirror Labyrinth] who shook 9F Labyrinth of Illusions. [Epic or higher]",
+    "ja": "9層幻影の迷宮を揺るがした［鏡の迷宮の支配者］の次元魔導杖と鏡の外衣。［エピック等級以上］"
+  },
+  "9층 회고록 쪽지": {
+    "en": "9F Memoir Note",
+    "ja": "9層の回顧録メモ"
+  },
+  "9층: 환영의 미궁 (위험도 극상)": {
+    "en": "9F: Labyrinth of Illusions (Extreme Hazard)",
+    "ja": "9層: 幻影の迷宮 (危険度・極上)"
+  },
+  "9티어 만화경 환영 단조 & 전 제작/강화 비용 18% 영구 할인": {
+    "en": "Tier 9 Kaleidoscope Illusion forging & 18% permanent discount on all craft/enhancement costs",
+    "ja": "Tier 9万華鏡幻影鍛造＆全製作/強化費用18%永久割引"
+  },
+  ": 6일 동안 활동하며 완전 토벌 시 다음 7일차 재소환 주기까지 평화 상태가 유지됩니다.": {
+    "en": ": Active for 6 days; when fully subjugated, peace remains until the 7th-day resummon cycle.",
+    "ja": ": 6日間活動し、完全討伐時は次回7日目の再召喚周期まで平和状態が維持されます。"
+  },
+  ": 고유 신화 특수 옵션 각성 (보스 오버차지 전리품)": {
+    "en": ": Awakens unique mythical special option (Boss Overcharge loot)",
+    "ja": ": 固有神話特殊OP覚醒 (ボスオーバーチャージ戦利品)"
+  },
+  ": 공격력/방어력 % 증폭 접두사 옵션 부여 (1~2F 파밍)": {
+    "en": ": Applies ATK/DEF % boost prefix option (1-2F farming)",
+    "ja": ": 攻撃力/防御力%増幅の接頭辞OP付与 (1〜2層ファーミング)"
+  },
+  ": 공격형(포격 지원 및 턴 시작 광역 피해), 방어형(성역 재생 및 아군 전체 턴 시작 지속 회복), 유틸형(방어 파쇄 및 상대 보호막/피해 경감 디버프).": {
+    "en": ": Offensive (Bombardment support & turn-start AoE damage), Defensive (Sanctuary regen & all-allies turn-start HoT), Utility (Armor crush & enemy shield/mitigation debuff).",
+    "ja": ": 攻撃型(砲撃支援およびターン開始時範囲ダメージ)、防御型(聖域再生および味方全体ターン開始時持続回復)、支援型(防御破砕および敵シールド/ダメージ軽減デバフ)。"
+  },
+  ": 기본 15% 확률에 행운(🍀) 보정치를 더해 45% 위력의 [추가 점사 탄환]을 격발합니다.": {
+    "en": ": Fires a 45% potency [Bonus Burst Bullet] with base 15% chance plus Luck (🍀) modifier.",
+    "ja": ": 基本15%確率に幸運(🍀)補正を加え、45%威力の［追加バースト弾］を発射。"
+  },
+  ": 기본 6종 및 1·2차 전직 클래스 전수에 고유 시너지가 부여됩니다.": {
+    "en": ": Unique synergy granted when taught to basic 6 classes and Tier 1 & 2 promotions.",
+    "ja": ": 基本6種および1・2次転職クラス伝授時に固有シナジーを付与。"
+  },
+  ": 기본 공격 시 출혈(Bleed) 상태인 적에게 [상처 절개]가 발동하여 20%의 추가 물리 피해를 입힙니다.": {
+    "en": ": Basic attacks trigger [Wound Laceration] against bleeding enemies, dealing 20% additional physical damage.",
+    "ja": ": 通常攻撃時、出血(Bleed)状態の敵に［傷口切開］が発動し20%の追加物理ダメージを与える。"
+  },
+  ": 네메시스는 활동 중 매 분마다 최대 체력의 0.05%(+": {
+    "en": ": While active, Nemesis regens 0.05%(+",
+    "ja": ": ネメシスは活動中、毎分最大体力の0.05%(+"
+  },
+  ": 단단한 적의 보호막(Shield)에 50%의 추가 피해를 주어 방어선을 분쇄합니다.": {
+    "en": ": Shatters defense lines by dealing 50% bonus damage against enemy shields.",
+    "ja": ": 頑丈な敵のシールド(Shield)に50%の追加ダメージを与え防衛線を粉砕。"
+  },
+  ": 대상 마물보다 속도가 빠를수록 피해량이 최대 20%까지 상향 증폭됩니다.": {
+    "en": ": The higher the speed compared to the target monster, the more damage is boosted, up to 20%.",
+    "ja": ": 対象魔物より速度が速いほどダメージが最大20%まで上昇増幅。"
+  },
+  ": 마나 순환을 안정화하여 모든 스킬의 마나(MP) 소모량을 5% 상시 절감합니다.": {
+    "en": ": Stabilizes mana circulation, constantly reducing all skills' MP cost by 5%.",
+    "ja": ": マナ循環を安定化し、全スキルのマナ(MP)消費量を常時5%軽減。"
+  },
+  ": 매 전투마다 피해량을 누적하여 마일스톤 장비와 대량의 인장을 수령하십시오.": {
+    "en": ": Accumulate damage in every battle to claim milestone equipment and massive seals.",
+    "ja": ": 毎戦闘でダメージを蓄積し、マイルストーン装備と大量の印章を受け取ろう。"
+  },
+  ": 모든 출전 대원 패널에 화상, 출혈, 기절, 스탯 증감 뱃지가 실시간으로 시각화됩니다.": {
+    "en": ": Real-time badges for Burn, Bleed, Stun, and stat modifications visualized on all deployed hero panels.",
+    "ja": ": 出撃した全隊員のパネルに火傷、出血、気絶、ステータス増減バッジをリアルタイムで可視化。"
+  },
+  ": 무분별한 약탈을 방지하기 위해 일일 3회 침공 제한과 피침공 시 8시간 보호막이 부여되며, 침공 전 사전 [정찰(Scout)]을 지원합니다.": {
+    "en": ": To prevent excessive plundering, daily invasions are capped at 3, an 8-hour shield is granted when raided, and pre-invasion [Scout] is supported.",
+    "ja": ": 無差別略奪を防ぐため1日3回の侵攻制限と被侵攻時8時間シールドが付与され、侵攻前の事前［偵察(Scout)］に対応。"
+  },
+  ": 받는 물리 피해 10% 감소 (탱커 최적)": {
+    "en": ": Reduces physical damage taken by 10% (Optimal for tanks)",
+    "ja": ": 被物理ダメージ10%減少 (タンク最適)"
+  },
+  ": 병기창 단조 ➔ 장비 제작 ➔ 연금 공방 ➔ 마도서 제본 ➔ 블랙 마켓": {
+    "en": ": Armory Forge ➔ Equipment Crafting ➔ Alchemy Lab ➔ Grimoire Binding ➔ Black Market",
+    "ja": ": 兵器廠鍛造 ➔ 装備製作 ➔ 錬金工房 ➔ 魔導書製本 ➔ ブラックマーケット"
+  },
+  ": 상단(적 리더) 및 하단(아군 리더) 전용 메인 포트레이트 및 스탯 패널 구성.": {
+    "en": ": Composed of dedicated main portrait & stat panel for Top (Enemy Leader) and Bottom (Ally Leader).",
+    "ja": ": 上部(敵リーダー)および下部(味方リーダー)専用メインポートレート＆ステータスパネル構成。"
+  },
+  ": 생체 복원 병동 완공 ➔ 영혼의 제단 해금 ➔ 1차 상위 전직 및 보스전": {
+    "en": ": Complete Bio-Restoration Ward ➔ Unlock Soul Sanctuary ➔ Tier 1 Promotion & Boss Battles",
+    "ja": ": 生体復元病棟完成 ➔ 魂の祭壇開放 ➔ 1次上位転職およびボス戦"
+  },
+  ": 선발 3인 + 리더(전술 스탯 1.15배) + 서포터(패시브 지원)의 5인 풀스쿼드로 참전합니다.": {
+    "en": ": Deploys as a 5-member full squad: 3 Starters + Leader (tactical stats x1.15) + Supporter (passive support).",
+    "ja": ": 先発3名＋リーダー(戦術ステータス1.15倍)＋サポーター(パッシブ支援)の5名フル部隊で参戦。"
+  },
+  ": 성공하더라도 긴급 도주 중 배낭 자원의 80%를 잃어버립니다. (20%만 보존)": {
+    "en": ": Even if successful, 80% of backpack resources are lost during emergency escape. (Only 20% preserved)",
+    "ja": ": 成功しても緊急逃走中にバッグ資源の80%を失います。(20%のみ保持)"
+  },
+  ": 성채 복귀 시": {
+    "en": ": Upon returning to Citadel",
+    "ja": ": 城塞復帰時"
+  },
+  ": 스킬 위력 +10% 및 어그로 감소 (마법사/힐러/총사)": {
+    "en": ": Skill Potency +10% & Aggro Reduced (Mage/Healer/Gunner)",
+    "ja": ": スキル威力+10%＆ヘイト減少 (魔法使い/ヒーラー/銃士)"
+  },
+  ": 아군과 적군의 속도 수치에 따라 턴 큐가 자동 정렬되며, 행동속도가 빠른 영웅이 먼저 스킬을 시전합니다.": {
+    "en": ": Turn queue automatically orders based on ally and enemy SPD stats; heroes with faster speed cast skills first.",
+    "ja": ": 味方と敵の速度値に応じてターンキューが自動整列され、行動速度が速い英雄が先にスキルを発動。"
+  },
+  ": 아무 일 없음 34%, 몬스터 조우 33%, 오브젝트 이벤트 33% (1/3 균등 분배)": {
+    "en": ": Nothing Happened 34%, Monster Encounter 33%, Object Event 33% (1/3 equal split)",
+    "ja": ": 何事もなし34%、モンスター遭遇33%、オブジェクトイベント33% (1/3均等配分)"
+  },
+  ": 안장된 영웅이 있을 때 헌화할 수 있으며, 안장 영웅 1명당 목재 20개(최대 100개)를 소모하여 5분간 1명당 전투 획득 경험치 +5%(최대 +25%) 가호를 얻습니다 (연속 헌화 시 시간 누적 연장).": {
+    "en": ": Can offer flowers when heroes are interred, consuming 20 Wood per buried hero (up to 100) to gain +5% Combat EXP blessing per hero (up to +25%) for 5 minutes (consecutive offerings stack duration).",
+    "ja": ": 埋葬された英雄がいる時に献花でき、埋葬英雄1名につき木材20個(最大100個)を消費して5分間1名につき戦闘獲得経験値+5%(最大+25%)の加護を獲得(連続献花時時間累積延長)。"
+  },
+  ": 안전 |": {
+    "en": ": Safe |",
+    "ja": ": 安全 |"
+  },
+  ": 영웅 등급별 에테르(30~100개 차등: N 30, V 45, H 60, E 80, L 100)를 공물로 바쳐 다음 심연 원정 1회 동안 가호를 누리며, 새로운 영령에게 공물을 바치면 이전 가호가 자동으로 교체됩니다. 공물을 바친 영웅은 1시간의 안식 쿨다운이 적용됩니다.": {
+    "en": ": Offer tiered Ether (30-100: N 30, V 45, H 60, E 80, L 100) to receive blessings for the next expedition; offering to a new spirit replaces the previous blessing. Contributing hero incurs a 1-hour rest cooldown.",
+    "ja": ": 英雄等級に応じたエーテル(30〜100個: N 30, V 45, H 60, E 80, L 100)を供物として捧げ次回深淵遠征1回の間加護を受け、新たな英霊へ捧げると以前の加護は自動交代。供物を捧げた英雄は1時間の休息クールダウンが適用。"
+  },
+  ": 일반 공격만으로 처치할 수 있는 잔여 체력의 적에게는 무의미한 스킬 마나 낭비를 방지하고 기본 공격으로 마무리합니다.": {
+    "en": ": Finishes off enemies with basic attacks when their remaining HP allows it, preventing needless skill mana waste.",
+    "ja": ": 通常攻撃だけで倒せる残体力の敵には、無意味なスキルマナ浪費を防ぎ基本攻撃でトドメを刺します。"
+  },
+  ": 자동 전투(Auto) 활성화 시 턴 진행 및 전투 애니메이션이 1.5배 속도로 쾌적하게 재생됩니다.": {
+    "en": ": When Auto-battle is active, turn progression and battle animations smoothly play at 1.5x speed.",
+    "ja": ": オート戦闘(Auto)有効時、ターン進行および戦闘アニメーションが1.5倍速で快適に再生されます。"
+  },
+  ": 적에게 걸린 디버프를 분석하여 6대 상태이상 콤보 폭발이 가능한 스킬을 최우선으로 시전합니다.": {
+    "en": ": Analyzes debuffs on enemies to prioritize skills that trigger 6 status ailment combo detonations.",
+    "ja": ": 敵にかかったデバフを分析し、6大状態異常コンボ爆発が可能なスキルを最優先で発動。"
+  },
+  ": 전사 영웅의 등급에 따라 가호 효과가 N(1.0배), V(1.25배), H(1.5배), E(1.8배), L(2.2배)로 최대 2.2배까지 대폭 증폭됩니다.": {
+    "en": ": Warrior hero blessing amplified up to 2.2x based on grade: N (1.0x), V (1.25x), H (1.5x), E (1.8x), L (2.2x).",
+    "ja": ": 戦士英雄の等級に応じて加護効果がN(1.0倍)、V(1.25倍)、H(1.5倍)、E(1.8倍)、L(2.2倍)と最大2.2倍まで大幅増幅。"
+  },
+  ": 차원 앵커 게이트(Lv.3+)가 개방되어 활성화된 상태에서만 침식과 약탈이 발생합니다. 차원 앵커가 닫혀 있는 동안에는 네메시스 침공과 자원 약탈이 전면 중단되어 영지 자원이 100% 안전하게 보호됩니다.": {
+    "en": ": Erosion and plundering occur only when Dimensional Gate (Lv.3+) is opened and active. While closed, Nemesis raids and resource looting are fully halted, keeping domain resources 100% safe.",
+    "ja": ": 次元アンカーゲート(Lv.3+)が開放され稼働中の状態でのみ侵食と略奪が発生。アンカー閉鎖中はネメシス侵攻と資源略奪が全面停止し、領地資源は100%安全に保護されます。"
+  },
+  ": 치명타/속도/마나소모 감소 접미사 옵션 부여 (3~5F 파밍)": {
+    "en": ": Applies Crit/SPD/MP cost reduction suffix option (3-5F farming)",
+    "ja": ": 会心/速度/マナ消費軽減の接尾辞OP付与 (3〜5層ファーミング)"
+  },
+  ": 치명타율 +5% 및 명중률 보정 (근접/원거리 딜러)": {
+    "en": ": Crit Rate +5% & Hit Rate bonus (Melee/Ranged DPS)",
+    "ja": ": 会心率+5%＆命中率補正 (近接/遠距離火力)"
+  },
+  ": 치명타율 +5% 및 치명타 피해량이 +5% 증폭되어 정밀 저격이 가능합니다.": {
+    "en": ": Crit Rate +5% & Crit Damage boosted +5%, enabling precise sharpshooting.",
+    "ja": ": 会心率+5%＆会心ダメージ+5%増幅により精密狙撃が可能。"
+  },
+  ": 침공 승리 시 고정 목표 2종(골드/식량)과 무작위 3종(기초 영지/심연 정제/파밍 전리품/소모품 군) 등 총 5종 자원을 상대 보유량의 30%까지 약탈합니다.": {
+    "en": ": Invasion victory plunders up to 30% of target's holdings across 5 resource types: 2 fixed (Gold/Food) and 3 random (Citadel/Refined/Farm/Consumable).",
+    "ja": ": 侵攻勝利時、固定2種(ゴールド/食糧)とランダム3種(基礎領地/深淵精製/ファーミング戦利品/消耗品)の計5種資源を相手所持量の30%まで略奪。"
+  },
+  ": 침공 전투 기본 속도가 2.0배속으로 상향되었으며, `[⚡ 2.5x 고속]` 스위치로 박진감 넘치는 쾌속 전투를 즐기실 수 있습니다.": {
+    "en": ": Base invasion battle speed upgraded to 2.0x; toggle `[⚡ 2.5x High-speed]` switch for thrilling lightning-fast combat.",
+    "ja": ": 侵攻戦闘の基本速度が2.0倍速へ向上し、`[⚡ 2.5x 高速]`スイッチで迫力ある高速バトルを楽しめます。"
+  },
+  ": 침공 전투 시 매 라운드 시작 단계에서 방어 타워가 독립적인 턴으로 작동하며 실시간 포격/재생 시각 효과가 연출됩니다.": {
+    "en": ": In invasion battles, defense towers act as independent turns at the start of each round with real-time shelling/regen visual effects.",
+    "ja": ": 侵攻戦闘時、毎ラウンド開始段階で防衛タワーが独立ターンとして作動し、リアルタイムの砲撃/再生視覚効果が演出されます。"
+  },
+  ": 침공 활성화 중 6시간마다 네메시스 체력의 1/24(": {
+    "en": ": Every 6 hours while invasion is active, 1/24 of Nemesis HP (",
+    "ja": ": 侵攻活性化中、6時間ごとにネメシス体力の1/24("
+  },
+  ": 퇴로가 차단되어 기습 피해를 입고 즉시 전투에 돌입합니다.": {
+    "en": ": Retreat cut off; sustains ambush damage and enters combat immediately.",
+    "ja": ": 退路が断たれ奇襲ダメージを受け即座に戦闘へ突入。"
+  },
+  ": 파티원 중 2명은 유대가 깊고(35+) 본인만 고립(15 이하)된 경우 소외 상태가 되어": {
+    "en": ": If 2 party members share deep bond (35+) and this hero is isolated (15 or less), enters alienated state and",
+    "ja": ": パーティ内の2名が強い絆(35+)で自身のみ孤立(15以下)の場合、疎外状態となり"
+  },
+  ": 포위망을 뚫고 성채로 탈출합니다.": {
+    "en": ": Breaks through the encirclement and escapes to Citadel.",
+    "ja": ": 包囲網を突破して城塞へ脱出。"
+  },
+  "A. 용병의 1차 전직 완료 후, 영혼의 성소(Sanctuary)에서 심연 5층 보스 격파 시 얻는 [공허의 파편]과 에테르를 봉헌하여 2차 상위 클래스로 영혼을 최종 승격시킬 수 있습니다.": {
+    "en": "A. After Tier 1 promotion, you can dedicate [Void Shards] from defeating 5F Abyss Boss and Ether at the Soul Sanctuary to finally ascend heroes to Tier 2 advanced classes.",
+    "ja": "A. 傭兵の1次転職完了後、魂の祭壇(Sanctuary)で深淵5層ボス撃破時に獲得する［虚無の欠片］とエーテルを奉納し、2次上位クラスへ魂を最終昇格させることができます。"
+  },
+  "A. 출정 시": {
+    "en": "A. Upon departure",
+    "ja": "A. 出陣時"
+  },
+  "A. 탐험 중 획득한 모든 전리품은": {
+    "en": "A. All loot acquired during exploration is",
+    "ja": "A. 探検中に獲得したすべての戦利品は"
+  },
+  "AI 일러스트 프롬프트 매트릭스": {
+    "en": "AI Illustration Prompt Matrix",
+    "ja": "AIイラストプロンプトマトリクス"
+  },
+  "ATK (공격력)": {
+    "en": "ATK",
+    "ja": "ATK (攻撃力)"
+  },
+  "ATK+10, MP+25, LUCK+2 [마법사 특화] 원소 완드": {
+    "en": "ATK+10, MP+25, LUCK+2 [Mage Specialized] Elemental Wand",
+    "ja": "ATK+10, MP+25, LUCK+2 [魔導士特化] 元素のワンド"
+  },
+  "ATK+11, HP+28, LUCK+3 [전사 특화] 처형도끼": {
+    "en": "ATK+11, HP+28, LUCK+3 [Warrior Specialized] Executioner's Axe",
+    "ja": "ATK+11, HP+28, LUCK+3 [戦士特化] 処刑の斧"
+  },
+  "ATK+11, SPD+2, LUCK+4 [도적 특화] 기습 단도": {
+    "en": "ATK+11, SPD+2, LUCK+4 [Rogue Specialized] Ambush Dagger",
+    "ja": "ATK+11, SPD+2, LUCK+4 [盗賊特化] 奇襲の短刀"
+  },
+  "ATK+13, DEF+7, HP+49, MP+35 [사제 특화] 기적 성홀": {
+    "en": "ATK+13, DEF+7, HP+49, MP+35 [Cleric Specialized] Miracle Scepter",
+    "ja": "ATK+13, DEF+7, HP+49, MP+35 [僧侶特化] 奇跡の聖笏"
+  }
+}

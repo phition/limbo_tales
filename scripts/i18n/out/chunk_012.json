@@ -1,0 +1,802 @@
+{
+  "그림자 습격": {
+    "en": "Shadow Raid",
+    "ja": "影の襲撃"
+  },
+  "그림자 악귀": {
+    "en": "Shadow Fiend",
+    "ja": "影の悪鬼"
+  },
+  "그림자 암살 비수": {
+    "en": "Shadow Assassin Dagger",
+    "ja": "影の暗殺短剣"
+  },
+  "그림자 암살 연대": {
+    "en": "Shadow Assassin Legion",
+    "ja": "影の暗殺連隊"
+  },
+  "그림자 암살계": {
+    "en": "Shadow Assassin Line",
+    "ja": "影の暗殺系"
+  },
+  "그림자 암살자": {
+    "en": "Shadow Assassin",
+    "ja": "影の暗殺者"
+  },
+  "그림자 암살자의 비수": {
+    "en": "Shadow Assassin's Dagger",
+    "ja": "影の暗殺者の短剣"
+  },
+  "그림자 여단": {
+    "en": "Shadow Brigade",
+    "ja": "影の旅団"
+  },
+  "그림자 위장술": {
+    "en": "Shadow Camouflage",
+    "ja": "影の偽装術"
+  },
+  "그림자 처형": {
+    "en": "Shadow Execution",
+    "ja": "影の処刑"
+  },
+  "그림자 처형 기습": {
+    "en": "Shadow Cull Ambush",
+    "ja": "影の処刑奇襲"
+  },
+  "그림자 처형 기습 (Shadow Cull)": {
+    "en": "Shadow Cull Ambush (Shadow Cull)",
+    "ja": "影の処刑奇襲 (Shadow Cull)"
+  },
+  "그림자 추적자. 전광석화 같은 행동속도(SPD)로 선제권을 잡고 적의 급소를 찔러 치명타와 출혈을 유발합니다.": {
+    "en": "Shadow Stalker. Seizes initiative with lightning SPD, striking enemy vitals to inflict critical hits and Bleed.",
+    "ja": "影の追跡者。電光石火の行動速度(SPD)で先手を取り、敵の急所を突いて会心と出血を誘発する。"
+  },
+  "그림자군주": {
+    "en": "Shadow Lord",
+    "ja": "影の君主"
+  },
+  "극단적 수호 방벽: 파티 방어력 +30%, 최대 체력 +15%, 받는 피해 12% 감소, 전열의 후열 엄호 30%": {
+    "en": "Extreme Guardian Barrier: Party DEF +30%, Max HP +15%, Damage Taken -12%, Front row covers Back row by 30%",
+    "ja": "極限の守護防壁：パーティ防御力+30%、最大HP+15%、被ダメージ12%減少、前衛の後衛援護30%"
+  },
+  "극저온 서리 룬": {
+    "en": "Cryo Frost Rune",
+    "ja": "極低温の霜ルーン"
+  },
+  "극창": {
+    "en": "Glaive",
+    "ja": "極槍"
+  },
+  "근접 추가 연격: 물리/암살/선봉 시너지(암영 연격, 그림자 연대) 활성 시 25% 확률로 추가 연격 발동 (참격 VFX)": {
+    "en": "Bonus Melee Combo: 25% chance to trigger an extra strike when Physical/Assassin/Vanguard synergy (Shadow Combo, Shadow Legion) is active (Slash VFX)",
+    "ja": "近接追加連撃：物理/暗殺/先鋒シナジー(暗影連撃、影の連隊)発動時、25%の確率で追加連撃発動 (斬撃VFX)"
+  },
+  "글로벌 밸런스": {
+    "en": "Global Balance",
+    "ja": "グローバルバランス"
+  },
+  "금이 간 세라믹 머그잔": {
+    "en": "Cracked Ceramic Mug",
+    "ja": "ひび割れたセラミックマグカップ"
+  },
+  "금이 간 스마트폰 액정": {
+    "en": "Cracked Smartphone Screen",
+    "ja": "ひび割れたスマートフォンの液晶"
+  },
+  "금화": {
+    "en": "Gold",
+    "ja": "金貨"
+  },
+  "금화, 식량, 목재, 광석, 에테르 등 기본 지급치로 복구": {
+    "en": "Restore Gold, Food, Wood, Ore, Ether, etc. to default values",
+    "ja": "金貨、食糧、木材、鉱石、エーテルなどの基本支給値に復旧"
+  },
+  "급소 노림수: 행운 +12, 치명타 피해 +18%, 속도 +8%, 중열 회피율 +10%": {
+    "en": "Vital Aim: LUCK +12, Crit DMG +18%, SPD +8%, Mid row Evasion +10%",
+    "ja": "急所狙い：幸運+12、会心ダメージ+18%、速度+8%、中衛回避率+10%"
+  },
+  "급소 사격": {
+    "en": "Vital Shot",
+    "ja": "急所射撃"
+  },
+  "급소 찌르기": {
+    "en": "Vital Strike",
+    "ja": "急所突き"
+  },
+  "급소 처형 낙인": {
+    "en": "Marked Execution",
+    "ja": "急所処刑の烙印"
+  },
+  "급소 처형 낙인 (Marked Execution)": {
+    "en": "Marked Execution (Marked Execution)",
+    "ja": "急所処刑の烙印 (Marked Execution)"
+  },
+  "급소를 기습하기 위해 정밀 연마된 투사의 비수.": {
+    "en": "A fighter's dagger finely sharpened to strike vital points by surprise.",
+    "ja": "急所を奇襲するために精密に研磨された闘士の短剣。"
+  },
+  "급증하는 마도 광석과 장비를 수용하기 위해 방주 중앙 병참고를 Lv.2 이상으로 증축하세요.": {
+    "en": "Expand the Central Logistics Depot to Lv.2 or higher to store increasing arcane ore and equipment.",
+    "ja": "急増する魔導鉱石と装備を収容するため、方舟中央兵站庫をLv.2以上に増築してください。"
+  },
+  "기능 실행 시 로컬 및 클라우드 세이브 데이터가 즉시 영구 삭제됩니다.": {
+    "en": "Executing this function will permanently delete all local and cloud save data immediately.",
+    "ja": "機能実行時、ローカルおよびクラウドのセーブデータが即座に永久削除されます。"
+  },
+  "기동 게릴라 전술: 행동 속도 +10%, 행운 +6, 중열 회피율 +25%": {
+    "en": "Mobile Guerrilla Tactics: SPD +10%, LUCK +6, Mid row Evasion +25%",
+    "ja": "機動ゲリラ戦術：行動速度+10%、幸運+6、中衛回避率+25%"
+  },
+  "기드온": {
+    "en": "Gideon",
+    "ja": "ギデオン"
+  },
+  "기록된 던전 탐험 로그가 없습니다.": {
+    "en": "No dungeon exploration logs recorded.",
+    "ja": "記録されたダンジョン探検ログがありません。"
+  },
+  "기록된 로그가 없습니다.": {
+    "en": "No logs recorded.",
+    "ja": "記録されたログがありません。"
+  },
+  "기록된 영지 로그가 없습니다.": {
+    "en": "No domain logs recorded.",
+    "ja": "記録された領地ログがありません。"
+  },
+  "기록된 전투 로그가 없습니다.": {
+    "en": "No combat logs recorded.",
+    "ja": "記録された戦闘ログがありません。"
+  },
+  "기민하게 서리 영역 이탈": {
+    "en": "Nimble Frost Zone Escape",
+    "ja": "俊敏に霜の領域から離脱"
+  },
+  "기병창": {
+    "en": "Cavalry Spear",
+    "ja": "騎兵槍"
+  },
+  "기본": {
+    "en": "Default",
+    "ja": "基本"
+  },
+  "기본 (0티어)": {
+    "en": "Basic (Tier 0)",
+    "ja": "基本 (Tier 0)"
+  },
+  "기본 (1,1,1,닻1)": {
+    "en": "Default (1,1,1,Anchor 1)",
+    "ja": "デフォルト (1,1,1,錨1)"
+  },
+  "기본 15% + 행운 보정 추가 점사 (공격력 45% 피해)": {
+    "en": "Base 15% + LUCK modifier bonus burst (45% ATK DMG)",
+    "ja": "基本15% + 幸運補正追加バースト (攻撃力45%ダメージ)"
+  },
+  "기본 15% 확률 + 영웅의 행운(🍀) 보정치": {
+    "en": "Base 15% chance + Hero's LUCK(🍀) modifier",
+    "ja": "基本15%確率 + 英雄の幸運(🍀)補正値"
+  },
+  "기본 15% 확률 + 행운(🍀) 보정으로 추가 점사(45% 피해) 격발": {
+    "en": "Trigger bonus burst (45% DMG) with base 15% chance + LUCK(🍀) modifier",
+    "ja": "基本15%確率 + 幸運(🍀)補正で追加バースト(45%ダメージ)発動"
+  },
+  "기본 2.0배속 & 2.5배속 고속 스위치": {
+    "en": "Default 2.0x & 2.5x High-Speed Switch",
+    "ja": "基本2.0倍速 & 2.5倍速 高速スイッチ"
+  },
+  "기본 공격": {
+    "en": "Basic Attack",
+    "ja": "通常攻撃"
+  },
+  "기본 공격 시": {
+    "en": "On Basic Attack",
+    "ja": "通常攻撃時"
+  },
+  "기본 공격 시 대상에게 1턴간 출혈 부여": {
+    "en": "Inflicts Bleed on target for 1 turn on Basic Attack",
+    "ja": "通常攻撃時、対象に1ターン出血を付与"
+  },
+  "기본 공격 시 대상에게 1턴간 출혈(Bleed) 상태이상을 부여하여 지속 피해 유발": {
+    "en": "Inflicts Bleed on target for 1 turn on Basic Attack, causing damage over time",
+    "ja": "通常攻撃時、対象に1ターン出血(Bleed)状態異常を付与して持続ダメージを誘発"
+  },
+  "기본 마총": {
+    "en": "Basic Magigun",
+    "ja": "基本魔銃"
+  },
+  "기본 물리 공격": {
+    "en": "Basic Physical Attack",
+    "ja": "基本物理攻撃"
+  },
+  "기본 물리/마법 타격": {
+    "en": "Basic Physical/Magic Strike",
+    "ja": "基本物理/魔法打撃"
+  },
+  "기본 실전": {
+    "en": "Basic Combat",
+    "ja": "基本実戦"
+  },
+  "기본 원자재": {
+    "en": "Basic Raw Materials",
+    "ja": "基本原材料"
+  },
+  "기본 직업": {
+    "en": "Basic Class",
+    "ja": "基本職業"
+  },
+  "기본 직업 스킬": {
+    "en": "Basic Class Skill",
+    "ja": "基本職業スキル"
+  },
+  "기본 클래스 (Tier 0)": {
+    "en": "Basic Class (Tier 0)",
+    "ja": "基本クラス (Tier 0)"
+  },
+  "기본 클래스 경험치 +30% 증폭 (전직 등급 상승 확률 +9%)": {
+    "en": "Base Class EXP +30% boost (Class change tier up chance +9%)",
+    "ja": "基本クラス経験値+30%増幅 (転職等級上昇確率+9%)"
+  },
+  "기본 클래스 경험치 +40% 증폭 (전직 등급 상승 확률 +12%)": {
+    "en": "Base Class EXP +40% boost (Class change tier up chance +12%)",
+    "ja": "基本クラス経験値+40%増幅 (転職等級上昇確率+12%)"
+  },
+  "기본 프리셋 (횃불 1, 식량 1, 곡괭이 1, 균열의 닻 1)": {
+    "en": "Default Preset (Torch 1, Food 1, Pickaxe 1, Rift Anchor 1)",
+    "ja": "デフォルトプリセット (松明 1, 食糧 1, つるはし 1, 亀裂の錨 1)"
+  },
+  "기본 효과: 영지 전 시설 생산량 +15%, 전투 획득 EXP +20%": {
+    "en": "Base Effect: All Domain Facilities Production +15%, Combat EXP +20%",
+    "ja": "基本効果：領地全施設生産量+15%、戦闘獲得EXP+20%"
+  },
+  "기본값 복원": {
+    "en": "Restore Defaults",
+    "ja": "初期値に戻す"
+  },
+  "기본기": {
+    "en": "Fundamentals",
+    "ja": "基本技"
+  },
+  "기사": {
+    "en": "Knight",
+    "ja": "騎士"
+  },
+  "기사, 성기사, 보병, 버서커": {
+    "en": "Knight, Paladin, Infantry, Berserker",
+    "ja": "騎士、聖騎士、歩兵、バーサーカー"
+  },
+  "기사, 성기사, 보병, 버서커, 검성": {
+    "en": "Knight, Paladin, Infantry, Berserker, Blade Lord",
+    "ja": "騎士、聖騎士、歩兵、バーサーカー、剣仙"
+  },
+  "기사, 성기사, 보병, 버서커, 사제": {
+    "en": "Knight, Paladin, Infantry, Berserker, Priest",
+    "ja": "騎士、聖騎士、歩兵、バーサーカー、司祭"
+  },
+  "기사·용병": {
+    "en": "Knight / Mercenary",
+    "ja": "騎士・傭兵"
+  },
+  "기사·용병 계열": {
+    "en": "Knight & Mercenary Line",
+    "ja": "騎士・傭兵系列"
+  },
+  "기사검": {
+    "en": "Knight Sword",
+    "ja": "騎士の剣"
+  },
+  "기사단 영웅 목걸이": {
+    "en": "Knight Order Hero Necklace",
+    "ja": "騎士団英雄のネックレス"
+  },
+  "기사단의 마도 비축물자와 거울의 순수 마력을 영지에 투입하여 성채의 전 자원과 금화를 비약적으로 증축합니다.": {
+    "en": "Inject Knight Order arcane reserves and pure mirror mana into the domain to drastically increase all citadel resources and gold.",
+    "ja": "騎士団の魔導備蓄物資と鏡の純粋な魔力を領地に投入し、城塞の全資源と金貨を飛躍的に増築します。"
+  },
+  "기사단장 베른하르트": {
+    "en": "Grandmaster Bernhardt",
+    "ja": "騎士団長ベルンハルト"
+  },
+  "기사단장 베른하르트의 의지가 담긴 8티어 신성 제식 성검 [단죄의 서약 검]을 결사대에 하사합니다.": {
+    "en": "Bestows the Tier 8 Holy Sacred Sword [Sword of Condemnation Oath] imbued with Grandmaster Bernhardt's will upon the legion.",
+    "ja": "騎士団長ベルンハルトの意志が宿るTier 8神聖儀礼聖剣【断罪の誓約剣】を決死隊に下賜します。"
+  },
+  "기사단장 휘장": {
+    "en": "Grandmaster Insignia",
+    "ja": "騎士団長の記章"
+  },
+  "기사단장의 맹세와 진실의 거울로 제련한 결전용 전설 중갑 [단죄 성역의 거울 판금갑]을 하사합니다.": {
+    "en": "Bestows the legendary battle heavy armor forged from the Grandmaster's oath and Mirror of Truth, [Mirror Plate Armor of Condemnation Sanctuary].",
+    "ja": "騎士団長の誓いと真実の鏡で製錬した決戦用伝説重甲【断罪聖域の鏡板金鎧】を下賜します。"
+  },
+  "기사단장의 비밀 서신": {
+    "en": "Grandmaster's Secret Letter",
+    "ja": "騎士団長の秘密書簡"
+  },
+  "기사회생": {
+    "en": "Resurrection",
+    "ja": "起死回生"
+  },
+  "기술 {0}": {
+    "en": "Skill {0}",
+    "ja": "スキル {0}"
+  },
+  "기술 정보:": {
+    "en": "Skill Info:",
+    "ja": "スキル情報:"
+  },
+  "기습": {
+    "en": "Ambush",
+    "ja": "奇襲"
+  },
+  "기습 본능: 첫 턴 공격 치명타율 100%.": {
+    "en": "Ambush Instinct: 100% Crit Rate on turn 1 attacks.",
+    "ja": "奇襲本能：1ターン目の攻撃会心率100%。"
+  },
+  "기습 회피율 +10%": {
+    "en": "Ambush Evasion +10%",
+    "ja": "奇襲回避率+10%"
+  },
+  "기억을 잃은 채 광맥을 헤매던 천재 연금술사 이안. 심연의 지식을 탐하다가 둘로 나뉜 그의 흩어진 자아와 현자의 비전을 하나로 통합하세요.": {
+    "en": "Ian, the genius alchemist who wandered the ore veins with lost memories. Unite his divided ego and sage visions, split while coveting abyssal knowledge.",
+    "ja": "記憶を失ったまま鉱脈を彷徨っていた天才錬金術師イアン。深淵の知識を貪り二つに分かれた彼の散らばった自我と賢者の秘伝を一つに統合せよ。"
+  },
+  "기여도 보상 획득": {
+    "en": "Claim Contribution Reward",
+    "ja": "貢献度報酬獲得"
+  },
+  "기적의 생체 재생 기술이 집약된 궁극의 생체 챔버. 7개 병상에서 1초마다 HP +5와 MP +4를 동시 회복시켜 즉시 전선으로 복귀시킵니다.": {
+    "en": "The ultimate bio-chamber condensing miraculous biological regeneration technology. Simultaneously restores HP +5 and MP +4 every second across 7 beds to immediately return heroes to the frontlines.",
+    "ja": "奇跡の生体再生技術が集約された究極の生体チャンバー。7つの病床で1秒ごとにHP+5とMP+4を同時回復し、即座に前線へ復帰させる。"
+  },
+  "기적의 성역": {
+    "en": "Miracle Sanctuary",
+    "ja": "奇跡の聖域"
+  },
+  "기적의 소생": {
+    "en": "Miraculous Revival",
+    "ja": "奇跡の蘇生"
+  },
+  "기적의 은총 성령 로드 +10": {
+    "en": "Miraculous Grace Holy Spirit Rod +10",
+    "ja": "奇跡の恩寵聖霊ロッド +10"
+  },
+  "기절": {
+    "en": "Stun",
+    "ja": "気絶"
+  },
+  "기절하거나 무력화된 적의 목을 베어 50%의 치명적 처형 피해를 입히고 시전자는 1턴간 회피율 60% 은신 상태 진입": {
+    "en": "Decapitates stunned or incapacitated enemies dealing 50% fatal execution damage; caster enters stealth with +60% Evasion for 1 turn",
+    "ja": "気絶または無力化した敵の首を刎ねて50%の致命的処刑ダメージを与え、術者は1ターン回避率60%の隠密状態に入る"
+  },
+  "기존 대원들의 따뜻한 배려로 [{0}]이(가) 마음의 벽을 허물고 빠르게 녹아듭니다!": {
+    "en": "Thanks to the warm consideration of existing members, [{0}] breaks down their walls and fits in quickly!",
+    "ja": "既存メンバーの温かい配慮により、[{0}]が心の壁を解きほぐして素早く打ち解けます！"
+  },
+  "기존 로그인 세션이 유지된 상태로 앱 실행 시 '지휘관 확인 중....' 오버레이 화면 연출을 제공하여 안정적이고 매끄러운 자동 로그인 진입 경험을 제공합니다.": {
+    "en": "When launching the app with an existing login session, displays a 'Verifying Commander...' overlay for a stable, seamless auto-login experience.",
+    "ja": "既存のログインセッションが維持された状態でアプリを起動すると、「指揮官確認中…」オーバーレイ画面を表示し、安定的でスムーズな自動ログイン体験を提供します。"
+  },
+  "기준": {
+    "en": "Base",
+    "ja": "基準"
+  },
+  "기증·등록": {
+    "en": "Donate & Register",
+    "ja": "寄贈・登録"
+  },
+  "기초 4대 채집 시설 완공 & 퀘스트 [보상 수령]": {
+    "en": "Complete 4 Basic Gathering Facilities & Quest [Claim Reward]",
+    "ja": "基礎4大採集施設の完成 ＆ クエスト【報酬受取】"
+  },
+  "기초 군수 보관 창고를 가동했습니다. 27종의 전 자원을 안전하게 보관하며 유지비가 전혀 들지 않는 영구 안전 인프라입니다.": {
+    "en": "Operationalized Basic Logistics Storage. Safely stores all 27 resource types with zero upkeep cost as a permanent safe infrastructure.",
+    "ja": "基礎軍需保管倉庫を稼働しました。全27種の資源を安全に保管し、維持費が一切かからない恒久安全インフラです。"
+  },
+  "기초 물리 타격": {
+    "en": "Basic Physical Strike",
+    "ja": "基礎物理打撃"
+  },
+  "기초 생산 시설 건설 및 레벨업, 시스템 1회 체험": {
+    "en": "Construct & level up basic production facilities, experience system once",
+    "ja": "基礎生産施設の建設およびレベルアップ、システム1回体験"
+  },
+  "기초 시설 자립 감면 (벌채소/시추소): Lv.5부터 레벨당 7%씩 골드 유지비가 점진 감면되어 Lv.10 최대 42% 감면.": {
+    "en": "Basic Facility Self-Sufficiency Discount (Lumber Camp/Quarry): From Lv.5, Gold upkeep decreases by 7% per level, up to 42% discount at Lv.10.",
+    "ja": "基礎施設自立減免 (伐採所/採掘所)：Lv.5からレベルごとに7%ずつゴールド維持費が漸減し、Lv.10で最大42%減免。"
+  },
+  "기초 에테르 증류 장치를 가동했습니다. 마도 시설과 영혼 승격에 필수적인 마나의 결정체 \"에테르\"를 60% 증산하여 안정적으로 정제합니다.": {
+    "en": "Activated Basic Ether Distillation Device. Increases production of \"Ether\", the crystallized mana essential for arcane facilities and soul ascension, by 60% for stable refining.",
+    "ja": "基礎エーテル蒸留装置を稼働しました。魔導施設と魂の昇格に不可欠なマナの結晶「エーテル」を60%増産し、安定して精製します。"
+  },
+  "기초 자원": {
+    "en": "Basic Resources",
+    "ja": "基礎資源"
+  },
+  "기초 전술 무예 마도서군": {
+    "en": "Basic Tactical Martial Grimoires",
+    "ja": "基礎戦術武芸魔導書群"
+  },
+  "기초 체력:": {
+    "en": "Base HP:",
+    "ja": "基礎体力:"
+  },
+  "기초적인 단조 기술로 제작된 [일반] 실전용": {
+    "en": "[Common] Combat Gear crafted with basic forging techniques",
+    "ja": "基礎的な鍛造技術で製作された【一般】実戦用"
+  },
+  "기타 전직 및 특수 역할군": {
+    "en": "Other Class Changes & Special Roles",
+    "ja": "その他の転職および特殊役割群"
+  },
+  "기타 특수 직업": {
+    "en": "Other Special Classes",
+    "ja": "その他特殊職業"
+  },
+  "긴급 이송": {
+    "en": "Emergency Transport",
+    "ja": "緊急搬送"
+  },
+  "긴급 이송 시간 2턴 단축(2턴) & 성채 귀환 시 배낭 물품 분실 확률 차단(손실 0%)": {
+    "en": "Emergency transport time reduced by 2 turns (2 turns) & eliminates backpack item loss when returning to citadel (0% loss)",
+    "ja": "緊急搬送時間を2ターン短縮(2ターン) ＆ 城塞帰還時のバックパックアイテム紛失確率を遮断(損失0%)"
+  },
+  "깨끗한 약초와 가죽으로 만든 멸균 붕대입니다. 야영 시 소지하고 있으면 파티원들의 출혈·중독·화상·빙결·기절·약화·실명 등 모든 해로운 디버프 상태이상을 즉시 치료합니다. 미사용 잔여분은 성채 귀환 시 영구 보존됩니다.": {
+    "en": "Sterile bandages made from clean herbs and leather. When held during camping, immediately cures all harmful debuffs including Bleed, Poison, Burn, Freeze, Stun, Weaken, and Blind from party members. Unused bandages are permanently preserved upon return to the citadel.",
+    "ja": "清潔な薬草と革で作られた滅菌包帯。野営時に所持していると、パーティメンバーの出血・中毒・火傷・凍結・気絶・弱体化・盲目など、すべての有害なデバフ状態異常を即座に治療する。未使用分は城塞帰還時に永久保存される。"
+  },
+  "깨끗한 약초와 가죽으로 만든 붕대입니다. 야영 시 소지하고 있으면 파티원들의 출혈·중독·화상 등 모든 해로운 디버프 상태이상을 즉시 정화합니다.": {
+    "en": "Bandages made from clean herbs and leather. When held during camping, immediately purges all harmful debuffs including Bleed, Poison, Burn, etc. from party members.",
+    "ja": "清潔な薬草と革で作られた包帯。野営時に所持していると、パーティメンバーの出血・中毒・火傷などすべての有害なデバフ状態異常を即座に浄化する。"
+  },
+  "끝없는 어둠과 공허의 흑무가 지상을 삼킨 지 오랜 세월... 모든 빛이 사그라든 세상에서 고대의 에테르로 부유하는 최후의 안식처,": {
+    "en": "Eons have passed since endless darkness and void mist swallowed the surface... In a world where all light has faded, the final sanctuary floats upon ancient ether,",
+    "ja": "果てしない暗闇と虚空の黒霧が地上を飲み込んで久しい歳月…すべての光が消え去った世界で、古代のエーテルによって浮遊する最後の安息所、"
+  },
+  "끝없는 억겁의 지옥 무간도. 태초의 공허를 베어내면 비로소 인류의 방주는 영원한 여명의 빛으로 비상하리라.": {
+    "en": "The endless hell of kalpas, Avici. Only when the primordial void is severed shall humanity's Ark soar into the eternal dawn light.",
+    "ja": "果てしない億劫の地獄、無間道。太初の虚空を切り裂いてこそ、人類の方舟は永遠なる黎明の光へと飛翔するだろう。"
+  },
+  "끝없는 투쟁심을 불태우는 붉은 마도 목걸이": {
+    "en": "A crimson arcane necklace burning with endless fighting spirit",
+    "ja": "果てしない闘争心を燃やす紅の魔導ネックレス"
+  },
+  "끝없이 피가 솟아나는 저주받은 진홍의 성배입니다. 6티어 보스 고유 장비를 단조합니다.": {
+    "en": "A cursed crimson holy grail endlessly gushing blood. Forges Tier 6 boss unique equipment.",
+    "ja": "果てしなく血が湧き出る呪われた真紅の聖杯。Tier 6ボスの固有装備を鍛造する。"
+  },
+  "끝이 보이지 않는 허공에 수만 개의 시간선이 꽈배기처럼 꼬여 있습니다. 한 걸음 내딛을 때마다 시공이 무너집니다.": {
+    "en": "Tens of thousands of timelines are twisted like braids into the endless void. With every step forward, spacetime fractures.",
+    "ja": "果てが見えない虚空に数万のタイムラインが螺旋のようにねじれている。一歩踏み出すたびに時空が崩壊する。"
+  },
+  "나가기 (보상 포기)": {
+    "en": "Leave (Forfeit Rewards)",
+    "ja": "退出 (報酬放棄)"
+  },
+  "나노미터 단위의 실리콘 회로 속에 인류의 모든 철학과 예술, 유전체 정보가 암호화되어 잠들어 있는 초소형 양자 코어. 그리고 지극히 아날로그적인 무거운 황동 열쇠 하나. 최첨단 AI와 투박한 열쇠의 조합은 구세계 인류가 남긴 가장 깊은 역설이다. 모든 전자 네트워크가 붕괴할 것을 예견한 그들은 가장 깊은 지하 화강암반 속에 타임캡슐 벙커를 짓고 물리적인 열쇠로 걸어 잠갔다. \"우리는 실패했으나 문명은 죽지 않았다. 이 열쇠를 쥔 자여, 심연의 바닥에서 인류의 두 번째 새벽을 열어라.\"": {
+    "en": "A microscopic quantum core where all of humanity's philosophy, art, and genomic data sleep encrypted within nanometer silicon circuits. Along with it, a heavy, utterly analog brass key. The pairing of cutting-edge AI and a crude key is the deepest paradox left by old-world humanity. Foreseeing the collapse of all electronic networks, they built a time-capsule bunker deep within subterranean granite bedrock and locked it with a physical key. \"We failed, but civilization did not perish. Bearer of this key, unlock humanity's second dawn from the bottom of the Abyss.\"",
+    "ja": "ナノメートル単位のシリコン回路の中に人類のすべての哲学と芸術、ゲノム情報が暗号化されて眠る超小型量子コア。そして極めてアナログで重厚な真鍮の鍵が一つ。最先端AIと武骨な鍵の組み合わせは、旧世界の人類が残した最も深遠な逆説である。すべての電子ネットワークの崩壊を予見した彼らは、最も深い地下の花崗岩盤の中にタイムカプセルバンカーを築き、物理的な鍵で施錠した。「我らは滅びたが文明は死なず。この鍵を握る者よ、深淵の底から人類の第二の夜明けを切り拓け。」"
+  },
+  "나노미터 실리콘 회로 속에 인류의 철학, 예술, 유전체 정보가 암호화되어 잠들어 있는 초소형 양자 프로세서입니다.": {
+    "en": "A microscopic quantum processor where humanity's philosophy, art, and genomic data sleep encrypted within nanometer silicon circuits.",
+    "ja": "ナノメートルシリコン回路の中に人類の哲学、芸術、ゲノム情報が暗号化されて眠る超小型量子プロセッサ。"
+  },
+  "나의 순위: #14 (": {
+    "en": "My Rank: #14 (",
+    "ja": "私の順位: #14 ("
+  },
+  "낙뢰": {
+    "en": "Lightning Strike",
+    "ja": "落雷"
+  },
+  "낙석 구간을 재빨리 빠져나갔습니다.": {
+    "en": "Quickly escaped the falling rock zone.",
+    "ja": "落石区域を素早く脱出した。"
+  },
+  "낙석 충격 트랩": {
+    "en": "Rockfall Impact Trap",
+    "ja": "落石衝撃トラップ"
+  },
+  "낙석을 가볍게 회피": {
+    "en": "Lightly evade rockfall",
+    "ja": "落石を軽快に回避"
+  },
+  "낙인": {
+    "en": "Brand",
+    "ja": "烙印"
+  },
+  "난공불락의 불멸성채": {
+    "en": "Impregnable Immortal Citadel",
+    "ja": "難攻不落の不滅城塞"
+  },
+  "난공불락의 성벽": {
+    "en": "Impregnable Ramparts",
+    "ja": "難攻不落の城壁"
+  },
+  "난무": {
+    "en": "Flurry",
+    "ja": "乱舞"
+  },
+  "날렵한": {
+    "en": "Nimble",
+    "ja": "素早い"
+  },
+  "날카로운": {
+    "en": "Sharp",
+    "ja": "鋭利な"
+  },
+  "낡은 사제 로브": {
+    "en": "Worn Priest Robe",
+    "ja": "古びた司祭のローブ"
+  },
+  "낡은 척후병의 군번줄": {
+    "en": "Worn Scout Dog Tag",
+    "ja": "古びた斥候の認識票"
+  },
+  "남은 온기: {0}분": {
+    "en": "Remaining Warmth: {0} min",
+    "ja": "残りの温もり: {0}分"
+  },
+  "남은 턴:": {
+    "en": "Remaining Turns:",
+    "ja": "残りターン:"
+  },
+  "납골당 묘지 밴시": {
+    "en": "Ossuary Graveyard Banshee",
+    "ja": "納骨堂の墓地バンシー"
+  },
+  "납골당의 묘비를 떠도는 원혼. 차가운 비탄의 절규로 대상 파티의 마나를 메마르게 한다.": {
+    "en": "A vengeful spirit haunting the ossuary tombstones. Drains party mana with chilling cries of sorrow.",
+    "ja": "納骨堂の墓標を彷徨う怨魂。冷酷な悲嘆の絶叫で対象パーティのマナを枯渇させる。"
+  },
+  "납골당의 무수한 원혼을 통솔하는 망령들의 군주. 영혼을 베어넘기는 저주받은 대검을 휘두른다.": {
+    "en": "Lord of phantoms commanding countless souls of the ossuary. Wields a cursed greatsword that severs spirits.",
+    "ja": "納骨堂の無数の怨魂を統率する亡霊たちの君主。魂を切り裂く呪われし大剣を振るう。"
+  },
+  "낫": {
+    "en": "Scythe",
+    "ja": "大鎌"
+  },
+  "내 영지 보호막": {
+    "en": "My Domain Barrier",
+    "ja": "自領地シールド"
+  },
+  "내가 엄호하마!": {
+    "en": "I've got your back!",
+    "ja": "俺が援護する！"
+  },
+  "냉각": {
+    "en": "Chilled",
+    "ja": "冷却"
+  },
+  "냉각(동상)은 대상의 행동을 1턴간 완전히 정지시키는 강력한 CC기이나, 빙결된 외피가 대상을 보호하여 방어력이 +40% 상승합니다.": {
+    "en": "Chilled (Frostbite) is a potent CC that completely halts target action for 1 turn, but the frozen outer layer protects them, granting DEF +40%.",
+    "ja": "冷却(凍傷)は対象の行動を1ターン完全に停止させる強力なCCだが、氷結した外皮が対象を保護して防御力が+40%上昇する。"
+  },
+  "냉기": {
+    "en": "Frost",
+    "ja": "冷気"
+  },
+  "냉기에 노출되어 신체 동결": {
+    "en": "Body frozen due to exposure to frost",
+    "ja": "冷気に晒され肉体凍結"
+  },
+  "너와 함께 싸울 땐 등을 맡겨도 안심이 되니까. 하하!": {
+    "en": "When fighting alongside you, I know my back is safe. Haha!",
+    "ja": "お前と共に戦う時は背中を預けても安心できる。ハハッ！"
+  },
+  "넉백 밀림": {
+    "en": "Knockback",
+    "ja": "ノックバック後退"
+  },
+  "네메시스": {
+    "en": "Nemesis",
+    "ja": "ネメシス"
+  },
+  "네메시스 기여도 보상을 확대하고 명예 상점 4단계에서 고급 영웅 장신구 [투사의 용맹 목걸이]를 해금합니다.": {
+    "en": "Expands Nemesis contribution rewards and unlocks high-tier hero accessory [Fighter's Valor Necklace] in Honor Shop Tier 4.",
+    "ja": "ネメシス貢献度報酬を拡大し、名誉商店段階4で高級英雄装飾品【闘士の勇猛ネックレス】を解放します。"
+  },
+  "네메시스 종말 성핵": {
+    "en": "Nemesis Doomsday Core",
+    "ja": "ネメシス終末の星核"
+  },
+  "네메시스 토벌전 정산": {
+    "en": "Nemesis Subjugation Settlement",
+    "ja": "ネメシス討伐戦精算"
+  },
+  "네메시스에게 누적 피해를 입혀 단계별 특별 무구와 마도석을 획득하십시오.": {
+    "en": "Inflict cumulative damage to Nemesis to obtain tiered special armaments and runestones.",
+    "ja": "ネメシスに累積ダメージを与え、段階ごとの特別武具と魔導石を獲得してください。"
+  },
+  "네메시스의 심장에서 추출한 에테르 성핵. 차원 왜곡 방벽과 파괴력을 동시에 제공합니다.": {
+    "en": "An ether core extracted from Nemesis's heart. Grants both dimensional warp barriers and destructive power.",
+    "ja": "ネメシスの心臓から抽出したエーテル星核。次元歪曲障壁と破壊力を同時に提供する。"
+  },
+  "네메시스의 종말 절멸기 방출! 파티 전원 궤멸 피해!": {
+    "en": "Nemesis unleashes Doomsday Annihilation! Entire party suffers catastrophic damage!",
+    "ja": "ネメシスの終末絶滅技が放出！パーティ全員に壊滅的ダメージ！"
+  },
+  "네오시안": {
+    "en": "Neosian",
+    "ja": "ネオシアン"
+  },
+  "노비스(N)": {
+    "en": "Novice (N)",
+    "ja": "ノービス(N)"
+  },
+  "노인챈트": {
+    "en": "No Enchant",
+    "ja": "エンチャントなし"
+  },
+  "녹슨 만능열쇠": {
+    "en": "Rusted Skeleton Key",
+    "ja": "錆びた万能鍵"
+  },
+  "녹슨 만능열쇠 촉매 제작": {
+    "en": "Craft Rusted Skeleton Key Catalyst",
+    "ja": "錆びた万能鍵の触媒製作"
+  },
+  "녹슨 스테인리스 텀블러": {
+    "en": "Rusted Stainless Tumbler",
+    "ja": "錆びたステンレスタンブラー"
+  },
+  "녹슨 와인 오프너": {
+    "en": "Rusted Wine Opener",
+    "ja": "錆びたワインオープナー"
+  },
+  "녹슨 철조각": {
+    "en": "Rusted Iron Scrap",
+    "ja": "錆びた鉄片"
+  },
+  "녹아내린 카메라 렌즈": {
+    "en": "Melted Camera Lens",
+    "ja": "溶け落ちたカメラレンズ"
+  },
+  "높은 체력과 도발, 전체 신성 보호막, 2차 전직 시 [영원의 성역] 무적 결계를 구사합니다.": {
+    "en": "Boasts high HP, taunt, all-party holy shield, and uses [Sanctuary of Eternity] invulnerability barrier upon 2nd class change.",
+    "ja": "高いHPと挑発、全体神聖シールド、2次転職時には【永遠の聖域】無敵結界を駆使する。"
+  },
+  "높은 행동속도와 100% 치명타 급습, 적 전체 연막탄 및 암영 난무로 보스를 순식간에 암살합니다.": {
+    "en": "Assassinates bosses in an instant with high SPD, 100% crit ambushes, all-enemy smoke grenades, and shadow flurries.",
+    "ja": "高い行動速度と100%会心急襲、敵全体への煙幕弾および暗影乱舞でボスを一瞬で暗殺する。"
+  },
+  "뇌": {
+    "en": "Brain",
+    "ja": "脳"
+  },
+  "뇌격": {
+    "en": "Thunderclap",
+    "ja": "雷撃"
+  },
+  "뇌광의": {
+    "en": "Lightning",
+    "ja": "雷光の"
+  },
+  "뇌전": {
+    "en": "Thunder",
+    "ja": "雷電"
+  },
+  "뇌전의": {
+    "en": "Thunderous",
+    "ja": "雷電の"
+  },
+  "뇌전의 낙뢰검": {
+    "en": "Lightning Strike Sword",
+    "ja": "雷電の落雷剣"
+  },
+  "뇌폭 폭풍": {
+    "en": "Thunder Tempest",
+    "ja": "雷爆嵐"
+  },
+  "뇌폭 폭풍 (Thunder Tempest)": {
+    "en": "Thunder Tempest (Thunder Tempest)",
+    "ja": "雷爆嵐 (Thunder Tempest)"
+  },
+  "누적 150만 피해 달성 — 에픽 [네메시스 종말 성핵 (+5)] + 인장 1,500개": {
+    "en": "Accumulate 1.5M DMG — Epic [Nemesis Doomsday Core (+5)] + 1,500 Seals",
+    "ja": "累積150万ダメージ達成 — エピック【ネメシス終末の星核 (+5)】 + 印章1,500個"
+  },
+  "누적 15만 피해 달성 — 투사의 인장 350개 + 순수 접두 마도석 2개": {
+    "en": "Accumulate 150k DMG — 350 Fighter's Seals + 2 Pure Prefix Runestones",
+    "ja": "累積15万ダメージ達成 — 闘士の印章350個 + 純粋接頭魔導石2個"
+  },
+  "누적 300만 피해 달성 — 전설 [패왕 네메시스 파멸 관 (+7)] + 인장 3,000개": {
+    "en": "Accumulate 3M DMG — Legendary [Overlord Nemesis Ruin Crown (+7)] + 3,000 Seals",
+    "ja": "累積300万ダメージ達成 — 伝説【覇王ネメシス破滅冠 (+7)】 + 印章3,000個"
+  },
+  "누적 35만 피해 달성 — 희귀 [시공의 왜곡 펜던트 (+3)] + 인장 600개": {
+    "en": "Accumulate 350k DMG — Rare [Spacetime Warp Pendant (+3)] + 600 Seals",
+    "ja": "累積35万ダメージ達成 — 希少【時空の歪曲ペンダント (+3)】 + 印章600個"
+  },
+  "누적 5만 피해 달성 — 투사의 인장 150개 + 에테르 60개": {
+    "en": "Accumulate 50k DMG — 150 Fighter's Seals + 60 Ether",
+    "ja": "累積5万ダメージ達成 — 闘士の印章150個 + エーテル60個"
+  },
+  "누적 75만 피해 달성 — 투사의 인장 900개 + 순수 접미 마도석 3개": {
+    "en": "Accumulate 750k DMG — 900 Fighter's Seals + 3 Pure Suffix Runestones",
+    "ja": "累積75万ダメージ達成 — 闘士の印章900個 + 純粋接尾魔導石3個"
+  },
+  "누적 총 피해량": {
+    "en": "Total Cumulative Damage",
+    "ja": "累積総ダメージ"
+  },
+  "누적 출혈 즉시 폭발 & 공격력 25% 약화": {
+    "en": "Instantly detonates accumulated Bleed & weakens ATK by 25%",
+    "ja": "累積出血を即座に起爆 ＆ 攻撃力25%弱体化"
+  },
+  "누적 피해 공유 & 기여도 랭킹: 각 지휘관 원정대의 도전 피해량이 실시간 집계되어 토벌 성공 시 기여도에 따라 막대한 전설 보상 지급": {
+    "en": "Shared Cumulative Damage & Contribution Ranking: Challenge damage from each commander expedition is tallied in real-time, granting immense legendary rewards upon successful subjugation based on contribution",
+    "ja": "累積ダメージ共有 ＆ 貢献度ランキング：各指揮官の遠征隊の挑戦ダメージがリアルタイムで集計され、討伐成功時に貢献度に応じて莫大な伝説報酬を支給"
+  },
+  "누적:": {
+    "en": "Cumulative:",
+    "ja": "累積:"
+  },
+  "눈보라": {
+    "en": "Blizzard",
+    "ja": "吹雪"
+  },
+  "눈을 깜빡이는 찰나, 차가운 칼날이 심장을 꿰뚫는다.": {
+    "en": "In the blink of an eye, a cold blade pierces the heart.",
+    "ja": "まばたきする刹那、冷たい刃が心臓を貫く。"
+  },
+  "는 연료가 다해 가쁜 숨을 몰아쉬고 있으며, 생존자들은 굶주림과 추위 속에 새로운 희망을 기다립니다. 최고 권한을 인계받은": {
+    "en": " is running out of fuel and gasping for breath, while survivors await new hope amidst hunger and cold. Having inherited supreme authority,",
+    "ja": "は燃料が尽きて息も絶え絶えであり、生存者たちは飢えと寒さの中で新たな希望を待っている。最高権限を引き継いだ"
+  },
+  "능력치 강화 버프": {
+    "en": "Stat Boost Buff",
+    "ja": "能力値強化バフ"
+  },
+  "능력치 약화 디버프": {
+    "en": "Stat Weaken Debuff",
+    "ja": "能力値弱体化デバフ"
+  },
+  "다단계 정제 증류관을 개량하여 대기 중의 에테르 기류를 더욱 높은 밀도로 압축하고 순도를 높였습니다.": {
+    "en": "Upgraded multistage refining distillation pipes to compress atmospheric ether currents into higher density and purity.",
+    "ja": "多段階精製蒸留管を改良し、大気中のエーテル気流をより高密度に圧縮して純度を高めました。"
+  },
+  "다른 두 대원은 유대가 깊고 본인만 고립되어 모든 능력치가 10% 감소합니다.": {
+    "en": "The other two members share a deep bond while this hero is isolated, reducing all stats by 10%.",
+    "ja": "他の2人の隊員は絆が深く自身のみ孤立しているため、すべての能力値が10%減少します。"
+  },
+  "다른 영령에게 공물을 바치면 이전 가호는 즉시 해제되고 새로운 가호로 교체됩니다.": {
+    "en": "Offering tribute to another heroic spirit immediately dispels the previous blessing and replaces it with a new one.",
+    "ja": "他の英霊に供物を捧げると以前の加護は即座に解除され、新たな加護に置き換わります。"
+  },
+  "다른 용병": {
+    "en": "Other Mercenary",
+    "ja": "他の傭兵"
+  },
+  "다른 지휘관 계정으로 로그인": {
+    "en": "Log in with Another Commander Account",
+    "ja": "別の指揮官アカウントでログイン"
+  },
+  "다른 차원의 방주 원정대와 연결되는 시공간 앵커 관문이 닫혀 있습니다.": {
+    "en": "The spacetime anchor gateway connecting to Ark expeditions in other dimensions is closed.",
+    "ja": "異次元の方舟遠征隊と繋がる時空間アンカー関門が閉じています。"
+  },
+  "다른 키워드나 명칭을 입력해 보세요.": {
+    "en": "Try entering a different keyword or name.",
+    "ja": "別のキーワードや名称を入力してください。"
+  },
+  "다리우스": {
+    "en": "Darius",
+    "ja": "ダリウス"
+  },
+  "다양한 직업 조합, 진형 배치, 전직 단계에 따라 강력한 파티 패시브가 활성화됩니다.": {
+    "en": "Activates powerful party passives depending on class combinations, formation placement, and promotion stages.",
+    "ja": "多彩な職業の組み合わせ、陣形配置、転職段階に応じて強力なパーティパッシブが発動します。"
+  },
+  "다양한 클래스": {
+    "en": "Diverse Classes",
+    "ja": "多様なクラス"
+  },
+  "다음 1회 원정": {
+    "en": "Next 1 Expedition",
+    "ja": "次の遠征1回"
+  },
+  "다음 레벨 (Lv.": {
+    "en": "Next Level (Lv.",
+    "ja": "次のレベル (Lv."
+  }
+}

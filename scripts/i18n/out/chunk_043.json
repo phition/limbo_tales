@@ -1,0 +1,746 @@
+{
+  "🛡️ [안전 파밍] 시간 왜곡 봉인 (위험도 -25 감소 / 야영 쿨다운 즉시 리셋 / HP/MP 40% 회복)": {
+    "en": "🛡️ [Safe Farming] Seal time distortion (Hazard -25 / Camp cooldown instantly reset / 40% HP/MP recovered)",
+    "ja": "🛡️ [安全ファーミング] 時間歪曲封印 (危険度-25減少 / 野営クールダウン即時リセット / HP/MP 40%回復)"
+  },
+  "🛡️ [안전 파밍] 안전선 내에서 유실물만 인양 (위험도 -20 감소 / 🧶 실크 ×8, ✨ 에테르 +30)": {
+    "en": "🛡️ [Safe Farming] Salvage lost items within safety line (Hazard -20 / 🧶 Silk ×8, ✨ Ether +30)",
+    "ja": "🛡️ [安全ファーミング] 安全線内で遺失物のみ回収 (危険度-20減少 / 🧶 絹 ×8、✨ エーテル+30)"
+  },
+  "🛡️ [안전 파밍] 에테르 화염으로 안전 소각 (위험도 -20 / 🧶 실크 ×10, 🌿 약초 ×8 수급)": {
+    "en": "🛡️ [Safe Farming] Safely incinerate with Ether flame (Hazard -20 / 🧶 Silk ×10, 🌿 Herbs ×8 obtained)",
+    "ja": "🛡️ [安全ファーミング] エーテル火炎で安全焼却 (危険度-20 / 🧶 絹 ×10、🌿 薬草 ×8獲得)"
+  },
+  "🛡️ [안전 파밍] 외곽의 안정 광맥만 정밀 채굴 (위험도 -20 감소 / ⚙️ 철광석 ×15, 🪨 석탄 ×10, ✨ 에테르 +40)": {
+    "en": "🛡️ [Safe Farming] Precisely mine stable outer veins only (Hazard -20 / ⚙️ Iron Ore ×15, 🪨 Coal ×10, ✨ Ether +40)",
+    "ja": "🛡️ [安全ファーミング] 外周の安定鉱脈のみ精密採掘 (危険度-20減少 / ⚙️ 鉄鉱石 ×15、🪨 石炭 ×10、✨ エーテル+40)"
+  },
+  "🛡️ [안전 파밍] 우회 통로로 폐기 무기 수습 (위험도 -20 감소 / ⚙️ 철광석 ×15, 🪙 150G)": {
+    "en": "🛡️ [Safe Farming] Recover discarded weapons via bypass (Hazard -20 / ⚙️ Iron Ore ×15, 🪙 150G)",
+    "ja": "🛡️ [安全ファーミング] 迂回路で廃棄武器を回収 (危険度-20減少 / ⚙️ 鉄鉱石 ×15、🪙 150G)"
+  },
+  "🛡️ [안전 파밍] 원혼들이 성불하며 납골당이 평온을 되찾았습니다. (위험도 -20 감소, 뼈 ×8, 에테르 +30, 20% 보호막)": {
+    "en": "🛡️ [Safe Farming] As spirits passed on, the Ossuary regained peace. (Hazard -20, Bones ×8, Ether +30, 20% shield)",
+    "ja": "🛡️ [安全ファーミング] 怨霊たちが成仏し納骨堂が平穏を取り戻しました。(危険度-20減少、骨 ×8、エーテル+30、20%シールド)"
+  },
+  "🛡️ [안전 파밍] 유서를 정독하고 전열 재정비 (위험도 -30 / 최종전 1회 사망 완전 방지 불굴 가호)": {
+    "en": "🛡️ [Safe Farming] Study will and reorganize front row (Hazard -30 / Indomitable protection completely preventing 1 death in final battle)",
+    "ja": "🛡️ [安全ファーミング] 遺書を精読し前衛を再整備 (危険度-30 / 最終戦で1回死亡完全防止の不屈の加護)"
+  },
+  "🛡️ [안전 파밍] 은밀하게 유해 수습 (위험도 -15 감소 / 붕대 ×2, 골드 15G 수습)": {
+    "en": "🛡️ [Safe Farming] Secretly recover remains (Hazard -15 / Bandages ×2, Gold 15G collected)",
+    "ja": "🛡️ [安全ファーミング] 隠密に遺骨を収容 (危険度-15減少 / 包帯 ×2、ゴールド 15G収容)"
+  },
+  "🛡️ [안전 파밍] 은밀히 족쇄를 풀고 치료 (위험도 -25 / 8층 모든 함정 해제 암호 획득)": {
+    "en": "🛡️ [Safe Farming] Covertly unbind shackles and treat (Hazard -25 / Acquired Floor 8 all-trap disarm code)",
+    "ja": "🛡️ [安全ファーミング] 密かに足枷を外し治療 (危険度-25 / 8層の全罠解除暗号獲得)"
+  },
+  "🛡️ [안전 파밍] 저울이 완벽한 수평을 이루며 사신의 절대 가호를 얻었습니다. (위험도 -25 감소, 사망 방지 방벽)": {
+    "en": "🛡️ [Safe Farming] Scales reached perfect balance, granting Grim Reaper's absolute protection. (Hazard -25, death-prevention barrier)",
+    "ja": "🛡️ [安全ファーミング] 天秤が完全に釣り合い死神の絶対的加護を得ました。(危険度-25減少、死亡防止バリア)"
+  },
+  "🛡️ [안전 파밍] 전리품 공양 (골드 100G 소모 / 위험도 -25 / 사신의 가호: 사망 1회 방지 방벽)": {
+    "en": "🛡️ [Safe Farming] Offer loot (Costs 100G Gold / Hazard -25 / Grim Reaper Protection: 1-time death prevention barrier)",
+    "ja": "🛡️ [安全ファーミング] 戦利品奉納 (ゴールド 100G消費 / 危険度-25 / 死神の加護: 死亡1回防止バリア)"
+  },
+  "🛡️ [안전 파밍] 정화의 성수로 심장의 맥동을 억제하여 최종 군주의 힘을 크게 약화시켰습니다! (위험도 -35 대폭 감소, 보스 약화)": {
+    "en": "🛡️ [Safe Farming] Suppressed heart pulsations with Purifying Holy Water, greatly weakening the final Lord's power! (Hazard -35, Boss weakened)",
+    "ja": "🛡️ [安全ファーミング] 浄化の聖水で心臓の脈動を抑え、最終君主の力を大幅に弱体化させました！(危険度-35大幅減少、ボス弱体化)"
+  },
+  "🛡️ [안전 파밍] 조용히 성기사를 구출하여 8층 성채의 전 함정 위치를 파악했습니다! (위험도 -25 감소)": {
+    "en": "🛡️ [Safe Farming] Quietly rescued the paladin, identifying all trap positions in the Floor 8 Citadel! (Hazard -25)",
+    "ja": "🛡️ [安全ファーミング] 静かに聖騎士を救出し、8層城塞の全罠の位置を把握しました！(危険度-25減少)"
+  },
+  "🛡️ [안전 파밍] 차원의 닻으로 시공간 안정화 (위험도 -500 감소 / 전리품 분실률 0% 보존)": {
+    "en": "🛡️ [Safe Farming] Stabilize spacetime with Dimensional Anchor (Hazard -500 / 0% loot loss rate preserved)",
+    "ja": "🛡️ [安全ファーミング] 次元の錨で時空間安定化 (危険度-500減少 / 戦利品紛失率0%保存)"
+  },
+  "🛡️ [안전 파밍] 충격을 최소화하며 안전하게 광석을 수급했습니다. (위험도 -20 감소, 철광석 ×15, 석탄 ×10, 에테르 +40)": {
+    "en": "🛡️ [Safe Farming] Safely mined ore with minimal shock. (Hazard -20, Iron Ore ×15, Coal ×10, Ether +40)",
+    "ja": "🛡️ [安全ファーミング] 衝撃を最小限に抑え安全に鉱石を獲得しました。(危険度-20減少、鉄鉱石 ×15、石炭 ×10、エーテル+40)"
+  },
+  "🛡️ [안전 파밍] 환영의 미궁을 차분히 진정시켜 9층 안전 파밍 구간을 확보했습니다. (위험도 -30 감소, 전원 마나 완치)": {
+    "en": "🛡️ [Safe Farming] Calmly soothed Labyrinth of Illusions, securing Floor 9 safe farming area. (Hazard -30, full party MP restored)",
+    "ja": "🛡️ [安全ファーミング] 幻影の迷宮を冷静に鎮め、9層安全ファーミング区間を確保しました。(危険度-30減少、全員MP全快)"
+  },
+  "🛡️ [안전 파밍] 횃불로 이끼 소각 정화 (위험도 -15 감소 / 심연 약초 ×5, 에테르 +15)": {
+    "en": "🛡️ [Safe Farming] Incinerate moss with torch (Hazard -15 / Abyssal Herbs ×5, Ether +15)",
+    "ja": "🛡️ [安全ファーミング] 松明で苔を焼却浄化 (危険度-15減少 / 深淵薬草 ×5、エーテル+15)"
+  },
+  "🛡️ [영지 방어 성공] 『{0}』의 침공을 5인 방어 부대가 완벽히 격퇴하고 영지 자원을 사수했습니다!": {
+    "en": "🛡️ [Territory Defense Success] 5-man defense squad completely repelled 『{0}』's invasion and safeguarded territory resources!",
+    "ja": "🛡️ [領地防衛成功] 『{0}』の侵攻を5人防衛部隊が完全に撃退し、領地資源を死守しました！"
+  },
+  "🛡️ [원호 보호막] {0}의 엄호로 파티 전원 보호막 +{1} 부여!": {
+    "en": "🛡️ [Assist Shield] {0}'s cover granted +{1} shield to all party members!",
+    "ja": "🛡️ [援護シールド] {0}の援護によりパーティ全員にシールド +{1}付与！"
+  },
+  "🛡️ [저항(RESIST)] {0}이(가) 높은 행운(🍀{1})으로 [{2}] 효과를 완전히 저항해냈습니다!": {
+    "en": "🛡️ [RESIST] {0} completely resisted [{2}] effect with high luck (🍀{1})!",
+    "ja": "🛡️ [抵抗(RESIST)] {0}が高い幸運(🍀{1})により[{2}]効果を完全に抵抗しました！"
+  },
+  "🛡️ [전열 돌격 방벽] {0}이(가) 전열 연계로 {1} 보호막을 획득했습니다!": {
+    "en": "🛡️ [Front Charge Barrier] {0} gained {1} shield via front row combo!",
+    "ja": "🛡️ [前衛突撃バリア] {0}が前衛連携で{1}のシールドを獲得しました！"
+  },
+  "🛡️ [전열 방호선] 적 전열의 엄호로 인해 {0}(후열) 타격 피해가 25% 감소합니다.": {
+    "en": "🛡️ [Front Defensive Line] Due to enemy front row cover, strike damage against {0} (Back Row) is reduced by 25%.",
+    "ja": "🛡️ [前衛防護線] 敵前衛の援護により{0}(後衛)への打撃ダメージが25%減少します。"
+  },
+  "🛡️ [전열 수호] {0}이(가) 후열 {1} 엄호 (-{2}% 경감)": {
+    "en": "🛡️ [Front Row Guard] {0} covers back row {1} (-{2}% reduction)",
+    "ja": "🛡️ [前衛守護] {0}が後衛{1}を援護 (-{2}%軽減)"
+  },
+  "🛡️ [차원 보호막 전개] 영지에 {0}시간 동안 차원 침공 방어막이 활성화되었습니다!": {
+    "en": "🛡️ [Dimensional Shield Deployed] Dimensional invasion shield activated on territory for {0} hours!",
+    "ja": "🛡️ [次元シールド展開] 領地に{0}時間の間、次元侵攻防護シールドが活性化されました！"
+  },
+  "🛡️ [피의 수호막] 아군 전체에게 활력 회복 파동 전개!": {
+    "en": "🛡️ [Blood Aegis] Deployed vitality recovery wave across all allies!",
+    "ja": "🛡️ [血の守護膜] 味方全体に活力回復波動を展開！"
+  },
+  "🛡️ [회랑 수호자의 철벽 중갑]": {
+    "en": "🛡️ [Cloister Guardian's Ironclad Heavy Armor]",
+    "ja": "🛡️ [回廊守護者の鉄壁重甲]"
+  },
+  "🛡️ {0} [{1}] → {2} 보호막 부여": {
+    "en": "🛡️ {0} [{1}] → Granted shield to {2}",
+    "ja": "🛡️ {0} [{1}] → {2}にシールド付与"
+  },
+  "🛡️ {0} [{1}] → 보호막({2}) 전개!": {
+    "en": "🛡️ {0} [{1}] → Deployed shield ({2})!",
+    "ja": "🛡️ {0} [{1}] → シールド({2})展開！"
+  },
+  "🛡️ {0} [{1}] → 파티 전원 보호막 전개! [{2}]": {
+    "en": "🛡️ {0} [{1}] → Deployed shield to entire party! [{2}]",
+    "ja": "🛡️ {0} [{1}] → パーティ全員にシールド展開！[{2}]"
+  },
+  "🛡️ 방어 수호자": {
+    "en": "🛡️ Defense Guardian",
+    "ja": "🛡️ 防御守護者"
+  },
+  "🛡️ 방어구": {
+    "en": "🛡️ Armor",
+    "ja": "🛡️ 防具"
+  },
+  "🛡️ 방어구 전용": {
+    "en": "🛡️ Armor Only",
+    "ja": "🛡️ 防具専用"
+  },
+  "🛡️ 보호막": {
+    "en": "🛡️ Shield",
+    "ja": "🛡️ シールド"
+  },
+  "🛡️ 보호막 분쇄": {
+    "en": "🛡️ Shield Shatter",
+    "ja": "🛡️ シールド粉砕"
+  },
+  "🛡️ 보호막 작동 중 (침공 불가)": {
+    "en": "🛡️ Shield Active (Invasion unavailable)",
+    "ja": "🛡️ シールド作動中 (侵攻不可)"
+  },
+  "🛡️ 상대 방어 부대 편성": {
+    "en": "🛡️ Opponent Defense Squad Formation",
+    "ja": "🛡️ 相手防衛部隊の編成"
+  },
+  "🛡️ 상태이상 완전 저항: 피격자의 행운에 비례하여 빙결, 기절, 실명, 출혈, 맹독, 화상 및 디버프를 무효화 (저항 확률 = min(50%, 방어자 행운 × 0.35%))": {
+    "en": "🛡️ Total Status Ailment Resistance: Nullifies Freeze, Stun, Blind, Bleed, Poison, Burn, and debuffs proportional to target's Luck (Resist chance = min(50%, Defender Luck × 0.35%))",
+    "ja": "🛡️ 状態異常完全抵抗: 被弾者の幸運に比例して凍結、気絶、盲目、出血、猛毒、火傷およびデバフを無効化 (抵抗確率 = min(50%, 防御者幸運 × 0.35%))"
+  },
+  "🛡️ 서포터": {
+    "en": "🛡️ Supporter",
+    "ja": "🛡️ サポーター"
+  },
+  "🛡️ 수호 개입 (GUARD): 보호막 전개, 방패 막기 또는 아군 수호 발동 시 획득": {
+    "en": "🛡️ Guard Intervention (GUARD): Obtained when deploying shield, blocking, or protecting allies",
+    "ja": "🛡️ 守護介入 (GUARD): シールド展開、盾防御、または味方守護発動時に獲得"
+  },
+  "🛡️ 실패 시 장비 손상/파괴/하락 없음 (재료만 소모)": {
+    "en": "🛡️ No equipment damage/break/downgrade on failure (Only materials consumed)",
+    "ja": "🛡️ 失敗時に装備の損傷/破壊/低下なし (材料のみ消費)"
+  },
+  "🛡️ 실패(유지)": {
+    "en": "🛡️ Failure (Retained)",
+    "ja": "🛡️ 失敗(維持)"
+  },
+  "🛡️ 쓰러진 척후병의 유해와 경보 장치": {
+    "en": "🛡️ Fallen Scout's Remains and Alarm System",
+    "ja": "🛡️ 倒れた斥候の遺骨と警報装置"
+  },
+  "🛡️ 아직 내 영지에 침공한 적 침략자가 없습니다. 평화로운 상태입니다.": {
+    "en": "🛡️ No enemy invaders have invaded my territory yet. It is peaceful.",
+    "ja": "🛡️ まだ領地に侵攻した敵侵略者はいません。平和な状態です。"
+  },
+  "🛡️ 영지 침식 및 약탈 비활성화": {
+    "en": "🛡️ Territory Erosion and Pillaging Disabled",
+    "ja": "🛡️ 領地侵食および略奪非活性化"
+  },
+  "🛡️ 원정대 배치 진형 (채비실)": {
+    "en": "🛡️ Expedition Formation (Prep Room)",
+    "ja": "🛡️ 遠征隊配置陣形 (準備室)"
+  },
+  "🛡️ 원정대 현황": {
+    "en": "🛡️ Expedition Status",
+    "ja": "🛡️ 遠征隊の現況"
+  },
+  "🛡️ 원호 방어(-40%)": {
+    "en": "🛡️ Assist Defense (-40%)",
+    "ja": "🛡️ 援護防御 (-40%)"
+  },
+  "🛡️ 장비 상세 정보 — {0}": {
+    "en": "🛡️ Equipment Details — {0}",
+    "ja": "🛡️ 装備詳細情報 — {0}"
+  },
+  "🛡️ 장비 해제": {
+    "en": "🛡️ Unequip",
+    "ja": "🛡️ 装備解除"
+  },
+  "🛡️ 장착": {
+    "en": "🛡️ Equip",
+    "ja": "🛡️ 装備"
+  },
+  "🛡️ 장착 장비": {
+    "en": "🛡️ Equipped Gear",
+    "ja": "🛡️ 装着装備"
+  },
+  "🛡️ 적용 중인 상태이상": {
+    "en": "🛡️ Applied Status Effects",
+    "ja": "🛡️ 適用中の状態異常"
+  },
+  "🛡️ 전열": {
+    "en": "🛡️ Front Row",
+    "ja": "🛡️ 前衛"
+  },
+  "🛡️ 전열 & 후열 전술 포지션 연계": {
+    "en": "🛡️ Front & Back Row Tactical Position Link",
+    "ja": "🛡️ 前衛＆後衛 戦術ポジション連携"
+  },
+  "🛡️ 전열 (Front)": {
+    "en": "🛡️ Front Row (Front)",
+    "ja": "🛡️ 前衛 (Front)"
+  },
+  "🛡️ 전열 수호 & 신성 방벽 (탱커)": {
+    "en": "🛡️ Frontline Guard & Divine Barrier (Tank)",
+    "ja": "🛡️ 前衛守護＆神聖バリア (タンク)"
+  },
+  "🛡️ 중장 보병": {
+    "en": "🛡️ Heavy Infantry",
+    "ja": "🛡️ 重装歩兵"
+  },
+  "🛡️ 피해": {
+    "en": "🛡️ Damage",
+    "ja": "🛡️ 被ダメージ"
+  },
+  "🛡️(방어 감쇄: 최소 피해 1)": {
+    "en": "🛡️(DEF Mitigated: Min Damage 1)",
+    "ja": "🛡️(防御減衰: 最小ダメージ1)"
+  },
+  "🛡️(방어력 감쇄)": {
+    "en": "🛡️(DEF Mitigated)",
+    "ja": "🛡️(防御力減衰)"
+  },
+  "🛡️(방어력 감쇄: 최소 피해 1)": {
+    "en": "🛡️(DEF Mitigated: Min Damage 1)",
+    "ja": "🛡️(防御力減衰: 最小ダメージ1)"
+  },
+  "🛡️[중장갑 방벽 70% 무효화]": {
+    "en": "🛡️[Heavy Armor Barrier 70% Nullified]",
+    "ja": "🛡️[重装甲バリア 70%無効化]"
+  },
+  "🛡️⚡ [철갑 방진 돌파] 적 전열의 방어력을 2턴간 {0}% 분쇄했습니다!": {
+    "en": "🛡️⚡ [Iron Phalanx Breach] Crushed enemy front row's DEF by {0}% for 2 turns!",
+    "ja": "🛡️⚡ [鉄甲方陣突破] 敵前衛の防御力を2ターンの間{0}%粉砕しました！"
+  },
+  "🛡️✨ [+{0}강 방어구] {1}에게 최대 HP의 {2}%(🛡️{3}) 에테르 방벽 전개!": {
+    "en": "🛡️✨ [+{0} Armor] Deployed {2}% max HP (🛡️{3}) Ether barrier to {1}!",
+    "ja": "🛡️✨ [+{0}強化 防具] {1}に最大HPの{2}%(🛡️{3})エーテルバリアを展開！"
+  },
+  "🛡️✨ [{0}] 파티 전원에게 {1}턴간 절대 면역 결계를 부여했습니다!": {
+    "en": "🛡️✨ [{0}] Granted absolute immunity barrier to all party members for {1} turns!",
+    "ja": "🛡️✨ [{0}] パーティ全員に{1}ターンの間絶対免疫結界を付与しました！"
+  },
+  "🛡️✨ [{0}] 파티 전원에게 최대 HP {1}% 에테르 방벽을 전개했습니다!": {
+    "en": "🛡️✨ [{0}] Deployed Ether barrier of {1}% max HP to all party members!",
+    "ja": "🛡️✨ [{0}] パーティ全員に最大HP {1}%のエーテルバリアを展開しました！"
+  },
+  "🛡️✨ [신성 집결] 2턴간 파티 전체가 받는 피해를 {0}% 경감합니다!": {
+    "en": "🛡️✨ [Divine Rally] Reduces damage taken by the party by {0}% for 2 turns!",
+    "ja": "🛡️✨ [神聖結集] 2ターンの間パーティ全体が受けるダメージを{0}%軽減します！"
+  },
+  "🛡️⬇️ [방어력 분쇄] {0}의 방어력을 {1}턴간 {2}% 감소시켰습니다!": {
+    "en": "🛡️⬇️ [Armor Crush] Reduced {0}'s DEF by {2}% for {1} turns!",
+    "ja": "🛡️⬇️ [防御力粉砕] {0}の防御力を{1}ターンの間{2}%減少させました！"
+  },
+  "🛡️⬇️ [방어력 약화] {0}의 방어력이 {1}% 감소했습니다!": {
+    "en": "🛡️⬇️ [Armor Weakened] {0}'s DEF decreased by {1}%!",
+    "ja": "🛡️⬇️ [防御力弱体化] {0}の防御力が{1}%減少しました！"
+  },
+  "🛡️⬇️ [원호 방어력 분쇄] {0}의 방어력이 2턴간 30% 분쇄되었습니다!": {
+    "en": "🛡️⬇️ [Assist Armor Crush] {0}'s DEF crushed by 30% for 2 turns!",
+    "ja": "🛡️⬇️ [援護防御力粉砕] {0}の防御力が2ターンの間30%粉砕されました！"
+  },
+  "🛡️방어력": {
+    "en": "🛡️DEF",
+    "ja": "🛡️防御力"
+  },
+  "🛡️🏰 [불멸의 요새]: 가드 2개 이상 + 카운터 2개 이상. 전원 최대 HP 60% 방벽 부여 + 2턴간 100% 환영 반격 결계 전개": {
+    "en": "🛡️🏰 [Immortal Fortress]: 2+ Guards and 2+ Counters. Grants 60% max HP barrier to all + deploys 100% illusion counter barrier for 2 turns",
+    "ja": "🛡️🏰 [不滅の要塞]: ガード2個以上＋カウンター2個以上。全員に最大HP 60%バリア付与＋2ターンの間100%幻影反撃結界を展開"
+  },
+  "🛡️💔 [자세 붕괴]: 방어 약화 상태의 적에게 강타/방패 파쇄 적중 시 1턴 기절 및 차징 브레이크 150 파쇄": {
+    "en": "🛡️💔 [Posture Break]: Hitting DEF-weakened enemies with bash/shield shatter inflicts 1 turn stun and 150 charging break",
+    "ja": "🛡️💔 [体勢崩壊]: 防御弱体化状態の敵に強打/盾破砕命中時、1ターン気絶およびチャージブレイク150破砕"
+  },
+  "🛰️ 하이퍼 레인저": {
+    "en": "🛰️ Hyper Ranger",
+    "ja": "🛰️ ハイパーレンジャー"
+  },
+  "🛰️🔥 [전술 드론 폭격] 드론 폭격으로 적 전체에 2턴간 지속 화상을 부여했습니다!": {
+    "en": "🛰️🔥 [Tactical Drone Bombardment] Drone bombardment inflicted 2-turn Burn on all enemies!",
+    "ja": "🛰️🔥 [戦術ドローン爆撃] ドローン爆撃により敵全体に2ターンの間持続火傷を付与しました！"
+  },
+  "🟡 실패 시 레벨 유지": {
+    "en": "🟡 Retains level on failure",
+    "ja": "🟡 失敗時にレベル維持"
+  },
+  "🟡 실패 시 유지": {
+    "en": "🟡 Retained on failure",
+    "ja": "🟡 失敗時に維持"
+  },
+  "🟡 중위험 구간 (35% ~ 70%)": {
+    "en": "🟡 Moderate Hazard Range (35% ~ 70%)",
+    "ja": "🟡 中危険度区間 (35% ~ 70%)"
+  },
+  "🟢 100% 안전 강화": {
+    "en": "🟢 100% Safe Enhancement",
+    "ja": "🟢 100% 安全強化"
+  },
+  "🟢 저위험 구간 (0% ~ 35%)": {
+    "en": "🟢 Low Hazard Range (0% ~ 35%)",
+    "ja": "🟢 低危険度区間 (0% ~ 35%)"
+  },
+  "🟢 탐험 출격 활성 상태": {
+    "en": "🟢 Exploration Sortie Active",
+    "ja": "🟢 探検出撃活性状態"
+  },
+  "🟫 가죽": {
+    "en": "🟫 Leather",
+    "ja": "🟫 革"
+  },
+  "🤍 (알아가는 단계)": {
+    "en": "🤍 (Getting Acquainted)",
+    "ja": "🤍 (知り合う段階)"
+  },
+  "🤝 [서포터 난입] [{0}] 전사로 인해 후방의 {1}이(가) 즉시 전장에 투입되었습니다!": {
+    "en": "🤝 [Supporter Intervene] Due to fallen [{0}], rear supporter {1} immediately deployed onto the battlefield!",
+    "ja": "🤝 [サポーター乱入] [{0}]の戦死により、後方の{1}が即座に戦場へ投入されました！"
+  },
+  "🤝 [서포터 대기] {0}이(가) 후방 지원 준비를 마쳤습니다.": {
+    "en": "🤝 [Supporter on Standby] {0} is ready for rear support.",
+    "ja": "🤝 [サポーター待機] {0}が後方支援の準備を完了しました。"
+  },
+  "🤝 고용 (🪙{0}G)": {
+    "en": "🤝 Recruit (🪙{0}G)",
+    "ja": "🤝 雇用 (🪙{0}G)"
+  },
+  "🤝 고용 체결 (🪙{0}G)": {
+    "en": "🤝 Sign Contract (🪙{0}G)",
+    "ja": "🤝 雇用締結 (🪙{0}G)"
+  },
+  "🤝 서포터": {
+    "en": "🤝 Supporter",
+    "ja": "🤝 サポーター"
+  },
+  "🤝 아군 서포터 난입! {0} 참전!": {
+    "en": "🤝 Ally supporter joins the fray! {0} enters battle!",
+    "ja": "🤝 味方サポーター乱入！{0} 参戦！"
+  },
+  "🤝 원호 공격 & 시너지 연계 & 오버레이 연출 (Assist & Synergy Combo)": {
+    "en": "🤝 Assist Attack & Synergy Combo & Overlay FX",
+    "ja": "🤝 援護攻撃＆シナジー連携＆オーバーレイ演出 (Assist & Synergy Combo)"
+  },
+  "🤝서포터": {
+    "en": "🤝Supporter",
+    "ja": "🤝サポーター"
+  },
+  "🥩 대량 배급제 (심연 생체 정제소 Lv.5): 전 시설 식량 유지비 30% 일괄 감면 및 식량 증산": {
+    "en": "🥩 Mass Rationing (Abyssal Refinery Lv.5): 30% flat reduction in food upkeep across all facilities & boosts food production",
+    "ja": "🥩 大量配給制 (深淵生体精製所Lv.5): 全施設の食糧維持費30%一括減免および食糧増産"
+  },
+  "🥻 [납골당의 영겁 로브]": {
+    "en": "🥻 [Eternity Robe of the Ossuary]",
+    "ja": "🥻 [納骨堂の永劫ローブ]"
+  },
+  "🦴 뼈": {
+    "en": "🦴 Bone",
+    "ja": "🦴 骨"
+  },
+  "🧘 [영혼 명상] 에테르 기류 흡수 (생존 대원 MP 10% 회복)": {
+    "en": "🧘 [Soul Meditation] Absorb Ether currents (Surviving members MP 10% recovery)",
+    "ja": "🧘 [魂の瞑想] エーテル気流吸収 (生存隊員MP 10%回復)"
+  },
+  "🧥 [시공 왜곡의 수호 로브]": {
+    "en": "🧥 [Guardian Robe of Spacetime Distortion]",
+    "ja": "🧥 [時空歪曲の守護ローブ]"
+  },
+  "🧪 [상인 거래] 200G와 에테르 200개로 생존 대원 전원 HP/MP 50% 회복 완료!": {
+    "en": "🧪 [Merchant Trade] Recovered 50% HP/MP for all surviving members with 200G and 200 Ether!",
+    "ja": "🧪 [商人取引] 200Gとエーテル200個で生存隊員全員のHP/MP 50%回復完了！"
+  },
+  "🧪 대형 연계 에픽: 연금술사와 만화경의 저주": {
+    "en": "🧪 Major Epic Chain: The Alchemist and the Kaleidoscope Curse",
+    "ja": "🧪 大型連携エピック: 錬金術師と万華鏡の呪い"
+  },
+  "🧪 에테르 공방 — 스킬 비전 강화": {
+    "en": "🧪 Ether Workshop — Skill Arcanum Enhancement",
+    "ja": "🧪 エーテル工房 — スキル奥義強化"
+  },
+  "🧪 에테르 환류관 (에테르 연금 공방 Lv.6): 전 시설 에테르 유지비 30% 일괄 감면": {
+    "en": "🧪 Ether Reflux Tube (Aether Alchemy Lab Lv.6): 30% flat reduction in Ether upkeep across all facilities",
+    "ja": "🧪 エーテル還流管 (エーテル錬金工房Lv.6): 全施設のエーテル維持費30%一括減免"
+  },
+  "🧪 응급 생체 회복약 구매 ({0}G & ✨{1} 필요 - {2})": {
+    "en": "🧪 Buy Emergency Bio-Medicine (Requires {0}G & ✨{1} - {2})",
+    "ja": "🧪 応急生体回復薬購入 ({0}G ＆ ✨{1}必要 - {2})"
+  },
+  "🧪 응급 생체 회복약 구매 ({0}G + ✨{1} 소모 ➔ 전원 HP/MP 50% 회복)": {
+    "en": "🧪 Buy Emergency Bio-Medicine (Costs {0}G + ✨{1} ➔ Restores 50% HP/MP to all)",
+    "ja": "🧪 応急生体回復薬購入 ({0}G + ✨{1}消費 ➔ 全員HP/MP 50%回復)"
+  },
+  "🧪 제본 소모 재료": {
+    "en": "🧪 Bookbinding Materials",
+    "ja": "🧪 製本消費材料"
+  },
+  "🧪 클래스 스킬 마도서 제본": {
+    "en": "🧪 Bind Class Skill Grimoire",
+    "ja": "🧪 クラススキル魔導書製本"
+  },
+  "🧬 기초 4대 채집 시설 건설 ➔ 퀘스트 [보상 수령] 즉시 터치": {
+    "en": "🧬 Build 4 Basic Gathering Facilities ➔ Instantly tap Quest [Claim Reward]",
+    "ja": "🧬 基礎4大採取施設建設 ➔ クエスト[報酬受取]を即座にタップ"
+  },
+  "🧭 [시공간의 나침반] 완전 각성 (용병 긴급 이송 0턴 즉시 합류)": {
+    "en": "🧭 [Spacetime Compass] Fully Awakened (Mercenary emergency transport takes 0 turns for instant join)",
+    "ja": "🧭 [時空間の羅針盤] 完全覚醒 (傭兵緊急搬送0ターン即時合流)"
+  },
+  "🧭 [영혼 나침반] (7F 광폭화 보스 전리품) 회수": {
+    "en": "🧭 Retrieve [Soul Compass] (7F Enraged Boss Loot)",
+    "ja": "🧭 [魂の羅針盤] (7F狂暴化ボスの戦利品) 回収"
+  },
+  "🧭 [탐색 재개] 전투를 마치고 {0} 탐색을 이어갑니다.": {
+    "en": "🧭 [Resume Exploration] Battle concluded, continuing exploration of {0}.",
+    "ja": "🧭 [探索再開] 戦闘を終え{0}の探索を続行します。"
+  },
+  "🧭 갈림길 & 미궁의 샛길": {
+    "en": "🧭 Crossroads & Labyrinth Byways",
+    "ja": "🧭 分かれ道＆迷宮の抜け道"
+  },
+  "🧭 차원의 나침반": {
+    "en": "🧭 Dimensional Compass",
+    "ja": "🧭 次元の羅針盤"
+  },
+  "🧭⌛ [시공간의 나침반] 획득 (차원의 나침반 완전 대체, 용병 긴급 이송 대기 시간 0턴 즉시 합류)": {
+    "en": "🧭⌛ [Spacetime Compass] Obtained (Completely replaces Dimensional Compass, emergency mercenary transport 0 turns instant join)",
+    "ja": "🧭⌛ [時空間の羅針盤] 獲得 (次元の羅針盤を完全代替、傭兵緊急搬送待機時間0ターン即時合流)"
+  },
+  "🧭⌛✨ [시공간의 나침반 초월 도약] [시공간의 나침반]의 시공간 왜곡 초월 권능으로 대기 턴 없이 [{0}] 대원이 즉시 원정대 전열에 합류했습니다! (이송 턴 0턴)": {
+    "en": "🧭⌛✨ [Spacetime Compass Transcendent Leap] By the spacetime warp authority of [Spacetime Compass], {0} instantly joined expedition ranks without wait! (0 turns transport)",
+    "ja": "🧭⌛✨ [時空間の羅針盤 超越跳躍] [時空間の羅針盤]の時空間歪曲超越権能により、待機ターンなしで[{0}]隊員が即座に遠征隊前衛へ合流しました！(搬送0ターン)"
+  },
+  "🧭✨ [차원의 나침반] 시공간 왜곡 권능으로 [{0}] 대원의 이송 시간이 1턴 단축되었습니다! (도착까지 {1}턴)": {
+    "en": "🧭✨ [Dimensional Compass] Spacetime warp authority reduced transport time of {0} by 1 turn! ({1} turns until arrival)",
+    "ja": "🧭✨ [次元の羅針盤] 時空間歪曲権能により[{0}]隊員の搬送時間が1ターン短縮されました！(到着まで{1}ターン)"
+  },
+  "🧱 가죽": {
+    "en": "🧱 Leather",
+    "ja": "🧱 革"
+  },
+  "🧳 길 잃은 방랑 보급관": {
+    "en": "🧳 Lost Wandering Quartermaster",
+    "ja": "🧳 道に迷った放浪補給官"
+  },
+  "🧵 실크": {
+    "en": "🧵 Silk",
+    "ja": "🧵 絹"
+  },
+  "🧹 저장 데이터 초기화 후 재시작": {
+    "en": "🧹 Reset Saved Data and Restart",
+    "ja": "🧹 保存データ初期化後に再起動"
+  },
+  "🩸 [생명력 흡수] 가한 피해의 {0}%를 흡혈하여 체력 +{1} 회복!": {
+    "en": "🩸 [Life Leech] Leeched {0}% of damage dealt, restoring +{1} HP!",
+    "ja": "🩸 [生命力吸収] 与えたダメージの{0}%を吸血し、HP +{1}回復！"
+  },
+  "🩸 [원호 출혈] {0}에게 2턴간 출혈 효과를 부여했습니다!": {
+    "en": "🩸 [Assist Bleed] Inflicted Bleed on {0} for 2 turns!",
+    "ja": "🩸 [援護出血] {0}に2ターンの間出血効果を付与しました！"
+  },
+  "🩸 [처형 일격] 빈사의 {0}에게 +{1}% 처형 증폭 피해!": {
+    "en": "🩸 [Execution Strike] Dealt +{1}% execution amplified damage to near-death {0}!",
+    "ja": "🩸 [処刑の一撃] 瀕死の{0}に+{1}%処刑増幅ダメージ！"
+  },
+  "🩸 [출혈 유발] {0}에게 2턴간 출혈 효과를 부여했습니다!": {
+    "en": "🩸 [Bleed Inflicted] Inflicted Bleed on {0} for 2 turns!",
+    "ja": "🩸 [出血誘発] {0}に2ターンの間出血効果を付与しました！"
+  },
+  "🩸 [출혈 유발] {0}에게 {1}턴간 출혈 효과를 부여했습니다!": {
+    "en": "🩸 [Bleed Inflicted] Inflicted Bleed on {0} for {1} turns!",
+    "ja": "🩸 [出血誘発] {0}に{1}ターンの間出血効果を付与しました！"
+  },
+  "🩸 [출혈] {0} 출혈 지속 피해 (-{1})": {
+    "en": "🩸 [Bleed] {0} Bleed DoT (-{1})",
+    "ja": "🩸 [出血] {0} 出血持続ダメージ (-{1})"
+  },
+  "🩸 [출혈] {0}에게 {1}턴간 출혈이 발생했습니다! (매 턴 7% 지속 피해, 공격력 -40%)": {
+    "en": "🩸 [Bleed] Bleed inflicted on {0} for {1} turns! (7% DoT per turn, ATK -40%)",
+    "ja": "🩸 [出血] {0}に{1}ターンの間出血が発生しました！(毎ターン7%持続ダメージ、攻撃力-40%)"
+  },
+  "🩸 [출혈] {0}에게 출혈이 발생했습니다! (매 턴 7% 지속 피해, 공격력 -40%)": {
+    "en": "🩸 [Bleed] Bleed inflicted on {0}! (7% DoT per turn, ATK -40%)",
+    "ja": "🩸 [出血] {0}に出血が発生しました！(毎ターン7%持続ダメージ、攻撃力-40%)"
+  },
+  "🩸 [피의 축제] {0}이(가) 적을 처치하여 공격력 +10% 상승!": {
+    "en": "🩸 [Blood Feast] {0} defeated an enemy, gaining ATK +10%!",
+    "ja": "🩸 [血の祝祭] {0}が敵を撃破し、攻撃力+10%上昇！"
+  },
+  "🩸 [피해 확인] 대열을 정비하고 전진": {
+    "en": "🩸 [Assess Damage] Reorganize ranks and advance",
+    "ja": "🩸 [被害確認] 隊列を整えて前進"
+  },
+  "🩸 대형 연계 에픽: 성혈의 서약과 발키리의 구원": {
+    "en": "🩸 Major Epic Chain: Oath of Holy Blood and Valkyrie's Salvation",
+    "ja": "🩸 大型連携エピック: 聖血の誓約とヴァルキリーの救済"
+  },
+  "🩸 생명력 흡혈": {
+    "en": "🩸 Life Leech",
+    "ja": "🩸 生命力吸血"
+  },
+  "🩸 신성 정화 시도 (성공 50% / 실패 시 파괴)": {
+    "en": "🩸 Attempt Divine Purification (50% Success / Destroyed on failure)",
+    "ja": "🩸 神聖浄化試行 (成功50% / 失敗時破壊)"
+  },
+  "🩸 정화": {
+    "en": "🩸 Purify",
+    "ja": "🩸 浄化"
+  },
+  "🩸 진홍의 피 웅덩이와 공양대": {
+    "en": "🩸 Crimson Blood Pool and Offering Table",
+    "ja": "🩸 深紅の血の池と奉納台"
+  },
+  "🩸[흡혈 +{0} HP 회복]": {
+    "en": "🩸[Leeched +{0} HP]",
+    "ja": "🩸[吸血 +{0} HP回復]"
+  },
+  "🩸출혈!": {
+    "en": "🩸Bleed!",
+    "ja": "🩸出血！"
+  },
+  "🩸흡혈": {
+    "en": "🩸Life Leech",
+    "ja": "🩸吸血"
+  },
+  "🩸💥 [과출혈 기폭]: 출혈 상태의 적에게 베기/관통/저격 적중 시 누적 출혈 즉발 폭발 및 2턴간 공격력 -25%": {
+    "en": "🩸💥 [Hemorrhage Detonation]: Hitting bleeding targets with slash/pierce/snipe immediately detonates accumulated bleed and applies -25% ATK for 2 turns",
+    "ja": "🩸💥 [過出血起爆]: 出血状態の敵に斬撃/貫通/狙撃命中時、累積出血が即時爆発し2ターンの間攻撃力-25%"
+  },
+  "🩸🕊️ [{0}] 쓰러졌던 {1}이(가) 기적처럼 HP {2}로 부활했습니다!": {
+    "en": "🩸🕊️ [{0}] Fallen {1} miraculously revived with {2} HP!",
+    "ja": "🩸🕊️ [{0}] 倒れていた{1}が奇跡のようにHP {2}で復活しました！"
+  },
+  "🩸🕊️ [기사회생]: 가드 2개 이상 모인 상태에서 아군 빈사/사망 시 발동. 사망 아군 전원 50% 부활 + 생존 아군 HP 100% 완전 회복 + 2턴간 디버프 면역": {
+    "en": "🩸🕊️ [Revival from the Brink]: Triggers with 2+ Guards when an ally is near-death/fallen. Resurrects all fallen allies with 50% HP + fully heals surviving allies' HP + debuff immunity for 2 turns",
+    "ja": "🩸🕊️ [起死回生]: ガード2個以上の状態で味方が瀕死/死亡時に発動。死亡味方全員50%復活＋生存味方HP 100%完全回復＋2ターンの間デバフ無効"
+  },
+  "🩹 [치유 붕대 응급처치] 붕대를 소모하여 생존 대원의 모든 디버프(출혈·중독·화상·빙결·기절·약화·실명)를 완전히 치료했습니다!": {
+    "en": "🩹 [Healing Bandage First Aid] Consumed bandage to cure all debuffs (Bleed, Poison, Burn, Freeze, Stun, Weaken, Blind) on surviving members!",
+    "ja": "🩹 [治癒包帯応急処置] 包帯を消費し、生存隊員の全デバフ(出血・中毒・火傷・凍結・気絶・弱体化・盲目)を完全に治療しました！"
+  },
+  "🩹 붕대": {
+    "en": "🩹 Bandage",
+    "ja": "🩹 包帯"
+  },
+  "🩹 치유 붕대: 급조 응급치료로 파티 체력 회복 및 모든 디버프 해제": {
+    "en": "🩹 Healing Bandage: Emergency first aid to restore party HP and clear all debuffs",
+    "ja": "🩹 治癒包帯: 応急手当でパーティのHPを回復し全デバフを解除"
+  },
+  "🩹✨ [성유 붕대 응급처치] 성유 붕대를 소모하여 생존 대원의 모든 디버프를 완전 치료하고, 3턴간 [디버프 면역] 결계를 부여했습니다!": {
+    "en": "🩹✨ [Holy Oil Bandage First Aid] Consumed Holy Oil Bandage to completely heal all debuffs on survivors and granted [Debuff Immunity] barrier for 3 turns!",
+    "ja": "🩹✨ [聖油包帯応急処置] 聖油包帯を消費し生存隊員の全デバフを完全治療、3ターンの間[デバフ無効]結界を付与しました！"
+  },
+  "🪄 [공명] 지팡이 계열 (Staff)": {
+    "en": "🪄 [Resonance] Staff Class (Staff)",
+    "ja": "🪄 [共鳴] 杖系列 (Staff)"
+  },
+  "🪄 [공명] 지팡이 계열: 모든 액티브 전투 스킬의 마나 소모량을 5% 상시 절감합니다.": {
+    "en": "🪄 [Resonance] Staff Class: Permanently reduces MP cost of all active combat skills by 5%.",
+    "ja": "🪄 [共鳴] 杖系列: 全アクティブ戦闘スキルの消費MPを常時5%軽減します。"
+  },
+  "🪄 [원초 광맥의 작열 스태프]": {
+    "en": "🪄 [Primordial Vein Blazing Staff]",
+    "ja": "🪄 [原初鉱脈の灼熱スタッフ]"
+  },
+  "🪄 마력 공명": {
+    "en": "🪄 Mana Resonance",
+    "ja": "🪄 魔力共鳴"
+  },
+  "🪄 마법": {
+    "en": "🪄 Magic",
+    "ja": "🪄 魔法"
+  },
+  "🪄 후열 (Back)": {
+    "en": "🪄 Back Row (Back)",
+    "ja": "🪄 後衛 (Back)"
+  },
+  "🪐 [{0}] 종말의 심연 폭발! 모든 적에게 광역 파멸 피해!": {
+    "en": "🪐 [{0}] Abyssal Apocalypse Detonation! AoE ruin damage to all enemies!",
+    "ja": "🪐 [{0}] 終末の深淵爆発！敵全体に範囲破滅ダメージ！"
+  },
+  "🪐 태초의 공허 모놀리스": {
+    "en": "🪐 Primordial Void Monolith",
+    "ja": "🪐 太初の虚空モノリス"
+  },
+  "🪐💥 [아마게돈 종말] 적 전체 1턴 기절 및 5턴간 공허 침식(공격력/방어력 50% 대폭 감소)을 부여했습니다!": {
+    "en": "🪐💥 [Armageddon Apocalypse] Stunned all enemies for 1 turn and inflicted Void Erosion (-50% ATK/DEF) for 5 turns!",
+    "ja": "🪐💥 [ハルマゲドン終末] 敵全体を1ターン気絶させ、5ターンの間虚空侵食(攻撃力/防御力50%大幅減少)を付与しました！"
+  },
+  "🪙 +{0}/13초": {
+    "en": "🪙 +{0}/13s",
+    "ja": "🪙 +{0}/13秒"
+  },
+  "🪙 +{0}G 획득하고 {1}개 매각": {
+    "en": "🪙 Gained +{0}G and sold {1}",
+    "ja": "🪙 +{0}G獲得し{1}個売却"
+  },
+  "🪙 [보물 획득] 골드 {0}G 및 [{1} ×{2}] 획득!": {
+    "en": "🪙 [Treasure Found] Obtained {0}G Gold and [{1} ×{2}]!",
+    "ja": "🪙 [宝獲得] ゴールド {0}G および [{1} ×{2}] 獲得！"
+  },
+  "🪙 [장비 매각] [{0}]을(를) 판매하여 🪙 {1} G를 획득했습니다.": {
+    "en": "🪙 [Equipment Sold] Sold [{0}] and gained 🪙 {1} G.",
+    "ja": "🪙 [装備売却] [{0}]を売却し、🪙 {1} Gを獲得しました。"
+  },
+  "🪙 [장비 일괄 매각] {0}개의 장비를 매각하여 총 🪙 {1} G를 획득했습니다.": {
+    "en": "🪙 [Bulk Sell Gear] Sold {0} pieces of equipment for a total of 🪙 {1} G.",
+    "ja": "🪙 [装備一括売却] {0}個の装備を一括売却し、計🪙 {1} Gを獲得しました。"
+  },
+  "🪙 {0}G 지불하고 {1}개 매입": {
+    "en": "🪙 Paid {0}G and bought {1}",
+    "ja": "🪙 {0}G支払い{1}個購入"
+  },
+  "🪙 골드": {
+    "en": "🪙 Gold",
+    "ja": "🪙 ゴールド"
+  },
+  "🪙 골드 -": {
+    "en": "🪙 Gold -",
+    "ja": "🪙 ゴールド -"
+  },
+  "🪙 매각": {
+    "en": "🪙 Sell",
+    "ja": "🪙 売却"
+  },
+  "🪙 약탈 전리품 안내 (침공 승리 시 각 30% 약탈)": {
+    "en": "🪙 Pillage Loot Notice (Plunders 30% each upon invasion victory)",
+    "ja": "🪙 略奪戦利品案内 (侵攻勝利時に各30%略奪)"
+  },
+  "🪙 코인": {
+    "en": "🪙 Coin",
+    "ja": "🪙 コイン"
+  },
+  "🪙 판매 (🪙": {
+    "en": "🪙 Sell (🪙",
+    "ja": "🪙 販売 (🪙"
+  },
+  "🪙+{0}/15초 ({1}s)": {
+    "en": "🪙+{0}/15s ({1}s)",
+    "ja": "🪙+{0}/15秒 ({1}s)"
+  },
+  "🪙골드 -{0}G": {
+    "en": "🪙Gold -{0}G",
+    "ja": "🪙ゴールド -{0}G"
+  },
+  "🪞 [{0}] 환영 굴절 발동! {1}이(가) 적의 공격을 완전히 투영 회피했습니다!": {
+    "en": "🪞 [{0}] Illusion Refraction triggered! {1} completely projected and evaded the enemy attack!",
+    "ja": "🪞 [{0}] 幻影屈折発動！{1}が敵の攻撃を完全に投影回避しました！"
+  },
+  "🪞 [진실 거울 파편] (9F 광폭화 보스 전리품) 회수": {
+    "en": "🪞 Retrieve [Mirror of Truth Fragment] (9F Enraged Boss Loot)",
+    "ja": "🪞 [真実の鏡の破片] (9F狂暴化ボスの戦利品) 回収"
+  },
+  "🪞 진실을 비추는 고대 만화경 거울": {
+    "en": "🪞 Ancient Kaleidoscope Mirror Reflecting Truth",
+    "ja": "🪞 真実を映す古代万華鏡の鏡"
+  },
+  "🪞⚔️ [만화경 환영검무] 적 전체의 공격력을 2턴간 {0}% 약화시켰습니다!": {
+    "en": "🪞⚔️ [Kaleidoscope Phantom Sword Dance] Weakened all enemies' ATK by {0}% for 2 turns!",
+    "ja": "🪞⚔️ [万華鏡幻影剣舞] 敵全体の攻撃力を2ターンの間{0}%弱体化させました！"
+  },
+  "🪞✨ [만화경 환영] 수억 개의 거울 환영을 펼쳐 아군 전체 방어/회피력을 50% 상승시켰습니다!": {
+    "en": "🪞✨ [Kaleidoscope Mirage] Spread myriad mirror illusions, boosting all allies' DEF/Evasion by 50%!",
+    "ja": "🪞✨ [万華鏡幻影] 数億の鏡の幻影を展開し味方全体の防御/回避力を50%上昇させました！"
+  },
+  "🪦 [{0}]의 영령 제단": {
+    "en": "🪦 Spirit Altar of [{0}]",
+    "ja": "🪦 [{0}]の英霊祭壇"
+  },
+  "🪦 [진혼의 묘비] 첫 심연 탐험에서 무사히 성채로 귀환했습니다. 성채 묘지를 방문하여 영령들에게 헌화하는 퀘스트가 개방되었습니다.": {
+    "en": "🪦 [Gravestone of Requiem] Safely returned to Citadel from first Abyss exploration. Quest to visit Citadel Cemetery and offer flowers to spirits has unlocked.",
+    "ja": "🪦 [鎮魂の墓碑] 初の深淵探検から無事に城塞へ帰還しました。城塞墓地を訪れ英霊たちに献花するクエストが開放されました。"
+  },
+  "🪦 성채 묘지 & 영령의 가호 (Ancestral Blessing) & 유품 회수": {
+    "en": "🪦 Citadel Cemetery & Ancestral Blessing & Relic Recovery",
+    "ja": "🪦 城塞墓地＆英霊の加護 (Ancestral Blessing) ＆遺品回収"
+  },
+  "🪦 성채 묘지 — 영령의 안식처 (Citadel Cemetery)": {
+    "en": "🪦 Citadel Cemetery — Resting Place of Spirits (Citadel Cemetery)",
+    "ja": "🪦 城塞墓地 — 英霊の安息所 (Citadel Cemetery)"
+  },
+  "🪦 이름이 지워진 순교자의 비문": {
+    "en": "🪦 Inscription of the Nameless Martyr",
+    "ja": "🪦 名の消えた殉教者の碑文"
+  },
+  "🪦📜 [회고록 갱신] 첫 번째 묘비명이 새겨져 [심연의 백과 & 회고록]의 [성채 묘비명: 영원한 불꽃의 결사대] 등록 조건이 충족되었습니다!": {
+    "en": "🪦📜 [Memoirs Updated] The first epitaph was engraved, fulfilling registration for [Citadel Epitaph: Vanguard of the Eternal Flame] in [Abyssal Codex & Memoirs]!",
+    "ja": "🪦📜 [回顧録更新] 最初の墓碑銘が刻まれ、[深淵の百科＆回顧録]の[城塞墓碑銘: 永遠の炎の決死隊]登録条件を満たしました！"
+  },
+  "🪨 석재": {
+    "en": "🪨 Stone",
+    "ja": "🪨 石材"
+  },
+  "🪨+{0}/11초": {
+    "en": "🪨+{0}/11s",
+    "ja": "🪨+{0}/11秒"
+  },
+  "🪨+{0}/11초, ⚙️+{1}/11초": {
+    "en": "🪨+{0}/11s, ⚙️+{1}/11s",
+    "ja": "🪨+{0}/11秒, ⚙️+{1}/11秒"
+  },
+  "🪵 +{0}/9초": {
+    "en": "🪵 +{0}/9s",
+    "ja": "🪵 +{0}/9秒"
+  },
+  "🪵 [우회로 정비] 안전한 통로에서 🪵 영목 {0}개, 🪨 석재 {1}개를 수습했습니다.": {
+    "en": "🪵 [Bypass Maintenance] Recovered 🪵 {0} Sacred Wood and 🪨 {1} Stone from safe passage.",
+    "ja": "🪵 [迂回路整備] 安全な通路から🪵 霊木{0}個、🪨 石材{1}個を回収しました。"
+  },
+  "🪵 [우회로 탐색] 안전한 자원 우회로 (🪵 영목 +{0}, 🪨 석재 +{1} 수급)": {
+    "en": "🪵 [Bypass Scout] Safe resource detour (Obtained 🪵 Sacred Wood +{0}, 🪨 Stone +{1})",
+    "ja": "🪵 [迂回路探索] 安全な資源迂回路 (🪵 霊木+{0}、🪨 石材+{1}獲得)"
+  },
+  "🪵 기본 원자재": {
+    "en": "🪵 Base Raw Materials",
+    "ja": "🪵 基本原材料"
+  },
+  "🪵 목재": {
+    "en": "🪵 Wood",
+    "ja": "🪵 木材"
+  },
+  "🪵 영목 줍기": {
+    "en": "🪵 Gather Sacred Wood",
+    "ja": "🪵 霊木拾い"
+  },
+  "🫀 [원초의 광맥 심장] (3F 광폭화 보스 전리품) 회수": {
+    "en": "🫀 Retrieve [Heart of the Primordial Vein] (3F Enraged Boss Loot)",
+    "ja": "🫀 [原初の鉱脈の心臓] (3F狂暴化ボスの戦利品) 回収"
+  }
+}

@@ -1,0 +1,802 @@
+{
+  "공허": {
+    "en": "Void",
+    "ja": "虚空"
+  },
+  "공허 너머에 숨겨져 있던 핏빛의 회랑. 피에 굶주린 대공을 쓰러뜨려 심연 중층부 개척의 첫 발을 내딛어라.": {
+    "en": "The crimson cloister hidden beyond the void. Slay the bloodthirsty Archduke to take your first steps into exploring the Abyss mid-layers.",
+    "ja": "虚空の彼方に隠されていた血塗られた回廊。血に飢えた大公を討ち倒し、深淵中層部開拓の第一歩を踏み出せ。"
+  },
+  "공허 변이종 소탕 의뢰": {
+    "en": "Void Mutant Extermination Bounty",
+    "ja": "虚空変異種掃討依頼"
+  },
+  "공허 분쇄 파성창": {
+    "en": "Void Crush Siege Lance",
+    "ja": "虚空破砕破城槍"
+  },
+  "공허 붕괴역": {
+    "en": "Void Collapse Zone",
+    "ja": "虚空崩壊域"
+  },
+  "공허 인장 반지": {
+    "en": "Void Seal Ring",
+    "ja": "虚空印章の指輪"
+  },
+  "공허 지배 성의": {
+    "en": "Void Domination Sacred Vestment",
+    "ja": "虚空支配の聖衣"
+  },
+  "공허 지배 수호갑": {
+    "en": "Void Domination Guardian Armor",
+    "ja": "虚空支配の守護鎧"
+  },
+  "공허 지배자가 휘두르던 종언의 무기. 파멸의 강타와 심연 방출 2종의 파괴적 스킬을 동시에 다룹니다.": {
+    "en": "The weapon of the end wielded by the Void Sovereign. Unleashes two devastating skills simultaneously: Ruin Strike and Abyss Discharge.",
+    "ja": "虚空の支配者が振るった終焉の武器。破滅の強打と深淵放出の2種の破壊的スキルを同時に操る。"
+  },
+  "공허 지배자의 마지막 사념": {
+    "en": "Final Thoughts of the Void Sovereign",
+    "ja": "虚空支配者の最後の思念"
+  },
+  "공허 지배자의 멸망 중갑": {
+    "en": "Void Sovereign's Heavy Doom Armor",
+    "ja": "虚空支配者の滅亡重甲"
+  },
+  "공허 지배자의 모노리스 핵": {
+    "en": "Void Sovereign's Monolith Core",
+    "ja": "虚空支配者のモノリス核"
+  },
+  "공허 지배자의 핵": {
+    "en": "Void Sovereign's Core",
+    "ja": "虚空支配者の核"
+  },
+  "공허 파편": {
+    "en": "Void Shard",
+    "ja": "虚空の破片"
+  },
+  "공허 파편 🌌": {
+    "en": "Void Shard 🌌",
+    "ja": "虚空の破片 🌌"
+  },
+  "공허 파편을 벼려내 4개 결전 스탯을 개방한 심연의 [영웅]": {
+    "en": "[Hero] of the Abyss forged from void shards, unlocking 4 decisive battle stats",
+    "ja": "虚空の破片を鍛え上げ、4つの決戦ステータスを解放した深淵の[英雄]"
+  },
+  "공허에서 분열한 소형 악령. 기절 효과로 아군의 턴을 빼앗는다.": {
+    "en": "A minor wraith split from the void. Steals ally turns with stun effects.",
+    "ja": "虚空から分裂した小型の悪霊。気絶効果で味方のターンを奪う。"
+  },
+  "공허의": {
+    "en": "Void",
+    "ja": "虚空の"
+  },
+  "공허의 묵시록 결계": {
+    "en": "Void Apocalypse Barrier",
+    "ja": "虚空の黙示録結界"
+  },
+  "공허의 실로 엮어낸 장궁. 적의 방어력을 20% 무시하고 치명타를 꽂아넣습니다.": {
+    "en": "A longbow woven with void threads. Pierces through 20% of enemy DEF and delivers critical strikes.",
+    "ja": "虚空の糸で編み上げた長弓。敵の防御力を20%無視して会心の一撃を叩き込む。"
+  },
+  "공허의 에테르 흐름을 감지하고 차원 통로를 단축하는 마도 나침반입니다. 던전 내에서 예비 대원을 긴급 이송할 때 소요되는 대기 턴을 1턴 줄여줍니다. 또한 탐험 중 비밀 차원 포탈의 발견 확률도 함께 증가합니다.": {
+    "en": "A magical compass detecting void ether flows and shortening dimensional pathways. Reduces the wait turns by 1 when dispatching reserve squad members inside dungeons. Also increases discovery chance of secret dimension portals during exploration.",
+    "ja": "虚空のエーテル流を感知し次元通路を短縮する魔導コンパス。ダンジョン内で予備隊員を緊急移送する際の待機ターンを1ターン短縮する。さらに探検中の秘密次元ポータル発見確率も上昇する。"
+  },
+  "공허의 융합 정수": {
+    "en": "Void Fusion Essence",
+    "ja": "虚空の融合エッセンス"
+  },
+  "공허의 일격": {
+    "en": "Void Strike",
+    "ja": "虚空の一撃"
+  },
+  "공허의 잠복자": {
+    "en": "Void Lurker",
+    "ja": "虚空の潜伏者"
+  },
+  "공허의 절대 침식": {
+    "en": "Void Absolute Erosion",
+    "ja": "虚空の絶対侵食"
+  },
+  "공허의 종말": {
+    "en": "Void End",
+    "ja": "虚空の終末"
+  },
+  "공허의 추적자": {
+    "en": "Void Stalker",
+    "ja": "虚空の追跡者"
+  },
+  "공허의 침식자": {
+    "en": "Void Eroder",
+    "ja": "虚空の侵食者"
+  },
+  "공허의 침식자를 숭배하며 제단을 수호하는 타락한 사제. 파괴적인 흑염 마법을 퍼붓는다.": {
+    "en": "A corrupted priest who worships the Void Eroder and guards the altar. Showers destructive black flame magic.",
+    "ja": "虚空の侵食者を崇拝し祭壇を守護する堕落した司祭。破壊的な黒炎魔法を浴びせかける。"
+  },
+  "공허의 침식자를 쓰러뜨리고 회수한 고대 보물.": {
+    "en": "Ancient treasure recovered after slaying the Void Eroder.",
+    "ja": "虚空の侵食者を倒して回収した古代の宝物。"
+  },
+  "공허의 침식자를 토벌한 영웅에게 주어지는 축복받은 고대 반지.": {
+    "en": "A blessed ancient ring bestowed upon heroes who subjugate the Void Eroder.",
+    "ja": "虚空の侵食者を討伐した英雄に授けられる祝福されし古代の指輪。"
+  },
+  "공허의 특이점": {
+    "en": "Void Singularity",
+    "ja": "虚空の特異点"
+  },
+  "공허의 파편": {
+    "en": "Void Shard",
+    "ja": "虚空の破片"
+  },
+  "공허의 파편과 암흑 정수를 제련하여 무기에 깃든 파멸의 위력을 끌어올립니다.": {
+    "en": "Smelts void shards and dark essences to enhance the ruinous power imbued within the weapon.",
+    "ja": "虚空の破片と暗黒エッセンスを製錬し、武器に宿る破滅の威力を引き上げる。"
+  },
+  "공허의 폭풍": {
+    "en": "Void Storm",
+    "ja": "虚空の嵐"
+  },
+  "공허의 하수인 촉수괴수": {
+    "en": "Void Minion Tentacle Monster",
+    "ja": "虚空の手先 触手怪物"
+  },
+  "공허의 흑마술로 적 전체의 방어력을 35% 분쇄하고 침식을 일으킵니다.": {
+    "en": "Shatters 35% DEF of all enemies and inflicts Erosion with void dark magic.",
+    "ja": "虚空の黒魔術で敵全体の防御力を35%粉砕し、侵食を引き起こす。"
+  },
+  "공허의 흑무에서 태어난 변이 맹수. 어둠 속에서 불시에 기습합니다.": {
+    "en": "A mutant beast born of void black fog. Ambush unawares from the darkness.",
+    "ja": "虚空の黒霧から生まれた変異猛獣。闇の中から不意に奇襲を仕掛ける。"
+  },
+  "공허파편": {
+    "en": "Void Shard",
+    "ja": "虚空の破片"
+  },
+  "과거 방주를 수호하다 타락한 영겁의 기사. 단단한 방벽과 저주받은 대검을 휘두른다.": {
+    "en": "An eternal knight who once guarded the Ark before falling to corruption. Wields a solid barrier and a cursed greatsword.",
+    "ja": "かつて方舟を守護し堕落した永劫の騎士。堅固な障壁と呪われた大剣を振るう。"
+  },
+  "과거 심연을 개척하던 선발대원들이 피와 잉크로 기록한 수기입니다. {0}층의 지형과 마물의 약점, 멸망의 전조가 상세히 기록되어 있습니다.": {
+    "en": "A journal recorded in blood and ink by vanguard pioneers exploring the Abyss in the past. Details {0}F's terrain, monster weaknesses, and omens of doom.",
+    "ja": "かつて深淵を開拓した先遣隊員たちが血とインクで記した手記。{0}階の地形や魔物の弱点、滅亡の前兆が克明に記録されている。"
+  },
+  "과출혈 기폭": {
+    "en": "Excess Bleed Detonation",
+    "ja": "過出血起爆"
+  },
+  "과출혈 기폭 (Hemorrhage)": {
+    "en": "Excess Bleed Detonation (Hemorrhage)",
+    "ja": "過出血起爆 (Hemorrhage)"
+  },
+  "과충전된 에테르 총열에서 뿜어져 나오는 열선은 강철 장갑마저 기화시킨다.": {
+    "en": "Heat rays spewing from an overcharged ether barrel vaporize even steel armor.",
+    "ja": "過充填されたエーテルの銃身から放たれる熱線は、鋼鉄の装甲すら蒸発させる。"
+  },
+  "관리 잔여:": {
+    "en": "Management Remaining:",
+    "ja": "管理残り:"
+  },
+  "관리] —": {
+    "en": "Management] —",
+    "ja": "管理] —"
+  },
+  "관통": {
+    "en": "Pierce",
+    "ja": "貫通"
+  },
+  "관통 +{0}%": {
+    "en": "Pierce +{0}%",
+    "ja": "貫通 +{0}%"
+  },
+  "관통포": {
+    "en": "Piercing Cannon",
+    "ja": "貫通砲"
+  },
+  "광고 로딩 중...": {
+    "en": "Loading ad...",
+    "ja": "広告読み込み中..."
+  },
+  "광고 보고 0/2 개방": {
+    "en": "Watch Ad to Unlock 0/2",
+    "ja": "広告を見て 0/2 開放"
+  },
+  "광고 보고 영령 위령비 헌화하기": {
+    "en": "Watch Ad to Lay Flowers at the Hero Memorial",
+    "ja": "広告を見て英霊慰霊碑に献花する"
+  },
+  "광고 보고 점화 5회 충전 (+촉매)": {
+    "en": "Watch Ad to Recharge 5 Ignitions (+Catalyst)",
+    "ja": "広告を見て点火5回充填（+触媒）"
+  },
+  "광고 보고 파밍 자원 2배 획득 (장비/오파츠 제외) + 촉매 개방": {
+    "en": "Watch Ad for 2x Farmed Resources (Excludes Gear/Ooparts) + Unlock Catalyst",
+    "ja": "広告を見てファーミング資源2倍獲得（装備/オーパーツ除外）＋触媒開放"
+  },
+  "광고 보고 헌화하기": {
+    "en": "Watch Ad to Lay Flowers",
+    "ja": "広告を見て献花する"
+  },
+  "광고 시청 ➔ 5분간 전투 획득 경험치 +{0}% 가호 & 심연 촉매 슬롯 개방": {
+    "en": "Watch Ad ➔ 5 min +{0}% Combat EXP Blessing & Abyss Catalyst Slot Unlocked",
+    "ja": "広告視聴 ➔ 5分間戦闘獲得経験値+{0}%の加護＆深淵触媒スロット開放"
+  },
+  "광고를 끝까지 시청하시면 약속된 보상과 심연 촉매가 지급됩니다.": {
+    "en": "Watch the ad to the end to receive the promised rewards and Abyss Catalyst.",
+    "ja": "広告を最後まで視聴すると、約束された報酬と深淵触媒が支給されます。"
+  },
+  "광고를 시청하면 촉매 선택 슬롯이": {
+    "en": "Watching an ad will unlock catalyst selection slots",
+    "ja": "広告を視聴すると触媒選択スロットが"
+  },
+  "광고를 시청하여 30칸 대용량 짐수레 3회 인가 및 심연 촉매 슬롯을 개방합니다.": {
+    "en": "Watch an ad to authorize 3 large 30-slot carts and unlock the Abyss Catalyst slot.",
+    "ja": "広告を視聴して30枠大容量荷車3回認可および深淵触媒スロットを開放します。"
+  },
+  "광고를 시청하여 다음 원정에서 심연 촉매를 최대 2개 장착할 수 있도록 슬롯을 개방합니다.": {
+    "en": "Watch an ad to open slots for equipping up to 2 Abyss Catalysts on the next expedition.",
+    "ja": "広告を視聴して次の遠征で深淵触媒を最大2個装着できるようスロットを開放します。"
+  },
+  "광고를 시청하여 신성한 성화 점화 5회를 재충전합니다.": {
+    "en": "Watch an ad to recharge 5 ignitions of the Sacred Flame.",
+    "ja": "広告を視聴して神聖な聖火の点火5回を再充填します。"
+  },
+  "광고를 중단하시겠습니까?": {
+    "en": "Do you want to stop watching the ad?",
+    "ja": "広告を中断しますか？"
+  },
+  "광기의 난무": {
+    "en": "Flurry of Madness",
+    "ja": "狂気の乱舞"
+  },
+  "광기의 울부짖음": {
+    "en": "Howl of Madness",
+    "ja": "狂気の遠吠え"
+  },
+  "광기의 피의 축제": {
+    "en": "Madness Blood Feast",
+    "ja": "狂気の血の祝祭"
+  },
+  "광란의": {
+    "en": "Frenzied",
+    "ja": "狂乱の"
+  },
+  "광란의 대지분쇄": {
+    "en": "Frenzied Earth Shatter",
+    "ja": "狂乱の大地粉砕"
+  },
+  "광란의 피의 소용돌이: 공격력 +22%, 흡혈 +15%, 치명타 피해 +20%, 빈사 적 처형 피해 +25% (방어력 -5%)": {
+    "en": "Frenzied Blood Maelstrom: ATK +22%, Lifesteal +15%, Crit Damage +20%, Near-Death Enemy Execution Damage +25% (DEF -5%)",
+    "ja": "狂乱の血の渦：攻撃力 +22%、吸血 +15%、会心ダメージ +20%、瀕死の敵への処刑ダメージ +25%（防御力 -5%）"
+  },
+  "광맥": {
+    "en": "Vein",
+    "ja": "鉱脈"
+  },
+  "광맥 채굴 및 무너진 통로 개척": {
+    "en": "Vein Mining & Clearing Collapsed Passages",
+    "ja": "鉱脈採掘および崩落通路の開拓"
+  },
+  "광맥 채굴 시 2배 자원 획득 (귀환 보존)": {
+    "en": "2x Resources mined from veins (Retained upon return)",
+    "ja": "鉱脈採掘時2倍資源獲得（帰還時保存）"
+  },
+  "광맥 채굴량 2배 (골드/광석 4배 수급), 비밀 숏컷 개척 시 위험도 -50 대폭 감소": {
+    "en": "2x Vein Mining (4x Gold/Ore yield), -50 Hazard reduction upon discovering secret shortcuts",
+    "ja": "鉱脈採掘量2倍（ゴールド/鉱石4倍受給）、秘密ショートカット開拓時危険度-50大幅減少"
+  },
+  "광맥 파쇄 대형 해머": {
+    "en": "Vein Crushing Sledgehammer",
+    "ja": "鉱脈破砕大型ハンマー"
+  },
+  "광맥을 뒤로하고 계속 전진합니다.": {
+    "en": "Leave behind the ore vein and keep advancing.",
+    "ja": "鉱脈を後にして前進を続ける。"
+  },
+  "광맥의 고농도 에테르가 응축된 푸른 수정 외피를 지닌 전갈. 강력한 독침으로 적을 마비시킨다.": {
+    "en": "A scorpion with a blue crystal carapace condensed from high-density ether. Paralyzes enemies with a potent stinger.",
+    "ja": "鉱脈の高濃度エーテルが凝縮された青水晶の外皮を持つサソリ。強力な毒針で敵を麻痺させる。"
+  },
+  "광맥의 마도 분출": {
+    "en": "Vein Magic Eruption",
+    "ja": "鉱脈の魔導噴出"
+  },
+  "광맥의 생명력이 맥동하여 매 턴 착용자의 체력을 지속 재생시키는 최고급 비보.": {
+    "en": "A supreme treasure pulsing with the vitality of the mineral vein, continuously regenerating wearer's HP every turn.",
+    "ja": "鉱脈の生命力が脈動し、毎ターン装着者のHPを持続再生させる最高級の秘宝。"
+  },
+  "광맥의 심장을 성채의 노심에 연결하여 모든 생산 시설에 방대한 에테르와 고급 광물 자원을 비축합니다.": {
+    "en": "Connects the vein's heart to the citadel core, stockpiling vast ether and high-grade minerals for all production facilities.",
+    "ja": "鉱脈の心臓を城塞の炉心に接続し、すべての生産施設に膨大なエーテルと高級鉱物資源を備蓄します。"
+  },
+  "광맥의 에테르 폭발": {
+    "en": "Vein Ether Explosion",
+    "ja": "鉱脈のエーテル爆発"
+  },
+  "광범위 마법 폭격에 필요한 압도적인 마력을 품은 마법사 계열의 결전 대지팡이.": {
+    "en": "A decisive greatstaff for mages harboring overwhelming magical power required for wide-area magic bombardment.",
+    "ja": "広範囲魔法爆撃に必要な圧倒的魔力を秘めた魔法使い系の決戦大杖。"
+  },
+  "광산": {
+    "en": "Mine",
+    "ja": "鉱山"
+  },
+  "광산 생산 & 무기/중갑 장비 단조 및 강화": {
+    "en": "Mine Production & Weapon/Heavy Armor Forging and Enhancement",
+    "ja": "鉱山生産＆武器/重甲装備の鍛造および強化"
+  },
+  "광역": {
+    "en": "AoE",
+    "ja": "範囲攻撃"
+  },
+  "광역 얼음 파편 폭풍 피해 (45%)": {
+    "en": "AoE Ice Shard Storm Damage (45%)",
+    "ja": "範囲氷破片嵐ダメージ（45%）"
+  },
+  "광역 정화 & 방어 버프": {
+    "en": "AoE Cleansing & DEF Buff",
+    "ja": "範囲浄化＆防御バフ"
+  },
+  "광전사": {
+    "en": "Berserker",
+    "ja": "狂戦士"
+  },
+  "광전사 + 거너 조합": {
+    "en": "Berserker + Gunner Combo",
+    "ja": "狂戦士＋ガンナー編成"
+  },
+  "광전사 2인": {
+    "en": "2 Berserkers",
+    "ja": "狂戦士2人"
+  },
+  "광전사 3인 (순수 버서커)": {
+    "en": "3 Berserkers (Pure Berserker)",
+    "ja": "狂戦士3人（純粋バーサーカー）"
+  },
+  "광전사 ➔ 검투사 / 피의 광전사 ➔ 👑 학살자 (Blood Slayer)": {
+    "en": "Berserker ➔ Gladiator / Blood Berserker ➔ 👑 Blood Slayer",
+    "ja": "狂戦士 ➔ 剣闘士 / 血の狂戦士 ➔ 👑 虐殺者 (Blood Slayer)"
+  },
+  "광전사 발할": {
+    "en": "Berserker Valhal",
+    "ja": "狂戦士ヴァルハル"
+  },
+  "광전사 선봉계": {
+    "en": "Berserker Vanguard Branch",
+    "ja": "狂戦士先鋒系"
+  },
+  "광전사/딜탱": {
+    "en": "Berserker / Bruiser",
+    "ja": "狂戦士/ブルーザー"
+  },
+  "광전사의 분노: 파티 공격력 +12%, 흡혈 +6%, 저체력 처형 피해 +15%": {
+    "en": "Berserker's Fury: Party ATK +12%, Lifesteal +6%, Low-HP Execution Damage +15%",
+    "ja": "狂戦士の怒り：パーティ攻撃力 +12%、吸血 +6%、低HP処刑ダメージ +15%"
+  },
+  "광전사의 혈통": {
+    "en": "Berserker Bloodline",
+    "ja": "狂戦士の血統"
+  },
+  "광채 은빛 반지": {
+    "en": "Lustrous Silver Ring",
+    "ja": "光彩の銀の指輪"
+  },
+  "광채의": {
+    "en": "Lustrous",
+    "ja": "光彩の"
+  },
+  "광폭": {
+    "en": "Frenzy",
+    "ja": "狂暴"
+  },
+  "광폭화": {
+    "en": "Enrage",
+    "ja": "狂暴化"
+  },
+  "광폭화 (능력치 1.3배)": {
+    "en": "Enrage (Stats 1.3x)",
+    "ja": "狂暴化（ステータス1.3倍）"
+  },
+  "광폭화 보스를 토벌하여 차원 포탈이 완전히 안정화되었습니다. 다음 행동을 선택하세요.": {
+    "en": "The frenzied boss has been defeated, and the dimensional portal is completely stabilized. Choose your next action.",
+    "ja": "狂暴化ボスを討伐し、次元ポータルが完全に安定化しました。次の行動を選択してください。"
+  },
+  "교단": {
+    "en": "Order",
+    "ja": "教団"
+  },
+  "교차 화력 지원: 속도 +12%, 공격력 +8%, 행운 +9": {
+    "en": "Crossfire Support: Speed +12%, ATK +8%, Luck +9",
+    "ja": "交差火力支援：速度 +12%、攻撃力 +8%、幸運 +9"
+  },
+  "교환": {
+    "en": "Exchange",
+    "ja": "交換"
+  },
+  "구글 인증 창이 닫혔습니다.": {
+    "en": "Google authentication window has been closed.",
+    "ja": "Google認証ウィンドウが閉じられました。"
+  },
+  "구매 실패: [{0}] 품목이 매진되었습니다! (재입고까지 {1}분 {2}초 남음)": {
+    "en": "Purchase Failed: [{0}] is sold out! ({1}m {2}s remaining until restock)",
+    "ja": "購入失敗：[{0}]は売り切れました！（再入荷まであと{1}分{2}秒）"
+  },
+  "구매 실패: [{0}]의 창고 적재량이 가득 찼습니다! ({1}/{2})": {
+    "en": "Purchase Failed: Storage capacity for [{0}] is full! ({1}/{2})",
+    "ja": "購入失敗：[{0}]の倉庫積載量が満杯です！（{1}/{2}）"
+  },
+  "구매 실패: 골드가 부족합니다! (필요: {0}G, 보유: {1}G)": {
+    "en": "Purchase Failed: Insufficient gold! (Requires: {0}G, Owned: {1}G)",
+    "ja": "購入失敗：ゴールドが不足しています！（必要: {0}G、所持: {1}G）"
+  },
+  "구매 실패: 구매 요청 수량({0}개)이 현재 상점 매입 재고({1}개)를 초과합니다!": {
+    "en": "Purchase Failed: Requested purchase quantity ({0}) exceeds current shop stock ({1})!",
+    "ja": "購入失敗：購入希望数量（{0}個）が現在のショップ在庫（{1}個）を超過しています！"
+  },
+  "구세계 2차 전지 배터리": {
+    "en": "Old World Secondary Battery",
+    "ja": "旧世界二次電池バッテリー"
+  },
+  "구세계 3D 홀로그램 투사기": {
+    "en": "Old World 3D Hologram Projector",
+    "ja": "旧世界3Dホログラム投影機"
+  },
+  "구세계 광역 고속철도망 안내도": {
+    "en": "Old World High-Speed Rail Map",
+    "ja": "旧世界広域高速鉄道網案内図"
+  },
+  "구세계 광학 유리 렌즈": {
+    "en": "Old World Optical Glass Lens",
+    "ja": "旧世界光学ガラスレンズ"
+  },
+  "구세계 교육기관 학생 신분증": {
+    "en": "Old World Student ID Card",
+    "ja": "旧世界教育機関学生身分証"
+  },
+  "구세계 기록": {
+    "en": "Old World Records",
+    "ja": "旧世界の記録"
+  },
+  "구세계 다색 필기구": {
+    "en": "Old World Multicolor Pen",
+    "ja": "旧世界多色筆記具"
+  },
+  "구세계 도자기 머그잔": {
+    "en": "Old World Ceramic Mug",
+    "ja": "旧世界陶磁器マグカップ"
+  },
+  "구세계 마그네틱 결제 카드": {
+    "en": "Old World Magnetic Payment Card",
+    "ja": "旧世界磁気決済カード"
+  },
+  "구세계 무선 음성 통신 단말": {
+    "en": "Old World Wireless Voice Radio",
+    "ja": "旧世界無線音声通信端末"
+  },
+  "구세계 양자 연산 코어 칩셋": {
+    "en": "Old World Quantum Computing Core Chipset",
+    "ja": "旧世界量子演算コアチップセット"
+  },
+  "구세계 오파츠 (10F)": {
+    "en": "Old World Ooparts (10F)",
+    "ja": "旧世界オーパーツ（10F）"
+  },
+  "구세계 오파츠 (1F)": {
+    "en": "Old World Ooparts (1F)",
+    "ja": "旧世界オーパーツ（1F）"
+  },
+  "구세계 오파츠 (2F)": {
+    "en": "Old World Ooparts (2F)",
+    "ja": "旧世界オーパーツ（2F）"
+  },
+  "구세계 오파츠 (3F)": {
+    "en": "Old World Ooparts (3F)",
+    "ja": "旧世界オーパーツ（3F）"
+  },
+  "구세계 오파츠 (4F)": {
+    "en": "Old World Ooparts (4F)",
+    "ja": "旧世界オーパーツ（4F）"
+  },
+  "구세계 오파츠 (5F)": {
+    "en": "Old World Ooparts (5F)",
+    "ja": "旧世界オーパーツ（5F）"
+  },
+  "구세계 오파츠 (6F)": {
+    "en": "Old World Ooparts (6F)",
+    "ja": "旧世界オーパーツ（6F）"
+  },
+  "구세계 오파츠 (7F)": {
+    "en": "Old World Ooparts (7F)",
+    "ja": "旧世界オーパーツ（7F）"
+  },
+  "구세계 오파츠 (8F)": {
+    "en": "Old World Ooparts (8F)",
+    "ja": "旧世界オーパーツ（8F）"
+  },
+  "구세계 오파츠 (9F)": {
+    "en": "Old World Ooparts (9F)",
+    "ja": "旧世界オーパーツ（9F）"
+  },
+  "구세계 음향 리시버 장치": {
+    "en": "Old World Audio Receiver",
+    "ja": "旧世界音響レシーバー装置"
+  },
+  "구세계 이중 진공 보온 텀블러": {
+    "en": "Old World Double Vacuum Insulated Tumbler",
+    "ja": "旧世界二重真空保温タンブラー"
+  },
+  "구세계 자기 테이프 음원 기록체": {
+    "en": "Old World Magnetic Audio Cassette",
+    "ja": "旧世界磁気テープ音源記録体"
+  },
+  "구세계 전자 쿼츠 시계": {
+    "en": "Old World Quartz Watch",
+    "ja": "旧世界電子クォーツ時計"
+  },
+  "구세계 전자기기 액정 파편": {
+    "en": "Old World Electronic LCD Fragment",
+    "ja": "旧世界電子機器液晶破片"
+  },
+  "구세계 즉석 인화 필름 사진": {
+    "en": "Old World Instant Film Photograph",
+    "ja": "旧世界インスタント写真"
+  },
+  "구세계 초경량 티타늄 프레임": {
+    "en": "Old World Ultralight Titanium Frame",
+    "ja": "旧世界超軽量チタンフレーム"
+  },
+  "구세계 최후의 방공호 마스터 키": {
+    "en": "Old World Bunker Master Key",
+    "ja": "旧世界最後の防空壕マスターキー"
+  },
+  "구세계 코르크 개봉 기구": {
+    "en": "Old World Corkscrew",
+    "ja": "旧世界コルクオープナー"
+  },
+  "구세계 회전식 화장품 케이스": {
+    "en": "Old World Twist Lipstick Case",
+    "ja": "旧世界回転式コスメケース"
+  },
+  "구세계의 직장인과 연구원들이 책상 위에 두고 음료를 마시던 도자기 잔입니다.": {
+    "en": "A ceramic mug once kept on desks by workers and researchers of the Old World to drink beverages.",
+    "ja": "旧世界の会社員や研究員たちが机の上に置き、飲み物を口にしていた陶磁器のカップ。"
+  },
+  "구원의 빛": {
+    "en": "Light of Salvation",
+    "ja": "救済の光"
+  },
+  "구원자의 불멸 성가: 매 턴 체력 3.5% 및 마나 +4 MP 재생, 전능력치 +8%": {
+    "en": "Savior's Immortal Hymn: 3.5% HP and +4 MP Regen per turn, All Stats +8%",
+    "ja": "救済者の不滅の聖歌：毎ターンHP 3.5%およびMP +4再生、全能力値 +8%"
+  },
+  "구출된 생존자 거주지. 방주에 세금(골드)을 13초마다 정기 납부합니다.": {
+    "en": "Shelter for rescued survivors. Regularly pays taxes (Gold) to the Ark every 13s.",
+    "ja": "救出された生存者の居住区。13秒ごとに方舟へ税金（ゴールド）を定期納付します。"
+  },
+  "구출된 피난민들을 위한 기초 목조 주거 구역. 거친 비바람을 피할 수 있게 되면서 방주에 정착한 주민들이 감사의 뜻으로 소액의 세금을 납부하기 시작합니다.": {
+    "en": "Basic wooden housing quarter for rescued refugees. Sheltered from harsh storms, settlers residing in the Ark begin paying modest taxes in gratitude.",
+    "ja": "救出された避難民のための基礎的な木造居住区。風雨をしのげるようになり、方舟に定住した住民たちが感謝の意を込めて少額の税金を納め始めます。"
+  },
+  "군단 총진격": {
+    "en": "Legion All-Out Charge",
+    "ja": "軍団総進撃"
+  },
+  "군단 총진격 & 총공격 진격령": {
+    "en": "Legion All-Out Charge & General Assault Order",
+    "ja": "軍団総進撃＆総攻撃進撃令"
+  },
+  "군수 물자 대용량 보관": {
+    "en": "Mass Military Logistics Storage",
+    "ja": "軍需物資大容量保管"
+  },
+  "군용 티타늄 안경테는 한쪽 렌즈가 깨져 있고 테가 심하게 일그러져 있다. 무전기의 송신 버튼은 누른 채로 굳어 있었다. \"...지휘부 응답하라. 제8방어선 방벽이 무너졌다. 총알이 통하지 않는다. 괴물들이... 안개 속에서 기어나온다. 민간인 수송기는 이륙했는가? ...응답할 필요 없다. 우리는 끝까지 남아서 진입로를 폭파하겠다. 신이시여 인류를 굽어살피소서.\" 마지막 찰칵 소리와 함께 끊어진 신호. 그들이 목숨을 바쳐 벌어준 30분 덕분에, 인류의 씨앗을 실은 초기 방주가 지하 격납고를 빠져나올 수 있었다.": {
+    "en": "The military titanium frame has a shattered lens and severely bent rims. The radio's transmit button was locked down. \"...Command, respond. 8th defense perimeter has fallen. Bullets have no effect. The monsters... crawling out of the fog. Has the civilian transport taken off? ...No need to respond. We will hold to the last and detonate the access tunnels. God preserve mankind.\" The transmission cut with a final click. Thanks to the 30 minutes bought with their lives, the early Ark carrying mankind's seeds was able to escape the underground hangar.",
+    "ja": "軍用チタン眼鏡フレームは片側のレンズが割れ、フレームがひどく歪んでいる。無線機の送信ボタンは押されたまま固まっていた。「…司令部応答せよ。第8防衛線の防壁が崩壊した。銃弾が通じない。怪物が…霧の中から這い出てくる。民間人輸送機は離陸したか？…応答は不要だ。我々は最後まで残り進入路を爆破する。神よ、人類を御加護あれ。」最後のカチリという音とともに途絶えた信号。彼らが命を賭して稼いだ30分のおかげで、人類の種を乗せた最初期の方舟が地下格納庫を脱出できたのだ。"
+  },
+  "군주:": {
+    "en": "Lord:",
+    "ja": "軍主:"
+  },
+  "군주의 비전서: 6~10층편": {
+    "en": "Lord's Grimoire: Floors 6-10",
+    "ja": "軍主の秘伝書：6〜10階編"
+  },
+  "군집 난무": {
+    "en": "Swarm Flurry",
+    "ja": "群集乱舞"
+  },
+  "굳건한 신뢰": {
+    "en": "Steadfast Trust",
+    "ja": "確固たる信頼"
+  },
+  "굳어버린 3색 볼펜": {
+    "en": "Dried 3-Color Ballpoint Pen",
+    "ja": "固まった3色ボールペン"
+  },
+  "굳은 신뢰의 눈빛을 주고받으며 결속을 다집니다.": {
+    "en": "Exchange glances of steadfast trust and deepen your bond.",
+    "ja": "固い信頼の眼差しを交わし、結束を固める。"
+  },
+  "궁": {
+    "en": "Ultimate",
+    "ja": "究極技"
+  },
+  "궁극기": {
+    "en": "Ultimate Skill",
+    "ja": "究極スキル"
+  },
+  "궁극기 범위 적 전체로 강제 확장 + 최종 위력 +120% 증폭 + 방어 관통 40%": {
+    "en": "Ultimate range forcefully expands to all enemies + final power +120% + 40% Armor Penetration",
+    "ja": "究極スキルの範囲が敵全体へ強制拡張＋最終威力+120%増幅＋防御貫通40%"
+  },
+  "궁극기 위력 +{0}%, 치명타율 +{1}%, 방어 관통 {2}%": {
+    "en": "Ultimate Power +{0}%, Crit Rate +{1}%, Armor Penetration {2}%",
+    "ja": "究極スキル威力 +{0}%, 会心率 +{1}%, 防御貫通 {2}%"
+  },
+  "권": {
+    "en": " books",
+    "ja": "巻"
+  },
+  "권 보유": {
+    "en": " owned",
+    "ja": "巻所持"
+  },
+  "권 추가 필요": {
+    "en": " more required",
+    "ja": "巻追加必要"
+  },
+  "권)": {
+    "en": " books)",
+    "ja": "巻）"
+  },
+  "권당 +": {
+    "en": "Per Book +",
+    "ja": "1巻あたり +"
+  },
+  "권총": {
+    "en": "Pistol",
+    "ja": "拳銃"
+  },
+  "궤도": {
+    "en": "Orbital",
+    "ja": "軌道"
+  },
+  "궤도 에테르 버스터": {
+    "en": "Orbital Ether Buster",
+    "ja": "軌道エーテルバスター"
+  },
+  "궤도 조명 폭격": {
+    "en": "Orbital Flare Bombardment",
+    "ja": "軌道照明爆撃"
+  },
+  "궤도의": {
+    "en": "Orbital",
+    "ja": "軌道の"
+  },
+  "귀환 ({0})": {
+    "en": "Return ({0})",
+    "ja": "帰還（{0}）"
+  },
+  "귀환 기회를 포기하고 깊은 심연으로 발걸음을 옮깁니다.": {
+    "en": "Forgo the chance to return and tread deeper into the Abyss.",
+    "ja": "帰還の機会を諦め、深淵の奥底へと歩みを進める。"
+  },
+  "균열의 닻": {
+    "en": "Rift Anchor",
+    "ja": "亀裂の錨"
+  },
+  "균열의 닻 부족 (닻 1개 필요)": {
+    "en": "Insufficient Rift Anchors (Requires 1 Anchor)",
+    "ja": "亀裂の錨不足（錨1個必要）"
+  },
+  "균열의 차원 추적자": {
+    "en": "Rift Dimensional Stalker",
+    "ja": "亀裂の次元追跡者"
+  },
+  "균형잡힌 정예": {
+    "en": "Balanced Elite",
+    "ja": "バランスの取れた精鋭"
+  },
+  "그랩 당겨짐": {
+    "en": "Pulled by Grab",
+    "ja": "グラブで引き寄せ"
+  },
+  "그러나 성채의 심장을 유지하던 여신의 성화는 꺼져가고, 심연의 바닥에서는 잠든 고대 군주들이 깨어나 성채를 끌어내리려 한다.\"": {
+    "en": "Yet the goddess's sacred flame that sustained the citadel's heart is fading, and sleeping ancient lords awake from the depths of the abyss to tear the citadel down.\"",
+    "ja": "しかし城塞の心臓を維持していた女神の聖火は消えかけ、深淵の底では眠れる古代軍主たちが目覚め城塞を引きずり降ろそうとしている。」"
+  },
+  "그렇군... 거울 속에 갇혀 있던 것은 내 오만함이었어. 지휘관님 덕분에 마침내 부서진 영혼이 하나로 완성되었습니다.": {
+    "en": "I see... What was trapped within the mirror was my own hubris. Thanks to you, Commander, my shattered soul is finally whole.",
+    "ja": "そうか…鏡の中に閉じ込められていたのは私の傲慢さだった。指揮官様のおかげで、ようやく砕けた魂が一つに完成しました。"
+  },
+  "그로기 (Groggy)": {
+    "en": "Groggy",
+    "ja": "グロッキー (Groggy)"
+  },
+  "그로기 (행동불능)": {
+    "en": "Groggy (Incapacitated)",
+    "ja": "グロッキー（行動不能）"
+  },
+  "그림자": {
+    "en": "Shadow",
+    "ja": "影"
+  },
+  "그림자 가죽옷 +1": {
+    "en": "Shadow Leather Outfit +1",
+    "ja": "影の革の服 +1"
+  },
+  "그림자 걸음": {
+    "en": "Shadow Step",
+    "ja": "影歩"
+  },
+  "그림자 결투사": {
+    "en": "Shadow Duelist",
+    "ja": "影の決闘士"
+  },
+  "그림자 기습": {
+    "en": "Shadow Ambush",
+    "ja": "影の奇襲"
+  },
+  "그림자 기습 비수": {
+    "en": "Shadow Ambush Dagger",
+    "ja": "影の奇襲短刀"
+  },
+  "그림자 망령": {
+    "en": "Shadow Phantom",
+    "ja": "影の亡霊"
+  },
+  "그림자 망령: [궁극기] 무간암영참 — 시공 분신으로 적 전체 6연속 광역 난무 (총 200% 참격)": {
+    "en": "Shadow Phantom: [Ultimate] Avici Dark Shadow Slash — 6 consecutive AoE strikes against all enemies with space-time clones (total 200% slash)",
+    "ja": "影の亡霊：[究極技] 無間暗影斬 — 時空分身による敵全体6連続範囲乱舞（計200%斬撃）"
+  },
+  "그림자 발걸음": {
+    "en": "Shadow Steps",
+    "ja": "影の足取り"
+  },
+  "그림자 베기": {
+    "en": "Shadow Slash",
+    "ja": "影斬り"
+  },
+  "그림자 부적": {
+    "en": "Shadow Talisman",
+    "ja": "影の護符"
+  },
+  "그림자 성전단": {
+    "en": "Shadow Crusade Order",
+    "ja": "影の聖戦団"
+  },
+  "그림자 속에 숨은 암살자는 목표가 숨을 들이쉬는 찰나에 경동맥을 긋는다.": {
+    "en": "An assassin lurking in the shadows slits the jugular vein the moment their mark draws breath.",
+    "ja": "影に潜む暗殺者は、標的が息を吸い込む刹那に頸動脈を切り裂く。"
+  },
+  "그림자 속에서 적의 급소를 찌르고 맹독과 정밀 저격을 가하는 암살 교본 3종.": {
+    "en": "3 assassination manuals detailing strikes on vitals, deadly poisons, and precision sniping from the shadows.",
+    "ja": "影の中から敵の急所を突き、猛毒と精密狙撃を加える暗殺教本3種。"
+  },
+  "그림자 속을 춤추며 적 1체에 140% 피해를 입히고 2턴간 출혈을 부여합니다.": {
+    "en": "Dances through the shadows to deal 140% damage to 1 enemy and inflicts Bleed for 2 turns.",
+    "ja": "影の中を舞い、敵1体に140%のダメージを与えて2ターンの間出血を付与する。"
+  },
+  "그림자 수련생": {
+    "en": "Shadow Apprentice",
+    "ja": "影の修練生"
+  },
+  "그림자 수련생 ➔ [암살자 ➔ 그림자 망령] / [그림자 결투사 ➔ 환영의 검성]": {
+    "en": "Shadow Apprentice ➔ [Assassin ➔ Shadow Phantom] / [Shadow Duelist ➔ Illusion Blade Lord]",
+    "ja": "影の修練生 ➔ [暗殺者 ➔ 影の亡霊] / [影の決闘士 ➔ 幻影の剣聖]"
+  },
+  "그림자 수련생 ➔ 암살자 / 결투사 ➔ 👑 그림자 군주 (Shadow Lord)": {
+    "en": "Shadow Apprentice ➔ Assassin / Duelist ➔ 👑 Shadow Lord",
+    "ja": "影の修練生 ➔ 暗殺者 / 決闘士 ➔ 👑 影の軍主 (Shadow Lord)"
+  },
+  "그림자 수련생 계통": {
+    "en": "Shadow Apprentice Branch",
+    "ja": "影の修練生系統"
+  },
+  "그림자 수련생의 기민함: 파티 속도 +6%, 중열 회피율 +8%": {
+    "en": "Shadow Apprentice's Agility: Party Speed +6%, Mid Row Evasion +8%",
+    "ja": "影の修練生の機敏さ：パーティ速度 +6%、中衛回避率 +8%"
+  }
+}

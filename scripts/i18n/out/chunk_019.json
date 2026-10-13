@@ -1,0 +1,802 @@
+{
+  "보급 수량:": {
+    "en": "Supplies Quantity:",
+    "ja": "補給数量:"
+  },
+  "보급 식량 🍖 +{0}, 가죽 🥋 +{1}/13초 생산": {
+    "en": "Produces Provisions 🍖 +{0}, Leather 🥋 +{1} every 13s",
+    "ja": "補給食糧🍖+{0}、革🥋+{1}/13秒生産"
+  },
+  "보급 식량 🍖 +{0}/13초 생산": {
+    "en": "Produces Provisions 🍖 +{0} every 13s",
+    "ja": "補給食糧🍖+{0}/13秒生産"
+  },
+  "보급관 엘릭": {
+    "en": "Quartermaster Elric",
+    "ja": "補給官エルリック"
+  },
+  "보급품": {
+    "en": "Supplies",
+    "ja": "補給品"
+  },
+  "보급품 ({0})": {
+    "en": "Supplies ({0})",
+    "ja": "補給品 ({0})"
+  },
+  "보급품 백과": {
+    "en": "Supplies Codex",
+    "ja": "補給品百科"
+  },
+  "보너스:": {
+    "en": "Bonus:",
+    "ja": "ボーナス:"
+  },
+  "보물 상자": {
+    "en": "Treasure Chest",
+    "ja": "宝箱"
+  },
+  "보물 상자 및 고대 석관 개방": {
+    "en": "Open Treasure Chest & Ancient Sarcophagus",
+    "ja": "宝箱および古代の石棺を開放"
+  },
+  "보물 상자 속에서": {
+    "en": "Inside the treasure chest",
+    "ja": "宝箱の中から"
+  },
+  "보물상자 및 고대 석관 개방": {
+    "en": "Open Treasure Chest & Ancient Sarcophagus",
+    "ja": "宝箱および古代の石棺を開放"
+  },
+  "보상 수령": {
+    "en": "Claim Reward",
+    "ja": "報酬受取"
+  },
+  "보상 수령 (": {
+    "en": "Claim Reward (",
+    "ja": "報酬受取 ("
+  },
+  "보상 수령 ▶": {
+    "en": "Claim Reward ▶",
+    "ja": "報酬受取 ▶"
+  },
+  "보상 수령하기": {
+    "en": "Claim Reward",
+    "ja": "報酬を受け取る"
+  },
+  "보상 획득": {
+    "en": "Reward Acquired",
+    "ja": "報酬獲得"
+  },
+  "보상 획득 완료 및 닫기": {
+    "en": "Claim Rewards & Close",
+    "ja": "報酬獲得完了および閉じる"
+  },
+  "보스": {
+    "en": "Boss",
+    "ja": "ボス"
+  },
+  "보스 고유 마도서 기본 드랍 확률": {
+    "en": "Boss Unique Grimoire Base Drop Rate",
+    "ja": "ボス固有魔導書の基本ドロップ率"
+  },
+  "보스 고유 세트": {
+    "en": "Boss Unique Set",
+    "ja": "ボス固有セット"
+  },
+  "보스 마도서 & 궁극 스킬 해금": {
+    "en": "Boss Grimoires & Ultimate Skills Unlock",
+    "ja": "ボス魔導書＆アルティメットスキル解放"
+  },
+  "보스 명칭": {
+    "en": "Boss Name",
+    "ja": "ボス名称"
+  },
+  "보스 비전서 획득!": {
+    "en": "Acquired Boss Grimoire!",
+    "ja": "ボス魔導書を獲得！"
+  },
+  "보스 비전서/스킬 설명": {
+    "en": "Boss Grimoire/Skill Description",
+    "ja": "ボス魔導書/スキル説明"
+  },
+  "보스 세트": {
+    "en": "Boss Set",
+    "ja": "ボスセット"
+  },
+  "보스 신화": {
+    "en": "Boss Mythic",
+    "ja": "ボス神話"
+  },
+  "보스 신화 유물": {
+    "en": "Boss Mythic Relic",
+    "ja": "ボス神話の遺物"
+  },
+  "보스 잔여 체력": {
+    "en": "Boss Remaining HP",
+    "ja": "ボスの残りHP"
+  },
+  "보스 조우": {
+    "en": "Boss Encounter",
+    "ja": "ボス遭遇"
+  },
+  "보스 칭호": {
+    "en": "Boss Title",
+    "ja": "ボスの称号"
+  },
+  "보스 토벌 전리품": {
+    "en": "Boss Subjugation Spoils",
+    "ja": "ボストー伐戦利品"
+  },
+  "보스 피버 만충! 아군 전원에게 차원 균열 파동!": {
+    "en": "Boss FEVER fully charged! Dimensional Rift Wave cast on all allies!",
+    "ja": "ボスFEVERフルチャージ！味方全員に次元亀裂の波動！"
+  },
+  "보스를 물리치고 차원 포탈을 확보했습니다. 다음 행동을 선택하세요.": {
+    "en": "Defeated the boss and secured the dimensional portal. Choose your next action.",
+    "ja": "ボスを撃破し次元ポータルを確保した。次の行動を選択せよ。"
+  },
+  "보안 암호문 (6자리 이상)": {
+    "en": "Security Password (6+ characters)",
+    "ja": "セキュリティ暗号文 (6文字以上)"
+  },
+  "보유": {
+    "en": "Owned",
+    "ja": "所持"
+  },
+  "보유 {0}/7명": {
+    "en": "Owned {0}/7",
+    "ja": "所持 {0}/7名"
+  },
+  "보유 골드 변동:": {
+    "en": "Owned Gold Change:",
+    "ja": "所持ゴールド変動:"
+  },
+  "보유 골드:": {
+    "en": "Owned Gold:",
+    "ja": "所持ゴールド:"
+  },
+  "보유 닻:": {
+    "en": "Owned Anchors:",
+    "ja": "所持錨:"
+  },
+  "보유 수량:": {
+    "en": "Owned Quantity:",
+    "ja": "所持数量:"
+  },
+  "보유 용병 선택 (슬롯을 먼저 선택하거나 탭하여 바로 배치)": {
+    "en": "Select Owned Mercenary (Select slot first or tap to deploy immediately)",
+    "ja": "所持傭兵を選択 (スロットを先に選択するかタップして即時配置)"
+  },
+  "보유 자원": {
+    "en": "Owned Resources",
+    "ja": "所持資源"
+  },
+  "보유 재고": {
+    "en": "Owned Stock",
+    "ja": "所持在庫"
+  },
+  "보유 중인 저주받은 장비가 없습니다.": {
+    "en": "No cursed equipment in possession.",
+    "ja": "所持中の呪われた装備はありません。"
+  },
+  "보유 중인 해당 분류의 장비가 없습니다.": {
+    "en": "No equipment of this category in possession.",
+    "ja": "所持中の該当カテゴリの装備はありません。"
+  },
+  "보유:": {
+    "en": "Owned:",
+    "ja": "所持:"
+  },
+  "보유량 / 필요량": {
+    "en": "Owned / Required",
+    "ja": "所持量 / 必要量"
+  },
+  "보유량(무제한 판매 가능):": {
+    "en": "Owned (Unlimited sellable):",
+    "ja": "所持量(無制限売却可能):"
+  },
+  "보존성과 영양가가 뛰어난 건조 육류와 곡물 보급품입니다. 던전 탐험 중 야영(Camp)을 거행할 때 파티원의 체력과 마나를 대량 회복시키며, 병동의 부상 용병 치료 시 소비됩니다.": {
+    "en": "Supplies of dried meat and grains with excellent shelf life and nutritional value. Greatly restores party HP and MP during camps on dungeon expeditions, and is consumed when treating wounded mercenaries in the ward.",
+    "ja": "保存性と栄養価に優れた乾燥肉と穀物の補給品。ダンジョン探検中の野営(Camp)時にパーティメンバーのHPとMPを大幅に回復させ、病棟の負傷傭兵治療時に消費される。"
+  },
+  "보호막": {
+    "en": "Shield",
+    "ja": "シールド"
+  },
+  "보호막 방벽": {
+    "en": "Shield Barrier",
+    "ja": "シールド防壁"
+  },
+  "보호막 붕괴": {
+    "en": "Shield Collapse",
+    "ja": "シールド崩壊"
+  },
+  "보호막 상태": {
+    "en": "Shielded State",
+    "ja": "シールド状態"
+  },
+  "보호막 전개, 방패 막기 또는 아군 수호": {
+    "en": "Deploy shield, block with shield, or protect ally",
+    "ja": "シールド展開、盾ブロック、または味方守護"
+  },
+  "보호막 타격 시": {
+    "en": "When striking a shield",
+    "ja": "シールド攻撃時"
+  },
+  "보호막(Shield)에 50% 증폭 피해": {
+    "en": "50% amplified damage to Shields",
+    "ja": "シールド(Shield)に50%増幅ダメージ"
+  },
+  "보호막에 50% 추가 피해": {
+    "en": "50% bonus DMG against shields",
+    "ja": "シールドに50%追加ダメージ"
+  },
+  "복사": {
+    "en": "Copy",
+    "ja": "コピー"
+  },
+  "복원": {
+    "en": "Restore",
+    "ja": "復元"
+  },
+  "복잡한 거미줄처럼 수도권 지하를 연결하던 고속 철도망 안내도입니다. 역 이름마다 번호가 매겨져 있습니다.": {
+    "en": "A rapid transit map that once interconnected the metropolitan underground like a complex spiderweb. Each station name is numbered.",
+    "ja": "複雑な蜘蛛の巣のように首都圏地下を結んでいた高速鉄道網の案内図。駅名ごとに番号が振られている。"
+  },
+  "봉": {
+    "en": "Staff",
+    "ja": "棒"
+  },
+  "부대 관리": {
+    "en": "Troop Management",
+    "ja": "部隊管理"
+  },
+  "부상 대원 집중 생체 복원 병동 (미건설)": {
+    "en": "Intensive Bio-Restoration Ward for Wounded Squad Members (Unbuilt)",
+    "ja": "負傷隊員集中生体復元病棟 (未建設)"
+  },
+  "부상 대원 체력/마나 복원": {
+    "en": "Restore Wounded Squad Member HP/MP",
+    "ja": "負傷隊員のHP/MP復元"
+  },
+  "부상당한 원정 대원들의 집중 치료와 생체 에너지 복원을 위해 생체 복원 병동을 건설하세요. (완공 시 영혼의 제단 개방)": {
+    "en": "Construct the Bio-Restoration Ward for intensive care and bio-energy restoration of wounded expedition members. (Soul Sanctuary unlocks upon completion)",
+    "ja": "負傷した遠征隊員の集中治療と生体エネルギー復元のため、生体復元病棟を建設せよ。(完成時に魂の祭壇解放)"
+  },
+  "부상병 입원 및 치료": {
+    "en": "Hospitalize & Treat Wounded",
+    "ja": "負傷兵の入院および治療"
+  },
+  "부서진 무전기 트랜시버": {
+    "en": "Broken Radio Transceiver",
+    "ja": "壊れたトランシーバー"
+  },
+  "부서진 헤드폰": {
+    "en": "Broken Headphones",
+    "ja": "壊れたヘッドホン"
+  },
+  "부식": {
+    "en": "Corrosion",
+    "ja": "腐食"
+  },
+  "부식성 맹독 분출구": {
+    "en": "Corrosive Venom Vent",
+    "ja": "腐食性猛毒噴出口"
+  },
+  "부여 스킬:": {
+    "en": "Granted Skill:",
+    "ja": "付与スキル:"
+  },
+  "부위: {0} • 유형: {1} • 등급: {2}": {
+    "en": "Slot: {0} • Type: {1} • Grade: {2}",
+    "ja": "部位: {0}・タイプ: {1}・等級: {2}"
+  },
+  "부위별 인챈트 풀: 무기(공격·치명·관통·흡혈·고유스킬), 방어구(방어·체력·수호·불굴·가호), 장신구(마나·속도·행운·지혜·파동)로 완벽 분화": {
+    "en": "Slot-specific enchant pools: perfectly differentiated into Weapons (ATK/Crit/Piercing/Lifesteal/Unique Skill), Armor (DEF/HP/Protection/Indomitable/Blessing), and Accessories (MP/SPD/LUCK/Wisdom/Wave)",
+    "ja": "部位別エンチャントプール: 武器(攻撃・会心・貫通・吸血・固有スキル)、防具(防御・体力・守護・不屈・加護)、装飾品(マナ・速度・幸運・知恵・波動)に完全分化"
+  },
+  "부유성 지반 깊숙한 곳의 에테르 석재 광맥을 시추할 시설이 없습니다.": {
+    "en": "There is no facility to drill into the ether stone veins deep within the floating citadel's bedrock.",
+    "ja": "浮遊城の地盤深部にあるエーテル石材鉱脈を採掘する施設がない。"
+  },
+  "부유성 지반 채굴 시설. 11초마다 석재를 생산하며 점차 철광석도 함께 발굴합니다.": {
+    "en": "Floating citadel bedrock quarry. Produces stone every 11s and gradually excavates iron ore as well.",
+    "ja": "浮遊城の地盤採掘施設。11秒ごとに石材を生産し、次第に鉄鉱石も発掘する。"
+  },
+  "부재 중 경과 시간:": {
+    "en": "Time Elapsed While Away:",
+    "ja": "不在中の経過時間:"
+  },
+  "부재 중 성화 소멸 (재점화 필요)": {
+    "en": "Sacred Flame Extinguished While Away (Relighting Required)",
+    "ja": "不在中に聖火消滅 (再点火が必要)"
+  },
+  "부적": {
+    "en": "Talisman",
+    "ja": "護符"
+  },
+  "부패": {
+    "en": "Decay",
+    "ja": "腐敗"
+  },
+  "부패 점액체": {
+    "en": "Decay Slime",
+    "ja": "腐敗スライム"
+  },
+  "부패한 에테르에서 태어난 녹색 점액 괴물. 느리지만 체력이 높고 광역 독을 뿌린다.": {
+    "en": "A green slime monster born from corrupted ether. Slow, but boasts high HP and sprays AoE poison.",
+    "ja": "腐敗したエーテルから生まれた緑のスライム怪物。遅いがHPが高く、範囲毒をまき散らす。"
+  },
+  "부활": {
+    "en": "Revive",
+    "ja": "復活"
+  },
+  "부활 대상 없음: 파티 전원 HP 70% 대량 치유 + 최대 HP 40% 보호막 & 디버프 면역 2턴": {
+    "en": "No revive target: Heavily heals all party members for 70% HP + grants 40% Max HP shield & debuff immunity for 2 turns",
+    "ja": "復活対象なし: パーティ全員のHP70%大量回復＋最大HP40%シールド＆デバフ無効2ターン"
+  },
+  "부활 성가 & 전체 완전 치유": {
+    "en": "Resurrection Hymn & Full Party Complete Heal",
+    "ja": "復活の聖歌＆全体完全治癒"
+  },
+  "부활의 성가": {
+    "en": "Hymn of Resurrection",
+    "ja": "復活の聖歌"
+  },
+  "분노 목걸이": {
+    "en": "Rage Necklace",
+    "ja": "憤怒のネックレス"
+  },
+  "분노의 목걸이 +1": {
+    "en": "Necklace of Rage +1",
+    "ja": "憤怒のネックレス +1"
+  },
+  "분노의 일격": {
+    "en": "Furious Strike",
+    "ja": "憤怒の一撃"
+  },
+  "분쇄": {
+    "en": "Crush",
+    "ja": "粉砕"
+  },
+  "분쇄포": {
+    "en": "Shatter Cannon",
+    "ja": "粉砕砲"
+  },
+  "분신": {
+    "en": "Decoy",
+    "ja": "分身"
+  },
+  "분신 난무": {
+    "en": "Clone Dance",
+    "ja": "分身乱舞"
+  },
+  "불": {
+    "en": "Fire",
+    "ja": "火"
+  },
+  "불굴": {
+    "en": "Indomitable",
+    "ja": "不屈"
+  },
+  "불굴의": {
+    "en": "Indomitable",
+    "ja": "不屈の"
+  },
+  "불굴의 결의": {
+    "en": "Indomitable Resolve",
+    "ja": "不屈の決意"
+  },
+  "불굴의 성기사": {
+    "en": "Indomitable Paladin",
+    "ja": "不屈の聖騎士"
+  },
+  "불굴의 성기사단장": {
+    "en": "Indomitable Grandmaster Templar",
+    "ja": "不屈の聖騎士団長"
+  },
+  "불길": {
+    "en": "Flames",
+    "ja": "炎"
+  },
+  "불길 폭압": {
+    "en": "Flame Blast Pressure",
+    "ja": "火炎爆圧"
+  },
+  "불길에 거센 돌풍이 휘몰아쳐 {0}의 폭발을 일으키고 모든 적에게 화상을 전파합니다!": {
+    "en": "A violent gale sweeps across the flames, causing a {0} explosion and spreading Burn to all enemies!",
+    "ja": "炎に猛烈な突風が吹き荒れ、{0}の爆発を起こして敵全体に火傷を拡散する！"
+  },
+  "불꽃": {
+    "en": "Flame",
+    "ja": "炎"
+  },
+  "불멸 선혈 목걸이": {
+    "en": "Immortal Blood Necklace",
+    "ja": "不滅の鮮血ネックレス"
+  },
+  "불멸 전사의 분노: 파티 공격력 +16%, 치명타 피해 +25%, 흡혈 +8%": {
+    "en": "Immortal Warrior's Rage: Party ATK +16%, Crit DMG +25%, Lifesteal +8%",
+    "ja": "不滅戦士の憤怒: パーティ攻撃力+16%、会心ダメージ+25%、吸血+8%"
+  },
+  "불멸 흉갑": {
+    "en": "Immortal Breastplate",
+    "ja": "不滅の胸甲"
+  },
+  "불멸의": {
+    "en": "Immortal",
+    "ja": "不滅の"
+  },
+  "불멸의 결전분노": {
+    "en": "Immortal Decisive Wrath",
+    "ja": "不滅の決戦憤怒"
+  },
+  "불멸의 성역": {
+    "en": "Immortal Sanctuary",
+    "ja": "不滅の聖域"
+  },
+  "불멸의 성역 결계": {
+    "en": "Immortal Sanctuary Barrier",
+    "ja": "不滅の聖域結界"
+  },
+  "불멸의 수호: 자신이 사망 시 파티 전원 체력을 100% 회복시키고 1회 자동 부활.": {
+    "en": "Immortal Guardian: Upon death, restores 100% HP to all party members and automatically revives once.",
+    "ja": "不滅の守護: 自身死亡時、パーティ全員のHPを100%回復させ1回自動復活。"
+  },
+  "불멸의 요새": {
+    "en": "Immortal Fortress",
+    "ja": "不滅の要塞"
+  },
+  "불멸의 포효": {
+    "en": "Immortal Roar",
+    "ja": "不滅の咆哮"
+  },
+  "불사조 용병단": {
+    "en": "Phoenix Mercenary Corps",
+    "ja": "不死鳥傭兵団"
+  },
+  "불씨가 사그라들면 흑무가 성벽을 집어삼킨다. 성화지기에게 영목을 공급하라.": {
+    "en": "When the embers die, the black mist will engulf the ramparts. Supply spirit wood to the flamekeeper.",
+    "ja": "残り火が消えれば黒霧が城壁を飲み込む。聖火番に霊木を供給せよ。"
+  },
+  "불안정한 균열을 무시하고 안전한 탐험로를 택했습니다.": {
+    "en": "Ignored the unstable rift and took a safer expedition route.",
+    "ja": "不安定な亀裂を無視し、安全な探検路を選んだ。"
+  },
+  "불안정한 상자를 건드리지 않고 안전하게 지나쳤습니다.": {
+    "en": "Passed by safely without disturbing the unstable chest.",
+    "ja": "不安定な箱に触れず、安全に通り過ぎた。"
+  },
+  "불운(-{0}%)": {
+    "en": "Bad Luck (-{0}%)",
+    "ja": "不運(-{0}%)"
+  },
+  "불운의 저주 안개": {
+    "en": "Curse Mist of Misfortune",
+    "ja": "不運の呪霧"
+  },
+  "불타는 마물에게 신성한 정화의 불길이 폭발하여 대상의 공격력을 정화하고 큰 피해를 입힙니다!": {
+    "en": "Holy purifying flames explode against burning monsters, purifying target's ATK and dealing heavy damage!",
+    "ja": "燃える魔物に神聖な浄化の炎が爆発し、対象の攻撃力を浄化して大ダメージを与える！"
+  },
+  "불타는 적을 둔기로 내리찍어 열압력 폭발을 일으켜 주변 적들에게도 불꽃 파편을 날립니다!": {
+    "en": "Slams burning foes with a blunt weapon to cause a thermobaric explosion, scattering flame shrapnel to nearby foes!",
+    "ja": "燃える敵を鈍器で叩きつけ熱圧力爆発を起こし、周囲の敵にも火花の破片をまき散らす！"
+  },
+  "불타는 적을 둔기로 짓이겨 고열을 순간 압축 폭발시킵니다. 타겟에게 40% 추가 화염 피해 및 주변 적들에게 35% 파편 피해": {
+    "en": "Crushes burning foes with a blunt weapon to compress and detonate extreme heat. Deals 40% bonus fire damage to the target and 35% shrapnel damage to nearby enemies.",
+    "ja": "燃える敵を鈍器で打ち砕き、高熱を瞬間圧縮爆発させる。ターゲットに40%の追加火炎ダメージおよび周囲の敵に35%の破片ダメージ"
+  },
+  "불패 성역 목걸이": {
+    "en": "Invincible Sanctuary Necklace",
+    "ja": "不敗の聖域ネックレス"
+  },
+  "불패의": {
+    "en": "Invincible",
+    "ja": "不敗の"
+  },
+  "불패의 군세": {
+    "en": "Invincible Legion",
+    "ja": "不敗の軍勢"
+  },
+  "불패의 통솔: 전열에 배치 시 파티 전체가 받는 모든 피해 12% 상시 경감.": {
+    "en": "Invincible Command: When placed in the front row, permanently reduces all damage taken by the party by 12%.",
+    "ja": "不敗の統率: 前衛配置時、パーティ全体が受ける全ダメージを常時12%軽減。"
+  },
+  "불패의 통솔력": {
+    "en": "Invincible Leadership",
+    "ja": "不敗の統率力"
+  },
+  "불패의 통솔력: 파티 전체가 받는 모든 피해가 상시 15% 경감되고, 물리 공격력이 20% 추가 증폭.": {
+    "en": "Invincible Leadership: Permanently reduces all damage taken by the party by 15% and amplifies Physical ATK by an additional 20%.",
+    "ja": "不敗の統率力: パーティ全体が受ける全ダメージが常時15%軽減され、物理攻撃力が20%追加増幅。"
+  },
+  "붉은 달빛이 스며드는 제단 중앙의 석조 대야에 신선한 핏물이 고동치며 생명력을 갈구합니다.": {
+    "en": "Fresh blood pulses within the stone basin at the altar's center where crimson moonlight filters in, thirsting for life force.",
+    "ja": "紅い月光が差し込む祭壇中央の石造りの洗面器で、新鮮な血潮が脈打ち生命力を渇望している。"
+  },
+  "붉은 안료를 입술에 칠해 미를 가꾸던 금속제 회전 케이스입니다. 붉은빛 자국이 남아 있습니다.": {
+    "en": "A metallic swivel case used to apply red pigment to lips for beauty. Traces of red hue remain.",
+    "ja": "紅い顔料を唇に塗り美を装っていた金属製の回転ケース。赤みを帯びた跡が残っている。"
+  },
+  "붉은 창끝 길드": {
+    "en": "Red Spearhead Guild",
+    "ja": "紅の槍先ギルド"
+  },
+  "붕괴": {
+    "en": "Collapse",
+    "ja": "崩壊"
+  },
+  "붕괴 진행 중...": {
+    "en": "Collapse in progress...",
+    "ja": "崩壊進行中..."
+  },
+  "붕대": {
+    "en": "Bandage",
+    "ja": "包帯"
+  },
+  "붕대 및 가죽 방어구 제작 (+30% 매입가)": {
+    "en": "Craft Bandages & Leather Armor (+30% Sell Price)",
+    "ja": "包帯および革防具の製作 (+30%買取価格)"
+  },
+  "붕대/물약 제조 & 성수 조제": {
+    "en": "Craft bandages/potions & concoct holy water",
+    "ja": "包帯/ポーション製造＆聖水調合"
+  },
+  "붕대와 약초를 사용하여 단일 아군의 HP를 30% 즉시 회복합니다.": {
+    "en": "Uses bandages and herbs to instantly restore 30% HP of a single ally.",
+    "ja": "包帯と薬草を使用して単一の味方のHPを即座に30%回復する。"
+  },
+  "브라우저 팝업이 차단되었습니다. 팝업을 허용해 주세요.": {
+    "en": "Browser popup was blocked. Please allow popups.",
+    "ja": "ブラウザのポップアップがブロックされました。ポップアップを許可してください。"
+  },
+  "브라우저 환경(CORS/서드파티 쿠키 차단 등) 또는 컴포넌트 렌더링 중 오류가 발생했습니다.": {
+    "en": "An error occurred due to browser settings (CORS/third-party cookie blocking, etc.) or component rendering.",
+    "ja": "ブラウザ環境(CORS/サードパーティCookieブロックなど)またはコンポーネントレンダリング中にエラーが発生しました。"
+  },
+  "브레스": {
+    "en": "Breath",
+    "ja": "ブレス"
+  },
+  "브레이크 요구치 -{0} 선제 파쇄!": {
+    "en": "Break requirement -{0} preemptively shattered!",
+    "ja": "ブレイク要求値 -{0} 先制粉砕！"
+  },
+  "브레이크 저지 요구 피해: {0}": {
+    "en": "DMG Required to Stop Break: {0}",
+    "ja": "ブレイク阻止の要求ダメージ: {0}"
+  },
+  "블랙 마켓": {
+    "en": "Black Market",
+    "ja": "ブラックマーケット"
+  },
+  "블랙 마켓 매입": {
+    "en": "Black Market Purchase",
+    "ja": "ブラックマーケット買取"
+  },
+  "블랙 마켓 자원 대량 매각": {
+    "en": "Bulk Resource Sale at Black Market",
+    "ja": "ブラックマーケット資源大量売却"
+  },
+  "블랙 마켓 주기 연장: 기본 20초 주기에서 마켓 레벨당 +1초 연장되어 Lv.10 시 30초마다 유지비를 지불 (지출 빈도 50% 완화).": {
+    "en": "Black Market Interval Extension: Extends by +1s per market level from base 20s interval, paying upkeep every 30s at Lv.10 (50% reduction in expense frequency).",
+    "ja": "ブラックマーケット周期延長: 基本20秒周期から市場レベルごとに+1秒延長され、Lv.10で30秒ごとに維持費を支払い (支出頻度50%緩和)。"
+  },
+  "블랙 마켓(Lv.8)": {
+    "en": "Black Market (Lv.8)",
+    "ja": "ブラックマーケット(Lv.8)"
+  },
+  "블랙 마켓을 레벨": {
+    "en": "Black Market to Level",
+    "ja": "ブラックマーケットをレベル"
+  },
+  "블랙로터스": {
+    "en": "Black Lotus",
+    "ja": "ブラックロータス"
+  },
+  "블랙마켓 Lv.5 필요 ({0}/5)": {
+    "en": "Requires Black Market Lv.5 ({0}/5)",
+    "ja": "ブラックマーケットLv.5が必要 ({0}/5)"
+  },
+  "블랙홀": {
+    "en": "Black Hole",
+    "ja": "ブラックホール"
+  },
+  "블레이드": {
+    "en": "Blade",
+    "ja": "ブレード"
+  },
+  "비기": {
+    "en": "Secret Technique",
+    "ja": "秘技"
+  },
+  "비닐 코팅된 학생증": {
+    "en": "Laminated Student ID",
+    "ja": "ラミネート学生証"
+  },
+  "비동기 PVP & 월드 레이드": {
+    "en": "Asynchronous PVP & World Raid",
+    "ja": "非同期PVP＆ワールドレイド"
+  },
+  "비동기 랭킹 결투, Lv.3 네메시스 월드 레이드, Lv.6 5인 영지 침공 및 명예 상점 1~10단계를 제공합니다. (Lv.4+ 에테르 유지비)": {
+    "en": "Provides Asynchronous Ranked Duels, Lv.3 Nemesis World Raid, Lv.6 5-Player Domain Invasions, and Honor Shop Tiers 1-10. (Lv.4+ Ether upkeep)",
+    "ja": "非同期ランキング決闘、Lv.3ネメシスワールドレイド、Lv.6の5人領地侵攻および名誉商店1〜10段階を提供。(Lv.4+ エーテル維持費)"
+  },
+  "비밀번호 보기": {
+    "en": "Show Password",
+    "ja": "パスワード表示"
+  },
+  "비밀번호 숨기기": {
+    "en": "Hide Password",
+    "ja": "パスワード非表示"
+  },
+  "비밀번호 일방향 암호화, HTTPS/SSL 전송 구간 암호화, Firebase Security Rules 접근 권한 분리를 적용하여 철저히 보호합니다.": {
+    "en": "Thoroughly protected applying one-way password hashing, HTTPS/SSL transmission encryption, and Firebase Security Rules access segregation.",
+    "ja": "パスワードの一方向暗号化、HTTPS/SSL転送区間暗号化、Firebase Security Rulesアクセス権限分離を適用して徹底保護。"
+  },
+  "비밀번호가 올바르지 않습니다.": {
+    "en": "Incorrect password.",
+    "ja": "パスワードが正しくありません。"
+  },
+  "비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인하세요.": {
+    "en": "Passwords do not match. Please verify your password again.",
+    "ja": "パスワードが一致しません。パスワードを再度確認してください。"
+  },
+  "비밀번호는 보안을 위해 최소 6자 이상이어야 합니다.": {
+    "en": "For security, passwords must be at least 6 characters.",
+    "ja": "パスワードはセキュリティのため最低6文字以上である必要があります。"
+  },
+  "비밀번호는 최소 6자 이상이어야 합니다.": {
+    "en": "Password must be at least 6 characters.",
+    "ja": "パスワードは最低6文字以上である必要があります。"
+  },
+  "비밀번호는 최소 6자리 이상이어야 합니다.": {
+    "en": "Password must be at least 6 characters.",
+    "ja": "パスワードは最低6文字以上である必要があります。"
+  },
+  "비비안": {
+    "en": "Vivian",
+    "ja": "ヴィヴィアン"
+  },
+  "비상 탈출 감행": {
+    "en": "Attempt Emergency Escape",
+    "ja": "非常脱出を決行"
+  },
+  "비상 탈출 위험 수칙:": {
+    "en": "Emergency Escape Safety Rules:",
+    "ja": "非常脱出危険規則:"
+  },
+  "비상 탈출 재시도 대기 (탐색 {0}회 후)": {
+    "en": "Emergency Escape Retry Cooldown (after {0} searches)",
+    "ja": "非常脱出再試行待機 (探索{0}回後)"
+  },
+  "비상탈출": {
+    "en": "Emergency Escape",
+    "ja": "非常脱出"
+  },
+  "비수": {
+    "en": "Dagger",
+    "ja": "短刀"
+  },
+  "비수 단검 +2": {
+    "en": "Dagger +2",
+    "ja": "短刀ダガー +2"
+  },
+  "비어있음": {
+    "en": "Empty",
+    "ja": "空き"
+  },
+  "비우기 (0개)": {
+    "en": "Clear (0)",
+    "ja": "空にする (0個)"
+  },
+  "비전": {
+    "en": "Arcane",
+    "ja": "秘術"
+  },
+  "비전 급강하": {
+    "en": "Arcane Dive",
+    "ja": "秘術急降下"
+  },
+  "비전 마도서": {
+    "en": "Arcane Grimoire",
+    "ja": "秘術魔導書"
+  },
+  "비전 마도서 집필 공정": {
+    "en": "Arcane Grimoire Authoring Process",
+    "ja": "秘術魔導書執筆工程"
+  },
+  "비전 부적": {
+    "en": "Arcane Talisman",
+    "ja": "秘術護符"
+  },
+  "비전 삼원소 마도서군": {
+    "en": "Arcane Tri-Element Grimoire Series",
+    "ja": "秘術三元素魔導書群"
+  },
+  "비전 성운 로브": {
+    "en": "Arcane Nebula Robe",
+    "ja": "秘術星雲ローブ"
+  },
+  "비전 암살 결사": {
+    "en": "Arcane Assassin Syndicate",
+    "ja": "秘術暗殺結社"
+  },
+  "비전 양피지에 마도 영창 각인 중...": {
+    "en": "Inscribing arcane chant onto grimoire parchment...",
+    "ja": "秘術羊皮紙に魔導詠唱を刻印中..."
+  },
+  "비전 원호: 마도/공학 시너지(마도 중화기, 비전 결사) 활성 시 25% 확률로 마법 원호 타격 (번개 VFX)": {
+    "en": "Arcane Assist: 25% chance of magical assist strike (Lightning VFX) when Arcane/Engineering synergies (Arcane Heavy Arms, Arcane Syndicate) are active",
+    "ja": "秘術援護: 魔導/工学シナジー(魔導重火器、秘術結社)活性時、25%の確率で魔法援護打撃 (雷VFX)"
+  },
+  "비전 침 찌르기": {
+    "en": "Arcane Needle Thrust",
+    "ja": "秘術針突き"
+  },
+  "비전 탐구단": {
+    "en": "Arcane Inquirers",
+    "ja": "秘術探求団"
+  },
+  "비전 탐구자": {
+    "en": "Arcane Inquirer",
+    "ja": "秘術探求者"
+  },
+  "비전 폭풍": {
+    "en": "Arcane Storm",
+    "ja": "秘術嵐"
+  },
+  "비전 학자": {
+    "en": "Arcane Scholar",
+    "ja": "秘術学者"
+  },
+  "비전 학자의 지혜: 매 턴 마나 +5 MP 회복, 행운 +8": {
+    "en": "Arcane Scholar's Wisdom: Mana +5 MP restored per turn, LUCK +8",
+    "ja": "秘術学者の知恵: 毎ターンMP+5回復、幸運+8"
+  },
+  "비전서": {
+    "en": "Grimoire",
+    "ja": "魔導書"
+  },
+  "비전서: 강타": {
+    "en": "Grimoire: Smite",
+    "ja": "魔導書: 強打"
+  },
+  "비전서: 거울 만화경 환영 [9F]": {
+    "en": "Grimoire: Mirror Kaleidoscope Illusion [9F]",
+    "ja": "魔導書: 鏡万華鏡幻影 [9F]"
+  },
+  "비전서: 광기의 난무": {
+    "en": "Grimoire: Frenzied Dance",
+    "ja": "魔導書: 狂気の乱舞"
+  },
+  "비전서: 광맥의 마도 분출 [3F 보스]": {
+    "en": "Grimoire: Vein Arcane Eruption [3F Boss]",
+    "ja": "魔導書: 鉱脈の魔導噴出 [3Fボス]"
+  },
+  "비전서: 광맥의 마도 분출 [3F]": {
+    "en": "Grimoire: Vein Arcane Eruption [3F]",
+    "ja": "魔導書: 鉱脈の魔導噴出 [3F]"
+  },
+  "비전서: 그림자 보법": {
+    "en": "Grimoire: Shadow Footwork",
+    "ja": "魔導書: 影歩法"
+  },
+  "비전서: 그림자 습격": {
+    "en": "Grimoire: Shadow Raid",
+    "ja": "魔導書: 影襲撃"
+  },
+  "비전서: 그림자 처형": {
+    "en": "Grimoire: Shadow Execution",
+    "ja": "魔導書: 影処刑"
+  },
+  "비전서: 단죄의 칠흑 성역 [8F 보스]": {
+    "en": "Grimoire: Pitch-Black Sanctuary of Condemnation [8F Boss]",
+    "ja": "魔導書: 断罪の漆黒聖域 [8Fボス]"
+  },
+  "비전서: 단죄의 칠흑 성역 [8F]": {
+    "en": "Grimoire: Pitch-Black Sanctuary of Condemnation [8F]",
+    "ja": "魔導書: 断罪の漆黒聖域 [8F]"
+  }
+}

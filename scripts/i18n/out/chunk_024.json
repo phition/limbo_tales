@@ -1,0 +1,803 @@
+{
+  "심연 개척단": {
+    "en": "Abyss Pioneers",
+    "ja": "深淵開拓団"
+  },
+  "심연 거미와 균열의 누에가 자아낸 마력 직물입니다. 마법사와 사제의 마도 로브를 직조하고 신비로운 부적 악세서리를 제작하는 데 쓰입니다.": {
+    "en": "A magical fabric spun by abyss spiders and rift silkworms. Used to weave arcane robes for mages and priests, and craft mystical talisman accessories.",
+    "ja": "深淵の蜘蛛と亀裂のカイコが紡ぎ出した魔力の織物。魔法使いや司祭の魔導ローブを織り、神秘的な護符アクセサリーを製作するのに使われる。"
+  },
+  "심연 결사대의 여명검": {
+    "en": "Abyssal Vanguard's Dawnblade",
+    "ja": "深淵決死隊の夜明けの剣"
+  },
+  "심연 곡괭이": {
+    "en": "Abyssal Pickaxe",
+    "ja": "深淵のツルハシ"
+  },
+  "심연 곡괭이 (강화)": {
+    "en": "Abyssal Pickaxe (Enhanced)",
+    "ja": "深淵のツルハシ (強化)"
+  },
+  "심연 공허의 중포격 무구": {
+    "en": "Abyssal Void Heavy Bombardment Weapon",
+    "ja": "深淵虚無の重砲撃武具"
+  },
+  "심연 관통탄": {
+    "en": "Abyssal Piercing Bullet",
+    "ja": "深淵貫通弾"
+  },
+  "심연 광석 용해 및 불순물 정제 중...": {
+    "en": "Smelting abyssal ore and refining impurities...",
+    "ja": "深淵鉱石の溶解および不純物精製中..."
+  },
+  "심연 광폭화 군주": {
+    "en": "Abyssal Berserk Lord",
+    "ja": "深淵狂暴化君主"
+  },
+  "심연 군주 아스모데우스의 권능이 깃든 신화 장비 [심연 군주의 절대 성관]을 하사합니다.": {
+    "en": "Bestows the mythic equipment [Abyssal Lord's Absolute Holy Crown], imbued with the power of Abyssal Lord Asmodeus.",
+    "ja": "深淵の君主アスモデウスの権能が宿る神話装備「深淵君主の絶対聖冠」を下賜する。"
+  },
+  "심연 군주의 마핵": {
+    "en": "Abyssal Lord's Demon Core",
+    "ja": "深淵君主の魔核"
+  },
+  "심연 군주의 모든 보물을 국고로 귀속시키고 방주를 지상 낙원으로 완성합니다.": {
+    "en": "Confiscates all treasures of the Abyssal Lord into the treasury and transforms the Ark into an earthly paradise.",
+    "ja": "深淵君主の全財宝を国庫に帰属させ、方舟を地上最後の楽園として完成させる。"
+  },
+  "심연 군주의 옥새": {
+    "en": "Abyssal Overlord Seal",
+    "ja": "深淵覇王の玉璽"
+  },
+  "심연 군주의 피로 맺은 저주받은 서약에 고통받는 발키리 처형자 실비아. 거룩한 영혼 정화수로 제단을 정화하고 그녀를 영원한 안식으로 인도하세요.": {
+    "en": "Valkyrie Executioner Sylvia suffers under a cursed pact bound by the Abyssal Lord's blood. Purify the altar with sacred soul water and guide her to eternal rest.",
+    "ja": "深淵君主の血で結ばれた呪われし誓約に苦しむヴァルキリー処刑者シルヴィア。聖なる魂の浄化水で祭壇を浄化し、彼女を永遠の安息へと導け。"
+  },
+  "심연 그림자 사령검": {
+    "en": "Abyssal Shadow Necroblade",
+    "ja": "深淵の影死霊剣"
+  },
+  "심연 나침반": {
+    "en": "Abyssal Compass",
+    "ja": "深淵の羅針盤"
+  },
+  "심연 대장간": {
+    "en": "Abyssal Forge",
+    "ja": "深淵の鍛冶屋"
+  },
+  "심연 대장간을 재건했습니다. 원정대의 기본 생존을 책임지는 1티어 순수 기본 장비 단조와 기초 +3강 강화를 지원합니다.": {
+    "en": "The Abyssal Forge has been rebuilt. Supports forging Tier 1 basic equipment for party survival and base +3 enhancement.",
+    "ja": "深淵の鍛冶屋を再建した。遠征隊の基本生存を担うTier 1の純粋基本装備の鍛造と基礎+3強化をサポートする。"
+  },
+  "심연 던전 진입을 위해 3명의 파티원을 모두 편성해야 합니다.": {
+    "en": "All 3 party members must be formed to enter the Abyssal Dungeon.",
+    "ja": "深淵ダンジョンに入るには、パーティメンバー3人を編成する必要がある。"
+  },
+  "심연 던전 탐험 중 야영지에서 성화를 피우고 대원들과 대화를 나누세요.": {
+    "en": "Light a sacred flame at the campsite during Abyssal Dungeon exploration and speak with your members.",
+    "ja": "深淵ダンジョン探検中、野営地で聖火を灯して隊員たちと言葉を交わせ。"
+  },
+  "심연 던전에서 야영": {
+    "en": "Camp in the Abyssal Dungeon",
+    "ja": "深淵ダンジョンで野営"
+  },
+  "심연 던전은 위험도가 극도로 높아": {
+    "en": "The Abyssal Dungeon hazard level is extremely high",
+    "ja": "深淵ダンジョンは危険度が極めて高く"
+  },
+  "심연 던전의 깊은 층으로 내려갈수록 짙은 마력 억압으로 인해 스킬의 마나(MP) 소모량이 층당 +10%씩 증가합니다.": {
+    "en": "As you descend into deeper dungeon floors, dense mana suppression increases skill MP cost by +10% per floor.",
+    "ja": "深淵ダンジョンの深層へ降りるほど、濃密な魔力抑圧によりスキルのMP消費量が階層ごとに+10%ずつ増加する。"
+  },
+  "심연 마기와 마물의 피를 머금고 붉은빛으로 박동하는 기괴한 이끼 군락입니다. 공기 중에 자극적인 마기 포자가 떠다닙니다.": {
+    "en": "A grotesque moss colony pulsating with a crimson glow, soaked in abyssal demonic energy and beast blood. Irritating spores drift through the air.",
+    "ja": "深淵の魔気と魔物の血を含み、赤く脈打つ奇怪な苔の群落。空気中に刺激的な魔気の胞子が漂っている。"
+  },
+  "심연 마물 {0}체 처치": {
+    "en": "Slay {0} Abyssal Monsters",
+    "ja": "深淵の魔物{0}体討伐"
+  },
+  "심연 마물 사체 정제 및 보급 식량/가죽 가공 (미건설)": {
+    "en": "Abyssal monster carcass refining and provision/leather processing (Not Built)",
+    "ja": "深淵魔物の死骸精製および補給食糧・革加工 (未建設)"
+  },
+  "심연 마물의 날카로운 발톱도 단단한 방패 앞에서는 무력화된다.": {
+    "en": "Even the sharp claws of abyssal monsters are rendered harmless before a sturdy shield.",
+    "ja": "深淵の魔物の鋭い爪も、頑丈な盾の前では無力化される。"
+  },
+  "심연 마물의 정수가 담긴 비전 마도 기술": {
+    "en": "Arcane magic technique containing the essence of abyssal monsters",
+    "ja": "深淵魔物の真髄が込められた秘術魔導技術"
+  },
+  "심연 맹수와 마물의 외피를 무두질하여 만든 질긴 가죽입니다. 확장 배낭(군장), 도적/사수의 경갑 방어구, 그리고 피의 서약서 촉매를 만드는 데 사용됩니다.": {
+    "en": "Tough leather made by tanning the hides of abyssal beasts and monsters. Used to craft expanded backpacks, light armor for Rogues/Snipers, and Blood Contract catalysts.",
+    "ja": "深淵の猛獣や魔物の外皮をなめして作った丈夫な革。拡張バックパック、盗賊・狙撃手の軽甲防具、血の契約書触媒の製作に使用される。"
+  },
+  "심연 몬스터 & 보스 기믹 도감 (": {
+    "en": "Abyss Monster & Boss Gimmick Codex (",
+    "ja": "深淵モンスター＆ボスギミック図鑑 ("
+  },
+  "심연 몬스터 도감 • {0}": {
+    "en": "Abyss Monster Codex • {0}",
+    "ja": "深淵モンスター図鑑 • {0}"
+  },
+  "심연 밑바닥까지 직통으로 뚫린 수직 채굴 터널을 완공하여 희귀 광맥을 직통 수송하고 유지비를 28% 감면합니다.": {
+    "en": "Completed a vertical mining tunnel leading directly to the bottom of the Abyss, transporting rare veins directly and reducing maintenance by 28%.",
+    "ja": "深淵の底まで直通する垂直採掘トンネルを完成させ、希少鉱脈を直通輸送して維持費を28%削減する。"
+  },
+  "심연 백그라운드 장기 이탈 (3분 초과 전멸)": {
+    "en": "Prolonged Abyss Background Absence (Wiped after exceeding 3 min)",
+    "ja": "深淵バックグラウンド長期離脱 (3分超過で全滅)"
+  },
+  "심연 보스 토벌 시 획득하는 마도서/스킬북 습득을 통한 파티원 고유 전술 스킬 해금": {
+    "en": "Unlock party members' unique tactical skills by acquiring grimoires and skill books dropped from Abyssal bosses",
+    "ja": "深淵ボスの討伐で獲得する魔導書・スキルブックを通じてパーティ固有の戦術スキルを解放"
+  },
+  "심연 비수": {
+    "en": "Abyssal Dagger",
+    "ja": "深淵の短刀"
+  },
+  "심연 생체 정제소": {
+    "en": "Abyssal Refinery",
+    "ja": "深淵生体精製所"
+  },
+  "심연 생체 정제소 건설": {
+    "en": "Construct Abyssal Refinery",
+    "ja": "深淵生体精製所の建設"
+  },
+  "심연 수호 가죽갑": {
+    "en": "Abyssal Guardian Leather Armor",
+    "ja": "深淵守護の革鎧"
+  },
+  "심연 시야 확보 & 기습 방지": {
+    "en": "Secure Abyss Vision & Prevent Ambush",
+    "ja": "深淵の視界確保＆奇襲防止"
+  },
+  "심연 심층 보스 격파나 유적 탐사를 통해 발굴한 오파츠는 방주에 영구 귀속되어 파티 전역 스탯 증폭 및 특수 패시브 효과를 발휘합니다.": {
+    "en": "Ooparts unearthed from deep Abyss bosses or ruins are permanently bound to the Ark, granting party-wide stat amplifications and special passives.",
+    "ja": "深淵深層ボスの撃破や遺跡探査で発掘したオーパーツは方舟に永久帰属し、パーティ全体のステータス増幅および特殊パッシブ効果を発揮する。"
+  },
+  "심연 약초": {
+    "en": "Abyssal Herb",
+    "ja": "深淵の薬草"
+  },
+  "심연 억제 부적": {
+    "en": "Abyssal Suppression Talisman",
+    "ja": "深淵抑制の護符"
+  },
+  "심연 오버차지": {
+    "en": "Abyssal Overcharge",
+    "ja": "深淵オーバーチャージ"
+  },
+  "심연 오버차지 광폭화 상태": {
+    "en": "Abyssal Overcharge Berserk State",
+    "ja": "深淵オーバーチャージ狂暴化状態"
+  },
+  "심연 원정대 특수 촉매": {
+    "en": "Abyss Expedition Special Catalyst",
+    "ja": "深淵遠征隊の特殊触媒"
+  },
+  "심연 은신술": {
+    "en": "Abyssal Stealth",
+    "ja": "深淵の隠密術"
+  },
+  "심연 장비 단조 공정": {
+    "en": "Abyssal Gear Forging Process",
+    "ja": "深淵装備の鍛造工程"
+  },
+  "심연 장비 제작 및 강화": {
+    "en": "Craft & Enhance Abyssal Gear",
+    "ja": "深淵装備の製作および強化"
+  },
+  "심연 재료": {
+    "en": "Abyssal Material",
+    "ja": "深淵の材料"
+  },
+  "심연 재료 1종 랜덤 (30%)": {
+    "en": "Random Abyssal Material x1 (30%)",
+    "ja": "深淵材料ランダム1種 (30%)"
+  },
+  "심연 저격수의 일격: 파티 치명타율 +10%, 치명타 피해 +25%": {
+    "en": "Abyssal Sniper's Strike: Party Crit Rate +10%, Crit DMG +25%",
+    "ja": "深淵狙撃手の一撃: パーティ会心率+10%、会心ダメージ+25%"
+  },
+  "심연 저주 장비 정화 제단": {
+    "en": "Abyssal Cursed Gear Purification Altar",
+    "ja": "深淵の呪い装備浄化祭壇"
+  },
+  "심연 제단 정화 및 파티 전원 즉시 치유": {
+    "en": "Purify Abyssal Altar and instantly heal entire party",
+    "ja": "深淵の祭壇を浄化しパーティ全員を即時回復"
+  },
+  "심연 종말 파멸포": {
+    "en": "Abyssal Doomsday Cataclysm Cannon",
+    "ja": "深淵終末破滅砲"
+  },
+  "심연 지배자의 종말 왕관": {
+    "en": "Abyssal Sovereign's Doomsday Crown",
+    "ja": "深淵支配者の終末王冠"
+  },
+  "심연 짐승들의 골격과 억센 모피를 분석하여 치명적인 급소를 노립니다.": {
+    "en": "Analyzes the skeletons and tough pelts of abyssal beasts to strike deadly weak points.",
+    "ja": "深淵の獣たちの骨格と剛毛を分析し、致命的な急所を狙う。"
+  },
+  "심연 차원 성운궁": {
+    "en": "Abyssal Dimensional Nebula Bow",
+    "ja": "深淵次元星雲弓"
+  },
+  "심연 채비실 바로가기 (강하 준비)": {
+    "en": "Go to Abyss Prep Room (Prepare Descent)",
+    "ja": "深淵準備室へ移動 (降下準備)"
+  },
+  "심연 촉매": {
+    "en": "Abyssal Catalyst",
+    "ja": "深淵の触媒"
+  },
+  "심연 촉매 4종": {
+    "en": "4 Types of Abyssal Catalysts",
+    "ja": "深淵触媒4種"
+  },
+  "심연 촉매 슬롯 개방": {
+    "en": "Unlock Abyssal Catalyst Slot",
+    "ja": "深淵触媒スロット開放"
+  },
+  "심연 촉매 슬롯 개방 (최대 2개 무료 장착)": {
+    "en": "Unlock Abyssal Catalyst Slot (Equip up to 2 for free)",
+    "ja": "深淵触媒スロット開放 (最大2個無料装着)"
+  },
+  "심연 촉매 슬롯(최대 2개)": {
+    "en": "Abyssal Catalyst Slots (Max 2)",
+    "ja": "深淵触媒スロット (最大2個)"
+  },
+  "심연 촉매 유물": {
+    "en": "Abyssal Catalyst Relic",
+    "ja": "深淵触媒遺物"
+  },
+  "심연 촉매 유물 제작": {
+    "en": "Craft Abyssal Catalyst Relic",
+    "ja": "深淵触媒遺物の製作"
+  },
+  "심연 촉매: {0}": {
+    "en": "Abyssal Catalyst: {0}",
+    "ja": "深淵触媒: {0}"
+  },
+  "심연 촉매는 최대 2개까지만 장착할 수 있습니다.": {
+    "en": "You can equip up to 2 Abyssal Catalysts only.",
+    "ja": "深淵触媒は最大2個までしか装着できない。"
+  },
+  "심연 층별 수호 군주": {
+    "en": "Abyss Floor Guardian Lords",
+    "ja": "深淵階層守護君主"
+  },
+  "심연 탐사": {
+    "en": "Abyss Exploration",
+    "ja": "深淵探査"
+  },
+  "심연 탐사 및 이벤트에서 획득하는 에테르 배율 (기본 1.0)": {
+    "en": "Ether multiplier gained from Abyss exploration and events (Base 1.0)",
+    "ja": "深淵探査およびイベントで獲得するエーテル倍率 (基本1.0)"
+  },
+  "심연 탐험": {
+    "en": "Abyss Exploration",
+    "ja": "深淵探検"
+  },
+  "심연 탐험 바로가기": {
+    "en": "Go to Abyss Exploration",
+    "ja": "深淵探検へ移動"
+  },
+  "심연 탐험 시 허기를 달래주는 전술 보급 식량 +25개": {
+    "en": "Tactical Provisions +25 to relieve hunger during Abyss exploration",
+    "ja": "深淵探検時に空腹を満たす戦術補給食糧+25個"
+  },
+  "심연 탐험 중 위기에 처한 생존 용병을": {
+    "en": "A surviving mercenary in danger during Abyss exploration",
+    "ja": "深淵探検中に危機に瀕した生存傭兵を"
+  },
+  "심연 탐험 중 전멸": {
+    "en": "Wiped out during Abyss Exploration",
+    "ja": "深淵探検中に全滅"
+  },
+  "심연 탐험단": {
+    "en": "Abyss Expedition Team",
+    "ja": "深淵探検団"
+  },
+  "심연 탐험대 회고록": {
+    "en": "Abyss Expedition Memoirs",
+    "ja": "深淵探検隊回顧録"
+  },
+  "심연 특수 촉매": {
+    "en": "Abyss Special Catalyst",
+    "ja": "深淵特殊触媒"
+  },
+  "심연 파멸의 신화검": {
+    "en": "Mythic Sword of Abyssal Ruin",
+    "ja": "深淵破滅の神話剣"
+  },
+  "심연 한구석에 은신해 있던 방랑 상인이 원정대를 반갑게 맞이합니다. \"지휘관님, 생존을 위한 비축 보급품이 필요하십니까?\"": {
+    "en": "A wandering merchant hidden in a corner of the Abyss welcomes the expedition. \"Commander, do you need stockpiled supplies for survival?\"",
+    "ja": "深淵の片隅に潜んでいた放浪商人が遠征隊を温かく迎える。「指揮官様、生き残りのための備蓄補給品が必要ですか？」"
+  },
+  "심연 함정": {
+    "en": "Abyss Trap",
+    "ja": "深淵の罠"
+  },
+  "심연 회랑을 개척한 초기 결사대에게 하사된 영광의 여명검.": {
+    "en": "The glorious Dawnblade bestowed upon the early vanguard who explored the Abyssal Cloister.",
+    "ja": "深淵の回廊を開拓した初期決死隊に下賜された栄光の夜明けの剣。"
+  },
+  "심연 흑요석 정련로를 증설하여 견고한 4티어 정예 흑요석 장비를 단조하고 제작 비용을 추가로 절감합니다.": {
+    "en": "Expands the Abyssal Obsidian Refinery to forge sturdy Tier 4 elite obsidian equipment and further reduce crafting costs.",
+    "ja": "深淵黒曜石精錬炉を増設し、頑丈なTier 4精鋭黒曜石装備を鍛造して製作費用をさらに削減する。"
+  },
+  "심연 희귀 유물": {
+    "en": "Abyssal Rare Relic",
+    "ja": "深淵の希少遺物"
+  },
+  "심연닻 ({0})": {
+    "en": "Abyssal Anchor ({0})",
+    "ja": "深淵の錨 ({0})"
+  },
+  "심연에서 발굴된 저주받은 장비의 봉인을 해제하여 최상급 스탯으로 각성시킵니다.": {
+    "en": "Unseals cursed gear unearthed from the Abyss, awakening it to top-tier stats.",
+    "ja": "深淵から発掘された呪われし装備の封印を解除し、最上級のステータスへと覚醒させる。"
+  },
+  "심연에서 첫 귀환 후, 성채 묘지를 방문하여 쓰러진 전우들과 영령들의 묘비에 헌화하세요.": {
+    "en": "After your first return from the Abyss, visit the Citadel Cemetery and lay flowers at the tombstones of fallen comrades and spirits.",
+    "ja": "深淵からの初帰還後、城塞の墓地を訪れ倒れた戦友たちと英霊の墓碑に献花せよ。"
+  },
+  "심연에서 획득한 저주받은 에픽 장비를 심연의 병기창에서 정화하세요.": {
+    "en": "Purify cursed epic equipment obtained in the Abyss at the Ark Armory & Forge.",
+    "ja": "深淵で獲得した呪われしエピック装備を深淵の兵器廠で浄化せよ。"
+  },
+  "심연은 자연의 재앙이 아니었다. 그것은 인류 스스로가 끝없는 번영과 영생을 갈망하며 차원의 밑바닥까지 파고 내려간 끝에 깨워버린 행성의 자정 작용이었다. \"너희가 쌓아 올린 찬란한 탑이 결국 너희 자신의 무덤이 되었도다.\" 옥좌에 새겨진 이 문장은, 방주 성채를 이끄는 모든 지휘관들에게 던져진 마지막 경고문이다.": {
+    "en": "The Abyss was no natural disaster. It was the planet's cleansing mechanism, awakened by humanity's relentless greed for endless prosperity and eternal life as they dug to the very bottom of dimensions. \"The glorious tower you erected has ultimately become your own tomb.\" This inscription engraved upon the throne serves as the final warning to all commanders leading the Ark Citadel.",
+    "ja": "深淵は自然の災厄ではなかった。それは人類自らが終わりのない繁栄と永遠の命を渇望し、次元の底まで掘り下げた果てに呼び覚ましてしまった惑星の自浄作用だった。「お前たちが積み上げた燦爛たる塔が、結局はお前たち自身の墓となったのだ。」玉座に刻まれたこの一文は、方舟城塞を率いるすべての指揮官たちに投げかけられた最後の警告文である。"
+  },
+  "심연의 가장 깊은 틈새에서 소환된 고위 악마. 치명적인 독과 저주받은 손톱으로 살을 찢습니다.": {
+    "en": "A high demon summoned from the deepest rift of the Abyss. Tears flesh with lethal poison and cursed claws.",
+    "ja": "深淵の最も深い亀裂から召喚された上位悪魔。猛毒と呪われし爪で肉を引き裂く。"
+  },
+  "심연의 결계 룬으로 단단히 잠긴 석관이 안치되어 있습니다. 어떻게 개방하시겠습니까?": {
+    "en": "A stone sarcophagus tightly sealed with abyssal barrier runes lies enshrined. How will you open it?",
+    "ja": "深淵の結界ルーンで固く閉ざされた石棺が安置されている。どうやって開封するか？"
+  },
+  "심연의 공간 응축 보석으로 제작된 궁극의 인챈트석입니다. +10강 이상의 장비에 최고의 방어력 및 방어구 관통 접미 옵션을 부여합니다.": {
+    "en": "The ultimate enchanting stone crafted from abyssal space-condensing gems. Grants the highest DEF and Armor Penetration suffix options to gear enhanced to +10 or higher.",
+    "ja": "深淵の空間凝縮宝石で作られた究極のエンチャント石。+10強化以上の装備に最高の防御力と防具貫通接尾オプションを付与する。"
+  },
+  "심연의 공간을 채우고 있는 순수 영혼 마력의 결정체입니다. 용병의 상위 클래스 전직 각성, 성수 조제, 저주받은 장비 정화 및 최고급 인챈트에 광범위하게 사용됩니다.": {
+    "en": "A crystallization of pure soul mana filling the abyss. Widely used for mercenary advanced class awakening, holy water concoction, cursed gear purification, and high-tier enchanting.",
+    "ja": "深淵の空間を満たす純粋な魂の魔力結晶。傭兵の上位クラス転職覚醒、聖水の調合、呪われし装備の浄化、最高級エンチャントに幅広く使用される。"
+  },
+  "심연의 군주 아스모데우스": {
+    "en": "Abyssal Lord Asmodeus",
+    "ja": "深淵の君主アスモデウス"
+  },
+  "심연의 군주 아스모데우스 (10F 보스)": {
+    "en": "Abyssal Lord Asmodeus (10F Boss)",
+    "ja": "深淵の君主アスモデウス (10Fボス)"
+  },
+  "심연의 균열": {
+    "en": "Abyssal Rift",
+    "ja": "深淵の亀裂"
+  },
+  "심연의 균열 사이로 영롱한 순수 에테르 기류가 흘러나옵니다. 기류를 어떻게 활용하시겠습니까?": {
+    "en": "A luminous current of pure ether flows between abyssal rifts. How will you utilize this current?",
+    "ja": "深淵の亀裂の間から澄み渡る純粋なエーテルの気流が流れ出ている。この気流をどう利用するか？"
+  },
+  "심연의 균열을 조작하여 시공간을 뒤틀어버리는 고대 차원 마도사. 시간의 흐름을 왜곡하여 공격을 무력화한다.": {
+    "en": "An ancient dimensional mage who twists space-time by manipulating abyssal rifts. Distorts the flow of time to nullify attacks.",
+    "ja": "深淵の亀裂を操り時空を歪める古代の次元魔導士。時間の流れを歪曲させ攻撃を無力化する。"
+  },
+  "심연의 그림자 추적자": {
+    "en": "Abyssal Shadow Stalker",
+    "ja": "深淵の影追跡者"
+  },
+  "심연의 극한 압력을 견뎌낸 고밀도 암반석입니다. 대장간, 방벽, 성채의 견고한 외벽을 축조하고 탐험용 채굴 곡괭이를 만드는 데 소모됩니다.": {
+    "en": "High-density bedrock that withstood the extreme pressure of the Abyss. Used to construct forges, barriers, citadel walls, and mining pickaxes.",
+    "ja": "深淵の極限圧力を耐え抜いた高密度岩盤石。鍛冶屋、防壁、城塞の強固な外壁を築き、探検用採掘ツルハシを作るのに消費される。"
+  },
+  "심연의 근원 [공허의 침식자]와 공허의 군단이 모습을 드러냈습니다! 최후의 결전이 시작됩니다!": {
+    "en": "The source of the Abyss, [Void Corruptor], and the Void Legion have revealed themselves! The final battle begins!",
+    "ja": "深淵の根源「虚無の侵蝕者」と虚無の軍団が姿を現した！最後の決戦が始まる！"
+  },
+  "심연의 끝에는 정말 구원이 기다리고 있을까? 가끔은 두려워져.": {
+    "en": "Does salvation truly await at the bottom of the Abyss? Sometimes I get scared.",
+    "ja": "深淵の果てには本当に救いが待っているのだろうか？時々怖くなる。"
+  },
+  "심연의 나침반 촉매 제작": {
+    "en": "Craft Abyssal Compass Catalyst",
+    "ja": "深淵の羅針盤触媒の製作"
+  },
+  "심연의 단죄": {
+    "en": "Abyssal Condemnation",
+    "ja": "深淵の断罪"
+  },
+  "심연의 닻": {
+    "en": "Abyssal Anchor",
+    "ja": "深淵の錨"
+  },
+  "심연의 닻 (강화)": {
+    "en": "Abyssal Anchor (Enhanced)",
+    "ja": "深淵の錨 (強化)"
+  },
+  "심연의 닻을 사용하여 분실 없이 100% 안전하게 성채로 귀환": {
+    "en": "Use the Abyssal Anchor to return to the Citadel 100% safely without loss",
+    "ja": "深淵の錨を使用して損失なく100%安全に城塞へ帰還"
+  },
+  "심연의 도약": {
+    "en": "Abyssal Leap",
+    "ja": "深淵の跳躍"
+  },
+  "심연의 독기는 강력하지만, 정결한 신성 에테르로 씻어내면 그 힘은 오롯이 우리의 칼날이 된다.": {
+    "en": "The miasma of the Abyss is potent, but cleansed with pure holy ether, that power becomes entirely our blade.",
+    "ja": "深淵の毒気は強烈だが、清らかな神聖エーテルで洗い流せば、その力は完全に我らの刃となる。"
+  },
+  "심연의 독기와 어둠 속에서도 자라나는 약효 높은 마도 이끼와 풀입니다. 출혈을 즉시 치료하는 지혈 붕대와 저주를 정화하는 성수를 조제하는 데 핵심 재료입니다.": {
+    "en": "Potent medicinal magical moss and herbs that thrive even in abyssal darkness and miasma. Key ingredients for hemostatic bandages that cure bleed and holy water that cleanses curses.",
+    "ja": "深淵の毒気と闇の中でも育つ薬効の高い魔導苔と草。出血を即座に治療する止血包帯や呪いを浄化する聖水を調合する重要材料。"
+  },
+  "심연의 루나": {
+    "en": "Abyssal Luna",
+    "ja": "深淵のルナ"
+  },
+  "심연의 마도 금속으로 벼려낸 강화 곡괭이입니다. 고순도 에테르 광맥을 파쇄하여 극대화된 자원을 캐내고 암벽을 뚫어 비밀 통로를 개척합니다.": {
+    "en": "An enhanced pickaxe forged from abyssal magic metal. Shatters high-purity ether veins for maximized resources and bores through rock walls to open secret paths.",
+    "ja": "深淵の魔導金属で鍛え上げられた強化ツルハシ。高純度エーテル鉱脈を破砕して最大化された資源を採掘し、岩壁を貫いて隠し通路を開拓する。"
+  },
+  "심연의 마도 룬 슬롯 각인 및 파동 집속 중...": {
+    "en": "Inscribing abyssal magic rune slot and focusing waves...",
+    "ja": "深淵の魔導ルーンスロット刻印および波動集束中..."
+  },
+  "심연의 마력 에너지 한계 집속 중...": {
+    "en": "Focusing abyssal mana energy to the limit...",
+    "ja": "深淵の魔力エネルギー限界集束中..."
+  },
+  "심연의 마물": {
+    "en": "Abyssal Monster",
+    "ja": "深淵の魔物"
+  },
+  "심연의 망령 기사": {
+    "en": "Abyssal Phantom Knight",
+    "ja": "深淵の亡霊騎士"
+  },
+  "심연의 맹독과 상태이상을 극복하고 새로운 마도 스킬을 습득하려면 에테르 연금술이 필요하다. 연금 공방을 재건하라.": {
+    "en": "To overcome abyssal lethal poisons and status ailments and learn new magic skills, ether alchemy is required. Rebuild the Alchemy Lab.",
+    "ja": "深淵の猛毒と状態異常を克服し新たな魔導スキルを習得するにはエーテル錬金術が必要だ。錬金工房を再建せよ。"
+  },
+  "심연의 모든 마력을 방주의 대지에 환류하여 끝없는 풍요와 번영의 지상 낙원을 완성합니다.": {
+    "en": "Channels all mana of the Abyss back into the land of the Ark, completing an earthly paradise of endless prosperity and abundance.",
+    "ja": "深淵の全魔力を方舟の大地へ還流させ、果てしない豊かさと繁栄の地上楽園を完成させる。"
+  },
+  "심연의 밑바닥을 배회하는 거대한 마수. 그 발걸음만으로도 던전 전체가 진동합니다.": {
+    "en": "A colossal demonic beast roaming the depths of the Abyss. Its very footsteps cause the entire dungeon to quake.",
+    "ja": "深淵の底を徘徊する巨大な魔獣。その足音だけでダンジョン全体が振動する。"
+  },
+  "심연의 백과": {
+    "en": "Abyss Codex",
+    "ja": "深淵の百科"
+  },
+  "심연의 백과 & 고대 컬렉션 열기": {
+    "en": "Open Abyss Codex & Ancient Collection",
+    "ja": "深淵の百科＆古代コレクションを開く"
+  },
+  "심연의 백과 (도감 완성 종합 가호)": {
+    "en": "Abyss Codex (Full Completion Blessing)",
+    "ja": "深淵の百科 (図鑑完成総合加護)"
+  },
+  "심연의 백과 도감 열기": {
+    "en": "Open Abyss Codex",
+    "ja": "深淵の百科図鑑を開く"
+  },
+  "심연의 백과 영구 보너스": {
+    "en": "Abyss Codex Permanent Bonus",
+    "ja": "深淵の百科永久ボーナス"
+  },
+  "심연의 백과(도감) 등록 알림 뱃지 & 실시간 카테고리 카운트": {
+    "en": "Abyss Codex Registration Notification Badge & Real-time Category Count",
+    "ja": "深淵の百科(図鑑)登録通知バッジ＆リアルタイムカテゴリカウント"
+  },
+  "심연의 백과사전 회고록 도감 등록 (영구 파티 스탯 보너스)": {
+    "en": "Abyss Encyclopedia Memoir Registration (Permanent Party Stat Bonus)",
+    "ja": "深淵の百科事典回顧録図鑑登録 (永久パーティステータスボーナス)"
+  },
+  "심연의 백과사전(도감) 10F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 10F Ooparts Collection Entry",
+    "ja": "深淵の百科事典(図鑑) 10Fオーパーツコレクション登録"
+  },
+  "심연의 백과사전(도감) 1F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 1F Ooparts Collection Entry",
+    "ja": "深淵の百科事典(図鑑) 1Fオーパーツコレクション登録"
+  },
+  "심연의 백과사전(도감) 2F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 2F Ooparts Collection Entry",
+    "ja": "深淵の百科事典(図鑑) 2Fオーパーツコレクション登録"
+  },
+  "심연의 백과사전(도감) 3F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 3F Ooparts Collection Entry",
+    "ja": "深淵の百科事典(図鑑) 3Fオーパーツコレクション登録"
+  },
+  "심연의 백과사전(도감) 4F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 4F Ooparts Collection Entry",
+    "ja": "深淵の百科事典(図鑑) 4Fオーパーツコレクション登録"
+  },
+  "심연의 백과사전(도감) 5F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 5F Ooparts Collection Entry",
+    "ja": "深淵의 百科事典(図鑑) 5Fオーパーツコレクション登録",
+    "ja": "深淵の百科事典(図鑑) 5Fオーパーツコレクション登録"
+  },
+  "심연의 백과사전(도감) 6F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 6F Ooparts Collection Entry",
+    "ja": "深淵の百科事典(図鑑) 6Fオーパーツコレクション登録"
+  },
+  "심연의 백과사전(도감) 7F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 7F Ooparts Collection Entry",
+    "ja": "深淵の百科事典(図鑑) 7Fオーパーツコレクション登録"
+  },
+  "심연의 백과사전(도감) 8F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 8F Ooparts Collection Entry",
+    "ja": "深淵の百科事典(図鑑) 8Fオーパーツコレクション登録"
+  },
+  "심연의 백과사전(도감) 9F 오파츠 컬렉션 등록": {
+    "en": "Abyss Encyclopedia 9F Ooparts Collection Entry",
+    "ja": "深淵の百科事典(図鑑) 9Fオーパーツコレクション登録"
+  },
+  "심연의 베헤모스": {
+    "en": "Abyssal Behemoth",
+    "ja": "深淵のベヒーモス"
+  },
+  "심연의 병기창": {
+    "en": "Ark Armory & Forge",
+    "ja": "深淵の兵器廠"
+  },
+  "심연의 병기창 (Abyssal Armory)": {
+    "en": "Ark Armory & Forge (Abyssal Armory)",
+    "ja": "深淵の兵器廠 (Abyssal Armory)"
+  },
+  "심연의 병기창 Lv.3 달성": {
+    "en": "Reach Ark Armory & Forge Lv.3",
+    "ja": "深淵の兵器廠 Lv.3達成"
+  },
+  "심연의 병기창 건설": {
+    "en": "Construct Ark Armory & Forge",
+    "ja": "深淵の兵器廠の建設"
+  },
+  "심연의 병기창에서 보유 장비 중 하나를 +3강 이상으로 강화하여 원정대의 화력을 증강하세요.": {
+    "en": "Enhance one of your pieces of equipment to +3 or higher at the Ark Armory & Forge to bolster expedition firepower.",
+    "ja": "深淵の兵器廠で所持装備の1つを+3以上に強化し、遠征隊の火力を増強せよ。"
+  },
+  "심연의 병기창에서 순수 접두석 또는 접미석을 사용하여 최고 등급 인챈트를 1회 완료하세요.": {
+    "en": "Complete 1 highest-tier enchant using a Pure Prefix Stone or Pure Suffix Stone at the Ark Armory & Forge.",
+    "ja": "深淵の兵器廠で純粋接頭石または純粋接尾石を使用し、最高ランクのエンチャントを1回完了させよ。"
+  },
+  "심연의 병기창에서 장비 1회 단조": {
+    "en": "Forge Equipment 1 Time at Ark Armory & Forge",
+    "ja": "深淵の兵器廠で装備を1回鍛造"
+  },
+  "심연의 병기창에서 첫 번째 전술 장비를 1회 제작(단조)하여 무구 생산을 개시하세요.": {
+    "en": "Forge your first tactical equipment piece at the Ark Armory & Forge to commence armaments production.",
+    "ja": "深淵の兵器廠で最初の戦術装備を1回製作(鍛造)し、武具生産を開始せよ。"
+  },
+  "심연의 병기창을 건설하여 전술 무구 단조 설비를 마련하세요.": {
+    "en": "Construct the Ark Armory & Forge to establish tactical armaments forging facilities.",
+    "ja": "深淵の兵器廠を建設し、戦術武具の鍛造設備を整えよ。"
+  },
+  "심연의 부패와 죽음조차 성자의 손끝에 깃든 태초의 빛 앞에서는 스러진다.": {
+    "en": "Even the corruption and death of the Abyss perish before the primordial light dwelling at the Saint's fingertips.",
+    "ja": "深淵の腐敗と死すらも、聖者の指先に宿る太初の光の前には崩れ去る。"
+  },
+  "심연의 비축식량": {
+    "en": "Abyssal Stockpile Provisions",
+    "ja": "深淵の備蓄食糧"
+  },
+  "심연의 상처는 일반 붕대로 아물지 않는다. 고농축 약초 추출액이 시급하다.": {
+    "en": "Wounds from the Abyss will not heal with ordinary bandages. Highly concentrated herbal extract is urgently needed.",
+    "ja": "深淵の傷は普通の包帯では癒えない。高濃縮の薬草抽出液が急務だ。"
+  },
+  "심연의 생명 에너지를 완벽한 자원으로 전환하는 궁극의 생체 정제 플랜트. 최대치의 식량과 가죽을 영구히 쏟아냅니다.": {
+    "en": "The ultimate bio-refining plant converting abyssal life energy into flawless resources. Continuously yields maximum food and leather.",
+    "ja": "深淵の生命エネルギーを完璧な資源へと変換する究極の生体精製プラント。最大値の食糧と革を永続的に産出する。"
+  },
+  "심연의 수호 군주가 출현했습니다!": {
+    "en": "The Abyssal Guardian Lord has appeared!",
+    "ja": "深淵の守護君主が現れた！"
+  },
+  "심연의 시공 닻": {
+    "en": "Chrono Anchor of Abyss",
+    "ja": "深淵の時空錨"
+  },
+  "심연의 시공 왜곡자": {
+    "en": "Abyssal Spacetime Warper",
+    "ja": "深淵の時空歪曲者"
+  },
+  "심연의 심연을 꿰뚫는 2차 심연 승격을 해금하고, 기본 클래스 EXP를 최대 +50%까지 증폭시키며 등급 승격률을 15%로 확장합니다.": {
+    "en": "Unlocks the 2nd Abyssal Promotion piercing the depths of the Abyss, amplifying base class EXP by up to +50% and expanding rank promotion rate to 15%.",
+    "ja": "深淵の奥底を貫く2次深淵昇格を解放し、基本クラスEXPを最大+50%まで増幅、ランク昇格率を15%に拡大する。"
+  },
+  "심연의 심장부를 지배하던 절대자의 옥새이자 종말의 마핵입니다. 10티어 종말 신화 장비를 단조합니다.": {
+    "en": "The imperial seal of the absolute ruler of the Heart of the Abyss and doomsday core. Used to forge Tier 10 Doomsday Mythic equipment.",
+    "ja": "深淵の心臓部を支配した絶対者の玉璽であり終末の魔核。Tier 10の終末神話装備を鍛造する。"
+  },
+  "심연의 심장부에 군림하는 궁극의 공허 군주. 차원 전체를 멸망시킬 종말의 숨결을 내뿜습니다.": {
+    "en": "The ultimate Void Lord reigning over the Heart of the Abyss. Exhales the breath of ruin that would destroy entire dimensions.",
+    "ja": "深淵の心臓部に君臨する究極の虚無君主。次元全体を滅亡させる終末の息吹を放つ。"
+  },
+  "심연의 심장을 뒤로하고 결전의 장으로 향합니다.": {
+    "en": "Leaving the Heart of the Abyss behind, proceed to the field of decisive battle.",
+    "ja": "深淵の心臓を後にし、決戦の場へと向かう。"
+  },
+  "심연의 악마": {
+    "en": "Abyssal Demon",
+    "ja": "深淵の悪魔"
+  },
+  "심연의 안개가 피어오르는 비전 부적": {
+    "en": "Arcane talisman shrouding in abyssal mist",
+    "ja": "深淵の霧が立ち込める秘術の護符"
+  },
+  "심연의 어둠 속 최후의 부유 요새 & 영지 시설 관리": {
+    "en": "The Last Floating Fortress in Abyssal Darkness & Territory Management",
+    "ja": "深淵の闇における最後の浮遊要塞＆領地施設管理"
+  },
+  "심연의 어둠 속에서 꿈틀거리는 다수의 촉수를 지닌 거대 마물. 광역 출혈과 자가 재생을 구사한다.": {
+    "en": "A colossal monster with numerous writhing tentacles in the abyssal darkness. Uses AoE bleed and self-regeneration.",
+    "ja": "深淵の闇で蠢く多数の触手を持つ巨大魔物。全体出血と自己再生を操る。"
+  },
+  "심연의 어둠 속에서 마도 결계로 잠긴 보물 상자를 발견했습니다. 어떻게 개방하시겠습니까?": {
+    "en": "Discovered a treasure chest sealed by a magical barrier in the abyssal darkness. How will you open it?",
+    "ja": "深淵の闇の中で魔導結界に閉ざされた宝箱を発見した。どうやって開封するか？"
+  },
+  "심연의 어둠 속에서 성화를 밝히고 인류의 마지막 방주를 수호하라": {
+    "en": "Light the sacred flame in the abyssal darkness and protect humanity's last Ark",
+    "ja": "深淵の闇の中で聖火を灯し、人類最後の方舟を守護せよ"
+  },
+  "심연의 어둠 속에서도 미약한 성스러운 기운을 내뿜는 여신상이 서 있습니다. 어떻게 행동하시겠습니까?": {
+    "en": "A statue of the goddess stands emitting faint holy energy even in the abyssal darkness. What will you do?",
+    "ja": "深淵の闇の中でも微かな神聖な気配を放つ女神像が立っている。どう行動するか？"
+  },
+  "심연의 어둠 속으로 먼저 뛰어들었던 성기사단 선발대. 그들의 꺾이지 않는 맹세와 타락한 단장을 구원하여 방주의 성스러운 유산을 되찾으세요.": {
+    "en": "The Paladin Order's vanguard plunged into the abyssal darkness first. Salvage their unbroken oath and save the fallen Grandmaster to reclaim the Ark's sacred legacy.",
+    "ja": "深淵の闇の中へ先陣を切って飛び込んだ聖騎士団先発隊。彼らの不屈の誓いと堕落した団長を救い、方舟の神聖なる遺産を取り戻せ。"
+  },
+  "심연의 어둠에 영혼을 바친 타락한 성직자. 어둠의 권능과 사악한 치유 의식을 행합니다.": {
+    "en": "A corrupted cleric who surrendered their soul to the abyssal darkness. Wields dark authority and conducts vile healing rites.",
+    "ja": "深淵の闇に魂を捧げた堕落した聖職者。闇の権能と邪悪な治癒の儀式を執り行う。"
+  },
+  "심연의 어둠을 밝힐 횃불에는 정제된 고열 석탄이 필수적이다. 가공 원자재를 조달하라.": {
+    "en": "Refined high-heat coal is essential for torches lighting the abyssal darkness. Procure processed raw materials.",
+    "ja": "深淵の闇を照らす松明には精製された高熱石炭が不可欠だ。加工原材料を調達せよ。"
+  },
+  "심연의 어둠을 찢고 타오르는 맹렬한 업화의 검격.": {
+    "en": "A fierce hellfire slash blazing through the darkness of the Abyss.",
+    "ja": "深淵の闇を引き裂き燃え上がる猛烈な業火の剣撃。"
+  },
+  "심연의 연무로 마물 공격력과 방어력 +{0}% 강화": {
+    "en": "Abyssal haze enhances monster ATK and DEF by +{0}%",
+    "ja": "深淵の煙霧により魔物の攻撃力と防御力+{0}%強化"
+  },
+  "심연의 원초 군주": {
+    "en": "Primordial Lord of the Abyss",
+    "ja": "深淵の原初君主"
+  },
+  "심연의 원혼들이 적의 육신과 갑주를 부식시킨다.": {
+    "en": "Abyssal vengeful spirits corrode enemy flesh and armor.",
+    "ja": "深淵の怨霊たちが敵の肉体と甲冑を腐食させる。"
+  },
+  "심연의 유령참": {
+    "en": "Abyssal Phantom Slash",
+    "ja": "深淵の幽霊斬"
+  },
+  "심연의 저격수": {
+    "en": "Abyssal Sniper",
+    "ja": "深淵の狙撃手"
+  },
+  "심연의 저주": {
+    "en": "Curse of the Abyss",
+    "ja": "深淵の呪い"
+  },
+  "심연의 저주 정화 시설은 대장간(병기창)을 건설하면 즉시 이용할 수 있습니다.": {
+    "en": "The Abyssal curse purification facility can be used immediately once the Forge (Armory) is constructed.",
+    "ja": "深淵の呪い浄化施設は鍛冶屋(兵器廠)を建設すればすぐに利用できる。"
+  },
+  "심연의 저주에 굴복한 고대 성기사. 칠흑의 검과 저주받은 방패로 전열을 압박합니다.": {
+    "en": "An ancient Paladin who succumbed to the curse of the Abyss. Pressures the frontline with a jet-black sword and cursed shield.",
+    "ja": "深淵の呪いに屈した古代の聖騎士。漆黒の剣と呪われし盾で前衛を圧迫する。"
+  },
+  "심연의 절대 재앙 '네메시스' 체력 30,000,000 대규모 상향": {
+    "en": "Abyssal Absolute Calamity 'Nemesis' HP significantly increased to 30,000,000",
+    "ja": "深淵の絶対災厄「ネメシス」HP 30,000,000 大規模上方修正"
+  },
+  "심연의 정점에 도달한 마도 공학의 궁극 5개 초월 스탯을 품은 [전설 신화]": {
+    "en": "The pinnacle of magic engineering reaching the Abyss peak, [Legendary Mythic] bearing 5 transcendent stats",
+    "ja": "深淵の頂点に到達した魔導工学の究極、5つの超越ステータスを宿した「伝説神話」"
+  },
+  "심연의 짙은 어둠을 몰아내어 기습을 방지하고 위험도 증가 속도를 35% 늦춥니다. 탐험 중 점등 시 1개가 소모됩니다. (던전 귀환 시 휘발/소멸)": {
+    "en": "Dispels the deep darkness of the Abyss to prevent ambushes and slows Hazard rate increase by 35%. Consumes 1 when lit during exploration. (Depletes/vanishes upon dungeon return)",
+    "ja": "深淵の濃い闇を払い奇襲を防ぎ、危険度の増加速度を35%遅らせる。探検中に点灯すると1個消費。(ダンジョン帰還時に揮発・消滅)"
+  },
+  "심연의 짙은 어둠을 몰아내어 기습을 방지하고 위험도 증가 속도를 35% 늦춥니다. 탐험 중 점등 시 1개가 소모됩니다. (목재 2개, 석탄 2개 소모)": {
+    "en": "Dispels the deep darkness of the Abyss to prevent ambushes and slows Hazard rate increase by 35%. Consumes 1 when lit during exploration. (Consumes 2 Wood, 2 Coal)",
+    "ja": "深淵の濃い闇を払い奇襲を防ぎ、危険度の増加速度を35%遅らせる。探検中に点灯すると1個消費。(木材2個、石炭2個消費)"
+  },
+  "심연의 차가운 흑무가 방주를 뒤덮을 때, 물러서지 않고 사선을 지켜낸 영웅들이 있었다. 그들의 유품 무구는 성채의 후대 용병들에게 전해지고, 그들의 영령은 공물과 기도를 통해 다음 원정대의 칼날과 방패가 되어 함께 심연의 밑바닥으로 강하한다. \"우리의 육신은 묘비 아래 잠들었으나, 우리의 투지는 방주의 성화와 함께 영원히 타오르리라.\"": {
+    "en": "When the cold black mist of the Abyss engulfed the Ark, heroes held the frontline without backing down. Their relic weapons are passed down to future mercenaries of the Citadel, and their spirits descend to the depths of the Abyss alongside the next expedition as blades and shields through offerings and prayers. \"Though our flesh rests beneath tombstones, our fighting spirit will burn forever with the Ark's sacred flame.\"",
+    "ja": "深淵の冷たい黒霧が方舟を覆い尽くした時、退くことなく死線を守り抜いた英雄たちがいた。彼らの遺品武具は城塞の次代の傭兵たちに受け継がれ、その英霊は供物と祈りを通じて次の遠征隊の刃と盾となり、共に深淵の底へと降下する。「我らの肉体は墓碑の下に眠れど、我らの闘志は方舟の聖火と共に永遠に燃え上がらん。」"
+  },
+  "심연의 촉수 난타": {
+    "en": "Abyssal Tentacle Flurry",
+    "ja": "深淵の触手乱打"
+  },
+  "심연의 침식에 완벽한 내성을 지닌 특수 암흑 영목 수림을 개척하여 극상의 내구도를 자랑하는 자재를 수급하고 유지비를 28% 절감합니다.": {
+    "en": "Cultivates a special dark spirit tree grove completely resistant to abyssal erosion to gather materials boasting supreme durability and reduce maintenance by 28%.",
+    "ja": "深淵の侵蝕に完全な耐性を持つ特殊な暗黒霊木の樹林を開拓し、極上の耐久性を誇る資材を調達して維持費を28%削減する。"
+  },
+  "심연의 타락 제단 정화 및 축복 획득": {
+    "en": "Purify Abyssal Corrupted Altar & Receive Blessing",
+    "ja": "深淵の堕落祭壇の浄化および祝福獲得"
+  },
+  "심연의 탐색자": {
+    "en": "Seeker of the Abyss",
+    "ja": "深淵の探索者"
+  },
+  "심연의 탑 10개 층계와 2대 시나리오 챕터": {
+    "en": "10 Floors of the Tower of Abyss and 2 Major Scenario Chapters",
+    "ja": "深淵の塔10階層と2大シナリオチャプター"
+  },
+  "심연의 포식자 추적록": {
+    "en": "Abyssal Predator Tracking Log",
+    "ja": "深淵の捕食者追跡録"
+  },
+  "심연의 포효": {
+    "en": "Abyssal Roar",
+    "ja": "深淵の咆哮"
+  },
+  "심연의 한기를 차단하는 단열재와 방한 방풍 벽을 시공하여 주민들의 생활 안정도를 크게 높였습니다.": {
+    "en": "Installed insulation and windbreak walls blocking abyssal chill, significantly improving living stability for residents.",
+    "ja": "深淵の寒気を遮断する断熱材と防寒・防風壁を施工し、住民たちの生活安定度を大幅に向上させた。"
+  },
+  "심연의 한복판에 우뚝 솟은 기적의 최고 번영도시. 완벽한 자치 행정과 풍요로운 상업망을 바탕으로 방주 최대의 골드 세금을 창출합니다.": {
+    "en": "A miraculously prosperous metropolis rising in the heart of the Abyss. Generates the Ark's highest Gold tax through complete autonomous governance and a thriving commercial network.",
+    "ja": "深淵の真ん中にそびえ立つ奇跡の最高繁栄都市。完璧な自治行政と豊かな商業網を基盤に、方舟最大のゴールド税収を生み出す。"
+  },
+  "심연의 혹한과 암흑 속에서 아직 불씨를 지피지 못한 거점의 중심 제단입니다.": {
+    "en": "The central altar of an outpost that has not yet ignited a flame amidst the bitter cold and darkness of the Abyss.",
+    "ja": "深淵の極寒と暗黒の中で、まだ火種を灯せていない拠点の中心祭壇。"
+  },
+  "심연의 황야에서 구출된 피난민들이 머물 임시 거처가 아직 마련되지 않았습니다.": {
+    "en": "Temporary shelters for refugees rescued from the Abyssal wasteland have not yet been prepared.",
+    "ja": "深淵の荒野から救出された避難民が滞在する仮住まいがまだ用意されていない。"
+  },
+  "심연의 흑무를 밝혀주는 고열 제련 석탄 +20개": {
+    "en": "High-Heat Smelting Coal +20 to illuminate abyssal black mist",
+    "ja": "深淵の黒霧を照らし出す高熱精錬石炭+20個"
+  },
+  "심연의 흔적 속에서 50골드를 수습했습니다.": {
+    "en": "Collected 50 Gold from the traces of the Abyss.",
+    "ja": "深淵の痕跡の中から50ゴールドを回収した。"
+  },
+  "심연의 흡혈 저주를 성스러운 불꽃으로 정화한 10티어 대검. 공격 시 적의 체력을 흡수한다.": {
+    "en": "A Tier 10 greatsword cleansed of the abyssal vampiric curse by sacred flames. Absorbs enemy HP when attacking.",
+    "ja": "深淵の吸血呪いを聖なる炎で浄化したTier 10の大剣。攻撃時に敵のHPを吸収する。"
+  },
+  "심장 꿰뚫기": {
+    "en": "Heart Piercer",
+    "ja": "心臓貫通"
+  },
+  "심장을 꿰뚫는 일격: 행운 +20, 치명타 피해 +35%, 방어 관통 +12%, 중열 회피율 +20%": {
+    "en": "Heart-Piercing Strike: LUCK +20, Crit DMG +35%, Armor Penetration +12%, Mid Row Evasion +20%",
+    "ja": "心臓を貫く一撃: 幸運+20、会心ダメージ+35%、防御貫通+12%、中衛回避率+20%"
+  },
+  "심판 단죄 마총": {
+    "en": "Judgment Condemnation Magic Gun",
+    "ja": "審判断罪の魔銃"
+  },
+  "심판검": {
+    "en": "Judgment Blade",
+    "ja": "審判の剣"
+  },
+  "심판의 망치": {
+    "en": "Hammer of Judgment",
+    "ja": "審判のハンマー"
+  }
+}

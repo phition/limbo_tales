@@ -1,0 +1,802 @@
+{
+  "차 상위 직업 각성 승급 (전직)": {
+    "en": "Tier Advanced Class Awakening Promotion (Class Change)",
+    "ja": "次上位職業覚醒昇格 (転職)"
+  },
+  "차 테크": {
+    "en": "Tier Tech",
+    "ja": "次テック"
+  },
+  "차 테크를 1레벨 이상 먼저 연구해야 활성화됩니다.": {
+    "en": "Activated only after researching Tier Tech to Lv.1 or higher.",
+    "ja": "次テックをレベル1以上先に研究すると有効化されます。"
+  },
+  "차가운 벽면에 쇠사슬로 결박된 채 고문받아 빈사 상태에 이른 전직 기사단원이 신음하고 있습니다.": {
+    "en": "Bound in chains against the cold wall and tortured to the brink of death, a former order knight groans in agony.",
+    "ja": "冷たい壁面に鎖で縛られ拷問を受け瀕死状態に陥った元騎士団員が呻いている。"
+  },
+  "차가운 흑무가 방주 성채를 감싸고 있습니다.": {
+    "en": "A cold black mist shrouds the Ark Citadel.",
+    "ja": "冷たい黒霧が方舟城塞を包み込んでいる。"
+  },
+  "차원": {
+    "en": "Dimensional",
+    "ja": "次元"
+  },
+  "차원 게이트": {
+    "en": "Dimensional Gate",
+    "ja": "次元ゲート"
+  },
+  "차원 게이트 & 멀티 컨텐츠": {
+    "en": "Dimensional Gate & Multi Content",
+    "ja": "次元ゲート & マルチコンテンツ"
+  },
+  "차원 게이트 & 전장 8단계 연계 퀘스트 라인 구축": {
+    "en": "Dimensional Gate & Battlefield Stage 8 Linked Quest Line Established",
+    "ja": "次元ゲート & 戦場8段階連動クエストライン構築"
+  },
+  "차원 게이트 10레벨의 극한을 뚫고 모든 차원을 평정한 절대 패왕의 신화 보관.": {
+    "en": "The mythical vault of the absolute conqueror who broke through the limit of Dimensional Gate Lv.10 and pacified all dimensions.",
+    "ja": "次元ゲートLv.10の極限を突破し全次元を平定した絶対覇王の神話保管。"
+  },
+  "차원 게이트 Lv.": {
+    "en": "Dimensional Gate Lv.",
+    "ja": "次元ゲート Lv."
+  },
+  "차원 게이트 바로가기": {
+    "en": "Go to Dimensional Gate",
+    "ja": "次元ゲートへ移動"
+  },
+  "차원 게이트 하단 내비 위치 재배치 & 일반 계정 공식 전면 개방": {
+    "en": "Dimensional Gate Bottom Nav Repositioned & Official Full Opening for Regular Accounts",
+    "ja": "次元ゲート下部ナビ位置再配置 & 一般アカウント公式全面開放"
+  },
+  "차원 격리 결계를 강화하여 명예 상점 7단계를 개방하고 신화 전설 성유물 상자와 PVE 피해량 +8% 특권을 해금합니다.": {
+    "en": "Strengthened the dimensional isolation barrier to open Honor Shop Tier 7, unlocking the Mythic Legendary Relic Chest and PVE Damage +8% privilege.",
+    "ja": "次元隔離結界を強化して名誉商店7段階を開放し、神話伝説の聖遺物箱とPVE与ダメージ+8%特権を解放する。"
+  },
+  "차원 결투 대승리!": {
+    "en": "Dimensional Duel Great Victory!",
+    "ja": "次元決闘大勝利！"
+  },
+  "차원 결투 패배...": {
+    "en": "Dimensional Duel Defeat...",
+    "ja": "次元決闘敗北..."
+  },
+  "차원 결투장에서 수많은 강자를 쓰러뜨린 투사의 명검.": {
+    "en": "A gladiator's famed sword that struck down countless champions in the Dimensional Colosseum.",
+    "ja": "次元決闘場で数多の強者を打ち倒した闘士の名剣。"
+  },
+  "차원 공간을 고정하는 마도 닻입니다. 던전 탐험 도중 언제든 사용하여 획득한 전리품 손실 없이 성채로 즉시 안전 귀환합니다. (미사용 시 영구 보존)": {
+    "en": "A magical anchor that anchors dimensional space. Can be used at any time during dungeon exploration to immediately return safely to the Citadel without losing acquired loot. (Permanently retained if unused)",
+    "ja": "次元空間を固定する魔導錨。ダンジョン探検中にいつでも使用でき、獲得した戦利品を失うことなく城塞へ即座に安全帰還する。(未使用時は永久保存)"
+  },
+  "차원 공간을 고정하는 마도 닻입니다. 던전 탐험 도중 언제든 사용하여 획득한 전리품 손실 없이 성채로 즉시 안전 귀환합니다. 미사용 잔여분은 성채 귀환 시 영구 보존됩니다.": {
+    "en": "A magical anchor that anchors dimensional space. Can be used at any time during dungeon exploration to immediately return safely to the Citadel without losing acquired loot. Unused remnants are permanently preserved upon returning to the Citadel.",
+    "ja": "次元空間を固定する魔導錨。ダンジョン探検中にいつでも使用でき、獲得した戦利品を失うことなく城塞へ即座に安全帰還する。未使用分は城塞帰還時に永久保存される。"
+  },
+  "차원 공명을 강화하여 명예 암시장 5단계를 개방하고 전설 영웅 장신구 [투사의 영광 반지]와 PVE 올스탯 +5%를 부여합니다.": {
+    "en": "Enhanced dimensional resonance to open Honor Black Market Tier 5, granting the legendary hero accessory [Gladiator's Ring of Glory] and PVE All Stats +5%.",
+    "ja": "次元共鳴を強化して名誉闇市5段階を開放し、伝説の英雄装飾品[闘士の栄光の指輪]とPVE全ステータス+5%を付与する。"
+  },
+  "차원 관문": {
+    "en": "Dimensional Gate",
+    "ja": "次元関門"
+  },
+  "차원 관문 미개방": {
+    "en": "Dimensional Gate Unopened",
+    "ja": "次元関門未開放"
+  },
+  "차원 관문. 비동기 랭킹 결투, 네메시스 레이드 및 차원 영지 침공을 지원합니다.": {
+    "en": "Dimensional Gate. Supports asynchronous ranking duels, Nemesis raids, and dimensional territory invasions.",
+    "ja": "次元関門。非同期ランキング決闘、ネメシスレイドおよび次元領地侵攻を支援します。"
+  },
+  "차원 균열을 안정화하여 비동기 PVP 결투장을 개방했습니다. 다른 지휘관의 원정대와 무용을 겨루고 명예 상점 1단계에서 보급품을 교환합니다.": {
+    "en": "Stabilized the dimensional rift to open the asynchronous PVP Colosseum. Compete in prowess against other Commanders' expeditions and exchange supplies at Honor Shop Tier 1.",
+    "ja": "次元の亀裂を安定化させて非同期PVP決闘場を開放しました。他の指揮官の遠征隊と武勇を競い、名誉商店1段階で補給品を交換します。"
+  },
+  "차원 균열의 닻 긴급 이송 & 유해 운구 시스템": {
+    "en": "Dimensional Rift Anchor Emergency Transport & Remains Evacuation System",
+    "ja": "次元亀裂の錨緊急移送 & 遺骸運搬システム"
+  },
+  "차원 너머 거대한 공포가 도사리는 [차원 네메시스 월드 레이드] 관문을 개방하고, 전 대원의 PVE 공격력 +5% 특권을 획득합니다.": {
+    "en": "Opened the gateway to [Dimensional Nemesis World Raid] where a colossal terror lurks beyond dimensions, gaining the PVE ATK +5% privilege for all members.",
+    "ja": "次元の彼方に巨大な恐怖が潜む[次元ネメシスワールドレイド]の関門を開放し、全隊員のPVE攻撃力+5%特権を獲得する。"
+  },
+  "차원 너머와 공명할 영혼의 제단(Lv.1 이상) 파동 증폭이 선행되어야 합니다.": {
+    "en": "Wave amplification of the Soul Sanctuary (Lv.1 or higher) to resonate beyond dimensions must precede this.",
+    "ja": "次元の彼方と共鳴する魂の祭壇(Lv.1以上)の波動増幅が先行する必要があります。"
+  },
+  "차원 네메시스 누적 데미지 100,000 달성": {
+    "en": "Achieve Cumulative 100,000 Damage to Dimensional Nemesis",
+    "ja": "次元ネメシス累積ダメージ100,000達成"
+  },
+  "차원 네메시스 보스": {
+    "en": "Dimensional Nemesis Boss",
+    "ja": "次元ネメシスボス"
+  },
+  "차원 네메시스 월드 레이드 1회 출격": {
+    "en": "Sortie 1 Time to Dimensional Nemesis World Raid",
+    "ja": "次元ネメシスワールドレイド1回出撃"
+  },
+  "차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다. (현재 게이트 레벨: Lv.{0}) 성채에서 차원 앵커 게이트를 증축해주세요.": {
+    "en": "Dimensional Nemesis World Raid unlocks from Dimensional Gate Lv.3 or higher. (Current Gate Level: Lv.{0}) Please expand the Dimensional Gate in the Citadel.",
+    "ja": "次元ネメシスワールドレイドは次元アンカーゲートLv.3以上から開放されます。(現在のゲートレベル: Lv.{0}) 城塞で次元アンカーゲートを増築してください。"
+  },
+  "차원 네메시스 월드 레이드에 1회 출격하여 파멸의 보스에게 유효 타격을 입히세요.": {
+    "en": "Sortie once to the Dimensional Nemesis World Raid and land effective blows on the boss of ruin.",
+    "ja": "次元ネメシスワールドレイドに1回出撃し、破滅のボスに有効打を与えてください。"
+  },
+  "차원 네메시스 침식 & 약탈 규칙": {
+    "en": "Dimensional Nemesis Erosion & Plunder Rules",
+    "ja": "次元ネメシス浸食 & 略奪ルール"
+  },
+  "차원 네메시스를 무릎 꿇린 불세출의 지휘관에게만 주어지는 전설의 파멸 성관.": {
+    "en": "A legendary holy crown of ruin granted only to peerless commanders who brought the Dimensional Nemesis to its knees.",
+    "ja": "次元ネメシスを屈服させた不世出の指揮官にのみ与えられる伝説の破滅聖冠。"
+  },
+  "차원 네메시스에게 누적 100,000 이상의 피해를 입혀 시공 붕괴를 지연시키세요.": {
+    "en": "Inflict cumulative 100,000 or more damage on the Dimensional Nemesis to delay spacetime collapse.",
+    "ja": "次元ネメシスに累積100,000以上のダメージを与え、時空崩壊を遅延させよ。"
+  },
+  "차원 네메시스의 시공간 균열 에너지를 정제하여 제작된 강력한 희귀 목걸이.": {
+    "en": "A powerful rare necklace crafted by refining spacetime rift energy from the Dimensional Nemesis.",
+    "ja": "次元ネメシスの時空間亀裂エネルギーを精製して製作された強力な希少ネックレス。"
+  },
+  "차원 닻 강타": {
+    "en": "Dimensional Anchor Strike",
+    "ja": "次元錨強打"
+  },
+  "차원 덱 연동": {
+    "en": "Link Dimensional Deck",
+    "ja": "次元デッキ連動"
+  },
+  "차원 도약 습격": {
+    "en": "Dimensional Leap Raid",
+    "ja": "次元跳躍襲撃"
+  },
+  "차원 도약 터널을 열어 5인 정예 부대로 타 영지를 습격해 자원을 약탈하는 [차원 영지 침공]을 해금하고 PVE 치명타율 +5%를 획득합니다.": {
+    "en": "Opens a dimensional leap tunnel to unlock [Dimensional Territory Invasion], raiding other territories with a 5-member elite squad to plunder resources, and grants PVE Crit Rate +5%.",
+    "ja": "次元跳躍トンネルを開き、5名精鋭部隊で他領地を襲撃して資源を略奪する[次元領地侵攻]を解放し、PVE会心率+5%を獲得する。"
+  },
+  "차원 리더": {
+    "en": "Dimensional Leader",
+    "ja": "次元リーダー"
+  },
+  "차원 리더 (가호/궁극기)": {
+    "en": "Dimensional Leader (Blessing/Ultimate)",
+    "ja": "次元リーダー (加護/究極技)"
+  },
+  "차원 마력을 벼려 만든 투사의 비전 지팡이.": {
+    "en": "A gladiator's arcane staff forged from dimensional mana.",
+    "ja": "次元魔力を練り上げて作った闘士の秘術の杖。"
+  },
+  "차원 방랑자 에단": {
+    "en": "Dimensional Wanderer Ethan",
+    "ja": "次元の放浪者イーサン"
+  },
+  "차원 보스": {
+    "en": "Dimensional Boss",
+    "ja": "次元ボス"
+  },
+  "차원 부대 (5인)": {
+    "en": "Dimensional Squad (5 Members)",
+    "ja": "次元部隊 (5名)"
+  },
+  "차원 부대 편성 잠김": {
+    "en": "Dimensional Squad Setup Locked",
+    "ja": "次元部隊編成ロック"
+  },
+  "차원 부대 편성은 영지 내": {
+    "en": "Dimensional squad formation is done in territory",
+    "ja": "次元部隊編成は領地内の"
+  },
+  "차원 부대는 최소 5인의 용병이 필요합니다! [영지 관리 ➔ 원정단 편성 ➔ 차원 부대 (5인)]에서 편성해주세요.": {
+    "en": "The dimensional squad requires at least 5 mercenaries! Please set up in [Territory Management ➔ Expedition Setup ➔ Dimensional Squad (5 Members)].",
+    "ja": "次元部隊には最低5名の傭兵が必要です！[領地管理 ➔ 遠征隊編成 ➔ 次元部隊(5名)]で編成してください。"
+  },
+  "차원 붕괴": {
+    "en": "Dimensional Collapse",
+    "ja": "次元崩壊"
+  },
+  "차원 소멸선 (Cataclysm)": {
+    "en": "Dimensional Oblivion Line (Cataclysm)",
+    "ja": "次元消滅線 (Cataclysm)"
+  },
+  "차원 아레나": {
+    "en": "Dimensional Arena",
+    "ja": "次元アリーナ"
+  },
+  "차원 아레나 & 네메시스": {
+    "en": "Dimensional Arena & Nemesis",
+    "ja": "次元アリーナ & ネメシス"
+  },
+  "차원 아레나 1회 결투 완수": {
+    "en": "Complete 1 Dimensional Arena Duel",
+    "ja": "次元アリーナ決闘1回完了"
+  },
+  "차원 아레나 3v3 PvP 결투에 출전하여 다른 방주 원정대와의 시련을 완수하세요.": {
+    "en": "Participate in Dimensional Arena 3v3 PvP duels and complete trials against other Ark expeditions.",
+    "ja": "次元アリーナ3v3 PvP決闘に出場し、他の防衛遠征隊との試練を完了せよ。"
+  },
+  "차원 아레나 PvP": {
+    "en": "Dimensional Arena PvP",
+    "ja": "次元アリーナ PvP"
+  },
+  "차원 아레나 랭킹전 승리": {
+    "en": "Win Dimensional Arena Ranked Match",
+    "ja": "次元アリーナランキング戦勝利"
+  },
+  "차원 아레나(PvP) · 네메시스 월드 레이드 · 5v5 영지 침공 (약탈은 휴무 유지)": {
+    "en": "Dimensional Arena (PvP) · Nemesis World Raid · 5v5 Territory Invasion (Plunder on hiatus)",
+    "ja": "次元アリーナ(PvP) · ネメシスワールドレイド · 5v5領地侵攻 (略奪は休止維持)"
+  },
+  "차원 앵커 게이트": {
+    "en": "Dimensional Gate",
+    "ja": "次元アンカーゲート"
+  },
+  "차원 앵커 게이트 Lv.3 달성": {
+    "en": "Reach Dimensional Gate Lv.3",
+    "ja": "次元アンカーゲートLv.3達成"
+  },
+  "차원 앵커 게이트 Lv.6 달성": {
+    "en": "Reach Dimensional Gate Lv.6",
+    "ja": "次元アンカーゲートLv.6達成"
+  },
+  "차원 앵커 게이트 건설": {
+    "en": "Build Dimensional Gate",
+    "ja": "次元アンカーゲート建設"
+  },
+  "차원 앵커 게이트 미건설": {
+    "en": "Dimensional Gate Unbuilt",
+    "ja": "次元アンカーゲート未建設"
+  },
+  "차원 앵커 게이트 완공 & 5인 차원 부대 출격 (아레나·네메시스·영지 침공)": {
+    "en": "Complete Dimensional Gate & Sortie 5-Member Dimensional Squad (Arena · Nemesis · Territory Invasion)",
+    "ja": "次元アンカーゲート完成 & 5名次元部隊出撃 (アリーナ・ネメシス・領地侵攻)"
+  },
+  "차원 앵커 게이트(Lv.3+)에서 등장하는 서버급 월드 레이드 보스": {
+    "en": "Server-wide world raid boss appearing from Dimensional Gate (Lv.3+)",
+    "ja": "次元アンカーゲート(Lv.3+)から登場するサーバー級ワールドレイドボス"
+  },
+  "차원 앵커 게이트를": {
+    "en": "The Dimensional Gate",
+    "ja": "次元アンカーゲートを"
+  },
+  "차원 앵커 게이트를 Lv.3으로 증축하여 시공간 균열을 안정화하고 차원 네메시스 관문을 개방하세요.": {
+    "en": "Expand Dimensional Gate to Lv.3 to stabilize spacetime rifts and open the Dimensional Nemesis gateway.",
+    "ja": "次元アンカーゲートをLv.3に増築して時空間亀裂を安定化させ、次元ネメシス関門を開放してください。"
+  },
+  "차원 앵커 게이트를 Lv.6으로 증축하여 5인 부대 영지 침공 및 전술 타워 방어 시스템을 해금하세요.": {
+    "en": "Expand Dimensional Gate to Lv.6 to unlock 5-member squad territory invasion and tactical tower defense systems.",
+    "ja": "次元アンカーゲートをLv.6に増築して5名部隊領地侵攻および戦術タワー防衛システムを解放してください。"
+  },
+  "차원 앵커 게이트의 출력이 증가하자, 시공간 왜곡 너머에서 모든 차원을 붕괴시키려는 파멸의 화신 [네메시스]의 파동이 감지되었다. 게이트를 3단계로 증축하여 균열을 통제하라.": {
+    "en": "As the Dimensional Gate's output surged, the tremors of Nemesis, avatar of ruin seeking to collapse all dimensions, were detected beyond the spacetime distortion. Expand the gate to Stage 3 to control the rift.",
+    "ja": "次元アンカーゲートの出力が増加すると、時空間歪曲の彼方から全次元を崩壊させようとする破滅の化身[ネメシス]の波動が感知された。ゲートを3段階に増築して亀裂を統制せよ。"
+  },
+  "차원 앵커 연동 침공": {
+    "en": "Dimensional Anchor Linked Invasion",
+    "ja": "次元アンカー連動侵攻"
+  },
+  "차원 앵커 폐쇄 상태 시 네메시스 침공 및 약탈 전면 중단": {
+    "en": "Nemesis invasion and plunder completely suspended while Dimensional Anchor is closed",
+    "ja": "次元アンカー閉鎖時はネメシス侵攻および略奪が全面中断"
+  },
+  "차원 앵커가 닫혀 있는 동안에는 네메시스의 영지 침공과 자원 약탈이 전면 중단되어 영지 자원이 100% 안전하게 보호됩니다.": {
+    "en": "While the Dimensional Anchor remains closed, Nemesis territory invasions and resource plundering are completely halted, keeping territory resources 100% safe.",
+    "ja": "次元アンカーが閉じている間はネメシスの領地侵攻と資源略奪が全面中断され、領地資源が100%安全に保護されます。"
+  },
+  "차원 앵커를 완공하면 5인의 정예 용병을 편성하여 차원 아레나, 시공 침식 네메시스 레이드 및 영지 침공에 출전시킬 수 있습니다.": {
+    "en": "Completing the Dimensional Anchor allows you to assemble 5 elite mercenaries to deploy into the Dimensional Arena, Chrono-Erosion Nemesis Raid, and Territory Invasion.",
+    "ja": "次元アンカーを完成させると、5名の精鋭傭兵を編成して次元アリーナ、時空浸食ネメシスレイドおよび領地侵攻に出陣させることができます。"
+  },
+  "차원 앵커를 통해 마주한 다른 방주 원정대와의 결투. 당신의 전술과 용병단의 무용을 증명하라.": {
+    "en": "A duel against another Ark expedition encountered through the Dimensional Anchor. Prove your tactics and the valor of your mercenary company.",
+    "ja": "次元アンカーを通じて対峙した他の方舟遠征隊との決闘。あなたの戦術と傭兵団の武勇を証明せよ。"
+  },
+  "차원 앵커의 비전 마도구": {
+    "en": "Arcane Magitech Device of the Dimensional Anchor",
+    "ja": "次元アンカーの秘術魔導具"
+  },
+  "차원 앵커의 주파수를 정밀 동기화하여 PVP 연승 보상을 강화하고 명예 상점 2단계에서 인챈트 마도석을 개방합니다.": {
+    "en": "Precisely synchronize the Dimensional Anchor's frequency to enhance PVP win-streak rewards and unlock enchant magic stones at Honor Shop Tier 2.",
+    "ja": "次元アンカーの周波数を精密同期させてPVP連勝報酬を強化し、名誉商店2段階でエンチャント魔導石を開放する。"
+  },
+  "차원 앵커의 출력이 임계치에 도달하며 다른 방주의 영지로 직접 침공할 수 있는 차원 통로가 열린다. 방어 타워를 확충하고 전면전에 대비하라.": {
+    "en": "As the Dimensional Anchor's power reaches critical mass, a dimensional conduit opens to invade other Ark territories directly. Expand defense towers and prepare for all-out war.",
+    "ja": "次元アンカーの出力が臨界値に達し、他の方舟の領地へ直接侵攻できる次元通路が開かれる。防衛タワーを拡充し全面戦争に備えよ。"
+  },
+  "차원 영지 침공": {
+    "en": "Dimensional Territory Invasion",
+    "ja": "次元領地侵攻"
+  },
+  "차원 영지 침공 & 5인 부대 30% 복합 약탈 시스템 도입": {
+    "en": "Dimensional Territory Invasion & 5-Member Squad 30% Composite Plunder System Introduced",
+    "ja": "次元領地侵攻 & 5名部隊30%複合略奪システム導入"
+  },
+  "차원 영지 침공 & 자원 약탈": {
+    "en": "Dimensional Territory Invasion & Resource Plunder",
+    "ja": "次元領地侵攻 & 資源略奪"
+  },
+  "차원 영지 침공 1회 출격": {
+    "en": "Sortie 1 Time to Dimensional Territory Invasion",
+    "ja": "次元領地侵攻1回出撃"
+  },
+  "차원 영지 침공 격퇴": {
+    "en": "Repel Dimensional Territory Invasion",
+    "ja": "次元領地侵攻撃退"
+  },
+  "차원 영지 침공 대승리!": {
+    "en": "Dimensional Territory Invasion Great Victory!",
+    "ja": "次元領地侵攻大勝利！"
+  },
+  "차원 영지 침공(5인 원정대 약탈전)은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다. (현재 게이트 레벨: Lv.{0}) 성채에서 차원 앵커 게이트를 증축해주세요.": {
+    "en": "Dimensional Territory Invasion (5-member expedition plunder battle) unlocks from Dimensional Gate Lv.6 or higher. (Current Gate Level: Lv.{0}) Please expand the Dimensional Gate in the Citadel.",
+    "ja": "次元領地侵攻(5名遠征隊略奪戦)は次元アンカーゲートLv.6以上から開放されます。(現在のゲートレベル: Lv.{0}) 城塞で次元アンカーゲートを増築してください。"
+  },
+  "차원 영지 침공에 1회 출격하여 상대 방주 영지를 정찰하고 약탈을 감행하세요.": {
+    "en": "Sortie once to Dimensional Territory Invasion to scout rival Ark territories and carry out plundering.",
+    "ja": "次元領地侵攻に1回出撃し、相手の方舟領地を偵察して略奪を決行せよ。"
+  },
+  "차원 왜곡 결계": {
+    "en": "Dimensional Distortion Barrier",
+    "ja": "次元歪曲結界"
+  },
+  "차원 왜곡 부적": {
+    "en": "Dimensional Distortion Talisman",
+    "ja": "次元歪曲符"
+  },
+  "차원 왜곡 평화 보호막": {
+    "en": "Dimensional Distortion Peace Barrier",
+    "ja": "次元歪曲平和シールド"
+  },
+  "차원 이송 대기 중: [": {
+    "en": "Waiting for Dimensional Transport: [",
+    "ja": "次元移送待機中: ["
+  },
+  "차원 이송 중: [": {
+    "en": "Dimensional Transport in Progress: [",
+    "ja": "次元移送中: ["
+  },
+  "차원 전체에 이름을 떨치는 최고 명성의 라운지. 명성이 극에 달하여 전 용병 계약 비용이 영구적으로 20% 할인됩니다.": {
+    "en": "A lounge of the highest renown famed across dimensions. With prestige at its peak, all mercenary contract costs are permanently discounted by 20%.",
+    "ja": "全次元に名を馳せる最高名声のラウンジ。名声が極限に達し、全傭兵の契約費用が永久に20%割引される。"
+  },
+  "차원 전체의 지배자로 군림하는 패왕의 관문. 명예 상점 10단계 [차원 패왕의 보관함]을 개방하며 모든 PVE 랭커 버프를 50% 영구 증폭합니다.": {
+    "en": "The conqueror's gateway reigning as ruler of all dimensions. Opens Honor Shop Tier 10 [Dimensional Overlord's Vault] and permanently amplifies all PVE Ranker buffs by 50%.",
+    "ja": "全次元の支配者として君臨する覇王の関門。名誉商店10段階[次元覇王の保管箱]を開放し、すべてのPVEランカーバフを永久に50%増幅する。"
+  },
+  "차원 조율: 파티 전원의 스킬 쿨다운이 상시 1턴 단축되며, 매 턴 시작 시 마나 15 자동 회복.": {
+    "en": "Dimensional Tuning: Reduces skill cooldowns of all party members by 1 turn at all times, and automatically restores 15 Mana at the start of each turn.",
+    "ja": "次元調律: パーティ全員のスキルクールダウンが常時1ターン短縮され、毎ターン開始時にマナ15を自動回復。"
+  },
+  "차원 총공격": {
+    "en": "Dimensional All-Out Attack",
+    "ja": "次元総攻撃"
+  },
+  "차원 투기장 승리자에게 주어지는 영예로운 반지.": {
+    "en": "An honorable ring awarded to victors of the Dimensional Colosseum.",
+    "ja": "次元闘技場の勝者に与えられる栄誉ある指輪。"
+  },
+  "차원 투기장에서 맹활약하는 기사를 위한 결전 방패. 강력한 방어력과 생명력을 제공합니다.": {
+    "en": "A decisive shield for knights distinguished in the Dimensional Colosseum. Provides mighty defense and vitality.",
+    "ja": "次元闘技場で大活躍する騎士のための決戦盾。強力な防御力と生命力を提供する。"
+  },
+  "차원 투기장에서 승리를 거듭한 지휘관에게 수여되는 결전 명검.": {
+    "en": "A decisive famed sword awarded to commanders who achieved consecutive victories in the Dimensional Colosseum.",
+    "ja": "次元闘技場で連勝を重ねた指揮官に授与される決戦名剣。"
+  },
+  "차원 투기장에서 승리를 거듭한 지휘관에게 수여되는 전설의 반지.": {
+    "en": "A legendary ring awarded to commanders who achieved consecutive victories in the Dimensional Colosseum.",
+    "ja": "次元闘技場で連勝を重ねた指揮官に授与される伝説の指輪。"
+  },
+  "차원 투기장에서 용맹을 증명한 투사에게 수여되는 펜던트.": {
+    "en": "A pendant awarded to gladiators who proved their valor in the Dimensional Colosseum.",
+    "ja": "次元闘技場で勇猛を証明した闘士に授与されるペンダント。"
+  },
+  "차원 패왕의 주권 관": {
+    "en": "Dimensional Overlord's Crown of Sovereignty",
+    "ja": "次元覇王の主権冠"
+  },
+  "차원 포탈": {
+    "en": "Dimensional Portal",
+    "ja": "次元ポータル"
+  },
+  "차원도": {
+    "en": "Dimensional Blade",
+    "ja": "次元刀"
+  },
+  "차원을 가르는 어둠의 단검 쌍검": {
+    "en": "Dark Dual Daggers that cleave dimensions",
+    "ja": "次元を切り裂く暗黒の双短剣"
+  },
+  "차원의": {
+    "en": "Dimensional",
+    "ja": "次元の"
+  },
+  "차원의 가호": {
+    "en": "Dimensional Blessing",
+    "ja": "次元の加護"
+  },
+  "차원의 관문이 아직 닫혀 있습니다.": {
+    "en": "The Dimensional Gate is still closed.",
+    "ja": "次元の関門はまだ閉ざされている。"
+  },
+  "차원의 균열을 뚫고 강림한 파멸의 화신": {
+    "en": "Avatar of ruin descending through the dimensional rift",
+    "ja": "次元の亀裂を破り降臨した破滅の化身"
+  },
+  "차원의 나침반": {
+    "en": "Dimensional Compass",
+    "ja": "次元の羅針盤"
+  },
+  "차원의 나침반 활성화 중:": {
+    "en": "Dimensional Compass Active:",
+    "ja": "次元の羅針盤活性化中:"
+  },
+  "차원의 나침반을 완전히 대체하는 [시공간의 나침반]을 각성하여, 전투 중 용병 긴급 이송 턴을 0턴으로 소멸시켜 즉시 합류시킵니다.": {
+    "en": "Awaken the [Compass of Spacetime] to completely replace the Dimensional Compass, reducing mercenary emergency transport turns during battle to 0 to join instantly.",
+    "ja": "次元の羅針盤を完全に代替する[時空間の羅針盤]を覚醒させ、戦闘中の傭兵緊急移送ターンを0ターンに短縮し即座に合流させる。"
+  },
+  "차원의 닻": {
+    "en": "Dimensional Anchor",
+    "ja": "次元の錨"
+  },
+  "차원의 닻을 사용하여 성채로 귀환 (일부 물품 분실 확률 있음)": {
+    "en": "Return to the Citadel using the Dimensional Anchor (Chance of losing some items)",
+    "ja": "次元の錨を使用して城塞へ帰還 (一部アイテム紛失の確率あり)"
+  },
+  "차원의 벽을 자유자재로 넘나들며 명예 상점 9단계에서 [초월의 전직 비전서]를 해금하고 PVE 피해량을 +15%로 증폭합니다.": {
+    "en": "Traverse freely across dimensional walls to unlock [Grimoire of Transcendent Class Promotion] at Honor Shop Tier 9 and amplify PVE damage to +15%.",
+    "ja": "次元の壁を自由に行き来し、名誉商店9段階で[超越の転職魔導書]を解放してPVE与ダメージを+15%に増幅する。"
+  },
+  "차원의 아레나 결투장(PvP)에서 벌어지는 모든 전투에서 용병 경험치(EXP) 획득을 제거하여, 결투 본연의 레이팅 점수 및 투사의 인장 획득, 연승 경쟁 시스템에 집중되도록 개선하였습니다.": {
+    "en": "Removed mercenary EXP gains from all battles in the Dimensional Arena (PvP), focusing instead on core duel ratings, gladiator seals, and win-streak competition.",
+    "ja": "次元のアリーナ決闘場(PvP)で行われる全戦闘から傭兵経験値(EXP)獲得を撤廃し、決闘本来のレーティングスコアおよび闘士の印章獲得、連勝競争システムに集中できるよう改善しました。"
+  },
+  "차원의 아레나 전투 경험치 획득 개편": {
+    "en": "Dimensional Arena Combat EXP Rework",
+    "ja": "次元アリーナ戦闘経験値獲得の改編"
+  },
+  "차원의 에테르를 교란시켜 침입자가 스킬을 발동할 때마다 소모되는 MP 소모량을 추가 증가시킵니다.": {
+    "en": "Disrupts dimensional ether, further increasing the MP consumed each time an intruder casts a skill.",
+    "ja": "次元のエーテルを攪乱し、侵入者がスキルを発動するたびに消費されるMP消費量を追加増加させる。"
+  },
+  "차원의 왜곡으로 인해 현실이 붕괴하고 있다. 시공 왜곡자를 처단하고 최종 제단으로 가는 포탈을 안정화하라.": {
+    "en": "Reality is collapsing due to dimensional distortion. Slay the spacetime distorter and stabilize the portal leading to the final altar.",
+    "ja": "次元の歪曲により現実が崩壊している。時空歪曲者を討伐し、最終祭壇へと続くポータルを安定化させよ。"
+  },
+  "차원의 틈이 찢어지며 떨어진 붕괴된 공간의 파편입니다. 대용량 완전 군장 배낭, 차원의 호각 유물, 그리고 2차 전설 클래스 각성에 필요한 최상급 유물입니다.": {
+    "en": "A fragment of collapsed space fallen from torn dimensional rifts. A supreme relic needed for the Large Combat Backpack, Dimensional Whistle relic, and Tier 2 Legendary Class Awakening.",
+    "ja": "次元の狭間が裂け落ちた崩壊空間の破片。大容量フル装備バックパック、次元の角笛遺物、そして2次伝説クラス覚醒に必要な最上級の遺物。"
+  },
+  "차원의 호각": {
+    "en": "Dimensional Whistle",
+    "ja": "次元の角笛"
+  },
+  "차원의 호각 촉매 유물": {
+    "en": "Dimensional Whistle Catalyst Relic",
+    "ja": "次元の角笛触媒遺物"
+  },
+  "차징 붕괴": {
+    "en": "Charging Collapse",
+    "ja": "チャージ崩壊"
+  },
+  "착용 불가 (병기창 정화 시설에서 정화 필요)": {
+    "en": "Cannot Equip (Purification needed at Armory Purification Facility)",
+    "ja": "装備不可 (兵器廠の浄化施設で浄化が必要)"
+  },
+  "착용 불가 (저주 봉인)": {
+    "en": "Cannot Equip (Curse Sealed)",
+    "ja": "装備不可 (呪い封印)"
+  },
+  "착용 시 어둠의 페널티가 부여됩니다. 대장간 Lv.9에서 신성 정화할 수 있습니다.": {
+    "en": "Incurs a darkness penalty when equipped. Can be divinely purified at Forge Lv.9.",
+    "ja": "装備時に暗黒のペナルティが付与される。鍛冶屋Lv.9で神聖浄化が可能。"
+  },
+  "착용 중인 장비는 판매할 수 없습니다": {
+    "en": "Equipped gear cannot be sold",
+    "ja": "装備中の装備品は売却できません"
+  },
+  "착용중": {
+    "en": "Equipped",
+    "ja": "装備中"
+  },
+  "착용한 무기 종류에 따라 고유한 특성 뱃지가 부여되며, 전투 시 차별화된 특수 메커니즘이 발동합니다.": {
+    "en": "Unique trait badges are granted depending on the type of weapon equipped, triggering specialized mechanics in combat.",
+    "ja": "装備した武器の種類に応じて固有の特性バッジが付与され、戦闘時に差別化された特殊メカニズムが発動する。"
+  },
+  "착취": {
+    "en": "Exploitation",
+    "ja": "搾取"
+  },
+  "찬란한": {
+    "en": "Radiant",
+    "ja": "燦然たる"
+  },
+  "참": {
+    "en": "Slash",
+    "ja": "斬"
+  },
+  "참격": {
+    "en": "Slash Strike",
+    "ja": "斬撃"
+  },
+  "참전 중": {
+    "en": "In Battle",
+    "ja": "参戦中"
+  },
+  "참회의 은총": {
+    "en": "Grace of Repentance",
+    "ja": "懺悔の恩寵"
+  },
+  "창": {
+    "en": "Spear",
+    "ja": "槍"
+  },
+  "창 계열": {
+    "en": "Spear Type",
+    "ja": "槍系列"
+  },
+  "창 모드로 전환되었습니다 (ESC)": {
+    "en": "Switched to windowed mode (ESC)",
+    "ja": "ウィンドウモードに切り替えました (ESC)"
+  },
+  "창고": {
+    "en": "Storage",
+    "ja": "倉庫"
+  },
+  "창고 백과": {
+    "en": "Storage Encyclopedia",
+    "ja": "倉庫百科"
+  },
+  "창고 재고": {
+    "en": "Storage Stock",
+    "ja": "倉庫在庫"
+  },
+  "창고 재고 {0}개": {
+    "en": "Storage Stock: {0}",
+    "ja": "倉庫在庫 {0}個"
+  },
+  "창고 재고 변동:": {
+    "en": "Storage Stock Change:",
+    "ja": "倉庫在庫の変動:"
+  },
+  "창고 적재 용량을 차지하지 않으며 영구적으로 보존됩니다.": {
+    "en": "Does not consume storage cargo capacity and is permanently preserved.",
+    "ja": "倉庫の積載容量を占有せず、永久に保存されます。"
+  },
+  "창고:": {
+    "en": "Storage:",
+    "ja": "倉庫:"
+  },
+  "창세검": {
+    "en": "Genesis Sword",
+    "ja": "創世剣"
+  },
+  "창세의 성령": {
+    "en": "Holy Spirit of Genesis",
+    "ja": "創世の聖霊"
+  },
+  "창세의 여명": {
+    "en": "Dawn of Genesis",
+    "ja": "創世の夜明け"
+  },
+  "채굴": {
+    "en": "Mining",
+    "ja": "採掘"
+  },
+  "채굴 곡괭이": {
+    "en": "Mining Pickaxe",
+    "ja": "採掘ツルハシ"
+  },
+  "채굴된 원석에서 철광석을 고속으로 자동 선별하는 비중 분리기를 증설하여 자립도를 높이고 유지비를 7% 감면합니다.": {
+    "en": "Installed gravity separators that automatically sort iron ore from mined raw stone at high speed, increasing self-sufficiency and reducing upkeep by 7%.",
+    "ja": "採掘された原石から鉄鉱石を高速自動選別する比重分離機を増設し、自立度を高めて維持費を7%減免する。"
+  },
+  "채비": {
+    "en": "Preparation",
+    "ja": "支度"
+  },
+  "채비 가능": {
+    "en": "Ready for Prep",
+    "ja": "支度可能"
+  },
+  "채비 수정하기": {
+    "en": "Modify Prep",
+    "ja": "支度を修正"
+  },
+  "채비 완료! 진입할 심연의 구역을 선택하십시오.": {
+    "en": "Prep complete! Select the Abyssal zone to enter.",
+    "ja": "支度完了！進入する深淵の区域を選択してください。"
+  },
+  "채비실 무료 불출": {
+    "en": "Free Supply Depot Provision",
+    "ja": "準備室無料支給"
+  },
+  "채비실 이동": {
+    "en": "Go to Prep Room",
+    "ja": "準備室へ移動"
+  },
+  "채비실에서 보급품을 챙기고 침식 회랑 1층 강하를 시작하세요!": {
+    "en": "Gather supplies from the Prep Room and begin descending into Erosion Cloister 1F!",
+    "ja": "準備室で補給品を整え、侵食回廊1層への降下を開始せよ！"
+  },
+  "채비실에서 즉시 추가(구매)하는 보급품은": {
+    "en": "Supplies additionally added (purchased) in the Prep Room are",
+    "ja": "準備室で即時追加(購入)する補給品は"
+  },
+  "채비실에서 활성화하여 던전 출격": {
+    "en": "Activate in Prep Room to embark on dungeon",
+    "ja": "準備室で有効化してダンジョン出撃"
+  },
+  "채석": {
+    "en": "Quarrying",
+    "ja": "採石"
+  },
+  "채석장 부화물": {
+    "en": "Quarry By-product",
+    "ja": "採石場の副産物"
+  },
+  "채석장 생산 & 방벽 및 방어 시설": {
+    "en": "Quarry Production & Barriers and Defense Facilities",
+    "ja": "採石場生産 & 防壁および防衛施設"
+  },
+  "채석장(Quarry) 틱 생산": {
+    "en": "Quarry Tick Production",
+    "ja": "採石場(Quarry)ティック生産"
+  },
+  "처음엔 누구나 그래. 우린 서로 지켜주며 여기까지 온 거야. 이제 넌 우리의 소중한 동료야.": {
+    "en": "Everyone feels that way at first. We watched each other's backs to make it this far. Now you are our precious comrade.",
+    "ja": "最初は誰だってそうだ。互いを守り合ってここまで来たんだ。今や君は我らの大切な仲間だ。"
+  },
+  "처치": {
+    "en": "Defeat",
+    "ja": "撃破"
+  },
+  "처형": {
+    "en": "Execute",
+    "ja": "処刑"
+  },
+  "처형 피해 +{0}%": {
+    "en": "Execution Damage +{0}%",
+    "ja": "処刑ダメージ +{0}%"
+  },
+  "척후병의 유언": {
+    "en": "Scout's Last Will",
+    "ja": "斥候の遺言"
+  },
+  "천공의 칼바람": {
+    "en": "Celestial Razor Wind",
+    "ja": "天空の刃風"
+  },
+  "천둥의 벼락": {
+    "en": "Thunderous Lightning Strike",
+    "ja": "雷鳴の落雷"
+  },
+  "천벌": {
+    "en": "Divine Punishment",
+    "ja": "天罰"
+  },
+  "천상봉": {
+    "en": "Celestial Rod",
+    "ja": "天上棒"
+  },
+  "천상의": {
+    "en": "Heavenly",
+    "ja": "天上の"
+  },
+  "천영 질풍참": {
+    "en": "Thousand-Shadow Gale Slash",
+    "ja": "千影疾風斬"
+  },
+  "천장의 고대 암석이 굉음과 함께 머리 위로 쏟아져 내립니다!": {
+    "en": "Ancient rocks from the ceiling tumble down upon your heads with a deafening roar!",
+    "ja": "天井の古代の岩石が轟音とともに頭上へ崩れ落ちてくる！"
+  },
+  "천지 분쇄": {
+    "en": "Heaven and Earth Shatter",
+    "ja": "天地粉砕"
+  },
+  "천체와 원소 마나를 무한히 끌어모으는 비전 마도봉": {
+    "en": "An arcane staff that endlessly draws in celestial and elemental mana",
+    "ja": "天体と元素のマナを無限に引き寄せる秘術魔導杖"
+  },
+  "철갑": {
+    "en": "Iron Plate",
+    "ja": "鉄甲"
+  },
+  "철갑 방진": {
+    "en": "Ironclad Phalanx",
+    "ja": "鉄甲方陣"
+  },
+  "철갑 방진 돌파": {
+    "en": "Ironclad Phalanx Breakthrough",
+    "ja": "鉄甲方陣突破"
+  },
+  "철광": {
+    "en": "Iron Ore",
+    "ja": "鉄鉱"
+  },
+  "철광산(Iron Mine) 틱 생산": {
+    "en": "Iron Mine Tick Production",
+    "ja": "鉄鉱山(Iron Mine)ティック生産"
+  },
+  "철광석": {
+    "en": "Iron Ore",
+    "ja": "鉄鉱石"
+  },
+  "철광석 {0}개 납품": {
+    "en": "Deliver Iron Ore x{0}",
+    "ja": "鉄鉱石 {0}個納品"
+  },
+  "철광석 ⚙️": {
+    "en": "Iron Ore ⚙️",
+    "ja": "鉄鉱石 ⚙️"
+  },
+  "철권 강타": {
+    "en": "Iron Fist Strike",
+    "ja": "鉄拳強打"
+  },
+  "철벽": {
+    "en": "Iron Wall",
+    "ja": "鉄壁"
+  },
+  "철벽 방어": {
+    "en": "Iron Wall Defense",
+    "ja": "鉄壁防御"
+  },
+  "철벽 방어 & 기절 강타": {
+    "en": "Iron Wall Defense & Stun Slam",
+    "ja": "鉄壁防御 & 気絶強打"
+  },
+  "철벽 팔랑크스 분쇄": {
+    "en": "Iron Wall Phalanx Crush",
+    "ja": "鉄壁ファランクス粉砕"
+  },
+  "철벽의 방진": {
+    "en": "Iron Wall Phalanx",
+    "ja": "鉄壁の方陣"
+  },
+  "철벽의 수호혼": {
+    "en": "Guardian Spirit of the Iron Wall",
+    "ja": "鉄壁の守護魂"
+  },
+  "철벽의 태세": {
+    "en": "Iron Wall Stance",
+    "ja": "鉄壁の構え"
+  },
+  "철통 요새라 불리던 단죄의 성채는 외부의 적으로 무너진 것이 아니었다. 사령관은 심연의 군주로부터 성채 내 모든 주민의 안전을 약속받고 새벽에 빗장을 풀었다. 그러나 악마와의 계약에 자비란 없었다. 성채는 하룻밤 만에 거대한 도살장이 되었고, 사령관은 단죄의 검을 쥔 채 영원한 광기의 꼭두각시로 전락했다.": {
+    "en": "The Citadel of Condemnation, hailed as an impregnable fortress, did not fall to an external enemy. Its commander unbolted the gates at dawn after the Abyssal Lord promised the safety of every soul within. But a devil's pact holds no mercy. Overnight, the citadel turned into an enormous slaughterhouse, and the commander was reduced to an eternal puppet of madness, still gripping the sword of condemnation.",
+    "ja": "難攻不落と呼ばれた断罪の城塞は、外敵によって崩壊したのではなかった。司令官は深淵の軍主から城塞内の全住民の安全を約束され、夜明けに閂を外した。しかし悪魔との契約に慈悲などなかった。城塞は一夜にして巨大な屠殺場と化し、司令官は断罪の剣を握ったまま永遠の狂気の傀儡へと堕落した。"
+  },
+  "철퇴": {
+    "en": "Mace",
+    "ja": "メイス"
+  },
+  "철퇴 강타": {
+    "en": "Mace Smash",
+    "ja": "鉄槌強打"
+  },
+  "철혈 패황의 지휘령: 파티 공격력 +15%, 방어력 +12%, 받는 피해 8% 감소": {
+    "en": "Ironblood Overlord's Command: Party ATK +15%, DEF +12%, Damage Taken -8%",
+    "ja": "鉄血覇王の指揮令: パーティ攻撃力+15%、防御力+12%、被ダメージ8%減少"
+  },
+  "철혈의 돌격 선봉": {
+    "en": "Ironblood Vanguard Charge",
+    "ja": "鉄血の突撃先鋒"
+  },
+  "철혈의 바사라": {
+    "en": "Basara of Iron Blood",
+    "ja": "鉄血のバサラ"
+  },
+  "철혈의 보급선": {
+    "en": "Ironblood Supply Line",
+    "ja": "鉄血の補給線"
+  },
+  "철혈의 세이라": {
+    "en": "Seira of Iron Blood",
+    "ja": "鉄血のセイラ"
+  }
+}

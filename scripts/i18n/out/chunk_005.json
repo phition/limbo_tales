@@ -1,0 +1,802 @@
+{
+  "{0} (🤝서포터)": {
+    "en": "{0} (🤝Supporter)",
+    "ja": "{0} (🤝サポーター)"
+  },
+  "{0} [{1}] (네메시스 속도 {2})": {
+    "en": "{0} [{1}] (Nemesis SPD {2})",
+    "ja": "{0} [{1}] (ネメシス速度 {2})"
+  },
+  "{0} {1} {2}개 (성채 창고 입고)": {
+    "en": "{0} {1} x{2} (Stored in Citadel Storage)",
+    "ja": "{0} {1} {2}個 (城塞倉庫に入庫)"
+  },
+  "{0} {1} 연구 완료 (Lv.{2})": {
+    "en": "{0} {1} Research Complete (Lv.{2})",
+    "ja": "{0} {1} 研究完了 (Lv.{2})"
+  },
+  "{0} {1}개": {
+    "en": "{0} x{1}",
+    "ja": "{0} {1}個"
+  },
+  "{0} {1}개 필요 (보유: {2})": {
+    "en": "{0} x{1} required (Owned: {2})",
+    "ja": "{0} {1}個必要 (所持: {2})"
+  },
+  "{0} ☠️[맹독] 최대 HP 14% 치명적 중독 피해 (-{1}) [최대 DoT]": {
+    "en": "{0} ☠️[Poison] Max HP 14% Lethal Poison DMG (-{1}) [Max DoT]",
+    "ja": "{0} ☠️[猛毒] 最大HP 14% 致命的中毒ダメージ (-{1}) [最大DoT]"
+  },
+  "{0} 가죽 갑옷. 질긴 가죽과 흉부 뼈대로 신속한 기동성과 회피력을 온전히 보존하는 {1} 방어구입니다. (병기창 Lv.{2})": {
+    "en": "{0} Leather Armor. Crafted with tough leather and chest ribs, this {1} armor preserves swift mobility and evasion. (Armory Lv.{2})",
+    "ja": "{0} 革鎧。強靭な革と胸部骨格で迅速な機動性と回避力を維持する{1}防具。(兵器廠 Lv.{2})"
+  },
+  "{0} 검. 대량의 철광석과 석탄 열기로 단련하여 균형 잡힌 물리 파괴력을 지닌 [🗡️ 베기] 특화 무기입니다. (병기창 Lv.{1})": {
+    "en": "{0} Sword. Tempered with ample iron ore and coal heat, this weapon features balanced physical destructive power specialized in [🗡️ Slash]. (Armory Lv.{1})",
+    "ja": "{0} 剣。大量の鉄鉱石と石炭の熱気で鍛え上げ、バランスの取れた物理破壊力を持つ[🗡️ 斬撃]特化武器。(兵器廠 Lv.{1})"
+  },
+  "{0} 단검. 예리한 강철과 가죽 손잡이로 민첩한 선제 기습을 가하는 [⚡ 암습] 특화 무기입니다. (병기창 Lv.{1})": {
+    "en": "{0} Dagger. Forged from keen steel with a leather hilt, this weapon excels in swift preemptive strikes specialized in [⚡ Ambush]. (Armory Lv.{1})",
+    "ja": "{0} 短剣。鋭利な鋼鉄と革の柄で俊敏な先制奇襲を仕掛ける[⚡ 奇襲]特化武器。(兵器廠 Lv.{1})"
+  },
+  "{0} 로브. 대량의 실크(비단)와 순수 에테르를 직조하여 마나 수용과 마도 위력을 극대화한 {1} 성의입니다. (병기창 Lv.{2})": {
+    "en": "{0} Robe. Woven from rich silk and pure ether, this {1} vestment maximizes mana capacity and magic power. (Armory Lv.{2})",
+    "ja": "{0} ローブ。大量のシルク(絹)と純粋なエーテルを織り込み、マナ受容と魔導威力を極大化した{1}聖衣。(兵器廠 Lv.{2})"
+  },
+  "{0} 마총. 석탄 화약 추진과 에테르 마나 기류로 빠른 연속 사격을 가하는 [🔫 연사] 특화 무기입니다. (병기창 Lv.{1})": {
+    "en": "{0} Magigun. Powered by coal propellant and ether mana currents, this weapon unleashes rapid continuous fire specialized in [🔫 Rapid Fire]. (Armory Lv.{1})",
+    "ja": "{0} 魔銃。石炭火薬の推進力とエーテルマナの気流で素早い連続射撃を放つ[🔫 連射]特化武器。(兵器廠 Lv.{1})"
+  },
+  "{0} 목걸이. 수호석과 생명 정기로 착용자의 신체 한계를 결계로 보호하는 {1} 장신구입니다. (병기창 Lv.{2})": {
+    "en": "{0} Necklace. Protects the wearer's physical limits with a barrier of wardstones and life essence in this {1} accessory. (Armory Lv.{2})",
+    "ja": "{0} ネックレス。守護石と生命精気で着用者の身体限界を結界で保護する{1}装飾品。(兵器廠 Lv.{2})"
+  },
+  "{0} 반지. 에테르 광채와 마력 수정 세공으로 공격 집중력과 치명적인 기회를 창출하는 {1} 장신구입니다. (병기창 Lv.{2})": {
+    "en": "{0} Ring. Crafted with ether luster and mana crystals, this {1} accessory hones offensive focus and creates critical opportunities. (Armory Lv.{2})",
+    "ja": "{0} 指輪。エーテルの輝きと魔力水晶細工で攻撃の集中力と会心の好機を創出する{1}装飾品。(兵器廠 Lv.{2})"
+  },
+  "{0} 발동!": {
+    "en": "{0} Activated!",
+    "ja": "{0} 発動！"
+  },
+  "{0} 부적. 신성 실크와 영혼 수정, 에테르 주술로 전신의 마나 흐름을 가속하는 {1} 장신구입니다. (병기창 Lv.{2})": {
+    "en": "{0} Talisman. Accelerates mana flow throughout the body using holy silk, soul crystals, and ether spells in this {1} accessory. (Armory Lv.{2})",
+    "ja": "{0} 護符。神聖シルクと魂の水晶、エーテル呪術で全身のマナ循環を加速させる{1}装飾品。(兵器廠 Lv.{2})"
+  },
+  "{0} 비어있음 (클릭 시 {1} 필터로 전환)": {
+    "en": "{0} Empty (Click to switch to {1} filter)",
+    "ja": "{0} 空き (クリックで{1}フィルターに切替)"
+  },
+  "{0} 약점 추격 원호!": {
+    "en": "{0} Weakness Pursuit Assist!",
+    "ja": "{0} 弱点追撃援護！"
+  },
+  "{0} 조명 중 ({1}회 남음)": {
+    "en": "Illuminating {0} ({1} left)",
+    "ja": "{0} 照射中 (残り{1}回)"
+  },
+  "{0} 지팡이. 신성 영목을 정제하고 마력 수정을 박아 마나 효율을 극대화하는 [🪄 공명] 특화 마도구입니다. (병기창 Lv.{1})": {
+    "en": "{0} Staff. Crafted from refined sacred timber embedded with mana crystals, this magical tool maximizes mana efficiency specialized in [🪄 Resonance]. (Armory Lv.{1})",
+    "ja": "{0} 杖。神聖霊木を精製し魔力水晶を埋め込んでマナ効率を極大化する[🪄 共鳴]特化魔導具。(兵器廠 Lv.{1})"
+  },
+  "{0} 창. 긴 원목 자루와 정련 강철 창날로 적 보호막을 분쇄하는 [🔱 방어 파쇄] 특화 무기입니다. (병기창 Lv.{1})": {
+    "en": "{0} Spear. Featuring a long timber shaft and refined steel spearhead, this weapon shatters enemy shields specialized in [🔱 DEF Shred]. (Armory Lv.{1})",
+    "ja": "{0} 槍。長い原木の柄と精錬鋼鉄の槍先で敵のシールドを粉砕する[🔱 防御粉砕]特化武器。(兵器廠 Lv.{1})"
+  },
+  "{0} 판금 갑옷. 막대한 철광석과 석탄 열기로 단조된 철벽같은 방호력과 생명력의 {1} 중갑입니다. (병기창 Lv.{2})": {
+    "en": "{0} Plate Armor. Forged with vast amounts of iron ore and coal heat, this {1} heavy armor offers ironclad protection and vitality. (Armory Lv.{2})",
+    "ja": "{0} 板金鎧。膨大な鉄鉱石と石炭の熱気で鍛造された鉄壁の防御力と生命力を誇る{1}重甲。(兵器廠 Lv.{2})"
+  },
+  "{0} 피해 흡수": {
+    "en": "Absorbed {0} DMG",
+    "ja": "{0} ダメージ吸収"
+  },
+  "{0} 피해! {1}": {
+    "en": "{0} DMG! {1}",
+    "ja": "{0} ダメージ！ {1}"
+  },
+  "{0} 활. 유연한 원목과 질긴 가죽 시위로 치명적인 약점을 노리는 [🏹 급소] 특화 무기입니다. (병기창 Lv.{1})": {
+    "en": "{0} Bow. Built with flexible timber and tough leather bowstring, this weapon targets critical weak points specialized in [🏹 Vitals]. (Armory Lv.{1})",
+    "ja": "{0} 弓。柔軟な原木と強靭な革の弦で致命的な弱点を狙う[🏹 急所]特化武器。(兵器廠 Lv.{1})"
+  },
+  "{0} 💚[재생] 체력 회복 (+{1})": {
+    "en": "{0} 💚[Regen] HP Restored (+{1})",
+    "ja": "{0} 💚[再生] HP回復 (+{1})"
+  },
+  "{0} 🔥[화상] 최대 HP 8% 화염 피해 (-{1}) [방어력 -50%]": {
+    "en": "{0} 🔥[Burn] Max HP 8% Fire DMG (-{1}) [DEF -50%]",
+    "ja": "{0} 🔥[火傷] 最大HP 8% 火炎ダメージ (-{1}) [防御力 -50%]"
+  },
+  "{0} 🩸[출혈] 최대 HP 7% 지속 피해 (-{1}) [공격력 -40%]": {
+    "en": "{0} 🩸[Bleed] Max HP 7% Continuous DMG (-{1}) [ATK -40%]",
+    "ja": "{0} 🩸[出血] 最大HP 7% 持続ダメージ (-{1}) [攻撃力 -40%]"
+  },
+  "{0}% 효과": {
+    "en": "{0}% Effect",
+    "ja": "{0}% 効果"
+  },
+  "{0}(광전사의 화신)": {
+    "en": "{0} (Avatar of the Berserker)",
+    "ja": "{0} (狂戦士の化身)"
+  },
+  "{0}(베기)": {
+    "en": "{0} (Slash)",
+    "ja": "{0} (斬撃)"
+  },
+  "{0}(약점 분석)": {
+    "en": "{0} (Weakness Analysis)",
+    "ja": "{0} (弱点分析)"
+  },
+  "{0}, 모닥불 옆으로 더 가까이 와. 여기 따뜻한 스튜 한 그릇 들게.": {
+    "en": "{0}, come closer to the bonfire. Have a bowl of warm stew.",
+    "ja": "{0}、焚火の近くにおいで。温かいシチューを一杯どうぞ。"
+  },
+  "{0}, 심연을 다 건너면 성채 주점에서 맛있는 술이나 한잔하자고!": {
+    "en": "{0}, once we cross the Abyss, let's grab a good drink at the Citadel tavern!",
+    "ja": "{0}、深淵を渡り切ったら城塞の酒場で旨い酒でも一杯やろう！"
+  },
+  "{0}, 아까 전투에서 그 타이밍은 정말 완벽했어. 손발이 척척 맞는군!": {
+    "en": "{0}, that timing in the battle earlier was perfect. We're completely in sync!",
+    "ja": "{0}、さっきの戦闘のあのタイミング、本当に完璧だった。息がぴったりだな！"
+  },
+  "{0}, 아까 전투에서 뒤를 든든하게 받쳐줘서 고마웠어.": {
+    "en": "{0}, thanks for having my back in that fight earlier.",
+    "ja": "{0}、さっきの戦いで背中を守ってくれて助かったよ。"
+  },
+  "{0}, 오늘 네 활약이 없었다면 위험했을 거야. 고마워.": {
+    "en": "{0}, without your performance today, it would've been dangerous. Thanks.",
+    "ja": "{0}、今日の活躍がなかったら危なかった。ありがとう。"
+  },
+  "{0}, 오늘 밤은 유난히 한기가 심하군... 따뜻한 수프라도 더 들겠나?": {
+    "en": "{0}, tonight is exceptionally freezing... Would you like some more warm soup?",
+    "ja": "{0}、今夜は一段と冷え込むな…温かいスープでももっと飲むかい？"
+  },
+  "{0}, 이곳 심연 {1}층에 잠들다. 그의 숭고한 희생으로 방주의 성화는 꺼지지 않으리라.": {
+    "en": "{0}, laid to rest here on Abyss Floor {1}. Through noble sacrifice, the Ark's Sacred Flame shall never fade.",
+    "ja": "{0}、ここ深淵{1}層に眠る。その崇高な犠牲により方舟の聖火は消えぬだろう。"
+  },
+  "{0}/2개 선택됨": {
+    "en": "{0}/2 selected",
+    "ja": "{0}/2個選択中"
+  },
+  "{0}/초": {
+    "en": "{0}/s",
+    "ja": "{0}/秒"
+  },
+  "{0}: 남은 지속 {1}턴": {
+    "en": "{0}: {1} turns remaining",
+    "ja": "{0}: 残り持続{1}ターン"
+  },
+  "{0}: 지속 {1}턴": {
+    "en": "{0}: Duration {1} turns",
+    "ja": "{0}: 持続{1}ターン"
+  },
+  "{0}{1}개 일반재고": {
+    "en": "{0}{1} Standard Stock",
+    "ja": "{0}{1}個 通常在庫"
+  },
+  "{0}개": {
+    "en": "{0}",
+    "ja": "{0}個"
+  },
+  "{0}개 수령 가능": {
+    "en": "{0} Claimable",
+    "ja": "{0}個 受取可能"
+  },
+  "{0}개 아이템을 배낭에 담았습니다. 배낭이 가득 차 남은 {1}개는 대기 중입니다.": {
+    "en": "Stored {0} items in your backpack. Backpack is full; remaining {1} items are pending.",
+    "ja": "{0}個のアイテムをリュックに収めました。満杯のため残りの{1}個は待機中です。"
+  },
+  "{0}개 장비 보관": {
+    "en": "{0} Equipment Stored",
+    "ja": "{0}個 装備保管"
+  },
+  "{0}단계 완료": {
+    "en": "Stage {0} Complete",
+    "ja": "{0}段階完了"
+  },
+  "{0}만": {
+    "en": "{0}0K",
+    "ja": "{0}万"
+  },
+  "{0}명 전체": {
+    "en": "All {0} Members",
+    "ja": "全{0}名"
+  },
+  "{0}분 {1}{2}초": {
+    "en": "{0}m {1}{2}s",
+    "ja": "{0}分 {1}{2}秒"
+  },
+  "{0}분 {1}초": {
+    "en": "{0}m {1}s",
+    "ja": "{0}分 {1}秒"
+  },
+  "{0}시간 {1}분": {
+    "en": "{0}h {1}m",
+    "ja": "{0}時間 {1}分"
+  },
+  "{0}억": {
+    "en": "{0}00M",
+    "ja": "{0}億"
+  },
+  "{0}에 헌화하였습니다. 5분간 전투 경험치 +{1}% 가호 및 심연 촉매가 활성화되었습니다!": {
+    "en": "Offered flowers at {0}. Combat EXP +{1}% blessing and Abyssal Catalyst activated for 5 min!",
+    "ja": "{0}に献花しました。5分間戦闘経験値+{1}%の加護および深淵触媒が活性化しました！"
+  },
+  "{0}에게 -{1} 피해": {
+    "en": "-{1} DMG to {0}",
+    "ja": "{0}に -{1} ダメージ"
+  },
+  "{0}에게 {1} {2}{3}": {
+    "en": "{1} {2}{3} to {0}",
+    "ja": "{0}に {1} {2}{3}"
+  },
+  "{0}은(는) 결빙/기절 상태이므로 행동할 수 없습니다!": {
+    "en": "{0} cannot act due to Frozen/Stunned state!",
+    "ja": "{0}は氷結/気絶状態のため行動不能！"
+  },
+  "{0}의": {
+    "en": "{0}'s",
+    "ja": "{0}の"
+  },
+  "{0}의 {1}": {
+    "en": "{0}'s {1}",
+    "ja": "{0}の{1}"
+  },
+  "{0}의 {1} 공격을 날렵하게 회피했습니다!": {
+    "en": "Deftly evaded {0}'s {1} attack!",
+    "ja": "{0}の{1}攻撃を素早く回避した！"
+  },
+  "{0}의 {1}!": {
+    "en": "{0}'s {1}!",
+    "ja": "{0}の{1}！"
+  },
+  "{0}의 가호": {
+    "en": "Blessing of {0}",
+    "ja": "{0}の加護"
+  },
+  "{0}의 방주 영지": {
+    "en": "{0}'s Ark Territory",
+    "ja": "{0}の方舟領地"
+  },
+  "{0}의 시각 형상": {
+    "en": "Visual Appearance of {0}",
+    "ja": "{0}の視覚形状"
+  },
+  "{0}의 침공 영지": {
+    "en": "{0}'s Invasion Territory",
+    "ja": "{0}の侵攻領地"
+  },
+  "{0}의 클래스 전술 외형 데이터입니다.": {
+    "en": "Tactical class appearance data for {0}.",
+    "ja": "{0}のクラスタクティクス外見データです。"
+  },
+  "{0}의 타격으로 {1}의 혈관 속 독소가 역류하여 {2} 추가 피해를 입히고 인접 동료에게 독액을 흩뿌립니다!": {
+    "en": "{0}'s strike causes venom in {1}'s veins to erupt, dealing {2} bonus DMG and splashing poison onto adjacent allies!",
+    "ja": "{0}の打撃により{1}の血管内の毒素が逆流し、{2}追加ダメージを与えて隣接する仲間に毒液を撒き散らす！"
+  },
+  "{0}이(가) 무력해진 {1}의 생명력을 흡수하여 {2} 피해를 가하고 자신의 체력을 회복합니다!": {
+    "en": "{0} drains life from enfeebled {1}, dealing {2} DMG and restoring own HP!",
+    "ja": "{0}が無力化した{1}の生命力を吸収し、{2}ダメージを与えて自身のHPを回復！"
+  },
+  "{0}이(가) 방어가 허물어진 {1}의 틈새를 꿰뚫어 {2}의 치명타 관통 피해를 입힙니다!": {
+    "en": "{0} pierces an opening in {1}'s broken defenses, dealing {2} Critical Piercing DMG!",
+    "ja": "{0}が防御の崩れた{1}の隙を突き、{2}の会心貫通ダメージを与える！"
+  },
+  "{0}이(가) 부족합니다. (필요: {1}, 보유: {2})": {
+    "en": "Not enough {0}. (Required: {1}, Owned: {2})",
+    "ja": "{0}が不足しています。(必要: {1}、所持: {2})"
+  },
+  "{0}이(가) 불타는 {1}의 화염을 자극하여 {2} 화염 폭발을 일으키고 마나를 15 소실시킵니다!": {
+    "en": "{0} stokes burning {1}'s flames, triggering {2} Flame Explosion and draining 15 MP!",
+    "ja": "{0}が燃え盛る{1}の火炎を刺激し、{2}火炎爆発を引き起こしてマナを15焼失させる！"
+  },
+  "{0}이(가) 얼어붙은 {1}의 외피를 내리찍어 {2}의 산산조각 파편 피해를 입히고 기절을 연장시킵니다!": {
+    "en": "{0} shatters frozen {1}'s carapace, dealing {2} Shatter Shard DMG and extending Stun duration!",
+    "ja": "{0}が凍りついた{1}の外皮を叩き割り、{2}の粉砕破片ダメージを与えて気絶を延長！"
+  },
+  "{0}이(가) 피 흘리는 {1}의 상처를 무자비하게 후벼파 {2} 추가 피해를 입히고 2턴간 받는 피해를 25% 증폭시킵니다!": {
+    "en": "{0} ruthlessly rends bleeding {1}'s wound, dealing {2} bonus DMG and amplifying damage taken by 25% for 2 turns!",
+    "ja": "{0}が出血中の{1}の傷口を無慈悲に抉り、{2}追加ダメージを与えて2ターンの間被ダメージを25%増幅！"
+  },
+  "{0}인에게 총 -{1} 피해": {
+    "en": "-{1} total DMG to {0} targets",
+    "ja": "{0}名に計 -{1} ダメージ"
+  },
+  "{0}일 {1}시간 {2}분": {
+    "en": "{0}d {1}h {2}m",
+    "ja": "{0}日 {1}時間 {2}分"
+  },
+  "{0}전투 기술": {
+    "en": "{0} Combat Skill",
+    "ja": "{0}戦闘技術"
+  },
+  "{0}차원 패왕의 주권 관{1}": {
+    "en": "{0}-Dimensional Overlord's Sovereign Crown{1}",
+    "ja": "{0}次元覇王の主権冠{1}"
+  },
+  "{0}초": {
+    "en": "{0}s",
+    "ja": "{0}秒"
+  },
+  "{0}초당 HP+5 회복 (🍖{1})": {
+    "en": "+5 HP per {0}s (🍖{1})",
+    "ja": "{0}秒ごとにHP+5回復 (🍖{1})"
+  },
+  "{0}층": {
+    "en": "Floor {0}",
+    "ja": "{0}層"
+  },
+  "{0}층 보스 세트": {
+    "en": "Floor {0} Boss Set",
+    "ja": "{0}層ボスセット"
+  },
+  "{0}층 심연 선발대가 남긴 마지막 생존 기록": {
+    "en": "Final Survival Record Left by the Floor {0} Abyss Vanguard",
+    "ja": "{0}層深淵先発隊が遺した最後の生存記録"
+  },
+  "{0}층 심연 회고록 쪽지": {
+    "en": "Floor {0} Abyss Memoir Note",
+    "ja": "{0}層深淵回顧録のメモ"
+  },
+  "{0}층 탐험 중 특별 오브젝트 수색 / 서브 퀘스트": {
+    "en": "Special Object Search / Sub-Quest during Floor {0} Exploration",
+    "ja": "{0}層探検中の特別オブジェクト捜索 / サブクエスト"
+  },
+  "{0}턴 대기": {
+    "en": "Wait {0} Turns",
+    "ja": "{0}ターン待機"
+  },
+  "{0}티어 비전서": {
+    "en": "Tier {0} Grimoire",
+    "ja": "Tier {0} 魔導書"
+  },
+  "{0}티어 장비 ({1}개 보유)": {
+    "en": "Tier {0} Equipment (Owned: {1})",
+    "ja": "Tier {0} 装備 ({1}個所持)"
+  },
+  "| 강화 단계:": {
+    "en": "| Enhance Stage:",
+    "ja": "| 強化段階:"
+  },
+  "| 강화 레벨:": {
+    "en": "| Enhance Level:",
+    "ja": "| 強化レベル:"
+  },
+  "| 기본 공격 대체 고유스킬 [{0}] 획득!": {
+    "en": "| Acquired Basic Attack replacement unique skill [{0}]!",
+    "ja": "| 基本攻撃代替固有スキル [{0}] 獲得！"
+  },
+  "| 방어력:": {
+    "en": "| DEF:",
+    "ja": "| 防御力:"
+  },
+  "| 속도:": {
+    "en": "| SPD:",
+    "ja": "| 速度:"
+  },
+  "| 필요 인챈트석:": {
+    "en": "| Required Enchant Stones:",
+    "ja": "| 必要エンチャント石:"
+  },
+  "| 행운:": {
+    "en": "| LUCK:",
+    "ja": "| 幸運:"
+  },
+  "· {0}초당 MP+4 충전 (✨1)": {
+    "en": "· +4 MP per {0}s (✨1)",
+    "ja": "· {0}秒ごとにMP+4充填 (✨1)"
+  },
+  "· 권당 +": {
+    "en": "· per volume +",
+    "ja": "· 冊あたり +"
+  },
+  "· 나침반 -1T": {
+    "en": "· Compass -1T",
+    "ja": "· 羅針盤 -1T"
+  },
+  "· 합류까지 남은 이동:": {
+    "en": "· Steps until rendezvous:",
+    "ja": "· 合流までの残り移動:"
+  },
+  "• 게임 내": {
+    "en": "• In-game",
+    "ja": "• ゲーム内"
+  },
+  "• 고객센터 문의(phitionv4@gmail.com)를 통한 계정 삭제 요청 시 즉시 복구 불가능하게 파기됩니다.": {
+    "en": "• Account deletion requests via Customer Support (phitionv4@gmail.com) will permanently destroy data beyond recovery.",
+    "ja": "• カスタマーサポート(phitionv4@gmail.com)へアカウント削除を要請した場合、即座に復旧不可能な形で破棄されます。"
+  },
+  "• 상위 전직 [{0}]": {
+    "en": "• Advanced Class [{0}]",
+    "ja": "• 上位転職 [{0}]"
+  },
+  "• 이용 목적 달성 시 즉시 파기합니다.": {
+    "en": "• Discarded immediately upon fulfilling purpose of use.",
+    "ja": "• 利用目的の達成後は即座に破棄されます。"
+  },
+  "…감사하오, 방주의 수호자들이여. 억겁의 광기와 타락 속에서 마침내 명예로운 기사의 맹세를 되찾았소. 나의 휘장과 거울의 파편을 그대들에게 맡기겠소…": {
+    "en": "...Thank you, guardians of the Ark. Amid eons of madness and corruption, I have finally reclaimed an honorable knight's oath. I entrust my insignia and mirror shard to you...",
+    "ja": "…感謝する、方舟の守護者たちよ。億劫の狂気と堕落の中で、ついに誉れ高き騎士の誓いを取り戻した。我が記章と鏡の破片をそなたたちに託そう…"
+  },
+  "…나를 베어넘긴 필멸자들이여. 너희의 의지가 진정 심연의 억겁을 뛰어넘었도다. 방주여, 이제 빛의 대지 위로 날아오르라…": {
+    "en": "...Mortals who struck me down. Your will has truly surpassed eons of the Abyss. Ark, soar forth above the realm of light...",
+    "ja": "…我を斬り伏せし定命の者たちよ。そなたらの意志は真に深淵の億劫を超越した。方舟よ、今こそ光の大地の上へと飛び立つがよい…"
+  },
+  "…너희는 종언의 굴레를 끊어냈도다. 허나 이것은 끝이 아니니, 더 깊은 심연의 균열 너머로 진정한 시련이 입을 벌리고 있으리라…": {
+    "en": "...You have severed the bonds of finality. Yet this is not the end; beyond deeper abyssal rifts, true trials lie gaping...",
+    "ja": "…汝らは終焉の軛を断ち切った。だがこれで終わりではない。より深き深淵の亀裂の彼方に、真なる試練が口を開けて待っているのだ…"
+  },
+  "…인식 완료. 방주 관리자 권한 부분 복구. 이 성채는 단순한 요새가 아닌, 붕괴하는 대륙을 떠나 하늘로 날아오르던 고대 비행 방주 [림보 아크]였느니라.": {
+    "en": "...Identification confirmed. Ark Administrator privileges partially restored. This citadel was no mere fortress, but the [Limbo Ark], an ancient flying vessel that soared into the skies away from the collapsing continent.",
+    "ja": "…認識完了。方舟管理者権限の一部を復旧。この城塞は単なる要塞ではなく、崩壊する大陸を離れて天へと舞い上がった古代の飛行方舟【リンボ・アーク】であったのだ。"
+  },
+  "…태초의 어둠조차 너희의 영혼이 뿜어내는 온기를 삼키지 못하였구나. 억겁의 시련을 통과한 자들이여, 이제 심연의 모든 균열을 영구히 봉인하노라… 인간들이여, 너희가 피워낸 빛의 세계로 돌아가라.": {
+    "en": "...Even the primordial darkness could not swallow the warmth of your souls. You who endured eons of trials, all rifts of the Abyss are now permanently sealed... Mortals, return to the radiant world you have wrought.",
+    "ja": "…太初の闇すらも、汝らの魂が放つ温もりを呑み込むことは叶わなかったか。億劫の試練を乗り越えし者たちよ、今こそ深淵のすべての亀裂を永久に封印せん…人間たちよ、汝らが灯した光の世界へと還るがよい。"
+  },
+  "※ 가동을 재개하면 시설의 고유 기능이 활성화되고 기본 운영 유지비 소모 및 자원 생산이 다시 시작됩니다.": {
+    "en": "* Resuming operation activates the facility's unique functions and restarts maintenance costs and resource production.",
+    "ja": "※ 稼働を再開すると施設の固有機能が有効化され、基本維持費の消費と資源生産が再開されます。"
+  },
+  "※ 매각된 장비는 즉시 인벤토리에서 영구 삭제되며 복구할 수 없습니다.": {
+    "en": "* Sold equipment is permanently removed from inventory immediately and cannot be recovered.",
+    "ja": "※ 売却された装備は即座にインベントリから永久削除され、復旧できません。"
+  },
+  "※ 용병들이 착용 중인 장비는 안전하게 보호되어 매각 대상에서 제외됩니다.": {
+    "en": "* Equipment worn by mercenaries is safely protected and excluded from sale.",
+    "ja": "※ 傭兵が装備中のアイテムは保護され、売却対象から除外されます。"
+  },
+  "※ 채비실에서 즉석 추가하는 보급품은 일반 보급품이므로 항상 미리 생산해두어야 합니다.": {
+    "en": "* Supplies added instantly in the Preparation Room are standard supplies and must always be produced in advance.",
+    "ja": "※ 準備室で即時追加する補給品は通常補給品であるため、常に事前に生産しておく必要があります。"
+  },
+  "ℹ️ 상세": {
+    "en": "ℹ️ Details",
+    "ja": "ℹ️ 詳細"
+  },
+  "⌛ 15턴 경과! 차원의 왜곡 한계에 도달하여 안전 철수합니다.": {
+    "en": "⌛ 15 turns elapsed! Dimensional distortion threshold reached; safely evacuating.",
+    "ja": "⌛ 15ターン経過！ 次元の歪曲限界に達したため安全に撤退します。"
+  },
+  "⌛💫 [시공 역류] 시간의 흐름을 되돌려 파티 전원의 체력과 마나를 회복하고 모든 스킬 쿨다운을 완전 초기화했습니다!": {
+    "en": "⌛💫 [Spacetime Backflow] Rewound the flow of time, restoring HP and MP for the entire party and resetting all skill cooldowns!",
+    "ja": "⌛💫 [時空逆流] 時の流れを巻き戻し、パーティ全員のHPとMPを回復して全スキルのクールダウンを完全初期化！"
+  },
+  "⏭️ 스킵": {
+    "en": "⏭️ Skip",
+    "ja": "⏭️ スキップ"
+  },
+  "⏳ [차원 조율] {0} 고유 패시브 마나 회복 (+{1} MP)": {
+    "en": "⏳ [Dimensional Tuning] {0} unique passive mana recovery (+{1} MP)",
+    "ja": "⏳ [次元調律] {0} 固有パッシブマナ回復 (+{1} MP)"
+  },
+  "⏳ 강화 각인 진행 중...": {
+    "en": "⏳ Inscribing enhancement...",
+    "ja": "⏳ 強化刻印の進行中..."
+  },
+  "⏳ 대형 연계 에픽: 크로노스와 시공간의 나침반": {
+    "en": "⏳ Grand Linked Epic: Chronos and the Spacetime Compass",
+    "ja": "⏳ 大型連携エピック: クロノスと時空間の羅針盤"
+  },
+  "⏳ 뒤틀린 시간의 잔향 (미래의 잔영)": {
+    "en": "⏳ Distorted Reverberation of Time (Afterimage of the Future)",
+    "ja": "⏳ 歪んだ時間の残響 (未来の残影)"
+  },
+  "⏳ 매진 (": {
+    "en": "⏳ Sold Out (",
+    "ja": "⏳ 売り切れ ("
+  },
+  "⏳ 매진 ({0} 후 입고)": {
+    "en": "⏳ Sold Out (Restock in {0})",
+    "ja": "⏳ 売り切れ ({0}後に入荷)"
+  },
+  "⏳ 상점의 매입 물량이 전량 매진되었습니다.": {
+    "en": "⏳ The shop is completely sold out of purchase stock.",
+    "ja": "⏳ ショップの買取可能枠がすべて上限に達しました。"
+  },
+  "⏳ 시공의 조율사": {
+    "en": "⏳ Tuner of Spacetime",
+    "ja": "⏳ 時空の調律士"
+  },
+  "⏳ 영령 안식 쿨다운 ({0})": {
+    "en": "⏳ Heroic Spirit Rest Cooldown ({0})",
+    "ja": "⏳ 英霊の安息クールダウン ({0})"
+  },
+  "⏳ 쿨다운": {
+    "en": "⏳ Cooldown",
+    "ja": "⏳ クールダウン"
+  },
+  "⏳✨ [시공 왜곡] 아군 전체 마나 +28 MP 회복 및 모든 스킬 쿨다운을 1턴 즉시 단축했습니다!": {
+    "en": "⏳✨ [Spacetime Distortion] Restored +28 MP to all allies and reduced all skill cooldowns by 1 turn immediately!",
+    "ja": "⏳✨ [時空歪曲] 味方全員のマナ+28 MP回復＆全スキルのクールダウンを即座に1ターン短縮！"
+  },
+  "⏳🌀 [시공간 차원 붕괴] 적 전체의 시간 축을 왜곡하여 2턴간 행동력을 40% 저하시켰습니다!": {
+    "en": "⏳🌀 [Spacetime Dimensional Collapse] Distorted the time axis of all enemies, reducing action power by 40% for 2 turns!",
+    "ja": "⏳🌀 [時空間次元崩壊] 敵全体の時間軸を歪め、2ターンの間行動力を40%低下させました！"
+  },
+  "⏸ 자동전투 중지": {
+    "en": "⏸ Stop Auto-Combat",
+    "ja": "⏸ 自動戦闘停止"
+  },
+  "⏸️ [{0}] 시설 가동을 일시 정지했습니다. (생산 및 유지비 소모 중단)": {
+    "en": "⏸️ Paused operation of [{0}] facility. (Production and upkeep stopped)",
+    "ja": "⏸️ [{0}] 施設の稼働を一時停止しました。(生産および維持費の消費停止)"
+  },
+  "⏸️ [방랑자의 라운지] 가동을 일시 정지했습니다. (식량 생산/유지비 및 신규 서브 의뢰 갱신 중단)": {
+    "en": "⏸️ Paused operation of [Wanderer Lounge]. (Food production/upkeep and new sub-requests paused)",
+    "ja": "⏸️ [放浪者のラウンジ] の稼働を一時停止しました。(食料生産/維持費および新規サブ依頼の更新停止)"
+  },
+  "⏸️ {0} 가동 중지 안내": {
+    "en": "⏸️ {0} Shutdown Notice",
+    "ja": "⏸️ {0} 稼働停止のご案内"
+  },
+  "⏸️ 상대 행동 중": {
+    "en": "⏸️ Enemy Acting",
+    "ja": "⏸️ 相手の行動中"
+  },
+  "⏸️ 영지 시설 가동 일시 정지 & 안전 차단 시스템": {
+    "en": "⏸️ Facility Operation Pause & Safety Cutoff System",
+    "ja": "⏸️ 領地施設稼働一時停止＆セーフティ遮断システム"
+  },
+  "① 🗝️ 도구 사용 (안전)": {
+    "en": "① 🗝️ Use Tool (Safe)",
+    "ja": "① 🗝️ 道具使用 (安全)"
+  },
+  "② 🔨 맨손/강제 시도 (위험)": {
+    "en": "② 🔨 Bare Hands / Force (Risky)",
+    "ja": "② 🔨 素手/強行 (危険)"
+  },
+  "③ 🚶 안전 포기 (지나침)": {
+    "en": "③ 🚶 Forfeit (Pass by)",
+    "ja": "③ 🚶 諦める (立ち去る)"
+  },
+  "────────── ⏳ 턴 {0} (Round {1}) ──────────": {
+    "en": "────────── ⏳ Turn {0} (Round {1}) ──────────",
+    "ja": "────────── ⏳ ターン {0} (Round {1}) ──────────"
+  },
+  "━━━━━━━━━━ 🚩 라운드 {0} ━━━━━━━━━━": {
+    "en": "━━━━━━━━━━ 🚩 Round {0} ━━━━━━━━━━",
+    "ja": "━━━━━━━━━━ 🚩 ラウンド {0} ━━━━━━━━━━"
+  },
+  "▶ ⚔️ {0} [{1}]{2} → {3} {4} 피해": {
+    "en": "▶ ⚔️ {0} [{1}]{2} → {3} {4} DMG",
+    "ja": "▶ ⚔️ {0} [{1}]{2} → {3} {4} ダメージ"
+  },
+  "▶ ⚡🗡️ [치명적 본능] {0}의 그림자 추가 연격{1} → {2}에게 {3} 치명 피해!{4}": {
+    "en": "▶ ⚡🗡️ [Lethal Instinct] {0}'s Shadow Combo{1} → {3} Crit DMG to {2}!{4}",
+    "ja": "▶ ⚡🗡️ [致命的本能] {0}の影追撃連撃{1} → {2}に{3}会心ダメージ！{4}"
+  },
+  "▶ 균열로 뛰어든다 (다음 층 즉시 이동)": {
+    "en": "▶ Leap into Rift (Immediately advance to next floor)",
+    "ja": "▶ 亀裂に飛び込む (次の階層へ即時移動)"
+  },
+  "▶ 내 턴": {
+    "en": "▶ My Turn",
+    "ja": "▶ 自分のターン"
+  },
+  "▶ 시공간 도약 (위험도 +30~60 고속 전진)": {
+    "en": "▶ Spacetime Leap (Hazard +30~60 Rapid Advance)",
+    "ja": "▶ 時空間跳躍 (危険度+30~60 高速前進)"
+  },
+  "▶ 자동전투 시작": {
+    "en": "▶ Start Auto-Combat",
+    "ja": "▶ 自動戦闘開始"
+  },
+  "▶ 🎯⚡ [약점 추격 원호!] {0} ({1}): \"{2}\" [{3}] → {4}에게 {5} 치명 피해! ({6}){7}": {
+    "en": "▶ 🎯⚡ [Weakness Pursuit Assist!] {0} ({1}): \"{2}\" [{3}] → {5} Crit DMG to {4}! ({6}){7}",
+    "ja": "▶ 🎯⚡ [弱点追撃援護！] {0} ({1}): \"{2}\" [{3}] → {4}に{5}会心ダメージ！ ({6}){7}"
+  },
+  "▶ 👾 {0} [{1}] 광역 강타! ➔ {2}": {
+    "en": "▶ 👾 {0} [{1}] AoE Strike! ➔ {2}",
+    "ja": "▶ 👾 {0} [{1}] 範囲強打！ ➔ {2}"
+  },
+  "▶ 💨🎯 [시전 요격 추가타!] {0}: \"차징을 끊어라! 선제 사격!\" {1}에게 {2} 요격 피해 및 브레이크 요구치 -{3} 선제 파쇄!": {
+    "en": "▶ 💨🎯 [Cast Intercept Strike!] {0}: \"Interrupt charging! Preemptive fire!\" {2} intercept DMG to {1} and broke -{3} required break points!",
+    "ja": "▶ 💨🎯 [詠唱迎撃追撃！] {0}: 「チャージを止めろ！先制射撃！」 {1}に{2}迎撃ダメージ＆ブレイク要求値-{3}先制粉砕！"
+  },
+  "▶ 🛡️ [보호막 방어 / Block!] {0} [{1}] → {2}의 보호막이 공격을 완전히 흡수했습니다! (보호막 {3} 흡수)": {
+    "en": "▶ 🛡️ [Barrier Block!] {0} [{1}] → {2}'s shield absorbed the attack completely! (Absorbed {3} shield)",
+    "ja": "▶ 🛡️ [シールド防御 / Block!] {0} [{1}] → {2}のシールドが攻撃を完全吸収！ (シールド{3}吸収)"
+  },
+  "▶ 🤝 [원호/추가 공격] {0}{1} → {2}에게 {3} 피해!{4}": {
+    "en": "▶ 🤝 [Assist/Extra Attack] {0}{1} → {3} DMG to {2}!{4}",
+    "ja": "▶ 🤝 [援護/追撃] {0}{1} → {2}に{3}ダメージ！{4}"
+  },
+  "▶️ [{0}] 시설 가동을 재개했습니다. (정상 작동 재개)": {
+    "en": "▶️ Resumed operation of [{0}] facility. (Normal operation resumed)",
+    "ja": "▶️ [{0}] 施設の稼働を再開しました。(通常稼働再開)"
+  },
+  "▶️ [방랑자의 라운지] 가동을 재개했습니다. (정상 작동 및 서브 의뢰 갱신 재개)": {
+    "en": "▶️ Resumed operation of [Wanderer Lounge]. (Normal operation and sub-request refresh resumed)",
+    "ja": "▶️ [放浪者のラウンジ] の稼働を再開しました。(通常稼働およびサブ依頼の更新再開)"
+  },
+  "▶️ 자동 콤보 연계": {
+    "en": "▶️ Auto Combo Chain",
+    "ja": "▶️ 自動コンボ連携"
+  },
+  "◀ 전체 용병 스킬 보기": {
+    "en": "◀ View All Mercenary Skills",
+    "ja": "◀ 全傭兵スキル確認"
+  },
+  "◆ 간편 계정 연동 ◆": {
+    "en": "◆ Quick Account Link ◆",
+    "ja": "◆ かんたんアカウント連携 ◆"
+  },
+  "○ 미달성": {
+    "en": "○ Unachieved",
+    "ja": "○ 未達成"
+  },
+  "○ 미발동": {
+    "en": "○ Not Activated",
+    "ja": "○ 未発動"
+  },
+  "○ 미습득 (보유 중)": {
+    "en": "○ Not Learned (Owned)",
+    "ja": "○ 未習得 (所持中)"
+  },
+  "● 활성화됨": {
+    "en": "● Activated",
+    "ja": "● 有効化"
+  },
+  "☁️ [클라우드 데이터] 최신 마스터 데이터(몬스터/비전서/밸런스)가 실시간 동기화되었습니다.": {
+    "en": "☁️ [Cloud Data] Latest master data (Monsters/Grimoires/Balance) synchronized in real time.",
+    "ja": "☁️ [クラウドデータ] 最新マスターデータ(モンスター/魔導書/バランス)がリアルタイム同期されました。"
+  },
+  "☄️ 아크 메이지": {
+    "en": "☄️ Archmage",
+    "ja": "☄️ アークメイジ"
+  },
+  "★ 1막 결전: 순수 마도석 세트, 전설 장비, 원초의 공허 파편 (보스 Lv.15)": {
+    "en": "★ Act 1 Decisive Battle: Pure Mana Stone Set, Legendary Equipment, Primordial Void Shard (Boss Lv.15)",
+    "ja": "★ 第1幕決戦: 純粋魔導石セット、伝説装備、原初の虚空の破片 (ボス Lv.15)"
+  },
+  "★ 1번 슬롯": {
+    "en": "★ Slot 1",
+    "ja": "★ スロット1"
+  },
+  "★ 1번 전투 슬롯 장착 중": {
+    "en": "★ Equipped in Combat Slot 1",
+    "ja": "★ 戦闘スロット1に装備中"
+  },
+  "★ 2번 슬롯": {
+    "en": "★ Slot 2",
+    "ja": "★ スロット2"
+  },
+  "★ 2번 전투 슬롯 장착 중": {
+    "en": "★ Equipped in Combat Slot 2",
+    "ja": "★ 戦闘スロット2に装備中"
+  },
+  "★ 2차 각성 (Tier 2)": {
+    "en": "★ 2nd Awakening (Tier 2)",
+    "ja": "★ 2次覚醒 (Tier 2)"
+  },
+  "★ 2차 심연 승격 해금 & 기본 클래스 EXP +50% (최대) (등급 상승 확률 +15%)": {
+    "en": "★ 2nd Abyss Promotion unlocked & Base Class EXP +50% (Max) (Grade Promotion Rate +15%)",
+    "ja": "★ 2次深淵昇格解放＆基本クラスEXP+50% (最大) (等級上昇確率+15%)"
+  },
+  "★ 2차 최종 전직": {
+    "en": "★ 2nd Final Class Change",
+    "ja": "★ 2次最終転職"
+  },
+  "★ 3단계 각성 완료 (+10)": {
+    "en": "★ Stage 3 Awakening Complete (+10)",
+    "ja": "★ 3段階覚醒完了 (+10)"
+  },
+  "★ HP 자동회복 +8%/틱 & 이동속도 +15%": {
+    "en": "★ Auto HP Regen +8%/tick & Movement Speed +15%",
+    "ja": "★ HP自然回復+8%/tick＆移動速度+15%"
+  },
+  "★ MP 충전 캡슐 가동 · 3초마다 HP +5 / 5초마다 MP +4 충전 (에테르 1 소모)": {
+    "en": "★ MP Recharge Capsule Active · +5 HP every 3s / +4 MP every 5s (Consumes 1 Ether)",
+    "ja": "★ MP充填カプセル稼働・3秒ごとにHP+5 / 5秒ごとにMP+4充填 (エーテル1消費)"
+  },
+  "★ [Top 10 랭커 달성] 전 파티원 공격력/체력 +15%, 던전 식량 소모 -20%, 희귀 드랍률 +25% PVE 특수 버프 획득!": {
+    "en": "★ [Top 10 Ranker Achieved] All party ATK/HP +15%, dungeon food consumption -20%, rare drop rate +25% PVE special buff acquired!",
+    "ja": "★ [Top 10 ランカー達成] パーティ全員の攻撃力/HP+15%、ダンジョン食料消費-20%、レアドロップ率+25% PVE特殊バフ獲得！"
+  },
+  "★ [강화 보급품 7종] 전면 대체 생산 해금 (일반 보급품 ➔ 에테르 횃불, 던전 도시락 등 전면 대체) & 6티어 진홍 혈염 단조": {
+    "en": "★ [7 Enhanced Supplies] Full substitute production unlocked (Standard supplies ➔ Ether Torch, Dungeon Ration, etc.) & Tier 6 Crimson Bloodflame Forging",
+    "ja": "★ [強化補給品7種] 全面代替生産解放 (通常補給品 ➔ エーテル松明、ダンジョン弁当等に全面置換)＆Tier 6 真紅血炎の鍛造"
+  },
+  "★ [상업 네트워크] 해금 (전 골드 유지비 -25%) & 🪙 +9G/15초 & 주기 25초": {
+    "en": "★ [Commercial Network] unlocked (All Gold upkeep -25%) & 🪙 +9G/15s & 25s cycle",
+    "ja": "★ [商業ネットワーク] 解放 (全ゴールド維持費-25%)＆🪙 +9G/15秒＆周期25秒"
+  },
+  "★ [완전 각성]: 전 파티원 올스탯 +10% 상시 버프 & 등급 상승 확률 +30%": {
+    "en": "★ [Full Awakening]: All party all-stats +10% permanent buff & Grade Promotion Rate +30%",
+    "ja": "★ [完全覚醒]: パーティ全員全ステータス+10%常時バフ＆等級上昇確率+30%"
+  },
+  "★ [용병 영입] [{0}] ({1})을(를) 영입했습니다!": {
+    "en": "★ [Mercenary Recruited] Recruited [{0}] ({1})!",
+    "ja": "★ [傭兵雇用] [{0}] ({1})を雇用しました！"
+  },
+  "★ [장비 각성] 시스템 해금 (+10강 각성 20% 성공 시 스탯 영구 보존 + 0강 초기화, 최대 3각성, 실패 시 파괴) & 전 비용 20% 할인 & 10티어 종말 신화": {
+    "en": "★ [Equipment Awakening] unlocked (+10 awaken 20% success keeps permanent stats + resets to +0, max 3 awakenings, destroys on fail) & 20% cost discount & Tier 10 Apocalypse Mythic",
+    "ja": "★ [装備覚醒] システム解放 (+10強化覚醒 20%成功時にステータス永久保存＋+0初期化、最大3覚醒、失敗時破壊)＆全コスト20%割引＆Tier 10 終末神話"
+  },
+  "★ [장비 강화] 탭 해금 & 최대 +5강 돌파 & [접두어 인챈트] 슬롯 해금 (3티어 마도 룬 각인)": {
+    "en": "★ [Equipment Enhance] tab unlocked & Up to +5 enhance breakthrough & [Prefix Enchant] slot unlocked (Tier 3 Mage Rune inscription)",
+    "ja": "★ [装備強化] タブ解放＆最大+5強化突破＆[接頭辞エンチャント] スロット解放 (Tier 3 魔導ルーン刻印)"
+  },
+  "★ [전직 각성 완료] [{0}]님이 [{1}] (Lv.{2}, {3})으로 승급했습니다! [기본 능력치 HP: {4}➔{5}, ATK: {6}➔{7}, DEF: {8}➔{9}, 🍀행운: {10}] + 고유오의 [{11}] 개화!": {
+    "en": "★ [Class Awakening Complete] [{0}] promoted to [{1}] (Lv.{2}, {3})! [Base Stats HP: {4}➔{5}, ATK: {6}➔{7}, DEF: {8}➔{9}, 🍀LUCK: {10}] + Unique Secret Art [{11}] awakened!",
+    "ja": "★ [転職覚醒完了] [{0}]が[{1}] (Lv.{2}, {3})へ昇格！ [基本能力値 HP: {4}➔{5}, ATK: {6}➔{7}, DEF: {8}➔{9}, 🍀幸運: {10}]＋固有奥義 [{11}] 開花！"
+  },
+  "★ [전직 해금] 영지 병영에서 1차 전직 가능!": {
+    "en": "★ [Class Change Unlocked] 1st Class Change available at Territory Barracks!",
+    "ja": "★ [転職解放] 領地兵舎で1次転職が可能！"
+  },
+  "★ [전직 해금] 영지 병영에서 2차 전직 가능!": {
+    "en": "★ [Class Change Unlocked] 2nd Class Change available at Territory Barracks!",
+    "ja": "★ [転職解放] 領地兵舎で2次転職が可能！"
+  },
+  "★ ⚔️ [차원 영지 침공] 해금 (5인 원정대 약탈전) & 명예 상점 6단계 & PVE 치명타율 +5%": {
+    "en": "★ ⚔️ [Dimensional Territory Invasion] unlocked (5-Hero Raid) & Honor Shop Stage 6 & PVE Crit Rate +5%",
+    "ja": "★ ⚔️ [次元領地侵攻] 解放 (5人遠征隊略奪戦)＆名誉商店6段階＆PVE会心率+5%"
+  },
+  "★ 궁극의 생체 챔버: 병상 7개 전원 수용 · 1초마다 HP +5 및 MP +4 동시 초고속 완치": {
+    "en": "★ Ultimate Bio-Chamber: Accommodates all 7 beds · Instant recovery of +5 HP and +4 MP every 1s",
+    "ja": "★ 究極の生体チャンバー: 病床7名全員収容・1秒ごとにHP+5およびMP+4を同時超高速完治"
+  },
+  "★ 기본 클래스 경험치 +20% 상시 증폭 (전직 등급 상승 확률 +6%)": {
+    "en": "★ Base Class EXP +20% permanent boost (Class grade increase chance +6%)",
+    "ja": "★ 基本クラス経験値+20%常時増幅 (転職等級上昇確率+6%)"
+  },
+  "★ 뱃지가 5개 가득 찼을 때 영웅이 궁극기를 발동하면 조합에 따른 강력한 시너지가 폭발합니다.": {
+    "en": "★ When 5 badges are full and a hero unleashes their Ultimate, powerful synergy explodes based on the combination.",
+    "ja": "★ バッジが5個満ちた時、英雄が必殺技を発動すると組み合わせに応じた強力なシナジーが爆発します。"
+  },
+  "★ 병상 7개 증설 · 1초마다 HP +5 초고속 치료 / 2초마다 MP +4 충전": {
+    "en": "★ 7 Extra Beds · Ultra-fast +5 HP heal every 1s / +4 MP recharge every 2s",
+    "ja": "★ 病床7床増設・1秒ごとにHP+5超高速治療 / 2秒ごとにMP+4充填"
+  },
+  "★ 불멸의 태양 성화 (영구 신성 결계 완성)": {
+    "en": "★ Immortal Solar Flame (Permanent Sacred Barrier Completed)",
+    "ja": "★ 不滅の太陽聖火 (永久神聖結界完成)"
+  },
+  "★ 시너지:": {
+    "en": "★ Synergy:",
+    "ja": "★ シナジー:"
+  },
+  "★ 식량 자체 조달 🍖+3/15초 생산 가동": {
+    "en": "★ Self-Sufficient Food 🍖+3/15s production active",
+    "ja": "★ 自給自足の食料 🍖+3/15秒 生産稼働"
+  },
+  "★ 식량 증산 🍖+10/15초 & 용병 고용 계약금 안정화": {
+    "en": "★ Increased Food Production 🍖+10/15s & Stabilized mercenary hiring deposit",
+    "ja": "★ 食料増産 🍖+10/15秒＆傭兵雇用手付金の安定化"
+  },
+  "★ 식량 증산 🍖+7/15초 & 일일 무료 새로고침 1회 해금": {
+    "en": "★ Increased Food Production 🍖+7/15s & 1 Daily Free Refresh unlocked",
+    "ja": "★ 食料増産 🍖+7/15秒＆デイリー無料更新1回解放"
+  },
+  "★ 심연의 심장부": {
+    "en": "★ Heart of the Abyss",
+    "ja": "★ 深淵の心臓部"
+  },
+  "★ 영원의 불꽃: 온기 버프 +20% & 자동회복 +10%/틱": {
+    "en": "★ Eternal Flame: Warmth Buff +20% & Auto HP Regen +10%/tick",
+    "ja": "★ 永遠の炎: 温もりバフ+20%＆自然回復+10%/tick"
+  },
+  "★ 온기 버프 해금! (전 자원 시설 +15% 증산)": {
+    "en": "★ Warmth Buff unlocked! (+15% production across all resource facilities)",
+    "ja": "★ 温もりバフ解放！ (全資源施設+15%増産)"
+  },
+  "★ 원초의 제단": {
+    "en": "★ Primordial Altar",
+    "ja": "★ 原初の祭壇"
+  },
+  "★ 이동속도 +10% & HP 자동회복 +5%/틱": {
+    "en": "★ Movement Speed +10% & Auto HP Regen +5%/tick",
+    "ja": "★ 移動速度+10%＆HP自然回復+5%/tick"
+  },
+  "★ 전 용병 영입 비용 -20% 영구 할인 & 🍖+10/15초": {
+    "en": "★ Permanent 20% discount on all mercenary recruitment & 🍖+10/15s",
+    "ja": "★ 全傭兵雇用費用-20%永久割引＆🍖+10/15秒"
+  },
+  "★ 전투 후 HP 자동회복 해금! (+3%/틱)": {
+    "en": "★ Post-Combat Auto HP Regen unlocked! (+3%/tick)",
+    "ja": "★ 戦闘後HP自然回復解放！ (+3%/tick)"
+  }
+}

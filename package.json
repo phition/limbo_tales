@@ -1,0 +1,53 @@
+{
+  "name": "project-limbo-tales",
+  "private": true,
+  "version": "0.9.9-rc1",
+  "description": "Project: Limbo Tales - 세로형 텍스트 MUD + 서브컬쳐 비주얼 다크 RPG",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/sync-custom-assets.js && vite",
+    "prebuild": "node scripts/sync-custom-assets.js",
+    "build": "vite build",
+    "deploy": "vite build && firebase deploy --only hosting",
+    "package:itch": "node scripts/package-itch.js",
+    "build:itch": "vite build && node scripts/package-itch.js",
+    "sync:assets": "node scripts/sync-custom-assets.js",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview",
+    "cap:sync": "vite build && cap sync android",
+    "cap:open": "cap open android"
+  },
+  "keywords": [
+    "phaser3",
+    "mud",
+    "rpg",
+    "mobile",
+    "typescript",
+    "subculture"
+  ],
+  "author": "Limbo Team",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor-community/admob": "^8.2.1",
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/screen-orientation": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^6.1.0",
+    "firebase": "^12.17.1",
+    "phaser": "^3.90.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.1"
+  }
+}

@@ -1,0 +1,104 @@
+  private static readonly HANGUL = /[\uac00-\ud7af]/;
+  private static readonly ATTRS = ['placeholder', 'title', 'alt', 'aria-label'];
+  private static readonly SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'CODE']);
+
+  /** 텍스트 노드 하나를 현재 언어에 맞춰 번역/복원 (원문은 __origKo 에 보존) */
+  private syncTextNode(textNode: Text, fromMutation: boolean): void {
+    const n = textNode as any;
+    const val = textNode.nodeValue || '';
+    if (fromMutation && n.__lastTr !== undefined && val === n.__lastTr) return; // 우리가 쓴 값
+    if (this.currentLanguage === 'ko') {
+      if (n.__origKo !== undefined && !fromMutation) {
+        textNode.nodeValue = n.__origKo;
+      }
+      if (!fromMutation) { delete n.__origKo; delete n.__lastTr; }
+      else if (I18nService.HANGUL.test(val)) { delete n.__origKo; delete n.__lastTr; }
+      return;
+    }
+    // 외부(React)가 새 값을 썼다면 그것이 새 원문
+    let src: string;
+    if (fromMutation || n.__origKo === undefined) src = val;
+    else src = n.__origKo;
+    if (!I18nService.HANGUL.test(src)) {
+      if (fromMutation) { delete n.__origKo; delete n.__lastTr; }
+      return;
+    }
+    n.__origKo = src;
+    const translated = this.tr(src, this.currentLanguage);
+    n.__lastTr = translated;
+    if (translated !== val) textNode.nodeValue = translated;
+  }
+
+  /** 요소의 번역 대상 속성(placeholder/title/alt/aria-label) 처리 */
+  private syncAttrs(el: Element, onlyAttr?: string): void {
+    const e = el as any;
+    for (const a of I18nService.ATTRS) {
+      if (onlyAttr && onlyAttr !== a) continue;
+      if (!el.hasAttribute(a)) continue;
+      const key = '__orig_' + a;
+      const lastKey = '__last_' + a;
+      const cur = el.getAttribute(a) || '';
+      if (onlyAttr && e[lastKey] !== undefined && cur === e[lastKey]) continue;
+      if (this.currentLanguage === 'ko') {
+        if (e[key] !== undefined && !onlyAttr) el.setAttribute(a, e[key]);
+        if (!onlyAttr || I18nService.HANGUL.test(cur)) { delete e[key]; delete e[lastKey]; }
+        continue;
+      }
+      const src = (onlyAttr || e[key] === undefined) ? cur : e[key];
+      if (!I18nService.HANGUL.test(src)) continue;
+      e[key] = src;
+      const tr = this.tr(src, this.currentLanguage);
+      e[lastKey] = tr;
+      if (tr !== cur) el.setAttribute(a, tr);
+    }
+  }
+
+  private walkDom(node: Node): void {
+    if (node.nodeType === Node.TEXT_NODE) {
+      this.syncTextNode(node as Text, false);
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as Element;
+      if (I18nService.SKIP_TAGS.has(el.tagName)) return;
+      this.syncAttrs(el);
+      for (let c = el.firstChild; c; c = c.nextSibling) this.walkDom(c);
+    }
+  }
+
+  /** 실시간 DOM 텍스트/속성 자동 번역 옵저버 초기화 */
+  public initDomTranslator(): void {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    if (this.domObserver) return;
+
+    const handle = (mutations: MutationRecord[]) => {
+      if (this.currentLanguage === 'ko') return;
+      for (const mut of mutations) {
+        if (mut.type === 'childList') {
+          mut.addedNodes.forEach((node) => this.walkDom(node));
+        } else if (mut.type === 'characterData') {
+          if (mut.target.nodeType === Node.TEXT_NODE) this.syncTextNode(mut.target as Text, true);
+        } else if (mut.type === 'attributes' && mut.attributeName) {
+          this.syncAttrs(mut.target as Element, mut.attributeName);
+        }
+      }
+    };
+
+    this.domObserver = new MutationObserver(handle);
+    this.domObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: I18nService.ATTRS,
+    });
+
+    if (this.currentLanguage !== 'ko') {
+      this.ensureLoaded(this.currentLanguage).then(() => this.retranslateWholeDom());
+    }
+  }
+
+  /** DOM 전체를 현재 언어로 번역 / 한국어 복원 */
+  public retranslateWholeDom(): void {
+    if (typeof document === 'undefined') return;
+    this.walkDom(document.body);
+  }
+}

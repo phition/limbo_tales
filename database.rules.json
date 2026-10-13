@@ -1,0 +1,28 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        "profile": {
+          ".read": "auth != null",
+          ".write": "auth != null && auth.uid === $uid"
+        },
+        "progress": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && auth.uid === $uid"
+        }
+      }
+    },
+    "arena_leaderboard": {
+      ".read": "auth != null",
+      ".indexOn": ["rating"],
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['uid', 'nickname', 'rating'])"
+      }
+    },
+    "game_data": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email != null && (auth.token.email.endsWith('@bumpcat.net') || auth.token.email.contains('bumpcat.net'))"
+    }
+  }
+}

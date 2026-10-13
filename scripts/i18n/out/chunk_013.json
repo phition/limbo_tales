@@ -1,0 +1,802 @@
+{
+  "다음 메뉴": {
+    "en": "Next Menu",
+    "ja": "次のメニュー"
+  },
+  "다음 모험가 도착:": {
+    "en": "Next Adventurer Arrival:",
+    "ja": "次の冒険者到着:"
+  },
+  "다음 원정 1회 결속": {
+    "en": "Next Expedition 1x Bond",
+    "ja": "次の遠征1回結束"
+  },
+  "다음 원정 1회 적용": {
+    "en": "Applies to Next Expedition 1x",
+    "ja": "次の遠征1回適用"
+  },
+  "다음 원정 1회 적용 & 덮어쓰기": {
+    "en": "Apply to Next Expedition 1x & Overwrite",
+    "ja": "次の遠征1回適用 ＆ 上書き"
+  },
+  "다음 원정 1회 적용: 가호는 다음 심연 탐험 1회 동안 상시 발동되며, 원정 귀환 정산 또는 전멸 후송 시 자동으로 영령의 안식으로 복귀합니다.": {
+    "en": "Applies to Next Expedition 1x: Blessing remains active throughout the next abyssal exploration, returning to the spirit rest upon return settlement or wipeout evac.",
+    "ja": "次の遠征1回適用：加護は次の深淵探検1回の間常時発動し、遠征帰還精算または全滅搬送時に自動的に英霊の安息へ復帰します。"
+  },
+  "다음 원정에서 쓸": {
+    "en": "To use on next expedition",
+    "ja": "次の遠征で使う"
+  },
+  "다음 주기: ⏱️": {
+    "en": "Next Cycle: ⏱️",
+    "ja": "次の周期: ⏱️"
+  },
+  "다음 주민/길드 의뢰 도착까지: {0}분 {1}{2}초": {
+    "en": "Until next citizen/guild request: {0}m {1}{2}s",
+    "ja": "次の住民/ギルド依頼到着まで: {0}分 {1}{2}秒"
+  },
+  "다음 턴 시전하는 마법의 대미지가 100% 증폭되고 마나를 20 회복합니다.": {
+    "en": "Increases magic DMG cast next turn by 100% and restores 20 MP.",
+    "ja": "次のターンに詠唱する魔法ダメージが100%増幅され、マナを20回復する。"
+  },
+  "다음 행동 턴을 기다리는 중입니다...": {
+    "en": "Waiting for next action turn...",
+    "ja": "次の行動ターンを待機中..."
+  },
+  "다이렉트 숏컷: 퀘스트 메뉴에서 [🏆 차원 게이트 바로가기 ▶] 버튼을 눌러 언제든 즉시 전장으로 이동할 수 있습니다.": {
+    "en": "Direct Shortcut: Press [🏆 Go to Dimensional Gate ▶] in the Quest menu anytime to head straight to battle.",
+    "ja": "ダイレクトショートカット：クエストメニューの【🏆 次元ゲートへ ▶】ボタンを押せば、いつでも即座に戦場へ移動できます。"
+  },
+  "다이아 상자": {
+    "en": "Diamond Chest",
+    "ja": "ダイヤ箱"
+  },
+  "다이아몬드 전사를 위한 에픽~전설(Legendary) 결전 무구 확정": {
+    "en": "Guaranteed Epic to Legendary battle armaments for Diamond warriors",
+    "ja": "ダイヤモンド戦士のためのエピック〜伝説(Legendary)決戦武具確定"
+  },
+  "단 한 번의 공세로는 부족하다. 지속적인 포격과 일격으로 네메시스의 핵을 분쇄해야만 방주 세계선의 소멸을 막을 수 있다.": {
+    "en": "A single offensive is not enough. Only continuous barrage and strikes crushing Nemesis's core can prevent the extinction of the Ark's timeline.",
+    "ja": "たった一度の攻勢では足りない。持続的な砲撃と一撃でネメシスの核を粉砕してこそ、方舟世界線の消滅を防ぐことができる。"
+  },
+  "단검": {
+    "en": "Dagger",
+    "ja": "短剣"
+  },
+  "단검 계열": {
+    "en": "Dagger Type",
+    "ja": "短剣系列"
+  },
+  "단계 의식": {
+    "en": "Stage Ritual",
+    "ja": "段階の儀式"
+  },
+  "단계 초월 각성 의식": {
+    "en": "Stage Transcendent Awakening Ritual",
+    "ja": "段階超越覚醒の儀式"
+  },
+  "단계+": {
+    "en": "Stage+",
+    "ja": "段階+"
+  },
+  "단계까지 증축 가능하며, 레벨이 상승함에 따라 생산량이 비약적으로 증가하거나 새로운 제작 레시피 및 특수 기능이 해금됩니다. 시설 Lv.4부터는 골드 또는 식량 등의 유지비가 부과될 수 있습니다.": {
+    "en": "Can be expanded up to stages; as the level rises, production drastically increases or new crafting recipes and special features are unlocked. From facility Lv.4, upkeep costs such as Gold or Food may apply.",
+    "ja": "段階まで増築可能で、レベル上昇に伴い生産量が飛躍的に増加するか、新たな製作レシピや特殊機能が解放されます。施設Lv.4からはゴールドや食糧などの維持費が課される場合があります。"
+  },
+  "단계별 광폭화 페이즈: 체력 감소 구간에 따라 더욱 파괴적인 심연의 광역 마도 스킬 시전": {
+    "en": "Tiered Berserk Phase: Casts more destructive abyssal AoE magic skills depending on HP reduction thresholds",
+    "ja": "段階別バーサクフェーズ：HP減少区間に応じて、より破壊的な深淵の範囲魔導スキルを詠唱"
+  },
+  "단계별 핵심 미션 완수 가이드": {
+    "en": "Step-by-Step Core Mission Completion Guide",
+    "ja": "段階別コアミッション達成ガイド"
+  },
+  "단단한 강철과 석재로 정밀 가공한 열쇠입니다. 잠겨 있는 보물 상자나 고대 석관을 함정 위험 없이 안전하게 해제하여 최고 등급 전리품을 획득합니다. 미사용 잔여분은 성채 귀환 시 영구 보존됩니다.": {
+    "en": "A key precision-crafted from sturdy steel and stone. Safely unlocks locked treasure chests or ancient sarcophagi without trap hazards to obtain top-tier loot. Unused keys are permanently preserved upon return to the citadel.",
+    "ja": "硬質な鋼鉄と石材で精密加工された鍵。施錠された宝箱や古代の石棺を罠の危険なく安全に解錠し、最高等級の戦利品を獲得する。未使用分は城塞帰還時に永久保存される。"
+  },
+  "단단한 강철과 석재로 정밀 가공한 열쇠입니다. 잠겨 있는 보물 상자나 고대 석관을 함정 위험 없이 안전하게 해제하여 최대 전리품을 획득합니다.": {
+    "en": "A key precision-crafted from sturdy steel and stone. Safely unlocks locked treasure chests or ancient sarcophagi without trap hazards to obtain maximum loot.",
+    "ja": "硬質な鋼鉄と石材で精密加工された鍵。施錠された宝箱や古代の石棺を罠の危険なく安全に解錠し、最大の戦利品を獲得する。"
+  },
+  "단단한 곡괭이": {
+    "en": "Sturdy Pickaxe",
+    "ja": "丈夫なつるはし"
+  },
+  "단단한 보호막을 분쇄하는 창끝으로 적의 보호막(Shield)에 50%의 추가 피해를 입힙니다.": {
+    "en": "Speartip that shatters tough barriers, dealing 50% bonus damage to enemy Shield.",
+    "ja": "硬いシールドを粉砕する槍先で、敵のシールド(Shield)に50%の追加ダメージを与える。"
+  },
+  "단단한 붕대": {
+    "en": "Sturdy Bandage",
+    "ja": "丈夫な包帯"
+  },
+  "단단한 암반과 광맥을 파쇄하는 도구입니다. 던전 내에서 고순도 에테르 광맥을 채굴하거나 막힌 지름길을 뚫을 수 있습니다. (석재 6개, 목재 1개 소모)": {
+    "en": "A tool to shatter tough bedrock and ore veins. Mines high-purity ether veins or clears blocked shortcuts in dungeons. (Costs Stone x6, Wood x1)",
+    "ja": "硬い岩盤や鉱脈を破砕する道具。ダンジョン内で高純度のエーテル鉱脈を採掘したり、塞がれた近道を切り開くことができる。(石材6個、木材1個消費)"
+  },
+  "단단한 암반과 광맥을 파쇄하는 도구입니다. 던전 내에서 고순도 에테르 광맥을 채굴할 때 2배의 전리품을 안전하게 수확합니다. 미사용 잔여분은 성채 귀환 시 영구 보존됩니다.": {
+    "en": "A tool to shatter tough bedrock and ore veins. Safely reaps 2x loot when mining high-purity ether veins in dungeons. Unused tools are permanently preserved upon return to the citadel.",
+    "ja": "硬い岩盤や鉱脈を破砕する道具。ダンジョン内で高純度エーテル鉱脈採掘時に2倍の戦利品を安全に獲得する。未使用分は城塞帰還時に永久保存される。"
+  },
+  "단단한 철광석을 석탄 열기로 벼려낸 기본 검. [🗡️ 베기] 특성으로 기본 공격 시 출혈 대상에게 [상처 절개]를 발동합니다.": {
+    "en": "A basic sword forged from tough iron ore with coal heat. With [🗡️ Slash] trait, Basic Attacks trigger [Wound Laceration] against bleeding targets.",
+    "ja": "硬質な鉄鉱石を石炭の熱気で鍛え上げた基本剣。【🗡️ 斬撃】特性により通常攻撃時、出血状態の対象に【傷口切開】を発動する。"
+  },
+  "단도": {
+    "en": "Dagger",
+    "ja": "短刀"
+  },
+  "단련된": {
+    "en": "Tempered",
+    "ja": "鍛錬された"
+  },
+  "단련된 강철 장검": {
+    "en": "Tempered Steel Longsword",
+    "ja": "鍛錬された鋼鉄の長剣"
+  },
+  "단련된 강철 중보병 세트": {
+    "en": "Tempered Steel Heavy Infantry Set",
+    "ja": "鍛錬された鋼鉄の重歩兵セット"
+  },
+  "단련된 일격": {
+    "en": "Tempered Strike",
+    "ja": "鍛錬された一撃"
+  },
+  "단련된 정예병들의 호흡: 파티 전체 모든 스탯 +5%": {
+    "en": "Tempered Elites' Harmony: Party-wide All Stats +5%",
+    "ja": "鍛錬された精鋭兵の息吹：パーティ全体全ステータス+5%"
+  },
+  "단련된 칼끝으로 적 1체에게 120% 물리 피해를 입힙니다.": {
+    "en": "Strikes 1 enemy with a tempered blade dealing 120% Physical DMG.",
+    "ja": "鍛錬された切っ先で敵1体に120%の物理ダメージを与える。"
+  },
+  "단일 (single)": {
+    "en": "Single (single)",
+    "ja": "単体 (single)"
+  },
+  "단일 100% 피해 + 빙결(스턴)": {
+    "en": "Single 100% DMG + Freeze(Stun)",
+    "ja": "単体100%ダメージ + 凍結(スタン)"
+  },
+  "단일 110% 관통 화형 (방어 관통 40%)": {
+    "en": "Single 110% Piercing Pyre (40% DEF Pierce)",
+    "ja": "単体110%貫通火刑 (防御貫通40%)"
+  },
+  "단일 120% 피해 (흡혈 30%)": {
+    "en": "Single 120% DMG (30% Lifesteal)",
+    "ja": "単体120%ダメージ (吸血30%)"
+  },
+  "단일 130% 피해": {
+    "en": "Single 130% DMG",
+    "ja": "単体130%ダメージ"
+  },
+  "단일 140% 피해 (보호막 분쇄 & 넉백)": {
+    "en": "Single 140% DMG (Shield Shatter & Knockback)",
+    "ja": "単体140%ダメージ (シールド粉砕 ＆ ノックバック)"
+  },
+  "단일 150% 피해 (그랩 / 진형 당기기)": {
+    "en": "Single 150% DMG (Grab / Formation Pull)",
+    "ja": "単体150%ダメージ (グラブ / 陣形引き寄せ)"
+  },
+  "단일 160% 피해 + 출혈 (흡혈 35% & 방어 관통 45%)": {
+    "en": "Single 160% DMG + Bleed (35% Lifesteal & 45% DEF Pierce)",
+    "ja": "単体160%ダメージ + 出血 (吸血35% ＆ 防御貫通45%)"
+  },
+  "단일 180% 피해 + 방어력 감소 (방어 관통 70% & 그랩)": {
+    "en": "Single 180% DMG + DEF Reduction (70% DEF Pierce & Grab)",
+    "ja": "単体180%ダメージ + 防御力減少 (防御貫通70% ＆ グラブ)"
+  },
+  "단일 200% 피해 및 40% 흡혈 (방어 관통 35%)": {
+    "en": "Single 200% DMG & 40% Lifesteal (35% DEF Pierce)",
+    "ja": "単体200%ダメージおよび40%吸血 (防御貫通35%)"
+  },
+  "단일 250% 방어 관통 65% 치명타": {
+    "en": "Single 250% 65% DEF Pierce Critical",
+    "ja": "単体250% 防御貫通65% 会心"
+  },
+  "단일 400% 멸망 강타 (방어 관통 80% & 넉백)": {
+    "en": "Single 400% Ruin Smash (80% DEF Pierce & Knockback)",
+    "ja": "単体400%破滅強打 (防御貫通80% ＆ ノックバック)"
+  },
+  "단일 대상": {
+    "en": "Single Target",
+    "ja": "単体対象"
+  },
+  "단일 대상 100% 피해 + 1턴 기절": {
+    "en": "Single Target 100% DMG + 1-Turn Stun",
+    "ja": "単体対象100%ダメージ + 1ターン気絶"
+  },
+  "단일 대상 120% 피해 + 자신 HP 흡수": {
+    "en": "Single Target 120% DMG + HP Absorb",
+    "ja": "単体対象120%ダメージ + 自身HP吸収"
+  },
+  "단일 대상 140% 피해 + 속도 25% 감속 2턴": {
+    "en": "Single Target 140% DMG + 25% Slow for 2 turns",
+    "ja": "単体対象140%ダメージ + 速度25%低下2ターン"
+  },
+  "단일 대상 150% 피해 + 2턴 출혈": {
+    "en": "Single Target 150% DMG + 2-Turn Bleed",
+    "ja": "単体対象150%ダメージ + 2ターン出血"
+  },
+  "단일 대상 160% 마법 관통 피해 + 1턴 기절": {
+    "en": "Single Target 160% Magic Pierce DMG + 1-Turn Stun",
+    "ja": "単体対象160%魔法貫通ダメージ + 1ターン気絶"
+  },
+  "단일 대상 180% 서리 대미지 + 1턴 기절": {
+    "en": "Single Target 180% Frost DMG + 1-Turn Stun",
+    "ja": "単体対象180%霜ダメージ + 1ターン気絶"
+  },
+  "단일 대상 1턴 기절": {
+    "en": "Single Target 1-Turn Stun",
+    "ja": "単体対象1ターン気絶"
+  },
+  "단일 대상 220% 암흑 참격 + 피해량 20% 흡혈": {
+    "en": "Single Target 220% Dark Slash + 20% Lifesteal",
+    "ja": "単体対象220%暗黒斬撃 + ダメージ20%吸血"
+  },
+  "단일 대상 500% 치명 관통 강타 (방어 관통 90%)": {
+    "en": "Single Target 500% Fatal Pierce Smash (90% DEF Pierce)",
+    "ja": "単体対象500%会心貫通強打 (防御貫通90%)"
+  },
+  "단일 대상 방어 무시 280% 치명 일격": {
+    "en": "Single Target 280% DEF-Ignoring Critical Strike",
+    "ja": "単体対象防御無視280%会心の一撃"
+  },
+  "단일 대상 방어 무시 280% 치명타 일격": {
+    "en": "Single Target 280% DEF-Ignoring Critical Strike",
+    "ja": "単体対象防御無視280%会心の一撃"
+  },
+  "단일 대상 방어력 2턴 25% 감소": {
+    "en": "Reduces Single Target DEF by 25% for 2 turns",
+    "ja": "単体対象の防御力を2ターン25%減少"
+  },
+  "단일 대상에게 100% 위력의 물리 기본 공격.": {
+    "en": "Basic physical attack dealing 100% power to a single target.",
+    "ja": "単体対象に威力100%の物理通常攻撃。"
+  },
+  "단일 대상에게 100% 위력의 물리 기본 공격을 가합니다.": {
+    "en": "Deals a basic physical attack of 100% power to a single target.",
+    "ja": "単体対象に威力100%の物理通常攻撃を加える。"
+  },
+  "단일 대상에게 130% 물리/암흑 관통 피해": {
+    "en": "Deals 130% Physical/Dark Pierce DMG to a single target",
+    "ja": "単体対象に130%の物理/暗黒貫通ダメージ"
+  },
+  "단일 아군": {
+    "en": "Single Ally",
+    "ja": "味方単体"
+  },
+  "단일 아군 HP 25% 회복": {
+    "en": "Restores 25% HP to a single ally",
+    "ja": "味方単体のHPを25%回復"
+  },
+  "단일 아군 HP 30% 즉시 회복": {
+    "en": "Instantly restores 30% HP to a single ally",
+    "ja": "味方単体のHPを30%即時回復"
+  },
+  "단일 아군 HP 52% 회복": {
+    "en": "Restores 52% HP to a single ally",
+    "ja": "味方単体のHPを52%回復"
+  },
+  "단일 아군 HP를 25% 즉시 회복합니다.": {
+    "en": "Instantly restores 25% HP to a single ally.",
+    "ja": "味方単体のHPを25%即時回復する。"
+  },
+  "단일 아군 공격력 150% 즉시 치유": {
+    "en": "Instantly heals a single ally for 150% ATK",
+    "ja": "味方単体を攻撃力150%即時治癒"
+  },
+  "단일 아군 디버프 즉시 해제 + 140% 보호막 & 2턴간 디버프 면역": {
+    "en": "Instantly cleanses debuffs on a single ally + 140% Shield & Debuff Immunity for 2 turns",
+    "ja": "味方単体のデバフ即時解除 + 140%シールド ＆ 2ターンデバフ免疫"
+  },
+  "단일 아군의 모든 해로운 상태이상을 즉시 제거하고 공격력 비례 140% 보호막 및 2턴간 디버프 면역을 부여합니다.": {
+    "en": "Instantly purges all debuffs from a single ally, granting a Shield equal to 140% ATK and Debuff Immunity for 2 turns.",
+    "ja": "味方単体のすべての有害な状態異常を即座に除去し、攻撃力比例140%のシールドおよび2ターンのデバフ免疫を付与する。"
+  },
+  "단일 적": {
+    "en": "Single Enemy",
+    "ja": "敵単体"
+  },
+  "단일 적 100% 피해 + 2턴 출혈": {
+    "en": "Single Enemy 100% DMG + 2-Turn Bleed",
+    "ja": "敵単体100%ダメージ + 2ターン出血"
+  },
+  "단일 적 130% 물리 피해": {
+    "en": "Single Enemy 130% Physical DMG",
+    "ja": "敵単体130%物理ダメージ"
+  },
+  "단일 적 144% 마법 피해": {
+    "en": "Single Enemy 144% Magic DMG",
+    "ja": "敵単体144%魔法ダメージ"
+  },
+  "단일 적 145% 피해 + 화상/출혈 (각 1턴)": {
+    "en": "Single Enemy 145% DMG + Burn/Bleed (1 turn each)",
+    "ja": "敵単体145%ダメージ + 火傷/出血 (各1ターン)"
+  },
+  "단일 적 170% 피해 + 50% 흡혈": {
+    "en": "Single Enemy 170% DMG + 50% Lifesteal",
+    "ja": "敵単体170%ダメージ + 50%吸血"
+  },
+  "단일 적 190% 번개 피해 + 1턴 기절": {
+    "en": "Single Enemy 190% Lightning DMG + 1-Turn Stun",
+    "ja": "敵単体190%雷ダメージ + 1ターン気絶"
+  },
+  "단일 적 280% 방어 무시 절대 피해": {
+    "en": "Single Enemy 280% Absolute DEF-Ignoring DMG",
+    "ja": "敵単体280%防御無視絶対ダメージ"
+  },
+  "단일 적에게 170% 피해를 입히고 가한 피해의 50%를 흡혈합니다.": {
+    "en": "Deals 170% damage to a single enemy and heals for 50% of damage dealt.",
+    "ja": "敵単体に170%のダメージを与え、与えたダメージの50%を吸血する。"
+  },
+  "단일 적에게 280% 방어 무시 절대 차원 피해를 꽂아넣습니다.": {
+    "en": "Inflicts 280% absolute dimensional DEF-ignoring damage on a single enemy.",
+    "ja": "敵単体に280%の防御無視絶対次元ダメージを突き刺す。"
+  },
+  "단일 최고 기록": {
+    "en": "Single Best Record",
+    "ja": "単一最高記録"
+  },
+  "단일 헤드샷 & 치명 암살": {
+    "en": "Single Headshot & Critical Assassination",
+    "ja": "単体ヘッドショット ＆ クリティカル暗殺"
+  },
+  "단장님! 저희는 지휘관님과 함께 성기사단의 맹세를 되찾으러 왔습니다!": {
+    "en": "Commander! We have come with our Lord Commander to reclaim the Paladin Order's oath!",
+    "ja": "団長！我らは指揮官様と共に聖騎士団の誓いを取り戻しに参りました！"
+  },
+  "단조": {
+    "en": "Forge",
+    "ja": "鍛造"
+  },
+  "단조 레시피": {
+    "en": "Forge Recipes",
+    "ja": "鍛造レシピ"
+  },
+  "단조 모루 타격": {
+    "en": "Forge Anvil Strike",
+    "ja": "鍛造金床打撃"
+  },
+  "단조 목록에서 장비의 기본 제원을 확인한 후, 상세 모달을 통해 기준 스탯 대비 ±30% 편차의 고유 수치를 가진 장비를 제작할 수 있습니다. 또한 로브 계열은 실크, 검·판금은 철광석, 스태프는 목재·석탄을 소모하며 고등급 장비는 에테르, 마법 수정, 공허 파편 등 심연 고급 자원을 적극 소모하도록 재료 연관성이 강화되었습니다.": {
+    "en": "After checking base item specs in the Forge list, you can craft gear with unique stats within ±30% variance from base values via the details modal. Material synergy has also been enhanced: robes consume silk, swords/plate armor require iron ore, staves use wood/coal, and high-tier gear actively requires advanced abyssal resources like ether, magic crystals, and void shards.",
+    "ja": "鍛造リストで装備の基本諸元を確認した後、詳細モーダルを通じて基準ステータス対比±30%の偏差を持つ固有数値の装備を製作できます。また、ローブ系はシルク、剣・板金は鉄鉱石、杖は木材・石炭を消費し、高等級装備はエーテル、魔法水晶、虚空の破片など深淵の高級資源を積極的に消費するよう材料の関連性が強化されました。"
+  },
+  "단조 상세": {
+    "en": "Forge Details",
+    "ja": "鍛造詳細"
+  },
+  "단조 성공 완료!": {
+    "en": "Forging Successful!",
+    "ja": "鍛造成功完了！"
+  },
+  "단조 스탯 ±30% 편차: 단조 목록에서 아이템 기본 스펙을 확인한 후, 상세 모달에서 제작을 확정하면 제작 가능 기준 스탯에서 ±30% 범위의 고유한 랜덤 수치로 완성": {
+    "en": "Forge Stat ±30% Variance: Check base specs in the Forge list and confirm crafting in the details modal to complete gear with unique randomized stats within ±30% of base values",
+    "ja": "鍛造ステータス±30%偏差：鍛造リストでアイテム基本スペック確認後、詳細モーダルで製作を確定すると基準値から±30%範囲の固有ランダム数値で完成"
+  },
+  "단조 시 대장장이의 숙련도와 담금질 상태에 따라 기본값의 ±30% 범위에서 랜덤하게 스탯이 완성됩니다.": {
+    "en": "When forging, stats are randomly completed within ±30% of base values depending on the blacksmith's proficiency and tempering condition.",
+    "ja": "鍛造時、鍛冶屋の熟練度と焼き入れ状態に応じて基本値の±30%の範囲でランダムにステータスが完成します。"
+  },
+  "단조 시 상세 모달을 통해 기준 스탯 대비 ±30% 랜덤 편차의 고유 장비를 제작하며, 6층 이상에서 드랍되는 저주받은 장비를 병기창에서 정화하여 최상급 극옵 장비를 획득합니다.": {
+    "en": "Craft unique equipment with ±30% random stat variance via the details modal, and purify cursed gear dropped from Floor 6+ in the Armory to obtain top-tier peak stats gear.",
+    "ja": "鍛造時の詳細モーダルを通じて基準ステータス比±30%のランダム偏差を持つ固有装備を製作し、6階以上でドロップする呪われた装備を兵器廠で浄化して最上級の極上装備を獲得します。"
+  },
+  "단조 장비 소모 자원": {
+    "en": "Forge Equipment Resource Consumption",
+    "ja": "鍛造装備消費資源"
+  },
+  "단조 필요 재료": {
+    "en": "Required Forging Materials",
+    "ja": "鍛造必要材料"
+  },
+  "단조: 부적": {
+    "en": "Forge: Talisman",
+    "ja": "鍛造: 護符"
+  },
+  "단죄 30% 추가 피해 & 아군 전체 치유/마나": {
+    "en": "Condemnation 30% Bonus DMG & All Allies Heal/MP",
+    "ja": "断罪30%追加ダメージ ＆ 味方全体治癒/マナ"
+  },
+  "단죄 불패 성역갑": {
+    "en": "Condemnation Invincible Sanctuary Armor",
+    "ja": "断罪不敗聖域甲"
+  },
+  "단죄 성역 가죽갑": {
+    "en": "Condemnation Sanctuary Leather Armor",
+    "ja": "断罪聖域の革鎧"
+  },
+  "단죄 성역 대지팡이": {
+    "en": "Condemnation Sanctuary Greatstaff",
+    "ja": "断罪聖域の大杖"
+  },
+  "단죄 성역 장창": {
+    "en": "Condemnation Sanctuary Longspear",
+    "ja": "断罪聖域の長槍"
+  },
+  "단죄 성역의 심판 대주교 무구": {
+    "en": "Judgment Archbishop Armaments of Condemnation Sanctuary",
+    "ja": "断罪聖域の審判大主教武具"
+  },
+  "단죄 수호 반지": {
+    "en": "Condemnation Guardian Ring",
+    "ja": "断罪守護の指輪"
+  },
+  "단죄 수호자의 칠흑 성배": {
+    "en": "Pitch-Black Grail of Condemnation Guardian",
+    "ja": "断罪守護者の漆黒聖杯"
+  },
+  "단죄 심판 부적": {
+    "en": "Condemnation Judgment Talisman",
+    "ja": "断罪審判の護符"
+  },
+  "단죄 요새의 결계 강철로 단조되어 5개 올라운드 스탯을 개화한 [전설]": {
+    "en": "[Legendary] Forged from Condemnation Citadel barrier steel, awakening all 5 stats",
+    "ja": "断罪要塞の結界鋼鉄で鍛造され、5つの全ステータスを開花させた【伝説】"
+  },
+  "단죄 칠흑의 심판검": {
+    "en": "Pitch-Black Judgment Sword of Condemnation",
+    "ja": "断罪漆黒の審判剣"
+  },
+  "단죄의 기사단장 맹세 휘장": {
+    "en": "Condemnation Grandmaster Oath Insignia",
+    "ja": "断罪の騎士団長誓約記章"
+  },
+  "단죄의 맹세 휘장 +10": {
+    "en": "Condemnation Oath Insignia +10",
+    "ja": "断罪の誓約記章 +10"
+  },
+  "단죄의 불패성": {
+    "en": "Invincible Fortress of Condemnation",
+    "ja": "断罪の不敗城"
+  },
+  "단죄의 성검": {
+    "en": "Holy Sword of Condemnation",
+    "ja": "断罪の聖剣"
+  },
+  "단죄의 성채": {
+    "en": "Citadel of Condemnation",
+    "ja": "断罪の城塞"
+  },
+  "단죄의 성채를 수호하던 성기사단의 최고위 흑철 휘장입니다. 8티어 보스 고유 장비를 단조합니다.": {
+    "en": "The highest dark iron insignia of the Paladin Order that once guarded the Citadel of Condemnation. Forges Tier 8 boss unique equipment.",
+    "ja": "断罪の城塞を守護していた聖騎士団の最高位黒鉄記章。Tier 8ボスの固有装備を鍛造する。"
+  },
+  "단죄의 성채에서 이단을 심문하던 광기의 집행관. 불타는 사슬과 화형의 불길로 적을 태웁니다.": {
+    "en": "A mad inquisitor who interrogated heretics in the Citadel of Condemnation. Burns foes with blazing chains and pyre flames.",
+    "ja": "断罪の城塞で異端を尋問していた狂気の執行官。燃え盛る鎖と火刑の炎で敵を焼き尽くす。"
+  },
+  "단죄의 성채의 결말": {
+    "en": "Ending of Citadel of Condemnation",
+    "ja": "断罪の城塞の結末"
+  },
+  "단죄의 요새를 통솔하던 전설적인 기사단장. 타락한 성역 결계와 무자비한 심판의 검을 휘두릅니다.": {
+    "en": "Legendary grandmaster who commanded the Citadel of Condemnation. Wields corrupted sanctuary barriers and a merciless sword of judgment.",
+    "ja": "断罪の要塞を統率していた伝説の騎士団長。堕落した聖域結界と無慈悲な審判の剣を振るう。"
+  },
+  "단죄의 일격": {
+    "en": "Strike of Condemnation",
+    "ja": "断罪の一撃"
+  },
+  "단죄의 칠흑 성역": {
+    "en": "Pitch-Black Sanctuary of Condemnation",
+    "ja": "断罪の漆黒聖域"
+  },
+  "닫기": {
+    "en": "Close",
+    "ja": "閉じる"
+  },
+  "닫기 (ESC)": {
+    "en": "Close (ESC)",
+    "ja": "閉じる (ESC)"
+  },
+  "닫기 (보상 미지급)": {
+    "en": "Close (Unclaimed)",
+    "ja": "閉じる (報酬未支給)"
+  },
+  "닫기 ✕": {
+    "en": "Close ✕",
+    "ja": "閉じる ✕"
+  },
+  "달빛 기사단": {
+    "en": "Moonlight Knights",
+    "ja": "月光騎士団"
+  },
+  "달빛 에테르 성소": {
+    "en": "Moonlight Ether Sanctuary",
+    "ja": "月光エーテル聖所"
+  },
+  "달성 보상:": {
+    "en": "Achievement Reward:",
+    "ja": "達成報酬:"
+  },
+  "달성 시나리오 & 분기 선택 보상:": {
+    "en": "Completed Scenario & Branch Choice Rewards:",
+    "ja": "達成シナリオ ＆ 分岐選択報酬:"
+  },
+  "달성)": {
+    "en": "Achieved)",
+    "ja": "達成)"
+  },
+  "달성된 퀘스트 보상을 수령하세요!": {
+    "en": "Claim your completed quest rewards!",
+    "ja": "達成されたクエスト報酬を受け取ってください！"
+  },
+  "당신의 사명은 명확합니다. 심연의 마물들에게 잠식당해 마비된": {
+    "en": "Your mission is clear. Overcome the paralysis wrought by encroaching abyssal monsters,",
+    "ja": "あなたの使命は明確です。深淵の魔物たちに侵食され麻痺した"
+  },
+  "대검": {
+    "en": "Greatsword",
+    "ja": "大剣"
+  },
+  "대검 베어가르기": {
+    "en": "Greatsword Cleave",
+    "ja": "大剣薙ぎ払い"
+  },
+  "대검을 크게 휘둘러 적 전열 전체에 110% 참격 피해를 입힙니다.": {
+    "en": "Swings a greatsword widely dealing 110% Slash DMG to all enemies in the Front row.",
+    "ja": "大剣を大きく薙ぎ払い、敵前衛全体に110%の斬撃ダメージを与える。"
+  },
+  "대궁": {
+    "en": "Greatbow",
+    "ja": "大弓"
+  },
+  "대규모 교역으로 환율 우대율을 추가 상향하고 유지비 지불 주기를 28초로 연장합니다.": {
+    "en": "Improves preferential exchange rates through large-scale trade and extends upkeep payment cycles to 28s.",
+    "ja": "大規模交易により為替優遇率をさらに引き上げ、維持費支払周期を28秒に延長します。"
+  },
+  "대규모 군수 창고군을 확충하여 영지 생산품 16,000개, 파밍 재료 4,400개의 거대한 보관 능력을 확보했습니다.": {
+    "en": "Expanded massive military warehouse complexes, securing huge storage capacity for 16,000 domain products and 4,400 farming materials.",
+    "ja": "大規模軍需倉庫群を拡充し、領地生産物16,000個、ファーミング材料4,400個の巨大な保管能力を確保しました。"
+  },
+  "대기": {
+    "en": "Standby",
+    "ja": "待機"
+  },
+  "대기 중": {
+    "en": "Waiting",
+    "ja": "待機中"
+  },
+  "대기 중의 에테르를 순간 압축해 쏘아내는 기초 사격술.": {
+    "en": "Basic marksmanship instantly compressing and discharging ambient ether.",
+    "ja": "大気中のエーテルを瞬間圧縮して放つ基礎射撃術。"
+  },
+  "대기 중의 희박한 마나 기류를 포집하여 에테르를 응축할 연금 장치가 없습니다.": {
+    "en": "No alchemy apparatus available to harvest sparse atmospheric mana currents and condense ether.",
+    "ja": "大気中の希薄なマナ気流を捕集してエーテルを凝縮する錬金装置がありません。"
+  },
+  "대기중": {
+    "en": "Waiting",
+    "ja": "待機中"
+  },
+  "대량 매각 (판매)": {
+    "en": "Bulk Sell",
+    "ja": "大量売却 (販売)"
+  },
+  "대량 매입 (구매)": {
+    "en": "Bulk Buy",
+    "ja": "大量買入 (購入)"
+  },
+  "대량 배급제": {
+    "en": "Rationing System",
+    "ja": "大量配給制"
+  },
+  "대량 배급제 (정제소 Lv.5+): 전 시설 식량 유지비 -30% 영구 감면 (Lv.7+ 시설은 -35% 우대 감면).": {
+    "en": "Rationing System (Refinery Lv.5+): All facilities food upkeep permanently reduced by 30% (Lv.7+ facilities receive -35% discount).",
+    "ja": "大量配給制 (精製所 Lv.5+)：全施設の食糧維持費を-30%永久減免 (Lv.7+施設は-35%優遇減免)。"
+  },
+  "대량의 철광석을 고열 석탄으로 녹여 만든 두꺼운 판금 중장갑. 뛰어난 방어력과 생명력을 보장합니다.": {
+    "en": "Thick plate heavy armor made by melting abundant iron ore with high-heat coal. Ensures outstanding DEF and vitality.",
+    "ja": "大量の鉄鉱石を高熱の石炭で溶かして作った厚手の板金重装甲。優れた防御力と生命力を保証する。"
+  },
+  "대마도사": {
+    "en": "Archmage",
+    "ja": "大魔導士"
+  },
+  "대마도사 셀레스트": {
+    "en": "Archmage Celeste",
+    "ja": "大魔導士セレステ"
+  },
+  "대마도사의 성운 지팡이": {
+    "en": "Archmage's Nebula Staff",
+    "ja": "大魔導士の星雲杖"
+  },
+  "대마도사의 원소 과부하: 파티 공격력 +10%, 매 턴 마나 +4 MP 회복": {
+    "en": "Archmage's Elemental Overload: Party ATK +10%, Restores +4 MP every turn",
+    "ja": "大魔導士の元素過負荷：パーティ攻撃力+10%、毎ターンマナ+4 MP回復"
+  },
+  "대상": {
+    "en": "Target",
+    "ja": "対象"
+  },
+  "대상 마물: 해골, 언데드, 망령, 악마, 사령, 심연 마물, 공허 괴수, 서큐버스, 아스모데우스 등": {
+    "en": "Target Monsters: Skeletons, Undead, Phantoms, Demons, Wraiths, Abyssal Fiends, Void Beasts, Succubi, Asmodeus, etc.",
+    "ja": "対象魔物：スケルトン、アンデッド、亡霊、悪魔、死霊、深淵魔物、虚空怪獣、サキュバス、アスモデウスなど"
+  },
+  "대상 마물보다": {
+    "en": "than target monster",
+    "ja": "対象魔物より"
+  },
+  "대상 서비스:": {
+    "en": "Target Service:",
+    "ja": "対象サービス:"
+  },
+  "대상 파티": {
+    "en": "Target Party",
+    "ja": "対象パーティ"
+  },
+  "대상 파티 (적 전체)": {
+    "en": "Target Party (All Enemies)",
+    "ja": "対象パーティ (敵全体)"
+  },
+  "대상 파티 전체": {
+    "en": "Entire Target Party",
+    "ja": "対象パーティ全体"
+  },
+  "대상 파티 전체 공격력 1턴 약화": {
+    "en": "Weakens entire target party's ATK for 1 turn",
+    "ja": "対象パーティ全体の攻撃力を1ターン弱体化"
+  },
+  "대상 파티 전체 공격력 2턴 20% 감소": {
+    "en": "Reduces entire target party's ATK by 20% for 2 turns",
+    "ja": "対象パーティ全体の攻撃力を2ターン20%減少"
+  },
+  "대상 파티 전체 방어력 50% 감소 및 2턴 기절": {
+    "en": "Reduces entire target party's DEF by 50% and stuns for 2 turns",
+    "ja": "対象パーティ全体の防御力を50%減少および2ターン気絶"
+  },
+  "대상 파티 전체에 110% 마법 피해 + MP 15 흡수 [차징]": {
+    "en": "Deals 110% Magic DMG to entire target party + drains 15 MP [Charging]",
+    "ja": "対象パーティ全体に110%魔法ダメージ + MP 15吸収 [チャージ]"
+  },
+  "대상을 찾을 수 없습니다.": {
+    "en": "Target cannot be found.",
+    "ja": "対象が見つかりません。"
+  },
+  "대상이 [출혈] 상태라면 [상처 절개]가 발동하여": {
+    "en": "If the target is afflicted with [Bleed], [Wound Laceration] triggers,",
+    "ja": "対象が【出血】状態の場合、【傷口切開】が発動して"
+  },
+  "대서사 에픽: [방주의 새벽] 1차 영지 재건 완성": {
+    "en": "Grand Epic: [Dawn of the Ark] Phase 1 Domain Reconstruction Complete",
+    "ja": "大叙事エピック：【方舟の黎明】第1次領地再建完了"
+  },
+  "대성녀 예복": {
+    "en": "High Saintess Vestments",
+    "ja": "大聖女の礼服"
+  },
+  "대성녀의 기적 성홀": {
+    "en": "High Saintess's Miraculous Scepter",
+    "ja": "大聖女の奇跡の聖笏"
+  },
+  "대성녀의 축복": {
+    "en": "Blessing of the High Saintess",
+    "ja": "大聖女の祝福"
+  },
+  "대용량 군수 물자를 적재할 석재 지반 기반 시설(Lv.1 이상)이 필요합니다.": {
+    "en": "Requires stone foundation infrastructure (Lv.1+) to load bulk military supplies.",
+    "ja": "大容量の軍需物資を積載するための石材地盤インフラ施設(Lv.1以上)が必要です。"
+  },
+  "대용량 보관함": {
+    "en": "Large Capacity Storage",
+    "ja": "大容量保管箱"
+  },
+  "대원": {
+    "en": "Hero",
+    "ja": "隊員"
+  },
+  "대원 {0}/7명": {
+    "en": "Heroes {0}/7",
+    "ja": "隊員 {0}/7名"
+  },
+  "대원 간 교감 & 결속 변화": {
+    "en": "Bonding & Synergy Shift Between Heroes",
+    "ja": "隊員間の交感 ＆ 結束変化"
+  },
+  "대원 간 소외감 상태:": {
+    "en": "Isolation Status Among Heroes:",
+    "ja": "隊員間の疎外感状態:"
+  },
+  "대원 진형 편성, 전직 각성 및 마도 비전서 스킬 전수": {
+    "en": "Form hero party, awaken promotions, and teach grimoire skills",
+    "ja": "隊員の陣形編成、転職覚醒および魔導秘伝書のスキル伝授"
+  },
+  "대원A": {
+    "en": "Hero A",
+    "ja": "隊員A"
+  },
+  "대원B": {
+    "en": "Hero B",
+    "ja": "隊員B"
+  },
+  "대원과 깊은 교감을 나눈 동료가 없습니다.": {
+    "en": "No companions have formed deep bonds with this hero.",
+    "ja": "隊員と深い交感を交わした仲間がいません。"
+  },
+  "대원을 중심으로 형성된 관계도입니다. 함께 출진하고": {
+    "en": "A relationship diagram centered on this hero. Deploy together and",
+    "ja": "隊員を中心に形成された相関図です。共に出撃し、"
+  },
+  "대장간": {
+    "en": "Forge",
+    "ja": "鍛冶屋"
+  },
+  "대장간 단조 공정": {
+    "en": "Blacksmith Forging Process",
+    "ja": "鍛冶屋の鍛造工程"
+  },
+  "대장간 및 방벽 건축석": {
+    "en": "Forge & Rampart Building Stone",
+    "ja": "鍛冶屋および防壁の建築石"
+  },
+  "대장간 시설 증축": {
+    "en": "Expand Forge Facility",
+    "ja": "鍛冶屋施設の増築"
+  },
+  "대장간 인챈트 연성": {
+    "en": "Forge Enchant Transmutation",
+    "ja": "鍛冶屋エンチャント錬成"
+  },
+  "대장간 장비 접두 인챈트 부여": {
+    "en": "Apply Forge Equipment Prefix Enchant",
+    "ja": "鍛冶屋装備接頭エンチャント付与"
+  },
+  "대장간 장비 접미 인챈트 부여": {
+    "en": "Apply Forge Equipment Suffix Enchant",
+    "ja": "鍛冶屋装備接尾エンチャント付与"
+  },
+  "대장간 제작 및 퀘스트 보상으로 획득한 소모품이 안전하게 적재됩니다.": {
+    "en": "Safely stores consumables obtained through blacksmith crafting and quest rewards.",
+    "ja": "鍛冶屋製作およびクエスト報酬で獲得した消費アイテムが安全に保管されます。"
+  },
+  "대장간 증축 필요": {
+    "en": "Forge Expansion Required",
+    "ja": "鍛冶屋の増築が必要"
+  },
+  "대장간 최상급 접두 인챈트": {
+    "en": "Top-Tier Forge Prefix Enchant",
+    "ja": "鍛冶屋最上級接頭エンチャント"
+  },
+  "대장간 최상급 접미 인챈트": {
+    "en": "Top-Tier Forge Suffix Enchant",
+    "ja": "鍛冶屋最上級接尾エンチャント"
+  },
+  "대장간 특전 -": {
+    "en": "Forge Perk -",
+    "ja": "鍛冶屋特典 -"
+  },
+  "대장간에서 +3강 이상으로 강화된 장비에 날카로운(공격력↑), 맹렬한(치명타↑), 신속한(속도↑) 등의 강력한 전술 접두 옵션을 무작위로 인챈트합니다.": {
+    "en": "Randomly enchants equipment enhanced to +3 or higher at the Forge with powerful tactical prefixes such as Sharp (ATK↑), Fierce (Crit↑), and Swift (SPD↑).",
+    "ja": "鍛冶屋で+3以上に強化された装備に、鋭利な(攻撃力↑)、猛烈な(会心↑)、迅速な(速度↑)などの強力な戦術接頭オプションをランダムにエンチャントします。"
+  },
+  "대장간에서 +7강 이상으로 강화된 장비에 수호자의(방어력↑), 불굴의(생명력↑), 흡혈의(피흡↑), 관통의(방관↑) 등의 접미 옵션을 무작위로 인챈트합니다.": {
+    "en": "Randomly enchants equipment enhanced to +7 or higher at the Forge with suffix options such as Guardian's (DEF↑), Indomitable (HP↑), Vampiric (Lifesteal↑), and Piercing (DEF Pierce↑).",
+    "ja": "鍛冶屋で+7以上に強化された装備に、守護者の(防御力↑)、不屈の(生命力↑)、吸血の(吸血↑)、貫通の(防貫↑)などの接尾オプションをランダムにエンチャントします。"
+  },
+  "대장간에서 단조하거나 던전 탐험을 통해 획득할 수 있습니다.": {
+    "en": "Can be crafted at the Forge or obtained through dungeon exploration.",
+    "ja": "鍛冶屋で鍛造するか、ダンジョン探検を通じて獲得できます。"
+  },
+  "대재앙": {
+    "en": "Cataclysm",
+    "ja": "大災厄"
+  },
+  "대지": {
+    "en": "Earth",
+    "ja": "大地"
+  },
+  "대지 분쇄타": {
+    "en": "Earth Shatter Strike",
+    "ja": "大地粉砕打"
+  },
+  "대지분쇄": {
+    "en": "Earth Shatter",
+    "ja": "大地粉砕"
+  },
+  "대지의 결계": {
+    "en": "Earthen Barrier",
+    "ja": "大地の結界"
+  }
+}

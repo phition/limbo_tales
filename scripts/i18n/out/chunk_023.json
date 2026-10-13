@@ -1,0 +1,802 @@
+{
+  "시공간 차원 붕괴": {
+    "en": "Spacetime Dimensional Collapse",
+    "ja": "時空次元崩壊"
+  },
+  "시공간 초월자 아르케오스": {
+    "en": "Spacetime Transcender Archaeos",
+    "ja": "時空超越者アルケオス"
+  },
+  "시공간을 붕괴시켜 적 전체에 173%의 종말급 암흑 폭발을 일으킵니다.": {
+    "en": "Collapses spacetime, triggering an apocalyptic 173% Dark explosion across all enemies.",
+    "ja": "時空間を崩壊させ、敵全体に173%の終末級暗黒爆発を引き起こします。"
+  },
+  "시공간의 굴절을 견디는 에픽 중장갑 [시공 굴절의 광맥 갑주]를 하사합니다.": {
+    "en": "Bestows the Epic heavy armor [Ore Armor of Spacetime Refraction] that withstands spacetime refraction.",
+    "ja": "時空間の屈折に耐えるエピック重装甲[時空屈折の鉱脈甲冑]を下賜します。"
+  },
+  "시공간의 균열을 압축 발사하는 초고속 결전 마총. 높은 민첩성과 치명타를 보장합니다.": {
+    "en": "A hyper-speed decisive magic gun firing compressed spacetime rifts. Guarantees high agility and critical hits.",
+    "ja": "時空間の亀裂を圧縮発射する超高速決戦魔銃。高い俊敏性と会心を保証する。"
+  },
+  "시공간의 균열을 열어 불안정한 중력 파동을 아군에게 방출합니다.": {
+    "en": "Opens a spacetime rift, unleashing unstable gravitational waves upon allies.",
+    "ja": "時空間の亀裂を開き、不安定な重力波動を味方へ放出します。"
+  },
+  "시공간의 틈새를 자유자재로 넘나드는 차원 포식자. 방어력을 관통하는 기습 일격을 가한다.": {
+    "en": "A dimensional predator freely slipping through spacetime cracks. Delivers ambush strikes that penetrate defense.",
+    "ja": "時空間の隙間を自在に行き来する次元の捕食者。防御力を貫通する奇襲一撃を加える。"
+  },
+  "시공간의 틈새에서 피투성이가 된 아군 파티의 미래 환영이 무언가를 경고하듯 서성입니다.": {
+    "en": "From the cracks of spacetime, a bloody future illusion of your party wanders as if warning of something.",
+    "ja": "時空間の隙間から、血まみれになった味方パーティの未来の幻影が何かを警告するように彷徨っています。"
+  },
+  "시공간의 환영을 담은 9티어 만화경 장비를 단조하며, 전 제작/강화 비용을 18% 영구 감면합니다.": {
+    "en": "Forges Tier 9 Kaleidoscope equipment imbued with spacetime illusions, and permanently reduces all crafting/enhancement costs by 18%.",
+    "ja": "時空間の幻影を宿すTier 9万華鏡装備を鍛造し、全製作/強化費用を永久に18%削減します。"
+  },
+  "시공의": {
+    "en": "Spacetime",
+    "ja": "時空の"
+  },
+  "시공의 균열타": {
+    "en": "Spacetime Rift Strike",
+    "ja": "時空の亀裂打"
+  },
+  "시공의 닻이 안정화되며 심연 3층과 4층의 연무가 걷히고 완벽히 정화되었습니다! 이제 3~4층 마물들의 연무 강화(공/방 +15%, +20%)가 해제되어 안전한 자원 채취가 가능해졌습니다. 또한 방주의 부유 기관이 공명하기 시작했습니다. 이 방대한 에너지를 방주의 생산 공방에 배급하여 번영을 이룰지, 최심부 결전에 나설 대원들에게 시공의 갑주를 하사할지 선택해주십시오.": {
+    "en": "With the spacetime anchor stabilized, the mist covering Abyss 3F and 4F has cleared and is completely purified! Monsters on 3F-4F have lost their mist buffs (+15% ATK/DEF, +20%), allowing safe resource gathering. The Ark's levitation engine has also begun resonating. Choose whether to distribute this vast energy to production workshops for prosperity, or bestow Spacetime Armor upon squad members marching to the final depths.",
+    "ja": "時空の錨が安定し、深淵3層と4層の煙霧が晴れて完全に浄化されました！3〜4層の魔物たちの煙霧強化(攻/防+15%、+20%)が解除され、安全な資源採取が可能になりました。さらに方舟の浮遊機関が共鳴を始めました。この膨大なエネルギーを方舟の生産工房に配給して繁栄を築くか、最深部の決戦に挑む隊員たちへ時空の甲冑を下賜するか選択してください。"
+  },
+  "시공의 마도서: 차원 붕괴": {
+    "en": "Spacetime Grimoire: Dimensional Collapse",
+    "ja": "時空の魔導書: 次元崩壊"
+  },
+  "시공의 섭리": {
+    "en": "Providence of Spacetime",
+    "ja": "時空の摂理"
+  },
+  "시공의 조율사": {
+    "en": "Chrono Tuner",
+    "ja": "時空の調律者"
+  },
+  "시공의 침식자 네메시스가 차원 경계를 허물고 강림했다. 전 원정대를 소집하여 시공 붕괴를 저지하고 피해를 누적시켜라!": {
+    "en": "Nemesis, the Corruptor of Spacetime, shattered dimensional barriers and descended. Rally all expeditions to halt spacetime collapse and accumulate damage!",
+    "ja": "時空の侵食者ネメシスが次元の境界を破り降臨した。全遠征隊を召集して時空崩壊を阻止し、ダメージを蓄積させよ！"
+  },
+  "시공의 침식자, 네메시스": {
+    "en": "Nemesis, Corruptor of Spacetime",
+    "ja": "時空の侵食者、ネメシス"
+  },
+  "시공의 틈새에서 무사히 철수하여 피해량을 기록했습니다.": {
+    "en": "Safely retreated from the cracks of spacetime and recorded damage dealt.",
+    "ja": "時空の隙間から無事に撤退し、与えたダメージを記録しました。"
+  },
+  "시그루드": {
+    "en": "Sigurd",
+    "ja": "シグルド"
+  },
+  "시너지 백과": {
+    "en": "Synergy Encyclopedia",
+    "ja": "シナジー百科"
+  },
+  "시너지 이름, 발동 조건, 효과 검색...": {
+    "en": "Search synergy name, conditions, effects...",
+    "ja": "シナジー名、発動条件、効果を検索…"
+  },
+  "시너지 조합 도감 열기": {
+    "en": "Open Synergy Combination Codex",
+    "ja": "シナジー組み合わせ図鑑を開く"
+  },
+  "시도 후": {
+    "en": "After attempt",
+    "ja": "試行後"
+  },
+  "시들음(-{0}%)": {
+    "en": "Wither (-{0}%)",
+    "ja": "萎凋(-{0}%)"
+  },
+  "시력이 감퇴한 자들의 시야를 교정해 주던 탄성 높은 티타늄 합금 프레임입니다.": {
+    "en": "A highly resilient titanium alloy frame that corrected vision for those with failing eyesight.",
+    "ja": "視力が低下した者の視界を矯正していた弾性の高いチタン合金フレーム。"
+  },
+  "시설": {
+    "en": "Facility",
+    "ja": "施設"
+  },
+  "시설 건축 및 연료의 기본": {
+    "en": "Facility Construction & Fuel Basics",
+    "ja": "施設建築および燃料の基本"
+  },
+  "시설 관리에서 시설 가동을 다시 켜주세요.": {
+    "en": "Please re-enable facility operation under Facility Management.",
+    "ja": "施設管理で施設の稼働を再開してください。"
+  },
+  "시설 레벨에 따라 정기 유지비가 발생하며, 체납 시 레벨이 일시 정지되나 재확보 시 즉시 자동 복구됩니다.": {
+    "en": "Periodic upkeep is incurred based on facility level; if overdue, levels pause but automatically restore upon securing funds.",
+    "ja": "施設レベルに応じて定期維持費が発生し、滞納時はレベルが一時停止しますが、再確保時に即時自動復旧します。"
+  },
+  "시설 바로 입장": {
+    "en": "Enter Facility Directly",
+    "ja": "施設に直接入場"
+  },
+  "시설 보유 현황": {
+    "en": "Facilities Owned",
+    "ja": "施設保有現況"
+  },
+  "시설 유지비가 고갈되면 어떻게 되나요?": {
+    "en": "What happens if facility upkeep runs out?",
+    "ja": "施設の維持費が枯渇するとどうなりますか？"
+  },
+  "시설 이용 안내": {
+    "en": "Facility Usage Guide",
+    "ja": "施設利用案内"
+  },
+  "시설 증축 및 운용 안내": {
+    "en": "Facility Expansion & Operation Guide",
+    "ja": "施設増築および運用案内"
+  },
+  "시설을 정상적으로 이용하시려면": {
+    "en": "To use the facility properly,",
+    "ja": "施設を正常に利用するには"
+  },
+  "시설의 가동이 일시 정지되어 있어 입장할 수 없습니다.": {
+    "en": "Cannot enter because facility operation is suspended.",
+    "ja": "施設の稼働が一時停止しているため入場できません。"
+  },
+  "시설의 해금은 던전 층수에 종속되지 않고,": {
+    "en": "Facility unlocks are not tied to dungeon floor levels, but",
+    "ja": "施設の解放はダンジョンの階層に縛られず、"
+  },
+  "시스템 & 가이드": {
+    "en": "System & Guide",
+    "ja": "システム＆ガイド"
+  },
+  "시스템 가이드 • {0}": {
+    "en": "System Guide • {0}",
+    "ja": "システムガイド • {0}"
+  },
+  "시스템 메뉴 & 도움말 열기": {
+    "en": "Open System Menu & Help",
+    "ja": "システムメニュー＆ヘルプを開く"
+  },
+  "시스템 설정": {
+    "en": "System Settings",
+    "ja": "システム設定"
+  },
+  "시안": {
+    "en": "Cyan",
+    "ja": "シアン"
+  },
+  "시안 (Cyan)": {
+    "en": "Cyan",
+    "ja": "シアン (Cyan)"
+  },
+  "시야 확보 & 기습 방지 & 위험도 억제": {
+    "en": "Gain Vision & Prevent Ambush & Suppress Hazard",
+    "ja": "視界確保＆奇襲防止＆危険度抑制"
+  },
+  "시작 영웅 2인(아이리스, 시안)과 초기 스킬북으로 재설정, 인벤토리 초기화": {
+    "en": "Reset to 2 starting heroes (Iris, Cyan), initial skill books, and clear inventory",
+    "ja": "初期英雄2人(アイリス、シアン)と初期スキルブックに再設定、インベントリ初期化"
+  },
+  "시작 위험도 {0} (Lv.{1}+)": {
+    "en": "Starting Hazard {0} (Lv.{1}+)",
+    "ja": "開始危険度 {0} (Lv.{1}+)"
+  },
+  "시작 클래스(Tier 0) ➔ 1차 전직(Tier 1) ➔ 2차 각성(Tier 2)": {
+    "en": "Starting Class (Tier 0) ➔ 1st Class (Tier 1) ➔ 2nd Awakening (Tier 2)",
+    "ja": "初期クラス(Tier 0) ➔ 1次転職(Tier 1) ➔ 2次覚醒(Tier 2)"
+  },
+  "시장": {
+    "en": "Market",
+    "ja": "市場"
+  },
+  "시청 완료! 보상이 지급되었습니다": {
+    "en": "Watch Complete! Rewards have been issued",
+    "ja": "視聴完了！報酬が支給されました"
+  },
+  "시체": {
+    "en": "Corpse",
+    "ja": "死体"
+  },
+  "시체 섭취": {
+    "en": "Consume Corpse",
+    "ja": "死体摂取"
+  },
+  "시추": {
+    "en": "Quarrying",
+    "ja": "採掘"
+  },
+  "시추소": {
+    "en": "Aether Quarry",
+    "ja": "採掘所"
+  },
+  "시추소 개척 후 [방랑자의 라운지]를 건설하고 마음에 드는 3번째 용병(사제, 마법사, 총사 등)을 고용하여 3인 정예 결사대를 완성해야 회랑 출정이 가능해집니다.": {
+    "en": "After establishing the Quarry, build the [Wanderer Lounge] and recruit your desired 3rd mercenary (Priest, Mage, Gunner, etc.) to form a 3-member elite squad before deploying to the Cloister.",
+    "ja": "採掘所を開拓後、[放浪者のラウンジ]を建設し好みの3人目の傭兵(司祭、魔法使い、銃士など)を雇用して3人精鋭決死隊を完成させると回廊への出撃が可能になります。"
+  },
+  "시추소 완공 후 [방랑자의 라운지]를 건설하고 성향에 맞는 3번째 용병(사제, 마법사, 총사 등)을 고용하세요. 3인 파티가 완성되어야 심연 회랑 출전이 가능해집니다.": {
+    "en": "After completing the Quarry, build the [Wanderer Lounge] and hire a 3rd mercenary suited to your style (Priest, Mage, Gunner, etc.). The 3-member party must be complete to deploy to the Abyssal Cloister.",
+    "ja": "採掘所の完成後、[放浪者のラウンジ]を建設しプレイスタイルに合った3人目の傭兵(司祭、魔法使い、銃士など)を雇用してください。3人パーティが揃って初めて深淵回廊への出撃が可能になります。"
+  },
+  "시키거나, 끝내 사경을 넘지 못하고": {
+    "en": "or fails to overcome the brink of death",
+    "ja": "させるか、ついに死線を越えられず"
+  },
+  "시키고, 영혼의 제단과 각성 공명을 통해 상위 등급으로 진화시킵니다.": {
+    "en": "and evolve to higher tiers via Soul Sanctuary and Awakening Resonance.",
+    "ja": "させ、魂の祭壇と覚醒共鳴を通じて上位ランクへ進化させます。"
+  },
+  "시행일자:": {
+    "en": "Effective Date:",
+    "ja": "施行日:"
+  },
+  "식량": {
+    "en": "Food",
+    "ja": "食料"
+  },
+  "식량 & 가죽 정제": {
+    "en": "Refine Food & Leather",
+    "ja": "食料＆革精製"
+  },
+  "식량 가공소(Food Processing) 틱 생산": {
+    "en": "Food Processing Tick Production",
+    "ja": "食料加工所(Food Processing)ティック生産"
+  },
+  "식량 부족으로 공방 가동이 중단되었습니다. 식량을 보충하여 공방을 재가동하세요.": {
+    "en": "Workshop halted due to food shortage. Replenish food to restart workshop.",
+    "ja": "食料不足により工房の稼働が停止しました。食料を補充して工房を再稼働させてください。"
+  },
+  "식량 유지비 -30%": {
+    "en": "Food Upkeep -30%",
+    "ja": "食料維持費 -30%"
+  },
+  "식량 정제 시설. 13초마다 보급 식량을 생산하고 무두질 가죽을 가공합니다.": {
+    "en": "Food refinery. Produces rations and processes tanned leather every 13s.",
+    "ja": "食料精製施設。13秒ごとに補給食料を生産し、鞣し革を加工します。"
+  },
+  "식량 🍖": {
+    "en": "Food 🍖",
+    "ja": "食料 🍖"
+  },
+  "식물형 마물 토벌 전리품": {
+    "en": "Plant Monster Subjugation Spoils",
+    "ja": "植物型魔物討伐の戦利品"
+  },
+  "식별자: {0} • 최대 증축 {1}레벨": {
+    "en": "ID: {0} • Max Expansion Lv.{1}",
+    "ja": "識別子: {0} • 最大増築 Lv.{1}"
+  },
+  "신경 마비": {
+    "en": "Nerve Paralysis",
+    "ja": "神経麻痺"
+  },
+  "신경 마비 충격": {
+    "en": "Neuro Paralysis Shock",
+    "ja": "神経麻痺衝撃"
+  },
+  "신경 마비 충격 (Neuro Paralysis)": {
+    "en": "Neuro Paralysis Shock",
+    "ja": "神経麻痺衝撃 (Neuro Paralysis)"
+  },
+  "신규 시설 해금": {
+    "en": "New Facility Unlocked",
+    "ja": "新規施設解放"
+  },
+  "신규 의뢰 접수 대기 중": {
+    "en": "Awaiting New Requests",
+    "ja": "新規依頼受付待機中"
+  },
+  "신규 지휘관 서약": {
+    "en": "New Commander Pledge",
+    "ja": "新規指揮官誓約"
+  },
+  "신규 지휘관 서약 등록 중...": {
+    "en": "Registering new commander pledge...",
+    "ja": "新規指揮官誓約を登録中…"
+  },
+  "신기루 검무": {
+    "en": "Mirage Sword Dance",
+    "ja": "蜃気楼の剣舞"
+  },
+  "신기루 칼춤": {
+    "en": "Mirage Blade Dance",
+    "ja": "蜃気楼の刀舞"
+  },
+  "신벌의 심판추": {
+    "en": "Judgment Plumb of Divine Retribution",
+    "ja": "神罰の審判錘"
+  },
+  "신벌의 심판추 & 최후의 성전": {
+    "en": "Judgment Plumb & Final Crusade",
+    "ja": "神罰の審判錘＆最後の聖戦"
+  },
+  "신비로운": {
+    "en": "Mysterious",
+    "ja": "神秘的な"
+  },
+  "신비로운 지혜 결계 봉인 중...": {
+    "en": "Sealing mysterious wisdom barrier...",
+    "ja": "神秘の知恵結界を封印中…"
+  },
+  "신성": {
+    "en": "Holy",
+    "ja": "神聖"
+  },
+  "신성 강타 & 성지 결계": {
+    "en": "Holy Strike & Holy Land Barrier",
+    "ja": "神聖強打＆聖地結界"
+  },
+  "신성 광휘": {
+    "en": "Holy Radiance",
+    "ja": "神聖光輝"
+  },
+  "신성 광휘(Acolyte Smite)는 적중 시 대상에게 2턴간 실명(Blind: 명중률 50% 저하)을 부여합니다.": {
+    "en": "Holy Radiance (Acolyte Smite) inflicts Blind (50% Hit reduction) on the target for 2 turns upon hitting.",
+    "ja": "神聖光輝(Acolyte Smite)は命中時に対象へ2ターン間、盲目(Blind: 命中率50%低下)を付与します。"
+  },
+  "신성 구원계": {
+    "en": "Holy Salvation Class",
+    "ja": "神聖救済系"
+  },
+  "신성 단죄 타격 및 최저 체력 아군 1명 체력 30% 즉각 응급 치유": {
+    "en": "Strikes with holy condemnation and immediately restores 30% HP to 1 ally with lowest HP",
+    "ja": "神聖断罪打撃および最低HPの味方1人のHPを30%即座に応急治癒"
+  },
+  "신성 방벽": {
+    "en": "Holy Barrier",
+    "ja": "神聖防壁"
+  },
+  "신성 방벽 & 아군 치유": {
+    "en": "Holy Barrier & Ally Healing",
+    "ja": "神聖防壁＆味方治癒"
+  },
+  "신성 성기사단": {
+    "en": "Holy Order of Paladins",
+    "ja": "神聖聖騎士団"
+  },
+  "신성 성역": {
+    "en": "Holy Sanctuary",
+    "ja": "神聖聖域"
+  },
+  "신성 성역 마도서군": {
+    "en": "Holy Sanctuary Grimoire Series",
+    "ja": "神聖聖域魔導書群"
+  },
+  "신성 성전: 발할라의 불멸": {
+    "en": "Holy Crusade: Immortality of Valhalla",
+    "ja": "神聖聖戦: ヴァルハラの不滅"
+  },
+  "신성 성화": {
+    "en": "Holy Sacred Flame",
+    "ja": "神聖聖火"
+  },
+  "신성 속성 공격은 언데드/악마/심연/공허 계열 마물에게 +30% 증폭 정화 피해를 입힙니다.": {
+    "en": "Holy attribute attacks deal +30% amplified purification damage to Undead/Demon/Abyss/Void monsters.",
+    "ja": "神聖属性攻撃はアンデッド/悪魔/深淵/虚無系の魔物に+30%増幅された浄化ダメージを与えます。"
+  },
+  "신성 스킬: 견습 사제(신성 광휘), 성기사(단죄의 일격), 발키리(심판의 빛창), 전투 사제(성전 강타) 등": {
+    "en": "Holy Skills: Acolyte (Holy Radiance), Paladin (Condemnation Strike), Valkyrie (Light Spear of Judgment), War Priest (Crusade Strike), etc.",
+    "ja": "神聖スキル: 見習い司祭(神聖光輝)、聖騎士(断罪の一撃)、ヴァルキリー(審判の光槍)、戦闘司祭(聖戦強打)など"
+  },
+  "신성 실크 인장에 에테르와 영혼 수정을 새긴 마도 부적. 마나 순환과 민첩성을 높입니다.": {
+    "en": "An arcane talisman carved with ether and soul crystals on sacred silk seal. Boosts mana circulation and agility.",
+    "ja": "神聖シルクの印章にエーテルと魂の水晶を刻んだ魔導護符。マナ循環と俊敏性を高める。"
+  },
+  "신성 에테르 급랭 및 담금질 중...": {
+    "en": "Quenching and tempering holy ether...",
+    "ja": "神聖エーテルの急冷および焼き入れ中…"
+  },
+  "신성 일격": {
+    "en": "Holy Strike",
+    "ja": "神聖一撃"
+  },
+  "신성 정벌": {
+    "en": "Divine Retribution",
+    "ja": "神聖征伐"
+  },
+  "신성 정벌 (Divine Retribution)": {
+    "en": "Divine Retribution",
+    "ja": "神聖征伐 (Divine Retribution)"
+  },
+  "신성 정화 대성공!": {
+    "en": "Holy Purification Great Success!",
+    "ja": "神聖浄化大成功！"
+  },
+  "신성 정화의 불꽃 폭발 & 적 버프 해제": {
+    "en": "Holy Flame Purge Explosion & Enemy Buff Removal",
+    "ja": "神聖浄化の火炎爆発＆敵バフ解除"
+  },
+  "신성 집결": {
+    "en": "Holy Rally",
+    "ja": "神聖集結"
+  },
+  "신성 집결 (피해 경감)": {
+    "en": "Holy Rally (DMG Reduction)",
+    "ja": "神聖集結 (被ダメージ軽減)"
+  },
+  "신성 치유": {
+    "en": "Holy Heal",
+    "ja": "神聖治癒"
+  },
+  "신성 화염 결계 강화 (부재 중 성화 온기 소진 완화)": {
+    "en": "Holy Fire Barrier Enhancement (Alleviates warmth depletion while absent)",
+    "ja": "神聖火炎結界強化 (不在時の聖火温もり消耗緩和)"
+  },
+  "신성한": {
+    "en": "Sacred",
+    "ja": "神聖な"
+  },
+  "신성한 마력이 샘솟는 방주 최대의 영목 삼림원을 완성했습니다. 영구적인 목재 최대 생산과 함께 42%의 최대 유지비 감면을 달성합니다.": {
+    "en": "Completed the Ark's greatest Arcane Lumber grove bubbling with sacred mana. Permanently maximizes wood output while achieving a max 42% upkeep reduction.",
+    "ja": "神聖な魔力が湧き出る方舟最大の霊木森林園を完成させました。永久的な木材最大生産とともに42%の最大維持費削減を達成します。"
+  },
+  "신성한 불꽃으로 성채 외곽에 보이지 않는 방호 결계를 형성하여, 혹한과 외부 심연 기운에 의한 온기 소진을 방어합니다.": {
+    "en": "Forms an unseen protective barrier outside the citadel with sacred flame, shielding against warmth loss from extreme cold and external abyssal chill.",
+    "ja": "神聖な炎で城塞外郭に見えない防護結界を形成し、極寒や外部深淵の気による温もりの消耗を防ぎます。"
+  },
+  "신성한 빛이 깃든 성기사단의 보검": {
+    "en": "The Paladin Order's treasured sword imbued with holy light",
+    "ja": "神聖な光が宿る聖騎士団の宝剣"
+  },
+  "신성한 생명의 성역: 최대 체력 +22%, 턴당 체력 7% 재생, 피해 감소 10%, 전투 개시 시 최대 HP 20% 보호막": {
+    "en": "Sanctuary of Sacred Life: Max HP +22%, 7% HP regen per turn, DMG taken -10%, 20% Max HP Shield at battle start",
+    "ja": "神聖なる生命の聖域: 最大HP+22%、ターン毎にHP7%自動回復、被ダメージ減少10%、戦闘開始時に最大HP20%シールド"
+  },
+  "신성한 서약": {
+    "en": "Sacred Oath",
+    "ja": "神聖なる誓約"
+  },
+  "신성한 성광 파동": {
+    "en": "Sacred Holy Light Wave",
+    "ja": "神聖なる聖光波動"
+  },
+  "신성한 성화 점화 5회 충전": {
+    "en": "Recharge Sacred Flame Ignition 5 Times",
+    "ja": "神聖なる聖火点火5回チャージ"
+  },
+  "신성한 성화. 목재를 공헌하여 생산량 +15%, 전투 EXP +20%, 영지 용병 지속 재생 온기 버프를 활성화합니다.": {
+    "en": "Sacred flame. Offer wood to activate warmth buff for +15% production, +20% Combat EXP, and continuous regeneration for mercenaries.",
+    "ja": "神聖なる聖火。木材を捧げて生産量+15%、戦闘EXP+20%、領地傭兵持続再生の温もりバフを有効化します。"
+  },
+  "신성한 수호 결계를 펼쳐 아군 전체에게 공격력 비례 210% 보호막을 부여하고 2턴간 받는 피해를 25% 경감합니다.": {
+    "en": "Unfurls a sacred guardian barrier, granting all allies a Shield equal to 210% of ATK and reducing damage taken by 25% for 2 turns.",
+    "ja": "神聖なる守護結界を展開し、味方全体に攻撃力比例210%のシールドを付与、2ターン間被ダメージを25%軽減します。"
+  },
+  "신성한 영혼 공명을 심화하여 1차 각성 클래스의 경험치 획득량을 +20%로 증폭시키고 등급 승격률을 21%로 높입니다.": {
+    "en": "Deepens sacred soul resonance to amplify 1st Awakening classes' EXP gain by +20% and raise promotion rate to 21%.",
+    "ja": "神聖なる魂の共鳴を深め、1次覚醒クラスの経験値獲得量を+20%増幅させ、昇格率を21%に引き上げます。"
+  },
+  "신성한 축복": {
+    "en": "Divine Blessing",
+    "ja": "神聖な祝福"
+  },
+  "신속": {
+    "en": "Swiftness",
+    "ja": "迅速"
+  },
+  "신속 유격 진형": {
+    "en": "Swift Guerilla Formation",
+    "ja": "迅速遊撃陣形"
+  },
+  "신속/마력/지혜 (+7강)": {
+    "en": "Swiftness/Magic/Wisdom (+7 Enhanced)",
+    "ja": "迅速/魔力/知恵 (+7強化)"
+  },
+  "신속한": {
+    "en": "Swift",
+    "ja": "迅速な"
+  },
+  "신속한 그림자": {
+    "en": "Swift Shadow",
+    "ja": "迅速な影"
+  },
+  "신의 가호": {
+    "en": "Divine Protection",
+    "ja": "神の加護"
+  },
+  "신의 은총": {
+    "en": "Divine Grace",
+    "ja": "神の恩寵"
+  },
+  "신임 지휘관 초반 생존 & 번영 로드맵": {
+    "en": "New Commander Early Survival & Prosperity Roadmap",
+    "ja": "新任指揮官序盤生存＆繁栄ロードマップ"
+  },
+  "신임 지휘관 초반 생존 & 육성 가이드": {
+    "en": "New Commander Early Survival & Progression Guide",
+    "ja": "新任指揮官序盤生存＆育成ガイド"
+  },
+  "신입 환영 & 결속": {
+    "en": "Rookie Welcome & Solidarity",
+    "ja": "新入歓迎＆結束"
+  },
+  "신창": {
+    "en": "Divine Spear",
+    "ja": "神槍"
+  },
+  "신화": {
+    "en": "Mythic",
+    "ja": "神話"
+  },
+  "신화 무기고": {
+    "en": "Mythic Armory",
+    "ja": "神話兵器廠"
+  },
+  "신화 속 정화의 불꽃을 현현시켜, 거점 내부로 침투하려는 모든 심연의 침식과 부패를 원천 차단합니다.": {
+    "en": "Manifests purifying mythic flames, completely blocking all abyssal corruption and rot attempting to infiltrate the stronghold.",
+    "ja": "神話の浄化の炎を具現化し、拠点内部へ侵入しようとするすべての深淵の侵食と腐敗を根本から遮断します。"
+  },
+  "신화 아티팩트: 차원 패왕의 주권 관": {
+    "en": "Mythic Artifact: Sovereign Crown of the Dimensional Overlord",
+    "ja": "神話アーティファクト: 次元覇王の主権冠"
+  },
+  "신화 유물": {
+    "en": "Mythic Relic",
+    "ja": "神話遺物"
+  },
+  "신화 장비": {
+    "en": "Mythic Equipment",
+    "ja": "神話装備"
+  },
+  "신화검": {
+    "en": "Mythic Sword",
+    "ja": "神話剣"
+  },
+  "신화급 각성 및 차원 왜곡 (+50% 매입가)": {
+    "en": "Mythic Awakening & Dimensional Distortion (+50% buy price)",
+    "ja": "神話級覚醒および次元歪曲 (+50% 買取価格)"
+  },
+  "신화의 성화 개방 (심연 침식 차단)": {
+    "en": "Unlocks Mythic Sacred Flame (Blocks Abyssal Erosion)",
+    "ja": "神話の聖火開放 (深淵侵食遮断)"
+  },
+  "신화의 정점에 도달한 최고 명장의 병기창. 10티어 종말 신화 장비를 단조하며 전 단조 및 강화 비용 20% 영구 할인을 제공합니다.": {
+    "en": "The master smith's armory reaching the pinnacle of myth. Forges Tier 10 Doom Mythic gear with a permanent 20% discount on all forging and enhancement costs.",
+    "ja": "神話の頂点に到達した最高名匠の兵器廠。Tier 10終末神話装備を鍛造し、全鍛造および強化費用を永久に20%割り引きます。"
+  },
+  "신화적 명장의 경지에 도달하여 7티어 망각 사신 장비를 제작하고, +10강 최고 강화와 [순수 마도석] 인챈트 슬롯을 전면 해금합니다.": {
+    "en": "Reaches the realm of mythic master smiths to craft Tier 7 Oblivion Reaper equipment, fully unlocking max +10 enhancement and [Pure Arcane Stone] enchantment slots.",
+    "ja": "神話的名匠の境地に達しTier 7忘却死神装備を製作、+10最高強化と[純粋魔導石]エンチャントスロットを全面解放します。"
+  },
+  "신화적 무력의 정점: 모든 스탯 +10%, 받는 피해 5% 감소, 치명타 피해 +15%, 턴당 체력 3% 재생 및 마나 5 MP 회복": {
+    "en": "Pinnacle of Mythic Might: All stats +10%, DMG taken -5%, Crit DMG +15%, 3% HP regen & +5 MP per turn",
+    "ja": "神話的武力の頂点: 全ステータス+10%、被ダメージ5%減少、会心ダメージ+15%、ターン毎にHP3%自動回復＆マナ5 MP回復"
+  },
+  "실력파 용병 모집 및 방랑 모험가 계약 영입": {
+    "en": "Recruit Skilled Mercenaries & Contract Wandering Adventurers",
+    "ja": "実力派傭兵募集および放浪冒険者契約加入"
+  },
+  "실명": {
+    "en": "Blind",
+    "ja": "盲目"
+  },
+  "실명/명중저하": {
+    "en": "Blind/Accuracy Down",
+    "ja": "盲目/命中低下"
+  },
+  "실버 등급 투사를 위한 희귀(Rare) 제식 무구 1종 확정": {
+    "en": "Guarantees 1 Rare issue gear for Silver tier gladiators",
+    "ja": "シルバーランク闘士向けの希少(Rare)制式武具1種確定"
+  },
+  "실버 상자": {
+    "en": "Silver Chest",
+    "ja": "シルバー宝箱"
+  },
+  "실비아": {
+    "en": "Silvia",
+    "ja": "シルヴィア"
+  },
+  "실시간 버프 & 디버프 뱃지: 용병 카드 내부 체력바 하단에 가호/타워 공격증폭/결계/성역재생 등 긍정 효과(초록)와 감속/마나누출/화상/빙결/방어파쇄 등 부정 효과(적색)가 미니 뱃지로 실시간 표시됩니다.": {
+    "en": "Real-time Buff & Debuff Badges: Below the HP bar inside mercenary cards, positive buffs (green) like Blessings, Tower ATK Boost, Barrier, and Sanctuary Regen, and negative debuffs (red) like Slow, Mana Leak, Burn, Freeze, and Armor Crush are displayed as mini badges in real time.",
+    "ja": "リアルタイムバフ＆デバフバッジ: 傭兵カード内のHPバー下部に加護/タワー攻撃増幅/結界/聖域再生などの有益効果(緑)と減速/マナ漏出/火傷/凍結/防御破砕などの有害効果(赤)がミニバッジでリアルタイム表示されます。"
+  },
+  "실시간 분석": {
+    "en": "Real-time Analysis",
+    "ja": "リアルタイム分析"
+  },
+  "실시간 비동기 PVP 결투 개방 & 명예 상점 1단계 (기초 보급품)": {
+    "en": "Async PVP Duel Unlocked & Honor Shop Stage 1 (Basic Supplies)",
+    "ja": "非同期PVP決闘開放＆名誉ショップ段階1 (基礎補給品)"
+  },
+  "실시간 상태이상/버프 뱃지": {
+    "en": "Real-time Status Effect/Buff Badges",
+    "ja": "リアルタイム状態異常/バフバッジ"
+  },
+  "실시간 생산 완료": {
+    "en": "Real-time Production Complete",
+    "ja": "リアルタイム生産完了"
+  },
+  "실시간 순감소(유지비 등): {0}": {
+    "en": "Real-time Net Drain (Upkeep, etc.): {0}",
+    "ja": "リアルタイム純減少(維持費など): {0}"
+  },
+  "실시간 순생산: {0}": {
+    "en": "Real-time Net Output: {0}",
+    "ja": "リアルタイム純生産: {0}"
+  },
+  "실시간 진형 시너지": {
+    "en": "Real-time Formation Synergy",
+    "ja": "リアルタイム陣形シナジー"
+  },
+  "실제 광고 모드": {
+    "en": "Real Ads Mode",
+    "ja": "実際の広告モード"
+  },
+  "실크": {
+    "en": "Silk",
+    "ja": "シルク"
+  },
+  "실패 시 70% 마물 기습": {
+    "en": "70% Monster Ambush on Failure",
+    "ja": "失敗時70%魔物奇襲"
+  },
+  "실패 시 유지": {
+    "en": "Retained on Failure",
+    "ja": "失敗時維持"
+  },
+  "실패 시 유지: {0}%": {
+    "en": "Retained on Failure: {0}%",
+    "ja": "失敗時維持: {0}%"
+  },
+  "실패 시 하락": {
+    "en": "Downgraded on Failure",
+    "ja": "失敗時下落"
+  },
+  "실패 시 하락: {0}%": {
+    "en": "Downgraded on Failure: {0}%",
+    "ja": "失敗時下落: {0}%"
+  },
+  "심연": {
+    "en": "Abyss",
+    "ja": "深淵"
+  },
+  "심연 10대 군주 대마도 전서": {
+    "en": "Archmage Tome of the 10 Abyssal Overlords",
+    "ja": "深淵10大君主の大魔導全書"
+  },
+  "심연 10층 나락의 정점, [심연의 군주 아스모데우스]의 종말 파멸과 5턴 공허 침식 궁극 마도서.": {
+    "en": "The ultimate grimoire of apocalyptic ruin and 5-turn void corruption from [Asmodeus, Lord of the Abyss] at the pinnacle of Abyss 10F.",
+    "ja": "深淵10層奈落の頂点、[深淵の君主アスモデウス]の終末破滅と5ターン虚無侵食の究極魔導書。"
+  },
+  "심연 1~2층 암반 채광": {
+    "en": "Rock Mining on Abyss 1F-2F",
+    "ja": "深淵1〜2層の岩盤採鉱"
+  },
+  "심연 1~2층 야수 사냥": {
+    "en": "Beast Hunting on Abyss 1F-2F",
+    "ja": "深淵1〜2層の野獣狩り"
+  },
+  "심연 1~2층 탐험 수목 채집": {
+    "en": "Lumber Gathering on Abyss 1F-2F",
+    "ja": "深淵1〜2層の探検樹木採集"
+  },
+  "심연 1~3층 보물상자 및 보스 토벌": {
+    "en": "Treasure Chests & Boss Subjugation on Abyss 1F-3F",
+    "ja": "深淵1〜3層の宝箱およびボス討伐"
+  },
+  "심연 1~3층 수풀 채집": {
+    "en": "Herb Gathering on Abyss 1F-3F",
+    "ja": "深淵1〜3層の草むら採集"
+  },
+  "심연 1~3층 야수형 마물 토벌": {
+    "en": "Beast Monster Subjugation on Abyss 1F-3F",
+    "ja": "深淵1〜3層の野獣型魔物討伐"
+  },
+  "심연 1층부터 10층까지 모든 군주 마물의 비기 마도서 10종을 방주 대서고에 집대성한 궁극의 대마도 전서.": {
+    "en": "The ultimate grand arcane tome in the Ark Grand Archives, compiling all 10 secret boss grimoires from Abyss 1F through 10F.",
+    "ja": "深淵1層から10層までのすべての君主魔物の秘技魔導書10種を方舟大書庫に集大成した究極の大魔導全書。"
+  },
+  "심연 1층으로 복귀, 퀘스트 목록 및 아레나 점수(1000점) 초기화": {
+    "en": "Return to Abyss 1F, reset quest list and arena score (1000 pts)",
+    "ja": "深淵1層へ復帰、クエスト一覧およびアリーナスコア(1000点)初期化"
+  },
+  "심연 1층의 거대한 지배자 [침묵의 흑핵 거신]을 처치하고 추출한 절대 영도의 빙결 비전 마도서.": {
+    "en": "The absolute zero freezing grimoire extracted after slaying the colossal ruler of Abyss 1F, [Dark Core Titan of Silence].",
+    "ja": "深淵1層の巨大な支配者[沈黙の黒核巨神]を討伐し抽出した絶対零度の氷結秘術魔導書。"
+  },
+  "심연 2~3층 광맥 채광": {
+    "en": "Vein Mining on Abyss 2F-3F",
+    "ja": "深淵2〜3層の鉱脈採鉱"
+  },
+  "심연 2~3층 광맥 채굴": {
+    "en": "Vein Mining on Abyss 2F-3F",
+    "ja": "深淵2〜3層の鉱脈採掘"
+  },
+  "심연 2~4층 거미형 마물 토벌": {
+    "en": "Spider Monster Subjugation on Abyss 2F-4F",
+    "ja": "深淵2〜4層の蜘蛛型魔物討伐"
+  },
+  "심연 2~4층 보물상자 및 보스 토벌": {
+    "en": "Treasure Chests & Boss Subjugation on Abyss 2F-4F",
+    "ja": "深淵2〜4層の宝箱およびボス討伐"
+  },
+  "심연 2층 납골당의 군주 [망령 군주 데스나이트]의 영혼 수확 절기가 담긴 암흑 흡혈 마도서.": {
+    "en": "The dark lifesteal grimoire holding the soul-harvesting secret technique of [Death Knight, Lord of Phantoms] from Abyss 2F Ossuary.",
+    "ja": "深淵2層納骨堂の君主[亡霊君主デスナイト]の魂収穫奥義が込められた暗黒吸血魔導書。"
+  },
+  "심연 3~4층 에테르 광맥 채굴": {
+    "en": "Ether Vein Mining on Abyss 3F-4F",
+    "ja": "深淵3〜4層のエーテル鉱脈採掘"
+  },
+  "심연 3~4층의 지배자들은 방주가 시공간의 심연 속으로 침몰하지 않도록 지탱하던 고대 닻이었다. 그들의 핵을 성화에 봉헌하여 성화의 화력을 극대화하라.": {
+    "en": "The rulers of Abyss 3F-4F were ancient anchors keeping the Ark from sinking into the abyss of spacetime. Consecrate their cores to the Sacred Flame to maximize its power.",
+    "ja": "深淵3〜4層の支配者たちは、方舟が時空間の深淵に沈まないよう支えていた古代の錨だった。彼らの核を聖火に捧げ、聖火の火力を極大化せよ。"
+  },
+  "심연 3~5층 고대 석관 개방": {
+    "en": "Open Ancient Sarcophagi on Abyss 3F-5F",
+    "ja": "深淵3〜5層の古代石棺開放"
+  },
+  "심연 3층 에테르 광맥의 태고 괴수 [태고의 광맥 베히모스]의 폭발적 화산 마력이 깃든 마도서.": {
+    "en": "The grimoire imbued with explosive volcanic magic of [Primordial Vein Behemoth] from Abyss 3F Ether Vein.",
+    "ja": "深淵3層エーテル鉱脈の太古怪獣[太古の鉱脈ベヒモス]の爆発的な火山魔力が宿る魔導書。"
+  },
+  "심연 4~5층 균열 탐험": {
+    "en": "Rift Exploration on Abyss 4F-5F",
+    "ja": "深淵4〜5層の亀裂探検"
+  },
+  "심연 4층 균열의 지배자 [심연의 시공 왜곡자]의 시공간 왜곡 파동이 봉인된 치명 저격 마도서.": {
+    "en": "The deadly sniping grimoire sealing spacetime distortion waves of [Abyssal Spacetime Warper], ruler of Abyss 4F Rift.",
+    "ja": "深淵4層亀裂の支配者[深淵の時空歪曲者]の時空間歪曲波動が封印された致命狙撃魔導書。"
+  },
+  "심연 5층 공허의 심장을 잠식한 [공허의 침식자]의 파멸적 공허 마법과 무적 결계 비전서.": {
+    "en": "The grimoire of apocalyptic void magic and invincible barrier of [Void Corruptor] infesting the heart of Abyss 5F Void.",
+    "ja": "深淵5層虚無の心臓を侵食した[虚無の侵食者]の破滅的虚無魔法と無敵結界の魔導書。"
+  },
+  "심연 6층 이상 탐험 중 고대 석관이나 보물 상자에서 획득할 수 있습니다.": {
+    "en": "Can be obtained from ancient sarcophagi or treasure chests while exploring Abyss 6F or higher.",
+    "ja": "深淵6層以上の探検中、古代の石棺や宝箱から獲得できます。"
+  },
+  "심연 6층 이상의 고대 석관 및 보물 상자에서 [저주받은][장비명]이 일정 확률로 드랍됩니다. 저주받은 장비는 착용할 수 없으며 병기창 정화 시설에서 50% 성공률로 정화할 수 있습니다(실패 시 파괴). 정화 성공 시 일반부터 전설까지 모든 등급 풀에서 결정되며, 해당 등급의 '최상급 극옵 스탯'을 지닌 명품 장비로 부활합니다.": {
+    "en": "There is a chance for [Cursed] [Equipment Name] to drop from ancient sarcophagi and treasure chests on Abyss 6F+. Cursed gear cannot be equipped and can be purified at the Armory purification facility with a 50% success rate (destroyed on failure). Upon success, a tier from Common to Legendary is rolled, reviving into masterwork equipment with top-tier god-roll stats of that tier.",
+    "ja": "深淵6層以上の古代石棺および宝箱から[呪われた][装備名]が一定確率でドロップします。呪われた装備は着用できず、兵器廠の浄化施設にて50%の成功率で浄化できます(失敗時破壊)。浄化成功時、一般から伝説までの全等級プールから決定され、該当等級の「最上級極上ステータス」を持つ逸品装備として復活します。"
+  },
+  "심연 6층 진홍빛 혈계의 지배자 [핏빛 대공]의 선혈 흡혈과 치명 출혈 파동이 담긴 마도서.": {
+    "en": "The grimoire containing fresh blood vampirism and deadly bleed waves of [Crimson Archduke], ruler of Abyss 6F Crimson Blood realm.",
+    "ja": "深淵6層真紅の血界の支配者[血塗られた大公]の鮮血吸血と致命出血波動が込められた魔導書。"
+  },
+  "심연 6층+ [저주받은 장비] 드랍 & 병기창 정화 시설": {
+    "en": "Abyss 6F+ [Cursed Equipment] Drops & Armory Purification Facility",
+    "ja": "深淵6層+ [呪われた装備]ドロップ＆兵器廠浄化施設"
+  },
+  "심연 7층 망각의 묘역을 지키는 [망각의 묘지기]의 거대한 사신 낫 초극딜 참격과 침묵/기절 마도서.": {
+    "en": "The silence/stun grimoire with colossal reaper scythe hyper-burst slashes of [Oblivion Gravedigger], guardian of Abyss 7F Graveyard of Oblivion.",
+    "ja": "深淵7層忘却の墓域を守る[忘却の墓守]の巨大な死神の鎌超高火力斬撃と沈黙/気絶の魔導書。"
+  },
+  "심연 8층 단죄의 요새를 통솔하는 [타락한 기사단장]의 집행 심판 보호막과 공격력 40% 증폭 비전서.": {
+    "en": "The arcane grimoire with execution judgment shield and +40% ATK amplification of [Fallen Grandmaster], commander of Abyss 8F Citadel of Condemnation.",
+    "ja": "深淵8層断罪の要塞を統率する[堕落した騎士団長]の執行審判シールドと攻撃力40%増幅の秘伝書。"
+  },
+  "심연 9층 거울의 미궁 환영을 엮어내는 [미궁의 지배자]의 마법 관통 파편 폭풍과 회피율 50% 버프 마도서.": {
+    "en": "The grimoire with magic penetration shard storm and 50% EVA buff of [Master of the Labyrinth], weaver of Abyss 9F Mirror Labyrinth illusions.",
+    "ja": "深淵9層鏡の迷宮の幻影を編み出す[迷宮の支配者]の魔法貫通破片嵐と回避率50%バフの魔導書。"
+  },
+  "심연 9층과 10층의 괴수들에게 일격을 가하기 위해선 장비에 마도의 극의를 새겨넣어야 한다.": {
+    "en": "To strike down the behemoths of Abyss 9F and 10F, the ultimate secrets of arcana must be engraved upon your gear.",
+    "ja": "深淵9層と10層の怪獣たちに一撃を加えるには、装備に魔導の極意を刻み込まねばならない。"
+  },
+  "심연 {0}층의 수호 군주 [{1}]와 호위대가 앞을 가로막습니다!": {
+    "en": "Abyss {0}F Guardian Lord [{1}] and their escort block your path!",
+    "ja": "深淵{0}層の守護君主[{1}]と護衛隊が行く手を阻みます！"
+  },
+  "심연 가장 깊은 화강암반 지하 벙커에 묻힌 인류 문명의 두 번째 새벽을 열 물리적 열쇠입니다.": {
+    "en": "A physical key buried in the deepest granite subterranean bunker of the Abyss, opening the second dawn of human civilization.",
+    "ja": "深淵の最も深い花崗岩盤地下バンカーに埋もれた、人類文明の第二の夜明けを開く物理的鍵。"
+  },
+  "심연 각지의 정보원 네트워크와 직통으로 연결되어 고난도 고급 비밀 의뢰와 값진 보상을 접수하기 시작합니다.": {
+    "en": "Connects directly with informant networks throughout the Abyss to begin receiving high-difficulty advanced secret requests and valuable rewards.",
+    "ja": "深淵各地の情報屋ネットワークと直結し、高難度の高級秘密依頼と価値ある報酬を受け付け始めます。"
+  },
+  "심연 강하 작전": {
+    "en": "Abyss Descent Operation",
+    "ja": "深淵降下作戦"
+  },
+  "심연 강하 차원 관문": {
+    "en": "Abyss Descent Dimensional Gate",
+    "ja": "深淵降下次元関門"
+  },
+  "심연 개척 원정대": {
+    "en": "Abyss Pioneer Expedition",
+    "ja": "深淵開拓遠征隊"
+  }
+}

@@ -1,0 +1,802 @@
+{
+  "대지의 고동": {
+    "en": "Pulse of the Earth",
+    "ja": "大地の鼓動"
+  },
+  "대지의 심장 수호 인장": {
+    "en": "Heart of Earth Guardian Seal",
+    "ja": "大地の心臓守護印章"
+  },
+  "대파멸 비전 의식": {
+    "en": "Cataclysm Arcane Ritual",
+    "ja": "大破滅秘術の儀式"
+  },
+  "대형 증기 훈제실과 보존 처리 라인을 도입하여 대량의 마물 고기를 신속하게 장기 보존 식량으로 가공합니다.": {
+    "en": "Introduces large steam smokehouses and preservation processing lines to quickly process bulk monster meat into long-term rations.",
+    "ja": "大型スチーム燻製室と保存処理ラインを導入し、大量の魔物の肉を迅速に長期保存食糧へ加工します。"
+  },
+  "더 깊은 곳에서 푸른빛의 에테르 광맥이 터져 나왔을 때, 지도자들은 이것이 인류를 구원할 기적이라 선언했다. 하지만 기적은 독이었다. 광맥을 캐내면 캘수록 대지는 힘을 잃고 균열은 더 넓어졌다. 광맥 깊은 곳에서 태어난 거대한 돌의 골렘이 인간들을 짓밟기 시작했을 때, 이미 돌아갈 길은 무너져 있었다.": {
+    "en": "When azure ether veins erupted from deeper within, leaders declared it a miracle that would save humanity. But the miracle was poison. The more veins they mined, the more the earth lost its strength and the rift widened. When massive stone golems born deep within the veins began trampling humans, the path back was already shattered.",
+    "ja": "より深い場所から青いエーテル鉱脈が噴き出した時、指導者たちはこれが人類を救う奇跡だと宣言した。だが奇跡は毒であった。鉱脈を掘り出すほど大地は力を失い、亀裂はさらに広がった。鉱脈の深部から生まれた巨大な石のゴーレムが人間を踏みにじり始めた時、すでに引き返す道は崩壊していた。"
+  },
+  "더 깊은 심연의 압력을 견디기 위해선 한계를 초월한 궁극의 직업 각성이 필요하다.": {
+    "en": "To withstand the pressure of deeper abyss, the ultimate class awakening transcending limits is required.",
+    "ja": "より深い深淵の圧力に耐えるためには、限界を超越した究極の職業覚醒が必要だ。"
+  },
+  "더 이상 하늘의 신들은 응답하지 않았다. 궁지에 몰린 대사제들은 마지막 방책으로 심연의 모노리스에 신의 심장을 바치는 역(逆)의식을 거행했다. 신이 흘린 피는 대지를 검게 물들였고, 강림한 것은 자비로운 구원자가 아닌 모든 것을 무(無)로 되돌리는 공허의 거수였다. 그날 이후 이 층엔 태양빛이 영원히 사라졌다.": {
+    "en": "The gods of the heavens answered no more. Driven into a corner, high priests conducted a reverse ritual offering the god's heart to the abyssal monolith as a last resort. The blood shed by the god stained the earth black, and what descended was not a benevolent savior, but a void behemoth reducing all things to nothingness. Since that day, sunlight vanished from this floor forever.",
+    "ja": "もはや天の神々は応えなかった。窮地に追い込まれた大司祭たちは、最後の策として深淵のモノリスに神の心臓を捧げる逆儀式を執り行った。神の流した血は大地を黒く染め、降臨したのは慈悲深き救済者ではなく、すべてを無へと帰す虚空の巨獣であった。その日以降、この階層から太陽の光は永遠に消え去った。"
+  },
+  "더 챙기기": {
+    "en": "Take More",
+    "ja": "さらに確保"
+  },
+  "던전": {
+    "en": "Dungeon",
+    "ja": "ダンジョン"
+  },
+  "던전 기습 확률 0% 무력화 및 오브젝트 발견율 상승": {
+    "en": "Nullifies dungeon ambush chance to 0% and increases object discovery rate",
+    "ja": "ダンジョン奇襲確率を0%に無力化 ＆ オブジェクト発見率上昇"
+  },
+  "던전 내 고순도 광맥 오브젝트 2배 자원 안전 채굴": {
+    "en": "Safely mines 2x resources from high-purity ore vein objects in dungeons",
+    "ja": "ダンジョン内の高純度鉱脈オブジェクトから2倍の資源を安全採掘"
+  },
+  "던전 내 야영 성화 1회 피우기": {
+    "en": "Light 1 Camp Bonfire in Dungeon",
+    "ja": "ダンジョン内で野営の聖火を1回灯す"
+  },
+  "던전 내 야영(Camp) 시 안전하고 강력한 체력/마나 회복": {
+    "en": "Safe and potent HP/MP recovery when camping in dungeons",
+    "ja": "ダンジョン内での野営(Camp)時、安全かつ強力なHP/MP回復"
+  },
+  "던전 내 야영(Camp) 시 파티원 전원 체력 및 마나 35% 회복": {
+    "en": "Restores 35% HP and MP to all party members when camping in dungeons",
+    "ja": "ダンジョン内での野営(Camp)時、パーティ全員のHPおよびMPを35%回復"
+  },
+  "던전 도시락": {
+    "en": "Dungeon Ration",
+    "ja": "ダンジョン弁当"
+  },
+  "던전 도시락 (강화)": {
+    "en": "Dungeon Ration (Enhanced)",
+    "ja": "ダンジョン弁当 (強化)"
+  },
+  "던전 도시락으로 야영 (HP/MP 45% 회복, 기습 -50%)": {
+    "en": "Camp with Dungeon Ration (Restores 45% HP/MP, Ambush -50%)",
+    "ja": "ダンジョン弁当で野営 (HP/MP 45%回復、奇襲-50%)"
+  },
+  "던전 및 퀘스트": {
+    "en": "Dungeons & Quests",
+    "ja": "ダンジョンおよびクエスト"
+  },
+  "던전 배낭": {
+    "en": "Dungeon Backpack",
+    "ja": "ダンジョンバックパック"
+  },
+  "던전 배낭 열기": {
+    "en": "Open Dungeon Backpack",
+    "ja": "ダンジョンバックパックを開く"
+  },
+  "던전 배낭(임시 보관함)": {
+    "en": "Dungeon Backpack (Temporary Storage)",
+    "ja": "ダンジョンバックパック(臨時保管箱)"
+  },
+  "던전 배낭에 임시 보관 중이던 전리품을 잃어버리게 됩니다. 위험할 땐 무리하지 말고 [성채 귀환]을 누르거나, 전멸 위기 시 안전 귀환시켜주는 [차원의 호각]을 장착하세요.": {
+    "en": "You will lose loot temporarily held in the dungeon backpack. When in danger, do not overexert yourself; press [Return to Citadel] or equip the [Dimensional Whistle] to safely return upon party wipeout.",
+    "ja": "ダンジョンバックパックに一時保管されていた戦利品を失ってしまいます。危険な時は無理せず【城塞帰還】を押すか、全滅の危機に安全帰還できる【次元の呼子笛】を装備してください。"
+  },
+  "던전 비밀 상자": {
+    "en": "Dungeon Secret Chest",
+    "ja": "ダンジョン秘密の宝箱"
+  },
+  "던전 식량": {
+    "en": "Dungeon Food",
+    "ja": "ダンジョン食糧"
+  },
+  "던전 야영(Camp) 시 파티원 모든 디버프 상태이상 완전 정화": {
+    "en": "Completely purges all debuffs from party members when camping in dungeons",
+    "ja": "ダンジョン野営(Camp)時、パーティメンバーのすべてのデバフ状態異常を完全浄化"
+  },
+  "던전 야영(Camp) 체력/마나 회복": {
+    "en": "Camp HP/MP Recovery in Dungeon",
+    "ja": "ダンジョン野営(Camp) HP/MP回復"
+  },
+  "던전 열쇠": {
+    "en": "Dungeon Key",
+    "ja": "ダンジョンの鍵"
+  },
+  "던전 원정대 (3인)": {
+    "en": "Dungeon Expedition (3 Heroes)",
+    "ja": "ダンジョン遠征隊 (3人)"
+  },
+  "던전 전 층 몬스터 처치": {
+    "en": "Defeat Monsters on All Dungeon Floors",
+    "ja": "ダンジョン全層の魔物討伐"
+  },
+  "던전 진행도 & 퀘스트": {
+    "en": "Dungeon Progress & Quests",
+    "ja": "ダンジョン進行度 ＆ クエスト"
+  },
+  "던전 출격 전 채비실에서 활성화하여 고유 탐험 보너스를 받습니다.": {
+    "en": "Activate in the preparation room before deploying to the dungeon to receive unique expedition bonuses.",
+    "ja": "ダンジョン出撃前の準備室で有効化し、固有の探検ボーナスを獲得します。"
+  },
+  "던전 탐색 {0}회 후 야영 가능": {
+    "en": "Can camp after {0} dungeon explorations",
+    "ja": "ダンジョン探索{0}回後に野営可能"
+  },
+  "던전 탐험 도중 즉시 성채 안전 귀환 (전리품 100% 보존)": {
+    "en": "Immediately safely return to citadel during dungeon exploration (100% loot preserved)",
+    "ja": "ダンジョン探検中に即座に城塞へ安全帰還 (戦利品100%保存)"
+  },
+  "던전 탐험 전리품 획득": {
+    "en": "Obtain Dungeon Exploration Loot",
+    "ja": "ダンジョン探検戦利品獲得"
+  },
+  "던전 탐험 중 점등하여 시야 및 이벤트 발견율 대폭 증강": {
+    "en": "Light during dungeon exploration to greatly increase vision and event discovery rate",
+    "ja": "ダンジョン探検中に点灯して視界およびイベント発見率を大幅強化"
+  },
+  "던전 탐험 중 횃불 점등 (시야 100% 확보)": {
+    "en": "Light torch during dungeon exploration (100% vision secured)",
+    "ja": "ダンジョン探検中に松明点灯 (視界100%確保)"
+  },
+  "던전 탐험 회수": {
+    "en": "Dungeon Explorations",
+    "ja": "ダンジョン探検回数"
+  },
+  "던전 탐험, 보스 토벌, 블랙 마켓에서 스킬북을 획득할 수 있습니다.": {
+    "en": "Skill Books can be obtained from dungeon exploration, boss subjugation, and the Black Market.",
+    "ja": "ダンジョン探検、ボス討伐、ブラックマーケットでスキルブックを獲得できます。"
+  },
+  "던전 파밍 재료": {
+    "en": "Dungeon Farming Materials",
+    "ja": "ダンジョンファーミング材料"
+  },
+  "던전에서 드랍되는 모든 마물·보스 마도서": {
+    "en": "All monster and boss grimoires dropped in dungeons",
+    "ja": "ダンジョンでドロップするすべての魔物・ボス魔導書"
+  },
+  "던전의 마수와 언데드 몬스터에게서 획득한 단단한 뼈입니다. 특수 무기 및 방어구 단조, 고대 유물 가공의 핵심 재료로 사용됩니다.": {
+    "en": "Hard bones obtained from dungeon magical beasts and undead monsters. Used as a key material for forging special weapons and armor, as well as processing ancient relics.",
+    "ja": "ダンジョンの魔獣やアンデッドモンスターから獲得した硬い骨。特殊な武器・防具の鍛造、古代遺物加工の重要材料として使用される。"
+  },
+  "데이터 초기화 (선택적)": {
+    "en": "Reset Data (Optional)",
+    "ja": "データ初期化 (選択的)"
+  },
+  "도": {
+    "en": "Blade",
+    "ja": "刀"
+  },
+  "도감 등록 가능": {
+    "en": "Can Register in Codex",
+    "ja": "図鑑登録可能"
+  },
+  "도감 수집 시 영구 반영": {
+    "en": "Permanently Applied upon Codex Collection",
+    "ja": "図鑑収集時に永久反映"
+  },
+  "도감 열기 ➔": {
+    "en": "Open Codex ➔",
+    "ja": "図鑑を開く ➔"
+  },
+  "도감 확인 ➔": {
+    "en": "View Codex ➔",
+    "ja": "図鑑を確認 ➔"
+  },
+  "도감 회고록 '성채 묘비명' 최초 영웅 전사 시 등록 조건 개선": {
+    "en": "Improved registration condition in Codex Memoir 'Citadel Epitaph' upon first hero death",
+    "ja": "図鑑回顧録「城塞の墓碑銘」初回英雄戦死時の登録条件を改善"
+  },
+  "도구 없이 무력/마력으로 강행 돌파합니다. 일정 확률로 성공하지만": {
+    "en": "Force through with brute force or mana without tools. Succeeds with a certain chance, but",
+    "ja": "道具なしで武力/魔力で強行突破します。一定確率で成功しますが"
+  },
+  "도끼": {
+    "en": "Axe",
+    "ja": "斧"
+  },
+  "도달": {
+    "en": "Reached",
+    "ja": "到達"
+  },
+  "도발": {
+    "en": "Taunt",
+    "ja": "挑発"
+  },
+  "도시락 ({0})": {
+    "en": "Ration ({0})",
+    "ja": "弁当 ({0})"
+  },
+  "도약하여 가시를 회피": {
+    "en": "Leap to evade spikes",
+    "ja": "跳躍してトゲを回避"
+  },
+  "도적": {
+    "en": "Rogue",
+    "ja": "盗賊"
+  },
+  "도적 • 중앙 척후/속도딜러": {
+    "en": "Rogue • Mid Scout / SPD Dealer",
+    "ja": "盗賊 • 中衛斥候/速度ディーラー"
+  },
+  "도적 계열을 위한 예리한 결전 비수. 빠른 행동 속도와 날카로운 치명타율을 부여합니다.": {
+    "en": "A keen battle dagger for Rogue classes. Bestows fast SPD and sharp Crit Rate.",
+    "ja": "盗賊系列のための鋭利な決戦短剣。素早い行動速度と鋭い会心率を付与する。"
+  },
+  "도적, 암살자, 거너, 사제": {
+    "en": "Rogue, Assassin, Gunner, Priest",
+    "ja": "盗賊、暗殺者、ガンナー、司祭"
+  },
+  "도적, 암살자, 그림자 학살자, 방랑 총사, 마총사, 하이퍼 레인저, 사신 저격수 등": {
+    "en": "Rogue, Assassin, Shadow Slayer, Wandering Musketeer, Magic Gunner, Hyper Ranger, Reaper Sniper, etc.",
+    "ja": "盗賊、暗殺者、影の虐殺者、放浪銃士、魔銃士、ハイパーレンジャー、死神狙撃手など"
+  },
+  "도적, 암살자, 그림자망령, 검성": {
+    "en": "Rogue, Assassin, Shadow Phantom, Blade Lord",
+    "ja": "盗賊、暗殺者、影の亡霊、剣仙"
+  },
+  "도적, 암살자, 그림자망령, 버서커": {
+    "en": "Rogue, Assassin, Shadow Phantom, Berserker",
+    "ja": "盗賊、暗殺者、影の亡霊、バーサーカー"
+  },
+  "도전 가능한 경쟁 지휘관 부대 (3인 덱)": {
+    "en": "Challengable Rival Commander Troops (3-Hero Deck)",
+    "ja": "挑戦可能なライバル指揮官部隊 (3人編成)"
+  },
+  "도축": {
+    "en": "Butchery",
+    "ja": "屠殺"
+  },
+  "독": {
+    "en": "Poison",
+    "ja": "毒"
+  },
+  "독무 연격": {
+    "en": "Poison Mist Barrage",
+    "ja": "毒霧連撃"
+  },
+  "독산이 외골격을 녹여내려 방어력을 50% 분쇄하고 극심한 산성 피해를 입힙니다!": {
+    "en": "Poison acid melts the exoskeleton, shredding DEF by 50% and dealing severe acid damage!",
+    "ja": "毒酸が外骨格を溶かし、防御力を50%粉砕して極めて激しい酸ダメージを与える！"
+  },
+  "독성": {
+    "en": "Toxic",
+    "ja": "毒性"
+  },
+  "독성 기화 전이": {
+    "en": "Toxic Vapor Spread",
+    "ja": "毒性気化転移"
+  },
+  "독성 기화 폭발": {
+    "en": "Toxic Vapor Explosion",
+    "ja": "毒性気化爆発"
+  },
+  "독성 기화 폭발 (Catalytic Venom)": {
+    "en": "Toxic Vapor Explosion (Catalytic Venom)",
+    "ja": "毒性気化爆発 (Catalytic Venom)"
+  },
+  "독성 분사": {
+    "en": "Toxic Spray",
+    "ja": "毒性噴射"
+  },
+  "독소 역류": {
+    "en": "Toxin Backflow",
+    "ja": "毒素逆流"
+  },
+  "독소가 마력과 격렬히 반응하여 {0} 피해를 입히고 모든 적에게 맹독을 전이합니다!": {
+    "en": "Toxins react violently with magic, dealing {0} damage and spreading deadly poison to all enemies!",
+    "ja": "毒素が魔力と激しく反応して{0}ダメージを与え、すべての敵に猛毒を転移させる！"
+  },
+  "독안개에 노출되어 맹독 감염": {
+    "en": "Infected with deadly poison from exposure to poison mist",
+    "ja": "毒霧に晒され猛毒感染"
+  },
+  "돌격": {
+    "en": "Charge",
+    "ja": "突撃"
+  },
+  "돌격 배수진": {
+    "en": "Last Stand Charge",
+    "ja": "突撃背水の陣"
+  },
+  "돌격 배수진 1턴 보호막: 전투 개시 시 최대 체력의 15% 보호막이 부여되며, 1라운드(전원 1회 행동 순환) 동안 유지": {
+    "en": "Last Stand Charge 1-Turn Shield: Grants a Shield equal to 15% Max HP at battle start, lasting 1 round (full action cycle)",
+    "ja": "突撃背水の陣 1ターンシールド：戦闘開始時に最大HPの15%のシールドが付与され、1ラウンド(全員1回行動巡回)の間維持"
+  },
+  "돌격병": {
+    "en": "Shock Trooper",
+    "ja": "突撃兵"
+  },
+  "돌파 돌격": {
+    "en": "Breaching Charge",
+    "ja": "突破突撃"
+  },
+  "돌풍": {
+    "en": "Gust",
+    "ja": "突風"
+  },
+  "동)": {
+    "en": "East)",
+    "ja": "東)"
+  },
+  "동결": {
+    "en": "Freeze",
+    "ja": "凍結"
+  },
+  "동결의 흑핵 방출": {
+    "en": "Freezing Black Core Discharge",
+    "ja": "凍結の黒核放出"
+  },
+  "동굴 흑익박쥐": {
+    "en": "Cave Darkwing Bat",
+    "ja": "洞窟黒翼コウモリ"
+  },
+  "동기화 서버 미연결": {
+    "en": "Sync Server Not Connected",
+    "ja": "同期サーバー未接続"
+  },
+  "동기화 서버 미연결 (오프라인 모드: 브라우저에 임시 저장됨)": {
+    "en": "Sync Server Not Connected (Offline Mode: Saved temporarily in browser)",
+    "ja": "同期サーバー未接続 (オフラインモード: ブラウザに一時保存)"
+  },
+  "동기화 중...": {
+    "en": "Syncing...",
+    "ja": "同期中..."
+  },
+  "동료를 위해 방패가 되는 건 당연한 일이야. 내일도 함께 나아가자.": {
+    "en": "It's natural to become a shield for my comrades. Let's move forward together tomorrow too.",
+    "ja": "仲間のために盾になるのは当然のことさ。明日も共に進もう。"
+  },
+  "동료애": {
+    "en": "Comradery",
+    "ja": "仲間愛"
+  },
+  "동상": {
+    "en": "Frostbite",
+    "ja": "凍傷"
+  },
+  "동시 개방!": {
+    "en": "Unlocked Simultaneously!",
+    "ja": "同時開放！"
+  },
+  "동시 해금 마일스톤: 거점의 기반 퀘스트 완료 시 심연의 병기창과 생체 복원 병동이 동시에 건설 가능 상태로 해금됩니다.": {
+    "en": "Simultaneous Unlock Milestone: Completing the 'Base Foundation' quest unlocks both Ark Armory & Forge and Bio-Restoration Ward for construction.",
+    "ja": "同時解放マイルストーン：拠点の基盤クエスト完了時、深淵の兵器廠と生体復元病棟が同時に建設可能状態として解放されます。"
+  },
+  "되어 한결 수월하게 탐험할 수 있습니다!": {
+    "en": "becomes much easier to explore!",
+    "ja": "一段とスムーズに探検できます！"
+  },
+  "되었습니다! 제작된 강화품은 창고에 적재되며 채비 시 최우선 불출됩니다.": {
+    "en": "completed! Crafted enhanced items are stored in warehouse and prioritized during preparation.",
+    "ja": "完了しました！製作された強化品は倉庫に積載され、準備時に最優先で支給されます。"
+  },
+  "됩니다! (균열의 닻: 2턴 / 심연의 닻: 1턴)": {
+    "en": "completed! (Rift Anchor: 2 turns / Abyssal Anchor: 1 turn)",
+    "ja": "完了します！ (亀裂の錨: 2ターン / 深淵の錨: 1ターン)"
+  },
+  "됩니다.": {
+    "en": "Done.",
+    "ja": "完了します。"
+  },
+  "됩니다. 민첩한 그림자 계열 영웅의 폭발적인 기습 딜링을 보장합니다.": {
+    "en": "guaranteed. Ensures explosive ambush burst damage for agile shadow-type heroes.",
+    "ja": "可能です。俊敏な影系列英雄の爆発的な奇襲火力を保証します。"
+  },
+  "두 갈래로 뻗은 심연의 통로가 나타났습니다. 어느 방향으로 원정대를 지휘하시겠습니까?": {
+    "en": "A branching abyssal passage has appeared. Which direction will you lead the expedition?",
+    "ja": "二手に分かれた深淵の通路が現れました。どちらの方向へ遠征隊を指揮しますか？"
+  },
+  "두고 떠나기": {
+    "en": "Leave Behind",
+    "ja": "置いて去る"
+  },
+  "두꺼운 갑주 사이의 이음새를 노리는 치명적인 찌르기.": {
+    "en": "A deadly thrust targeting the seams between thick armor plates.",
+    "ja": "厚い甲冑の隙間を狙う致命的な突き刺し。"
+  },
+  "두터운": {
+    "en": "Thick",
+    "ja": "厚手の"
+  },
+  "둔기": {
+    "en": "Blunt Weapon",
+    "ja": "鈍器"
+  },
+  "뒤로 굴러 폭염을 회피": {
+    "en": "Roll backward to evade intense heat",
+    "ja": "後方へ転がって爆炎を回避"
+  },
+  "뒤로가기": {
+    "en": "Back",
+    "ja": "戻る"
+  },
+  "드랍 자원 즉시 골드 변환": {
+    "en": "Instantly Convert Dropped Resources to Gold",
+    "ja": "ドロップ資源を即座にゴールド変換"
+  },
+  "드랍 자원 즉시 골드 자동 변환": {
+    "en": "Automatically Convert Dropped Resources to Gold",
+    "ja": "ドロップ資源を即座にゴールド自動変換"
+  },
+  "드론이 적 전체에 55% 자동 포격을 가하고 2턴간 화상을 부여합니다.": {
+    "en": "Drone conducts 55% auto-bombardment against all enemies and inflicts Burn for 2 turns.",
+    "ja": "ドローンが敵全体に55%の自動砲撃を加え、2ターンの間火傷を付与する。"
+  },
+  "등급": {
+    "en": "Tier",
+    "ja": "等級"
+  },
+  "등급 가호 배율: x": {
+    "en": "Tier Blessing Multiplier: x",
+    "ja": "等級加護倍率: x"
+  },
+  "등급 소모:": {
+    "en": "Tier Cost:",
+    "ja": "等級消費:"
+  },
+  "등급 승격 진화율: (영혼의 제단 Lv × 3%) + (각성 차수 × 10%)로 각성을 거듭할수록 진화율 대폭 상승 (1단계: 25%, 2단계: 35%, 3단계: 45% ...)": {
+    "en": "Tier Promotion Evolution Rate: (Soul Sanctuary Lv × 3%) + (Awakening Stage × 10%); evolution rate rises significantly with each awakening (Stage 1: 25%, Stage 2: 35%, Stage 3: 45% ...)",
+    "ja": "等級昇格進化率：(魂の祭壇Lv × 3%) + (覚醒次数 × 10%)で、覚醒を重ねるごとに進化率が大幅上昇 (1段階: 25%, 2段階: 35%, 3段階: 45% ...)"
+  },
+  "등급 진화 순서: 노비스(N) ➔ 베테랑(V) ➔ 히어로(H) ➔ 에픽(E) ➔ 레전드(L) 승격 시 기본 잠재 스탯 배율 폭증": {
+    "en": "Tier Evolution Order: Novice (N) ➔ Veteran (V) ➔ Hero (H) ➔ Epic (E) ➔ Legend (L); baseline potential stat multipliers surge upon promotion",
+    "ja": "等級進化順序：ノービス(N) ➔ ベテラン(V) ➔ ヒーロー(H) ➔ エピック(E) ➔ レジェンド(L) 昇格時、基本潜在ステータス倍率が急増"
+  },
+  "등급:": {
+    "en": "Tier:",
+    "ja": "等級:"
+  },
+  "등급: {0} • 전수 스킬: {1}{2}": {
+    "en": "Tier: {0} • Inherited Skill: {1}{2}",
+    "ja": "等級: {0} • 伝授スキル: {1}{2}"
+  },
+  "등급별 시너지 강화": {
+    "en": "Synergy Boost by Tier",
+    "ja": "等級別シナジー強化"
+  },
+  "등록 가능한 심연의 백과 컬렉션이 있습니다!": {
+    "en": "There are Abyssal Codex collections available for registration!",
+    "ja": "登録可能な深淵の百科コレクションがあります！"
+  },
+  "등록 가능한 컬렉션 항목이 생겼을 때 상단 메인 일러스트창 및 메뉴에 붉은색 알림 뱃지가 표시되며, 백과 모달 내 카테고리 탭마다 등록 가능 건수가 실시간으로 표기됩니다.": {
+    "en": "When registrable collection items become available, a red notification badge appears on the top main illustration window and menus, and available items per category tab are displayed in real-time within the Codex modal.",
+    "ja": "登録可能なコレクション項目が発生すると、上部メインイラストウィンドウおよびメニューに赤い通知バッジが表示され、百科モーダル内のカテゴリータブごとに登録可能件数がリアルタイムで表記されます。"
+  },
+  "등록되지 않은 지휘관 계정입니다. [신규 가입] 탭에서 계정을 생성해 주세요.": {
+    "en": "Unregistered commander account. Please create an account in the [Sign Up] tab.",
+    "ja": "登録されていない指揮官アカウントです。【新規登録】タブでアカウントを作成してください。"
+  },
+  "등의 영지 발전 퀘스트를 통해 자연스럽게 순차적으로 개방됩니다.": {
+    "en": "are naturally unlocked sequentially through domain development quests.",
+    "ja": "などの領地発展クエストを通じて自然と順次開放されます。"
+  },
+  "디버프": {
+    "en": "Debuff",
+    "ja": "デバフ"
+  },
+  "디버프 면역": {
+    "en": "Debuff Immunity",
+    "ja": "デバフ免疫"
+  },
+  "디아나": {
+    "en": "Diana",
+    "ja": "ディアナ"
+  },
+  "따뜻한 모닥불과 독한 술이 있는 방랑 주점을 개방했습니다. 새로운 용병 후보 3명을 영입할 수 있으며 의뢰 게시판이 활성화됩니다.": {
+    "en": "Opened the Wanderer Tavern with a warm bonfire and strong ale. You can recruit 3 new mercenary candidates, and the bounty board is activated.",
+    "ja": "温かい焚火と強い酒がある放浪酒場を開放しました。新たな傭兵候補3人を雇用可能になり、依頼掲示板が活性化します。"
+  },
+  "따스한 음식 한 그릇이 절망에 빠진 생존자들에게 내일로 나아갈 용기를 준다.": {
+    "en": "A single bowl of warm food gives despairing survivors the courage to press onward into tomorrow.",
+    "ja": "温かい一杯の食事が、絶望に沈む生存者たちに明日へ進む勇気を与える。"
+  },
+  "떨어진 골드": {
+    "en": "Dropped Gold",
+    "ja": "落ちた金貨"
+  },
+  "라그나로크": {
+    "en": "Ragnarok",
+    "ja": "ラグナロク"
+  },
+  "라그나로크 슬래시": {
+    "en": "Ragnarok Slash",
+    "ja": "ラグナロクスラッシュ"
+  },
+  "라운드 · 속도(SPD) 턴제 교전": {
+    "en": "Round & SPD Turn-Based Engagement",
+    "ja": "ラウンド・速度(SPD)ターン制交戦"
+  },
+  "라운드 개시 프로토콜": {
+    "en": "Round Start Protocol",
+    "ja": "ラウンド開始プロトコル"
+  },
+  "라운드 개시 프로토콜: 전투 화면에서 매 라운드 시작 시 방어 타워가 독립 턴을 받아 시각 연출(포격 폭발, 성역 치유, 방어 파쇄)과 함께 즉시 효과를 발휘합니다.": {
+    "en": "Round Start Protocol: At the start of each round on the combat screen, the defense tower takes an independent turn, immediately executing effects alongside visual presentations (bombardment blast, sanctuary heal, defense shatter).",
+    "ja": "ラウンド開始プロトコル：戦闘画面で毎ラウンド開始時に防衛タワーが独立ターンを得て、視覚演出(砲撃爆発、聖域治癒、防御粉砕)と共に即座に効果を発揮します。"
+  },
+  "라운지": {
+    "en": "Lounge",
+    "ja": "ラウンジ"
+  },
+  "라운지 좌석을 확충하여 대기 용병 풀을 4명으로 늘리고, 실전 경험이 풍부한 [V] 베테랑 등급 용병이 출현하기 시작합니다.": {
+    "en": "Expanded lounge seating to increase the mercenary pool to 4, and combat-hardened [V] Veteran tier mercenaries begin appearing.",
+    "ja": "ラウンジの席を拡充して待機傭兵プールを4名に増やし、実戦経験豊かな【V】ベテラン等級の傭兵が出現し始めます。"
+  },
+  "라이플": {
+    "en": "Rifle",
+    "ja": "ライフル"
+  },
+  "라인 1 (장비/마도 테크)": {
+    "en": "Line 1 (Equipment/Arcane Tech)",
+    "ja": "ライン 1 (装備/魔導テック)"
+  },
+  "라인 2 (의료/영혼 승격 테크)": {
+    "en": "Line 2 (Medical/Soul Ascension Tech)",
+    "ja": "ライン 2 (医療/魂昇格テック)"
+  },
+  "란슬롯": {
+    "en": "Lancelot",
+    "ja": "ランスロット"
+  },
+  "랜덤 2대상에 각 90% 피해": {
+    "en": "Deals 90% DMG each to 2 random targets",
+    "ja": "ランダム2体に対象各90%ダメージ"
+  },
+  "랜덤 대상에 90% 피해 × 2회 연타": {
+    "en": "Strikes random targets twice for 90% DMG each",
+    "ja": "ランダム対象に90%ダメージ × 2回連続攻撃"
+  },
+  "랭커 전용 차원 버프를 강화하여 명예 상점 8단계에서 [궁극의 마도석]을 해금하고 PVE 피해량을 +12%로 끌어올립니다.": {
+    "en": "Strengthens ranker-exclusive dimensional buffs, unlocking [Ultimate Runestone] at Honor Shop Stage 8 and boosting PVE damage by +12%.",
+    "ja": "ランカー専用の次元バフを強化し、名誉商店段階8で【究極の魔導石】を解放してPVEダメージを+12%引き上げます。"
+  },
+  "레벨": {
+    "en": "Level",
+    "ja": "レベル"
+  },
+  "레벨 달성!": {
+    "en": "Level Reached!",
+    "ja": "レベル達成！"
+  },
+  "레벨 스케일링: 마물 시작 Lv.20, 위험도 100마다 보스전 돌입 및 몹 레벨 +5씩 지속 상승 (최대 Lv.520)": {
+    "en": "Level Scaling: Monsters start at Lv.20; every 100 Hazard enters a boss battle and increases mob Lv by +5 continuously (Max Lv.520)",
+    "ja": "レベルスケーリング：魔物開始Lv.20、危険度100ごとにボス戦突入およびモンスターレベル+5ずつ継続上昇 (最大Lv.520)"
+  },
+  "레벨업 시 상승하는 스탯 폭을 차등화하여, N(+0), V(+1), H(+2), E(+3), L(+5)의 정수 스탯 상승 보너스와 행운 10% 단위 증폭이 적용되어 고등급 영웅의 장기 육성 가치가 강화되었습니다.": {
+    "en": "Differentiated stat growth upon level up: integer stat bonuses of N(+0), V(+1), H(+2), E(+3), L(+5) and LUCK 10% unit amplification are applied, enhancing the long-term value of high-tier heroes.",
+    "ja": "レベルアップ時のステータス上昇幅を差別化し、N(+0)、V(+1)、H(+2)、E(+3)、L(+5)の整数ステータス上昇ボーナスと幸運10%単位の増幅が適用され、高専級英雄の長期育成価値が強化されました。"
+  },
+  "레시피를 찾을 수 없습니다.": {
+    "en": "Recipe cannot be found.",
+    "ja": "レシピが見つかりません。"
+  },
+  "레오나": {
+    "en": "Leona",
+    "ja": "レオナ"
+  },
+  "레이": {
+    "en": "Ray",
+    "ja": "レイ"
+  },
+  "레이팅 변화": {
+    "en": "Rating Change",
+    "ja": "レーティング変動"
+  },
+  "레일건": {
+    "en": "Railgun",
+    "ja": "レールガン"
+  },
+  "레일건 관통 & 드론 폭격": {
+    "en": "Railgun Piercing & Drone Bombardment",
+    "ja": "レールガン貫通 ＆ ドローン爆撃"
+  },
+  "레일건 관통포": {
+    "en": "Railgun Piercing Cannon",
+    "ja": "レールガン貫通砲"
+  },
+  "레전드(L)": {
+    "en": "Legend (L)",
+    "ja": "レジェンド(L)"
+  },
+  "로 45% 위력의": {
+    "en": "with 45% power of",
+    "ja": "で威力45%の"
+  },
+  "로 개방됩니다!": {
+    "en": "is unlocked!",
+    "ja": "として開放されます！"
+  },
+  "로건": {
+    "en": "Logan",
+    "ja": "ローガン"
+  },
+  "로그아웃 (계정 전환)": {
+    "en": "Log Out (Switch Account)",
+    "ja": "ログアウト (アカウント切替)"
+  },
+  "로그인 상태가 아닙니다. @bumpcat.net 지휘관 계정으로 로그인해 주세요.": {
+    "en": "Not logged in. Please log in with a @bumpcat.net commander account.",
+    "ja": "ログイン状態ではありません。@bumpcat.netの指揮官アカウントでログインしてください。"
+  },
+  "로그인에 실패했습니다.": {
+    "en": "Failed to log in.",
+    "ja": "ログインに失敗しました。"
+  },
+  "로드": {
+    "en": "Rod",
+    "ja": "ロッド"
+  },
+  "로딩 중...": {
+    "en": "Loading...",
+    "ja": "読み込み中..."
+  },
+  "로브": {
+    "en": "Robe",
+    "ja": "ローブ"
+  },
+  "로비로 복귀": {
+    "en": "Return to Lobby",
+    "ja": "ロビーへ帰還"
+  },
+  "로사리오": {
+    "en": "Rosario",
+    "ja": "ロザリオ"
+  },
+  "로웨나": {
+    "en": "Rowena",
+    "ja": "ロウェナ"
+  },
+  "로이드": {
+    "en": "Lloyd",
+    "ja": "ロイド"
+  },
+  "로컬 파일시스템(custom_assets_preset.json)에 영구 저장 완료!": {
+    "en": "Permanently saved to local filesystem (custom_assets_preset.json)!",
+    "ja": "ローカルファイルシステム(custom_assets_preset.json)への永久保存完了！"
+  },
+  "롤랑": {
+    "en": "Roland",
+    "ja": "ローラン"
+  },
+  "루나": {
+    "en": "Luna",
+    "ja": "ルナ"
+  },
+  "루미나스": {
+    "en": "Luminous",
+    "ja": "ルミナス"
+  },
+  "루시아": {
+    "en": "Lucia",
+    "ja": "ルシア"
+  },
+  "룬 마력 합성궁": {
+    "en": "Runic Mana Composite Bow",
+    "ja": "ルーン魔力合成弓"
+  },
+  "룬 새김 장창": {
+    "en": "Rune-Carved Longspear",
+    "ja": "ルーン刻印の長槍"
+  },
+  "를 건설하고 첫 원정 채비를 갖추십시오.": {
+    "en": "Construct and prepare for the first expedition.",
+    "ja": "を建設し、最初の遠征準備を整えてください。"
+  },
+  "를 건설하면 방주 생존자들의 구호 의뢰 및 마물 토벌 서브 퀘스트가 해금됩니다.": {
+    "en": "Constructing this unlocks relief requests from Ark survivors and monster subjugation sub-quests.",
+    "ja": "を建設すると方舟の生存者たちの救援依頼および魔物討伐サブクエストが解放されます。"
+  },
+  "를 건설하여 3v3 아레나, 네메시스, 영지 침공을 개방하십시오.": {
+    "en": "Construct this to unlock 3v3 Arena, Nemesis, and Domain Invasions.",
+    "ja": "を建設して3v3アリーナ、ネメシス、領地侵攻を開放してください。"
+  },
+  "를 건설해야 해금되는 특수 부대 관리 기능입니다.": {
+    "en": "A special unit management feature unlocked only after constructing this.",
+    "ja": "を建設して初めて解放される特殊部隊管理機能です。"
+  },
+  "를 되찾아 인류의 새로운 여명을 밝히는 것입니다.": {
+    "en": "Reclaim this to illuminate a new dawn for humanity.",
+    "ja": "を取り戻し、人類の新たな黎明を照らし出すことです。"
+  },
+  "를 마주합니다. 심연의 정수와 전설 유물들이 잠들어 있는 극한의 무대입니다.": {
+    "en": "You face this: an ultimate stage where abyssal essences and legendary relics slumber.",
+    "ja": "に対面します。深淵の真髄と伝説の遺物が眠る極限の舞台です。"
+  },
+  "를 수급합니다.": {
+    "en": "is procured.",
+    "ja": "を需給します。"
+  },
+  "를 입힙니다. 두꺼운 보호막을 두르고 출현하는 골렘 및 정예 마물을 단숨에 무력화할 수 있습니다.": {
+    "en": "deals damage. Can instantly incapacitate golems and elite monsters shielded by thick barriers.",
+    "ja": "を与えます。厚いシールドをまとって現れるゴーレムや精鋭魔物を一息に無力化できます。"
+  },
+  "를 입힙니다. 출혈 스킬을 지닌 도적/전사와 최고의 궁합을 자랑합니다.": {
+    "en": "deals damage. Boasts the finest synergy with Rogues/Warriors with Bleed skills.",
+    "ja": "を与えます。出血スキルを持つ盗賊/戦士と最高の相性を誇ります。"
+  },
+  "를 토벌하는 여정입니다. 승리 시 성채의 기본 동력이 되는 태초의 모노리스 핵을 회수하고 챕터 2 심층 구역으로 통하는 대균열이 개방됩니다.": {
+    "en": "A journey to subjugate this. Upon victory, retrieve the Primordial Monolith Core that powers the citadel and open the Great Rift leading to Chapter 2 deep zones.",
+    "ja": "を討伐する旅路です。勝利時、城塞の基本動力となる太初のモノリス核を回収し、チャプター2深層区域へ通じる大亀裂が開放されます。"
+  },
+  "를 통해 게임을 완전히 처음부터 다시 시작할 수 있습니다.": {
+    "en": "You can restart the game completely from the beginning through this.",
+    "ja": "を通じてゲームを完全に最初からやり直すことができます。"
+  },
+  "를 획득하시겠습니까?": {
+    "en": "Would you like to obtain this?",
+    "ja": "を獲得しますか？"
+  },
+  "리더": {
+    "en": "Leader",
+    "ja": "リーダー"
+  },
+  "리더 공석": {
+    "en": "Leader Vacant",
+    "ja": "リーダー空席"
+  },
+  "리더 미배치": {
+    "en": "Leader Unassigned",
+    "ja": "リーダー未配置"
+  },
+  "리더 미편성": {
+    "en": "Leader Unassigned",
+    "ja": "リーダー未編成"
+  },
+  "리더 전용 정보 패널: 최상단(적 리더)과 최하단(아군 리더)에 리더 포트레이트, 레벨, 등급, 클래스, 리더 가호(Blessing) 명칭 및 효과, 서포터 지원 상태가 일체형으로 노출됩니다.": {
+    "en": "Leader Info Panel: Shows leader portrait, level, tier, class, Leader Blessing name & effect, and support status all-in-one at the top (Enemy Leader) and bottom (Ally Leader).",
+    "ja": "リーダー専用情報パネル：最上部(敵リーダー)と最下部(味方リーダー)にリーダーの肖像画、レベル、等級、クラス、リーダー加護(Blessing)名称および効果、サポーター支援状態が一体型で表示されます。"
+  },
+  "리더 중심 인터페이스": {
+    "en": "Leader-Centric Interface",
+    "ja": "リーダー中心インターフェース"
+  },
+  "리더 해제": {
+    "en": "Remove Leader",
+    "ja": "リーダー解除"
+  },
+  "리로드": {
+    "en": "Reload",
+    "ja": "リロード"
+  },
+  "링": {
+    "en": "Ring",
+    "ja": "リング"
+  },
+  "마검": {
+    "en": "Demonic Sword",
+    "ja": "魔剣"
+  },
+  "마기에 풍화되어 비문이 깎여나간 거대한 순교자의 묘비입니다. 주변에 기사들의 부러진 검들이 꽂혀 있습니다.": {
+    "en": "A massive martyr's tombstone weathered by demonic energy with worn inscriptions. Broken knight swords are thrust into the surrounding ground.",
+    "ja": "魔気に風化され碑文が削り取られた巨大な殉教者の墓標。周囲には騎士たちの折れた剣が突き刺さっている。"
+  },
+  "마나": {
+    "en": "Mana",
+    "ja": "マナ"
+  },
+  "마나 (MP)": {
+    "en": "Mana (MP)",
+    "ja": "マナ (MP)"
+  },
+  "마나 +100, 속도 +5, 행운 +4": {
+    "en": "MP +100, SPD +5, LUCK +4",
+    "ja": "マナ+100、速度+5、幸運+4"
+  },
+  "마나 +100, 최대 체력 +120, 행운 +4": {
+    "en": "MP +100, Max HP +120, LUCK +4",
+    "ja": "マナ+100、最大HP+120、幸運+4"
+  },
+  "마나 +120, 공격력 +15": {
+    "en": "MP +120, ATK +15",
+    "ja": "マナ+120、攻撃力+15"
+  },
+  "마나 +150, 최대 체력 +250, 방어력 +15": {
+    "en": "MP +150, Max HP +250, DEF +15",
+    "ja": "マナ+150、最大HP+250、防御力+15"
+  }
+}

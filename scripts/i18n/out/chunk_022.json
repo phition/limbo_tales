@@ -1,0 +1,802 @@
+{
+  "성화": {
+    "en": "Sacred Flame",
+    "ja": "聖火"
+  },
+  "성화 꺼짐": {
+    "en": "Sacred Flame Extinguished",
+    "ja": "聖火消灯"
+  },
+  "성화 백과": {
+    "en": "Sacred Flame Encyclopedia",
+    "ja": "聖火百科"
+  },
+  "성화 열기 확산 (거점 전역 용병 회복 파동 안정화)": {
+    "en": "Sacred Flame Heat Dispersion (Stabilizes mercenary recovery waves across stronghold)",
+    "ja": "聖火熱気拡散 (拠点全域の傭兵回復波動安定化)"
+  },
+  "성화 온기 활성화 & 침묵의 회랑 1구역 첫 척후": {
+    "en": "Activate Sacred Flame Warmth & First Scout of Silent Cloister Zone 1",
+    "ja": "聖火の温もり有効化＆沈黙の回廊第1区域初偵察"
+  },
+  "성화 유지를 위한 영목 {0}개 납품": {
+    "en": "Deliver {0} Arcane Lumber to maintain Sacred Flame",
+    "ja": "聖火維持のための霊木{0}個納品"
+  },
+  "성화 점화 5회 & 심연 촉매 슬롯 개방": {
+    "en": "Ignite Sacred Flame 5 Times & Unlock Abyssal Catalyst Slot",
+    "ja": "聖火点火5回＆深淵触媒スロット開放"
+  },
+  "성화 점화 실패: 영목(목재)이 부족합니다! ({0}개 필요)": {
+    "en": "Failed to ignite Sacred Flame: Not enough Arcane Lumber! ({0} required)",
+    "ja": "聖火点火失敗: 霊木(木材)が不足しています！ ({0}個必要)"
+  },
+  "성화 화력 유지력 증강 (온기 지속 효율 보전)": {
+    "en": "Boost Sacred Flame Firepower Retention (Preserves warmth duration efficiency)",
+    "ja": "聖火火力維持力増強 (温もり持続効率保全)"
+  },
+  "성화대 주변으로 방열 마도 도관을 매설하여, 거점 전역에 온화한 회복의 파동을 일정하게 분출합니다.": {
+    "en": "Lays heat-dissipating arcane conduits around the brazier, steadily emitting gentle recovery waves across the entire stronghold.",
+    "ja": "聖火台の周囲に放熱魔導導管を埋設し、拠点全域に穏やかな回復波動を一定に噴出します。"
+  },
+  "성화를 점화하면 방주 전체에 성스러운 온기가 깃들어 생산 및 전투, 영지 용병 회복을 강력하게 지원합니다.": {
+    "en": "Igniting the Sacred Flame infuses the Ark with holy warmth, strongly aiding production, combat, and mercenary recovery.",
+    "ja": "聖火を点火すると方舟全体に聖なる温もりが宿り、生産や戦闘、領地傭兵の回復を強力に支援します。"
+  },
+  "성화에 목재를 공헌하여 [온기 버프]를 켜두면 생산량 +15% 증산과 거점 회복 효과를 누립니다. 보급품을 챙겨 심연 1구역으로 첫 척후를 파견하세요. 진입 즉시 첫 척후 퀘스트가 달성됩니다.": {
+    "en": "Contribute wood to the Sacred Flame to activate the [Warmth Buff] for +15% production and stronghold recovery. Pack supplies and dispatch your first scout to Abyss Zone 1. The quest will be completed upon entering.",
+    "ja": "聖火に木材を捧げて[温もりバフ]を点灯すると生産量+15%増産と拠点回復効果を得られます。補給品を持って深淵第1区域へ初の斥候を派遣してください。進入直後に初偵察クエストが達成されます。"
+  },
+  "성화에 목재를 공헌하여 [온기 버프]를 켜두면 생산량 +15% 증산과 거점 회복 효과를 얻습니다. 횃불과 붕대를 챙겨 심연 1구역으로 첫 척후를 파견하면 진입 즉시 퀘스트가 달성됩니다.": {
+    "en": "Contribute wood to the Sacred Flame to activate the [Warmth Buff] for +15% production and stronghold recovery. Pack torches and bandages to dispatch your first scout to Abyss Zone 1; the quest will complete immediately upon entry.",
+    "ja": "聖火に木材を捧げて[温もりバフ]を点灯すると生産量+15%増産と拠点回復効果を得られます。松明と包帯を持って深淵第1区域へ初の斥候を派遣すると、進入直後にクエストが達成されます。"
+  },
+  "성화의 대사제": {
+    "en": "High Priest of the Sacred Flame",
+    "ja": "聖火の大司祭"
+  },
+  "성화의 수호성녀": {
+    "en": "Patron Saint of the Sacred Flame",
+    "ja": "聖火の守護聖女"
+  },
+  "성화의 온기": {
+    "en": "Warmth of the Sacred Flame",
+    "ja": "聖火の温もり"
+  },
+  "세계관 & 대서사": {
+    "en": "World Lore & Epic Narrative",
+    "ja": "世界観＆大叙事"
+  },
+  "세계는 침묵에 잠겼다. 생존자들의 허기를 달래려면 마물의 사체라도 정제해야 한다...": {
+    "en": "The world sank into silence. To sate the survivors' hunger, even monsters' carcasses must be refined...",
+    "ja": "世界は沈黙に沈んだ。生存者たちの飢えを癒すには、魔物の死骸ですら精製しなければならない…"
+  },
+  "세레나": {
+    "en": "Serena",
+    "ja": "セレナ"
+  },
+  "세린": {
+    "en": "Serin",
+    "ja": "セリン"
+  },
+  "세부 가이드 & 룰 설명:": {
+    "en": "Detailed Guide & Rules:",
+    "ja": "詳細ガイド＆ルール説明:"
+  },
+  "세상이 불타는 동안에도 이곳의 귀족들은 붉은 포도주를 마시며 음악에 맞춰 춤을 추었다. 포도주가 바닥나자 그들은 종복들의 피를 잔에 채웠고, 결국엔 서로의 목덜미를 물어뜯었다. 영생을 누릴 수만 있다면 괴물이 되어도 상관없다며 미소 짓던 대공의 얼굴... 그것은 인간성이 완전히 파멸한 지옥의 풍경이었다.": {
+    "en": "Even while the world burned, the nobles here drank red wine and danced to the music. When the wine ran dry, they filled their goblets with their servants' blood, and eventually sank their fangs into each other's throats. The Grand Duke smiling, saying he didn't care if he became a monster so long as he attained eternal life... It was a hellish landscape where humanity was utterly destroyed.",
+    "ja": "世界が燃え盛る間も、ここの貴族たちは赤ワインを呷り音楽に合わせて踊っていた。ワインが尽きると下僕たちの血を杯に満たし、最後には互いの首筋に噛みついた。永遠の命が得られるなら怪物になっても構わないと微笑む大公の顔…それは人間性が完全に破滅した地獄の光景だった。"
+  },
+  "세실리아": {
+    "en": "Cecilia",
+    "ja": "セシリア"
+  },
+  "세이버": {
+    "en": "Saber",
+    "ja": "セイバー"
+  },
+  "셀레스트": {
+    "en": "Celeste",
+    "ja": "セレステ"
+  },
+  "소모": {
+    "en": "Consume",
+    "ja": "消費"
+  },
+  "소모 자원 / 보유량": {
+    "en": "Consumed Resources / Stock",
+    "ja": "消費資源 / 所持量"
+  },
+  "소모 자원 없음": {
+    "en": "No Resources Consumed",
+    "ja": "消費資源なし"
+  },
+  "소모 재화": {
+    "en": "Cost Currency",
+    "ja": "消費財貨"
+  },
+  "소모 재화:": {
+    "en": "Cost Currency:",
+    "ja": "消費財貨:"
+  },
+  "소모/재고:": {
+    "en": "Cost/Stock:",
+    "ja": "消費/在庫:"
+  },
+  "소모품": {
+    "en": "Consumables",
+    "ja": "消耗品"
+  },
+  "소생": {
+    "en": "Revival",
+    "ja": "蘇生"
+  },
+  "소외감": {
+    "en": "Alienation",
+    "ja": "疎外感"
+  },
+  "소외감 (-10%)": {
+    "en": "Alienation (-10%)",
+    "ja": "疎外感 (-10%)"
+  },
+  "소외감 페널티": {
+    "en": "Alienation Penalty",
+    "ja": "疎外感ペナルティ"
+  },
+  "소지: {0}개": {
+    "en": "Owned: {0}",
+    "ja": "所持: {0}個"
+  },
+  "소환 대원:": {
+    "en": "Summoned Member:",
+    "ja": "召喚隊員:"
+  },
+  "속도": {
+    "en": "Speed",
+    "ja": "速度"
+  },
+  "속도 (SPD)": {
+    "en": "Speed (SPD)",
+    "ja": "速度 (SPD)"
+  },
+  "속도 +": {
+    "en": "Speed +",
+    "ja": "速度 +"
+  },
+  "속도 +10, 마나 +200, 행운 +10": {
+    "en": "SPD +10, Mana +200, LUCK +10",
+    "ja": "速度 +10、マナ +200、幸運 +10"
+  },
+  "속도 +2, 행운 +8, 공격력 +5%": {
+    "en": "SPD +2, LUCK +8, ATK +5%",
+    "ja": "速度 +2、幸運 +8、攻撃力 +5%"
+  },
+  "속도 +5, 치명타율 +4%": {
+    "en": "SPD +5, Crit Rate +4%",
+    "ja": "速度 +5、会心率 +4%"
+  },
+  "속도 +{0}": {
+    "en": "SPD +{0}",
+    "ja": "速度 +{0}"
+  },
+  "속도 +{0}%": {
+    "en": "SPD +{0}%",
+    "ja": "速度 +{0}%"
+  },
+  "속도 SPD": {
+    "en": "Speed SPD",
+    "ja": "速度 SPD"
+  },
+  "속도 우위": {
+    "en": "Speed Advantage",
+    "ja": "速度優位"
+  },
+  "속도(SPD)": {
+    "en": "Speed (SPD)",
+    "ja": "速度(SPD)"
+  },
+  "속도(SPD) 선제권": {
+    "en": "Speed (SPD) Initiative",
+    "ja": "速度(SPD)先制権"
+  },
+  "속박": {
+    "en": "Bind",
+    "ja": "束縛"
+  },
+  "속사": {
+    "en": "Rapid Fire",
+    "ja": "速射"
+  },
+  "손톱": {
+    "en": "Claw",
+    "ja": "爪"
+  },
+  "수동 정지: 시설 상세 화면에서 [⏸️ 일시 정지] 토글 시 생산과 유지비 소모가 즉시 멈춤": {
+    "en": "Manual Halt: Toggling [⏸️ Pause] on the facility details screen immediately stops production and upkeep cost",
+    "ja": "手動停止: 施設詳細画面で[⏸️ 一時停止]を切り替えると生産と維持費消費が即時停止"
+  },
+  "수동 정지: 시설 상세에서 [⏸️ 일시 정지] 토글 시 생산과 유지비 소모가 모두 멈춤": {
+    "en": "Manual Halt: Toggling [⏸️ Pause] in facility details stops both production and upkeep cost",
+    "ja": "手動停止: 施設詳細で[⏸️ 一時停止]を切り替えると生産と維持費消費が共に停止"
+  },
+  "수량:": {
+    "en": "Quantity:",
+    "ja": "数量:"
+  },
+  "수련자의 목제 십자가": {
+    "en": "Trainee's Wooden Cross",
+    "ja": "修練者の木製十字架"
+  },
+  "수령": {
+    "en": "Claim",
+    "ja": "受取"
+  },
+  "수령 가능!": {
+    "en": "Claimable!",
+    "ja": "受取可能！"
+  },
+  "수령 완료": {
+    "en": "Claimed",
+    "ja": "受取完了"
+  },
+  "수많은 심연의 칼날을 막아낸 회랑 수호자의 상흔 가득한 판금 갑주.": {
+    "en": "The scarred plate armor of a cloister guardian that deflected countless abyssal blades.",
+    "ja": "幾多の深淵の刃を防ぎ止めた回廊守護者の傷跡だらけの板金甲。"
+  },
+  "수많은 원혼의 비명이 결정화된 푸른빛 영혼 보석입니다. 2티어 보스 고유 장비를 단조합니다.": {
+    "en": "A blue soul gem crystallized from the shrieks of countless vengeful spirits. Used to forge Tier 2 boss unique gear.",
+    "ja": "無数の怨霊の悲鳴が結晶化した青い魂の宝石。Tier 2ボスの固有装備を鍛造します。"
+  },
+  "수백 년간 심연의 기운을 견뎌낸 고대 거목 제재 공정을 확립하여 목재 생산 효율을 극대화하고 유지비를 14% 감면합니다.": {
+    "en": "Establishes a milling process for ancient giant trees that withstood abyssal energy for centuries, maximizing wood output and lowering upkeep by 14%.",
+    "ja": "数百年間深淵の気に耐え抜いた古代巨木の製材工程を確立し、木材生産効率を極大化して維持費を14%削減します。"
+  },
+  "수백 명의 유골이 담긴 거대한 점토 항아리에서 갇힌 원혼들의 애달픈 속삭임이 귓가를 맴돕니다.": {
+    "en": "Sorrowful whispers of trapped vengeful spirits linger from a massive clay urn holding hundreds of remains.",
+    "ja": "数百人もの遺骨が収められた巨大な壺から、囚われた怨霊たちの切ない囁きが耳元をよぎる。"
+  },
+  "수비 시 발동되는 3대 전술 효과를 강화합니다. 각 테크를 눌러 상세 효과를 확인하고 심연 재료로 연구하세요.": {
+    "en": "Enhances 3 tactical effects triggered during defense. Click each tech to check details and research with abyssal materials.",
+    "ja": "防衛時に発動する3大戦術効果を強化します。各テックを押して詳細を確認し、深淵材料で研究してください。"
+  },
+  "수비 진지에 마도 역장을 전개하여 모든 수비 아군의 기본 공격력을 증폭합니다.": {
+    "en": "Deploys an arcane force field over defensive positions to amplify base ATK of all defending allies.",
+    "ja": "防衛陣地に魔導力場を展開し、すべての防衛味方の基本攻撃力を増幅します。"
+  },
+  "수비대 사령관": {
+    "en": "Garrison Commander",
+    "ja": "守備隊司令官"
+  },
+  "수비대 총반격": {
+    "en": "Garrison Total Counterattack",
+    "ja": "守備隊総反撃"
+  },
+  "수석 대장장이 불카누스": {
+    "en": "Chief Blacksmith Vulcanus",
+    "ja": "首席鍛冶屋ウルカヌス"
+  },
+  "수석 연금술사 알리샤": {
+    "en": "Chief Alchemist Alysha",
+    "ja": "首席錬金術師アリシャ"
+  },
+  "수석의": {
+    "en": "Chief's",
+    "ja": "首席の"
+  },
+  "수습 가죽 갑옷": {
+    "en": "Apprentice Leather Armor",
+    "ja": "見習いの革鎧"
+  },
+  "수습 단검": {
+    "en": "Apprentice Dagger",
+    "ja": "見習いの短剣"
+  },
+  "수습 대장장이의 입문 장구": {
+    "en": "Apprentice Blacksmith's Starter Kit",
+    "ja": "見習い鍛冶屋の入門装具"
+  },
+  "수습 대장장이의 창": {
+    "en": "Apprentice Blacksmith's Spear",
+    "ja": "見習い鍛冶屋の槍"
+  },
+  "수습 대장장이의 철검": {
+    "en": "Apprentice Blacksmith's Iron Sword",
+    "ja": "見習い鍛冶屋の鉄剣"
+  },
+  "수습 마나 로브": {
+    "en": "Apprentice Mana Robe",
+    "ja": "見習いのマナローブ"
+  },
+  "수습 목재 장궁": {
+    "en": "Apprentice Wooden Longbow",
+    "ja": "見習いの木製長弓"
+  },
+  "수습 원목 지팡이": {
+    "en": "Apprentice Wooden Staff",
+    "ja": "見習いの原木杖"
+  },
+  "수습 판금 갑옷": {
+    "en": "Apprentice Plate Armor",
+    "ja": "見習いの板金甲"
+  },
+  "수십 개의 환영 분신으로 적 전체를 180% 연속 난무하고 2턴간 모든 적의 공격력을 40% 약화시킵니다.": {
+    "en": "Flurries all enemies for 180% damage with dozens of illusion clones, weakening all enemies' ATK by 40% for 2 turns.",
+    "ja": "数十体の幻影分身で敵全体に180%連続乱舞を浴びせ、2ターン間すべての敵の攻撃力を40%弱体化させます。"
+  },
+  "수정": {
+    "en": "Crystal",
+    "ja": "水晶"
+  },
+  "수정 외골격": {
+    "en": "Crystal Exoskeleton",
+    "ja": "水晶外骨格"
+  },
+  "수정의 진동을 이용해 초 단위로 시간을 정밀 계측하던 소형 손목시계입니다. 초침이 멈춰 있습니다.": {
+    "en": "A small wristwatch that precisely measured time in seconds via crystal vibrations. Its second hand has stopped.",
+    "ja": "水晶の振動を利用して秒単位で精密に時間を計測していた小型の腕時計。秒針は止まっている。"
+  },
+  "수천 명의 전사들이 이곳에서 칼을 들고 방주의 퇴로를 지켰다. 한 명씩 쓰러질 때마다 땅에 묻혔으나, 무덤이 너무 많아 비석조차 세우지 못했다. 도굴꾼들은 그들의 갑옷을 벗겨 팔아넘겼고, 망령들은 자신들이 왜 싸웠는지조차 잊어버린 채 허공을 헤맨다. 부디 우리를 기억해다오. 우리가 지키려 했던 작은 등불을 꺼뜨리지 말아다오.": {
+    "en": "Thousands of warriors drew their swords here to protect the Ark's retreat. Each fallen soldier was buried, but graves were too numerous to even erect headstones. Grave robbers stripped their armor to sell, and phantoms wander the void having forgotten why they fought. Please remember us. Do not let the small flame we tried to guard burn out.",
+    "ja": "幾千の戦士たちがここで剣を抜き、方舟の退路を守った。1人倒れるたびに地に埋められたが、墓があまりにも多く墓石すら立てられなかった。盗掘者たちは鎧を剥ぎ取って売り飛ばし、亡霊たちは己がなぜ戦ったかすら忘れて虚空をさまよう。どうか我らを覚えていてくれ。我らが守ろうとした小さな灯火を消さないでおくれ。"
+  },
+  "수천의 유골과 마수의 뼈가 결합되어 탄생한 거대한 뼈의 골렘. 막강한 방어력과 분쇄력을 지닙니다.": {
+    "en": "A colossal bone golem born from thousands of remains and beast bones. Possesses immense defense and crushing power.",
+    "ja": "数千の遺骨と魔獣の骨が結合して誕生した巨大な骨のゴーレム。強大な防御力と粉砕力を誇る。"
+  },
+  "수호": {
+    "en": "Protection",
+    "ja": "守護"
+  },
+  "수호 개입": {
+    "en": "Guardian Intervention",
+    "ja": "守護介入"
+  },
+  "수호 결계 목걸이": {
+    "en": "Guardian Barrier Necklace",
+    "ja": "守護結界の首飾り"
+  },
+  "수호 기사계": {
+    "en": "Guardian Knight Class",
+    "ja": "守護騎士系"
+  },
+  "수호 기사의 결전 방패": {
+    "en": "Guardian Knight's Decisive Battle Shield",
+    "ja": "守護騎士の決戦盾"
+  },
+  "수호 반지": {
+    "en": "Ring of Protection",
+    "ja": "守護の指輪"
+  },
+  "수호갑": {
+    "en": "Guardian Armor",
+    "ja": "守護甲"
+  },
+  "수호석 목걸이": {
+    "en": "Guardian Stone Necklace",
+    "ja": "守護石の首飾り"
+  },
+  "수호석과 생명 약초 정기가 깃든 결계 목걸이. 방어력과 최대 체력을 보강합니다.": {
+    "en": "A barrier necklace imbued with guardian stone and life herb essence. Bolsters DEF and Max HP.",
+    "ja": "守護石と生命薬草の精気が宿る結界の首飾り。防御力と最大HPを補強する。"
+  },
+  "수호신의 백금 성갑 +10": {
+    "en": "Guardian Deity's Platinum Holy Armor +10",
+    "ja": "守護神の白金聖甲 +10"
+  },
+  "수호의": {
+    "en": "Guardian's",
+    "ja": "守護の"
+  },
+  "수호의 맹세: 전열 배치 시 받는 대미지 10% 추가 감소.": {
+    "en": "Oath of Protection: Reduces damage taken by an additional 10% when placed in the front row.",
+    "ja": "守護の誓約: 前衛配置時、被ダメージがさらに10%減少。"
+  },
+  "수호의 방패": {
+    "en": "Shield of Protection",
+    "ja": "守護の盾"
+  },
+  "수호의 방패 원호": {
+    "en": "Shield of Protection Cover",
+    "ja": "守護の盾援護"
+  },
+  "수호자의 반지 +1": {
+    "en": "Guardian's Ring +1",
+    "ja": "守護者の指輪 +1"
+  },
+  "수호자의 은빛 반지 (+5강)": {
+    "en": "Guardian's Silver Ring (+5 Enhanced)",
+    "ja": "守護者の銀の指輪 (+5強化)"
+  },
+  "수확": {
+    "en": "Harvest",
+    "ja": "収穫"
+  },
+  "숙련도 1개": {
+    "en": "1 Proficiency",
+    "ja": "熟練度1個"
+  },
+  "숙련도/전직 시너지 (최대 1개): 각성한 신화 군단(2차 전원) > 전설의 영웅단(2차 1명+) > 베테랑 정예(1차 전원) 중 최상위 1개 적용": {
+    "en": "Mastery/Class Synergy (Max 1): Applies highest among Awakened Mythic Legion (all 2nd) > Legendary Hero Band (1+ 2nd) > Veteran Elite (all 1st)",
+    "ja": "熟練度/転職シナジー (最大1個): 覚醒した神話軍団(2次全員) ＞ 伝説の英雄団(2次1人+) ＞ ベテラン精鋭(1次全員)のうち最上位1つ適用"
+  },
+  "순간적인 극저온 마력이 방출되며 주변 공기가 얼어붙습니다!": {
+    "en": "A momentary cryogenic burst is released, freezing the surrounding air!",
+    "ja": "瞬間的な極低温魔力が放出され、周囲の空気が凍りつきます！"
+  },
+  "순교자의 묘비를 뒤로하고 전진합니다.": {
+    "en": "Leaves the martyr's gravestone behind and presses forward.",
+    "ja": "殉教者の墓碑を背にして前進する。"
+  },
+  "순백 영혼의 묵주 +10": {
+    "en": "Pure White Soul Rosary +10",
+    "ja": "純白の魂のロザリオ +10"
+  },
+  "순수 마나 환류 챔버를 가동하여 정제 중 손실되는 마나를 100% 재순환시키며 에테르 생산량을 한 단계 높입니다.": {
+    "en": "Operates the pure mana recirculation chamber to recycle 100% of mana lost during refining, taking ether production to the next level.",
+    "ja": "純粋マナ還流チャンバーを稼働させ、精製中に損失するマナを100%再循環させてエーテル生産量を一段階引き上げます。"
+  },
+  "순수 마도석": {
+    "en": "Pure Arcane Stone",
+    "ja": "純粋な魔導石"
+  },
+  "순수 마도석 인챈트 1회 부여": {
+    "en": "Apply Pure Arcane Stone Enchant 1 Time",
+    "ja": "純粋魔導石エンチャント1回付与"
+  },
+  "순수 에테르 기류 농축 중...": {
+    "en": "Concentrating pure ether airstream...",
+    "ja": "純粋エーテル気流を濃縮中…"
+  },
+  "순수 에테르를 불꽃에 융합한 강화 횃불입니다. 심연 속의 은밀한 보물과 차원 틈새를 날카롭게 비추어 이벤트 발견율을 20% 높입니다.": {
+    "en": "An enhanced torch fusing pure ether into flame. Sharply illuminates hidden treasures and dimensional rifts in the Abyss, raising event discovery rate by 20%.",
+    "ja": "純粋エーテルを炎に融合させた強化松明。深淵の隠された宝や次元の狭間を鋭く照らし、イベント発見率を20%高めます。"
+  },
+  "순수 접두 마도석 (Pure Prefix)": {
+    "en": "Pure Prefix Arcane Stone (Pure Prefix)",
+    "ja": "純粋接頭魔導石 (Pure Prefix)"
+  },
+  "순수 접두석": {
+    "en": "Pure Prefix Stone",
+    "ja": "純粋接頭石"
+  },
+  "순수 접미 마도석 (Pure Suffix)": {
+    "en": "Pure Suffix Arcane Stone (Pure Suffix)",
+    "ja": "純粋接尾魔導石 (Pure Suffix)"
+  },
+  "순수 접미석": {
+    "en": "Pure Suffix Stone",
+    "ja": "純粋接尾石"
+  },
+  "순수 피해": {
+    "en": "True DMG",
+    "ja": "純粋ダメージ"
+  },
+  "순수석 인챈트": {
+    "en": "Pure Stone Enchant",
+    "ja": "純粋石エンチャント"
+  },
+  "순수석 후보 풀 (에픽~전설 확정)": {
+    "en": "Pure Stone Candidate Pool (Guaranteed Epic-Legendary)",
+    "ja": "純粋石候補プール (エピック〜伝説確定)"
+  },
+  "순수접두석": {
+    "en": "Pure Prefix Stone",
+    "ja": "純粋接頭石"
+  },
+  "순수접미석": {
+    "en": "Pure Suffix Stone",
+    "ja": "純粋接尾石"
+  },
+  "순수한 접두석": {
+    "en": "Pure Prefix Stone",
+    "ja": "純粋な接頭石"
+  },
+  "순수한 접미석": {
+    "en": "Pure Suffix Stone",
+    "ja": "純粋な接尾石"
+  },
+  "순수한 정령석의 핵으로 만든 최상급 인챈트석입니다. +10강 이상의 궁극 장비에 파멸적인 최상위 등급 접두 옵션을 부여합니다.": {
+    "en": "A supreme enchanting stone made from pure elemental stone cores. Grants devastating top-tier prefix options to +10 or higher ultimate gear.",
+    "ja": "純粋な精霊石の核で作られた最上級エンチャント石。+10強化以上の究極装備に破滅的な最上位ランクの接頭オプションを付与します。"
+  },
+  "숨결": {
+    "en": "Breath",
+    "ja": "息吹"
+  },
+  "스나이퍼 포커스: 체력이 100%일 때 치명타 피해량이 60% 추가 증폭.": {
+    "en": "Sniper Focus: When HP is 100%, Crit DMG is further amplified by 60%.",
+    "ja": "スナイパーフォーカス: HPが100%の時、会心ダメージがさらに60%増幅。"
+  },
+  "스마트 마무리(막타)": {
+    "en": "Smart Finisher (Last Hit)",
+    "ja": "スマートフィニッシュ (トドメ)"
+  },
+  "스칼렛": {
+    "en": "Scarlet",
+    "ja": "スカーレット"
+  },
+  "스크롤하여 이전 기록을 확인할 수 있습니다.": {
+    "en": "Scroll to view previous records.",
+    "ja": "スクロールして過去の記録を確認できます。"
+  },
+  "스킬 & 상태이상": {
+    "en": "Skills & Status Effects",
+    "ja": "スキル＆状態異常"
+  },
+  "스킬 교체": {
+    "en": "Change Skill",
+    "ja": "スキル変更"
+  },
+  "스킬 마나 소모량 5% 절감": {
+    "en": "Skill Mana Cost reduced by 5%",
+    "ja": "スキルマナ消費量5%軽減"
+  },
+  "스킬 망각 확인": {
+    "en": "Confirm Skill Forget",
+    "ja": "スキル忘却の確認"
+  },
+  "스킬 비전 강화": {
+    "en": "Skill Arcane Enhancement",
+    "ja": "スキル秘術強化"
+  },
+  "스킬 비전 강화 성공! (Lv.{0})": {
+    "en": "Skill Arcane Enhancement Success! (Lv.{0})",
+    "ja": "スキル秘術強化成功！ (Lv.{0})"
+  },
+  "스킬 비전 과충전 강화": {
+    "en": "Skill Arcane Overcharge Enhancement",
+    "ja": "スキル秘術過充電強化"
+  },
+  "스킬 사용": {
+    "en": "Use Skill",
+    "ja": "スキル使用"
+  },
+  "스킬 연계": {
+    "en": "Skill Combo",
+    "ja": "スキル連携"
+  },
+  "스킬 연계 콤보": {
+    "en": "Skill Combo",
+    "ja": "スキル連携コンボ"
+  },
+  "스킬 연계 콤보 • {0}": {
+    "en": "Skill Combo • {0}",
+    "ja": "スキル連携コンボ • {0}"
+  },
+  "스킬 장착": {
+    "en": "Equip Skill",
+    "ja": "スキル装着"
+  },
+  "스킬 효과 설명": {
+    "en": "Skill Effect Description",
+    "ja": "スキル効果説明"
+  },
+  "스킬/비전서 설명": {
+    "en": "Skill/Grimoire Description",
+    "ja": "スキル/魔導書説明"
+  },
+  "스킬북": {
+    "en": "Skill Book",
+    "ja": "スキルブック"
+  },
+  "스킬을 망각하면 전투 슬롯에서 즉시 해제되며, 다시 습득하려면 마도서를 처음부터(0%) 다시 연독해야 합니다.": {
+    "en": "Forgetting a skill unbinds it from combat slots immediately; relearning it requires studying the grimoire again from scratch (0%).",
+    "ja": "スキルを忘却すると戦闘スロットから即座に解除され、再習得するには魔導書を最初から(0%)読み直す必要があります。"
+  },
+  "스킬을 망각하여 슬롯을 비웁니다": {
+    "en": "Forget skill to free the slot",
+    "ja": "スキルを忘却してスロットを空ける"
+  },
+  "스킬을 완전히 망각하시겠습니까?": {
+    "en": "Do you want to completely forget this skill?",
+    "ja": "スキルを完全に忘却しますか？"
+  },
+  "스킬을 최대 4개 습득하고, 전투에 사용할 2개를 자유롭게 장착하세요.": {
+    "en": "Learn up to 4 skills, and freely equip 2 to use in battle.",
+    "ja": "スキルを最大4つ習得し、戦闘で使用する2つを自由に装着してください。"
+  },
+  "스탯 +15% 집중 증폭: 6대 핵심 능력치(HP, MP, ATK, DEF, SPD, LUK) 중 1종을 선택하여 영구 집중 상향 (전직 시 +30% 특화와 중첩 적용)": {
+    "en": "Stat +15% Focused Amplification: Select 1 of 6 core stats (HP, MP, ATK, DEF, SPD, LUK) for permanent focused enhancement (stacks with +30% class change spec)",
+    "ja": "ステータス+15%集中増幅: 6大コアステータス(HP, MP, ATK, DEF, SPD, LUK)から1種を選択して永久集中強化 (転職時の+30%特化と重複適用)"
+  },
+  "스탯 +20% 증폭": {
+    "en": "Stat +20% Amplification",
+    "ja": "ステータス+20%増幅"
+  },
+  "스탯 +35% 대폭 증폭": {
+    "en": "Stat +35% Massive Amplification",
+    "ja": "ステータス+35%大幅増幅"
+  },
+  "스탯 1종 +15% 추가 영구 상향": {
+    "en": "Permanent +15% boost to 1 chosen stat",
+    "ja": "ステータス1種+15%追加永久強化"
+  },
+  "스탯 없음": {
+    "en": "No Stats",
+    "ja": "ステータスなし"
+  },
+  "스탯 영구 반영": {
+    "en": "Permanently Apply Stats",
+    "ja": "ステータス永久反映"
+  },
+  "스토리 대화 서사": {
+    "en": "Story Dialogue Narrative",
+    "ja": "ストーリー対話叙事"
+  },
+  "스토리 회고록": {
+    "en": "Story Memoir",
+    "ja": "ストーリー回顧録"
+  },
+  "스폰서 보상형 비디오": {
+    "en": "Sponsored Rewarded Video",
+    "ja": "スポンサーリワード動画"
+  },
+  "슬롯": {
+    "en": "Slot",
+    "ja": "スロット"
+  },
+  "슬롯 {0}에 장착": {
+    "en": "Equip to Slot {0}",
+    "ja": "スロット{0}に装着"
+  },
+  "슬롯 가득 참": {
+    "en": "Slots Full",
+    "ja": "スロット満杯"
+  },
+  "슬롯 가득참": {
+    "en": "Slots Full",
+    "ja": "スロット満杯"
+  },
+  "슬롯 개방됨 (0/2)": {
+    "en": "Slot Unlocked (0/2)",
+    "ja": "スロット開放済み (0/2)"
+  },
+  "슬롯 잠김 (0/0)": {
+    "en": "Slot Locked (0/0)",
+    "ja": "スロットロック中 (0/0)"
+  },
+  "슬롯 잠김 (0/0개 선택 가능)": {
+    "en": "Slot Locked (0/0 selectable)",
+    "ja": "スロットロック中 (0/0個選択可能)"
+  },
+  "슬롯:": {
+    "en": "Slot:",
+    "ja": "スロット:"
+  },
+  "습득": {
+    "en": "Learn",
+    "ja": "習得"
+  },
+  "습득 불가: [{0}]님은 이미 [{1}] (Lv.{2}) 기술을 완전히 터득(100%)했습니다.": {
+    "en": "Cannot Learn: [{0}] has already fully mastered (100%) [{1}] (Lv.{2}).",
+    "ja": "習得不可: [{0}]はすでに[{1}] (Lv.{2})の技術を完全に習得(100%)しています。"
+  },
+  "습득 스킬 강화 ({0}개)": {
+    "en": "Enhance Learned Skills ({0})",
+    "ja": "習得スキル強化 ({0}個)"
+  },
+  "습득 슬롯 가득참": {
+    "en": "Learned Skill Slots Full",
+    "ja": "習得スロット満杯"
+  },
+  "습득 완료:": {
+    "en": "Learned:",
+    "ja": "習得完了:"
+  },
+  "습득률": {
+    "en": "Mastery Rate",
+    "ja": "習得率"
+  },
+  "습득한 스킬이 없습니다. 마도서를 통해 새로운 스킬을 습득해보세요.": {
+    "en": "No skills learned. Learn new skills from grimoires.",
+    "ja": "習得したスキルがありません。魔導書を通じて新しいスキルを習得してみましょう。"
+  },
+  "승격": {
+    "en": "Promotion",
+    "ja": "昇格"
+  },
+  "시간": {
+    "en": "Time",
+    "ja": "時間"
+  },
+  "시간 정지": {
+    "en": "Time Stop",
+    "ja": "時間停止"
+  },
+  "시간의 잔영을 스쳐 지나갔습니다.": {
+    "en": "Brushed past the afterimages of time.",
+    "ja": "時の残影をすれ違って通り過ぎました。"
+  },
+  "시간의 종착역과 시공간 나침반 각성": {
+    "en": "End of Time and Awakening of Spacetime Compass",
+    "ja": "時間の終着駅と時空羅針盤の覚醒"
+  },
+  "시간의 흐름을 되돌려 모든 아군의 체력과 마나를 58% 회복하고 파티 전원의 모든 스킬 쿨다운을 완전 초기화합니다.": {
+    "en": "Reverses the flow of time to restore 58% HP and MP to all allies, and resets all skill cooldowns for the entire party.",
+    "ja": "時の流れを巻き戻し、すべての味方のHPとマナを58%回復させ、パーティ全員の全スキルクールダウンを完全初期化します。"
+  },
+  "시공": {
+    "en": "Spacetime",
+    "ja": "時空"
+  },
+  "시공 역류": {
+    "en": "Spacetime Backflow",
+    "ja": "時空逆流"
+  },
+  "시공 역행 결계": {
+    "en": "Spacetime Reversal Barrier",
+    "ja": "時空逆行結界"
+  },
+  "시공 왜곡": {
+    "en": "Spacetime Distortion",
+    "ja": "時空歪曲"
+  },
+  "시공 왜곡의 비전 지팡이": {
+    "en": "Arcane Staff of Spacetime Distortion",
+    "ja": "時空歪曲の秘術杖"
+  },
+  "시공 왜곡자의 성운 로브": {
+    "en": "Nebula Robe of the Spacetime Warper",
+    "ja": "時空歪曲者の星雲ローブ"
+  },
+  "시공 왜곡장": {
+    "en": "Spacetime Distortion Field",
+    "ja": "時空歪曲場"
+  },
+  "시공 정지": {
+    "en": "Spacetime Stop",
+    "ja": "時空停止"
+  },
+  "시공 정지 & 쿨다운 완전 초기화": {
+    "en": "Spacetime Stop & Complete Cooldown Reset",
+    "ja": "時空停止＆クールダウン完全リセット"
+  },
+  "시공 조율사의 인피니티: 매 턴 마나 +6 MP 회복, 파티 속도 +10%, 전능력치 +6%": {
+    "en": "Chrono Tuner's Infinity: Restores +6 MP every turn, party SPD +10%, all stats +6%",
+    "ja": "時空調律者のインフィニティ: 毎ターンマナ+6 MP回復、パーティ速度+10%、全ステータス+6%"
+  },
+  "시공간 굴절 비전이 담긴 9티어 전설 비전서 [만화경의 기억 비전서]를 결사대 마법사에게 수여합니다.": {
+    "en": "Bestows the Tier 9 Legendary Grimoire [Kaleidoscope Memory Grimoire] imbued with spacetime refraction arcana upon the squad's mage.",
+    "ja": "時空間屈折の秘術が込められたTier 9伝説の魔導書[万華鏡の記憶魔導書]を決死隊の魔法使いへ授与します。"
+  },
+  "시공간 균열 붕괴": {
+    "en": "Spacetime Rift Collapse",
+    "ja": "時空間亀裂崩壊"
+  },
+  "시공간 균열을 틀어막고 현실을 고정하는 마도 닻입니다. 4티어 보스 고유 장비를 단조합니다.": {
+    "en": "An arcane anchor that plugs spacetime rifts and stabilizes reality. Forges Tier 4 boss unique gear.",
+    "ja": "時空間の亀裂を塞ぎ現実を固定する魔導錨。Tier 4ボスの固有装備を鍛造します。"
+  },
+  "시공간 나선을 우회하여 통과했습니다.": {
+    "en": "Bypassed and navigated through the spacetime spiral.",
+    "ja": "時空間螺旋を迂回して通過しました。"
+  },
+  "시공간 마력을 응축한 푸른 영롱 보석": {
+    "en": "A radiant blue gem condensing spacetime magic",
+    "ja": "時空間魔力を凝縮した青く輝く宝石"
+  },
+  "시공간 붕괴격": {
+    "en": "Spacetime Collapse Strike",
+    "ja": "時空間崩壊撃"
+  },
+  "시공간 비동기 PVP 결투장 및 차원 원정 관문 (미건설)": {
+    "en": "Spacetime Asynchronous PVP Arena & Dimensional Expedition Gate (Unbuilt)",
+    "ja": "時空間非同期PVP決闘場および次元遠征関門 (未建設)"
+  },
+  "시공간 왜곡 권능으로 소환된 대원의": {
+    "en": "Of a member summoned by spacetime distortion authority",
+    "ja": "時空間歪曲の権能で召喚された隊員の"
+  },
+  "시공간 왜곡을 이용한 에테르 응축기를 설치하여 주변 차원의 순수 에테르를 빨아들여 고밀도로 정제합니다.": {
+    "en": "Installs an ether condenser utilizing spacetime distortion to draw in pure ether from surrounding dimensions and refine it at high density.",
+    "ja": "時空間歪曲を利用したエーテル濃縮機を設置し、周囲の次元から純粋エーテルを吸い上げて高密度で精製します。"
+  },
+  "시공간 제어 (시들음)": {
+    "en": "Spacetime Control (Wither)",
+    "ja": "時空間制御 (萎凋)"
+  },
+  "시공간 좌표를 완벽하게 고정하는 초공간 닻입니다. 귀환 시 배낭에 적재된 모든 전리품과 자원을 1개의 손실도 없이 100% 보존하여 복귀합니다.": {
+    "en": "A hyperspace anchor that locks spacetime coordinates flawlessly. On return, fully preserves 100% of all loot and resources loaded in your backpack without any loss.",
+    "ja": "時空間座標を完璧に固定する超空間錨。帰還時にバックパックに積載されたすべての戦利品と資源を1つの損失もなく100%保持して帰還します。"
+  }
+}

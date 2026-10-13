@@ -1,0 +1,236 @@
+import { SupportedLanguage } from './types';
+
+export const CLASS_NAMES: Record<string, Record<SupportedLanguage, { name: string }>> = {
+  warrior: { ko: { name: '전사' }, en: { name: 'Warrior' }, ja: { name: '戦士' } },
+  paladin: { ko: { name: '성기사' }, en: { name: 'Paladin' }, ja: { name: '聖騎士' } },
+  berserker: { ko: { name: '광전사' }, en: { name: 'Berserker' }, ja: { name: '狂戦士' } },
+  rogue: { ko: { name: '도적' }, en: { name: 'Rogue' }, ja: { name: '盗賊' } },
+  assassin: { ko: { name: '암살자' }, en: { name: 'Assassin' }, ja: { name: '暗殺者' } },
+  knight: { ko: { name: '기사' }, en: { name: 'Knight' }, ja: { name: '騎士' } },
+  sniper: { ko: { name: '저격수' }, en: { name: 'Sniper' }, ja: { name: '狙撃手' } },
+  archmage: { ko: { name: '대마법사' }, en: { name: 'Archmage' }, ja: { name: '大魔導士' } },
+  warlock: { ko: { name: '흑마법사' }, en: { name: 'Warlock' }, ja: { name: '黒魔術師' } },
+  saintess: { ko: { name: '성녀' }, en: { name: 'Saintess' }, ja: { name: '聖女' } },
+  elementalist: { ko: { name: '원소술사' }, en: { name: 'Elementalist' }, ja: { name: '元素術士' } },
+
+  // 1차 / 2차 전직 클래스
+  crusader: { ko: { name: '크루세이더' }, en: { name: 'Crusader' }, ja: { name: 'クルセイダー' } },
+  templar_grandmaster: { ko: { name: '성전 기사단장' }, en: { name: 'Grandmaster Templar' }, ja: { name: 'テンプル総長' } },
+  blade_lord: { ko: { name: '검성' }, en: { name: 'Blade Lord' }, ja: { name: '剣仙' } },
+  heavenly_sword: { ko: { name: '천검 극의' }, en: { name: 'Heavenly Sword Saint' }, ja: { name: '天剣極意' } },
+  blood_berserker: { ko: { name: '혈염 버서커' }, en: { name: 'Blood Berserker' }, ja: { name: '血炎バーサーカー' } },
+  asura_warlord: { ko: { name: '아수라 군주' }, en: { name: 'Asura Warlord' }, ja: { name: '阿修羅軍主' } },
+  shadow_phantom: { ko: { name: '그림자 망령' }, en: { name: 'Shadow Phantom' }, ja: { name: '影の亡霊' } },
+  void_assassin: { ko: { name: '공허 처형자' }, en: { name: 'Void Executioner' }, ja: { name: '虚空処刑者' } },
+  heavy_destroyer: { ko: { name: '중갑 파쇄자' }, en: { name: 'Heavy Destroyer' }, ja: { name: '重甲破砕者' } },
+  champion: { ko: { name: '불패의 챔피언' }, en: { name: 'Invincible Champion' }, ja: { name: '不敗のチャンピオン' } },
+  plasma_gunner: { ko: { name: '플라즈마 거너' }, en: { name: 'Plasma Gunner' }, ja: { name: 'プラズマガンナー' } },
+  chronos_sniper: { ko: { name: '시공 저격사' }, en: { name: 'Chrono Marksman' }, ja: { name: '時空狙撃士' } },
+  astral_sage: { ko: { name: '성운 현자' }, en: { name: 'Astral Sage' }, ja: { name: '星雲の賢者' } },
+  genesis_wizard: { ko: { name: '창세 비전사' }, en: { name: 'Genesis Archon' }, ja: { name: '創世の秘術師' } },
+  abyss_necromancer: { ko: { name: '심연 강령술사' }, en: { name: 'Abyssal Necromancer' }, ja: { name: '深淵の死霊術士' } },
+  soul_ruler: { ko: { name: '영혼 지배자' }, en: { name: 'Soul Sovereign' }, ja: { name: '魂の支配者' } },
+  divine_prophet: { ko: { name: '신성 선지자' }, en: { name: 'Divine Prophet' }, ja: { name: '神聖の預言者' } },
+  valkyrie_saint: { ko: { name: '발키리 대천사' }, en: { name: 'Valkyrie Archangel' }, ja: { name: 'ヴァルキリー大天使' } },
+  chaos_elementalist: { ko: { name: '혼돈 원소사' }, en: { name: 'Chaos Elementalist' }, ja: { name: '混沌元素士' } },
+  primal_archon: { ko: { name: '원초 마신' }, en: { name: 'Primal Archon' }, ja: { name: '原初の魔神' } },
+};
+
+export const BUILDING_NAMES: Record<string, Record<SupportedLanguage, { name: string; desc: string }>> = {
+  bonfire: {
+    ko: { name: '방주의 성화', desc: '신성한 성화. 목재를 공헌하여 생산량 +15%, 전투 EXP +20% 온기 버프 활성화' },
+    en: { name: 'Primal Bonfire', desc: 'Sacred flame. Offer wood for +15% production and +20% combat EXP warmth buff' },
+    ja: { name: '方舟の聖火', desc: '神聖なる聖火。木材を投入して生産量+15%、戦闘EXP+20%の温もりバフを有効化' }
+  },
+  cabin: {
+    ko: { name: '생존자 안식처', desc: '구출된 생존자 거주지. 방주에 세금(골드)을 13초마다 정기 납부합니다' },
+    en: { name: 'Survivor Haven', desc: 'Refugee shelter. Regularly pays gold taxes to the Ark every 13s' },
+    ja: { name: '生存者の安息所', desc: '救出された生存者の居住区。13秒ごとに方舟へ金貨の税金を納めます' }
+  },
+  lumberCamp: {
+    ko: { name: '영목 벌채소', desc: '방주 외곽 목재 벌채 시설. 영지 증축과 성화 유지용 목재를 생산합니다' },
+    en: { name: 'Lumber Camp', desc: 'Ark timber mill. Harvests wood every 9s for citadel expansion & bonfire' },
+    ja: { name: '霊木伐採所', desc: '方舟郊外の伐採施設。領地増築と聖火維持のための木材を9秒ごとに生産' }
+  },
+  quarry: {
+    ko: { name: '에테르 광맥 시추소', desc: '부유성 지반 채굴 시설. 11초마다 석재 및 룬 철광석을 발굴합니다' },
+    en: { name: 'Aether Quarry', desc: 'Subterranean drill. Extracts stone and runic iron ore every 11s' },
+    ja: { name: 'エーテル鉱脈採掘所', desc: '浮遊城の地盤採掘施設。11秒ごとに石材と鉄鉱石を発掘します' }
+  },
+  butchery: {
+    ko: { name: '심연 생체 정제소', desc: '식량 정제 시설. 13초마다 보급 식량과 무두질 가죽을 가공합니다' },
+    en: { name: 'Abyssal Refinery', desc: 'Food refinery. Produces provisions and leather every 13s' },
+    ja: { name: '深淵生体精製所', desc: '食糧精製施設。13秒ごとに補給食糧と革を加工します' }
+  },
+  tavern: {
+    ko: { name: '방랑자의 라운지', desc: '용병 고용소. 방랑 용병을 계약 영입하고 서브 퀘스트를 수주합니다' },
+    en: { name: 'Wanderer Lounge', desc: 'Mercenary guild. Recruit wandering heroes and accept bounty contracts' },
+    ja: { name: '放浪者のラウンジ', desc: '傭兵雇用所。放浪傭兵を契約雇用し、サブクエストを受注します' }
+  },
+  blacksmith: {
+    ko: { name: '심연의 병기창', desc: '장비 공방. 전술 무기 및 방어구 단조, 장비 강화 및 인챈트를 수행합니다' },
+    en: { name: 'Ark Armory & Forge', desc: 'Tactical armory. Forge weapons/armor, enhance up to +10, apply enchants' },
+    ja: { name: '深淵の兵器廠', desc: '装備工房。戦術武器・防具の鍛造、装備強化およびエンチャントを行います' }
+  },
+  sanctuary: {
+    ko: { name: '영혼의 제단', desc: '클래스 승격 시설. 용병들의 상위 클래스 전직과 초월 각성을 집전합니다' },
+    en: { name: 'Soul Sanctuary', desc: 'Ascension altar. Conducts class promotions and transcendent awakenings' },
+    ja: { name: '魂の祭壇', desc: 'クラス昇格施設。傭兵の上位クラス転職と超越覚醒を執り行います' }
+  },
+  alchemy: {
+    ko: { name: '에테르 연금 공방', desc: '에테르 연금 및 마도 시설. 15초마다 에테르를 생산하고 마도서를 제본합니다' },
+    en: { name: 'Aether Alchemy Lab', desc: 'Arcane alchemy lab. Refines ether every 15s and crafts grimoires' },
+    ja: { name: 'エーテル錬金工房', desc: 'エーテル錬金施設。15秒ごとにエーテルを生産し魔導書を製本します' }
+  },
+  arenaGate: {
+    ko: { name: '차원 앵커 게이트', desc: '차원 관문. 비동기 랭킹 결투, 네메시스 레이드 및 영지 침공을 지원합니다' },
+    en: { name: 'Dimensional Gate', desc: 'Interdimensional rift. Supports asynchronous PVP duels and Nemesis raids' },
+    ja: { name: '次元アンカーゲート', desc: '次元関門。非同期PVP決闘、ネメシスレイド、領地侵攻を支援します' }
+  },
+  storage: {
+    ko: { name: '방주 중앙 병참고', desc: '방주 물자 저장고. 레벨에 따라 27종 모든 자원의 최대 적재 용량을 확장합니다' },
+    en: { name: 'Central Logistics Depot', desc: 'Logistics storage. Expands max cargo limits for all 27 resource types' },
+    ja: { name: '方舟中央兵站庫', desc: '物資保管庫。レベルに応じて全27種資源の最大積載容量を拡張します' }
+  },
+  infirmary: {
+    ko: { name: '생체 복원 병동', desc: '의료 시설. 부상당한 용병을 입원시켜 체력과 마나를 복원합니다' },
+    en: { name: 'Bio-Restoration Ward', desc: 'Medical ward. Hospitalizes wounded heroes to recover HP and MP' },
+    ja: { name: '生体復元病棟', desc: '医療施設。負傷した傭兵を入院させHPとMPを復元します' }
+  },
+  market: {
+    ko: { name: '황혼의 블랙 마켓', desc: '암시장 교역소. 15종 자원 거래 및 환전을 지원하며 상업 골드를 수급합니다' },
+    en: { name: 'Twilight Black Market', desc: 'Contraband outpost. Trade 15 resource types and barter for rare relics' },
+    ja: { name: '黄昏のブラックマーケット', desc: '闇市交易所。15種の資源取引や換金を行い、商業資金を調達します' }
+  },
+  // 알리아스 호환
+  forge: {
+    ko: { name: '방주 병기창', desc: '장비 단조 및 마도 인챈트' },
+    en: { name: 'Ark Armory & Forge', desc: 'Craft gear & apply arcane enchants' },
+    ja: { name: '方舟兵器廠', desc: '装備製造と魔導エンチャント' }
+  },
+  black_market: {
+    ko: { name: '심연 블랙 마켓', desc: '전리품 매각 및 암시장 거래' },
+    en: { name: 'Abyssal Black Market', desc: 'Liquidate loot & trade contraband' },
+    ja: { name: '深淵ブラックマーケット', desc: '戦利品売却と闇市取引' }
+  },
+  arena: {
+    ko: { name: '영광의 결투장', desc: '지휘관 간 비동기 PVP 결투' },
+    en: { name: 'Colosseum of Glory', desc: 'Asynchronous PVP expedition duels' },
+    ja: { name: '栄光の闘技場', desc: '指揮官同士の非同期PVP決闘' }
+  },
+  dungeon_entry: {
+    ko: { name: '심연 심층 탐험', desc: '심연의 어둠 속으로 강하합니다' },
+    en: { name: 'Abyssal Descent', desc: 'Descend into the depths of the Abyss' },
+    ja: { name: '深淵深層探検', desc: '深淵の深部へ降下します' }
+  },
+  barracks: {
+    ko: { name: '원정대 병영', desc: '용병 고용 및 파티 편성' },
+    en: { name: 'Expedition Barracks', desc: 'Recruit and organize mercenaries' },
+    ja: { name: '遠征隊兵舎', desc: '傭兵雇用とパーティ編成' }
+  },
+  lounge: {
+    ko: { name: '방랑자의 라운지', desc: 'NPC 의뢰 및 현상금 수락' },
+    en: { name: 'Wanderer Lounge', desc: 'Accept contracts & bounty quests' },
+    ja: { name: '放浪者のラウンジ', desc: 'NPC依頼や賞金首クエスト' }
+  },
+};
+
+export const RESOURCE_NAMES: Record<string, Record<SupportedLanguage, string>> = {
+  gold: { ko: '골드', en: 'Gold', ja: 'ゴールド' },
+  wood: { ko: '목재', en: 'Wood', ja: '木材' },
+  stone: { ko: '석재', en: 'Stone', ja: '石材' },
+  iron: { ko: '철광석', en: 'Iron Ore', ja: '鉄鉱石' },
+  food: { ko: '식량', en: 'Food', ja: '食糧' },
+  ether: { ko: '에테르', en: 'Ether', ja: 'エーテル' },
+  leather: { ko: '가죽', en: 'Leather', ja: '革' },
+  herb: { ko: '약초', en: 'Herb', ja: '薬草' },
+  coal: { ko: '석탄', en: 'Coal', ja: '石炭' },
+  silk: { ko: '실크', en: 'Silk', ja: 'シルク' },
+  bone: { ko: '짐승 뼈', en: 'Bone', ja: '骨' },
+  crystal: { ko: '마력수정', en: 'Magic Crystal', ja: '魔力結晶' },
+  void_shard: { ko: '공허파편', en: 'Void Shard', ja: '虚無の欠片' },
+  dark_essence: { ko: '암흑 정수', en: 'Dark Essence', ja: '暗黒エッセンス' },
+  prefix_stone: { ko: '일반 접두석', en: 'Prefix Stone', ja: '一般接頭石' },
+  suffix_stone: { ko: '일반 접미석', en: 'Suffix Stone', ja: '一般接尾石' },
+  pure_prefix_stone: { ko: '순수 접두석', en: 'Pure Prefix Stone', ja: '純粋接頭石' },
+  pure_suffix_stone: { ko: '순수 접미석', en: 'Pure Suffix Stone', ja: '純粋接尾石' },
+  potion: { ko: '체력 포션', en: 'Health Potion', ja: '体力ポーション' },
+  torch: { ko: '횃불', en: 'Torch', ja: '松明' },
+  pickaxe: { ko: '곡괭이', en: 'Pickaxe', ja: 'ツルハシ' },
+  bandage: { ko: '붕대', en: 'Bandage', ja: '包帯' },
+  holy_water: { ko: '정화의 성수', en: 'Holy Water', ja: '浄化の聖水' },
+  key: { ko: '던전 열쇠', en: 'Dungeon Key', ja: 'ダンジョンの鍵' },
+  skeleton_key: { ko: '녹슨 만능열쇠', en: 'Skeleton Key', ja: '万能鍵' },
+  rift_anchor: { ko: '균열의 닻', en: 'Rift Anchor', ja: '亀裂の錨' },
+  golden_toad: { ko: '황금 두꺼비', en: 'Golden Toad', ja: '黄金のヒキガエル' },
+  compass: { ko: '차원의 나침반', en: 'Dimensional Compass', ja: '次元の羅針盤' },
+  blood_contract: { ko: '피의 서약서', en: 'Blood Contract', ja: '血の契約書' },
+  dimensional_whistle: { ko: '차원의 호각', en: 'Dimensional Whistle', ja: '次元の角笛' },
+  enhanced_torch: { ko: '에테르 횃불', en: 'Ether Torch', ja: 'エーテル松明' },
+  enhanced_food: { ko: '던전 도시락', en: 'Dungeon Lunchbox', ja: 'ダンジョン弁当' },
+  enhanced_pickaxe: { ko: '심연 곡괭이', en: 'Abyssal Pickaxe', ja: '深淵のツルハシ' },
+  enhanced_bandage: { ko: '성유 붕대', en: 'Holy Oil Bandage', ja: '聖油の包帯' },
+  enhanced_holy_water: { ko: '여신의 성수', en: 'Goddess Holy Water', ja: '女神の聖水' },
+  enhanced_key: { ko: '황금 열쇠', en: 'Golden Key', ja: '黄金の鍵' },
+  enhanced_rift_anchor: { ko: '심연의 닻', en: 'Abyssal Anchor', ja: '深淵の錨' },
+  gold_bag: { ko: '골드 주머니', en: 'Gold Pouch', ja: 'ゴールドの袋' },
+
+  // 🔮 층별 보스 성유물
+  relic_floor_1: { ko: '침묵의 흑핵', en: 'Silent Black Core', ja: '沈黙の黒核' },
+  relic_floor_2: { ko: '망령의 영혼수정', en: 'Phantom Soul Crystal', ja: '亡霊の魂結晶' },
+  relic_floor_3: { ko: '원초의 광맥 심장', en: 'Primal Vein Heart', ja: '原初の鉱脈心臓' },
+  relic_floor_4: { ko: '심연의 시공 닻', en: 'Chrono Anchor of Abyss', ja: '深淵の時空錨' },
+  relic_floor_5: { ko: '공허 지배자의 모노리스 핵', en: 'Void Monolith Core', ja: '虚無のモノリス核' },
+  relic_floor_6: { ko: '핏빛 대공의 진홍 성배', en: 'Blood Archduke Grail', ja: '深紅の大公聖杯' },
+  relic_floor_7: { ko: '망각 묘지기의 영혼 나침반', en: 'Graveyard Soul Compass', ja: '忘却墓守の魂羅針盤' },
+  relic_floor_8: { ko: '단죄의 기사단장 맹세 휘장', en: 'Order Commander Crest', ja: '断罪騎士団長の紋章' },
+  relic_floor_9: { ko: '미궁 지배자의 진실 거울 파편', en: 'Mirror Shard of Truth', ja: '真実の鏡の破片' },
+  relic_floor_10: { ko: '심연 군주의 옥새', en: 'Abyssal Overlord Seal', ja: '深淵覇王の玉璽' },
+
+  // 📜 1F~10F 회고록 쪽지
+  memoir_note_1: { ko: '1층 회고록 쪽지', en: '1F Memoir Note', ja: '1層の回顧録メモ' },
+  memoir_note_2: { ko: '2층 회고록 쪽지', en: '2F Memoir Note', ja: '2層の回顧録メモ' },
+  memoir_note_3: { ko: '3층 회고록 쪽지', en: '3F Memoir Note', ja: '3層の回顧録メモ' },
+  memoir_note_4: { ko: '4층 회고록 쪽지', en: '4F Memoir Note', ja: '4層の回顧録メモ' },
+  memoir_note_5: { ko: '5층 회고록 쪽지', en: '5F Memoir Note', ja: '5層の回顧録メモ' },
+  memoir_note_6: { ko: '6층 회고록 쪽지', en: '6F Memoir Note', ja: '6層の回顧録メモ' },
+  memoir_note_7: { ko: '7층 회고록 쪽지', en: '7F Memoir Note', ja: '7層の回顧録メモ' },
+  memoir_note_8: { ko: '8층 회고록 쪽지', en: '8F Memoir Note', ja: '8層の回顧録メモ' },
+  memoir_note_9: { ko: '9층 회고록 쪽지', en: '9F Memoir Note', ja: '9層の回顧録メモ' },
+  memoir_note_10: { ko: '10층 회고록 쪽지', en: '10F Memoir Note', ja: '10層の回顧録メモ' },
+
+  // 🏛️ 1F~10F 고대 오파츠 (구세계 유물)
+  ooparts_1_1: { ko: '금이 간 스마트폰 액정', en: 'Cracked Smartphone Screen', ja: 'ヒビ入りのスマホ画面' },
+  ooparts_1_2: { ko: '녹슨 스테인리스 텀블러', en: 'Rusted Stainless Tumbler', ja: '錆びたステンレスタンブラー' },
+  ooparts_2_1: { ko: '빛바랜 플라스틱 신용카드', en: 'Faded Credit Card', ja: '色あせたクレジットカード' },
+  ooparts_2_2: { ko: '먼지 쌓인 카세트 테이프', en: 'Dusty Cassette Tape', ja: '埃まみれのカセットテープ' },
+  ooparts_3_1: { ko: '방전된 리튬 배터리', en: 'Depleted Lithium Battery', ja: '放電したリチウム電池' },
+  ooparts_3_2: { ko: '금이 간 세라믹 머그잔', en: 'Cracked Ceramic Mug', ja: 'ヒビ入りのマグカップ' },
+  ooparts_4_1: { ko: '찢겨진 지하철 노선도', en: 'Torn Subway Map', ja: '破れた地下鉄路線図' },
+  ooparts_4_2: { ko: '멈춰버린 쿼츠 손목시계', en: 'Frozen Quartz Watch', ja: '止まったクォーツ時計' },
+  ooparts_5_1: { ko: '부서진 헤드폰', en: 'Broken Headphones', ja: '壊れたヘッドホン' },
+  ooparts_5_2: { ko: '비닐 코팅된 학생증', en: 'Laminated Student ID', ja: 'ラミネート学生証' },
+  ooparts_6_1: { ko: '녹슨 와인 오프너', en: 'Rusted Wine Opener', ja: '錆びたワインオープナー' },
+  ooparts_6_2: { ko: '말라붙은 립스틱 케이스', en: 'Dried Lipstick Case', ja: '乾いた口紅ケース' },
+  ooparts_7_1: { ko: '빛바랜 폴라로이드 사진', en: 'Faded Polaroid Photo', ja: '色あせたポラロイド写真' },
+  ooparts_7_2: { ko: '굳어버린 3색 볼펜', en: 'Dried 3-Color Pen', ja: '固まった3色ボールペン' },
+  ooparts_8_1: { ko: '부서진 무전기 트랜시버', en: 'Broken Radio Transceiver', ja: '壊れたトランシーバー' },
+  ooparts_8_2: { ko: '찌그러진 티타늄 안경테', en: 'Bent Titanium Glasses', ja: '歪んだチタン眼鏡' },
+  ooparts_9_1: { ko: '홀로그램 디스플레이 큐브', en: 'Hologram Display Cube', ja: 'ホログラムキューブ' },
+  ooparts_9_2: { ko: '녹아내린 카메라 렌즈', en: 'Melted Camera Lens', ja: '溶けたカメラレンズ' },
+  ooparts_10_1: { ko: '양자 코어 칩셋', en: 'Quantum Core Chipset', ja: '量子コアチップセット' },
+  ooparts_10_2: { ko: '타임캡슐 황동 열쇠', en: 'Time Capsule Brass Key', ja: 'タイムカプセル真鍮の鍵' },
+};
+
+/** 데이터 명칭/설명 로컬라이징 헬퍼 */
+export function getLocalizedClassName(classId: string, lang: SupportedLanguage): string {
+  return CLASS_NAMES[classId]?.[lang]?.name || classId;
+}
+
+export function getLocalizedBuildingName(buildingId: string, lang: SupportedLanguage): { name: string; desc: string } {
+  return BUILDING_NAMES[buildingId]?.[lang] || { name: buildingId, desc: '' };
+}
+
+export function getLocalizedResourceName(resourceKey: string, lang: SupportedLanguage): string {
+  return RESOURCE_NAMES[resourceKey]?.[lang] || resourceKey;
+}

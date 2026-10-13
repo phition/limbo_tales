@@ -1,0 +1,803 @@
+{
+  "무기 특성 • {0}": {
+    "en": "Weapon Trait • {0}",
+    "ja": "武器特性・{0}"
+  },
+  "무기 파괴 (영구 소멸)": {
+    "en": "Weapon Destruction (Permanent Loss)",
+    "ja": "武器破壊 (永久消滅)"
+  },
+  "무기/방어구/장신구 3세트 착용 시 특별한 보스 세트 보너스가 발현됩니다.": {
+    "en": "Equipping the 3-piece Weapon/Armor/Accessory set activates a special boss set bonus.",
+    "ja": "武器/防具/装飾品の3セット装備時、特別なボスセットボーナスが発動する。"
+  },
+  "무기/방어구를 단조하고 +3강 접두석, +7강 접미석, +10강 순수 마도석을 부여합니다. (Lv.4+ 목재 2배, Lv.6+ 석재 2배, Lv.8+ 철제 3배, Lv.4+ 에테르 및 골드 보조 유지비)": {
+    "en": "Forges weapons/armor and applies +3 Prefix Stones, +7 Suffix Stones, and +10 Pure Magic Stones. (Lv.4+ Wood x2, Lv.6+ Stone x2, Lv.8+ Iron x3, Lv.4+ Ether & Gold auxiliary upkeep)",
+    "ja": "武器/防具を鍛造し、+3強化接頭石、+7強化接尾石、+10強化純粋魔導石を付与。(Lv.4+ 木材2倍、Lv.6+ 石材2倍、Lv.8+ 鉄材3倍、Lv.4+ エーテルおよびゴールド補助維持費)"
+  },
+  "무기고를 건드리지 않고 지나쳤습니다.": {
+    "en": "Passed by the armory without disturbing it.",
+    "ja": "武器庫に触れず通り過ぎた。"
+  },
+  "무너지지 않는 성기사의 신념이 전우들의 목숨을 지키는 뚫리지 않는 성벽이 된다.": {
+    "en": "The unyielding conviction of the paladin becomes an impenetrable rampart protecting comrades' lives.",
+    "ja": "揺るぎない聖騎士の信念が戦友の命を守る突破不可能な城壁となる。"
+  },
+  "무너진 방어선을 분쇄하여 1턴간 기절시키고 브레이크 수치를 대량 파쇄합니다!": {
+    "en": "Shatters the collapsed defense line, stunning for 1 turn and dealing massive Break damage!",
+    "ja": "崩れた防衛線を粉砕して1ターン気絶させ、ブレイク数値を大量に削る！"
+  },
+  "무두질된 질긴 가죽과 흉부 뼈대로 제작된 경량 갑옷. 방어력과 함께 신속한 움직임을 유지합니다.": {
+    "en": "Light armor crafted from tanned tough leather and a rib cage frame. Provides defense while maintaining swift mobility.",
+    "ja": "なめした頑丈な革と胸部骨格で作られた軽量鎧。防御力とともに素早い動きを保つ。"
+  },
+  "무력화된 적에게 뇌운 돌풍이 소환되어 모든 적을 휩쓰는 뇌폭 파동을 일으킵니다!": {
+    "en": "Summons a thundercloud gust upon incapacitated enemies, triggering a lightning blast wave that sweeps all foes!",
+    "ja": "無力化された敵に雷雲の突風が召喚され、敵全体を巻き込む雷爆波動を引き起こす！"
+  },
+  "무력화된 틈을 타 암살 일격을 가해 치명적 처형 피해를 입히고 시전자가 은신 태세에 돌입합니다!": {
+    "en": "Strikes an incapacitated foe with an assassination blow dealing fatal execute damage, entering Stealth stance!",
+    "ja": "無力化された隙を突き暗殺一撃を放ち、致命的な処刑ダメージを与えて術者が潜伏態勢に入る！"
+  },
+  "무료": {
+    "en": "Free",
+    "ja": "無料"
+  },
+  "무료 (Lv.1~3)": {
+    "en": "Free (Lv.1-3)",
+    "ja": "無料 (Lv.1〜3)"
+  },
+  "무료 유지": {
+    "en": "Free Upkeep",
+    "ja": "無料維持"
+  },
+  "무료 장착": {
+    "en": "Free Equip",
+    "ja": "無料装着"
+  },
+  "무명의 소굴": {
+    "en": "Nameless Lair",
+    "ja": "無名の巣窟"
+  },
+  "무명의 암영길드": {
+    "en": "Nameless Shadow Guild",
+    "ja": "無名の暗影ギルド"
+  },
+  "무슨 소릴! 심연에선 한 배를 탄 전우야. 등이 든든해졌으니 이제 우리와 호흡을 맞추면 돼!": {
+    "en": "What are you talking about! In the Abyss, we're comrades in the same boat. Now that our backs are covered, just sync up with us!",
+    "ja": "何を言っている！深淵では同じ船に乗った戦友だ。背中が心強くなったのだから、あとは息を合わせればいい！"
+  },
+  "무시하고 탐험 계속": {
+    "en": "Ignore and continue exploring",
+    "ja": "無視して探検続行"
+  },
+  "무자비한 처형: 치명타 피해 +18%, 공격력 +8%, 흡혈 +5%, 빈사 적 처형 피해 +15%": {
+    "en": "Ruthless Execution: Crit DMG +18%, ATK +8%, Lifesteal +5%, Execution DMG to near-death enemies +15%",
+    "ja": "無慈悲な処刑: 会心ダメージ+18%、攻撃力+8%、吸血+5%、瀕死敵への処刑ダメージ+15%"
+  },
+  "무적의 군세를 지휘하여 적 전체를 260% 위력으로 짓밟고 모든 아군에게 최대 HP 40% 보호막을 부여합니다.": {
+    "en": "Commands an invincible legion to trample all enemies for 260% power and grants a 40% Max HP shield to all allies.",
+    "ja": "無敵の軍勢を率いて敵全体を260%の威力で蹂躙し、味方全体に最大HP40%のシールドを付与する。"
+  },
+  "무중력 구역을 우회하여 통과했습니다.": {
+    "en": "Bypassed and navigated through the zero-gravity zone.",
+    "ja": "無重力区域を迂回して通過した。"
+  },
+  "무한의": {
+    "en": "Infinite",
+    "ja": "無限の"
+  },
+  "무한의 마도: 모든 마법 스킬의 마나 소모량이 30% 감소합니다.": {
+    "en": "Infinite Arcana: Mana cost of all magic skills reduced by 30%.",
+    "ja": "無限の魔導: すべての魔法スキルの消費MPが30%減少する。"
+  },
+  "묵시록의 흑염": {
+    "en": "Black Flame of Apocalypse",
+    "ja": "黙示録の黒炎"
+  },
+  "묵직한": {
+    "en": "Heavy",
+    "ja": "重厚な"
+  },
+  "묵직한 물리 파괴 일격 및 2턴간 대상의 공격력 30% 강제 억제": {
+    "en": "Heavy physical crushing blow and forcibly suppresses target's ATK by 30% for 2 turns",
+    "ja": "重厚な物理破壊一撃および2ターン対象の攻撃力を30%強制抑制"
+  },
+  "문의 이메일:": {
+    "en": "Inquiry Email:",
+    "ja": "お問い合わせメール:"
+  },
+  "물류 구획을 체계적으로 분할하여 기초 원자재와 파밍 재료의 적재 한도를 1,000개까지 대폭 확대했습니다.": {
+    "en": "Systematically partitioned the logistics sector to greatly expand the cargo capacity of raw materials and farming supplies up to 1,000.",
+    "ja": "物流区画を体系的に分割し、基礎原材料と採取素材の積載上限を1,000個まで大幅に拡大した。"
+  },
+  "물리 딜러": {
+    "en": "Physical DPS",
+    "ja": "物理ディーラー"
+  },
+  "물리 딜러 + 광전사 조합": {
+    "en": "Physical DPS + Berserker Combo",
+    "ja": "物理ディーラー＋狂戦士の組み合わせ"
+  },
+  "물리 딜러 + 힐러 조합": {
+    "en": "Physical DPS + Healer Combo",
+    "ja": "物理ディーラー＋ヒーラーの組み合わせ"
+  },
+  "물리 딜러 2인": {
+    "en": "2 Physical DPS",
+    "ja": "物理ディーラー2名"
+  },
+  "물리 딜러 3인 (순수 암살/도적)": {
+    "en": "3 Physical DPS (Pure Assassin/Rogue)",
+    "ja": "物理ディーラー3名 (純粋暗殺/盗賊)"
+  },
+  "물리 전사들이 전선에서 가장 애용하는 기초 전술 마도서 3종을 영구 서고에 보존합니다.": {
+    "en": "Permanently preserves 3 basic tactical grimoires favored by frontline physical warriors in the archives.",
+    "ja": "前線の物理戦士たちが最も愛用する基礎戦術魔導書3種を永久書庫に保管する。"
+  },
+  "물리/마법 피해": {
+    "en": "Physical/Magical DMG",
+    "ja": "物理/魔法ダメージ"
+  },
+  "물약": {
+    "en": "Potion",
+    "ja": "ポーション"
+  },
+  "물어뜯기": {
+    "en": "Bite",
+    "ja": "噛みつき"
+  },
+  "미각성": {
+    "en": "Unawakened",
+    "ja": "未覚醒"
+  },
+  "미건설": {
+    "en": "Unconstructed",
+    "ja": "未建設"
+  },
+  "미건설 시설": {
+    "en": "Unbuilt Facility",
+    "ja": "未建設の施設"
+  },
+  "미결속 (공물 봉헌 시 발동)": {
+    "en": "Unbound (Triggers upon offering tribute)",
+    "ja": "未結束 (供物奉納時に発動)"
+  },
+  "미결속 (아래 영웅 선택 후 가호 결속 가능)": {
+    "en": "Unbound (Select a hero below to bind blessing)",
+    "ja": "未結束 (下の英雄を選択して加護の結束が可能)"
+  },
+  "미궁 지배자의 진실 거울 파편": {
+    "en": "Mirror Shard of Truth",
+    "ja": "真実の鏡の破片"
+  },
+  "미궁 진실 목걸이": {
+    "en": "Labyrinth Truth Necklace",
+    "ja": "迷宮真実のネックレス"
+  },
+  "미궁의 지배자 (9F 보스)": {
+    "en": "Labyrinth Overlord (9F Boss)",
+    "ja": "迷宮の支配者 (9Fボス)"
+  },
+  "미등록": {
+    "en": "Unregistered",
+    "ja": "未登録"
+  },
+  "미래의 결전 기억": {
+    "en": "Memory of the Future Showdown",
+    "ja": "未来の決戦の記憶"
+  },
+  "미보유": {
+    "en": "Not Owned",
+    "ja": "未所持"
+  },
+  "미부여 (인챈트 가능)": {
+    "en": "Not Applied (Enchantable)",
+    "ja": "未付与 (エンチャント可能)"
+  },
+  "미수령 상태인 모든 전리품을 포기하시겠습니까?": {
+    "en": "Forfeit all unclaimed loot?",
+    "ja": "未受取のすべての戦利品を放棄しますか？"
+  },
+  "미수령 전리품 (": {
+    "en": "Unclaimed Loot (",
+    "ja": "未受取戦利品 ("
+  },
+  "미아": {
+    "en": "Mia",
+    "ja": "ミア"
+  },
+  "미연구 (Lv.0)": {
+    "en": "Unresearched (Lv.0)",
+    "ja": "未研究 (Lv.0)"
+  },
+  "미장착 상태 (최대 2개)": {
+    "en": "Unequipped (Max 2)",
+    "ja": "未装着 (最大2個)"
+  },
+  "미적용": {
+    "en": "Not Applied",
+    "ja": "未適用"
+  },
+  "미착용 장비 [{0}]이(가) 보관함에 부족합니다. (필요: {1}, 보유: {2})": {
+    "en": "Insufficient unequipped gear [{0}] in inventory. (Required: {1}, Owned: {2})",
+    "ja": "未装備の[{0}]が保管庫に不足しています。(必要: {1}、所持: {2})"
+  },
+  "미해금": {
+    "en": "Locked",
+    "ja": "未解放"
+  },
+  "민첩 부적": {
+    "en": "Agility Talisman",
+    "ja": "敏捷の護符"
+  },
+  "민첩의 부적 +1": {
+    "en": "Agility Talisman +1",
+    "ja": "敏捷の護符 +1"
+  },
+  "민첩한 기동과 회피를 극대화한 투사의 전투 경갑.": {
+    "en": "Fighter's light combat armor maximizing agile mobility and evasion.",
+    "ja": "俊敏な機動と回避を極限まで高めた闘士の戦闘軽甲。"
+  },
+  "민첩한 선제 공격으로 대상 마물보다 속도가 빠를수록 피해량이 최대 20%까지 증폭됩니다.": {
+    "en": "Agile preemptive strike; the faster your speed compared to the monster, the more damage is amplified up to 20%.",
+    "ja": "素早い先制攻撃。対象の魔物より速度が速いほどダメージが最大20%まで増幅する。"
+  },
+  "믿을 수 없군… 베히모스의 광맥 심장에서 영원히 식지 않는 태고의 에테르 불꽃이 솟구치고 있어! 시공 왜곡자의 닻이 차원의 균열을 완전히 용접해냈네!": {
+    "en": "Incredible... an everlasting primordial ether flame is surging from Behemoth's vein heart! The chronowarper's anchor has completely sealed the dimensional rift!",
+    "ja": "信じられない…ベヒモスの鉱脈心臓から永遠に冷めない太古のエーテルの炎が湧き上がっている！時空の歪み人の錨が次元の亀裂を完全に溶接して塞いだぞ！"
+  },
+  "및": {
+    "en": "and",
+    "ja": "および"
+  },
+  "바닥에 잠들어 있던 고대 화염 룬이 폭쇄하며 불길이 번집니다!": {
+    "en": "Ancient flame runes dormant on the floor detonate, spreading flames!",
+    "ja": "床に眠っていた古代の火炎ルーンが爆砕し、火の手が広がる！"
+  },
+  "바닥의 석판이 꺼지며 날카로운 흑철 가시가 솟구칩니다!": {
+    "en": "The floor slab sinks as sharp dark iron spikes erupt!",
+    "ja": "床の石板が沈み、鋭い黒鉄の棘が突き出る！"
+  },
+  "바람": {
+    "en": "Wind",
+    "ja": "風"
+  },
+  "바람을 타고 독안개 탈출": {
+    "en": "Ride the wind to escape the poison mist",
+    "ja": "風に乗って毒霧を脱出"
+  },
+  "바르톨": {
+    "en": "Bartol",
+    "ja": "バルトル"
+  },
+  "박쥐": {
+    "en": "Bat",
+    "ja": "コウモリ"
+  },
+  "반격": {
+    "en": "Counter",
+    "ja": "反撃"
+  },
+  "반응형 정찰 시스템: 정찰 탭에서 상대 영지 목록이 가로형 카드 형태로 제공되며, 정찰 버튼을 눌러 상대 영주의 방어 타워 레벨과 부대 클래스 구성을 미리 파악할 수 있습니다.": {
+    "en": "Responsive Recon System: Enemy domains are displayed as horizontal cards in the Recon tab. Tap the Recon button to assess the enemy lord's defense tower levels and troop class compositions beforehand.",
+    "ja": "反応型偵察システム: 偵察タブで相手領地リストが横型カード形式で提供され、偵察ボタンを押して相手領主の防衛タワーレベルと部隊クラス構成を事前に把握できる。"
+  },
+  "반지": {
+    "en": "Ring",
+    "ja": "指輪"
+  },
+  "받는 피해 -{0}%": {
+    "en": "Received DMG -{0}%",
+    "ja": "被ダメージ -{0}%"
+  },
+  "받는 피해 {0}% 감소": {
+    "en": "Received DMG reduced by {0}%",
+    "ja": "被ダメージ {0}%減少"
+  },
+  "발광 이끼를 건드리지 않고 지나쳤습니다.": {
+    "en": "Passed by without disturbing the glowing moss.",
+    "ja": "発光苔に触れず通り過ぎた。"
+  },
+  "발동 조건: 적 [{0}] 상태": {
+    "en": "Trigger condition: Enemy [{0}] state",
+    "ja": "発動条件: 敵[{0}]状態"
+  },
+  "발레리아": {
+    "en": "Valeria",
+    "ja": "ヴァレリア"
+  },
+  "발렌타인": {
+    "en": "Valentine",
+    "ja": "バレンタイン"
+  },
+  "발키리": {
+    "en": "Valkyrie",
+    "ja": "ヴァルキリー"
+  },
+  "발키리 성스러운 방주": {
+    "en": "Valkyrie Holy Ark",
+    "ja": "ヴァルキリー聖なる方舟"
+  },
+  "발키리: [궁극기] 영원의 성역 — 1턴간 파티 완전 무적 결계 + 모든 디버프 정화": {
+    "en": "Valkyrie: [Ultimate] Eternal Sanctuary — 1 turn party absolute invulnerability barrier + cleanse all debuffs",
+    "ja": "ヴァルキリー: [アルティメット] 永遠の聖域 — 1ターンパーティ完全無敵結界＋すべてのデバフ浄化"
+  },
+  "발키리의 결계": {
+    "en": "Valkyrie's Barrier",
+    "ja": "ヴァルキリーの結界"
+  },
+  "발키리의 인도자": {
+    "en": "Valkyrie's Guide",
+    "ja": "ヴァルキリーの導き手"
+  },
+  "발톱": {
+    "en": "Claw",
+    "ja": "爪"
+  },
+  "발할라": {
+    "en": "Valhalla",
+    "ja": "ヴァルハラ"
+  },
+  "발할라 기사단": {
+    "en": "Valhalla Knights",
+    "ja": "ヴァルハラ騎士団"
+  },
+  "발할라 블레이드": {
+    "en": "Valhalla Blade",
+    "ja": "ヴァルハラブレード"
+  },
+  "발할라 블레이드: [궁극기] 불멸의 결전분노 — 잃은 체력 비례 최대 450% 적 전체 행성 파괴급 일격": {
+    "en": "Valhalla Blade: [Ultimate] Immortal Decisive Wrath — Planet-shattering strike up to 450% to all enemies based on lost HP",
+    "ja": "ヴァルハラブレード: [アルティメット] 不滅の決戦憤怒 — 減少HPに比例し最大450%の敵全体惑星破壊級一撃"
+  },
+  "발할라 블레이드의 학살검": {
+    "en": "Valhalla Blade's Slaughter Sword",
+    "ja": "ヴァルハラブレードの虐殺剣"
+  },
+  "발할라 참격": {
+    "en": "Valhalla Slash",
+    "ja": "ヴァルハラ斬撃"
+  },
+  "발할라의 불멸": {
+    "en": "Valhalla's Immortality",
+    "ja": "ヴァルハラの不滅"
+  },
+  "발할라의 영광": {
+    "en": "Glory of Valhalla",
+    "ja": "ヴァルハラの栄光"
+  },
+  "밤안개의 그림자 부적 +10": {
+    "en": "Nightmist Shadow Talisman +10",
+    "ja": "夜霧の影護符 +10"
+  },
+  "방 전체를 채울 정도로 거대한 순수 에테르 수정이 웅웅거리며 주변 광맥과 강력하게 공명하고 있습니다.": {
+    "en": "A pure ether crystal colossal enough to fill the entire chamber hums, resonating powerfully with the surrounding veins.",
+    "ja": "部屋全体を満たすほど巨大な純粋エーテル結晶が唸りを上げ、周囲の鉱脈と力強く共鳴している。"
+  },
+  "방+": {
+    "en": "DEF+",
+    "ja": "防+"
+  },
+  "방랑 모험가들을 맞이할 석재 토대와 시추 기반 시설(Lv.1 이상)이 갖춰져야 합니다.": {
+    "en": "Requires stone foundations and drilling infrastructure (Lv.1 or higher) to welcome wandering adventurers.",
+    "ja": "放浪冒険者を迎え入れる石材土台と採掘基盤施設(Lv.1以上)が整っている必要がある。"
+  },
+  "방랑 보급관에게 다음 안녕을 기원하며 지나쳤습니다.": {
+    "en": "Wished the wandering quartermaster farewell and moved on.",
+    "ja": "放浪補給官に旅の無事を祈りつつ通り過ぎた。"
+  },
+  "방랑 상인": {
+    "en": "Wandering Merchant",
+    "ja": "放浪商人"
+  },
+  "방랑 연금술사": {
+    "en": "Wandering Alchemist",
+    "ja": "放浪の錬金術士"
+  },
+  "방랑 용병 계약 영입 및 서브 퀘스트 게시판 (미건설)": {
+    "en": "Wandering mercenary contract recruitment & subquest board (Unbuilt)",
+    "ja": "放浪傭兵の契約雇用およびサブクエスト掲示板 (未建設)"
+  },
+  "방랑 용병을 고용하고 레벨에 따라 강화되는 서브 의뢰를 수주하며, Lv.5부터 15초마다 식량을 자체 조달(Lv.5: 3, Lv.7: 7, Lv.9: 10)합니다. (Lv.4+ 골드 유지비)": {
+    "en": "Recruits wandering mercenaries and accepts scaling subquests; automatically provides food every 15s starting at Lv.5 (Lv.5: 3, Lv.7: 7, Lv.9: 10). (Lv.4+ Gold upkeep)",
+    "ja": "放浪傭兵を雇用しレベルに応じたサブ依頼を受注。Lv.5から15秒ごとに食糧を自家調達(Lv.5: 3, Lv.7: 7, Lv.9: 10)。(Lv.4+ ゴールド維持費)"
+  },
+  "방랑 주점": {
+    "en": "Wanderer Tavern",
+    "ja": "放浪酒場"
+  },
+  "방랑 주점 바로가기 (용병 영입)": {
+    "en": "Go to Wanderer Tavern (Recruit Mercenaries)",
+    "ja": "放浪酒場へ移動 (傭兵雇用)"
+  },
+  "방랑 지휘관_{0}": {
+    "en": "Wandering Commander_{0}",
+    "ja": "放浪指揮官_{0}"
+  },
+  "방랑자": {
+    "en": "Wanderer",
+    "ja": "放浪者"
+  },
+  "방랑자(익명)로 즉시 탐험 시작": {
+    "en": "Start exploration immediately as Wanderer (Anonymous)",
+    "ja": "放浪者(匿名)として即座に探検を開始"
+  },
+  "방랑자의 라운지": {
+    "en": "Wanderer Lounge",
+    "ja": "放浪者のラウンジ"
+  },
+  "방랑자의 라운지 (Wanderer's Lounge)": {
+    "en": "Wanderer Lounge",
+    "ja": "放浪者のラウンジ"
+  },
+  "방랑자의 라운지 (고용)": {
+    "en": "Wanderer Lounge (Recruit)",
+    "ja": "放浪者のラウンジ (雇用)"
+  },
+  "방랑자의 라운지 (주점) 건설 필요": {
+    "en": "Requires Wanderer Lounge (Tavern) Construction",
+    "ja": "放浪者のラウンジ (酒場) 建設が必要"
+  },
+  "방랑자의 라운지 건설": {
+    "en": "Construct Wanderer Lounge",
+    "ja": "放浪者のラウンジ建設"
+  },
+  "방랑자의 라운지 건설 & 3번째 용병 영입": {
+    "en": "Construct Wanderer Lounge & Recruit 3rd Mercenary",
+    "ja": "放浪者のラウンジ建設＆3人目の傭兵雇用"
+  },
+  "방랑자의 라운지를 건설하고 세 번째 용병을 계약 영입하여 3인 정규 원정대를 완성하고 첫 탐험을 출진하세요!": {
+    "en": "Construct the Wanderer Lounge, recruit the 3rd mercenary to complete a 3-member regular expedition, and embark on your first exploration!",
+    "ja": "放浪者のラウンジを建設し、3人目の傭兵を契約雇用して3人正規遠征隊を結成、初の探検へ出陣せよ！"
+  },
+  "방랑자의 라운지를 건설하여 첫 용병을 영입하고 성채 외곽 침묵의 회랑 1구역으로 첫 척후를 파견(진입)하세요.": {
+    "en": "Construct the Wanderer Lounge, recruit your first mercenary, and deploy scouts (enter) Sector 1 of the Silent Cloister outside the Citadel.",
+    "ja": "放浪者のラウンジを建設して最初の傭兵を雇用し、城塞郊外の沈黙の回廊第1区域へ初の斥候を派遣(進入)せよ。"
+  },
+  "방랑하는 용병들과 정보원들이 모여들 따뜻한 휴식처가 없습니다.": {
+    "en": "There is no warm shelter for wandering mercenaries and informants to gather.",
+    "ja": "放浪する傭兵や情報屋が集まる温かな憩いの場がない。"
+  },
+  "방벽": {
+    "en": "Wall",
+    "ja": "防壁"
+  },
+  "방벽, 대장간, 시설 건축 및 증축": {
+    "en": "Walls, forge, facility construction & expansion",
+    "ja": "防壁、鍛冶屋、施設の建築および増築"
+  },
+  "방어": {
+    "en": "Defend",
+    "ja": "防御"
+  },
+  "방어 100% 무시 확정 치명타 (1.6배)": {
+    "en": "Guaranteed Critical ignoring 100% DEF (1.6x)",
+    "ja": "防御力100%無視 確定会心 (1.6倍)"
+  },
+  "방어 관통 +{0}%": {
+    "en": "DEF Piercing +{0}%",
+    "ja": "防御貫通 +{0}%"
+  },
+  "방어 관통 마도탄 저격 및 2턴간 대상 방어력 35% 추가 분쇄": {
+    "en": "DEF Piercing arcane shot snipe and additionally shreds target DEF by 35% for 2 turns",
+    "ja": "防御貫通魔導弾の狙撃および2ターン対象の防御力を35%追加粉砕"
+  },
+  "방어 분쇄": {
+    "en": "DEF Crush",
+    "ja": "防御粉砕"
+  },
+  "방어 성공!": {
+    "en": "Defense Successful!",
+    "ja": "防御成功！"
+  },
+  "방어 약화": {
+    "en": "DEF Weaken",
+    "ja": "防御弱化"
+  },
+  "방어 약화 상태의 적을 강타로 강타 시 무너진 방어선을 분쇄하여 1턴간 기절 및 차징 브레이크 150 파쇄": {
+    "en": "When striking an enemy with DEF Weaken, shatters their broken defense line, stunning for 1 turn and dealing 150 Charging Break",
+    "ja": "防御弱化状態の敵に強打を当てた時、崩れた防衛線を粉砕し1ターン気絶およびチャージブレイク150粉砕"
+  },
+  "방어 전술": {
+    "en": "Defense Tactics",
+    "ja": "防衛戦術"
+  },
+  "방어 전술 결계": {
+    "en": "Tactical Defense Barrier",
+    "ja": "防衛戦術結界"
+  },
+  "방어 전술 타워": {
+    "en": "Tactical Defense Tower",
+    "ja": "防衛戦術タワー"
+  },
+  "방어 전술 타워 (총 Lv.{0})": {
+    "en": "Tactical Defense Tower (Total Lv.{0})",
+    "ja": "防衛戦術タワー (総Lv.{0})"
+  },
+  "방어 전술 타워 1회 연구 달성": {
+    "en": "Achieve Tactical Defense Tower Research 1 Time",
+    "ja": "防衛戦術タワー研究1回達成"
+  },
+  "방어 전술 타워: 왜곡 방어장(최대 HP 비례 보호막 전개), 장갑 보강 코어(방어력 상시 증폭), 수호의 오벨리스크(매 라운드 시작 시 수비측 전원 체력 자동 재생)": {
+    "en": "Tactical Defense Tower: Distortion Barrier (shields proportional to Max HP), Armor Reinforcement Core (permanently amplifies DEF), Obelisk of Protection (automatically regenerates all defenders' HP at the start of each round)",
+    "ja": "防衛戦術タワー: 歪曲防護障壁(最大HP比例シールド展開)、装甲補強コア(防御力常時増幅)、守護のオベリスク(毎ラウンド開始時守備側全員のHP自動再生)"
+  },
+  "방어 전술 타워는 공격형(포격 지원), 방어형(성역 재생), 유틸형(방어 파쇄/약화) 3대 테크로 나뉘며, 연구 레벨에 따라 매 라운드 시작 시 별도의 독립 턴으로 발동하여 아군 치료나 적 전체 광역 포격 및 디버프를 지원합니다.": {
+    "en": "Tactical Defense Towers branch into 3 techs: Offensive (Artillery Support), Defensive (Sanctuary Regen), and Utility (DEF Shred/Weaken). Based on research levels, they trigger on independent turns at the start of each round to heal allies or shell enemies with AoE and debuffs.",
+    "ja": "防衛戦術タワーは攻撃型(砲撃支援)、防御型(聖域再生)、ユーティリティ型(防御粉砕/弱化)の3大系統に分かれ、研究レベルに応じて毎ラウンド開始時に独立ターンで発動し、味方回復や敵全体への範囲砲撃・デバフを支援する。"
+  },
+  "방어 전술 프로토콜": {
+    "en": "Defense Tactical Protocol",
+    "ja": "防衛戦術プロトコル"
+  },
+  "방어 전투력": {
+    "en": "Defense Power",
+    "ja": "防御戦闘力"
+  },
+  "방어 태세": {
+    "en": "Defensive Stance",
+    "ja": "防御態勢"
+  },
+  "방어 파쇄": {
+    "en": "DEF Shred",
+    "ja": "防御粉砕"
+  },
+  "방어 파쇄 역장": {
+    "en": "DEF Shred Forcefield",
+    "ja": "防御粉砕力場"
+  },
+  "방어 파쇄(-{0}%)": {
+    "en": "DEF Shred (-{0}%)",
+    "ja": "防御粉砕(-{0}%)"
+  },
+  "방어/생명/수호 (+3강)": {
+    "en": "DEF/HP/Protection (+3)",
+    "ja": "防御/生命/守護 (+3強化)"
+  },
+  "방어/재생/가호 (+7강)": {
+    "en": "DEF/Regen/Blessing (+7)",
+    "ja": "防御/再生/加護 (+7強化)"
+  },
+  "방어구": {
+    "en": "Armor",
+    "ja": "防具"
+  },
+  "방어구 (3)": {
+    "en": "Armor (3)",
+    "ja": "防具 (3)"
+  },
+  "방어구 ({0})": {
+    "en": "Armor ({0})",
+    "ja": "防具 ({0})"
+  },
+  "방어기록": {
+    "en": "Defense Record",
+    "ja": "防御記録"
+  },
+  "방어력": {
+    "en": "DEF",
+    "ja": "防御力"
+  },
+  "방어력 (DEF)": {
+    "en": "DEF",
+    "ja": "防御力 (DEF)"
+  },
+  "방어력 +": {
+    "en": "DEF +",
+    "ja": "防御力 +"
+  },
+  "방어력 +13, HP +70": {
+    "en": "DEF +13, HP +70",
+    "ja": "防御力 +13, HP +70"
+  },
+  "방어력 +15, 공격력 +15": {
+    "en": "DEF +15, ATK +15",
+    "ja": "防御力 +15, 攻撃力 +15"
+  },
+  "방어력 +16, HP +100, 행운 +8": {
+    "en": "DEF +16, HP +100, LUCK +8",
+    "ja": "防御力 +16, HP +100, 幸運 +8"
+  },
+  "방어력 +16, 최대 체력 +120, 속도 +4": {
+    "en": "DEF +16, Max HP +120, SPD +4",
+    "ja": "防御力 +16, 最大HP +120, 速度 +4"
+  },
+  "방어력 +18%, 체력 +15%, 행운 -3": {
+    "en": "DEF +18%, HP +15%, LUCK -3",
+    "ja": "防御力 +18%, HP +15%, 幸運 -3"
+  },
+  "방어력 +18, 마나 +80, 최대 체력 +100": {
+    "en": "DEF +18, MP +80, Max HP +100",
+    "ja": "防御力 +18, MP +80, 最大HP +100"
+  },
+  "방어력 +18, 최대 HP +105": {
+    "en": "DEF +18, Max HP +105",
+    "ja": "防御力 +18, 最大HP +105"
+  },
+  "방어력 +18, 최대 체력 +150, 행운 +4": {
+    "en": "DEF +18, Max HP +150, LUCK +4",
+    "ja": "防御力 +18, 最大HP +150, 幸運 +4"
+  },
+  "방어력 +18, 최대 체력 +180, 속도 +3": {
+    "en": "DEF +18, Max HP +180, SPD +3",
+    "ja": "防御力 +18, 最大HP +180, 速度 +3"
+  },
+  "방어력 +20, 마나 +60": {
+    "en": "DEF +20, MP +60",
+    "ja": "防御力 +20, MP +60"
+  },
+  "방어력 +20, 최대 체력 +180": {
+    "en": "DEF +20, Max HP +180",
+    "ja": "防御力 +20, 最大HP +180"
+  },
+  "방어력 +22, 마나 +60": {
+    "en": "DEF +22, MP +60",
+    "ja": "防御力 +22, MP +60"
+  },
+  "방어력 +24, 최대 체력 +160": {
+    "en": "DEF +24, Max HP +160",
+    "ja": "防御力 +24, 最大HP +160"
+  },
+  "방어력 +25, HP +180, 속도 +5": {
+    "en": "DEF +25, HP +180, SPD +5",
+    "ja": "防御力 +25, HP +180, 速度 +5"
+  },
+  "방어력 +25, 최대 체력 +150": {
+    "en": "DEF +25, Max HP +150",
+    "ja": "防御力 +25, 最大HP +150"
+  },
+  "방어력 +28, 최대 체력 +100": {
+    "en": "DEF +28, Max HP +100",
+    "ja": "防御力 +28, Max HP +100",
+    "ja": "防御力 +28, 最大HP +100"
+  },
+  "방어력 +28, 최대 체력 +240, 행운 +6": {
+    "en": "DEF +28, Max HP +240, LUCK +6",
+    "ja": "防御力 +28, 最大HP +240, 幸運 +6"
+  },
+  "방어력 +35, 최대 체력 +250": {
+    "en": "DEF +35, Max HP +250",
+    "ja": "防御力 +35, 最大HP +250"
+  },
+  "방어력 +35, 최대 체력 +300": {
+    "en": "DEF +35, Max HP +300",
+    "ja": "防御力 +35, 最大HP +300"
+  },
+  "방어력 +4, HP +25, 마나 +14": {
+    "en": "DEF +4, HP +25, MP +14",
+    "ja": "防御力 +4, HP +25, MP +14"
+  },
+  "방어력 +45, 최대 체력 +400, 속도 +8": {
+    "en": "DEF +45, Max HP +400, SPD +8",
+    "ja": "防御力 +45, 最大HP +400, 速度 +8"
+  },
+  "방어력 +48, 최대 체력 +600, 마나 +50": {
+    "en": "DEF +48, Max HP +600, MP +50",
+    "ja": "防御力 +48, 最大HP +600, MP +50"
+  },
+  "방어력 +55, 최대 체력 +500, 속도 +7": {
+    "en": "DEF +55, Max HP +500, SPD +7",
+    "ja": "防御力 +55, 最大HP +500, 速度 +7"
+  },
+  "방어력 +6, HP +28": {
+    "en": "DEF +6, HP +28",
+    "ja": "防御力 +6, HP +28"
+  },
+  "방어력 +60, 최대 체력 +500": {
+    "en": "DEF +60, Max HP +500",
+    "ja": "防御力 +60, 最大HP +500"
+  },
+  "방어력 +8, HP +42": {
+    "en": "DEF +8, HP +42",
+    "ja": "防御力 +8, HP +42"
+  },
+  "방어력 +8, HP +42, 공격력 +4": {
+    "en": "DEF +8, HP +42, ATK +4",
+    "ja": "防御力 +8, HP +42, 攻撃力 +4"
+  },
+  "방어력 +{0}": {
+    "en": "DEF +{0}",
+    "ja": "防御力 +{0}"
+  },
+  "방어력 +{0}%": {
+    "en": "DEF +{0}%",
+    "ja": "防御力 +{0}%"
+  },
+  "방어력 -50% & 턴당 최대 HP 8% 화염 피해": {
+    "en": "DEF -50% & 8% Max HP Fire DMG per turn",
+    "ja": "防御力 -50% ＆ ターンごと最大HP8%の火炎ダメージ"
+  },
+  "방어력 100% 무시(순수 관통 피해) + 확정 치명타(100%) + 치명 피해 +150% 폭발": {
+    "en": "Ignores 100% DEF (True Piercing DMG) + Guaranteed Crit (100%) + Crit DMG +150% Burst",
+    "ja": "防御力100%無視(純粋貫通ダメージ)＋確定会心(100%)＋会心ダメージ+150%爆発"
+  },
+  "방어력 35%": {
+    "en": "DEF 35%",
+    "ja": "防御力 35%"
+  },
+  "방어력 50%": {
+    "en": "DEF 50%",
+    "ja": "防御力 50%"
+  },
+  "방어력 DEF": {
+    "en": "DEF",
+    "ja": "防御力 DEF"
+  },
+  "방어력 {0}": {
+    "en": "DEF {0}",
+    "ja": "防御力 {0}"
+  },
+  "방어력 감소": {
+    "en": "DEF Reduction",
+    "ja": "防御力減少"
+  },
+  "방어력 강화": {
+    "en": "DEF Enhancement",
+    "ja": "防御力強化"
+  },
+  "방어력 무시 정밀 저격과 폭풍 화살비로 적의 핵심 후열 딜러를 원거리에서 저격합니다.": {
+    "en": "Snipes key backline enemy DPS from afar with DEF-ignoring precision shots and storm arrow rains.",
+    "ja": "防御力無視の精密狙撃と嵐の矢の雨で敵の要となる後衛ディーラーを遠距離から狙撃する。"
+  },
+  "방어력 분쇄": {
+    "en": "DEF Shred",
+    "ja": "防御力粉砕"
+  },
+  "방어력 약화": {
+    "en": "DEF Weaken",
+    "ja": "防御力弱化"
+  },
+  "방어력 증가": {
+    "en": "DEF Increase",
+    "ja": "防御力増加"
+  },
+  "방어력 차단": {
+    "en": "DEF Block",
+    "ja": "防御力遮断"
+  },
+  "방어력(DEF)": {
+    "en": "DEF",
+    "ja": "防御力(DEF)"
+  },
+  "방어력을 100% 무시하는 확정 치명타 및 2턴 깊은 출혈 부여": {
+    "en": "Guaranteed Critical ignoring 100% DEF and inflicts Deep Bleed for 2 turns",
+    "ja": "防御力を100%無視する確定会心および2ターンの重度出血を付与"
+  },
+  "방어무시": {
+    "en": "Ignore DEF",
+    "ja": "防御無視"
+  },
+  "방어선 붕괴": {
+    "en": "Defense Line Collapse",
+    "ja": "防衛線崩壊"
+  },
+  "방어파쇄(-{0})": {
+    "en": "DEF Shred (-{0})",
+    "ja": "防御粉砕(-{0})"
+  },
+  "방전된 리튬 배터리": {
+    "en": "Depleted Lithium Battery",
+    "ja": "放電したリチウム電池"
+  },
+  "방주 13대 영지 시설 도감 (": {
+    "en": "Ark 13 Domain Facilities Codex (",
+    "ja": "方舟13大領地施設図鑑 ("
+  },
+  "방주 거점의 핵심 11대 시설을 모두 1레벨 이상 건설하여, 황폐화된 방주를 완전한 자립형 작전 기지로 복원하세요.": {
+    "en": "Construct all 11 core facilities of the Ark stronghold to Level 1 or higher, restoring the desolate Ark into a fully self-sustaining operational base.",
+    "ja": "方舟拠点の主要11施設をすべてレベル1以上で建設し、荒廃した方舟を完全自立型の作戦基地へと復元せよ。"
+  },
+  "방주 고대 영목 벌채 및 목재 수급 (미건설)": {
+    "en": "Ark ancient timber harvest and wood supply (Unbuilt)",
+    "ja": "方舟古代霊木の伐採および木材調達 (未建設)"
+  },
+  "방주 관리": {
+    "en": "Ark Management",
+    "ja": "方舟管理"
+  },
+  "방주 백과사전 & 도감": {
+    "en": "Ark Encyclopedia & Codex",
+    "ja": "方舟百科事典＆図鑑"
+  }
+}

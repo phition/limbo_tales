@@ -1,0 +1,802 @@
+{
+  "방주 백과사전 • FAQ": {
+    "en": "Ark Encyclopedia • FAQ",
+    "ja": "方舟百科事典・FAQ"
+  },
+  "방주 백과사전 상세 열람": {
+    "en": "View Ark Encyclopedia Details",
+    "ja": "方舟百科事典詳細閲覧"
+  },
+  "방주 병기창장": {
+    "en": "Ark Armory Master",
+    "ja": "方舟兵器廠長"
+  },
+  "방주 보관함": {
+    "en": "Ark Storage",
+    "ja": "方舟保管庫"
+  },
+  "방주 부임 극초반 1일차~3일차 지휘관이 자원 고갈이나 전멸 없이 가장 빠르고 안전하게 영지를 번영시킬 수 있는 핵심 생존 지침입니다.": {
+    "en": "Core survival guidelines for commanders on Days 1-3 of assignment to prosper the domain quickly and safely without resource depletion or annihilation.",
+    "ja": "方舟着任初期の1日目〜3日目に指揮官が資源枯渇や全滅を起こさず最も迅速かつ安全に領地を発展させるための核心生存指針。"
+  },
+  "방주 생존 공식 마스터 대백과": {
+    "en": "Official Ark Survival Master Encyclopedia",
+    "ja": "方舟生存公式マスター大百科"
+  },
+  "방주 성채": {
+    "en": "Ark Citadel",
+    "ja": "方舟城塞"
+  },
+  "방주 성채 (Ark Citadel)": {
+    "en": "Ark Citadel",
+    "ja": "方舟城塞 (Ark Citadel)"
+  },
+  "방주 성채 (Ark Citadel) 영지 경제 & 건립 관리": {
+    "en": "Ark Citadel Domain Economy & Construction Management",
+    "ja": "方舟城塞 (Ark Citadel) 領地経済＆建設管理"
+  },
+  "방주 성채 입장하기": {
+    "en": "Enter Ark Citadel",
+    "ja": "方舟城塞へ入場"
+  },
+  "방주 성채(Ark Citadel)": {
+    "en": "Ark Citadel",
+    "ja": "方舟城塞(Ark Citadel)"
+  },
+  "방주 성채로 진입합니다...": {
+    "en": "Entering Ark Citadel...",
+    "ja": "方舟城塞へ進入中..."
+  },
+  "방주 성채에 태어난 아이들은 '바다'라는 것을 본 적이 없다. 하지만 이 한 장의 사진 속에는 끝없이 펼쳐진 푸른 물결과 부서지는 백파, 밀짚모자를 쓰고 브이(V) 자를 그리며 활짝 웃는 어린 딸과 부모가 담겨 있다. 굳어버린 3색 볼펜으로 사진 뒷면에 눌러쓴 삐뚤빼뚤한 글씨: \"202X년 8월, 우리 가족 첫 동해 여행. 다음 여름엔 제주도 가자!\" 그 다음 여름은 영원히 오지 않았지만, 한 가족이 누렸던 가장 찬란했던 여름 한낮의 햇살은 차가운 심연에서도 따스하게 숨쉬고 있다.": {
+    "en": "Children born in the Ark Citadel have never seen the 'sea.' Yet this single photograph captures endless blue waves, breaking white foam, and a young daughter grinning with a V-sign in a straw hat beside her parents. Uneven handwriting scrawled on the back with a dried 3-color pen reads: \"August 202X, our family's first trip to the East Sea. Let's go to Jeju Island next summer!\" That next summer never came, but the brilliant midday summer sun that family once enjoyed still breathes warmly even in the cold Abyss.",
+    "ja": "方舟の城塞で生まれた子供たちは「海」というものを見たことがない。だが、この一枚の写真には果てしなく広がる青い波と砕ける白波、麦わら帽子をかぶりVサインで微笑む幼い娘と両親が収められている。固まった3色ボールペンで写真の裏に力強く殴り書きされた文字: 「202X年8月、家族で初めての東海旅行。次の夏は済州島へ行こう！」その次の夏は二度と訪れなかったが、ある家族が謳歌した最も眩しい夏の真昼の陽光は、冷たい深淵の中でも温かに息づいている。"
+  },
+  "방주 성채에서 쓰러진 병사의 혼이 공허에 흡수된 언데드. 자신의 HP를 흡수하며 싸운다.": {
+    "en": "An undead whose fallen soul from Ark Citadel was absorbed into the void. Fights while absorbing its own HP.",
+    "ja": "方舟城塞で倒れた兵士の魂が虚無に吸収されたアンデッド。自らのHPを吸収しながら戦う。"
+  },
+  "방주 성채의 성벽과 기반을 보강하여 시설 유지 부담을 영구 경감합니다.": {
+    "en": "Reinforces the walls and foundations of Ark Citadel to permanently reduce facility upkeep burden.",
+    "ja": "方舟城塞の城壁と基盤を補強し、施設維持の負担を永久軽減する。"
+  },
+  "방주 성채의 에테르 파동이 차원 경계를 두드리기 시작했다. 시공간을 가로지르는 차원 앵커를 세워 다른 세계선의 원정대와 교신하라.": {
+    "en": "The ether waves of Ark Citadel have begun pounding the dimensional boundary. Erect dimensional anchors traversing spacetime to communicate with expeditions of other worldlines.",
+    "ja": "方舟城塞のエーテル波動が次元の境界を叩き始めた。時空間を超える次元アンカーを立て、異界線の遠征隊と交信せよ。"
+  },
+  "방주 수호대": {
+    "en": "Ark Guard",
+    "ja": "方舟守護隊"
+  },
+  "방주 수호대 총대장": {
+    "en": "Ark Guard Grand Commander",
+    "ja": "方舟守護隊総隊長"
+  },
+  "방주 수호대장": {
+    "en": "Ark Guard Captain",
+    "ja": "方舟守護隊長"
+  },
+  "방주 영지": {
+    "en": "Ark Domain",
+    "ja": "方舟領地"
+  },
+  "방주 외곽 목재 벌채 시설. 영지 증축과 성화 유지에 필요한 목재를 9초마다 생산합니다.": {
+    "en": "Ark outer timber mill. Harvests wood every 9s required for citadel expansion & bonfire maintenance.",
+    "ja": "方舟郊外の伐採施設。領地増築と聖火維持に必要な木材を9秒ごとに生産する。"
+  },
+  "방주 외곽 위협 개체 척결": {
+    "en": "Eliminate Outskirt Threats of the Ark",
+    "ja": "方舟郊外の脅威個体掃討"
+  },
+  "방주 원정대": {
+    "en": "Ark Expedition",
+    "ja": "方舟遠征隊"
+  },
+  "방주 원정대 세션 및 성채 기록 동기화 중...": {
+    "en": "Syncing Ark Expedition session and Citadel records...",
+    "ja": "方舟遠征隊セッションおよび城塞記録を同期中..."
+  },
+  "방주 원정대를 지켜주는 성령의 신성한 묵주": {
+    "en": "Sacred rosary of the Holy Spirit protecting the Ark Expedition",
+    "ja": "方舟遠征隊を守護する聖霊の神聖な数珠"
+  },
+  "방주 인공위성에서 에테르 융합 빔을 유도 폭격하여 적 전체의 방어력을 50% 관통하고 240% 위력으로 타격합니다.": {
+    "en": "Coordinates an ether fusion beam bombardment from an Ark satellite, penetrating 50% enemy DEF and striking with 240% power.",
+    "ja": "方舟人工衛星からエーテル融合ビームを誘導爆撃し、敵全体の防御力を50%貫通して240%の威力で打撃を与える。"
+  },
+  "방주 인증 서버와 교신 중...": {
+    "en": "Communicating with Ark Authentication Server...",
+    "ja": "方舟認証サーバーと交信中..."
+  },
+  "방주 전역에 생명의 빛이 퍼져나가고 있어요. 절망에 떨던 생존자들은 이제 이곳을 진정한 안식처라 부르며 지휘관님을 우러러보고 있습니다. 방주의 기틀을 다지는 초반 생존 가이드와 1차 영지 재건이 눈부시게 완수된 것입니다.": {
+    "en": "The light of life is spreading across the Ark. The survivors who once trembled in despair now call this place a true sanctuary and look up to you, Commander. The early survival guide laying the foundation of the Ark and the Phase 1 Domain Reconstruction have been brilliantly accomplished.",
+    "ja": "方舟全域に生命の光が広がっている。絶望に震えていた生存者たちは今やここを真の安息所と呼び、指揮官を仰ぎ見ている。方舟の基盤を固める初期生存ガイドと第1次領地再建は見事に完遂されたのだ。"
+  },
+  "방주 제어 인공지능": {
+    "en": "Ark Control AI",
+    "ja": "方舟制御人工知能"
+  },
+  "방주 종합 백과사전 & 도감": {
+    "en": "Comprehensive Ark Encyclopedia & Codex",
+    "ja": "方舟総合百科事典＆図鑑"
+  },
+  "방주 주변에 자생하는 고대 영목을 벌채할 시설이 아직 마련되지 않았습니다.": {
+    "en": "No facility has been established yet to harvest ancient spirit trees native to the Ark's surroundings.",
+    "ja": "方舟周辺に自生する古代霊木を伐採する施設がまだ整っていない。"
+  },
+  "방주 주변에서 떨어진 영목 가지를 주워 목재 +{0} 획득": {
+    "en": "Gathered fallen spirit tree branches around the Ark, gaining Wood +{0}",
+    "ja": "方舟周辺に落ちた霊木の枝を拾い、木材+{0}を獲得"
+  },
+  "방주 주변의 고대 석화림에서 벌채한 마도 목재입니다. 시설의 뼈대를 세우고 모닥불의 온기를 지피며, 심연 탐험용 횃불과 곡괭이를 제작하는 데 필수적입니다.": {
+    "en": "Arcane timber harvested from ancient petrified forests around the Ark. Essential for framing facilities, fueling bonfire warmth, and crafting torches and pickaxes for abyssal exploration.",
+    "ja": "方舟周辺の古代石化林から伐採した魔導木材。施設の骨組みを建て焚火の温もりを灯し、深淵探検用の松明やツルハシの製作に不可欠。"
+  },
+  "방주 중심 성화 (미점화)": {
+    "en": "Central Ark Sacred Flame (Unlit)",
+    "ja": "方舟中心聖火 (未点火)"
+  },
+  "방주 중심부까지 주거 구역을 대대적으로 확장하여 대규모 정주 인구를 수용하고 정기적인 세수 기반을 탄탄히 다졌습니다.": {
+    "en": "Massively expanded the residential district to the Ark's core, accommodating a large settled population and solidly establishing a regular tax base.",
+    "ja": "方舟中心部まで居住区を大幅に拡張し、大規模な定住人口を収容して定期的な税収基盤を強固に固めた。"
+  },
+  "방주 중앙 물자 저장고. 레벨에 따라 27종 모든 자원의 최대 적재 용량을 확장합니다.": {
+    "en": "Central logistics depot of the Ark. Expands maximum storage capacity for all 27 resources according to level.",
+    "ja": "方舟中央物資保管庫。レベルに応じて全27種の全資源の最大積載容量を拡張する。"
+  },
+  "방주 중앙 병참고": {
+    "en": "Central Logistics Depot",
+    "ja": "方舟中央兵站庫"
+  },
+  "방주 중앙 병참고 (Ark Central Logistics)": {
+    "en": "Ark Central Logistics Depot",
+    "ja": "方舟中央兵站庫 (Ark Central Logistics)"
+  },
+  "방주 중앙 병참고 Lv.2 달성": {
+    "en": "Reach Central Logistics Depot Lv.2",
+    "ja": "方舟中央兵站庫 Lv.2達成"
+  },
+  "방주 지반 전체의 광맥을 장악한 전설적인 에테르 대광맥 시추소. 막대한 석재와 철광을 쏟아내며 42%의 최대 유지비 감면을 달성합니다.": {
+    "en": "Legendary Aether Great Quarry controlling veins across the Ark's bedrock. Yields massive stone and iron ore, achieving up to 42% max upkeep reduction.",
+    "ja": "方舟地盤全体の鉱脈を掌握した伝説のエーテル大鉱脈採掘所。膨大な石材と鉄鉱石を産出し、最大42%の維持費軽減を達成する。"
+  },
+  "방주 지반에 채굴 시추탑을 설치했습니다. 견고한 건축용 석재를 지상으로 끌어올려 방주 기반 시설 확장의 토대를 마련합니다.": {
+    "en": "Installed a mining drill tower into the Ark bedrock. Extracts sturdy building stone to lay the foundation for expanding Ark infrastructure.",
+    "ja": "方舟地盤に採掘タワーを設置。強固な建築用石材を地上へと引き上げ、方舟インフラ拡張の土台を築く。"
+  },
+  "방주 지휘관": {
+    "en": "Ark Commander",
+    "ja": "方舟指揮官"
+  },
+  "방주 총괄 참모": {
+    "en": "Ark Chief of Staff",
+    "ja": "方舟総括参謀"
+  },
+  "방주 최대 규모의 중앙 병참고를 완전 증축했습니다. 기초 20,000개, 파밍 5,000개, 심연 1,000개, 골드 1억의 궁극의 적재 한도를 달성합니다.": {
+    "en": "Fully expanded the Ark's largest Central Logistics Depot. Reached ultimate caps of 20,000 basic, 5,000 farming, 1,000 abyss resources, and 100M Gold.",
+    "ja": "方舟最大規模の中央兵站庫を完全増築。基礎20,000個、採取5,000個、深淵1,000個、ゴールド1億の究極積載上限を達成。"
+  },
+  "방주 클라우드 데이터 확인 및 최신 세이브 동기화 중...": {
+    "en": "Verifying Ark cloud data and syncing latest save...",
+    "ja": "方舟クラウドデータ確認および最新セーブを同期中..."
+  },
+  "방주 태초의 성역 정수가 담긴 신화의 반지. 착용자의 방어력과 생명력을 대폭 강화합니다.": {
+    "en": "A mythic ring containing the primordial sanctuary essence of the Ark. Greatly enhances the wearer's DEF and HP.",
+    "ja": "方舟原初の聖域エッセンスが宿る神話の指輪。着用者の防御力と生命力を大幅に強化する。"
+  },
+  "방주 프롤로그 서사 다시 보기": {
+    "en": "Replay Ark Prologue Story",
+    "ja": "方舟プロローグストーリー再確認"
+  },
+  "방주가 거대해질수록 희귀 비전서와 잉여 물자의 원활한 유통이 필요하다. 암시장의 빗장을 열어라.": {
+    "en": "As the Ark grows larger, smooth circulation of rare grimoires and surplus supplies becomes vital. Unlock the doors of the black market.",
+    "ja": "方舟が巨大化するほど、希少な魔導書と余剰物資の円滑な流通が必要となる。闇市の閂を開け。"
+  },
+  "방주가 다시 부유할 때 울려 퍼졌던 창세의 축복.": {
+    "en": "The blessing of genesis that resounded when the Ark floated once more.",
+    "ja": "方舟が再び浮遊したときに響き渡った創世の祝福。"
+  },
+  "방주는 단순한 피난처가 아니다. 고대인들이 심연의 붕괴를 막기 위해 건조한 차원 도약함이다. 1~2층 수호자들의 핵을 모아 시원의 기제를 복원하라.": {
+    "en": "The Ark is no mere sanctuary. It is an interdimensional leap ship built by the ancients to prevent the collapse of the Abyss. Gather the cores of the 1st and 2nd floor guardians to restore the primordial mechanism.",
+    "ja": "方舟は単なる避難所ではない。古代人が深淵の崩壊を防ぐために建造した次元跳躍艦だ。1〜2層の守護者たちのコアを集め、始原の機構を復元せよ。"
+  },
+  "방주로 무사 귀환": {
+    "en": "Safe Return to the Ark",
+    "ja": "方舟へ無事帰還"
+  },
+  "방주로부터 현장까지 이동 중 (합류까지": {
+    "en": "En route from the Ark to the site (until joining",
+    "ja": "方舟から現場へ移動中 (合流まで"
+  },
+  "방주를 수호하는 초기 2인의 결사대원": {
+    "en": "The initial 2 vanguard members defending the Ark",
+    "ja": "方舟を守護する初期2名の決死隊員"
+  },
+  "방주에 깃든 성령의 빛이 쓰러져가는 전우를 일으킨다.": {
+    "en": "The holy light dwelling in the Ark raises falling comrades.",
+    "ja": "方舟に宿る聖霊の光が倒れゆく戦友を立ち上がらせる。"
+  },
+  "방주에 부임한 신임 지휘관이 자원 고갈이나 전멸 없이 가장 신속하게 전력을 갖추고 영지를 안정시키는 핵심 6단계 공략입니다.": {
+    "en": "Core 6-step strategy for newly appointed commanders to quickly build strength and stabilize the domain without resource depletion or wipeout.",
+    "ja": "方舟に着任した新任指揮官が資源枯渇や全滅を起こさず最速で戦力を整え領地を安定させるための核心6段階攻略。"
+  },
+  "방주에 상인과 암거래상들을 유치하여 15종 자원 거래와 마도 비전서 서고를 이용할 수 있는 블랙 마켓을 개설하세요.": {
+    "en": "Attract merchants and black marketeers to the Ark to open a black market for trading 15 resources and accessing arcane grimoires.",
+    "ja": "方舟に商人と密売人を呼び込み、15種の資源取引と魔導書の書庫を利用できるブラックマーケットを開設せよ。"
+  },
+  "방주에서 현장으로 소환 중": {
+    "en": "Summoning from Ark to the site",
+    "ja": "方舟から現場へ召喚中"
+  },
+  "방주와 교신 중...": {
+    "en": "Communicating with the Ark...",
+    "ja": "方舟と交信中..."
+  },
+  "방주와 심연 전역에서 통용되는 고대 순금 주화입니다. 시설 건설 및 증축, 용병 고용 및 전직 의식, 대장간 장비 단조 및 암시장 거래의 기초 화폐로 쓰입니다.": {
+    "en": "Ancient pure gold coins circulating throughout the Ark and Abyss. Used as fundamental currency for building construction, mercenary recruitment/promotion, forge crafting, and black market trade.",
+    "ja": "方舟と深淵全域で通用する古代純金硬貨。施設建設や増築、傭兵雇用や転職儀式、鍛冶屋の装備鍛造や闇市取引の基本通貨として使用される。"
+  },
+  "방주의 각성: 심연의 어둠 속에서": {
+    "en": "Awakening of the Ark: Amidst the Abyss's Darkness",
+    "ja": "方舟の覚醒: 深淵の闇の中で"
+  },
+  "방주의 결사대원": {
+    "en": "Vanguard Member of the Ark",
+    "ja": "方舟の決死隊員"
+  },
+  "방주의 군수 물자를 보관할 체계적인 물류 창고가 없습니다.": {
+    "en": "There is no systematic logistics depot to store military supplies for the Ark.",
+    "ja": "方舟の軍需物資を保管する体系的な物流倉庫がない。"
+  },
+  "방주의 내실을 다지기 위해 대량의 금화와 마도 건자재, 마력 수정을 영지 창고에 대량 비축합니다.": {
+    "en": "Stockpiles large amounts of gold coins, arcane construction materials, and magic crystals in the domain warehouse to solidify the Ark's interior.",
+    "ja": "方舟の内実を固めるため、大量の金貨と魔導建材、魔力結晶を領地倉庫に大量備蓄する。"
+  },
+  "방주의 등불을 밝히는 후원사 영상": {
+    "en": "Sponsor Video Lighting the Ark's Beacon",
+    "ja": "方舟の灯火を灯すスポンサー映像"
+  },
+  "방주의 등불을 위해 첫 번째로 쓰러진 선발대원": {
+    "en": "The first vanguard member who fell for the Ark's beacon",
+    "ja": "方舟の灯火のために最初に倒れた先発隊員"
+  },
+  "방주의 모닥불": {
+    "en": "Ark Bonfire",
+    "ja": "方舟の焚火"
+  },
+  "방주의 생존자들을 먹여 살리기 위해 가장 먼저 심연 생체 정제소를 건설하세요.": {
+    "en": "Construct the Abyssal Refinery first to feed the survivors of the Ark.",
+    "ja": "方舟の生存者を養うため、真っ先に深淵生体精製所を建設せよ。"
+  },
+  "방주의 성화": {
+    "en": "Primal Bonfire",
+    "ja": "方舟の聖火"
+  },
+  "방주의 성화가 꺼졌습니다. 다시 한기가 몰려옵니다.": {
+    "en": "The Ark's Sacred Flame has extinguished. The bitter chill creeps back in.",
+    "ja": "方舟の聖火が消えた。再び冷気が押し寄せる。"
+  },
+  "방주의 영목을 9초마다 벌채하여 목재를 공급합니다. (Lv.4+ 골드 유지비, Lv.5+ 점진 감면: Lv.5 -7% ~ Lv.10 -42%)": {
+    "en": "Harvests Ark spirit trees every 9s to supply wood. (Lv.4+ Gold upkeep, Lv.5+ progressive reduction: Lv.5 -7% to Lv.10 -42%)",
+    "ja": "方舟の霊木を9秒ごとに伐採して木材を供給。(Lv.4+ ゴールド維持費、Lv.5+ 漸進的軽減: Lv.5 -7% 〜 Lv.10 -42%)"
+  },
+  "방주의 주요 거점 시설입니다.": {
+    "en": "A major stronghold facility of the Ark.",
+    "ja": "方舟の主要拠点施設。"
+  },
+  "방주의 주춧돌": {
+    "en": "Cornerstone of the Ark",
+    "ja": "方舟の礎石"
+  },
+  "방진": {
+    "en": "Phalanx",
+    "ja": "方陣"
+  },
+  "방진갑": {
+    "en": "Phalanx Armor",
+    "ja": "方陣甲"
+  },
+  "방패": {
+    "en": "Shield",
+    "ja": "盾"
+  },
+  "방패 강타": {
+    "en": "Shield Bash",
+    "ja": "シールドバッシュ"
+  },
+  "방패 깨기": {
+    "en": "Shield Break",
+    "ja": "盾破壊"
+  },
+  "방패 방어": {
+    "en": "Shield Guard",
+    "ja": "盾防御"
+  },
+  "방패 올리기": {
+    "en": "Raise Shield",
+    "ja": "盾構え"
+  },
+  "방패 파쇄": {
+    "en": "Shield Shatter",
+    "ja": "シールド破砕"
+  },
+  "방패/외피 완전 부식 & 방어력 50% 영구 분쇄": {
+    "en": "Completely corrodes shields/carapace & permanently shatters DEF by 50%",
+    "ja": "盾/外皮を完全腐食＆防御力を永久に50%粉砕"
+  },
+  "방패를 굳건히 들어 자신에게 공격력 비례 120% 보호막을 2턴간 생성합니다.": {
+    "en": "Firmly raises shield to grant oneself a barrier of 120% ATK for 2 turns.",
+    "ja": "盾を固く構え、自身に攻撃力比例120%のシールドを2ターン生成する。"
+  },
+  "배 증폭 피해": {
+    "en": "x Amplified DMG",
+    "ja": "倍 増幅ダメージ"
+  },
+  "배경음악 음소거 토글": {
+    "en": "Toggle BGM Mute",
+    "ja": "BGMミュート切り替え"
+  },
+  "배낭 (": {
+    "en": "Backpack (",
+    "ja": "バックパック ("
+  },
+  "배낭 공간 부족": {
+    "en": "Insufficient Backpack Space",
+    "ja": "バックパック容量不足"
+  },
+  "배낭 공간:": {
+    "en": "Backpack Space:",
+    "ja": "バックパック容量:"
+  },
+  "배낭 규격 선택": {
+    "en": "Select Backpack Size",
+    "ja": "バックパック規格選択"
+  },
+  "배낭 슬롯 부족": {
+    "en": "Insufficient Backpack Slots",
+    "ja": "バックパックスロット不足"
+  },
+  "배낭 용량 선택": {
+    "en": "Select Backpack Capacity",
+    "ja": "バックパック容量選択"
+  },
+  "배낭/경갑옷 & 촉매 유물 제작": {
+    "en": "Craft Backpacks/Light Armor & Catalyst Relics",
+    "ja": "バックパック/軽鎧＆触媒遺物の製作"
+  },
+  "배낭에 빈 공간이 없습니다. 왼쪽에서 아이템을 버려 공간을 확보하세요.": {
+    "en": "Backpack is full. Discard items on the left to free up space.",
+    "ja": "バックパックに空きがありません。左側からアイテムを捨てて容量を確保してください。"
+  },
+  "배낭에 빈 슬롯이 없습니다! 왼쪽 배낭에서 불필요한 아이템을 먼저 버려주세요.": {
+    "en": "No empty slots in backpack! Please discard unnecessary items from the backpack on the left first.",
+    "ja": "バックパックに空きスロットがありません！まず左側のバックパックから不要なアイテムを捨ててください。"
+  },
+  "배낭으로 수령 또는 포기": {
+    "en": "Receive into Backpack or Forfeit",
+    "ja": "バックパックに受け取るか放棄"
+  },
+  "배낭이 가득 찼습니다": {
+    "en": "Backpack is full",
+    "ja": "バックパックがいっぱいです"
+  },
+  "배낭이 비어 있습니다.": {
+    "en": "Backpack is empty.",
+    "ja": "バックパックが空です。"
+  },
+  "배낭이 비어있습니다.": {
+    "en": "Backpack is empty.",
+    "ja": "バックパックが空です。"
+  },
+  "배치": {
+    "en": "Deploy",
+    "ja": "配置"
+  },
+  "배포 저장 중...": {
+    "en": "Saving deployment...",
+    "ja": "デプロイ保存中..."
+  },
+  "배포용 저장 & 적용": {
+    "en": "Save for Deployment & Apply",
+    "ja": "配布用保存＆適用"
+  },
+  "배후": {
+    "en": "Rear",
+    "ja": "背後"
+  },
+  "백과": {
+    "en": "Codex",
+    "ja": "百科"
+  },
+  "백과 수집 진척도": {
+    "en": "Codex Collection Progress",
+    "ja": "図鑑収集進捗"
+  },
+  "백과: 영령의 가호": {
+    "en": "Codex: Blessing of Heroic Spirits",
+    "ja": "図鑑: 英霊の加護"
+  },
+  "백과사전": {
+    "en": "Encyclopedia",
+    "ja": "百科事典"
+  },
+  "백금 성갑": {
+    "en": "Platinum Holy Armor",
+    "ja": "白金聖甲"
+  },
+  "뱃지 종류:": {
+    "en": "Badge Type:",
+    "ja": "バッジ種類:"
+  },
+  "버리기": {
+    "en": "Discard",
+    "ja": "捨てる"
+  },
+  "버릴 아이템 선택": {
+    "en": "Select Item to Discard",
+    "ja": "捨てるアイテムを選択"
+  },
+  "버서커의 광기": {
+    "en": "Berserker's Frenzy",
+    "ja": "バーサーカーの狂気"
+  },
+  "버스터": {
+    "en": "Buster",
+    "ja": "バスター"
+  },
+  "버전 정보 & 패치노트": {
+    "en": "Version Info & Patch Notes",
+    "ja": "バージョン情報＆パッチノート"
+  },
+  "버튼을 누르거나,": {
+    "en": "Press the button, or",
+    "ja": "ボタンを押すか、"
+  },
+  "버튼을 누르거나, 상단의 시설 상세에서 가동을 재개해주세요.": {
+    "en": "Press the button or resume operation from Facility Details above.",
+    "ja": "ボタンを押すか、上部の施設詳細から稼働を再開してください。"
+  },
+  "버튼을 클릭하여 전열/중열/후열 전환": {
+    "en": "Click button to switch Front/Mid/Back row",
+    "ja": "ボタンをクリックして前衛/中衛/後衛を切り替え"
+  },
+  "버튼을 탭하여 위치 변경": {
+    "en": "Tap button to change position",
+    "ja": "ボタンをタップして位置を変更"
+  },
+  "버프": {
+    "en": "Buff",
+    "ja": "バフ"
+  },
+  "번개": {
+    "en": "Lightning",
+    "ja": "雷"
+  },
+  "벌목": {
+    "en": "Lumbering",
+    "ja": "伐採"
+  },
+  "벌목소 생산 & 건물 건설 및 횃불 연료": {
+    "en": "Lumber camp production, building construction & torch fuel",
+    "ja": "伐採所生産＆建物建設および松明の燃料"
+  },
+  "벌목소(Lumber Camp) 틱 생산": {
+    "en": "Lumber Camp Tick Production",
+    "ja": "伐採所(Lumber Camp) ティック生産"
+  },
+  "벌채 작업을 담당할 생존자 거주 시설(Lv.1 이상)이 선행되어야 합니다.": {
+    "en": "Requires survivor housing facility (Lv.1 or higher) to oversee lumber operations.",
+    "ja": "伐採作業を担当する生存者居住施設(Lv.1以上)が前提条件として必要。"
+  },
+  "벌채소": {
+    "en": "Lumber Camp",
+    "ja": "伐採所"
+  },
+  "법의": {
+    "en": "Vestments",
+    "ja": "法衣"
+  },
+  "베기": {
+    "en": "Slash",
+    "ja": "斬撃"
+  },
+  "베기/타격": {
+    "en": "Slash/Blunt",
+    "ja": "斬撃/打撃"
+  },
+  "베르나르": {
+    "en": "Bernard",
+    "ja": "ベルナール"
+  },
+  "베아트리스": {
+    "en": "Beatrice",
+    "ja": "ベアトリス"
+  },
+  "베어": {
+    "en": "Bear",
+    "ja": "ベア"
+  },
+  "베테랑 (V)": {
+    "en": "Veteran (V)",
+    "ja": "ベテラン (V)"
+  },
+  "베테랑 정예 원정단": {
+    "en": "Veteran Elite Expedition",
+    "ja": "ベテラン精鋭遠征隊"
+  },
+  "베테랑(V)": {
+    "en": "Veteran (V)",
+    "ja": "ベテラン(V)"
+  },
+  "베히모스의 심장과 시공의 닻으로 담금질한 판금 갑주. 받는 피해를 10% 감소시킨다.": {
+    "en": "Plate armor tempered with Behemoth's heart and the chrono anchor. Reduces received damage by 10%.",
+    "ja": "ベヒモスの心臓と時空の錨で鍛え上げた板金甲冑。被ダメージを10%減少させる。"
+  },
+  "벼락": {
+    "en": "Thunderbolt",
+    "ja": "落雷"
+  },
+  "벼락의 에테르 전류가 흐르는 강철창. 적의 방패를 꿰뚫는 강력한 물리 공격력을 자랑합니다.": {
+    "en": "A steel spear coursing with thunderous ether current. Boasts powerful physical attack that pierces enemy shields.",
+    "ja": "雷のエーテル電流が流れる鋼鉄の槍。敵の盾を貫く強力な物理攻撃力を誇る。"
+  },
+  "벽면을 따라 영롱한 빛을 내뿜는 마도 광맥이 노출되어 있습니다. 어떻게 채굴하시겠습니까?": {
+    "en": "A glowing arcane ore vein is exposed along the wall. How will you mine it?",
+    "ja": "壁面に沿って輝かしい光を放つ魔導鉱脈が露出している。どのように採掘しますか？"
+  },
+  "별말씀을요. 우린 서로를 믿으니까요.": {
+    "en": "Don't mention it. We trust each other, after all.",
+    "ja": "どういたしまして。お互いを信じていますから。"
+  },
+  "별빛 로브": {
+    "en": "Starlight Robe",
+    "ja": "星光のローブ"
+  },
+  "병기창": {
+    "en": "Armory",
+    "ja": "兵器廠"
+  },
+  "병기창 & 생체 복원 병동 동시 해금 (이중 테크)": {
+    "en": "Simultaneous unlock of Armory & Bio-Restoration Ward (Dual Tech)",
+    "ja": "兵器廠＆生体復元病棟の同時解放 (デュアルテック)"
+  },
+  "병기창 & 생체 복원 병동 동시 해금 및 이중 퀘스트 테크트리 라인 구축": {
+    "en": "Simultaneous unlock of Armory & Bio-Restoration Ward and establishment of dual quest tech tree lines",
+    "ja": "兵器廠＆生体復元病棟の同時解放およびデュアルクエスト技術ツリー構築"
+  },
+  "병기창 10단계, 심연의 정점에 도달한 마도 공학의 궁극 초월 장비 3종 세트. [에픽 등급 이상]": {
+    "en": "Armory Tier 10: 3-piece ultimate transcendent gear of magitechnology reaching the apex of the Abyss. [Epic grade or higher]",
+    "ja": "兵器廠ティア10、深淵の頂点に到達した魔導工学の究極超越装備3種セット。[エピック等級以上]"
+  },
+  "병기창 10레벨 필요": {
+    "en": "Requires Armory Lv.10",
+    "ja": "兵器廠 Lv.10が必要"
+  },
+  "병기창 1단계에서 단조된 기초 철검과 경량 가죽 갑옷, 은빛 반지의 표준 입문 구성.": {
+    "en": "Standard starter setup forged at Armory Tier 1: basic iron sword, light leather armor, and silver ring.",
+    "ja": "兵器廠ティア1で鍛造された基礎鉄剣と軽量革鎧、銀の指輪の標準入門構成。"
+  },
+  "병기창 2단계의 석탄 열기로 단련한 기병창과 두터운 판금갑, 결계 목걸이의 견고한 중보병 장구.": {
+    "en": "Solid heavy infantry gear forged with coal heat at Armory Tier 2: cavalry spear, heavy plate armor, and barrier necklace.",
+    "ja": "兵器廠ティア2の石炭の熱気で鍛えた騎兵槍と厚い板金甲、結界ネックレスの堅固な重歩兵装具。"
+  },
+  "병기창 3단계에서 마력 수정을 주입해 룬을 새긴 마도 지팡이와 공명 로브, 영혼 부적.": {
+    "en": "Rune-inscribed arcane staff infused with magic crystals, resonance robe, and soul talisman from Armory Tier 3.",
+    "ja": "兵器廠ティア3で魔力結晶を注入しルーンを刻んだ魔導杖、共鳴ローブ、魂の護符。"
+  },
+  "병기창 4단계의 흑요석과 에테르를 결속한 기습 단검과 정예 가죽 경갑, 에테르 심장 반지. [희귀 등급 이상]": {
+    "en": "Armory Tier 4 gear bound with obsidian and ether: ambush dagger, elite light leather armor, and ether heart ring. [Rare grade or higher]",
+    "ja": "兵器廠ティア4の黒曜石とエーテルを結合した奇襲ダガー、精鋭革軽甲、エーテルハートの指輪。[レア等級以上]"
+  },
+  "병기창 5단계의 공허 파편을 제련해 결전 화력을 부여한 파멸포와 수호 판금갑, 왜곡 부적. [희귀 등급 이상]": {
+    "en": "Armory Tier 5 decisive firepower forged from void shards: ruin cannon, guardian plate armor, and distortion talisman. [Rare grade or higher]",
+    "ja": "兵器廠ティア5の虚無の欠片を製錬し決戦火力を付与した破滅砲、守護板金甲、歪曲護符。[レア等級以上]"
+  },
+  "병기창 6단계의 진홍빛 혈염 권능을 머금은 환영궁과 선혈 로브, 불멸 목걸이. [희귀 등급 이상]": {
+    "en": "Armory Tier 6 imbued with crimson bloodfire power: illusion bow, fresh blood robe, and immortal necklace. [Rare grade or higher]",
+    "ja": "兵器廠ティア6の深紅の血炎の権能を宿した幻影弓、鮮血ローブ、不滅のネックレス。[レア等級以上]"
+  },
+  "병기창 7단계의 망각 묘역 원혼 에너지를 벼려낸 사령 극창과 철벽 사령갑, 속박 반지. [희귀 등급 이상]": {
+    "en": "Armory Tier 7 forged from Graveyard of Oblivion vengeful souls: necro pike, ironwall necro armor, and binding ring. [Rare grade or higher]",
+    "ja": "兵器廠ティア7の忘却墓地の怨魂エネルギーを鍛えた死霊槍、鉄壁死霊甲、束縛の指輪。[レア等級以上]"
+  },
+  "병기창 8단계의 단죄 요새 결계 강철로 축성된 대지팡이와 단죄 성의, 심판 부적. [에픽 등급 이상]": {
+    "en": "Armory Tier 8 consecrated with Citadel of Condemnation barrier steel: greatstaff, condemnation vestments, and judgment talisman. [Epic grade or higher]",
+    "ja": "兵器廠ティア8の断罪城塞の結界鋼鉄で聖別された大杖、断罪の聖衣、審判の護符。[エピック等級以上]"
+  },
+  "병기창 9단계의 거울 차원 굴절 마력을 담은 환영 마총과 굴절 경갑, 진실 목걸이. [에픽 등급 이상]": {
+    "en": "Armory Tier 9 imbued with mirror dimension refractive magic: illusion magic gun, refraction light armor, and truth necklace. [Epic grade or higher]",
+    "ja": "兵器廠ティア9の鏡次元の屈折魔力を込めた幻影魔銃、屈折軽甲、真実のネックレス。[エピック等級以上]"
+  },
+  "병기창 Lv.10 전용": {
+    "en": "Armory Lv.10 Exclusive",
+    "ja": "兵器廠 Lv.10専用"
+  },
+  "병기창 Lv.6 달성으로 강화 보급품 제작이 해금되었습니다. 병기창에서 [에테르 횃불] 1개를 제작하여 심연 탐험을 준비하세요.": {
+    "en": "Crafting enhanced supplies has been unlocked by reaching Armory Lv.6. Craft 1 [Ether Torch] in the Armory to prepare for abyssal exploration.",
+    "ja": "兵器廠Lv.6達成により強化補給品の製作が解放されました。兵器廠で[エーテル松明]を1個製作し、深淵探検に備えよ。"
+  },
+  "병기창 Lv.6 특화로 일반 보급품이": {
+    "en": "With Armory Lv.6 specialization, standard supplies are",
+    "ja": "兵器廠Lv.6特化により一般補給品が"
+  },
+  "병기창 Lv.6+ 보급품 운용 안내": {
+    "en": "Armory Lv.6+ Supplies Operation Guide",
+    "ja": "兵器廠Lv.6+ 補給品運用案内"
+  },
+  "병기창 Lv.7부터 +5%/Lv 증가": {
+    "en": "From Armory Lv.7, +5%/Lv increase",
+    "ja": "兵器廠Lv.7から+5%/Lv増加"
+  },
+  "병기창 Lv.{0} (+{1}% 상승)": {
+    "en": "Armory Lv.{0} (+{1}% Increase)",
+    "ja": "兵器廠 Lv.{0} (+{1}%上昇)"
+  },
+  "병기창 건설 필요": {
+    "en": "Requires Armory Construction",
+    "ja": "兵器廠の建設が必要"
+  },
+  "병기창 단조 시 무기별 고유 메커니즘": {
+    "en": "Weapon-specific mechanics upon Armory forging",
+    "ja": "兵器廠鍛造時の武器別固有メカニズム"
+  },
+  "병기창 대장간": {
+    "en": "Armory Forge",
+    "ja": "兵器廠鍛冶屋"
+  },
+  "병기창 레벨에 따른 제작 장비 등급(일반/희귀/에픽) 분기, 5% 복리 강화 공식, 장비 부위별 인챈트 풀 및 성공 확률 시스템을 지원합니다.": {
+    "en": "Supports craftable gear grade tiers (Common/Rare/Epic) by Armory level, 5% compound enhance formula, slot-specific enchant pools, and success rate systems.",
+    "ja": "兵器廠レベルに応じた製作装備等級(一般/希少/エピック)分岐、5%複利強化計算式、装備部位別エンチャントプールおよび成功確率システムをサポート。"
+  },
+  "병기창 무구": {
+    "en": "Armory Weapons & Armor",
+    "ja": "兵器廠武具"
+  },
+  "병기창 무기 계열 고유 특성 뱃지": {
+    "en": "Armory Weapon Series Unique Trait Badge",
+    "ja": "兵器廠武器系統固有特性バッジ"
+  },
+  "병기창 백과": {
+    "en": "Armory Codex",
+    "ja": "兵器廠百科"
+  },
+  "병기창 장비 단조 & 2중 인챈트 부여": {
+    "en": "Armory Equipment Forging & Dual Enchant Application",
+    "ja": "兵器廠の装備鍛造＆二重エンチャント付与"
+  },
+  "병기창 정화 의식: 병기창 정화 시설에서 50% 확률로 정화 진행 (실패 시 장비 영구 파괴)": {
+    "en": "Armory Purify Ritual: 50% chance to purify at the Armory Purify facility (permanent equipment destruction on failure)",
+    "ja": "兵器廠浄化儀式: 兵器廠浄化施設で50%の確率で浄化進行 (失敗時装備永久破壊)"
+  },
+  "병기창 제작 등급 분기: Lv.1~2 일반(Common) / Lv.3~4 희귀(Rare) / Lv.5~7 영웅(Epic) / Lv.8~10 전설(Legendary) 무기·방어구·장신구 단조": {
+    "en": "Armory Craft Grade Tiers: Lv.1-2 Common / Lv.3-4 Rare / Lv.5-7 Epic / Lv.8-10 Legendary weapon, armor, and accessory forging",
+    "ja": "兵器廠製作等級分岐: Lv.1〜2 一般(Common) / Lv.3〜4 希少(Rare) / Lv.5〜7 英雄(Epic) / Lv.8〜10 伝説(Legendary) 武器・防具・装飾品の鍛造"
+  },
+  "병기창 증축 필요 (최대 +{0}강)": {
+    "en": "Requires Armory Expansion (Max +{0} Enhance)",
+    "ja": "兵器廠の増築が必要 (最大+{0}強化)"
+  },
+  "병기창 특수 장비 단조": {
+    "en": "Forge Special Armory Equipment",
+    "ja": "兵器廠特殊装備鍛造"
+  },
+  "병기창(대장간)을 Lv.3 이상으로 증축해야 장비 강화 공방이 해금됩니다.": {
+    "en": "Expand Armory (Forge) to Lv.3 or higher to unlock the Equipment Enhancement Workshop.",
+    "ja": "兵器廠(鍛冶屋)をLv.3以上に増築することで装備強化工房が解放される。"
+  },
+  "병기창에서 [에테르 횃불] 1개 제작": {
+    "en": "Craft 1 [Ether Torch] in the Armory",
+    "ja": "兵器廠で[エーテル松明]を1個製作"
+  },
+  "병기창에서 미리 생산": {
+    "en": "Pre-produce in the Armory",
+    "ja": "兵器廠で事前生産"
+  },
+  "병기창을": {
+    "en": "Armory",
+    "ja": "兵器廠を"
+  },
+  "병기창이 6단계에 도달하여 마도 열기를 안정적으로 제어할 수 있게 되었다! 이제 일반 보급품이 전면 대체되어 [에테르 횃불], [던전 도시락], [심연 곡괭이] 등 월등한 7종의 강화 보급품을 제작할 수 있다. 병기창에서 첫 번째 [에테르 횃불]을 단조하라! (※ 채비실에서 즉석 추가하는 보급품은 일반 보급품이므로, 강화 보급품은 반드시 병기창에서 미리 생산해두어야 합니다.)": {
+    "en": "The Armory has reached Tier 6 and can now stably control arcane thermal energy! Standard supplies have now been fully replaced, allowing the crafting of 7 superior enhanced supplies such as [Ether Torch], [Dungeon Lunchbox], and [Abyssal Pickaxe]. Forge your first [Ether Torch] in the Armory! (※ Supplies added on the fly in the Prep Room are standard supplies; enhanced supplies must be produced in advance at the Armory.)",
+    "ja": "兵器廠がレベル6に到達し、魔導の熱気を安定して制御できるようになった！これより一般補給品が全面的に置き換わり、[エーテル松明]、[ダンジョン弁当]、[深淵のツルハシ]など優れた7種の強化補給品を製作可能となった。兵器廠で最初の[エーテル松明]を鍛造せよ！(※準備室で即席追加する補給品は一般補給品であるため、強化補給品は必ず兵器廠で事前に生産しておく必要があります。)"
+  },
+  "병동": {
+    "en": "Ward",
+    "ja": "病棟"
+  },
+  "병동 백과": {
+    "en": "Ward Codex",
+    "ja": "病棟百科"
+  },
+  "병동 증축(Lv.{0}) 시 해금": {
+    "en": "Unlocked upon Ward Expansion (Lv.{0})",
+    "ja": "病棟増築(Lv.{0})時に解放"
+  },
+  "병동 치료 식량: 생체 복원 병동에서 부상 용병 치료 시 1~3레벨은 틱당 식량 2, 4레벨부터는 식량 1(MP는 에테르 1)을 소모합니다.": {
+    "en": "Ward Healing Food: When treating wounded mercenaries in the Bio-Restoration Ward, Lv.1-3 consumes 2 Food per tick, and Lv.4+ consumes 1 Food (MP consumes 1 Ether).",
+    "ja": "病棟治療食糧: 生体復元病棟で負傷傭兵を治療する際、1〜3レベルは1ティックにつき食糧2、4レベルからは食糧1(MPはエーテル1)を消費。"
+  },
+  "병상 2개 가동 · 5초마다 HP +5 치료 (인당 틱당 🍖식량 2 소모)": {
+    "en": "2 Beds active · HP +5 heal every 5s (Consumes 🍖2 Food per person per tick)",
+    "ja": "病床2床稼働・5秒ごとにHP+5治療 (1人1ティックにつき🍖食糧2消費)"
+  },
+  "병상 3개 증설 가동 · 4초마다 HP +5 치료 (인당 틱당 🍖식량 2 소모)": {
+    "en": "3 Beds expanded active · HP +5 heal every 4s (Consumes 🍖2 Food per person per tick)",
+    "ja": "病床3床増設稼働・4秒ごとにHP+5治療 (1人1ティックにつき🍖食糧2消費)"
+  },
+  "병상 4개 증설 가동 · 3초마다 HP +5 / 4초마다 MP +4 충전": {
+    "en": "4 Beds expanded active · HP +5 heal every 3s / MP +4 restore every 4s",
+    "ja": "病床4床増設稼働・3秒ごとにHP+5 / 4秒ごとにMP+4回復"
+  },
+  "병상 5개 증설 가동 · 3초마다 HP +5 / 4초마다 MP +4 충전": {
+    "en": "5 Beds expanded active · HP +5 heal every 3s / MP +4 restore every 4s",
+    "ja": "病床5床増設稼働・3秒ごとにHP+5 / 4秒ごとにMP+4回復"
+  },
+  "병상 6개 증설 가동 · 2초마다 HP +5 / 3초마다 MP +4 충전": {
+    "en": "6 Beds expanded active · HP +5 heal every 2s / MP +3 restore every 3s",
+    "ja": "病床6床増設稼働・2秒ごとにHP+5 / 3秒ごとにMP+4回復"
+  },
+  "병상을 3개로 증설하고 신체 재생 촉진제를 투여하여 여러 대원을 동시에 안정적으로 치료합니다.": {
+    "en": "Expands to 3 beds and administers body regeneration stimulants to stably heal multiple squad members simultaneously.",
+    "ja": "病床を3床に増設し、身体再生促進剤を投与して複数の隊員を同時に安定して治療する。"
+  },
+  "병상을 4개로 증설하고 MP 충전 주기를 4초로 단축하여 마법 대원들의 전선 복귀를 가속화합니다.": {
+    "en": "Expands to 4 beds and shortens MP recovery interval to 4s, accelerating magical squad members' return to the front line.",
+    "ja": "病床を4床に増設し、MP回復周期を4秒に短縮して魔術隊員の戦線復帰を加速させる。"
+  },
+  "병상을 5개로 증설하고 고농축 에테르 생체액을 순환시켜 원정대 대다수를 동시에 집중 치료합니다.": {
+    "en": "Expands to 5 beds and circulates high-concentration ether bio-fluid to intensively treat most of the expedition simultaneously.",
+    "ja": "病床を5床に増設し、高濃度エーテル生体液を循環させて遠征隊の大多数を同時に集中治療する。"
+  },
+  "병상을 6개로 증설하고 HP 치료 주기를 2초, MP 충전 주기를 3초로 대폭 단축하여 치명상도 순식간에 복원합니다.": {
+    "en": "Expands to 6 beds and sharply reduces HP heal interval to 2s and MP recovery to 3s, restoring even mortal wounds in an instant.",
+    "ja": "病床を6床に増設し、HP治療周期を2秒、MP回復周期を3秒に大幅短縮して致命傷も一瞬で復元する。"
+  },
+  "병상을 7개로 증설하여 원정대 전원을 동시 수용하고, 1초마다 HP +5를 회복시키는 초고속 치료를 가동합니다.": {
+    "en": "Expands to 7 beds to accommodate the entire expedition simultaneously, operating ultra-fast treatment that restores HP +5 every 1s.",
+    "ja": "病床を7床に増設して遠征隊全員を同時に収容し、1秒ごとにHP+5を回復させる超高速治療を稼働する。"
+  },
+  "병영": {
+    "en": "Barracks",
+    "ja": "兵舎"
+  },
+  "병영 백과": {
+    "en": "Barracks Codex",
+    "ja": "兵舎百科"
+  },
+  "병참고": {
+    "en": "Logistics Depot",
+    "ja": "兵站庫"
+  },
+  "보관": {
+    "en": "Store",
+    "ja": "保管"
+  },
+  "보관 수량:": {
+    "en": "Stored Quantity:",
+    "ja": "保管数量:"
+  },
+  "보관 중인 미착용 장비가 없습니다.": {
+    "en": "No unequipped gear in storage.",
+    "ja": "保管中の未装備アイテムはありません。"
+  },
+  "보관 창고": {
+    "en": "Storage Warehouse",
+    "ja": "保管倉庫"
+  },
+  "보관소에 용병이 없습니다. 주점에서 새 용병을 영입하세요.": {
+    "en": "No mercenaries in storage. Recruit new mercenaries at the tavern.",
+    "ja": "保管所に傭兵がいません。酒場で新しい傭兵を雇用してください。"
+  },
+  "보관함": {
+    "en": "Storage",
+    "ja": "保管庫"
+  },
+  "보관함 (미착용)": {
+    "en": "Storage (Unequipped)",
+    "ja": "保管庫 (未装着)"
+  },
+  "보관함에 스킬북이 없습니다.": {
+    "en": "No skill books in storage.",
+    "ja": "保管庫にスキルブックがありません。"
+  }
+}

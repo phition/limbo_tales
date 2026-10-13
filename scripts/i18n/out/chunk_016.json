@@ -1,0 +1,802 @@
+{
+  "만화경 환영 부적": {
+    "en": "Kaleidoscope Illusion Talisman",
+    "ja": "万華鏡の幻影護符"
+  },
+  "만화경 환영 폭풍": {
+    "en": "Kaleidoscope Illusion Storm",
+    "ja": "万華鏡の幻影嵐"
+  },
+  "만화경 환영검무 & 천영 질풍참": {
+    "en": "Kaleidoscopic Illusion Dance & Thousand Shadow Gale Slash",
+    "ja": "万華鏡幻影剣舞＆千影疾風斬"
+  },
+  "만화경 환영궁": {
+    "en": "Kaleidoscope Illusion Bow",
+    "ja": "万華鏡の幻影弓"
+  },
+  "만화경 환영의 차원 마도봉": {
+    "en": "Kaleidoscope Illusion Dimensional Wand",
+    "ja": "万華鏡幻影の次元魔導棒"
+  },
+  "만화경 환영의 차원 저격 장구": {
+    "en": "Kaleidoscope Illusion Dimensional Sniper Gear",
+    "ja": "万華鏡幻影の次元狙撃装具"
+  },
+  "만화경과 현자의 돌": {
+    "en": "Kaleidoscope and Philosopher's Stone",
+    "ja": "万華鏡と賢者の石"
+  },
+  "만화경의 검무": {
+    "en": "Sword Dance of the Kaleidoscope",
+    "ja": "万華鏡の剣舞"
+  },
+  "말라붙은 립스틱 케이스": {
+    "en": "Dried Lipstick Case",
+    "ja": "乾いた口紅ケース"
+  },
+  "망각 묘역의 원혼 에너지를 제련하여 파괴적인 4개 스탯을 지닌 [영웅]": {
+    "en": "Refining the vengeful soul energy of the Graveyard of Oblivion to grant 4 destructive stats [Hero]",
+    "ja": "忘却の墓地の怨魂エネルギーを製錬し、破壊的な4種のステータスを持つ[英雄]"
+  },
+  "망각 묘지기의 영혼 나침반": {
+    "en": "Graveyard Soul Compass",
+    "ja": "忘却墓守の魂羅針盤"
+  },
+  "망각 묘지기의 영혼 참살낫": {
+    "en": "Graveyard Soul Decapitating Scythe",
+    "ja": "忘却墓守の魂斬殺鎌"
+  },
+  "망각 사령 경갑": {
+    "en": "Oblivion Necrolight Armor",
+    "ja": "忘却死霊の軽甲"
+  },
+  "망각 사령 로브": {
+    "en": "Oblivion Necro Robe",
+    "ja": "忘却死霊のローブ"
+  },
+  "망각 사령 마도봉": {
+    "en": "Oblivion Necro Wand",
+    "ja": "忘却死霊の魔導棒"
+  },
+  "망각 사신 부적": {
+    "en": "Oblivion Reaper Talisman",
+    "ja": "忘却死神の護符"
+  },
+  "망각 사신의 영혼 파열 장구": {
+    "en": "Oblivion Reaper Soul Burst Gear",
+    "ja": "忘却死神の魂破裂装具"
+  },
+  "망각 사신의 영혼검": {
+    "en": "Oblivion Reaper Soul Sword",
+    "ja": "忘却死神の魂剣"
+  },
+  "망각 사신의 칠흑 사령의": {
+    "en": "Oblivion Reaper Pitch-Black Necro Shroud",
+    "ja": "忘却死神の漆黒死霊衣"
+  },
+  "망각 저격 마총": {
+    "en": "Oblivion Sniper Magic Gun",
+    "ja": "忘却狙撃魔銃"
+  },
+  "망각 철벽 사령갑": {
+    "en": "Oblivion Ironwall Necro Armor",
+    "ja": "忘却鉄壁死霊甲"
+  },
+  "망각의 묘역을 수호하는 죽음의 묘지기. 거대한 영혼의 낫으로 산 자의 생명을 수확합니다.": {
+    "en": "The deathly gravedigger who guards the Graveyard of Oblivion. Reaps the lives of the living with a massive soul scythe.",
+    "ja": "忘却の墓地を守護する死の墓守。巨大な魂の鎌で生者の命を刈り取る。"
+  },
+  "망각의 묘지": {
+    "en": "Graveyard of Oblivion",
+    "ja": "忘却の墓地"
+  },
+  "망각의 묘지기 (7F 보스)": {
+    "en": "Gravekeeper of Oblivion (7F Boss)",
+    "ja": "忘却の墓守 (7Fボス)"
+  },
+  "망각의 묘지에 갇힌 영혼들의 원념이 뭉쳐진 언데드 유체. 영혼을 얼어붙게 하는 한기를 내뿜습니다.": {
+    "en": "An undead phantom condensed from the grudges of trapped souls in the Graveyard of Oblivion. Emits a chill that freezes the soul.",
+    "ja": "忘却の墓地に囚われた魂の怨念が凝集したアンデッドの幽体。魂を凍てつかせる冷気を放つ。"
+  },
+  "망각의 사신 낫": {
+    "en": "Oblivion Reaper Scythe",
+    "ja": "忘却の死神鎌"
+  },
+  "망각의 안개 속에서 영혼의 길을 인도하는 사신의 나침반입니다. 7티어 보스 고유 장비를 단조합니다.": {
+    "en": "A reaper's compass that guides souls through the mist of oblivion. Used to forge Tier 7 boss unique equipment.",
+    "ja": "忘却の霧の中で魂の道を導く死神の羅針盤。ティア7ボスの固有装備を鍛造する。"
+  },
+  "망각의 유령": {
+    "en": "Phantom of Oblivion",
+    "ja": "忘却の幽霊"
+  },
+  "망각하기": {
+    "en": "Forget",
+    "ja": "忘却する"
+  },
+  "망령": {
+    "en": "Phantom",
+    "ja": "亡霊"
+  },
+  "망령 군주 데스나이트": {
+    "en": "Phantom Lord Death Knight",
+    "ja": "亡霊君主デスナイト"
+  },
+  "망령 군주의 유령 로브": {
+    "en": "Phantom Lord's Ghost Robe",
+    "ja": "亡霊君主の幽霊ローブ"
+  },
+  "망령 섀도우": {
+    "en": "Phantom Shadow",
+    "ja": "亡霊シャドウ"
+  },
+  "망령들의 순수 영혼수가 응축되어 마법 위력과 치명타율을 강화하는 반지.": {
+    "en": "A ring condensed from pure phantom soul water, enhancing magic power and Crit rate.",
+    "ja": "亡霊たちの純粋な魂水が凝縮され、魔法威力と会心率を強化する指輪。"
+  },
+  "망령의 납골당": {
+    "en": "Ossuary of Phantoms",
+    "ja": "亡霊の納骨堂"
+  },
+  "망령의 방벽": {
+    "en": "Phantom Barrier",
+    "ja": "亡霊の防壁"
+  },
+  "망령의 시공간 절삭: 치명타율 +10%, 치명타 피해 +25%, 방어 관통 +15%": {
+    "en": "Phantom Spacetime Sever: Crit Rate +10%, Crit DMG +25%, DEF Piercing +15%",
+    "ja": "亡霊の時空間切削: 会心率+10%、会心ダメージ+25%、防御貫通+15%"
+  },
+  "망령의 영혼 처형": {
+    "en": "Phantom Soul Execution",
+    "ja": "亡霊の魂処刑"
+  },
+  "망령의 영혼수정": {
+    "en": "Phantom Soul Crystal",
+    "ja": "亡霊の魂結晶"
+  },
+  "망자의 감시 흉갑": {
+    "en": "Watcher Breastplate of the Dead",
+    "ja": "死者の監視胸甲"
+  },
+  "망치": {
+    "en": "Hammer",
+    "ja": "ハンマー"
+  },
+  "매 라운드 시작 시 수비 아군 전체 체력 {0}% 회복": {
+    "en": "At the start of each round, restores {0}% HP to all defending allies",
+    "ja": "毎ラウンド開始時、守備味方全体のHPを{0}%回復"
+  },
+  "매 라운드 시작 시 신성한 성역 나노 에너지를 방출하여 모든 수비 아군의 체력을 지속 회복합니다.": {
+    "en": "Releases sacred sanctuary nano-energy at the start of each round to continuously recover HP of all defending allies.",
+    "ja": "毎ラウンド開始時に神聖な聖域ナノエネルギーを放出し、全守備味方のHPを持続回復する。"
+  },
+  "매 라운드 시작 시 적 방어력 {0}%씩 누적 감소": {
+    "en": "At the start of each round, cumulatively decreases enemy DEF by {0}%",
+    "ja": "毎ラウンド開始時、敵の防御力を{0}%ずつ累積減少"
+  },
+  "매 라운드 시작 시 침입자 전체의 방어력을 파쇄하며, 이 수치는 매 라운드마다 누적 감소됩니다.": {
+    "en": "Shreds the DEF of all invaders at the start of each round, stacking further each round.",
+    "ja": "毎ラウンド開始時に全侵入者の防御力を粉砕し、この数値は毎ラウンド累積減少する。"
+  },
+  "매 라운드 시작 시, 방어 타워가 아군 평균 공격력에 비례한 고정 포격을 침입자 전체에 가합니다.": {
+    "en": "At the start of each round, defense towers bombard all invaders with fixed damage proportional to ally average ATK.",
+    "ja": "毎ラウンド開始時、防衛タワーが味方平均攻撃力に比例した固定砲撃を全侵入者に浴びせる。"
+  },
+  "매 라운드 적 전체에 아군 평균 공격력의 {0}% 포격": {
+    "en": "Each round, bombards all enemies for {0}% of ally average ATK",
+    "ja": "毎ラウンド敵全体に味方平均攻撃力の{0}%砲撃"
+  },
+  "매 턴": {
+    "en": "Each Turn",
+    "ja": "毎ターン"
+  },
+  "매 턴 마나 +{0} MP": {
+    "en": "Each turn Mana +{0} MP",
+    "ja": "毎ターンMP+{0}"
+  },
+  "매 턴 체력 +{0}% 재생": {
+    "en": "Each turn HP +{0}% Regen",
+    "ja": "毎ターンHP+{0}%再生"
+  },
+  "매입 재고:": {
+    "en": "Purchase Stock:",
+    "ja": "買取在庫:"
+  },
+  "매턴 hp": {
+    "en": "HP per turn",
+    "ja": "毎ターンHP"
+  },
+  "맹공의": {
+    "en": "Onslaught",
+    "ja": "猛攻の"
+  },
+  "맹독": {
+    "en": "Poison",
+    "ja": "猛毒"
+  },
+  "맹독 누적 피해": {
+    "en": "Deadly Poison Stacking DMG",
+    "ja": "猛毒累積ダメージ"
+  },
+  "맹독 비산": {
+    "en": "Venom Scatter",
+    "ja": "猛毒飛散"
+  },
+  "맹독의": {
+    "en": "Venomous",
+    "ja": "猛毒の"
+  },
+  "맹렬한": {
+    "en": "Furious",
+    "ja": "猛烈な"
+  },
+  "맹렬한 투사": {
+    "en": "Fierce Fighter",
+    "ja": "猛烈な闘士"
+  },
+  "맹세 휘장": {
+    "en": "Oath Crest",
+    "ja": "誓いの紋章"
+  },
+  "먹구름처럼 하늘을 메운 화살은 도망칠 틈조차 주지 않고 심연의 마물들을 꿰뚫는다.": {
+    "en": "Arrows blotting out the sky like dark clouds pierce abyssal beasts without giving them a chance to flee.",
+    "ja": "暗雲のごとく空を覆う矢は、逃げる隙すら与えず深淵の魔物を射抜く。"
+  },
+  "먼지 쌓인 카세트 테이프": {
+    "en": "Dusty Cassette Tape",
+    "ja": "埃まみれのカセットテープ"
+  },
+  "멈춰버린 쿼츠 손목시계": {
+    "en": "Frozen Quartz Watch",
+    "ja": "止まったクォーツ時計"
+  },
+  "메이스": {
+    "en": "Mace",
+    "ja": "メイス"
+  },
+  "메인": {
+    "en": "Main",
+    "ja": "メイン"
+  },
+  "메인 서사, 영지 발전, 반복 토벌 등 의뢰소의 3대 카테고리별 흐름과 보상 즉시 수령을 통한 테크 해금 메커니즘을 총괄 안내합니다.": {
+    "en": "Provides an overview of the 3 contract categories—Main Epic, Domain Development, and Repeat Subjugation—and the tech unlock mechanism via instant reward claiming.",
+    "ja": "メインストーリー、領地発展、反復討伐など依頼所の3大カテゴリ別進行と、報酬即時受取によるテック解放メカニズムを総合案内。"
+  },
+  "메인 스토리 & 시설": {
+    "en": "Main Story & Facilities",
+    "ja": "メインストーリー＆施設"
+  },
+  "메인 스토리 임무 완수 및 단계별 시설 연계": {
+    "en": "Main story mission completion and staged facility progression",
+    "ja": "メインストーリー任務完了および段階別施設連携"
+  },
+  "메테오": {
+    "en": "Meteor",
+    "ja": "メテオ"
+  },
+  "면역": {
+    "en": "Immune",
+    "ja": "免疫"
+  },
+  "멸망 이전 인류가 따뜻한 커피를 담아 마시던 진공 보온병입니다. 바닥면에 흐릿한 브랜드 로고가 새겨져 있습니다.": {
+    "en": "A vacuum thermos used by pre-apocalypse humans to drink warm coffee. A faded brand logo is stamped on the bottom.",
+    "ja": "滅亡前の人類が温かいコーヒーを入れて飲んでいた真空サーモス。底面に薄れたブランドロゴが刻まれている。"
+  },
+  "멸망의 라그나로크 +10": {
+    "en": "Ragnarok of Doom +10",
+    "ja": "滅亡のラグナロク +10"
+  },
+  "멸망의 순간마저 후대에 전하기 위해 고열 속에서도 셔터를 누른 기록자의 흔적입니다.": {
+    "en": "Traces of a chronicler who pressed the shutter amid searing heat to pass down even the moment of doom to posterity.",
+    "ja": "滅亡の瞬間すら後世に伝えるため、高熱の中でシャッターを押し続けた記録者の痕跡。"
+  },
+  "멸망의 창조 일격": {
+    "en": "Doom Creation Strike",
+    "ja": "滅亡の創造一撃"
+  },
+  "멸망의 흑무(黑霧)를 뚫고 공중으로 날아오른 유일한 희망의 방주가 있었다.": {
+    "en": "Piercing through the black mist of destruction, there was a sole Ark of hope that soared into the skies.",
+    "ja": "滅亡の黒霧を突破して空中へと舞い上がった、唯一の希望の方舟があった。"
+  },
+  "명": {
+    "en": " Mercenaries",
+    "ja": "名"
+  },
+  "명 대기 중": {
+    "en": " waiting",
+    "ja": "名 待機中"
+  },
+  "명 보유": {
+    "en": " owned",
+    "ja": "名 所持"
+  },
+  "명검": {
+    "en": "Famous Sword",
+    "ja": "名剣"
+  },
+  "명성이 드높아지며 용병 풀이 5명으로 확장되고, 뛰어난 무용을 지닌 [H] 히어로 등급 용병이 계약을 위해 찾아옵니다.": {
+    "en": "As renown rises, the mercenary pool expands to 5, and [H] Hero-grade mercenaries with exceptional prowess arrive seeking contracts.",
+    "ja": "名声が高まり傭兵プールが5名に拡張され、卓越した武勇を誇る[H]ヒーロー級の傭兵が契約を求めて訪れる。"
+  },
+  "명예 상점 4단계 ([투사의 용맹 목걸이]) & PVE 방어력 +5%": {
+    "en": "Honor Shop Tier 4 ([Fighter's Valor Necklace]) & PVE DEF +5%",
+    "ja": "名誉商店ティア4 ([闘士の勇猛ネックレス]) ＆ PVE防御力+5%"
+  },
+  "명예 상점 7단계 (신화 전설 성유물 상자) & PVE 피해량 +8%": {
+    "en": "Honor Shop Tier 7 (Mythic Legendary Relic Chest) & PVE DMG +8%",
+    "ja": "名誉商店ティア7 (神話伝説の聖遺物箱) ＆ PVEダメージ+8%"
+  },
+  "명예 상점 8단계 (궁극의 마도석) & PVE 피해량 +12%": {
+    "en": "Honor Shop Tier 8 (Ultimate Mana Stone) & PVE DMG +12%",
+    "ja": "名誉商店ティア8 (究極の魔導石) ＆ PVEダメージ+12%"
+  },
+  "명예 상점 9단계 (초월의 전직 비전서) & PVE 피해량 +15%": {
+    "en": "Honor Shop Tier 9 (Transcendent Class Grimoire) & PVE DMG +15%",
+    "ja": "名誉商店ティア9 (超越の転職魔導書) ＆ PVEダメージ+15%"
+  },
+  "명예 암시장 5단계 ([투사의 영광 반지]) & PVE 올스탯 +5%": {
+    "en": "Honor Black Market Tier 5 ([Fighter's Glory Ring]) & PVE All Stats +5%",
+    "ja": "名誉闇市ティア5 ([闘士の栄光の指輪]) ＆ PVE全ステータス+5%"
+  },
+  "명의 영령 추모 (기본 10% + 영령당 5%, 최대 30%) ➔ 5분간 전투 EXP +": {
+    "en": " Memorial of Heroic Spirits (Base 10% + 5% per spirit, max 30%) ➔ Combat EXP + for 5m",
+    "ja": "名の英霊追悼 (基本10% + 英霊ごと5%、最大30%) ➔ 5分間 戦闘EXP +"
+  },
+  "명중:": {
+    "en": "Hit:",
+    "ja": "命中:"
+  },
+  "명중률 감소 (공격 시 50% 확률로 빗나감)": {
+    "en": "Accuracy Reduction (50% chance to miss when attacking)",
+    "ja": "命中率減少 (攻撃時50%の確率でミス)"
+  },
+  "명칭, 스킬, 상태이상, 보스 기믹, 옵션 검색... (예: 성기사, 실명, 접두, 흑익박쥐, 유지비)": {
+    "en": "Search name, skill, status, boss gimmick, options... (e.g., Paladin, Blind, Prefix, Blackwing Bat, Upkeep)",
+    "ja": "名称、スキル、状態異常、ボスのギミック、オプション検索... (例: 聖騎士、盲目、接頭辞、黒翼コウモリ、維持費)"
+  },
+  "모건": {
+    "en": "Morgan",
+    "ja": "モーガン"
+  },
+  "모노리스 공허 분쇄포": {
+    "en": "Monolith Void Shatter Cannon",
+    "ja": "モノリス虚無粉砕砲"
+  },
+  "모노리스 파멸포": {
+    "en": "Monolith Ruin Cannon",
+    "ja": "モノリス破滅砲"
+  },
+  "모노리스 핵의 신성한 힘이 깃든 레전더리 장신구 [모노리스의 신성 성휘]를 수여합니다.": {
+    "en": "Bestows the Legendary accessory [Sacred Radiance of Monolith], imbued with the divine power of the Monolith core.",
+    "ja": "モノリス核の神聖な力が宿るレジェンダリー装飾品[モノリスの神聖なる光輝]を授与する。"
+  },
+  "모노리스 핵이 제단에 안치되며 심연 5층 전체의 지독한 공허 연무가 걷히고 완전 정화되었습니다! 5층 마물들의 연무 강화(공/방 +25%)가 사라져 심층 파밍이 한결 편안해졌으며, 성화의 찬란한 황금빛 오라가 성채 전체를 감싸고 있습니다. 이제 방주는 절망의 무덤이 아니라, 인류를 구원할 기적의 비행 성채입니다!": {
+    "en": "With the Monolith Core enshrined upon the altar, the noxious void haze across Floor 5 of the Abyss has lifted and been completely cleansed! The monsters' haze empowerment (+25% ATK/DEF) has vanished, making deep-floor farming much easier, and the radiant golden aura of the Sacred Flame now wraps the Citadel. Now, the Ark is no longer a tomb of despair, but a miraculous flying citadel that will save humanity!",
+    "ja": "モノリス核が祭壇に安置され、深淵5層全体の過酷な虚無の靄が晴れて完全浄化された！5層の魔物たちの靄強化(攻/防+25%)が消失し、深層ファーミングが一段と快適になり、聖火の輝かしい黄金色のオーラが城塞全体を包み込んでいる。今や方舟は絶望の墓場ではなく、人類を救う奇跡の飛行城塞だ！"
+  },
+  "모노리스의 태초 에너지를 영지 전역에 방출하여 국고를 황금과 에테르로 가득 채우고 전설적인 이상향을 완성합니다.": {
+    "en": "Releases the primordial energy of the Monolith across the domain, filling national coffers with gold and ether, completing a legendary utopia.",
+    "ja": "モノリスの太古エネルギーを領地全域に放出し、国庫を金貨とエーテルで満たして伝説のユートピアを完成させる。"
+  },
+  "모노리스의 파멸 수호자": {
+    "en": "Monolith Ruin Guardian",
+    "ja": "モノリスの破滅守護者"
+  },
+  "모노리스의 파멸 핵 성물": {
+    "en": "Monolith Ruin Core Relic",
+    "ja": "モノリスの破滅核聖物"
+  },
+  "모노리스의 파편으로 주조된 불멸의 갑주. 착용자에게 강력한 수호의 방어력을 제공합니다.": {
+    "en": "Immortal armor forged from Monolith shards. Grants immense protective defense to the wearer.",
+    "ja": "モノリスの破片で鍛造された不死の甲冑。着用者に強力な守護の防御力を提供する。"
+  },
+  "모놀리스를 뒤로하고 전진합니다.": {
+    "en": "Leaving the monolith behind, you move forward.",
+    "ja": "モノリスを後にして前進する。"
+  },
+  "모놀리스의 지혜": {
+    "en": "Wisdom of the Monolith",
+    "ja": "モノリスの知恵"
+  },
+  "모닝스타": {
+    "en": "Morningstar",
+    "ja": "モーニングスター"
+  },
+  "모닥불": {
+    "en": "Bonfire",
+    "ja": "焚火"
+  },
+  "모닥불 교감": {
+    "en": "Bonfire Communion",
+    "ja": "焚火の交感"
+  },
+  "모닥불 장작 투입 (온기 스택 유지)": {
+    "en": "Add Bonfire Firewood (Maintain Warmth Stacks)",
+    "ja": "焚火の薪投入 (温もりスタック維持)"
+  },
+  "모닥불 휴식 완료": {
+    "en": "Bonfire Rest Completed",
+    "ja": "焚火での休息完了"
+  },
+  "모닥불의 온기 속에서 동료들과 깊은 교감을 나눕니다.": {
+    "en": "Share deep communion with companions in the warmth of the bonfire.",
+    "ja": "焚火の温もりの中で仲間たちと深い交感を交わす。"
+  },
+  "모달이 팝업되어 골드/자원/발굴 장비 전량을 안전 입고합니다.": {
+    "en": "A modal pops up to safely store all gold, resources, and excavated gear.",
+    "ja": "モーダルが表示され、ゴールド・資源・発掘装備の全量を安全に入庫する。"
+  },
+  "모두 버리기 ({0}개)": {
+    "en": "Discard All ({0})",
+    "ja": "すべて捨てる ({0}個)"
+  },
+  "모두 포기": {
+    "en": "Forfeit All",
+    "ja": "すべて放棄"
+  },
+  "모드 종료": {
+    "en": "Exit Mode",
+    "ja": "モード終了"
+  },
+  "모든 결사대원이 사경을 헤치고 살아남아 성채의 등불을 지켜내고 있습니다.": {
+    "en": "Every member of the vanguard has survived the brink of death to guard the citadel's beacon.",
+    "ja": "決死隊の全隊員が死線を乗り越えて生き残り、城塞の灯火を守り抜いている。"
+  },
+  "모든 능력치 +10% & 치사 피해를 입었을 때 1회 [1 HP]로 생존(불굴).": {
+    "en": "All Stats +10% & Survive lethal DMG once with [1 HP] (Indomitable).",
+    "ja": "全ステータス+10% ＆ 致死ダメージ時に1回[1 HP]で生存(不屈)。"
+  },
+  "모든 능력치가 10% 감소": {
+    "en": "All stats reduced by 10%",
+    "ja": "全ステータスが10%減少"
+  },
+  "모든 대원이 사경을 헤치고 살아남아 성채의 등불을 지켜내고 있습니다.": {
+    "en": "Every squad member has survived the brink of death to guard the citadel's beacon.",
+    "ja": "全隊員が死線を乗り越えて生き残り、城塞の灯火を守り抜いている。"
+  },
+  "모든 마법 자물쇠를 해제하는 마스터 키입니다. 고대 보물상자를 안전하게 개방하며 희귀 장비를 추가로 얻을 확률이 상승합니다.": {
+    "en": "A master key that unlocks all magical locks. Safely opens ancient treasure chests and increases the chance of obtaining bonus rare gear.",
+    "ja": "すべての魔法錠を解除するマスターキー。古代の宝箱を安全に開錠し、希少装備を追加獲得する確率が上昇する。"
+  },
+  "모든 부정한 상태이상을 거부하는 축복받은 사제복": {
+    "en": "Blessed priestly vestments that reject all impure debuffs",
+    "ja": "すべての不浄な状態異常を拒絶する祝福された司祭服"
+  },
+  "모든 소모품 0개로 설정": {
+    "en": "Set all consumables to 0",
+    "ja": "全消耗品を0個に設定"
+  },
+  "모든 수치 편집 내역을 기본 상태로 초기화하시겠습니까?": {
+    "en": "Reset all numeric edits to default state?",
+    "ja": "すべての数値編集履歴をデフォルト状態に初期化しますか？"
+  },
+  "모든 시설이 Lv.1 이상으로 완공되었습니다! 1차 영지 재건 서사와 향후 전개 인사이트를 확인하세요.": {
+    "en": "All facilities have been completed at Lv.1 or above! Check the Phase 1 Domain Reconstruction story and upcoming insights.",
+    "ja": "すべての施設がLv.1以上で完成した！第1次領地再建ストーリーと今後の展開インサイトを確認しよう。"
+  },
+  "모든 아군": {
+    "en": "All Allies",
+    "ja": "味方全体"
+  },
+  "모든 아군에게 최대 HP 80% 무적 결계를 전개하고 모든 디버프를 즉시 정화합니다.": {
+    "en": "Deploys an invulnerable barrier of 80% Max HP to all allies and instantly cleanses all debuffs.",
+    "ja": "味方全体に最大HP80%の無敵結界を展開し、すべてのデバフを即時浄化する。"
+  },
+  "모든 액티브 마도 스킬 사용 시 마나(MP) 소모량 5% 상시 절감": {
+    "en": "Permanently reduces MP cost by 5% when using active arcane skills",
+    "ja": "すべてのアクティブ魔導スキル使用時の消費MPを常時5%軽減"
+  },
+  "모든 적": {
+    "en": "All Enemies",
+    "ja": "敵全体"
+  },
+  "모든 적에게 81% 화염 광역 피해 및 화상 부여.": {
+    "en": "Deals 81% fire AoE DMG and inflicts Burn to all enemies.",
+    "ja": "敵全体に81%の火炎範囲ダメージを与え、火傷を付与。"
+  },
+  "모든 전리품을 수령했습니다! 🎉": {
+    "en": "Claimed all loot! 🎉",
+    "ja": "すべての戦利品を受け取りました！🎉"
+  },
+  "모든 직업군이 페널티 없이 온전한 위력(100%)으로 사용 가능한 비전서": {
+    "en": "A grimoire that can be used at full power (100%) by all classes without penalty",
+    "ja": "すべてのクラスがペナルティなしで本来の威力(100%)で使用可能な魔導書"
+  },
+  "모든 진실이 왜곡되는 거울의 미궁. 거짓된 환영을 깨부수고 심연의 군주가 기다리는 옥좌의 문을 열어라.": {
+    "en": "A labyrinth of mirrors where all truths are distorted. Shatter the false illusions and unlock the throne door where the Lord of the Abyss awaits.",
+    "ja": "すべての真実が歪む鏡の迷宮。偽りの幻影を打ち砕き、深淵の君主が待つ玉座の扉を開け。"
+  },
+  "모든 차원을 단숨에 소멸시킬 절대 절멸기를 충전하기 시작합니다!": {
+    "en": "Begins charging an absolute annihilation skill that will eradicate all dimensions in an instant!",
+    "ja": "すべての次元を一瞬で消滅させる絶対絶滅スキルのチャージを開始した！"
+  },
+  "모든 피해 +": {
+    "en": "All DMG +",
+    "ja": "全ダメージ+"
+  },
+  "모든 피해 +10% & 공격력/방어력 +25 & HP +150": {
+    "en": "All DMG +10% & ATK/DEF +25 & HP +150",
+    "ja": "全ダメージ+10% ＆ 攻撃力/防御力+25 ＆ HP+150"
+  },
+  "모든 피해 +10% & 올스탯 +10 영구 증가": {
+    "en": "All DMG +10% & All Stats permanently +10",
+    "ja": "全ダメージ+10% ＆ 全ステータス+10永久増加"
+  },
+  "모든 피해 +10% & 최대 HP +120 & 공격력 +20": {
+    "en": "All DMG +10% & Max HP +120 & ATK +20",
+    "ja": "全ダメージ+10% ＆ 最大HP+120 ＆ 攻撃力+20"
+  },
+  "모든 피해 +10% & 최대 HP +150 & 공격력 +20": {
+    "en": "All DMG +10% & Max HP +150 & ATK +20",
+    "ja": "全ダメージ+10% ＆ 最大HP+150 ＆ 攻撃力+20"
+  },
+  "모든 피해 +4% & 공격력 +10": {
+    "en": "All DMG +4% & ATK +10",
+    "ja": "全ダメージ+4% ＆ 攻撃力+10"
+  },
+  "모든 피해 +4% & 속도 +3 & 파티 행운 +6": {
+    "en": "All DMG +4% & SPD +3 & Party LUCK +6",
+    "ja": "全ダメージ+4% ＆ 速度+3 ＆ パーティ幸運+6"
+  },
+  "모든 피해 +5% & 공격력 +15": {
+    "en": "All DMG +5% & ATK +15",
+    "ja": "全ダメージ+5% ＆ 攻撃力+15"
+  },
+  "모든 피해 +5% & 파티 공격력 +14": {
+    "en": "All DMG +5% & Party ATK +14",
+    "ja": "全ダメージ+5% ＆ パーティ攻撃力+14"
+  },
+  "모든 피해 +6% & 공격력 +15 & 최대 MP +50 & 골드 +10% & 자원 생산 +10% & 방어력 +15": {
+    "en": "All DMG +6% & ATK +15 & Max MP +50 & Gold +10% & Resource Production +10% & DEF +15",
+    "ja": "全ダメージ+6% ＆ 攻撃力+15 ＆ 最大MP+50 ＆ ゴールド+10% ＆ 資源生産+10% ＆ 防御力+15"
+  },
+  "모든 피해 +6% & 파티 공격력 +16": {
+    "en": "All DMG +6% & Party ATK +16",
+    "ja": "全ダメージ+6% ＆ パーティ攻撃力+16"
+  },
+  "모든 피해 +7% & 공격력 +15": {
+    "en": "All DMG +7% & ATK +15",
+    "ja": "全ダメージ+7% ＆ 攻撃力+15"
+  },
+  "모든 피해 +8% & 올스탯 +12": {
+    "en": "All DMG +8% & All Stats +12",
+    "ja": "全ダメージ+8% ＆ 全ステータス+12"
+  },
+  "모든 해로운 상태이상(출혈/맹독/화상/냉각/기절/실명/약화) 완전 차단": {
+    "en": "Completely blocks all harmful debuffs (Bleed/Poison/Burn/Freeze/Stun/Blind/Weaken)",
+    "ja": "すべての有害な状態異常(出血/猛毒/火傷/冷却/気絶/盲目/弱化)を完全遮断"
+  },
+  "모든 환각과 도플갱어의 본체를 비추는 마도 만화경 거울 파편입니다. 9티어 보스 고유 장비를 단조합니다.": {
+    "en": "A magical kaleidoscope mirror shard that reflects the true form of all illusions and doppelgangers. Used to forge Tier 9 boss unique equipment.",
+    "ja": "すべての幻覚とドッペルゲンガーの本体を映し出す魔導万華鏡の鏡破片。ティア9ボスの固有装備を鍛造する。"
+  },
+  "모든피해 +{0}%": {
+    "en": "All DMG +{0}%",
+    "ja": "全ダメージ+{0}%"
+  },
+  "모멘텀 뱃지 5개가 완충된 상태에서 용병이 궁극기 시전 시 즉시 FEVER가 폭발하며, 조합에 따른 강력한 시너지 버프와 전용 극적 컷인이 발동합니다.": {
+    "en": "When a mercenary casts an ultimate skill with all 5 Momentum Badges charged, FEVER immediately erupts, triggering powerful synergy buffs and dramatic cut-ins based on the composition.",
+    "ja": "モメンタムバッジが5個フルチャージされた状態で傭兵がアルティメットを発動すると、即座にFEVERが炸裂し、組み合わせに応じた強力なシナジーバフと専用演出カットインが発動する。"
+  },
+  "모멘텀 뱃지: ASSIST (원호 추격)": {
+    "en": "Momentum Badge: ASSIST (Assist Pursuit)",
+    "ja": "戦術モメンタムバッジ: ASSIST (援護追撃)"
+  },
+  "모멘텀 뱃지: BREAK (차징 붕괴)": {
+    "en": "Momentum Badge: BREAK (Charging Break)",
+    "ja": "戦術モメンタムバッジ: BREAK (チャージ崩壊)"
+  },
+  "모멘텀 뱃지: COUNTER (환영 반격)": {
+    "en": "Momentum Badge: COUNTER (Illusion Counter)",
+    "ja": "戦術モメンタムバッジ: COUNTER (幻影反撃)"
+  },
+  "모멘텀 뱃지: CRIT (치명 일격)": {
+    "en": "Momentum Badge: CRIT (Critical Strike)",
+    "ja": "戦術モメンタムバッジ: CRIT (会心の一撃)"
+  },
+  "모멘텀 뱃지: EXTRA (스킬 연계)": {
+    "en": "Momentum Badge: EXTRA (Skill Chain)",
+    "ja": "戦術モメンタムバッジ: EXTRA (スキル連携)"
+  },
+  "모멘텀 뱃지: GUARD (수호 개입)": {
+    "en": "Momentum Badge: GUARD (Guardian Intervene)",
+    "ja": "戦術モメンタムバッジ: GUARD (守護介入)"
+  },
+  "모멘텀 뱃지: HEAL (신성 치유)": {
+    "en": "Momentum Badge: HEAL (Divine Heal)",
+    "ja": "戦術モメンタムバッジ: HEAL (神聖治癒)"
+  },
+  "모습을 감추고 적의 공격을 환영으로 흘려보내는 암살복": {
+    "en": "Assassin garb that conceals the user and deflects enemy strikes with illusions",
+    "ja": "姿を隠し敵の攻撃を幻影で受け流す暗殺服"
+  },
+  "모험가와 용병들의 수요가 발생하는 방랑자의 라운지(Lv.1 이상)가 선행되어야 합니다.": {
+    "en": "Requires the Wanderer Lounge (Lv.1 or higher), where demand from adventurers and mercenaries arises.",
+    "ja": "冒険者や傭兵の需要が発生する放浪者のラウンジ(Lv.1以上)が前提条件として必要。"
+  },
+  "목걸": {
+    "en": "Neck",
+    "ja": "首"
+  },
+  "목걸이": {
+    "en": "Necklace",
+    "ja": "ネックレス"
+  },
+  "목록을 열어 생존자들을 위한": {
+    "en": "Open the list to view items for survivors",
+    "ja": "リストを開いて生存者のための"
+  },
+  "목재": {
+    "en": "Wood",
+    "ja": "木材"
+  },
+  "목재 20개로 [심연 생체 정제소]를 건설한 뒤 상단 퀘스트 메뉴(📜)에서 깜빡이는 [보상 수령]을 반드시 터치하세요! 연이어 [생존자 안식처](골드), [영목 벌채소](목재), [광맥 시추소](석재/철광)가 순차 해금되며 초기 자본과 생산 라인이 확보됩니다.": {
+    "en": "Construct the [Abyssal Refinery] with 20 Wood, then be sure to tap the blinking [Claim Reward] in the top quest menu (📜)! Subsequently, [Survivor Haven] (Gold), [Lumber Camp] (Wood), and [Aether Quarry] (Stone/Iron Ore) will unlock sequentially, securing initial capital and production lines.",
+    "ja": "木材20個で[深淵生体精製所]を建設した後、上部クエストメニュー(📜)で点滅する[報酬受取]を必ずタップ！続いて[生存者の安息所](ゴールド)、[霊木伐採所](木材)、[エーテル鉱脈採掘所](石材/鉄鉱石)が順次解放され、初期資金と生産ラインが確保される。"
+  },
+  "목재 20개로 [심연 생체 정제소]를 건설한 뒤 상단 퀘스트 메뉴(📜)에서 번쩍이는 [보상 수령]을 반드시 터치하세요! 연이어 [생존자 안식처](골드), [영목 벌채소](목재), [광맥 시추소](석재/철광)가 차례대로 해금되며 퀘스트 보상으로 넉넉한 초기 자금이 들어옵니다.": {
+    "en": "Construct the [Abyssal Refinery] with 20 Wood, then be sure to tap the glowing [Claim Reward] in the top quest menu (📜)! Subsequently, [Survivor Haven] (Gold), [Lumber Camp] (Wood), and [Aether Quarry] (Stone/Iron Ore) will unlock in sequence, providing generous initial funds as quest rewards.",
+    "ja": "木材20個で[深淵生体精製所]を建設した後、上部クエストメニュー(📜)で輝く[報酬受取]を必ずタップ！続いて[生存者の安息所](ゴールド)、[霊木伐採所](木材)、[エーテル鉱脈採掘所](石材/鉄鉱石)が順番に解放され、クエスト報酬として十分な初期資金が手に入る。"
+  },
+  "목재 {0}개 납품": {
+    "en": "Deliver {0} Wood",
+    "ja": "木材{0}個納品"
+  },
+  "목재 자동 생산": {
+    "en": "Automatic Wood Production",
+    "ja": "木材自動生産"
+  },
+  "목재 🪵": {
+    "en": "Wood 🪵",
+    "ja": "木材 🪵"
+  },
+  "목재🪵, 석재🪨, 철광⚙️, 식량🍖": {
+    "en": "Wood🪵, Stone🪨, Iron Ore⚙️, Food🍖",
+    "ja": "木材🪵、石材🪨、鉄鉱石⚙️、食糧🍖"
+  },
+  "몬스터 & 보스": {
+    "en": "Monsters & Bosses",
+    "ja": "モンスター＆ボス"
+  },
+  "몬스터 & 아군 상호 적용: 설원/빙결계 몬스터의 빙결 스킬뿐만 아니라 아군 영웅의 결빙 스킬에도 동일하게 적용": {
+    "en": "Mutual application for monsters & allies: applies equally to freeze skills of snow/ice monsters as well as allied hero freezing skills",
+    "ja": "モンスター＆味方相互適用: 雪原/氷結系モンスターの凍結スキルだけでなく味方英雄の氷結スキルにも同様に適用"
+  },
+  "몬스터 정보 (홀드로도 확인 가능)": {
+    "en": "Monster Info (Hold to view)",
+    "ja": "モンスター情報 (長押しでも確認可能)"
+  },
+  "몬스터 조우 50%": {
+    "en": "Monster Encounter 50%",
+    "ja": "モンスター遭遇 50%"
+  },
+  "몰려드는 생존자들을 위해 복층 주거 시설을 증축하고, 공동 취사장과 위생 시설을 정비하여 정주 환경을 개선했습니다.": {
+    "en": "Expanded multi-story living facilities for flocking survivors and improved the living environment by renovating communal kitchens and sanitary facilities.",
+    "ja": "押し寄せる生存者のために複層住宅施設を増築し、共同炊事場と衛生施設を整備して定住環境を改善した。"
+  },
+  "묘지": {
+    "en": "Graveyard",
+    "ja": "墓地"
+  },
+  "묘지 백과": {
+    "en": "Graveyard Codex",
+    "ja": "墓地百科"
+  },
+  "묘지 한가운데 떠 있는 거대한 청동 저울입니다. 한쪽 접시에 깃털이 놓여 있습니다.": {
+    "en": "A colossal bronze scale floating in the middle of the graveyard. A feather rests on one pan.",
+    "ja": "墓地の中央に浮かぶ巨大な青銅の天秤。片方の皿に羽毛が置かれている。"
+  },
+  "묘지에 안장된 영웅이 없습니다. 심연의 흑무 속에서 전사한 영웅이 이곳에 안장됩니다.": {
+    "en": "No heroes laid to rest in the graveyard. Heroes who fell in the black mist of the Abyss will be entombed here.",
+    "ja": "墓地に埋葬された英雄はいません。深淵の黒霧の中で戦死した英雄がここに埋葬される。"
+  },
+  "묘지에서 영웅을 찾을 수 없습니다.": {
+    "en": "Cannot find hero in the graveyard.",
+    "ja": "墓地で英雄が見つかりません。"
+  },
+  "무간 심연의 비수 +10": {
+    "en": "Avici Abyssal Dagger +10",
+    "ja": "無間深淵のダガー +10"
+  },
+  "무간 피의 도살군단": {
+    "en": "Avici Blood Slaughter Legion",
+    "ja": "無間血の虐殺軍団"
+  },
+  "무간도": {
+    "en": "Avici",
+    "ja": "無間道"
+  },
+  "무간도 (Avici)": {
+    "en": "Avici",
+    "ja": "無間道 (Avici)"
+  },
+  "무간도 {0}계층": {
+    "en": "Avici Floor {0}",
+    "ja": "無間道 第{0}階層"
+  },
+  "무간도 위험도 10,000에 도달하여 진 최종 보스 [무간의 지배자 아르케오스]의 광폭화를 잠재우고 모든 심연을 영구 봉인하세요.": {
+    "en": "Reach Hazard 10,000 in Avici to subdue the enrage of True Final Boss [Archeos, Ruler of Avici] and permanently seal all abyssal rifts.",
+    "ja": "無間道の危険度10,000に到達し、真のラスボス[無間の支配者アルケオス]の狂暴化を鎮めて深淵を永久封印せよ。"
+  },
+  "무간도 위험도 {0} 돌파! 광폭화 군주 [{1}]와 정예 호위대가 길을 가로막습니다!": {
+    "en": "Surpassed Avici Hazard {0}! Berserk Overlord [{1}] and elite guards block the way!",
+    "ja": "無間道 危険度{0}突破！狂暴化君主[{1}]と精鋭親衛隊が立ちはだかる！"
+  },
+  "무간도 중간 군주를 토벌했습니다! (현재 위험도: {0}) 심연을 계속 개척할지, 전리품을 정산하고 성채로 안전 귀환할지 선택하세요.": {
+    "en": "Defeated the intermediate Avici overlord! (Current Hazard: {0}) Choose whether to push deeper into the Abyss or tally your spoils and return safely to the Citadel.",
+    "ja": "無間道の中間君主を討伐した！(現在の危険度: {0}) 深淵を開拓し続けるか、戦利品を精算して城塞へ安全に帰還するか選択せよ。"
+  },
+  "무간도의 가장 깊은 심연에 도사린 태초의 공허 창조주. 존재 자체로 시공간을 소멸시키는 절대자입니다.": {
+    "en": "The primordial void creator lurking in the deepest abyss of Avici. An absolute being whose very presence eradicates spacetime.",
+    "ja": "無間道の最深淵に潜む原初の虚無の創造主。存在そのものが時空間を消滅させる絶対者。"
+  },
+  "무간도의 공허를 가르고 모든 심연을 봉인한 태초의 창세 성검. 신화적 권능이 깃들어 있다.": {
+    "en": "A holy sword of genesis that cut through the void of Avici and sealed all abyssal rifts. Imbued with mythic power.",
+    "ja": "無間道の虚無を切り裂き、すべての深淵を封印した原初の創世聖剣。神話の権能が宿っている。"
+  },
+  "무간도의 끝없는 공간을 단축하는 차원 왜곡 균열이 보입니다. 균열을 타고 심연의 더 깊은 곳(위험도 +30~60 전진)으로 도약하시겠습니까?": {
+    "en": "A dimensional rift that warps the endless expanse of Avici appears. Leap through the rift deeper into the Abyss (Hazard +30-60 advance)?",
+    "ja": "無間道の果てしない空間を短縮する次元の歪み亀裂が見える。亀裂を通って深淵のさらに深部(危険度+30〜60前進)へ跳躍しますか？"
+  },
+  "무간도의 인도자": {
+    "en": "Guide of Avici",
+    "ja": "無間道の導き手"
+  },
+  "무간암영참": {
+    "en": "Avici Dark Shadow Slash",
+    "ja": "無間暗影斬"
+  },
+  "무간의 지배자 아르케오스": {
+    "en": "Archeos, Ruler of Avici",
+    "ja": "無間の支配者アルケオス"
+  },
+  "무간의 지배자 아르케오스 (진 최종 보스)": {
+    "en": "Archeos, Ruler of Avici (True Final Boss)",
+    "ja": "無間の支配者アルケオス (真ラスボス)"
+  },
+  "무간의 태초 파동": {
+    "en": "Primordial Wave of Avici",
+    "ja": "無間の原初波動"
+  },
+  "무기": {
+    "en": "Weapon",
+    "ja": "武器"
+  },
+  "무기 (6)": {
+    "en": "Weapons (6)",
+    "ja": "武器 (6)"
+  },
+  "무기 ({0})": {
+    "en": "Weapon ({0})",
+    "ja": "武器 ({0})"
+  },
+  "무기 6종 고유 특성 뱃지 (Weapon Traits) 완전 해설": {
+    "en": "Complete Guide to 6 Weapon Trait Badges",
+    "ja": "武器6種固有特性バッジ (Weapon Traits) 完全解説"
+  },
+  "무기 6종 고유 특성 뱃지(Weapon Traits) & 전투 차별화 도입": {
+    "en": "Introduction of 6 Weapon Trait Badges & Combat Differentiation",
+    "ja": "武器6種固有特性バッジ(Weapon Traits)＆戦闘差別化導入"
+  },
+  "무기 계열별 고유 전투 메커니즘과 특성 뱃지가 공식 적용되었습니다.": {
+    "en": "Unique combat mechanisms and trait badges for each weapon category have been officially applied.",
+    "ja": "武器系統ごとの固有戦闘メカニズムと特性バッジが正式適用された。"
+  },
+  "무기 고유 특성": {
+    "en": "Weapon Trait",
+    "ja": "武器固有特性"
+  },
+  "무기 및 방어구 장비 단조": {
+    "en": "Forge Weapon & Armor Equipment",
+    "ja": "武器および防具装備の鍛造"
+  },
+  "무기 및 중갑 방어구 단조 (+30% 매입가)": {
+    "en": "Forge Weapons & Heavy Armor (+30% Sell Price)",
+    "ja": "武器および重甲防具の鍛造 (+30%買取価格)"
+  },
+  "무기 접두사 인챈트 시 기본 공격을 대체하는 고유 스킬(작열탄, 동결 타격, 신성 심판, 파멸 강타 등)을 획득할 수 있습니다!": {
+    "en": "Enchanting weapon prefixes allows obtaining unique skills (Incendiary Shot, Freezing Strike, Divine Judgement, Ruin Smash, etc.) that replace basic attacks!",
+    "ja": "武器の接頭辞エンチャント時、通常攻撃を置き換える固有スキル(灼熱弾、凍結打撃、神聖審判、破滅強打など)を獲得可能！"
+  }
+}

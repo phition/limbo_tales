@@ -1,0 +1,802 @@
+{
+  "ATK+14, SPD+4, LUCK+6, MP+18 [마총사 특화] 레일 버스터": {
+    "en": "ATK+14, SPD+4, LUCK+6, MP+18 [Gunner Specialized] Rail Buster",
+    "ja": "ATK+14, SPD+4, LUCK+6, MP+18 [魔銃士特化] レールバスター"
+  },
+  "ATK+18, MP+42, LUCK+4 [마법사 특화] 재앙 지팡이": {
+    "en": "ATK+18, MP+42, LUCK+4 [Mage Specialized] Calamity Staff",
+    "ja": "ATK+18, MP+42, LUCK+4 [魔導士特化] 災厄の杖"
+  },
+  "ATK+18, SPD+4, LUCK+7 [도적 특화] 사신의 비도": {
+    "en": "ATK+18, SPD+4, LUCK+7 [Rogue Specialized] Reaper's Flying Dagger",
+    "ja": "ATK+18, SPD+4, LUCK+7 [盗賊特化] 死神の飛刀"
+  },
+  "ATK+20, HP+49, LUCK+6, SPD+2 [전사 특화] 학살검": {
+    "en": "ATK+20, HP+49, LUCK+6, SPD+2 [Warrior Specialized] Massacre Sword",
+    "ja": "ATK+20, HP+49, LUCK+6, SPD+2 [戦士特化] 虐殺剣"
+  },
+  "ATK+8, SPD+2, LUCK+4 [마총사 특화] 전술 리볼버": {
+    "en": "ATK+8, SPD+2, LUCK+4 [Gunner Specialized] Tactical Revolver",
+    "ja": "ATK+8, SPD+2, LUCK+4 [魔銃士特化] 戦術リボルバー"
+  },
+  "BGM 꺼짐": {
+    "en": "BGM Off",
+    "ja": "BGM オフ"
+  },
+  "BGM 켜짐": {
+    "en": "BGM On",
+    "ja": "BGM オン"
+  },
+  "Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다.": {
+    "en": "Chapter 1 Source of the Abyss. Enrages when HP is below 40%, simultaneously inflicting multiple debuffs including Bleed and Drain.",
+    "ja": "Chapter 1 深淵の根源。HP40%以下で狂暴化し、出血・吸収などの複合状態異常を同時に付与する。"
+  },
+  "DEF (방어력)": {
+    "en": "DEF",
+    "ja": "DEF (防御力)"
+  },
+  "DEF+10, HP+42, LUCK+1 [기사 특화] 결전 방패": {
+    "en": "DEF+10, HP+42, LUCK+1 [Knight Specialized] Decisive Shield",
+    "ja": "DEF+10, HP+42, LUCK+1 [騎士特化] 決戦の盾"
+  },
+  "DEF+17, HP+84, ATK+4 [기사 특화] 영광 판금갑": {
+    "en": "DEF+17, HP+84, ATK+4 [Knight Specialized] Glory Plate Armor",
+    "ja": "DEF+17, HP+84, ATK+4 [騎士特化] 栄光の板金鎧"
+  },
+  "DEF+8, HP+32, MP+21, LUCK+2 [사제 특화] 축복 로브": {
+    "en": "DEF+8, HP+32, MP+21, LUCK+2 [Cleric Specialized] Blessing Robe",
+    "ja": "DEF+8, HP+32, MP+21, LUCK+2 [僧侶特化] 祝福のローブ"
+  },
+  "DMG) 이상을 깎지 못하면 영지 전 자원의 20%를 약탈당합니다.": {
+    "en": "DMG) or more is not dealt, 20% of all domain resources will be plundered.",
+    "ja": "DMG)以上削れなければ、領地の全資源の20%が略奪されます。"
+  },
+  "F 보스 드랍": {
+    "en": "F Boss Drop",
+    "ja": "F ボスドロップ"
+  },
+  "FEVER 게이지: 전술 모멘텀 완충": {
+    "en": "FEVER Gauge: Tactical Momentum Fully Charged",
+    "ja": "FEVERゲージ: 戦術モメンタムフルチャージ"
+  },
+  "FEVER 뱃지": {
+    "en": "FEVER Badge",
+    "ja": "FEVERバッジ"
+  },
+  "FEVER 시너지: 기적의 소생": {
+    "en": "FEVER Synergy: Miracle Revival",
+    "ja": "FEVERシナジー: 奇跡の蘇生"
+  },
+  "FEVER 시너지: 불멸의 요새": {
+    "en": "FEVER Synergy: Immortal Fortress",
+    "ja": "FEVERシナジー: 不滅の要塞"
+  },
+  "FEVER 시너지: 신성 성역": {
+    "en": "FEVER Synergy: Divine Sanctuary",
+    "ja": "FEVERシナジー: 神聖聖域"
+  },
+  "FEVER 시너지: 전술 파동": {
+    "en": "FEVER Synergy: Tactical Surge",
+    "ja": "FEVERシナジー: 戦術波動"
+  },
+  "FEVER 시너지: 전술의 극의": {
+    "en": "FEVER Synergy: Tactical Mastery",
+    "ja": "FEVERシナジー: 戦術の極意"
+  },
+  "FEVER 시너지: 질풍노도": {
+    "en": "FEVER Synergy: Storm and Stress",
+    "ja": "FEVERシナジー: 疾風怒濤"
+  },
+  "FEVER 시너지: 총력 섬멸": {
+    "en": "FEVER Synergy: Total Annihilation",
+    "ja": "FEVERシナジー: 総力殲滅"
+  },
+  "FEVER 시너지: 흡혈 진혼곡": {
+    "en": "FEVER Synergy: Vampiric Requiem",
+    "ja": "FEVERシナジー: 吸血レクイエム"
+  },
+  "FEVER 폭발: 궁극기 시너지 방출": {
+    "en": "FEVER Burst: Ultimate Synergy Unleashed",
+    "ja": "FEVERバースト: 究極技シナジー放出"
+  },
+  "Firebase 클라우드 동기화 세이브 삭제": {
+    "en": "Delete Firebase Cloud Sync Save",
+    "ja": "Firebaseクラウド同期セーブ削除"
+  },
+  "G/개": {
+    "en": "G each",
+    "ja": "G/個"
+  },
+  "Gate Lv.6 필요": {
+    "en": "Requires Gate Lv.6",
+    "ja": "Gate Lv.6 必要"
+  },
+  "Google 계정 인증 교신 중...": {
+    "en": "Connecting to Google account authentication...",
+    "ja": "Googleアカウント認証通信中..."
+  },
+  "Google 계정으로 가입": {
+    "en": "Sign up with Google",
+    "ja": "Googleアカウントで登録"
+  },
+  "Google 계정으로 로그인": {
+    "en": "Sign in with Google",
+    "ja": "Googleアカウントでログイン"
+  },
+  "Google 로그인에 실패했습니다.": {
+    "en": "Google login failed.",
+    "ja": "Googleログインに失敗しました。"
+  },
+  "Google 인증 중 오류가 발생했습니다.": {
+    "en": "An error occurred during Google authentication.",
+    "ja": "Google認証中にエラーが発生しました。"
+  },
+  "HP (생명력)": {
+    "en": "HP",
+    "ja": "HP (生命力)"
+  },
+  "HP +56, 마나 +21": {
+    "en": "HP +56, MP +21",
+    "ja": "HP +56, MP +21"
+  },
+  "HP/분) 회복 중": {
+    "en": "HP/min) recovering",
+    "ja": "HP/分) 回復中"
+  },
+  "HP/분)를 지속 회복합니다.": {
+    "en": "HP/min) continuously regenerated.",
+    "ja": "HP/分)を持続回復します。"
+  },
+  "JSON 내보내기": {
+    "en": "Export JSON",
+    "ja": "JSONエクスポート"
+  },
+  "LUK (행운)": {
+    "en": "LUCK",
+    "ja": "LUCK (幸運)"
+  },
+  "Lv.1 (Bond 20): 동료애 — 야영 회복량 +5% & 최대 HP +5%": {
+    "en": "Lv.1 (Bond 20): Camaraderie — Camp recovery +5% & Max HP +5%",
+    "ja": "Lv.1 (Bond 20): 仲間意識 — 野営回復量+5%＆最大HP+5%"
+  },
+  "Lv.1 ~ Lv.3: 초기 개척 지원으로 유지비 완전 무료": {
+    "en": "Lv.1 - Lv.3: Upkeep completely free with early pioneer support",
+    "ja": "Lv.1〜Lv.3: 初期開拓支援により維持費完全無料"
+  },
+  "Lv.1 유대 (Bond 20) : 동료애": {
+    "en": "Lv.1 Bond (Bond 20): Camaraderie",
+    "ja": "Lv.1 絆 (Bond 20): 仲間意識"
+  },
+  "Lv.2 (Bond 40): 전술적 호흡 — 공격 시 25% 확률로 유대 동료의 원호 공격(Assist Attack, 공격력 80%)": {
+    "en": "Lv.2 (Bond 40): Tactical Rhythm — 25% chance upon attacking for bonded ally to launch Assist Attack (80% ATK)",
+    "ja": "Lv.2 (Bond 40): 戦術的呼吸 — 攻撃時25%確率で絆仲間の援護攻撃(Assist Attack、攻撃力80%)"
+  },
+  "Lv.2 유대 (Bond 40) : 전술적 호흡": {
+    "en": "Lv.2 Bond (Bond 40): Tactical Rhythm",
+    "ja": "Lv.2 絆 (Bond 40): 戦術的呼吸"
+  },
+  "Lv.3 (Bond 60): 굳건한 신뢰 — 치명타율(행운) +8 & 아군 빈사(HP 25% 이하) 시 [수호의 결속] 50 HP 보호막 전개": {
+    "en": "Lv.3 (Bond 60): Firm Trust — Crit Rate (Luck) +8 & deploys [Bond of Protection] 50 HP shield when ally is near death (HP <= 25%)",
+    "ja": "Lv.3 (Bond 60): 固い信頼 — 会心率(幸運)+8＆味方瀕死(HP25%以下)時［守護の結束］50 HPシールド展開"
+  },
+  "Lv.3 유대 (Bond 60) : 굳건한 신뢰": {
+    "en": "Lv.3 Bond (Bond 60): Firm Trust",
+    "ja": "Lv.3 絆 (Bond 60): 固い信頼"
+  },
+  "Lv.4 (Bond 80): 사선의 맹세 — 치명상 피격 시 1회 체력 1로 생존 (불굴) & 모든 능력치 +10%": {
+    "en": "Lv.4 (Bond 80): Oath of the Brink — Survives lethal hit once with 1 HP (Indomitable) & All Stats +10%",
+    "ja": "Lv.4 (Bond 80): 死線の誓い — 致死打撃を受けた時1回HP1で生存(不屈)＆全ステータス+10%"
+  },
+  "Lv.4 유대 (Bond 80) : 사선의 맹세": {
+    "en": "Lv.4 Bond (Bond 80): Oath of the Brink",
+    "ja": "Lv.4 絆 (Bond 80): 死線の誓い"
+  },
+  "Lv.4 이상: 골드, 식량, 에테르 유지비가 단계별 부과": {
+    "en": "Lv.4 and above: Gold, Food, and Ether upkeep imposed by tiers",
+    "ja": "Lv.4以上: ゴールド、食糧、エーテル維持費が段階別に課される"
+  },
+  "Lv.5 (Bond 100): 영혼의 결속 — 전투 시작 시 유대 100 달성자 마나(MP) 30% 회복 (전원 최대 유대 시 50% 회복) & 공/방 +15%": {
+    "en": "Lv.5 (Bond 100): Soul Bond — Bond 100 heroes recover 30% MP at battle start (50% if all at max bond) & ATK/DEF +15%",
+    "ja": "Lv.5 (Bond 100): 魂の結束 — 戦闘開始時、絆100達成者のMP30%回復(全員最大絆時50%回復)＆攻/防+15%"
+  },
+  "Lv.5 유대 (Bond 100) : 영혼의 결속": {
+    "en": "Lv.5 Bond (Bond 100): Soul Bond",
+    "ja": "Lv.5 絆 (Bond 100): 魂の結束"
+  },
+  "Lv.{0} 강화 활성": {
+    "en": "Lv.{0} Enhance Active",
+    "ja": "Lv.{0} 強化有効"
+  },
+  "MP (마나)": {
+    "en": "MP",
+    "ja": "MP (マナ)"
+  },
+  "MP / 쿨": {
+    "en": "MP / CD",
+    "ja": "MP / CT"
+  },
+  "MP • 쿨타임": {
+    "en": "MP • Cooldown",
+    "ja": "MP • クールタイム"
+  },
+  "MP 소모": {
+    "en": "MP Cost",
+    "ja": "MP消費"
+  },
+  "MP 충전 주기 단축 · 2초마다 HP +5 / 2초마다 MP +4 충전": {
+    "en": "Shorten MP Recharge Cycle · Every 2s HP +5 / Every 2s MP +4 Recharge",
+    "ja": "MP充電周期短縮 · 2秒ごとにHP +5 / 2秒ごとにMP +4 充電"
+  },
+  "MP 충전 주기를 2초로 단축하여 마나를 소진한 용병들을 즉시 완충 상태로 되돌립니다.": {
+    "en": "Shortens MP recharge cycle to 2s, rapidly restoring depleted mercenaries to fully charged status.",
+    "ja": "MP充電周期を2秒に短縮し、マナを消耗した傭兵を素早く全快状態へ戻します。"
+  },
+  "MP가 부족합니다! (필요 MP: {0}, 보유 MP: {1})": {
+    "en": "Insufficient MP! (Required MP: {0}, Current MP: {1})",
+    "ja": "MPが不足しています！ (必要MP: {0}, 所持MP: {1})"
+  },
+  "MUD 던전 5층": {
+    "en": "MUD Dungeon 5F",
+    "ja": "MUDダンジョン5層"
+  },
+  "N등급과 L등급 간 레벨당 최대 5의 스탯 성장 격차가 발생하여 장기 육성 시 전설 영웅의 압도적인 잠재력이 발현됩니다.": {
+    "en": "A stat growth difference of up to 5 per level occurs between Rank N and Rank L, revealing the overwhelming potential of Legendary heroes over long-term training.",
+    "ja": "N等級とL等級の間でレベルあたり最大5のステータス成長差が生じ、長期育成時に伝説英雄の圧倒的な潜在能力が発揮されます。"
+  },
+  "N층: MP 소모량 = 기본 MP × [1 + (N - 1) × 10%]": {
+    "en": "Floor N: MP Cost = Base MP × [1 + (N - 1) × 10%]",
+    "ja": "N層: MP消費量 = 基本MP × [1 + (N - 1) × 10%]"
+  },
+  "PVP 결투 및 차원 원정": {
+    "en": "PVP Duels & Dimensional Expeditions",
+    "ja": "PVP決闘および次元遠征"
+  },
+  "PVP 연승 보너스 강화 & 명예 상점 2단계 (인챈트 마도석)": {
+    "en": "PVP Win Streak Bonus Boosted & Honor Shop Tier 2 (Enchant Magic Stones)",
+    "ja": "PVP連勝ボーナス強化＆名誉ショップ第2段階 (エンチャント魔導石)"
+  },
+  "Phase 1: 차원의 균열 (Dimensional Rift)": {
+    "en": "Phase 1: Dimensional Rift",
+    "ja": "Phase 1: 次元の亀裂 (Dimensional Rift)"
+  },
+  "Phase 2: 시공 붕괴 (Spacetime Collapse)": {
+    "en": "Phase 2: Spacetime Collapse",
+    "ja": "Phase 2: 時空崩壊 (Spacetime Collapse)"
+  },
+  "Phase 3: 네메시스 각성 (Cataclysm Countdown)": {
+    "en": "Phase 3: Nemesis Awakening (Cataclysm Countdown)",
+    "ja": "Phase 3: ネメシス覚醒 (Cataclysm Countdown)"
+  },
+  "Project: Limbo Tales 공식 후원사 광고": {
+    "en": "Project: Limbo Tales Official Sponsor Ad",
+    "ja": "Project: Limbo Tales 公式スポンサー広告"
+  },
+  "Q. 2차 전직(발키리, 하이퍼레인저 등)은 어떻게 하나요?": {
+    "en": "Q. How do I perform Tier 2 promotion (Valkyrie, Hyper Ranger, etc.)?",
+    "ja": "Q. 2次転職(ヴァルキリー、ハイパーレンジャーなど)はどうすればいいですか？"
+  },
+  "Q. 몬스터 전투에서 전멸하면 어떻게 되나요?": {
+    "en": "Q. What happens if our party wipes out in monster battles?",
+    "ja": "Q. モンスター戦闘で全滅したらどうなりますか？"
+  },
+  "Q. 탐험 중 얻은 아이템이 성채 창고에 바로 안 들어와요!": {
+    "en": "Q. Why don't items found during exploration go directly into Citadel storage?",
+    "ja": "Q. 探検で得たアイテムが城塞倉庫にすぐ入らないのですが！"
+  },
+  "SPD (행동속도)": {
+    "en": "SPD",
+    "ja": "SPD (行動速度)"
+  },
+  "Top 10 랭커 전용 PVE 버프 발동 중": {
+    "en": "Top 10 Ranker Exclusive PVE Buff Active",
+    "ja": "Top 10ランカー専用PVEバフ発動中"
+  },
+  "UI, 던전, 시스템 텍스트 번역 엔진": {
+    "en": "UI, Dungeon, System Text Translation Engine",
+    "ja": "UI、ダンジョン、システムテキスト翻訳エンジン"
+  },
+  "V.0.9.6 주요 게임 구성 & 핵심 시스템": {
+    "en": "V.0.9.6 Major Game Features & Core Systems",
+    "ja": "V.0.9.6 主要ゲーム構成＆中核システム"
+  },
+  "V.0.9.6-rc2 업데이트 패치노트": {
+    "en": "V.0.9.6-rc2 Update Patch Notes",
+    "ja": "V.0.9.6-rc2 アップデートパッチノート"
+  },
+  "V.0.9.6-rc4 업데이트 패치노트": {
+    "en": "V.0.9.6-rc4 Update Patch Notes",
+    "ja": "V.0.9.6-rc4 アップデートパッチノート"
+  },
+  "V.0.9.6-rc7 업데이트 패치노트": {
+    "en": "V.0.9.6-rc7 Update Patch Notes",
+    "ja": "V.0.9.6-rc7 アップデートパッチノート"
+  },
+  "V.0.9.6-rc8 업데이트 패치노트": {
+    "en": "V.0.9.6-rc8 Update Patch Notes",
+    "ja": "V.0.9.6-rc8 アップデートパッチノート"
+  },
+  "V.0.9.7-rc1 업데이트 패치노트": {
+    "en": "V.0.9.7-rc1 Update Patch Notes",
+    "ja": "V.0.9.7-rc1 アップデートパッチノート"
+  },
+  "[ 심연의 지배자가 모습을 드러냈습니다 ]": {
+    "en": "[ The Ruler of the Abyss has revealed itself ]",
+    "ja": "［ 深淵の支配者が姿を現しました ］"
+  },
+  "[1단계] 1층 침묵의 회랑: 쓰러진 척후병 루카스의 군번줄 수습": {
+    "en": "[Stage 1] 1F Silent Cloister: Retrieve dog tag of fallen scout Lucas",
+    "ja": "［1段階］ 1層沈黙の回廊: 倒れた斥候兵ルーカスの認識票を回収"
+  },
+  "[1단계] 3층 에테르 광맥: 방랑 연금술사 이안과 접선 및 플라스크 안정화": {
+    "en": "[Stage 1] 3F Ether Vein: Contact wandering alchemist Ian and stabilize flask",
+    "ja": "［1段階］ 3層エーテル鉱脈: 放浪錬金術師イアンと接触およびフラスコ安定化"
+  },
+  "[1단계] 4층 거울의 미궁: 심연의 균열에서 차원의 태엽 부품 수습 및 크로노스 접선": {
+    "en": "[Stage 1] 4F Labyrinth of Mirrors: Retrieve dimensional gear parts in Abyssal Rift & contact Chronos",
+    "ja": "［1段階］ 4層鏡の迷宮: 深淵の亀裂で次元のぜんまい部品を回収＆クロノスと接触"
+  },
+  "[1단계] 6층 통곡의 늪: 피를 흘리는 발키리 처형자 실비아 구호 및 저주 확인": {
+    "en": "[Stage 1] 6F Swamp of Wailing: Rescue bleeding Valkyrie Executioner Sylvia & investigate curse",
+    "ja": "［1段階］ 6層嘆きの沼: 血を流すヴァルキリー処刑者シルヴィアを救助＆呪いを確認"
+  },
+  "[2단계] 3층 에테르 광맥: 은신 중인 보급관 엘릭과 접선 및 유품 전달": {
+    "en": "[Stage 2] 3F Ether Vein: Contact hidden quartermaster Elric & deliver memento",
+    "ja": "［2段階］ 3層エーテル鉱脈: 潜伏中の補給官エルリックと接触＆遺品を引き渡し"
+  },
+  "[2단계] 5층 무너진 신전: 원초의 제단에서 시간 앵커와 회중시계 동기화": {
+    "en": "[Stage 2] 5F Ruined Temple: Synchronize time anchor with pocket watch at Primordial Altar",
+    "ja": "［2段階］ 5層崩壊した神殿: 原初の祭壇で時間アンカーと懐中時計を同期"
+  },
+  "[2단계] 6층 통곡의 늪: 광기의 늪지대에서 잃어버린 자홍빛 시약 3병 회수": {
+    "en": "[Stage 2] 6F Swamp of Wailing: Recover 3 lost magenta reagents in the marsh of madness",
+    "ja": "［2段階］ 6層嘆きの沼: 狂気の沼地で失われた赤紫色の試薬3本を回収"
+  },
+  "[2단계] 7층 용암 심층: 붉은 용암 바다 속 은둔사제 카엘에게서 영혼 정화수 획득": {
+    "en": "[Stage 2] 7F Molten Depths: Obtain soul purification water from hermit priest Kael in red lava sea",
+    "ja": "［2段階］ 7層溶岩深層: 赤い溶岩の海で隠遁司祭カエルから魂の浄化水を獲得"
+  },
+  "[3단계] 10층 심연의 옥좌: 최종 제단 정화 및 성혈의 흡혈 저주 해방": {
+    "en": "[Stage 3] 10F Abyssal Throne: Purify final altar & lift vampiric curse of holy blood",
+    "ja": "［3段階］ 10層深淵の玉座: 最終祭壇浄化＆聖血の吸血呪いを解放"
+  },
+  "[3단계] 11층 무간지옥 아비치: 시간 종착역에서 아르케오스와 대면 및 시간 권능 수렴": {
+    "en": "[Stage 3] 11F Avici Purgatory: Confront Archeos at Time Terminus & converge temporal power",
+    "ja": "［3段階］ 11層無間地獄アビチ: 時間の終着駅でアルケオスと対面＆時間権能を収束"
+  },
+  "[3단계] 8층 단죄의 성채: 마기에 잠식된 기사단장 베른하르트 결판": {
+    "en": "[Stage 3] 8F Citadel of Condemnation: Settle with Knight Commander Bernhardt corrupted by demonic energy",
+    "ja": "［3段階］ 8層断罪の城塞: 魔気に侵食された騎士団長ベルンハルトとの決着"
+  },
+  "[3단계] 9층 환영의 미궁: 심연에 닿은 만화경 속 복제 기억체와 진실 통합": {
+    "en": "[Stage 3] 9F Labyrinth of Illusions: Integrate truth with clone memories in kaleidoscope touched by abyss",
+    "ja": "［3段階］ 9層幻影の迷宮: 深淵に触れた万華鏡の複製記憶体と真実を統合"
+  },
+  "[3세트 완성] 공허 붕괴역: 스킬 피해량 +25% 증폭 및 적 방어력 20% 관통 무시": {
+    "en": "[3-Piece Set] Void Collapse Zone: Skill Damage +25% & ignores 20% enemy DEF",
+    "ja": "［3セット完成］ 虚無崩壊域: スキルダメージ+25%増幅＆敵防御力20%貫通無視"
+  },
+  "[3세트 완성] 단죄의 불패성: 받는 모든 피해 20% 상시 경감 및 치명타 저항 20% 증가": {
+    "en": "[3-Piece Set] Invincible Castle of Condemnation: Always reduces all damage taken by 20% & Crit Resistance +20%",
+    "ja": "［3セット完成］ 断罪の不敗城: 受ける全ダメージを常時20%軽減＆会心抵抗20%増加"
+  },
+  "[3세트 완성] 대지의 결계: 전투 시작 시 최대 체력의 25%에 해당하는 바위 보호막 생성": {
+    "en": "[3-Piece Set] Earthen Barrier: Creates a rock shield equal to 25% of Max HP at battle start",
+    "ja": "［3セット完成］ 大地の結界: 戦闘開始時、最大HPの25%に相当する岩シールドを生成"
+  },
+  "[3세트 완성] 선혈의 갈증: 체력 50% 이하 시 공격력 +35% 폭주 및 피해량의 20% 흡혈": {
+    "en": "[3-Piece Set] Thirst for Blood: ATK +35% berserk when HP <= 50% & 20% Lifesteal from damage dealt",
+    "ja": "［3セット完成］ 鮮血の渇き: HP50%以下で攻撃力+35%暴走＆与ダメージの20%吸血"
+  },
+  "[3세트 완성] 시공 왜곡장: 매 턴 시작 시 MP 15 회복 및 행동 속도(SPD) +20% 가속": {
+    "en": "[3-Piece Set] Spatiotemporal Distortion Field: Restores 15 MP at start of each turn & SPD +20%",
+    "ja": "［3セット完成］ 時空歪曲場: 毎ターン開始時MP15回復＆行動速度(SPD)+20%加速"
+  },
+  "[3세트 완성] 영혼 착취: 모든 공격 및 스킬 적중 시 가한 피해의 12%를 체력으로 흡혈": {
+    "en": "[3-Piece Set] Soul Exploitation: Siphons 12% of damage dealt by all attacks and skills as HP",
+    "ja": "［3セット完成］ 魂の搾取: 全ての攻撃およびスキル命中時、与えたダメージの12%をHPとして吸収"
+  },
+  "[3세트 완성] 원혼의 속박: 공격 시 25% 확률로 대상을 1턴간 [빙결] 상태로 행동 불능화": {
+    "en": "[3-Piece Set] Shackles of Vengeful Spirits: 25% chance on attack to freeze target for 1 turn (incapacitated)",
+    "ja": "［3セット完成］ 怨霊の束縛: 攻撃時25%確率で対象を1ターン［凍結］状態にし行動不能化"
+  },
+  "[3세트 완성] 종말의 군주: 올스탯 +30% 증폭 및 3턴마다 적 전체에 최대 체력 15% 심연 폭발": {
+    "en": "[3-Piece Set] Lord of Doom: All Stats +30% & triggers 15% Max HP Abyssal Explosion on all enemies every 3 turns",
+    "ja": "［3セット完成］ 終末の君主: 全ステータス+30%増幅＆3ターンごとに敵全体へ最大HP15%の深淵爆発"
+  },
+  "[3세트 완성] 침묵의 주시: 전투 시작 시 영구 방어력 +15% 및 치명타율 +10% 증가": {
+    "en": "[3-Piece Set] Silent Gaze: Permanent DEF +15% and Crit Rate +10% at start of battle",
+    "ja": "［3セット完成］ 沈黙の注視: 戦闘開始時、永久防御力+15%＆会心率+10%増加"
+  },
+  "[3세트 완성] 환영 굴절: 20% 확률로 적의 단일 공격을 100% 완전 회피(굴절)": {
+    "en": "[3-Piece Set] Phantom Refraction: 20% chance to completely evade (refract) enemy single-target attacks",
+    "ja": "［3セット完成］ 幻影屈折: 20%の確率で敵の単体攻撃を100%完全回避(屈折)"
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_1.jpg] \"Dark fantasy RPG concept art, silent dark stone corridor, dungeon entrance, glowing moss, gloomy atmosphere\"": {
+    "en": "[AI Image Prompt — assets/dungeon_1.jpg] \"Dark fantasy RPG concept art, silent dark stone corridor, dungeon entrance, glowing moss, gloomy atmosphere\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_1.jpg] \"Dark fantasy RPG concept art, silent dark stone corridor, dungeon entrance, glowing moss, gloomy atmosphere\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_10.jpg] \"Dark fantasy heart of the abyss, cosmic void rift, obsidian rune monoliths, apocalyptic demonic throne room, final battle arena\"": {
+    "en": "[AI Image Prompt — assets/dungeon_10.jpg] \"Dark fantasy heart of the abyss, cosmic void rift, obsidian rune monoliths, apocalyptic demonic throne room, final battle arena\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_10.jpg] \"Dark fantasy heart of the abyss, cosmic void rift, obsidian rune monoliths, apocalyptic demonic throne room, final battle arena\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_11.jpg] \"Dark fantasy infinite abyss of Avici, cosmic void purgatory, glowing purple dimensional tears, endless monolith spires, ultimate purgatory arena\"": {
+    "en": "[AI Image Prompt — assets/dungeon_11.jpg] \"Dark fantasy infinite abyss of Avici, cosmic void purgatory, glowing purple dimensional tears, endless monolith spires, ultimate purgatory arena\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_11.jpg] \"Dark fantasy infinite abyss of Avici, cosmic void purgatory, glowing purple dimensional tears, endless monolith spires, ultimate purgatory arena\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_2.jpg] \"Dark fantasy crypt, skulls and bones, ethereal blue flames, ruined tombs, eerie atmosphere\"": {
+    "en": "[AI Image Prompt — assets/dungeon_2.jpg] \"Dark fantasy crypt, skulls and bones, ethereal blue flames, ruined tombs, eerie atmosphere\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_2.jpg] \"Dark fantasy crypt, skulls and bones, ethereal blue flames, ruined tombs, eerie atmosphere\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_3.jpg] \"Underground glowing crystal cave, blue and cyan magical aether veins, fantasy environment\"": {
+    "en": "[AI Image Prompt — assets/dungeon_3.jpg] \"Underground glowing crystal cave, blue and cyan magical aether veins, fantasy environment\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_3.jpg] \"Underground glowing crystal cave, blue and cyan magical aether veins, fantasy environment\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_4.jpg] \"Deep dark void, abyss, glowing purple spatial cracks, ominous dark fantasy setting\"": {
+    "en": "[AI Image Prompt — assets/dungeon_4.jpg] \"Deep dark void, abyss, glowing purple spatial cracks, ominous dark fantasy setting\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_4.jpg] \"Deep dark void, abyss, glowing purple spatial cracks, ominous dark fantasy setting\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_5.jpg] \"Ancient ruined altar, blood moon sky, epic boss arena, corrupted dark fantasy landscape\"": {
+    "en": "[AI Image Prompt — assets/dungeon_5.jpg] \"Ancient ruined altar, blood moon sky, epic boss arena, corrupted dark fantasy landscape\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_5.jpg] \"Ancient ruined altar, blood moon sky, epic boss arena, corrupted dark fantasy landscape\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_6.jpg] \"Dark fantasy blood sanctuary, gothic cathedral hall submerged in crimson moonlight, stained glass, rose vines, misty red reflections\"": {
+    "en": "[AI Image Prompt — assets/dungeon_6.jpg] \"Dark fantasy blood sanctuary, gothic cathedral hall submerged in crimson moonlight, stained glass, rose vines, misty red reflections\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_6.jpg] \"Dark fantasy blood sanctuary, gothic cathedral hall submerged in crimson moonlight, stained glass, rose vines, misty red reflections\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_7.jpg] \"Dark fantasy oblivion catacombs, ancient stone crypts and gravestones, ethereal cyan soul flames, chilly mist\"": {
+    "en": "[AI Image Prompt — assets/dungeon_7.jpg] \"Dark fantasy oblivion catacombs, ancient stone crypts and gravestones, ethereal cyan soul flames, chilly mist\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_7.jpg] \"Dark fantasy oblivion catacombs, ancient stone crypts and gravestones, ethereal cyan soul flames, chilly mist\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_8.jpg] \"Dark fantasy hall of condemnation, ruined fortress of fallen knights, hanging iron chains, ghostly blue braziers, paladin statues\"": {
+    "en": "[AI Image Prompt — assets/dungeon_8.jpg] \"Dark fantasy hall of condemnation, ruined fortress of fallen knights, hanging iron chains, ghostly blue braziers, paladin statues\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_8.jpg] \"Dark fantasy hall of condemnation, ruined fortress of fallen knights, hanging iron chains, ghostly blue braziers, paladin statues\""
+  },
+  "[AI 이미지 프롬프트 — assets/dungeon_9.jpg] \"Dark fantasy mirror labyrinth, floating shattered crystal mirrors, glowing neon cyan and violet light beams, surreal maze\"": {
+    "en": "[AI Image Prompt — assets/dungeon_9.jpg] \"Dark fantasy mirror labyrinth, floating shattered crystal mirrors, glowing neon cyan and violet light beams, surreal maze\"",
+    "ja": "[AI画像プロンプト — assets/dungeon_9.jpg] \"Dark fantasy mirror labyrinth, floating shattered crystal mirrors, glowing neon cyan and violet light beams, surreal maze\""
+  },
+  "[AI 이미지 프롬프트 — assets/{0}.jpg] \"{1}, {2}, dark fantasy RPG style, glowing eyes, menacing pose, dramatic rim lighting, high detail concept art, black background\"": {
+    "en": "[AI Image Prompt — assets/{0}.jpg] \"{1}, {2}, dark fantasy RPG style, glowing eyes, menacing pose, dramatic rim lighting, high detail concept art, black background\"",
+    "ja": "[AI画像プロンプト — assets/{0}.jpg] \"{1}, {2}, dark fantasy RPG style, glowing eyes, menacing pose, dramatic rim lighting, high detail concept art, black background\""
+  },
+  "[{0} (Lv.{1} {2})]의 영령 가호: {3}": {
+    "en": "Heroic Blessing of [{0} (Lv.{1} {2})]: {3}",
+    "ja": "［{0} (Lv.{1} {2})］の英霊加護: {3}"
+  },
+  "[{0} 계열] [{1}의 대표 비기] {2}": {
+    "en": "[{0} Tree] [{1}'s Signature Secret Art] {2}",
+    "ja": "［{0}系列］ ［{1}の代表秘技］ {2}"
+  },
+  "[{0} 특화] [{1}]의 대표 기술을 결집한 마도서. {2} (비적합 계열 사용 시 위력 50% 반감)": {
+    "en": "[{0} Specialized] A grimoire concentrating signature techniques of [{1}]. {2} (Potency halved by 50% if used by non-matching tree)",
+    "ja": "［{0}特化］ ［{1}］の代表技を結集した魔導書。{2} (不適合系列の使用時威力50%半減)"
+  },
+  "[{0}F 보스세트] {1}": {
+    "en": "[{0}F Boss Set] {1}",
+    "ja": "［{0}層ボスセット］ {1}"
+  },
+  "[{0}T 병기창] {1}": {
+    "en": "[{0}T Armory] {1}",
+    "ja": "［{0}T兵器廠］ {1}"
+  },
+  "[{0}] {1} Lv.{2} 이상 필요 (현재 Lv.{3}) - {4}": {
+    "en": "[{0}] Requires {1} Lv.{2} or higher (Current Lv.{3}) - {4}",
+    "ja": "［{0}］ {1} Lv.{2}以上必要 (現在Lv.{3}) - {4}"
+  },
+  "[{0}] ⚔️⚡[피격 환영 반격!] -{1}": {
+    "en": "[{0}] ⚔️⚡[Hit Phantom Counter!] -{1}",
+    "ja": "［{0}］ ⚔️⚡［被弾幻影反撃！］ -{1}"
+  },
+  "[{0}] 관련 백과사전 공략 열기 (검색: {1})": {
+    "en": "[{0}] Open Related Encyclopedia Guide (Search: {1})",
+    "ja": "［{0}］ 関連百科事典の攻略を開く (検索: {1})"
+  },
+  "[{0}] 긴급 귀환 & [{1}] 후방 호출 ({2}턴 소요{3})": {
+    "en": "[{0}] Emergency Return & [{1}] Summon Rear Ally (Takes {2} turns{3})",
+    "ja": "［{0}］ 緊急帰還＆［{1}］後方呼び出し ({2}ターン所要{3})"
+  },
+  "[{0}] 던전 탐험을 시작합니다.": {
+    "en": "Starting exploration of dungeon [{0}].",
+    "ja": "［{0}］ ダンジョン探検を開始します。"
+  },
+  "[{0}] 백과사전 열기": {
+    "en": "Open [{0}] Encyclopedia",
+    "ja": "［{0}］ 百科事典を開く"
+  },
+  "[{0}] 스킬의 위력이 12% 증가하고 마도 영창이 강화되었습니다!": {
+    "en": "[{0}] Skill potency increased by 12% and arcane chant empowered!",
+    "ja": "［{0}］ スキルの威力が12%増加し、魔導詠唱が強化されました！"
+  },
+  "[{0}] 슬롯 (미장착)": {
+    "en": "[{0}] Slot (Unequipped)",
+    "ja": "［{0}］ スロット (未装備)"
+  },
+  "[{0}] 시전 요격 사격!": {
+    "en": "[{0}] Cast Interception Fire!",
+    "ja": "［{0}］ 詠唱迎撃射撃！"
+  },
+  "[{0}] 영령을 안치 보존으로 잠갔습니다. (최대 3명)": {
+    "en": "Heroic spirit [{0}] locked for enshrined preservation. (Max 3)",
+    "ja": "英霊［{0}］を安置保存としてロックしました。(最大3名)"
+  },
+  "[{0}] 영령의 잠금을 해제했습니다.": {
+    "en": "Heroic spirit [{0}] unlocked.",
+    "ja": "英霊［{0}］のロックを解除しました。"
+  },
+  "[{0}] 이미 증축/건설 공사가 진행 중입니다! (남은 시간: {1}초)": {
+    "en": "[{0}] Expansion/construction already in progress! (Remaining: {1}s)",
+    "ja": "［{0}］ すでに増築/建設工事が進行中です！ (残り時間: {1}秒)"
+  },
+  "[{0}] 이미 최고 레벨(Lv.10)입니다.": {
+    "en": "[{0}] is already at max level (Lv.10).",
+    "ja": "［{0}］ すでに最高レベル(Lv.10)です。"
+  },
+  "[{0}] 인챈트": {
+    "en": "[{0}] Enchant",
+    "ja": "［{0}］ エンチャント"
+  },
+  "[{0}] 전사 ➔ 후방 서포터가 전선에 합류했습니다!": {
+    "en": "[{0}] Fallen ➔ Rear supporter joined the frontline!",
+    "ja": "［{0}］ 戦死 ➔ 後方サポーターが戦線に合流しました！"
+  },
+  "[{0}] 컬렉션이 완성되었습니다!": {
+    "en": "[{0}] Collection completed!",
+    "ja": "［{0}］ コレクションが完成しました！"
+  },
+  "[{0}] 투사의 결전 마총": {
+    "en": "[{0}] Fighter's Decisive Magic Gun",
+    "ja": "［{0}］ 闘士の決戦魔銃"
+  },
+  "[{0}] 투사의 영광 반지": {
+    "en": "[{0}] Fighter's Glory Ring",
+    "ja": "［{0}］ 闘士の栄光指輪"
+  },
+  "[{0}] 투사의 처형검": {
+    "en": "[{0}] Fighter's Execution Sword",
+    "ja": "［{0}］ 闘士の処刑剣"
+  },
+  "[{0}] 👥[은신 회피] 광역 피해 50% 경감": {
+    "en": "[{0}] 👥[Stealth Evasion] AoE Damage reduced by 50%",
+    "ja": "［{0}］ 👥［ステルス回避］ 範囲ダメージ50%軽減"
+  },
+  "[{0}] 💨[중열 기동] 회피(EVADE)": {
+    "en": "[{0}] 💨[Mid-Row Maneuver] EVADED",
+    "ja": "［{0}］ 💨［中衛機動］ 回避(EVADE)"
+  },
+  "[{0}] 💨빗나감(MISS)": {
+    "en": "[{0}] 💨MISS",
+    "ja": "［{0}］ 💨ミス(MISS)"
+  },
+  "[{0}] 💨회피(EVADE)": {
+    "en": "[{0}] 💨EVADED",
+    "ja": "［{0}］ 💨回避(EVADE)"
+  },
+  "[{0}] 💨회피(EVADE) ➔ ⚔️⚡[환영 반격!] -{1}": {
+    "en": "[{0}] 💨EVADED ➔ ⚔️⚡[Phantom Counter!] -{1}",
+    "ja": "［{0}］ 💨回避(EVADE) ➔ ⚔️⚡［幻影反撃！］ -{1}"
+  },
+  "[{0}]{1} 미착용 보관함에 조건(등급)을 충족하는 기증 가능 장비가 없습니다.": {
+    "en": "No donateable equipment meeting conditions (tier) found in unequipped storage of [{0}]{1}.",
+    "ja": "［{0}］{1} 未装備保管庫に条件(等級)を満たす寄贈可能な装備がありません。"
+  },
+  "[{0}]{1} 보관함 기증 가능: {2}개 보유 ✓ 우선 기증 대상: {3} ({4} / +{5}강 / {6}) ※ 복수 보유 시 [최저 등급 ➔ 최저 강화 ➔ 노 인챈트] 순으로 자동 기증됩니다.": {
+    "en": "[{0}]{1} Storage donation available: {2} held ✓ Priority donation: {3} ({4} / +{5} Enhance / {6}) * When owning multiples, auto-donated in order: [Lowest Tier ➔ Lowest Enhance ➔ No Enchant].",
+    "ja": "［{0}］{1} 保管庫寄贈可能: {2}個所持 ✓ 優先寄贈対象: {3} ({4} / +{5}強化 / {6}) ※複数所持時は［最低等級 ➔ 最低強化 ➔ ノーエンチャント］順に自動寄贈されます。"
+  },
+  "[{0}]에게서 추출한 마도서. {1}": {
+    "en": "Grimoire extracted from [{0}]. {1}",
+    "ja": "［{0}］から抽出された魔導書。{1}"
+  },
+  "[{0}]에는 부여된 인챈트가 없습니다.": {
+    "en": "No enchantment applied to [{0}].",
+    "ja": "［{0}］にはエンチャントが付与されていません。"
+  },
+  "[{0}]은(는) 아직 습득한 마도서 스킬이 없습니다.": {
+    "en": "[{0}] has not learned any grimoire skills yet.",
+    "ja": "［{0}］はまだ習得した魔導書スキルがありません。"
+  },
+  "[{0}]은(는) 이미 최고 강화 단계(+10)입니다!": {
+    "en": "[{0}] is already at maximum enhancement (+10)!",
+    "ja": "［{0}］はすでに最高強化段階(+10)です！"
+  },
+  "[{0}]을(를) 골드 🪙 {1} G에 매각하시겠습니까?": {
+    "en": "Sell [{0}] for 🪙 {1} G?",
+    "ja": "［{0}］をゴールド 🪙 {1} Gで売却しますか？"
+  },
+  "[{0}]의 [{1}] 룬이 공명하여 [{2}]이(가) 뿜어져 나왔습니다!": {
+    "en": "[{0}]'s [{1}] rune resonated, unleashing [{2}]!",
+    "ja": "［{0}］の［{1}］ルーンが共鳴し、［{2}］が吹き出しました！"
+  },
+  "[{0}]의 대표 기술을 결집한 마도서. {1}": {
+    "en": "Grimoire condensing signature technique of [{0}]. {1}",
+    "ja": "［{0}］の代表技を結集した魔導書。{1}"
+  },
+  "[{0}]의 묘비": {
+    "en": "Tombstone of [{0}]",
+    "ja": "［{0}］の墓碑"
+  },
+  "[{0}]의 비전 원호!": {
+    "en": "[{0}]'s Arcane Assist!",
+    "ja": "［{0}］の秘術援護！"
+  },
+  "[{0}]의 수호 엄호!": {
+    "en": "[{0}]'s Guardian Cover!",
+    "ja": "［{0}］の守護援護！"
+  },
+  "[{0}]의 수호의 결속!": {
+    "en": "[{0}]'s Bond of Protection!",
+    "ja": "［{0}］の守護の結束！"
+  },
+  "[{0}]의 스킬은 이미 최고 강화 단계(Lv.10)입니다!": {
+    "en": "[{0}]'s skill is already at max enhancement level (Lv.10)!",
+    "ja": "［{0}］のスキルはすでに最高強化段階(Lv.10)です！"
+  },
+  "[{0}]의 영령과 결속되었습니다! [{1}] 시너지가 다음 원정 1회 동안 활성화됩니다.": {
+    "en": "Bonded with heroic spirit of [{0}]! [{1}] synergy active for the next expedition.",
+    "ja": "［{0}］の英霊と結束しました！［{1}］シナジーが次回遠征1回の間有効化されます。"
+  },
+  "[{0}]의 원호 사격!": {
+    "en": "[{0}]'s Assist Fire!",
+    "ja": "［{0}］の援護射撃！"
+  },
+  "[{0}]의 원호!": {
+    "en": "[{0}]'s Assist!",
+    "ja": "［{0}］の援護！"
+  },
+  "[{0}]의 추가 공격!": {
+    "en": "[{0}]'s Follow-up Attack!",
+    "ja": "［{0}］の追加攻撃！"
+  },
+  "[{0}]의 환영 반격!": {
+    "en": "[{0}]'s Phantom Counter!",
+    "ja": "［{0}］の幻影反撃！"
+  },
+  "[▶️ 가동 재개 및 입장]": {
+    "en": "[▶️ Resume Operation & Enter]",
+    "ja": "［▶️ 稼働再開および入場］"
+  },
+  "[★{0}각성]": {
+    "en": "[★Awakening {0}]",
+    "ja": "［★{0}覚醒］"
+  },
+  "[⚓ 균열의 닻]": {
+    "en": "[⚓ Rift Anchor]",
+    "ja": "［⚓ 亀裂の錨］"
+  },
+  "[⚡ 암습] 단검": {
+    "en": "[⚡ Ambush] Dagger",
+    "ja": "［⚡ 奇襲］ 短刀"
+  },
+  "[가동 중단됨]": {
+    "en": "[Operation Halted]",
+    "ja": "［稼働停止中］"
+  },
+  "[골드] 투사의 결전 무구함": {
+    "en": "[Gold] Fighter's Decisive Arms Chest",
+    "ja": "［ゴールド］ 闘士の決戦武具箱"
+  },
+  "[공허의 침식자]": {
+    "en": "[Void Corruptor]",
+    "ja": "［虚無の侵食者］"
+  },
+  "[광역 전체기]": {
+    "en": "[AoE All-Target Skill]",
+    "ja": "［全体範囲技］"
+  },
+  "[구호 Lv.{0}] 피난민 긴급 식량 지원": {
+    "en": "[Relief Lv.{0}] Refugee Emergency Food Aid",
+    "ja": "［救護 Lv.{0}］ 避難民緊急食糧支援"
+  },
+  "[궁극기]": {
+    "en": "[Ultimate]",
+    "ja": "［究極技］"
+  },
+  "[궁극기] 군단 총진격": {
+    "en": "[Ultimate] Legion Full Charge",
+    "ja": "［究極技］ 軍団総進撃"
+  },
+  "[궁극기] 궤도 에테르 버스터": {
+    "en": "[Ultimate] Orbital Ether Buster",
+    "ja": "［究極技］ 軌道エーテルバスター"
+  },
+  "[궁극기] 만화경 환영검무": {
+    "en": "[Ultimate] Kaleidoscope Phantom Sword Dance",
+    "ja": "［究極技］ 万華鏡幻影剣舞"
+  },
+  "[궁극기] 만화경 환영난무": {
+    "en": "[Ultimate] Kaleidoscope Phantom Flurry",
+    "ja": "［究極技］ 万華鏡幻影乱舞"
+  },
+  "[궁극기] 무간암영참": {
+    "en": "[Ultimate] Avici Shadow Slash",
+    "ja": "［究極技］ 無間暗影斬"
+  },
+  "[궁극기] 방주 결전포": {
+    "en": "[Ultimate] Ark Decisive Cannon",
+    "ja": "［究極技］ 方舟決戦砲"
+  },
+  "[궁극기] 부활의 성가": {
+    "en": "[Ultimate] Hymn of Resurrection",
+    "ja": "［究極技］ 復活の聖歌"
+  },
+  "[궁극기] 불멸의 결전분노": {
+    "en": "[Ultimate] Immortal Battle Fury",
+    "ja": "［究極技］ 不滅の決戦憤怒"
+  },
+  "[궁극기] 성전의 천벌": {
+    "en": "[Ultimate] Crusade Wrath",
+    "ja": "［究極技］ 聖戦の天罰"
+  },
+  "[궁극기] 소생의 기도": {
+    "en": "[Ultimate] Prayer of Revival",
+    "ja": "［究極技］ 蘇生の祈り"
+  },
+  "[궁극기] 시간 역행": {
+    "en": "[Ultimate] Time Reversal",
+    "ja": "［究極技］ 時間逆行"
+  },
+  "[궁극기] 시공 역류": {
+    "en": "[Ultimate] Spacetime Backflow",
+    "ja": "［究極技］ 時空逆流"
+  },
+  "[궁극기] 영원의 성역": {
+    "en": "[Ultimate] Sanctuary of Eternity",
+    "ja": "［究極技］ 永遠の聖域"
+  },
+  "[궁극기] 유령 탄환 (사신 스나이프)": {
+    "en": "[Ultimate] Ghost Bullet (Reaper Snipe)",
+    "ja": "［究極技］ 幽霊弾丸 (死神スナイプ)"
+  },
+  "[궁극기] 절대 불락의 성채": {
+    "en": "[Ultimate] Impregnable Citadel",
+    "ja": "［究極技］ 難攻不落の城塞"
+  },
+  "[궁극기] 절대 요새의 성역": {
+    "en": "[Ultimate] Absolute Fortress Sanctuary",
+    "ja": "［究極技］ 絶対要塞の聖域"
+  },
+  "[궁극기] 종말의 메테오": {
+    "en": "[Ultimate] Doomsday Meteor",
+    "ja": "［究極技］ 終末のメテオ"
+  },
+  "[궁극기] 종말의 탄환 (갓 킬러)": {
+    "en": "[Ultimate] Doomsday Bullet (God Killer)",
+    "ja": "［究極技］ 終末の弾丸 (ゴッドキラー)"
+  },
+  "[궁극기] 최후의 성전 선포": {
+    "en": "[Ultimate] Declaration of the Final Crusade",
+    "ja": "［究極技］ 最後の聖戦布告"
+  },
+  "[귀환 포탈]": {
+    "en": "[Return Portal]",
+    "ja": "［帰還ポータル］"
+  },
+  "[기사·용병 계열 전용] 납골당의 망령 군주가 수확한 원혼들의 생명력이 원정대의 상처를 메운다.": {
+    "en": "[Knight/Mercenary Class Only] Life force of vengeful spirits harvested by Ossuary's Phantom Lord mends the expedition's wounds.",
+    "ja": "［騎士・傭兵系列専用］ 納骨堂の亡霊の君主が収穫した怨霊たちの生命力が遠征隊の傷を癒す。"
+  },
+  "[기사·용병 계열 전용] 에테르 광맥의 지각을 붕괴시키는 태고 베히모스의 분노.": {
+    "en": "[Knight/Mercenary Class Only] Fury of the ancient behemoth shattering the crust of Ether Vein.",
+    "ja": "［騎士・傭兵系列専用］ エーテル鉱脈の地殻を崩壊させる太古のベヒモスの憤怒。"
+  },
+  "[기사·용병 계열 전용] 침묵의 회랑 깊은 곳에서 추출한 절대 영도의 동결 에너지.": {
+    "en": "[Knight/Mercenary Class Only] Absolute zero freezing energy extracted from deep within Silent Cloister.",
+    "ja": "［騎士・傭兵系列専用］ 沈黙の回廊深部から抽出した絶対零度の凍結エネルギー。"
+  },
+  "[기사·용병 계열 전용] 핏빛 성역의 지배자가 흩뿌리는 진홍빛 선혈의 향연.": {
+    "en": "[Knight/Mercenary Class Only] Feast of crimson fresh blood scattered by ruler of Crimson Sanctuary.",
+    "ja": "［騎士・傭兵系列専用］ 血塗られた聖域の支配者が撒き散らす深紅の鮮血の饗宴。"
+  },
+  "[기사·용병 계열 특화] 망령 군주의 사령도를 휘둘러 적 전체에 110% 암흑 참격을 가하고 가한 총 피해량의 35%를 파티 전원에게 치유로 환원합니다. (비적합 계열 사용 시 위력 50% 반감)": {
+    "en": "[Knight/Mercenary Specialized] Swings the Phantom Lord's necrotic blade to deal 110% dark slash damage to all enemies and restores 35% of total damage dealt as healing to all party members. (Potency halved by 50% if used by non-matching tree)",
+    "ja": "［騎士・傭兵系列特化］ 亡霊の君主の死霊刀を振るい敵全体に110%の暗黒斬撃を与え、与えた総ダメージの35%をパーティ全員へ回復として還元。(不適合系列の使用時威力50%半減)"
+  },
+  "[기사·용병 계열 특화] 침묵의 흑핵 거신의 냉각 핵을 개방하여 단일 적에게 165% 빙결 피해를 입히고 1턴 완전 결빙(행동 불가) 및 전열 아군에게 150% 보호막을 부여합니다. (비적합 계열 사용 시 위력 50% 반감)": {
+    "en": "[Knight/Mercenary Specialized] Unseals the cooling core of the Silent Black Core Colossus to deal 165% freeze damage to a single enemy, causing 1 turn full freeze (incapacitated) and granting a 150% shield to front-row allies. (Potency halved by 50% if used by non-matching tree)",
+    "ja": "［騎士・傭兵系列特化］ 沈黙の黒核巨神の冷却コアを開放し単体の敵に165%の凍結ダメージを与え1ターン完全氷結(行動不能)および前衛の味方に150%のシールドを付与。(不適合系列の使用時威力50%半減)"
+  },
+  "[기사·용병 계열 특화] 태고의 광맥 베히모스의 마도 화산력을 분출시켜 전열 적에게 175% 방어 무시 고열 폭발을 가하고 3턴간 화상(방어력 50% 분쇄)을 일으킵니다. (비적합 계열 사용 시 위력 50% 반감)": {
+    "en": "[Knight/Mercenary Specialized] Erupts the arcane volcanic power of Ancient Vein Behemoth to inflict 175% DEF-piercing thermal explosion on front-row enemies, inflicting Burn for 3 turns (shatters DEF by 50%). (Potency halved by 50% if used by non-matching tree)",
+    "ja": "［騎士・傭兵系列特化］ 太古の鉱脈ベヒモスの魔導火山力を噴出させ前衛の敵に175%の防御無視高熱爆発を与え、3ターン火傷(防御力50%粉砕)を引き起こす。(不適合系列の使用時威力50%半減)"
+  }
+}
