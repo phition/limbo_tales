@@ -148,7 +148,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
             <span>긴급 이송</span>
             {deadHeroes.length > 0 && (
               <span className="text-[9px] bg-[#ef5350] text-white px-1.5 py-0.2 rounded-full font-bold animate-pulse">
-                💀 전사 {deadHeroes.length}
+                {`💀 사망 ${deadHeroes.length}`}
               </span>
             )}
             {inTransitHero && (
@@ -482,17 +482,19 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <span className="text-xs font-bold text-[#ffd54f] flex items-center gap-1.5">
                     <span>{hasEnhanced ? '⚓✨' : '⚓'}</span>
-                    <span>{hasEnhanced ? '차원 심연의 닻' : '차원 균열의 닻'} 긴급 이송 & 유해 운구 시스템</span>
+                    <span>{hasEnhanced ? '차원 심연의 닻 긴급 이송 & 유해 운구 시스템' : '차원 균열의 닻 긴급 이송 & 유해 운구 시스템'}</span>
                   </span>
                   <div className="flex items-center gap-1.5 flex-wrap">
                     {enhancedAnchorCount > 0 && (
                       <span className="text-xs font-mono font-bold text-[#b388ff] bg-[#b388ff18] px-2 py-0.5 rounded border border-[#b388ff44] flex items-center gap-1">
-                        <span>⚓✨</span> 심연의 닻: {enhancedAnchorCount}개 (2턴)
+                        <span>⚓✨</span>
+                        <span>{`심연의 닻: ${enhancedAnchorCount}개 (2턴)`}</span>
                       </span>
                     )}
                     {normalAnchorCount > 0 && (
                       <span className="text-xs font-mono font-bold text-[#00d2ff] bg-[#00d2ff18] px-2 py-0.5 rounded border border-[#00d2ff44] flex items-center gap-1">
-                        <span>⚓</span> 균열의 닻: {normalAnchorCount}개 (3턴)
+                        <span>⚓</span>
+                        <span>{`균열의 닻: ${normalAnchorCount}개 (3턴)`}</span>
                       </span>
                     )}
                     {totalAnchorCount === 0 && (
@@ -503,7 +505,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                   </div>
                 </div>
                 <p className="text-[11px] text-[#cfd8e8] leading-relaxed">
-                  심연 탐험 중 위기에 처한 생존 용병을 <strong className="text-[#38ef7d]">방주로 무사 귀환</strong>시키거나, 끝내 사경을 넘지 못하고 <strong className="text-[#ef5350]">완전 전사한 용병의 유해를 영주(성채 묘지)로 안전히 운구</strong>하여 유품을 회수하고 방주 대기소의 후방 용병을 원정대로 호출합니다.
+                  심연 탐험 중 위기에 처한 생존 용병을 방주로 무사 귀환시키거나, 끝내 사경을 넘지 못하고 완전 전사한 용병의 유해를 영주(성채 묘지)로 안전히 운구하여 유품을 회수하고 방주 대기소의 후방 용병을 원정대로 호출합니다.
                 </p>
                 <div className={`text-[10px] p-2.5 rounded-lg border leading-relaxed ${
                   hasEnhanced
@@ -517,28 +519,28 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                       {hasEnhanced ? (
                         <span className="text-[#b388ff] flex items-center gap-1">
                           <span>⚓✨</span>
-                          <span><strong>심연의 닻 적용 중:</strong> 고대 시공간 안정화 권능으로 기본 이송 턴이 <strong>2턴으로 단축</strong>됩니다! (일반 균열의 닻 3턴 ➔ 2턴)</span>
+                          <span>심연의 닻 적용 중: 고대 시공간 안정화 권능으로 기본 이송 턴이 2턴으로 단축됩니다! (일반 균열의 닻 3턴 ➔ 2턴)</span>
                         </span>
                       ) : (
                         <span className="text-[#ffd54f] flex items-center gap-1">
                           <span>⚓</span>
-                          <span><strong>균열의 닻 적용:</strong> 소환된 대원은 차원 균열을 통해 <strong>3턴 후 원정대에 도착</strong>하여 합류합니다.</span>
+                          <span>균열의 닻 적용: 소환된 대원은 차원 균열을 통해 3턴 후 원정대에 도착하여 합류합니다.</span>
                         </span>
                       )}
                     </div>
                     {gm.activeCatalysts.includes('chrono_compass') || (gm.activeCatalysts.includes('compass') && gm.hasChronoCompass) || gm.hasChronoCompass ? (
                       <div className="text-[#38ef7d] flex items-center gap-1 font-bold">
                         <span>🧭⌛✨</span>
-                        <span><strong>시공간의 나침반 활성화:</strong> 초월 시공간 왜곡 권능으로 대기 턴 없이 <strong>즉시 합류(0턴)</strong>합니다!</span>
+                        <span>시공간의 나침반 활성화: 초월 시공간 왜곡 권능으로 대기 턴 없이 즉시 합류(0턴)합니다!</span>
                       </div>
                     ) : gm.activeCatalysts.includes('compass') ? (
                       <div className="text-[#38ef7d] flex items-center gap-1 font-bold">
                         <span>🧭✨</span>
-                        <span><strong>차원의 나침반 활성화 중:</strong> 시공간 왜곡 권능으로 소환 대원의 <strong>이송 턴이 추가 1턴 단축</strong>됩니다! ({hasEnhanced ? '심연의 닻: 1턴' : '균열의 닻: 2턴'})</span>
+                        <span>{`차원의 나침반 활성화 중: 시공간 왜곡 권능으로 소환 대원의 이송 턴이 추가 1턴 단축됩니다! (${hasEnhanced ? '심연의 닻: 1턴' : '균열의 닻: 2턴'})`}</span>
                       </div>
                     ) : (
                       <div className="text-[#8b9bb4]">
-                        💡 <strong>팁:</strong> 차원의 나침반 촉매를 채비하면 이송 턴이 추가로 1턴 더 단축됩니다.
+                        <span>💡 팁: 차원의 나침반 촉매를 채비하면 이송 턴이 추가로 1턴 더 단축됩니다.</span>
                       </div>
                     )}
                   </div>
@@ -553,7 +555,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                     현재 차원 이송 작전이 진행 중입니다!
                   </div>
                   <div className="text-xs text-[#cfd8e8]">
-                    소환 대원: <strong className="text-white">[{inTransitHero.heroName}]</strong> · 합류까지 남은 이동: <strong className="text-[#ffd54f] font-mono">{inTransitHero.turnsLeft}턴</strong>
+                    <span>{`소환 대원: [${inTransitHero.heroName}] · 합류까지 남은 이동: ${inTransitHero.turnsLeft}턴`}</span>
                   </div>
                   <div className="text-[10px] text-[#8b9bb4]">
                     이송이 완료된 후 다음 긴급 이송을 요청할 수 있습니다.
@@ -569,7 +571,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                       </span>
                       {deadHeroes.length > 0 && (
                         <span className="text-[10px] text-[#ef5350] font-bold">
-                          💀 전사자 {deadHeroes.length}명 대기 중
+                          {`💀 전사자 ${deadHeroes.length}명 대기 중`}
                         </span>
                       )}
                     </div>
@@ -600,7 +602,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                                   <span className={`text-xs font-bold truncate ${isDead ? 'text-[#8b9bb4] line-through' : 'text-white'}`}>{hero.name}</span>
                                   {isDead && (
                                     <span className="text-[9px] bg-[#ef5350] text-white px-1 py-0.2 rounded font-bold shrink-0">
-                                      전사
+                                      사망
                                     </span>
                                   )}
                                 </div>

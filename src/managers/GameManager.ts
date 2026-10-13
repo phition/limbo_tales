@@ -3871,12 +3871,12 @@ export class GameManager {
     const c = CHARACTER_CLASSES[classId];
     const role = c?.role || 'tank';
 
-    // 1. 하이브리드 클래스(전투 사제/성전의 심판관 등) 및 전직 클래스 호환 매핑
-    // - crusader_lord, war_priest: role은 'healer'이나 검/창/해머/판금갑옷 착용 가능한 신성 딜탱
-    const isHolyCrusader = classId === 'war_priest' || classId === 'crusader_lord';
-    const isPriest = ['acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord'].includes(classId) || role === 'healer';
-    const isRogue = ['rogue', 'assassin', 'shadow_stalker', 'shadow_phantom', 'duelist', 'blade_dancer', 'reaper'].includes(classId);
-    const isGunner = ['gunner', 'tactical_gunner', 'aether_gun_meister', 'sharpshooter', 'ghost_sniper', 'sniper', 'heavy_gunner', 'artificer'].includes(classId) || role === 'gunner';
+    // 1. 하이브리드 클래스(전투 사제/성전의 심판관/세라픽 인퀴지터 등) 및 전직 클래스 호환 매핑
+    // - crusader_lord, war_priest, seraphic_inquisitor: role은 'healer'이나 검/창/해머/판금갑옷 착용 가능한 신성 딜탱
+    const isHolyCrusader = classId === 'war_priest' || classId === 'crusader_lord' || classId === 'seraphic_inquisitor';
+    const isPriest = ['acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord', 'seraphic_inquisitor'].includes(classId) || role === 'healer';
+    const isRogue = ['rogue', 'assassin', 'shadow_stalker', 'shadow_phantom', 'duelist', 'blade_dancer', 'reaper', 'void_strider'].includes(classId);
+    const isGunner = ['gunner', 'tactical_gunner', 'aether_gun_meister', 'sharpshooter', 'ghost_sniper', 'sniper', 'heavy_gunner', 'artificer', 'omega_deadeye'].includes(classId) || role === 'gunner';
 
     const baseName = item.baseName || item.name || '';
     const detectedWeapon = item.slot === 'weapon' ? (item.weaponType || detectWeaponType(item) || detectWeaponType(baseName)) : undefined;
@@ -3895,7 +3895,7 @@ export class GameManager {
     if (item.affinity && item.affinity.length > 0) {
       if (item.affinity.includes('all')) return true;
       if (item.affinity.includes(role) || item.affinity.includes(classId)) return true;
-      // 전열 성전사(war_priest, crusader_lord)는 tank/berserker/dealer_phy 장비 친화도 호환 허용 (단, 검은 위에서 제외됨)
+      // 전열 성전사(war_priest, crusader_lord, seraphic_inquisitor)는 tank/berserker/dealer_phy 장비 친화도 호환 허용 (단, 검은 위에서 제외됨)
       if (isHolyCrusader && (item.affinity.includes('tank') || item.affinity.includes('berserker') || item.affinity.includes('dealer_phy'))) {
         return true;
       }
@@ -3916,7 +3916,7 @@ export class GameManager {
       // 2. 창 / 해머 / 도끼 / 둔기 / 월도 (spear)
       if (detectedWeapon === 'spear' || ['창', '장창', '기병창', '극창', '신창', '트라이던트', '해머', '망치', '메이스', '철퇴', '모닝스타', '도끼', '둔기', '월도'].some(k => baseName.includes(k))) {
         if (['tank', 'berserker'].includes(role) || isHolyCrusader) return true;
-        return ['squire', 'paladin', 'guardian', 'aegis_valkyrie', 'fortress', 'vanguard', 'berserker', 'valhalla_blade', 'warlord', 'iron_marshal', 'crusader_lord', 'war_priest'].includes(classId);
+        return ['squire', 'paladin', 'guardian', 'aegis_valkyrie', 'fortress', 'vanguard', 'berserker', 'valhalla_blade', 'warlord', 'iron_marshal', 'crusader_lord', 'war_priest', 'aegis_bastion', 'valhalla_warlord', 'seraphic_inquisitor'].includes(classId);
       }
 
       // 3. 마총 / 총 / 포 / 속사총 / 저격총 / 분쇄포 (gun)
@@ -3940,7 +3940,7 @@ export class GameManager {
         ['단검', '비수', '낫', '사신 낫', '절단', '암살', '그림자', '유령도', '차원도', '단도'].some(k => baseName.includes(k));
       if (isDagger) {
         if (['dealer_phy', 'berserker'].includes(role)) return true;
-        return ['rogue', 'assassin', 'shadow_stalker', 'shadow_phantom', 'duelist', 'blade_dancer', 'reaper'].includes(classId);
+        return ['rogue', 'assassin', 'shadow_stalker', 'shadow_phantom', 'duelist', 'blade_dancer', 'reaper', 'void_strider'].includes(classId);
       }
 
       // 6. 지팡이 / 봉 (staff)
@@ -3948,7 +3948,7 @@ export class GameManager {
         ['지팡이', '봉', '마도봉', '천상봉', '마력봉', '로드', '완드'].some(k => baseName.includes(k));
       if (isStaff) {
         if (['dealer_mag', 'healer'].includes(role)) return true;
-        return ['apprentice', 'mage', 'archmage', 'elementalist', 'arcane_scholar', 'calamity_mage', 'chronomancer', 'acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord'].includes(classId);
+        return ['apprentice', 'mage', 'archmage', 'elementalist', 'arcane_scholar', 'calamity_mage', 'chronomancer', 'acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord', 'chrono_archon', 'seraphic_inquisitor'].includes(classId);
       }
 
       return true;
@@ -3959,17 +3959,17 @@ export class GameManager {
       if (['판금', '중갑', '갑주', '흉갑', '투구', '수호갑', '절대갑', '철갑', '중장갑', '방진갑'].some(k => baseName.includes(k))) {
         if (['tank', 'berserker'].includes(role)) return true;
         if (isHolyCrusader) return true;
-        return ['squire', 'paladin', 'guardian', 'aegis_valkyrie', 'fortress', 'vanguard', 'berserker', 'valhalla_blade', 'destroyer', 'warlord', 'iron_marshal', 'crusader_lord', 'war_priest'].includes(classId);
+        return ['squire', 'paladin', 'guardian', 'aegis_valkyrie', 'fortress', 'vanguard', 'berserker', 'valhalla_blade', 'destroyer', 'warlord', 'iron_marshal', 'crusader_lord', 'war_priest', 'aegis_bastion', 'valhalla_warlord', 'seraphic_inquisitor'].includes(classId);
       }
       // 가죽 / 경갑 / 코트 / 예복 / 외투
       if (['가죽', '경갑', '코트', '예복', '외투', '가죽 갑옷'].some(k => baseName.includes(k))) {
         if (['dealer_phy', 'gunner', 'healer', 'berserker', 'tank'].includes(role)) return true;
-        return ['rogue', 'assassin', 'shadow_stalker', 'shadow_phantom', 'duelist', 'blade_dancer', 'reaper', 'gunner', 'tactical_gunner', 'sharpshooter', 'ghost_sniper', 'aether_gun_meister', 'acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord', 'vanguard', 'valhalla_blade'].includes(classId);
+        return ['rogue', 'assassin', 'shadow_stalker', 'shadow_phantom', 'duelist', 'blade_dancer', 'reaper', 'gunner', 'tactical_gunner', 'sharpshooter', 'ghost_sniper', 'aether_gun_meister', 'acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord', 'vanguard', 'valhalla_blade', 'void_strider', 'omega_deadeye', 'seraphic_inquisitor'].includes(classId);
       }
       // 로브 / 성의 / 사령의
       if (['로브', '성의', '사령의', '법의'].some(k => baseName.includes(k))) {
         if (['dealer_mag', 'healer'].includes(role)) return true;
-        return ['apprentice', 'mage', 'archmage', 'elementalist', 'arcane_scholar', 'calamity_mage', 'chronomancer', 'acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord'].includes(classId);
+        return ['apprentice', 'mage', 'archmage', 'elementalist', 'arcane_scholar', 'calamity_mage', 'chronomancer', 'acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord', 'chrono_archon', 'seraphic_inquisitor'].includes(classId);
       }
       return true;
     }
@@ -6034,7 +6034,12 @@ export class GameManager {
     return defaultMeta;
   }
 
+  public static readonly MAX_HERO_LEVEL = 99;
+
   public static calcExpToNext(level: number): number {
+    if (level >= GameManager.MAX_HERO_LEVEL) {
+      return Infinity;
+    }
     // 기본 전체 성장 곡선 (2레벨 달성 요구치 100에서 시작하는 이차함수 곡선)
     const baseExp = 100 + (level - 1) * 30 + Math.pow(level - 1, 2) * 2;
     
@@ -6051,6 +6056,13 @@ export class GameManager {
   }
 
   public gainExp(hero: Mercenary, amount: number): void {
+    if (hero.level >= GameManager.MAX_HERO_LEVEL) {
+      hero.level = GameManager.MAX_HERO_LEVEL;
+      hero.exp = 0;
+      hero.expToNext = Infinity;
+      return;
+    }
+
     // 🌟 레벨 구간별 동적 경험치 부스트 (Lv 1~10: 1.5배(+50% 부스트) / Lv 11+: 1배 정상치)
     let levelMult = 1.0;
     if (hero.level <= 10) {
@@ -6098,13 +6110,26 @@ export class GameManager {
     const memTag = memorialExpBonus > 0 ? ` (추모 헌화 EXP +${memorialExpPct}%)` : '';
     this.addLog(`⭐ [EXP] ${hero.name} +${amount} EXP${sanctTag}${memTag} (${hero.exp}/${hero.expToNext})`, 'system');
 
-    while (hero.exp >= hero.expToNext) {
+    while (hero.level < GameManager.MAX_HERO_LEVEL && hero.exp >= hero.expToNext) {
       hero.exp -= hero.expToNext;
       this.levelUp(hero);
+    }
+
+    if (hero.level >= GameManager.MAX_HERO_LEVEL) {
+      hero.level = GameManager.MAX_HERO_LEVEL;
+      hero.exp = 0;
+      hero.expToNext = Infinity;
     }
   }
 
   public levelUp(hero: Mercenary): void {
+    if (hero.level >= GameManager.MAX_HERO_LEVEL) {
+      hero.level = GameManager.MAX_HERO_LEVEL;
+      hero.exp = 0;
+      hero.expToNext = Infinity;
+      return;
+    }
+
     const prevBase = GameManager.calcHeroStatsForClassAndLevel(
       hero.classId,
       hero.level,
@@ -6141,11 +6166,14 @@ export class GameManager {
     const tier = cClass.tier ?? 0;
     const tierReq1 = 10;   // Tier 0→1 전직 최소 레벨
     const tierReq2 = 30;  // Tier 1→2 전직 최소 레벨
+    const tierReq3 = 60;  // Tier 2→3 최종 전직 최소 레벨
     let promotionHint = '';
     if (tier === 0 && hero.level >= tierReq1) {
       promotionHint = ' ★ [전직 해금] 영지 병영에서 1차 전직 가능!';
     } else if (tier === 1 && hero.level >= tierReq2) {
       promotionHint = ' ★ [전직 해금] 영지 병영에서 2차 전직 가능!';
+    } else if (tier === 2 && hero.level >= tierReq3) {
+      promotionHint = ' 👑 [최종 3차 전직 해금] 영지 병영에서 궁극 3차 전직 가능!';
     } else if (tier === 2) {
       const nextAwakenLv = 30 + ((hero.awakeningCount || 0) + 1) * 10;
       if (hero.level >= nextAwakenLv) {
@@ -6269,8 +6297,8 @@ export class GameManager {
     const targetClass = CHARACTER_CLASSES[targetClassId];
     if (!hero || !targetClass) return false;
 
-    const etherCost = targetClass.tier === 1 ? 20 : 100;
-    const goldCost = targetClass.tier === 1 ? 500 : 3000;
+    const etherCost = targetClass.tier === 1 ? 20 : (targetClass.tier === 2 ? 100 : 300);
+    const goldCost = targetClass.tier === 1 ? 500 : (targetClass.tier === 2 ? 3000 : 10000);
 
     if (this.resources.ether < etherCost || this.resources.gold < goldCost) {
       this.addLog(`전직 실패: 에테르(${etherCost}) 또는 골드(${goldCost})가 부족합니다.`, 'danger');
@@ -6308,9 +6336,13 @@ export class GameManager {
       }
     }
 
-    // 전직 전 순수 기본 스탯 기록 (비교 로그용)
+    // 전직 전 클래스 및 스킬, 순수 기본 스탯 기록 (비교 로그 및 스킬 보존용)
+    const prevClassId = hero.classId;
+    const prevClass = CHARACTER_CLASSES[prevClassId];
+    const prevClassSkillIds = prevClass ? prevClass.skills.map(s => s.id) : [];
+
     const prevBase = GameManager.calcHeroStatsForClassAndLevel(
-      hero.classId,
+      prevClassId,
       hero.level,
       hero.grade,
       hero.trait || hero.title,
@@ -6353,8 +6385,6 @@ export class GameManager {
     this.syncHeroStats(hero);
 
     // 🌟 전직 시 기존 스킬과 학습한 스킬은 사라지지 않고 모두 학습한 스킬(learnedSkills)로 보존 (최대 6개)
-    const prevClass = CHARACTER_CLASSES[hero.classId];
-    const prevClassSkillIds = prevClass ? prevClass.skills.map(s => s.id) : [];
     const targetClassSkillIds = targetClass.skills.map(s => s.id);
 
     // 신규 클래스 기본 스킬 2개를 우선 장착 슬롯에 배치

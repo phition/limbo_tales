@@ -77,6 +77,10 @@ export class I18nService {
         for (const key of Object.keys(dict)) {
           if (!/\{\d+\}/.test(key)) continue;
           const parts = key.split(/\{\d+\}/);
+          const fixedText = parts.join('').trim();
+          // 너무 짧거나 조사 단독으로 매칭되어 일반 명사구를 파괴하는 위험 패턴 방지
+          if (fixedText.length <= 1) continue;
+          if (['의', '는', '은', '이', '가', '을', '를', '에', '와', '과'].includes(fixedText)) continue;
           const esc = parts.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
           const re = new RegExp('^' + esc.join('(.+?)') + '$', 's');
           const frag = parts.reduce((a, b) => (b.length > a.length ? b : a), '');

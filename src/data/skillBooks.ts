@@ -1,5 +1,6 @@
 import { Skill, SkillRank } from '../types/game';
 import { MONSTERS } from './monsters';
+import { CHARACTER_CLASSES } from './classes';
 
 export interface SkillBookDef {
   id: string;
@@ -211,13 +212,15 @@ export function getSkillAffinityMeta(affinity?: string[]): SkillAffinityMeta {
   return SKILL_AFFINITY_META.universal;
 }
 
-/** ⚔️ 영웅의 직업/역할과 스킬 친화도가 일치하는지 판별하는 헬퍼 (불일치 시 위력 50% 반감 페널티) */
+/** ⚔️ 영웅의 직업/역할과 스킬 친화도가 일치하는지 판별하는 헬퍼 (불일치 시 위력 50% 반감 페널티, 3차 만마도서는 100% 허용) */
 export function checkSkillAffinityMatch(
   affinity?: string[],
   heroRole?: string,
   heroClassId?: string
 ): boolean {
   if (!affinity || affinity.length === 0 || affinity.includes('all')) return true;
+  // 🌟 [만마도서 (Omni-Grimoire)]: 3차 전직 클래스는 모든 마도서 계열 제한 완전 면제 (100% 본래 위력 발휘)
+  if (heroClassId && CHARACTER_CLASSES[heroClassId]?.tier === 3) return true;
   if (heroRole && affinity.includes(heroRole)) return true;
   if (heroClassId && affinity.includes(heroClassId)) return true;
   return false;

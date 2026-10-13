@@ -62,6 +62,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '발키리',
     tier: 2,
     parentClassId: 'paladin',
+    promotions: ['aegis_bastion'],
     role: 'tank',
     baseStats: { hp: 1040, mp: 120, atk: 56, def: 56, spd: 16, luck: 25 },
     skills: [
@@ -117,6 +118,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '그림자 망령',
     tier: 2,
     parentClassId: 'assassin',
+    promotions: ['void_strider'],
     role: 'dealer_phy',
     baseStats: { hp: 680, mp: 120, atk: 86, def: 25, spd: 32, luck: 58 },
     skills: [
@@ -191,6 +193,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '아크 메이지',
     tier: 2,
     parentClassId: 'elementalist',
+    promotions: ['chrono_archon'],
     role: 'dealer_mag',
     baseStats: { hp: 600, mp: 228, atk: 94, def: 20, spd: 20, luck: 38 },
     skills: [
@@ -228,6 +231,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '성령의 구원자',
     tier: 2,
     parentClassId: 'bishop',
+    promotions: ['seraphic_inquisitor'],
     role: 'healer',
     baseStats: { hp: 660, mp: 192, atk: 27, def: 32, spd: 18, luck: 42 },
     skills: [
@@ -283,6 +287,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '발할라 블레이드',
     tier: 2,
     parentClassId: 'berserker',
+    promotions: ['valhalla_warlord'],
     role: 'berserker',
     baseStats: { hp: 980, mp: 100, atk: 92, def: 30, spd: 22, luck: 44 },
     skills: [
@@ -375,6 +380,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '하이퍼 레인저',
     tier: 2,
     parentClassId: 'tactical_gunner',
+    promotions: ['omega_deadeye'],
     role: 'gunner',
     baseStats: { hp: 760, mp: 170, atk: 90, def: 28, spd: 28, luck: 52 },
     skills: [
@@ -454,6 +460,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '포트리스',
     tier: 2,
     parentClassId: 'guardian',
+    promotions: ['aegis_bastion'],
     role: 'tank',
     baseStats: { hp: 1250, mp: 80, atk: 40, def: 75, spd: 10, luck: 18 },
     skills: [
@@ -474,6 +481,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '환영의 검성',
     tier: 2,
     parentClassId: 'duelist',
+    promotions: ['void_strider'],
     role: 'dealer_phy',
     baseStats: { hp: 760, mp: 100, atk: 82, def: 28, spd: 36, luck: 50 },
     skills: [
@@ -494,6 +502,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '시공의 조율사',
     tier: 2,
     parentClassId: 'arcane_scholar',
+    promotions: ['chrono_archon'],
     role: 'dealer_mag',
     baseStats: { hp: 560, mp: 260, atk: 86, def: 24, spd: 26, luck: 35 },
     skills: [
@@ -514,6 +523,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '성전의 심판관',
     tier: 2,
     parentClassId: 'war_priest',
+    promotions: ['seraphic_inquisitor'],
     role: 'healer',
     baseStats: { hp: 880, mp: 160, atk: 48, def: 42, spd: 18, luck: 34 },
     skills: [
@@ -534,6 +544,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '철혈의 패황',
     tier: 2,
     parentClassId: 'warlord',
+    promotions: ['valhalla_warlord'],
     role: 'berserker',
     baseStats: { hp: 1100, mp: 110, atk: 80, def: 52, spd: 18, luck: 32 },
     skills: [
@@ -554,6 +565,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     name: '사신 저격수',
     tier: 2,
     parentClassId: 'sharpshooter',
+    promotions: ['omega_deadeye'],
     role: 'gunner',
     baseStats: { hp: 640, mp: 180, atk: 108, def: 22, spd: 32, luck: 65 },
     skills: [
@@ -564,6 +576,132 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     passiveDesc: '사신의 조준경: 후열 배치 시 치명타율 +25%, 치명타 대미지가 기본 200%에서 250%로 증폭.',
     promptKey: 'hero_gunner',
     themeColor: 0x00bcd4
+  },
+
+  // ================================================================
+  // 13. [최종 3차 전직] 이지스 바스티온 (Aegis Bastion) - 수호/방벽 융합
+  //     (발키리 + 포트리스의 통합 궁극 형태)
+  // ================================================================
+  'aegis_bastion': {
+    id: 'aegis_bastion',
+    name: '이지스 바스티온',
+    tier: 3,
+    parentClassId: 'aegis_valkyrie',
+    role: 'tank',
+    baseStats: { hp: 1800, mp: 180, atk: 65, def: 95, spd: 14, luck: 25 },
+    skills: [
+      { id: 'bastion_divine_providence', name: '신성 수호진', description: '[전열 특화] 아군 전체에 2턴간 방어력 50% 증폭 및 자신에게 최대 체력 35% 보호막 생성', manaCost: 45, cooldown: 3, targetType: 'all_allies', power: 0.35, effectType: 'buff', positionBonus: 'front', icon: '🛡️' },
+      { id: 'bastion_sanctuary_smite', name: '성벽 강타', description: '[전열 특화] 전열 적 1체에게 자신의 방어력의 380%에 달하는 신성 물리 충격파를 가하고 1턴간 기절시킵니다.', manaCost: 50, cooldown: 2, targetType: 'single_enemy', power: 3.8, effectType: 'stun', positionBonus: 'front', icon: '🔨' }
+    ],
+    specialSkill: { id: 'bastion_avalon', name: '[초월오의] 아발론', description: '모든 아군에게 시전자 최대 HP의 50%에 해당하는 절대 방벽을 부여하고, 자신은 2턴간 피격 시 100% 확률로 상시 반격 태세를 취합니다.', manaCost: 120, cooldown: 5, targetType: 'all_allies', power: 0.5, effectType: 'shield', icon: '👑', isSpecial: true },
+    passiveDesc: '만마도서 & 영원의 방벽: 모든 마도서 장착 가능(위력 100%). 아군 피격 시 피해의 50%를 대신 흡수하고 공격자에게 신성 반사 피해를 가합니다.',
+    promptKey: 'hero_valkyrie',
+    themeColor: 0xffd700
+  },
+
+  // ================================================================
+  // 14. [최종 3차 전직] 보이드 스트라이더 (Void Strider) - 암영/환영 융합
+  //     (그림자 망령 + 환영의 검성의 통합 궁극 형태)
+  // ================================================================
+  'void_strider': {
+    id: 'void_strider',
+    name: '보이드 스트라이더',
+    tier: 3,
+    parentClassId: 'shadow_phantom',
+    role: 'dealer_phy',
+    baseStats: { hp: 1100, mp: 180, atk: 125, def: 40, spd: 44, luck: 75 },
+    skills: [
+      { id: 'void_phantom_flicker', name: '공허 섬광보', description: '[전열/후열 대응] 적 1체에게 350% 치명타 일격을 가하고 2턴간 회피율 40% 증가 및 은신 상태로 진입합니다.', manaCost: 40, cooldown: 2, targetType: 'single_enemy', power: 3.5, effectType: 'damage', positionBonus: 'any', icon: '⚡' },
+      { id: 'void_abyssal_dance', name: '심연 환영검무', description: '적 전체를 가로지르며 6연속 환영 난무를 펼쳐 180% 광역 물리 피해를 입히고 적들의 공격력을 30% 감소시킵니다.', manaCost: 55, cooldown: 3, targetType: 'all_enemies', power: 1.8, effectType: 'damage', icon: '👤' }
+    ],
+    specialSkill: { id: 'void_dimension_slash', name: '[초월오의] 차원참', description: '[전열 특화] 차원의 틈새를 열어 적 전체의 방어력을 100% 무시하고 280% 위력으로 가로지르며 3턴간 출혈을 부여합니다.', manaCost: 100, cooldown: 4, targetType: 'all_enemies', power: 2.8, effectType: 'damage', positionBonus: 'front', statusDuration: 3, icon: '🌌', isSpecial: true },
+    passiveDesc: '만마도서 & 공허의 잔영: 모든 마도서 장착 가능(위력 100%). 회피 성공 시마다 다음 공격 턴까지 회피율과 명중률이 10% 증폭됩니다.',
+    promptKey: 'hero_shadow_phantom',
+    themeColor: 0x00e676
+  },
+
+  // ================================================================
+  // 15. [최종 3차 전직] 크로노 아콘 (Chrono Archon) - 원소/시공 융합
+  //     (아크 메이지 + 시공의 조율사의 통합 궁극 형태)
+  // ================================================================
+  'chrono_archon': {
+    id: 'chrono_archon',
+    name: '크로노 아콘',
+    tier: 3,
+    parentClassId: 'calamity_mage',
+    role: 'dealer_mag',
+    baseStats: { hp: 950, mp: 380, atk: 135, def: 35, spd: 30, luck: 50 },
+    skills: [
+      { id: 'chrono_event_horizon', name: '사상의 지평선', description: '공간을 압축하여 적 전체에 220% 비전 마법 피해를 가하고 1턴간 시공 정지(행동 불가)를 부여합니다.', manaCost: 95, cooldown: 3, targetType: 'all_enemies', power: 2.2, effectType: 'stun', icon: '🌀' },
+      { id: 'chrono_temporal_flux', name: '시간 가속 왜곡', description: '파티 전원의 모든 스킬 쿨다운을 2턴 단축하고 마나를 40 회복하며 행동속도를 +8 가속시킵니다.', manaCost: 70, cooldown: 4, targetType: 'all_allies', power: 0.4, effectType: 'buff', icon: '⏳' }
+    ],
+    specialSkill: { id: 'chrono_bigbang', name: '[초월오의] 빅뱅 크로노스', description: '시간과 공간의 특이점을 폭파하여 적 전체에 300% 위력의 파멸 폭딜을 가하고 2턴간 화상(방어 분쇄)과 기절을 동시에 유발합니다.', manaCost: 150, cooldown: 5, targetType: 'all_enemies', power: 3.0, effectType: 'damage', statusDuration: 2, icon: '💥', isSpecial: true },
+    passiveDesc: '만마도서 & 특이점 가속: 모든 마도서 장착 가능(위력 100%). 스킬 시전 시 50% 확률로 동일 스킬을 1회 더 연속 발동하며, 매 턴 시작 시 파티 쿨다운이 1턴 추가 단축됩니다.',
+    promptKey: 'hero_calamity_mage',
+    themeColor: 0xba68c8
+  },
+
+  // ================================================================
+  // 16. [최종 3차 전직] 세라픽 인퀴지터 (Seraphic Inquisitor) - 치유/심판 융합
+  //     (성령의 구원자 + 성전의 심판관의 통합 궁극 형태)
+  // ================================================================
+  'seraphic_inquisitor': {
+    id: 'seraphic_inquisitor',
+    name: '세라픽 인퀴지터',
+    tier: 3,
+    parentClassId: 'high_saintess',
+    role: 'healer',
+    baseStats: { hp: 1300, mp: 280, atk: 70, def: 60, spd: 24, luck: 48 },
+    skills: [
+      { id: 'seraph_divine_wrath', name: '성스러운 단죄', description: '[전열 특화] 적 1체에게 260% 신성 물리/마법 복합 피해를 입히고 가한 피해의 100%만큼 최저 HP 아군을 치유합니다.', manaCost: 45, cooldown: 2, targetType: 'single_enemy', power: 2.6, effectType: 'damage', positionBonus: 'front', icon: '⚖️' },
+      { id: 'seraph_grace_sanctuary', name: '세라핌의 가호', description: '아군 전체 체력을 220% 회복시키고 모든 해로운 상태이상을 즉시 정화하며 2턴간 디버프 면역 및 방어력 40% 버프를 부여합니다.', manaCost: 60, cooldown: 3, targetType: 'all_allies', power: 2.2, effectType: 'heal', statusDuration: 2, icon: '🕊️' }
+    ],
+    specialSkill: { id: 'seraph_grand_judgment', name: '[초월오의] 창공의 대심판', description: '하늘을 가르는 거대한 신성 광휘로 적 전체를 200% 위력으로 강타하고 입힌 총 대미지만큼 아군 전체를 회복시킵니다. 사경(사망 임박) 아군이 있을 경우 체력 1로 즉시 부활시킨 후 온전한 회복을 적용합니다.', manaCost: 130, cooldown: 5, targetType: 'all_enemies', power: 2.0, effectType: 'damage', icon: '☀️', isSpecial: true },
+    passiveDesc: '만마도서 & 성스러운 천칭: 모든 마도서 장착 가능(위력 100%). 치유 스킬 사용 시 치유량의 50%만큼 적을 신성 타격하며, 공격 시 피해량의 50%만큼 아군 전체를 치유합니다.',
+    promptKey: 'hero_high_saintess',
+    themeColor: 0xffea00
+  },
+
+  // ================================================================
+  // 17. [최종 3차 전직] 발할라 워로드 (Valhalla Warlord) - 광전/통솔 융합
+  //     (발할라 블레이드 + 철혈의 패황의 통합 궁극 형태)
+  // ================================================================
+  'valhalla_warlord': {
+    id: 'valhalla_warlord',
+    name: '발할라 워로드',
+    tier: 3,
+    parentClassId: 'valhalla_blade',
+    role: 'berserker',
+    baseStats: { hp: 1650, mp: 170, atk: 128, def: 65, spd: 26, luck: 46 },
+    skills: [
+      { id: 'warlord_blood_cleave', name: '혈겁의 대검풍', description: '[전열 특화] 전열 적에게 280% 물리 참격을 가하고 2턴간 적의 공격력을 35% 감소시키며 가한 피해의 30%를 흡혈합니다.', manaCost: 40, cooldown: 2, targetType: 'single_enemy', power: 2.8, effectType: 'damage', positionBonus: 'front', icon: '🪓' },
+      { id: 'warlord_immortal_vanguard', name: '불멸의 진격', description: '파티 전원의 공격력과 치명타율을 3턴간 50% 증폭하고 자신의 체력이 낮을수록 최대 100%까지 공격력이 추가 증폭됩니다.', manaCost: 50, cooldown: 3, targetType: 'all_allies', power: 0.5, effectType: 'buff', icon: '🚩' }
+    ],
+    specialSkill: { id: 'warlord_blood_tactics', name: '[초월오의] 피의 전술', description: '적 전체의 방어력을 40% 분쇄하는 파괴 파동을 방출하고, 2턴간 파티 전원에게 모든 공격에 적용되는 15% 추가 흡혈 태세를 부여합니다.', manaCost: 100, cooldown: 4, targetType: 'all_enemies', power: 2.2, effectType: 'damage', icon: '🩸', isSpecial: true },
+    passiveDesc: '만마도서 & 불멸의 군세: 모든 마도서 장착 가능(위력 100%). 상시 흡혈 10%를 획득하며, 사경 상태에서도 쓰러지지 않고 행동을 계속할 수 있습니다(턴 종료 시까지 미회복 시 최종 사망).',
+    promptKey: 'hero_valhalla_blade',
+    themeColor: 0xff1744
+  },
+
+  // ================================================================
+  // 18. [최종 3차 전직] 오메가 데드아이 (Omega Deadeye) - 포격/저격 융합
+  //     (하이퍼 레인저 + 사신 저격수의 통합 궁극 형태)
+  // ================================================================
+  'omega_deadeye': {
+    id: 'omega_deadeye',
+    name: '오메가 데드아이',
+    tier: 3,
+    parentClassId: 'ghost_sniper',
+    role: 'gunner',
+    baseStats: { hp: 1050, mp: 250, atk: 145, def: 38, spd: 38, luck: 80 },
+    skills: [
+      { id: 'omega_railgun_burst', name: '오메가 펄스포', description: '[후열 관통] 적 전체를 60% 방어 관통하여 200% 고압 플라즈마 피해를 입히고 2턴간 받는 피해 30% 증폭 디버프를 부여합니다.', manaCost: 55, cooldown: 2, targetType: 'all_enemies', power: 2.0, effectType: 'damage', positionBonus: 'back', piercePct: 60, icon: '⚡' },
+      { id: 'omega_overclock_stealth', name: '영점 사격 은신', description: '자신에게 2턴간 [은신]을 부여하고 다음 공격 치명타율 100% 확정 및 치명타 피해 80% 추가 증폭 버프를 획득합니다.', manaCost: 40, cooldown: 3, targetType: 'self', power: 0.8, effectType: 'buff', positionBonus: 'back', icon: '👤' }
+    ],
+    specialSkill: { id: 'omega_orbital_annihilation', name: '[초월오의] 궤도 섬멸', description: '[후열 저격] 단일 핵심 적에게 방어력을 100% 무시하는 300% 위력의 초정밀 저격을 가하고, 즉시 전장 전체에 100% 위력의 궤도 융합 폭격을 연쇄 투하합니다.', manaCost: 120, cooldown: 4, targetType: 'single_enemy', power: 3.0, effectType: 'damage', positionBonus: 'back', piercePct: 100, icon: '🛰️', isSpecial: true },
+    passiveDesc: '만마도서 & 멸절의 탄두: 모든 마도서 장착 가능(위력 100%). 상시 방어 관통 50%를 획득하며, 단일 대상을 공격할 때마다 50% 확률로 주변 적 전체에게 50% 연쇄 충격파를 폭발시킵니다.',
+    promptKey: 'hero_aether_meister',
+    themeColor: 0x00e5ff
   }
 };
 
@@ -578,6 +716,7 @@ export const CLASS_EMOJI_MAP: Record<string, string> = {
   aegis_valkyrie: '🔱',
   fortress: '🏰',
   crusader_lord: '⚜️',
+  aegis_bastion: '🛡️',
 
   // 도적/암살/결투 계열 (물리 딜러)
   rogue: '🗡️',
@@ -585,6 +724,7 @@ export const CLASS_EMOJI_MAP: Record<string, string> = {
   shadow_phantom: '👤',
   duelist: '🤺',
   blade_dancer: '💃',
+  void_strider: '🗡️',
 
   // 마법사 계열 (마법 딜러)
   apprentice: '🔮',
@@ -592,12 +732,14 @@ export const CLASS_EMOJI_MAP: Record<string, string> = {
   calamity_mage: '☄️',
   arcane_scholar: '📜',
   chronomancer: '⏳',
+  chrono_archon: '🌌',
 
   // 사제/지원 계열 (힐러)
   acolyte: '✨',
   high_saintess: '🕊️',
   bishop: '⛪',
   war_priest: '✝️',
+  seraphic_inquisitor: '☀️',
 
   // 전사/버서커 계열
   vanguard: '🪓',
@@ -605,6 +747,7 @@ export const CLASS_EMOJI_MAP: Record<string, string> = {
   valhalla_blade: '⚔️',
   warlord: '👑',
   iron_marshal: '🎖️',
+  valhalla_warlord: '🩸',
 
   // 거너/사수 계열 (원거리 딜러)
   gunner: '🔫',
@@ -612,6 +755,7 @@ export const CLASS_EMOJI_MAP: Record<string, string> = {
   sharpshooter: '🏹',
   aether_gun_meister: '⚙️',
   ghost_sniper: '👁️',
+  omega_deadeye: '🛰️',
 };
 
 export function getClassEmoji(classId?: string): string {

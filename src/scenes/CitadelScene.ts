@@ -1590,16 +1590,30 @@ export class CitadelScene extends Phaser.Scene {
       } else if (currentHero.classId === 'bishop' || currentHero.classId === 'war_priest') {
         branches = [{ id: 'high_saintess',     name: '👑 2차: 성령의 구원자',   desc: '부활 성가 & 전체 완전 치유', special: '부활의 성가' }];
       }
+    } else if (currentClass.tier === 2) {
+      if (currentHero.classId === 'aegis_valkyrie' || currentHero.classId === 'fortress') {
+        branches = [{ id: 'aegis_bastion', name: '🛡️ 3차: 이지스 바스티온', desc: '절대 수호 융합 & 아발론 결계, 만마도서 해금', special: '아발론' }];
+      } else if (currentHero.classId === 'shadow_phantom' || currentHero.classId === 'blade_dancer') {
+        branches = [{ id: 'void_strider', name: '🌌 3차: 보이드 스트라이더', desc: '차원 회피 증폭 & 차원참 방어무시 난무, 만마도서 해금', special: '차원참' }];
+      } else if (currentHero.classId === 'calamity_mage' || currentHero.classId === 'chronomancer') {
+        branches = [{ id: 'chrono_archon', name: '⏳ 3차: 크로노 아콘', desc: '더블 캐스트 & 빅뱅 크로노스 시공 폭격, 만마도서 해금', special: '빅뱅 크로노스' }];
+      } else if (currentHero.classId === 'high_saintess' || currentHero.classId === 'crusader_lord') {
+        branches = [{ id: 'seraphic_inquisitor', name: '☀️ 3차: 세라픽 인퀴지터', desc: '신성 심판 & 창공의 대심판 전체 부활/치유, 만마도서 해금', special: '창공의 대심판' }];
+      } else if (currentHero.classId === 'valhalla_blade' || currentHero.classId === 'iron_marshal') {
+        branches = [{ id: 'valhalla_warlord', name: '🩸 3차: 발할라 워로드', desc: '상시 흡혈 & 사경 분전, 피의 전술 군단 파쇄, 만마도서 해금', special: '피의 전술' }];
+      } else if (currentHero.classId === 'aether_gun_meister' || currentHero.classId === 'ghost_sniper') {
+        branches = [{ id: 'omega_deadeye', name: '🛰️ 3차: 오메가 데드아이', desc: '방관 폭발 & 궤도 섬멸 광역 폭격, 만마도서 해금', special: '궤도 섬멸' }];
+      }
     }
 
     if (branches.length > 0) {
       const bHeaderY = skillsEndY + 14;
 
       // ── 레벨 요구조건 계산 ────────────────────────────────
-      const reqLevel = currentClass.tier === 0 ? 10 : 30;
+      const reqLevel = currentClass.tier === 0 ? 10 : (currentClass.tier === 1 ? 30 : 60);
       const meetsLevel = currentHero.level >= reqLevel;
       const sanctuaryLevel = this.gm.buildings['sanctuary']?.level || 0;
-      const reqSanctuaryLevel = currentClass.tier === 0 ? 5 : 10;
+      const reqSanctuaryLevel = currentClass.tier === 0 ? 1 : (currentClass.tier === 1 ? 5 : 8);
       const sanctuaryBuilt = sanctuaryLevel >= reqSanctuaryLevel;
       const canPromote = meetsLevel && sanctuaryBuilt;
 
@@ -1609,7 +1623,7 @@ export class CitadelScene extends Phaser.Scene {
         : (!sanctuaryBuilt ? `  ⛔ 성소 Lv.${reqSanctuaryLevel} 필요` : '  ✅ 전직 가능');
 
       const bHeader = this.add.text(14, bHeaderY,
-        `🔮 전직 분기 선택 (에테르 소모)${levelGateText}`, {
+        `🔮 전직 분기 선택 (에테르/골드 소모)${levelGateText}`, {
         fontFamily: 'Noto Sans KR', fontSize: '11px', color: headerColor, fontStyle: 'bold'
       });
       heroCard.add(bHeader);
@@ -1632,11 +1646,9 @@ export class CitadelScene extends Phaser.Scene {
       const btnOffsetY = meetsLevel ? bHeaderY + 20 : bHeaderY + 44;
 
       branches.forEach((bItem, bIdx) => {
-        const eqCost = currentClass.tier === 0 ? 50 : 150;
-        const shardCost = currentClass.tier === 1 ? 10 : 0;
-        const costText = shardCost > 0
-          ? `에테르 ${eqCost} + 공허파편 ${shardCost}`
-          : `에테르 ${eqCost}`;
+        const eqCost = currentClass.tier === 0 ? 20 : (currentClass.tier === 1 ? 100 : 300);
+        const goldCost = currentClass.tier === 0 ? 500 : (currentClass.tier === 1 ? 3000 : 10000);
+        const costText = `에테르 ${eqCost} + 골드 ${goldCost}`;
 
         const btnLabel = canPromote
           ? `${bItem.name}  [${costText}]\n${bItem.desc}`

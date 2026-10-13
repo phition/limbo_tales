@@ -3530,6 +3530,20 @@ const PROMOTE_MAP: Record<string, { id: string; name: string; desc: string }[]> 
   arcane_scholar:[{ id: 'chronomancer', name: '⏳ 시공의 조율사', desc: '시공 정지 & 쿨다운 완전 초기화' }],
   bishop:    [{ id: 'high_saintess', name: '🌈 성령의 구원자', desc: '부활 성가 & 전체 완전 치유' }],
   war_priest:[{ id: 'crusader_lord', name: '⚖️ 성전의 심판관', desc: '신벌의 심판추 & 최후의 성전' }],
+
+  // ── 3차 최종 전직 (Tier 3) ──
+  aegis_valkyrie: [{ id: 'aegis_bastion', name: '🛡️ 이지스 바스티온', desc: '절대 수호 융합 & 아발론 결계, 만마도서 해금' }],
+  fortress:       [{ id: 'aegis_bastion', name: '🛡️ 이지스 바스티온', desc: '절대 수호 융합 & 아발론 결계, 만마도서 해금' }],
+  shadow_phantom: [{ id: 'void_strider', name: '🌌 보이드 스트라이더', desc: '차원 회피 증폭 & 차원참 방어무시 난무, 만마도서 해금' }],
+  blade_dancer:   [{ id: 'void_strider', name: '🌌 보이드 스트라이더', desc: '차원 회피 증폭 & 차원참 방어무시 난무, 만마도서 해금' }],
+  calamity_mage:  [{ id: 'chrono_archon', name: '⏳ 크로노 아콘', desc: '더블 캐스트 & 빅뱅 크로노스 시공 폭격, 만마도서 해금' }],
+  chronomancer:   [{ id: 'chrono_archon', name: '⏳ 크로노 아콘', desc: '더블 캐스트 & 빅뱅 크로노스 시공 폭격, 만마도서 해금' }],
+  high_saintess:  [{ id: 'seraphic_inquisitor', name: '☀️ 세라픽 인퀴지터', desc: '신성 심판 & 창공의 대심판 전체 부활/치유, 만마도서 해금' }],
+  crusader_lord:  [{ id: 'seraphic_inquisitor', name: '☀️ 세라픽 인퀴지터', desc: '신성 심판 & 창공의 대심판 전체 부활/치유, 만마도서 해금' }],
+  valhalla_blade: [{ id: 'valhalla_warlord', name: '🩸 발할라 워로드', desc: '상시 흡혈 & 사경 분전, 피의 전술 군단 파쇄, 만마도서 해금' }],
+  iron_marshal:   [{ id: 'valhalla_warlord', name: '🩸 발할라 워로드', desc: '상시 흡혈 & 사경 분전, 피의 전술 군단 파쇄, 만마도서 해금' }],
+  aether_gun_meister: [{ id: 'omega_deadeye', name: '🛰️ 오메가 데드아이', desc: '방관 폭발 & 궤도 섬멸 광역 폭격, 만마도서 해금' }],
+  ghost_sniper:   [{ id: 'omega_deadeye', name: '🛰️ 오메가 데드아이', desc: '방관 폭발 & 궤도 섬멸 광역 폭격, 만마도서 해금' }],
 };
 
 const SKILL_RANK_COLORS: Record<string, { label: string; color: string; bg: string }> = {
@@ -4196,7 +4210,7 @@ const BarracksDrawer: React.FC<{
 
               const hCls = CHARACTER_CLASSES[h.classId];
               const hTier = hCls?.tier || 0;
-              const hReqLv = hTier === 0 ? 10 : 30;
+              const hReqLv = hTier === 0 ? 10 : (hTier === 1 ? 30 : 60);
               const canPromoteHero = h.level >= hReqLv && (PROMOTE_MAP[h.classId]?.length || 0) > 0;
               const canAwakenHero = hTier === 2 && h.level >= (30 + ((h.awakeningCount || 0) + 1) * 10);
 
@@ -4548,10 +4562,10 @@ const BarracksDrawer: React.FC<{
                 const branches = PROMOTE_MAP[hero.classId] || [];
                 if (branches.length === 0) return null;
                 const targetTier = (cls.tier || 0) + 1;
-                const reqLevel = cls.tier === 0 ? 10 : 30;
+                const reqLevel = cls.tier === 0 ? 10 : (cls.tier === 1 ? 30 : 60);
                 const meetsLevel = hero.level >= reqLevel;
                 const sanctuaryLv = state.buildings['sanctuary']?.level || 0;
-                const reqSanct = cls.tier === 0 ? 1 : 5;
+                const reqSanct = cls.tier === 0 ? 1 : (cls.tier === 1 ? 5 : 8);
                 const hasSanctuary = sanctuaryLv >= reqSanct;
                 const canPromote = meetsLevel && hasSanctuary;
 
@@ -4609,8 +4623,8 @@ const BarracksDrawer: React.FC<{
                     {/* 전직 분기 목록 (탭하여 상세 정보 확인) */}
                     <div className="flex flex-col gap-1.5">
                       {branches.map(br => {
-                        const etherCost = cls.tier === 0 ? 20 : 100;
-                        const goldCost = cls.tier === 0 ? 500 : 3000;
+                        const etherCost = cls.tier === 0 ? 20 : (cls.tier === 1 ? 100 : 300);
+                        const goldCost = cls.tier === 0 ? 500 : (cls.tier === 1 ? 3000 : 10000);
                         const canAfford = state.resources.ether >= etherCost && state.resources.gold >= goldCost;
                         const isButtonActive = canPromote && canAfford;
 
@@ -4802,14 +4816,14 @@ const BarracksDrawer: React.FC<{
 
             const curClass = CHARACTER_CLASSES[targetHero.classId];
             const targetTier = targetClass.tier;
-            const reqLevel = targetTier === 1 ? 10 : 30;
+            const reqLevel = targetTier === 1 ? 10 : (targetTier === 2 ? 30 : 60);
             const meetsLevel = targetHero.level >= reqLevel;
             const sanctuaryLv = state.buildings['sanctuary']?.level || 0;
-            const reqSanct = targetTier === 1 ? 1 : 5;
+            const reqSanct = targetTier === 1 ? 1 : (targetTier === 2 ? 5 : 8);
             const hasSanctuary = sanctuaryLv >= reqSanct;
 
-            const etherCost = targetTier === 1 ? 20 : 100;
-            const goldCost = targetTier === 1 ? 500 : 3000;
+            const etherCost = targetTier === 1 ? 20 : (targetTier === 2 ? 100 : 300);
+            const goldCost = targetTier === 1 ? 500 : (targetTier === 2 ? 3000 : 10000);
             const canAfford = state.resources.ether >= etherCost && state.resources.gold >= goldCost;
             const canPromote = meetsLevel && hasSanctuary && canAfford;
             const upgradeChance = Math.min(100, Math.max(1, sanctuaryLv) * 3);
