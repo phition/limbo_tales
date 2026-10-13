@@ -167,7 +167,7 @@ export const LogPanel: React.FC<Props> = ({
         const content = part.slice(1, -1);
 
         // Block / Guard
-        if (content === 'Block!' || content.includes('Block') || content.includes('수호') || content.includes('엄호')) {
+        if (content === 'Block!' || content.includes('Block') || content.includes('Guard') || content.includes('수호') || content.includes('엄호') || content.includes('ガード')) {
           return (
             <span key={idx} className="font-bold text-[#60a5fa] bg-[#1e3a8a33] px-1 py-0.5 rounded border border-[#2563eb44] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
@@ -175,7 +175,7 @@ export const LogPanel: React.FC<Props> = ({
           );
         }
         // Critical
-        if (content.includes('치명타') || content.includes('치명')) {
+        if (content.includes('치명타') || content.includes('치명') || content.includes('CRIT') || content.includes('Critical') || content.includes('会心') || content.includes('クリティカル')) {
           return (
             <span key={idx} className="font-extrabold text-[#f87171] bg-[#7f1d1d33] px-1 py-0.5 rounded border border-[#dc262644] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
@@ -183,7 +183,7 @@ export const LogPanel: React.FC<Props> = ({
           );
         }
         // Status - Burn
-        if (content.includes('화상')) {
+        if (content.includes('화상') || content.includes('Burn') || content.includes('火傷')) {
           return (
             <span key={idx} className="font-bold text-[#fb923c] bg-[#7c2d1233] px-1 py-0.5 rounded border border-[#ea580c44] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
@@ -191,7 +191,7 @@ export const LogPanel: React.FC<Props> = ({
           );
         }
         // Status - Bleed
-        if (content.includes('출혈')) {
+        if (content.includes('출혈') || content.includes('Bleed') || content.includes('出血')) {
           return (
             <span key={idx} className="font-bold text-[#f472b6] bg-[#83184333] px-1 py-0.5 rounded border border-[#db277744] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
@@ -199,7 +199,7 @@ export const LogPanel: React.FC<Props> = ({
           );
         }
         // Status - Stun
-        if (content.includes('기절')) {
+        if (content.includes('기절') || content.includes('Stun') || content.includes('気絶')) {
           return (
             <span key={idx} className="font-bold text-[#facc15] bg-[#713f1233] px-1 py-0.5 rounded border border-[#ca8a0444] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
@@ -207,15 +207,15 @@ export const LogPanel: React.FC<Props> = ({
           );
         }
         // Status - Poison
-        if (content.includes('독') || content.includes('맹독') || content.includes('중독')) {
+        if (content.includes('독') || content.includes('맹독') || content.includes('중독') || content.includes('Poison') || content.includes('毒') || content.includes('猛毒')) {
           return (
             <span key={idx} className="font-bold text-[#a3e635] bg-[#36531433] px-1 py-0.5 rounded border border-[#65a30d44] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
             </span>
           );
         }
-        // Status - Freeze / Chill
-        if (content.includes('동결') || content.includes('빙결') || content.includes('냉각')) {
+        // Status - Freeze / Chill / Frostbite
+        if (content.includes('동결') || content.includes('빙결') || content.includes('냉각') || content.includes('동상') || content.includes('결빙') || content.includes('Freeze') || content.includes('Frostbite') || content.includes('Chill') || content.includes('凍結') || content.includes('氷結') || content.includes('凍傷')) {
           return (
             <span key={idx} className="font-bold text-[#38bdf8] bg-[#0c4a6e33] px-1 py-0.5 rounded border border-[#0284c744] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
@@ -223,7 +223,7 @@ export const LogPanel: React.FC<Props> = ({
           );
         }
         // Status - Blind
-        if (content.includes('실명')) {
+        if (content.includes('실명') || content.includes('Blind') || content.includes('暗闇') || content.includes('盲目')) {
           return (
             <span key={idx} className="font-bold text-[#c084fc] bg-[#581c8733] px-1 py-0.5 rounded border border-[#9333ea44] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
@@ -231,7 +231,7 @@ export const LogPanel: React.FC<Props> = ({
           );
         }
         // Buff / Immunity / Resist
-        if (content.includes('면역') || content.includes('저항') || content.includes('사선의 맹세')) {
+        if (content.includes('면역') || content.includes('저항') || content.includes('사선의 맹세') || content.includes('Immune') || content.includes('Resist') || content.includes('Oath') || content.includes('免疫') || content.includes('抵抗')) {
           return (
             <span key={idx} className="font-bold text-[#34d399] bg-[#064e3b33] px-1 py-0.5 rounded border border-[#05966944] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
@@ -239,7 +239,7 @@ export const LogPanel: React.FC<Props> = ({
           );
         }
         // Counter
-        if (content.includes('반격')) {
+        if (content.includes('반격') || content.includes('Counter') || content.includes('反撃')) {
           return (
             <span key={idx} className="font-bold text-[#fde047] bg-[#854d0e33] px-1 py-0.5 rounded border border-[#eab30844] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
@@ -365,7 +365,7 @@ export const LogPanel: React.FC<Props> = ({
                     <div className="h-[1px] flex-1 min-w-[8px] bg-gradient-to-r from-transparent via-[#00d2ff33] to-[#00d2ff66]" />
                     <span className="text-[10px] sm:text-[11px] font-bold text-[#00d2ff] px-2.5 py-0.5 rounded-full bg-[#00d2ff14] border border-[#00d2ff3a] shadow-sm flex items-center gap-1.5 shrink-0 max-w-[85%] min-w-0">
                       <span>⏳</span>
-                      <span className="truncate max-w-[130px] sm:max-w-[200px] text-white font-medium">{actorName}</span>
+                      <span className="truncate max-w-[130px] sm:max-w-[200px] text-white font-medium">{tr(actorName)}</span>
                       <span className="text-[#80d8ff] font-mono text-[9px] sm:text-[10px] shrink-0">({turnNum}{lang === 'ko' ? '턴' : lang === 'ja' ? 'ターン' : 'T'})</span>
                     </span>
                     <div className="h-[1px] flex-1 min-w-[8px] bg-gradient-to-l from-transparent via-[#00d2ff33] to-[#00d2ff66]" />

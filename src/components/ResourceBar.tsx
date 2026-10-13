@@ -63,9 +63,9 @@ export const ResourceBar: React.FC<Props> = ({
           key={upkeepTicker.id}
           className="absolute inset-0 bg-[#0c0f17f2] backdrop-blur-md flex items-center justify-center px-4 z-30 pointer-events-none overflow-hidden animate-upkeep-banner border-b border-[#ffd54f55]"
         >
-          <div className="flex items-center gap-1.5 text-xs text-[#ffd54f] font-bold tracking-wide whitespace-nowrap shadow-sm">
-            <span className="text-sm">🏢</span>
-            <span>{upkeepTicker.text}</span>
+          <div className="flex items-center gap-1.5 text-xs text-[#ffd54f] font-bold tracking-wide text-center truncate max-w-full shadow-sm">
+            <span className="text-sm shrink-0">🏢</span>
+            <span className="truncate">{upkeepTicker.text}</span>
           </div>
         </div>
       )}

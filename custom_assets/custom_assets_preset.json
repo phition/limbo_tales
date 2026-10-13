@@ -478,7 +478,8 @@
     "forge_t7_amulet": "assets/custom_uploaded/icons/forge_t7_amulet.png",
     "forge_t8_amulet": "assets/custom_uploaded/icons/forge_t8_amulet.png",
     "forge_t9_amulet": "assets/custom_uploaded/icons/forge_t9_amulet.png",
-    "forge_t10_amulet": "assets/custom_uploaded/icons/forge_t10_amulet.png"
+    "forge_t10_amulet": "assets/custom_uploaded/icons/forge_t10_amulet.png",
+    "battle_victory": "assets/custom_uploaded/icons/battle_victory.png"
   },
   "bgmOverrides": {
     "battle": "assets/bgm/bgm_battle.mp3",
@@ -851,5 +852,5 @@
     "iron_marshal": "assets/custom_uploaded/mercenaries/iron_marshal.png",
     "ghost_sniper": "assets/custom_uploaded/mercenaries/ghost_sniper.png"
   },
-  "version": 546
+  "version": 559
 }

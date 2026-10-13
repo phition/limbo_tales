@@ -12695,20 +12695,11 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                 const validParty = state.party.filter(p => state.barracks.some(b => b.id === p.id));
                 if (validParty.length === 0) {
                   return (
-                    <div className="p-3 text-center text-xs text-[#8b9bb4] bg-[#0c101a] rounded-lg border border-[#1f2738] flex flex-col items-center gap-2">
+                    <div className="p-3 text-center text-xs text-[#8b9bb4] bg-[#0c101a] rounded-lg border border-[#1f2738] flex flex-col items-center">
                       <div>
                         현재 원정대에 편성된 용병이 없습니다.<br />
                         <span className="text-[10px] text-[#ffd54f] font-bold mt-1 inline-block">[원정단 편성]에서 3명의 용병을 출전시켜 주세요.</span>
                       </div>
-                      {onNavigateDrawer && (
-                        <button
-                          className="btn btn-primary text-xs px-3 py-1 font-bold shadow-md shadow-[#ffd54f22] cursor-pointer flex items-center gap-1.5"
-                          onClick={() => onNavigateDrawer('barracks')}
-                        >
-                          <span>⚔️</span>
-                          <span>원정단 편성하기</span>
-                        </button>
-                      )}
                     </div>
                   );
                 }
@@ -14279,8 +14270,8 @@ export const CitadelScreen: React.FC = () => {
                       isCenter ? 'hover:scale-105 active:scale-95 shadow-lg' : 'hover:opacity-80 active:scale-90'
                     }`}
                     style={{
-                      width: isCenter ? 112 : 86,
-                      height: isCenter ? 108 : 88,
+                      width: isCenter ? 'clamp(112px, 32vw, 130px)' : 'clamp(84px, 24vw, 96px)',
+                      minHeight: isCenter ? 110 : 88,
                       background: isCenter ? `${item.color}25` : '#141822',
                       border: `${isCenter ? 2 : 1}px solid ${isCenter ? item.color : '#2c384d'}`,
                       opacity: isCenter ? 1 : 0.6,
@@ -14300,17 +14291,17 @@ export const CitadelScreen: React.FC = () => {
                         {registerableCodexCount}
                       </span>
                     )}
-                    <div className="flex items-center justify-center" style={{ minHeight: isCenter ? 32 : 24 }}>
-                      <GameIcon name={item.key} icon={item.icon} size={isCenter ? 26 : 20} />
+                    <div className="flex items-center justify-center shrink-0" style={{ minHeight: isCenter ? 28 : 22 }}>
+                      <GameIcon name={item.key} icon={item.icon} size={isCenter ? 24 : 18} />
                     </div>
                     <div 
-                      className="font-bold mt-0.5 text-center px-1 truncate max-w-full" 
-                      style={{ fontSize: isCenter ? 12 : 10, color: isCenter ? '#fff' : '#8b9bb4' }}
+                      className="font-bold mt-0.5 text-center px-1 line-clamp-2 leading-tight break-words max-w-full" 
+                      style={{ fontSize: isCenter ? 11.5 : 9.5, color: isCenter ? '#fff' : '#8b9bb4' }}
                     >
                       {item.label}
                     </div>
                     {isCenter && (
-                      <div className="text-[9px] text-[#8b9bb4] mt-0.5 text-center px-1 truncate max-w-full">
+                      <div className="text-[8.5px] text-[#8b9bb4] mt-0.5 text-center px-1 line-clamp-2 leading-tight break-words max-w-full">
                         {item.sub}
                       </div>
                     )}
@@ -14572,7 +14563,13 @@ export const CitadelScreen: React.FC = () => {
 
       <Modal title="⚠️ 게임 초기화" open={resetModal} onClose={() => setResetModal(false)}
         footer={<><ActionButton label="취소" variant="ghost" onClick={() => setResetModal(false)} />
-          <ActionButton label="초기화" variant="danger" onClick={async () => { await gm.resetGame(); setResetModal(false); }} /></>}>
+          <ActionButton label="초기화" variant="danger" onClick={async () => {
+            if (!window.confirm('⚠️ [경고: 복구 불가]\n\n정말 모든 게임 데이터를 완전 초기화하시겠습니까?\n\n• 로컬 저장 데이터 영구 삭제\n• Firebase 클라우드 동기화 세이브 영구 삭제\n• 용병단, 장비, 거점 건물, 자원, 던전 진행도 전체 초기화\n\n이 작업은 되돌릴 수 없습니다. 계속 진행하시겠습니까?')) {
+              return;
+            }
+            await gm.resetGame();
+            setResetModal(false);
+          }} /></>}>
         <p className="text-sm text-[#cfd8dc]">현재 계정의 로컬 및 Firebase 클라우드 데이터가 모두 초기화되고 처음부터 다시 시작합니다. 정말 초기화하시겠습니까?</p>
       </Modal>
 

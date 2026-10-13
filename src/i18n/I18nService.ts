@@ -24,11 +24,19 @@ export class I18nService {
   private patterns: Partial<Record<'en' | 'ja', { re: RegExp; frag: string; tpl: string }[]>> = {};
   private loading: Partial<Record<'en' | 'ja', Promise<void>>> = {};
 
+  private updateDocumentLang(lang: SupportedLanguage): void {
+    if (typeof document !== 'undefined' && document.documentElement) {
+      document.documentElement.lang = lang;
+      document.documentElement.setAttribute('data-lang', lang);
+    }
+  }
+
   private constructor() {
     try {
       const savedLang = localStorage.getItem('limbo_language') as SupportedLanguage;
       if (savedLang && (savedLang === 'ko' || savedLang === 'en' || savedLang === 'ja')) {
         this.currentLanguage = savedLang;
+        this.updateDocumentLang(savedLang);
         if (savedLang !== 'ko') {
           this.ensureLoaded(savedLang).then(() => {
             this.translationCache.clear();
@@ -36,8 +44,12 @@ export class I18nService {
             this.listeners.forEach((fn) => fn(savedLang));
           });
         }
+      } else {
+        this.updateDocumentLang(this.currentLanguage);
       }
-    } catch (_) {}
+    } catch (_) {
+      this.updateDocumentLang(this.currentLanguage);
+    }
   }
 
   public static getInstance(): I18nService {
@@ -82,11 +94,13 @@ export class I18nService {
   public setLanguage(lang: SupportedLanguage): void {
     if (this.currentLanguage === lang) return;
     this.currentLanguage = lang;
+    this.updateDocumentLang(lang);
     try {
       localStorage.setItem('limbo_language', lang);
     } catch (_) {}
     this.translationCache.clear();
     const apply = () => {
+      this.updateDocumentLang(lang);
       this.translationCache.clear();
       this.retranslateWholeDom();
       this.listeners.forEach((fn) => fn(lang));
@@ -180,10 +194,24 @@ export class I18nService {
     }
 
     const trimmed = text.trim();
-
     const tLang = (lang === 'ja' ? 'ja' : 'en') as 'en' | 'ja';
 
-    // 0. 빌드 생성 전체 문장 번역표 (정확 일치 + {N} 템플릿)
+    // 0. 복합 로그 분할 번역 (화살표 ➔ 또는 파이프 | 로 결합된 복합 다중 피격/원호 로그)
+    if (text.includes(' ➔ ')) {
+      const parts = text.split(' ➔ ');
+      const res = parts.map(part => this.tr(part, lang)).join(' ➔ ');
+      this.translationCache.set(cacheKey, res);
+      return res;
+    }
+
+    if (text.includes(' | ')) {
+      const parts = text.split(' | ');
+      const res = parts.map(part => this.tr(part, lang)).join(' | ');
+      this.translationCache.set(cacheKey, res);
+      return res;
+    }
+
+    // 1. 빌드 생성 전체 문장 번역표 (정확 일치 + {N} 템플릿)
     const gen = this.lookupGenerated(text, tLang);
     if (gen !== null) {
       const lead = text.match(/^\s*/)![0];
@@ -194,7 +222,7 @@ export class I18nService {
       return res;
     }
 
-    // 1. 완전 일치 사전 (Exact Match)
+    // 2. 완전 일치 사전 (Exact Match)
     const exact = EXACT_TRANSLATIONS[tLang]?.[trimmed];
     if (exact) {
       const res = text.replace(trimmed, exact);
@@ -202,7 +230,44 @@ export class I18nService {
       return res;
     }
 
-    // 2. 동적 전투/탐험 로그 정규식 패턴 검사
+    // 2.1 몬스터 식별 알파벳 접미사 (예: "종언의 제단 광신도 A")
+    const alphaSuffixMatch = trimmed.match(/^(.+?)\s+([A-Z])$/);
+    if (alphaSuffixMatch) {
+      const baseName = alphaSuffixMatch[1].trim();
+      const suffix = alphaSuffixMatch[2];
+      const trBase = this.tr(baseName, lang);
+      if (trBase && trBase !== baseName) {
+        const res = text.replace(trimmed, `${trBase} ${suffix}`);
+        this.translationCache.set(cacheKey, res);
+        return res;
+      }
+    }
+
+    // 2.2 대괄호 태그 분리 번역 (예: "[아이리스]", "[궁극기]")
+    const bracketMatch = trimmed.match(/^\[(.+?)\]$/);
+    if (bracketMatch) {
+      const inner = bracketMatch[1].trim();
+      const trInner = this.tr(inner, lang);
+      if (trInner && trInner !== inner) {
+        const res = text.replace(trimmed, `[${trInner}]`);
+        this.translationCache.set(cacheKey, res);
+        return res;
+      }
+    }
+
+    // 2.3 스킬 특수 접두 태그 (예: "[궁극기] 종언의 메테오", "★[궁극기] 메테오")
+    const skillPrefixMatch = trimmed.match(/^(\★?\[(?:궁극기|고유기)\])\s*(.+)$/);
+    if (skillPrefixMatch) {
+      const prefix = skillPrefixMatch[1].trim();
+      const skillName = skillPrefixMatch[2].trim();
+      const trPrefix = this.tr(prefix, lang);
+      const trSkill = this.tr(skillName, lang);
+      const res = text.replace(trimmed, `${trPrefix} ${trSkill}`);
+      this.translationCache.set(cacheKey, res);
+      return res;
+    }
+
+    // 3. 동적 전투/탐험 로그 정규식 패턴 검사
     for (const p of LOG_PATTERNS) {
       const match = text.match(p.pattern);
       if (match) {
@@ -212,8 +277,15 @@ export class I18nService {
       }
     }
 
+    // 2.5 전투 로그 전용 지능형 시맨틱 폴백 (미등록/동적 로그 전수 번역)
+    const fallbackBattleLog = this.translateBattleLogFallback(text, tLang);
+    if (fallbackBattleLog && !/[\uac00-\ud7af]/.test(fallbackBattleLog)) {
+      this.translationCache.set(cacheKey, fallbackBattleLog);
+      return fallbackBattleLog;
+    }
+
     // 3. 부분 어휘 및 엔티티 치환 (자원, 시설, 클래스 등)
-    let transformed = text;
+    let transformed = fallbackBattleLog || text;
     const dict = EXACT_TRANSLATIONS[tLang] || {};
 
     for (const [k, v] of Object.entries(dict)) {
@@ -268,6 +340,134 @@ export class I18nService {
 
     this.translationCache.set(cacheKey, transformed);
     return transformed;
+  }
+
+  /**
+   * 정규식 패턴에 걸리지 않은 미등록/동적 전투 로그를 위한 지능형 시맨틱 번역 폴백
+   */
+  private translateBattleLogFallback(text: string, lang: 'en' | 'ja'): string | null {
+    // 전투 로그 특징: 특수 기호나 이모지, 대괄호 태그, 턴/라운드 등 전투 관련 키워드 포함
+    const isBattleLogLike = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u.test(text)
+      || /\[.+?\]/.test(text)
+      || /(?:피해|체력|마나|보호막|기절|빙결|화상|출혈|맹독|치유|회복|버프|디버프|시너지|라운드|턴|그로기|차징|부활)/.test(text);
+
+    if (!isBattleLogLike) return null;
+
+    let res = text;
+
+    // 1. 긴 전투 구문 및 서술어 치환 (길이가 긴 것부터 순차 치환)
+    const BATTLE_PREDICATES: { ko: string; en: string; ja: string }[] = [
+      { ko: '광폭화 결계로 인해 전투에서 철수할 수 없습니다!', en: 'Frenzy barrier prevents retreat from battle!', ja: '暴走結界により戦闘から撤退できません！' },
+      { ko: '적의 추격을 뿌리치고 안전하게 후퇴했습니다.', en: 'Safely escaped enemy pursuit and retreated.', ja: '敵の追撃を振り切り無事に撤退しました。' },
+      { ko: '퇴로가 막혀 도주에 실패했습니다!', en: 'Escape path was blocked; retreat failed!', ja: '退路を塞がれ逃走に失敗しました！' },
+      { ko: '동료의 영혼이 영겁의 어둠 속으로 흩어집니다.', en: 'Companion soul disperses into the endless dark.', ja: '仲間の魂が永劫の闇へと散っていきます。' },
+      { ko: '대원의 맥박이 완전히 멎었습니다...', en: 'pulse completely stopped...', ja: '脈拍が完全に停止しました…' },
+      { ko: '남은 시간이 얼마 없습니다!', en: 'Time is running out!', ja: '残された時間はわずかです！' },
+      { ko: '차가운 바닥에 쓰러졌습니다!', en: 'collapsed onto the cold ground!', ja: '冷たい床に倒れました！' },
+      { ko: '기적처럼 HP', en: 'miraculously with HP', ja: '奇跡のようにHP' },
+      { ko: '사경을 헤매던', en: 'critically injured', ja: '死線を彷徨っていた' },
+      { ko: '극적 소생시켰습니다!', en: 'dramatically revived!', ja: '劇的に蘇生させました！' },
+      { ko: '완전 치유했습니다!', en: 'fully healed!', ja: '完全治癒しました！' },
+      { ko: '완전 초기화했습니다!', en: 'completely reset!', ja: '完全初期化しました！' },
+      { ko: '완전 정화했습니다!', en: 'completely cleansed!', ja: '完全浄化しました！' },
+      { ko: '완전히 저항해냈습니다!', en: 'completely resisted!', ja: '完全に抵抗しました！' },
+      { ko: '완전히 차단했습니다!', en: 'completely blocked!', ja: '完全に遮断しました！' },
+      { ko: '완전히 흡수했습니다!', en: 'completely absorbed!', ja: '完全に吸収しました！' },
+      { ko: '파티 전원에게 치유로 환원했습니다!', en: 'converted to party heal!', ja: '味方全員の回復に還元！' },
+      { ko: '대신 받아', en: 'intercepted, taking', ja: '身代わりとなり' },
+      { ko: '치유로 환원했습니다!', en: 'converted to healing!', ja: '回復に還元しました！' },
+      { ko: '지속 재생을 부여했습니다!', en: 'granted continuous regen!', ja: '継続リジェネを付与しました！' },
+      { ko: '보호막을 부여했습니다!', en: 'granted barrier!', ja: 'シールドを付与しました！' },
+      { ko: '보호막을 전개했습니다!', en: 'deployed barrier!', ja: 'シールドを展開しました！' },
+      { ko: '결계를 전개했습니다!', en: 'deployed barrier!', ja: '結界を展開しました！' },
+      { ko: '방벽을 전개했습니다!', en: 'deployed absorption wall!', ja: '防壁を展開しました！' },
+      { ko: '상태이상 효과를 부여했습니다!', en: 'inflicted status effect!', ja: '状態異常を付与しました！' },
+      { ko: '효과를 부여했습니다!', en: 'granted effect!', ja: '効果を付与しました！' },
+      { ko: '상태이상을 부여했습니다!', en: 'inflicted status condition!', ja: '状態異常を付与しました！' },
+      { ko: '추가 피해를 입혔습니다!', en: 'dealt bonus damage!', ja: '追加ダメージを与えました！' },
+      { ko: '치명 피해를 입혔습니다!', en: 'dealt critical damage!', ja: '会心ダメージを与えました！' },
+      { ko: '피해를 입혔습니다!', en: 'dealt damage!', ja: 'ダメージを与えました！' },
+      { ko: '피해 직격!', en: 'Direct hit damage!', ja: '直撃ダメージ！' },
+      { ko: '증폭 피해!', en: 'Amplified damage!', ja: '増幅ダメージ！' },
+      { ko: '회복되었습니다.', en: 'was restored.', ja: '回復しました。' },
+      { ko: '회복되었습니다!', en: 'was restored!', ja: '回復しました！' },
+      { ko: '회복했습니다!', en: 'restored!', ja: '回復しました！' },
+      { ko: '치유되었습니다!', en: 'was healed!', ja: '回復しました！' },
+      { ko: '치유했습니다!', en: 'healed!', ja: '回復しました！' },
+      { ko: '소멸했습니다.', en: 'dissipated.', ja: '消滅しました。' },
+      { ko: '부활했습니다!', en: 'revived!', ja: '復活しました！' },
+      { ko: '발동했습니다!', en: 'activated!', ja: '発動しました！' },
+      { ko: '분쇄되었습니다!', en: 'was shattered!', ja: '粉砕されました！' },
+      { ko: '분쇄했습니다!', en: 'shattered!', ja: '粉砕しました！' },
+      { ko: '증폭되었습니다!', en: 'amplified!', ja: '増幅しました！' },
+      { ko: '증폭했습니다!', en: 'amplified!', ja: '増幅しました！' },
+      { ko: '감소시켰습니다!', en: 'reduced!', ja: '減少させました！' },
+      { ko: '감소했습니다!', en: 'decreased!', ja: '減少しました！' },
+      { ko: '상승했습니다!', en: 'increased!', ja: '上昇しました！' },
+      { ko: '상승합니다!', en: 'increases!', ja: '上昇します！' },
+      { ko: '완충했습니다!', en: 'fully recharged!', ja: '満充填しました！' },
+      { ko: '충전합니다.', en: 'charges.', ja: '充填します。' },
+      { ko: '충전했습니다!', en: 'charged!', ja: '充填しました！' },
+      { ko: '단축했습니다!', en: 'shortened!', ja: '短縮しました！' },
+      { ko: '환급받았습니다!', en: 'refunded!', ja: '還元されました！' },
+      { ko: '회피했습니다!', en: 'evaded!', ja: '回避しました！' },
+      { ko: '방출합니다!', en: 'unleashes!', ja: '放ちます！' },
+      { ko: '버텨냅니다!', en: 'endures!', ja: '耐え抜きます！' },
+      { ko: '이동했습니다!', en: 'moved to!', ja: '移動しました！' },
+      { ko: '해제되었습니다!', en: 'was removed!', ja: '解除されました！' },
+      { ko: '취소되었습니다!', en: 'was cancelled!', ja: '中断されました！' },
+      { ko: '봉쇄되었습니다!', en: 'was blocked!', ja: '封鎖されました！' },
+      { ko: '무효화되었습니다!', en: 'was nullified!', ja: '無効化されました！' },
+      { ko: '전투 승리!', en: 'Battle Victory!', ja: '戦闘勝利！' },
+      { ko: '전투 패배...', en: 'Battle Defeat...', ja: '戦闘敗北…' },
+      { ko: '전투 재개', en: 'Resume Battle', ja: '戦闘再開' },
+      { ko: '라운드', en: 'Round', ja: 'ラウンド' },
+      { ko: '턴', en: 'Turn', ja: 'ターン' },
+      { ko: '파티 전원', en: 'Entire Party', ja: 'パーティ全員' },
+      { ko: '파티 전체', en: 'Entire Party', ja: 'パーティ全体' },
+      { ko: '아군 전원', en: 'All Allies', ja: '味方全員' },
+      { ko: '아군 전체', en: 'All Allies', ja: '味方全体' },
+      { ko: '생존 아군 전원', en: 'Surviving Allies', ja: '生存味方全員' },
+      { ko: '적 전체', en: 'All Enemies', ja: '敵全体' },
+      { ko: '적 전열', en: 'Enemy Frontline', ja: '敵前列' },
+      { ko: '전열 아군', en: 'Frontline Allies', ja: '前列味方' },
+      { ko: '행동 불가', en: 'Immobilized', ja: '行動不能' },
+      { ko: '지속 피해', en: 'DoT', ja: '継続ダメージ' },
+      { ko: '치명 피해', en: 'Crit DMG', ja: '会心ダメージ' },
+      { ko: '순수 피해', en: 'Pure DMG', ja: '純粋ダメージ' },
+      { ko: '마도 피해', en: 'Magic DMG', ja: '魔導ダメージ' },
+      { ko: '추가 피해', en: 'Bonus DMG', ja: '追加ダメージ' },
+      { ko: '공격력', en: 'ATK', ja: '攻撃力' },
+      { ko: '방어력', en: 'DEF', ja: '防御力' },
+      { ko: '행동력', en: 'Action SPD', ja: '行動力' },
+      { ko: '명중률', en: 'Accuracy', ja: '命中率' },
+      { ko: '회피율', en: 'Evasion', ja: '回避率' },
+      { ko: '치명타율', en: 'Crit Rate', ja: '会心率' },
+      { ko: '보호막', en: 'Barrier', ja: 'シールド' },
+      { ko: '자가 회복', en: 'self recovery', ja: '自己回復' },
+      { ko: '흡혈', en: 'Lifesteal', ja: '吸血' },
+      { ko: '그로기', en: 'Groggy', ja: 'グロッキー' },
+      { ko: '차징', en: 'Charging', ja: 'チャージ' },
+      { ko: '브레이크', en: 'Break', ja: 'ブレイク' },
+      { ko: '출혈', en: 'Bleed', ja: '出血' },
+      { ko: '화상', en: 'Burn', ja: '火傷' },
+      { ko: '빙결', en: 'Freeze', ja: '凍結' },
+      { ko: '냉각', en: 'Chill', ja: '冷却' },
+      { ko: '동상', en: 'Frostbite', ja: '凍傷' },
+      { ko: '맹독', en: 'Poison', ja: '猛毒' },
+      { ko: '기절', en: 'Stun', ja: '気絶' },
+      { ko: '실명', en: 'Blind', ja: '暗闇' },
+      { ko: '침묵', en: 'Silence', ja: '沈黙' },
+      { ko: '은신', en: 'Stealth', ja: '潜伏' },
+    ];
+
+    for (const item of BATTLE_PREDICATES) {
+      if (res.includes(item.ko)) {
+        res = res.split(item.ko).join(lang === 'ja' ? item.ja : item.en);
+      }
+    }
+
+    return res;
   }
 
   private static readonly HANGUL = /[\uac00-\ud7af]/;

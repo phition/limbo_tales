@@ -3067,12 +3067,13 @@ export const ArenaScreen: React.FC = () => {
                     <span className="font-bold">심연의 백과 영구 보너스</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-[8.5px] font-mono text-[#e1bee7] flex-wrap justify-end">
+                    {codexBonus.allStatsBonus && codexBonus.allStatsBonus > 0 && <span className="bg-[#4a148c33] px-1 rounded text-[#00d2ff]">전능+{codexBonus.allStatsBonus}</span>}
                     {codexBonus.atk > 0 && <span className="bg-[#4a148c33] px-1 rounded">공+{codexBonus.atk}</span>}
                     {codexBonus.def > 0 && <span className="bg-[#4a148c33] px-1 rounded">방+{codexBonus.def}</span>}
                     {codexBonus.hp > 0 && <span className="bg-[#4a148c33] px-1 rounded">체+{codexBonus.hp}</span>}
                     {codexBonus.critRate > 0 && <span className="bg-[#4a148c33] px-1 rounded text-[#ffd54f]">치명+{codexBonus.critRate}%</span>}
                     {codexBonus.dmgReduction > 0 && <span className="bg-[#4a148c33] px-1 rounded text-[#80deea]">경감+{codexBonus.dmgReduction}%</span>}
-                    {codexBonus.atk === 0 && codexBonus.def === 0 && codexBonus.hp === 0 && (
+                    {codexBonus.atk === 0 && codexBonus.def === 0 && codexBonus.hp === 0 && (!codexBonus.allStatsBonus || codexBonus.allStatsBonus === 0) && (
                       <span className="text-[8px] text-[#8b9bb4]">도감 수집 시 영구 반영</span>
                     )}
                   </div>

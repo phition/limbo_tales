@@ -33,12 +33,13 @@ export const ActionButton: React.FC<Props> = ({
 
   return (
     <button
-      className={`btn ${variantClass} ${sizeClass} ${className}`}
+      className={`btn ${variantClass} ${sizeClass} min-w-0 max-w-full leading-tight text-center break-words ${className}`}
       disabled={disabled}
       onClick={handleClick}
       style={style}
     >
-      {icon && <span className="mr-1">{icon}</span>}{label}
+      {icon && <span className="mr-1 shrink-0">{icon}</span>}
+      <span className="min-w-0 break-words">{label}</span>
     </button>
   );
 };

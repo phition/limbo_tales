@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ResourceBar } from '../components/ResourceBar';
 import { useGameManager } from '../hooks/useGameManager';
 import { useI18n } from '../hooks/useI18n';
+import { trEntity } from '../i18n/translationDictionary';
 import { GameManager } from '../managers/GameManager';
 import { LogPanel } from '../components/LogPanel';
 import { ActionButton } from '../components/ActionButton';
@@ -947,15 +948,17 @@ const HeroRow: React.FC<{
       {isAlive && hero.statusEffects.length > 0 && (
         <div className="flex gap-1 mt-0.5 flex-wrap">
           {hero.statusEffects.map((se, i) => {
-            const meta = STATUS_EFFECT_META[se.type];
+            const meta = STATUS_EFFECT_META[se.type] || { icon: se.icon || '✨', label: se.name || se.type, color: '#00d2ff', desc: '' };
+            const turns = se.turnsLeft ?? se.duration ?? 1;
             return (
               <span
                 key={i}
                 className="text-[10px] px-1 py-0.5 rounded flex items-center gap-0.5 font-bold"
-                style={{ background: meta.color + '33', color: meta.color }}
+                style={{ background: (meta.color || '#00d2ff') + '33', color: meta.color || '#00d2ff', border: `1px solid ${(meta.color || '#00d2ff')}44` }}
+                title={`${meta.label} (${turns}턴)`}
               >
-                <GameIcon name={se.type} icon={meta.icon} size={12} />
-                <span>{se.turnsLeft}</span>
+                <GameIcon name={se.type} icon={meta.icon || '✨'} size={12} />
+                <span>{turns}</span>
               </span>
             );
           })}
@@ -968,7 +971,7 @@ const HeroRow: React.FC<{
 // ── BattleScreen 메인 ──────────────────────────────────────────────────────
 export const BattleScreen: React.FC = () => {
   const { state, gm, navigateTo } = useGameManager();
-  const { lang, dict } = useI18n();
+  const { lang, dict, tr } = useI18n();
   useCustomAssetVersion();
 
   const [monsters, setMonsters] = useState<MonsterState[]>([]);
@@ -6537,7 +6540,7 @@ export const BattleScreen: React.FC = () => {
                     </span>
                     {skillCutIn.subText && (
                       <span className="text-[9px] sm:text-[10px] text-[#ffecb3] font-bold">
-                        {skillCutIn.subText}
+                        {trEntity(tr(skillCutIn.subText), lang)}
                       </span>
                     )}
                   </div>
@@ -6549,7 +6552,7 @@ export const BattleScreen: React.FC = () => {
                     </span>
                     {skillCutIn.subText && (
                       <span className="text-[9px] sm:text-[10px] text-[#a7ffeb] font-semibold">
-                        {skillCutIn.subText}
+                        {trEntity(tr(skillCutIn.subText), lang)}
                       </span>
                     )}
                   </div>
@@ -6570,7 +6573,7 @@ export const BattleScreen: React.FC = () => {
                   </span>
                 )}
                 <div className="text-xl sm:text-3xl font-black text-white tracking-wider flex items-center gap-2 drop-shadow-[0_0_18px_rgba(255,255,255,0.95)]">
-                  <span>{skillCutIn.skillName}</span>
+                  <span>{trEntity(tr(skillCutIn.skillName), lang)}</span>
                 </div>
               </div>
             </div>
@@ -6594,12 +6597,16 @@ export const BattleScreen: React.FC = () => {
                   </span>
                   {skillCutIn.heroName && (
                     <span className="text-xs sm:text-sm font-black text-[#80d8ff] drop-shadow-[0_0_8px_rgba(128,216,255,0.8)]">
-                      {skillCutIn.heroName}
+                      {trEntity(skillCutIn.heroName, lang)}
                     </span>
                   )}
                 </div>
                 <div className="text-xl sm:text-3xl md:text-4xl font-black italic tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-[#fff9c4] via-[#ffd54f] to-[#ffecb3] drop-shadow-[0_0_22px_rgba(255,213,79,0.95)] text-center px-4">
-                  {skillCutIn.quote.startsWith('"') ? skillCutIn.quote : `"${skillCutIn.quote}"`}
+                  {(() => {
+                    const cleaned = skillCutIn.quote.replace(/^["'「]+|["'」]+$/g, '').trim();
+                    const translated = tr(cleaned);
+                    return lang === 'ja' ? `「${translated}」` : `"${translated}"`;
+                  })()}
                 </div>
               </div>
             </div>
@@ -6866,7 +6873,7 @@ export const BattleScreen: React.FC = () => {
                   <LongPressBox
                     onLongPress={() => setSelectedSkillForModal(modalSkillInfo)}
                     onClick={() => executeSkill(selectedHero, 'basic', targetedMonsterIdx)}
-                    className={`btn btn-ghost flex flex-col justify-between p-2 sm:p-2.5 h-[80px] bg-transparent border relative select-none ${
+                    className={`btn btn-ghost flex flex-col justify-between p-2 sm:p-2.5 min-h-[82px] h-auto bg-transparent border relative select-none ${
                       hasWeaponSkill ? 'shadow-[0_0_8px_rgba(0,210,255,0.15)]' : ''
                     }`}
                     style={{
@@ -6880,15 +6887,15 @@ export const BattleScreen: React.FC = () => {
                           <GameIcon name={hasWeaponSkill ? weaponEnchantSkill.id : 'basic_attack'} icon={displayIcon} size={20} />
                         </span>
                         <span
-                          className="text-sm font-bold truncate"
+                          className="text-sm font-bold truncate break-words skill-btn-name"
                           style={{ color: hasWeaponSkill ? (hasMp ? '#00e5ff' : '#ffd54f') : getSkillBtnStyle('basic').color }}
                         >
                           {displayName}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between w-full text-xs">
-                      <span className="text-[11px] text-[#8b9bb4] truncate max-w-[140px]">{displaySubLabel}</span>
+                    <div className="flex items-center justify-between w-full text-xs mt-1">
+                      <span className="text-[11px] text-[#8b9bb4] truncate min-w-0 flex-1 mr-1">{displaySubLabel}</span>
                       <span
                         className="text-[11px] font-mono font-bold shrink-0 ml-1"
                         style={{ color: hasWeaponSkill ? (hasMp ? '#64b5f6' : '#ffb74d') : '#8b9bb4' }}
@@ -6928,7 +6935,7 @@ export const BattleScreen: React.FC = () => {
                     key={skill.id}
                     onLongPress={() => setSelectedSkillForModal(skill)}
                     onClick={() => canUse && executeSkill(selectedHero, skill, targetedMonsterIdx)}
-                    className={`btn btn-ghost flex flex-col justify-between p-2 sm:p-2.5 h-[80px] bg-transparent border relative select-none ${!canUse ? 'opacity-40 cursor-not-allowed' : ''} ${
+                    className={`btn btn-ghost flex flex-col justify-between p-2 sm:p-2.5 min-h-[82px] h-auto bg-transparent border relative select-none ${!canUse ? 'opacity-40 cursor-not-allowed' : ''} ${
                       readyCombo ? 'animate-pulse shadow-[0_0_12px_rgba(255,213,79,0.45)]' : ''
                     }`}
                     style={{
@@ -6956,7 +6963,7 @@ export const BattleScreen: React.FC = () => {
                         <div className="flex flex-col min-w-0 flex-1">
                           <div className="flex items-center gap-1 flex-wrap">
                             <span
-                              className="font-bold line-clamp-2 break-keep tracking-tight"
+                              className="font-bold line-clamp-2 break-words tracking-tight skill-btn-name"
                               style={{
                                 color: readyCombo ? '#ffe57f' : (cdLeft > 0 ? '#90a4ae' : style.color),
                                 ...nameStyle
@@ -6988,11 +6995,11 @@ export const BattleScreen: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between w-full text-xs">
-                      <span className="text-[11px] text-[#8b9bb4] truncate max-w-[60%] flex items-center gap-1">
-                        <span>{targetLabel}</span>
+                    <div className="flex items-center justify-between w-full text-xs mt-1">
+                      <span className="text-[11px] text-[#8b9bb4] truncate min-w-0 flex-1 flex items-center gap-1 mr-1">
+                        <span className="truncate">{targetLabel}</span>
                         <span>•</span>
-                        <span>{Math.round((skill.power || 1.0) * 100)}%</span>
+                        <span className="shrink-0">{Math.round((skill.power || 1.0) * 100)}%</span>
                       </span>
                       <div className="flex items-center gap-1 shrink-0">
                         {cdLeft > 0 ? (
@@ -7315,7 +7322,7 @@ export const BattleScreen: React.FC = () => {
       {/* ── 📜 전체 상세 전투 로그 팝업 모달 ── */}
       {showFullLogModal && (
         <Modal
-          title="📜 전투 상세 기록 (전체 로그)"
+          title={tr("📜 전투 상세 기록 (전체 로그)")}
           open={showFullLogModal}
           zIndex="z-[70]"
           onClose={() => setShowFullLogModal(false)}
@@ -7324,17 +7331,17 @@ export const BattleScreen: React.FC = () => {
               className="btn btn-ghost text-xs px-4 py-1.5"
               onClick={() => setShowFullLogModal(false)}
             >
-              닫기
+              {tr("닫기")}
             </button>
           }
         >
           <div className="flex flex-col gap-2">
             <div className="text-xs text-[#8b9bb4] flex items-center justify-between border-b border-[#1f2738] pb-1.5">
-              <span>총 <span className="text-[#00d2ff] font-bold font-mono">{(state.battleLogs || []).length}</span>건의 전투 기록</span>
-              <span className="text-[10px] text-[#00d2ff]">스크롤하여 이전 기록을 확인할 수 있습니다.</span>
+              <span>{tr(`총 ${(state.battleLogs || []).length}건의 전투 기록`)}</span>
+              <span className="text-[10px] text-[#00d2ff]">{tr('스크롤하여 이전 기록을 확인할 수 있습니다.')}</span>
             </div>
             <div className="max-h-[60vh] overflow-y-auto pr-1">
-              <LogPanel logs={state.battleLogs || []} isBattle maxHeight={520} emptyMessage="기록된 전투 로그가 없습니다." />
+              <LogPanel logs={state.battleLogs || []} isBattle maxHeight={520} emptyMessage={tr('기록된 전투 로그가 없습니다.')} />
             </div>
           </div>
         </Modal>

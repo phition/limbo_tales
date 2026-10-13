@@ -313,7 +313,26 @@ export interface CharacterClass {
 }
 
 // ─── 상태이상 (StatusEffect) ───────────────────────────────────────────────────
-export type StatusEffectType = 'bleed' | 'poison' | 'burn' | 'freeze' | 'stun' | 'debuff_atk' | 'debuff_def' | 'shield' | 'buff_atk' | 'buff_def' | 'regen' | 'blind' | 'riposte' | 'immunity' | 'stealth';
+export type StatusEffectType = 
+  | 'bleed' 
+  | 'poison' 
+  | 'burn' 
+  | 'freeze' 
+  | 'frostbite'
+  | 'stun' 
+  | 'debuff_atk' 
+  | 'debuff_def' 
+  | 'shield' 
+  | 'buff_atk' 
+  | 'buff_def' 
+  | 'buff_hit'
+  | 'buff'
+  | 'debuff'
+  | 'regen' 
+  | 'blind' 
+  | 'riposte' 
+  | 'immunity' 
+  | 'stealth';
 
 export interface StatusEffect {
   type: StatusEffectType;
@@ -332,6 +351,7 @@ export interface StatusEffect {
 
 export const STATUS_EFFECT_META: Record<StatusEffectType, { icon: string; label: string; color: string; desc: string }> = {
   freeze:     { icon: '❄️', label: '냉각',      color: '#80d8ff', desc: '행동 불가 & 방어력 +40% (외피 동결 유지력 보전) & 턴당 최대 HP 4% 동상 피해' },
+  frostbite:  { icon: '❄️', label: '동상',      color: '#80d8ff', desc: '매 턴 지속 한기 피해 및 행동 둔화' },
   bleed:      { icon: '🩸', label: '출혈',      color: '#ef5350', desc: '공격력 -40% & 턴당 최대 HP 7% 출혈 피해' },
   poison:     { icon: '☠️', label: '중독',      color: '#ab47bc', desc: '턴당 최대 HP 14% 치명적 맹독 피해 (최대 DoT)' },
   burn:       { icon: '🔥', label: '화상',      color: '#ff7043', desc: '방어력 -50% & 턴당 최대 HP 8% 화염 피해' },
@@ -341,6 +361,9 @@ export const STATUS_EFFECT_META: Record<StatusEffectType, { icon: string; label:
   debuff_def: { icon: '💔', label: '방어력 약화', color: '#ff8a65', desc: '방어력 감소' },
   buff_atk:   { icon: '🔺', label: '공격력 강화', color: '#66bb6a', desc: '공격력 증가' },
   buff_def:   { icon: '🔰', label: '방어력 강화', color: '#4fc3f7', desc: '방어력 증가' },
+  buff_hit:   { icon: '🎯', label: '명중력 증가', color: '#00e5ff', desc: '명중률 및 정밀도 상승' },
+  buff:       { icon: '✨', label: '강화',      color: '#00d2ff', desc: '전투 능력 강화' },
+  debuff:     { icon: '💀', label: '약화',      color: '#ff5252', desc: '전투 능력 약화' },
   regen:      { icon: '💚', label: '재생',      color: '#26a69a', desc: '턴당 체력 회복' },
   blind:      { icon: '👁️', label: '실명',      color: '#b0bec5', desc: '명중률 감소 (공격 시 50% 확률로 빗나감)' },
   riposte:    { icon: '⚡', label: '환영반격',  color: '#00e5ff', desc: '회피율 60% 증가 & 피격/회피 시 즉시 130% 환영 반격' },

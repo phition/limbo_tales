@@ -22,13 +22,6 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
   const { gm } = useGameManager();
   const { lang, setLanguage, dict } = useI18n();
   const [resetModal, setResetModal] = useState(false);
-  const [resetTargets, setResetTargets] = useState({
-    buildings: true,
-    resources: true,
-    heroes: true,
-    dungeon: true,
-    cloud: true,
-  });
   const [isResetting, setIsResetting] = useState(false);
   const [patchModal, setPatchModal] = useState(false);
   const [assetStudioModal, setAssetStudioModal] = useState(false);
@@ -157,7 +150,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
           {/* BGM 볼륨 */}
           <div className="flex items-center justify-between gap-2">
             <button
-              className={`text-[10.5px] px-2 py-1 rounded font-bold transition-all ${bgmMuted ? 'bg-[#ef535022] text-[#ef5350] border border-[#ef535044]' : 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]'}`}
+              className={`text-[10.5px] px-2 py-1 rounded font-bold transition-all shrink-0 ${bgmMuted ? 'bg-[#ef535022] text-[#ef5350] border border-[#ef535044]' : 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]'}`}
               onClick={() => {
                 const muted = sm.toggleBgmMute();
                 setBgmMuted(muted);
@@ -179,7 +172,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
               }}
               className="flex-1 accent-[#00d2ff] cursor-pointer h-1.5 bg-[#1f2738] rounded-lg"
             />
-            <span className="text-[10px] font-mono text-[#8b9bb4] w-7 text-right">
+            <span className="text-[10px] font-mono text-[#8b9bb4] w-7 text-right shrink-0">
               {bgmMuted ? '0%' : `${Math.round(bgmVol * 100)}%`}
             </span>
           </div>
@@ -187,7 +180,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
           {/* SFX 볼륨 */}
           <div className="flex items-center justify-between gap-2">
             <button
-              className={`text-[10px] px-2 py-1 rounded font-bold transition-all ${sfxMuted ? 'bg-[#ef535022] text-[#ef5350] border border-[#ef535044]' : 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]'}`}
+              className={`text-[10px] px-2 py-1 rounded font-bold transition-all shrink-0 ${sfxMuted ? 'bg-[#ef535022] text-[#ef5350] border border-[#ef535044]' : 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]'}`}
               onClick={() => {
                 const muted = sm.toggleSfxMute();
                 setSfxMuted(muted);
@@ -209,7 +202,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
               }}
               className="flex-1 accent-[#38ef7d] cursor-pointer h-1.5 bg-[#1f2738] rounded-lg"
             />
-            <span className="text-[10px] font-mono text-[#8b9bb4] w-7 text-right">
+            <span className="text-[10px] font-mono text-[#8b9bb4] w-7 text-right shrink-0">
               {sfxMuted ? '0%' : `${Math.round(sfxVol * 100)}%`}
             </span>
           </div>
@@ -237,7 +230,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
               ).map(item => (
                 <button
                   key={item.code}
-                  className={`py-1.5 px-1 rounded-lg text-xs font-bold transition-all text-center cursor-pointer border ${
+                  className={`py-1.5 px-1 rounded-lg text-xs font-bold transition-all text-center cursor-pointer border truncate min-w-0 ${
                     lang === item.code
                       ? 'bg-[#00d2ff] text-black border-[#00d2ff] shadow-md shadow-[#00d2ff44]'
                       : 'bg-[#182338] text-[#cfd8e8] border-[#253550] hover:border-[#00d2ff88]'
@@ -272,16 +265,16 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
               onOpenGuide();
             }}
           >
-            <div className="flex items-center gap-2.5">
-              <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff]">📖</span>
-              <div>
-                <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff] shrink-0">📖</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors break-words">
                   방주 백과사전 & 도감
                 </div>
-                <div className="text-[10px] text-[#8b9bb4]">전투 팁, 클래스, 장비, 몬스터 정보</div>
+                <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">전투 팁, 클래스, 장비, 몬스터 정보</div>
               </div>
             </div>
-            <span className="text-xs text-[#00d2ff]">▶</span>
+            <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
           </button>
 
           {/* 📜 방주 프롤로그 서사 다시 보기 */}
@@ -299,16 +292,16 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
               }
             }}
           >
-            <div className="flex items-center gap-2.5">
-              <span className="text-xl p-1 rounded-lg bg-[#ffd54f22] text-[#ffd54f]">📜</span>
-              <div>
-                <div className="font-bold text-xs text-white group-hover:text-[#ffd54f] transition-colors">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <span className="text-xl p-1 rounded-lg bg-[#ffd54f22] text-[#ffd54f] shrink-0">📜</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-bold text-xs text-white group-hover:text-[#ffd54f] transition-colors break-words">
                   방주 프롤로그 서사 다시 보기
                 </div>
-                <div className="text-[10px] text-[#8b9bb4]">초반 세계관 및 작전 지침 서사</div>
+                <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">초반 세계관 및 작전 지침 서사</div>
               </div>
             </div>
-            <span className="text-xs text-[#ffd54f]">▶</span>
+            <span className="text-xs text-[#ffd54f] shrink-0 ml-1.5">▶</span>
           </button>
 
           {/* 4. 🎨 커스텀 에셋 & 미디어 스튜디오 (마스터 계정 전용, 모바일 빌드 제외) */}
@@ -317,17 +310,17 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
               className="w-full p-2.5 rounded-xl bg-[#131d2b] border border-[#00d2ff44] hover:border-[#00d2ff] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
               onClick={() => setAssetStudioModal(true)}
             >
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff]">🎨</span>
-                <div>
-                  <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors flex items-center gap-1.5">
-                    <span>에셋 & 사운드 스튜디오</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">MASTER</span>
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff] shrink-0">🎨</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors flex items-center gap-1.5 flex-wrap">
+                    <span className="break-words">에셋 & 사운드 스튜디오</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">MASTER</span>
                   </div>
-                  <div className="text-[10px] text-[#8b9bb4]">아이콘·이모지 전환, BGM & SFX 커스텀</div>
+                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">아이콘·이모지 전환, BGM & SFX 커스텀</div>
                 </div>
               </div>
-              <span className="text-xs text-[#00d2ff]">▶</span>
+              <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
             </button>
           )}
 
@@ -337,35 +330,33 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
               className="w-full p-2.5 rounded-xl bg-[#1d1b13] border border-[#ffd54f44] hover:border-[#ffd54f] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
               onClick={() => setDataStudioModal(true)}
             >
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl p-1 rounded-lg bg-[#ffd54f22] text-[#ffd54f]">📊</span>
-                <div>
-                  <div className="font-bold text-xs text-white group-hover:text-[#ffd54f] transition-colors flex items-center gap-1.5">
-                    <span>마스터 데이터 스튜디오</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold">MASTER</span>
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-xl p-1 rounded-lg bg-[#ffd54f22] text-[#ffd54f] shrink-0">📊</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-white group-hover:text-[#ffd54f] transition-colors flex items-center gap-1.5 flex-wrap">
+                    <span className="break-words">마스터 데이터 스튜디오</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold shrink-0">MASTER</span>
                   </div>
-                  <div className="text-[10px] text-[#8b9bb4]">건물·단조 자원, 마물·초기 용병, 스킬 위력 편집 & 배포</div>
+                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">건물·단조 자원, 마물·초기 용병, 스킬 위력 편집 & 배포</div>
                 </div>
               </div>
-              <span className="text-xs text-[#ffd54f]">▶</span>
+              <span className="text-xs text-[#ffd54f] shrink-0 ml-1.5">▶</span>
             </button>
           )}
-
-
 
           {/* 5. 버전 정보 & 패치노트 */}
           <button
             className="w-full p-2.5 rounded-xl bg-[#131926] border border-[#222d42] hover:border-[#66bb6a66] text-left flex items-center justify-between transition-all cursor-pointer"
             onClick={() => setPatchModal(true)}
           >
-            <div className="flex items-center gap-2.5">
-              <span className="text-xl p-1 rounded-lg bg-[#182030] text-[#66bb6a]">📜</span>
-              <div>
-                <div className="font-bold text-xs text-white">버전 정보 & 패치노트</div>
-                <div className="text-[10px] text-[#8b9bb4]">최신 업데이트 및 변경 사항</div>
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <span className="text-xl p-1 rounded-lg bg-[#182030] text-[#66bb6a] shrink-0">📜</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-bold text-xs text-white break-words">버전 정보 & 패치노트</div>
+                <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">최신 업데이트 및 변경 사항</div>
               </div>
             </div>
-            <span className="text-xs text-[#8b9bb4]">▶</span>
+            <span className="text-xs text-[#8b9bb4] shrink-0 ml-1.5">▶</span>
           </button>
 
           {/* 👑 지휘관 최고 전력 활성화 (마스터 계정 전용, 모바일 빌드 제외) */}
@@ -378,35 +369,35 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
                 setTimeout(() => setCloudStatus(null), 3000);
               }}
             >
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl p-1 rounded-lg bg-[#ffd54f22] text-[#ffd54f]">👑</span>
-                <div>
-                  <div className="font-bold text-xs text-[#ffd54f] group-hover:text-yellow-300 transition-colors flex items-center gap-1.5">
-                    <span>지휘관 최고 전력 활성화</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold">MASTER BOOST</span>
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-xl p-1 rounded-lg bg-[#ffd54f22] text-[#ffd54f] shrink-0">👑</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-[#ffd54f] group-hover:text-yellow-300 transition-colors flex items-center gap-1.5 flex-wrap">
+                    <span className="break-words">지휘관 최고 전력 활성화</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold shrink-0">MASTER BOOST</span>
                   </div>
-                  <div className="text-[10px] text-[#8b9bb4]">전 건물 Lv.10 · 최대 자원 · 보스 비전서 10종 · Lv.30 히어로 5인 · 10층 던전 해금</div>
+                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">전 건물 Lv.10 · 최대 자원 · 보스 비전서 10종 · Lv.30 히어로 5인 · 10층 던전 해금</div>
                 </div>
               </div>
-              <span className="text-xs text-[#ffd54f] font-bold">적용</span>
+              <span className="text-xs text-[#ffd54f] font-bold shrink-0 ml-1.5">적용</span>
             </button>
           )}
 
           {/* 👑 차원 게이트 & 멀티 컨텐츠 개방 토글 (마스터 계정 전용, 모바일 빌드 제외) */}
           {!isMobilePlatform && fb.isMasterUser() && (
             <div className="p-2.5 rounded-xl bg-[#171124] border border-[#a855f755] flex items-center justify-between shadow-md">
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl p-1 rounded-lg bg-[#a855f722] text-[#c084fc]">🌀</span>
-                <div>
-                  <div className="font-bold text-xs text-[#c084fc] flex items-center gap-1.5">
-                    <span>차원 게이트 & 멀티 컨텐츠</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#a855f722] text-[#c084fc] font-bold">MASTER GATE</span>
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-xl p-1 rounded-lg bg-[#a855f722] text-[#c084fc] shrink-0">🌀</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-[#c084fc] flex items-center gap-1.5 flex-wrap">
+                    <span className="break-words">차원 게이트 & 멀티 컨텐츠</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#a855f722] text-[#c084fc] font-bold shrink-0">MASTER GATE</span>
                   </div>
-                  <div className="text-[10px] text-[#8b9bb4]">차원 아레나(PvP) · 네메시스 월드 레이드 · 5v5 영지 침공 (약탈은 휴무 유지)</div>
+                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">차원 아레나(PvP) · 네메시스 월드 레이드 · 5v5 영지 침공 (약탈은 휴무 유지)</div>
                 </div>
               </div>
               <button
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer shrink-0 ml-1.5 ${
                   gm.isMasterAccount
                     ? 'bg-[#a855f7] text-white shadow-md shadow-[#a855f744]'
                     : 'bg-[#211636] text-[#a855f7] border border-[#a855f744]'
@@ -440,17 +431,17 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
                 setTimeout(() => setCloudStatus(null), 5000);
               }}
             >
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff]">👑</span>
-                <div>
-                  <div className="font-bold text-xs text-[#00d2ff] flex items-center gap-1.5">
-                    <span>마스터 데이터 Firebase 시딩</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">MASTER</span>
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff] shrink-0">👑</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-[#00d2ff] flex items-center gap-1.5 flex-wrap">
+                    <span className="break-words">마스터 데이터 Firebase 시딩</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">MASTER</span>
                   </div>
-                  <div className="text-[10px] text-[#8b9bb4]">bumpcat.net 마스터 권한 전용 클라우드 동기화</div>
+                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">bumpcat.net 마스터 권한 전용 클라우드 동기화</div>
                 </div>
               </div>
-              <span className="text-xs text-[#00d2ff]">▶</span>
+              <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
             </button>
           )}
 
@@ -459,14 +450,14 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
             className="w-full p-2.5 rounded-xl bg-[#1c1824] border border-[#ab47bc44] hover:border-[#ab47bc] text-left flex items-center justify-between transition-all mt-auto cursor-pointer"
             onClick={handleLogout}
           >
-            <div className="flex items-center gap-2.5">
-              <span className="text-xl p-1 rounded-lg bg-[#ab47bc22] text-[#ce93d8]">🚪</span>
-              <div>
-                <div className="font-bold text-xs text-[#ce93d8]">로그아웃 (계정 전환)</div>
-                <div className="text-[10px] text-[#8b9bb4]">다른 지휘관 계정으로 로그인</div>
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <span className="text-xl p-1 rounded-lg bg-[#ab47bc22] text-[#ce93d8] shrink-0">🚪</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-bold text-xs text-[#ce93d8] break-words">로그아웃 (계정 전환)</div>
+                <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">다른 지휘관 계정으로 로그인</div>
               </div>
             </div>
-            <span className="text-xs text-[#ce93d8]">▶</span>
+            <span className="text-xs text-[#ce93d8] shrink-0 ml-1.5">▶</span>
           </button>
 
           {/* 6. 게임 데이터 초기화 */}
@@ -474,14 +465,14 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
             className="w-full p-2.5 rounded-xl bg-[#1a1215] border border-[#ef535044] hover:border-[#ef5350] text-left flex items-center justify-between transition-all cursor-pointer"
             onClick={() => setResetModal(true)}
           >
-            <div className="flex items-center gap-2.5">
-              <span className="text-xl p-1 rounded-lg bg-[#ef535022] text-[#ef5350]">⚠️</span>
-              <div>
-                <div className="font-bold text-xs text-[#ef5350]">데이터 초기화 (선택적)</div>
-                <div className="text-[10px] text-[#8b9bb4]">선택 항목 초기화 또는 전체 초기화</div>
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <span className="text-xl p-1 rounded-lg bg-[#ef535022] text-[#ef5350] shrink-0">⚠️</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-bold text-xs text-[#ef5350] break-words">데이터 전체 초기화</div>
+                <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">로컬 및 클라우드 세이브 완전 초기화</div>
               </div>
             </div>
-            <span className="text-xs text-[#ef5350]">▶</span>
+            <span className="text-xs text-[#ef5350] shrink-0 ml-1.5">▶</span>
           </button>
         </div>
 
@@ -975,19 +966,27 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
         </div>
       </Modal>
 
-      {/* ⚠️ 게임 데이터 초기화 모달 (선택 및 완전 초기화) */}
+      {/* ⚠️ 게임 데이터 전체 초기화 모달 */}
       <Modal
-        title="⚠️ 게임 데이터 초기화"
+        title="⚠️ 게임 데이터 전체 초기화"
         open={resetModal}
         onClose={() => !isResetting && setResetModal(false)}
         footer={
-          <div className="flex items-center justify-between w-full gap-2 pt-1">
-            <button
-              type="button"
-              className="text-[11px] px-2.5 py-1.5 rounded-lg bg-[#ef535022] border border-[#ef535066] hover:bg-[#ef535044] text-[#ef5350] font-bold transition-colors cursor-pointer"
+          <div className="flex items-center justify-end w-full gap-2 pt-1">
+            <ActionButton
+              label="취소"
+              variant="ghost"
+              size="sm"
+              disabled={isResetting}
+              onClick={() => setResetModal(false)}
+            />
+            <ActionButton
+              label={isResetting ? '초기화 진행 중...' : '🚨 전체 데이터 초기화'}
+              variant="danger"
+              size="sm"
               disabled={isResetting}
               onClick={async () => {
-                if (!window.confirm('정말 모든 게임 데이터(로컬 및 Firebase 클라우드 세이브)를 완전 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                if (!window.confirm('⚠️ [경고: 복구 불가]\n\n정말 모든 게임 데이터를 완전 초기화하시겠습니까?\n\n• 로컬 저장 데이터 영구 삭제\n• Firebase 클라우드 동기화 세이브 영구 삭제\n• 용병단, 장비, 거점 건물, 자원, 던전 진행도 전체 초기화\n\n이 작업은 되돌릴 수 없습니다. 계속 진행하시겠습니까?')) {
                   return;
                 }
                 setIsResetting(true);
@@ -999,159 +998,43 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
                   setIsResetting(false);
                 }
               }}
-            >
-              🚨 전체 완전 초기화
-            </button>
-            <div className="flex items-center gap-1.5">
-              <ActionButton
-                label="취소"
-                variant="ghost"
-                size="sm"
-                disabled={isResetting}
-                onClick={() => setResetModal(false)}
-              />
-              <ActionButton
-                label={isResetting ? '초기화 중...' : '선택 항목 초기화'}
-                variant="danger"
-                size="sm"
-                disabled={isResetting || !Object.values(resetTargets).some(Boolean)}
-                onClick={async () => {
-                  const selectedLabels = Object.entries(resetTargets)
-                    .filter(([, v]) => v)
-                    .map(([k]) => {
-                      const map: Record<string, string> = {
-                        buildings: '거점 건물',
-                        resources: '보유 자원',
-                        heroes: '용병단 및 장비',
-                        dungeon: '던전 및 퀘스트',
-                        cloud: '클라우드 세이브',
-                      };
-                      return map[k] || k;
-                    });
-                  if (selectedLabels.length === 0) return;
-                  if (!window.confirm(`선택한 항목 [${selectedLabels.join(', ')}]을(를) 초기화하시겠습니까?`)) {
-                    return;
-                  }
-                  setIsResetting(true);
-                  try {
-                    await gm.resetGame(resetTargets);
-                    setResetModal(false);
-                    onClose();
-                  } finally {
-                    setIsResetting(false);
-                  }
-                }}
-              />
-            </div>
+            />
           </div>
         }
       >
         <div className="flex flex-col gap-3 text-xs text-[#cfd8dc]">
-          <p className="text-[11px] text-[#90a4ae] leading-relaxed">
-            원하는 항목만 선택하여 초기화하거나, 하단의 <strong>전체 완전 초기화</strong>를 통해 게임을 완전히 처음부터 다시 시작할 수 있습니다.
-          </p>
-
-          <div className="flex items-center justify-between pb-1 border-b border-[#1f2738]">
-            <span className="text-[11px] font-bold text-[#8b9bb4]">초기화 대상 항목</span>
-            <div className="flex gap-1.5">
-              <button
-                type="button"
-                className="text-[10px] px-2 py-0.5 rounded bg-[#1f2738] hover:bg-[#2c3850] text-[#cfd8e8] cursor-pointer"
-                onClick={() => setResetTargets({ buildings: true, resources: true, heroes: true, dungeon: true, cloud: true })}
-              >
-                전체 선택
-              </button>
-              <button
-                type="button"
-                className="text-[10px] px-2 py-0.5 rounded bg-[#1f2738] hover:bg-[#2c3850] text-[#cfd8e8] cursor-pointer"
-                onClick={() => setResetTargets({ buildings: false, resources: false, heroes: false, dungeon: false, cloud: false })}
-              >
-                선택 해제
-              </button>
+          <div className="p-3 rounded-lg bg-[#2b1414] border border-[#ef535088] flex items-start gap-2.5">
+            <span className="text-2xl shrink-0">🚨</span>
+            <div className="flex flex-col gap-1">
+              <span className="font-bold text-sm text-[#ef5350]">전체 초기화 주의사항</span>
+              <p className="text-[11px] text-[#cfd8dc] leading-relaxed">
+                현재 지휘관 계정의 모든 게임 진행 데이터가 <strong>완전히 삭제</strong>되며 게임을 처음부터 다시 시작합니다.
+              </p>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            {/* 거점 건물 */}
-            <label className="flex items-start gap-2.5 p-2 rounded-lg bg-[#141b2c] border border-[#23324d] hover:border-[#00d2ff44] cursor-pointer transition-colors">
-              <input
-                type="checkbox"
-                className="mt-0.5 accent-[#ef5350] cursor-pointer"
-                checked={resetTargets.buildings}
-                onChange={(e) => setResetTargets((prev) => ({ ...prev, buildings: e.target.checked }))}
-              />
-              <div className="flex-1">
-                <div className="font-bold text-[#ffd54f] flex items-center gap-1">
-                  <span>🏰</span> 거점 건물
-                </div>
-                <div className="text-[10px] text-[#8b9bb4]">전체 시설 레벨을 1레벨 및 기본 상태로 초기화</div>
-              </div>
-            </label>
-
-            {/* 보유 자원 */}
-            <label className="flex items-start gap-2.5 p-2 rounded-lg bg-[#141b2c] border border-[#23324d] hover:border-[#00d2ff44] cursor-pointer transition-colors">
-              <input
-                type="checkbox"
-                className="mt-0.5 accent-[#ef5350] cursor-pointer"
-                checked={resetTargets.resources}
-                onChange={(e) => setResetTargets((prev) => ({ ...prev, resources: e.target.checked }))}
-              />
-              <div className="flex-1">
-                <div className="font-bold text-[#ffd54f] flex items-center gap-1">
-                  <span>🪙</span> 보유 자원
-                </div>
-                <div className="text-[10px] text-[#8b9bb4]">금화, 식량, 목재, 광석, 에테르 등 기본 지급치로 복구</div>
-              </div>
-            </label>
-
-            {/* 용병단 및 장비 */}
-            <label className="flex items-start gap-2.5 p-2 rounded-lg bg-[#141b2c] border border-[#23324d] hover:border-[#00d2ff44] cursor-pointer transition-colors">
-              <input
-                type="checkbox"
-                className="mt-0.5 accent-[#ef5350] cursor-pointer"
-                checked={resetTargets.heroes}
-                onChange={(e) => setResetTargets((prev) => ({ ...prev, heroes: e.target.checked }))}
-              />
-              <div className="flex-1">
-                <div className="font-bold text-[#ffd54f] flex items-center gap-1">
-                  <span>⚔️</span> 용병단 & 장비 인벤토리
-                </div>
-                <div className="text-[10px] text-[#8b9bb4]">시작 영웅 2인(아이리스, 시안)과 초기 스킬북으로 재설정, 인벤토리 초기화</div>
-              </div>
-            </label>
-
-            {/* 던전 & 퀘스트 */}
-            <label className="flex items-start gap-2.5 p-2 rounded-lg bg-[#141b2c] border border-[#23324d] hover:border-[#00d2ff44] cursor-pointer transition-colors">
-              <input
-                type="checkbox"
-                className="mt-0.5 accent-[#ef5350] cursor-pointer"
-                checked={resetTargets.dungeon}
-                onChange={(e) => setResetTargets((prev) => ({ ...prev, dungeon: e.target.checked }))}
-              />
-              <div className="flex-1">
-                <div className="font-bold text-[#ffd54f] flex items-center gap-1">
-                  <span>🌌</span> 던전 진행도 & 퀘스트
-                </div>
-                <div className="text-[10px] text-[#8b9bb4]">심연 1층으로 복귀, 퀘스트 목록 및 아레나 점수(1000점) 초기화</div>
-              </div>
-            </label>
-
-            {/* 클라우드 세이브 */}
-            <label className="flex items-start gap-2.5 p-2 rounded-lg bg-[#141b2c] border border-[#23324d] hover:border-[#00d2ff44] cursor-pointer transition-colors">
-              <input
-                type="checkbox"
-                className="mt-0.5 accent-[#ef5350] cursor-pointer"
-                checked={resetTargets.cloud}
-                onChange={(e) => setResetTargets((prev) => ({ ...prev, cloud: e.target.checked }))}
-              />
-              <div className="flex-1">
-                <div className="font-bold text-[#ef5350] flex items-center gap-1">
-                  <span>☁️</span> Firebase 클라우드 동기화 세이브 삭제
-                </div>
-                <div className="text-[10px] text-[#8b9bb4]">원격 DB에 백업된 사용자 저장 데이터 삭제</div>
-              </div>
-            </label>
+          <div className="p-3 rounded-lg bg-[#141b2c] border border-[#23324d] flex flex-col gap-1.5 text-[11px]">
+            <span className="font-bold text-[#ffd54f] mb-0.5">삭제 대상 목록:</span>
+            <div className="flex items-center gap-1.5 text-[#cfd8dc]">
+              <span>🏰</span> <span>거점 건물 레벨 및 시설 해금 전체 초기화</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[#cfd8dc]">
+              <span>🪙</span> <span>보유 자원(금화, 식량, 목재, 광석, 에테르 등) 기본 지급치로 재설정</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[#cfd8dc]">
+              <span>⚔️</span> <span>고용된 용병단, 보유 장비 및 습득 스킬북 초기화 (기본 영웅 2인 재설정)</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[#cfd8dc]">
+              <span>🌌</span> <span>심연 던전 진행도, 탐험 퀘스트 및 아레나 점수(1000점) 초기화</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[#ef5350]">
+              <span>☁️</span> <span>Firebase 클라우드에 백업된 사용자 동기화 세이브 영구 삭제</span>
+            </div>
           </div>
+
+          <p className="text-[11px] text-[#ef5350] font-bold text-center">
+            ※ 초기화 후에는 삭제된 데이터를 복구할 수 없습니다.
+          </p>
         </div>
       </Modal>
 

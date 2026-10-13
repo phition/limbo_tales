@@ -453,7 +453,7 @@ interface EventCard {
 
 export const ExplorationScreen: React.FC = () => {
   const { state, gm, navigateTo } = useGameManager();
-  const { lang, dict } = useI18n();
+  const { lang, dict, tr } = useI18n();
   useCustomAssetVersion();
     const [floor, setFloor] = useState(gm.dungeonFloor || 1);
   const [danger, setDanger] = useState(gm.dungeonDangerLevel || 0);
@@ -2442,16 +2442,16 @@ export const ExplorationScreen: React.FC = () => {
                 <GameIcon name={eventCard.iconKey || eventCard.icon} icon={eventCard.icon} size={44} className="drop-shadow-md" />
               </div>
             </div>
-            <div className="font-bold text-xl text-[#00d2ff] mb-2">{eventCard.title}</div>
-            <div className="text-sm text-[#cfd8e8] mb-6 leading-relaxed whitespace-pre-line">{eventCard.desc}</div>
+            <div className="font-bold text-xl text-[#00d2ff] mb-2">{tr(eventCard.title)}</div>
+            <div className="text-sm text-[#cfd8e8] mb-6 leading-relaxed whitespace-pre-line">{tr(eventCard.desc)}</div>
             {eventCard.options ? (
               <div className="flex flex-col gap-2 w-full">
                 {eventCard.options.map((opt, i) => (
-                  <ActionButton key={i} label={opt.label} variant={opt.variant} disabled={opt.disabled} className="w-full text-xs py-2.5" onClick={opt.action} />
+                  <ActionButton key={i} label={tr(opt.label)} variant={opt.variant} disabled={opt.disabled} className="w-full text-xs py-2.5" onClick={opt.action} />
                 ))}
               </div>
             ) : (
-              <ActionButton label="확인 (2초 후 자동 닫힘)" size="md" className="w-full" onClick={() => setEventCard(null)} />
+              <ActionButton label={tr("확인 (2초 후 자동 닫힘)")} size="md" className="w-full" onClick={() => setEventCard(null)} />
             )}
           </div>
         </div>
@@ -2473,10 +2473,10 @@ export const ExplorationScreen: React.FC = () => {
               BOSS!!
             </div>
             <div className="mt-3 text-lg font-bold text-white tracking-wider border-y border-[#ff174488] py-1 px-6 bg-[#ff174422]">
-              {bossWarning}
+              {tr(bossWarning)}
             </div>
             <div className="text-xs text-[#cfd8dc] mt-2 font-mono">
-              심연의 수호 군주가 출현했습니다!
+              {tr("심연의 수호 군주가 출현했습니다!")}
             </div>
           </div>
         </div>
@@ -2485,15 +2485,15 @@ export const ExplorationScreen: React.FC = () => {
       {/* ── 🗑️ 배낭 아이템 버리기 확인 모달 ── */}
       {discardTarget && (
         <Modal
-          title="🗑️ 배낭 아이템 버리기"
+          title={`🗑️ ${tr('배낭 아이템 버리기')}`}
           open={!!discardTarget}
           onClose={() => setDiscardTarget(null)}
           footer={
             <div className="flex gap-2 w-full justify-end">
-              <ActionButton label="취소" variant="ghost" onClick={() => setDiscardTarget(null)} />
+              <ActionButton label={tr("취소")} variant="ghost" onClick={() => setDiscardTarget(null)} />
               {discardTarget.slot.qty > 1 && (
                 <ActionButton
-                  label="1개만 버리기"
+                  label={tr("1개만 버리기")}
                   variant="danger"
                   onClick={() => {
                     gm.discardDungeonSlot(discardTarget.index, 1);
@@ -2502,7 +2502,7 @@ export const ExplorationScreen: React.FC = () => {
                 />
               )}
               <ActionButton
-                label={discardTarget.slot.qty > 1 ? `모두 버리기 (${discardTarget.slot.qty}개)` : '버리기'}
+                label={discardTarget.slot.qty > 1 ? `${tr('모두 버리기')} (${discardTarget.slot.qty}${tr('개')})` : tr('버리기')}
                 variant="danger"
                 onClick={() => {
                   gm.discardDungeonSlot(discardTarget.index);
@@ -2521,13 +2521,13 @@ export const ExplorationScreen: React.FC = () => {
               />
             </div>
             <div className="text-sm font-bold text-white">
-              [{(!discardTarget.slot.label || /^[a-zA-Z0-9_\-\s]+$/.test(discardTarget.slot.label))
+              [{tr((!discardTarget.slot.label || /^[a-zA-Z0-9_\-\s]+$/.test(discardTarget.slot.label))
                 ? (GameManager.getResourceMeta(discardTarget.slot.key)?.name || discardTarget.slot.label || discardTarget.slot.key)
-                : discardTarget.slot.label}] ×{discardTarget.slot.qty}개
+                : discardTarget.slot.label)}] ×{discardTarget.slot.qty}{tr('개')}
             </div>
             <div className="text-xs text-[#cfd8e8] leading-relaxed bg-[#1e141a] p-3 rounded-lg border border-[#ef535033]">
-              이 아이템을 배낭에서 버려 공간을 확보하시겠습니까?<br />
-              <span className="text-[#ef5350] font-bold">⚠️ 버린 아이템은 다시 회수할 수 없습니다.</span>
+              {tr('이 아이템을 배낭에서 버려 공간을 확보하시겠습니까?')}<br />
+              <span className="text-[#ef5350] font-bold">⚠️ {tr('버린 아이템은 다시 회수할 수 없습니다.')}</span>
             </div>
           </div>
         </Modal>
@@ -2535,12 +2535,12 @@ export const ExplorationScreen: React.FC = () => {
 
       {/* ── 🏕️ 심연 던전 야영 모닥불 담소 모달 ── */}
       <Modal
-        title="🏕️ 심연 던전 야영 — 모닥불 담소 (Campfire Banter)"
+        title={`🏕️ ${tr('심연 던전 야영 — 모닥불 담소 (Campfire Banter)')}`}
         open={!!banterResult}
         onClose={() => setBanterResult(null)}
         footer={
           <ActionButton
-            label="야영을 마치고 탐험 계속하기"
+            label={tr("야영을 마치고 탐험 계속하기")}
             variant="primary"
             className="w-full"
             onClick={() => setBanterResult(null)}
@@ -2553,12 +2553,12 @@ export const ExplorationScreen: React.FC = () => {
             <div className="flex items-center gap-2">
               <span className="text-xl">🔥</span>
               <div>
-                <span className="text-xs font-bold text-[#00d2ff]">모닥불 휴식 완료</span>
-                <span className="text-[10px] text-[#8b9bb4] block">전 파티원 HP 및 MP +35% 회복</span>
+                <span className="text-xs font-bold text-[#00d2ff]">{tr('모닥불 휴식 완료')}</span>
+                <span className="text-[10px] text-[#8b9bb4] block">{tr('전 파티원 HP 및 MP +35% 회복')}</span>
               </div>
             </div>
             <span className="text-xs font-mono font-bold text-[#38ef7d] bg-[#38ef7d15] px-2 py-0.5 rounded border border-[#38ef7d33]">
-              🍖 식량 -1
+              🍖 {tr('식량')} -1
             </span>
           </div>
 
@@ -2571,8 +2571,8 @@ export const ExplorationScreen: React.FC = () => {
               >
                 <span className="text-xl shrink-0">{d.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="font-bold text-xs text-[#00d2ff]">{d.speakerName}</div>
-                  <div className="text-xs text-[#cfd8e8] mt-0.5 leading-relaxed">{d.text}</div>
+                  <div className="font-bold text-xs text-[#00d2ff]">{tr(d.speakerName)}</div>
+                  <div className="text-xs text-[#cfd8e8] mt-0.5 leading-relaxed">{tr(d.text)}</div>
                 </div>
               </div>
             ))}
@@ -2583,7 +2583,7 @@ export const ExplorationScreen: React.FC = () => {
             <div className="p-2.5 rounded-xl bg-[#ff416c15] border border-[#ff416c44] flex flex-col gap-1.5">
               <div className="flex items-center gap-1 text-xs font-bold text-[#ff416c]">
                 <span>💞</span>
-                <span>대원 간 교감 & 결속 변화</span>
+                <span>{tr('대원 간 교감 & 결속 변화')}</span>
               </div>
               <div className="flex flex-col gap-1 mt-0.5">
                 {banterResult.bondChanges.map((b, i) => {
@@ -2593,13 +2593,13 @@ export const ExplorationScreen: React.FC = () => {
                   return (
                     <div key={i} className="text-[11px] flex items-center justify-between px-2 py-1 bg-[#0f1422] rounded-lg border border-[#1f2b40]">
                       <span className="flex items-center gap-1.5 text-white font-bold">
-                        <span>{hA}</span>
+                        <span>{tr(hA)}</span>
                         <span className="text-xs">{isPositive ? '💖' : '💔'}</span>
-                        <span>{hB}</span>
+                        <span>{tr(hB)}</span>
                       </span>
                       <span className={`text-[10px] font-bold flex items-center gap-1 ${isPositive ? 'text-[#38ef7d]' : 'text-[#ef5350]'}`}>
-                        <span>{isPositive ? '✨ 유대 깊어짐' : '🌧️ 마음의 거리감'}</span>
-                        <span className="text-[9px] text-[#8b9bb4]">({b.reason})</span>
+                        <span>{isPositive ? `✨ ${tr('유대 깊어짐')}` : `🌧️ ${tr('마음의 거리감')}`}</span>
+                        <span className="text-[9px] text-[#8b9bb4]">({tr(b.reason)})</span>
                       </span>
                     </div>
                   );
@@ -2613,19 +2613,19 @@ export const ExplorationScreen: React.FC = () => {
       {/* ── 🏃 균열의 닻 없는 비상 탈출 경고 및 확인 모달 ── */}
       {showEmergencyEscapeModal && (
         <Modal
-          title="⚠️ 비상 탈출 시도 (균열의 닻 부재)"
+          title={`⚠️ ${tr('비상 탈출 시도 (균열의 닻 부재)')}`}
           open={showEmergencyEscapeModal}
           onClose={() => setShowEmergencyEscapeModal(false)}
           footer={
             <div className="flex gap-2 w-full">
               <ActionButton
-                label="취소"
+                label={tr("취소")}
                 variant="ghost"
                 className="flex-1"
                 onClick={() => setShowEmergencyEscapeModal(false)}
               />
               <ActionButton
-                label="비상 탈출 감행"
+                label={tr("비상 탈출 감행")}
                 variant="danger"
                 className="flex-1 font-bold"
                 onClick={executeEmergencyEscape}
@@ -2636,21 +2636,21 @@ export const ExplorationScreen: React.FC = () => {
           <div className="flex flex-col gap-3 py-2 text-center text-xs">
             <div className="text-4xl animate-bounce">🏃💨</div>
             <div className="text-sm font-bold text-[#ff7043]">
-              현재 보급품 [균열의 닻]이 소진된 상태입니다!
+              {tr('현재 보급품 [균열의 닻]이 소진된 상태입니다!')}
             </div>
             <div className="bg-[#241315] border border-[#ff416c44] p-3 rounded-xl flex flex-col gap-2 text-left leading-relaxed text-[#cfd8e8]">
               <div className="text-[#ff5252] font-bold flex items-center gap-1">
-                <span>⚠️</span> <span>비상 탈출 위험 수칙:</span>
+                <span>⚠️</span> <span>{tr('비상 탈출 위험 수칙:')}</span>
               </div>
               <ul className="list-disc list-inside space-y-1 text-[11px] text-[#ffcdd2]">
-                <li><strong className="text-[#38ef7d]">성공 확률 30%</strong>: 포위망을 뚫고 성채로 탈출합니다.</li>
-                <li><strong className="text-[#ffb74d]">전리품 80% 유실</strong>: 성공하더라도 긴급 도주 중 배낭 자원의 80%를 잃어버립니다. (20%만 보존)</li>
-                <li><strong className="text-[#ff5252]">실패 시 70% 마물 기습</strong>: 퇴로가 차단되어 기습 피해를 입고 즉시 전투에 돌입합니다.</li>
-                <li>시도 후 <strong className="text-[#ffd54f]">1턴의 재탈출 준비 쿨다운</strong>이 소요됩니다.</li>
+                <li><strong className="text-[#38ef7d]">{tr('성공 확률 30%')}</strong>: {tr('포위망을 뚫고 성채로 탈출합니다.')}</li>
+                <li><strong className="text-[#ffb74d]">{tr('전리품 80% 유실')}</strong>: {tr('성공하더라도 긴급 도주 중 배낭 자원의 80%를 잃어버립니다. (20%만 보존)')}</li>
+                <li><strong className="text-[#ff5252]">{tr('실패 시 70% 마물 기습')}</strong>: {tr('퇴로가 차단되어 기습 피해를 입고 즉시 전투에 돌입합니다.')}</li>
+                <li>{tr('시도 후')} <strong className="text-[#ffd54f]">{tr('1턴의 재탈출 준비 쿨다운')}</strong>{tr('이 소요됩니다.')}</li>
               </ul>
             </div>
             <div className="text-[11px] text-[#8b9bb4]">
-              정말로 모든 위험을 감수하고 비상 탈출을 감행하시겠습니까?
+              {tr('정말로 모든 위험을 감수하고 비상 탈출을 감행하시겠습니까?')}
             </div>
           </div>
         </Modal>

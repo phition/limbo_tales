@@ -94,7 +94,7 @@ export const HeroCard: React.FC<Props> = ({ hero, selected, onClick, compact }) 
                   const tInfo = HERO_TRAITS[tKey];
                   return (
                     <span
-                      className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33] truncate max-w-[90px] cursor-help"
+                      className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33] truncate max-w-[120px] cursor-help"
                       title={tInfo ? `✨ ${tInfo.name}: ${tInfo.desc}` : tKey}
                     >
                       {tKey}

@@ -31,9 +31,26 @@ html, body {
   overflow: hidden;
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 🌐 언어별 전역 타이포그래피 & 레이아웃 방어 반응형 규칙 */
+html[data-lang="en"], html[data-lang="en"] body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+html[data-lang="ja"], html[data-lang="ja"] body {
+  font-family: 'Noto Sans JP', 'Noto Sans KR', sans-serif;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  line-height: 1.35;
 }
 
 #root {
@@ -141,13 +158,58 @@ html, body {
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: inherit;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.1s;
   border: none;
   outline: none;
   -webkit-tap-highlight-color: transparent;
+  min-width: 0;
+  line-height: 1.25;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+/* 🌐 언어별 버튼 및 레이아웃 반응형 보정 */
+html[data-lang="en"] .btn {
+  letter-spacing: -0.015em;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+html[data-lang="en"] .btn.text-xs {
+  font-size: 0.72rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+html[data-lang="en"] .btn.text-sm {
+  font-size: 0.8125rem;
+}
+
+html[data-lang="ja"] .btn {
+  word-break: break-all;
+  letter-spacing: 0.005em;
+  line-height: 1.3;
+}
+
+/* 🌐 언어별 스킬 버튼 폰트 및 자간 최적화 */
+html[data-lang="en"] .skill-btn-name {
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em;
+}
+
+html[data-lang="ja"] .skill-btn-name {
+  font-size: 11.5px !important;
+  line-height: 1.2 !important;
+}
+
+/* 🌐 다국어 태그/뱃지 방어 */
+html[data-lang="en"] .badge,
+html[data-lang="ja"] .badge {
+  overflow-wrap: break-word;
 }
 
 .btn:active { opacity: 0.75; transform: scale(0.97); }
