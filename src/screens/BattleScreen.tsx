@@ -2038,24 +2038,6 @@ export const BattleScreen: React.FC = () => {
         }
       }
 
-      // 💀 [사경 카운트다운] 라운드(참가자 전원 1턴 순환)가 지날 때마다 사경 상태인 영웅의 남은 턴 1 감소
-      if (nextIdx > 0 && nextIdx % q.length === 0) {
-        gm.party.forEach(h => {
-          if (h.currentHp <= 0 && !h.isPermanentlyDead) {
-            if (h.deathCountdown === undefined) {
-              h.deathCountdown = 3;
-            }
-            h.deathCountdown -= 1;
-            if (h.deathCountdown <= 0) {
-              h.isPermanentlyDead = true;
-              gm.addLog(`⚰️ [영면] 차가운 심연의 바닥에서 ${h.name} 대원의 맥박이 완전히 멎었습니다... 동료의 영혼이 영겁의 어둠 속으로 흩어집니다.`, 'danger');
-            } else {
-              gm.addLog(`💀 [임종의 위기] ${h.name} 대원의 호흡이 옅어지고 심장 박동이 희미해져 갑니다! 남은 시간이 얼마 없습니다!`, 'danger');
-            }
-          }
-        });
-      }
-
       const candidate = q[nextIdx % q.length];
       if (!candidate) break;
 
@@ -2064,13 +2046,14 @@ export const BattleScreen: React.FC = () => {
             const h = gm.party.find(p => p.id === candidate.id);
             if (!h) return true;
             if (h.isPermanentlyDead) return true;
-            if (h.classId === 'valhalla_warlord' && h.deathCountdown !== undefined && h.deathCountdown > 0) return false;
+            // 💀 사경(3턴 유예) 중인 영웅은 건너뛰지 않고 턴을 맞이하여 사경 연출 및 카운트다운을 진행함
+            if (h.deathCountdown !== undefined && h.deathCountdown > 0) return false;
             return h.currentHp <= 0;
           })()
         : (monstersRef.current.find(m => m.id === candidate.id)?.currentHp ?? 0) <= 0;
 
       if (!isDead) {
-        break; // 살아있는 액터 발견
+        break; // 살아있는 액터 또는 사경 중인 액터 발견
       }
 
       nextIdx++;
@@ -2092,6 +2075,12 @@ export const BattleScreen: React.FC = () => {
       return;
     }
 
+    // 💀 [전멸 검사] 마지막 남은 영웅마저 사경에 돌입하여 생존 용병이 없으면 즉시 패배
+    if (gm.party.length > 0 && gm.party.every(h => h.currentHp <= 0)) {
+      checkBattleOutcome(monstersRef.current);
+      return;
+    }
+
     const q = turnQueueRef.current;
     const currentTurn = q[turnIdxRef.current % q.length];
     if (!currentTurn) return;
@@ -2102,7 +2091,8 @@ export const BattleScreen: React.FC = () => {
           const h = gm.party.find(p => p.id === currentTurn.id);
           if (!h) return true;
           if (h.isPermanentlyDead) return true;
-          if (h.classId === 'valhalla_warlord' && h.deathCountdown !== undefined && h.deathCountdown > 0) return false;
+          // 💀 사경(3턴 유예) 중인 영웅은 즉시 스킵되지 않고 사경 턴 연출을 수행함
+          if (h.deathCountdown !== undefined && h.deathCountdown > 0) return false;
           return h.currentHp <= 0;
         })()
       : (monstersRef.current.find(m => m.id === currentTurn.id)?.currentHp ?? 0) <= 0;
@@ -2163,9 +2153,102 @@ export const BattleScreen: React.FC = () => {
       const heroIdx = gm.party.findIndex(h => h.id === currentTurn.id);
       if (heroIdx !== -1) {
         const hero = gm.party[heroIdx];
+        
+        // 💀 [사경(Death's Door) 시스템] 체력 0 이하인 영웅의 턴 연출 및 생존 유예 처리
         if (hero.currentHp <= 0) {
-          advanceTurn();
-          return;
+          // 이미 영구 사망한 영웅은 즉시 스킵
+          if (hero.isPermanentlyDead) {
+            advanceTurn();
+            return;
+          }
+
+          // 💀 마지막 남은 용병이 사경에 돌입하면 구원해 줄 동료가 없으므로 즉시 전투 패배
+          const hasLivingAlly = gm.party.some(h => h.id !== hero.id && h.currentHp > 0);
+          if (!hasLivingAlly) {
+            checkBattleOutcome(monstersRef.current);
+            return;
+          }
+
+          if (hero.deathCountdown === undefined) {
+            hero.deathCountdown = 3;
+            hero.isDead = true;
+          }
+
+          setSelectedHeroIdx(heroIdx);
+          const heroPos = getHeroVfxPos(heroIdx, true, gm.party.length);
+          hero.deathCountdown -= 1;
+          const remaining = hero.deathCountdown;
+
+          if (remaining <= 0) {
+            hero.isPermanentlyDead = true;
+            hero.deathCountdown = 0;
+            hero.isDead = true;
+            logs.push(`⚰️ [영면] 차가운 심연의 바닥에서 ${hero.name} 대원의 맥박이 완전히 멎었습니다... 동료의 영혼이 영겁의 어둠 속으로 흩어집니다.`);
+            setSkillCutIn({
+              id: String(Date.now()),
+              skillName: `[영면] ${hero.name}`,
+              icon: '⚰️',
+              isEnemy: false,
+              bannerType: 'skill',
+              heroName: hero.name,
+              subText: '3턴간의 사경 끝에 완전히 전사했습니다...'
+            });
+            SoundManager.getInstance().play('defeat');
+            triggerVFX({
+              type: 'status_stun',
+              x: heroPos.x,
+              y: heroPos.y,
+              statusEffect: 'stun',
+              text: '⚰️ 완전 사망'
+            });
+            shouldSkipTurn = true;
+          } else {
+            logs.push(`💀 [사경 헤맴] ${hero.name} 대원이 위독한 상태로 사경을 헤매고 있습니다! (완전 사망까지 남은 유예: ${remaining}턴)`);
+            setSkillCutIn({
+              id: String(Date.now()),
+              skillName: `[사경 헤맴] ${hero.name}`,
+              icon: '💀',
+              isEnemy: false,
+              bannerType: 'skill',
+              heroName: hero.name,
+              subText: `완전 사망까지 남은 유예: ${remaining}턴!`
+            });
+            SoundManager.getInstance().play('hero_hurt');
+            triggerVFX({
+              type: 'status_bleed',
+              x: heroPos.x,
+              y: heroPos.y,
+              statusEffect: 'bleed',
+              text: `💀 사경 (${remaining}턴 남음)`
+            });
+
+            // 발할라 워로드만 사경 중에도 불굴의 투지로 직접 행동 가능
+            const canAct = hero.classId === 'valhalla_warlord';
+            if (!canAct) {
+              shouldSkipTurn = true;
+            }
+          }
+          gm.emit('partyUpdated', gm.party);
+
+          if (shouldSkipTurn) {
+            if (logs.length > 0) {
+              setTimeout(() => logs.forEach(msg => gm.addLog(msg, 'danger')), 0);
+            }
+            turnSkippedRef.current = true;
+            isProcessingRef.current = true;
+            setIsProcessing(true);
+
+            const skipTimer = setTimeout(() => {
+              if (battleEndedRef.current) return;
+              turnSkippedRef.current = false;
+              isProcessingRef.current = false;
+              setIsProcessing(false);
+              if (!checkBattleOutcome(monstersRef.current)) {
+                advanceTurn();
+              }
+            }, 900);
+            return () => clearTimeout(skipTimer);
+          }
         }
         
         // 턴 영웅 자동 선택!
@@ -2220,6 +2303,18 @@ export const BattleScreen: React.FC = () => {
         // ⚠️ 행동 불가 사유 명시 로그 출력
         if (shouldSkipTurn && heroSkipReasons.length > 0) {
           logs.push(`⚠️ [행동 불가] ${hero.name}이(가) [${heroSkipReasons.join(', ')}] 상태로 인해 아무 행동도 하지 못하고 턴을 넘깁니다.`);
+        }
+
+        // 💀 지속 피해(DoT)로 인해 체력이 0 이하가 되었을 때 즉시 사경(3턴) 진입
+        if (hero.currentHp <= 0 && hero.deathCountdown === undefined && !hero.isPermanentlyDead) {
+          hero.deathCountdown = 3;
+          hero.isDead = true;
+          logs.push(`💀 [사경 위기] ${hero.name} 대원이 지속 피해를 견디지 못하고 쓰러져 사경을 헤맵니다! (유예 3턴)`);
+          SoundManager.getInstance().play('defeat');
+          if (gm.party.every(h => h.currentHp <= 0)) {
+            checkBattleOutcome(monstersRef.current);
+            return;
+          }
         }
 
         // 🌟 [원정대 시너지] 매 턴 지속 체력 회복(hpRegenPct) 및 마나 회복(mpRegenPerTurn) 처리
@@ -5168,7 +5263,7 @@ export const BattleScreen: React.FC = () => {
           }
 
           if (!triggeredAssistHero) {
-            const otherAllies = gm.party.filter(p => p.id !== hero.id && p.currentHp > 0);
+            const otherAllies = gm.party.filter(p => p.id !== hero.id && p.currentHp > 0 && !p.isPermanentlyDead && !p.isDead && p.deathCountdown === undefined);
             // 1. 유대 2단계 (전술적 호흡: Bond >= 60) - 25% 확률로 원호 공격
             const bondAllies = otherAllies.filter(p => gm.getBond(hero.id, p.id) >= 60);
             if (bondAllies.length > 0 && Math.random() < 0.25) {
@@ -5585,7 +5680,7 @@ export const BattleScreen: React.FC = () => {
         });
 
         // 💨 [아이디어 5: 적 특수 차징 시전 시 아군의 '시전 요격 추가타 (Intercept Assist)']
-        const livingAllies = gm.party.filter(p => p.currentHp > 0);
+        const livingAllies = gm.party.filter(p => p.currentHp > 0 && !p.isPermanentlyDead && !p.isDead && p.deathCountdown === undefined);
         const interceptor = livingAllies.find(p => ['gunner', 'rogue', 'apprentice', 'elementalist', 'assassin', 'duelist'].includes(p.classId)) || livingAllies[0];
         if (interceptor && monster.chargingState) {
           const interceptorStats = gm.getHeroEffectiveStats(interceptor);
@@ -6226,6 +6321,10 @@ export const BattleScreen: React.FC = () => {
                 setTimeout(() => gm.addLog(`💀 [사경의 위기] 치명상을 입은 ${target.name} 대원이 의식을 잃고 차가운 바닥에 쓰러졌습니다! 숨결이 완전히 멎기 전에 마물을 베어 넘기거나 성스러운 구원의 손길을 뻗어야 합니다!`, 'danger'), 0);
               }
               triggerHaptic('heroDeath');
+              // 💀 마지막 남은 용병이 사경에 돌입하면 그 즉시 패배!
+              if (gm.party.every(h => h.currentHp <= 0)) {
+                checkBattleOutcome(monstersRef.current);
+              }
             }
           }
 
@@ -6357,7 +6456,15 @@ export const BattleScreen: React.FC = () => {
             guardedFrontHero.currentHp = Math.max(0, frontNewHp);
             if (guardedFrontHero.currentHp <= 0) {
               guardedFrontHero.isDead = true;
-              guardedFrontHero.deathCountdown = 0;
+              if (guardedFrontHero.deathCountdown === undefined && !guardedFrontHero.isPermanentlyDead) {
+                guardedFrontHero.deathCountdown = 3;
+                setTimeout(() => gm.addLog(`💀 [사경 위기] 엄호 중 치명상을 입은 ${guardedFrontHero!.name} 대원이 사경을 헤맵니다! (유예 3턴)`, 'danger'), 0);
+                SoundManager.getInstance().play('defeat');
+              }
+              // 💀 마지막 남은 용병이 사경에 돌입하면 그 즉시 패배!
+              if (gm.party.every(h => h.currentHp <= 0)) {
+                checkBattleOutcome(monstersRef.current);
+              }
             }
 
             // 🛡️ [엄호자의 보호막(Shield) 버프 실시간 소모 및 소멸 정리]

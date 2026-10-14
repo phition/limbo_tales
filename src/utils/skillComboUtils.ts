@@ -739,7 +739,13 @@ export function getHeroAssistDef(hero: Mercenary): AssistAttackDef {
  * 파티 내에서 공격자(attackerId)를 제외한 생존 아군 중 1명을 원호자로 선출합니다.
  */
 export function selectAssistHero(party: Mercenary[], attackerId: string): Mercenary | null {
-  const eligible = party.filter(h => h.id !== attackerId && h.currentHp > 0);
+  const eligible = party.filter(h => 
+    h.id !== attackerId && 
+    h.currentHp > 0 && 
+    !h.isPermanentlyDead && 
+    !h.isDead && 
+    h.deathCountdown === undefined
+  );
   if (eligible.length === 0) return null;
   
   // 가장 공격력이 높거나 레벨이 높은 용병 우선

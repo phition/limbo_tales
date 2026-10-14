@@ -1428,18 +1428,23 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     }
 
     // 🔥 피버 뱃지 적립
+    const attackerTeam = isAttackerPlayer ? playerTeamRef.current : oppTeamRef.current;
+    const livingAlliesCount = attackerTeam.filter((c: InvasionCombatant) => c.id !== attacker.id && c.currentHp > 0).length;
+
     if (isAttackerPlayer) {
       if (chosenSkill.effectType === 'heal') addFeverBadge('heal');
       else if (chosenSkill.effectType === 'shield') addFeverBadge('guard');
       else if (isCrit) addFeverBadge('crit');
       else if (chosenSkill.id !== 'basic_attack') addFeverBadge('extra');
-      else addFeverBadge('assist');
+      else if (livingAlliesCount > 0) addFeverBadge('assist');
+      else addFeverBadge('break');
     } else {
       if (chosenSkill.effectType === 'heal') addOppFeverBadge('heal');
       else if (chosenSkill.effectType === 'shield') addOppFeverBadge('guard');
       else if (isCrit) addOppFeverBadge('crit');
       else if (chosenSkill.id !== 'basic_attack') addOppFeverBadge('extra');
-      else addOppFeverBadge('assist');
+      else if (livingAlliesCount > 0) addOppFeverBadge('assist');
+      else addOppFeverBadge('break');
     }
 
     // 중앙 타원 배지는 사라지지 않고 항상 유지되며 최신 교전 텍스트로 업데이트

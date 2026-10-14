@@ -198,6 +198,9 @@ interface ArenaCombatant {
   cooldowns: Record<string, number>;
   statusEffects: StatusEffect[];
   icon: string;
+  deathCountdown?: number;
+  isDead?: boolean;
+  isPermanentlyDead?: boolean;
 }
 
 // ── 가짜 상대 생성 ─────────────────────────────────────────────────────────
@@ -1768,18 +1771,23 @@ export const ArenaScreen: React.FC = () => {
     });
 
     // 4. 피버 뱃지 적립 (동등한 조건으로 아군 및 적군 모두 적립)
+    const allySide = attacker.isPlayer ? currentP : currentO;
+    const livingAlliesCount = allySide.filter(c => c.id !== attacker.id && c.currentHp > 0 && !c.isPermanentlyDead && c.deathCountdown === undefined).length;
+
     if (attacker.isPlayer) {
       if (isHealing) addFeverBadge('heal');
       else if (isShield) addFeverBadge('guard');
       else if (anyCrit) addFeverBadge('crit');
       else if (skill.id !== 'basic_attack') addFeverBadge('extra');
-      else addFeverBadge('assist');
+      else if (livingAlliesCount > 0) addFeverBadge('assist');
+      else addFeverBadge('break');
     } else {
       if (isHealing) addOppFeverBadge('heal');
       else if (isShield) addOppFeverBadge('guard');
       else if (anyCrit) addOppFeverBadge('crit');
       else if (skill.id !== 'basic_attack') addOppFeverBadge('extra');
-      else addOppFeverBadge('assist');
+      else if (livingAlliesCount > 0) addOppFeverBadge('assist');
+      else addOppFeverBadge('break');
     }
 
     // 5. 던전처럼 각 타겟의 패널 카드 위에 개별 VFX 동시/시차 폭발 연출
@@ -1881,7 +1889,37 @@ export const ArenaScreen: React.FC = () => {
       if (res) {
         const effects = [...(c.statusEffects || [])];
         if (res.addedEffect) effects.push(res.addedEffect);
-        return { ...c, currentHp: res.newHp, statusEffects: effects };
+        let deathCountdown = c.deathCountdown;
+        let isDead = c.isDead;
+        let isPermanentlyDead = c.isPermanentlyDead;
+
+        if (res.newHp <= 0) {
+          if (deathCountdown === undefined && !isPermanentlyDead) {
+            deathCountdown = 3;
+            isDead = true;
+            const tIdx = Math.max(0, currentP.findIndex(u => u.id === c.id));
+            const colX = tIdx === 0 ? 20 : tIdx === 1 ? 50 : 80;
+            const rowY = 74;
+            setTimeout(() => {
+              setVfxList(prev => [...prev, {
+                id: `death_door_${Date.now()}_${c.id}`,
+                type: 'status_bleed',
+                damage: 0,
+                text: '💀 사경 위기 (3턴)!',
+                x: colX,
+                y: rowY,
+                duration: 750,
+              }]);
+              SoundManager.getInstance().play('defeat');
+            }, 300);
+            gm.addLog(`💀 [사경 위기] 아군 ${c.name} 대원이 치명상을 입고 쓰러져 사경을 헤맵니다! (3턴 유예)`, 'danger');
+          }
+        } else if (res.newHp > 0 && (deathCountdown !== undefined || isDead)) {
+          deathCountdown = undefined;
+          isDead = false;
+        }
+
+        return { ...c, currentHp: res.newHp, statusEffects: effects, deathCountdown, isDead, isPermanentlyDead };
       }
       return c;
     });
@@ -1892,7 +1930,37 @@ export const ArenaScreen: React.FC = () => {
       if (res) {
         const effects = [...(c.statusEffects || [])];
         if (res.addedEffect) effects.push(res.addedEffect);
-        return { ...c, currentHp: res.newHp, statusEffects: effects };
+        let deathCountdown = c.deathCountdown;
+        let isDead = c.isDead;
+        let isPermanentlyDead = c.isPermanentlyDead;
+
+        if (res.newHp <= 0) {
+          if (deathCountdown === undefined && !isPermanentlyDead) {
+            deathCountdown = 3;
+            isDead = true;
+            const tIdx = Math.max(0, currentO.findIndex(u => u.id === c.id));
+            const colX = tIdx === 0 ? 20 : tIdx === 1 ? 50 : 80;
+            const rowY = 24;
+            setTimeout(() => {
+              setVfxList(prev => [...prev, {
+                id: `death_door_${Date.now()}_${c.id}`,
+                type: 'status_bleed',
+                damage: 0,
+                text: '💀 사경 위기 (3턴)!',
+                x: colX,
+                y: rowY,
+                duration: 750,
+              }]);
+              SoundManager.getInstance().play('defeat');
+            }, 300);
+            gm.addLog(`💀 [사경 위기] 적군 ${c.name}이(가) 치명상을 입고 쓰러져 사경을 헤맵니다! (3턴 유예)`, 'normal');
+          }
+        } else if (res.newHp > 0 && (deathCountdown !== undefined || isDead)) {
+          deathCountdown = undefined;
+          isDead = false;
+        }
+
+        return { ...c, currentHp: res.newHp, statusEffects: effects, deathCountdown, isDead, isPermanentlyDead };
       }
       return c;
     });
@@ -2003,12 +2071,13 @@ export const ArenaScreen: React.FC = () => {
     }
 
     // 9. 승패 검증 (즉시 결과창 팝업)
-    const pAlive = nextP.filter(c => c.currentHp > 0);
-    const oAlive = nextO.filter(c => c.currentHp > 0);
+    // 💀 마지막 남은 용병이 사경에 돌입(currentHp <= 0)하면 그 즉시 패배!
+    const pLiving = nextP.filter(c => c.currentHp > 0);
+    const oLiving = nextO.filter(c => c.currentHp > 0);
 
-    if (oAlive.length === 0 || pAlive.length === 0) {
+    if (oLiving.length === 0 || pLiving.length === 0) {
       isProcessingRef.current = false;
-      const isWin = oAlive.length === 0;
+      const isWin = oLiving.length === 0;
       const rewardResult = gm.claimArenaMatchRewards(opp, isWin);
       setCombatMetrics(Object.values(combatMetricsRef.current));
       setFinalReward({ ...rewardResult, win: isWin });
@@ -2022,7 +2091,7 @@ export const ArenaScreen: React.FC = () => {
     // 타겟 사망 시 다음 적 자동 타겟팅
     const activeTargetDied = targetResults.some(r => r.unitId === targetEnemyIdRef.current && r.newHp <= 0);
     if (activeTargetDied) {
-      const nextTarget = oAlive[0];
+      const nextTarget = oLiving[0];
       if (nextTarget) {
         targetEnemyIdRef.current = nextTarget.id;
         setTargetEnemyId(nextTarget.id);
@@ -2030,10 +2099,11 @@ export const ArenaScreen: React.FC = () => {
     }
 
     // 10. 🏃 속도(SPD) 기반 정통 턴제 순서 전진
-    // 현재 살아있는 유닛들로 큐 필터링
+    // 현재 활성 유닛(생존자 + 사경 유예자)들로 큐 필터링
+    const isUnitActive = (c: ArenaCombatant) => !c.isPermanentlyDead && (c.currentHp > 0 || (c.deathCountdown !== undefined && c.deathCountdown > 0));
     const currentQueue = roundQueueRef.current.filter(id => {
       const u = [...nextP, ...nextO].find(c => c.id === id);
-      return u && u.currentHp > 0;
+      return u && isUnitActive(u);
     });
 
     const curIdx = currentQueue.indexOf(attacker.id);
@@ -2044,10 +2114,10 @@ export const ArenaScreen: React.FC = () => {
       nextId = currentQueue[curIdx + 1];
       roundQueueRef.current = currentQueue;
     } else {
-      // 라운드 종료! 새 라운드 시작 -> 생존자 전원을 spd 순으로 재정렬
+      // 라운드 종료! 새 라운드 시작 -> 활성 참가자 전원을 spd 순으로 재정렬
       setBattleRound(r => r + 1);
-      const allLiving = [...nextP, ...nextO].filter(c => c.currentHp > 0);
-      const sortedNew = allLiving.sort((a, b) => b.spd - a.spd || b.luck - a.luck);
+      const allActive = [...nextP, ...nextO].filter(isUnitActive);
+      const sortedNew = allActive.sort((a, b) => b.spd - a.spd || b.luck - a.luck);
       const newQueue = sortedNew.map(c => c.id);
       roundQueueRef.current = newQueue;
       setRoundQueue(newQueue);
@@ -2067,17 +2137,132 @@ export const ArenaScreen: React.FC = () => {
 
     const pTeam = playerTeamRef.current;
     const oTeam = oppTeamRef.current;
-    const allLiving = [...pTeam, ...oTeam].filter(c => c.currentHp > 0);
-    if (allLiving.length === 0) return;
+    const pLiving = pTeam.filter(c => c.currentHp > 0);
+    const oLiving = oTeam.filter(c => c.currentHp > 0);
+    if (pLiving.length === 0 || oLiving.length === 0) {
+      isProcessingRef.current = false;
+      const isWin = oLiving.length === 0;
+      const rewardResult = gm.claimArenaMatchRewards(activeBattleOppRef.current!, isWin);
+      setCombatMetrics(Object.values(combatMetricsRef.current));
+      setFinalReward({ ...rewardResult, win: isWin });
+      try {
+        SoundManager.getInstance().play(isWin ? 'victory' : 'defeat');
+      } catch (_) {}
+      refreshOpponents();
+      return;
+    }
 
-    const currentAttacker = allLiving.find(c => c.id === activeCombatantId);
+    const isUnitActive = (c: ArenaCombatant) => !c.isPermanentlyDead && (c.currentHp > 0 || (c.deathCountdown !== undefined && c.deathCountdown > 0));
+    const allActive = [...pTeam, ...oTeam].filter(isUnitActive);
+    if (allActive.length === 0) return;
+
+    const currentAttacker = allActive.find(c => c.id === activeCombatantId);
     if (!currentAttacker) {
-      const fallback = allLiving[0];
+      const fallback = allActive[0];
       if (fallback) {
         activeCombatantIdRef.current = fallback.id;
         setActiveCombatantId(fallback.id);
       }
       return;
+    }
+
+    // 💀 [사경(Death's Door) 턴 처리]: 체력이 0 이하인 영웅의 사경 헤맴 연출 및 카운트다운
+    if (currentAttacker.currentHp <= 0 && currentAttacker.deathCountdown !== undefined && currentAttacker.deathCountdown > 0) {
+      isProcessingRef.current = true;
+      const delay = battleSpeed === 2 ? 400 : 750;
+
+      const dyingTimer = setTimeout(() => {
+        try {
+          if (!activeBattleOppRef.current || finalRewardRef.current) return;
+          const side = currentAttacker.isPlayer ? playerTeamRef.current : oppTeamRef.current;
+          const me = side.find(c => c.id === currentAttacker.id);
+          if (!me) return;
+
+          me.deathCountdown = (me.deathCountdown || 1) - 1;
+          const remaining = me.deathCountdown;
+          const tIdx = Math.max(0, side.findIndex(c => c.id === me.id));
+          const colX = tIdx === 0 ? 20 : tIdx === 1 ? 50 : 80;
+          const rowY = me.isPlayer ? 74 : 24;
+
+          if (remaining <= 0) {
+            me.isPermanentlyDead = true;
+            me.deathCountdown = 0;
+            me.isDead = true;
+            setVfxList(prev => [...prev, {
+              id: `dead_vfx_${Date.now()}_${me.id}`,
+              type: 'status_stun',
+              damage: 0,
+              text: '⚰️ 완전 사망',
+              x: colX,
+              y: rowY,
+              duration: 900,
+            }]);
+            SoundManager.getInstance().play('defeat');
+            gm.addLog(`⚰️ [영면] ${me.name}이(가) 3턴간의 사경 끝에 완전히 전사했습니다...`, me.isPlayer ? 'danger' : 'reward');
+          } else {
+            setVfxList(prev => [...prev, {
+              id: `dying_vfx_${Date.now()}_${me.id}`,
+              type: 'status_bleed',
+              damage: 0,
+              text: `💀 사경 헤맴 (${remaining}턴)`,
+              x: colX,
+              y: rowY,
+              duration: 800,
+            }]);
+            SoundManager.getInstance().play('hero_hurt');
+            gm.addLog(`💀 [사경 헤맴] ${me.name}이(가) 위독한 상태로 사경을 헤매고 있습니다! (완전 사망까지 ${remaining}턴)`, me.isPlayer ? 'danger' : 'normal');
+          }
+
+          if (currentAttacker.isPlayer) {
+            setPlayerTeam([...playerTeamRef.current]);
+          } else {
+            setOppTeam([...oppTeamRef.current]);
+          }
+
+          // 턴 큐 전진
+          const curQ = roundQueueRef.current.filter(id => {
+            const u = [...playerTeamRef.current, ...oppTeamRef.current].find(c => c.id === id);
+            return u && isUnitActive(u);
+          });
+          const cIdx = curQ.indexOf(me.id);
+          let nxtId: string | null = null;
+          if (cIdx >= 0 && cIdx < curQ.length - 1) {
+            nxtId = curQ[cIdx + 1];
+            roundQueueRef.current = curQ;
+          } else {
+            setBattleRound(r => r + 1);
+            const allActiveAfter = [...playerTeamRef.current, ...oppTeamRef.current].filter(isUnitActive);
+            const sortedNew = allActiveAfter.sort((a, b) => b.spd - a.spd || b.luck - a.luck);
+            const newQ = sortedNew.map(c => c.id);
+            roundQueueRef.current = newQ;
+            setRoundQueue(newQ);
+            nxtId = newQ[0] || null;
+          }
+
+          // 승패 확인 (생존자가 없는 팀 즉시 패배)
+          const pLiving = playerTeamRef.current.filter(c => c.currentHp > 0);
+          const oLiving = oppTeamRef.current.filter(c => c.currentHp > 0);
+          if (oLiving.length === 0 || pLiving.length === 0) {
+            isProcessingRef.current = false;
+            const isWin = oLiving.length === 0;
+            const rewardResult = gm.claimArenaMatchRewards(activeBattleOppRef.current!, isWin);
+            setCombatMetrics(Object.values(combatMetricsRef.current));
+            setFinalReward({ ...rewardResult, win: isWin });
+            try {
+              SoundManager.getInstance().play(isWin ? 'victory' : 'defeat');
+            } catch (_) {}
+            refreshOpponents();
+            return;
+          }
+
+          activeCombatantIdRef.current = nxtId;
+          setActiveCombatantId(nxtId);
+          setTurnTick(t => t + 1);
+        } finally {
+          isProcessingRef.current = false;
+        }
+      }, delay);
+      return () => clearTimeout(dyingTimer);
     }
 
     // 수동 모드이고 플레이어 턴인 경우: 플레이어 스킬 입력 대기
@@ -3706,6 +3891,8 @@ export const ArenaScreen: React.FC = () => {
             {/* 적 3인 선발 필드 카드 */}
             <div className="grid grid-cols-3 gap-1.5">
               {oppTeam.map((c) => {
+                const isDying = c.currentHp <= 0 && c.deathCountdown !== undefined && c.deathCountdown > 0 && !c.isPermanentlyDead;
+                const isDead = c.isPermanentlyDead || (c.currentHp <= 0 && !isDying);
                 const isAlive = c.currentHp > 0;
                 const isTarget = c.id === targetEnemyId;
                 const hpPct = Math.max(0, (c.currentHp / c.maxHp) * 100);
@@ -3717,12 +3904,18 @@ export const ArenaScreen: React.FC = () => {
                     key={c.id}
                     className={`panel p-2 flex flex-col gap-0.5 rounded-xl transition-all cursor-pointer relative ${
                       isTarget ? 'border-2 border-[#ff416c] shadow-lg shadow-[#ff416c33] bg-[#1a0f1c]' : 'border border-[#261f33] bg-[#120d1c]'
-                    } ${isTurn ? 'ring-2 ring-[#ffd54f] animate-pulse' : ''} ${!isAlive ? 'opacity-40 grayscale' : ''}`}
+                    } ${isTurn ? 'ring-2 ring-[#ffd54f] animate-pulse' : ''} ${isDying ? 'border-2 border-[#ff9800] ring-1 ring-[#ff9800] bg-[#221010]' : ''} ${isDead ? 'opacity-40 grayscale' : ''}`}
                     onClick={() => isAlive && setTargetEnemyId(c.id)}
                   >
                     {isTarget && isAlive && (
                       <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[8px] px-1.5 py-0.1 rounded-full font-bold bg-[#ff416c] text-white shadow-md z-10">
                         TARGET
+                      </span>
+                    )}
+
+                    {isDying && (
+                      <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[7.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff9800] text-black shadow-md z-10 animate-pulse border border-[#ffd54f]">
+                        💀 사경 ({c.deathCountdown}T)
                       </span>
                     )}
 
@@ -3775,7 +3968,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
 
                     <div className="text-[8px] text-right font-mono text-[#8b9bb4]">
-                      {isAlive ? `${c.currentHp}/${c.maxHp}` : '💀 DEAD'}
+                      {isAlive ? `${c.currentHp}/${c.maxHp}` : isDying ? <span className="text-[#ffeb3b] font-bold">💀 사경 ({c.deathCountdown}턴)</span> : '⚰️ DEAD'}
                     </div>
                   </div>
                 );
@@ -3847,6 +4040,8 @@ export const ArenaScreen: React.FC = () => {
             {/* ── 3. 아군 진영 (3인 필드 카드) ── */}
             <div className="grid grid-cols-3 gap-1.5">
               {playerTeam.map((c) => {
+                const isDying = c.currentHp <= 0 && c.deathCountdown !== undefined && c.deathCountdown > 0 && !c.isPermanentlyDead;
+                const isDead = c.isPermanentlyDead || (c.currentHp <= 0 && !isDying);
                 const isAlive = c.currentHp > 0;
                 const isTurn = c.id === activeCombatantId;
                 const hpPct = Math.max(0, (c.currentHp / c.maxHp) * 100);
@@ -3857,11 +4052,17 @@ export const ArenaScreen: React.FC = () => {
                     key={c.id}
                     className={`panel p-2 flex flex-col gap-0.5 rounded-xl transition-all relative ${
                       isTurn ? 'border-2 border-[#00d2ff] shadow-lg shadow-[#00d2ff33] bg-[#0c1e30]' : 'border border-[#1a2d48] bg-[#0d1726]'
-                    } ${!isAlive ? 'opacity-40 grayscale' : ''}`}
+                    } ${isDying ? 'border-2 border-[#ff9800] ring-1 ring-[#ff9800] bg-[#1c150c]' : ''} ${isDead ? 'opacity-40 grayscale' : ''}`}
                   >
                     {isTurn && isAlive && (
                       <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[8px] px-1.5 py-0.1 rounded-full font-bold bg-[#00d2ff] text-black shadow-md animate-bounce z-10">
                         TURN
+                      </span>
+                    )}
+
+                    {isDying && (
+                      <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[7.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff9800] text-black shadow-md z-10 animate-pulse border border-[#ffd54f]">
+                        💀 사경 ({c.deathCountdown}T)
                       </span>
                     )}
 
@@ -3914,7 +4115,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
 
                     <div className="text-[8px] text-right font-mono text-[#8b9bb4]">
-                      {isAlive ? `${c.currentHp}/${c.maxHp}` : '💀 DEAD'}
+                      {isAlive ? `${c.currentHp}/${c.maxHp}` : isDying ? <span className="text-[#ffeb3b] font-bold">💀 사경 ({c.deathCountdown}턴)</span> : '⚰️ DEAD'}
                     </div>
                   </div>
                 );
