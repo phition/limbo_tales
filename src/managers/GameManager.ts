@@ -86,7 +86,9 @@ import {
   detectAccessoryType,
   rollForgeItemRarity,
   applyForgeRarityBonus,
-  getForgeRarityRates
+  getForgeRarityRates,
+  FORGE_TIER_NAMES,
+  FORGE_STAT_TABLE
 } from '../data/equipment';
 import { calculatePartySynergies, ALL_PARTY_SYNERGIES } from '../data/synergies';
 import { ALL_SKILL_BOOKS, ALL_SKILLS_MAP, getSkillBookRarity, GRIMOIRE_RARITY_META, getMasteryGainPerBook, cleanMonsterNameForDrop, adjustSkillDescriptionForDrop, normalizeDroppedSkillDescription, determineSkillAffinity, getSkillAffinityMeta } from '../data/skillBooks';
@@ -458,7 +460,7 @@ export class GameManager {
       });
     }
 
-    // 🔮 [초월 각성 스탯 +15% 적용]: 2차 전직 후 10레벨마다 각성 시 선택한 스탯 15% 영구 집중 증폭
+    // 🔮 [초월 각성 스탯 +15% 적용]: 3차 전직 후 10레벨마다 각성 시 선택한 스탯 15% 영구 집중 증폭
     if (Array.isArray(awakeningBonuses)) {
       awakeningBonuses.forEach(b => {
         if (b === 'hp') maxHp *= 1.15;
@@ -3685,19 +3687,19 @@ export class GameManager {
           .filter(p => p && p.id !== hero.id)
           .reduce((max, p) => Math.max(max, this.getBond(hero.id, p.id)), 0);
 
-        if (maxBondWithParty >= 100) { // Lv.5 영혼의 결속 (공/방 +15%)
+        if (maxBondWithParty >= 150) { // Lv.5 영혼의 결속 (공/방 +15%)
           atk = Math.floor(atk * 1.15);
           def = Math.floor(def * 1.15);
-        } else if (maxBondWithParty >= 80) { // Lv.4 사선의 맹세 (전능력치 +10%)
+        } else if (maxBondWithParty >= 120) { // Lv.4 사선의 맹세 (전능력치 +10%)
           atk = Math.floor(atk * 1.10);
           def = Math.floor(def * 1.10);
           spd = Math.floor(spd * 1.10);
           luck = Math.floor(luck * 1.10);
           maxHp = Math.floor(maxHp * 1.10);
           maxMp = Math.floor(maxMp * 1.10);
-        } else if (maxBondWithParty >= 60) { // Lv.3 굳건한 신뢰 (치명타/행운 +8)
+        } else if (maxBondWithParty >= 90) { // Lv.3 굳건한 신뢰 (치명타/행운 +8)
           luck += 8;
-        } else if (maxBondWithParty >= 20) { // Lv.1 동료애 (최대 HP +5%)
+        } else if (maxBondWithParty >= 30) { // Lv.1 동료애 (최대 HP +5%)
           maxHp = Math.floor(maxHp * 1.05);
         }
       }
@@ -6174,8 +6176,8 @@ export class GameManager {
       promotionHint = ' ★ [전직 해금] 영지 병영에서 2차 전직 가능!';
     } else if (tier === 2 && hero.level >= tierReq3) {
       promotionHint = ' 👑 [최종 3차 전직 해금] 영지 병영에서 궁극 3차 전직 가능!';
-    } else if (tier === 2) {
-      const nextAwakenLv = 30 + ((hero.awakeningCount || 0) + 1) * 10;
+    } else if (tier >= 3) {
+      const nextAwakenLv = 60 + ((hero.awakeningCount || 0) + 1) * 10;
       if (hero.level >= nextAwakenLv) {
         promotionHint = ` 🔮 [초월 각성 해금] 영지 원정단 편성에서 ${(hero.awakeningCount || 0) + 1}단계 각성 가능!`;
       }
@@ -6424,7 +6426,7 @@ export class GameManager {
     return this.promoteMercenary(heroId, targetClassId, chosenStat);
   }
 
-  /** 🔮 2차 전직 이후 10레벨마다 거행하는 초월 각성 시스템 */
+  /** 🔮 3차 전직 이후 10레벨마다 거행하는 초월 각성 시스템 */
   public awakenMercenary(
     heroId: string,
     chosenStat: 'hp' | 'mp' | 'atk' | 'def' | 'spd' | 'luck' = 'atk'
@@ -6433,13 +6435,13 @@ export class GameManager {
     if (!hero) return false;
 
     const cClass = CHARACTER_CLASSES[hero.classId];
-    if (!cClass || (cClass.tier || 0) < 2) {
-      this.addLog(`각성 불가: 2차 전직을 완료한 용병만 초월 각성을 진행할 수 있습니다.`, 'danger');
+    if (!cClass || (cClass.tier || 0) < 3) {
+      this.addLog(`각성 불가: 3차 전직을 완료한 용병만 초월 각성을 진행할 수 있습니다.`, 'danger');
       return false;
     }
 
     const currentCount = hero.awakeningCount || 0;
-    const reqLevel = 30 + (currentCount + 1) * 10;
+    const reqLevel = 60 + (currentCount + 1) * 10;
     if (hero.level < reqLevel) {
       this.addLog(`각성 불가: Lv.${reqLevel} 이상에 도달해야 ${currentCount + 1}단계 각성을 진행할 수 있습니다. (현재 Lv.${hero.level})`, 'danger');
       return false;
@@ -8989,24 +8991,24 @@ export class GameManager {
 
   public setBond(id1: string, id2: string, value: number): void {
     const key = this.getBondKey(id1, id2);
-    this.bonds[key] = Math.max(0, Math.min(100, value));
+    this.bonds[key] = Math.max(0, Math.min(150, value));
     this.emit('bondsUpdated', this.bonds);
     this.saveGame();
   }
 
   public increaseBond(id1: string, id2: string, delta: number): number {
     const current = this.getBond(id1, id2);
-    const updated = Math.max(0, Math.min(100, current + delta));
+    const updated = Math.max(0, Math.min(150, current + delta));
     this.setBond(id1, id2, updated);
     return updated;
   }
 
   public getBondLevel(bondValue: number): { level: number; title: string; perk: string } {
-    if (bondValue >= 100) return { level: 5, title: '영혼의 결속', perk: '전투 시작 시 MP 30% 회복 (전원 최대 유대 시 50% 회복) & 공/방 +15%' };
-    if (bondValue >= 80)  return { level: 4, title: '사선의 맹세', perk: '치명적 피해 시 1회 체력 1로 생존(불굴) & 스탯 +10%' };
-    if (bondValue >= 60)  return { level: 3, title: '굳건한 신뢰', perk: '치명타율 +8% & 아군 빈사 시 50 HP 수호 보호막 자동 발동' };
-    if (bondValue >= 40)  return { level: 2, title: '전술적 호흡', perk: '일반 공격 시 25% 확률로 동료의 원호 공격(Assist Attack)' };
-    if (bondValue >= 20)  return { level: 1, title: '동료애', perk: '야영 회복량 +5% & 최대 HP +5%' };
+    if (bondValue >= 150) return { level: 5, title: '영혼의 결속', perk: '전투 시작 시 MP 30% 회복 (전원 최대 유대 시 50% 회복) & 공/방 +15%' };
+    if (bondValue >= 120) return { level: 4, title: '사선의 맹세', perk: '치명적 피해 시 1회 체력 1로 생존(불굴) & 스탯 +10%' };
+    if (bondValue >= 90)  return { level: 3, title: '굳건한 신뢰', perk: '치명타율 +8% & 아군 빈사 시 50 HP 수호 보호막 자동 발동' };
+    if (bondValue >= 60)  return { level: 2, title: '전술적 호흡', perk: '일반 공격 시 25% 확률로 동료의 원호 공격(Assist Attack)' };
+    if (bondValue >= 30)  return { level: 1, title: '동료애', perk: '야영 회복량 +5% & 최대 HP +5%' };
     return { level: 0, title: '초면', perk: '효과 없음' };
   }
 
@@ -9064,6 +9066,50 @@ export class GameManager {
 
     this.emit('bondsUpdated', this.bonds);
     this.saveGame();
+  }
+
+  /**
+   * 💔 던전 위험도에 따른 유대감 마찰/감소 시스템
+   * - 중간 레벨 (35% ~ 69.9%): 랜덤 확률로 파티원 상호 유대감 1 감소
+   * - 위험 레벨 (70% ~ 100%): 확정적으로 파티원 상호 유대감 1 감소
+   * - 스트레스, 의심, 패닉, 날카로워진 신경 등 다양한 원인의 던전 로그 출력
+   */
+  public applyDungeonHazardBondFriction(dangerRatio: number): { dropped: boolean; reason?: string } {
+    const aliveParty = this.party.filter(h => h && h.currentHp > 0 && !h.isPermanentlyDead);
+    if (aliveParty.length < 2) return { dropped: false };
+
+    let shouldDrop = false;
+    if (dangerRatio >= 0.70) {
+      // 위험 레벨: 확정적으로 하락
+      shouldDrop = true;
+    } else if (dangerRatio >= 0.35) {
+      // 중간 레벨: 랜덤하게 하락 (35% 확률)
+      if (Math.random() < 0.35) {
+        shouldDrop = true;
+      }
+    }
+
+    if (!shouldDrop) return { dropped: false };
+
+    for (let i = 0; i < aliveParty.length; i++) {
+      for (let j = i + 1; j < aliveParty.length; j++) {
+        this.increaseBond(aliveParty[i].id, aliveParty[j].id, -1);
+      }
+    }
+
+    const HAZARD_FRICTION_REASONS = [
+      { tag: '심연의 스트레스', text: '짙어지는 심연의 어둠과 누적되는 피로로 대원들의 신경이 곤두서며 유대감이 조금 하락했습니다.' },
+      { tag: '의심과 불신', text: '불길한 환청과 마물의 살기 속에서 서로를 향한 의심이 싹트며 유대감이 조금 하락했습니다.' },
+      { tag: '심연의 패닉', text: '옥죄어오는 공포와 압박감에 대원들이 패닉에 빠지며 유대감이 조금 하락했습니다.' },
+      { tag: '날카로워진 신경', text: '생존을 향한 중압감으로 인해 대원들 사이에 날카로운 마찰이 일며 유대감이 조금 하락했습니다.' },
+      { tag: '정신적 압박', text: '심연의 불온한 기운에 짓눌려 대원들 간 마음의 거리가 조금 멀어졌습니다.' },
+      { tag: '극한의 피로', text: '끝나지 않는 탐색과 긴장감에 대원들의 인내심이 바닥나며 유대감이 조금 하락했습니다.' },
+    ];
+
+    const chosen = HAZARD_FRICTION_REASONS[Math.floor(Math.random() * HAZARD_FRICTION_REASONS.length)];
+    this.addLog(`⚠️ [${chosen.tag}] ${chosen.text} (파티 유대감 -1)`, 'danger');
+
+    return { dropped: true, reason: chosen.tag };
   }
 
   /** 야영 시 모닥불 토크 발생 및 유대/소외감 계산 */
@@ -9158,7 +9204,7 @@ export class GameManager {
           // 임계점 체크
           [newB1, newB2].forEach((nb, idx) => {
             const vHero = idx === 0 ? vet1 : vet2;
-            const thresholds = [20, 40, 60, 80, 100];
+            const thresholds = [30, 60, 90, 120, 150];
             thresholds.forEach(th => {
               if (nb >= th && (nb - catchupDelta) < th) {
                 const meta = this.getBondLevel(th);
@@ -9237,8 +9283,8 @@ export class GameManager {
           const newVal = this.increaseBond(party[i].id, party[j].id, delta);
           bondChanges.push({ heroAId: party[i].id, heroBId: party[j].id, delta, reason: '모닥불 교감' });
 
-          // 임계점 체크 (20, 40, 60, 80, 100)
-          const thresholds = [20, 40, 60, 80, 100];
+          // 임계점 체크 (30, 60, 90, 120, 150)
+          const thresholds = [30, 60, 90, 120, 150];
           thresholds.forEach(th => {
             if (oldVal < th && newVal >= th) {
               const meta = this.getBondLevel(th);
@@ -11920,89 +11966,171 @@ export class GameManager {
       }
     }
 
-    // 4. 히어로('hero') 등급 30레벨 영웅 5인 구성
+    // 4. 7인 원정대 편성: 3차 전직을 앞둔 60레벨 히어로('hero') 3인 + 2차 전직 완료 50레벨 에픽('epic') 4인
+    // 각 영웅마다 10레벨 병기창에서 제작된 종말급 장비 3종 세트(무기/방어구/장신구)를 +5강화 상태로 장착
+    const createTier10EnhancedGear = (
+      key: 'sword' | 'spear' | 'gun' | 'bow' | 'staff' | 'dagger' | 'leather_armor' | 'plate_armor' | 'robe' | 'ring' | 'necklace' | 'amulet',
+      heroId: string
+    ): EquipmentItem => {
+      const baseName = FORGE_TIER_NAMES[10][key];
+      const slot: EquipmentSlot = (key === 'leather_armor' || key === 'plate_armor' || key === 'robe')
+        ? 'armor'
+        : (key === 'ring' || key === 'necklace' || key === 'amulet')
+          ? 'accessory'
+          : 'weapon';
+      const iconMap: Record<string, string> = {
+        sword: '⚔️', spear: '🔱', gun: '🔫', bow: '🏹', staff: '🪄', dagger: '🗡️',
+        leather_armor: '🧥', plate_armor: '🛡️', robe: '👘',
+        ring: '💍', necklace: '📿', amulet: '🧿'
+      };
+      const weaponTypeMap: Record<string, string> = {
+        sword: 'sword', spear: 'spear', gun: 'gun', bow: 'bow', staff: 'staff', dagger: 'dagger'
+      };
+      const baseStats = { ...(FORGE_STAT_TABLE[10][key] || {}) };
+      const computedStats = { ...baseStats };
+      for (let l = 0; l < 5; l++) {
+        if (computedStats.atk !== undefined) computedStats.atk = Math.floor(computedStats.atk * 1.05 + 4);
+        if (computedStats.def !== undefined) computedStats.def = Math.floor(computedStats.def * 1.05 + 3);
+        if (computedStats.hp !== undefined) computedStats.hp = Math.floor(computedStats.hp * 1.05 + 25);
+        if (computedStats.mp !== undefined) computedStats.mp = Math.floor(computedStats.mp * 1.05 + 15);
+        if (computedStats.spd !== undefined) computedStats.spd = Math.min(30, Math.floor((computedStats.spd || 0) + 1));
+        if (computedStats.luck !== undefined) computedStats.luck = Math.min(60, Math.floor((computedStats.luck || 0) + 1));
+      }
+
+      return {
+        id: `eq_t10_${key}_${heroId}_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        templateId: `forge_t10_${key}`,
+        tier: 10,
+        baseName,
+        name: `👑 [전설] ${baseName} +5`,
+        slot,
+        weaponType: slot === 'weapon' ? (weaponTypeMap[key] as any) : undefined,
+        level: 5,
+        enhanceLevel: 5,
+        rarity: 'legendary',
+        baseStats,
+        stats: computedStats,
+        description: `10레벨 마도 병기창에서 단조되어 +5강화에 도달한 종말급 장비`,
+        icon: iconMap[key] || '⚔️'
+      };
+    };
+
     const heroDefs = [
+      // 🌟 3차 전직을 앞둔 Lv.60 히어로('hero') 등급 3인 (성기사, 암살자, 마법사 계열)
       {
-        id: 'hero_iris_h30',
+        id: 'hero_iris_h60',
         name: '아이리스',
-        title: '불굴의 성기사단장',
+        title: '이지스 발키리',
         trait: '강철의 수호자',
-        classId: 'paladin',
+        classId: 'aegis_valkyrie',
+        grade: 'hero' as MercenaryGrade,
+        level: 60,
         position: 'front' as PositionSlot,
-        equip: {
-          weapon: { id: 'eq_iris_wp_30', baseName: '성광 대검', name: '영원의 성광 대검 +10', slot: 'weapon' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { atk: 95, def: 25, hp: 120, luck: 15 }, icon: '⚔️', description: '신성한 빛이 깃든 성기사단의 보검' },
-          armor: { id: 'eq_iris_ar_30', baseName: '백금 성갑', name: '수호신의 백금 성갑 +10', slot: 'armor' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { def: 88, hp: 280, luck: 10 }, icon: '🛡️', description: '어떤 마물의 공격도 튕겨내는 불침의 갑옷' },
-          accessory: { id: 'eq_iris_ac_30', baseName: '맹세 휘장', name: '단죄의 맹세 휘장 +10', slot: 'accessory' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { hp: 150, def: 20, mp: 60, luck: 18 }, icon: '💍', description: '성기사단장의 신념이 새겨진 성스러운 휘장' }
-        }
+        weaponKey: 'sword' as const,
+        armorKey: 'plate_armor' as const,
+        accKey: 'necklace' as const
       },
       {
-        id: 'hero_bartol_h30',
-        name: '바르톨',
-        title: '전장의 파괴자',
-        trait: '광전사의 혈통',
-        classId: 'valhalla_blade',
-        position: 'front' as PositionSlot,
-        equip: {
-          weapon: { id: 'eq_bartol_wp_30', baseName: '라그나로크', name: '멸망의 라그나로크 +10', slot: 'weapon' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { atk: 145, spd: 12, hp: 100, luck: 22 }, icon: '🗡️', description: '적의 뼈와 살을 분쇄하는 거대한 혈풍 대검' },
-          armor: { id: 'eq_bartol_ar_30', baseName: '불멸 흉갑', name: '진홍의 불멸 흉갑 +10', slot: 'armor' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { def: 65, hp: 220, atk: 25 }, icon: '🦺', description: '선혈을 흡수하여 착용자를 끝없이 전장에 머물게 하는 흉갑' },
-          accessory: { id: 'eq_bartol_ac_30', baseName: '해골환', name: '투신의 분노 해골환 +10', slot: 'accessory' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { atk: 35, hp: 80, spd: 8, luck: 20 }, icon: '📿', description: '끝없는 투쟁심을 불태우는 붉은 마도 목걸이' }
-        }
-      },
-      {
-        id: 'hero_kael_h30',
+        id: 'hero_kael_h60',
         name: '카엘',
-        title: '그림자 암살자',
+        title: '섀도우 팬텀',
         trait: '신속한 그림자',
         classId: 'shadow_phantom',
+        grade: 'hero' as MercenaryGrade,
+        level: 60,
         position: 'mid' as PositionSlot,
-        equip: {
-          weapon: { id: 'eq_kael_wp_30', baseName: '심연 비수', name: '무간 심연의 비수 +10', slot: 'weapon' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { atk: 125, spd: 28, luck: 35 }, icon: '🗡️', description: '차원을 가르는 어둠의 단검 쌍검' },
-          armor: { id: 'eq_kael_ar_30', baseName: '영혼 가죽옷', name: '환영의 영혼 가죽옷 +10', slot: 'armor' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { def: 52, hp: 160, spd: 20, luck: 25 }, icon: '🧥', description: '모습을 감추고 적의 공격을 환영으로 흘려보내는 암살복' },
-          accessory: { id: 'eq_kael_ac_30', baseName: '그림자 부적', name: '밤안개의 그림자 부적 +10', slot: 'accessory' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { spd: 22, luck: 32, atk: 20 }, icon: '🧿', description: '심연의 안개가 피어오르는 비전 부적' }
-        }
+        weaponKey: 'dagger' as const,
+        armorKey: 'leather_armor' as const,
+        accKey: 'ring' as const
       },
       {
-        id: 'hero_serena_h30',
+        id: 'hero_serena_h60',
         name: '세레나',
-        title: '원소의 대마도사',
+        title: '칼라미티 메이지',
         trait: '비전 탐구자',
         classId: 'calamity_mage',
+        grade: 'hero' as MercenaryGrade,
+        level: 60,
         position: 'back' as PositionSlot,
-        equip: {
-          weapon: { id: 'eq_serena_wp_30', baseName: '에테르 지팡이', name: '종말의 에테르 지팡이 +10', slot: 'weapon' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { atk: 135, mp: 180, luck: 25 }, icon: '🪄', description: '천체와 원소 마나를 무한히 끌어모으는 비전 마도봉' },
-          armor: { id: 'eq_serena_ar_30', baseName: '별빛 로브', name: '초신성의 별빛 로브 +10', slot: 'armor' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { def: 48, hp: 150, mp: 120, luck: 20 }, icon: '👘', description: '원소 보호막이 둘러쳐진 고대 마도사의 비단 로브' },
-          accessory: { id: 'eq_serena_ac_30', baseName: '특이점 보옥', name: '마력 특이점 보옥 +10', slot: 'accessory' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { mp: 150, atk: 28, luck: 25 }, icon: '🔮', description: '시공간 마력을 응축한 푸른 영롱 보석' }
-        }
+        weaponKey: 'staff' as const,
+        armorKey: 'robe' as const,
+        accKey: 'amulet' as const
       },
+      // 🌟 2차 전직을 마친 Lv.50 에픽('epic') 등급 4인 (힐러, 버서커, 거너, 성전사 계열)
       {
-        id: 'hero_elena_h30',
+        id: 'hero_elena_e50',
         name: '엘레나',
-        title: '성령의 구원자',
+        title: '하이 세인티스',
         trait: '신성한 서약',
         classId: 'high_saintess',
+        grade: 'epic' as MercenaryGrade,
+        level: 50,
         position: 'back' as PositionSlot,
-        equip: {
-          weapon: { id: 'eq_elena_wp_30', baseName: '성령 로드', name: '기적의 은총 성령 로드 +10', slot: 'weapon' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { atk: 75, mp: 160, hp: 140, luck: 25 }, icon: '🌟', description: '죽어가는 자에게 즉시 생명을 불어넣는 신성 홀' },
-          armor: { id: 'eq_elena_ar_30', baseName: '대성녀 예복', name: '자애로운 대성녀 예복 +10', slot: 'armor' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { def: 58, hp: 220, mp: 100, luck: 22 }, icon: '👗', description: '모든 부정한 상태이상을 거부하는 축복받은 사제복' },
-          accessory: { id: 'eq_elena_ac_30', baseName: '영혼의 묵주', name: '순백 영혼의 묵주 +10', slot: 'accessory' as EquipmentSlot, rarity: 'epic' as const, level: 30, stats: { hp: 120, mp: 110, def: 18, luck: 26 }, icon: '🕊️', description: '방주 원정대를 지켜주는 성령의 신성한 묵주' }
-        }
+        weaponKey: 'staff' as const,
+        armorKey: 'robe' as const,
+        accKey: 'necklace' as const
+      },
+      {
+        id: 'hero_bartol_e50',
+        name: '바르톨',
+        title: '발할라 블레이드',
+        trait: '광전사의 혈통',
+        classId: 'valhalla_blade',
+        grade: 'epic' as MercenaryGrade,
+        level: 50,
+        position: 'front' as PositionSlot,
+        weaponKey: 'sword' as const,
+        armorKey: 'plate_armor' as const,
+        accKey: 'ring' as const
+      },
+      {
+        id: 'hero_raven_e50',
+        name: '레이븐',
+        title: '고스트 스나이퍼',
+        trait: '독수리의 눈',
+        classId: 'ghost_sniper',
+        grade: 'epic' as MercenaryGrade,
+        level: 50,
+        position: 'back' as PositionSlot,
+        weaponKey: 'gun' as const,
+        armorKey: 'leather_armor' as const,
+        accKey: 'amulet' as const
+      },
+      {
+        id: 'hero_roman_e50',
+        name: '로만',
+        title: '크루세이더 로드',
+        trait: '철벽의 의지',
+        classId: 'crusader_lord',
+        grade: 'epic' as MercenaryGrade,
+        level: 50,
+        position: 'front' as PositionSlot,
+        weaponKey: 'spear' as const,
+        armorKey: 'plate_armor' as const,
+        accKey: 'necklace' as const
       }
     ];
 
     const createdHeroes: Mercenary[] = [];
     for (const def of heroDefs) {
-      const cClass = CHARACTER_CLASSES[def.classId] || CHARACTER_CLASSES['paladin'];
-      const computed = GameManager.calcHeroStatsForClassAndLevel(def.classId, 30, 'hero', def.trait);
+      const cClass = CHARACTER_CLASSES[def.classId] || CHARACTER_CLASSES['squire'];
+      const computed = GameManager.calcHeroStatsForClassAndLevel(def.classId, def.level, def.grade, def.trait);
+      const equip = {
+        weapon: createTier10EnhancedGear(def.weaponKey, def.id),
+        armor: createTier10EnhancedGear(def.armorKey, def.id),
+        accessory: createTier10EnhancedGear(def.accKey, def.id)
+      };
+
       const hero: Mercenary = this.sanitizeHero({
         id: def.id,
         name: def.name,
         title: def.title,
         trait: def.trait,
         classId: def.classId,
-        grade: 'hero',
-        level: 30,
+        grade: def.grade,
+        level: def.level,
         exp: 0,
-        expToNext: 1500,
+        expToNext: 99999,
         currentHp: computed.maxHp,
         maxHp: computed.maxHp,
         currentMp: computed.maxMp,
@@ -12014,24 +12142,24 @@ export class GameManager {
           ...cClass.skills.map(s => s.id),
           ...(cClass.specialSkill ? [cClass.specialSkill.id] : [])
         ],
-        equipment: def.equip,
+        equipment: equip,
         statusEffects: [],
         portraitPromptKey: cClass.promptKey
       });
       createdHeroes.push(hero);
     }
 
-    // 막사(barracks)에 이 5인을 최우선 배치 (기존 타 용병과 병합, 최대 7명 정원 준수)
-    const existingOtherHeroes = this.barracks.filter(h => !createdHeroes.some(ch => ch.id === h.id || ch.name === h.name));
-    this.barracks = [...createdHeroes, ...existingOtherHeroes].slice(0, 7);
+    // 막사(barracks)에 이 7인을 배치 (총 7명 정원)
+    this.barracks = [...createdHeroes].slice(0, 7);
 
-    // 파티는 5인 중 최적의 3인 조합 (성기사 아이리스 [전열], 그림자 카엘 [중열], 구원자 엘레나 [후열])으로 기본 편성
-    this.party = [createdHeroes[0], createdHeroes[2], createdHeroes[4]];
+    // 파티는 3차 전직을 앞둔 성기사(아이리스 [전열]), 암살자(카엘 [중열]), 마법사(세레나 [후열]) 3인으로 기본 편성
+    this.party = [createdHeroes[0], createdHeroes[1], createdHeroes[2]];
     this.reconcileParty();
 
-    // 5. 심연 던전 10층까지 전면 해금 (성채 채비실에서 1~10층 즉시 선택 출격 가능)
-    this.unlockedDungeonFloor = Math.max(this.unlockedDungeonFloor || 1, 10);
-    this.dungeonFloor = Math.max(this.dungeonFloor || 1, 10);
+    // 5. 심연 던전 11층 및 무간도 10개 체크포인트 전면 해금
+    this.unlockedDungeonFloor = 11;
+    this.dungeonFloor = 11;
+    this.unlockedAviciTier = 10;
 
     // 6. 퀘스트 점검 및 상태 알림
     this.checkAllQuestObjectives();
@@ -12043,7 +12171,7 @@ export class GameManager {
     this.emit('dungeonUpdated');
     this.emit('update');
 
-    this.addLog('👑 [지휘관 최고 전력 활성화] 13개 전 건물 10레벨 증축, 전 자원 최대치 완충, 10종 보스 비전서 서고 입고, 5인의 30레벨 히어로급 원정대 집결, 심연 10층까지의 던전이 전면 해금되었습니다!', 'reward');
+    this.addLog('👑 [지휘관 최고 전력 활성화] 13개 전 건물 10레벨 증축, 전 자원 최대치 완충, 보스 비전서 서고 입고, 3차 전직을 앞둔 Lv.60 히어로 3인 및 2차 완료 Lv.50 에픽 4인 집결 (10티어 5강 세트 장착), 심연 11층 및 무간도 10개 체크포인트가 전면 해금되었습니다!', 'reward');
     this.saveGame();
     this.saveToCloud().catch(() => {});
   }

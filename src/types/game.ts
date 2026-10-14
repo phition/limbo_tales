@@ -79,7 +79,7 @@ export interface BuildingState {
   };
 }
 
-export type ClassTier = 0 | 1 | 2;
+export type ClassTier = 0 | 1 | 2 | 3;
 export type PositionSlot = 'front' | 'mid' | 'back';
 export type EquipmentSlot = 'weapon' | 'armor' | 'accessory';
 
@@ -332,6 +332,7 @@ export type StatusEffectType =
   | 'blind' 
   | 'riposte' 
   | 'immunity' 
+  | 'buff_drain'
   | 'stealth';
 
 export interface StatusEffect {
@@ -368,6 +369,7 @@ export const STATUS_EFFECT_META: Record<StatusEffectType, { icon: string; label:
   blind:      { icon: '👁️', label: '실명',      color: '#b0bec5', desc: '명중률 감소 (공격 시 50% 확률로 빗나감)' },
   riposte:    { icon: '⚡', label: '환영반격',  color: '#00e5ff', desc: '회피율 60% 증가 & 피격/회피 시 즉시 130% 환영 반격' },
   immunity:   { icon: '🌟', label: '디버프 면역', color: '#fff176', desc: '모든 해로운 상태이상(출혈/맹독/화상/냉각/기절/실명/약화) 완전 차단' },
+  buff_drain: { icon: '🩸', label: '흡혈 태세',  color: '#ff1744', desc: '공격 시 가한 피해의 일부를 생명력으로 흡수' },
   stealth:    { icon: '👥', label: '은신',      color: '#b388ff', desc: '적의 표적에서 벗어나 피격되지 않으며 다음 공격 위력이 대폭 증폭됩니다' },
 };
 

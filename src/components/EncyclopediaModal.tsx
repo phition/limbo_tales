@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { CHARACTER_CLASSES } from '../data/classes';
 import { MONSTERS } from '../data/monsters';
-import { INITIAL_BUILDINGS } from '../data/buildings';
+import { INITIAL_BUILDINGS, BUILDING_LORE_AND_TIPS } from '../data/buildings';
 import { EQUIPMENT_RECIPES, PREFIX_ENCHANT_OPTIONS, SUFFIX_ENCHANT_OPTIONS, getEquipmentTemplateId } from '../data/equipment';
 import { ALL_SKILL_BOOKS, getSkillAffinityMeta } from '../data/skillBooks';
 import { STATUS_EFFECT_META, StatusEffectType, MonsterData, EnchantOption, CharacterClass, MONSTER_FACTION_META } from '../types/game';
@@ -547,7 +547,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                   <span>직업 & 전직 계통 도감 ({totalClassesCount}클래스 · {filteredLineageGroups.length}개 계통)</span>
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">
-                  시작 클래스(Tier 0) ➔ 1차 전직(Tier 1) ➔ 2차 각성(Tier 2)
+                  시작 클래스(Tier 0) ➔ 1차 전직(Tier 1) ➔ 2차 각성(Tier 2) ➔ 👑 3차 초월(Tier 3)
                 </span>
               </div>
 
@@ -621,7 +621,9 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         ? '기본 클래스 (Tier 0)'
                         : cls.tier === 1
                         ? '1차 전직 (Tier 1)'
-                        : '★ 2차 각성 (Tier 2)';
+                        : cls.tier === 2
+                        ? '★ 2차 각성 (Tier 2)'
+                        : '👑 3차 초월 (Tier 3)';
                       const parentClass = cls.parentClassId ? CHARACTER_CLASSES[cls.parentClassId] : null;
                       const parentText = parentClass ? ` • 상위 전직 [${parentClass.name}]` : '';
 
@@ -630,7 +632,9 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         ? { bg: lineage.theme.tagBg, color: lineage.theme.light, border: lineage.theme.tagBorder }
                         : cls.tier === 1
                         ? { bg: 'rgba(255, 255, 255, 0.08)', color: '#e2e8f0', border: 'rgba(255, 255, 255, 0.22)' }
-                        : { bg: 'rgba(255, 215, 0, 0.18)', color: '#ffd700', border: 'rgba(255, 215, 0, 0.5)' };
+                        : cls.tier === 2
+                        ? { bg: 'rgba(255, 215, 0, 0.18)', color: '#ffd700', border: 'rgba(255, 215, 0, 0.5)' }
+                        : { bg: 'rgba(0, 229, 255, 0.22)', color: '#00e5ff', border: 'rgba(0, 229, 255, 0.6)' };
 
                       return (
                         <div
@@ -1051,6 +1055,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {filteredBuildings.map(b => {
                   const maxLevel = (b as any).maxLevel || 10;
+                  const loreTips = BUILDING_LORE_AND_TIPS[b.id as keyof typeof BUILDING_LORE_AND_TIPS];
                   return (
                     <div
                       key={b.id}
@@ -1064,13 +1069,24 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             <div className="text-base sm:text-lg text-white font-medium leading-relaxed bg-[#0c1220] p-5 rounded-2xl border border-[#1e2c45] shadow-inner">
                               {tr(b.description)}
                             </div>
-                            <div className="p-4 rounded-xl bg-[#111929] border border-[#22334f] flex flex-col gap-2">
+                            {loreTips?.lore && (
+                              <div className="p-4 rounded-xl bg-[#140e1e] border border-[#a855f744] flex flex-col gap-2">
+                                <span className="font-bold text-sm text-[#c084fc] flex items-center gap-1.5">
+                                  <span>📜</span>
+                                  <span>{tr('방주 비사 및 시설 뒷이야기')}</span>
+                                </span>
+                                <div className="text-sm text-[#e9d5ff] leading-relaxed whitespace-pre-line">
+                                  {tr(loreTips.lore)}
+                                </div>
+                              </div>
+                            )}
+                            <div className="p-4 rounded-xl bg-[#111929] border border-[#38ef7d44] flex flex-col gap-2">
                               <span className="font-bold text-sm text-[#38ef7d] flex items-center gap-1.5">
-                                <span>🏗️</span>
-                                <span>{tr('시설 증축 및 운용 안내')}</span>
+                                <span>💡</span>
+                                <span>{tr('시설 증축 및 전략 운영 방안')}</span>
                               </span>
-                              <div className="text-sm text-[#cfd8e8] leading-relaxed">
-                                {tr('최대 {0}단계까지 증축 가능하며, 레벨이 상승함에 따라 생산량이 비약적으로 증가하거나 새로운 제작 레시피 및 특수 기능이 해금됩니다. 시설 Lv.4부터는 골드 또는 식량 등의 유지비가 부과될 수 있습니다.').replace('{0}', String(maxLevel))}
+                              <div className="text-sm text-[#cfd8e8] leading-relaxed whitespace-pre-line">
+                                {loreTips?.strategy ? tr(loreTips.strategy) : tr('최대 {0}단계까지 증축 가능하며, 레벨이 상승함에 따라 생산량이 비약적으로 증가하거나 새로운 제작 레시피 및 특수 기능이 해금됩니다. 시설 Lv.4부터는 골드 또는 식량 등의 유지비가 부과될 수 있습니다.').replace('{0}', String(maxLevel))}
                               </div>
                             </div>
                           </div>

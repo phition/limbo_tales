@@ -17,6 +17,7 @@ export interface GameBalanceConfig {
   etherMultiplier: number;
   itemDropRateMultiplier: number;
   bossSkillBookDropRate: number;
+  drConstant: number; // 🛡️ 방어력 피해 감소(DR%) 기준 상수 K (기본값: 300)
 }
 
 const DEFAULT_BALANCE_CONFIG: GameBalanceConfig = {
@@ -25,6 +26,7 @@ const DEFAULT_BALANCE_CONFIG: GameBalanceConfig = {
   etherMultiplier: 1.0,
   itemDropRateMultiplier: 1.0,
   bossSkillBookDropRate: 0.04,
+  drConstant: 300,
 };
 
 export interface CustomGameDataPackage {

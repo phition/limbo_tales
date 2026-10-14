@@ -365,7 +365,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
               className="w-full p-2.5 rounded-xl bg-[#1c1810] border border-[#ffd54f55] hover:border-[#ffd54f] text-left flex items-center justify-between transition-all cursor-pointer shadow-md group"
               onClick={() => {
                 gm.applyCommanderMaxUpgrade();
-                setCloudStatus('👑 지휘관 최고 전력 적용 완료! (10층 던전 해금)');
+                setCloudStatus('👑 지휘관 최고 전력 적용 완료! (11층 및 무간도 전 구역 해금, 7인 10티어 5강 세트 장착)');
                 setTimeout(() => setCloudStatus(null), 3000);
               }}
             >
@@ -376,7 +376,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
                     <span className="break-words">지휘관 최고 전력 활성화</span>
                     <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold shrink-0">MASTER BOOST</span>
                   </div>
-                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">전 건물 Lv.10 · 최대 자원 · 보스 비전서 10종 · Lv.30 히어로 5인 · 10층 던전 해금</div>
+                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">전 건물 Lv.10 · 최대 자원 · 3차 전직 대비 Lv.60 3인+Lv.50 4인(10티어 5강) · 11층/무간도 전 구역 해금</div>
                 </div>
               </div>
               <span className="text-xs text-[#ffd54f] font-bold shrink-0 ml-1.5">적용</span>

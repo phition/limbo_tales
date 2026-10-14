@@ -409,6 +409,7 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     '1차 전직': '1st Promotion',
     '2차 심연 승격': '2nd Abyssal Promotion',
     '2차 초월 각성': '2nd Transcendent Awakening',
+    '3차 초월 각성': '3rd Transcendent Awakening',
     '승격 조건': 'Promotion Requirements',
     '승격 단행': 'Undergo Promotion',
     '적재 용량': 'Storage Capacity',
@@ -708,7 +709,6 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     '마총 저격계': 'Magic Gunner',
     '수호의 방패 원호': 'Guardian Shield Assist',
     '그림자 기습 비수': 'Shadow Ambush Dagger',
-    '에테르 공명 탄막': 'Aether Resonant Barrage',
     '빛의 단죄와 가호': 'Light\'s Judgment & Aegis',
     '전장의 분노 추격타': 'Battlefield Rage Pursuit',
     '전술 마도 저격': 'Tactical Magic Snipe',
@@ -781,7 +781,6 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     '공허의 절대 침식': 'Absolute Void Erosion',
     '멸망의 창조 일격': 'Genesis Strike of Ruin',
     '종언의 광신도': 'End Zealot Cultist',
-    '종언의 제단 광신도': 'Altar Zealot Cultist',
     '핏빛 대공 (6F 보스)': 'Blood Archduke (6F Boss)',
     '망각의 묘지기 (7F 보스)': 'Graveyard Keeper of Oblivion (7F Boss)',
     '타락한 기사단장 (8F 보스)': 'Fallen Knight Commander (8F Boss)',
@@ -842,7 +841,6 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     '개시 보호막': 'Start Shield',
     '처형 피해': 'Execute DMG',
     '피해감소': 'DMG Reduction',
-    '치명타': 'CRIT Rate',
     '치명피해': 'CRIT DMG',
     '관통': 'Penetration',
     '흡혈': 'Life Drain',
@@ -855,7 +853,6 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     '영구 패시브': 'Permanent Passive',
     '도감 열기 ➔': 'Open Codex ➔',
     '항목': 'entries',
-    '종': 'types',
     '탱/딜/힐 역할군 조합, 진형 배치, 성채 묘지 영혼 결속, 또는 심연의 백과(도감) 수집을 통해 시너지를 발동할 수 있습니다.': 'Activate synergies through Tank/DPS/Healer roles, formation layout, Cemetery Soul Links, or Abyssal Codex collection.',
     '클릭하여 심연의 백과 도감 열기': 'Click to open Abyssal Codex',
     // ── 던전 조우 이벤트 모달 및 선택지 EN ──
@@ -1166,6 +1163,7 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     '1차 전직': '1次転職',
     '2차 심연 승격': '2次深淵昇格',
     '2차 초월 각성': '2次超越覚醒',
+    '3차 초월 각성': '3次超越覚醒',
     '승격 조건': '昇格条件',
     '승격 단행': '昇格断行',
     '적재 용량': '積載容量',
@@ -1507,7 +1505,6 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     '마총 저격계': '魔銃狙撃系',
     '수호의 방패 원호': '守護の盾援護',
     '그림자 기습 비수': '影の急襲短剣',
-    '에테르 공명 탄막': 'エーテル共鳴弾幕',
     '빛의 단죄와 가호': '光の断罪と加護',
     '전장의 분노 추격타': '戦場の怒り追撃',
     '전술 마도 저격': '戦術魔導狙撃',
@@ -1555,7 +1552,6 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     '개시 보호막': '開始シールド',
     '처형 피해': '処刑ダメージ',
     '피해감소': 'ダメージ減少',
-    '치명타': '会心率',
     '치명피해': '会心ダメージ',
     '관통': '貫通',
     '흡혈': '吸血',
@@ -1616,7 +1612,6 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     '공허의 절대 침식': '虚無の絶対侵食',
     '멸망의 창조 일격': '滅亡の創造一撃',
     '종언의 광신도': '終焉の狂信者',
-    '종언의 제단 광신도': '終焉の祭壇の狂信者',
     '핏빛 대공 (6F 보스)': '血の太公 (6Fボス)',
     '망각의 묘지기 (7F 보스)': '忘却の墓守 (7Fボス)',
     '타락한 기사단장 (8F 보스)': '堕落した騎士団長 (8Fボス)',
@@ -1691,9 +1686,10 @@ export interface LogPatternDef {
 }
 
 // ── 로그 내부 엔티티(영웅/몬스터/스킬) 안전 치환 헬퍼 ──
-export const trEntity = (name: string, lang: 'en' | 'ja'): string => {
+export const trEntity = (name: string, lang: 'en' | 'ja' | string): string => {
   if (!name) return '';
   let trimmed = name.trim();
+  if (lang !== 'en' && lang !== 'ja') return trimmed;
 
   // 0. 중첩 대괄호 정리: "[[궁극기] ...]" -> "[궁극기] ..."
   if (trimmed.startsWith('[[') && trimmed.endsWith(']')) {
@@ -2363,9 +2359,9 @@ export const LOG_PATTERNS: LogPatternDef[] = [
   },
   // ✨ 영혼의 결속 (파티 전체)
   {
-    pattern: /✨\s*\[영혼의 결속\]\s*파티 전원이 상호 최고조 유대\(Bond 100\)를 달성하여 특별 공명 보너스로 마나\(MP\)가\s*(\d+)%\s*회복된 상태로 전투를 시작합니다!/i,
-    en: m => `✨ [Soulbond] Max Bond (100) resonance! Entire party starts battle with ${m[1]}% MP restored!`,
-    ja: m => `✨ [魂の結束] 全員が最高潮の絆(Bond 100)に到達！共鳴ボーナスでMPが${m[1]}%回復した状態で戦闘を開始します！`
+    pattern: /✨\s*\[영혼의 결속\]\s*파티 전원이 상호 최고조 유대\(Bond (?:100|150)\)를 달성하여 특별 공명 보너스로 마나\(MP\)가\s*(\d+)%\s*회복된 상태로 전투를 시작합니다!/i,
+    en: m => `✨ [Soulbond] Max Bond (150) resonance! Entire party starts battle with ${m[1]}% MP restored!`,
+    ja: m => `✨ [魂の結束] 全員が最高潮の絆(Bond 150)に到達！共鳴ボーナスでMPが${m[1]}%回復した状態で戦闘を開始します！`
   },
   // ✨ 영혼의 결속 (일부 영웅)
   {

@@ -1,43 +1,25 @@
 {
   "buildingBaseCosts": {
+    "blacksmith": {
+      "gold": 500,
+      "iron": 100,
+      "stone": 80,
+      "wood": 100
+    },
     "infirmary": {
-      "wood": 120,
+      "ether": 10,
       "herb": 30,
-      "ether": 10
+      "wood": 120
     },
     "market": {
-      "wood": 150,
+      "gold": 1000,
       "stone": 150,
-      "gold": 1000
-    },
-    "blacksmith": {
-      "wood": 100,
-      "stone": 80,
-      "iron": 100,
-      "gold": 500
+      "wood": 150
     }
   },
-  "version": 7,
-  "updatedAt": 1791510797397,
+  "version": 10,
+  "updatedAt": 1791975564453,
   "classSkills": {
-    "apprentice_flame": {
-      "manaCost": 56
-    },
-    "elem_chain_lightning": {
-      "manaCost": 88
-    },
-    "elem_blizzard": {
-      "manaCost": 72
-    },
-    "elem_supernova": {
-      "manaCost": 99
-    },
-    "calamity_arcane_storm": {
-      "manaCost": 92
-    },
-    "calamity_ultimate": {
-      "manaCost": 142
-    },
     "acolyte_heal": {
       "manaCost": 20
     },
@@ -47,125 +29,264 @@
     "acolyte_smite": {
       "manaCost": 15
     },
-    "saint_blessing": {
-      "power": 0.6
+    "apprentice_flame": {
+      "manaCost": 56
     },
-    "saint_ultimate": {
-      "power": 1.88,
-      "manaCost": 120
+    "apprentice_mana_burst": {
+      "power": 1.4
     },
-    "saint_purify": {
-      "power": 2
-    },
-    "ber_rampage": {
-      "power": 0.5
-    },
-    "val_ragnarok_slash": {
+    "assassin_execution": {
       "power": 1.6,
-      "manaCost": 62
+      "cooldown": 5
     },
     "ber_berserk_crush": {
-      "manaCost": 66,
-      "cooldown": 4
+      "cooldown": 5,
+      "manaCost": 66
     },
-    "val_ultimate": {
-      "power": 2.5
-    },
-    "gun_rapid_fire": {
-      "manaCost": 18,
+    "ber_rampage": {
+      "power": 0.5,
       "cooldown": 2
     },
-    "gun_flashbang": {
-      "manaCost": 36
+    "calamity_arcane_storm": {
+      "manaCost": 92
+    },
+    "calamity_ultimate": {
+      "manaCost": 142
+    },
+    "duel_blade_waltz": {
+      "manaCost": 72,
+      "power": 1.2,
+      "cooldown": 4
+    },
+    "duel_flurry": {
+      "manaCost": 55,
+      "power": 1.4,
+      "cooldown": 3
+    },
+    "elem_blizzard": {
+      "manaCost": 72
+    },
+    "elem_chain_lightning": {
+      "manaCost": 88
+    },
+    "elem_supernova": {
+      "manaCost": 99
     },
     "gun_aimed_snipe": {
       "manaCost": 45
     },
+    "gun_flashbang": {
+      "manaCost": 16
+    },
+    "gun_rapid_fire": {
+      "cooldown": 2,
+      "manaCost": 8,
+      "power": 1.2
+    },
+    "phantom_teleport": {
+      "manaCost": 60,
+      "power": 2.4
+    },
+    "saint_blessing": {
+      "power": 0.6
+    },
+    "saint_purify": {
+      "power": 2
+    },
+    "saint_ultimate": {
+      "manaCost": 120,
+      "power": 1.88
+    },
     "scholar_gravity": {
       "power": 1.24
     },
-    "assassin_execution": {
+    "val_ragnarok_slash": {
+      "manaCost": 62,
       "power": 1.6
     },
-    "phantom_teleport": {
-      "power": 2.4,
-      "manaCost": 80
+    "val_ultimate": {
+      "power": 2.5
     },
-    "duel_flurry": {
-      "power": 1.4,
-      "manaCost": 55
+    "valk_spear": {
+      "manaCost": 38,
+      "power": 2.5
     },
-    "duel_blade_waltz": {
-      "power": 1.2,
-      "manaCost": 72
+    "valk_divine_shield": {
+      "manaCost": 42
     },
-    "apprentice_mana_burst": {
-      "power": 1.2
+    "valk_ultimate": {
+      "manaCost": 65,
+      "cooldown": 4
+    },
+    "phantom_ultimate": {
+      "cooldown": 5,
+      "power": 1.8
+    },
+    "dancer_thousand_cuts": {
+      "manaCost": 58,
+      "power": 2.6,
+      "cooldown": 3
+    },
+    "void_phantom_flicker": {
+      "manaCost": 65
+    },
+    "apprentice_bolt": {
+      "cooldown": 2
+    },
+    "van_frenzy_strike": {
+      "cooldown": 3
+    },
+    "van_cleave": {
+      "cooldown": 2
+    },
+    "ber_blood_rend": {
+      "cooldown": 2
+    },
+    "val_immortal_roar": {
+      "cooldown": 4
+    },
+    "warlord_overwhelm": {
+      "power": 1.4
+    },
+    "marshal_phalanx_crush": {
+      "cooldown": 3
+    },
+    "sharp_headshot": {
+      "cooldown": 3
+    },
+    "sharp_abyssal_bullet": {
+      "cooldown": 5
+    },
+    "gun_hyper_cannon": {
+      "cooldown": 4
+    },
+    "gun_orbital_strike": {
+      "cooldown": 6
+    },
+    "sniper_ultimate": {
+      "cooldown": 5
     }
   },
   "classBaseStats": {
-    "squire": {
-      "hp": 160,
-      "mp": 20,
-      "atk": 14,
-      "def": 14,
-      "spd": 8,
-      "luck": 10
-    },
-    "rogue": {
-      "hp": 110,
-      "mp": 30,
-      "atk": 18,
-      "def": 7,
-      "spd": 14,
-      "luck": 22
-    },
-    "apprentice": {
-      "hp": 84,
-      "mp": 54,
-      "atk": 17,
-      "def": 5,
-      "spd": 10,
-      "luck": 15
-    },
     "acolyte": {
-      "hp": 100,
-      "mp": 51,
       "atk": 6,
       "def": 9,
-      "spd": 9,
-      "luck": 16
+      "hp": 100,
+      "luck": 16,
+      "mp": 51,
+      "spd": 9
     },
-    "vanguard": {
-      "hp": 150,
-      "mp": 25,
-      "atk": 20,
-      "def": 10,
-      "spd": 11,
-      "luck": 14
+    "apprentice": {
+      "atk": 17,
+      "def": 5,
+      "hp": 84,
+      "luck": 15,
+      "mp": 54,
+      "spd": 10
     },
     "gunner": {
-      "hp": 86,
-      "mp": 50,
       "atk": 19,
       "def": 8,
-      "spd": 13,
-      "luck": 20
+      "hp": 86,
+      "luck": 20,
+      "mp": 50,
+      "spd": 13
+    },
+    "rogue": {
+      "atk": 18,
+      "def": 7,
+      "hp": 110,
+      "luck": 22,
+      "mp": 30,
+      "spd": 14
+    },
+    "squire": {
+      "atk": 14,
+      "def": 14,
+      "hp": 160,
+      "luck": 10,
+      "mp": 20,
+      "spd": 8
+    },
+    "vanguard": {
+      "atk": 20,
+      "def": 10,
+      "hp": 150,
+      "luck": 14,
+      "mp": 25,
+      "spd": 11
     }
   },
   "monsters": {
+    "boss_floor_1": {
+      "atk": 68,
+      "def": 300,
+      "description": "침묵의 회랑 심부에 잠들어 있던 고대 석조 거신. 가슴의 흑핵에서 뿜어져 나오는 한기로 침입자를 얼어붙게 한다.",
+      "id": "boss_floor_1",
+      "imagePath": "assets/boss_floor_1.jpg",
+      "level": 4,
+      "luck": 25,
+      "maxHp": 228,
+      "name": "침묵의 흑핵 거신",
+      "promptKey": "boss_floor_1",
+      "rewards": {
+        "dropSkillBookId": "book_boss_colossus_core",
+        "ether": 20,
+        "exp": 250,
+        "gold": 350,
+        "resources": {
+          "herb": 8,
+          "leather": 8,
+          "prefix_stone": 3,
+          "wood": 10
+        }
+      },
+      "skills": [
+        {
+          "description": "전체 140% 물리 피해 + 공격력 20% 감소 2턴",
+          "effectType": "debuff",
+          "name": "침묵의 대지 분쇄",
+          "power": 1.4,
+          "statusDuration": 2
+        },
+        {
+          "description": "단일 대상 180% 서리 대미지 + 1턴 기절",
+          "effectType": "stun",
+          "name": "동결의 흑핵 방출",
+          "power": 1.8,
+          "statusDuration": 1
+        },
+        {
+          "description": "자신에게 2턴간 받는 피해 35% 감소 방벽",
+          "effectType": "shield",
+          "name": "고대 석벽 결계",
+          "power": 0.35,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 20,
+      "themeColor": 6056896,
+      "type": "boss"
+    },
     "boss_floor_10": {
-      "id": "boss_floor_10",
-      "name": "심연의 군주 아스모데우스 (10F 보스)",
-      "type": "boss",
-      "level": 28,
-      "maxHp": 9000,
       "atk": 280,
       "def": 620,
-      "spd": 70,
-      "luck": 70,
-      "piercePct": 0.6,
+      "description": "심연의 심장부에 군림하는 궁극의 공허 군주. 차원 전체를 멸망시킬 종말의 숨결을 내뿜습니다.",
       "drainPct": 0.35,
+      "id": "boss_floor_10",
+      "imagePath": "assets/boss_floor_10.jpg",
+      "level": 28,
+      "luck": 70,
+      "maxHp": 9000,
+      "name": "심연의 군주 아스모데우스 (10F 보스)",
+      "piercePct": 0.6,
+      "promptKey": "boss_floor_10",
+      "rewards": {
+        "dropSkillBookId": "book_boss_asmodeus_armageddon",
+        "ether": 100,
+        "exp": 1500,
+        "gold": 2000
+      },
       "shieldBreakMult": 2,
       "skills": [
         {
@@ -193,759 +314,33 @@
           "power": 4
         }
       ],
-      "themeColor": 12000284,
-      "promptKey": "boss_floor_10",
-      "imagePath": "assets/boss_floor_10.jpg",
-      "description": "심연의 심장부에 군림하는 궁극의 공허 군주. 차원 전체를 멸망시킬 종말의 숨결을 내뿜습니다.",
-      "rewards": {
-        "dropSkillBookId": "book_boss_asmodeus_armageddon",
-        "ether": 100,
-        "exp": 1500,
-        "gold": 2000
-      }
-    },
-    "monster_abyssal_behemoth": {
-      "id": "monster_abyssal_behemoth",
-      "name": "심연의 베헤모스",
-      "type": "elite",
-      "level": 27,
-      "maxHp": 1800,
-      "atk": 304,
-      "def": 340,
-      "spd": 45,
-      "luck": 126,
-      "shieldBreakMult": 2.5,
-      "skills": [
-        {
-          "breakGauge": 1200,
-          "description": "전체 150% 대지진 [집중 차징 & 넉백]",
-          "disruptPosition": "knockback",
-          "effectType": "stun",
-          "isCharge": true,
-          "name": "지각 변동",
-          "power": 1.5,
-          "statusDuration": 1
-        },
-        {
-          "description": "전체 공격력 감소",
-          "effectType": "debuff_atk",
-          "name": "심연의 포효",
-          "power": 0,
-          "statusDuration": 3
-        }
-      ],
-      "themeColor": 4073251,
-      "description": "심연의 밑바닥을 배회하는 거대한 마수. 그 발걸음만으로도 던전 전체가 진동합니다.",
-      "promptKey": "monster_abyssal_behemoth",
-      "imagePath": "assets/monster_abyssal_behemoth_v2.jpg",
-      "rewards": {
-        "ether": 35,
-        "exp": 250,
-        "gold": 300
-      }
-    },
-    "monster_abyssal_fiend": {
-      "id": "monster_abyssal_fiend",
-      "name": "심연의 악마",
-      "type": "normal",
-      "level": 25,
-      "maxHp": 4000,
-      "atk": 204,
-      "def": 600,
-      "spd": 63,
-      "luck": 75,
-      "piercePct": 0.45,
-      "drainPct": 0.35,
-      "skills": [
-        {
-          "description": "단일 160% 피해 + 출혈 (흡혈 35% & 방어 관통 45%)",
-          "drainPct": 0.35,
-          "effectType": "bleed",
-          "name": "악마의 손톱",
-          "piercePct": 0.45,
-          "power": 1.6,
-          "statusDuration": 2
-        }
-      ],
-      "themeColor": 12986408,
-      "description": "심연의 가장 깊은 틈새에서 소환된 고위 악마. 치명적인 독과 저주받은 손톱으로 살을 찢습니다.",
-      "promptKey": "monster_abyssal_fiend",
-      "imagePath": "assets/monster_abyssal_fiend_v2.jpg",
-      "rewards": {
-        "ether": 20,
-        "exp": 150,
-        "gold": 180
-      }
-    },
-    "monster_void_stalker": {
-      "id": "monster_void_stalker",
-      "name": "공허의 추적자",
-      "type": "normal",
-      "level": 26,
-      "maxHp": 840,
-      "atk": 210,
-      "def": 520,
-      "spd": 84,
-      "luck": 84,
-      "piercePct": 0.6,
-      "skills": [
-        {
-          "description": "단일 180% 피해 + 방어력 감소 (방어 관통 70% & 그랩)",
-          "disruptPosition": "pull",
-          "effectType": "debuff_def",
-          "name": "공허의 일격",
-          "piercePct": 0.7,
-          "power": 1.8,
-          "statusDuration": 2
-        }
-      ],
-      "themeColor": 4854924,
-      "description": "어둠 속에서 먹잇감을 노리는 공허의 암살자. 기척을 숨기고 다가와 치명적인 일격을 가합니다.",
-      "promptKey": "monster_void_stalker",
-      "imagePath": "assets/monster_void_stalker_v2.jpg",
-      "rewards": {
-        "ether": 25,
-        "exp": 170,
-        "gold": 200
-      }
-    },
-    "boss_floor_9": {
-      "id": "boss_floor_9",
-      "name": "미궁의 지배자 (9F 보스)",
-      "type": "boss",
-      "level": 24,
-      "maxHp": 6200,
-      "atk": 220,
-      "def": 710,
-      "spd": 60,
-      "luck": 64,
-      "piercePct": 0.5,
-      "skills": [
-        {
-          "breakGauge": 1100,
-          "description": "전체 220% 거울 폭풍 [집중 차징 & 진형 셔플]",
-          "disruptPosition": "shuffle",
-          "effectType": "damage",
-          "isCharge": true,
-          "name": "파편의 폭풍",
-          "piercePct": 0.5,
-          "power": 2.2
-        },
-        {
-          "description": "전체 공격력 감소 디버프",
-          "effectType": "debuff_atk",
-          "name": "현혹의 거울",
-          "power": 0.5,
-          "statusDuration": 3
-        }
-      ],
-      "themeColor": 166097,
-      "promptKey": "boss_floor_9",
-      "imagePath": "assets/boss_floor_9.jpg",
-      "description": "환영의 미궁 중심에서 차원 공간을 뒤틀어놓는 환각의 대마도사. 수많은 거울 파편으로 전장을 유린합니다.",
-      "rewards": {
-        "dropSkillBookId": "book_boss_mirror_kaleidoscope",
-        "ether": 60,
-        "exp": 800,
-        "gold": 1000
-      }
-    },
-    "boss_floor_8": {
-      "id": "boss_floor_8",
-      "name": "타락한 기사단장 (8F 보스)",
-      "type": "boss",
-      "level": 21,
-      "maxHp": 4800,
-      "atk": 190,
-      "def": 660,
-      "spd": 80,
-      "luck": 60,
-      "piercePct": 0.45,
-      "shieldBreakMult": 2,
-      "skills": [
-        {
-          "breakGauge": 850,
-          "description": "전체 200% 방어 관통 심판 [집중 차징 & 넉백]",
-          "disruptPosition": "knockback",
-          "effectType": "damage",
-          "isCharge": true,
-          "name": "집행자의 심판",
-          "piercePct": 0.5,
-          "power": 2
-        },
-        {
-          "description": "자신에게 300% 보호막",
-          "effectType": "shield",
-          "name": "타락한 성역",
-          "power": 3
-        }
-      ],
-      "themeColor": 3622735,
-      "promptKey": "boss_floor_8",
-      "imagePath": "assets/boss_floor_8.jpg",
-      "description": "단죄의 요새를 통솔하던 전설적인 기사단장. 타락한 성역 결계와 무자비한 심판의 검을 휘두릅니다.",
-      "rewards": {
-        "dropSkillBookId": "book_boss_judgment_sanctum",
-        "ether": 50,
-        "exp": 600,
-        "gold": 800
-      }
-    },
-    "monster_mirror_phantom": {
-      "id": "monster_mirror_phantom",
-      "name": "거울의 환영",
-      "type": "normal",
-      "level": 22,
-      "maxHp": 863,
-      "atk": 265,
-      "def": 350,
-      "spd": 84,
-      "luck": 85,
-      "piercePct": 0.4,
-      "skills": [
-        {
-          "description": "단일 150% 피해 (그랩 / 진형 당기기)",
-          "disruptPosition": "pull",
-          "effectType": "damage",
-          "name": "일루전 스트라이크",
-          "piercePct": 0.4,
-          "power": 1.5
-        }
-      ],
-      "themeColor": 2733814,
-      "description": "환영의 미궁에 반사된 다중 차원의 그림자 분신. 실체 없는 공격으로 적의 급소를 유린합니다.",
-      "promptKey": "monster_mirror_phantom",
-      "imagePath": "assets/monster_mirror_phantom_v2.jpg",
-      "rewards": {
-        "ether": 16,
-        "exp": 130,
-        "gold": 160
-      }
-    },
-    "monster_inquisitor": {
-      "id": "monster_inquisitor",
-      "name": "이단 심문관",
-      "type": "normal",
-      "level": 20,
-      "maxHp": 720,
-      "atk": 150,
-      "def": 220,
-      "spd": 57,
-      "luck": 69,
-      "piercePct": 0.35,
-      "skills": [
-        {
-          "description": "단일 110% 관통 화형 (방어 관통 40%)",
-          "effectType": "bleed",
-          "name": "화형 선고",
-          "piercePct": 0.4,
-          "power": 1.1,
-          "statusDuration": 3
-        }
-      ],
-      "themeColor": 14172949,
-      "description": "단죄의 성채에서 이단을 심문하던 광기의 집행관. 불타는 사슬과 화형의 불길로 적을 태웁니다.",
-      "promptKey": "monster_inquisitor",
-      "imagePath": "assets/monster_inquisitor_v2.jpg",
-      "rewards": {
-        "ether": 14,
-        "exp": 110,
-        "gold": 140
-      }
-    },
-    "monster_fallen_paladin": {
-      "id": "monster_fallen_paladin",
-      "name": "타락한 기사",
-      "type": "normal",
-      "level": 19,
-      "maxHp": 800,
-      "atk": 240,
-      "def": 350,
-      "spd": 45,
-      "luck": 63,
-      "skills": [
-        {
-          "description": "단일 130% 피해",
-          "effectType": "damage",
-          "name": "칠흑의 검",
-          "power": 1.3
-        }
-      ],
-      "themeColor": 4545124,
-      "description": "심연의 저주에 굴복한 고대 성기사. 칠흑의 검과 저주받은 방패로 전열을 압박합니다.",
-      "promptKey": "monster_fallen_paladin",
-      "imagePath": "assets/monster_fallen_paladin_v2.jpg",
-      "rewards": {
-        "ether": 12,
-        "exp": 100,
-        "gold": 130
-      }
-    },
-    "boss_floor_7": {
-      "id": "boss_floor_7",
-      "name": "망각의 묘지기 (7F 보스)",
-      "type": "boss",
-      "level": 18,
-      "maxHp": 3900,
-      "atk": 160,
-      "def": 480,
       "spd": 70,
-      "luck": 56,
-      "piercePct": 0.4,
-      "drainPct": 0.3,
-      "skills": [
-        {
-          "breakGauge": 650,
-          "description": "전체 180% 마법 피해 + 생명 강탈 [집중 차징]",
-          "drainPct": 0.35,
-          "effectType": "drain",
-          "isCharge": true,
-          "name": "영혼 수확",
-          "power": 1.8
-        },
-        {
-          "description": "단일 250% 방어 관통 65% 치명타",
-          "effectType": "damage",
-          "name": "사신의 낫",
-          "piercePct": 0.65,
-          "power": 2.5
-        }
-      ],
-      "themeColor": 6056896,
-      "promptKey": "boss_floor_7",
-      "imagePath": "assets/boss_floor_7.jpg",
-      "description": "망각의 묘역을 수호하는 죽음의 묘지기. 거대한 영혼의 낫으로 산 자의 생명을 수확합니다.",
-      "rewards": {
-        "dropSkillBookId": "book_boss_oblivion_scythe",
-        "ether": 40,
-        "exp": 450,
-        "gold": 600
-      }
-    },
-    "monster_bone_golem": {
-      "id": "monster_bone_golem",
-      "name": "뼈 골렘",
-      "type": "normal",
-      "level": 17,
-      "maxHp": 3400,
-      "atk": 118,
-      "def": 460,
-      "spd": 36,
-      "luck": 54,
-      "shieldBreakMult": 2.2,
-      "skills": [
-        {
-          "description": "단일 140% 피해 (보호막 분쇄 & 넉백)",
-          "disruptPosition": "knockback",
-          "effectType": "damage",
-          "name": "뼈 분쇄",
-          "power": 1.4
-        }
-      ],
-      "themeColor": 12364452,
-      "description": "수천의 유골과 마수의 뼈가 결합되어 탄생한 거대한 뼈의 골렘. 막강한 방어력과 분쇄력을 지닙니다.",
-      "promptKey": "monster_bone_golem",
-      "imagePath": "assets/monster_bone_golem_v2.jpg",
-      "rewards": {
-        "ether": 10,
-        "exp": 90,
-        "gold": 110,
-        "resources": {
-          "bone": 3
-        }
-      }
-    },
-    "monster_oblivion_ghost": {
-      "id": "monster_oblivion_ghost",
-      "name": "망각의 유령",
-      "type": "normal",
-      "level": 16,
-      "maxHp": 724,
-      "atk": 125,
-      "def": 126,
-      "spd": 78,
-      "luck": 100,
-      "skills": [
-        {
-          "description": "단일 100% 피해 + 빙결(스턴)",
-          "effectType": "stun",
-          "name": "한기 서린 손아귀",
-          "power": 1,
-          "statusDuration": 1
-        }
-      ],
-      "themeColor": 9489145,
-      "description": "망각의 묘지에 갇힌 영혼들의 원념이 뭉쳐진 언데드 유체. 영혼을 얼어붙게 하는 한기를 내뿜습니다.",
-      "promptKey": "monster_oblivion_ghost",
-      "imagePath": "assets/monster_oblivion_ghost_v2.jpg",
-      "rewards": {
-        "ether": 10,
-        "exp": 80,
-        "gold": 100
-      }
-    },
-    "monster_fallen_priest": {
-      "id": "monster_fallen_priest",
-      "name": "타락한 사제",
-      "type": "normal",
-      "level": 14,
-      "maxHp": 288,
-      "atk": 82,
-      "def": 240,
-      "spd": 48,
-      "luck": 51,
-      "piercePct": 0.25,
-      "skills": [
-        {
-          "description": "전체 80% 피해 (방어 관통 25%)",
-          "effectType": "damage",
-          "name": "검은 권능",
-          "piercePct": 0.25,
-          "power": 0.8
-        },
-        {
-          "description": "가장 체력이 낮은 아군 치유",
-          "effectType": "heal",
-          "name": "피의 의식",
-          "power": 1.5
-        }
-      ],
-      "themeColor": 8280002,
-      "description": "심연의 어둠에 영혼을 바친 타락한 성직자. 어둠의 권능과 사악한 치유 의식을 행합니다.",
-      "promptKey": "monster_fallen_priest",
-      "imagePath": "assets/monster_fallen_priest_v2.jpg",
-      "rewards": {
-        "ether": 8,
-        "exp": 70,
-        "gold": 90
-      }
-    },
-    "boss_floor_6": {
-      "id": "boss_floor_6",
-      "name": "핏빛 대공 (6F 보스)",
-      "type": "boss",
-      "level": 16,
-      "maxHp": 3000,
-      "atk": 140,
-      "def": 680,
-      "spd": 88,
-      "luck": 52,
-      "piercePct": 0.3,
-      "drainPct": 0.4,
-      "skills": [
-        {
-          "breakGauge": 500,
-          "description": "전체 150% 피해 + 출혈 [집중 차징]",
-          "drainPct": 0.4,
-          "effectType": "bleed",
-          "isCharge": true,
-          "name": "핏빛 파동",
-          "power": 1.5,
-          "statusDuration": 2
-        },
-        {
-          "description": "단일 200% 피해 및 40% 흡혈 (방어 관통 35%)",
-          "drainPct": 0.4,
-          "effectType": "drain",
-          "name": "흡혈의 일격",
-          "piercePct": 0.35,
-          "power": 2
-        }
-      ],
-      "themeColor": 13840175,
-      "promptKey": "boss_floor_6",
-      "imagePath": "assets/boss_floor_6.jpg",
-      "description": "핏빛 성역의 지배자. 거대한 박쥐 날개와 피의 마법으로 침입자의 생명력을 흡수합니다.",
-      "rewards": {
-        "dropSkillBookId": "book_boss_blood_monarch",
-        "ether": 30,
-        "exp": 350,
-        "gold": 450
-      }
-    },
-    "monster_blood_wolf": {
-      "id": "monster_blood_wolf",
-      "name": "핏빛 늑대",
-      "type": "normal",
-      "level": 13,
-      "maxHp": 2100,
-      "atk": 155,
-      "def": 110,
-      "spd": 66,
-      "luck": 54,
-      "drainPct": 0.3,
-      "skills": [
-        {
-          "description": "단일 120% 피해 (흡혈 30%)",
-          "drainPct": 0.3,
-          "effectType": "drain",
-          "name": "물어뜯기",
-          "power": 1.2
-        },
-        {
-          "description": "전체 공격력 증가",
-          "effectType": "buff_atk",
-          "name": "광기의 울부짖음",
-          "power": 0.3,
-          "statusDuration": 2
-        }
-      ],
-      "themeColor": 15684432,
-      "description": "핏빛 성역을 배회하는 흉포한 마수. 피 냄새를 맡으면 무리를 이끌고 광포화합니다.",
-      "promptKey": "monster_blood_wolf",
-      "imagePath": "assets/monster_blood_wolf_v2.jpg",
-      "rewards": {
-        "ether": 6,
-        "exp": 60,
-        "gold": 80
-      }
-    },
-    "monster_void_overlord": {
-      "id": "monster_void_overlord",
-      "name": "공허의 침식자",
-      "type": "boss",
-      "level": 12,
-      "maxHp": 166,
-      "atk": 138,
-      "def": 230,
-      "spd": 28,
-      "luck": 48,
-      "skills": [
-        {
-          "description": "전체 240% 마법 피해",
-          "effectType": "damage",
-          "name": "파멸의 공허 폭풍",
-          "power": 2.4
-        },
-        {
-          "description": "단일 대상 방어 무시 280% 치명 일격",
-          "effectType": "damage",
-          "name": "시공간 붕괴격",
-          "power": 2.8
-        },
-        {
-          "description": "전체 MP 25 흡수 + 자신 HP 대량 회복",
-          "effectType": "drain",
-          "name": "흑무의 잠식",
-          "power": 1.2
-        },
-        {
-          "description": "전체 출혈 3턴 부여",
-          "effectType": "bleed",
-          "name": "심연의 저주",
-          "power": 0.8,
-          "statusDuration": 3
-        }
-      ],
-      "rewards": {
-        "dropEquipment": {
-          "baseName": "반지",
-          "description": "공허의 침식자를 쓰러뜨리고 회수한 고대 보물.",
-          "icon": "💍",
-          "id": "equip_legendary_ring",
-          "level": 7,
-          "name": "반지",
-          "rarity": "legendary",
-          "slot": "accessory",
-          "stats": {
-            "atk": 12,
-            "luck": 10,
-            "mp": 68,
-            "spd": 13
-          }
-        },
-        "dropSkillBookId": "book_boss_void_cataclysm",
-        "ether": 80,
-        "exp": 1000,
-        "gold": 1500,
-        "resources": {
-          "crystal": 8,
-          "pure_prefix_stone": 2,
-          "pure_suffix_stone": 2,
-          "void_shard": 12
-        }
-      },
-      "promptKey": "monster_void_overlord",
-      "imagePath": "assets/void_overlord.jpg",
-      "themeColor": 16728428,
-      "description": "Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다."
-    },
-    "boss_floor_4": {
-      "id": "boss_floor_4",
-      "name": "심연의 시공 왜곡자",
-      "type": "boss",
-      "level": 10,
-      "maxHp": 1400,
-      "atk": 105,
-      "def": 155,
-      "spd": 58,
-      "luck": 60,
-      "skills": [
-        {
-          "description": "전체 210% 비전 마법 피해 + 아군 속도 30% 감속 2턴",
-          "effectType": "debuff",
-          "name": "시공간 균열 붕괴",
-          "power": 2.1,
-          "statusDuration": 2
-        },
-        {
-          "description": "단일 대상 방어 무시 280% 치명타 일격",
-          "effectType": "damage",
-          "name": "차원 닻 강타",
-          "power": 2.8
-        },
-        {
-          "description": "2턴간 받는 피해 50% 반사 및 체력 회복",
-          "effectType": "shield",
-          "name": "시공 역행 결계",
-          "power": 0.5,
-          "statusDuration": 2
-        }
-      ],
-      "rewards": {
-        "dropSkillBookId": "book_boss_chrono_warp",
-        "ether": 60,
-        "exp": 750,
-        "gold": 1100,
-        "resources": {
-          "crystal": 6,
-          "pure_suffix_stone": 2,
-          "silk": 8,
-          "void_shard": 10
-        }
-      },
-      "promptKey": "boss_floor_4",
-      "imagePath": "assets/boss_floor_4.jpg",
-      "themeColor": 11225020,
-      "description": "심연의 균열을 조작하여 시공간을 뒤틀어버리는 고대 차원 마도사. 시간의 흐름을 왜곡하여 공격을 무력화한다."
-    },
-    "boss_floor_5": {
-      "id": "boss_floor_5",
-      "name": "공허의 침식자",
-      "type": "boss",
-      "level": 12,
-      "maxHp": 1800,
-      "atk": 88,
-      "def": 142,
-      "spd": 28,
-      "luck": 48,
-      "skills": [
-        {
-          "description": "전체 240% 마법 피해",
-          "effectType": "damage",
-          "name": "파멸의 공허 폭풍",
-          "power": 2.4
-        },
-        {
-          "description": "단일 대상 방어 무시 280% 치명 일격",
-          "effectType": "damage",
-          "name": "시공간 붕괴격",
-          "power": 2.8
-        },
-        {
-          "description": "전체 MP 25 흡수 + 자신 HP 대량 회복",
-          "effectType": "drain",
-          "name": "흑무의 잠식",
-          "power": 1.2
-        },
-        {
-          "description": "전체 출혈 3턴 부여",
-          "effectType": "bleed",
-          "name": "심연의 저주",
-          "power": 0.8,
-          "statusDuration": 3
-        }
-      ],
-      "rewards": {
-        "dropEquipment": {
-          "baseName": "반지",
-          "description": "공허의 침식자를 쓰러뜨리고 회수한 고대 보물.",
-          "icon": "💍",
-          "id": "equip_legendary_ring",
-          "level": 7,
-          "name": "반지",
-          "rarity": "legendary",
-          "slot": "accessory",
-          "stats": {
-            "atk": 12,
-            "luck": 10,
-            "mp": 68,
-            "spd": 13
-          }
-        },
-        "dropSkillBookId": "book_boss_void_cataclysm",
-        "ether": 80,
-        "exp": 1000,
-        "gold": 1500,
-        "resources": {
-          "crystal": 8,
-          "pure_prefix_stone": 2,
-          "pure_suffix_stone": 2,
-          "void_shard": 12
-        }
-      },
-      "promptKey": "monster_void_overlord",
-      "imagePath": "assets/void_overlord.jpg",
-      "themeColor": 16728428,
-      "description": "Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다."
-    },
-    "boss_floor_3": {
-      "id": "boss_floor_3",
-      "name": "태고의 광맥 베히모스",
-      "type": "boss",
-      "level": 8,
-      "maxHp": 600,
-      "atk": 96,
-      "def": 220,
-      "spd": 43,
-      "luck": 36,
-      "skills": [
-        {
-          "description": "전체 180% 고열 화염 마법 피해",
-          "effectType": "damage",
-          "name": "광맥의 에테르 폭발",
-          "power": 1.8
-        },
-        {
-          "description": "적 전열·중앙에 200% 관통 피해",
-          "effectType": "damage",
-          "name": "마도 결정 쇄도",
-          "power": 2
-        },
-        {
-          "description": "체력 25% 즉시 회복 및 방어력 30% 증폭",
-          "effectType": "heal",
-          "name": "대지의 고동",
-          "power": 0.25
-        }
-      ],
-      "rewards": {
-        "dropSkillBookId": "book_boss_behemoth_eruption",
-        "ether": 45,
-        "exp": 580,
-        "gold": 800,
-        "resources": {
-          "crystal": 8,
-          "iron": 12,
-          "pure_prefix_stone": 2,
-          "stone": 15
-        }
-      },
-      "promptKey": "boss_floor_3",
-      "imagePath": "assets/boss_floor_3.jpg",
-      "themeColor": 48340,
-      "description": "에테르 광맥 깊은 곳에서 결정을 먹고 자란 태고의 마도 생명체. 폭발적인 광맥 에너지를 방출한다."
+      "themeColor": 12000284,
+      "type": "boss"
     },
     "boss_floor_2": {
-      "id": "boss_floor_2",
-      "name": "망령 군주 데스나이트",
-      "type": "boss",
-      "level": 6,
-      "maxHp": 240,
       "atk": 80,
       "def": 320,
-      "spd": 40,
+      "description": "납골당의 무수한 원혼을 통솔하는 망령들의 군주. 영혼을 베어넘기는 저주받은 대검을 휘두른다.",
+      "id": "boss_floor_2",
+      "imagePath": "assets/boss_floor_2.jpg",
+      "level": 6,
       "luck": 30,
+      "maxHp": 240,
+      "name": "망령 군주 데스나이트",
+      "promptKey": "boss_floor_2",
+      "rewards": {
+        "dropSkillBookId": "book_boss_deathknight_reap",
+        "ether": 30,
+        "exp": 400,
+        "gold": 550,
+        "resources": {
+          "coal": 6,
+          "iron": 8,
+          "silk": 8,
+          "suffix_stone": 3
+        }
+      },
       "skills": [
         {
           "description": "단일 대상 220% 암흑 참격 + 피해량 20% 흡혈",
@@ -968,33 +363,703 @@
           "statusDuration": 2
         }
       ],
+      "spd": 40,
+      "themeColor": 7901340,
+      "type": "boss"
+    },
+    "boss_floor_3": {
+      "atk": 96,
+      "def": 220,
+      "description": "에테르 광맥 깊은 곳에서 결정을 먹고 자란 태고의 마도 생명체. 폭발적인 광맥 에너지를 방출한다.",
+      "id": "boss_floor_3",
+      "imagePath": "assets/boss_floor_3.jpg",
+      "level": 8,
+      "luck": 36,
+      "maxHp": 600,
+      "name": "태고의 광맥 베히모스",
+      "promptKey": "boss_floor_3",
       "rewards": {
-        "dropSkillBookId": "book_boss_deathknight_reap",
-        "ether": 30,
-        "exp": 400,
-        "gold": 550,
+        "dropSkillBookId": "book_boss_behemoth_eruption",
+        "ether": 45,
+        "exp": 580,
+        "gold": 800,
         "resources": {
-          "coal": 6,
-          "iron": 8,
-          "silk": 8,
-          "suffix_stone": 3
+          "crystal": 8,
+          "iron": 12,
+          "pure_prefix_stone": 2,
+          "stone": 15
         }
       },
-      "promptKey": "boss_floor_2",
-      "imagePath": "assets/boss_floor_2.jpg",
+      "skills": [
+        {
+          "description": "전체 180% 고열 화염 마법 피해",
+          "effectType": "damage",
+          "name": "광맥의 에테르 폭발",
+          "power": 1.8
+        },
+        {
+          "description": "적 전열·중앙에 200% 관통 피해",
+          "effectType": "damage",
+          "name": "마도 결정 쇄도",
+          "power": 2
+        },
+        {
+          "description": "체력 25% 즉시 회복 및 방어력 30% 증폭",
+          "effectType": "heal",
+          "name": "대지의 고동",
+          "power": 0.25
+        }
+      ],
+      "spd": 43,
+      "themeColor": 48340,
+      "type": "boss"
+    },
+    "boss_floor_4": {
+      "atk": 105,
+      "def": 155,
+      "description": "심연의 균열을 조작하여 시공간을 뒤틀어버리는 고대 차원 마도사. 시간의 흐름을 왜곡하여 공격을 무력화한다.",
+      "id": "boss_floor_4",
+      "imagePath": "assets/boss_floor_4.jpg",
+      "level": 10,
+      "luck": 60,
+      "maxHp": 1400,
+      "name": "심연의 시공 왜곡자",
+      "promptKey": "boss_floor_4",
+      "rewards": {
+        "dropSkillBookId": "book_boss_chrono_warp",
+        "ether": 60,
+        "exp": 750,
+        "gold": 1100,
+        "resources": {
+          "crystal": 6,
+          "pure_suffix_stone": 2,
+          "silk": 8,
+          "void_shard": 10
+        }
+      },
+      "skills": [
+        {
+          "description": "전체 210% 비전 마법 피해 + 아군 속도 30% 감속 2턴",
+          "effectType": "debuff",
+          "name": "시공간 균열 붕괴",
+          "power": 2.1,
+          "statusDuration": 2
+        },
+        {
+          "description": "단일 대상 방어 무시 280% 치명타 일격",
+          "effectType": "damage",
+          "name": "차원 닻 강타",
+          "power": 2.8
+        },
+        {
+          "description": "2턴간 받는 피해 50% 반사 및 체력 회복",
+          "effectType": "shield",
+          "name": "시공 역행 결계",
+          "power": 0.5,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 58,
+      "themeColor": 11225020,
+      "type": "boss"
+    },
+    "boss_floor_5": {
+      "atk": 88,
+      "def": 142,
+      "description": "Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다.",
+      "id": "boss_floor_5",
+      "imagePath": "assets/void_overlord.jpg",
+      "level": 12,
+      "luck": 48,
+      "maxHp": 1800,
+      "name": "공허의 침식자",
+      "promptKey": "monster_void_overlord",
+      "rewards": {
+        "dropEquipment": {
+          "baseName": "반지",
+          "description": "공허의 침식자를 쓰러뜨리고 회수한 고대 보물.",
+          "icon": "💍",
+          "id": "equip_legendary_ring",
+          "level": 7,
+          "name": "반지",
+          "rarity": "legendary",
+          "slot": "accessory",
+          "stats": {
+            "atk": 12,
+            "luck": 10,
+            "mp": 68,
+            "spd": 13
+          }
+        },
+        "dropSkillBookId": "book_boss_void_cataclysm",
+        "ether": 80,
+        "exp": 1000,
+        "gold": 1500,
+        "resources": {
+          "crystal": 8,
+          "pure_prefix_stone": 2,
+          "pure_suffix_stone": 2,
+          "void_shard": 12
+        }
+      },
+      "skills": [
+        {
+          "description": "전체 240% 마법 피해",
+          "effectType": "damage",
+          "name": "파멸의 공허 폭풍",
+          "power": 2.4
+        },
+        {
+          "description": "단일 대상 방어 무시 280% 치명 일격",
+          "effectType": "damage",
+          "name": "시공간 붕괴격",
+          "power": 2.8
+        },
+        {
+          "description": "전체 MP 25 흡수 + 자신 HP 대량 회복",
+          "effectType": "drain",
+          "name": "흑무의 잠식",
+          "power": 1.2
+        },
+        {
+          "description": "전체 출혈 3턴 부여",
+          "effectType": "bleed",
+          "name": "심연의 저주",
+          "power": 0.8,
+          "statusDuration": 3
+        }
+      ],
+      "spd": 28,
+      "themeColor": 16728428,
+      "type": "boss"
+    },
+    "boss_floor_6": {
+      "atk": 140,
+      "def": 680,
+      "description": "핏빛 성역의 지배자. 거대한 박쥐 날개와 피의 마법으로 침입자의 생명력을 흡수합니다.",
+      "drainPct": 0.4,
+      "id": "boss_floor_6",
+      "imagePath": "assets/boss_floor_6.jpg",
+      "level": 16,
+      "luck": 52,
+      "maxHp": 3000,
+      "name": "핏빛 대공 (6F 보스)",
+      "piercePct": 0.3,
+      "promptKey": "boss_floor_6",
+      "rewards": {
+        "dropSkillBookId": "book_boss_blood_monarch",
+        "ether": 30,
+        "exp": 350,
+        "gold": 450
+      },
+      "skills": [
+        {
+          "breakGauge": 500,
+          "description": "전체 150% 피해 + 출혈 [집중 차징]",
+          "drainPct": 0.4,
+          "effectType": "bleed",
+          "isCharge": true,
+          "name": "핏빛 파동",
+          "power": 1.5,
+          "statusDuration": 2
+        },
+        {
+          "description": "단일 200% 피해 및 40% 흡혈 (방어 관통 35%)",
+          "drainPct": 0.4,
+          "effectType": "drain",
+          "name": "흡혈의 일격",
+          "piercePct": 0.35,
+          "power": 2
+        }
+      ],
+      "spd": 88,
+      "themeColor": 13840175,
+      "type": "boss"
+    },
+    "boss_floor_7": {
+      "atk": 160,
+      "def": 480,
+      "description": "망각의 묘역을 수호하는 죽음의 묘지기. 거대한 영혼의 낫으로 산 자의 생명을 수확합니다.",
+      "drainPct": 0.3,
+      "id": "boss_floor_7",
+      "imagePath": "assets/boss_floor_7.jpg",
+      "level": 18,
+      "luck": 56,
+      "maxHp": 3900,
+      "name": "망각의 묘지기 (7F 보스)",
+      "piercePct": 0.4,
+      "promptKey": "boss_floor_7",
+      "rewards": {
+        "dropSkillBookId": "book_boss_oblivion_scythe",
+        "ether": 40,
+        "exp": 450,
+        "gold": 600
+      },
+      "skills": [
+        {
+          "breakGauge": 650,
+          "description": "전체 180% 마법 피해 + 생명 강탈 [집중 차징]",
+          "drainPct": 0.35,
+          "effectType": "drain",
+          "isCharge": true,
+          "name": "영혼 수확",
+          "power": 1.8
+        },
+        {
+          "description": "단일 250% 방어 관통 65% 치명타",
+          "effectType": "damage",
+          "name": "사신의 낫",
+          "piercePct": 0.65,
+          "power": 2.5
+        }
+      ],
+      "spd": 70,
+      "themeColor": 6056896,
+      "type": "boss"
+    },
+    "boss_floor_8": {
+      "atk": 190,
+      "def": 660,
+      "description": "단죄의 요새를 통솔하던 전설적인 기사단장. 타락한 성역 결계와 무자비한 심판의 검을 휘두릅니다.",
+      "id": "boss_floor_8",
+      "imagePath": "assets/boss_floor_8.jpg",
+      "level": 21,
+      "luck": 60,
+      "maxHp": 4800,
+      "name": "타락한 기사단장 (8F 보스)",
+      "piercePct": 0.45,
+      "promptKey": "boss_floor_8",
+      "rewards": {
+        "dropSkillBookId": "book_boss_judgment_sanctum",
+        "ether": 50,
+        "exp": 600,
+        "gold": 800
+      },
+      "shieldBreakMult": 2,
+      "skills": [
+        {
+          "breakGauge": 850,
+          "description": "전체 200% 방어 관통 심판 [집중 차징 & 넉백]",
+          "disruptPosition": "knockback",
+          "effectType": "damage",
+          "isCharge": true,
+          "name": "집행자의 심판",
+          "piercePct": 0.5,
+          "power": 2
+        },
+        {
+          "description": "자신에게 300% 보호막",
+          "effectType": "shield",
+          "name": "타락한 성역",
+          "power": 3
+        }
+      ],
+      "spd": 80,
+      "themeColor": 3622735,
+      "type": "boss"
+    },
+    "boss_floor_9": {
+      "atk": 220,
+      "def": 710,
+      "description": "환영의 미궁 중심에서 차원 공간을 뒤틀어놓는 환각의 대마도사. 수많은 거울 파편으로 전장을 유린합니다.",
+      "id": "boss_floor_9",
+      "imagePath": "assets/boss_floor_9.jpg",
+      "level": 24,
+      "luck": 64,
+      "maxHp": 6200,
+      "name": "미궁의 지배자 (9F 보스)",
+      "piercePct": 0.5,
+      "promptKey": "boss_floor_9",
+      "rewards": {
+        "dropSkillBookId": "book_boss_mirror_kaleidoscope",
+        "ether": 60,
+        "exp": 800,
+        "gold": 1000
+      },
+      "skills": [
+        {
+          "breakGauge": 1100,
+          "description": "전체 220% 거울 폭풍 [집중 차징 & 진형 셔플]",
+          "disruptPosition": "shuffle",
+          "effectType": "damage",
+          "isCharge": true,
+          "name": "파편의 폭풍",
+          "piercePct": 0.5,
+          "power": 2.2
+        },
+        {
+          "description": "전체 공격력 감소 디버프",
+          "effectType": "debuff_atk",
+          "name": "현혹의 거울",
+          "power": 0.5,
+          "statusDuration": 3
+        }
+      ],
+      "spd": 60,
+      "themeColor": 166097,
+      "type": "boss"
+    },
+    "monster_abyssal_behemoth": {
+      "atk": 304,
+      "def": 340,
+      "description": "심연의 밑바닥을 배회하는 거대한 마수. 그 발걸음만으로도 던전 전체가 진동합니다.",
+      "id": "monster_abyssal_behemoth",
+      "imagePath": "assets/monster_abyssal_behemoth_v2.jpg",
+      "level": 27,
+      "luck": 126,
+      "maxHp": 1800,
+      "name": "심연의 베헤모스",
+      "promptKey": "monster_abyssal_behemoth",
+      "rewards": {
+        "ether": 35,
+        "exp": 250,
+        "gold": 300
+      },
+      "shieldBreakMult": 2.5,
+      "skills": [
+        {
+          "breakGauge": 1200,
+          "description": "전체 150% 대지진 [집중 차징 & 넉백]",
+          "disruptPosition": "knockback",
+          "effectType": "stun",
+          "isCharge": true,
+          "name": "지각 변동",
+          "power": 1.5,
+          "statusDuration": 1
+        },
+        {
+          "description": "전체 공격력 감소",
+          "effectType": "debuff_atk",
+          "name": "심연의 포효",
+          "power": 0,
+          "statusDuration": 3
+        }
+      ],
+      "spd": 45,
+      "themeColor": 4073251,
+      "type": "elite"
+    },
+    "monster_abyssal_fiend": {
+      "atk": 204,
+      "def": 600,
+      "description": "심연의 가장 깊은 틈새에서 소환된 고위 악마. 치명적인 독과 저주받은 손톱으로 살을 찢습니다.",
+      "drainPct": 0.35,
+      "id": "monster_abyssal_fiend",
+      "imagePath": "assets/monster_abyssal_fiend_v2.jpg",
+      "level": 25,
+      "luck": 75,
+      "maxHp": 4000,
+      "name": "심연의 악마",
+      "piercePct": 0.45,
+      "promptKey": "monster_abyssal_fiend",
+      "rewards": {
+        "ether": 20,
+        "exp": 150,
+        "gold": 180
+      },
+      "skills": [
+        {
+          "description": "단일 160% 피해 + 출혈 (흡혈 35% & 방어 관통 45%)",
+          "drainPct": 0.35,
+          "effectType": "bleed",
+          "name": "악마의 손톱",
+          "piercePct": 0.45,
+          "power": 1.6,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 63,
+      "themeColor": 12986408,
+      "type": "normal"
+    },
+    "monster_altar_cultist": {
+      "atk": 126,
+      "def": 131,
+      "description": "공허의 침식자를 숭배하며 제단을 수호하는 타락한 사제. 파괴적인 흑염 마법을 퍼붓는다.",
+      "id": "monster_altar_cultist",
+      "imagePath": "assets/monster_altar_cultist.jpg",
+      "level": 10,
+      "luck": 48,
+      "maxHp": 1600,
+      "name": "종언의 제단 광신도",
+      "promptKey": "monster_altar_cultist",
+      "rewards": {
+        "ether": 22,
+        "exp": 240,
+        "gold": 250,
+        "resources": {
+          "crystal": 4,
+          "void_shard": 4
+        }
+      },
+      "skills": [
+        {
+          "description": "전체 적에게 180% 강력한 흑마법 피해",
+          "effectType": "damage",
+          "name": "묵시록의 흑염",
+          "power": 1.8
+        },
+        {
+          "description": "적 단일 MP 30 강탈 + 자신 공격력 30% 증폭 2턴",
+          "effectType": "drain",
+          "name": "암흑 제물 공양",
+          "power": 1.3
+        }
+      ],
+      "spd": 45,
+      "themeColor": 15277667,
+      "type": "normal"
+    },
+    "monster_blood_wolf": {
+      "atk": 155,
+      "def": 110,
+      "description": "핏빛 성역을 배회하는 흉포한 마수. 피 냄새를 맡으면 무리를 이끌고 광포화합니다.",
+      "drainPct": 0.3,
+      "id": "monster_blood_wolf",
+      "imagePath": "assets/monster_blood_wolf_v2.jpg",
+      "level": 13,
+      "luck": 54,
+      "maxHp": 2100,
+      "name": "핏빛 늑대",
+      "promptKey": "monster_blood_wolf",
+      "rewards": {
+        "ether": 6,
+        "exp": 60,
+        "gold": 80
+      },
+      "skills": [
+        {
+          "description": "단일 120% 피해 (흡혈 30%)",
+          "drainPct": 0.3,
+          "effectType": "drain",
+          "name": "물어뜯기",
+          "power": 1.2
+        },
+        {
+          "description": "전체 공격력 증가",
+          "effectType": "buff_atk",
+          "name": "광기의 울부짖음",
+          "power": 0.3,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 66,
+      "themeColor": 15684432,
+      "type": "normal"
+    },
+    "monster_bone_golem": {
+      "atk": 118,
+      "def": 460,
+      "description": "수천의 유골과 마수의 뼈가 결합되어 탄생한 거대한 뼈의 골렘. 막강한 방어력과 분쇄력을 지닙니다.",
+      "id": "monster_bone_golem",
+      "imagePath": "assets/monster_bone_golem_v2.jpg",
+      "level": 17,
+      "luck": 54,
+      "maxHp": 3400,
+      "name": "뼈 골렘",
+      "promptKey": "monster_bone_golem",
+      "rewards": {
+        "ether": 10,
+        "exp": 90,
+        "gold": 110,
+        "resources": {
+          "bone": 3
+        }
+      },
+      "shieldBreakMult": 2.2,
+      "skills": [
+        {
+          "description": "단일 140% 피해 (보호막 분쇄 & 넉백)",
+          "disruptPosition": "knockback",
+          "effectType": "damage",
+          "name": "뼈 분쇄",
+          "power": 1.4
+        }
+      ],
+      "spd": 36,
+      "themeColor": 12364452,
+      "type": "normal"
+    },
+    "monster_cave_bat": {
+      "atk": 35,
+      "def": 66,
+      "description": "고속으로 날며 음파 충격을 가하는 동굴 군집 몬스터. 속도가 가장 빠르다.",
+      "id": "monster_cave_bat",
+      "imagePath": "assets/monster_cave_bat.jpg",
+      "level": 1,
+      "luck": 7,
+      "maxHp": 60,
+      "name": "동굴 흑익박쥐",
+      "promptKey": "monster_cave_bat",
+      "rewards": {
+        "ether": 1,
+        "exp": 20,
+        "gold": 25,
+        "resources": {
+          "wood": 3
+        }
+      },
+      "skills": [
+        {
+          "description": "랜덤 대상에 90% 피해 × 2회 연타",
+          "effectType": "damage",
+          "name": "초음파 강타",
+          "power": 0.9
+        },
+        {
+          "description": "대상 파티 전체 공격력 1턴 약화",
+          "effectType": "debuff",
+          "name": "혼란의 울음",
+          "power": 0.2,
+          "statusDuration": 1
+        }
+      ],
+      "spd": 20,
       "themeColor": 7901340,
-      "description": "납골당의 무수한 원혼을 통솔하는 망령들의 군주. 영혼을 베어넘기는 저주받은 대검을 휘두른다."
+      "type": "normal"
+    },
+    "monster_crypt_ghoul": {
+      "atk": 55,
+      "def": 75,
+      "description": "어둠 속에서 시체를 파먹고 자란 흉폭한 구울. 강력한 턱과 출혈 공격을 가한다.",
+      "drainPct": 0.25,
+      "id": "monster_crypt_ghoul",
+      "imagePath": "assets/monster_crypt_ghoul.jpg",
+      "level": 4,
+      "luck": 8,
+      "maxHp": 126,
+      "name": "살점을 뜯는 구울",
+      "promptKey": "monster_crypt_ghoul",
+      "rewards": {
+        "ether": 4,
+        "exp": 70,
+        "gold": 80,
+        "resources": {
+          "coal": 3,
+          "iron": 2
+        }
+      },
+      "skills": [
+        {
+          "description": "단일 대상 150% 피해 + 2턴 출혈",
+          "drainPct": 0.3,
+          "effectType": "bleed",
+          "name": "썩은 송곳니",
+          "power": 1.5,
+          "statusDuration": 2
+        },
+        {
+          "description": "자신의 체력을 30% 즉시 재생",
+          "effectType": "heal",
+          "name": "시체 섭취",
+          "power": 0.3
+        }
+      ],
+      "spd": 11,
+      "themeColor": 9268835,
+      "type": "normal"
+    },
+    "monster_crystal_scorpion": {
+      "atk": 68,
+      "def": 62,
+      "description": "광맥의 고농도 에테르가 응축된 푸른 수정 외피를 지닌 전갈. 강력한 독침으로 적을 마비시킨다.",
+      "id": "monster_crystal_scorpion",
+      "imagePath": "assets/monster_crystal_scorpion.jpg",
+      "level": 6,
+      "luck": 10,
+      "maxHp": 140,
+      "name": "마도 수정 전갈",
+      "promptKey": "monster_crystal_scorpion",
+      "rewards": {
+        "ether": 8,
+        "exp": 110,
+        "gold": 120,
+        "resources": {
+          "crystal": 3,
+          "stone": 8
+        }
+      },
+      "skills": [
+        {
+          "description": "단일 대상 160% 마법 관통 피해 + 1턴 기절",
+          "effectType": "stun",
+          "name": "비전 침 찌르기",
+          "power": 1.6,
+          "statusDuration": 1
+        },
+        {
+          "description": "자신의 방어력을 2턴간 40% 강화",
+          "effectType": "buff",
+          "name": "수정 외골격",
+          "power": 0.4,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 10,
+      "themeColor": 2541274,
+      "type": "normal"
+    },
+    "monster_cursed_revenant": {
+      "atk": 47,
+      "def": 74,
+      "description": "방주 성채에서 쓰러진 병사의 혼이 공허에 흡수된 언데드. 자신의 HP를 흡수하며 싸운다.",
+      "id": "monster_cursed_revenant",
+      "imagePath": "assets/monster_cursed_revenant.jpg",
+      "level": 2,
+      "luck": 7,
+      "maxHp": 95,
+      "name": "저주받은 망자",
+      "promptKey": "monster_cursed_revenant",
+      "rewards": {
+        "ether": 3,
+        "exp": 32,
+        "gold": 45,
+        "resources": {
+          "leather": 2,
+          "wood": 2
+        }
+      },
+      "skills": [
+        {
+          "description": "단일 대상 120% 피해 + 자신 HP 흡수",
+          "effectType": "drain",
+          "name": "영혼 흡수",
+          "power": 1.2
+        },
+        {
+          "description": "단일 대상 방어력 2턴 25% 감소",
+          "effectType": "debuff",
+          "name": "저주의 포옹",
+          "power": 0.25,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 10,
+      "themeColor": 13538264,
+      "type": "normal"
     },
     "monster_dread_knight": {
-      "id": "monster_dread_knight",
-      "name": "심연의 망령 기사",
-      "type": "elite",
-      "level": 5,
-      "maxHp": 134,
       "atk": 110,
       "def": 148,
-      "spd": 19,
+      "description": "과거 방주를 수호하다 타락한 영겁의 기사. 단단한 방벽과 저주받은 대검을 휘두른다.",
+      "id": "monster_dread_knight",
+      "imagePath": "assets/monster_dread_knight.jpg",
+      "level": 5,
       "luck": 30,
+      "maxHp": 134,
+      "name": "심연의 망령 기사",
+      "promptKey": "monster_dread_knight",
+      "rewards": {
+        "ether": 15,
+        "exp": 200,
+        "gold": 280,
+        "resources": {
+          "crystal": 3,
+          "iron": 8,
+          "pure_prefix_stone": 1,
+          "pure_suffix_stone": 1
+        }
+      },
       "skills": [
         {
           "description": "전열·중앙 동시 관통 160% 피해",
@@ -1017,395 +1082,125 @@
           "statusDuration": 2
         }
       ],
-      "rewards": {
-        "ether": 15,
-        "exp": 200,
-        "gold": 280,
-        "resources": {
-          "crystal": 3,
-          "iron": 8,
-          "pure_prefix_stone": 1,
-          "pure_suffix_stone": 1
-        }
-      },
-      "promptKey": "monster_dread_knight",
-      "imagePath": "assets/monster_dread_knight.jpg",
+      "spd": 19,
       "themeColor": 11225020,
-      "description": "과거 방주를 수호하다 타락한 영겁의 기사. 단단한 방벽과 저주받은 대검을 휘두른다."
+      "type": "elite"
     },
-    "boss_floor_1": {
-      "id": "boss_floor_1",
-      "name": "침묵의 흑핵 거신",
-      "type": "boss",
-      "level": 4,
-      "maxHp": 228,
-      "atk": 68,
-      "def": 300,
-      "spd": 20,
-      "luck": 25,
-      "skills": [
-        {
-          "description": "전체 140% 물리 피해 + 공격력 20% 감소 2턴",
-          "effectType": "debuff",
-          "name": "침묵의 대지 분쇄",
-          "power": 1.4,
-          "statusDuration": 2
-        },
-        {
-          "description": "단일 대상 180% 서리 대미지 + 1턴 기절",
-          "effectType": "stun",
-          "name": "동결의 흑핵 방출",
-          "power": 1.8,
-          "statusDuration": 1
-        },
-        {
-          "description": "자신에게 2턴간 받는 피해 35% 감소 방벽",
-          "effectType": "shield",
-          "name": "고대 석벽 결계",
-          "power": 0.35,
-          "statusDuration": 2
-        }
-      ],
+    "monster_fallen_paladin": {
+      "atk": 240,
+      "def": 350,
+      "description": "심연의 저주에 굴복한 고대 성기사. 칠흑의 검과 저주받은 방패로 전열을 압박합니다.",
+      "id": "monster_fallen_paladin",
+      "imagePath": "assets/monster_fallen_paladin_v2.jpg",
+      "level": 19,
+      "luck": 63,
+      "maxHp": 800,
+      "name": "타락한 기사",
+      "promptKey": "monster_fallen_paladin",
       "rewards": {
-        "dropSkillBookId": "book_boss_colossus_core",
-        "ether": 20,
-        "exp": 250,
-        "gold": 350,
-        "resources": {
-          "herb": 8,
-          "leather": 8,
-          "prefix_stone": 3,
-          "wood": 10
-        }
+        "ether": 12,
+        "exp": 100,
+        "gold": 130
       },
-      "promptKey": "boss_floor_1",
-      "imagePath": "assets/boss_floor_1.jpg",
-      "themeColor": 6056896,
-      "description": "침묵의 회랑 심부에 잠들어 있던 고대 석조 거신. 가슴의 흑핵에서 뿜어져 나오는 한기로 침입자를 얼어붙게 한다."
-    },
-    "monster_monolith_guardian": {
-      "id": "monster_monolith_guardian",
-      "name": "모노리스의 파멸 수호자",
-      "type": "normal",
-      "level": 11,
-      "maxHp": 280,
-      "atk": 103,
-      "def": 179,
-      "spd": 24,
-      "luck": 21,
       "skills": [
         {
-          "description": "전열 대상에게 240% 피해 + 1턴 기절",
-          "effectType": "stun",
-          "name": "파멸의 모노리스 강타",
-          "power": 2.4,
-          "statusDuration": 1
-        },
-        {
-          "description": "자신에게 최대 체력의 35% 보호막 전개 2턴",
-          "effectType": "shield",
-          "name": "절대 성벽 방진",
-          "power": 0.35,
-          "statusDuration": 2
-        }
-      ],
-      "rewards": {
-        "ether": 25,
-        "exp": 280,
-        "gold": 300,
-        "resources": {
-          "crystal": 5,
-          "void_shard": 6
-        }
-      },
-      "promptKey": "monster_monolith_guardian",
-      "imagePath": "assets/monster_monolith_guardian.jpg",
-      "themeColor": 16740419,
-      "description": "고대 모노리스의 파편으로 기동하는 거대한 골렘. 철벽의 방패와 무거운 석퇴로 침입자를 짓밟는다."
-    },
-    "monster_altar_cultist": {
-      "id": "monster_altar_cultist",
-      "name": "종언의 제단 광신도",
-      "type": "normal",
-      "level": 10,
-      "maxHp": 1600,
-      "atk": 126,
-      "def": 131,
-      "spd": 45,
-      "luck": 48,
-      "skills": [
-        {
-          "description": "전체 적에게 180% 강력한 흑마법 피해",
+          "description": "단일 130% 피해",
           "effectType": "damage",
-          "name": "묵시록의 흑염",
-          "power": 1.8
-        },
-        {
-          "description": "적 단일 MP 30 강탈 + 자신 공격력 30% 증폭 2턴",
-          "effectType": "drain",
-          "name": "암흑 제물 공양",
+          "name": "칠흑의 검",
           "power": 1.3
         }
       ],
-      "rewards": {
-        "ether": 22,
-        "exp": 240,
-        "gold": 250,
-        "resources": {
-          "crystal": 4,
-          "void_shard": 4
-        }
-      },
-      "promptKey": "monster_altar_cultist",
-      "imagePath": "assets/monster_altar_cultist.jpg",
-      "themeColor": 15277667,
-      "description": "공허의 침식자를 숭배하며 제단을 수호하는 타락한 사제. 파괴적인 흑염 마법을 퍼붓는다."
+      "spd": 45,
+      "themeColor": 4545124,
+      "type": "normal"
     },
-    "monster_rift_stalker": {
-      "id": "monster_rift_stalker",
-      "name": "균열의 차원 추적자",
-      "type": "normal",
-      "level": 8,
-      "maxHp": 120,
-      "atk": 77,
-      "def": 100,
-      "spd": 55,
-      "luck": 45,
-      "skills": [
-        {
-          "description": "적 1체에 방어력 30% 무시 220% 암습",
-          "effectType": "damage",
-          "name": "차원 도약 습격",
-          "power": 2.2
-        },
-        {
-          "description": "자신에게 2턴간 30% 회피율 및 치명타율 버프",
-          "effectType": "buff",
-          "name": "공간 왜곡",
-          "power": 0.3,
-          "statusDuration": 2
-        }
-      ],
-      "rewards": {
-        "ether": 14,
-        "exp": 170,
-        "gold": 180,
-        "resources": {
-          "crystal": 2,
-          "void_shard": 4
-        }
-      },
-      "promptKey": "monster_rift_stalker",
-      "imagePath": "assets/monster_rift_stalker.jpg",
-      "themeColor": 12216520,
-      "description": "시공간의 틈새를 자유자재로 넘나드는 차원 포식자. 방어력을 관통하는 기습 일격을 가한다."
-    },
-    "monster_void_beast": {
-      "id": "monster_void_beast",
-      "name": "공허의 하수인 촉수괴수",
-      "type": "normal",
-      "level": 8,
-      "maxHp": 220,
-      "atk": 76,
-      "def": 188,
-      "spd": 18,
-      "luck": 12,
-      "skills": [
-        {
-          "description": "전체 적에게 130% 물리 피해 + 2턴 출혈",
-          "effectType": "bleed",
-          "name": "심연의 촉수 난타",
-          "power": 1.3,
-          "statusDuration": 2
-        },
-        {
-          "description": "자신의 체력을 25% 회복하고 방어력 20% 증가",
-          "effectType": "heal",
-          "name": "흑무 흡수",
-          "power": 0.25
-        }
-      ],
-      "rewards": {
-        "ether": 16,
-        "exp": 185,
-        "gold": 200,
-        "resources": {
-          "silk": 3,
-          "void_shard": 5
-        }
-      },
-      "promptKey": "monster_void_beast",
-      "imagePath": "assets/monster_void_beast.jpg",
-      "themeColor": 8280002,
-      "description": "심연의 어둠 속에서 꿈틀거리는 다수의 촉수를 지닌 거대 마물. 광역 출혈과 자가 재생을 구사한다."
-    },
-    "monster_mana_gargoyle": {
-      "id": "monster_mana_gargoyle",
-      "name": "마력 침식 가고일",
-      "type": "normal",
-      "level": 6,
-      "maxHp": 110,
-      "atk": 74,
-      "def": 84,
-      "spd": 16,
-      "luck": 12,
-      "skills": [
-        {
-          "description": "전열 전체 150% 마법 피해",
-          "effectType": "damage",
-          "name": "에테르 파동포",
-          "power": 1.5
-        },
-        {
-          "description": "후열 단일 대상 190% 치명 기습",
-          "effectType": "damage",
-          "name": "비전 급강하",
-          "power": 1.9
-        }
-      ],
-      "rewards": {
-        "ether": 9,
-        "exp": 120,
-        "gold": 130,
-        "resources": {
-          "crystal": 2,
-          "iron": 6
-        }
-      },
-      "promptKey": "monster_mana_gargoyle",
-      "imagePath": "assets/monster_mana_gargoyle.jpg",
-      "themeColor": 5099745,
-      "description": "석재 조각상에 에테르 마력이 스며들어 깨어난 비행 가고일. 고속으로 급강하하여 후열을 노린다."
-    },
-    "monster_crystal_scorpion": {
-      "id": "monster_crystal_scorpion",
-      "name": "마도 수정 전갈",
-      "type": "normal",
-      "level": 6,
-      "maxHp": 140,
-      "atk": 68,
-      "def": 62,
-      "spd": 10,
-      "luck": 10,
-      "skills": [
-        {
-          "description": "단일 대상 160% 마법 관통 피해 + 1턴 기절",
-          "effectType": "stun",
-          "name": "비전 침 찌르기",
-          "power": 1.6,
-          "statusDuration": 1
-        },
-        {
-          "description": "자신의 방어력을 2턴간 40% 강화",
-          "effectType": "buff",
-          "name": "수정 외골격",
-          "power": 0.4,
-          "statusDuration": 2
-        }
-      ],
+    "monster_fallen_priest": {
+      "atk": 82,
+      "def": 240,
+      "description": "심연의 어둠에 영혼을 바친 타락한 성직자. 어둠의 권능과 사악한 치유 의식을 행합니다.",
+      "id": "monster_fallen_priest",
+      "imagePath": "assets/monster_fallen_priest_v2.jpg",
+      "level": 14,
+      "luck": 51,
+      "maxHp": 288,
+      "name": "타락한 사제",
+      "piercePct": 0.25,
+      "promptKey": "monster_fallen_priest",
       "rewards": {
         "ether": 8,
-        "exp": 110,
-        "gold": 120,
-        "resources": {
-          "crystal": 3,
-          "stone": 8
-        }
-      },
-      "promptKey": "monster_crystal_scorpion",
-      "imagePath": "assets/monster_crystal_scorpion.jpg",
-      "themeColor": 2541274,
-      "description": "광맥의 고농도 에테르가 응축된 푸른 수정 외피를 지닌 전갈. 강력한 독침으로 적을 마비시킨다."
-    },
-    "monster_crypt_ghoul": {
-      "id": "monster_crypt_ghoul",
-      "name": "살점을 뜯는 구울",
-      "type": "normal",
-      "level": 4,
-      "maxHp": 126,
-      "atk": 55,
-      "def": 75,
-      "spd": 11,
-      "luck": 8,
-      "drainPct": 0.25,
-      "skills": [
-        {
-          "description": "단일 대상 150% 피해 + 2턴 출혈",
-          "drainPct": 0.3,
-          "effectType": "bleed",
-          "name": "썩은 송곳니",
-          "power": 1.5,
-          "statusDuration": 2
-        },
-        {
-          "description": "자신의 체력을 30% 즉시 재생",
-          "effectType": "heal",
-          "name": "시체 섭취",
-          "power": 0.3
-        }
-      ],
-      "rewards": {
-        "ether": 4,
         "exp": 70,
-        "gold": 80,
-        "resources": {
-          "coal": 3,
-          "iron": 2
-        }
+        "gold": 90
       },
-      "promptKey": "monster_crypt_ghoul",
-      "imagePath": "assets/monster_crypt_ghoul.jpg",
-      "themeColor": 9268835,
-      "description": "어둠 속에서 시체를 파먹고 자란 흉폭한 구울. 강력한 턱과 출혈 공격을 가한다."
-    },
-    "monster_shadow_imp": {
-      "id": "monster_shadow_imp",
-      "name": "그림자 악귀",
-      "type": "normal",
-      "level": 2,
-      "maxHp": 88,
-      "atk": 30,
-      "def": 66,
-      "spd": 22,
-      "luck": 8,
       "skills": [
         {
-          "description": "단일 대상 100% 피해 + 1턴 기절",
-          "effectType": "stun",
-          "name": "암흑 할퀴기",
-          "power": 1,
-          "statusDuration": 1
+          "description": "전체 80% 피해 (방어 관통 25%)",
+          "effectType": "damage",
+          "name": "검은 권능",
+          "piercePct": 0.25,
+          "power": 0.8
         },
         {
-          "description": "랜덤 2대상에 각 90% 피해",
-          "effectType": "damage",
-          "name": "군집 난무",
-          "power": 0.9
+          "description": "가장 체력이 낮은 아군 치유",
+          "effectType": "heal",
+          "name": "피의 의식",
+          "power": 1.5
         }
       ],
+      "spd": 48,
+      "themeColor": 8280002,
+      "type": "normal"
+    },
+    "monster_inquisitor": {
+      "atk": 150,
+      "def": 220,
+      "description": "단죄의 성채에서 이단을 심문하던 광기의 집행관. 불타는 사슬과 화형의 불길로 적을 태웁니다.",
+      "id": "monster_inquisitor",
+      "imagePath": "assets/monster_inquisitor_v2.jpg",
+      "level": 20,
+      "luck": 69,
+      "maxHp": 720,
+      "name": "이단 심문관",
+      "piercePct": 0.35,
+      "promptKey": "monster_inquisitor",
       "rewards": {
-        "ether": 2,
-        "exp": 25,
-        "gold": 32,
-        "resources": {
-          "herb": 2
-        }
+        "ether": 14,
+        "exp": 110,
+        "gold": 140
       },
-      "promptKey": "monster_shadow_imp",
-      "imagePath": "assets/monster_shadow_imp.jpg",
-      "themeColor": 6056896,
-      "description": "공허에서 분열한 소형 악령. 기절 효과로 아군의 턴을 빼앗는다."
+      "skills": [
+        {
+          "description": "단일 110% 관통 화형 (방어 관통 40%)",
+          "effectType": "bleed",
+          "name": "화형 선고",
+          "piercePct": 0.4,
+          "power": 1.1,
+          "statusDuration": 3
+        }
+      ],
+      "spd": 57,
+      "themeColor": 14172949,
+      "type": "normal"
     },
     "monster_iron_golem": {
-      "id": "monster_iron_golem",
-      "name": "폐허 철제 골렘",
-      "type": "normal",
-      "level": 3,
-      "maxHp": 120,
       "atk": 35,
       "def": 160,
-      "spd": 4,
+      "description": "고대 연금술로 만들어진 철제 자동 병기의 잔해. 방어력이 매우 높고 둔중한 강타로 전열을 부순다.",
+      "id": "monster_iron_golem",
+      "imagePath": "assets/monster_iron_golem.jpg",
+      "level": 3,
       "luck": 6,
+      "maxHp": 120,
+      "name": "폐허 철제 골렘",
+      "promptKey": "monster_iron_golem",
+      "rewards": {
+        "ether": 2,
+        "exp": 42,
+        "gold": 55,
+        "resources": {
+          "leather": 2,
+          "wood": 4
+        }
+      },
       "shieldBreakMult": 1.5,
       "skills": [
         {
@@ -1423,30 +1218,206 @@
           "statusDuration": 2
         }
       ],
+      "spd": 4,
+      "themeColor": 9479342,
+      "type": "normal"
+    },
+    "monster_mana_gargoyle": {
+      "atk": 74,
+      "def": 84,
+      "description": "석재 조각상에 에테르 마력이 스며들어 깨어난 비행 가고일. 고속으로 급강하하여 후열을 노린다.",
+      "id": "monster_mana_gargoyle",
+      "imagePath": "assets/monster_mana_gargoyle.jpg",
+      "level": 6,
+      "luck": 12,
+      "maxHp": 110,
+      "name": "마력 침식 가고일",
+      "promptKey": "monster_mana_gargoyle",
       "rewards": {
-        "ether": 2,
-        "exp": 42,
-        "gold": 55,
+        "ether": 9,
+        "exp": 120,
+        "gold": 130,
         "resources": {
-          "leather": 2,
-          "wood": 4
+          "crystal": 2,
+          "iron": 6
         }
       },
-      "promptKey": "monster_iron_golem",
-      "imagePath": "assets/monster_iron_golem.jpg",
-      "themeColor": 9479342,
-      "description": "고대 연금술로 만들어진 철제 자동 병기의 잔해. 방어력이 매우 높고 둔중한 강타로 전열을 부순다."
+      "skills": [
+        {
+          "description": "전열 전체 150% 마법 피해",
+          "effectType": "damage",
+          "name": "에테르 파동포",
+          "power": 1.5
+        },
+        {
+          "description": "후열 단일 대상 190% 치명 기습",
+          "effectType": "damage",
+          "name": "비전 급강하",
+          "power": 1.9
+        }
+      ],
+      "spd": 16,
+      "themeColor": 5099745,
+      "type": "normal"
+    },
+    "monster_mirror_phantom": {
+      "atk": 265,
+      "def": 350,
+      "description": "환영의 미궁에 반사된 다중 차원의 그림자 분신. 실체 없는 공격으로 적의 급소를 유린합니다.",
+      "id": "monster_mirror_phantom",
+      "imagePath": "assets/monster_mirror_phantom_v2.jpg",
+      "level": 22,
+      "luck": 85,
+      "maxHp": 863,
+      "name": "거울의 환영",
+      "piercePct": 0.4,
+      "promptKey": "monster_mirror_phantom",
+      "rewards": {
+        "ether": 16,
+        "exp": 130,
+        "gold": 160
+      },
+      "skills": [
+        {
+          "description": "단일 150% 피해 (그랩 / 진형 당기기)",
+          "disruptPosition": "pull",
+          "effectType": "damage",
+          "name": "일루전 스트라이크",
+          "piercePct": 0.4,
+          "power": 1.5
+        }
+      ],
+      "spd": 84,
+      "themeColor": 2733814,
+      "type": "normal"
+    },
+    "monster_monolith_guardian": {
+      "atk": 103,
+      "def": 179,
+      "description": "고대 모노리스의 파편으로 기동하는 거대한 골렘. 철벽의 방패와 무거운 석퇴로 침입자를 짓밟는다.",
+      "id": "monster_monolith_guardian",
+      "imagePath": "assets/monster_monolith_guardian.jpg",
+      "level": 11,
+      "luck": 21,
+      "maxHp": 280,
+      "name": "모노리스의 파멸 수호자",
+      "promptKey": "monster_monolith_guardian",
+      "rewards": {
+        "ether": 25,
+        "exp": 280,
+        "gold": 300,
+        "resources": {
+          "crystal": 5,
+          "void_shard": 6
+        }
+      },
+      "skills": [
+        {
+          "description": "전열 대상에게 240% 피해 + 1턴 기절",
+          "effectType": "stun",
+          "name": "파멸의 모노리스 강타",
+          "power": 2.4,
+          "statusDuration": 1
+        },
+        {
+          "description": "자신에게 최대 체력의 35% 보호막 전개 2턴",
+          "effectType": "shield",
+          "name": "절대 성벽 방진",
+          "power": 0.35,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 24,
+      "themeColor": 16740419,
+      "type": "normal"
+    },
+    "monster_oblivion_ghost": {
+      "atk": 125,
+      "def": 126,
+      "description": "망각의 묘지에 갇힌 영혼들의 원념이 뭉쳐진 언데드 유체. 영혼을 얼어붙게 하는 한기를 내뿜습니다.",
+      "id": "monster_oblivion_ghost",
+      "imagePath": "assets/monster_oblivion_ghost_v2.jpg",
+      "level": 16,
+      "luck": 100,
+      "maxHp": 724,
+      "name": "망각의 유령",
+      "promptKey": "monster_oblivion_ghost",
+      "rewards": {
+        "ether": 10,
+        "exp": 80,
+        "gold": 100
+      },
+      "skills": [
+        {
+          "description": "단일 100% 피해 + 빙결(스턴)",
+          "effectType": "stun",
+          "name": "한기 서린 손아귀",
+          "power": 1,
+          "statusDuration": 1
+        }
+      ],
+      "spd": 78,
+      "themeColor": 9489145,
+      "type": "normal"
+    },
+    "monster_rift_stalker": {
+      "atk": 77,
+      "def": 100,
+      "description": "시공간의 틈새를 자유자재로 넘나드는 차원 포식자. 방어력을 관통하는 기습 일격을 가한다.",
+      "id": "monster_rift_stalker",
+      "imagePath": "assets/monster_rift_stalker.jpg",
+      "level": 8,
+      "luck": 45,
+      "maxHp": 120,
+      "name": "균열의 차원 추적자",
+      "promptKey": "monster_rift_stalker",
+      "rewards": {
+        "ether": 14,
+        "exp": 170,
+        "gold": 180,
+        "resources": {
+          "crystal": 2,
+          "void_shard": 4
+        }
+      },
+      "skills": [
+        {
+          "description": "적 1체에 방어력 30% 무시 220% 암습",
+          "effectType": "damage",
+          "name": "차원 도약 습격",
+          "power": 2.2
+        },
+        {
+          "description": "자신에게 2턴간 30% 회피율 및 치명타율 버프",
+          "effectType": "buff",
+          "name": "공간 왜곡",
+          "power": 0.3,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 55,
+      "themeColor": 12216520,
+      "type": "normal"
     },
     "monster_rot_slime": {
-      "id": "monster_rot_slime",
-      "name": "부패 점액체",
-      "type": "normal",
-      "level": 2,
-      "maxHp": 66,
       "atk": 23,
       "def": 58,
-      "spd": 5,
+      "description": "부패한 에테르에서 태어난 녹색 점액 괴물. 느리지만 체력이 높고 광역 독을 뿌린다.",
+      "id": "monster_rot_slime",
+      "imagePath": "assets/monster_rot_slime.jpg",
+      "level": 2,
       "luck": 5,
+      "maxHp": 66,
+      "name": "부패 점액체",
+      "promptKey": "monster_rot_slime",
+      "rewards": {
+        "ether": 2,
+        "exp": 27,
+        "gold": 35,
+        "resources": {
+          "herb": 3
+        }
+      },
       "skills": [
         {
           "description": "전체 적에게 80% 피해 + 2턴 출혈",
@@ -1463,104 +1434,197 @@
           "statusDuration": 1
         }
       ],
+      "spd": 5,
+      "themeColor": 9159498,
+      "type": "normal"
+    },
+    "monster_shadow_imp": {
+      "atk": 30,
+      "def": 66,
+      "description": "공허에서 분열한 소형 악령. 기절 효과로 아군의 턴을 빼앗는다.",
+      "id": "monster_shadow_imp",
+      "imagePath": "assets/monster_shadow_imp.jpg",
+      "level": 2,
+      "luck": 8,
+      "maxHp": 88,
+      "name": "그림자 악귀",
+      "promptKey": "monster_shadow_imp",
       "rewards": {
         "ether": 2,
-        "exp": 27,
-        "gold": 35,
+        "exp": 25,
+        "gold": 32,
         "resources": {
-          "herb": 3
+          "herb": 2
         }
       },
-      "promptKey": "monster_rot_slime",
-      "imagePath": "assets/monster_rot_slime.jpg",
-      "themeColor": 9159498,
-      "description": "부패한 에테르에서 태어난 녹색 점액 괴물. 느리지만 체력이 높고 광역 독을 뿌린다."
-    },
-    "monster_cursed_revenant": {
-      "id": "monster_cursed_revenant",
-      "name": "저주받은 망자",
-      "type": "normal",
-      "level": 2,
-      "maxHp": 95,
-      "atk": 47,
-      "def": 74,
-      "spd": 10,
-      "luck": 7,
       "skills": [
         {
-          "description": "단일 대상 120% 피해 + 자신 HP 흡수",
+          "description": "단일 대상 100% 피해 + 1턴 기절",
+          "effectType": "stun",
+          "name": "암흑 할퀴기",
+          "power": 1,
+          "statusDuration": 1
+        },
+        {
+          "description": "랜덤 2대상에 각 90% 피해",
+          "effectType": "damage",
+          "name": "군집 난무",
+          "power": 0.9
+        }
+      ],
+      "spd": 22,
+      "themeColor": 6056896,
+      "type": "normal"
+    },
+    "monster_void_beast": {
+      "atk": 76,
+      "def": 188,
+      "description": "심연의 어둠 속에서 꿈틀거리는 다수의 촉수를 지닌 거대 마물. 광역 출혈과 자가 재생을 구사한다.",
+      "id": "monster_void_beast",
+      "imagePath": "assets/monster_void_beast.jpg",
+      "level": 8,
+      "luck": 12,
+      "maxHp": 220,
+      "name": "공허의 하수인 촉수괴수",
+      "promptKey": "monster_void_beast",
+      "rewards": {
+        "ether": 16,
+        "exp": 185,
+        "gold": 200,
+        "resources": {
+          "silk": 3,
+          "void_shard": 5
+        }
+      },
+      "skills": [
+        {
+          "description": "전체 적에게 130% 물리 피해 + 2턴 출혈",
+          "effectType": "bleed",
+          "name": "심연의 촉수 난타",
+          "power": 1.3,
+          "statusDuration": 2
+        },
+        {
+          "description": "자신의 체력을 25% 회복하고 방어력 20% 증가",
+          "effectType": "heal",
+          "name": "흑무 흡수",
+          "power": 0.25
+        }
+      ],
+      "spd": 18,
+      "themeColor": 8280002,
+      "type": "normal"
+    },
+    "monster_void_overlord": {
+      "atk": 138,
+      "def": 230,
+      "description": "Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다.",
+      "id": "monster_void_overlord",
+      "imagePath": "assets/void_overlord.jpg",
+      "level": 12,
+      "luck": 48,
+      "maxHp": 166,
+      "name": "공허의 침식자",
+      "promptKey": "monster_void_overlord",
+      "rewards": {
+        "dropEquipment": {
+          "baseName": "반지",
+          "description": "공허의 침식자를 쓰러뜨리고 회수한 고대 보물.",
+          "icon": "💍",
+          "id": "equip_legendary_ring",
+          "level": 7,
+          "name": "반지",
+          "rarity": "legendary",
+          "slot": "accessory",
+          "stats": {
+            "atk": 12,
+            "luck": 10,
+            "mp": 68,
+            "spd": 13
+          }
+        },
+        "dropSkillBookId": "book_boss_void_cataclysm",
+        "ether": 80,
+        "exp": 1000,
+        "gold": 1500,
+        "resources": {
+          "crystal": 8,
+          "pure_prefix_stone": 2,
+          "pure_suffix_stone": 2,
+          "void_shard": 12
+        }
+      },
+      "skills": [
+        {
+          "description": "전체 240% 마법 피해",
+          "effectType": "damage",
+          "name": "파멸의 공허 폭풍",
+          "power": 2.4
+        },
+        {
+          "description": "단일 대상 방어 무시 280% 치명 일격",
+          "effectType": "damage",
+          "name": "시공간 붕괴격",
+          "power": 2.8
+        },
+        {
+          "description": "전체 MP 25 흡수 + 자신 HP 대량 회복",
           "effectType": "drain",
-          "name": "영혼 흡수",
+          "name": "흑무의 잠식",
           "power": 1.2
         },
         {
-          "description": "단일 대상 방어력 2턴 25% 감소",
-          "effectType": "debuff",
-          "name": "저주의 포옹",
-          "power": 0.25,
+          "description": "전체 출혈 3턴 부여",
+          "effectType": "bleed",
+          "name": "심연의 저주",
+          "power": 0.8,
+          "statusDuration": 3
+        }
+      ],
+      "spd": 28,
+      "themeColor": 16728428,
+      "type": "boss"
+    },
+    "monster_void_stalker": {
+      "atk": 210,
+      "def": 520,
+      "description": "어둠 속에서 먹잇감을 노리는 공허의 암살자. 기척을 숨기고 다가와 치명적인 일격을 가합니다.",
+      "id": "monster_void_stalker",
+      "imagePath": "assets/monster_void_stalker_v2.jpg",
+      "level": 26,
+      "luck": 84,
+      "maxHp": 840,
+      "name": "공허의 추적자",
+      "piercePct": 0.6,
+      "promptKey": "monster_void_stalker",
+      "rewards": {
+        "ether": 25,
+        "exp": 170,
+        "gold": 200
+      },
+      "skills": [
+        {
+          "description": "단일 180% 피해 + 방어력 감소 (방어 관통 70% & 그랩)",
+          "disruptPosition": "pull",
+          "effectType": "debuff_def",
+          "name": "공허의 일격",
+          "piercePct": 0.7,
+          "power": 1.8,
           "statusDuration": 2
         }
       ],
-      "rewards": {
-        "ether": 3,
-        "exp": 32,
-        "gold": 45,
-        "resources": {
-          "leather": 2,
-          "wood": 2
-        }
-      },
-      "promptKey": "monster_cursed_revenant",
-      "imagePath": "assets/monster_cursed_revenant.jpg",
-      "themeColor": 13538264,
-      "description": "방주 성채에서 쓰러진 병사의 혼이 공허에 흡수된 언데드. 자신의 HP를 흡수하며 싸운다."
-    },
-    "monster_cave_bat": {
-      "id": "monster_cave_bat",
-      "name": "동굴 흑익박쥐",
-      "type": "normal",
-      "level": 1,
-      "maxHp": 60,
-      "atk": 35,
-      "def": 66,
-      "spd": 20,
-      "luck": 7,
-      "skills": [
-        {
-          "description": "랜덤 대상에 90% 피해 × 2회 연타",
-          "effectType": "damage",
-          "name": "초음파 강타",
-          "power": 0.9
-        },
-        {
-          "description": "대상 파티 전체 공격력 1턴 약화",
-          "effectType": "debuff",
-          "name": "혼란의 울음",
-          "power": 0.2,
-          "statusDuration": 1
-        }
-      ],
-      "rewards": {
-        "ether": 1,
-        "exp": 20,
-        "gold": 25,
-        "resources": {
-          "wood": 3
-        }
-      },
-      "promptKey": "monster_cave_bat",
-      "imagePath": "assets/monster_cave_bat.jpg",
-      "themeColor": 7901340,
-      "description": "고속으로 날며 음파 충격을 가하는 동굴 군집 몬스터. 속도가 가장 빠르다."
+      "spd": 84,
+      "themeColor": 4854924,
+      "type": "normal"
     }
   },
   "balance": {
-    "itemDropRateMultiplier": 0.7
+    "itemDropRateMultiplier": 0.2
   },
   "nemesis": {
     "atk": 500,
     "def": 800,
-    "spd": 45,
-    "luck": 480
+    "luck": 480,
+    "spd": 45
   }
 }

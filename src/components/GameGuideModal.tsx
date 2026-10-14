@@ -364,28 +364,47 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
                   <div className="p-3 rounded-lg bg-[#140e1f] border border-[#e040fb33]">
-                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.1 유대 (Bond 20) : 동료애</div>
+                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.1 유대 (Bond 30) : 동료애</div>
                     <div className="text-[#8b9bb4]">최대 HP +5% 및 야영 휴식 시 회복량 +5% 상승.</div>
                   </div>
                   <div className="p-3 rounded-lg bg-[#140e1f] border border-[#e040fb33]">
-                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.2 유대 (Bond 40) : 전술적 호흡</div>
+                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.2 유대 (Bond 60) : 전술적 호흡</div>
                     <div className="text-[#8b9bb4]">공격/스킬 시전 시 25% 확률로 유대 동료가 원호 공격(80% 위력).</div>
                   </div>
                   <div className="p-3 rounded-lg bg-[#140e1f] border border-[#e040fb33]">
-                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.3 유대 (Bond 60) : 굳건한 신뢰</div>
+                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.3 유대 (Bond 90) : 굳건한 신뢰</div>
                     <div className="text-[#8b9bb4]">행운 +8 & 동료 빈사(HP 25% 이하) 시 즉시 [50 HP 보호막] 전개.</div>
                   </div>
                   <div className="p-3 rounded-lg bg-[#140e1f] border border-[#e040fb33]">
-                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.4 유대 (Bond 80) : 사선의 맹세</div>
+                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.4 유대 (Bond 120) : 사선의 맹세</div>
                     <div className="text-[#8b9bb4]">모든 능력치 +10% & 치사 피해를 입었을 때 1회 [1 HP]로 생존(불굴).</div>
                   </div>
                   <div className="p-3 rounded-lg bg-[#140e1f] border border-[#e040fb33] sm:col-span-2">
-                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.5 유대 (Bond 100) : 영혼의 결속</div>
-                    <div className="text-[#8b9bb4]">공/방 +15% & 전투 개시 시 유대 100 달성자 마나(MP) 30% 회복 (파티 전원 상호 최대 유대 시 50% 회복).</div>
+                    <div className="font-bold text-[#f48fb1] mb-0.5">Lv.5 유대 (Bond 150) : 영혼의 결속</div>
+                    <div className="text-[#8b9bb4]">공/방 +15% & 전투 개시 시 유대 150 달성자 마나(MP) 30% 회복 (파티 전원 상호 최대 유대 시 50% 회복).</div>
                   </div>
                 </div>
                 <div className="p-2.5 rounded-lg bg-[#ef535015] border border-[#ef535033] text-xs text-[#ff8a80]">
-                  💔 <strong>소외감 페널티</strong>: 파티원 중 2명은 유대가 깊고(35+) 본인만 고립(15 이하)된 경우 소외 상태가 되어 <strong>모든 능력치가 10% 감소</strong>합니다. 야영을 통해 유대를 골고루 쌓아주세요.
+                  💔 <strong>소외감 페널티</strong>: 파티원 중 2명은 유대가 깊고 본인만 고립된 경우 소외 상태가 되어 <strong>모든 능력치 감소 페널티</strong>를 받습니다. 야영을 통해 유대를 골고루 쌓아주세요.
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                  <div className="p-2.5 rounded-lg bg-[#38ef7d11] border border-[#38ef7d33] text-[#c8e6c9] space-y-1">
+                    <div className="font-bold text-[#81c784] flex items-center gap-1">📈 유대감 상승 조건</div>
+                    <ul className="list-disc list-inside space-y-0.5 text-[11px] text-[#a5d6a7]">
+                      <li><strong>사선 생환 & 탐험 정산</strong>: 사선을 함께 넘고 성채로 생환 시 전우애 상승 (신입과 더욱 빠르게 성장)</li>
+                      <li><strong>모닥불 야영과 교감</strong>: 야영 중 모닥불 앞에서 담소를 나누며 파티 전원 유대감 대폭 상승</li>
+                      <li><strong>소외 대원 포용</strong>: 선임 대원들이 소외된 신입 대원을 따뜻하게 품어줄 때 유대감 급격 상승</li>
+                    </ul>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-[#e5393511] border border-[#e5393533] text-[#ffcdd2] space-y-1">
+                    <div className="font-bold text-[#e57373] flex items-center gap-1">📉 유대감 하락 조건</div>
+                    <ul className="list-disc list-inside space-y-0.5 text-[11px] text-[#ef9a9a]">
+                      <li><strong>중간 위험도 탐색 피로</strong>: 주의 수준의 던전 위험도 탐색 시 피로와 스트레스로 확률적 하락</li>
+                      <li><strong>위험 레벨의 공포 & 패닉</strong>: 위험 수준 초과 시 어둠의 압박과 의심, 패닉으로 확정적 지속 하락</li>
+                      <li><strong>사경(Near-Death) 생환 트라우마</strong>: 치명상으로 죽음의 문턱을 넘나든 대원의 정신적 상흔으로 대폭 하락</li>
+                      <li><strong>야영 중 소외와 고립</strong>: 결속에 끼지 못하고 겉돌며 느끼는 마음의 거리로 인한 하락</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 

@@ -18,10 +18,98 @@ interface Props {
 
 type StudioTab = 'buildings' | 'forge' | 'monsters' | 'nemesis' | 'classes' | 'skills' | 'grimoires' | 'balance';
 
+const MONSTER_FLOOR_MAP: Record<string, number> = {
+  monster_cave_bat: 1,
+  monster_stalker: 1,
+  monster_rot_slime: 1,
+  monster_cursed_revenant: 1,
+  monster_shadow_imp: 1,
+  monster_iron_golem: 1,
+  boss_floor_1: 1,
+
+  monster_tomb_banshee: 2,
+  monster_crypt_ghoul: 2,
+  monster_dread_knight: 2,
+  boss_floor_2: 2,
+
+  monster_crystal_scorpion: 3,
+  monster_mana_gargoyle: 3,
+  boss_floor_3: 3,
+
+  monster_rift_stalker: 4,
+  monster_void_beast: 4,
+  boss_floor_4: 4,
+
+  monster_altar_cultist: 5,
+  monster_monolith_guardian: 5,
+  boss_floor_5: 5,
+
+  monster_blood_wolf: 6,
+  monster_fallen_priest: 6,
+  boss_floor_6: 6,
+
+  monster_oblivion_ghost: 7,
+  monster_bone_golem: 7,
+  boss_floor_7: 7,
+
+  monster_fallen_paladin: 8,
+  monster_inquisitor: 8,
+  boss_floor_8: 8,
+
+  monster_mirror_phantom: 9,
+  monster_abyssal_fiend: 9,
+  boss_floor_9: 9,
+
+  monster_void_stalker: 10,
+  monster_abyssal_behemoth: 10,
+  boss_floor_10: 10,
+
+  boss_avici_final: 11
+};
+
+const getMonsterFloor = (id: string, level: number): number => {
+  if (MONSTER_FLOOR_MAP[id]) return MONSTER_FLOOR_MAP[id];
+  const bossMatch = id.match(/boss_floor_(\d+)/);
+  if (bossMatch) return parseInt(bossMatch[1], 10);
+  if (id === 'boss_avici_final') return 11;
+  if (level <= 3) return 1;
+  if (level <= 5) return 2;
+  if (level <= 7) return 3;
+  if (level <= 9) return 4;
+  if (level <= 11) return 5;
+  if (level <= 13) return 6;
+  if (level <= 15) return 7;
+  if (level <= 17) return 8;
+  if (level <= 20) return 9;
+  if (level <= 30) return 10;
+  return 11;
+};
+
+const SKILL_CLASS_CATEGORIES = [
+  { id: 'all', label: '전체 계열', icon: '🌐' },
+  { id: 'squire', label: '기사 계열', icon: '🛡️' },
+  { id: 'rogue', label: '암살자 계열', icon: '🗡️' },
+  { id: 'apprentice', label: '마법사 계열', icon: '🔮' },
+  { id: 'acolyte', label: '사제 계열', icon: '✝️' },
+  { id: 'vanguard', label: '전사 계열', icon: '🩸' },
+  { id: 'gunner', label: '총사 계열', icon: '🎯' },
+];
+
+const getRootClassId = (classId: string): string => {
+  let curr = CHARACTER_CLASSES[classId];
+  while (curr && curr.parentClassId && CHARACTER_CLASSES[curr.parentClassId]) {
+    curr = CHARACTER_CLASSES[curr.parentClassId];
+  }
+  return curr?.id || classId;
+};
+
 export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
   const gds = GameDataService.getInstance();
   const [activeTab, setActiveTab] = useState<StudioTab>('buildings');
   const [grimoireSubTab, setGrimoireSubTab] = useState<'all' | 'standard' | 'monster'>('all');
+  const [monsterFloorFilter, setMonsterFloorFilter] = useState<'all' | number>('all');
+  const [skillCategoryFilter, setSkillCategoryFilter] = useState<string>('all');
+  const [skillClassFilter, setSkillClassFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -30,6 +118,31 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
   // 로컬 편집 상태 복사본
   const [overrides, setOverrides] = useState<CustomGameDataPackage>(() => gds.getCustomOverrides());
   const droppableMonsterBooks = useMemo(() => getDroppableMonsterSkillBooks(MONSTERS), []);
+
+  const availableSubClasses = useMemo(() => {
+    return Object.values(CHARACTER_CLASSES).filter(cls => {
+      if (skillCategoryFilter === 'all') return true;
+      return getRootClassId(cls.id) === skillCategoryFilter;
+    });
+  }, [skillCategoryFilter]);
+
+  const sortedMonsters = useMemo(() => {
+    return Object.entries(MONSTERS)
+      .filter(([id]) => id !== 'monster_void_overlord') // 중복 alias 제외
+      .map(([id, m]) => {
+        const floor = getMonsterFloor(id, m.level);
+        const isBoss = m.type === 'boss';
+        return { id, m, floor, isBoss };
+      })
+      .sort((a, b) => {
+        if (a.floor !== b.floor) return a.floor - b.floor;
+        const rankA = a.isBoss ? 1 : 0;
+        const rankB = b.isBoss ? 1 : 0;
+        if (rankA !== rankB) return rankA - rankB;
+        if (a.m.level !== b.m.level) return a.m.level - b.m.level;
+        return a.m.name.localeCompare(b.m.name);
+      });
+  }, []);
 
   if (!open) return null;
 
@@ -463,26 +576,100 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
           {/* 3. 👾 마물/보스 능력치 */}
           {activeTab === 'monsters' && (
-            <div className="space-y-3">
-              <div className="p-3 bg-[#131926] rounded-xl border border-[#1f2d48] text-xs text-[#8b9bb4]">
-                💡 심연 1~11층 마물 및 보스의 기본 체력, 공격력, 방어력, 속도, 행운 수치를 편집합니다.
+            <div className="space-y-4">
+              <div className="p-3 bg-[#131926] rounded-xl border border-[#1f2d48] text-xs text-[#8b9bb4] flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                  💡 심연 1~11층 마물 및 보스의 기본 스탯을 층별 순서로 일목요연하게 편집합니다.
+                </div>
+                <div className="text-[11px] text-[#00d2ff] font-bold">
+                  총 {sortedMonsters.length}종 (중복 마물 정리 완료)
+                </div>
               </div>
+
+              {/* 층별 퀵 필터 칩 바 */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                <button
+                  type="button"
+                  onClick={() => setMonsterFloorFilter('all')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+                    monsterFloorFilter === 'all'
+                      ? 'bg-[#00d2ff] text-black shadow-md'
+                      : 'bg-[#141c2c] text-[#8b9bb4] hover:text-white border border-[#233148]'
+                  }`}
+                >
+                  전체 층 (1~11F)
+                </button>
+                {Array.from({ length: 11 }, (_, i) => i + 1).map(f => (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setMonsterFloorFilter(f)}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+                      monsterFloorFilter === f
+                        ? 'bg-[#00d2ff] text-black shadow-md'
+                        : f === 11
+                          ? 'bg-[#2b1040] text-[#ce93d8] hover:bg-[#3d1859] border border-[#7b1fa255]'
+                          : 'bg-[#141c2c] text-[#8b9bb4] hover:text-white border border-[#233148]'
+                    }`}
+                  >
+                    {f === 11 ? '11F (무간도)' : `${f}F`}
+                  </button>
+                ))}
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {Object.entries(MONSTERS)
-                  .filter(([id, m]) => !searchQuery || m.name.includes(searchQuery) || id.includes(searchQuery))
-                  .map(([monId, m]) => {
+                {sortedMonsters
+                  .filter(({ id, m, floor }) => {
+                    if (monsterFloorFilter !== 'all' && floor !== monsterFloorFilter) return false;
+                    if (searchQuery) {
+                      const q = searchQuery.toLowerCase();
+                      return m.name.toLowerCase().includes(q) || id.toLowerCase().includes(q) || `${floor}f`.includes(q) || `${floor}층`.includes(q);
+                    }
+                    return true;
+                  })
+                  .map(({ id: monId, m, floor, isBoss }) => {
                     const current = { ...m, ...(overrides.monsters?.[monId] || {}) };
                     return (
-                      <div key={monId} className="p-3.5 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-sm text-white flex items-center gap-1.5">
-                            <span>{m.type === 'boss' ? '👑' : '👾'}</span>
-                            <span>{current.name}</span>
+                      <div
+                        key={monId}
+                        className={`p-3.5 rounded-xl space-y-2 transition-all ${
+                          isBoss
+                            ? 'bg-gradient-to-r from-[#1f0e1c] via-[#151224] to-[#0f1422] border-2 border-[#ff416c66] shadow-lg shadow-[#ff416c11]'
+                            : 'bg-[#0f1422] border border-[#1c263c]'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between flex-wrap gap-1.5">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-base">{isBoss ? '👑' : m.type === 'elite' ? '⭐' : '👾'}</span>
+                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                              floor === 11
+                                ? 'bg-[#9c27b033] text-[#ce93d8] border border-[#9c27b066]'
+                                : isBoss
+                                  ? 'bg-[#ff416c28] text-[#ff6b8b] border border-[#ff416c55]'
+                                  : 'bg-[#1e293b] text-[#94a3b8] border border-[#334155]'
+                            }`}>
+                              {floor === 11 ? '11F 무간도' : `${floor}F`}
+                            </span>
+                            <span className="font-bold text-sm text-white">
+                              {current.name}
+                            </span>
                             <span className="text-[10px] text-[#607d8b]">Lv.{current.level}</span>
-                          </span>
-                          <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${m.type === 'boss' ? 'bg-[#ff416c22] text-[#ff416c]' : 'bg-[#00d2ff22] text-[#00d2ff]'}`}>
-                            {m.type.toUpperCase()}
-                          </span>
+                          </div>
+                          <div>
+                            {isBoss ? (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">
+                                {floor === 11 ? '최종 보스' : `${floor}F 보스`}
+                              </span>
+                            ) : m.type === 'elite' ? (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#ab47bc22] text-[#ab47bc] border border-[#ab47bc44]">
+                                ELITE
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff]">
+                                NORMAL
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <div className="grid grid-cols-5 gap-1.5">
                           {(['maxHp', 'atk', 'def', 'spd', 'luck'] as const).map(statKey => {
@@ -810,30 +997,150 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
           )}
 
           {/* 5. ⚡ 직업 고유 스킬 */}
-          {activeTab === 'skills' && (
-            <div className="space-y-3">
-              <div className="p-3 bg-[#131926] rounded-xl border border-[#1f2d48] text-xs text-[#8b9bb4]">
-                💡 각 직업 클래스의 고유 액티브 스킬 및 궁극기의 피해 계수(Power), 소모 마나(MP), 쿨다운(턴)을 조정합니다.
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {Object.values(CHARACTER_CLASSES)
-                  .flatMap(cls => [
-                    ...cls.skills.map(sk => ({ ...sk, className: cls.name })),
-                    ...(cls.specialSkill ? [{ ...cls.specialSkill, className: cls.name }] : [])
-                  ])
-                  .filter(sk => !searchQuery || sk.name.includes(searchQuery) || sk.className.includes(searchQuery) || sk.id.includes(searchQuery))
-                  .map(sk => {
+          {activeTab === 'skills' && (() => {
+            const allClassSkills = Object.values(CHARACTER_CLASSES).flatMap(cls => {
+              const rootId = getRootClassId(cls.id);
+              const tier = cls.tier;
+              return [
+                ...cls.skills.map(sk => ({
+                  ...sk,
+                  className: cls.name,
+                  classId: cls.id,
+                  rootClassId: rootId,
+                  tier,
+                  isSpecial: false
+                })),
+                ...(cls.specialSkill ? [{
+                  ...cls.specialSkill,
+                  className: cls.name,
+                  classId: cls.id,
+                  rootClassId: rootId,
+                  tier,
+                  isSpecial: true
+                }] : [])
+              ];
+            });
+
+            const filteredClassSkills = allClassSkills.filter(sk => {
+              if (skillCategoryFilter !== 'all' && sk.rootClassId !== skillCategoryFilter) return false;
+              if (skillClassFilter !== 'all' && sk.classId !== skillClassFilter) return false;
+              if (searchQuery) {
+                const q = searchQuery.toLowerCase();
+                return sk.name.toLowerCase().includes(q) || sk.className.toLowerCase().includes(q) || sk.id.toLowerCase().includes(q) || (sk.description && sk.description.toLowerCase().includes(q));
+              }
+              return true;
+            });
+
+            return (
+              <div className="space-y-3">
+                <div className="p-3 bg-[#131926] rounded-xl border border-[#1f2d48] text-xs text-[#8b9bb4] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    💡 각 직업 클래스의 고유 액티브 스킬 및 궁극기의 피해 계수(Power), 소모 마나(MP), 쿨다운(턴)을 조정합니다.
+                  </div>
+                  <div className="text-[11px] text-[#00d2ff] font-bold shrink-0">
+                    총 {filteredClassSkills.length}개 스킬 표시 중
+                  </div>
+                </div>
+
+                {/* 1차: 6대 직업 계열 카테고리 탭 */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                  {SKILL_CLASS_CATEGORIES.map(cat => {
+                    const isSelected = skillCategoryFilter === cat.id;
+                    const count = cat.id === 'all'
+                      ? allClassSkills.length
+                      : allClassSkills.filter(s => s.rootClassId === cat.id).length;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => {
+                          setSkillCategoryFilter(cat.id);
+                          setSkillClassFilter('all');
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                          isSelected
+                            ? 'bg-[#00d2ff] text-black shadow-md'
+                            : 'bg-[#141c2c] text-[#8b9bb4] hover:text-white border border-[#233148]'
+                        }`}
+                      >
+                        <span>{cat.icon}</span>
+                        <span>{cat.label}</span>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                          isSelected ? 'bg-black/20 text-black font-bold' : 'bg-[#1f2d48] text-[#8b9bb4]'
+                        }`}>
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* 2차: 세부 직업 퀵 필터 칩 */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                  <button
+                    type="button"
+                    onClick={() => setSkillClassFilter('all')}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all whitespace-nowrap ${
+                      skillClassFilter === 'all'
+                        ? 'bg-[#ffd54f] text-black shadow'
+                        : 'bg-[#0f1422] text-[#8b9bb4] hover:text-white border border-[#1f2b42]'
+                    }`}
+                  >
+                    {skillCategoryFilter === 'all' ? '전체 세부 직업' : `${SKILL_CLASS_CATEGORIES.find(c => c.id === skillCategoryFilter)?.label} 전체`}
+                  </button>
+                  {availableSubClasses.map(cls => {
+                    const isSelected = skillClassFilter === cls.id;
+                    const tierBadge = cls.tier === 0 ? '0티어' : cls.tier === 1 ? '1차' : cls.tier === 2 ? '2차' : '3차';
+                    return (
+                      <button
+                        key={cls.id}
+                        type="button"
+                        onClick={() => setSkillClassFilter(cls.id)}
+                        className={`px-2.5 py-1 rounded-md text-[11px] transition-all whitespace-nowrap flex items-center gap-1 ${
+                          isSelected
+                            ? 'bg-[#ffd54f] text-black font-bold shadow'
+                            : 'bg-[#0f1422] text-[#8b9bb4] hover:text-white border border-[#1f2b42]'
+                        }`}
+                      >
+                        <span>{cls.skills[0]?.icon || '⚡'}</span>
+                        <span>{cls.name}</span>
+                        <span className={`text-[9px] px-1 rounded font-mono ${
+                          isSelected ? 'bg-black/20 text-black' : 'bg-[#1f2d48] text-[#607d8b]'
+                        }`}>
+                          {tierBadge}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {filteredClassSkills.map(sk => {
                     const override = overrides.classSkills?.[sk.id] || {};
                     const curPower = override.power !== undefined ? override.power : (sk.power || 1.0);
                     const curMp = override.manaCost !== undefined ? override.manaCost : (sk.manaCost || 0);
                     const curCd = override.cooldown !== undefined ? override.cooldown : (sk.cooldown || 1);
+                    const tierLabel = sk.tier === 0 ? '0티어' : sk.tier === 1 ? '1차' : sk.tier === 2 ? '2차' : '3차';
                     return (
                       <div key={sk.id} className="p-3 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-xs text-white flex items-center gap-1.5">
+                          <span className="font-bold text-xs text-white flex items-center gap-1.5 flex-wrap">
                             <span>{sk.icon || '⚡'}</span>
                             <span>{sk.name}</span>
                             <span className="text-[10px] text-[#607d8b]">[{sk.className}]</span>
+                            <span className={`text-[9px] px-1 py-0.2 rounded font-mono ${
+                              sk.tier === 3 ? 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]' :
+                              sk.tier === 2 ? 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]' :
+                              sk.tier === 1 ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]' :
+                              'bg-[#78909c22] text-[#90a4ae]'
+                            }`}>
+                              {tierLabel}
+                            </span>
+                            {sk.isSpecial && (
+                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#e040fb22] text-[#e040fb] border border-[#e040fb44] font-bold">
+                                {sk.tier === 3 ? '🌟 초월기' : '⭐ 궁극기'}
+                              </span>
+                            )}
                           </span>
                           <span className="text-[9px] text-[#8b9bb4] font-mono">{sk.id}</span>
                         </div>
@@ -870,9 +1177,10 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       </div>
                     );
                   })}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* 6. 📖 마도서/비전서 위력 및 마물 마도서 스펙 */}
           {activeTab === 'grimoires' && (
@@ -1162,13 +1470,14 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
               etherMultiplier: 1.0,
               itemDropRateMultiplier: 1.0,
               bossSkillBookDropRate: 0.04,
+              drConstant: 300,
               ...(overrides.balance || {})
             };
 
             return (
               <div className="space-y-4">
                 <div className="p-3 bg-[#131926] rounded-xl border border-[#1f2d48] text-xs text-[#8b9bb4]">
-                  💡 인게임 전역에 적용되는 경험치, 재화 획득량 및 보스 비기 드랍 확률의 전역 승수(Multiplier)를 실시간 조율합니다.
+                  💡 인게임 전역에 적용되는 경험치, 재화 획득량, 방어력 피해 감소(DR) 상수 및 보스 비기 드랍 확률의 전역 계수를 실시간 조율합니다.
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1260,7 +1569,31 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     <div className="text-[10px] text-[#8b9bb4]">장비 레시피, 완제품 및 전리품 기본 드랍 확률 배율 (기본 1.0)</div>
                   </div>
 
-                  <div className="p-3.5 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2 col-span-1 md:col-span-2">
+                  <div className="p-3.5 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-sm text-white flex items-center gap-1.5">
+                        <span>🛡️</span>
+                        <span>방어 피해 감소(DR) 기준 상수 (K)</span>
+                      </span>
+                      <span className="text-xs font-mono font-bold text-[#4fc3f7]">
+                        K = {curBalance.drConstant || 300}
+                      </span>
+                    </div>
+                    <input
+                      type="number"
+                      step="10"
+                      min="50"
+                      max="3000"
+                      value={curBalance.drConstant || 300}
+                      onChange={e => handleBalanceChange('drConstant', Number(e.target.value))}
+                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                    />
+                    <div className="text-[10px] text-[#8b9bb4]">
+                      피해 공식 [K / (DEF + K)]의 기준 상수입니다. DEF = K일 때 대미지가 50% 경감됩니다. (기본: 300 / 6~10층: 1.67K / 11층: 2.67K)
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-sm text-white flex items-center gap-1.5">
                         <span>📖</span>

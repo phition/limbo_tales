@@ -17,6 +17,7 @@ import { FeverGaugeBar } from '../components/FeverGaugeBar';
 import { evaluateFeverSynergy } from '../utils/feverUtils';
 import { CombatMeterTable, CombatantMetrics } from '../components/CombatMeterTable';
 import { CustomAssetService } from '../services/CustomAssetService';
+import { GameDataService } from '../services/GameDataService';
 import { gameDialog } from '../services/DialogService';
 import { getSkillMagicSchool, getElementalSubtype } from '../utils/skillComboUtils';
 
@@ -31,6 +32,11 @@ const DEFAULT_CLASS_IMAGES: Record<string, string> = {
 // ⚔️ 차원 아레나 PVP 전투 스케일 밸런스 상수
 export const ARENA_ATK_SCALE = 0.70; // 공격력 30% 너프 (0.70x)
 export const ARENA_DEF_SCALE = 0.50; // 방어력 50% 너프 (0.50x)
+
+export const getArenaDRConstant = (): number => {
+  const baseDR = GameDataService.getInstance().getBalanceConfig().drConstant || 300;
+  return Math.round(baseDR * (160 / 300));
+};
 
 interface LeaderInfoCardProps {
   leader: any | null;
@@ -743,7 +749,7 @@ export const ArenaScreen: React.FC = () => {
     const updatedOppTeam = currentOppTeam.map(c => {
       if (c.currentHp <= 0) return c;
       const effectiveDef = c.def * ARENA_DEF_SCALE; // 🛡️ 방어력 50% 너프 적용
-      const defFactor = 1 - (effectiveDef / (effectiveDef + 160));
+      const defFactor = 1 - (effectiveDef / (effectiveDef + getArenaDRConstant()));
       const dmg = Math.max(25, Math.floor(leaderAtk * (ultSkill.power || 2.2) * 1.3 * defFactor));
       return {
         ...c,
@@ -861,7 +867,7 @@ export const ArenaScreen: React.FC = () => {
     const updatedPTeam = currentPTeam.map(c => {
       if (c.currentHp <= 0) return c;
       const effectiveDef = c.def * ARENA_DEF_SCALE; // 🛡️ 방어력 50% 너프 적용
-      const defFactor = 1 - (effectiveDef / (effectiveDef + 160));
+      const defFactor = 1 - (effectiveDef / (effectiveDef + getArenaDRConstant()));
       const dmg = Math.max(25, Math.floor(leaderAtk * (ultSkill.power || 2.0) * defFactor));
       return {
         ...c,
@@ -1067,7 +1073,7 @@ export const ArenaScreen: React.FC = () => {
         if (magicSchool === 'dark') {
           effectiveDef = effectiveDef * 0.80; // 🔮 암흑: 기본 방어 관통 20%
         }
-        const defFactor = 1 - (effectiveDef / (effectiveDef + 160));
+        const defFactor = 1 - (effectiveDef / (effectiveDef + getArenaDRConstant()));
         let rawDmg = effectiveAtk * (skill.power || 1.0) * defFactor * (0.95 + Math.random() * 0.12);
         if (magicSchool === 'dark') {
           rawDmg = rawDmg * 1.20; // 🔮 암흑: 용병(PvP) 대상 20% 추가 데미지
@@ -1366,7 +1372,7 @@ export const ArenaScreen: React.FC = () => {
         if (liveTarget && liveTarget.currentHp > 0) {
           const rawAssistDmg = Math.max(20, Math.round(suppEff.atk * 0.65));
           const effectiveDef = liveTarget.def * ARENA_DEF_SCALE; // 🛡️ 방어력 50% 너프 적용
-          const assistDmg = Math.max(10, Math.floor(rawAssistDmg * (1 - (effectiveDef / (effectiveDef + 160)))));
+          const assistDmg = Math.max(10, Math.floor(rawAssistDmg * (1 - (effectiveDef / (effectiveDef + getArenaDRConstant())))));
           liveTarget.currentHp = Math.max(0, liveTarget.currentHp - assistDmg);
 
           const tIdx = Math.max(0, targetSide.findIndex(c => c.id === liveTarget.id));

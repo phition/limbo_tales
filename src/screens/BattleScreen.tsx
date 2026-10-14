@@ -20,6 +20,7 @@ import { GameIcon } from '../components/GameIcon';
 import { triggerHaptic } from '../utils/haptics';
 import { getSkillTags, getTriggerableCombos, isComboReadyForMonster, isComboReadyForBattleTarget, getEffectivePositionBonus, SkillTag, ComboRule, getHeroAssistDef, selectAssistHero, AssistAttackDef, checkMonsterStatusComboOnHero, checkEquipmentProc, EnemyComboResult, EquipmentProcResult, getTagMeta, resolveCombatVfxAndSfx, getSkillMagicSchool, getElementalSubtype } from '../utils/skillComboUtils';
 import { CustomAssetService } from '../services/CustomAssetService';
+import { GameDataService } from '../services/GameDataService';
 import { useCustomAssetVersion } from '../hooks/useCustomAssetVersion';
 import { getHeroEquippedBossSet, getWeaponTrait, detectWeaponType } from '../data/equipment';
 import { FeverBadgeType, FeverSynergyResult } from '../types/fever';
@@ -1126,12 +1127,13 @@ export const BattleScreen: React.FC = () => {
       totalAttack = Math.floor(totalAttack * 1.5);
     }
 
-    // 🌟 [층별 점근형 피해 감소(DR%) 상수 K 동적 결정]
-    // 1~5층: K=300 (DEF 300일 때 50% 경감)
-    // 6~10층: K=500 (DEF 500일 때 50% 경감)
-    // 11층 이상: K=800 (DEF 800일 때 50% 경감)
+    // 🌟 [층별 점근형 피해 감소(DR%) 상수 K 동적 결정 (글로벌 밸런스 DR 상수 연동)]
+    // 1~5층: K=baseDR (기본 300, DEF 300일 때 50% 경감)
+    // 6~10층: K=baseDR * 1.67 (기본 500일 때 50% 경감)
+    // 11층 이상: K=baseDR * 2.67 (기본 800일 때 50% 경감)
+    const baseDR = GameDataService.getInstance().getBalanceConfig().drConstant || 300;
     const currentFloor = gm?.dungeonFloor || 1;
-    const K = currentFloor >= 11 ? 800 : (currentFloor >= 6 ? 500 : 300);
+    const K = currentFloor >= 11 ? Math.round(baseDR * (800 / 300)) : (currentFloor >= 6 ? Math.round(baseDR * (500 / 300)) : baseDR);
     const mitigatedDmg = Math.round(totalAttack * (K / (def + K)));
 
     // 🗡️ [아이디어 4: 무기 강화 단계 비례 순수 피해 (True Damage)]
@@ -1655,8 +1657,13 @@ export const BattleScreen: React.FC = () => {
       setTurnQueue(battleSnap.turnQueue);
       isAutoBattleRef.current = !!battleSnap.isAutoBattle;
       setIsAutoBattle(!!battleSnap.isAutoBattle);
-      heroCooldownsRef.current = battleSnap.heroCooldowns || {};
-      setHeroCooldowns(battleSnap.heroCooldowns || {});
+      const loadedCds = { ...(battleSnap.heroCooldowns || {}) };
+      // 인챈트/기본공격 대체 스킬 쿨다운 잔여물 제거
+      Object.keys(loadedCds).forEach(k => {
+        if (k.includes('skill_enc_') || k.includes('basic')) delete loadedCds[k];
+      });
+      heroCooldownsRef.current = loadedCds;
+      setHeroCooldowns(loadedCds);
       const hasBoss = !!battleSnap.isBossBattle;
       setIsBossBattle(hasBoss);
       setBattleEnded(false);
@@ -1752,12 +1759,12 @@ export const BattleScreen: React.FC = () => {
     turnQueueRef.current = q;
     setTurnQueue(q);
 
-    // 💖 영혼의 결속 (Bond 100) 체크: 유대 100 달성자 MP 30% 회복 (파티 전원 상호 최대 유대 시 50% 회복)
+    // 💖 영혼의 결속 (Bond 150) 체크: 유대 150 달성자 MP 30% 회복 (파티 전원 상호 최대 유대 시 50% 회복)
     let isAllPartyFullBond = party.length >= 2;
     if (isAllPartyFullBond) {
       for (let i = 0; i < party.length; i++) {
         for (let j = i + 1; j < party.length; j++) {
-          if (gm.getBond(party[i].id, party[j].id) < 100) {
+          if (gm.getBond(party[i].id, party[j].id) < 150) {
             isAllPartyFullBond = false;
             break;
           }
@@ -1771,10 +1778,10 @@ export const BattleScreen: React.FC = () => {
         const recoverMp = Math.round(h.maxMp * 0.5);
         h.currentMp = Math.min(h.maxMp, h.currentMp + recoverMp);
       });
-      gm.addLog(`✨ [영혼의 결속] 파티 전원이 상호 최고조 유대(Bond 100)를 달성하여 특별 공명 보너스로 마나(MP)가 50% 회복된 상태로 전투를 시작합니다!`, 'reward');
+      gm.addLog(`✨ [영혼의 결속] 파티 전원이 상호 최고조 유대(Bond 150)를 달성하여 특별 공명 보너스로 마나(MP)가 50% 회복된 상태로 전투를 시작합니다!`, 'reward');
     } else {
       const soulboundHeroes = party.filter(h => {
-        return party.some(p => p.id !== h.id && gm.getBond(h.id, p.id) >= 100);
+        return party.some(p => p.id !== h.id && gm.getBond(h.id, p.id) >= 150);
       });
       if (soulboundHeroes.length > 0) {
         soulboundHeroes.forEach(h => {
@@ -2528,6 +2535,7 @@ export const BattleScreen: React.FC = () => {
     );
     // 기본 공격이거나, 인챈트로 인해 기본 공격이 스킬로 대체된 액션인지 여부
     const isBasicOrEnchantBasic = skill === 'basic' || isEnchantBasicTrigger || isEnchantSkill;
+    const isNoCooldownSkill = isBasicOrEnchantBasic || isEnchantSkill || (skill !== 'basic' && (skill.cooldown ?? 0) === 0);
 
     let requiredMp = skill !== 'basic' ? gm.getSkillManaCost(skill.manaCost, undefined, hero) : 0;
     if (skill !== 'basic' && hero.currentMp < requiredMp) {
@@ -2535,7 +2543,7 @@ export const BattleScreen: React.FC = () => {
       return;
     }
 
-    if (skill !== 'basic' && !isChronoDoubleCastingRef.current) {
+    if (skill !== 'basic' && !isNoCooldownSkill && !isChronoDoubleCastingRef.current) {
       const cdLeft = heroCooldownsRef.current[`${hero.id}_${skill.id}`] || 0;
       if (cdLeft > 0) {
         gm.addLog(`[쿨다운 중] ${skill.name}은(는) 아직 재사용할 수 없습니다! (남은 쿨다운: ${cdLeft}턴)`, 'danger');
@@ -2615,6 +2623,7 @@ export const BattleScreen: React.FC = () => {
     const logs: string[] = [];
     const posBonus = skill === 'basic' ? undefined : (skill.positionBonus || getEffectivePositionBonus(skill));
     let cooldownReductionTarget: 'none' | 'self' | 'all' = 'none';
+    let cooldownReductionAmount = 1;
     let resetAllPartyCooldowns = false;
 
     // 효과 적용 대상 선정 (피아 식별 무결성 보장)
@@ -2749,6 +2758,7 @@ export const BattleScreen: React.FC = () => {
       const effectType = skill === 'basic' ? 'damage' : skill.effectType;
       let nextMonsters = [...monstersRef.current];
       let anyCritLanded = false;
+      let totalActualDamageDealt = 0;
 
       if (effectType === 'damage' || effectType === 'bleed' || effectType === 'stun' || effectType === 'debuff' || effectType === 'drain' || effectType === 'poison') {
         const skillName = skill === 'basic' ? '기본 공격' : skill.name;
@@ -2828,6 +2838,10 @@ export const BattleScreen: React.FC = () => {
         }
         
         let rawDmg = Math.floor(finalAtk * powerMultiplier * efficiency);
+        // 🛡️ [성벽 강타] 방어력 계수 기반 물리 타격
+        if (skill !== 'basic' && skill.id === 'bastion_sanctuary_smite') {
+          rawDmg = Math.max(rawDmg, Math.floor((stats.def || 95) * (skill.power || 3.8) * efficiency));
+        }
         // 광역 공격(다수 타겟) 시 분산 감쇠 보정 (과도한 전체 피해 폭증 억제)
         if (targetIds.length > 1) {
           rawDmg = Math.floor(rawDmg * 0.85);
@@ -2884,7 +2898,7 @@ export const BattleScreen: React.FC = () => {
         );
 
         let anyDied = false;
-        let totalActualDamageDealt = 0;
+        totalActualDamageDealt = 0;
         let aetherMeisterMpCharged = false;
         let assistAttackTriggered = false;
         const hasAliveFront = nextMonsters.slice(0, 2).some(mon => mon.currentHp > 0);
@@ -3319,7 +3333,8 @@ export const BattleScreen: React.FC = () => {
           }
 
           // 📡 [오메가 데드아이 패시브: 연쇄 궤도 충격파] 단일 공격 시 50% 확률로 주변 적 전체에 50% 연쇄 충격파
-          const isSingleTargetAttack = targetType === 'single_enemy' || targetIds.length === 1;
+          const currentTargetType = skill === 'basic' ? 'single_enemy' : (skill.targetType || 'single_enemy');
+          const isSingleTargetAttack = currentTargetType === 'single_enemy' || targetIds.length === 1;
           if (hero.classId === 'omega_deadeye' && isSingleTargetAttack && actualDamage > 0 && Math.random() < 0.50) {
             const shockwaveDmg = Math.max(1, Math.floor(actualDamage * 0.50));
             const otherMonsters = nextMonsters.filter(om => om.id !== m.id && om.currentHp > 0);
@@ -3329,7 +3344,7 @@ export const BattleScreen: React.FC = () => {
                 totalActualDamageDealt += shockwaveDmg;
                 const oPos = getMonsterVfxPos(nextMonsters.indexOf(om), nextMonsters.length);
                 setTimeout(() => {
-                  SoundManager.getInstance().play('bow');
+                  SoundManager.getInstance().play('bow_shot');
                   triggerVFX({
                     type: 'arcane_nova',
                     x: oPos.x,
@@ -3654,6 +3669,66 @@ export const BattleScreen: React.FC = () => {
               }
             });
             logs.push(`🌪️⚔️ [환영 난무 왈츠] ${hero.name}의 화려한 분신 검무가 적 전체를 난도질하고 공격력을 2턴간 ${Math.round(atkDebuffMag * 100)}% 약화시켰습니다!`);
+          }
+          // 🌌 [3차] 보이드 스트라이더: 심연 환영검무 (적 전체 공격력 30% 감소)
+          else if (sid === 'void_abyssal_dance') {
+            nextMonsters.forEach(m => {
+              if (m.currentHp > 0) {
+                applyStatusEffect(m, {
+                  type: 'debuff_atk',
+                  turnsLeft: 2,
+                  totalTurns: 2,
+                  magnitude: 0.30,
+                  source: `${hero.name} (심연 환영검무)`
+                });
+              }
+            });
+            logs.push(`🌌👤 [심연 환영검무] ${hero.name}의 심연 환영이 적 전체의 공격력을 2턴간 30% 약화시켰습니다!`);
+          }
+          // 🩸 [3차] 발할라 워로드: 혈겁의 대검풍 (적 공격력 35% 감소 & 30% 흡혈)
+          else if (sid === 'warlord_blood_cleave') {
+            nextMonsters.forEach(m => {
+              if (targetIds.includes(m.id) && m.currentHp > 0) {
+                applyStatusEffect(m, {
+                  type: 'debuff_atk',
+                  turnsLeft: 2,
+                  totalTurns: 2,
+                  magnitude: 0.35,
+                  source: `${hero.name} (혈겁의 대검풍)`
+                });
+              }
+            });
+            const cleaveDrain = Math.max(1, Math.floor(totalActualDamageDealt * 0.30));
+            hero.currentHp = Math.min(hero.maxHp, hero.currentHp + cleaveDrain);
+            logs.push(`🪓🩸 [혈겁의 대검풍] 적의 공격력을 35% 분쇄하고 체력 +${cleaveDrain}(30%)를 흡혈했습니다!`);
+          }
+          // ⚡ [3차] 오메가 데드아이: 오메가 펄스포 (적 전체 2턴간 받는 피해 30% 증폭)
+          else if (sid === 'omega_railgun_burst') {
+            nextMonsters.forEach(m => {
+              if (m.currentHp > 0) {
+                applyStatusEffect(m, {
+                  type: 'debuff_def',
+                  turnsLeft: 2,
+                  totalTurns: 2,
+                  magnitude: 0.30,
+                  source: `${hero.name} (오메가 펄스)`
+                });
+              }
+            });
+            logs.push(`⚡💥 [오메가 펄스포] 고압 플라즈마 파동으로 적 전체에 2턴간 취약(받는 피해 30% 증폭)을 부여했습니다!`);
+          }
+          // ⚖️ [3차] 세라픽 인퀴지터: 성스러운 단죄 (가한 피해의 100% 최저 HP 아군 치유)
+          else if (sid === 'seraph_divine_wrath') {
+            const livingAllies = gm.party.filter(p => p.currentHp > 0);
+            if (livingAllies.length > 0 && totalActualDamageDealt > 0) {
+              const lowestAlly = livingAllies.reduce((prev, curr) => (curr.currentHp / curr.maxHp) < (prev.currentHp / prev.maxHp) ? curr : prev, livingAllies[0]);
+              const healAmt = totalActualDamageDealt;
+              lowestAlly.currentHp = Math.min(lowestAlly.maxHp, lowestAlly.currentHp + healAmt);
+              const allyIdx = gm.party.findIndex(h => h.id === lowestAlly.id);
+              const heroPos = getHeroVfxPos(allyIdx >= 0 ? allyIdx : 0, false, gm.party.length);
+              triggerVFX({ type: 'holy_heal', x: heroPos.x, y: heroPos.y, damage: healAmt, isHeal: true });
+              logs.push(`⚖️✨ [성스러운 단죄] 가한 피해(${healAmt})의 100%를 ${lowestAlly.name}에게 즉시 신성 치유로 부여했습니다!`);
+            }
           }
           // 전술 지휘관: 전열 압도 (적 전체 2턴 공격력 30% 감소 & 모든 아군 최대 HP 25% 보호막)
           else if (sid === 'warlord_overwhelm') {
@@ -4003,14 +4078,14 @@ export const BattleScreen: React.FC = () => {
             logs.push(`🕊️⚡ [창공의 대심판] 신성 심판의 빛이 방출되어 쓰러진 아군을 소생시키고 가한 피해(${totalActualDamageDealt})만큼 전원을 치유했습니다!`);
           }
 
-          // 🩸 [3차 궁극기] 피의 전술 (발할라 워로드): 적 전체 방어 40% 분쇄, 2턴간 파티 전원 흡혈 15% 부여
+          // 🩸 [3차 궁극기] 피의 전술 (발할라 워로드): 적 전체 방어 40% 분쇄 (3턴), 2턴간 파티 전원 흡혈 15% 부여
           if (sid === 'warlord_blood_tactics') {
             nextMonsters.forEach(m => {
               if (m.currentHp > 0) {
                 applyStatusEffect(m, {
                   type: 'debuff_def',
-                  turnsLeft: 2,
-                  totalTurns: 2,
+                  turnsLeft: 3,
+                  totalTurns: 3,
                   magnitude: 0.40,
                   source: `${hero.name} (피의 전술)`
                 });
@@ -4025,7 +4100,7 @@ export const BattleScreen: React.FC = () => {
                 source: `${hero.name} (피의 갈망)`
               });
             });
-            logs.push(`🩸🚩 [피의 전술] 적 전체 방어력을 40% 분쇄하고 2턴간 파티 전원에게 15% 흡혈 태세를 부여했습니다!`);
+            logs.push(`🩸🚩 [피의 전술] 적 전체 방어력을 3턴간 40% 분쇄하고 2턴간 파티 전원에게 15% 흡혈 태세를 부여했습니다!`);
           }
 
           // 🛰️ [3차 궁극기] 궤도 섬멸 (오메가 데드아이): 단일 300% 방관 저격 후, 적 전체에 100% 궤도 폭격 연쇄
@@ -4033,28 +4108,29 @@ export const BattleScreen: React.FC = () => {
             const orbitalPower = Math.max(1, Math.floor(finalAtk * 1.0 * efficiency));
             const livingMonsters = nextMonsters.filter(om => om.currentHp > 0);
             livingMonsters.forEach((om, oIdx) => {
+              const isOrbCrit = Math.random() * 100 < critChance;
               const { actualDamage: orbDmg } = calculateDamage(
                 orbitalPower,
                 om.def,
                 om.statusEffects,
-                targetIsCrit,
-                finalCritMult,
+                isOrbCrit,
+                heroCritMult,
                 100,
                 1,
                 om.isGroggy || false,
-                trueDmgRate
+                0
               );
               om.currentHp = Math.max(0, om.currentHp - orbDmg);
               totalActualDamageDealt += orbDmg;
               const omPos = getMonsterVfxPos(nextMonsters.indexOf(om), nextMonsters.length);
               setTimeout(() => {
-                SoundManager.getInstance().play('explosion');
+                SoundManager.getInstance().play('spell');
                 triggerVFX({
                   type: 'boss_cataclysm',
                   x: omPos.x,
                   y: omPos.y,
                   damage: orbDmg,
-                  isCrit: true,
+                  isCrit: isOrbCrit,
                   text: '궤도폭격!',
                 });
               }, getBattleDelay(250 + oIdx * 70));
@@ -4424,6 +4500,19 @@ export const BattleScreen: React.FC = () => {
             });
             logs.push(`⚔️🔰 [성전 결계 전개] 3턴간 아군 전체의 공격력과 방어력이 ${Math.round(buffMag * 100)}% 증폭되었습니다!`);
           }
+          if (skill.id === 'seraph_grace_sanctuary') {
+            const defMag = Number((0.40 * efficiency * ultMult).toFixed(2));
+            targetAllies.forEach(ally => {
+              applyStatusEffect(ally, {
+                type: 'buff_def',
+                turnsLeft: 2,
+                totalTurns: 2,
+                magnitude: defMag,
+                source: '세라핌의 가호'
+              });
+            });
+            logs.push(`🛡️✨ [세라핌의 가호] 2턴간 아군 전체의 방어력이 +40% 증폭되었습니다!`);
+          }
           if (skill.id === 'warpriest_sacred_ground' || (skill.description && skill.description.includes('성지') && skill.description.includes('매 턴'))) {
             const regenMag = Number((0.09 * (skill.power ? (skill.power / 0.09) : 1) * efficiency * ultMult).toFixed(2));
             targetAllies.forEach(ally => {
@@ -4477,7 +4566,7 @@ export const BattleScreen: React.FC = () => {
                 setTimeout(() => {
                   SoundManager.getInstance().play('holy_spell');
                   triggerVFX({
-                    type: 'holy_smite',
+                    type: 'divine_smite',
                     x: wPos.x,
                     y: wPos.y,
                     damage: smiteDmg,
@@ -4578,13 +4667,13 @@ export const BattleScreen: React.FC = () => {
 
             shieldReports.push(`${ally.name}(${shieldAmt})`);
 
-            // 🛡️ [3차 궁극기] 아발론 (이지스 바스티온): 자신 2턴간 상시 반격 (100%)
+            // 🛡️ [3차 궁극기] 아발론 (이지스 바스티온): 자신 2턴간 상시 반격 (130%)
             if (skill.id === 'bastion_avalon' && ally.id === hero.id) {
               applyStatusEffect(hero, {
                 type: 'riposte',
                 turnsLeft: 2,
                 totalTurns: 2,
-                magnitude: 1.0,
+                magnitude: 1.30,
                 source: `${hero.name} (아발론 반격)`
               });
             }
@@ -4604,7 +4693,7 @@ export const BattleScreen: React.FC = () => {
           if (targetType === 'all_allies') {
             logs.push(`🛡️ ${hero.name} [${skill.name}] → 파티 전원 보호막 전개! [${shieldReports.join(', ')}]`);
             if (skill.id === 'bastion_avalon') {
-              logs.push(`🛡️⚔️ [아발론] ${hero.name}이(가) 파티 전체에 전설의 성벽(최대 HP 50% 보호막)을 치고 2턴간 100% 상시 반격 태세를 전개했습니다!`);
+              logs.push(`🛡️⚔️ [아발론] ${hero.name}이(가) 파티 전체에 전설의 성벽(최대 HP 50% 보호막)을 치고 2턴간 130% 상시 반격 태세를 전개했습니다!`);
             }
             if (skill.id === 'skill_boss_judgment_sanctum') {
               logs.push(`🏰⚔️ [칠흑 성역] 파티 전원의 공격력이 3턴간 ${Math.round(40 * efficiency)}% 상승했습니다!`);
@@ -4704,6 +4793,30 @@ export const BattleScreen: React.FC = () => {
             logs.push(`⚙️🎯 [오버클럭 리로드] 아군 전체 스킬 쿨다운 1턴 단축 및 3턴간 치명 공격력 ${Math.round(50 * ultMult)}% 증폭!`);
           }
 
+          // ⏳🌌 [시간 가속 왜곡: 전원 쿨다운 2턴 단축 & 마나 40 회복]
+          if (sid === 'chrono_temporal_flux' || sDesc.includes('시간 가속 왜곡')) {
+            const addMp = Math.floor(40 * ultMult);
+            targetAllies.forEach(ally => {
+              ally.currentMp = Math.min(ally.maxMp, ally.currentMp + addMp);
+            });
+            cooldownReductionTarget = 'all';
+            cooldownReductionAmount = 2;
+            logs.push(`⏳🌌 [시간 가속 왜곡] 아군 전체 마나 +${addMp} MP 회복 및 모든 스킬 쿨다운을 2턴 즉시 단축했습니다!`);
+          }
+
+          // 🛡️✨ [신성 수호진: 자신에게 최대 체력 35% 보호막 생성]
+          if (sid === 'bastion_divine_providence' || sDesc.includes('신성 수호진')) {
+            const shieldAmt = Math.floor(hero.maxHp * 0.35 * ultMult);
+            applyStatusEffect(hero, {
+              type: 'shield',
+              turnsLeft: 2,
+              totalTurns: 2,
+              magnitude: shieldAmt,
+              source: '신성 수호진'
+            });
+            logs.push(`🛡️✨ [신성 수호진] ${hero.name}에게 최대 체력 35% (${shieldAmt}) 보호막을 전개했습니다!`);
+          }
+
           // ✝️🔥 [성전 선포: HP 20% 희생하여 아군 공격력 46% 증폭]
           if (sid === 'warpriest_holy_proclamation' || sDesc.includes('성전 선포')) {
             const hpCost = Math.floor(hero.maxHp * 0.20);
@@ -4747,11 +4860,14 @@ export const BattleScreen: React.FC = () => {
               });
             }
             if (isDefBuff) {
+              const defMag = sid === 'bastion_divine_providence'
+                ? Number((0.50 * efficiency * ultMult).toFixed(2))
+                : Number(((skill.power || 0.35) * efficiency * ultMult).toFixed(2));
               applyStatusEffect(ally, {
                 type: 'buff_def',
                 turnsLeft: skill.statusDuration || 3,
                 totalTurns: skill.statusDuration || 3,
-                magnitude: Number(((skill.power || 0.35) * efficiency * ultMult).toFixed(2)),
+                magnitude: defMag,
                 source: hero.name
               });
             }
@@ -4911,12 +5027,12 @@ export const BattleScreen: React.FC = () => {
         Object.keys(nextCooldowns).forEach(k => { nextCooldowns[k] = 0; });
       } else if (cooldownReductionTarget === 'all') {
         Object.keys(nextCooldowns).forEach(k => {
-          if (nextCooldowns[k] > 0) nextCooldowns[k] = Math.max(0, nextCooldowns[k] - 1);
+          if (nextCooldowns[k] > 0) nextCooldowns[k] = Math.max(0, nextCooldowns[k] - cooldownReductionAmount);
         });
       } else if (cooldownReductionTarget === 'self') {
         Object.keys(nextCooldowns).forEach(k => {
           if (k.startsWith(hero.id + '_') && nextCooldowns[k] > 0) {
-            nextCooldowns[k] = Math.max(0, nextCooldowns[k] - 1);
+            nextCooldowns[k] = Math.max(0, nextCooldowns[k] - cooldownReductionAmount);
           }
         });
       } else {
@@ -4929,14 +5045,22 @@ export const BattleScreen: React.FC = () => {
 
       if (skill !== 'basic') {
         const cdKey = `${hero.id}_${skill.id}`;
-        let rawCd = (skill.isSpecial || skill.isUnique)
-          ? (skill.cooldown || 0)
-          : Math.max(1, skill.cooldown ?? 1);
-        // ⏳ [시공의 조율사 패시브: 차원 조율] 파티 전원 스킬 쿨다운 상시 1턴 단축
-        if (gm.party.some(p => (p.classId === 'chronomancer' || p.classId === 'chrono_master') && p.currentHp > 0)) {
-          rawCd = Math.max(1, rawCd - 1);
+        if (isNoCooldownSkill || (skill.cooldown ?? 0) === 0) {
+          delete nextCooldowns[cdKey];
+        } else {
+          let rawCd = (skill.isSpecial || skill.isUnique)
+            ? (skill.cooldown || 0)
+            : Math.max(0, skill.cooldown ?? 1);
+          // ⏳ [시공의 조율사 패시브: 차원 조율] 파티 전원 스킬 쿨다운 상시 1턴 단축
+          if (gm.party.some(p => (p.classId === 'chronomancer' || p.classId === 'chrono_master') && p.currentHp > 0)) {
+            rawCd = Math.max(1, rawCd - 1);
+          }
+          if (rawCd > 0) {
+            nextCooldowns[cdKey] = rawCd;
+          } else {
+            delete nextCooldowns[cdKey];
+          }
         }
-        nextCooldowns[cdKey] = rawCd;
       }
       heroCooldownsRef.current = nextCooldowns;
       setHeroCooldowns(nextCooldowns);
@@ -4978,7 +5102,7 @@ export const BattleScreen: React.FC = () => {
           }
         });
         if (healedAny) {
-          SoundManager.getInstance().play('holy_heal');
+          SoundManager.getInstance().play('heal');
           logs.push(`✝️✨ [빛과 징벌의 조화] ${hero.name}의 심판의 빛이 파티 전체에 닿아 각각 체력 +${partyHealAmount} 회복!`);
         }
       }
@@ -5045,8 +5169,8 @@ export const BattleScreen: React.FC = () => {
 
           if (!triggeredAssistHero) {
             const otherAllies = gm.party.filter(p => p.id !== hero.id && p.currentHp > 0);
-            // 1. 유대 2단계 (전술적 호흡: Bond >= 40) - 25% 확률로 원호 공격
-            const bondAllies = otherAllies.filter(p => gm.getBond(hero.id, p.id) >= 40);
+            // 1. 유대 2단계 (전술적 호흡: Bond >= 60) - 25% 확률로 원호 공격
+            const bondAllies = otherAllies.filter(p => gm.getBond(hero.id, p.id) >= 60);
             if (bondAllies.length > 0 && Math.random() < 0.25) {
               triggeredAssistHero = bondAllies[Math.floor(Math.random() * bondAllies.length)];
               const cls = CHARACTER_CLASSES[triggeredAssistHero.classId];
@@ -6042,10 +6166,10 @@ export const BattleScreen: React.FC = () => {
 
           let newHp = target.currentHp - (finalDmgToHero + finalComboExtraDmg);
 
-          // 💖 [유대 Lv.4: 사선의 맹세] (Bond >= 80)
+          // 💖 [유대 Lv.4: 사선의 맹세] (Bond >= 120)
           if (newHp <= 0 && !endureUsedRef.current[target.id]) {
-            const hasBond80 = gm.party.some(p => p.id !== target.id && p.currentHp > 0 && gm.getBond(target.id, p.id) >= 80);
-            if (hasBond80) {
+            const hasBond120 = gm.party.some(p => p.id !== target.id && p.currentHp > 0 && gm.getBond(target.id, p.id) >= 120);
+            if (hasBond120) {
               newHp = 1;
               endureUsedRef.current[target.id] = true;
               SoundManager.getInstance().play('shield');
@@ -6105,9 +6229,9 @@ export const BattleScreen: React.FC = () => {
             }
           }
 
-          // 💖 [유대 Lv.3: 수호의 결속] (Bond >= 60)
+          // 💖 [유대 Lv.3: 수호의 결속] (Bond >= 90)
           if (target.currentHp > 0 && target.currentHp <= Math.floor(target.maxHp * 0.25) && !guardianShieldUsedRef.current[target.id]) {
-            const guardian = gm.party.find(p => p.id !== target.id && p.currentHp > 0 && gm.getBond(target.id, p.id) >= 60);
+            const guardian = gm.party.find(p => p.id !== target.id && p.currentHp > 0 && gm.getBond(target.id, p.id) >= 90);
             if (guardian) {
               guardianShieldUsedRef.current[target.id] = true;
               addFeverBadge('guard');
@@ -6221,8 +6345,8 @@ export const BattleScreen: React.FC = () => {
 
             let frontNewHp = guardedFrontHero.currentHp - frontFinalDmg;
             if (frontNewHp <= 0 && !endureUsedRef.current[guardedFrontHero.id]) {
-              const hasBond80 = gm.party.some(p => p.id !== guardedFrontHero!.id && p.currentHp > 0 && gm.getBond(guardedFrontHero!.id, p.id) >= 80);
-              if (hasBond80) {
+              const hasBond120 = gm.party.some(p => p.id !== guardedFrontHero!.id && p.currentHp > 0 && gm.getBond(guardedFrontHero!.id, p.id) >= 120);
+              if (hasBond120) {
                 frontNewHp = 1;
                 endureUsedRef.current[guardedFrontHero.id] = true;
                 SoundManager.getInstance().play('shield');
@@ -6269,7 +6393,7 @@ export const BattleScreen: React.FC = () => {
                 monster.statusEffects = [];
               }
               triggerVFX({
-                type: 'holy_smite',
+                type: 'divine_smite',
                 x: selfMonPos.x,
                 y: selfMonPos.y,
                 damage: holyReflectDmg,
@@ -6451,7 +6575,7 @@ export const BattleScreen: React.FC = () => {
             monstersRef.current = currentMonsters;
             setMonsters([...currentMonsters]);
             triggerVFX({
-              type: 'holy_smite',
+              type: 'divine_smite',
               x: selfMonPos.x,
               y: selfMonPos.y,
               damage: holyReflectDmg,
@@ -7224,10 +7348,10 @@ export const BattleScreen: React.FC = () => {
                 return (
                   <LongPressBox
                     onLongPress={() => setSelectedSkillForModal(modalSkillInfo)}
-                    onClick={() => executeSkill(selectedHero, 'basic', targetedMonsterIdx)}
+                    onClick={() => !isProcessing && aliveMonsters.length > 0 && executeSkill(selectedHero, 'basic', targetedMonsterIdx)}
                     className={`btn btn-ghost flex flex-col justify-between p-2 sm:p-2.5 min-h-[82px] h-auto bg-transparent border relative select-none ${
                       hasWeaponSkill ? 'shadow-[0_0_8px_rgba(0,210,255,0.15)]' : ''
-                    }`}
+                    } ${isProcessing || aliveMonsters.length === 0 ? 'opacity-40 cursor-not-allowed' : ''}`}
                     style={{
                       borderColor: hasWeaponSkill ? (hasMp ? '#00d2ff' : '#ffd54f88') : getSkillBtnStyle('basic').borderColor,
                       borderRadius: 10
@@ -7635,13 +7759,18 @@ export const BattleScreen: React.FC = () => {
         canCast={
           selectedHero && selectedSkillForModal
             ? (selectedHero.currentMp >= gm.getSkillManaCost(selectedSkillForModal.manaCost, undefined, selectedHero) &&
-               (heroCooldowns[`${selectedHero.id}_${selectedSkillForModal.id}`] || 0) === 0 &&
+               ((selectedSkillForModal.id === 'basic_attack' || selectedSkillForModal.id?.startsWith('skill_enc_') || (selectedHero.equipment?.weapon?.prefix?.grantedSkill?.id === selectedSkillForModal.id) || (selectedSkillForModal.cooldown ?? 0) === 0) ||
+                (heroCooldowns[`${selectedHero.id}_${selectedSkillForModal.id}`] || 0) === 0) &&
                !isProcessing && aliveMonsters.length > 0)
             : false
         }
         onCast={() => {
           if (selectedHero && selectedSkillForModal) {
-            executeSkill(selectedHero, selectedSkillForModal, targetedMonsterIdx);
+            if (selectedSkillForModal.id === 'basic_attack') {
+              executeSkill(selectedHero, 'basic', targetedMonsterIdx);
+            } else {
+              executeSkill(selectedHero, selectedSkillForModal, targetedMonsterIdx);
+            }
           }
         }}
         onClose={() => setSelectedSkillForModal(null)}

@@ -111,7 +111,9 @@ export const FAQS_GUIDE: FaqGuide[] = [
   { question: '탐험 전리품은 어디로 가나요?', answer: '탐험 중 획득한 아이템과 자원은 던전 배낭에 임시 보관되며, [성채 귀환]을 누르거나 포탈을 타면 성채 창고로 100% 안전하게 입고됩니다.' },
   { question: '탐험 중 전멸하면 어떻게 되나요?', answer: '던전 배낭에 임시 보관 중이던 전리품을 잃어버리게 됩니다. 위험할 땐 무리하지 말고 [성채 귀환]을 누르거나, 전멸 위기 시 안전 귀환시켜주는 [차원의 호각]을 장착하세요.' },
   { question: '영웅이 전사하면 장비는 소멸되나요?', answer: '아닙니다. 사경 상태에서 지속 피해 등으로 전사한 영웅이 착용하고 있던 모든 무기와 방어구, 장신구는 100% 성채 보관함으로 안전하게 회수됩니다.' },
-  { question: '전직 시 기존 스킬과 습득 스킬은 어떻게 되나요?', answer: '영혼의 제단에서 1차 또는 2차 전직 시, 이전 클래스의 고유 스킬과 기존에 습득했던 모든 스킬이 소멸되지 않고 [학습한 스킬] 목록(최대 6개)으로 100% 안전하게 이동 및 보존됩니다.' },
+  { question: '전직 시 기존 스킬과 습득 스킬은 어떻게 되나요?', answer: '영혼의 제단에서 1차, 2차 또는 3차 전직 시, 이전 클래스의 고유 스킬과 기존에 습득했던 모든 스킬이 소멸되지 않고 [학습한 스킬] 목록(최대 6개)으로 100% 안전하게 이동 및 보존됩니다.' },
+  { question: '3차 초월 전직(Tier 3)의 조건과 특징은 무엇인가요?', answer: '3차 초월 전직은 2차 각성 직업 Lv.60 달성 및 영혼의 제단 증축을 통해 승급할 수 있는 최종 경지입니다. 3차 전직을 완료하면 모든 계열의 마도서를 페널티 없이 100% 위력으로 장착/시전하는 [만마도서] 패시브가 해금되며, 전장을 뒤흔드는 고유 초월 궁극기(오의)와 강력한 융합 패시브를 다룹니다.' },
+  { question: '3차 전직 클래스 6종의 고유 역할과 초월 궁극기는 무엇인가요?', answer: '① 이지스 바스티온(절대수호/반사, 초월오의 [아발론]) ② 보이드 스트라이더(차원회피/공격력증폭, 초월오의 [차원참]) ③ 크로노 아콘(50% 더블캐스트, 초월오의 [빅뱅 크로노스]) ④ 세라픽 인퀴지터(공격치유/치유반격, 초월오의 [창공의 대심판]) ⑤ 발할라 워로드(상시흡혈/사경행동, 초월오의 [피의 전술]) ⑥ 오메가 데드아이(방무50%/연쇄충격, 초월오의 [궤도 섬멸])로 구성됩니다.' },
   { question: '마도서 제작 확률과 에테르 공방 해금은 어떻게 되나요?', answer: '에테르 연금 공방의 레벨에 따라 기본(Lv.1, 80%), 희귀(Lv.3, 50%), 에픽(Lv.5, 30%), 전설(Lv.7, 10%) 마도서가 순차 해금되며, 실패 시 에테르 붕괴 연출이 발생합니다.' },
   { question: '마물이 차징(Charging) 중일 때 어떻게 대처해야 하나요?', answer: '마물이 차징을 완료하여 기술 시전에 성공하면 확정 치명타와 방어 관통 50%의 치명적인 피해를 입힙니다. 기절, 빙결, 침묵, 또는 차징 붕괴(BREAK) 스킬을 집중하여 반드시 시전 전에 차징을 캔슬해야 합니다.' },
   { question: '저주받은 장비 정화 시 연출과 결과는 일치하나요?', answer: '네, 병기창 정화 탭에서 정화 진행 시 드라마틱한 컷인 연출과 실제 성공/파괴 판정 결과가 100% 일치합니다. 또한 정화된 장비 목록은 정화 탭에 5분간 유지된 후 자동 정리됩니다.' },
@@ -142,7 +144,7 @@ export const CLASS_LINEAGES: ClassLineageDef[] = [
     name: '견습 기사 계통',
     roleTitle: '🛡️ 전열 수호 & 신성 방벽 (탱커)',
     icon: '🛡️',
-    summary: '견습 기사 ➔ [성기사 ➔ 이지스 발키리] / [중장 보병 ➔ 포트리스]',
+    summary: '견습 기사 ➔ [성기사 ➔ 이지스 발키리] / [중장 보병 ➔ 포트리스] ➔ 👑 이지스 바스티온',
     theme: {
       primary: '#3b82f6',
       light: '#93c5fd',
@@ -156,14 +158,14 @@ export const CLASS_LINEAGES: ClassLineageDef[] = [
       glow: 'rgba(59, 130, 246, 0.12)',
       accentBar: '#3b82f6'
     },
-    classOrder: ['squire', 'paladin', 'guardian', 'aegis_valkyrie', 'fortress']
+    classOrder: ['squire', 'paladin', 'guardian', 'aegis_valkyrie', 'fortress', 'aegis_bastion']
   },
   {
     id: 'rogue',
-    name: '암영 암살자 계통',
-    roleTitle: '⚡ 초고속 암습 & 출혈 맹독 (물리 딜러)',
+    name: '그림자 수련생 계통',
+    roleTitle: '⚡ 초고속 암습 & 치명 암살 (물리 딜러)',
     icon: '⚡',
-    summary: '암영 암살자 ➔ [그림자 단검 ➔ 나이트토커] / [심연 추적자 ➔ 섀도우 블레이드]',
+    summary: '그림자 수련생 ➔ [암살자 ➔ 그림자 망령] / [그림자 결투사 ➔ 환영의 검성] ➔ 👑 보이드 스트라이더',
     theme: {
       primary: '#10b981',
       light: '#6ee7b7',
@@ -177,14 +179,14 @@ export const CLASS_LINEAGES: ClassLineageDef[] = [
       glow: 'rgba(16, 185, 129, 0.12)',
       accentBar: '#10b981'
     },
-    classOrder: ['rogue', 'shadow_blade', 'stalker', 'nightstalker', 'void_assassin']
+    classOrder: ['rogue', 'assassin', 'duelist', 'shadow_phantom', 'blade_dancer', 'void_strider']
   },
   {
     id: 'apprentice',
     name: '원소 학도 계통',
     roleTitle: '🔮 광역 마법 & 원소 폭발 (마법 딜러)',
     icon: '🔮',
-    summary: '원소 학도 ➔ [대마도사 ➔ 아크 메이지] / [비전 학자 ➔ 시공의 조율사]',
+    summary: '원소 학도 ➔ [대마도사 ➔ 아크 메이지] / [비전 학자 ➔ 시공의 조율사] ➔ 👑 크로노 아콘',
     theme: {
       primary: '#a855f7',
       light: '#d8b4fe',
@@ -198,14 +200,14 @@ export const CLASS_LINEAGES: ClassLineageDef[] = [
       glow: 'rgba(168, 85, 247, 0.12)',
       accentBar: '#a855f7'
     },
-    classOrder: ['apprentice', 'elementalist', 'arcane_scholar', 'calamity_mage', 'chronomancer']
+    classOrder: ['apprentice', 'elementalist', 'arcane_scholar', 'calamity_mage', 'chronomancer', 'chrono_archon']
   },
   {
     id: 'acolyte',
     name: '견습 사제 계통',
     roleTitle: '🕊️ 광역 치유 & 디버프 정화 (신성 힐러)',
     icon: '🕊️',
-    summary: '견습 사제 ➔ [주교 ➔ 성령의 구원자] / [전투 사제 ➔ 성전의 심판관]',
+    summary: '견습 사제 ➔ [주교 ➔ 성령의 구원자] / [전투 사제 ➔ 성전의 심판관] ➔ 👑 세라픽 인퀴지터',
     theme: {
       primary: '#eab308',
       light: '#fde047',
@@ -219,14 +221,14 @@ export const CLASS_LINEAGES: ClassLineageDef[] = [
       glow: 'rgba(234, 179, 8, 0.12)',
       accentBar: '#eab308'
     },
-    classOrder: ['acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord']
+    classOrder: ['acolyte', 'bishop', 'war_priest', 'high_saintess', 'crusader_lord', 'seraphic_inquisitor']
   },
   {
     id: 'vanguard',
     name: '용병 검사 계통',
     roleTitle: '🌋 전열 분쇄 & 피의 폭주 (근접 딜탱)',
     icon: '🌋',
-    summary: '용병 검사 ➔ [광전사 ➔ 발할라 블레이드] / [전술 지휘관 ➔ 철혈의 패황]',
+    summary: '용병 검사 ➔ [광전사 ➔ 발할라 블레이드] / [전술 지휘관 ➔ 철혈의 패황] ➔ 👑 발할라 워로드',
     theme: {
       primary: '#f97316',
       light: '#fdba74',
@@ -240,14 +242,14 @@ export const CLASS_LINEAGES: ClassLineageDef[] = [
       glow: 'rgba(249, 115, 22, 0.12)',
       accentBar: '#f97316'
     },
-    classOrder: ['vanguard', 'berserker', 'warlord', 'valhalla_blade', 'iron_marshal']
+    classOrder: ['vanguard', 'berserker', 'warlord', 'valhalla_blade', 'iron_marshal', 'valhalla_warlord']
   },
   {
     id: 'gunner',
     name: '마총 수련생 계통',
     roleTitle: '🎯 원거리 관통 & 전술 저격 (원거리 딜러)',
     icon: '🎯',
-    summary: '마총 수련생 ➔ [전술 포수 ➔ 하이퍼 레인저] / [심연의 저격수 ➔ 사신 저격수]',
+    summary: '마총 수련생 ➔ [전술 포수 ➔ 하이퍼 레인저] / [심연의 저격수 ➔ 사신 저격수] ➔ 👑 오메가 데드아이',
     theme: {
       primary: '#06b6d4',
       light: '#67e8f9',
@@ -261,6 +263,6 @@ export const CLASS_LINEAGES: ClassLineageDef[] = [
       glow: 'rgba(6, 182, 212, 0.12)',
       accentBar: '#06b6d4'
     },
-    classOrder: ['gunner', 'tactical_gunner', 'sharpshooter', 'aether_gun_meister', 'ghost_sniper']
+    classOrder: ['gunner', 'tactical_gunner', 'sharpshooter', 'aether_gun_meister', 'ghost_sniper', 'omega_deadeye']
   }
 ];

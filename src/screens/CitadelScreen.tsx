@@ -4212,7 +4212,7 @@ const BarracksDrawer: React.FC<{
               const hTier = hCls?.tier || 0;
               const hReqLv = hTier === 0 ? 10 : (hTier === 1 ? 30 : 60);
               const canPromoteHero = h.level >= hReqLv && (PROMOTE_MAP[h.classId]?.length || 0) > 0;
-              const canAwakenHero = hTier === 2 && h.level >= (30 + ((h.awakeningCount || 0) + 1) * 10);
+              const canAwakenHero = hTier >= 3 && h.level >= (60 + ((h.awakeningCount || 0) + 1) * 10);
 
               return (
                 <button
@@ -4675,11 +4675,11 @@ const BarracksDrawer: React.FC<{
                 );
               })()}
 
-              {/* 🔮 2차 전직 이후 10레벨마다 거행하는 초월 각성 섹션 */}
-              {cls.tier === 2 && (() => {
+              {/* 🔮 3차 전직 이후 10레벨마다 거행하는 초월 각성 섹션 */}
+              {cls.tier >= 3 && (() => {
                 const currentCount = hero.awakeningCount || 0;
                 const targetStep = currentCount + 1;
-                const reqLevel = 30 + targetStep * 10;
+                const reqLevel = 60 + targetStep * 10;
                 const meetsLevel = hero.level >= reqLevel;
                 const sanctuaryLv = state.buildings['sanctuary']?.level || 0;
                 const reqSanct = 5;
@@ -4730,7 +4730,7 @@ const BarracksDrawer: React.FC<{
                     </div>
 
                     <div className="text-[11px] text-[#cfd8dc] mb-2 leading-relaxed">
-                      2차 전직 이후 10레벨마다 영혼을 초월하여 <strong>스탯 1종 +15% 추가 영구 상향</strong> 및 <strong>상위 등급({nextGrade ? GRADE_NAMES[nextGrade] : '최고등급'})으로 진화</strong>할 수 있습니다.
+                      3차 전직 이후 10레벨마다 영혼을 초월하여 <strong>스탯 1종 +15% 추가 영구 상향</strong> 및 <strong>상위 등급({nextGrade ? GRADE_NAMES[nextGrade] : '최고등급'})으로 진화</strong>할 수 있습니다.
                     </div>
 
                     {/* 조건 체크리스트 */}
@@ -5043,7 +5043,7 @@ const BarracksDrawer: React.FC<{
             );
           })()}
 
-          {/* ── 🔮 2차 전직 이후 초월 각성 모달 ── */}
+          {/* ── 🔮 3차 전직 이후 초월 각성 모달 ── */}
           {awakeningTargetHero && (() => {
             const targetHero = state.barracks.find(h => h.id === awakeningTargetHero.id) || awakeningTargetHero;
             const cClass = CHARACTER_CLASSES[targetHero.classId];
@@ -5051,7 +5051,7 @@ const BarracksDrawer: React.FC<{
 
             const currentCount = targetHero.awakeningCount || 0;
             const targetStep = currentCount + 1;
-            const reqLevel = 30 + targetStep * 10;
+            const reqLevel = 60 + targetStep * 10;
             const meetsLevel = targetHero.level >= reqLevel;
             const sanctuaryLv = state.buildings['sanctuary']?.level || 0;
             const reqSanct = 5;
@@ -5343,7 +5343,7 @@ const BarracksDrawer: React.FC<{
                       <div className="w-full h-1.5 bg-[#090d18] rounded-full overflow-hidden border border-[#1f2738] p-0.2">
                         <div
                           className="h-full bg-gradient-to-r from-[#ff416c] via-[#ff7043] to-[#ffd54f] rounded-full transition-all duration-500"
-                          style={{ width: `${Math.max(12, Math.min(100, bondVal))}%` }}
+                          style={{ width: `${Math.max(12, Math.min(100, (bondVal / 150) * 100))}%` }}
                         />
                       </div>
 

@@ -862,6 +862,10 @@ export const ExplorationScreen: React.FC = () => {
 
     // 70% 이상 위험도 도달 시 보스 전조 경고 (무간도 제외 일반층)
     const dangerRatio = newDanger / maxDanger;
+
+    // 💔 던전 위험도에 따른 유대감 마찰/감소 (중간 레벨: 확률적 -1, 위험 레벨: 확정적 -1)
+    gm.applyDungeonHazardBondFriction(dangerRatio);
+
     if (floor !== 11 && dangerRatio >= 0.7 && dangerRatio < 1.0 && !gm.isOvercharged) {
       const isBossFloor = (floor === 5 || floor === 10);
       const omenMsg = isBossFloor
