@@ -157,8 +157,8 @@ export class GameManager {
     this.currentBattleTurn = Math.max(1, turn);
   }
   public logs: LogEntry[] = [];
-  public currentArenaRank: number = 24;
-  public currentArenaRating: number = 1200;
+  public currentArenaRank: number = 850;
+  public currentArenaRating: number = 800;
   public arenaCoins: number = 150;
   public arenaStreak: number = 0;
   public pveBuffActive: boolean = false;
@@ -661,8 +661,8 @@ export class GameManager {
     this.lastSelectedBagId = 'medium';
 
     // 7. 아레나 / 성화 / 병동 / 유대 초기화
-    this.currentArenaRank = 100;
-    this.currentArenaRating = 1000;
+    this.currentArenaRank = 850;
+    this.currentArenaRating = 800;
     this.arenaCoins = 0;
     this.pveBuffActive = false;
     this.bonfireStacks = 0;
@@ -820,8 +820,8 @@ export class GameManager {
         this.purifiedFloors = [];
         this.quests = JSON.parse(JSON.stringify(INITIAL_QUESTS));
         this.subQuestCooldownUntil = 0;
-        this.currentArenaRank = 100;
-        this.currentArenaRating = 1000;
+        this.currentArenaRank = 850;
+        this.currentArenaRating = 800;
         this.arenaCoins = 0;
         this.pveBuffActive = false;
         resetLogs.push('던전 및 퀘스트');
@@ -7829,10 +7829,27 @@ export class GameManager {
 
     }
     this.currentArenaRating = Math.max(800, this.currentArenaRating + delta);
-    if (this.currentArenaRating > 1800) {
-      this.currentArenaRank = Math.max(1, Math.floor((2200 - this.currentArenaRating) / 40));
+    if (this.currentArenaRating >= 2500) {
+      // 👑 그랜드마스터: Rank 1 ~ 5
+      this.currentArenaRank = Math.max(1, Math.floor(5 - (this.currentArenaRating - 2500) / 50));
+    } else if (this.currentArenaRating >= 2200) {
+      // 💎 마스터: Rank 6 ~ 30
+      this.currentArenaRank = Math.max(6, Math.floor(30 - (this.currentArenaRating - 2200) / 12.5));
+    } else if (this.currentArenaRating >= 1900) {
+      // 💠 다이아몬드: Rank 31 ~ 80
+      this.currentArenaRank = Math.max(31, Math.floor(80 - (this.currentArenaRating - 1900) / 6));
+    } else if (this.currentArenaRating >= 1600) {
+      // ⚔️ 플래티넘: Rank 81 ~ 180
+      this.currentArenaRank = Math.max(81, Math.floor(180 - (this.currentArenaRating - 1600) / 3));
+    } else if (this.currentArenaRating >= 1300) {
+      // 🏆 골드: Rank 181 ~ 320
+      this.currentArenaRank = Math.max(181, Math.floor(320 - (this.currentArenaRating - 1300) / 2.14));
+    } else if (this.currentArenaRating >= 1000) {
+      // 🛡️ 실버: Rank 321 ~ 500
+      this.currentArenaRank = Math.max(321, Math.floor(500 - (this.currentArenaRating - 1000) / 1.67));
     } else {
-      this.currentArenaRank = Math.max(1, Math.floor(50 - (this.currentArenaRating - 1000) / 30));
+      // 🥉 브론즈: Rank 501 ~ 1000
+      this.currentArenaRank = Math.max(501, Math.floor(1000 - (this.currentArenaRating - 800) * 2.5));
     }
 
     if (coinsEarned > 0) {
@@ -8327,109 +8344,106 @@ export class GameManager {
   }
 
   /** 3선발 + 1리더 + 1서포터 차원 덱 구조 반환 */
+  /** 3인 선발 + 1인 전술 오퍼레이터 (+ 1서포터) 차원 덱 구조 반환 */
   public getDimensionalDeck(): {
     mainHeroes: Mercenary[];
-    leaderHero: Mercenary | null;
+    operatorHero: Mercenary | null;
+    leaderHero: Mercenary | null; // 레거시 호환
     supporterHero: Mercenary | null;
     deck: DimensionalDeck;
   } {
     const allHeroes = [...this.barracks, ...this.party].filter((h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx);
 
     let mainHeroIds: string[] = [];
-    let leaderHeroId = '';
+    let operatorHeroId = '';
     let supporterHeroId = '';
 
     if (this.invasionState.deck) {
       mainHeroIds = this.invasionState.deck.mainHeroIds.filter(id => allHeroes.some(h => h.id === id)).slice(0, 3);
-      if (allHeroes.some(h => h.id === this.invasionState.deck!.leaderHeroId)) {
-        leaderHeroId = this.invasionState.deck!.leaderHeroId;
+      const rawOpId = this.invasionState.deck.operatorHeroId || this.invasionState.deck.leaderHeroId;
+      if (rawOpId && allHeroes.some(h => h.id === rawOpId)) {
+        operatorHeroId = rawOpId;
       }
       if (allHeroes.some(h => h.id === this.invasionState.deck!.supporterHeroId)) {
-        supporterHeroId = this.invasionState.deck!.supporterHeroId;
+        supporterHeroId = this.invasionState.deck!.supporterHeroId || '';
       }
-    } else if (this.invasionState.squadHeroIds && this.invasionState.squadHeroIds.length >= 5) {
+    } else if (this.invasionState.squadHeroIds && this.invasionState.squadHeroIds.length >= 4) {
       const validSquad = this.invasionState.squadHeroIds.filter(id => allHeroes.some(h => h.id === id));
       const unique = Array.from(new Set(validSquad));
-      if (unique.length >= 5) {
+      if (unique.length >= 3) {
         mainHeroIds = unique.slice(0, 3);
-        leaderHeroId = unique[3];
-        supporterHeroId = unique[4];
+        operatorHeroId = unique[3] || '';
+        supporterHeroId = unique[4] || '';
       }
     }
 
     const mainHeroes = mainHeroIds.map(id => allHeroes.find(h => h.id === id)).filter((h): h is Mercenary => Boolean(h));
-    const leaderHero = allHeroes.find(h => h.id === leaderHeroId) || null;
+    const operatorHero = allHeroes.find(h => h.id === operatorHeroId) || null;
     const supporterHero = allHeroes.find(h => h.id === supporterHeroId) || null;
 
     const deck: DimensionalDeck = {
       mainHeroIds: mainHeroes.map(h => h.id),
-      leaderHeroId: leaderHero?.id || '',
+      operatorHeroId: operatorHero?.id || '',
+      leaderHeroId: operatorHero?.id || '',
       supporterHeroId: supporterHero?.id || '',
     };
 
-    return { mainHeroes, leaderHero, supporterHero, deck };
+    return { mainHeroes, operatorHero, leaderHero: operatorHero, supporterHero, deck };
   }
 
-  /** 차원 5인 부대 편성 완료 여부 및 현황 검사 */
+  /** 차원 3인 부대 편성 완료 여부 및 현황 검사 */
   public isDimensionalSquadReady(): { isReady: boolean; count: number; reason?: string } {
     const allHeroes = [...this.barracks, ...this.party].filter((h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx);
     
-    // 1. 보유 영웅 수 부족
-    if (allHeroes.length < 5) {
+    // 1. 보유 영웅 수 부족 (최소 3인)
+    if (allHeroes.length < 3) {
       return {
         isReady: false,
         count: allHeroes.length,
-        reason: `보유 용병이 부족합니다. (현재 ${allHeroes.length}/5명 보유)\n차원 게이트 전투에 출전하려면 주점에서 용병을 최소 5명 이상 고용해야 합니다.`
+        reason: `보유 용병이 부족합니다. (현재 ${allHeroes.length}/3명 보유)\n차원 결투에 출전하려면 용병을 최소 3명 이상 고용해야 합니다.`
       };
     }
 
-    // 2. 덱 편성 확인 (3선발 + 1리더 + 1서포터, 중복 없는 5인)
+    // 2. 덱 편성 확인 (3인 메인)
     const deck = this.invasionState.deck;
     if (!deck) {
-      if (this.invasionState.squadHeroIds && this.invasionState.squadHeroIds.length >= 5) {
+      if (this.invasionState.squadHeroIds && this.invasionState.squadHeroIds.length >= 3) {
         const validSquad = this.invasionState.squadHeroIds.filter(id => allHeroes.some(h => h.id === id));
         const unique = Array.from(new Set(validSquad));
-        if (unique.length >= 5) {
-          const ids = unique.slice(0, 5);
+        if (unique.length >= 3) {
+          const ids = unique.slice(0, 3);
           this.invasionState.deck = {
-            mainHeroIds: ids.slice(0, 3),
-            leaderHeroId: ids[3],
-            supporterHeroId: ids[4],
+            mainHeroIds: ids,
+            leaderHeroId: '',
+            supporterHeroId: '',
           };
-          return { isReady: true, count: 5 };
+          return { isReady: true, count: 3 };
         }
       }
       return {
         isReady: false,
         count: 0,
-        reason: '차원 5인 부대(선발 3인 + 리더 1인 + 서포터 1인)가 편성되지 않았습니다.\n전투를 시작하려면 부대를 먼저 편성해야 합니다.'
+        reason: '차원 3인 부대(전열/중열/후열)가 편성되지 않았습니다.\n전투를 시작하려면 부대를 먼저 편성해야 합니다.'
       };
     }
 
     const validMain = (deck.mainHeroIds || []).filter(id => allHeroes.some(h => h.id === id));
-    const hasLeader = Boolean(deck.leaderHeroId && allHeroes.some(h => h.id === deck.leaderHeroId));
-    const hasSupporter = Boolean(deck.supporterHeroId && allHeroes.some(h => h.id === deck.supporterHeroId));
-
-    const usedIds = new Set<string>();
-    validMain.forEach(id => usedIds.add(id));
-    if (hasLeader) usedIds.add(deck.leaderHeroId);
-    if (hasSupporter) usedIds.add(deck.supporterHeroId);
-
-    if (usedIds.size < 5 || validMain.length < 3 || !hasLeader || !hasSupporter) {
+    if (validMain.length < 3) {
       return {
         isReady: false,
-        count: usedIds.size,
-        reason: `차원 5인 부대가 온전히 편성되지 않았습니다. (현재 ${usedIds.size}/5인 배치)\n선발 3인, 리더 1인, 서포터 1인을 중복 없이 모두 배치해주세요.`
+        count: validMain.length,
+        reason: `차원 3인 부대가 온전히 편성되지 않았습니다. (현재 ${validMain.length}/3인 배치)\n전열, 중열, 후열 3인을 모두 배치해주세요.`
       };
     }
 
-    return { isReady: true, count: 5 };
+    const totalCount = validMain.length;
+    return { isReady: true, count: totalCount };
   }
 
-  /** 차원 5인 부대 (3선발 + 1리더 + 1서포터) 전투력 기준 최적 자동 편성 */
+  /** 차원 3인 부대 (전열, 중열, 후열) 최적 자동 편성 */
   public autoAssignDimensionalDeck(): boolean {
     const allHeroes = [...this.barracks, ...this.party].filter((h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx);
-    if (allHeroes.length < 5) return false;
+    if (allHeroes.length < 3) return false;
 
     const sorted = [...allHeroes].sort((a, b) => {
       const pA = a.stats.atk * 3 + a.stats.def * 2 + a.maxHp / 5;
@@ -8438,8 +8452,8 @@ export class GameManager {
     });
 
     const mainIds = sorted.slice(0, 3).map(h => h.id);
-    const leaderId = sorted[3].id;
-    const supporterId = sorted[4].id;
+    const leaderId = sorted[3]?.id || sorted[0].id;
+    const supporterId = sorted[4]?.id || sorted[1]?.id || sorted[0].id;
 
     this.setDimensionalDeck({
       mainHeroIds: mainIds,
@@ -8450,26 +8464,34 @@ export class GameManager {
   }
 
   /** 차원 덱 (3선발 + 1리더 + 1서포터) 저장 */
+  /** 차원 결투 덱 (3인 결투 부대 + 1인 전술 오퍼레이터) 저장 */
   public setDimensionalDeck(deck: DimensionalDeck): void {
     const allHeroes = [...this.barracks, ...this.party].filter((h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx);
-    const validMainIds = deck.mainHeroIds.filter(id => allHeroes.some(h => h.id === id)).slice(0, 3);
-    const validLeaderId = allHeroes.some(h => h.id === deck.leaderHeroId) ? deck.leaderHeroId : '';
-    const validSupporterId = allHeroes.some(h => h.id === deck.supporterHeroId) ? deck.supporterHeroId : '';
+    const validMainIds = (deck.mainHeroIds || []).filter(id => allHeroes.some(h => h.id === id)).slice(0, 3);
+    const targetOpId = deck.operatorHeroId || deck.leaderHeroId || '';
+    const validOpId = allHeroes.some(h => h.id === targetOpId) ? targetOpId : '';
+    const validSupporterId = deck.supporterHeroId && allHeroes.some(h => h.id === deck.supporterHeroId) ? deck.supporterHeroId : '';
 
     this.invasionState.deck = {
       mainHeroIds: validMainIds,
-      leaderHeroId: validLeaderId,
+      operatorHeroId: validOpId,
+      leaderHeroId: validOpId, // 호환성
       supporterHeroId: validSupporterId,
     };
-    // 기존 squadHeroIds와도 동기화 (5인 호환성)
+    // 기존 squadHeroIds와도 동기화
     const combined = [...validMainIds];
-    if (validLeaderId && !combined.includes(validLeaderId)) combined.push(validLeaderId);
+    if (validOpId && !combined.includes(validOpId)) combined.push(validOpId);
     if (validSupporterId && !combined.includes(validSupporterId)) combined.push(validSupporterId);
     this.invasionState.squadHeroIds = combined;
 
     this.emit('invasionUpdated', this.invasionState);
     this.emit('update');
     this.saveGame();
+  }
+
+  /** 전술 오퍼레이터(리더)의 무덤의 영령 가호 버프 생성 */
+  public getOperatorBlessing(hero: Mercenary): ActiveAncestralBlessing | null {
+    return this.getLeaderBlessing(hero);
   }
 
   /** 리더 영웅의 무덤의 영령 가호 버프 생성 */
@@ -11581,6 +11603,11 @@ export class GameManager {
     if (parsed.currentArenaRating) this.currentArenaRating = parsed.currentArenaRating as number;
     if (parsed.arenaCoins !== undefined) this.arenaCoins   = parsed.arenaCoins as number;
     if (parsed.arenaStreak !== undefined) this.arenaStreak = parsed.arenaStreak as number;
+    // 프리시즌 브론즈 시작 보정: 과거 하드코딩 기본값(1200, 1000)이고 대전 전적이 없으면 브론즈(800P, #850)에서 시작
+    if ((this.currentArenaRating === 1200 || this.currentArenaRating === 1000) && (!this.arenaStreak || this.arenaStreak === 0)) {
+      this.currentArenaRating = 800;
+      this.currentArenaRank = 850;
+    }
     if (parsed.pveBuffActive !== undefined) this.pveBuffActive = parsed.pveBuffActive as boolean;
     if (parsed.bonfireStacks !== undefined) this.bonfireStacks = parsed.bonfireStacks as number;
     if (parsed.bonfireWarmthTime !== undefined) this.bonfireWarmthTime = parsed.bonfireWarmthTime as number;
@@ -12254,6 +12281,11 @@ export class GameManager {
         if (parsed.currentArenaRating) this.currentArenaRating = parsed.currentArenaRating as number;
         if (parsed.arenaCoins !== undefined) this.arenaCoins   = parsed.arenaCoins as number;
         if (parsed.arenaStreak !== undefined) this.arenaStreak = parsed.arenaStreak as number;
+        // 프리시즌 브론즈 시작 보정: 과거 하드코딩 기본값(1200, 1000)이고 대전 전적이 없으면 브론즈(800P, #850)에서 시작
+        if ((this.currentArenaRating === 1200 || this.currentArenaRating === 1000) && (!this.arenaStreak || this.arenaStreak === 0)) {
+          this.currentArenaRating = 800;
+          this.currentArenaRank = 850;
+        }
         if (parsed.pveBuffActive !== undefined) this.pveBuffActive = parsed.pveBuffActive as boolean;
         if (parsed.bonfireStacks !== undefined) this.bonfireStacks = parsed.bonfireStacks as number;
         if (parsed.bonfireWarmthTime !== undefined) this.bonfireWarmthTime = parsed.bonfireWarmthTime as number;

@@ -1808,11 +1808,11 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 윤회의 고리 1,000 위험도 점프 (위험도 +1,000 / 📜 초월 비전서 ×3 획득)',
+          label: '⚡ [진척도 가속] 윤회의 고리 100 위험도 점프 (위험도 +100 / 📜 초월 비전서 ×3 획득)',
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('portal');
-            const nextD = Math.min(maxDanger, danger + 1000);
+            const nextD = Math.min(maxDanger, danger + 100);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
             gm.party.forEach(h => gm.addExpToHero(h, 1000));
@@ -1821,23 +1821,23 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
             if (q4 && q4.status === 'active' && q4.objectives[1]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_04', 2, 1);
             }
-            gm.addLog('⚡ [진척도 극한 가속] 시간선을 강제로 뛰어넘어 상위 계층으로 직행했습니다! (무간도 위험도 +1,000 폭발적 도약, 전원 EXP +1,000)', 'reward');
+            gm.addLog('⚡ [진척도 극한 가속] 시간선을 강제로 뛰어넘어 상위 계층으로 직행했습니다! (무간도 위험도 +100 폭발적 도약, 전원 EXP +1,000)', 'reward');
             setEventCard(null);
           }
         },
         {
-          label: '🛡️ [안전 파밍] 차원의 닻으로 시공간 안정화 (위험도 -500 감소 / 전리품 분실률 0% 보존)',
+          label: '🛡️ [안전 파밍] 차원의 닻으로 시공간 안정화 (위험도 -50 감소 / 전리품 분실률 0% 보존)',
           variant: 'primary',
           action: () => {
             SoundManager.getInstance().play('heal');
-            const nextD = Math.max(0, danger - 500);
+            const nextD = Math.max(0, danger - 50);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
             const q4 = gm.quests.find(q => q.id === 'Q_SCENARIO_04');
             if (q4 && q4.status === 'active' && q4.objectives[1]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_04', 2, 1);
             }
-            gm.addLog('🛡️ [안전 파밍] 무간도의 난류를 잠재워 전리품을 안전하게 보존했습니다. (무간도 위험도 -500 감소, 배낭 분실률 0%)', 'reward');
+            gm.addLog('🛡️ [안전 파밍] 무간도의 난류를 잠재워 전리품을 안전하게 보존했습니다. (무간도 위험도 -50 감소, 배낭 분실률 0%)', 'reward');
             setEventCard(null);
           }
         }
@@ -1845,11 +1845,11 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       if (phantomHero) {
         options.unshift({
-          label: `🌟 [${phantomHero.name} 특기] 시공간 위상 정밀 조율 (위험도 -500 감소 & 🌌 공허 파편 ×5 획득)`,
+          label: `🌟 [${phantomHero.name} 특기] 시공간 위상 정밀 조율 (위험도 -60 감소 & 🌌 공허 파편 ×5 획득)`,
           variant: 'success',
           action: () => {
             SoundManager.getInstance().play('portal');
-            const nextD = Math.max(0, danger - 500);
+            const nextD = Math.max(0, danger - 60);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
             gm.addToDungeonInventory('void_shard', '공허의 파편', '🌌', 5);
@@ -1857,7 +1857,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
             if (q4 && q4.status === 'active' && q4.objectives[1]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_04', 2, 1);
             }
-            gm.addLog(`🌟 [시공간 특기] [${phantomHero.name}]이(가) 무간도의 나선을 안정화하여 공허 파편을 다량 수습했습니다! (위험도 -500)`, 'reward');
+            gm.addLog(`🌟 [시공간 특기] [${phantomHero.name}]이(가) 무간도의 나선을 안정화하여 공허 파편을 다량 수습했습니다! (위험도 -60)`, 'reward');
             setEventCard(null);
           }
         });

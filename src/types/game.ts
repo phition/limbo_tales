@@ -681,6 +681,7 @@ export interface ArenaOpponent {
   guild: string;
   gateLevel?: number; // 🏰 차원 앵커 게이트 레벨
   isBot?: boolean; // 🤖 봇 상대 여부 플래그 (true면 봇, false면 실제 유저)
+  isPromotion?: boolean; // 🔥 상위 티어 승급 도전 상대 여부
 }
 
 export interface LogEntry {
@@ -815,8 +816,9 @@ export interface InvasionDefenseLog {
 
 export interface DimensionalDeck {
   mainHeroIds: string[];       // 3인 선발 필드 전투원 ID (전열/중열/후열)
-  leaderHeroId: string;        // 1인 리더 영웅 ID (영령 가호 버프 + 100% 피버 시 자동 궁극기 발동)
-  supporterHeroId: string;     // 1인 서포터 영웅 ID (선발 3인 중 사망자 발생 시 즉시 교체 투입)
+  operatorHeroId?: string;     // 1인 전술 오퍼레이터 ID (영령 가호 버프 + 피버 쇼다운 승리 시 궁극기 발동)
+  leaderHeroId?: string;        // 1인 리더 영웅 ID (오퍼레이터 레거시 호환 필드)
+  supporterHeroId?: string;     // 1인 서포터 영웅 ID (선택 사항)
 }
 
 export type TacticalTowerBranch = 'attack' | 'defense' | 'utility';

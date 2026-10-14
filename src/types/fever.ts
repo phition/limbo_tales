@@ -65,3 +65,21 @@ export interface FeverSynergyResult {
   rechargePartyMpPct?: number;// 파티 MP 일정 비율 회복 (예: 0.3 = 30%)
   hitRateBonus?: number;      // 아군 전체 명중력 증가 (예: 0.5 = 50%)
 }
+
+export type FeverAffinity = 'burst' | 'guard' | 'trick' | 'joker' | 'neutral';
+export type FeverShowdownOutcome = 'player_win' | 'opp_win' | 'clash';
+
+export interface ShowdownResult {
+  outcome: FeverShowdownOutcome;
+  playerSynergy: FeverSynergyResult;
+  oppSynergy: FeverSynergyResult;
+  playerAffinity: FeverAffinity;
+  oppAffinity: FeverAffinity;
+  playerScore: number;
+  oppScore: number;
+  weeklyRuleTitle?: string;
+  bannerTitle: string;
+  bannerSub: string;
+  narrative: string;
+  icon: string;
+}

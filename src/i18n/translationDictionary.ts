@@ -6,6 +6,11 @@ import { CLASS_NAMES, RESOURCE_NAMES, BUILDING_NAMES } from './dataLocales';
 // ============================================================================
 export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
   en: {
+    "⚡ [진척도 가속] 윤회의 고리 100 위험도 점프 (위험도 +100 / 📜 초월 비전서 ×3 획득)": "⚡ [Progress Accelerated] Reincarnation Ring 100 Hazard Jump (Hazard +100 / 📜 Transcendence Grimoires x3 obtained)",
+    "⚡ [진척도 극한 가속] 시간선을 강제로 뛰어넘어 상위 계층으로 직행했습니다! (무간도 위험도 +100 폭발적 도약, 전원 EXP +1,000)": "⚡ [Extreme Progress Acceleration] Forcibly leaped timelines straight to upper strata! (Avici Hazard +100 explosive surge, all allies EXP +1,000)",
+    "🛡️ [안전 파밍] 차원의 닻으로 시공간 안정화 (위험도 -50 감소 / 전리품 분실률 0% 보존)": "🛡️ [Safe Farming] Stabilize spacetime with Dimensional Anchor (Hazard -50 / 0% loot loss rate preserved)",
+    "🛡️ [안전 파밍] 무간도의 난류를 잠재워 전리품을 안전하게 보존했습니다. (무간도 위험도 -50 감소, 배낭 분실률 0%)": "🛡️ [Safe Farming] Calmed turbulence of Avici, safely preserving loot. (Avici Hazard -50, backpack loss rate 0%)",
+    "🌟 [{0} 특기] 시공간 위상 정밀 조율 (위험도 -60 감소 & 🌌 공허 파편 ×5 획득)": "🌟 [{0} Specialty] Spacetime Phase Precision Tuning (Hazard -60 & 🌌 Void Shard x5 acquired)",
     "구출된 생존자 거주지. 방주에 세금(골드)을 정기 납부합니다. (1~5레벨 10% 감액, Lv.5부터 15% 감액, Lv.6 초과 시 레벨당 30% 추가 증산)": "Shelter for rescued survivors. Regularly pays taxes (Gold) to the Ark. (Lv.1~5: -10% cost, Lv.5+: -15% cost, Above Lv.6: +30% yield compound bonus per level)",
     "구출된 생존자 거주지. 방주에 세금(골드)을 정기 납부합니다. (1~5레벨 10% 감액, Lv.5부터 15% 감액, Lv.6 초과 시 레벨당 30% 추 증산)": "Shelter for rescued survivors. Regularly pays taxes (Gold) to the Ark. (Lv.1~5: -10% cost, Lv.5+: -15% cost, Above Lv.6: +30% yield compound bonus per level)",
     "구출된 생존자 거주지. 방주 세금(골드) 정기 납부합니다. (1~5레벨 10% 감액, Lv.5부터 15% 감액, Lv.6 초과 시 레벨당 30% 추 증산)": "Shelter for rescued survivors. Regularly pays taxes (Gold) to the Ark. (Lv.1~5: -10% cost, Lv.5+: -15% cost, Above Lv.6: +30% yield compound bonus per level)",
@@ -2216,6 +2221,11 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "공격력 +16, 피해량 +8%": "ATK +16, Damage +8%",
   },
   ja: {
+    "⚡ [진척도 가속] 윤회의 고리 100 위험도 점프 (위험도 +100 / 📜 초월 비전서 ×3 획득)": "⚡ [進捗加速] 輪廻の環100危険度ジャンプ (危険度+100 / 📜 超越魔導書×3 獲得)",
+    "⚡ [진척도 극한 가속] 시간선을 강제로 뛰어넘어 상위 계층으로 직행했습니다! (무간도 위험도 +100 폭발적 도약, 전원 EXP +1,000)": "⚡ [進捗極限加速] 時間軸を強制跳躍し上位階層へ直行！ (無間道危険度+100爆発的跳躍、全員EXP+1,000)",
+    "🛡️ [안전 파밍] 차원의 닻으로 시공간 안정화 (위험도 -50 감소 / 전리품 분실률 0% 보존)": "🛡️ [安全ファーミング] 次元の錨で時空間安定化 (危険度-50減少 / 戦利品紛失率0%保存)",
+    "🛡️ [안전 파밍] 무간도의 난류를 잠재워 전리품을 안전하게 보존했습니다. (무간도 위험도 -50 감소, 배낭 분실률 0%)": "🛡️ [安全ファーミング] 無間道の乱流を鎮め戦利品を安全に保存しました。(無間道危険度-50減少、リュック紛失率0%)",
+    "🌟 [{0} 특기] 시공간 위상 정밀 조율 (위험도 -60 감소 & 🌌 공허 파편 ×5 획득)": "🌟 [{0}特技] 時空位相精密同調 (危険度-60減少＆🌌虚無の欠片×5獲得)",
     "구출된 생존자 거주지. 방주에 세금(골드)을 정기 납부합니다. (1~5레벨 10% 감액, Lv.5부터 15% 감액, Lv.6 초과 시 레벨당 30% 추가 증산)": "救出された生存者の居住区。方舟へ税金（ゴールド）を定期納付します。（Lv.1〜5: 10%減免、Lv.5から15%減免、Lv.6超過時レベルあたり30%追加増産）",
     "구출된 생존자 거주지. 방주에 세금(골드)을 정기 납부합니다. (1~5레벨 10% 감액, Lv.5부터 15% 감액, Lv.6 초과 시 레벨당 30% 추 증산)": "救出された生存者の居住区。方舟へ税金（ゴールド）を定期納付します。（Lv.1〜5: 10%減免、Lv.5から15%減免、Lv.6超過時レベルあたり30%追加増산）",
     "구출된 생존자 거주지. 방주 세금(골드) 정기 납부합니다. (1~5레벨 10% 감액, Lv.5부터 15% 감액, Lv.6 초과 시 레벨당 30% 추 증산)": "救出された生存者の居住区。方舟へ税金（ゴールド）を定期納付します。（Lv.1〜5: 10%減免、Lv.5から15%減免、Lv.6超過時レベルあたり30%追加増산）",

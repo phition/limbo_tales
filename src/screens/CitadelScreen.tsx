@@ -49,6 +49,13 @@ import { getLocalizedBuildingName, getLocalizedClassName, getLocalizedResourceNa
 import { EncyclopediaBadge } from '../components/EncyclopediaBadge';
 import { triggerHaptic } from '../utils/haptics';
 import { calculatePartySynergies } from '../data/synergies';
+import {
+  predictTopSynergies,
+  ALL_FEVER_SYNERGIES_CODEX,
+  FEVER_AFFINITY_META,
+  FEVER_BADGE_WEIGHT,
+  getWeeklyAffinityConfig,
+} from '../utils/feverUtils';
 
 // ─────────────────────────────────────────────────────────────
 //  휠 내비게이션 & 시설 매핑
@@ -3575,43 +3582,51 @@ const BarracksDrawer: React.FC<{
   useEffect(() => {
     setBarracksCategory(initialCategory);
   }, [initialCategory]);
-  const [selectedDimRole, setSelectedDimRole] = useState<'main_0' | 'main_1' | 'main_2' | 'leader' | 'supporter' | null>(null);
+  const [selectedDimRole, setSelectedDimRole] = useState<'main_0' | 'main_1' | 'main_2' | 'operator' | 'leader' | null>(null);
   const [showDimTacticsGuide, setShowDimTacticsGuide] = useState(false);
+  const [isDimCodexModalOpen, setIsDimCodexModalOpen] = useState(false);
+  const weeklyAffinity = useMemo(() => getWeeklyAffinityConfig(), []);
 
   const isAnchorUnlocked = gm.isMasterAccount || (state.buildings['arenaGate']?.level || 0) > 0;
   const dimDeckData = gm.getDimensionalDeck();
-  const { mainHeroes, leaderHero, supporterHero } = dimDeckData;
+  const { mainHeroes, operatorHero, leaderHero } = dimDeckData;
+  const activeOperator = operatorHero || leaderHero;
   const dimSquad = gm.getInvasionSquad();
   const mainSynergies = calculatePartySynergies(mainHeroes);
-  const leaderBlessing = leaderHero ? gm.getLeaderBlessing(leaderHero) : null;
+  const operatorBlessing = activeOperator ? gm.getOperatorBlessing(activeOperator) : null;
+  const predictedSynergies = useMemo(() => predictTopSynergies(mainHeroes), [mainHeroes]);
 
-  // ⚡ 5인 차원 부대 (3선발 + 1리더 + 1서포터) 최적 자동 편성
+  // ⚡ 3인 결투 부대 + 1인 오퍼레이터 최적 자동 편성
   const handleAutoAssignDimSquad = () => {
     const ok = gm.autoAssignDimensionalDeck();
     if (ok) {
       SoundManager.getInstance().play('equip');
     } else {
       SoundManager.getInstance().play('debuff');
-      alert('보유 용병이 5명 미만입니다! 주점에서 용병을 5명 이상 고용해주세요.');
+      alert('보유 용병이 3명 미만입니다! 주점에서 용병을 3명 이상 고용해주세요.');
     }
   };
 
   // 슬롯에 용병 배치 / 스왑
   const handleAssignHeroToDimSlot = (heroId: string) => {
     const currentDeck = { ...dimDeckData.deck };
+    const currentOpId = currentDeck.operatorHeroId || currentDeck.leaderHeroId || '';
+
     if (!selectedDimRole) {
       // 자동 빈 자리 배치
-      if (!currentDeck.mainHeroIds.includes(heroId) && currentDeck.leaderHeroId !== heroId && currentDeck.supporterHeroId !== heroId) {
+      if (!currentDeck.mainHeroIds.includes(heroId) && currentOpId !== heroId) {
         if (currentDeck.mainHeroIds.length < 3) {
           currentDeck.mainHeroIds.push(heroId);
-        } else if (!currentDeck.leaderHeroId) {
+        } else if (!currentOpId) {
+          currentDeck.operatorHeroId = heroId;
           currentDeck.leaderHeroId = heroId;
-        } else if (!currentDeck.supporterHeroId) {
-          currentDeck.supporterHeroId = heroId;
         } else {
           currentDeck.mainHeroIds[0] = heroId;
         }
-        gm.setDimensionalDeck(currentDeck);
+        gm.setDimensionalDeck({
+          ...currentDeck,
+          supporterHeroId: '',
+        });
       }
       SoundManager.getInstance().play('click');
       return;
@@ -3619,55 +3634,44 @@ const BarracksDrawer: React.FC<{
 
     // 특정 역할 슬롯 선택 시
     const prevMain = [...currentDeck.mainHeroIds];
-    let prevLeader = currentDeck.leaderHeroId;
-    let prevSupporter = currentDeck.supporterHeroId;
+    let prevOp = currentOpId;
 
     if (selectedDimRole.startsWith('main_')) {
       const idx = parseInt(selectedDimRole.split('_')[1], 10);
       // 기존에 다른 슬롯에 들어가 있던 영웅인지 확인하여 스왑
-      if (prevLeader === heroId) prevLeader = prevMain[idx] || '';
-      else if (prevSupporter === heroId) prevSupporter = prevMain[idx] || '';
+      if (prevOp === heroId) prevOp = prevMain[idx] || '';
       else {
         const otherMainIdx = prevMain.indexOf(heroId);
         if (otherMainIdx !== -1) prevMain[otherMainIdx] = prevMain[idx];
       }
       prevMain[idx] = heroId;
-    } else if (selectedDimRole === 'leader') {
-      if (prevSupporter === heroId) prevSupporter = prevLeader;
-      else {
-        const mainIdx = prevMain.indexOf(heroId);
-        if (mainIdx !== -1) prevMain[mainIdx] = prevLeader;
-      }
-      prevLeader = heroId;
-    } else if (selectedDimRole === 'supporter') {
-      if (prevLeader === heroId) prevLeader = prevSupporter;
-      else {
-        const mainIdx = prevMain.indexOf(heroId);
-        if (mainIdx !== -1) prevMain[mainIdx] = prevSupporter;
-      }
-      prevSupporter = heroId;
+    } else if (selectedDimRole === 'operator' || selectedDimRole === 'leader') {
+      const mainIdx = prevMain.indexOf(heroId);
+      if (mainIdx !== -1) prevMain[mainIdx] = prevOp;
+      prevOp = heroId;
     }
 
     gm.setDimensionalDeck({
       mainHeroIds: prevMain.filter(Boolean),
-      leaderHeroId: prevLeader,
-      supporterHeroId: prevSupporter,
+      operatorHeroId: prevOp,
+      leaderHeroId: prevOp,
+      supporterHeroId: '',
     });
     setSelectedDimRole(null);
     SoundManager.getInstance().play('click');
   };
 
   // 슬롯에서 용병 제거
-  const handleRemoveFromDimRole = (role: 'main_0' | 'main_1' | 'main_2' | 'leader' | 'supporter') => {
+  const handleRemoveFromDimRole = (role: 'main_0' | 'main_1' | 'main_2' | 'operator' | 'leader') => {
     const currentDeck = { ...dimDeckData.deck };
     if (role.startsWith('main_')) {
       const idx = parseInt(role.split('_')[1], 10);
       currentDeck.mainHeroIds = currentDeck.mainHeroIds.filter((_, i) => i !== idx);
-    } else if (role === 'leader') {
+    } else if (role === 'operator' || role === 'leader') {
+      currentDeck.operatorHeroId = '';
       currentDeck.leaderHeroId = '';
-    } else if (role === 'supporter') {
-      currentDeck.supporterHeroId = '';
     }
+    currentDeck.supporterHeroId = '';
     gm.setDimensionalDeck(currentDeck);
     SoundManager.getInstance().play('click');
   };
@@ -3752,9 +3756,9 @@ const BarracksDrawer: React.FC<{
           onClick={() => setBarracksCategory('dimensional')}
         >
           <span>{isAnchorUnlocked ? '🌌' : '🔒'}</span>
-          <span>차원 부대 (5인)</span>
+          <span>차원 결투 부대 (3인 + OP)</span>
           {isAnchorUnlocked ? (
-            <span className="text-[10px] font-mono text-[#ffd54f]">({dimSquad.length}/5)</span>
+            <span className="text-[10px] font-mono text-[#ffd54f]">({mainHeroes.length}/3 + {activeOperator ? 'OP' : '0'})</span>
           ) : (
             <span className="text-[9px] px-1 py-0.2 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">앵커 필요</span>
           )}
@@ -3762,16 +3766,16 @@ const BarracksDrawer: React.FC<{
       </div>
 
       {barracksCategory === 'dimensional' ? (
-        // ── 🌌 5인 차원 부대 관리 뷰 ──
+        // ── 🌌 차원 3인 결투 부대 & 전술 오퍼레이터 관리 뷰 ──
         !isAnchorUnlocked ? (
           <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-3">
             <div className="text-4xl p-4 bg-[#ff416c15] border border-[#ff416c33] rounded-2xl text-[#ff416c] animate-pulse">
               🔒
             </div>
-            <h3 className="text-base font-extrabold text-white">차원 부대 편성 잠김</h3>
+            <h3 className="text-base font-extrabold text-white">차원 결투 부대 편성 잠김</h3>
             <p className="text-xs text-[#8b9bb4] max-w-sm leading-relaxed">
               차원 부대 편성은 영지 내 <strong className="text-[#00d2ff]">[차원 앵커 게이트]</strong>를 건설해야 해금되는 특수 부대 관리 기능입니다.<br />
-              차원 앵커를 완공하면 5인의 정예 용병을 편성하여 차원 아레나, 시공 침식 네메시스 레이드 및 영지 침공에 출전시킬 수 있습니다.
+              차원 앵커를 완공하면 3인의 정예 결투원과 1인의 전술 오퍼레이터를 편성하여 차원 아레나 및 네메시스에 출전시킬 수 있습니다.
             </p>
             <button
               className="btn btn-primary text-xs px-4 py-2 mt-2"
@@ -3782,13 +3786,13 @@ const BarracksDrawer: React.FC<{
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3 animate-fade-in">
-            {/* 상단 안내 & 5인 최적 자동 편성 버튼 */}
+            {/* 상단 안내 & 자동 편성 버튼 */}
             <div className="bg-[#0b101c] p-3 rounded-xl border border-[#1b263b] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs">
               <div>
                 <div className="font-extrabold text-white flex items-center gap-2 flex-wrap">
-                  <span>🌌 3+1+1 차원 전술 덱 편성</span>
+                  <span>🌌 내 차원 3인 결투 부대 & 전술 오퍼레이터</span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
-                    총 전투력: ⚡ {Math.round(dimSquad.reduce((sum, h) => sum + (h.stats.atk * 3 + h.stats.def * 2 + h.maxHp / 5), 0)).toLocaleString()}
+                    총 전투력: ⚡ {Math.round(([...mainHeroes, ...(activeOperator ? [activeOperator] : [])]).reduce((sum, h) => sum + (h.stats.atk * 3 + h.stats.def * 2 + h.maxHp / 5), 0)).toLocaleString()}
                   </span>
                   <button
                     type="button"
@@ -3796,11 +3800,11 @@ const BarracksDrawer: React.FC<{
                     className="text-[10px] px-2 py-0.5 rounded bg-[#ffd54f18] hover:bg-[#ffd54f33] text-[#ffd54f] border border-[#ffd54f44] font-bold cursor-pointer transition-colors flex items-center gap-1"
                   >
                     <span>ℹ️</span>
-                    <span>전술 가이드</span>
+                    <span>오퍼레이터 가이드</span>
                   </button>
                 </div>
                 <p className="text-[11px] text-[#8b9bb4] mt-0.5 leading-relaxed">
-                  필드 3인 선발 전투 + 1인 리더(영령 가호 및 피버 궁극기) + 1인 서포터(원호 방어 50% & 공격/치유 지원)
+                  필드 3인 결투 부대(전열·중열·후열) + 1인 오퍼레이터(영령 가호 및 피버 궁극기 발동자). <strong className="text-amber-400">전투 중 피버콜 3회 승리 시 즉시 압승!</strong>
                 </p>
               </div>
               <button
@@ -3808,7 +3812,7 @@ const BarracksDrawer: React.FC<{
                 onClick={handleAutoAssignDimSquad}
               >
                 <span>⚡</span>
-                <span>최적 3+1+1 자동 편성</span>
+                <span>최적 3+1 부대 자동 편성</span>
               </button>
             </div>
 
@@ -3818,7 +3822,7 @@ const BarracksDrawer: React.FC<{
                 <div className="flex items-center justify-between border-b border-[#1e293b] pb-1.5">
                   <span className="font-bold text-[#00d2ff] flex items-center gap-1.5 text-xs">
                     <span>📖</span>
-                    <span>차원 부대(5인) 전술 포지션 & 서포터 시스템 가이드</span>
+                    <span>차원 결투 부대 & 전술 오퍼레이터 시스템 가이드</span>
                   </span>
                   <button
                     type="button"
@@ -3830,176 +3834,39 @@ const BarracksDrawer: React.FC<{
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-[#cfd8e8]">
                   <div className="p-2 rounded-lg bg-[#141e30] border border-[#233554] space-y-1">
-                    <div className="font-bold text-[#80deea] flex items-center gap-1">
-                      <span>🛡️</span>
-                      <span>차원 서포터 시스템</span>
+                    <div className="font-bold text-[#ffd54f] flex items-center gap-1">
+                      <span>👑</span>
+                      <span>전술 오퍼레이터 (Tactical Operator)</span>
                     </div>
                     <ul className="list-disc list-inside text-[#94a3b8] space-y-0.5 leading-relaxed">
-                      <li><strong className="text-white">원호 방어 (Assist Guard):</strong> 아군 피격 시(치명타 피격 또는 확률 발동) 받는 피해를 50%로 분담/경감하여 아군의 급사를 방지합니다.</li>
-                      <li><strong className="text-white">원호 지원 (Assist Action):</strong> 아군 공격 시 40% 확률로 후방에서 추가타(딜러/탱커) 또는 아군 치유(힐러)를 지원합니다.</li>
+                      <li><strong className="text-white">영령의 가호 (Ancestral Blessing):</strong> 오퍼레이터의 무덤 가호 패시브를 전 부대에 상시 부여합니다.</li>
+                      <li><strong className="text-white">피버 궁극기 (Fever Special Skill):</strong> 피버 쇼다운에서 아군이 승리할 때마다 오퍼레이터의 궁극기가 전장에 전탄 투사됩니다!</li>
+                      <li>3인의 추천 족보를 확인하고, 피버가 터졌을 때 가장 시너지가 높은 궁극기를 가진 영웅을 오퍼레이터로 지정하십시오.</li>
                     </ul>
                   </div>
                   <div className="p-2 rounded-lg bg-[#141e30] border border-[#233554] space-y-1">
-                    <div className="font-bold text-[#ffd54f] flex items-center gap-1">
-                      <span>👑</span>
-                      <span>차원 리더 시스템</span>
+                    <div className="font-bold text-[#38ef7d] flex items-center gap-1">
+                      <span>🏆</span>
+                      <span>피버콜 3승 즉시 제압 룰 (Fever 3-Win Domination)</span>
                     </div>
                     <p className="text-[#94a3b8] leading-relaxed">
-                      전 부대에 상시 적용되는 <strong className="text-[#ffd54f]">영령의 가호</strong> 버프를 부여하며, 전투 중 피버 게이지 100% 충전 시 강력한 전황 역전용 피버 궁극기를 발동합니다.
+                      전투의 유불리와 무관하게, 피버 쇼다운 대결에서 <strong className="text-[#38ef7d]">먼저 3회 승리한 쪽이 해당 결투에서 즉시 압승</strong>합니다! 1인만 생존한 위기 상황이라도 족보 포커 싸움에서 이기면 기적의 역전승이 가능합니다.
                     </p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 pt-1 border-t border-[#1e293b] text-[10px]">
-                  <div className="p-1.5 rounded bg-[#2a1215] border border-[#ff525244] text-[#ff8a80]">
-                    <span className="font-bold text-[#ff5252]">🔴 전열:</span> 선봉 방어 및 돌파. 전열 피격 분담 및 어그로 집중.
-                  </div>
-                  <div className="p-1.5 rounded bg-[#281708] border border-[#ff980044] text-[#ffb74d]">
-                    <span className="font-bold text-[#ff9800]">🟡 중열:</span> 전열 엄호 및 안정적 화력 투사, 스킬 콤보 연계.
-                  </div>
-                  <div className="p-1.5 rounded bg-[#0a2416] border border-[#00e67644] text-[#69f0ae]">
-                    <span className="font-bold text-[#00e676]">🟢 후열:</span> 후방에서 안전하게 광역 마법, 치유, 원거리 저격 수행.
                   </div>
                 </div>
               </div>
             )}
 
-            {/* 👑 리더 (1인) & 🛡️ 서포터 (1인) 특수 슬롯 */}
-            <div className="grid grid-cols-2 gap-2">
-              {/* 리더 슬롯 */}
-              <div
-                className={`p-2.5 rounded-xl border transition-all cursor-pointer relative flex flex-col justify-between min-h-[110px] ${
-                  selectedDimRole === 'leader'
-                    ? 'bg-[#2a1a08] border-[#ffd54f] shadow-[0_0_12px_rgba(255,213,79,0.4)]'
-                    : leaderHero
-                    ? 'bg-[#18140c] border-[#ffb30044] hover:border-[#ffd54f88]'
-                    : 'bg-[#100c06] border-[#3d2c0b] border-dashed hover:border-[#ffb30088]'
-                }`}
-                onClick={() => setSelectedDimRole(selectedDimRole === 'leader' ? null : 'leader')}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-extrabold text-[#ffd54f] flex items-center gap-1">
-                    <span>👑</span>
-                    <span>차원 리더 (가호/궁극기)</span>
-                  </span>
-                  {leaderHero && (
-                    <button
-                      className="text-[#ff416c] hover:text-white px-1 text-xs font-bold"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveFromDimRole('leader');
-                      }}
-                      title="리더 해제"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-
-                {leaderHero ? (
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-2xl p-1.5 bg-[#090e18] rounded-lg border border-[#ffd54f44] shrink-0">
-                      {CHARACTER_CLASSES[leaderHero.classId]?.skills[0]?.icon || '👑'}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="font-bold text-xs text-white truncate">{leaderHero.name}</div>
-                      <div className="text-[9px] text-[#ffd54f]">
-                        {CHARACTER_CLASSES[leaderHero.classId]?.name} Lv.{leaderHero.level}
-                      </div>
-                      <div className="text-[9px] text-[#ffecb3] truncate mt-0.5">
-                        ✨ {leaderBlessing ? leaderBlessing.name : '영령의 가호 발동'} (피버 궁극기 준비)
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center flex-1 py-2 text-center text-[#8d6e63]">
-                    <span className="text-base font-bold">+ 리더 지정</span>
-                    <span className="text-[9px]">영령 가호 및 피버 궁극기 전담</span>
-                  </div>
-                )}
-              </div>
-
-              {/* 서포터 슬롯 */}
-              <div
-                className={`p-2.5 rounded-xl border transition-all cursor-pointer relative flex flex-col justify-between min-h-[110px] ${
-                  selectedDimRole === 'supporter'
-                    ? 'bg-[#14233c] border-[#00d2ff] shadow-[0_0_12px_rgba(0,210,255,0.4)]'
-                    : supporterHero
-                    ? 'bg-[#0f1726] border-[#00d2ff44] hover:border-[#00d2ff88]'
-                    : 'bg-[#090e18] border-[#1b2a40] border-dashed hover:border-[#00d2ff66]'
-                }`}
-                onClick={() => setSelectedDimRole(selectedDimRole === 'supporter' ? null : 'supporter')}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-extrabold text-[#00d2ff] flex items-center gap-1">
-                    <span>🛡️</span>
-                    <span>차원 서포터 (원호 지원/방어)</span>
-                  </span>
-                  {supporterHero && (
-                    <button
-                      className="text-[#ff416c] hover:text-white px-1 text-xs font-bold"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveFromDimRole('supporter');
-                      }}
-                      title="서포터 해제"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-
-                {supporterHero ? (
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-2xl p-1.5 bg-[#090e18] rounded-lg border border-[#00d2ff44] shrink-0">
-                      {CHARACTER_CLASSES[supporterHero.classId]?.skills[0]?.icon || '🛡️'}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="font-bold text-xs text-white truncate">{supporterHero.name}</div>
-                      <div className="text-[9px] text-[#00d2ff]">
-                        {CHARACTER_CLASSES[supporterHero.classId]?.name} Lv.{supporterHero.level}
-                      </div>
-                      <div className="text-[9px] text-[#80deea] truncate mt-0.5">
-                        🛡️ 원호 방어(피해 50% 분담) & ⚔️ 원호 지원(공격/치유)
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center flex-1 py-2 text-center text-[#546e7a]">
-                    <span className="text-base font-bold">+ 서포터 지정</span>
-                    <span className="text-[9px]">아군 피격 시 50% 원호 방어 및 공격 시 원호 지원</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* ⚔️ 3인 선발 필드 전투원 슬롯 & 실시간 시너지 */}
-            <div className="panel p-2.5 bg-[#0a0f1b] border border-[#1b263b] rounded-xl flex flex-col gap-2">
+            {/* ⚔️ 차원 3인 결투 부대 (전열, 중열, 후열) 슬롯 */}
+            <div className="panel p-3 bg-[#0a0f1b] border border-[#1b263b] rounded-xl flex flex-col gap-2.5">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-extrabold text-white flex items-center gap-1.5">
                   <span>⚔️</span>
-                  <span>선발 3인 필드 전투원 (던전 진형 시너지 적용)</span>
+                  <span>선발 3인 결투 부대 (전열 / 중열 / 후열)</span>
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">
-                  {mainHeroes.length}/3명 배치됨
+                  {mainHeroes.length}/3명 배치됨 (진형 시너지 {mainSynergies.length}개 활성)
                 </span>
-              </div>
-
-              {/* 활성 시너지 태그 바 */}
-              <div className="flex items-center gap-1.5 flex-wrap min-h-[24px]">
-                {mainSynergies.length > 0 ? (
-                  mainSynergies.map(syn => (
-                    <span
-                      key={syn.id}
-                      className="text-[10px] px-2 py-0.5 rounded-full bg-[#00d2ff18] text-[#00d2ff] border border-[#00d2ff44] font-bold flex items-center gap-1"
-                      title={syn.description}
-                    >
-                      <span>{syn.icon}</span>
-                      <span>{syn.name}</span>
-                    </span>
-                  ))
-                ) : (
-                  <span className="text-[10px] text-[#607d8b]">선발 3인의 직업 조합에 따라 진형 시너지가 발동합니다.</span>
-                )}
               </div>
 
               <div className="grid grid-cols-3 gap-2">
@@ -4100,6 +3967,126 @@ const BarracksDrawer: React.FC<{
                   );
                 })}
               </div>
+
+              {/* 🎯 3인 추천 피버 족보 TOP 3 프리뷰 & 전체 족보 보기 버튼 */}
+              <div className="pt-2 border-t border-[#1b263b] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
+                  <span className="text-[11px] font-bold text-amber-300 flex items-center gap-1 shrink-0">
+                    <span>🎯</span>
+                    <span>추천 족보 TOP 3:</span>
+                  </span>
+                  {predictedSynergies.length > 0 ? (
+                    predictedSynergies.map((item, pIdx) => {
+                      const aff = FEVER_AFFINITY_META[item.codex.affinity];
+                      return (
+                        <div
+                          key={item.codex.id}
+                          className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/40 border border-amber-500/30 text-[10px] text-stone-300 hover:border-amber-400 transition-colors"
+                          title={`${item.codex.handRankLabel} | ${item.codex.summary}\n💡 사유: ${item.reason}`}
+                        >
+                          <span className="font-black text-amber-400">#{pIdx + 1}</span>
+                          <span className="font-bold text-white">{item.codex.name}</span>
+                          <span className="text-[9px] font-mono text-cyan-300">({item.probabilityPct}%)</span>
+                          <span
+                            className="text-[8px] px-1 py-0.1 rounded border font-semibold ml-0.5"
+                            style={{
+                              backgroundColor: `${aff.color}15`,
+                              borderColor: `${aff.color}55`,
+                              color: aff.color
+                            }}
+                          >
+                            {aff.icon} {aff.label}
+                          </span>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <span className="text-[10px] text-stone-500">
+                      3인을 모두 배치하면 직업 성향에 맞춘 최적 피버 족보가 예측됩니다.
+                    </span>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsDimCodexModalOpen(true)}
+                  className="px-2.5 py-1 rounded-lg bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/50 text-[#ffd54f] text-[11px] font-bold flex items-center gap-1 shrink-0 cursor-pointer transition-colors shadow-sm"
+                >
+                  <span>📜</span>
+                  <span>전체 족보 보기</span>
+                </button>
+              </div>
+            </div>
+
+            {/* 👑 전술 오퍼레이터 (Tactical Operator) 슬롯 */}
+            <div className="w-full">
+              <div
+                className={`w-full p-3.5 rounded-xl border transition-all cursor-pointer relative flex flex-col justify-between min-h-[110px] ${
+                  selectedDimRole === 'operator' || selectedDimRole === 'leader'
+                    ? 'bg-[#2a1a08] border-[#ffd54f] shadow-[0_0_14px_rgba(255,213,79,0.5)]'
+                    : activeOperator
+                    ? 'bg-[#18140c] border-[#ffb30044] hover:border-[#ffd54f88]'
+                    : 'bg-[#100c06] border-[#3d2c0b] border-dashed hover:border-[#ffb30088]'
+                }`}
+                onClick={() => setSelectedDimRole(selectedDimRole === 'operator' ? null : 'operator')}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-extrabold text-[#ffd54f] flex items-center gap-1.5">
+                    <span>👑</span>
+                    <span>전술 오퍼레이터 (상시 영령의 가호 & 피버 쇼다운 궁극기 발동자)</span>
+                  </span>
+                  {activeOperator && (
+                    <button
+                      className="text-[#ff416c] hover:text-white px-1.5 text-xs font-bold"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveFromDimRole('operator');
+                      }}
+                      title="오퍼레이터 해제"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                {activeOperator ? (
+                  (() => {
+                    const opCls = CHARACTER_CLASSES[activeOperator.classId];
+                    const opSkill = opCls ? (opCls.specialSkill || opCls.skills[0]) : null;
+                    return (
+                      <div className="flex items-start gap-3 mt-1.5">
+                        <span className="text-3xl p-2 bg-[#090e18] rounded-xl border border-[#ffd54f44] shrink-0">
+                          {opSkill?.icon || opCls?.skills?.[0]?.icon || '👑'}
+                        </span>
+                        <div className="min-w-0 flex-1 space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm text-white truncate">{activeOperator.name}</span>
+                            <span className="text-xs text-[#ffd54f] font-mono">
+                              {opCls?.name} Lv.{activeOperator.level}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-[#ffecb3] truncate">
+                            ✨ <strong className="text-white">영령의 가호:</strong> {operatorBlessing ? operatorBlessing.name : '전술 가호 버프 적용'}
+                          </div>
+                          {opSkill && (
+                            <div className="text-[11px] text-amber-300/90 truncate flex items-center gap-1">
+                              <span>💥</span>
+                              <span><strong className="text-white">피버 궁극기:</strong> [{opSkill.name}] 피버 승리 시 전장에 시전</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className="flex flex-col items-center justify-center flex-1 py-3 text-center text-[#8d6e63]">
+                    <span className="text-base font-bold text-amber-400">+ 전술 오퍼레이터 지정</span>
+                    <span className="text-[10px] text-stone-400 mt-0.5">
+                      상시 영령의 가호 버프를 부여하고, 피버 승리 시 전장에 궁극기를 투사합니다.
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* 하단: 보유 용병 선택 리스트 */}
@@ -4115,10 +4102,8 @@ const BarracksDrawer: React.FC<{
                         ? '[선발 중열 (🟡 연계/화력)]에 배치할 용병을 탭하세요'
                         : selectedDimRole === 'main_2'
                         ? '[선발 후열 (🟢 지원/원거리)]에 배치할 용병을 탭하세요'
-                        : selectedDimRole === 'leader'
-                        ? '[차원 리더 (👑 가호/궁극기)]로 지정할 용병을 탭하세요'
-                        : '[차원 서포터 (🛡️ 원호 지원/방어)]로 지정할 용병을 탭하세요'
-                      : '보유 용병 선택 (슬롯을 먼저 선택하거나 탭하여 바로 배치)'}
+                        : '[전술 오퍼레이터 (👑 가호/피버 궁극기)]로 지정할 용병을 탭하세요'
+                      : '보유 용병 선택 (위의 슬롯을 먼저 선택하거나 탭하여 바로 배치)'}
                   </span>
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">{state.barracks.length}명 보유</span>
@@ -4127,9 +4112,8 @@ const BarracksDrawer: React.FC<{
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {state.barracks.map(bHero => {
                   const mainIdx = mainHeroes.findIndex(h => h.id === bHero.id);
-                  const isLeader = leaderHero?.id === bHero.id;
-                  const isSupporter = supporterHero?.id === bHero.id;
-                  const isAssigned = mainIdx !== -1 || isLeader || isSupporter;
+                  const isLeader = activeOperator?.id === bHero.id;
+                  const isAssigned = mainIdx !== -1 || isLeader;
                   const gMeta = GRADE_META[bHero.grade] || GRADE_META.rookie;
                   const bCls = CHARACTER_CLASSES[bHero.classId];
 
@@ -4150,13 +4134,9 @@ const BarracksDrawer: React.FC<{
                     badgeStyle = 'bg-[#00e67622] text-[#00e676] border-[#00e67655]';
                     cardBgStyle = 'bg-[#0a1810] border-[#00e67644]';
                   } else if (isLeader) {
-                    assignedLabel = '👑 리더';
+                    assignedLabel = '👑 오퍼레이터';
                     badgeStyle = 'bg-[#ffd54f22] text-[#ffd54f] border-[#ffd54f44]';
                     cardBgStyle = 'bg-[#1e170b] border-[#ffd54f55]';
-                  } else if (isSupporter) {
-                    assignedLabel = '🛡️ 서포터';
-                    badgeStyle = 'bg-[#00d2ff22] text-[#00d2ff] border-[#00d2ff44]';
-                    cardBgStyle = 'bg-[#101c2b] border-[#00d2ff55]';
                   }
 
                   return (
@@ -5364,6 +5344,180 @@ const BarracksDrawer: React.FC<{
             onClose={() => setShowSynergyModal(false)}
             party={state.party}
           />
+
+          {/* 📜 피버 족보 & 상성 대도감 (Grand Codex Modal) */}
+          {isDimCodexModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
+              <div className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#14161f] border-2 border-[#ffcc00]/50 rounded-2xl shadow-2xl overflow-hidden text-stone-200">
+                {/* 모달 헤더 */}
+                <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#241a10] via-[#1c2236] to-[#121624] border-b border-[#ffcc00]/30">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">📜</span>
+                    <div>
+                      <h2 className="text-xl font-bold text-[#ffdd66] tracking-wide flex items-center gap-2">
+                        차원 아레나: 피버 족보 & 상성 대도감
+                        <span className="text-xs px-2 py-0.5 rounded bg-[#ffcc00]/20 text-[#ffcc00] border border-[#ffcc00]/40 font-mono">
+                          GRAND CODEX
+                        </span>
+                      </h2>
+                      <p className="text-xs text-stone-400">
+                        3인의 수호자가 엮어내는 전술 포커의 위계와 주간 차원율의 상성을 한눈에 확인하십시오.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsDimCodexModalOpen(false)}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-stone-800/80 hover:bg-stone-700 text-stone-400 hover:text-white transition-colors"
+                    title="닫기"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* 모달 본문 (스크롤) */}
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
+                  {/* 섹션 1: 이번 주의 차원율 및 상성 규칙 */}
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-[#1a2035] to-[#121526] border border-cyan-500/30">
+                    <div className="flex items-center justify-between mb-3 border-b border-cyan-500/20 pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">🌌</span>
+                        <span className="font-bold text-cyan-300 text-base">이번 주의 차원율: {weeklyAffinity.title}</span>
+                      </div>
+                      <span className="text-xs text-cyan-400/80 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800">
+                        매주 월요일 00:00 순환
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
+                      <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
+                        <span className="text-xs text-stone-400 font-semibold mb-1">상성 순환 구조</span>
+                        <span className="text-xs font-bold text-amber-300 tracking-wider">
+                          {weeklyAffinity.relationText}
+                        </span>
+                      </div>
+                      <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
+                        <span className="text-xs text-stone-400 font-semibold mb-1">상성 우위 특전</span>
+                        <span className="text-xs text-emerald-400 font-bold">
+                          족보 맞대결 시 판정 계급 +1단계 보너스
+                        </span>
+                      </div>
+                      <div className="p-3 rounded-lg bg-black/40 border border-red-900/40 flex flex-col items-center text-center">
+                        <span className="text-xs text-red-400 font-semibold mb-1">🏆 피버 3승 즉시 제압</span>
+                        <span className="text-xs text-amber-300 font-bold">
+                          피버콜 3승 선착 시 전투 즉시 압승
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-stone-400 bg-black/30 p-2.5 rounded border border-stone-800/80 leading-relaxed">
+                      💡 <strong className="text-stone-300">상성 판정 원리:</strong> 양측이 완성한 피버 족보의 계열(돌파/수호/변칙)을 대조하여 우위인 쪽은 족보 판정에서 1단계 높은 족보로 인정받습니다.
+                    </p>
+                  </div>
+
+                  {/* 섹션 2: 배지 가중치 총점제 (하이 카드 판정) */}
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-[#241d14] to-[#171410] border border-amber-500/30">
+                    <div className="flex items-center justify-between mb-2 border-b border-amber-500/20 pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">⚖️</span>
+                        <span className="font-bold text-amber-300 text-base">배지 가중치 총점표 (High Card Score)</span>
+                      </div>
+                      <span className="text-xs text-amber-400/80 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800">
+                        노페어(전술 파동) 발생 시 적용
+                      </span>
+                    </div>
+                    <p className="text-xs text-stone-400 mb-3">
+                      양측 모두 유효한 족보를 완성하지 못해 <strong>[전술 파동(High Card)]</strong>으로 격돌할 경우, 게이지 5칸에 누적된 배지들의 개별 가중치 총점을 합산하여 승패를 결정합니다.
+                    </p>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                      {[
+                        { badge: 'extra', label: '연계 (Extra)', score: 35, desc: '스킬 콤보·추가타', color: 'border-purple-500/40 bg-purple-950/30 text-purple-300' },
+                        { badge: 'counter', label: '반격 (Counter)', score: 30, desc: '적 턴 반격 반응', color: 'border-orange-500/40 bg-orange-950/30 text-orange-300' },
+                        { badge: 'crit', label: '치명 (Crit)', score: 25, desc: '회심의 일격', color: 'border-red-500/40 bg-red-950/30 text-red-300' },
+                        { badge: 'break', label: '파쇄 (Break)', score: 20, desc: '방어 분쇄·실드 관통', color: 'border-yellow-500/40 bg-yellow-950/30 text-yellow-300' },
+                        { badge: 'guard', label: '방어 (Guard)', score: 15, desc: '철벽 방어·막기', color: 'border-blue-500/40 bg-blue-950/30 text-blue-300' },
+                        { badge: 'assist', label: '지원 (Assist)', score: 15, desc: '아군 버프·정화', color: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-300' },
+                        { badge: 'heal', label: '치유 (Heal)', score: 10, desc: '생명력 회복', color: 'border-pink-500/40 bg-pink-950/30 text-pink-300' },
+                        { badge: 'evade', label: '회피 (Evade)', score: 10, desc: '완전 회피 기동', color: 'border-cyan-500/40 bg-cyan-950/30 text-cyan-300' },
+                      ].map((item) => (
+                        <div key={item.badge} className={`p-2 rounded-lg border flex flex-col justify-between ${item.color}`}>
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="font-bold">{item.label}</span>
+                            <span className="font-mono font-black text-amber-300 text-sm">{item.score}점</span>
+                          </div>
+                          <span className="text-[10px] text-stone-400">{item.desc}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 섹션 3: 12종 포커 피버 시너지 족보 전체 목록 */}
+                  <div>
+                    <div className="flex items-center justify-between mb-3 border-b border-stone-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">🃏</span>
+                        <span className="font-bold text-white text-base">차원 피버 12대 전술 족보 (Synergy Rankings)</span>
+                      </div>
+                      <span className="text-xs text-stone-400">위계 순위 높은 순 정렬</span>
+                    </div>
+
+                    <div className="space-y-2.5">
+                      {ALL_FEVER_SYNERGIES_CODEX.map((synergy, idx) => {
+                        const affinityMeta = FEVER_AFFINITY_META[synergy.affinity];
+                        return (
+                          <div
+                            key={synergy.id}
+                            className="p-3 rounded-xl bg-stone-900/70 border border-stone-800 hover:border-amber-500/50 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                          >
+                            <div className="flex items-start sm:items-center gap-3">
+                              <div className="w-9 h-9 rounded-lg bg-black/60 border border-stone-700 flex flex-col items-center justify-center shrink-0">
+                                <span className="text-[10px] text-stone-400 font-mono">RANK</span>
+                                <span className="text-xs font-black text-amber-400 font-mono">#{idx + 1}</span>
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-bold text-stone-100 text-sm">{synergy.name}</span>
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 border border-stone-700 text-stone-300 font-mono">
+                                    {synergy.handRankLabel}
+                                  </span>
+                                  <span
+                                    className="text-[10px] px-1.5 py-0.5 rounded border font-semibold flex items-center gap-1"
+                                    style={{
+                                      backgroundColor: `${affinityMeta.color}1a`,
+                                      borderColor: `${affinityMeta.color}66`,
+                                      color: affinityMeta.color
+                                    }}
+                                  >
+                                    {affinityMeta.icon} {affinityMeta.label}
+                                  </span>
+                                </div>
+                                <div className="text-xs text-stone-400 mt-0.5">
+                                  {synergy.summary}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="sm:text-right shrink-0 bg-black/40 px-3 py-1.5 rounded-lg border border-stone-800/80 w-full sm:w-auto">
+                              <div className="text-[10px] text-stone-500 font-semibold">필요 배지 조건</div>
+                              <div className="text-xs text-amber-300/95 font-mono">{synergy.requiredBadges}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 모달 푸터 */}
+                <div className="px-6 py-3 bg-[#11131c] border-t border-stone-800 flex justify-end">
+                  <ActionButton
+                    label="확인 (닫기)"
+                    variant="secondary"
+                    className="px-6 py-1.5 text-xs font-bold"
+                    onClick={() => setIsDimCodexModalOpen(false)}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </>
       ))}
     </div>

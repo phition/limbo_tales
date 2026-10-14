@@ -12,9 +12,20 @@ import { NemesisView } from './NemesisView';
 import { InvasionView } from './InvasionView';
 import { AttackerVisualBox } from '../components/AttackerVisualBox';
 import { calculatePartySynergies } from '../data/synergies';
-import { FeverBadgeType } from '../types/fever';
+import { FeverBadgeType, ShowdownResult } from '../types/fever';
 import { FeverGaugeBar } from '../components/FeverGaugeBar';
-import { evaluateFeverSynergy } from '../utils/feverUtils';
+import {
+  evaluateFeverSynergy,
+  resolveFeverShowdown,
+  FEVER_AFFINITY_META,
+  FEVER_BADGE_META,
+  FEVER_BADGE_WEIGHT,
+  getWeeklyAffinityConfig,
+  ALL_FEVER_SYNERGIES_CODEX,
+  predictTopSynergies,
+  FeverCodexItem,
+  PredictedSynergy
+} from '../utils/feverUtils';
 import { CombatMeterTable, CombatantMetrics } from '../components/CombatMeterTable';
 import { CustomAssetService } from '../services/CustomAssetService';
 import { GameDataService } from '../services/GameDataService';
@@ -29,9 +40,12 @@ const DEFAULT_CLASS_IMAGES: Record<string, string> = {
   tactical_tower: 'assets/citadel_bonfire.jpg',
 };
 
-// ⚔️ 차원 아레나 PVP 전투 스케일 밸런스 상수
-export const ARENA_ATK_SCALE = 0.70; // 공격력 30% 너프 (0.70x)
-export const ARENA_DEF_SCALE = 0.50; // 방어력 50% 너프 (0.50x)
+// 🚫 주간 차원의 금기 (Weekly Banned Badge) - 이번 주 획득 불가 배지
+export const WEEKLY_BANNED_BADGE: FeverBadgeType = 'crit';
+
+// ⚔️ 차원 아레나 PVP 전투 스케일 밸런스 상수 (순수 3인 전투 정렬)
+export const ARENA_ATK_SCALE = 1.0; 
+export const ARENA_DEF_SCALE = 1.0;
 
 export const getArenaDRConstant = (): number => {
   const baseDR = GameDataService.getInstance().getBalanceConfig().drConstant || 300;
@@ -187,33 +201,454 @@ interface ArenaCombatant {
 }
 
 // ── 가짜 상대 생성 ─────────────────────────────────────────────────────────
-function generateOpponents(myRank: number, myRating: number, gateLevel: number = 1): ArenaOpponent[] {
-  const opponentConfigs = [
-    { name: '철혈의 바사라', guild: '붉은 창끝 길드', classes: ['paladin', 'guardian', 'high_saintess', 'tactical_gunner', 'elementalist'] },
-    { name: '심연의 루나', guild: '심연 탐험단', classes: ['assassin', 'shadow_phantom', 'calamity_mage', 'berserker', 'war_priest'] },
-    { name: '폭풍의 제라드', guild: '황금 독수리단', classes: ['vanguard', 'berserker', 'valhalla_blade', 'sharpshooter', 'bishop'] },
-    { name: '황금의 아라나', guild: '달빛 기사단', classes: ['aegis_valkyrie', 'elementalist', 'high_saintess', 'arcane_scholar', 'paladin'] },
-    { name: '어둠의 클레오', guild: '무명의 소굴', classes: ['tactical_gunner', 'arcane_scholar', 'bishop', 'duelist', 'guardian'] },
-  ];
+// ── 🤖 프리시즌 전 등급 AI 지휘관 봇 로스터 (브론즈 ~ 그랜드마스터) ───────────────
+export interface PreseasonBotConfig {
+  id: string;
+  name: string;
+  guild: string;
+  tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond' | 'master' | 'grandmaster';
+  rating: number;
+  classes: [string, string, string]; // 전열, 중열, 후열
+  opClass: string; // 전술 오퍼레이터
+  feverConcept: string; // 전술 특징
+}
 
-  return opponentConfigs.map((cfg, i) => {
-    const oppRank = Math.max(1, myRank - 4 + i * 2);
-    const oppRating = Math.max(900, myRating - 120 + i * 60 + Math.floor(Math.random() * 40));
-    const botGateLevel = Math.max(1, Math.min(10, gateLevel + (i % 3 === 0 ? 0 : i % 2 === 0 ? 1 : -1)));
-    const mockDeck: Mercenary[] = cfg.classes.map((clsId, idx) => {
+export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
+  // 🥉 브론즈 (Bronze: 700 ~ 990) - 기본기 훈련 및 피버 연습용
+  {
+    id: 'bot_bronze_1',
+    name: '수습 검사 루키',
+    guild: '모험가 초보자단',
+    tier: 'bronze',
+    rating: 760,
+    classes: ['squire', 'vanguard', 'squire'],
+    opClass: 'squire',
+    feverConcept: '기본 돌격 및 연계 기초'
+  },
+  {
+    id: 'bot_bronze_2',
+    name: '견습 수녀 릴리',
+    guild: '신록의 기도원',
+    tier: 'bronze',
+    rating: 810,
+    classes: ['paladin', 'squire', 'novice_cleric'],
+    opClass: 'novice_cleric',
+    feverConcept: '수호 방어 및 지속 치유'
+  },
+  {
+    id: 'bot_bronze_3',
+    name: '훈련병 한스',
+    guild: '성채 방위대 훈련소',
+    tier: 'bronze',
+    rating: 870,
+    classes: ['guardian', 'squire', 'archer'],
+    opClass: 'guardian',
+    feverConcept: '전열 방벽 & 견제 사격'
+  },
+  {
+    id: 'bot_bronze_4',
+    name: '마도 실습생 핀',
+    guild: '마법 학술원 초급반',
+    tier: 'bronze',
+    rating: 920,
+    classes: ['squire', 'apprentice_mage', 'novice_cleric'],
+    opClass: 'apprentice_mage',
+    feverConcept: '마력 탄환 기초 연계'
+  },
+  {
+    id: 'bot_bronze_5',
+    name: '길거리 격투가 잭',
+    guild: '뒷골목 자경단',
+    tier: 'bronze',
+    rating: 960,
+    classes: ['rogue', 'vanguard', 'squire'],
+    opClass: 'rogue',
+    feverConcept: '연속 급소 찌르기'
+  },
+
+  // 🥈 실버 (Silver: 1000 ~ 1290) - 초중급 진형 훈련용
+  {
+    id: 'bot_silver_1',
+    name: '창술사 볼트',
+    guild: '붉은 창끝 길드',
+    tier: 'silver',
+    rating: 1050,
+    classes: ['vanguard', 'tactical_gunner', 'bishop'],
+    opClass: 'vanguard',
+    feverConcept: '원거리 저격 및 전열 견제'
+  },
+  {
+    id: 'bot_silver_2',
+    name: '그림자 연습생',
+    guild: '밤까마귀 도적단',
+    tier: 'silver',
+    rating: 1110,
+    classes: ['assassin', 'duelist', 'rogue'],
+    opClass: 'assassin',
+    feverConcept: '회피 기동 및 치명타 노림수'
+  },
+  {
+    id: 'bot_silver_3',
+    name: '강철 수호병 바란',
+    guild: '아이언 가드 연대',
+    tier: 'silver',
+    rating: 1160,
+    classes: ['guardian', 'paladin', 'bishop'],
+    opClass: 'paladin',
+    feverConcept: '신성 방벽 & 철벽 수호'
+  },
+  {
+    id: 'bot_silver_4',
+    name: '성역의 순례자 엘렌',
+    guild: '여명의 수도회',
+    tier: 'silver',
+    rating: 1210,
+    classes: ['paladin', 'bishop', 'novice_cleric'],
+    opClass: 'bishop',
+    feverConcept: '이중 치유 & 성스러운 오라'
+  },
+  {
+    id: 'bot_silver_5',
+    name: '황야의 저격수 로빈',
+    guild: '은빛 화살 용병단',
+    tier: 'silver',
+    rating: 1260,
+    classes: ['guardian', 'sniper', 'archer'],
+    opClass: 'sniper',
+    feverConcept: '정밀 조준 관통 저격'
+  },
+
+  // 🏆 골드 (Gold: 1300 ~ 1590) - 정석 조합 대결용
+  {
+    id: 'bot_gold_1',
+    name: '철혈의 바사라',
+    guild: '붉은 창끝 길드',
+    tier: 'gold',
+    rating: 1350,
+    classes: ['paladin', 'tactical_gunner', 'high_saintess'],
+    opClass: 'aegis_valkyrie',
+    feverConcept: '철벽 수호 & 원거리 화력 투사'
+  },
+  {
+    id: 'bot_gold_2',
+    name: '황금의 아라나',
+    guild: '달빛 기사단',
+    tier: 'gold',
+    rating: 1410,
+    classes: ['aegis_valkyrie', 'elementalist', 'arcane_scholar'],
+    opClass: 'bishop',
+    feverConcept: '마법 변칙계 & 에테르 증폭'
+  },
+  {
+    id: 'bot_gold_3',
+    name: '진홍의 저격수 레이첼',
+    guild: '비호 용병단',
+    tier: 'gold',
+    rating: 1460,
+    classes: ['vanguard', 'sniper', 'shadow_phantom'],
+    opClass: 'sniper',
+    feverConcept: '은신 기습 & 즉사 저격'
+  },
+  {
+    id: 'bot_gold_4',
+    name: '비전의 마도사 레온',
+    guild: '상아탑 마도연맹',
+    tier: 'gold',
+    rating: 1510,
+    classes: ['guardian', 'elementalist', 'calamity_mage'],
+    opClass: 'elementalist',
+    feverConcept: '원소 폭풍 & 마력 연쇄'
+  },
+  {
+    id: 'bot_gold_5',
+    name: '질풍의 검사 렌',
+    guild: '일섬 유파',
+    tier: 'gold',
+    rating: 1560,
+    classes: ['duelist', 'assassin', 'shadow_phantom'],
+    opClass: 'duelist',
+    feverConcept: '연속 난무 & 치명 반격'
+  },
+
+  // ⚔️ 플래티넘 (Platinum: 1600 ~ 1890) - 상급 연계 공략용
+  {
+    id: 'bot_plat_1',
+    name: '심연의 루나',
+    guild: '심연 탐험단',
+    tier: 'platinum',
+    rating: 1640,
+    classes: ['assassin', 'shadow_phantom', 'calamity_mage'],
+    opClass: 'valhalla_blade',
+    feverConcept: '극딜 암살 & 돌파계 포카드 노림수'
+  },
+  {
+    id: 'bot_plat_2',
+    name: '폭풍의 제라드',
+    guild: '황금 독수리단',
+    tier: 'platinum',
+    rating: 1700,
+    classes: ['vanguard', 'valhalla_blade', 'bishop'],
+    opClass: 'paladin',
+    feverConcept: '연격 폭풍 & 성기사 가호 지속전'
+  },
+  {
+    id: 'bot_plat_3',
+    name: '철벽의 수호자 가렌',
+    guild: '방주 방위사령부',
+    tier: 'platinum',
+    rating: 1760,
+    classes: ['aegis_valkyrie', 'guardian', 'high_saintess'],
+    opClass: 'aegis_valkyrie',
+    feverConcept: '난공불락 요새 & 기적의 치유'
+  },
+  {
+    id: 'bot_plat_4',
+    name: '시공의 마탄사 카일',
+    guild: '에테르 연금단',
+    tier: 'platinum',
+    rating: 1810,
+    classes: ['tactical_gunner', 'arcane_scholar', 'calamity_mage'],
+    opClass: 'tactical_gunner',
+    feverConcept: '시공 탄환 난사 & 왜곡 결계'
+  },
+  {
+    id: 'bot_plat_5',
+    name: '성역의 수호희 세실리아',
+    guild: '빛의 수호성당',
+    tier: 'platinum',
+    rating: 1860,
+    classes: ['aegis_valkyrie', 'paladin', 'high_saintess'],
+    opClass: 'high_saintess',
+    feverConcept: '신성 축복 풀하우스 연계'
+  },
+
+  // 💠 다이아몬드 (Diamond: 1900 ~ 2190) - 최정예 고수 덱
+  {
+    id: 'bot_dia_1',
+    name: '절대방벽 볼코프',
+    guild: '아이언 가디언즈',
+    tier: 'diamond',
+    rating: 1940,
+    classes: ['guardian', 'paladin', 'high_saintess'],
+    opClass: 'aegis_valkyrie',
+    feverConcept: '불멸의 방진 & 결계 반사'
+  },
+  {
+    id: 'bot_dia_2',
+    name: '환영술사 미라주',
+    guild: '시공의 유랑단',
+    tier: 'diamond',
+    rating: 2000,
+    classes: ['shadow_phantom', 'duelist', 'arcane_scholar'],
+    opClass: 'calamity_mage',
+    feverConcept: '변칙계 환영 회피 & 흡혈 진혼곡'
+  },
+  {
+    id: 'bot_dia_3',
+    name: '발할라 선봉장 지그프리트',
+    guild: '발할라 기사단',
+    tier: 'diamond',
+    rating: 2060,
+    classes: ['valhalla_blade', 'vanguard', 'aegis_valkyrie'],
+    opClass: 'valhalla_blade',
+    feverConcept: '투신 강림 & 파쇄 스트레이트'
+  },
+  {
+    id: 'bot_dia_4',
+    name: '여명의 대주교 세라핌',
+    guild: '천상 성역 수도원',
+    tier: 'diamond',
+    rating: 2110,
+    classes: ['high_saintess', 'paladin', 'bishop'],
+    opClass: 'high_saintess',
+    feverConcept: '영원한 부활 & 성스러운 기적'
+  },
+  {
+    id: 'bot_dia_5',
+    name: '심연의 마탄황 로이드',
+    guild: '블랙 불릿 여단',
+    tier: 'diamond',
+    rating: 2160,
+    classes: ['tactical_gunner', 'shadow_phantom', 'calamity_mage'],
+    opClass: 'tactical_gunner',
+    feverConcept: '암흑 탄환 탄막 & 파멸 광역기'
+  },
+
+  // 💎 마스터 (Master: 2200 ~ 2490) - 아레나 챔피언 덱
+  {
+    id: 'bot_master_1',
+    name: '신벌의 발키리아',
+    guild: '천상의 성역',
+    tier: 'master',
+    rating: 2240,
+    classes: ['aegis_valkyrie', 'valhalla_blade', 'high_saintess'],
+    opClass: 'paladin',
+    feverConcept: '성역 결계 & 기적의 소생 풀하우스'
+  },
+  {
+    id: 'bot_master_2',
+    name: '재앙의 인도자 벨리알',
+    guild: '흑사자 정예대',
+    tier: 'master',
+    rating: 2310,
+    classes: ['calamity_mage', 'shadow_phantom', 'tactical_gunner'],
+    opClass: 'duelist',
+    feverConcept: '치명 타격 & 파쇄 스트레이트 극의'
+  },
+  {
+    id: 'bot_master_3',
+    name: '불멸의 검성 렌',
+    guild: '심연의 무극관',
+    tier: 'master',
+    rating: 2380,
+    classes: ['valhalla_blade', 'duelist', 'shadow_phantom'],
+    opClass: 'valhalla_blade',
+    feverConcept: '무한의 검막 & 신속 섬격'
+  },
+  {
+    id: 'bot_master_4',
+    name: '공허의 지배관 에레보스',
+    guild: '공허 숭배단',
+    tier: 'master',
+    rating: 2450,
+    classes: ['aegis_valkyrie', 'calamity_mage', 'arcane_scholar'],
+    opClass: 'calamity_mage',
+    feverConcept: '블랙홀 왜곡 & 심연 압살'
+  },
+
+  // 👑 그랜드마스터 (Grand Master: 2500+) - 전 서버 절대자 덱
+  {
+    id: 'bot_grand_1',
+    name: '차원의 지배자 크로노스',
+    guild: '시공간 최고평의회',
+    tier: 'grandmaster',
+    rating: 2560,
+    classes: ['aegis_valkyrie', 'calamity_mage', 'high_saintess'],
+    opClass: 'valhalla_blade',
+    feverConcept: '5색 무지개 전술의 극의 (Grand Maestro)'
+  },
+  {
+    id: 'bot_grand_2',
+    name: '무한의 수호룡 테라',
+    guild: '용혈의 성채',
+    tier: 'grandmaster',
+    rating: 2640,
+    classes: ['aegis_valkyrie', 'guardian', 'paladin'],
+    opClass: 'aegis_valkyrie',
+    feverConcept: '절대 무적의 용린 결계'
+  },
+  {
+    id: 'bot_grand_3',
+    name: '황혼의 심판자 오리온',
+    guild: '별빛 천구관',
+    tier: 'grandmaster',
+    rating: 2730,
+    classes: ['valhalla_blade', 'calamity_mage', 'shadow_phantom'],
+    opClass: 'tactical_gunner',
+    feverConcept: '초신성 폭발 & 영혼 흡수'
+  }
+];
+
+export function getTierFromRating(rating: number): 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond' | 'master' | 'grandmaster' {
+  if (rating >= 2500) return 'grandmaster';
+  if (rating >= 2200) return 'master';
+  if (rating >= 1900) return 'diamond';
+  if (rating >= 1600) return 'platinum';
+  if (rating >= 1300) return 'gold';
+  if (rating >= 1000) return 'silver';
+  return 'bronze';
+}
+
+// ── 등급 사다리 기반 대진표 생성 (유저 등급 맞춤 대진 + 상위 승급 도전 배치) ─────────────
+function generateOpponents(myRank: number, myRating: number, gateLevel: number = 1): ArenaOpponent[] {
+  const userTier = getTierFromRating(myRating);
+  const TIER_ORDER: PreseasonBotConfig['tier'][] = ['bronze', 'silver', 'gold', 'platinum', 'diamond', 'master', 'grandmaster'];
+  const curTierIdx = TIER_ORDER.indexOf(userTier);
+  const nextTierIdx = Math.min(TIER_ORDER.length - 1, curTierIdx + 1);
+  const prevTierIdx = Math.max(0, curTierIdx - 1);
+
+  const curPool = PRESEASON_BOT_ROSTER.filter(b => b.tier === userTier);
+  const nextPool = PRESEASON_BOT_ROSTER.filter(b => b.tier === TIER_ORDER[nextTierIdx]);
+  const prevPool = PRESEASON_BOT_ROSTER.filter(b => b.tier === TIER_ORDER[prevTierIdx]);
+
+  function pickUnique<T extends { id: string }>(pool: T[], count: number, excludeIds: Set<string>): T[] {
+    const available = pool.filter(item => !excludeIds.has(item.id));
+    const shuffled = [...available].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, count);
+    selected.forEach(item => excludeIds.add(item.id));
+    return selected;
+  }
+
+  const pickedIds = new Set<string>();
+  let selectedBots: PreseasonBotConfig[] = [];
+
+  if (userTier === 'bronze') {
+    // 🥉 브론즈: 동급 브론즈 3명 + 상위 실버 승급 도전 2명
+    const bronzeBots = pickUnique(curPool, 3, pickedIds);
+    const silverChallenges = pickUnique(nextPool, 2, pickedIds);
+    selectedBots = [...bronzeBots, ...silverChallenges];
+  } else if (userTier === 'grandmaster') {
+    // 👑 그랜드마스터: 마스터 2명 + 그랜드마스터 3명
+    const masterBots = pickUnique(prevPool, 2, pickedIds);
+    const grandBots = pickUnique(curPool, 3, pickedIds);
+    selectedBots = [...masterBots, ...grandBots];
+  } else {
+    // 🥈~💎 실버~마스터: 워밍업 1명 + 동급 2명 + 상위 티어 승급 도전 2명
+    const warmupBots = pickUnique(prevPool.length > 0 ? prevPool : curPool, 1, pickedIds);
+    const peerBots = pickUnique(curPool, 2, pickedIds);
+    const promotionChallenges = pickUnique(nextPool, 2, pickedIds);
+    selectedBots = [...warmupBots, ...peerBots, ...promotionChallenges];
+  }
+
+  // 예외 방어: 5명이 안 채워졌을 경우 전체 로스터에서 추가 보충
+  if (selectedBots.length < 5) {
+    const remaining = pickUnique(PRESEASON_BOT_ROSTER, 5 - selectedBots.length, pickedIds);
+    selectedBots = [...selectedBots, ...remaining];
+  }
+
+  // 레이팅 오름차순 정렬 (1번: 가장 만만한/워밍업 상대 ~ 5번: 최고 승급 도전전)
+  selectedBots.sort((a, b) => a.rating - b.rating);
+
+  return selectedBots.map((cfg, i) => {
+    // 랭크 추산 (레이팅 기반 자연스러운 순위 부여)
+    let oppRank = 500;
+    if (cfg.rating >= 2500) {
+      oppRank = Math.max(1, Math.floor(5 - (cfg.rating - 2500) / 50 + (Math.random() * 2 - 1)));
+    } else if (cfg.rating >= 2200) {
+      oppRank = Math.max(6, Math.floor(30 - (cfg.rating - 2200) / 12.5 + (Math.random() * 4 - 2)));
+    } else if (cfg.rating >= 1900) {
+      oppRank = Math.max(31, Math.floor(80 - (cfg.rating - 1900) / 6 + (Math.random() * 6 - 3)));
+    } else if (cfg.rating >= 1600) {
+      oppRank = Math.max(81, Math.floor(180 - (cfg.rating - 1600) / 3 + (Math.random() * 10 - 5)));
+    } else if (cfg.rating >= 1300) {
+      oppRank = Math.max(181, Math.floor(320 - (cfg.rating - 1300) / 2.14 + (Math.random() * 14 - 7)));
+    } else if (cfg.rating >= 1000) {
+      oppRank = Math.max(321, Math.floor(500 - (cfg.rating - 1000) / 1.67 + (Math.random() * 20 - 10)));
+    } else {
+      oppRank = Math.max(501, Math.floor(1000 - (cfg.rating - 800) * 2.5 + (Math.random() * 20 - 10)));
+    }
+
+    const botGateLevel = Math.max(1, Math.min(10, gateLevel + (i % 2 === 0 ? 0 : 1)));
+    const isPromotion = TIER_ORDER.indexOf(cfg.tier) > curTierIdx;
+
+    // 3인 선발 + 1인 오퍼레이터 덱 생성
+    const allRoleClasses = [...cfg.classes, cfg.opClass];
+    const mockDeck: Mercenary[] = allRoleClasses.map((clsId, idx) => {
       const cls = CHARACTER_CLASSES[clsId] || CHARACTER_CLASSES['squire'];
-      const pos = idx < 2 ? 'front' : idx === 2 ? 'mid' : 'back';
+      const pos: 'front' | 'mid' | 'back' = idx === 0 ? 'front' : idx === 1 ? 'mid' : 'back';
+      const isOp = idx === 3;
+
       return {
-        id: `opp_hero_${i}_${idx}`,
-        name: `${cfg.name}의 ${cls.name}`,
+        id: `opp_hero_${cfg.id}_${idx}`,
+        name: isOp ? `[OP] ${cfg.name}의 ${cls.name}` : `${cfg.name}의 ${cls.name}`,
         title: cls.name,
         classId: clsId,
-        grade: 'veteran',
-        level: Math.max(1, Math.floor(oppRating / 80)),
+        grade: cfg.tier === 'master' || cfg.tier === 'grandmaster' ? 'legend' : cfg.tier === 'diamond' ? 'epic' : cfg.tier === 'platinum' ? 'hero' : 'veteran',
+        level: Math.max(1, Math.floor(cfg.rating / 75)),
         exp: 0,
         expToNext: 100,
-        currentHp: cls.baseStats.hp * 2,
-        maxHp: cls.baseStats.hp * 2,
+        currentHp: Math.round(cls.baseStats.hp * 1.5),
+        maxHp: Math.round(cls.baseStats.hp * 1.5),
         currentMp: cls.baseStats.mp,
         maxMp: cls.baseStats.mp,
         position: pos,
@@ -227,26 +662,28 @@ function generateOpponents(myRank: number, myRating: number, gateLevel: number =
     });
 
     return {
-      id: `opp_${i}_${Date.now()}`,
-      name: cfg.name,
+      id: `opp_${cfg.id}_${Date.now()}_${i}`,
+      name: `${cfg.name} [${cfg.feverConcept}]`,
       rank: oppRank,
-      rating: oppRating,
+      rating: cfg.rating,
       defenseDeck: mockDeck,
       guild: cfg.guild,
       gateLevel: botGateLevel,
       isBot: true,
+      isPromotion,
     };
   });
 }
 
-// ── 랭크 뱃지 ──────────────────────────────────────────────────────────────
-function getRankBadge(rating: number): { label: string; color: string; border: string; bg: string; icon: string } {
-  if (rating >= 2200) return { label: 'Grand Master', color: '#ff416c', border: '#ff416c88', bg: '#ff416c22', icon: '👑' };
-  if (rating >= 1900) return { label: 'Master', color: '#ce93d8', border: '#ce93d888', bg: '#ce93d822', icon: '💎' };
-  if (rating >= 1600) return { label: 'Diamond', color: '#42a5f5', border: '#42a5f588', bg: '#42a5f522', icon: '💠' };
-  if (rating >= 1300) return { label: 'Platinum', color: '#66bb6a', border: '#66bb6a88', bg: '#66bb6a22', icon: '⚔️' };
-  if (rating >= 1000) return { label: 'Gold', color: '#ffd54f', border: '#ffd54f88', bg: '#ffd54f22', icon: '🏆' };
-  return { label: 'Silver', color: '#9e9e9e', border: '#9e9e9e88', bg: '#9e9e9e22', icon: '🛡️' };
+// ── 7개 표준 랭크 뱃지 (브론즈 ~ 그랜드마스터) ──────────────────────────────
+export function getRankBadge(rating: number): { label: string; color: string; border: string; bg: string; icon: string } {
+  if (rating >= 2500) return { label: 'Grand Master', color: '#ff1744', border: '#ff174488', bg: '#ff174422', icon: '👑' };
+  if (rating >= 2200) return { label: 'Master', color: '#e040fb', border: '#e040fb88', bg: '#e040fb22', icon: '💎' };
+  if (rating >= 1900) return { label: 'Diamond', color: '#00d2ff', border: '#00d2ff88', bg: '#00d2ff22', icon: '💠' };
+  if (rating >= 1600) return { label: 'Platinum', color: '#00e676', border: '#00e67688', bg: '#00e67622', icon: '⚔️' };
+  if (rating >= 1300) return { label: 'Gold', color: '#ffd54f', border: '#ffd54f88', bg: '#ffd54f22', icon: '🏆' };
+  if (rating >= 1000) return { label: 'Silver', color: '#b0bec5', border: '#b0bec588', bg: '#b0bec522', icon: '🛡️' };
+  return { label: 'Bronze', color: '#cd7f32', border: '#cd7f3288', bg: '#cd7f3222', icon: '🥉' };
 }
 
 type Tab = 'match' | 'ranking' | 'shop';
@@ -312,6 +749,22 @@ export const ArenaScreen: React.FC = () => {
   const [oppFeverBadges, setOppFeverBadges] = useState<FeverBadgeType[]>([]);
   const [isLeaderUltCutin, setIsLeaderUltCutin] = useState(false);
   const [isOppLeaderUltCutin, setIsOppLeaderUltCutin] = useState(false);
+  const [isShowdownCutin, setIsShowdownCutin] = useState(false);
+  const isShowdownCutinRef = useRef(false);
+  const [showdownResult, setShowdownResult] = useState<ShowdownResult | null>(null);
+  // 🃏 피버 쇼다운 순차 배지 오픈 & 승자 광채 연출 상태
+  const [showdownPlayerBadges, setShowdownPlayerBadges] = useState<FeverBadgeType[]>([]);
+  const [showdownOppBadges, setShowdownOppBadges] = useState<FeverBadgeType[]>([]);
+  const [showdownRevealIndex, setShowdownRevealIndex] = useState(0); // 0 ~ 5 (오픈된 배지 수)
+  const [isShowdownEvaluated, setIsShowdownEvaluated] = useState(false); // 족보 판정 및 승자 광채 발동
+  const [isCodexModalOpen, setIsCodexModalOpen] = useState(false);
+  const weeklyAffinity = useMemo(() => getWeeklyAffinityConfig(), []);
+
+  // 🏆 피버콜 3회 승리 즉시 제압 카운터 (3-Win Domination)
+  const [playerFeverWins, setPlayerFeverWins] = useState(0);
+  const [oppFeverWins, setOppFeverWins] = useState(0);
+  const playerFeverWinsRef = useRef(0);
+  const oppFeverWinsRef = useRef(0);
 
   // 🏃 속도(SPD) 기반 턴 순서 큐
   const [roundQueue, setRoundQueue] = useState<string[]>([]);
@@ -376,6 +829,11 @@ export const ArenaScreen: React.FC = () => {
     return gm.getDimensionalDeck();
   }, [state.invasionState, state.barracks, state.party, turnTick, gm]);
 
+  // 🎯 3인 부대 기반 달성 가능성 높은 추천 족보 TOP 3 계산
+  const predictedSynergies = useMemo(() => {
+    return predictTopSynergies(dimDeck.mainHeroes);
+  }, [dimDeck.mainHeroes]);
+
   const allAvailableHeroes = useMemo(() => {
     return [...state.barracks, ...state.party].filter((h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx);
   }, [state.barracks, state.party]);
@@ -395,30 +853,50 @@ export const ArenaScreen: React.FC = () => {
   }, [playerTeam]);
 
   // 상대 풀 로드 (차원 앵커 게이트 레벨 반영 + 실제 유저 데이터 우선 매칭 + 부족 시 봇 보충)
-  const refreshOpponents = useCallback(async () => {
-    try {
-      const list = await fb.getArenaOpponents(state.currentArenaRating, state.currentArenaRank, gateLevel, 5);
-      if (list && list.length > 0) {
-        setOpponents(list);
-        return;
-      }
-    } catch (err) {
-      console.warn('[ArenaScreen] fetch arena opponents error:', err);
-    }
+  // ── 🛡️ [프리시즌 고정] 유저풀 집계 전까지 전 등급 AI 봇 대진표 매칭 ──
+  const refreshOpponents = useCallback(() => {
     setOpponents(generateOpponents(state.currentArenaRank, state.currentArenaRating, gateLevel));
-  }, [fb, state.currentArenaRating, state.currentArenaRank, gateLevel]);
+  }, [state.currentArenaRank, state.currentArenaRating, gateLevel]);
 
   useEffect(() => {
     refreshOpponents();
   }, [refreshOpponents]);
 
-  // 리더보드 로드
+  // ── 🏆 프리시즌 AI 전술 훈련 리그 순위표 로드 ──────────────────────────
   const fetchLeaderboard = useCallback(async () => {
     setIsLoadingLb(true);
-    const data = await fb.getLeaderboard();
-    setLeaderboard(data);
+    // 플레이어 정보 생성
+    const playerEntry: LeaderboardEntry = {
+      rank: 0,
+      nickname: '내 원정단 (지휘관)',
+      rating: state.currentArenaRating,
+      level: Math.max(1, Math.floor(state.currentArenaRating / 75)),
+      leaderTitle: '방주 성채 수호단',
+      gateLevel: gateLevel,
+      isPlayer: true,
+    };
+
+    // 프리시즌 봇 로스터를 기반으로 순위표 엔트리 생성
+    const botEntries: LeaderboardEntry[] = PRESEASON_BOT_ROSTER.map((b) => ({
+      rank: 0,
+      nickname: `${b.name} (${b.guild})`,
+      rating: b.rating,
+      level: Math.max(1, Math.floor(b.rating / 75)),
+      leaderTitle: `[${b.feverConcept}]`,
+      gateLevel: Math.max(1, Math.min(10, Math.floor(b.rating / 250))),
+      isPlayer: false,
+    }));
+
+    // 레이팅 내림차순 정렬 후 순위 부여
+    const combined = [playerEntry, ...botEntries].sort((a, b) => b.rating - a.rating);
+    const rankedList: LeaderboardEntry[] = combined.map((entry, idx) => ({
+      ...entry,
+      rank: idx + 1,
+    }));
+
+    setLeaderboard(rankedList);
     setIsLoadingLb(false);
-  }, [fb]);
+  }, [state.currentArenaRating, gateLevel]);
 
   useEffect(() => {
     if (tab === 'ranking') {
@@ -426,14 +904,14 @@ export const ArenaScreen: React.FC = () => {
     }
   }, [tab, fetchLeaderboard]);
 
-  // ── ⚔️ 3v3+1+1 아레나 전투 시작 (진영 초기화) ──────────────────────────────────
+  // ── ⚔️ 3v3 아레나 전투 시작 (진영 초기화) ──────────────────────────────────
   const startPvpSimulation = (opp: ArenaOpponent) => {
     const check = gm.isDimensionalSquadReady();
     if (!check.isReady) {
       SoundManager.getInstance().play('debuff');
       gameDialog.alert({
-        title: '⚔️ 차원 5인 부대 편성 필요',
-        message: check.reason || '차원 게이트 전투는 5인 부대(선발 3인 + 리더 1인 + 서포터 1인)가 모두 편성되어야 진행할 수 있습니다.',
+        title: '⚔️ 차원 3인 부대 편성 필요',
+        message: check.reason || '차원 아레나 결투는 3인 부대(전열/중열/후열)가 모두 편성되어야 진행할 수 있습니다.',
         icon: '⚠️',
       });
       return;
@@ -447,6 +925,16 @@ export const ArenaScreen: React.FC = () => {
     setVfxList([]);
     setFeverBadges([]);
     setOppFeverBadges([]);
+    setShowdownPlayerBadges([]);
+    setShowdownOppBadges([]);
+    setShowdownRevealIndex(0);
+    setIsShowdownEvaluated(false);
+    setIsShowdownCutin(false);
+    isShowdownCutinRef.current = false;
+    setPlayerFeverWins(0);
+    playerFeverWinsRef.current = 0;
+    setOppFeverWins(0);
+    oppFeverWinsRef.current = 0;
     setIsLeaderUltCutin(false);
     setIsOppLeaderUltCutin(false);
     gm.emit('arenaBattleStateChanged', true);
@@ -690,8 +1178,9 @@ export const ArenaScreen: React.FC = () => {
     setTurnTick(0);
   };
 
-  // 🔥 아군 피버 뱃지 추가 헬퍼
+  // 🔥 아군 피버 뱃지 추가 헬퍼 (주간 금지 배지 필터링)
   const addFeverBadge = useCallback((badgeType: FeverBadgeType) => {
+    if (badgeType === WEEKLY_BANNED_BADGE) return;
     setFeverBadges(prev => {
       if (prev.length >= 5) return prev;
       const next = [...prev, badgeType];
@@ -700,8 +1189,9 @@ export const ArenaScreen: React.FC = () => {
     });
   }, []);
 
-  // 💀 적군 피버 뱃지 추가 헬퍼
+  // 💀 적군 피버 뱃지 추가 헬퍼 (주간 금지 배지 필터링)
   const addOppFeverBadge = useCallback((badgeType: FeverBadgeType) => {
+    if (badgeType === WEEKLY_BANNED_BADGE) return;
     setOppFeverBadges(prev => {
       if (prev.length >= 5) return prev;
       const next = [...prev, badgeType];
@@ -710,242 +1200,337 @@ export const ArenaScreen: React.FC = () => {
     });
   }, []);
 
-  // 👑 아군 리더 궁극기 자동 발동 실행 함수
-  const triggerLeaderUltimate = useCallback(() => {
-    const leader = playerLeaderRef.current;
-    if (!leader) {
-      setFeverBadges([]);
-      return;
-    }
+  // 💥 2단계: 피버콜 승부 판정 연출이 사라진 후 궁극기 연출 폭발 및 전투 재개
+  const executeFeverUltimateAfterShowdown = useCallback((
+    showdown: ShowdownResult,
+    isPlayerDomination: boolean,
+    isOppDomination: boolean
+  ) => {
+    const isPlayerWin = showdown.outcome === 'player_win';
+    const isOppWin = showdown.outcome === 'opp_win';
+    const isClash = showdown.outcome === 'clash';
 
-    const cls = CHARACTER_CLASSES[leader.classId] || CHARACTER_CLASSES['squire'];
-    const ultSkill = cls?.specialSkill || cls?.skills[cls.skills.length - 1] || {
-      id: 'leader_burst',
-      name: '영령의 심판',
-      description: '적 전체에게 강력한 리더 궁극기를 가합니다.',
-      manaCost: 0,
-      cooldown: 0,
-      targetType: 'all_enemies' as const,
-      power: 2.5,
-      effectType: 'damage' as const,
-      icon: '👑',
-    };
+    const pCombatants = playerTeamRef.current;
+    const oCombatants = oppTeamRef.current;
 
-    setIsLeaderUltCutin(true);
-    SoundManager.getInstance().play('boss_skill');
+    // 👑 아군 전술 오퍼레이터 및 궁극기 파싱
+    const dimDeck = gm.getDimensionalDeck();
+    const activeOperator = playerLeaderRef.current || dimDeck.operatorHero || dimDeck.leaderHero;
+    const opCls = activeOperator ? CHARACTER_CLASSES[activeOperator.classId] : null;
+    const opSpecialSkill = opCls ? (opCls.specialSkill || opCls.skills[0]) : null;
+    const opBonusDmg = activeOperator ? Math.round((activeOperator.stats.atk || 120) * (isClash ? 0.8 : 1.5)) : 0;
 
-    setActionBanner({
-      text: `👑 리더 궁극기: ${leader.name} ➔ ${ultSkill.name}!`,
-      sub: `🔥 아군 피버 게이지 만충! 적 진영 전체 강타!`,
-      color: '#ffd54f',
-    });
-
-    const leaderEff = gm.getHeroEffectiveStats(leader);
-    const leaderAtk = leaderEff.atk * ARENA_ATK_SCALE;
-
-    const currentOppTeam = oppTeamRef.current;
-    const livingTargets = currentOppTeam.filter(c => c.currentHp > 0);
-
-    const updatedOppTeam = currentOppTeam.map(c => {
-      if (c.currentHp <= 0) return c;
-      const effectiveDef = c.def * ARENA_DEF_SCALE; // 🛡️ 방어력 50% 너프 적용
-      const defFactor = 1 - (effectiveDef / (effectiveDef + getArenaDRConstant()));
-      const dmg = Math.max(25, Math.floor(leaderAtk * (ultSkill.power || 2.2) * 1.3 * defFactor));
-      return {
-        ...c,
-        currentHp: Math.max(0, c.currentHp - dmg),
-      };
-    });
-
-    // VFX: 살아있는 각 적 카드 위치에 던전처럼 각각 모두 폭발 이펙트 출력
-    livingTargets.forEach((t, i) => {
-      const idx = Math.max(0, currentOppTeam.findIndex(c => c.id === t.id));
-      const colX = idx === 0 ? 20 : idx === 1 ? 50 : 80;
-      setTimeout(() => {
-        const vfxId = `vfx_leader_ult_${Date.now()}_${t.id}_${i}`;
-        setVfxList(prev => [...prev, {
-          id: vfxId,
-          type: 'crit_slash',
-          damage: Math.floor(leaderAtk * 1.8),
-          isCrit: true,
-          x: colX,
-          y: 24,
-          duration: 650,
-        }]);
-        gm.emit('battleHitEffect', {
-          x: colX,
-          y: 24,
-          color: 0xffd54f,
-          isCrit: true,
-          type: 'crit_slash',
-        });
-      }, i * 60);
-    });
-
-    oppTeamRef.current = updatedOppTeam;
-    setOppTeam(updatedOppTeam);
+    // 배지 슬롯 정산 (쇼다운 종료 즉시 비움)
     setFeverBadges([]);
     feverBadgesRef.current = [];
-
-    // 딜미터기 메트릭스 기록 (아군 리더)
-    const mRef = combatMetricsRef.current;
-    const mLeader = mRef[leader.id];
-    if (mLeader) {
-      mLeader.actionsCount = (mLeader.actionsCount || 0) + 1;
-      mLeader.critCount += livingTargets.length;
-      mLeader.combosTriggered += 1;
-    }
-    updatedOppTeam.forEach((c, idx) => {
-      const oldHp = currentOppTeam[idx]?.currentHp || 0;
-      if (oldHp > 0) {
-        const dealt = oldHp - c.currentHp;
-        if (mRef[leader.id]) mRef[leader.id].damageDealt += dealt;
-        if (mRef[c.id]) {
-          mRef[c.id].damageTaken += dealt;
-          if (c.currentHp <= 0 && mRef[leader.id]) mRef[leader.id].kills += 1;
-        }
-      }
-    });
-
-    // 🏆 리더 궁극기로 적 전원 처치 시 즉시 승리 처리
-    const oppRemains = updatedOppTeam.filter(c => c.currentHp > 0);
-    if (oppRemains.length === 0 && activeBattleOppRef.current) {
-      isProcessingRef.current = false;
-      const opp = activeBattleOppRef.current;
-      const rewardResult = gm.claimArenaMatchRewards(opp, true);
-      setCombatMetrics(Object.values(combatMetricsRef.current));
-      setFinalReward({ ...rewardResult, win: true });
-      try {
-        SoundManager.getInstance().play('victory');
-      } catch (_) {}
-      setOpponents(generateOpponents(gm.currentArenaRank, gm.currentArenaRating, gateLevel));
-    }
-
-    setTimeout(() => {
-      setIsLeaderUltCutin(false);
-    }, 1200);
-  }, [gm]);
-
-  // 💀 적군 리더 궁극기 자동 발동 실행 함수
-  const triggerOppLeaderUltimate = useCallback(() => {
-    const leader = oppLeaderRef.current;
-    if (!leader) {
-      setOppFeverBadges([]);
-      oppFeverBadgesRef.current = [];
-      return;
-    }
-
-    const cls = CHARACTER_CLASSES[leader.classId] || CHARACTER_CLASSES['squire'];
-    const ultSkill = cls?.specialSkill || cls?.skills[cls.skills.length - 1] || {
-      id: 'opp_leader_burst',
-      name: '심연의 단죄',
-      description: '아군 전체에게 치명적인 적 리더 궁극기를 가합니다.',
-      manaCost: 0,
-      cooldown: 0,
-      targetType: 'all_enemies' as const,
-      power: 2.2,
-      effectType: 'damage' as const,
-      icon: '💀',
-    };
-
-    setIsOppLeaderUltCutin(true);
-    SoundManager.getInstance().play('boss_skill');
-
-    setActionBanner({
-      text: `💀 적 리더 궁극기: ${leader.name} ➔ ${ultSkill.name}!`,
-      sub: `⚠️ 상대 피버 게이지 만충! 아군 전원에게 강력한 참격!`,
-      color: '#ff416c',
-    });
-
-    const oppRating = activeBattleOppRef.current?.rating || 1000;
-    const ratingScale = Math.max(1.0, oppRating / 1000);
-    const leaderAtk = ((cls.baseStats.atk * 1.5 + (leader.level || 10) * 5) * ratingScale) * ARENA_ATK_SCALE;
-
-    const currentPTeam = playerTeamRef.current;
-    const livingTargets = currentPTeam.filter(c => c.currentHp > 0);
-
-    const updatedPTeam = currentPTeam.map(c => {
-      if (c.currentHp <= 0) return c;
-      const effectiveDef = c.def * ARENA_DEF_SCALE; // 🛡️ 방어력 50% 너프 적용
-      const defFactor = 1 - (effectiveDef / (effectiveDef + getArenaDRConstant()));
-      const dmg = Math.max(25, Math.floor(leaderAtk * (ultSkill.power || 2.0) * defFactor));
-      return {
-        ...c,
-        currentHp: Math.max(0, c.currentHp - dmg),
-      };
-    });
-
-    // VFX: 살아있는 각 아군 카드 위치에 던전처럼 각각 모두 폭발 이펙트 출력
-    livingTargets.forEach((t, i) => {
-      const idx = Math.max(0, currentPTeam.findIndex(c => c.id === t.id));
-      const colX = idx === 0 ? 20 : idx === 1 ? 50 : 80;
-      setTimeout(() => {
-        const vfxId = `vfx_opp_leader_ult_${Date.now()}_${t.id}_${i}`;
-        setVfxList(prev => [...prev, {
-          id: vfxId,
-          type: 'crit_slash',
-          damage: Math.floor(leaderAtk * 1.6),
-          isCrit: true,
-          x: colX,
-          y: 74,
-          duration: 650,
-        }]);
-        gm.emit('battleHitEffect', {
-          x: colX,
-          y: 74,
-          color: 0xff416c,
-          isCrit: true,
-          type: 'crit_slash',
-        });
-      }, i * 60);
-    });
-
-    playerTeamRef.current = updatedPTeam;
-    setPlayerTeam(updatedPTeam);
     setOppFeverBadges([]);
     oppFeverBadgesRef.current = [];
 
-    // 딜미터기 메트릭스 기록 (적 리더)
-    const mRefOpp = combatMetricsRef.current;
-    const mOppLeader = mRefOpp['opp_leader'];
-    if (mOppLeader) {
-      mOppLeader.actionsCount = (mOppLeader.actionsCount || 0) + 1;
-      mOppLeader.critCount += livingTargets.length;
-      mOppLeader.combosTriggered += 1;
+    // 사운드 및 배너 연출
+    try {
+      SoundManager.getInstance().play(isPlayerDomination ? 'victory' : isPlayerWin ? 'boss_skill' : isOppWin ? 'heavy_hit' : 'slash');
+    } catch (_) {}
+
+    if (isPlayerDomination) {
+      setActionBanner({
+        text: '🏆 [피버 전술 압도 (FEVER DOMINATION)]',
+        sub: `피버콜 3회 승리 달성! 오퍼레이터 [${activeOperator?.name || '지휘관'}]의 전술 폭격으로 적 결투 부대를 완전히 제압했습니다!`,
+        color: '#ffd54f'
+      });
+    } else if (isOppDomination) {
+      setActionBanner({
+        text: '💀 [적군 피버 전술 압도]',
+        sub: '적의 피버콜 3회 성공으로 결투에서 패배했습니다.',
+        color: '#ff416c'
+      });
+    } else {
+      setActionBanner({
+        text: `${showdown.icon} ${showdown.bannerTitle}`,
+        sub: isPlayerWin && opSpecialSkill
+          ? `[오퍼레이터 궁극기] ${activeOperator?.name}의 [${opSpecialSkill.name}] 전탄 발사! (${showdown.playerSynergy.name})`
+          : `${showdown.bannerSub} (${showdown.playerSynergy.name} vs ${showdown.oppSynergy.name})`,
+        color: isPlayerWin ? '#00d2ff' : isOppWin ? '#ff416c' : '#ffd54f'
+      });
     }
-    updatedPTeam.forEach((c, idx) => {
-      const oldHp = currentPTeam[idx]?.currentHp || 0;
-      if (oldHp > 0) {
-        const dealt = oldHp - c.currentHp;
-        if (mRefOpp['opp_leader']) mRefOpp['opp_leader'].damageDealt += dealt;
-        if (mRefOpp[c.id]) {
-          mRefOpp[c.id].damageTaken += dealt;
-          if (c.currentHp <= 0 && mRefOpp['opp_leader']) mRefOpp['opp_leader'].kills += 1;
+
+    // 컷인 배너 활성화
+    if (isPlayerWin || isPlayerDomination) {
+      setIsLeaderUltCutin(true);
+    } else if (isOppWin || isOppDomination) {
+      setIsOppLeaderUltCutin(true);
+    }
+
+    // 1. 아군 공격/효과 적용 (아군 승리 또는 동급 격돌)
+    if (isPlayerWin || isClash) {
+      const syn = showdown.playerSynergy;
+      const pLeader = pCombatants.find(c => c.currentHp > 0) || pCombatants[0];
+      const baseAtk = pLeader?.atk || 120;
+      const mult = (syn.powerMult || 1.4) * (isClash ? 0.6 : 1.0);
+      const critMult = syn.critRateBonus >= 0.5 ? 1.6 : 1.2;
+      const finalDmg = isPlayerDomination ? 999999 : Math.round(baseAtk * mult * critMult) + opBonusDmg;
+
+      const livingOpp = oCombatants.filter(c => c.currentHp > 0);
+      const updatedOpp = oCombatants.map(c => {
+        if (c.currentHp <= 0) return c;
+        const newHp = isPlayerDomination ? 0 : Math.max(0, c.currentHp - finalDmg);
+        return {
+          ...c,
+          currentHp: newHp,
+          statusEffects: syn.stunTurns > 0 ? [
+            ...c.statusEffects,
+            { id: 'fever_stun', name: '그로기', type: 'stun', duration: syn.stunTurns, turnsLeft: syn.stunTurns, totalTurns: syn.stunTurns, magnitude: 1, source: 'fever', icon: '💫' } as unknown as StatusEffect
+          ] : c.statusEffects
+        };
+      });
+
+      // 전투 로그 기록
+      setBattleLogs(prev => [
+        ...prev,
+        {
+          round: battleRound,
+          attacker: activeOperator ? `오퍼레이터 ${activeOperator.name}` : (pLeader?.name || '아군 리더'),
+          defender: '적 전체',
+          damage: finalDmg,
+          isCrit: true,
+          skillName: isPlayerDomination
+            ? '🏆 피버 3승 즉시 제압 (Domination)'
+            : opSpecialSkill
+            ? `피버 연계 [${syn.name} + ${opSpecialSkill.name}]`
+            : syn.name,
+          side: 'player'
+        }
+      ]);
+
+      // VFX 출력
+      livingOpp.forEach((t, i) => {
+        const idx = Math.max(0, oCombatants.findIndex(c => c.id === t.id));
+        const colX = idx === 0 ? 20 : idx === 1 ? 50 : 80;
+        setTimeout(() => {
+          setVfxList(prev => [...prev, {
+            id: `vfx_showdown_p_${Date.now()}_${t.id}_${i}`,
+            type: 'crit_slash',
+            damage: finalDmg,
+            isCrit: true,
+            x: colX,
+            y: 24,
+            duration: 700
+          }]);
+          gm.emit('battleHitEffect', { x: colX, y: 24, color: 0x00d2ff, isCrit: true, type: 'crit_slash' });
+        }, i * 70);
+      });
+
+      // 아군 부활 / 회복 효과 적용
+      let updatedPTeam = [...pCombatants];
+      if (syn.reviveFallen) {
+        const deadIdx = updatedPTeam.findIndex(c => c.currentHp <= 0);
+        if (deadIdx >= 0) {
+          const targetHero = updatedPTeam[deadIdx];
+          const reviveHp = Math.round(targetHero.maxHp * (syn.reviveHpPct || 0.5));
+          updatedPTeam[deadIdx] = { ...targetHero, currentHp: reviveHp };
         }
       }
-    });
+      if (syn.partyShieldPct > 0) {
+        updatedPTeam = updatedPTeam.map(c => c.currentHp <= 0 ? c : {
+          ...c,
+          statusEffects: [
+            ...c.statusEffects,
+            { id: 'fever_shield', name: '에테르 방벽', type: 'shield', duration: 2, turnsLeft: 2, totalTurns: 2, magnitude: Math.round(c.maxHp * syn.partyShieldPct), source: 'fever', icon: '🛡️' } as unknown as StatusEffect
+          ]
+        });
+      }
 
-    playerTeamRef.current = updatedPTeam;
-    setPlayerTeam(updatedPTeam);
-
-    // 💀 아군 전원 사망 시 패배 처리
-    const pRemains = updatedPTeam.filter(c => c.currentHp > 0);
-    if (pRemains.length === 0 && activeBattleOppRef.current) {
-      isProcessingRef.current = false;
-      const opp = activeBattleOppRef.current;
-      const rewardResult = gm.claimArenaMatchRewards(opp, false);
-      setCombatMetrics(Object.values(combatMetricsRef.current));
-      setFinalReward({ ...rewardResult, win: false });
-      try {
-        SoundManager.getInstance().play('defeat');
-      } catch (_) {}
-      setOpponents(generateOpponents(gm.currentArenaRank, gm.currentArenaRating, gateLevel));
+      oppTeamRef.current = updatedOpp;
+      setOppTeam(updatedOpp);
+      playerTeamRef.current = updatedPTeam;
+      setPlayerTeam(updatedPTeam);
     }
 
+    // 2. 적군 공격/효과 적용 (적군 승리 또는 동급 격돌)
+    if (!isPlayerDomination && (isOppWin || isClash)) {
+      const syn = showdown.oppSynergy;
+      const oLeader = oCombatants.find(c => c.currentHp > 0) || oCombatants[0];
+      const baseAtk = oLeader?.atk || 120;
+      const mult = (syn.powerMult || 1.4) * (isClash ? 0.6 : 1.0);
+      const critMult = syn.critRateBonus >= 0.5 ? 1.5 : 1.2;
+      const finalDmg = isOppDomination ? 999999 : Math.round(baseAtk * mult * critMult);
+
+      const livingP = playerTeamRef.current.filter(c => c.currentHp > 0);
+      const updatedP = playerTeamRef.current.map(c => {
+        if (c.currentHp <= 0) return c;
+        const newHp = isOppDomination ? 0 : Math.max(0, c.currentHp - finalDmg);
+        return { ...c, currentHp: newHp };
+      });
+
+      // VFX 출력
+      livingP.forEach((t, i) => {
+        const idx = Math.max(0, playerTeamRef.current.findIndex(c => c.id === t.id));
+        const colX = idx === 0 ? 20 : idx === 1 ? 50 : 80;
+        setTimeout(() => {
+          setVfxList(prev => [...prev, {
+            id: `vfx_showdown_o_${Date.now()}_${t.id}_${i}`,
+            type: 'crit_slash',
+            damage: finalDmg,
+            isCrit: true,
+            x: colX,
+            y: 74,
+            duration: 700
+          }]);
+          gm.emit('battleHitEffect', { x: colX, y: 74, color: 0xff416c, isCrit: true, type: 'crit_slash' });
+        }, i * 70);
+      });
+
+      playerTeamRef.current = updatedP;
+      setPlayerTeam(updatedP);
+    }
+
+    // 4. 궁극기 연출 지속(1.6초) 후 승패 체크 및 전투 재개
     setTimeout(() => {
+      setIsLeaderUltCutin(false);
       setIsOppLeaderUltCutin(false);
-    }, 1200);
-  }, [gm]);
+
+      const oppRemains = oppTeamRef.current.filter(c => c.currentHp > 0);
+      const pRemains = playerTeamRef.current.filter(c => c.currentHp > 0);
+
+      if (oppRemains.length === 0 && activeBattleOppRef.current) {
+        isProcessingRef.current = false;
+        const opp = activeBattleOppRef.current;
+        const rewardResult = gm.claimArenaMatchRewards(opp, true);
+        setCombatMetrics(Object.values(combatMetricsRef.current));
+        setFinalReward({ ...rewardResult, win: true });
+        try { SoundManager.getInstance().play('victory'); } catch (_) {}
+        setOpponents(generateOpponents(gm.currentArenaRank, gm.currentArenaRating, gateLevel));
+        return;
+      } else if (pRemains.length === 0 && activeBattleOppRef.current) {
+        isProcessingRef.current = false;
+        const opp = activeBattleOppRef.current;
+        const rewardResult = gm.claimArenaMatchRewards(opp, false);
+        setCombatMetrics(Object.values(combatMetricsRef.current));
+        setFinalReward({ ...rewardResult, win: false });
+        try { SoundManager.getInstance().play('defeat'); } catch (_) {}
+        setOpponents(generateOpponents(gm.currentArenaRank, gm.currentArenaRating, gateLevel));
+        return;
+      }
+
+      // 🏃 전투 재개! 다음 턴 진행
+      isProcessingRef.current = false;
+      setTurnTick(t => t + 1);
+    }, 1600);
+  }, [gm, gateLevel, battleRound]);
+
+  // ⚔️🔥 1단계: 피버 쇼다운 (Fever Showdown) 대결 판정 및 컷인 개시 (필드 전투 일시 정지)
+  const triggerFeverShowdown = useCallback(() => {
+    const pCombatants = playerTeamRef.current;
+    const oCombatants = oppTeamRef.current;
+    if (pCombatants.length === 0 || oCombatants.length === 0) return;
+
+    // ⚔️ [핵심 룰] 아군과 적군 양측 모두 피버 5개가 완전히 모였을 때만 피버콜 발동!
+    if (feverBadgesRef.current.length < 5 || oppFeverBadgesRef.current.length < 5) {
+      return;
+    }
+
+    if (isShowdownCutinRef.current) return;
+    isShowdownCutinRef.current = true;
+
+    // ⏸️ 필드 전투 즉시 일시 정지 (턴 및 AI 정지)
+    isProcessingRef.current = true;
+
+    const playerParty = pCombatants.map(c => ({
+      classId: c.classId,
+      currentHp: c.currentHp,
+      maxHp: c.maxHp
+    } as any));
+    const oppParty = oCombatants.map(c => ({
+      classId: c.classId,
+      currentHp: c.currentHp,
+      maxHp: c.maxHp
+    } as any));
+
+    const showdown = resolveFeverShowdown(
+      feverBadgesRef.current,
+      oppFeverBadgesRef.current,
+      playerParty,
+      oppParty
+    );
+
+    // 🃏 쇼다운 배지 스냅샷 캡처 및 순차 오픈 시퀀스 시작
+    const pBadgesSnapshot = [...feverBadgesRef.current];
+    const oBadgesSnapshot = [...oppFeverBadgesRef.current];
+    setShowdownPlayerBadges(pBadgesSnapshot);
+    setShowdownOppBadges(oBadgesSnapshot);
+    setShowdownRevealIndex(0);
+    setIsShowdownEvaluated(false);
+
+    setShowdownResult(showdown);
+    setIsShowdownCutin(true);
+
+    const isPlayerWin = showdown.outcome === 'player_win';
+    const isOppWin = showdown.outcome === 'opp_win';
+
+    // 🏆 피버콜 승리 카운트 갱신
+    let newPlayerWins = playerFeverWinsRef.current;
+    let newOppWins = oppFeverWinsRef.current;
+    if (isPlayerWin) {
+      newPlayerWins += 1;
+      playerFeverWinsRef.current = newPlayerWins;
+      setPlayerFeverWins(newPlayerWins);
+    } else if (isOppWin) {
+      newOppWins += 1;
+      oppFeverWinsRef.current = newOppWins;
+      setOppFeverWins(newOppWins);
+    }
+
+    const isPlayerDomination = newPlayerWins >= 3;
+    const isOppDomination = newOppWins >= 3;
+
+    // 🃏 5개 뱃지 순차적 오픈 타이머 (220ms 간격)
+    for (let i = 1; i <= 5; i++) {
+      setTimeout(() => {
+        setShowdownRevealIndex(i);
+        try {
+          SoundManager.getInstance().play(i === 5 ? 'heavy_hit' : 'equip');
+        } catch (_) {}
+      }, i * 220);
+    }
+
+    // ⚡ 5개 배지 전체 오픈 완료 후 1.35초 시점에 족보 확정 및 승자 광채 방출!
+    setTimeout(() => {
+      setIsShowdownEvaluated(true);
+      try {
+        if (isPlayerWin) {
+          SoundManager.getInstance().play('boss_skill');
+        } else if (isOppWin) {
+          SoundManager.getInstance().play('heavy_hit');
+        } else {
+          SoundManager.getInstance().play('slash');
+        }
+      } catch (_) {}
+    }, 1350);
+
+    // 🎬 3.0초 후: 피버콜 연출 닫힘 ➔ 연출이 사라진 직후 궁극기 연출부터 전투 재개!
+    setTimeout(() => {
+      setIsShowdownCutin(false);
+      isShowdownCutinRef.current = false;
+      setShowdownResult(null);
+      setShowdownRevealIndex(0);
+      setIsShowdownEvaluated(false);
+
+      // 💥 피버콜 연출이 사라진 직후 2단계 궁극기 연출 폭발 실행!
+      executeFeverUltimateAfterShowdown(showdown, isPlayerDomination, isOppDomination);
+    }, 3000);
+  }, [executeFeverUltimateAfterShowdown]);
+
+  const triggerLeaderUltimate = useCallback(() => {
+    if (feverBadgesRef.current.length >= 5 && oppFeverBadgesRef.current.length >= 5) {
+      triggerFeverShowdown();
+    }
+  }, [triggerFeverShowdown]);
+
+  // 💀 적군 리더 궁극기 자동 발동 실행 함수 (피버 쇼다운 통합)
+  const triggerOppLeaderUltimate = useCallback(() => {
+    if (feverBadgesRef.current.length >= 5 && oppFeverBadgesRef.current.length >= 5) {
+      triggerFeverShowdown();
+    }
+  }, [triggerFeverShowdown]);
 
   // ── 턴 액션 실행 (광역기 다중 타겟 및 정상 공방 처리) ──────────────────────
   const executeCombatMove = useCallback((attacker: ArenaCombatant, skill: Skill, target: ArenaCombatant) => {
@@ -1410,12 +1995,11 @@ export const ArenaScreen: React.FC = () => {
     setPlayerTeam(nextP);
     setOppTeam(nextO);
 
-    // 8. 피버 만충 시 리더 궁극기 발동 검사
-    if (feverBadgesRef.current.length >= 5) {
-      setTimeout(() => triggerLeaderUltimate(), 400);
-    }
-    if (oppFeverBadgesRef.current.length >= 5) {
-      setTimeout(() => triggerOppLeaderUltimate(), 400);
+    // 8. ⚔️ [핵심 룰] 피버콜(Fever Showdown) 발동 검사:
+    // 양쪽 모두 피버 배지 5개가 완전히 모였을 때에만 피버콜이 개시됩니다!
+    // 그 전에는 어떠한 스킬(단일기/광역기)을 시전해도 피버콜이나 피버 족보가 임의로 터지지 않습니다.
+    if (feverBadgesRef.current.length >= 5 && oppFeverBadgesRef.current.length >= 5) {
+      setTimeout(() => triggerFeverShowdown(), 400);
     }
 
     // 9. 승패 검증 (즉시 결과창 팝업)
@@ -1477,7 +2061,8 @@ export const ArenaScreen: React.FC = () => {
 
   // ── 턴 자동 진행 루프 (스킬 연계 최우선 콤보 AI & Auto Battle) ──────────────────────────────
   useEffect(() => {
-    if (!activeBattleOpp || finalReward || !activeCombatantId) return;
+    // ⏸️ 피버콜 쇼다운 진행 중이거나 궁극기 컷인 연출 중일 때는 전투 완전 일시 정지!
+    if (!activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
     if (isProcessingRef.current) return;
 
     const pTeam = playerTeamRef.current;
@@ -1603,11 +2188,12 @@ export const ArenaScreen: React.FC = () => {
     }, delay);
 
     return () => clearTimeout(timer);
-  }, [activeBattleOpp, finalReward, activeCombatantId, isAuto, battleSpeed, turnTick, executeCombatMove]);
+  }, [activeBattleOpp, finalReward, activeCombatantId, isAuto, battleSpeed, turnTick, isShowdownCutin, isLeaderUltCutin, isOppLeaderUltCutin, executeCombatMove]);
 
   // 🛡️ [아레나 멈춤 방지 워치독]: 만약 2.5초 이상 턴이 멈춰 있으면 강제 복구 및 다음 턴 진행
   useEffect(() => {
-    if (!activeBattleOpp || finalReward || !activeCombatantId) return;
+    // ⏸️ 피버콜 쇼다운 진행 중이거나 궁극기 연출 중일 때는 워치독 개입 금지
+    if (!activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
     const watchdog = setTimeout(() => {
       if (isProcessingRef.current) {
         console.warn('⚠️ [아레나 멈춤 방지 워치독] 2.5초간 응답 없음 감지 -> 강제 플래그 해제 및 턴 진행');
@@ -1625,7 +2211,7 @@ export const ArenaScreen: React.FC = () => {
       }
     }, 2500);
     return () => clearTimeout(watchdog);
-  }, [activeBattleOpp, finalReward, activeCombatantId, turnTick]);
+  }, [activeBattleOpp, finalReward, activeCombatantId, turnTick, isShowdownCutin, isLeaderUltCutin, isOppLeaderUltCutin]);
 
   // ── ⏩ 즉시 결과 확인 (Skip) ──────────────────────────────────────────────
   const handleInstantSkip = () => {
@@ -1669,7 +2255,7 @@ export const ArenaScreen: React.FC = () => {
 
   // ── 수동 스킬 클릭 실행 ──────────────────────────────────────────────────
   const handleManualSkillClick = (skill: Skill) => {
-    if (isProcessingRef.current || finalReward) return;
+    if (isProcessingRef.current || finalReward || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
     const attacker = playerTeamRef.current.find(c => c.id === activeCombatantIdRef.current);
     if (!attacker) return;
 
@@ -2290,27 +2876,27 @@ export const ArenaScreen: React.FC = () => {
         {/* ── 1. 매칭 탭 ── */}
         {tab === 'match' && (
           <div className="flex flex-col gap-2.5 w-full max-w-full">
-            {/* 🌌 내 5인 차원 부대 편성 상태 배너 */}
-            {!squadCheck.isReady ? (
+            {/* 🌌 내 3인 차원 결투 부대 미편성 시에만 컴팩트 안내 배너 노출 */}
+            {!squadCheck.isReady && (
               <div className="p-3 rounded-xl bg-gradient-to-r from-[#2c1216] via-[#1f0f15] to-[#120d18] border border-[#ef535088] shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <span className="text-2xl p-1.5 rounded-lg bg-black/40 border border-[#ef535044] shrink-0">⚠️</span>
                   <div className="min-w-0">
                     <div className="font-extrabold text-xs text-[#ff8a80] flex items-center gap-1.5 flex-wrap">
-                      <span>차원 5인 부대 미편성</span>
+                      <span>차원 3인 결투 부대 미편성</span>
                       <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/50 text-[#ffd54f] font-mono font-bold border border-[#ffd54f33]">
-                        현재 {squadCheck.count}/5인 배치
+                        현재 {squadCheck.count}/3인 배치
                       </span>
                     </div>
                     <div className="text-[10px] text-[#cfd8dc] mt-0.5 leading-relaxed">
-                      차원 게이트 전투는 5인 부대(선발 3인 + 리더 1인 + 서포터 1인)가 모두 편성되어야 진행할 수 있습니다.
+                      차원 아레나는 전열/중열/후열 3인 부대가 모두 배치되어야 결투를 치를 수 있습니다.
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
-                  {allAvailableHeroes.length >= 5 ? (
+                  {allAvailableHeroes.length >= 3 ? (
                     <button
-                      className="btn btn-primary text-xs px-3 py-1.5 font-bold flex items-center gap-1 shadow-md shadow-[#00d2ff33]"
+                      className="btn btn-primary text-xs px-3 py-1.5 font-bold flex items-center gap-1 shadow-md shadow-[#00d2ff33] cursor-pointer"
                       onClick={() => {
                         const ok = gm.autoAssignDimensionalDeck();
                         if (ok) {
@@ -2320,11 +2906,11 @@ export const ArenaScreen: React.FC = () => {
                       }}
                     >
                       <span>⚡</span>
-                      <span>5인 자동 편성</span>
+                      <span>3인 자동 편성</span>
                     </button>
                   ) : (
                     <button
-                      className="btn btn-ghost text-xs px-3 py-1.5 text-[#ffd54f] border border-[#ffd54f55] hover:bg-[#ffd54f15] font-bold"
+                      className="btn btn-ghost text-xs px-3 py-1.5 text-[#ffd54f] border border-[#ffd54f55] hover:bg-[#ffd54f15] font-bold cursor-pointer"
                       onClick={() => {
                         navigateTo('citadel');
                         gm.emit('openTavernDrawer');
@@ -2334,7 +2920,7 @@ export const ArenaScreen: React.FC = () => {
                     </button>
                   )}
                   <button
-                    className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#00d2ff] border border-[#00d2ff44] hover:bg-[#00d2ff18] font-bold"
+                    className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#00d2ff] border border-[#00d2ff44] hover:bg-[#00d2ff18] font-bold cursor-pointer"
                     onClick={() => {
                       navigateTo('citadel');
                       gm.emit('openDimensionalBarracks');
@@ -2342,49 +2928,6 @@ export const ArenaScreen: React.FC = () => {
                   >
                     🏛️ 부대 직접 편성
                   </button>
-                </div>
-              </div>
-            ) : (
-              <div className="p-2.5 rounded-xl bg-[#0e1424] border border-[#1f2d47] flex flex-col gap-1.5 shadow-md">
-                <div className="flex items-center justify-between text-[11px]">
-                  <div className="flex items-center gap-1.5 font-bold text-white">
-                    <span>🌌 내 차원 5인 출격 부대</span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44] font-bold">
-                      ✓ 출격 가능
-                    </span>
-                  </div>
-                  <button
-                    className="text-[10px] text-[#00d2ff] hover:underline flex items-center gap-0.5 font-medium cursor-pointer"
-                    onClick={() => {
-                      navigateTo('citadel');
-                      gm.emit('openDimensionalBarracks');
-                    }}
-                  >
-                    ⚙️ 부대 변경
-                  </button>
-                </div>
-                <div className="grid grid-cols-5 gap-1 p-1 rounded-lg bg-[#080d17] border border-[#172338]">
-                  {dimDeck.mainHeroes.map((h, i) => (
-                    <div key={h.id} className="flex flex-col items-center justify-center p-1 rounded bg-[#101728] border border-[#1e2a44] text-center min-w-0">
-                      <span className="text-[8px] font-bold text-[#00d2ff]">{i === 0 ? '전열' : i === 1 ? '중열' : '후열'}</span>
-                      <span className="text-[9px] font-bold text-white truncate w-full">{h.name}</span>
-                      <span className="text-[8px] text-[#8b9bb4] font-mono">Lv.{h.level}</span>
-                    </div>
-                  ))}
-                  {dimDeck.leaderHero && (
-                    <div className="flex flex-col items-center justify-center p-1 rounded bg-[#1e170a] border border-[#ffd54f44] text-center min-w-0">
-                      <span className="text-[8px] font-bold text-[#ffd54f]">👑리더</span>
-                      <span className="text-[9px] font-bold text-[#ffe082] truncate w-full">{dimDeck.leaderHero.name}</span>
-                      <span className="text-[8px] text-[#ffd54f] font-mono">Lv.{dimDeck.leaderHero.level}</span>
-                    </div>
-                  )}
-                  {dimDeck.supporterHero && (
-                    <div className="flex flex-col items-center justify-center p-1 rounded bg-[#0a181e] border border-[#80deea44] text-center min-w-0">
-                      <span className="text-[8px] font-bold text-[#80deea]">🛡️서포터</span>
-                      <span className="text-[9px] font-bold text-[#b2ebf2] truncate w-full">{dimDeck.supporterHero.name}</span>
-                      <span className="text-[8px] text-[#80deea] font-mono">Lv.{dimDeck.supporterHero.level}</span>
-                    </div>
-                  )}
                 </div>
               </div>
             )}
@@ -2401,8 +2944,85 @@ export const ArenaScreen: React.FC = () => {
               </div>
             )}
 
+            {/* 🌱 프리시즌 AI 전술 훈련 리그 안내 배너 */}
+            <div className="p-3 rounded-xl bg-gradient-to-r from-[#00d2ff18] via-[#38ef7d15] to-[#00d2ff18] border border-[#00d2ff55] flex items-center justify-between shadow-sm">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-xl shrink-0">🌱</span>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-xs font-bold text-white">프리시즌 AI 전술 훈련 리그 진행 중</span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66]">
+                      PRE-SEASON
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-[#b0bec5] truncate block mt-0.5">
+                    브론즈부터 마스터까지 전 등급 AI 봇이 균등 배치되어 3인 홀덤 & 피버 전략을 연습할 수 있습니다.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 🚫 주간 차원의 금기 & 블러핑 앤 쇼다운 룰 배너 */}
+            <div className="p-3 rounded-xl bg-gradient-to-r from-[#170e28] via-[#24133b] to-[#120a21] border border-[#7e57c266] flex flex-col gap-2 shadow-md">
+              <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-1.5 font-bold text-[#d1c4e9]">
+                  <span>🔮</span>
+                  <span>이번 주의 차원 칙령:</span>
+                  <span className="text-[#ffd54f] font-black">【블러핑 앤 쇼다운】</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-[#00d2ff18] hover:bg-[#00d2ff33] text-[#00d2ff] border border-[#00d2ff44] font-bold flex items-center gap-1 cursor-pointer transition-all"
+                    onClick={() => {
+                      navigateTo('citadel');
+                      gm.emit('openDimensionalBarracks');
+                    }}
+                    title="성채 병영의 차원 결투 부대 편성 화면으로 이동"
+                  >
+                    <span>🏛️</span>
+                    <span>부대 편성</span>
+                  </button>
+                  <button
+                    className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-[#7e57c233] hover:bg-[#7e57c255] text-[#ce93d8] border border-[#7e57c255] font-bold flex items-center gap-1 cursor-pointer transition-all"
+                    onClick={() => setIsCodexModalOpen(true)}
+                  >
+                    <span>📜 족보 도감 열람</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 주간 가위바위보 상성 순환 안내 */}
+              <div className="flex items-center justify-between text-[10.5px] bg-black/40 rounded-lg px-2.5 py-1.5 border border-[#7e57c233]">
+                <div className="flex items-center gap-1 text-[#ffd54f]">
+                  <span>⚖️</span>
+                  <span className="font-bold">{weeklyAffinity.title}:</span>
+                </div>
+                <span className="font-mono font-bold text-[#80d8ff] tracking-tight">
+                  {weeklyAffinity.relationText}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-[11px] text-[#b0bec5] px-0.5">
+                <div className="flex items-center gap-1">
+                  <span className="text-[#ff5252] font-bold">🚫 금지 배지:</span>
+                  <span className="font-mono font-bold text-[#ff8a80] bg-[#ff525222] px-1.5 py-0.2 rounded border border-[#ff525244]">
+                    💥 CRIT (치명 일격 획득 불가)
+                  </span>
+                </div>
+                <span className="text-[10px] text-[#80d8ff] font-medium">
+                  🃏 3인 홀덤 실루엣 (2 공개 + 1 히든)
+                </span>
+              </div>
+            </div>
+
             <div className="flex items-center justify-between text-xs text-[#8b9bb4] px-1">
-              <span>도전 가능한 경쟁 지휘관 부대 (3인 덱)</span>
+              <span className="flex items-center gap-1.5">
+                <span className="text-[#00d2ff]">⚔️</span>
+                <span className="font-bold text-white">도전 가능한 AI 봇 대진표</span>
+                <span className="text-[9.5px] text-[#8b9bb4]">
+                  (내 등급 <strong className="text-white">[{getRankBadge(state.currentArenaRating).label}]</strong> 맞춤 대진 & 상위 승급전)
+                </span>
+              </span>
               <button
                 className="text-[11px] text-[#00d2ff] hover:underline flex items-center gap-1 cursor-pointer"
                 onClick={refreshOpponents}
@@ -2434,6 +3054,11 @@ export const ArenaScreen: React.FC = () => {
                         <span className="text-[10px] px-1.5 py-0.2 rounded font-mono font-bold shrink-0" style={{ background: oppBadge.bg, color: oppBadge.color, border: `1px solid ${oppBadge.border}` }}>
                           {oppBadge.label}
                         </span>
+                        {opp.isPromotion && (
+                          <span className="text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff980025] text-[#ffd54f] border border-[#ff980066] shrink-0 font-mono flex items-center gap-0.5 animate-pulse">
+                            🔥 승급 도전
+                          </span>
+                        )}
                       </div>
                       <div className="text-[11px] text-[#8b9bb4] mt-0.5 truncate">{opp.guild} · Rank #{opp.rank}</div>
                     </div>
@@ -2455,15 +3080,31 @@ export const ArenaScreen: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* 카드 하단: 방어 진형 5인 덱 칩 */}
-                  <div className="grid grid-cols-5 gap-1 p-1.5 rounded-lg bg-[#141b2b] border border-[#222d42] w-full">
-                    {opp.defenseDeck.map((hero, idx) => (
-                      <div key={idx} className="flex flex-col items-center justify-center gap-0.5 text-[9px] text-[#cfd8dc] bg-[#1a2338] px-1 py-1 rounded border border-[#2c3b59] min-w-0 text-center">
-                        <span className="text-[9px] font-bold text-[#00d2ff] shrink-0">{idx < 2 ? '전열' : idx === 2 ? '중열' : '후열'}</span>
-                        <span className="font-medium truncate w-full">{hero.title}</span>
-                        <span className="text-[8px] text-[#8b9bb4] font-mono shrink-0">Lv.{hero.level}</span>
-                      </div>
-                    ))}
+                  {/* 카드 하단: 방어 진형 3인 덱 칩 (홀덤 실루엣: 2 공개 + 1 히든) */}
+                  <div className="grid grid-cols-3 gap-1.5 p-1.5 rounded-lg bg-[#141b2b] border border-[#222d42] w-full">
+                    {opp.defenseDeck.slice(0, 3).map((hero, idx) => {
+                      const isHidden = idx === 2; // 후열 블라인드
+                      return (
+                        <div
+                          key={idx}
+                          className={`flex flex-col items-center justify-center gap-0.5 text-[9px] px-1 py-1.5 rounded border min-w-0 text-center ${
+                            isHidden
+                              ? 'bg-gradient-to-br from-[#211233] to-[#120a1c] border-[#7e57c266] text-[#ce93d8]'
+                              : 'bg-[#1a2338] border-[#2c3b59] text-[#cfd8dc]'
+                          }`}
+                        >
+                          <span className="text-[9px] font-bold text-[#00d2ff] shrink-0">
+                            {idx === 0 ? '전열' : idx === 1 ? '중열' : '후열 ❓'}
+                          </span>
+                          <span className="font-semibold truncate w-full">
+                            {isHidden ? '❓ [비공개]' : hero.title}
+                          </span>
+                          <span className="text-[8px] font-mono shrink-0 text-[#8b9bb4]">
+                            {isHidden ? '히든 실루엣' : `Lv.${hero.level}`}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
 
                 </div>
@@ -2472,13 +3113,19 @@ export const ArenaScreen: React.FC = () => {
           </div>
         )}
 
-        {/* ── 2. 클라우드 랭킹 탭 ── */}
+        {/* ── 2. 프리시즌 랭킹 탭 ── */}
         {tab === 'ranking' && (
           <div className="flex flex-col gap-2 w-full max-w-full">
             <div className="flex items-center justify-between text-xs text-[#8b9bb4] px-1">
-              <span>'Firebase Realtime DB 실시간 시즌 랭킹'</span>
+              <span className="flex items-center gap-1.5 font-bold text-[#b0bec5]">
+                <span className="text-[#38ef7d]">🌱</span>
+                <span>프리시즌 AI 전술 훈련 리그 순위표</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55]">
+                  AI LEAGUE
+                </span>
+              </span>
               <button
-                className="text-[11px] text-[#00d2ff] hover:underline flex items-center gap-1"
+                className="text-[11px] text-[#00d2ff] hover:underline flex items-center gap-1 cursor-pointer"
                 onClick={fetchLeaderboard}
                 disabled={isLoadingLb}
               >
@@ -2489,7 +3136,7 @@ export const ArenaScreen: React.FC = () => {
             {/* 내 순위 핀 카드 */}
             <div className="panel-accent p-3 flex items-center gap-2.5 border-2 border-[#00d2ff] bg-[#0c1b29] w-full max-w-full">
               <div className="font-mono text-base font-bold w-8 text-center text-[#00d2ff] shrink-0">
-                #{state.currentArenaRank}
+                #{leaderboard.find(e => e.isPlayer)?.rank || state.currentArenaRank}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
@@ -2522,6 +3169,15 @@ export const ArenaScreen: React.FC = () => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="font-bold text-xs text-white truncate">{entry.nickname}</span>
+                        {entry.isPlayer ? (
+                          <span className="text-[8.5px] px-1.5 py-0.2 rounded font-bold bg-[#00d2ff22] text-[#00d2ff] font-mono shrink-0">
+                            ME
+                          </span>
+                        ) : (
+                          <span className="text-[8.5px] px-1.5 py-0.2 rounded font-bold bg-[#ff704322] text-[#ff7043] border border-[#ff704344] font-mono shrink-0">
+                            🤖 AI 봇
+                          </span>
+                        )}
                         <span className="text-[9px] text-[#8b9bb4] shrink-0">Lv.{entry.level}</span>
                       </div>
                       <div className="text-[10px] text-[#6e82a0] truncate">{entry.leaderTitle}</div>
@@ -2698,6 +3354,305 @@ export const ArenaScreen: React.FC = () => {
             </div>
           </div>
 
+          {/* 🏆 피버콜 3승 선착 스코어보드 (Fever 3-Win Domination) */}
+          <div className="w-full max-w-[500px] flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#090d19]/90 border border-amber-500/40 shadow-lg text-xs mt-1 z-10 backdrop-blur-sm">
+            <div className="flex items-center gap-1.5">
+              <span className="font-extrabold text-cyan-300 text-[11px] flex items-center gap-1">
+                <span>🛡️</span>
+                <span>아군 피버</span>
+              </span>
+              <div className="flex items-center gap-1 text-sm bg-black/40 px-1.5 py-0.5 rounded border border-cyan-500/30">
+                {[0, 1, 2].map(i => (
+                  <span
+                    key={i}
+                    className={i < playerFeverWins ? 'text-amber-400 drop-shadow-[0_0_6px_rgba(255,213,79,0.8)]' : 'text-stone-700'}
+                  >
+                    {i < playerFeverWins ? '⭐' : '☆'}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <span className="text-[10px] font-black text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/50 font-mono tracking-wider shadow-inner">
+              ⚡ 3승 선착 시 즉시 압승 ⚡
+            </span>
+
+            <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1 text-sm bg-black/40 px-1.5 py-0.5 rounded border border-red-500/30">
+                {[0, 1, 2].map(i => (
+                  <span
+                    key={i}
+                    className={i < oppFeverWins ? 'text-red-400 drop-shadow-[0_0_6px_rgba(255,82,82,0.8)]' : 'text-stone-700'}
+                  >
+                    {i < oppFeverWins ? '🔴' : '⚪'}
+                  </span>
+                ))}
+              </div>
+              <span className="font-extrabold text-red-400 text-[11px] flex items-center gap-1">
+                <span>적군 피버</span>
+                <span>⚔️</span>
+              </span>
+            </div>
+          </div>
+
+          {/* ⚔️🔥 피버 쇼다운 (Fever Showdown) 몰입형 순차 뱃지 오픈 & 승자 광채 오버레이 */}
+          {isShowdownCutin && showdownResult && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/85 backdrop-blur-md animate-fade-in pointer-events-auto cursor-pointer"
+              onClick={() => {
+                if (!isShowdownEvaluated) {
+                  setShowdownRevealIndex(5);
+                  setIsShowdownEvaluated(true);
+                } else {
+                  setIsShowdownCutin(false);
+                  isShowdownCutinRef.current = false;
+                  setShowdownResult(null);
+                  setShowdownRevealIndex(0);
+                  setIsShowdownEvaluated(false);
+                  executeFeverUltimateAfterShowdown(showdownResult, playerFeverWins >= 3, oppFeverWins >= 3);
+                }
+              }}
+              title="화면을 터치하면 궁극기 연출로 즉시 스킵됩니다"
+            >
+              <div
+                className={`relative w-full max-w-md p-4 sm:p-5 rounded-3xl border-2 transition-all duration-500 flex flex-col gap-3 text-center shadow-2xl overflow-hidden ${
+                  !isShowdownEvaluated
+                    ? 'bg-[#0c1220] border-[#00d2ff66] shadow-[0_0_40px_rgba(0,210,255,0.25)]'
+                    : showdownResult.outcome === 'player_win'
+                    ? 'bg-gradient-to-b from-[#0a1e36] via-[#081526] to-[#040912] border-[#00d2ff] shadow-[0_0_60px_rgba(0,210,255,0.7)]'
+                    : showdownResult.outcome === 'opp_win'
+                    ? 'bg-gradient-to-b from-[#2e0911] via-[#1a050a] to-[#0d0205] border-[#ff1744] shadow-[0_0_60px_rgba(255,23,68,0.7)]'
+                    : 'bg-gradient-to-b from-[#2a220a] via-[#171305] to-[#0c0902] border-[#ffd54f] shadow-[0_0_60px_rgba(255,213,79,0.7)]'
+                }`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* 승리 시 배경 방사형 광채 레이어 */}
+                {isShowdownEvaluated && (
+                  <div
+                    className="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen animate-pulse"
+                    style={{
+                      background: showdownResult.outcome === 'player_win'
+                        ? 'radial-gradient(circle at center, #00d2ff 0%, transparent 70%)'
+                        : showdownResult.outcome === 'opp_win'
+                        ? 'radial-gradient(circle at center, #ff1744 0%, transparent 70%)'
+                        : 'radial-gradient(circle at center, #ffd54f 0%, transparent 70%)'
+                    }}
+                  />
+                )}
+
+                {/* 1. 상단 헤더: FEVER SHOWDOWN & 진행 인디케이터 */}
+                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xl animate-spin">🔥</span>
+                    <span className="font-black text-sm text-white tracking-widest uppercase font-cinzel">
+                      FEVER SHOWDOWN
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[10px] font-mono">
+                    {!isShowdownEvaluated ? (
+                      <span className="text-[#00d2ff] font-bold animate-pulse flex items-center gap-1">
+                        <span>🃏</span>
+                        <span>배지 오픈 {showdownRevealIndex}/5</span>
+                      </span>
+                    ) : (
+                      <span className={`font-extrabold px-2 py-0.5 rounded-full ${
+                        showdownResult.outcome === 'player_win'
+                          ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff88]'
+                          : showdownResult.outcome === 'opp_win'
+                          ? 'bg-[#ff174422] text-[#ff5252] border border-[#ff174488]'
+                          : 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f88]'
+                      }`}>
+                        {showdownResult.outcome === 'player_win' ? '🎉 아군 승리' : showdownResult.outcome === 'opp_win' ? '💀 적군 승리' : '⚡ 전술 무승부'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* ── 2. 적군 결투 부대 (ENEMY SIDE) ── */}
+                <div className={`p-2.5 rounded-2xl border transition-all duration-500 flex flex-col gap-2 relative ${
+                  isShowdownEvaluated && showdownResult.outcome === 'opp_win'
+                    ? 'bg-gradient-to-r from-[#3b0d18] via-[#521322] to-[#3b0d18] border-[#ff1744] shadow-[0_0_35px_rgba(255,23,68,0.95)] ring-2 ring-[#ff5252]'
+                    : isShowdownEvaluated && showdownResult.outcome === 'player_win'
+                    ? 'bg-[#120a10]/60 border-[#2b1822] opacity-45 grayscale'
+                    : 'bg-[#150d18] border-[#38203c]'
+                }`}>
+                  <div className="flex items-center justify-between text-xs px-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs">💀</span>
+                      <span className="font-bold text-[#ff80ab] text-[11px]">상대 결투 부대</span>
+                    </div>
+                    {isShowdownEvaluated && (
+                      <span className="text-[10px] font-mono text-[#ff80ab]">
+                        점수 {showdownResult.oppScore} P
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 5개 뱃지 슬롯 (순차 오픈) */}
+                  <div className="grid grid-cols-5 gap-1.5">
+                    {[0, 1, 2, 3, 4].map((idx) => {
+                      const isRevealed = idx < showdownRevealIndex;
+                      const badgeType = showdownOppBadges[idx];
+                      const meta = badgeType ? FEVER_BADGE_META[badgeType] : null;
+
+                      return (
+                        <div
+                          key={idx}
+                          className={`h-11 rounded-xl flex flex-col items-center justify-center gap-0.5 border transition-all duration-300 text-center ${
+                            isRevealed && meta
+                              ? 'scale-100 rotate-0 shadow-md animate-scale-up'
+                              : 'scale-95 bg-[#1f1124] border-[#43234d] text-stone-600'
+                          }`}
+                          style={isRevealed && meta ? {
+                            background: meta.bg,
+                            borderColor: meta.borderColor,
+                            color: meta.color
+                          } : {}}
+                        >
+                          {isRevealed && meta ? (
+                            <>
+                              <span className="text-sm leading-none drop-shadow">{meta.icon}</span>
+                              <span className="text-[7.5px] font-black tracking-tight">{meta.shortLabel}</span>
+                            </>
+                          ) : (
+                            <span className="text-xs font-mono font-bold text-purple-400/50">🎴</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* 적군 족보 배너 (승리 시 광채 연출) */}
+                  <div className={`py-1.5 px-3 rounded-xl border flex items-center justify-between transition-all duration-500 ${
+                    !isShowdownEvaluated
+                      ? 'bg-black/40 border-stone-800 text-stone-500'
+                      : showdownResult.outcome === 'opp_win'
+                      ? 'bg-gradient-to-r from-[#ff174455] via-[#ff525244] to-[#ff174455] border-[#ff1744] text-white shadow-lg shadow-[#ff174488]'
+                      : 'bg-black/50 border-stone-800 text-stone-400'
+                  }`}>
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span className="text-sm">{isShowdownEvaluated ? showdownResult.oppSynergy.icon : '❓'}</span>
+                      <span className="font-extrabold text-xs truncate">
+                        {isShowdownEvaluated ? showdownResult.oppSynergy.name : '족보 분석 중...'}
+                      </span>
+                    </div>
+                    {isShowdownEvaluated && showdownResult.outcome === 'opp_win' && (
+                      <span className="text-[9px] font-black px-1.5 py-0.2 rounded bg-[#ff1744] text-white font-mono animate-bounce shrink-0">
+                        👑 WINNER
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* ── ⚡ VS 상성 판정 바 (중앙 격돌) ── */}
+                <div className="flex items-center justify-center gap-2 py-0.5">
+                  <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-[#ffd54f66]" />
+                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-[#ffd54f55] shadow-md">
+                    <span className="text-xs">⚖️</span>
+                    <span className="text-[10px] font-mono font-bold text-[#ffd54f] tracking-tight">
+                      {showdownResult.bannerTitle}
+                    </span>
+                  </div>
+                  <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-[#ffd54f66]" />
+                </div>
+
+                {/* ── 3. 아군 결투 부대 (PLAYER SIDE) ── */}
+                <div className={`p-2.5 rounded-2xl border transition-all duration-500 flex flex-col gap-2 relative ${
+                  isShowdownEvaluated && showdownResult.outcome === 'player_win'
+                    ? 'bg-gradient-to-r from-[#0d2847] via-[#103a68] to-[#0d2847] border-[#00d2ff] shadow-[0_0_40px_rgba(0,210,255,0.95)] ring-2 ring-[#00e5ff]'
+                    : isShowdownEvaluated && showdownResult.outcome === 'opp_win'
+                    ? 'bg-[#0a121e]/60 border-[#14233a] opacity-45 grayscale'
+                    : 'bg-[#0d1829] border-[#1d3558]'
+                }`}>
+                  <div className="flex items-center justify-between text-xs px-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs">🛡️</span>
+                      <span className="font-bold text-[#80d8ff] text-[11px]">내 차원 결투 부대</span>
+                    </div>
+                    {isShowdownEvaluated && (
+                      <span className="text-[10px] font-mono text-[#80d8ff]">
+                        점수 {showdownResult.playerScore} P
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 5개 뱃지 슬롯 (순차 오픈) */}
+                  <div className="grid grid-cols-5 gap-1.5">
+                    {[0, 1, 2, 3, 4].map((idx) => {
+                      const isRevealed = idx < showdownRevealIndex;
+                      const badgeType = showdownPlayerBadges[idx];
+                      const meta = badgeType ? FEVER_BADGE_META[badgeType] : null;
+
+                      return (
+                        <div
+                          key={idx}
+                          className={`h-11 rounded-xl flex flex-col items-center justify-center gap-0.5 border transition-all duration-300 text-center ${
+                            isRevealed && meta
+                              ? 'scale-100 rotate-0 shadow-md animate-scale-up'
+                              : 'scale-95 bg-[#0f1d33] border-[#1b355e] text-cyan-700/50'
+                          }`}
+                          style={isRevealed && meta ? {
+                            background: meta.bg,
+                            borderColor: meta.borderColor,
+                            color: meta.color
+                          } : {}}
+                        >
+                          {isRevealed && meta ? (
+                            <>
+                              <span className="text-sm leading-none drop-shadow">{meta.icon}</span>
+                              <span className="text-[7.5px] font-black tracking-tight">{meta.shortLabel}</span>
+                            </>
+                          ) : (
+                            <span className="text-xs font-mono font-bold text-cyan-400/50">🎴</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* 아군 족보 배너 (승리 시 눈부신 황금/청록 광채) */}
+                  <div className={`py-1.5 px-3 rounded-xl border flex items-center justify-between transition-all duration-500 ${
+                    !isShowdownEvaluated
+                      ? 'bg-black/40 border-stone-800 text-stone-500'
+                      : showdownResult.outcome === 'player_win'
+                      ? 'bg-gradient-to-r from-[#00d2ff44] via-[#ffd54f33] to-[#00d2ff44] border-[#00d2ff] text-white shadow-lg shadow-[#00d2ff99]'
+                      : 'bg-black/50 border-stone-800 text-stone-400'
+                  }`}>
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span className="text-sm">{isShowdownEvaluated ? showdownResult.playerSynergy.icon : '❓'}</span>
+                      <span className={`font-extrabold text-xs truncate ${
+                        isShowdownEvaluated && showdownResult.outcome === 'player_win' ? 'text-[#ffd54f] drop-shadow-[0_0_8px_rgba(255,213,79,0.8)]' : ''
+                      }`}>
+                        {isShowdownEvaluated ? showdownResult.playerSynergy.name : '족보 분석 중...'}
+                      </span>
+                    </div>
+                    {isShowdownEvaluated && showdownResult.outcome === 'player_win' && (
+                      <span className="text-[9px] font-black px-2 py-0.5 rounded bg-gradient-to-r from-[#00d2ff] to-[#ffd54f] text-black font-mono animate-bounce shrink-0 shadow-md">
+                        👑 WINNER!
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* ── 4. 하단: 해설 및 오퍼레이터 궁극기 연계 ── */}
+                {isShowdownEvaluated && (
+                  <div className="p-2.5 rounded-xl bg-black/60 border border-white/10 flex flex-col gap-1 text-center animate-fade-in">
+                    <div className="text-[11px] text-white font-bold truncate">
+                      {showdownResult.narrative}
+                    </div>
+                    {showdownResult.outcome === 'player_win' && (
+                      <div className="text-[10px] text-[#ffd54f] font-mono flex items-center justify-center gap-1">
+                        <span>💥</span>
+                        <span>전술 오퍼레이터 궁극기 연계 발동!</span>
+                      </div>
+                    )}
+                    <span className="text-[8.5px] text-stone-400 mt-0.5">화면을 터치하면 즉시 전장으로 이어집니다.</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* 👑 아군 리더 궁극기 컷인 배너 오버레이 */}
           {isLeaderUltCutin && (
             <div className="absolute inset-x-0 top-1/4 z-50 flex items-center justify-center p-3 animate-bounce pointer-events-none">
@@ -2832,14 +3787,22 @@ export const ArenaScreen: React.FC = () => {
               <FeverGaugeBar
                 badges={oppFeverBadges}
                 party={oppTeam.map(c => ({ classId: c.classId } as any))}
-                label="ENEMY FEVER"
+                label={
+                  oppFeverBadges.length >= 5 && feverBadges.length < 5
+                    ? "ENEMY FEVER (아군 대기 중 ⏳)"
+                    : oppFeverBadges.length >= 5 && feverBadges.length >= 5
+                    ? "FEVER SHOWDOWN READY! 🔥"
+                    : "ENEMY FEVER"
+                }
                 side="enemy"
+                isBluffing={true}
+                revealAll={isShowdownCutin}
               />
             </div>
 
-            {/* ── 2. 중앙 배틀 아레나 (액션 배너 전용) ── */}
+            {/* ── 2. 중앙 배틀 아레나 (액션 배너 & 양측 피버 대기 현황) ── */}
             <div className="h-10 w-full relative flex flex-col items-center justify-center pointer-events-none my-1">
-              {actionBanner && (
+              {actionBanner ? (
                 <div className="px-4 py-1 rounded-full bg-[#0d1527ee] border border-[#00d2ff66] shadow-xl animate-scale-up text-center max-w-[90%] z-20">
                   <span className="text-xs font-bold block" style={{ color: actionBanner.color }}>
                     {actionBanner.text}
@@ -2848,7 +3811,19 @@ export const ArenaScreen: React.FC = () => {
                     {actionBanner.sub}
                   </span>
                 </div>
-              )}
+              ) : (feverBadges.length >= 5 && oppFeverBadges.length < 5) ? (
+                <div className="px-3 py-1 rounded-full bg-[#ffd54f15] border border-[#ffd54f55] text-center z-10 animate-pulse">
+                  <span className="text-[10px] font-bold text-[#ffd54f]">
+                    ⚡ 아군 피버 만충! 상대의 피버 배지({oppFeverBadges.length}/5)가 모두 모이면 피버콜이 격돌합니다.
+                  </span>
+                </div>
+              ) : (oppFeverBadges.length >= 5 && feverBadges.length < 5) ? (
+                <div className="px-3 py-1 rounded-full bg-[#ff416c15] border border-[#ff416c55] text-center z-10 animate-pulse">
+                  <span className="text-[10px] font-bold text-[#ff80ab]">
+                    ⚠️ 상대 피버 만충! 아군의 피버 배지({feverBadges.length}/5)가 모두 모이면 피버콜이 격돌합니다.
+                  </span>
+                </div>
+              ) : null}
             </div>
 
             {/* ── 🔥 아군 피버 게이지 ── */}
@@ -2856,8 +3831,16 @@ export const ArenaScreen: React.FC = () => {
               <FeverGaugeBar
                 badges={feverBadges}
                 party={playerTeam.map(c => ({ classId: c.classId } as any))}
-                label="PLAYER FEVER"
+                label={
+                  feverBadges.length >= 5 && oppFeverBadges.length < 5
+                    ? "PLAYER FEVER (상대 대기 중 ⏳)"
+                    : feverBadges.length >= 5 && oppFeverBadges.length >= 5
+                    ? "FEVER SHOWDOWN READY! 🔥"
+                    : "PLAYER FEVER"
+                }
                 side="player"
+                isBluffing={true}
+                revealAll={isShowdownCutin}
               />
             </div>
 
@@ -3182,6 +4165,180 @@ export const ArenaScreen: React.FC = () => {
             </div>
           )}
 
+        </div>
+      )}
+
+      {/* 📜 피버 족보 & 상성 대도감 (Grand Codex Modal) */}
+      {isCodexModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#14161f] border-2 border-[#ffcc00]/50 rounded-2xl shadow-2xl overflow-hidden text-stone-200">
+            {/* 모달 헤더 */}
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#241a10] via-[#1c2236] to-[#121624] border-b border-[#ffcc00]/30">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">📜</span>
+                <div>
+                  <h2 className="text-xl font-bold text-[#ffdd66] tracking-wide flex items-center gap-2">
+                    차원 아레나: 피버 족보 & 상성 대도감
+                    <span className="text-xs px-2 py-0.5 rounded bg-[#ffcc00]/20 text-[#ffcc00] border border-[#ffcc00]/40 font-mono">
+                      GRAND CODEX
+                    </span>
+                  </h2>
+                  <p className="text-xs text-stone-400">
+                    3인의 수호자가 엮어내는 전술 포커의 위계와 주간 차원율의 상성을 한눈에 확인하십시오.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsCodexModalOpen(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-stone-800/80 hover:bg-stone-700 text-stone-400 hover:text-white transition-colors"
+                title="닫기"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* 모달 본문 (스크롤) */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
+              {/* 섹션 1: 이번 주의 차원율 및 상성 규칙 */}
+              <div className="p-4 rounded-xl bg-gradient-to-br from-[#1a2035] to-[#121526] border border-cyan-500/30">
+                <div className="flex items-center justify-between mb-3 border-b border-cyan-500/20 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🌌</span>
+                    <span className="font-bold text-cyan-300 text-base">이번 주의 차원율: {weeklyAffinity.title}</span>
+                  </div>
+                  <span className="text-xs text-cyan-400/80 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800">
+                    매주 월요일 00:00 순환
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
+                  <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
+                    <span className="text-xs text-stone-400 font-semibold mb-1">상성 순환 구조</span>
+                    <span className="text-xs font-bold text-amber-300 tracking-wider">
+                      {weeklyAffinity.relationText}
+                    </span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
+                    <span className="text-xs text-stone-400 font-semibold mb-1">상성 우위 특전</span>
+                    <span className="text-xs text-emerald-400 font-bold">
+                      족보 맞대결 시 판정 계급 +1단계 보너스
+                    </span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-black/40 border border-red-900/40 flex flex-col items-center text-center">
+                    <span className="text-xs text-red-400 font-semibold mb-1">🚫 이번 주 금기 배지</span>
+                    <span className="text-xs text-red-300 font-bold">
+                      회심 배지(Crit) 발동 불가
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-stone-400 bg-black/30 p-2.5 rounded border border-stone-800/80 leading-relaxed">
+                  💡 <strong className="text-stone-300">상성 판정 원리:</strong> 양측이 완성한 피버 족보의 계열(돌파/수호/변칙)을 대조하여 우위인 쪽은 족보 판정에서 1단계 높은 족보로 인정받습니다. (예: 상대의 원페어 vs 나의 하이카드이나 상성 우위 시 무승부 또는 역전 가능!)
+                </p>
+              </div>
+
+              {/* 섹션 2: 배지 가중치 총점제 (하이 카드 판정) */}
+              <div className="p-4 rounded-xl bg-gradient-to-br from-[#241d14] to-[#171410] border border-amber-500/30">
+                <div className="flex items-center justify-between mb-2 border-b border-amber-500/20 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">⚖️</span>
+                    <span className="font-bold text-amber-300 text-base">배지 가중치 총점표 (High Card Score)</span>
+                  </div>
+                  <span className="text-xs text-amber-400/80 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800">
+                    노페어(전술 파동) 발생 시 적용
+                  </span>
+                </div>
+                <p className="text-xs text-stone-400 mb-3">
+                  양측 모두 유효한 족보를 완성하지 못해 <strong>[전술 파동(High Card)]</strong>으로 격돌할 경우, 게이지 5칸에 누적된 배지들의 개별 가중치 총점을 합산하여 승패를 결정합니다.
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                  {[
+                    { badge: 'extra', label: '연계 (Extra)', score: 35, desc: '스킬 콤보·추가타', color: 'border-purple-500/40 bg-purple-950/30 text-purple-300' },
+                    { badge: 'counter', label: '반격 (Counter)', score: 30, desc: '적 턴 반격 반응', color: 'border-orange-500/40 bg-orange-950/30 text-orange-300' },
+                    { badge: 'crit', label: '치명 (Crit)', score: 25, desc: '회심의 일격', color: 'border-red-500/40 bg-red-950/30 text-red-300' },
+                    { badge: 'break', label: '파쇄 (Break)', score: 20, desc: '방어 분쇄·실드 관통', color: 'border-yellow-500/40 bg-yellow-950/30 text-yellow-300' },
+                    { badge: 'guard', label: '방어 (Guard)', score: 15, desc: '철벽 방어·막기', color: 'border-blue-500/40 bg-blue-950/30 text-blue-300' },
+                    { badge: 'assist', label: '지원 (Assist)', score: 15, desc: '아군 버프·정화', color: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-300' },
+                    { badge: 'heal', label: '치유 (Heal)', score: 10, desc: '생명력 회복', color: 'border-pink-500/40 bg-pink-950/30 text-pink-300' },
+                    { badge: 'evade', label: '회피 (Evade)', score: 10, desc: '완전 회피 기동', color: 'border-cyan-500/40 bg-cyan-950/30 text-cyan-300' },
+                  ].map((item) => (
+                    <div key={item.badge} className={`p-2 rounded-lg border flex flex-col justify-between ${item.color}`}>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-bold">{item.label}</span>
+                        <span className="font-mono font-black text-amber-300 text-sm">{item.score}점</span>
+                      </div>
+                      <span className="text-[10px] text-stone-400">{item.desc}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 섹션 3: 12종 포커 피버 시너지 족보 전체 목록 */}
+              <div>
+                <div className="flex items-center justify-between mb-3 border-b border-stone-800 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🃏</span>
+                    <span className="font-bold text-white text-base">차원 피버 12대 전술 족보 (Synergy Rankings)</span>
+                  </div>
+                  <span className="text-xs text-stone-400">위계 순위 높은 순 정렬</span>
+                </div>
+
+                <div className="space-y-2.5">
+                  {ALL_FEVER_SYNERGIES_CODEX.map((synergy, idx) => {
+                    const affinityMeta = FEVER_AFFINITY_META[synergy.affinity];
+                    return (
+                      <div
+                        key={synergy.id}
+                        className="p-3 rounded-xl bg-stone-900/70 border border-stone-800 hover:border-amber-500/50 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                      >
+                        <div className="flex items-start sm:items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-black/60 border border-stone-700 flex flex-col items-center justify-center shrink-0">
+                            <span className="text-[10px] text-stone-400 font-mono">RANK</span>
+                            <span className="text-xs font-black text-amber-400 font-mono">#{idx + 1}</span>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-bold text-stone-100 text-sm">{synergy.name}</span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 border border-stone-700 text-stone-300 font-mono">
+                                {synergy.handRankLabel}
+                              </span>
+                              <span
+                                className="text-[10px] px-1.5 py-0.5 rounded border font-semibold flex items-center gap-1"
+                                style={{
+                                  backgroundColor: `${affinityMeta.color}1a`,
+                                  borderColor: `${affinityMeta.color}66`,
+                                  color: affinityMeta.color
+                                }}
+                              >
+                                {affinityMeta.icon} {affinityMeta.label}
+                              </span>
+                            </div>
+                            <div className="text-xs text-stone-400 mt-0.5">
+                              {synergy.summary}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="sm:text-right shrink-0 bg-black/40 px-3 py-1.5 rounded-lg border border-stone-800/80 w-full sm:w-auto">
+                          <div className="text-[10px] text-stone-500 font-semibold">필요 배지 조건</div>
+                          <div className="text-xs text-amber-300/95 font-mono">{synergy.requiredBadges}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* 모달 푸터 */}
+            <div className="px-6 py-3 bg-[#11131c] border-t border-stone-800 flex justify-end">
+              <ActionButton
+                label="확인 (닫기)"
+                variant="secondary"
+                className="px-6 py-1.5 text-xs font-bold"
+                onClick={() => setIsCodexModalOpen(false)}
+              />
+            </div>
+          </div>
         </div>
       )}
 
