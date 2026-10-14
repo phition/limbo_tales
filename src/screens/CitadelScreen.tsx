@@ -3744,7 +3744,7 @@ const BarracksDrawer: React.FC<{
           onClick={() => setBarracksCategory('dungeon')}
         >
           <span>⚔️</span>
-          <span>던전 원정대 (3인)</span>
+          <span>던전 원정대</span>
           <span className="text-[10px] font-mono text-[#38ef7d]">({state.party.length}/3)</span>
         </button>
         <button
@@ -3756,7 +3756,7 @@ const BarracksDrawer: React.FC<{
           onClick={() => setBarracksCategory('dimensional')}
         >
           <span>{isAnchorUnlocked ? '🌌' : '🔒'}</span>
-          <span>차원 부대 편성 (3인 + OP)</span>
+          <span>차원 부대 편성</span>
           {isAnchorUnlocked ? (
             <span className="text-[10px] font-mono text-[#ffd54f]">({mainHeroes.length}/3 + {activeOperator ? 'OP' : '0'})</span>
           ) : (
