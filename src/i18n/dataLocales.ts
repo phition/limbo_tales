@@ -81,69 +81,69 @@ export const CLASS_NAMES: Record<string, Record<SupportedLanguage, { name: strin
 
 export const BUILDING_NAMES: Record<string, Record<SupportedLanguage, { name: string; desc: string }>> = {
   bonfire: {
-    ko: { name: '방주의 성화', desc: '신성한 성화. 목재를 공헌하여 생산량 +15%, 전투 EXP +20% 온기 버프 활성화' },
-    en: { name: 'Primal Bonfire', desc: 'Sacred flame. Offer wood for +15% production and +20% combat EXP warmth buff' },
-    ja: { name: '方舟の聖火', desc: '神聖なる聖火。木材を投入して生産量+15%、戦闘EXP+20%の温もりバフを有効化' }
+    ko: { name: '방주의 성화', desc: '신성한 성화. 목재를 공헌하여 생산량 +15%, 전투 EXP +20%, 영지 용병 지속 재생 온기 버프를 활성화합니다.' },
+    en: { name: 'Primal Bonfire', desc: 'Sacred flame. Offer wood to activate warmth buff for +15% production, +20% Combat EXP, and continuous regeneration for mercenaries.' },
+    ja: { name: '方舟の聖火', desc: '神聖なる聖火。木材を捧げて生産量+15%、戦闘EXP+20%、領地傭兵持続再生の温もりバフを有効化します。' }
   },
   cabin: {
-    ko: { name: '생존자 안식처', desc: '구출된 생존자 거주지. 방주에 세금(골드)을 13초마다 정기 납부합니다' },
-    en: { name: 'Survivor Haven', desc: 'Refugee shelter. Regularly pays gold taxes to the Ark every 13s' },
-    ja: { name: '生存者の安息所', desc: '救出された生存者の居住区。13秒ごとに方舟へ金貨の税金を納めます' }
+    ko: { name: '생존자 안식처', desc: '구출된 생존자 거주지. 방주에 세금(골드)을 13초마다 정기 납부합니다.' },
+    en: { name: 'Survivor Haven', desc: 'Shelter for rescued survivors. Regularly pays taxes (Gold) to the Ark every 13s.' },
+    ja: { name: '生存者の安息所', desc: '救出された生存者の居住区。13秒ごとに方舟へ税金（ゴールド）を定期納付します。' }
   },
   lumberCamp: {
-    ko: { name: '영목 벌채소', desc: '방주 외곽 목재 벌채 시설. 영지 증축과 성화 유지용 목재를 생산합니다' },
-    en: { name: 'Lumber Camp', desc: 'Ark timber mill. Harvests wood every 9s for citadel expansion & bonfire' },
-    ja: { name: '霊木伐採所', desc: '方舟郊外の伐採施設。領地増築と聖火維持のための木材を9秒ごとに生産' }
+    ko: { name: '영목 벌채소', desc: '방주 외곽 목재 벌채 시설. 영지 증축과 성화 유지에 필요한 목재를 9초마다 생산합니다.' },
+    en: { name: 'Lumber Camp', desc: 'Ark outer timber mill. Harvests wood every 9s required for citadel expansion & bonfire maintenance.' },
+    ja: { name: '霊木伐採所', desc: '方舟郊外の伐採施設。領地増築と聖火維持に必要な木材を9秒ごとに生産する。' }
   },
   quarry: {
-    ko: { name: '에테르 광맥 시추소', desc: '부유성 지반 채굴 시설. 11초마다 석재 및 룬 철광석을 발굴합니다' },
-    en: { name: 'Aether Quarry', desc: 'Subterranean drill. Extracts stone and runic iron ore every 11s' },
-    ja: { name: 'エーテル鉱脈採掘所', desc: '浮遊城の地盤採掘施設。11秒ごとに石材と鉄鉱石を発掘します' }
+    ko: { name: '에테르 광맥 시추소', desc: '부유성 지반 채굴 시설. 11초마다 석재를 생산하며 점차 철광석도 함께 발굴합니다.' },
+    en: { name: 'Aether Quarry', desc: 'Floating citadel bedrock quarry. Produces stone every 11s and gradually excavates iron ore as well.' },
+    ja: { name: 'エーテル鉱脈採掘所', desc: '浮遊城の地盤採掘施設。11秒ごとに石材を生産し、次第に鉄鉱石も発掘する。' }
   },
   butchery: {
-    ko: { name: '심연 생체 정제소', desc: '식량 정제 시설. 13초마다 보급 식량과 무두질 가죽을 가공합니다' },
-    en: { name: 'Abyssal Refinery', desc: 'Food refinery. Produces provisions and leather every 13s' },
-    ja: { name: '深淵生体精製所', desc: '食糧精製施設。13秒ごとに補給食糧と革を加工します' }
+    ko: { name: '심연 생체 정제소', desc: '식량 정제 시설. 13초마다 보급 식량을 생산하고 무두질 가죽을 가공합니다.' },
+    en: { name: 'Abyssal Refinery', desc: 'Food refinery. Produces rations and processes tanned leather every 13s.' },
+    ja: { name: '深淵生体精製所', desc: '食料精製施設。13秒ごとに補給食料を生産し、鞣し革を加工します。' }
   },
   tavern: {
-    ko: { name: '방랑자의 라운지', desc: '용병 고용소. 방랑 용병을 계약 영입하고 서브 퀘스트를 수주합니다' },
-    en: { name: 'Wanderer Lounge', desc: 'Mercenary guild. Recruit wandering heroes and accept bounty contracts' },
-    ja: { name: '放浪者のラウンジ', desc: '傭兵雇用所。放浪傭兵を契約雇用し、サブクエストを受注します' }
+    ko: { name: '방랑자의 라운지', desc: '용병 고용소. 방랑 용병을 계약 영입하고 서브 퀘스트를 수주하며 식량을 조달합니다.' },
+    en: { name: 'Wanderer Lounge', desc: 'Mercenary guild. Recruits wandering mercenaries, accepts sub-quests, and procures food.' },
+    ja: { name: '放浪者のラウンジ', desc: '傭兵雇用所。放浪傭兵を契約加入させ、サブクエストを受注し食糧を調達します。' }
   },
   blacksmith: {
-    ko: { name: '심연의 병기창', desc: '장비 공방. 전술 무기 및 방어구 단조, 장비 강화 및 인챈트를 수행합니다' },
-    en: { name: 'Ark Armory & Forge', desc: 'Tactical armory. Forge weapons/armor, enhance up to +10, apply enchants' },
-    ja: { name: '深淵の兵器廠', desc: '装備工房。戦術武器・防具の鍛造、装備強化およびエンチャントを行います' }
+    ko: { name: '심연의 병기창', desc: '장비 공방. 전술 무기 및 방어구 단조, 장비 강화 및 인챈트를 수행합니다.' },
+    en: { name: 'Ark Armory & Forge', desc: 'Tactical armory. Forge weapons/armor, enhance equipment, and apply enchants.' },
+    ja: { name: '深淵の兵器廠', desc: '装備工房。戦術武器・防具の鍛造、装備強化およびエンチャントを行います。' }
   },
   sanctuary: {
-    ko: { name: '영혼의 제단', desc: '클래스 승격 시설. 용병들의 상위 클래스 전직과 초월 각성을 집전합니다' },
-    en: { name: 'Soul Sanctuary', desc: 'Ascension altar. Conducts class promotions and transcendent awakenings' },
-    ja: { name: '魂の祭壇', desc: 'クラス昇格施設。傭兵の上位クラス転職と超越覚醒を執り行います' }
+    ko: { name: '영혼의 제단', desc: '클래스 승격 시설. 용병들의 상위 클래스 전직과 초월 각성을 집전합니다.' },
+    en: { name: 'Soul Sanctuary', desc: 'Class promotion facility. Conducts class promotions and transcendent awakenings for mercenaries.' },
+    ja: { name: '魂の祭壇', desc: 'クラス昇格施設。傭兵の上位クラス転職と超越覚醒を執り行います。' }
   },
   alchemy: {
-    ko: { name: '에테르 연금 공방', desc: '에테르 연금 및 마도 시설. 15초마다 에테르를 생산하고 마도서를 제본합니다' },
-    en: { name: 'Aether Alchemy Lab', desc: 'Arcane alchemy lab. Refines ether every 15s and crafts grimoires' },
-    ja: { name: 'エーテル錬金工房', desc: 'エーテル錬金施設。15秒ごとにエーテルを生産し魔導書を製本します' }
+    ko: { name: '에테르 연금 공방', desc: '에테르 연금 및 마도 시설. 15초마다 에테르를 정기 생산하고 마도서를 제본합니다.' },
+    en: { name: 'Aether Alchemy Lab', desc: 'Ether alchemy and magic facility. Regularly produces ether every 15s and crafts grimoires.' },
+    ja: { name: 'エーテル錬金工房', desc: 'エーテル錬金および魔導施設。15秒ごとにエーテルを定期生産し魔導書を製本します。' }
   },
   arenaGate: {
-    ko: { name: '차원 앵커 게이트', desc: '차원 관문. 비동기 랭킹 결투, 네메시스 레이드 및 영지 침공을 지원합니다' },
-    en: { name: 'Dimensional Gate', desc: 'Interdimensional rift. Supports asynchronous PVP duels and Nemesis raids' },
-    ja: { name: '次元アンカーゲート', desc: '次元関門。非同期PVP決闘、ネメシスレイド、領地侵攻を支援します' }
+    ko: { name: '차원 앵커 게이트', desc: '차원 관문. 비동기 랭킹 결투, 네메시스 레이드 및 차원 영지 침공을 지원합니다.' },
+    en: { name: 'Dimensional Gate', desc: 'Dimensional Gate. Supports asynchronous ranking duels, Nemesis raids, and dimensional territory invasions.' },
+    ja: { name: '次元アンカーゲート', desc: '次元関門。非同期ランキング決闘、ネメシスレイドおよび次元領地侵攻を支援します。' }
   },
   storage: {
-    ko: { name: '방주 중앙 병참고', desc: '방주 물자 저장고. 레벨에 따라 27종 모든 자원의 최대 적재 용량을 확장합니다' },
-    en: { name: 'Central Logistics Depot', desc: 'Logistics storage. Expands max cargo limits for all 27 resource types' },
-    ja: { name: '方舟中央兵站庫', desc: '物資保管庫。レベルに応じて全27種資源の最大積載容量を拡張します' }
+    ko: { name: '방주 중앙 병참고', desc: '방주 중앙 물자 저장고. 레벨에 따라 27종 모든 자원의 최대 적재 용량을 확장합니다.' },
+    en: { name: 'Central Logistics Depot', desc: 'Central logistics depot of the Ark. Expands maximum storage capacity for all 27 resources according to level.' },
+    ja: { name: '方舟中央兵站庫', desc: '方舟中央物資保管庫。レベルに応じて全27種の全資源の最大積載容量を拡張する。' }
   },
   infirmary: {
-    ko: { name: '생체 복원 병동', desc: '의료 시설. 부상당한 용병을 입원시켜 체력과 마나를 복원합니다' },
-    en: { name: 'Bio-Restoration Ward', desc: 'Medical ward. Hospitalizes wounded heroes to recover HP and MP' },
-    ja: { name: '生体復元病棟', desc: '医療施設。負傷した傭兵を入院させHPとMPを復元します' }
+    ko: { name: '생체 복원 병동', desc: '의료 시설. 부상당한 용병을 입원시켜 체력과 마나를 복원합니다.' },
+    en: { name: 'Bio-Restoration Ward', desc: 'Medical ward. Hospitalizes wounded heroes to recover HP and MP.' },
+    ja: { name: '生体復元病棟', desc: '医療施設。負傷した傭兵を入院させHPとMPを復元します。' }
   },
   market: {
-    ko: { name: '황혼의 블랙 마켓', desc: '암시장 교역소. 15종 자원 거래 및 환전을 지원하며 상업 골드를 수급합니다' },
-    en: { name: 'Twilight Black Market', desc: 'Contraband outpost. Trade 15 resource types and barter for rare relics' },
-    ja: { name: '黄昏のブラックマーケット', desc: '闇市交易所。15種の資源取引や換金を行い、商業資金を調達します' }
+    ko: { name: '황혼의 블랙 마켓', desc: '암시장 교역소. 15종 자원 거래 및 환전을 지원하며 상업 골드를 수급합니다.' },
+    en: { name: 'Twilight Black Market', desc: 'Contraband trading post. Supports trading 15 types of resources, currency exchange, and earns commerce Gold.' },
+    ja: { name: '黄昏のブラックマーケット', desc: '闇市交易所。15種の資源取引や換金をサポートし、商業ゴールドを調達します。' }
   },
   // 알리아스 호환
   forge: {

@@ -118,7 +118,7 @@ export class I18nService {
     const dict = this.generated[l];
     if (!dict) return null;
     const norm = text.replace(/\s+/g, ' ').trim();
-    const hit = dict[norm];
+    const hit = dict[text] ?? dict[text.trim()] ?? dict[norm];
     if (hit !== undefined) return hit;
     if (depth > 2) return null;
     const pats = this.patterns[l] || [];
@@ -200,21 +200,6 @@ export class I18nService {
     const trimmed = text.trim();
     const tLang = (lang === 'ja' ? 'ja' : 'en') as 'en' | 'ja';
 
-    // 0. 복합 로그 분할 번역 (화살표 ➔ 또는 파이프 | 로 결합된 복합 다중 피격/원호 로그)
-    if (text.includes(' ➔ ')) {
-      const parts = text.split(' ➔ ');
-      const res = parts.map(part => this.tr(part, lang)).join(' ➔ ');
-      this.translationCache.set(cacheKey, res);
-      return res;
-    }
-
-    if (text.includes(' | ')) {
-      const parts = text.split(' | ');
-      const res = parts.map(part => this.tr(part, lang)).join(' | ');
-      this.translationCache.set(cacheKey, res);
-      return res;
-    }
-
     // 1. 빌드 생성 전체 문장 번역표 (정확 일치 + {N} 템플릿)
     const gen = this.lookupGenerated(text, tLang);
     if (gen !== null) {
@@ -227,9 +212,24 @@ export class I18nService {
     }
 
     // 2. 완전 일치 사전 (Exact Match)
-    const exact = EXACT_TRANSLATIONS[tLang]?.[trimmed];
+    const exact = EXACT_TRANSLATIONS[tLang]?.[trimmed] ?? EXACT_TRANSLATIONS[tLang]?.[text];
     if (exact) {
       const res = text.replace(trimmed, exact);
+      this.translationCache.set(cacheKey, res);
+      return res;
+    }
+
+    // 2.05 복합 로그 분할 번역 (화살표 ➔ 또는 파이프 | 로 결합된 복합 다중 피격/원호 로그 - 전체 문장 미매칭 시 분할)
+    if (text.includes(' ➔ ')) {
+      const parts = text.split(' ➔ ');
+      const res = parts.map(part => this.tr(part, lang)).join(' ➔ ');
+      this.translationCache.set(cacheKey, res);
+      return res;
+    }
+
+    if (text.includes(' | ')) {
+      const parts = text.split(' | ');
+      const res = parts.map(part => this.tr(part, lang)).join(' | ');
       this.translationCache.set(cacheKey, res);
       return res;
     }

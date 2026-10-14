@@ -123,12 +123,11 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
           if (!cleanSearch || lineageMatch) return true;
           const str = (
             cls.id + ' ' +
-            cls.name + ' ' +
-            cls.role + ' ' +
-            cls.passiveDesc + ' ' +
-            cls.skills.map(s => s.name + ' ' + s.description).join(' ') + ' ' +
-            (cls.specialSkill?.name || '') + ' ' +
-            (cls.specialSkill?.description || '')
+            cls.name + ' ' + tr(cls.name) + ' ' +
+            cls.role + ' ' + tr(cls.role) + ' ' +
+            cls.passiveDesc + ' ' + tr(cls.passiveDesc) + ' ' +
+            cls.skills.map(s => s.name + ' ' + tr(s.name) + ' ' + s.description + ' ' + tr(s.description)).join(' ') + ' ' +
+            (cls.specialSkill ? cls.specialSkill.name + ' ' + tr(cls.specialSkill.name) + ' ' + cls.specialSkill.description + ' ' + tr(cls.specialSkill.description) : '')
           ).toLowerCase();
           return str.includes(cleanSearch);
         });
@@ -151,10 +150,10 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
     if (unhandledClasses.length > 0) {
       result.push({
         id: 'other',
-        name: '특수 및 기타 클래스',
-        roleTitle: '기타 전직 및 특수 역할군',
+        name: tr('특수 및 기타 클래스'),
+        roleTitle: tr('기타 전직 및 특수 역할군'),
         icon: '✨',
-        summary: '기타 특수 직업',
+        summary: tr('기타 특수 직업'),
         theme: {
           primary: '#8b9bb4',
           light: '#cbd5e1',
@@ -189,7 +188,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
   const filteredMonsters = useMemo(() => {
     return Object.values(MONSTERS).filter((mon: MonsterData) => {
       if (!cleanSearch) return true;
-      const str = (mon.id + ' ' + mon.name + ' ' + mon.type + ' ' + mon.description + ' ' + mon.skills.map(s => s.name + ' ' + s.description).join(' ')).toLowerCase();
+      const str = (mon.id + ' ' + mon.name + ' ' + tr(mon.name) + ' ' + mon.type + ' ' + mon.description + ' ' + tr(mon.description) + ' ' + mon.skills.map(s => s.name + ' ' + tr(s.name) + ' ' + s.description + ' ' + tr(s.description)).join(' ')).toLowerCase();
       return str.includes(cleanSearch);
     });
   }, [cleanSearch, dataRevision]);
@@ -198,7 +197,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
   const filteredBuildings = useMemo(() => {
     return Object.values(INITIAL_BUILDINGS).filter(b => {
       if (!cleanSearch) return true;
-      const str = (b.id + ' ' + b.name + ' ' + b.description).toLowerCase();
+      const str = (b.id + ' ' + b.name + ' ' + tr(b.name) + ' ' + b.description + ' ' + tr(b.description)).toLowerCase();
       return str.includes(cleanSearch);
     });
   }, [cleanSearch, dataRevision]);
@@ -207,7 +206,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
   const filteredEquipment = useMemo(() => {
     const recipes = EQUIPMENT_RECIPES.filter(eq => {
       if (!cleanSearch) return true;
-      const str = (eq.id + ' ' + eq.name + ' ' + eq.slot + ' ' + eq.rarity + ' ' + eq.description).toLowerCase();
+      const str = (eq.id + ' ' + eq.name + ' ' + tr(eq.name) + ' ' + eq.slot + ' ' + eq.rarity + ' ' + eq.description + ' ' + tr(eq.description)).toLowerCase();
       return str.includes(cleanSearch);
     });
     const allEnchants: EnchantOption[] = [
@@ -216,7 +215,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
     ];
     const enchants = allEnchants.filter((enc: EnchantOption) => {
       if (!cleanSearch) return true;
-      const str = (enc.id + ' ' + enc.name + ' ' + enc.type + ' ' + enc.rarity + ' ' + enc.description).toLowerCase();
+      const str = (enc.id + ' ' + enc.name + ' ' + tr(enc.name) + ' ' + enc.type + ' ' + enc.rarity + ' ' + enc.description + ' ' + tr(enc.description)).toLowerCase();
       return str.includes(cleanSearch);
     });
     return { recipes, enchants };
@@ -226,22 +225,22 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
   const filteredSkills = useMemo(() => {
     const books = ALL_SKILL_BOOKS.filter(sb => {
       if (!cleanSearch) return true;
-      const str = (sb.id + ' ' + sb.name + ' ' + sb.skill.name + ' ' + sb.skill.description + ' ' + sb.rank).toLowerCase();
+      const str = (sb.id + ' ' + sb.name + ' ' + tr(sb.name) + ' ' + sb.skill.name + ' ' + tr(sb.skill.name) + ' ' + sb.skill.description + ' ' + tr(sb.skill.description) + ' ' + sb.rank + ' ' + sb.description + ' ' + tr(sb.description)).toLowerCase();
       return str.includes(cleanSearch);
     });
     const statuses = (Object.entries(STATUS_EFFECT_META) as [StatusEffectType, typeof STATUS_EFFECT_META[StatusEffectType]][]).filter(([type, meta]) => {
       if (!cleanSearch) return true;
-      const str = (type + ' ' + meta.label + ' ' + meta.desc).toLowerCase();
+      const str = (type + ' ' + meta.label + ' ' + tr(meta.label) + ' ' + meta.desc + ' ' + tr(meta.desc)).toLowerCase();
       return str.includes(cleanSearch);
     });
     const combos = COMBO_RULES.filter((c: ComboRule) => {
       if (!cleanSearch) return true;
-      const str = (c.comboName + ' ' + c.triggerStatus + ' ' + c.summary + ' ' + c.fullDesc + ' ' + c.requiredTagIds.map(t => getTagMeta(t).label).join(' ') + ' 연계 콤보 스킬 상태이상').toLowerCase();
+      const str = (c.comboName + ' ' + tr(c.comboName) + ' ' + c.triggerStatus + ' ' + tr(c.triggerStatus) + ' ' + c.summary + ' ' + tr(c.summary) + ' ' + c.fullDesc + ' ' + tr(c.fullDesc) + ' ' + c.requiredTagIds.map(t => getTagMeta(t).label + ' ' + tr(getTagMeta(t).label)).join(' ') + ' 연계 콤보 스킬 상태이상 combo synergy').toLowerCase();
       return str.includes(cleanSearch);
     });
     const feverBadges = (Object.values(FEVER_BADGE_META) as FeverBadgeMeta[]).filter((b: FeverBadgeMeta) => {
       if (!cleanSearch) return true;
-      const str = (b.type + ' ' + b.label + ' ' + b.shortLabel + ' ' + b.description + ' 피버 모멘텀 뱃지 전술 궁극기').toLowerCase();
+      const str = (b.type + ' ' + b.label + ' ' + tr(b.label) + ' ' + b.shortLabel + ' ' + tr(b.shortLabel) + ' ' + b.description + ' ' + tr(b.description) + ' 피버 모멘텀 뱃지 전술 궁극기 fever badge momentum tactic').toLowerCase();
       return str.includes(cleanSearch);
     });
     return { books, statuses, combos, feverBadges };
@@ -318,7 +317,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
             </span>
             <input
               type="text"
-              placeholder="명칭, 스킬, 상태이상, 보스 기믹, 옵션 검색... (예: 성기사, 실명, 접두, 흑익박쥐, 유지비)"
+              placeholder={tr('명칭, 스킬, 상태이상, 보스 기믹, 옵션 검색... (예: 성기사, 실명, 접두, 흑익박쥐, 유지비)')}
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-10 py-2 rounded-xl bg-[#090d16] border border-[#22334f] focus:border-[#00d2ff] text-white text-xs sm:text-sm placeholder:text-[#5a6a85] outline-none transition-all"
@@ -364,7 +363,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               <div className="flex items-center justify-between border-b border-[#1f2b42] pb-2">
                 <span className="font-bold text-sm sm:text-base text-[#38ef7d] flex items-center gap-2">
                   <span>💡</span>
-                  <span>신임 지휘관 초반 생존 & 육성 가이드</span>
+                  <span>{tr('신임 지휘관 초반 생존 & 육성 가이드')}</span>
                 </span>
                 <span className="text-[10px] text-[#81c784] bg-[#38ef7d18] border border-[#38ef7d33] px-2 py-0.5 rounded-full font-bold">
                   Starter Guide
@@ -544,10 +543,10 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               <div className="flex items-center justify-between border-b border-[#1f2b42] pb-2">
                 <span className="font-bold text-sm sm:text-base text-[#00d2ff] flex items-center gap-2">
                   <span>👑</span>
-                  <span>직업 & 전직 계통 도감 ({totalClassesCount}클래스 · {filteredLineageGroups.length}개 계통)</span>
+                  <span>{tr('직업 & 전직 계통 도감')} ({totalClassesCount}{tr('클래스')} · {filteredLineageGroups.length}{tr('개 계통')})</span>
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">
-                  시작 클래스(Tier 0) ➔ 1차 전직(Tier 1) ➔ 2차 각성(Tier 2) ➔ 👑 3차 초월(Tier 3)
+                  {tr('시작 클래스(Tier 0) ➔ 1차 전직(Tier 1) ➔ 2차 각성(Tier 2) ➔ 👑 3차 초월(Tier 3)')}
                 </span>
               </div>
 
@@ -583,7 +582,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             className="font-extrabold text-sm sm:text-base"
                             style={{ color: lineage.theme.light }}
                           >
-                            {lineage.name}
+                            {tr(lineage.name)}
                           </span>
                           <span
                             className="text-[11px] px-2.5 py-0.5 rounded-full font-bold"
@@ -593,12 +592,12 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               border: `1px solid ${lineage.theme.tagBorder}`
                             }}
                           >
-                            {lineage.roleTitle}
+                            {tr(lineage.roleTitle)}
                           </span>
                         </div>
                         <div className="text-[11px] text-[#94a3b8] mt-1 flex items-center gap-1">
-                          <span className="text-[#64748b]">전직 흐름:</span>
-                          <span className="text-[#cbd5e1] font-medium">{lineage.summary}</span>
+                          <span className="text-[#64748b]">{tr('전직 흐름')}:</span>
+                          <span className="text-[#cbd5e1] font-medium">{tr(lineage.summary)}</span>
                         </div>
                       </div>
                     </div>
@@ -610,7 +609,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         border: `1px solid ${lineage.theme.tagBorder}`
                       }}
                     >
-                      계통 직업 {lineage.classes.length}개
+                      {tr('계통 직업')} {lineage.classes.length}{tr('개')}
                     </div>
                   </div>
 
@@ -618,14 +617,14 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {lineage.classes.map(cls => {
                       const tierBadgeText = cls.tier === 0
-                        ? '기본 클래스 (Tier 0)'
+                        ? tr('기본 클래스 (Tier 0)')
                         : cls.tier === 1
-                        ? '1차 전직 (Tier 1)'
+                        ? tr('1차 전직 (Tier 1)')
                         : cls.tier === 2
-                        ? '★ 2차 각성 (Tier 2)'
-                        : '👑 3차 초월 (Tier 3)';
+                        ? tr('★ 2차 각성 (Tier 2)')
+                        : tr('👑 3차 초월 (Tier 3)');
                       const parentClass = cls.parentClassId ? CHARACTER_CLASSES[cls.parentClassId] : null;
-                      const parentText = parentClass ? ` • 상위 전직 [${parentClass.name}]` : '';
+                      const parentText = parentClass ? ` • ${tr('상위 전직')} [${tr(parentClass.name)}]` : '';
 
                       // 티어별 뱃지 스타일
                       const tierBadgeStyle = cls.tier === 0
@@ -640,8 +639,8 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         <div
                           key={cls.id}
                           onClick={() => setDetailData({
-                            title: cls.name,
-                            subtitle: `계통: ${lineage.name} • 역할군: ${cls.role}${parentText} • ${tierBadgeText}`,
+                            title: tr(cls.name),
+                            subtitle: `${tr('계통')}: ${tr(lineage.name)} • ${tr('역할군')}: ${tr(cls.role)}${parentText} • ${tierBadgeText}`,
                             categoryBadge: {
                               label: tierBadgeText,
                               bg: tierBadgeStyle.bg,
@@ -653,10 +652,10 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               <div className="flex flex-col gap-4">
                                 {/* 기본 스탯 그리드 */}
                                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3.5 bg-[#0a101d] rounded-xl border border-[#1e2f4c]">
-                                  <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">체력 (HP)</span><span className="text-base font-bold text-[#66bb6a]">{cls.baseStats.hp}</span></div>
-                                  <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">마나 (MP)</span><span className="text-base font-bold text-[#42a5f5]">{cls.baseStats.mp}</span></div>
-                                  <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">공격력 (ATK)</span><span className="text-base font-bold text-[#ef5350]">{cls.baseStats.atk}</span></div>
-                                  <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">방어력 (DEF)</span><span className="text-base font-bold text-[#ffd54f]">{cls.baseStats.def}</span></div>
+                                  <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">{tr('체력 (HP)')}</span><span className="text-base font-bold text-[#66bb6a]">{cls.baseStats.hp}</span></div>
+                                  <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">{tr('마나 (MP)')}</span><span className="text-base font-bold text-[#42a5f5]">{cls.baseStats.mp}</span></div>
+                                  <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">{tr('공격력 (ATK)')}</span><span className="text-base font-bold text-[#ef5350]">{cls.baseStats.atk}</span></div>
+                                  <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">{tr('방어력 (DEF)')}</span><span className="text-base font-bold text-[#ffd54f]">{cls.baseStats.def}</span></div>
                                 </div>
 
                                 {/* 고유 패시브 */}
@@ -669,10 +668,10 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 >
                                   <span className="font-bold text-sm text-[#ffd54f] flex items-center gap-1.5">
                                     <span>🌟</span>
-                                    <span>고유 패시브 능력</span>
+                                    <span>{tr('고유 패시브 능력')}</span>
                                   </span>
                                   <div className="text-sm sm:text-base text-white leading-relaxed">
-                                    {cls.passiveDesc}
+                                    {tr(cls.passiveDesc)}
                                   </div>
                                 </div>
 
@@ -680,7 +679,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 <div className="flex flex-col gap-2.5">
                                   <span className="font-bold text-sm flex items-center gap-1.5" style={{ color: lineage.theme.light }}>
                                     <span>⚔️</span>
-                                    <span>전투 스킬 ({cls.skills.length + (cls.specialSkill ? 1 : 0)}개)</span>
+                                    <span>{tr('전투 스킬')} ({cls.skills.length + (cls.specialSkill ? 1 : 0)}{tr('개')})</span>
                                   </span>
                                   <div className="flex flex-col gap-2">
                                     {cls.skills.map(sk => {
@@ -701,10 +700,10 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                           <div className="flex items-center justify-between">
                                             <span className="font-bold text-sm sm:text-base text-white flex items-center gap-1.5 flex-wrap">
                                               <span>{sk.icon}</span>
-                                              <span>{sk.name}</span>
+                                              <span>{tr(sk.name)}</span>
                                               {maxLv > 1 && (
                                                 <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55] font-bold">
-                                                  Lv.{maxLv} (위력 {curP}%)
+                                                  Lv.{maxLv} ({tr('위력')} {curP}%)
                                                 </span>
                                               )}
                                             </span>
@@ -720,7 +719,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                             </span>
                                           </div>
                                           <div className="text-sm text-[#cfd8dc] leading-relaxed">
-                                            {resSk.description}
+                                            {tr(resSk.description)}
                                           </div>
                                         </div>
                                       );
@@ -736,10 +735,10 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                           <div className="flex items-center justify-between">
                                             <span className="font-bold text-sm sm:text-base text-[#ffd54f] flex items-center gap-1.5 flex-wrap">
                                               <span>{cls.specialSkill.icon || '⚡'}</span>
-                                              <span>★ {cls.specialSkill.name} (특수 각성기)</span>
+                                              <span>★ {tr(cls.specialSkill.name)} ({tr('특수 각성기')})</span>
                                               {maxLv > 1 && (
                                                 <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55] font-bold">
-                                                  Lv.{maxLv} (위력 {curP}%)
+                                                  Lv.{maxLv} ({tr('위력')} {curP}%)
                                                 </span>
                                               )}
                                             </span>
@@ -748,7 +747,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                             </span>
                                           </div>
                                           <div className="text-sm text-[#ffd54f] leading-relaxed">
-                                            {resSpec.description}
+                                            {tr(resSpec.description)}
                                           </div>
                                         </div>
                                       );
@@ -757,7 +756,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 </div>
                               </div>
                             ),
-                            footerInfo: `${lineage.name} • ${cls.name}`
+                            footerInfo: `${tr(lineage.name)} • ${tr(cls.name)}`
                           })}
                           className="p-3.5 rounded-xl border flex flex-col gap-2.5 transition-all cursor-pointer hover:scale-[1.01] group shadow-sm"
                           style={{
@@ -796,7 +795,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                   </span>
                                 </div>
                                 <div className="text-[10px] text-[#8b9bb4]">
-                                  역할군: {cls.role}{parentText}
+                                  {tr('역할군')}: {tr(cls.role)}{parentText}
                                 </div>
                               </div>
                             </div>
@@ -815,15 +814,15 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             }}
                           >
                             <span className="font-bold text-[#ffd54f]">
-                              🌟 고유 패시브:{' '}
+                              🌟 {tr('고유 패시브')}:{' '}
                             </span>
-                            {cls.passiveDesc}
+                            {tr(cls.passiveDesc)}
                           </div>
 
                           {/* 기본/전직 스킬 목록 */}
                           <div className="flex flex-col gap-1">
                             <div className="text-[10px] font-bold text-[#8b9bb4]">
-                              전투 스킬 ({cls.skills.length + (cls.specialSkill ? 1 : 0)}개):
+                              {tr('전투 스킬')} ({cls.skills.length + (cls.specialSkill ? 1 : 0)}{tr('개')}):
                             </div>
                             {cls.skills.map(sk => {
                               const gm = GameManager.getInstance();
@@ -839,13 +838,13 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               >
                                 <div>
                                   <span className="mr-1">{sk.icon}</span>
-                                  <span className="font-bold text-white mr-1">{sk.name}</span>
+                                  <span className="font-bold text-white mr-1">{tr(sk.name)}</span>
                                   {maxLv > 1 && (
                                     <span className="text-[9px] px-1 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55] font-bold mr-1">
                                       Lv.{maxLv} ({curP}%)
                                     </span>
                                   )}
-                                  <span className="text-[10px] text-[#8b9bb4]">({resSk.description})</span>
+                                  <span className="text-[10px] text-[#8b9bb4]">({tr(resSk.description)})</span>
                                 </div>
                                 <span
                                   className="text-[10px] font-mono shrink-0 font-bold ml-1"
@@ -865,13 +864,13 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               <div className="flex items-start justify-between text-[11px] text-[#ffd54f] pl-2 border-l-2 border-[#ffd54f66]">
                                 <div>
                                   <span className="mr-1">{cls.specialSkill.icon || '⚡'}</span>
-                                  <span className="font-bold mr-1">★ {cls.specialSkill.name}</span>
+                                  <span className="font-bold mr-1">★ {tr(cls.specialSkill.name)}</span>
                                   {maxLv > 1 && (
                                     <span className="text-[9px] px-1 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55] font-bold mr-1">
                                       Lv.{maxLv} ({curP}%)
                                     </span>
                                   )}
-                                  <span className="text-[10px] text-[#cfd8e8]">({resSpec.description})</span>
+                                  <span className="text-[10px] text-[#cfd8e8]">({tr(resSpec.description)})</span>
                                 </div>
                                 <span className="text-[10px] font-mono text-[#ffd54f] shrink-0 font-bold ml-1">{resSpec.manaCost} MP</span>
                               </div>
@@ -905,7 +904,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                     boss: { label: '👑 BOSS', bg: '#ffd54f22', color: '#ffd54f', border: '#ffd54f55' },
                     elite: { label: '⭐ ELITE', bg: '#ff416c22', color: '#ff416c', border: '#ff416c55' },
                     normal: {
-                      label: '👾 일반',
+                      label: tr('👾 일반'),
                       bg: '#00d2ff22',
                       color: '#00d2ff',
                       border: '#00d2ff55'
@@ -918,7 +917,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                       key={mon.id}
                       onClick={() => setDetailData({
                         title: tr(mon.name),
-                        subtitle: `Lv.${mon.level} • [${MONSTER_FACTION_META[mon.faction]?.label || '마물'}] ${tr(mon.description)}`,
+                        subtitle: `Lv.${mon.level} • [${tr(MONSTER_FACTION_META[mon.faction]?.label || '마물')}] ${tr(mon.description)}`,
                         categoryBadge: { label: tr(badge.label), bg: badge.bg, color: badge.color, border: badge.border },
                         icon: <span className="text-3xl">{mon.type === 'boss' ? '👑' : mon.type === 'elite' ? '⭐' : '👾'}</span>,
                         content: (
@@ -1061,7 +1060,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                       key={b.id}
                       onClick={() => setDetailData({
                         title: tr(b.name),
-                        subtitle: `${tr('식별자')}: ${b.id} • ${tr('최대 증축')} ${maxLevel}${tr('레벨')}`,
+                        subtitle: `${tr('식별자')}: ${b.id} • ${tr('최대 증축')} Lv.${maxLevel}`,
                         categoryBadge: { label: tr('영지 시설'), bg: '#38ef7d22', color: '#38ef7d', border: '#38ef7d55' },
                         icon: <GameIcon name={b.id} icon={b.icon || '🏰'} size={36} />,
                         content: (
@@ -1103,7 +1102,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                           <div>
                             <div className="font-bold text-sm text-white group-hover:text-[#38ef7d] transition-colors">{tr(b.name)}</div>
                             <div className="text-[10px] text-[#8b9bb4]">
-                              {tr('최대 증축')}: {maxLevel}{tr('레벨')}
+                              {tr('최대 증축')}: Lv.{maxLevel}
                             </div>
                           </div>
                         </div>
@@ -1271,7 +1270,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-bold text-[#ce93d8] group-hover:text-white transition-colors">[{enc.name}]</span>
+                            <span className="font-bold text-[#ce93d8] group-hover:text-white transition-colors">[{tr(enc.name)}]</span>
                             <span className="text-[9px] px-1 py-0.2 rounded font-mono font-bold border" style={{ background: slotBg, color: slotColor, borderColor: slotBorder }}>
                               {slotLabel}
                             </span>
@@ -1282,10 +1281,10 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             <span className="text-[9px] text-[#556987] group-hover:text-white transition-colors">🔍</span>
                           </div>
                         </div>
-                        <div className="text-[#cfd8e8]">{enc.description}</div>
+                        <div className="text-[#cfd8e8]">{tr(enc.description)}</div>
                         {enc.grantedSkill && (
                           <div className="text-[10px] text-[#00d2ff]">
-                            ⚔️ 고유 스킬: [{enc.grantedSkill.name}] {enc.grantedSkill.description}
+                            ⚔️ {tr('고유 스킬')}: [{tr(enc.grantedSkill.name)}] {tr(enc.grantedSkill.description)}
                           </div>
                         )}
                       </div>
@@ -1302,43 +1301,43 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               <div className="flex items-center justify-between border-b border-[#1f2b42] pb-2">
                 <span className="font-bold text-sm sm:text-base text-[#00e5ff] flex items-center gap-2">
                   <span>📜</span>
-                  <span>10대 상태이상 메커니즘 & 마도 비전서 스킬</span>
+                  <span>{tr('10대 상태이상 메커니즘 & 마도 비전서 스킬')}</span>
                 </span>
               </div>
 
               {/* 상태이상 목록 */}
               <div className="flex flex-col gap-2">
                 <div className="text-xs font-bold text-[#ffd54f]">
-                  💫 전투 상태이상 (Status Effects)
+                  💫 {tr('전투 상태이상')} (Status Effects)
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {filteredSkills.statuses.map(([type, meta]) => (
                     <div
                       key={type}
                       onClick={() => setDetailData({
-                        title: `${meta.label} (${type.toUpperCase()})`,
-                        subtitle: '전투 상태이상 메커니즘',
-                        categoryBadge: { label: '상태이상', bg: `${meta.color}22`, color: meta.color, border: `${meta.color}55` },
+                        title: `${tr(meta.label)} (${type.toUpperCase()})`,
+                        subtitle: tr('전투 상태이상 메커니즘'),
+                        categoryBadge: { label: tr('상태이상'), bg: `${meta.color}22`, color: meta.color, border: `${meta.color}55` },
                         icon: <GameIcon name={type} icon={meta.icon} size={32} />,
                         content: (
                           <div className="flex flex-col gap-4">
                             <div className="text-base sm:text-lg text-white font-bold leading-relaxed bg-[#111828] p-5 rounded-2xl border border-[#22334f] shadow-inner">
-                              {meta.desc}
+                              {tr(meta.desc)}
                             </div>
                             <div className="text-sm text-[#cfd8e8] bg-[#0c1220] p-4 rounded-xl border border-[#1e2c45] leading-relaxed">
-                              💡 전투 중 마물의 스킬이나 아군 장비/스킬의 효과로 해당 상태이상이 부여됩니다. 상태이상 지속 턴 수 동안 해당 패널티 또는 이로운 효과가 틱마다 적용됩니다.
+                              💡 {tr('전투 중 마물의 스킬이나 아군 장비/스킬의 효과로 해당 상태이상이 부여됩니다. 상태이상 지속 턴 수 동안 해당 패널티 또는 이로운 효과가 틱마다 적용됩니다.')}
                             </div>
                           </div>
                         ),
-                        footerInfo: `상태이상 • ${meta.label}`
+                        footerInfo: `${tr('상태이상')} • ${tr(meta.label)}`
                       })}
                       className="p-2.5 rounded-lg bg-[#111828] border border-[#22334f] flex items-center justify-between text-[11px] hover:border-[#00d2ff66] transition-all cursor-pointer hover:scale-[1.01] group"
                     >
                       <div className="flex items-center gap-2.5">
                         <GameIcon name={type} icon={meta.icon} size={22} className="shrink-0" />
                         <div>
-                          <span className="font-bold group-hover:text-white transition-colors" style={{ color: meta.color }}>{meta.label}</span>
-                          <div className="text-[10px] text-[#8b9bb4]">{meta.desc}</div>
+                          <span className="font-bold group-hover:text-white transition-colors" style={{ color: meta.color }}>{tr(meta.label)}</span>
+                          <div className="text-[10px] text-[#8b9bb4]">{tr(meta.desc)}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-1">
@@ -1354,32 +1353,32 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               {filteredSkills.combos.length > 0 && (
                 <div className="flex flex-col gap-2 pt-2">
                   <div className="text-xs font-bold text-[#38ef7d] flex items-center justify-between">
-                    <span>⚡ 상태이상 스킬 연계 콤보 메커니즘 ({filteredSkills.combos.length}종)</span>
-                    <span className="text-[10px] text-[#8b9bb4]">상태이상 대상에게 일치 태그 스킬로 공격 시 폭발</span>
+                    <span>⚡ {tr('상태이상 스킬 연계 콤보 메커니즘')} ({filteredSkills.combos.length}{tr('종')})</span>
+                    <span className="text-[10px] text-[#8b9bb4]">{tr('상태이상 대상에게 일치 태그 스킬로 공격 시 폭발')}</span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {filteredSkills.combos.map((c) => (
                       <div
                         key={c.comboName}
                         onClick={() => setDetailData({
-                          title: `${c.icon} ${c.comboName}`,
-                          subtitle: `발동 조건: 적 [${c.triggerStatus}] 상태`,
-                          categoryBadge: { label: '스킬 연계 콤보', bg: `${c.bannerColor}22`, color: c.bannerColor, border: `${c.bannerColor}55` },
+                          title: `${c.icon} ${tr(c.comboName)}`,
+                          subtitle: `${tr('발동 조건')}: ${tr('적')} [${tr(c.triggerStatus)}] ${tr('상태')}`,
+                          categoryBadge: { label: tr('스킬 연계 콤보'), bg: `${c.bannerColor}22`, color: c.bannerColor, border: `${c.bannerColor}55` },
                           icon: <span className="text-3xl">{c.icon}</span>,
                           content: (
                             <div className="flex flex-col gap-4">
                               <div className="text-base sm:text-lg text-white font-bold leading-relaxed bg-[#111828] p-5 rounded-2xl border border-[#22334f] shadow-inner">
-                                {c.fullDesc}
+                                {tr(c.fullDesc)}
                               </div>
                               <div className="p-4 rounded-xl bg-[#0e1626] border border-[#1e2f4c] flex flex-col gap-2 text-xs">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-[#8b9bb4]">필요 적 상태이상:</span>
+                                  <span className="text-[#8b9bb4]">{tr('필요 적 상태이상')}:</span>
                                   <span className="font-bold text-[#ffd54f] px-2 py-0.5 rounded bg-[#ffd54f22] border border-[#ffd54f44]">
-                                    {c.triggerStatus}
+                                    {tr(c.triggerStatus)}
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-1.5 flex-wrap mt-1">
-                                  <span className="text-[#8b9bb4]">필요 스킬 태그:</span>
+                                  <span className="text-[#8b9bb4]">{tr('필요 스킬 태그')}:</span>
                                   {c.requiredTagIds.map(tId => {
                                     const tMeta = getTagMeta(tId);
                                     return (
@@ -1396,28 +1395,28 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 </div>
                               </div>
                               <div className="text-xs text-[#cfd8dc] bg-[#0a1220] p-3.5 rounded-xl border border-[#1e2c45] leading-relaxed">
-                                💡 적에게 {c.triggerStatus} 상태가 부여되어 있을 때, 해당 태그가 부여된 스킬이나 기본 공격을 가하면 즉시 연계 콤보가 폭발합니다.
+                                {tr('적에게 {0} 상태가 부여되어 있을 때, 해당 태그가 부여된 스킬이나 기본 공격을 가하면 즉시 연계 콤보가 폭발합니다.').replace('{0}', tr(c.triggerStatus))}
                               </div>
                             </div>
                           ),
-                          footerInfo: `스킬 연계 콤보 • ${c.comboName}`
+                          footerInfo: `${tr('스킬 연계 콤보')} • ${tr(c.comboName)}`
                         })}
                         className="p-2.5 rounded-lg bg-[#111828] border border-[#22334f] flex flex-col justify-between gap-1.5 text-[11px] hover:border-[#00d2ff66] transition-all cursor-pointer hover:scale-[1.01] group"
                       >
                         <div className="flex items-center justify-between gap-1">
                           <div className="flex items-center gap-1.5 font-bold">
                             <span className="text-base">{c.icon}</span>
-                            <span className="text-white group-hover:text-[#00d2ff] transition-colors">{c.comboName}</span>
+                            <span className="text-white group-hover:text-[#00d2ff] transition-colors">{tr(c.comboName)}</span>
                           </div>
                           <span
                             className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold"
                             style={{ backgroundColor: `${c.bannerColor}18`, color: c.bannerColor, border: `1px solid ${c.bannerColor}44` }}
                           >
-                            {c.triggerStatus}
+                            {tr(c.triggerStatus)}
                           </span>
                         </div>
                         <div className="text-[10px] text-[#cfd8dc] leading-tight">
-                          {c.summary}
+                          {tr(c.summary)}
                         </div>
                         <div className="flex items-center gap-1 flex-wrap pt-0.5">
                           {c.requiredTagIds.map(tId => {
@@ -1429,7 +1428,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 style={{ backgroundColor: tMeta.bg, color: tMeta.text, border: `1px solid ${tMeta.border}` }}
                               >
                                 <span>{tMeta.icon}</span>
-                                <span>{tMeta.label}</span>
+                                <span>{tr(tMeta.label)}</span>
                               </span>
                             );
                           })}
@@ -1446,61 +1445,61 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                   <div className="text-xs font-bold text-[#ffd54f] flex items-center justify-between">
                     <span className="flex items-center gap-1.5">
                       <span>🔥</span>
-                      <span>전술 모멘텀 FEVER 뱃지 ({filteredSkills.feverBadges.length}종)</span>
+                      <span>{tr('전술 모멘텀 FEVER 뱃지')} ({filteredSkills.feverBadges.length}{tr('종')})</span>
                     </span>
-                    <span className="text-[10px] text-[#8b9bb4]">전투 중 특정 전술 행동 시 획득, 5개 완충 시 궁극기로 FEVER 폭발</span>
+                    <span className="text-[10px] text-[#8b9bb4]">{tr('전투 중 특정 전술 행동 시 획득, 5개 완충 시 궁극기로 FEVER 폭발')}</span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {filteredSkills.feverBadges.map((b) => (
                       <div
                         key={b.type}
                         onClick={() => setDetailData({
-                          title: `${b.icon} ${b.label} (${b.shortLabel})`,
-                          subtitle: '전술 모멘텀 FEVER 뱃지',
-                          categoryBadge: { label: 'FEVER 뱃지', bg: b.bg, color: b.color, border: b.borderColor },
+                          title: `${b.icon} ${tr(b.label)} (${tr(b.shortLabel)})`,
+                          subtitle: tr('전술 모멘텀 FEVER 뱃지'),
+                          categoryBadge: { label: tr('FEVER 뱃지'), bg: b.bg, color: b.color, border: b.borderColor },
                           icon: <span className="text-3xl">{b.icon}</span>,
                           content: (
                             <div className="flex flex-col gap-4">
                               <div className="text-base sm:text-lg text-white font-bold leading-relaxed bg-[#111828] p-5 rounded-2xl border border-[#22334f] shadow-inner">
-                                {b.description}
+                                {tr(b.description)}
                               </div>
                               <div className="p-4 rounded-xl bg-[#0e1626] border border-[#1e2f4c] flex flex-col gap-2.5 text-xs text-[#cfd8e8]">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-[#8b9bb4]">뱃지 종류:</span>
+                                  <span className="text-[#8b9bb4]">{tr('뱃지 종류')}:</span>
                                   <span className="font-bold px-2 py-0.5 rounded font-mono" style={{ backgroundColor: b.bg, color: b.color, border: `1px solid ${b.borderColor}` }}>
-                                    {b.label} ({b.shortLabel})
+                                    {tr(b.label)} ({tr(b.shortLabel)})
                                   </span>
                                 </div>
                                 <div className="leading-relaxed">
-                                  전투 중 해당 조건이 달성되면 파티 공용 FEVER 게이지 슬롯에 뱃지가 즉시 적립됩니다.
+                                  {tr('전투 중 해당 조건이 달성되면 파티 공용 FEVER 게이지 슬롯에 뱃지가 즉시 적립됩니다.')}
                                 </div>
                                 <div className="leading-relaxed text-[#ffd54f]">
-                                  ★ 뱃지가 5개 가득 찼을 때 영웅이 궁극기를 발동하면 조합에 따른 강력한 시너지가 폭발합니다.
+                                  {tr('★ 뱃지가 5개 가득 찼을 때 영웅이 궁극기를 발동하면 조합에 따른 강력한 시너지가 폭발합니다.')}
                                 </div>
                                 <div className="leading-relaxed text-[#80d8ff]">
-                                  🔄 5개가 채워진 상태에서 새 뱃지를 얻으면 맨 앞의 오래된 뱃지가 밀려나며 실시간으로 최종 시너지가 갱신됩니다.
+                                  {tr('🔄 5개가 채워진 상태에서 새 뱃지를 얻으면 맨 앞의 오래된 뱃지가 밀려나며 실시간으로 최종 시너지가 갱신됩니다.')}
                                 </div>
                               </div>
                             </div>
                           ),
-                          footerInfo: `전술 모멘텀 • ${b.label}`
+                          footerInfo: `${tr('전술 모멘텀')} • ${tr(b.label)}`
                         })}
                         className="p-2.5 rounded-lg bg-[#111828] border border-[#22334f] flex flex-col justify-between gap-1.5 text-[11px] hover:border-[#ffd54f66] transition-all cursor-pointer hover:scale-[1.01] group"
                       >
                         <div className="flex items-center justify-between gap-1">
                           <div className="flex items-center gap-2 font-bold">
                             <span className="text-base">{b.icon}</span>
-                            <span className="text-white group-hover:text-[#ffd54f] transition-colors">{b.label}</span>
+                            <span className="text-white group-hover:text-[#ffd54f] transition-colors">{tr(b.label)}</span>
                           </div>
                           <span
                             className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold"
                             style={{ backgroundColor: b.bg, color: b.color, border: `1px solid ${b.borderColor}` }}
                           >
-                            {b.shortLabel}
+                            {tr(b.shortLabel)}
                           </span>
                         </div>
                         <div className="text-[10px] text-[#cfd8dc] leading-tight">
-                          {b.description}
+                          {tr(b.description)}
                         </div>
                       </div>
                     ))}
@@ -1511,7 +1510,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               {/* 전술 비전서 스킬북 */}
               <div className="flex flex-col gap-2 pt-2">
                 <div className="text-xs font-bold text-[#00e5ff]">
-                  📖 전술 마도 비전서 ({filteredSkills.books.length}종)
+                  📖 {tr('전술 마도 비전서')} ({filteredSkills.books.length}{tr('종')})
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {filteredSkills.books.map(sb => {
@@ -1528,14 +1527,14 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                     <div
                       key={sb.id}
                       onClick={() => setDetailData({
-                        title: sb.name,
-                        subtitle: `등급: ${sb.rank.toUpperCase()} • 전수 스킬: ${resSk.name}${currentLv > 1 ? ` (Lv.${currentLv})` : ''}`,
+                        title: tr(sb.name),
+                        subtitle: `${tr('등급')}: ${sb.rank.toUpperCase()} • ${tr('전수 스킬')}: ${tr(resSk.name)}${currentLv > 1 ? ` (Lv.${currentLv})` : ''}`,
                         categoryBadge: { label: sb.rank.toUpperCase(), bg: '#00d2ff22', color: '#00d2ff', border: '#00d2ff55' },
                         icon: <GameIcon name={sb.id || sb.skill.id} icon={sb.icon} size={36} />,
                         content: (
                           <div className="flex flex-col gap-4">
                             <div className="text-base sm:text-lg text-white font-medium leading-relaxed bg-[#10192e] p-5 rounded-2xl border border-[#1d3557] shadow-inner">
-                              {sb.description}
+                              {tr(sb.description)}
                             </div>
                             {/* ⚔️ 계열 적합도 안내 배너 */}
                             <div
@@ -1544,14 +1543,14 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             >
                               <div className="flex items-center gap-1.5 font-bold" style={{ color: affMeta.color }}>
                                 <span className="text-base">{affMeta.icon}</span>
-                                <span>{affMeta.name}</span>
+                                <span>{tr(affMeta.name)}</span>
                               </div>
                               <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
-                                {affMeta.description}
+                                {tr(affMeta.description)}
                               </div>
                               {affMeta.id !== 'universal' && (
                                 <div className="text-[10px] text-[#ff8a80] font-bold mt-0.5">
-                                  ⚠️ 비적합 클래스가 장착/사용 시 전투 중 위력이 50% 반감됩니다.
+                                  {tr('⚠️ 비적합 클래스가 장착/사용 시 전투 중 위력이 50% 반감됩니다.')}
                                 </div>
                               )}
                             </div>
@@ -1559,34 +1558,34 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               <div className="flex items-center justify-between flex-wrap gap-1">
                                 <span className="font-bold text-sm sm:text-base text-[#ffd54f] flex items-center gap-1.5 flex-wrap">
                                   <span>📖</span>
-                                  <span>전수 스킬: [{resSk.name}]</span>
+                                  <span>{tr('전수 스킬')}: [{tr(resSk.name)}]</span>
                                   {currentLv > 1 && (
                                     <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55] font-bold">
-                                      Lv.{currentLv} (위력 {curP}%{curP !== baseP ? ` / 초기 ${baseP}%` : ''})
+                                      Lv.{currentLv} ({tr('위력')} {curP}%{curP !== baseP ? ` / ${tr('초기')} ${baseP}%` : ''})
                                     </span>
                                   )}
                                 </span>
                                 <span className="text-xs font-mono font-bold text-[#00d2ff] bg-[#00d2ff18] px-2.5 py-1 rounded border border-[#00d2ff44]">
-                                  {resSk.manaCost} MP • 쿨타임 {resSk.cooldown}턴
+                                  {resSk.manaCost} MP • {tr('쿨타임')} {resSk.cooldown}{tr('턴')}
                                 </span>
                               </div>
                               <div className="text-sm text-white leading-relaxed">
-                                {resSk.description}
+                                {tr(resSk.description)}
                               </div>
                             </div>
                             <div className="text-xs text-[#8b9bb4] p-3 rounded-lg bg-[#0c1220] border border-[#1e2c45]">
-                              💡 성채 용병 관리 창에서 용병에게 전수하여 새로운 액티브 스킬 슬롯을 개방할 수 있습니다.
+                              {tr('💡 성채 용병 관리 창에서 용병에게 전수하여 새로운 액티브 스킬 슬롯을 개방할 수 있습니다.')}
                             </div>
                           </div>
                         ),
-                        footerInfo: `마도 비전서 • ${sb.name}`
+                        footerInfo: `${tr('마도 비전서')} • ${tr(sb.name)}`
                       })}
                       className="p-2.5 rounded-lg bg-[#10192e] border border-[#1d3557] flex flex-col gap-1 text-[11px] hover:border-[#00d2ff66] transition-all cursor-pointer hover:scale-[1.01] group"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5 font-bold text-white group-hover:text-[#00d2ff] transition-colors">
                           <GameIcon name={sb.id || sb.skill.id} icon={sb.icon} size={18} />
-                          <span>{sb.name}</span>
+                          <span>{tr(sb.name)}</span>
                           {currentLv > 1 && (
                             <span className="text-[9px] px-1 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55] font-bold">
                               Lv.{currentLv}
@@ -1598,7 +1597,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             className="text-[9px] px-1.5 py-0.5 rounded font-bold"
                             style={{ backgroundColor: affMeta.bg, color: affMeta.color, border: `1px solid ${affMeta.borderColor}` }}
                           >
-                            {affMeta.shortName}
+                            {tr(affMeta.shortName)}
                           </span>
                           <span className={"text-[9px] font-mono px-1.5 py-0.5 rounded uppercase border " + (
                             sb.rank === 'epic'
@@ -1616,13 +1615,13 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                           <span className="text-[9px] text-[#556987] group-hover:text-white transition-colors">🔍</span>
                         </div>
                       </div>
-                      <div className="text-[10px] text-[#8b9bb4]">{sb.description}</div>
+                      <div className="text-[10px] text-[#8b9bb4]">{tr(sb.description)}</div>
                       <div className="text-[10px] text-[#ffd54f] font-mono flex items-center justify-between pt-0.5 border-t border-[#1d3557]">
                         <span className="flex items-center gap-1">
-                          <span>전수: {resSk.name}</span>
+                          <span>{tr('전수')}: {tr(resSk.name)}</span>
                           {currentLv > 1 && <span className="text-[#38ef7d] font-bold">[{curP}%]</span>}
                         </span>
-                        <span>{resSk.manaCost} MP • {resSk.cooldown}턴</span>
+                        <span>{resSk.manaCost} MP • {resSk.cooldown}{tr('턴')}</span>
                       </div>
                     </div>
                   );})}
@@ -1709,16 +1708,16 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
             <div className="py-16 text-center flex flex-col items-center justify-center gap-3">
               <span className="text-4xl">🔎</span>
               <div className="text-sm font-bold text-white">
-                '{searchTerm}'에 대한 검색 결과가 없습니다.
+                {tr("'{0}'에 대한 검색 결과가 없습니다.").replace('{0}', searchTerm)}
               </div>
               <div className="text-xs text-[#8b9bb4]">
-                다른 키워드나 명칭을 입력해 보세요.
+                {tr('다른 키워드나 명칭을 입력해 보세요.')}
               </div>
               <button
                 onClick={() => setSearchTerm('')}
                 className="mt-2 px-3 py-1.5 rounded-lg bg-[#1d273d] hover:bg-[#2c3b5c] text-xs text-[#00d2ff] transition-colors"
               >
-                검색어 초기화
+                {tr('검색어 초기화')}
               </button>
             </div>
           )}
