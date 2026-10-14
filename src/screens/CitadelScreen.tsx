@@ -3756,7 +3756,7 @@ const BarracksDrawer: React.FC<{
           onClick={() => setBarracksCategory('dimensional')}
         >
           <span>{isAnchorUnlocked ? '🌌' : '🔒'}</span>
-          <span>차원 결투 부대 (3인 + OP)</span>
+          <span>차원 부대 편성 (3인 + OP)</span>
           {isAnchorUnlocked ? (
             <span className="text-[10px] font-mono text-[#ffd54f]">({mainHeroes.length}/3 + {activeOperator ? 'OP' : '0'})</span>
           ) : (
@@ -3772,7 +3772,7 @@ const BarracksDrawer: React.FC<{
             <div className="text-4xl p-4 bg-[#ff416c15] border border-[#ff416c33] rounded-2xl text-[#ff416c] animate-pulse">
               🔒
             </div>
-            <h3 className="text-base font-extrabold text-white">차원 결투 부대 편성 잠김</h3>
+            <h3 className="text-base font-extrabold text-white">차원 부대 편성 잠김</h3>
             <p className="text-xs text-[#8b9bb4] max-w-sm leading-relaxed">
               차원 부대 편성은 영지 내 <strong className="text-[#00d2ff]">[차원 앵커 게이트]</strong>를 건설해야 해금되는 특수 부대 관리 기능입니다.<br />
               차원 앵커를 완공하면 3인의 정예 결투원과 1인의 전술 오퍼레이터를 편성하여 차원 아레나 및 네메시스에 출전시킬 수 있습니다.
