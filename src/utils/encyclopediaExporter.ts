@@ -1,6 +1,7 @@
 import { CHARACTER_CLASSES } from '../data/classes';
 import { MONSTERS } from '../data/monsters';
 import { INITIAL_BUILDINGS } from '../data/buildings';
+import { BUILDING_NAMES } from '../i18n/dataLocales';
 import { EQUIPMENT_RECIPES } from '../data/equipment';
 import { ALL_SKILL_BOOKS, getSkillBookRarity } from '../data/skillBooks';
 import { SYSTEM_GUIDES } from '../data/systemGuides';
@@ -200,21 +201,26 @@ export function exportEncyclopediaToHtml(
   }).join('');
 
   // 5. Buildings
-  const buildingsHtml = Object.entries(INITIAL_BUILDINGS || {}).map(([id, b]) => `
+  const buildingsHtml = Object.entries(INITIAL_BUILDINGS || {}).map(([id, b]) => {
+    const bLocale = BUILDING_NAMES[id]?.[lang] || BUILDING_NAMES[id]?.ko;
+    const bName = bLocale?.name || tr(b.name);
+    const bDesc = bLocale?.desc || tr(b.description || '');
+    return `
     <div class="grid-card">
       <div class="grid-card-head">
         <span class="icon-lg">${b.icon || '🏛️'}</span>
         <div>
-          <strong class="card-title">${escapeHtml(tr(b.name))}</strong>
+          <strong class="card-title">${escapeHtml(bName)}</strong>
           <span class="badge badge-subtle">Max Lv.${(b as any).maxLevel ?? 10}</span>
         </div>
       </div>
-      <p class="desc-sm">${escapeHtml(tr(b.description || ''))}</p>
+      <p class="desc-sm">${escapeHtml(bDesc)}</p>
       <div class="perks-list">
         ${(((b as any).perks || []) as Array<{ level: number; desc: string }>).map(p => `<div class="perk-item">✓ Lv.${p.level}: ${escapeHtml(tr(p.desc))}</div>`).join('')}
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   // 6. Equipment recipes
   const equipmentHtml = (EQUIPMENT_RECIPES || []).map(eq => {

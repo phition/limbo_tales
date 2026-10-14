@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { CHARACTER_CLASSES } from '../data/classes';
 import { MONSTERS } from '../data/monsters';
 import { INITIAL_BUILDINGS, BUILDING_LORE_AND_TIPS } from '../data/buildings';
+import { BUILDING_NAMES } from '../i18n/dataLocales';
 import { EQUIPMENT_RECIPES, PREFIX_ENCHANT_OPTIONS, SUFFIX_ENCHANT_OPTIONS, getEquipmentTemplateId } from '../data/equipment';
 import { ALL_SKILL_BOOKS, getSkillAffinityMeta } from '../data/skillBooks';
 import { STATUS_EFFECT_META, StatusEffectType, MonsterData, EnchantOption, CharacterClass, MONSTER_FACTION_META } from '../types/game';
@@ -197,10 +198,13 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
   const filteredBuildings = useMemo(() => {
     return Object.values(INITIAL_BUILDINGS).filter(b => {
       if (!cleanSearch) return true;
-      const str = (b.id + ' ' + b.name + ' ' + tr(b.name) + ' ' + b.description + ' ' + tr(b.description)).toLowerCase();
+      const bLocale = BUILDING_NAMES[b.id]?.[lang] || BUILDING_NAMES[b.id]?.ko;
+      const bName = bLocale?.name || b.name;
+      const bDesc = bLocale?.desc || b.description;
+      const str = (b.id + ' ' + bName + ' ' + tr(bName) + ' ' + bDesc + ' ' + tr(bDesc) + ' ' + b.description).toLowerCase();
       return str.includes(cleanSearch);
     });
-  }, [cleanSearch, dataRevision]);
+  }, [cleanSearch, dataRevision, lang]);
 
   // 4. 장비 & 인챈트 필터링
   const filteredEquipment = useMemo(() => {
@@ -1055,18 +1059,21 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                 {filteredBuildings.map(b => {
                   const maxLevel = (b as any).maxLevel || 10;
                   const loreTips = BUILDING_LORE_AND_TIPS[b.id as keyof typeof BUILDING_LORE_AND_TIPS];
+                  const bLocale = BUILDING_NAMES[b.id]?.[lang] || BUILDING_NAMES[b.id]?.ko;
+                  const bName = bLocale?.name || tr(b.name);
+                  const bDesc = bLocale?.desc || tr(b.description);
                   return (
                     <div
                       key={b.id}
                       onClick={() => setDetailData({
-                        title: tr(b.name),
+                        title: bName,
                         subtitle: `${tr('식별자')}: ${b.id} • ${tr('최대 증축')} Lv.${maxLevel}`,
                         categoryBadge: { label: tr('영지 시설'), bg: '#38ef7d22', color: '#38ef7d', border: '#38ef7d55' },
                         icon: <GameIcon name={b.id} icon={b.icon || '🏰'} size={36} />,
                         content: (
                           <div className="flex flex-col gap-4">
                             <div className="text-base sm:text-lg text-white font-medium leading-relaxed bg-[#0c1220] p-5 rounded-2xl border border-[#1e2c45] shadow-inner">
-                              {tr(b.description)}
+                              {bDesc}
                             </div>
                             {loreTips?.lore && (
                               <div className="p-4 rounded-xl bg-[#140e1e] border border-[#a855f744] flex flex-col gap-2">
@@ -1090,7 +1097,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             </div>
                           </div>
                         ),
-                        footerInfo: `${tr('영지 시설')} • ${tr(b.name)}`
+                        footerInfo: `${tr('영지 시설')} • ${bName}`
                       })}
                       className="p-3.5 rounded-xl bg-[#111828] border border-[#22334f] flex flex-col gap-1.5 hover:border-[#38ef7d66] transition-all cursor-pointer hover:scale-[1.01] group"
                     >
@@ -1100,7 +1107,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             <GameIcon name={b.id} icon={b.icon || '🏰'} size={24} />
                           </div>
                           <div>
-                            <div className="font-bold text-sm text-white group-hover:text-[#38ef7d] transition-colors">{tr(b.name)}</div>
+                            <div className="font-bold text-sm text-white group-hover:text-[#38ef7d] transition-colors">{bName}</div>
                             <div className="text-[10px] text-[#8b9bb4]">
                               {tr('최대 증축')}: Lv.{maxLevel}
                             </div>
@@ -1114,7 +1121,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         </div>
                       </div>
                       <div className="text-xs text-[#cfd8e8] leading-relaxed bg-[#0c1220] p-2.5 rounded-lg border border-[#1e2c45]">
-                        {tr(b.description)}
+                        {bDesc}
                       </div>
                     </div>
                   );

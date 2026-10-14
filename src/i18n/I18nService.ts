@@ -80,7 +80,9 @@ export class I18nService {
           const fixedText = parts.join('').trim();
           // 너무 짧거나 조사 단독으로 매칭되어 일반 명사구를 파괴하는 위험 패턴 방지
           if (fixedText.length <= 1) continue;
-          if (['의', '는', '은', '이', '가', '을', '를', '에', '와', '과'].includes(fixedText)) continue;
+          if (['의', '는', '은', '이', '가', '을', '를', '에', '와', '과', '에게', '에서', '으로', '로', '하고', '하며', '하여', '에도', '까지', '부터'].includes(fixedText)) continue;
+          // 와일드카드만 많고 고정 텍스트가 극히 빈약한 패턴 필터링
+          if ((key.match(/\{\d+\}/g) || []).length >= 2 && fixedText.length < 4) continue;
           const esc = parts.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
           const re = new RegExp('^' + esc.join('(.+?)') + '$', 's');
           const frag = parts.reduce((a, b) => (b.length > a.length ? b : a), '');
@@ -113,14 +115,22 @@ export class I18nService {
     else this.ensureLoaded(lang).then(apply);
   }
 
-  /** 생성 번역표 기반 조회 (완전 일치 → {N} 템플릿 패턴) */
-  private lookupGenerated(text: string, l: 'en' | 'ja', depth = 0): string | null {
+  /** 1. 생성 번역표 기반 완전 일치 조회 */
+  private lookupGeneratedExact(text: string, l: 'en' | 'ja'): string | null {
     const dict = this.generated[l];
     if (!dict) return null;
     const norm = text.replace(/\s+/g, ' ').trim();
     const hit = dict[text] ?? dict[text.trim()] ?? dict[norm];
-    if (hit !== undefined) return hit;
+    return hit !== undefined ? hit : null;
+  }
+
+  /** 2. 생성 번역표 기반 {N} 템플릿 패턴 매칭 (완전 일치 미매칭 시에만) */
+  private lookupGeneratedPattern(text: string, l: 'en' | 'ja', depth = 0): string | null {
     if (depth > 2) return null;
+    const norm = text.replace(/\s+/g, ' ').trim();
+    // 문장이 길고 마침표가 여러 개 있는 복합 단락은 와일드카드 템플릿으로 함부로 분해하지 않음
+    if (norm.length > 80 && (norm.match(/\./g) || []).length >= 2) return null;
+
     const pats = this.patterns[l] || [];
     for (const p of pats as any[]) {
       if (!norm.includes(p.frag)) continue;
@@ -129,7 +139,7 @@ export class I18nService {
       const vals: Record<number, string> = {};
       p.order.forEach((n: number, i: number) => {
         const v = m[i + 1];
-        vals[n] = /[\uac00-\ud7af]/.test(v) ? (this.lookupGenerated(v, l, depth + 1) ?? this.trFallback(v, l)) : v;
+        vals[n] = /[\uac00-\ud7af]/.test(v) ? (this.lookupGeneratedExact(v, l) ?? this.lookupGeneratedPattern(v, l, depth + 1) ?? this.trFallback(v, l)) : v;
       });
       return (p.tpl as string).replace(/\{(\d+)\}/g, (_: string, n: string) => vals[Number(n)] ?? '');
     }
@@ -200,12 +210,12 @@ export class I18nService {
     const trimmed = text.trim();
     const tLang = (lang === 'ja' ? 'ja' : 'en') as 'en' | 'ja';
 
-    // 1. 빌드 생성 전체 문장 번역표 (정확 일치 + {N} 템플릿)
-    const gen = this.lookupGenerated(text, tLang);
-    if (gen !== null) {
+    // 1. 빌드 생성 전체 문장 번역표 (정확 완전 일치)
+    const exactGen = this.lookupGeneratedExact(text, tLang);
+    if (exactGen !== null) {
       const lead = text.match(/^\s*/)![0];
       const trail = text.match(/\s*$/)![0];
-      const res = lead + gen + trail;
+      const res = lead + exactGen + trail;
       if (this.translationCache.size > 8000) this.translationCache.clear();
       this.translationCache.set(cacheKey, res);
       return res;
@@ -215,6 +225,17 @@ export class I18nService {
     const exact = EXACT_TRANSLATIONS[tLang]?.[trimmed] ?? EXACT_TRANSLATIONS[tLang]?.[text];
     if (exact) {
       const res = text.replace(trimmed, exact);
+      this.translationCache.set(cacheKey, res);
+      return res;
+    }
+
+    // 2.01 빌드 생성 {N} 템플릿 패턴 매칭 (완전 일치 미매칭 시에만)
+    const genPattern = this.lookupGeneratedPattern(text, tLang);
+    if (genPattern !== null) {
+      const lead = text.match(/^\s*/)![0];
+      const trail = text.match(/\s*$/)![0];
+      const res = lead + genPattern + trail;
+      if (this.translationCache.size > 8000) this.translationCache.clear();
       this.translationCache.set(cacheKey, res);
       return res;
     }
