@@ -34,6 +34,49 @@ export const CLASS_NAMES: Record<string, Record<SupportedLanguage, { name: strin
   valkyrie_saint: { ko: { name: '발키리 대천사' }, en: { name: 'Valkyrie Archangel' }, ja: { name: 'ヴァルキリー大天使' } },
   chaos_elementalist: { ko: { name: '혼돈 원소사' }, en: { name: 'Chaos Elementalist' }, ja: { name: '混沌元素士' } },
   primal_archon: { ko: { name: '원초 마신' }, en: { name: 'Primal Archon' }, ja: { name: '原初の魔神' } },
+
+  // 🛡️ 성기사 계열 (Squire / Paladin / Guardian / Valkyrie / Fortress / Aegis Bastion)
+  squire: { ko: { name: '견습 기사' }, en: { name: 'Squire' }, ja: { name: '見習い騎士' } },
+  guardian: { ko: { name: '중장 보병' }, en: { name: 'Heavy Infantry' }, ja: { name: '重装歩兵' } },
+  aegis_valkyrie: { ko: { name: '발키리' }, en: { name: 'Valkyrie' }, ja: { name: 'ヴァルキリー' } },
+  fortress: { ko: { name: '포트리스' }, en: { name: 'Fortress' }, ja: { name: 'フォートレス' } },
+  aegis_bastion: { ko: { name: '이지스 바스티온' }, en: { name: 'Aegis Bastion' }, ja: { name: 'イージス・バスティオン' } },
+
+  // 🗡️ 암살자 계열 (Rogue / Assassin / Duelist / Shadow Phantom / Phantom Swordmaster / Void Strider)
+  shadow_trainee: { ko: { name: '그림자 수련생' }, en: { name: 'Shadow Trainee' }, ja: { name: '影の見習い' } },
+  duelist: { ko: { name: '그림자 결투사' }, en: { name: 'Shadow Duelist' }, ja: { name: '影の決闘士' } },
+  blade_dancer: { ko: { name: '환영의 검성' }, en: { name: 'Phantom Swordmaster' }, ja: { name: '幻影の剣聖' } },
+  void_strider: { ko: { name: '보이드 스트라이더' }, en: { name: 'Void Strider' }, ja: { name: 'ヴォイド・ストライダー' } },
+
+  // 🔮 마법사 계열 (Apprentice / Archmage / Arcane Scholar / Chrono Tuner / Chrono Archon)
+  apprentice: { ko: { name: '원소 학도' }, en: { name: 'Elemental Scholar' }, ja: { name: '元素の学徒' } },
+  calamity_mage: { ko: { name: '아크 메이지' }, en: { name: 'Archmage' }, ja: { name: 'アークメイジ' } },
+  arcane_scholar: { ko: { name: '비전 학자' }, en: { name: 'Arcane Scholar' }, ja: { name: '秘術の学者' } },
+  chronomancer: { ko: { name: '시공의 조율사' }, en: { name: 'Spacetime Tuner' }, ja: { name: '時空の調律者' } },
+  chrono_archon: { ko: { name: '크로노 아콘' }, en: { name: 'Chrono Archon' }, ja: { name: 'クロノ・アルコン' } },
+
+  // 🕊️ 사제 / 성전사 계열 (Acolyte / Bishop / War Priest / Holy Savior / Crusader Lord / Seraphic Inquisitor)
+  acolyte: { ko: { name: '견습 사제' }, en: { name: 'Acolyte' }, ja: { name: '見習い司祭' } },
+  bishop: { ko: { name: '주교' }, en: { name: 'Bishop' }, ja: { name: '司教' } },
+  war_priest: { ko: { name: '전투 사제' }, en: { name: 'War Priest' }, ja: { name: '戦闘司祭' } },
+  high_saintess: { ko: { name: '성령의 구원자' }, en: { name: 'Holy Savior' }, ja: { name: '聖霊の救済者' } },
+  crusader_lord: { ko: { name: '성전의 심판관' }, en: { name: 'Judge of Crusade' }, ja: { name: '聖戦の審判官' } },
+  seraphic_inquisitor: { ko: { name: '세라픽 인퀴지터' }, en: { name: 'Seraphic Inquisitor' }, ja: { name: 'セラフィック・インクイジター' } },
+
+  // 🪓 광전사 / 선봉 계열 (Vanguard / Berserker / Tactical Commander / Valhalla Blade / Ironblood Overlord / Valhalla Warlord)
+  vanguard: { ko: { name: '용병 검사' }, en: { name: 'Mercenary Swordsman' }, ja: { name: '傭兵剣士' } },
+  warlord: { ko: { name: '전술 지휘관' }, en: { name: 'Tactical Commander' }, ja: { name: '戦術指揮官' } },
+  valhalla_blade: { ko: { name: '발할라 블레이드' }, en: { name: 'Valhalla Blade' }, ja: { name: 'ヴァルハラ・ブレード' } },
+  iron_marshal: { ko: { name: '철혈의 패황' }, en: { name: 'Ironblood Overlord' }, ja: { name: '鉄血の覇皇' } },
+  valhalla_warlord: { ko: { name: '발할라 워로드' }, en: { name: 'Valhalla Warlord' }, ja: { name: 'ヴァルハラ・ウォーロード' } },
+
+  // 🎯 거너 / 저격 계열 (Gunner / Tactical Cannoneer / Abyssal Sniper / Hyper Ranger / Reaper Sharpshooter / Omega Deadeye)
+  gunner: { ko: { name: '마총 수련생' }, en: { name: 'Gunner Trainee' }, ja: { name: '魔銃見習い' } },
+  tactical_gunner: { ko: { name: '전술 포수' }, en: { name: 'Tactical Cannoneer' }, ja: { name: '戦術砲手' } },
+  sharpshooter: { ko: { name: '심연의 저격수' }, en: { name: 'Abyssal Sniper' }, ja: { name: '深淵の狙撃手' } },
+  aether_gun_meister: { ko: { name: '하이퍼 레인저' }, en: { name: 'Hyper Ranger' }, ja: { name: 'ハイパーレンジャー' } },
+  ghost_sniper: { ko: { name: '사신 저격수' }, en: { name: 'Reaper Sharpshooter' }, ja: { name: '死神狙撃手' } },
+  omega_deadeye: { ko: { name: '오메가 데드아이' }, en: { name: 'Omega Deadeye' }, ja: { name: 'オメガ・デッドアイ' } },
 };
 
 export const BUILDING_NAMES: Record<string, Record<SupportedLanguage, { name: string; desc: string }>> = {
