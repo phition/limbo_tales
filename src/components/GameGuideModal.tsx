@@ -488,14 +488,14 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                 </div>
               </div>
 
-              {/* ⚡ 스마트 자동 전투 AI & 2.0배속 가속 */}
+              {/* ⚡ 스마트 자동 전투 AI & 1.5배속 가속 */}
               <div className="p-4 rounded-xl bg-[#0f192a] border border-[#38ef7d44] flex flex-col gap-2">
                 <div className="text-sm sm:text-base font-bold text-[#38ef7d] flex items-center justify-between">
-                  <span>⚡ 5. 2.0배속 스마트 자동 전투 AI 가이드</span>
-                  <span className="text-xs font-mono text-[#81c784] font-bold">Auto Combat 2.0x</span>
+                  <span>⚡ 5. 일반 던전 1.5배속 스마트 자동 전투 AI 가이드</span>
+                  <span className="text-xs font-mono text-[#81c784] font-bold">Dungeon Auto 1.5x</span>
                 </div>
                 <div className="text-xs text-[#b0bec5] space-y-1">
-                  <div>• <strong>2.0배속 전투 연출</strong>: 전투 진행 시 턴 진행 및 전투 애니메이션이 기본 2.0배속 고속으로 쾌적하게 재생됩니다.</div>
+                  <div>• <strong>1.5배속 전투 연출</strong>: 일반 던전 및 회랑 탐험 시 자동 전투(Auto)를 활성화하면 턴 진행과 타격 연출이 1.5배 속도로 안정적으로 재생됩니다.</div>
                   <div>• <strong>상태이상 폭발 연계 우선</strong>: 적에게 걸린 디버프를 분석하여 6대 상태이상 콤보 폭발이 가능한 스킬을 최우선으로 시전합니다.</div>
                   <div>• <strong>스마트 마무리(막타)</strong>: 일반 공격만으로 처치할 수 있는 잔여 체력의 적에게는 무의미한 스킬 마나 낭비를 방지하고 기본 공격으로 마무리합니다.</div>
                 </div>
