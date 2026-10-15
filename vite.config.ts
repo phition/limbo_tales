@@ -179,6 +179,13 @@ function customAssetSyncPlugin(): Plugin {
               fs.mkdirSync(path.dirname(backupPath), { recursive: true });
               fs.writeFileSync(backupPath, JSON.stringify(merged, null, 2), 'utf-8');
 
+              // 빌드 산출물(dist/assets)이 존재하는 경우 함께 동기화
+              const distAssetsDir = path.join(rootDir, 'dist', 'assets');
+              if (fs.existsSync(distAssetsDir)) {
+                const distPresetPath = path.join(distAssetsDir, 'custom_game_data.json');
+                fs.writeFileSync(distPresetPath, JSON.stringify(merged, null, 2), 'utf-8');
+              }
+
               console.log(`[customAssetSyncPlugin] 📊 게임 밸런스/수치 데이터가 로컬 파일시스템에 저장되었습니다. (version ${merged.version})`);
 
               res.setHeader('Content-Type', 'application/json');

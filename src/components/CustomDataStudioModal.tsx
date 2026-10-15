@@ -490,22 +490,17 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
   // 7. 배포 및 저장
   const handleSaveAndDeploy = async () => {
     setIsSaving(true);
-    gds.applyCustomPackage(overrides, true);
-    const res = await gds.saveCustomDataToServer();
+    const result = await gds.deployMasterData(overrides);
     setIsSaving(false);
     setHasChanges(false);
-    if (res.success) {
-      showToast('🚀 데이터 스튜디오 설정이 배포 파일(custom_game_data.json)과 인게임에 성공적으로 적용되었습니다!');
-    } else {
-      showToast('💾 브라우저 및 인게임에 즉시 적용되었습니다! (배포 파일 미연결 시 로컬 보관)');
-    }
+    showToast(result.message);
   };
 
   // 8. 초기화
   const handleResetToDefault = () => {
     if (!window.confirm('모든 수치 편집 내역을 기본 상태로 초기화하시겠습니까?')) return;
     setOverrides({});
-    gds.applyCustomPackage({}, true);
+    gds.resetCustomOverrides();
     setHasChanges(true);
     showToast('🔄 모든 수치가 원본 기본값으로 초기화되었습니다. [배포용 저장]을 누르면 영구 적용됩니다.');
   };

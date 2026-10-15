@@ -17,8 +17,8 @@
       "wood": 150
     }
   },
-  "version": 13,
-  "updatedAt": 1792037759948,
+  "version": 18,
+  "updatedAt": 1792047603553,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -1561,130 +1561,627 @@
     "atk": 500,
     "def": 800,
     "luck": 480,
-    "spd": 45,
-    "maxHp": 34700000,
-    "parts": {
-      "head": {
-        "id": "head",
-        "name": "네메시스 머리",
-        "position": "front",
-        "archetype": "발할라 워로드 (Valhalla Warlord)",
-        "maxHp": 11600000,
-        "atk": 925,
-        "def": 1350,
-        "spd": 140,
-        "luck": 250,
-        "icon": "💥",
-        "desc": "압도적인 물리 강타와 진동 파쇄를 시전하는 전열의 파멸 머리",
-        "skills": [
-          {
-            "id": "nemesis_head_cleave",
-            "name": "파멸의 쇄도",
-            "desc": "전열 대상에게 145% 물리 충격 관통 피해",
-            "power": 1.45,
-            "target": "front",
-            "icon": "⚡"
-          },
-          {
-            "id": "nemesis_head_roar",
-            "name": "종말의 포효",
-            "desc": "아군 전체에게 125% 광역 물리 피해 및 2턴간 방어력 25% 파쇄",
-            "power": 1.25,
-            "target": "all",
-            "effectType": "debuff",
-            "icon": "📢"
-          },
-          {
-            "id": "nemesis_head_cataclysm",
-            "name": "피의 궤멸격",
-            "desc": "아군 전체에게 160% 궤멸 피해 및 2턴간 치명적인 출혈 부여",
-            "power": 1.6,
-            "target": "all",
-            "effectType": "damage",
-            "icon": "🩸"
-          }
-        ]
+    "spd": 45
+  },
+  "buildingTierConfigs": {
+    "cabin": {
+      "3": {
+        "cost": {
+          "wood": 76,
+          "stone": 120
+        },
+        "production": {},
+        "upkeep": {}
       },
-      "body": {
-        "id": "body",
-        "name": "네메시스 몸통",
-        "position": "mid",
-        "archetype": "크로노 아콘 (Chrono Archon)",
-        "maxHp": 12100000,
-        "atk": 595,
-        "def": 645,
-        "spd": 110,
-        "luck": 200,
-        "icon": "🌀",
-        "desc": "시공간 조작과 광역 군중 제어(CC)를 담당하는 중심 몸통",
-        "skills": [
-          {
-            "id": "nemesis_body_timewarp",
-            "name": "시간 왜곡 파동",
-            "desc": "아군 전체에게 110% 마법 피해 및 2턴간 행동 속도 30% 감속",
-            "power": 1.8,
-            "target": "all",
-            "effectType": "debuff",
-            "icon": "⏳"
-          },
-          {
-            "id": "nemesis_body_stasis",
-            "name": "시공 정지 역장",
-            "desc": "단일 대상에게 130% 마법 피해 및 1턴간 행동 불능(스턴) 부여",
-            "power": 2.3,
-            "target": "single",
-            "effectType": "debuff",
-            "icon": "🛑"
-          },
-          {
-            "id": "nemesis_body_voiddrain",
-            "name": "공허 침식 폭풍",
-            "desc": "아군 전체에게 120% 마법 피해 및 마나 20 강탈",
-            "power": 1.8,
-            "target": "all",
-            "effectType": "drain",
-            "icon": "🌌"
-          }
-        ]
+      "4": {
+        "cost": {
+          "wood": 244,
+          "stone": 200,
+          "iron": 50
+        },
+        "upkeep": {
+          "amount": 5,
+          "secondaryAmount": 0
+        },
+        "production": {}
       },
-      "tail": {
-        "id": "tail",
-        "name": "네메시스 꼬리",
-        "position": "back",
-        "archetype": "오메가 데드아이 / 레인저 (Omega Deadeye)",
-        "maxHp": 11000000,
-        "atk": 840,
-        "def": 935,
-        "spd": 250,
-        "luck": 450,
-        "icon": "🎯",
-        "desc": "신속한 광역 휩쓸기와 급소 원샷원킬을 노리는 후열의 치명 꼬리",
-        "skills": [
-          {
-            "id": "nemesis_tail_sweep",
-            "name": "차원 꼬리 휩쓸기",
-            "desc": "아군 전열/중열을 쓸어버리는 135% 광역 물리 피해",
-            "power": 1.85,
-            "target": "front",
-            "icon": "🌪️"
-          },
-          {
-            "id": "nemesis_tail_stinger",
-            "name": "절멸의 종말 침",
-            "desc": "단일 대상을 궤도 저격하여 280% 초치명타 관통 피해 (원샷원킬)",
-            "power": 2.8,
-            "target": "single",
-            "icon": "🎯"
-          },
-          {
-            "id": "nemesis_tail_dimension_slash",
-            "name": "시공 분열 연타",
-            "desc": "아군 전체에게 140% 방어 무시 광역 관통타",
-            "power": 1.8,
-            "target": "all",
-            "icon": "🗡️"
-          }
-        ]
+      "5": {
+        "cost": {
+          "wood": 392,
+          "stone": 336,
+          "iron": 80
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "6": {
+        "cost": {
+          "wood": 628,
+          "stone": 518,
+          "iron": 139,
+          "ether": 41
+        },
+        "upkeep": {
+          "amount": 10,
+          "secondaryAmount": 0
+        },
+        "production": {}
+      },
+      "7": {
+        "cost": {
+          "wood": 1006,
+          "stone": 750,
+          "iron": 228,
+          "ether": 66
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "8": {
+        "cost": {
+          "wood": 2415,
+          "stone": 1562,
+          "iron": 305,
+          "ether": 152,
+          "leather": 242
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "9": {
+        "cost": {
+          "wood": 3864,
+          "stone": 2900,
+          "iron": 429,
+          "ether": 284,
+          "leather": 567
+        },
+        "upkeep": {
+          "amount": 24,
+          "secondaryAmount": 0
+        },
+        "production": {}
+      },
+      "10": {
+        "cost": {
+          "wood": 6183,
+          "stone": 4442,
+          "iron": 627,
+          "ether": 368,
+          "leather": 707,
+          "void_shard": 20
+        },
+        "upkeep": {
+          "amount": 28,
+          "secondaryAmount": 0
+        },
+        "production": {}
+      }
+    },
+    "lumberCamp": {
+      "4": {
+        "cost": {
+          "wood": 254,
+          "gold": 858,
+          "iron": 210
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "5": {
+        "cost": {
+          "wood": 427,
+          "gold": 1375,
+          "iron": 250
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "6": {
+        "cost": {
+          "wood": 624,
+          "gold": 2200,
+          "iron": 379,
+          "ether": 55
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "7": {
+        "cost": {
+          "wood": 838,
+          "gold": 5521,
+          "iron": 528,
+          "ether": 96
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "8": {
+        "cost": {
+          "wood": 1342,
+          "gold": 7636,
+          "iron": 605,
+          "ether": 152,
+          "leather": 42
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "9": {
+        "cost": {
+          "wood": 3150,
+          "gold": 9017,
+          "iron": 729,
+          "ether": 284,
+          "leather": 167
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "10": {
+        "cost": {
+          "wood": 4435,
+          "gold": 14429,
+          "iron": 827,
+          "ether": 436,
+          "leather": 507,
+          "void_shard": 10
+        },
+        "production": {},
+        "upkeep": {}
+      }
+    },
+    "quarry": {
+      "1": {
+        "cost": {
+          "wood": 40,
+          "stone": 63,
+          "gold": 315
+        },
+        "production": {
+          "primaryAmount": 2,
+          "secondaryAmount": 0
+        },
+        "upkeep": {
+          "amount": 0,
+          "secondaryAmount": 0
+        }
+      },
+      "2": {
+        "cost": {
+          "wood": 64,
+          "stone": 100,
+          "gold": 504
+        },
+        "production": {
+          "primaryAmount": 4,
+          "secondaryAmount": 0
+        },
+        "upkeep": {
+          "amount": 0,
+          "secondaryAmount": 0
+        }
+      },
+      "3": {
+        "cost": {
+          "wood": 102,
+          "stone": 159,
+          "gold": 806
+        },
+        "production": {
+          "primaryAmount": 5,
+          "secondaryAmount": 1
+        },
+        "upkeep": {
+          "amount": 0,
+          "secondaryAmount": 0
+        }
+      },
+      "4": {
+        "cost": {
+          "wood": 163,
+          "stone": 256,
+          "gold": 1289,
+          "iron": 31
+        },
+        "production": {
+          "primaryAmount": 7,
+          "secondaryAmount": 1
+        },
+        "upkeep": {
+          "amount": 15,
+          "secondaryAmount": 0
+        }
+      },
+      "5": {
+        "cost": {
+          "wood": 786,
+          "stone": 411,
+          "gold": 2064,
+          "iron": 50
+        },
+        "production": {
+          "primaryAmount": 9,
+          "secondaryAmount": 1
+        },
+        "upkeep": {
+          "amount": 28,
+          "secondaryAmount": 0
+        }
+      },
+      "6": {
+        "cost": {
+          "wood": 1257,
+          "stone": 659,
+          "gold": 3301,
+          "iron": 79,
+          "ether": 21
+        },
+        "production": {
+          "primaryAmount": 11,
+          "secondaryAmount": 2
+        },
+        "upkeep": {
+          "amount": 39,
+          "secondaryAmount": 0
+        }
+      },
+      "7": {
+        "cost": {
+          "wood": 2013,
+          "stone": 1056,
+          "gold": 5283,
+          "iron": 128,
+          "ether": 33
+        },
+        "production": {
+          "primaryAmount": 13,
+          "secondaryAmount": 2
+        },
+        "upkeep": {
+          "amount": 41,
+          "secondaryAmount": 18
+        }
+      },
+      "8": {
+        "cost": {
+          "wood": 3219,
+          "stone": 1690,
+          "gold": 8454,
+          "iron": 205,
+          "ether": 52,
+          "leather": 42
+        },
+        "production": {
+          "primaryAmount": 14,
+          "secondaryAmount": 2
+        },
+        "upkeep": {
+          "amount": 53,
+          "secondaryAmount": 23
+        }
+      },
+      "9": {
+        "cost": {
+          "wood": 5151,
+          "stone": 2704,
+          "gold": 13528,
+          "iron": 329,
+          "ether": 84,
+          "leather": 67
+        },
+        "production": {
+          "primaryAmount": 16,
+          "secondaryAmount": 3
+        },
+        "upkeep": {
+          "amount": 62,
+          "secondaryAmount": 26
+        }
+      },
+      "10": {
+        "cost": {
+          "wood": 8244,
+          "stone": 4328,
+          "gold": 21644,
+          "iron": 527,
+          "ether": 136,
+          "leather": 107,
+          "void_shard": 10
+        },
+        "production": {
+          "primaryAmount": 18,
+          "secondaryAmount": 3
+        },
+        "upkeep": {
+          "amount": 73,
+          "secondaryAmount": 31
+        }
+      }
+    },
+    "sanctuary": {
+      "1": {
+        "upkeep": {
+          "amount": 4,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "2": {
+        "upkeep": {
+          "amount": 6,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "3": {
+        "upkeep": {
+          "amount": 8,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "4": {
+        "upkeep": {
+          "amount": 10,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "5": {
+        "upkeep": {
+          "amount": 12,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "6": {
+        "upkeep": {
+          "amount": 14,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "7": {
+        "upkeep": {
+          "amount": 16,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      }
+    },
+    "arenaGate": {
+      "1": {
+        "upkeep": {
+          "amount": 2,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "2": {
+        "upkeep": {
+          "amount": 4,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "3": {
+        "upkeep": {
+          "amount": 6,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "4": {
+        "upkeep": {
+          "amount": 12,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "5": {
+        "upkeep": {
+          "amount": 16,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "6": {
+        "upkeep": {
+          "amount": 20,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "7": {
+        "upkeep": {
+          "amount": 24,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "8": {
+        "upkeep": {
+          "amount": 28,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "9": {
+        "upkeep": {
+          "amount": 34,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "10": {
+        "upkeep": {
+          "amount": 40,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      }
+    },
+    "market": {
+      "5": {
+        "production": {
+          "primaryAmount": 10,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "6": {
+        "production": {
+          "primaryAmount": 12,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "7": {
+        "production": {
+          "primaryAmount": 15,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "8": {
+        "production": {
+          "primaryAmount": 20,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "9": {
+        "production": {
+          "primaryAmount": 24,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "10": {
+        "production": {
+          "primaryAmount": 28,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      }
+    },
+    "infirmary": {
+      "4": {
+        "upkeep": {
+          "amount": 3,
+          "secondaryAmount": 3
+        },
+        "cost": {},
+        "production": {}
+      },
+      "5": {
+        "upkeep": {
+          "amount": 6,
+          "secondaryAmount": 3
+        },
+        "cost": {},
+        "production": {}
+      },
+      "6": {
+        "upkeep": {
+          "amount": 9,
+          "secondaryAmount": 10
+        },
+        "cost": {},
+        "production": {}
+      },
+      "7": {
+        "upkeep": {
+          "amount": 15,
+          "secondaryAmount": 14
+        },
+        "cost": {},
+        "production": {}
+      },
+      "8": {
+        "upkeep": {
+          "amount": 21,
+          "secondaryAmount": 18
+        },
+        "cost": {},
+        "production": {}
+      },
+      "9": {
+        "upkeep": {
+          "amount": 27,
+          "secondaryAmount": 20
+        },
+        "cost": {},
+        "production": {}
+      },
+      "10": {
+        "upkeep": {
+          "amount": 36,
+          "secondaryAmount": 24
+        },
+        "cost": {},
+        "production": {}
+      }
+    },
+    "blacksmith": {
+      "1": {
+        "cost": {
+          "wood": 100,
+          "stone": 168,
+          "iron": 150,
+          "gold": 1050
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "8": {
+        "upkeep": {
+          "amount": 20,
+          "secondaryAmount": 10
+        },
+        "cost": {},
+        "production": {}
+      },
+      "9": {
+        "upkeep": {
+          "amount": 25,
+          "secondaryAmount": 12
+        },
+        "cost": {},
+        "production": {}
+      },
+      "10": {
+        "upkeep": {
+          "amount": 30,
+          "secondaryAmount": 15
+        },
+        "cost": {},
+        "production": {}
       }
     }
   }

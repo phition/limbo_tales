@@ -45,6 +45,109 @@ export interface CustomGameDataPackage {
   updatedBy?: string;
 }
 
+function deepMergeCustomPackage(base: CustomGameDataPackage, override: CustomGameDataPackage): CustomGameDataPackage {
+  const result: CustomGameDataPackage = { ...base, ...override };
+
+  // 1. buildingTierConfigs
+  if (base.buildingTierConfigs || override.buildingTierConfigs) {
+    result.buildingTierConfigs = {};
+    const bIds = new Set([
+      ...Object.keys(base.buildingTierConfigs || {}),
+      ...Object.keys(override.buildingTierConfigs || {})
+    ]);
+    for (const bId of bIds) {
+      const baseMap = base.buildingTierConfigs?.[bId] || {};
+      const overMap = override.buildingTierConfigs?.[bId] || {};
+      const allLevels = new Set([
+        ...Object.keys(baseMap).map(Number),
+        ...Object.keys(overMap).map(Number)
+      ]);
+      result.buildingTierConfigs[bId] = {};
+      for (const lv of allLevels) {
+        const bTier = baseMap[lv] || {};
+        const oTier = overMap[lv] || {};
+        result.buildingTierConfigs[bId][lv] = {
+          ...bTier,
+          ...oTier,
+          cost: { ...(bTier.cost || {}), ...(oTier.cost || {}) },
+          production: { ...(bTier.production || {}), ...(oTier.production || {}) },
+          upkeep: { ...(bTier.upkeep || {}), ...(oTier.upkeep || {}) }
+        };
+      }
+    }
+  }
+
+  // 2. monsters
+  if (base.monsters || override.monsters) {
+    result.monsters = { ...(base.monsters || {}) };
+    for (const [id, mDiff] of Object.entries(override.monsters || {})) {
+      result.monsters[id] = { ...(result.monsters[id] || {}), ...mDiff };
+    }
+  }
+
+  // 3. buildingBaseCosts
+  if (base.buildingBaseCosts || override.buildingBaseCosts) {
+    result.buildingBaseCosts = { ...(base.buildingBaseCosts || {}) };
+    for (const [id, cDiff] of Object.entries(override.buildingBaseCosts || {})) {
+      result.buildingBaseCosts[id] = { ...(result.buildingBaseCosts[id] || {}), ...cDiff };
+    }
+  }
+
+  // 4. forgeItemBaseCosts
+  if (base.forgeItemBaseCosts || override.forgeItemBaseCosts) {
+    result.forgeItemBaseCosts = { ...(base.forgeItemBaseCosts || {}) };
+    for (const [id, cDiff] of Object.entries(override.forgeItemBaseCosts || {})) {
+      result.forgeItemBaseCosts[id] = { ...(result.forgeItemBaseCosts[id] || {}), ...cDiff };
+    }
+  }
+
+  // 5. classBaseStats
+  if (base.classBaseStats || override.classBaseStats) {
+    result.classBaseStats = { ...(base.classBaseStats || {}) };
+    for (const [id, sDiff] of Object.entries(override.classBaseStats || {})) {
+      result.classBaseStats[id] = { ...(result.classBaseStats[id] || {}), ...sDiff };
+    }
+  }
+
+  // 6. classSkills
+  if (base.classSkills || override.classSkills) {
+    result.classSkills = { ...(base.classSkills || {}) };
+    for (const [id, skDiff] of Object.entries(override.classSkills || {})) {
+      result.classSkills[id] = { ...(result.classSkills[id] || {}), ...skDiff };
+    }
+  }
+
+  // 7. skillBooks
+  if (base.skillBooks || override.skillBooks) {
+    result.skillBooks = { ...(base.skillBooks || {}) };
+    for (const [id, bkDiff] of Object.entries(override.skillBooks || {})) {
+      result.skillBooks[id] = { ...(result.skillBooks[id] || {}), ...bkDiff };
+    }
+  }
+
+  // 8. balance
+  if (base.balance || override.balance) {
+    result.balance = { ...(base.balance || {}), ...(override.balance || {}) };
+  }
+
+  // 9. nemesis
+  if (base.nemesis || override.nemesis) {
+    const mergedNemesis: Partial<NemesisBossConfig> = {
+      ...(base.nemesis || {}),
+      ...(override.nemesis || {})
+    };
+    if (base.nemesis?.parts || override.nemesis?.parts) {
+      mergedNemesis.parts = {
+        ...(base.nemesis?.parts || {}),
+        ...(override.nemesis?.parts || {})
+      } as any;
+    }
+    result.nemesis = mergedNemesis;
+  }
+
+  return result;
+}
+
 const IDB_DATA_KEY = 'limbo_custom_game_data_idb';
 
 export class GameDataService {
@@ -126,7 +229,7 @@ export class GameDataService {
 
     for (const url of candidateUrls) {
       try {
-        const res = await fetch(url);
+        const res = await fetch(`${url}?t=${Date.now()}`);
         if (res.ok) {
           const data = await res.json();
           if (data && typeof data === 'object') {
@@ -137,10 +240,24 @@ export class GameDataService {
       } catch (_) {}
     }
 
-    const merged: CustomGameDataPackage = {
-      ...(staticPreset || {}),
-      ...(savedOverrides || {})
-    };
+    let merged: CustomGameDataPackage = {};
+    if (staticPreset && savedOverrides) {
+      const staticTime = staticPreset.updatedAt || 0;
+      const savedTime = savedOverrides.updatedAt || 0;
+      // 정적 배포 파일이 로컬 스토리지보다 최신이거나 같으면 정적 배포 파일 우선 적용
+      if (staticTime >= savedTime) {
+        merged = deepMergeCustomPackage(savedOverrides, staticPreset);
+        try {
+          localStorage.setItem(IDB_DATA_KEY, JSON.stringify(merged));
+        } catch (_) {}
+      } else {
+        merged = deepMergeCustomPackage(staticPreset, savedOverrides);
+      }
+    } else if (staticPreset) {
+      merged = staticPreset;
+    } else if (savedOverrides) {
+      merged = savedOverrides;
+    }
 
     if (Object.keys(merged).length > 0) {
       this.applyCustomPackage(merged, false);
@@ -151,7 +268,7 @@ export class GameDataService {
    * 🌟 커스텀 데이터 패키지를 인게임 런타임에 즉각 적용
    */
   public applyCustomPackage(pkg: CustomGameDataPackage, persist = true): void {
-    this.customOverrides = { ...this.customOverrides, ...pkg };
+    this.customOverrides = deepMergeCustomPackage(this.customOverrides, pkg);
 
     // 1. 몬스터 스탯 반영
     if (pkg.monsters) {
@@ -412,10 +529,31 @@ export class GameDataService {
   }
 
   /**
+   * 🔄 모든 커스텀 오버라이드 설정 초기화
+   */
+  public resetCustomOverrides(): void {
+    this.customOverrides = {};
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(IDB_DATA_KEY);
+      } catch (_) {}
+    }
+    this.notifyListeners();
+  }
+
+  /**
    * ☁️ 원격 데이터를 로컬 메모리 및 전역 데이터 객체에 병합
    */
   public applyRemoteData(remoteData: any, source: string = 'remote'): boolean {
     if (!remoteData || typeof remoteData !== 'object') return false;
+
+    // 로컬 변경사항이 더 최신인 경우 이전 원격 데이터로 덮어쓰지 않도록 타임스탬프 보호
+    const localUpdatedAt = this.customOverrides.updatedAt || 0;
+    const remoteUpdatedAt = remoteData.updatedAt || remoteData.customOverrides?.updatedAt || 0;
+    if (localUpdatedAt > 0 && remoteUpdatedAt > 0 && remoteUpdatedAt < localUpdatedAt) {
+      console.log(`[GameDataService] ⏭️ Skipping older remote data from ${source} (remote: ${remoteUpdatedAt} < local: ${localUpdatedAt})`);
+      return false;
+    }
 
     let updated = false;
 
@@ -455,9 +593,32 @@ export class GameDataService {
       updated = true;
     }
 
+    if (remoteData.buildingTierConfigs && typeof remoteData.buildingTierConfigs === 'object') {
+      this.applyCustomPackage({ buildingTierConfigs: remoteData.buildingTierConfigs }, false);
+      updated = true;
+    }
+
+    if (remoteData.buildingBaseCosts && typeof remoteData.buildingBaseCosts === 'object') {
+      this.applyCustomPackage({ buildingBaseCosts: remoteData.buildingBaseCosts }, false);
+      updated = true;
+    }
+
+    if (remoteData.forgeItemBaseCosts && typeof remoteData.forgeItemBaseCosts === 'object') {
+      this.applyCustomPackage({ forgeItemBaseCosts: remoteData.forgeItemBaseCosts }, false);
+      updated = true;
+    }
+
     if (updated) {
       this.isRemoteSynced = true;
       this.notifyListeners();
+      try {
+        import('../managers/GameManager').then(({ GameManager }) => {
+          const gm = GameManager.getInstance();
+          gm.emit('buildingUpdated');
+          gm.emit('update');
+          gm.emit('resourcesChanged');
+        }).catch(() => {});
+      } catch (_) {}
     }
 
     return updated;
@@ -504,51 +665,111 @@ export class GameDataService {
     return false;
   }
 
-  public async seedMasterDataToFirebase(): Promise<{ success: boolean; message: string }> {
+  /**
+   * 🚀 마스터 데이터 통합 배포: 로컬 프리셋 파일(/api/custom-data/save) + Firebase 실시간 DB(/game_data) 동시 배포
+   */
+  public async deployMasterData(packageData?: CustomGameDataPackage): Promise<{
+    success: boolean;
+    localSaved: boolean;
+    cloudSynced: boolean;
+    message: string;
+  }> {
+    if (packageData) {
+      this.applyCustomPackage(packageData, true);
+    }
+
+    this.customOverrides.updatedAt = Date.now();
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(IDB_DATA_KEY, JSON.stringify(this.customOverrides));
+      } catch (_) {}
+    }
+
+    // 1. 로컬 정적 배포 파일 저장 시도
+    let localSaved = false;
+    let localMessage = '';
+    try {
+      const localRes = await this.saveCustomDataToServer();
+      localSaved = localRes.success;
+      localMessage = localRes.message;
+    } catch (e: any) {
+      localMessage = e?.message || '로컬 서버 미응답';
+    }
+
+    // 2. Firebase 실시간 데이터베이스 배포 시도
+    let cloudSynced = false;
+    let cloudMessage = '';
     const fb = FirebaseService.getInstance();
     const currentUser = fb.getCurrentUser();
 
-    if (!currentUser) {
-      return { success: false, message: '로그인 상태가 아닙니다. @bumpcat.net 지휘관 계정으로 로그인해 주세요.' };
-    }
-
-    if (!fb.isMasterUser()) {
-      return {
-        success: false,
-        message: `마스터 권한이 없습니다. (현재 계정: ${currentUser.email || '익명 계정'} / @bumpcat.net 이메일 필요)`
-      };
-    }
-
-    try {
-      const dataRef = ref(db, 'game_data');
-      const payload = {
-        updatedAt: Date.now(),
-        updatedBy: currentUser.email || currentUser.uid,
-        monsters: MONSTERS,
-        buildings: INITIAL_BUILDINGS,
-        recipes: EQUIPMENT_RECIPES,
-        buildingBaseCosts: BUILDING_BASE_COSTS,
-        forgeItemBaseCosts: FORGE_ITEM_BASE_COSTS,
-        initialHeroes: INITIAL_HEROES_CONFIG,
-        customOverrides: this.customOverrides,
-        balance: this.balanceConfig,
-        nemesis: NEMESIS_BOSS_CONFIG,
-      };
-
-      await set(dataRef, payload);
-      console.log('[GameDataService] Master game data seeded to Firebase /game_data successfully.');
-      return { success: true, message: '✅ Firebase /game_data 노드에 마스터 데이터가 성공적으로 저장되었습니다!' };
-    } catch (err: any) {
-      console.error('[GameDataService] Failed to seed master game data to Firebase.', err);
-      const errMsg = err?.message || String(err);
-      if (errMsg.includes('PERMISSION_DENIED')) {
-        return {
-          success: false,
-          message: '❌ PERMISSION_DENIED: Firebase 콘솔 > Realtime Database > 규칙 탭에 game_data 쓰기 규칙을 게시해 주세요!'
+    if (currentUser && fb.isMasterUser()) {
+      try {
+        const dataRef = ref(db, 'game_data');
+        const payload = {
+          updatedAt: Date.now(),
+          updatedBy: currentUser.email || currentUser.uid,
+          monsters: MONSTERS,
+          buildings: INITIAL_BUILDINGS,
+          recipes: EQUIPMENT_RECIPES,
+          buildingBaseCosts: BUILDING_BASE_COSTS,
+          forgeItemBaseCosts: FORGE_ITEM_BASE_COSTS,
+          initialHeroes: INITIAL_HEROES_CONFIG,
+          customOverrides: this.customOverrides,
+          buildingTierConfigs: this.customOverrides.buildingTierConfigs || {},
+          balance: this.balanceConfig,
+          nemesis: NEMESIS_BOSS_CONFIG,
         };
+        await set(dataRef, payload);
+        cloudSynced = true;
+        cloudMessage = 'Firebase 클라우드 배포 완료';
+        console.log('[GameDataService] ✅ Master game data synced to Firebase /game_data successfully.');
+      } catch (fbErr: any) {
+        console.warn('[GameDataService] Firebase seed failed:', fbErr);
+        cloudMessage = `Firebase 배포 실패: ${fbErr?.message || fbErr}`;
       }
-      return { success: false, message: `❌ 시딩 실패: ${errMsg}` };
+    } else {
+      cloudMessage = currentUser ? '마스터 권한 부족 (@bumpcat.net 필요)' : '미로그인 상태 (클라우드 미배포)';
     }
+
+    // 3. 인게임 UI 및 매니저에 즉각 반영 통지
+    try {
+      import('../managers/GameManager').then(({ GameManager }) => {
+        const gm = GameManager.getInstance();
+        gm.emit('buildingUpdated');
+        gm.emit('update');
+        gm.emit('resourcesChanged');
+      }).catch(() => {});
+    } catch (_) {}
+
+    this.notifyListeners();
+
+    // 4. 결과 메시지 조합
+    const overallSuccess = localSaved || cloudSynced;
+    let finalMessage = '';
+    if (localSaved && cloudSynced) {
+      finalMessage = '🚀 배포 파일(custom_game_data.json)과 Firebase 클라우드(/game_data)에 성공적으로 동기화 배포되었습니다!';
+    } else if (cloudSynced) {
+      finalMessage = '☁️ Firebase 실시간 DB(/game_data)에 성공적으로 배포되었습니다! 모든 접속자에게 실시간 적용됩니다.';
+    } else if (localSaved) {
+      finalMessage = `📁 로컬 정적 배포 파일(custom_game_data.json)에 저장되었습니다. (${cloudMessage})`;
+    } else {
+      finalMessage = '💾 브라우저 로컬 저장소 및 인게임에 즉시 적용되었습니다. (정적 파일 및 클라우드 미연결)';
+    }
+
+    return {
+      success: overallSuccess,
+      localSaved,
+      cloudSynced,
+      message: finalMessage,
+    };
+  }
+
+  public async seedMasterDataToFirebase(): Promise<{ success: boolean; message: string }> {
+    const res = await this.deployMasterData();
+    return {
+      success: res.cloudSynced || res.localSaved,
+      message: res.message
+    };
   }
 
   public isSyncedWithRemote(): boolean {
