@@ -122,6 +122,8 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [selectedBuildingId, setSelectedBuildingId] = useState<BuildingId>('cabin');
+  const [showBaseCostFormulas, setShowBaseCostFormulas] = useState(false);
 
   // 로컬 편집 상태 복사본
   const [overrides, setOverrides] = useState<CustomGameDataPackage>(() => gds.getCustomOverrides());
@@ -158,9 +160,6 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
-
-  const [selectedBuildingId, setSelectedBuildingId] = useState<BuildingId>('cabin');
-  const [showBaseCostFormulas, setShowBaseCostFormulas] = useState(false);
 
   // 1. 건물 건축/강화 소모재료 변경 (기초 베이스)
   const handleBuildingCostChange = (bId: string, resKey: keyof GameResources, val: number) => {
