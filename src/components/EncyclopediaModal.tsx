@@ -1760,7 +1760,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               <span>{downloadFeedback || tr('백과사전 HTML 다운로드')}</span>
             </button>
             <div className="text-[11px] text-[#8b9bb4] font-mono hidden md:block">
-              Limbo Ark Encyclopedia v0.9.9-rc1
+              Limbo Ark Encyclopedia v0.9.9-rc10
             </div>
           </div>
           <button

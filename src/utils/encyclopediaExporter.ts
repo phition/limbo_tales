@@ -686,7 +686,7 @@ export function exportEncyclopediaToHtml(
     <div class="meta-bar">
       <span>🌐 LANG: ${lang.toUpperCase()}</span>
       <span>📅 ${escapeHtml(generatedDate)}</span>
-      <span>📦 VERSION: 0.9.9-rc1</span>
+      <span>📦 VERSION: 0.9.9-rc10</span>
     </div>
   </header>
 

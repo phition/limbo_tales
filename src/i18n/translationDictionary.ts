@@ -2233,6 +2233,30 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "차원 아레나 승리 보상과 명예 암시장 무구 교환은 어떻게 활용하나요?": "How do Dimensional Arena victory rewards and Honor Black Market exchanges work?",
     "결투 승리 시 레이팅 점수 상승과 함께 [투사의 인장]을 획득하며, 연승(Streak)이 길어질수록 추가 인장 보너스를 대량 획득합니다. 모은 투사의 인장은 명예 암시장에서 베테랑/엘리트/마스터 등급 무구 보급함과 최고급 장비로 교환할 수 있습니다.": "Duel victories raise rating points and award [Fighter's Marks], with winning streaks granting massive bonus marks. Collected Fighter's Marks can be exchanged at the Honor Black Market for Veteran, Elite, and Master gear supply boxes and top-tier masterwork armaments.",
     "공격력 +16, 피해량 +8%": "ATK +16, Damage +8%",
+    "네메시스 머리": "Nemesis Head",
+    "네메시스 몸통": "Nemesis Body",
+    "네메시스 꼬리": "Nemesis Tail",
+    "시공의 침식자, 네메시스": "Spacetime Corruptor, Nemesis",
+    "파멸의 쇄도": "Surge of Ruin",
+    "종말의 포효": "Doomsday Roar",
+    "피의 궤멸격": "Bloody Annihilation",
+    "시간 왜곡 파동": "Timewarp Pulse",
+    "시공 정지 역장": "Stasis Field",
+    "공허 침식 폭풍": "Void Erosion Storm",
+    "시공 왜곡 절단": "Spacetime Sever",
+    "차원 관통 사격": "Dimensional Piercing Shot",
+    "종언의 단두대": "Guillotine of Finality",
+    "💀 파티원 전원이 전투 불능 상태가 되었습니다! 긴급 퇴각을 개시합니다.": "💀 All party members are incapacitated! Initiating emergency retreat.",
+    "👑 [네메시스 완전 격파!] 네메시스의 모든 부위가 산산조각 났습니다!": "👑 [Nemesis Decimated!] All parts of Nemesis have been shattered into pieces!",
+    "⌛ [차원의 한계] 15턴이 경과하여 시공간 균열이 붕괴되었습니다. 전장을 이탈합니다.": "⌛ [Dimensional Limit] 15 turns elapsed; spacetime rift collapsed. Disengaging from the battlefield.",
+    "⌛ 15턴 작전 시간이 만료되었습니다.": "⌛ 15-turn operation limit reached.",
+    "기력(MP)이 부족하여 스킬을 시전할 수 없습니다!": "Not enough MP to cast this skill!",
+    "아군 전술 보호막 전개!": "Tactical shields deployed for all allies!",
+    "아군 능력치 강화 부여!": "Stat buffs granted to all allies!",
+    "치명타!": "Critical!",
+    "💥 치명타!": "💥 Critical!",
+    "사경 유예": "Grace Period",
+    "요격 목표치": "Interception Target",
   },
   ja: {
     "⚡ [진척도 가속] 윤회의 고리 100 위험도 점프 (위험도 +100 / 📜 초월 비전서 ×3 획득)": "⚡ [進捗加速] 輪廻の環100危険度ジャンプ (危険度+100 / 📜 超越魔導書×3 獲得)",
@@ -4430,6 +4454,30 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "피버 콜!": "フィーバーコール！",
     "[피버 콜!]": "[フィーバーコール！]",
     "공격력 +16, 피해량 +8%": "攻撃力+16、ダメージ+8%",
+    "네메시스 머리": "ネメシス・ヘッド",
+    "네메시스 몸통": "ネメシス・ボディ",
+    "네메시스 꼬리": "ネメシス・テイル",
+    "시공의 침식자, 네메시스": "時空の侵食者、ネメシス",
+    "파멸의 쇄도": "破滅の殺到",
+    "종말의 포효": "終末の咆哮",
+    "피의 궤멸격": "血の壊滅撃",
+    "시간 왜곡 파동": "時間歪曲波動",
+    "시공 정지 역장": "時空停止力場",
+    "공허 침식 폭풍": "虚無侵食の嵐",
+    "시공 왜곡 절단": "時空歪曲切断",
+    "차원 관통 사격": "次元貫通射撃",
+    "종언의 단두대": "終焉の断頭台",
+    "💀 파티원 전원이 전투 불능 상태가 되었습니다! 긴급 퇴각을 개시합니다.": "💀 パーティ全員が戦闘不能になりました！緊急退却を開始します。",
+    "👑 [네메시스 완전 격파!] 네메시스의 모든 부위가 산산조각 났습니다!": "👑 [ネメシス完全撃破！] ネメシスの全部位が粉々に粉砕されました！",
+    "⌛ [차원의 한계] 15턴이 경과하여 시공간 균열이 붕괴되었습니다. 전장을 이탈합니다.": "⌛ [次元の限界] 15ターンが経過し時空の亀裂が崩壊しました。戦場を離脱します。",
+    "⌛ 15턴 작전 시간이 만료되었습니다.": "⌛ 15ターンの作戦時間が終了しました。",
+    "기력(MP)이 부족하여 스킬을 시전할 수 없습니다!": "気力(MP)が不足しておりスキルを発動できません！",
+    "아군 전술 보호막 전개!": "味方全員に戦術シールドを展開！",
+    "아군 능력치 강화 부여!": "味方全員のステータス強化を付与！",
+    "치명타!": "会心！",
+    "💥 치명타!": "💥 会心！",
+    "사경 유예": "死境猶予",
+    "요격 목표치": "迎撃目標値",
   }};
 
 // ============================================================================
@@ -6140,5 +6188,174 @@ export const LOG_PATTERNS: LogPatternDef[] = [
     pattern: /(.+?)(?:이\(가\)|이|가)\s*(.+?)에게\s*(\d+)\s*(?:치명 )?피해를 입혔습니다!(.*)/i,
     en: m => `${trEntity(m[1], 'en')} dealt ${m[3]} damage to ${trEntity(m[2], 'en')}!${trEntity(m[4], 'en')}`,
     ja: m => `${trEntity(m[1], 'ja')}が${trEntity(m[2], 'ja')}に${m[3]}のダメージを与えました！${trEntity(m[4], 'ja')}`
+  },
+
+  // 💥 차징 저지 성공 (강력한 타격 / 연계 콤보)
+  {
+    pattern: /💥\s*\[차징 저지 성공!\]\s*(.+?)의\s*(.+?)로\s*\[(.+?)\]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다!/i,
+    en: m => `💥 [Charge Interrupted!] ${trEntity(m[1], 'en')}'s ${trEntity(m[2], 'en')} shattered [${trEntity(m[3], 'en')}]'s cataclysm charge, causing Groggy for 1 turn!`,
+    ja: m => `💥 [チャージ阻止成功！] ${trEntity(m[1], 'ja')}の${trEntity(m[2], 'ja')}により[${trEntity(m[3], 'ja')}]の絶滅技チャージを破砕し、1ターンの間グロッキー状態に陥れました！`
+  },
+  // ⚡ 차징 저지 중 잔여치
+  {
+    pattern: /⚡\s*\[차징 저지 중\]\s*\[(.+?)\]\s*남은 브레이크 요구치:\s*([\d,]+)/i,
+    en: m => `⚡ [Charge Interruption in Progress] [${trEntity(m[1], 'en')}] Remaining Break Gauge: ${m[2]}`,
+    ja: m => `⚡ [チャージ阻止中] [${trEntity(m[1], 'ja')}] 残りブレイク要求値: ${m[2]}`
+  },
+  // 💀 부위 완전 패퇴
+  {
+    pattern: /💀\s*\[(.+?)\s+완전 패퇴!\]\s*(.+)/i,
+    en: m => `💀 [${trEntity(m[1], 'en')} Fully Defeated!] ${trEntity(m[2], 'en')}`,
+    ja: m => `💀 [${trEntity(m[1], 'ja')} 完全敗退！] ${trEntity(m[2], 'ja')}`
+  },
+  // 💥⚡ 연계 콤보 폭발
+  {
+    pattern: /💥⚡\s*\[연계 콤보 폭발!\]\s*(.*?)\s*\[(.+?)\]\s*발동!\s*\[(.+?)\]에게 추가\s*([\d,]+)\s*콤보 피해!/i,
+    en: m => `💥⚡ [Combo Detonation!] ${m[1]} [${trEntity(m[2], 'en')}] triggered! Dealt +${m[4]} extra combo damage to [${trEntity(m[3], 'en')}]!`,
+    ja: m => `💥⚡ [連携コンボ爆発！] ${m[1]} [${trEntity(m[2], 'ja')}] 発動！[${trEntity(m[3], 'ja')}]に追加${m[4]}のコンボダメージ！`
+  },
+  // 🩸 부위 출혈
+  {
+    pattern: /🩸\s*\[출혈\]\s*\[(.+?)\]에게\s*(\d+)턴간 출혈 상태를 부여했습니다\./i,
+    en: m => `🩸 [Bleed] Inflicted Bleed on [${trEntity(m[1], 'en')}] for ${m[2]} turn(s).`,
+    ja: m => `🩸 [出血] [${trEntity(m[1], 'ja')}]に${m[2]}ターンの間出血を付与しました。`
+  },
+  // ☠️ 부위 중독
+  {
+    pattern: /☠️\s*\[중독\]\s*\[(.+?)\]에게\s*(\d+)턴간 맹독을 주입했습니다\./i,
+    en: m => `☠️ [Poison] Injected Deadly Poison into [${trEntity(m[1], 'en')}] for ${m[2]} turn(s).`,
+    ja: m => `☠️ [猛毒] [${trEntity(m[1], 'ja')}]に${m[2]}ターンの間猛毒を注入しました。`
+  },
+  // 🔥 부위 화상
+  {
+    pattern: /🔥\s*\[화상\]\s*\[(.+?)\]에게\s*(\d+)턴간 화상을 부여했습니다\s*\(방어력\s*(\d+)%\s*분쇄\)\./i,
+    en: m => `🔥 [Burn] Inflicted Burn on [${trEntity(m[1], 'en')}] for ${m[2]} turn(s) (DEF shredded by ${m[3]}%).`,
+    ja: m => `🔥 [火傷] [${trEntity(m[1], 'ja')}]に${m[2]}ターンの間火傷を付与しました (防御力${m[3]}%粉砕)。`
+  },
+  // ❄️ 부위 빙결
+  {
+    pattern: /❄️\s*\[빙결\]\s*\[(.+?)\]에게\s*(\d+)턴간 빙결\(행동 불가\)을 부여했습니다!/i,
+    en: m => `❄️ [Freeze] Inflicted Freeze (Immobilized) on [${trEntity(m[1], 'en')}] for ${m[2]} turn(s)!`,
+    ja: m => `❄️ [氷結] [${trEntity(m[1], 'ja')}]に${m[2]}ターンの間氷結(行動不能)を付与しました！`
+  },
+  // 💫 부위 기절
+  {
+    pattern: /💫\s*\[기절\]\s*\[(.+?)\]에게\s*(\d+)턴간 기절을 부여했습니다!/i,
+    en: m => `💫 [Stun] Inflicted Stun on [${trEntity(m[1], 'en')}] for ${m[2]} turn(s)!`,
+    ja: m => `💫 [気絶] [${trEntity(m[1], 'ja')}]に${m[2]}ターンの間気絶を付与しました！`
+  },
+  // 🛡️⬇️ 부위 방어 분쇄
+  {
+    pattern: /🛡️⬇️\s*\[방어 분쇄\]\s*\[(.+?)\]의\s*방어력을\s*(\d+)턴간\s*(\d+)%\s*감소시켰습니다\./i,
+    en: m => `🛡️⬇️ [DEF Shredded] Reduced [${trEntity(m[1], 'en')}]'s DEF by ${m[3]}% for ${m[2]} turn(s).`,
+    ja: m => `🛡️⬇️ [防御力粉砕] [${trEntity(m[1], 'ja')}]の防御力を${m[2]}ターンの間${m[3]}%減少させました。`
+  },
+  // ⚔️⬇️ 부위 공격력 약화
+  {
+    pattern: /⚔️⬇️\s*\[공격력 약화\]\s*\[(.+?)\]의\s*공격력을\s*(\d+)턴간\s*(\d+)%\s*감소시켰습니다\./i,
+    en: m => `⚔️⬇️ [ATK Weakened] Reduced [${trEntity(m[1], 'en')}]'s ATK by ${m[3]}% for ${m[2]} turn(s).`,
+    ja: m => `⚔️⬇️ [攻撃力弱化] [${trEntity(m[1], 'ja')}]の攻撃力を${m[2]}ターンの間${m[3]}%減少させました。`
+  },
+  // 🩸 생명력 흡수
+  {
+    pattern: /🩸\s*\[생명력 흡수\]\s*(.+?)(?:이\(가\)|이|가)\s*가한 피해의 일부로 체력\s*\+([\d,]+)\s*회복!/i,
+    en: m => `🩸 [Life Drain] ${trEntity(m[1], 'en')} recovered +${m[2]} HP from dealt damage!`,
+    ja: m => `🩸 [生命力吸収] ${trEntity(m[1], 'ja')}が与えたダメージの一部でHP+${m[2]}回復！`
+  },
+  // 💀 사경 위기 (아군/적군 ... 사경을 헤맵니다!)
+  {
+    pattern: /💀\s*\[사경 위기\]\s*(아군|적군)\s*(.+?)(?:이\(가\)|이|가|\s*대원이)\s*치명상을 입고 쓰러져 사경을 헤맵니다!\s*\((\d+)턴 유예\)/i,
+    en: m => `💀 [Near Death] ${trEntity(m[1], 'en')} ${trEntity(m[2], 'en')} suffered a fatal blow and teeters on the brink of death! (${m[3]} turns grace)`,
+    ja: m => `💀 [死線の危機] ${trEntity(m[1], 'ja')} ${trEntity(m[2], 'ja')}が致命傷を負い倒れ、死線を彷徨っています！（${m[3]}ターン猶予）`
+  },
+  // 💀 사경 헤맴 (위독한 상태)
+  {
+    pattern: /💀\s*\[사경 헤맴\]\s*(.+?)(?:이\(가\)|이|가)\s*위독한 상태로 사경을 헤매고 있습니다!\s*\(완전 사망까지\s*(\d+)턴\)/i,
+    en: m => `💀 [On the Brink] ${trEntity(m[1], 'en')} is critically wounded and teetering on death! (${m[2]} turns until permanent death)`,
+    ja: m => `💀 [死線の彷徨] ${trEntity(m[1], 'ja')}が危険な状態で死線を彷徨っています！（完全死亡まで${m[2]}ターン）`
+  },
+  // ⚰️ 영면
+  {
+    pattern: /⚰️\s*\[영면\]\s*(.+?)(?:이\(가\)|이|가)\s*(\d+)턴간의 사경 끝에 완전히 전사했습니다\.\.\./i,
+    en: m => `⚰️ [Perished] ${trEntity(m[1], 'en')} succumbed after ${m[2]} turns on the brink and has fallen...`,
+    ja: m => `⚰️ [永眠] ${trEntity(m[1], 'ja')}が${m[2]}ターンの死線の末に完全に戦死しました…`
+  },
+  // 💥⚠️ 절멸기 방출
+  {
+    pattern: /💥⚠️\s*\[(.+?)\]\s*절멸기\s*\[(.+?)\]\s*방출!\s*파티 전원에게 궤멸적 피해가 쏟아졌습니다!/i,
+    en: m => `💥⚠️ [${trEntity(m[1], 'en')}] unleashed Cataclysm [${trEntity(m[2], 'en')}]! Devastating destruction rained upon all party members!`,
+    ja: m => `💥⚠️ [${trEntity(m[1], 'ja')}] 絶滅技 [${trEntity(m[2], 'ja')}] 放出！パーティ全員に壊滅的ダメージが降り注ぎました！`
+  },
+  // ⚠️ 차원 절멸기 차징 돌입
+  {
+    pattern: /⚠️\s*\[(.+?)\]\s*차원 절멸기\s*\[(.+?)\]\s*차징 돌입!\s*\(브레이크 저지 요구치:\s*([\d,]+)\)/i,
+    en: m => `⚠️ [${trEntity(m[1], 'en')}] started charging Dimensional Cataclysm [${trEntity(m[2], 'en')}]! (Break threshold: ${m[3]})`,
+    ja: m => `⚠️ [${trEntity(m[1], 'ja')}] 次元絶滅技 [${trEntity(m[2], 'ja')}] チャージ突入！（ブレイク阻止要求値: ${m[3]}）`
+  },
+  // 🌀 광역 강타
+  {
+    pattern: /🌀\s*\[(.+?)\]\s*\[(.+?)\]\s*광역 강타!\s*아군 전체가 피해를 입었습니다!/i,
+    en: m => `🌀 [${trEntity(m[1], 'en')}] struck with AOE [${trEntity(m[2], 'en')}]! All allies took damage!`,
+    ja: m => `🌀 [${trEntity(m[1], 'ja')}] [${trEntity(m[2], 'ja')}] 広域強打！味方全体がダメージを受けました！`
+  },
+  // 💨 회피
+  {
+    pattern: /💨\s*\[(.+?)\]\s*\[(.+?)\]의\s*\[(.+?)\]\s*공격을 신속히 회피했습니다!/i,
+    en: m => `💨 [${trEntity(m[1], 'en')}] swiftly evaded [${trEntity(m[2], 'en')}]'s [${trEntity(m[3], 'en')}] attack!`,
+    ja: m => `💨 [${trEntity(m[1], 'ja')}]が[${trEntity(m[2], 'ja')}]の[${trEntity(m[3], 'ja')}]攻撃を迅速に回避しました！`
+  },
+  // 👁️ 부위 단일 공격
+  {
+    pattern: /👁️\s*\[(.+?)\]\s*\[(.+?)\]\s*➔\s*\[(.+?)\]에게\s*([\d,]+)\s*피해!/i,
+    en: m => `👁️ [${trEntity(m[1], 'en')}] [${trEntity(m[2], 'en')}] ➔ Dealt ${m[4]} damage to [${trEntity(m[3], 'en')}]!`,
+    ja: m => `👁️ [${trEntity(m[1], 'ja')}] [${trEntity(m[2], 'ja')}] ➔ [${trEntity(m[3], 'ja')}]に${m[4]}のダメージ！`
+  },
+  // 🛡️ 보호막 흡수
+  {
+    pattern: /🛡️\s*\[(.+?)\]\s*보호막이\s*([\d,]+)\s*피해를 흡수했습니다!/i,
+    en: m => `🛡️ [${trEntity(m[1], 'en')}]'s shield absorbed ${m[2]} damage!`,
+    ja: m => `🛡️ [${trEntity(m[1], 'ja')}]のシールドが${m[2]}ダメージを吸収しました！`
+  },
+  // 💫 행동 불가 (빙결/기절)
+  {
+    pattern: /💫\s*\[행동 불가\]\s*\[(.+?)\](?:이\(가\)|이|가)\s*(빙결|기절)\s*상태로 이번 턴 행동할 수 없습니다!/i,
+    en: m => `💫 [Immobilized] [${trEntity(m[1], 'en')}] is ${trEntity(m[2], 'en')} and cannot act this turn!`,
+    ja: m => `💫 [行動不能] [${trEntity(m[1], 'ja')}]は${trEntity(m[2], 'ja')}状態で今ターン行動できません！`
+  },
+  // 💫 그로기 회복
+  {
+    pattern: /💫\s*\[(.+?)\]\s*그로기 상태에서 정신을 차리고 있습니다\.\s*\(이번 턴 행동 불가\)/i,
+    en: m => `💫 [${trEntity(m[1], 'en')}] is recovering from Groggy state. (Cannot act this turn)`,
+    ja: m => `💫 [${trEntity(m[1], 'ja')}] グロッキー状態から体勢を立て直しています。（今ターン行動不能）`
+  },
+  // 🩸🔥 상태이상 지속 피해
+  {
+    pattern: /🩸🔥\s*\[지속 피해\]\s*\[(.+?)\]\s*상태이상 지속 피해로\s*([\d,]+)\s*피해!/i,
+    en: m => `🩸🔥 [DoT] [${trEntity(m[1], 'en')}] took ${m[2]} damage from continuous status effects!`,
+    ja: m => `🩸🔥 [持続ダメージ] [${trEntity(m[1], 'ja')}] 状態異常の持続ダメージで${m[2]}ダメージ！`
+  },
+  // ▶ 영웅 타격 공격 화살표 (▶ [용병] [스킬] ➔ [대상]에게 N 피해! ...)
+  {
+    pattern: /▶\s*\[(.+?)\]\s*\[(.+?)\]\s*➔\s*\[(.+?)\]에게\s*([\d,]+)\s*피해!(.*)/i,
+    en: m => `▶ [${trEntity(m[1], 'en')}] [${trEntity(m[2], 'en')}] ➔ Dealt ${m[4]} damage to [${trEntity(m[3], 'en')}]!${trEntity(m[5], 'en')}`,
+    ja: m => `▶ [${trEntity(m[1], 'ja')}] [${trEntity(m[2], 'ja')}] ➔ [${trEntity(m[3], 'ja')}]に${m[4]}のダメージ！${trEntity(m[5], 'ja')}`
+  },
+  // ✨ 치유/지원 스킬 시전
+  {
+    pattern: /✨\s*\[(.+?)\]\s*\[(.+?)\]\s*시전!\s*\((.+?)\)/i,
+    en: m => `✨ [${trEntity(m[1], 'en')}] cast [${trEntity(m[2], 'en')}]! (${trEntity(m[3], 'en')})`,
+    ja: m => `✨ [${trEntity(m[1], 'ja')}]が[${trEntity(m[2], 'ja')}]を発動！ (${trEntity(m[3], 'ja')})`
+  },
+  // ⏳ 쿨다운 진행
+  {
+    pattern: /쿨다운 진행 중입니다!\s*\((\d+)턴 남음\)/i,
+    en: m => `Cooldown in progress! (${m[1]} turn(s) remaining)`,
+    ja: m => `クールダウン中です！（残り${m[1]}ターン）`
+  },
+  // ⚠️ 아케인 게이트 출격 불가
+  {
+    pattern: /⚠️\s*\[출격 불가\]\s*차원 네메시스 토벌은 아케인 게이트 Lv\.(\d+) 이상부터 개방됩니다\.\s*\(현재 Lv\.(\d+)\)/i,
+    en: m => `⚠️ [Sortie Unavailable] Dimensional Nemesis Raid unlocks at Arcane Gate Lv.${m[1]}+. (Current Lv.${m[2]})`,
+    ja: m => `⚠️ [出撃不可] 次元ネメシス討伐はアルケインゲートLv.${m[1]}以上から開放されます。(現在 Lv.${m[2]})`
   },
 ];

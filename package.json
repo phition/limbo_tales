@@ -1,7 +1,7 @@
 {
   "name": "project-limbo-tales",
   "private": true,
-  "version": "0.9.9-rc1",
+  "version": "0.9.9-rc10",
   "description": "Project: Limbo Tales - 세로형 텍스트 MUD + 서브컬쳐 비주얼 다크 RPG",
   "type": "module",
   "scripts": {

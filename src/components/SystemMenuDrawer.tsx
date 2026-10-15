@@ -480,7 +480,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
         <div className="p-3 bg-[#070a12] border-t border-[#1f293d] text-center text-[10px] text-[#607d8b] flex flex-col items-center gap-0.5">
           <div className="font-medium text-[#8b9bb4]">Limbo: Ark of the Abyss</div>
           <div className="text-[10px] text-[#8b9bb4]">published by BumPCaT.net</div>
-          <div className="font-mono text-[11px] text-[#00d2ff] font-bold">V.0.9.9-rc1</div>
+          <div className="font-mono text-[11px] text-[#00d2ff] font-bold">V.0.9.9-rc10</div>
           <div className="text-[9px] text-[#4a5568]">Firebase Connected</div>
         </div>
       </div>
@@ -493,14 +493,78 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
         footer={<ActionButton label="닫기" variant="primary" size="sm" onClick={() => setPatchModal(false)} />}
       >
         <div className="flex flex-col gap-3 text-xs text-[#cfd8dc] leading-relaxed max-h-[60vh] overflow-y-auto pr-1">
-          {/* V.0.9.9-rc1 최신 패치노트 */}
+          {/* V.0.9.9-rc10 최신 패치노트 */}
           <div className="p-3 rounded-xl bg-[#0f172a] border border-[#00d2ff] shadow-lg">
             <div className="font-bold text-sm text-[#00d2ff] mb-2 flex items-center justify-between border-b border-[#00d2ff44] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>🔥</span>
-                <span>V.0.9.9-rc1 업데이트 패치노트</span>
+                <span>V.0.9.9-rc10 업데이트 패치노트</span>
               </span>
               <span className="text-[10px] font-mono text-[#00d2ff] bg-[#00d2ff22] px-2 py-0.5 rounded font-bold border border-[#00d2ff55]">
+                v0.9.9-rc10
+              </span>
+            </div>
+            <ul className="space-y-2.5 text-xs text-[#cfd8e8]">
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#00d2ff] flex items-center gap-1">
+                  <span>⚔️</span> 차원 아레나 (Dimensional Arena) 전면 개편 &amp; 정규 시즌 고도화
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  방주의 5인 정예 결투 부대(선발 3인 + 전술 오퍼레이터 + 원호 서포터)가 출격하는 차원 아레나가 한층 더 박진감 넘치고 공정하게 진화했습니다.
+                  <br />• <strong>실시간 SPD 턴 큐 &amp; 피버콜(Fever Call) 족보 대결</strong>: 참가자 전원의 행동 속도에 맞춰 자동 연계 전투가 전개되며, 모멘텀 배지 5개 선제 완성 시 발동하는 12대 전술 족보 및 주간 차원율(돌파 &gt; 수호 &gt; 변칙 &gt; 돌파) 상성 배틀이 펼쳐집니다.
+                  <br />• <strong>사경(Death&apos;s Door) 3턴 유예 &amp; 서포터 전술 원호</strong>: 치명상을 입은 영웅은 3턴간 사경 유예 상태에 머물며 아군 힐러의 구원이나 서포터(40% 확률)의 원호 치유로 극적인 전선 복귀가 가능합니다.
+                  <br />• <strong>명예 암시장 &amp; 투사의 인장 교환</strong>: 승리 및 연승 보너스로 획득한 투사의 인장을 통해 최고 등급 무구 보급함과 특화 장비로 교환할 수 있습니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#ff416c] flex items-center gap-1">
+                  <span>👾</span> 주간 월드 레이드 『차원 네메시스』 전면 개편
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  차원 앵커 게이트(Lv.3+)와 연동되는 시공의 침식자 『네메시스』의 토벌전이 정통 레이드 감성으로 전면 재구축되었습니다.
+                  <br />• <strong>3개 독립 부위 공략 &amp; 30,000 차징 브레이크</strong>: 머리·몸통·꼬리의 고유 패턴에 맞서 절멸기 차징 시 요구치(약 30,000)를 신속히 집중 타격해 파쇄하면 1턴간 그로기 상태로 무력화할 수 있습니다.
+                  <br />• <strong>용병 고유 스킬셋 &amp; 궁극기 커맨드 패널</strong>: PVE 탐험에서 육성한 영웅들의 고유 스킬과 화려한 VFX, 상태이상 연계 콤보 폭발을 네메시스 전장에서도 그대로 전술 지휘할 수 있습니다.
+                  <br />• <strong>요격 목표치(24주기 목표 체력) 로비 표시</strong>: 6시간 주기 자원 약탈(20%)을 방어하기 위한 부위별·전체 요격 목표치가 로비 전광판에 명확하게 안내됩니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#b388ff] flex items-center gap-1">
+                  <span>🌌</span> 심연 11층 무간도(Avici) 레벨 스케일링 전면 개편
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  최심층 무간도 던전의 난이도 곡선이 개선되어 11층 시작 몬스터가 Lv.50부터 시작하며, 최심부 최종 진 보스가 Lv.600까지 매끄럽게 레벨 스케일링되도록 밸런스를 조정했습니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#ffd54f] flex items-center gap-1">
+                  <span>🛠️</span> 마스터 데이터 에셋 스튜디오 &amp; 시설 티어 관리
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  영지 시설의 건설/증축 소모 자재량, 생산량, 유지비를 각 티어 레벨별로 정밀하게 튜닝할 수 있는 데이터 시트가 추가되었으며, Firebase Realtime Database 클라우드 실시간 배포 및 세이브 동기화 안정성이 극대화되었습니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#69f0ae] flex items-center gap-1">
+                  <span>✨</span> 편의성(UX) 및 인터랙션 개선
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>초반 퀘스트 바로가기 동선 수정</strong>: 묘지 헌화 바로가기가 묘지로, 장비 단조 연계 퀘스트 바로가기가 병기창으로 올바르게 연결됩니다.
+                  <br />• <strong>완료된 퀘스트 상위 정렬</strong>: 완료되어 보상을 즉시 수령할 수 있는 퀘스트가 퀘스트 목록의 최상단에 우선 표시됩니다.
+                  <br />• <strong>탐험 진입 스크롤 자동 복구</strong>: 채비 완료 후 구역(층) 선택 단계로 진입 시 스크롤 위치가 자동으로 최상단으로 끌어올려집니다.
+                  <br />• <strong>다국어(EN/JA) 전투/레이드 로그 현지화 전면 보강</strong>: 네메시스 토벌전, 차원 아레나, 사경 및 스킬 연계 로그의 다국어 번역이 빈틈없이 완성되었습니다.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* V.0.9.9-rc1 이전 패치노트 */}
+          <div className="p-3 rounded-xl bg-[#0b101d] border border-[#1f2b42] shadow-sm opacity-90">
+            <div className="font-bold text-xs text-[#8b9bb4] mb-2 flex items-center justify-between border-b border-[#1f2b42] pb-1.5">
+              <span className="flex items-center gap-1.5">
+                <span>📜</span>
+                <span>V.0.9.9-rc1 업데이트 내역</span>
+              </span>
+              <span className="text-[10px] font-mono text-[#8b9bb4] bg-[#1a2333] px-2 py-0.5 rounded font-bold border border-[#2a364f]">
                 v0.9.9-rc1
               </span>
             </div>

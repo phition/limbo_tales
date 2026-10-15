@@ -488,7 +488,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
             <span className="font-mono">ARK CLOUD STATUS: ONLINE</span>
             <span>•</span>
-            <span className="font-mono">v0.9.9-rc1</span>
+            <span className="font-mono">v0.9.9-rc10</span>
           </div>
           <div className="text-[10px] text-[#475569] italic font-serif">
             &ldquo;어둠이 깊을수록, 성화의 불꽃은 더욱 찬란히 타오른다.&rdquo;
