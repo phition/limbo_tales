@@ -12573,6 +12573,14 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
   const [showSynergyGuide, setShowSynergyGuide] = useState(false);
   const [showCodexModal, setShowCodexModal] = useState(false);
   const [showWagonAdConfirm, setShowWagonAdConfirm] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // 🌀 채비실 <-> 구역(층) 선택 단계 전환 시 스크롤을 최상단으로 강제 초기화
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [step]);
 
   // 파티원 수 확인 (최소 3인 필수)
   const partyCount = state.party.length;
@@ -12850,7 +12858,7 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
 
       {/* ── 1단계: 탐험 채비 ── */}
       {step === 'prep' ? (
-        <div className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-4">
+        <div key="step-prep" ref={scrollContainerRef} className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-4">
           {/* 1. 원정대 진형 배치 */}
           <div className="panel p-3 bg-[#111622]">
             <div className="flex items-center justify-between mb-2">
@@ -13313,7 +13321,7 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
         </div>
       ) : (
         /* ── 2단계: 심연 구역(층) 선택 ── */
-        <div className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-2.5">
+        <div key="step-zone" ref={scrollContainerRef} className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-2.5">
           <div className="text-xs text-[#8b9bb4] mb-1">
             {'채비 완료! 진입할 심연의 구역을 선택하십시오.'}
           </div>
@@ -13680,6 +13688,9 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                 return;
               }
               setStep('zone');
+              if (scrollContainerRef.current) {
+                scrollContainerRef.current.scrollTop = 0;
+              }
             }}
             style={canAfford ? { background: 'linear-gradient(135deg, #1e0d2d 0%, #34144b 100%)', color: '#e2d4f0', border: '1px solid #5c2b8a', boxShadow: '0 3px 12px rgba(45, 15, 65, 0.4)' } : {}}
           >
@@ -13690,7 +13701,12 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
         ) : (
           <button
             className="btn btn-ghost px-4 py-2 text-xs text-[#8b9bb4]"
-            onClick={() => setStep('prep')}
+            onClick={() => {
+              setStep('prep');
+              if (scrollContainerRef.current) {
+                scrollContainerRef.current.scrollTop = 0;
+              }
+            }}
           >
             ◀ {'채비 수정하기'}
           </button>
