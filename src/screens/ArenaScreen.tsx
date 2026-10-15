@@ -12,7 +12,7 @@ import { NemesisView } from './NemesisView';
 import { InvasionView } from './InvasionView';
 import { AttackerVisualBox } from '../components/AttackerVisualBox';
 import { calculatePartySynergies } from '../data/synergies';
-import { FeverBadgeType, ShowdownResult } from '../types/fever';
+import { FeverBadgeType, ShowdownResult, FeverShowdownOutcome } from '../types/fever';
 import { FeverGaugeBar } from '../components/FeverGaugeBar';
 import {
   evaluateFeverSynergy,
@@ -755,6 +755,32 @@ export const ArenaScreen: React.FC = () => {
   const [feverCallCountdown, setFeverCallCountdown] = useState<number>(3);
   const feverCallCountdownRef = useRef<number>(3);
 
+  // 📜 전투 중 발생한 피버콜 대결 히스토리 (결투 종료 리포트 출력용)
+  const [feverCallHistory, setFeverCallHistory] = useState<{
+    round: number;
+    playerSynergy: { id: string; name: string; icon: string; summary: string };
+    oppSynergy: { id: string; name: string; icon: string; summary: string };
+    playerBadges: FeverBadgeType[];
+    oppBadges: FeverBadgeType[];
+    playerScore: number;
+    oppScore: number;
+    outcome: FeverShowdownOutcome;
+    isTimeout?: boolean;
+    bannerTitle: string;
+  }[]>([]);
+  const feverCallHistoryRef = useRef<{
+    round: number;
+    playerSynergy: { id: string; name: string; icon: string; summary: string };
+    oppSynergy: { id: string; name: string; icon: string; summary: string };
+    playerBadges: FeverBadgeType[];
+    oppBadges: FeverBadgeType[];
+    playerScore: number;
+    oppScore: number;
+    outcome: FeverShowdownOutcome;
+    isTimeout?: boolean;
+    bannerTitle: string;
+  }[]>([]);
+
   // 🏃 속도(SPD) 기반 턴 순서 큐
   const [roundQueue, setRoundQueue] = useState<string[]>([]);
   const roundQueueRef = useRef<string[]>([]);
@@ -928,6 +954,8 @@ export const ArenaScreen: React.FC = () => {
     feverCallLeadRef.current = null;
     setFeverCallCountdown(3);
     feverCallCountdownRef.current = 3;
+    setFeverCallHistory([]);
+    feverCallHistoryRef.current = [];
     setIsLeaderUltCutin(false);
     setIsOppLeaderUltCutin(false);
     gm.emit('arenaBattleStateChanged', true);
@@ -1501,6 +1529,32 @@ export const ArenaScreen: React.FC = () => {
 
     setShowdownResult(showdown);
     setIsShowdownCutin(true);
+
+    // 📜 피버콜 대결 히스토리 기록 (아레나 리포트 출력용)
+    const historyEntry = {
+      round: feverCallHistoryRef.current.length + 1,
+      playerSynergy: {
+        id: showdown.playerSynergy.id,
+        name: showdown.playerSynergy.name,
+        icon: showdown.playerSynergy.icon,
+        summary: showdown.playerSynergy.summary,
+      },
+      oppSynergy: {
+        id: showdown.oppSynergy.id,
+        name: showdown.oppSynergy.name,
+        icon: showdown.oppSynergy.icon,
+        summary: showdown.oppSynergy.summary,
+      },
+      playerBadges: [...pBadgesSnapshot],
+      oppBadges: [...oBadgesSnapshot],
+      playerScore: showdown.playerScore,
+      oppScore: showdown.oppScore,
+      outcome: showdown.outcome,
+      isTimeout,
+      bannerTitle: showdown.bannerTitle,
+    };
+    feverCallHistoryRef.current = [...feverCallHistoryRef.current, historyEntry];
+    setFeverCallHistory(feverCallHistoryRef.current);
 
     const isPlayerWin = showdown.outcome === 'player_win';
     const isOppWin = showdown.outcome === 'opp_win';
@@ -4317,6 +4371,158 @@ export const ArenaScreen: React.FC = () => {
                       {finalReward.streak}연승 🔥
                     </span>
                   </div>
+                </div>
+
+                {/* 🔥 피버 콜 대결 리포트 (Fever Call Report) */}
+                <div className="p-3 rounded-2xl bg-[#090f1d] border border-amber-500/40 shadow-xl flex flex-col gap-2.5 text-left">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-base">🔥</span>
+                      <span className="font-bold text-xs text-white">피버 콜 격돌 리포트</span>
+                      <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-1.5 py-0.2 rounded border border-amber-800">
+                        총 {feverCallHistory.length}회 격돌
+                      </span>
+                    </div>
+                    <div className="text-[10px] font-mono text-stone-400">
+                      아군 <span className="text-cyan-400 font-bold">{playerFeverWins}승</span> : <span className="text-rose-400 font-bold">{oppFeverWins}승</span> 상대
+                    </div>
+                  </div>
+
+                  {feverCallHistory.length > 0 ? (
+                    <div className="flex flex-col gap-2">
+                      {feverCallHistory.map((entry, idx) => {
+                        const isPlayerWin = entry.outcome === 'player_win';
+                        const isOppWin = entry.outcome === 'opp_win';
+
+                        return (
+                          <div
+                            key={idx}
+                            className={`p-2.5 rounded-xl border flex flex-col gap-1.5 transition-all ${
+                              isPlayerWin
+                                ? 'bg-gradient-to-r from-[#0d2238] via-[#091726] to-[#0d2238] border-cyan-500/50'
+                                : isOppWin
+                                ? 'bg-gradient-to-r from-[#290d16] via-[#1a070e] to-[#290d16] border-rose-500/50'
+                                : 'bg-stone-900/80 border-stone-700'
+                            }`}
+                          >
+                            {/* 회차 및 승패 뱃지 */}
+                            <div className="flex items-center justify-between text-[11px]">
+                              <span className="font-bold text-stone-300 flex items-center gap-1.5">
+                                <span className="text-amber-400">⚡ #{entry.round}차 피버콜 격돌</span>
+                                {entry.isTimeout && (
+                                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                                    ⏱️ 3턴 유예 타임아웃
+                                  </span>
+                                )}
+                              </span>
+                              <span
+                                className={`text-[9.5px] font-extrabold px-2 py-0.5 rounded-full font-mono ${
+                                  isPlayerWin
+                                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
+                                    : isOppWin
+                                    ? 'bg-rose-500/20 text-rose-300 border border-rose-400/50'
+                                    : 'bg-amber-500/20 text-amber-300 border border-amber-400/50'
+                                }`}
+                              >
+                                {isPlayerWin ? '👑 아군 승리' : isOppWin ? '💀 상대 승리' : '⚡ 전술 무승부'}
+                              </span>
+                            </div>
+
+                            {/* 양측 족보 및 배지 대조 */}
+                            <div className="grid grid-cols-2 gap-2 text-xs mt-0.5">
+                              {/* 아군 피버 */}
+                              <div className={`p-2 rounded-lg border flex flex-col gap-1 ${
+                                isPlayerWin ? 'bg-cyan-950/40 border-cyan-500/30' : 'bg-black/30 border-stone-800'
+                              }`}>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[10px] text-cyan-400 font-bold flex items-center gap-1">
+                                    <span>🛡️</span> <span>아군 피버</span>
+                                  </span>
+                                  <span className="text-[10px] font-mono text-cyan-300 font-bold">
+                                    {entry.playerScore} P
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                  <span className="text-sm shrink-0">{entry.playerSynergy.icon}</span>
+                                  <span className="font-extrabold text-white text-xs truncate">
+                                    {entry.playerSynergy.name}
+                                  </span>
+                                </div>
+                                <div className="text-[9.5px] text-stone-400 truncate">
+                                  {entry.playerSynergy.summary}
+                                </div>
+                                {/* 5개 배지 나열 */}
+                                <div className="flex items-center gap-1 flex-wrap mt-0.5">
+                                  {entry.playerBadges.map((b, bIdx) => {
+                                    const bMeta = FEVER_BADGE_META[b];
+                                    return (
+                                      <span
+                                        key={bIdx}
+                                        className="text-[8px] px-1 py-0.2 rounded bg-black/60 border border-stone-700 text-stone-300 font-mono flex items-center gap-0.5"
+                                        title={bMeta ? bMeta.label : b}
+                                      >
+                                        <span>{bMeta?.icon}</span>
+                                        <span>{bMeta?.shortLabel}</span>
+                                      </span>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+
+                              {/* 상대 피버 */}
+                              <div className={`p-2 rounded-lg border flex flex-col gap-1 ${
+                                isOppWin ? 'bg-rose-950/40 border-rose-500/30' : 'bg-black/30 border-stone-800'
+                              }`}>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[10px] text-rose-400 font-bold flex items-center gap-1">
+                                    <span>💀</span> <span>상대 피버</span>
+                                  </span>
+                                  <span className="text-[10px] font-mono text-rose-300 font-bold">
+                                    {entry.oppScore} P
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                  <span className="text-sm shrink-0">{entry.oppSynergy.icon}</span>
+                                  <span className="font-extrabold text-white text-xs truncate">
+                                    {entry.oppSynergy.name}
+                                  </span>
+                                </div>
+                                <div className="text-[9.5px] text-stone-400 truncate">
+                                  {entry.oppSynergy.summary}
+                                </div>
+                                {/* 5개 배지 나열 */}
+                                <div className="flex items-center gap-1 flex-wrap mt-0.5">
+                                  {entry.oppBadges.map((b, bIdx) => {
+                                    const bMeta = FEVER_BADGE_META[b];
+                                    return (
+                                      <span
+                                        key={bIdx}
+                                        className="text-[8px] px-1 py-0.2 rounded bg-black/60 border border-stone-700 text-stone-300 font-mono flex items-center gap-0.5"
+                                        title={bMeta ? bMeta.label : b}
+                                      >
+                                        <span>{bMeta?.icon}</span>
+                                        <span>{bMeta?.shortLabel}</span>
+                                      </span>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* 대결 요약 배너 */}
+                            <div className="text-[10px] text-stone-400 px-1 truncate">
+                              💡 {entry.bannerTitle}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="p-3 rounded-xl bg-stone-900/40 border border-stone-800 text-center text-xs text-stone-400 flex items-center justify-center gap-2">
+                      <span>ℹ️</span>
+                      <span>이번 결투에서는 피버 완충 전 승패가 결정되어 피버콜이 발생하지 않았습니다.</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* 📊 전투 상세 리포트 (MVP 배지, 딜량 점유율, 회복/방어/회피/연계) */}
