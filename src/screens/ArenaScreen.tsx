@@ -816,6 +816,7 @@ export const ArenaScreen: React.FC = () => {
     levelUps: string[];
   } | null>(null);
   const finalRewardRef = useRef<typeof finalReward>(null);
+  const isBattleEndedRef = useRef(false);
 
   playerTeamRef.current = playerTeam;
   oppTeamRef.current = oppTeam;
@@ -873,6 +874,32 @@ export const ArenaScreen: React.FC = () => {
   const refreshOpponents = useCallback(() => {
     setOpponents(generateOpponents(state.currentArenaRank, state.currentArenaRating, gateLevel));
   }, [state.currentArenaRank, state.currentArenaRating, gateLevel]);
+
+  // 🏁 전투 완전 종료 처리 (승패 확정 시 백그라운드 전투/타이머/턴 즉시 중단)
+  const finishBattle = useCallback((isWin: boolean) => {
+    if (isBattleEndedRef.current || finalRewardRef.current) return;
+    isBattleEndedRef.current = true;
+    isProcessingRef.current = true; // 영구 잠금: 이후 어떤 턴이나 AI도 동작하지 않음
+    activeCombatantIdRef.current = null;
+    setActiveCombatantId(null);
+    setIsShowdownCutin(false);
+    isShowdownCutinRef.current = false;
+    setIsLeaderUltCutin(false);
+    setIsOppLeaderUltCutin(false);
+
+    const opp = activeBattleOppRef.current;
+    if (!opp) return;
+
+    const rewardResult = gm.claimArenaMatchRewards(opp, isWin);
+    const finalData = { ...rewardResult, win: isWin };
+    finalRewardRef.current = finalData;
+    setFinalReward(finalData);
+    setCombatMetrics(Object.values(combatMetricsRef.current));
+    try {
+      SoundManager.getInstance().play(isWin ? 'victory' : 'defeat');
+    } catch (_) {}
+    refreshOpponents();
+  }, [gm, refreshOpponents]);
 
   useEffect(() => {
     refreshOpponents();
@@ -936,6 +963,8 @@ export const ArenaScreen: React.FC = () => {
     setActiveBattleOpp(opp);
     setBattleLogs([]);
     setFinalReward(null);
+    finalRewardRef.current = null;
+    isBattleEndedRef.current = false;
     setBattleRound(1);
     setActionBanner(null);
     setVfxList([]);
@@ -1245,6 +1274,8 @@ export const ArenaScreen: React.FC = () => {
     isPlayerDomination: boolean,
     isOppDomination: boolean
   ) => {
+    if (isBattleEndedRef.current || finalRewardRef.current) return;
+
     const isPlayerWin = showdown.outcome === 'player_win';
     const isOppWin = showdown.outcome === 'opp_win';
     const isClash = showdown.outcome === 'clash';
@@ -1424,29 +1455,19 @@ export const ArenaScreen: React.FC = () => {
 
     // 4. 궁극기 연출 지속(1.6초) 후 승패 체크 및 전투 재개
     setTimeout(() => {
+      if (isBattleEndedRef.current || finalRewardRef.current) return;
+
       setIsLeaderUltCutin(false);
       setIsOppLeaderUltCutin(false);
 
       const oppRemains = oppTeamRef.current.filter(c => c.currentHp > 0);
       const pRemains = playerTeamRef.current.filter(c => c.currentHp > 0);
 
-      if (oppRemains.length === 0 && activeBattleOppRef.current) {
-        isProcessingRef.current = false;
-        const opp = activeBattleOppRef.current;
-        const rewardResult = gm.claimArenaMatchRewards(opp, true);
-        setCombatMetrics(Object.values(combatMetricsRef.current));
-        setFinalReward({ ...rewardResult, win: true });
-        try { SoundManager.getInstance().play('victory'); } catch (_) {}
-        setOpponents(generateOpponents(gm.currentArenaRank, gm.currentArenaRating, gateLevel));
+      if (oppRemains.length === 0 || isPlayerDomination) {
+        finishBattle(true);
         return;
-      } else if (pRemains.length === 0 && activeBattleOppRef.current) {
-        isProcessingRef.current = false;
-        const opp = activeBattleOppRef.current;
-        const rewardResult = gm.claimArenaMatchRewards(opp, false);
-        setCombatMetrics(Object.values(combatMetricsRef.current));
-        setFinalReward({ ...rewardResult, win: false });
-        try { SoundManager.getInstance().play('defeat'); } catch (_) {}
-        setOpponents(generateOpponents(gm.currentArenaRank, gm.currentArenaRating, gateLevel));
+      } else if (pRemains.length === 0 || isOppDomination) {
+        finishBattle(false);
         return;
       }
 
@@ -1454,10 +1475,11 @@ export const ArenaScreen: React.FC = () => {
       isProcessingRef.current = false;
       setTurnTick(t => t + 1);
     }, 1600);
-  }, [gm, gateLevel, battleRound]);
+  }, [gm, gateLevel, battleRound, finishBattle]);
 
   // ⚔️🔥 1단계: 피버 콜 (Fever Call) 대결 판정 및 컷인 개시 (필드 전투 일시 정지)
   const triggerFeverShowdown = useCallback((isTimeout = false, timeoutWinner?: 'player' | 'opp') => {
+    if (isBattleEndedRef.current || finalRewardRef.current) return;
     const pCombatants = playerTeamRef.current;
     const oCombatants = oppTeamRef.current;
     if (pCombatants.length === 0 || oCombatants.length === 0) return;
@@ -1580,6 +1602,7 @@ export const ArenaScreen: React.FC = () => {
     // 🃏 5개 뱃지 순차적 오픈 타이머 (220ms 간격)
     for (let i = 1; i <= 5; i++) {
       setTimeout(() => {
+        if (isBattleEndedRef.current || finalRewardRef.current) return;
         setShowdownRevealIndex(i);
         try {
           SoundManager.getInstance().play(i === 5 ? 'heavy_hit' : 'equip');
@@ -1589,6 +1612,7 @@ export const ArenaScreen: React.FC = () => {
 
     // ⚡ 5개 배지 전체 오픈 완료 후 1.35초 시점에 족보 확정 및 승자 광채 방출!
     setTimeout(() => {
+      if (isBattleEndedRef.current || finalRewardRef.current) return;
       setIsShowdownEvaluated(true);
       try {
         if (isPlayerWin) {
@@ -1603,6 +1627,7 @@ export const ArenaScreen: React.FC = () => {
 
     // 🎬 3.0초 후: 피버콜 연출 닫힘 ➔ 연출이 사라진 직후 궁극기 연출부터 전투 재개!
     setTimeout(() => {
+      if (isBattleEndedRef.current || finalRewardRef.current) return;
       setIsShowdownCutin(false);
       isShowdownCutinRef.current = false;
       setShowdownResult(null);
@@ -1630,7 +1655,7 @@ export const ArenaScreen: React.FC = () => {
   // ── 턴 액션 실행 (광역기 다중 타겟 및 정상 공방 처리) ──────────────────────
   const executeCombatMove = useCallback((attacker: ArenaCombatant, skill: Skill, target: ArenaCombatant) => {
     const opp = activeBattleOppRef.current;
-    if (!opp || finalRewardRef.current) return;
+    if (!opp || finalRewardRef.current || isBattleEndedRef.current) return;
 
     // 공격자 상태 기록
     if (attacker.isPlayer) {
@@ -2106,7 +2131,7 @@ export const ArenaScreen: React.FC = () => {
     // 공격자 측 서포터가 40% 확률로 후방 지원 발동 (생존 시에만 발동, 힐러는 아군 치유, 딜러/탱커는 추가타)
     const atkSupporter = attacker.isPlayer ? playerSupporterRef.current : oppSupporterRef.current;
     const isAtkSupporterAlive = atkSupporter && (atkSupporter.currentHp === undefined || atkSupporter.currentHp > 0) && !atkSupporter.isDead;
-    if (isAtkSupporterAlive && Math.random() < 0.40) {
+    if (!isBattleEndedRef.current && isAtkSupporterAlive && Math.random() < 0.40) {
       const suppCls = CHARACTER_CLASSES[atkSupporter.classId] || CHARACTER_CLASSES['squire'];
       const isHealer = suppCls.role === 'healer' || suppCls.skills.some(s => s.effectType === 'heal');
       const suppEff = attacker.isPlayer
@@ -2133,6 +2158,7 @@ export const ArenaScreen: React.FC = () => {
           const rowY = healTarget.isPlayer ? 74 : 24;
 
           setTimeout(() => {
+            if (isBattleEndedRef.current || finalRewardRef.current) return;
             setVfxList(prev => [...prev, {
               id: `supp_assist_heal_${Date.now()}`,
               type: 'holy_heal',
@@ -2170,6 +2196,7 @@ export const ArenaScreen: React.FC = () => {
           const rowY = liveTarget.isPlayer ? 74 : 24;
 
           setTimeout(() => {
+            if (isBattleEndedRef.current || finalRewardRef.current) return;
             setVfxList(prev => [...prev, {
               id: `supp_assist_strike_${Date.now()}`,
               type: 'crit_slash',
@@ -2202,7 +2229,10 @@ export const ArenaScreen: React.FC = () => {
 
     // 8. ⚔️ [핵심 룰] 피버콜(Fever Call) 발동 및 3턴 유예 타임아웃 검사:
     if (feverBadgesRef.current.length >= 5 && oppFeverBadgesRef.current.length >= 5) {
-      setTimeout(() => triggerFeverShowdown(false), 400);
+      setTimeout(() => {
+        if (isBattleEndedRef.current || finalRewardRef.current) return;
+        triggerFeverShowdown(false);
+      }, 400);
     } else if (feverCallLeadRef.current !== null && !isShowdownCutinRef.current) {
       feverCallCountdownRef.current -= 1;
       const remainTurns = feverCallCountdownRef.current;
@@ -2214,7 +2244,10 @@ export const ArenaScreen: React.FC = () => {
         setFeverCallLead(null);
         feverCallCountdownRef.current = 3;
         setFeverCallCountdown(3);
-        setTimeout(() => triggerFeverShowdown(true, winner), 400);
+        setTimeout(() => {
+          if (isBattleEndedRef.current || finalRewardRef.current) return;
+          triggerFeverShowdown(true, winner);
+        }, 400);
       }
     }
 
@@ -2224,15 +2257,7 @@ export const ArenaScreen: React.FC = () => {
     const oLiving = nextO.filter(c => c.currentHp > 0);
 
     if (oLiving.length === 0 || pLiving.length === 0) {
-      isProcessingRef.current = false;
-      const isWin = oLiving.length === 0;
-      const rewardResult = gm.claimArenaMatchRewards(opp, isWin);
-      setCombatMetrics(Object.values(combatMetricsRef.current));
-      setFinalReward({ ...rewardResult, win: isWin });
-      try {
-        SoundManager.getInstance().play(isWin ? 'victory' : 'defeat');
-      } catch (_) {}
-      refreshOpponents();
+      finishBattle(oLiving.length === 0);
       return;
     }
 
@@ -2275,12 +2300,12 @@ export const ArenaScreen: React.FC = () => {
     activeCombatantIdRef.current = nextId;
     setActiveCombatantId(nextId);
     setTurnTick(t => t + 1);
-  }, [battleRound, gm, addFeverBadge, addOppFeverBadge, triggerLeaderUltimate, triggerOppLeaderUltimate]);
+  }, [battleRound, gm, addFeverBadge, addOppFeverBadge, triggerLeaderUltimate, triggerOppLeaderUltimate, finishBattle]);
 
   // ── 턴 자동 진행 루프 (스킬 연계 최우선 콤보 AI & Auto Battle) ──────────────────────────────
   useEffect(() => {
     // ⏸️ 피버콜 쇼다운 진행 중이거나 궁극기 컷인 연출 중일 때는 전투 완전 일시 정지!
-    if (!activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
+    if (isBattleEndedRef.current || !activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
     if (isProcessingRef.current) return;
 
     const pTeam = playerTeamRef.current;
@@ -2288,15 +2313,7 @@ export const ArenaScreen: React.FC = () => {
     const pLiving = pTeam.filter(c => c.currentHp > 0);
     const oLiving = oTeam.filter(c => c.currentHp > 0);
     if (pLiving.length === 0 || oLiving.length === 0) {
-      isProcessingRef.current = false;
-      const isWin = oLiving.length === 0;
-      const rewardResult = gm.claimArenaMatchRewards(activeBattleOppRef.current!, isWin);
-      setCombatMetrics(Object.values(combatMetricsRef.current));
-      setFinalReward({ ...rewardResult, win: isWin });
-      try {
-        SoundManager.getInstance().play(isWin ? 'victory' : 'defeat');
-      } catch (_) {}
-      refreshOpponents();
+      finishBattle(oLiving.length === 0);
       return;
     }
 
@@ -2321,7 +2338,7 @@ export const ArenaScreen: React.FC = () => {
 
       const dyingTimer = setTimeout(() => {
         try {
-          if (!activeBattleOppRef.current || finalRewardRef.current) return;
+          if (!activeBattleOppRef.current || finalRewardRef.current || isBattleEndedRef.current) return;
           const side = currentAttacker.isPlayer ? playerTeamRef.current : oppTeamRef.current;
           const me = side.find(c => c.id === currentAttacker.id);
           if (!me) return;
@@ -2391,15 +2408,7 @@ export const ArenaScreen: React.FC = () => {
           const pLiving = playerTeamRef.current.filter(c => c.currentHp > 0);
           const oLiving = oppTeamRef.current.filter(c => c.currentHp > 0);
           if (oLiving.length === 0 || pLiving.length === 0) {
-            isProcessingRef.current = false;
-            const isWin = oLiving.length === 0;
-            const rewardResult = gm.claimArenaMatchRewards(activeBattleOppRef.current!, isWin);
-            setCombatMetrics(Object.values(combatMetricsRef.current));
-            setFinalReward({ ...rewardResult, win: isWin });
-            try {
-              SoundManager.getInstance().play(isWin ? 'victory' : 'defeat');
-            } catch (_) {}
-            refreshOpponents();
+            finishBattle(oLiving.length === 0);
             return;
           }
 
@@ -2407,7 +2416,9 @@ export const ArenaScreen: React.FC = () => {
           setActiveCombatantId(nxtId);
           setTurnTick(t => t + 1);
         } finally {
-          isProcessingRef.current = false;
+          if (!isBattleEndedRef.current) {
+            isProcessingRef.current = false;
+          }
         }
       }, delay);
       return () => clearTimeout(dyingTimer);
@@ -2423,7 +2434,7 @@ export const ArenaScreen: React.FC = () => {
 
     const timer = setTimeout(() => {
       try {
-        if (!activeBattleOppRef.current || finalRewardRef.current) return;
+        if (!activeBattleOppRef.current || finalRewardRef.current || isBattleEndedRef.current) return;
 
         const latestP = playerTeamRef.current;
         const latestO = oppTeamRef.current;
@@ -2516,18 +2527,21 @@ export const ArenaScreen: React.FC = () => {
           executeCombatMove(attacker, selectedSkill, selectedTarget);
         }
       } finally {
-        isProcessingRef.current = false;
+        if (!isBattleEndedRef.current) {
+          isProcessingRef.current = false;
+        }
       }
     }, delay);
 
     return () => clearTimeout(timer);
-  }, [activeBattleOpp, finalReward, activeCombatantId, isAuto, battleSpeed, turnTick, isShowdownCutin, isLeaderUltCutin, isOppLeaderUltCutin, executeCombatMove]);
+  }, [activeBattleOpp, finalReward, activeCombatantId, isAuto, battleSpeed, turnTick, isShowdownCutin, isLeaderUltCutin, isOppLeaderUltCutin, executeCombatMove, finishBattle]);
 
   // 🛡️ [아레나 멈춤 방지 워치독]: 만약 2.5초 이상 턴이 멈춰 있으면 강제 복구 및 다음 턴 진행
   useEffect(() => {
     // ⏸️ 피버콜 쇼다운 진행 중이거나 궁극기 연출 중일 때는 워치독 개입 금지
-    if (!activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
+    if (isBattleEndedRef.current || !activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
     const watchdog = setTimeout(() => {
+      if (isBattleEndedRef.current || finalRewardRef.current) return;
       if (isProcessingRef.current) {
         console.warn('⚠️ [아레나 멈춤 방지 워치독] 2.5초간 응답 없음 감지 -> 강제 플래그 해제 및 턴 진행');
         isProcessingRef.current = false;
@@ -2548,7 +2562,7 @@ export const ArenaScreen: React.FC = () => {
 
   // ── ⏩ 즉시 결과 확인 (Skip) ──────────────────────────────────────────────
   const handleInstantSkip = () => {
-    if (!activeBattleOpp || finalReward) return;
+    if (isBattleEndedRef.current || !activeBattleOpp || finalReward) return;
     isProcessingRef.current = false;
 
     let pTeam = [...playerTeamRef.current];
@@ -2577,18 +2591,12 @@ export const ArenaScreen: React.FC = () => {
     }
 
     const isWin = oTeam.every(c => c.currentHp <= 0) || pTeam.reduce((sum, c) => sum + c.currentHp, 0) >= oTeam.reduce((sum, c) => sum + c.currentHp, 0);
-    const rewardResult = gm.claimArenaMatchRewards(activeBattleOpp, isWin);
-    setCombatMetrics(Object.values(combatMetricsRef.current));
-    setFinalReward({ ...rewardResult, win: isWin });
-    try {
-      SoundManager.getInstance().play(isWin ? 'victory' : 'defeat');
-    } catch (_) {}
-    refreshOpponents();
+    finishBattle(isWin);
   };
 
   // ── 수동 스킬 클릭 실행 ──────────────────────────────────────────────────
   const handleManualSkillClick = (skill: Skill) => {
-    if (isProcessingRef.current || finalReward || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
+    if (isBattleEndedRef.current || isProcessingRef.current || finalReward || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
     const attacker = playerTeamRef.current.find(c => c.id === activeCombatantIdRef.current);
     if (!attacker) return;
 
@@ -2606,7 +2614,9 @@ export const ArenaScreen: React.FC = () => {
       isProcessingRef.current = true;
       executeCombatMove(attacker, skill, target);
       setTimeout(() => {
-        isProcessingRef.current = false;
+        if (!isBattleEndedRef.current) {
+          isProcessingRef.current = false;
+        }
       }, 150);
     }
   };
@@ -4561,6 +4571,8 @@ export const ArenaScreen: React.FC = () => {
                   <button
                     className="px-2.5 py-1.5 rounded-lg bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff66] text-xs font-bold hover:bg-[#00d2ff44] transition-all shrink-0 ml-2"
                     onClick={() => {
+                      isBattleEndedRef.current = false;
+                      finalRewardRef.current = null;
                       setActiveBattleOpp(null);
                       setFinalReward(null);
                       gm.emit('arenaBattleStateChanged', false);
@@ -4585,6 +4597,8 @@ export const ArenaScreen: React.FC = () => {
                   variant="primary"
                   className="w-full py-2.5 font-bold shadow-lg shadow-[#42321955]"
                   onClick={() => {
+                    isBattleEndedRef.current = false;
+                    finalRewardRef.current = null;
                     setActiveBattleOpp(null);
                     setFinalReward(null);
                     gm.emit('arenaBattleStateChanged', false);
