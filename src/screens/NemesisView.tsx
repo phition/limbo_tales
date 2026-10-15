@@ -3,7 +3,7 @@ import { useGameManager } from '../hooks/useGameManager';
 import { ActionButton } from '../components/ActionButton';
 import { BattleVFXOverlay, VFXEvent, VFXType } from '../components/BattleVFXOverlay';
 import { SoundManager } from '../managers/SoundManager';
-import { Skill, StatusEffect, Mercenary, NemesisPartId } from '../types/game';
+import { Skill, StatusEffect, Mercenary, NemesisPartId, LogEntry } from '../types/game';
 import { CHARACTER_CLASSES } from '../data/classes';
 import {
   NEMESIS_BOSS_CONFIG,
@@ -11,12 +11,60 @@ import {
   NEMESIS_LEADERBOARD_MOCK,
   NemesisBossSkill
 } from '../data/nemesis';
-import { FeverBadgeType } from '../types/fever';
-import { FeverGaugeBar } from '../components/FeverGaugeBar';
 import { CombatMeterTable, CombatantMetrics } from '../components/CombatMeterTable';
 import { GameDataService } from '../services/GameDataService';
 import { gameDialog } from '../services/DialogService';
+import { LogPanel } from '../components/LogPanel';
+import { CustomAssetService } from '../services/CustomAssetService';
 
+// ── 롱프레스 (홀드) 헬퍼 컴포넌트 ──────────────────────────────────────────
+const LongPressBox: React.FC<{
+  onLongPress: () => void;
+  onClick?: () => void;
+  className?: string;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
+}> = ({ onLongPress, onClick, className = '', style, children }) => {
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isLongRef = useRef(false);
+
+  const handleStart = () => {
+    isLongRef.current = false;
+    timerRef.current = setTimeout(() => {
+      isLongRef.current = true;
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        try { navigator.vibrate(30); } catch (_) {}
+      }
+      onLongPress();
+    }, 350);
+  };
+
+  const handleEnd = (shouldClick: boolean) => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    if (!isLongRef.current && shouldClick && onClick) {
+      onClick();
+    }
+  };
+
+  return (
+    <div
+      className={className}
+      style={style}
+      onMouseDown={handleStart}
+      onMouseUp={() => handleEnd(true)}
+      onMouseLeave={() => handleEnd(false)}
+      onTouchStart={handleStart}
+      onTouchEnd={() => handleEnd(true)}
+    >
+      {children}
+    </div>
+  );
+};
+
+// ── 아군 영웅 전투 런타임 상태 ──────────────────────────────────────────────
 interface RaidHeroCombatant {
   id: string;
   name: string;
@@ -40,6 +88,15 @@ interface RaidHeroCombatant {
   damageDealt: number;
 }
 
+// ── 부위별 절멸기 차징 상태 ────────────────────────────────────────────────
+interface PartChargingState {
+  skillName: string;
+  remainingBreakDmg: number;
+  maxBreakDmg: number;
+  skill: NemesisBossSkill;
+}
+
+// ── 3대 부위 전투 런타임 상태 ──────────────────────────────────────────────
 interface NemesisCombatPart {
   id: NemesisPartId;
   name: string;
@@ -53,15 +110,92 @@ interface NemesisCombatPart {
   luck: number;
   icon: string;
   isDefeated: boolean;
+  isGroggy?: boolean;
+  chargingState?: PartChargingState | null;
   skills: NemesisBossSkill[];
   statusEffects: StatusEffect[];
 }
 
-interface RaidCombatLog {
-  turn: number;
-  text: string;
-  type: 'damage' | 'boss_skill' | 'hero_skill' | 'warning' | 'system';
+// ── 스킬 컷인 상태 ────────────────────────────────────────────────────────
+interface SkillCutInState {
+  id: string;
+  skillName: string;
+  icon: string;
+  isEnemy: boolean;
+  heroName?: string;
+  subText?: string;
 }
+
+// ── 용병 상태 행 (PVE 감성 HeroRow) ────────────────────────────────────────
+const HeroRow: React.FC<{
+  hero: RaidHeroCombatant;
+  isCurrentTurn: boolean;
+  isSelected: boolean;
+  onClick: () => void;
+}> = ({ hero, isCurrentTurn, isSelected, onClick }) => {
+  const isAlive = hero.currentHp > 0;
+  const hpPct = isAlive ? Math.max(0, Math.min(100, (hero.currentHp / hero.maxHp) * 100)) : 0;
+  const mpPct = isAlive ? Math.max(0, Math.min(100, (hero.currentMp / hero.maxMp) * 100)) : 0;
+  const posMeta = {
+    front: { label: '전열', color: '#ef5350' },
+    mid:   { label: '중열', color: '#ffd54f' },
+    back:  { label: '후열', color: '#42a5f5' },
+  }[hero.position || 'mid'];
+  const customPortrait = CustomAssetService.getInstance().getMercenaryOverride(hero.classId)
+    || CustomAssetService.getInstance().getMercenaryOverride(hero.id)
+    || CustomAssetService.getInstance().getMercenaryOverride(hero.name);
+
+  return (
+    <div
+      onClick={onClick}
+      className={`panel px-2.5 py-1 sm:py-1.5 cursor-pointer transition-all select-none relative ${
+        !isAlive ? 'opacity-35 grayscale bg-[#0c101a] border-[#18202d] shadow-none' : ''
+      }`}
+      style={{
+        borderColor: !isAlive ? '#18202d' : isCurrentTurn ? '#00d2ff' : isSelected ? '#38ef7d' : undefined,
+      }}
+    >
+      <div className="flex items-center gap-1.5">
+        <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-[#00d2ff55] bg-[#1a2333] flex items-center justify-center relative shadow-xs">
+          {customPortrait ? (
+            <img src={customPortrait} alt={hero.name} className={`w-full h-full object-cover ${!isAlive ? 'grayscale' : ''}`} />
+          ) : (
+            <span className="text-xs">{hero.icon || '⚔️'}</span>
+          )}
+          {!isAlive && (
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-[10px]">💀</div>
+          )}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1 mb-0.5 flex-wrap">
+            <span className="font-bold text-xs" style={{ color: !isAlive ? '#607d8b' : undefined, textDecoration: !isAlive ? 'line-through' : undefined }}>
+              {hero.name}
+            </span>
+            <span className="text-[10px] text-[#00d2ff] font-medium shrink-0">{hero.className}</span>
+            <span className="text-[10px] font-mono font-bold" style={{ color: !isAlive ? '#607d8b' : '#ffd54f' }}>Lv.{hero.level}</span>
+            <span
+              className="text-[9px] px-1 py-0.2 rounded font-bold"
+              style={{ color: !isAlive ? '#607d8b' : posMeta.color, background: !isAlive ? '#26323822' : `${posMeta.color}22`, border: `1px solid ${!isAlive ? '#26323844' : `${posMeta.color}44`}` }}
+            >
+              [{posMeta.label}]
+            </span>
+            {isAlive && isCurrentTurn && <span className="text-[9px] bg-[#00d2ff22] text-[#00d2ff] px-1 rounded font-bold border border-[#00d2ff44]">▶ 내 턴</span>}
+          </div>
+          <div className="bar-track" style={{ height: 5 }}><div className="bar-fill-hp h-full" style={{ width: `${hpPct}%` }} /></div>
+          <div className="bar-track mt-0.5" style={{ height: 4 }}><div className="bar-fill-mp h-full" style={{ width: `${mpPct}%` }} /></div>
+        </div>
+        <div className="text-right text-[10px] text-[#8b9bb4] shrink-0 font-mono flex flex-col items-end">
+          <span style={{ color: !isAlive ? '#607d8b' : '#ef5350' }}>
+            {isAlive ? `${Math.round(hero.currentHp)}/${Math.round(hero.maxHp)}` : '💀 전투불능'}
+          </span>
+          <span className="text-[#00d2ff] text-[9px]">
+            {isAlive ? `${Math.round(hero.currentMp)}/${Math.round(hero.maxMp)}` : ''}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 type NemesisTab = 'hub' | 'milestones' | 'ranking';
 
@@ -82,9 +216,9 @@ export const NemesisView: React.FC = () => {
   const [inBattle, setInBattle] = useState(false);
   const [battleTurn, setBattleTurn] = useState(1);
   const [maxTurns] = useState(15);
-  const [cataclysmCount, setCataclysmCount] = useState(3);
   const [heroes, setHeroes] = useState<RaidHeroCombatant[]>([]);
-  
+  const [selectedHeroIdx, setSelectedHeroIdx] = useState(0);
+
   // 3대 부위 전투 런타임 상태
   const [bossParts, setBossParts] = useState<Record<NemesisPartId, NemesisCombatPart>>({
     head: { ...NEMESIS_BOSS_CONFIG.parts.head, currentHp: 4000000, isDefeated: false, statusEffects: [] },
@@ -92,33 +226,27 @@ export const NemesisView: React.FC = () => {
     tail: { ...NEMESIS_BOSS_CONFIG.parts.tail, currentHp: 3500000, isDefeated: false, statusEffects: [] },
   });
   const [targetedPart, setTargetedPart] = useState<NemesisPartId>('head');
+  const [attackingPartId, setAttackingPartId] = useState<NemesisPartId | null>(null);
+
   const [isAutoBattle, setIsAutoBattle] = useState(false);
+  const [battleSpeed, setBattleSpeed] = useState<1 | 1.5 | 2>(2);
   const [activeHeroTurnId, setActiveHeroTurnId] = useState<string | null>(null);
-  const [isWaitingManual, setIsWaitingManual] = useState(false);
+  const [isHeroTurn, setIsHeroTurn] = useState(false);
 
   const [bossHp, setBossHp] = useState(state.nemesisState?.currentBossHp ?? NEMESIS_BOSS_CONFIG.maxHp);
   const [totalBattleDmg, setTotalBattleDmg] = useState(0);
-  const [battleSpeed, setBattleSpeed] = useState<1.5 | 2>(2);
+
+  // 연출 & VFX 상태
   const [vfxList, setVfxList] = useState<VFXEvent[]>([]);
-  const [actionBanner, setActionBanner] = useState<{ text: string; sub: string; color: string } | null>(null);
-  const [logs, setLogs] = useState<RaidCombatLog[]>([]);
+  const [skillCutIn, setSkillCutIn] = useState<SkillCutInState | null>(null);
+  const [screenFlash, setScreenFlash] = useState<'enemy' | 'player' | null>(null);
+  const [isShaking, setIsShaking] = useState(false);
+
+  // 📜 PVE 표준 LogPanel 연동 전투 로그
+  const [battleLogs, setBattleLogs] = useState<LogEntry[]>([]);
 
   // 👑 전술 오퍼레이터 상태 (3선발 + 1오퍼레이터 체계)
-  const [playerLeader, setPlayerLeader] = useState<Mercenary | null>(null);
-  const playerLeaderRef = useRef<Mercenary | null>(null);
-  playerLeaderRef.current = playerLeader;
-
-  const playerLeaderBlessing = useMemo(() => {
-    return playerLeader ? gm.getLeaderBlessing(playerLeader) : null;
-  }, [playerLeader, gm]);
-
-  // 🔥 피버 게이지 상태
-  const [feverBadges, setFeverBadges] = useState<FeverBadgeType[]>([]);
-  const [bossFeverBadges, setBossFeverBadges] = useState<FeverBadgeType[]>([]);
-  const feverBadgesRef = useRef<FeverBadgeType[]>([]);
-  const bossFeverBadgesRef = useRef<FeverBadgeType[]>([]);
-  feverBadgesRef.current = feverBadges;
-  bossFeverBadgesRef.current = bossFeverBadges;
+  const [operatorHero, setOperatorHero] = useState<Mercenary | null>(null);
 
   // 📊 전투 상세 딜미터기 상태
   const [combatMetrics, setCombatMetrics] = useState<CombatantMetrics[]>([]);
@@ -140,26 +268,51 @@ export const NemesisView: React.FC = () => {
   const bossPartsRef = useRef(bossParts);
   const targetedPartRef = useRef<NemesisPartId>(targetedPart);
   const isAutoBattleRef = useRef(isAutoBattle);
+  const battleSpeedRef = useRef(battleSpeed);
   const bossHpRef = useRef(bossHp);
   const totalBattleDmgRef = useRef(0);
-  const cataclysmCountRef = useRef(cataclysmCount);
   const battleTurnRef = useRef(battleTurn);
 
   // 라운드 내 행동 큐 Ref
-  const actionsRef = useRef<Array<{ type: 'hero' | 'part'; id: string; spd: number; luck: number }>>([]);
-  const actionIndexRef = useRef(0);
+  const turnQueueRef = useRef<Array<{ type: 'hero' | 'part'; id: string; spd: number; luck: number }>>([]);
+  const turnIndexRef = useRef(0);
   const initialPartHpsRef = useRef<{ head: number; body: number; tail: number }>({ head: 4000000, body: 5000000, tail: 3500000 });
 
   useEffect(() => { heroesRef.current = heroes; }, [heroes]);
   useEffect(() => { bossPartsRef.current = bossParts; }, [bossParts]);
   useEffect(() => { targetedPartRef.current = targetedPart; }, [targetedPart]);
   useEffect(() => { isAutoBattleRef.current = isAutoBattle; }, [isAutoBattle]);
+  useEffect(() => { battleSpeedRef.current = battleSpeed; }, [battleSpeed]);
   useEffect(() => { bossHpRef.current = bossHp; }, [bossHp]);
   useEffect(() => { totalBattleDmgRef.current = totalBattleDmg; }, [totalBattleDmg]);
-  useEffect(() => { cataclysmCountRef.current = cataclysmCount; }, [cataclysmCount]);
   useEffect(() => { battleTurnRef.current = battleTurn; }, [battleTurn]);
 
-  // ── 레이드 VFX 발생기 ────────────────────────────────────────────────
+  // ── 사운드 재생 ─────────────────────────────────────────────────────
+  const playSfx = useCallback((type: 'hit' | 'crit' | 'shield' | 'shield_break' | 'victory' | 'defeat' | 'cast') => {
+    try {
+      const sm = SoundManager.getInstance();
+      if (type === 'hit') sm.play('slash');
+      else if (type === 'crit') sm.play('crit');
+      else if (type === 'shield') sm.play('shield');
+      else if (type === 'shield_break') sm.play('shield_break');
+      else if (type === 'victory') sm.play('victory');
+      else if (type === 'defeat') sm.play('defeat');
+      else if (type === 'cast') sm.play('spell');
+    } catch (_) {}
+  }, []);
+
+  // ── PVE 스타일 로그 기록기 ───────────────────────────────────────────
+  const addLog = useCallback((text: string, type: 'normal' | 'reward' | 'danger' | 'story' | 'system' = 'normal') => {
+    const entry: LogEntry = {
+      id: `nemesis_log_${Date.now()}_${Math.random()}`,
+      timestamp: new Date().toLocaleTimeString(),
+      text,
+      type,
+    };
+    setBattleLogs(prev => [...prev.slice(-40), entry]);
+  }, []);
+
+  // ── VFX 발생기 ───────────────────────────────────────────────────────
   const triggerVfx = useCallback((type: VFXType, x: number, y: number, text?: string, isCrit?: boolean) => {
     const ev: VFXEvent = { id: `vfx_${Date.now()}_${Math.random()}`, type, x, y, text, isCrit };
     setVfxList(prev => [...prev.slice(-8), ev]);
@@ -169,116 +322,14 @@ export const NemesisView: React.FC = () => {
     setVfxList(prev => prev.filter(v => v.id !== id));
   }, []);
 
-  // ── 사운드 재생 ─────────────────────────────────────────────────────
-  const playSfx = useCallback((type: 'hit' | 'crit' | 'shield' | 'victory' | 'defeat' | 'cast') => {
-    try {
-      const sm = SoundManager.getInstance();
-      if (type === 'hit') sm.play('slash');
-      else if (type === 'crit') sm.play('crit');
-      else if (type === 'shield') sm.play('shield');
-      else if (type === 'victory') sm.play('victory');
-      else if (type === 'defeat') sm.play('defeat');
-      else if (type === 'cast') sm.play('spell');
-    } catch (_) {}
+  const getDelay = useCallback((ms: number) => {
+    return Math.max(150, Math.round(ms / battleSpeedRef.current));
   }, []);
-
-  // 🔥 피버 뱃지 추가
-  const addFeverBadge = useCallback((badgeType: FeverBadgeType) => {
-    setFeverBadges(prev => {
-      if (prev.length >= 5) return prev;
-      const next = [...prev, badgeType];
-      feverBadgesRef.current = next;
-      return next;
-    });
-  }, []);
-
-  const addBossFeverBadge = useCallback((badgeType: FeverBadgeType) => {
-    setBossFeverBadges(prev => {
-      if (prev.length >= 5) return prev;
-      const next = [...prev, badgeType];
-      bossFeverBadgesRef.current = next;
-      return next;
-    });
-  }, []);
-
-  // 👑 아군 피버 버스트
-  const triggerPlayerFeverBurst = useCallback(() => {
-    const liveHeroes = heroesRef.current.filter(h => h.currentHp > 0);
-    if (liveHeroes.length === 0) return;
-
-    SoundManager.getInstance().play('boss_skill');
-    setActionBanner({
-      text: '👑 아군 차원 총공격: ALL-OUT FEVER BURST!',
-      sub: '아군 피버 만충! 오퍼레이터의 차원 지휘로 네메시스에게 집중 포화!',
-      color: '#ffd54f',
-    });
-
-    const totalAtk = liveHeroes.reduce((sum, h) => sum + h.atk, 0);
-    const burstDmg = Math.floor(totalAtk * 4.5 + Math.random() * 2000);
-
-    triggerVfx('crit_slash', 50, 25, `${burstDmg.toLocaleString()}`, true);
-    playSfx('crit');
-
-    // 살아있는 타겟 부위 또는 첫 생존 부위에 타격
-    const alivePartKeys = (['head', 'body', 'tail'] as const).filter(k => !bossPartsRef.current[k].isDefeated && bossPartsRef.current[k].currentHp > 0);
-    const targetKey = alivePartKeys.includes(targetedPartRef.current) ? targetedPartRef.current : alivePartKeys[0];
-
-    if (targetKey) {
-      const part = bossPartsRef.current[targetKey];
-      const nextHp = Math.max(0, part.currentHp - burstDmg);
-      part.currentHp = nextHp;
-      if (nextHp <= 0) {
-        part.isDefeated = true;
-        setLogs(prev => [...prev.slice(-20), { turn: battleTurnRef.current, text: `💀 [${part.name} 패퇴!] 피버 총공격으로 부위가 완전히 파괴되었습니다!`, type: 'warning' }]);
-      }
-      setBossParts({ ...bossPartsRef.current });
-    }
-
-    const curTotalHp = Object.values(bossPartsRef.current).reduce((sum, p) => sum + (p.isDefeated ? 0 : p.currentHp), 0);
-    setBossHp(curTotalHp);
-    bossHpRef.current = curTotalHp;
-
-    const nextTotalDmg = totalBattleDmgRef.current + burstDmg;
-    setTotalBattleDmg(nextTotalDmg);
-    totalBattleDmgRef.current = nextTotalDmg;
-
-    setFeverBadges([]);
-    feverBadgesRef.current = [];
-  }, [playSfx, triggerVfx]);
-
-  // 💀 보스 피버 버스트
-  const triggerBossFeverBurst = useCallback(() => {
-    const liveHeroes = heroesRef.current.filter(h => h.currentHp > 0);
-    if (liveHeroes.length === 0) return;
-
-    SoundManager.getInstance().play('boss_skill');
-    setActionBanner({
-      text: '💀 네메시스 공허 폭주: VOID FEVER ANNIHILATION!',
-      sub: '보스 피버 만충! 전 부위 공명으로 아군 전원에게 차원 균열 방출!',
-      color: '#ff416c',
-    });
-
-    triggerVfx('dark_curse', 50, 75, 'FEVER BURST!', true);
-    playSfx('defeat');
-
-    const updated = heroesRef.current.map(h => {
-      if (h.currentHp <= 0) return h;
-      const bDmg = Math.floor(h.maxHp * 0.25 + 40);
-      const m = combatMetricsRef.current[h.id];
-      if (m) m.damageTaken += bDmg;
-      return { ...h, currentHp: Math.max(0, h.currentHp - bDmg) };
-    });
-
-    setHeroes(updated);
-    heroesRef.current = updated;
-    setBossFeverBadges([]);
-    bossFeverBadgesRef.current = [];
-  }, [playSfx, triggerVfx]);
 
   // ── 레이드 종료 및 정산 처리 ─────────────────────────────────────────
   const finalizeRaidBattle = useCallback(() => {
     isProcessingRef.current = true;
-    setIsWaitingManual(false);
+    setIsHeroTurn(false);
     setActiveHeroTurnId(null);
 
     const initHps = initialPartHpsRef.current;
@@ -311,44 +362,50 @@ export const NemesisView: React.FC = () => {
   const processNextActionRef = useRef<() => void>(() => {});
 
   const processNextAction = useCallback(() => {
-    if (!inBattle || settlement) return;
+    if (settlement || !inBattle) return;
 
     // 생존 영웅 및 생존 부위 확인
     const liveHeroes = heroesRef.current.filter(h => h.currentHp > 0);
-    const alivePartKeys = (['head', 'body', 'tail'] as const).filter(k => !bossPartsRef.current[k].isDefeated && bossPartsRef.current[k].currentHp > 0);
+    const alivePartKeys = (['head', 'body', 'tail'] as const).filter(
+      k => !bossPartsRef.current[k].isDefeated && bossPartsRef.current[k].currentHp > 0
+    );
 
     // 종료 조건 1: 모든 아군 전멸
     if (liveHeroes.length === 0) {
-      setLogs(prev => [...prev.slice(-20), { turn: battleTurnRef.current, text: '💀 원정대 전원이 쓰러져 시공의 틈새로 철수합니다!', type: 'warning' }]);
+      addLog('💀 파티원 전원이 전투 불능 상태가 되었습니다! 긴급 퇴각을 개시합니다.', 'danger');
       finalizeRaidBattle();
       return;
     }
 
-    // 종료 조건 2: 모든 네메시스 부위 패퇴 (완전 토벌)
+    // 종료 조건 2: 네메시스 전 부위 패퇴
     if (alivePartKeys.length === 0) {
-      setLogs(prev => [...prev.slice(-20), { turn: battleTurnRef.current, text: '👑 [네메시스 토벌 성공] 머리, 몸통, 꼬리가 모두 패퇴하여 네메시스가 격퇴되었습니다!', type: 'system' }]);
+      addLog('👑 [네메시스 완전 격파!] 네메시스의 모든 부위가 산산조각 났습니다!', 'reward');
       finalizeRaidBattle();
       return;
     }
 
-    // 종료 조건 3: 15턴 도달
+    // 종료 조건 3: 최대 턴(15턴) 도달
     if (battleTurnRef.current > maxTurns) {
-      setLogs(prev => [...prev.slice(-20), { turn: maxTurns, text: '⌛ 15턴 경과! 차원의 왜곡 한계에 도달하여 안전 귀환합니다.', type: 'system' }]);
+      addLog('⌛ [차원의 한계] 15턴이 경과하여 시공간 균열이 붕괴되었습니다. 전장을 이탈합니다.', 'system');
       finalizeRaidBattle();
       return;
     }
 
-    // 라운드 내 모든 행동 완료 시 다음 턴으로 전진
-    if (actionIndexRef.current >= actionsRef.current.length) {
-      // 피버 버스트 검사
-      if (feverBadgesRef.current.length >= 5) {
-        setTimeout(() => triggerPlayerFeverBurst(), 200);
-      }
-      if (bossFeverBadgesRef.current.length >= 5) {
-        setTimeout(() => triggerBossFeverBurst(), 200);
+    // 턴 큐 확인
+    const queue = turnQueueRef.current;
+    if (turnIndexRef.current >= queue.length) {
+      // 새로운 라운드 시작
+      const nextTurn = battleTurnRef.current + 1;
+      setBattleTurn(nextTurn);
+      battleTurnRef.current = nextTurn;
+
+      if (nextTurn > maxTurns) {
+        addLog('⌛ 15턴 작전 시간이 만료되었습니다.', 'system');
+        finalizeRaidBattle();
+        return;
       }
 
-      // 아군 쿨다운 1씩 감소
+      // 쿨다운 1씩 감소
       heroesRef.current.forEach(h => {
         Object.keys(h.cooldowns).forEach(k => {
           if (h.cooldowns[k] > 0) h.cooldowns[k] -= 1;
@@ -356,163 +413,143 @@ export const NemesisView: React.FC = () => {
       });
       setHeroes([...heroesRef.current]);
 
-      const nextTurn = battleTurnRef.current + 1;
-      setBattleTurn(nextTurn);
-      battleTurnRef.current = nextTurn;
-
-      // 새 라운드 행동 큐 생성
-      const nextLiveHeroes = heroesRef.current.filter(h => h.currentHp > 0);
-      const nextAliveParts = (['head', 'body', 'tail'] as const).filter(k => !bossPartsRef.current[k].isDefeated && bossPartsRef.current[k].currentHp > 0);
-
-      const nextActions: Array<{ type: 'hero' | 'part'; id: string; spd: number; luck: number }> = [
-        ...nextLiveHeroes.map(h => ({ type: 'hero' as const, id: h.id, spd: h.spd, luck: h.luck })),
-        ...nextAliveParts.map(k => ({ type: 'part' as const, id: k, spd: bossPartsRef.current[k].spd, luck: bossPartsRef.current[k].luck }))
+      // 새 턴 큐 구성 (SPD 순 정렬)
+      const newQueue: Array<{ type: 'hero' | 'part'; id: string; spd: number; luck: number }> = [
+        ...liveHeroes.map(h => ({ type: 'hero' as const, id: h.id, spd: h.spd, luck: h.luck })),
+        ...alivePartKeys.map(k => ({ type: 'part' as const, id: k, spd: bossPartsRef.current[k].spd, luck: bossPartsRef.current[k].luck }))
       ];
-      nextActions.sort((a, b) => b.spd - a.spd || b.luck - a.luck);
+      newQueue.sort((a, b) => b.spd - a.spd || b.luck - a.luck);
+      turnQueueRef.current = newQueue;
+      turnIndexRef.current = 0;
+    }
 
-      actionsRef.current = nextActions;
-      actionIndexRef.current = 0;
+    const currentTurn = turnQueueRef.current[turnIndexRef.current];
+    turnIndexRef.current += 1;
 
-      const stepDelay = battleSpeed === 2 ? 300 : 450;
-      setTimeout(() => processNextActionRef.current(), stepDelay);
+    if (!currentTurn) {
+      processNextActionRef.current();
       return;
     }
 
-    const currentAction = actionsRef.current[actionIndexRef.current];
-    const stepDelay = battleSpeed === 2 ? 300 : 450;
-
-    // ── [1. 영웅의 행동] ──
-    if (currentAction.type === 'hero') {
-      const hero = heroesRef.current.find(h => h.id === currentAction.id);
+    if (currentTurn.type === 'hero') {
+      const hero = heroesRef.current.find(h => h.id === currentTurn.id);
       if (!hero || hero.currentHp <= 0) {
-        actionIndexRef.current++;
-        processNextAction();
+        processNextActionRef.current();
         return;
       }
 
-      // 자동 전투인 경우: AI 자동 실행
+      setActiveHeroTurnId(hero.id);
+      const hIdx = heroesRef.current.findIndex(h => h.id === hero.id);
+      if (hIdx >= 0) setSelectedHeroIdx(hIdx);
+
       if (isAutoBattleRef.current) {
-        executeHeroCombat(hero, null);
+        // 자동 전투: 사용 가능한 스킬 우선 시전 후 턴 넘김
+        setIsHeroTurn(false);
+        const timer = setTimeout(() => {
+          if (!isAutoBattleRef.current) return;
+          const usableSkill = hero.skills.find(s => hero.currentMp >= s.manaCost && (hero.cooldowns[s.id] || 0) === 0);
+          executeHeroCombat(hero, usableSkill || null);
+        }, getDelay(400));
+        return () => clearTimeout(timer);
       } else {
-        // 수동 모드: 플레이어 입력 대기 상태 돌입
-        setActiveHeroTurnId(hero.id);
-        setIsWaitingManual(true);
+        // 수동 조작: 플레이어 입력 대기
+        setIsHeroTurn(true);
       }
     } else {
-      // ── [2. 네메시스 부위의 행동] ──
-      const partKey = currentAction.id as NemesisPartId;
+      // 보스 부위 행동
+      const partKey = currentTurn.id as NemesisPartId;
       const part = bossPartsRef.current[partKey];
-
-      // 네메시스 부위는 사경 없음 -> 체력 0이면 바로 패퇴하여 행동 불가!
       if (!part || part.isDefeated || part.currentHp <= 0) {
-        actionIndexRef.current++;
-        processNextAction();
+        processNextActionRef.current();
         return;
       }
 
-      executeBossPartCombat(part);
+      setIsHeroTurn(false);
+      setActiveHeroTurnId(null);
+      setAttackingPartId(partKey);
+
+      const timer = setTimeout(() => {
+        executePartCombat(part);
+      }, getDelay(350));
+      return () => clearTimeout(timer);
     }
-  }, [inBattle, settlement, maxTurns, battleSpeed, finalizeRaidBattle, triggerPlayerFeverBurst, triggerBossFeverBurst]);
+  }, [addLog, finalizeRaidBattle, getDelay, inBattle, maxTurns, settlement]);
 
-  processNextActionRef.current = processNextAction;
+  useEffect(() => {
+    processNextActionRef.current = processNextAction;
+  }, [processNextAction]);
 
-  // ── 영웅 공격 실행기 ──────────────────────────────────────────────────
-  const executeHeroCombat = useCallback((hero: RaidHeroCombatant, chosenSkill: Skill | null) => {
-    setIsWaitingManual(false);
-    setActiveHeroTurnId(null);
+  // ── 아군 영웅 공격 실행 ──────────────────────────────────────────────
+  const executeHeroCombat = useCallback((hero: RaidHeroCombatant, skill: Skill | null) => {
+    isProcessingRef.current = true;
+    setIsHeroTurn(false);
 
-    // 타겟팅된 부위가 살아있는지 검사, 사망 시 생존 부위로 자동 교체
+    // 타겟 부위 확인 (패퇴 시 다른 생존 부위 자동 타겟)
     let targetKey = targetedPartRef.current;
     if (bossPartsRef.current[targetKey].isDefeated || bossPartsRef.current[targetKey].currentHp <= 0) {
-      const aliveKeys = (['head', 'body', 'tail'] as const).filter(k => !bossPartsRef.current[k].isDefeated && bossPartsRef.current[k].currentHp > 0);
-      if (aliveKeys.length > 0) {
-        targetKey = aliveKeys[0];
-        setTargetedPart(targetKey);
-        targetedPartRef.current = targetKey;
-      } else {
+      const alive = (['head', 'body', 'tail'] as const).filter(
+        k => !bossPartsRef.current[k].isDefeated && bossPartsRef.current[k].currentHp > 0
+      );
+      if (alive.length === 0) {
         finalizeRaidBattle();
         return;
       }
+      targetKey = alive[0];
+      setTargetedPart(targetKey);
+      targetedPartRef.current = targetKey;
     }
 
     const targetPart = bossPartsRef.current[targetKey];
-
-    // 스킬 결정 (자동 전투 시 65% 확률로 쿨다운 가능한 스킬 선택)
-    let useSkill = chosenSkill;
-    if (!useSkill && isAutoBattleRef.current) {
-      const readySkills = hero.skills.filter(s => (hero.cooldowns[s.id] || 0) === 0 && hero.currentMp >= s.manaCost);
-      if (readySkills.length > 0 && Math.random() < 0.7) {
-        useSkill = readySkills[Math.floor(Math.random() * readySkills.length)];
-      }
-    }
-
-    let dmg = 0;
-    const isCrit = Math.random() * 100 < Math.min(50, 10 + hero.luck * 0.8);
-    const critMult = isCrit ? 1.75 : 1.0;
+    const useSkill = skill !== null;
 
     if (useSkill) {
-      const power = useSkill.power || 1.25;
-      dmg = Math.floor((hero.atk * power * 2.2 - targetPart.def * 0.4) * critMult);
-      dmg = Math.max(150, dmg + Math.floor(Math.random() * 80));
-      hero.currentMp = Math.max(0, hero.currentMp - useSkill.manaCost);
-      hero.cooldowns[useSkill.id] = useSkill.cooldown || 2;
-
-      setActionBanner({
-        text: `⚔️ [${hero.name}] ${useSkill.name} ➔ ${targetPart.name}`,
-        sub: `${dmg.toLocaleString()} 피해! ${isCrit ? '💥 치명타!' : ''}`,
-        color: '#00d2ff',
+      hero.currentMp = Math.max(0, hero.currentMp - skill.manaCost);
+      hero.cooldowns[skill.id] = skill.cooldown;
+      setSkillCutIn({
+        id: String(Date.now()),
+        skillName: skill.name,
+        icon: skill.icon || '⚔️',
+        isEnemy: false,
+        heroName: hero.name,
+        subText: `${hero.className} 전술 스킬 시전`
       });
-
-      setLogs(prev => [...prev.slice(-20), {
-        turn: battleTurnRef.current,
-        text: `⚔️ [${hero.name}] ${useSkill?.icon || '⚡'} [${useSkill?.name}] ➔ [${targetPart.name}]에게 ${dmg.toLocaleString()} 피해! ${isCrit ? '💥 치명타!' : ''}`,
-        type: 'hero_skill'
-      }]);
-    } else {
-      dmg = Math.floor((hero.atk * 1.6 - targetPart.def * 0.3) * critMult);
-      dmg = Math.max(90, dmg + Math.floor(Math.random() * 50));
-      hero.currentMp = Math.min(hero.maxMp, hero.currentMp + 15);
-
-      setActionBanner({
-        text: `🗡️ [${hero.name}] 일반 공격 ➔ ${targetPart.name}`,
-        sub: `${dmg.toLocaleString()} 피해! ${isCrit ? '💥 치명타!' : ''}`,
-        color: '#42a5f5',
-      });
-
-      setLogs(prev => [...prev.slice(-20), {
-        turn: battleTurnRef.current,
-        text: `🗡️ [${hero.name}] 일반 공격 ➔ [${targetPart.name}]에게 ${dmg.toLocaleString()} 피해! ${isCrit ? '💥 치명타!' : ''}`,
-        type: 'damage'
-      }]);
     }
 
-    // 타겟 부위 체력 차감 (사경 없음 -> 0이 되면 즉시 패퇴)
+    // 대미지 산출
+    const pwr = useSkill ? skill.power : 1.0;
+    const isCrit = Math.random() < Math.min(0.65, hero.luck * 0.0035 + 0.10);
+    // 오퍼레이터 전술 화력 보너스 (+10%)
+    const opBonus = 1.10;
+    const rawDmg = Math.floor((hero.atk * pwr * 1.5 - targetPart.def * 0.25) * opBonus);
+    const dmg = Math.max(80, Math.floor((rawDmg + Math.random() * 80) * (isCrit ? 1.6 : 1.0)));
+
+    // ⚡ [차징 저지 & 브레이크 판정]
+    if (targetPart.chargingState) {
+      targetPart.chargingState.remainingBreakDmg -= dmg;
+      if (targetPart.chargingState.remainingBreakDmg <= 0) {
+        targetPart.chargingState = null;
+        targetPart.isGroggy = true;
+        playSfx('shield_break');
+        triggerVfx('boss_cataclysm', 50, 25, 'BREAK!', true);
+        addLog(`💥 [차징 저지 성공!] ${hero.name}의 강력한 타격으로 [${targetPart.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다!`, 'reward');
+      } else {
+        addLog(`⚡ [차징 저지 중] [${targetPart.name}] 남은 브레이크 요구치: ${Math.max(0, targetPart.chargingState.remainingBreakDmg).toLocaleString()}`);
+      }
+    }
+
+    // 보스 부위 체력 차감 (사경 없음: 0이 되면 즉시 패퇴)
     const nextPartHp = Math.max(0, targetPart.currentHp - dmg);
     targetPart.currentHp = nextPartHp;
+
     if (nextPartHp <= 0) {
       targetPart.isDefeated = true;
-      setActionBanner({
-        text: `💀 [${targetPart.name} 패퇴!]`,
-        sub: '부위가 완전히 파괴되어 전선에서 이탈했습니다!',
-        color: '#ff416c',
-      });
-      setLogs(prev => [...prev.slice(-20), {
-        turn: battleTurnRef.current,
-        text: `💀⚠️ [네메시스 ${targetPart.name} 파괴!] 부위 체력이 소진되어 즉시 패퇴했습니다!`,
-        type: 'warning'
-      }]);
-
-      // 다음 살아있는 부위로 타겟 자동 교체
-      const remainingAlive = (['head', 'body', 'tail'] as const).filter(k => k !== targetKey && !bossPartsRef.current[k].isDefeated && bossPartsRef.current[k].currentHp > 0);
-      if (remainingAlive.length > 0) {
-        setTargetedPart(remainingAlive[0]);
-        targetedPartRef.current = remainingAlive[0];
-      }
+      targetPart.chargingState = null;
+      addLog(`💀 [${targetPart.name} 완전 패퇴!] 부위가 파괴되어 더 이상 재생하거나 행동하지 않습니다!`, 'reward');
+      playSfx('shield_break');
     }
 
     setBossParts({ ...bossPartsRef.current });
 
-    hero.damageDealt += dmg;
     const nextTotalDmg = totalBattleDmgRef.current + dmg;
     setTotalBattleDmg(nextTotalDmg);
     totalBattleDmgRef.current = nextTotalDmg;
@@ -530,133 +567,186 @@ export const NemesisView: React.FC = () => {
       if (useSkill) metric.combosTriggered += 1;
     }
 
-    if (isCrit) addFeverBadge('crit');
-    else if (useSkill) addFeverBadge('extra');
-    else addFeverBadge('assist');
-
     triggerVfx(isCrit ? 'crit_slash' : 'slash', 50, 25, `${dmg.toLocaleString()}`, isCrit);
     playSfx(isCrit ? 'crit' : 'hit');
+    setScreenFlash('enemy');
+    setTimeout(() => setScreenFlash(null), 150);
+
+    addLog(
+      `▶ [${hero.name}] [${useSkill ? skill.name : '기본 공격'}] ➔ [${targetPart.name}]에게 ${dmg.toLocaleString()} 피해! ${isCrit ? '💥 치명타!' : ''}`,
+      'normal'
+    );
 
     setHeroes([...heroesRef.current]);
 
-    const stepDelay = battleSpeed === 2 ? 300 : 450;
-    actionIndexRef.current++;
-    setTimeout(() => processNextActionRef.current(), stepDelay);
-  }, [addFeverBadge, battleSpeed, finalizeRaidBattle, playSfx, triggerVfx]);
+    setTimeout(() => {
+      setSkillCutIn(null);
+      isProcessingRef.current = false;
+      processNextActionRef.current();
+    }, getDelay(450));
+  }, [addLog, finalizeRaidBattle, getDelay, playSfx, triggerVfx]);
 
-  // ── 네메시스 부위별 고유 행동 실행기 ─────────────────────────────────
-  const executeBossPartCombat = useCallback((part: NemesisCombatPart) => {
+  // ── 네메시스 부위 행동 실행 ──────────────────────────────────────────
+  const executePartCombat = useCallback((part: NemesisCombatPart) => {
+    isProcessingRef.current = true;
     const liveTargets = heroesRef.current.filter(h => h.currentHp > 0);
     if (liveTargets.length === 0) {
-      actionIndexRef.current++;
-      processNextActionRef.current();
+      setAttackingPartId(null);
+      finalizeRaidBattle();
       return;
     }
 
-    const nextCountdown = cataclysmCountRef.current - 1;
+    // 1. 그로기 상태 처리 (차징 파쇄 시 행동 스킵)
+    if (part.isGroggy) {
+      part.isGroggy = false;
+      addLog(`💫 [${part.name}] 그로기 상태에서 정신을 차리고 있습니다. (이번 턴 행동 불가)`, 'system');
+      setBossParts({ ...bossPartsRef.current });
+      setAttackingPartId(null);
+      isProcessingRef.current = false;
+      setTimeout(() => processNextActionRef.current(), getDelay(300));
+      return;
+    }
 
-    // 3턴 주기 절멸기: 차원 소멸선 (Cataclysm)
-    if (nextCountdown <= 0) {
-      setActionBanner({
-        text: `💥 [차원 소멸선] (${part.name} 발동)`,
-        sub: '시공간 균열이 폭발하여 파티 전원에게 궤멸적 전멸 피해!',
-        color: '#ff416c'
+    // 2. 절멸기 차징 완료 시: 방출 폭발!
+    if (part.chargingState) {
+      const chargeSkill = part.chargingState.skill;
+      part.chargingState = null;
+
+      setSkillCutIn({
+        id: String(Date.now()),
+        skillName: `💥⚠️ [절멸기 방출] ${chargeSkill.name}`,
+        icon: chargeSkill.icon || '💀',
+        isEnemy: true,
+        subText: `${part.name}의 시공간 차원 절멸기 폭발!`
       });
-      triggerVfx('dark_curse', 50, 75, 'CATACLYSM!', true);
+
       playSfx('defeat');
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
+      setScreenFlash('enemy');
+      setTimeout(() => setScreenFlash(null), 250);
 
-      heroesRef.current.forEach(h => {
-        if (h.currentHp > 0) {
-          const cataDmg = Math.floor(h.maxHp * 0.45 + 50);
-          h.currentHp = Math.max(0, h.currentHp - cataDmg);
-          const m = combatMetricsRef.current[h.id];
-          if (m) m.damageTaken += cataDmg;
-        }
+      // 아군 전체에게 막대한 절멸 피해
+      liveTargets.forEach(h => {
+        const cataDmg = Math.max(60, Math.floor(h.maxHp * 0.35 + part.atk * 0.45));
+        h.currentHp = Math.max(0, h.currentHp - cataDmg);
+        const m = combatMetricsRef.current[h.id];
+        if (m) m.damageTaken += cataDmg;
       });
 
-      setLogs(prev => [...prev.slice(-20), {
-        turn: battleTurnRef.current,
-        text: `💥⚠️ [네메시스](SPD ${part.spd}) 차원 소멸선 방출! 파티 전체가 치명적인 피해를 입었습니다!`,
-        type: 'warning'
-      }]);
+      triggerVfx('dark_curse', 50, 75, 'CATACLYSM!', true);
+      addLog(`💥⚠️ [${part.name}] 절멸기 [${chargeSkill.name}] 방출! 파티 전원에게 궤멸적 피해가 쏟아졌습니다!`, 'danger');
 
-      setCataclysmCount(3);
-      cataclysmCountRef.current = 3;
-      addBossFeverBadge('extra');
-    } else {
-      // 부위별 고유 스킬 선택
-      const availableSkills = part.skills && part.skills.length > 0 ? part.skills : NEMESIS_BOSS_CONFIG.skills;
-      const partSkill = availableSkills[Math.floor(Math.random() * availableSkills.length)];
+      setHeroes([...heroesRef.current]);
+      setBossParts({ ...bossPartsRef.current });
 
-      setActionBanner({
-        text: `${partSkill.icon} [${part.name}] ${partSkill.name}`,
-        sub: partSkill.desc,
-        color: part.id === 'head' ? '#ef5350' : part.id === 'body' ? '#ce93d8' : '#00d2ff'
+      setTimeout(() => {
+        setSkillCutIn(null);
+        setAttackingPartId(null);
+        isProcessingRef.current = false;
+        processNextActionRef.current();
+      }, getDelay(650));
+      return;
+    }
+
+    // 3. 차징 돌입 판정 (2라운드 이상, 35% 확률로 고유 절멸기 차징 개시)
+    const availableSkills = part.skills && part.skills.length > 0 ? part.skills : NEMESIS_BOSS_CONFIG.skills;
+    const chargeSkillCandidate = availableSkills[availableSkills.length - 1] || availableSkills[0];
+    const shouldStartCharge = battleTurnRef.current >= 2 && !part.chargingState && Math.random() < 0.35;
+
+    if (shouldStartCharge) {
+      const breakGauge = part.id === 'head' ? 80000 : part.id === 'body' ? 90000 : 75000;
+      part.chargingState = {
+        skillName: chargeSkillCandidate.name,
+        remainingBreakDmg: breakGauge,
+        maxBreakDmg: breakGauge,
+        skill: chargeSkillCandidate,
+      };
+
+      setSkillCutIn({
+        id: String(Date.now()),
+        skillName: `⚡ [차원 절멸기 차징] ${chargeSkillCandidate.name}`,
+        icon: '⚡',
+        isEnemy: true,
+        subText: `${part.name} 차징 돌입! 저지 요구치: ${breakGauge.toLocaleString()}`
       });
+
       playSfx('cast');
+      triggerVfx('dark_curse', 50, 25, 'CHARGING!');
+      addLog(`⚠️ [${part.name}] 차원 절멸기 [${chargeSkillCandidate.name}] 차징 돌입! (브레이크 저지 요구치: ${breakGauge.toLocaleString()})`, 'danger');
 
-      if (partSkill.target === 'single') {
-        const target = liveTargets[Math.floor(Math.random() * liveTargets.length)];
-        const evadeChance = Math.min(0.25, Math.max(0.04, target.spd * 0.001 + target.luck * 0.001));
-        const isEvaded = Math.random() < evadeChance;
+      setBossParts({ ...bossPartsRef.current });
 
-        if (isEvaded) {
-          const m = combatMetricsRef.current[target.id];
-          if (m) m.dodges += 1;
-          triggerVfx('evade', 50, 75, '💨 EVADE');
-          setLogs(prev => [...prev.slice(-20), {
-            turn: battleTurnRef.current,
-            text: `💨 [${target.name}] [${part.name}]의 [${partSkill.name}] 공격을 신속히 회피했습니다!`,
-            type: 'hero_skill'
-          }]);
-        } else {
-          const bDmg = Math.max(30, Math.floor(part.atk * partSkill.power * 1.5 - target.def * 0.35));
-          target.currentHp = Math.max(0, target.currentHp - bDmg);
-          const m = combatMetricsRef.current[target.id];
-          if (m) m.damageTaken += bDmg;
+      setTimeout(() => {
+        setSkillCutIn(null);
+        setAttackingPartId(null);
+        isProcessingRef.current = false;
+        processNextActionRef.current();
+      }, getDelay(500));
+      return;
+    }
 
-          triggerVfx('fire', 50, 75, `-${bDmg}`);
-          setLogs(prev => [...prev.slice(-20), {
-            turn: battleTurnRef.current,
-            text: `👁️ [${part.name}] [${partSkill.name}] ➔ [${target.name}]에게 ${bDmg} 피해!`,
-            type: 'boss_skill'
-          }]);
+    // 4. 일반 스킬 및 부위 공격
+    const partSkill = availableSkills[Math.floor(Math.random() * (availableSkills.length - 1))];
+    const isAoe = partSkill.target === 'all';
+
+    setSkillCutIn({
+      id: String(Date.now()),
+      skillName: `[${part.name}] ${partSkill.name}`,
+      icon: partSkill.icon || '👁️',
+      isEnemy: true,
+      subText: partSkill.desc
+    });
+
+    playSfx('hit');
+    setScreenFlash('player');
+    setTimeout(() => setScreenFlash(null), 150);
+
+    if (isAoe) {
+      liveTargets.forEach(target => {
+        const bDmg = Math.max(20, Math.floor(part.atk * partSkill.power * 0.85 - target.def * 0.25));
+        target.currentHp = Math.max(0, target.currentHp - bDmg);
+        const m = combatMetricsRef.current[target.id];
+        if (m) m.damageTaken += bDmg;
+        if (partSkill.effectType === 'drain') {
+          target.currentMp = Math.max(0, target.currentMp - 15);
         }
+      });
+      triggerVfx('dark_curse', 50, 75, 'AOE HIT');
+      addLog(`🌀 [${part.name}] [${partSkill.name}] 광역 강타! 아군 전체가 피해를 입었습니다!`, 'danger');
+    } else {
+      const target = liveTargets[Math.floor(Math.random() * liveTargets.length)];
+      const evadeChance = Math.min(0.25, Math.max(0.04, target.spd * 0.001 + target.luck * 0.001));
+      const isEvaded = Math.random() < evadeChance;
+
+      if (isEvaded) {
+        const m = combatMetricsRef.current[target.id];
+        if (m) m.dodges += 1;
+        triggerVfx('evade', 50, 75, '💨 EVADE');
+        addLog(`💨 [${target.name}] [${part.name}]의 [${partSkill.name}] 공격을 신속히 회피했습니다!`, 'reward');
       } else {
-        // 광역기
-        liveTargets.forEach(target => {
-          const bDmg = Math.max(20, Math.floor(part.atk * partSkill.power * 0.95 - target.def * 0.25));
-          target.currentHp = Math.max(0, target.currentHp - bDmg);
-          const m = combatMetricsRef.current[target.id];
-          if (m) m.damageTaken += bDmg;
-          if (partSkill.effectType === 'drain') {
-            target.currentMp = Math.max(0, target.currentMp - 15);
-          }
-        });
-
-        triggerVfx('dark_curse', 50, 75, 'AOE HIT');
-        setLogs(prev => [...prev.slice(-20), {
-          turn: battleTurnRef.current,
-          text: `🌀 [${part.name}] [${partSkill.name}] 광역 강타! 아군 전체가 피해를 입었습니다!`,
-          type: 'boss_skill'
-        }]);
+        const bDmg = Math.max(30, Math.floor(part.atk * partSkill.power * 1.3 - target.def * 0.35));
+        target.currentHp = Math.max(0, target.currentHp - bDmg);
+        const m = combatMetricsRef.current[target.id];
+        if (m) m.damageTaken += bDmg;
+        triggerVfx('claw', 50, 75, `-${bDmg}`);
+        addLog(`👁️ [${part.name}] [${partSkill.name}] ➔ [${target.name}]에게 ${bDmg} 피해!`, 'danger');
       }
-
-      setCataclysmCount(nextCountdown);
-      cataclysmCountRef.current = nextCountdown;
-      addBossFeverBadge('crit');
     }
 
     setHeroes([...heroesRef.current]);
 
-    const stepDelay = battleSpeed === 2 ? 300 : 450;
-    actionIndexRef.current++;
-    setTimeout(() => processNextActionRef.current(), stepDelay);
-  }, [addBossFeverBadge, battleSpeed, playSfx, triggerVfx]);
+    setTimeout(() => {
+      setSkillCutIn(null);
+      setAttackingPartId(null);
+      isProcessingRef.current = false;
+      processNextActionRef.current();
+    }, getDelay(450));
+  }, [addLog, finalizeRaidBattle, getDelay, playSfx, triggerVfx]);
 
   // ── 수동 커맨드 핸들러 (플레이어가 버튼 클릭 시 실행) ───────────────────
   const handleManualAction = (skill: Skill | 'basic') => {
-    if (!isWaitingManual || !activeHeroTurnId) return;
+    if (!isHeroTurn || !activeHeroTurnId) return;
     const hero = heroesRef.current.find(h => h.id === activeHeroTurnId);
     if (!hero) return;
 
@@ -675,6 +765,19 @@ export const NemesisView: React.FC = () => {
     }
   };
 
+  // ── 전투 철수 확인 ──────────────────────────────────────────────────
+  const handleRetreat = async () => {
+    const confirmed = await gameDialog.confirm({
+      title: '🏃 전투 철수',
+      message: '지금까지 가한 피해를 저장하고 전장에서 안전하게 철수하시겠습니까?',
+      confirmText: '철수하기',
+      cancelText: '계속 전투',
+    });
+    if (confirmed) {
+      finalizeRaidBattle();
+    }
+  };
+
   // ── 레이드 전투 개시 ─────────────────────────────────────────────────
   const startRaidBattle = () => {
     if (!isGateUnlocked) {
@@ -682,8 +785,15 @@ export const NemesisView: React.FC = () => {
       return;
     }
 
-    if ((state.nemesisState?.dailyAttempts ?? 0) <= 0) {
-      gm.addLog('일일 토벌 도전 횟수를 모두 소진했습니다! 에테르로 충전 가능합니다.', 'danger');
+    const { status, respawnRemainingMs } = gm.getNemesisCycleInfo();
+    if (status !== 'active') {
+      const waitMinutes = Math.ceil(respawnRemainingMs / 60000);
+      gameDialog.alert({
+        title: '💤 토벌 대기 중',
+        message: status === 'defeated'
+          ? `네메시스는 이미 이번 주기에 토벌되었습니다. 다음 주기(${waitMinutes}분 후)에 다시 도전할 수 있습니다.`
+          : `현재 네메시스는 심연 재소환 준비 중입니다. (${waitMinutes}분 남음)`
+      });
       return;
     }
 
@@ -692,112 +802,125 @@ export const NemesisView: React.FC = () => {
       SoundManager.getInstance().play('debuff');
       gameDialog.alert({
         title: '⚔️ 차원 원정대 편성 필요',
-        message: squadCheck.reason || '차원 네메시스 레이드는 선발 3인과 전술 오퍼레이터 1인이 모두 편성되어야 진행할 수 있습니다.',
-        icon: '⚠️',
+        message: squadCheck.reason || '차원 네메시스 레이드는 선발 3인과 전술 오퍼레이터 1인이 모두 편성되어야 진행할 수 있습니다.'
       });
       return;
     }
 
-    // 3선발 + 1오퍼레이터 (리더)
     const { mainHeroes, leaderHero } = gm.getDimensionalDeck();
-    setPlayerLeader(leaderHero);
-    playerLeaderRef.current = leaderHero;
+    const starterHeroes = mainHeroes.slice(0, 3);
+    const assignedOperator = leaderHero;
 
-    // 리더 영웅의 가호 버프 적용
-    const leaderBlessing = leaderHero ? gm.getLeaderBlessing(leaderHero) : null;
-    const atkBonus = leaderBlessing?.buffs?.atkBonus || 1.0;
-    const defBonus = leaderBlessing?.buffs?.defBonus || 1.0;
-    const hpBonus = leaderBlessing?.buffs?.maxHpBonus || (leaderBlessing?.buffs as any)?.hpBonus || 1.0;
-    const allBonus = leaderBlessing?.buffs?.allStatsBonus || 1.0;
-
-    const raidHeroes: RaidHeroCombatant[] = mainHeroes.slice(0, 3).map((hero, idx) => {
-      const cls = CHARACTER_CLASSES[hero.classId] || CHARACTER_CLASSES['squire'];
-      const heroSkills: Skill[] = cls?.skills ? [...cls.skills] : [];
+    // 아군 3선발 런타임 영웅 데이터 빌드
+    const raidHeroes: RaidHeroCombatant[] = starterHeroes.map((h, idx) => {
+      const stats = gm.getHeroEffectiveStats(h);
+      const cls = CHARACTER_CLASSES[h.classId];
+      const heroSkills: Skill[] = [];
       if (cls?.specialSkill) heroSkills.push(cls.specialSkill);
-      const eff = gm.getHeroEffectiveStats(hero);
+      if (h.equippedSkills && h.equippedSkills.length > 0) {
+        h.equippedSkills.forEach(sid => {
+          const res = gm.resolveSkillData(sid, h);
+          if (res && !heroSkills.some(s => s.id === res.id)) heroSkills.push(res);
+        });
+      }
+      cls?.skills.forEach(s => {
+        if (heroSkills.length < 3 && !heroSkills.some(x => x.id === s.id)) {
+          heroSkills.push(s);
+        }
+      });
 
-      const maxHp = Math.round(eff.maxHp * hpBonus * allBonus);
-      const currentHp = Math.min(maxHp, Math.round(hero.currentHp * hpBonus * allBonus));
-      const atk = Math.round(eff.atk * atkBonus * allBonus);
-      const def = Math.round(eff.def * defBonus * allBonus);
+      const pos = idx === 0 ? 'front' : idx === 1 ? 'mid' : 'back';
 
       return {
-        id: hero.id,
-        name: hero.name,
-        classId: hero.classId,
-        className: cls?.name || hero.classId,
-        grade: hero.grade,
-        level: hero.level,
-        position: idx === 0 ? 'front' : idx === 1 ? 'mid' : 'back',
-        currentHp: currentHp,
-        maxHp: maxHp,
-        currentMp: eff.maxMp,
-        maxMp: eff.maxMp,
-        atk: atk,
-        def: def,
-        spd: eff.spd,
-        luck: eff.luck,
+        id: h.id,
+        name: h.name,
+        classId: h.classId,
+        className: cls?.name || h.classId,
+        grade: h.grade || 'normal',
+        level: h.level,
+        position: pos,
+        currentHp: stats.maxHp,
+        maxHp: stats.maxHp,
+        currentMp: stats.maxMp,
+        maxMp: stats.maxMp,
+        atk: stats.atk,
+        def: stats.def,
+        spd: stats.spd,
+        luck: stats.luck,
         skills: heroSkills,
         cooldowns: {},
         statusEffects: [],
-        icon: heroSkills[0]?.icon || '⚔️',
+        icon: cls?.skills[0]?.icon || '⚔️',
         damageDealt: 0,
       };
     });
 
     setHeroes(raidHeroes);
     heroesRef.current = raidHeroes;
+    setSelectedHeroIdx(0);
+    setOperatorHero(assignedOperator);
 
-    // 3개 부위 초기화 (저장된 parts 상태 또는 기본 설정)
-    const savedParts = state.nemesisState?.parts;
-    const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
-    const bodyCfg = NEMESIS_BOSS_CONFIG.parts.body;
-    const tailCfg = NEMESIS_BOSS_CONFIG.parts.tail;
+    // 네메시스 부위별 실시간 HP 복원 (자연 재생 또는 영구 피해 반영)
+    const persistedParts = state.nemesisState?.parts || {
+      head: { currentHp: 4000000, maxHp: 4000000, isDefeated: false },
+      body: { currentHp: 5000000, maxHp: 5000000, isDefeated: false },
+      tail: { currentHp: 3500000, maxHp: 3500000, isDefeated: false },
+    };
 
-    const curHeadHp = savedParts?.head?.currentHp ?? headCfg.maxHp;
-    const curBodyHp = savedParts?.body?.currentHp ?? bodyCfg.maxHp;
-    const curTailHp = savedParts?.tail?.currentHp ?? tailCfg.maxHp;
+    initialPartHpsRef.current = {
+      head: persistedParts.head.currentHp,
+      body: persistedParts.body.currentHp,
+      tail: persistedParts.tail.currentHp,
+    };
+
+    const gdsHead = NEMESIS_BOSS_CONFIG.parts.head;
+    const gdsBody = NEMESIS_BOSS_CONFIG.parts.body;
+    const gdsTail = NEMESIS_BOSS_CONFIG.parts.tail;
 
     const initParts: Record<NemesisPartId, NemesisCombatPart> = {
       head: {
-        ...headCfg,
-        currentHp: curHeadHp,
-        isDefeated: (savedParts?.head?.isDefeated || curHeadHp <= 0),
+        ...gdsHead,
+        currentHp: persistedParts.head.currentHp,
+        maxHp: persistedParts.head.maxHp,
+        isDefeated: persistedParts.head.isDefeated || persistedParts.head.currentHp <= 0,
         statusEffects: [],
+        chargingState: null,
       },
       body: {
-        ...bodyCfg,
-        currentHp: curBodyHp,
-        isDefeated: (savedParts?.body?.isDefeated || curBodyHp <= 0),
+        ...gdsBody,
+        currentHp: persistedParts.body.currentHp,
+        maxHp: persistedParts.body.maxHp,
+        isDefeated: persistedParts.body.isDefeated || persistedParts.body.currentHp <= 0,
         statusEffects: [],
+        chargingState: null,
       },
       tail: {
-        ...tailCfg,
-        currentHp: curTailHp,
-        isDefeated: (savedParts?.tail?.isDefeated || curTailHp <= 0),
+        ...gdsTail,
+        currentHp: persistedParts.tail.currentHp,
+        maxHp: persistedParts.tail.maxHp,
+        isDefeated: persistedParts.tail.isDefeated || persistedParts.tail.currentHp <= 0,
         statusEffects: [],
+        chargingState: null,
       },
     };
 
     setBossParts(initParts);
     bossPartsRef.current = initParts;
-    initialPartHpsRef.current = { head: curHeadHp, body: curBodyHp, tail: curTailHp };
-
-    const defaultTarget: NemesisPartId = !initParts.head.isDefeated ? 'head' : !initParts.body.isDefeated ? 'body' : 'tail';
-    setTargetedPart(defaultTarget);
-    targetedPartRef.current = defaultTarget;
 
     const totalInitHp = Object.values(initParts).reduce((sum, p) => sum + (p.isDefeated ? 0 : p.currentHp), 0);
     setBossHp(totalInitHp);
     bossHpRef.current = totalInitHp;
+    setTotalBattleDmg(0);
+    totalBattleDmgRef.current = 0;
+
+    // 타겟팅 가능한 첫 생존 부위 설정
+    const firstAliveKey = (['head', 'body', 'tail'] as const).find(k => !initParts[k].isDefeated) || 'head';
+    setTargetedPart(firstAliveKey);
+    targetedPartRef.current = firstAliveKey;
 
     setBattleTurn(1);
     battleTurnRef.current = 1;
-    setCataclysmCount(3);
-    cataclysmCountRef.current = 3;
-    setTotalBattleDmg(0);
-    totalBattleDmgRef.current = 0;
-    setIsWaitingManual(false);
+    setIsHeroTurn(false);
     setActiveHeroTurnId(null);
     setIsAutoBattle(false);
     isAutoBattleRef.current = false;
@@ -824,13 +947,13 @@ export const NemesisView: React.FC = () => {
       };
     });
 
-    if (leaderHero) {
-      initMetrics[leaderHero.id] = {
-        id: leaderHero.id,
-        name: `${leaderHero.name} (오퍼레이터)`,
-        className: CHARACTER_CLASSES[leaderHero.classId]?.name || '오퍼레이터',
-        classId: leaderHero.classId,
-        grade: leaderHero.grade,
+    if (assignedOperator) {
+      initMetrics[assignedOperator.id] = {
+        id: assignedOperator.id,
+        name: `${assignedOperator.name} (오퍼레이터)`,
+        className: CHARACTER_CLASSES[assignedOperator.classId]?.name || '오퍼레이터',
+        classId: assignedOperator.classId,
+        grade: assignedOperator.grade,
         icon: '👑',
         isPlayer: true,
         damageDealt: 0,
@@ -846,21 +969,18 @@ export const NemesisView: React.FC = () => {
 
     combatMetricsRef.current = initMetrics;
     setCombatMetrics(Object.values(initMetrics));
-    setFeverBadges([]);
-    setBossFeverBadges([]);
-    feverBadgesRef.current = [];
-    bossFeverBadgesRef.current = [];
 
-    const initLogs: RaidCombatLog[] = [
-      { turn: 1, text: '🌌 [차원의 침식] 시공의 침식자 네메시스와의 결전이 시작되었습니다!', type: 'system' },
-      { turn: 1, text: '⚡ 선발 3인(전열/중열/후열) + 전술 오퍼레이터 1인이 참전했습니다!', type: 'system' },
-      { turn: 1, text: '🎯 네메시스의 3대 부위(머리·전열 / 몸통·중열 / 꼬리·후열)를 타겟팅하여 수동 공격할 수 있습니다.', type: 'warning' },
+    const nowStr = new Date().toLocaleTimeString();
+    const initLogs: LogEntry[] = [
+      { id: '1', timestamp: nowStr, text: '🌌 [차원의 침식] 시공의 침식자 네메시스와의 결전이 시작되었습니다!', type: 'system' },
+      { id: '2', timestamp: nowStr, text: '⚡ 선발 3인(전열/중열/후열) + 전술 오퍼레이터 1인이 전장에 배치되었습니다.', type: 'system' },
+      { id: '3', timestamp: nowStr, text: '🎯 네메시스의 3대 부위(머리·전열 / 몸통·중열 / 꼬리·후열)를 선택하여 타겟팅할 수 있습니다.', type: 'normal' },
     ];
-    if (leaderHero && leaderBlessing) {
-      initLogs.push({ turn: 1, text: `👑 [오퍼레이터 가호] ${leaderHero.name}: ${leaderBlessing.name} 효과 발동!`, type: 'hero_skill' });
+    if (assignedOperator) {
+      initLogs.push({ id: '4', timestamp: nowStr, text: `📡 [전술 오퍼레이터 지휘] ${assignedOperator.name}: 파티 화력 지원 가동!`, type: 'reward' });
     }
 
-    setLogs(initLogs);
+    setBattleLogs(initLogs);
     setSettlement(null);
     setInBattle(true);
     isProcessingRef.current = false;
@@ -871,8 +991,8 @@ export const NemesisView: React.FC = () => {
       ...(['head', 'body', 'tail'] as const).filter(k => !initParts[k].isDefeated).map(k => ({ type: 'part' as const, id: k, spd: initParts[k].spd, luck: initParts[k].luck }))
     ];
     initActions.sort((a, b) => b.spd - a.spd || b.luck - a.luck);
-    actionsRef.current = initActions;
-    actionIndexRef.current = 0;
+    turnQueueRef.current = initActions;
+    turnIndexRef.current = 0;
 
     setTimeout(() => processNextActionRef.current(), 350);
   };
@@ -910,442 +1030,484 @@ export const NemesisView: React.FC = () => {
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
-  // ── 1. 레이드 전투 진행 중 화면 (PVE 스타일 수동 전장) ───────────────────
+  // ── 1. 레이드 전투 진행 중 화면 (PVE 동일 전장) ───────────────────────
   if (inBattle) {
     const activeHero = activeHeroTurnId ? heroes.find(h => h.id === activeHeroTurnId) : null;
-    const battleHpPercent = Math.max(0, (bossHp / (NEMESIS_BOSS_CONFIG.maxHp || 12500000)) * 100);
+    const targetedPartState = bossParts[targetedPart];
+    const posLabel = targetedPart === 'head' ? '전열' : targetedPart === 'body' ? '중열' : '후열';
+    const alivePartsCount = Object.values(bossParts).filter(p => !p.isDefeated && p.currentHp > 0).length;
+
+    const bossImageSrc = CustomAssetService.getInstance().getMonsterOverride('nemesis_boss')
+      || CustomAssetService.getInstance().getMonsterOverride('nemesis')
+      || 'assets/void_overlord.jpg';
+
+    const operatorPortrait = operatorHero ? (
+      CustomAssetService.getInstance().getMercenaryOverride(operatorHero.classId)
+      || CustomAssetService.getInstance().getMercenaryOverride(operatorHero.id)
+      || CustomAssetService.getInstance().getMercenaryOverride(operatorHero.name)
+    ) : undefined;
+
+    const activeHeroPortrait = activeHero ? (
+      CustomAssetService.getInstance().getMercenaryOverride(activeHero.classId)
+      || CustomAssetService.getInstance().getMercenaryOverride(activeHero.id)
+      || CustomAssetService.getInstance().getMercenaryOverride(activeHero.name)
+    ) : undefined;
 
     return (
-      <div className="flex-1 min-h-0 w-full max-w-full flex flex-col bg-[#070910] text-white relative overflow-hidden">
-        <BattleVFXOverlay vfxList={vfxList} onFinish={handleVfxComplete} />
+      <div className={`flex-1 min-h-0 w-full max-w-full flex flex-col bg-[#070910] text-white relative overflow-hidden ${isShaking ? 'animate-screen-shake' : ''}`}>
+        {/* ⚔️ 전투 오버레이 시각 이펙트 */}
+        <BattleVFXOverlay vfxList={vfxList} onFinish={handleVfxComplete} isShaking={isShaking} />
 
-        {/* 상단 액션 배너 */}
-        {actionBanner && (
-          <div className="absolute top-2 inset-x-3 z-30 flex flex-col items-center justify-center p-2 rounded-xl bg-black/85 border border-[#ff416c88] shadow-lg animate-bounce">
-            <span className="text-sm font-bold tracking-wider" style={{ color: actionBanner.color }}>{actionBanner.text}</span>
-            <span className="text-[10px] text-[#cfd8e8]">{actionBanner.sub}</span>
+        {/* 💥 화면 타격 플래시 */}
+        {screenFlash && (
+          <div className={`absolute inset-0 pointer-events-none z-50 animate-impact-flash ${
+            screenFlash === 'enemy' ? 'bg-[#ff174435]' : 'bg-[#00d2ff30]'
+          }`} />
+        )}
+
+        {/* 🌟 스킬 발동 컷인 배너 (PVE 스타일 슬래시 배너) */}
+        {skillCutIn && (
+          <div className="absolute inset-0 z-40 pointer-events-none flex items-center justify-center overflow-hidden">
+            <div className={`absolute inset-0 opacity-30 ${
+              skillCutIn.isEnemy ? 'bg-red-900/40' : 'bg-cyan-900/40'
+            } animate-skill-speedlines`} />
+
+            <div className={`relative w-[130%] py-3 px-6 flex items-center justify-center shadow-2xl border-y-2 transform -rotate-2 animate-skill-banner ${
+              skillCutIn.isEnemy
+                ? 'bg-gradient-to-r from-transparent via-[#200813f5] via-50% to-transparent border-[#ff1744] shadow-[#ff1744aa]'
+                : 'bg-gradient-to-r from-transparent via-[#09152af5] via-50% to-transparent border-[#00d2ff] shadow-[#00d2ffaa]'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className={`text-2xl p-1.5 rounded-xl border-2 shadow-xl shrink-0 ${
+                  skillCutIn.isEnemy
+                    ? 'bg-[#2b0c1b] border-[#ff1744] shadow-[#ff1744]'
+                    : 'bg-[#0c1f38] border-[#00d2ff] shadow-[#00d2ff]'
+                }`}>
+                  {skillCutIn.icon}
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black tracking-widest uppercase text-[#ffd54f]">
+                      {skillCutIn.isEnemy ? '⚠️ NEMESIS ACTION ⚠️' : '⚔️ HERO ACTION ⚔️'}
+                    </span>
+                    {skillCutIn.subText && (
+                      <span className="text-[9px] text-[#cfd8e8]">
+                        {skillCutIn.subText}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-xl sm:text-2xl font-black text-white tracking-wider flex items-center gap-2 drop-shadow-md">
+                    <span>{skillCutIn.skillName}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
-        {/* 전투 상단 헤더: 턴 정보, 배속, 자동/수동, 스킵, 철수 */}
-        <div className="px-3 pt-2 flex items-center justify-between shrink-0 border-b border-[#1f283d] pb-2 bg-[#0b0e18]">
+        {/* ── 전투 상단 헤더: 퇴각, 턴 정보, 배속 토글, 자동 전투 토글 ── */}
+        <div className="px-3 pt-2 pb-1.5 flex items-center justify-between shrink-0 bg-[#080d16] border-b border-[#1b263b] z-20">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded bg-[#ff416c22] border border-[#ff416c66] text-[#ff416c] text-xs font-mono font-bold">
-              Turn {Math.min(maxTurns, battleTurn)} / {maxTurns}
+            <button
+              onClick={handleRetreat}
+              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#ef535022] hover:bg-[#ef535033] text-[#ef5350] border border-[#ef535055] transition-all flex items-center gap-1 shadow-sm"
+            >
+              <span>🏃</span>
+              <span>퇴각</span>
+            </button>
+            <span className="px-2 py-0.5 rounded font-mono text-xs font-bold bg-[#141d2f] text-[#00d2ff] border border-[#00d2ff44]">
+              턴 {Math.min(maxTurns, battleTurn)} / {maxTurns}
             </span>
-            <span className="text-xs text-[#8b9bb4]">Phase {nemesisState.phase}</span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            {/* 자동/수동 전투 토글 */}
-            <button
-              className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
-                isAutoBattle
-                  ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff66] animate-pulse'
-                  : 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f66]'
-              }`}
-              onClick={() => {
-                const next = !isAutoBattle;
-                setIsAutoBattle(next);
-                isAutoBattleRef.current = next;
-                if (next && isWaitingManual && activeHeroTurnId) {
-                  const h = heroes.find(x => x.id === activeHeroTurnId);
-                  if (h) executeHeroCombat(h, null);
-                }
-              }}
-            >
-              {isAutoBattle ? '⚡ 자동 진행' : '🎮 수동 조작'}
-            </button>
-
             {/* 배속 토글 */}
             <button
-              className={`px-2 py-1 rounded text-xs font-bold ${battleSpeed === 2 ? 'bg-[#5c4524] text-[#f3e5c8] border border-[#876739]' : 'bg-[#151c2d] text-[#8b9bb4]'}`}
-              onClick={() => setBattleSpeed(s => s === 2 ? 1.5 : 2)}
+              onClick={() => setBattleSpeed(s => s === 2 ? 1 : s === 1 ? 1.5 : 2)}
+              className="px-2 py-1 rounded-lg text-xs font-mono font-bold bg-[#141d2f] text-[#ffd54f] border border-[#ffd54f44] hover:bg-[#ffd54f22] transition-all"
             >
               ⏩ {battleSpeed}x
             </button>
 
-            {/* 즉시 스킵 */}
+            {/* 자동 전투 토글 */}
             <button
-              className="px-2.5 py-1 rounded bg-[#ffd54f22] border border-[#ffd54f66] text-[#ffd54f] text-xs font-bold hover:bg-[#ffd54f33]"
               onClick={() => {
-                const remainingTurns = Math.max(1, maxTurns - battleTurn + 1);
-                const avgDmgPerTurn = 22000 + Math.floor(Math.random() * 8000);
-                const addDmg = remainingTurns * avgDmgPerTurn;
-                totalBattleDmgRef.current += addDmg;
-
-                // 살아있는 부위에 분배 차감
-                const aliveKeys = (['head', 'body', 'tail'] as const).filter(k => !bossPartsRef.current[k].isDefeated);
-                if (aliveKeys.length > 0) {
-                  const perPart = Math.floor(addDmg / aliveKeys.length);
-                  aliveKeys.forEach(k => {
-                    bossPartsRef.current[k].currentHp = Math.max(0, bossPartsRef.current[k].currentHp - perPart);
-                    if (bossPartsRef.current[k].currentHp <= 0) bossPartsRef.current[k].isDefeated = true;
-                  });
+                const next = !isAutoBattle;
+                setIsAutoBattle(next);
+                isAutoBattleRef.current = next;
+                if (next && isHeroTurn && activeHeroTurnId) {
+                  const h = heroesRef.current.find(x => x.id === activeHeroTurnId);
+                  if (h) {
+                    const usableSkill = h.skills.find(s => h.currentMp >= s.manaCost && (h.cooldowns[s.id] || 0) === 0);
+                    executeHeroCombat(h, usableSkill || null);
+                  }
                 }
-                finalizeRaidBattle();
               }}
+              className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-all ${
+                isAutoBattle
+                  ? 'bg-[#00d2ff22] text-[#00d2ff] border-[#00d2ff] shadow-[0_0_8px_rgba(0,210,255,0.4)] animate-pulse'
+                  : 'bg-[#141d2f] text-[#8b9bb4] border-[#25354e]'
+              }`}
             >
-              ⏭️ 스킵
-            </button>
-
-            {/* 안전 철수 */}
-            <button
-              className="px-2 py-1 rounded bg-[#ef535022] border border-[#ef535066] text-[#ef5350] text-xs font-bold"
-              onClick={finalizeRaidBattle}
-            >
-              🏳️ 철수
+              {isAutoBattle ? '⚡ 자동 ON' : '🎮 자동 OFF'}
             </button>
           </div>
         </div>
 
-        {/* 상단 몬스터 일러스트 및 보스 통합 정보 */}
-        <div className="px-3 pt-2 shrink-0">
-          <div className="relative rounded-2xl overflow-hidden border border-[#ff416c55] bg-gradient-to-b from-[#1a0c24] to-[#0d0914] p-2.5 shadow-lg flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-11 h-11 rounded-xl overflow-hidden border border-[#ff416c] relative shadow-md shrink-0 bg-black">
-                <img src="assets/void_overlord.jpg" alt="Nemesis" className="w-full h-full object-cover object-center scale-110" />
-                <div className="absolute inset-0 bg-purple-900/20 animate-pulse pointer-events-none" />
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-xs sm:text-sm font-bold text-white tracking-tight break-keep truncate">
-                    {NEMESIS_BOSS_CONFIG.name}
-                  </span>
-                  <span className="text-[9px] px-1 py-0.2 rounded font-bold" style={{ backgroundColor: `${currentPhaseCfg.badgeColor}22`, color: currentPhaseCfg.badgeColor }}>
-                    Phase {nemesisState.phase}
-                  </span>
-                </div>
-                <div className="text-[9px] text-[#ce93d8] truncate">
-                  절멸기 충전: <span className="font-mono text-[#ff416c] font-bold">{cataclysmCount}턴 후 발동</span>
-                </div>
-              </div>
-            </div>
+        {/* ── 몬스터 일러스트 패널 (네메시스 보스 일러스트 & 타겟 부위 연출) ── */}
+        <div className={`px-3 pt-1.5 shrink-0 relative ${attackingPartId ? 'z-40' : 'z-10'}`}>
+          <div
+            className={`relative w-full panel flex items-center justify-center transition-all duration-300 shadow-xl overflow-hidden ${
+              attackingPartId
+                ? 'border-[#ff1744] shadow-[0_0_35px_rgba(255,23,68,0.6)] ring-1 ring-[#ff174488]'
+                : 'border-[#2c1d3b]'
+            }`}
+            style={{ height: 'min(135px, 17vh)', background: 'linear-gradient(135deg, #0d1525 0%, #1a0a2e 50%, #0d1525 100%)' }}
+          >
+            <div
+              className="absolute inset-0 opacity-10 rounded-xl overflow-hidden pointer-events-none"
+              style={{
+                backgroundImage: 'repeating-linear-gradient(0deg,#a742f5 0,#a742f5 1px,transparent 0,transparent 50%),repeating-linear-gradient(90deg,#a742f5 0,#a742f5 1px,transparent 0,transparent 50%)',
+                backgroundSize: '40px 40px',
+              }}
+            />
 
-            <div className="flex flex-col items-end shrink-0">
-              <span className="font-mono text-xs font-bold text-[#ffd54f]">{battleHpPercent.toFixed(1)}%</span>
-              <span className="text-[9px] text-[#8b9bb4] font-mono">({bossHp.toLocaleString()} / 12,500,000)</span>
+            <img
+              src={bossImageSrc}
+              alt="Nemesis Boss"
+              className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-300 ${
+                attackingPartId ? 'animate-monster-attack-surge filter brightness-125 contrast-125' : 'brightness-90 contrast-110'
+              }`}
+              onError={(e) => {
+                (e.currentTarget as HTMLElement).style.display = 'none';
+              }}
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-[#070910] via-transparent to-transparent pointer-events-none" />
+
+            {/* 타겟 부위 오버레이 배지 */}
+            <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
+              <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10">
+                <span className="text-[10px] text-[#ffd54f]">🎯 집중 타겟:</span>
+                <span className="text-xs font-bold text-white">
+                  [{posLabel}] {targetedPartState?.name}
+                </span>
+                <span className="text-[10px] text-[#ce93d8]">({targetedPartState?.archetype.split(' ')[0]})</span>
+              </div>
+              <div className="bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10 text-right">
+                <span className="text-[10px] text-[#8b9bb4]">보스 잔여: </span>
+                <span className="text-xs font-mono font-bold text-[#ffd54f]">
+                  {((bossHp / 12500000) * 100).toFixed(1)}%
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* ── 👾 네메시스 3대 부위 (적군 슬롯: 머리·전열 / 몸통·중열 / 꼬리·후열) ── */}
-        <div className="px-3 pt-2 shrink-0">
-          <div className="flex items-center justify-between text-[10px] text-[#8b9bb4] mb-1">
-            <span className="flex items-center gap-1 font-bold text-white">
-              <span>🎯</span>
-              <span>네메시스 부위 선택 (공격 타겟 탭)</span>
-            </span>
-            <span className="text-[9px] text-[#ffd54f]">
-              현재 타겟: <strong className="text-white">{bossParts[targetedPart]?.name || '머리'}</strong>
-            </span>
-          </div>
-
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-            {(['head', 'body', 'tail'] as const).map(pKey => {
-              const part = bossParts[pKey];
-              const isSelected = targetedPart === pKey && !part.isDefeated;
-              const isDead = part.isDefeated || part.currentHp <= 0;
-              const partHpPct = Math.max(0, Math.min(100, (part.currentHp / part.maxHp) * 100));
-              const themeColor = pKey === 'head' ? '#ef5350' : pKey === 'body' ? '#ce93d8' : '#00d2ff';
-              const posLabel = pKey === 'head' ? '전열' : pKey === 'body' ? '중열' : '후열';
+        {/* ── 👾 적군 슬롯 그리드: 네메시스 3대 부위 (머리·전열 / 몸통·중열 / 꼬리·후열) ── */}
+        <div className="px-3 pt-2 shrink-0 relative z-20">
+          <div className="grid grid-cols-3 gap-1.5 w-full">
+            {(['head', 'body', 'tail'] as const).map(partKey => {
+              const part = bossParts[partKey];
+              const isAlive = !part.isDefeated && part.currentHp > 0;
+              const isTargeted = isAlive && targetedPart === partKey;
+              const hpPct = isAlive ? Math.max(0, Math.min(100, (part.currentHp / part.maxHp) * 100)) : 0;
+              const posMeta = {
+                head: { label: '전열', color: '#ef5350' },
+                body: { label: '중열', color: '#ce93d8' },
+                tail: { label: '후열', color: '#00d2ff' },
+              }[partKey];
 
               return (
-                <div
-                  key={pKey}
+                <LongPressBox
+                  key={partKey}
                   onClick={() => {
-                    if (!isDead) {
-                      setTargetedPart(pKey);
-                      targetedPartRef.current = pKey;
+                    if (isAlive) {
+                      setTargetedPart(partKey);
+                      targetedPartRef.current = partKey;
                       SoundManager.getInstance().play('click');
                     }
                   }}
-                  className={`relative p-2 rounded-xl transition-all border flex flex-col justify-between min-h-[72px] sm:min-h-[80px] select-none ${
-                    isDead
-                      ? 'border-[#1f283d] bg-[#0c101a] opacity-35 grayscale cursor-not-allowed'
-                      : isSelected
-                      ? 'border-[#ff4444] bg-[#ff444422] shadow-[0_0_12px_rgba(255,68,68,0.5)] scale-[1.02] cursor-pointer'
-                      : 'border-[#24334a] bg-[#111726ee] hover:border-[#3d5378] cursor-pointer'
+                  onLongPress={() => {}}
+                  className={`relative p-1.5 sm:p-2 rounded-lg transition-all border flex flex-col justify-center h-[42px] sm:h-[46px] min-w-0 select-none ${
+                    !isAlive
+                      ? 'border-[#18202d] bg-[#0c101a] opacity-35 grayscale cursor-not-allowed shadow-none'
+                      : isTargeted
+                      ? 'border-[#ff4444] bg-[#ff444425] shadow-[0_0_12px_rgba(255,68,68,0.4)] scale-[1.02] cursor-pointer'
+                      : 'border-[#24334a] bg-[#111726dd] hover:border-[#3d5378] cursor-pointer'
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] sm:text-xs font-bold flex items-center gap-1 truncate" style={{ color: isDead ? '#8b9bb4' : themeColor }}>
-                      <span>{part.icon}</span>
-                      <span className="truncate">{part.name}</span>
-                    </span>
-                    <span className="text-[8px] px-1 py-0.2 rounded font-bold" style={{ backgroundColor: `${themeColor}22`, color: themeColor }}>
-                      {posLabel}
-                    </span>
-                  </div>
+                  {/* ⚡ 절멸기 차징 배지 */}
+                  {isAlive && part.chargingState && (() => {
+                    const breakPct = Math.max(0, Math.min(100, Math.round((part.chargingState.remainingBreakDmg / part.chargingState.maxBreakDmg) * 100)));
+                    return (
+                      <div className="absolute -top-3.5 right-1 z-30 h-4 px-1.5 sm:px-2 rounded-full overflow-hidden border border-[#ff9800] bg-[#1a0800] shadow-[0_0_10px_rgba(255,152,0,0.7)] flex items-center justify-center animate-pulse">
+                        <div
+                          className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-[#ff3d00] via-[#ff9100] to-[#ffd600] transition-all duration-300 pointer-events-none"
+                          style={{ width: `${breakPct}%` }}
+                        />
+                        <div className="relative z-10 flex items-center gap-1 text-[8.5px] font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] leading-none">
+                          <span>⚡ 절멸 차징</span>
+                          <span className="font-mono text-[#fffde7]">BREAK {breakPct}%</span>
+                        </div>
+                      </div>
+                    );
+                  })()}
 
-                  <div className="text-[8.5px] text-[#8b9bb4] truncate mt-0.5">
-                    {part.archetype.split(' ')[0]}
-                  </div>
-
-                  <div className="mt-1">
-                    <div className="flex items-center justify-between text-[8px] font-mono text-[#cfd8dc] mb-0.5">
-                      <span>{isDead ? '💀 패퇴' : `${partHpPct.toFixed(0)}%`}</span>
-                      <span>{isDead ? '0' : Math.round(part.currentHp).toLocaleString()}</span>
+                  {/* 그로기 배지 */}
+                  {isAlive && part.isGroggy && (
+                    <div className="absolute -top-3 left-1 z-30 px-1.5 py-0.2 rounded font-bold text-[8.5px] bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44] animate-pulse">
+                      💫 그로기
                     </div>
-                    <div className="w-full bg-black/60 h-1.5 rounded-full overflow-hidden">
-                      <div
-                        className="h-full transition-all duration-300"
+                  )}
+
+                  {/* 체력 게이지 (배경 그라데이션 바) */}
+                  {isAlive && (
+                    <div
+                      className="absolute left-0 top-0 bottom-0 rounded-lg overflow-hidden transition-all duration-300 pointer-events-none opacity-30"
+                      style={{
+                        width: `${hpPct}%`,
+                        background: hpPct > 50
+                          ? 'linear-gradient(90deg, #11998e, #38ef7d)'
+                          : hpPct > 25
+                          ? 'linear-gradient(90deg, #f2994a, #f2c94c)'
+                          : 'linear-gradient(90deg, #cb2d3e, #ef473a)',
+                      }}
+                    />
+                  )}
+
+                  {/* 부위 정보 및 체력 */}
+                  <div className="relative z-10 flex items-center justify-between gap-1">
+                    <div className="flex items-center gap-1 min-w-0 flex-1">
+                      {isTargeted && <span className="text-[10px] text-[#ff4444] font-bold animate-pulse">🎯</span>}
+                      <span
+                        className="text-[8.5px] px-1 py-0.2 rounded font-bold shrink-0"
                         style={{
-                          width: `${isDead ? 0 : partHpPct}%`,
-                          backgroundColor: isDead ? '#546e7a' : themeColor,
+                          background: !isAlive ? '#26323822' : `${posMeta.color}22`,
+                          color: !isAlive ? '#607d8b' : posMeta.color,
+                          border: `1px solid ${!isAlive ? '#26323844' : `${posMeta.color}44`}`,
                         }}
-                      />
+                      >
+                        {posMeta.label}
+                      </span>
+                      <span
+                        className="font-bold text-xs truncate"
+                        style={{
+                          color: !isAlive ? '#607d8b' : isTargeted ? '#ffffff' : '#cfd8dc',
+                          textShadow: isAlive && isTargeted ? '0 0 6px #ff4444' : undefined,
+                          textDecoration: !isAlive ? 'line-through' : undefined,
+                        }}
+                      >
+                        {part.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-0.5 shrink-0">
+                      <span
+                        className="text-[9.5px] font-mono font-bold"
+                        style={{
+                          color: !isAlive ? '#607d8b' : hpPct > 50 ? '#38ef7d' : hpPct > 25 ? '#ffd54f' : '#ef5350',
+                        }}
+                      >
+                        {isAlive ? `${(part.currentHp / 10000).toFixed(0)}만` : '💀 파괴'}
+                      </span>
                     </div>
                   </div>
-                </div>
+                </LongPressBox>
               );
             })}
           </div>
         </div>
 
-        {/* 적군 피버 게이지 */}
-        <div className="px-3 pt-1.5 shrink-0">
-          <FeverGaugeBar
-            badges={bossFeverBadges}
-            party={[{ id: 'nemesis_boss', name: NEMESIS_BOSS_CONFIG.name, currentHp: bossHp, maxHp: NEMESIS_BOSS_CONFIG.maxHp } as any]}
-            label="NEMESIS FEVER"
-            side="enemy"
-          />
+        {/* ── 📜 전투 로그 패널 (로그 사이즈 축소: maxHeight={80}) ── */}
+        <div className="px-3 pt-1.5 shrink-0 relative z-10">
+          <LogPanel logs={battleLogs} maxHeight={80} isBattle emptyMessage="기록된 전투 로그가 없습니다." />
         </div>
 
-        {/* ── ⚔️ 전투 상황 로그 ── */}
-        <div className="flex-1 min-h-[50px] px-3 py-1 overflow-y-auto font-mono text-[9.5px] space-y-0.5">
-          {logs.slice(-5).map((l, i) => (
-            <div key={i} className={`truncate ${l.type === 'warning' ? 'text-[#ff416c] font-bold' : l.type === 'hero_skill' ? 'text-[#00d2ff]' : l.type === 'boss_skill' ? 'text-[#ce93d8]' : 'text-[#8b9bb4]'}`}>
-              {l.text}
+        {/* ── 📡 전술 오퍼레이터 패널 (1줄) ── */}
+        {operatorHero && (
+          <div className="px-3 pt-1.5 shrink-0 z-10">
+            <div className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#0d1627] via-[#14233e] to-[#0d1627] border border-[#00d2ff44] shadow-sm flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#00d2ff88] bg-[#0c1424] flex items-center justify-center">
+                  {operatorPortrait ? <img src={operatorPortrait} alt={operatorHero.name} className="w-full h-full object-cover" /> : '📡'}
+                </div>
+                <span className="text-[11px] font-bold text-white truncate">{operatorHero.name}</span>
+                <span className="text-[9.5px] text-[#00d2ff] font-medium shrink-0">{CHARACTER_CLASSES[operatorHero.classId]?.name || operatorHero.classId}</span>
+                <span className="text-[9.5px] text-[#ffd54f] font-mono font-bold shrink-0">Lv.{operatorHero.level}</span>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44] flex items-center gap-1">
+                  <span>📡</span>
+                  <span>전술 지원 중 (+10% 화력)</span>
+                </span>
+                <span className="text-[9px] font-mono text-[#ffd54f] font-bold">
+                  누적: {totalBattleDmg.toLocaleString()} DMG
+                </span>
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
-        {/* 아군 피버 게이지 */}
-        <div className="px-3 pb-1 shrink-0">
-          <FeverGaugeBar
-            badges={feverBadges}
-            party={heroes.map(h => ({ id: h.id, name: h.name, currentHp: h.currentHp, maxHp: h.maxHp, classId: h.className } as any))}
-            label="PLAYER FEVER"
-            side="player"
-          />
-        </div>
-
-        {/* 👑 전술 오퍼레이터 상태 바 */}
-        <div className="px-3 py-1 flex items-center justify-between gap-2 shrink-0 bg-[#090d16] border-t border-[#1a2333]">
-          {playerLeader ? (
-            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-[#ffd54f15] border border-[#ffd54f44] text-[10px] min-w-0 flex-1 truncate">
-              <span className="text-xs">👑</span>
-              <span className="font-bold text-[#ffd54f] truncate">{playerLeader.name}</span>
-              <span className="text-[9px] text-[#cfd8e8] truncate">
-                (전술 오퍼레이터: {playerLeaderBlessing?.name || '가호 발동'})
-              </span>
-            </div>
-          ) : (
-            <div className="text-[9px] text-[#8b9bb4]">전술 오퍼레이터 미편성</div>
-          )}
-          <span className="text-[9px] text-[#00d2ff] font-mono shrink-0">
-            총 가한 피해: {totalBattleDmg.toLocaleString()} DMG
-          </span>
-        </div>
-
-        {/* ── 아군 선발 3인 슬롯 ── */}
-        <div className="px-2 pt-1 pb-1.5 grid grid-cols-3 gap-1.5 shrink-0 bg-[#090d16] border-t border-[#1f283d]">
-          {heroes.map(hero => {
-            const hpPct = Math.max(0, (hero.currentHp / hero.maxHp) * 100);
-            const mpPct = Math.max(0, (hero.currentMp / hero.maxMp) * 100);
-            const isDead = hero.currentHp <= 0;
-            const isActive = activeHeroTurnId === hero.id;
-
-            return (
-              <div
+        {/* ── 아군 선발 3인 영웅 행 & 행동 선택 창 ── */}
+        <div className="px-3 pt-1.5 pb-2 shrink-0 z-10 flex flex-col justify-end">
+          {/* 아군 선발 3인 행 */}
+          <div className="flex flex-col gap-1 mb-1.5">
+            {heroes.map((hero, i) => (
+              <HeroRow
                 key={hero.id}
-                className={`panel p-1.5 flex flex-col justify-between transition-all rounded-xl ${
-                  isDead
-                    ? 'opacity-40 bg-[#16121a]'
-                    : isActive
-                    ? 'border-[#ffd54f] bg-[#1a190f] shadow-[0_0_12px_rgba(255,213,79,0.5)] scale-[1.02]'
-                    : 'bg-[#0f1523] border border-[#1e2a40]'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold truncate text-white">{hero.name}</span>
-                    <span className="text-[9px] text-[#00d2ff] font-bold shrink-0">{hero.className}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-[8px] text-[#8b9bb4] mt-0.5 font-mono">
-                    <span>Lv.{hero.level}</span>
-                    <span className="text-[#ffd54f] font-bold">SPD {hero.spd}</span>
-                  </div>
-                  <div className="w-full bg-black/50 h-1.5 rounded-full overflow-hidden mt-1">
-                    <div className="bg-[#4caf50] h-full" style={{ width: `${hpPct}%` }} />
-                  </div>
-                  <div className="w-full bg-black/50 h-1 rounded-full overflow-hidden mt-0.5">
-                    <div className="bg-[#00d2ff] h-full" style={{ width: `${mpPct}%` }} />
-                  </div>
-                </div>
+                hero={hero}
+                isCurrentTurn={activeHeroTurnId === hero.id}
+                isSelected={selectedHeroIdx === i}
+                onClick={() => setSelectedHeroIdx(i)}
+              />
+            ))}
+          </div>
 
-                <div className="flex items-center justify-between text-[8.5px] text-[#8b9bb4] mt-1 font-mono">
-                  <span>{hero.currentHp}/{hero.maxHp}</span>
-                  {isDead ? (
-                    <span className="text-[#ff416c] font-bold">기절</span>
-                  ) : (
-                    <span className="text-[#00d2ff]">{hero.currentMp} MP</span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* ── 🎮 수동 조작 커맨드 액션 바 ── */}
-        <div className="px-3 py-2 bg-[#0d1322] border-t border-[#1f2d48] shrink-0">
-          {activeHero && isWaitingManual && !isAutoBattle ? (
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="font-bold text-[#ffd54f] flex items-center gap-1">
-                  <span>⚔️</span>
-                  <span>[{activeHero.name}] 커맨드 선택</span>
+          {/* ── 수동 행동 선택 창 (PVE 감성 그대로) ── */}
+          {!settlement && alivePartsCount > 0 && isHeroTurn && activeHero && activeHero.currentHp > 0 && !isAutoBattle && (
+            <div className="panel p-2 animate-slide-up" style={{ background: '#0b0d13dd', border: '1px solid #00d2ff44' }}>
+              <div className="text-xs text-[#00d2ff] font-bold mb-1.5 border-b border-[#00d2ff22] pb-1 flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#00d2ff55] bg-[#1a2333] flex items-center justify-center">
+                    {activeHeroPortrait ? <img src={activeHeroPortrait} alt={activeHero.name} className="w-full h-full object-cover" /> : '⚔️'}
+                  </span>
+                  <span>{activeHero.name}</span>
+                  <span className="text-[10px] text-[#00d2ff] font-medium">{activeHero.className}</span>
+                  <span className="text-[10px] text-[#ffd54f] font-mono font-bold">Lv.{activeHero.level}</span>
+                  <span className="text-[10px] font-normal text-[#8b9bb4]">({activeHero.position === 'front' ? '전열' : activeHero.position === 'mid' ? '중열' : '후열'})</span>
                 </span>
-                <span className="text-[10px] text-[#8b9bb4]">
-                  타겟: <strong className="text-[#00d2ff]">{bossParts[targetedPart]?.name || '머리'}</strong>
-                </span>
+                <span className="text-[10px] text-[#ffd54f] font-medium">타겟: [{bossParts[targetedPart]?.name || '머리'}]</span>
               </div>
 
-              <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
-                {/* 일반 공격 버튼 */}
+              <div className="grid grid-cols-2 gap-1.5">
+                {/* 기본 공격 */}
                 <button
-                  className="px-3 py-2 rounded-xl bg-[#1c273c] border border-[#2e3e5c] text-white hover:bg-[#2e3e5c] text-xs font-bold flex items-center gap-1 shrink-0"
-                  onClick={() => handleManualAction('basic')}
+                  onClick={() => !isProcessingRef.current && handleManualAction('basic')}
+                  className="btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border border-[#8b9bb4] rounded-lg hover:border-[#00d2ff]"
                 >
-                  <span>🗡️</span>
-                  <span>일반 공격</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base">⚔️</span>
+                    <span className="text-xs font-bold text-white">기본 공격</span>
+                  </div>
+                  <div className="flex items-center justify-between w-full text-[10px] text-[#8b9bb4]">
+                    <span>기본 물리 공격</span>
+                    <span>0 MP</span>
+                  </div>
                 </button>
 
-                {/* 보유 스킬 버튼들 */}
-                {activeHero.skills.map(sk => {
-                  const onCd = (activeHero.cooldowns[sk.id] || 0) > 0;
-                  const notEnoughMp = activeHero.currentMp < sk.manaCost;
-                  const disabled = onCd || notEnoughMp;
-
+                {/* 영웅 스킬들 */}
+                {activeHero.skills.map(skill => {
+                  const cdLeft = activeHero.cooldowns[skill.id] || 0;
+                  const mpCost = skill.manaCost;
+                  const hasMp = activeHero.currentMp >= mpCost;
+                  const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
                   return (
                     <button
-                      key={sk.id}
-                      disabled={disabled}
-                      onClick={() => handleManualAction(sk)}
-                      className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex flex-col items-start gap-0.5 shrink-0 transition-all ${
-                        disabled
-                          ? 'border-[#232c3d] bg-[#121722] text-[#556987] opacity-60 cursor-not-allowed'
-                          : 'border-[#00d2ff66] bg-[#0c1f33] text-white hover:bg-[#122e4d] shadow-sm'
+                      key={skill.id}
+                      disabled={!canUse}
+                      onClick={() => canUse && handleManualAction(skill)}
+                      className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg ${
+                        !canUse ? 'opacity-40 cursor-not-allowed border-[#37474f]' : 'border-[#00d2ff55] hover:border-[#00d2ff]'
                       }`}
                     >
-                      <div className="flex items-center gap-1">
-                        <span>{sk.icon || '⚡'}</span>
-                        <span className="truncate max-w-[110px]">{sk.name}</span>
+                      <div className="flex items-center gap-1.5 w-full">
+                        <span className="text-base">{skill.icon || '✨'}</span>
+                        <span className="text-xs font-bold text-white truncate flex-1 text-left">{skill.name}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-[9px] font-mono">
-                        <span className="text-[#00d2ff]">{sk.manaCost} MP</span>
-                        {onCd && <span className="text-[#ff416c]">({activeHero.cooldowns[sk.id]}턴)</span>}
+                      <div className="flex items-center justify-between w-full text-[10px]">
+                        <span className="text-[#8b9bb4] truncate mr-1">{skill.targetType === 'all_enemies' ? '전체 공격' : '단일 공격'}</span>
+                        <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#00d2ff]' : 'text-[#ff5252]'}`}>
+                          {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
+                        </span>
                       </div>
                     </button>
                   );
                 })}
               </div>
             </div>
-          ) : (
-            <div className="flex items-center justify-between text-xs py-1 text-[#8b9bb4]">
-              {isAutoBattle ? (
-                <span className="text-[#00d2ff] font-bold flex items-center gap-1 animate-pulse">
-                  <span>⚡</span>
-                  <span>자동 전투 진행 중입니다... (상단 버튼으로 수동 전환 가능)</span>
-                </span>
-              ) : (
-                <span>턴 큐 진행 대기 중... (행동 순서가 도달하면 커맨드가 활성화됩니다)</span>
-              )}
-            </div>
           )}
         </div>
 
-        {/* 🏆 정산 모달 */}
+        {/* ── 🎁 전투 정산 모달 ── */}
         {settlement && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/85 backdrop-blur-sm animate-fade-in">
-            <div className="panel-accent w-full max-w-[520px] max-h-[90vh] overflow-y-auto custom-scrollbar p-4 flex flex-col items-center gap-3 border border-[#333d4e] shadow-2xl">
-              <div className="w-12 h-12 rounded-2xl bg-[#00d2ff22] border border-[#00d2ff] flex items-center justify-center text-2xl shadow-lg">
-                🌌
-              </div>
-
+          <div className="absolute inset-0 z-50 bg-black/85 flex items-center justify-center p-3 animate-fade-in">
+            <div className="panel p-4 max-w-md w-full bg-[#0d121f] border border-[#ff416c] shadow-2xl flex flex-col gap-3 rounded-2xl max-h-[90vh] overflow-y-auto">
               <div className="text-center">
-                <h3 className="font-cinzel text-lg font-bold text-white tracking-wide">
-                  네메시스 토벌전 정산
-                </h3>
-                <p className="text-xs text-[#8b9bb4] mt-0.5">
-                  부위별 피해량을 영구 기록하고 시공의 틈새에서 철수했습니다.
-                </p>
+                <span className="text-xs font-bold text-[#ff416c] uppercase tracking-widest">RAID SETTLEMENT</span>
+                <h3 className="text-lg font-black text-white mt-0.5">네메시스 토벌전 정산 리포트</h3>
               </div>
 
               {settlement.isNewRecord && (
-                <div className="px-3 py-1 rounded-full bg-[#ffd54f22] border border-[#ffd54f] text-[#ffd54f] text-xs font-bold flex items-center gap-1 animate-pulse">
-                  👑 개인 단일 최고 피해량 신기록 달성!
+                <div className="p-2 rounded-xl bg-gradient-to-r from-[#ffd54f33] to-[#ff980033] border border-[#ffd54f] text-center font-bold text-xs text-[#ffd54f] animate-pulse">
+                  🎉 단일 전투 최고 피해 기록 갱신!
                 </div>
               )}
 
-              {/* 딜량 및 부위별 피해량 기록 */}
-              <div className="w-full panel p-3 bg-[#0d1424] border border-[#1e2c45] flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#8b9bb4]">가한 총 피해량:</span>
-                  <span className="font-mono text-base font-bold text-[#ffd54f]">
+              {/* 총 피해량 및 보상 */}
+              <div className="grid grid-cols-3 gap-2">
+                <div className="panel p-2 bg-[#141b2d] border border-[#23334d] text-center">
+                  <span className="text-[10px] text-[#8b9bb4]">총 누적 피해</span>
+                  <div className="font-mono text-xs font-bold text-[#ffd54f] mt-0.5">
                     {settlement.damage.toLocaleString()} DMG
-                  </span>
-                </div>
-
-                {/* 부위별 가한 피해 기록 */}
-                <div className="grid grid-cols-3 gap-1.5 p-2 bg-[#070b14] rounded-lg border border-[#172338] text-[10px] text-center">
-                  <div>
-                    <span className="text-[#ef5350] block font-bold">💥 머리 피해</span>
-                    <span className="font-mono font-bold text-white">{settlement.partDamages.head.toLocaleString()}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#ce93d8] block font-bold">🌀 몸통 피해</span>
-                    <span className="font-mono font-bold text-white">{settlement.partDamages.body.toLocaleString()}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#00d2ff] block font-bold">🎯 꼬리 피해</span>
-                    <span className="font-mono font-bold text-white">{settlement.partDamages.tail.toLocaleString()}</span>
                   </div>
                 </div>
-
-                <div className="h-px bg-[#1f283d]" />
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-[#8b9bb4] flex items-center gap-1">
-                    <span>🪙</span>
-                    <span>투사의 인장 획득:</span>
-                  </span>
-                  <span className="font-mono font-bold text-white">+{settlement.coins}</span>
+                <div className="panel p-2 bg-[#141b2d] border border-[#23334d] text-center">
+                  <span className="text-[10px] text-[#8b9bb4]">획득 골드</span>
+                  <div className="font-mono text-xs font-bold text-[#ffd54f] mt-0.5">
+                    🪙 {settlement.coins.toLocaleString()}
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-[#8b9bb4] flex items-center gap-1">
-                    <span>✨</span>
-                    <span>에테르 정제 보상:</span>
-                  </span>
-                  <span className="font-mono font-bold text-[#00d2ff]">+{settlement.ether}</span>
+                <div className="panel p-2 bg-[#141b2d] border border-[#23334d] text-center">
+                  <span className="text-[10px] text-[#8b9bb4]">획득 에테르</span>
+                  <div className="font-mono text-xs font-bold text-[#00d2ff] mt-0.5">
+                    ✨ {settlement.ether.toLocaleString()}
+                  </div>
                 </div>
               </div>
 
-              {/* ⚔️ 상세 전투 리포트 분석 표 */}
-              <CombatMeterTable
-                metrics={combatMetrics}
-                title="🌌 차원 네메시스 전투 리포트"
-              />
+              {/* 부위별 가한 피해량 상세 */}
+              <div className="panel p-2.5 bg-[#0b101c] border border-[#1f2b42]">
+                <div className="text-xs font-bold text-white mb-2 flex items-center justify-between">
+                  <span>🎯 부위별 타격 피해 정산</span>
+                  <span className="text-[10px] text-[#8b9bb4]">영구 누적 저장</span>
+                </div>
+                <div className="space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
+                    <span className="text-[#ef5350] font-bold">머리 (전열 · 발할라 워로드)</span>
+                    <span className="font-mono font-bold text-white">{settlement.partDamages.head.toLocaleString()} DMG</span>
+                  </div>
+                  <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
+                    <span className="text-[#ce93d8] font-bold">몸통 (중열 · 크로노 아콘)</span>
+                    <span className="font-mono font-bold text-white">{settlement.partDamages.body.toLocaleString()} DMG</span>
+                  </div>
+                  <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
+                    <span className="text-[#00d2ff] font-bold">꼬리 (후열 · 레인저)</span>
+                    <span className="font-mono font-bold text-white">{settlement.partDamages.tail.toLocaleString()} DMG</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 딜미터기 요약 */}
+              {combatMetrics.length > 0 && (
+                <div className="panel p-2 bg-[#090d16] border border-[#1e2a40]">
+                  <div className="text-xs font-bold text-white mb-1.5 flex items-center justify-between">
+                    <span>📊 대원별 피해 및 기여도</span>
+                    <span className="text-[9px] text-[#ffd54f]">전투 리포트</span>
+                  </div>
+                  <CombatMeterTable
+                    metrics={combatMetrics}
+                  />
+                </div>
+              )}
 
               <ActionButton
                 label="로비로 복귀"
                 variant="primary"
                 size="md"
-                className="w-full py-2.5 font-bold"
+                className="w-full font-bold shadow-lg shadow-[#00d2ff33] mt-1"
                 onClick={() => {
-                  setInBattle(false);
                   setSettlement(null);
+                  setInBattle(false);
                 }}
               />
             </div>
@@ -1355,46 +1517,46 @@ export const NemesisView: React.FC = () => {
     );
   }
 
-  // ── 2. 네메시스 메인 로비 화면 ────────────────────────────────────────
+  // ── 2. 네메시스 로비 허브 화면 (기존 완성 로비) ──────────────────────────
   return (
-    <div className="flex-1 min-h-0 w-full max-w-full flex flex-col bg-transparent overflow-hidden overflow-x-hidden relative">
-      {/* 🌌 네메시스 상단 침식 사이클 & 보스 현황 배너 카드 */}
-      <div className="px-3 pt-2 w-full max-w-full shrink-0">
-        <div className="relative rounded-2xl overflow-hidden border border-[#ff416c66] bg-gradient-to-r from-[#180a24] via-[#0d0716] to-[#180a24] p-3 shadow-xl">
-          {/* 상단 사이클 상태 태그 */}
-          <div className="flex items-center justify-between mb-2 border-b border-[#ff416c33] pb-1.5 flex-wrap gap-1">
-            <div className="flex items-center gap-1.5">
-              {cycleInfo.status === 'dormant' ? (
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#78909c33] text-[#cfd8dc] border border-[#78909c66]">
-                  🛑 차원 앵커 폐쇄 중 (네메시스 침공 및 약탈 전면 중단)
-                </span>
-              ) : cycleInfo.status === 'active' ? (
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#ff416c33] text-[#ff416c] border border-[#ff416c66] animate-pulse">
-                  🚨 6일 침식 활동 중 (D-{Math.ceil(cycleInfo.activeRemainingMs / 86400000)} · {formatRemainingTimeStr(cycleInfo.activeRemainingMs)})
-                </span>
-              ) : cycleInfo.status === 'defeated' ? (
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#ffd54f33] text-[#ffd54f] border border-[#ffd54f66]">
-                  👑 토벌 완료 (평화 상태 · 재소환까지 {formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})
-                </span>
-              ) : (
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#00d2ff33] text-[#00d2ff] border border-[#00d2ff66]">
-                  💤 1일 재소환 대기 중 (재소환까지 {formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})
-                </span>
-              )}
+    <div className="flex-1 min-h-0 w-full max-w-full flex flex-col bg-[#070910] text-white relative overflow-hidden">
+      {/* 상단 통합 헤더 */}
+      <div className="px-3 pt-2 shrink-0 border-b border-[#1f283d] pb-2 bg-[#0b0e18]">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigateTo('citadel')}
+              className="px-2 py-1 rounded bg-[#151c2d] hover:bg-[#1f2a42] text-xs font-bold text-[#8b9bb4] hover:text-white transition-all flex items-center gap-1 border border-[#23334d]"
+            >
+              <span>🏛️</span>
+              <span>영지 복귀</span>
+            </button>
+            <div className="flex items-center gap-1">
+              <span className="text-sm font-black text-white tracking-wide">차원 네메시스</span>
+              <span className="text-[10px] text-[#ff416c] font-bold">VOID RAID</span>
             </div>
-            {cycleInfo.status === 'active' && (
-              <span className="text-[10px] text-[#81c784] font-mono flex items-center gap-0.5">
-                🌱 분당 +0.05% (+{Math.round(cycleInfo.regenPerMinute).toLocaleString()} HP/분) 회복 중
-              </span>
-            )}
           </div>
 
-          {/* 보스 헤더 정보 */}
-          <div className="flex items-start gap-3">
-            <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl overflow-hidden border-2 border-[#ff416c] relative shadow-lg shrink-0 bg-black">
+          <div className="flex items-center gap-1.5">
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${cycleInfo.status === 'active' ? 'bg-[#4caf5022] text-[#4caf50] border-[#4caf5066]' : 'bg-[#ef535022] text-[#ef5350] border-[#ef535066]'}`}>
+              {cycleInfo.status === 'active' ? '🟢 토벌 진행 중' : cycleInfo.status === 'defeated' ? '👑 토벌 완료' : '💤 재소환 대기'}
+            </span>
+            <span className="text-[10px] text-[#ffd54f] font-mono">
+              주기: {formatRemainingTimeStr(cycleInfo.status === 'active' ? cycleInfo.activeRemainingMs : cycleInfo.respawnRemainingMs)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 보스 개요 대형 카드 */}
+      <div className="px-3 pt-2.5 shrink-0">
+        <div className="relative rounded-2xl overflow-hidden border border-[#ff416c44] bg-gradient-to-r from-[#1f0b1f] via-[#120a1c] to-[#0a0d18] p-3 shadow-xl">
+          <div className="flex items-center gap-3">
+            <div className="w-14 h-14 rounded-2xl overflow-hidden border border-[#ff416c] relative shadow-md shrink-0 bg-black">
               <img src="assets/void_overlord.jpg" alt="Nemesis" className="w-full h-full object-cover object-center scale-110" />
-              <div className="absolute inset-0 bg-purple-900/30 animate-pulse pointer-events-none" />
+              <div className="absolute inset-0 bg-purple-900/20 animate-pulse pointer-events-none" />
             </div>
+
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-sm sm:text-base font-bold text-white tracking-tight break-keep leading-tight">
@@ -1466,9 +1628,9 @@ export const NemesisView: React.FC = () => {
                           }}
                         />
                       </div>
-                      <span className="text-[8px] text-[#8b9bb4] font-mono mt-0.5 truncate">
-                        {isDefeated ? '재생 불가' : `${Math.round(curHp).toLocaleString()}`}
-                      </span>
+                      <div className="text-[8px] text-[#8b9bb4] font-mono mt-0.5">
+                        {isDefeated ? '회복 불가' : `${(curHp / 10000).toFixed(0)}만 / ${(maxHp / 10000).toFixed(0)}만`}
+                      </div>
                     </div>
                   );
                 })}
@@ -1478,11 +1640,11 @@ export const NemesisView: React.FC = () => {
         </div>
       </div>
 
-      {/* 지휘관 레이드 전적 & 일일 도전 횟수 */}
+      {/* 실시간 레이드 상태 및 지휘관 통계 */}
       <div className="px-3 pt-2 grid grid-cols-3 gap-1.5 shrink-0">
         <div className="panel p-2 flex flex-col items-center text-center bg-[#0d1322] border border-[#1e2a40]">
-          <span className="text-[10px] text-[#8b9bb4]">누적 총 피해량</span>
-          <span className="font-mono text-xs font-bold text-[#00d2ff] mt-0.5">
+          <span className="text-[10px] text-[#8b9bb4]">나의 누적 피해량</span>
+          <span className="font-mono text-xs font-bold text-white mt-0.5">
             {nemesisState.totalDamage.toLocaleString()}
           </span>
         </div>
@@ -1541,12 +1703,14 @@ export const NemesisView: React.FC = () => {
                 return (
                   <div className="p-3 rounded-xl bg-gradient-to-r from-[#2c1216] via-[#1f0f15] to-[#120d18] border border-[#ef535088] shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="text-2xl p-1.5 rounded-lg bg-black/40 border border-[#ef535044] shrink-0">⚠️</span>
+                      <div className="w-8 h-8 rounded-lg bg-[#ef535022] border border-[#ef535066] flex items-center justify-center text-lg shrink-0">
+                        ⚠️
+                      </div>
                       <div className="min-w-0">
-                        <div className="font-extrabold text-xs text-[#ff8a80] flex items-center gap-1.5 flex-wrap">
-                          <span>차원 원정대 (3선발 + 1오퍼레이터) 미편성</span>
-                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/50 text-[#ffd54f] font-mono font-bold border border-[#ffd54f33]">
-                            현재 {squadCheck.count}/4인 배치
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-bold text-xs text-white">차원 원정대 편성 필요</span>
+                          <span className="text-[10px] text-[#ef5350] font-mono font-bold">
+                            ({squadCheck.count}/4인 편성됨)
                           </span>
                         </div>
                         <div className="text-[10px] text-[#cfd8dc] mt-0.5 leading-relaxed">
@@ -1639,57 +1803,77 @@ export const NemesisView: React.FC = () => {
                           <span className="text-[8.5px] sm:text-[10px] text-[#00d2ff] truncate w-full">
                             {cls?.name || h.classId}
                           </span>
-                          <div className="text-[8px] text-[#ffd54f] mt-0.5 font-mono flex items-center justify-center gap-0.5">
+                          <div className="flex items-center gap-1 text-[8px] text-[#8b9bb4] font-mono mt-0.5">
                             <span>Lv.{h.level}</span>
-                            <span className="text-[#8b9bb4]">·</span>
-                            <span>{posLabel}</span>
+                            <span className="text-[#ffd54f]">[{posLabel}]</span>
                           </div>
                         </div>
                       );
                     })}
 
-                    {/* 1오퍼레이터 (리더) 슬롯 */}
-                    {leaderHero ? (() => {
-                      const lCls = CHARACTER_CLASSES[leaderHero.classId];
-                      return (
-                        <div className="p-1.5 sm:p-2 rounded-xl bg-[#1f1910] border border-[#ffd54f66] flex flex-col items-center text-center min-w-0 relative">
-                          <span className="text-[8px] font-bold text-[#ffd54f]">👑오퍼레이터</span>
-                          <div className="text-base sm:text-xl">{lCls?.skills[0]?.icon || '👑'}</div>
-                          <span className="text-[10px] sm:text-xs font-bold text-white truncate w-full mt-0.5" title={leaderHero.name}>
-                            {leaderHero.name}
-                          </span>
-                          <span className="text-[8.5px] sm:text-[10px] text-[#ffd54f] truncate w-full">
-                            {lCls?.name || leaderHero.classId}
-                          </span>
-                          <div className="text-[8px] text-[#ffd54f] mt-0.5 font-mono">
-                            Lv.{leaderHero.level} 가호
-                          </div>
+                    {/* 전술 오퍼레이터 슬롯 */}
+                    {leaderHero ? (
+                      <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-b from-[#2a1b0a] to-[#161009] border border-[#ffd54f55] flex flex-col items-center text-center min-w-0 shadow-sm shadow-[#ffd54f22]">
+                        <span className="text-[8px] font-bold text-[#ffd54f]">오퍼레이터</span>
+                        <div className="text-base sm:text-xl">👑</div>
+                        <span className="text-[10px] sm:text-xs font-bold text-[#ffd54f] truncate w-full mt-0.5" title={leaderHero.name}>
+                          {leaderHero.name}
+                        </span>
+                        <span className="text-[8.5px] sm:text-[10px] text-[#ffecb3] truncate w-full">
+                          {CHARACTER_CLASSES[leaderHero.classId]?.name || leaderHero.classId}
+                        </span>
+                        <div className="text-[8px] text-[#ffd54f] font-mono mt-0.5">
+                          지휘 가호
                         </div>
-                      );
-                    })() : (
-                      <div className="p-1.5 sm:p-2 rounded-xl border border-dashed border-[#ffd54f44] bg-[#1a150c]/50 flex flex-col items-center justify-center text-center min-h-[72px]">
+                      </div>
+                    ) : (
+                      <div className="p-1.5 sm:p-2 rounded-xl border border-dashed border-[#ffd54f33] bg-[#1a140a]/40 flex flex-col items-center justify-center text-center min-h-[72px]">
                         <span className="text-sm opacity-40">👑</span>
-                        <span className="text-[9px] text-[#ffd54f88] mt-1 font-mono">오퍼레이터 공석</span>
+                        <span className="text-[9px] text-[#ffd54f88] mt-1 font-mono">오퍼레이터</span>
                       </div>
                     )}
                   </div>
                 );
               })()}
+
+              <div className="mt-2.5 pt-2 border-t border-[#1f2b42] flex items-center justify-between text-[10px] text-[#8b9bb4]">
+                <span>선발 3인이 전투에 직접 참전하며, 오퍼레이터가 파티 전체에 전술 지휘를 제공합니다.</span>
+                <button
+                  className="text-[#00d2ff] hover:underline font-bold shrink-0 ml-2"
+                  onClick={() => {
+                    navigateTo('citadel');
+                    gm.emit('openDimensionalBarracks');
+                  }}
+                >
+                  원정대 변경 ➔
+                </button>
+              </div>
             </div>
 
-            {/* 레이드 특징 안내 */}
-            <div className="panel p-3 bg-[#110c1c] border border-[#ff416c44] flex flex-col gap-1.5 text-xs text-[#cfd8e8]">
-              <div className="font-bold text-[#ff416c] flex items-center gap-1 text-sm">
-                <span>⚠️</span>
-                <span>차원 네메시스 침식 & 부위별 전투 규칙</span>
+            {/* 레이드 특수 규칙 안내 */}
+            <div className="panel p-3 bg-[#0d1424] border border-[#1c273e]">
+              <div className="text-xs font-bold text-[#00d2ff] mb-1.5 flex items-center gap-1">
+                <span>📜</span>
+                <span>차원 네메시스 공략 지침</span>
               </div>
-              <p className="text-[11px] leading-relaxed text-[#8b9bb4]">
-                • <strong className="text-white">3선발 + 1오퍼레이터 원정대</strong>: 선발 3인(전열/중열/후열)의 직접 수동 커맨드 전투와 전술 오퍼레이터의 후방 가호/피버 총공격으로 토벌전을 진행합니다.<br />
-                • <strong className="text-white">3대 전술 부위 (머리/몸통/꼬리)</strong>: 전열의 머리(워로드·광역 물리/분쇄, 400만), 중열의 몸통(크로노 아콘·광역 디버프/CC, 500만), 후열의 꼬리(레인저·광역 휩쓸기/원샷원킬, 350만)로 구성됩니다.<br />
-                • <strong className="text-white">수동 타겟팅 & 즉시 패퇴 (사경 없음)</strong>: 원하는 부위를 직접 탭하여 집중 공격할 수 있으며, 부위 체력이 0이 되면 사경 유예 없이 즉시 패퇴합니다.<br />
-                • <strong className="text-white">생존 부위 한정 시간제 자연 재생</strong>: 살아있는 부위는 분당 0.05%씩 자연 재생되나, 어느 한 부위라도 패퇴하면 해당 부위는 영구히 재생되지 않습니다.<br />
-                • <strong className="text-white">영구 피해 기록</strong>: 전투 후 가한 부위별 피해는 누적 보존되며, 로비에는 전체 합계 잔여 체력이 표시됩니다.
-              </p>
+              <ul className="text-[10px] text-[#cfd8e8] space-y-1 leading-relaxed">
+                <li className="flex items-start gap-1.5">
+                  <span className="text-[#ffd54f]">•</span>
+                  <span><strong>부위별 아키타입:</strong> 머리는 워로드(물리/분쇄), 몸통은 크로노 아콘(디버프/CC), 꼬리는 레인저(관통/광역 휩쓸기)입니다.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="text-[#ffd54f]">•</span>
+                  <span><strong>절멸기 차징 저지:</strong> 네메시스 각 부위가 절멸기 차징에 돌입하면 부위를 집중 타격하여 브레이크 게이지를 파쇄(그로기 유발)하십시오.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="text-[#ffd54f]">•</span>
+                  <span><strong>사경 없음 & 파괴 보존:</strong> 보스 부위는 사경 없이 체력 0 즉시 패퇴하며, 한번 파괴된 부위는 다시 재생되지 않습니다.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="text-[#ffd54f]">•</span>
+                  <span><strong>피해량 누적 보상:</strong> 입힌 피해는 즉시 저장되어 마일스톤 보상 및 토벌 랭킹 점수로 환산됩니다.</span>
+                </li>
+              </ul>
             </div>
 
             {/* 대형 출격 버튼 */}
