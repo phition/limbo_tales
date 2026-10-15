@@ -76,45 +76,34 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
           {Array.from({ length: maxSlots }).map((_, idx) => {
             const badgeType = badges[idx];
             const meta = badgeType ? FEVER_BADGE_META[badgeType] : null;
-            const isHiddenSlot = isBluffing && !revealAll && idx >= 2 && Boolean(badgeType);
-
-            if (isHiddenSlot) {
-              return (
-                <div
-                  key={idx}
-                  className="relative group flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-[#7e57c288] bg-gradient-to-br from-[#211233] to-[#120a1c] shadow-[0_0_8px_rgba(126,87,194,0.3)] transition-all duration-200 animate-pulse cursor-help"
-                  title="[블러핑 슬롯] 쇼다운 시 전광판에 공개됩니다."
-                >
-                  <span className="text-xs font-black text-[#d1c4e9]">❓</span>
-                  <span className="absolute -bottom-1 text-[7.5px] font-mono font-black px-1 rounded-sm bg-[#000000ee] text-[#b39ddb] tracking-tighter">
-                    HIDDEN
-                  </span>
-                </div>
-              );
-            }
-
-            if (meta) {
-              return (
-                <div
-                  key={idx}
-                  className="relative group flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg border transition-all duration-200 transform scale-100 hover:scale-110 animate-fade-in shadow-sm cursor-pointer"
-                  style={{
-                    backgroundColor: meta.bg,
-                    borderColor: meta.borderColor,
-                    boxShadow: isFull ? `0 0 10px ${meta.color}66` : undefined
-                  }}
-                  title={`[${meta.label}] ${meta.description}`}
-                >
-                  <GameIcon name={`badge_${meta.type}`} icon={meta.icon} size={16} />
-                  {/* 슬롯 상단 미니 뱃지 라벨 */}
-                  <span className="absolute -bottom-1 text-[8px] font-black px-1 rounded-sm bg-[#000000dd] text-white tracking-tighter">
-                    {meta.shortLabel}
-                  </span>
-                </div>
-              );
-            }
-
-            return (
+            return idx >= 2 && Boolean(badgeType) && isBluffing && !revealAll ? (
+              <div
+                key={idx}
+                className="relative group flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-[#7e57c288] bg-gradient-to-br from-[#211233] to-[#120a1c] shadow-[0_0_8px_rgba(126,87,194,0.3)] transition-all duration-200 animate-pulse cursor-help"
+                title="[블러핑 슬롯] 피버 콜 시 전광판에 공개됩니다."
+              >
+                <span className="text-xs font-black text-[#d1c4e9]">❓</span>
+                <span className="absolute -bottom-1 text-[7.5px] font-mono font-black px-1 rounded-sm bg-[#000000ee] text-[#b39ddb] tracking-tighter">
+                  HIDDEN
+                </span>
+              </div>
+            ) : meta ? (
+              <div
+                key={idx}
+                className="relative group flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg border transition-all duration-200 transform scale-100 hover:scale-110 animate-fade-in shadow-sm cursor-pointer"
+                style={{
+                  backgroundColor: meta.bg,
+                  borderColor: meta.borderColor,
+                  boxShadow: isFull ? `0 0 10px ${meta.color}66` : undefined
+                }}
+                title={`[${meta.label}] ${meta.description}`}
+              >
+                <GameIcon name={`badge_${meta.type}`} icon={meta.icon} size={16} />
+                <span className="absolute -bottom-1 text-[8px] font-black px-1 rounded-sm bg-[#000000dd] text-white tracking-tighter">
+                  {meta.shortLabel}
+                </span>
+              </div>
+            ) : (
               <div
                 key={idx}
                 className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-[#1b273b] bg-[#0b0f19] flex items-center justify-center text-[#253347] transition-all"
@@ -130,17 +119,8 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
           {isFull ? (
             <div className="flex flex-col items-end animate-pulse">
               <span className="text-[10px] sm:text-xs font-black text-[#ffd54f] flex items-center gap-1">
-                {isBluffing && !revealAll ? (
-                  <>
-                    <span>❓</span>
-                    <span className="text-[#ce93d8]">비공개 족보 (쇼다운 대기)</span>
-                  </>
-                ) : (
-                  <>
-                    <GameIcon name={`fever_${synergy.id}`} icon={synergy.icon} size={13} />
-                    <span>{synergy.name}</span>
-                  </>
-                )}
+                <GameIcon name={`fever_${synergy.id}`} icon={synergy.icon} size={13} />
+                <span>{synergy.name}</span>
               </span>
             </div>
           ) : badges.length > 0 ? (
@@ -154,23 +134,6 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
           )}
         </div>
       </div>
-
-      {/* 5개 완충 시 하단에 펼쳐지는 발동 효과 프리뷰 바 */}
-      {isFull && (
-        <div className="mt-1 pt-1 border-t border-[#ffd54f33] flex items-center justify-between text-[10px] text-[#fff9c4] px-0.5">
-          <div className="flex items-center gap-1.5 truncate">
-            <span className="font-extrabold text-[#ffd54f] shrink-0">★ 시너지:</span>
-            <span className="truncate">
-              {isBluffing && !revealAll
-                ? '쇼다운 시 감춰진 3장의 패와 함께 족보가 전광판에 열립니다.'
-                : synergy.summary}
-            </span>
-          </div>
-          <span className="text-[9px] text-[#ffd54f] font-mono shrink-0 ml-1">
-            {isBluffing && !revealAll ? 'SHOWDOWN READY' : 'SLOTS FULL'}
-          </span>
-        </div>
-      )}
     </div>
   );
 };

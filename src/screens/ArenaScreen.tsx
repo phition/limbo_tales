@@ -78,16 +78,16 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
 
   return (
     <div
-      className={`w-full p-2 rounded-2xl border transition-all relative overflow-hidden shadow-lg ${
+      className={`w-full px-2.5 py-1.5 rounded-2xl border transition-all relative overflow-hidden shadow-lg ${
         isPlayer
           ? 'bg-gradient-to-r from-[#091424]/95 via-[#0d1c33]/95 to-[#07111e]/95 border-[#00d2ff55] shadow-[#00d2ff15]'
           : 'bg-gradient-to-r from-[#1c0c16]/95 via-[#270e1c]/95 to-[#140810]/95 border-[#ff416c55] shadow-[#ff416c15]'
       } ${isActing ? (isPlayer ? 'ring-2 ring-[#00d2ff] animate-pulse' : 'ring-2 ring-[#ff416c] animate-pulse') : ''}`}
     >
       <div className="flex items-center gap-2.5">
-        {/* 좌측: 리더 대형 포트레이트 */}
+        {/* 좌측: 오퍼레이터 포트레이트 */}
         <div
-          className={`relative w-12 h-12 sm:w-13 sm:h-13 rounded-xl overflow-hidden shrink-0 border-2 ${
+          className={`relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden shrink-0 border-2 ${
             isPlayer
               ? 'border-[#00d2ff] shadow-[0_0_10px_rgba(0,210,255,0.4)]'
               : 'border-[#ff416c] shadow-[0_0_10px_rgba(255,65,108,0.4)]'
@@ -96,25 +96,25 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
           {imageUrl ? (
             <img
               src={imageUrl}
-              alt={leader?.name || 'Leader'}
+              alt={leader?.name || 'Operator'}
               className="w-full h-full object-cover object-center"
               onError={(e) => {
                 (e.currentTarget as HTMLElement).style.display = 'none';
               }}
             />
           ) : (
-            <span className="text-2xl">{clsInfo?.skills[0]?.icon || '👑'}</span>
+            <span className="text-xl">{clsInfo?.skills[0]?.icon || '👑'}</span>
           )}
-          <span className="absolute bottom-0.5 right-0.5 text-[7.5px] font-mono font-black bg-black/85 px-1 py-0.2 rounded text-[#ffd54f] border border-[#ffd54f]/40 leading-none">
+          <span className="absolute bottom-0.5 right-0.5 text-[7px] font-mono font-black bg-black/85 px-1 py-0.2 rounded text-[#ffd54f] border border-[#ffd54f]/40 leading-none">
             Lv.{leader?.level || 1}
           </span>
-          <span className="absolute top-0.5 left-0.5 text-[6.5px] font-bold bg-black/80 px-1 py-0.2 rounded text-[#ffd54f] leading-none">
-            👑 LEADER
+          <span className="absolute top-0.5 left-0.5 text-[6px] font-bold bg-black/80 px-1 py-0.2 rounded text-[#ffd54f] leading-none">
+            OP
           </span>
         </div>
 
-        {/* 중앙: 리더 이름, 등급 & 가호 정보 */}
-        <div className="min-w-0 flex-1 flex flex-col justify-between py-0.5">
+        {/* 중앙: 오퍼레이터 이름 및 등급 정보 */}
+        <div className="min-w-0 flex-1 flex flex-col justify-center">
           <div className="flex items-center justify-between gap-1">
             <div className="flex items-center gap-1.5 min-w-0">
               <span
@@ -124,7 +124,7 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
                     : 'bg-[#ff416c25] text-[#ff80ab] border border-[#ff416c66]'
                 }`}
               >
-                {isPlayer ? '아군 지휘 리더' : '상대 결투 리더'}
+                {isPlayer ? '아군 오퍼레이터' : '상대 오퍼레이터'}
               </span>
               {!isPlayer && (
                 isBot ? (
@@ -138,7 +138,7 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
                 )
               )}
               <span className="text-xs font-black text-white truncate">
-                {leader?.name || (isPlayer ? '원정대 사령관' : '결투장 수비 리더')}
+                {leader?.name || (isPlayer ? '아군 오퍼레이터' : '상대 오퍼레이터')}
               </span>
               {leader?.grade && (
                 <span className="text-[8px] font-bold text-[#ffd54f] shrink-0 font-mono">
@@ -149,26 +149,6 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
             <span className="text-[9px] text-[#8b9bb4] shrink-0">
               {clsName}
             </span>
-          </div>
-
-          {/* 가호 & 서포터 상태 한 줄 패널 */}
-          <div className="bg-black/40 rounded-lg px-2 py-0.5 border border-white/10 flex items-center justify-between gap-1.5 mt-1 text-[8.5px]">
-            <div className="flex items-center gap-1 min-w-0 truncate">
-              <span className="text-[#ffd54f] font-bold shrink-0">
-                ✨ {blessing?.name || '차원의 가호'}:
-              </span>
-              <span className="text-[#cfd8e8] truncate text-[8px]">
-                {blessing?.description || (isPlayer ? '원정 부대 전체 올스탯 증폭' : '상대 결투 부대 능력치 증폭')}
-              </span>
-            </div>
-            {supporter && (
-              <div className="shrink-0 flex items-center gap-1 pl-1.5 border-l border-white/10">
-                <span className="text-[8px] text-[#ce93d8] truncate font-bold">🤝 {supporter.name}</span>
-                <span className="text-[7px] font-mono px-1.5 py-0.2 rounded font-bold bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55]">
-                  전술 원호 가동 중 ✨🛡️
-                </span>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -769,6 +749,12 @@ export const ArenaScreen: React.FC = () => {
   const playerFeverWinsRef = useRef(0);
   const oppFeverWinsRef = useRef(0);
 
+  // ⚡ 피버콜 선언(선완성) 및 3턴 유예 타임아웃 관리
+  const [feverCallLead, setFeverCallLead] = useState<'player' | 'opp' | null>(null);
+  const feverCallLeadRef = useRef<'player' | 'opp' | null>(null);
+  const [feverCallCountdown, setFeverCallCountdown] = useState<number>(3);
+  const feverCallCountdownRef = useRef<number>(3);
+
   // 🏃 속도(SPD) 기반 턴 순서 큐
   const [roundQueue, setRoundQueue] = useState<string[]>([]);
   const roundQueueRef = useRef<string[]>([]);
@@ -938,6 +924,10 @@ export const ArenaScreen: React.FC = () => {
     playerFeverWinsRef.current = 0;
     setOppFeverWins(0);
     oppFeverWinsRef.current = 0;
+    setFeverCallLead(null);
+    feverCallLeadRef.current = null;
+    setFeverCallCountdown(3);
+    feverCallCountdownRef.current = 3;
     setIsLeaderUltCutin(false);
     setIsOppLeaderUltCutin(false);
     gm.emit('arenaBattleStateChanged', true);
@@ -1184,23 +1174,39 @@ export const ArenaScreen: React.FC = () => {
   // 🔥 아군 피버 뱃지 추가 헬퍼 (주간 금지 배지 필터링)
   const addFeverBadge = useCallback((badgeType: FeverBadgeType) => {
     if (badgeType === WEEKLY_BANNED_BADGE) return;
+    let becameFull = false;
     setFeverBadges(prev => {
       if (prev.length >= 5) return prev;
       const next = [...prev, badgeType];
       feverBadgesRef.current = next;
+      if (next.length >= 5) becameFull = true;
       return next;
     });
+    if (becameFull && feverCallLeadRef.current === null && oppFeverBadgesRef.current.length < 5) {
+      feverCallLeadRef.current = 'player';
+      feverCallCountdownRef.current = 3;
+      setFeverCallLead('player');
+      setFeverCallCountdown(3);
+    }
   }, []);
 
   // 💀 적군 피버 뱃지 추가 헬퍼 (주간 금지 배지 필터링)
   const addOppFeverBadge = useCallback((badgeType: FeverBadgeType) => {
     if (badgeType === WEEKLY_BANNED_BADGE) return;
+    let becameFull = false;
     setOppFeverBadges(prev => {
       if (prev.length >= 5) return prev;
       const next = [...prev, badgeType];
       oppFeverBadgesRef.current = next;
+      if (next.length >= 5) becameFull = true;
       return next;
     });
+    if (becameFull && feverCallLeadRef.current === null && feverBadgesRef.current.length < 5) {
+      feverCallLeadRef.current = 'opp';
+      feverCallCountdownRef.current = 3;
+      setFeverCallLead('opp');
+      setFeverCallCountdown(3);
+    }
   }, []);
 
   // 💥 2단계: 피버콜 승부 판정 연출이 사라진 후 궁극기 연출 폭발 및 전투 재개
@@ -1420,15 +1426,17 @@ export const ArenaScreen: React.FC = () => {
     }, 1600);
   }, [gm, gateLevel, battleRound]);
 
-  // ⚔️🔥 1단계: 피버 쇼다운 (Fever Showdown) 대결 판정 및 컷인 개시 (필드 전투 일시 정지)
-  const triggerFeverShowdown = useCallback(() => {
+  // ⚔️🔥 1단계: 피버 콜 (Fever Call) 대결 판정 및 컷인 개시 (필드 전투 일시 정지)
+  const triggerFeverShowdown = useCallback((isTimeout = false, timeoutWinner?: 'player' | 'opp') => {
     const pCombatants = playerTeamRef.current;
     const oCombatants = oppTeamRef.current;
     if (pCombatants.length === 0 || oCombatants.length === 0) return;
 
-    // ⚔️ [핵심 룰] 아군과 적군 양측 모두 피버 5개가 완전히 모였을 때만 피버콜 발동!
-    if (feverBadgesRef.current.length < 5 || oppFeverBadgesRef.current.length < 5) {
-      return;
+    // ⚔️ [핵심 룰] 정상 발동 시 양측 모두 5개 완충 시에만 발동! (타임아웃 시에는 완성 측 승리로 발동)
+    if (!isTimeout) {
+      if (feverBadgesRef.current.length < 5 || oppFeverBadgesRef.current.length < 5) {
+        return;
+      }
     }
 
     if (isShowdownCutinRef.current) return;
@@ -1436,6 +1444,12 @@ export const ArenaScreen: React.FC = () => {
 
     // ⏸️ 필드 전투 즉시 일시 정지 (턴 및 AI 정지)
     isProcessingRef.current = true;
+
+    // 피버콜 리드 및 카운트다운 초기화
+    feverCallLeadRef.current = null;
+    setFeverCallLead(null);
+    feverCallCountdownRef.current = 3;
+    setFeverCallCountdown(3);
 
     const playerParty = pCombatants.map(c => ({
       classId: c.classId,
@@ -1448,12 +1462,34 @@ export const ArenaScreen: React.FC = () => {
       maxHp: c.maxHp
     } as any));
 
-    const showdown = resolveFeverShowdown(
-      feverBadgesRef.current,
-      oppFeverBadgesRef.current,
-      playerParty,
-      oppParty
-    );
+    let showdown: ShowdownResult;
+    if (isTimeout && timeoutWinner) {
+      const isPlayerWin = timeoutWinner === 'player';
+      const playerSynergy = evaluateFeverSynergy(feverBadgesRef.current, playerParty);
+      const oppSynergy = evaluateFeverSynergy(oppFeverBadgesRef.current, oppParty);
+      showdown = {
+        outcome: isPlayerWin ? 'player_win' : 'opp_win',
+        playerSynergy,
+        oppSynergy,
+        playerAffinity: 'neutral',
+        oppAffinity: 'neutral',
+        playerScore: isPlayerWin ? 100 : 0,
+        oppScore: isPlayerWin ? 0 : 100,
+        bannerTitle: isPlayerWin ? '상대 피버콜 시간 초과 (3턴 미완성) - 아군 부전승!' : '아군 피버콜 시간 초과 (3턴 미완성) - 상대 부전승!',
+        bannerSub: isPlayerWin ? '상대가 3턴 내에 피버를 완성하지 못해 실격 처리되었습니다.' : '아군이 3턴 내에 피버를 완성하지 못해 실격 처리되었습니다.',
+        narrative: isPlayerWin
+          ? `상대가 3턴 내에 피버를 완성하지 못해 시간 초과로 실격 패배했습니다! 아군 [${playerSynergy.name}] 피버콜 완성에 따른 완승!`
+          : `3턴 내에 아군 피버를 완성하지 못해 시간 초과로 실격 처리되었습니다. 상대 [${oppSynergy.name}] 피버콜 완성에 따른 패배...`,
+        icon: isPlayerWin ? '🏆' : '💀'
+      };
+    } else {
+      showdown = resolveFeverShowdown(
+        feverBadgesRef.current,
+        oppFeverBadgesRef.current,
+        playerParty,
+        oppParty
+      );
+    }
 
     // 🃏 쇼다운 배지 스냅샷 캡처 및 순차 오픈 시퀀스 시작
     const pBadgesSnapshot = [...feverBadgesRef.current];
@@ -1612,6 +1648,14 @@ export const ArenaScreen: React.FC = () => {
     targetUnits.forEach((t) => {
       if (isHealing) {
         const healAmt = Math.round(effectiveAtk * (skill.power || 1.0) * 1.4);
+        const addedEffect = skill.effectType === 'regen' ? {
+          id: `eff_${Date.now()}_regen_${t.id}`,
+          type: 'regen',
+          name: '재생',
+          icon: '🌱',
+          duration: skill.statusDuration || 2,
+          value: Math.round(healAmt * 0.3)
+        } : undefined;
         targetResults.push({
           unitId: t.id,
           newHp: Math.min(t.maxHp, t.currentHp + healAmt),
@@ -1619,15 +1663,43 @@ export const ArenaScreen: React.FC = () => {
           isCrit: false,
           isHeal: true,
           isShield: false,
+          addedEffect
         });
       } else if (isShield) {
+        const shieldAmt = Math.round(effectiveAtk * 0.8);
         targetResults.push({
           unitId: t.id,
           newHp: t.currentHp,
-          dmg: Math.round(effectiveAtk * 0.8),
+          dmg: shieldAmt,
           isCrit: false,
           isHeal: false,
           isShield: true,
+          addedEffect: {
+            id: `eff_${Date.now()}_shield_${t.id}`,
+            type: 'shield',
+            name: '보호막',
+            icon: '🛡️',
+            duration: skill.statusDuration || 2,
+            value: shieldAmt
+          }
+        });
+      } else if (skill.effectType === 'buff') {
+        const buffType = skill.name.includes('방어') ? 'buff_def' : 'buff_atk';
+        targetResults.push({
+          unitId: t.id,
+          newHp: t.currentHp,
+          dmg: 0,
+          isCrit: false,
+          isHeal: false,
+          isShield: false,
+          addedEffect: {
+            id: `eff_${Date.now()}_buff_${t.id}`,
+            type: buffType,
+            name: skill.name,
+            icon: buffType === 'buff_def' ? '🛡️' : '⚔️',
+            duration: skill.statusDuration || 2,
+            value: 0.25
+          }
         });
       } else {
         // 💨 회피 (Dodge / Evade) 판정
@@ -1683,7 +1755,6 @@ export const ArenaScreen: React.FC = () => {
           const defSuppId = t.isPlayer ? defSupporter.id : 'opp_supporter';
           if (combatMetricsRef.current[defSuppId]) {
             combatMetricsRef.current[defSuppId].actionsCount = (combatMetricsRef.current[defSuppId].actionsCount || 0) + 1;
-            // 서포터 자신이 받은 데미지로 계산해서 누적
             const suppDef = (defSupporter as any).def || 50;
             const suppTakenDmg = Math.max(1, Math.round(blockedDmg * (100 / (100 + suppDef * ARENA_DEF_SCALE))));
             combatMetricsRef.current[defSuppId].damageTaken = (combatMetricsRef.current[defSuppId].damageTaken || 0) + suppTakenDmg;
@@ -1708,24 +1779,32 @@ export const ArenaScreen: React.FC = () => {
         // 상태이상 부여 검사
         let addedEffect: any = undefined;
         if (skill.effectType === 'burn') {
-          addedEffect = { type: 'debuff', name: '화상', icon: '🔥', duration: 2, value: Math.round(effectiveAtk * 0.2) };
+          addedEffect = { id: `eff_${Date.now()}_burn_${t.id}`, type: 'burn', name: '화상', icon: '🔥', duration: skill.statusDuration || 2, value: Math.round(effectiveAtk * 0.2) };
         } else if (skill.effectType === 'bleed') {
-          addedEffect = { type: 'debuff', name: '출혈', icon: '🩸', duration: 2, value: Math.round(effectiveAtk * 0.25) };
+          addedEffect = { id: `eff_${Date.now()}_bleed_${t.id}`, type: 'bleed', name: '출혈', icon: '🩸', duration: skill.statusDuration || 2, value: Math.round(effectiveAtk * 0.25) };
         } else if (skill.effectType === 'stun') {
-          addedEffect = { type: 'debuff', name: '기절', icon: '⚡', duration: 1 };
+          addedEffect = { id: `eff_${Date.now()}_stun_${t.id}`, type: 'stun', name: '기절', icon: '⚡', duration: skill.statusDuration || 1 };
         } else if (skill.effectType === 'freeze') {
-          addedEffect = { type: 'debuff', name: '빙결', icon: '❄️', duration: 1 };
+          addedEffect = { id: `eff_${Date.now()}_freeze_${t.id}`, type: 'freeze', name: '빙결', icon: '❄️', duration: skill.statusDuration || 1 };
+        } else if (skill.effectType === 'poison') {
+          addedEffect = { id: `eff_${Date.now()}_poison_${t.id}`, type: 'poison', name: '중독', icon: '🧪', duration: skill.statusDuration || 2, value: Math.round(effectiveAtk * 0.2) };
+        } else if (skill.effectType === 'blind') {
+          addedEffect = { id: `eff_${Date.now()}_blind_${t.id}`, type: 'blind', name: '실명', icon: '👁️', duration: skill.statusDuration || 2 };
+        } else if (skill.effectType === 'debuff_atk') {
+          addedEffect = { id: `eff_${Date.now()}_datk_${t.id}`, type: 'debuff_atk', name: '공격력 약화', icon: '📉', duration: skill.statusDuration || 2 };
+        } else if (skill.effectType === 'debuff_def') {
+          addedEffect = { id: `eff_${Date.now()}_ddef_${t.id}`, type: 'debuff_def', name: '방어력 약화', icon: '💔', duration: skill.statusDuration || 2 };
         } else if (skill.effectType === 'debuff') {
-          addedEffect = { type: 'debuff', name: '약화', icon: '💀', duration: 2 };
+          addedEffect = { id: `eff_${Date.now()}_debuff_${t.id}`, type: 'debuff', name: '약화', icon: '💀', duration: skill.statusDuration || 2 };
         } else if (magicSchool === 'elemental') {
           // 🔮 원소 마법: 해당 원소 상태 이상 추가 부여
           const elem = getElementalSubtype(skill);
           if (elem === 'fire') {
-            addedEffect = { type: 'debuff', name: '화상', icon: '🔥', duration: 2, value: Math.round(effectiveAtk * 0.2) };
+            addedEffect = { id: `eff_${Date.now()}_burn_${t.id}`, type: 'burn', name: '화상', icon: '🔥', duration: 2, value: Math.round(effectiveAtk * 0.2) };
           } else if (elem === 'ice') {
-            addedEffect = { type: 'debuff', name: '빙결', icon: '❄️', duration: 1 };
+            addedEffect = { id: `eff_${Date.now()}_freeze_${t.id}`, type: 'freeze', name: '빙결', icon: '❄️', duration: 1 };
           } else if (elem === 'lightning') {
-            addedEffect = { type: 'debuff', name: '기절', icon: '⚡', duration: 1 };
+            addedEffect = { id: `eff_${Date.now()}_stun_${t.id}`, type: 'stun', name: '기절', icon: '⚡', duration: 1 };
           }
         }
 
@@ -1884,14 +1963,15 @@ export const ArenaScreen: React.FC = () => {
 
     // 7. 팀 상태 동기화 (최신 ref 기반)
     let nextP = currentP.map(c => {
-      if (c.id === updatedAttacker.id) return updatedAttacker;
       const res = targetResults.find(r => r.unitId === c.id);
+      const isAttacker = c.id === updatedAttacker.id;
+      const base = isAttacker ? updatedAttacker : c;
       if (res) {
-        const effects = [...(c.statusEffects || [])];
+        const effects = [...(base.statusEffects || [])];
         if (res.addedEffect) effects.push(res.addedEffect);
-        let deathCountdown = c.deathCountdown;
-        let isDead = c.isDead;
-        let isPermanentlyDead = c.isPermanentlyDead;
+        let deathCountdown = base.deathCountdown;
+        let isDead = base.isDead;
+        let isPermanentlyDead = base.isPermanentlyDead;
 
         if (res.newHp <= 0) {
           if (deathCountdown === undefined && !isPermanentlyDead) {
@@ -1919,20 +1999,21 @@ export const ArenaScreen: React.FC = () => {
           isDead = false;
         }
 
-        return { ...c, currentHp: res.newHp, statusEffects: effects, deathCountdown, isDead, isPermanentlyDead };
+        return { ...base, currentHp: res.newHp, statusEffects: effects, deathCountdown, isDead, isPermanentlyDead };
       }
-      return c;
+      return base;
     });
 
     let nextO = currentO.map(c => {
-      if (c.id === updatedAttacker.id) return updatedAttacker;
       const res = targetResults.find(r => r.unitId === c.id);
+      const isAttacker = c.id === updatedAttacker.id;
+      const base = isAttacker ? updatedAttacker : c;
       if (res) {
-        const effects = [...(c.statusEffects || [])];
+        const effects = [...(base.statusEffects || [])];
         if (res.addedEffect) effects.push(res.addedEffect);
-        let deathCountdown = c.deathCountdown;
-        let isDead = c.isDead;
-        let isPermanentlyDead = c.isPermanentlyDead;
+        let deathCountdown = base.deathCountdown;
+        let isDead = base.isDead;
+        let isPermanentlyDead = base.isPermanentlyDead;
 
         if (res.newHp <= 0) {
           if (deathCountdown === undefined && !isPermanentlyDead) {
@@ -1960,9 +2041,9 @@ export const ArenaScreen: React.FC = () => {
           isDead = false;
         }
 
-        return { ...c, currentHp: res.newHp, statusEffects: effects, deathCountdown, isDead, isPermanentlyDead };
+        return { ...base, currentHp: res.newHp, statusEffects: effects, deathCountdown, isDead, isPermanentlyDead };
       }
-      return c;
+      return base;
     });
 
     // ⚔️/💖 [서포터 전술 원호: 원호 추가타 or 원호 치유]
@@ -2063,11 +2144,22 @@ export const ArenaScreen: React.FC = () => {
     setPlayerTeam(nextP);
     setOppTeam(nextO);
 
-    // 8. ⚔️ [핵심 룰] 피버콜(Fever Showdown) 발동 검사:
-    // 양쪽 모두 피버 배지 5개가 완전히 모였을 때에만 피버콜이 개시됩니다!
-    // 그 전에는 어떠한 스킬(단일기/광역기)을 시전해도 피버콜이나 피버 족보가 임의로 터지지 않습니다.
+    // 8. ⚔️ [핵심 룰] 피버콜(Fever Call) 발동 및 3턴 유예 타임아웃 검사:
     if (feverBadgesRef.current.length >= 5 && oppFeverBadgesRef.current.length >= 5) {
-      setTimeout(() => triggerFeverShowdown(), 400);
+      setTimeout(() => triggerFeverShowdown(false), 400);
+    } else if (feverCallLeadRef.current !== null && !isShowdownCutinRef.current) {
+      feverCallCountdownRef.current -= 1;
+      const remainTurns = feverCallCountdownRef.current;
+      setFeverCallCountdown(remainTurns);
+      if (remainTurns <= 0) {
+        // 3턴 타임아웃 만료! 미완성 측 실격 패배, 선언 측 부전승!
+        const winner = feverCallLeadRef.current;
+        feverCallLeadRef.current = null;
+        setFeverCallLead(null);
+        feverCallCountdownRef.current = 3;
+        setFeverCallCountdown(3);
+        setTimeout(() => triggerFeverShowdown(true, winner), 400);
+      }
     }
 
     // 9. 승패 검증 (즉시 결과창 팝업)
@@ -3625,12 +3717,12 @@ export const ArenaScreen: React.FC = () => {
                   />
                 )}
 
-                {/* 1. 상단 헤더: FEVER SHOWDOWN & 진행 인디케이터 */}
+                {/* 1. 상단 헤더: FEVER CALL & 진행 인디케이터 */}
                 <div className="flex items-center justify-between border-b border-white/10 pb-2">
                   <div className="flex items-center gap-1.5">
                     <span className="text-xl animate-spin">🔥</span>
                     <span className="font-black text-sm text-white tracking-widest uppercase font-cinzel">
-                      FEVER SHOWDOWN
+                      FEVER CALL
                     </span>
                   </div>
                   <div className="flex items-center gap-1 text-[10px] font-mono">
@@ -3924,7 +4016,7 @@ export const ArenaScreen: React.FC = () => {
                       <div className="flex items-center gap-1 flex-wrap mb-0.5">
                         {c.statusEffects.map((eff, eIdx) => {
                           const meta = STATUS_EFFECT_META[eff.type];
-                          const isBuff = eff.type.startsWith('buff_') || eff.type === 'shield' || eff.type === 'regen' || eff.type === 'riposte' || eff.type === 'immunity' || eff.type === 'stealth';
+                          const isBuff = eff.type.startsWith('buff_') || eff.type === 'shield' || eff.type === 'regen' || eff.type === 'riposte' || eff.type === 'immunity' || eff.type === 'stealth' || eff.type === 'buff';
                           const turns = eff.duration ?? eff.turnsLeft ?? 1;
                           const label = eff.name || meta?.label || eff.type;
                           const icon = eff.icon || meta?.icon || (isBuff ? '✨' : '💀');
@@ -3981,10 +4073,8 @@ export const ArenaScreen: React.FC = () => {
                 badges={oppFeverBadges}
                 party={oppTeam.map(c => ({ classId: c.classId } as any))}
                 label={
-                  oppFeverBadges.length >= 5 && feverBadges.length < 5
-                    ? "ENEMY FEVER (아군 대기 중 ⏳)"
-                    : oppFeverBadges.length >= 5 && feverBadges.length >= 5
-                    ? "FEVER SHOWDOWN READY! 🔥"
+                  oppFeverBadges.length >= 5
+                    ? "ENEMY FEVER [피버 콜!]"
                     : "ENEMY FEVER"
                 }
                 side="enemy"
@@ -3993,7 +4083,7 @@ export const ArenaScreen: React.FC = () => {
               />
             </div>
 
-            {/* ── 2. 중앙 배틀 아레나 (액션 배너 & 양측 피버 대기 현황) ── */}
+            {/* ── 2. 중앙 배틀 아레나 (액션 배너 & 피버콜 3턴 유예 현황) ── */}
             <div className="h-10 w-full relative flex flex-col items-center justify-center pointer-events-none my-1">
               {actionBanner ? (
                 <div className="px-4 py-1 rounded-full bg-[#0d1527ee] border border-[#00d2ff66] shadow-xl animate-scale-up text-center max-w-[90%] z-20">
@@ -4004,16 +4094,16 @@ export const ArenaScreen: React.FC = () => {
                     {actionBanner.sub}
                   </span>
                 </div>
-              ) : (feverBadges.length >= 5 && oppFeverBadges.length < 5) ? (
+              ) : feverCallLead === 'player' ? (
                 <div className="px-3 py-1 rounded-full bg-[#ffd54f15] border border-[#ffd54f55] text-center z-10 animate-pulse">
                   <span className="text-[10px] font-bold text-[#ffd54f]">
-                    ⚡ 아군 피버 만충! 상대의 피버 배지({oppFeverBadges.length}/5)가 모두 모이면 피버콜이 격돌합니다.
+                    ⚡ 아군 [피버 콜!] (상대 유예: {feverCallCountdown}턴 남음)
                   </span>
                 </div>
-              ) : (oppFeverBadges.length >= 5 && feverBadges.length < 5) ? (
+              ) : feverCallLead === 'opp' ? (
                 <div className="px-3 py-1 rounded-full bg-[#ff416c15] border border-[#ff416c55] text-center z-10 animate-pulse">
                   <span className="text-[10px] font-bold text-[#ff80ab]">
-                    ⚠️ 상대 피버 만충! 아군의 피버 배지({feverBadges.length}/5)가 모두 모이면 피버콜이 격돌합니다.
+                    ⚠️ 상대 [피버 콜!] (아군 유예: {feverCallCountdown}턴 남음)
                   </span>
                 </div>
               ) : null}
@@ -4025,10 +4115,8 @@ export const ArenaScreen: React.FC = () => {
                 badges={feverBadges}
                 party={playerTeam.map(c => ({ classId: c.classId } as any))}
                 label={
-                  feverBadges.length >= 5 && oppFeverBadges.length < 5
-                    ? "PLAYER FEVER (상대 대기 중 ⏳)"
-                    : feverBadges.length >= 5 && oppFeverBadges.length >= 5
-                    ? "FEVER SHOWDOWN READY! 🔥"
+                  feverBadges.length >= 5
+                    ? "PLAYER FEVER [피버 콜!]"
                     : "PLAYER FEVER"
                 }
                 side="player"
@@ -4071,7 +4159,7 @@ export const ArenaScreen: React.FC = () => {
                       <div className="flex items-center gap-1 flex-wrap mb-0.5">
                         {c.statusEffects.map((eff, eIdx) => {
                           const meta = STATUS_EFFECT_META[eff.type];
-                          const isBuff = eff.type.startsWith('buff_') || eff.type === 'shield' || eff.type === 'regen' || eff.type === 'riposte' || eff.type === 'immunity' || eff.type === 'stealth';
+                          const isBuff = eff.type.startsWith('buff_') || eff.type === 'shield' || eff.type === 'regen' || eff.type === 'riposte' || eff.type === 'immunity' || eff.type === 'stealth' || eff.type === 'buff';
                           const turns = eff.duration ?? eff.turnsLeft ?? 1;
                           const label = eff.name || meta?.label || eff.type;
                           const icon = eff.icon || meta?.icon || (isBuff ? '✨' : '💀');
@@ -4181,93 +4269,13 @@ export const ArenaScreen: React.FC = () => {
                 </div>
               </div>
             ) : (
-              /* ── 🛡️ 하단 전술 버프 현황판: 리더 가호 + 3인 진형 시너지 + 백과사전 도감 버프 ── */
-              <div className="panel p-2 rounded-xl bg-[#090e1a]/95 border border-[#1a253a] flex flex-col gap-1.5 shadow-xl">
-                {/* 상단 타이틀 & 모드 인디케이터 */}
-                <div className="flex items-center justify-between text-[10px] pb-1 border-b border-[#162032]">
-                  <span className="font-bold text-[#cfd8e8] flex items-center gap-1">
-                    <span>⚡</span> <span>아군 전술 강화 현황</span>
-                  </span>
-                  <span className="text-[#38ef7d] font-mono flex items-center gap-1 text-[9px] animate-pulse">
-                    <span>{isAuto ? '▶️ 자동 콤보 연계' : '⏸️ 상대 행동 중'}</span>
-                  </span>
-                </div>
-
-                {/* 1. 👑 리더의 가호 (영령 버프) 상세 */}
-                <div className="p-1.5 rounded-lg bg-[#141006] border border-[#ffb30033] flex items-start justify-between gap-1 text-[9.5px]">
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="text-sm shrink-0">👑</span>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1">
-                        <span className="font-bold text-[#ffd54f] truncate">
-                          {playerLeader ? `${playerLeader.name}의 가호` : '리더 미배치'}
-                        </span>
-                        {playerLeader && (
-                          <span className="text-[8px] px-1 py-0.1 rounded bg-[#ffd54f22] text-[#ffe082] font-mono">
-                            [{playerLeader.grade.toUpperCase()}]
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-[8.5px] text-[#ffecb3] truncate mt-0.5">
-                        {playerLeaderBlessing ? playerLeaderBlessing.description : '선대 영령의 영구 가호 효과 발동 중'}
-                      </div>
-                    </div>
-                  </div>
-                  {playerLeaderBlessing && (
-                    <div className="flex items-center gap-1 shrink-0 text-[8.5px] font-mono text-[#ffd54f]">
-                      {playerLeaderBlessing.buffs?.atkBonus && <span>공+{Math.round((playerLeaderBlessing.buffs.atkBonus - 1) * 100)}%</span>}
-                      {playerLeaderBlessing.buffs?.defBonus && <span>방+{Math.round((playerLeaderBlessing.buffs.defBonus - 1) * 100)}%</span>}
-                      {playerLeaderBlessing.buffs?.allStatsBonus && <span>올+{Math.round((playerLeaderBlessing.buffs.allStatsBonus - 1) * 100)}%</span>}
-                    </div>
-                  )}
-                </div>
-
-                {/* 2. ⚔️ 진형 & 클래스 활성 시너지 뱃지 */}
-                <div className="p-1.5 rounded-lg bg-[#071322] border border-[#00d2ff26] flex flex-col gap-1 text-[9px]">
-                  <div className="flex items-center justify-between text-[#80deea]">
-                    <span className="font-bold flex items-center gap-1">
-                      <span>⚔️</span> <span>실시간 진형 시너지</span>
-                    </span>
-                    <span className="text-[8px] font-mono text-[#4dd0e1]">
-                      {activePartySynergies.length}개 활성
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 flex-wrap">
-                    {activePartySynergies.length > 0 ? (
-                      activePartySynergies.map(syn => (
-                        <span
-                          key={syn.id}
-                          className="px-1.5 py-0.5 rounded-md bg-[#00d2ff18] text-[#00e5ff] border border-[#00d2ff44] text-[8.5px] font-bold flex items-center gap-0.5"
-                          title={syn.description}
-                        >
-                          <span>{syn.icon}</span>
-                          <span>{syn.name}</span>
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-[8.5px] text-[#607d8b]">활성화된 진형 시너지 없음</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* 3. 📜 심연의 백과 도감 영구 버프 스탯 */}
-                <div className="p-1.5 rounded-lg bg-[#0e0c1a] border border-[#9c27b033] flex items-center justify-between text-[9px]">
-                  <div className="flex items-center gap-1 text-[#ba68c8]">
-                    <span>📜</span>
-                    <span className="font-bold">심연의 백과 영구 보너스</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-[8.5px] font-mono text-[#e1bee7] flex-wrap justify-end">
-                    {codexBonus.allStatsBonus && codexBonus.allStatsBonus > 0 && <span className="bg-[#4a148c33] px-1 rounded text-[#00d2ff]">전능+{codexBonus.allStatsBonus}</span>}
-                    {codexBonus.atk > 0 && <span className="bg-[#4a148c33] px-1 rounded">공+{codexBonus.atk}</span>}
-                    {codexBonus.def > 0 && <span className="bg-[#4a148c33] px-1 rounded">방+{codexBonus.def}</span>}
-                    {codexBonus.hp > 0 && <span className="bg-[#4a148c33] px-1 rounded">체+{codexBonus.hp}</span>}
-                    {codexBonus.critRate > 0 && <span className="bg-[#4a148c33] px-1 rounded text-[#ffd54f]">치명+{codexBonus.critRate}%</span>}
-                    {codexBonus.dmgReduction > 0 && <span className="bg-[#4a148c33] px-1 rounded text-[#80deea]">경감+{codexBonus.dmgReduction}%</span>}
-                    {codexBonus.atk === 0 && codexBonus.def === 0 && codexBonus.hp === 0 && (!codexBonus.allStatsBonus || codexBonus.allStatsBonus === 0) && (
-                      <span className="text-[8px] text-[#8b9bb4]">도감 수집 시 영구 반영</span>
-                    )}
-                  </div>
-                </div>
+              <div className="panel px-3 py-1.5 rounded-xl bg-[#090e1a]/85 border border-[#1a253a]/80 flex items-center justify-between text-[10px] shadow-md">
+                <span className="text-[#8b9bb4] flex items-center gap-1.5 font-medium">
+                  <span className="animate-spin">⚔️</span> <span>차원 결투 진행 중</span>
+                </span>
+                <span className="text-[#38ef7d] font-mono flex items-center gap-1 text-[9px] font-bold">
+                  <span>{isAuto ? '▶️ 자동 전투 연계' : '⏸️ 상대 행동 중'}</span>
+                </span>
               </div>
             )}
           </div>
