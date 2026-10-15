@@ -17,8 +17,8 @@
       "wood": 150
     }
   },
-  "version": 10,
-  "updatedAt": 1791975564453,
+  "version": 13,
+  "updatedAt": 1792037759948,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -33,19 +33,17 @@
       "manaCost": 56
     },
     "apprentice_mana_burst": {
-      "power": 1.4
+      "power": 1.2
     },
     "assassin_execution": {
-      "power": 1.6,
-      "cooldown": 5
+      "power": 1.6
     },
     "ber_berserk_crush": {
-      "cooldown": 5,
+      "cooldown": 4,
       "manaCost": 66
     },
     "ber_rampage": {
-      "power": 0.5,
-      "cooldown": 2
+      "power": 0.5
     },
     "calamity_arcane_storm": {
       "manaCost": 92
@@ -55,13 +53,11 @@
     },
     "duel_blade_waltz": {
       "manaCost": 72,
-      "power": 1.2,
-      "cooldown": 4
+      "power": 1.2
     },
     "duel_flurry": {
       "manaCost": 55,
-      "power": 1.4,
-      "cooldown": 3
+      "power": 1.4
     },
     "elem_blizzard": {
       "manaCost": 72
@@ -76,15 +72,14 @@
       "manaCost": 45
     },
     "gun_flashbang": {
-      "manaCost": 16
+      "manaCost": 36
     },
     "gun_rapid_fire": {
       "cooldown": 2,
-      "manaCost": 8,
-      "power": 1.2
+      "manaCost": 18
     },
     "phantom_teleport": {
-      "manaCost": 60,
+      "manaCost": 80,
       "power": 2.4
     },
     "saint_blessing": {
@@ -106,65 +101,6 @@
     },
     "val_ultimate": {
       "power": 2.5
-    },
-    "valk_spear": {
-      "manaCost": 38,
-      "power": 2.5
-    },
-    "valk_divine_shield": {
-      "manaCost": 42
-    },
-    "valk_ultimate": {
-      "manaCost": 65,
-      "cooldown": 4
-    },
-    "phantom_ultimate": {
-      "cooldown": 5,
-      "power": 1.8
-    },
-    "dancer_thousand_cuts": {
-      "manaCost": 58,
-      "power": 2.6,
-      "cooldown": 3
-    },
-    "void_phantom_flicker": {
-      "manaCost": 65
-    },
-    "apprentice_bolt": {
-      "cooldown": 2
-    },
-    "van_frenzy_strike": {
-      "cooldown": 3
-    },
-    "van_cleave": {
-      "cooldown": 2
-    },
-    "ber_blood_rend": {
-      "cooldown": 2
-    },
-    "val_immortal_roar": {
-      "cooldown": 4
-    },
-    "warlord_overwhelm": {
-      "power": 1.4
-    },
-    "marshal_phalanx_crush": {
-      "cooldown": 3
-    },
-    "sharp_headshot": {
-      "cooldown": 3
-    },
-    "sharp_abyssal_bullet": {
-      "cooldown": 5
-    },
-    "gun_hyper_cannon": {
-      "cooldown": 4
-    },
-    "gun_orbital_strike": {
-      "cooldown": 6
-    },
-    "sniper_ultimate": {
-      "cooldown": 5
     }
   },
   "classBaseStats": {
@@ -1619,12 +1555,137 @@
     }
   },
   "balance": {
-    "itemDropRateMultiplier": 0.2
+    "itemDropRateMultiplier": 0.7
   },
   "nemesis": {
     "atk": 500,
     "def": 800,
     "luck": 480,
-    "spd": 45
+    "spd": 45,
+    "maxHp": 34700000,
+    "parts": {
+      "head": {
+        "id": "head",
+        "name": "네메시스 머리",
+        "position": "front",
+        "archetype": "발할라 워로드 (Valhalla Warlord)",
+        "maxHp": 11600000,
+        "atk": 925,
+        "def": 1350,
+        "spd": 140,
+        "luck": 250,
+        "icon": "💥",
+        "desc": "압도적인 물리 강타와 진동 파쇄를 시전하는 전열의 파멸 머리",
+        "skills": [
+          {
+            "id": "nemesis_head_cleave",
+            "name": "파멸의 쇄도",
+            "desc": "전열 대상에게 145% 물리 충격 관통 피해",
+            "power": 1.45,
+            "target": "front",
+            "icon": "⚡"
+          },
+          {
+            "id": "nemesis_head_roar",
+            "name": "종말의 포효",
+            "desc": "아군 전체에게 125% 광역 물리 피해 및 2턴간 방어력 25% 파쇄",
+            "power": 1.25,
+            "target": "all",
+            "effectType": "debuff",
+            "icon": "📢"
+          },
+          {
+            "id": "nemesis_head_cataclysm",
+            "name": "피의 궤멸격",
+            "desc": "아군 전체에게 160% 궤멸 피해 및 2턴간 치명적인 출혈 부여",
+            "power": 1.6,
+            "target": "all",
+            "effectType": "damage",
+            "icon": "🩸"
+          }
+        ]
+      },
+      "body": {
+        "id": "body",
+        "name": "네메시스 몸통",
+        "position": "mid",
+        "archetype": "크로노 아콘 (Chrono Archon)",
+        "maxHp": 12100000,
+        "atk": 595,
+        "def": 645,
+        "spd": 110,
+        "luck": 200,
+        "icon": "🌀",
+        "desc": "시공간 조작과 광역 군중 제어(CC)를 담당하는 중심 몸통",
+        "skills": [
+          {
+            "id": "nemesis_body_timewarp",
+            "name": "시간 왜곡 파동",
+            "desc": "아군 전체에게 110% 마법 피해 및 2턴간 행동 속도 30% 감속",
+            "power": 1.8,
+            "target": "all",
+            "effectType": "debuff",
+            "icon": "⏳"
+          },
+          {
+            "id": "nemesis_body_stasis",
+            "name": "시공 정지 역장",
+            "desc": "단일 대상에게 130% 마법 피해 및 1턴간 행동 불능(스턴) 부여",
+            "power": 2.3,
+            "target": "single",
+            "effectType": "debuff",
+            "icon": "🛑"
+          },
+          {
+            "id": "nemesis_body_voiddrain",
+            "name": "공허 침식 폭풍",
+            "desc": "아군 전체에게 120% 마법 피해 및 마나 20 강탈",
+            "power": 1.8,
+            "target": "all",
+            "effectType": "drain",
+            "icon": "🌌"
+          }
+        ]
+      },
+      "tail": {
+        "id": "tail",
+        "name": "네메시스 꼬리",
+        "position": "back",
+        "archetype": "오메가 데드아이 / 레인저 (Omega Deadeye)",
+        "maxHp": 11000000,
+        "atk": 840,
+        "def": 935,
+        "spd": 250,
+        "luck": 450,
+        "icon": "🎯",
+        "desc": "신속한 광역 휩쓸기와 급소 원샷원킬을 노리는 후열의 치명 꼬리",
+        "skills": [
+          {
+            "id": "nemesis_tail_sweep",
+            "name": "차원 꼬리 휩쓸기",
+            "desc": "아군 전열/중열을 쓸어버리는 135% 광역 물리 피해",
+            "power": 1.85,
+            "target": "front",
+            "icon": "🌪️"
+          },
+          {
+            "id": "nemesis_tail_stinger",
+            "name": "절멸의 종말 침",
+            "desc": "단일 대상을 궤도 저격하여 280% 초치명타 관통 피해 (원샷원킬)",
+            "power": 2.8,
+            "target": "single",
+            "icon": "🎯"
+          },
+          {
+            "id": "nemesis_tail_dimension_slash",
+            "name": "시공 분열 연타",
+            "desc": "아군 전체에게 140% 방어 무시 광역 관통타",
+            "power": 1.8,
+            "target": "all",
+            "icon": "🗡️"
+          }
+        ]
+      }
+    }
   }
 }

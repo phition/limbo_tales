@@ -147,10 +147,10 @@ const DUNGEON_TRAPS: DungeonTrapDef[] = [
 /** 층별 1~5인 마물 편대 생성기 */
 function generateMonsterSquad(floor: number, isOvercharged: boolean = false, currentDanger: number = 0): MonsterData[] {
   if (floor === 11) {
-    // 🌌 무간도: 1~10층의 모든 몬스터가 정예 + 광폭화 상태로 출현, 시작 레벨 20, 100위험도마다 레벨 +5
+    // 🌌 무간도: 1~10층의 모든 몬스터가 정예 + 광폭화 상태로 출현, 시작 레벨 50, 100위험도마다 레벨 +5.5 (최대 Lv.600)
     const pool = FLOOR_MONSTER_POOL[11] || FLOOR_MONSTER_POOL[10];
     const dangerBracket = Math.floor(currentDanger / 100);
-    const scaledLevel = 20 + dangerBracket * 5;
+    const scaledLevel = Math.min(600, Math.round(50 + dangerBracket * 5.5));
     const statMult = 2.4 * (1 + dangerBracket * 0.05);
     const count = Math.floor(Math.random() * 3) + 3; // 3~5마리
 
@@ -320,7 +320,7 @@ function generateBossSquad(floor: number, isOvercharged: boolean = false, curren
     const baseBoss = MONSTERS[bossKey] || MONSTERS['boss_floor_10'];
     const bossData: MonsterData = JSON.parse(JSON.stringify(baseBoss));
     bossData.type = 'boss';
-    bossData.level = isTrueFinalBoss ? 520 : (20 + dangerBracket * 5);
+    bossData.level = isTrueFinalBoss ? 600 : Math.min(600, Math.round(50 + dangerBracket * 5.5));
     const bossStatMult = isTrueFinalBoss ? (isOvercharged ? 2.0 : 1.0) : (2.8 * (1 + dangerBracket * 0.06));
     const floorStatMult = 1 + (11 - 1) * 0.20; // 🌟 B안: 11층 3.0x 누적 가산
 
@@ -889,9 +889,9 @@ export const ExplorationScreen: React.FC = () => {
       setBossWarning(mainBoss.name);
 
       if (isTrueFinal) {
-        gm.addLog(`👑 [위험도 10,000 극한 도달!] 무간도의 심연 속에서 진 최종 보스 [${mainBoss.name}]이(가) 강림했습니다!`, 'danger');
+        gm.addLog(`👑 [위험도 10,000 극한 도달!] 무간도의 심연 속에서 진 최종 보스 [${mainBoss.name}]이(가) 강림했습니다! (Lv.600)`, 'danger');
       } else if (isAvici) {
-        gm.addLog(`💀 [무간도 위험도 ${Math.floor(newDanger / 100) * 100} 돌파!] 심연의 억겁이 심화되며 [${mainBoss.name}] 편대가 출현했습니다! (몬스터 Lv.${20 + Math.floor(newDanger / 100) * 5})`, 'danger');
+        gm.addLog(`💀 [무간도 위험도 ${Math.floor(newDanger / 100) * 100} 돌파!] 심연의 억겁이 심화되며 [${mainBoss.name}] 편대가 출현했습니다! (몬스터 Lv.${Math.min(600, Math.round(50 + Math.floor(newDanger / 100) * 5.5))})`, 'danger');
       } else {
         gm.addLog(`💀 [위험도 100.00%] 심연의 위기가 극한에 달했습니다! [${mainBoss.name}]과 호위군 출현!`, 'danger');
       }

@@ -905,7 +905,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     name: '무간의 지배자 아르케오스 (진 최종 보스)',
     type: 'boss',
     faction: 'corrupted',
-    level: 520,
+    level: 600,
     maxHp: 45000,
     atk: 1250,
     def: 680,

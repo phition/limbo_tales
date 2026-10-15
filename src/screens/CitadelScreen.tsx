@@ -12367,7 +12367,7 @@ const FLOOR_DESCS_I18N: Record<string, string[]> = {
     '예상 보상: 단죄의 강철, 신성 에테르 룬, 순수 접두석 (몬스터 Lv.19~21)',
     '예상 보상: 환영의 거울 파편, 시공간 공허정수, 순수 접미석 (몬스터 Lv.22~25)',
     '★ 최종 결전: 신화급 장비, 궁극의 심연 정수, 대량 골드 & 에테르 (보스 Lv.28)',
-    '★ 초월 엔드 컨텐츠: 정예 광폭화 마물 군단, 위험도 10,000 돌파, 진 최종 보스 토벌 (몹 Lv.20~520)'
+    '★ 초월 엔드 컨텐츠: 정예 광폭화 마물 군단, 위험도 10,000 돌파, 진 최종 보스 토벌 (몹 Lv.50~600)'
   ],
   en: [
     'Expected: Gold, Food, Herbs, Leather, Common Prefix Stone (Lv.1~3)',
@@ -12380,7 +12380,7 @@ const FLOOR_DESCS_I18N: Record<string, string[]> = {
     'Expected: Condemnation Steel, Holy Ether Rune, Pure Prefix Stone (Lv.19~21)',
     'Expected: Mirror Phantom Shards, Spacetime Void Essence, Pure Suffix Stone (Lv.22~25)',
     '★ Final Battle: Mythic Gear, Ultimate Abyss Essence, Massive Gold & Ether (Boss Lv.28)',
-    '★ Transcendence Endgame: Enraged Elite Demons, Hazard 10,000+, True Final Boss (Lv.20~520)'
+    '★ Transcendence Endgame: Enraged Elite Demons, Hazard 10,000+, True Final Boss (Lv.50~600)'
   ],
   ja: [
     '予想報酬: ゴールド, 食糧, 薬草, 革, 一般接頭石 (Lv.1~3)',
@@ -12393,7 +12393,7 @@ const FLOOR_DESCS_I18N: Record<string, string[]> = {
     '予想報酬: 断罪の鋼, 神聖エーテルルーン, 純粋接頭石 (Lv.19~21)',
     '予想報酬: 幻影の鏡破片, 時空虚無エッセンス, 純粋接尾石 (Lv.22~25)',
     '★ 最終決戦: 神話級装備, 究極の深淵エッセンス, 大量ゴールド＆エーテル (ボス Lv.28)',
-    '★ 超越エンドコンテンツ: 精鋭暴走魔物軍団, 危険度10,000突破, 真の最終ボス討伐 (Lv.20~520)'
+    '★ 超越エンドコンテンツ: 精鋭暴走魔物軍団, 危険度10,000突破, 真の最終ボス討伐 (Lv.50~600)'
   ]
 };
 
@@ -13300,7 +13300,7 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                       </div>
                       <div className="text-[10px] text-[#cfd8dc] mt-0.5">
                         {isUnlocked
-                          ? `초월 엔드 컨텐츠: 1,000 위험도 단위 세부 진입로 개방 (현재 해금: 무간도 1~${gm.unlockedAviciTier || 1}계층 / 몹 Lv.20~520)`
+                          ? `초월 엔드 컨텐츠: 1,000 위험도 단위 세부 진입로 개방 (현재 해금: 무간도 1~${gm.unlockedAviciTier || 1}계층 / 몹 Lv.50~600)`
                           : ('10층 보스 아스모데우스를 토벌해야 무간도 진입로가 영구 해금됩니다.')}
                       </div>
                     </div>
@@ -13320,7 +13320,7 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                           const tierUnlocked = tier <= (gm.unlockedAviciTier || 1);
                           const startDanger = tier === 1 ? 0 : (tier - 1) * 1000 + 1;
                           const reqDanger = (tier - 1) * 1000;
-                          const startLv = 20 + Math.floor(startDanger / 100) * 5;
+                          const startLv = Math.min(600, Math.round(50 + Math.floor(startDanger / 100) * 5.5));
                           return (
                             <button
                               key={tier}
