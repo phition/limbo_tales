@@ -12,6 +12,8 @@
  *  - JSON 프리셋 내보내기/가져오기 및 IndexedDB 영속화
  */
 
+import { NPC_NAME_TO_ID, NPC_ID_TO_NAME } from '../data/npcs';
+
 export interface SpriteSheetConfig {
   cols: number;
   rows: number;
@@ -31,6 +33,7 @@ export interface AssetConfigData {
   monsterOverrides: Record<string, string>;
   monsterVideoOverrides: Record<string, string>;
   mercenaryOverrides: Record<string, string>;
+  npcOverrides?: Record<string, string>;
   version: number;
 }
 
@@ -58,6 +61,7 @@ export class CustomAssetService {
     monsterOverrides: {},
     monsterVideoOverrides: {},
     mercenaryOverrides: {},
+    npcOverrides: {},
     version: 1,
   };
 
@@ -98,6 +102,10 @@ export class CustomAssetService {
 
   public static getMercenaryOverride(idOrClass: string): string | undefined {
     return CustomAssetService.getInstance().getMercenaryOverride(idOrClass);
+  }
+
+  public static getNpcOverride(nameOrId: string): string | undefined {
+    return CustomAssetService.getInstance().getNpcOverride(nameOrId);
   }
 
   // ── 이벤트 리스너 ──────────────────────────────────────────────────────────
@@ -264,6 +272,7 @@ export class CustomAssetService {
         monsterOverrides: mergedMonsterOverrides,
         monsterVideoOverrides: { ...(staticPreset.monsterVideoOverrides || {}), ...(saved?.monsterVideoOverrides || {}) },
         mercenaryOverrides: { ...(staticPreset.mercenaryOverrides || {}), ...(saved?.mercenaryOverrides || {}) },
+        npcOverrides: { ...(staticPreset.npcOverrides || {}), ...(saved?.npcOverrides || {}) },
         version: Math.max(saved?.version || 1, staticPreset.version || 1),
       };
     } catch (err) {
@@ -439,6 +448,34 @@ export class CustomAssetService {
     return this.config.mercenaryOverrides[classIdOrKey];
   }
 
+  public getNpcOverride(nameOrId: string): string | undefined {
+    if (!nameOrId) return undefined;
+    const overrides = this.config.npcOverrides;
+    if (!overrides) return undefined;
+
+    // 1. 직접 키 일치 (e.g. 'npc_lloyd' or '선봉대장 로이드')
+    if (overrides[nameOrId]) return overrides[nameOrId];
+
+    // 2. 한국어 NPC 이름 -> 영문 id 변환 조회
+    const mappedId = NPC_NAME_TO_ID[nameOrId];
+    if (mappedId && overrides[mappedId]) return overrides[mappedId];
+
+    // 3. 영문 id -> 한국어 NPC 이름 변환 조회
+    const mappedName = NPC_ID_TO_NAME[nameOrId];
+    if (mappedName && overrides[mappedName]) return overrides[mappedName];
+
+    // 4. 'npc_' 접두사 유무 상호 호환 조회
+    if (nameOrId.startsWith('npc_')) {
+      const stripped = nameOrId.replace(/^npc_/, '');
+      if (overrides[stripped]) return overrides[stripped];
+    } else {
+      const prefixed = `npc_${nameOrId}`;
+      if (overrides[prefixed]) return overrides[prefixed];
+    }
+
+    return undefined;
+  }
+
   public getAllConfig(): AssetConfigData {
     return JSON.parse(JSON.stringify(this.config));
   }
@@ -553,6 +590,29 @@ export class CustomAssetService {
     this.saveToStorage();
   }
 
+  public setNpcOverride(nameOrId: string, urlOrDataUri: string | null): void {
+    if (!nameOrId) return;
+    if (!this.config.npcOverrides) {
+      this.config.npcOverrides = {};
+    }
+
+    const mappedId = NPC_NAME_TO_ID[nameOrId];
+    const mappedName = NPC_ID_TO_NAME[nameOrId];
+
+    if (!urlOrDataUri) {
+      delete this.config.npcOverrides[nameOrId];
+      if (mappedId) delete this.config.npcOverrides[mappedId];
+      if (mappedName) delete this.config.npcOverrides[mappedName];
+    } else {
+      const val = urlOrDataUri.trim();
+      this.config.npcOverrides[nameOrId] = val;
+      // name과 id 둘 다 동기화 저장하여 조회 시 0ms 즉시 보장
+      if (mappedId) this.config.npcOverrides[mappedId] = val;
+      if (mappedName) this.config.npcOverrides[mappedName] = val;
+    }
+    this.saveToStorage();
+  }
+
   public resetToDefaults(): void {
     this.config = {
       pureEmojiMode: false,
@@ -566,6 +626,7 @@ export class CustomAssetService {
       monsterOverrides: {},
       monsterVideoOverrides: {},
       mercenaryOverrides: {},
+      npcOverrides: {},
       version: 1,
     };
     this.saveToStorage();
@@ -592,6 +653,7 @@ export class CustomAssetService {
         monsterOverrides: parsed.monsterOverrides || {},
         monsterVideoOverrides: parsed.monsterVideoOverrides || {},
         mercenaryOverrides: parsed.mercenaryOverrides || {},
+        npcOverrides: parsed.npcOverrides || {},
         version: (this.config.version || 1) + 1,
       };
       this.saveToStorage();

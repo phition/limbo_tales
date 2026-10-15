@@ -6,6 +6,7 @@ import { SoundManager, SoundEffectType, BgmTrack } from '../managers/SoundManage
 import { BattleVFXOverlay, VFXEvent, VFXType, detectSpriteSheetDimensions } from './BattleVFXOverlay';
 import { CHARACTER_CLASSES } from '../data/classes';
 import { MONSTERS } from '../data/monsters';
+import { EPIC_STORY_NPCS, NPC_ID_TO_NAME, NpcDefinition } from '../data/npcs';
 import { getVfxAssociatedSfx } from '../utils/skillComboUtils';
 
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
   onClose: () => void;
 }
 
-type StudioTab = 'overview' | 'icons' | 'vfx' | 'dungeon' | 'monsters' | 'mercenaries' | 'bgm' | 'sfx';
+type StudioTab = 'overview' | 'icons' | 'vfx' | 'dungeon' | 'monsters' | 'mercenaries' | 'npc' | 'bgm' | 'sfx';
 type IconCategory = 'all' | 'skills' | 'monster_skills' | 'resources' | 'status' | 'forge' | 'boss_equip' | 'buildings' | 'supplies' | 'events' | 'badges';
 
 // 👑 직업 궁극기 및 마도서 미보유 고유 특수기 목록
@@ -189,6 +190,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [monsterFilter, setMonsterFilter] = useState<'all' | 'boss' | 'normal'>('all');
   const [mercenaryFilter, setMercenaryFilter] = useState<'all' | '0' | '1' | '2'>('all');
+  const [npcCategoryFilter, setNpcCategoryFilter] = useState<'all' | 'citadel' | 'scenario' | 'abyss'>('all');
   const [config, setConfig] = useState<AssetConfigData>(() => CustomAssetService.getInstance().getAllConfig());
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [pendingChangeCount, setPendingChangeCount] = useState(0);
@@ -201,7 +203,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [targetUploadKey, setTargetUploadKey] = useState<{
-    type: 'icon' | 'vfx' | 'dungeon' | 'monster' | 'monster_video' | 'mercenary' | 'bgm' | 'sfx';
+    type: 'icon' | 'vfx' | 'dungeon' | 'monster' | 'monster_video' | 'mercenary' | 'npc' | 'bgm' | 'sfx';
     key: string;
   } | null>(null);
 
@@ -318,7 +320,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
     setEditingVfxConfig(null);
   };
 
-  type UploadType = 'icon' | 'vfx' | 'dungeon' | 'monster' | 'monster_video' | 'mercenary' | 'bgm' | 'sfx';
+  type UploadType = 'icon' | 'vfx' | 'dungeon' | 'monster' | 'monster_video' | 'mercenary' | 'npc' | 'bgm' | 'sfx';
 
   const openFilePicker = (type: UploadType, key: string, accept: string) => {
     if (fileInputRef.current) {
@@ -444,6 +446,19 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
         setHasUnsavedChanges(true);
         setPendingChangeCount(c => c + 1);
         showToast(`⚔️ [${targetUploadKey.key}] 용병 일러스트 대기 중! [프리셋 즉시 저장]을 누르면 적용됩니다.`);
+      } else if (targetUploadKey.type === 'npc') {
+        const mappedName = NPC_ID_TO_NAME[targetUploadKey.key] || targetUploadKey.key;
+        setConfig(prev => ({
+          ...prev,
+          npcOverrides: {
+            ...(prev.npcOverrides || {}),
+            [targetUploadKey.key]: dataUrl,
+            [mappedName]: dataUrl,
+          }
+        }));
+        setHasUnsavedChanges(true);
+        setPendingChangeCount(c => c + 1);
+        showToast(`👑 [${mappedName}] 서사 NPC 포트레이트 대기 중! [프리셋 즉시 저장]을 누르면 적용됩니다.`);
       } else if (targetUploadKey.type === 'bgm') {
         setConfig(prev => ({
           ...prev,
@@ -557,6 +572,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
         monsterOverrides: {},
         monsterVideoOverrides: {},
         mercenaryOverrides: {},
+        npcOverrides: {},
         version: (config.version || 1) + 1,
       });
       setHasUnsavedChanges(true);
@@ -624,6 +640,22 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       return cls.name.toLowerCase().includes(q) || cls.id.toLowerCase().includes(q) || (cls.role && cls.role.toLowerCase().includes(q));
+    }
+    return true;
+  });
+
+  // 서사 NPC 목록 필터링
+  const filteredNpcList = EPIC_STORY_NPCS.filter(npc => {
+    if (npcCategoryFilter !== 'all' && npc.category !== npcCategoryFilter) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      return (
+        npc.name.toLowerCase().includes(q) ||
+        npc.id.toLowerCase().includes(q) ||
+        npc.role.toLowerCase().includes(q) ||
+        (npc.description && npc.description.toLowerCase().includes(q)) ||
+        (npc.questSource && npc.questSource.toLowerCase().includes(q))
+      );
     }
     return true;
   });
@@ -719,6 +751,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
             { key: 'dungeon', icon: '🌀', label: `던전 배경 (${Object.keys(config.dungeonFloorOverrides || {}).length > 0 ? `커스텀 ${Object.keys(config.dungeonFloorOverrides || {}).length}` : '기본'})` },
             { key: 'monsters', icon: '👾', label: `몬스터/보스 미디어 (${Object.keys(config.monsterOverrides || {}).length + Object.keys(config.monsterVideoOverrides || {}).length > 0 ? `커스텀` : '기본'})` },
             { key: 'mercenaries', icon: '⚔️', label: `용병 일러스트 (${Object.keys(config.mercenaryOverrides || {}).length > 0 ? `커스텀 ${Object.keys(config.mercenaryOverrides || {}).length}` : '기본'})` },
+            { key: 'npc', icon: '👑', label: `서사 NPC (${Object.keys(config.npcOverrides || {}).length > 0 ? `커스텀 ${Object.keys(config.npcOverrides || {}).length}` : '기본'})` },
             { key: 'bgm', icon: '🎵', label: `BGM 음악` },
             { key: 'sfx', icon: '🔊', label: `SFX 효과음` },
           ].map(tab => (
@@ -1635,7 +1668,171 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
             </div>
           )}
 
-          {/* ════ 7. 🎵 BGM 배경음악 커스텀 탭 ════ */}
+          {/* ════ 7. 👑 서사 NPC (에픽 스토리) 커스텀 탭 ════ */}
+          {activeTab === 'npc' && (
+            <div className="flex flex-col gap-3 animate-fade-in">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {[
+                    { key: 'all', label: `전체 (${EPIC_STORY_NPCS.length})` },
+                    { key: 'citadel', label: '🏰 방주 성채' },
+                    { key: 'scenario', label: '⚔️ 시나리오 인물' },
+                    { key: 'abyss', label: '🌌 심연/초월' },
+                  ].map(f => (
+                    <button
+                      key={f.key}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        npcCategoryFilter === f.key
+                          ? 'bg-[#e040fb] text-black shadow-md'
+                          : 'bg-[#141b2c] text-[#8b9bb4] hover:text-white hover:bg-[#1f2b42]'
+                      }`}
+                      onClick={() => setNpcCategoryFilter(f.key as any)}
+                    >
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  placeholder="NPC 이름/직책/서사 검색..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-[#141b2c] border border-[#273650] text-xs px-3 py-1.5 rounded-lg text-white placeholder-[#546e7a] w-full sm:w-48 focus:outline-none focus:border-[#e040fb]"
+                />
+              </div>
+
+              <div className="text-xs text-[#8b9bb4] bg-[#0b101c] px-3 py-2 rounded-xl border border-[#1b263b] flex items-center justify-between">
+                <span>💡 에픽 퀘스트 완료 시 대화 서사창에 등장하는 NPC 초상화/아바타를 커스텀할 수 있습니다. (권장: 256x256 정사각형 PNG/JPG/WebP/GIF 또는 이모지)</span>
+                <span className="text-[11px] text-[#e040fb] font-mono shrink-0 ml-2">검색 결과: {filteredNpcList.length}명</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[55vh] overflow-y-auto pr-1">
+                {filteredNpcList.map(npc => {
+                  const overrideAvatar = config.npcOverrides?.[npc.id] || config.npcOverrides?.[npc.name];
+                  const isImage = overrideAvatar && (
+                    overrideAvatar.startsWith('data:') ||
+                    overrideAvatar.startsWith('http://') ||
+                    overrideAvatar.startsWith('https://') ||
+                    overrideAvatar.startsWith('/') ||
+                    overrideAvatar.startsWith('assets/') ||
+                    overrideAvatar.includes('.png') ||
+                    overrideAvatar.includes('.jpg') ||
+                    overrideAvatar.includes('.jpeg') ||
+                    overrideAvatar.includes('.webp') ||
+                    overrideAvatar.includes('.gif')
+                  );
+
+                  return (
+                    <div
+                      key={npc.id}
+                      className={`p-3 rounded-xl bg-[#111828] border ${
+                        overrideAvatar ? 'border-[#e040fb66] bg-[#1a1226]' : 'border-[#1f2d48]'
+                      } flex items-center justify-between gap-3 text-xs`}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                        <div className="w-12 h-12 rounded-xl bg-[#070b14] border border-[#23314d] flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
+                          {isImage ? (
+                            <img src={overrideAvatar} alt={npc.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-2xl">{overrideAvatar || npc.defaultAvatar}</span>
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="font-bold text-white flex items-center gap-1.5 truncate">
+                            <span>{npc.name}</span>
+                            {overrideAvatar && (
+                              <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#e040fb22] text-[#e040fb] border border-[#e040fb44]">
+                                {isImage ? '이미지' : '이모지'}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
+                            <span className="text-[#00d2ff] font-mono font-bold">{npc.role}</span>
+                            <span className="text-[#546e7a]"> • {npc.categoryLabel}</span>
+                          </div>
+                          <div className="text-[9px] text-[#718096] truncate mt-0.5" title={npc.description}>
+                            {npc.description}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          className="btn btn-ghost text-[10px] px-2 py-1.5 border border-[#4a245e] text-[#e040fb] hover:bg-[#e040fb1a]"
+                          title="NPC 포트레이트 이미지 파일 업로드"
+                          onClick={() => {
+                            openFilePicker('npc', npc.id, 'image/png,image/jpeg,image/webp,image/gif');
+                          }}
+                        >
+                          📁 사진
+                        </button>
+                        <button
+                          className="btn btn-ghost text-[10px] px-2 py-1.5 border border-[#ffd54f55] text-[#ffd54f] hover:bg-[#ffd54f1f]"
+                          title="이모지 또는 외부 이미지 URL 직접 입력"
+                          onClick={() => {
+                            const cur = overrideAvatar || npc.defaultAvatar;
+                            const input = window.prompt(
+                              `[${npc.name}] 포트레이트로 사용할 이모지 또는 이미지 URL을 입력하세요:\n(예: 👑, 🛡️, https://.../portrait.png)`,
+                              cur
+                            );
+                            if (input !== null) {
+                              const trimmed = input.trim();
+                              if (!trimmed) {
+                                setConfig(prev => {
+                                  const next = { ...(prev.npcOverrides || {}) };
+                                  delete next[npc.id];
+                                  delete next[npc.name];
+                                  return { ...prev, npcOverrides: next };
+                                });
+                                setHasUnsavedChanges(true);
+                                setPendingChangeCount(c => c + 1);
+                                showToast(`🔄 [${npc.name}] 기본 아바타로 복원되었습니다.`);
+                              } else {
+                                setConfig(prev => ({
+                                  ...prev,
+                                  npcOverrides: {
+                                    ...(prev.npcOverrides || {}),
+                                    [npc.id]: trimmed,
+                                    [npc.name]: trimmed,
+                                  }
+                                }));
+                                setHasUnsavedChanges(true);
+                                setPendingChangeCount(c => c + 1);
+                                showToast(`👑 [${npc.name}] 커스텀 포트레이트 대기 중! [프리셋 즉시 저장]을 누르면 적용됩니다.`);
+                              }
+                            }
+                          }}
+                        >
+                          ✏️ 입력
+                        </button>
+                        {overrideAvatar && (
+                          <button
+                            className="btn btn-danger text-[10px] px-2 py-1.5"
+                            title="기본값으로 복원"
+                            onClick={() => {
+                              setConfig(prev => {
+                                const next = { ...(prev.npcOverrides || {}) };
+                                delete next[npc.id];
+                                delete next[npc.name];
+                                return { ...prev, npcOverrides: next };
+                              });
+                              setHasUnsavedChanges(true);
+                              setPendingChangeCount(c => c + 1);
+                              showToast(`🔄 [${npc.name}] 포트레이트 복원 대기 중. [프리셋 즉시 저장] 시 적용됩니다.`);
+                            }}
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ════ 8. 🎵 BGM 배경음악 커스텀 탭 ════ */}
           {activeTab === 'bgm' && (
             <div className="flex flex-col gap-3 animate-fade-in">
               <div className="text-xs text-[#8b9bb4] bg-[#0b101c] p-3 rounded-xl border border-[#1b263b] leading-relaxed">

@@ -41,6 +41,7 @@ function customAssetSyncPlugin(): Plugin {
                 monsterOverrides: {},
                 monsterVideoOverrides: {},
                 mercenaryOverrides: {},
+                npcOverrides: {},
                 version: 1,
               };
 
@@ -90,6 +91,7 @@ function customAssetSyncPlugin(): Plugin {
                 { key: 'monsterOverrides', folder: 'monsters' },
                 { key: 'monsterVideoOverrides', folder: 'monster_videos' },
                 { key: 'mercenaryOverrides', folder: 'mercenaries' },
+                { key: 'npcOverrides', folder: 'npcs' },
                 { key: 'bgmOverrides', folder: 'bgm' },
                 { key: 'sfxOverrides', folder: 'sfx' },
               ];

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Quest, GameResources } from '../types/game';
 import { SoundManager } from '../managers/SoundManager';
+import { CustomAssetService } from '../services/CustomAssetService';
 import { GameIcon } from './GameIcon';
 
 interface Props {
@@ -95,26 +96,46 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
               <span>📜</span>
               <span>스토리 대화 서사</span>
             </div>
-            {epicStory.dialogues.map((dlg, idx) => (
-              <div key={idx} className="flex items-start gap-3 animate-fade-in" style={{ animationDelay: `${idx * 80}ms` }}>
-                <div className="w-10 h-10 rounded-xl bg-[#141b2d] border border-[#2b3954] flex items-center justify-center text-xl shrink-0 shadow-md">
-                  {dlg.speakerAvatar || '👤'}
-                </div>
-                <div className="flex-1 bg-[#101626] p-3 rounded-xl border border-[#222e46] shadow-sm">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-bold text-xs text-[#ffd54f]">{dlg.speakerName}</span>
-                    {dlg.speakerRole && (
-                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff15] text-[#00d2ff] font-mono border border-[#00d2ff33]">
-                        {dlg.speakerRole}
-                      </span>
+            {epicStory.dialogues.map((dlg, idx) => {
+              const customAvatar = CustomAssetService.getNpcOverride(dlg.speakerName) || (dlg.speakerRole ? CustomAssetService.getNpcOverride(dlg.speakerRole) : undefined);
+              const isImage = customAvatar && (
+                customAvatar.startsWith('data:') ||
+                customAvatar.startsWith('http://') ||
+                customAvatar.startsWith('https://') ||
+                customAvatar.startsWith('/') ||
+                customAvatar.startsWith('assets/') ||
+                customAvatar.includes('.png') ||
+                customAvatar.includes('.jpg') ||
+                customAvatar.includes('.jpeg') ||
+                customAvatar.includes('.webp') ||
+                customAvatar.includes('.gif')
+              );
+
+              return (
+                <div key={idx} className="flex items-start gap-3 animate-fade-in" style={{ animationDelay: `${idx * 80}ms` }}>
+                  <div className={`w-10 h-10 rounded-xl bg-[#141b2d] border ${customAvatar ? 'border-[#e040fb66]' : 'border-[#2b3954]'} flex items-center justify-center shrink-0 shadow-md overflow-hidden`}>
+                    {isImage ? (
+                      <img src={customAvatar} alt={dlg.speakerName} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-xl">{customAvatar || dlg.speakerAvatar || '👤'}</span>
                     )}
                   </div>
-                  <p className="text-xs text-[#cfd8e8] leading-relaxed whitespace-pre-line">
-                    {dlg.text}
-                  </p>
+                  <div className="flex-1 bg-[#101626] p-3 rounded-xl border border-[#222e46] shadow-sm">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-bold text-xs text-[#ffd54f]">{dlg.speakerName}</span>
+                      {dlg.speakerRole && (
+                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff15] text-[#00d2ff] font-mono border border-[#00d2ff33]">
+                          {dlg.speakerRole}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-[#cfd8e8] leading-relaxed whitespace-pre-line">
+                      {dlg.text}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* ✨ 심연의 연무 정화 혜택 안내 배너 */}

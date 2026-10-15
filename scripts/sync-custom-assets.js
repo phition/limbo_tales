@@ -31,6 +31,7 @@ let existingPreset = {
   monsterOverrides: {},
   monsterVideoOverrides: {},
   mercenaryOverrides: {},
+  npcOverrides: {},
   version: 1
 };
 
@@ -65,7 +66,7 @@ for (const dir of scanDirsForJson) {
         console.log(`✨ [sync-custom-assets] Merging custom export: ${jf}`);
         const overrideKeys = [
           'iconOverrides', 'bgmOverrides', 'sfxOverrides', 'vfxOverrides', 'vfxConfigs',
-          'dungeonFloorOverrides', 'monsterOverrides', 'monsterVideoOverrides', 'mercenaryOverrides'
+          'dungeonFloorOverrides', 'monsterOverrides', 'monsterVideoOverrides', 'mercenaryOverrides', 'npcOverrides'
         ];
         for (const ok of overrideKeys) {
           if (parsed[ok] && typeof parsed[ok] === 'object') {
@@ -154,6 +155,11 @@ function scanAndIndex(dir, baseRel = 'assets') {
       else if (relPath.includes('/sfx/') && (ext === '.mp3' || ext === '.ogg' || ext === '.wav')) {
         const sfxKey = baseName.replace('sfx_', '');
         existingPreset.sfxOverrides[sfxKey] = relPath;
+      }
+      // 9. NPC Portraits
+      else if ((baseName.startsWith('npc_') || relPath.includes('/npcs/')) && (ext === '.jpg' || ext === '.png' || ext === '.webp' || ext === '.gif')) {
+        if (!existingPreset.npcOverrides) existingPreset.npcOverrides = {};
+        existingPreset.npcOverrides[baseName] = relPath;
       }
     }
   }
