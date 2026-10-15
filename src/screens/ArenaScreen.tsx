@@ -780,6 +780,7 @@ export const ArenaScreen: React.FC = () => {
     isTimeout?: boolean;
     bannerTitle: string;
   }[]>([]);
+  const [isFeverReportExpanded, setIsFeverReportExpanded] = useState(true);
 
   // 🏃 속도(SPD) 기반 턴 순서 큐
   const [roundQueue, setRoundQueue] = useState<string[]>([]);
@@ -956,6 +957,7 @@ export const ArenaScreen: React.FC = () => {
     feverCallCountdownRef.current = 3;
     setFeverCallHistory([]);
     feverCallHistoryRef.current = [];
+    setIsFeverReportExpanded(true);
     setIsLeaderUltCutin(false);
     setIsOppLeaderUltCutin(false);
     gm.emit('arenaBattleStateChanged', true);
@@ -4373,9 +4375,15 @@ export const ArenaScreen: React.FC = () => {
                   </div>
                 </div>
 
-                {/* 🔥 피버 콜 대결 리포트 (Fever Call Report) */}
-                <div className="p-3 rounded-2xl bg-[#090f1d] border border-amber-500/40 shadow-xl flex flex-col gap-2.5 text-left">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                {/* 🔥 피버 콜 대결 리포트 (Fever Call Report - 접기/펼치기 지원) */}
+                <div className="p-3 rounded-2xl bg-[#090f1d] border border-amber-500/40 shadow-xl flex flex-col gap-2.5 text-left transition-all">
+                  <div
+                    onClick={() => setIsFeverReportExpanded(prev => !prev)}
+                    className={`flex items-center justify-between cursor-pointer select-none hover:opacity-90 transition-all ${
+                      isFeverReportExpanded ? 'border-b border-white/10 pb-1.5' : ''
+                    }`}
+                    title={isFeverReportExpanded ? '클릭하여 리포트 접기' : '클릭하여 리포트 펼치기'}
+                  >
                     <div className="flex items-center gap-1.5">
                       <span className="text-base">🔥</span>
                       <span className="font-bold text-xs text-white">피버 콜 격돌 리포트</span>
@@ -4383,57 +4391,63 @@ export const ArenaScreen: React.FC = () => {
                         총 {feverCallHistory.length}회 격돌
                       </span>
                     </div>
-                    <div className="text-[10px] font-mono text-stone-400">
-                      아군 <span className="text-cyan-400 font-bold">{playerFeverWins}승</span> : <span className="text-rose-400 font-bold">{oppFeverWins}승</span> 상대
+                    <div className="flex items-center gap-2">
+                      <div className="text-[10px] font-mono text-stone-400">
+                        아군 <span className="text-cyan-400 font-bold">{playerFeverWins}승</span> : <span className="text-rose-400 font-bold">{oppFeverWins}승</span> 상대
+                      </div>
+                      <span className="text-[10px] font-bold text-amber-400/90 bg-black/50 px-1.5 py-0.5 rounded border border-amber-500/30 flex items-center gap-1">
+                        <span>{isFeverReportExpanded ? '▲ 접기' : '▼ 펼치기'}</span>
+                      </span>
                     </div>
                   </div>
 
-                  {feverCallHistory.length > 0 ? (
-                    <div className="flex flex-col gap-2">
-                      {feverCallHistory.map((entry, idx) => {
-                        const isPlayerWin = entry.outcome === 'player_win';
-                        const isOppWin = entry.outcome === 'opp_win';
+                  {isFeverReportExpanded && (
+                    feverCallHistory.length > 0 ? (
+                      <div className="flex flex-col gap-2 animate-fade-in">
+                        {feverCallHistory.map((entry, idx) => {
+                          const isPlayerWin = entry.outcome === 'player_win';
+                          const isOppWin = entry.outcome === 'opp_win';
 
-                        return (
-                          <div
-                            key={idx}
-                            className={`p-2.5 rounded-xl border flex flex-col gap-1.5 transition-all ${
-                              isPlayerWin
-                                ? 'bg-gradient-to-r from-[#0d2238] via-[#091726] to-[#0d2238] border-cyan-500/50'
-                                : isOppWin
-                                ? 'bg-gradient-to-r from-[#290d16] via-[#1a070e] to-[#290d16] border-rose-500/50'
-                                : 'bg-stone-900/80 border-stone-700'
-                            }`}
-                          >
-                            {/* 회차 및 승패 뱃지 */}
-                            <div className="flex items-center justify-between text-[11px]">
-                              <span className="font-bold text-stone-300 flex items-center gap-1.5">
-                                <span className="text-amber-400">⚡ #{entry.round}차 피버콜 격돌</span>
-                                {entry.isTimeout && (
-                                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                                    ⏱️ 3턴 유예 타임아웃
-                                  </span>
-                                )}
-                              </span>
-                              <span
-                                className={`text-[9.5px] font-extrabold px-2 py-0.5 rounded-full font-mono ${
-                                  isPlayerWin
-                                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
-                                    : isOppWin
-                                    ? 'bg-rose-500/20 text-rose-300 border border-rose-400/50'
-                                    : 'bg-amber-500/20 text-amber-300 border border-amber-400/50'
-                                }`}
-                              >
-                                {isPlayerWin ? '👑 아군 승리' : isOppWin ? '💀 상대 승리' : '⚡ 전술 무승부'}
-                              </span>
-                            </div>
+                          return (
+                            <div
+                              key={idx}
+                              className={`p-2.5 rounded-xl border flex flex-col gap-1.5 transition-all ${
+                                isPlayerWin
+                                  ? 'bg-gradient-to-r from-[#0d2238] via-[#091726] to-[#0d2238] border-cyan-500/50'
+                                  : isOppWin
+                                  ? 'bg-gradient-to-r from-[#290d16] via-[#1a070e] to-[#290d16] border-rose-500/50'
+                                  : 'bg-stone-900/80 border-stone-700'
+                              }`}
+                            >
+                              {/* 회차 및 승패 뱃지 */}
+                              <div className="flex items-center justify-between text-[11px]">
+                                <span className="font-bold text-stone-300 flex items-center gap-1.5">
+                                  <span className="text-amber-400">⚡ #{entry.round}차 피버콜 격돌</span>
+                                  {entry.isTimeout && (
+                                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                                      ⏱️ 3턴 유예 타임아웃
+                                    </span>
+                                  )}
+                                </span>
+                                <span
+                                  className={`text-[9.5px] font-extrabold px-2 py-0.5 rounded-full font-mono ${
+                                    isPlayerWin
+                                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
+                                      : isOppWin
+                                      ? 'bg-rose-500/20 text-rose-300 border border-rose-400/50'
+                                      : 'bg-amber-500/20 text-amber-300 border border-amber-400/50'
+                                  }`}
+                                >
+                                  {isPlayerWin ? '👑 아군 승리' : isOppWin ? '💀 상대 승리' : '⚡ 전술 무승부'}
+                                </span>
+                              </div>
 
-                            {/* 양측 족보 및 배지 대조 */}
-                            <div className="grid grid-cols-2 gap-2 text-xs mt-0.5">
-                              {/* 아군 피버 */}
-                              <div className={`p-2 rounded-lg border flex flex-col gap-1 ${
-                                isPlayerWin ? 'bg-cyan-950/40 border-cyan-500/30' : 'bg-black/30 border-stone-800'
-                              }`}>
+                              {/* 양측 족보 및 배지 대조 */}
+                              <div className="grid grid-cols-2 gap-2 text-xs mt-0.5">
+                                {/* 아군 피버 */}
+                                <div className={`p-2 rounded-lg border flex flex-col gap-1 ${
+                                  isPlayerWin ? 'bg-cyan-950/40 border-cyan-500/30' : 'bg-black/30 border-stone-800'
+                                }`}>
                                 <div className="flex items-center justify-between">
                                   <span className="text-[10px] text-cyan-400 font-bold flex items-center gap-1">
                                     <span>🛡️</span> <span>아군 피버</span>
@@ -4518,12 +4532,13 @@ export const ArenaScreen: React.FC = () => {
                       })}
                     </div>
                   ) : (
-                    <div className="p-3 rounded-xl bg-stone-900/40 border border-stone-800 text-center text-xs text-stone-400 flex items-center justify-center gap-2">
+                    <div className="p-3 rounded-xl bg-stone-900/40 border border-stone-800 text-center text-xs text-stone-400 flex items-center justify-center gap-2 animate-fade-in">
                       <span>ℹ️</span>
                       <span>이번 결투에서는 피버 완충 전 승패가 결정되어 피버콜이 발생하지 않았습니다.</span>
                     </div>
-                  )}
-                </div>
+                  )
+                )}
+              </div>
 
                 {/* 📊 전투 상세 리포트 (MVP 배지, 딜량 점유율, 회복/방어/회피/연계) */}
                 <div className="text-left">
