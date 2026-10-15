@@ -11637,14 +11637,32 @@ const QuestsDrawer: React.FC<{
   const epicClaimable = epicActive.filter(q => q.objectives.every(o => o.isCompleted)).length;
   const totalClaimable = chainClaimable + subClaimable + epicClaimable;
 
+  // 🌟 정렬 함수: 완료되어 보상 수령 대기 중인 퀘스트를 목록 최상단으로 우선 배치
+  const sortQuestsByCompletion = (quests: Quest[]) => {
+    return [...quests].sort((a, b) => {
+      const aClaimable = a.objectives.length > 0 && a.objectives.every(o => o.isCompleted) ? 1 : 0;
+      const bClaimable = b.objectives.length > 0 && b.objectives.every(o => o.isCompleted) ? 1 : 0;
+      if (aClaimable !== bClaimable) {
+        return bClaimable - aClaimable; // 1 (완료/수령 대기)이 최상위로
+      }
+      // 그 외 진행 완료된 세부 목표 수가 많은 퀘스트 우선
+      const aDoneCount = a.objectives.filter(o => o.isCompleted).length;
+      const bDoneCount = b.objectives.filter(o => o.isCompleted).length;
+      if (aDoneCount !== bDoneCount) {
+        return bDoneCount - aDoneCount;
+      }
+      return 0;
+    });
+  };
+
   // 현재 탭에 노출할 퀘스트 목록 결정
   const displayedQuests = (() => {
     switch (catTab) {
-      case 'chain': return chainActive;
-      case 'sub': return subActive;
-      case 'epic': return epicActive;
-      case 'completed': return completedQuests;
-      default: return chainActive;
+      case 'chain': return sortQuestsByCompletion(chainActive);
+      case 'sub': return sortQuestsByCompletion(subActive);
+      case 'epic': return sortQuestsByCompletion(epicActive);
+      case 'completed': return [...completedQuests].reverse();
+      default: return sortQuestsByCompletion(chainActive);
     }
   })();
 
@@ -11776,7 +11794,55 @@ const QuestsDrawer: React.FC<{
 
     const desc = pendingObj.description;
 
-    // 1. 방랑 주점 / 용병 영입 분기
+    // 0. 성채 묘지 / 헌화 분기 (Q_MEMORIAL_TRIBUTE 등)
+    const isCemeteryObjective = desc.includes('묘지') || desc.includes('헌화') || quest.id === 'Q_MEMORIAL_TRIBUTE';
+    if (isCemeteryObjective) {
+      return (
+        <button
+          className="text-xs px-3 py-1.5 rounded-lg bg-[#182333] hover:bg-[#223247] text-[#90caf9] font-bold border border-[#3b5578] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+          onClick={() => onNavigateDrawer ? onNavigateDrawer('cemetery') : onClose()}
+        >
+          <span>🪦</span>
+          <span>묘지로 이동</span>
+          <span className="text-[10px]">▶</span>
+        </button>
+      );
+    }
+
+    // 1. 심연의 병기창 / 장비 단조 / 강화 / 인챈트 분기 (Q_CRAFT_EQUIP 등)
+    const isForgeObjective = desc.includes('단조') || desc.includes('장비 1회') || desc.includes('장비 제작') || desc.includes('인챈트') || desc.includes('장비 강화') || quest.id === 'Q_CRAFT_EQUIP';
+    if (isForgeObjective) {
+      const blacksmithLevel = state.buildings['blacksmith']?.level || 0;
+      if (blacksmithLevel >= 1) {
+        return (
+          <button
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#3d2b17] hover:bg-[#523a1f] text-[#f5d79e] font-bold border border-[#9c6f3b] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+            onClick={() => onNavigateDrawer ? onNavigateDrawer('forge') : onClose()}
+          >
+            <span>⚒️</span>
+            <span>병기창 바로가기</span>
+            <span className="text-[10px]">▶</span>
+          </button>
+        );
+      } else {
+        return (
+          <button
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#2a2417] hover:bg-[#3d321f] text-[#ebd5b3] font-bold border border-[#876739] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+            onClick={() => {
+              if (onNavigateBuilding) onNavigateBuilding('blacksmith');
+              else if (onNavigateDrawer) onNavigateDrawer('citadel');
+              else onClose();
+            }}
+          >
+            <span>🏛️</span>
+            <span>영지 건설 바로가기 (심연의 병기창)</span>
+            <span className="text-[10px]">▶</span>
+          </button>
+        );
+      }
+    }
+
+    // 2. 방랑 주점 / 용병 영입 분기
     // 복합 연계 퀘스트(Q_MAIN_02 등): 주점 건설 후에는 용병 영입을 위해 '주점' 바로가기로 전환!
     const isRecruitObjective = desc.includes('용병') || desc.includes('영입') || desc.includes('고용') || desc.includes('주점 방문');
     if (isRecruitObjective) {
@@ -11784,7 +11850,7 @@ const QuestsDrawer: React.FC<{
       if (tavernLevel >= 1) {
         return (
           <button
-            className="text-xs px-3 py-1.5 rounded-lg bg-[#3a2512] hover:bg-[#4d3218] text-[#f3d19e] font-bold border border-[#a67c52] flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#3a2512] hover:bg-[#4d3218] text-[#f3d19e] font-bold border border-[#a67c52] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
             onClick={() => onNavigateDrawer ? onNavigateDrawer('tavern') : onClose()}
           >
             <span>🍺</span>
@@ -11795,7 +11861,7 @@ const QuestsDrawer: React.FC<{
       } else {
         return (
           <button
-            className="text-xs px-3 py-1.5 rounded-lg bg-[#2a2417] hover:bg-[#3d321f] text-[#ebd5b3] font-bold border border-[#876739] flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#2a2417] hover:bg-[#3d321f] text-[#ebd5b3] font-bold border border-[#876739] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
             onClick={() => {
               if (onNavigateBuilding) onNavigateBuilding('tavern');
               else if (onNavigateDrawer) onNavigateDrawer('citadel');
@@ -11810,7 +11876,7 @@ const QuestsDrawer: React.FC<{
       }
     }
 
-    // 2. 심연 강하 / 채비실 / 던전 탐험 분기
+    // 3. 심연 강하 / 채비실 / 던전 탐험 분기
     const isDescentObjective = desc.includes('강하') || desc.includes('채비') || desc.includes('파견') || desc.includes('출정')
       || desc.includes('회랑') || desc.includes('던전') || desc.includes('진입') || desc.includes('입장') || desc.includes('1층')
       || (quest.id === 'Q_MAIN_02' && !isRecruitObjective);
@@ -11818,7 +11884,7 @@ const QuestsDrawer: React.FC<{
       if (state.party.length < 3) {
         return (
           <button
-            className="text-xs px-3 py-1.5 rounded-lg bg-[#0d2238] hover:bg-[#12304f] text-[#00d2ff] font-bold border border-[#00d2ff66] flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#0d2238] hover:bg-[#12304f] text-[#00d2ff] font-bold border border-[#00d2ff66] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
             onClick={() => onNavigateDrawer ? onNavigateDrawer('barracks') : onClose()}
           >
             <span>⚔️</span>
@@ -11829,7 +11895,7 @@ const QuestsDrawer: React.FC<{
       }
       return (
         <button
-          className="text-xs px-3 py-1.5 rounded-lg bg-[#1e0d2d] hover:bg-[#2b1340] text-[#e0b8ff] font-bold border border-[#7b3fa6] flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+          className="text-xs px-3 py-1.5 rounded-lg bg-[#1e0d2d] hover:bg-[#2b1340] text-[#e0b8ff] font-bold border border-[#7b3fa6] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
           onClick={() => onNavigateDrawer ? onNavigateDrawer('explore') : onClose()}
         >
           <span>🎒</span>
@@ -11839,9 +11905,9 @@ const QuestsDrawer: React.FC<{
       );
     }
 
-    // 3. 건물 건설 / 증축 분기
+    // 4. 건물 건설 / 증축 분기
     const isBuildingObjective = desc.includes('건설') || desc.includes('증축') || desc.includes('개설') || desc.includes('복원') || desc.includes('완공');
-    if (isBuildingObjective || quest.type === 'building') {
+    if (isBuildingObjective || (quest.type === 'building' && !isForgeObjective)) {
       let targetBuildingId = getBuildingIdForQuest(quest);
       if (desc.includes('주점') || desc.includes('라운지')) targetBuildingId = 'tavern';
       else if (desc.includes('정제') || desc.includes('도축')) targetBuildingId = 'butchery';
@@ -11858,14 +11924,14 @@ const QuestsDrawer: React.FC<{
 
       const buildingNameMap: Record<string, string> = {
         tavern: '방랑 주점', butchery: '마물 정제소', cabin: '주거 구역', lumberCamp: '영목 벌채소',
-        quarry: '지반 시추탑', blacksmith: '심연 대장간', alchemy: '연금 공방', infirmary: '생체 병동',
+        quarry: '지반 시추탑', blacksmith: '심연의 병기창', alchemy: '연금 공방', infirmary: '생체 병동',
         sanctuary: '영혼 제단', storage: '보관 창고', bonfire: '신성 성화', arenaGate: '차원 관문'
       };
       const label = targetBuildingId && buildingNameMap[targetBuildingId] ? ` (${buildingNameMap[targetBuildingId]})` : '';
 
       return (
         <button
-          className="text-xs px-3 py-1.5 rounded-lg bg-[#2a2417] hover:bg-[#3d321f] text-[#ebd5b3] font-bold border border-[#876739] flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+          className="text-xs px-3 py-1.5 rounded-lg bg-[#2a2417] hover:bg-[#3d321f] text-[#ebd5b3] font-bold border border-[#876739] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
           onClick={() => {
             if (targetBuildingId && onNavigateBuilding) {
               onNavigateBuilding(targetBuildingId);
@@ -11883,31 +11949,16 @@ const QuestsDrawer: React.FC<{
       );
     }
 
-    // 4. 전직 / 승격 / 병영 분기
+    // 5. 전직 / 승격 / 병영 분기
     const isBarracksObjective = desc.includes('전직') || desc.includes('승격') || desc.includes('배치') || desc.includes('파티');
     if (isBarracksObjective || quest.type === 'promotion') {
       return (
         <button
-          className="text-xs px-3 py-1.5 rounded-lg bg-[#281b33] hover:bg-[#382647] text-[#dfb8f2] font-bold border border-[#7a4891] flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+          className="text-xs px-3 py-1.5 rounded-lg bg-[#281b33] hover:bg-[#382647] text-[#dfb8f2] font-bold border border-[#7a4891] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
           onClick={() => onNavigateDrawer ? onNavigateDrawer('barracks') : onClose()}
         >
           <span>⚔️</span>
           <span>용병 병영 바로가기</span>
-          <span className="text-[10px]">▶</span>
-        </button>
-      );
-    }
-
-    // 5. 대장간 / 단조 / 강화 / 인챈트
-    const isForgeObjective = desc.includes('단조') || desc.includes('정화') || desc.includes('강화') || desc.includes('인챈트') || desc.includes('장비 제작');
-    if (isForgeObjective) {
-      return (
-        <button
-          className="text-xs px-3 py-1.5 rounded-lg bg-[#3d2b17] hover:bg-[#523a1f] text-[#f5d79e] font-bold border border-[#9c6f3b] flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
-          onClick={() => onNavigateDrawer ? onNavigateDrawer('forge') : onClose()}
-        >
-          <span>⚒️</span>
-          <span>마도 대장간 바로가기</span>
           <span className="text-[10px]">▶</span>
         </button>
       );
@@ -11918,7 +11969,7 @@ const QuestsDrawer: React.FC<{
     if (isAlchemyObjective) {
       return (
         <button
-          className="text-xs px-3 py-1.5 rounded-lg bg-[#142d2b] hover:bg-[#1d3d3a] text-[#80cbc4] font-bold border border-[#2e6d65] flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+          className="text-xs px-3 py-1.5 rounded-lg bg-[#142d2b] hover:bg-[#1d3d3a] text-[#80cbc4] font-bold border border-[#2e6d65] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
           onClick={() => onNavigateDrawer ? onNavigateDrawer('alchemy') : onClose()}
         >
           <span>🧪</span>
@@ -11948,10 +11999,10 @@ const QuestsDrawer: React.FC<{
 
     // 8. 던전 탐험 / 처치 / 도달
     const isExploreObjective = desc.includes('탐험') || desc.includes('야영') || desc.includes('처치') || desc.includes('도달') || desc.includes('격파') || desc.includes('층');
-    if (isExploreObjective || quest.type === 'field') {
+    if (isExploreObjective || (quest.type === 'field' && !isCemeteryObjective)) {
       return (
         <button
-          className="text-xs px-3 py-1.5 rounded-lg bg-[#13281d] hover:bg-[#1b3829] text-[#a5d6a7] font-bold border border-[#3b7553] flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+          className="text-xs px-3 py-1.5 rounded-lg bg-[#13281d] hover:bg-[#1b3829] text-[#a5d6a7] font-bold border border-[#3b7553] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
           onClick={() => onNavigateDrawer ? onNavigateDrawer('explore') : onClose()}
         >
           <span>🌌</span>
