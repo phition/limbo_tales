@@ -780,7 +780,7 @@ export const ArenaScreen: React.FC = () => {
     isTimeout?: boolean;
     bannerTitle: string;
   }[]>([]);
-  const [isFeverReportExpanded, setIsFeverReportExpanded] = useState(true);
+  const [isFeverReportExpanded, setIsFeverReportExpanded] = useState(false);
 
   // 🏃 속도(SPD) 기반 턴 순서 큐
   const [roundQueue, setRoundQueue] = useState<string[]>([]);
@@ -957,7 +957,7 @@ export const ArenaScreen: React.FC = () => {
     feverCallCountdownRef.current = 3;
     setFeverCallHistory([]);
     feverCallHistoryRef.current = [];
-    setIsFeverReportExpanded(true);
+    setIsFeverReportExpanded(false);
     setIsLeaderUltCutin(false);
     setIsOppLeaderUltCutin(false);
     gm.emit('arenaBattleStateChanged', true);
