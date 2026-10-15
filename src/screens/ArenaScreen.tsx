@@ -3128,14 +3128,6 @@ export const ArenaScreen: React.FC = () => {
       ) : gateMode === 'nemesis' ? (
         <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
           <NemesisView />
-          <div className="px-3 py-1.5 shrink-0 w-full max-w-full border-t border-[#1a2333] bg-[#090e18]">
-            <ActionButton
-              label="🏰 방주 성채로 귀환"
-              variant="ghost"
-              className="w-full py-1.5 text-xs"
-              onClick={() => navigateTo('citadel')}
-            />
-          </div>
         </div>
       ) : (
         <>

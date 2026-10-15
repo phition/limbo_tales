@@ -75,36 +75,38 @@ export const CombatMeterTable: React.FC<Props> = ({
           {subtitle && <div className="text-[10px] text-[#8b9bb4] mt-0.5">{subtitle}</div>}
         </div>
 
-        {/* 필터 탭 */}
-        <div className="flex items-center gap-1 bg-[#101726] p-0.5 rounded-lg border border-[#212f4d] text-[10px] font-bold">
-          <button
-            type="button"
-            className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
-              filter === 'all' ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]' : 'text-[#8b9bb4] hover:text-white'
-            }`}
-            onClick={() => setFilter('all')}
-          >
-            전체 ({metrics.length})
-          </button>
-          <button
-            type="button"
-            className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
-              filter === 'player' ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]' : 'text-[#8b9bb4] hover:text-white'
-            }`}
-            onClick={() => setFilter('player')}
-          >
-            아군
-          </button>
-          <button
-            type="button"
-            className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
-              filter === 'enemy' ? 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]' : 'text-[#8b9bb4] hover:text-white'
-            }`}
-            onClick={() => setFilter('enemy')}
-          >
-            적군
-          </button>
-        </div>
+        {/* 필터 탭 (적군 메트릭스가 존재할 때만 표시) */}
+        {metrics.some(m => !m.isPlayer) && (
+          <div className="flex items-center gap-1 bg-[#101726] p-0.5 rounded-lg border border-[#212f4d] text-[10px] font-bold">
+            <button
+              type="button"
+              className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+                filter === 'all' ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]' : 'text-[#8b9bb4] hover:text-white'
+              }`}
+              onClick={() => setFilter('all')}
+            >
+              전체 ({metrics.length})
+            </button>
+            <button
+              type="button"
+              className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+                filter === 'player' ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]' : 'text-[#8b9bb4] hover:text-white'
+              }`}
+              onClick={() => setFilter('player')}
+            >
+              아군
+            </button>
+            <button
+              type="button"
+              className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+                filter === 'enemy' ? 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]' : 'text-[#8b9bb4] hover:text-white'
+              }`}
+              onClick={() => setFilter('enemy')}
+            >
+              적군
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 🏆 MVP 및 최고 기여자 하이라이트 뱃지 */}

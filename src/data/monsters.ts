@@ -925,6 +925,94 @@ export const MONSTERS: Record<string, MonsterData> = {
     description: '무간도의 가장 깊은 심연에 도사린 태초의 공허 창조주. 존재 자체로 시공간을 소멸시키는 절대자입니다.',
     rewards: { exp: 8000, gold: 50000, ether: 5000 }
   },
+
+
+  // ══════════════════════════════════════════════════════
+  //  차원 네메시스 레이드 (Void Nemesis Raid)
+  // ══════════════════════════════════════════════════════
+  'nemesis_boss': {
+    id: 'nemesis_boss',
+    name: '차원 네메시스 (본체)',
+    type: 'boss',
+    faction: 'corrupted',
+    level: 99,
+    maxHp: 12500000,
+    atk: 1400,
+    def: 350,
+    spd: 120,
+    luck: 50,
+    skills: [
+      { name: '차원 붕괴선', description: '파티 전원에게 치명적인 공허 광역 피해', power: 2.0, effectType: 'damage' }
+    ],
+    rewards: { gold: 10000, ether: 500, exp: 5000 },
+    promptKey: 'nemesis_boss',
+    imagePath: 'assets/void_overlord.jpg',
+    themeColor: 0x9c27b0,
+    description: '시공간 균열을 찢고 방주 영지를 침공하는 태초의 공허 지배자.'
+  },
+
+  'nemesis_head': {
+    id: 'nemesis_head',
+    name: '네메시스 머리',
+    type: 'boss',
+    faction: 'corrupted',
+    level: 99,
+    maxHp: 4000000,
+    atk: 1550,
+    def: 380,
+    spd: 135,
+    luck: 45,
+    skills: [
+      { name: '공간 붕괴 파동', description: '물리 분쇄 광역 절멸 강타', power: 2.2, effectType: 'damage' }
+    ],
+    rewards: { gold: 3000, ether: 150, exp: 1500 },
+    promptKey: 'nemesis_head',
+    imagePath: 'assets/nemesis_head.jpg',
+    themeColor: 0xef5350,
+    description: '공허 군주의 대검을 휘두르며 전열에서 아군을 분쇄하는 워로드 부위.'
+  },
+
+  'nemesis_body': {
+    id: 'nemesis_body',
+    name: '네메시스 몸통',
+    type: 'boss',
+    faction: 'corrupted',
+    level: 99,
+    maxHp: 5000000,
+    atk: 1250,
+    def: 450,
+    spd: 105,
+    luck: 60,
+    skills: [
+      { name: '차원 시간 정지장', description: '광역 정지 및 엔트로피 흡수', power: 1.8, effectType: 'debuff' }
+    ],
+    rewards: { gold: 4000, ether: 200, exp: 2000 },
+    promptKey: 'nemesis_body',
+    imagePath: 'assets/nemesis_body.jpg',
+    themeColor: 0xce93d8,
+    description: '시간 정지장과 마나 엔트로피를 흡수하는 중열 크로노 아콘 부위.'
+  },
+
+  'nemesis_tail': {
+    id: 'nemesis_tail',
+    name: '네메시스 꼬리',
+    type: 'boss',
+    faction: 'corrupted',
+    level: 99,
+    maxHp: 3500000,
+    atk: 1700,
+    def: 300,
+    spd: 150,
+    luck: 70,
+    skills: [
+      { name: '보이드 테일 스윕', description: '초고속 관통 광역 휩쓸기', power: 2.0, effectType: 'damage' }
+    ],
+    rewards: { gold: 3000, ether: 150, exp: 1500 },
+    promptKey: 'nemesis_tail',
+    imagePath: 'assets/nemesis_tail.jpg',
+    themeColor: 0x00d2ff,
+    description: '치명적인 관통 침과 꼬리 휩쓸기로 후방을 기습하는 레인저 부위.'
+  },
 };
 
 // ─── 층별 조우 몬스터 테이블 (2~10층 및 11층 무간도 반영) ───────────────────────────

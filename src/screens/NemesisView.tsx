@@ -16,6 +16,7 @@ import { GameDataService } from '../services/GameDataService';
 import { gameDialog } from '../services/DialogService';
 import { LogPanel } from '../components/LogPanel';
 import { CustomAssetService } from '../services/CustomAssetService';
+import { resolveCombatVfxAndSfx } from '../utils/skillComboUtils';
 
 // ── 롱프레스 (홀드) 헬퍼 컴포넌트 ──────────────────────────────────────────
 const LongPressBox: React.FC<{
@@ -124,6 +125,7 @@ interface SkillCutInState {
   isEnemy: boolean;
   heroName?: string;
   subText?: string;
+  isUltimate?: boolean;
 }
 
 // ── 용병 상태 행 (PVE 감성 HeroRow) ────────────────────────────────────────
@@ -443,7 +445,7 @@ export const NemesisView: React.FC = () => {
       if (hIdx >= 0) setSelectedHeroIdx(hIdx);
 
       if (isAutoBattleRef.current) {
-        // 자동 전투: 사용 가능한 스킬 우선 시전 후 턴 넘김
+        // 자동 전투: 사용 가능한 스킬(궁극기 우선) 시전 후 턴 넘김
         setIsHeroTurn(false);
         const timer = setTimeout(() => {
           if (!isAutoBattleRef.current) return;
@@ -479,7 +481,7 @@ export const NemesisView: React.FC = () => {
     processNextActionRef.current = processNextAction;
   }, [processNextAction]);
 
-  // ── 아군 영웅 공격 실행 ──────────────────────────────────────────────
+  // ── 아군 영웅 공격/스킬 실행 (PVE 동일 스킬 효과 & VFX 연동) ─────────
   const executeHeroCombat = useCallback((hero: RaidHeroCombatant, skill: Skill | null) => {
     isProcessingRef.current = true;
     setIsHeroTurn(false);
@@ -501,6 +503,16 @@ export const NemesisView: React.FC = () => {
 
     const targetPart = bossPartsRef.current[targetKey];
     const useSkill = skill !== null;
+    const isUltimate = useSkill && (
+      Boolean(skill.isSpecial) ||
+      Boolean(skill.name?.includes('궁극기')) ||
+      Boolean(skill.id?.endsWith('_ultimate')) ||
+      Boolean(CHARACTER_CLASSES[hero.classId]?.specialSkill?.id === skill.id)
+    );
+
+    // 원래 영웅 스킬의 고유 VFX 및 SFX 매핑
+    const isMulti = Boolean(isUltimate || (useSkill && skill.targetType === 'all_enemies'));
+    const fxInfo = resolveCombatVfxAndSfx(useSkill ? skill : 'basic', hero as unknown as Mercenary, isMulti);
 
     if (useSkill) {
       hero.currentMp = Math.max(0, hero.currentMp - skill.manaCost);
@@ -511,12 +523,34 @@ export const NemesisView: React.FC = () => {
         icon: skill.icon || '⚔️',
         isEnemy: false,
         heroName: hero.name,
-        subText: `${hero.className} 전술 스킬 시전`
+        subText: isUltimate ? '★ CLASS ULTIMATE ★' : `${hero.className} 전술 스킬`,
+        isUltimate,
       });
     }
 
-    // 대미지 산출
-    const pwr = useSkill ? skill.power : 1.0;
+    // 🛡️ 지원/치유 스킬인 경우 파티 치유 및 버프 적용
+    if (useSkill && (skill.effectType === 'heal' || skill.effectType === 'regen')) {
+      const healAmt = Math.max(80, Math.floor(hero.atk * (skill.power || 1.2) + hero.level * 25));
+      heroesRef.current.forEach(h => {
+        if (h.currentHp > 0) {
+          h.currentHp = Math.min(h.maxHp, h.currentHp + healAmt);
+        }
+      });
+      triggerVfx('heal' as VFXType, 50, 65, `+${healAmt.toLocaleString()}`);
+      playSfx('cast');
+      addLog(`✨ [${hero.name}] [${skill.name}] 시전! 아군 전체의 체력이 ${healAmt.toLocaleString()} 회복되었습니다.`, 'reward');
+      setHeroes([...heroesRef.current]);
+
+      setTimeout(() => {
+        setSkillCutIn(null);
+        isProcessingRef.current = false;
+        processNextActionRef.current();
+      }, getDelay(450));
+      return;
+    }
+
+    // 공격 스킬 또는 일반 공격
+    const pwr = useSkill ? (skill.power || 1.0) : 1.0;
     const isCrit = Math.random() < Math.min(0.65, hero.luck * 0.0035 + 0.10);
     // 오퍼레이터 전술 화력 보너스 (+10%)
     const opBonus = 1.10;
@@ -548,6 +582,26 @@ export const NemesisView: React.FC = () => {
       playSfx('shield_break');
     }
 
+    // 광역 공격 시 다른 활성 부위에도 스플래시 피해 적용
+    if (useSkill && skill.targetType === 'all_enemies') {
+      (['head', 'body', 'tail'] as NemesisPartId[]).forEach(pKey => {
+        if (pKey === targetKey) return;
+        const otherPart = bossPartsRef.current[pKey];
+        if (otherPart && !otherPart.isDefeated && otherPart.currentHp > 0) {
+          const splashDmg = Math.max(50, Math.floor(dmg * 0.85));
+          otherPart.currentHp = Math.max(0, otherPart.currentHp - splashDmg);
+          if (otherPart.currentHp <= 0) {
+            otherPart.isDefeated = true;
+            otherPart.chargingState = null;
+            addLog(`💀 [${otherPart.name} 완전 패퇴!] 광역 충격으로 부위가 파괴되었습니다!`, 'reward');
+          }
+          const splashMetric = combatMetricsRef.current[hero.id];
+          if (splashMetric) splashMetric.damageDealt += splashDmg;
+          totalBattleDmgRef.current += splashDmg;
+        }
+      });
+    }
+
     setBossParts({ ...bossPartsRef.current });
 
     const nextTotalDmg = totalBattleDmgRef.current + dmg;
@@ -567,8 +621,15 @@ export const NemesisView: React.FC = () => {
       if (useSkill) metric.combosTriggered += 1;
     }
 
-    triggerVfx(isCrit ? 'crit_slash' : 'slash', 50, 25, `${dmg.toLocaleString()}`, isCrit);
-    playSfx(isCrit ? 'crit' : 'hit');
+    // 원본 스킬 VFX/SFX 적용
+    const attackVfx: VFXType = isCrit ? 'crit_slash' : (fxInfo.vfx || 'slash');
+    triggerVfx(attackVfx, 50, 25, `${dmg.toLocaleString()}`, isCrit);
+    try {
+      SoundManager.getInstance().play(fxInfo.sfx || (isCrit ? 'crit' : 'hit'));
+    } catch (_) {
+      playSfx(isCrit ? 'crit' : 'hit');
+    }
+
     setScreenFlash('enemy');
     setTimeout(() => setScreenFlash(null), 150);
 
@@ -811,21 +872,36 @@ export const NemesisView: React.FC = () => {
     const starterHeroes = mainHeroes.slice(0, 3);
     const assignedOperator = leaderHero;
 
-    // 아군 3선발 런타임 영웅 데이터 빌드
+    // 아군 3선발 런타임 영웅 데이터 빌드 (원래 스킬 및 궁극기 100% 일치)
     const raidHeroes: RaidHeroCombatant[] = starterHeroes.map((h, idx) => {
       const stats = gm.getHeroEffectiveStats(h);
       const cls = CHARACTER_CLASSES[h.classId];
       const heroSkills: Skill[] = [];
-      if (cls?.specialSkill) heroSkills.push(cls.specialSkill);
+
+      // 1. 클래스 고유기 / 궁극기를 1순위로 배치 (PVE와 일치)
+      if (cls?.specialSkill) {
+        const resSpec = gm.resolveSkillData(cls.specialSkill.id, h);
+        heroSkills.push({
+          ...(resSpec || cls.specialSkill),
+          isSpecial: true,
+        });
+      }
+
+      // 2. 장착된 전술 스킬들
       if (h.equippedSkills && h.equippedSkills.length > 0) {
         h.equippedSkills.forEach(sid => {
           const res = gm.resolveSkillData(sid, h);
-          if (res && !heroSkills.some(s => s.id === res.id)) heroSkills.push(res);
+          if (res && !heroSkills.some(s => s.id === res.id)) {
+            heroSkills.push(res);
+          }
         });
       }
-      cls?.skills.forEach(s => {
+
+      // 3. 전술 스킬이 부족할 경우 클래스 기본 스킬 보충
+      cls?.skills?.forEach(s => {
         if (heroSkills.length < 3 && !heroSkills.some(x => x.id === s.id)) {
-          heroSkills.push(s);
+          const res = gm.resolveSkillData(s.id, h);
+          heroSkills.push(res || s);
         }
       });
 
@@ -977,7 +1053,9 @@ export const NemesisView: React.FC = () => {
       { id: '3', timestamp: nowStr, text: '🎯 네메시스의 3대 부위(머리·전열 / 몸통·중열 / 꼬리·후열)를 선택하여 타겟팅할 수 있습니다.', type: 'normal' },
     ];
     if (assignedOperator) {
-      initLogs.push({ id: '4', timestamp: nowStr, text: `📡 [전술 오퍼레이터 지휘] ${assignedOperator.name}: 파티 화력 지원 가동!`, type: 'reward' });
+      const opCls = CHARACTER_CLASSES[assignedOperator.classId];
+      const opSpecial = opCls?.specialSkill ? gm.resolveSkillData(opCls.specialSkill.id, assignedOperator) || opCls.specialSkill : null;
+      initLogs.push({ id: '4', timestamp: nowStr, text: `📡 [전술 오퍼레이터] ${assignedOperator.name}: 전술 궁극기 [${opSpecial?.name || '차원 지휘'}] 지원 가동!`, type: 'reward' });
     }
 
     setBattleLogs(initLogs);
@@ -1030,15 +1108,33 @@ export const NemesisView: React.FC = () => {
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
+  // ── 스킬 버튼 색상 구분 헬퍼 (PVE 스타일) ───────────────────────────
+  const getSkillBtnStyle = (skill: Skill | 'basic') => {
+    if (skill === 'basic') return { borderColor: '#8b9bb4', color: '#e2e8f0', label: '일반 공격' };
+    const isUlt = skill.isSpecial || skill.name.includes('궁극기') || skill.id?.endsWith('_ultimate');
+    if (isUlt) {
+      return { borderColor: '#ffd54f', color: '#ffe57f', label: '궁극기', shadow: '0 0 10px #ffd54f55' };
+    }
+    if (['heal', 'shield', 'regen', 'buff'].includes(skill.effectType || '')) {
+      return { borderColor: '#26a69a', color: '#b2dfdb', label: '지원/마법' };
+    }
+    return { borderColor: '#ef5350', color: '#ffcdd2', label: '전투 스킬' };
+  };
+
   // ── 1. 레이드 전투 진행 중 화면 (PVE 동일 전장) ───────────────────────
   if (inBattle) {
     const activeHero = activeHeroTurnId ? heroes.find(h => h.id === activeHeroTurnId) : null;
     const targetedPartState = bossParts[targetedPart];
     const posLabel = targetedPart === 'head' ? '전열' : targetedPart === 'body' ? '중열' : '후열';
+    const cleanTargetedName = (targetedPartState?.name || '').replace(/\s*\(.*?\)/g, '').trim();
     const alivePartsCount = Object.values(bossParts).filter(p => !p.isDefeated && p.currentHp > 0).length;
 
-    const bossImageSrc = CustomAssetService.getInstance().getMonsterOverride('nemesis_boss')
+    // 🎨 에셋 스튜디오 연동: 선택된 부위별 커스텀 이미지 우선 노출
+    const bossImageSrc =
+      CustomAssetService.getInstance().getMonsterOverride(`nemesis_${targetedPart}`)
+      || CustomAssetService.getInstance().getMonsterOverride('nemesis_boss')
       || CustomAssetService.getInstance().getMonsterOverride('nemesis')
+      || `assets/nemesis_${targetedPart}.jpg`
       || 'assets/void_overlord.jpg';
 
     const operatorPortrait = operatorHero ? (
@@ -1069,18 +1165,26 @@ export const NemesisView: React.FC = () => {
         {skillCutIn && (
           <div className="absolute inset-0 z-40 pointer-events-none flex items-center justify-center overflow-hidden">
             <div className={`absolute inset-0 opacity-30 ${
-              skillCutIn.isEnemy ? 'bg-red-900/40' : 'bg-cyan-900/40'
+              skillCutIn.isEnemy
+                ? 'bg-red-900/40'
+                : skillCutIn.isUltimate
+                ? 'bg-amber-600/50'
+                : 'bg-cyan-900/40'
             } animate-skill-speedlines`} />
 
             <div className={`relative w-[130%] py-3 px-6 flex items-center justify-center shadow-2xl border-y-2 transform -rotate-2 animate-skill-banner ${
               skillCutIn.isEnemy
                 ? 'bg-gradient-to-r from-transparent via-[#200813f5] via-50% to-transparent border-[#ff1744] shadow-[#ff1744aa]'
+                : skillCutIn.isUltimate
+                ? 'bg-gradient-to-r from-transparent via-[#2a1a05f5] via-50% to-transparent border-[#ffd54f] shadow-[0_0_35px_rgba(255,213,79,0.7)]'
                 : 'bg-gradient-to-r from-transparent via-[#09152af5] via-50% to-transparent border-[#00d2ff] shadow-[#00d2ffaa]'
             }`}>
               <div className="flex items-center gap-3">
                 <div className={`text-2xl p-1.5 rounded-xl border-2 shadow-xl shrink-0 ${
                   skillCutIn.isEnemy
                     ? 'bg-[#2b0c1b] border-[#ff1744] shadow-[#ff1744]'
+                    : skillCutIn.isUltimate
+                    ? 'bg-[#3b2408] border-[#ffd54f] shadow-[#ffd54f] animate-bounce'
                     : 'bg-[#0c1f38] border-[#00d2ff] shadow-[#00d2ff]'
                 }`}>
                   {skillCutIn.icon}
@@ -1088,7 +1192,7 @@ export const NemesisView: React.FC = () => {
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-black tracking-widest uppercase text-[#ffd54f]">
-                      {skillCutIn.isEnemy ? '⚠️ NEMESIS ACTION ⚠️' : '⚔️ HERO ACTION ⚔️'}
+                      {skillCutIn.isEnemy ? '⚠️ NEMESIS ACTION ⚠️' : skillCutIn.isUltimate ? '🔥 CLASS ULTIMATE 🔥' : '⚔️ HERO ACTION ⚔️'}
                     </span>
                     {skillCutIn.subText && (
                       <span className="text-[9px] text-[#cfd8e8]">
@@ -1154,278 +1258,364 @@ export const NemesisView: React.FC = () => {
           </div>
         </div>
 
-        {/* ── 몬스터 일러스트 패널 (네메시스 보스 일러스트 & 타겟 부위 연출) ── */}
-        <div className={`px-3 pt-1.5 shrink-0 relative ${attackingPartId ? 'z-40' : 'z-10'}`}>
-          <div
-            className={`relative w-full panel flex items-center justify-center transition-all duration-300 shadow-xl overflow-hidden ${
-              attackingPartId
-                ? 'border-[#ff1744] shadow-[0_0_35px_rgba(255,23,68,0.6)] ring-1 ring-[#ff174488]'
-                : 'border-[#2c1d3b]'
-            }`}
-            style={{ height: 'min(135px, 17vh)', background: 'linear-gradient(135deg, #0d1525 0%, #1a0a2e 50%, #0d1525 100%)' }}
-          >
+        {/* ── ⚔️ 전장 반응형 내부 컨테이너 (PVE 동일 구조: 하단 공백 차단) ── */}
+        <div className="flex-1 min-h-0 flex flex-col justify-between overflow-y-auto overflow-x-hidden relative">
+          {/* ── 몬스터 일러스트 패널 (선택된 부위 실시간 연동 & 괄호 제거 클린 표기) ── */}
+          <div className={`px-3 pt-1.5 shrink-0 relative ${attackingPartId ? 'z-40' : 'z-10'}`}>
             <div
-              className="absolute inset-0 opacity-10 rounded-xl overflow-hidden pointer-events-none"
-              style={{
-                backgroundImage: 'repeating-linear-gradient(0deg,#a742f5 0,#a742f5 1px,transparent 0,transparent 50%),repeating-linear-gradient(90deg,#a742f5 0,#a742f5 1px,transparent 0,transparent 50%)',
-                backgroundSize: '40px 40px',
-              }}
-            />
-
-            <img
-              src={bossImageSrc}
-              alt="Nemesis Boss"
-              className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-300 ${
-                attackingPartId ? 'animate-monster-attack-surge filter brightness-125 contrast-125' : 'brightness-90 contrast-110'
+              className={`relative w-full panel flex items-center justify-center transition-all duration-300 shadow-xl overflow-hidden ${
+                attackingPartId
+                  ? 'border-[#ff1744] shadow-[0_0_35px_rgba(255,23,68,0.6)] ring-1 ring-[#ff174488]'
+                  : 'border-[#2c1d3b]'
               }`}
-              onError={(e) => {
-                (e.currentTarget as HTMLElement).style.display = 'none';
-              }}
-            />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-[#070910] via-transparent to-transparent pointer-events-none" />
-
-            {/* 타겟 부위 오버레이 배지 */}
-            <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
-              <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10">
-                <span className="text-[10px] text-[#ffd54f]">🎯 집중 타겟:</span>
-                <span className="text-xs font-bold text-white">
-                  [{posLabel}] {targetedPartState?.name}
-                </span>
-                <span className="text-[10px] text-[#ce93d8]">({targetedPartState?.archetype.split(' ')[0]})</span>
-              </div>
-              <div className="bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10 text-right">
-                <span className="text-[10px] text-[#8b9bb4]">보스 잔여: </span>
-                <span className="text-xs font-mono font-bold text-[#ffd54f]">
-                  {((bossHp / 12500000) * 100).toFixed(1)}%
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── 👾 적군 슬롯 그리드: 네메시스 3대 부위 (머리·전열 / 몸통·중열 / 꼬리·후열) ── */}
-        <div className="px-3 pt-2 shrink-0 relative z-20">
-          <div className="grid grid-cols-3 gap-1.5 w-full">
-            {(['head', 'body', 'tail'] as const).map(partKey => {
-              const part = bossParts[partKey];
-              const isAlive = !part.isDefeated && part.currentHp > 0;
-              const isTargeted = isAlive && targetedPart === partKey;
-              const hpPct = isAlive ? Math.max(0, Math.min(100, (part.currentHp / part.maxHp) * 100)) : 0;
-              const posMeta = {
-                head: { label: '전열', color: '#ef5350' },
-                body: { label: '중열', color: '#ce93d8' },
-                tail: { label: '후열', color: '#00d2ff' },
-              }[partKey];
-
-              return (
-                <LongPressBox
-                  key={partKey}
-                  onClick={() => {
-                    if (isAlive) {
-                      setTargetedPart(partKey);
-                      targetedPartRef.current = partKey;
-                      SoundManager.getInstance().play('click');
-                    }
-                  }}
-                  onLongPress={() => {}}
-                  className={`relative p-1.5 sm:p-2 rounded-lg transition-all border flex flex-col justify-center h-[42px] sm:h-[46px] min-w-0 select-none ${
-                    !isAlive
-                      ? 'border-[#18202d] bg-[#0c101a] opacity-35 grayscale cursor-not-allowed shadow-none'
-                      : isTargeted
-                      ? 'border-[#ff4444] bg-[#ff444425] shadow-[0_0_12px_rgba(255,68,68,0.4)] scale-[1.02] cursor-pointer'
-                      : 'border-[#24334a] bg-[#111726dd] hover:border-[#3d5378] cursor-pointer'
-                  }`}
-                >
-                  {/* ⚡ 절멸기 차징 배지 */}
-                  {isAlive && part.chargingState && (() => {
-                    const breakPct = Math.max(0, Math.min(100, Math.round((part.chargingState.remainingBreakDmg / part.chargingState.maxBreakDmg) * 100)));
-                    return (
-                      <div className="absolute -top-3.5 right-1 z-30 h-4 px-1.5 sm:px-2 rounded-full overflow-hidden border border-[#ff9800] bg-[#1a0800] shadow-[0_0_10px_rgba(255,152,0,0.7)] flex items-center justify-center animate-pulse">
-                        <div
-                          className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-[#ff3d00] via-[#ff9100] to-[#ffd600] transition-all duration-300 pointer-events-none"
-                          style={{ width: `${breakPct}%` }}
-                        />
-                        <div className="relative z-10 flex items-center gap-1 text-[8.5px] font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] leading-none">
-                          <span>⚡ 절멸 차징</span>
-                          <span className="font-mono text-[#fffde7]">BREAK {breakPct}%</span>
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                  {/* 그로기 배지 */}
-                  {isAlive && part.isGroggy && (
-                    <div className="absolute -top-3 left-1 z-30 px-1.5 py-0.2 rounded font-bold text-[8.5px] bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44] animate-pulse">
-                      💫 그로기
-                    </div>
-                  )}
-
-                  {/* 체력 게이지 (배경 그라데이션 바) */}
-                  {isAlive && (
-                    <div
-                      className="absolute left-0 top-0 bottom-0 rounded-lg overflow-hidden transition-all duration-300 pointer-events-none opacity-30"
-                      style={{
-                        width: `${hpPct}%`,
-                        background: hpPct > 50
-                          ? 'linear-gradient(90deg, #11998e, #38ef7d)'
-                          : hpPct > 25
-                          ? 'linear-gradient(90deg, #f2994a, #f2c94c)'
-                          : 'linear-gradient(90deg, #cb2d3e, #ef473a)',
-                      }}
-                    />
-                  )}
-
-                  {/* 부위 정보 및 체력 */}
-                  <div className="relative z-10 flex items-center justify-between gap-1">
-                    <div className="flex items-center gap-1 min-w-0 flex-1">
-                      {isTargeted && <span className="text-[10px] text-[#ff4444] font-bold animate-pulse">🎯</span>}
-                      <span
-                        className="text-[8.5px] px-1 py-0.2 rounded font-bold shrink-0"
-                        style={{
-                          background: !isAlive ? '#26323822' : `${posMeta.color}22`,
-                          color: !isAlive ? '#607d8b' : posMeta.color,
-                          border: `1px solid ${!isAlive ? '#26323844' : `${posMeta.color}44`}`,
-                        }}
-                      >
-                        {posMeta.label}
-                      </span>
-                      <span
-                        className="font-bold text-xs truncate"
-                        style={{
-                          color: !isAlive ? '#607d8b' : isTargeted ? '#ffffff' : '#cfd8dc',
-                          textShadow: isAlive && isTargeted ? '0 0 6px #ff4444' : undefined,
-                          textDecoration: !isAlive ? 'line-through' : undefined,
-                        }}
-                      >
-                        {part.name}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-0.5 shrink-0">
-                      <span
-                        className="text-[9.5px] font-mono font-bold"
-                        style={{
-                          color: !isAlive ? '#607d8b' : hpPct > 50 ? '#38ef7d' : hpPct > 25 ? '#ffd54f' : '#ef5350',
-                        }}
-                      >
-                        {isAlive ? `${(part.currentHp / 10000).toFixed(0)}만` : '💀 파괴'}
-                      </span>
-                    </div>
-                  </div>
-                </LongPressBox>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── 📜 전투 로그 패널 (로그 사이즈 축소: maxHeight={80}) ── */}
-        <div className="px-3 pt-1.5 shrink-0 relative z-10">
-          <LogPanel logs={battleLogs} maxHeight={80} isBattle emptyMessage="기록된 전투 로그가 없습니다." />
-        </div>
-
-        {/* ── 📡 전술 오퍼레이터 패널 (1줄) ── */}
-        {operatorHero && (
-          <div className="px-3 pt-1.5 shrink-0 z-10">
-            <div className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#0d1627] via-[#14233e] to-[#0d1627] border border-[#00d2ff44] shadow-sm flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#00d2ff88] bg-[#0c1424] flex items-center justify-center">
-                  {operatorPortrait ? <img src={operatorPortrait} alt={operatorHero.name} className="w-full h-full object-cover" /> : '📡'}
-                </div>
-                <span className="text-[11px] font-bold text-white truncate">{operatorHero.name}</span>
-                <span className="text-[9.5px] text-[#00d2ff] font-medium shrink-0">{CHARACTER_CLASSES[operatorHero.classId]?.name || operatorHero.classId}</span>
-                <span className="text-[9.5px] text-[#ffd54f] font-mono font-bold shrink-0">Lv.{operatorHero.level}</span>
-              </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44] flex items-center gap-1">
-                  <span>📡</span>
-                  <span>전술 지원 중 (+10% 화력)</span>
-                </span>
-                <span className="text-[9px] font-mono text-[#ffd54f] font-bold">
-                  누적: {totalBattleDmg.toLocaleString()} DMG
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ── 아군 선발 3인 영웅 행 & 행동 선택 창 ── */}
-        <div className="px-3 pt-1.5 pb-2 shrink-0 z-10 flex flex-col justify-end">
-          {/* 아군 선발 3인 행 */}
-          <div className="flex flex-col gap-1 mb-1.5">
-            {heroes.map((hero, i) => (
-              <HeroRow
-                key={hero.id}
-                hero={hero}
-                isCurrentTurn={activeHeroTurnId === hero.id}
-                isSelected={selectedHeroIdx === i}
-                onClick={() => setSelectedHeroIdx(i)}
+              style={{ height: 'min(135px, 17vh)', background: 'linear-gradient(135deg, #0d1525 0%, #1a0a2e 50%, #0d1525 100%)' }}
+            >
+              <div
+                className="absolute inset-0 opacity-10 rounded-xl overflow-hidden pointer-events-none"
+                style={{
+                  backgroundImage: 'repeating-linear-gradient(0deg,#a742f5 0,#a742f5 1px,transparent 0,transparent 50%),repeating-linear-gradient(90deg,#a742f5 0,#a742f5 1px,transparent 0,transparent 50%)',
+                  backgroundSize: '40px 40px',
+                }}
               />
-            ))}
+
+              <img
+                src={bossImageSrc}
+                alt={cleanTargetedName}
+                className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-300 ${
+                  attackingPartId ? 'animate-monster-attack-surge filter brightness-125 contrast-125' : 'brightness-90 contrast-110'
+                }`}
+                onError={(e) => {
+                  (e.currentTarget as HTMLElement).style.display = 'none';
+                }}
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-[#070910] via-transparent to-transparent pointer-events-none" />
+
+              {/* 타겟 부위 오버레이 배지 (괄호 완전 제거) */}
+              <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
+                <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10">
+                  <span className="text-[10px] text-[#ffd54f]">🎯 집중 타겟:</span>
+                  <span className="text-xs font-bold text-white">
+                    [{posLabel}] {cleanTargetedName}
+                  </span>
+                </div>
+                <div className="bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10 text-right">
+                  <span className="text-[10px] text-[#8b9bb4]">보스 잔여: </span>
+                  <span className="text-xs font-mono font-bold text-[#ffd54f]">
+                    {((bossHp / 12500000) * 100).toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* ── 수동 행동 선택 창 (PVE 감성 그대로) ── */}
-          {!settlement && alivePartsCount > 0 && isHeroTurn && activeHero && activeHero.currentHp > 0 && !isAutoBattle && (
-            <div className="panel p-2 animate-slide-up" style={{ background: '#0b0d13dd', border: '1px solid #00d2ff44' }}>
-              <div className="text-xs text-[#00d2ff] font-bold mb-1.5 border-b border-[#00d2ff22] pb-1 flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#00d2ff55] bg-[#1a2333] flex items-center justify-center">
-                    {activeHeroPortrait ? <img src={activeHeroPortrait} alt={activeHero.name} className="w-full h-full object-cover" /> : '⚔️'}
-                  </span>
-                  <span>{activeHero.name}</span>
-                  <span className="text-[10px] text-[#00d2ff] font-medium">{activeHero.className}</span>
-                  <span className="text-[10px] text-[#ffd54f] font-mono font-bold">Lv.{activeHero.level}</span>
-                  <span className="text-[10px] font-normal text-[#8b9bb4]">({activeHero.position === 'front' ? '전열' : activeHero.position === 'mid' ? '중열' : '후열'})</span>
-                </span>
-                <span className="text-[10px] text-[#ffd54f] font-medium">타겟: [{bossParts[targetedPart]?.name || '머리'}]</span>
-              </div>
+          {/* ── 👾 적군 슬롯 그리드: 네메시스 3대 부위 (머리·전열 / 몸통·중열 / 꼬리·후열) ── */}
+          <div className="px-3 pt-1.5 shrink-0 relative z-20">
+            <div className="grid grid-cols-3 gap-1.5 w-full">
+              {(['head', 'body', 'tail'] as const).map(partKey => {
+                const part = bossParts[partKey];
+                const isAlive = !part.isDefeated && part.currentHp > 0;
+                const isTargeted = isAlive && targetedPart === partKey;
+                const hpPct = isAlive ? Math.max(0, Math.min(100, (part.currentHp / part.maxHp) * 100)) : 0;
+                const posMeta = {
+                  head: { label: '전열', color: '#ef5350' },
+                  body: { label: '중열', color: '#ce93d8' },
+                  tail: { label: '후열', color: '#00d2ff' },
+                }[partKey];
+                const cleanName = (part.name || '').replace(/\s*\(.*?\)/g, '').trim();
 
-              <div className="grid grid-cols-2 gap-1.5">
-                {/* 기본 공격 */}
-                <button
-                  onClick={() => !isProcessingRef.current && handleManualAction('basic')}
-                  className="btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border border-[#8b9bb4] rounded-lg hover:border-[#00d2ff]"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-base">⚔️</span>
-                    <span className="text-xs font-bold text-white">기본 공격</span>
-                  </div>
-                  <div className="flex items-center justify-between w-full text-[10px] text-[#8b9bb4]">
-                    <span>기본 물리 공격</span>
-                    <span>0 MP</span>
-                  </div>
-                </button>
+                return (
+                  <LongPressBox
+                    key={partKey}
+                    onClick={() => {
+                      if (isAlive) {
+                        setTargetedPart(partKey);
+                        targetedPartRef.current = partKey;
+                        SoundManager.getInstance().play('click');
+                      }
+                    }}
+                    onLongPress={() => {}}
+                    className={`relative p-1.5 sm:p-2 rounded-lg transition-all border flex flex-col justify-center h-[42px] sm:h-[46px] min-w-0 select-none ${
+                      !isAlive
+                        ? 'border-[#18202d] bg-[#0c101a] opacity-35 grayscale cursor-not-allowed shadow-none'
+                        : isTargeted
+                        ? 'border-[#ff4444] bg-[#ff444425] shadow-[0_0_12px_rgba(255,68,68,0.4)] scale-[1.02] cursor-pointer'
+                        : 'border-[#24334a] bg-[#111726dd] hover:border-[#3d5378] cursor-pointer'
+                    }`}
+                  >
+                    {/* ⚡ 절멸기 차징 배지 */}
+                    {isAlive && part.chargingState && (() => {
+                      const breakPct = Math.max(0, Math.min(100, Math.round((part.chargingState.remainingBreakDmg / part.chargingState.maxBreakDmg) * 100)));
+                      return (
+                        <div className="absolute -top-3.5 right-1 z-30 h-4 px-1.5 sm:px-2 rounded-full overflow-hidden border border-[#ff9800] bg-[#1a0800] shadow-[0_0_10px_rgba(255,152,0,0.7)] flex items-center justify-center animate-pulse">
+                          <div
+                            className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-[#ff3d00] via-[#ff9100] to-[#ffd600] transition-all duration-300 pointer-events-none"
+                            style={{ width: `${breakPct}%` }}
+                          />
+                          <div className="relative z-10 flex items-center gap-1 text-[8.5px] font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] leading-none">
+                            <span>⚡ 절멸 차징</span>
+                            <span className="font-mono text-[#fffde7]">BREAK {breakPct}%</span>
+                          </div>
+                        </div>
+                      );
+                    })()}
 
-                {/* 영웅 스킬들 */}
-                {activeHero.skills.map(skill => {
-                  const cdLeft = activeHero.cooldowns[skill.id] || 0;
-                  const mpCost = skill.manaCost;
-                  const hasMp = activeHero.currentMp >= mpCost;
-                  const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
-                  return (
-                    <button
-                      key={skill.id}
-                      disabled={!canUse}
-                      onClick={() => canUse && handleManualAction(skill)}
-                      className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg ${
-                        !canUse ? 'opacity-40 cursor-not-allowed border-[#37474f]' : 'border-[#00d2ff55] hover:border-[#00d2ff]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 w-full">
-                        <span className="text-base">{skill.icon || '✨'}</span>
-                        <span className="text-xs font-bold text-white truncate flex-1 text-left">{skill.name}</span>
+                    {/* 그로기 배지 */}
+                    {isAlive && part.isGroggy && (
+                      <div className="absolute -top-3 left-1 z-30 px-1.5 py-0.2 rounded font-bold text-[8.5px] bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44] animate-pulse">
+                        💫 그로기
                       </div>
-                      <div className="flex items-center justify-between w-full text-[10px]">
-                        <span className="text-[#8b9bb4] truncate mr-1">{skill.targetType === 'all_enemies' ? '전체 공격' : '단일 공격'}</span>
-                        <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#00d2ff]' : 'text-[#ff5252]'}`}>
-                          {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
+                    )}
+
+                    {/* 체력 게이지 (배경 그라데이션 바) */}
+                    {isAlive && (
+                      <div
+                        className="absolute left-0 top-0 bottom-0 rounded-lg overflow-hidden transition-all duration-300 pointer-events-none opacity-30"
+                        style={{
+                          width: `${hpPct}%`,
+                          background: hpPct > 50
+                            ? 'linear-gradient(90deg, #11998e, #38ef7d)'
+                            : hpPct > 25
+                            ? 'linear-gradient(90deg, #f2994a, #f2c94c)'
+                            : 'linear-gradient(90deg, #cb2d3e, #ef473a)',
+                        }}
+                      />
+                    )}
+
+                    {/* 부위 정보 및 체력 */}
+                    <div className="relative z-10 flex items-center justify-between gap-1">
+                      <div className="flex items-center gap-1 min-w-0 flex-1">
+                        {isTargeted && <span className="text-[10px] text-[#ff4444] font-bold animate-pulse">🎯</span>}
+                        <span
+                          className="text-[8.5px] px-1 py-0.2 rounded font-bold shrink-0"
+                          style={{
+                            background: !isAlive ? '#26323822' : `${posMeta.color}22`,
+                            color: !isAlive ? '#607d8b' : posMeta.color,
+                            border: `1px solid ${!isAlive ? '#26323844' : `${posMeta.color}44`}`,
+                          }}
+                        >
+                          {posMeta.label}
+                        </span>
+                        <span
+                          className="font-bold text-xs truncate"
+                          style={{
+                            color: !isAlive ? '#607d8b' : isTargeted ? '#ffffff' : '#cfd8dc',
+                            textShadow: isAlive && isTargeted ? '0 0 6px #ff4444' : undefined,
+                            textDecoration: !isAlive ? 'line-through' : undefined,
+                          }}
+                        >
+                          {cleanName}
                         </span>
                       </div>
-                    </button>
-                  );
-                })}
-              </div>
+                      <div className="flex items-center gap-0.5 shrink-0">
+                        <span
+                          className="text-[9.5px] font-mono font-bold"
+                          style={{
+                            color: !isAlive ? '#607d8b' : hpPct > 50 ? '#38ef7d' : hpPct > 25 ? '#ffd54f' : '#ef5350',
+                          }}
+                        >
+                          {isAlive ? `${(part.currentHp / 10000).toFixed(0)}만` : '💀 파괴'}
+                        </span>
+                      </div>
+                    </div>
+                  </LongPressBox>
+                );
+              })}
             </div>
-          )}
+          </div>
+
+          {/* ── 📜 전투 로그 패널 (유연하게 공간을 채워 하단 공백 제거) ── */}
+          <div className="px-3 pt-1.5 flex-1 min-h-[70px] relative z-10">
+            <LogPanel logs={battleLogs} maxHeight={90} isBattle emptyMessage="기록된 전투 로그가 없습니다." />
+          </div>
+
+          {/* ── 📡 전술 오퍼레이터 패널 (궁극기 이름 표시) ── */}
+          {operatorHero && (() => {
+            const opCls = CHARACTER_CLASSES[operatorHero.classId];
+            const opSpecial = opCls?.specialSkill ? gm.resolveSkillData(opCls.specialSkill.id, operatorHero) || opCls.specialSkill : null;
+            return (
+              <div className="px-3 pt-1 shrink-0 z-10">
+                <div className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#0d1627] via-[#14233e] to-[#0d1627] border border-[#00d2ff44] shadow-sm flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#00d2ff88] bg-[#0c1424] flex items-center justify-center">
+                      {operatorPortrait ? <img src={operatorPortrait} alt={operatorHero.name} className="w-full h-full object-cover" /> : '📡'}
+                    </div>
+                    <span className="text-[11px] font-bold text-white truncate">{operatorHero.name}</span>
+                    <span className="text-[9.5px] text-[#00d2ff] font-medium shrink-0">{opCls?.name || operatorHero.classId}</span>
+                    <span className="text-[9.5px] text-[#ffd54f] font-mono font-bold shrink-0">Lv.{operatorHero.level}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {opSpecial && (
+                      <span className="text-[9px] px-2 py-0.5 rounded-full font-bold bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f55] flex items-center gap-1">
+                        <span>👑</span>
+                        <span>전술 궁극기: [{opSpecial.name}]</span>
+                      </span>
+                    )}
+                    <span className="text-[9px] font-mono text-[#00d2ff] font-bold">
+                      누적 {totalBattleDmg.toLocaleString()} DMG
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* ── 아군 선발 3인 영웅 행 & PVE 2열 스킬 패널 (하단 완벽 밀착) ── */}
+          <div className="px-3 pt-1.5 pb-2 shrink-0 z-10 flex flex-col justify-end">
+            {/* 아군 선발 3인 행 */}
+            <div className="flex flex-col gap-1 mb-1.5">
+              {heroes.map((hero, i) => (
+                <HeroRow
+                  key={hero.id}
+                  hero={hero}
+                  isCurrentTurn={activeHeroTurnId === hero.id}
+                  isSelected={selectedHeroIdx === i}
+                  onClick={() => setSelectedHeroIdx(i)}
+                />
+              ))}
+            </div>
+
+            {/* ── PVE 전장 동일 2x2 스킬 선택 패널 (궁극기 배지 강조) ── */}
+            {!settlement && alivePartsCount > 0 && isHeroTurn && activeHero && activeHero.currentHp > 0 && !isAutoBattle && (() => {
+              // 스킬 목록: 1번째는 궁극기(specialSkill), 2/3번째는 일반 스킬
+              const ultSkill = activeHero.skills.find(s => s.isSpecial || s.name.includes('궁극기') || s.id.endsWith('_ultimate')) || activeHero.skills[0];
+              const normalSkills = activeHero.skills.filter(s => s !== ultSkill);
+
+              return (
+                <div className="panel p-2 animate-slide-up" style={{ background: '#0b0d13dd', border: '1px solid #00d2ff44' }}>
+                  <div className="text-xs text-[#00d2ff] font-bold mb-1.5 border-b border-[#00d2ff22] pb-1 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#00d2ff55] bg-[#1a2333] flex items-center justify-center">
+                        {activeHeroPortrait ? <img src={activeHeroPortrait} alt={activeHero.name} className="w-full h-full object-cover" /> : '⚔️'}
+                      </span>
+                      <span>{activeHero.name}</span>
+                      <span className="text-[10px] text-[#00d2ff] font-medium">{activeHero.className}</span>
+                      <span className="text-[10px] text-[#ffd54f] font-mono font-bold">Lv.{activeHero.level}</span>
+                      <span className="text-[10px] font-normal text-[#8b9bb4]">({activeHero.position === 'front' ? '전열' : activeHero.position === 'mid' ? '중열' : '후열'})</span>
+                    </span>
+                    <span className="text-[10px] text-[#ffd54f] font-medium">타겟: [{cleanTargetedName}]</span>
+                  </div>
+
+                  {/* 2열 2행 PVE 스킬 버튼 그리드 */}
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {/* [1행 1열]: 기본 공격 */}
+                    <button
+                      onClick={() => !isProcessingRef.current && handleManualAction('basic')}
+                      className="btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border border-[#8b9bb4] rounded-lg hover:border-[#00d2ff] transition-all text-left"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-base">⚔️</span>
+                        <span className="text-xs font-bold text-white">기본 공격</span>
+                      </div>
+                      <div className="flex items-center justify-between w-full text-[10px] text-[#8b9bb4]">
+                        <span>기본 물리 공격</span>
+                        <span className="font-mono text-[#cfd8dc]">0 MP</span>
+                      </div>
+                    </button>
+
+                    {/* [1행 2열]: 궁극기 (특별 황금 테두리 & 배지 연출) */}
+                    {ultSkill ? (() => {
+                      const cdLeft = activeHero.cooldowns[ultSkill.id] || 0;
+                      const mpCost = ultSkill.manaCost;
+                      const hasMp = activeHero.currentMp >= mpCost;
+                      const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
+                      return (
+                        <button
+                          disabled={!canUse}
+                          onClick={() => canUse && handleManualAction(ultSkill)}
+                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg relative text-left transition-all ${
+                            !canUse
+                              ? 'opacity-40 cursor-not-allowed border-[#37474f]'
+                              : 'border-[#ffd54f] bg-[#ffd54f10] shadow-[0_0_12px_rgba(255,213,79,0.3)] hover:border-[#ffe57f]'
+                          }`}
+                        >
+                          <span className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md">
+                            궁극기
+                          </span>
+                          <div className="flex items-center gap-1.5 w-full">
+                            <span className="text-base">{ultSkill.icon || '👑'}</span>
+                            <span className="text-xs font-bold text-[#ffe57f] truncate flex-1">{ultSkill.name}</span>
+                          </div>
+                          <div className="flex items-center justify-between w-full text-[10px]">
+                            <span className="text-[#ffd54f88] truncate mr-1">{ultSkill.targetType === 'all_enemies' ? '전체 공격' : '고유 강타'}</span>
+                            <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#ffd54f]' : 'text-[#ff5252]'}`}>
+                              {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })() : <div />}
+
+                    {/* [2행 1열]: 일반 스킬 1 */}
+                    {normalSkills[0] ? (() => {
+                      const sk = normalSkills[0];
+                      const style = getSkillBtnStyle(sk);
+                      const cdLeft = activeHero.cooldowns[sk.id] || 0;
+                      const mpCost = sk.manaCost;
+                      const hasMp = activeHero.currentMp >= mpCost;
+                      const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
+                      return (
+                        <button
+                          disabled={!canUse}
+                          onClick={() => canUse && handleManualAction(sk)}
+                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all ${
+                            !canUse
+                              ? 'opacity-40 cursor-not-allowed border-[#37474f]'
+                              : 'border-[#00d2ff55] hover:border-[#00d2ff]'
+                          }`}
+                          style={{ borderColor: canUse ? style.borderColor : undefined }}
+                        >
+                          <div className="flex items-center gap-1.5 w-full">
+                            <span className="text-base">{sk.icon || '⚡'}</span>
+                            <span className="text-xs font-bold text-white truncate flex-1">{sk.name}</span>
+                          </div>
+                          <div className="flex items-center justify-between w-full text-[10px]">
+                            <span className="text-[#8b9bb4] truncate mr-1">{sk.targetType === 'all_enemies' ? '전체' : sk.effectType === 'heal' ? '치유' : '단일'}</span>
+                            <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#00d2ff]' : 'text-[#ff5252]'}`}>
+                              {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })() : <div />}
+
+                    {/* [2행 2열]: 일반 스킬 2 */}
+                    {normalSkills[1] ? (() => {
+                      const sk = normalSkills[1];
+                      const style = getSkillBtnStyle(sk);
+                      const cdLeft = activeHero.cooldowns[sk.id] || 0;
+                      const mpCost = sk.manaCost;
+                      const hasMp = activeHero.currentMp >= mpCost;
+                      const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
+                      return (
+                        <button
+                          disabled={!canUse}
+                          onClick={() => canUse && handleManualAction(sk)}
+                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all ${
+                            !canUse
+                              ? 'opacity-40 cursor-not-allowed border-[#37474f]'
+                              : 'border-[#00d2ff55] hover:border-[#00d2ff]'
+                          }`}
+                          style={{ borderColor: canUse ? style.borderColor : undefined }}
+                        >
+                          <div className="flex items-center gap-1.5 w-full">
+                            <span className="text-base">{sk.icon || '⚡'}</span>
+                            <span className="text-xs font-bold text-white truncate flex-1">{sk.name}</span>
+                          </div>
+                          <div className="flex items-center justify-between w-full text-[10px]">
+                            <span className="text-[#8b9bb4] truncate mr-1">{sk.targetType === 'all_enemies' ? '전체' : sk.effectType === 'heal' ? '치유' : '단일'}</span>
+                            <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#00d2ff]' : 'text-[#ff5252]'}`}>
+                              {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })() : <div />}
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
         </div>
 
         {/* ── 🎁 전투 정산 모달 ── */}
@@ -1473,21 +1663,21 @@ export const NemesisView: React.FC = () => {
                 </div>
                 <div className="space-y-1.5 text-xs">
                   <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
-                    <span className="text-[#ef5350] font-bold">머리 (전열 · 발할라 워로드)</span>
+                    <span className="text-[#ef5350] font-bold">머리 (전열)</span>
                     <span className="font-mono font-bold text-white">{settlement.partDamages.head.toLocaleString()} DMG</span>
                   </div>
                   <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
-                    <span className="text-[#ce93d8] font-bold">몸통 (중열 · 크로노 아콘)</span>
+                    <span className="text-[#ce93d8] font-bold">몸통 (중열)</span>
                     <span className="font-mono font-bold text-white">{settlement.partDamages.body.toLocaleString()} DMG</span>
                   </div>
                   <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
-                    <span className="text-[#00d2ff] font-bold">꼬리 (후열 · 레인저)</span>
+                    <span className="text-[#00d2ff] font-bold">꼬리 (후열)</span>
                     <span className="font-mono font-bold text-white">{settlement.partDamages.tail.toLocaleString()} DMG</span>
                   </div>
                 </div>
               </div>
 
-              {/* 딜미터기 요약 */}
+              {/* 딜미터기 요약 (적군 리포트 완전 제거) */}
               {combatMetrics.length > 0 && (
                 <div className="panel p-2 bg-[#090d16] border border-[#1e2a40]">
                   <div className="text-xs font-bold text-white mb-1.5 flex items-center justify-between">
@@ -1606,6 +1796,7 @@ export const NemesisView: React.FC = () => {
                   const isDefeated = part?.isDefeated || curHp <= 0;
                   const pct = Math.max(0, Math.min(100, (curHp / maxHp) * 100));
                   const theme = pKey === 'head' ? '#ef5350' : pKey === 'body' ? '#ce93d8' : '#00d2ff';
+                  const cleanName = (pCfg.name || '').replace(/\s*\(.*?\)/g, '').trim();
                   return (
                     <div
                       key={pKey}
@@ -1616,7 +1807,7 @@ export const NemesisView: React.FC = () => {
                       }`}
                     >
                       <div className="flex items-center justify-between text-[9px] font-bold" style={{ color: isDefeated ? '#78909c' : theme }}>
-                        <span>{pCfg.icon} {pCfg.name}</span>
+                        <span>{pCfg.icon} {cleanName}</span>
                         <span>{isDefeated ? '💀패퇴' : `${pct.toFixed(0)}%`}</span>
                       </div>
                       <div className="w-full bg-[#0a0710] h-1.5 rounded-full overflow-hidden mt-1 border border-white/5">
@@ -1850,30 +2041,19 @@ export const NemesisView: React.FC = () => {
               </div>
             </div>
 
-            {/* 레이드 특수 규칙 안내 */}
-            <div className="panel p-3 bg-[#0d1424] border border-[#1c273e]">
-              <div className="text-xs font-bold text-[#00d2ff] mb-1.5 flex items-center gap-1">
-                <span>📜</span>
-                <span>차원 네메시스 공략 지침</span>
+            {/* 📜 레이드 특징 안내 (이전 정통 컨텐츠 규칙 복구) */}
+            <div className="panel p-3 bg-[#110c1c] border border-[#ff416c44] flex flex-col gap-1.5 text-xs text-[#cfd8e8]">
+              <div className="font-bold text-[#ff416c] flex items-center gap-1 text-sm">
+                <span>⚠️</span>
+                <span>차원 네메시스 침식 & 약탈 규칙</span>
               </div>
-              <ul className="text-[10px] text-[#cfd8e8] space-y-1 leading-relaxed">
-                <li className="flex items-start gap-1.5">
-                  <span className="text-[#ffd54f]">•</span>
-                  <span><strong>부위별 아키타입:</strong> 머리는 워로드(물리/분쇄), 몸통은 크로노 아콘(디버프/CC), 꼬리는 레인저(관통/광역 휩쓸기)입니다.</span>
-                </li>
-                <li className="flex items-start gap-1.5">
-                  <span className="text-[#ffd54f]">•</span>
-                  <span><strong>절멸기 차징 저지:</strong> 네메시스 각 부위가 절멸기 차징에 돌입하면 부위를 집중 타격하여 브레이크 게이지를 파쇄(그로기 유발)하십시오.</span>
-                </li>
-                <li className="flex items-start gap-1.5">
-                  <span className="text-[#ffd54f]">•</span>
-                  <span><strong>사경 없음 & 파괴 보존:</strong> 보스 부위는 사경 없이 체력 0 즉시 패퇴하며, 한번 파괴된 부위는 다시 재생되지 않습니다.</span>
-                </li>
-                <li className="flex items-start gap-1.5">
-                  <span className="text-[#ffd54f]">•</span>
-                  <span><strong>피해량 누적 보상:</strong> 입힌 피해는 즉시 저장되어 마일스톤 보상 및 토벌 랭킹 점수로 환산됩니다.</span>
-                </li>
-              </ul>
+              <p className="text-[11px] leading-relaxed text-[#8b9bb4]">
+                • <strong className="text-white">차원 앵커 연동 침공</strong>: 차원 앵커 게이트(Lv.3+)가 개방되어 활성화된 상태에서만 침식과 약탈이 발생합니다. 차원 앵커가 닫혀 있는 동안에는 네메시스 침공과 자원 약탈이 전면 중단되어 영지 자원이 100% 안전하게 보호됩니다.<br />
+                • <strong className="text-white">6일 활동 & 1일 재소환 주기</strong>: 6일 동안 활동하며 완전 토벌 시 다음 7일차 재소환 주기까지 평화 상태가 유지됩니다.<br />
+                • <strong className="text-white">6시간 주기 20% 약탈</strong>: 침공 활성화 중 6시간마다 네메시스 체력의 1/24({(Math.round(cycleInfo.requiredWindowDamage)).toLocaleString()} DMG) 이상을 깎지 못하면 영지 전 자원의 20%를 약탈당합니다.<br />
+                • <strong className="text-white">체력 자연 회복</strong>: 네메시스는 활동 중 매 분마다 생존 부위 체력을 지속 회복합니다. (파괴된 부위는 영구 회복 불가)<br />
+                • <strong className="text-white">최대 15턴 전투 & 마일스톤</strong>: 매 전투마다 피해량을 누적하여 마일스톤 장비와 대량의 인장을 수령하십시오.
+              </p>
             </div>
 
             {/* 대형 출격 버튼 */}
