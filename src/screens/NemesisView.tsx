@@ -67,7 +67,7 @@ export const NemesisView: React.FC = () => {
   const [heroes, setHeroes] = useState<RaidHeroCombatant[]>([]);
   const [bossHp, setBossHp] = useState(state.nemesisState?.currentBossHp ?? NEMESIS_BOSS_CONFIG.maxHp);
   const [totalBattleDmg, setTotalBattleDmg] = useState(0);
-  const [battleSpeed, setBattleSpeed] = useState<1 | 1.5>(1);
+  const [battleSpeed, setBattleSpeed] = useState<1.5 | 2>(2);
   const [vfxList, setVfxList] = useState<VFXEvent[]>([]);
   const [actionBanner, setActionBanner] = useState<{ text: string; sub: string; color: string } | null>(null);
   const [logs, setLogs] = useState<RaidCombatLog[]>([]);
@@ -467,8 +467,8 @@ export const NemesisView: React.FC = () => {
   useEffect(() => {
     if (!inBattle || isProcessingRef.current || settlement) return;
 
-    // 관전이 편안하도록 속도 딜레이 완화 (기본 1x: 650ms, 1.5x: 450ms)
-    const stepDelay = battleSpeed === 1.5 ? 450 : 650;
+    // 관전이 편안하도록 속도 딜레이 최적화 (기본 2x: 320ms, 1.5x: 450ms)
+    const stepDelay = battleSpeed === 2 ? 320 : 450;
 
     const timer = setTimeout(() => {
       if (isProcessingRef.current) return;
@@ -854,8 +854,8 @@ export const NemesisView: React.FC = () => {
 
           <div className="flex items-center gap-1.5">
             <button
-              className={`px-2 py-1 rounded text-xs font-bold ${battleSpeed === 1.5 ? 'bg-[#5c4524] text-[#f3e5c8] border border-[#876739]' : 'bg-[#151c2d] text-[#8b9bb4]'}`}
-              onClick={() => setBattleSpeed(s => s === 1 ? 1.5 : 1)}
+              className={`px-2 py-1 rounded text-xs font-bold ${battleSpeed === 2 ? 'bg-[#5c4524] text-[#f3e5c8] border border-[#876739]' : 'bg-[#151c2d] text-[#8b9bb4]'}`}
+              onClick={() => setBattleSpeed(s => s === 2 ? 1.5 : 2)}
             >
               ⚡ {battleSpeed}x
             </button>

@@ -1890,9 +1890,9 @@ export const BattleScreen: React.FC = () => {
     }
   }, [gm]);
 
-  // ⚡ [전투 속도 제어 헬퍼]: 자동 전투 시 모든 대기/연출 딜레이를 1.5배 가속
+  // ⚡ [전투 속도 제어 헬퍼]: 자동 전투 시 모든 대기/연출 딜레이를 2.0배 가속
   const getBattleDelay = useCallback((ms: number) => {
-    return isAutoBattleRef.current ? Math.max(35, Math.round(ms / 1.5)) : ms;
+    return isAutoBattleRef.current ? Math.max(25, Math.round(ms / 2.0)) : ms;
   }, []);
 
   const checkBattleOutcome = useCallback((currentMonsters: MonsterState[]) => {

@@ -710,7 +710,7 @@ export const ArenaScreen: React.FC = () => {
   const [activeCombatantId, setActiveCombatantId] = useState<string | null>(null);
   const [targetEnemyId, setTargetEnemyId] = useState<string | null>(null);
   const [isAuto] = useState(true);
-  const [battleSpeed, setBattleSpeed] = useState<1.5 | 2>(1.5);
+  const [battleSpeed, setBattleSpeed] = useState<1.5 | 2>(2);
   const [battleRound, setBattleRound] = useState(1);
   const [vfxList, setVfxList] = useState<VFXEvent[]>([]);
   const [actionBanner, setActionBanner] = useState<{ text: string; sub: string; color: string } | null>(null);
@@ -3684,7 +3684,7 @@ export const ArenaScreen: React.FC = () => {
             <div className="flex items-center gap-1.5 shrink-0">
               <button
                 className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#141b2c] text-[#ffd54f] border border-[#212e48] hover:border-[#ffd54f]/50 transition-all cursor-pointer"
-                onClick={() => setBattleSpeed(s => (s === 1.5 ? 2 : 1.5))}
+                onClick={() => setBattleSpeed(s => (s === 2 ? 1.5 : 2))}
               >
                 ⚡ {battleSpeed}x
               </button>

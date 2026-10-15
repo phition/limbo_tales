@@ -488,16 +488,31 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                 </div>
               </div>
 
-              {/* ⚡ 스마트 자동 전투 AI & 1.5배 가속 */}
+              {/* ⚡ 스마트 자동 전투 AI & 2.0배속 가속 */}
               <div className="p-4 rounded-xl bg-[#0f192a] border border-[#38ef7d44] flex flex-col gap-2">
                 <div className="text-sm sm:text-base font-bold text-[#38ef7d] flex items-center justify-between">
-                  <span>⚡ 5. 1.5배 스마트 자동 전투 AI 가이드</span>
-                  <span className="text-xs font-mono text-[#81c784] font-bold">Auto Combat 1.5x</span>
+                  <span>⚡ 5. 2.0배속 스마트 자동 전투 AI 가이드</span>
+                  <span className="text-xs font-mono text-[#81c784] font-bold">Auto Combat 2.0x</span>
                 </div>
                 <div className="text-xs text-[#b0bec5] space-y-1">
-                  <div>• <strong>1.5배속 전투 연출</strong>: 자동 전투(Auto) 활성화 시 턴 진행 및 전투 애니메이션이 1.5배 속도로 쾌적하게 재생됩니다.</div>
+                  <div>• <strong>2.0배속 전투 연출</strong>: 전투 진행 시 턴 진행 및 전투 애니메이션이 기본 2.0배속 고속으로 쾌적하게 재생됩니다.</div>
                   <div>• <strong>상태이상 폭발 연계 우선</strong>: 적에게 걸린 디버프를 분석하여 6대 상태이상 콤보 폭발이 가능한 스킬을 최우선으로 시전합니다.</div>
                   <div>• <strong>스마트 마무리(막타)</strong>: 일반 공격만으로 처치할 수 있는 잔여 체력의 적에게는 무의미한 스킬 마나 낭비를 방지하고 기본 공격으로 마무리합니다.</div>
+                </div>
+              </div>
+
+              {/* ⚔️ 차원 아레나 5인 부대 & 피버 콜(Fever Call) 가이드 */}
+              <div className="p-4 rounded-xl bg-[#141a2e] border border-[#00d2ff44] flex flex-col gap-2.5">
+                <div className="text-sm sm:text-base font-bold text-[#00d2ff] flex items-center justify-between">
+                  <span>⚔️ 6. 차원 아레나 5인 부대 & 피버 콜(Fever Call) 결투 가이드</span>
+                  <span className="text-xs font-mono text-[#80d8ff] font-bold">Dimensional Arena & Fever Call</span>
+                </div>
+                <div className="text-xs text-[#b0bec5] space-y-1.5 leading-relaxed">
+                  <div>• <strong>5인 차원 결투 부대</strong>: 3인의 선발(전열/중열/후열)과 1인의 전술 오퍼레이터(리더 가호 및 궁극기), 1인의 서포터(원호 공격 및 치유)로 출격하여 속도(SPD) 순서로 턴을 진행합니다 (기본 2.0배속).</div>
+                  <div>• <strong>사경(Death's Door) 3턴 유예</strong>: 체력이 0이 된 영웅은 3턴간 사경 상태로 버티며, 힐러나 서포터의 치유로 부활할 수 있습니다. 단, 마지막 생존자가 사경에 돌입하면 즉시 패배합니다.</div>
+                  <div>• <strong>피버 콜(Fever Call) 3턴 타임아웃</strong>: 배지 5개를 먼저 채운 쪽이 피버콜을 선언하며, 상대가 3턴 내에 피버를 완성하지 못하면 실격 패배로 선언 측이 부전승을 거둡니다.</div>
+                  <div>• <strong>12대 전술 족보 & 주간 상성</strong>: 양측 피버콜 완성 시 전광판 쇼다운이 펼쳐지며, 족보 위계와 주간 차원율(돌파 &gt; 수호 &gt; 변칙 &gt; 돌파) 상성에 따라 승자 오퍼레이터의 궁극기가 폭발합니다.</div>
+                  <div>• <strong>투사의 인장 & 명예 암시장</strong>: 승리 및 연승(Streak) 보너스로 투사의 인장을 모아 명예 암시장에서 고티어 장비 보급함을 교환할 수 있습니다.</div>
                 </div>
               </div>
 
