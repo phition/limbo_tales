@@ -2257,6 +2257,11 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "💥 치명타!": "💥 Critical!",
     "사경 유예": "Grace Period",
     "요격 목표치": "Interception Target",
+    "연계 퀘스트 (2/2): 에테르 공방 - 스킬 비전 강화": "Linked Quest (2/2): Aether Lab - Skill Grimoire Enhancement",
+    "에테르 공방에서 용병의 스킬을 1회 강화하여 비전 전술 능력을 증폭하세요.": "Enhance a mercenary skill once in the Aether Lab to amplify their tactical arcane power.",
+    "에테르 공방에서 스킬 강화 1회": "Enhance a skill 1 time in the Aether Lab",
+    "에테르 공방 바로가기": "Go to Aether Lab",
+    "영지 건설 바로가기 (에테르 공방)": "Build/Upgrade Aether Lab",
   },
   ja: {
     "⚡ [진척도 가속] 윤회의 고리 100 위험도 점프 (위험도 +100 / 📜 초월 비전서 ×3 획득)": "⚡ [進捗加速] 輪廻の環100危険度ジャンプ (危険度+100 / 📜 超越魔導書×3 獲得)",
@@ -4478,6 +4483,11 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "💥 치명타!": "💥 会心！",
     "사경 유예": "死境猶予",
     "요격 목표치": "迎撃目標値",
+    "연계 퀘스트 (2/2): 에테르 공방 - 스킬 비전 강화": "連携クエスト (2/2): エーテル工房 - スキル秘伝強化",
+    "에테르 공방에서 용병의 스킬을 1회 강화하여 비전 전술 능력을 증폭하세요.": "エーテル工房で傭兵のスキルを1回強化し、秘伝戦術能力を増幅させてください。",
+    "에테르 공방에서 스킬 강화 1회": "エーテル工房でスキル強化1回",
+    "에테르 공방 바로가기": "エーテル工房へ移動",
+    "영지 건설 바로가기 (에테르 공방)": "エーテル工房建設へ移動",
   }};
 
 // ============================================================================

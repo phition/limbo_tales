@@ -15,6 +15,7 @@ import { ALL_SKILL_BOOKS, MARKET_SKILL_BOOKS, BOSS_EXCLUSIVE_SKILL_BOOKS, getDro
 import { CHARACTER_CLASSES } from '../data/classes';
 import { NEMESIS_BOSS_CONFIG, NemesisBossConfig } from '../data/nemesis';
 import { BuildingId, GameResources } from '../types/game';
+import { GameBalanceConfig } from '../services/GameDataService';
 import { GameIcon } from './GameIcon';
 
 interface Props {

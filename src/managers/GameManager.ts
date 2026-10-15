@@ -235,6 +235,7 @@ export class GameManager {
   public hasReturnedFromDungeon: boolean = false;
   public hasCraftedEquipment: boolean = false;
   public hasCraftedGrimoire: boolean = false;
+  public hasEnhancedSkill: boolean = false;
   public unlockedAviciTier: number = 1; // 🌌 무간도 세부 진입 계층 (1~10층, 위험도 0~9,000)
   public purifiedFloors: number[] = []; // ✨ 연무가 정화된 심연 층 목록
   public portalAppeared: boolean = false;
@@ -648,6 +649,7 @@ export class GameManager {
     this.hasEnteredDungeon = false;
     this.hasCraftedEquipment = false;
     this.hasCraftedGrimoire = false;
+    this.hasEnhancedSkill = false;
     this.unlockedAviciTier = 1;
     this.purifiedFloors = [];
     this.dungeonDangerLevel = 0;
@@ -1988,6 +1990,7 @@ export class GameManager {
       hasReturnedFromDungeon: this.hasReturnedFromDungeon,
       hasCraftedEquipment: this.hasCraftedEquipment,
       hasCraftedGrimoire: this.hasCraftedGrimoire,
+      hasEnhancedSkill: this.hasEnhancedSkill,
       portalAppeared: this.portalAppeared,
       currentMonsters: [...this.currentMonsters],
       dungeonInventory: [...this.dungeonInventory],
@@ -4549,6 +4552,9 @@ export class GameManager {
         `✨ [스킬 비전 강화 성공!] (성공률 ${rateInfo.successRate}%) [${hero.name}]의 [${skillName}] 스킬이 Lv.${newLv}로 승급했습니다! (위력 +12% / 소모 MP +25% 증가)`,
         'reward'
       );
+      this.hasEnhancedSkill = true;
+      this.updateQuestObjective('Q_CRAFT_GRIMOIRE', 0, 1);
+      this.checkAllQuestObjectives();
       this.emit('partyUpdated', this.party);
       this.emit('heroesUpdated', this.barracks);
       this.saveGame();
@@ -4687,6 +4693,9 @@ export class GameManager {
 
     SoundManager.getInstance().play('forge_success');
     this.addLog(`✨ [마도서 강화 성공!] [${targetBook.name}] (Lv.${newLv}) 강화 완료! (스킬 위력: ${Math.round(targetBook.skill.power * 100)}%)`, 'reward');
+    this.hasEnhancedSkill = true;
+    this.updateQuestObjective('Q_CRAFT_GRIMOIRE', 0, 1);
+    this.checkAllQuestObjectives();
     this.emit('skillBooksUpdated', this.skillBookInventory);
     this.emit('partyUpdated', this.party);
     this.saveGame();
@@ -7066,9 +7075,13 @@ export class GameManager {
           qEquip.objectives[0].isCompleted = false;
         }
       }
-      // Q_CRAFT_GRIMOIRE: 마도서 직접 연성 제작 시에만 동기화
+      // Q_CRAFT_GRIMOIRE: 에테르 공방 스킬 강화 1회 동기화
       const qGrim = this.quests.find(q => q.id === 'Q_CRAFT_GRIMOIRE');
-      if (this.hasCraftedGrimoire) {
+      const hasSkillEnhanced = this.hasEnhancedSkill ||
+        [...this.barracks, ...this.party].some(h => h.skillLevels && Object.values(h.skillLevels).some(lv => (lv || 1) > 1)) ||
+        this.skillBookInventory.some(b => (b.level || 1) > 1);
+      if (hasSkillEnhanced) {
+        this.hasEnhancedSkill = true;
         this.updateQuestObjective('Q_CRAFT_GRIMOIRE', 0, 1);
       } else if (qGrim && qGrim.status !== 'completed' && qGrim.objectives && qGrim.objectives[0]) {
         if (qGrim.objectives[0].isCompleted || qGrim.objectives[0].current > 0) {
@@ -7637,7 +7650,11 @@ export class GameManager {
         q.objectives.forEach(o => { o.current = o.required; o.isCompleted = true; });
       }
       if (questId === 'Q_CRAFT_GRIMOIRE' && q.objectives) {
-        if (this.hasCraftedGrimoire) {
+        const hasSkillEnhanced = this.hasEnhancedSkill ||
+          [...this.barracks, ...this.party].some(h => h.skillLevels && Object.values(h.skillLevels).some(lv => (lv || 1) > 1)) ||
+          this.skillBookInventory.some(b => (b.level || 1) > 1);
+        if (hasSkillEnhanced) {
+          this.hasEnhancedSkill = true;
           q.objectives.forEach(o => { o.current = o.required; o.isCompleted = true; });
         } else {
           q.objectives.forEach(o => { o.current = 0; o.isCompleted = false; });
@@ -11294,6 +11311,7 @@ export class GameManager {
         hasReturnedFromDungeon: this.hasReturnedFromDungeon,
         hasCraftedEquipment: this.hasCraftedEquipment,
         hasCraftedGrimoire: this.hasCraftedGrimoire,
+        hasEnhancedSkill: this.hasEnhancedSkill,
         barracks: this.barracks,
         party: this.party,
         equipmentInventory: this.equipmentInventory,
@@ -11372,6 +11390,7 @@ export class GameManager {
             hasReturnedFromDungeon: this.hasReturnedFromDungeon,
             hasCraftedEquipment: this.hasCraftedEquipment,
             hasCraftedGrimoire: this.hasCraftedGrimoire,
+            hasEnhancedSkill: this.hasEnhancedSkill,
             barracks: this.barracks,
             party: this.party,
             equipmentInventory: this.equipmentInventory,
@@ -11514,6 +11533,7 @@ export class GameManager {
       hasReturnedFromDungeon: this.hasReturnedFromDungeon,
       hasCraftedEquipment: this.hasCraftedEquipment,
       hasCraftedGrimoire: this.hasCraftedGrimoire,
+      hasEnhancedSkill: this.hasEnhancedSkill,
       barracks: this.barracks,
       party: this.party,
       equipmentInventory: this.equipmentInventory,
@@ -11782,6 +11802,7 @@ export class GameManager {
     if (this.unlockedDungeonFloor >= 2) this.hasEnteredDungeon = true;
     if (parsed.hasCraftedEquipment !== undefined) this.hasCraftedEquipment = parsed.hasCraftedEquipment as boolean;
     if (parsed.hasCraftedGrimoire !== undefined) this.hasCraftedGrimoire = parsed.hasCraftedGrimoire as boolean;
+    if (parsed.hasEnhancedSkill !== undefined) this.hasEnhancedSkill = parsed.hasEnhancedSkill as boolean;
     if (parsed.unlockedAviciTier !== undefined) this.unlockedAviciTier = parsed.unlockedAviciTier as number;
     if (parsed.purifiedFloors && Array.isArray(parsed.purifiedFloors)) {
       this.purifiedFloors = (parsed.purifiedFloors as number[]).map(Number).filter(n => !isNaN(n));
@@ -12460,6 +12481,7 @@ export class GameManager {
         if (this.unlockedDungeonFloor >= 2) this.hasEnteredDungeon = true;
         if (parsed.hasCraftedEquipment !== undefined) this.hasCraftedEquipment = parsed.hasCraftedEquipment as boolean;
         if (parsed.hasCraftedGrimoire !== undefined) this.hasCraftedGrimoire = parsed.hasCraftedGrimoire as boolean;
+        if (parsed.hasEnhancedSkill !== undefined) this.hasEnhancedSkill = parsed.hasEnhancedSkill as boolean;
         if (parsed.subQuestCooldownUntil !== undefined) this.subQuestCooldownUntil = parsed.subQuestCooldownUntil as number;
         if (parsed.hasInitializedSubQuests !== undefined) this.hasInitializedSubQuests = parsed.hasInitializedSubQuests as boolean;
         if (parsed.unlockedAviciTier !== undefined) this.unlockedAviciTier = parsed.unlockedAviciTier as number;

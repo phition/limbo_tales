@@ -165,13 +165,13 @@ export const INITIAL_QUESTS: Quest[] = [
   },
   {
     id: 'Q_CRAFT_GRIMOIRE',
-    title: '연계 퀘스트 (2/2): 연금 공방 - 비전 마도서 연성',
+    title: '연계 퀘스트 (2/2): 에테르 공방 - 스킬 비전 강화',
     type: 'building',
     chapter: 1,
-    summary: '에테르 연금 공방에서 비전 마도서를 1회 연성(제작)하여 비전 연구를 개시하세요.',
-    flavorText: '마도의 지혜가 응축된 비전 마도서를 제본하여 용병들에게 강력한 전술 스킬을 전수하라.',
+    summary: '에테르 공방에서 용병의 스킬을 1회 강화하여 비전 전술 능력을 증폭하세요.',
+    flavorText: '마도의 지혜가 응축된 에테르 연금술로 용병들의 스킬을 강화하여 심연의 적들에게 더욱 강력한 위력을 발휘하라.',
     objectives: [
-      { description: '에테르 연금 공방에서 마도서 1회 제작', current: 0, required: 1, isCompleted: false }
+      { description: '에테르 공방에서 스킬 강화 1회', current: 0, required: 1, isCompleted: false }
     ],
     rewards: {
       gold: 300,

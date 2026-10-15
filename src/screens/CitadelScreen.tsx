@@ -11842,6 +11842,39 @@ const QuestsDrawer: React.FC<{
       }
     }
 
+    // 1-1. 에테르 공방 / 스킬 강화 / 마도서 연성 분기 (Q_CRAFT_GRIMOIRE 등)
+    const isAlchemyObjective = desc.includes('마도서') || desc.includes('연성') || desc.includes('스킬 강화') || desc.includes('스킬 비전') || desc.includes('물약') || desc.includes('촉매') || quest.id === 'Q_CRAFT_GRIMOIRE';
+    if (isAlchemyObjective) {
+      const alchemyLevel = state.buildings['alchemy']?.level || 0;
+      if (alchemyLevel >= 1) {
+        return (
+          <button
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#142d2b] hover:bg-[#1d3d3a] text-[#80cbc4] font-bold border border-[#2e6d65] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+            onClick={() => onNavigateDrawer ? onNavigateDrawer('alchemy') : onClose()}
+          >
+            <span>🧪</span>
+            <span>에테르 공방 바로가기</span>
+            <span className="text-[10px]">▶</span>
+          </button>
+        );
+      } else {
+        return (
+          <button
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#2a2417] hover:bg-[#3d321f] text-[#ebd5b3] font-bold border border-[#876739] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+            onClick={() => {
+              if (onNavigateBuilding) onNavigateBuilding('alchemy');
+              else if (onNavigateDrawer) onNavigateDrawer('citadel');
+              else onClose();
+            }}
+          >
+            <span>🏛️</span>
+            <span>영지 건설 바로가기 (에테르 공방)</span>
+            <span className="text-[10px]">▶</span>
+          </button>
+        );
+      }
+    }
+
     // 2. 방랑 주점 / 용병 영입 분기
     // 복합 연계 퀘스트(Q_MAIN_02 등): 주점 건설 후에는 용병 영입을 위해 '주점' 바로가기로 전환!
     const isRecruitObjective = desc.includes('용병') || desc.includes('영입') || desc.includes('고용') || desc.includes('주점 방문');
@@ -11906,8 +11939,8 @@ const QuestsDrawer: React.FC<{
     }
 
     // 4. 건물 건설 / 증축 분기
-    const isBuildingObjective = desc.includes('건설') || desc.includes('증축') || desc.includes('개설') || desc.includes('복원') || desc.includes('완공');
-    if (isBuildingObjective || (quest.type === 'building' && !isForgeObjective)) {
+    const isBuildingObjective = (desc.includes('건설') || desc.includes('증축') || desc.includes('개설') || desc.includes('복원') || desc.includes('완공')) && !isAlchemyObjective && !isForgeObjective;
+    if (isBuildingObjective || (quest.type === 'building' && !isForgeObjective && !isAlchemyObjective)) {
       let targetBuildingId = getBuildingIdForQuest(quest);
       if (desc.includes('주점') || desc.includes('라운지')) targetBuildingId = 'tavern';
       else if (desc.includes('정제') || desc.includes('도축')) targetBuildingId = 'butchery';
@@ -11959,21 +11992,6 @@ const QuestsDrawer: React.FC<{
         >
           <span>⚔️</span>
           <span>용병 병영 바로가기</span>
-          <span className="text-[10px]">▶</span>
-        </button>
-      );
-    }
-
-    // 6. 연금 공방 / 마도서 / 포션
-    const isAlchemyObjective = desc.includes('마도서') || desc.includes('연성') || desc.includes('물약') || desc.includes('촉매');
-    if (isAlchemyObjective) {
-      return (
-        <button
-          className="text-xs px-3 py-1.5 rounded-lg bg-[#142d2b] hover:bg-[#1d3d3a] text-[#80cbc4] font-bold border border-[#2e6d65] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
-          onClick={() => onNavigateDrawer ? onNavigateDrawer('alchemy') : onClose()}
-        >
-          <span>🧪</span>
-          <span>에테르 연금 공방 바로가기</span>
           <span className="text-[10px]">▶</span>
         </button>
       );
