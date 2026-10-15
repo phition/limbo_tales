@@ -251,6 +251,66 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
     setHasChanges(true);
   };
 
+  // 6-2-2. 🌌 네메시스 부위 스탯 변경
+  const handleNemesisPartStatChange = (partId: 'head' | 'body' | 'tail', field: 'maxHp' | 'atk' | 'def' | 'spd' | 'luck', val: number) => {
+    setOverrides(prev => {
+      const curNemesis = prev.nemesis || {};
+      const curParts = {
+        head: { ...NEMESIS_BOSS_CONFIG.parts.head, ...(curNemesis.parts?.head || {}) },
+        body: { ...NEMESIS_BOSS_CONFIG.parts.body, ...(curNemesis.parts?.body || {}) },
+        tail: { ...NEMESIS_BOSS_CONFIG.parts.tail, ...(curNemesis.parts?.tail || {}) },
+      };
+      curParts[partId] = {
+        ...curParts[partId],
+        [field]: Math.max(1, Number(val))
+      };
+      const totalHp = curParts.head.maxHp + curParts.body.maxHp + curParts.tail.maxHp;
+      return {
+        ...prev,
+        nemesis: {
+          ...curNemesis,
+          maxHp: totalHp,
+          parts: curParts
+        }
+      };
+    });
+    setHasChanges(true);
+  };
+
+  // 6-2-3. 🌌 네메시스 부위 스킬 변경
+  const handleNemesisPartSkillChange = (partId: 'head' | 'body' | 'tail', skillId: string, field: 'power' | 'target' | 'name' | 'desc', val: any) => {
+    setOverrides(prev => {
+      const curNemesis = prev.nemesis || {};
+      const curParts = {
+        head: { ...NEMESIS_BOSS_CONFIG.parts.head, ...(curNemesis.parts?.head || {}) },
+        body: { ...NEMESIS_BOSS_CONFIG.parts.body, ...(curNemesis.parts?.body || {}) },
+        tail: { ...NEMESIS_BOSS_CONFIG.parts.tail, ...(curNemesis.parts?.tail || {}) },
+      };
+      const partSkills = [
+        ...(curParts[partId].skills || NEMESIS_BOSS_CONFIG.parts[partId].skills.map(s => ({ ...s })))
+      ];
+      const targetIdx = partSkills.findIndex(s => s.id === skillId);
+      if (targetIdx >= 0) {
+        partSkills[targetIdx] = {
+          ...partSkills[targetIdx],
+          [field]: field === 'power' ? Math.max(0.1, Number(val)) : val
+        };
+      }
+      curParts[partId] = {
+        ...curParts[partId],
+        skills: partSkills
+      };
+      return {
+        ...prev,
+        nemesis: {
+          ...curNemesis,
+          parts: curParts
+        }
+      };
+    });
+    setHasChanges(true);
+  };
+
   // 6-3. 🌌 네메시스 보유 스킬 변경
   const handleNemesisSkillChange = (skillId: string, field: 'power' | 'target' | 'name' | 'desc', val: any) => {
     setOverrides(prev => {
@@ -703,6 +763,12 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
               skills: (overrides.nemesis?.skills || NEMESIS_BOSS_CONFIG.skills).map(s => ({ ...s }))
             };
 
+            const curParts = {
+              head: { ...NEMESIS_BOSS_CONFIG.parts.head, ...(overrides.nemesis?.parts?.head || {}) },
+              body: { ...NEMESIS_BOSS_CONFIG.parts.body, ...(overrides.nemesis?.parts?.body || {}) },
+              tail: { ...NEMESIS_BOSS_CONFIG.parts.tail, ...(overrides.nemesis?.parts?.tail || {}) },
+            };
+
             const formatHpKorean = (hp: number) => {
               if (hp >= 100000000) return `${(hp / 100000000).toFixed(1)}억`;
               if (hp >= 10000) return `${(hp / 10000).toLocaleString()}만`;
@@ -714,7 +780,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 <div className="p-3 bg-[#131926] rounded-xl border border-[#1f2d48] text-xs text-[#8b9bb4] flex items-center justify-between flex-wrap gap-2">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">🌌</span>
-                    <span>차원 앵커 게이트(Lv.3+)에서 등장하는 서버급 월드 레이드 보스 <strong>「시공의 침식자, 네메시스」</strong>의 기본 전투 스탯, 3단계 페이즈 전환 임계치, 4종 고유 스킬을 실시간 편집합니다.</span>
+                    <span>차원 앵커 게이트(Lv.3+)에서 등장하는 서버급 월드 레이드 보스 <strong>「시공의 침식자, 네메시스」</strong>의 3개 부위(머리·몸통·꼬리) 전술 스탯, 스킬 위력, 3단계 페이즈 전환 임계치를 실시간 편집합니다.</span>
                   </div>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#9c27b022] text-[#ce93d8] border border-[#9c27b044] font-bold">
                     WORLD RAID BOSS
@@ -735,11 +801,10 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       <span className="text-xs text-[#ce93d8] font-bold">[{curNemesis.title}]</span>
                     </div>
                     <div className="text-xs text-[#8b9bb4]">
-                      기초 체력: <span className="text-[#00d2ff] font-bold font-mono">{curNemesis.maxHp.toLocaleString()} HP</span> ({formatHpKorean(curNemesis.maxHp)}) | 
-                      공격력: <span className="text-[#ff7043] font-bold font-mono">{curNemesis.atk}</span> | 
-                      방어력: <span className="text-[#66bb6a] font-bold font-mono">{curNemesis.def}</span> | 
-                      속도: <span className="text-[#ffd54f] font-bold font-mono">{curNemesis.spd}</span> | 
-                      행운: <span className="text-[#ce93d8] font-bold font-mono">{curNemesis.luck}</span>
+                      총 체력: <span className="text-[#00d2ff] font-bold font-mono">{curNemesis.maxHp.toLocaleString()} HP</span> ({formatHpKorean(curNemesis.maxHp)}) | 
+                      머리: <span className="text-[#ef5350] font-bold font-mono">{formatHpKorean(curParts.head.maxHp)}</span> | 
+                      몸통: <span className="text-[#ce93d8] font-bold font-mono">{formatHpKorean(curParts.body.maxHp)}</span> | 
+                      꼬리: <span className="text-[#00d2ff] font-bold font-mono">{formatHpKorean(curParts.tail.maxHp)}</span>
                     </div>
                   </div>
                 </div>
@@ -773,7 +838,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                     <div className="bg-[#141c2c] p-2 rounded-lg border border-[#1a2438] col-span-2 md:col-span-1">
                       <div className="flex items-center justify-between mb-1">
-                        <label className="text-[10px] text-[#8b9bb4]">최대 체력 (HP)</label>
+                        <label className="text-[10px] text-[#8b9bb4]">총합 체력 (HP)</label>
                         <span className="text-[9px] text-[#00d2ff] font-mono font-bold">({formatHpKorean(curNemesis.maxHp)})</span>
                       </div>
                       <input
@@ -820,6 +885,136 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                         className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
                       />
                     </div>
+                  </div>
+                </div>
+
+                {/* 2. 🌌 네메시스 3대 전술 부위별 스탯 & 스킬 에디터 */}
+                <div className="p-4 bg-[#0f1422] border border-[#ff416c44] rounded-xl space-y-4">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <h3 className="text-xs font-bold text-[#ff80ab] flex items-center gap-1.5">
+                      <span>💥</span>
+                      <span>2. 네메시스 3대 전술 부위별 스탯 & 스킬 (머리·전열 / 몸통·중열 / 꼬리·후열)</span>
+                    </h3>
+                    <span className="text-[10px] text-[#8b9bb4]">
+                      체력 합계: <span className="font-mono text-[#ffd54f] font-bold">{(curParts.head.maxHp + curParts.body.maxHp + curParts.tail.maxHp).toLocaleString()} HP</span> ({formatHpKorean(curParts.head.maxHp + curParts.body.maxHp + curParts.tail.maxHp)})
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                    {(['head', 'body', 'tail'] as const).map(partKey => {
+                      const part = curParts[partKey];
+                      const themeColor = partKey === 'head' ? '#ef5350' : partKey === 'body' ? '#ce93d8' : '#00d2ff';
+                      const posLabel = partKey === 'head' ? '전열 (Front)' : partKey === 'body' ? '중열 (Mid)' : '후열 (Back)';
+                      return (
+                        <div key={partKey} className="p-3 bg-[#141c2c] border border-[#1f2d48] rounded-xl space-y-2.5">
+                          <div className="flex items-center justify-between border-b border-[#233148] pb-1.5">
+                            <span className="font-bold text-xs flex items-center gap-1.5" style={{ color: themeColor }}>
+                              <span>{part.icon}</span>
+                              <span>{part.name}</span>
+                            </span>
+                            <span className="text-[9px] px-1.5 py-0.5 rounded font-bold" style={{ backgroundColor: `${themeColor}22`, color: themeColor, border: `1px solid ${themeColor}66` }}>
+                              {posLabel}
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-[#ce93d8] font-bold">
+                            {part.archetype}
+                          </div>
+                          
+                          {/* 스탯 입력 그리드 */}
+                          <div className="grid grid-cols-2 gap-1.5">
+                            <div className="col-span-2">
+                              <label className="text-[9px] text-[#8b9bb4] block">부위 최대 체력 (Max HP)</label>
+                              <input
+                                type="number"
+                                step="100000"
+                                value={part.maxHp}
+                                onChange={e => handleNemesisPartStatChange(partKey, 'maxHp', Number(e.target.value))}
+                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono font-bold focus:border-[#ffd54f] focus:outline-none"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[9px] text-[#8b9bb4] block">공격력 (ATK)</label>
+                              <input
+                                type="number"
+                                value={part.atk}
+                                onChange={e => handleNemesisPartStatChange(partKey, 'atk', Number(e.target.value))}
+                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#ffd54f] focus:outline-none"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[9px] text-[#8b9bb4] block">방어력 (DEF)</label>
+                              <input
+                                type="number"
+                                value={part.def}
+                                onChange={e => handleNemesisPartStatChange(partKey, 'def', Number(e.target.value))}
+                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#ffd54f] focus:outline-none"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[9px] text-[#8b9bb4] block">속도 (SPD)</label>
+                              <input
+                                type="number"
+                                value={part.spd}
+                                onChange={e => handleNemesisPartStatChange(partKey, 'spd', Number(e.target.value))}
+                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#ffd54f] focus:outline-none"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[9px] text-[#8b9bb4] block">행운 (LUCK)</label>
+                              <input
+                                type="number"
+                                value={part.luck}
+                                onChange={e => handleNemesisPartStatChange(partKey, 'luck', Number(e.target.value))}
+                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#ffd54f] focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          {/* 부위 스킬 3종 */}
+                          <div className="border-t border-[#233148] pt-2 space-y-1.5">
+                            <span className="text-[10px] font-bold text-[#8b9bb4]">⚡ 부위 고유 스킬</span>
+                            {part.skills.map(sk => (
+                              <div key={sk.id} className="p-1.5 bg-[#0b0f19] rounded border border-[#1a2336] space-y-1">
+                                <div className="flex items-center justify-between text-[11px] font-bold text-white">
+                                  <span>{sk.icon} {sk.name}</span>
+                                  <span className="text-[9px] text-[#8b9bb4] font-mono">{sk.target}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-1">
+                                  <div>
+                                    <label className="text-[8px] text-[#8b9bb4]">위력 배율</label>
+                                    <input
+                                      type="number"
+                                      step="0.05"
+                                      value={sk.power}
+                                      onChange={e => handleNemesisPartSkillChange(partKey, sk.id, 'power', Number(e.target.value))}
+                                      className="w-full bg-black/60 border border-[#233148] rounded px-1 text-[10px] text-[#ffd54f] font-mono font-bold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-[8px] text-[#8b9bb4]">타겟</label>
+                                    <select
+                                      value={sk.target}
+                                      onChange={e => handleNemesisPartSkillChange(partKey, sk.id, 'target', e.target.value)}
+                                      className="w-full bg-black/60 border border-[#233148] rounded px-1 text-[10px] text-white"
+                                    >
+                                      <option value="single">단일</option>
+                                      <option value="front">전열/중열</option>
+                                      <option value="all">전체</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <input
+                                  type="text"
+                                  value={sk.desc}
+                                  onChange={e => handleNemesisPartSkillChange(partKey, sk.id, 'desc', e.target.value)}
+                                  className="w-full bg-black/60 border border-[#233148] rounded px-1 text-[9px] text-[#cfd8e8]"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 

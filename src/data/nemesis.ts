@@ -1,4 +1,4 @@
-import { EquipmentItem, NemesisMilestone } from '../types/game';
+import { EquipmentItem, NemesisMilestone, NemesisPartId } from '../types/game';
 import { recalculateEquipmentStats } from './equipment';
 
 export interface NemesisBossSkill {
@@ -9,6 +9,21 @@ export interface NemesisBossSkill {
   target: 'single' | 'front' | 'all';
   effectType?: 'damage' | 'debuff' | 'drain';
   icon: string;
+}
+
+export interface NemesisBossPartConfig {
+  id: NemesisPartId;
+  name: string;
+  position: 'front' | 'mid' | 'back';
+  archetype: string;
+  maxHp: number;
+  atk: number;
+  def: number;
+  spd: number;
+  luck: number;
+  icon: string;
+  desc: string;
+  skills: NemesisBossSkill[];
 }
 
 export interface NemesisBossConfig {
@@ -28,6 +43,7 @@ export interface NemesisBossConfig {
     desc: string;
     badgeColor: string;
   }[];
+  parts: Record<NemesisPartId, NemesisBossPartConfig>;
   skills: NemesisBossSkill[];
 }
 
@@ -35,11 +51,11 @@ export const NEMESIS_BOSS_CONFIG: NemesisBossConfig = {
   id: 'boss_chronos_nemesis',
   name: '시공의 침식자, 네메시스',
   title: '차원의 균열을 뚫고 강림한 파멸의 화신',
-  maxHp: 30000000,
-  atk: 95,
+  maxHp: 12500000, // 머리 400만 + 몸통 500만 + 꼬리 350만 = 1,250만 HP
+  atk: 120,
   def: 45,
-  spd: 14,
-  luck: 28,
+  spd: 15,
+  luck: 30,
   image: 'assets/void_overlord.jpg',
   phases: [
     {
@@ -64,6 +80,130 @@ export const NEMESIS_BOSS_CONFIG: NemesisBossConfig = {
       badgeColor: '#ff416c',
     },
   ],
+  parts: {
+    head: {
+      id: 'head',
+      name: '네메시스 머리',
+      position: 'front',
+      archetype: '발할라 워로드 (Valhalla Warlord)',
+      maxHp: 4000000,
+      atk: 125,
+      def: 55,
+      spd: 14,
+      luck: 25,
+      icon: '💥',
+      desc: '압도적인 물리 강타와 진동 파쇄를 시전하는 전열의 파멸 머리',
+      skills: [
+        {
+          id: 'nemesis_head_cleave',
+          name: '파멸의 쇄도',
+          desc: '전열 대상에게 145% 물리 충격 관통 피해',
+          power: 1.45,
+          target: 'front',
+          icon: '⚡',
+        },
+        {
+          id: 'nemesis_head_roar',
+          name: '종말의 포효',
+          desc: '아군 전체에게 125% 광역 물리 피해 및 2턴간 방어력 25% 파쇄',
+          power: 1.25,
+          target: 'all',
+          effectType: 'debuff',
+          icon: '📢',
+        },
+        {
+          id: 'nemesis_head_cataclysm',
+          name: '피의 궤멸격',
+          desc: '아군 전체에게 160% 궤멸 피해 및 2턴간 치명적인 출혈 부여',
+          power: 1.6,
+          target: 'all',
+          effectType: 'damage',
+          icon: '🩸',
+        },
+      ],
+    },
+    body: {
+      id: 'body',
+      name: '네메시스 몸통',
+      position: 'mid',
+      archetype: '크로노 아콘 (Chrono Archon)',
+      maxHp: 5000000,
+      atk: 95,
+      def: 45,
+      spd: 11,
+      luck: 20,
+      icon: '🌀',
+      desc: '시공간 조작과 광역 군중 제어(CC)를 담당하는 중심 몸통',
+      skills: [
+        {
+          id: 'nemesis_body_timewarp',
+          name: '시간 왜곡 파동',
+          desc: '아군 전체에게 110% 마법 피해 및 2턴간 행동 속도 30% 감속',
+          power: 1.1,
+          target: 'all',
+          effectType: 'debuff',
+          icon: '⏳',
+        },
+        {
+          id: 'nemesis_body_stasis',
+          name: '시공 정지 역장',
+          desc: '단일 대상에게 130% 마법 피해 및 1턴간 행동 불능(스턴) 부여',
+          power: 1.3,
+          target: 'single',
+          effectType: 'debuff',
+          icon: '🛑',
+        },
+        {
+          id: 'nemesis_body_voiddrain',
+          name: '공허 침식 폭풍',
+          desc: '아군 전체에게 120% 마법 피해 및 마나 20 강탈',
+          power: 1.2,
+          target: 'all',
+          effectType: 'drain',
+          icon: '🌌',
+        },
+      ],
+    },
+    tail: {
+      id: 'tail',
+      name: '네메시스 꼬리',
+      position: 'back',
+      archetype: '오메가 데드아이 / 레인저 (Omega Deadeye)',
+      maxHp: 3500000,
+      atk: 140,
+      def: 35,
+      spd: 22,
+      luck: 45,
+      icon: '🎯',
+      desc: '신속한 광역 휩쓸기와 급소 원샷원킬을 노리는 후열의 치명 꼬리',
+      skills: [
+        {
+          id: 'nemesis_tail_sweep',
+          name: '차원 꼬리 휩쓸기',
+          desc: '아군 전열/중열을 쓸어버리는 135% 광역 물리 피해',
+          power: 1.35,
+          target: 'front',
+          icon: '🌪️',
+        },
+        {
+          id: 'nemesis_tail_stinger',
+          name: '절멸의 종말 침',
+          desc: '단일 대상을 궤도 저격하여 280% 초치명타 관통 피해 (원샷원킬)',
+          power: 2.8,
+          target: 'single',
+          icon: '🎯',
+        },
+        {
+          id: 'nemesis_tail_dimension_slash',
+          name: '시공 분열 연타',
+          desc: '아군 전체에게 140% 방어 무시 광역 관통타',
+          power: 1.4,
+          target: 'all',
+          icon: '🗡️',
+        },
+      ],
+    },
+  },
   skills: [
     {
       id: 'nemesis_rift_strike',

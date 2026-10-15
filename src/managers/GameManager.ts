@@ -8003,14 +8003,33 @@ export class GameManager {
     if (this.nemesisState.windowStartHp === undefined) {
       this.nemesisState.windowStartHp = this.nemesisState.currentBossHp;
     }
-    if (this.nemesisState.maxBossHp !== NEMESIS_BOSS_CONFIG.maxHp) {
-      const prevMax = this.nemesisState.maxBossHp || 5000000;
-      const ratio = this.nemesisState.currentBossHp !== undefined ? Math.max(0, Math.min(1, this.nemesisState.currentBossHp / prevMax)) : 1;
-      this.nemesisState.maxBossHp = NEMESIS_BOSS_CONFIG.maxHp;
-      this.nemesisState.currentBossHp = Math.round(NEMESIS_BOSS_CONFIG.maxHp * ratio);
+
+    // 🌌 3개 부위 (머리/몸통/꼬리) 초기화 및 동기화
+    const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
+    const bodyCfg = NEMESIS_BOSS_CONFIG.parts.body;
+    const tailCfg = NEMESIS_BOSS_CONFIG.parts.tail;
+    const totalCfgHp = headCfg.maxHp + bodyCfg.maxHp + tailCfg.maxHp;
+
+    if (!this.nemesisState.parts || !this.nemesisState.parts.head || !this.nemesisState.parts.body || !this.nemesisState.parts.tail) {
+      const curRatio = this.nemesisState.currentBossHp !== undefined ? Math.max(0, Math.min(1, this.nemesisState.currentBossHp / (this.nemesisState.maxBossHp || totalCfgHp))) : 1;
+      this.nemesisState.parts = {
+        head: { id: 'head', name: headCfg.name, position: 'front', currentHp: Math.round(headCfg.maxHp * curRatio), maxHp: headCfg.maxHp, isDefeated: curRatio <= 0 },
+        body: { id: 'body', name: bodyCfg.name, position: 'mid', currentHp: Math.round(bodyCfg.maxHp * curRatio), maxHp: bodyCfg.maxHp, isDefeated: curRatio <= 0 },
+        tail: { id: 'tail', name: tailCfg.name, position: 'back', currentHp: Math.round(tailCfg.maxHp * curRatio), maxHp: tailCfg.maxHp, isDefeated: curRatio <= 0 },
+      };
+      this.nemesisState.maxBossHp = totalCfgHp;
+      this.nemesisState.currentBossHp = Object.values(this.nemesisState.parts).reduce((sum, p) => sum + (p.isDefeated ? 0 : Math.max(0, p.currentHp)), 0);
       this.nemesisState.windowStartHp = this.nemesisState.currentBossHp;
       stateChanged = true;
+    } else if (this.nemesisState.maxBossHp !== totalCfgHp) {
+      this.nemesisState.maxBossHp = totalCfgHp;
+      this.nemesisState.parts.head.maxHp = headCfg.maxHp;
+      this.nemesisState.parts.body.maxHp = bodyCfg.maxHp;
+      this.nemesisState.parts.tail.maxHp = tailCfg.maxHp;
+      this.nemesisState.currentBossHp = Object.values(this.nemesisState.parts).reduce((sum, p) => sum + (p.isDefeated ? 0 : Math.max(0, p.currentHp)), 0);
+      stateChanged = true;
     }
+
     if (!this.nemesisState.lastHpRegenTime) {
       this.nemesisState.lastHpRegenTime = now;
     }
@@ -8031,7 +8050,13 @@ export class GameManager {
     if (elapsedSinceCycleStart >= TOTAL_CYCLE_MS) {
       const cyclesToAdvance = Math.floor(elapsedSinceCycleStart / TOTAL_CYCLE_MS);
       this.nemesisState.cycleStartTime += cyclesToAdvance * TOTAL_CYCLE_MS;
-      this.nemesisState.currentBossHp = this.nemesisState.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp;
+      this.nemesisState.parts = {
+        head: { id: 'head', name: headCfg.name, position: 'front', currentHp: headCfg.maxHp, maxHp: headCfg.maxHp, isDefeated: false },
+        body: { id: 'body', name: bodyCfg.name, position: 'mid', currentHp: bodyCfg.maxHp, maxHp: bodyCfg.maxHp, isDefeated: false },
+        tail: { id: 'tail', name: tailCfg.name, position: 'back', currentHp: tailCfg.maxHp, maxHp: tailCfg.maxHp, isDefeated: false },
+      };
+      this.nemesisState.maxBossHp = totalCfgHp;
+      this.nemesisState.currentBossHp = totalCfgHp;
       this.nemesisState.phase = 1;
       this.nemesisState.isDefeated = false;
       this.nemesisState.defeatedTime = undefined;
@@ -8039,7 +8064,7 @@ export class GameManager {
       this.nemesisState.lastPlunderCheckTime = this.nemesisState.cycleStartTime;
       this.nemesisState.lastHpRegenTime = now;
 
-      this.addLog('🌌 [차원 네메시스 강림] 시공의 균열이 다시 열리고 \'시공의 침식자, 네메시스\'가 완전히 재소환되었습니다! 6일간의 침식 활동이 시작됩니다.', 'danger');
+      this.addLog('🌌 [차원 네메시스 강림] 시공의 균열이 다시 열리고 \'시공의 침식자, 네메시스\'(머리·몸통·꼬리)가 완전히 재소환되었습니다! 6일간의 침식 활동이 시작됩니다.', 'danger');
       this.emit('nemesisUpdated');
       this.saveGame();
       return true;
@@ -8074,22 +8099,43 @@ export class GameManager {
     }
 
     // 5. 6일간의 활성 침식 기간 중 (Active Period)
-    // 5-1) 체력 자연 회복 (분당 0.05%)
+    // 5-1) 체력 자연 회복 (분당 0.05% - 살아있는 부위만 개별 재생, 패퇴 부위는 영구 회복 불가)
     const regenElapsedMs = now - this.nemesisState.lastHpRegenTime;
     if (regenElapsedMs >= 1000) { // 최소 1초 이상 경과 시 회복
       const regenMinutes = regenElapsedMs / 60000;
-      const regenAmount = (this.nemesisState.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp) * HP_REGEN_PER_MINUTE_RATE * regenMinutes;
-      if (regenAmount > 0 && this.nemesisState.currentBossHp < this.nemesisState.maxBossHp) {
-        this.nemesisState.currentBossHp = Math.min(
-          this.nemesisState.maxBossHp,
-          this.nemesisState.currentBossHp + regenAmount
+      let anyPartRegened = false;
+
+      if (this.nemesisState.parts) {
+        (['head', 'body', 'tail'] as const).forEach(partKey => {
+          const part = this.nemesisState.parts![partKey];
+          // 어느 한 부위라도 패퇴(currentHp <= 0 또는 isDefeated)하면 더 이상 회복되지 않음!
+          if (part && !part.isDefeated && part.currentHp > 0 && part.currentHp < part.maxHp) {
+            const partRegen = part.maxHp * HP_REGEN_PER_MINUTE_RATE * regenMinutes;
+            part.currentHp = Math.min(part.maxHp, part.currentHp + partRegen);
+            anyPartRegened = true;
+          }
+        });
+        this.nemesisState.currentBossHp = Object.values(this.nemesisState.parts).reduce(
+          (sum, p) => sum + (p.isDefeated ? 0 : Math.max(0, p.currentHp)), 
+          0
         );
-        stateChanged = true;
+      } else {
+        const regenAmount = (this.nemesisState.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp) * HP_REGEN_PER_MINUTE_RATE * regenMinutes;
+        if (regenAmount > 0 && this.nemesisState.currentBossHp < this.nemesisState.maxBossHp) {
+          this.nemesisState.currentBossHp = Math.min(
+            this.nemesisState.maxBossHp,
+            this.nemesisState.currentBossHp + regenAmount
+          );
+          anyPartRegened = true;
+        }
       }
+
+      if (anyPartRegened) stateChanged = true;
       this.nemesisState.lastHpRegenTime = now;
 
       // 페이즈 실시간 보정
-      const hpRatio = this.nemesisState.currentBossHp / this.nemesisState.maxBossHp;
+      const maxHp = this.nemesisState.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp;
+      const hpRatio = maxHp > 0 ? this.nemesisState.currentBossHp / maxHp : 0;
       if (hpRatio <= 0.3) this.nemesisState.phase = 3;
       else if (hpRatio <= 0.7) this.nemesisState.phase = 2;
       else this.nemesisState.phase = 1;
@@ -8197,8 +8243,26 @@ export class GameManager {
     };
   }
 
+  /** 차원 네메시스 원정대(3선발 + 1오퍼레이터) 출전 준비 상태 검사 */
+  public isNemesisSquadReady(): { isReady: boolean; reason?: string; count: number } {
+    const { mainHeroes, leaderHero } = this.getDimensionalDeck();
+    const activeMain = mainHeroes.slice(0, 3).filter(h => !!h);
+    const count = activeMain.length + (leaderHero ? 1 : 0);
+    if (activeMain.length < 3) {
+      return { isReady: false, reason: `선발 3인이 모두 배치되어야 합니다. (현재 ${activeMain.length}/3인)`, count };
+    }
+    if (!leaderHero) {
+      return { isReady: false, reason: '전술 오퍼레이터(리더)가 배치되어야 합니다.', count };
+    }
+    return { isReady: true, count };
+  }
+
   /** 네메시스 토벌전 종료 후 대미지 기록 및 정산 */
-  public recordNemesisDamage(damage: number, _participatingHeroIds: string[] = []): {
+  public recordNemesisDamage(
+    damage: number, 
+    _participatingHeroIds: string[] = [],
+    partDamages?: { head?: number; body?: number; tail?: number }
+  ): {
     coinsEarned: number;
     etherEarned: number;
     isNewRecord: boolean;
@@ -8216,12 +8280,33 @@ export class GameManager {
       this.nemesisState.highestDamage = damage;
     }
 
-    // 보스 HP 감소 (최소 0)
-    this.nemesisState.currentBossHp = Math.max(0, this.nemesisState.currentBossHp - damage);
+    // 보스 및 부위별 HP 감소
+    if (this.nemesisState.parts && partDamages) {
+      (['head', 'body', 'tail'] as const).forEach(partKey => {
+        const part = this.nemesisState.parts![partKey];
+        const pDmg = partDamages[partKey] || 0;
+        if (part && pDmg > 0) {
+          part.currentHp = Math.max(0, part.currentHp - pDmg);
+          if (part.currentHp <= 0) {
+            part.isDefeated = true;
+            part.currentHp = 0;
+          }
+        }
+      });
+      this.nemesisState.currentBossHp = Object.values(this.nemesisState.parts).reduce(
+        (sum, p) => sum + (p.isDefeated ? 0 : Math.max(0, p.currentHp)),
+        0
+      );
+    } else {
+      this.nemesisState.currentBossHp = Math.max(0, this.nemesisState.currentBossHp - damage);
+    }
 
     if (this.nemesisState.currentBossHp <= 0) {
       this.nemesisState.isDefeated = true;
       this.nemesisState.defeatedTime = Date.now();
+      if (this.nemesisState.parts) {
+        Object.values(this.nemesisState.parts).forEach(p => { p.isDefeated = true; p.currentHp = 0; });
+      }
       this.addLog('👑 [차원 네메시스 완전 토벌] 지휘관들의 총력전으로 시공의 침식자 네메시스가 격퇴되었습니다! 다음 재소환 주기까지 영지에 평화가 유지됩니다.', 'reward');
     }
 

@@ -259,6 +259,20 @@ export class GameDataService {
           if (ph) Object.assign(ph, phOverride);
         });
       }
+      if (pkg.nemesis.parts) {
+        (['head', 'body', 'tail'] as const).forEach(partKey => {
+          const partOverride = pkg.nemesis!.parts?.[partKey];
+          if (partOverride && NEMESIS_BOSS_CONFIG.parts?.[partKey]) {
+            Object.assign(NEMESIS_BOSS_CONFIG.parts[partKey], partOverride);
+            if (partOverride.skills && Array.isArray(partOverride.skills)) {
+              partOverride.skills.forEach(skOverride => {
+                const psk = NEMESIS_BOSS_CONFIG.parts[partKey].skills.find(s => s.id === skOverride.id);
+                if (psk) Object.assign(psk, skOverride);
+              });
+            }
+          }
+        });
+      }
     }
 
     if (persist && typeof window !== 'undefined') {

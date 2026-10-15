@@ -761,6 +761,17 @@ export interface NemesisMilestone {
   };
 }
 
+export type NemesisPartId = 'head' | 'body' | 'tail';
+
+export interface NemesisPartState {
+  id: NemesisPartId;
+  name: string;
+  position: 'front' | 'mid' | 'back';
+  currentHp: number;
+  maxHp: number;
+  isDefeated: boolean;
+}
+
 export interface NemesisState {
   totalDamage: number;
   highestDamage: number;
@@ -776,6 +787,7 @@ export interface NemesisState {
   windowStartHp?: number;        // 현재 6시간 윈도우 시작 시점의 보스 HP
   isDefeated?: boolean;          // 이번 사이클에서 완전 토벌되었는지 여부
   defeatedTime?: number;         // 토벌 완료 타임스탬프 (ms)
+  parts?: Record<NemesisPartId, NemesisPartState>;
 }
 
 // ─── 🏰 차원 영지 침공 (Dimensional Estate Invasion) 타입 ────────────────────
