@@ -19,6 +19,7 @@ import { CustomAssetService } from '../services/CustomAssetService';
 import { resolveCombatVfxAndSfx, getSkillTags, getEffectivePositionBonus } from '../utils/skillComboUtils';
 import { GameIcon } from '../components/GameIcon';
 import { SkillDetailModal } from '../components/SkillDetailModal';
+import { Modal } from '../components/Modal';
 
 // ── 롱프레스 (홀드) 헬퍼 컴포넌트 ──────────────────────────────────────────
 const LongPressBox: React.FC<{
@@ -262,6 +263,7 @@ export const NemesisView: React.FC = () => {
 
   // 📜 PVE 표준 LogPanel 연동 전투 로그
   const [battleLogs, setBattleLogs] = useState<LogEntry[]>([]);
+  const [showFullLogModal, setShowFullLogModal] = useState(false);
 
   // 👑 전술 오퍼레이터 상태 (3선발 + 1오퍼레이터 체계)
   const [operatorHero, setOperatorHero] = useState<Mercenary | null>(null);
@@ -958,7 +960,7 @@ export const NemesisView: React.FC = () => {
     const shouldStartCharge = battleTurnRef.current >= 2 && !part.chargingState && Math.random() < 0.35;
 
     if (shouldStartCharge) {
-      const breakGauge = part.id === 'head' ? 80000 : part.id === 'body' ? 90000 : 75000;
+      const breakGauge = part.id === 'head' ? 30000 : part.id === 'body' ? 32000 : 28000;
       part.chargingState = {
         skillName: chargeSkillCandidate.name,
         remainingBreakDmg: breakGauge,
@@ -1695,9 +1697,20 @@ export const NemesisView: React.FC = () => {
             </div>
           </div>
 
-          {/* ── 📜 전투 로그 패널 (유연하게 공간을 채워 하단 공백 제거) ── */}
-          <div className="px-3 pt-1.5 flex-1 min-h-[70px] relative z-10">
-            <LogPanel logs={battleLogs} maxHeight={90} isBattle emptyMessage="기록된 전투 로그가 없습니다." />
+          {/* ── 📜 전투 로그 패널 (로그 영역 확장 및 상세 로그 모달 연동) ── */}
+          <div className="px-3 pt-1 flex-1 min-h-[95px] relative z-10">
+            <div className="relative h-full">
+              <LogPanel logs={battleLogs} maxHeight={125} isBattle emptyMessage="기록된 전투 로그가 없습니다." />
+              <button
+                type="button"
+                className="absolute top-1.5 right-2 px-2 py-0.5 rounded text-[11px] font-bold bg-[#141a27e0] hover:bg-[#1e273dee] text-[#00d2ff] hover:text-white border border-[#00d2ff44] shadow-md transition-all flex items-center gap-1 z-20"
+                title="전체 전투 상세 기록 모달 열기"
+                onClick={() => setShowFullLogModal(true)}
+              >
+                <span>📜</span>
+                <span className="text-[10px]">상세 로그</span>
+              </button>
+            </div>
           </div>
 
           {/* ── 📡 전술 오퍼레이터 패널 (궁극기 이름 표시) ── */}
@@ -2005,16 +2018,26 @@ export const NemesisView: React.FC = () => {
                 </div>
               )}
 
-              <ActionButton
-                label="로비로 복귀"
-                variant="primary"
-                size="md"
-                className="w-full font-bold shadow-lg shadow-[#00d2ff33] mt-1"
-                onClick={() => {
-                  setSettlement(null);
-                  setInBattle(false);
-                }}
-              />
+              <div className="flex gap-2 mt-1">
+                <button
+                  type="button"
+                  className="px-3 py-2 rounded-xl text-xs font-bold bg-[#141d30] hover:bg-[#1f2b45] text-[#00d2ff] hover:text-white border border-[#00d2ff44] transition-all flex items-center justify-center gap-1.5 flex-1 shadow-md"
+                  onClick={() => setShowFullLogModal(true)}
+                >
+                  <span>📜</span>
+                  <span>상세 로그 보기</span>
+                </button>
+                <ActionButton
+                  label="로비로 복귀"
+                  variant="primary"
+                  size="md"
+                  className="flex-1 font-bold shadow-lg shadow-[#00d2ff33]"
+                  onClick={() => {
+                    setSettlement(null);
+                    setInBattle(false);
+                  }}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -2042,6 +2065,34 @@ export const NemesisView: React.FC = () => {
           }}
           onClose={() => setSelectedSkillForModal(null)}
         />
+
+        {/* ── 📜 전체 상세 전투 로그 팝업 모달 ── */}
+        {showFullLogModal && (
+          <Modal
+            title="📜 전투 상세 기록 (전체 로그)"
+            open={showFullLogModal}
+            zIndex="z-[70]"
+            onClose={() => setShowFullLogModal(false)}
+            footer={
+              <button
+                className="btn btn-ghost text-xs px-4 py-1.5"
+                onClick={() => setShowFullLogModal(false)}
+              >
+                닫기
+              </button>
+            }
+          >
+            <div className="flex flex-col gap-2">
+              <div className="text-xs text-[#8b9bb4] flex items-center justify-between border-b border-[#1f2738] pb-1.5">
+                <span>총 {battleLogs.length}건의 전투 기록</span>
+                <span className="text-[10px] text-[#00d2ff]">스크롤하여 이전 기록을 확인할 수 있습니다.</span>
+              </div>
+              <div className="max-h-[60vh] overflow-y-auto pr-1">
+                <LogPanel logs={battleLogs} isBattle maxHeight={520} emptyMessage="기록된 전투 로그가 없습니다." />
+              </div>
+            </div>
+          </Modal>
+        )}
       </div>
     );
   }
