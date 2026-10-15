@@ -355,4 +355,473 @@ export const BUILDING_LORE_AND_TIPS: Record<BuildingId, { lore: string; strategy
   }
 };
 
+/** 🏛️ 티어/레벨별 영지 시설 커스텀 설정 인터페이스 */
+export interface BuildingTierConfig {
+  cost?: Partial<GameResources>;
+  production?: {
+    primaryAmount?: number;
+    secondaryAmount?: number;
+  };
+  upkeep?: {
+    amount?: number;
+    secondaryAmount?: number;
+  };
+}
+
+export interface BuildingProductionMeta {
+  hasPrimary: boolean;
+  primaryRes?: keyof GameResources;
+  primaryName?: string;
+  primaryIcon?: string;
+  primaryCycleSec?: number;
+  hasSecondary?: boolean;
+  secondaryRes?: keyof GameResources;
+  secondaryName?: string;
+  secondaryIcon?: string;
+  secondaryCycleSec?: number;
+  secondaryMinLevel?: number;
+}
+
+export interface BuildingUpkeepMeta {
+  hasPrimary: boolean;
+  primaryRes?: 'food' | 'ether' | 'gold';
+  primaryName?: string;
+  primaryIcon?: string;
+  hasSecondary?: boolean;
+  secondaryRes?: 'food' | 'ether' | 'gold';
+  secondaryName?: string;
+  secondaryIcon?: string;
+  secondaryMinLevel?: number;
+}
+
+export interface BuildingMetadata {
+  id: BuildingId;
+  name: string;
+  icon: string;
+  description: string;
+  production: BuildingProductionMeta;
+  upkeep: BuildingUpkeepMeta;
+}
+
+export const BUILDING_METADATA_MAP: Record<BuildingId, BuildingMetadata> = {
+  bonfire: {
+    id: 'bonfire',
+    name: '방주의 성화',
+    icon: '🔥',
+    description: '목재를 공헌하여 방주 전체에 온기 버프를 활성화합니다.',
+    production: { hasPrimary: false },
+    upkeep: { hasPrimary: false }
+  },
+  cabin: {
+    id: 'cabin',
+    name: '생존자 안식처',
+    icon: '🏕️',
+    description: '구출된 생존자 거주지. 방주에 세금(골드)을 13초마다 정기 납부합니다.',
+    production: { hasPrimary: true, primaryRes: 'gold', primaryName: '골드', primaryIcon: '🪙', primaryCycleSec: 13 },
+    upkeep: { hasPrimary: true, primaryRes: 'food', primaryName: '식량', primaryIcon: '🍖' }
+  },
+  lumberCamp: {
+    id: 'lumberCamp',
+    name: '영목 벌채소',
+    icon: '🌲',
+    description: '방주 외곽 목재 벌채 시설. 영목 목재를 9초마다 생산합니다.',
+    production: { hasPrimary: true, primaryRes: 'wood', primaryName: '목재', primaryIcon: '🪵', primaryCycleSec: 9 },
+    upkeep: { hasPrimary: true, primaryRes: 'gold', primaryName: '골드', primaryIcon: '🪙' }
+  },
+  quarry: {
+    id: 'quarry',
+    name: '에테르 광맥 시추소',
+    icon: '⛏️',
+    description: '부유성 지반 채굴 시설. 11초마다 석재와 철광석(Lv.3+)을 채굴합니다.',
+    production: {
+      hasPrimary: true, primaryRes: 'stone', primaryName: '석재', primaryIcon: '🪨', primaryCycleSec: 11,
+      hasSecondary: true, secondaryRes: 'iron', secondaryName: '철광석', secondaryIcon: '⚙️', secondaryCycleSec: 11, secondaryMinLevel: 3
+    },
+    upkeep: {
+      hasPrimary: true, primaryRes: 'gold', primaryName: '골드', primaryIcon: '🪙',
+      hasSecondary: true, secondaryRes: 'food', secondaryName: '식량', secondaryIcon: '🍖', secondaryMinLevel: 7
+    }
+  },
+  butchery: {
+    id: 'butchery',
+    name: '심연 생체 정제소',
+    icon: '⚗️',
+    description: '마물 사체를 정제하여 13초마다 식량과 무두질 가죽(Lv.3+)을 생산합니다.',
+    production: {
+      hasPrimary: true, primaryRes: 'food', primaryName: '식량', primaryIcon: '🍖', primaryCycleSec: 13,
+      hasSecondary: true, secondaryRes: 'leather', secondaryName: '가죽', secondaryIcon: '🟫', secondaryCycleSec: 13, secondaryMinLevel: 3
+    },
+    upkeep: { hasPrimary: true, primaryRes: 'gold', primaryName: '골드', primaryIcon: '🪙' }
+  },
+  tavern: {
+    id: 'tavern',
+    name: '방랑자의 라운지',
+    icon: '🍺',
+    description: '용병 고용소 및 식량 조달소. 5레벨부터 15초마다 식량을 생산합니다.',
+    production: {
+      hasPrimary: true, primaryRes: 'food', primaryName: '식량', primaryIcon: '🍖', primaryCycleSec: 15, secondaryMinLevel: 5
+    },
+    upkeep: { hasPrimary: true, primaryRes: 'gold', primaryName: '골드', primaryIcon: '🪙' }
+  },
+  blacksmith: {
+    id: 'blacksmith',
+    name: '심연의 병기창',
+    icon: '⚒️',
+    description: '전술 무기/방어구 단조 및 인챈트 공방. 티어별 장비를 단조합니다.',
+    production: { hasPrimary: false },
+    upkeep: {
+      hasPrimary: true, primaryRes: 'ether', primaryName: '에테르', primaryIcon: '✨',
+      hasSecondary: true, secondaryRes: 'gold', secondaryName: '골드', secondaryIcon: '🪙', secondaryMinLevel: 4
+    }
+  },
+  sanctuary: {
+    id: 'sanctuary',
+    name: '영혼의 제단',
+    icon: '✨',
+    description: '용병들의 상위 클래스 전직과 초월 각성을 집전하는 성소입니다.',
+    production: { hasPrimary: false },
+    upkeep: { hasPrimary: true, primaryRes: 'ether', primaryName: '에테르', primaryIcon: '✨' }
+  },
+  alchemy: {
+    id: 'alchemy',
+    name: '에테르 연금 공방',
+    icon: '🧪',
+    description: '마도 시설. 15초마다 에테르를 정기 생산하고 마도서를 제본합니다.',
+    production: { hasPrimary: true, primaryRes: 'ether', primaryName: '에테르', primaryIcon: '✨', primaryCycleSec: 15 },
+    upkeep: {
+      hasPrimary: true, primaryRes: 'gold', primaryName: '골드', primaryIcon: '🪙',
+      hasSecondary: true, secondaryRes: 'food', secondaryName: '식량', secondaryIcon: '🍖', secondaryMinLevel: 4
+    }
+  },
+  arenaGate: {
+    id: 'arenaGate',
+    name: '차원 앵커 게이트',
+    icon: '🌀',
+    description: '차원 관문. 비동기 랭킹 결투, 네메시스 레이드를 지원합니다.',
+    production: { hasPrimary: false },
+    upkeep: { hasPrimary: true, primaryRes: 'ether', primaryName: '에테르', primaryIcon: '✨' }
+  },
+  storage: {
+    id: 'storage',
+    name: '방주 중앙 병참고',
+    icon: '🏛️',
+    description: '물자 저장고. 레벨에 따라 27종 모든 자원의 최대 적재량을 확장합니다.',
+    production: { hasPrimary: false },
+    upkeep: { hasPrimary: true, primaryRes: 'gold', primaryName: '골드', primaryIcon: '🪙' }
+  },
+  infirmary: {
+    id: 'infirmary',
+    name: '생체 복원 병동',
+    icon: '🏥',
+    description: '의료 시설. 부상당한 용병을 입원시켜 체력과 마나를 복원합니다.',
+    production: { hasPrimary: false },
+    upkeep: {
+      hasPrimary: true, primaryRes: 'food', primaryName: '식량', primaryIcon: '🍖',
+      hasSecondary: true, secondaryRes: 'gold', secondaryName: '골드', secondaryIcon: '🪙', secondaryMinLevel: 4
+    }
+  },
+  market: {
+    id: 'market',
+    name: '황혼의 블랙 마켓',
+    icon: '⚖️',
+    description: '암시장 교역소. 15종 자원 거래를 지원하고 15초마다 상업 골드를 수급합니다.',
+    production: { hasPrimary: true, primaryRes: 'gold', primaryName: '골드', primaryIcon: '🪙', primaryCycleSec: 15 },
+    upkeep: { hasPrimary: true, primaryRes: 'food', primaryName: '식량', primaryIcon: '🍖' }
+  }
+};
+
+/** 📐 기본 건설/증축 소모자재량 기본 공식 계산 */
+export const computeDefaultBuildingUpgradeCost = (id: BuildingId, targetLevel: number): Partial<GameResources> => {
+  const currentLevel = Math.max(0, targetLevel - 1);
+  const baseCost = BUILDING_BASE_COSTS[id] || {};
+  if (currentLevel === 0) {
+    const initialCost: Partial<GameResources> = {};
+    for (const [res, amt] of Object.entries(baseCost)) {
+      if (id !== 'infirmary' && res !== 'wood') {
+        initialCost[res as keyof GameResources] = Math.max(1, Math.floor((amt as number) * 2.1));
+      } else {
+        initialCost[res as keyof GameResources] = amt as number;
+      }
+    }
+    if (id === 'market' && initialCost.gold) {
+      initialCost.gold = Math.max(1, Math.floor(initialCost.gold * 2));
+    }
+    return initialCost;
+  }
+
+  const multiplier = Math.pow(1.6, currentLevel);
+  const finalCost: Partial<GameResources> = {};
+
+  for (const [res, amt] of Object.entries(baseCost)) {
+    finalCost[res as keyof GameResources] = Math.floor((amt as number) * multiplier);
+  }
+
+  if (currentLevel >= 3) {
+    const ironBase = id === 'infirmary' ? 45 : 15;
+    finalCost.iron = (finalCost.iron || 0) + Math.floor(ironBase * Math.pow(1.6, currentLevel - 3));
+  }
+  if (currentLevel >= 5) {
+    finalCost.ether = (finalCost.ether || 0) + Math.floor(10 * Math.pow(1.6, currentLevel - 5));
+  }
+  if (currentLevel >= 7) {
+    finalCost.leather = (finalCost.leather || 0) + Math.floor(20 * Math.pow(1.6, currentLevel - 7));
+  }
+  if (currentLevel >= 9) {
+    finalCost.void_shard = (finalCost.void_shard || 0) + Math.floor(5 * Math.pow(1.6, currentLevel - 9));
+  }
+
+  // 🏥 병원(생체 복원 병동): 6레벨부터 목재를 제외한 모든 강화 재료 2.1배
+  if (id === 'infirmary' && currentLevel >= 6) {
+    for (const res of Object.keys(finalCost) as (keyof GameResources)[]) {
+      if (res !== 'wood' && (finalCost[res] || 0) > 0) {
+        finalCost[res] = Math.max(1, Math.floor((finalCost[res] || 0) * 2.1));
+      }
+    }
+  } else if (id !== 'infirmary') {
+    // 🏛️ 병원을 제외한 모든 건물의 목재 외 강화 재료 전 구간 2.1배
+    for (const res of Object.keys(finalCost) as (keyof GameResources)[]) {
+      if (res !== 'wood' && (finalCost[res] || 0) > 0) {
+        finalCost[res] = Math.max(1, Math.floor((finalCost[res] || 0) * 2.1));
+      }
+    }
+  }
+
+  // 🕶️ 황혼의 블랙 마켓: 5레벨부터 강화 시(Lv.5+) 석재 필요량 30% 감축
+  if (id === 'market' && currentLevel >= 5 && finalCost.stone) {
+    finalCost.stone = Math.max(1, Math.floor(finalCost.stone * 0.7));
+  }
+
+  // 🕶️ 황혼의 블랙 마켓: 3레벨 이후(Lv.3+) 레벨 당 건설 자원 비용 50% 증가 (1.5배)
+  if (id === 'market' && currentLevel >= 3) {
+    for (const res of Object.keys(finalCost) as (keyof GameResources)[]) {
+      if ((finalCost[res] || 0) > 0) {
+        finalCost[res] = Math.max(1, Math.round((finalCost[res] || 0) * 1.5));
+      }
+    }
+  }
+
+  // 1. 생존자 안식처(cabin): 레벨4부터 목재 소모량 2배, 8레벨부터 3배
+  if (id === 'cabin' && finalCost.wood) {
+    if (targetLevel >= 8) {
+      finalCost.wood = Math.max(1, Math.floor(finalCost.wood * 3));
+    } else if (targetLevel >= 4) {
+      finalCost.wood = Math.max(1, Math.floor(finalCost.wood * 2));
+    }
+  }
+
+  // 2. 광맥시추소(quarry): 레벨 5부터 목재 소모 3배
+  if (id === 'quarry' && targetLevel >= 5 && finalCost.wood) {
+    finalCost.wood = Math.max(1, Math.floor(finalCost.wood * 3));
+  }
+
+  // 3. 심연의 병기창(blacksmith): 레벨 4부터 목재 2배, 레벨 6부터 석재 2배, 레벨 8부터 철제 3배
+  if (id === 'blacksmith') {
+    if (targetLevel >= 4 && finalCost.wood) {
+      finalCost.wood = Math.max(1, Math.floor(finalCost.wood * 2));
+    }
+    if (targetLevel >= 6 && finalCost.stone) {
+      finalCost.stone = Math.max(1, Math.floor(finalCost.stone * 2));
+    }
+    if (targetLevel >= 8 && finalCost.iron) {
+      finalCost.iron = Math.max(1, Math.floor(finalCost.iron * 3));
+    }
+  }
+
+  // 4. 영혼의 제단(sanctuary): 레벨 5부터 에테르 2배
+  if (id === 'sanctuary' && targetLevel >= 5 && finalCost.ether) {
+    finalCost.ether = Math.max(1, Math.floor(finalCost.ether * 2));
+  }
+
+  // 5. 에테르 연금 공방(alchemy): 레벨 4부터 철광석 2배
+  if (id === 'alchemy' && targetLevel >= 4 && finalCost.iron) {
+    finalCost.iron = Math.max(1, Math.floor(finalCost.iron * 2));
+  }
+
+  // 6. 방주 중앙 병참고(storage): 레벨 4부터 모든 소모 자원 2배
+  if (id === 'storage' && targetLevel >= 4) {
+    for (const res of Object.keys(finalCost) as (keyof GameResources)[]) {
+      if ((finalCost[res] || 0) > 0) {
+        finalCost[res] = Math.max(1, Math.floor((finalCost[res] || 0) * 2));
+      }
+    }
+  }
+
+  // 7. 생체 복원 병동(infirmary): 레벨 4부터 목재 1.5배, 철광석 2배, 에테르 2배
+  if (id === 'infirmary' && targetLevel >= 4) {
+    if (finalCost.wood) {
+      finalCost.wood = Math.max(1, Math.floor(finalCost.wood * 1.5));
+    }
+    if (finalCost.iron) {
+      finalCost.iron = Math.max(1, Math.floor(finalCost.iron * 2));
+    }
+    if (finalCost.ether) {
+      finalCost.ether = Math.max(1, Math.floor(finalCost.ether * 2));
+    }
+  }
+
+  // 8. 황혼의 블랙 마켓(market): 10레벨 달성 시 석재 소모량 19725로 보정
+  if (id === 'market') {
+    if (finalCost.gold) {
+      finalCost.gold = Math.max(1, Math.floor(finalCost.gold * 2));
+    }
+    if (targetLevel === 10) {
+      finalCost.stone = 19725;
+    }
+  }
+
+  // 9. 심연의 병기창(blacksmith): 후반부(Lv.9, Lv.10) 상한 보정
+  if (id === 'blacksmith') {
+    if (targetLevel === 9) {
+      finalCost.iron = 4750;
+    }
+    if (targetLevel === 10) {
+      finalCost.stone = 19300;
+      finalCost.iron = 4880;
+    }
+  }
+
+  // 10. 차원의 관문(arenaGate): 후반부(Lv.9, Lv.10) 상한 보정
+  if (id === 'arenaGate') {
+    if (targetLevel === 9) {
+      finalCost.iron = 4700;
+    }
+    if (targetLevel === 10) {
+      if (finalCost.stone) finalCost.stone = Math.min(finalCost.stone, 19500);
+      finalCost.iron = 4850;
+    }
+  }
+
+  // 11. 영혼의 제단(sanctuary): 후반부(Lv.10) 철광석 상한 보정
+  if (id === 'sanctuary' && targetLevel === 10) {
+    finalCost.iron = 4800;
+  }
+
+  return finalCost;
+};
+
+/** 📐 기본 생산량 계산 */
+export const computeDefaultBuildingProduction = (id: BuildingId, level: number): { primaryAmount: number; secondaryAmount: number } => {
+  if (level <= 0) return { primaryAmount: 0, secondaryAmount: 0 };
+  switch (id) {
+    case 'cabin': {
+      const cabinMap: Record<number, number> = {
+        1: 4, 2: 10, 3: 15, 4: 21, 5: 26, 6: 51, 7: 74, 8: 93, 9: 104, 10: 134
+      };
+      return { primaryAmount: cabinMap[level] ?? Math.round(134 * Math.pow(1.25, level - 10)), secondaryAmount: 0 };
+    }
+    case 'lumberCamp': {
+      return { primaryAmount: Math.max(1, Math.round(level * 2 * 0.9)), secondaryAmount: 0 };
+    }
+    case 'quarry': {
+      const stoneAmt = Math.max(1, Math.round(level * 2 * 0.9));
+      const ironAmt = level >= 3 ? Math.floor(level / 3) : 0;
+      return { primaryAmount: stoneAmt, secondaryAmount: ironAmt };
+    }
+    case 'butchery': {
+      const base = level <= 4 ? level : Math.round((4 + (level - 4) * 2) * 1.5);
+      const full = Math.max(1, Math.round(base * 1.8));
+      const baseAfter10 = Math.max(1, Math.round(full * 0.9));
+      const foodAmt = Math.max(1, Math.round(baseAfter10 * 0.95));
+      const leatherAmt = level >= 3 ? Math.floor(level / 3) : 0;
+      return { primaryAmount: foodAmt, secondaryAmount: leatherAmt };
+    }
+    case 'tavern': {
+      if (level < 5) return { primaryAmount: 0, secondaryAmount: 0 };
+      const base = (2 + Math.floor((level - 5) / 2) * 2) * 2;
+      const baseAfter10 = Math.max(1, Math.round(base * 0.9));
+      const foodAmt = Math.max(1, Math.round(baseAfter10 * 0.95));
+      return { primaryAmount: foodAmt, secondaryAmount: 0 };
+    }
+    case 'alchemy': {
+      const alcMap: Record<number, number> = {
+        1: 2, 2: 5, 3: 7, 4: 11, 5: 15, 6: 18, 7: 23, 8: 29, 9: 35, 10: 41
+      };
+      return { primaryAmount: alcMap[level] ?? Math.round(41 * Math.pow(1.15, level - 10)), secondaryAmount: 0 };
+    }
+    case 'market': {
+      const base = Math.max(1, Math.round(level * 2 * 0.9));
+      return { primaryAmount: Math.max(1, Math.round(base * 0.95)), secondaryAmount: 0 };
+    }
+    default:
+      return { primaryAmount: 0, secondaryAmount: 0 };
+  }
+};
+
+/** 📐 기본 유지비 계산 (시너지 적용 전 기초값) */
+export const computeDefaultBuildingUpkeep = (id: BuildingId, level: number): { amount: number; secondaryAmount: number } => {
+  if (level <= 0) return { amount: 0, secondaryAmount: 0 };
+  if (level < 4 && id !== 'storage') return { amount: 0, secondaryAmount: 0 };
+
+  const getLvFactor = (lv: number) => {
+    if (lv < 4) return 0;
+    if (lv <= 6) return lv - 3;
+    const tier2Map: Record<number, number> = { 7: 5, 8: 7, 9: 9, 10: 12 };
+    return tier2Map[lv] ?? (12 + (lv - 10) * 3);
+  };
+
+  const lvFactor = getLvFactor(level);
+
+  switch (id) {
+    case 'storage': {
+      const storageUpkeepMap = [0, 1, 2, 3, 4, 6, 8, 9, 11, 12, 14];
+      return { amount: storageUpkeepMap[level] ?? (14 + (level - 10) * 2), secondaryAmount: 0 };
+    }
+    case 'cabin': {
+      return { amount: lvFactor * 2 + 2, secondaryAmount: 0 };
+    }
+    case 'infirmary': {
+      const food = lvFactor * 3;
+      const gold = Math.floor(food * 0.5);
+      return { amount: food, secondaryAmount: gold };
+    }
+    case 'market': {
+      return { amount: lvFactor * 4, secondaryAmount: 0 };
+    }
+    case 'sanctuary': {
+      const sanctuaryUpkeepMap = [0, 0, 0, 0, 5, 8, 11, 14, 18, 21, 25];
+      return { amount: sanctuaryUpkeepMap[level] ?? (25 + (level - 10) * 4), secondaryAmount: 0 };
+    }
+    case 'blacksmith': {
+      const blacksmithUpkeepMap = [0, 0, 0, 0, 4, 8, 12, 16, 20, 25, 30];
+      return { amount: blacksmithUpkeepMap[level] ?? (30 + (level - 10) * 5), secondaryAmount: level };
+    }
+    case 'arenaGate': {
+      const arenaGateUpkeepMap = [0, 0, 0, 0, 2, 4, 7, 12, 20, 29, 40];
+      return { amount: arenaGateUpkeepMap[level] ?? (40 + (level - 10) * 8), secondaryAmount: 0 };
+    }
+    case 'tavern': {
+      return { amount: lvFactor * 5, secondaryAmount: 0 };
+    }
+    case 'alchemy': {
+      return { amount: lvFactor * 8, secondaryAmount: lvFactor * 1 };
+    }
+    case 'lumberCamp': {
+      let base = lvFactor * 15;
+      if (level >= 5) {
+        const discountRate = Math.min(0.42, (level - 4) * 0.07);
+        base = Math.round(base * (1 - discountRate));
+      }
+      return { amount: base, secondaryAmount: 0 };
+    }
+    case 'quarry': {
+      let qGold = lvFactor * 15;
+      if (level >= 5) {
+        const discountRate = Math.min(0.42, (level - 4) * 0.07);
+        qGold = Math.round(qGold * (1 - discountRate));
+      }
+      if (level >= 7) {
+        const foodCost = Math.round(qGold * 0.30);
+        return { amount: qGold - foodCost, secondaryAmount: foodCost };
+      }
+      return { amount: qGold, secondaryAmount: 0 };
+    }
+    case 'butchery': {
+      return { amount: lvFactor * 6, secondaryAmount: 0 };
+    }
+    default:
+      return { amount: 0, secondaryAmount: 0 };
+  }
+};
+
+
 

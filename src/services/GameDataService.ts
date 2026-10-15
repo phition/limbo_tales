@@ -1,6 +1,6 @@
 import { MONSTERS } from '../data/monsters';
 import { EQUIPMENT_RECIPES, FORGE_ITEM_BASE_COSTS } from '../data/equipment';
-import { INITIAL_BUILDINGS, BUILDING_BASE_COSTS } from '../data/buildings';
+import { INITIAL_BUILDINGS, BUILDING_BASE_COSTS, BuildingTierConfig } from '../data/buildings';
 import { INITIAL_QUESTS } from '../data/quests';
 import { CHARACTER_CLASSES } from '../data/classes';
 import { ALL_SKILL_BOOKS } from '../data/skillBooks';
@@ -32,6 +32,7 @@ const DEFAULT_BALANCE_CONFIG: GameBalanceConfig = {
 export interface CustomGameDataPackage {
   monsters?: Record<string, Partial<MonsterData>>;
   buildingBaseCosts?: Record<string, Partial<GameResources>>;
+  buildingTierConfigs?: Record<string, Record<number, BuildingTierConfig>>;
   forgeItemBaseCosts?: Record<string, Partial<GameResources>>;
   initialHeroes?: Mercenary[];
   classBaseStats?: Record<string, Partial<CharacterClass['baseStats']>>;
@@ -173,6 +174,37 @@ export class GameDataService {
       }
     }
 
+    // 2-2. 🏛️ 영지 시설 티어/레벨별 소모자재량/생산량/유지비 오버라이드 병합
+    if (pkg.buildingTierConfigs) {
+      if (!this.customOverrides.buildingTierConfigs) {
+        this.customOverrides.buildingTierConfigs = {};
+      }
+      for (const [bId, tierMap] of Object.entries(pkg.buildingTierConfigs)) {
+        if (!this.customOverrides.buildingTierConfigs[bId]) {
+          this.customOverrides.buildingTierConfigs[bId] = {};
+        }
+        for (const [lvStr, cfg] of Object.entries(tierMap)) {
+          const lv = Number(lvStr);
+          this.customOverrides.buildingTierConfigs[bId][lv] = {
+            ...(this.customOverrides.buildingTierConfigs[bId][lv] || {}),
+            ...cfg,
+            cost: {
+              ...(this.customOverrides.buildingTierConfigs[bId][lv]?.cost || {}),
+              ...(cfg.cost || {})
+            },
+            production: {
+              ...(this.customOverrides.buildingTierConfigs[bId][lv]?.production || {}),
+              ...(cfg.production || {})
+            },
+            upkeep: {
+              ...(this.customOverrides.buildingTierConfigs[bId][lv]?.upkeep || {}),
+              ...(cfg.upkeep || {})
+            }
+          };
+        }
+      }
+    }
+
     // 3. 단조 장비 기초 자원 소모량 반영
     if (pkg.forgeItemBaseCosts) {
       for (const [itemKey, costDiff] of Object.entries(pkg.forgeItemBaseCosts)) {
@@ -294,6 +326,22 @@ export class GameDataService {
 
   public getNemesisConfig(): NemesisBossConfig {
     return NEMESIS_BOSS_CONFIG;
+  }
+
+  public getCustomBuildingTierCost(bId: BuildingId, level: number): Partial<GameResources> | undefined {
+    return this.customOverrides.buildingTierConfigs?.[bId]?.[level]?.cost;
+  }
+
+  public getCustomBuildingProduction(bId: BuildingId, level: number): { primaryAmount?: number; secondaryAmount?: number } | undefined {
+    return this.customOverrides.buildingTierConfigs?.[bId]?.[level]?.production;
+  }
+
+  public getCustomBuildingUpkeep(bId: BuildingId, level: number): { amount?: number; secondaryAmount?: number } | undefined {
+    return this.customOverrides.buildingTierConfigs?.[bId]?.[level]?.upkeep;
+  }
+
+  public getAllCustomBuildingTierConfigs(): Record<string, Record<number, BuildingTierConfig>> {
+    return this.customOverrides.buildingTierConfigs || {};
   }
 
   /**

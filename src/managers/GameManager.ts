@@ -944,6 +944,10 @@ export class GameManager {
         } else if (bId === 'butchery') {
           // 🥩 생체 정제소: 5% 감축 적용
           amt = GameManager.getButcheryBaseProduction(b.level);
+        } else if (bId === 'lumberCamp') {
+          amt = GameManager.getLumberCampBaseProduction(b.level);
+        } else if (bId === 'quarry') {
+          amt = GameManager.getQuarryBaseStoneProduction(b.level);
         } else {
           // 📉 벌채소, 시추소 10% 감축
           amt = Math.max(1, Math.round(amt * 0.9));
@@ -955,13 +959,13 @@ export class GameManager {
     // 마도 광산 철광석 특수 생산 (Lv.3+, 11초 주기)
     const quarry = this.buildings['quarry'];
     if (quarry && quarry.level >= 3 && !quarry.isPaused) {
-      activeProds.push({ res: 'iron', baseAmt: Math.floor(quarry.level / 3), period: 11 });
+      activeProds.push({ res: 'iron', baseAmt: GameManager.getQuarryBaseIronProduction(quarry.level), period: 11 });
     }
 
     // 마물 가공소 가죽 특수 생산 (Lv.3+, 13초 주기)
     const butchery = this.buildings['butchery'];
     if (butchery && butchery.level >= 3 && !butchery.isPaused) {
-      activeProds.push({ res: 'leather', baseAmt: Math.floor(butchery.level / 3), period: 13 });
+      activeProds.push({ res: 'leather', baseAmt: GameManager.getButcheryLeatherProduction(butchery.level), period: 13 });
     }
 
     // 🍺 방랑자의 라운지 식량 특수 생산 (Lv.5+, 15초 주기, 5% 감축 적용)
@@ -1321,6 +1325,10 @@ export class GameManager {
           } else if (bId === 'butchery') {
             // 🥩 생체 정제소: 5% 감축 적용
             amount = GameManager.getButcheryBaseProduction(b.level);
+          } else if (bId === 'lumberCamp') {
+            amount = GameManager.getLumberCampBaseProduction(b.level);
+          } else if (bId === 'quarry') {
+            amount = GameManager.getQuarryBaseStoneProduction(b.level);
           } else {
             // 📉 벌채소, 시추소 10% 감축
             amount = Math.max(1, Math.round(amount * 0.9));
@@ -1337,10 +1345,10 @@ export class GameManager {
         }
       }
 
-      // 마도 광산 특수 생산: 3레벨 도달 시부터 레벨/3 만큼의 철광석을 6초마다 생산
+      // 마도 광산 특수 생산: 3레벨 도달 시부터 철광석 생산
       const quarry = this.buildings['quarry'];
       if (quarry && quarry.level >= 3 && !quarry.isPaused && this.tickCount % 11 === 0) {
-        let extraIron = Math.floor(quarry.level / 3);
+        let extraIron = GameManager.getQuarryBaseIronProduction(quarry.level);
         if (this.bonfireWarmthTime > 0 && this.bonfireStacks >= 5) {
           extraIron = Math.ceil(extraIron * 1.15);
         }
@@ -1349,10 +1357,10 @@ export class GameManager {
         changed = true;
       }
 
-      // 마물 가공소 특수 생산: 3레벨 도달 시부터 레벨/3 만큼의 가죽을 8초마다 생산
+      // 마물 가공소 특수 생산: 3레벨 도달 시부터 가죽 생산
       const butchery = this.buildings['butchery'];
       if (butchery && butchery.level >= 3 && !butchery.isPaused && this.tickCount % 13 === 0) {
-        let extraLeather = Math.floor(butchery.level / 3);
+        let extraLeather = GameManager.getButcheryLeatherProduction(butchery.level);
         if (this.bonfireWarmthTime > 0 && this.bonfireStacks >= 5) {
           extraLeather = Math.ceil(extraLeather * 1.15);
         }
@@ -1570,12 +1578,15 @@ export class GameManager {
     originalAmount?: number;
     isDiscounted?: boolean;
   } {
-    if (level < 4 && id !== 'storage') {
+    const customUp = GameDataService.getInstance().getCustomBuildingUpkeep(id, level);
+    const hasCustomUpkeep = customUp && (customUp.amount !== undefined || customUp.secondaryAmount !== undefined);
+
+    if (!hasCustomUpkeep && level < 4 && id !== 'storage') {
       return { res: null, amount: 0, resIcon: '✨', resName: '무료 (Lv.1~3)' };
     }
 
     const lvFactor = this.getUpkeepFactor(level);
-    if (lvFactor <= 0 && id !== 'storage') {
+    if (!hasCustomUpkeep && lvFactor <= 0 && id !== 'storage') {
       return { res: null, amount: 0, resIcon: '✨', resName: '무료 (Lv.1~3)' };
     }
 
@@ -1713,34 +1724,49 @@ export class GameManager {
         return { res: null, amount: 0, resIcon: '', resName: '없음' };
     }
 
+    if (customUp?.amount !== undefined) {
+      baseAmount = customUp.amount;
+    }
+    if (customUp?.secondaryAmount !== undefined) {
+      secondaryAmount = customUp.secondaryAmount;
+    }
+
+    if (baseAmount === 0 && (!secondaryAmount || secondaryAmount === 0)) {
+      return { res: null, amount: 0, resIcon: '✨', resName: '유지비 없음' };
+    }
+
     let finalAmount = baseAmount;
     let isDiscounted = false;
 
-    if (res === 'food' && synergies.foodSynergy) {
-      const foodDiscount = level >= 7 ? 0.65 : 0.70; // 🥩 식량 유지비 감면 (Lv.7+ 35% 감면 적용)
-      finalAmount = Math.max(1, Math.ceil(baseAmount * foodDiscount));
-      isDiscounted = true;
-    } else if (res === 'gold' && synergies.goldSynergy) {
-      finalAmount = Math.max(1, Math.ceil(baseAmount * 0.75)); // ⚖️ 골드 유지비 25% 감면
-      isDiscounted = true;
-    } else if (res === 'ether' && synergies.etherSynergy) {
-      finalAmount = Math.max(1, Math.ceil(baseAmount * 0.75)); // 🧪 마도 에테르 유지비 25% 감면 (인프라 시너지 5% 축소)
-      isDiscounted = true;
+    if (customUp?.amount !== undefined) {
+      finalAmount = customUp.amount;
+    } else {
+      if (res === 'food' && synergies.foodSynergy) {
+        const foodDiscount = level >= 7 ? 0.65 : 0.70; // 🥩 식량 유지비 감면 (Lv.7+ 35% 감면 적용)
+        finalAmount = Math.max(1, Math.ceil(baseAmount * foodDiscount));
+        isDiscounted = true;
+      } else if (res === 'gold' && synergies.goldSynergy) {
+        finalAmount = Math.max(1, Math.ceil(baseAmount * 0.75)); // ⚖️ 골드 유지비 25% 감면
+        isDiscounted = true;
+      } else if (res === 'ether' && synergies.etherSynergy) {
+        finalAmount = Math.max(1, Math.ceil(baseAmount * 0.75)); // 🧪 마도 에테르 유지비 25% 감면 (인프라 시너지 5% 축소)
+        isDiscounted = true;
+      }
+
+      // 📜 심연의 백과 영지 시설 유지비 감면 적용
+      const codexUpkeepDiscount = this.getCodexBonus?.()?.upkeepDiscountPct || 0;
+      if (codexUpkeepDiscount > 0) {
+        const discountRatio = Math.min(0.5, codexUpkeepDiscount / 100);
+        finalAmount = Math.max(1, Math.ceil(finalAmount * (1 - discountRatio)));
+        isDiscounted = true;
+      }
     }
 
-    // 📜 심연의 백과 영지 시설 유지비 감면 적용
-    const codexUpkeepDiscount = this.getCodexBonus?.()?.upkeepDiscountPct || 0;
-    if (codexUpkeepDiscount > 0) {
-      const discountRatio = Math.min(0.5, codexUpkeepDiscount / 100);
-      finalAmount = Math.max(1, Math.ceil(finalAmount * (1 - discountRatio)));
-      isDiscounted = true;
-    }
-
-    const resMeta = {
+    const resMeta = res ? {
       food: { icon: '🍖', name: '식량' },
       ether: { icon: '✨', name: '에테르' },
       gold: { icon: '🪙', name: '골드' },
-    }[res];
+    }[res] : { icon: '', name: '없음' };
 
     return {
       res,
@@ -2133,17 +2159,17 @@ export class GameManager {
     if (resKey === 'wood') {
       const lc = this.buildings['lumberCamp'];
       if (lc && lc.level > 0 && !lc.isPaused) {
-        prodPerSec = (Math.max(1, Math.round(lc.level * 2 * 0.9)) * warmthMult) / 9; // 9초마다 2*Lv (10% 감축)
+        prodPerSec = (GameManager.getLumberCampBaseProduction(lc.level) * warmthMult) / 9; // 9초마다 목재
       }
     } else if (resKey === 'stone') {
       const q = this.buildings['quarry'];
       if (q && q.level > 0 && !q.isPaused) {
-        prodPerSec = (Math.max(1, Math.round(q.level * 2 * 0.9)) * warmthMult) / 11; // 11초마다 2*Lv (10% 감축)
+        prodPerSec = (GameManager.getQuarryBaseStoneProduction(q.level) * warmthMult) / 11; // 11초마다 석재
       }
     } else if (resKey === 'iron') {
       const q = this.buildings['quarry'];
       if (q && q.level >= 3 && !q.isPaused) {
-        prodPerSec = (Math.floor(q.level / 3) * warmthMult) / 11; // 11초마다 Lv/3
+        prodPerSec = (GameManager.getQuarryBaseIronProduction(q.level) * warmthMult) / 11; // 11초마다 철광석
       }
     } else if (resKey === 'food') {
       const b = this.buildings['butchery'];
@@ -2183,7 +2209,7 @@ export class GameManager {
     } else if (resKey === 'leather') {
       const b = this.buildings['butchery'];
       if (b && b.level >= 3 && !b.isPaused) {
-        prodPerSec = (Math.floor(b.level / 3) * warmthMult) / 13; // 13초마다 Lv/3
+        prodPerSec = (GameManager.getButcheryLeatherProduction(b.level) * warmthMult) / 13; // 13초마다 가죽
       }
     } else if (resKey === 'ether') {
       const alc = this.buildings['alchemy'];
@@ -2289,6 +2315,8 @@ export class GameManager {
   /** 🏕️ 생존자 안식처(cabin) 레벨별 기본 골드 생산량 (13초 주기, Lv.6 손익분기점, Lv.9 미세적자, Lv.10 +0.2G/초 흑자 조율) */
   public static getCabinBaseProduction(level: number): number {
     if (level <= 0) return 0;
+    const custom = GameDataService.getInstance().getCustomBuildingProduction('cabin', level);
+    if (custom?.primaryAmount !== undefined) return custom.primaryAmount;
     const cabinMap: Record<number, number> = {
       1: 4,
       2: 10,
@@ -2308,6 +2336,8 @@ export class GameManager {
   /** 🥩 심연 생체 정제소(butchery) 레벨별 기본 식량 생산량 (13초 주기, 생산량 5% 감축 적용) */
   public static getButcheryBaseProduction(level: number): number {
     if (level <= 0) return 0;
+    const custom = GameDataService.getInstance().getCustomBuildingProduction('butchery', level);
+    if (custom?.primaryAmount !== undefined) return custom.primaryAmount;
     const base = level <= 4 ? level : Math.round((4 + (level - 4) * 2) * 1.5);
     const full = Math.max(1, Math.round(base * 1.8));
     const baseAfter10 = Math.max(1, Math.round(full * 0.9));
@@ -2315,9 +2345,19 @@ export class GameManager {
     return Math.max(1, Math.round(baseAfter10 * 0.95));
   }
 
+  /** 🥩 심연 생체 정제소(butchery) 레벨별 가죽 생산량 (13초 주기, Lv.3+) */
+  public static getButcheryLeatherProduction(level: number): number {
+    if (level <= 0) return 0;
+    const custom = GameDataService.getInstance().getCustomBuildingProduction('butchery', level);
+    if (custom?.secondaryAmount !== undefined) return custom.secondaryAmount;
+    return level >= 3 ? Math.floor(level / 3) : 0;
+  }
+
   /** 🧪 에테르 연금 공방(alchemy) 레벨별 기본 에테르 생산량 (15초 주기, Lv.3·Lv.4 틱당 +2개 상향 적용) */
   public static getAlchemyBaseProduction(level: number): number {
     if (level <= 0) return 0;
+    const custom = GameDataService.getInstance().getCustomBuildingProduction('alchemy', level);
+    if (custom?.primaryAmount !== undefined) return custom.primaryAmount;
     const alcMap: Record<number, number> = {
       1: 2,
       2: 5,
@@ -2337,6 +2377,8 @@ export class GameManager {
   /** ⚖️ 황혼의 블랙 마켓(market) 레벨별 기본 골드 수급량 (15초 주기, 골드 5% 감축 적용) */
   public static getMarketBaseProduction(level: number): number {
     if (level <= 0) return 0;
+    const custom = GameDataService.getInstance().getCustomBuildingProduction('market', level);
+    if (custom?.primaryAmount !== undefined) return custom.primaryAmount;
     const base = Math.max(1, Math.round(level * 2 * 0.9));
     // 📉 골드 생산량 5% 추가 감축 적용
     return Math.max(1, Math.round(base * 0.95));
@@ -2345,10 +2387,36 @@ export class GameManager {
   /** 🍺 방랑자의 라운지(tavern) 레벨별 기본 식량 생산량 (15초 주기, Lv.5+, 식량 5% 감축 적용) */
   public static getTavernBaseFoodProduction(level: number): number {
     if (level < 5) return 0;
+    const custom = GameDataService.getInstance().getCustomBuildingProduction('tavern', level);
+    if (custom?.primaryAmount !== undefined) return custom.primaryAmount;
     const base = (2 + Math.floor((level - 5) / 2) * 2) * 2;
     const baseAfter10 = Math.max(1, Math.round(base * 0.9));
     // 📉 식량 생산량 5% 추가 감축 적용
     return Math.max(1, Math.round(baseAfter10 * 0.95));
+  }
+
+  /** 🌲 영목 벌채소(lumberCamp) 레벨별 목재 생산량 (9초 주기) */
+  public static getLumberCampBaseProduction(level: number): number {
+    if (level <= 0) return 0;
+    const custom = GameDataService.getInstance().getCustomBuildingProduction('lumberCamp', level);
+    if (custom?.primaryAmount !== undefined) return custom.primaryAmount;
+    return Math.max(1, Math.round(level * 2 * 0.9));
+  }
+
+  /** ⛏️ 에테르 광맥 시추소(quarry) 레벨별 석재 생산량 (11초 주기) */
+  public static getQuarryBaseStoneProduction(level: number): number {
+    if (level <= 0) return 0;
+    const custom = GameDataService.getInstance().getCustomBuildingProduction('quarry', level);
+    if (custom?.primaryAmount !== undefined) return custom.primaryAmount;
+    return Math.max(1, Math.round(level * 2 * 0.9));
+  }
+
+  /** ⛏️ 에테르 광맥 시추소(quarry) 레벨별 철광석 생산량 (11초 주기, Lv.3+) */
+  public static getQuarryBaseIronProduction(level: number): number {
+    if (level < 3) return 0;
+    const custom = GameDataService.getInstance().getCustomBuildingProduction('quarry', level);
+    if (custom?.secondaryAmount !== undefined) return custom.secondaryAmount;
+    return Math.floor(level / 3);
   }
 
   /** 자원 타입의 카테고리 분류 반환 */
@@ -2420,6 +2488,12 @@ export class GameManager {
   }
 
   public getBuildingUpgradeCost(id: BuildingId, currentLevel: number): Partial<GameResources> {
+    const targetLevel = currentLevel + 1;
+    const customCost = GameDataService.getInstance().getCustomBuildingTierCost(id, targetLevel);
+    if (customCost && Object.keys(customCost).length > 0) {
+      return { ...customCost };
+    }
+
     const baseCost = BUILDING_BASE_COSTS[id] || {};
     if (currentLevel === 0) {
       const initialCost: Partial<GameResources> = {};
@@ -2489,9 +2563,7 @@ export class GameManager {
       }
     }
 
-    // ── 🏗️ 건물별 맞춤 건축 자원 밸런싱 규칙 (목표 레벨 = currentLevel + 1) ──
-    const targetLevel = currentLevel + 1;
-
+    // ── 🏗️ 건물별 맞춤 건축 자원 밸런싱 규칙 (목표 레벨 = targetLevel) ──
     // 1. 생존자 안식처(cabin): 레벨4부터 목재 소모량 2배, 8레벨부터 3배
     if (id === 'cabin' && finalCost.wood) {
       if (targetLevel >= 8) {

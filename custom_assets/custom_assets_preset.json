@@ -807,7 +807,11 @@
     "monster_tomb_banshee": "assets/monster_tomb_banshee.jpg",
     "monster_void_beast": "assets/monster_void_beast.jpg",
     "monster_void_stalker": "assets/monster_void_stalker.jpg",
-    "monster_void_stalker_v2": "assets/monster_void_stalker_v2.jpg"
+    "monster_void_stalker_v2": "assets/monster_void_stalker_v2.jpg",
+    "nemesis_boss": "assets/custom_uploaded/monsters/nemesis_boss.png",
+    "nemesis_head": "assets/custom_uploaded/monsters/nemesis_head.jpg",
+    "nemesis_body": "assets/custom_uploaded/monsters/nemesis_body.png",
+    "nemesis_tail": "assets/custom_uploaded/monsters/nemesis_tail.png"
   },
   "monsterVideoOverrides": {
     "boss_floor_1": "assets/boss_floor_1.mp4",
@@ -850,7 +854,13 @@
     "chronomancer": "assets/custom_uploaded/mercenaries/chronomancer.png",
     "crusader_lord": "assets/custom_uploaded/mercenaries/crusader_lord.png",
     "iron_marshal": "assets/custom_uploaded/mercenaries/iron_marshal.png",
-    "ghost_sniper": "assets/custom_uploaded/mercenaries/ghost_sniper.png"
+    "ghost_sniper": "assets/custom_uploaded/mercenaries/ghost_sniper.png",
+    "aegis_bastion": "assets/custom_uploaded/mercenaries/aegis_bastion.jpg",
+    "void_strider": "assets/custom_uploaded/mercenaries/void_strider.jpg",
+    "chrono_archon": "assets/custom_uploaded/mercenaries/chrono_archon.jpg",
+    "seraphic_inquisitor": "assets/custom_uploaded/mercenaries/seraphic_inquisitor.jpg",
+    "valhalla_warlord": "assets/custom_uploaded/mercenaries/valhalla_warlord.jpg",
+    "omega_deadeye": "assets/custom_uploaded/mercenaries/omega_deadeye.jpg"
   },
-  "version": 596
+  "version": 599
 }

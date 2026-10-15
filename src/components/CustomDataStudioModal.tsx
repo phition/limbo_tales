@@ -1,7 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { GameDataService, CustomGameDataPackage } from '../services/GameDataService';
 import { MONSTERS } from '../data/monsters';
-import { BUILDING_BASE_COSTS, INITIAL_BUILDINGS } from '../data/buildings';
+import {
+  BUILDING_BASE_COSTS,
+  INITIAL_BUILDINGS,
+  BuildingTierConfig,
+  BUILDING_METADATA_MAP,
+  computeDefaultBuildingUpgradeCost,
+  computeDefaultBuildingProduction,
+  computeDefaultBuildingUpkeep
+} from '../data/buildings';
 import { FORGE_ITEM_BASE_COSTS } from '../data/equipment';
 import { INITIAL_HEROES_CONFIG } from '../data/mercenaries';
 import { ALL_SKILL_BOOKS, MARKET_SKILL_BOOKS, BOSS_EXCLUSIVE_SKILL_BOOKS, getDroppableMonsterSkillBooks, DroppableMonsterSkillBookDef } from '../data/skillBooks';
@@ -151,7 +159,10 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  // 1. 건물 건축/강화 소모재료 변경
+  const [selectedBuildingId, setSelectedBuildingId] = useState<BuildingId>('cabin');
+  const [showBaseCostFormulas, setShowBaseCostFormulas] = useState(false);
+
+  // 1. 건물 건축/강화 소모재료 변경 (기초 베이스)
   const handleBuildingCostChange = (bId: string, resKey: keyof GameResources, val: number) => {
     setOverrides(prev => {
       const nextBuildingCosts = { ...(prev.buildingBaseCosts || {}) };
@@ -161,6 +172,118 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
       return { ...prev, buildingBaseCosts: nextBuildingCosts };
     });
     setHasChanges(true);
+  };
+
+  // 1-1. 건물 티어별 건설/증축 소모자재량 변경
+  const handleBuildingTierCostChange = (bId: BuildingId, level: number, resKey: keyof GameResources, val: number) => {
+    setOverrides(prev => {
+      const nextTierConfigs = { ...(prev.buildingTierConfigs || {}) };
+      const buildingMap = { ...(nextTierConfigs[bId] || {}) };
+      const currentTier = { ...(buildingMap[level] || {}) };
+      const defaultCost = computeDefaultBuildingUpgradeCost(bId, level);
+      const currentCost = {
+        ...defaultCost,
+        ...(currentTier.cost || {})
+      };
+      currentCost[resKey] = Math.max(0, val);
+      currentTier.cost = currentCost;
+      buildingMap[level] = currentTier;
+      nextTierConfigs[bId] = buildingMap;
+      return { ...prev, buildingTierConfigs: nextTierConfigs };
+    });
+    setHasChanges(true);
+  };
+
+  // 1-2. 건물 티어별 생산량 변경
+  const handleBuildingTierProductionChange = (bId: BuildingId, level: number, field: 'primaryAmount' | 'secondaryAmount', val: number) => {
+    setOverrides(prev => {
+      const nextTierConfigs = { ...(prev.buildingTierConfigs || {}) };
+      const buildingMap = { ...(nextTierConfigs[bId] || {}) };
+      const currentTier = { ...(buildingMap[level] || {}) };
+      const defaultProd = computeDefaultBuildingProduction(bId, level);
+      const currentProd = {
+        primaryAmount: currentTier.production?.primaryAmount ?? defaultProd.primaryAmount,
+        secondaryAmount: currentTier.production?.secondaryAmount ?? defaultProd.secondaryAmount,
+        [field]: Math.max(0, val)
+      };
+      currentTier.production = currentProd;
+      buildingMap[level] = currentTier;
+      nextTierConfigs[bId] = buildingMap;
+      return { ...prev, buildingTierConfigs: nextTierConfigs };
+    });
+    setHasChanges(true);
+  };
+
+  // 1-3. 건물 티어별 유지비 변경
+  const handleBuildingTierUpkeepChange = (bId: BuildingId, level: number, field: 'amount' | 'secondaryAmount', val: number) => {
+    setOverrides(prev => {
+      const nextTierConfigs = { ...(prev.buildingTierConfigs || {}) };
+      const buildingMap = { ...(nextTierConfigs[bId] || {}) };
+      const currentTier = { ...(buildingMap[level] || {}) };
+      const defaultUpkeep = computeDefaultBuildingUpkeep(bId, level);
+      const currentUpkeep = {
+        amount: currentTier.upkeep?.amount ?? defaultUpkeep.amount,
+        secondaryAmount: currentTier.upkeep?.secondaryAmount ?? defaultUpkeep.secondaryAmount,
+        [field]: Math.max(0, val)
+      };
+      currentTier.upkeep = currentUpkeep;
+      buildingMap[level] = currentTier;
+      nextTierConfigs[bId] = buildingMap;
+      return { ...prev, buildingTierConfigs: nextTierConfigs };
+    });
+    setHasChanges(true);
+  };
+
+  // 1-4. 특정 레벨 기본값으로 리셋
+  const handleResetBuildingTier = (bId: BuildingId, level: number) => {
+    setOverrides(prev => {
+      const nextTierConfigs = { ...(prev.buildingTierConfigs || {}) };
+      if (nextTierConfigs[bId]) {
+        const buildingMap = { ...nextTierConfigs[bId] };
+        delete buildingMap[level];
+        if (Object.keys(buildingMap).length === 0) {
+          delete nextTierConfigs[bId];
+        } else {
+          nextTierConfigs[bId] = buildingMap;
+        }
+      }
+      return { ...prev, buildingTierConfigs: nextTierConfigs };
+    });
+    setHasChanges(true);
+    showToast(`🔄 [${BUILDING_METADATA_MAP[bId]?.name || bId}] Lv.${level} 설정이 기본 공식으로 초기화되었습니다.`);
+  };
+
+  // 1-5. 1~10레벨 전체 기본 수치를 편집창에 일괄 로드
+  const handlePopulateBuildingDefaults = (bId: BuildingId) => {
+    setOverrides(prev => {
+      const nextTierConfigs = { ...(prev.buildingTierConfigs || {}) };
+      const buildingMap = { ...(nextTierConfigs[bId] || {}) };
+      for (let lv = 1; lv <= 10; lv++) {
+        const defCost = computeDefaultBuildingUpgradeCost(bId, lv);
+        const defProd = computeDefaultBuildingProduction(bId, lv);
+        const defUpkeep = computeDefaultBuildingUpkeep(bId, lv);
+        buildingMap[lv] = {
+          cost: { ...defCost },
+          production: { ...defProd },
+          upkeep: { ...defUpkeep }
+        };
+      }
+      nextTierConfigs[bId] = buildingMap;
+      return { ...prev, buildingTierConfigs: nextTierConfigs };
+    });
+    setHasChanges(true);
+    showToast(`📋 [${BUILDING_METADATA_MAP[bId]?.name || bId}] 1~10레벨 전체 기본 수치가 시트에 로드되었습니다.`);
+  };
+
+  // 1-6. 해당 건물의 모든 커스텀 설정 초기화
+  const handleClearBuildingOverrides = (bId: BuildingId) => {
+    setOverrides(prev => {
+      const nextTierConfigs = { ...(prev.buildingTierConfigs || {}) };
+      delete nextTierConfigs[bId];
+      return { ...prev, buildingTierConfigs: nextTierConfigs };
+    });
+    setHasChanges(true);
+    showToast(`🔄 [${BUILDING_METADATA_MAP[bId]?.name || bId}] 모든 레벨의 커스텀 설정이 초기화되었습니다.`);
   };
 
   // 2. 단조 장비 기초 자원 소모량 변경
@@ -499,7 +622,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
         {/* 탭 네비게이션 */}
         <div className="flex items-center gap-1 px-4 pt-2 pb-2 bg-[#090d16] border-b border-[#1a2336] shrink-0 overflow-x-auto">
           {[
-            { key: 'buildings', icon: '🏛️', label: '건물 건설/강화 자원' },
+            { key: 'buildings', icon: '🏛️', label: '영지 시설 (건설·생산·유지비)' },
             { key: 'forge', icon: '⚒️', label: '단조 장비 소모 자원' },
             { key: 'monsters', icon: '👾', label: '마물/보스 능력치' },
             { key: 'nemesis', icon: '🌌', label: '차원 네메시스 보스' },
@@ -535,53 +658,504 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
         {/* 탭 컨텐츠 영역 */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
 
-          {/* 1. 🏛️ 건물 건설/강화 소모 자원 */}
+          {/* 1. 🏛️ 영지 시설 티어별 시트 (건설 소모자재량 / 생산량 / 유지비) */}
           {activeTab === 'buildings' && (
-            <div className="space-y-3">
-              <div className="p-3 bg-[#131926] rounded-xl border border-[#1f2d48] text-xs text-[#8b9bb4]">
-                💡 각 건물의 기초 건설/강화 베이스 요구 자원을 수정합니다. 레벨별 계수 공식이 이 기초값을 기준으로 계산됩니다.
+            <div className="space-y-4">
+              {/* 상단 13대 시설 선택 탭 바 */}
+              <div className="p-2.5 bg-[#101626] rounded-xl border border-[#1f2d48] space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#8b9bb4] px-1">
+                  <span className="font-bold text-[#cfd8e8] flex items-center gap-1.5">
+                    <span>🏛️</span>
+                    <span>영지 설비 선택 (13종)</span>
+                  </span>
+                  <span className="text-[11px] text-[#00d2ff]">
+                    선택 설비: <strong className="text-white">{BUILDING_METADATA_MAP[selectedBuildingId]?.name}</strong>
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                  {Object.entries(INITIAL_BUILDINGS)
+                    .filter(([id, b]) => !searchQuery || b.name.includes(searchQuery) || id.includes(searchQuery))
+                    .map(([bId, b]) => {
+                      const idKey = bId as BuildingId;
+                      const isSelected = selectedBuildingId === idKey;
+                      const hasCustom = overrides.buildingTierConfigs?.[idKey] && Object.keys(overrides.buildingTierConfigs[idKey]).length > 0;
+                      return (
+                        <button
+                          key={bId}
+                          type="button"
+                          onClick={() => setSelectedBuildingId(idKey)}
+                          className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
+                            isSelected
+                              ? 'bg-gradient-to-r from-[#00d2ff33] to-[#7c4dff33] text-white border border-[#00d2ff] shadow-md shadow-[#00d2ff22]'
+                              : 'bg-[#151c2d] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#212d46]'
+                          }`}
+                        >
+                          <span className="text-sm">{b.icon}</span>
+                          <span>{b.name}</span>
+                          {hasCustom && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff] animate-pulse" title="커스텀 수치 적용됨" />
+                          )}
+                        </button>
+                      );
+                    })}
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {Object.entries(INITIAL_BUILDINGS)
-                  .filter(([id, b]) => !searchQuery || b.name.includes(searchQuery) || id.includes(searchQuery))
-                  .map(([bId, b]) => {
-                    const currentCost = {
-                      ...(BUILDING_BASE_COSTS[bId as BuildingId] || {}),
-                      ...(overrides.buildingBaseCosts?.[bId] || {})
-                    };
-                    const resKeys: (keyof GameResources)[] = ['wood', 'stone', 'iron', 'gold', 'ether', 'herb'];
-                    return (
-                      <div key={bId} className="p-3.5 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2.5">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-sm text-white flex items-center gap-1.5">
-                            <span>{b.icon}</span>
-                            <span>{b.name}</span>
-                            <span className="text-[10px] text-[#607d8b] font-mono">({bId})</span>
+
+              {/* 선택된 시설 요약 및 퀵 액션 배너 */}
+              {(() => {
+                const bMeta = BUILDING_METADATA_MAP[selectedBuildingId];
+                const bState = INITIAL_BUILDINGS[selectedBuildingId];
+                const customCount = overrides.buildingTierConfigs?.[selectedBuildingId]
+                  ? Object.keys(overrides.buildingTierConfigs[selectedBuildingId]).length
+                  : 0;
+
+                return (
+                  <div className="p-3.5 bg-gradient-to-r from-[#11192e] via-[#0e1424] to-[#0c101d] rounded-xl border border-[#23314d] flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-lg">
+                    <div className="space-y-1.5 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-2xl p-1 bg-[#1a233a] rounded-lg border border-[#2e3e60]">{bState?.icon || '🏛️'}</span>
+                        <span className="text-base font-extrabold text-white">{bMeta?.name}</span>
+                        <span className="text-xs font-mono text-[#607d8b]">({selectedBuildingId})</span>
+                        {customCount > 0 ? (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]">
+                            ✨ {customCount}개 레벨 커스텀 수정됨
                           </span>
+                        ) : (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#1b263b] text-[#8b9bb4] border border-[#283750]">
+                            기본 공식 적용 중
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-[#8b9bb4] leading-relaxed line-clamp-2">
+                        {bMeta?.description || bState?.description}
+                      </p>
+                      <div className="flex items-center gap-2 pt-1 flex-wrap text-xs">
+                        <span className="px-2 py-0.5 rounded bg-[#162138] border border-[#233355] text-[#81d4fa] font-medium flex items-center gap-1">
+                          <span>📦 생산:</span>
+                          {bMeta?.production.hasPrimary ? (
+                            <span>
+                              {bMeta.production.primaryIcon} {bMeta.production.primaryName} ({bMeta.production.primaryCycleSec}초)
+                              {bMeta.production.hasSecondary && ` + ${bMeta.production.secondaryIcon} ${bMeta.production.secondaryName} (Lv.${bMeta.production.secondaryMinLevel}+)`}
+                            </span>
+                          ) : (
+                            <span className="text-[#8899aa]">생산 없음 (기능 설비)</span>
+                          )}
+                        </span>
+                        <span className="px-2 py-0.5 rounded bg-[#162138] border border-[#233355] text-[#ffd54f] font-medium flex items-center gap-1">
+                          <span>💸 유지비:</span>
+                          {bMeta?.upkeep.hasPrimary ? (
+                            <span>
+                              {bMeta.upkeep.primaryIcon} {bMeta.upkeep.primaryName} ({selectedBuildingId === 'storage' ? 'Lv.1+' : 'Lv.4+'})
+                              {bMeta.upkeep.hasSecondary && ` + ${bMeta.upkeep.secondaryIcon} ${bMeta.upkeep.secondaryName} (Lv.${bMeta.upkeep.secondaryMinLevel}+)`}
+                            </span>
+                          ) : (
+                            <span className="text-[#81c784]">무료 (유지비 없음)</span>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+                      <button
+                        type="button"
+                        onClick={() => handlePopulateBuildingDefaults(selectedBuildingId)}
+                        className="px-2.5 py-1.5 bg-[#18233c] hover:bg-[#202f50] text-[#00d2ff] hover:text-white border border-[#283b63] hover:border-[#00d2ff66] rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1"
+                        title="1~10레벨의 기본 수치를 시트에 복사하여 손쉽게 미세조정합니다."
+                      >
+                        <span>📋</span>
+                        <span>전체 1~10Lv 기본값 채우기</span>
+                      </button>
+                      {customCount > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => handleClearBuildingOverrides(selectedBuildingId)}
+                          className="px-2.5 py-1.5 bg-[#2c141d] hover:bg-[#3d1825] text-[#ff708f] hover:text-white border border-[#5a2133] rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1"
+                          title="이 건물의 모든 커스텀 설정을 삭제하고 원본 공식으로 복원합니다."
+                        >
+                          <span>🔄</span>
+                          <span>커스텀 초기화</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* 1~10 티어 레벨별 시트 테이블 */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between px-1 text-xs text-[#8b9bb4]">
+                  <span className="font-bold text-white flex items-center gap-1.5">
+                    <span>📊</span>
+                    <span>레벨별 밸런스 조정 시트 (Lv.1 ~ Lv.10)</span>
+                  </span>
+                  <span className="text-[11px] text-[#8b9bb4]">
+                    * 미입력 칸은 게임 내 기본 공식이 자동 적용됩니다.
+                  </span>
+                </div>
+
+                <div className="space-y-2.5">
+                  {Array.from({ length: 10 }, (_, i) => i + 1).map(level => {
+                    const bMeta = BUILDING_METADATA_MAP[selectedBuildingId];
+                    const defaultCost = computeDefaultBuildingUpgradeCost(selectedBuildingId, level);
+                    const defaultProd = computeDefaultBuildingProduction(selectedBuildingId, level);
+                    const defaultUpkeep = computeDefaultBuildingUpkeep(selectedBuildingId, level);
+
+                    const tierConfig = overrides.buildingTierConfigs?.[selectedBuildingId]?.[level];
+                    const hasCostOverride = !!tierConfig?.cost && Object.keys(tierConfig.cost).length > 0;
+                    const hasProdOverride = tierConfig?.production?.primaryAmount !== undefined || tierConfig?.production?.secondaryAmount !== undefined;
+                    const hasUpkeepOverride = tierConfig?.upkeep?.amount !== undefined || tierConfig?.upkeep?.secondaryAmount !== undefined;
+                    const isOverridden = hasCostOverride || hasProdOverride || hasUpkeepOverride;
+
+                    const resCostKeys: (keyof GameResources)[] = ['wood', 'stone', 'iron', 'gold', 'ether', 'herb', 'leather', 'void_shard'];
+                    const resLabels: Record<string, string> = {
+                      wood: '🪵 목재', stone: '🪨 석재', iron: '⚙️ 철광석', gold: '🪙 골드',
+                      ether: '✨ 에테르', herb: '🌿 약초', leather: '🟫 가죽', void_shard: '🔮 공허파편'
+                    };
+
+                    const getMilestoneTag = (lv: number) => {
+                      if (lv === 4) return '중반 1차';
+                      if (lv === 7) return '중반 2차';
+                      if (lv === 9) return '후반 3차';
+                      if (lv === 10) return '마스터 티어';
+                      return null;
+                    };
+                    const milestone = getMilestoneTag(level);
+
+                    return (
+                      <div
+                        key={level}
+                        className={`p-3 rounded-xl border transition-all ${
+                          isOverridden
+                            ? 'bg-[#101728] border-[#00d2ff55] shadow-md shadow-[#00d2ff11]'
+                            : 'bg-[#0b101c] border-[#1a243a]'
+                        }`}
+                      >
+                        {/* 레벨 헤더 줄 */}
+                        <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#18233c] flex-wrap gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2.5 py-0.5 rounded-lg font-black text-xs ${
+                              level === 10
+                                ? 'bg-gradient-to-r from-[#ffd700] to-[#ff9800] text-black shadow-sm'
+                                : level >= 7
+                                  ? 'bg-[#7c4dff33] text-[#b388ff] border border-[#7c4dff66]'
+                                  : level >= 4
+                                    ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]'
+                                    : 'bg-[#1e293b] text-[#94a3b8] border border-[#334155]'
+                            }`}>
+                              Lv.{level}
+                            </span>
+                            <span className="text-xs font-bold text-white">
+                              {level === 1 ? '최초 건설' : `${level}단계 증축`}
+                            </span>
+                            {milestone && (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#ff980022] text-[#ffb74d] border border-[#ff980044]">
+                                🏛️ {milestone}
+                              </span>
+                            )}
+                            {isOverridden && (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                                ✨ 커스텀 설정 적용됨
+                              </span>
+                            )}
+                          </div>
+
+                          {isOverridden && (
+                            <button
+                              type="button"
+                              onClick={() => handleResetBuildingTier(selectedBuildingId, level)}
+                              className="text-[11px] text-[#8b9bb4] hover:text-[#ff708f] transition-all flex items-center gap-1 px-2 py-0.5 rounded bg-[#161f33] hover:bg-[#251824] border border-[#223150]"
+                              title="이 레벨의 설정을 기본 공식으로 리셋합니다."
+                            >
+                              <span>🔄</span>
+                              <span>Lv.{level} 기본값 복원</span>
+                            </button>
+                          )}
                         </div>
-                        <div className="grid grid-cols-3 gap-2">
-                          {resKeys.map(rk => {
-                            const val = currentCost[rk] || 0;
-                            const resLabels: Record<string, string> = {
-                              wood: '🪵 목재', stone: '🪨 석재', iron: '⚙️ 철광석',
-                              gold: '🪙 골드', ether: '✨ 에테르', herb: '🌿 약초'
-                            };
-                            return (
-                              <div key={rk} className="bg-[#141c2c] p-1.5 rounded-lg border border-[#1a2438]">
-                                <label className="text-[10px] text-[#8b9bb4] block mb-0.5">{resLabels[rk] || rk}</label>
-                                <input
-                                  type="number"
-                                  value={val}
-                                  onChange={e => handleBuildingCostChange(bId, rk, Number(e.target.value))}
-                                  className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
-                                />
+
+                        {/* 상세 인풋 그리드 (소모자재량 vs 생산량 & 유지비) */}
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+                          {/* 1. 소모자재량 (7컬럼) */}
+                          <div className="lg:col-span-7 bg-[#080d17] p-2.5 rounded-lg border border-[#162035] space-y-1.5">
+                            <div className="text-[11px] font-bold text-[#8b9bb4] flex items-center justify-between">
+                              <span className="flex items-center gap-1">
+                                <span>🛠️</span>
+                                <span>건설/증축 소모자재량 (Cost)</span>
+                              </span>
+                              <span className="text-[10px] text-[#607d8b]">목재, 석재, 철광석, 골드, 에테르 등</span>
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                              {resCostKeys.map(rk => {
+                                const currentCost = tierConfig?.cost?.[rk];
+                                const isCustom = currentCost !== undefined;
+                                const displayVal = isCustom ? currentCost : (defaultCost[rk] || 0);
+
+                                return (
+                                  <div
+                                    key={rk}
+                                    className={`p-1.5 rounded border transition-all ${
+                                      isCustom
+                                        ? 'bg-[#0f1d2d] border-[#00d2ff77]'
+                                        : displayVal > 0
+                                          ? 'bg-[#101726] border-[#1d2942]'
+                                          : 'bg-[#0b0f19] border-[#141b2a] opacity-75'
+                                    }`}
+                                  >
+                                    <label className="text-[10px] text-[#8b9bb4] flex items-center justify-between block mb-0.5">
+                                      <span>{resLabels[rk]}</span>
+                                      {isCustom && <span className="text-[9px] text-[#00d2ff] font-bold">수정</span>}
+                                    </label>
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      value={displayVal}
+                                      onChange={e => handleBuildingTierCostChange(selectedBuildingId, level, rk, Number(e.target.value))}
+                                      className={`w-full rounded px-1.5 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#00d2ff] ${
+                                        isCustom
+                                          ? 'bg-[#07131e] text-[#00d2ff] font-bold border-[#00d2ff66]'
+                                          : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                      }`}
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {/* 2. 생산량 & 유지비 (5컬럼) */}
+                          <div className="lg:col-span-5 flex flex-col gap-2">
+                            {/* 생산량 카드 */}
+                            <div className="flex-1 bg-[#080d17] p-2.5 rounded-lg border border-[#162035] space-y-1.5">
+                              <div className="text-[11px] font-bold text-[#81d4fa] flex items-center justify-between">
+                                <span className="flex items-center gap-1">
+                                  <span>📦</span>
+                                  <span>생산량 (Production)</span>
+                                </span>
+                                {bMeta?.production.hasPrimary && (
+                                  <span className="text-[10px] text-[#607d8b]">
+                                    {bMeta.production.primaryCycleSec}초 주기
+                                  </span>
+                                )}
                               </div>
-                            );
-                          })}
+
+                              {bMeta?.production.hasPrimary ? (
+                                <div className="space-y-1.5">
+                                  {/* 주 생산량 */}
+                                  <div>
+                                    <div className="flex items-center justify-between text-[10px] text-[#8b9bb4] mb-0.5">
+                                      <span>{bMeta.production.primaryIcon} {bMeta.production.primaryName} 생산</span>
+                                      {tierConfig?.production?.primaryAmount !== undefined && (
+                                        <span className="text-[9px] text-[#00d2ff] font-bold">수정됨</span>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <input
+                                        type="number"
+                                        min="0"
+                                        value={
+                                          tierConfig?.production?.primaryAmount !== undefined
+                                            ? tierConfig.production.primaryAmount
+                                            : defaultProd.primaryAmount
+                                        }
+                                        onChange={e => handleBuildingTierProductionChange(selectedBuildingId, level, 'primaryAmount', Number(e.target.value))}
+                                        className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#00d2ff] ${
+                                          tierConfig?.production?.primaryAmount !== undefined
+                                            ? 'bg-[#07131e] text-[#00d2ff] font-bold border-[#00d2ff66]'
+                                            : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                        }`}
+                                      />
+                                      <span className="text-xs text-[#8b9bb4] font-medium shrink-0">개/회</span>
+                                    </div>
+                                  </div>
+
+                                  {/* 보조 생산량 (철광석, 가죽 등) */}
+                                  {bMeta.production.hasSecondary && (
+                                    <div>
+                                      <div className="flex items-center justify-between text-[10px] text-[#8b9bb4] mb-0.5">
+                                        <span>
+                                          {bMeta.production.secondaryIcon} {bMeta.production.secondaryName} 보조 생산
+                                          {level < (bMeta.production.secondaryMinLevel || 1) && ' (기본 Lv.3+)'}
+                                        </span>
+                                        {tierConfig?.production?.secondaryAmount !== undefined && (
+                                          <span className="text-[9px] text-[#00d2ff] font-bold">수정됨</span>
+                                        )}
+                                      </div>
+                                      <div className="flex items-center gap-1.5">
+                                        <input
+                                          type="number"
+                                          min="0"
+                                          value={
+                                            tierConfig?.production?.secondaryAmount !== undefined
+                                              ? tierConfig.production.secondaryAmount
+                                              : defaultProd.secondaryAmount
+                                          }
+                                          onChange={e => handleBuildingTierProductionChange(selectedBuildingId, level, 'secondaryAmount', Number(e.target.value))}
+                                          className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#00d2ff] ${
+                                            tierConfig?.production?.secondaryAmount !== undefined
+                                              ? 'bg-[#07131e] text-[#00d2ff] font-bold border-[#00d2ff66]'
+                                              : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                          }`}
+                                        />
+                                        <span className="text-xs text-[#8b9bb4] font-medium shrink-0">개/회</span>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              ) : (
+                                <div className="p-2 bg-[#0d1320] rounded border border-[#172033] text-[11px] text-[#607d8b] text-center">
+                                  ⚙️ 특수 기능성 설비 (자원 생산 없음)
+                                </div>
+                              )}
+                            </div>
+
+                            {/* 유지비 카드 */}
+                            <div className="flex-1 bg-[#080d17] p-2.5 rounded-lg border border-[#162035] space-y-1.5">
+                              <div className="text-[11px] font-bold text-[#ffd54f] flex items-center justify-between">
+                                <span className="flex items-center gap-1">
+                                  <span>💸</span>
+                                  <span>유지비 (Upkeep)</span>
+                                </span>
+                                {bMeta?.upkeep.hasPrimary && (
+                                  <span className="text-[10px] text-[#607d8b]">
+                                    {selectedBuildingId === 'storage' ? 'Lv.1+' : 'Lv.4+'} (60초 주기)
+                                  </span>
+                                )}
+                              </div>
+
+                              {bMeta?.upkeep.hasPrimary ? (
+                                <div className="space-y-1.5">
+                                  {/* 주 유지비 */}
+                                  <div>
+                                    <div className="flex items-center justify-between text-[10px] text-[#8b9bb4] mb-0.5">
+                                      <span>{bMeta.upkeep.primaryIcon} {bMeta.upkeep.primaryName} 유지비</span>
+                                      {tierConfig?.upkeep?.amount !== undefined && (
+                                        <span className="text-[9px] text-[#ffd54f] font-bold">수정됨</span>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <input
+                                        type="number"
+                                        min="0"
+                                        value={
+                                          tierConfig?.upkeep?.amount !== undefined
+                                            ? tierConfig.upkeep.amount
+                                            : defaultUpkeep.amount
+                                        }
+                                        onChange={e => handleBuildingTierUpkeepChange(selectedBuildingId, level, 'amount', Number(e.target.value))}
+                                        className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#ffd54f] ${
+                                          tierConfig?.upkeep?.amount !== undefined
+                                            ? 'bg-[#1f1a10] text-[#ffd54f] font-bold border-[#ffd54f66]'
+                                            : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                        }`}
+                                      />
+                                      <span className="text-xs text-[#8b9bb4] font-medium shrink-0">개/틱</span>
+                                    </div>
+                                  </div>
+
+                                  {/* 보조 유지비 (골드, 식량 등) */}
+                                  {bMeta.upkeep.hasSecondary && (
+                                    <div>
+                                      <div className="flex items-center justify-between text-[10px] text-[#8b9bb4] mb-0.5">
+                                        <span>
+                                          {bMeta.upkeep.secondaryIcon} {bMeta.upkeep.secondaryName} 보조 유지비
+                                          {level < (bMeta.upkeep.secondaryMinLevel || 1) && ` (기본 Lv.${bMeta.upkeep.secondaryMinLevel}+)`}
+                                        </span>
+                                        {tierConfig?.upkeep?.secondaryAmount !== undefined && (
+                                          <span className="text-[9px] text-[#ffd54f] font-bold">수정됨</span>
+                                        )}
+                                      </div>
+                                      <div className="flex items-center gap-1.5">
+                                        <input
+                                          type="number"
+                                          min="0"
+                                          value={
+                                            tierConfig?.upkeep?.secondaryAmount !== undefined
+                                              ? tierConfig.upkeep.secondaryAmount
+                                              : defaultUpkeep.secondaryAmount
+                                          }
+                                          onChange={e => handleBuildingTierUpkeepChange(selectedBuildingId, level, 'secondaryAmount', Number(e.target.value))}
+                                          className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#ffd54f] ${
+                                            tierConfig?.upkeep?.secondaryAmount !== undefined
+                                              ? 'bg-[#1f1a10] text-[#ffd54f] font-bold border-[#ffd54f66]'
+                                              : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                          }`}
+                                        />
+                                        <span className="text-xs text-[#8b9bb4] font-medium shrink-0">개/틱</span>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              ) : (
+                                <div className="p-2 bg-[#0d1320] rounded border border-[#172033] text-[11px] text-[#81c784] text-center">
+                                  ✨ 유지비 무료 (소모 자원 없음)
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     );
                   })}
+                </div>
+              </div>
+
+              {/* 하단: 레거시 기초 베이스 자원 공식(BuildingBaseCosts) 보기/접기 */}
+              <div className="p-3 bg-[#0d121f] rounded-xl border border-[#1a2336] space-y-2">
+                <button
+                  type="button"
+                  onClick={() => setShowBaseCostFormulas(prev => !prev)}
+                  className="w-full flex items-center justify-between text-xs text-[#8b9bb4] hover:text-white transition-all font-bold"
+                >
+                  <span className="flex items-center gap-1.5">
+                    <span>⚙️</span>
+                    <span>레거시 기초 베이스 자원(BUILDING_BASE_COSTS) 설정 {showBaseCostFormulas ? '접기 ▲' : '펼치기 ▼'}</span>
+                  </span>
+                  <span className="text-[11px] text-[#607d8b]">
+                    {showBaseCostFormulas ? '티어별 오버라이드가 없을 때의 배율 계산 기준값' : '기초 공식 설정 열기'}
+                  </span>
+                </button>
+
+                {showBaseCostFormulas && (
+                  <div className="pt-2 border-t border-[#182133] grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {Object.entries(INITIAL_BUILDINGS)
+                      .filter(([id, b]) => !searchQuery || b.name.includes(searchQuery) || id.includes(searchQuery))
+                      .map(([bId, b]) => {
+                        const currentCost = {
+                          ...(BUILDING_BASE_COSTS[bId as BuildingId] || {}),
+                          ...(overrides.buildingBaseCosts?.[bId] || {})
+                        };
+                        const resKeys: (keyof GameResources)[] = ['wood', 'stone', 'iron', 'gold', 'ether', 'herb'];
+                        return (
+                          <div key={bId} className="p-2.5 bg-[#0a0e1a] border border-[#162035] rounded-lg space-y-2">
+                            <span className="font-bold text-xs text-white flex items-center gap-1.5">
+                              <span>{b.icon}</span>
+                              <span>{b.name}</span>
+                              <span className="text-[10px] text-[#607d8b] font-mono">({bId})</span>
+                            </span>
+                            <div className="grid grid-cols-3 gap-1.5">
+                              {resKeys.map(rk => {
+                                const val = currentCost[rk] || 0;
+                                const resLabels: Record<string, string> = {
+                                  wood: '🪵 목재', stone: '🪨 석재', iron: '⚙️ 철광석',
+                                  gold: '🪙 골드', ether: '✨ 에테르', herb: '🌿 약초'
+                                };
+                                return (
+                                  <div key={rk} className="bg-[#101726] p-1 rounded border border-[#19243a]">
+                                    <label className="text-[9px] text-[#8b9bb4] block mb-0.5">{resLabels[rk] || rk}</label>
+                                    <input
+                                      type="number"
+                                      value={val}
+                                      onChange={e => handleBuildingCostChange(bId, rk, Number(e.target.value))}
+                                      className="w-full bg-[#070b14] border border-[#1f2d48] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
               </div>
             </div>
           )}
