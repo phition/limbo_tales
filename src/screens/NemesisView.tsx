@@ -16,7 +16,9 @@ import { GameDataService } from '../services/GameDataService';
 import { gameDialog } from '../services/DialogService';
 import { LogPanel } from '../components/LogPanel';
 import { CustomAssetService } from '../services/CustomAssetService';
-import { resolveCombatVfxAndSfx } from '../utils/skillComboUtils';
+import { resolveCombatVfxAndSfx, getSkillTags, getEffectivePositionBonus } from '../utils/skillComboUtils';
+import { GameIcon } from '../components/GameIcon';
+import { SkillDetailModal } from '../components/SkillDetailModal';
 
 // ── 롱프레스 (홀드) 헬퍼 컴포넌트 ──────────────────────────────────────────
 const LongPressBox: React.FC<{
@@ -87,6 +89,7 @@ interface RaidHeroCombatant {
   statusEffects: StatusEffect[];
   icon: string;
   damageDealt: number;
+  originalHero?: Mercenary;
 }
 
 // ── 부위별 절멸기 차징 상태 ────────────────────────────────────────────────
@@ -182,6 +185,18 @@ const HeroRow: React.FC<{
               [{posMeta.label}]
             </span>
             {isAlive && isCurrentTurn && <span className="text-[9px] bg-[#00d2ff22] text-[#00d2ff] px-1 rounded font-bold border border-[#00d2ff44]">▶ 내 턴</span>}
+            {isAlive && hero.statusEffects && hero.statusEffects.length > 0 && (
+              <span className="flex items-center gap-0.5 ml-1">
+                {hero.statusEffects.map((se, sIdx) => {
+                  const sIcon = se.type === 'shield' ? '🛡️' : se.type === 'buff_atk' ? '⚔️' : se.type === 'buff_def' ? '🛡️' : '✨';
+                  return (
+                    <span key={sIdx} className="text-[8px] px-1 py-0.2 rounded bg-black/60 border border-white/20 font-mono text-[#69f0ae]">
+                      {sIcon}{se.type === 'shield' && se.magnitude ? `${Math.round(se.magnitude)}` : `${se.turnsLeft}턴`}
+                    </span>
+                  );
+                })}
+              </span>
+            )}
           </div>
           <div className="bar-track" style={{ height: 5 }}><div className="bar-fill-hp h-full" style={{ width: `${hpPct}%` }} /></div>
           <div className="bar-track mt-0.5" style={{ height: 4 }}><div className="bar-fill-mp h-full" style={{ width: `${mpPct}%` }} /></div>
@@ -234,6 +249,7 @@ export const NemesisView: React.FC = () => {
   const [battleSpeed, setBattleSpeed] = useState<1 | 1.5 | 2>(2);
   const [activeHeroTurnId, setActiveHeroTurnId] = useState<string | null>(null);
   const [isHeroTurn, setIsHeroTurn] = useState(false);
+  const [selectedSkillForModal, setSelectedSkillForModal] = useState<Skill | null>(null);
 
   const [bossHp, setBossHp] = useState(state.nemesisState?.currentBossHp ?? NEMESIS_BOSS_CONFIG.maxHp);
   const [totalBattleDmg, setTotalBattleDmg] = useState(0);
@@ -407,11 +423,12 @@ export const NemesisView: React.FC = () => {
         return;
       }
 
-      // 쿨다운 1씩 감소
+      // 쿨다운 및 지속 버프/상태이상 턴 감소
       heroesRef.current.forEach(h => {
         Object.keys(h.cooldowns).forEach(k => {
           if (h.cooldowns[k] > 0) h.cooldowns[k] -= 1;
         });
+        h.statusEffects = (h.statusEffects || []).map(se => ({ ...se, turnsLeft: se.turnsLeft - 1 })).filter(se => se.turnsLeft > 0);
       });
       setHeroes([...heroesRef.current]);
 
@@ -501,7 +518,6 @@ export const NemesisView: React.FC = () => {
       targetedPartRef.current = targetKey;
     }
 
-    const targetPart = bossPartsRef.current[targetKey];
     const useSkill = skill !== null;
     const isUltimate = useSkill && (
       Boolean(skill.isSpecial) ||
@@ -510,10 +526,7 @@ export const NemesisView: React.FC = () => {
       Boolean(CHARACTER_CLASSES[hero.classId]?.specialSkill?.id === skill.id)
     );
 
-    // 원래 영웅 스킬의 고유 VFX 및 SFX 매핑
-    const isMulti = Boolean(isUltimate || (useSkill && skill.targetType === 'all_enemies'));
-    const fxInfo = resolveCombatVfxAndSfx(useSkill ? skill : 'basic', hero as unknown as Mercenary, isMulti);
-
+    // 1. MP 차감 및 쿨다운 설정
     if (useSkill) {
       hero.currentMp = Math.max(0, hero.currentMp - skill.manaCost);
       hero.cooldowns[skill.id] = skill.cooldown;
@@ -526,21 +539,103 @@ export const NemesisView: React.FC = () => {
         subText: isUltimate ? '★ CLASS ULTIMATE ★' : `${hero.className} 전술 스킬`,
         isUltimate,
       });
+
+      if (isUltimate) {
+        try { SoundManager.getInstance().play('fever_burst'); } catch (_) {}
+      }
     }
 
-    // 🛡️ 지원/치유 스킬인 경우 파티 치유 및 버프 적용
-    if (useSkill && (skill.effectType === 'heal' || skill.effectType === 'regen')) {
-      const healAmt = Math.max(80, Math.floor(hero.atk * (skill.power || 1.2) + hero.level * 25));
-      heroesRef.current.forEach(h => {
-        if (h.currentHp > 0) {
-          h.currentHp = Math.min(h.maxHp, h.currentHp + healAmt);
-        }
-      });
-      triggerVfx('heal' as VFXType, 50, 65, `+${healAmt.toLocaleString()}`);
-      playSfx('cast');
-      addLog(`✨ [${hero.name}] [${skill.name}] 시전! 아군 전체의 체력이 ${healAmt.toLocaleString()} 회복되었습니다.`, 'reward');
-      setHeroes([...heroesRef.current]);
+    // 2. 스킬 고유 VFX/SFX 판별
+    const isMultiTargetAttack = useSkill && (skill.targetType === 'all_enemies' || isUltimate);
+    const heroClassTier = CHARACTER_CLASSES[hero.classId]?.tier ?? 0;
+    const skillTier: 0 | 1 | 2 = !useSkill ? 0 : ((isUltimate || (skill.power || 1) >= 2.0 || heroClassTier >= 2) ? 2 : (heroClassTier >= 1 ? 1 : 0));
+    const fxInfo = resolveCombatVfxAndSfx(useSkill ? skill : 'basic', (hero.originalHero || hero) as unknown as Mercenary, isMultiTargetAttack, skillTier);
 
+    // 3. 🛡️ 지원/치유 스킬인 경우 (heal, regen, shield, buff, cleanse)
+    const isSupport = useSkill && ['heal', 'regen', 'shield', 'buff', 'cleanse'].includes(skill.effectType || '');
+    if (isSupport) {
+      let targetAllies: RaidHeroCombatant[] = [];
+      if (skill.targetType === 'single_ally') {
+        const alive = heroesRef.current.filter(h => h.currentHp > 0);
+        if (alive.length > 0) {
+          const lowest = alive.reduce((prev, curr) => (curr.currentHp / curr.maxHp) < (prev.currentHp / prev.maxHp) ? curr : prev, alive[0]);
+          targetAllies = [lowest];
+        } else {
+          targetAllies = [hero];
+        }
+      } else if (skill.targetType === 'self') {
+        targetAllies = [hero];
+      } else {
+        targetAllies = heroesRef.current.filter(h => h.currentHp > 0);
+      }
+
+      if (skill.effectType === 'heal' || skill.effectType === 'regen') {
+        const healReports: string[] = [];
+        targetAllies.forEach(ally => {
+          let healAmt = 0;
+          if (skill.id === 'saint_ultimate') {
+            healAmt = ally.maxHp - ally.currentHp;
+            ally.currentHp = ally.maxHp;
+          } else if (skill.id === 'chrono_ultimate' || skill.description?.includes('시공 역류')) {
+            const healRate = 0.58;
+            healAmt = Math.max(1, Math.floor(ally.maxHp * healRate));
+            ally.currentHp = Math.min(ally.maxHp, ally.currentHp + healAmt);
+            const mpAmt = Math.max(1, Math.floor(ally.maxMp * healRate));
+            ally.currentMp = Math.min(ally.maxMp, ally.currentMp + mpAmt);
+            heroesRef.current.forEach(h => { h.cooldowns = {}; });
+          } else {
+            healAmt = (skill.power || 1.2) <= 1.0
+              ? Math.max(1, Math.floor(ally.maxHp * (skill.power || 0.4)))
+              : Math.max(1, Math.floor(hero.atk * ((skill.power || 1.2) * 0.5) + ally.maxHp * 0.15));
+            ally.currentHp = Math.min(ally.maxHp, ally.currentHp + healAmt);
+          }
+          healReports.push(`${ally.name} +${healAmt.toLocaleString()}`);
+          const aIdx = heroesRef.current.findIndex(h => h.id === ally.id);
+          triggerVfx(targetAllies.length > 1 ? 'holy_heal_aoe' : 'holy_heal', 30 + aIdx * 20, 72, `+${healAmt.toLocaleString()}`);
+        });
+
+        // 정화 스킬 체크
+        if (skill.id.includes('purify') || skill.id.includes('sanctuary') || skill.description?.includes('정화')) {
+          targetAllies.forEach(ally => {
+            ally.statusEffects = (ally.statusEffects || []).filter(s => !['bleed', 'poison', 'burn', 'stun', 'freeze', 'debuff_atk', 'debuff_def'].includes(s.type));
+          });
+        }
+
+        try { SoundManager.getInstance().play('heal'); } catch (_) { playSfx('cast'); }
+        addLog(`✨ [${hero.name}] [${skill.name}] 시전! (${healReports.join(', ')})`, 'reward');
+      } else if (skill.effectType === 'shield') {
+        targetAllies.forEach(ally => {
+          const shAmt = Math.max(1, Math.floor(hero.atk * (skill.power || 1.2) + ally.maxHp * 0.10));
+          const existing = ally.statusEffects.find(s => s.type === 'shield');
+          if (existing) {
+            existing.turnsLeft = 2;
+            existing.magnitude = Math.max(existing.magnitude || 0, shAmt);
+          } else {
+            ally.statusEffects.push({ type: 'shield', turnsLeft: 2, totalTurns: 2, magnitude: shAmt, source: `${hero.name} [${skill.name}]` });
+          }
+          const aIdx = heroesRef.current.findIndex(h => h.id === ally.id);
+          triggerVfx('shield', 30 + aIdx * 20, 72, `🛡️+${shAmt.toLocaleString()}`);
+        });
+        try { SoundManager.getInstance().play('shield'); } catch (_) { playSfx('shield'); }
+        addLog(`🛡️ [${hero.name}] [${skill.name}] 시전! 아군 전술 보호막 전개!`, 'reward');
+      } else if (skill.effectType === 'buff') {
+        const isAtk = skill.description?.includes('공격력') || skill.id.includes('atk');
+        const bType = isAtk ? 'buff_atk' : 'buff_def';
+        targetAllies.forEach(ally => {
+          const existing = ally.statusEffects.find(s => s.type === bType);
+          if (existing) {
+            existing.turnsLeft = 2;
+          } else {
+            ally.statusEffects.push({ type: bType, turnsLeft: 2, totalTurns: 2, magnitude: 0.25, source: `${hero.name} [${skill.name}]` });
+          }
+          const aIdx = heroesRef.current.findIndex(h => h.id === ally.id);
+          triggerVfx('arcane_nova', 30 + aIdx * 20, 72, 'BUFF!');
+        });
+        try { SoundManager.getInstance().play('spell'); } catch (_) { playSfx('cast'); }
+        addLog(`⚔️✨ [${hero.name}] [${skill.name}] 시전! 아군 능력치 강화 부여!`, 'reward');
+      }
+
+      setHeroes([...heroesRef.current]);
       setTimeout(() => {
         setSkillCutIn(null);
         isProcessingRef.current = false;
@@ -549,62 +644,166 @@ export const NemesisView: React.FC = () => {
       return;
     }
 
-    // 공격 스킬 또는 일반 공격
-    const pwr = useSkill ? (skill.power || 1.0) : 1.0;
-    const isCrit = Math.random() < Math.min(0.65, hero.luck * 0.0035 + 0.10);
-    // 오퍼레이터 전술 화력 보너스 (+10%)
-    const opBonus = 1.10;
-    const rawDmg = Math.floor((hero.atk * pwr * 1.5 - targetPart.def * 0.25) * opBonus);
-    const dmg = Math.max(80, Math.floor((rawDmg + Math.random() * 80) * (isCrit ? 1.6 : 1.0)));
+    // 4. ⚔️ 공격 스킬 및 기본 공격 처리
+    const isAoe = Boolean(isMultiTargetAttack);
+    const targetPartKeys: NemesisPartId[] = isAoe
+      ? (['head', 'body', 'tail'] as NemesisPartId[]).filter(k => !bossPartsRef.current[k].isDefeated && bossPartsRef.current[k].currentHp > 0)
+      : [targetKey];
 
-    // ⚡ [차징 저지 & 브레이크 판정]
-    if (targetPart.chargingState) {
-      targetPart.chargingState.remainingBreakDmg -= dmg;
-      if (targetPart.chargingState.remainingBreakDmg <= 0) {
-        targetPart.chargingState = null;
-        targetPart.isGroggy = true;
-        playSfx('shield_break');
-        triggerVfx('boss_cataclysm', 50, 25, 'BREAK!', true);
-        addLog(`💥 [차징 저지 성공!] ${hero.name}의 강력한 타격으로 [${targetPart.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다!`, 'reward');
-      } else {
-        addLog(`⚡ [차징 저지 중] [${targetPart.name}] 남은 브레이크 요구치: ${Math.max(0, targetPart.chargingState.remainingBreakDmg).toLocaleString()}`);
-      }
-    }
+    const partPosMap: Record<NemesisPartId, { x: number; y: number }> = {
+      head: { x: 25, y: 32 },
+      body: { x: 50, y: 32 },
+      tail: { x: 75, y: 32 },
+    };
 
-    // 보스 부위 체력 차감 (사경 없음: 0이 되면 즉시 패퇴)
-    const nextPartHp = Math.max(0, targetPart.currentHp - dmg);
-    targetPart.currentHp = nextPartHp;
+    let totalActionDmg = 0;
+    let anyCrit = false;
 
-    if (nextPartHp <= 0) {
-      targetPart.isDefeated = true;
-      targetPart.chargingState = null;
-      addLog(`💀 [${targetPart.name} 완전 패퇴!] 부위가 파괴되어 더 이상 재생하거나 행동하지 않습니다!`, 'reward');
-      playSfx('shield_break');
-    }
+    targetPartKeys.forEach(pKey => {
+      const part = bossPartsRef.current[pKey];
+      if (!part || part.isDefeated || part.currentHp <= 0) return;
 
-    // 광역 공격 시 다른 활성 부위에도 스플래시 피해 적용
-    if (useSkill && skill.targetType === 'all_enemies') {
-      (['head', 'body', 'tail'] as NemesisPartId[]).forEach(pKey => {
-        if (pKey === targetKey) return;
-        const otherPart = bossPartsRef.current[pKey];
-        if (otherPart && !otherPart.isDefeated && otherPart.currentHp > 0) {
-          const splashDmg = Math.max(50, Math.floor(dmg * 0.85));
-          otherPart.currentHp = Math.max(0, otherPart.currentHp - splashDmg);
-          if (otherPart.currentHp <= 0) {
-            otherPart.isDefeated = true;
-            otherPart.chargingState = null;
-            addLog(`💀 [${otherPart.name} 완전 패퇴!] 광역 충격으로 부위가 파괴되었습니다!`, 'reward');
-          }
-          const splashMetric = combatMetricsRef.current[hero.id];
-          if (splashMetric) splashMetric.damageDealt += splashDmg;
-          totalBattleDmgRef.current += splashDmg;
+      // A) 포지션 연계 보너스 (전열 머리 +25%, 후열 꼬리 +20%)
+      const posBonus = !useSkill ? undefined : (skill.positionBonus || getEffectivePositionBonus(skill));
+      let posMult = 1.0;
+      if (posBonus === 'front' && pKey === 'head') posMult = 1.25;
+      else if (posBonus === 'back' && pKey === 'tail') posMult = 1.20;
+
+      // B) 기본 위력 및 오퍼레이터 화력 보너스 (+10%)
+      const pwr = useSkill ? (skill.power || 1.0) : 1.0;
+      const opBonus = 1.10;
+      const aoeMult = isAoe ? 0.85 : 1.0;
+      let rawDmg = Math.floor(hero.atk * pwr * 1.5 * posMult * opBonus * aoeMult);
+
+      // 영웅 공격력 버프/디버프 반영
+      const atkBuff = (hero.statusEffects || []).find(s => s.type === 'buff_atk');
+      if (atkBuff) rawDmg = Math.floor(rawDmg * (1 + (atkBuff.magnitude || 0.25)));
+      const atkDebuff = (hero.statusEffects || []).find(s => s.type === 'debuff_atk');
+      if (atkDebuff) rawDmg = Math.floor(rawDmg * (1 - (atkDebuff.magnitude || 0.25)));
+
+      // C) 치명타 판정
+      const critChance = Math.min(85, Math.max(5, hero.luck * 0.35 + (isUltimate ? 20 : 0)));
+      const isCrit = Math.random() * 100 < critChance;
+      if (isCrit) anyCrit = true;
+      const critMult = 1.5 + (hero.luck * 0.005);
+
+      // D) 방어력 및 점근형 DR 공식 연산
+      let partDef = part.def;
+      const hasBurn = (part.statusEffects || []).some(s => s.type === 'burn');
+      if (hasBurn) partDef = Math.round(partDef * 0.5);
+      const hasFreeze = (part.statusEffects || []).some(s => s.type === 'freeze');
+      if (hasFreeze) partDef = Math.round(partDef * 1.4);
+      const defDebuffs = (part.statusEffects || []).filter(s => s.type === 'debuff_def');
+      const totalDefDebuff = defDebuffs.reduce((sum, s) => sum + (s.magnitude || 0), 0);
+      if (totalDefDebuff > 0) partDef = Math.max(0, Math.round(partDef * (1 - Math.min(0.9, totalDefDebuff))));
+
+      const piercePct = (useSkill ? (skill.piercePct || 0) : 0) + (isUltimate ? 20 : 0);
+      if (piercePct > 0) partDef = Math.round(partDef * (1 - Math.min(100, piercePct) / 100));
+
+      const extraCrit = isCrit ? Math.round(rawDmg * (critMult - 1)) : 0;
+      let totalAtk = rawDmg + extraCrit;
+      if (part.isGroggy) totalAtk = Math.floor(totalAtk * 1.5);
+
+      const K = 500;
+      const dmg = Math.max(80, Math.round(totalAtk * (K / (partDef + K))));
+      totalActionDmg += dmg;
+
+      // E) ⚡ [차징 저지 & 브레이크 판정]
+      if (part.chargingState) {
+        part.chargingState.remainingBreakDmg -= dmg;
+        if (part.chargingState.remainingBreakDmg <= 0) {
+          part.chargingState = null;
+          part.isGroggy = true;
+          playSfx('shield_break');
+          triggerVfx('boss_cataclysm', partPosMap[pKey].x, partPosMap[pKey].y, 'BREAK!', true);
+          addLog(`💥 [차징 저지 성공!] ${hero.name}의 강력한 타격으로 [${part.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다!`, 'reward');
+          setSkillCutIn({
+            id: String(Date.now()),
+            skillName: `💥 [${part.name}] 차징 붕괴!`,
+            icon: '💥⚡',
+            isEnemy: false,
+            subText: '1턴간 그로기 (받는 피해 +50%)'
+          });
+        } else {
+          addLog(`⚡ [차징 저지 중] [${part.name}] 남은 브레이크 요구치: ${Math.max(0, part.chargingState.remainingBreakDmg).toLocaleString()}`);
         }
-      });
-    }
+      }
 
+      // F) 부위 체력 차감 (사경 없음: 0 즉시 패퇴)
+      part.currentHp = Math.max(0, part.currentHp - dmg);
+      if (part.currentHp <= 0) {
+        part.isDefeated = true;
+        part.chargingState = null;
+        addLog(`💀 [${part.name} 완전 패퇴!] 부위가 파괴되어 더 이상 재생하거나 행동하지 않습니다!`, 'reward');
+        playSfx('shield_break');
+      }
+
+      // G) 스킬 고유 상태이상 부위 부여
+      if (useSkill && part.currentHp > 0) {
+        const sDesc = (skill.description || '').toLowerCase();
+        const sName = (skill.name || '').toLowerCase();
+        const dur = skill.statusDuration || 2;
+
+        const applyPartEffect = (type: StatusEffect['type'], duration: number, mag: number) => {
+          const ex = part.statusEffects.find(s => s.type === type);
+          if (ex) {
+            ex.turnsLeft = Math.max(ex.turnsLeft, duration);
+          } else {
+            part.statusEffects.push({ type, turnsLeft: duration, totalTurns: duration, magnitude: mag, source: hero.name });
+          }
+        };
+
+        if (skill.effectType === 'bleed' || sDesc.includes('출혈') || sName.includes('출혈')) {
+          applyPartEffect('bleed', dur, 0.08);
+          addLog(`🩸 [출혈] [${part.name}]에게 ${dur}턴간 출혈 상태를 부여했습니다.`, 'normal');
+        }
+        if (skill.effectType === 'poison' || sDesc.includes('중독') || sName.includes('독')) {
+          applyPartEffect('poison', dur + 1, 0.12);
+          addLog(`☠️ [중독] [${part.name}]에게 ${dur + 1}턴간 맹독을 주입했습니다.`, 'normal');
+        }
+        if (skill.effectType === 'burn' || sDesc.includes('화상') || sName.includes('화염')) {
+          applyPartEffect('burn', dur, 0.08);
+          addLog(`🔥 [화상] [${part.name}]에게 ${dur}턴간 화상을 부여했습니다 (방어력 50% 분쇄).`, 'normal');
+        }
+        if (skill.effectType === 'freeze' || sDesc.includes('빙결') || sName.includes('빙결')) {
+          applyPartEffect('freeze', 1, 0.04);
+          addLog(`❄️ [빙결] [${part.name}]에게 1턴간 빙결(행동 불가)을 부여했습니다!`, 'normal');
+        }
+        if (skill.effectType === 'stun' || sDesc.includes('기절') || sName.includes('기절')) {
+          applyPartEffect('stun', 1, 0);
+          addLog(`💫 [기절] [${part.name}]에게 1턴간 기절을 부여했습니다!`, 'normal');
+        }
+        if (skill.effectType === 'debuff' || sDesc.includes('방어력') || sDesc.includes('방어 분쇄')) {
+          applyPartEffect('debuff_def', dur, 0.25);
+          addLog(`🛡️⬇️ [방어 분쇄] [${part.name}]의 방어력을 ${dur}턴간 25% 감소시켰습니다.`, 'normal');
+        }
+        if (sDesc.includes('공격력 약화') || sDesc.includes('공격력 감소')) {
+          applyPartEffect('debuff_atk', dur, 0.25);
+          addLog(`⚔️⬇️ [공격력 약화] [${part.name}]의 공격력을 ${dur}턴간 25% 감소시켰습니다.`, 'normal');
+        }
+      }
+
+      // H) 흡혈 (Drain)
+      if (useSkill && (skill.effectType === 'drain' || skill.drainPct || skill.description?.includes('흡혈'))) {
+        const drainAmt = Math.floor(dmg * (skill.drainPct || 0.35));
+        hero.currentHp = Math.min(hero.maxHp, hero.currentHp + drainAmt);
+        addLog(`🩸 [생명력 흡수] ${hero.name}이(가) 가한 피해의 일부로 체력 +${drainAmt.toLocaleString()} 회복!`, 'normal');
+      }
+
+      // I) 해당 타겟 부위 좌표에 VFX 격발
+      const pos = partPosMap[pKey];
+      const partVfx: VFXType = isCrit ? 'crit_slash' : (fxInfo.vfx || 'slash');
+      triggerVfx(partVfx, pos.x, pos.y, `${dmg.toLocaleString()}`, isCrit);
+
+      addLog(
+        `▶ [${hero.name}] [${useSkill ? skill.name : '기본 공격'}] ➔ [${part.name}]에게 ${dmg.toLocaleString()} 피해! ${isCrit ? '💥 치명타!' : ''}`,
+        'normal'
+      );
+    });
+
+    // 5. 총합 피해 누적 및 보스 잔여 체력 업데이트
     setBossParts({ ...bossPartsRef.current });
-
-    const nextTotalDmg = totalBattleDmgRef.current + dmg;
+    const nextTotalDmg = totalBattleDmgRef.current + totalActionDmg;
     setTotalBattleDmg(nextTotalDmg);
     totalBattleDmgRef.current = nextTotalDmg;
 
@@ -616,27 +815,21 @@ export const NemesisView: React.FC = () => {
     const metric = combatMetricsRef.current[hero.id];
     if (metric) {
       metric.actionsCount = (metric.actionsCount || 0) + 1;
-      metric.damageDealt += dmg;
-      if (isCrit) metric.critCount += 1;
+      metric.damageDealt += totalActionDmg;
+      if (anyCrit) metric.critCount += 1;
       if (useSkill) metric.combosTriggered += 1;
     }
 
-    // 원본 스킬 VFX/SFX 적용
-    const attackVfx: VFXType = isCrit ? 'crit_slash' : (fxInfo.vfx || 'slash');
-    triggerVfx(attackVfx, 50, 25, `${dmg.toLocaleString()}`, isCrit);
+    // 타격 SFX 및 연출
     try {
-      SoundManager.getInstance().play(fxInfo.sfx || (isCrit ? 'crit' : 'hit'));
+      SoundManager.getInstance().play(fxInfo.sfx || (anyCrit ? 'crit' : 'hit'));
     } catch (_) {
-      playSfx(isCrit ? 'crit' : 'hit');
+      playSfx(anyCrit ? 'crit' : 'hit');
     }
-
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 250);
     setScreenFlash('enemy');
     setTimeout(() => setScreenFlash(null), 150);
-
-    addLog(
-      `▶ [${hero.name}] [${useSkill ? skill.name : '기본 공격'}] ➔ [${targetPart.name}]에게 ${dmg.toLocaleString()} 피해! ${isCrit ? '💥 치명타!' : ''}`,
-      'normal'
-    );
 
     setHeroes([...heroesRef.current]);
 
@@ -654,6 +847,48 @@ export const NemesisView: React.FC = () => {
     if (liveTargets.length === 0) {
       setAttackingPartId(null);
       finalizeRaidBattle();
+      return;
+    }
+
+    const partPosMap: Record<NemesisPartId, { x: number; y: number }> = {
+      head: { x: 25, y: 32 },
+      body: { x: 50, y: 32 },
+      tail: { x: 75, y: 32 },
+    };
+
+    // 0. 부위 상태이상 지속 피해 (DOT) 처리
+    let dotDamage = 0;
+    (part.statusEffects || []).forEach(se => {
+      if (se.type === 'bleed') dotDamage += Math.floor(part.maxHp * 0.015);
+      if (se.type === 'burn') dotDamage += Math.floor(part.maxHp * 0.015);
+      if (se.type === 'poison') dotDamage += Math.floor(part.maxHp * 0.020);
+    });
+    if (dotDamage > 0) {
+      part.currentHp = Math.max(0, part.currentHp - dotDamage);
+      addLog(`🩸🔥 [지속 피해] [${part.name}] 상태이상 지속 피해로 ${dotDamage.toLocaleString()} 피해!`, 'normal');
+      triggerVfx('blood_bleed', partPosMap[part.id].x, partPosMap[part.id].y, `${dotDamage.toLocaleString()}`);
+      if (part.currentHp <= 0) {
+        part.isDefeated = true;
+        part.chargingState = null;
+        addLog(`💀 [${part.name} 완전 패퇴!] 지속 피해로 부위가 파괴되었습니다!`, 'reward');
+        setBossParts({ ...bossPartsRef.current });
+        setAttackingPartId(null);
+        isProcessingRef.current = false;
+        setTimeout(() => processNextActionRef.current(), getDelay(300));
+        return;
+      }
+    }
+    // 부위 상태이상 턴 감소
+    part.statusEffects = (part.statusEffects || []).map(se => ({ ...se, turnsLeft: se.turnsLeft - 1 })).filter(se => se.turnsLeft > 0);
+
+    // 0-1. 군중 제어기(CC) 체크 (빙결/기절)
+    const cc = (part.statusEffects || []).find(se => se.type === 'freeze' || se.type === 'stun');
+    if (cc) {
+      addLog(`💫 [행동 불가] [${part.name}]이(가) ${cc.type === 'freeze' ? '빙결' : '기절'} 상태로 이번 턴 행동할 수 없습니다!`, 'system');
+      setBossParts({ ...bossPartsRef.current });
+      setAttackingPartId(null);
+      isProcessingRef.current = false;
+      setTimeout(() => processNextActionRef.current(), getDelay(300));
       return;
     }
 
@@ -687,9 +922,16 @@ export const NemesisView: React.FC = () => {
       setScreenFlash('enemy');
       setTimeout(() => setScreenFlash(null), 250);
 
-      // 아군 전체에게 막대한 절멸 피해
+      // 아군 전체에게 막대한 절멸 피해 (보호막 선흡수)
       liveTargets.forEach(h => {
-        const cataDmg = Math.max(60, Math.floor(h.maxHp * 0.35 + part.atk * 0.45));
+        let cataDmg = Math.max(60, Math.floor(h.maxHp * 0.35 + part.atk * 0.45));
+        const sh = (h.statusEffects || []).find(s => s.type === 'shield');
+        if (sh && (sh.magnitude || 0) > 0) {
+          const absorbed = Math.min(sh.magnitude || 0, cataDmg);
+          sh.magnitude = (sh.magnitude || 0) - absorbed;
+          cataDmg -= absorbed;
+          addLog(`🛡️ [${h.name}] 보호막이 ${absorbed.toLocaleString()} 피해를 흡수했습니다!`, 'normal');
+        }
         h.currentHp = Math.max(0, h.currentHp - cataDmg);
         const m = combatMetricsRef.current[h.id];
         if (m) m.damageTaken += cataDmg;
@@ -760,12 +1002,19 @@ export const NemesisView: React.FC = () => {
     });
 
     playSfx('hit');
-    setScreenFlash('player');
+    setScreenFlash('enemy');
     setTimeout(() => setScreenFlash(null), 150);
 
     if (isAoe) {
       liveTargets.forEach(target => {
-        const bDmg = Math.max(20, Math.floor(part.atk * partSkill.power * 0.85 - target.def * 0.25));
+        let bDmg = Math.max(20, Math.floor(part.atk * partSkill.power * 0.85 - target.def * 0.25));
+        const sh = (target.statusEffects || []).find(s => s.type === 'shield');
+        if (sh && (sh.magnitude || 0) > 0) {
+          const absorbed = Math.min(sh.magnitude || 0, bDmg);
+          sh.magnitude = (sh.magnitude || 0) - absorbed;
+          bDmg -= absorbed;
+          addLog(`🛡️ [${target.name}] 보호막이 ${absorbed.toLocaleString()} 피해를 흡수했습니다!`, 'normal');
+        }
         target.currentHp = Math.max(0, target.currentHp - bDmg);
         const m = combatMetricsRef.current[target.id];
         if (m) m.damageTaken += bDmg;
@@ -786,7 +1035,14 @@ export const NemesisView: React.FC = () => {
         triggerVfx('evade', 50, 75, '💨 EVADE');
         addLog(`💨 [${target.name}] [${part.name}]의 [${partSkill.name}] 공격을 신속히 회피했습니다!`, 'reward');
       } else {
-        const bDmg = Math.max(30, Math.floor(part.atk * partSkill.power * 1.3 - target.def * 0.35));
+        let bDmg = Math.max(30, Math.floor(part.atk * partSkill.power * 1.3 - target.def * 0.35));
+        const sh = (target.statusEffects || []).find(s => s.type === 'shield');
+        if (sh && (sh.magnitude || 0) > 0) {
+          const absorbed = Math.min(sh.magnitude || 0, bDmg);
+          sh.magnitude = (sh.magnitude || 0) - absorbed;
+          bDmg -= absorbed;
+          addLog(`🛡️ [${target.name}] 보호막이 ${absorbed.toLocaleString()} 피해를 흡수했습니다!`, 'normal');
+        }
         target.currentHp = Math.max(0, target.currentHp - bDmg);
         const m = combatMetricsRef.current[target.id];
         if (m) m.damageTaken += bDmg;
@@ -928,6 +1184,7 @@ export const NemesisView: React.FC = () => {
         statusEffects: [],
         icon: cls?.skills[0]?.icon || '⚔️',
         damageDealt: 0,
+        originalHero: h,
       };
     });
 
@@ -1418,6 +1675,20 @@ export const NemesisView: React.FC = () => {
                         </span>
                       </div>
                     </div>
+
+                    {/* 상태이상 배지 표시 */}
+                    {isAlive && part.statusEffects && part.statusEffects.length > 0 && (
+                      <div className="relative z-10 flex items-center gap-0.5 flex-wrap mt-0.5">
+                        {part.statusEffects.map((se, sIdx) => {
+                          const sIcon = se.type === 'bleed' ? '🩸' : se.type === 'burn' ? '🔥' : se.type === 'poison' ? '☠️' : se.type === 'freeze' ? '❄️' : se.type === 'stun' ? '💫' : se.type === 'debuff_def' ? '🛡️' : '⚔️';
+                          return (
+                            <span key={sIdx} className="text-[7.5px] px-1 py-0.2 rounded bg-black/80 border border-white/30 font-mono text-white leading-none">
+                              {sIcon}{se.turnsLeft}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
                   </LongPressBox>
                 );
               })}
@@ -1481,6 +1752,28 @@ export const NemesisView: React.FC = () => {
               const ultSkill = activeHero.skills.find(s => s.isSpecial || s.name.includes('궁극기') || s.id.endsWith('_ultimate')) || activeHero.skills[0];
               const normalSkills = activeHero.skills.filter(s => s !== ultSkill);
 
+              // 기본 공격 (무기 인챈트 스킬이 있는 경우 무기 스킬 반영)
+              const weaponEnchantSkill = activeHero.originalHero?.equipment?.weapon?.prefix?.grantedSkill;
+              const hasWeaponSkill = Boolean(weaponEnchantSkill);
+              const basicDisplayName = weaponEnchantSkill?.name || '기본 공격';
+              const basicDisplayIcon = weaponEnchantSkill?.icon || '⚔️';
+              const basicSubLabel = weaponEnchantSkill ? (weaponEnchantSkill.targetType === 'all_enemies' ? '적 전체' : '단일 적') : '기본 물리 공격';
+              const basicMpCost = weaponEnchantSkill?.manaCost || 0;
+              const basicHasMp = activeHero.currentMp >= basicMpCost;
+              const basicCanUse = !isProcessingRef.current && (hasWeaponSkill ? basicHasMp : true);
+
+              const basicModalInfo: Skill = weaponEnchantSkill || {
+                id: 'basic_attack',
+                name: '기본 공격',
+                description: '적 1체에 일반 물리 피해를 입힙니다. 마나를 소모하지 않으며 쿨다운이 없습니다.',
+                manaCost: 0,
+                cooldown: 0,
+                power: 1.0,
+                effectType: 'damage',
+                targetType: 'single_enemy',
+                icon: '⚔️'
+              };
+
               return (
                 <div className="panel p-2 animate-slide-up" style={{ background: '#0b0d13dd', border: '1px solid #00d2ff44' }}>
                   <div className="text-xs text-[#00d2ff] font-bold mb-1.5 border-b border-[#00d2ff22] pb-1 flex items-center justify-between">
@@ -1499,19 +1792,29 @@ export const NemesisView: React.FC = () => {
                   {/* 2열 2행 PVE 스킬 버튼 그리드 */}
                   <div className="grid grid-cols-2 gap-1.5">
                     {/* [1행 1열]: 기본 공격 */}
-                    <button
+                    <LongPressBox
+                      onLongPress={() => setSelectedSkillForModal(basicModalInfo)}
                       onClick={() => !isProcessingRef.current && handleManualAction('basic')}
-                      className="btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border border-[#8b9bb4] rounded-lg hover:border-[#00d2ff] transition-all text-left"
+                      className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg transition-all text-left relative select-none ${
+                        !basicCanUse ? 'opacity-40 cursor-not-allowed' : ''
+                      }`}
+                      style={{
+                        borderColor: hasWeaponSkill ? (basicHasMp ? '#00d2ff' : '#ffd54f88') : '#8b9bb4',
+                      }}
                     >
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-base">⚔️</span>
-                        <span className="text-xs font-bold text-white">기본 공격</span>
+                      <div className="flex items-center gap-1.5 min-w-0 w-full">
+                        <span className="shrink-0 flex items-center justify-center">
+                          <GameIcon name={weaponEnchantSkill?.id || 'basic_attack'} icon={basicDisplayIcon} size={20} />
+                        </span>
+                        <span className="text-xs font-bold truncate flex-1" style={{ color: hasWeaponSkill ? (basicHasMp ? '#00e5ff' : '#ffd54f') : '#ffffff' }}>
+                          {basicDisplayName}
+                        </span>
                       </div>
-                      <div className="flex items-center justify-between w-full text-[10px] text-[#8b9bb4]">
-                        <span>기본 물리 공격</span>
-                        <span className="font-mono text-[#cfd8dc]">0 MP</span>
+                      <div className="flex items-center justify-between w-full text-[10px] mt-1 text-[#8b9bb4]">
+                        <span className="truncate mr-1">{basicSubLabel}</span>
+                        <span className="font-mono font-bold shrink-0 text-[#cfd8dc]">{basicMpCost > 0 ? `${basicMpCost} MP` : '0 MP'}</span>
                       </div>
-                    </button>
+                    </LongPressBox>
 
                     {/* [1행 2열]: 궁극기 (특별 황금 테두리 & 배지 연출) */}
                     {ultSkill ? (() => {
@@ -1519,11 +1822,13 @@ export const NemesisView: React.FC = () => {
                       const mpCost = ultSkill.manaCost;
                       const hasMp = activeHero.currentMp >= mpCost;
                       const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
+                      const targetLabel = ultSkill.targetType === 'all_enemies' ? '적 전체' : ultSkill.targetType === 'all_allies' ? '아군 전체' : '고유 강타';
+
                       return (
-                        <button
-                          disabled={!canUse}
+                        <LongPressBox
+                          onLongPress={() => setSelectedSkillForModal(ultSkill)}
                           onClick={() => canUse && handleManualAction(ultSkill)}
-                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg relative text-left transition-all ${
+                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg relative text-left transition-all select-none ${
                             !canUse
                               ? 'opacity-40 cursor-not-allowed border-[#37474f]'
                               : 'border-[#ffd54f] bg-[#ffd54f10] shadow-[0_0_12px_rgba(255,213,79,0.3)] hover:border-[#ffe57f]'
@@ -1532,17 +1837,19 @@ export const NemesisView: React.FC = () => {
                           <span className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md">
                             궁극기
                           </span>
-                          <div className="flex items-center gap-1.5 w-full">
-                            <span className="text-base">{ultSkill.icon || '👑'}</span>
+                          <div className="flex items-center gap-1.5 w-full min-w-0">
+                            <span className="shrink-0 flex items-center justify-center">
+                              <GameIcon name={ultSkill.id} icon={ultSkill.icon || '👑'} size={20} />
+                            </span>
                             <span className="text-xs font-bold text-[#ffe57f] truncate flex-1">{ultSkill.name}</span>
                           </div>
-                          <div className="flex items-center justify-between w-full text-[10px]">
-                            <span className="text-[#ffd54f88] truncate mr-1">{ultSkill.targetType === 'all_enemies' ? '전체 공격' : '고유 강타'}</span>
+                          <div className="flex items-center justify-between w-full text-[10px] mt-1">
+                            <span className="text-[#ffd54f88] truncate mr-1">{targetLabel}</span>
                             <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#ffd54f]' : 'text-[#ff5252]'}`}>
                               {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
                             </span>
                           </div>
-                        </button>
+                        </LongPressBox>
                       );
                     })() : <div />}
 
@@ -1554,28 +1861,32 @@ export const NemesisView: React.FC = () => {
                       const mpCost = sk.manaCost;
                       const hasMp = activeHero.currentMp >= mpCost;
                       const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
+                      const targetLabel = sk.targetType === 'all_enemies' ? '적 전체' : sk.targetType === 'all_allies' ? '아군 전체' : sk.effectType === 'heal' ? '아군 치유' : sk.effectType === 'shield' ? '보호막' : '단일 적';
+
                       return (
-                        <button
-                          disabled={!canUse}
+                        <LongPressBox
+                          onLongPress={() => setSelectedSkillForModal(sk)}
                           onClick={() => canUse && handleManualAction(sk)}
-                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all ${
+                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all select-none ${
                             !canUse
                               ? 'opacity-40 cursor-not-allowed border-[#37474f]'
                               : 'border-[#00d2ff55] hover:border-[#00d2ff]'
                           }`}
                           style={{ borderColor: canUse ? style.borderColor : undefined }}
                         >
-                          <div className="flex items-center gap-1.5 w-full">
-                            <span className="text-base">{sk.icon || '⚡'}</span>
+                          <div className="flex items-center gap-1.5 w-full min-w-0">
+                            <span className="shrink-0 flex items-center justify-center">
+                              <GameIcon name={sk.id} icon={sk.icon || '⚡'} size={20} />
+                            </span>
                             <span className="text-xs font-bold text-white truncate flex-1">{sk.name}</span>
                           </div>
-                          <div className="flex items-center justify-between w-full text-[10px]">
-                            <span className="text-[#8b9bb4] truncate mr-1">{sk.targetType === 'all_enemies' ? '전체' : sk.effectType === 'heal' ? '치유' : '단일'}</span>
+                          <div className="flex items-center justify-between w-full text-[10px] mt-1">
+                            <span className="text-[#8b9bb4] truncate mr-1">{targetLabel}</span>
                             <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#00d2ff]' : 'text-[#ff5252]'}`}>
                               {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
                             </span>
                           </div>
-                        </button>
+                        </LongPressBox>
                       );
                     })() : <div />}
 
@@ -1587,28 +1898,32 @@ export const NemesisView: React.FC = () => {
                       const mpCost = sk.manaCost;
                       const hasMp = activeHero.currentMp >= mpCost;
                       const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
+                      const targetLabel = sk.targetType === 'all_enemies' ? '적 전체' : sk.targetType === 'all_allies' ? '아군 전체' : sk.effectType === 'heal' ? '아군 치유' : sk.effectType === 'shield' ? '보호막' : '단일 적';
+
                       return (
-                        <button
-                          disabled={!canUse}
+                        <LongPressBox
+                          onLongPress={() => setSelectedSkillForModal(sk)}
                           onClick={() => canUse && handleManualAction(sk)}
-                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all ${
+                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all select-none ${
                             !canUse
                               ? 'opacity-40 cursor-not-allowed border-[#37474f]'
                               : 'border-[#00d2ff55] hover:border-[#00d2ff]'
                           }`}
                           style={{ borderColor: canUse ? style.borderColor : undefined }}
                         >
-                          <div className="flex items-center gap-1.5 w-full">
-                            <span className="text-base">{sk.icon || '⚡'}</span>
+                          <div className="flex items-center gap-1.5 w-full min-w-0">
+                            <span className="shrink-0 flex items-center justify-center">
+                              <GameIcon name={sk.id} icon={sk.icon || '⚡'} size={20} />
+                            </span>
                             <span className="text-xs font-bold text-white truncate flex-1">{sk.name}</span>
                           </div>
-                          <div className="flex items-center justify-between w-full text-[10px]">
-                            <span className="text-[#8b9bb4] truncate mr-1">{sk.targetType === 'all_enemies' ? '전체' : sk.effectType === 'heal' ? '치유' : '단일'}</span>
+                          <div className="flex items-center justify-between w-full text-[10px] mt-1">
+                            <span className="text-[#8b9bb4] truncate mr-1">{targetLabel}</span>
                             <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#00d2ff]' : 'text-[#ff5252]'}`}>
                               {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
                             </span>
                           </div>
-                        </button>
+                        </LongPressBox>
                       );
                     })() : <div />}
                   </div>
@@ -1703,6 +2018,30 @@ export const NemesisView: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* ── 🔍 스킬 상세 정보 모달 (홀드 / 롱프레스 시 오픈) ── */}
+        <SkillDetailModal
+          skill={selectedSkillForModal}
+          hero={activeHero?.originalHero}
+          gm={gm}
+          canCast={
+            activeHero && selectedSkillForModal
+              ? (activeHero.currentMp >= selectedSkillForModal.manaCost &&
+                 (selectedSkillForModal.id === 'basic_attack' || (activeHero.cooldowns[selectedSkillForModal.id] || 0) === 0) &&
+                 !isProcessingRef.current && alivePartsCount > 0)
+              : false
+          }
+          onCast={() => {
+            if (selectedSkillForModal) {
+              if (selectedSkillForModal.id === 'basic_attack') {
+                handleManualAction('basic');
+              } else {
+                handleManualAction(selectedSkillForModal);
+              }
+            }
+          }}
+          onClose={() => setSelectedSkillForModal(null)}
+        />
       </div>
     );
   }
