@@ -491,28 +491,88 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
               {/* ⚡ 스마트 자동 전투 AI & 1.5배속 가속 */}
               <div className="p-4 rounded-xl bg-[#0f192a] border border-[#38ef7d44] flex flex-col gap-2">
                 <div className="text-sm sm:text-base font-bold text-[#38ef7d] flex items-center justify-between">
-                  <span>⚡ 5. 일반 던전 1.5배속 스마트 자동 전투 AI 가이드</span>
+                  <span>
+                    {lang === 'en'
+                      ? '⚡ 5. Normal Dungeon 1.5x Smart Auto Combat AI Guide'
+                      : lang === 'ja'
+                      ? '⚡ 5. 通常ダンジョン 1.5倍速スマート自動戦闘AIガイド'
+                      : '⚡ 5. 일반 던전 1.5배속 스마트 자동 전투 AI 가이드'}
+                  </span>
                   <span className="text-xs font-mono text-[#81c784] font-bold">Dungeon Auto 1.5x</span>
                 </div>
                 <div className="text-xs text-[#b0bec5] space-y-1">
-                  <div>• <strong>1.5배속 전투 연출</strong>: 일반 던전 및 회랑 탐험 시 자동 전투(Auto)를 활성화하면 턴 진행과 타격 연출이 1.5배 속도로 안정적으로 재생됩니다.</div>
-                  <div>• <strong>상태이상 폭발 연계 우선</strong>: 적에게 걸린 디버프를 분석하여 6대 상태이상 콤보 폭발이 가능한 스킬을 최우선으로 시전합니다.</div>
-                  <div>• <strong>스마트 마무리(막타)</strong>: 일반 공격만으로 처치할 수 있는 잔여 체력의 적에게는 무의미한 스킬 마나 낭비를 방지하고 기본 공격으로 마무리합니다.</div>
+                  <div>
+                    {lang === 'en'
+                      ? '• 1.5x Combat Speed: Activating Auto in normal dungeons smoothly accelerates turn progression and strike animations at 1.5x speed.'
+                      : lang === 'ja'
+                      ? '• 1.5倍速戦闘演出: 通常ダンジョンおよび回廊の探検時に自動戦闘(Auto)を有効にすると、ターンの進行と打撃演出が1.5倍速で快適に再生されます。'
+                      : '• 1.5배속 전투 연출: 일반 던전 및 회랑 탐험 시 자동 전투(Auto)를 활성화하면 턴 진행과 타격 연출이 1.5배 속도로 안정적으로 재생됩니다.'}
+                  </div>
+                  <div>
+                    {lang === 'en'
+                      ? '• Status Combo Priority: The AI analyzes enemy debuffs to prioritize skills that trigger 6 major status combo detonations.'
+                      : lang === 'ja'
+                      ? '• 状態異常コンボ優先: 敵に付与されたデバフを分析し、6大状態異常コンボの起爆が可能なスキルを最優先で発動します。'
+                      : '• 상태이상 폭발 연계 우선: 적에게 걸린 디버프를 분석하여 6대 상태이상 콤보 폭발이 가능한 스킬을 최우선으로 시전합니다.'}
+                  </div>
+                  <div>
+                    {lang === 'en'
+                      ? '• Smart Finishing: For enemies whose remaining HP can be finished with normal attacks, the AI conserves skill MP and finishes them with basic strikes.'
+                      : lang === 'ja'
+                      ? '• スマートフィニッシュ(トドメ): 通常攻撃だけで撃破可能な残存HPの敵にはスキルMPの浪費を防ぎ、基本攻撃で確実に仕留めます。'
+                      : '• 스마트 마무리(막타): 일반 공격만으로 처치할 수 있는 잔여 체력의 적에게는 무의미한 스킬 마나 낭비를 방지하고 기본 공격으로 마무리합니다.'}
+                  </div>
                 </div>
               </div>
 
               {/* ⚔️ 차원 아레나 5인 부대 & 피버 콜(Fever Call) 가이드 */}
               <div className="p-4 rounded-xl bg-[#141a2e] border border-[#00d2ff44] flex flex-col gap-2.5">
                 <div className="text-sm sm:text-base font-bold text-[#00d2ff] flex items-center justify-between">
-                  <span>⚔️ 6. 차원 아레나 5인 부대 & 피버 콜(Fever Call) 결투 가이드</span>
+                  <span>
+                    {lang === 'en'
+                      ? '⚔️ 6. Dimensional Arena 5-Hero Squad & Fever Call Guide'
+                      : lang === 'ja'
+                      ? '⚔️ 6. 次元アリーナ 5人部隊＆フィーバーコール(Fever Call)決闘ガイド'
+                      : '⚔️ 6. 차원 아레나 5인 부대 & 피버 콜(Fever Call) 결투 가이드'}
+                  </span>
                   <span className="text-xs font-mono text-[#80d8ff] font-bold">Dimensional Arena & Fever Call</span>
                 </div>
                 <div className="text-xs text-[#b0bec5] space-y-1.5 leading-relaxed">
-                  <div>• <strong>5인 차원 결투 부대</strong>: 3인의 선발(전열/중열/후열)과 1인의 전술 오퍼레이터(리더 가호 및 궁극기), 1인의 서포터(원호 공격 및 치유)로 출격하여 속도(SPD) 순서로 턴을 진행합니다 (기본 2.0배속).</div>
-                  <div>• <strong>사경(Death's Door) 3턴 유예</strong>: 체력이 0이 된 영웅은 3턴간 사경 상태로 버티며, 힐러나 서포터의 치유로 부활할 수 있습니다. 단, 마지막 생존자가 사경에 돌입하면 즉시 패배합니다.</div>
-                  <div>• <strong>피버 콜(Fever Call) 3턴 타임아웃</strong>: 배지 5개를 먼저 채운 쪽이 피버콜을 선언하며, 상대가 3턴 내에 피버를 완성하지 못하면 실격 패배로 선언 측이 부전승을 거둡니다.</div>
-                  <div>• <strong>12대 전술 족보 & 주간 상성</strong>: 양측 피버콜 완성 시 전광판 쇼다운이 펼쳐지며, 족보 위계와 주간 차원율(돌파 &gt; 수호 &gt; 변칙 &gt; 돌파) 상성에 따라 승자 오퍼레이터의 궁극기가 폭발합니다.</div>
-                  <div>• <strong>투사의 인장 & 명예 암시장</strong>: 승리 및 연승(Streak) 보너스로 투사의 인장을 모아 명예 암시장에서 고티어 장비 보급함을 교환할 수 있습니다.</div>
+                  <div>
+                    {lang === 'en'
+                      ? '• 5-Hero Dimensional Squad: Sortie with 3 frontline combatants (front/mid/back), 1 tactical operator (leader blessing & ultimate), and 1 supporter (assist attack & heal) fighting in SPD-based automatic combo turns (default 2.0x / Skip).'
+                      : lang === 'ja'
+                      ? '• 5人次元決闘部隊: 先発3人(前列/中列/後列)、戦術オペレーター1人(リーダー加護＆究極技)、サポーター1人(援護攻撃＆治癒)で出撃し、速度(SPD)順に自動連携戦闘を行います(基本2.0倍速/スキップ)。'
+                      : '• 5인 차원 결투 부대: 3인의 선발(전열/중열/후열)과 1인의 전술 오퍼레이터(리더 가호 및 궁극기), 1인의 서포터(원호 공격 및 치유)로 출격하여 속도(SPD) 순서로 자동 연계를 진행합니다 (기본 2.0배속 / 스킵 지원).'}
+                  </div>
+                  <div>
+                    {lang === 'en'
+                      ? '• Death\'s Door 3-Turn Grace: Heroes whose HP hits 0 endure for 3 turns in Death\'s Door and revive if healed by a healer or supporter. However, if the last standing ally enters Death\'s Door, defeat is instantaneous.'
+                      : lang === 'ja'
+                      ? '• 死境(Death\'s Door) 3ターン猶予: HPが0になった英雄は3ターンの死境状態で耐え、ヒーラーやサポーターの治癒で復活できます。ただし、最後の生存者が死境に入った場合は即時敗北となります。'
+                      : '• 사경(Death\'s Door) 3턴 유예: 체력이 0이 된 영웅은 3턴간 사경 상태로 버티며, 힐러나 서포터의 치유로 부활할 수 있습니다. 단, 마지막 생존자가 사경에 돌입하면 즉시 패배합니다.'}
+                  </div>
+                  <div>
+                    {lang === 'en'
+                      ? '• Fever Call 3-Turn Timeout: The first side to collect 5 momentum badges declares [Fever Call!]. If the opponent cannot complete 5 badges within 3 turns, they are disqualified by timeout and the declarer wins by walkover.'
+                      : lang === 'ja'
+                      ? '• フィーバーコール(Fever Call) 3ターンタイムアウト: 先にバッジ5個を満たした陣営が[フィーバーコール！]を宣言し、相手が3ターン以内にフィーバーを完成できなければ失格敗北となり宣言側が不戦勝となります。'
+                      : '• 피버 콜(Fever Call) 3턴 타임아웃: 배지 5개를 먼저 채운 쪽이 피버콜을 선언하며, 상대가 3턴 내에 피버를 완성하지 못하면 실격 패배로 선언 측이 부전승을 거둡니다.'}
+                  </div>
+                  <div>
+                    {lang === 'en'
+                      ? '• 12 Tactical Hands & Weekly Affinities: When both sides complete Fever Call, a scoreboard showdown triggers. Based on hand hierarchy and weekly affinity (Break > Guard > Anomaly > Break), the winning operator\'s ultimate devastates the field (first to 3 wins achieves domination victory).'
+                      : lang === 'ja'
+                      ? '• 12大戦術役＆週間相性: 双方がフィーバーコールを完成させると電光掲示板のショーダウンが開幕。役の序列と週間次元律(突破 > 守護 > 変則 > 突破)の優劣判定により勝者オペレーターの究極技が炸裂します(3勝先取で圧勝)。'
+                      : '• 12대 전술 족보 & 주간 상성: 양측 피버콜 완성 시 전광판 쇼다운이 펼쳐지며, 족보 위계와 주간 차원율(돌파 > 수호 > 변칙 > 돌파) 상성에 따라 승자 오퍼레이터의 궁극기가 폭발합니다 (3승 선착 시 압도 승리).'}
+                  </div>
+                  <div>
+                    {lang === 'en'
+                      ? '• Fighter\'s Mark & Black Market: Gather Fighter\'s Marks from victories and streak bonuses to exchange for high-tier equipment supply crates and masterwork armaments at the Honor Black Market.'
+                      : lang === 'ja'
+                      ? '• 闘士の印章＆名誉闇市: 勝利および連勝(Streak)ボーナスで闘士の印章を集め、名誉闇市で上位ティアの装備補給箱や最高峰の武具と交換できます。'
+                      : '• 투사의 인장 & 명예 암시장: 승리 및 연승(Streak) 보너스로 투사의 인장을 모아 명예 암시장에서 고티어 장비 보급함과 최고급 무구를 교환할 수 있습니다.'}
+                  </div>
                 </div>
               </div>
 
