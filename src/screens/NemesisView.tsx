@@ -16,7 +16,7 @@ import { GameDataService } from '../services/GameDataService';
 import { gameDialog } from '../services/DialogService';
 import { LogPanel } from '../components/LogPanel';
 import { CustomAssetService } from '../services/CustomAssetService';
-import { resolveCombatVfxAndSfx, getSkillTags, getEffectivePositionBonus } from '../utils/skillComboUtils';
+import { resolveCombatVfxAndSfx, getSkillTags, getEffectivePositionBonus, isComboReadyForBattleTarget, isComboReadyForMonster, ComboRule } from '../utils/skillComboUtils';
 import { GameIcon } from '../components/GameIcon';
 import { SkillDetailModal } from '../components/SkillDetailModal';
 import { Modal } from '../components/Modal';
@@ -738,6 +738,36 @@ export const NemesisView: React.FC = () => {
         part.chargingState = null;
         addLog(`💀 [${part.name} 완전 패퇴!] 부위가 파괴되어 더 이상 재생하거나 행동하지 않습니다!`, 'reward');
         playSfx('shield_break');
+      }
+
+      // 🌟 [상태이상 연계 콤보 폭발 (Status Detonation Combo)]
+      const combo = isComboReadyForMonster(useSkill ? skill : 'basic', part.statusEffects);
+      if (combo && part.currentHp > 0) {
+        const comboDmg = Math.max(100, Math.floor(dmg * 0.45));
+        totalActionDmg += comboDmg;
+        part.currentHp = Math.max(0, part.currentHp - comboDmg);
+
+        let comboVfx: VFXType = 'arcane_nova';
+        if (combo.comboName.includes('빙결') || combo.comboName.includes('초전도')) comboVfx = 'blizzard_storm';
+        else if (combo.comboName.includes('출혈') || combo.comboName.includes('낙인')) comboVfx = 'blood_bleed';
+        else if (combo.comboName.includes('독성') || combo.comboName.includes('산성')) comboVfx = 'dark_curse';
+        else if (combo.comboName.includes('붕괴') || combo.comboName.includes('열폭')) comboVfx = 'heavy_slash';
+        else if (combo.comboName.includes('신성') || combo.comboName.includes('성염')) comboVfx = 'divine_smite';
+        else if (combo.comboName.includes('화염')) comboVfx = 'fire';
+
+        triggerVfx(comboVfx, partPosMap[pKey].x, partPosMap[pKey].y, `⚡${combo.comboName.split(' ')[0]}`, true);
+        addLog(`💥⚡ [연계 콤보 폭발!] ${combo.icon || '⚡'} [${combo.comboName}] 발동! [${part.name}]에게 추가 ${comboDmg.toLocaleString()} 콤보 피해!`, 'reward');
+
+        if (part.chargingState) {
+          part.chargingState.remainingBreakDmg -= comboDmg;
+          if (part.chargingState.remainingBreakDmg <= 0) {
+            part.chargingState = null;
+            part.isGroggy = true;
+            playSfx('shield_break');
+            triggerVfx('boss_cataclysm', partPosMap[pKey].x, partPosMap[pKey].y, 'BREAK!', true);
+            addLog(`💥 [차징 저지 성공!] ${hero.name}의 연계 콤보로 [${part.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다!`, 'reward');
+          }
+        }
       }
 
       // G) 스킬 고유 상태이상 부위 부여
@@ -1787,6 +1817,26 @@ export const NemesisView: React.FC = () => {
                 icon: '⚔️'
               };
 
+              // 3대 부위를 BattleMonsterTarget 규격으로 변환하여 연계 콤보 조건 정밀 감지
+              const partsMonsterTargets = (['head', 'body', 'tail'] as const).map(pKey => {
+                const p = bossParts[pKey];
+                return {
+                  id: p.id,
+                  name: p.name,
+                  currentHp: p.isDefeated ? 0 : p.currentHp,
+                  maxHp: p.maxHp,
+                  statusEffects: p.statusEffects || [],
+                  data: { name: p.name },
+                  position: p.position
+                };
+              });
+              const targetedPartIdx = targetedPart === 'head' ? 0 : targetedPart === 'body' ? 1 : 2;
+
+              const basicSkillObj: Skill | 'basic' = weaponEnchantSkill || 'basic';
+              const basicComboMatch = basicCanUse ? isComboReadyForBattleTarget(basicSkillObj, partsMonsterTargets, targetedPartIdx) : null;
+              const basicReadyCombo = basicComboMatch?.combo || null;
+              const basicTags = weaponEnchantSkill ? getSkillTags(weaponEnchantSkill) : [];
+
               return (
                 <div className="panel p-2 animate-slide-up" style={{ background: '#0b0d13dd', border: '1px solid #00d2ff44' }}>
                   <div className="text-xs text-[#00d2ff] font-bold mb-1.5 border-b border-[#00d2ff22] pb-1 flex items-center justify-between">
@@ -1810,18 +1860,38 @@ export const NemesisView: React.FC = () => {
                       onClick={() => !isProcessingRef.current && handleManualAction('basic')}
                       className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg transition-all text-left relative select-none ${
                         !basicCanUse ? 'opacity-40 cursor-not-allowed' : ''
-                      }`}
+                      } ${basicReadyCombo ? 'animate-pulse shadow-[0_0_12px_rgba(255,213,79,0.45)]' : ''}`}
                       style={{
-                        borderColor: hasWeaponSkill ? (basicHasMp ? '#00d2ff' : '#ffd54f88') : '#8b9bb4',
+                        borderColor: basicReadyCombo ? '#ffd54f' : hasWeaponSkill ? (basicHasMp ? '#00d2ff' : '#ffd54f88') : '#8b9bb4',
+                        boxShadow: basicReadyCombo ? '0 0 14px rgba(255,213,79,0.5)' : undefined
                       }}
                     >
+                      {/* ⚡ 연계 발동 가능 뱃지 */}
+                      {basicReadyCombo && basicComboMatch && (
+                        <span
+                          className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md flex items-center gap-0.5 animate-bounce z-10"
+                          title={`⚡ [${basicReadyCombo.comboName}] 연계 폭발 가능!`}
+                        >
+                          <span>⚡</span>
+                          <span>연계!{basicComboMatch.isAoe ? '' : basicComboMatch.isFrontTarget ? '(전열)' : '(후열)'}</span>
+                        </span>
+                      )}
                       <div className="flex items-center gap-1.5 min-w-0 w-full">
                         <span className="shrink-0 flex items-center justify-center">
                           <GameIcon name={weaponEnchantSkill?.id || 'basic_attack'} icon={basicDisplayIcon} size={20} />
                         </span>
-                        <span className="text-xs font-bold truncate flex-1" style={{ color: hasWeaponSkill ? (basicHasMp ? '#00e5ff' : '#ffd54f') : '#ffffff' }}>
+                        <span className="text-xs font-bold truncate flex-1" style={{ color: basicReadyCombo ? '#ffe57f' : hasWeaponSkill ? (basicHasMp ? '#00e5ff' : '#ffd54f') : '#ffffff' }}>
                           {basicDisplayName}
                         </span>
+                        {basicTags.slice(0, 1).map(t => (
+                          <span
+                            key={t.id}
+                            className="text-[7.5px] px-1 py-0.1 rounded font-bold shrink-0"
+                            style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
+                          >
+                            {t.label}
+                          </span>
+                        ))}
                       </div>
                       <div className="flex items-center justify-between w-full text-[10px] mt-1 text-[#8b9bb4]">
                         <span className="truncate mr-1">{basicSubLabel}</span>
@@ -1836,6 +1906,9 @@ export const NemesisView: React.FC = () => {
                       const hasMp = activeHero.currentMp >= mpCost;
                       const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
                       const targetLabel = ultSkill.targetType === 'all_enemies' ? '적 전체' : ultSkill.targetType === 'all_allies' ? '아군 전체' : '고유 강타';
+                      const ultComboMatch = canUse ? isComboReadyForBattleTarget(ultSkill, partsMonsterTargets, targetedPartIdx) : null;
+                      const ultReadyCombo = ultComboMatch?.combo || null;
+                      const ultTags = getSkillTags(ultSkill);
 
                       return (
                         <LongPressBox
@@ -1845,16 +1918,39 @@ export const NemesisView: React.FC = () => {
                             !canUse
                               ? 'opacity-40 cursor-not-allowed border-[#37474f]'
                               : 'border-[#ffd54f] bg-[#ffd54f10] shadow-[0_0_12px_rgba(255,213,79,0.3)] hover:border-[#ffe57f]'
-                          }`}
+                          } ${ultReadyCombo ? 'animate-pulse shadow-[0_0_16px_rgba(255,213,79,0.6)]' : ''}`}
+                          style={{
+                            borderColor: ultReadyCombo ? '#ffd54f' : undefined,
+                            boxShadow: ultReadyCombo ? '0 0 16px rgba(255,213,79,0.6)' : undefined
+                          }}
                         >
-                          <span className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md">
-                            궁극기
-                          </span>
+                          {ultReadyCombo && ultComboMatch ? (
+                            <span
+                              className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md flex items-center gap-0.5 animate-bounce z-10"
+                              title={`⚡ [${ultReadyCombo.comboName}] 연계 폭발 가능!`}
+                            >
+                              <span>⚡</span>
+                              <span>궁극 연계!{ultComboMatch.isAoe ? '' : ultComboMatch.isFrontTarget ? '(전열)' : '(후열)'}</span>
+                            </span>
+                          ) : (
+                            <span className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md">
+                              궁극기
+                            </span>
+                          )}
                           <div className="flex items-center gap-1.5 w-full min-w-0">
                             <span className="shrink-0 flex items-center justify-center">
                               <GameIcon name={ultSkill.id} icon={ultSkill.icon || '👑'} size={20} />
                             </span>
                             <span className="text-xs font-bold text-[#ffe57f] truncate flex-1">{ultSkill.name}</span>
+                            {ultTags.slice(0, 1).map(t => (
+                              <span
+                                key={t.id}
+                                className="text-[7.5px] px-1 py-0.1 rounded font-bold shrink-0"
+                                style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
+                              >
+                                {t.label}
+                              </span>
+                            ))}
                           </div>
                           <div className="flex items-center justify-between w-full text-[10px] mt-1">
                             <span className="text-[#ffd54f88] truncate mr-1">{targetLabel}</span>
@@ -1875,23 +1971,48 @@ export const NemesisView: React.FC = () => {
                       const hasMp = activeHero.currentMp >= mpCost;
                       const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
                       const targetLabel = sk.targetType === 'all_enemies' ? '적 전체' : sk.targetType === 'all_allies' ? '아군 전체' : sk.effectType === 'heal' ? '아군 치유' : sk.effectType === 'shield' ? '보호막' : '단일 적';
+                      const skComboMatch = canUse ? isComboReadyForBattleTarget(sk, partsMonsterTargets, targetedPartIdx) : null;
+                      const skReadyCombo = skComboMatch?.combo || null;
+                      const skTags = getSkillTags(sk);
 
                       return (
                         <LongPressBox
                           onLongPress={() => setSelectedSkillForModal(sk)}
                           onClick={() => canUse && handleManualAction(sk)}
-                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all select-none ${
+                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all select-none relative ${
                             !canUse
                               ? 'opacity-40 cursor-not-allowed border-[#37474f]'
                               : 'border-[#00d2ff55] hover:border-[#00d2ff]'
-                          }`}
-                          style={{ borderColor: canUse ? style.borderColor : undefined }}
+                          } ${skReadyCombo ? 'animate-pulse shadow-[0_0_12px_rgba(255,213,79,0.45)]' : ''}`}
+                          style={{
+                            borderColor: skReadyCombo ? '#ffd54f' : canUse ? style.borderColor : undefined,
+                            boxShadow: skReadyCombo ? '0 0 14px rgba(255,213,79,0.5)' : undefined
+                          }}
                         >
+                          {/* ⚡ 연계 발동 가능 뱃지 */}
+                          {skReadyCombo && skComboMatch && (
+                            <span
+                              className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md flex items-center gap-0.5 animate-bounce z-10"
+                              title={`⚡ [${skReadyCombo.comboName}] 연계 폭발 가능!`}
+                            >
+                              <span>⚡</span>
+                              <span>연계!{skComboMatch.isAoe ? '' : skComboMatch.isFrontTarget ? '(전열)' : '(후열)'}</span>
+                            </span>
+                          )}
                           <div className="flex items-center gap-1.5 w-full min-w-0">
                             <span className="shrink-0 flex items-center justify-center">
                               <GameIcon name={sk.id} icon={sk.icon || '⚡'} size={20} />
                             </span>
-                            <span className="text-xs font-bold text-white truncate flex-1">{sk.name}</span>
+                            <span className="text-xs font-bold truncate flex-1" style={{ color: skReadyCombo ? '#ffe57f' : 'white' }}>{sk.name}</span>
+                            {skTags.slice(0, 1).map(t => (
+                              <span
+                                key={t.id}
+                                className="text-[7.5px] px-1 py-0.1 rounded font-bold shrink-0"
+                                style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
+                              >
+                                {t.label}
+                              </span>
+                            ))}
                           </div>
                           <div className="flex items-center justify-between w-full text-[10px] mt-1">
                             <span className="text-[#8b9bb4] truncate mr-1">{targetLabel}</span>
@@ -1912,23 +2033,48 @@ export const NemesisView: React.FC = () => {
                       const hasMp = activeHero.currentMp >= mpCost;
                       const canUse = hasMp && cdLeft === 0 && !isProcessingRef.current;
                       const targetLabel = sk.targetType === 'all_enemies' ? '적 전체' : sk.targetType === 'all_allies' ? '아군 전체' : sk.effectType === 'heal' ? '아군 치유' : sk.effectType === 'shield' ? '보호막' : '단일 적';
+                      const skComboMatch = canUse ? isComboReadyForBattleTarget(sk, partsMonsterTargets, targetedPartIdx) : null;
+                      const skReadyCombo = skComboMatch?.combo || null;
+                      const skTags = getSkillTags(sk);
 
                       return (
                         <LongPressBox
                           onLongPress={() => setSelectedSkillForModal(sk)}
                           onClick={() => canUse && handleManualAction(sk)}
-                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all select-none ${
+                          className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all select-none relative ${
                             !canUse
                               ? 'opacity-40 cursor-not-allowed border-[#37474f]'
                               : 'border-[#00d2ff55] hover:border-[#00d2ff]'
-                          }`}
-                          style={{ borderColor: canUse ? style.borderColor : undefined }}
+                          } ${skReadyCombo ? 'animate-pulse shadow-[0_0_12px_rgba(255,213,79,0.45)]' : ''}`}
+                          style={{
+                            borderColor: skReadyCombo ? '#ffd54f' : canUse ? style.borderColor : undefined,
+                            boxShadow: skReadyCombo ? '0 0 14px rgba(255,213,79,0.5)' : undefined
+                          }}
                         >
+                          {/* ⚡ 연계 발동 가능 뱃지 */}
+                          {skReadyCombo && skComboMatch && (
+                            <span
+                              className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md flex items-center gap-0.5 animate-bounce z-10"
+                              title={`⚡ [${skReadyCombo.comboName}] 연계 폭발 가능!`}
+                            >
+                              <span>⚡</span>
+                              <span>연계!{skComboMatch.isAoe ? '' : skComboMatch.isFrontTarget ? '(전열)' : '(후열)'}</span>
+                            </span>
+                          )}
                           <div className="flex items-center gap-1.5 w-full min-w-0">
                             <span className="shrink-0 flex items-center justify-center">
                               <GameIcon name={sk.id} icon={sk.icon || '⚡'} size={20} />
                             </span>
-                            <span className="text-xs font-bold text-white truncate flex-1">{sk.name}</span>
+                            <span className="text-xs font-bold truncate flex-1" style={{ color: skReadyCombo ? '#ffe57f' : 'white' }}>{sk.name}</span>
+                            {skTags.slice(0, 1).map(t => (
+                              <span
+                                key={t.id}
+                                className="text-[7.5px] px-1 py-0.1 rounded font-bold shrink-0"
+                                style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
+                              >
+                                {t.label}
+                              </span>
+                            ))}
                           </div>
                           <div className="flex items-center justify-between w-full text-[10px] mt-1">
                             <span className="text-[#8b9bb4] truncate mr-1">{targetLabel}</span>
@@ -2173,6 +2319,46 @@ export const NemesisView: React.FC = () => {
                 className="h-full bg-gradient-to-r from-[#ce93d8] via-[#ff416c] to-[#ff007f] transition-all duration-500"
                 style={{ width: `${hpPercent}%` }}
               />
+            </div>
+
+            {/* 🎯 24주기 요격 목표치 (6시간 주기 저지 목표) */}
+            <div className="mt-2 pt-2 border-t border-[#ff416c1a]">
+              <div className="flex items-center justify-between text-xs mb-1">
+                <span className="text-[10px] text-[#cfd8e8] font-bold flex items-center gap-1">
+                  <span>🎯</span>
+                  <span className="text-[#ffd54f]">요격 목표치</span>
+                  <span className="text-[9px] text-[#8b9bb4] font-normal">(24주기 / 6시간 체력 1/24)</span>
+                </span>
+                <div className="flex items-center gap-1.5 font-mono">
+                  <span className={`text-[10px] font-bold ${cycleInfo.isWindowDefended ? 'text-[#38ef7d]' : 'text-[#00d2ff]'}`}>
+                    {Math.round(cycleInfo.currentWindowDamage).toLocaleString()} / {Math.round(cycleInfo.requiredWindowDamage).toLocaleString()} DMG
+                  </span>
+                  <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                    cycleInfo.isWindowDefended
+                      ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66]'
+                      : 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f66]'
+                  }`}>
+                    {cycleInfo.isWindowDefended ? '✅ 요격 달성' : `${cycleInfo.windowProgressPct.toFixed(1)}%`}
+                  </span>
+                </div>
+              </div>
+
+              {/* 요격 진행도 바 */}
+              <div className="w-full bg-[#120a1c] h-2 rounded-full overflow-hidden border border-white/10">
+                <div
+                  className={`h-full transition-all duration-500 ${
+                    cycleInfo.isWindowDefended
+                      ? 'bg-gradient-to-r from-[#38ef7d] to-[#00d2ff]'
+                      : 'bg-gradient-to-r from-[#ff9800] via-[#ffd54f] to-[#38ef7d]'
+                  }`}
+                  style={{ width: `${Math.min(100, Math.max(0, cycleInfo.windowProgressPct))}%` }}
+                />
+              </div>
+
+              <div className="text-[9px] text-[#8b9bb4] flex items-center justify-between mt-1">
+                <span>⏱️ 다음 요격 주기 갱신: {formatRemainingTimeStr(cycleInfo.nextPlunderRemainingMs)}</span>
+                <span className="text-[#8b9bb4]">총 24개 주기 중 현재 주기 방어</span>
+              </div>
             </div>
 
             {/* 3대 부위별 실시간 상태 배지 */}
