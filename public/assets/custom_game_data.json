@@ -15,10 +15,57 @@
       "gold": 1000,
       "stone": 150,
       "wood": 150
+    },
+    "alchemy": {
+      "ether": 40,
+      "gold": 600,
+      "stone": 80
+    },
+    "arenaGate": {
+      "ether": 50,
+      "gold": 1500,
+      "iron": 80,
+      "stone": 150
+    },
+    "bonfire": {
+      "wood": 10
+    },
+    "butchery": {
+      "stone": 5,
+      "wood": 10
+    },
+    "cabin": {
+      "stone": 10,
+      "wood": 30
+    },
+    "lumberCamp": {
+      "gold": 100,
+      "wood": 50
+    },
+    "quarry": {
+      "gold": 150,
+      "stone": 30,
+      "wood": 40
+    },
+    "sanctuary": {
+      "ether": 30,
+      "gold": 1000,
+      "iron": 50,
+      "stone": 120
+    },
+    "storage": {
+      "gold": 200,
+      "stone": 50,
+      "wood": 100
+    },
+    "tavern": {
+      "gold": 300,
+      "stone": 50,
+      "wood": 80
     }
   },
-  "version": 19,
-  "updatedAt": 1792048740979,
+  "version": 20,
+  "updatedAt": 1792162711391,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -255,14 +302,14 @@
       "type": "boss"
     },
     "boss_floor_2": {
-      "atk": 80,
+      "atk": 180,
       "def": 320,
       "description": "납골당의 무수한 원혼을 통솔하는 망령들의 군주. 영혼을 베어넘기는 저주받은 대검을 휘두른다.",
       "id": "boss_floor_2",
       "imagePath": "assets/boss_floor_2.jpg",
       "level": 6,
       "luck": 30,
-      "maxHp": 240,
+      "maxHp": 340,
       "name": "망령 군주 데스나이트",
       "promptKey": "boss_floor_2",
       "rewards": {
@@ -301,7 +348,8 @@
       ],
       "spd": 40,
       "themeColor": 7901340,
-      "type": "boss"
+      "type": "boss",
+      "faction": "undead"
     },
     "boss_floor_3": {
       "atk": 96,
@@ -407,7 +455,7 @@
       "imagePath": "assets/void_overlord.jpg",
       "level": 12,
       "luck": 48,
-      "maxHp": 1800,
+      "maxHp": 2800,
       "name": "공허의 침식자",
       "promptKey": "monster_void_overlord",
       "rewards": {
@@ -467,7 +515,8 @@
       ],
       "spd": 28,
       "themeColor": 16728428,
-      "type": "boss"
+      "type": "boss",
+      "faction": "corrupted"
     },
     "boss_floor_6": {
       "atk": 140,
@@ -856,7 +905,7 @@
     },
     "monster_crypt_ghoul": {
       "atk": 55,
-      "def": 75,
+      "def": 175,
       "description": "어둠 속에서 시체를 파먹고 자란 흉폭한 구울. 강력한 턱과 출혈 공격을 가한다.",
       "drainPct": 0.25,
       "id": "monster_crypt_ghoul",
@@ -893,7 +942,8 @@
       ],
       "spd": 11,
       "themeColor": 9268835,
-      "type": "normal"
+      "type": "normal",
+      "faction": "undead"
     },
     "monster_crystal_scorpion": {
       "atk": 68,
@@ -976,7 +1026,7 @@
     },
     "monster_dread_knight": {
       "atk": 110,
-      "def": 148,
+      "def": 348,
       "description": "과거 방주를 수호하다 타락한 영겁의 기사. 단단한 방벽과 저주받은 대검을 휘두른다.",
       "id": "monster_dread_knight",
       "imagePath": "assets/monster_dread_knight.jpg",
@@ -1020,7 +1070,8 @@
       ],
       "spd": 19,
       "themeColor": 11225020,
-      "type": "elite"
+      "type": "elite",
+      "faction": "undead"
     },
     "monster_fallen_paladin": {
       "atk": 240,
@@ -1058,7 +1109,7 @@
       "imagePath": "assets/monster_fallen_priest_v2.jpg",
       "level": 14,
       "luck": 51,
-      "maxHp": 288,
+      "maxHp": 1880,
       "name": "타락한 사제",
       "piercePct": 0.25,
       "promptKey": "monster_fallen_priest",
@@ -1084,7 +1135,8 @@
       ],
       "spd": 48,
       "themeColor": 8280002,
-      "type": "normal"
+      "type": "normal",
+      "faction": "corrupted"
     },
     "monster_inquisitor": {
       "atk": 150,
@@ -1235,7 +1287,7 @@
       "imagePath": "assets/monster_monolith_guardian.jpg",
       "level": 11,
       "luck": 21,
-      "maxHp": 280,
+      "maxHp": 2790,
       "name": "모노리스의 파멸 수호자",
       "promptKey": "monster_monolith_guardian",
       "rewards": {
@@ -1265,7 +1317,8 @@
       ],
       "spd": 24,
       "themeColor": 16740419,
-      "type": "normal"
+      "type": "normal",
+      "faction": "construct"
     },
     "monster_oblivion_ghost": {
       "atk": 125,
@@ -1275,7 +1328,7 @@
       "imagePath": "assets/monster_oblivion_ghost_v2.jpg",
       "level": 16,
       "luck": 100,
-      "maxHp": 724,
+      "maxHp": 1724,
       "name": "망각의 유령",
       "promptKey": "monster_oblivion_ghost",
       "rewards": {
@@ -1294,7 +1347,8 @@
       ],
       "spd": 78,
       "themeColor": 9489145,
-      "type": "normal"
+      "type": "normal",
+      "faction": "undead"
     },
     "monster_rift_stalker": {
       "atk": 77,
@@ -1552,6 +1606,49 @@
       "spd": 84,
       "themeColor": 4854924,
       "type": "normal"
+    },
+    "monster_tomb_banshee": {
+      "id": "monster_tomb_banshee",
+      "name": "납골당 묘지 밴시",
+      "type": "normal",
+      "faction": "undead",
+      "level": 4,
+      "maxHp": 88,
+      "atk": 44,
+      "def": 160,
+      "spd": 14,
+      "luck": 10,
+      "drainPct": 0.2,
+      "skills": [
+        {
+          "breakGauge": 120,
+          "description": "대상 파티 전체에 110% 마법 피해 + MP 15 흡수 [차징]",
+          "drainPct": 0.35,
+          "effectType": "drain",
+          "isCharge": true,
+          "name": "비탄의 절규",
+          "power": 1.1
+        },
+        {
+          "description": "단일 대상 140% 피해 + 속도 25% 감속 2턴",
+          "effectType": "debuff",
+          "name": "영혼 침식",
+          "power": 1.4,
+          "statusDuration": 2
+        }
+      ],
+      "rewards": {
+        "ether": 5,
+        "exp": 65,
+        "gold": 75,
+        "resources": {
+          "silk": 3
+        }
+      },
+      "promptKey": "monster_tomb_banshee",
+      "imagePath": "assets/monster_tomb_banshee.jpg",
+      "themeColor": 8445674,
+      "description": "납골당의 묘비를 떠도는 원혼. 차가운 비탄의 절규로 대상 파티의 마나를 메마르게 한다."
     }
   },
   "balance": {
@@ -2183,6 +2280,80 @@
         "cost": {},
         "production": {}
       }
+    }
+  },
+  "forgeItemBaseCosts": {
+    "amulet": {
+      "crystal": 10,
+      "ether": 25,
+      "gold": 450,
+      "silk": 18
+    },
+    "bow": {
+      "bone": 8,
+      "gold": 200,
+      "leather": 15,
+      "wood": 35
+    },
+    "dagger": {
+      "bone": 10,
+      "gold": 180,
+      "iron": 20,
+      "leather": 20
+    },
+    "gun": {
+      "coal": 8,
+      "ether": 20,
+      "gold": 350,
+      "iron": 30
+    },
+    "leather_armor": {
+      "bone": 12,
+      "gold": 200,
+      "leather": 35,
+      "wood": 10
+    },
+    "necklace": {
+      "bone": 8,
+      "gold": 400,
+      "herb": 15,
+      "stone": 30
+    },
+    "plate_armor": {
+      "coal": 15,
+      "gold": 350,
+      "iron": 50,
+      "stone": 25
+    },
+    "ring": {
+      "crystal": 5,
+      "ether": 15,
+      "gold": 400
+    },
+    "robe": {
+      "crystal": 4,
+      "ether": 18,
+      "gold": 250,
+      "silk": 25
+    },
+    "spear": {
+      "coal": 6,
+      "gold": 220,
+      "iron": 28,
+      "wood": 25
+    },
+    "staff": {
+      "coal": 12,
+      "crystal": 8,
+      "ether": 12,
+      "gold": 250,
+      "wood": 35
+    },
+    "sword": {
+      "coal": 6,
+      "gold": 200,
+      "iron": 35,
+      "wood": 10
     }
   }
 }

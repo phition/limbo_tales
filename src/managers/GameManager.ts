@@ -8908,13 +8908,13 @@ export class GameManager {
         const defenseSquad: Mercenary[] = defaultClasses.map((clsId, cIdx) => {
           const cls = CHARACTER_CLASSES[clsId] || CHARACTER_CLASSES['squire'];
           const pos = cIdx < 3 ? 'front' : 'back';
-          const lv = Math.max(20, Math.floor(oppRating / 55));
+          const lv = Math.max(21, Math.min(55, Math.floor(gateLv * 4 + oppRating / 70)));
           return {
             id: `inv_real_hero_${entry.rank}_${cIdx}`,
             name: `${entry.nickname}의 ${cls.name}`,
             title: cls.name,
             classId: clsId,
-            grade: lv >= 35 ? 'epic' : lv >= 25 ? 'elite' : 'veteran',
+            grade: (lv >= 50 ? 'legend' : lv >= 40 ? 'epic' : lv >= 30 ? 'elite' : 'veteran') as MercenaryGrade,
             level: lv,
             exp: 0,
             expToNext: 100,
@@ -8976,6 +8976,7 @@ export class GameManager {
       defenseConcept: string;
       gateLevel: number;
       bonfireLevel: number;
+      heroLevelRange: [number, number];
       classes: string[];
       traits: string[];
       avatarIcon: string;
@@ -9002,6 +9003,7 @@ export class GameManager {
         defenseConcept: '🔰 입문 훈련 (기본 검증)',
         gateLevel: 6,
         bonfireLevel: 6,
+        heroLevelRange: [21, 25],
         classes: ['paladin', 'sharpshooter', 'bishop', 'warlord', 'squire'],
         traits: ['수호의 결속', '집중 사격', '성스러운 치유', '신병 지휘', '성실'],
         avatarIcon: '🔰',
@@ -9021,6 +9023,7 @@ export class GameManager {
         defenseConcept: '🛡️ 성벽 극방어 (내구&방어 증폭)',
         gateLevel: 8,
         bonfireLevel: 8,
+        heroLevelRange: [38, 43],
         classes: ['aegis_valkyrie', 'paladin', 'high_saintess', 'guardian', 'warlord'],
         traits: ['철벽의 금강', '투사의 요격', '성스러운 수복', '불굴의 지휘', '수호자'],
         avatarIcon: '🏰',
@@ -9040,6 +9043,7 @@ export class GameManager {
         defenseConcept: '🔥 작열 포격 (화상 DoT & 집중 포격)',
         gateLevel: 8,
         bonfireLevel: 8,
+        heroLevelRange: [42, 47],
         classes: ['berserker', 'aether_gun_meister', 'calamity_mage', 'warlord', 'valhalla_blade'],
         traits: ['불굴의 돌파', '치명적 폭격', '작열의 마탄', '피의 전술', '투사'],
         avatarIcon: '🔥',
@@ -9059,6 +9063,7 @@ export class GameManager {
         defenseConcept: '❄️ 결빙 CC (동결 & 기절 교란)',
         gateLevel: 8,
         bonfireLevel: 7,
+        heroLevelRange: [36, 41],
         classes: ['guardian', 'sniper', 'elementalist', 'arcane_scholar', 'bishop'],
         traits: ['냉혹의 수호', '약점 관통', '절대영도 결빙', '지성의 전술', '신비'],
         avatarIcon: '❄️',
@@ -9078,6 +9083,7 @@ export class GameManager {
         defenseConcept: '⚡ 초고속 급습 (감속 & 치명타 저격)',
         gateLevel: 7,
         bonfireLevel: 7,
+        heroLevelRange: [31, 36],
         classes: ['shadow_phantom', 'assassin', 'duelist', 'sharpshooter', 'arcane_scholar'],
         traits: ['암영의 은신', '치명적 암살', '신속의 칼날', '그림자 전술', '암살'],
         avatarIcon: '⚡',
@@ -9097,6 +9103,7 @@ export class GameManager {
         defenseConcept: '🧪 맹독 부식 (14% DoT 지속 피해)',
         gateLevel: 8,
         bonfireLevel: 7,
+        heroLevelRange: [34, 39],
         classes: ['paladin', 'sniper', 'arcane_scholar', 'assassin', 'berserker'],
         traits: ['독기 저항', '맹독의 저격', '부식 전염', '역병 전술', '냉혹'],
         avatarIcon: '🧪',
@@ -9116,6 +9123,7 @@ export class GameManager {
         defenseConcept: '👑 총력전 요새 (Gate Lv.10 최고 난도)',
         gateLevel: 10,
         bonfireLevel: 10,
+        heroLevelRange: [50, 56],
         classes: ['aegis_valkyrie', 'valhalla_blade', 'high_saintess', 'paladin', 'warlord'],
         traits: ['불멸의 성역', '신성한 심판', '기적의 소생', '성전의 총지휘', '수호'],
         avatarIcon: '👑',
@@ -9135,6 +9143,7 @@ export class GameManager {
         defenseConcept: '🏰 표준 균형 (공/방/유틸 밸런스)',
         gateLevel: 7,
         bonfireLevel: 7,
+        heroLevelRange: [28, 33],
         classes: ['warlord', 'valhalla_blade', 'bishop', 'tactical_gunner', 'paladin'],
         traits: ['진형 엄호', '돌격 검격', '축복의 성수', '정석 전술', '용맹'],
         avatarIcon: '🏰',
@@ -9154,6 +9163,7 @@ export class GameManager {
         defenseConcept: '💰 부유한 상단 (약탈 자원 대량)',
         gateLevel: 6,
         bonfireLevel: 8,
+        heroLevelRange: [23, 27],
         classes: ['guardian', 'tactical_gunner', 'high_saintess', 'duelist', 'arcane_scholar'],
         traits: ['금고 수호', '용병 경호', '치유 기도', '재력의 전술', '상인'],
         avatarIcon: '💰',
@@ -9173,6 +9183,7 @@ export class GameManager {
         defenseConcept: '🌌 마나 세금 (공허 파편 & MP소모 증가)',
         gateLevel: 9,
         bonfireLevel: 9,
+        heroLevelRange: [48, 53],
         classes: ['calamity_mage', 'aether_gun_meister', 'arcane_scholar', 'elementalist', 'shadow_phantom'],
         traits: ['공허 왜곡', '에테르 과충전', '마나 붕괴', '시공간 전술', '비전'],
         avatarIcon: '🌌',
@@ -9199,14 +9210,17 @@ export class GameManager {
       const defenseSquad: Mercenary[] = arch.classes.map((clsId, cIdx) => {
         const cls = CHARACTER_CLASSES[clsId] || CHARACTER_CLASSES['squire'];
         const pos = cIdx < 3 ? 'front' : 'back';
-        const lv = Math.max(20, Math.floor(oppRating / 55));
+        const [minLv, maxLv] = arch.heroLevelRange || [21, 30];
+        const lvSpread = maxLv - minLv;
+        const lvOffset = lvSpread > 0 ? (cIdx === 0 || cIdx === 4 ? lvSpread : Math.floor(Math.random() * (lvSpread + 1))) : 0;
+        const lv = Math.max(21, Math.min(60, minLv + lvOffset));
         const heroTrait = (arch.traits && arch.traits[cIdx]) || (cIdx === 0 ? '철벽의' : cIdx === 1 ? '사격' : cIdx === 2 ? '비전' : '지휘');
         return {
           id: `inv_bot_hero_${idx}_${cIdx}`,
           name: `${arch.ownerNickname}의 ${cls.name}`,
           title: cls.name,
           classId: clsId,
-          grade: (lv >= 45 ? 'legend' : lv >= 35 ? 'epic' : lv >= 25 ? 'elite' : 'veteran') as MercenaryGrade,
+          grade: (lv >= 50 ? 'legend' : lv >= 40 ? 'epic' : lv >= 30 ? 'elite' : 'veteran') as MercenaryGrade,
           level: lv,
           exp: 0,
           expToNext: 100,
