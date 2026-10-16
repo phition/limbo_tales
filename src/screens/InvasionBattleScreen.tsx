@@ -63,6 +63,43 @@ export interface InvasionStatusEffect {
   value?: number;
 }
 
+export function applyInvasionStatusEffect(
+  target: { statusEffects: InvasionStatusEffect[] },
+  effect: InvasionStatusEffect,
+  maxCapTurns = 5
+): { isNew: boolean; currentTurns: number } {
+  if (!Array.isArray(target.statusEffects)) {
+    target.statusEffects = [];
+  }
+  const existing = target.statusEffects.find(se => se.id === effect.id);
+  if (existing) {
+    existing.duration = Math.min(maxCapTurns, (existing.duration || 1) + (effect.duration || 1));
+    if (effect.value !== undefined) existing.value = effect.value;
+    return { isNew: false, currentTurns: existing.duration };
+  } else {
+    target.statusEffects.push({ ...effect });
+    return { isNew: true, currentTurns: effect.duration || 1 };
+  }
+}
+
+export const renderStatusBadges = (statusEffects: InvasionStatusEffect[] | undefined, isDestroyed = false) => {
+  if (!statusEffects || statusEffects.length === 0 || isDestroyed) return null;
+  return (
+    <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar py-0.5 z-10">
+      {statusEffects.map((st, sidx) => (
+        <span
+          key={sidx}
+          className="text-[6.5px] px-1 py-0.2 rounded bg-black/85 border border-white/20 flex items-center gap-0.5 text-white shrink-0 font-mono shadow-sm"
+          title={`${st.name} (${st.duration}턴)`}
+        >
+          <span>{st.icon}</span>
+          <span className="text-[#ffd54f] font-bold">{st.duration}T</span>
+        </span>
+      ))}
+    </div>
+  );
+};
+
 interface SiegeTargetObject {
   id: 'dimensional_barrier' | 'turret_left' | 'turret_right';
   name: string;
@@ -74,6 +111,7 @@ interface SiegeTargetObject {
   side: 'left' | 'right' | 'center';
   isDestroyed: boolean;
   description: string;
+  statusEffects: InvasionStatusEffect[];
 }
 
 interface OperatorCardProps {
@@ -245,6 +283,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     side: 'center',
     isDestroyed: false,
     description: '수비대 전면을 가로지르는 절대 차원 역장',
+    statusEffects: [],
   });
   const [turretLeft, setTurretLeft] = useState<SiegeTargetObject>({
     id: 'turret_left',
@@ -257,6 +296,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     side: 'left',
     isDestroyed: false,
     description: '화력 공세 & 요격 사격 (광역 폭격 / 집중 요격)',
+    statusEffects: [],
   });
   const [turretRight, setTurretRight] = useState<SiegeTargetObject>({
     id: 'turret_right',
@@ -269,6 +309,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     side: 'right',
     isDestroyed: false,
     description: '성역 결계 & 전술 지원 (마나·행운 기반 증폭)',
+    statusEffects: [],
   });
 
   const barrierStateRef = useRef(barrierState);
@@ -411,6 +452,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       description: bHero
         ? `게이트 Lv.${baseGateLv} | 결속 수호자: ${bHero.name} (+${extraBarrierHp.toLocaleString()} HP)`
         : `게이트 Lv.${baseGateLv} 에너지 공급 역장`,
+      statusEffects: [],
     };
     const initLeftTurret: SiegeTargetObject = {
       id: 'turret_left',
@@ -425,6 +467,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       description: lTurretHero
         ? `사수: ${lTurretHero.name} | 화력 복합 지원 (포탑+용병 공격력 합산)`
         : `자동 요격 포탑`,
+      statusEffects: [],
     };
     const initRightTurret: SiegeTargetObject = {
       id: 'turret_right',
@@ -439,6 +482,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       description: rTurretHero
         ? `사수: ${rTurretHero.name} | 전술 증폭 지원 (마나·행운 기반 전술 지원)`
         : `성역 결계 포탑`,
+      statusEffects: [],
     };
 
     setBarrierState(initBarrier);
@@ -1080,6 +1124,12 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           attacker.currentHp = Math.max(0, attacker.currentHp - dot);
           SoundManager.getInstance().play('fire');
           setVfxList(prev => [...prev, { id: `vfx_burn_${Date.now()}_${Math.random()}`, type: 'fire', damage: dot, x: pos.x, y: pos.y, duration: 350 }]);
+        } else if (se.id === 'bleed') {
+          // 🩸 출혈: 최대 HP 7% 지속 피해
+          const dot = Math.max(1, Math.round(attacker.maxHp * 0.07));
+          attacker.currentHp = Math.max(0, attacker.currentHp - dot);
+          SoundManager.getInstance().play('bleed');
+          setVfxList(prev => [...prev, { id: `vfx_bleed_${Date.now()}_${Math.random()}`, type: 'slash', damage: dot, x: pos.x, y: pos.y, duration: 350 }]);
         } else if (se.id === 'stun') {
           // ⚡ 기절: 100% 행동 불가(턴 스킵)
           skipReasons.push('⚡ 전자기 기절');
@@ -1091,6 +1141,19 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         return (se.duration || 0) > 0;
       });
 
+      // 포탑 공격자 상태 실시간 동기화
+      if (attacker.id === 'turret_left') {
+        turretLeftRef.current.statusEffects = [...attacker.statusEffects];
+        turretLeftRef.current.currentHp = attacker.currentHp;
+        if (attacker.currentHp <= 0) turretLeftRef.current.isDestroyed = true;
+        setTurretLeft({ ...turretLeftRef.current });
+      } else if (attacker.id === 'turret_right') {
+        turretRightRef.current.statusEffects = [...attacker.statusEffects];
+        turretRightRef.current.currentHp = attacker.currentHp;
+        if (attacker.currentHp <= 0) turretRightRef.current.isDestroyed = true;
+        setTurretRight({ ...turretRightRef.current });
+      }
+
       if (attacker.currentHp <= 0) {
         hasDiedFromDot = true;
       }
@@ -1098,9 +1161,16 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
     // DoT 지속 피해로 사망 시 즉시 턴 종료
     if (hasDiedFromDot) {
+      if (attacker.id === 'turret_left') {
+        turretLeftRef.current.isDestroyed = true;
+        setTurretLeft({ ...turretLeftRef.current });
+      } else if (attacker.id === 'turret_right') {
+        turretRightRef.current.isDestroyed = true;
+        setTurretRight({ ...turretRightRef.current });
+      }
       setActionBanner({
         text: `💀 [지속 피해 격멸] ${attacker.name}!`,
-        sub: `중독/화상/동상 등의 치명적인 지속 피해를 견디지 못하고 쓰러졌습니다!`,
+        sub: `중독/화상/동상/출혈 등의 치명적인 지속 피해를 견디지 못하고 쓰러졌습니다!`,
         color: '#ff416c',
       });
       setPlayerTeam([...currentP]);
@@ -1154,152 +1224,468 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     });
 
     // ─────────────────────────────────────────────────────────────
-    // [분기 A] 공성측(아군)의 공격 -> 차원 보호막 or 좌/우 타워 타겟팅!
+    // [분기 A] 공성측(아군)의 스킬 및 공격 -> 아군 지원/치유 or 적 성벽·타워 타겟팅 & 디버프 부여!
     // ─────────────────────────────────────────────────────────────
     if (isAttackerPlayer) {
-      // 타겟 풀 구성: 보호막(중앙), 좌측 타워, 우측 타워
-      const availableTargets: SiegeTargetObject[] = [];
-      if (!curBarrier.isDestroyed) availableTargets.push(curBarrier);
-      if (!curL.isDestroyed) availableTargets.push(curL);
-      if (!curR.isDestroyed) availableTargets.push(curR);
+      // 1. 아군 대상 버프/치유/보호막 스킬 판정
+      const isSupportSkill =
+        ['heal', 'shield', 'buff', 'regen', 'cleanse'].includes(chosenSkill.effectType || '') ||
+        ['all_allies', 'single_ally', 'self'].includes(chosenSkill.targetType || '') ||
+        (chosenSkill.description && (chosenSkill.description.includes('회복') || chosenSkill.description.includes('보호막') || chosenSkill.description.includes('치유') || chosenSkill.description.includes('아군 전체')) && !chosenSkill.targetType?.includes('enemy'));
 
-      let targetObj = availableTargets.find(t => t.id === selectedFocusTargetId);
-      if (!targetObj || targetObj.isDestroyed) {
-        // 자동 가중치: 타워가 살아있다면 60% 보호막, 40% 타워
-        if (availableTargets.some(t => t.type === 'turret')) {
-          const turrets = availableTargets.filter(t => t.type === 'turret');
-          if (Math.random() < 0.40 && turrets.length > 0) {
-            targetObj = turrets[Math.floor(Math.random() * turrets.length)];
-          } else {
-            targetObj = curBarrier;
-          }
+      if (isSupportSkill) {
+        // [지원/치유/버프 분기]
+        let targetAllies: InvasionCombatant[] = [];
+        if (chosenSkill.targetType === 'all_allies' || chosenSkill.description?.includes('전체') || chosenSkill.description?.includes('모든 아군')) {
+          targetAllies = aliveP;
+        } else if (chosenSkill.targetType === 'single_ally') {
+          const lowest = aliveP.slice().sort((a, b) => (a.currentHp / a.maxHp) - (b.currentHp / b.maxHp))[0] || attacker;
+          targetAllies = [lowest];
         } else {
-          targetObj = curBarrier;
+          targetAllies = [attacker];
         }
+
+        const isHeal = chosenSkill.effectType === 'heal' || chosenSkill.description?.includes('회복') || chosenSkill.description?.includes('치유');
+        const isShield = chosenSkill.effectType === 'shield' || chosenSkill.description?.includes('보호막') || chosenSkill.description?.includes('방벽');
+        const isAtkBuff = chosenSkill.effectType === 'buff' || (chosenSkill.description?.includes('공격력') && chosenSkill.description?.includes('증가'));
+        const isDefBuff = chosenSkill.description?.includes('방어력') && chosenSkill.description?.includes('증가');
+
+        let totalHealed = 0;
+        targetAllies.forEach((ally, aIdx) => {
+          const allyPos = getCombatantCardPos(ally.id, true);
+
+          if (isHeal) {
+            const healAmt = Math.max(25, Math.round(attacker.atk * (chosenSkill.power || 1.3)));
+            ally.currentHp = Math.min(ally.maxHp, ally.currentHp + healAmt);
+            totalHealed += healAmt;
+            setVfxList(prev => [
+              ...prev,
+              {
+                id: `vfx_heal_${Date.now()}_${aIdx}`,
+                type: 'holy_heal',
+                damage: healAmt,
+                isHeal: true,
+                x: allyPos.x,
+                y: allyPos.y,
+                duration: 500,
+              },
+            ]);
+            SoundManager.getInstance().play('holy_spell');
+          }
+
+          if (isShield) {
+            const shieldAmt = Math.max(30, Math.round(attacker.maxHp * 0.25 * (chosenSkill.power || 1.0)));
+            applyInvasionStatusEffect(ally, {
+              id: 'shield',
+              name: '에테르 방벽',
+              type: 'buff',
+              icon: '🛡️',
+              duration: 2,
+              value: shieldAmt,
+            });
+            setVfxList(prev => [
+              ...prev,
+              {
+                id: `vfx_shield_${Date.now()}_${aIdx}`,
+                type: 'shield',
+                damage: shieldAmt,
+                x: allyPos.x,
+                y: allyPos.y,
+                duration: 400,
+              },
+            ]);
+            SoundManager.getInstance().play('shield');
+          }
+
+          if (isAtkBuff) {
+            applyInvasionStatusEffect(ally, {
+              id: 'buff_atk',
+              name: '공격력 증폭',
+              type: 'buff',
+              icon: '⚔️',
+              duration: 2,
+              value: 0.25,
+            });
+            SoundManager.getInstance().play('holy_spell');
+          }
+
+          if (isDefBuff) {
+            applyInvasionStatusEffect(ally, {
+              id: 'buff_def',
+              name: '방어력 증폭',
+              type: 'buff',
+              icon: '🛡️',
+              duration: 2,
+              value: 0.30,
+            });
+            SoundManager.getInstance().play('shield');
+          }
+        });
+
+        const mAttacker = combatMetricsRef.current[attacker.id];
+        if (mAttacker) {
+          mAttacker.healingDone += totalHealed;
+          mAttacker.actionsCount = (mAttacker.actionsCount || 0) + 1;
+        }
+
+        addFeverBadge('extra');
+
+        setActionBanner({
+          text: `✨ [전술 지원] ${attacker.name}의 ${chosenSkill.name}!`,
+          sub: `${targetAllies.map(a => a.name).join(', ')}에게 아군 전술 지원 효과 전개!`,
+          color: '#38ef7d',
+        });
+
+        setBattleLogs(prev => [
+          ...prev.slice(-30),
+          {
+            round: currentRoundNumber,
+            attacker: attacker.name,
+            defender: targetAllies.map(a => a.name).join(', '),
+            damage: -totalHealed,
+            isCrit: false,
+            skillName: chosenSkill.name,
+            side: 'player',
+          },
+        ]);
+
+        setPlayerTeam([...currentP]);
+      } else {
+        // [공격 스킬 분기] -> 차원 보호막 or 좌/우 타워 타겟팅 & PvE 디버프 부여!
+        const availableTargets: SiegeTargetObject[] = [];
+        if (!curBarrier.isDestroyed) availableTargets.push(curBarrier);
+        if (!curL.isDestroyed) availableTargets.push(curL);
+        if (!curR.isDestroyed) availableTargets.push(curR);
+
+        const isAoeSkill = chosenSkill.targetType === 'all_enemies' || (chosenSkill.description && (chosenSkill.description.includes('전체') || chosenSkill.description.includes('모든 적') || chosenSkill.description.includes('광역')));
+        let targetsToHit: SiegeTargetObject[] = [];
+
+        if (isAoeSkill && availableTargets.length > 1) {
+          targetsToHit = availableTargets;
+        } else {
+          let targetObj = availableTargets.find(t => t.id === selectedFocusTargetId);
+          if (!targetObj || targetObj.isDestroyed) {
+            if (availableTargets.some(t => t.type === 'turret')) {
+              const turrets = availableTargets.filter(t => t.type === 'turret');
+              if (Math.random() < 0.40 && turrets.length > 0) {
+                targetObj = turrets[Math.floor(Math.random() * turrets.length)];
+              } else {
+                targetObj = curBarrier;
+              }
+            } else {
+              targetObj = curBarrier;
+            }
+          }
+          targetsToHit = targetObj ? [targetObj] : (curBarrier ? [curBarrier] : []);
+        }
+
+        if (targetsToHit.length > 0) {
+          setActiveTargetDefenderId(targetsToHit[0].id);
+        }
+
+        let totalDmgDealt = 0;
+        let anyCrit = false;
+        const allDebuffsApplied: string[] = [];
+
+        // 공격자 공격력 버프/디버프 연산
+        let effectiveAtk = attacker.atk;
+        const atkBuff = (attacker.statusEffects || []).find(e => e.id === 'buff_atk');
+        if (atkBuff) effectiveAtk = Math.round(effectiveAtk * (1 + (atkBuff.value || 0.25)));
+        const atkDebuff = (attacker.statusEffects || []).find(e => e.id === 'debuff_atk');
+        if (atkDebuff) effectiveAtk = Math.max(10, Math.round(effectiveAtk * (1 - (atkDebuff.value || 0.30))));
+
+        const critChance = attacker.luck * 0.008 + 0.12;
+        const isCrit = Math.random() < critChance;
+        if (isCrit) anyCrit = true;
+
+        targetsToHit.forEach((targetObj, tIdx) => {
+          // 타겟 방어력 연산 (화상 50% 분쇄, 결빙 +40%, 방어 분쇄)
+          let targetDef = targetObj.def;
+          const targetEffects = targetObj.statusEffects || [];
+          if (targetEffects.some(e => e.id === 'burn')) {
+            targetDef = Math.round(targetDef * 0.5);
+          }
+          if (targetEffects.some(e => e.id === 'freeze')) {
+            targetDef = Math.round(targetDef * 1.4);
+          }
+          const defDebuff = targetEffects.find(e => e.id === 'debuff_def');
+          if (defDebuff) {
+            targetDef = Math.max(5, Math.round(targetDef * (1 - (defDebuff.value || 0.35))));
+          }
+
+          const aoeMultiplier = targetsToHit.length > 1 ? 0.75 : 1.0;
+          const rawDmg = effectiveAtk * (chosenSkill.power || 1.0) * (isCrit ? 1.6 : 1.0) * aoeMultiplier;
+          let finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + targetDef * INVASION_DEF_SCALE))));
+
+          // 보호막(shield) 버프 흡수 연산
+          const shieldEff = targetEffects.find(e => e.id === 'shield');
+          if (shieldEff && (shieldEff.value || 0) > 0) {
+            const absorbed = Math.min(finalDmg, shieldEff.value || 0);
+            shieldEff.value = (shieldEff.value || 0) - absorbed;
+            finalDmg -= absorbed;
+            if (shieldEff.value <= 0) {
+              targetObj.statusEffects = targetObj.statusEffects.filter(e => e.id !== 'shield');
+            }
+          }
+
+          // 대상 체력 감소
+          targetObj.currentHp = Math.max(0, targetObj.currentHp - finalDmg);
+          if (targetObj.currentHp <= 0) targetObj.isDestroyed = true;
+          totalDmgDealt += finalDmg;
+
+          // 🌟 PvE 표준 상태이상 및 디버프 성벽/타워 부여 판정
+          const sName = (chosenSkill.name || '').toLowerCase();
+          const sId = (chosenSkill.id || '').toLowerCase();
+          const sDesc = (chosenSkill.description || '').toLowerCase();
+
+          // 1. 🔥 화상 (Burn)
+          const isBurn = chosenSkill.effectType === 'burn' || sId.includes('flame') || sId.includes('burn') || sId.includes('meteor') || sName.includes('화염') || sName.includes('화상') || sDesc.includes('화염') || sDesc.includes('화상');
+          if (isBurn) {
+            applyInvasionStatusEffect(targetObj, {
+              id: 'burn',
+              name: '작열 화상',
+              type: 'debuff',
+              icon: '🔥',
+              duration: chosenSkill.statusDuration || 2,
+              value: 0.08,
+            });
+            if (!allDebuffsApplied.includes('🔥화상')) allDebuffsApplied.push('🔥화상');
+          }
+
+          // 2. ☠️ 중독 (Poison)
+          const isPoison = chosenSkill.effectType === 'poison' || sId.includes('poison') || sName.includes('독') || sDesc.includes('중독');
+          if (isPoison) {
+            applyInvasionStatusEffect(targetObj, {
+              id: 'poison',
+              name: '맹독 부식',
+              type: 'debuff',
+              icon: '☠️',
+              duration: chosenSkill.statusDuration || 3,
+              value: 0.14,
+            });
+            if (!allDebuffsApplied.includes('☠️중독')) allDebuffsApplied.push('☠️중독');
+          }
+
+          // 3. ❄️ 결빙 (Freeze)
+          const isFreeze = chosenSkill.effectType === 'freeze' || sId.includes('freeze') || sId.includes('blizzard') || sName.includes('빙결') || sName.includes('냉각') || sName.includes('눈보라') || sDesc.includes('빙결') || sDesc.includes('냉각') || sDesc.includes('동상');
+          if (isFreeze) {
+            applyInvasionStatusEffect(targetObj, {
+              id: 'freeze',
+              name: '극저온 동결',
+              type: 'debuff',
+              icon: '❄️',
+              duration: chosenSkill.statusDuration || 2,
+              value: 0.04,
+            });
+            if (!allDebuffsApplied.includes('❄️결빙')) allDebuffsApplied.push('❄️결빙');
+          }
+
+          // 4. 💫 기절 (Stun)
+          const isStun = chosenSkill.effectType === 'stun' || sDesc.includes('기절') || sDesc.includes('속박');
+          if (isStun) {
+            applyInvasionStatusEffect(targetObj, {
+              id: 'stun',
+              name: '기절 무력화',
+              type: 'debuff',
+              icon: '💫',
+              duration: chosenSkill.statusDuration || 1,
+            });
+            if (!allDebuffsApplied.includes('💫기절')) allDebuffsApplied.push('💫기절');
+          }
+
+          // 5. 🛡️⬇️ 방어력 분쇄 (debuff_def)
+          const isDefDebuff = chosenSkill.effectType === 'debuff' || chosenSkill.effectType === 'debuff_def' || (sDesc.includes('방어력') && (sDesc.includes('분쇄') || sDesc.includes('감소') || sDesc.includes('파쇄') || sDesc.includes('약화')));
+          if (isDefDebuff) {
+            applyInvasionStatusEffect(targetObj, {
+              id: 'debuff_def',
+              name: '방어력 분쇄',
+              type: 'debuff',
+              icon: '🛡️',
+              duration: chosenSkill.statusDuration || 3,
+              value: 0.35,
+            });
+            if (!allDebuffsApplied.includes('🛡️방어분쇄')) allDebuffsApplied.push('🛡️방어분쇄');
+          }
+
+          // 6. ⚔️⬇️ 공격력 약화 (debuff_atk)
+          const isAtkDebuff = chosenSkill.effectType === 'debuff_atk' || (sDesc.includes('공격력') && (sDesc.includes('감소') || sDesc.includes('약화')));
+          if (isAtkDebuff) {
+            applyInvasionStatusEffect(targetObj, {
+              id: 'debuff_atk',
+              name: '공격력 약화',
+              type: 'debuff',
+              icon: '⚔️',
+              duration: chosenSkill.statusDuration || 2,
+              value: 0.30,
+            });
+            if (!allDebuffsApplied.includes('⚔️공격감소')) allDebuffsApplied.push('⚔️공격감소');
+          }
+
+          // 7. 🩸 출혈 (Bleed)
+          const isBleed = chosenSkill.effectType === 'bleed' || sName.includes('출혈') || sDesc.includes('출혈');
+          if (isBleed) {
+            applyInvasionStatusEffect(targetObj, {
+              id: 'bleed',
+              name: '치명 출혈',
+              type: 'debuff',
+              icon: '🩸',
+              duration: chosenSkill.statusDuration || 3,
+              value: 0.07,
+            });
+            if (!allDebuffsApplied.includes('🩸출혈')) allDebuffsApplied.push('🩸출혈');
+          }
+
+          // 거점 상태 동기화
+          if (targetObj.id === 'dimensional_barrier') {
+            barrierStateRef.current = { ...targetObj };
+            setBarrierState({ ...targetObj });
+            setIsBarrierHit(true);
+            setTimeout(() => setIsBarrierHit(false), 350);
+          } else if (targetObj.id === 'turret_left') {
+            turretLeftRef.current = { ...targetObj };
+            setTurretLeft({ ...targetObj });
+            oppTeamRef.current = oppTeamRef.current.map(c => c.id === 'turret_left' ? { ...c, currentHp: targetObj.currentHp, statusEffects: [...targetObj.statusEffects] } : c);
+            setOppTeam([...oppTeamRef.current]);
+          } else if (targetObj.id === 'turret_right') {
+            turretRightRef.current = { ...targetObj };
+            setTurretRight({ ...targetObj });
+            oppTeamRef.current = oppTeamRef.current.map(c => c.id === 'turret_right' ? { ...c, currentHp: targetObj.currentHp, statusEffects: [...targetObj.statusEffects] } : c);
+            setOppTeam([...oppTeamRef.current]);
+          }
+
+          const targetPos = getCombatantCardPos(targetObj.id, false);
+          setVfxList(prev => [
+            ...prev,
+            {
+              id: `vfx_hit_${Date.now()}_${tIdx}`,
+              type: isCrit ? 'crit_slash' : 'slash',
+              damage: finalDmg,
+              isCrit,
+              x: targetPos.x,
+              y: targetPos.y,
+              duration: battleSpeed === 2 ? 350 : 500,
+            },
+          ]);
+          gm.emit('battleHitEffect', {
+            x: targetPos.x,
+            y: targetPos.y,
+            color: 0x00d2ff,
+            isCrit,
+            type: isCrit ? 'crit_slash' : 'slash',
+          });
+        });
+
+        // 메트릭스 업데이트
+        const mAttacker = combatMetricsRef.current[attacker.id];
+        if (mAttacker) {
+          mAttacker.damageDealt += totalDmgDealt;
+          mAttacker.actionsCount = (mAttacker.actionsCount || 0) + 1;
+          if (anyCrit) mAttacker.critCount += 1;
+        }
+
+        // 피버 뱃지 적립
+        if (anyCrit) addFeverBadge('crit');
+        else if (chosenSkill.id !== 'basic_attack') addFeverBadge('extra');
+        else addFeverBadge('break');
+
+        // 연출 배너
+        const targetNames = targetsToHit.map(t => t.id === 'dimensional_barrier' ? '🛡️ 차원 보호막' : `🗼 ${t.name}`).join(', ');
+        const debuffNotice = allDebuffsApplied.length > 0 ? ` [디버프 부여: ${allDebuffsApplied.join(', ')}]` : '';
+        setActionBanner({
+          text: `⚔️ [공성 돌격] ${attacker.name}의 ${chosenSkill.name}!`,
+          sub: `${targetNames}에 총 ${totalDmgDealt.toLocaleString()}의 공성 타격! ${anyCrit ? '💥 치명타 작열!' : ''}${debuffNotice}`,
+          color: '#00d2ff',
+        });
+
+        // 실시간 교전 정보 패널 업데이트
+        const primaryTarget = targetsToHit[0];
+        if (primaryTarget) {
+          setClashData({
+            attacker: { ...attacker },
+            defender: {
+              name: primaryTarget.name,
+              icon: primaryTarget.icon,
+              className: primaryTarget.id === 'dimensional_barrier' ? '차원 절대 방어막' : '영지 방어 포탑',
+              level: target.gateLevel,
+              currentHp: primaryTarget.currentHp,
+              maxHp: primaryTarget.maxHp,
+              currentMp: 0,
+              maxMp: 0,
+              def: primaryTarget.def,
+              classId: 'tactical_tower',
+              position: 'center',
+            },
+            skill: chosenSkill,
+            damage: totalDmgDealt,
+            isCrit: anyCrit,
+            isPlayerAttacking: true,
+          });
+          setIsClashZoomed(true);
+        }
+
+        SoundManager.getInstance().play(anyCrit ? 'crit' : 'heavy_hit');
+
+        setBattleLogs(prev => [
+          ...prev.slice(-30),
+          {
+            round: currentRoundNumber,
+            attacker: attacker.name,
+            defender: targetNames,
+            damage: totalDmgDealt,
+            isCrit: anyCrit,
+            skillName: `${chosenSkill.name}${debuffNotice}`,
+            side: 'player',
+          },
+        ]);
       }
-
-      setActiveTargetDefenderId(targetObj.id);
-
-      // 치명타 및 피해 계산
-      const critChance = attacker.luck * 0.008 + 0.12;
-      const isCrit = Math.random() < critChance;
-      const rawDmg = attacker.atk * (chosenSkill.power || 1.0) * (isCrit ? 1.6 : 1.0);
-      let targetDef = targetObj.def;
-      const oppCombatant = oppTeamRef.current.find(c => c.id === targetObj.id);
-      const targetEffects = oppCombatant?.statusEffects || [];
-      if (targetEffects.some(e => e.id === 'burn')) {
-        targetDef = Math.round(targetDef * 0.5);
-      }
-      if (targetEffects.some(e => e.id === 'freeze')) {
-        targetDef = Math.round(targetDef * 1.4);
-      }
-      const finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + targetDef * INVASION_DEF_SCALE))));
-
-      // 대상 체력 감소
-      targetObj.currentHp = Math.max(0, targetObj.currentHp - finalDmg);
-      if (targetObj.currentHp <= 0) targetObj.isDestroyed = true;
-
-      if (targetObj.id === 'dimensional_barrier') {
-        barrierStateRef.current = { ...targetObj };
-        setBarrierState({ ...targetObj });
-        setIsBarrierHit(true);
-        setTimeout(() => setIsBarrierHit(false), 350);
-      } else if (targetObj.id === 'turret_left') {
-        turretLeftRef.current = { ...targetObj };
-        setTurretLeft({ ...targetObj });
-        oppTeamRef.current = oppTeamRef.current.map(c => c.id === 'turret_left' ? { ...c, currentHp: targetObj.currentHp } : c);
-        setOppTeam([...oppTeamRef.current]);
-      } else if (targetObj.id === 'turret_right') {
-        turretRightRef.current = { ...targetObj };
-        setTurretRight({ ...targetObj });
-        oppTeamRef.current = oppTeamRef.current.map(c => c.id === 'turret_right' ? { ...c, currentHp: targetObj.currentHp } : c);
-        setOppTeam([...oppTeamRef.current]);
-      }
-
-      // 메트릭스 업데이트
-      const mAttacker = combatMetricsRef.current[attacker.id];
-      if (mAttacker) {
-        mAttacker.damageDealt += finalDmg;
-        mAttacker.actionsCount = (mAttacker.actionsCount || 0) + 1;
-        if (isCrit) mAttacker.critCount += 1;
-      }
-
-      // 피버 뱃지 적립
-      if (isCrit) addFeverBadge('crit');
-      else if (chosenSkill.id !== 'basic_attack') addFeverBadge('extra');
-      else addFeverBadge('break');
-
-      // 연출 배너
-      const targetDisplayName = targetObj.id === 'dimensional_barrier' ? '🛡️ 차원 보호막' : `🗼 ${targetObj.name}`;
-      setActionBanner({
-        text: `⚔️ [공성 돌격] ${attacker.name}의 ${chosenSkill.name}!`,
-        sub: `${targetDisplayName}에 ${finalDmg.toLocaleString()}의 공성 타격! ${isCrit ? '💥 치명타 작열!' : ''}`,
-        color: '#00d2ff',
-      });
-
-      // 실시간 교전 정보 패널 업데이트
-      setClashData({
-        attacker: { ...attacker },
-        defender: {
-          name: targetObj.name,
-          icon: targetObj.icon,
-          className: targetObj.id === 'dimensional_barrier' ? '차원 절대 방어막' : '영지 방어 포탑',
-          level: target.gateLevel,
-          currentHp: targetObj.currentHp,
-          maxHp: targetObj.maxHp,
-          currentMp: 0,
-          maxMp: 0,
-          def: targetObj.def,
-          classId: 'tactical_tower',
-          position: 'center',
-        },
-        skill: chosenSkill,
-        damage: finalDmg,
-        isCrit,
-        isPlayerAttacking: true,
-      });
-      setIsClashZoomed(true);
-
-      const targetPos = getCombatantCardPos(targetObj.id, false);
-      setVfxList(prev => [
-        ...prev,
-        {
-          id: `vfx_hit_${Date.now()}`,
-          type: isCrit ? 'crit_slash' : 'slash',
-          damage: finalDmg,
-          isCrit,
-          x: targetPos.x,
-          y: targetPos.y,
-          duration: battleSpeed === 2 ? 350 : 500,
-        },
-      ]);
-      gm.emit('battleHitEffect', {
-        x: targetPos.x,
-        y: targetPos.y,
-        color: 0x00d2ff,
-        isCrit,
-        type: isCrit ? 'crit_slash' : 'slash',
-      });
-      SoundManager.getInstance().play(isCrit ? 'crit' : 'heavy_hit');
-
-      setBattleLogs(prev => [
-        ...prev.slice(-30),
-        {
-          round: currentRoundNumber,
-          attacker: attacker.name,
-          defender: targetObj.name,
-          damage: finalDmg,
-          isCrit,
-          skillName: chosenSkill.name,
-          side: 'player',
-        },
-      ]);
     }
 
     // ─────────────────────────────────────────────────────────────
     // [분기 B] 수성측(포탑)의 턴 -> 좌측 화력 포탑 / 우측 전술 지원 포탑 행동 분기
     // ─────────────────────────────────────────────────────────────
     else {
+      // 🛡️ 차원 왜곡 보호막 디버프 DoT 처리 (수성측 턴 개시 시 일괄 정산)
+      const curB = barrierStateRef.current;
+      if (curB && !curB.isDestroyed && curB.statusEffects && curB.statusEffects.length > 0) {
+        let bDotTotal = 0;
+        curB.statusEffects = curB.statusEffects.filter(se => {
+          let dot = 0;
+          if (se.id === 'burn') {
+            dot = Math.max(1, Math.round(curB.maxHp * 0.08));
+            SoundManager.getInstance().play('fire');
+            setVfxList(prev => [...prev, { id: `vfx_b_burn_${Date.now()}_${Math.random()}`, type: 'fire', damage: dot, x: 50, y: 38, duration: 400 }]);
+          } else if (se.id === 'poison') {
+            dot = Math.max(1, Math.round(curB.maxHp * 0.14));
+            SoundManager.getInstance().play('poison');
+            setVfxList(prev => [...prev, { id: `vfx_b_poison_${Date.now()}_${Math.random()}`, type: 'bullet', damage: dot, x: 50, y: 38, duration: 400 }]);
+          } else if (se.id === 'bleed') {
+            dot = Math.max(1, Math.round(curB.maxHp * 0.07));
+            SoundManager.getInstance().play('bleed');
+            setVfxList(prev => [...prev, { id: `vfx_b_bleed_${Date.now()}_${Math.random()}`, type: 'slash', damage: dot, x: 50, y: 38, duration: 400 }]);
+          } else if (se.id === 'freeze') {
+            dot = Math.max(1, Math.round(curB.maxHp * 0.04));
+            SoundManager.getInstance().play('ice');
+            setVfxList(prev => [...prev, { id: `vfx_b_freeze_${Date.now()}_${Math.random()}`, type: 'slash', damage: dot, x: 50, y: 38, duration: 400 }]);
+          }
+          if (dot > 0) {
+            curB.currentHp = Math.max(0, curB.currentHp - dot);
+            bDotTotal += dot;
+          }
+          se.duration = (se.duration || 1) - 1;
+          return (se.duration || 0) > 0;
+        });
+
+        if (curB.currentHp <= 0) {
+          curB.isDestroyed = true;
+        }
+        barrierStateRef.current = { ...curB };
+        setBarrierState({ ...curB });
+        if (bDotTotal > 0) {
+          setIsBarrierHit(true);
+          setTimeout(() => setIsBarrierHit(false), 300);
+        }
+      }
+
       if (aliveP.length === 0) {
         isProcessingRef.current = false;
         return;
@@ -1318,6 +1704,10 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           ['투사', '그림자', '혈통', '냉혹', '사격', '저격', '치명', '암살', '집중'].some(k => opTrait.includes(k) || heroTrait.includes(k)) ||
           opRole === 'dealer_phy' || heroRole === 'dealer_phy' || heroRole === 'gunner';
 
+        let effectiveTurretAtk = attacker.atk;
+        const atkDebuff = (attacker.statusEffects || []).find(e => e.id === 'debuff_atk');
+        if (atkDebuff) effectiveTurretAtk = Math.max(10, Math.round(effectiveTurretAtk * (1 - (atkDebuff.value || 0.30))));
+
         const atkBuffTier = oppTowerRef.current?.attack?.tier1 || 0;
         const atkBuffMult = 1.0 + atkBuffTier * 0.15;
         const burnTier = oppTowerRef.current?.attack?.tier2 || 0;
@@ -1333,7 +1723,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           const targetDefender = aliveP.slice().sort((a, b) => (a.currentHp / a.maxHp) - (b.currentHp / b.maxHp))[0] || aliveP[0];
           setActiveTargetDefenderId(targetDefender.id);
 
-          const rawDmg = attacker.atk * 1.45 * (isCrit ? 1.5 : 1.0) * atkBuffMult;
+          const rawDmg = effectiveTurretAtk * 1.45 * (isCrit ? 1.5 : 1.0) * atkBuffMult;
           let effectiveDef = targetDefender.def;
           if ((targetDefender.statusEffects || []).some(e => e.id === 'burn')) effectiveDef = Math.round(effectiveDef * 0.5);
           if ((targetDefender.statusEffects || []).some(e => e.id === 'freeze')) effectiveDef = Math.round(effectiveDef * 1.4);
@@ -1441,7 +1831,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           let anyPoisonApplied = false;
 
           aliveP.forEach((defender, idx) => {
-            const rawDmg = attacker.atk * 0.72 * (isCrit ? 1.35 : 1.0) * atkBuffMult;
+            const rawDmg = effectiveTurretAtk * 0.72 * (isCrit ? 1.35 : 1.0) * atkBuffMult;
             let def = defender.def;
             if ((defender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
             if ((defender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
@@ -1560,6 +1950,10 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
         const isTactCrit = Math.random() < (attacker.luck * 0.008 + 0.15);
         const tactPowerMult = (isTactCrit ? 1.35 : 1.0) * (isMpSufficient ? 1.0 : 0.6);
+
+        let effectiveTurretAtk = attacker.atk;
+        const atkDebuff = (attacker.statusEffects || []).find(e => e.id === 'debuff_atk');
+        if (atkDebuff) effectiveTurretAtk = Math.max(10, Math.round(effectiveTurretAtk * (1 - (atkDebuff.value || 0.30))));
 
         // 🛡️ 방어 연구 연동: 성벽 회복(tier1), 기절(tier2), 결빙(tier3)
         const defTier1 = oppTowerRef.current?.defense?.tier1 || 0;
@@ -1702,7 +2096,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           let def = targetDefender.def;
           if ((targetDefender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
           if ((targetDefender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
-          const tacticDmg = Math.max(10, Math.round((160 + attacker.luck * 9 + attacker.atk * 0.6) * tactPowerMult * (100 / (100 + def * INVASION_DEF_SCALE))));
+          const tacticDmg = Math.max(10, Math.round((160 + attacker.luck * 9 + effectiveTurretAtk * 0.6) * tactPowerMult * (100 / (100 + def * INVASION_DEF_SCALE))));
           targetDefender.currentHp = Math.max(0, targetDefender.currentHp - tacticDmg);
 
           const mDefender = combatMetricsRef.current[targetDefender.id];
@@ -2000,6 +2394,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                 </span>
               </div>
 
+              {/* 상태이상/디버프 뱃지 */}
+              {renderStatusBadges(turretLeft.statusEffects, turretLeft.isDestroyed)}
+
               {/* HP Bar */}
               <div className="w-full bg-black/60 rounded-full h-1.5 overflow-hidden">
                 <div
@@ -2073,6 +2470,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                   +{((oppTower?.defense?.tier3 || oppTower?.attack?.tier2 || 1) * 30)}%
                 </span>
               </div>
+
+              {/* 상태이상/디버프 뱃지 */}
+              {renderStatusBadges(turretRight.statusEffects, turretRight.isDestroyed)}
 
               {/* HP Bar */}
               <div className="w-full bg-black/60 rounded-full h-1.5 overflow-hidden">
@@ -2161,6 +2561,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                 </span>
               )}
             </div>
+
+            {/* 차원 보호막 상태이상/디버프 뱃지 */}
+            {renderStatusBadges(barrierState.statusEffects, barrierState.isDestroyed)}
 
             {/* 대형 보호막 HP 게이지 바 */}
             <div className="relative w-full bg-black/80 rounded-full h-2.5 sm:h-3 overflow-hidden p-0.5 border border-[#00d2ff44]">
