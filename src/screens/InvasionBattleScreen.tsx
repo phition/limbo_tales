@@ -27,7 +27,7 @@ export const getHeroPortraitUrl = (classId?: string) => {
 
 // 🛡️ 차원 영지 침공 방어력 스케일
 const INVASION_DEF_SCALE = 0.50;
-const MAX_SIEGE_ROUNDS = 12;
+const MAX_SIEGE_ROUNDS = 7;
 
 interface InvasionCombatant {
   id: string;
@@ -356,7 +356,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const [battleLogs, setBattleLogs] = useState<CombatLogItem[]>([]);
   const [actionBanner, setActionBanner] = useState<{ text: string; sub: string; color: string }>({
     text: '🏰 차원 공성전 프로토콜 개시 (3인 결사대 + 1인 오퍼레이터)',
-    sub: '12라운드 내에 적 영지의 차원 보호막을 돌파하십시오!',
+    sub: `${MAX_SIEGE_ROUNDS}라운드 내에 적 영지의 차원 보호막을 돌파하십시오!`,
     color: '#00d2ff',
   });
 
@@ -1075,8 +1075,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       return;
     }
 
-    // 🛡️ 승패 판정 3: 라운드 초과 (12라운드 방어 성공) -> 수성측 승리
-    if (currentRoundNumber > MAX_SIEGE_ROUNDS) {
+    // 🛡️ 승패 판정 3: 라운드 초과 (7라운드 방어 성공) -> 수성측 승리
+    if (Math.floor(currentRoundNumber) > MAX_SIEGE_ROUNDS || currentRoundNumber >= MAX_SIEGE_ROUNDS + 1) {
       setCombatMetrics(Object.values(combatMetricsRef.current));
       setBattleResult({
         win: false,
@@ -2341,7 +2341,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const turretLeftHpPct = Math.max(0, Math.min(100, (turretLeft.currentHp / turretLeft.maxHp) * 100));
   const turretRightHpPct = Math.max(0, Math.min(100, (turretRight.currentHp / turretRight.maxHp) * 100));
 
-  const displayRound = Math.floor(currentRoundNumber);
+  const displayRound = Math.min(MAX_SIEGE_ROUNDS, Math.floor(currentRoundNumber));
 
   const battleViewContent = (
     <div
@@ -2949,7 +2949,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                   SIEGE ENGAGE!
                 </div>
                 <div className="text-xs sm:text-sm font-bold text-[#ffd54f] uppercase bg-black/80 px-6 py-2 rounded-full border border-[#ffd54f] shadow-[0_0_25px_rgba(255,213,79,0.6)] text-center mt-2">
-                  🔥 12라운드 차원 보호막 돌파 작전 개시! 🔥
+                  🔥 {MAX_SIEGE_ROUNDS}라운드 차원 보호막 돌파 작전 개시! 🔥
                 </div>
               </div>
             ) : (
