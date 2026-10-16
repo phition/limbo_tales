@@ -855,12 +855,12 @@
     "crusader_lord": "assets/custom_uploaded/mercenaries/crusader_lord.png",
     "iron_marshal": "assets/custom_uploaded/mercenaries/iron_marshal.png",
     "ghost_sniper": "assets/custom_uploaded/mercenaries/ghost_sniper.png",
-    "aegis_bastion": "assets/custom_uploaded/mercenaries/aegis_bastion.jpg",
-    "void_strider": "assets/custom_uploaded/mercenaries/void_strider.jpg",
-    "chrono_archon": "assets/custom_uploaded/mercenaries/chrono_archon.jpg",
-    "seraphic_inquisitor": "assets/custom_uploaded/mercenaries/seraphic_inquisitor.jpg",
-    "valhalla_warlord": "assets/custom_uploaded/mercenaries/valhalla_warlord.jpg",
-    "omega_deadeye": "assets/custom_uploaded/mercenaries/omega_deadeye.jpg"
+    "aegis_bastion": "assets/custom_uploaded/mercenaries/aegis_bastion.png",
+    "void_strider": "assets/custom_uploaded/mercenaries/void_strider.png",
+    "chrono_archon": "assets/custom_uploaded/mercenaries/chrono_archon.png",
+    "seraphic_inquisitor": "assets/custom_uploaded/mercenaries/seraphic_inquisitor.png",
+    "valhalla_warlord": "assets/custom_uploaded/mercenaries/valhalla_warlord.png",
+    "omega_deadeye": "assets/custom_uploaded/mercenaries/omega_deadeye.png"
   },
   "npcOverrides": {
     "npc_bernhard": "assets/custom_uploaded/npcs/npc_bernhard.png",
@@ -893,5 +893,5 @@
     "____________": "assets/custom_uploaded/npcs/____________.png",
     "_________________": "assets/custom_uploaded/npcs/_________________.png"
   },
-  "version": 611
+  "version": 613
 }

@@ -850,8 +850,11 @@ export interface TacticalTowerState {
 }
 
 export interface DefenseDeck {
-  mainHeroIds: string[]; // 수비 결사대 3인 영웅 ID
-  operatorHeroId: string; // 수성 오퍼레이터 1인 영웅 ID
+  barrierHeroId?: string; // 🛡️ 차원 왜곡 보호막 결속 용병 ID (비공격, 체력/방어력 전량 합산)
+  leftTurretHeroId?: string; // 🗼 좌측 전술 타워 탑승 사수 용병 ID (기본 공격 버프)
+  rightTurretHeroId?: string; // 🗼 우측 전술 타워 탑승 사수 용병 ID (전술 스킬 버프)
+  operatorHeroId: string; // 📡 수성 오퍼레이터 1인 영웅 ID
+  mainHeroIds?: string[]; // 하위 호환용 (3인 ID 목록)
   leftTurretMode?: 'focus_bombard' | 'slow_field' | 'balanced'; // 좌측 타워 작전 모드 (자동포격/중력감속/균형)
   rightTurretMode?: 'barrier_regen' | 'sanctuary_heal' | 'fortress_guard'; // 우측 타워 작전 모드 (보호막수복/성역치유/철벽수호)
 }

@@ -20,6 +20,11 @@ const DEFAULT_CLASS_IMAGES: Record<string, string> = {
   tactical_tower: 'assets/citadel_bonfire.jpg',
 };
 
+export const getHeroPortraitUrl = (classId?: string) => {
+  if (!classId) return '';
+  return CustomAssetService.getInstance().getMercenaryOverride(classId) || DEFAULT_CLASS_IMAGES[classId] || '';
+};
+
 // 🛡️ 차원 영지 침공 방어력 스케일
 const INVASION_DEF_SCALE = 0.50;
 const MAX_SIEGE_ROUNDS = 12;
@@ -217,18 +222,24 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const [playerOperator, setPlayerOperator] = useState<Mercenary | null>(null);
   const playerOperatorRef = useRef<Mercenary | null>(null);
 
-  // 2. 수성측 (3인 수비대 + 1인 오퍼레이터)
+  // 2. 수성측 결사대 (차원 보호막 결속, 좌/우 포탑 사수, 수성 오퍼레이터)
   const [oppTeam, setOppTeam] = useState<InvasionCombatant[]>([]);
+  const [barrierHero, setBarrierHero] = useState<Mercenary | any | null>(null);
+  const [leftTurretHero, setLeftTurretHero] = useState<Mercenary | any | null>(null);
+  const [rightTurretHero, setRightTurretHero] = useState<Mercenary | any | null>(null);
   const [oppOperator, setOppOperator] = useState<any | null>(null);
   const oppOperatorRef = useRef<any | null>(null);
+  const [oppTower, setOppTower] = useState<any>(null);
+  const oppTowerRef = useRef<any>(null);
+  const [barrierHeroBonus, setBarrierHeroBonus] = useState<{ hp: number; def: number }>({ hp: 0, def: 0 });
 
   // 3. 차원 보호막 및 좌/우 2개 전술 타워
   const [barrierState, setBarrierState] = useState<SiegeTargetObject>({
     id: 'dimensional_barrier',
     name: '차원 왜곡 보호막',
-    currentHp: 80000,
-    maxHp: 80000,
-    def: 40,
+    currentHp: 10000,
+    maxHp: 10000,
+    def: 30,
     icon: '🛡️',
     type: 'barrier',
     side: 'center',
@@ -237,27 +248,27 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   });
   const [turretLeft, setTurretLeft] = useState<SiegeTargetObject>({
     id: 'turret_left',
-    name: '좌측 지원 포탑',
-    currentHp: 20000,
-    maxHp: 20000,
-    def: 30,
+    name: '좌측 전술 포탑',
+    currentHp: 4000,
+    maxHp: 4000,
+    def: 25,
     icon: '🗼',
     type: 'turret',
     side: 'left',
     isDestroyed: false,
-    description: '공격 전술 지원 및 침입자 감속',
+    description: '화력 지원 & 요격 사격 (평타 화력 강화)',
   });
   const [turretRight, setTurretRight] = useState<SiegeTargetObject>({
     id: 'turret_right',
     name: '우측 방호 포탑',
-    currentHp: 20000,
-    maxHp: 20000,
-    def: 30,
+    currentHp: 4000,
+    maxHp: 4000,
+    def: 25,
     icon: '🗼',
     type: 'turret',
     side: 'right',
     isDestroyed: false,
-    description: '차원 결계 보강 및 수비대 회복',
+    description: '성역 결계 & 전술 증폭 (스킬 위력 강화)',
   });
 
   const barrierStateRef = useRef(barrierState);
@@ -339,22 +350,53 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     playerOperatorRef.current = resolvedOp;
 
     // 🗼 수비측 방어 전술 타워 레벨 산출
-    const oppTower = target.tacticalTower || {
+    const oppTowerData = target.tacticalTower || {
       attack: { tier1: Math.min(3, Math.max(1, (target.gateLevel || 6) - 5)), tier2: Math.min(3, Math.max(0, (target.gateLevel || 6) - 6)), tier3: 0 },
       defense: { tier1: Math.min(3, Math.max(1, (target.gateLevel || 6) - 5)), tier2: Math.min(3, Math.max(0, (target.gateLevel || 6) - 6)), tier3: 0 },
       utility: { tier1: Math.min(3, Math.max(1, (target.gateLevel || 6) - 5)), tier2: Math.min(3, Math.max(0, (target.gateLevel || 6) - 6)), tier3: 0 },
     };
+    setOppTower(oppTowerData);
+    oppTowerRef.current = oppTowerData;
 
     const totalTowerLv =
-      (oppTower.attack?.tier1 || 0) + (oppTower.attack?.tier2 || 0) + (oppTower.attack?.tier3 || 0) +
-      (oppTower.defense?.tier1 || 0) + (oppTower.defense?.tier2 || 0) + (oppTower.defense?.tier3 || 0) +
-      (oppTower.utility?.tier1 || 0) + (oppTower.utility?.tier2 || 0) + (oppTower.utility?.tier3 || 0);
+      (oppTowerData.attack?.tier1 || 0) + (oppTowerData.attack?.tier2 || 0) + (oppTowerData.attack?.tier3 || 0) +
+      (oppTowerData.defense?.tier1 || 0) + (oppTowerData.defense?.tier2 || 0) + (oppTowerData.defense?.tier3 || 0) +
+      (oppTowerData.utility?.tier1 || 0) + (oppTowerData.utility?.tier2 || 0) + (oppTowerData.utility?.tier3 || 0);
 
-    // 차원 보호막 및 2대 타워 내구도 계산
+    // 1-2. 수성측 3인 수비 결사대 + 1인 오퍼레이터 매핑
+    // Slot 0: 차원 보호막 결속 용병 (Tank) - 직접 공격하지 않고 체력/방어력 성벽 가산
+    // Slot 1: 좌측 포탑 사수 (Gunner/Physical) - 포탑 턴에 공격, 기본 공격 시 화력 버프
+    // Slot 2: 우측 포탑 사수 (Mage/Healer) - 포탑 턴에 공격, 스킬 사용 시 전술 버프
+    // Slot 3: 수성 오퍼레이터 (Tactical Commander)
+    const oppSquad = target.defenseSquad || [];
+    const bHero = oppSquad[0] || null;
+    const lTurretHero = oppSquad[1] || oppSquad[0] || null;
+    const rTurretHero = oppSquad[2] || oppSquad[1] || oppSquad[0] || null;
+    const oppOp = oppSquad[3] || oppSquad[oppSquad.length - 1] || null;
+
+    setBarrierHero(bHero);
+    setLeftTurretHero(lTurretHero);
+    setRightTurretHero(rTurretHero);
+    setOppOperator(oppOp);
+    oppOperatorRef.current = oppOp;
+
     const baseGateLv = target.gateLevel || 6;
-    const calcBarrierHp = Math.max(50000, 35000 + baseGateLv * 8000 + totalTowerLv * 3000);
-    const calcTurretHp = Math.max(15000, 10000 + baseGateLv * 2200 + totalTowerLv * 1200);
-    const barrierDef = Math.max(35, 20 + baseGateLv * 4 + (oppTower.defense?.tier1 || 0) * 8);
+
+    // 🛡️ 차원 보호막 내구도 및 방어력 계산 (기본 10,000 HP 기준)
+    const defTier1 = oppTowerData.defense?.tier1 || 0;
+    const extraBarrierHp = bHero ? Math.round(bHero.maxHp * (1.0 + defTier1 * 0.20)) : 0;
+    const extraBarrierDef = bHero ? Math.round((bHero.stats?.def || 0) * 0.50) : 0;
+    setBarrierHeroBonus({ hp: extraBarrierHp, def: extraBarrierDef });
+
+    const calcBarrierHp = 10000 + baseGateLv * 1500 + totalTowerLv * 500 + extraBarrierHp;
+    const barrierDef = 30 + baseGateLv * 3 + (oppTowerData.defense?.tier3 || 0) * 8 + extraBarrierDef;
+
+    // 🗼 좌/우 전술 포탑 스펙 산출 (기본 4,000 HP)
+    const defTier2 = oppTowerData.defense?.tier2 || 0;
+    const calcTurretHp = 4000 + baseGateLv * 800 + totalTowerLv * 300;
+    const turretDef = 25 + defTier2 * 4;
+    const turretSpd = 15 + (oppTowerData.utility?.tier1 || 0) * 3;
+    const turretLuck = 10 + (oppTowerData.utility?.tier2 || 0) * 2;
 
     const initBarrier: SiegeTargetObject = {
       id: 'dimensional_barrier',
@@ -366,31 +408,37 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       type: 'barrier',
       side: 'center',
       isDestroyed: false,
-      description: `게이트 Lv.${baseGateLv} 에너지 공급 역장`,
+      description: bHero
+        ? `게이트 Lv.${baseGateLv} | 결속 수호자: ${bHero.name} (+${extraBarrierHp.toLocaleString()} HP)`
+        : `게이트 Lv.${baseGateLv} 에너지 공급 역장`,
     };
     const initLeftTurret: SiegeTargetObject = {
       id: 'turret_left',
       name: '좌측 전술 포탑',
       currentHp: calcTurretHp,
       maxHp: calcTurretHp,
-      def: Math.round(barrierDef * 0.85),
+      def: turretDef,
       icon: '🗼',
       type: 'turret',
       side: 'left',
       isDestroyed: false,
-      description: `자동 포격 & 감속 역장 (총 Lv.${(oppTower.attack?.tier1 || 0) + (oppTower.utility?.tier1 || 0)})`,
+      description: lTurretHero
+        ? `사수: ${lTurretHero.name} | 화력 지원 (평타 +${(oppTowerData.attack?.tier1 || 1) * 25}%)`
+        : `자동 요격 포탑`,
     };
     const initRightTurret: SiegeTargetObject = {
       id: 'turret_right',
       name: '우측 방호 포탑',
       currentHp: calcTurretHp,
       maxHp: calcTurretHp,
-      def: Math.round(barrierDef * 0.85),
+      def: turretDef,
       icon: '🗼',
       type: 'turret',
       side: 'right',
       isDestroyed: false,
-      description: `결계 수복 & 성역 치유 (총 Lv.${(oppTower.defense?.tier1 || 0) + (oppTower.defense?.tier2 || 0)})`,
+      description: rTurretHero
+        ? `사수: ${rTurretHero.name} | 전술 증폭 (스킬 +${(oppTowerData.defense?.tier3 || oppTowerData.attack?.tier2 || 1) * 30}%)`
+        : `성역 결계 포탑`,
     };
 
     setBarrierState(initBarrier);
@@ -446,62 +494,122 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       };
     });
 
-    // 1-2. 수성측 3인 수비대 + 1인 오퍼레이터
-    const oppSquad = target.defenseSquad || [];
-    const oppMain = oppSquad.slice(0, 3);
-    const oppOp = oppSquad[3] || oppSquad[oppSquad.length - 1] || null;
-    setOppOperator(oppOp);
-    oppOperatorRef.current = oppOp;
+    // 1-3. 수성측 포탑 전투 유닛 (포탑의 체력/방어/속도/행운 + 탑승 사수의 공격력 및 스킬)
+    const oCombatants: InvasionCombatant[] = [];
 
-    const oCombatants: InvasionCombatant[] = oppMain.map((h, idx) => {
-      const cls = CHARACTER_CLASSES[h.classId] || CHARACTER_CLASSES['squire'];
-      const allSkills: Skill[] = [
+    // 좌측 포탑 사수 (물리/사격 화력 지원)
+    if (lTurretHero || target.gateLevel) {
+      const cls = lTurretHero ? (CHARACTER_CLASSES[lTurretHero.classId] || CHARACTER_CLASSES['sniper']) : CHARACTER_CLASSES['sniper'];
+      const heroSkills: Skill[] = lTurretHero ? [
         {
           id: 'basic_attack',
-          name: '성벽 요격 사격',
-          description: '보호막 너머 침입자 요격 타격',
+          name: '포탑 요격 사격',
+          description: '좌측 타워 기본 사격 (화력 버프 적용)',
           manaCost: 0,
           cooldown: 0,
           targetType: 'single_enemy',
           power: 1.0,
           effectType: 'damage',
-          icon: '🛡️⚔️',
+          icon: '🗼🏹',
         },
         ...cls.skills,
         ...(cls.specialSkill ? [cls.specialSkill] : []),
+      ] : [
+        {
+          id: 'basic_attack',
+          name: '포탑 요격 사격',
+          description: '좌측 타워 기본 사격',
+          manaCost: 0,
+          cooldown: 0,
+          targetType: 'single_enemy',
+          power: 1.0,
+          effectType: 'damage',
+          icon: '🗼🏹',
+        }
       ];
 
-      return {
-        id: `opp_${idx}_${h.id}`,
-        name: h.name,
-        classId: h.classId,
-        className: cls.name,
-        grade: h.grade,
-        level: h.level,
-        position: idx < 2 ? 'front' : 'back',
-        currentHp: h.maxHp,
-        maxHp: h.maxHp,
-        currentMp: h.maxMp,
-        maxMp: h.maxMp,
-        atk: h.stats.atk,
-        def: h.stats.def,
-        spd: h.stats.spd,
-        luck: h.stats.luck,
-        skills: allSkills,
+      oCombatants.push({
+        id: 'turret_left',
+        name: lTurretHero ? `좌측 포탑 [${lTurretHero.name}]` : '좌측 전술 포탑',
+        classId: lTurretHero?.classId || 'sniper',
+        className: cls?.name || '포탑 사수',
+        grade: lTurretHero?.grade || 'veteran',
+        level: lTurretHero?.level || baseGateLv,
+        position: 'back',
+        currentHp: calcTurretHp,
+        maxHp: calcTurretHp,
+        currentMp: lTurretHero ? lTurretHero.currentMp : 100,
+        maxMp: lTurretHero ? lTurretHero.maxMp : 100,
+        atk: lTurretHero ? lTurretHero.stats.atk : 130 + baseGateLv * 15,
+        def: turretDef,
+        spd: turretSpd,
+        luck: turretLuck,
+        skills: heroSkills,
         isPlayer: false,
         cooldowns: {},
-        statusEffects: [{
-          id: 'barrier_protection',
-          name: '차원 차폐(무적)',
-          type: 'buff',
-          icon: '🛡️✨',
-          duration: 99,
-        }],
-        icon: cls.skills[0]?.icon || '🛡️',
-        trait: h.trait,
+        statusEffects: [],
+        icon: '🗼',
+        trait: lTurretHero?.trait,
         role: cls.role,
-      };
-    });
+      });
+    }
+
+    // 우측 방호 포탑 사수 (마법/전술 증폭 지원)
+    if (rTurretHero || target.gateLevel) {
+      const cls = rTurretHero ? (CHARACTER_CLASSES[rTurretHero.classId] || CHARACTER_CLASSES['archmage']) : CHARACTER_CLASSES['archmage'];
+      const heroSkills: Skill[] = rTurretHero ? [
+        {
+          id: 'basic_attack',
+          name: '성역 결계 사격',
+          description: '우측 타워 기본 사격',
+          manaCost: 0,
+          cooldown: 0,
+          targetType: 'single_enemy',
+          power: 1.0,
+          effectType: 'damage',
+          icon: '🗼✨',
+        },
+        ...cls.skills,
+        ...(cls.specialSkill ? [cls.specialSkill] : []),
+      ] : [
+        {
+          id: 'basic_attack',
+          name: '방호 마력 방출',
+          description: '우측 타워 기본 사격',
+          manaCost: 0,
+          cooldown: 0,
+          targetType: 'single_enemy',
+          power: 1.0,
+          effectType: 'damage',
+          icon: '🗼✨',
+        }
+      ];
+
+      oCombatants.push({
+        id: 'turret_right',
+        name: rTurretHero ? `우측 포탑 [${rTurretHero.name}]` : '우측 방호 포탑',
+        classId: rTurretHero?.classId || 'archmage',
+        className: cls?.name || '전술 사수',
+        grade: rTurretHero?.grade || 'veteran',
+        level: rTurretHero?.level || baseGateLv,
+        position: 'back',
+        currentHp: calcTurretHp,
+        maxHp: calcTurretHp,
+        currentMp: rTurretHero ? rTurretHero.currentMp : 100,
+        maxMp: rTurretHero ? rTurretHero.maxMp : 100,
+        atk: rTurretHero ? rTurretHero.stats.atk : 130 + baseGateLv * 15,
+        def: turretDef,
+        spd: turretSpd,
+        luck: turretLuck,
+        skills: heroSkills,
+        isPlayer: false,
+        cooldowns: {},
+        statusEffects: [],
+        icon: '🗼',
+        trait: rTurretHero?.trait,
+        role: cls.role,
+      });
+    }
 
     setPlayerTeam(pCombatants);
     setOppTeam(oCombatants);
@@ -530,6 +638,22 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         name: `${resolvedOp.name} (📡오퍼레이터)`,
         className: CHARACTER_CLASSES[resolvedOp.classId]?.name || '오퍼레이터',
         isPlayer: true,
+        damageDealt: 0,
+        healingDone: 0,
+        damageTaken: 0,
+        dodges: 0,
+        combosTriggered: 0,
+        critCount: 0,
+        kills: 0,
+        actionsCount: 0,
+      };
+    }
+    if (bHero) {
+      initMetrics[`barrier_${bHero.id}`] = {
+        id: `barrier_${bHero.id}`,
+        name: `${bHero.name} (🛡️성벽 결속 수호자)`,
+        className: CHARACTER_CLASSES[bHero.classId]?.name || '수호자',
+        isPlayer: false,
         damageDealt: 0,
         healingDone: 0,
         damageTaken: 0,
@@ -665,6 +789,13 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       setTurretRight(curR);
     }
 
+    oppTeamRef.current = oppTeamRef.current.map(c => {
+      if (c.id === 'turret_left') return { ...c, currentHp: curL.currentHp };
+      if (c.id === 'turret_right') return { ...c, currentHp: curR.currentHp };
+      return c;
+    });
+    setOppTeam([...oppTeamRef.current]);
+
     if (op) {
       const opMetric = combatMetricsRef.current[op.id];
       if (opMetric) {
@@ -744,6 +875,27 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       ]);
     }
 
+    const curL = { ...turretLeftRef.current };
+    const curR = { ...turretRightRef.current };
+    if (!curL.isDestroyed) {
+      const repL = Math.round(curL.maxHp * 0.15);
+      curL.currentHp = Math.min(curL.maxHp, curL.currentHp + repL);
+      turretLeftRef.current = curL;
+      setTurretLeft(curL);
+    }
+    if (!curR.isDestroyed) {
+      const repR = Math.round(curR.maxHp * 0.15);
+      curR.currentHp = Math.min(curR.maxHp, curR.currentHp + repR);
+      turretRightRef.current = curR;
+      setTurretRight(curR);
+    }
+    oppTeamRef.current = oppTeamRef.current.map(c => {
+      if (c.id === 'turret_left') return { ...c, currentHp: curL.currentHp };
+      if (c.id === 'turret_right') return { ...c, currentHp: curR.currentHp };
+      return c;
+    });
+    setOppTeam([...oppTeamRef.current]);
+
     // 침입자 아군에게 충격파 반격
     const aliveP = playerTeamRef.current.filter(c => c.currentHp > 0);
     const counterDmg = Math.max(15, Math.round(50 * (tactic.defensePower + 1)));
@@ -816,7 +968,11 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     const currentP = [...playerTeamRef.current];
     const currentO = [...oppTeamRef.current];
     const aliveP = currentP.filter(c => c.currentHp > 0);
-    const aliveO = currentO.filter(c => c.currentHp > 0);
+    const aliveO = currentO.filter(c => {
+      if (c.id === 'turret_left') return !turretLeftRef.current.isDestroyed && turretLeftRef.current.currentHp > 0;
+      if (c.id === 'turret_right') return !turretRightRef.current.isDestroyed && turretRightRef.current.currentHp > 0;
+      return c.currentHp > 0;
+    });
 
     const curBarrier = { ...barrierStateRef.current };
     const curL = { ...turretLeftRef.current };
@@ -866,9 +1022,11 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       return;
     }
 
-    // 행동자 선정: 아군 3인과 수비대 3인 중 속도 기반 추첨
+    // 행동자 선정: 아군 3인과 생존 포탑 중 속도 기반 추첨
     const allLivingCombatants = [...aliveP, ...aliveO].sort((a, b) => b.spd - a.spd);
-    const attacker = allLivingCombatants[Math.floor(Math.random() * allLivingCombatants.length)];
+    const attacker = allLivingCombatants.length > 0
+      ? allLivingCombatants[Math.floor(Math.random() * allLivingCombatants.length)]
+      : aliveP[0];
     if (!attacker) {
       isProcessingRef.current = false;
       return;
@@ -941,9 +1099,13 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       } else if (targetObj.id === 'turret_left') {
         turretLeftRef.current = { ...targetObj };
         setTurretLeft({ ...targetObj });
+        oppTeamRef.current = oppTeamRef.current.map(c => c.id === 'turret_left' ? { ...c, currentHp: targetObj.currentHp } : c);
+        setOppTeam([...oppTeamRef.current]);
       } else if (targetObj.id === 'turret_right') {
         turretRightRef.current = { ...targetObj };
         setTurretRight({ ...targetObj });
+        oppTeamRef.current = oppTeamRef.current.map(c => c.id === 'turret_right' ? { ...c, currentHp: targetObj.currentHp } : c);
+        setOppTeam([...oppTeamRef.current]);
       }
 
       // 메트릭스 업데이트
@@ -1027,7 +1189,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     }
 
     // ─────────────────────────────────────────────────────────────
-    // [분기 B] 수성측(적군 수비대)의 공격 -> 차원 보호막 너머에서 아군 3인 타격!
+    // [분기 B] 수성측(포탑)의 공격 -> 차원 보호막 너머에서 아군 3인 타격!
     // ─────────────────────────────────────────────────────────────
     else {
       const targetDefender = aliveP[Math.floor(Math.random() * aliveP.length)];
@@ -1040,7 +1202,27 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
       const critChance = attacker.luck * 0.008 + 0.10;
       const isCrit = Math.random() < critChance;
-      const rawDmg = attacker.atk * (chosenSkill.power || 1.0) * (isCrit ? 1.5 : 1.0);
+      let rawDmg = attacker.atk * (chosenSkill.power || 1.0) * (isCrit ? 1.5 : 1.0);
+
+      let buffNotice = '';
+      if (attacker.id === 'turret_left') {
+        // 좌측 포탑 사수: 기본 공격(평타) 시 화력 버프 발동!
+        if (chosenSkill.id === 'basic_attack') {
+          const atkBuffTier = oppTowerRef.current?.attack?.tier1 || 1;
+          const atkBuffMult = 1.0 + atkBuffTier * 0.25;
+          rawDmg = Math.round(rawDmg * atkBuffMult);
+          buffNotice = ` [💥화력 지원 +${Math.round((atkBuffMult - 1) * 100)}%]`;
+        }
+      } else if (attacker.id === 'turret_right') {
+        // 우측 방호 포탑: 스킬 사용 시 전술 버프 발동!
+        if (chosenSkill.id !== 'basic_attack') {
+          const tacticBuffTier = oppTowerRef.current?.defense?.tier3 || oppTowerRef.current?.attack?.tier2 || 1;
+          const tacticBuffMult = 1.0 + tacticBuffTier * 0.30;
+          rawDmg = Math.round(rawDmg * tacticBuffMult);
+          buffNotice = ` [✨전술 증폭 +${Math.round((tacticBuffMult - 1) * 100)}%]`;
+        }
+      }
+
       const finalDmg = Math.max(10, Math.round(rawDmg * (100 / (100 + targetDefender.def * INVASION_DEF_SCALE))));
 
       targetDefender.currentHp = Math.max(0, targetDefender.currentHp - finalDmg);
@@ -1061,9 +1243,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       else addOppFeverBadge('break');
 
       setActionBanner({
-        text: `🛡️ [보호막 너머 요격] ${attacker.name}의 ${chosenSkill.name}!`,
+        text: `🛡️ [포탑 요격 사격${buffNotice}] ${attacker.name}의 ${chosenSkill.name}!`,
         sub: `결사대 [${targetDefender.name}]에게 ${finalDmg.toLocaleString()}의 요격 사격!`,
-        color: '#ff416c',
+        color: attacker.id === 'turret_left' ? '#ff7043' : '#00d2ff',
       });
 
       setClashData({
@@ -1245,8 +1427,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       {/* ── 2. 중앙 공성 전장 아레나 (반응형 풀와이드 차원 보호막 & 2개 타워 & 수비대) ── */}
       <div className="relative z-10 flex-1 min-h-0 w-full max-w-[560px] my-auto p-1 flex flex-col justify-between gap-1 overflow-y-auto custom-scrollbar">
 
-        {/* ════════ 🛡️ 수성측 영역 (오퍼레이터 + 보호막 뒤 3인 수비대) ════════ */}
-        <div className="flex flex-col gap-1 w-full">
+        {/* ════════ 🛡️ 수성측 영역 (오퍼레이터 + 2대 포탑 + 가로지르는 차원 보호막) ════════ */}
+        <div className="flex flex-col gap-1.5 w-full">
           {/* 수성 오퍼레이터 카드 */}
           <OperatorCard
             hero={oppOperator}
@@ -1255,77 +1437,12 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             isActing={activeCombatantId === oppOperator?.id}
           />
 
-          {/* 차원 보호막 너머(뒤쪽)에 배치된 3인 수비대 */}
-          <div className="relative w-full rounded-2xl p-1.5 bg-[#140b15]/60 border border-[#ff416c33] shadow-inner">
-            <div className="flex items-center justify-between px-1 mb-1 text-[8.5px] font-bold text-[#ff80ab]">
-              <span className="flex items-center gap-1">
-                <span>🛡️</span>
-                <span>차원 차폐 수비대 (보호막 방호 중)</span>
-              </span>
-              <span className="font-mono text-[7.5px] bg-[#ff416c22] px-1.5 py-0.2 rounded border border-[#ff416c44]">
-                직접 타격 불가
-              </span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-1.5 w-full">
-              {oppTeam.map(h => {
-                const hpPct = Math.max(0, (h.currentHp / h.maxHp) * 100);
-                const isDead = h.currentHp <= 0;
-                const isActive = activeCombatantId === h.id;
-
-                return (
-                  <div
-                    key={h.id}
-                    className={`p-1.5 flex flex-col gap-0.5 rounded-xl transition-all duration-300 relative border ${
-                      isDead
-                        ? 'bg-[#10141d]/50 border-[#1f2533] opacity-40 grayscale'
-                        : isActive
-                        ? 'bg-[#3b1120] border-[#ff416c] shadow-[0_0_12px_rgba(255,65,108,0.7)] ring-1 ring-[#ff416c]'
-                        : 'bg-[#180e1a] border-[#381c34]'
-                    }`}
-                  >
-                    {isActive && !isDead && (
-                      <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[7px] px-1 py-0.1 rounded-full font-bold bg-[#ff416c] text-white shadow-md z-10 animate-bounce">
-                        사격
-                      </span>
-                    )}
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">{h.icon}</span>
-                      <span className="text-[7.5px] font-mono text-[#ff80ab] font-bold">
-                        {h.position === 'front' ? '전열' : '후열'}
-                      </span>
-                    </div>
-
-                    <div className="min-w-0">
-                      <div className="text-[9px] font-bold text-white truncate">{h.name}</div>
-                      <div className="text-[7.5px] text-[#ce93d8] truncate">{h.className} Lv.{h.level}</div>
-                    </div>
-
-                    {/* HP Bar */}
-                    <div className="w-full bg-[#26152a] rounded-full h-1 overflow-hidden mt-0.5">
-                      <div className="bg-[#ff416c] h-full transition-all duration-300" style={{ width: `${hpPct}%` }} />
-                    </div>
-
-                    <div className="text-[7px] text-right font-mono text-[#8b9bb4]">
-                      {!isDead ? `${h.currentHp}` : '💀 격퇴'}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* ════════ 💥 전장 중앙: 2대 전술 타워 & 최대로 뻗은 차원 보호막 ════════ */}
-        <div className="w-full flex flex-col gap-1.5 my-1 z-20">
-
           {/* 좌/우 2대 전술 타워 패널 */}
-          <div className="grid grid-cols-2 gap-2 w-full">
-            {/* 좌측 전술 타워 (공격 지원) */}
+          <div className="grid grid-cols-2 gap-1.5 w-full">
+            {/* 좌측 전술 타워 (공격 지원 / 기본 공격 버프) */}
             <div
               onClick={() => setSelectedFocusTargetId('turret_left')}
-              className={`p-2 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col gap-1 ${
+              className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col gap-1 ${
                 turretLeft.isDestroyed
                   ? 'bg-[#121216]/60 border-[#262832] opacity-45 grayscale'
                   : selectedFocusTargetId === 'turret_left'
@@ -1334,37 +1451,72 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               }`}
             >
               {selectedFocusTargetId === 'turret_left' && !turretLeft.isDestroyed && (
-                <span className="absolute top-1 right-1 text-[7px] px-1 py-0.2 rounded bg-[#ff7043] text-black font-black uppercase tracking-wider animate-pulse">
+                <span className="absolute top-1 right-1 text-[6.5px] px-1 py-0.2 rounded bg-[#ff7043] text-black font-black uppercase tracking-wider animate-pulse z-10">
                   🎯 집중 공격
                 </span>
               )}
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-white flex items-center gap-1">
-                  <span>🗼</span>
-                  <span>{turretLeft.name}</span>
-                </span>
-                <span className="text-[8px] font-mono text-[#ff8a80]">
-                  {turretLeft.isDestroyed ? '🔥 파괴됨' : `방어 ${turretLeft.def}`}
+
+              {/* 포탑 헤더 & 사수 포트레이트 */}
+              <div className="flex items-center gap-1.5">
+                <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-[#ff704355] bg-black/60 flex items-center justify-center">
+                  {leftTurretHero && getHeroPortraitUrl(leftTurretHero.classId) ? (
+                    <img
+                      src={getHeroPortraitUrl(leftTurretHero.classId)}
+                      alt={leftTurretHero.name}
+                      className="w-full h-full object-cover object-center"
+                      onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                    />
+                  ) : (
+                    <span className="text-base">🗼</span>
+                  )}
+                  <span className="absolute bottom-0 right-0 text-[6.5px] font-mono font-bold bg-black/85 px-0.5 rounded text-[#ffd54f] leading-none">
+                    Lv.{leftTurretHero?.level || target.gateLevel}
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] sm:text-xs font-bold text-white truncate">
+                      {turretLeft.name}
+                    </span>
+                    <span className="text-[7.5px] font-mono text-[#ff8a80] shrink-0">
+                      방어 {turretLeft.def}
+                    </span>
+                  </div>
+                  <div className="text-[7.5px] text-[#ffab91] truncate">
+                    사수: {leftTurretHero?.name || '배치 사수'}
+                  </div>
+                </div>
+              </div>
+
+              {/* 버프 배지 */}
+              <div className="flex items-center justify-between text-[7.5px] px-1 py-0.5 bg-black/40 rounded border border-white/5">
+                <span className="text-[#ff7043] font-bold truncate">💥 화력 지원 (평타)</span>
+                <span className="font-mono text-[#ffd54f] shrink-0">
+                  +{((oppTower?.attack?.tier1 || 1) * 25)}%
                 </span>
               </div>
+
+              {/* HP Bar */}
               <div className="w-full bg-black/60 rounded-full h-1.5 overflow-hidden">
                 <div
                   className="bg-gradient-to-r from-[#ff416c] to-[#ff7043] h-full transition-all duration-300"
                   style={{ width: `${turretLeftHpPct}%` }}
                 />
               </div>
-              <div className="flex justify-between items-center text-[7.5px] font-mono">
-                <span className="text-[#8b9bb4]">내구도</span>
+              <div className="flex justify-between items-center text-[7px] font-mono">
+                <span className="text-[#8b9bb4]">
+                  {turretLeft.isDestroyed ? '🔥 파괴됨 (사격 중단)' : '내구도'}
+                </span>
                 <span className="text-white font-bold">
                   {turretLeft.currentHp.toLocaleString()} / {turretLeft.maxHp.toLocaleString()}
                 </span>
               </div>
             </div>
 
-            {/* 우측 전술 타워 (결계 방호) */}
+            {/* 우측 전술 타워 (방호 지원 / 스킬 전술 버프) */}
             <div
               onClick={() => setSelectedFocusTargetId('turret_right')}
-              className={`p-2 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col gap-1 ${
+              className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col gap-1 ${
                 turretRight.isDestroyed
                   ? 'bg-[#121216]/60 border-[#262832] opacity-45 grayscale'
                   : selectedFocusTargetId === 'turret_right'
@@ -1373,27 +1525,62 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               }`}
             >
               {selectedFocusTargetId === 'turret_right' && !turretRight.isDestroyed && (
-                <span className="absolute top-1 right-1 text-[7px] px-1 py-0.2 rounded bg-[#00d2ff] text-black font-black uppercase tracking-wider animate-pulse">
+                <span className="absolute top-1 right-1 text-[6.5px] px-1 py-0.2 rounded bg-[#00d2ff] text-black font-black uppercase tracking-wider animate-pulse z-10">
                   🎯 집중 공격
                 </span>
               )}
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-white flex items-center gap-1">
-                  <span>🗼</span>
-                  <span>{turretRight.name}</span>
-                </span>
-                <span className="text-[8px] font-mono text-[#80deea]">
-                  {turretRight.isDestroyed ? '🔥 파괴됨' : `방어 ${turretRight.def}`}
+
+              {/* 포탑 헤더 & 사수 포트레이트 */}
+              <div className="flex items-center gap-1.5">
+                <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-[#00d2ff55] bg-black/60 flex items-center justify-center">
+                  {rightTurretHero && getHeroPortraitUrl(rightTurretHero.classId) ? (
+                    <img
+                      src={getHeroPortraitUrl(rightTurretHero.classId)}
+                      alt={rightTurretHero.name}
+                      className="w-full h-full object-cover object-center"
+                      onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                    />
+                  ) : (
+                    <span className="text-base">🗼</span>
+                  )}
+                  <span className="absolute bottom-0 right-0 text-[6.5px] font-mono font-bold bg-black/85 px-0.5 rounded text-[#ffd54f] leading-none">
+                    Lv.{rightTurretHero?.level || target.gateLevel}
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] sm:text-xs font-bold text-white truncate">
+                      {turretRight.name}
+                    </span>
+                    <span className="text-[7.5px] font-mono text-[#80deea] shrink-0">
+                      방어 {turretRight.def}
+                    </span>
+                  </div>
+                  <div className="text-[7.5px] text-[#80deea] truncate">
+                    사수: {rightTurretHero?.name || '배치 사수'}
+                  </div>
+                </div>
+              </div>
+
+              {/* 버프 배지 */}
+              <div className="flex items-center justify-between text-[7.5px] px-1 py-0.5 bg-black/40 rounded border border-white/5">
+                <span className="text-[#00d2ff] font-bold truncate">✨ 전술 증폭 (스킬)</span>
+                <span className="font-mono text-[#ffd54f] shrink-0">
+                  +{((oppTower?.defense?.tier3 || oppTower?.attack?.tier2 || 1) * 30)}%
                 </span>
               </div>
+
+              {/* HP Bar */}
               <div className="w-full bg-black/60 rounded-full h-1.5 overflow-hidden">
                 <div
                   className="bg-gradient-to-r from-[#00d2ff] to-[#38ef7d] h-full transition-all duration-300"
                   style={{ width: `${turretRightHpPct}%` }}
                 />
               </div>
-              <div className="flex justify-between items-center text-[7.5px] font-mono">
-                <span className="text-[#8b9bb4]">내구도</span>
+              <div className="flex justify-between items-center text-[7px] font-mono">
+                <span className="text-[#8b9bb4]">
+                  {turretRight.isDestroyed ? '🔥 파괴됨 (사격 중단)' : '내구도'}
+                </span>
                 <span className="text-white font-bold">
                   {turretRight.currentHp.toLocaleString()} / {turretRight.maxHp.toLocaleString()}
                 </span>
@@ -1401,10 +1588,10 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* 🛡️ [핵심] 수비대 앞을 가로질러 전장 전체 너비로 최대로 뻗어 있는 차원 보호막 */}
+          {/* 🛡️ [핵심] 수비대 앞을 가로질러 전장 전체 너비로 최대로 뻗어 있는 차원 보호막 + 결속 수호자 */}
           <div
             onClick={() => setSelectedFocusTargetId('dimensional_barrier')}
-            className={`w-full p-2.5 sm:p-3 rounded-2xl border-2 transition-all duration-300 cursor-pointer relative overflow-hidden shadow-2xl flex flex-col gap-1.5 ${
+            className={`w-full p-2 sm:p-2.5 rounded-2xl border-2 transition-all duration-300 cursor-pointer relative overflow-hidden shadow-2xl flex flex-col gap-1.5 ${
               barrierState.isDestroyed
                 ? 'bg-[#10141d]/70 border-[#262f40] opacity-40'
                 : selectedFocusTargetId === 'dimensional_barrier'
@@ -1420,91 +1607,115 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               }}
             />
 
-            {/* 상단: 보호막 헤더 및 집중 타겟 배지 */}
-            <div className="flex items-center justify-between relative z-10">
-              <div className="flex items-center gap-2">
-                <span className="text-xl sm:text-2xl animate-pulse">🛡️</span>
-                <div>
-                  <div className="text-xs sm:text-sm font-black text-white flex items-center gap-1.5">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d2ff] via-[#80deea] to-[#ffffff]">
-                      차원 왜곡 보호막 (DIMENSIONAL BARRIER)
+            {/* 상단: 보호막 정보 및 결속 수호자 포트레이트 */}
+            <div className="flex items-center justify-between relative z-10 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                {/* 결속 수호자 포트레이트 */}
+                <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shrink-0 border-2 border-[#00d2ff] bg-black/60 flex items-center justify-center shadow-[0_0_8px_rgba(0,210,255,0.4)]">
+                  {barrierHero && getHeroPortraitUrl(barrierHero.classId) ? (
+                    <img
+                      src={getHeroPortraitUrl(barrierHero.classId)}
+                      alt={barrierHero.name}
+                      className="w-full h-full object-cover object-center"
+                      onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                    />
+                  ) : (
+                    <span className="text-xl">🛡️</span>
+                  )}
+                  <span className="absolute bottom-0 right-0 text-[6.5px] font-mono font-bold bg-black/85 px-0.5 rounded text-[#ffd54f] leading-none">
+                    Lv.{barrierHero?.level || target.gateLevel}
+                  </span>
+                  <span className="absolute top-0 left-0 text-[5.5px] font-bold bg-[#00d2ff] text-black px-0.5 rounded-br leading-none">
+                    결속
+                  </span>
+                </div>
+
+                <div className="min-w-0">
+                  <div className="text-[11px] sm:text-xs font-black text-white flex items-center gap-1.5 flex-wrap">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d2ff] via-[#80deea] to-[#ffffff] truncate">
+                      차원 왜곡 보호막
                     </span>
-                    <span className="text-[8px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55]">
+                    <span className="text-[7.5px] font-mono px-1 py-0.2 rounded bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] shrink-0">
                       방어력 {barrierState.def}
                     </span>
                   </div>
-                  <div className="text-[9px] text-[#8b9bb4]">
-                    {barrierState.description}
+                  <div className="text-[7.5px] sm:text-[8px] text-[#80deea] truncate mt-0.5">
+                    {barrierHero ? (
+                      <span>
+                        수호자 <strong className="text-white">{barrierHero.name}</strong> 결속 (+{barrierHeroBonus.hp.toLocaleString()} HP / +{barrierHeroBonus.def} DEF 반영 · 비전투)
+                      </span>
+                    ) : (
+                      <span>기본 차원 역장 작동 중</span>
+                    )}
                   </div>
                 </div>
               </div>
 
               {selectedFocusTargetId === 'dimensional_barrier' && (
-                <span className="text-[8px] sm:text-[9px] px-2 py-0.5 rounded-full font-black bg-[#00d2ff] text-black shadow-[0_0_12px_rgba(0,210,255,0.8)] animate-bounce shrink-0">
-                  🎯 결사대 집중 포격 중
+                <span className="text-[7.5px] sm:text-[8.5px] px-2 py-0.5 rounded-full font-black bg-[#00d2ff] text-black shadow-[0_0_12px_rgba(0,210,255,0.8)] animate-bounce shrink-0">
+                  🎯 집중 돌파 중
                 </span>
               )}
             </div>
 
             {/* 대형 보호막 HP 게이지 바 */}
-            <div className="relative w-full bg-black/80 rounded-full h-3 sm:h-3.5 overflow-hidden p-0.5 border border-[#00d2ff44]">
+            <div className="relative w-full bg-black/80 rounded-full h-2.5 sm:h-3 overflow-hidden p-0.5 border border-[#00d2ff44]">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-[#00d2ff] via-[#38ef7d] to-[#ffd54f] transition-all duration-300 relative shadow-[0_0_15px_rgba(0,210,255,0.8)]"
                 style={{ width: `${barrierHpPct}%` }}
               >
-                {/* 셰이머 빛무리 효과 */}
                 <div className="absolute inset-0 bg-white/25 animate-pulse" />
               </div>
             </div>
 
-            {/* 정밀 내구도 수치 및 퍼센트 표기 */}
-            <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono relative z-10">
+            {/* 정밀 내구도 수치 및 승리 조건 표기 */}
+            <div className="flex items-center justify-between text-[8px] sm:text-[9px] font-mono relative z-10">
               <span className="text-[#80deea] font-bold">
-                보호막 잔여 내구도: {barrierHpPct.toFixed(1)}%
+                잔여 내구도: {barrierHpPct.toFixed(1)}% (돌파 시 즉시 공성 승리!)
               </span>
               <span className="text-white font-black">
                 {barrierState.currentHp.toLocaleString()} / {barrierState.maxHp.toLocaleString()}
               </span>
             </div>
           </div>
+        </div>
 
-          {/* ── 상시 유지되는 중앙 액션 로그 타원 배지 & 피버 게이지 ── */}
-          <div className="w-full flex flex-col items-center gap-1 my-0.5">
-            {/* 적군 피버 바 */}
-            <div className="w-full">
-              <FeverGaugeBar
-                badges={oppFeverBadges}
-                party={oppTeam.map(c => ({ classId: c.classId } as any))}
-                label="DEFENSE FEVER"
-                side="enemy"
-              />
-            </div>
+        {/* ── 상시 유지되는 중앙 액션 로그 타원 배지 & 피버 게이지 ── */}
+        <div className="w-full flex flex-col items-center gap-1 my-0.5">
+          {/* 적군 피버 바 */}
+          <div className="w-full">
+            <FeverGaugeBar
+              badges={oppFeverBadges}
+              party={oppTeam.map(c => ({ classId: c.classId } as any))}
+              label="DEFENSE FEVER"
+              side="enemy"
+            />
+          </div>
 
-            {/* 중앙 배지 */}
-            <div className="px-4 py-1 rounded-full bg-[#0d1527ee] border border-[#00d2ff55] shadow-xl text-center max-w-[95%] transition-all duration-300 z-10">
-              <span className="text-[10.5px] sm:text-xs font-bold block truncate" style={{ color: actionBanner.color }}>
-                {actionBanner.text}
-              </span>
-              <span className="text-[9px] sm:text-[9.5px] text-[#ffd54f] font-bold block mt-0.5 truncate">
-                {actionBanner.sub}
-              </span>
-            </div>
+          {/* 중앙 배지 */}
+          <div className="px-3 py-1 rounded-full bg-[#0d1527ee] border border-[#00d2ff55] shadow-xl text-center max-w-[95%] transition-all duration-300 z-10">
+            <span className="text-[10px] sm:text-[11px] font-bold block truncate" style={{ color: actionBanner.color }}>
+              {actionBanner.text}
+            </span>
+            <span className="text-[8.5px] sm:text-[9px] text-[#ffd54f] font-bold block mt-0.5 truncate">
+              {actionBanner.sub}
+            </span>
+          </div>
 
-            {/* 아군 피버 바 */}
-            <div className="w-full">
-              <FeverGaugeBar
-                badges={feverBadges}
-                party={playerTeam.map(c => ({ classId: c.classId } as any))}
-                label="SIEGE FEVER"
-                side="player"
-              />
-            </div>
+          {/* 아군 피버 바 */}
+          <div className="w-full">
+            <FeverGaugeBar
+              badges={feverBadges}
+              party={playerTeam.map(c => ({ classId: c.classId } as any))}
+              label="SIEGE FEVER"
+              side="player"
+            />
           </div>
         </div>
 
-        {/* ════════ ⚔️ 공성측 영역 (3인 결사대 + 오퍼레이터) ════════ */}
+        {/* ════════ ⚔️ 공성측 결사대 영역 (3인 결사대 + 오퍼레이터) ════════ */}
         <div className="flex flex-col gap-1 w-full">
-          {/* 아군 3인 결사대 카드 그리드 */}
+          {/* 아군 3인 결사대 카드 그리드 (포트레이트 교체 및 모바일 최적화) */}
           <div className="grid grid-cols-3 gap-1.5 w-full">
             {playerTeam.map(h => {
               const hpPct = Math.max(0, (h.currentHp / h.maxHp) * 100);
@@ -1512,11 +1723,12 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               const isDead = h.currentHp <= 0;
               const isActive = activeCombatantId === h.id;
               const isTargeted = activeTargetDefenderId === h.id && !isDead;
+              const portraitUrl = getHeroPortraitUrl(h.classId);
 
               return (
                 <div
                   key={h.id}
-                  className={`panel p-1 flex flex-col gap-0.5 rounded-xl transition-all duration-300 ease-out transform relative border ${
+                  className={`p-1.5 flex flex-col gap-1 rounded-xl transition-all duration-300 ease-out transform relative border ${
                     isDead
                       ? 'bg-[#10141d]/50 border-[#1f2533] opacity-40 grayscale'
                       : isTargeted
@@ -1527,30 +1739,47 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                   }`}
                 >
                   {isTargeted && (
-                    <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[7px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff1744] text-white z-30 animate-pulse">
+                    <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[6.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff1744] text-white z-30 animate-pulse">
                       🎯 피격
                     </span>
                   )}
                   {isActive && !isDead && (
-                    <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[7px] px-1.5 py-0.1 rounded-full font-bold bg-[#00d2ff] text-black shadow-md z-10 animate-bounce">
+                    <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[6.5px] px-1.5 py-0.1 rounded-full font-bold bg-[#00d2ff] text-black shadow-md z-10 animate-bounce">
                       돌격
                     </span>
                   )}
 
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs">{h.icon}</span>
-                    <span className="text-[8px] font-mono text-[#00d2ff] font-bold">
-                      {h.position === 'front' ? '전열' : '후열'}
-                    </span>
-                  </div>
+                  {/* 포트레이트 및 영웅 정보 */}
+                  <div className="flex items-center gap-1.5">
+                    <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-[#00d2ff55] bg-black/60 flex items-center justify-center">
+                      {portraitUrl ? (
+                        <img
+                          src={portraitUrl}
+                          alt={h.name}
+                          className="w-full h-full object-cover object-center"
+                          onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                        />
+                      ) : (
+                        <span className="text-base">{h.icon}</span>
+                      )}
+                      <span className="absolute bottom-0 right-0 text-[6px] font-mono font-bold bg-black/85 px-0.5 rounded text-[#ffd54f] leading-none">
+                        Lv.{h.level}
+                      </span>
+                    </div>
 
-                  <div className="min-w-0">
-                    <div className="text-[9.5px] font-bold text-white truncate">{h.name}</div>
-                    <div className="text-[8px] text-[#80deea] truncate">{h.className} Lv.{h.level}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between">
+                        <div className="text-[9px] sm:text-[9.5px] font-bold text-white truncate">{h.name}</div>
+                        <span className="text-[6.5px] font-mono text-[#00d2ff] font-bold shrink-0">
+                          {h.position === 'front' ? '전열' : '후열'}
+                        </span>
+                      </div>
+                      <div className="text-[7.5px] text-[#80deea] truncate">{h.className}</div>
+                    </div>
                   </div>
 
                   {/* HP Bar */}
-                  <div className="w-full bg-[#102422] rounded-full h-1 overflow-hidden mt-0.5">
+                  <div className="w-full bg-[#102422] rounded-full h-1 overflow-hidden">
                     <div className="bg-[#38ef7d] h-full transition-all duration-300" style={{ width: `${hpPct}%` }} />
                   </div>
                   {/* MP Bar */}
@@ -1558,8 +1787,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                     <div className="bg-[#00d2ff] h-full transition-all duration-300" style={{ width: `${mpPct}%` }} />
                   </div>
 
-                  <div className="text-[7.5px] text-right font-mono text-[#8b9bb4]">
-                    {!isDead ? `${h.currentHp}` : '💀 DEAD'}
+                  <div className="text-[7px] text-right font-mono text-[#8b9bb4]">
+                    {!isDead ? `${h.currentHp} / ${h.maxHp}` : '💀 DEAD'}
                   </div>
                 </div>
               );

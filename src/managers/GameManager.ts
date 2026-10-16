@@ -8575,60 +8575,98 @@ export class GameManager {
     return { mainHeroes, operatorHero, leaderHero: operatorHero, supporterHero, deck };
   }
 
-  /** 3인 수비 결사대 + 1인 수성 오퍼레이터 + 타워 작전 모드 수비 덱 반환 */
+  /** 3대 방어 거점(차원 보호막, 좌/우 전술 타워) 결속자 및 수성 오퍼레이터 수비 덱 반환 */
   public getDefenseDeck(): {
-    mainHeroes: Mercenary[];
+    barrierHero: Mercenary | null;
+    leftTurretHero: Mercenary | null;
+    rightTurretHero: Mercenary | null;
     operatorHero: Mercenary | null;
+    mainHeroes: Mercenary[];
     leftTurretMode: 'focus_bombard' | 'slow_field' | 'balanced';
     rightTurretMode: 'barrier_regen' | 'sanctuary_heal' | 'fortress_guard';
     deck: DefenseDeck;
   } {
     const allHeroes = [...this.barracks, ...this.party].filter((h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx);
 
-    let mainHeroIds: string[] = [];
+    let barrierHeroId = '';
+    let leftTurretHeroId = '';
+    let rightTurretHeroId = '';
     let operatorHeroId = '';
     let leftTurretMode: 'focus_bombard' | 'slow_field' | 'balanced' = 'balanced';
     let rightTurretMode: 'barrier_regen' | 'sanctuary_heal' | 'fortress_guard' = 'barrier_regen';
 
-    if (this.invasionState.defenseDeck) {
-      mainHeroIds = (this.invasionState.defenseDeck.mainHeroIds || []).filter(id => allHeroes.some(h => h.id === id)).slice(0, 3);
-      const rawOpId = this.invasionState.defenseDeck.operatorHeroId;
-      if (rawOpId && allHeroes.some(h => h.id === rawOpId)) {
-        operatorHeroId = rawOpId;
+    const dState = this.invasionState.defenseDeck;
+    if (dState) {
+      if (dState.barrierHeroId && allHeroes.some(h => h.id === dState.barrierHeroId)) {
+        barrierHeroId = dState.barrierHeroId;
       }
-      if (this.invasionState.defenseDeck.leftTurretMode) {
-        leftTurretMode = this.invasionState.defenseDeck.leftTurretMode;
+      if (dState.leftTurretHeroId && allHeroes.some(h => h.id === dState.leftTurretHeroId)) {
+        leftTurretHeroId = dState.leftTurretHeroId;
       }
-      if (this.invasionState.defenseDeck.rightTurretMode) {
-        rightTurretMode = this.invasionState.defenseDeck.rightTurretMode;
+      if (dState.rightTurretHeroId && allHeroes.some(h => h.id === dState.rightTurretHeroId)) {
+        rightTurretHeroId = dState.rightTurretHeroId;
+      }
+      if (dState.operatorHeroId && allHeroes.some(h => h.id === dState.operatorHeroId)) {
+        operatorHeroId = dState.operatorHeroId;
+      }
+      if (dState.leftTurretMode) leftTurretMode = dState.leftTurretMode;
+      if (dState.rightTurretMode) rightTurretMode = dState.rightTurretMode;
+
+      // 하위 호환: barrier/turret이 비어있고 mainHeroIds가 있다면 매핑
+      if (!barrierHeroId && !leftTurretHeroId && !rightTurretHeroId && dState.mainHeroIds && dState.mainHeroIds.length >= 3) {
+        barrierHeroId = dState.mainHeroIds[0] || '';
+        leftTurretHeroId = dState.mainHeroIds[1] || '';
+        rightTurretHeroId = dState.mainHeroIds[2] || '';
       }
     }
 
-    // 기본값이 비어있다면 자동 폴백 (3인 결사대 + 1인 오퍼레이터)
-    if (mainHeroIds.length === 0 && allHeroes.length >= 3) {
+    // 기본값이 비어있다면 자동 편성
+    if (!barrierHeroId && !leftTurretHeroId && !rightTurretHeroId && allHeroes.length >= 3) {
       const dimDeck = this.getDimensionalDeck();
-      mainHeroIds = dimDeck.mainHeroes.map(h => h.id);
-      operatorHeroId = dimDeck.operatorHero?.id || '';
+      barrierHeroId = dimDeck.mainHeroes[0]?.id || allHeroes[0]?.id || '';
+      leftTurretHeroId = dimDeck.mainHeroes[1]?.id || allHeroes[1]?.id || '';
+      rightTurretHeroId = dimDeck.mainHeroes[2]?.id || allHeroes[2]?.id || '';
+      operatorHeroId = dimDeck.operatorHero?.id || allHeroes[3]?.id || '';
     }
 
-    const mainHeroes = mainHeroIds.map(id => allHeroes.find(h => h.id === id)).filter((h): h is Mercenary => Boolean(h));
+    const barrierHero = allHeroes.find(h => h.id === barrierHeroId) || null;
+    const leftTurretHero = allHeroes.find(h => h.id === leftTurretHeroId) || null;
+    const rightTurretHero = allHeroes.find(h => h.id === rightTurretHeroId) || null;
     const operatorHero = allHeroes.find(h => h.id === operatorHeroId) || null;
 
+    const mainHeroes = [barrierHero, leftTurretHero, rightTurretHero].filter((h): h is Mercenary => Boolean(h));
+
     const deck: DefenseDeck = {
+      barrierHeroId,
+      leftTurretHeroId,
+      rightTurretHeroId,
+      operatorHeroId,
       mainHeroIds: mainHeroes.map(h => h.id),
-      operatorHeroId: operatorHero?.id || '',
       leftTurretMode,
       rightTurretMode,
     };
 
-    return { mainHeroes, operatorHero, leftTurretMode, rightTurretMode, deck };
+    return {
+      barrierHero,
+      leftTurretHero,
+      rightTurretHero,
+      operatorHero,
+      mainHeroes,
+      leftTurretMode,
+      rightTurretMode,
+      deck,
+    };
   }
 
-  /** 수비 부대 및 방어 타워 세팅 저장 */
+  /** 수비 부대 및 방어 타워 세팅 영구 저장 */
   public setDefenseDeck(deck: DefenseDeck): void {
+    const mainHeroIds = [deck.barrierHeroId, deck.leftTurretHeroId, deck.rightTurretHeroId].filter(Boolean) as string[];
     this.invasionState.defenseDeck = {
-      mainHeroIds: deck.mainHeroIds.slice(0, 3),
+      barrierHeroId: deck.barrierHeroId || '',
+      leftTurretHeroId: deck.leftTurretHeroId || '',
+      rightTurretHeroId: deck.rightTurretHeroId || '',
       operatorHeroId: deck.operatorHeroId || '',
+      mainHeroIds: mainHeroIds.slice(0, 3),
       leftTurretMode: deck.leftTurretMode || 'balanced',
       rightTurretMode: deck.rightTurretMode || 'barrier_regen',
     };
@@ -8636,24 +8674,88 @@ export class GameManager {
     this.emit('defenseDeckChanged');
   }
 
-  /** 수비 부대 최적 자동 편성 */
+  /** 수비 거점 최적 지능형 자동 편성 (탱커->보호막, 물리->좌측, 마법/힐->우측, 오퍼레이터) */
   public autoAssignDefenseDeck(): boolean {
     const allHeroes = [...this.barracks, ...this.party].filter((h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx);
     if (allHeroes.length < 3) return false;
 
-    // 탱커 및 힐러, 고방어력 우선 정렬
-    const sorted = [...allHeroes].sort((a, b) => (b.stats.def * 2 + b.maxHp) - (a.stats.def * 2 + a.maxHp));
-    const mainHeroIds = sorted.slice(0, 3).map(h => h.id);
-    const remaining = sorted.slice(3);
-    const operatorHeroId = remaining.length > 0 ? remaining[0].id : '';
+    const usedIds = new Set<string>();
+
+    // 1. 차원 보호막: 탱커 우선 (체력+방어 최고)
+    const tanks = allHeroes.filter(h => (CHARACTER_CLASSES[h.classId]?.role === 'tank')).sort((a, b) => (b.stats.def * 2 + b.maxHp) - (a.stats.def * 2 + a.maxHp));
+    const barrierHero = tanks[0] || [...allHeroes].sort((a, b) => (b.stats.def * 2 + b.maxHp) - (a.stats.def * 2 + a.maxHp))[0];
+    if (barrierHero) usedIds.add(barrierHero.id);
+
+    // 2. 좌측 포탑 (기본 공격 특화): 물리 딜러/원거리 사수 우선
+    const phyDealers = allHeroes.filter(h => !usedIds.has(h.id) && ['dealer_phy', 'gunner', 'berserker'].includes(CHARACTER_CLASSES[h.classId]?.role || '')).sort((a, b) => b.stats.atk - a.stats.atk);
+    const leftHero = phyDealers[0] || allHeroes.filter(h => !usedIds.has(h.id)).sort((a, b) => b.stats.atk - a.stats.atk)[0];
+    if (leftHero) usedIds.add(leftHero.id);
+
+    // 3. 우측 포탑 (전술 스킬 특화): 마법/힐러 우선
+    const magDealers = allHeroes.filter(h => !usedIds.has(h.id) && ['dealer_mag', 'healer'].includes(CHARACTER_CLASSES[h.classId]?.role || '')).sort((a, b) => b.stats.atk - a.stats.atk);
+    const rightHero = magDealers[0] || allHeroes.filter(h => !usedIds.has(h.id))[0];
+    if (rightHero) usedIds.add(rightHero.id);
+
+    // 4. 수성 오퍼레이터: 남은 영웅 중 최고 레벨/성향 보유자
+    const remaining = allHeroes.filter(h => !usedIds.has(h.id));
+    const opHero = remaining[0] || null;
 
     this.setDefenseDeck({
-      mainHeroIds,
-      operatorHeroId,
+      barrierHeroId: barrierHero?.id || '',
+      leftTurretHeroId: leftHero?.id || '',
+      rightTurretHeroId: rightHero?.id || '',
+      operatorHeroId: opHero?.id || '',
       leftTurretMode: 'balanced',
       rightTurretMode: 'barrier_regen',
     });
     return true;
+  }
+
+  /** 차원 보호막 및 2대 타워 내구도/방어력 정밀 산출 */
+  public getFortressStats(): {
+    barrierMaxHp: number;
+    barrierDef: number;
+    leftTurretMaxHp: number;
+    leftTurretDef: number;
+    rightTurretMaxHp: number;
+    rightTurretDef: number;
+    barrierHero: Mercenary | null;
+    leftTurretHero: Mercenary | null;
+    rightTurretHero: Mercenary | null;
+  } {
+    const gateLevel = this.buildings['arenaGate']?.level || 0;
+    const tower = this.getTacticalTower();
+    const { barrierHero, leftTurretHero, rightTurretHero } = this.getDefenseDeck();
+
+    const totalTowerLv =
+      (tower.attack?.tier1 || 0) + (tower.attack?.tier2 || 0) + (tower.attack?.tier3 || 0) +
+      (tower.defense?.tier1 || 0) + (tower.defense?.tier2 || 0) + (tower.defense?.tier3 || 0) +
+      (tower.utility?.tier1 || 0) + (tower.utility?.tier2 || 0) + (tower.utility?.tier3 || 0);
+
+    // 1. 차원 보호막: 기본 10,000 HP + 게이트/연구치 + 결속 용병의 MaxHP 전량 합산
+    const baseBarrierHp = 10000 + gateLevel * 1500 + totalTowerLv * 500;
+    const heroHpBonus = barrierHero ? Math.round(barrierHero.maxHp * (1.0 + (tower.defense?.tier1 || 0) * 0.20)) : 0;
+    const barrierMaxHp = baseBarrierHp + heroHpBonus;
+
+    const baseBarrierDef = 30 + gateLevel * 3 + (tower.defense?.tier3 || 0) * 10;
+    const heroDefBonus = barrierHero ? Math.round(barrierHero.stats.def * 0.5) : 0;
+    const barrierDef = baseBarrierDef + heroDefBonus;
+
+    // 2. 좌/우 전술 타워: 기본 4,000 HP + 게이트/연구치
+    const baseTurretHp = 4000 + gateLevel * 800 + totalTowerLv * 300;
+    const baseTurretDef = 25 + gateLevel * 2 + (tower.defense?.tier1 || 0) * 5;
+
+    return {
+      barrierMaxHp,
+      barrierDef,
+      leftTurretMaxHp: baseTurretHp,
+      leftTurretDef: baseTurretDef,
+      rightTurretMaxHp: baseTurretHp,
+      rightTurretDef: baseTurretDef,
+      barrierHero,
+      leftTurretHero,
+      rightTurretHero,
+    };
   }
 
   /** 차원 3인 부대 편성 완료 여부 및 현황 검사 */
