@@ -173,7 +173,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               차원 왜곡 보호막 결속
             </span>
             <span className="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] shrink-0">
-              기본 7,000 HP
+              기본 3,500 HP
             </span>
           </div>
           <span className="text-[11px] text-[#00d2ff] font-bold flex items-center gap-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform">
@@ -230,7 +230,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                 <span className="text-white font-black">{fortressStats.barrierMaxHp.toLocaleString()} HP</span>
               </span>
               <span className="text-[9px] text-[#ffd54f] truncate">
-                {barrierHero ? `용병 HP +${Math.round(barrierHero.maxHp * 0.70).toLocaleString()} 합산 반영` : '탱커 배치 권장'}
+                {barrierHero ? `용병 HP +${Math.round(barrierHero.maxHp * 0.35).toLocaleString()} 합산 반영` : '탱커 배치 권장'}
               </span>
             </div>
 

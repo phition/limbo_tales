@@ -233,12 +233,12 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const oppTowerRef = useRef<any>(null);
   const [barrierHeroBonus, setBarrierHeroBonus] = useState<{ hp: number; def: number }>({ hp: 0, def: 0 });
 
-  // 3. 차원 보호막 및 좌/우 2개 전술 타워 (30% 하향 조정)
+  // 3. 차원 보호막 및 좌/우 2개 전술 타워 (50% 추가 하향 밸런싱)
   const [barrierState, setBarrierState] = useState<SiegeTargetObject>({
     id: 'dimensional_barrier',
     name: '차원 왜곡 보호막',
-    currentHp: 7000,
-    maxHp: 7000,
+    currentHp: 3500,
+    maxHp: 3500,
     def: 25,
     icon: '🛡️',
     type: 'barrier',
@@ -249,8 +249,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const [turretLeft, setTurretLeft] = useState<SiegeTargetObject>({
     id: 'turret_left',
     name: '좌측 전술 포탑',
-    currentHp: 2800,
-    maxHp: 2800,
+    currentHp: 1400,
+    maxHp: 1400,
     def: 20,
     icon: '🗼',
     type: 'turret',
@@ -261,8 +261,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const [turretRight, setTurretRight] = useState<SiegeTargetObject>({
     id: 'turret_right',
     name: '우측 방호 포탑',
-    currentHp: 2800,
-    maxHp: 2800,
+    currentHp: 1400,
+    maxHp: 1400,
     def: 20,
     icon: '🗼',
     type: 'turret',
@@ -382,18 +382,18 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
     const baseGateLv = target.gateLevel || 6;
 
-    // 🛡️ 차원 보호막 내구도 및 방어력 계산 (기본 7,000 HP 기준 - 30% 하향 밸런싱)
+    // 🛡️ 차원 보호막 내구도 및 방어력 계산 (기본 3,500 HP 기준 - 50% 추가 하향 밸런싱)
     const defTier1 = oppTowerData.defense?.tier1 || 0;
-    const extraBarrierHp = bHero ? Math.round(bHero.maxHp * 0.70 * (1.0 + defTier1 * 0.20)) : 0;
+    const extraBarrierHp = bHero ? Math.round(bHero.maxHp * 0.35 * (1.0 + defTier1 * 0.20)) : 0;
     const extraBarrierDef = bHero ? Math.round((bHero.stats?.def || 0) * 0.50) : 0;
     setBarrierHeroBonus({ hp: extraBarrierHp, def: extraBarrierDef });
 
-    const calcBarrierHp = 7000 + baseGateLv * 1050 + totalTowerLv * 350 + extraBarrierHp;
+    const calcBarrierHp = 3500 + baseGateLv * 525 + totalTowerLv * 175 + extraBarrierHp;
     const barrierDef = 25 + baseGateLv * 3 + (oppTowerData.defense?.tier3 || 0) * 8 + extraBarrierDef;
 
-    // 🗼 좌/우 전술 포탑 스펙 산출 (기본 2,800 HP - 30% 하향 밸런싱)
+    // 🗼 좌/우 전술 포탑 스펙 산출 (기본 1,400 HP - 50% 추가 하향 밸런싱)
     const defTier2 = oppTowerData.defense?.tier2 || 0;
-    const calcTurretHp = 2800 + baseGateLv * 560 + totalTowerLv * 210;
+    const calcTurretHp = 1400 + baseGateLv * 280 + totalTowerLv * 105;
     const turretDef = 20 + defTier2 * 4;
     const turretSpd = 15 + (oppTowerData.utility?.tier1 || 0) * 3;
     const turretLuck = 10 + (oppTowerData.utility?.tier2 || 0) * 2;
@@ -914,7 +914,10 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     const counterDmg = Math.max(15, Math.round(50 * (tactic.defensePower + 1)));
     const updatedP = playerTeamRef.current.map(c => {
       if (c.currentHp <= 0) return c;
-      const finalD = Math.max(10, Math.round(counterDmg * (100 / (100 + c.def * INVASION_DEF_SCALE))));
+      let effectiveDef = c.def;
+      if ((c.statusEffects || []).some(e => e.id === 'burn')) effectiveDef = Math.round(effectiveDef * 0.5);
+      if ((c.statusEffects || []).some(e => e.id === 'freeze')) effectiveDef = Math.round(effectiveDef * 1.4);
+      const finalD = Math.max(10, Math.round(counterDmg * (100 / (100 + effectiveDef * INVASION_DEF_SCALE))));
       if (combatMetricsRef.current[c.id]) combatMetricsRef.current[c.id].damageTaken += finalD;
       return { ...c, currentHp: Math.max(0, c.currentHp - finalD) };
     });
@@ -1048,20 +1051,74 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     setActiveCombatantId(attacker.id);
     const isAttackerPlayer = attacker.isPlayer;
 
-    // ⚡ 상태이상 1: 기절 (Stun) 검사 -> 행동 스킵
-    const stunIdx = (attacker.statusEffects || []).findIndex(e => e.id === 'stun');
-    if (stunIdx >= 0) {
-      const stunEff = attacker.statusEffects[stunIdx];
-      stunEff.duration = (stunEff.duration || 1) - 1;
-      if (stunEff.duration <= 0) {
-        attacker.statusEffects.splice(stunIdx, 1);
+    let shouldSkipTurn = false;
+    const skipReasons: string[] = [];
+    let hasDiedFromDot = false;
+
+    // 🔥 상태이상 처리 (PvE BattleScreen.tsx 표준 규격 100% 동일 적용)
+    if (attacker.statusEffects && attacker.statusEffects.length > 0) {
+      const pos = getCombatantCardPos(attacker.id, attacker.isPlayer);
+
+      attacker.statusEffects = attacker.statusEffects.filter(se => {
+        if (se.id === 'freeze') {
+          // ❄️ 결빙: 최대 HP 4% 동상 피해 & 방어력 +40% 외피 & 100% 행동 불가(턴 스킵)
+          const dot = Math.max(1, Math.round(attacker.maxHp * 0.04));
+          attacker.currentHp = Math.max(0, attacker.currentHp - dot);
+          skipReasons.push('❄️ 극저온 빙결');
+          shouldSkipTurn = true;
+          SoundManager.getInstance().play('ice');
+          setVfxList(prev => [...prev, { id: `vfx_freeze_${Date.now()}_${Math.random()}`, type: 'slash', damage: dot, x: pos.x, y: pos.y, duration: 350 }]);
+        } else if (se.id === 'poison') {
+          // ☠️ 맹독: 최대 HP 14% 치명적 중독 피해 (최대 DoT)
+          const dot = Math.max(1, Math.round(attacker.maxHp * 0.14));
+          attacker.currentHp = Math.max(0, attacker.currentHp - dot);
+          SoundManager.getInstance().play('poison');
+          setVfxList(prev => [...prev, { id: `vfx_poison_${Date.now()}_${Math.random()}`, type: 'bullet', damage: dot, x: pos.x, y: pos.y, duration: 350 }]);
+        } else if (se.id === 'burn') {
+          // 🔥 화상: 최대 HP 8% 화염 피해 & 방어력 50% 분쇄
+          const dot = Math.max(1, Math.round(attacker.maxHp * 0.08));
+          attacker.currentHp = Math.max(0, attacker.currentHp - dot);
+          SoundManager.getInstance().play('fire');
+          setVfxList(prev => [...prev, { id: `vfx_burn_${Date.now()}_${Math.random()}`, type: 'fire', damage: dot, x: pos.x, y: pos.y, duration: 350 }]);
+        } else if (se.id === 'stun') {
+          // ⚡ 기절: 100% 행동 불가(턴 스킵)
+          skipReasons.push('⚡ 전자기 기절');
+          shouldSkipTurn = true;
+          SoundManager.getInstance().play('stun');
+        }
+
+        se.duration = (se.duration || 1) - 1;
+        return (se.duration || 0) > 0;
+      });
+
+      if (attacker.currentHp <= 0) {
+        hasDiedFromDot = true;
       }
+    }
+
+    // DoT 지속 피해로 사망 시 즉시 턴 종료
+    if (hasDiedFromDot) {
       setActionBanner({
-        text: `⚡ [기절 무력화] ${attacker.name}!`,
-        sub: `고압 전자기 충격으로 인해 이번 턴 행동이 마비되었습니다!`,
+        text: `💀 [지속 피해 격멸] ${attacker.name}!`,
+        sub: `중독/화상/동상 등의 치명적인 지속 피해를 견디지 못하고 쓰러졌습니다!`,
+        color: '#ff416c',
+      });
+      setPlayerTeam([...currentP]);
+      setOppTeam([...currentO]);
+      setTimeout(() => {
+        setActiveCombatantId(null);
+        isProcessingRef.current = false;
+      }, 300);
+      return;
+    }
+
+    // 기절 또는 결빙으로 인한 행동 불가 턴 스킵
+    if (shouldSkipTurn && skipReasons.length > 0) {
+      setActionBanner({
+        text: `⚠️ [행동 불가] ${attacker.name}!`,
+        sub: `[${skipReasons.join(', ')}] 상태로 인해 이번 턴 아무 행동도 하지 못하고 턴을 넘깁니다!`,
         color: '#ffd54f',
       });
-      SoundManager.getInstance().play('stun');
       setPlayerTeam([...currentP]);
       setOppTeam([...currentO]);
       setTimeout(() => {
@@ -1070,61 +1127,6 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         setCurrentRoundNumber(r => Number((r + 0.1).toFixed(2)));
       }, battleSpeed === 2 ? 300 : 450);
       return;
-    }
-
-    // 🔥 상태이상 2: 작열 화상 (Burn) 턴 시작 지속 피해
-    const burnEff = (attacker.statusEffects || []).find(e => e.id === 'burn');
-    if (burnEff) {
-      const burnDmg = burnEff.value || 40;
-      attacker.currentHp = Math.max(0, attacker.currentHp - burnDmg);
-      burnEff.duration = (burnEff.duration || 1) - 1;
-      if (burnEff.duration <= 0) {
-        attacker.statusEffects = attacker.statusEffects.filter(e => e.id !== 'burn');
-      }
-      const pos = getCombatantCardPos(attacker.id, attacker.isPlayer);
-      setVfxList(prev => [...prev, { id: `vfx_burn_${Date.now()}`, type: 'fire', damage: burnDmg, x: pos.x, y: pos.y, duration: 350 }]);
-      SoundManager.getInstance().play('fire');
-      if (attacker.currentHp <= 0) {
-        setPlayerTeam([...currentP]);
-        setOppTeam([...currentO]);
-        setTimeout(() => {
-          setActiveCombatantId(null);
-          isProcessingRef.current = false;
-        }, 300);
-        return;
-      }
-    }
-
-    // 🧪 상태이상 3: 맹독 부식 (Poison) 턴 시작 지속 피해
-    const poisonEff = (attacker.statusEffects || []).find(e => e.id === 'poison');
-    if (poisonEff) {
-      const poisonDmg = poisonEff.value || 50;
-      attacker.currentHp = Math.max(0, attacker.currentHp - poisonDmg);
-      poisonEff.duration = (poisonEff.duration || 1) - 1;
-      if (poisonEff.duration <= 0) {
-        attacker.statusEffects = attacker.statusEffects.filter(e => e.id !== 'poison');
-      }
-      const pos = getCombatantCardPos(attacker.id, attacker.isPlayer);
-      setVfxList(prev => [...prev, { id: `vfx_poison_${Date.now()}`, type: 'bullet', damage: poisonDmg, x: pos.x, y: pos.y, duration: 350 }]);
-      SoundManager.getInstance().play('poison');
-      if (attacker.currentHp <= 0) {
-        setPlayerTeam([...currentP]);
-        setOppTeam([...currentO]);
-        setTimeout(() => {
-          setActiveCombatantId(null);
-          isProcessingRef.current = false;
-        }, 300);
-        return;
-      }
-    }
-
-    // ❄️ 상태이상 4: 결빙 (Freeze) 턴 차감
-    const freezeEff = (attacker.statusEffects || []).find(e => e.id === 'freeze');
-    if (freezeEff) {
-      freezeEff.duration = (freezeEff.duration || 1) - 1;
-      if (freezeEff.duration <= 0) {
-        attacker.statusEffects = attacker.statusEffects.filter(e => e.id !== 'freeze');
-      }
     }
 
     // ⚡ 유틸 연구 (tier2): 침입자 스킬 마나 소모량 +15% * tier2
@@ -1182,7 +1184,15 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       const critChance = attacker.luck * 0.008 + 0.12;
       const isCrit = Math.random() < critChance;
       const rawDmg = attacker.atk * (chosenSkill.power || 1.0) * (isCrit ? 1.6 : 1.0);
-      const targetDef = targetObj.def;
+      let targetDef = targetObj.def;
+      const oppCombatant = oppTeamRef.current.find(c => c.id === targetObj.id);
+      const targetEffects = oppCombatant?.statusEffects || [];
+      if (targetEffects.some(e => e.id === 'burn')) {
+        targetDef = Math.round(targetDef * 0.5);
+      }
+      if (targetEffects.some(e => e.id === 'freeze')) {
+        targetDef = Math.round(targetDef * 1.4);
+      }
       const finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + targetDef * INVASION_DEF_SCALE))));
 
       // 대상 체력 감소
@@ -1324,10 +1334,13 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           setActiveTargetDefenderId(targetDefender.id);
 
           const rawDmg = attacker.atk * 1.45 * (isCrit ? 1.5 : 1.0) * atkBuffMult;
-          const finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + targetDefender.def * INVASION_DEF_SCALE))));
+          let effectiveDef = targetDefender.def;
+          if ((targetDefender.statusEffects || []).some(e => e.id === 'burn')) effectiveDef = Math.round(effectiveDef * 0.5);
+          if ((targetDefender.statusEffects || []).some(e => e.id === 'freeze')) effectiveDef = Math.round(effectiveDef * 1.4);
+          const finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + effectiveDef * INVASION_DEF_SCALE))));
           targetDefender.currentHp = Math.max(0, targetDefender.currentHp - finalDmg);
 
-          // 🔥 작열 화상 (공격 2차 테크) 부여 판정
+          // 🔥 작열 화상 (공격 2차 테크) 부여 판정: PvE 규격 2턴 지속, 8% 화염 DoT & 방어력 50% 분쇄
           let debuffSuffix = '';
           if (burnTier > 0 && Math.random() < burnChance) {
             if (!targetDefender.statusEffects.some(e => e.id === 'burn')) {
@@ -1337,25 +1350,24 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                 type: 'debuff',
                 icon: '🔥',
                 duration: 2,
-                value: Math.round(attacker.atk * burnTier * 0.12),
+                value: 0.08,
               });
               debuffSuffix += ' [🔥화상]';
             }
           }
 
-          // 🧪 맹독 부식 (공격 3차 테크) 부여 판정
+          // 🧪 맹독 부식 (공격 3차 테크) 부여 판정: PvE 규격 3턴 지속, 14% 치명적 중독 DoT
           if (poisonTier > 0 && Math.random() < poisonChance) {
             if (!targetDefender.statusEffects.some(e => e.id === 'poison')) {
               targetDefender.statusEffects.push({
                 id: 'poison',
                 name: '맹독 부식',
                 type: 'debuff',
-                icon: '🧪',
+                icon: '☠️',
                 duration: 3,
-                value: Math.round(targetDefender.maxHp * poisonTier * 0.015),
+                value: 0.14,
               });
-              targetDefender.def = Math.max(5, Math.round(targetDefender.def * (1 - poisonTier * 0.06)));
-              debuffSuffix += ' [🧪중독]';
+              debuffSuffix += ' [☠️중독]';
             }
           }
 
@@ -1430,11 +1442,14 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
           aliveP.forEach((defender, idx) => {
             const rawDmg = attacker.atk * 0.72 * (isCrit ? 1.35 : 1.0) * atkBuffMult;
-            const finalDmg = Math.max(10, Math.round(rawDmg * (100 / (100 + defender.def * INVASION_DEF_SCALE))));
+            let def = defender.def;
+            if ((defender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
+            if ((defender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
+            const finalDmg = Math.max(10, Math.round(rawDmg * (100 / (100 + def * INVASION_DEF_SCALE))));
             defender.currentHp = Math.max(0, defender.currentHp - finalDmg);
             totalDmg += finalDmg;
 
-            // 🔥 광역 작열 화상 (공격 2차)
+            // 🔥 광역 작열 화상 (공격 2차): PvE 규격 2턴 지속, 8% 화염 DoT & 방어력 50% 분쇄
             if (burnTier > 0 && Math.random() < burnChance) {
               if (!defender.statusEffects.some(e => e.id === 'burn')) {
                 defender.statusEffects.push({
@@ -1443,24 +1458,23 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                   type: 'debuff',
                   icon: '🔥',
                   duration: 2,
-                  value: Math.round(attacker.atk * burnTier * 0.12),
+                  value: 0.08,
                 });
                 anyBurnApplied = true;
               }
             }
 
-            // 🧪 광역 맹독 부식 (공격 3차)
+            // 🧪 광역 맹독 부식 (공격 3차): PvE 규격 3턴 지속, 14% 치명적 중독 DoT
             if (poisonTier > 0 && Math.random() < poisonChance) {
               if (!defender.statusEffects.some(e => e.id === 'poison')) {
                 defender.statusEffects.push({
                   id: 'poison',
                   name: '맹독 부식',
                   type: 'debuff',
-                  icon: '🧪',
+                  icon: '☠️',
                   duration: 3,
-                  value: Math.round(defender.maxHp * poisonTier * 0.015),
+                  value: 0.14,
                 });
-                defender.def = Math.max(5, Math.round(defender.def * (1 - poisonTier * 0.06)));
                 anyPoisonApplied = true;
               }
             }
@@ -1629,7 +1643,10 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           // [전자기 위상 간섭 - EMP 디버프] 결사대 전원에게 전격 충격 및 출력 저하
           let totalDmg = 0;
           aliveP.forEach((defender, idx) => {
-            const shockDmg = Math.max(10, Math.round((140 + attacker.luck * 7 + (attacker.currentMp || 0) * 0.3) * tactPowerMult * (100 / (100 + defender.def * INVASION_DEF_SCALE))));
+            let def = defender.def;
+            if ((defender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
+            if ((defender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
+            const shockDmg = Math.max(10, Math.round((140 + attacker.luck * 7 + (attacker.currentMp || 0) * 0.3) * tactPowerMult * (100 / (100 + def * INVASION_DEF_SCALE))));
             defender.currentHp = Math.max(0, defender.currentHp - shockDmg);
             totalDmg += shockDmg;
 
@@ -1682,7 +1699,10 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           const targetDefender = aliveP[Math.floor(Math.random() * aliveP.length)];
           setActiveTargetDefenderId(targetDefender.id);
 
-          const tacticDmg = Math.max(10, Math.round((160 + attacker.luck * 9 + attacker.atk * 0.6) * tactPowerMult * (100 / (100 + targetDefender.def * INVASION_DEF_SCALE))));
+          let def = targetDefender.def;
+          if ((targetDefender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
+          if ((targetDefender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
+          const tacticDmg = Math.max(10, Math.round((160 + attacker.luck * 9 + attacker.atk * 0.6) * tactPowerMult * (100 / (100 + def * INVASION_DEF_SCALE))));
           targetDefender.currentHp = Math.max(0, targetDefender.currentHp - tacticDmg);
 
           const mDefender = combatMetricsRef.current[targetDefender.id];
@@ -1723,7 +1743,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           ]);
         }
 
-        // ⚡ 방어 2차 연구: 충격 전자기파 (기절 유발 판정)
+        // ⚡ 방어 2차 연구: 충격 전자기파 (기절 유발 판정) - PvE 규격 1턴간 완전 행동 불능
         const stunChance = stunTier * 0.16;
         if (stunTier > 0 && Math.random() < stunChance && aliveP.length > 0) {
           const stunTarget = aliveP[Math.floor(Math.random() * aliveP.length)];
@@ -1732,38 +1752,37 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               id: 'stun',
               name: '기절 무력화',
               type: 'debuff',
-              icon: '⚡',
+              icon: '💫',
               duration: 1,
             });
             SoundManager.getInstance().play('stun');
             setActionBanner(prev => ({
-              text: `${prev.text} · ⚡ [기절 유발!]`,
-              sub: `${prev.sub} | [${stunTarget.name}]의 신경계가 마비되어 1턴간 기절합니다!`,
+              text: `${prev.text} · 💫 [기절 유발!]`,
+              sub: `${prev.sub} | [${stunTarget.name}]의 신경계가 마비되어 1턴간 완전 행동 불능에 빠집니다!`,
               color: '#ffd54f',
             }));
           }
         }
 
-        // ❄️ 방어 3차 연구: 극저온 동결 역장 (결빙 유발 판정)
+        // ❄️ 방어 3차 연구: 극저온 동결 역장 (결빙 유발 판정) - PvE 규격 2턴 지속, 4% 동상 DoT & 행동 불가 & 방어력 +40%
         const freezeChance = freezeTier * 0.18;
         if (freezeTier > 0 && Math.random() < freezeChance && aliveP.length > 0) {
           aliveP.forEach(defender => {
             if (!defender.statusEffects.some(e => e.id === 'freeze')) {
               defender.statusEffects.push({
                 id: 'freeze',
-                name: '극저온 결빙',
+                name: '극저온 동결',
                 type: 'debuff',
                 icon: '❄️',
                 duration: 2,
-                value: freezeTier * 10,
+                value: 0.04,
               });
-              defender.spd = Math.max(5, Math.round(defender.spd * (1 - freezeTier * 0.10)));
             }
           });
           SoundManager.getInstance().play('ice');
           setActionBanner(prev => ({
-            text: `${prev.text} · ❄️ [극저온 결빙!]`,
-            sub: `${prev.sub} | 결사대 전원에게 동결 역장이 전개되어 2턴간 속도가 급감합니다!`,
+            text: `${prev.text} · ❄️ [극저온 동결!]`,
+            sub: `${prev.sub} | 결사대 전원에게 동결 역장이 전개되어 2턴간 행동 불가 및 동상 피해를 입습니다!`,
             color: '#80d8ff',
           }));
         }
