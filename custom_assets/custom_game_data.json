@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 20,
-  "updatedAt": 1792162711391,
+  "version": 21,
+  "updatedAt": 1792163166327,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -448,8 +448,8 @@
       "type": "boss"
     },
     "boss_floor_5": {
-      "atk": 88,
-      "def": 142,
+      "atk": 388,
+      "def": 642,
       "description": "Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다.",
       "id": "boss_floor_5",
       "imagePath": "assets/void_overlord.jpg",
@@ -759,7 +759,7 @@
     },
     "monster_altar_cultist": {
       "atk": 126,
-      "def": 131,
+      "def": 331,
       "description": "공허의 침식자를 숭배하며 제단을 수호하는 타락한 사제. 파괴적인 흑염 마법을 퍼붓는다.",
       "id": "monster_altar_cultist",
       "imagePath": "assets/monster_altar_cultist.jpg",
@@ -793,7 +793,8 @@
       ],
       "spd": 45,
       "themeColor": 15277667,
-      "type": "normal"
+      "type": "normal",
+      "faction": "corrupted"
     },
     "monster_blood_wolf": {
       "atk": 155,
@@ -1281,13 +1282,13 @@
     },
     "monster_monolith_guardian": {
       "atk": 103,
-      "def": 179,
+      "def": 479,
       "description": "고대 모노리스의 파편으로 기동하는 거대한 골렘. 철벽의 방패와 무거운 석퇴로 침입자를 짓밟는다.",
       "id": "monster_monolith_guardian",
       "imagePath": "assets/monster_monolith_guardian.jpg",
       "level": 11,
       "luck": 21,
-      "maxHp": 2790,
+      "maxHp": 1790,
       "name": "모노리스의 파멸 수호자",
       "promptKey": "monster_monolith_guardian",
       "rewards": {

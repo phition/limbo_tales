@@ -502,7 +502,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     // 아군 결사대 3인 변환
     const pCombatants: InvasionCombatant[] = pSource.slice(0, 3).map((h, idx) => {
       const eff = gm.getHeroEffectiveStats(h);
-      const cls = CHARACTER_CLASSES[h.classId] || CHARACTER_CLASSES['squire'];
+      const cls = CHARACTER_CLASSES[h.classId] || CHARACTER_CLASSES['sharpshooter'] || CHARACTER_CLASSES['squire'];
       const allSkills: Skill[] = [
         {
           id: 'basic_attack',
@@ -515,8 +515,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           effectType: 'damage',
           icon: '⚔️',
         },
-        ...cls.skills,
-        ...(cls.specialSkill ? [cls.specialSkill] : []),
+        ...(cls?.skills || []),
+        ...(cls?.specialSkill ? [cls.specialSkill] : []),
       ];
 
       // ⚡ 유틸 연구: 침입자 속도(tier1 -% 감속) 및 행운(tier3 -% 감속) 적용
@@ -529,7 +529,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         id: h.id,
         name: h.name,
         classId: h.classId,
-        className: cls.name,
+        className: cls?.name || '결사대원',
         grade: h.grade,
         level: h.level,
         position: idx < 2 ? 'front' : 'back',
@@ -545,9 +545,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         isPlayer: true,
         cooldowns: {},
         statusEffects: [],
-        icon: cls.skills[0]?.icon || '⚔️',
+        icon: cls?.skills?.[0]?.icon || '⚔️',
         trait: h.trait,
-        role: cls.role,
+        role: cls?.role || 'tank',
       };
     });
 
@@ -556,7 +556,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
     // 좌측 포탑 사수 (물리/사격 화력 지원)
     if (lTurretHero || target.gateLevel) {
-      const cls = lTurretHero ? (CHARACTER_CLASSES[lTurretHero.classId] || CHARACTER_CLASSES['sniper']) : CHARACTER_CLASSES['sniper'];
+      const cls = (lTurretHero ? CHARACTER_CLASSES[lTurretHero.classId] : undefined) || CHARACTER_CLASSES['sharpshooter'] || CHARACTER_CLASSES['squire'];
       const heroSkills: Skill[] = lTurretHero ? [
         {
           id: 'basic_attack',
@@ -569,8 +569,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           effectType: 'damage',
           icon: '🗼🏹',
         },
-        ...cls.skills,
-        ...(cls.specialSkill ? [cls.specialSkill] : []),
+        ...(cls?.skills || []),
+        ...(cls?.specialSkill ? [cls.specialSkill] : []),
       ] : [
         {
           id: 'basic_attack',
@@ -592,7 +592,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       oCombatants.push({
         id: 'turret_left',
         name: lTurretHero ? `좌측 포탑 [${lTurretHero.name}]` : '좌측 전술 포탑',
-        classId: lTurretHero?.classId || 'sniper',
+        classId: lTurretHero?.classId || 'sharpshooter',
         className: cls?.name || '포탑 사수',
         grade: lTurretHero?.grade || 'veteran',
         level: lTurretHero?.level || baseGateLv,
@@ -611,13 +611,13 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         statusEffects: [],
         icon: '🗼',
         trait: lTurretHero?.trait,
-        role: cls.role,
+        role: cls?.role || 'gunner',
       });
     }
 
     // 우측 방호 포탑 사수 (마법/전술 증폭 지원 - 마나 및 행운 특화)
     if (rTurretHero || target.gateLevel) {
-      const cls = rTurretHero ? (CHARACTER_CLASSES[rTurretHero.classId] || CHARACTER_CLASSES['archmage']) : CHARACTER_CLASSES['archmage'];
+      const cls = (rTurretHero ? CHARACTER_CLASSES[rTurretHero.classId] : undefined) || CHARACTER_CLASSES['calamity_mage'] || CHARACTER_CLASSES['bishop'] || CHARACTER_CLASSES['squire'];
       const heroSkills: Skill[] = rTurretHero ? [
         {
           id: 'basic_attack',
@@ -630,8 +630,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           effectType: 'damage',
           icon: '🗼✨',
         },
-        ...cls.skills,
-        ...(cls.specialSkill ? [cls.specialSkill] : []),
+        ...(cls?.skills || []),
+        ...(cls?.specialSkill ? [cls.specialSkill] : []),
       ] : [
         {
           id: 'basic_attack',
@@ -652,7 +652,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       oCombatants.push({
         id: 'turret_right',
         name: rTurretHero ? `우측 포탑 [${rTurretHero.name}]` : '우측 방호 포탑',
-        classId: rTurretHero?.classId || 'archmage',
+        classId: rTurretHero?.classId || 'calamity_mage',
         className: cls?.name || '전술 사수',
         grade: rTurretHero?.grade || 'veteran',
         level: rTurretHero?.level || baseGateLv,
@@ -671,7 +671,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         statusEffects: [],
         icon: '🗼',
         trait: rTurretHero?.trait,
-        role: cls.role,
+        role: cls?.role || 'dealer_mag',
       });
     }
 

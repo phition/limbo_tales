@@ -296,8 +296,8 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '은빛 화살 용병단',
     tier: 'silver',
     rating: 1260,
-    classes: ['guardian', 'sniper', 'archer'],
-    opClass: 'sniper',
+    classes: ['guardian', 'sharpshooter', 'tactical_gunner'],
+    opClass: 'sharpshooter',
     feverConcept: '정밀 조준 관통 저격'
   },
 
@@ -328,8 +328,8 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '비호 용병단',
     tier: 'gold',
     rating: 1460,
-    classes: ['vanguard', 'sniper', 'shadow_phantom'],
-    opClass: 'sniper',
+    classes: ['vanguard', 'sharpshooter', 'shadow_phantom'],
+    opClass: 'sharpshooter',
     feverConcept: '은신 기습 & 즉사 저격'
   },
   {

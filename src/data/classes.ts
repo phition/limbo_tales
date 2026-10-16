@@ -705,10 +705,18 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
   }
 };
 
+// 동의어 및 레거시 클래스 별칭(Alias) 등록
+CHARACTER_CLASSES['sniper'] = CHARACTER_CLASSES['sharpshooter'];
+CHARACTER_CLASSES['archmage'] = CHARACTER_CLASSES['calamity_mage'];
+CHARACTER_CLASSES['archer'] = CHARACTER_CLASSES['sharpshooter'];
+
 // ================================================================
 // 클래스별 대표 이모지 매핑 & 헬퍼 함수
 // ================================================================
 export const CLASS_EMOJI_MAP: Record<string, string> = {
+  sniper: '🏹',
+  archmage: '☄️',
+  archer: '🏹',
   // 기사/수호 계열 (탱커)
   squire: '🛡️',
   paladin: '🔨',

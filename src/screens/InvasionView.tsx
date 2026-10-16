@@ -755,7 +755,7 @@ export const InvasionView: React.FC = () => {
                         >
                           {isOperator ? '🛡️ 오퍼레이터' : `수비대 ${i + 1}`}
                         </span>
-                        <span className="text-3xl my-1.5">{cls?.skills[0]?.icon || '⚔️'}</span>
+                        <span className="text-3xl my-1.5">{cls?.skills?.[0]?.icon || '⚔️'}</span>
                         <span className="text-[11px] font-mono font-black text-[#ffd54f]">
                           Lv.{h.level}
                         </span>

@@ -9064,7 +9064,7 @@ export class GameManager {
         gateLevel: 8,
         bonfireLevel: 7,
         heroLevelRange: [36, 41],
-        classes: ['guardian', 'sniper', 'elementalist', 'arcane_scholar', 'bishop'],
+        classes: ['guardian', 'sharpshooter', 'elementalist', 'arcane_scholar', 'bishop'],
         traits: ['냉혹의 수호', '약점 관통', '절대영도 결빙', '지성의 전술', '신비'],
         avatarIcon: '❄️',
         tacticalTower: {
@@ -9104,7 +9104,7 @@ export class GameManager {
         gateLevel: 8,
         bonfireLevel: 7,
         heroLevelRange: [34, 39],
-        classes: ['paladin', 'sniper', 'arcane_scholar', 'assassin', 'berserker'],
+        classes: ['paladin', 'sharpshooter', 'arcane_scholar', 'assassin', 'berserker'],
         traits: ['독기 저항', '맹독의 저격', '부식 전염', '역병 전술', '냉혹'],
         avatarIcon: '🧪',
         tacticalTower: {
