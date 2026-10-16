@@ -849,9 +849,17 @@ export interface TacticalTowerState {
   utility: TacticalTowerBranchState;
 }
 
+export interface DefenseDeck {
+  mainHeroIds: string[]; // 수비 결사대 3인 영웅 ID
+  operatorHeroId: string; // 수성 오퍼레이터 1인 영웅 ID
+  leftTurretMode?: 'focus_bombard' | 'slow_field' | 'balanced'; // 좌측 타워 작전 모드 (자동포격/중력감속/균형)
+  rightTurretMode?: 'barrier_regen' | 'sanctuary_heal' | 'fortress_guard'; // 우측 타워 작전 모드 (보호막수복/성역치유/철벽수호)
+}
+
 export interface InvasionState {
   squadHeroIds: string[]; // 5인 차원 부대 영웅 ID 목록 (하위 호환성)
   deck?: DimensionalDeck; // 3+1+1 차원 덱 구조
+  defenseDeck?: DefenseDeck; // 🛡️ 수비 부대 및 방어 타워 세팅
   invasionCoins?: number; // 🎖️ 차원 침공 훈장 (레거시 호환)
   peaceShieldUntil: number; // 🛡️ 내 영지 평화 보호막 만료 시각 (ms)
   defenseLogs: InvasionDefenseLog[]; // 피침공 방어 기록

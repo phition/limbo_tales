@@ -6,6 +6,7 @@ import { ResourceBar } from '../components/ResourceBar';
 import { LogPanel } from '../components/LogPanel';
 import { ActionButton } from '../components/ActionButton';
 import { Modal } from '../components/Modal';
+import { DefenseSettingsView } from '../components/DefenseSettingsView';
 import {
   BuildingId, BuildingState, PositionSlot, EquipmentSlot, EquipmentRecipe, Mercenary, MercenaryGrade, EquipmentItem, EnchantOption, GameResources, Skill, SkillBookItem, CampBanterResult, TavernCandidate, Quest, ExpeditionReturnReport
 } from '../types/game';
@@ -3587,7 +3588,7 @@ const SKILL_RANK_COLORS: Record<string, { label: string; color: string; bg: stri
 const BarracksDrawer: React.FC<{
   onClose: () => void;
   onNavigateDrawer?: (drawerKey: string) => void;
-  initialCategory?: 'dungeon' | 'dimensional';
+  initialCategory?: 'dungeon' | 'dimensional' | 'defense';
   tutorialStepId?: string;
   onAdvanceTutorial?: (nextStepId?: string) => void;
 }> = ({ onClose, onNavigateDrawer, initialCategory = 'dungeon', tutorialStepId, onAdvanceTutorial }) => {
@@ -3606,7 +3607,7 @@ const BarracksDrawer: React.FC<{
   const [showBondModal, setShowBondModal] = useState(false);
   const [showSynergyModal, setShowSynergyModal] = useState(false);
 
-  const [barracksCategory, setBarracksCategory] = useState<'dungeon' | 'dimensional'>(initialCategory);
+  const [barracksCategory, setBarracksCategory] = useState<'dungeon' | 'dimensional' | 'defense'>(initialCategory);
   useEffect(() => {
     setBarracksCategory(initialCategory);
   }, [initialCategory]);
@@ -3761,10 +3762,10 @@ const BarracksDrawer: React.FC<{
         </div>
       </div>
 
-      {/* ── ⚔️ / 🌌 카테고리 탭 (3인 던전 원정대 vs 5인 차원 부대) ── */}
-      <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0a0d16] border-b border-[#1f2738] shrink-0">
+      {/* ── ⚔️ / 🌌 / 🛡️ 카테고리 탭 (3인 던전 원정대 vs 3+1 차원 부대 vs 영지 수비 부대) ── */}
+      <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0a0d16] border-b border-[#1f2738] shrink-0 overflow-x-auto">
         <button
-          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
             barracksCategory === 'dungeon'
               ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff66] shadow-sm'
               : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
@@ -3776,7 +3777,7 @@ const BarracksDrawer: React.FC<{
           <span className="text-[10px] font-mono text-[#38ef7d]">({state.party.length}/3)</span>
         </button>
         <button
-          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
             barracksCategory === 'dimensional'
               ? 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c66] shadow-sm'
               : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
@@ -3791,10 +3792,41 @@ const BarracksDrawer: React.FC<{
             <span className="text-[9px] px-1 py-0.2 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">앵커 필요</span>
           )}
         </button>
+
+        {/* 🛡️ 영지 수비부대 탭 (차원 앵커 게이트 Lv.6 해금) */}
+        {(() => {
+          const gateLv = state.buildings['arenaGate']?.level || 0;
+          const isDefenseUnlocked = gm.isMasterAccount || gateLv >= 6;
+          return (
+            <button
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
+                barracksCategory === 'defense'
+                  ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66] shadow-sm'
+                  : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
+              }`}
+              onClick={() => {
+                if (!isDefenseUnlocked) {
+                  SoundManager.getInstance().play('debuff');
+                  alert('차원 앵커 게이트가 6레벨 이상이어야 영지 수비부대 셋팅이 해금됩니다.');
+                  return;
+                }
+                setBarracksCategory('defense');
+              }}
+            >
+              <span>{isDefenseUnlocked ? '🛡️' : '🔒'}</span>
+              <span>수비부대</span>
+              {isDefenseUnlocked ? (
+                <span className="text-[10px] font-mono text-[#38ef7d]">(수비 셋팅)</span>
+              ) : (
+                <span className="text-[9px] px-1 py-0.2 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">Lv.6 필요</span>
+              )}
+            </button>
+          );
+        })()}
       </div>
 
       {/* 🎒 3인 편성 완료 시 출정 채비실 바로가기 안내 배너 */}
-      {state.party.length >= 3 && onNavigateDrawer && (
+      {state.party.length >= 3 && onNavigateDrawer && barracksCategory === 'dungeon' && (
         <div className="bg-gradient-to-r from-[#1a103c] via-[#2a1758] to-[#1a103c] border-b border-[#a855f788] px-3 py-2 flex items-center justify-between gap-2 shrink-0 animate-fade-in shadow-md">
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-lg shrink-0">🎒</span>
@@ -3814,7 +3846,14 @@ const BarracksDrawer: React.FC<{
         </div>
       )}
 
-      {barracksCategory === 'dimensional' ? (
+      {barracksCategory === 'defense' ? (
+        <DefenseSettingsView
+          onNavigateToTowerResearch={() => {
+            onClose();
+            onNavigateDrawer?.('arena');
+          }}
+        />
+      ) : barracksCategory === 'dimensional' ? (
         // ── 🌌 차원 3인 결투 부대 & 전술 오퍼레이터 관리 뷰 ──
         !isAnchorUnlocked ? (
           <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-3">
@@ -14139,7 +14178,7 @@ export const CitadelScreen: React.FC = () => {
   const wheelDragStartXRef = useRef<number | null>(null);
   const isWheelDraggingRef = useRef(false);
   const wheelHasSwipedRef = useRef(false);
-  const [barracksInitialCat, setBarracksInitialCat] = useState<'dungeon' | 'dimensional'>('dungeon');
+  const [barracksInitialCat, setBarracksInitialCat] = useState<'dungeon' | 'dimensional' | 'defense'>('dungeon');
   const [resetModal, setResetModal] = useState(false);
   const [expeditionReport, setExpeditionReport] = useState<ExpeditionReturnReport | null>(null);
   const [isLootDoubled, setIsLootDoubled] = useState(false);
