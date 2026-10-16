@@ -272,12 +272,12 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const oppTowerRef = useRef<any>(null);
   const [barrierHeroBonus, setBarrierHeroBonus] = useState<{ hp: number; def: number }>({ hp: 0, def: 0 });
 
-  // 3. 차원 보호막 및 좌/우 2개 전술 타워 (50% 추가 하향 밸런싱)
+  // 3. 차원 보호막 및 좌/우 2개 전술 타워 (기본 HP: 보호막 2,500 / 타워 400)
   const [barrierState, setBarrierState] = useState<SiegeTargetObject>({
     id: 'dimensional_barrier',
     name: '차원 왜곡 보호막',
-    currentHp: 3500,
-    maxHp: 3500,
+    currentHp: 2500,
+    maxHp: 2500,
     def: 25,
     icon: '🛡️',
     type: 'barrier',
@@ -290,8 +290,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const [turretLeft, setTurretLeft] = useState<SiegeTargetObject>({
     id: 'turret_left',
     name: '좌측 전술 포탑',
-    currentHp: 1400,
-    maxHp: 1400,
+    currentHp: 400,
+    maxHp: 400,
     def: 20,
     icon: '🗼',
     type: 'turret',
@@ -304,8 +304,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const [turretRight, setTurretRight] = useState<SiegeTargetObject>({
     id: 'turret_right',
     name: '우측 방호 포탑',
-    currentHp: 1400,
-    maxHp: 1400,
+    currentHp: 400,
+    maxHp: 400,
     def: 20,
     icon: '🗼',
     type: 'turret',
@@ -427,18 +427,18 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
     const baseGateLv = target.gateLevel || 6;
 
-    // 🛡️ 차원 보호막 내구도 및 방어력 계산 (기본 3,500 HP 기준 - 50% 추가 하향 밸런싱)
+    // 🛡️ 차원 보호막 내구도 및 방어력 계산 (기본 2,500 HP 기준)
     const defTier1 = oppTowerData.defense?.tier1 || 0;
     const extraBarrierHp = bHero ? Math.round(bHero.maxHp * 0.35 * (1.0 + defTier1 * 0.20)) : 0;
     const extraBarrierDef = bHero ? Math.round((bHero.stats?.def || 0) * 0.50) : 0;
     setBarrierHeroBonus({ hp: extraBarrierHp, def: extraBarrierDef });
 
-    const calcBarrierHp = 3500 + baseGateLv * 250 + totalTowerLv * 175 + extraBarrierHp;
+    const calcBarrierHp = 2500 + baseGateLv * 250 + totalTowerLv * 175 + extraBarrierHp;
     const barrierDef = 25 + baseGateLv * 3 + (oppTowerData.defense?.tier3 || 0) * 8 + extraBarrierDef;
 
-    // 🗼 좌/우 전술 포탑 스펙 산출 (기본 1,400 HP - 50% 추가 하향 밸런싱)
+    // 🗼 좌/우 전술 포탑 스펙 산출 (기본 400 HP 기준)
     const defTier2 = oppTowerData.defense?.tier2 || 0;
-    const calcTurretHp = 1400 + baseGateLv * 100 + totalTowerLv * 105;
+    const calcTurretHp = 400 + baseGateLv * 100 + totalTowerLv * 105;
     const turretDef = 20 + defTier2 * 4;
     const turretSpd = 15 + (oppTowerData.utility?.tier1 || 0) * 3;
     const turretLuck = 10 + (oppTowerData.utility?.tier2 || 0) * 2;
