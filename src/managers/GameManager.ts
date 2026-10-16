@@ -8969,93 +8969,265 @@ export class GameManager {
       }
     } catch (_) {}
 
-    const botArchetypes = [
+    interface BotArchetypeDef {
+      name: string;
+      ownerNickname: string;
+      guildName: string;
+      defenseConcept: string;
+      gateLevel: number;
+      bonfireLevel: number;
+      classes: string[];
+      traits: string[];
+      avatarIcon: string;
+      tacticalTower: {
+        attack: { tier1: number; tier2: number; tier3: number };
+        defense: { tier1: number; tier2: number; tier3: number };
+        utility: { tier1: number; tier2: number; tier3: number };
+      };
+      statMultiplier: number;
+      gold: number;
+      wood: number;
+      stone: number;
+      iron: number;
+      food: number;
+      ether: number;
+      bonusLoot?: Partial<Record<keyof GameResources, number>>;
+    }
+
+    const botArchetypes: BotArchetypeDef[] = [
       {
-        name: '아이언팽 요새 영지',
+        name: '수련자의 차원 주둔지',
+        ownerNickname: '교관 카일',
+        guildName: '초심자 원탁회',
+        defenseConcept: '🔰 입문 훈련 (기본 검증)',
+        gateLevel: 6,
+        bonfireLevel: 6,
+        classes: ['paladin', 'sharpshooter', 'bishop', 'warlord', 'squire'],
+        traits: ['수호의 결속', '집중 사격', '성스러운 치유', '신병 지휘', '성실'],
+        avatarIcon: '🔰',
+        tacticalTower: {
+          attack: { tier1: 1, tier2: 0, tier3: 0 },
+          defense: { tier1: 1, tier2: 0, tier3: 0 },
+          utility: { tier1: 0, tier2: 0, tier3: 0 },
+        },
+        statMultiplier: 0.85,
+        gold: 35000, wood: 22000, stone: 18000, iron: 12000, food: 16000, ether: 2500,
+        bonusLoot: { herb: 80, leather: 80, coal: 60, crystal: 10, void_shard: 5 },
+      },
+      {
+        name: '아이언팽 철벽 요새',
         ownerNickname: '사령관 바르가스',
         guildName: '강철의 여명회',
-        gateLevel: Math.max(6, Math.min(10, myGateLv + (Math.random() > 0.5 ? 1 : 0))),
-        bonfireLevel: 7,
-        classes: ['paladin', 'warlord', 'berserker', 'tactical_gunner', 'high_saintess'],
-        avatarIcon: '🏰',
-        gold: 48000, wood: 32000, stone: 24000, iron: 18000, food: 15000, ether: 3600
-      },
-      {
-        name: '달빛 에테르 성소',
-        ownerNickname: '대마도사 셀레스트',
-        guildName: '비전 탐구단',
-        gateLevel: Math.max(6, Math.min(10, myGateLv - 1 + Math.floor(Math.random() * 3))),
+        defenseConcept: '🛡️ 성벽 극방어 (내구&방어 증폭)',
+        gateLevel: 8,
         bonfireLevel: 8,
-        classes: ['guardian', 'calamity_mage', 'arcane_scholar', 'bishop', 'shadow_phantom'],
-        avatarIcon: '✨',
-        gold: 65000, wood: 20000, stone: 15000, iron: 12000, food: 22000, ether: 7800
+        classes: ['aegis_valkyrie', 'paladin', 'high_saintess', 'guardian', 'warlord'],
+        traits: ['철벽의 금강', '투사의 요격', '성스러운 수복', '불굴의 지휘', '수호자'],
+        avatarIcon: '🏰',
+        tacticalTower: {
+          attack: { tier1: 2, tier2: 0, tier3: 0 },
+          defense: { tier1: 5, tier2: 4, tier3: 5 },
+          utility: { tier1: 2, tier2: 1, tier3: 1 },
+        },
+        statMultiplier: 1.20,
+        gold: 62000, wood: 35000, stone: 65000, iron: 52000, food: 25000, ether: 4500,
+        bonusLoot: { coal: 220, stone: 500, iron: 400, prefix_stone: 20 },
       },
       {
-        name: '핏빛 심연 원정기지',
-        ownerNickname: '광전사 발할',
-        guildName: '진홍의 학살자들',
-        gateLevel: Math.max(6, Math.min(10, myGateLv + Math.floor(Math.random() * 2))),
-        bonfireLevel: 6,
-        classes: ['valhalla_blade', 'berserker', 'assassin', 'aether_gun_meister', 'war_priest'],
-        avatarIcon: '🩸',
-        gold: 38000, wood: 45000, stone: 35000, iron: 28000, food: 30000, ether: 2900
+        name: '진홍의 화룡 포병대',
+        ownerNickname: '포병단장 이그니스',
+        guildName: '홍련의 학살자들',
+        defenseConcept: '🔥 작열 포격 (화상 DoT & 집중 포격)',
+        gateLevel: 8,
+        bonfireLevel: 8,
+        classes: ['berserker', 'aether_gun_meister', 'calamity_mage', 'warlord', 'valhalla_blade'],
+        traits: ['불굴의 돌파', '치명적 폭격', '작열의 마탄', '피의 전술', '투사'],
+        avatarIcon: '🔥',
+        tacticalTower: {
+          attack: { tier1: 5, tier2: 5, tier3: 2 },
+          defense: { tier1: 1, tier2: 1, tier3: 1 },
+          utility: { tier1: 3, tier2: 1, tier3: 1 },
+        },
+        statMultiplier: 1.15,
+        gold: 68000, wood: 40000, stone: 30000, iron: 58000, food: 32000, ether: 4000,
+        bonusLoot: { coal: 300, iron: 500, crystal: 25, void_shard: 15 },
       },
       {
-        name: '발키리 성스러운 방주',
-        ownerNickname: '성녀 엘레나',
-        guildName: '빛의 성기사단',
-        gateLevel: Math.max(6, Math.min(10, myGateLv + 1)),
-        bonfireLevel: 9,
-        classes: ['aegis_valkyrie', 'paladin', 'elementalist', 'high_saintess', 'tactical_gunner'],
-        avatarIcon: '🕊️',
-        gold: 72000, wood: 52000, stone: 42000, iron: 31000, food: 28000, ether: 9200
+        name: '서리꽃 혹한 연구소',
+        ownerNickname: '빙결사 프로스트',
+        guildName: '혹한의 탐구자',
+        defenseConcept: '❄️ 결빙 CC (동결 & 기절 교란)',
+        gateLevel: 8,
+        bonfireLevel: 7,
+        classes: ['guardian', 'sniper', 'elementalist', 'arcane_scholar', 'bishop'],
+        traits: ['냉혹의 수호', '약점 관통', '절대영도 결빙', '지성의 전술', '신비'],
+        avatarIcon: '❄️',
+        tacticalTower: {
+          attack: { tier1: 2, tier2: 1, tier3: 0 },
+          defense: { tier1: 2, tier2: 5, tier3: 4 },
+          utility: { tier1: 4, tier2: 4, tier3: 2 },
+        },
+        statMultiplier: 1.10,
+        gold: 58000, wood: 25000, stone: 22000, iron: 20000, food: 25000, ether: 9500,
+        bonusLoot: { crystal: 45, void_shard: 25, silk: 200 },
       },
       {
-        name: '섀도우 스파이어 은신처',
-        ownerNickname: '망령 섀도우',
+        name: '섀도우 리퍼 암영 기지',
+        ownerNickname: '암영 제이드',
         guildName: '무명의 암영길드',
-        gateLevel: Math.max(6, Math.min(10, myGateLv)),
+        defenseConcept: '⚡ 초고속 급습 (감속 & 치명타 저격)',
+        gateLevel: 7,
         bonfireLevel: 7,
         classes: ['shadow_phantom', 'assassin', 'duelist', 'sharpshooter', 'arcane_scholar'],
-        avatarIcon: '🥷',
-        gold: 55000, wood: 28000, stone: 19000, iron: 22000, food: 18000, ether: 4500
+        traits: ['암영의 은신', '치명적 암살', '신속의 칼날', '그림자 전술', '암살'],
+        avatarIcon: '⚡',
+        tacticalTower: {
+          attack: { tier1: 4, tier2: 1, tier3: 1 },
+          defense: { tier1: 1, tier2: 1, tier3: 1 },
+          utility: { tier1: 5, tier2: 2, tier3: 5 },
+        },
+        statMultiplier: 1.05,
+        gold: 55000, wood: 30000, stone: 20000, iron: 22000, food: 20000, ether: 5000,
+        bonusLoot: { leather: 280, silk: 260, suffix_stone: 22 },
+      },
+      {
+        name: '독사 군단 역병 요새',
+        ownerNickname: '독주술사 베놈',
+        guildName: '부식의 만드라고라',
+        defenseConcept: '🧪 맹독 부식 (14% DoT 지속 피해)',
+        gateLevel: 8,
+        bonfireLevel: 7,
+        classes: ['paladin', 'sniper', 'arcane_scholar', 'assassin', 'berserker'],
+        traits: ['독기 저항', '맹독의 저격', '부식 전염', '역병 전술', '냉혹'],
+        avatarIcon: '🧪',
+        tacticalTower: {
+          attack: { tier1: 3, tier2: 2, tier3: 5 },
+          defense: { tier1: 2, tier2: 2, tier3: 1 },
+          utility: { tier1: 3, tier2: 3, tier3: 2 },
+        },
+        statMultiplier: 1.10,
+        gold: 52000, wood: 35000, stone: 25000, iron: 24000, food: 30000, ether: 4200,
+        bonusLoot: { bone: 300, herb: 320, crystal: 20 },
+      },
+      {
+        name: '성스러운 빛의 대성채',
+        ownerNickname: '대주교 발렌타인',
+        guildName: '빛의 성기사단',
+        defenseConcept: '👑 총력전 요새 (Gate Lv.10 최고 난도)',
+        gateLevel: 10,
+        bonfireLevel: 10,
+        classes: ['aegis_valkyrie', 'valhalla_blade', 'high_saintess', 'paladin', 'warlord'],
+        traits: ['불멸의 성역', '신성한 심판', '기적의 소생', '성전의 총지휘', '수호'],
+        avatarIcon: '👑',
+        tacticalTower: {
+          attack: { tier1: 5, tier2: 4, tier3: 4 },
+          defense: { tier1: 5, tier2: 5, tier3: 4 },
+          utility: { tier1: 4, tier2: 4, tier3: 4 },
+        },
+        statMultiplier: 1.35,
+        gold: 110000, wood: 80000, stone: 75000, iron: 65000, food: 60000, ether: 16000,
+        bonusLoot: { crystal: 60, void_shard: 40, prefix_stone: 35, suffix_stone: 35 },
+      },
+      {
+        name: '발할라 기사단 주둔지',
+        ownerNickname: '기사단장 지그문트',
+        guildName: '발할라의 방패',
+        defenseConcept: '🏰 표준 균형 (공/방/유틸 밸런스)',
+        gateLevel: 7,
+        bonfireLevel: 7,
+        classes: ['warlord', 'valhalla_blade', 'bishop', 'tactical_gunner', 'paladin'],
+        traits: ['진형 엄호', '돌격 검격', '축복의 성수', '정석 전술', '용맹'],
+        avatarIcon: '🏰',
+        tacticalTower: {
+          attack: { tier1: 3, tier2: 2, tier3: 1 },
+          defense: { tier1: 3, tier2: 2, tier3: 2 },
+          utility: { tier1: 2, tier2: 2, tier3: 2 },
+        },
+        statMultiplier: 1.0,
+        gold: 50000, wood: 35000, stone: 30000, iron: 25000, food: 25000, ether: 4000,
+        bonusLoot: { iron: 200, wood: 200, coal: 150 },
+      },
+      {
+        name: '황금 실크로드 보급성채',
+        ownerNickname: '대상인 골드마이어',
+        guildName: '번영의 황금상단',
+        defenseConcept: '💰 부유한 상단 (약탈 자원 대량)',
+        gateLevel: 6,
+        bonfireLevel: 8,
+        classes: ['guardian', 'tactical_gunner', 'high_saintess', 'duelist', 'arcane_scholar'],
+        traits: ['금고 수호', '용병 경호', '치유 기도', '재력의 전술', '상인'],
+        avatarIcon: '💰',
+        tacticalTower: {
+          attack: { tier1: 2, tier2: 0, tier3: 0 },
+          defense: { tier1: 3, tier2: 1, tier3: 1 },
+          utility: { tier1: 1, tier2: 1, tier3: 1 },
+        },
+        statMultiplier: 0.95,
+        gold: 150000, wood: 75000, stone: 60000, iron: 45000, food: 65000, ether: 18000,
+        bonusLoot: { silk: 350, crystal: 30, void_shard: 20, leather: 250 },
+      },
+      {
+        name: '공허의 틈새 관측탑',
+        ownerNickname: '차원학자 노바',
+        guildName: '공허의 관측자',
+        defenseConcept: '🌌 마나 세금 (공허 파편 & MP소모 증가)',
+        gateLevel: 9,
+        bonfireLevel: 9,
+        classes: ['calamity_mage', 'aether_gun_meister', 'arcane_scholar', 'elementalist', 'shadow_phantom'],
+        traits: ['공허 왜곡', '에테르 과충전', '마나 붕괴', '시공간 전술', '비전'],
+        avatarIcon: '🌌',
+        tacticalTower: {
+          attack: { tier1: 3, tier2: 2, tier3: 3 },
+          defense: { tier1: 4, tier2: 3, tier3: 4 },
+          utility: { tier1: 4, tier2: 5, tier3: 3 },
+        },
+        statMultiplier: 1.20,
+        gold: 80000, wood: 45000, stone: 40000, iron: 35000, food: 35000, ether: 12000,
+        bonusLoot: { void_shard: 45, crystal: 50, prefix_stone: 30, suffix_stone: 30 },
       },
     ];
 
+    // 다양한 봇들이 매칭 풀에 골고루 등장하도록 무작위 셔플
+    const shuffledArchetypes = [...botArchetypes].sort(() => Math.random() - 0.5);
+
     let bIdx = 0;
     while (targets.length < limit) {
-      const arch = botArchetypes[bIdx % botArchetypes.length];
+      const arch = shuffledArchetypes[bIdx % shuffledArchetypes.length];
       const idx = targets.length;
       const oppRating = Math.max(1200, myRating - 150 + idx * 80 + Math.floor(Math.random() * 50));
+      const mult = arch.statMultiplier || 1.0;
       const defenseSquad: Mercenary[] = arch.classes.map((clsId, cIdx) => {
         const cls = CHARACTER_CLASSES[clsId] || CHARACTER_CLASSES['squire'];
         const pos = cIdx < 3 ? 'front' : 'back';
         const lv = Math.max(20, Math.floor(oppRating / 55));
+        const heroTrait = (arch.traits && arch.traits[cIdx]) || (cIdx === 0 ? '철벽의' : cIdx === 1 ? '사격' : cIdx === 2 ? '비전' : '지휘');
         return {
           id: `inv_bot_hero_${idx}_${cIdx}`,
           name: `${arch.ownerNickname}의 ${cls.name}`,
           title: cls.name,
           classId: clsId,
-          grade: lv >= 35 ? 'epic' : lv >= 25 ? 'elite' : 'veteran',
+          grade: (lv >= 45 ? 'legend' : lv >= 35 ? 'epic' : lv >= 25 ? 'elite' : 'veteran') as MercenaryGrade,
           level: lv,
           exp: 0,
           expToNext: 100,
-          currentHp: cls.baseStats.hp * 3 + lv * 25,
-          maxHp: cls.baseStats.hp * 3 + lv * 25,
-          currentMp: cls.baseStats.mp + lv * 5,
-          maxMp: cls.baseStats.mp + lv * 5,
+          currentHp: Math.round((cls.baseStats.hp * 3 + lv * 25) * mult),
+          maxHp: Math.round((cls.baseStats.hp * 3 + lv * 25) * mult),
+          currentMp: Math.round((cls.baseStats.mp + lv * 5) * mult),
+          maxMp: Math.round((cls.baseStats.mp + lv * 5) * mult),
           position: pos,
           stats: {
-            atk: cls.baseStats.atk * 2 + lv * 3,
-            def: cls.baseStats.def * 2 + lv * 2,
-            spd: cls.baseStats.spd + Math.floor(lv / 5),
-            luck: cls.baseStats.luck + Math.floor(lv / 4),
+            atk: Math.round((cls.baseStats.atk * 2 + lv * 3) * mult),
+            def: Math.round((cls.baseStats.def * 2 + lv * 2) * mult),
+            spd: Math.round((cls.baseStats.spd + Math.floor(lv / 5)) * mult),
+            luck: Math.round((cls.baseStats.luck + Math.floor(lv / 4)) * mult),
           },
           equippedSkills: cls.skills.map(s => s.id),
           learnedSkills: cls.skills.map(s => s.id),
           equipment: {},
           statusEffects: [],
           portraitPromptKey: cls.promptKey,
+          trait: heroTrait,
+          role: cls.role,
         };
       });
 
@@ -9078,13 +9250,13 @@ export class GameManager {
           iron: arch.iron,
           food: arch.food,
           ether: arch.ether,
-          herb: 100 + Math.floor(Math.random() * 150),
-          leather: 100 + Math.floor(Math.random() * 150),
-          silk: 80 + Math.floor(Math.random() * 120),
-          coal: 100 + Math.floor(Math.random() * 150),
-          bone: 80 + Math.floor(Math.random() * 120),
-          crystal: 15 + Math.floor(Math.random() * 25),
-          void_shard: 10 + Math.floor(Math.random() * 20),
+          herb: (arch.bonusLoot?.herb || 100) + Math.floor(Math.random() * 150),
+          leather: (arch.bonusLoot?.leather || 100) + Math.floor(Math.random() * 150),
+          silk: (arch.bonusLoot?.silk || 80) + Math.floor(Math.random() * 120),
+          coal: (arch.bonusLoot?.coal || 100) + Math.floor(Math.random() * 150),
+          bone: (arch.bonusLoot?.bone || 80) + Math.floor(Math.random() * 120),
+          crystal: (arch.bonusLoot?.crystal || 15) + Math.floor(Math.random() * 25),
+          void_shard: (arch.bonusLoot?.void_shard || 10) + Math.floor(Math.random() * 20),
           prefix_stone: 12 + Math.floor(Math.random() * 18),
           suffix_stone: 12 + Math.floor(Math.random() * 18),
         },
@@ -9093,23 +9265,8 @@ export class GameManager {
         guildName: arch.guildName,
         avatarIcon: arch.avatarIcon,
         isBot: true, // 🤖 봇!
-        tacticalTower: {
-          attack: {
-            tier1: Math.min(3, Math.max(1, arch.gateLevel - 5)),
-            tier2: Math.min(3, Math.max(0, arch.gateLevel - 6)),
-            tier3: Math.min(3, Math.max(0, arch.gateLevel - 7)),
-          },
-          defense: {
-            tier1: Math.min(3, Math.max(1, arch.gateLevel - 5)),
-            tier2: Math.min(3, Math.max(0, arch.gateLevel - 6)),
-            tier3: Math.min(3, Math.max(0, arch.gateLevel - 7)),
-          },
-          utility: {
-            tier1: Math.min(3, Math.max(1, arch.gateLevel - 5)),
-            tier2: Math.min(3, Math.max(0, arch.gateLevel - 6)),
-            tier3: Math.min(3, Math.max(0, arch.gateLevel - 7)),
-          },
-        },
+        tacticalTower: arch.tacticalTower,
+        defenseConcept: arch.defenseConcept,
       });
 
       bIdx++;

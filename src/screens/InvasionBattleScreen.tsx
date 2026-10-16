@@ -2380,6 +2380,11 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               <span className="text-[10px] px-1.5 py-0.2 rounded font-mono bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">
                 차원 게이트 Lv.{target.gateLevel}
               </span>
+              {target.defenseConcept && (
+                <span className="text-[9.5px] px-1.5 py-0.2 rounded font-bold bg-[#ffd54f18] text-[#ffd54f] border border-[#ffd54f44] shrink-0">
+                  {target.defenseConcept}
+                </span>
+              )}
             </div>
             <div className="text-[10px] text-[#8b9bb4]">
               영주: {target.ownerNickname} ({target.guildName || '자유 용병단'})

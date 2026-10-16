@@ -372,6 +372,11 @@ export const InvasionView: React.FC = () => {
                       <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44] shrink-0">
                         Lv.{t.gateLevel}
                       </span>
+                      {t.defenseConcept && (
+                        <span className="text-[9.5px] px-1.5 py-0.2 rounded font-bold bg-[#ffd54f18] text-[#ffd54f] border border-[#ffd54f44] shrink-0">
+                          {t.defenseConcept}
+                        </span>
+                      )}
                       {t.guildName && (
                         <span className="text-[10px] text-[#8b9bb4] hidden md:inline truncate">
                           ({t.guildName})
@@ -679,6 +684,11 @@ export const InvasionView: React.FC = () => {
                     <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">
                       게이트 Lv.{inspectTarget.gateLevel}
                     </span>
+                    {inspectTarget.defenseConcept && (
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]">
+                        {inspectTarget.defenseConcept}
+                      </span>
+                    )}
                   </div>
                   <div className="text-[11px] text-[#8b9bb4]">
                     사령관: <span className="text-white font-bold">{inspectTarget.ownerNickname}</span>

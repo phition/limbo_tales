@@ -809,6 +809,7 @@ export interface InvasionTarget {
   avatarIcon?: string;
   tacticalTower?: TacticalTowerState; // 🗼 상대 영지 방어 전술 타워 상태
   isBot?: boolean; // 🤖 봇 영지 여부 플래그 (true면 봇, false면 실제 유저)
+  defenseConcept?: string; // 🎯 영지 수비 방어 컨셉 (예: '철벽 방어', '화력 포격', '결빙 교란' 등)
 }
 
 export interface InvasionDefenseLog {
