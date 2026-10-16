@@ -412,7 +412,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
 
                   return (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {skillsList.map(sk => {
+                      {skillsList.map((sk, skIdx) => {
                         const isEquippedInSlot1 = currentSelectedHero.equippedSkills?.[0] === sk.id;
                         const isEquippedInSlot2 = currentSelectedHero.equippedSkills?.[1] === sk.id;
                         const isEquippedHere = currentSelectedHero.equippedSkills?.[selectedSkillSlot] === sk.id;
@@ -420,7 +420,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
 
                         return (
                           <div
-                            key={sk.id}
+                            key={`${sk.id}_${skIdx}`}
                             className={`p-2.5 rounded-xl border flex flex-col justify-between transition-all ${
                               isEquippedHere
                                 ? 'border-[#876739] bg-[#5c452422]'

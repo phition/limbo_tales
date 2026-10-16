@@ -4303,13 +4303,13 @@ export const ArenaScreen: React.FC = () => {
 
                 {/* 스킬 버튼 그리드 */}
                 <div className="grid grid-cols-3 gap-1.5">
-                  {activeAttacker?.skills.map((skill) => {
+                  {activeAttacker?.skills.map((skill, sIdx) => {
                     const cd = activeAttacker.cooldowns[skill.id] || 0;
                     const canAfford = activeAttacker.currentMp >= skill.manaCost && cd <= 0;
 
                     return (
                       <button
-                        key={skill.id}
+                        key={`${skill.id}_${sIdx}`}
                         disabled={!canAfford}
                         className={`p-2 rounded-lg flex flex-col items-center justify-center gap-0.5 transition-all text-center ${
                           canAfford

@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 21,
-  "updatedAt": 1792163166327,
+  "version": 24,
+  "updatedAt": 1792164414435,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -202,7 +202,7 @@
   },
   "monsters": {
     "boss_floor_1": {
-      "atk": 68,
+      "atk": 88,
       "def": 300,
       "description": "침묵의 회랑 심부에 잠들어 있던 고대 석조 거신. 가슴의 흑핵에서 뿜어져 나오는 한기로 침입자를 얼어붙게 한다.",
       "id": "boss_floor_1",
@@ -249,18 +249,19 @@
       ],
       "spd": 20,
       "themeColor": 6056896,
-      "type": "boss"
+      "type": "boss",
+      "faction": "construct"
     },
     "boss_floor_10": {
-      "atk": 280,
-      "def": 620,
+      "atk": 880,
+      "def": 920,
       "description": "심연의 심장부에 군림하는 궁극의 공허 군주. 차원 전체를 멸망시킬 종말의 숨결을 내뿜습니다.",
       "drainPct": 0.35,
       "id": "boss_floor_10",
       "imagePath": "assets/boss_floor_10.jpg",
       "level": 28,
       "luck": 70,
-      "maxHp": 9000,
+      "maxHp": 10000,
       "name": "심연의 군주 아스모데우스 (10F 보스)",
       "piercePct": 0.6,
       "promptKey": "boss_floor_10",
@@ -299,7 +300,8 @@
       ],
       "spd": 70,
       "themeColor": 12000284,
-      "type": "boss"
+      "type": "boss",
+      "faction": "corrupted"
     },
     "boss_floor_2": {
       "atk": 180,
@@ -352,7 +354,7 @@
       "faction": "undead"
     },
     "boss_floor_3": {
-      "atk": 96,
+      "atk": 182,
       "def": 220,
       "description": "에테르 광맥 깊은 곳에서 결정을 먹고 자란 태고의 마도 생명체. 폭발적인 광맥 에너지를 방출한다.",
       "id": "boss_floor_3",
@@ -396,10 +398,11 @@
       ],
       "spd": 43,
       "themeColor": 48340,
-      "type": "boss"
+      "type": "boss",
+      "faction": "beast"
     },
     "boss_floor_4": {
-      "atk": 105,
+      "atk": 204,
       "def": 155,
       "description": "심연의 균열을 조작하여 시공간을 뒤틀어버리는 고대 차원 마도사. 시간의 흐름을 왜곡하여 공격을 무력화한다.",
       "id": "boss_floor_4",
@@ -445,7 +448,8 @@
       ],
       "spd": 58,
       "themeColor": 11225020,
-      "type": "boss"
+      "type": "boss",
+      "faction": "corrupted"
     },
     "boss_floor_5": {
       "atk": 388,
@@ -519,7 +523,7 @@
       "faction": "corrupted"
     },
     "boss_floor_6": {
-      "atk": 140,
+      "atk": 240,
       "def": 680,
       "description": "핏빛 성역의 지배자. 거대한 박쥐 날개와 피의 마법으로 침입자의 생명력을 흡수합니다.",
       "drainPct": 0.4,
@@ -559,18 +563,19 @@
       ],
       "spd": 88,
       "themeColor": 13840175,
-      "type": "boss"
+      "type": "boss",
+      "faction": "corrupted"
     },
     "boss_floor_7": {
-      "atk": 160,
-      "def": 480,
+      "atk": 460,
+      "def": 680,
       "description": "망각의 묘역을 수호하는 죽음의 묘지기. 거대한 영혼의 낫으로 산 자의 생명을 수확합니다.",
       "drainPct": 0.3,
       "id": "boss_floor_7",
       "imagePath": "assets/boss_floor_7.jpg",
       "level": 18,
       "luck": 56,
-      "maxHp": 3900,
+      "maxHp": 4900,
       "name": "망각의 묘지기 (7F 보스)",
       "piercePct": 0.4,
       "promptKey": "boss_floor_7",
@@ -600,17 +605,18 @@
       ],
       "spd": 70,
       "themeColor": 6056896,
-      "type": "boss"
+      "type": "boss",
+      "faction": "undead"
     },
     "boss_floor_8": {
-      "atk": 190,
-      "def": 660,
+      "atk": 590,
+      "def": 860,
       "description": "단죄의 요새를 통솔하던 전설적인 기사단장. 타락한 성역 결계와 무자비한 심판의 검을 휘두릅니다.",
       "id": "boss_floor_8",
       "imagePath": "assets/boss_floor_8.jpg",
       "level": 21,
       "luck": 60,
-      "maxHp": 4800,
+      "maxHp": 6800,
       "name": "타락한 기사단장 (8F 보스)",
       "piercePct": 0.45,
       "promptKey": "boss_floor_8",
@@ -641,17 +647,18 @@
       ],
       "spd": 80,
       "themeColor": 3622735,
-      "type": "boss"
+      "type": "boss",
+      "faction": "corrupted"
     },
     "boss_floor_9": {
-      "atk": 220,
+      "atk": 720,
       "def": 710,
       "description": "환영의 미궁 중심에서 차원 공간을 뒤틀어놓는 환각의 대마도사. 수많은 거울 파편으로 전장을 유린합니다.",
       "id": "boss_floor_9",
       "imagePath": "assets/boss_floor_9.jpg",
       "level": 24,
       "luck": 64,
-      "maxHp": 6200,
+      "maxHp": 8200,
       "name": "미궁의 지배자 (9F 보스)",
       "piercePct": 0.5,
       "promptKey": "boss_floor_9",
@@ -680,19 +687,20 @@
           "statusDuration": 3
         }
       ],
-      "spd": 60,
+      "spd": 100,
       "themeColor": 166097,
-      "type": "boss"
+      "type": "boss",
+      "faction": "construct"
     },
     "monster_abyssal_behemoth": {
-      "atk": 304,
-      "def": 340,
+      "atk": 544,
+      "def": 740,
       "description": "심연의 밑바닥을 배회하는 거대한 마수. 그 발걸음만으로도 던전 전체가 진동합니다.",
       "id": "monster_abyssal_behemoth",
       "imagePath": "assets/monster_abyssal_behemoth_v2.jpg",
       "level": 27,
       "luck": 126,
-      "maxHp": 1800,
+      "maxHp": 3800,
       "name": "심연의 베헤모스",
       "promptKey": "monster_abyssal_behemoth",
       "rewards": {
@@ -722,10 +730,11 @@
       ],
       "spd": 45,
       "themeColor": 4073251,
-      "type": "elite"
+      "type": "elite",
+      "faction": "beast"
     },
     "monster_abyssal_fiend": {
-      "atk": 204,
+      "atk": 504,
       "def": 600,
       "description": "심연의 가장 깊은 틈새에서 소환된 고위 악마. 치명적인 독과 저주받은 손톱으로 살을 찢습니다.",
       "drainPct": 0.35,
@@ -753,9 +762,10 @@
           "statusDuration": 2
         }
       ],
-      "spd": 63,
+      "spd": 88,
       "themeColor": 12986408,
-      "type": "normal"
+      "type": "normal",
+      "faction": "corrupted"
     },
     "monster_altar_cultist": {
       "atk": 126,
@@ -765,7 +775,7 @@
       "imagePath": "assets/monster_altar_cultist.jpg",
       "level": 10,
       "luck": 48,
-      "maxHp": 1600,
+      "maxHp": 1120,
       "name": "종언의 제단 광신도",
       "promptKey": "monster_altar_cultist",
       "rewards": {
@@ -797,15 +807,15 @@
       "faction": "corrupted"
     },
     "monster_blood_wolf": {
-      "atk": 155,
-      "def": 110,
+      "atk": 255,
+      "def": 410,
       "description": "핏빛 성역을 배회하는 흉포한 마수. 피 냄새를 맡으면 무리를 이끌고 광포화합니다.",
       "drainPct": 0.3,
       "id": "monster_blood_wolf",
       "imagePath": "assets/monster_blood_wolf_v2.jpg",
       "level": 13,
-      "luck": 54,
-      "maxHp": 2100,
+      "luck": 34,
+      "maxHp": 1300,
       "name": "핏빛 늑대",
       "promptKey": "monster_blood_wolf",
       "rewards": {
@@ -829,19 +839,20 @@
           "statusDuration": 2
         }
       ],
-      "spd": 66,
+      "spd": 86,
       "themeColor": 15684432,
-      "type": "normal"
+      "type": "normal",
+      "faction": "beast"
     },
     "monster_bone_golem": {
-      "atk": 118,
-      "def": 460,
+      "atk": 318,
+      "def": 560,
       "description": "수천의 유골과 마수의 뼈가 결합되어 탄생한 거대한 뼈의 골렘. 막강한 방어력과 분쇄력을 지닙니다.",
       "id": "monster_bone_golem",
       "imagePath": "assets/monster_bone_golem_v2.jpg",
       "level": 17,
       "luck": 54,
-      "maxHp": 3400,
+      "maxHp": 2400,
       "name": "뼈 골렘",
       "promptKey": "monster_bone_golem",
       "rewards": {
@@ -864,11 +875,12 @@
       ],
       "spd": 36,
       "themeColor": 12364452,
-      "type": "normal"
+      "type": "normal",
+      "faction": "construct"
     },
     "monster_cave_bat": {
       "atk": 35,
-      "def": 66,
+      "def": 166,
       "description": "고속으로 날며 음파 충격을 가하는 동굴 군집 몬스터. 속도가 가장 빠르다.",
       "id": "monster_cave_bat",
       "imagePath": "assets/monster_cave_bat.jpg",
@@ -902,10 +914,11 @@
       ],
       "spd": 20,
       "themeColor": 7901340,
-      "type": "normal"
+      "type": "normal",
+      "faction": "beast"
     },
     "monster_crypt_ghoul": {
-      "atk": 55,
+      "atk": 65,
       "def": 175,
       "description": "어둠 속에서 시체를 파먹고 자란 흉폭한 구울. 강력한 턱과 출혈 공격을 가한다.",
       "drainPct": 0.25,
@@ -947,14 +960,14 @@
       "faction": "undead"
     },
     "monster_crystal_scorpion": {
-      "atk": 68,
-      "def": 62,
+      "atk": 124,
+      "def": 162,
       "description": "광맥의 고농도 에테르가 응축된 푸른 수정 외피를 지닌 전갈. 강력한 독침으로 적을 마비시킨다.",
       "id": "monster_crystal_scorpion",
       "imagePath": "assets/monster_crystal_scorpion.jpg",
       "level": 6,
       "luck": 10,
-      "maxHp": 140,
+      "maxHp": 240,
       "name": "마도 수정 전갈",
       "promptKey": "monster_crystal_scorpion",
       "rewards": {
@@ -984,11 +997,12 @@
       ],
       "spd": 10,
       "themeColor": 2541274,
-      "type": "normal"
+      "type": "normal",
+      "faction": "beast"
     },
     "monster_cursed_revenant": {
       "atk": 47,
-      "def": 74,
+      "def": 174,
       "description": "방주 성채에서 쓰러진 병사의 혼이 공허에 흡수된 언데드. 자신의 HP를 흡수하며 싸운다.",
       "id": "monster_cursed_revenant",
       "imagePath": "assets/monster_cursed_revenant.jpg",
@@ -1023,7 +1037,8 @@
       ],
       "spd": 10,
       "themeColor": 13538264,
-      "type": "normal"
+      "type": "normal",
+      "faction": "undead"
     },
     "monster_dread_knight": {
       "atk": 110,
@@ -1075,14 +1090,14 @@
       "faction": "undead"
     },
     "monster_fallen_paladin": {
-      "atk": 240,
-      "def": 350,
+      "atk": 440,
+      "def": 550,
       "description": "심연의 저주에 굴복한 고대 성기사. 칠흑의 검과 저주받은 방패로 전열을 압박합니다.",
       "id": "monster_fallen_paladin",
       "imagePath": "assets/monster_fallen_paladin_v2.jpg",
       "level": 19,
       "luck": 63,
-      "maxHp": 800,
+      "maxHp": 2800,
       "name": "타락한 기사",
       "promptKey": "monster_fallen_paladin",
       "rewards": {
@@ -1100,16 +1115,17 @@
       ],
       "spd": 45,
       "themeColor": 4545124,
-      "type": "normal"
+      "type": "normal",
+      "faction": "corrupted"
     },
     "monster_fallen_priest": {
-      "atk": 82,
-      "def": 240,
+      "atk": 182,
+      "def": 340,
       "description": "심연의 어둠에 영혼을 바친 타락한 성직자. 어둠의 권능과 사악한 치유 의식을 행합니다.",
       "id": "monster_fallen_priest",
       "imagePath": "assets/monster_fallen_priest_v2.jpg",
       "level": 14,
-      "luck": 51,
+      "luck": 61,
       "maxHp": 1880,
       "name": "타락한 사제",
       "piercePct": 0.25,
@@ -1140,14 +1156,14 @@
       "faction": "corrupted"
     },
     "monster_inquisitor": {
-      "atk": 150,
-      "def": 220,
+      "atk": 380,
+      "def": 520,
       "description": "단죄의 성채에서 이단을 심문하던 광기의 집행관. 불타는 사슬과 화형의 불길로 적을 태웁니다.",
       "id": "monster_inquisitor",
       "imagePath": "assets/monster_inquisitor_v2.jpg",
       "level": 20,
-      "luck": 69,
-      "maxHp": 720,
+      "luck": 99,
+      "maxHp": 2576,
       "name": "이단 심문관",
       "piercePct": 0.35,
       "promptKey": "monster_inquisitor",
@@ -1168,7 +1184,8 @@
       ],
       "spd": 57,
       "themeColor": 14172949,
-      "type": "normal"
+      "type": "normal",
+      "faction": "corrupted"
     },
     "monster_iron_golem": {
       "atk": 35,
@@ -1212,14 +1229,14 @@
       "type": "normal"
     },
     "monster_mana_gargoyle": {
-      "atk": 74,
-      "def": 84,
+      "atk": 148,
+      "def": 184,
       "description": "석재 조각상에 에테르 마력이 스며들어 깨어난 비행 가고일. 고속으로 급강하하여 후열을 노린다.",
       "id": "monster_mana_gargoyle",
       "imagePath": "assets/monster_mana_gargoyle.jpg",
       "level": 6,
       "luck": 12,
-      "maxHp": 110,
+      "maxHp": 210,
       "name": "마력 침식 가고일",
       "promptKey": "monster_mana_gargoyle",
       "rewards": {
@@ -1247,17 +1264,18 @@
       ],
       "spd": 16,
       "themeColor": 5099745,
-      "type": "normal"
+      "type": "normal",
+      "faction": "construct"
     },
     "monster_mirror_phantom": {
-      "atk": 265,
-      "def": 350,
+      "atk": 465,
+      "def": 650,
       "description": "환영의 미궁에 반사된 다중 차원의 그림자 분신. 실체 없는 공격으로 적의 급소를 유린합니다.",
       "id": "monster_mirror_phantom",
       "imagePath": "assets/monster_mirror_phantom_v2.jpg",
       "level": 22,
-      "luck": 85,
-      "maxHp": 863,
+      "luck": 120,
+      "maxHp": 2863,
       "name": "거울의 환영",
       "piercePct": 0.4,
       "promptKey": "monster_mirror_phantom",
@@ -1276,19 +1294,20 @@
           "power": 1.5
         }
       ],
-      "spd": 84,
+      "spd": 74,
       "themeColor": 2733814,
-      "type": "normal"
+      "type": "normal",
+      "faction": "construct"
     },
     "monster_monolith_guardian": {
-      "atk": 103,
+      "atk": 203,
       "def": 479,
       "description": "고대 모노리스의 파편으로 기동하는 거대한 골렘. 철벽의 방패와 무거운 석퇴로 침입자를 짓밟는다.",
       "id": "monster_monolith_guardian",
       "imagePath": "assets/monster_monolith_guardian.jpg",
       "level": 11,
       "luck": 21,
-      "maxHp": 1790,
+      "maxHp": 1490,
       "name": "모노리스의 파멸 수호자",
       "promptKey": "monster_monolith_guardian",
       "rewards": {
@@ -1322,14 +1341,14 @@
       "faction": "construct"
     },
     "monster_oblivion_ghost": {
-      "atk": 125,
-      "def": 126,
+      "atk": 325,
+      "def": 426,
       "description": "망각의 묘지에 갇힌 영혼들의 원념이 뭉쳐진 언데드 유체. 영혼을 얼어붙게 하는 한기를 내뿜습니다.",
       "id": "monster_oblivion_ghost",
       "imagePath": "assets/monster_oblivion_ghost_v2.jpg",
       "level": 16,
       "luck": 100,
-      "maxHp": 1724,
+      "maxHp": 2240,
       "name": "망각의 유령",
       "promptKey": "monster_oblivion_ghost",
       "rewards": {
@@ -1352,14 +1371,14 @@
       "faction": "undead"
     },
     "monster_rift_stalker": {
-      "atk": 77,
-      "def": 100,
+      "atk": 158,
+      "def": 225,
       "description": "시공간의 틈새를 자유자재로 넘나드는 차원 포식자. 방어력을 관통하는 기습 일격을 가한다.",
       "id": "monster_rift_stalker",
       "imagePath": "assets/monster_rift_stalker.jpg",
       "level": 8,
       "luck": 45,
-      "maxHp": 120,
+      "maxHp": 620,
       "name": "균열의 차원 추적자",
       "promptKey": "monster_rift_stalker",
       "rewards": {
@@ -1388,11 +1407,12 @@
       ],
       "spd": 55,
       "themeColor": 12216520,
-      "type": "normal"
+      "type": "normal",
+      "faction": "beast"
     },
     "monster_rot_slime": {
       "atk": 23,
-      "def": 58,
+      "def": 158,
       "description": "부패한 에테르에서 태어난 녹색 점액 괴물. 느리지만 체력이 높고 광역 독을 뿌린다.",
       "id": "monster_rot_slime",
       "imagePath": "assets/monster_rot_slime.jpg",
@@ -1427,11 +1447,12 @@
       ],
       "spd": 5,
       "themeColor": 9159498,
-      "type": "normal"
+      "type": "normal",
+      "faction": "beast"
     },
     "monster_shadow_imp": {
       "atk": 30,
-      "def": 66,
+      "def": 166,
       "description": "공허에서 분열한 소형 악령. 기절 효과로 아군의 턴을 빼앗는다.",
       "id": "monster_shadow_imp",
       "imagePath": "assets/monster_shadow_imp.jpg",
@@ -1465,17 +1486,18 @@
       ],
       "spd": 22,
       "themeColor": 6056896,
-      "type": "normal"
+      "type": "normal",
+      "faction": "corrupted"
     },
     "monster_void_beast": {
-      "atk": 76,
-      "def": 188,
+      "atk": 122,
+      "def": 288,
       "description": "심연의 어둠 속에서 꿈틀거리는 다수의 촉수를 지닌 거대 마물. 광역 출혈과 자가 재생을 구사한다.",
       "id": "monster_void_beast",
       "imagePath": "assets/monster_void_beast.jpg",
       "level": 8,
       "luck": 12,
-      "maxHp": 220,
+      "maxHp": 520,
       "name": "공허의 하수인 촉수괴수",
       "promptKey": "monster_void_beast",
       "rewards": {
@@ -1504,7 +1526,8 @@
       ],
       "spd": 18,
       "themeColor": 8280002,
-      "type": "normal"
+      "type": "normal",
+      "faction": "beast"
     },
     "monster_void_overlord": {
       "atk": 138,
@@ -1577,14 +1600,14 @@
       "type": "boss"
     },
     "monster_void_stalker": {
-      "atk": 210,
+      "atk": 510,
       "def": 520,
       "description": "어둠 속에서 먹잇감을 노리는 공허의 암살자. 기척을 숨기고 다가와 치명적인 일격을 가합니다.",
       "id": "monster_void_stalker",
       "imagePath": "assets/monster_void_stalker_v2.jpg",
       "level": 26,
       "luck": 84,
-      "maxHp": 840,
+      "maxHp": 3140,
       "name": "공허의 추적자",
       "piercePct": 0.6,
       "promptKey": "monster_void_stalker",
@@ -1606,7 +1629,8 @@
       ],
       "spd": 84,
       "themeColor": 4854924,
-      "type": "normal"
+      "type": "normal",
+      "faction": "beast"
     },
     "monster_tomb_banshee": {
       "id": "monster_tomb_banshee",
@@ -1615,9 +1639,9 @@
       "faction": "undead",
       "level": 4,
       "maxHp": 88,
-      "atk": 44,
+      "atk": 64,
       "def": 160,
-      "spd": 14,
+      "spd": 24,
       "luck": 10,
       "drainPct": 0.2,
       "skills": [
@@ -1650,6 +1674,95 @@
       "imagePath": "assets/monster_tomb_banshee.jpg",
       "themeColor": 8445674,
       "description": "납골당의 묘비를 떠도는 원혼. 차가운 비탄의 절규로 대상 파티의 마나를 메마르게 한다."
+    },
+    "monster_stalker": {
+      "id": "monster_stalker",
+      "name": "공허의 잠복자",
+      "type": "normal",
+      "faction": "beast",
+      "level": 2,
+      "maxHp": 59,
+      "atk": 34,
+      "def": 180,
+      "spd": 14,
+      "luck": 8,
+      "skills": [
+        {
+          "description": "전열 영웅에게 130% 물리 피해",
+          "effectType": "damage",
+          "name": "그림자 기습",
+          "power": 1.3
+        },
+        {
+          "description": "적 1체에 110% 피해 + 2턴 출혈(ATK 15%)",
+          "effectType": "bleed",
+          "name": "출혈 발톱",
+          "power": 1.1,
+          "statusDuration": 2
+        }
+      ],
+      "rewards": {
+        "ether": 2,
+        "exp": 30,
+        "gold": 40,
+        "resources": {
+          "leather": 2
+        }
+      },
+      "promptKey": "monster_stalker",
+      "imagePath": "assets/monster_stalker.jpg",
+      "themeColor": 15684432,
+      "description": "공허의 흑무에서 태어난 변이 맹수. 어둠 속에서 불시에 기습합니다."
+    },
+    "boss_avici_final": {
+      "id": "boss_avici_final",
+      "name": "무간의 지배자 아르케오스 (진 최종 보스)",
+      "type": "boss",
+      "faction": "corrupted",
+      "level": 600,
+      "maxHp": 45000,
+      "atk": 1250,
+      "def": 1080,
+      "spd": 176,
+      "luck": 150,
+      "piercePct": 0.7,
+      "drainPct": 0.4,
+      "shieldBreakMult": 2.5,
+      "skills": [
+        {
+          "breakGauge": 3000,
+          "description": "적 전체에 350% 마법 관통 파동 [집중 차징 & 진형 셔플]",
+          "disruptPosition": "shuffle",
+          "effectType": "damage",
+          "isCharge": true,
+          "name": "무간의 태초 파동",
+          "piercePct": 0.8,
+          "power": 3.5
+        },
+        {
+          "description": "대상 파티 전체 방어력 50% 감소 및 2턴 기절",
+          "effectType": "stun",
+          "name": "공허의 절대 침식",
+          "power": 1.5,
+          "statusDuration": 2
+        },
+        {
+          "description": "단일 대상 500% 치명 관통 강타 (방어 관통 90%)",
+          "effectType": "damage",
+          "name": "멸망의 창조 일격",
+          "piercePct": 0.9,
+          "power": 5
+        }
+      ],
+      "themeColor": 10233776,
+      "promptKey": "boss_avici_final",
+      "imagePath": "assets/void_overlord.jpg",
+      "description": "무간도의 가장 깊은 심연에 도사린 태초의 공허 창조주. 존재 자체로 시공간을 소멸시키는 절대자입니다.",
+      "rewards": {
+        "ether": 5000,
+        "exp": 8000,
+        "gold": 50000
+      }
     }
   },
   "balance": {

@@ -6215,7 +6215,7 @@ const SkillManagerOverlay: React.FC<{
                   </span>
                 </div>
               ) : (
-                learnedSkills.map(sk => {
+                learnedSkills.map((sk, skIdx) => {
                   const bookDef = ALL_SKILL_BOOKS.find(b => b.skill.id === sk.id);
                   const matchingBookItem = (skillBooks || []).find(b => b.skill.id === sk.id);
                   const bookLv = hero.skillLevels?.[sk.id] || matchingBookItem?.level || 1;
@@ -6228,7 +6228,7 @@ const SkillManagerOverlay: React.FC<{
 
                   return (
                     <div
-                      key={sk.id}
+                      key={`${sk.id}_${skIdx}`}
                       className={`panel p-3 rounded-xl flex flex-col gap-2 transition-all cursor-pointer hover:border-[#00d2ff88] group ${
                         isEquippedAny ? 'border-[#00d2ff] bg-[#121c2c]' : 'border-[#222d42] bg-[#131926]'
                       }`}
@@ -6366,7 +6366,7 @@ const SkillManagerOverlay: React.FC<{
                   </span>
                 </div>
               ) : (
-                studyingSkills.map(({ skill: sk, mastery }) => {
+                studyingSkills.map(({ skill: sk, mastery }, stIdx) => {
                   const bookDef = ALL_SKILL_BOOKS.find(b => b.skill.id === sk.id);
                   const matchingBookItem = (skillBooks || []).find(b => b.skill.id === sk.id);
                   const bookLv = hero.skillLevels?.[sk.id] || matchingBookItem?.level || 1;
@@ -6378,7 +6378,7 @@ const SkillManagerOverlay: React.FC<{
 
                   return (
                     <div
-                      key={sk.id}
+                      key={`${sk.id}_${stIdx}`}
                       className="panel p-3 bg-[#131926] border border-[#ffd54f44] rounded-xl flex flex-col gap-2.5 cursor-pointer hover:border-[#ffd54f88] group transition-all"
                       onClick={() => {
                         setDetailModalItem({

@@ -705,10 +705,23 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
   }
 };
 
-// 동의어 및 레거시 클래스 별칭(Alias) 등록
-CHARACTER_CLASSES['sniper'] = CHARACTER_CLASSES['sharpshooter'];
-CHARACTER_CLASSES['archmage'] = CHARACTER_CLASSES['calamity_mage'];
-CHARACTER_CLASSES['archer'] = CHARACTER_CLASSES['sharpshooter'];
+// 동의어 및 레거시 클래스 별칭(Alias)을 비열거형(enumerable: false)으로 등록
+// -> CHARACTER_CLASSES['sniper']로 직접 접근 가능하면서도 Object.values(CHARACTER_CLASSES) 순회 시 중복 방지
+Object.defineProperty(CHARACTER_CLASSES, 'sniper', {
+  get: () => CHARACTER_CLASSES['sharpshooter'],
+  enumerable: false,
+  configurable: true,
+});
+Object.defineProperty(CHARACTER_CLASSES, 'archmage', {
+  get: () => CHARACTER_CLASSES['calamity_mage'],
+  enumerable: false,
+  configurable: true,
+});
+Object.defineProperty(CHARACTER_CLASSES, 'archer', {
+  get: () => CHARACTER_CLASSES['sharpshooter'],
+  enumerable: false,
+  configurable: true,
+});
 
 // ================================================================
 // 클래스별 대표 이모지 매핑 & 헬퍼 함수

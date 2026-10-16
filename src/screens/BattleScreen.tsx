@@ -7563,7 +7563,7 @@ export const BattleScreen: React.FC = () => {
               })()}
               
               {/* 스킬 목록 */}
-              {heroSkills.map(skill => {
+              {heroSkills.map((skill, sIdx) => {
                 const style = getSkillBtnStyle(skill);
                 const cdLeft = heroCooldowns[`${selectedHero.id}_${skill.id}`] || 0;
                 const mpCost = gm.getSkillManaCost(skill.manaCost, undefined, selectedHero);
@@ -7587,7 +7587,7 @@ export const BattleScreen: React.FC = () => {
 
                 return (
                   <LongPressBox
-                    key={skill.id}
+                    key={`${skill.id}_${sIdx}`}
                     onLongPress={() => setSelectedSkillForModal(skill)}
                     onClick={() => canUse && executeSkill(selectedHero, skill, targetedMonsterIdx)}
                     className={`btn btn-ghost flex flex-col justify-between p-2 sm:p-2.5 min-h-[82px] h-auto bg-transparent border relative select-none ${!canUse ? 'opacity-40 cursor-not-allowed' : ''} ${

@@ -1884,7 +1884,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     const curCd = override.cooldown !== undefined ? override.cooldown : (sk.cooldown || 1);
                     const tierLabel = sk.tier === 0 ? '0티어' : sk.tier === 1 ? '1차' : sk.tier === 2 ? '2차' : '3차';
                     return (
-                      <div key={sk.id} className="p-3 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2">
+                      <div key={`${sk.classId || ''}_${sk.id}`} className="p-3 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-xs text-white flex items-center gap-1.5 flex-wrap">
                             <span>{sk.icon || '⚡'}</span>
