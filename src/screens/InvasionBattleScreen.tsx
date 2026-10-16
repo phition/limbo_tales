@@ -433,12 +433,12 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     const extraBarrierDef = bHero ? Math.round((bHero.stats?.def || 0) * 0.50) : 0;
     setBarrierHeroBonus({ hp: extraBarrierHp, def: extraBarrierDef });
 
-    const calcBarrierHp = 3500 + baseGateLv * 525 + totalTowerLv * 175 + extraBarrierHp;
+    const calcBarrierHp = 3500 + baseGateLv * 250 + totalTowerLv * 175 + extraBarrierHp;
     const barrierDef = 25 + baseGateLv * 3 + (oppTowerData.defense?.tier3 || 0) * 8 + extraBarrierDef;
 
     // 🗼 좌/우 전술 포탑 스펙 산출 (기본 1,400 HP - 50% 추가 하향 밸런싱)
     const defTier2 = oppTowerData.defense?.tier2 || 0;
-    const calcTurretHp = 1400 + baseGateLv * 280 + totalTowerLv * 105;
+    const calcTurretHp = 1400 + baseGateLv * 100 + totalTowerLv * 105;
     const turretDef = 20 + defTier2 * 4;
     const turretSpd = 15 + (oppTowerData.utility?.tier1 || 0) * 3;
     const turretLuck = 10 + (oppTowerData.utility?.tier2 || 0) * 2;
