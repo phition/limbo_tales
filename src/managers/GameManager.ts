@@ -8732,18 +8732,18 @@ export class GameManager {
       (tower.defense?.tier1 || 0) + (tower.defense?.tier2 || 0) + (tower.defense?.tier3 || 0) +
       (tower.utility?.tier1 || 0) + (tower.utility?.tier2 || 0) + (tower.utility?.tier3 || 0);
 
-    // 1. 차원 보호막: 기본 10,000 HP + 게이트/연구치 + 결속 용병의 MaxHP 전량 합산
-    const baseBarrierHp = 10000 + gateLevel * 1500 + totalTowerLv * 500;
-    const heroHpBonus = barrierHero ? Math.round(barrierHero.maxHp * (1.0 + (tower.defense?.tier1 || 0) * 0.20)) : 0;
+    // 1. 차원 보호막: 기본 7,000 HP (30% 하향) + 게이트/연구치 + 결속 용병의 MaxHP 합산
+    const baseBarrierHp = 7000 + gateLevel * 1050 + totalTowerLv * 350;
+    const heroHpBonus = barrierHero ? Math.round(barrierHero.maxHp * 0.70 * (1.0 + (tower.defense?.tier1 || 0) * 0.20)) : 0;
     const barrierMaxHp = baseBarrierHp + heroHpBonus;
 
-    const baseBarrierDef = 30 + gateLevel * 3 + (tower.defense?.tier3 || 0) * 10;
+    const baseBarrierDef = 25 + gateLevel * 2 + (tower.defense?.tier3 || 0) * 7;
     const heroDefBonus = barrierHero ? Math.round(barrierHero.stats.def * 0.5) : 0;
     const barrierDef = baseBarrierDef + heroDefBonus;
 
-    // 2. 좌/우 전술 타워: 기본 4,000 HP + 게이트/연구치
-    const baseTurretHp = 4000 + gateLevel * 800 + totalTowerLv * 300;
-    const baseTurretDef = 25 + gateLevel * 2 + (tower.defense?.tier1 || 0) * 5;
+    // 2. 좌/우 전술 타워: 기본 2,800 HP (30% 하향) + 게이트/연구치
+    const baseTurretHp = 2800 + gateLevel * 560 + totalTowerLv * 210;
+    const baseTurretDef = 20 + gateLevel * 2 + (tower.defense?.tier1 || 0) * 4;
 
     return {
       barrierMaxHp,

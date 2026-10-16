@@ -122,8 +122,15 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
     (h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx
   );
 
+  const leftTurretBaseAtk = 100 + gateLevel * 15 + (tacticalTower.attack?.tier1 || 0) * 20;
+  const leftTurretHeroAtk = leftTurretHero ? leftTurretHero.stats.atk : 0;
+  const leftTurretTotalAtk = leftTurretBaseAtk + leftTurretHeroAtk;
+
+  const rightTurretMaxMp = 100 + (rightTurretHero ? rightTurretHero.maxMp : 50);
+  const rightTurretLuck = 10 + (tacticalTower.utility?.tier2 || 0) * 2 + (rightTurretHero ? rightTurretHero.stats.luck : 0);
+
   return (
-    <div className="flex flex-col gap-2.5 p-2 sm:p-3 overflow-y-auto custom-scrollbar animate-fade-in select-none">
+    <div className="flex-1 min-h-0 w-full flex flex-col gap-2.5 p-2 sm:p-3 overflow-y-auto custom-scrollbar animate-fade-in select-none pb-16">
 
       {/* ── 상단 헤더 & 자동 편성 바 (모바일 반응형 한 줄 압축) ── */}
       <div className="p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#121c2e] via-[#0e1626] to-[#1a1124] border border-[#233554] flex items-center justify-between shadow-lg gap-2">
@@ -153,7 +160,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
         </button>
       </div>
 
-      {/* ════════ 1. 🛡️ 차원 왜곡 보호막 결속 (기본 10,000 HP + 탱커 체력/방어력 전량 합산) ════════ */}
+      {/* ════════ 1. 🛡️ 차원 왜곡 보호막 결속 (기본 7,000 HP + 탱커 체력/방어력 결속 합산) ════════ */}
       <div
         onClick={() => handleOpenModal('barrier')}
         className="p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0a1e33] via-[#091b2e] to-[#061424] border-2 border-[#00d2ff77] hover:border-[#00d2ff] cursor-pointer transition-all flex flex-col gap-2 shadow-[0_0_15px_rgba(0,210,255,0.25)] relative overflow-hidden group"
@@ -166,7 +173,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               차원 왜곡 보호막 결속
             </span>
             <span className="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] shrink-0">
-              기본 10,000 HP
+              기본 7,000 HP
             </span>
           </div>
           <span className="text-[11px] text-[#00d2ff] font-bold flex items-center gap-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform">
@@ -223,7 +230,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                 <span className="text-white font-black">{fortressStats.barrierMaxHp.toLocaleString()} HP</span>
               </span>
               <span className="text-[9px] text-[#ffd54f] truncate">
-                {barrierHero ? `용병 HP +${barrierHero.maxHp.toLocaleString()} 전량 합산` : '탱커 배치 권장'}
+                {barrierHero ? `용병 HP +${Math.round(barrierHero.maxHp * 0.70).toLocaleString()} 합산 반영` : '탱커 배치 권장'}
               </span>
             </div>
 
@@ -237,7 +244,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
       {/* ════════ 2. 🗼 좌측 전술 타워 & 3. 🗼 우측 전술 타워 (모바일 2열 나란히 배치) ════════ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
 
-        {/* 🗼 좌측 전술 포탑 (공격 지원 / 기본 공격 버프 특화) */}
+        {/* 🗼 좌측 전술 포탑 (공격 지원 / 포탑 공격력 + 사수 공격력 합산) */}
         <div
           onClick={() => handleOpenModal('left_turret')}
           className="p-2.5 rounded-2xl bg-[#140e18] border border-[#ff704355] hover:border-[#ff7043] cursor-pointer transition-all flex flex-col gap-2 shadow group relative"
@@ -246,7 +253,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <div className="flex items-center gap-1.5 truncate">
               <span className="text-base">🗼</span>
               <span className="font-extrabold text-xs text-white group-hover:text-[#ff7043] transition-colors truncate">
-                좌측 포탑 (공격 지원)
+                좌측 포탑 (화력 공세)
               </span>
             </div>
             <span className="text-[10px] text-[#ff7043] font-bold shrink-0">사수 변경 ➔</span>
@@ -276,21 +283,21 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                 <span className="text-xs font-black text-white truncate">
                   {leftTurretHero ? leftTurretHero.name : '사수 미배치'}
                 </span>
-                <span className="text-[9px] font-mono text-[#ff8a80]">
-                  ATK {leftTurretHero ? leftTurretHero.stats.atk : 0}
+                <span className="text-[8.5px] font-mono text-[#ff8a80] font-bold">
+                  총 ATK {leftTurretTotalAtk}
                 </span>
               </div>
-              <div className="text-[9.5px] font-mono text-[#8b9bb4]">
-                내구도: <span className="text-white font-bold">{fortressStats.leftTurretMaxHp.toLocaleString()} HP</span>
+              <div className="text-[8.5px] font-mono text-[#8b9bb4]">
+                기본 {leftTurretBaseAtk} + 사수 {leftTurretHeroAtk} · HP <span className="text-white font-bold">{fortressStats.leftTurretMaxHp.toLocaleString()}</span>
               </div>
-              <div className="text-[8.5px] text-[#ffd54f] truncate">
-                {leftTurretMode === 'focus_bombard' ? '💥 자동 포격 집중' : leftTurretMode === 'slow_field' ? '⚡ 감속 역장' : '⚖️ 공격 버프 (평타 특화)'}
+              <div className="text-[8px] text-[#ffd54f] truncate">
+                🎯 {leftTurretMode === 'focus_bombard' ? '타겟 집중 사격' : leftTurretMode === 'slow_field' ? '감속 억제탄' : '광역 폭격 / 집중 요격'}
               </div>
             </div>
           </div>
         </div>
 
-        {/* 🗼 우측 전술 포탑 (전술 지원 / 스킬 버프 특화) */}
+        {/* 🗼 우측 전술 포탑 (전술 지원 / 마나 & 행운 기반 증폭) */}
         <div
           onClick={() => handleOpenModal('right_turret')}
           className="p-2.5 rounded-2xl bg-[#0c1824] border border-[#00d2ff55] hover:border-[#00d2ff] cursor-pointer transition-all flex flex-col gap-2 shadow group relative"
@@ -329,15 +336,15 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                 <span className="text-xs font-black text-white truncate">
                   {rightTurretHero ? rightTurretHero.name : '사수 미배치'}
                 </span>
-                <span className="text-[9px] font-mono text-[#80deea]">
-                  ATK {rightTurretHero ? rightTurretHero.stats.atk : 0}
+                <span className="text-[8.5px] font-mono text-[#80deea] font-bold">
+                  MP {rightTurretMaxMp} · LUCK {rightTurretLuck}
                 </span>
               </div>
-              <div className="text-[9.5px] font-mono text-[#8b9bb4]">
-                내구도: <span className="text-white font-bold">{fortressStats.rightTurretMaxHp.toLocaleString()} HP</span>
+              <div className="text-[8.5px] font-mono text-[#8b9bb4]">
+                전술 스킬 증폭 · HP <span className="text-white font-bold">{fortressStats.rightTurretMaxHp.toLocaleString()}</span>
               </div>
-              <div className="text-[8.5px] text-[#80deea] truncate">
-                {rightTurretMode === 'barrier_regen' ? '🛡️ 결계 수복' : rightTurretMode === 'sanctuary_heal' ? '💚 성역 치유' : '✨ 전술 버프 (스킬 특화)'}
+              <div className="text-[8px] text-[#80deea] truncate">
+                ✨ {rightTurretMode === 'barrier_regen' ? '성벽·포탑 긴급 수복' : rightTurretMode === 'sanctuary_heal' ? '결계 방어막 및 버프' : '디버프 및 어그로 교란'}
               </div>
             </div>
           </div>

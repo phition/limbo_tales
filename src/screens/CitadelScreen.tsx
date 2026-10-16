@@ -3847,12 +3847,14 @@ const BarracksDrawer: React.FC<{
       )}
 
       {barracksCategory === 'defense' ? (
-        <DefenseSettingsView
-          onNavigateToTowerResearch={() => {
-            onClose();
-            onNavigateDrawer?.('arena');
-          }}
-        />
+        <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar w-full">
+          <DefenseSettingsView
+            onNavigateToTowerResearch={() => {
+              onClose();
+              onNavigateDrawer?.('arena');
+            }}
+          />
+        </div>
       ) : barracksCategory === 'dimensional' ? (
         // ── 🌌 차원 3인 결투 부대 & 전술 오퍼레이터 관리 뷰 ──
         !isAnchorUnlocked ? (

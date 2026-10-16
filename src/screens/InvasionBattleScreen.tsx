@@ -233,13 +233,13 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const oppTowerRef = useRef<any>(null);
   const [barrierHeroBonus, setBarrierHeroBonus] = useState<{ hp: number; def: number }>({ hp: 0, def: 0 });
 
-  // 3. 차원 보호막 및 좌/우 2개 전술 타워
+  // 3. 차원 보호막 및 좌/우 2개 전술 타워 (30% 하향 조정)
   const [barrierState, setBarrierState] = useState<SiegeTargetObject>({
     id: 'dimensional_barrier',
     name: '차원 왜곡 보호막',
-    currentHp: 10000,
-    maxHp: 10000,
-    def: 30,
+    currentHp: 7000,
+    maxHp: 7000,
+    def: 25,
     icon: '🛡️',
     type: 'barrier',
     side: 'center',
@@ -249,26 +249,26 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const [turretLeft, setTurretLeft] = useState<SiegeTargetObject>({
     id: 'turret_left',
     name: '좌측 전술 포탑',
-    currentHp: 4000,
-    maxHp: 4000,
-    def: 25,
+    currentHp: 2800,
+    maxHp: 2800,
+    def: 20,
     icon: '🗼',
     type: 'turret',
     side: 'left',
     isDestroyed: false,
-    description: '화력 지원 & 요격 사격 (평타 화력 강화)',
+    description: '화력 공세 & 요격 사격 (광역 폭격 / 집중 요격)',
   });
   const [turretRight, setTurretRight] = useState<SiegeTargetObject>({
     id: 'turret_right',
     name: '우측 방호 포탑',
-    currentHp: 4000,
-    maxHp: 4000,
-    def: 25,
+    currentHp: 2800,
+    maxHp: 2800,
+    def: 20,
     icon: '🗼',
     type: 'turret',
     side: 'right',
     isDestroyed: false,
-    description: '성역 결계 & 전술 증폭 (스킬 위력 강화)',
+    description: '성역 결계 & 전술 지원 (마나·행운 기반 증폭)',
   });
 
   const barrierStateRef = useRef(barrierState);
@@ -382,19 +382,19 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
     const baseGateLv = target.gateLevel || 6;
 
-    // 🛡️ 차원 보호막 내구도 및 방어력 계산 (기본 10,000 HP 기준)
+    // 🛡️ 차원 보호막 내구도 및 방어력 계산 (기본 7,000 HP 기준 - 30% 하향 밸런싱)
     const defTier1 = oppTowerData.defense?.tier1 || 0;
-    const extraBarrierHp = bHero ? Math.round(bHero.maxHp * (1.0 + defTier1 * 0.20)) : 0;
+    const extraBarrierHp = bHero ? Math.round(bHero.maxHp * 0.70 * (1.0 + defTier1 * 0.20)) : 0;
     const extraBarrierDef = bHero ? Math.round((bHero.stats?.def || 0) * 0.50) : 0;
     setBarrierHeroBonus({ hp: extraBarrierHp, def: extraBarrierDef });
 
-    const calcBarrierHp = 10000 + baseGateLv * 1500 + totalTowerLv * 500 + extraBarrierHp;
-    const barrierDef = 30 + baseGateLv * 3 + (oppTowerData.defense?.tier3 || 0) * 8 + extraBarrierDef;
+    const calcBarrierHp = 7000 + baseGateLv * 1050 + totalTowerLv * 350 + extraBarrierHp;
+    const barrierDef = 25 + baseGateLv * 3 + (oppTowerData.defense?.tier3 || 0) * 8 + extraBarrierDef;
 
-    // 🗼 좌/우 전술 포탑 스펙 산출 (기본 4,000 HP)
+    // 🗼 좌/우 전술 포탑 스펙 산출 (기본 2,800 HP - 30% 하향 밸런싱)
     const defTier2 = oppTowerData.defense?.tier2 || 0;
-    const calcTurretHp = 4000 + baseGateLv * 800 + totalTowerLv * 300;
-    const turretDef = 25 + defTier2 * 4;
+    const calcTurretHp = 2800 + baseGateLv * 560 + totalTowerLv * 210;
+    const turretDef = 20 + defTier2 * 4;
     const turretSpd = 15 + (oppTowerData.utility?.tier1 || 0) * 3;
     const turretLuck = 10 + (oppTowerData.utility?.tier2 || 0) * 2;
 
@@ -423,7 +423,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       side: 'left',
       isDestroyed: false,
       description: lTurretHero
-        ? `사수: ${lTurretHero.name} | 화력 지원 (평타 +${(oppTowerData.attack?.tier1 || 1) * 25}%)`
+        ? `사수: ${lTurretHero.name} | 화력 복합 지원 (포탑+용병 공격력 합산)`
         : `자동 요격 포탑`,
     };
     const initRightTurret: SiegeTargetObject = {
@@ -437,7 +437,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       side: 'right',
       isDestroyed: false,
       description: rTurretHero
-        ? `사수: ${rTurretHero.name} | 전술 증폭 (스킬 +${(oppTowerData.defense?.tier3 || oppTowerData.attack?.tier2 || 1) * 30}%)`
+        ? `사수: ${rTurretHero.name} | 전술 증폭 지원 (마나·행운 기반 전술 지원)`
         : `성역 결계 포탑`,
     };
 
@@ -528,6 +528,10 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         }
       ];
 
+      const leftTurretBaseAtk = 90 + baseGateLv * 12 + (oppTowerData.attack?.tier1 || 0) * 15;
+      const leftTurretHeroAtk = lTurretHero ? lTurretHero.stats.atk : 0;
+      const leftTurretTotalAtk = leftTurretBaseAtk + leftTurretHeroAtk;
+
       oCombatants.push({
         id: 'turret_left',
         name: lTurretHero ? `좌측 포탑 [${lTurretHero.name}]` : '좌측 전술 포탑',
@@ -540,7 +544,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         maxHp: calcTurretHp,
         currentMp: lTurretHero ? lTurretHero.currentMp : 100,
         maxMp: lTurretHero ? lTurretHero.maxMp : 100,
-        atk: lTurretHero ? lTurretHero.stats.atk : 130 + baseGateLv * 15,
+        atk: leftTurretTotalAtk,
         def: turretDef,
         spd: turretSpd,
         luck: turretLuck,
@@ -554,7 +558,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       });
     }
 
-    // 우측 방호 포탑 사수 (마법/전술 증폭 지원)
+    // 우측 방호 포탑 사수 (마법/전술 증폭 지원 - 마나 및 행운 특화)
     if (rTurretHero || target.gateLevel) {
       const cls = rTurretHero ? (CHARACTER_CLASSES[rTurretHero.classId] || CHARACTER_CLASSES['archmage']) : CHARACTER_CLASSES['archmage'];
       const heroSkills: Skill[] = rTurretHero ? [
@@ -585,6 +589,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         }
       ];
 
+      const rightTurretMaxMp = 120 + (rTurretHero ? rTurretHero.maxMp : 60);
+      const rightTurretLuck = turretLuck + (rTurretHero ? (rTurretHero.stats?.luck || 15) : 10);
+
       oCombatants.push({
         id: 'turret_right',
         name: rTurretHero ? `우측 포탑 [${rTurretHero.name}]` : '우측 방호 포탑',
@@ -595,12 +602,12 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         position: 'back',
         currentHp: calcTurretHp,
         maxHp: calcTurretHp,
-        currentMp: rTurretHero ? rTurretHero.currentMp : 100,
-        maxMp: rTurretHero ? rTurretHero.maxMp : 100,
-        atk: rTurretHero ? rTurretHero.stats.atk : 130 + baseGateLv * 15,
+        currentMp: rightTurretMaxMp,
+        maxMp: rightTurretMaxMp,
+        atk: rTurretHero ? rTurretHero.stats.atk : 110 + baseGateLv * 10,
         def: turretDef,
         spd: turretSpd,
-        luck: turretLuck,
+        luck: rightTurretLuck,
         skills: heroSkills,
         isPlayer: false,
         cooldowns: {},
@@ -1189,109 +1196,372 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     }
 
     // ─────────────────────────────────────────────────────────────
-    // [분기 B] 수성측(포탑)의 공격 -> 차원 보호막 너머에서 아군 3인 타격!
+    // [분기 B] 수성측(포탑)의 턴 -> 좌측 화력 포탑 / 우측 전술 지원 포탑 행동 분기
     // ─────────────────────────────────────────────────────────────
     else {
-      const targetDefender = aliveP[Math.floor(Math.random() * aliveP.length)];
-      if (!targetDefender) {
+      if (aliveP.length === 0) {
         isProcessingRef.current = false;
         return;
       }
 
-      setActiveTargetDefenderId(targetDefender.id);
+      const opTrait = oppOperatorRef.current?.trait || '';
+      const opRole = oppOperatorRef.current?.role || '';
+      const heroTrait = attacker.trait || '';
+      const heroRole = attacker.role || '';
 
-      const critChance = attacker.luck * 0.008 + 0.10;
-      const isCrit = Math.random() < critChance;
-      let rawDmg = attacker.atk * (chosenSkill.power || 1.0) * (isCrit ? 1.5 : 1.0);
-
-      let buffNotice = '';
+      // ─────────────────────────────────────────────────────────
+      // 1) 좌측 전술 화력 포탑 (포탑+용병 공격력 합산 / 광역 폭격 vs 약점 타겟 집중 공격)
+      // ─────────────────────────────────────────────────────────
       if (attacker.id === 'turret_left') {
-        // 좌측 포탑 사수: 기본 공격(평타) 시 화력 버프 발동!
-        if (chosenSkill.id === 'basic_attack') {
-          const atkBuffTier = oppTowerRef.current?.attack?.tier1 || 1;
-          const atkBuffMult = 1.0 + atkBuffTier * 0.25;
-          rawDmg = Math.round(rawDmg * atkBuffMult);
-          buffNotice = ` [💥화력 지원 +${Math.round((atkBuffMult - 1) * 100)}%]`;
+        const isFocusFire =
+          ['투사', '그림자', '혈통', '냉혹', '사격', '저격', '치명', '암살', '집중'].some(k => opTrait.includes(k) || heroTrait.includes(k)) ||
+          opRole === 'dealer_phy' || heroRole === 'dealer_phy' || heroRole === 'gunner';
+
+        const atkBuffTier = oppTowerRef.current?.attack?.tier1 || 1;
+        const atkBuffMult = 1.0 + atkBuffTier * 0.25;
+        const critChance = attacker.luck * 0.008 + 0.12;
+        const isCrit = Math.random() < critChance;
+
+        if (isFocusFire) {
+          // [약점 집중 사격] 가장 생명력 비율이 낮거나 위협적인 대상 1인 집중 타격!
+          const targetDefender = aliveP.slice().sort((a, b) => (a.currentHp / a.maxHp) - (b.currentHp / b.maxHp))[0] || aliveP[0];
+          setActiveTargetDefenderId(targetDefender.id);
+
+          const rawDmg = attacker.atk * 1.45 * (isCrit ? 1.5 : 1.0) * atkBuffMult;
+          const finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + targetDefender.def * INVASION_DEF_SCALE))));
+          targetDefender.currentHp = Math.max(0, targetDefender.currentHp - finalDmg);
+
+          const mAttacker = combatMetricsRef.current[attacker.id];
+          if (mAttacker) {
+            mAttacker.damageDealt += finalDmg;
+            mAttacker.actionsCount = (mAttacker.actionsCount || 0) + 1;
+            if (isCrit) mAttacker.critCount += 1;
+            if (targetDefender.currentHp <= 0) mAttacker.kills += 1;
+          }
+          const mDefender = combatMetricsRef.current[targetDefender.id];
+          if (mDefender) mDefender.damageTaken += finalDmg;
+
+          if (isCrit) addOppFeverBadge('crit');
+          else addOppFeverBadge('break');
+
+          setActionBanner({
+            text: `🎯 [약점 집중 사격${isCrit ? ' · 치명타!' : ''}] ${attacker.name}!`,
+            sub: `가장 취약한 [${targetDefender.name}]에게 집중 화력 포화 (${finalDmg.toLocaleString()} 피해)!`,
+            color: '#ff5722',
+          });
+
+          setClashData({
+            attacker: { ...attacker },
+            defender: { ...targetDefender },
+            skill: { ...chosenSkill, name: '약점 집중 사격' },
+            damage: finalDmg,
+            isCrit,
+            isPlayerAttacking: false,
+          });
+          setIsClashZoomed(true);
+
+          const defPos = getCombatantCardPos(targetDefender.id, true);
+          setVfxList(prev => [
+            ...prev,
+            {
+              id: `vfx_focus_strike_${Date.now()}`,
+              type: 'bullet',
+              damage: finalDmg,
+              isCrit,
+              x: defPos.x,
+              y: defPos.y,
+              duration: battleSpeed === 2 ? 350 : 500,
+            },
+          ]);
+          gm.emit('battleHitEffect', {
+            x: defPos.x,
+            y: defPos.y,
+            color: 0xff3d00,
+            isCrit,
+            type: 'bullet',
+          });
+          SoundManager.getInstance().play(isCrit ? 'crit' : 'heavy_hit');
+
+          setBattleLogs(prev => [
+            ...prev.slice(-30),
+            {
+              round: currentRoundNumber,
+              attacker: attacker.name,
+              defender: targetDefender.name,
+              damage: finalDmg,
+              isCrit,
+              skillName: '약점 집중 사격',
+              side: 'enemy',
+            },
+          ]);
+        } else {
+          // [전탄 광역 폭격] 침공 결사대 전원(3인)에게 무차별 일제 포격!
+          let totalDmg = 0;
+          aliveP.forEach((defender, idx) => {
+            const rawDmg = attacker.atk * 0.72 * (isCrit ? 1.35 : 1.0) * atkBuffMult;
+            const finalDmg = Math.max(10, Math.round(rawDmg * (100 / (100 + defender.def * INVASION_DEF_SCALE))));
+            defender.currentHp = Math.max(0, defender.currentHp - finalDmg);
+            totalDmg += finalDmg;
+
+            const mDef = combatMetricsRef.current[defender.id];
+            if (mDef) mDef.damageTaken += finalDmg;
+            if (defender.currentHp <= 0) {
+              const mAtk = combatMetricsRef.current[attacker.id];
+              if (mAtk) mAtk.kills += 1;
+            }
+
+            const defPos = getCombatantCardPos(defender.id, true);
+            setVfxList(prev => [
+              ...prev,
+              {
+                id: `vfx_aoe_strike_${defender.id}_${Date.now()}_${idx}`,
+                type: 'bullet',
+                damage: finalDmg,
+                isCrit,
+                x: defPos.x,
+                y: defPos.y,
+                duration: battleSpeed === 2 ? 350 : 500,
+              },
+            ]);
+            gm.emit('battleHitEffect', {
+              x: defPos.x,
+              y: defPos.y,
+              color: 0xff6d00,
+              isCrit,
+              type: 'bullet',
+            });
+          });
+
+          const mAttacker = combatMetricsRef.current[attacker.id];
+          if (mAttacker) {
+            mAttacker.damageDealt += totalDmg;
+            mAttacker.actionsCount = (mAttacker.actionsCount || 0) + 1;
+            if (isCrit) mAttacker.critCount += 1;
+          }
+
+          if (isCrit) addOppFeverBadge('crit');
+          else addOppFeverBadge('break');
+
+          setActionBanner({
+            text: `🚀 [전탄 광역 폭격${isCrit ? ' · 융단폭격!' : ''}] ${attacker.name}!`,
+            sub: `침공 결사대 3인 전원에게 일제 폭격 (총 ${totalDmg.toLocaleString()} 피해)!`,
+            color: '#ff6d00',
+          });
+
+          SoundManager.getInstance().play('heavy_hit');
+
+          setBattleLogs(prev => [
+            ...prev.slice(-30),
+            {
+              round: currentRoundNumber,
+              attacker: attacker.name,
+              defender: '결사대 전원',
+              damage: totalDmg,
+              isCrit,
+              skillName: '전탄 광역 폭격',
+              side: 'enemy',
+            },
+          ]);
         }
-      } else if (attacker.id === 'turret_right') {
-        // 우측 방호 포탑: 스킬 사용 시 전술 버프 발동!
-        if (chosenSkill.id !== 'basic_attack') {
-          const tacticBuffTier = oppTowerRef.current?.defense?.tier3 || oppTowerRef.current?.attack?.tier2 || 1;
-          const tacticBuffMult = 1.0 + tacticBuffTier * 0.30;
-          rawDmg = Math.round(rawDmg * tacticBuffMult);
-          buffNotice = ` [✨전술 증폭 +${Math.round((tacticBuffMult - 1) * 100)}%]`;
+      }
+
+      // ─────────────────────────────────────────────────────────
+      // 2) 우측 전술 지원 포탑 (마나와 행운 기반 / 긴급 수복, 결계 방어, EMP 디버프, 어그로 교란)
+      // ─────────────────────────────────────────────────────────
+      else if (attacker.id === 'turret_right') {
+        const manaCost = 15;
+        const currentMp = attacker.currentMp || 0;
+        const isMpSufficient = currentMp >= manaCost;
+
+        if (isMpSufficient) {
+          attacker.currentMp = Math.max(0, currentMp - manaCost);
+        } else {
+          // 마나 고갈 시 마나 리차지
+          attacker.currentMp = Math.min(attacker.maxMp || 120, currentMp + 45);
         }
+
+        const isTactCrit = Math.random() < (attacker.luck * 0.008 + 0.15);
+        const tactPowerMult = (isTactCrit ? 1.35 : 1.0) * (isMpSufficient ? 1.0 : 0.6);
+
+        const curBarrier = { ...barrierStateRef.current };
+        const curLeft = { ...turretLeftRef.current };
+        const barrierHpRatio = curBarrier.currentHp / curBarrier.maxHp;
+        const leftHpRatio = curLeft.maxHp > 0 ? (curLeft.currentHp / curLeft.maxHp) : 1;
+
+        // 전술 상황 판단 및 오퍼레이터 성향 매칭
+        const needRepair = barrierHpRatio < 0.85 || (leftHpRatio < 0.75 && !curLeft.isDestroyed);
+        const isDefenderTrait = ['수호', '방어', '철벽', '가디언', '인내'].some(k => opTrait.includes(k) || heroTrait.includes(k));
+        const isDebuffTrait = ['비전', '제압', '파괴', '암흑', '마법', '간섭'].some(k => opTrait.includes(k) || heroTrait.includes(k));
+
+        if (needRepair) {
+          // [긴급 전술 수복] 차원 보호막 및 좌측 타워 HP 재생
+          const healBarrier = Math.round((320 + attacker.luck * 14 + (attacker.currentMp || 0) * 0.5) * tactPowerMult);
+          const healTurret = Math.round((180 + attacker.luck * 8) * tactPowerMult);
+
+          curBarrier.currentHp = Math.min(curBarrier.maxHp, curBarrier.currentHp + healBarrier);
+          barrierStateRef.current = curBarrier;
+          setBarrierState(curBarrier);
+
+          let turretHealedNotice = '';
+          if (!curLeft.isDestroyed && curLeft.currentHp > 0) {
+            curLeft.currentHp = Math.min(curLeft.maxHp, curLeft.currentHp + healTurret);
+            turretLeftRef.current = curLeft;
+            setTurretLeft(curLeft);
+            turretHealedNotice = ` & 좌측포탑(+${healTurret.toLocaleString()} HP)`;
+          }
+
+          setActionBanner({
+            text: `🔧 [긴급 전술 수복${isTactCrit ? ' · 대성공' : ''}] ${attacker.name}!`,
+            sub: `차원 보호막(+${healBarrier.toLocaleString()} HP)${turretHealedNotice} 수복 복원!`,
+            color: '#00e676',
+          });
+          SoundManager.getInstance().play('holy_spell');
+
+          setBattleLogs(prev => [
+            ...prev.slice(-30),
+            {
+              round: currentRoundNumber,
+              attacker: attacker.name,
+              defender: '차원 보호막/포탑',
+              damage: -healBarrier,
+              isCrit: isTactCrit,
+              skillName: '긴급 전술 수복',
+              side: 'enemy',
+            },
+          ]);
+        } else if (isDefenderTrait) {
+          // [성벽 굴절 방호막] 차원 보호막 DEF 영구/일시 강화
+          const addedDef = Math.round((6 + (attacker.luck || 10) * 0.15) * tactPowerMult);
+          curBarrier.def = (curBarrier.def || 25) + addedDef;
+          barrierStateRef.current = curBarrier;
+          setBarrierState(curBarrier);
+
+          setActionBanner({
+            text: `🛡️ [결계 굴절 방호막${isTactCrit ? ' · 극대화' : ''}] ${attacker.name}!`,
+            sub: `차원 결계에 고밀도 위상 굴절막 전개 (방어력 +${addedDef} 상승)!`,
+            color: '#00d2ff',
+          });
+          SoundManager.getInstance().play('shield');
+
+          setBattleLogs(prev => [
+            ...prev.slice(-30),
+            {
+              round: currentRoundNumber,
+              attacker: attacker.name,
+              defender: '차원 보호막',
+              damage: 0,
+              isCrit: isTactCrit,
+              skillName: '결계 굴절 방호막',
+              side: 'enemy',
+            },
+          ]);
+        } else if (isDebuffTrait) {
+          // [전자기 위상 간섭 - EMP 디버프] 결사대 전원에게 전격 충격 및 출력 저하
+          let totalDmg = 0;
+          aliveP.forEach((defender, idx) => {
+            const shockDmg = Math.max(10, Math.round((140 + attacker.luck * 7 + (attacker.currentMp || 0) * 0.3) * tactPowerMult * (100 / (100 + defender.def * INVASION_DEF_SCALE))));
+            defender.currentHp = Math.max(0, defender.currentHp - shockDmg);
+            totalDmg += shockDmg;
+
+            const mDef = combatMetricsRef.current[defender.id];
+            if (mDef) mDef.damageTaken += shockDmg;
+
+            const defPos = getCombatantCardPos(defender.id, true);
+            setVfxList(prev => [
+              ...prev,
+              {
+                id: `vfx_emp_shock_${defender.id}_${Date.now()}_${idx}`,
+                type: 'slash',
+                damage: shockDmg,
+                isCrit: isTactCrit,
+                x: defPos.x,
+                y: defPos.y,
+                duration: battleSpeed === 2 ? 350 : 500,
+              },
+            ]);
+            gm.emit('battleHitEffect', {
+              x: defPos.x,
+              y: defPos.y,
+              color: 0x00e5ff,
+              isCrit: isTactCrit,
+              type: 'slash',
+            });
+          });
+
+          setActionBanner({
+            text: `⚡ [전자기 위상 간섭${isTactCrit ? ' · 과부하' : ''}] ${attacker.name}!`,
+            sub: `침공 결사대 전원에게 EMP 펄스 방출 (총 ${totalDmg.toLocaleString()} 충격 피해)!`,
+            color: '#2979ff',
+          });
+          SoundManager.getInstance().play('lightning');
+
+          setBattleLogs(prev => [
+            ...prev.slice(-30),
+            {
+              round: currentRoundNumber,
+              attacker: attacker.name,
+              defender: '결사대 전원',
+              damage: totalDmg,
+              isCrit: isTactCrit,
+              skillName: '전자기 위상 간섭',
+              side: 'enemy',
+            },
+          ]);
+        } else {
+          // [차원 왜곡 기만 / 어그로 교란] 홀로그램 미끼 전개 & 단일 견제 사격
+          const targetDefender = aliveP[Math.floor(Math.random() * aliveP.length)];
+          setActiveTargetDefenderId(targetDefender.id);
+
+          const tacticDmg = Math.max(10, Math.round((160 + attacker.luck * 9 + attacker.atk * 0.6) * tactPowerMult * (100 / (100 + targetDefender.def * INVASION_DEF_SCALE))));
+          targetDefender.currentHp = Math.max(0, targetDefender.currentHp - tacticDmg);
+
+          const mDefender = combatMetricsRef.current[targetDefender.id];
+          if (mDefender) mDefender.damageTaken += tacticDmg;
+
+          setActionBanner({
+            text: `🌀 [차원 왜곡 기만] ${attacker.name}!`,
+            sub: `홀로그램 미끼로 조준 센서 교란 & [${targetDefender.name}]에게 ${tacticDmg.toLocaleString()} 견제!`,
+            color: '#b388ff',
+          });
+
+          const defPos = getCombatantCardPos(targetDefender.id, true);
+          setVfxList(prev => [
+            ...prev,
+            {
+              id: `vfx_decoy_strike_${Date.now()}`,
+              type: 'bullet',
+              damage: tacticDmg,
+              isCrit: isTactCrit,
+              x: defPos.x,
+              y: defPos.y,
+              duration: battleSpeed === 2 ? 350 : 500,
+            },
+          ]);
+          SoundManager.getInstance().play('spell');
+
+          setBattleLogs(prev => [
+            ...prev.slice(-30),
+            {
+              round: currentRoundNumber,
+              attacker: attacker.name,
+              defender: targetDefender.name,
+              damage: tacticDmg,
+              isCrit: isTactCrit,
+              skillName: '차원 왜곡 기만',
+              side: 'enemy',
+            },
+          ]);
+        }
+
+        const mAttacker = combatMetricsRef.current[attacker.id];
+        if (mAttacker) {
+          mAttacker.actionsCount = (mAttacker.actionsCount || 0) + 1;
+          if (isTactCrit) mAttacker.critCount += 1;
+        }
+
+        if (isTactCrit) addOppFeverBadge('crit');
+        else addOppFeverBadge('break');
       }
-
-      const finalDmg = Math.max(10, Math.round(rawDmg * (100 / (100 + targetDefender.def * INVASION_DEF_SCALE))));
-
-      targetDefender.currentHp = Math.max(0, targetDefender.currentHp - finalDmg);
-
-      const mAttacker = combatMetricsRef.current[attacker.id];
-      if (mAttacker) {
-        mAttacker.damageDealt += finalDmg;
-        mAttacker.actionsCount = (mAttacker.actionsCount || 0) + 1;
-        if (isCrit) mAttacker.critCount += 1;
-        if (targetDefender.currentHp <= 0) mAttacker.kills += 1;
-      }
-      const mDefender = combatMetricsRef.current[targetDefender.id];
-      if (mDefender) {
-        mDefender.damageTaken += finalDmg;
-      }
-
-      if (isCrit) addOppFeverBadge('crit');
-      else addOppFeverBadge('break');
-
-      setActionBanner({
-        text: `🛡️ [포탑 요격 사격${buffNotice}] ${attacker.name}의 ${chosenSkill.name}!`,
-        sub: `결사대 [${targetDefender.name}]에게 ${finalDmg.toLocaleString()}의 요격 사격!`,
-        color: attacker.id === 'turret_left' ? '#ff7043' : '#00d2ff',
-      });
-
-      setClashData({
-        attacker: { ...attacker },
-        defender: { ...targetDefender },
-        skill: chosenSkill,
-        damage: finalDmg,
-        isCrit,
-        isPlayerAttacking: false,
-      });
-      setIsClashZoomed(true);
-
-      const defPos = getCombatantCardPos(targetDefender.id, true);
-      setVfxList(prev => [
-        ...prev,
-        {
-          id: `vfx_def_strike_${Date.now()}`,
-          type: 'bullet',
-          damage: finalDmg,
-          isCrit,
-          x: defPos.x,
-          y: defPos.y,
-          duration: battleSpeed === 2 ? 350 : 500,
-        },
-      ]);
-      gm.emit('battleHitEffect', {
-        x: defPos.x,
-        y: defPos.y,
-        color: 0xff416c,
-        isCrit,
-        type: 'bullet',
-      });
-      SoundManager.getInstance().play('bow_shot');
-
-      setBattleLogs(prev => [
-        ...prev.slice(-30),
-        {
-          round: currentRoundNumber,
-          attacker: attacker.name,
-          defender: targetDefender.name,
-          damage: finalDmg,
-          isCrit,
-          skillName: chosenSkill.name,
-          side: 'enemy',
-        },
-      ]);
     }
 
     setPlayerTeam([...currentP]);
