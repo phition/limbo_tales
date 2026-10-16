@@ -425,10 +425,10 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
           <div className="min-w-0">
             <div className="text-xs font-bold text-white flex items-center gap-1.5 truncate">
               <span>영지 침공 방어 전술 타워 연구 연동</span>
-              <span className="text-[9px] font-mono text-[#ffd54f] shrink-0">총 Lv.{totalTowerLv} / 27</span>
+              <span className="text-[9px] font-mono text-[#ffd54f] shrink-0">총 Lv.{totalTowerLv} / 45</span>
             </div>
             <div className="text-[10px] text-[#8b9bb4] truncate">
-              공격 1~3차(좌측 타워) · 방어 1~3차(보호막) · 유틸 1~3차(스킬 가속)
+              공격 1~3차(화력·화상·중독) · 방어 1~3차(수복·기절·결빙) · 유틸 1~3차(속도%·마나%·행운%)
             </div>
           </div>
         </div>

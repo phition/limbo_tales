@@ -9241,20 +9241,26 @@ export class GameManager {
     tier: 1 | 2 | 3,
     currentLv: number
   ): Partial<GameResources> {
-    if (currentLv >= 3) return {};
+    if (currentLv >= 5) return {};
 
     if (tier === 1) {
       if (currentLv === 0) return { gold: 3000, ether: 100, crystal: 2 };
       if (currentLv === 1) return { gold: 8000, ether: 250, crystal: 5, void_shard: 2 };
       if (currentLv === 2) return { gold: 18000, ether: 500, crystal: 10, void_shard: 5 };
+      if (currentLv === 3) return { gold: 35000, ether: 900, crystal: 18, void_shard: 10 };
+      if (currentLv === 4) return { gold: 65000, ether: 1500, crystal: 30, void_shard: 18 };
     } else if (tier === 2) {
       if (currentLv === 0) return { gold: 6000, ether: 200, crystal: 4, void_shard: 3 };
       if (currentLv === 1) return { gold: 15000, ether: 450, crystal: 8, void_shard: 6 };
       if (currentLv === 2) return { gold: 35000, ether: 900, crystal: 16, void_shard: 12 };
+      if (currentLv === 3) return { gold: 70000, ether: 1800, crystal: 30, void_shard: 22 };
+      if (currentLv === 4) return { gold: 130000, ether: 3000, crystal: 50, void_shard: 35 };
     } else if (tier === 3) {
       if (currentLv === 0) return { gold: 12000, ether: 400, crystal: 8, void_shard: 6 };
       if (currentLv === 1) return { gold: 30000, ether: 800, crystal: 16, void_shard: 14 };
       if (currentLv === 2) return { gold: 70000, ether: 1800, crystal: 30, void_shard: 25 };
+      if (currentLv === 3) return { gold: 140000, ether: 3500, crystal: 55, void_shard: 40 };
+      if (currentLv === 4) return { gold: 260000, ether: 6000, crystal: 90, void_shard: 65 };
     }
     return { gold: 5000, ether: 100 };
   }
@@ -9269,8 +9275,8 @@ export class GameManager {
     const key = `tier${tier}` as 'tier1' | 'tier2' | 'tier3';
     const currentLv = branchState[key];
 
-    if (currentLv >= 3) {
-      return { success: false, message: '이미 최고 레벨(Lv.3)에 도달했습니다.' };
+    if (currentLv >= 5) {
+      return { success: false, message: '이미 최고 레벨(Lv.5)에 도달했습니다.' };
     }
 
     // 선행 테크 해금 조건 검사

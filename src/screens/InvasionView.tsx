@@ -29,30 +29,30 @@ interface TechDefinition {
 }
 
 const TECH_DEFINITIONS: TechDefinition[] = [
-  // ⚔️ 공격 전술
+  // ⚔️ 공격 전술 (좌측 화력 포탑 특화: 공업, 화상, 중독)
   {
     branch: 'attack',
     branchName: '공격 전술',
     branchIcon: '⚔️',
     accentColor: '#ff416c',
     tier: 1,
-    name: '전력 증폭 진지',
-    icon: '⚔️',
-    desc: '수비 진지에 마도 역장을 전개하여 모든 수비 아군의 기본 공격력을 증폭합니다.',
-    effectText: (lv) => `아군 전체 공격력 +${lv * 1}%`,
-    nextEffectText: (lv) => `아군 전체 공격력 +${(lv + 1) * 1}%`,
-  },
-  {
-    branch: 'attack',
-    branchName: '공격 전술',
-    branchIcon: '⚔️',
-    accentColor: '#ff416c',
-    tier: 2,
-    name: '자동 타워 포격',
+    name: '고출력 화력 증폭 (공업)',
     icon: '💥',
-    desc: '매 라운드 시작 시, 방어 타워가 아군 평균 공격력에 비례한 고정 포격을 침입자 전체에 가합니다.',
-    effectText: (lv) => `매 라운드 적 전체에 아군 평균 공격력의 ${lv * 1}% 포격`,
-    nextEffectText: (lv) => `매 라운드 적 전체에 아군 평균 공격력의 ${(lv + 1) * 1}% 포격`,
+    desc: '좌측 화력 포탑의 공격 코어를 증폭하여 포탑 기본 공격력 및 포격 위력을 대폭 향상시킵니다.',
+    effectText: (lv) => `좌측 포탑 화력 +${lv * 15}% (포탑 기본 ATK +${lv * 20})`,
+    nextEffectText: (lv) => `좌측 포탑 화력 +${(lv + 1) * 15}% (포탑 기본 ATK +${(lv + 1) * 20})`,
+  },
+  {
+    branch: 'attack',
+    branchName: '공격 전술',
+    branchIcon: '⚔️',
+    accentColor: '#ff416c',
+    tier: 2,
+    name: '작열 고열탄 (화상)',
+    icon: '🔥',
+    desc: '좌측 화력 포탑 포격 시 대상에게 지속적인 작열 화상(Burn) 상태이상을 부여하여 매 턴 화염 지속 피해를 입힙니다.',
+    effectText: (lv) => `포격 시 ${lv * 20}% 확률로 2턴간 화상 부여 (턴당 포탑 ATK의 ${lv * 12}% 화염 지속 피해)`,
+    nextEffectText: (lv) => `포격 시 ${(lv + 1) * 20}% 확률로 2턴간 화상 부여 (턴당 포탑 ATK의 ${(lv + 1) * 12}% 화염 지속 피해)`,
   },
   {
     branch: 'attack',
@@ -60,36 +60,36 @@ const TECH_DEFINITIONS: TechDefinition[] = [
     branchIcon: '⚔️',
     accentColor: '#ff416c',
     tier: 3,
-    name: '시공간 제어 (시들음)',
-    icon: '⏳',
-    desc: '침입자들의 시간축을 침식하여, 침입자의 행동 턴 시작 시마다 해당 적의 체력을 침식 감소시킵니다.',
-    effectText: (lv) => `침입자 턴 시작마다 해당 적 체력 ${(lv * 0.5).toFixed(1)}% 감소`,
-    nextEffectText: (lv) => `침입자 턴 시작마다 해당 적 체력 ${((lv + 1) * 0.5).toFixed(1)}% 감소`,
+    name: '맹독 부식탄 (중독)',
+    icon: '🧪',
+    desc: '좌측 화력 포탑 탄두에 신경 맹독을 코팅하여 대상에게 중독(Poison)을 부여하고 방어력을 침식 감소시킵니다.',
+    effectText: (lv) => `포격 시 ${lv * 20}% 확률로 3턴간 중독 부여 (방어력 -${lv * 6}%, 매 턴 최대 체력의 ${(lv * 1.5).toFixed(1)}% 피해)`,
+    nextEffectText: (lv) => `포격 시 ${(lv + 1) * 20}% 확률로 3턴간 중독 부여 (방어력 -${(lv + 1) * 6}%, 매 턴 최대 체력의 ${((lv + 1) * 1.5).toFixed(1)}% 피해)`,
   },
-  // 🛡️ 방어 전술
+  // 🛡️ 방어 전술 (우측 전술 지원 포탑 특화: 성벽 회복, 기절, 결빙)
   {
     branch: 'defense',
     branchName: '방어 전술',
     branchIcon: '🛡️',
     accentColor: '#00d2ff',
     tier: 1,
-    name: '차원 왜곡 결계',
-    icon: '🛡️',
-    desc: '전투 시작 시 아군 평균 방어력에 비례한 차원 보호막을 수비 부대에 전개합니다. (1턴 유지)',
-    effectText: (lv) => `전투 시작 시 아군 평균 방어력의 ${lv * 1}% 보호막 획득 (1턴)`,
-    nextEffectText: (lv) => `전투 시작 시 아군 평균 방어력의 ${(lv + 1) * 1}% 보호막 획득 (1턴)`,
-  },
-  {
-    branch: 'defense',
-    branchName: '방어 전술',
-    branchIcon: '🛡️',
-    accentColor: '#00d2ff',
-    tier: 2,
-    name: '성역 지속 재생',
+    name: '나노 결계 복원 (성벽 회복)',
     icon: '💚',
-    desc: '매 라운드 시작 시 신성한 성역 나노 에너지를 방출하여 모든 수비 아군의 체력을 지속 회복합니다.',
-    effectText: (lv) => `매 라운드 시작 시 수비 아군 전체 체력 ${lv * 1}% 회복`,
-    nextEffectText: (lv) => `매 라운드 시작 시 수비 아군 전체 체력 ${(lv + 1) * 1}% 회복`,
+    desc: '우측 전술 포탑의 나노 복구 장치를 증폭하여 차원 보호막 및 포탑의 회복량을 대폭 향상시키고 매 턴 재생합니다.',
+    effectText: (lv) => `성벽 및 포탑 수복량 +${lv * 20}% (매 턴 차원 보호막 기본 재생 +${lv * 150} HP)`,
+    nextEffectText: (lv) => `성벽 및 포탑 수복량 +${(lv + 1) * 20}% (매 턴 차원 보호막 기본 재생 +${(lv + 1) * 150} HP)`,
+  },
+  {
+    branch: 'defense',
+    branchName: '방어 전술',
+    branchIcon: '🛡️',
+    accentColor: '#00d2ff',
+    tier: 2,
+    name: '충격 전자기파 (기절)',
+    icon: '⚡',
+    desc: '우측 전술 포탑이 위상 간섭 방출 시 침입자를 일시적으로 완전 무력화하는 기절(Stun) 상태이상을 유발합니다.',
+    effectText: (lv) => `전술 지원 발동 시 ${lv * 16}% 확률로 침입자 1인 1턴 기절 (행동 불가)`,
+    nextEffectText: (lv) => `전술 지원 발동 시 ${(lv + 1) * 16}% 확률로 침입자 1인 1턴 기절 (행동 불가)`,
   },
   {
     branch: 'defense',
@@ -97,24 +97,24 @@ const TECH_DEFINITIONS: TechDefinition[] = [
     branchIcon: '🛡️',
     accentColor: '#00d2ff',
     tier: 3,
-    name: '방어 파쇄 역장',
-    icon: '🌀',
-    desc: '매 라운드 시작 시 침입자 전체의 방어력을 파쇄하며, 이 수치는 매 라운드마다 누적 감소됩니다.',
-    effectText: (lv) => `매 라운드 시작 시 적 방어력 ${lv * 1}%씩 누적 감소`,
-    nextEffectText: (lv) => `매 라운드 시작 시 적 방어력 ${(lv + 1) * 1}%씩 누적 감소`,
+    name: '극저온 동결 역장 (결빙)',
+    icon: '❄️',
+    desc: '우측 전술 포탑이 절대영도 냉각 펄스를 투사하여 침입자들을 결빙(Freeze) 상태이상에 빠뜨려 행동 속도를 대폭 지연시킵니다.',
+    effectText: (lv) => `전술 지원 시 ${lv * 18}% 확률로 침입자 결빙 부여 (2턴간 속도 -${lv * 10}%, 행동 지연)`,
+    nextEffectText: (lv) => `전술 지원 시 ${(lv + 1) * 18}% 확률로 침입자 결빙 부여 (2턴간 속도 -${(lv + 1) * 10}%, 행동 지연)`,
   },
-  // ⚡ 유틸 전술
+  // ⚡ 유틸 전술 (속도 % 감소, 마나 소모량 % 증가, 행운 % 감소)
   {
     branch: 'utility',
     branchName: '유틸 전술',
     branchIcon: '⚡',
     accentColor: '#ffd54f',
     tier: 1,
-    name: '중력 감속 역장',
-    icon: '⚡',
-    desc: '영지 전장에 중력 감속 왜곡장을 형성하여 침입자(적군) 전체의 속도(SPD)를 감속시킵니다.',
-    effectText: (lv) => `침입자 전체 속도(SPD) -${lv * 1}`,
-    nextEffectText: (lv) => `침입자 전체 속도(SPD) -${(lv + 1) * 1}`,
+    name: '중력 감속 왜곡장 (속도 감소)',
+    icon: '⏳',
+    desc: '전장 전체에 차원 중력 왜곡장을 형성하여 침입자(적군) 전체의 속도(SPD)를 비율(%)로 지속 감속시킵니다.',
+    effectText: (lv) => `침입자 전원 속도(SPD) -${lv * 5}% 감소`,
+    nextEffectText: (lv) => `침입자 전원 속도(SPD) -${(lv + 1) * 5}% 감소`,
   },
   {
     branch: 'utility',
@@ -122,11 +122,11 @@ const TECH_DEFINITIONS: TechDefinition[] = [
     branchIcon: '⚡',
     accentColor: '#ffd54f',
     tier: 2,
-    name: '마나 누출 균열',
+    name: '에테르 교란 균열 (마나 증가)',
     icon: '🔮',
-    desc: '차원의 에테르를 교란시켜 침입자가 스킬을 발동할 때마다 소모되는 MP 소모량을 추가 증가시킵니다.',
-    effectText: (lv) => `침입자 스킬 MP 소모량 +${lv * 10}%`,
-    nextEffectText: (lv) => `침입자 스킬 MP 소모량 +${(lv + 1) * 10}%`,
+    desc: '차원의 에테르 흐름을 교란하여 침입자가 스킬을 발동할 때 소모되는 마나(MP)를 비율(%)로 추가 증가시킵니다.',
+    effectText: (lv) => `침입자 스킬 MP 소모량 +${lv * 15}% 증가`,
+    nextEffectText: (lv) => `침입자 스킬 MP 소모량 +${(lv + 1) * 15}% 증가`,
   },
   {
     branch: 'utility',
@@ -134,11 +134,11 @@ const TECH_DEFINITIONS: TechDefinition[] = [
     branchIcon: '⚡',
     accentColor: '#ffd54f',
     tier: 3,
-    name: '불운의 저주 안개',
+    name: '불운의 위상 저주 (행운 감소)',
     icon: '🌫️',
-    desc: '침입자 부대를 에워싸는 저주의 안개를 피워 침입자 전체의 치명타 및 회피 판정 행운(LUCK)을 감소시킵니다.',
-    effectText: (lv) => `침입자 전체 행운(LUCK) -${lv * 10}%`,
-    nextEffectText: (lv) => `침입자 전체 행운(LUCK) -${(lv + 1) * 10}%`,
+    desc: '침입자 부대를 에워싸는 위상 저주를 투사하여 침입자 전체의 치명타 및 회피 판정 행운(LUCK)을 비율(%)로 대폭 감소시킵니다.',
+    effectText: (lv) => `침입자 전원 행운(LUCK) -${lv * 10}% 감소`,
+    nextEffectText: (lv) => `침입자 전원 행운(LUCK) -${(lv + 1) * 10}% 감소`,
   },
 ];
 
@@ -564,7 +564,7 @@ export const InvasionView: React.FC = () => {
                       {(tacticalTower[branch]?.tier1 || 0) +
                         (tacticalTower[branch]?.tier2 || 0) +
                         (tacticalTower[branch]?.tier3 || 0)}{' '}
-                      / 9
+                      / 15
                     </span>
                   </div>
 
@@ -578,7 +578,7 @@ export const InvasionView: React.FC = () => {
                           ? 1
                           : tacticalTower[tech.branch][`tier${(tech.tier - 1) as 1 | 2}`] || 0;
                       const isLocked = tech.tier > 1 && prevLv < 1;
-                      const isMax = currentLv >= 3;
+                      const isMax = currentLv >= 5;
 
                       return (
                         <div
@@ -610,7 +610,7 @@ export const InvasionView: React.FC = () => {
                                 {isLocked ? (
                                   <span className="text-[#ff7043]">🔒 선행 {tech.tier - 1}차 Lv.1 필요</span>
                                 ) : isMax ? (
-                                  <span className="text-[#38ef7d]">★ 최고 연구 단계</span>
+                                  <span className="text-[#38ef7d]">★ 최고 연구 단계 (Lv.5)</span>
                                 ) : (
                                   <span className="text-[#cfd8e8]">{tech.effectText(currentLv)}</span>
                                 )}
@@ -628,7 +628,7 @@ export const InvasionView: React.FC = () => {
                                 Lv.{currentLv}
                               </span>
                               <div className="flex gap-0.5">
-                                {[1, 2, 3].map((star) => (
+                                {[1, 2, 3, 4, 5].map((star) => (
                                   <span
                                     key={star}
                                     className="text-[8px]"
@@ -937,7 +937,7 @@ export const InvasionView: React.FC = () => {
             ? 1
             : tacticalTower[selectedTech.branch][`tier${(selectedTech.tier - 1) as 1 | 2}`] || 0;
         const isLocked = selectedTech.tier > 1 && prevLv < 1;
-        const isMax = currentLv >= 3;
+        const isMax = currentLv >= 5;
         const cost = gm.getTacticalTowerUpgradeCost(selectedTech.branch, selectedTech.tier, currentLv);
 
         // 자원 충분 여부 체크
@@ -982,7 +982,7 @@ export const InvasionView: React.FC = () => {
                       </span>
                     </div>
                     <div className="text-[11px] text-[#8b9bb4] mt-0.5">
-                      연구 단계: <span className="font-bold text-white">Lv.{currentLv}</span> / 3
+                      연구 단계: <span className="font-bold text-white">Lv.{currentLv}</span> / 5
                     </div>
                   </div>
                 </div>
@@ -1009,7 +1009,7 @@ export const InvasionView: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    {[1, 2, 3].map((star) => (
+                    {[1, 2, 3, 4, 5].map((star) => (
                       <span
                         key={star}
                         className="text-lg"

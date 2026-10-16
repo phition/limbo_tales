@@ -838,9 +838,9 @@ export interface DimensionalDeck {
 export type TacticalTowerBranch = 'attack' | 'defense' | 'utility';
 
 export interface TacticalTowerBranchState {
-  tier1: number; // 0 ~ 3 (1차 테크)
-  tier2: number; // 0 ~ 3 (2차 테크)
-  tier3: number; // 0 ~ 3 (3차 테크)
+  tier1: number; // 0 ~ 5 (1차 테크)
+  tier2: number; // 0 ~ 5 (2차 테크)
+  tier3: number; // 0 ~ 5 (3차 테크)
 }
 
 export interface TacticalTowerState {
