@@ -146,7 +146,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               </span>
             </div>
             <div className="text-[10px] sm:text-[11px] text-[#8b9bb4] truncate">
-              보호막에 탱커를 결속하고, 좌/우 타워에 사수를 탑승시키세요.
+              전열 타워는 전열 특화 스킬 대상이 되며 성벽을 엄호하고, 후열 보호막은 후열 저격 대상이 됩니다.
             </div>
           </div>
         </div>
@@ -171,6 +171,9 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <span className="text-base sm:text-lg">🛡️</span>
             <span className="font-extrabold text-xs sm:text-sm text-white group-hover:text-[#00d2ff] transition-colors truncate">
               차원 왜곡 보호막 결속
+            </span>
+            <span className="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#42a5f525] text-[#42a5f5] border border-[#42a5f555] shrink-0">
+              후열 거점
             </span>
             <span className="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] shrink-0">
               기본 3,500 HP
@@ -255,6 +258,9 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               <span className="font-extrabold text-xs text-white group-hover:text-[#ff7043] transition-colors truncate">
                 좌측 포탑 (화력 공세)
               </span>
+              <span className="text-[7.5px] font-bold px-1 py-0.2 rounded bg-[#ef535025] text-[#ef5350] border border-[#ef535055] shrink-0">
+                전열
+              </span>
             </div>
             <span className="text-[10px] text-[#ff7043] font-bold shrink-0">사수 변경 ➔</span>
           </div>
@@ -307,6 +313,9 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               <span className="text-base">🗼</span>
               <span className="font-extrabold text-xs text-white group-hover:text-[#00d2ff] transition-colors truncate">
                 우측 포탑 (전술 지원)
+              </span>
+              <span className="text-[7.5px] font-bold px-1 py-0.2 rounded bg-[#ef535025] text-[#ef5350] border border-[#ef535055] shrink-0">
+                전열
               </span>
             </div>
             <span className="text-[10px] text-[#00d2ff] font-bold shrink-0">사수 변경 ➔</span>

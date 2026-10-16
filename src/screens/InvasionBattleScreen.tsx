@@ -9,7 +9,7 @@ import { CustomAssetService } from '../services/CustomAssetService';
 import { FeverBadgeType } from '../types/fever';
 import { FeverGaugeBar } from '../components/FeverGaugeBar';
 import { CombatMeterTable, CombatantMetrics } from '../components/CombatMeterTable';
-import { getSkillMagicSchool } from '../utils/skillComboUtils';
+import { getSkillMagicSchool, getEffectivePositionBonus } from '../utils/skillComboUtils';
 import { resolveSiegeTactic, SiegeTacticDefinition } from '../data/siegeTactics';
 
 const DEFAULT_CLASS_IMAGES: Record<string, string> = {
@@ -109,6 +109,7 @@ interface SiegeTargetObject {
   icon: string;
   type: 'barrier' | 'turret';
   side: 'left' | 'right' | 'center';
+  position: 'front' | 'back';
   isDestroyed: boolean;
   description: string;
   statusEffects: InvasionStatusEffect[];
@@ -281,6 +282,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     icon: '🛡️',
     type: 'barrier',
     side: 'center',
+    position: 'back',
     isDestroyed: false,
     description: '수비대 전면을 가로지르는 절대 차원 역장',
     statusEffects: [],
@@ -294,6 +296,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     icon: '🗼',
     type: 'turret',
     side: 'left',
+    position: 'front',
     isDestroyed: false,
     description: '화력 공세 & 요격 사격 (광역 폭격 / 집중 요격)',
     statusEffects: [],
@@ -307,6 +310,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     icon: '🗼',
     type: 'turret',
     side: 'right',
+    position: 'front',
     isDestroyed: false,
     description: '성역 결계 & 전술 지원 (마나·행운 기반 증폭)',
     statusEffects: [],
@@ -448,6 +452,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       icon: '🛡️',
       type: 'barrier',
       side: 'center',
+      position: 'back',
       isDestroyed: false,
       description: bHero
         ? `게이트 Lv.${baseGateLv} | 결속 수호자: ${bHero.name} (+${extraBarrierHp.toLocaleString()} HP)`
@@ -463,6 +468,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       icon: '🗼',
       type: 'turret',
       side: 'left',
+      position: 'front',
       isDestroyed: false,
       description: lTurretHero
         ? `사수: ${lTurretHero.name} | 화력 복합 지원 (포탑+용병 공격력 합산)`
@@ -478,6 +484,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       icon: '🗼',
       type: 'turret',
       side: 'right',
+      position: 'front',
       isDestroyed: false,
       description: rTurretHero
         ? `사수: ${rTurretHero.name} | 전술 증폭 지원 (마나·행운 기반 전술 지원)`
@@ -1351,32 +1358,69 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
         setPlayerTeam([...currentP]);
       } else {
-        // [공격 스킬 분기] -> 차원 보호막 or 좌/우 타워 타겟팅 & PvE 디버프 부여!
+        // [공격 스킬 분기] -> 포지션 판정(성벽: 후열, 좌우 타워: 전열) 적용 및 타겟팅 & PvE 디버프 부여!
         const availableTargets: SiegeTargetObject[] = [];
         if (!curBarrier.isDestroyed) availableTargets.push(curBarrier);
         if (!curL.isDestroyed) availableTargets.push(curL);
         if (!curR.isDestroyed) availableTargets.push(curR);
 
-        const isAoeSkill = chosenSkill.targetType === 'all_enemies' || (chosenSkill.description && (chosenSkill.description.includes('전체') || chosenSkill.description.includes('모든 적') || chosenSkill.description.includes('광역')));
+        const posBonus = chosenSkill.positionBonus || getEffectivePositionBonus(chosenSkill);
+        const aliveFrontTargets = [curL, curR].filter(t => !t.isDestroyed && t.currentHp > 0);
+        const isBarrierAlive = !curBarrier.isDestroyed && curBarrier.currentHp > 0;
+
+        const isAoeSkill =
+          chosenSkill.targetType === 'all_enemies' ||
+          (chosenSkill.description && (
+            chosenSkill.description.includes('전체') ||
+            chosenSkill.description.includes('모든 적') ||
+            chosenSkill.description.includes('광역')
+          ));
         let targetsToHit: SiegeTargetObject[] = [];
 
         if (isAoeSkill && availableTargets.length > 1) {
-          targetsToHit = availableTargets;
+          // 전열/후열 특정 광역 체크
+          const isFrontAoe = chosenSkill.description && (chosenSkill.description.includes('전열') && (chosenSkill.description.includes('전체') || chosenSkill.description.includes('모든')));
+          const isBackAoe = chosenSkill.description && (chosenSkill.description.includes('후열') && (chosenSkill.description.includes('전체') || chosenSkill.description.includes('모든')));
+
+          if (isFrontAoe && aliveFrontTargets.length > 0) {
+            targetsToHit = aliveFrontTargets;
+          } else if (isBackAoe && isBarrierAlive) {
+            targetsToHit = [curBarrier];
+          } else {
+            targetsToHit = availableTargets;
+          }
         } else {
-          let targetObj = availableTargets.find(t => t.id === selectedFocusTargetId);
-          if (!targetObj || targetObj.isDestroyed) {
-            if (availableTargets.some(t => t.type === 'turret')) {
-              const turrets = availableTargets.filter(t => t.type === 'turret');
-              if (Math.random() < 0.40 && turrets.length > 0) {
-                targetObj = turrets[Math.floor(Math.random() * turrets.length)];
+          // 단일 타겟팅: 전열/후열 포지션 특화 엄격 적용
+          if (posBonus === 'front') {
+            // ⚔️ 전열 특화 스킬: 전열(좌/우 타워)을 우선 타격!
+            if (aliveFrontTargets.length > 0) {
+              const matchedFocus = aliveFrontTargets.find(t => t.id === selectedFocusTargetId);
+              targetsToHit = [matchedFocus || aliveFrontTargets[0]];
+            } else {
+              // 전열 타워가 모두 파괴되었을 때만 후열(차원 왜곡 보호막) 타격
+              targetsToHit = isBarrierAlive ? [curBarrier] : [];
+            }
+          } else if (posBonus === 'back') {
+            // 🎯 후열 저격 스킬: 전열 타워를 무시하고 후열(성벽 / 차원 보호막)을 직격 관통!
+            if (isBarrierAlive) {
+              targetsToHit = [curBarrier];
+            } else {
+              // 성벽이 파괴되었을 때 남은 전열 타워 타격
+              const matchedFocus = aliveFrontTargets.find(t => t.id === selectedFocusTargetId);
+              targetsToHit = matchedFocus ? [matchedFocus] : (aliveFrontTargets.length > 0 ? [aliveFrontTargets[0]] : []);
+            }
+          } else {
+            // 🌟 일반 공격 / 전후열 대응: 유저가 선택한 타겟 우선, 파괴 시 기본 타겟
+            let targetObj = availableTargets.find(t => t.id === selectedFocusTargetId);
+            if (!targetObj || targetObj.isDestroyed) {
+              if (aliveFrontTargets.length > 0) {
+                targetObj = aliveFrontTargets[0];
               } else {
                 targetObj = curBarrier;
               }
-            } else {
-              targetObj = curBarrier;
             }
+            targetsToHit = targetObj ? [targetObj] : (curBarrier ? [curBarrier] : []);
           }
-          targetsToHit = targetObj ? [targetObj] : (curBarrier ? [curBarrier] : []);
         }
 
         if (targetsToHit.length > 0) {
@@ -1386,6 +1430,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         let totalDmgDealt = 0;
         let anyCrit = false;
         const allDebuffsApplied: string[] = [];
+        const positionBonusLogs: string[] = [];
 
         // 공격자 공격력 버프/디버프 연산
         let effectiveAtk = attacker.atk;
@@ -1394,11 +1439,19 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         const atkDebuff = (attacker.statusEffects || []).find(e => e.id === 'debuff_atk');
         if (atkDebuff) effectiveAtk = Math.max(10, Math.round(effectiveAtk * (1 - (atkDebuff.value || 0.30))));
 
-        const critChance = attacker.luck * 0.008 + 0.12;
+        // 기본 치명타 확률 + 후열 저격 치명타율 보너스 (+20%)
+        let critChance = attacker.luck * 0.008 + 0.12;
+        if (posBonus === 'back') {
+          critChance += 0.20;
+        }
         const isCrit = Math.random() < critChance;
         if (isCrit) anyCrit = true;
 
         targetsToHit.forEach((targetObj, tIdx) => {
+          const isTargetFront = targetObj.id === 'turret_left' || targetObj.id === 'turret_right';
+          const isTargetBack = targetObj.id === 'dimensional_barrier';
+          const hasAliveFront = aliveFrontTargets.length > 0;
+
           // 타겟 방어력 연산 (화상 50% 분쇄, 결빙 +40%, 방어 분쇄)
           let targetDef = targetObj.def;
           const targetEffects = targetObj.statusEffects || [];
@@ -1414,7 +1467,29 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           }
 
           const aoeMultiplier = targetsToHit.length > 1 ? 0.75 : 1.0;
-          const rawDmg = effectiveAtk * (chosenSkill.power || 1.0) * (isCrit ? 1.6 : 1.0) * aoeMultiplier;
+          let rawDmg = effectiveAtk * (chosenSkill.power || 1.0) * (isCrit ? 1.6 : 1.0) * aoeMultiplier;
+
+          // 🌟 [포지션 판정 보너스 및 페널티 연산 - PvE 규격 동일]
+          // 1) 전열 특화 스킬: 전열 거점(좌/우 타워) 타격 시 +25% 피해 증폭
+          if (posBonus === 'front') {
+            if (isTargetFront) {
+              rawDmg = rawDmg * 1.25;
+              if (!positionBonusLogs.includes('전열 분쇄(+25%)')) positionBonusLogs.push('전열 분쇄(+25%)');
+            }
+          }
+          // 2) 후열 저격 스킬: 후열 거점(성벽 / 차원 보호막) 타격 시 +20% 피해 증폭
+          else if (posBonus === 'back') {
+            if (isTargetBack) {
+              rawDmg = rawDmg * 1.20;
+              if (!positionBonusLogs.includes('후열 저격(+20%)')) positionBonusLogs.push('후열 저격(+20%)');
+            }
+          }
+          // 3) 전열 방호선 엄호 페널티: 살아있는 전열 타워가 있는데 후열(성벽)을 일반/근접 공격으로 타격 시 25% 경감
+          else if (isTargetBack && hasAliveFront && posBonus !== 'any') {
+            rawDmg = rawDmg * 0.75;
+            if (!positionBonusLogs.includes('전열 타워 엄호(-25%)')) positionBonusLogs.push('전열 타워 엄호(-25%)');
+          }
+
           let finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + targetDef * INVASION_DEF_SCALE))));
 
           // 보호막(shield) 버프 흡수 연산
@@ -1588,12 +1663,33 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         else if (chosenSkill.id !== 'basic_attack') addFeverBadge('extra');
         else addFeverBadge('break');
 
+        // 🌟 아군 시전자 포지션 연계 보너스 (PvE 동일)
+        if (posBonus === 'front' && attacker.position === 'front' && totalDmgDealt > 0) {
+          const shieldAmt = Math.max(15, Math.floor(totalDmgDealt * 0.25));
+          applyInvasionStatusEffect(attacker, {
+            id: 'shield',
+            name: '전열 돌격 방벽',
+            type: 'buff',
+            icon: '🛡️',
+            duration: 2,
+            value: shieldAmt,
+          });
+          if (!positionBonusLogs.includes('전열 돌격 방벽')) positionBonusLogs.push('전열 돌격 방벽');
+        } else if (posBonus === 'back' && attacker.position === 'back' && chosenSkill.id !== 'basic_attack') {
+          const refundMp = Math.max(1, Math.floor((chosenSkill.manaCost || 0) * 0.35));
+          if (refundMp > 0) {
+            attacker.currentMp = Math.min(attacker.maxMp, attacker.currentMp + refundMp);
+            if (!positionBonusLogs.includes(`후열 마나환급(+${refundMp})`)) positionBonusLogs.push(`후열 마나환급(+${refundMp})`);
+          }
+        }
+
         // 연출 배너
-        const targetNames = targetsToHit.map(t => t.id === 'dimensional_barrier' ? '🛡️ 차원 보호막' : `🗼 ${t.name}`).join(', ');
-        const debuffNotice = allDebuffsApplied.length > 0 ? ` [디버프 부여: ${allDebuffsApplied.join(', ')}]` : '';
+        const targetNames = targetsToHit.map(t => t.id === 'dimensional_barrier' ? '🛡️ 차원 보호막(후열)' : `🗼 ${t.name}(전열)`).join(', ');
+        const posBonusNotice = positionBonusLogs.length > 0 ? ` [${positionBonusLogs.join(', ')}]` : '';
+        const debuffNotice = allDebuffsApplied.length > 0 ? ` [디버프: ${allDebuffsApplied.join(', ')}]` : '';
         setActionBanner({
           text: `⚔️ [공성 돌격] ${attacker.name}의 ${chosenSkill.name}!`,
-          sub: `${targetNames}에 총 ${totalDmgDealt.toLocaleString()}의 공성 타격! ${anyCrit ? '💥 치명타 작열!' : ''}${debuffNotice}`,
+          sub: `${targetNames}에 총 ${totalDmgDealt.toLocaleString()}의 공성 타격! ${anyCrit ? '💥 치명타 작열!' : ''}${posBonusNotice}${debuffNotice}`,
           color: '#00d2ff',
         });
 
@@ -1605,7 +1701,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             defender: {
               name: primaryTarget.name,
               icon: primaryTarget.icon,
-              className: primaryTarget.id === 'dimensional_barrier' ? '차원 절대 방어막' : '영지 방어 포탑',
+              className: primaryTarget.id === 'dimensional_barrier' ? '차원 절대 방어막 (후열)' : '영지 방어 포탑 (전열)',
               level: target.gateLevel,
               currentHp: primaryTarget.currentHp,
               maxHp: primaryTarget.maxHp,
@@ -1613,7 +1709,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               maxMp: 0,
               def: primaryTarget.def,
               classId: 'tactical_tower',
-              position: 'center',
+              position: primaryTarget.id === 'dimensional_barrier' ? 'back' : 'front',
             },
             skill: chosenSkill,
             damage: totalDmgDealt,
@@ -1633,7 +1729,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             defender: targetNames,
             damage: totalDmgDealt,
             isCrit: anyCrit,
-            skillName: `${chosenSkill.name}${debuffNotice}`,
+            skillName: `${chosenSkill.name}${posBonusNotice}${debuffNotice}`,
             side: 'player',
           },
         ]);
@@ -2373,9 +2469,14 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] sm:text-xs font-bold text-white truncate">
-                      {turretLeft.name}
-                    </span>
+                    <div className="flex items-center gap-1 min-w-0">
+                      <span className="text-[10px] sm:text-xs font-bold text-white truncate">
+                        {turretLeft.name}
+                      </span>
+                      <span className="text-[6.5px] px-1 py-0.2 rounded font-bold bg-[#ef535025] text-[#ef5350] border border-[#ef535055] shrink-0">
+                        전열
+                      </span>
+                    </div>
                     <span className="text-[7.5px] font-mono text-[#ff8a80] shrink-0">
                       방어 {turretLeft.def}
                     </span>
@@ -2450,9 +2551,14 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] sm:text-xs font-bold text-white truncate">
-                      {turretRight.name}
-                    </span>
+                    <div className="flex items-center gap-1 min-w-0">
+                      <span className="text-[10px] sm:text-xs font-bold text-white truncate">
+                        {turretRight.name}
+                      </span>
+                      <span className="text-[6.5px] px-1 py-0.2 rounded font-bold bg-[#ef535025] text-[#ef5350] border border-[#ef535055] shrink-0">
+                        전열
+                      </span>
+                    </div>
                     <span className="text-[7.5px] font-mono text-[#80deea] shrink-0">
                       방어 {turretRight.def}
                     </span>
@@ -2538,6 +2644,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                   <div className="text-[11px] sm:text-xs font-black text-white flex items-center gap-1.5 flex-wrap">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d2ff] via-[#80deea] to-[#ffffff] truncate">
                       차원 왜곡 보호막
+                    </span>
+                    <span className="text-[7px] px-1 py-0.2 rounded font-bold bg-[#42a5f525] text-[#42a5f5] border border-[#42a5f555] shrink-0">
+                      후열
                     </span>
                     <span className="text-[7.5px] font-mono px-1 py-0.2 rounded bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] shrink-0">
                       방어력 {barrierState.def}
