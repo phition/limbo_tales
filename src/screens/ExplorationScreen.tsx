@@ -17,6 +17,7 @@ import { GameIcon } from '../components/GameIcon';
 import { CustomAssetService } from '../services/CustomAssetService';
 import { useCustomAssetVersion } from '../hooks/useCustomAssetVersion';
 import { getFloorUniqueEvent, CLASS_GROUPS, findPartyHeroByClasses } from '../data/dungeonFloorEvents';
+import { TutorialGuideOverlay } from '../components/TutorialGuideOverlay';
 
 const FLOOR_NAMES_I18N: Record<string, string[]> = {
   ko: [
@@ -480,6 +481,42 @@ export const ExplorationScreen: React.FC = () => {
   // 영웅 상세 정보 모달
   const [inspectedHero, setInspectedHero] = useState<Mercenary | null>(null);
 
+  // ── 튜토리얼 상태 관리 ──
+  const [tutorialStepId, setTutorialStepId] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('ark_tutorial_state');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.isCompleted || parsed.isSkipped) return '';
+        return parsed.currentStepId || '';
+      }
+    } catch {}
+    return '';
+  });
+  const [isExplorationGuideDismissed, setIsExplorationGuideDismissed] = useState(false);
+  const tutorialExploreCountRef = useRef<number>(0);
+
+  const handleAdvanceTutorial = (nextId?: string) => {
+    if (!nextId) {
+      setTutorialStepId('');
+      try {
+        localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: true, isSkipped: false }));
+      } catch {}
+      return;
+    }
+    setTutorialStepId(nextId);
+    try {
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: nextId, isCompleted: false, isSkipped: false }));
+    } catch {}
+  };
+
+  const handleSkipTutorial = () => {
+    setTutorialStepId('');
+    try {
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: false, isSkipped: true }));
+    } catch {}
+  };
+
   // 🛡️ [탐색 애니메이션 데드락 방지 와치독 타이머]: 1.2초 이상 isAnimating이 유지되면 강제 해제
   useEffect(() => {
     if (isAnimating) {
@@ -590,9 +627,12 @@ export const ExplorationScreen: React.FC = () => {
     gm.updateQuestObjective('Q_MAIN_02', 2, 1);
     gm.settleDungeonInventory(floor);
     gm.clearDungeonSession();
+    if (tutorialStepId === 'TUTORIAL_EXPLORE_RETURN') {
+      handleAdvanceTutorial('TUTORIAL_CITADEL_FINISH');
+    }
     navigateTo('citadel');
     gm.saveGame();
-  }, [dangerPct, floor, gm, navigateTo]);
+  }, [dangerPct, floor, gm, navigateTo, tutorialStepId]);
 
   // 🏃 닻 없는 비상 탈출 감행 (성공 30% / 전리품 80% 유실, 실패 70% / 마물 기습)
   const executeEmergencyEscape = useCallback(() => {
@@ -941,12 +981,37 @@ export const ExplorationScreen: React.FC = () => {
       return;
     }
 
-    const event = rollEvent();
+    let event = rollEvent();
+    if (floor === 1 && tutorialStepId === 'TUTORIAL_EXPLORE_SCOUT') {
+      setIsExplorationGuideDismissed(true);
+      const stepIdx = tutorialExploreCountRef.current;
+      if (stepIdx === 0) {
+        event = 'loot';
+        tutorialExploreCountRef.current = 1;
+      } else if (stepIdx === 1) {
+        event = 'ore_vein';
+        tutorialExploreCountRef.current = 2;
+      } else {
+        event = 'monster';
+        tutorialExploreCountRef.current = 3;
+      }
+    }
 
     setTimeout(() => {
       switch (event) {
         case 'monster': {
-          const squad = generateMonsterSquad(floor, newDanger >= maxDanger, newDanger);
+          let squad: MonsterData[];
+          if (floor === 1 && tutorialStepId === 'TUTORIAL_EXPLORE_SCOUT') {
+            // 🌟 튜토리얼 강제 2마리 편대 (전열 부패 슬라임 + 후열 그림자 임프)
+            const slime = JSON.parse(JSON.stringify(MONSTERS['monster_rot_slime'])) as MonsterData;
+            const imp = JSON.parse(JSON.stringify(MONSTERS['monster_shadow_imp'])) as MonsterData;
+            slime.level = 1;
+            imp.level = 1;
+            squad = [slime, imp];
+            handleAdvanceTutorial('TUTORIAL_BATTLE_TARGET');
+          } else {
+            squad = generateMonsterSquad(floor, newDanger >= maxDanger, newDanger);
+          }
           if (squad && squad.length > 0) {
             gm.currentMonsters = squad;
             gm.isOvercharged = newDanger >= maxDanger;
@@ -1954,28 +2019,42 @@ export const ExplorationScreen: React.FC = () => {
       return;
     }
 
+    if (tutorialStepId === 'TUTORIAL_EXPLORE_TORCH' && gm.getDungeonItemCount('torch') === 0 && gm.getDungeonItemCount('enhanced_torch') === 0) {
+      gm.addToDungeonInventory('torch', '횃불', '🔥', 1, undefined, undefined, 'supply');
+    }
+
     if (hasEtherTorch && gm.consumeDungeonItem('enhanced_torch', 1)) {
       setTorchTurns(3);
       setIsEtherTorch(true);
       SoundManager.getInstance().play('torch_light');
       gm.addLog('🔥✨ [에테르 횃불 점등] 강력한 에테르 불꽃으로 심연을 환히 밝힙니다! (탐험 시 위험도 상승 2배, 이벤트 발견율 2배↑, 몬스터 조우율 대폭 억제)', 'reward');
       gm.emit('dungeonUpdated');
+      if (tutorialStepId === 'TUTORIAL_EXPLORE_TORCH') {
+        handleAdvanceTutorial('TUTORIAL_EXPLORE_RETURN');
+      }
     } else if (hasNormalTorch && gm.consumeDungeonItem('torch', 1)) {
       setTorchTurns(3);
       setIsEtherTorch(false);
       SoundManager.getInstance().play('torch_light');
       gm.addLog('🔥 [횃불 점등] 주위가 환해졌습니다! (3회 탐색 동안 자원/광맥/보물 발견율↑, 몬스터 조우율↓, 위험도 축적 속도↑)', 'reward');
       gm.emit('dungeonUpdated');
+      if (tutorialStepId === 'TUTORIAL_EXPLORE_TORCH') {
+        handleAdvanceTutorial('TUTORIAL_EXPLORE_RETURN');
+      }
     } else {
       gm.addLog('🔥 횃불이 부족합니다! 채비실에서 미리 횃불을 구비해야 합니다.', 'danger');
     }
-  }, [torchTurns, gm]);
+  }, [torchTurns, gm, tutorialStepId]);
 
   // 야영 (어둠 속 마물 기습 위험 & 모닥불 토크 & 탐색 3회 쿨다운)
   const doCamp = useCallback(() => {
-    if (campCooldown > 0) {
+    if (campCooldown > 0 && tutorialStepId !== 'TUTORIAL_EXPLORE_CAMP') {
       gm.addLog(`🏕️ [야영 쿨다운] 던전을 ${campCooldown}회 더 탐색해야 안전한 야영지를 확보할 수 있습니다! (탐색 3회당 1회 가능)`, 'danger');
       return;
+    }
+
+    if (tutorialStepId === 'TUTORIAL_EXPLORE_CAMP' && gm.getDungeonItemCount('food') === 0 && gm.getDungeonItemCount('enhanced_food') === 0) {
+      gm.addToDungeonInventory('food', '식량', '🍖', 1, undefined, undefined, 'supply');
     }
 
     const hasEnhancedFood = gm.getDungeonItemCount('enhanced_food') > 0;
@@ -2541,13 +2620,23 @@ export const ExplorationScreen: React.FC = () => {
       <Modal
         title={`🏕️ ${tr('심연 던전 야영 — 모닥불 담소 (Campfire Banter)')}`}
         open={!!banterResult}
-        onClose={() => setBanterResult(null)}
+        onClose={() => {
+          setBanterResult(null);
+          if (tutorialStepId === 'TUTORIAL_EXPLORE_CAMP') {
+            handleAdvanceTutorial('TUTORIAL_EXPLORE_TORCH');
+          }
+        }}
         footer={
           <ActionButton
             label={tr("야영을 마치고 탐험 계속하기")}
             variant="primary"
             className="w-full"
-            onClick={() => setBanterResult(null)}
+            onClick={() => {
+              setBanterResult(null);
+              if (tutorialStepId === 'TUTORIAL_EXPLORE_CAMP') {
+                handleAdvanceTutorial('TUTORIAL_EXPLORE_TORCH');
+              }
+            }}
           />
         }
       >
@@ -2670,6 +2759,7 @@ export const ExplorationScreen: React.FC = () => {
               const normalFoodCount = gm.getDungeonItemCount('food');
               return (
                 <button 
+                   data-tutorial-target="btn-camp"
                    className={`btn h-full flex-1 flex flex-col items-center justify-center text-xs border transition-all rounded-xl ${
                      campCooldown > 0
                        ? 'border-[#2c384d] text-[#607d8b] bg-[#0d1017] opacity-60'
@@ -2697,12 +2787,22 @@ export const ExplorationScreen: React.FC = () => {
               const hasAnchor = hasEnhancedAnchor || hasNormalAnchor || gm.portalAppeared;
               return (
                 <button 
+                   data-tutorial-target="btn-return"
                    className={`btn btn-danger h-full flex-1 flex flex-col items-center justify-center text-xs rounded-xl ${
                      !hasAnchor
                        ? (escapeCooldown > 0 ? 'opacity-40 border-[#ff416c33]' : 'border-[#ff704388] text-[#ff7043] animate-pulse')
                        : (hasEnhancedAnchor ? 'border-[#ffd54f88] text-[#ffd54f] bg-[#2a1e05]' : '')
                    }`}
                    onClick={() => {
+                     if (tutorialStepId === 'TUTORIAL_EXPLORE_RETURN') {
+                       if (gm.getDungeonItemCount('rift_anchor') === 0 && gm.getDungeonItemCount('enhanced_rift_anchor') === 0) {
+                         gm.addToDungeonInventory('rift_anchor', '균열의 닻', '⚓', 1, undefined, undefined, 'supply');
+                       }
+                       gm.consumeDungeonItem('rift_anchor', 1);
+                       gm.addLog('⚓ [균열의 닻 사용] 차원의 닻을 작동하여 성채로 안전하게 귀환합니다!', 'reward');
+                       returnToCitadel('rift_anchor');
+                       return;
+                     }
                      if (gm.portalAppeared) {
                        returnToCitadel('portal');
                      } else if (hasEnhancedAnchor) {
@@ -2749,6 +2849,7 @@ export const ExplorationScreen: React.FC = () => {
           {/* 중앙 몸통: 탐색 */}
           <div className="col-span-2 flex">
             <button 
+               data-tutorial-target="btn-explore"
                className="btn w-full h-full text-base sm:text-lg font-bold transition-all flex flex-col items-center justify-center gap-1 rounded-xl shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110"
                disabled={isAnimating || !!eventCard}
                onClick={doExplore}
@@ -2771,6 +2872,7 @@ export const ExplorationScreen: React.FC = () => {
               const normalTorchCount = gm.getDungeonItemCount('torch');
               return (
                 <button 
+                   data-tutorial-target="btn-torch"
                    className={`btn h-full flex-1 flex flex-col items-center justify-center text-xs border rounded-xl ${
                      torchTurns > 0 
                        ? (isEtherTorch ? 'border-[#00d2ff] text-[#00d2ff] bg-[#00d2ff22] animate-pulse' : 'border-[#ff7043] text-[#ff7043] bg-[#ff704322]')
@@ -2855,6 +2957,20 @@ export const ExplorationScreen: React.FC = () => {
           onClose={() => setInspectedHero(null)}
         />
       )}
+
+      {/* 🧭 튜토리얼 가이드 오버레이 (심연 1층 탐색 가이드) */}
+      <TutorialGuideOverlay
+        currentStepId={tutorialStepId}
+        onAdvanceStep={(nextId) => {
+          setIsExplorationGuideDismissed(true);
+          handleAdvanceTutorial(nextId);
+        }}
+        onSkipTutorial={handleSkipTutorial}
+        isOpen={!!tutorialStepId && !banterResult && (
+          (tutorialStepId === 'TUTORIAL_EXPLORE_SCOUT' && !isExplorationGuideDismissed) ||
+          ['TUTORIAL_EXPLORE_CAMP', 'TUTORIAL_EXPLORE_TORCH', 'TUTORIAL_EXPLORE_RETURN'].includes(tutorialStepId)
+        )}
+      />
     </div>
   );
 };

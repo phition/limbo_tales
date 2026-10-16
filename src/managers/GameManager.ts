@@ -242,7 +242,7 @@ export class GameManager {
   public currentMonsters: MonsterData[] = [];
   public returnReport: ExpeditionReturnReport | null = null;
   public citadelSupplies: Record<string, number> = {
-    torch: 0, food: 0, pickaxe: 0, bandage: 0, holy_water: 0, key: 0, rift_anchor: 0,
+    torch: 3, food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3,
     enhanced_torch: 0, enhanced_food: 0, enhanced_pickaxe: 0, enhanced_bandage: 0, enhanced_holy_water: 0, enhanced_key: 0, enhanced_rift_anchor: 0
   };
 
@@ -601,6 +601,12 @@ export class GameManager {
   }
 
   public resetToNewGame(): void {
+    try {
+      localStorage.removeItem('ark_tutorial_state');
+      const uid = this.getCurrentUserId();
+      localStorage.removeItem(`limbo_intro_story_seen_${uid}`);
+      localStorage.removeItem('limbo_intro_story_seen_guest');
+    } catch (_) {}
     this.initDefaultData();
     this.saveGame();
     this.emit('resourcesChanged');
@@ -609,6 +615,7 @@ export class GameManager {
     this.emit('partyUpdated', this.party);
     this.emit('questUpdated');
     this.emit('inventoryUpdated', this.equipmentInventory);
+    this.emit('gameReset');
   }
 
   public initDefaultData(): void {
@@ -676,7 +683,7 @@ export class GameManager {
     this.infirmaryPatients = [];
     this.bonds = {};
     this.citadelSupplies = {
-      torch: 0, food: 0, pickaxe: 0, bandage: 0, holy_water: 0, key: 0, rift_anchor: 0,
+      torch: 3, food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3,
       enhanced_torch: 0, enhanced_food: 0, enhanced_pickaxe: 0, enhanced_bandage: 0, enhanced_holy_water: 0, enhanced_key: 0, enhanced_rift_anchor: 0
     };
     this.cemetery = [this.getInitialFallenHero()];
@@ -718,11 +725,14 @@ export class GameManager {
       // 2. 로컬 스토리지 세이브 및 지휘관 최고 전력 플래그 완전 삭제
       try {
         localStorage.removeItem(this.getSaveKey());
+        localStorage.removeItem('ark_tutorial_state');
         const uid = this.getCurrentUserId();
         localStorage.removeItem(`limbo_commander_max_upgraded_v1_${uid}`);
         localStorage.removeItem(`limbo_commander_max_upgraded_v2_${uid}`);
         localStorage.removeItem(`limbo_commander_max_upgraded_v1_guest`);
         localStorage.removeItem(`limbo_commander_max_upgraded_v2_guest`);
+        localStorage.removeItem(`limbo_intro_story_seen_${uid}`);
+        localStorage.removeItem('limbo_intro_story_seen_guest');
       } catch (_) {}
 
       // 3. 클라우드 세이브 삭제 (options.cloud가 false가 아니면 기본 삭제)
@@ -737,6 +747,7 @@ export class GameManager {
       this.currentScreen = 'citadel';
       this.currentSceneContext = 'citadel';
       this.addLog('🔄 [완전 초기화] 모든 게임 데이터가 초기화되었습니다. 처음부터 다시 시작합니다.', 'story', 'citadel');
+      this.emit('gameReset');
     } else {
       // 선택적 초기화
       const resetLogs: string[] = [];
@@ -2863,10 +2874,6 @@ export class GameManager {
     if (id === 'lumberCamp')  this.updateQuestObjective('Q_BUILD_LUMBER', 0, 1);
     if (id === 'quarry') {
       this.updateQuestObjective('Q_BUILD_QUARRY', 0, 1);
-      if (this.buildings['tavern']) {
-        this.buildings['tavern'].unlocked = true;
-      }
-      this.activateQuest('Q_MAIN_02');
     }
     if (id === 'tavern') {
       this.updateQuestObjective('Q_MAIN_02', 0, 1);
@@ -5295,32 +5302,38 @@ export class GameManager {
       { name: '광전사의 혈통', atkMod: 1.16, defMod: 0.90, hpMod: 1.08, mpMod: 0.90, spdMod: 1, luckMod: 6 }
     ];
 
-    const poolSize = [0, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6][tavernLv] || 3;
+    // 🌟 첫 용병 영입 시에는 용병 검사, 마총 수련생, 원소 학도 3종 후보 고정 출현
+    const isFirstTavernPool = this.barracks.length <= 2 && this.tavernRefreshCount === 0;
+    const initialTrio = ['vanguard', 'gunner', 'apprentice'];
+
+    const poolSize = isFirstTavernPool ? 3 : ([0, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6][tavernLv] || 3);
     this.tavernCandidates = Array.from({ length: poolSize }).map((_, idx) => {
-      const cId = classIds[Math.floor(Math.random() * classIds.length)];
-      const cData = CHARACTER_CLASSES[cId];
+      const cId = isFirstTavernPool && idx < 3 ? initialTrio[idx] : classIds[Math.floor(Math.random() * classIds.length)];
+      const cData = CHARACTER_CLASSES[cId] || CHARACTER_CLASSES.warrior;
       
       const rand = Math.random() * 100;
       let grade: MercenaryGrade = 'rookie';
       let statMult = 1.0;
       let hiringCost = 400;
       
-      if (rand < epicChance) {
-        grade = 'epic'; // [E] 에픽
-        statMult = 1.75;
-        hiringCost = 8000; // [E] 8,000G
-      } else if (rand < epicChance + heroChance) {
-        grade = 'hero'; // [H] 히어로
-        statMult = 1.45;
-        hiringCost = 4000; // [H] 4,000G
-      } else if (rand < epicChance + heroChance + veteranChance) {
-        grade = 'veteran'; // [V] 베테랑
-        statMult = 1.2;
-        hiringCost = 1200; // [V] 1,200G
-      } else {
-        grade = 'rookie'; // [N] 뉴비
-        statMult = 1.0;
-        hiringCost = 400; // [N] 400G
+      if (!isFirstTavernPool) {
+        if (rand < epicChance) {
+          grade = 'epic'; // [E] 에픽
+          statMult = 1.75;
+          hiringCost = 8000; // [E] 8,000G
+        } else if (rand < epicChance + heroChance) {
+          grade = 'hero'; // [H] 히어로
+          statMult = 1.45;
+          hiringCost = 4000; // [H] 4,000G
+        } else if (rand < epicChance + heroChance + veteranChance) {
+          grade = 'veteran'; // [V] 베테랑
+          statMult = 1.2;
+          hiringCost = 1200; // [V] 1,200G
+        } else {
+          grade = 'rookie'; // [N] 뉴비
+          statMult = 1.0;
+          hiringCost = 400; // [N] 400G
+        }
       }
 
       const traitObj = TRAITS[Math.floor(Math.random() * TRAITS.length)];
@@ -7001,16 +7014,12 @@ export class GameManager {
       // Q_BUILD_QUARRY: 마도 광산
       if (this.buildings['quarry'] && this.buildings['quarry'].level >= 1) {
         this.updateQuestObjective('Q_BUILD_QUARRY', 0, 1);
-        if (this.buildings['tavern']) {
-          this.buildings['tavern'].unlocked = true;
-        }
       }
 
       // 🍺 Q_MAIN_02: 주점이 해금되기 전까지는 보이지 않도록 locked 유지, 해금 시 active
       const isTavernUnlocked = Boolean(
         (this.buildings['tavern'] && this.buildings['tavern'].unlocked) ||
-        (this.buildings['tavern'] && this.buildings['tavern'].level >= 1) ||
-        (this.buildings['quarry'] && this.buildings['quarry'].level >= 1)
+        (this.buildings['tavern'] && this.buildings['tavern'].level >= 1)
       );
       const qMain02 = this.quests.find(q => q.id === 'Q_MAIN_02');
       if (qMain02 && qMain02.status !== 'completed') {
@@ -10285,7 +10294,7 @@ export class GameManager {
   // 📦 성채 창고 보급품 입고 및 출출 헬퍼
   public addCitadelSupply(key: string, qty: number): void {
     if (!this.citadelSupplies) {
-      this.citadelSupplies = { torch: 0, food: 0, pickaxe: 0, bandage: 0, holy_water: 0, key: 0, rift_anchor: 0 };
+      this.citadelSupplies = { torch: 3, food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3 };
     }
     this.citadelSupplies[key] = (this.citadelSupplies[key] || 0) + qty;
     if (key === 'enhanced_torch' && qty > 0) {
@@ -10297,7 +10306,7 @@ export class GameManager {
 
   public consumeCitadelSupply(key: string, qty: number): boolean {
     if (!this.citadelSupplies) {
-      this.citadelSupplies = { torch: 0, food: 0, pickaxe: 0, bandage: 0, holy_water: 0, key: 0, rift_anchor: 0 };
+      this.citadelSupplies = { torch: 3, food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3 };
     }
     const current = this.citadelSupplies[key] || 0;
     if (current < qty) return false;
@@ -11810,7 +11819,7 @@ export class GameManager {
     this.syncPurifiedFloorsFromQuests();
     if (parsed.infirmaryPatients)  this.infirmaryPatients  = parsed.infirmaryPatients as string[];
     if (parsed.bonds)              this.bonds              = parsed.bonds as Record<string, number>;
-    if (parsed.citadelSupplies)     this.citadelSupplies     = { torch: 0, food: 0, pickaxe: 0, bandage: 0, holy_water: 0, key: 0, ...(parsed.citadelSupplies as Record<string, number>) };
+    if (parsed.citadelSupplies)     this.citadelSupplies     = { torch: 3, food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3, ...(parsed.citadelSupplies as Record<string, number>) };
     if (parsed.backpackCapacity !== undefined) this.backpackCapacity = parsed.backpackCapacity as number;
     if (parsed.lastSelectedBagId)  this.lastSelectedBagId  = parsed.lastSelectedBagId as string;
     if (parsed.tavernArrivalSecondsLeft !== undefined) this.tavernArrivalSecondsLeft = parsed.tavernArrivalSecondsLeft as number;
@@ -12491,7 +12500,7 @@ export class GameManager {
         this.syncPurifiedFloorsFromQuests();
         if (parsed.infirmaryPatients)  this.infirmaryPatients  = parsed.infirmaryPatients as string[];
         if (parsed.bonds)              this.bonds              = parsed.bonds as Record<string, number>;
-        if (parsed.citadelSupplies)     this.citadelSupplies     = { torch: 0, food: 0, pickaxe: 0, bandage: 0, holy_water: 0, key: 0, ...(parsed.citadelSupplies as Record<string, number>) };
+        if (parsed.citadelSupplies)     this.citadelSupplies     = { torch: 3, food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3, ...(parsed.citadelSupplies as Record<string, number>) };
         if (parsed.backpackCapacity !== undefined) this.backpackCapacity = parsed.backpackCapacity as number;
         if (parsed.lastSelectedBagId)  this.lastSelectedBagId  = parsed.lastSelectedBagId as string;
         if (parsed.tavernArrivalSecondsLeft !== undefined) this.tavernArrivalSecondsLeft = parsed.tavernArrivalSecondsLeft as number;

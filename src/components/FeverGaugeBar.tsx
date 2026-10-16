@@ -12,6 +12,7 @@ interface FeverGaugeBarProps {
   side?: 'player' | 'enemy';
   isBluffing?: boolean;
   revealAll?: boolean;
+  showEffectDescription?: boolean;
 }
 
 export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
@@ -21,7 +22,8 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
   label = 'FEVER',
   side = 'player',
   isBluffing = false,
-  revealAll = false
+  revealAll = false,
+  showEffectDescription = true
 }) => {
   const maxSlots = 5;
   const isFull = (badges || []).length >= maxSlots;
@@ -134,6 +136,19 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
           )}
         </div>
       </div>
+
+      {/* 5개 완충 시 하단에 펼쳐지는 발동 효과 프리뷰 바 (PVE 등) */}
+      {showEffectDescription && isFull && (
+        <div className="mt-1 pt-1 border-t border-[#ffd54f33] flex items-center justify-between text-[10px] text-[#fff9c4] px-0.5 animate-fade-in">
+          <div className="flex items-center gap-1.5 truncate min-w-0">
+            <span className="font-extrabold text-[#ffd54f] shrink-0">★ 효과:</span>
+            <span className="truncate text-[#fff59d] font-semibold">{synergy.summary}</span>
+          </div>
+          <span className="text-[9px] text-[#ffd54f] font-mono font-black shrink-0 ml-1 tracking-wider animate-pulse">
+            FEVER READY
+          </span>
+        </div>
+      )}
     </div>
   );
 };

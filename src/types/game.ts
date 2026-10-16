@@ -289,6 +289,8 @@ export const MAGIC_SCHOOL_META: Record<MagicSchool, { label: string; icon: strin
   }
 };
 
+export type CharacterClassRole = 'tank' | 'dealer_phy' | 'dealer_mag' | 'healer' | 'gunner' | 'berserker';
+
 export interface CharacterClass {
   id: string;
   name: string;
@@ -296,7 +298,7 @@ export interface CharacterClass {
   icon?: string;
   parentClassId?: string;
   promotions?: string[];
-  role: 'tank' | 'dealer_phy' | 'dealer_mag' | 'healer' | 'gunner' | 'berserker';
+  role: CharacterClassRole;
   baseStats: {
     hp: number;
     mp: number;

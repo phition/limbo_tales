@@ -111,6 +111,15 @@ export const App: React.FC = () => {
   // 📖 전역 백과사전 다이렉트 검색 이벤트 구독
   useEffect(() => {
     const handleOpenEnc = (data: any) => {
+      // 튜토리얼 진행 중에는 백과사전 모달 팝업 방지
+      try {
+        const tutState = localStorage.getItem('ark_tutorial_state');
+        if (tutState) {
+          const parsed = JSON.parse(tutState);
+          if (parsed?.isActive) return;
+        }
+      } catch (_) {}
+
       if (data?.tab) setGuideInitialTab(data.tab);
       if (data?.query !== undefined) setGuideInitialQuery(data.query);
       setGuideOpen(true);

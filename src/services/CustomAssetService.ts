@@ -108,6 +108,10 @@ export class CustomAssetService {
     return CustomAssetService.getInstance().getNpcOverride(nameOrId);
   }
 
+  public static getElainePortrait(emotion: 'normal' | 'serious' | 'smile' | 'worry' = 'normal'): string {
+    return CustomAssetService.getInstance().getElainePortrait(emotion);
+  }
+
   // ── 이벤트 리스너 ──────────────────────────────────────────────────────────
   public on(event: string, fn: EventListener): void {
     if (!this.listeners.has(event)) {
@@ -474,6 +478,15 @@ export class CustomAssetService {
     }
 
     return undefined;
+  }
+
+  public getElainePortrait(emotion: 'normal' | 'serious' | 'smile' | 'worry' = 'normal'): string {
+    const emotionKey = `npc_elaine_${emotion}`;
+    const specific = this.getNpcOverride(emotionKey);
+    if (specific) return specific;
+    const base = this.getNpcOverride('npc_elaine') || this.getNpcOverride('수석 오퍼레이터 일레인');
+    if (base) return base;
+    return 'assets/portraits/portrait_t1_scholar.png';
   }
 
   public getAllConfig(): AssetConfigData {

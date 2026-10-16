@@ -1,3 +1,5 @@
+import { TutorialGuideOverlay } from '../components/TutorialGuideOverlay';
+import { TUTORIAL_STEPS } from '../data/tutorialSteps';
 import { useGameManager } from '../hooks/useGameManager';
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { ResourceBar } from '../components/ResourceBar';
@@ -2695,19 +2697,25 @@ const CitadelDrawer: React.FC<{
                 {/* 버튼 그룹 (클릭 이벤트 버블링 방지) */}
                 <div className="flex items-center gap-1.5 shrink-0" onClick={e => e.stopPropagation()}>
                   {item.drawerKey && isBuilt && (
-                    <ActionButton
-                      label="입장"
-                      variant="success"
-                      size="sm"
-                      className="px-2.5 font-bold"
-                      onClick={() => {
-                        if (item.id === 'arenaGate') navigateTo('arena');
-                        else onEnterDrawer(item.drawerKey!);
-                      }}
-                    />
+                    <div data-tutorial-target={item.id === 'tavern' ? 'enter-tavern' : undefined}>
+                      <ActionButton
+                        label="입장"
+                        variant="success"
+                        size="sm"
+                        className="px-2.5 font-bold"
+                        onClick={() => {
+                          if (item.id === 'arenaGate') navigateTo('arena');
+                          else onEnterDrawer(item.drawerKey!);
+                        }}
+                      />
+                    </div>
                   )}
-                  <ActionButton
-                    label={isConstructing ? `🔨 ${remainSec}초` : (isMax ? 'MAX' : (!prereq.allowed ? '선행 필요' : (isBuilt ? '강화' : '건설')))}
+                  <div data-tutorial-target={
+                    item.id === 'butchery' && !isBuilt ? 'build-refinery' :
+                    item.id === 'tavern' && !isBuilt ? 'build-tavern' : undefined
+                  }>
+                    <ActionButton
+                      label={isConstructing ? `🔨 ${remainSec}초` : (isMax ? 'MAX' : (!prereq.allowed ? '선행 필요' : (isBuilt ? '강화' : '건설')))}
                     variant={isConstructing ? 'ghost' : (canAfford && !isMax && prereq.allowed ? 'primary' : 'ghost')}
                     size="sm"
                     className={`px-3 font-bold transition-all ${
@@ -2726,6 +2734,7 @@ const CitadelDrawer: React.FC<{
                       gm.buildBuilding(item.id);
                     }}
                   />
+                  </div>
                 </div>
               </div>
 
@@ -3055,6 +3064,17 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
     }
   };
 
+  // 🌟 첫 용병 영입 전에는 용병 검사, 마총 수련생, 원소 학도 3인이 반드시 후보로 등장하도록 보장
+  useEffect(() => {
+    if (state.barracks.length <= 2 && (gm.tavernRefreshCount || 0) === 0) {
+      const candIds = (state.tavernCandidates || []).map(c => c.classId);
+      const isExactTrio = candIds.length === 3 && candIds.includes('vanguard') && candIds.includes('gunner') && candIds.includes('apprentice');
+      if (!isExactTrio) {
+        gm.refreshTavernPool();
+      }
+    }
+  }, [state.barracks.length, state.tavernCandidates, gm]);
+
   // 🎒 연계 퀘스트 (Q_MAIN_02): 용병 영입 완료 후 침식 회랑 1층 강하(채비실) 준비 단계인지 확인
   const qMain02 = state.quests.find(q => q.id === 'Q_MAIN_02');
   const isReadyForExpedition = (qMain02 && qMain02.status === 'active' && qMain02.objectives[1]?.isCompleted && !qMain02.objectives[2]?.isCompleted)
@@ -3129,6 +3149,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
             </div>
           </div>
           <button
+            data-tutorial-target={state.party.length < 3 ? "open-barracks-btn" : "open-explore-drawer"}
             className={`text-xs px-3 py-1.5 rounded-lg font-bold shrink-0 active:scale-95 shadow-md flex items-center gap-1 cursor-pointer transition-all ${
               state.party.length < 3
                 ? 'bg-[#0088cc] hover:bg-[#00a2f5] text-white border border-[#00d2ff]'
@@ -3254,13 +3275,15 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                     size="sm"
                     onClick={() => setDetailCandidate(cand)}
                   />
-                  <ActionButton
-                    label={isFull ? '정원 초과' : canAfford ? `🤝 고용 (🪙${cand.hiringCost}G)` : '골드 부족'}
-                    variant={isFull ? 'ghost' : canAfford ? 'primary' : 'ghost'}
-                    size="sm"
-                    disabled={isFull || !canAfford}
-                    onClick={() => gm.hireMercenary(cand.id)}
-                  />
+                  <div data-tutorial-target="recruit-mercenary">
+                    <ActionButton
+                      label={isFull ? '정원 초과' : canAfford ? `🤝 고용 (🪙${cand.hiringCost}G)` : '골드 부족'}
+                      variant={isFull ? 'ghost' : canAfford ? 'primary' : 'ghost'}
+                      size="sm"
+                      disabled={isFull || !canAfford}
+                      onClick={() => gm.hireMercenary(cand.id)}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -3565,9 +3588,14 @@ const BarracksDrawer: React.FC<{
   onClose: () => void;
   onNavigateDrawer?: (drawerKey: string) => void;
   initialCategory?: 'dungeon' | 'dimensional';
-}> = ({ onClose, onNavigateDrawer, initialCategory = 'dungeon' }) => {
+  tutorialStepId?: string;
+  onAdvanceTutorial?: (nextStepId?: string) => void;
+}> = ({ onClose, onNavigateDrawer, initialCategory = 'dungeon', tutorialStepId, onAdvanceTutorial }) => {
   const { state, gm } = useGameManager();
-  const [selectedIdx, setSelectedIdx] = useState(0);
+  const [selectedIdx, setSelectedIdx] = useState(() => {
+    const unassignedIdx = state.barracks.findIndex(h => !state.party.some(p => p.id === h.id));
+    return unassignedIdx >= 0 ? unassignedIdx : 0;
+  });
   const [equipOverlay, setEquipOverlay] = useState<{ hero: Mercenary; slot: EquipmentSlot | 'all' } | null>(null);
   const [skillOverlayHero, setSkillOverlayHero] = useState<Mercenary | null>(null);
   const [dismissConfirmHero, setDismissConfirmHero] = useState<Mercenary | null>(null);
@@ -3764,6 +3792,27 @@ const BarracksDrawer: React.FC<{
           )}
         </button>
       </div>
+
+      {/* 🎒 3인 편성 완료 시 출정 채비실 바로가기 안내 배너 */}
+      {state.party.length >= 3 && onNavigateDrawer && (
+        <div className="bg-gradient-to-r from-[#1a103c] via-[#2a1758] to-[#1a103c] border-b border-[#a855f788] px-3 py-2 flex items-center justify-between gap-2 shrink-0 animate-fade-in shadow-md">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-lg shrink-0">🎒</span>
+            <div className="min-w-0">
+              <div className="text-xs font-bold text-[#e9d5ff]">3인 원정대 편성 완료!</div>
+              <div className="text-[10px] text-[#c084fc] truncate">출정 채비실로 이동하여 진형과 보급품을 점검하세요.</div>
+            </div>
+          </div>
+          <button
+            data-tutorial-target="open-explore-drawer"
+            className="btn btn-primary text-xs px-3 py-1 font-bold shrink-0 flex items-center gap-1 shadow bg-[#7e22ce] hover:bg-[#9333ea] border border-[#c084fc] text-white"
+            onClick={() => onNavigateDrawer('explore')}
+          >
+            <span>출정 채비실로 이동</span>
+            <span>▶</span>
+          </button>
+        </div>
+      )}
 
       {barracksCategory === 'dimensional' ? (
         // ── 🌌 차원 3인 결투 부대 & 전술 오퍼레이터 관리 뷰 ──
@@ -4505,11 +4554,15 @@ const BarracksDrawer: React.FC<{
                         variant={isAdmitted ? 'danger' : inParty ? 'danger' : 'primary'}
                         disabled={false}
                         className={`flex-1 font-bold ${isAdmitted ? 'bg-[#ff704325] border border-[#ff704388] text-[#ff7043] hover:bg-[#ff704344] hover:text-white cursor-pointer' : ''}`}
+                        data-tutorial-target={!inParty ? "hero-deploy-btn" : undefined}
                         onClick={() => {
                           if (isAdmitted) {
                             onNavigateDrawer?.('infirmary');
                           } else {
                             gm.togglePartyMember(hero.id);
+                            if (tutorialStepId === 'TUTORIAL_DEPLOY_HERO') {
+                              onAdvanceTutorial?.('TUTORIAL_WEAPON_SHORTAGE');
+                            }
                           }
                         }}
                       />
@@ -4523,6 +4576,30 @@ const BarracksDrawer: React.FC<{
                         {state.barracks.length <= 3 ? '🔒 해고(최소 3명)' : '👋 해고'}
                       </button>
                     </div>
+
+                    {/* 🎒 출정 채비실 바로가기 버튼 (파티 출전 후 채비실로 즉시 이동) */}
+                    {onNavigateDrawer && (
+                      <div className="mt-1 flex flex-col gap-1 animate-fade-in">
+                        <button
+                          data-tutorial-target="open-explore-drawer"
+                          className={`btn w-full py-1.5 px-3 text-sm font-bold shadow-md flex items-center justify-center gap-1.5 rounded-lg leading-tight transition-all cursor-pointer ${
+                            state.party.length >= 3
+                              ? 'btn-primary bg-gradient-to-r from-[#7e22ce] via-[#9333ea] to-[#7e22ce] hover:from-[#9333ea] hover:to-[#a855f7] border border-[#c084fc] text-white active:scale-95'
+                              : 'bg-[#1e142e] hover:bg-[#2a1b42] text-[#ce93d8] border border-[#7e22ce55]'
+                          }`}
+                          onClick={() => onNavigateDrawer('explore')}
+                        >
+                          <span className="text-sm shrink-0">🎒</span>
+                          <span className="font-bold">출정 채비실로 이동</span>
+                          <span className="text-xs shrink-0">▶</span>
+                        </button>
+                        {state.party.length >= 3 && (
+                          <span className="text-[10px] text-center text-[#c084fc] font-medium leading-tight">
+                            3인 원정대 편성이 완료되었습니다. 채비실에서 진형과 보급품을 점검하세요!
+                          </span>
+                        )}
+                      </div>
+                    )}
                     {isAdmitted && (
                       <div
                         className="text-[10px] text-[#ff7043] bg-[#ff704312] border border-[#ff704333] hover:bg-[#ff704322] px-2.5 py-1 rounded flex items-center gap-1.5 leading-tight cursor-pointer transition-all"
@@ -11737,7 +11814,7 @@ const QuestsDrawer: React.FC<{
             }}
           >
             <span>🏛️</span>
-            <span>영지 건설 바로가기 (방랑 주점)</span>
+            <span>방랑자의 라운지 건설하러 가기</span>
             <span className="text-[10px]">▶</span>
           </button>
         );
@@ -12345,7 +12422,7 @@ const QuestsDrawer: React.FC<{
               {/* 보상 수령 버튼 */}
               {isClaimable && (
                 <button
-                  className="btn btn-success w-full py-2 text-xs font-bold shadow-lg mt-1 flex items-center justify-center gap-1.5 animate-pulse"
+                  data-tutorial-target="quest-reward" className="btn btn-success w-full py-2 text-xs font-bold shadow-lg mt-1 flex items-center justify-center gap-1.5 animate-pulse"
                   onClick={() => {
                     if (q.epicStory) {
                       setEpicQuestForModal(q);
@@ -12583,7 +12660,12 @@ const BAG_OPTIONS = [
   { id: 'wagon', name: '견고한 짐수레', slots: 30, perk: '30칸 & 자원 스택 99', costs: { gold: 1200, wood: 20, iron: 15, leather: 10, ether: 50, void_shard: 3 } },
 ];
 
-export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (k: string) => void }> = ({ onClose, onNavigateDrawer }) => {
+export const ExploreDrawer: React.FC<{ 
+  onClose: () => void; 
+  onNavigateDrawer?: (k: string) => void;
+  tutorialStepId?: string;
+  onAdvanceTutorial?: (stepId?: string) => void;
+}> = ({ onClose, onNavigateDrawer, tutorialStepId, onAdvanceTutorial }) => {
   const { state, gm, navigateTo } = useGameManager();
   const { lang, dict, tr } = useI18n();
   const [step, setStep] = useState<'prep' | 'zone'>('prep');
@@ -12592,6 +12674,14 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
   const [showCodexModal, setShowCodexModal] = useState(false);
   const [showWagonAdConfirm, setShowWagonAdConfirm] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // 튜토리얼 진행 중에는 도감 모달 강제 닫힘
+  useEffect(() => {
+    if (tutorialStepId) {
+      setShowCodexModal(false);
+      setShowSynergyGuide(false);
+    }
+  }, [tutorialStepId]);
 
   // 🌀 채비실 <-> 구역(층) 선택 단계 전환 시 스크롤을 최상단으로 강제 초기화
   useEffect(() => {
@@ -12606,6 +12696,10 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
 
   // 채비 상태 (이전에 선택한 백팩 규격 복원 및 유지. 단 짐수레 사용 후 또는 충전 소진 시 기본 선택 배낭은 표준 군장으로 리셋)
   const initialBagId = (() => {
+    // 튜토리얼 채비실 단계에서는 무료 배낭(가벼운 백팩)을 직접 선택해보도록 초기 상태를 medium으로 설정
+    if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_PREP')) {
+      return 'medium';
+    }
     if (gm.lastSelectedBagId === 'wagon' && (gm.wagonAdCharges ?? 0) <= 0) {
       gm.lastSelectedBagId = 'medium';
       gm.backpackCapacity = 16;
@@ -12614,16 +12708,15 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
     return gm.lastSelectedBagId || (BAG_OPTIONS.find(b => b.slots === (state.backpackCapacity || gm.backpackCapacity))?.id) || 'medium';
   })();
   const [selectedBagId, setSelectedBagId] = useState<string>(initialBagId);
-  const [supplyCounts, setSupplyCounts] = useState<Record<string, number>>({
-    torch: 1,
-    food: 1,
-    pickaxe: 1,
-    rift_anchor: 1,
-    key: 0,
-    bandage: 0,
-    holy_water: 0,
+  const [supplyCounts, setSupplyCounts] = useState<Record<string, number>>(() => {
+    // 튜토리얼 채비실 단계에서는 보급품을 1개씩 직접 담아보도록 0개로 시작
+    if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_PREP')) {
+      return { torch: 0, food: 0, pickaxe: 0, rift_anchor: 0, key: 0, bandage: 0, holy_water: 0 };
+    }
+    return { torch: 1, food: 1, pickaxe: 1, rift_anchor: 1, key: 0, bandage: 0, holy_water: 0 };
   });
   const [selectedCatalysts, setSelectedCatalysts] = useState<string[]>([]);
+  const hasEssentialSupplies = (supplyCounts.torch || 0) >= 1 && (supplyCounts.food || 0) >= 1 && (supplyCounts.pickaxe || 0) >= 1 && (supplyCounts.rift_anchor || 0) >= 1;
 
   // 상세 확인 팝업 모달 상태
   const [inspectItem, setInspectItem] = useState<{ item: ItemCostDef; type: 'supply' | 'catalyst' } | null>(null);
@@ -12862,7 +12955,7 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
           <span className={`text-[10px] px-1.5 py-0.5 rounded border ${step === 'prep' ? 'bg-[#5c452444] text-[#f3e5c8] border-[#87673955]' : 'bg-[#2a113d55] text-[#c4a5e6] border-[#5c2b8a66]'}`}>
             {step === 'prep' ? '1단계: 채비' : '2단계: 진입'}
           </span>
-          <EncyclopediaBadge tab="all" label="탐험 백과" />
+          {!tutorialStepId && <EncyclopediaBadge tab="all" label="탐험 백과" />}
         </div>
         <button
           className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
@@ -12996,6 +13089,7 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                         </div>
                       </div>
                       <button
+                        data-tutorial-target="hero-position-btn"
                         className="btn text-xs px-3 py-1 font-bold border transition-all"
                         style={{ borderColor: posMeta.color, color: posMeta.color, background: `${posMeta.color}15` }}
                         onClick={() => cyclePosition(hero.id, pos)}
@@ -13010,14 +13104,22 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
           </div>
 
           {/* 1.5. 원정대 활성 시너지 (Party Synergies) */}
-          <PartySynergyPanel
-            party={state.party.filter(p => state.barracks.some(b => b.id === p.id))}
-            onOpenGuide={() => setShowSynergyGuide(true)}
-            onOpenCodex={() => setShowCodexModal(true)}
-          />
+          <div data-tutorial-target="party-synergy-panel">
+            <PartySynergyPanel
+              party={state.party.filter(p => state.barracks.some(b => b.id === p.id))}
+              onOpenGuide={() => {
+                if (tutorialStepId) return;
+                setShowSynergyGuide(true);
+              }}
+              onOpenCodex={() => {
+                if (tutorialStepId) return;
+                setShowCodexModal(true);
+              }}
+            />
+          </div>
 
           {/* 2. 배낭 규격 선택 (테두리 가시성 강화) */}
-          <div className="panel p-3 bg-[#111622]">
+          <div data-tutorial-target="backpack-section" className="panel p-3 bg-[#111622]">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-[#00d2ff]">
                 🎒 2. {'배낭 규격 선택'}
@@ -13032,12 +13134,17 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                 const locBag = bag;
                 const bName = locBag?.name || bag.name;
                 const bPerk = locBag?.perk || bag.perk;
+                const isSmallTutorialTarget = tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && bag.id === 'small' && selectedBagId !== 'small';
                 return (
                   <div
                     key={bag.id}
+                    data-tutorial-target={bag.id === 'small' ? 'backpack-small' : undefined}
                     className={`relative panel p-2.5 flex flex-col items-center justify-between text-center cursor-pointer transition-all ${
                       isSelected 
-                        ? 'border-2 border-[#876739] bg-[#42321944] shadow-[0_0_12px_rgba(135,103,57,0.35)] scale-[1.02]' : 'border border-[#27354d] bg-[#141a29] hover:border-[#415473]'
+                        ? 'border-2 border-[#876739] bg-[#42321944] shadow-[0_0_12px_rgba(135,103,57,0.35)] scale-[1.02]' 
+                        : isSmallTutorialTarget
+                        ? 'border-2 border-[#00d2ff] bg-[#00d2ff18] shadow-[0_0_20px_rgba(0,210,255,0.7)] animate-pulse scale-[1.02]'
+                        : 'border border-[#27354d] bg-[#141a29] hover:border-[#415473]'
                     }`}
                     onClick={() => handleSelectBag(bag.id)}
                   >
@@ -13045,6 +13152,11 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                     {isSelected && (
                       <div className="absolute -top-2 -right-2 bg-[#5c4524] text-[#f3e5c8] border border-[#876739] font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px] shadow">
                         ✓
+                      </div>
+                    )}
+                    {isSmallTutorialTarget && (
+                      <div className="absolute -top-2.5 px-2 py-0.5 bg-gradient-to-r from-[#00d2ff] to-[#0088ff] text-white font-bold text-[9px] rounded-full shadow-lg animate-bounce">
+                        👉 무료 배낭 선택
                       </div>
                     )}
                     <div className={`text-xs font-bold ${isSelected ? 'text-[#f3e5c8]' : 'text-white'}`}>{bName}</div>
@@ -13093,7 +13205,12 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                   {'비우기 (0개)'}
                 </button>
                 <button
-                  className="text-[10px] px-2 py-0.5 rounded bg-[#1f2738] text-[#8b9bb4] hover:text-white transition-colors"
+                  data-tutorial-target="supplies-preset-btn"
+                  className={`text-[10px] px-2.5 py-1 rounded transition-all font-bold ${
+                    tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && selectedBagId === 'small' && !hasEssentialSupplies
+                      ? 'bg-gradient-to-r from-[#ffd54f] to-[#ffb300] text-black border-2 border-white animate-pulse shadow-[0_0_20px_rgba(255,213,79,0.9)] scale-105'
+                      : 'bg-[#1f2738] text-[#8b9bb4] hover:text-white'
+                  }`}
                   onClick={() => setSupplyCounts({ torch: 1, food: 1, pickaxe: 1, rift_anchor: 1, key: 0, bandage: 0, holy_water: 0 })}
                   title={'기본 프리셋 (횃불 1, 식량 1, 곡괭이 1, 균열의 닻 1)'}
                 >
@@ -13451,7 +13568,13 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                   isUnlocked ? 'hover:border-[#7c3aed88] bg-gradient-to-r from-[#0f0e18] to-[#140e1f]' : 'opacity-40 bg-[#0a0e17] cursor-not-allowed'
                 }`}
                 style={{ borderColor: isUnlocked ? (isPurified ? '#10b98166' : '#5c2b8a66') : '#27354d' }}
-                onClick={() => isUnlocked && startDescent(f)}
+                onClick={() => {
+                  if (!isUnlocked) return;
+                  if (f === 1 && tutorialStepId === 'TUTORIAL_DESCENT_START') {
+                    onAdvanceTutorial?.('TUTORIAL_EXPLORE_SCOUT');
+                  }
+                  startDescent(f);
+                }}
               >
                 <div className="flex-1 pr-2">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -13489,6 +13612,7 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                 </div>
                 {isUnlocked && (
                   <button 
+                    data-tutorial-target={f === 1 ? 'btn-descent-floor-1' : undefined}
                     className="btn text-xs px-3.5 py-1.5 font-bold rounded-lg transition-all active:scale-95 shadow-md flex items-center gap-1 hover:brightness-110 shrink-0"
                     style={{
                       background: isPurified 
@@ -13496,7 +13620,14 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                         : 'linear-gradient(135deg, #13081c 0%, #220b32 100%)',
                       color: isPurified ? '#a7f3d0' : '#cfbddf',
                       border: isPurified ? '1px solid #059669' : '1px solid #431d66',
-                      boxShadow: isPurified ? '0 2px 6px rgba(5, 150, 105, 0.4)' : '0 2px 6px rgba(25, 8, 38, 0.5)'
+                      boxShadow: isPurified ? '0 2px 66px rgba(5, 150, 105, 0.4)' : '0 2px 6px rgba(25, 8, 38, 0.5)'
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (f === 1 && tutorialStepId === 'TUTORIAL_DESCENT_START') {
+                        onAdvanceTutorial?.('TUTORIAL_EXPLORE_SCOUT');
+                      }
+                      startDescent(f);
                     }}
                   >
                     {'강하 개시 ⚔️'}
@@ -13663,6 +13794,41 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
         );
       })()}
 
+      {/* ── 튜토리얼 포지션 설정 완료 플로팅 버튼 (스크롤 추종) ── */}
+      {tutorialStepId === 'TUTORIAL_PREP_POSITION' && (
+        <div className="absolute bottom-16 right-4 sm:right-6 z-40 animate-bounce">
+          <button
+            onClick={() => onAdvanceTutorial?.('TUTORIAL_PREP_SYNERGY')}
+            className="btn btn-primary px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-black shadow-[0_0_25px_rgba(0,210,255,0.7)] bg-gradient-to-r from-[#00d2ff] via-[#0099ff] to-[#0055ff] text-white border-2 border-[#80e5ff] rounded-2xl flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+          >
+            <span>🛡️ 포지션 설정 완료</span>
+            <span className="font-bold underline">다음: 시너지 확인 ▶</span>
+          </button>
+        </div>
+      )}
+
+      {/* ── 튜토리얼 배낭 및 보급품 채비 플로팅 가이드 ── */}
+      {tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && (
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-[500px]">
+          {selectedBagId !== 'small' ? (
+            <div className="p-2.5 rounded-xl bg-[#0e1626]/95 border-2 border-[#00d2ff] shadow-[0_4px_20px_rgba(0,210,255,0.4)] text-center text-xs font-bold text-[#00d2ff] animate-bounce flex items-center justify-center gap-2">
+              <span>👉</span>
+              <span>1단계: 무료 배낭 [가벼운 백팩(12칸)]을 터치하여 선택하세요!</span>
+            </div>
+          ) : !hasEssentialSupplies ? (
+            <div className="p-2.5 rounded-xl bg-[#1e1507]/95 border-2 border-[#ffd54f] shadow-[0_4px_20px_rgba(255,213,79,0.5)] text-center text-xs font-bold text-[#ffd54f] animate-bounce flex items-center justify-center gap-2">
+              <span>👉</span>
+              <span>2단계: [기본 (1,1,1,닻1)] 버튼을 눌러 필수 보급품을 1개씩 담으세요!</span>
+            </div>
+          ) : (
+            <div className="p-2.5 rounded-xl bg-[#092015]/95 border-2 border-[#38ef7d] shadow-[0_4px_20px_rgba(56,239,125,0.5)] text-center text-xs font-bold text-[#38ef7d] animate-pulse flex items-center justify-center gap-2">
+              <span>✨</span>
+              <span>채비 완료! 하단의 [진입 구역 선택 ▶]을 눌러 출격 준비를 마치세요!</span>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* 하단 비용 바 & 네비게이션 */}
       <div className="p-3 bg-[#080b11] border-t border-[#1f2738] shrink-0 flex items-center justify-between">
         <div>
@@ -13695,7 +13861,14 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
 
         {step === 'prep' ? (
           <button
-            className={`btn px-5 py-2.5 text-sm font-bold ${canAfford && !gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id)) ? 'btn-primary' : 'btn-ghost opacity-40'}`}
+            data-tutorial-target="btn-select-zone"
+            className={`btn px-5 py-2.5 text-sm font-bold ${
+              canAfford && !gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id)) 
+                ? (tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && selectedBagId === 'small' && hasEssentialSupplies
+                    ? 'btn-primary animate-pulse border-2 border-[#ffd54f] shadow-[0_0_20px_rgba(255,213,79,0.8)]'
+                    : 'btn-primary')
+                : 'btn-ghost opacity-40'
+            }`}
             disabled={!canAfford || gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id))}
             onClick={() => {
               if (gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id))) {
@@ -13706,6 +13879,9 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
                 return;
               }
               setStep('zone');
+              if (tutorialStepId === 'TUTORIAL_PREP_SUPPLIES') {
+                onAdvanceTutorial?.('TUTORIAL_DESCENT_START');
+              }
               if (scrollContainerRef.current) {
                 scrollContainerRef.current.scrollTop = 0;
               }
@@ -13778,14 +13954,14 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
 
       {/* ── ✨ 원정대 시너지 도감 모달 ── */}
       <SynergyGuideModal
-        open={showSynergyGuide}
+        open={showSynergyGuide && !tutorialStepId}
         onClose={() => setShowSynergyGuide(false)}
         party={gm.party}
       />
 
       {/* ── 📜 심연의 백과 도감 모달 ── */}
       <CodexModal
-        open={showCodexModal}
+        open={showCodexModal && !tutorialStepId}
         onClose={() => setShowCodexModal(false)}
         gm={gm}
       />
@@ -13838,17 +14014,131 @@ export const ExploreDrawer: React.FC<{ onClose: () => void; onNavigateDrawer?: (
 //  메인 CitadelScreen
 // ─────────────────────────────────────────────────────────────
 export const CitadelScreen: React.FC = () => {
+  const [openDrawer, setOpenDrawer] = useState<string | null>(null);
+  // 영지('citadel') 패널에서 개별 건물 패널로 진입한 경우에만 닫기 시 영지로 복귀, 그 외(바로가기 등)는 즉시 완전 닫기
+  const [returnToCitadelOnClose, setReturnToCitadelOnClose] = useState<boolean>(false);
+
+  // ── 튜토리얼 상태 관리 (초반 강하까지 가이드) ──
+  const [tutorialStepId, setTutorialStepId] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('ark_tutorial_state');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.isCompleted || parsed.isSkipped) return '';
+        return parsed.currentStepId || 'TUTORIAL_WELCOME';
+      }
+    } catch {}
+    return 'TUTORIAL_WELCOME';
+  });
+
+  const handleAdvanceTutorial = (nextId?: string) => {
+    if (!nextId) {
+      setTutorialStepId('');
+      try {
+        localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: true, isSkipped: false }));
+      } catch {}
+      SoundManager.getInstance().play('victory');
+      gm.addLog('👑 [튜토리얼 완수] 첫 심연 정찰을 완벽히 마치고 정식 지휘관으로 임명되었습니다! 영지 시설을 발전시켜 심연을 정복하십시오!', 'reward');
+      return;
+    }
+    setTutorialStepId(nextId);
+    try {
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: nextId, isCompleted: false, isSkipped: false }));
+    } catch {}
+
+    // 스텝 전환에 따른 자동 드로어 오픈 연계
+    setReturnToCitadelOnClose(false);
+    if (nextId === 'TUTORIAL_BUILD_REFINERY' || nextId === 'TUTORIAL_BUILD_TAVERN') {
+      setOpenDrawer('citadel');
+    } else if (nextId === 'TUTORIAL_CLAIM_REWARD') {
+      setOpenDrawer('quests');
+    } else if (nextId === 'TUTORIAL_ENTER_TAVERN') {
+      setOpenDrawer('citadel');
+    } else if (nextId === 'TUTORIAL_DEPLOY_HERO') {
+      setOpenDrawer('barracks');
+    } else if (nextId === 'TUTORIAL_PREP_POSITION') {
+      setOpenDrawer('explore');
+    }
+  };
+
+  const handleSkipTutorial = () => {
+    setTutorialStepId('');
+    try {
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: false, isSkipped: true }));
+    } catch {}
+  };
+
   const { state, gm, navigateTo } = useGameManager();
   const { lang, dict } = useI18n();
   useCustomAssetVersion();
+
+  // 🔄 게임 데이터 초기화 시 튜토리얼 처음부터 다시 시작
+  useEffect(() => {
+    const handleGameReset = () => {
+      setTutorialStepId('TUTORIAL_WELCOME');
+      try {
+        localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_WELCOME', isCompleted: false, isSkipped: false }));
+      } catch {}
+    };
+    gm.on('gameReset', handleGameReset);
+    return () => {
+      gm.off('gameReset', handleGameReset);
+    };
+  }, [gm]);
+
+  // 🔨 건설 완료 후 일레인 재등장 감시 (실제 완공 시점까지 대기 후 일레인 복귀)
+  useEffect(() => {
+    if (tutorialStepId === 'WAITING_CONSTRUCTION_TUTORIAL_BUILD_REFINERY') {
+      const butchery = state.buildings['butchery'];
+      if (butchery && butchery.level >= 1 && !butchery.construction) {
+        setTutorialStepId('TUTORIAL_CLAIM_REWARD');
+        setOpenDrawer('quests');
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_CLAIM_REWARD', isCompleted: false, isSkipped: false }));
+        } catch {}
+      }
+    } else if (tutorialStepId === 'WAITING_CONSTRUCTION_TUTORIAL_BUILD_TAVERN') {
+      const tavern = state.buildings['tavern'];
+      if (tavern && tavern.level >= 1 && !tavern.construction) {
+        setTutorialStepId('TUTORIAL_ENTER_TAVERN');
+        setOpenDrawer('citadel');
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_ENTER_TAVERN', isCompleted: false, isSkipped: false }));
+        } catch {}
+      }
+    } else if (tutorialStepId === 'WAITING_TAVERN_UNLOCK') {
+      // 퀘스트 라인을 따라 영지 시설을 건설하여 광맥 시추소 보상까지 수령 완료하고,
+      // '방랑자의 라운지 건설하러 가기' 등을 눌러 영지 시설(citadel)로 진입했을 때 일레인 재등장!
+      const isQuarryRewardClaimed = state.quests.find(q => q.id === 'Q_BUILD_QUARRY')?.status === 'completed';
+      const isTavernUnlocked = Boolean(state.buildings['tavern']?.unlocked);
+      const isTavernNotBuilt = (state.buildings['tavern']?.level || 0) === 0;
+      if (isQuarryRewardClaimed && openDrawer === 'citadel' && isTavernUnlocked && isTavernNotBuilt) {
+        setTutorialStepId('TUTORIAL_BUILD_TAVERN');
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_BUILD_TAVERN', isCompleted: false, isSkipped: false }));
+        } catch {}
+      } else if (isQuarryRewardClaimed && openDrawer === 'citadel' && (state.buildings['tavern']?.level || 0) >= 1) {
+        setTutorialStepId('TUTORIAL_ENTER_TAVERN');
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_ENTER_TAVERN', isCompleted: false, isSkipped: false }));
+        } catch {}
+      }
+    } else if (tutorialStepId === 'TUTORIAL_RECRUIT_MERCENARY') {
+      // 🤝 용병을 고용하여 대원이 3명 이상이 되면 상단에 '원정단 편성 이동' 버튼이 나타나며 일레인 재등장!
+      if (state.barracks.length >= 3) {
+        setTutorialStepId('TUTORIAL_NAVIGATE_BARRACKS');
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_NAVIGATE_BARRACKS', isCompleted: false, isSkipped: false }));
+        } catch {}
+      }
+    }
+  }, [state.buildings, state.quests, tutorialStepId, openDrawer, state.barracks.length]);
   
   const [selectedWheelIdx, setSelectedWheelIdx] = useState(0);
   const [wheelDragOffset, setWheelDragOffset] = useState(0);
   const wheelDragStartXRef = useRef<number | null>(null);
   const isWheelDraggingRef = useRef(false);
   const wheelHasSwipedRef = useRef(false);
-  const [openDrawer, setOpenDrawer] = useState<string | null>(null);
-  const [drawerStack, setDrawerStack] = useState<string[]>([]);
   const [barracksInitialCat, setBarracksInitialCat] = useState<'dungeon' | 'dimensional'>('dungeon');
   const [resetModal, setResetModal] = useState(false);
   const [expeditionReport, setExpeditionReport] = useState<ExpeditionReturnReport | null>(null);
@@ -13889,6 +14179,13 @@ export const CitadelScreen: React.FC = () => {
   const [showIntroStory, setShowIntroStory] = useState(false);
   // 📜 심연의 백과 모달 상태
   const [showCodexModal, setShowCodexModal] = useState(false);
+
+  // 튜토리얼 진행 중에는 심연의 백과 도감 모달 강제 닫힘
+  useEffect(() => {
+    if (tutorialStepId) {
+      setShowCodexModal(false);
+    }
+  }, [tutorialStepId]);
   // 🏰 퀘스트 바로가기 시 해당 건물 강조 및 자동 스크롤 상태
   const [highlightedBuildingId, setHighlightedBuildingId] = useState<string | null>(null);
   // 📜 퀘스트 완료 즉시 알림 토스트 상태 (건물 완공 시 패널을 닫지 않아도 화면 상단에 플로팅)
@@ -13922,10 +14219,10 @@ export const CitadelScreen: React.FC = () => {
     return () => clearTimeout(timer);
   }, [questCompleteToast]);
 
-  // 퀘스트 의뢰소 등에서 특정 건물 건설 바로가기 클릭 시
+  // 퀘스트 의뢰소 등에서 특정 건물 건설 바로가기 클릭 시 (영지 패널로 이동하여 해당 건물 강조)
   const handleNavigateBuilding = useCallback((buildingId: string) => {
     setHighlightedBuildingId(buildingId);
-    setDrawerStack(stack => [...stack, 'quests']);
+    setReturnToCitadelOnClose(false);
     setOpenDrawer('citadel');
     setTimeout(() => {
       const el = document.getElementById(`building-card-${buildingId}`);
@@ -14022,6 +14319,20 @@ export const CitadelScreen: React.FC = () => {
       localStorage.setItem(`limbo_intro_story_seen_${uid}`, 'true');
     } catch (_) {}
     setShowIntroStory(false);
+    // 프롤로그 모달 닫힘 시점에 일레인 튜토리얼 반응 시작
+    setTutorialStepId(prev => {
+      if (!prev) {
+        try {
+          const saved = localStorage.getItem('ark_tutorial_state');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.isCompleted || parsed.isSkipped) return '';
+          }
+        } catch {}
+        return 'TUTORIAL_WELCOME';
+      }
+      return prev;
+    });
   }, [gm]);
 
   const handleOpenQuestsFromIntro = useCallback(() => {
@@ -14132,46 +14443,51 @@ export const CitadelScreen: React.FC = () => {
     return items;
   }, [state.buildings, gm.isMasterAccount, lang]);
 
-  // 시설 입장 및 드로어 열기 시도 (스택 기반 내비게이션 지원)
-  const handleTryOpenDrawer = useCallback((key: string, fromCurrent = false) => {
+  // 일반 드로어 열기 (네비게이션 휠, 바로가기 등: 닫기 시 즉시 완전 닫기)
+  const handleTryOpenDrawer = useCallback((key: string) => {
+    setReturnToCitadelOnClose(false);
     if (key === 'codex') {
       setShowCodexModal(true);
     } else if (key === 'arena') {
       navigateTo('arena');
     } else {
-      setOpenDrawer(prev => {
-        if (fromCurrent && prev && prev !== key) {
-          setDrawerStack(stack => [...stack, prev]);
-        }
-        return key;
-      });
+      setOpenDrawer(key);
     }
     return true;
-  }, [navigateTo, gm]);
+  }, [navigateTo]);
 
-  // 드로어 닫기 핸들러 (직전 드로어가 스택에 있으면 직전 드로어로 복귀, 없으면 하단 네비로 복귀)
+  // 영지('citadel') 패널 내부에서 건물 선택 입장 시 (닫기 시 영지 패널로 복귀)
+  const handleEnterBuildingFromCitadel = useCallback((key: string) => {
+    if (key === 'codex') {
+      setShowCodexModal(true);
+    } else if (key === 'arena') {
+      navigateTo('arena');
+    } else {
+      setReturnToCitadelOnClose(true);
+      setOpenDrawer(key);
+    }
+    return true;
+  }, [navigateTo]);
+
+  // 드로어 닫기 핸들러 (영지에서 건물로 들어간 경우에만 영지로 복귀, 그 외 모든 경우 즉시 패널 닫기)
   const handleCloseDrawer = useCallback(() => {
-    setDrawerStack(stack => {
-      if (stack.length > 0) {
-        const nextStack = [...stack];
-        const prevDrawer = nextStack.pop()!;
-        setOpenDrawer(prevDrawer);
-        return nextStack;
-      }
-      setOpenDrawer(null);
-      return [];
-    });
-  }, []);
+    if (returnToCitadelOnClose && openDrawer !== 'citadel') {
+      setReturnToCitadelOnClose(false);
+      setOpenDrawer('citadel');
+      return;
+    }
+    setReturnToCitadelOnClose(false);
+    setOpenDrawer(null);
+  }, [returnToCitadelOnClose, openDrawer]);
 
   // 백드롭 클릭 등으로 모든 드로어를 한 번에 닫을 때
   const handleCloseAllDrawers = useCallback(() => {
-    setDrawerStack([]);
+    setReturnToCitadelOnClose(false);
     setOpenDrawer(null);
   }, []);
 
   const handleWheelSelect = useCallback((item: { key: string; label: string; sub: string; icon: string; color: string }) => {
-    setDrawerStack([]); // 하단 휠에서 직접 선택 시 새로운 세션으로 초기화
-    handleTryOpenDrawer(item.key, false);
+    handleTryOpenDrawer(item.key);
   }, [handleTryOpenDrawer]);
 
     // 🎡 모바일 터치 및 마우스 드래그로 휠 내비게이션 부드럽게 회전
@@ -14253,6 +14569,16 @@ export const CitadelScreen: React.FC = () => {
 
   return (
     <div className="flex-1 min-h-0 w-full flex flex-col relative bg-transparent overflow-hidden">
+      {/* 👑 방주 수석 오퍼레이터 일레인의 SRPG식 온보딩 튜토리얼 가이드 (프롤로그 종료 후 및 대기 상태가 아닐 때만 노출) */}
+      {tutorialStepId && !showIntroStory && !tutorialStepId.startsWith('WAITING_') && (
+        <TutorialGuideOverlay
+          currentStepId={tutorialStepId}
+          isOpen={Boolean(tutorialStepId && !showIntroStory && !tutorialStepId.startsWith('WAITING_'))}
+          onAdvanceStep={handleAdvanceTutorial}
+          onSkipTutorial={handleSkipTutorial}
+        />
+      )}
+
       
       {/* 🌟 퀘스트 완료 즉시 알림 플로팅 토스트 배너 (패널이 열려 있어도 화면 최상단 z-40에 표시) */}
       {questCompleteToast && (
@@ -14284,7 +14610,7 @@ export const CitadelScreen: React.FC = () => {
                   setQuestCompleteToast(null);
                   setOpenDrawer('quests');
                 }}
-                title="퀘스트 창으로 이동하여 보상과 다음 연계 퀘스트를 확인합니다"
+                data-tutorial-target="quest-reward" title="퀘스트 창으로 이동하여 보상과 다음 연계 퀘스트를 확인합니다"
               >
                 <span>🎁</span>
                 <span>보상 수령 ▶</span>
@@ -14318,7 +14644,7 @@ export const CitadelScreen: React.FC = () => {
           </button>
           <button
             className="px-2 py-0.5 rounded bg-[#78909c15] hover:bg-[#78909c33] text-[#cfd8dc] border border-[#78909c44] text-[10px] font-bold shadow-sm flex items-center gap-1 transition-all"
-            onClick={() => handleTryOpenDrawer('cemetery', true)}
+            onClick={() => handleTryOpenDrawer('cemetery')}
             title="성채 묘지 & 영령의 가호"
           >
             <span>🪦</span>
@@ -14379,7 +14705,7 @@ export const CitadelScreen: React.FC = () => {
               {isEpicRebuildReady && (
                 <button
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#ffd700] via-[#ffb300] to-[#ff8f00] text-black text-xs font-black shadow-[0_0_20px_rgba(255,215,0,0.85)] border-2 border-white hover:scale-105 transition-all cursor-pointer animate-pulse"
-                  onClick={() => handleTryOpenDrawer('quests', true)}
+                  onClick={() => handleTryOpenDrawer('quests')}
                   title="모든 시설이 Lv.1 이상으로 완공되었습니다! 1차 영지 재건 서사와 향후 전개 인사이트를 확인하세요."
                 >
                   <span className="text-sm animate-bounce">👑</span>
@@ -14393,7 +14719,7 @@ export const CitadelScreen: React.FC = () => {
               )}
 
               {/* 📜 도감 등록 가능 알림 마커 */}
-              {registerableCodexCount > 0 && (
+              {registerableCodexCount > 0 && !tutorialStepId && (
                 <button
                   className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#ef5350] text-[#ff7043] text-xs font-bold shadow-lg shadow-[#ef535044] hover:scale-105 transition-all cursor-pointer animate-fade-in"
                   onClick={() => setShowCodexModal(true)}
@@ -14417,7 +14743,7 @@ export const CitadelScreen: React.FC = () => {
               {hasQuestAlert && (
                 <button
                   className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#ffd54f] text-[#ffd54f] text-xs font-bold shadow-lg shadow-[#ffd54f33] hover:scale-105 transition-all cursor-pointer animate-fade-in"
-                  onClick={() => handleTryOpenDrawer('quests', true)}
+                  onClick={() => handleTryOpenDrawer('quests')}
                 >
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffd54f] opacity-75"></span>
@@ -14611,18 +14937,26 @@ export const CitadelScreen: React.FC = () => {
             {openDrawer === 'citadel'   && (
               <CitadelDrawer 
                 onClose={handleCloseDrawer} 
-                onEnterDrawer={(k) => handleTryOpenDrawer(k, true)}
+                onEnterDrawer={handleEnterBuildingFromCitadel}
                 highlightedBuildingId={highlightedBuildingId}
                 onClearHighlight={() => setHighlightedBuildingId(null)}
               />
             )}
-            {openDrawer === 'barracks'  && <BarracksDrawer onClose={handleCloseDrawer} onNavigateDrawer={(k) => handleTryOpenDrawer(k, true)} initialCategory={barracksInitialCat} />}
+            {openDrawer === 'barracks'  && (
+              <BarracksDrawer 
+                onClose={handleCloseDrawer} 
+                onNavigateDrawer={(k) => handleTryOpenDrawer(k)} 
+                initialCategory={barracksInitialCat} 
+                tutorialStepId={tutorialStepId}
+                onAdvanceTutorial={handleAdvanceTutorial}
+              />
+            )}
             {openDrawer === 'quests'    && (
               <QuestsDrawer 
                 onClose={handleCloseDrawer} 
                 onNavigateDrawer={(k) => {
                   if (k === 'barracks') setBarracksInitialCat('dungeon');
-                  handleTryOpenDrawer(k, true);
+                  handleTryOpenDrawer(k);
                 }} 
                 onNavigateBuilding={handleNavigateBuilding}
               />
@@ -14632,8 +14966,10 @@ export const CitadelScreen: React.FC = () => {
                 onClose={handleCloseDrawer} 
                 onNavigateDrawer={(k) => {
                   if (k === 'barracks') setBarracksInitialCat('dungeon');
-                  handleTryOpenDrawer(k, true);
+                  handleTryOpenDrawer(k);
                 }} 
+                tutorialStepId={tutorialStepId}
+                onAdvanceTutorial={handleAdvanceTutorial}
               />
             )}
             {openDrawer === 'tavern'    && (
@@ -14641,7 +14977,7 @@ export const CitadelScreen: React.FC = () => {
                 onBack={handleCloseDrawer} 
                 onNavigateDrawer={(k) => {
                   if (k === 'barracks') setBarracksInitialCat('dungeon');
-                  handleTryOpenDrawer(k, true);
+                  handleTryOpenDrawer(k);
                 }} 
               />
             )}
@@ -14821,6 +15157,7 @@ export const CitadelScreen: React.FC = () => {
               return;
             }
             await gm.resetGame();
+            setTutorialStepId('TUTORIAL_WELCOME');
             setResetModal(false);
           }} /></>}>
         <p className="text-sm text-[#cfd8dc]">현재 계정의 로컬 및 Firebase 클라우드 데이터가 모두 초기화되고 처음부터 다시 시작합니다. 정말 초기화하시겠습니까?</p>
@@ -14849,7 +15186,7 @@ export const CitadelScreen: React.FC = () => {
                   const drawerKey = BUILDING_TO_DRAWER_KEY[bId];
                   if (drawerKey) {
                     if (bId === 'arenaGate') navigateTo('arena');
-                    else handleTryOpenDrawer(drawerKey, true);
+                    else handleTryOpenDrawer(drawerKey);
                   }
                 }}
               >
@@ -15052,7 +15389,7 @@ export const CitadelScreen: React.FC = () => {
 
       {/* 📜 심연의 백과 & 회고록 모달 */}
       <CodexModal
-        open={showCodexModal}
+        open={showCodexModal && !tutorialStepId}
         onClose={() => setShowCodexModal(false)}
         gm={gm}
       />

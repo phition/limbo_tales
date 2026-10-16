@@ -10,10 +10,12 @@ interface Props {
   className?: string;
   style?: React.CSSProperties;
   size?: 'sm' | 'md' | 'lg';
+  'data-tutorial-target'?: string;
 }
 
 export const ActionButton: React.FC<Props> = ({
-  label, icon, variant = 'primary', disabled, onClick, className = '', style, size = 'md'
+  label, icon, variant = 'primary', disabled, onClick, className = '', style, size = 'md',
+  'data-tutorial-target': dataTutorialTarget
 }) => {
   const variantClass = {
     primary: 'btn-primary',
@@ -37,6 +39,7 @@ export const ActionButton: React.FC<Props> = ({
       disabled={disabled}
       onClick={handleClick}
       style={style}
+      data-tutorial-target={dataTutorialTarget}
     >
       {icon && <span className="mr-1 shrink-0">{icon}</span>}
       <span className="min-w-0 break-words">{label}</span>

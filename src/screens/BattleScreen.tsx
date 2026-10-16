@@ -26,6 +26,7 @@ import { getHeroEquippedBossSet, getWeaponTrait, detectWeaponType } from '../dat
 import { FeverBadgeType, FeverSynergyResult } from '../types/fever';
 import { evaluateFeverSynergy } from '../utils/feverUtils';
 import { FeverGaugeBar } from '../components/FeverGaugeBar';
+import { TutorialGuideOverlay } from '../components/TutorialGuideOverlay';
 
 // ── 몬스터 런타임 상태 ──────────────────────────────────────────────────────
 interface MonsterState {
@@ -295,9 +296,19 @@ const LongPressBox: React.FC<{
   className?: string;
   style?: React.CSSProperties;
   children: React.ReactNode;
-}> = ({ onLongPress, onClick, className = '', style, children }) => {
+  'data-tutorial-target'?: string;
+  [key: string]: any;
+}> = ({ onLongPress, onClick, className = '', style, children, ...rest }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongRef = useRef(false);
+  const lastTriggeredRef = useRef(0);
+
+  const triggerClick = () => {
+    const now = Date.now();
+    if (now - lastTriggeredRef.current < 150) return;
+    lastTriggeredRef.current = now;
+    if (onClick) onClick();
+  };
 
   const handleStart = () => {
     isLongRef.current = false;
@@ -315,8 +326,8 @@ const LongPressBox: React.FC<{
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
-    if (!isLongRef.current && shouldClick && onClick) {
-      onClick();
+    if (!isLongRef.current && shouldClick) {
+      triggerClick();
     }
   };
 
@@ -324,6 +335,11 @@ const LongPressBox: React.FC<{
     <div
       className={className}
       style={style}
+      onClick={() => {
+        if (!isLongRef.current) {
+          triggerClick();
+        }
+      }}
       onMouseDown={handleStart}
       onMouseUp={() => handleEnd(true)}
       onMouseLeave={() => handleEnd(false)}
@@ -334,6 +350,7 @@ const LongPressBox: React.FC<{
         e.preventDefault();
         onLongPress();
       }}
+      {...rest}
     >
       {children}
     </div>
@@ -1011,10 +1028,52 @@ export const BattleScreen: React.FC = () => {
   const [showBossCutscene, setShowBossCutscene] = useState(false);
   const [bossForCutscene, setBossForCutscene] = useState<MonsterData | null>(null);
   const [, setInventoryVersion] = useState(0);
+
+  // ── 튜토리얼 상태 관리 ──
+  const [tutorialStepId, setTutorialStepId] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('ark_tutorial_state');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.isCompleted || parsed.isSkipped) return '';
+        return parsed.currentStepId || '';
+      }
+    } catch {}
+    return '';
+  });
+
+  const handleAdvanceTutorial = (nextId?: string) => {
+    if (!nextId) {
+      setTutorialStepId('');
+      try {
+        localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: true, isSkipped: false }));
+      } catch {}
+      return;
+    }
+    setTutorialStepId(nextId);
+    try {
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: nextId, isCompleted: false, isSkipped: false }));
+    } catch {}
+  };
+
+  const handleSkipTutorial = () => {
+    setTutorialStepId('');
+    try {
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: false, isSkipped: true }));
+    } catch {}
+  };
+
   // 🔥 전술 모멘텀 파티 공유 FEVER 게이지 상태 (0~5 슬롯)
   const [feverBadges, setFeverBadges] = useState<FeverBadgeType[]>([]);
   const feverBadgesRef = useRef<FeverBadgeType[]>([]);
   feverBadgesRef.current = feverBadges;
+
+  // 피버 게이지 5개 완충 시 튜토리얼 가이드 스텝으로 전이
+  useEffect(() => {
+    if (feverBadges.length >= 5 && tutorialStepId === 'TUTORIAL_BATTLE_COMBO') {
+      handleAdvanceTutorial('TUTORIAL_BATTLE_FEVER_GUIDE');
+    }
+  }, [feverBadges, tutorialStepId]);
 
   const addFeverBadge = useCallback((badge: FeverBadgeType) => {
     setFeverBadges(prev => {
@@ -1855,8 +1914,11 @@ export const BattleScreen: React.FC = () => {
 
     guardianShieldUsedRef.current = {};
     endureUsedRef.current = {};
-    setFeverBadges([]);
-    feverBadgesRef.current = [];
+    const initBadges: FeverBadgeType[] = (tutorialStepId === 'TUTORIAL_BATTLE_TARGET' || tutorialStepId === 'TUTORIAL_BATTLE_COMBO')
+      ? ['extra', 'crit']
+      : [];
+    setFeverBadges(initBadges);
+    feverBadgesRef.current = initBadges;
 
     const isBossBattle = sortedMonsters.some(m => m.type === 'boss');
     SoundManager.getInstance().playBgm(isBossBattle ? 'boss' : 'battle');
@@ -2681,6 +2743,9 @@ export const BattleScreen: React.FC = () => {
         gm.addLog(`🔥⚡ [FEVER 궁극기 폭발] ${hero.name}의 궁극기에 【${feverSynergy.name}】 시너지 방출! - ${feverSynergy.summary.replace(/\([^)]*\)/g, '').trim()}`, 'reward');
         SoundManager.getInstance().play('fever_burst');
         triggerHaptic('heavy');
+        if (tutorialStepId === 'TUTORIAL_BATTLE_FEVER_GUIDE' || tutorialStepId === 'TUTORIAL_BATTLE_COMBO') {
+          handleAdvanceTutorial('TUTORIAL_BATTLE_FEVER_PRAISE');
+        }
       }
     }
 
@@ -7236,8 +7301,15 @@ export const BattleScreen: React.FC = () => {
             return (
               <LongPressBox
                 key={m.id}
+                data-tutorial-target={`monster-card-${idx}`}
                 onLongPress={() => isAlive && setInspectedMonster(m)}
-                onClick={() => isAlive && setTargetedMonsterIdx(idx)}
+                onClick={() => {
+                  if (!isAlive) return;
+                  setTargetedMonsterIdx(idx);
+                  if (tutorialStepId === 'TUTORIAL_BATTLE_TARGET' && idx === 1) {
+                    handleAdvanceTutorial('TUTORIAL_BATTLE_COMBO');
+                  }
+                }}
                 className={`relative p-1.5 sm:p-2 rounded-lg transition-all border flex flex-col justify-center h-[38px] sm:h-[40px] min-w-0 select-none ${
                   !isAlive
                     ? 'border-[#18202d] bg-[#0c101a] opacity-30 grayscale cursor-not-allowed shadow-none'
@@ -7380,8 +7452,8 @@ export const BattleScreen: React.FC = () => {
 
       <div className="px-3 pb-2 pt-1 shrink-0">
         {/* 🔥 파티 공유 전술 모멘텀 FEVER 게이지 바 */}
-        <div className="mb-1.5">
-          <FeverGaugeBar badges={feverBadges} party={gm.party} />
+        <div className="mb-1.5" data-tutorial-target="fever-gauge-panel">
+          <FeverGaugeBar badges={feverBadges} party={gm.party} showEffectDescription={true} />
         </div>
 
         <div className="flex flex-col gap-1 mb-2">
@@ -7798,6 +7870,9 @@ export const BattleScreen: React.FC = () => {
                 variant={battleResult === 'win' && gm.pendingLoot.length > 0 ? 'success' : (isBossBattle ? 'primary' : 'primary')}
                 onClick={() => {
                   if (battleResult === 'win') {
+                    if (tutorialStepId) {
+                      handleAdvanceTutorial();
+                    }
                     // 승리 시 처리:
                     // 1. 완전 사망자: 즉시 파티에서 삭제하지 않고 isPermanentlyDead=true, currentHp=0으로 유지하여 던전 용병 관리(긴급 이송)에서 영주로 유해 운구 및 후방 지원 가능
                     // 2. 사경을 헤매다 간신히 생환한 영웅: 1 HP 기사회생 및 동료들과의 유대감 30% 하락 (사경 트라우마)
@@ -7828,10 +7903,17 @@ export const BattleScreen: React.FC = () => {
                     gm.emit('partyUpdated', gm.party);
                     gm.saveGame();
 
+                    const toExplorationAfterBattle = () => {
+                      if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {
+                        handleAdvanceTutorial('TUTORIAL_EXPLORE_CAMP');
+                      }
+                      navigateTo('exploration');
+                    };
+
                     if (gm.pendingLoot.length > 0) {
                       setShowLootModal(true);
                     } else {
-                      navigateTo('exploration');
+                      toExplorationAfterBattle();
                     }
                   } else {
                     // 패배 후 성채 복귀 시 전멸 처리 (차원의 호각 여부, 전리품 정산, 성채 귀환 일괄 처리)
@@ -7849,11 +7931,17 @@ export const BattleScreen: React.FC = () => {
         open={showLootModal}
         onClose={() => {
           setShowLootModal(false);
+          if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {
+            handleAdvanceTutorial('TUTORIAL_EXPLORE_CAMP');
+          }
           navigateTo('exploration');
         }}
         completeButtonText="✅ 정리 완료 (탐험으로 이동)"
         onComplete={() => {
           setShowLootModal(false);
+          if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {
+            handleAdvanceTutorial('TUTORIAL_EXPLORE_CAMP');
+          }
           navigateTo('exploration');
         }}
       />
@@ -7934,6 +8022,14 @@ export const BattleScreen: React.FC = () => {
           </div>
         </Modal>
       )}
+
+      {/* ⚔️ 튜토리얼 가이드 오버레이 (전투 가이드: 타깃 지정, 콤보/피버, 시너지 폭발 칭찬) */}
+      <TutorialGuideOverlay
+        currentStepId={tutorialStepId}
+        onAdvanceStep={handleAdvanceTutorial}
+        onSkipTutorial={handleSkipTutorial}
+        isOpen={!!tutorialStepId && ['TUTORIAL_BATTLE_TARGET', 'TUTORIAL_BATTLE_COMBO', 'TUTORIAL_BATTLE_FEVER_GUIDE', 'TUTORIAL_BATTLE_FEVER_PRAISE'].includes(tutorialStepId)}
+      />
     </div>
   );
 };

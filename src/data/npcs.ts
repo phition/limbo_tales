@@ -20,6 +20,46 @@ export interface NpcDefinition {
 export const EPIC_STORY_NPCS: NpcDefinition[] = [
   // ── 🏰 방주 성채 핵심 인물 (Citadel Leaders & Staff) ──
   {
+    id: 'npc_elaine_normal',
+    name: '수석 오퍼레이터 일레인 (기본)',
+    role: '방주 수석 오퍼레이터',
+    defaultAvatar: 'assets/portraits/portrait_t1_scholar.png',
+    description: '방주 통제실을 총괄하며 사령관의 탐사와 방주 재건을 전폭 보좌하는 냉철하고 헌신적인 수석 오퍼레이터 (기본 표정)',
+    category: 'citadel',
+    categoryLabel: '방주 성채',
+    questSource: '초반 튜토리얼 & 방주 전술 브리핑'
+  },
+  {
+    id: 'npc_elaine_serious',
+    name: '수석 오퍼레이터 일레인 (진지)',
+    role: '방주 수석 오퍼레이터',
+    defaultAvatar: 'assets/portraits/portrait_t1_scholar.png',
+    description: '심연 마물의 위협과 전장의 긴박한 전황을 냉철히 분석하고 지휘를 보좌하는 진지한 표정',
+    category: 'citadel',
+    categoryLabel: '방주 성채',
+    questSource: '초반 튜토리얼 & 실전 전투 가이드'
+  },
+  {
+    id: 'npc_elaine_smile',
+    name: '수석 오퍼레이터 일레인 (미소)',
+    role: '방주 수석 오퍼레이터',
+    defaultAvatar: 'assets/portraits/portrait_t1_scholar.png',
+    description: '작전 성공, 퀘스트 완수 및 대원들의 무사 귀환을 환영하며 안도하는 부드러운 미소',
+    category: 'citadel',
+    categoryLabel: '방주 성채',
+    questSource: '초반 튜토리얼 & 승전 보고 및 야영'
+  },
+  {
+    id: 'npc_elaine_worry',
+    name: '수석 오퍼레이터 일레인 (걱정)',
+    role: '방주 수석 오퍼레이터',
+    defaultAvatar: 'assets/portraits/portrait_t1_scholar.png',
+    description: '물자 부족, 무구 미지원, 대원 부상 등 예기치 못한 위기 상황을 염려하는 표정',
+    category: 'citadel',
+    categoryLabel: '방주 성채',
+    questSource: '초반 튜토리얼 & 무구 부족 브리핑'
+  },
+  {
     id: 'npc_lloyd',
     name: '선봉대장 로이드',
     role: '방주 수호대장',

@@ -4138,6 +4138,7 @@ export const ArenaScreen: React.FC = () => {
                 side="enemy"
                 isBluffing={true}
                 revealAll={isShowdownCutin}
+                showEffectDescription={false}
               />
             </div>
 
@@ -4180,6 +4181,7 @@ export const ArenaScreen: React.FC = () => {
                 side="player"
                 isBluffing={true}
                 revealAll={isShowdownCutin}
+                showEffectDescription={false}
               />
             </div>
 

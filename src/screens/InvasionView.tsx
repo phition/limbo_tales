@@ -190,8 +190,8 @@ export const InvasionView: React.FC = () => {
     if (!squadCheck.isReady) {
       SoundManager.getInstance().play('debuff');
       gameDialog.alert({
-        title: '⚔️ 차원 5인 부대 편성 필요',
-        message: squadCheck.reason || '차원 영지 침공은 5인 원정대(선발 3인 + 리더 1인 + 서포터 1인)가 모두 편성되어야 진행할 수 있습니다.',
+        title: '⚔️ 차원 공성 부대 편성 필요',
+        message: squadCheck.reason || '차원 영지 침공은 3인 결사대 + 1인 오퍼레이터가 모두 편성되어야 진행할 수 있습니다.',
         icon: '⚠️',
       });
       return;
@@ -226,7 +226,7 @@ export const InvasionView: React.FC = () => {
             </span>
           </h3>
           <p className="text-xs text-[#8b9bb4] max-w-md mt-1.5 leading-relaxed">
-            차원 앵커 게이트를 <span className="text-[#ffd54f] font-bold">6레벨</span> 이상으로 증축하면, 3인 선발 + 1인 리더 + 1인 서포터 차원 부대를 결성하여 다른 사령관의 영지를 침공하고 영지 자원의 <span className="text-[#ff416c] font-bold">30%를 약탈</span>하는 엔드 전략 컨텐츠가 영구 해금됩니다.
+            차원 앵커 게이트를 <span className="text-[#ffd54f] font-bold">6레벨</span> 이상으로 증축하면, 3인 결사대 + 1인 오퍼레이터 차원 공성 부대를 결성하여 다른 사령관의 영지를 침공하고 차원 보호막을 돌파하여 영지 자원의 <span className="text-[#ff416c] font-bold">30%를 약탈</span>하는 엔드 전략 컨텐츠가 영구 해금됩니다.
           </p>
         </div>
         <div className="text-xs text-[#546e7a] font-mono bg-[#060911] px-4 py-2 rounded-xl border border-[#151f33]">
@@ -717,44 +717,53 @@ export const InvasionView: React.FC = () => {
                 </div>
               </div>
 
-              {/* 상대 부대 편성 (편성 클래스 아이콘과 레벨만 노출, 이름/스탯 숨김) */}
+              {/* 상대 부대 편성 (3인 수비대 + 1인 오퍼레이터) */}
               <div className="bg-[#090e1a] p-3 rounded-xl border border-[#162238] flex flex-col gap-2">
                 <div className="text-xs font-bold text-white flex items-center justify-between">
                   <span>🛡️ 상대 방어 부대 편성</span>
-                  <span className="text-[10px] font-mono text-[#00d2ff]">3선발 + 1리더 + 1서포터</span>
+                  <span className="text-[10px] font-mono text-[#00d2ff]">3인 결사대 + 1인 오퍼레이터</span>
                 </div>
-                <div className="grid grid-cols-5 gap-1.5">
-                  {inspectTarget.defenseSquad.map((h, i) => {
-                    const isLeader = i === 3;
-                    const isSupporter = i === 4;
+                <div className="grid grid-cols-4 gap-1.5">
+                  {inspectTarget.defenseSquad.slice(0, 4).map((h, i) => {
+                    const isOperator = i === 3;
                     const cls = CHARACTER_CLASSES[h.classId];
                     return (
                       <div
                         key={i}
                         className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-center relative ${
-                          isLeader
-                            ? 'bg-[#1f1910] border-[#ffd54f66]'
-                            : isSupporter
-                            ? 'bg-[#0c1824] border-[#00d2ff66]'
+                          isOperator
+                            ? 'bg-[#1f1220] border-[#ff416c66]'
                             : 'bg-[#101726] border-[#1e2a40]'
                         }`}
                       >
                         <span
                           className="text-[9px] font-black px-1.5 py-0.2 rounded mb-1"
                           style={{
-                            color: isLeader ? '#ffd54f' : isSupporter ? '#00d2ff' : '#cfd8e8',
-                            backgroundColor: isLeader ? '#332612' : isSupporter ? '#102538' : '#18243c',
+                            color: isOperator ? '#ff80ab' : '#cfd8e8',
+                            backgroundColor: isOperator ? '#381428' : '#18243c',
                           }}
                         >
-                          {isLeader ? '👑 리더' : isSupporter ? '🤝 서포터' : `선발 ${i + 1}`}
+                          {isOperator ? '🛡️ 오퍼레이터' : `수비대 ${i + 1}`}
                         </span>
                         <span className="text-3xl my-1.5">{cls?.skills[0]?.icon || '⚔️'}</span>
                         <span className="text-[11px] font-mono font-black text-[#ffd54f]">
                           Lv.{h.level}
                         </span>
+                        <span className="text-[9px] text-[#8b9bb4] truncate w-full">
+                          {cls?.name || '용병'}
+                        </span>
                       </div>
                     );
                   })}
+                </div>
+                <div className="p-2 rounded-lg bg-[#0d1726] border border-[#00d2ff33] flex items-center justify-between text-xs">
+                  <span className="text-[#00d2ff] font-bold flex items-center gap-1.5">
+                    <span>🛡️</span>
+                    <span>차원 왜곡 보호막 & 2대 전술 타워 방호</span>
+                  </span>
+                  <span className="text-[11px] font-mono text-[#ffd54f]">
+                    예상 내구도 {Math.round(inspectTarget.defensePower * 1.5).toLocaleString()} HP
+                  </span>
                 </div>
               </div>
 
