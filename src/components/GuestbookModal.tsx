@@ -4,6 +4,8 @@ import { ActionButton } from './ActionButton';
 import { FirebaseService, GuestbookMessage, UserProfile } from '../services/FirebaseService';
 import { SoundManager } from '../managers/SoundManager';
 import { useGameManager } from '../hooks/useGameManager';
+import { TranslationService } from '../services/TranslationService';
+import { I18nService } from '../i18n/I18nService';
 
 interface Props {
   open: boolean;
@@ -37,6 +39,12 @@ export const GuestbookModal: React.FC<Props> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // 🌐 번역 상태 관리
+  const [translatedMap, setTranslatedMap] = useState<Record<string, string>>({});
+  const [translatingIds, setTranslatingIds] = useState<Set<string>>(new Set());
+  const [isTranslatingAll, setIsTranslatingAll] = useState(false);
+  const [translationError, setTranslationError] = useState<string | null>(null);
+
   // 실시간 방명록 데이터 구독
   useEffect(() => {
     if (!open) return;
@@ -61,6 +69,79 @@ export const GuestbookModal: React.FC<Props> = ({
   const safePage = Math.min(currentPage, totalPages);
   const startIndex = (safePage - 1) * PAGE_SIZE;
   const pageMessages = messages.slice(startIndex, startIndex + PAGE_SIZE);
+
+  // 🌐 현재 언어 및 타겟 언어 라벨
+  const currentLang = I18nService.getInstance().getCurrentLanguage();
+  const targetLangLabel = currentLang === 'ja' ? '日本語' : currentLang === 'en' ? 'English' : '한국어';
+
+  // 🌐 단일 글 번역 토글
+  const handleToggleTranslate = async (msg: GuestbookMessage) => {
+    SoundManager.getInstance().play('click');
+    setTranslationError(null);
+
+    if (translatedMap[msg.id]) {
+      // 이미 번역되어 있으면 원문으로 복귀
+      setTranslatedMap((prev) => {
+        const next = { ...prev };
+        delete next[msg.id];
+        return next;
+      });
+      return;
+    }
+
+    setTranslatingIds((prev) => new Set(prev).add(msg.id));
+    try {
+      const res = await TranslationService.getInstance().translate(msg.content);
+      setTranslatedMap((prev) => ({
+        ...prev,
+        [msg.id]: res.translatedText
+      }));
+    } catch (err: any) {
+      setTranslationError(err?.message || '번역 중 오류가 발생했습니다.');
+    } finally {
+      setTranslatingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(msg.id);
+        return next;
+      });
+    }
+  };
+
+  // 🌐 현재 페이지 전체 일괄 번역 토글
+  const handleToggleTranslateAll = async () => {
+    SoundManager.getInstance().play('click');
+    setTranslationError(null);
+
+    const allTranslated = pageMessages.length > 0 && pageMessages.every((m) => !!translatedMap[m.id]);
+    if (allTranslated) {
+      // 전체 원문으로 복귀
+      setTranslatedMap((prev) => {
+        const next = { ...prev };
+        pageMessages.forEach((m) => delete next[m.id]);
+        return next;
+      });
+      return;
+    }
+
+    setIsTranslatingAll(true);
+    try {
+      const texts = pageMessages.map((m) => m.content);
+      const results = await TranslationService.getInstance().translateBatch(texts);
+      setTranslatedMap((prev) => {
+        const next = { ...prev };
+        pageMessages.forEach((m, idx) => {
+          if (results[idx]?.translatedText) {
+            next[m.id] = results[idx].translatedText;
+          }
+        });
+        return next;
+      });
+    } catch (err: any) {
+      setTranslationError(err?.message || '일괄 번역 중 오류가 발생했습니다.');
+    } finally {
+      setIsTranslatingAll(false);
+    }
+  };
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -108,10 +189,10 @@ export const GuestbookModal: React.FC<Props> = ({
       maxWidth="w-[96vw] max-w-[560px] sm:max-w-[640px] md:max-w-[740px]"
       maxHeight="h-[88vh] max-h-[88dvh]"
       footer={
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between w-full flex-wrap gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
             <div className="text-[10px] text-[#8b9bb4]">
-              총 <strong className="text-[#c8aa6e]">{messages.length}</strong>개의 교신 기록 (최대 200개 보존)
+              총 <strong className="text-[#c8aa6e]">{messages.length}</strong>개의 교신 기록
             </div>
             <button
               type="button"
@@ -125,11 +206,31 @@ export const GuestbookModal: React.FC<Props> = ({
               <span>🔄</span>
               <span>새로고침</span>
             </button>
+            <button
+              type="button"
+              onClick={handleToggleTranslateAll}
+              disabled={isTranslatingAll || pageMessages.length === 0}
+              className={`text-[10px] px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+                pageMessages.length > 0 && pageMessages.every((m) => !!translatedMap[m.id])
+                  ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e66]'
+                  : 'bg-[#12141a] border-[#23324d] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e]'
+              }`}
+              title="현재 페이지의 모든 글을 현재 게임 언어로 번역"
+            >
+              <span>{isTranslatingAll ? '⏳' : '🌐'}</span>
+              <span>
+                {isTranslatingAll
+                  ? '번역 중...'
+                  : pageMessages.length > 0 && pageMessages.every((m) => !!translatedMap[m.id])
+                  ? '원문 보기'
+                  : `전체 번역 (${targetLangLabel})`}
+              </span>
+            </button>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="btn btn-ghost text-xs px-3 py-1 font-bold rounded-lg border transition-all flex items-center gap-1.5 hover:bg-[#c560601f] cursor-pointer active:scale-95"
+            className="btn btn-ghost text-xs px-3 py-1 font-bold rounded-lg border transition-all flex items-center gap-1.5 hover:bg-[#c560601f] cursor-pointer active:scale-95 ml-auto"
             style={{ borderColor: '#c56060', color: '#c56060', borderWidth: '1px', borderStyle: 'solid' }}
           >
             <span className="font-extrabold text-xs" style={{ color: '#c56060' }}>✕</span>
@@ -139,6 +240,23 @@ export const GuestbookModal: React.FC<Props> = ({
       }
     >
       <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-hidden">
+        {/* ⚠️ 번역 오류 발생 시 상단 알림 배너 */}
+        {translationError && (
+          <div className="p-2.5 rounded-xl bg-[#261618] border border-[#c5606055] text-xs text-[#ef9a9a] flex items-center justify-between gap-2 shrink-0 animate-fade-in">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="text-sm">⚠️</span>
+              <span className="truncate">{translationError}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setTranslationError(null)}
+              className="text-[10px] text-[#ef9a9a] hover:text-white px-1.5 py-0.5 rounded bg-black/40 cursor-pointer"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
         {/* 1. 상단: 게시글 목록 (새 글이 항상 위로 올라오도록 정렬, 10개씩 페이징, 상하 확장) */}
         <div className="flex-1 overflow-y-auto min-h-0 flex flex-col gap-2 pr-1 custom-scrollbar">
           {pageMessages.length === 0 ? (
@@ -148,33 +266,62 @@ export const GuestbookModal: React.FC<Props> = ({
               <div className="text-[11px]">첫 번째 방주 지휘관 메시지를 남겨보세요!</div>
             </div>
           ) : (
-            pageMessages.map((msg) => (
-              <div
-                key={msg.id}
-                className="p-3 rounded-xl bg-[#0c121e] border border-[#1b2537] hover:border-[#c8aa6e55] flex items-center justify-between gap-2.5 sm:gap-3.5 transition-all shadow-xs"
-              >
-                {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) - 낮은 채도의 금색 */}
-                <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px]">
-                  <span className="text-xs">🎖️</span>
-                  <span
-                    className="text-xs sm:text-sm font-bold text-[#c8aa6e] truncate block"
-                    title={msg.authorName}
-                  >
-                    {msg.authorName}
-                  </span>
-                </div>
+            pageMessages.map((msg) => {
+              const isTranslated = !!translatedMap[msg.id];
+              const isTranslating = translatingIds.has(msg.id);
+              const textToShow = isTranslated ? translatedMap[msg.id] : msg.content;
 
-                {/* 2. 중앙: 본문 내용 (최대 100자) */}
-                <div className="flex-1 min-w-0 text-xs sm:text-[13px] text-[#cfd8dc] break-words whitespace-pre-wrap leading-relaxed">
-                  {msg.content}
-                </div>
+              return (
+                <div
+                  key={msg.id}
+                  className="p-3 rounded-xl bg-[#0c121e] border border-[#1b2537] hover:border-[#c8aa6e55] flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3.5 transition-all shadow-xs"
+                >
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) - 낮은 채도의 금색 */}
+                    <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px]">
+                      <span className="text-xs">🎖️</span>
+                      <span
+                        className="text-xs sm:text-sm font-bold text-[#c8aa6e] truncate block"
+                        title={msg.authorName}
+                      >
+                        {msg.authorName}
+                      </span>
+                    </div>
 
-                {/* 3. 글 끝: 등록 날짜와 시간 스탬프 (작게 표시) */}
-                <div className="shrink-0 text-[10px] sm:text-[11px] text-[#8b9bb4] font-mono whitespace-nowrap text-right ml-1">
-                  {formatTimestamp(msg.createdAt)}
+                    {/* 2. 중앙: 본문 내용 (최대 100자) 및 번역 태그 */}
+                    <div className="flex-1 min-w-0 text-xs sm:text-[13px] text-[#cfd8dc] break-words whitespace-pre-wrap leading-relaxed">
+                      <span>{textToShow}</span>
+                      {isTranslated && (
+                        <span className="inline-block ml-1.5 text-[9.5px] px-1.5 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e33] font-mono font-bold align-middle">
+                          🌐 {targetLangLabel}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 3. 글 끝: 번역 버튼 + 등록 날짜와 시간 스탬프 */}
+                  <div className="shrink-0 flex items-center justify-end gap-2 ml-auto">
+                    <button
+                      type="button"
+                      onClick={() => handleToggleTranslate(msg)}
+                      disabled={isTranslating}
+                      className={`text-[10.5px] px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+                        isTranslated
+                          ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e66]'
+                          : 'bg-[#14161c] border-[#262830] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e]'
+                      }`}
+                      title={isTranslated ? '원문으로 되돌리기' : `${targetLangLabel} 언어로 번역`}
+                    >
+                      <span>{isTranslating ? '⏳' : isTranslated ? '↩️' : '🌐'}</span>
+                      <span>{isTranslating ? '...' : isTranslated ? '원문' : '번역'}</span>
+                    </button>
+                    <div className="text-[10px] sm:text-[11px] text-[#8b9bb4] font-mono whitespace-nowrap text-right">
+                      {formatTimestamp(msg.createdAt)}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 

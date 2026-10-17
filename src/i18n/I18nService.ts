@@ -63,6 +63,10 @@ export class I18nService {
     return this.currentLanguage;
   }
 
+  public getCurrentLanguage(): SupportedLanguage {
+    return this.currentLanguage;
+  }
+
   /** 지정 언어의 생성 번역표를 로드하고 {N} 템플릿 패턴을 컴파일 */
   public ensureLoaded(lang: SupportedLanguage): Promise<void> {
     if (lang === 'ko') return Promise.resolve();
