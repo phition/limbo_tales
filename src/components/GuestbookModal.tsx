@@ -51,6 +51,8 @@ export const GuestbookModal: React.FC<Props> = ({
 
   if (!open) return null;
 
+  const fb = FirebaseService.getInstance();
+  const isAnonymous = currentUserProfile?.isAnonymous ?? fb.isAnonymousUser();
   const currentNick = currentUserProfile?.nickname || '지휘관';
   const totalPages = Math.max(1, Math.ceil(messages.length / PAGE_SIZE));
   const safePage = Math.min(currentPage, totalPages);
@@ -59,6 +61,11 @@ export const GuestbookModal: React.FC<Props> = ({
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    if (isAnonymous) {
+      setErrorMessage('익명(게스트) 지휘관은 방명록을 작성할 수 없습니다. 정식 계정으로 로그인해 주세요.');
+      return;
+    }
+
     const clean = inputContent.trim();
     if (!clean) {
       setErrorMessage('내용을 입력해 주세요.');
@@ -72,7 +79,6 @@ export const GuestbookModal: React.FC<Props> = ({
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
-      const fb = FirebaseService.getInstance();
       const res = await fb.addGuestbookMessage(clean);
       if (res.success) {
         setInputContent('');
@@ -105,68 +111,85 @@ export const GuestbookModal: React.FC<Props> = ({
       }
     >
       <div className="flex flex-col gap-3 max-h-[75vh] overflow-hidden">
-        {/* 상단 100자 글쓰기 카드 */}
-        <form
-          onSubmit={handleSubmit}
-          className="p-3 rounded-xl bg-[#101726] border border-[#23324d] flex flex-col gap-2 shrink-0 shadow-sm"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs">🎖️</span>
-              <span className="text-xs font-bold text-[#00d2ff] truncate max-w-[160px]">
-                {currentNick}
+        {/* 상단 100자 글쓰기 카드 (익명 지휘관은 작성 불가 안내) */}
+        {isAnonymous ? (
+          <div className="p-3 rounded-xl bg-[#1a1424] border border-[#ab47bc44] flex items-center gap-3 shrink-0 shadow-sm animate-fade-in">
+            <span className="text-2xl p-2 rounded-xl bg-[#ab47bc22] text-[#ce93d8] shrink-0">🔒</span>
+            <div className="flex-1 min-w-0">
+              <div className="text-xs font-bold text-[#ce93d8] flex items-center gap-1.5">
+                <span>방명록 작성 불가 (익명 지휘관)</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ab47bc22] text-[#ce93d8] font-mono font-bold">
+                  GUEST
+                </span>
+              </div>
+              <div className="text-[11px] text-[#90a4ae] mt-0.5 leading-relaxed">
+                익명(게스트) 계정은 방명록을 열람할 수만 있으며 글을 작성할 수 없습니다. 소통에 참여하시려면 정식 계정(Google 또는 이메일)으로 로그인해 주세요.
+              </div>
+            </div>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="p-3 rounded-xl bg-[#101726] border border-[#23324d] flex flex-col gap-2 shrink-0 shadow-sm"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs">🎖️</span>
+                <span className="text-xs font-bold text-[#00d2ff] truncate max-w-[160px]">
+                  {currentNick}
+                </span>
+                <span className="text-[10px] text-[#8b9bb4]">지휘관님의 방명록 한마디</span>
+              </div>
+              <span
+                className={`text-[10px] font-mono ${
+                  inputContent.length > 90 ? 'text-[#ff9800] font-bold' : 'text-[#8b9bb4]'
+                }`}
+              >
+                {inputContent.length} / 100자
               </span>
-              <span className="text-[10px] text-[#8b9bb4]">지휘관님의 방명록 한마디</span>
             </div>
-            <span
-              className={`text-[10px] font-mono ${
-                inputContent.length > 90 ? 'text-[#ff9800] font-bold' : 'text-[#8b9bb4]'
-              }`}
-            >
-              {inputContent.length} / 100자
-            </span>
-          </div>
 
-          <div className="flex gap-2">
-            <textarea
-              rows={2}
-              maxLength={100}
-              value={inputContent}
-              onChange={(e) => {
-                setInputContent(e.target.value);
-                setErrorMessage(null);
-              }}
-              placeholder="방주 지휘관들에게 남길 응원과 전술 조언을 작성하세요 (최대 100자)"
-              className="flex-1 p-2 rounded-lg bg-[#080d17] border border-[#1e2a3e] text-white text-xs placeholder-[#50607d] resize-none focus:border-[#00d2ff] focus:outline-none transition-colors"
-              disabled={isSubmitting}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSubmit();
-                }
-              }}
-            />
-            <button
-              type="submit"
-              disabled={isSubmitting || !inputContent.trim()}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 flex flex-col items-center justify-center cursor-pointer ${
-                isSubmitting || !inputContent.trim()
-                  ? 'bg-[#182338] text-[#50607d] cursor-not-allowed'
-                  : 'bg-[#00d2ff] hover:bg-[#38bdf8] text-black shadow-md shadow-[#00d2ff33] active:scale-95'
-              }`}
-            >
-              <span>{isSubmitting ? '...' : '✍️'}</span>
-              <span>등록</span>
-            </button>
-          </div>
-
-          {errorMessage && (
-            <div className="text-[10.5px] text-[#ef5350] font-bold flex items-center gap-1 animate-fade-in">
-              <span>⚠️</span>
-              <span>{errorMessage}</span>
+            <div className="flex gap-2">
+              <textarea
+                rows={2}
+                maxLength={100}
+                value={inputContent}
+                onChange={(e) => {
+                  setInputContent(e.target.value);
+                  setErrorMessage(null);
+                }}
+                placeholder="방주 지휘관들에게 남길 응원과 전술 조언을 작성하세요 (최대 100자)"
+                className="flex-1 p-2 rounded-lg bg-[#080d17] border border-[#1e2a3e] text-white text-xs placeholder-[#50607d] resize-none focus:border-[#00d2ff] focus:outline-none transition-colors"
+                disabled={isSubmitting}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit();
+                  }
+                }}
+              />
+              <button
+                type="submit"
+                disabled={isSubmitting || !inputContent.trim()}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 flex flex-col items-center justify-center cursor-pointer ${
+                  isSubmitting || !inputContent.trim()
+                    ? 'bg-[#182338] text-[#50607d] cursor-not-allowed'
+                    : 'bg-[#00d2ff] hover:bg-[#38bdf8] text-black shadow-md shadow-[#00d2ff33] active:scale-95'
+                }`}
+              >
+                <span>{isSubmitting ? '...' : '✍️'}</span>
+                <span>등록</span>
+              </button>
             </div>
-          )}
-        </form>
+
+            {errorMessage && (
+              <div className="text-[10.5px] text-[#ef5350] font-bold flex items-center gap-1 animate-fade-in">
+                <span>⚠️</span>
+                <span>{errorMessage}</span>
+              </div>
+            )}
+          </form>
+        )}
 
         {/* 게시글 목록 (새 글이 항상 위로 올라오도록 정렬, 10개씩 페이징) */}
         <div className="flex-1 overflow-y-auto min-h-[240px] max-h-[350px] flex flex-col gap-1.5 pr-1">

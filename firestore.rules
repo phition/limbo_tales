@@ -2,6 +2,10 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /guestbook/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
     match /{document=**} {
       allow read, write: if true;
     }

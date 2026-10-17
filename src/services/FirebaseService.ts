@@ -221,6 +221,15 @@ export class FirebaseService {
     return cleanEmail.endsWith('@bumpcat.net') || cleanEmail.includes('bumpcat.net');
   }
 
+  /** 👤 익명(게스트) 계정 여부 판별 */
+  public isAnonymousUser(): boolean {
+    const user = this.currentUser || auth.currentUser;
+    if (!user) return true;
+    if (user.isAnonymous) return true;
+    if (this.cachedProfile?.isAnonymous) return true;
+    return false;
+  }
+
   /** Firebase Auth 에러 코드를 친절한 한국어 안내문으로 변환 */
   public getFriendlyErrorMessage(err: any): string {
     const code = err?.code || '';
@@ -1330,6 +1339,14 @@ export class FirebaseService {
    * ✍️ 방명록 글 등록 (최대 100자) 및 200개 초과 자동 삭제
    */
   public async addGuestbookMessage(rawContent: string): Promise<{ success: boolean; error?: string }> {
+    // 🚫 익명(게스트) 지휘관은 방명록 등록 불가
+    if (this.isAnonymousUser()) {
+      return {
+        success: false,
+        error: '익명(게스트) 지휘관은 방명록을 작성할 수 없습니다. 정식 계정(Google 또는 이메일)으로 로그인해 주세요.'
+      };
+    }
+
     const clean = (rawContent || '').trim();
     if (!clean) {
       return { success: false, error: '방명록 내용을 입력해 주세요.' };
