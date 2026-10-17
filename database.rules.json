@@ -9,6 +9,10 @@
         "progress": {
           ".read": "auth != null && auth.uid === $uid",
           ".write": "auth != null && auth.uid === $uid"
+        },
+        "ping": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && auth.uid === $uid"
         }
       }
     },
@@ -18,6 +22,12 @@
       "$uid": {
         ".write": "auth != null && auth.uid === $uid",
         ".validate": "newData.hasChildren(['uid', 'nickname', 'rating'])"
+      }
+    },
+    "world_boss": {
+      "nemesis": {
+        ".read": true,
+        ".write": true
       }
     },
     "game_data": {

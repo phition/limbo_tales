@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 28,
-  "updatedAt": 1792199501248,
+  "version": 31,
+  "updatedAt": 1792202776268,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -1778,26 +1778,26 @@
       "luck": 14,
       "skills": [
         {
-          "name": "원혼 소환",
           "description": "단일 대상 130% 암흑 피해 + 2턴 방어력 20% 감소",
-          "power": 1.3,
           "effectType": "debuff_def",
+          "name": "원혼 소환",
+          "power": 1.3,
           "statusDuration": 2
         },
         {
-          "name": "사령 치유",
           "description": "가장 체력이 낮은 아군 언데드 25% 회복",
-          "power": 0.25,
-          "effectType": "heal"
+          "effectType": "heal",
+          "name": "사령 치유",
+          "power": 0.25
         }
       ],
       "rewards": {
-        "gold": 95,
         "ether": 5,
         "exp": 80,
+        "gold": 95,
         "resources": {
-          "silk": 4,
-          "coal": 2
+          "coal": 2,
+          "silk": 4
         }
       },
       "promptKey": "monster_crypt_necromancer",
@@ -1819,24 +1819,24 @@
       "luck": 45,
       "skills": [
         {
-          "name": "석화의 응시",
           "description": "단일 대상 150% 마법 피해 + 1턴 기절",
-          "power": 1.5,
           "effectType": "stun",
+          "name": "석화의 응시",
+          "power": 1.5,
           "statusDuration": 1
         },
         {
-          "name": "결정 비늘 분출",
           "description": "적 전체 120% 관통 피해",
-          "power": 1.2,
           "effectType": "damage",
-          "piercePct": 0.25
+          "name": "결정 비늘 분출",
+          "piercePct": 0.25,
+          "power": 1.2
         }
       ],
       "rewards": {
-        "gold": 140,
         "ether": 10,
         "exp": 135,
+        "gold": 140,
         "resources": {
           "crystal": 4,
           "stone": 6
@@ -1861,27 +1861,27 @@
       "luck": 18,
       "skills": [
         {
-          "name": "차원 균열 붕괴",
           "description": "전체 적에게 140% 시공간 피해 + 진형 셔플",
-          "power": 1.4,
+          "disruptPosition": "shuffle",
           "effectType": "damage",
-          "disruptPosition": "shuffle"
+          "name": "차원 균열 붕괴",
+          "power": 1.4
         },
         {
-          "name": "공간 전이 흡수",
           "description": "단일 대상 180% 피해 + 30% 흡혈",
-          "power": 1.8,
+          "drainPct": 0.3,
           "effectType": "drain",
-          "drainPct": 0.3
+          "name": "공간 전이 흡수",
+          "power": 1.8
         }
       ],
       "rewards": {
-        "gold": 220,
         "ether": 18,
         "exp": 200,
+        "gold": 220,
         "resources": {
-          "void_shard": 5,
-          "crystal": 3
+          "crystal": 3,
+          "void_shard": 5
         }
       },
       "promptKey": "monster_dimension_eater",
@@ -1903,27 +1903,27 @@
       "luck": 30,
       "skills": [
         {
-          "name": "심연의 저주 제물",
           "description": "적 전체 150% 암흑 피해 + 2턴 출혈",
-          "power": 1.5,
           "effectType": "bleed",
+          "name": "심연의 저주 제물",
+          "power": 1.5,
           "statusDuration": 2
         },
         {
-          "name": "원초의 결계",
           "description": "아군 전체 공격력 25% 증가 2턴",
-          "power": 0.25,
           "effectType": "buff_atk",
+          "name": "원초의 결계",
+          "power": 0.25,
           "statusDuration": 2
         }
       ],
       "rewards": {
-        "gold": 320,
         "ether": 26,
         "exp": 300,
+        "gold": 320,
         "resources": {
-          "void_shard": 6,
-          "crystal": 5
+          "crystal": 5,
+          "void_shard": 6
         }
       },
       "promptKey": "monster_primordial_shaman",
@@ -1946,18 +1946,18 @@
       "drainPct": 0.35,
       "skills": [
         {
-          "name": "진홍의 연회",
           "description": "단일 160% 피해 (흡혈 40% & 2턴 출혈)",
-          "power": 1.6,
-          "effectType": "drain",
           "drainPct": 0.4,
+          "effectType": "drain",
+          "name": "진홍의 연회",
+          "power": 1.6,
           "statusDuration": 2
         },
         {
-          "name": "박쥐 떼 소환",
           "description": "적 전체 110% 마법 피해 + 적 전체 명중/속도 감소",
-          "power": 1.1,
           "effectType": "debuff",
+          "name": "박쥐 떼 소환",
+          "power": 1.1,
           "statusDuration": 2
         }
       ],
@@ -1967,9 +1967,9 @@
       "imagePath": "assets/monster_crimson_vampire.jpg",
       "imagePrompt": "Dark fantasy anime style, aristocratic crimson vampire noble standing in a gothic cathedral ruin bathed in blood-red moonlight, flowing dark crimson cape, sharp fangs and glowing ruby eyes, holding an ornate blood chalice, fluttering shadow bats in background, magitech style, masterpiece, 8k",
       "rewards": {
+        "ether": 8,
         "exp": 75,
-        "gold": 95,
-        "ether": 8
+        "gold": 95
       }
     },
     "monster_grave_specter": {
@@ -1985,18 +1985,18 @@
       "luck": 52,
       "skills": [
         {
-          "name": "영혼 절단",
           "description": "전열 단일 160% 피해 (방어력 30% 무시 & 넉백)",
-          "power": 1.6,
+          "disruptPosition": "knockback",
           "effectType": "damage",
+          "name": "영혼 절단",
           "piercePct": 0.3,
-          "disruptPosition": "knockback"
+          "power": 1.6
         },
         {
-          "name": "망각의 한기",
           "description": "적 전체 100% 피해 + 1턴 빙결(스턴)",
-          "power": 1,
           "effectType": "stun",
+          "name": "망각의 한기",
+          "power": 1,
           "statusDuration": 1
         }
       ],
@@ -2006,9 +2006,9 @@
       "imagePath": "assets/monster_grave_specter.jpg",
       "imagePrompt": "Dark fantasy anime style, haunting ghostly grave knight encased in rusted gothic plate armor with ethereal cyan flames bursting from visor, wielding a chipped rusted greatsword engulfed in soul fire, ruined foggy cemetery with cracked tombstones, masterpiece, 8k",
       "rewards": {
+        "ether": 11,
         "exp": 95,
         "gold": 115,
-        "ether": 11,
         "resources": {
           "bone": 2
         }
@@ -2029,18 +2029,18 @@
       "shieldBreakMult": 2,
       "skills": [
         {
-          "name": "화형의 사슬",
           "description": "단일 150% 피해 + 진형 당기기(pull) + 2턴 화상",
-          "power": 1.5,
+          "disruptPosition": "pull",
           "effectType": "burn",
-          "statusDuration": 2,
-          "disruptPosition": "pull"
+          "name": "화형의 사슬",
+          "power": 1.5,
+          "statusDuration": 2
         },
         {
-          "name": "단죄의 철퇴",
           "description": "단일 190% 분쇄 피해 (보호막 분쇄 2.0배)",
-          "power": 1.9,
-          "effectType": "damage"
+          "effectType": "damage",
+          "name": "단죄의 철퇴",
+          "power": 1.9
         }
       ],
       "themeColor": 14172949,
@@ -2049,9 +2049,9 @@
       "imagePath": "assets/monster_iron_torturer.jpg",
       "imagePrompt": "Dark fantasy anime style, menacing iron torturer executioner clad in spiked black iron armor and iron cage mask, wielding red-hot glowing torture chains and a barbed executioner flail, dark stone fortress torture chamber lit by burning braziers, cinematic lighting, 8k",
       "rewards": {
+        "ether": 15,
         "exp": 115,
-        "gold": 145,
-        "ether": 15
+        "gold": 145
       }
     },
     "monster_prism_weaver": {
@@ -2068,17 +2068,17 @@
       "piercePct": 0.45,
       "skills": [
         {
-          "name": "굴절 광선",
           "description": "적 전체 160% 마법 관통 피해",
-          "power": 1.6,
           "effectType": "damage",
-          "piercePct": 0.45
+          "name": "굴절 광선",
+          "piercePct": 0.45,
+          "power": 1.6
         },
         {
-          "name": "만화경 혼란",
           "description": "적 전체 2턴간 공격력 30% 감소 디버프",
-          "power": 0.3,
           "effectType": "debuff_atk",
+          "name": "만화경 혼란",
+          "power": 0.3,
           "statusDuration": 2
         }
       ],
@@ -2088,9 +2088,9 @@
       "imagePath": "assets/monster_prism_weaver.jpg",
       "imagePrompt": "Dark fantasy anime style, floating geometric prism weaver entity composed of crystalline mirrors and kaleidoscopic light ribbons, spinning sharp glass shards hovering around it, infinite mirrored labyrinth room refracting vibrant spectral light, surreal sci-fi fantasy, masterpiece, 8k",
       "rewards": {
+        "ether": 18,
         "exp": 140,
-        "gold": 170,
-        "ether": 18
+        "gold": 170
       }
     },
     "monster_abyssal_harbinger": {
@@ -2108,20 +2108,20 @@
       "drainPct": 0.3,
       "skills": [
         {
-          "name": "공허의 특이점",
           "description": "적 전체 180% 암흑 중력 피해 + 진형 셔플",
-          "power": 1.8,
-          "effectType": "damage",
           "disruptPosition": "shuffle",
-          "piercePct": 0.5
+          "effectType": "damage",
+          "name": "공허의 특이점",
+          "piercePct": 0.5,
+          "power": 1.8
         },
         {
-          "name": "종말의 파멸인",
           "description": "단일 대상 220% 피해 + 3턴 출혈 (흡혈 30%)",
-          "power": 2.2,
+          "drainPct": 0.3,
           "effectType": "bleed",
-          "statusDuration": 3,
-          "drainPct": 0.3
+          "name": "종말의 파멸인",
+          "power": 2.2,
+          "statusDuration": 3
         }
       ],
       "themeColor": 8916559,
@@ -2130,9 +2130,9 @@
       "imagePath": "assets/monster_abyssal_harbinger.jpg",
       "imagePrompt": "Dark fantasy anime style, colossal abyssal harbinger demon hovering at the core of the abyss, massive obsidian horns crackling with dark lightning, six glowing crimson eyes, surrounded by orbiting black holes and floating dark matter runes, swirling apocalyptic vortex background, masterpiece, 8k",
       "rewards": {
+        "ether": 26,
         "exp": 180,
-        "gold": 220,
-        "ether": 26
+        "gold": 220
       }
     }
   },
@@ -2140,23 +2140,24 @@
     "itemDropRateMultiplier": 0.7
   },
   "nemesis": {
-    "atk": 120,
-    "def": 45,
-    "luck": 30,
-    "spd": 15,
-    "maxHp": 12500000,
+    "atk": 850,
+    "def": 1800,
+    "luck": 480,
+    "spd": 85,
+    "maxHp": 125000000,
     "parts": {
       "head": {
-        "archetype": "발할라 워로드 (Valhalla Warlord)",
-        "atk": 125,
-        "def": 55,
-        "desc": "압도적인 물리 강타와 진동 파쇄를 시전하는 전열의 파멸 머리",
-        "icon": "💥",
         "id": "head",
-        "luck": 25,
-        "maxHp": 4000000,
         "name": "네메시스 머리",
         "position": "front",
+        "archetype": "발할라 워로드 (Valhalla Warlord)",
+        "maxHp": 40000000,
+        "atk": 825,
+        "def": 1055,
+        "spd": 140,
+        "luck": 250,
+        "icon": "💥",
+        "desc": "압도적인 물리 강타와 진동 파쇄를 시전하는 전열의 파멸 머리",
         "skills": [
           {
             "desc": "전열 대상에게 145% 물리 충격 관통 피해",
@@ -2184,20 +2185,20 @@
             "power": 1.6,
             "target": "all"
           }
-        ],
-        "spd": 14
+        ]
       },
       "body": {
-        "archetype": "크로노 아콘 (Chrono Archon)",
-        "atk": 95,
-        "def": 45,
-        "desc": "시공간 조작과 광역 군중 제어(CC)를 담당하는 중심 몸통",
-        "icon": "🌀",
         "id": "body",
-        "luck": 20,
-        "maxHp": 5000000,
         "name": "네메시스 몸통",
         "position": "mid",
+        "archetype": "크로노 아콘 (Chrono Archon)",
+        "maxHp": 50000000,
+        "atk": 950,
+        "def": 450,
+        "spd": 110,
+        "luck": 200,
+        "icon": "🌀",
+        "desc": "시공간 조작과 광역 군중 제어(CC)를 담당하는 중심 몸통",
         "skills": [
           {
             "desc": "아군 전체에게 110% 마법 피해 및 2턴간 행동 속도 30% 감속",
@@ -2226,20 +2227,20 @@
             "power": 1.2,
             "target": "all"
           }
-        ],
-        "spd": 11
+        ]
       },
       "tail": {
-        "archetype": "오메가 데드아이 / 레인저 (Omega Deadeye)",
-        "atk": 140,
-        "def": 35,
-        "desc": "신속한 광역 휩쓸기와 급소 원샷원킬을 노리는 후열의 치명 꼬리",
-        "icon": "🎯",
         "id": "tail",
-        "luck": 45,
-        "maxHp": 3500000,
         "name": "네메시스 꼬리",
         "position": "back",
+        "archetype": "오메가 데드아이 / 레인저 (Omega Deadeye)",
+        "maxHp": 35000000,
+        "atk": 1040,
+        "def": 935,
+        "spd": 220,
+        "luck": 145,
+        "icon": "🎯",
+        "desc": "신속한 광역 휩쓸기와 급소 원샷원킬을 노리는 후열의 치명 꼬리",
         "skills": [
           {
             "desc": "아군 전열/중열을 쓸어버리는 135% 광역 물리 피해",
@@ -2265,8 +2266,7 @@
             "power": 1.4,
             "target": "all"
           }
-        ],
-        "spd": 22
+        ]
       }
     }
   },
