@@ -197,6 +197,30 @@ export const MONSTERS: Record<string, MonsterData> = {
     description: '어둠 속에서 시체를 파먹고 자란 흉폭한 구울. 강력한 턱과 출혈 공격을 가한다.'
   },
 
+  // 2-C. 납골당 사령술사
+  'monster_crypt_necromancer': {
+    id: 'monster_crypt_necromancer',
+    name: '납골당 사령술사',
+    type: 'normal',
+    faction: 'undead',
+    level: 5,
+    maxHp: 130,
+    atk: 52,
+    def: 18,
+    spd: 15,
+    luck: 14,
+    skills: [
+      { name: '원혼 소환', description: '단일 대상 130% 암흑 피해 + 2턴 방어력 20% 감소', power: 1.3, effectType: 'debuff_def', statusDuration: 2 },
+      { name: '사령 치유', description: '가장 체력이 낮은 아군 언데드 25% 회복', power: 0.25, effectType: 'heal' }
+    ],
+    rewards: { gold: 95, ether: 5, exp: 80, resources: { silk: 4, coal: 2 } },
+    promptKey: 'monster_crypt_necromancer',
+    imagePath: 'assets/monster_crypt_necromancer.jpg',
+    themeColor: 0x7e57c2,
+    description: '납골당의 원혼들을 부리며 망자를 조종하는 사령술사. 저주와 사령 마법으로 아군을 괴롭힙니다.',
+    imagePrompt: 'Dark fantasy anime style, sinister undead crypt necromancer floating above ancient catacomb coffins, draped in tattered obsidian burial robes, skull mask glowing with eerie cyan ghostfire, holding a floating necrotic lantern summoning wailing spectral souls, atmospheric dim crypt lighting, magitech style, clean sharp lineart, 8k'
+  },
+
   // ══════════════════════════════════════════════════════
   //  3층 (3F) — 에테르 광맥 [마력 수정 / 석재 / 철광석 / 순수 접두석]
   // ══════════════════════════════════════════════════════
@@ -245,6 +269,30 @@ export const MONSTERS: Record<string, MonsterData> = {
     imagePath: 'assets/monster_mana_gargoyle.jpg',
     themeColor: 0x4dd0e1,
     description: '석재 조각상에 에테르 마력이 스며들어 깨어난 비행 가고일. 고속으로 급강하하여 후열을 노린다.'
+  },
+
+  // 3-C. 에테르 바실리스크
+  'monster_aether_basilisk': {
+    id: 'monster_aether_basilisk',
+    name: '에테르 바실리스크',
+    type: 'normal',
+    faction: 'beast',
+    level: 7,
+    maxHp: 275,
+    atk: 78,
+    def: 42,
+    spd: 14,
+    luck: 15,
+    skills: [
+      { name: '석화의 응시', description: '단일 대상 150% 마법 피해 + 1턴 기절', power: 1.5, effectType: 'stun', statusDuration: 1 },
+      { name: '결정 비늘 분출', description: '적 전체 120% 관통 피해', power: 1.2, effectType: 'damage', piercePct: 0.25 }
+    ],
+    rewards: { gold: 140, ether: 10, exp: 135, resources: { crystal: 4, stone: 6 } },
+    promptKey: 'monster_aether_basilisk',
+    imagePath: 'assets/monster_aether_basilisk.jpg',
+    themeColor: 0x00e5ff,
+    description: '에테르 광맥의 결정을 흡수하여 자란 마수. 석화의 시선과 수정 비늘 파편으로 적을 압박합니다.',
+    imagePrompt: 'Dark fantasy anime style, serpentine aether basilisk coiled around massive glowing cyan crystal spires, iridescent crystalline reptilian scales reflecting magical light, piercing glowing amber eyes with petrifying glare, subterranean crystal cavern filled with luminous mana fog, sharp cel shading, 8k'
   },
 
   // ══════════════════════════════════════════════════════
@@ -297,6 +345,30 @@ export const MONSTERS: Record<string, MonsterData> = {
     description: '심연의 어둠 속에서 꿈틀거리는 다수의 촉수를 지닌 거대 마물. 광역 출혈과 자가 재생을 구사한다.'
   },
 
+  // 4-C. 차원 포식체
+  'monster_dimension_eater': {
+    id: 'monster_dimension_eater',
+    name: '차원 포식체',
+    type: 'normal',
+    faction: 'beast',
+    level: 9,
+    maxHp: 320,
+    atk: 72,
+    def: 32,
+    spd: 32,
+    luck: 18,
+    skills: [
+      { name: '차원 균열 붕괴', description: '전체 적에게 140% 시공간 피해 + 진형 셔플', power: 1.4, effectType: 'damage', disruptPosition: 'shuffle' },
+      { name: '공간 전이 흡수', description: '단일 대상 180% 피해 + 30% 흡혈', power: 1.8, effectType: 'drain', drainPct: 0.30 }
+    ],
+    rewards: { gold: 220, ether: 18, exp: 200, resources: { void_shard: 5, crystal: 3 } },
+    promptKey: 'monster_dimension_eater',
+    imagePath: 'assets/monster_dimension_eater.jpg',
+    themeColor: 0x9c27b0,
+    description: '심연의 균열에서 시공간을 집어삼키는 차원 괴수. 공간을 왜곡하여 진형을 붕괴시킵니다.',
+    imagePrompt: 'Dark fantasy anime style, cosmic eldritch dimensional devourer floating in shattered purple spacetime rift, floating geometric clockwork plates and dark purple cosmic vortex body, glowing void core pulsing with dimensional anomalies, floating shattered debris, masterpiece, 8k'
+  },
+
   // ══════════════════════════════════════════════════════
   //  5층 (5F) — 원초의 제단 [공허 파편 / 마력 수정 / 순수 접두석 / 순수 접미석]
   // ══════════════════════════════════════════════════════
@@ -345,6 +417,30 @@ export const MONSTERS: Record<string, MonsterData> = {
     imagePath: 'assets/monster_monolith_guardian.jpg',
     themeColor: 0xff7043,
     description: '고대 모노리스의 파편으로 기동하는 거대한 골렘. 철벽의 방패와 무거운 석퇴로 침입자를 짓밟는다.'
+  },
+
+  // 5-C. 원초의 주술사
+  'monster_primordial_shaman': {
+    id: 'monster_primordial_shaman',
+    name: '원초의 주술사',
+    type: 'normal',
+    faction: 'corrupted',
+    level: 11,
+    maxHp: 390,
+    atk: 92,
+    def: 36,
+    spd: 42,
+    luck: 30,
+    skills: [
+      { name: '심연의 저주 제물', description: '적 전체 150% 암흑 피해 + 2턴 출혈', power: 1.5, effectType: 'bleed', statusDuration: 2 },
+      { name: '원초의 결계', description: '아군 전체 공격력 25% 증가 2턴', power: 0.25, effectType: 'buff_atk', statusDuration: 2 }
+    ],
+    rewards: { gold: 320, ether: 26, exp: 300, resources: { void_shard: 6, crystal: 5 } },
+    promptKey: 'monster_primordial_shaman',
+    imagePath: 'assets/monster_primordial_shaman.jpg',
+    themeColor: 0xd81b60,
+    description: '원초의 제단에서 금단의 의식을 주재하는 고위 주술사. 혈염과 저주로 침입자를 제물로 바칩니다.',
+    imagePrompt: 'Dark fantasy anime style, primordial void shaman hovering before an ancient black basalt altar, ritual mask carved from demon bone, draped in crimson ceremonial robes, casting dark blood flame hexes from floating sacrificial totems, starry cosmic void sky background, sharp cel shading, 8k'
   },
 
   // ══════════════════════════════════════════════════════
@@ -614,6 +710,29 @@ export const MONSTERS: Record<string, MonsterData> = {
     imagePath: 'assets/monster_fallen_priest_v2.jpg',
     rewards: { exp: 70, gold: 90, ether: 8 }
   },
+  'monster_crimson_vampire': {
+    id: 'monster_crimson_vampire',
+    name: '진홍의 흡혈귀',
+    type: 'normal',
+    faction: 'corrupted',
+    level: 14,
+    maxHp: 430,
+    atk: 120,
+    def: 38,
+    spd: 58,
+    luck: 55,
+    drainPct: 0.35,
+    skills: [
+      { name: '진홍의 연회', description: '단일 160% 피해 (흡혈 40% & 2턴 출혈)', power: 1.6, effectType: 'drain', drainPct: 0.40, statusDuration: 2 },
+      { name: '박쥐 떼 소환', description: '적 전체 110% 마법 피해 + 적 전체 명중/속도 감소', power: 1.1, effectType: 'debuff', statusDuration: 2 }
+    ],
+    themeColor: 0xb71c1c,
+    description: '핏빛 성역의 귀족 흡혈귀. 치명적인 흡혈과 박쥐 떼 환영으로 전장을 유린합니다.',
+    promptKey: 'monster_crimson_vampire',
+    imagePath: 'assets/monster_crimson_vampire.jpg',
+    imagePrompt: 'Dark fantasy anime style, aristocratic crimson vampire noble standing in a gothic cathedral ruin bathed in blood-red moonlight, flowing dark crimson cape, sharp fangs and glowing ruby eyes, holding an ornate blood chalice, fluttering shadow bats in background, magitech style, masterpiece, 8k',
+    rewards: { exp: 75, gold: 95, ether: 8 }
+  },
   'boss_floor_6': {
     id: 'boss_floor_6',
     name: '핏빛 대공 (6F 보스)',
@@ -679,6 +798,28 @@ export const MONSTERS: Record<string, MonsterData> = {
     imagePath: 'assets/monster_bone_golem_v2.jpg',
     rewards: { exp: 90, gold: 110, ether: 10, resources: { bone: 3 } }
   },
+  'monster_grave_specter': {
+    id: 'monster_grave_specter',
+    name: '무덤의 망령 기사',
+    type: 'normal',
+    faction: 'undead',
+    level: 17,
+    maxHp: 640,
+    atk: 130,
+    def: 60,
+    spd: 44,
+    luck: 52,
+    skills: [
+      { name: '영혼 절단', description: '전열 단일 160% 피해 (방어력 30% 무시 & 넉백)', power: 1.6, effectType: 'damage', piercePct: 0.30, disruptPosition: 'knockback' },
+      { name: '망각의 한기', description: '적 전체 100% 피해 + 1턴 빙결(스턴)', power: 1.0, effectType: 'stun', statusDuration: 1 }
+    ],
+    themeColor: 0x5c6bc0,
+    description: '망각의 묘지를 지키는 유령 기사. 원혼의 한기와 영혼을 베는 녹슨 대검을 휘두릅니다.',
+    promptKey: 'monster_grave_specter',
+    imagePath: 'assets/monster_grave_specter.jpg',
+    imagePrompt: 'Dark fantasy anime style, haunting ghostly grave knight encased in rusted gothic plate armor with ethereal cyan flames bursting from visor, wielding a chipped rusted greatsword engulfed in soul fire, ruined foggy cemetery with cracked tombstones, masterpiece, 8k',
+    rewards: { exp: 95, gold: 115, ether: 11, resources: { bone: 2 } }
+  },
   'boss_floor_7': {
     id: 'boss_floor_7',
     name: '망각의 묘지기 (7F 보스)',
@@ -743,6 +884,30 @@ export const MONSTERS: Record<string, MonsterData> = {
     imagePath: 'assets/monster_inquisitor_v2.jpg',
     rewards: { exp: 110, gold: 140, ether: 14 }
   },
+  'monster_iron_torturer': {
+    id: 'monster_iron_torturer',
+    name: '단죄의 고문관',
+    type: 'normal',
+    faction: 'corrupted',
+    level: 20,
+    maxHp: 680,
+    atk: 145,
+    def: 72,
+    spd: 46,
+    luck: 58,
+    piercePct: 0.35,
+    shieldBreakMult: 2.0,
+    skills: [
+      { name: '화형의 사슬', description: '단일 150% 피해 + 진형 당기기(pull) + 2턴 화상', power: 1.5, effectType: 'burn', statusDuration: 2, disruptPosition: 'pull' },
+      { name: '단죄의 철퇴', description: '단일 190% 분쇄 피해 (보호막 분쇄 2.0배)', power: 1.9, effectType: 'damage' }
+    ],
+    themeColor: 0xd84315,
+    description: '단죄의 성채에서 죄인을 처형하던 잔혹한 집행자. 붉게 달아오른 사슬과 철퇴로 적을 파쇄합니다.',
+    promptKey: 'monster_iron_torturer',
+    imagePath: 'assets/monster_iron_torturer.jpg',
+    imagePrompt: 'Dark fantasy anime style, menacing iron torturer executioner clad in spiked black iron armor and iron cage mask, wielding red-hot glowing torture chains and a barbed executioner flail, dark stone fortress torture chamber lit by burning braziers, cinematic lighting, 8k',
+    rewards: { exp: 115, gold: 145, ether: 15 }
+  },
   'boss_floor_8': {
     id: 'boss_floor_8',
     name: '타락한 기사단장 (8F 보스)',
@@ -786,6 +951,29 @@ export const MONSTERS: Record<string, MonsterData> = {
     promptKey: 'monster_mirror_phantom',
     imagePath: 'assets/monster_mirror_phantom_v2.jpg',
     rewards: { exp: 130, gold: 160, ether: 16 }
+  },
+  'monster_prism_weaver': {
+    id: 'monster_prism_weaver',
+    name: '프리즘 방직사',
+    type: 'normal',
+    faction: 'construct',
+    level: 23,
+    maxHp: 660,
+    atk: 175,
+    def: 52,
+    spd: 78,
+    luck: 72,
+    piercePct: 0.45,
+    skills: [
+      { name: '굴절 광선', description: '적 전체 160% 마법 관통 피해', power: 1.6, effectType: 'damage', piercePct: 0.45 },
+      { name: '만화경 혼란', description: '적 전체 2턴간 공격력 30% 감소 디버프', power: 0.30, effectType: 'debuff_atk', statusDuration: 2 }
+    ],
+    themeColor: 0x00bcd4,
+    description: '환영의 미궁에서 빛과 거울을 엮어내는 마도 생명체. 굴절된 광선과 만화경 환각을 구사합니다.',
+    promptKey: 'monster_prism_weaver',
+    imagePath: 'assets/monster_prism_weaver.jpg',
+    imagePrompt: 'Dark fantasy anime style, floating geometric prism weaver entity composed of crystalline mirrors and kaleidoscopic light ribbons, spinning sharp glass shards hovering around it, infinite mirrored labyrinth room refracting vibrant spectral light, surreal sci-fi fantasy, masterpiece, 8k',
+    rewards: { exp: 140, gold: 170, ether: 18 }
   },
   'boss_floor_9': {
     id: 'boss_floor_9',
@@ -874,6 +1062,30 @@ export const MONSTERS: Record<string, MonsterData> = {
     promptKey: 'monster_abyssal_behemoth',
     imagePath: 'assets/monster_abyssal_behemoth_v2.jpg',
     rewards: { exp: 250, gold: 300, ether: 35 }
+  },
+  'monster_abyssal_harbinger': {
+    id: 'monster_abyssal_harbinger',
+    name: '심연의 전조자',
+    type: 'normal',
+    faction: 'corrupted',
+    level: 26,
+    maxHp: 960,
+    atk: 205,
+    def: 88,
+    spd: 68,
+    luck: 78,
+    piercePct: 0.50,
+    drainPct: 0.30,
+    skills: [
+      { name: '공허의 특이점', description: '적 전체 180% 암흑 중력 피해 + 진형 셔플', power: 1.8, effectType: 'damage', disruptPosition: 'shuffle', piercePct: 0.50 },
+      { name: '종말의 파멸인', description: '단일 대상 220% 피해 + 3턴 출혈 (흡혈 30%)', power: 2.2, effectType: 'bleed', statusDuration: 3, drainPct: 0.30 }
+    ],
+    themeColor: 0x880e4f,
+    description: '심연의 심장부에서 종말을 예고하는 고위 악마. 공허의 중력 특이점과 멸망의 파멸인을 펼칩니다.',
+    promptKey: 'monster_abyssal_harbinger',
+    imagePath: 'assets/monster_abyssal_harbinger.jpg',
+    imagePrompt: 'Dark fantasy anime style, colossal abyssal harbinger demon hovering at the core of the abyss, massive obsidian horns crackling with dark lightning, six glowing crimson eyes, surrounded by orbiting black holes and floating dark matter runes, swirling apocalyptic vortex background, masterpiece, 8k',
+    rewards: { exp: 180, gold: 220, ether: 26 }
   },
   'boss_floor_10': {
     id: 'boss_floor_10',
@@ -1018,21 +1230,22 @@ export const MONSTERS: Record<string, MonsterData> = {
 // ─── 층별 조우 몬스터 테이블 (2~10층 및 11층 무간도 반영) ───────────────────────────
 export const FLOOR_MONSTER_POOL: Record<number, string[]> = {
   1: ['monster_stalker', 'monster_cave_bat', 'monster_rot_slime', 'monster_cursed_revenant', 'monster_iron_golem', 'monster_shadow_imp'],
-  2: ['monster_stalker', 'monster_cursed_revenant', 'monster_tomb_banshee', 'monster_crypt_ghoul', 'monster_dread_knight'],
-  3: ['monster_crystal_scorpion', 'monster_mana_gargoyle', 'monster_iron_golem', 'monster_dread_knight'],
-  4: ['monster_rift_stalker', 'monster_void_beast', 'monster_dread_knight', 'monster_mana_gargoyle'],
-  5: ['monster_altar_cultist', 'monster_monolith_guardian', 'monster_rift_stalker', 'monster_void_beast'],
-  6: ['monster_blood_wolf', 'monster_fallen_priest', 'monster_altar_cultist'],
-  7: ['monster_oblivion_ghost', 'monster_bone_golem', 'monster_blood_wolf'],
-  8: ['monster_fallen_paladin', 'monster_inquisitor', 'monster_oblivion_ghost'],
-  9: ['monster_mirror_phantom', 'monster_abyssal_fiend', 'monster_fallen_paladin'],
-  10: ['monster_void_stalker', 'monster_abyssal_behemoth', 'monster_mirror_phantom'],
+  2: ['monster_stalker', 'monster_cursed_revenant', 'monster_tomb_banshee', 'monster_crypt_ghoul', 'monster_crypt_necromancer', 'monster_dread_knight'],
+  3: ['monster_crystal_scorpion', 'monster_mana_gargoyle', 'monster_aether_basilisk', 'monster_iron_golem', 'monster_dread_knight'],
+  4: ['monster_rift_stalker', 'monster_void_beast', 'monster_dimension_eater', 'monster_dread_knight', 'monster_mana_gargoyle'],
+  5: ['monster_altar_cultist', 'monster_monolith_guardian', 'monster_primordial_shaman', 'monster_rift_stalker', 'monster_void_beast'],
+  6: ['monster_blood_wolf', 'monster_fallen_priest', 'monster_crimson_vampire', 'monster_altar_cultist'],
+  7: ['monster_oblivion_ghost', 'monster_bone_golem', 'monster_grave_specter', 'monster_blood_wolf'],
+  8: ['monster_fallen_paladin', 'monster_inquisitor', 'monster_iron_torturer', 'monster_oblivion_ghost'],
+  9: ['monster_mirror_phantom', 'monster_abyssal_fiend', 'monster_prism_weaver', 'monster_fallen_paladin'],
+  10: ['monster_void_stalker', 'monster_abyssal_behemoth', 'monster_abyssal_harbinger', 'monster_mirror_phantom'],
   11: [
     'monster_stalker', 'monster_cave_bat', 'monster_rot_slime', 'monster_cursed_revenant', 'monster_iron_golem', 'monster_shadow_imp',
-    'monster_tomb_banshee', 'monster_crypt_ghoul', 'monster_dread_knight', 'monster_crystal_scorpion', 'monster_mana_gargoyle',
-    'monster_rift_stalker', 'monster_void_beast', 'monster_altar_cultist', 'monster_monolith_guardian', 'monster_blood_wolf',
-    'monster_fallen_priest', 'monster_oblivion_ghost', 'monster_bone_golem', 'monster_fallen_paladin', 'monster_inquisitor',
-    'monster_mirror_phantom', 'monster_abyssal_fiend', 'monster_void_stalker', 'monster_abyssal_behemoth'
+    'monster_tomb_banshee', 'monster_crypt_ghoul', 'monster_crypt_necromancer', 'monster_dread_knight', 'monster_crystal_scorpion', 'monster_mana_gargoyle',
+    'monster_aether_basilisk', 'monster_rift_stalker', 'monster_void_beast', 'monster_dimension_eater', 'monster_altar_cultist', 'monster_monolith_guardian',
+    'monster_primordial_shaman', 'monster_blood_wolf', 'monster_fallen_priest', 'monster_crimson_vampire', 'monster_oblivion_ghost', 'monster_bone_golem',
+    'monster_grave_specter', 'monster_fallen_paladin', 'monster_inquisitor', 'monster_iron_torturer', 'monster_mirror_phantom', 'monster_prism_weaver',
+    'monster_abyssal_fiend', 'monster_void_stalker', 'monster_abyssal_behemoth', 'monster_abyssal_harbinger'
   ]
 };
 

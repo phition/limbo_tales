@@ -36,39 +36,48 @@ const MONSTER_FLOOR_MAP: Record<string, number> = {
 
   monster_tomb_banshee: 2,
   monster_crypt_ghoul: 2,
+  monster_crypt_necromancer: 2,
   monster_dread_knight: 2,
   boss_floor_2: 2,
 
   monster_crystal_scorpion: 3,
   monster_mana_gargoyle: 3,
+  monster_aether_basilisk: 3,
   boss_floor_3: 3,
 
   monster_rift_stalker: 4,
   monster_void_beast: 4,
+  monster_dimension_eater: 4,
   boss_floor_4: 4,
 
   monster_altar_cultist: 5,
   monster_monolith_guardian: 5,
+  monster_primordial_shaman: 5,
   boss_floor_5: 5,
 
   monster_blood_wolf: 6,
   monster_fallen_priest: 6,
+  monster_crimson_vampire: 6,
   boss_floor_6: 6,
 
   monster_oblivion_ghost: 7,
   monster_bone_golem: 7,
+  monster_grave_specter: 7,
   boss_floor_7: 7,
 
   monster_fallen_paladin: 8,
   monster_inquisitor: 8,
+  monster_iron_torturer: 8,
   boss_floor_8: 8,
 
   monster_mirror_phantom: 9,
   monster_abyssal_fiend: 9,
+  monster_prism_weaver: 9,
   boss_floor_9: 9,
 
   monster_void_stalker: 10,
   monster_abyssal_behemoth: 10,
+  monster_abyssal_harbinger: 10,
   boss_floor_10: 10,
 
   boss_avici_final: 11
@@ -1314,6 +1323,25 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             );
                           })}
                         </div>
+                        {m.imagePrompt && (
+                          <div className="p-2 bg-[#090d16] rounded-lg border border-[#1b263b] flex items-center justify-between gap-2 text-[11px]">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <span className="text-xs">✨</span>
+                              <span className="font-bold text-[#ce93d8] shrink-0">AI 프롬프트:</span>
+                              <span className="text-[#90caf9] font-mono truncate italic text-[10px]">"{m.imagePrompt}"</span>
+                            </div>
+                            <button
+                              type="button"
+                              className="shrink-0 px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] hover:bg-[#00d2ff44] border border-[#00d2ff44] text-[10px] font-bold transition-all flex items-center gap-1"
+                              onClick={() => {
+                                navigator.clipboard.writeText(m.imagePrompt!);
+                                showToast(`📋 [${m.name}] 프롬프트가 복사되었습니다!`);
+                              }}
+                            >
+                              <span>📋</span> 복사
+                            </button>
+                          </div>
+                        )}
                       </div>
                     );
                   })}

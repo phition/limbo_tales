@@ -530,6 +530,89 @@ export const PROMPT_REGISTRY: Record<string, PromptData> = {
     prompt: `supreme apocalyptic void demon lord Asmodeus boss towering at the core of the abyss, colossal dark draconic wings, crowned with jagged dark energy horns, glowing crimson cataclysmic aura, multiple floating dark matter orbs, swirling spatial vortex background, anime style, dark fantasy anime aesthetic, magitech style, highly detailed anime illustration, clean sharp lineart, soft cel shading, vibrant cinematic lighting, masterpiece, 8k resolution`,
     negativePrompt: MASTER_NEGATIVE_PROMPT,
     description: '심연의 심장부에 군림하는 궁극의 공허 군주. 차원 전체를 멸망시킬 종말의 숨결을 내뿜습니다.'
+  },
+
+  // --- 2층 ~ 10층 신규 특화 마물 (2F ~ 10F New Monsters) ---
+  'monster_crypt_necromancer': {
+    title: '납골당 사령술사 (Crypt Necromancer)',
+    themeColor: 0x7e57c2,
+    themeColorHex: '#7e57c2',
+    accentColorHex: '#b39ddb',
+    prompt: `Dark fantasy anime style, sinister undead crypt necromancer floating above ancient catacomb coffins, draped in tattered obsidian burial robes, skull mask glowing with eerie cyan ghostfire, holding a floating necrotic lantern summoning wailing spectral souls, atmospheric dim crypt lighting, magitech style, clean sharp lineart, 8k`,
+    negativePrompt: MASTER_NEGATIVE_PROMPT,
+    description: '납골당의 원혼들을 부리며 망자를 조종하는 사령술사. 저주와 사령 마법으로 아군을 괴롭힙니다.'
+  },
+  'monster_aether_basilisk': {
+    title: '에테르 바실리스크 (Aether Basilisk)',
+    themeColor: 0x00e5ff,
+    themeColorHex: '#00e5ff',
+    accentColorHex: '#84ffff',
+    prompt: `Dark fantasy anime style, serpentine aether basilisk coiled around massive glowing cyan crystal spires, iridescent crystalline reptilian scales reflecting magical light, piercing glowing amber eyes with petrifying glare, subterranean crystal cavern filled with luminous mana fog, sharp cel shading, 8k`,
+    negativePrompt: MASTER_NEGATIVE_PROMPT,
+    description: '에테르 광맥의 결정을 흡수하여 자란 마수. 석화의 시선과 수정 비늘 파편으로 적을 압박합니다.'
+  },
+  'monster_dimension_eater': {
+    title: '차원 포식체 (Dimension Devourer)',
+    themeColor: 0x9c27b0,
+    themeColorHex: '#9c27b0',
+    accentColorHex: '#ce93d8',
+    prompt: `Dark fantasy anime style, cosmic eldritch dimensional devourer floating in shattered purple spacetime rift, floating geometric clockwork plates and dark purple cosmic vortex body, glowing void core pulsing with dimensional anomalies, floating shattered debris, masterpiece, 8k`,
+    negativePrompt: MASTER_NEGATIVE_PROMPT,
+    description: '심연의 균열에서 시공간을 집어삼키는 차원 괴수. 공간을 왜곡하여 진형을 붕괴시킵니다.'
+  },
+  'monster_primordial_shaman': {
+    title: '원초의 주술사 (Primordial Void Shaman)',
+    themeColor: 0xd81b60,
+    themeColorHex: '#d81b60',
+    accentColorHex: '#f48fb1',
+    prompt: `Dark fantasy anime style, primordial void shaman hovering before an ancient black basalt altar, ritual mask carved from demon bone, draped in crimson ceremonial robes, casting dark blood flame hexes from floating sacrificial totems, starry cosmic void sky background, sharp cel shading, 8k`,
+    negativePrompt: MASTER_NEGATIVE_PROMPT,
+    description: '원초의 제단에서 금단의 의식을 주재하는 고위 주술사. 혈염과 저주로 침입자를 제물로 바칩니다.'
+  },
+  'monster_crimson_vampire': {
+    title: '진홍의 흡혈귀 (Crimson Vampire Noble)',
+    themeColor: 0xb71c1c,
+    themeColorHex: '#b71c1c',
+    accentColorHex: '#ef5350',
+    prompt: `Dark fantasy anime style, aristocratic crimson vampire noble standing in a gothic cathedral ruin bathed in blood-red moonlight, flowing dark crimson cape, sharp fangs and glowing ruby eyes, holding an ornate blood chalice, fluttering shadow bats in background, magitech style, masterpiece, 8k`,
+    negativePrompt: MASTER_NEGATIVE_PROMPT,
+    description: '핏빛 성역의 귀족 흡혈귀. 치명적인 흡혈과 박쥐 떼 환영으로 전장을 유린합니다.'
+  },
+  'monster_grave_specter': {
+    title: '무덤의 망령 기사 (Grave Specter Knight)',
+    themeColor: 0x5c6bc0,
+    themeColorHex: '#5c6bc0',
+    accentColorHex: '#9fa8da',
+    prompt: `Dark fantasy anime style, haunting ghostly grave knight encased in rusted gothic plate armor with ethereal cyan flames bursting from visor, wielding a chipped rusted greatsword engulfed in soul fire, ruined foggy cemetery with cracked tombstones, masterpiece, 8k`,
+    negativePrompt: MASTER_NEGATIVE_PROMPT,
+    description: '망각의 묘지를 지키는 유령 기사. 원혼의 한기와 영혼을 베는 녹슨 대검을 휘두릅니다.'
+  },
+  'monster_iron_torturer': {
+    title: '단죄의 고문관 (Iron Torturer)',
+    themeColor: 0xd84315,
+    themeColorHex: '#d84315',
+    accentColorHex: '#ff8a65',
+    prompt: `Dark fantasy anime style, menacing iron torturer executioner clad in spiked black iron armor and iron cage mask, wielding red-hot glowing torture chains and a barbed executioner flail, dark stone fortress torture chamber lit by burning braziers, cinematic lighting, 8k`,
+    negativePrompt: MASTER_NEGATIVE_PROMPT,
+    description: '단죄의 성채에서 죄인을 처형하던 잔혹한 집행자. 붉게 달아오른 사슬과 철퇴로 적을 파쇄합니다.'
+  },
+  'monster_prism_weaver': {
+    title: '프리즘 방직사 (Prism Illusion Weaver)',
+    themeColor: 0x00bcd4,
+    themeColorHex: '#00bcd4',
+    accentColorHex: '#80deea',
+    prompt: `Dark fantasy anime style, floating geometric prism weaver entity composed of crystalline mirrors and kaleidoscopic light ribbons, spinning sharp glass shards hovering around it, infinite mirrored labyrinth room refracting vibrant spectral light, surreal sci-fi fantasy, masterpiece, 8k`,
+    negativePrompt: MASTER_NEGATIVE_PROMPT,
+    description: '환영의 미궁에서 빛과 거울을 엮어내는 마도 생명체. 굴절된 광선과 만화경 환각을 구사합니다.'
+  },
+  'monster_abyssal_harbinger': {
+    title: '심연의 전조자 (Abyssal Harbinger)',
+    themeColor: 0x880e4f,
+    themeColorHex: '#880e4f',
+    accentColorHex: '#f06292',
+    prompt: `Dark fantasy anime style, colossal abyssal harbinger demon hovering at the core of the abyss, massive obsidian horns crackling with dark lightning, six glowing crimson eyes, surrounded by orbiting black holes and floating dark matter runes, swirling apocalyptic vortex background, masterpiece, 8k`,
+    negativePrompt: MASTER_NEGATIVE_PROMPT,
+    description: '심연의 심장부에서 종말을 예고하는 고위 악마. 공허의 중력 특이점과 멸망의 파멸인을 펼칩니다.'
   }
 };
 

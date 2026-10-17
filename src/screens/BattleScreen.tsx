@@ -16,6 +16,7 @@ import { BossEntranceCutscene } from '../components/BossEntranceCutscene';
 import { Modal } from '../components/Modal';
 import { HeroDetailModal } from '../components/HeroDetailModal';
 import { MONSTERS } from '../data/monsters';
+import { PROMPT_REGISTRY } from '../data/prompts';
 import { GameIcon } from '../components/GameIcon';
 import { triggerHaptic } from '../utils/haptics';
 import { getSkillTags, getTriggerableCombos, isComboReadyForMonster, isComboReadyForBattleTarget, getEffectivePositionBonus, SkillTag, ComboRule, getHeroAssistDef, selectAssistHero, AssistAttackDef, checkMonsterStatusComboOnHero, checkEquipmentProc, EnemyComboResult, EquipmentProcResult, getTagMeta, resolveCombatVfxAndSfx, getSkillMagicSchool, getElementalSubtype } from '../utils/skillComboUtils';
@@ -165,15 +166,20 @@ const MonsterImagePanel: React.FC<{ targetMonster?: MonsterState; totalCount: nu
   }, [mon?.id, mon?.data?.imagePath]);
 
   const getPrompt = (m: MonsterState) => {
+    const customPrompt = m.data.imagePrompt || PROMPT_REGISTRY[m.data.promptKey]?.prompt;
+    if (customPrompt) {
+      return `[AI 이미지 프롬프트 — ${m.data.name}]\n"${customPrompt}"`;
+    }
     const type = m.data.type === 'boss' ? 'epic boss creature' : m.data.type === 'elite' ? 'elite monster' : 'dungeon monster';
     return `[AI 이미지 프롬프트 — assets/${m.data.promptKey}.jpg]\n"${m.data.name}, ${type}, dark fantasy RPG style,\nglowing eyes, menacing pose, dramatic rim lighting,\nhigh detail concept art, black background"`;
   };
 
   const defMon = mon?.data.id ? MONSTERS[mon.data.id] : undefined;
   const customOverride = mon?.data.id ? CustomAssetService.getInstance().getMonsterOverride(mon.data.id) : undefined;
-  const rawImageSrc = customOverride || defMon?.imagePath || mon?.data.imagePath;
+  const hasDedicatedAsset = !mon?.data.imagePrompt && !defMon?.imagePrompt;
+  const rawImageSrc = customOverride || (hasDedicatedAsset ? (defMon?.imagePath || mon?.data.imagePath) : undefined);
   const imageSrc = rawImageSrc ? (rawImageSrc.startsWith('data:') || rawImageSrc.includes('?') ? rawImageSrc : `${rawImageSrc}?v=2`) : undefined;
-  const showImage = imageSrc && !imgError;
+  const showImage = Boolean(imageSrc && !imgError);
 
   return (
     <div className={`px-3 pt-2 shrink-0 relative ${isAttacking ? 'z-40' : 'z-10'}`}>

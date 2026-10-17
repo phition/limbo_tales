@@ -1504,13 +1504,43 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   return (
                     <div key={m.id} className={`p-3 rounded-xl bg-[#111828] border ${overrideImg || overrideVideo ? 'border-[#00d2ff66] bg-[#101e30]' : 'border-[#1f2d48]'} flex flex-col gap-2`}>
                       <div className="relative h-28 rounded-lg overflow-hidden bg-black/40 border border-[#22324f]">
-                        <img src={imgSrc} alt={m.name} className="w-full h-full object-cover object-top" style={{ objectPosition: 'top' }} />
-                        <div className="absolute top-1 right-1 flex gap-1">
+                        {overrideImg ? (
+                          <img src={overrideImg} alt={m.name} className="w-full h-full object-cover object-top" style={{ objectPosition: 'top' }} />
+                        ) : m.imagePrompt ? (
+                          <div className="w-full h-full p-2 bg-gradient-to-br from-[#0e1626] via-[#1a142c] to-[#0c101a] flex flex-col justify-between text-left">
+                            <div className="flex items-center justify-between gap-1 z-10">
+                              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#ab47bc33] text-[#ce93d8] border border-[#ab47bc55] flex items-center gap-0.5">
+                                <span>✨</span> AI 프롬프트 대기
+                              </span>
+                              <button
+                                type="button"
+                                className="text-[9px] px-1.5 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] hover:bg-[#00d2ff44] border border-[#00d2ff44] font-bold transition-all flex items-center gap-0.5"
+                                title="프롬프트 복사"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigator.clipboard.writeText(m.imagePrompt!);
+                                  showToast(`📋 [${m.name}] 프롬프트가 복사되었습니다!`);
+                                }}
+                              >
+                                <span>📋</span> 복사
+                              </button>
+                            </div>
+                            <div className="text-[10px] text-[#90caf9] font-mono line-clamp-3 leading-tight opacity-90 italic px-0.5 select-all">
+                              "{m.imagePrompt}"
+                            </div>
+                            <div className="text-[8px] text-[#546e7a] truncate">
+                              💡 아래 [🖼️ 이미지/GIF] 버튼으로 커스텀 가능
+                            </div>
+                          </div>
+                        ) : (
+                          <img src={imgSrc} alt={m.name} className="w-full h-full object-cover object-top" style={{ objectPosition: 'top' }} />
+                        )}
+                        <div className="absolute top-1 right-1 flex gap-1 z-10">
                           {isBoss && <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#ff416c] text-white">BOSS</span>}
                           {overrideImg && <span className="text-[9px] px-1 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">이미지 커스텀</span>}
                           {overrideVideo && <span className="text-[9px] px-1 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]">영상 커스텀</span>}
                         </div>
-                        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-1.5">
+                        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-1.5 pointer-events-none z-10">
                           <span className="font-bold text-xs text-white truncate block">{m.name}</span>
                         </div>
                       </div>
@@ -1526,6 +1556,19 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                         >
                           🖼️ 이미지/GIF
                         </button>
+                        {m.imagePrompt && (
+                          <button
+                            type="button"
+                            className="btn btn-ghost text-[10px] px-2 py-1 border border-[#ab47bc55] text-[#ce93d8]"
+                            title="AI 이미지 생성 프롬프트 복사"
+                            onClick={() => {
+                              navigator.clipboard.writeText(m.imagePrompt!);
+                              showToast(`📋 [${m.name}] 프롬프트가 복사되었습니다!`);
+                            }}
+                          >
+                            📋 프롬프트
+                          </button>
+                        )}
                         {isBoss && (
                           <button
                             className="btn btn-ghost text-[10px] px-2 py-1 border border-[#38ef7d55] text-[#38ef7d] flex-1"

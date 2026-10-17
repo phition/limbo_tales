@@ -597,6 +597,7 @@ export interface MonsterData {
   imagePath: string;
   themeColor: number;
   description: string;
+  imagePrompt?: string;
 }
 
 export interface EpicStoryDialogue {
