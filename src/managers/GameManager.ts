@@ -8086,9 +8086,41 @@ export class GameManager {
     return true;
   }
 
-  /** 일일 토벌 도전 횟수 갱신 확인 (매일 자정 3회 자동 충전) */
+  /**
+   * 🌌 매주 수요일 설정된 최대 체력 초기화 알고리즘:
+   * 매주 수요일(00:00:00)이 되면 네메시스를 현재 설정된 최대 체력(NEMESIS_BOSS_CONFIG.maxHp)으로
+   * 3대 부위(머리/몸통/꼬리) 및 토벌 상태를 100% 완전 초기화합니다.
+   */
+  public checkNemesisWednesdayReset(now: number = Date.now()): boolean {
+    if (!this.isNemesisInvasionActive()) return false;
+
+    const d = new Date(now);
+    const day = d.getDay(); // 0:일, 1:월, 2:화, 3:수, 4:목, 5:금, 6:토
+    const daysSinceWed = (day + 7 - 3) % 7;
+    const wedDateObj = new Date(d.getFullYear(), d.getMonth(), d.getDate() - daysSinceWed, 0, 0, 0, 0);
+    const wedTimestamp = wedDateObj.getTime();
+    const wedDateStr = `${wedDateObj.getFullYear()}-${String(wedDateObj.getMonth() + 1).padStart(2, '0')}-${String(wedDateObj.getDate()).padStart(2, '0')}`;
+
+    const lastReset = this.nemesisState.lastWednesdayResetDate;
+    const isNewWednesday = !lastReset || lastReset !== wedDateStr || (this.nemesisState.cycleStartTime !== undefined && this.nemesisState.cycleStartTime < wedTimestamp);
+
+    if (isNewWednesday) {
+      this.nemesisState.lastWednesdayResetDate = wedDateStr;
+      this.restoreNemesisHealth(true);
+      this.nemesisState.cycleStartTime = wedTimestamp;
+      this.addLog(`🌌 [수요일 정기 초기화] 매주 수요일 정기 리셋으로 네메시스가 설정된 최대 체력(${(this.nemesisState.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp).toLocaleString()} HP)으로 완전 초기화 및 재소환되었습니다!`, 'danger');
+      this.saveGame();
+      this.emit('nemesisUpdated', this.nemesisState);
+      return true;
+    }
+
+    return false;
+  }
+
+  /** 일일 토벌 도전 횟수 갱신 확인 (매일 자정 3회 자동 충전 및 수요일 주간 초기화 확인) */
   public checkNemesisDailyReset(): void {
     if (!this.isNemesisInvasionActive()) return;
+    this.checkNemesisWednesdayReset();
     const today = new Date().toISOString().slice(0, 10);
     if (this.nemesisState.lastDate !== today) {
       this.nemesisState.lastDate = today;
@@ -8105,6 +8137,11 @@ export class GameManager {
     // 🛑 차원 앵커가 닫혀 있는 상태에서는 네메시스 침공 및 약탈 사이클 전면 중단
     if (!this.isNemesisInvasionActive()) {
       return false;
+    }
+
+    // 🌌 매주 수요일 설정된 최대 체력으로 정기 초기화 알고리즘 검사
+    if (this.checkNemesisWednesdayReset(now)) {
+      return true;
     }
 
     let stateChanged = false;
@@ -8314,6 +8351,7 @@ export class GameManager {
   public getNemesisCycleInfo() {
     const isAnchorActive = this.isNemesisInvasionActive();
     const now = Date.now();
+    this.checkNemesisWednesdayReset(now);
     const cycleStart = this.nemesisState.cycleStartTime || now;
     const {
       ACTIVE_DURATION_MS,

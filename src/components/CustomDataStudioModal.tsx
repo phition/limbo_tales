@@ -17,6 +17,8 @@ import { NEMESIS_BOSS_CONFIG, NemesisBossConfig } from '../data/nemesis';
 import { BuildingId, GameResources } from '../types/game';
 import { GameBalanceConfig } from '../services/GameDataService';
 import { GameIcon } from './GameIcon';
+import { GameManager } from '../managers/GameManager';
+import { SoundManager } from '../managers/SoundManager';
 
 interface Props {
   open: boolean;
@@ -1380,24 +1382,39 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#9c27b022] text-[#ce93d8] border border-[#9c27b044] font-bold">
                     WORLD RAID BOSS
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleNemesisStatChange('maxHp', 12500000);
-                      handleNemesisPartStatChange('head', 'maxHp', 4000000);
-                      handleNemesisPartStatChange('body', 'maxHp', 5000000);
-                      handleNemesisPartStatChange('tail', 'maxHp', 3500000);
-                      handleNemesisStatChange('atk', 120);
-                      handleNemesisStatChange('def', 45);
-                      handleNemesisStatChange('spd', 15);
-                      handleNemesisStatChange('luck', 30);
-                    }}
-                    className="btn btn-ghost text-[10px] px-2 py-0.5 rounded font-bold border border-[#38ef7d66] text-[#38ef7d] bg-[#38ef7d15] hover:bg-[#38ef7d33] transition-all cursor-pointer flex items-center gap-1"
-                    title="네메시스 체력을 기본값(총 1,250만 HP: 머리 400만, 몸통 500만, 꼬리 350만)으로 즉시 복구합니다."
-                  >
-                    <span>🔄</span>
-                    <span>기본 체력(1,250만) 복구</span>
-                  </button>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        GameManager.getInstance().restoreNemesisHealth(true);
+                        SoundManager.getInstance().play('heal');
+                        alert('💚 네메시스의 인게임 체력 및 모든 부위(머리/몸통/꼬리)가 100% 완전 복구되었습니다!');
+                      }}
+                      className="btn btn-primary text-xs px-3 py-1.5 rounded-lg font-bold border border-[#38ef7d88] text-[#38ef7d] bg-[#38ef7d22] hover:bg-[#38ef7d44] transition-all cursor-pointer flex items-center gap-1.5 shadow-md active:scale-95"
+                      title="현재 진행 중인 인게임 레이드 네메시스 체력과 모든 부위를 100% 완전 복구합니다."
+                    >
+                      <span>💚</span>
+                      <span>인게임 체력 100% 즉시 복구</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleNemesisStatChange('maxHp', 12500000);
+                        handleNemesisPartStatChange('head', 'maxHp', 4000000);
+                        handleNemesisPartStatChange('body', 'maxHp', 5000000);
+                        handleNemesisPartStatChange('tail', 'maxHp', 3500000);
+                        handleNemesisStatChange('atk', 120);
+                        handleNemesisStatChange('def', 45);
+                        handleNemesisStatChange('spd', 15);
+                        handleNemesisStatChange('luck', 30);
+                      }}
+                      className="btn btn-ghost text-[10px] px-2.5 py-1.5 rounded-lg font-bold border border-[#ce93d866] text-[#ce93d8] bg-[#ce93d815] hover:bg-[#ce93d833] transition-all cursor-pointer flex items-center gap-1"
+                      title="네메시스 체력 설정값을 정규 기본값(총 1,250만 HP: 머리 400만, 몸통 500만, 꼬리 350만)으로 즉시 초기화합니다."
+                    >
+                      <span>🔄</span>
+                      <span>설정값 기본(1,250만) 복원</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* 네메시스 헤더 요약 카드 */}

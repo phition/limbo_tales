@@ -933,14 +933,23 @@ export class FirebaseService {
    */
   public async initNemesisWorldBoss(): Promise<WorldBossNemesisData> {
     const bossRef = ref(db, 'world_boss/nemesis');
+    const now = Date.now();
+    const d = new Date(now);
+    const daysSinceWed = (d.getDay() + 7 - 3) % 7;
+    const wedTimestamp = new Date(d.getFullYear(), d.getMonth(), d.getDate() - daysSinceWed, 0, 0, 0, 0).getTime();
+
     try {
       const snapshot = await get(bossRef);
       if (snapshot.exists()) {
-        return snapshot.val() as WorldBossNemesisData;
+        const val = snapshot.val() as WorldBossNemesisData;
+        if (!val.cycleStartTime || val.cycleStartTime < wedTimestamp) {
+          const restored = await this.restoreNemesisWorldBossHp();
+          if (restored) return restored;
+        }
+        return val;
       }
     } catch (_) {}
 
-    const now = Date.now();
     const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
     const bodyCfg = NEMESIS_BOSS_CONFIG.parts.body;
     const tailCfg = NEMESIS_BOSS_CONFIG.parts.tail;
@@ -955,7 +964,7 @@ export class FirebaseService {
         tail: { id: 'tail', name: tailCfg.name, position: 'back', currentHp: tailCfg.maxHp, maxHp: tailCfg.maxHp, isDefeated: false }
       },
       phase: 1,
-      cycleStartTime: now,
+      cycleStartTime: wedTimestamp,
       lastPlunderCheckTime: now,
       windowStartHp: totalMaxHp,
       isDefeated: false,
@@ -1008,10 +1017,13 @@ export class FirebaseService {
           };
         }
 
-        // 7일 사이클 만료 검사 ➔ 보스 재소환 및 리셋
-        if (now - (currentData.cycleStartTime || now) >= NEMESIS_CYCLE_CONSTANTS.TOTAL_CYCLE_MS) {
-          const cyclesToAdvance = Math.floor((now - currentData.cycleStartTime) / NEMESIS_CYCLE_CONSTANTS.TOTAL_CYCLE_MS);
-          currentData.cycleStartTime += cyclesToAdvance * NEMESIS_CYCLE_CONSTANTS.TOTAL_CYCLE_MS;
+        // 🌌 매주 수요일 설정된 최대 체력으로 정기 초기화
+        const d = new Date(now);
+        const daysSinceWed = (d.getDay() + 7 - 3) % 7;
+        const wedTimestamp = new Date(d.getFullYear(), d.getMonth(), d.getDate() - daysSinceWed, 0, 0, 0, 0).getTime();
+
+        if (!currentData.cycleStartTime || currentData.cycleStartTime < wedTimestamp) {
+          currentData.cycleStartTime = wedTimestamp;
           currentData.parts = {
             head: { id: 'head', name: headCfg.name, position: 'front', currentHp: headCfg.maxHp, maxHp: headCfg.maxHp, isDefeated: false },
             body: { id: 'body', name: bodyCfg.name, position: 'mid', currentHp: bodyCfg.maxHp, maxHp: bodyCfg.maxHp, isDefeated: false },
@@ -1022,6 +1034,7 @@ export class FirebaseService {
           currentData.windowStartHp = totalMaxHp;
           currentData.phase = 1;
           currentData.isDefeated = false;
+          currentData.defeatedTime = undefined;
         }
 
         // 6시간 주기 만료 검사 ➔ 요격 윈도우 갱신

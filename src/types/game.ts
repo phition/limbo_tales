@@ -790,6 +790,7 @@ export interface NemesisState {
   windowStartHp?: number;        // 현재 6시간 윈도우 시작 시점의 보스 HP
   isDefeated?: boolean;          // 이번 사이클에서 완전 토벌되었는지 여부
   defeatedTime?: number;         // 토벌 완료 타임스탬프 (ms)
+  lastWednesdayResetDate?: string; // 마지막 수요일 주간 초기화 기준일 (YYYY-MM-DD)
   parts?: Record<NemesisPartId, NemesisPartState>;
 }
 
