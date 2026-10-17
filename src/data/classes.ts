@@ -593,7 +593,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
       { id: 'bastion_divine_providence', name: '신성 수호진', description: '[전열 특화] 아군 전체에 2턴간 방어력 50% 증폭 및 자신에게 최대 체력 35% 보호막 생성', manaCost: 45, cooldown: 3, targetType: 'all_allies', power: 0.35, effectType: 'buff', positionBonus: 'front', icon: '🛡️' },
       { id: 'bastion_sanctuary_smite', name: '성벽 강타', description: '[전열 특화] 전열 적 1체에게 자신의 방어력의 380%에 달하는 신성 물리 충격파를 가하고 1턴간 기절시킵니다.', manaCost: 50, cooldown: 2, targetType: 'single_enemy', power: 3.8, effectType: 'stun', positionBonus: 'front', icon: '🔨' }
     ],
-    specialSkill: { id: 'bastion_avalon', name: '[초월오의] 아발론', description: '아군 전체에게 영웅 최대 HP 50%의 보호막을 3턴간 전개하고, 2턴간 모든 피격에 130% 상시 반격 태세에 돌입합니다.', manaCost: 120, cooldown: 5, targetType: 'all_allies', power: 0.5, statusDuration: 3, effectType: 'shield', icon: '👑', isSpecial: true },
+    specialSkill: { id: 'bastion_avalon', name: '[초월기] 아발론', description: '아군 전체에게 영웅 최대 HP 50%의 보호막을 3턴간 전개하고, 2턴간 모든 피격에 130% 상시 반격 태세에 돌입합니다.', manaCost: 120, cooldown: 5, targetType: 'all_allies', power: 0.5, statusDuration: 3, effectType: 'shield', icon: '👑', isSpecial: true },
     passiveDesc: '만마도서 & 영원의 방벽: 전 마도서 페널티 0% 해금. 피격 및 엄호 시 받은 피해의 50%를 공격자에게 신성 대미지로 반사, 파티 전체가 받는 피해 20% 상시 감쇄(본인은 추가 35% 감쇄), 중열/후열 아군 피격 시 50% 피해를 대신 분담하는 수호 엄호 개입.',
     promptKey: 'hero_valkyrie',
     themeColor: 0xffd700
@@ -614,7 +614,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
       { id: 'void_phantom_flicker', name: '공허 섬광보', description: '[전열/후열 대응] 적 1체에게 350% 치명타 일격을 가하고 2턴간 회피율 40% 증가 및 은신 상태로 진입합니다.', manaCost: 40, cooldown: 2, targetType: 'single_enemy', power: 3.5, effectType: 'damage', positionBonus: 'any', icon: '⚡' },
       { id: 'void_abyssal_dance', name: '심연 환영검무', description: '적 전체를 가로지르며 6연속 환영 난무를 펼쳐 180% 광역 물리 피해를 입히고 적들의 공격력을 30% 감소시킵니다.', manaCost: 55, cooldown: 3, targetType: 'all_enemies', power: 1.8, effectType: 'damage', icon: '👤' }
     ],
-    specialSkill: { id: 'void_dimension_slash', name: '[초월오의] 차원참', description: '[전열] 적 전체를 가로지르며 적의 방어력을 100% 무시하는 200% 위력의 차원 베기 + 3턴간 출혈을 부여합니다.', manaCost: 100, cooldown: 5, targetType: 'all_enemies', power: 2.0, effectType: 'damage', positionBonus: 'front', statusDuration: 3, icon: '🌌', isSpecial: true },
+    specialSkill: { id: 'void_dimension_slash', name: '[초월기] 차원참', description: '[전열] 적 전체를 가로지르며 적의 방어력을 100% 무시하는 200% 위력의 차원 베기 + 3턴간 출혈을 부여합니다.', manaCost: 100, cooldown: 5, targetType: 'all_enemies', power: 2.0, effectType: 'damage', positionBonus: 'front', statusDuration: 3, icon: '🌌', isSpecial: true },
     passiveDesc: '만마도서 & 공허의 잔영: 전 마도서 페널티 0% 해금. 적의 공격을 회피할 때마다 다음 공격 턴까지 회피율과 명중률 10% 증폭, 공격력 +20%, MP 15 회복.',
     promptKey: 'hero_shadow_phantom',
     themeColor: 0x00e676
@@ -635,7 +635,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
       { id: 'chrono_event_horizon', name: '사상의 지평선', description: '공간을 압축하여 적 전체에 220% 비전 마법 피해를 가하고 1턴간 시공 정지(행동 불가)를 부여합니다.', manaCost: 95, cooldown: 3, targetType: 'all_enemies', power: 2.2, effectType: 'stun', icon: '🌀' },
       { id: 'chrono_temporal_flux', name: '시간 가속 왜곡', description: '파티 전원의 모든 스킬 쿨다운을 2턴 단축하고 마나를 40 회복하며 행동속도를 +8 가속시킵니다.', manaCost: 70, cooldown: 4, targetType: 'all_allies', power: 0.4, effectType: 'buff', icon: '⏳' }
     ],
-    specialSkill: { id: 'chrono_bigbang', name: '[초월오의] 빅뱅 크로노스', description: '적 전체에 300% 위력의 시공 폭발을 일으키고, 2턴간 화상(지속 피해) 및 2턴 완전 기절(행동 불가)을 부여합니다.', manaCost: 140, cooldown: 5, targetType: 'all_enemies', power: 3.0, effectType: 'damage', statusDuration: 2, icon: '💥', isSpecial: true },
+    specialSkill: { id: 'chrono_bigbang', name: '[초월기] 빅뱅 크로노스', description: '적 전체에 300% 위력의 시공 폭발을 일으키고, 2턴간 화상(지속 피해) 및 2턴 완전 기절(행동 불가)을 부여합니다.', manaCost: 140, cooldown: 5, targetType: 'all_enemies', power: 3.0, effectType: 'damage', statusDuration: 2, icon: '💥', isSpecial: true },
     passiveDesc: '만마도서 & 특이점 가속: 전 마도서 페널티 0% 해금. 모든 스킬 시전 시 50% 확률로 마나 소모 없이 동일 스킬을 즉시 1회 연속 재시전 (더블 캐스트).',
     promptKey: 'hero_calamity_mage',
     themeColor: 0xba68c8
@@ -656,7 +656,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
       { id: 'seraph_divine_wrath', name: '성스러운 단죄', description: '[전열 특화] 적 1체에게 260% 신성 물리/마법 복합 피해를 입히고 가한 피해의 100%만큼 최저 HP 아군을 치유합니다.', manaCost: 45, cooldown: 2, targetType: 'single_enemy', power: 2.6, effectType: 'damage', positionBonus: 'front', icon: '⚖️' },
       { id: 'seraph_grace_sanctuary', name: '세라핌의 가호', description: '아군 전체 체력을 220% 회복시키고 모든 해로운 상태이상을 즉시 정화하며 2턴간 디버프 면역 및 방어력 40% 버프를 부여합니다.', manaCost: 60, cooldown: 3, targetType: 'all_allies', power: 2.2, effectType: 'heal', statusDuration: 2, icon: '🕊️' }
     ],
-    specialSkill: { id: 'seraph_grand_judgment', name: '[초월오의] 창공의 대심판', description: '적 전체에 200% 신성 강타를 가하고, 가한 피해량만큼 파티 전원 체력을 회복하며, 사망/사경 상태의 아군을 체력 1로 즉시 부활시킵니다.', manaCost: 130, cooldown: 5, targetType: 'all_enemies', power: 2.0, effectType: 'damage', icon: '☀️', isSpecial: true },
+    specialSkill: { id: 'seraph_grand_judgment', name: '[초월기] 창공의 대심판', description: '적 전체에 200% 신성 강타를 가하고, 가한 피해량만큼 파티 전원 체력을 회복하며, 사망/사경 상태의 아군을 체력 1로 즉시 부활시킵니다.', manaCost: 130, cooldown: 5, targetType: 'all_enemies', power: 2.0, effectType: 'damage', icon: '☀️', isSpecial: true },
     passiveDesc: '만마도서 & 빛과 징벌의 조화: 전 마도서 페널티 0% 해금. 공격 스킬 적중 시 가한 대미지의 50%만큼 파티 전체 체력 즉시 치유, 아군 치유 스킬 시전 시 회복량의 50%만큼 무작위 적에게 즉시 신성 강타.',
     promptKey: 'hero_high_saintess',
     themeColor: 0xffea00
@@ -677,7 +677,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
       { id: 'warlord_blood_cleave', name: '혈겁의 대검풍', description: '[전열 특화] 전열 적에게 280% 물리 참격을 가하고 2턴간 적의 공격력을 35% 감소시키며 가한 피해의 30%를 흡혈합니다.', manaCost: 40, cooldown: 2, targetType: 'single_enemy', power: 2.8, effectType: 'damage', positionBonus: 'front', icon: '🪓' },
       { id: 'warlord_immortal_vanguard', name: '불멸의 진격', description: '파티 전원의 공격력과 치명타율을 3턴간 50% 증폭하고 자신의 체력이 낮을수록 최대 100%까지 공격력이 추가 증폭됩니다.', manaCost: 50, cooldown: 3, targetType: 'all_allies', power: 0.5, effectType: 'buff', icon: '🚩' }
     ],
-    specialSkill: { id: 'warlord_blood_tactics', name: '[초월오의] 피의 전술', description: '적 전체 방어력을 40% 분쇄 (3턴 지속)하고, 2턴간 파티 전원에게 15% 흡혈 버프를 부여합니다.', manaCost: 110, cooldown: 5, targetType: 'all_enemies', power: 2.2, effectType: 'damage', statusDuration: 3, icon: '🩸', isSpecial: true },
+    specialSkill: { id: 'warlord_blood_tactics', name: '[초월기] 피의 전술', description: '적 전체 방어력을 40% 분쇄 (3턴 지속)하고, 2턴간 파티 전원에게 15% 흡혈 버프를 부여합니다.', manaCost: 110, cooldown: 5, targetType: 'all_enemies', power: 2.2, effectType: 'damage', statusDuration: 3, icon: '🩸', isSpecial: true },
     passiveDesc: '만마도서 & 불멸의 발할라: 전 마도서 페널티 0% 해금. 모든 공격 시 가한 피해의 10% 상시 체력 흡혈, 체력이 0이 되어 사경(Death Door)에 빠져도 쓰러지지 않고 행동 가능.',
     promptKey: 'hero_valhalla_blade',
     themeColor: 0xff1744
@@ -698,7 +698,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
       { id: 'omega_railgun_burst', name: '오메가 펄스포', description: '[후열 관통] 적 전체를 60% 방어 관통하여 200% 고압 플라즈마 피해를 입히고 2턴간 받는 피해 30% 증폭 디버프를 부여합니다.', manaCost: 55, cooldown: 2, targetType: 'all_enemies', power: 2.0, effectType: 'damage', positionBonus: 'back', piercePct: 60, icon: '⚡' },
       { id: 'omega_overclock_stealth', name: '영점 사격 은신', description: '자신에게 2턴간 [은신]을 부여하고 다음 공격 치명타율 100% 확정 및 치명타 피해 80% 추가 증폭 버프를 획득합니다.', manaCost: 40, cooldown: 3, targetType: 'self', power: 0.8, effectType: 'buff', positionBonus: 'back', icon: '👤' }
     ],
-    specialSkill: { id: 'omega_orbital_annihilation', name: '[초월오의] 궤도 섬멸', description: '[후열] 단일 적 대상 300% 방어력 100% 무시 정밀 저격 + 적 전체 100% 광역 궤도 폭격을 가합니다.', manaCost: 150, cooldown: 5, targetType: 'single_enemy', power: 3.0, effectType: 'damage', positionBonus: 'back', piercePct: 100, icon: '🛰️', isSpecial: true },
+    specialSkill: { id: 'omega_orbital_annihilation', name: '[초월기] 궤도 섬멸', description: '[후열] 단일 적 대상 300% 방어력 100% 무시 정밀 저격 + 적 전체 100% 광역 궤도 폭격을 가합니다.', manaCost: 150, cooldown: 5, targetType: 'single_enemy', power: 3.0, effectType: 'damage', positionBonus: 'back', piercePct: 100, icon: '🛰️', isSpecial: true },
     passiveDesc: '만마도서 & 연쇄 탄도학: 전 마도서 페널티 0% 해금. 상시 방어 관통 +50% 보유, 단일 공격 적중 시 50% 확률로 주변 적 전체에게 50% 위력의 연쇄 궤도 충격파 발생.',
     promptKey: 'hero_aether_meister',
     themeColor: 0x00e5ff
