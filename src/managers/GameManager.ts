@@ -8324,6 +8324,7 @@ export class GameManager {
     const currentHp = this.nemesisState.currentBossHp ?? maxHp;
     const currentWindowDamage = Math.max(0, windowStartHp - currentHp);
     const requiredWindowDamage = maxHp * REQUIRED_DAMAGE_RATIO;
+    const remainingTargetDamage = Math.max(0, requiredWindowDamage - currentWindowDamage);
     const isWindowDefended = currentWindowDamage >= requiredWindowDamage;
     const windowProgressPct = Math.min(100, Math.max(0, (currentWindowDamage / requiredWindowDamage) * 100));
 
@@ -8347,6 +8348,7 @@ export class GameManager {
       nextPlunderRemainingMs,
       currentWindowDamage,
       requiredWindowDamage,
+      remainingTargetDamage,
       isWindowDefended,
       windowProgressPct,
       regenPerMinute: maxHp * HP_REGEN_PER_MINUTE_RATE, // 2,500 HP/분

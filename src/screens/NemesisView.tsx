@@ -2323,42 +2323,56 @@ export const NemesisView: React.FC = () => {
 
             {/* 🎯 24주기 요격 목표치 (6시간 주기 저지 목표) */}
             <div className="mt-2 pt-2 border-t border-[#ff416c1a]">
-              <div className="flex items-center justify-between text-xs mb-1">
-                <span className="text-[10px] text-[#cfd8e8] font-bold flex items-center gap-1">
-                  <span>🎯</span>
-                  <span className="text-[#ffd54f]">요격 목표치</span>
-                  <span className="text-[9px] text-[#8b9bb4] font-normal">(24주기 / 6시간 체력 1/24)</span>
-                </span>
-                <div className="flex items-center gap-1.5 font-mono">
-                  <span className={`text-[10px] font-bold ${cycleInfo.isWindowDefended ? 'text-[#38ef7d]' : 'text-[#00d2ff]'}`}>
-                    {Math.round(cycleInfo.currentWindowDamage).toLocaleString()} / {Math.round(cycleInfo.requiredWindowDamage).toLocaleString()} DMG
-                  </span>
-                  <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
-                    cycleInfo.isWindowDefended
-                      ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66]'
-                      : 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f66]'
-                  }`}>
-                    {cycleInfo.isWindowDefended ? '✅ 요격 달성' : `${cycleInfo.windowProgressPct.toFixed(1)}%`}
-                  </span>
-                </div>
-              </div>
+              {(() => {
+                const targetGoal = Math.round(cycleInfo.requiredWindowDamage);
+                const remainingTarget = Math.max(0, targetGoal - Math.round(cycleInfo.currentWindowDamage));
+                return (
+                  <>
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="text-[10px] text-[#cfd8e8] font-bold flex items-center gap-1">
+                        <span>🎯</span>
+                        <span className="text-[#ffd54f]">요격 목표치</span>
+                        <span className="text-[9px] text-[#8b9bb4] font-normal">(체력 1/24 저지)</span>
+                      </span>
+                      <div className="flex items-center gap-1.5 font-mono">
+                        <span className="text-[10px] text-[#8b9bb4]">잔여 목표:</span>
+                        <span className={`text-[10px] font-bold ${cycleInfo.isWindowDefended ? 'text-[#38ef7d]' : 'text-[#ffd54f]'}`}>
+                          {remainingTarget.toLocaleString()}
+                        </span>
+                        <span className="text-[10px] text-[#8b9bb4]">
+                          / {targetGoal.toLocaleString()} DMG
+                        </span>
+                        <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                          cycleInfo.isWindowDefended
+                            ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66]'
+                            : 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f66]'
+                        }`}>
+                          {cycleInfo.isWindowDefended ? '✅ 요격 달성' : `${cycleInfo.windowProgressPct.toFixed(1)}% 저지`}
+                        </span>
+                      </div>
+                    </div>
 
-              {/* 요격 진행도 바 */}
-              <div className="w-full bg-[#120a1c] h-2 rounded-full overflow-hidden border border-white/10">
-                <div
-                  className={`h-full transition-all duration-500 ${
-                    cycleInfo.isWindowDefended
-                      ? 'bg-gradient-to-r from-[#38ef7d] to-[#00d2ff]'
-                      : 'bg-gradient-to-r from-[#ff9800] via-[#ffd54f] to-[#38ef7d]'
-                  }`}
-                  style={{ width: `${Math.min(100, Math.max(0, cycleInfo.windowProgressPct))}%` }}
-                />
-              </div>
+                    {/* 요격 진행도 바 */}
+                    <div className="w-full bg-[#120a1c] h-2 rounded-full overflow-hidden border border-white/10">
+                      <div
+                        className={`h-full transition-all duration-500 ${
+                          cycleInfo.isWindowDefended
+                            ? 'bg-gradient-to-r from-[#38ef7d] to-[#00d2ff]'
+                            : 'bg-gradient-to-r from-[#ff9800] via-[#ffd54f] to-[#38ef7d]'
+                        }`}
+                        style={{ width: `${Math.min(100, Math.max(0, cycleInfo.windowProgressPct))}%` }}
+                      />
+                    </div>
 
-              <div className="text-[9px] text-[#8b9bb4] flex items-center justify-between mt-1">
-                <span>⏱️ 다음 요격 주기 갱신: {formatRemainingTimeStr(cycleInfo.nextPlunderRemainingMs)}</span>
-                <span className="text-[#8b9bb4]">총 24개 주기 중 현재 주기 방어</span>
-              </div>
+                    <div className="text-[9px] text-[#8b9bb4] flex items-center justify-between mt-1">
+                      <span>⏱️ 다음 요격 주기 갱신: {formatRemainingTimeStr(cycleInfo.nextPlunderRemainingMs)}</span>
+                      <span className="text-[#8b9bb4]">
+                        누적 피해: {Math.round(cycleInfo.currentWindowDamage).toLocaleString()} DMG {cycleInfo.isWindowDefended ? '(방어 성공)' : ''}
+                      </span>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             {/* 3대 부위별 실시간 상태 배지 */}
