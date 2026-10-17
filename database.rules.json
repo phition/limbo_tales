@@ -16,6 +16,17 @@
         }
       }
     },
+    "callsigns": {
+      ".read": true,
+      "$callsign": {
+        ".write": "auth != null"
+      }
+    },
+    "guestbook": {
+      ".read": true,
+      ".write": "auth != null",
+      ".indexOn": ["createdAt"]
+    },
     "arena_leaderboard": {
       ".read": "auth != null",
       ".indexOn": ["rating"],

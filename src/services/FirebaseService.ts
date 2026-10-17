@@ -9,7 +9,7 @@ import {
   signInWithPopup,
   User
 } from 'firebase/auth';
-import { ref, set, get, child, update, query, limitToLast, orderByChild, onValue, runTransaction, Unsubscribe } from 'firebase/database';
+import { ref, set, get, child, update, query, limitToLast, orderByChild, onValue, runTransaction, push, Unsubscribe } from 'firebase/database';
 import { auth, db } from './firebaseConfig';
 import { ArenaOpponent, Mercenary } from '../types/game';
 import { CHARACTER_CLASSES } from '../data/classes';
@@ -58,6 +58,16 @@ export interface UserProfile {
   createdAt: number;
   lastLoginAt: number;
   lastSavedAt?: number;
+  callsignChanged?: boolean; // 🎖️ 콜사인 1회 변경 여부
+  callsignChangedAt?: number;
+}
+
+export interface GuestbookMessage {
+  id: string;
+  uid: string;
+  authorName: string;
+  content: string; // 최대 100자
+  createdAt: number;
 }
 
 export class FirebaseService {
@@ -65,6 +75,9 @@ export class FirebaseService {
   private currentUser: User | null = null;
   private cachedProfile: UserProfile | null = null;
   private authListeners: Array<(user: User | null, profile: UserProfile | null) => void> = [];
+  private cachedGuestbookMessages: GuestbookMessage[] = [];
+  private guestbookListeners: Array<(messages: GuestbookMessage[]) => void> = [];
+  private guestbookSubscribed: boolean = false;
 
   private mockLeaderboard: LeaderboardEntry[] = [
     { rank: 1, nickname: '아스트라', rating: 2150, level: 45, leaderTitle: '발키리' },
@@ -1130,6 +1143,249 @@ export class FirebaseService {
     } catch (err) {
       console.warn('[Firebase RTDB] Restore Nemesis World Boss HP failed:', err);
       return null;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 🎖️ 지휘관 콜사인 1회 수정 및 중복 검증
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * 🔍 콜사인 사용 가능 여부 및 중복 검증
+   */
+  public async checkCallsignAvailable(candidate: string): Promise<{ available: boolean; reason?: string }> {
+    const trimmed = (candidate || '').trim();
+    if (!trimmed) {
+      return { available: false, reason: '콜사인을 입력해 주세요.' };
+    }
+    if (trimmed.length < 2 || trimmed.length > 12) {
+      return { available: false, reason: '콜사인은 2자 이상 12자 이하로 입력해 주세요.' };
+    }
+
+    const validRegex = /^[a-zA-Z0-9가-힣_]+$/;
+    if (!validRegex.test(trimmed)) {
+      return { available: false, reason: '콜사인에는 한글, 영문, 숫자, 밑줄(_)만 사용할 수 있습니다.' };
+    }
+
+    const currentNick = this.cachedProfile?.nickname;
+    if (currentNick && currentNick.toLowerCase() === trimmed.toLowerCase()) {
+      return { available: false, reason: '현재 사용 중인 콜사인과 동일합니다.' };
+    }
+
+    try {
+      // 1. callsigns 노드 조회 (고속 검증)
+      const callsignSnap = await get(child(ref(db), `callsigns/${trimmed}`));
+      if (callsignSnap.exists()) {
+        const ownerUid = callsignSnap.val();
+        if (ownerUid !== this.currentUser?.uid) {
+          return { available: false, reason: '이미 다른 지휘관이 사용 중인 콜사인입니다.' };
+        }
+      }
+
+      // 2. arena_leaderboard 노드에서 중복 확인 (등록 전 유저 대비)
+      const arenaSnap = await get(ref(db, 'arena_leaderboard'));
+      if (arenaSnap.exists()) {
+        const val = arenaSnap.val();
+        for (const u in val) {
+          if (u !== this.currentUser?.uid && val[u]?.nickname?.toLowerCase() === trimmed.toLowerCase()) {
+            return { available: false, reason: '이미 다른 지휘관이 사용 중인 콜사인입니다.' };
+          }
+        }
+      }
+
+      return { available: true };
+    } catch (err: any) {
+      console.warn('⚠️ [checkCallsignAvailable] 검증 중 오류:', err);
+      return { available: true };
+    }
+  }
+
+  /**
+   * 🎖️ 지휘관 콜사인 1회 수정 등록
+   */
+  public async updateCommanderCallsign(newCallsign: string): Promise<{ success: boolean; error?: string }> {
+    if (!this.currentUser) {
+      return { success: false, error: '인증된 지휘관 로그인이 필요합니다.' };
+    }
+
+    const uid = this.currentUser.uid;
+    const profile = this.cachedProfile;
+
+    if (profile?.callsignChanged) {
+      return { success: false, error: '지휘관 콜사인은 계정당 1회만 변경할 수 있습니다.' };
+    }
+
+    const check = await this.checkCallsignAvailable(newCallsign);
+    if (!check.available) {
+      return { success: false, error: check.reason };
+    }
+
+    const trimmed = newCallsign.trim();
+    const oldNick = profile?.nickname;
+
+    try {
+      const updates: Record<string, any> = {};
+      updates[`callsigns/${trimmed}`] = uid;
+      if (oldNick && oldNick !== trimmed) {
+        updates[`callsigns/${oldNick}`] = null;
+      }
+      updates[`users/${uid}/profile/nickname`] = trimmed;
+      updates[`users/${uid}/profile/callsignChanged`] = true;
+      updates[`users/${uid}/profile/callsignChangedAt`] = Date.now();
+
+      await update(ref(db), updates);
+
+      // Auth displayName 갱신
+      await updateProfile(this.currentUser, { displayName: trimmed }).catch(() => {});
+
+      // 아레나 리더보드 동기화
+      await update(ref(db, `arena_leaderboard/${uid}`), { nickname: trimmed }).catch(() => {});
+
+      // 로컬 캐시 갱신
+      if (this.cachedProfile) {
+        this.cachedProfile.nickname = trimmed;
+        this.cachedProfile.callsignChanged = true;
+        this.cachedProfile.callsignChangedAt = Date.now();
+      }
+
+      this.notifyAuthListeners();
+      return { success: true };
+    } catch (err: any) {
+      console.error('⚠️ [updateCommanderCallsign] 실패:', err);
+      return { success: false, error: err.message || '콜사인 변경 중 오류가 발생했습니다.' };
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 📋 방주 지휘관 방명록 (게시판) 실시간 동기화 & 최대 200개 유지
+  // ─────────────────────────────────────────────────────────────
+
+  public getCachedGuestbookMessages(): GuestbookMessage[] {
+    return this.cachedGuestbookMessages;
+  }
+
+  /**
+   * 📡 방명록 실시간 구독
+   */
+  public listenGuestbookMessages(callback: (messages: GuestbookMessage[]) => void): () => void {
+    this.guestbookListeners.push(callback);
+    callback(this.cachedGuestbookMessages);
+
+    if (!this.guestbookSubscribed) {
+      this.guestbookSubscribed = true;
+      try {
+        const guestbookQuery = query(ref(db, 'guestbook'), orderByChild('createdAt'), limitToLast(200));
+        onValue(guestbookQuery, (snapshot) => {
+          const list: GuestbookMessage[] = [];
+          if (snapshot.exists()) {
+            snapshot.forEach((childSnap) => {
+              const val = childSnap.val();
+              if (val && typeof val === 'object') {
+                list.push({
+                  id: childSnap.key || val.id || '',
+                  uid: val.uid || '',
+                  authorName: val.authorName || '방주 지휘관',
+                  content: val.content || '',
+                  createdAt: Number(val.createdAt) || 0
+                });
+              }
+            });
+          }
+          // 최신 글이 항상 위로 올라오도록 정렬 (createdAt 내림차순)
+          list.sort((a, b) => b.createdAt - a.createdAt);
+          this.cachedGuestbookMessages = list;
+          this.guestbookListeners.forEach((cb) => {
+            try {
+              cb(list);
+            } catch (cbErr) {
+              console.error('⚠️ [Firebase] 방명록 리스너 콜백 예외:', cbErr);
+            }
+          });
+        }, (error) => {
+          console.warn('⚠️ [Firebase] 방명록 실시간 수신 경고:', error);
+        });
+      } catch (e) {
+        console.warn('⚠️ [Firebase] 방명록 구독 시작 예외:', e);
+      }
+    }
+
+    return () => {
+      this.guestbookListeners = this.guestbookListeners.filter((cb) => cb !== callback);
+    };
+  }
+
+  /**
+   * ✍️ 방명록 글 등록 (최대 100자) 및 200개 초과 자동 삭제
+   */
+  public async addGuestbookMessage(rawContent: string): Promise<{ success: boolean; error?: string }> {
+    const clean = (rawContent || '').trim();
+    if (!clean) {
+      return { success: false, error: '방명록 내용을 입력해 주세요.' };
+    }
+    if (clean.length > 100) {
+      return { success: false, error: '방명록은 최대 100자까지 작성할 수 있습니다.' };
+    }
+
+    const authorName = this.cachedProfile?.nickname || this.currentUser?.displayName || '방주 지휘관';
+    const uid = this.currentUser?.uid || 'anonymous';
+
+    try {
+      const guestbookRef = ref(db, 'guestbook');
+      const newMsgRef = push(guestbookRef);
+      const newMsg: GuestbookMessage = {
+        id: newMsgRef.key!,
+        uid,
+        authorName,
+        content: clean,
+        createdAt: Date.now()
+      };
+
+      await set(newMsgRef, newMsg);
+
+      // 🧹 파이어베이스에 최대 200개 유지 -> 초과 시 오래된 글 자동 삭제
+      this.cleanupOldGuestbookMessages().catch((e) => {
+        console.warn('⚠️ [cleanupOldGuestbookMessages] 자동 정리 경고:', e);
+      });
+
+      return { success: true };
+    } catch (err: any) {
+      console.error('⚠️ [addGuestbookMessage] 방명록 등록 실패:', err);
+      return { success: false, error: err.message || '방명록 등록 중 오류가 발생했습니다.' };
+    }
+  }
+
+  /**
+   * 🧹 방명록 최대 200개 초과 시 오래된 글 자동 정리
+   */
+  private async cleanupOldGuestbookMessages(): Promise<void> {
+    try {
+      const guestbookRef = ref(db, 'guestbook');
+      const snapshot = await get(query(guestbookRef, orderByChild('createdAt')));
+      if (snapshot.exists()) {
+        const all: { key: string; createdAt: number }[] = [];
+        snapshot.forEach((childSnap) => {
+          const val = childSnap.val();
+          all.push({
+            key: childSnap.key!,
+            createdAt: Number(val?.createdAt) || 0
+          });
+        });
+
+        if (all.length > 200) {
+          // 등록 일시 오름차순(가장 오래된 글 먼저)
+          all.sort((a, b) => a.createdAt - b.createdAt);
+          const removeCount = all.length - 200;
+          const toRemove = all.slice(0, removeCount);
+          const updates: Record<string, null> = {};
+          for (const item of toRemove) {
+            updates[`guestbook/${item.key}`] = null;
+          }
+          await update(ref(db), updates);
+          console.log(`🧹 [Firebase] 방명록 200개 초과 항목 ${removeCount}개 자동 삭제 완료`);
+        }
+      }
+    } catch (err) {
+      console.warn('⚠️ [cleanupOldGuestbookMessages] 정리 실패:', err);
     }
   }
 }

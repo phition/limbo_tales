@@ -4,6 +4,7 @@ import { useGameManager } from './hooks/useGameManager';
 import { ResourceBar } from './components/ResourceBar';
 import { SystemMenuDrawer } from './components/SystemMenuDrawer';
 import { EncyclopediaModal, EncyclopediaCategory } from './components/EncyclopediaModal';
+import { GuestbookModal } from './components/GuestbookModal';
 import { AuthScreen } from './screens/AuthScreen';
 import { CommanderAuthOverlay } from './components/CommanderAuthOverlay';
 import { FirebaseService, UserProfile } from './services/FirebaseService';
@@ -99,6 +100,7 @@ export const App: React.FC = () => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [guideInitialTab, setGuideInitialTab] = useState<EncyclopediaCategory>('all');
   const [guideInitialQuery, setGuideInitialQuery] = useState('');
+  const [guestbookOpen, setGuestbookOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
@@ -127,6 +129,17 @@ export const App: React.FC = () => {
     gm.on('openEncyclopedia', handleOpenEnc);
     return () => {
       gm.off('openEncyclopedia', handleOpenEnc);
+    };
+  }, [gm]);
+
+  // 📋 전역 방명록 (게시판) 모달 오픈 이벤트 구독
+  useEffect(() => {
+    const handleOpenGuestbook = () => {
+      setGuestbookOpen(true);
+    };
+    gm.on('openGuestbook', handleOpenGuestbook);
+    return () => {
+      gm.off('openGuestbook', handleOpenGuestbook);
     };
   }, [gm]);
 
@@ -362,6 +375,10 @@ export const App: React.FC = () => {
         setGuideOpen(false);
         return true;
       }
+      if (guestbookOpen) {
+        setGuestbookOpen(false);
+        return true;
+      }
       if (menuOpen) {
         setMenuOpen(false);
         return true;
@@ -504,6 +521,7 @@ export const App: React.FC = () => {
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
         onOpenGuide={() => setGuideOpen(true)}
+        onOpenGuestbook={() => setGuestbookOpen(true)}
       />
 
       {/* 📖 방주 백과사전 & 종합 도감 (Searchable Encyclopedia & Guide) */}
@@ -512,6 +530,13 @@ export const App: React.FC = () => {
         initialTab={guideInitialTab}
         initialSearchQuery={guideInitialQuery}
         onClose={() => setGuideOpen(false)}
+      />
+
+      {/* 📋 방주 지휘관 방명록 (게시판) 모달 */}
+      <GuestbookModal
+        open={guestbookOpen}
+        onClose={() => setGuestbookOpen(false)}
+        currentUserProfile={userProfile}
       />
 
       {/* 🌟 창 및 전체 화면 모드 전환 시 하단 토스트 알림 (1초 후 자동 소멸) */}

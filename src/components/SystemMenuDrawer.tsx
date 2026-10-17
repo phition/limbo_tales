@@ -8,6 +8,7 @@ import { SoundManager } from '../managers/SoundManager';
 import { GameDataService } from '../services/GameDataService';
 import { CustomAssetStudioModal } from './CustomAssetStudioModal';
 import { CustomDataStudioModal } from './CustomDataStudioModal';
+import { CallsignChangeModal } from './CallsignChangeModal';
 import { useI18n } from '../hooks/useI18n';
 import { SupportedLanguage } from '../i18n/types';
 
@@ -15,9 +16,10 @@ interface Props {
   open: boolean;
   onClose: () => void;
   onOpenGuide: () => void;
+  onOpenGuestbook?: () => void;
 }
 
-export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }) => {
+export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, onOpenGuestbook }) => {
   const isMobilePlatform = Capacitor.isNativePlatform();
   const { gm } = useGameManager();
   const { lang, setLanguage, dict } = useI18n();
@@ -26,6 +28,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
   const [patchModal, setPatchModal] = useState(false);
   const [assetStudioModal, setAssetStudioModal] = useState(false);
   const [dataStudioModal, setDataStudioModal] = useState(false);
+  const [callsignModal, setCallsignModal] = useState(false);
   const [cloudStatus, setCloudStatus] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
 
@@ -130,6 +133,30 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
             <div className="text-[11px] text-[#8b9bb4] font-mono truncate">
               {user?.email || `UID: ${user?.uid.slice(0, 10)}...`}
             </div>
+
+            {/* 🎖️ 지휘관 콜사인 1회 수정 버튼 & 상태 */}
+            <div className="flex items-center justify-between pt-1 border-t border-[#1f2738]/60 mt-0.5">
+              <span className="text-[10px] text-[#8b9bb4]">
+                호출부호: <strong className="text-[#00d2ff]">[{profile?.nickname || '지휘관'}]</strong>
+              </span>
+              {!profile?.callsignChanged ? (
+                <button
+                  type="button"
+                  className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55] hover:bg-[#00d2ff33] active:scale-95 transition-all cursor-pointer flex items-center gap-1 shadow-xs"
+                  onClick={() => setCallsignModal(true)}
+                  title="콜사인은 계정당 1회만 변경 가능합니다."
+                >
+                  <span>✏️</span>
+                  <span>콜사인 변경 (1회)</span>
+                </button>
+              ) : (
+                <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-[#182338] text-[#8b9bb4] font-medium flex items-center gap-1">
+                  <span>🔒</span>
+                  <span>1회 변경 완료</span>
+                </span>
+              )}
+            </div>
+
             {cloudStatus && (
               <div className="text-[10px] text-[#ffd54f] font-medium bg-[#ffd54f15] px-2 py-0.5 rounded text-center animate-pulse">
                 {cloudStatus}
@@ -257,6 +284,32 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
 
         {/* 메뉴 목록 */}
         <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
+          {/* 📋 방주 지휘관 방명록 (게시판) */}
+          <button
+            className="w-full p-2.5 rounded-xl bg-[#141b2c] border border-[#23324d] hover:border-[#00d2ff] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
+            onClick={() => {
+              onClose();
+              if (onOpenGuestbook) {
+                onOpenGuestbook();
+              } else {
+                gm.emit('openGuestbook');
+              }
+            }}
+          >
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff] shrink-0">📋</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors break-words">
+                  방주 지휘관 방명록 (게시판)
+                </div>
+                <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">
+                  전 서버 지휘관 100자 실시간 교신 &amp; 자유 소통
+                </div>
+              </div>
+            </div>
+            <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
+          </button>
+
           {/* 3. 도움말 (방주 백과사전 & 종합 도감) */}
           <button
             className="w-full p-2.5 rounded-xl bg-[#141b2c] border border-[#23324d] hover:border-[#00d2ff] text-left flex items-center justify-between transition-all group cursor-pointer"
@@ -1117,6 +1170,13 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
           onClose={() => setDataStudioModal(false)}
         />
       )}
+
+      {/* 🎖️ 지휘관 콜사인(호출부호) 1회 변경 모달 */}
+      <CallsignChangeModal
+        open={callsignModal}
+        onClose={() => setCallsignModal(false)}
+        currentProfile={profile}
+      />
     </div>
   );
 };

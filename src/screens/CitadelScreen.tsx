@@ -61,6 +61,7 @@ import {
   FEVER_BADGE_WEIGHT,
   getWeeklyAffinityConfig,
 } from '../utils/feverUtils';
+import { FirebaseService, GuestbookMessage } from '../services/FirebaseService';
 
 // ─────────────────────────────────────────────────────────────
 //  휠 내비게이션 & 시설 매핑
@@ -14179,6 +14180,21 @@ export const CitadelScreen: React.FC = () => {
   // 영지('citadel') 패널에서 개별 건물 패널로 진입한 경우에만 닫기 시 영지로 복귀, 그 외(바로가기 등)는 즉시 완전 닫기
   const [returnToCitadelOnClose, setReturnToCitadelOnClose] = useState<boolean>(false);
 
+  // 📋 방명록(게시판) 실시간 메시지 상태 (하단 네비 상단 2개 미리보기용)
+  const [guestbookMessages, setGuestbookMessages] = useState<GuestbookMessage[]>(() => {
+    return FirebaseService.getInstance().getCachedGuestbookMessages();
+  });
+
+  useEffect(() => {
+    const fb = FirebaseService.getInstance();
+    const unsubscribe = fb.listenGuestbookMessages((msgs) => {
+      setGuestbookMessages(msgs);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   // ── 튜토리얼 상태 관리 (프롤로그 확인 후 최초 1회만 발동) ──
   const [tutorialStepId, setTutorialStepId] = useState<string>(() => {
     try {
@@ -15000,9 +15016,43 @@ export const CitadelScreen: React.FC = () => {
         </div>
       )}
 
-      {/* 🎡 모바일 스와이프/드래그 지원 회전 휠 내비게이션 */}
+      {/* 🎡 모바일 스와이프/드래그 지원 회전 휠 내비게이션 & 상단 방명록 티커 */}
       {!openDrawer ? (
-        <div className="px-3 py-2 shrink-0 select-none">
+        <div className="px-3 pt-1 pb-2 shrink-0 select-none flex flex-col gap-1.5">
+          {/* 📢 방명록 2개 미리보기 티커 (하단 네비 메뉴 상단) */}
+          <div
+            className="w-full px-2.5 py-1.5 rounded-xl bg-[#0c1424]/90 border border-[#00d2ff33] hover:border-[#00d2ff88] cursor-pointer flex items-center justify-between transition-all backdrop-blur-xs shadow-md group active:scale-[0.99]"
+            onClick={() => gm.emit('openGuestbook')}
+            title="클릭 시 방주 지휘관 방명록(게시판) 모달이 열립니다"
+          >
+            <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0 flex items-center gap-1 border border-[#00d2ff44]">
+                <span className="text-xs">📢</span>
+                <span>방명록</span>
+              </span>
+              <div className="text-[11px] text-[#cfd8e8] truncate flex items-center gap-1.5 min-w-0">
+                {guestbookMessages.length === 0 ? (
+                  <span className="text-[#8b9bb4]">첫 번째 방주 지휘관 방명록을 등록해 보세요!</span>
+                ) : (
+                  guestbookMessages.slice(0, 2).map((msg, idx) => {
+                    const shortText = msg.content.slice(0, 10) + (msg.content.length > 10 ? '...' : '');
+                    return (
+                      <span key={msg.id || idx} className="truncate flex items-center gap-1 shrink-0 max-w-[48%]">
+                        {idx > 0 && <span className="text-[#3b4b68] mr-1 shrink-0">|</span>}
+                        <strong className="text-[#00d2ff] font-bold shrink-0">[{msg.authorName}]</strong>
+                        <span className="text-[#e2e8f0] truncate">{shortText}</span>
+                      </span>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+            <span className="text-[10px] text-[#00d2ff] group-hover:text-white group-hover:translate-x-0.5 transition-all shrink-0 ml-1.5 font-bold flex items-center gap-0.5">
+              <span>💬</span>
+              <span>열기 ▶</span>
+            </span>
+          </div>
+
           <div 
             className="panel p-3 touch-pan-y"
             onWheel={handleWheelScroll}
