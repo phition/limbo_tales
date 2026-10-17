@@ -1431,6 +1431,23 @@ const EquipmentOverlay: React.FC<{
                     >
                       [{getRarityLabel(eq.rarity)}]
                     </span>
+                    {eq.slot === 'weapon' && (() => {
+                      const wt = eq.weaponTrait || getWeaponTrait(eq);
+                      if (!wt) return null;
+                      return (
+                        <span
+                          className="text-[9px] px-1.5 py-0.5 rounded font-bold"
+                          style={{
+                            color: wt.color,
+                            backgroundColor: wt.bgColor,
+                            border: `1px solid ${wt.color}44`
+                          }}
+                          title={`${wt.name}: ${wt.description}`}
+                        >
+                          {wt.badge}
+                        </span>
+                      );
+                    })()}
                     {(eq.isCorrupted || eq.isUnpurified || eq.name.startsWith('[침식된]')) && (
                       <span className="text-[9px] px-1.5 py-0.5 rounded font-bold bg-[#ef535022] text-[#ef5350] border border-[#ef535055]">
                         💀 침식됨
@@ -1568,6 +1585,37 @@ const EquipmentOverlay: React.FC<{
               <div className="text-[11px] text-[#8b9bb4] font-bold mb-1">📊 전체 종합 능력치:</div>
               {renderTotalStats(activeDetailItem.stats)}
             </div>
+
+            {/* 🏷️ 무기 고유 특성 뱃지 및 메커니즘 상세 */}
+            {activeDetailItem.slot === 'weapon' && (() => {
+              const wt = activeDetailItem.weaponTrait || getWeaponTrait(activeDetailItem);
+              if (!wt) return null;
+              return (
+                <div
+                  className="p-2.5 rounded-xl border flex flex-col gap-1 shadow-md"
+                  style={{ backgroundColor: `${wt.color}10`, borderColor: `${wt.color}55` }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs" style={{ color: wt.color }}>
+                      {wt.badge}
+                    </span>
+                    <span
+                      className="text-[9px] px-1.5 py-0.2 rounded font-bold shadow-sm"
+                      style={{ backgroundColor: wt.bgColor, color: wt.color, border: `1px solid ${wt.color}55` }}
+                    >
+                      무기 고유 특성
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
+                    {wt.description}
+                  </div>
+                  <div className="text-[10px] text-[#90a4ae] flex items-center gap-1 pt-1 border-t border-[#ffffff15]">
+                    <span>💡</span>
+                    <span><strong>효과 요약:</strong> {wt.shortDesc}</span>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* 인챈트 상세 */}
             {(activeDetailItem.prefix || activeDetailItem.suffix) && (
@@ -9542,6 +9590,19 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#1f2738] text-[#8b9bb4] font-bold">
                               {slotName}
                             </span>
+                            {item.slot === 'weapon' && (() => {
+                              const wt = item.weaponTrait || getWeaponTrait(item);
+                              if (!wt) return null;
+                              return (
+                                <span
+                                  className="text-[9px] px-1.5 py-0.2 rounded font-bold"
+                                  style={{ color: wt.color, backgroundColor: wt.bgColor, border: `1px solid ${wt.color}44` }}
+                                  title={`${wt.name}: ${wt.description}`}
+                                >
+                                  {wt.badge}
+                                </span>
+                              );
+                            })()}
                             {item.isCursed && (
                               <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535022] text-[#ef5350] font-bold">
                                 {'저주'}
@@ -9806,6 +9867,37 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   ))}
                 </div>
               </div>
+
+              {/* 🏷️ 무기 고유 특성 정보 */}
+              {item.slot === 'weapon' && (() => {
+                const wt = item.weaponTrait || getWeaponTrait(item);
+                if (!wt) return null;
+                return (
+                  <div
+                    className="p-3 rounded-xl border flex flex-col gap-1.5 shadow-md"
+                    style={{ backgroundColor: `${wt.color}10`, borderColor: `${wt.color}55` }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-xs" style={{ color: wt.color }}>
+                        {wt.badge}
+                      </span>
+                      <span
+                        className="text-[9px] px-2 py-0.5 rounded font-bold shadow-sm"
+                        style={{ backgroundColor: wt.bgColor, color: wt.color, border: `1px solid ${wt.color}55` }}
+                      >
+                        무기 고유 특성
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
+                      {wt.description}
+                    </div>
+                    <div className="text-[10px] text-[#90a4ae] flex items-center gap-1 pt-1.5 border-t border-[#ffffff15]">
+                      <span>💡</span>
+                      <span><strong>효과 요약:</strong> {wt.shortDesc}</span>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* 접두 / 접미 인챈트 정보 */}
               {(item.prefix || item.suffix) && (() => {

@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 27,
-  "updatedAt": 1792197746167,
+  "version": 28,
+  "updatedAt": 1792199501248,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -209,7 +209,7 @@
       "imagePath": "assets/boss_floor_1.jpg",
       "level": 4,
       "luck": 25,
-      "maxHp": 228,
+      "maxHp": 528,
       "name": "침묵의 흑핵 거신",
       "promptKey": "boss_floor_1",
       "rewards": {
@@ -253,15 +253,15 @@
       "faction": "construct"
     },
     "boss_floor_10": {
-      "atk": 880,
-      "def": 920,
+      "atk": 480,
+      "def": 520,
       "description": "심연의 심장부에 군림하는 궁극의 공허 군주. 차원 전체를 멸망시킬 종말의 숨결을 내뿜습니다.",
       "drainPct": 0.35,
       "id": "boss_floor_10",
       "imagePath": "assets/boss_floor_10.jpg",
       "level": 28,
       "luck": 70,
-      "maxHp": 10000,
+      "maxHp": 6500,
       "name": "심연의 군주 아스모데우스 (10F 보스)",
       "piercePct": 0.6,
       "promptKey": "boss_floor_10",
@@ -452,14 +452,14 @@
       "faction": "corrupted"
     },
     "boss_floor_5": {
-      "atk": 388,
+      "atk": 588,
       "def": 642,
       "description": "Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다.",
       "id": "boss_floor_5",
       "imagePath": "assets/void_overlord.jpg",
       "level": 12,
       "luck": 48,
-      "maxHp": 2800,
+      "maxHp": 1800,
       "name": "공허의 침식자",
       "promptKey": "monster_void_overlord",
       "rewards": {
@@ -531,7 +531,7 @@
       "imagePath": "assets/boss_floor_6.jpg",
       "level": 16,
       "luck": 52,
-      "maxHp": 3000,
+      "maxHp": 2400,
       "name": "핏빛 대공 (6F 보스)",
       "piercePct": 0.3,
       "promptKey": "boss_floor_6",
@@ -575,7 +575,7 @@
       "imagePath": "assets/boss_floor_7.jpg",
       "level": 18,
       "luck": 56,
-      "maxHp": 4900,
+      "maxHp": 2900,
       "name": "망각의 묘지기 (7F 보스)",
       "piercePct": 0.4,
       "promptKey": "boss_floor_7",
@@ -616,7 +616,7 @@
       "imagePath": "assets/boss_floor_8.jpg",
       "level": 21,
       "luck": 60,
-      "maxHp": 6800,
+      "maxHp": 4800,
       "name": "타락한 기사단장 (8F 보스)",
       "piercePct": 0.45,
       "promptKey": "boss_floor_8",
@@ -658,7 +658,7 @@
       "imagePath": "assets/boss_floor_9.jpg",
       "level": 24,
       "luck": 64,
-      "maxHp": 8200,
+      "maxHp": 5200,
       "name": "미궁의 지배자 (9F 보스)",
       "piercePct": 0.5,
       "promptKey": "boss_floor_9",
@@ -694,7 +694,7 @@
     },
     "monster_abyssal_behemoth": {
       "atk": 544,
-      "def": 740,
+      "def": 540,
       "description": "심연의 밑바닥을 배회하는 거대한 마수. 그 발걸음만으로도 던전 전체가 진동합니다.",
       "id": "monster_abyssal_behemoth",
       "imagePath": "assets/monster_abyssal_behemoth_v2.jpg",
@@ -734,7 +734,7 @@
       "faction": "beast"
     },
     "monster_abyssal_fiend": {
-      "atk": 504,
+      "atk": 304,
       "def": 600,
       "description": "심연의 가장 깊은 틈새에서 소환된 고위 악마. 치명적인 독과 저주받은 손톱으로 살을 찢습니다.",
       "drainPct": 0.35,
@@ -742,7 +742,7 @@
       "imagePath": "assets/monster_abyssal_fiend_v2.jpg",
       "level": 25,
       "luck": 75,
-      "maxHp": 4000,
+      "maxHp": 3200,
       "name": "심연의 악마",
       "piercePct": 0.45,
       "promptKey": "monster_abyssal_fiend",
@@ -769,7 +769,7 @@
     },
     "monster_altar_cultist": {
       "atk": 126,
-      "def": 331,
+      "def": 231,
       "description": "공허의 침식자를 숭배하며 제단을 수호하는 타락한 사제. 파괴적인 흑염 마법을 퍼붓는다.",
       "id": "monster_altar_cultist",
       "imagePath": "assets/monster_altar_cultist.jpg",
@@ -807,8 +807,8 @@
       "faction": "corrupted"
     },
     "monster_blood_wolf": {
-      "atk": 285,
-      "def": 410,
+      "atk": 185,
+      "def": 210,
       "description": "핏빛 성역을 배회하는 흉포한 마수. 피 냄새를 맡으면 무리를 이끌고 광포화합니다.",
       "drainPct": 0.3,
       "id": "monster_blood_wolf",
@@ -845,8 +845,8 @@
       "faction": "beast"
     },
     "monster_bone_golem": {
-      "atk": 318,
-      "def": 560,
+      "atk": 218,
+      "def": 260,
       "description": "수천의 유골과 마수의 뼈가 결합되어 탄생한 거대한 뼈의 골렘. 막강한 방어력과 분쇄력을 지닙니다.",
       "id": "monster_bone_golem",
       "imagePath": "assets/monster_bone_golem_v2.jpg",
@@ -886,7 +886,7 @@
       "imagePath": "assets/monster_cave_bat.jpg",
       "level": 1,
       "luck": 7,
-      "maxHp": 60,
+      "maxHp": 160,
       "name": "동굴 흑익박쥐",
       "promptKey": "monster_cave_bat",
       "rewards": {
@@ -1008,7 +1008,7 @@
       "imagePath": "assets/monster_cursed_revenant.jpg",
       "level": 2,
       "luck": 7,
-      "maxHp": 95,
+      "maxHp": 195,
       "name": "저주받은 망자",
       "promptKey": "monster_cursed_revenant",
       "rewards": {
@@ -1090,8 +1090,8 @@
       "faction": "undead"
     },
     "monster_fallen_paladin": {
-      "atk": 440,
-      "def": 550,
+      "atk": 240,
+      "def": 250,
       "description": "심연의 저주에 굴복한 고대 성기사. 칠흑의 검과 저주받은 방패로 전열을 압박합니다.",
       "id": "monster_fallen_paladin",
       "imagePath": "assets/monster_fallen_paladin_v2.jpg",
@@ -1119,8 +1119,8 @@
       "faction": "corrupted"
     },
     "monster_fallen_priest": {
-      "atk": 282,
-      "def": 340,
+      "atk": 182,
+      "def": 240,
       "description": "심연의 어둠에 영혼을 바친 타락한 성직자. 어둠의 권능과 사악한 치유 의식을 행합니다.",
       "id": "monster_fallen_priest",
       "imagePath": "assets/monster_fallen_priest_v2.jpg",
@@ -1156,8 +1156,8 @@
       "faction": "corrupted"
     },
     "monster_inquisitor": {
-      "atk": 380,
-      "def": 520,
+      "atk": 280,
+      "def": 220,
       "description": "단죄의 성채에서 이단을 심문하던 광기의 집행관. 불타는 사슬과 화형의 불길로 적을 태웁니다.",
       "id": "monster_inquisitor",
       "imagePath": "assets/monster_inquisitor_v2.jpg",
@@ -1195,7 +1195,7 @@
       "imagePath": "assets/monster_iron_golem.jpg",
       "level": 3,
       "luck": 6,
-      "maxHp": 120,
+      "maxHp": 320,
       "name": "폐허 철제 골렘",
       "promptKey": "monster_iron_golem",
       "rewards": {
@@ -1226,7 +1226,8 @@
       ],
       "spd": 4,
       "themeColor": 9479342,
-      "type": "normal"
+      "type": "normal",
+      "faction": "construct"
     },
     "monster_mana_gargoyle": {
       "atk": 148,
@@ -1268,8 +1269,8 @@
       "faction": "construct"
     },
     "monster_mirror_phantom": {
-      "atk": 465,
-      "def": 650,
+      "atk": 365,
+      "def": 450,
       "description": "환영의 미궁에 반사된 다중 차원의 그림자 분신. 실체 없는 공격으로 적의 급소를 유린합니다.",
       "id": "monster_mirror_phantom",
       "imagePath": "assets/monster_mirror_phantom_v2.jpg",
@@ -1301,7 +1302,7 @@
     },
     "monster_monolith_guardian": {
       "atk": 203,
-      "def": 479,
+      "def": 379,
       "description": "고대 모노리스의 파편으로 기동하는 거대한 골렘. 철벽의 방패와 무거운 석퇴로 침입자를 짓밟는다.",
       "id": "monster_monolith_guardian",
       "imagePath": "assets/monster_monolith_guardian.jpg",
@@ -1341,8 +1342,8 @@
       "faction": "construct"
     },
     "monster_oblivion_ghost": {
-      "atk": 325,
-      "def": 426,
+      "atk": 225,
+      "def": 226,
       "description": "망각의 묘지에 갇힌 영혼들의 원념이 뭉쳐진 언데드 유체. 영혼을 얼어붙게 하는 한기를 내뿜습니다.",
       "id": "monster_oblivion_ghost",
       "imagePath": "assets/monster_oblivion_ghost_v2.jpg",
@@ -1418,7 +1419,7 @@
       "imagePath": "assets/monster_rot_slime.jpg",
       "level": 2,
       "luck": 5,
-      "maxHp": 66,
+      "maxHp": 166,
       "name": "부패 점액체",
       "promptKey": "monster_rot_slime",
       "rewards": {
@@ -1458,7 +1459,7 @@
       "imagePath": "assets/monster_shadow_imp.jpg",
       "level": 2,
       "luck": 8,
-      "maxHp": 88,
+      "maxHp": 188,
       "name": "그림자 악귀",
       "promptKey": "monster_shadow_imp",
       "rewards": {
@@ -1601,7 +1602,7 @@
     },
     "monster_void_stalker": {
       "atk": 510,
-      "def": 520,
+      "def": 420,
       "description": "어둠 속에서 먹잇감을 노리는 공허의 암살자. 기척을 숨기고 다가와 치명적인 일격을 가합니다.",
       "id": "monster_void_stalker",
       "imagePath": "assets/monster_void_stalker_v2.jpg",
@@ -1638,7 +1639,7 @@
       "type": "normal",
       "faction": "undead",
       "level": 4,
-      "maxHp": 88,
+      "maxHp": 188,
       "atk": 64,
       "def": 160,
       "spd": 24,
@@ -1681,7 +1682,7 @@
       "type": "normal",
       "faction": "beast",
       "level": 2,
-      "maxHp": 59,
+      "maxHp": 159,
       "atk": 34,
       "def": 180,
       "spd": 14,
@@ -1720,11 +1721,11 @@
       "type": "boss",
       "faction": "corrupted",
       "level": 600,
-      "maxHp": 45000,
-      "atk": 1250,
+      "maxHp": 450000,
+      "atk": 3250,
       "def": 1080,
-      "spd": 176,
-      "luck": 150,
+      "spd": 376,
+      "luck": 250,
       "piercePct": 0.7,
       "drainPct": 0.4,
       "shieldBreakMult": 2.5,
@@ -1772,7 +1773,7 @@
       "level": 5,
       "maxHp": 130,
       "atk": 52,
-      "def": 18,
+      "def": 180,
       "spd": 15,
       "luck": 14,
       "skills": [
@@ -1812,10 +1813,10 @@
       "faction": "beast",
       "level": 7,
       "maxHp": 275,
-      "atk": 78,
-      "def": 42,
+      "atk": 108,
+      "def": 142,
       "spd": 14,
-      "luck": 15,
+      "luck": 45,
       "skills": [
         {
           "name": "석화의 응시",
@@ -1854,9 +1855,9 @@
       "faction": "beast",
       "level": 9,
       "maxHp": 320,
-      "atk": 72,
-      "def": 32,
-      "spd": 32,
+      "atk": 172,
+      "def": 232,
+      "spd": 42,
       "luck": 18,
       "skills": [
         {
@@ -1895,9 +1896,9 @@
       "type": "normal",
       "faction": "corrupted",
       "level": 11,
-      "maxHp": 390,
-      "atk": 92,
-      "def": 36,
+      "maxHp": 1390,
+      "atk": 192,
+      "def": 260,
       "spd": 42,
       "luck": 30,
       "skills": [
@@ -1937,10 +1938,10 @@
       "type": "normal",
       "faction": "corrupted",
       "level": 14,
-      "maxHp": 430,
+      "maxHp": 1430,
       "atk": 120,
-      "def": 38,
-      "spd": 58,
+      "def": 238,
+      "spd": 110,
       "luck": 55,
       "drainPct": 0.35,
       "skills": [
@@ -1977,10 +1978,10 @@
       "type": "normal",
       "faction": "undead",
       "level": 17,
-      "maxHp": 640,
-      "atk": 130,
-      "def": 60,
-      "spd": 44,
+      "maxHp": 1640,
+      "atk": 230,
+      "def": 260,
+      "spd": 84,
       "luck": 52,
       "skills": [
         {
@@ -2019,9 +2020,9 @@
       "type": "normal",
       "faction": "corrupted",
       "level": 20,
-      "maxHp": 680,
-      "atk": 145,
-      "def": 72,
+      "maxHp": 2680,
+      "atk": 245,
+      "def": 272,
       "spd": 46,
       "luck": 58,
       "piercePct": 0.35,
@@ -2059,9 +2060,9 @@
       "type": "normal",
       "faction": "construct",
       "level": 23,
-      "maxHp": 660,
-      "atk": 175,
-      "def": 52,
+      "maxHp": 2660,
+      "atk": 375,
+      "def": 452,
       "spd": 78,
       "luck": 72,
       "piercePct": 0.45,
@@ -2098,9 +2099,9 @@
       "type": "normal",
       "faction": "corrupted",
       "level": 26,
-      "maxHp": 960,
+      "maxHp": 2960,
       "atk": 205,
-      "def": 88,
+      "def": 488,
       "spd": 68,
       "luck": 78,
       "piercePct": 0.5,
@@ -2146,126 +2147,126 @@
     "maxHp": 58600000,
     "parts": {
       "head": {
-        "id": "head",
-        "name": "네메시스 머리",
-        "position": "front",
         "archetype": "발할라 워로드 (Valhalla Warlord)",
-        "maxHp": 7600000,
         "atk": 125,
         "def": 55,
-        "spd": 14,
-        "luck": 25,
-        "icon": "💥",
         "desc": "압도적인 물리 강타와 진동 파쇄를 시전하는 전열의 파멸 머리",
+        "icon": "💥",
+        "id": "head",
+        "luck": 25,
+        "maxHp": 7600000,
+        "name": "네메시스 머리",
+        "position": "front",
         "skills": [
           {
+            "desc": "전열 대상에게 145% 물리 충격 관통 피해",
+            "icon": "⚡",
             "id": "nemesis_head_cleave",
             "name": "파멸의 쇄도",
-            "desc": "전열 대상에게 145% 물리 충격 관통 피해",
             "power": 1.45,
-            "target": "front",
-            "icon": "⚡"
+            "target": "front"
           },
           {
+            "desc": "아군 전체에게 125% 광역 물리 피해 및 2턴간 방어력 25% 파쇄",
+            "effectType": "debuff",
+            "icon": "📢",
             "id": "nemesis_head_roar",
             "name": "종말의 포효",
-            "desc": "아군 전체에게 125% 광역 물리 피해 및 2턴간 방어력 25% 파쇄",
             "power": 1.25,
-            "target": "all",
-            "effectType": "debuff",
-            "icon": "📢"
+            "target": "all"
           },
           {
+            "desc": "아군 전체에게 160% 궤멸 피해 및 2턴간 치명적인 출혈 부여",
+            "effectType": "damage",
+            "icon": "🩸",
             "id": "nemesis_head_cataclysm",
             "name": "피의 궤멸격",
-            "desc": "아군 전체에게 160% 궤멸 피해 및 2턴간 치명적인 출혈 부여",
             "power": 1.6,
-            "target": "all",
-            "effectType": "damage",
-            "icon": "🩸"
+            "target": "all"
           }
-        ]
+        ],
+        "spd": 14
       },
       "body": {
-        "id": "body",
-        "name": "네메시스 몸통",
-        "position": "mid",
         "archetype": "크로노 아콘 (Chrono Archon)",
-        "maxHp": 6000000,
         "atk": 95,
         "def": 45,
-        "spd": 11,
-        "luck": 20,
-        "icon": "🌀",
         "desc": "시공간 조작과 광역 군중 제어(CC)를 담당하는 중심 몸통",
+        "icon": "🌀",
+        "id": "body",
+        "luck": 20,
+        "maxHp": 6000000,
+        "name": "네메시스 몸통",
+        "position": "mid",
         "skills": [
           {
+            "desc": "아군 전체에게 110% 마법 피해 및 2턴간 행동 속도 30% 감속",
+            "effectType": "debuff",
+            "icon": "⏳",
             "id": "nemesis_body_timewarp",
             "name": "시간 왜곡 파동",
-            "desc": "아군 전체에게 110% 마법 피해 및 2턴간 행동 속도 30% 감속",
             "power": 1.1,
-            "target": "all",
-            "effectType": "debuff",
-            "icon": "⏳"
+            "target": "all"
           },
           {
+            "desc": "단일 대상에게 130% 마법 피해 및 1턴간 행동 불능(스턴) 부여",
+            "effectType": "debuff",
+            "icon": "🛑",
             "id": "nemesis_body_stasis",
             "name": "시공 정지 역장",
-            "desc": "단일 대상에게 130% 마법 피해 및 1턴간 행동 불능(스턴) 부여",
             "power": 1.3,
-            "target": "single",
-            "effectType": "debuff",
-            "icon": "🛑"
+            "target": "single"
           },
           {
+            "desc": "아군 전체에게 120% 마법 피해 및 마나 20 강탈",
+            "effectType": "drain",
+            "icon": "🌌",
             "id": "nemesis_body_voiddrain",
             "name": "공허 침식 폭풍",
-            "desc": "아군 전체에게 120% 마법 피해 및 마나 20 강탈",
             "power": 1.2,
-            "target": "all",
-            "effectType": "drain",
-            "icon": "🌌"
+            "target": "all"
           }
-        ]
+        ],
+        "spd": 11
       },
       "tail": {
-        "id": "tail",
-        "name": "네메시스 꼬리",
-        "position": "back",
         "archetype": "오메가 데드아이 / 레인저 (Omega Deadeye)",
-        "maxHp": 45000000,
         "atk": 140,
         "def": 35,
-        "spd": 22,
-        "luck": 45,
-        "icon": "🎯",
         "desc": "신속한 광역 휩쓸기와 급소 원샷원킬을 노리는 후열의 치명 꼬리",
+        "icon": "🎯",
+        "id": "tail",
+        "luck": 45,
+        "maxHp": 45000000,
+        "name": "네메시스 꼬리",
+        "position": "back",
         "skills": [
           {
+            "desc": "아군 전열/중열을 쓸어버리는 135% 광역 물리 피해",
+            "icon": "🌪️",
             "id": "nemesis_tail_sweep",
             "name": "차원 꼬리 휩쓸기",
-            "desc": "아군 전열/중열을 쓸어버리는 135% 광역 물리 피해",
             "power": 1.35,
-            "target": "front",
-            "icon": "🌪️"
+            "target": "front"
           },
           {
+            "desc": "단일 대상을 궤도 저격하여 280% 초치명타 관통 피해 (원샷원킬)",
+            "icon": "🎯",
             "id": "nemesis_tail_stinger",
             "name": "절멸의 종말 침",
-            "desc": "단일 대상을 궤도 저격하여 280% 초치명타 관통 피해 (원샷원킬)",
             "power": 2.8,
-            "target": "single",
-            "icon": "🎯"
+            "target": "single"
           },
           {
+            "desc": "아군 전체에게 140% 방어 무시 광역 관통타",
+            "icon": "🗡️",
             "id": "nemesis_tail_dimension_slash",
             "name": "시공 분열 연타",
-            "desc": "아군 전체에게 140% 방어 무시 광역 관통타",
             "power": 1.4,
-            "target": "all",
-            "icon": "🗡️"
+            "target": "all"
           }
-        ]
+        ],
+        "spd": 22
       }
     }
   },

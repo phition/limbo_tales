@@ -4004,21 +4004,21 @@ export class GameManager {
     }
 
     if (item.slot === 'weapon') {
-      // 1. 검 / 대검 / 도 (sword)
-      if (detectedWeapon === 'sword' || ['검', '대검', '명검', '신화검', '기사검', '결전검', '심판검', '파멸검', '마검'].some(k => baseName.includes(k))) {
+      // 1. 검 / 대검 / 도 / 도끼 (sword)
+      if (detectedWeapon === 'sword' || ['검', '대검', '명검', '신화검', '기사검', '결전검', '심판검', '파멸검', '마검', '도끼', '배틀액스', '참도끼', '전투도끼', '손도끼', '도끼창'].some(k => baseName.includes(k))) {
         if (isPriest) return false;
         return ['tank', 'berserker', 'dealer_phy'].includes(role);
       }
 
-      // 2. 창 / 해머 / 도끼 / 둔기 / 월도 (spear)
-      if (detectedWeapon === 'spear' || ['창', '장창', '기병창', '극창', '신창', '트라이던트', '해머', '망치', '메이스', '철퇴', '모닝스타', '도끼', '둔기', '월도'].some(k => baseName.includes(k))) {
+      // 2. 창 / 해머 / 망치 / 둔기 / 월도 (spear)
+      if (detectedWeapon === 'spear' || ['창', '장창', '기병창', '극창', '신창', '트라이던트', '해머', '망치', '메이스', '철퇴', '모닝스타', '둔기', '월도', '워해머'].some(k => baseName.includes(k))) {
         if (['tank', 'berserker'].includes(role) || isHolyCrusader) return true;
         return ['squire', 'paladin', 'guardian', 'aegis_valkyrie', 'fortress', 'vanguard', 'berserker', 'valhalla_blade', 'warlord', 'iron_marshal', 'crusader_lord', 'war_priest', 'aegis_bastion', 'valhalla_warlord', 'seraphic_inquisitor'].includes(classId);
       }
 
       // 3. 마총 / 총 / 포 / 속사총 / 저격총 / 분쇄포 (gun)
       const isGun = detectedWeapon === 'gun' ||
-        ['마총', '총', '포', '속사', '저격', '파멸포', '분쇄포', '라이플', '권총', '캐논'].some(k => baseName.includes(k));
+        ['마총', '총', '포', '속사', '저격', '파멸포', '분쇄포', '라이플', '권총', '캐논', '레일건'].some(k => baseName.includes(k));
       if (isGun) {
         if (isRogue) return false;
         return isGunner;
@@ -4026,15 +4026,15 @@ export class GameManager {
 
       // 4. 활 / 궁 (bow)
       const isBow = detectedWeapon === 'bow' ||
-        ['활', '궁', '장궁', '강궁', '합성궁', '대궁', '성운궁', '환영궁'].some(k => baseName.includes(k));
+        ['활', '궁', '장궁', '강궁', '합성궁', '대궁', '성운궁', '환영궁', '석궁'].some(k => baseName.includes(k));
       if (isBow) {
         if (isGunner) return false;
         return isRogue || role === 'dealer_phy';
       }
 
-      // 5. 단검 / 비수 / 낫 / 도 (dagger)
+      // 5. 단검 / 비수 / 낫 / 대낫 / 사신낫 (dagger)
       const isDagger = detectedWeapon === 'dagger' ||
-        ['단검', '비수', '낫', '사신 낫', '절단', '암살', '그림자', '유령도', '차원도', '단도'].some(k => baseName.includes(k));
+        ['단검', '비수', '낫', '사신 낫', '사신낫', '참살낫', '대낫', '절단', '암살', '그림자', '유령도', '차원도', '단도', '나이프'].some(k => baseName.includes(k));
       if (isDagger) {
         if (['dealer_phy', 'berserker'].includes(role)) return true;
         return ['rogue', 'assassin', 'shadow_stalker', 'shadow_phantom', 'duelist', 'blade_dancer', 'reaper', 'void_strider'].includes(classId);
@@ -4087,6 +4087,10 @@ export class GameManager {
     }
 
     cleanItem.equippedHeroId = undefined;
+    if (cleanItem.slot === 'weapon') {
+      if (!cleanItem.weaponType) cleanItem.weaponType = detectWeaponType(cleanItem);
+      if (!cleanItem.weaponTrait && cleanItem.weaponType) cleanItem.weaponTrait = getWeaponTrait(cleanItem.weaponType);
+    }
     sanitizeEquipmentEnchantSkills(cleanItem);
     this.recalculateItemStats(cleanItem);
 
@@ -4117,6 +4121,10 @@ export class GameManager {
 
       if (!item.stats) item.stats = {};
       if (!item.baseStats) item.baseStats = { ...item.stats };
+      if (item.slot === 'weapon') {
+        if (!item.weaponType) item.weaponType = detectWeaponType(item);
+        if (!item.weaponTrait && item.weaponType) item.weaponTrait = getWeaponTrait(item.weaponType);
+      }
       sanitizeEquipmentEnchantSkills(item);
       this.recalculateItemStats(item);
       deduplicatedInventory.push(item);
@@ -4139,6 +4147,11 @@ export class GameManager {
           if (equippedItemMap.has(eq.id)) {
             delete hero.equipment[slot];
             return;
+          }
+
+          if (eq.slot === 'weapon') {
+            if (!eq.weaponType) eq.weaponType = detectWeaponType(eq);
+            if (!eq.weaponTrait && eq.weaponType) eq.weaponTrait = getWeaponTrait(eq.weaponType);
           }
 
           let invItem = this.equipmentInventory.find(e => e.id === eq.id);
@@ -9965,212 +9978,9 @@ export class GameManager {
   }
 
   // ================= 심연의 저주받은 장비 생성 & 정화 시스템 =================
-  /** 각 층별 광폭화 보스 고유 상급/신화 장비 생성기 */
+  /** 각 층별 광폭화 보스 고유 상급/신화 장비 생성기 (1~10층 보스 유니크 세트 연동) */
   public generateBossUniqueEquipment(floor: number): EquipmentItem {
-    const f = Math.min(5, Math.max(1, floor));
-
-    const BOSS_EQUIP_POOLS: Record<number, Array<{
-      baseName: string;
-      name: string;
-      slot: EquipmentSlot;
-      rarity: 'epic' | 'legendary';
-      icon: string;
-      stats: { atk?: number; def?: number; hp?: number; mp?: number; spd?: number; luck?: number };
-      prefixId?: string;
-      suffixId?: string;
-      description: string;
-    }>> = {
-      // 1층: 침묵의 회랑 보스 전용 상급 비보
-      1: [
-        {
-          baseName: '단검',
-          name: '🗡️ [침묵의 비수]',
-          slot: 'weapon',
-          rarity: 'epic',
-          icon: '🗡️',
-          stats: { atk: 32, spd: 12, luck: 10 },
-          prefixId: 'pre_glacial',
-          description: '침묵의 회랑 수호자가 사용하던 서리빛 비수. 동결 타격 고유 스킬이 내재되어 있습니다.'
-        },
-        {
-          baseName: '목걸이',
-          name: '📿 [침묵의 회랑 목걸이]',
-          slot: 'accessory',
-          rarity: 'epic',
-          icon: '📿',
-          stats: { def: 20, hp: 153, luck: 7 },
-          suffixId: 'suf_haste',
-          description: '흑무 속에서도 착용자의 감각과 행동 속도를 비약적으로 증폭시키는 고대 목걸이.'
-        },
-        {
-          baseName: '판금 갑옷',
-          name: '🛡️ [회랑 수호자의 철벽 중갑]',
-          slot: 'armor',
-          rarity: 'epic',
-          icon: '🛡️',
-          stats: { def: 31, hp: 187, atk: 8 },
-          suffixId: 'suf_scar',
-          description: '수많은 심연의 칼날을 막아낸 회랑 수호자의 상흔 가득한 판금 갑주.'
-        }
-      ],
-      // 2층: 망령의 납골당 보스 전용 상급 비보
-      2: [
-        {
-          baseName: '검',
-          name: '⚔️ [망령 기사의 사형선고검]',
-          slot: 'weapon',
-          rarity: 'epic',
-          icon: '⚔️',
-          stats: { atk: 46, def: 15, luck: 12 },
-          prefixId: 'pre_reaper',
-          description: '타락한 망령 기사의 저주받은 대검. 적에게 입힌 대미지의 15%를 흡혈합니다.'
-        },
-        {
-          baseName: '로브',
-          name: '🥻 [납골당의 영겁 로브]',
-          slot: 'armor',
-          rarity: 'epic',
-          icon: '🥻',
-          stats: { def: 27, mp: 128, hp: 170 },
-          suffixId: 'suf_tenacity',
-          description: '원혼의 마력이 깃들어 착용자의 마나를 대폭 늘리고 불굴의 방어력을 부여합니다.'
-        },
-        {
-          baseName: '반지',
-          name: '💍 [망령 군주의 영혼 반지]',
-          slot: 'accessory',
-          rarity: 'epic',
-          icon: '💍',
-          stats: { atk: 19, mp: 94, spd: 8, luck: 8 },
-          suffixId: 'suf_arcana',
-          description: '망령들의 순수 영혼수가 응축되어 마법 위력과 치명타율을 강화하는 반지.'
-        }
-      ],
-      // 3층: 에테르 광맥 보스 전용 상급/전설 비보
-      3: [
-        {
-          baseName: '지팡이',
-          name: '🪄 [원초 광맥의 작열 스태프]',
-          slot: 'weapon',
-          rarity: 'legendary',
-          icon: '🪄',
-          stats: { atk: 53, mp: 162, spd: 12 },
-          prefixId: 'pre_blazing',
-          description: '마도 광맥의 핵으로 깎아낸 지팡이. 강력한 화염 작열탄 스킬을 시전할 수 있습니다.'
-        },
-        {
-          baseName: '창',
-          name: '🔱 [심층 광맥 관통창]',
-          slot: 'weapon',
-          rarity: 'legendary',
-          icon: '🔱',
-          stats: { atk: 55, def: 20, hp: 204 },
-          prefixId: 'pre_thunder',
-          description: '벼락의 에테르 전류가 흐르는 강철창. 적의 방패를 꿰뚫는 강력한 물리 공격력을 자랑합니다.'
-        },
-        {
-          baseName: '목걸이',
-          name: '📿 [에테르 심장 목걸이]',
-          slot: 'accessory',
-          rarity: 'legendary',
-          icon: '📿',
-          stats: { def: 29, hp: 272, mp: 76, spd: 10 },
-          suffixId: 'suf_regen',
-          description: '광맥의 생명력이 맥동하여 매 턴 착용자의 체력을 지속 재생시키는 최고급 비보.'
-        }
-      ],
-      // 4층: 심연의 균열 보스 전용 전설 비보
-      4: [
-        {
-          baseName: '마총',
-          name: '🔫 [시공 붕괴 레일건]',
-          slot: 'weapon',
-          rarity: 'legendary',
-          icon: '🔫',
-          stats: { atk: 64, spd: 19, luck: 17 },
-          prefixId: 'pre_thunder',
-          description: '시공간의 균열을 압축 발사하는 초고속 결전 마총. 높은 민첩성과 치명타를 보장합니다.'
-        },
-        {
-          baseName: '활',
-          name: '🏹 [심연 균열의 사냥활]',
-          slot: 'weapon',
-          rarity: 'legendary',
-          icon: '🏹',
-          stats: { atk: 61, spd: 15, luck: 22 },
-          prefixId: 'pre_void',
-          description: '공허의 실로 엮어낸 장궁. 적의 방어력을 20% 무시하고 치명타를 꽂아넣습니다.'
-        },
-        {
-          baseName: '로브',
-          name: '🧥 [시공 왜곡의 수호 로브]',
-          slot: 'armor',
-          rarity: 'legendary',
-          icon: '🧥',
-          stats: { def: 39, hp: 323, mp: 178, spd: 14 },
-          suffixId: 'suf_grace',
-          description: '공간 결계를 펼쳐 아군 전체의 피해를 30% 감소시키는 [천상의 방벽] 스킬이 깃든 로브.'
-        }
-      ],
-      // 5층: 원초의 제단 보스 전용 신화 비보
-      5: [
-        {
-          baseName: '검',
-          name: '👑 [심연 지배자의 종언 대검]',
-          slot: 'weapon',
-          rarity: 'legendary',
-          icon: '👑',
-          stats: { atk: 81, luck: 24, def: 24, hp: 255 },
-          prefixId: 'pre_cataclysm',
-          suffixId: 'suf_surge',
-          description: '공허 지배자가 휘두르던 종언의 무기. 파멸의 강타와 심연 방출 2종의 파괴적 스킬을 동시에 다룹니다.'
-        },
-        {
-          baseName: '반지',
-          name: '💍 [수호자의 은빛 성역 반지]',
-          slot: 'accessory',
-          rarity: 'legendary',
-          icon: '💍',
-          stats: { atk: 32, def: 32, hp: 408, mp: 153, spd: 19, luck: 15 },
-          prefixId: 'pre_holy',
-          description: '방주 태초의 성역 정수가 담긴 신화의 반지. 착용자의 방어력과 생명력을 대폭 강화합니다.'
-        },
-        {
-          baseName: '판금 갑옷',
-          name: '🛡️ [모노리스의 불멸 방벽]',
-          slot: 'armor',
-          rarity: 'legendary',
-          icon: '🛡️',
-          stats: { def: 61, hp: 578, mp: 119 },
-          suffixId: 'suf_grace',
-          description: '모노리스의 파편으로 주조된 불멸의 갑주. 착용자에게 강력한 수호의 방어력을 제공합니다.'
-        }
-      ]
-    };
-
-    const pool = BOSS_EQUIP_POOLS[f] || BOSS_EQUIP_POOLS[1];
-    const chosen = pool[Math.floor(Math.random() * pool.length)];
-
-    const item: EquipmentItem = {
-      id: `boss_unique_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      baseName: chosen.baseName,
-      name: chosen.name,
-      slot: chosen.slot,
-      level: 1,
-      rarity: chosen.rarity,
-      stats: { ...chosen.stats },
-      description: chosen.description,
-      icon: chosen.icon,
-    };
-
-    if (chosen.prefixId && PREFIX_ENCHANT_OPTIONS[chosen.prefixId]) {
-      item.prefix = PREFIX_ENCHANT_OPTIONS[chosen.prefixId];
-    }
-    if (chosen.suffixId && SUFFIX_ENCHANT_OPTIONS[chosen.suffixId]) {
-      item.suffix = SUFFIX_ENCHANT_OPTIONS[chosen.suffixId];
-    }
-
-    return corruptEquipment(sanitizeEquipmentEnchantSkills(item));
+    return generateBossUniqueEquipment(floor);
   }
 
   /**
@@ -10265,11 +10075,15 @@ export class GameManager {
   public generateCursedEquipment(floor: number): EquipmentItem {
     const baseDef = CURSED_EQUIP_BASES[Math.floor(Math.random() * CURSED_EQUIP_BASES.length)] || CURSED_EQUIP_BASES[0];
     const cursedName = `[침식된] ${baseDef.name}`;
+    const wType = baseDef.slot === 'weapon' ? (baseDef.weaponType || detectWeaponType(baseDef.name)) : undefined;
+    const wTrait = wType ? (baseDef.weaponTrait || getWeaponTrait(wType)) : undefined;
     const cursedItem: EquipmentItem = {
       id: `cursed_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       baseName: baseDef.name,
       name: cursedName,
       slot: baseDef.slot,
+      weaponType: wType,
+      weaponTrait: wTrait,
       level: 0,
       rarity: 'common',
       baseStats: { atk: 12, hp: 45 },

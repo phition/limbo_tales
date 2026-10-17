@@ -69,7 +69,7 @@ export const WEAPON_TRAITS: Record<WeaponType, WeaponTrait> = {
 /**
  * 🔍 아이템 객체, 레시피, 또는 명칭/ID로부터 무기 계열(WeaponType)을 자동 판별합니다.
  */
-export function detectWeaponType(itemOrName: { slot?: string; baseName?: string; name?: string; id?: string; weaponType?: WeaponType } | string): WeaponType | undefined {
+export function detectWeaponType(itemOrName: { slot?: string; baseName?: string; name?: string; id?: string; weaponType?: WeaponType; affinity?: string[] } | string): WeaponType | undefined {
   if (typeof itemOrName !== 'string' && itemOrName?.weaponType) {
     return itemOrName.weaponType;
   }
@@ -78,24 +78,78 @@ export function detectWeaponType(itemOrName: { slot?: string; baseName?: string;
     : `${itemOrName?.id || ''} ${itemOrName?.baseName || ''} ${itemOrName?.name || ''}`;
   
   const lower = str.toLowerCase();
-  if (lower.includes('spear') || str.includes('창') || str.includes('극창') || str.includes('장창') || str.includes('신창') || str.includes('트라이던트')) {
+
+  // 1. 🔱 창 계열 (Spear): 창, 장창, 극창, 트라이던트, 랜스 + 🔨 [망치/해머/둔기/메이스]
+  if (
+    lower.includes('spear') || lower.includes('lance') || lower.includes('trident') || lower.includes('javelin') ||
+    str.includes('창') || str.includes('극창') || str.includes('장창') || str.includes('신창') || str.includes('트라이던트') || str.includes('랜스') || str.includes('자베린') || str.includes('월도') ||
+    lower.includes('hammer') || lower.includes('maul') || lower.includes('mace') || lower.includes('warhammer') ||
+    str.includes('망치') || str.includes('해머') || str.includes('둔기') || str.includes('메이스') || str.includes('철퇴') || str.includes('모닝스타') || str.includes('워해머')
+  ) {
     return 'spear';
   }
-  if (lower.includes('dagger') || str.includes('단검') || str.includes('비수') || str.includes('단도')) {
+
+  // 2. ⚡ 단검 계열 (Dagger): 단검, 비수, 단도, 나이프 + 🌙 [낫/대낫/사신낫/참살낫]
+  if (
+    lower.includes('dagger') || lower.includes('knife') || lower.includes('dirk') ||
+    str.includes('단검') || str.includes('비수') || str.includes('단도') || str.includes('나이프') || str.includes('암기') ||
+    lower.includes('scythe') || lower.includes('kama') ||
+    str.includes('낫') || str.includes('대낫') || str.includes('사신 낫') || str.includes('사신낫') || str.includes('참살낫')
+  ) {
     return 'dagger';
   }
-  if (lower.includes('sword') || str.includes('검') || str.includes('도') || str.includes('대검') || str.includes('세이버') || str.includes('블레이드')) {
+
+  // 3. 🗡️ 검 계열 (Sword): 검, 대검, 세이버, 블레이드, 카타나 + 🪓 [도끼/배틀액스/참도끼/전투도끼]
+  if (
+    lower.includes('sword') || lower.includes('blade') || lower.includes('saber') || lower.includes('katana') || lower.includes('claymore') || lower.includes('rapier') ||
+    str.includes('검') || str.includes('도') || str.includes('대검') || str.includes('세이버') || str.includes('블레이드') || str.includes('카타나') || str.includes('환도') || str.includes('성검') || str.includes('마검') || str.includes('파멸검') || str.includes('처형검') ||
+    lower.includes('axe') || lower.includes('battleaxe') ||
+    str.includes('도끼') || str.includes('배틀액스') || str.includes('참도끼') || str.includes('전투도끼') || str.includes('도끼창') || str.includes('손도끼')
+  ) {
     return 'sword';
   }
-  if (lower.includes('bow') || str.includes('활') || str.includes('대궁') || str.includes('궁') || str.includes('장궁')) {
+
+  // 4. 🏹 활 계열 (Bow): 활, 대궁, 장궁, 궁, 석궁, 크로스보우
+  if (
+    lower.includes('bow') || lower.includes('crossbow') ||
+    str.includes('활') || str.includes('대궁') || str.includes('궁') || str.includes('장궁') || str.includes('석궁') || str.includes('강궁')
+  ) {
     return 'bow';
   }
-  if (lower.includes('gun') || str.includes('총') || str.includes('마총') || str.includes('포') || str.includes('권총') || str.includes('라이플') || str.includes('캐논')) {
+
+  // 5. 🔫 총 계열 (Gun): 총, 마총, 포, 권총, 라이플, 캐논, 분쇄포, 레일건
+  if (
+    lower.includes('gun') || lower.includes('rifle') || lower.includes('cannon') || lower.includes('musket') || lower.includes('railgun') ||
+    str.includes('총') || str.includes('마총') || str.includes('포') || str.includes('권총') || str.includes('라이플') || str.includes('캐논') || str.includes('분쇄포') || str.includes('레일건')
+  ) {
     return 'gun';
   }
-  if (lower.includes('staff') || str.includes('지팡이') || str.includes('마도봉') || str.includes('로드') || str.includes('완드')) {
+
+  // 6. 🪄 지팡이 계열 (Staff): 지팡이, 마도봉, 로드, 완드, 스태프, 성봉, 오브
+  if (
+    lower.includes('staff') || lower.includes('rod') || lower.includes('wand') || lower.includes('orb') || lower.includes('scepter') ||
+    str.includes('지팡이') || str.includes('마도봉') || str.includes('로드') || str.includes('완드') || str.includes('스태프') || str.includes('성봉') || str.includes('마법봉') || str.includes('오브')
+  ) {
     return 'staff';
   }
+
+  // 7. 🏷️ 장착 클래스(affinity)를 고려한 고유 특성 스마트 폴백
+  if (typeof itemOrName !== 'string' && itemOrName?.affinity && itemOrName.affinity.length > 0) {
+    const aff = itemOrName.affinity;
+    if (aff.includes('dealer_mag') || aff.includes('healer')) {
+      return 'staff';
+    }
+    if (aff.includes('gunner')) {
+      return 'gun';
+    }
+    if (aff.includes('rogue') || aff.includes('assassin') || aff.includes('duelist')) {
+      return 'dagger';
+    }
+    if (aff.includes('tank') || aff.includes('berserker') || aff.includes('dealer_phy')) {
+      return 'sword';
+    }
+  }
+
   return undefined;
 }
 
@@ -1107,6 +1161,8 @@ export interface BossUniqueDefinition {
   floor: number;
   baseName: string;
   slot: 'weapon' | 'armor' | 'accessory';
+  weaponType?: WeaponType;
+  weaponTrait?: WeaponTrait;
   stats: {
     atk?: number;
     def?: number;
@@ -1127,8 +1183,10 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 1,
       baseName: '감시자의 심안 대검',
       slot: 'weapon',
+      weaponType: 'sword',
+      weaponTrait: WEAPON_TRAITS.sword,
       stats: { atk: 10, luck: 4 },
-      description: '1F 보스 [침묵의 감시자]의 예리한 시선이 깃든 고유 대검.',
+      description: '1F 보스 [침묵의 감시자]의 예리한 시선이 깃든 고유 대검. [🗡️ 베기] 특성으로 기본 공격 시 출혈을 부여합니다.',
       icon: '🗡️',
       affinity: ['tank', 'berserker', 'dealer_phy']
     },
@@ -1159,10 +1217,12 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 2,
       baseName: '영혼 수확자의 사신 낫',
       slot: 'weapon',
+      weaponType: 'dagger',
+      weaponTrait: WEAPON_TRAITS.dagger,
       stats: { atk: 15, mp: 21, luck: 6 },
-      description: '2F 보스 [망령의 군주]가 수많은 원혼을 베어 넘기던 전설의 낫.',
+      description: '2F 보스 [망령의 군주]가 수많은 원혼을 베어 넘기던 전설의 낫. [⚡ 암습] 특성으로 적보다 속도가 빠를수록 피해량이 최대 20% 증폭됩니다.',
       icon: '⚔️',
-      affinity: ['dealer_phy', 'berserker', 'gunner']
+      affinity: ['dealer_phy', 'berserker', 'rogue', 'assassin']
     },
     {
       id: 'boss_uniq_2_arm',
@@ -1191,8 +1251,10 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 3,
       baseName: '광맥 파쇄 대형 해머',
       slot: 'weapon',
+      weaponType: 'spear',
+      weaponTrait: WEAPON_TRAITS.spear,
       stats: { atk: 22, def: 8 },
-      description: '3F 보스 [원초의 골렘]의 거암을 깎아 만든 묵직한 파쇄 망치.',
+      description: '3F 보스 [원초의 골렘]의 거암을 깎아 만든 묵직한 파쇄 망치. [🔱 방어 파쇄] 특성으로 적의 보호막에 50% 추가 피해를 입힙니다.',
       icon: '🔨',
       affinity: ['tank', 'berserker', 'dealer_phy']
     },
@@ -1223,8 +1285,10 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 4,
       baseName: '시공 왜곡의 비전 지팡이',
       slot: 'weapon',
+      weaponType: 'staff',
+      weaponTrait: WEAPON_TRAITS.staff,
       stats: { atk: 26, mp: 55, spd: 5, luck: 5 },
-      description: '4F 보스 [심연의 시공 왜곡자]가 시공간 균열을 개방하고 비전 마력을 방출하던 고유 지팡이.',
+      description: '4F 보스 [심연의 시공 왜곡자]가 시공간 균열을 개방하고 비전 마력을 방출하던 고유 지팡이. [🪄 마력 공명] 특성으로 스킬 MP 소모량을 5% 절감합니다.',
       icon: '🪄',
       affinity: ['dealer_mag', 'healer']
     },
@@ -1255,8 +1319,10 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 5,
       baseName: '모노리스 공허 분쇄포',
       slot: 'weapon',
+      weaponType: 'gun',
+      weaponTrait: WEAPON_TRAITS.gun,
       stats: { atk: 41, luck: 10, mp: 34 },
-      description: '5F 보스 [공허의 지배자]의 모노리스 파편을 포신으로 개조한 결전포.',
+      description: '5F 보스 [공허의 지배자]의 모노리스 파편을 포신으로 개조한 결전포. [🔫 연사] 특성으로 행운 비례 추가 점사 탄환을 격발합니다.',
       icon: '🔫',
       affinity: ['gunner', 'dealer_phy']
     },
@@ -1287,8 +1353,10 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 6,
       baseName: '진홍 군주의 흡혈 마검',
       slot: 'weapon',
+      weaponType: 'sword',
+      weaponTrait: WEAPON_TRAITS.sword,
       stats: { atk: 53, luck: 13, mp: 26 },
-      description: '6F 보스 [핏빛 성역의 지배자]가 피의 갈증을 채우던 진홍빛 고유 마검.',
+      description: '6F 보스 [핏빛 성역의 지배자]가 피의 갈증을 채우던 진홍빛 고유 마검. [🗡️ 베기] 특성으로 기본 공격 시 출혈을 부여합니다.',
       icon: '🗡️',
       affinity: ['berserker', 'dealer_phy', 'tank']
     },
@@ -1319,10 +1387,12 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 7,
       baseName: '망각 묘지기의 영혼 참살낫',
       slot: 'weapon',
+      weaponType: 'dagger',
+      weaponTrait: WEAPON_TRAITS.dagger,
       stats: { atk: 66, spd: 10, luck: 14 },
-      description: '7F 보스 [망각의 묘지기]가 원혼들의 육신과 영혼을 영구 절단하던 사신의 낫.',
+      description: '7F 보스 [망각의 묘지기]가 원혼들의 육신과 영혼을 영구 절단하던 사신의 낫. [⚡ 암습] 특성으로 적보다 속도가 빠를수록 피해량이 최대 20% 증폭됩니다.',
       icon: '⚔️',
-      affinity: ['dealer_phy', 'gunner', 'berserker']
+      affinity: ['dealer_phy', 'berserker', 'rogue', 'assassin']
     },
     {
       id: 'boss_uniq_7_arm',
@@ -1351,8 +1421,10 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 8,
       baseName: '타락 기사단장의 단죄 성검',
       slot: 'weapon',
+      weaponType: 'sword',
+      weaponTrait: WEAPON_TRAITS.sword,
       stats: { atk: 82, def: 21, luck: 13 },
-      description: '8F 보스 [타락한 성기사단장]이 단죄의 요새를 호령하던 불패의 성검.',
+      description: '8F 보스 [타락한 성기사단장]이 단죄의 요새를 호령하던 불패의 성검. [🗡️ 베기] 특성으로 기본 공격 시 출혈을 부여합니다.',
       icon: '⚔️',
       affinity: ['tank', 'dealer_phy', 'berserker']
     },
@@ -1383,8 +1455,10 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 9,
       baseName: '만화경 환영의 차원 마도봉',
       slot: 'weapon',
+      weaponType: 'staff',
+      weaponTrait: WEAPON_TRAITS.staff,
       stats: { atk: 98, mp: 68, spd: 13 },
-      description: '9F 보스 [거울 미궁의 지배자]의 환영 차원을 현실로 투영하는 신비로운 마도봉.',
+      description: '9F 보스 [거울 미궁의 지배자]의 환영 차원을 현실로 투영하는 신비로운 마도봉. [🪄 마력 공명] 특성으로 스킬 MP 소모량을 5% 절감합니다.',
       icon: '🪄',
       affinity: ['dealer_mag', 'healer']
     },
@@ -1415,8 +1489,10 @@ export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
       floor: 10,
       baseName: '종말의 심연 파멸검',
       slot: 'weapon',
+      weaponType: 'sword',
+      weaponTrait: WEAPON_TRAITS.sword,
       stats: { atk: 122, luck: 17, mp: 85, spd: 15 },
-      description: '10F 보스 [심연의 군주 아스모데우스]가 세계의 종말을 집행하던 신화 파멸검.',
+      description: '10F 보스 [심연의 군주 아스모데우스]가 세계의 종말을 집행하던 신화 파멸검. [🗡️ 베기] 특성으로 기본 공격 시 출혈을 부여합니다.',
       icon: '🪐',
       affinity: ['tank', 'dealer_phy', 'berserker', 'dealer_mag', 'gunner']
     },
@@ -1655,12 +1731,17 @@ export function generateBossUniqueEquipment(floor: number): EquipmentItem {
 
   const setBonus = BOSS_SET_BONUSES[f];
 
+  const wType = chosen.slot === 'weapon' ? (chosen.weaponType || detectWeaponType(chosen)) : undefined;
+  const wTrait = wType ? (chosen.weaponTrait || getWeaponTrait(wType)) : undefined;
+
   const createdItem: EquipmentItem = {
     id: `equip_unique_${f}_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
     templateId: chosen.id,
     baseName: chosen.baseName,
     name: fullName,
     slot: chosen.slot,
+    weaponType: wType,
+    weaponTrait: wTrait,
     level: 0,
     rarity: 'unique',
     baseStats: { ...chosen.stats },
@@ -1903,16 +1984,18 @@ export interface CursedBaseDef {
   name: string;
   slot: EquipmentSlot;
   icon: string;
+  weaponType?: WeaponType;
+  weaponTrait?: WeaponTrait;
   affinity?: string[];
 }
 
 export const CURSED_EQUIP_BASES: CursedBaseDef[] = [
-  { key: 'sword', name: '검', slot: 'weapon', icon: '⚔️', affinity: ['tank', 'berserker', 'dealer_phy'] },
-  { key: 'spear', name: '창', slot: 'weapon', icon: '🔱', affinity: ['tank', 'berserker', 'dealer_phy'] },
-  { key: 'gun', name: '마총', slot: 'weapon', icon: '🔫', affinity: ['gunner', 'dealer_phy'] },
-  { key: 'bow', name: '활', slot: 'weapon', icon: '🏹', affinity: ['gunner', 'dealer_phy'] },
-  { key: 'staff', name: '지팡이', slot: 'weapon', icon: '🪄', affinity: ['dealer_mag', 'healer'] },
-  { key: 'dagger', name: '단검', slot: 'weapon', icon: '🗡️', affinity: ['dealer_phy', 'berserker'] },
+  { key: 'sword', name: '검', slot: 'weapon', icon: '⚔️', weaponType: 'sword', weaponTrait: WEAPON_TRAITS.sword, affinity: ['tank', 'berserker', 'dealer_phy'] },
+  { key: 'spear', name: '창', slot: 'weapon', icon: '🔱', weaponType: 'spear', weaponTrait: WEAPON_TRAITS.spear, affinity: ['tank', 'berserker', 'dealer_phy'] },
+  { key: 'gun', name: '마총', slot: 'weapon', icon: '🔫', weaponType: 'gun', weaponTrait: WEAPON_TRAITS.gun, affinity: ['gunner', 'dealer_phy'] },
+  { key: 'bow', name: '활', slot: 'weapon', icon: '🏹', weaponType: 'bow', weaponTrait: WEAPON_TRAITS.bow, affinity: ['gunner', 'dealer_phy'] },
+  { key: 'staff', name: '지팡이', slot: 'weapon', icon: '🪄', weaponType: 'staff', weaponTrait: WEAPON_TRAITS.staff, affinity: ['dealer_mag', 'healer'] },
+  { key: 'dagger', name: '단검', slot: 'weapon', icon: '🗡️', weaponType: 'dagger', weaponTrait: WEAPON_TRAITS.dagger, affinity: ['dealer_phy', 'berserker'] },
   { key: 'leather_armor', name: '가죽 갑옷', slot: 'armor', icon: '🧥', affinity: ['dealer_phy', 'gunner', 'healer', 'berserker'] },
   { key: 'plate_armor', name: '판금 갑옷', slot: 'armor', icon: '🛡️', affinity: ['tank', 'berserker'] },
   { key: 'robe', name: '로브', slot: 'armor', icon: '🔮', affinity: ['dealer_mag', 'healer'] },
@@ -1929,6 +2012,12 @@ export const CURSED_EQUIP_BASES: CursedBaseDef[] = [
  */
 export function corruptEquipment(item: EquipmentItem): EquipmentItem {
   if (!item) return item;
+
+  // 무기 고유 특성 보존 및 자동 감지 부여
+  if (item.slot === 'weapon') {
+    if (!item.weaponType) item.weaponType = detectWeaponType(item);
+    if (!item.weaponTrait && item.weaponType) item.weaponTrait = getWeaponTrait(item.weaponType);
+  }
 
   // 이미 침식된 장비라면 그대로 반환
   if (item.isCorrupted) return item;
@@ -1957,6 +2046,10 @@ export function corruptEquipment(item: EquipmentItem): EquipmentItem {
  */
 export function purifyCorruptedEquipment(item: EquipmentItem): EquipmentItem {
   if (!item) return item;
+
+  // 무기 고유 특성 보존 및 자동 감지 부여
+  const wType = item.slot === 'weapon' ? (item.weaponType || detectWeaponType(item)) : undefined;
+  const wTrait = wType ? (item.weaponTrait || getWeaponTrait(wType)) : undefined;
 
   // 1. [침식된], [저주받은] 등 접두어 완벽 제거하여 순정 명칭으로 복원
   const pureName = item.name.replace(/^\[(침식된|저주받은|정화된)\]\s*/, '').trim();
@@ -2000,6 +2093,8 @@ export function purifyCorruptedEquipment(item: EquipmentItem): EquipmentItem {
   return {
     ...item,
     name: pureName,
+    weaponType: wType,
+    weaponTrait: wTrait,
     isCorrupted: false,
     isUnpurified: false,
     isCursed: false,
