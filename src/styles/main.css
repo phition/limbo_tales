@@ -803,3 +803,25 @@ html[data-lang="ja"] .badge {
   animation: goldShimmer 6s ease infinite;
 }
 
+/* ─── 방명록 티커 전광판 좌측 연속 흐름 애니메이션 ─────────────────────── */
+@keyframes tickerMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-ticker-marquee {
+  display: flex;
+  width: max-content;
+  animation: tickerMarquee var(--marquee-dur, 24s) linear infinite;
+  will-change: transform;
+}
+
+.animate-ticker-marquee:hover {
+  animation-play-state: paused;
+}
+
+

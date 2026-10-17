@@ -105,6 +105,8 @@ export const GuestbookModal: React.FC<Props> = ({
       open={open}
       onClose={onClose}
       title="📋 방주 지휘관 방명록 (게시판)"
+      maxWidth="w-[96vw] max-w-[560px] sm:max-w-[640px] md:max-w-[740px]"
+      maxHeight="h-[88vh] max-h-[88dvh]"
       footer={
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
@@ -128,7 +130,7 @@ export const GuestbookModal: React.FC<Props> = ({
         </div>
       }
     >
-      <div className="flex flex-col gap-3 max-h-[75vh] overflow-hidden">
+      <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-hidden">
         {/* 상단 100자 글쓰기 카드 (익명 지휘관은 작성 불가 안내) */}
         {isAnonymous ? (
           <div className="p-3 rounded-xl bg-[#1a1424] border border-[#ab47bc44] flex items-center gap-3 shrink-0 shadow-sm animate-fade-in">
@@ -153,7 +155,7 @@ export const GuestbookModal: React.FC<Props> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <span className="text-xs">🎖️</span>
-                <span className="text-xs font-bold text-[#00d2ff] truncate max-w-[160px]">
+                <span className="text-xs sm:text-sm font-bold text-[#00d2ff] truncate max-w-[200px]">
                   {currentNick}
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">지휘관님의 방명록 한마디</span>
@@ -209,8 +211,8 @@ export const GuestbookModal: React.FC<Props> = ({
           </form>
         )}
 
-        {/* 게시글 목록 (새 글이 항상 위로 올라오도록 정렬, 10개씩 페이징) */}
-        <div className="flex-1 overflow-y-auto min-h-[240px] max-h-[350px] flex flex-col gap-1.5 pr-1">
+        {/* 게시글 목록 (새 글이 항상 위로 올라오도록 정렬, 10개씩 페이징, 상하 확장) */}
+        <div className="flex-1 overflow-y-auto min-h-0 flex flex-col gap-2 pr-1 custom-scrollbar">
           {pageMessages.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[#8b9bb4] gap-2">
               <span className="text-3xl">💬</span>
@@ -221,13 +223,13 @@ export const GuestbookModal: React.FC<Props> = ({
             pageMessages.map((msg) => (
               <div
                 key={msg.id}
-                className="p-2.5 rounded-xl bg-[#0c121e] border border-[#1b2537] hover:border-[#00d2ff55] flex items-center justify-between gap-2.5 transition-all shadow-xs"
+                className="p-3 rounded-xl bg-[#0c121e] border border-[#1b2537] hover:border-[#00d2ff55] flex items-center justify-between gap-2.5 sm:gap-3.5 transition-all shadow-xs"
               >
                 {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) */}
-                <div className="flex items-center gap-1 shrink-0 w-[88px] sm:w-[110px]">
+                <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px]">
                   <span className="text-xs">🎖️</span>
                   <span
-                    className="text-xs font-bold text-[#00d2ff] truncate block"
+                    className="text-xs sm:text-sm font-bold text-[#00d2ff] truncate block"
                     title={msg.authorName}
                   >
                     {msg.authorName}
@@ -235,12 +237,12 @@ export const GuestbookModal: React.FC<Props> = ({
                 </div>
 
                 {/* 2. 중앙: 본문 내용 (최대 100자) */}
-                <div className="flex-1 min-w-0 text-xs text-[#cfd8dc] break-words whitespace-pre-wrap leading-relaxed">
+                <div className="flex-1 min-w-0 text-xs sm:text-[13px] text-[#cfd8dc] break-words whitespace-pre-wrap leading-relaxed">
                   {msg.content}
                 </div>
 
                 {/* 3. 글 끝: 등록 날짜와 시간 스탬프 (작게 표시) */}
-                <div className="shrink-0 text-[10px] text-[#8b9bb4] font-mono whitespace-nowrap text-right ml-1">
+                <div className="shrink-0 text-[10px] sm:text-[11px] text-[#8b9bb4] font-mono whitespace-nowrap text-right ml-1">
                   {formatTimestamp(msg.createdAt)}
                 </div>
               </div>
