@@ -1644,7 +1644,6 @@ const EquipmentOverlay: React.FC<{
               const heroEquips = Object.values(hero.equipment || {}).filter(Boolean);
               const matchingCount = heroEquips.filter(e => resolveEquipmentBossFloor(e) === itemFloor).length;
               const isFull = matchingCount >= 3;
-              const isTwoActive = matchingCount >= 2;
 
               return (
                 <div className="p-2.5 rounded-xl bg-gradient-to-r from-[#201608] to-[#121927] border border-[#ffd54f55] flex flex-col gap-1.5 shadow-md">
@@ -1656,30 +1655,13 @@ const EquipmentOverlay: React.FC<{
                     <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${
                       isFull 
                         ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55]' 
-                        : isTwoActive 
-                        ? 'bg-[#ffd54f33] text-[#ffd54f] border border-[#ffd54f88]' 
                         : 'bg-[#37474f44] text-[#90a4ae]'
                     }`}>
-                      {isFull ? '✨ 3/3 풀세트 완성' : isTwoActive ? '⚡ 2/3 세트 효과 활성' : `(${matchingCount}/3 세트 장착 중)`}
+                      {isFull ? '✨ 3/3 풀세트 완성!' : `(${matchingCount}/3 세트 장착 중)`}
                     </span>
                   </div>
-                  <div className="text-[11px] flex flex-col gap-1 mt-0.5">
-                    <div className={`p-1.5 rounded text-[10px] leading-tight flex items-start gap-1 ${
-                      isTwoActive 
-                        ? 'bg-[#38ef7d15] text-[#b9f6ca] border border-[#38ef7d33]' 
-                        : 'bg-[#1e293b44] text-[#90a4ae] border border-[#33415533]'
-                    }`}>
-                      <span className={`font-bold shrink-0 ${isTwoActive ? 'text-[#38ef7d]' : 'text-[#78909c]'}`}>[2세트]</span>
-                      <span>{setBonusDef.twoPieceDesc}</span>
-                    </div>
-                    <div className={`p-1.5 rounded text-[10px] leading-tight flex items-start gap-1 ${
-                      isFull 
-                        ? 'bg-[#ffd54f15] text-[#ffe082] border border-[#ffd54f33]' 
-                        : 'bg-[#1e293b44] text-[#607d8b] border border-[#33415533]'
-                    }`}>
-                      <span className={`font-bold shrink-0 ${isFull ? 'text-[#ffd54f]' : 'text-[#546e7a]'}`}>[3세트]</span>
-                      <span>{setBonusDef.threePieceDesc}</span>
-                    </div>
+                  <div className="text-[11px] text-[#ffecb3] leading-relaxed">
+                    {setBonusDef.description}
                   </div>
                 </div>
               );

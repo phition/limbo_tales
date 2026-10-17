@@ -207,35 +207,19 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
           {(() => {
             const bossSet = getHeroEquippedBossSet(hero);
             if (!bossSet) return null;
-            const isFull = bossSet.count >= 3;
             return (
-              <div className="mt-1 p-2 rounded-lg bg-gradient-to-r from-[#2a1b08] to-[#121c2d] border border-[#ffd54f88] flex flex-col gap-1 shadow-md">
+              <div className="mt-1 p-2 rounded-lg bg-gradient-to-r from-[#2a1b08] to-[#121c2d] border border-[#ffd54f88] flex flex-col gap-0.5 shadow-md">
                 <div className="flex items-center justify-between text-xs font-bold text-[#ffd54f]">
                   <span className="flex items-center gap-1.5">
                     <span>👑</span>
-                    <span>{bossSet.setName} ({bossSet.count}/3 세트)</span>
+                    <span>{bossSet.setName} (3/3 풀세트 완성)</span>
                   </span>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded border font-mono font-bold ${
-                    isFull 
-                      ? 'text-[#38ef7d] bg-[#38ef7d22] border-[#38ef7d44]' 
-                      : 'text-[#ffd54f] bg-[#ffd54f22] border-[#ffd54f44]'
-                  }`}>
-                    {isFull ? '✨ 3/3 풀세트 완성' : '⚡ 2/3 세트 효과 활성'}
+                  <span className="text-[10px] text-[#38ef7d] bg-[#38ef7d22] px-1.5 py-0.5 rounded border border-[#38ef7d44] font-mono font-bold">
+                    ✨ 풀세트 효과 적용 중
                   </span>
                 </div>
-                <div className="text-[10px] flex flex-col gap-1 mt-0.5">
-                  <div className="flex items-start gap-1.5 text-[#b9f6ca] bg-[#38ef7d15] p-1 rounded border border-[#38ef7d25]">
-                    <span className="text-[#38ef7d] font-bold shrink-0">[2세트]</span>
-                    <span className="leading-tight">{bossSet.twoPieceDesc}</span>
-                  </div>
-                  <div className={`flex items-start gap-1.5 p-1 rounded border ${
-                    isFull 
-                      ? 'text-[#ffe082] bg-[#ffd54f15] border-[#ffd54f35]' 
-                      : 'text-[#78909c] bg-[#1e293b44] border-[#33415533]'
-                  }`}>
-                    <span className={`font-bold shrink-0 ${isFull ? 'text-[#ffd54f]' : 'text-[#546e7a]'}`}>[3세트]</span>
-                    <span className="leading-tight">{bossSet.threePieceDesc}</span>
-                  </div>
+                <div className="text-[10px] text-[#ffe082] leading-tight mt-0.5">
+                  {bossSet.description}
                 </div>
               </div>
             );

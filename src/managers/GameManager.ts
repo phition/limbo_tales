@@ -3829,70 +3829,34 @@ export class GameManager {
       maxHp += codex.allStatsBonus;
       maxMp += codex.allStatsBonus;
     }
-    // 6. 👑 보스 유니크 세트 보너스 적용 (2세트 고유 효과 & 3세트 풀세트 추가 증폭)
+    // 6. 👑 보스 유니크 3세트 완성 특별 세트 보너스 적용
     const bossSet = getHeroEquippedBossSet(hero);
     if (bossSet) {
-      // 🌿 [2세트 효과] - 2피스 이상 장착 시 상시 발동
-      if (bossSet.floor === 1) {
-        def = Math.floor(def * 1.10);
-        luck += 5;
-      } else if (bossSet.floor === 2) {
-        drainPercent += 6;
-      } else if (bossSet.floor === 3) {
+      if (bossSet.effectType === 'buff_def_crit') {
         def = Math.floor(def * 1.15);
-        maxHp = Math.floor(maxHp * 1.10);
-      } else if (bossSet.floor === 4) {
-        spd = Math.floor(spd * 1.10);
-      } else if (bossSet.floor === 5) {
-        damageBonus += 10;
-        defPenetration += 10;
-      } else if (bossSet.floor === 6) {
-        atk = Math.floor(atk * 1.15);
-      } else if (bossSet.floor === 7) {
-        atk = Math.floor(atk * 1.15);
         luck += 10;
-      } else if (bossSet.floor === 8) {
-        def = Math.floor(def * 1.10);
-      } else if (bossSet.floor === 9) {
-        spd = Math.floor(spd * 1.05);
-      } else if (bossSet.floor === 10) {
-        atk = Math.floor(atk * 1.15);
-        def = Math.floor(def * 1.15);
-        spd = Math.floor(spd * 1.15);
-        luck = Math.floor(luck * 1.15);
-        maxHp = Math.floor(maxHp * 1.15);
-        maxMp = Math.floor(maxMp * 1.15);
-      }
-
-      // 👑 [3세트 풀세트 추가 효과] - 3피스 장착 시 완성 보너스 가산
-      if (bossSet.count >= 3) {
-        if (bossSet.effectType === 'buff_def_crit') {
-          def = Math.floor(def * 1.15);
-          luck += 10;
-        } else if (bossSet.effectType === 'vampirism') {
-          drainPercent += 6;
-        } else if (bossSet.effectType === 'mana_regen_spd') {
-          spd = Math.floor(spd * 1.20);
-        } else if (bossSet.effectType === 'skill_dmg_pen') {
-          damageBonus += 25;
-          defPenetration += 20;
-        } else if (bossSet.effectType === 'bloodlust') {
-          if (hero.currentHp <= hero.maxHp * 0.5) {
-            atk = Math.floor(atk * 1.35);
-            drainPercent += 20;
-          }
-        } else if (bossSet.effectType === 'dmg_reduction') {
-          def = Math.floor(def * 1.20);
-        } else if (bossSet.effectType === 'evade_chance') {
-          spd = Math.floor(spd * 1.15);
-        } else if (bossSet.effectType === 'asmodeus_wrath') {
-          atk = Math.floor(atk * 1.15);
-          def = Math.floor(def * 1.15);
-          spd = Math.floor(spd * 1.15);
-          luck = Math.floor(luck * 1.15);
-          maxHp = Math.floor(maxHp * 1.15);
-          maxMp = Math.floor(maxMp * 1.15);
+      } else if (bossSet.effectType === 'vampirism') {
+        drainPercent += 12;
+      } else if (bossSet.effectType === 'mana_regen_spd') {
+        spd = Math.floor(spd * 1.20);
+      } else if (bossSet.effectType === 'skill_dmg_pen') {
+        damageBonus += 25;
+        defPenetration += 20;
+      } else if (bossSet.effectType === 'bloodlust') {
+        if (hero.currentHp <= hero.maxHp * 0.5) {
+          atk = Math.floor(atk * 1.35);
+          drainPercent += 20;
         }
+      } else if (bossSet.effectType === 'dmg_reduction') {
+        def = Math.floor(def * 1.20);
+      } else if (bossSet.effectType === 'asmodeus_wrath') {
+        // 10층 종말의 심연군주 세트 효과: 올스탯 +10%
+        atk = Math.floor(atk * 1.10);
+        def = Math.floor(def * 1.10);
+        spd = Math.floor(spd * 1.10);
+        luck = Math.floor(luck * 1.10);
+        maxHp = Math.floor(maxHp * 1.10);
+        maxMp = Math.floor(maxMp * 1.10);
       }
     }
 
