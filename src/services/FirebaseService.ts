@@ -9,10 +9,11 @@ import {
   signInWithPopup,
   User
 } from 'firebase/auth';
-import { ref, set, get, child, update, query, limitToLast, orderByChild } from 'firebase/database';
+import { ref, set, get, child, update, query, limitToLast, orderByChild, onValue, runTransaction, Unsubscribe } from 'firebase/database';
 import { auth, db } from './firebaseConfig';
 import { ArenaOpponent, Mercenary } from '../types/game';
 import { CHARACTER_CLASSES } from '../data/classes';
+import { NEMESIS_BOSS_CONFIG, NEMESIS_CYCLE_CONSTANTS } from '../data/nemesis';
 import { Capacitor } from '@capacitor/core';
 
 /**
@@ -906,4 +907,194 @@ export class FirebaseService {
 
     return opponents;
   }
+
+  /**
+   * 🌌 월드 보스: 네메시스 실시간 동기화 리스너 등록
+   * 모든 지휘관이 공유하는 네메시스 전체 체력, 부위별 체력, 6시간 요격 윈도우 정보를 실시간 수신
+   */
+  public subscribeNemesisWorldBoss(callback: (bossData: WorldBossNemesisData) => void): Unsubscribe {
+    const bossRef = ref(db, 'world_boss/nemesis');
+    return onValue(bossRef, (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val() as WorldBossNemesisData);
+      } else {
+        // 데이터가 아직 없으면 최초 기본값으로 초기화
+        this.initNemesisWorldBoss().then((initialData) => {
+          if (initialData) callback(initialData);
+        }).catch(() => {});
+      }
+    }, (err) => {
+      console.warn('[Firebase RTDB] Nemesis world boss listen error:', err);
+    });
+  }
+
+  /**
+   * 🌌 월드 보스: 네메시스 데이터 초기 생성 또는 조회
+   */
+  public async initNemesisWorldBoss(): Promise<WorldBossNemesisData> {
+    const bossRef = ref(db, 'world_boss/nemesis');
+    try {
+      const snapshot = await get(bossRef);
+      if (snapshot.exists()) {
+        return snapshot.val() as WorldBossNemesisData;
+      }
+    } catch (_) {}
+
+    const now = Date.now();
+    const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
+    const bodyCfg = NEMESIS_BOSS_CONFIG.parts.body;
+    const tailCfg = NEMESIS_BOSS_CONFIG.parts.tail;
+    const totalMaxHp = NEMESIS_BOSS_CONFIG.maxHp;
+
+    const initialData: WorldBossNemesisData = {
+      currentBossHp: totalMaxHp,
+      maxBossHp: totalMaxHp,
+      parts: {
+        head: { id: 'head', name: headCfg.name, position: 'front', currentHp: headCfg.maxHp, maxHp: headCfg.maxHp, isDefeated: false },
+        body: { id: 'body', name: bodyCfg.name, position: 'mid', currentHp: bodyCfg.maxHp, maxHp: bodyCfg.maxHp, isDefeated: false },
+        tail: { id: 'tail', name: tailCfg.name, position: 'back', currentHp: tailCfg.maxHp, maxHp: tailCfg.maxHp, isDefeated: false }
+      },
+      phase: 1,
+      cycleStartTime: now,
+      lastPlunderCheckTime: now,
+      windowStartHp: totalMaxHp,
+      isDefeated: false,
+      updatedAt: now,
+      lastAttackerNickname: '성채 수호대'
+    };
+
+    try {
+      await set(bossRef, initialData);
+    } catch (e) {
+      console.warn('[Firebase RTDB] Init Nemesis World Boss failed:', e);
+    }
+    return initialData;
+  }
+
+  /**
+   * 🌌 월드 보스: 토벌 피해량 원자적(Atomic) 반영 (모든 지휘관 공유)
+   */
+  public async recordNemesisWorldBossDamage(
+    totalDmg: number,
+    partDamages: { head?: number; body?: number; tail?: number } = {},
+    attackerNickname: string = '지휘관'
+  ): Promise<WorldBossNemesisData | null> {
+    const bossRef = ref(db, 'world_boss/nemesis');
+
+    try {
+      const result = await runTransaction(bossRef, (currentData: WorldBossNemesisData | null) => {
+        const now = Date.now();
+        const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
+        const bodyCfg = NEMESIS_BOSS_CONFIG.parts.body;
+        const tailCfg = NEMESIS_BOSS_CONFIG.parts.tail;
+        const totalMaxHp = NEMESIS_BOSS_CONFIG.maxHp;
+
+        if (!currentData) {
+          currentData = {
+            currentBossHp: totalMaxHp,
+            maxBossHp: totalMaxHp,
+            parts: {
+              head: { id: 'head', name: headCfg.name, position: 'front', currentHp: headCfg.maxHp, maxHp: headCfg.maxHp, isDefeated: false },
+              body: { id: 'body', name: bodyCfg.name, position: 'mid', currentHp: bodyCfg.maxHp, maxHp: bodyCfg.maxHp, isDefeated: false },
+              tail: { id: 'tail', name: tailCfg.name, position: 'back', currentHp: tailCfg.maxHp, maxHp: tailCfg.maxHp, isDefeated: false }
+            },
+            phase: 1,
+            cycleStartTime: now,
+            lastPlunderCheckTime: now,
+            windowStartHp: totalMaxHp,
+            isDefeated: false,
+            updatedAt: now,
+            lastAttackerNickname: attackerNickname
+          };
+        }
+
+        // 7일 사이클 만료 검사 ➔ 보스 재소환 및 리셋
+        if (now - (currentData.cycleStartTime || now) >= NEMESIS_CYCLE_CONSTANTS.TOTAL_CYCLE_MS) {
+          const cyclesToAdvance = Math.floor((now - currentData.cycleStartTime) / NEMESIS_CYCLE_CONSTANTS.TOTAL_CYCLE_MS);
+          currentData.cycleStartTime += cyclesToAdvance * NEMESIS_CYCLE_CONSTANTS.TOTAL_CYCLE_MS;
+          currentData.parts = {
+            head: { id: 'head', name: headCfg.name, position: 'front', currentHp: headCfg.maxHp, maxHp: headCfg.maxHp, isDefeated: false },
+            body: { id: 'body', name: bodyCfg.name, position: 'mid', currentHp: bodyCfg.maxHp, maxHp: bodyCfg.maxHp, isDefeated: false },
+            tail: { id: 'tail', name: tailCfg.name, position: 'back', currentHp: tailCfg.maxHp, maxHp: tailCfg.maxHp, isDefeated: false }
+          };
+          currentData.maxBossHp = totalMaxHp;
+          currentData.currentBossHp = totalMaxHp;
+          currentData.windowStartHp = totalMaxHp;
+          currentData.phase = 1;
+          currentData.isDefeated = false;
+        }
+
+        // 6시간 주기 만료 검사 ➔ 요격 윈도우 갱신
+        const lastPlunder = currentData.lastPlunderCheckTime || currentData.cycleStartTime || now;
+        if (now - lastPlunder >= NEMESIS_CYCLE_CONSTANTS.PLUNDER_INTERVAL_MS) {
+          const intervals = Math.floor((now - lastPlunder) / NEMESIS_CYCLE_CONSTANTS.PLUNDER_INTERVAL_MS);
+          currentData.lastPlunderCheckTime = lastPlunder + intervals * NEMESIS_CYCLE_CONSTANTS.PLUNDER_INTERVAL_MS;
+          currentData.windowStartHp = currentData.currentBossHp;
+        }
+
+        // 피해 적용 (부위별 및 전체 체력)
+        if (currentData.parts) {
+          (['head', 'body', 'tail'] as const).forEach(k => {
+            const part = currentData!.parts[k];
+            const pDmg = partDamages[k] || 0;
+            if (part && pDmg > 0) {
+              part.currentHp = Math.max(0, (part.currentHp || 0) - pDmg);
+              if (part.currentHp <= 0) {
+                part.isDefeated = true;
+                part.currentHp = 0;
+              }
+            }
+          });
+          currentData.currentBossHp = Object.values(currentData.parts).reduce(
+            (sum, p) => sum + (p.isDefeated ? 0 : Math.max(0, p.currentHp)),
+            0
+          );
+        } else {
+          currentData.currentBossHp = Math.max(0, (currentData.currentBossHp || totalMaxHp) - totalDmg);
+        }
+
+        // 페이즈 전환 검사
+        const hpRatio = currentData.currentBossHp / (currentData.maxBossHp || totalMaxHp);
+        if (hpRatio <= 0.3) currentData.phase = 3;
+        else if (hpRatio <= 0.7) currentData.phase = 2;
+        else currentData.phase = 1;
+
+        if (currentData.currentBossHp <= 0) {
+          currentData.isDefeated = true;
+          currentData.defeatedTime = now;
+        }
+
+        currentData.updatedAt = now;
+        currentData.lastAttackerNickname = attackerNickname;
+        return currentData;
+      });
+
+      if (result.committed && result.snapshot.exists()) {
+        return result.snapshot.val() as WorldBossNemesisData;
+      }
+      return null;
+    } catch (err) {
+      console.warn('[Firebase RTDB] Record Nemesis World Boss damage failed:', err);
+      return null;
+    }
+  }
+}
+
+export interface WorldBossNemesisData {
+  currentBossHp: number;
+  maxBossHp: number;
+  parts: {
+    head: { id: 'head'; name: string; position: 'front'; currentHp: number; maxHp: number; isDefeated: boolean };
+    body: { id: 'body'; name: string; position: 'mid'; currentHp: number; maxHp: number; isDefeated: boolean };
+    tail: { id: 'tail'; name: string; position: 'back'; currentHp: number; maxHp: number; isDefeated: boolean };
+  };
+  phase: number;
+  cycleStartTime: number;
+  lastPlunderCheckTime: number;
+  windowStartHp: number;
+  isDefeated: boolean;
+  defeatedTime?: number;
+  updatedAt: number;
+  lastAttackerNickname?: string;
+  totalDamageDealt?: number;
 }

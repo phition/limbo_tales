@@ -96,7 +96,7 @@ import { ALL_SKILL_BOOKS, ALL_SKILLS_MAP, getSkillBookRarity, GRIMOIRE_RARITY_ME
 import { getIconMeta } from '../utils/iconMap';
 import { GRIMOIRE_CRAFT_RECIPES, GRIMOIRE_CRAFT_SUCCESS_RATES, GrimoireRecipe } from '../data/classSkillRecipes';
 import { BUILDING_TECH_TREE, BUILDING_MILESTONE_TIERS, getBuildingConstructionDurationSec } from '../data/buildings';
-import { FirebaseService } from '../services/FirebaseService';
+import { FirebaseService, WorldBossNemesisData } from '../services/FirebaseService';
 import { GameDataService } from '../services/GameDataService';
 import { I18nService } from '../i18n/I18nService';
 import { RESOURCE_NAMES } from '../i18n/dataLocales';
@@ -354,6 +354,7 @@ export class GameManager {
       this.addLog('☁️ [클라우드 데이터] 최신 마스터 데이터(몬스터/비전서/밸런스)가 실시간 동기화되었습니다.', 'system');
     });
     GameDataService.getInstance().initRealtimeSync();
+    this.initNemesisRealtimeSync();
   }
 
   public static getInstance(): GameManager {
@@ -8355,6 +8356,76 @@ export class GameManager {
     };
   }
 
+  private unsubscribeNemesisRealtime: (() => void) | null = null;
+
+  /**
+   * 🌌 월드 보스: 네메시스 실시간 동기화 리스너 등록
+   * 전 세계 모든 지휘관이 실시간으로 공유하는 네메시스 전체 체력 및 6시간 요격 윈도우 동기화
+   */
+  public initNemesisRealtimeSync(): void {
+    if (this.unsubscribeNemesisRealtime) return;
+
+    try {
+      this.unsubscribeNemesisRealtime = FirebaseService.getInstance().subscribeNemesisWorldBoss((remoteData) => {
+        this.applyRemoteNemesisData(remoteData);
+      });
+      console.log('[GameManager] 🌌 Nemesis world boss realtime sync registered.');
+    } catch (err) {
+      console.warn('[GameManager] Failed to init Nemesis realtime sync:', err);
+    }
+  }
+
+  /**
+   * 🌌 원격 월드 보스 데이터 반영 (전 지휘관 실시간 공유)
+   */
+  public applyRemoteNemesisData(remote: WorldBossNemesisData): void {
+    if (!remote || typeof remote.currentBossHp !== 'number') return;
+
+    const prevHp = this.nemesisState.currentBossHp;
+    this.nemesisState.currentBossHp = remote.currentBossHp;
+    this.nemesisState.maxBossHp = remote.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp;
+    this.nemesisState.phase = remote.phase || 1;
+    if (remote.cycleStartTime) this.nemesisState.cycleStartTime = remote.cycleStartTime;
+    if (remote.lastPlunderCheckTime) this.nemesisState.lastPlunderCheckTime = remote.lastPlunderCheckTime;
+    if (remote.windowStartHp !== undefined) this.nemesisState.windowStartHp = remote.windowStartHp;
+    this.nemesisState.isDefeated = !!remote.isDefeated;
+    if (remote.defeatedTime) this.nemesisState.defeatedTime = remote.defeatedTime;
+
+    if (remote.parts) {
+      this.nemesisState.parts = {
+        head: {
+          id: 'head',
+          name: remote.parts.head?.name || NEMESIS_BOSS_CONFIG.parts.head.name,
+          position: 'front',
+          currentHp: remote.parts.head?.currentHp ?? NEMESIS_BOSS_CONFIG.parts.head.maxHp,
+          maxHp: remote.parts.head?.maxHp || NEMESIS_BOSS_CONFIG.parts.head.maxHp,
+          isDefeated: !!remote.parts.head?.isDefeated || (remote.parts.head?.currentHp ?? 0) <= 0
+        },
+        body: {
+          id: 'body',
+          name: remote.parts.body?.name || NEMESIS_BOSS_CONFIG.parts.body.name,
+          position: 'mid',
+          currentHp: remote.parts.body?.currentHp ?? NEMESIS_BOSS_CONFIG.parts.body.maxHp,
+          maxHp: remote.parts.body?.maxHp || NEMESIS_BOSS_CONFIG.parts.body.maxHp,
+          isDefeated: !!remote.parts.body?.isDefeated || (remote.parts.body?.currentHp ?? 0) <= 0
+        },
+        tail: {
+          id: 'tail',
+          name: remote.parts.tail?.name || NEMESIS_BOSS_CONFIG.parts.tail.name,
+          position: 'back',
+          currentHp: remote.parts.tail?.currentHp ?? NEMESIS_BOSS_CONFIG.parts.tail.maxHp,
+          maxHp: remote.parts.tail?.maxHp || NEMESIS_BOSS_CONFIG.parts.tail.maxHp,
+          isDefeated: !!remote.parts.tail?.isDefeated || (remote.parts.tail?.currentHp ?? 0) <= 0
+        }
+      };
+    }
+
+    if (prevHp !== remote.currentBossHp) {
+      this.emit('nemesisUpdated', this.nemesisState);
+      this.emit('update');
+    }
+  }
+
   /** 차원 네메시스 원정대(3선발 + 1오퍼레이터) 출전 준비 상태 검사 */
   public isNemesisSquadReady(): { isReady: boolean; reason?: string; count: number } {
     const { mainHeroes, leaderHero } = this.getDimensionalDeck();
@@ -8466,6 +8537,19 @@ export class GameManager {
     }
 
     this.saveGame();
+
+    // 🌌 전 지휘관 공유 월드 보스: 실시간 DB에 피해량 원자적 반영
+    try {
+      const commanderNick = FirebaseService.getInstance().getCachedProfile()?.nickname || '지휘관';
+      FirebaseService.getInstance().recordNemesisWorldBossDamage(damage, partDamages, commanderNick)
+        .then((updatedWorldBoss) => {
+          if (updatedWorldBoss) {
+            this.applyRemoteNemesisData(updatedWorldBoss);
+          }
+        })
+        .catch(err => console.warn('[GameManager] Sync world boss damage warning:', err));
+    } catch (_) {}
+
     return { coinsEarned, etherEarned, isNewRecord, bossPhaseChanged };
   }
 

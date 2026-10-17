@@ -2291,6 +2291,10 @@ export const NemesisView: React.FC = () => {
                 <span className="text-[10px] px-1.5 py-0.2 rounded font-bold shrink-0" style={{ backgroundColor: `${currentPhaseCfg.badgeColor}22`, color: currentPhaseCfg.badgeColor, border: `1px solid ${currentPhaseCfg.badgeColor}88` }}>
                   Phase {nemesisState.phase}
                 </span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded font-semibold shrink-0 bg-[#00d2ff1a] text-[#00d2ff] border border-[#00d2ff55] flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff] animate-ping inline-block" />
+                  🌐 전 지휘관 실시간 공유 월드 보스
+                </span>
               </div>
               <div className="text-[10px] sm:text-xs text-[#ce93d8] truncate mt-0.5">
                 {currentPhaseCfg.name}
@@ -2304,7 +2308,10 @@ export const NemesisView: React.FC = () => {
           {/* 보스 전체 체력 상태 바 */}
           <div className="mt-2.5 pt-2 border-t border-[#ff416c22]">
             <div className="flex items-center justify-between text-xs mb-1">
-              <span className="text-[10px] text-[#8b9bb4]">보스 전체 잔여 체력</span>
+              <span className="text-[10px] text-[#8b9bb4] flex items-center gap-1">
+                <span>보스 전체 잔여 체력</span>
+                <span className="text-[9px] text-[#00d2ff]">(전 지휘관 공유)</span>
+              </span>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-xs font-bold text-[#ffd54f]">
                   {hpPercent.toFixed(1)}%
@@ -2331,8 +2338,8 @@ export const NemesisView: React.FC = () => {
                     <div className="flex items-center justify-between text-xs mb-1">
                       <span className="text-[10px] text-[#cfd8e8] font-bold flex items-center gap-1">
                         <span>🎯</span>
-                        <span className="text-[#ffd54f]">요격 목표치</span>
-                        <span className="text-[9px] text-[#8b9bb4] font-normal">(체력 1/24 저지)</span>
+                        <span className="text-[#ffd54f]">전 지휘관 요격 목표치</span>
+                        <span className="text-[9px] text-[#8b9bb4] font-normal">(6시간 체력 1/24 저지)</span>
                       </span>
                       <div className="flex items-center gap-1.5 font-mono">
                         <span className="text-[10px] text-[#8b9bb4]">잔여 목표:</span>
@@ -2367,7 +2374,7 @@ export const NemesisView: React.FC = () => {
                     <div className="text-[9px] text-[#8b9bb4] flex items-center justify-between mt-1">
                       <span>⏱️ 다음 요격 주기 갱신: {formatRemainingTimeStr(cycleInfo.nextPlunderRemainingMs)}</span>
                       <span className="text-[#8b9bb4]">
-                        누적 피해: {Math.round(cycleInfo.currentWindowDamage).toLocaleString()} DMG {cycleInfo.isWindowDefended ? '(방어 성공)' : ''}
+                        전 지휘관 누적 피해: {Math.round(cycleInfo.currentWindowDamage).toLocaleString()} DMG {cycleInfo.isWindowDefended ? '(방어 성공)' : ''}
                       </span>
                     </div>
                   </>
