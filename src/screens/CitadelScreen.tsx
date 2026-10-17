@@ -15053,12 +15053,12 @@ export const CitadelScreen: React.FC = () => {
                     >
                       {/* 복사본 1 (원문) */}
                       <div className="flex items-center gap-2 pr-12 shrink-0 text-[11px]">
-                        <strong className="text-[#00d2ff] font-bold shrink-0">[{latestMsg.authorName}]</strong>
+                        <strong className="text-[#c8aa6e] font-bold shrink-0">[{latestMsg.authorName}]</strong>
                         <span className="text-[#e2e8f0] font-medium">{latestMsg.content}</span>
                       </div>
                       {/* 복사본 2 (무한 루프 이음새 없는 연속 스크롤용) */}
                       <div className="flex items-center gap-2 pr-12 shrink-0 text-[11px]">
-                        <strong className="text-[#00d2ff] font-bold shrink-0">[{latestMsg.authorName}]</strong>
+                        <strong className="text-[#c8aa6e] font-bold shrink-0">[{latestMsg.authorName}]</strong>
                         <span className="text-[#e2e8f0] font-medium">{latestMsg.content}</span>
                       </div>
                     </div>
