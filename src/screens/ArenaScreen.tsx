@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useGameManager } from '../hooks/useGameManager';
 import { ActionButton } from '../components/ActionButton';
-import { ArenaOpponent, EquipmentItem, Mercenary, Skill, StatusEffect, STATUS_EFFECT_META } from '../types/game';
+import { ArenaOpponent, CharacterClass, EquipmentItem, Mercenary, Skill, StatusEffect, STATUS_EFFECT_META } from '../types/game';
 import { FirebaseService, LeaderboardEntry } from '../services/FirebaseService';
 import { CHARACTER_CLASSES } from '../data/classes';
 import { SoundManager } from '../managers/SoundManager';
 import { GameManager } from '../managers/GameManager';
-import { BattleVFXOverlay, VFXEvent } from '../components/BattleVFXOverlay';
+import { BattleVFXOverlay, VFXEvent, VFXType } from '../components/BattleVFXOverlay';
 import { generateArenaRewardEquipment, CLASS_HONOR_SHOP_DEFINITIONS, createClassHonorEquipment, recalculateEquipmentStats } from '../data/equipment';
 import { NemesisView } from './NemesisView';
 import { InvasionView } from './InvasionView';
@@ -30,7 +30,8 @@ import { CombatMeterTable, CombatantMetrics } from '../components/CombatMeterTab
 import { CustomAssetService } from '../services/CustomAssetService';
 import { GameDataService } from '../services/GameDataService';
 import { gameDialog } from '../services/DialogService';
-import { getSkillMagicSchool, getElementalSubtype } from '../utils/skillComboUtils';
+import { getSkillMagicSchool, getElementalSubtype, resolveCombatVfxAndSfx } from '../utils/skillComboUtils';
+import { SkillDetailModal } from '../components/SkillDetailModal';
 
 const DEFAULT_CLASS_IMAGES: Record<string, string> = {
   aegis_valkyrie: 'assets/valkyrie_saintess.jpg',
@@ -741,6 +742,7 @@ export const ArenaScreen: React.FC = () => {
   const [showdownRevealIndex, setShowdownRevealIndex] = useState(0); // 0 ~ 5 (오픈된 배지 수)
   const [isShowdownEvaluated, setIsShowdownEvaluated] = useState(false); // 족보 판정 및 승자 광채 발동
   const [isCodexModalOpen, setIsCodexModalOpen] = useState(false);
+  const [selectedSkillForModal, setSelectedSkillForModal] = useState<Skill | null>(null);
   const weeklyAffinity = useMemo(() => getWeeklyAffinityConfig(), []);
 
   // 🏆 피버콜 3회 승리 즉시 제압 카운터 (3-Win Domination)
@@ -1009,25 +1011,60 @@ export const ArenaScreen: React.FC = () => {
     const oppLeaderBlessing = oppLeaderHero ? gm.getLeaderBlessing(oppLeaderHero) : null;
     setOppLeaderBlessing(oppLeaderBlessing);
 
-    // 3. 아군 3인 선발 전투원 빌드
-    const pCombatants: ArenaCombatant[] = mainHeroes.map((h, idx) => {
-      const eff = gm.getHeroEffectiveStats(h);
-      const cls = CHARACTER_CLASSES[h.classId] || CHARACTER_CLASSES['squire'];
-      const allSkills: Skill[] = [
-        {
+    // 🌟 [PVE 통일성] 클래스 고유 스킬, 장착 마도서 스킬, 특수 궁극기 및 무기 인챈트 스킬을 PVE와 100% 동일하게 해석
+    const buildHeroCombatSkills = (h: any, cls: CharacterClass, gmInstance: GameManager): Skill[] => {
+      const skills: Skill[] = [];
+
+      // 1. 기본 공격 (Basic Attack) - 무기 인챈트 스킬 부여 시 해당 스킬 우선 적용
+      const weaponEnchantSkill = h.equipment?.weapon?.prefix?.grantedSkill;
+      if (weaponEnchantSkill) {
+        skills.push(weaponEnchantSkill);
+      } else {
+        skills.push({
           id: 'basic_attack',
           name: '기본 공격',
-          description: '단일 대상에게 100% 위력의 물리 기본 공격을 가합니다.',
+          description: '단일 대상에게 100% 위력의 물리 기본 공격을 가합니다. (마나 소모 없음)',
           manaCost: 0,
           cooldown: 0,
           targetType: 'single_enemy',
           power: 1.0,
           effectType: 'damage',
           icon: '⚔️',
-        },
-        ...cls.skills,
-        ...(cls.specialSkill ? [cls.specialSkill] : []),
-      ];
+        });
+      }
+
+      // 2. 클래스 고유 특수 오의 / 궁극기 (Special Skill)
+      if (cls.specialSkill) {
+        const resSpec = gmInstance.resolveSkillData(cls.specialSkill.id, h);
+        skills.push(resSpec || cls.specialSkill);
+      }
+
+      // 3. 영웅이 장착한 액티브 스킬 (Equipped Grimoire / Learned Skills)
+      if (h.equippedSkills && h.equippedSkills.length > 0) {
+        h.equippedSkills.forEach((sid: string) => {
+          const resolved = gmInstance.resolveSkillData(sid, h);
+          if (resolved && !skills.some(s => s.id === resolved.id)) {
+            skills.push(resolved);
+          }
+        });
+      }
+
+      // 4. 부족한 슬롯은 클래스 기본 스킬로 보충
+      cls.skills.forEach(s => {
+        if (!skills.some(existing => existing.id === s.id)) {
+          const resNormal = gmInstance.resolveSkillData(s.id, h);
+          skills.push(resNormal || s);
+        }
+      });
+
+      return skills;
+    };
+
+    // 3. 아군 3인 선발 전투원 빌드
+    const pCombatants: ArenaCombatant[] = mainHeroes.map((h, idx) => {
+      const eff = gm.getHeroEffectiveStats(h);
+      const cls = CHARACTER_CLASSES[h.classId] || CHARACTER_CLASSES['squire'];
+      const allSkills: Skill[] = buildHeroCombatSkills(h, cls, gm);
       return {
         id: h.id,
         name: h.name,
@@ -1048,28 +1085,14 @@ export const ArenaScreen: React.FC = () => {
         isPlayer: true,
         cooldowns: {},
         statusEffects: [],
-        icon: cls.skills[0]?.icon || '⚔️',
+        icon: allSkills[1]?.icon || cls.skills[0]?.icon || '⚔️',
       };
     });
 
     // 4. 적군 3인 선발 전투원 빌드 (레벨 성장치, 레이팅 스케일, 리더 가호 반영)
     const oCombatants: ArenaCombatant[] = oppMainHeroes.map((h, idx) => {
       const cls = CHARACTER_CLASSES[h.classId] || CHARACTER_CLASSES['squire'];
-      const allSkills: Skill[] = [
-        {
-          id: 'basic_attack',
-          name: '기본 공격',
-          description: '단일 대상에게 100% 위력의 물리 기본 공격.',
-          manaCost: 0,
-          cooldown: 0,
-          targetType: 'single_enemy',
-          power: 1.0,
-          effectType: 'damage',
-          icon: '⚔️',
-        },
-        ...cls.skills,
-        ...(cls.specialSkill ? [cls.specialSkill] : []),
-      ];
+      const allSkills: Skill[] = buildHeroCombatSkills(h, cls, gm);
 
       const lvlBonus = 1 + (h.level - 1) * 0.08;
       const ratingScale = Math.max(1.0, opp.rating / 1000);
@@ -1104,7 +1127,7 @@ export const ArenaScreen: React.FC = () => {
         isPlayer: false,
         cooldowns: {},
         statusEffects: [],
-        icon: cls.skills[0]?.icon || '👾',
+        icon: allSkills[1]?.icon || cls.skills[0]?.icon || '👾',
       };
     });
 
@@ -1372,22 +1395,33 @@ export const ArenaScreen: React.FC = () => {
       ]);
 
       // VFX 출력
+      const opVfxPair = resolveCombatVfxAndSfx(
+        opSpecialSkill || 'basic',
+        activeOperator?.classId || pLeader?.classId,
+        true,
+        2
+      );
       livingOpp.forEach((t, i) => {
         const idx = Math.max(0, oCombatants.findIndex(c => c.id === t.id));
         const colX = idx === 0 ? 20 : idx === 1 ? 50 : 80;
         setTimeout(() => {
           setVfxList(prev => [...prev, {
             id: `vfx_showdown_p_${Date.now()}_${t.id}_${i}`,
-            type: 'crit_slash',
+            type: opVfxPair.vfx,
             damage: finalDmg,
             isCrit: true,
+            tier: 2,
             x: colX,
             y: 24,
             duration: 700
           }]);
-          gm.emit('battleHitEffect', { x: colX, y: 24, color: 0x00d2ff, isCrit: true, type: 'crit_slash' });
+          gm.emit('battleHitEffect', { x: colX, y: 24, color: 0x00d2ff, isCrit: true, type: opVfxPair.vfx });
         }, i * 70);
       });
+      try {
+        if (opVfxPair.sfx) SoundManager.getInstance().play(opVfxPair.sfx);
+        else SoundManager.getInstance().play('crit');
+      } catch (_) {}
 
       // 아군 부활 / 회복 효과 적용
       let updatedPTeam = [...pCombatants];
@@ -1432,22 +1466,34 @@ export const ArenaScreen: React.FC = () => {
       });
 
       // VFX 출력
+      const oppOpSpecialSkill = oppLeader ? (CHARACTER_CLASSES[oppLeader.classId]?.specialSkill || null) : null;
+      const oppOpVfxPair = resolveCombatVfxAndSfx(
+        oppOpSpecialSkill || 'basic',
+        oppLeader?.classId || oLeader?.classId,
+        true,
+        2
+      );
       livingP.forEach((t, i) => {
         const idx = Math.max(0, playerTeamRef.current.findIndex(c => c.id === t.id));
         const colX = idx === 0 ? 20 : idx === 1 ? 50 : 80;
         setTimeout(() => {
           setVfxList(prev => [...prev, {
             id: `vfx_showdown_o_${Date.now()}_${t.id}_${i}`,
-            type: 'crit_slash',
+            type: oppOpVfxPair.vfx,
             damage: finalDmg,
             isCrit: true,
+            tier: 2,
             x: colX,
             y: 74,
             duration: 700
           }]);
-          gm.emit('battleHitEffect', { x: colX, y: 74, color: 0xff416c, isCrit: true, type: 'crit_slash' });
+          gm.emit('battleHitEffect', { x: colX, y: 74, color: 0xff416c, isCrit: true, type: oppOpVfxPair.vfx });
         }, i * 70);
       });
+      try {
+        if (oppOpVfxPair.sfx) SoundManager.getInstance().play(oppOpVfxPair.sfx);
+        else SoundManager.getInstance().play('crit');
+      } catch (_) {}
 
       playerTeamRef.current = updatedP;
       setPlayerTeam(updatedP);
@@ -1810,17 +1856,39 @@ export const ArenaScreen: React.FC = () => {
         const isCrit = Math.random() < critChance;
         if (isCrit) anyCrit = true;
 
-        let effectiveDef = t.def * ARENA_DEF_SCALE; // 🛡️ 방어력 50% 너프 적용
+        let effectiveDef = t.def * ARENA_DEF_SCALE; // 🛡️ 방어력 스케일 적용
         if (magicSchool === 'dark') {
           effectiveDef = effectiveDef * 0.80; // 🔮 암흑: 기본 방어 관통 20%
+        }
+        if (skill.piercePct) {
+          effectiveDef = effectiveDef * Math.max(0, 1 - (skill.piercePct / 100)); // 🎯 스킬 방어 관통 반영
+        }
+        if (attacker.classId === 'omega_deadeye') {
+          effectiveDef = effectiveDef * 0.50; // 🎯 오메가 데드아이: 상시 방어 관통 50%
         }
         const defFactor = 1 - (effectiveDef / (effectiveDef + getArenaDRConstant()));
         let rawDmg = effectiveAtk * (skill.power || 1.0) * defFactor * (0.95 + Math.random() * 0.12);
         if (magicSchool === 'dark') {
           rawDmg = rawDmg * 1.20; // 🔮 암흑: 용병(PvP) 대상 20% 추가 데미지
         }
+        // 🎯 [포지션 특화 보너스] PVE와 동일하게 전열 특화 및 후열 저격 반영
+        if (skill.positionBonus === 'front' && t.position === 'front') {
+          rawDmg *= 1.25;
+        } else if (skill.positionBonus === 'back' && t.position === 'back') {
+          rawDmg *= 1.20;
+          critChance = Math.min(1.0, critChance + 0.20);
+        }
         const minDmg = Math.max(15, Math.floor(effectiveAtk * 0.25));
         let dmg = Math.max(minDmg, Math.floor(rawDmg * (isCrit ? 1.5 : 1.0)));
+
+        // 🩸 [흡혈 (Life Steal / Drain) 판정] PVE와 동일하게 흡혈 스킬 발동 시 시전자 체력 회복
+        const isDrainSkill = skill.effectType === 'drain' || Boolean(skill.description && (skill.description.includes('흡혈') || skill.description.includes('생명력 흡수')));
+        if (isDrainSkill && dmg > 0) {
+          const drainHeal = Math.min(attacker.maxHp - attacker.currentHp, Math.round(dmg * 0.35));
+          if (drainHeal > 0) {
+            attacker.currentHp += drainHeal;
+          }
+        }
 
         // 🛡️ [서포터 원호 방어 (Assist Guard)]
         // 방어자 측 후방 서포터가 원호 방어 전개 (치명타 피격 시 또는 35% 확률, 생존 시에만 발동)
@@ -1950,7 +2018,15 @@ export const ArenaScreen: React.FC = () => {
       else addOppFeverBadge('break');
     }
 
-    // 5. 던전처럼 각 타겟의 패널 카드 위에 개별 VFX 동시/시차 폭발 연출
+    // 5. 던전처럼 각 타겟의 패널 카드 위에 PVE 통일 VFX 및 SFX 동시/시차 폭발 연출
+    const skillTier = (attacker.level >= 60 ? 2 : attacker.level >= 30 ? 1 : 0) as 0 | 1 | 2;
+    const resolvedCombatPair = resolveCombatVfxAndSfx(
+      skill.id === 'basic_attack' ? 'basic' : skill,
+      attacker.classId,
+      isAoe,
+      skillTier
+    );
+
     targetResults.forEach((res, i) => {
       const tgt = targetUnits.find(u => u.id === res.unitId);
       if (!tgt) return;
@@ -1977,9 +2053,10 @@ export const ArenaScreen: React.FC = () => {
         } else if (res.isHeal) {
           setVfxList(prev => [...prev, {
             id: vfxId,
-            type: 'holy_heal',
+            type: isAoe ? 'holy_heal_aoe' : 'holy_heal',
             damage: res.dmg,
             isHeal: true,
+            tier: skillTier,
             x: colX,
             y: rowY,
             duration: 550,
@@ -1989,17 +2066,35 @@ export const ArenaScreen: React.FC = () => {
             id: vfxId,
             type: 'shield',
             isShield: true,
+            tier: skillTier,
             x: colX,
             y: rowY,
             duration: 550,
           }]);
-        } else {
-          const vfxType = res.isCrit ? 'crit_slash' : (skill.icon === '🔥' ? 'fire' : skill.icon === '❄️' ? 'ice' : 'slash');
+        } else if ((res as any).isAssistGuarded) {
           setVfxList(prev => [...prev, {
             id: vfxId,
-            type: vfxType,
+            type: 'shield',
+            damage: res.dmg,
+            isBlock: true,
+            text: '🛡️ 원호 방어',
+            x: colX,
+            y: rowY,
+            duration: 550,
+          }]);
+          SoundManager.getInstance().play('shield');
+        } else {
+          let targetVfx: VFXType = resolvedCombatPair.vfx;
+          if (res.isCrit && targetVfx === 'slash') {
+            targetVfx = 'crit_slash';
+          }
+          setVfxList(prev => [...prev, {
+            id: vfxId,
+            type: targetVfx,
             damage: res.dmg,
             isCrit: res.isCrit,
+            tier: skillTier,
+            statusEffect: res.addedEffect?.type,
             x: colX,
             y: rowY,
             duration: 550,
@@ -2009,16 +2104,26 @@ export const ArenaScreen: React.FC = () => {
             y: rowY,
             color: attacker.isPlayer ? 0x00d2ff : 0xff416c,
             isCrit: res.isCrit,
-            type: vfxType,
+            type: targetVfx,
           });
         }
       }, isAoe ? i * 70 : 0);
     });
 
     try {
-      if (isHealing) SoundManager.getInstance().play('heal');
-      else if (isShield) SoundManager.getInstance().play('shield');
-      else SoundManager.getInstance().play(anyCrit ? 'crit' : 'slash');
+      if (isHealing) {
+        SoundManager.getInstance().play('heal');
+      } else if (isShield) {
+        SoundManager.getInstance().play('shield');
+      } else {
+        if (anyCrit && resolvedCombatPair.sfx === 'slash') {
+          SoundManager.getInstance().play('crit');
+        } else if (resolvedCombatPair.sfx) {
+          SoundManager.getInstance().play(resolvedCombatPair.sfx);
+        } else {
+          SoundManager.getInstance().play(anyCrit ? 'crit' : 'slash');
+        }
+      }
     } catch (_) {}
 
     // 6. 전투 로그 및 배너 기록
@@ -2195,18 +2300,19 @@ export const ArenaScreen: React.FC = () => {
           const colX = tIdx === 0 ? 20 : tIdx === 1 ? 50 : 80;
           const rowY = liveTarget.isPlayer ? 74 : 24;
 
+          const suppVfxPair = resolveCombatVfxAndSfx('basic', atkSupporter?.classId, false, 1);
           setTimeout(() => {
             if (isBattleEndedRef.current || finalRewardRef.current) return;
             setVfxList(prev => [...prev, {
               id: `supp_assist_strike_${Date.now()}`,
-              type: 'crit_slash',
+              type: suppVfxPair.vfx,
               damage: assistDmg,
               text: `-${assistDmg} 💥 원호 추가타`,
               x: colX,
               y: rowY,
               duration: 500,
             }]);
-            SoundManager.getInstance().play('heavy_hit');
+            SoundManager.getInstance().play(suppVfxPair.sfx || 'heavy_hit');
           }, 300);
 
           if (attacker.isPlayer) addFeverBadge('assist');
@@ -4302,28 +4408,42 @@ export const ArenaScreen: React.FC = () => {
                 </div>
 
                 {/* 스킬 버튼 그리드 */}
-                <div className="grid grid-cols-3 gap-1.5">
+                <div className={`grid ${activeAttacker?.skills && activeAttacker.skills.length > 3 ? 'grid-cols-4' : 'grid-cols-3'} gap-1.5`}>
                   {activeAttacker?.skills.map((skill, sIdx) => {
                     const cd = activeAttacker.cooldowns[skill.id] || 0;
                     const canAfford = activeAttacker.currentMp >= skill.manaCost && cd <= 0;
 
                     return (
-                      <button
-                        key={`${skill.id}_${sIdx}`}
-                        disabled={!canAfford}
-                        className={`p-2 rounded-lg flex flex-col items-center justify-center gap-0.5 transition-all text-center ${
-                          canAfford
-                            ? 'bg-[#14233c] hover:bg-[#1a3154] border border-[#234272] text-white cursor-pointer active:scale-95'
-                            : 'bg-[#0f1724] border border-[#182335] text-[#556987] opacity-60 cursor-not-allowed'
-                        }`}
-                        onClick={() => handleManualSkillClick(skill)}
-                      >
-                        <span className="text-base">{skill.icon || '⚔️'}</span>
-                        <span className="text-xs font-bold truncate max-w-full">{skill.name}</span>
-                        <span className="text-[9px] font-mono text-[#64b5f6]">
-                          {cd > 0 ? `${cd}턴 대기` : skill.manaCost > 0 ? `${skill.manaCost} MP` : '0 MP'}
-                        </span>
-                      </button>
+                      <div key={`${skill.id}_${sIdx}`} className="relative group">
+                        <button
+                          disabled={!canAfford}
+                          title={`${skill.name}\n${skill.description || ''}\n마나: ${skill.manaCost} MP | 쿨타임: ${skill.cooldown}턴`}
+                          className={`w-full p-2 rounded-lg flex flex-col items-center justify-center gap-0.5 transition-all text-center ${
+                            canAfford
+                              ? 'bg-[#14233c] hover:bg-[#1a3154] border border-[#234272] text-white cursor-pointer active:scale-95'
+                              : 'bg-[#0f1724] border border-[#182335] text-[#556987] opacity-60 cursor-not-allowed'
+                          }`}
+                          onClick={() => handleManualSkillClick(skill)}
+                        >
+                          <span className="text-base">{skill.icon || '⚔️'}</span>
+                          <span className="text-xs font-bold truncate max-w-full">{skill.name}</span>
+                          <span className="text-[9px] font-mono text-[#64b5f6]">
+                            {cd > 0 ? `${cd}턴 대기` : skill.manaCost > 0 ? `${skill.manaCost} MP` : '0 MP'}
+                          </span>
+                        </button>
+                        {/* 스킬 정보 상세 보기 버튼 (PVE 통일성) */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedSkillForModal(skill);
+                          }}
+                          className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#0a1526]/80 text-[#8ba3c7] hover:text-[#00d2ff] hover:bg-[#1a2d48] flex items-center justify-center text-[9px] font-bold border border-[#243b5e]/50 cursor-pointer"
+                          title="스킬 정보 상세 보기"
+                        >
+                          ℹ️
+                        </button>
+                      </div>
                     );
                   })}
                 </div>
@@ -4339,6 +4459,29 @@ export const ArenaScreen: React.FC = () => {
               </div>
             )}
           </div>
+
+          {/* ── 🔍 스킬 상세 정보 모달 (PVE 통일) ── */}
+          {selectedSkillForModal && (
+            <SkillDetailModal
+              skill={selectedSkillForModal}
+              hero={activeAttacker as unknown as Mercenary}
+              gm={gm}
+              canCast={
+                activeAttacker
+                  ? activeAttacker.currentMp >= selectedSkillForModal.manaCost &&
+                    (activeAttacker.cooldowns[selectedSkillForModal.id] || 0) <= 0 &&
+                    !isProcessingRef.current &&
+                    !isBattleEndedRef.current
+                  : false
+              }
+              onCast={() => {
+                const sk = selectedSkillForModal;
+                setSelectedSkillForModal(null);
+                handleManualSkillClick(sk);
+              }}
+              onClose={() => setSelectedSkillForModal(null)}
+            />
+          )}
 
           {/* ════════════════════════════════════════════════════════════════ */}
           {/* 🏆 아레나 결투 결과 & 등급별 장비 전리품 획득 모달                 */}
