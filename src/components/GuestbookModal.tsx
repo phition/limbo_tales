@@ -87,7 +87,7 @@ export const GuestbookModal: React.FC<Props> = ({
         setInputContent('');
         setCurrentPage(1); // 새 글이 최상단에 있으므로 1페이지로 이동
         setMessages(fb.getCachedGuestbookMessages()); // 새 글 즉시 화면 반영
-        SoundManager.getInstance().play('forge_success');
+        SoundManager.getInstance().play('click');
         gm.addLog(`💬 [방명록 등록] "${clean.slice(0, 15)}..." 글이 전 서버 게시판에 등록되었습니다.`, 'system');
       } else {
         setErrorMessage(res.error || '글 등록에 실패했습니다.');
@@ -131,7 +131,77 @@ export const GuestbookModal: React.FC<Props> = ({
       }
     >
       <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-hidden">
-        {/* 상단 100자 글쓰기 카드 (익명 지휘관은 작성 불가 안내) */}
+        {/* 1. 상단: 게시글 목록 (새 글이 항상 위로 올라오도록 정렬, 10개씩 페이징, 상하 확장) */}
+        <div className="flex-1 overflow-y-auto min-h-0 flex flex-col gap-2 pr-1 custom-scrollbar">
+          {pageMessages.length === 0 ? (
+            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[#8b9bb4] gap-2">
+              <span className="text-3xl">💬</span>
+              <div className="text-xs font-bold text-[#cfd8e8]">등록된 방명록이 없습니다.</div>
+              <div className="text-[11px]">첫 번째 방주 지휘관 메시지를 남겨보세요!</div>
+            </div>
+          ) : (
+            pageMessages.map((msg) => (
+              <div
+                key={msg.id}
+                className="p-3 rounded-xl bg-[#0c121e] border border-[#1b2537] hover:border-[#00d2ff55] flex items-center justify-between gap-2.5 sm:gap-3.5 transition-all shadow-xs"
+              >
+                {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) */}
+                <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px]">
+                  <span className="text-xs">🎖️</span>
+                  <span
+                    className="text-xs sm:text-sm font-bold text-[#00d2ff] truncate block"
+                    title={msg.authorName}
+                  >
+                    {msg.authorName}
+                  </span>
+                </div>
+
+                {/* 2. 중앙: 본문 내용 (최대 100자) */}
+                <div className="flex-1 min-w-0 text-xs sm:text-[13px] text-[#cfd8dc] break-words whitespace-pre-wrap leading-relaxed">
+                  {msg.content}
+                </div>
+
+                {/* 3. 글 끝: 등록 날짜와 시간 스탬프 (작게 표시) */}
+                <div className="shrink-0 text-[10px] sm:text-[11px] text-[#8b9bb4] font-mono whitespace-nowrap text-right ml-1">
+                  {formatTimestamp(msg.createdAt)}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* 2. 중하단: 페이지네이션 (10개 단위) */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 pt-1 border-t border-[#1e2a3e] shrink-0">
+            <button
+              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#141b2c] border border-[#23324d] text-white hover:border-[#00d2ff] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+              disabled={safePage <= 1}
+              onClick={() => {
+                setCurrentPage((p) => Math.max(1, p - 1));
+                SoundManager.getInstance().play('click');
+              }}
+            >
+              ◀ 이전
+            </button>
+
+            <span className="text-xs font-mono font-bold text-[#00d2ff] px-2">
+              {safePage} / {totalPages}
+            </span>
+
+            <button
+              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#141b2c] border border-[#23324d] text-white hover:border-[#00d2ff] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+              disabled={safePage >= totalPages}
+              onClick={() => {
+                setCurrentPage((p) => Math.min(totalPages, p + 1));
+                SoundManager.getInstance().play('click');
+              }}
+            >
+              다음 ▶
+            </button>
+          </div>
+        )}
+
+        {/* 3. 하단: 100자 글쓰기 카드 (익명 지휘관은 작성 불가 안내) */}
         {isAnonymous ? (
           <div className="p-3 rounded-xl bg-[#1a1424] border border-[#ab47bc44] flex items-center gap-3 shrink-0 shadow-sm animate-fade-in">
             <span className="text-2xl p-2 rounded-xl bg-[#ab47bc22] text-[#ce93d8] shrink-0">🔒</span>
@@ -209,76 +279,6 @@ export const GuestbookModal: React.FC<Props> = ({
               </div>
             )}
           </form>
-        )}
-
-        {/* 게시글 목록 (새 글이 항상 위로 올라오도록 정렬, 10개씩 페이징, 상하 확장) */}
-        <div className="flex-1 overflow-y-auto min-h-0 flex flex-col gap-2 pr-1 custom-scrollbar">
-          {pageMessages.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[#8b9bb4] gap-2">
-              <span className="text-3xl">💬</span>
-              <div className="text-xs font-bold text-[#cfd8e8]">등록된 방명록이 없습니다.</div>
-              <div className="text-[11px]">첫 번째 방주 지휘관 메시지를 남겨보세요!</div>
-            </div>
-          ) : (
-            pageMessages.map((msg) => (
-              <div
-                key={msg.id}
-                className="p-3 rounded-xl bg-[#0c121e] border border-[#1b2537] hover:border-[#00d2ff55] flex items-center justify-between gap-2.5 sm:gap-3.5 transition-all shadow-xs"
-              >
-                {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) */}
-                <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px]">
-                  <span className="text-xs">🎖️</span>
-                  <span
-                    className="text-xs sm:text-sm font-bold text-[#00d2ff] truncate block"
-                    title={msg.authorName}
-                  >
-                    {msg.authorName}
-                  </span>
-                </div>
-
-                {/* 2. 중앙: 본문 내용 (최대 100자) */}
-                <div className="flex-1 min-w-0 text-xs sm:text-[13px] text-[#cfd8dc] break-words whitespace-pre-wrap leading-relaxed">
-                  {msg.content}
-                </div>
-
-                {/* 3. 글 끝: 등록 날짜와 시간 스탬프 (작게 표시) */}
-                <div className="shrink-0 text-[10px] sm:text-[11px] text-[#8b9bb4] font-mono whitespace-nowrap text-right ml-1">
-                  {formatTimestamp(msg.createdAt)}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* 하단 페이지네이션 (10개 단위) */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 pt-1 border-t border-[#1e2a3e] shrink-0">
-            <button
-              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#141b2c] border border-[#23324d] text-white hover:border-[#00d2ff] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
-              disabled={safePage <= 1}
-              onClick={() => {
-                setCurrentPage((p) => Math.max(1, p - 1));
-                SoundManager.getInstance().play('click');
-              }}
-            >
-              ◀ 이전
-            </button>
-
-            <span className="text-xs font-mono font-bold text-[#00d2ff] px-2">
-              {safePage} / {totalPages}
-            </span>
-
-            <button
-              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#141b2c] border border-[#23324d] text-white hover:border-[#00d2ff] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
-              disabled={safePage >= totalPages}
-              onClick={() => {
-                setCurrentPage((p) => Math.min(totalPages, p + 1));
-                SoundManager.getInstance().play('click');
-              }}
-            >
-              다음 ▶
-            </button>
-          </div>
         )}
       </div>
     </Modal>
