@@ -151,9 +151,14 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
   const isPlayer = side === 'player';
   const customAssetService = CustomAssetService.getInstance();
   const classId = leader?.classId || '';
-  const imageUrl = customAssetService.getMercenaryOverride(classId) || DEFAULT_CLASS_IMAGES[classId];
+  const imageUrl =
+    leader?.portraitUrl ||
+    leader?.customPortraitUrl ||
+    customAssetService.getMercenaryOverride(classId) ||
+    getCombatantPortrait(leader || { classId });
   const clsInfo = CHARACTER_CLASSES[classId];
   const clsName = clsInfo?.name || leader?.className || (isPlayer ? '원정대 사령관' : '수비대 사령관');
+  const ultSkill = clsInfo?.specialSkill || leader?.specialSkill || clsInfo?.skills?.[0] || null;
 
   return (
     <div
@@ -192,8 +197,8 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
           </span>
         </div>
 
-        {/* 중앙: 오퍼레이터 이름 및 등급 정보 */}
-        <div className="min-w-0 flex-1 flex flex-col justify-center">
+        {/* 중앙: 오퍼레이터 이름 및 등급 정보, 궁극기 */}
+        <div className="min-w-0 flex-1 flex flex-col justify-center gap-0.5">
           <div className="flex items-center justify-between gap-1">
             <div className="flex items-center gap-1.5 min-w-0">
               <span
@@ -225,9 +230,42 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
                 </span>
               )}
             </div>
-            <span className="text-[9px] text-[#8b9bb4] shrink-0">
+            <span className="text-[9px] text-[#8b9bb4] shrink-0 font-mono">
               {clsName}
             </span>
+          </div>
+
+          {/* 하단: 궁극기 이름 및 가호 정보 */}
+          <div className="flex items-center justify-between gap-1 text-[9px] min-w-0 mt-0.5">
+            <div className="flex items-center gap-1.5 min-w-0 truncate">
+              <span
+                className={`text-[7.5px] px-1.5 py-0.2 rounded font-black tracking-wider shrink-0 flex items-center gap-0.5 ${
+                  isPlayer
+                    ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]'
+                    : 'bg-[#ff416c22] text-[#ff80ab] border border-[#ff416c55]'
+                }`}
+              >
+                <span>⚡</span>
+                <span>궁극기</span>
+              </span>
+              <span
+                className="text-[10px] font-extrabold text-[#ffd54f] truncate flex items-center gap-1"
+                title={ultSkill?.description || ultSkill?.name}
+              >
+                <span>{ultSkill?.icon || '💥'}</span>
+                <span className="text-white hover:text-[#ffd54f] transition-colors">
+                  {ultSkill?.name || '기본 오의'}
+                </span>
+              </span>
+            </div>
+            {blessing?.name && (
+              <span
+                className="text-[8px] text-[#8b9bb4] truncate font-mono shrink-0 hidden sm:inline"
+                title={blessing.name}
+              >
+                가호: <span className="text-[#ce93d8] font-bold">{blessing.name}</span>
+              </span>
+            )}
           </div>
         </div>
       </div>

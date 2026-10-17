@@ -56,7 +56,7 @@ export const ResourceBar: React.FC<Props> = ({
   const menuTooltip = '시스템 메뉴 & 도움말 열기';
 
   return (
-    <div className="relative flex items-center justify-between px-3 py-1.5 bg-[#0c0f17] border-b border-[#1f2738] shrink-0 z-20 w-full overflow-hidden">
+    <div id="global-resource-bar" className="relative flex items-center justify-between px-3 py-1.5 bg-[#0c0f17] border-b border-[#1f2738] shrink-0 z-20 w-full overflow-hidden">
       {/* 🌟 유지비 결제 시 상단 자원바 위로 스르륵 흘러지나가는 티커 알림 */}
       {upkeepTicker && (
         <div

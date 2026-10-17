@@ -22,6 +22,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const [isDialogueDismissed, setIsDialogueDismissed] = useState(false);
+  const [resourceBarBottom, setResourceBarBottom] = useState<number>(0);
   const [, setLangTick] = useState(0);
   const typingTimerRef = useRef<number | null>(null);
 
@@ -35,6 +36,30 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
   const tr = useCallback((text: string) => {
     return I18nService.getInstance().tr(text);
   }, []);
+
+  // 자원 표시줄 하단 위치 추적 (모바일 노치 / 상태바 및 자원 표시줄 침범 방지)
+  const updateResourceBarBottom = useCallback(() => {
+    const el = document.getElementById('global-resource-bar') || document.querySelector('.game-column > div:first-child');
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.bottom > 0) {
+        setResourceBarBottom(rect.bottom);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    updateResourceBarBottom();
+    const interval = window.setInterval(updateResourceBarBottom, 350);
+    window.addEventListener('resize', updateResourceBarBottom);
+    window.addEventListener('scroll', updateResourceBarBottom, true);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', updateResourceBarBottom);
+      window.removeEventListener('scroll', updateResourceBarBottom, true);
+    };
+  }, [isOpen, updateResourceBarBottom]);
 
   // 현재 표정에 따른 일레인 포트레이트
   const elainePortrait = CustomAssetService.getElainePortrait(currentStep?.emotion || 'normal');
@@ -252,6 +277,19 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
     worry: { label: '주의 / 염려', color: '#ff7043' },
   }[currentStep.emotion];
 
+  // 자원 표시줄 바로 아래 안전 마진 계산 (모바일 알림표시줄 및 자원바 침범 방지)
+  const topSafeOffset = resourceBarBottom > 0
+    ? `${resourceBarBottom + 6}px`
+    : 'calc(env(safe-area-inset-top, 0px) + 48px)';
+
+  const chipSafeOffset = resourceBarBottom > 0
+    ? `${resourceBarBottom + 44}px`
+    : 'calc(env(safe-area-inset-top, 0px) + 86px)';
+
+  const dialogueSafeTop = resourceBarBottom > 0
+    ? `${resourceBarBottom + 40}px`
+    : 'calc(env(safe-area-inset-top, 0px) + 82px)';
+
   return (
     <div className={`fixed inset-0 z-[9999] select-none font-sans overflow-hidden ${
       isDialogueDismissed ? 'pointer-events-none' : 'pointer-events-auto'
@@ -319,25 +357,31 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
         </div>
       )}
 
-      {/* ── 3. 상단 튜토리얼 헤더 (스킵 및 단계 표시) ── */}
-      <div className="absolute top-3 right-4 z-20 flex items-center gap-2">
-        <span className="text-[11px] font-mono text-[#8b9bb4] bg-[#0c121e]/80 border border-[#202d44] px-2.5 py-1 rounded-full">
+      {/* ── 3. 상단 튜토리얼 헤더 (스킵 및 단계 표시: 자원표시줄 바로 아래 안전 배치) ── */}
+      <div
+        className="absolute right-3 sm:right-4 z-30 flex items-center gap-2 pointer-events-auto transition-all duration-200"
+        style={{ top: topSafeOffset }}
+      >
+        <span className="text-[11px] font-mono text-[#8b9bb4] bg-[#0c121e]/90 border border-[#202d44] px-2.5 py-1 rounded-full shadow-md backdrop-blur-sm">
           {tr('튜토리얼 STEP')} {currentStep.order} / {TUTORIAL_STEPS.length}
         </span>
         <button
           onClick={onSkipTutorial}
-          className="text-xs px-3 py-1 rounded-full bg-[#201818]/90 border border-[#ef535088] text-[#ef5350] hover:bg-[#ef5350] hover:text-white transition-all font-bold shadow cursor-pointer"
+          className="text-xs px-3 py-1.5 rounded-full bg-[#241414]/95 border border-[#ef5350aa] text-[#ef5350] hover:bg-[#ef5350] hover:text-white transition-all font-bold shadow-lg cursor-pointer active:scale-95 flex items-center gap-1 backdrop-blur-sm min-h-[30px]"
         >
-          {tr('건너뛰기 ✕')}
+          <span>{tr('건너뛰기 ✕')}</span>
         </button>
       </div>
 
       {/* ── 4. SRPG식 상반신 포트레이트 및 대사창 (화면 하단 또는 타깃이 하단일 때 상단) ── */}
       {isDialogueDismissed ? (
-        /* 대화창 일시 숨김 시 상단에 깔끔한 안내 칩 표시 */
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-[#0c1322]/95 border-2 border-[#ffd54f] text-[#ffd54f] text-xs font-bold shadow-[0_4px_20px_rgba(255,213,79,0.4)] backdrop-blur-md animate-bounce pointer-events-auto">
+        /* 대화창 일시 숨김 시 상단에 깔끔한 안내 칩 표시 (자원표시줄 및 스킵 헤더 아래) */
+        <div
+          className="absolute left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-[#0c1322]/95 border-2 border-[#ffd54f] text-[#ffd54f] text-xs font-bold shadow-[0_4px_20px_rgba(255,213,79,0.4)] backdrop-blur-md animate-bounce pointer-events-auto max-w-[92%]"
+          style={{ top: chipSafeOffset }}
+        >
           <span>👉</span>
-          <span>
+          <span className="truncate">
             {(() => {
               if (currentStep.id === 'TUTORIAL_PREP_POSITION') {
                 return tr('🛡️ 대원들의 포지션을 자유롭게 설정한 후, 화면 하단의 [다음: 시너지 확인 ▶] 플로팅 버튼을 터치하세요!');
@@ -356,7 +400,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
               e.stopPropagation();
               setIsDialogueDismissed(false);
             }}
-            className="ml-2 text-[10px] text-[#8b9bb4] hover:text-white underline cursor-pointer"
+            className="ml-2 text-[10px] text-[#8b9bb4] hover:text-white underline cursor-pointer shrink-0"
           >
             {tr('대화 다시보기')}
           </button>
@@ -364,8 +408,13 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
       ) : (
         <div
           className={`absolute left-1/2 -translate-x-1/2 w-[95%] max-w-[850px] z-20 cursor-pointer pointer-events-auto transition-all duration-300 ${
-            targetRect && targetRect.y > (typeof window !== 'undefined' ? window.innerHeight * 0.45 : 400) ? 'top-14 sm:top-16' : 'bottom-4'
+            targetRect && targetRect.y > (typeof window !== 'undefined' ? window.innerHeight * 0.45 : 400) ? '' : 'bottom-4'
           }`}
+          style={
+            targetRect && targetRect.y > (typeof window !== 'undefined' ? window.innerHeight * 0.45 : 400)
+              ? { top: dialogueSafeTop }
+              : undefined
+          }
           onClick={handleDialogueClick}
         >
           {/* 세로형 모바일 최적화: 외부 좌상단 오버랩 포트레이트 & 발화자 배지 */}

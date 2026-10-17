@@ -2650,19 +2650,32 @@ export const NemesisView: React.FC = () => {
 
                     {/* 전술 오퍼레이터 슬롯 */}
                     {leaderHero ? (
-                      <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-b from-[#2a1b0a] to-[#161009] border border-[#ffd54f55] flex flex-col items-center text-center min-w-0 shadow-sm shadow-[#ffd54f22]">
-                        <span className="text-[8px] font-bold text-[#ffd54f]">오퍼레이터</span>
-                        <div className="text-base sm:text-xl">👑</div>
-                        <span className="text-[10px] sm:text-xs font-bold text-[#ffd54f] truncate w-full mt-0.5" title={leaderHero.name}>
-                          {leaderHero.name}
-                        </span>
-                        <span className="text-[8.5px] sm:text-[10px] text-[#ffecb3] truncate w-full">
-                          {CHARACTER_CLASSES[leaderHero.classId]?.name || leaderHero.classId}
-                        </span>
-                        <div className="text-[8px] text-[#ffd54f] font-mono mt-0.5">
-                          지휘 가호
-                        </div>
-                      </div>
+                      (() => {
+                        const opCls = CHARACTER_CLASSES[leaderHero.classId];
+                        const opUlt = opCls?.specialSkill || leaderHero?.specialSkill || opCls?.skills?.[0] || null;
+                        return (
+                          <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-b from-[#2a1b0a] to-[#161009] border border-[#ffd54f55] flex flex-col items-center text-center min-w-0 shadow-sm shadow-[#ffd54f22]">
+                            <span className="text-[8px] font-bold text-[#ffd54f]">오퍼레이터</span>
+                            <div className="text-base sm:text-xl">👑</div>
+                            <span className="text-[10px] sm:text-xs font-bold text-[#ffd54f] truncate w-full mt-0.5" title={leaderHero.name}>
+                              {leaderHero.name}
+                            </span>
+                            <span className="text-[8.5px] sm:text-[10px] text-[#ffecb3] truncate w-full">
+                              {opCls?.name || leaderHero.classId}
+                            </span>
+                            {opUlt ? (
+                              <div className="text-[7.5px] sm:text-[8px] text-[#ffd54f] font-bold truncate w-full mt-0.5 flex items-center justify-center gap-0.5" title={`궁극기: ${opUlt.name}`}>
+                                <span>⚡</span>
+                                <span className="truncate">{opUlt.name}</span>
+                              </div>
+                            ) : (
+                              <div className="text-[8px] text-[#ffd54f] font-mono mt-0.5">
+                                지휘 가호
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()
                     ) : (
                       <div className="p-1.5 sm:p-2 rounded-xl border border-dashed border-[#ffd54f33] bg-[#1a140a]/40 flex flex-col items-center justify-center text-center min-h-[72px]">
                         <span className="text-sm opacity-40">👑</span>
