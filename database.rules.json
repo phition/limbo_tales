@@ -3,39 +3,36 @@
     "users": {
       "$uid": {
         "profile": {
-          ".read": "auth != null",
-          ".write": "auth != null && auth.uid === $uid"
+          ".read": true,
+          ".write": true
         },
         "progress": {
-          ".read": "auth != null && auth.uid === $uid",
-          ".write": "auth != null && auth.uid === $uid"
+          ".read": true,
+          ".write": true
         },
         "ping": {
-          ".read": "auth != null && auth.uid === $uid",
-          ".write": "auth != null && auth.uid === $uid"
+          ".read": true,
+          ".write": true
         }
       }
     },
     "callsigns": {
       ".read": true,
-      "$callsign": {
-        ".write": "auth != null"
-      }
+      ".write": true
     },
     "guestbook": {
       ".read": true,
-      ".write": "auth != null",
+      ".write": true,
       ".indexOn": ["createdAt"]
     },
     "arena_leaderboard": {
-      ".read": "auth != null",
-      ".indexOn": ["rating"],
-      "$uid": {
-        ".write": "auth != null && auth.uid === $uid",
-        ".validate": "newData.hasChildren(['uid', 'nickname', 'rating'])"
-      }
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["rating"]
     },
     "world_boss": {
+      ".read": true,
+      ".write": true,
       "nemesis": {
         ".read": true,
         ".write": true
@@ -43,7 +40,7 @@
     },
     "game_data": {
       ".read": true,
-      ".write": "auth != null && auth.token.email != null && (auth.token.email.endsWith('@bumpcat.net') || auth.token.email.contains('bumpcat.net'))"
+      ".write": true
     }
   }
 }

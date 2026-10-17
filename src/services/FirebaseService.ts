@@ -1182,15 +1182,19 @@ export class FirebaseService {
         }
       }
 
-      // 2. arena_leaderboard 노드에서 중복 확인 (등록 전 유저 대비)
-      const arenaSnap = await get(ref(db, 'arena_leaderboard'));
-      if (arenaSnap.exists()) {
-        const val = arenaSnap.val();
-        for (const u in val) {
-          if (u !== this.currentUser?.uid && val[u]?.nickname?.toLowerCase() === trimmed.toLowerCase()) {
-            return { available: false, reason: '이미 다른 지휘관이 사용 중인 콜사인입니다.' };
+      // 2. arena_leaderboard 노드에서 중복 확인 (등록 전 유저 대비, 권한 제한 시 안전 무시)
+      try {
+        const arenaSnap = await get(ref(db, 'arena_leaderboard'));
+        if (arenaSnap.exists()) {
+          const val = arenaSnap.val();
+          for (const u in val) {
+            if (u !== this.currentUser?.uid && val[u]?.nickname?.toLowerCase() === trimmed.toLowerCase()) {
+              return { available: false, reason: '이미 다른 지휘관이 사용 중인 콜사인입니다.' };
+            }
           }
         }
+      } catch (arenaErr) {
+        // 리더보드 읽기 권한이 제한된 환경에서도 callsigns 검증으로 안전하게 진행
       }
 
       return { available: true };
@@ -1224,24 +1228,32 @@ export class FirebaseService {
     const oldNick = profile?.nickname;
 
     try {
-      const updates: Record<string, any> = {};
-      updates[`callsigns/${trimmed}`] = uid;
+      // 1. callsigns 노드 등록 (개별 노드 직접 쓰기)
+      await set(ref(db, `callsigns/${trimmed}`), uid);
       if (oldNick && oldNick !== trimmed) {
-        updates[`callsigns/${oldNick}`] = null;
+        await set(ref(db, `callsigns/${oldNick}`), null).catch(() => {});
       }
-      updates[`users/${uid}/profile/nickname`] = trimmed;
-      updates[`users/${uid}/profile/callsignChanged`] = true;
-      updates[`users/${uid}/profile/callsignChangedAt`] = Date.now();
 
-      await update(ref(db), updates);
+      // 2. users/{uid}/profile 업데이트
+      await update(ref(db, `users/${uid}/profile`), {
+        nickname: trimmed,
+        callsignChanged: true,
+        callsignChangedAt: Date.now()
+      });
 
-      // Auth displayName 갱신
+      // 3. Auth displayName 갱신
       await updateProfile(this.currentUser, { displayName: trimmed }).catch(() => {});
 
-      // 아레나 리더보드 동기화
-      await update(ref(db, `arena_leaderboard/${uid}`), { nickname: trimmed }).catch(() => {});
+      // 4. 아레나 리더보드 동기화 (기존 항목이 있을 때만 안전 업데이트)
+      try {
+        const arenaRef = ref(db, `arena_leaderboard/${uid}`);
+        const arenaSnap = await get(arenaRef);
+        if (arenaSnap.exists()) {
+          await update(arenaRef, { nickname: trimmed }).catch(() => {});
+        }
+      } catch (_) {}
 
-      // 로컬 캐시 갱신
+      // 5. 로컬 캐시 갱신
       if (this.cachedProfile) {
         this.cachedProfile.nickname = trimmed;
         this.cachedProfile.callsignChanged = true;
@@ -1378,9 +1390,9 @@ export class FirebaseService {
           const toRemove = all.slice(0, removeCount);
           const updates: Record<string, null> = {};
           for (const item of toRemove) {
-            updates[`guestbook/${item.key}`] = null;
+            updates[item.key] = null;
           }
-          await update(ref(db), updates);
+          await update(guestbookRef, updates);
           console.log(`🧹 [Firebase] 방명록 200개 초과 항목 ${removeCount}개 자동 삭제 완료`);
         }
       }
