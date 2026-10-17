@@ -3831,7 +3831,7 @@ const BarracksDrawer: React.FC<{
           onClick={() => setBarracksCategory('dungeon')}
         >
           <span>⚔️</span>
-          <span>던전 원정대</span>
+          <span>{I18nService.getInstance().tr('던전 원정대')}</span>
         </button>
         <button
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
@@ -3842,7 +3842,7 @@ const BarracksDrawer: React.FC<{
           onClick={() => setBarracksCategory('dimensional')}
         >
           <span>{isAnchorUnlocked ? '🌌' : '🔒'}</span>
-          <span>차원 부대</span>
+          <span>{I18nService.getInstance().tr('차원 부대')}</span>
         </button>
 
         {/* 🛡️ 영지 수비부대 탭 (차원 앵커 게이트 Lv.6 해금) */}
@@ -3859,14 +3859,14 @@ const BarracksDrawer: React.FC<{
               onClick={() => {
                 if (!isDefenseUnlocked) {
                   SoundManager.getInstance().play('debuff');
-                  alert('차원 앵커 게이트가 6레벨 이상이어야 영지 수비부대 셋팅이 해금됩니다.');
+                  alert(I18nService.getInstance().tr('차원 앵커 게이트가 6레벨 이상이어야 영지 수비부대 셋팅이 해금됩니다.'));
                   return;
                 }
                 setBarracksCategory('defense');
               }}
             >
               <span>{isDefenseUnlocked ? '🛡️' : '🔒'}</span>
-              <span>수비부대</span>
+              <span>{I18nService.getInstance().tr('수비 부대')}</span>
             </button>
           );
         })()}
@@ -3909,16 +3909,16 @@ const BarracksDrawer: React.FC<{
             <div className="text-4xl p-4 bg-[#ff416c15] border border-[#ff416c33] rounded-2xl text-[#ff416c] animate-pulse">
               🔒
             </div>
-            <h3 className="text-base font-extrabold text-white">차원 부대 편성 잠김</h3>
+            <h3 className="text-base font-extrabold text-white">{I18nService.getInstance().tr('차원 부대 편성 잠김')}</h3>
             <p className="text-xs text-[#8b9bb4] max-w-sm leading-relaxed">
-              차원 부대 편성은 영지 내 <strong className="text-[#c8aa6e]">[차원 앵커 게이트]</strong>를 건설해야 해금되는 특수 부대 관리 기능입니다.<br />
-              차원 앵커를 완공하면 3인의 정예 결투원과 1인의 전술 오퍼레이터를 편성하여 차원 아레나 및 네메시스에 출전시킬 수 있습니다.
+              {I18nService.getInstance().tr('차원 부대 편성은 영지 내 [차원 앵커 게이트]를 건설해야 해금되는 특수 부대 관리 기능입니다.')}<br />
+              {I18nService.getInstance().tr('차원 앵커를 완공하면 3인의 정예 결투원과 1인의 전술 오퍼레이터를 편성하여 차원 아레나 및 네메시스에 출전시킬 수 있습니다.')}
             </p>
             <button
               className="btn btn-primary text-xs px-4 py-2 mt-2"
               onClick={onClose}
             >
-              🏛️ 영지로 돌아가 건물 건설하기
+              {I18nService.getInstance().tr('🏛️ 영지로 돌아가 건물 건설하기')}
             </button>
           </div>
         ) : (
@@ -3927,9 +3927,9 @@ const BarracksDrawer: React.FC<{
             <div className="bg-[#0b101c] p-3 rounded-xl border border-[#1b263b] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs">
               <div>
                 <div className="font-extrabold text-white flex items-center gap-2 flex-wrap">
-                  <span>🌌 내 차원 3인 결투 부대 & 전술 오퍼레이터</span>
+                  <span>{I18nService.getInstance().tr('🌌 내 차원 3인 결투 부대 & 전술 오퍼레이터')}</span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
-                    총 전투력: ⚡ {Math.round(([...mainHeroes, ...(activeOperator ? [activeOperator] : [])]).reduce((sum, h) => sum + (h.stats.atk * 3 + h.stats.def * 2 + h.maxHp / 5), 0)).toLocaleString()}
+                    {I18nService.getInstance().tr('총 전투력')}: ⚡ {Math.round(([...mainHeroes, ...(activeOperator ? [activeOperator] : [])]).reduce((sum, h) => sum + (h.stats.atk * 3 + h.stats.def * 2 + h.maxHp / 5), 0)).toLocaleString()}
                   </span>
                   <button
                     type="button"
@@ -3937,11 +3937,11 @@ const BarracksDrawer: React.FC<{
                     className="text-[10px] px-2 py-0.5 rounded bg-[#ffd54f18] hover:bg-[#ffd54f33] text-[#ffd54f] border border-[#ffd54f44] font-bold cursor-pointer transition-colors flex items-center gap-1"
                   >
                     <span>ℹ️</span>
-                    <span>오퍼레이터 가이드</span>
+                    <span>{I18nService.getInstance().tr('오퍼레이터 가이드')}</span>
                   </button>
                 </div>
                 <p className="text-[11px] text-[#8b9bb4] mt-0.5 leading-relaxed">
-                  필드 3인 결투 부대(전열·중열·후열) + 1인 오퍼레이터(영령 가호 및 피버 궁극기 발동자). <strong className="text-amber-400">전투 중 피버콜 3회 승리 시 즉시 압승!</strong>
+                  {I18nService.getInstance().tr('필드 3인 결투 부대(전열·중열·후열) + 1인 오퍼레이터(영령 가호 및 피버 궁극기 발동자).')} <strong className="text-amber-400">{I18nService.getInstance().tr('전투 중 피버콜 3회 승리 시 즉시 압승!')}</strong>
                 </p>
               </div>
               <button
@@ -3949,7 +3949,7 @@ const BarracksDrawer: React.FC<{
                 onClick={handleAutoAssignDimSquad}
               >
                 <span>⚡</span>
-                <span>최적 3+1 부대 자동 편성</span>
+                <span>{I18nService.getInstance().tr('최적 3+1 부대 자동 편성')}</span>
               </button>
             </div>
 
@@ -3959,7 +3959,7 @@ const BarracksDrawer: React.FC<{
                 <div className="flex items-center justify-between border-b border-[#1e293b] pb-1.5">
                   <span className="font-bold text-[#c8aa6e] flex items-center gap-1.5 text-xs">
                     <span>📖</span>
-                    <span>차원 결투 부대 & 전술 오퍼레이터 시스템 가이드</span>
+                    <span>{I18nService.getInstance().tr('차원 결투 부대 & 전술 오퍼레이터 시스템 가이드')}</span>
                   </span>
                   <button
                     type="button"
@@ -3973,21 +3973,21 @@ const BarracksDrawer: React.FC<{
                   <div className="p-2 rounded-lg bg-[#141e30] border border-[#233554] space-y-1">
                     <div className="font-bold text-[#ffd54f] flex items-center gap-1">
                       <span>👑</span>
-                      <span>전술 오퍼레이터 (Tactical Operator)</span>
+                      <span>{I18nService.getInstance().tr('전술 오퍼레이터 (Tactical Operator)')}</span>
                     </div>
                     <ul className="list-disc list-inside text-[#94a3b8] space-y-0.5 leading-relaxed">
-                      <li><strong className="text-white">영령의 가호 (Ancestral Blessing):</strong> 오퍼레이터의 무덤 가호 패시브를 전 부대에 상시 부여합니다.</li>
-                      <li><strong className="text-white">피버 궁극기 (Fever Special Skill):</strong> 피버 쇼다운에서 아군이 승리할 때마다 오퍼레이터의 궁극기가 전장에 전탄 투사됩니다!</li>
-                      <li>3인의 추천 족보를 확인하고, 피버가 터졌을 때 가장 시너지가 높은 궁극기를 가진 영웅을 오퍼레이터로 지정하십시오.</li>
+                      <li><strong className="text-white">{I18nService.getInstance().tr('영령의 가호 (Ancestral Blessing):')}</strong> {I18nService.getInstance().tr('오퍼레이터의 무덤 가호 패시브를 전 부대에 상시 부여합니다.')}</li>
+                      <li><strong className="text-white">{I18nService.getInstance().tr('피버 궁극기 (Fever Special Skill):')}</strong> {I18nService.getInstance().tr('피버 쇼다운에서 아군이 승리할 때마다 오퍼레이터의 궁극기가 전장에 전탄 투사됩니다!')}</li>
+                      <li>{I18nService.getInstance().tr('3인의 추천 족보를 확인하고, 피버가 터졌을 때 가장 시너지가 높은 궁극기를 가진 영웅을 오퍼레이터로 지정하십시오.')}</li>
                     </ul>
                   </div>
                   <div className="p-2 rounded-lg bg-[#141e30] border border-[#233554] space-y-1">
                     <div className="font-bold text-[#38ef7d] flex items-center gap-1">
                       <span>🏆</span>
-                      <span>피버콜 3승 즉시 제압 룰 (Fever 3-Win Domination)</span>
+                      <span>{I18nService.getInstance().tr('피버콜 3승 즉시 제압 룰 (Fever 3-Win Domination)')}</span>
                     </div>
                     <p className="text-[#94a3b8] leading-relaxed">
-                      전투의 유불리와 무관하게, 피버 쇼다운 대결에서 <strong className="text-[#38ef7d]">먼저 3회 승리한 쪽이 해당 결투에서 즉시 압승</strong>합니다! 1인만 생존한 위기 상황이라도 족보 포커 싸움에서 이기면 기적의 역전승이 가능합니다.
+                      {I18nService.getInstance().tr('전투의 유불리와 무관하게, 피버 쇼다운 대결에서 먼저 3회 승리한 쪽이 해당 결투에서 즉시 압승합니다! 1인만 생존한 위기 상황이라도 족보 포커 싸움에서 이기면 기적의 역전승이 가능합니다.')}
                     </p>
                   </div>
                 </div>
@@ -3999,10 +3999,10 @@ const BarracksDrawer: React.FC<{
               <div className="flex items-center justify-between text-xs">
                 <span className="font-extrabold text-white flex items-center gap-1.5">
                   <span>⚔️</span>
-                  <span>선발 3인 결투 부대 (전열 / 중열 / 후열)</span>
+                  <span>{I18nService.getInstance().tr('선발 3인 결투 부대 (전열 / 중열 / 후열)')}</span>
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">
-                  {mainHeroes.length}/3명 배치됨 (진형 시너지 {mainSynergies.length}개 활성)
+                  {mainHeroes.length}/3{I18nService.getInstance().tr('명 배치됨')} ({I18nService.getInstance().tr('진형 시너지')} {mainSynergies.length}{I18nService.getInstance().tr('개 활성')})
                 </span>
               </div>
 
@@ -4060,7 +4060,7 @@ const BarracksDrawer: React.FC<{
                     >
                       <div className="flex items-center justify-between text-[9px]">
                         <span className={`font-mono font-bold px-1.5 py-0.2 rounded border text-[9px] ${posTheme.badgeClass}`}>
-                          {posTheme.icon} {posTheme.name} ({idx + 1})
+                          {posTheme.icon} {I18nService.getInstance().tr(posTheme.name)} ({idx + 1})
                         </span>
                         {h && (
                           <button
@@ -4069,7 +4069,7 @@ const BarracksDrawer: React.FC<{
                               e.stopPropagation();
                               handleRemoveFromDimRole(roleKey);
                             }}
-                            title="선발 해제"
+                            title={I18nService.getInstance().tr('선발 해제')}
                           >
                             ✕
                           </button>
@@ -4093,10 +4093,10 @@ const BarracksDrawer: React.FC<{
                         <div className="flex flex-col items-center justify-center flex-1 text-center">
                           <span className="text-xl mb-0.5" style={{ color: posTheme.color }}>+</span>
                           <span className={`text-[9px] font-bold ${posTheme.emptyTextClass}`}>
-                            {posTheme.name} 선택
+                            {I18nService.getInstance().tr(`${posTheme.name} 선택`)}
                           </span>
                           <span className="text-[8px] text-[#8b9bb4] mt-0.5">
-                            {posTheme.role}
+                            {I18nService.getInstance().tr(posTheme.role)}
                           </span>
                         </div>
                       )}
@@ -4110,7 +4110,7 @@ const BarracksDrawer: React.FC<{
                 <div className="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
                   <span className="text-[11px] font-bold text-amber-300 flex items-center gap-1 shrink-0">
                     <span>🎯</span>
-                    <span>추천 족보 TOP 3:</span>
+                    <span>{I18nService.getInstance().tr('추천 족보 TOP 3:')}</span>
                   </span>
                   {predictedSynergies.length > 0 ? (
                     predictedSynergies.map((item, pIdx) => {
@@ -4139,7 +4139,7 @@ const BarracksDrawer: React.FC<{
                     })
                   ) : (
                     <span className="text-[10px] text-stone-500">
-                      3인을 모두 배치하면 직업 성향에 맞춘 최적 피버 족보가 예측됩니다.
+                      {I18nService.getInstance().tr('3인을 모두 배치하면 직업 성향에 맞춘 최적 피버 족보가 예측됩니다.')}
                     </span>
                   )}
                 </div>
@@ -4150,7 +4150,7 @@ const BarracksDrawer: React.FC<{
                   className="px-2.5 py-1 rounded-lg bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/50 text-[#ffd54f] text-[11px] font-bold flex items-center gap-1 shrink-0 cursor-pointer transition-colors shadow-sm"
                 >
                   <span>📜</span>
-                  <span>전체 족보 보기</span>
+                  <span>{I18nService.getInstance().tr('전체 족보 보기')}</span>
                 </button>
               </div>
             </div>
@@ -4170,7 +4170,7 @@ const BarracksDrawer: React.FC<{
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-extrabold text-[#ffd54f] flex items-center gap-1.5">
                     <span>👑</span>
-                    <span>전술 오퍼레이터 (상시 영령의 가호 & 피버 쇼다운 궁극기 발동자)</span>
+                    <span>{I18nService.getInstance().tr('전술 오퍼레이터 (상시 영령의 가호 & 피버 쇼다운 궁극기 발동자)')}</span>
                   </span>
                   {activeOperator && (
                     <button
@@ -4179,7 +4179,7 @@ const BarracksDrawer: React.FC<{
                         e.stopPropagation();
                         handleRemoveFromDimRole('operator');
                       }}
-                      title="오퍼레이터 해제"
+                      title={I18nService.getInstance().tr('오퍼레이터 해제')}
                     >
                       ✕
                     </button>
@@ -4203,12 +4203,12 @@ const BarracksDrawer: React.FC<{
                             </span>
                           </div>
                           <div className="text-[11px] text-[#ffecb3] truncate">
-                            ✨ <strong className="text-white">영령의 가호:</strong> {operatorBlessing ? operatorBlessing.name : '전술 가호 버프 적용'}
+                            ✨ <strong className="text-white">{I18nService.getInstance().tr('영령의 가호:')}</strong> {operatorBlessing ? operatorBlessing.name : I18nService.getInstance().tr('전술 가호 버프 적용')}
                           </div>
                           {opSkill && (
                             <div className="text-[11px] text-amber-300/90 truncate flex items-center gap-1">
                               <span>💥</span>
-                              <span><strong className="text-white">피버 궁극기:</strong> [{opSkill.name}] 피버 승리 시 전장에 시전</span>
+                              <span><strong className="text-white">{I18nService.getInstance().tr('피버 궁극기:')}</strong> [{opSkill.name}] {I18nService.getInstance().tr('피버 승리 시 전장에 시전')}</span>
                             </div>
                           )}
                         </div>
@@ -4217,9 +4217,9 @@ const BarracksDrawer: React.FC<{
                   })()
                 ) : (
                   <div className="flex flex-col items-center justify-center flex-1 py-3 text-center text-[#8d6e63]">
-                    <span className="text-base font-bold text-amber-400">+ 전술 오퍼레이터 지정</span>
+                    <span className="text-base font-bold text-amber-400">{I18nService.getInstance().tr('+ 전술 오퍼레이터 지정')}</span>
                     <span className="text-[10px] text-stone-400 mt-0.5">
-                      상시 영령의 가호 버프를 부여하고, 피버 승리 시 전장에 궁극기를 투사합니다.
+                      {I18nService.getInstance().tr('상시 영령의 가호 버프를 부여하고, 피버 승리 시 전장에 궁극기를 투사합니다.')}
                     </span>
                   </div>
                 )}
@@ -4227,23 +4227,23 @@ const BarracksDrawer: React.FC<{
             </div>
 
             {/* 하단: 보유 용병 선택 리스트 */}
-            <div className="panel p-3 bg-[#0c111e] border border-[#1b263c] rounded-xl flex flex-col gap-2">
+            <div className="panel p-3 bg-[#0c111e] border border-[#1b263b] rounded-xl flex flex-col gap-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-bold text-[#cfd8e8] flex items-center gap-1.5">
                   <span>👥</span>
                   <span>
                     {selectedDimRole
                       ? selectedDimRole === 'main_0'
-                        ? '[선발 전열 (🔴 방어/돌파)]에 배치할 용병을 탭하세요'
+                        ? I18nService.getInstance().tr('[선발 전열 (🔴 방어/돌파)]에 배치할 용병을 탭하세요')
                         : selectedDimRole === 'main_1'
-                        ? '[선발 중열 (🟡 연계/화력)]에 배치할 용병을 탭하세요'
+                        ? I18nService.getInstance().tr('[선발 중열 (🟡 연계/화력)]에 배치할 용병을 탭하세요')
                         : selectedDimRole === 'main_2'
-                        ? '[선발 후열 (🟢 지원/원거리)]에 배치할 용병을 탭하세요'
-                        : '[전술 오퍼레이터 (👑 가호/피버 궁극기)]로 지정할 용병을 탭하세요'
-                      : '보유 용병 선택 (위의 슬롯을 먼저 선택하거나 탭하여 바로 배치)'}
+                        ? I18nService.getInstance().tr('[선발 후열 (🟢 지원/원거리)]에 배치할 용병을 탭하세요')
+                        : I18nService.getInstance().tr('[전술 오퍼레이터 (👑 가호/피버 궁극기)]로 지정할 용병을 탭하세요')
+                      : I18nService.getInstance().tr('보유 용병 선택 (위의 슬롯을 먼저 선택하거나 탭하여 바로 배치)')}
                   </span>
                 </span>
-                <span className="text-[10px] text-[#8b9bb4]">{state.barracks.length}명 보유</span>
+                <span className="text-[10px] text-[#8b9bb4]">{state.barracks.length}{I18nService.getInstance().tr('명 보유')}</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -4286,11 +4286,11 @@ const BarracksDrawer: React.FC<{
                         <span className="text-lg">{bCls?.skills[0]?.icon || '⚔️'}</span>
                         {isAssigned ? (
                           <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold border ${badgeStyle}`}>
-                            {assignedLabel}
+                            {I18nService.getInstance().tr(assignedLabel)}
                           </span>
                         ) : (
                           <span className="text-[9px] px-1 py-0.2 rounded font-bold" style={{ color: gMeta.color, background: `${gMeta.color}15` }}>
-                            대기
+                            {I18nService.getInstance().tr('대기')}
                           </span>
                         )}
                       </div>

@@ -5,6 +5,7 @@ import { CHARACTER_CLASSES } from '../data/classes';
 import { resolveSiegeTactic, SiegeTacticDefinition } from '../data/siegeTactics';
 import { SoundManager } from '../managers/SoundManager';
 import { CustomAssetService } from '../services/CustomAssetService';
+import { I18nService } from '../i18n/I18nService';
 
 const DEFAULT_CLASS_IMAGES: Record<string, string> = {
   aegis_valkyrie: 'assets/valkyrie_saintess.jpg',
@@ -21,6 +22,7 @@ interface DefenseSettingsViewProps {
 export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
   onNavigateToTowerResearch,
 }) => {
+  const tr = (k: string) => I18nService.getInstance().tr(k);
   const { state, gm } = useGameManager();
   const customAssetService = CustomAssetService.getInstance();
   const gateLevel = state.buildings['arenaGate']?.level || 0;
@@ -108,17 +110,17 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
         </div>
         <div>
           <h3 className="text-base font-black text-white flex items-center justify-center gap-2">
-            <span>영지 수비 부대 & 방어 타워 셋팅</span>
+            <span>{tr('영지 수비 부대 & 방어 타워 셋팅')}</span>
             <span className="text-[10px] px-1.5 py-0.2 rounded font-mono bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">
-              Gate Lv.6 필요
+              {tr('Gate Lv.6 필요')}
             </span>
           </h3>
           <p className="text-xs text-[#8b9bb4] max-w-sm mt-1 leading-relaxed">
-            차원 앵커 게이트를 <span className="text-[#ffd54f] font-bold">6레벨</span> 이상으로 증축하여 <span className="text-[#c8aa6e] font-bold">영지 침공</span>이 열리면, 3대 방어 거점(차원 보호막, 좌/우 포탑)에 용병을 탑승시켜 영지를 수호할 수 있습니다.
+            {tr('차원 앵커 게이트를 6레벨 이상으로 증축하여 영지 침공이 열리면, 3대 방어 거점(차원 보호막, 좌/우 포탑)에 용병을 탑승시켜 영지를 수호할 수 있습니다.')}
           </p>
         </div>
         <div className="text-[11px] text-[#546e7a] font-mono bg-[#060911] px-3 py-1 rounded-xl border border-[#151f33]">
-          현재 차원 게이트: <span className="text-[#c8aa6e] font-bold">Lv.{gateLevel}</span> / 6
+          {tr('현재 차원 게이트:')} <span className="text-[#c8aa6e] font-bold">Lv.{gateLevel}</span> / 6
         </div>
       </div>
     );
@@ -146,13 +148,13 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
           </span>
           <div className="min-w-0">
             <div className="text-xs sm:text-sm font-black text-white flex items-center gap-1.5 truncate">
-              <span>수비 거점 결속 프로토콜</span>
+              <span>{tr('수비 거점 결속 프로토콜')}</span>
               <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] shrink-0">
                 Gate Lv.{gateLevel}
               </span>
             </div>
             <div className="text-[10px] sm:text-[11px] text-[#8b9bb4] truncate">
-              전열 타워는 전열 특화 스킬 대상이 되며 성벽을 엄호하고, 후열 보호막은 후열 저격 대상이 됩니다.
+              {tr('전열 타워는 전열 특화 스킬 대상이 되며 성벽을 엄호하고, 후열 보호막은 후열 저격 대상이 됩니다.')}
             </div>
           </div>
         </div>
@@ -162,7 +164,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
           className="btn btn-ghost text-[11px] sm:text-xs px-2.5 sm:px-3 py-1.5 border border-[#2a3f64] text-[#ffd54f] hover:bg-[#ffd54f15] flex items-center gap-1 font-bold cursor-pointer shrink-0"
         >
           <span>⚡</span>
-          <span>자동 셋팅</span>
+          <span>{tr('자동 셋팅')}</span>
         </button>
       </div>
 
@@ -176,13 +178,13 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-base sm:text-lg">🛡️</span>
             <span className="font-extrabold text-xs sm:text-sm text-white group-hover:text-[#c8aa6e] transition-colors truncate">
-              차원 왜곡 보호막 결속
+              {tr('차원 왜곡 보호막 결속')}
             </span>
             <span className="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#42a5f525] text-[#42a5f5] border border-[#42a5f555] shrink-0">
-              후열 거점
+              {tr('후열 거점')}
             </span>
             <span className="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] shrink-0">
-              기본 2,500 HP
+              {tr('기본 2,500 HP')}
             </span>
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
@@ -197,11 +199,11 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                 className="text-[9.5px] px-2 py-0.5 rounded-lg bg-[#c8aa6e22] border border-[#c8aa6e66] text-[#c8aa6e] hover:bg-[#c8aa6e44] font-bold flex items-center gap-1 shrink-0"
               >
                 <span>🔍</span>
-                <span>전술/수치 상세</span>
+                <span>{tr('전술/수치 상세')}</span>
               </button>
             )}
             <span className="text-[11px] text-[#c8aa6e] font-bold flex items-center gap-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform">
-              <span>결속자 변경</span>
+              <span>{tr('결속자 변경')}</span>
               <span>➔</span>
             </span>
           </div>
@@ -220,7 +222,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             ) : barrierHero ? (
               <span className="text-2xl">{CHARACTER_CLASSES[barrierHero.classId]?.skills[0]?.icon || '🛡️'}</span>
             ) : (
-              <span className="text-xs text-[#3a587e] font-bold">+ 결속</span>
+              <span className="text-xs text-[#3a587e] font-bold">+ {tr('결속')}</span>
             )}
             <span className="absolute bottom-0.5 right-0.5 text-[8px] font-mono font-black bg-black/85 px-1 rounded text-[#ffd54f]">
               Lv.{barrierHero?.level || 1}
@@ -235,32 +237,32 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <div className="flex items-center justify-between gap-1">
               <div className="flex items-center gap-1.5 truncate">
                 <span className="text-xs sm:text-sm font-black text-white truncate">
-                  {barrierHero ? barrierHero.name : '수호 결속자 미배치'}
+                  {barrierHero ? barrierHero.name : tr('수호 결속자 미배치')}
                 </span>
                 {barrierHero && (
                   <span className="text-[9px] font-bold text-[#80deea] truncate">
-                    ({CHARACTER_CLASSES[barrierHero.classId]?.name})
+                    ({tr(CHARACTER_CLASSES[barrierHero.classId]?.name || '')})
                   </span>
                 )}
               </div>
               <span className="text-[9px] font-mono font-bold text-[#ffd54f] shrink-0">
-                방어력 {fortressStats.barrierDef}
+                {tr('방어력')} {fortressStats.barrierDef}
               </span>
             </div>
 
             {/* 총 내구도 및 결속 효과 요약 배너 */}
             <div className="p-1.5 rounded-lg bg-black/50 border border-[#c8aa6e33] flex items-center justify-between text-[10px] sm:text-[11px] font-mono">
               <span className="text-[#80deea] font-bold flex items-center gap-1">
-                <span>총 내구도:</span>
+                <span>{tr('총 내구도')}:</span>
                 <span className="text-white font-black">{fortressStats.barrierMaxHp.toLocaleString()} HP</span>
               </span>
               <span className="text-[9px] text-[#ffd54f] truncate">
-                {barrierHero ? `용병 HP +${Math.round(barrierHero.maxHp * 0.35).toLocaleString()} 합산 반영` : '탱커 배치 권장'}
+                {barrierHero ? `${tr('용병 HP')} +${Math.round(barrierHero.maxHp * 0.35).toLocaleString()} ${tr('합산 반영')}` : tr('탱커 배치 권장')}
               </span>
             </div>
 
             <div className="text-[8.5px] sm:text-[9px] text-[#8b9bb4] truncate">
-              ※ 결속 용병은 직접 공격하지 않고 성벽 내구도와 방어력을 대폭 증폭시킵니다.
+              {tr('※ 결속 용병은 직접 공격하지 않고 성벽 내구도와 방어력을 대폭 증폭시킵니다.')}
             </div>
           </div>
         </div>
@@ -278,10 +280,10 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <div className="flex items-center gap-1.5 truncate">
               <span className="text-base">🗼</span>
               <span className="font-extrabold text-xs text-white group-hover:text-[#ff7043] transition-colors truncate">
-                좌측 포탑 (화력 공세)
+                {tr('좌측 포탑 (화력 공세)')}
               </span>
               <span className="text-[7.5px] font-bold px-1 py-0.2 rounded bg-[#ef535025] text-[#ef5350] border border-[#ef535055] shrink-0">
-                전열
+                {tr('전열')}
               </span>
             </div>
             <div className="flex items-center gap-1 shrink-0">
@@ -296,10 +298,13 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   className="text-[8.5px] px-1.5 py-0.5 rounded bg-[#ff704322] border border-[#ff704366] text-[#ff7043] hover:bg-[#ff704344] font-bold flex items-center gap-1 shrink-0"
                 >
                   <span>🔍</span>
-                  <span>상세</span>
+                  <span>{tr('상세')}</span>
                 </button>
               )}
-              <span className="text-[10px] text-[#ff7043] font-bold shrink-0">사수 변경 ➔</span>
+              <span className="text-[10px] text-[#ff7043] font-bold shrink-0 flex items-center gap-0.5">
+                <span>{tr('사수 변경')}</span>
+                <span>➔</span>
+              </span>
             </div>
           </div>
 
@@ -315,7 +320,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               ) : leftTurretHero ? (
                 <span className="text-xl">{CHARACTER_CLASSES[leftTurretHero.classId]?.skills[0]?.icon || '⚔️'}</span>
               ) : (
-                <span className="text-[10px] text-[#6b3524] font-bold">+ 탑승</span>
+                <span className="text-[10px] text-[#6b3524] font-bold">+ {tr('탑승')}</span>
               )}
               <span className="absolute bottom-0.5 right-0.5 text-[7px] font-mono font-black bg-black/85 px-1 rounded text-[#ffd54f]">
                 Lv.{leftTurretHero?.level || 1}
@@ -325,17 +330,17 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <div className="min-w-0 flex-1 flex flex-col justify-between py-0.5">
               <div className="flex items-center justify-between gap-1">
                 <span className="text-xs font-black text-white truncate">
-                  {leftTurretHero ? leftTurretHero.name : '사수 미배치'}
+                  {leftTurretHero ? leftTurretHero.name : tr('사수 미배치')}
                 </span>
                 <span className="text-[8.5px] font-mono text-[#ff8a80] font-bold">
-                  총 ATK {leftTurretTotalAtk}
+                  {tr('총 ATK')} {leftTurretTotalAtk}
                 </span>
               </div>
               <div className="text-[8.5px] font-mono text-[#8b9bb4]">
-                기본 {leftTurretBaseAtk} + 사수 {leftTurretHeroAtk} · HP <span className="text-white font-bold">{fortressStats.leftTurretMaxHp.toLocaleString()}</span>
+                {tr('기본')} {leftTurretBaseAtk} + {tr('사수')} {leftTurretHeroAtk} · HP <span className="text-white font-bold">{fortressStats.leftTurretMaxHp.toLocaleString()}</span>
               </div>
               <div className="text-[8px] text-[#ffd54f] truncate">
-                🎯 {leftTurretMode === 'focus_bombard' ? '타겟 집중 사격' : leftTurretMode === 'slow_field' ? '감속 억제탄' : '광역 폭격 / 집중 요격'}
+                🎯 {leftTurretMode === 'focus_bombard' ? tr('타겟 집중 사격') : leftTurretMode === 'slow_field' ? tr('감속 억제탄') : tr('광역 폭격 / 집중 요격')}
               </div>
             </div>
           </div>
@@ -350,10 +355,10 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <div className="flex items-center gap-1.5 truncate">
               <span className="text-base">🗼</span>
               <span className="font-extrabold text-xs text-white group-hover:text-[#c8aa6e] transition-colors truncate">
-                우측 포탑 (전술 지원)
+                {tr('우측 포탑 (전술 지원)')}
               </span>
               <span className="text-[7.5px] font-bold px-1 py-0.2 rounded bg-[#ef535025] text-[#ef5350] border border-[#ef535055] shrink-0">
-                전열
+                {tr('전열')}
               </span>
             </div>
             <div className="flex items-center gap-1 shrink-0">
@@ -368,10 +373,13 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   className="text-[8.5px] px-1.5 py-0.5 rounded bg-[#ffd54f22] border border-[#ffd54f66] text-[#ffd54f] hover:bg-[#ffd54f44] font-bold flex items-center gap-1 shrink-0"
                 >
                   <span>🔍</span>
-                  <span>상세</span>
+                  <span>{tr('상세')}</span>
                 </button>
               )}
-              <span className="text-[10px] text-[#c8aa6e] font-bold shrink-0">사수 변경 ➔</span>
+              <span className="text-[10px] text-[#c8aa6e] font-bold shrink-0 flex items-center gap-0.5">
+                <span>{tr('사수 변경')}</span>
+                <span>➔</span>
+              </span>
             </div>
           </div>
 
@@ -387,7 +395,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               ) : rightTurretHero ? (
                 <span className="text-xl">{CHARACTER_CLASSES[rightTurretHero.classId]?.skills[0]?.icon || '🔮'}</span>
               ) : (
-                <span className="text-[10px] text-[#2c526d] font-bold">+ 탑승</span>
+                <span className="text-[10px] text-[#2c526d] font-bold">+ {tr('탑승')}</span>
               )}
               <span className="absolute bottom-0.5 right-0.5 text-[7px] font-mono font-black bg-black/85 px-1 rounded text-[#ffd54f]">
                 Lv.{rightTurretHero?.level || 1}
@@ -397,17 +405,17 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <div className="min-w-0 flex-1 flex flex-col justify-between py-0.5">
               <div className="flex items-center justify-between gap-1">
                 <span className="text-xs font-black text-white truncate">
-                  {rightTurretHero ? rightTurretHero.name : '사수 미배치'}
+                  {rightTurretHero ? rightTurretHero.name : tr('사수 미배치')}
                 </span>
                 <span className="text-[8.5px] font-mono text-[#80deea] font-bold">
                   MP {rightTurretMaxMp} · LUCK {rightTurretLuck}
                 </span>
               </div>
               <div className="text-[8.5px] font-mono text-[#8b9bb4]">
-                전술 스킬 증폭 · HP <span className="text-white font-bold">{fortressStats.rightTurretMaxHp.toLocaleString()}</span>
+                {tr('전술 스킬 증폭')} · HP <span className="text-white font-bold">{fortressStats.rightTurretMaxHp.toLocaleString()}</span>
               </div>
               <div className="text-[8px] text-[#80deea] truncate">
-                ✨ {rightTurretMode === 'barrier_regen' ? '성벽·포탑 긴급 수복' : rightTurretMode === 'sanctuary_heal' ? '결계 방어막 및 버프' : '디버프 및 어그로 교란'}
+                ✨ {rightTurretMode === 'barrier_regen' ? tr('성벽·포탑 긴급 수복') : rightTurretMode === 'sanctuary_heal' ? tr('결계 방어막 및 버프') : tr('디버프 및 어그로 교란')}
               </div>
             </div>
           </div>
@@ -424,7 +432,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
           <div className="flex items-center gap-1.5 truncate">
             <span className="text-base">📡</span>
             <span className="font-extrabold text-xs sm:text-sm text-white group-hover:text-[#ff80ab] transition-colors truncate">
-              수성 오퍼레이터 & 수성 전술
+              {tr('수성 오퍼레이터 & 수성 전술')}
             </span>
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
@@ -439,10 +447,13 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                 className="text-[9.5px] px-2 py-0.5 rounded bg-[#ff416c22] border border-[#ff416c66] text-[#ff80ab] hover:bg-[#ff416c44] font-bold flex items-center gap-1 shrink-0"
               >
                 <span>🔍</span>
-                <span>전술 상세</span>
+                <span>{tr('전술 상세')}</span>
               </button>
             )}
-            <span className="text-[10px] sm:text-[11px] text-[#ff80ab] font-bold shrink-0">오퍼레이터 변경 ➔</span>
+            <span className="text-[10px] sm:text-[11px] text-[#ff80ab] font-bold shrink-0 flex items-center gap-0.5">
+              <span>{tr('오퍼레이터 변경')}</span>
+              <span>➔</span>
+            </span>
           </div>
         </div>
 
@@ -469,16 +480,16 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <div className="flex items-center justify-between gap-1">
               <div className="flex items-center gap-1.5 truncate">
                 <span className="text-xs font-black text-white truncate">
-                  {operatorHero ? operatorHero.name : '수성 오퍼레이터 미지정'}
+                  {operatorHero ? operatorHero.name : tr('수성 오퍼레이터 미지정')}
                 </span>
                 {operatorHero && (
                   <span className="text-[8.5px] font-bold text-[#ffd54f] px-1 py-0.2 rounded bg-[#ffd54f15] border border-[#ffd54f33] font-mono shrink-0">
-                    {activeTactic.trait}
+                    {tr(activeTactic.trait)}
                   </span>
                 )}
               </div>
               <span className="text-[9px] text-[#ce93d8] font-mono shrink-0">
-                {operatorHero ? CHARACTER_CLASSES[operatorHero.classId]?.name : '선택 필요'}
+                {operatorHero ? tr(CHARACTER_CLASSES[operatorHero.classId]?.name || '') : tr('선택 필요')}
               </span>
             </div>
 
@@ -486,8 +497,8 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <div className="p-1.5 rounded-lg bg-black/45 border border-[#ff416c33] flex items-center justify-between gap-1.5 text-[9.5px] sm:text-[10px]">
               <div className="flex items-center gap-1.5 truncate">
                 <span className="text-xs shrink-0">{activeTactic.defenseIcon}</span>
-                <span className="font-bold text-[#ff80ab] shrink-0">[{activeTactic.defenseSkillName}]</span>
-                <span className="text-[#cfd8e8] truncate">{activeTactic.defenseDesc}</span>
+                <span className="font-bold text-[#ff80ab] shrink-0">[{tr(activeTactic.defenseSkillName)}]</span>
+                <span className="text-[#cfd8e8] truncate">{tr(activeTactic.defenseDesc)}</span>
               </div>
               <span className="font-mono font-bold text-[#ffd54f] shrink-0">
                 {Math.round(activeTactic.defensePower * 100)}%
@@ -503,11 +514,11 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
           <span className="text-lg text-[#ffd54f] shrink-0">🔬</span>
           <div className="min-w-0">
             <div className="text-xs font-bold text-white flex items-center gap-1.5 truncate">
-              <span>영지 침공 방어 전술 타워 연구 연동</span>
-              <span className="text-[9px] font-mono text-[#ffd54f] shrink-0">총 Lv.{totalTowerLv} / 45</span>
+              <span>{tr('영지 침공 방어 전술 타워 연구 연동')}</span>
+              <span className="text-[9px] font-mono text-[#ffd54f] shrink-0">{tr('총')} Lv.{totalTowerLv} / 45</span>
             </div>
             <div className="text-[10px] text-[#8b9bb4] truncate">
-              공격 1~3차(화력·화상·중독) · 방어 1~3차(수복·기절·결빙) · 유틸 1~3차(속도%·마나%·행운%)
+              {tr('공격 1~3차(화력·화상·중독) · 방어 1~3차(수복·기절·결빙) · 유틸 1~3차(속도%·마나%·행운%)')}
             </div>
           </div>
         </div>
@@ -517,7 +528,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             onClick={onNavigateToTowerResearch}
             className="btn btn-ghost text-[10px] sm:text-[11px] px-2.5 py-1 border border-[#2b4168] text-[#c8aa6e] hover:bg-[#c8aa6e15] shrink-0 font-bold"
           >
-            연구소 ➔
+            {tr('연구소')} ➔
           </button>
         )}
       </div>
@@ -533,10 +544,10 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   {modalType === 'barrier' ? '🛡️' : modalType === 'left_turret' ? '🗼' : modalType === 'right_turret' ? '🗼' : '📡'}
                 </span>
                 <span className="font-extrabold text-xs sm:text-sm text-white">
-                  {modalType === 'barrier' && '차원 보호막 결속자 지정 (탱커 권장)'}
-                  {modalType === 'left_turret' && '좌측 전술 포탑 사수 지정 (물리 딜러 권장)'}
-                  {modalType === 'right_turret' && '우측 전술 포탑 사수 지정 (마법/힐러 권장)'}
-                  {modalType === 'operator' && '수성 오퍼레이터 임명 (전술 조율)'}
+                  {modalType === 'barrier' && tr('차원 보호막 결속자 지정 (탱커 권장)')}
+                  {modalType === 'left_turret' && tr('좌측 전술 포탑 사수 지정 (물리 딜러 권장)')}
+                  {modalType === 'right_turret' && tr('우측 전술 포탑 사수 지정 (마법/힐러 권장)')}
+                  {modalType === 'operator' && tr('수성 오퍼레이터 임명 (전술 조율)')}
                 </span>
               </div>
               <button onClick={() => setModalType(null)} className="text-gray-400 hover:text-white p-1 text-base">✕</button>
@@ -547,28 +558,28 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               <div className="text-[11px] text-[#8b9bb4] bg-[#070b14] p-2 rounded-xl border border-[#162238] leading-relaxed">
                 {modalType === 'barrier' && (
                   <span>
-                    🛡️ 결속 용병은 <strong className="text-[#ffd54f]">직접 공격하지 않고</strong>, 자신의 <strong className="text-[#c8aa6e]">MaxHP와 DEF</strong>를 차원 보호막에 100% 가산 합산합니다. 탱커를 배치할수록 보호막이 극적으로 두터워집니다.
+                    🛡️ {tr('결속 용병은 직접 공격하지 않고, 자신의 MaxHP와 DEF를 차원 보호막에 100% 가산 합산합니다. 탱커를 배치할수록 보호막이 극적으로 두터워집니다.')}
                   </span>
                 )}
                 {modalType === 'left_turret' && (
                   <span>
-                    🗼 좌측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 <strong className="text-[#ff7043]">공격력과 스킬</strong>로 공격합니다. <strong className="text-[#ffd54f]">기본 공격 버프(2연타 등)</strong>가 발동됩니다.
+                    🗼 {tr('좌측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 공격력과 스킬로 공격합니다. 기본 공격 버프(2연타 등)가 발동됩니다.')}
                   </span>
                 )}
                 {modalType === 'right_turret' && (
                   <span>
-                    🗼 우측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 <strong className="text-[#c8aa6e]">공격력과 스킬</strong>로 공격합니다. <strong className="text-[#ffd54f]">전술 스킬 버프(쿨다운/계수)</strong>가 발동됩니다.
+                    🗼 {tr('우측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 공격력과 스킬로 공격합니다. 전술 스킬 버프(쿨다운/계수)가 발동됩니다.')}
                   </span>
                 )}
                 {modalType === 'operator' && (
                   <span>
-                    📡 오퍼레이터의 <strong className="text-[#ffd54f]">성향(8종)</strong>과 <strong className="text-[#ff80ab]">클래스(6종)</strong>에 따라 영지의 핵심 수성 전술이 발동됩니다.
+                    📡 {tr('오퍼레이터의 성향(8종)과 클래스(6종)에 따라 영지의 핵심 수성 전술이 발동됩니다.')}
                   </span>
                 )}
               </div>
 
               {/* 보유 용병 리스트 */}
-              <div className="text-xs font-bold text-white">보유 용병 선택 (포트레이트 클릭)</div>
+              <div className="text-xs font-bold text-white">{tr('보유 용병 선택 (포트레이트 클릭)')}</div>
               <div className="flex flex-col gap-1.5 max-h-60 overflow-y-auto custom-scrollbar">
                 {allAvailableHeroes.map(h => {
                   const isCurrentBarrier = tempBarrierHeroId === h.id;
@@ -625,16 +636,16 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                           <div className="flex items-center gap-1.5 truncate">
                             <span className="text-xs font-bold text-white truncate">{h.name}</span>
                             <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33]">
-                              {h.trait || '균형잡힌 정예'}
+                              {tr(h.trait || '균형잡힌 정예')}
                             </span>
                             {isOccupiedElsewhere && (
                               <span className="text-[8px] px-1 py-0.2 rounded bg-red-950/40 text-red-300 border border-red-800/40">
-                                타 거점 배치 중
+                                {tr('타 거점 배치 중')}
                               </span>
                             )}
                           </div>
                           <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
-                            {cls?.name} · ATK {h.stats.atk} · DEF {h.stats.def} · HP {h.maxHp.toLocaleString()}
+                            {tr(cls?.name || '')} · ATK {h.stats.atk} · DEF {h.stats.def} · HP {h.maxHp.toLocaleString()}
                           </div>
                         </div>
                       </div>
@@ -651,7 +662,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                           className="px-2 py-1 rounded-lg bg-[#c8aa6e18] border border-[#c8aa6e55] hover:bg-[#c8aa6e33] text-[#c8aa6e] text-[10px] font-bold flex items-center gap-1 cursor-pointer"
                         >
                           <span>🔍</span>
-                          <span>상세/전술</span>
+                          <span>{tr('상세/전술')}</span>
                         </button>
                         <button
                           type="button"
@@ -672,7 +683,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                               : 'bg-[#c8aa6e22] border-[#c8aa6e88] text-white hover:bg-[#c8aa6e44]'
                           }`}
                         >
-                          {isSelectedForThis ? '✓ 선택됨' : isOccupiedElsewhere ? '배치불가' : '선택'}
+                          {isSelectedForThis ? tr('✓ 선택됨') : isOccupiedElsewhere ? tr('배치불가') : tr('선택')}
                         </button>
                       </div>
                     </div>
@@ -684,10 +695,10 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             {/* 모달 풋터 */}
             <div className="px-3.5 py-2.5 bg-[#0a0f1d] border-t border-[#1f2d48] flex items-center justify-end gap-2">
               <button onClick={() => setModalType(null)} className="btn btn-ghost text-xs px-3.5 py-1.5 text-[#8b9bb4]">
-                취소
+                {tr('취소')}
               </button>
               <button onClick={handleSaveModal} className="btn btn-primary text-xs px-5 py-2 font-bold">
-                배치 저장
+                {tr('배치 저장')}
               </button>
             </div>
           </div>
@@ -704,40 +715,40 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
 
         const slotMeta = {
           barrier: {
-            name: '차원 왜곡 보호막',
-            roleLabel: '수호 결속자 (탱커 권장)',
+            name: tr('차원 왜곡 보호막'),
+            roleLabel: tr('수호 결속자 (탱커 권장)'),
             icon: '🛡️',
             color: '#c8aa6e',
             bgColor: '#c8aa6e18',
             borderColor: '#c8aa6e77',
-            badge: '후열 방어선 (내구&방어 대폭 증폭)'
+            badge: tr('후열 방어선 (내구&방어 대폭 증폭)')
           },
           left_turret: {
-            name: '좌측 공격 포탑',
-            roleLabel: '화력 공세 사수 (물리 딜러 권장)',
+            name: tr('좌측 공격 포탑'),
+            roleLabel: tr('화력 공세 사수 (물리 딜러 권장)'),
             icon: '🗼',
             color: '#ff7043',
             bgColor: '#ff704318',
             borderColor: '#ff704377',
-            badge: '전열 거점 (포탑+사수 화력 합산 및 요격)'
+            badge: tr('전열 거점 (포탑+사수 화력 합산 및 요격)')
           },
           right_turret: {
-            name: '우측 전술 포탑',
-            roleLabel: '전술 방호 사수 (마법/힐러 권장)',
+            name: tr('우측 전술 포탑'),
+            roleLabel: tr('전술 방호 사수 (마법/힐러 권장)'),
             icon: '🗼',
             color: '#ffd54f',
             bgColor: '#ffd54f18',
             borderColor: '#ffd54f77',
-            badge: '전열 거점 (마나&행운 전술 스킬 증폭)'
+            badge: tr('전열 거점 (마나&행운 전술 스킬 증폭)')
           },
           operator: {
-            name: '수성 오퍼레이터',
-            roleLabel: '전술 사령관 (전황 전략 지휘)',
+            name: tr('수성 오퍼레이터'),
+            roleLabel: tr('전술 사령관 (전황 전략 지휘)'),
             icon: '📡',
             color: '#ff416c',
             bgColor: '#ff416c18',
             borderColor: '#ff416c77',
-            badge: '사령탑 (성향×클래스 고유 수성 전술)'
+            badge: tr('사령탑 (성향×클래스 고유 수성 전술)')
           }
         }[targetSlot];
 
@@ -795,12 +806,12 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
         };
 
         const roleKoreanMap: Record<string, string> = {
-          tank: '탱커 (방어 수호)',
-          dealer_phy: '물리 딜러 (근접 타격)',
-          gunner: '사수 (원거리 사격)',
-          dealer_mag: '마법 딜러 (비전 폭격)',
-          healer: '힐러 (생명 치유)',
-          berserker: '버서커 (광폭 공격)',
+          tank: tr('탱커 (방어 수호)'),
+          dealer_phy: tr('물리 딜러 (근접 타격)'),
+          gunner: tr('사수 (원거리 사격)'),
+          dealer_mag: tr('마법 딜러 (비전 폭격)'),
+          healer: tr('힐러 (생명 치유)'),
+          berserker: tr('버서커 (광폭 공격)'),
         };
 
         return (
@@ -818,7 +829,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   <span className="text-2xl">{slotMeta.icon}</span>
                   <div className="min-w-0">
                     <div className="text-sm font-black text-white flex items-center gap-2 truncate">
-                      <span>[{slotMeta.name}] 결속 및 전술 상세 분석</span>
+                      <span>[{slotMeta.name}] {tr('결속 및 전술 상세 분석')}</span>
                     </div>
                     <div className="text-[10px] text-[#cfd8e8] truncate">
                       {slotMeta.roleLabel} · {slotMeta.badge}
@@ -857,14 +868,14 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                     <div className="flex items-center justify-between gap-1">
                       <div className="flex items-center gap-1.5 truncate">
                         <span className="text-sm font-black text-white truncate">{h.name}</span>
-                        <span className="text-[10px] font-bold text-[#80deea]">({cls?.name})</span>
+                        <span className="text-[10px] font-bold text-[#80deea]">({tr(cls?.name || '')})</span>
                       </div>
                       <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33] shrink-0">
-                        {h.trait || '균형잡힌 정예'}
+                        {tr(h.trait || '균형잡힌 정예')}
                       </span>
                     </div>
                     <div className="text-[10.5px] text-[#8b9bb4] mt-0.5">
-                      직업 역할: <strong className="text-white">{roleKoreanMap[cls?.role || 'tank'] || cls?.role}</strong>
+                      {tr('직업 역할')}: <strong className="text-white">{roleKoreanMap[cls?.role || 'tank'] || cls?.role}</strong>
                     </div>
 
                     {/* 스탯 미니 바 */}
@@ -885,11 +896,11 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                     <div className="flex items-center gap-1.5">
                       <span className="text-base">🌟</span>
                       <span className="font-extrabold text-xs text-[#e1bee7]">
-                        클래스({cls?.name}) × 성향({h.trait}) 고유 전술
+                        {tr('클래스')}({tr(cls?.name || '')}) × {tr('성향')}({tr(h.trait || '균형잡힌 정예')}) {tr('고유 전술')}
                       </span>
                     </div>
                     <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-[#ab47bc25] text-[#ce93d8] border border-[#ab47bc55] font-mono">
-                      {tactic.name}
+                      {tr(tactic.name)}
                     </span>
                   </div>
 
@@ -898,14 +909,14 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-black text-[#ff80ab] flex items-center gap-1.5">
                         <span className="text-sm">{tactic.defenseIcon}</span>
-                        <span>[수성 핵심 전술] {tactic.defenseSkillName}</span>
+                        <span>[{tr('수성 핵심 전술')}] {tr(tactic.defenseSkillName)}</span>
                       </span>
                       <span className="text-[9px] font-mono font-bold text-[#ffd54f] bg-[#ffd54f18] px-1.5 py-0.2 rounded border border-[#ffd54f33]">
-                        계수 {Math.round(tactic.defensePower * 100)}%
+                        {tr('계수')} {Math.round(tactic.defensePower * 100)}%
                       </span>
                     </div>
                     <p className="text-[10px] text-[#cfd8e8] leading-relaxed">
-                      {tactic.defenseDesc}
+                      {tr(tactic.defenseDesc)}
                     </p>
                   </div>
 
@@ -914,14 +925,14 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-black text-[#c8aa6e] flex items-center gap-1.5">
                         <span className="text-sm">{tactic.siegeIcon}</span>
-                        <span>[공성 침공 전술] {tactic.siegeSkillName}</span>
+                        <span>[{tr('공성 침공 전술')}] {tr(tactic.siegeSkillName)}</span>
                       </span>
                       <span className="text-[9px] font-mono font-bold text-[#ffd54f] bg-[#ffd54f18] px-1.5 py-0.2 rounded border border-[#ffd54f33]">
-                        계수 {Math.round(tactic.siegePower * 100)}%
+                        {tr('계수')} {Math.round(tactic.siegePower * 100)}%
                       </span>
                     </div>
                     <p className="text-[10px] text-[#8b9bb4] leading-relaxed">
-                      {tactic.siegeDesc}
+                      {tr(tactic.siegeDesc)}
                     </p>
                   </div>
                 </div>
@@ -934,10 +945,10 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   <div className="flex items-center justify-between border-b pb-1.5" style={{ borderColor: slotMeta.borderColor }}>
                     <div className="flex items-center gap-1.5 font-black text-xs text-white">
                       <span>📊</span>
-                      <span>[{slotMeta.name}] 탑승 시 최종 수치 변화</span>
+                      <span>[{slotMeta.name}] {tr('탑승 시 최종 수치 변화')}</span>
                     </div>
                     <span className="text-[9px] font-bold px-1.5 py-0.2 rounded font-mono" style={{ color: slotMeta.color, backgroundColor: '#00000088' }}>
-                      {targetSlot === 'barrier' ? '후열 엄호 수호' : targetSlot === 'left_turret' ? '전열 화력 포격' : targetSlot === 'right_turret' ? '전열 전술 지원' : '전황 총괄 지휘'}
+                      {targetSlot === 'barrier' ? tr('후열 엄호 수호') : targetSlot === 'left_turret' ? tr('전열 화력 포격') : targetSlot === 'right_turret' ? tr('전열 전술 지원') : tr('전황 총괄 지휘')}
                     </span>
                   </div>
 
@@ -945,38 +956,38 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   {targetSlot === 'barrier' && (
                     <div className="flex flex-col gap-2 text-[10.5px]">
                       <div className="text-[#80deea] text-[10px] leading-relaxed">
-                        🛡️ 차원 보호막에 결속되어 후열에서 영지를 엄호합니다. 수호자는 직접 공격하지 않는 대신 자신의 <strong className="text-white">MaxHP(35% 증폭 반영)</strong>와 <strong className="text-white">방어력(50%)</strong>을 영지 전체 보호막에 가산하여 철벽을 형성합니다.
+                        🛡️ {tr('차원 보호막에 결속되어 후열에서 영지를 엄호합니다. 수호자는 직접 공격하지 않는 대신 자신의 MaxHP(35% 증폭 반영)와 방어력(50%)을 영지 전체 보호막에 가산하여 철벽을 형성합니다.')}
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 bg-black/60 p-2.5 rounded-xl border border-[#c8aa6e33]">
                         {/* HP 비교 */}
                         <div className="flex flex-col gap-1 border-r border-[#c8aa6e22] pr-2">
-                          <span className="text-[10px] font-bold text-[#8b9bb4]">보호막 총 내구도 (HP)</span>
+                          <span className="text-[10px] font-bold text-[#8b9bb4]">{tr('보호막 총 내구도 (HP)')}</span>
                           <div className="flex items-baseline gap-1.5">
                             <span className="text-[11px] text-[#546e7a] line-through font-mono">{baseBarrierHp.toLocaleString()}</span>
                             <span className="text-sm font-black text-white font-mono">{finalBarrierHp.toLocaleString()}</span>
                           </div>
                           <span className="text-[9.5px] font-bold text-[#38ef7d] font-mono">
-                            ▲ +{barrierHpBonus.toLocaleString()} HP 증폭!
+                            ▲ +{barrierHpBonus.toLocaleString()} HP {tr('증폭!')}
                           </span>
                         </div>
 
                         {/* DEF 비교 */}
                         <div className="flex flex-col gap-1 pl-1">
-                          <span className="text-[10px] font-bold text-[#8b9bb4]">보호막 방어력 (DEF)</span>
+                          <span className="text-[10px] font-bold text-[#8b9bb4]">{tr('보호막 방어력 (DEF)')}</span>
                           <div className="flex items-baseline gap-1.5">
                             <span className="text-[11px] text-[#546e7a] line-through font-mono">{baseBarrierDef}</span>
                             <span className="text-sm font-black text-white font-mono">{finalBarrierDef}</span>
                           </div>
                           <span className="text-[9.5px] font-bold text-[#38ef7d] font-mono">
-                            ▲ +{barrierDefBonus} DEF 증폭!
+                            ▲ +{barrierDefBonus} DEF {tr('증폭!')}
                           </span>
                         </div>
                       </div>
 
                       <div className="text-[9px] text-[#8b9bb4] flex items-center gap-1">
                         <span>ℹ️</span>
-                        <span>성벽은 <strong>후열(Back Row)</strong> 판정으로, 전열 포탑들이 건재할 경우 전열 관통/후열 저격 스킬을 제외한 일반 공격으로부터 엄호받습니다.</span>
+                        <span>{tr('성벽은 후열(Back Row) 판정으로, 전열 포탑들이 건재할 경우 전열 관통/후열 저격 스킬을 제외한 일반 공격으로부터 엄호받습니다.')}</span>
                       </div>
                     </div>
                   )}
@@ -984,41 +995,41 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   {targetSlot === 'left_turret' && (
                     <div className="flex flex-col gap-2 text-[10.5px]">
                       <div className="text-[#ffab91] text-[10px] leading-relaxed">
-                        🗼 좌측 전술 포탑에 탑승하여 전열 요격을 전담합니다. 포탑 기본 공격력에 사수의 <strong className="text-white">공격력(ATK 100%)</strong>이 합산되며, 매 턴 타워 요격 사격과 사수의 공격 스킬을 구사합니다.
+                        🗼 {tr('좌측 전술 포탑에 탑승하여 전열 요격을 전담합니다. 포탑 기본 공격력에 사수의 공격력(ATK 100%)이 합산되며, 매 턴 타워 요격 사격과 사수의 공격 스킬을 구사합니다.')}
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 bg-black/60 p-2.5 rounded-xl border border-[#ff704333]">
                         {/* ATK 비교 */}
                         <div className="flex flex-col gap-1 border-r border-[#ff704322] pr-2">
-                          <span className="text-[10px] font-bold text-[#8b9bb4]">포탑 총 공격력 (ATK)</span>
+                          <span className="text-[10px] font-bold text-[#8b9bb4]">{tr('포탑 총 공격력 (ATK)')}</span>
                           <div className="flex items-baseline gap-1.5">
                             <span className="text-[11px] text-[#546e7a] line-through font-mono">{leftTurretBaseAtk}</span>
                             <span className="text-sm font-black text-white font-mono">{finalLeftTurretAtk}</span>
                           </div>
                           <span className="text-[9.5px] font-bold text-[#ff7043] font-mono">
-                            ▲ +{h.stats.atk} 사수 공격력 합산!
+                            ▲ +{h.stats.atk} {tr('사수 공격력 합산!')}
                           </span>
                         </div>
 
                         {/* 포탑 생존 스펙 */}
                         <div className="flex flex-col gap-1 pl-1 font-mono text-[10px]">
-                          <span className="text-[#8b9bb4]">포탑 내구 & 속도</span>
+                          <span className="text-[#8b9bb4]">{tr('포탑 내구 & 속도')}</span>
                           <div>HP: <strong className="text-white">{baseTurretHp.toLocaleString()}</strong></div>
                           <div>DEF: <strong className="text-[#81c784]">{baseTurretDef}</strong> · SPD: <strong className="text-[#ffd54f]">{turretSpd}</strong></div>
                         </div>
                       </div>
 
                       <div className="p-2 rounded-lg bg-[#0e0a12] border border-[#ff704322] text-[9.5px]">
-                        <strong className="text-[#ffd54f]">🗼 포탑 구사 스킬:</strong>
+                        <strong className="text-[#ffd54f]">🗼 {tr('포탑 구사 스킬')}:</strong>
                         <div className="text-[#cfd8e8] mt-0.5">
-                          · [기본 사격] 포탑 요격 사격 (화력 버프 적용)<br />
-                          · [사수 스킬] {cls?.skills?.map(s => s.name).join(', ') || '기본 공격'}
+                          · [{tr('기본 사격')}] {tr('포탑 요격 사격 (화력 버프 적용)')}<br />
+                          · [{tr('사수 스킬')}] {cls?.skills?.map(s => tr(s.name)).join(', ') || tr('기본 공격')}
                         </div>
                       </div>
 
                       <div className="text-[9px] text-[#8b9bb4] flex items-center gap-1">
                         <span>ℹ️</span>
-                        <span>포탑은 <strong>전열(Front Row)</strong> 판정으로, 적의 전열 특화 스킬 대상이 되며 후열의 성벽을 방패처럼 보호합니다.</span>
+                        <span>{tr('포탑은 전열(Front Row) 판정으로, 적의 전열 특화 스킬 대상이 되며 후열의 성벽을 방패처럼 보호합니다.')}</span>
                       </div>
                     </div>
                   )}
@@ -1026,46 +1037,46 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   {targetSlot === 'right_turret' && (
                     <div className="flex flex-col gap-2 text-[10.5px]">
                       <div className="text-[#fff59d] text-[10px] leading-relaxed">
-                        🗼 우측 전술 포탑에 탑승하여 전열 지원 및 디버프를 전담합니다. 포탑에 사수의 <strong className="text-white">마나(MaxMP)</strong>와 <strong className="text-white">행운(LUCK)</strong>이 가산되어 성벽/포탑 긴급 수복 및 전술 스킬 발동을 극대화합니다.
+                        🗼 {tr('우측 전술 포탑에 탑승하여 전열 지원 및 디버프를 전담합니다. 포탑에 사수의 마나(MaxMP)와 행운(LUCK)이 가산되어 성벽/포탑 긴급 수복 및 전술 스킬 발동을 극대화합니다.')}
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 bg-black/60 p-2.5 rounded-xl border border-[#ffd54f33]">
                         {/* MP 비교 */}
                         <div className="flex flex-col gap-1 border-r border-[#ffd54f22] pr-2">
-                          <span className="text-[10px] font-bold text-[#8b9bb4]">포탑 최대 마나 (MP)</span>
+                          <span className="text-[10px] font-bold text-[#8b9bb4]">{tr('포탑 최대 마나 (MP)')}</span>
                           <div className="flex items-baseline gap-1.5">
                             <span className="text-[11px] text-[#546e7a] line-through font-mono">{rightTurretBaseMp}</span>
                             <span className="text-sm font-black text-[#64b5f6] font-mono">{finalRightTurretMp}</span>
                           </div>
                           <span className="text-[9.5px] font-bold text-[#64b5f6] font-mono">
-                            ▲ +{h.maxMp} 사수 마나 합산!
+                            ▲ +{h.maxMp} {tr('사수 마나 합산!')}
                           </span>
                         </div>
 
                         {/* LUCK 비교 */}
                         <div className="flex flex-col gap-1 pl-1">
-                          <span className="text-[10px] font-bold text-[#8b9bb4]">포탑 행운 (LUCK)</span>
+                          <span className="text-[10px] font-bold text-[#8b9bb4]">{tr('포탑 행운 (LUCK)')}</span>
                           <div className="flex items-baseline gap-1.5">
                             <span className="text-[11px] text-[#546e7a] line-through font-mono">{rightTurretBaseLuck}</span>
                             <span className="text-sm font-black text-[#ce93d8] font-mono">{finalRightTurretLuck}</span>
                           </div>
                           <span className="text-[9.5px] font-bold text-[#ce93d8] font-mono">
-                            ▲ +{h.stats.luck} 사수 행운 합산!
+                            ▲ +{h.stats.luck} {tr('사수 행운 합산!')}
                           </span>
                         </div>
                       </div>
 
                       <div className="p-2 rounded-lg bg-[#0a1018] border border-[#ffd54f22] text-[9.5px]">
-                        <strong className="text-[#ffd54f]">🗼 포탑 구사 스킬:</strong>
+                        <strong className="text-[#ffd54f]">🗼 {tr('포탑 구사 스킬')}:</strong>
                         <div className="text-[#cfd8e8] mt-0.5">
-                          · [기본 사격] 성역 결계 사격 (방호 마력 방출)<br />
-                          · [사수 스킬] {cls?.skills?.map(s => s.name).join(', ') || '전술 지원'}
+                          · [{tr('기본 사격')}] {tr('성역 결계 사격 (방호 마력 방출)')}<br />
+                          · [{tr('사수 스킬')}] {cls?.skills?.map(s => tr(s.name)).join(', ') || tr('전술 지원')}
                         </div>
                       </div>
 
                       <div className="text-[9px] text-[#8b9bb4] flex items-center gap-1">
                         <span>ℹ️</span>
-                        <span>우측 포탑은 <strong>전열(Front Row)</strong>에서 높은 마나와 행운으로 침입자에게 감속/결빙/기절 디버프를 가하고 성벽을 치유합니다.</span>
+                        <span>{tr('우측 포탑은 전열(Front Row)에서 높은 마나와 행운으로 침입자에게 감속/결빙/기절 디버프를 가하고 성벽을 치유합니다.')}</span>
                       </div>
                     </div>
                   )}
@@ -1073,27 +1084,27 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   {targetSlot === 'operator' && (
                     <div className="flex flex-col gap-2 text-[10.5px]">
                       <div className="text-[#f48fb1] text-[10px] leading-relaxed">
-                        📡 수성 사령탑으로 임명되어 매 4턴마다 영지 전체 부대에 전술 명령을 하달합니다. 오퍼레이터의 성향과 클래스 역할이 영지의 방어 전략 성패를 결정짓습니다.
+                        📡 {tr('수성 사령탑으로 임명되어 매 4턴마다 영지 전체 부대에 전술 명령을 하달합니다. 오퍼레이터의 성향과 클래스 역할이 영지의 방어 전략 성패를 결정짓습니다.')}
                       </div>
 
                       <div className="bg-black/60 p-2.5 rounded-xl border border-[#ff416c33] flex flex-col gap-1.5">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-white flex items-center gap-1.5">
                             <span>{tactic.defenseIcon}</span>
-                            <span>{tactic.defenseSkillName}</span>
+                            <span>{tr(tactic.defenseSkillName)}</span>
                           </span>
                           <span className="text-[9.5px] font-mono font-bold text-[#ffd54f]">
-                            매 4턴 자동 하달
+                            {tr('매 4턴 자동 하달')}
                           </span>
                         </div>
                         <p className="text-[10px] text-[#cfd8e8]">
-                          {tactic.defenseDesc}
+                          {tr(tactic.defenseDesc)}
                         </p>
                       </div>
 
                       <div className="text-[9px] text-[#8b9bb4] flex items-center gap-1">
                         <span>ℹ️</span>
-                        <span>오퍼레이터는 전장에 직접 전투원으로 서지 않으며, 안전한 사령실에서 아군 방어 부대 전체에 버프를 부여하고 적을 약화시킵니다.</span>
+                        <span>{tr('오퍼레이터는 전장에 직접 전투원으로 서지 않으며, 안전한 사령실에서 아군 방어 부대 전체에 버프를 부여하고 적을 약화시킵니다.')}</span>
                       </div>
                     </div>
                   )}
@@ -1103,7 +1114,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                 <div className="p-3 rounded-xl bg-[#0b101c] border border-[#1b273d] flex flex-col gap-2">
                   <div className="text-xs font-bold text-white flex items-center gap-1.5">
                     <span>⚔️</span>
-                    <span>{h.name}의 고유 전투 스킬</span>
+                    <span>{h.name}{tr('의 고유 전투 스킬')}</span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                     {(cls?.skills || []).map((sk, idx) => (
@@ -1111,11 +1122,11 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-white text-[11px] flex items-center gap-1">
                             <span>{sk.icon || '⚔️'}</span>
-                            <span>{sk.name}</span>
+                            <span>{tr(sk.name)}</span>
                           </span>
                           <span className="text-[9px] font-mono text-[#64b5f6]">{sk.manaCost} MP</span>
                         </div>
-                        <span className="text-[9.5px] text-[#8b9bb4] line-clamp-2 leading-relaxed">{sk.description}</span>
+                        <span className="text-[9.5px] text-[#8b9bb4] line-clamp-2 leading-relaxed">{tr(sk.description)}</span>
                       </div>
                     ))}
                   </div>
@@ -1130,7 +1141,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   onClick={() => setInspectHero(null)}
                   className="btn btn-ghost text-xs px-3.5 py-1.5 text-[#8b9bb4] cursor-pointer"
                 >
-                  닫기
+                  {tr('닫기')}
                 </button>
 
                 <button
@@ -1140,7 +1151,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   style={{ backgroundColor: slotMeta.color, color: targetSlot === 'right_turret' ? '#000' : '#fff' }}
                 >
                   <span>{slotMeta.icon}</span>
-                  <span>{isCurrentlyAssignedToThis ? '현재 거점에 배치됨 (확정)' : `이 용병을 [${slotMeta.name}]에 배치`}</span>
+                  <span>{isCurrentlyAssignedToThis ? tr('현재 거점에 배치됨 (확정)') : `${tr('이 용병을')} [${slotMeta.name}]${tr('에 배치')}`}</span>
                 </button>
               </div>
             </div>
