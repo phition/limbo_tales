@@ -46,6 +46,7 @@ interface MonsterState {
     remainingBreakDmg: number;
     maxBreakDmg: number;
     skill: MonsterSkill;
+    originalLuck?: number;
   } | null;
   isGroggy?: boolean;
 }
@@ -3368,15 +3369,20 @@ export const BattleScreen: React.FC = () => {
           // 👑 [7층 보스 세트 효과] 공격 시 25% 확률로 적에게 1턴간 [빙결] 부여
           const heroBossSetAttacking = getHeroEquippedBossSet(hero);
           if (heroBossSetAttacking?.effectType === 'stun_chance' && m.currentHp > 0 && Math.random() < 0.25) {
-            applyStatusEffect(m, {
-              type: 'freeze',
-              turnsLeft: 1,
-              totalTurns: 1,
-              magnitude: 1,
-              source: heroBossSetAttacking.setName
-            });
-            logs.push(`⛓️ [${heroBossSetAttacking.setName}] 원혼의 속박 발동: ${m.data.name} 1턴간 [빙결] 행동 불능!`);
-            SoundManager.getInstance().play('ice');
+            const monResistChance = Math.min(50, (m.luck || 10) * 0.35);
+            if (Math.random() * 100 < monResistChance) {
+              logs.push(`🛡️ [저항(RESIST)] ${m.data.name}이(가) 높은 행운(🍀${m.luck})으로 원혼의 속박(빙결)을 저항했습니다!`);
+            } else {
+              applyStatusEffect(m, {
+                type: 'freeze',
+                turnsLeft: 1,
+                totalTurns: 1,
+                magnitude: 1,
+                source: heroBossSetAttacking.setName
+              });
+              logs.push(`⛓️ [${heroBossSetAttacking.setName}] 원혼의 속박 발동: ${m.data.name} 1턴간 [빙결] 행동 불능!`);
+              SoundManager.getInstance().play('ice');
+            }
           }
 
           // 🎯 [전술 사격수 패시브: 약점 분석] 적 타격 시 40% 확률로 적의 방어력 -15% 디버프 중첩
@@ -3405,12 +3411,16 @@ export const BattleScreen: React.FC = () => {
             logs.push(`🔥 [광전사의 화신] ${hero.name}의 치명타로 파티 전원 공격력 15% 강화!`);
           }
 
-          // 🌟 [차징 저지 & 브레이크 판정]
+          // 🌟 [차징 저지 & 브레이크 판정] (차징 게이지는 몬스터가 입는 피해의 50%만 적용)
           if (m.chargingState && m.currentHp > 0) {
-            const totalDmgAgainstCharge = actualDamage + (comboResult.triggered ? comboResult.extraDamage : 0);
+            const rawDmgAgainstCharge = actualDamage + (comboResult.triggered ? comboResult.extraDamage : 0);
+            const totalDmgAgainstCharge = Math.max(1, Math.floor(rawDmgAgainstCharge * 0.5));
             m.chargingState.remainingBreakDmg -= totalDmgAgainstCharge;
             const hasStunOrFreeze = (m.statusEffects || []).some(se => se.type === 'stun' || se.type === 'freeze');
             if (hasStunOrFreeze || m.chargingState.remainingBreakDmg <= 0) {
+              if (m.chargingState.originalLuck !== undefined) {
+                m.luck = m.chargingState.originalLuck;
+              }
               m.chargingState = null;
               m.isGroggy = true;
               addFeverBadge('break');
@@ -3423,7 +3433,7 @@ export const BattleScreen: React.FC = () => {
                 text: 'BREAK!',
                 isCrit: true,
               });
-              logs.push(`💥⚡ [차징 파쇄] ${hero.name}의 맹공으로 ${m.data.name}의 차징이 분쇄되었습니다! (1턴간 받는 피해 +50% 그로기 돌입)`);
+              logs.push(`💥⚡ [차징 파쇄] ${hero.name}의 맹공으로 ${m.data.name}의 차징이 분쇄되었습니다! (1턴간 받는 피해 +50% 그로기 돌입 & 행운 정상화)`);
               setSkillCutIn({
                 id: String(Date.now() + 1),
                 skillName: `💥 [${m.data.name}] 차징 붕괴!`,
@@ -5689,9 +5699,12 @@ export const BattleScreen: React.FC = () => {
     const ccEffects = (monster.statusEffects || []).filter(se => se.type === 'freeze' || se.type === 'stun');
     if (ccEffects.length > 0 || turnSkippedRef.current) {
       if (monster.chargingState) {
+        if (monster.chargingState.originalLuck !== undefined) {
+          monster.luck = monster.chargingState.originalLuck;
+        }
         monster.chargingState = null;
         monster.isGroggy = true;
-        gm.addLog(`💥 [차징 취소] 결빙/기절로 인해 ${monster.data.name}의 차징이 붕괴되었습니다!`, 'reward');
+        gm.addLog(`💥 [차징 취소] 결빙/기절로 인해 ${monster.data.name}의 차징이 붕괴되었습니다! (행운 정상화)`, 'reward');
       }
       if (turnSkippedRef.current) {
         return;
@@ -5721,9 +5734,12 @@ export const BattleScreen: React.FC = () => {
 
       if (monster.chargingState) {
         selectedSkill = monster.chargingState.skill;
+        if (monster.chargingState.originalLuck !== undefined) {
+          monster.luck = monster.chargingState.originalLuck;
+        }
         monster.chargingState = null;
         isReleasingCharge = true;
-        gm.addLog(`💥⚠️ [차징 완료!] ${monster.data.name}이(가) 응축된 힘을 폭발시키며 [${selectedSkill.name}]을(를) 방출합니다! (확정 치명타 & 방어 관통 50%)`, 'danger');
+        gm.addLog(`💥⚠️ [차징 완료!] ${monster.data.name}이(가) 응축된 힘을 폭발시키며 [${selectedSkill.name}]을(를) 방출합니다! (확정 치명타 & 방어 관통 50%, 행운 정상화)`, 'danger');
       } else {
         // 차징 스킬 시전 확률 상향 (차징 스킬이 있는 경우 55% 확률로 차징 스킬 우선 고려)
         const chargeSkills = skillList.filter(s => s.isCharge);
@@ -5737,23 +5753,27 @@ export const BattleScreen: React.FC = () => {
       // ⚡ [차징 스킬 감지 시 차징 모드 돌입]
       if (selectedSkill && selectedSkill.isCharge && !isReleasingCharge) {
         const breakGauge = selectedSkill.breakGauge || Math.max(100, Math.floor(monster.maxHp * 0.25));
+        const origLuck = monster.luck || 10;
+        const boostedLuck = Math.round(origLuck * 1.3);
         monster.chargingState = {
           skillName: selectedSkill.name,
           remainingBreakDmg: breakGauge,
           maxBreakDmg: breakGauge,
           skill: selectedSkill,
+          originalLuck: origLuck,
         };
+        monster.luck = boostedLuck;
         monstersRef.current = currentMonsters;
         setMonsters([...currentMonsters]);
 
-        gm.addLog(`⚠️ [위기 경고] ${monster.data.name}이(가) 강력한 일격 [${selectedSkill.name}] 시전을 위해 힘을 모으기 시작합니다! (브레이크 저지 요구치: ${breakGauge} 피해 또는 기절/빙결)`, 'danger');
+        gm.addLog(`⚠️ [위기 경고] ${monster.data.name}이(가) 강력한 일격 [${selectedSkill.name}] 시전을 위해 힘을 모으기 시작합니다! (행운 +30% 상승으로 상태이상 저항력 강화: 🍀${origLuck}→${boostedLuck}, 차징 게이지는 받는 피해의 50%만 적용)`, 'danger');
         setSkillCutIn({
           id: String(Date.now()),
           skillName: `⚠️ [차징 경고] ${selectedSkill.name}`,
           icon: '⚡⚠️',
           isEnemy: true,
           bannerType: 'skill',
-          subText: `브레이크 저지 요구 피해: ${breakGauge}`
+          subText: `브레이크 저지 요구 피해: ${breakGauge} (피해 50% 반영 & 행운 +30%)`
         });
         SoundManager.getInstance().play('charge');
         triggerVFX({

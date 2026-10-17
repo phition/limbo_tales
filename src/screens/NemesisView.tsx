@@ -99,6 +99,7 @@ interface PartChargingState {
   remainingBreakDmg: number;
   maxBreakDmg: number;
   skill: NemesisBossSkill;
+  originalLuck?: number;
 }
 
 // ── 3대 부위 전투 런타임 상태 ──────────────────────────────────────────────
@@ -712,15 +713,19 @@ export const NemesisView: React.FC = () => {
       const dmg = Math.max(80, Math.round(totalAtk * (K / (partDef + K))));
       totalActionDmg += dmg;
 
-      // E) ⚡ [차징 저지 & 브레이크 판정]
+      // E) ⚡ [차징 저지 & 브레이크 판정] (차징 게이지는 입은 피해의 50%만 적용)
       if (part.chargingState) {
-        part.chargingState.remainingBreakDmg -= dmg;
+        const breakDmg = Math.max(1, Math.floor(dmg * 0.5));
+        part.chargingState.remainingBreakDmg -= breakDmg;
         if (part.chargingState.remainingBreakDmg <= 0) {
+          if (part.chargingState.originalLuck !== undefined) {
+            part.luck = part.chargingState.originalLuck;
+          }
           part.chargingState = null;
           part.isGroggy = true;
           playSfx('shield_break');
           triggerVfx('boss_cataclysm', partPosMap[pKey].x, partPosMap[pKey].y, 'BREAK!', true);
-          addLog(`💥 [차징 저지 성공!] ${hero.name}의 강력한 타격으로 [${part.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다!`, 'reward');
+          addLog(`💥 [차징 저지 성공!] ${hero.name}의 강력한 타격으로 [${part.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다! (행운 정상화)`, 'reward');
           setSkillCutIn({
             id: String(Date.now()),
             skillName: `💥 [${part.name}] 차징 붕괴!`,
@@ -737,6 +742,9 @@ export const NemesisView: React.FC = () => {
       part.currentHp = Math.max(0, part.currentHp - dmg);
       if (part.currentHp <= 0) {
         part.isDefeated = true;
+        if (part.chargingState?.originalLuck !== undefined) {
+          part.luck = part.chargingState.originalLuck;
+        }
         part.chargingState = null;
         addLog(`💀 [${part.name} 완전 패퇴!] 부위가 파괴되어 더 이상 재생하거나 행동하지 않습니다!`, 'reward');
         playSfx('shield_break');
@@ -761,13 +769,17 @@ export const NemesisView: React.FC = () => {
         addLog(`💥⚡ [연계 콤보 폭발!] ${combo.icon || '⚡'} [${combo.comboName}] 발동! [${part.name}]에게 추가 ${comboDmg.toLocaleString()} 콤보 피해!`, 'reward');
 
         if (part.chargingState) {
-          part.chargingState.remainingBreakDmg -= comboDmg;
+          const comboBreakDmg = Math.max(1, Math.floor(comboDmg * 0.5));
+          part.chargingState.remainingBreakDmg -= comboBreakDmg;
           if (part.chargingState.remainingBreakDmg <= 0) {
+            if (part.chargingState.originalLuck !== undefined) {
+              part.luck = part.chargingState.originalLuck;
+            }
             part.chargingState = null;
             part.isGroggy = true;
             playSfx('shield_break');
             triggerVfx('boss_cataclysm', partPosMap[pKey].x, partPosMap[pKey].y, 'BREAK!', true);
-            addLog(`💥 [차징 저지 성공!] ${hero.name}의 연계 콤보로 [${part.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다!`, 'reward');
+            addLog(`💥 [차징 저지 성공!] ${hero.name}의 연계 콤보로 [${part.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다! (행운 정상화)`, 'reward');
           }
         }
       }
@@ -778,7 +790,17 @@ export const NemesisView: React.FC = () => {
         const sName = (skill.name || '').toLowerCase();
         const dur = skill.statusDuration || 2;
 
-        const applyPartEffect = (type: StatusEffect['type'], duration: number, mag: number) => {
+        const checkPartResist = (effectName: string): boolean => {
+          const resistChance = Math.min(50, (part.luck || 10) * 0.35);
+          if (Math.random() * 100 < resistChance) {
+            addLog(`🛡️ [저항(RESIST)] [${part.name}]이(가) 높은 행운(🍀${part.luck})으로 [${effectName}] 효과를 저항했습니다!`, 'system');
+            return true;
+          }
+          return false;
+        };
+
+        const applyPartEffect = (type: StatusEffect['type'], duration: number, mag: number, name: string) => {
+          if (checkPartResist(name)) return;
           const ex = part.statusEffects.find(s => s.type === type);
           if (ex) {
             ex.turnsLeft = Math.max(ex.turnsLeft, duration);
@@ -788,31 +810,31 @@ export const NemesisView: React.FC = () => {
         };
 
         if (skill.effectType === 'bleed' || sDesc.includes('출혈') || sName.includes('출혈')) {
-          applyPartEffect('bleed', dur, 0.08);
+          applyPartEffect('bleed', dur, 0.08, '출혈');
           addLog(`🩸 [출혈] [${part.name}]에게 ${dur}턴간 출혈 상태를 부여했습니다.`, 'normal');
         }
         if (skill.effectType === 'poison' || sDesc.includes('중독') || sName.includes('독')) {
-          applyPartEffect('poison', dur + 1, 0.12);
+          applyPartEffect('poison', dur + 1, 0.12, '중독');
           addLog(`☠️ [중독] [${part.name}]에게 ${dur + 1}턴간 맹독을 주입했습니다.`, 'normal');
         }
         if (skill.effectType === 'burn' || sDesc.includes('화상') || sName.includes('화염')) {
-          applyPartEffect('burn', dur, 0.08);
+          applyPartEffect('burn', dur, 0.08, '화상');
           addLog(`🔥 [화상] [${part.name}]에게 ${dur}턴간 화상을 부여했습니다 (방어력 50% 분쇄).`, 'normal');
         }
         if (skill.effectType === 'freeze' || sDesc.includes('빙결') || sName.includes('빙결')) {
-          applyPartEffect('freeze', 1, 0.04);
+          applyPartEffect('freeze', 1, 0.04, '빙결');
           addLog(`❄️ [빙결] [${part.name}]에게 1턴간 빙결(행동 불가)을 부여했습니다!`, 'normal');
         }
         if (skill.effectType === 'stun' || sDesc.includes('기절') || sName.includes('기절')) {
-          applyPartEffect('stun', 1, 0);
+          applyPartEffect('stun', 1, 0, '기절');
           addLog(`💫 [기절] [${part.name}]에게 1턴간 기절을 부여했습니다!`, 'normal');
         }
         if (skill.effectType === 'debuff' || sDesc.includes('방어력') || sDesc.includes('방어 분쇄')) {
-          applyPartEffect('debuff_def', dur, 0.25);
+          applyPartEffect('debuff_def', dur, 0.25, '방어 분쇄');
           addLog(`🛡️⬇️ [방어 분쇄] [${part.name}]의 방어력을 ${dur}턴간 25% 감소시켰습니다.`, 'normal');
         }
         if (sDesc.includes('공격력 약화') || sDesc.includes('공격력 감소')) {
-          applyPartEffect('debuff_atk', dur, 0.25);
+          applyPartEffect('debuff_atk', dur, 0.25, '공격력 약화');
           addLog(`⚔️⬇️ [공격력 약화] [${part.name}]의 공격력을 ${dur}턴간 25% 감소시켰습니다.`, 'normal');
         }
       }
@@ -910,6 +932,9 @@ export const NemesisView: React.FC = () => {
       triggerVfx('blood_bleed', partPosMap[part.id].x, partPosMap[part.id].y, `${dotDamage.toLocaleString()}`);
       if (part.currentHp <= 0) {
         part.isDefeated = true;
+        if (part.chargingState?.originalLuck !== undefined) {
+          part.luck = part.chargingState.originalLuck;
+        }
         part.chargingState = null;
         addLog(`💀 [${part.name} 완전 패퇴!] 지속 피해로 부위가 파괴되었습니다!`, 'reward');
         setBossParts({ ...bossPartsRef.current });
@@ -925,6 +950,14 @@ export const NemesisView: React.FC = () => {
     // 0-1. 군중 제어기(CC) 체크 (빙결/기절)
     const cc = (part.statusEffects || []).find(se => se.type === 'freeze' || se.type === 'stun');
     if (cc) {
+      if (part.chargingState) {
+        if (part.chargingState.originalLuck !== undefined) {
+          part.luck = part.chargingState.originalLuck;
+        }
+        part.chargingState = null;
+        part.isGroggy = true;
+        addLog(`💥 [차징 취소] 결빙/기절로 인해 [${part.name}]의 차징이 붕괴되었습니다! (행운 정상화)`, 'reward');
+      }
       addLog(`💫 [행동 불가] [${part.name}]이(가) ${cc.type === 'freeze' ? '빙결' : '기절'} 상태로 이번 턴 행동할 수 없습니다!`, 'system');
       setBossParts({ ...bossPartsRef.current });
       setAttackingPartId(null);
@@ -947,6 +980,9 @@ export const NemesisView: React.FC = () => {
     // 2. 절멸기 차징 완료 시: 방출 폭발!
     if (part.chargingState) {
       const chargeSkill = part.chargingState.skill;
+      if (part.chargingState.originalLuck !== undefined) {
+        part.luck = part.chargingState.originalLuck;
+      }
       part.chargingState = null;
 
       setSkillCutIn({
@@ -979,7 +1015,7 @@ export const NemesisView: React.FC = () => {
       });
 
       triggerVfx('dark_curse', 50, 75, 'CATACLYSM!', true);
-      addLog(`💥⚠️ [${part.name}] 절멸기 [${chargeSkill.name}] 방출! 파티 전원에게 궤멸적 피해가 쏟아졌습니다!`, 'danger');
+      addLog(`💥⚠️ [${part.name}] 절멸기 [${chargeSkill.name}] 방출! 파티 전원에게 궤멸적 피해가 쏟아졌습니다! (행운 정상화)`, 'danger');
 
       setHeroes([...heroesRef.current]);
       setBossParts({ ...bossPartsRef.current });
@@ -1000,24 +1036,28 @@ export const NemesisView: React.FC = () => {
 
     if (shouldStartCharge) {
       const breakGauge = part.id === 'head' ? 30000 : part.id === 'body' ? 32000 : 28000;
+      const origLuck = part.luck || 15;
+      const boostedLuck = Math.round(origLuck * 1.3);
       part.chargingState = {
         skillName: chargeSkillCandidate.name,
         remainingBreakDmg: breakGauge,
         maxBreakDmg: breakGauge,
         skill: chargeSkillCandidate,
+        originalLuck: origLuck,
       };
+      part.luck = boostedLuck;
 
       setSkillCutIn({
         id: String(Date.now()),
         skillName: `⚡ [차원 절멸기 차징] ${chargeSkillCandidate.name}`,
         icon: '⚡',
         isEnemy: true,
-        subText: `${part.name} 차징 돌입! 저지 요구치: ${breakGauge.toLocaleString()}`
+        subText: `${part.name} 차징 돌입! 저지 요구치: ${breakGauge.toLocaleString()} (피해 50% 반영 & 행운 +30%)`
       });
 
       playSfx('cast');
       triggerVfx('dark_curse', 50, 25, 'CHARGING!');
-      addLog(`⚠️ [${part.name}] 차원 절멸기 [${chargeSkillCandidate.name}] 차징 돌입! (브레이크 저지 요구치: ${breakGauge.toLocaleString()})`, 'danger');
+      addLog(`⚠️ [${part.name}] 차원 절멸기 [${chargeSkillCandidate.name}] 차징 돌입! (행운 +30% 상승으로 상태이상 저항력 강화: 🍀${origLuck}→${boostedLuck}, 차징 게이지는 받는 피해의 50%만 적용)`, 'danger');
 
       setBossParts({ ...bossPartsRef.current });
 
