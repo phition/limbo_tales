@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 24,
-  "updatedAt": 1792164414435,
+  "version": 26,
+  "updatedAt": 1792168286592,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -523,7 +523,7 @@
       "faction": "corrupted"
     },
     "boss_floor_6": {
-      "atk": 240,
+      "atk": 540,
       "def": 680,
       "description": "핏빛 성역의 지배자. 거대한 박쥐 날개와 피의 마법으로 침입자의 생명력을 흡수합니다.",
       "drainPct": 0.4,
@@ -807,7 +807,7 @@
       "faction": "corrupted"
     },
     "monster_blood_wolf": {
-      "atk": 255,
+      "atk": 285,
       "def": 410,
       "description": "핏빛 성역을 배회하는 흉포한 마수. 피 냄새를 맡으면 무리를 이끌고 광포화합니다.",
       "drainPct": 0.3,
@@ -1119,7 +1119,7 @@
       "faction": "corrupted"
     },
     "monster_fallen_priest": {
-      "atk": 182,
+      "atk": 282,
       "def": 340,
       "description": "심연의 어둠에 영혼을 바친 타락한 성직자. 어둠의 권능과 사악한 치유 의식을 행합니다.",
       "id": "monster_fallen_priest",

@@ -31,8 +31,8 @@ export const WEAPON_TRAITS: Record<WeaponType, WeaponTrait> = {
     name: '급소 사격',
     color: '#69f0ae',
     bgColor: 'rgba(105, 240, 174, 0.15)',
-    shortDesc: '치명타율 +5% · 치명타 피해 +5%',
-    description: '원거리 정밀 조준으로 치명타율이 +5%, 치명타 피해량이 +5% 증가합니다.'
+    shortDesc: '기본 공격 시 치명타율 +5% · 치명타 피해 +5%',
+    description: '원거리 정밀 조준으로 기본 공격 시 치명타율이 +5%, 치명타 피해량이 +5% 증가합니다.'
   },
   gun: {
     id: 'trait_burst',
@@ -41,8 +41,8 @@ export const WEAPON_TRAITS: Record<WeaponType, WeaponTrait> = {
     name: '연사',
     color: '#00e5ff',
     bgColor: 'rgba(0, 229, 255, 0.15)',
-    shortDesc: '기본 15% + 행운 보정 추가 점사 (공격력 45% 피해)',
-    description: '탄환을 일제 사격하여 기본 15%에 행운(🍀) 보정을 더한 확률로 공격력의 45% 위력을 지닌 추가 점사 탄환을 격발합니다.'
+    shortDesc: '기본 공격 시 기본 15% + 행운 보정 추가 점사 (공격력 45% 피해)',
+    description: '탄환을 일제 사격하여 기본 공격 시 기본 15%에 행운(🍀) 보정을 더한 확률로 공격력의 45% 위력을 지닌 추가 점사 탄환을 격발합니다.'
   },
   dagger: {
     id: 'trait_ambush',
@@ -172,7 +172,7 @@ export const EQUIPMENT_RECIPES: EquipmentRecipe[] = [
     rarity: 'rare',
     cost: { iron: 30, ether: 20, coal: 8, gold: 350 },
     baseStats: { atk: 3, spd: 2 },
-    description: '에테르 기동 마력과 석탄 화약으로 탄환을 추진하는 전술 마총. [🔫 연사] 특성으로 기본 30% + 행운 보정 추가 점사 탄환을 격발합니다.',
+    description: '에테르 기동 마력과 석탄 화약으로 탄환을 추진하는 전술 마총. [🔫 연사] 특성으로 기본 공격 시 기본 15% + 행운 보정으로 추가 점사 탄환(공격력 45% 피해)을 격발합니다.',
     icon: '🔫'
   },
   {
@@ -184,7 +184,7 @@ export const EQUIPMENT_RECIPES: EquipmentRecipe[] = [
     rarity: 'common',
     cost: { wood: 35, leather: 15, bone: 8, gold: 200 },
     baseStats: { atk: 3, luck: 2 },
-    description: '유연한 목재와 질긴 가죽 시위로 탄성을 극대화한 장궁. [🏹 급소] 특성으로 치명타율 +15% 및 치명타 피해 +30%를 제공합니다.',
+    description: '유연한 목재와 질긴 가죽 시위로 탄성을 극대화한 장궁. [🏹 급소 사격] 특성으로 기본 공격 시 치명타율 +5% 및 치명타 피해 +5%를 제공합니다.',
     icon: '🏹'
   },
   {

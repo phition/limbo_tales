@@ -451,11 +451,11 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                   </div>
                   <div className="p-3 rounded-lg bg-[#0e1424] border border-[#69f0ae44] flex flex-col gap-1">
                     <div className="font-bold text-[#69f0ae] flex items-center justify-between">
-                      <span>🏹 [급소] 활 계열 (Bow)</span>
+                      <span>🏹 [급소 사격] 활 계열 (Bow)</span>
                       <span className="text-[10px] text-[#a7ffeb]">정밀 사격</span>
                     </div>
                     <div className="text-[#cfd8dc]">
-                      <strong>치명타율 +5% 및 치명타 피해 +5%</strong>가 상시 가산됩니다. 후열에서 적의 약점을 노려 일격필살의 치명 피해를 꽂아넣습니다.
+                      <strong>기본 공격 시 치명타율 +5% 및 치명타 피해 +5%</strong>가 가산됩니다. 후열에서 적의 약점을 노려 일격필살의 치명 피해를 꽂아넣습니다.
                     </div>
                   </div>
                   <div className="p-3 rounded-lg bg-[#0e1424] border border-[#00e5ff44] flex flex-col gap-1">
@@ -464,7 +464,7 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                       <span className="text-[10px] text-[#80d8ff]">마도 점사</span>
                     </div>
                     <div className="text-[#cfd8dc]">
-                      <strong>기본 15% 확률 + 영웅의 행운(🍀) 보정치</strong>로 45% 위력의 <strong>[추가 점사 탄환]</strong>을 연속 격발합니다. 행운 스탯이 높을수록 연사 빈도가 비약적으로 상승합니다.
+                      <strong>기본 공격 시 기본 15% 확률 + 영웅의 행운(🍀) 보정치</strong>로 공격력 45% 위력의 <strong>[추가 점사 탄환]</strong>을 연속 격발합니다. 행운 스탯이 높을수록 연사 빈도가 비약적으로 상승합니다.
                     </div>
                   </div>
                   <div className="p-3 rounded-lg bg-[#0e1424] border border-[#b388ff44] flex flex-col gap-1">

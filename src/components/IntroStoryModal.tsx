@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { SoundManager } from '../managers/SoundManager';
+import { I18nService } from '../i18n/I18nService';
 
 interface Props {
   open: boolean;
@@ -8,6 +9,18 @@ interface Props {
 }
 
 export const IntroStoryModal: React.FC<Props> = ({ open, onClose }) => {
+  const [, setLangTick] = useState(0);
+
+  useEffect(() => {
+    return I18nService.getInstance().subscribe(() => {
+      setLangTick(t => t + 1);
+    });
+  }, []);
+
+  const tr = useCallback((text: string) => {
+    return I18nService.getInstance().tr(text);
+  }, []);
+
   useEffect(() => {
     if (open) {
       SoundManager.getInstance().play('camp_fire');
@@ -28,7 +41,7 @@ export const IntroStoryModal: React.FC<Props> = ({ open, onClose }) => {
         <div className="relative h-36 w-full overflow-hidden shrink-0 border-b border-[#1f2a3f]">
           <img
             src="assets/citadel_bonfire.jpg"
-            alt="방주 성채"
+            alt={tr("방주 성채")}
             className="w-full h-full object-cover object-center filter brightness-90 contrast-110"
             onError={(e) => {
               (e.target as HTMLElement).style.display = 'none';
@@ -41,10 +54,10 @@ export const IntroStoryModal: React.FC<Props> = ({ open, onClose }) => {
             <div>
               <div className="flex items-center gap-1.5 text-xs text-[#ffd54f] font-mono tracking-wider">
                 <span>🔥</span>
-                <span className="font-bold">PROLOGUE: LIMBO TALES</span>
+                <span className="font-bold">{tr("PROLOGUE: LIMBO TALES")}</span>
               </div>
               <h2 className="text-lg font-black text-white tracking-wide mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                방주의 각성: 꺼져가는 불씨 속에서
+                {tr("방주의 각성: 꺼져가는 불씨 속에서")}
               </h2>
             </div>
             <span className="text-2xl animate-pulse shrink-0">⚔️</span>
@@ -58,12 +71,10 @@ export const IntroStoryModal: React.FC<Props> = ({ open, onClose }) => {
           <div className="p-3.5 rounded-xl bg-[#121826] border border-[#1e2a40] flex flex-col gap-1.5 shadow-inner">
             <div className="text-[11px] font-bold text-[#f3e5c8] flex items-center gap-1">
               <span>🌌</span>
-              <span>세상이 심연에 잠긴 지 오랜 세월</span>
+              <span>{tr("세상이 심연에 잠긴 지 오랜 세월")}</span>
             </div>
             <p className="text-[#a0aec0] leading-relaxed">
-              온 세상이 공허의 흑무에 집어삼켜지고 지상의 문명들이 모두 무너져 내린 지 오랜 세월... 
-              간신히 살아남은 자들과 함께 심연 밖까지 겨우 탈출해 도달한 최후의 안식처, 
-              <strong className="text-white font-medium"> [방주 성채]</strong>만이 차가운 허공 위에 간신히 떠 있습니다.
+              {tr("온 세상이 공허의 흑무에 집어삼켜지고 지상의 문명들이 모두 무너져 내린 지 오랜 세월... 간신히 살아남은 자들과 함께 심연 밖까지 겨우 탈출해 도달한 최후의 안식처, [방주 성채]만이 차가운 허공 위에 간신히 떠 있습니다.")}
             </p>
           </div>
 
@@ -71,12 +82,10 @@ export const IntroStoryModal: React.FC<Props> = ({ open, onClose }) => {
           <div className="p-3.5 rounded-xl bg-[#1a1216] border border-[#ef535044] flex flex-col gap-1.5 shadow-inner">
             <div className="text-[11px] font-bold text-[#ef5350] flex items-center gap-1">
               <span>💀</span>
-              <span>쓰러진 전우와 사령관의 각성</span>
+              <span>{tr("쓰러진 전우와 사령관의 각성")}</span>
             </div>
             <p className="text-[#e2b8b8] leading-relaxed">
-              하지만 방주를 재가동하기 위한 첫 진입로 정찰 전투에서, 
-              마물의 기습으로 인해 <strong className="text-[#ff8a80] font-bold">원정대의 동료 1인이 전사</strong>하는 참담한 비극을 겪었습니다. 
-              방주로 긴급 후송되던 도중 충격과 마기 중독으로 의식을 잃었던 사령관님께서… 이제 막 희미한 눈을 떴습니다.
+              {tr("하지만 방주를 재가동하기 위한 첫 진입로 정찰 전투에서, 마물의 기습으로 인해 원정대의 동료 1인이 전사하는 참담한 비극을 겪었습니다. 방주로 긴급 후송되던 도중 충격과 마기 중독으로 의식을 잃었던 사령관님께서… 이제 막 희미한 눈을 떴습니다.")}
             </p>
           </div>
 
@@ -84,12 +93,10 @@ export const IntroStoryModal: React.FC<Props> = ({ open, onClose }) => {
           <div className="p-3.5 rounded-xl bg-[#131b2c] border border-[#00d2ff33] flex flex-col gap-1.5 shadow-sm">
             <div className="text-[11px] font-bold text-[#00d2ff] flex items-center gap-1">
               <span>🔥</span>
-              <span>꺼져가는 성화, 그리고 남겨진 자들</span>
+              <span>{tr("꺼져가는 성화, 그리고 남겨진 자들")}</span>
             </div>
             <p className="text-[#b0cde5] leading-relaxed">
-              방주의 동력로는 식어가고 생존자들은 불안에 떨고 있습니다. 
-              쓰러진 전우의 희생을 헛되이 하지 않고 방주를 다시 일으켜 세우려면, 
-              사령관님의 단호한 지휘와 거점 재건이 절실합니다.
+              {tr("방주의 동력로는 식어가고 생존자들은 불안에 떨고 있습니다. 쓰러진 전우의 희생을 헛되이 하지 않고 방주를 다시 일으켜 세우려면, 사령관님의 단호한 지휘와 거점 재건이 절실합니다.")}
             </p>
           </div>
         </div>
@@ -104,7 +111,7 @@ export const IntroStoryModal: React.FC<Props> = ({ open, onClose }) => {
             className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#1c2c48] to-[#14233c] hover:from-[#253a60] hover:to-[#1a2f50] text-[#00d2ff] hover:text-white border border-[#00d2ff66] font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#00d2ff22] transition-all active:scale-[0.98] cursor-pointer"
           >
             <span>👁️</span>
-            <span>정신을 차리고 눈을 뜬다 [확인]</span>
+            <span>{tr("정신을 차리고 눈을 뜬다 [확인]")}</span>
           </button>
         </div>
 

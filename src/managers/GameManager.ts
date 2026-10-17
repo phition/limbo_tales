@@ -3530,8 +3530,15 @@ export class GameManager {
     }
   }
 
-  public enchantEquipment(itemId: string, type: 'prefix' | 'suffix', isPure = false): boolean {
-    const item = this.equipmentInventory.find(e => e.id === itemId);
+  public enchantEquipment(
+    itemId: string,
+    type: 'prefix' | 'suffix',
+    isPure = false,
+    forcedOutcome?: 'success' | 'keep' | 'drop'
+  ): boolean {
+    const item = this.equipmentInventory.find(e => e.id === itemId)
+      || this.party.flatMap(h => Object.values(h.equipment || {})).find(e => e && e.id === itemId)
+      || this.barracks.flatMap(h => Object.values(h.equipment || {})).find(e => e && e.id === itemId);
     if (!item) return false;
 
     if (type === 'prefix' && item.level < 3) {
@@ -3578,9 +3585,10 @@ export class GameManager {
     // 성공 확률 판정 (기본 20%, 병기창 Lv.6부터 레벨당 +5% 증가, 순수석 사용 시 50% 반감)
     const successRate = getEnchantSuccessRate(forgeLv, isPure);
     const roll = Math.random() * 100;
-    const isSuccess = roll < successRate;
+    const isSuccess = forcedOutcome !== undefined ? (forcedOutcome === 'success') : (roll < successRate);
 
     if (!isSuccess) {
+      SoundManager.getInstance().play('forge_fail');
       this.addLog(`💨 [마도 인챈트 실패] 마력 주입이 흩어져 인챈트에 실패했습니다. (성공 확률: ${successRate}%, 장비 손상 없음)`, 'danger');
       this.emit('inventoryUpdated', this.equipmentInventory);
       this.saveGame();
@@ -3604,6 +3612,7 @@ export class GameManager {
 
     const hasSkill = item.slot === 'weapon' && item.prefix?.grantedSkill;
     const skillNotice = hasSkill ? ` | 기본 공격 대체 고유스킬 [${item.prefix!.grantedSkill!.name}] 획득!` : '';
+    SoundManager.getInstance().play('forge_success');
     this.addLog(`🌟 [마도 인챈트 대성공!] (성공 확률: ${successRate}%) [${item.name} +${item.level}]에 [${chosen.name}] 부여! (${item.prefix?.description || item.suffix?.description || chosen.description})${skillNotice}`, 'reward');
     this.reconcileEquipment();
     this.emit('inventoryUpdated', this.equipmentInventory);
@@ -3612,7 +3621,9 @@ export class GameManager {
   }
 
   public cleanseEnchant(itemId: string): boolean {
-    const item = this.equipmentInventory.find(e => e.id === itemId);
+    const item = this.equipmentInventory.find(e => e.id === itemId)
+      || this.party.flatMap(h => Object.values(h.equipment || {})).find(e => e && e.id === itemId)
+      || this.barracks.flatMap(h => Object.values(h.equipment || {})).find(e => e && e.id === itemId);
     if (!item) return false;
     if (!item.prefix && !item.suffix) {
       this.addLog(`[${item.name}]에는 부여된 인챈트가 없습니다.`, 'normal');

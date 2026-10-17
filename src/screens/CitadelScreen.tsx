@@ -6770,7 +6770,7 @@ const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
 
   const handleEnchantComplete = () => {
     setIsEnchanting(false);
-    gm.enchantEquipment(item.id, enchantType, isPure);
+    gm.enchantEquipment(item.id, enchantType, isPure, pendingOutcome);
     setPendingOutcome(undefined);
   };
 
