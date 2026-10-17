@@ -389,6 +389,10 @@ export class GameDataService {
 
     // 8. 🌌 차원 네메시스 보스 설정 반영
     if (pkg.nemesis) {
+      if (pkg.nemesis.maxHp === 58600000) pkg.nemesis.maxHp = 12500000;
+      if (pkg.nemesis.parts?.head?.maxHp === 7600000) pkg.nemesis.parts.head.maxHp = 4000000;
+      if (pkg.nemesis.parts?.body?.maxHp === 6000000) pkg.nemesis.parts.body.maxHp = 5000000;
+      if (pkg.nemesis.parts?.tail?.maxHp === 45000000) pkg.nemesis.parts.tail.maxHp = 3500000;
       if (pkg.nemesis.name !== undefined) NEMESIS_BOSS_CONFIG.name = pkg.nemesis.name;
       if (pkg.nemesis.title !== undefined) NEMESIS_BOSS_CONFIG.title = pkg.nemesis.title;
       if (pkg.nemesis.maxHp !== undefined) NEMESIS_BOSS_CONFIG.maxHp = pkg.nemesis.maxHp;

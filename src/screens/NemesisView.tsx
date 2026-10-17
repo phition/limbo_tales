@@ -2295,6 +2295,18 @@ export const NemesisView: React.FC = () => {
                   <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff] animate-ping inline-block" />
                   🌐 전 지휘관 실시간 공유 월드 보스
                 </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    gm.restoreNemesisHealth(true);
+                    SoundManager.getInstance().play('heal');
+                  }}
+                  className="btn btn-ghost text-[9px] px-2 py-0.5 rounded font-bold border border-[#38ef7d88] text-[#38ef7d] bg-[#38ef7d1a] hover:bg-[#38ef7d33] flex items-center gap-1 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="네메시스의 전체 체력과 모든 부위를 100% 완전 복구합니다."
+                >
+                  <span>💚</span>
+                  <span>체력 완전 복구</span>
+                </button>
               </div>
               <div className="text-[10px] sm:text-xs text-[#ce93d8] truncate mt-0.5">
                 {currentPhaseCfg.name}
@@ -2658,26 +2670,41 @@ export const NemesisView: React.FC = () => {
               const squadCheck = gm.isNemesisSquadReady();
               const canFight = isGateUnlocked && cycleInfo.status === 'active' && nemesisState.dailyAttempts > 0 && squadCheck.isReady;
               return (
-                <ActionButton
-                  label={
-                    cycleInfo.status === 'defeated'
-                      ? `👑 이번 주기 토벌 완료 (재소환 대기 중: ${formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})`
-                      : cycleInfo.status === 'cooldown'
-                      ? `💤 1일 재소환 대기 기간 (재소환까지: ${formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})`
-                      : !isGateUnlocked
-                      ? `🔒 차원 앵커 게이트 Lv.3 필요 (현재 Lv.${gateLevel})`
-                      : !squadCheck.isReady
-                      ? `⚠️ 차원 원정대 미편성 (출격 불가: ${squadCheck.count}/4인)`
-                      : nemesisState.dailyAttempts > 0
-                      ? '🌌 네메시스 토벌전 출격 (전투 시작)'
-                      : '🔒 일일 도전 횟수 소진 (에테르 충전 필요)'
-                  }
-                  variant={canFight ? 'danger' : 'ghost'}
-                  size="lg"
-                  disabled={!isGateUnlocked || cycleInfo.status !== 'active' || nemesisState.dailyAttempts <= 0 || !squadCheck.isReady}
-                  className={`w-full py-3.5 text-sm font-bold ${canFight ? 'shadow-lg shadow-[#ff416c33]' : 'opacity-80 border border-[#ef535044] text-[#ff8a80]'}`}
-                  onClick={startRaidBattle}
-                />
+                <div className="flex flex-col gap-2 w-full">
+                  <ActionButton
+                    label={
+                      cycleInfo.status === 'defeated'
+                        ? `👑 이번 주기 토벌 완료 (재소환 대기 중: ${formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})`
+                        : cycleInfo.status === 'cooldown'
+                        ? `💤 1일 재소환 대기 기간 (재소환까지: ${formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})`
+                        : !isGateUnlocked
+                        ? `🔒 차원 앵커 게이트 Lv.3 필요 (현재 Lv.${gateLevel})`
+                        : !squadCheck.isReady
+                        ? `⚠️ 차원 원정대 미편성 (출격 불가: ${squadCheck.count}/4인)`
+                        : nemesisState.dailyAttempts > 0
+                        ? '🌌 네메시스 토벌전 출격 (전투 시작)'
+                        : '🔒 일일 도전 횟수 소진 (에테르 충전 필요)'
+                    }
+                    variant={canFight ? 'danger' : 'ghost'}
+                    size="lg"
+                    disabled={!isGateUnlocked || cycleInfo.status !== 'active' || nemesisState.dailyAttempts <= 0 || !squadCheck.isReady}
+                    className={`w-full py-3.5 text-sm font-bold ${canFight ? 'shadow-lg shadow-[#ff416c33]' : 'opacity-80 border border-[#ef535044] text-[#ff8a80]'}`}
+                    onClick={startRaidBattle}
+                  />
+                  {(cycleInfo.status === 'defeated' || nemesisState.isDefeated || nemesisState.currentBossHp <= 0) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        gm.restoreNemesisHealth(true);
+                        SoundManager.getInstance().play('heal');
+                      }}
+                      className="btn btn-primary w-full py-2.5 text-xs font-bold bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66] hover:bg-[#38ef7d44] flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-[0.99] transition-all"
+                    >
+                      <span>💚</span>
+                      <span>[네메시스 체력 100% 완전 복구 및 즉시 재소환]</span>
+                    </button>
+                  )}
+                </div>
               );
             })()}
           </div>

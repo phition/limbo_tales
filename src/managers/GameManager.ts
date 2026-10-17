@@ -8609,6 +8609,67 @@ export class GameManager {
     return true;
   }
 
+  /**
+   * 🌌 네메시스 월드 보스 체력 완전 복구:
+   * 전체 체력 1,250만 HP 및 3대 부위(머리 400만, 몸통 500만, 꼬리 350만)를 100% 완전 회복하고 부활시킵니다.
+   */
+  public restoreNemesisHealth(syncRemote: boolean = true): void {
+    const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
+    const bodyCfg = NEMESIS_BOSS_CONFIG.parts.body;
+    const tailCfg = NEMESIS_BOSS_CONFIG.parts.tail;
+    const totalMaxHp = NEMESIS_BOSS_CONFIG.maxHp || 12500000;
+
+    this.nemesisState.maxBossHp = totalMaxHp;
+    this.nemesisState.currentBossHp = totalMaxHp;
+    this.nemesisState.windowStartHp = totalMaxHp;
+    this.nemesisState.phase = 1;
+    this.nemesisState.isDefeated = false;
+    this.nemesisState.defeatedTime = undefined;
+    this.nemesisState.lastHpRegenTime = Date.now();
+
+    this.nemesisState.parts = {
+      head: {
+        id: 'head',
+        name: headCfg.name || '네메시스 머리',
+        position: 'front',
+        currentHp: headCfg.maxHp || 4000000,
+        maxHp: headCfg.maxHp || 4000000,
+        isDefeated: false,
+      },
+      body: {
+        id: 'body',
+        name: bodyCfg.name || '네메시스 몸통',
+        position: 'mid',
+        currentHp: bodyCfg.maxHp || 5000000,
+        maxHp: bodyCfg.maxHp || 5000000,
+        isDefeated: false,
+      },
+      tail: {
+        id: 'tail',
+        name: tailCfg.name || '네메시스 꼬리',
+        position: 'back',
+        currentHp: tailCfg.maxHp || 3500000,
+        maxHp: tailCfg.maxHp || 3500000,
+        isDefeated: false,
+      },
+    };
+
+    this.addLog('🌌 [시공의 네메시스] 네메시스의 체력과 모든 부위(머리 400만 / 몸통 500만 / 꼬리 350만)가 100% 완전 복구되었습니다!', 'reward');
+    this.saveGame();
+    this.emit('nemesisUpdated', this.nemesisState);
+    this.emit('update');
+
+    if (syncRemote) {
+      try {
+        FirebaseService.getInstance().restoreNemesisWorldBossHp().then(remote => {
+          if (remote) {
+            this.applyRemoteNemesisData(remote);
+          }
+        }).catch(err => console.warn('[GameManager] Sync restore Nemesis failed:', err));
+      } catch (_) {}
+    }
+  }
+
   // ═════════════════════════════════════════════════════════════════════════
   // 🏰 차원 영지 침공 (Dimensional Estate Invasion / 5v5 Plunder Siege) 시스템
   // ═════════════════════════════════════════════════════════════════════════
@@ -12099,6 +12160,8 @@ export class GameManager {
     if (parsed.nemesisState) {
       this.nemesisState = { ...this.nemesisState, ...(parsed.nemesisState as Partial<NemesisState>) };
     }
+    // 🌌 네메시스 체력 100% 완전 복구 보장
+    this.restoreNemesisHealth(true);
     if (parsed.invasionState) {
       this.invasionState = { ...this.invasionState, ...(parsed.invasionState as Partial<InvasionState>) };
     }
@@ -12780,6 +12843,8 @@ export class GameManager {
         if (parsed.nemesisState) {
           this.nemesisState = { ...this.nemesisState, ...(parsed.nemesisState as Partial<NemesisState>) };
         }
+        // 🌌 네메시스 체력 100% 완전 복구 보장
+        this.restoreNemesisHealth(true);
         if (parsed.invasionState) {
           this.invasionState = { ...this.invasionState, ...(parsed.invasionState as Partial<InvasionState>) };
         }

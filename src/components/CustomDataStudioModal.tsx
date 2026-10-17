@@ -1380,6 +1380,24 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#9c27b022] text-[#ce93d8] border border-[#9c27b044] font-bold">
                     WORLD RAID BOSS
                   </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleNemesisStatChange('maxHp', 12500000);
+                      handleNemesisPartStatChange('head', 'maxHp', 4000000);
+                      handleNemesisPartStatChange('body', 'maxHp', 5000000);
+                      handleNemesisPartStatChange('tail', 'maxHp', 3500000);
+                      handleNemesisStatChange('atk', 120);
+                      handleNemesisStatChange('def', 45);
+                      handleNemesisStatChange('spd', 15);
+                      handleNemesisStatChange('luck', 30);
+                    }}
+                    className="btn btn-ghost text-[10px] px-2 py-0.5 rounded font-bold border border-[#38ef7d66] text-[#38ef7d] bg-[#38ef7d15] hover:bg-[#38ef7d33] transition-all cursor-pointer flex items-center gap-1"
+                    title="네메시스 체력을 기본값(총 1,250만 HP: 머리 400만, 몸통 500만, 꼬리 350만)으로 즉시 복구합니다."
+                  >
+                    <span>🔄</span>
+                    <span>기본 체력(1,250만) 복구</span>
+                  </button>
                 </div>
 
                 {/* 네메시스 헤더 요약 카드 */}

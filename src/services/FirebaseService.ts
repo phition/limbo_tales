@@ -1078,6 +1078,47 @@ export class FirebaseService {
       return null;
     }
   }
+
+  /**
+   * 🌌 월드 보스: 네메시스 체력 100% 완전 복구 (실시간 DB 동기화)
+   */
+  public async restoreNemesisWorldBossHp(): Promise<WorldBossNemesisData | null> {
+    const bossRef = ref(db, 'world_boss/nemesis');
+    try {
+      const result = await runTransaction(bossRef, (currentData: WorldBossNemesisData | null) => {
+        const now = Date.now();
+        const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
+        const bodyCfg = NEMESIS_BOSS_CONFIG.parts.body;
+        const tailCfg = NEMESIS_BOSS_CONFIG.parts.tail;
+        const totalMaxHp = NEMESIS_BOSS_CONFIG.maxHp;
+
+        return {
+          currentBossHp: totalMaxHp,
+          maxBossHp: totalMaxHp,
+          parts: {
+            head: { id: 'head', name: headCfg.name, position: 'front', currentHp: headCfg.maxHp, maxHp: headCfg.maxHp, isDefeated: false },
+            body: { id: 'body', name: bodyCfg.name, position: 'mid', currentHp: bodyCfg.maxHp, maxHp: bodyCfg.maxHp, isDefeated: false },
+            tail: { id: 'tail', name: tailCfg.name, position: 'back', currentHp: tailCfg.maxHp, maxHp: tailCfg.maxHp, isDefeated: false }
+          },
+          phase: 1,
+          cycleStartTime: currentData?.cycleStartTime || now,
+          lastPlunderCheckTime: now,
+          windowStartHp: totalMaxHp,
+          isDefeated: false,
+          updatedAt: now,
+          lastAttackerNickname: '성채 수호대'
+        };
+      });
+
+      if (result.committed && result.snapshot.exists()) {
+        return result.snapshot.val() as WorldBossNemesisData;
+      }
+      return null;
+    } catch (err) {
+      console.warn('[Firebase RTDB] Restore Nemesis World Boss HP failed:', err);
+      return null;
+    }
+  }
 }
 
 export interface WorldBossNemesisData {

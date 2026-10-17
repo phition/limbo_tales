@@ -2140,11 +2140,11 @@
     "itemDropRateMultiplier": 0.7
   },
   "nemesis": {
-    "atk": 850,
-    "def": 1800,
-    "luck": 480,
-    "spd": 85,
-    "maxHp": 58600000,
+    "atk": 120,
+    "def": 45,
+    "luck": 30,
+    "spd": 15,
+    "maxHp": 12500000,
     "parts": {
       "head": {
         "archetype": "발할라 워로드 (Valhalla Warlord)",
@@ -2154,7 +2154,7 @@
         "icon": "💥",
         "id": "head",
         "luck": 25,
-        "maxHp": 7600000,
+        "maxHp": 4000000,
         "name": "네메시스 머리",
         "position": "front",
         "skills": [
@@ -2195,7 +2195,7 @@
         "icon": "🌀",
         "id": "body",
         "luck": 20,
-        "maxHp": 6000000,
+        "maxHp": 5000000,
         "name": "네메시스 몸통",
         "position": "mid",
         "skills": [
@@ -2237,7 +2237,7 @@
         "icon": "🎯",
         "id": "tail",
         "luck": 45,
-        "maxHp": 45000000,
+        "maxHp": 3500000,
         "name": "네메시스 꼬리",
         "position": "back",
         "skills": [
