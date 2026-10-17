@@ -481,7 +481,25 @@
     "forge_t8_amulet": "assets/custom_uploaded/icons/forge_t8_amulet.png",
     "forge_t9_amulet": "assets/custom_uploaded/icons/forge_t9_amulet.png",
     "forge_t10_amulet": "assets/custom_uploaded/icons/forge_t10_amulet.png",
-    "battle_victory": "assets/custom_uploaded/icons/battle_victory.png"
+    "battle_victory": "assets/custom_uploaded/icons/battle_victory.png",
+    "book_m_monster_crypt_necromancer": "assets/custom_uploaded/icons/book_m_monster_crypt_necromancer.png",
+    "skill_m_monster_crypt_necromancer": "assets/custom_uploaded/icons/skill_m_monster_crypt_necromancer.png",
+    "book_m_monster_aether_basilisk": "assets/custom_uploaded/icons/book_m_monster_aether_basilisk.png",
+    "skill_m_monster_aether_basilisk": "assets/custom_uploaded/icons/skill_m_monster_aether_basilisk.png",
+    "book_m_monster_dimension_eater": "assets/custom_uploaded/icons/book_m_monster_dimension_eater.png",
+    "skill_m_monster_dimension_eater": "assets/custom_uploaded/icons/skill_m_monster_dimension_eater.png",
+    "book_m_monster_primordial_shaman": "assets/custom_uploaded/icons/book_m_monster_primordial_shaman.png",
+    "skill_m_monster_primordial_shaman": "assets/custom_uploaded/icons/skill_m_monster_primordial_shaman.png",
+    "book_m_monster_crimson_vampire": "assets/custom_uploaded/icons/book_m_monster_crimson_vampire.png",
+    "skill_m_monster_crimson_vampire": "assets/custom_uploaded/icons/skill_m_monster_crimson_vampire.png",
+    "book_m_monster_grave_specter": "assets/custom_uploaded/icons/book_m_monster_grave_specter.png",
+    "skill_m_monster_grave_specter": "assets/custom_uploaded/icons/skill_m_monster_grave_specter.png",
+    "book_m_monster_iron_torturer": "assets/custom_uploaded/icons/book_m_monster_iron_torturer.png",
+    "skill_m_monster_iron_torturer": "assets/custom_uploaded/icons/skill_m_monster_iron_torturer.png",
+    "book_m_monster_prism_weaver": "assets/custom_uploaded/icons/book_m_monster_prism_weaver.png",
+    "skill_m_monster_prism_weaver": "assets/custom_uploaded/icons/skill_m_monster_prism_weaver.png",
+    "book_m_monster_abyssal_harbinger": "assets/custom_uploaded/icons/book_m_monster_abyssal_harbinger.png",
+    "skill_m_monster_abyssal_harbinger": "assets/custom_uploaded/icons/skill_m_monster_abyssal_harbinger.png"
   },
   "bgmOverrides": {
     "battle": "assets/bgm/bgm_battle.mp3",
@@ -901,5 +919,5 @@
     "npc_asmodeus": "assets/custom_uploaded/npcs/npc_asmodeus.png",
     "심연의 군주 아스모데우스": "assets/custom_uploaded/npcs/npc_asmodeus.png"
   },
-  "version": 675
+  "version": 677
 }

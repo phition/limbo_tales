@@ -2938,17 +2938,17 @@ export const ExplorationScreen: React.FC = () => {
                }`}
                onClick={() => {
                  if ((gm.mercenaryManageCharges ?? 1) <= 0) {
-                   gm.addLog('⛺ [용병 관리 불가] 현재 사용 횟수가 소진되었습니다. 야영(Camp)을 진행하면 재충전됩니다! (최대 1회)', 'danger');
+                   gm.addLog(tr('⛺ [용병 관리 불가] 현재 사용 횟수가 소진되었습니다. 야영(Camp)을 진행하면 재충전됩니다! (최대 1회)'), 'danger');
                    return;
                  }
                  gm.consumeMercenaryManageCharge();
                  setIsMercenaryManageOpen(true);
                }}
-               title={(gm.mercenaryManageCharges ?? 1) > 0 ? `원정대 용병 관리 (1회 사용 가능 - 야영 시 충전)` : '용병 관리 소진 (야영 시 1회 재충전)'}
+               title={(gm.mercenaryManageCharges ?? 1) > 0 ? tr('원정대 용병 관리 (1회 사용 가능 - 야영 시 충전)') : tr('용병 관리 소진 (야영 시 1회 재충전)')}
             >
                <span className="text-base mb-0.5">👥</span>
                <div className="flex items-center gap-1 font-bold">
-                 <span>용병 관리</span>
+                 <span>{tr('용병 관리')}</span>
                  <span className={`text-[9px] px-1 py-0.2 rounded font-mono ${
                    (gm.mercenaryManageCharges ?? 1) > 0 ? 'bg-[#38ef7d33] text-[#38ef7d]' : 'bg-[#2c384d] text-[#8b9bb4]'
                  }`}>
@@ -2957,7 +2957,7 @@ export const ExplorationScreen: React.FC = () => {
                </div>
                {gm.inTransitHero && (
                  <span className="absolute -top-1 -right-1 bg-[#ff7043] text-white text-[9px] px-1.5 py-0.2 rounded-full font-bold animate-pulse shadow-md">
-                   이송중
+                   {tr('이송중')}
                  </span>
                )}
             </button>
