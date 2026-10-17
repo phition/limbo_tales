@@ -684,10 +684,12 @@ export const NemesisView: React.FC = () => {
       if (atkDebuff) rawDmg = Math.floor(rawDmg * (1 - (atkDebuff.magnitude || 0.25)));
 
       // C) 치명타 판정
-      const critChance = Math.min(85, Math.max(5, hero.luck * 0.35 + (isUltimate ? 20 : 0)));
+      const heroEff = hero.originalHero ? gm.getHeroEffectiveStats(hero.originalHero) : null;
+      const critBonus = heroEff?.critRateBonus || 0;
+      const critChance = Math.min(95, Math.max(5, hero.luck * 0.35 + critBonus + (isUltimate ? 20 : 0)));
       const isCrit = Math.random() * 100 < critChance;
       if (isCrit) anyCrit = true;
-      const critMult = 1.5 + (hero.luck * 0.005);
+      const critMult = (heroEff?.critDmg || 1.5) + (hero.luck * 0.005);
 
       // D) 방어력 및 점근형 DR 공식 연산
       let partDef = part.def;
@@ -816,10 +818,17 @@ export const NemesisView: React.FC = () => {
       }
 
       // H) 흡혈 (Drain)
-      if (useSkill && (skill.effectType === 'drain' || skill.drainPct || skill.description?.includes('흡혈'))) {
-        const drainAmt = Math.floor(dmg * (skill.drainPct || 0.35));
-        hero.currentHp = Math.min(hero.maxHp, hero.currentHp + drainAmt);
-        addLog(`🩸 [생명력 흡수] ${hero.name}이(가) 가한 피해의 일부로 체력 +${drainAmt.toLocaleString()} 회복!`, 'normal');
+      const gearDrainPct = (heroEff?.drainPercent || 0) / 100;
+      const skillDrainPct = (useSkill && skill) ? (skill.drainPct || (skill.effectType === 'drain' ? 0.35 : 0)) : 0;
+      const totalDrainRatio = gearDrainPct + skillDrainPct;
+      const effectiveMaxHp = Math.max(hero.maxHp, heroEff?.maxHp || 0);
+      if (totalDrainRatio > 0 && dmg > 0 && hero.currentHp < effectiveMaxHp) {
+        const drainAmt = Math.max(1, Math.floor(dmg * totalDrainRatio));
+        const actualHealed = Math.min(effectiveMaxHp - hero.currentHp, drainAmt);
+        if (actualHealed > 0) {
+          hero.currentHp += actualHealed;
+          addLog(`🩸 [생명력 흡수] ${hero.name}이(가) 가한 피해의 ${Math.round(totalDrainRatio * 100)}%를 흡혈하여 체력 +${actualHealed.toLocaleString()} 회복!`, 'normal');
+        }
       }
 
       // I) 해당 타겟 부위 좌표에 VFX 격발

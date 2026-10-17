@@ -57,20 +57,26 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 경보 룬 고의 격발 (위험도 +20 상승 / 3턴간 공격력 +20% / 군번줄 수습)',
+          label: '⚡ [진척도 가속] 경보 룬 고의 격발 (위험도 +20 상승 / 이번 원정 동안 공격력 +15% 가호 / 군번줄 수습)',
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('heavy_hit');
             const nextD = Math.min(maxDanger, danger + 20);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.party.forEach(h => {
-              gm.applyStatusEffectToHero(h, { type: 'buff_atk', turnsLeft: 3, totalTurns: 3, magnitude: 0.20, source: '척후병의 유언' });
+            gm.addExpeditionBuff({
+              id: 'expedition_scout_will',
+              name: '척후병의 유언',
+              icon: '🛡️',
+              category: 'ancestral',
+              description: '이번 원정 동안 공격력 +15%',
+              conditionText: '이번 원정 동안',
+              buffs: { atkBonus: 1.15 }
             });
             gm.addToDungeonInventory('memoir_1', '낡은 척후병의 군번줄', '📜', 1);
             gm.activateQuest('Q_SCENARIO_01');
             gm.updateQuestObjective('Q_SCENARIO_01', 0, 1);
-            gm.addLog('⚡ [진척도 급가속] 경보 룬을 격발하여 마물들을 유인했습니다! (위험도 +20, 파티 3턴간 공격력 +20% 사기 진작, 낡은 군번줄 수습)', 'reward');
+            gm.addLog('⚡ [진척도 급가속] 경보 룬을 격발하여 마물들을 유인했습니다! (위험도 +20, 이번 원정 동안 파티 공격력 +15% 가호, 낡은 군번줄 수습)', 'reward');
             setEventCard(null);
           }
         },
@@ -139,18 +145,24 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 포자 주머니를 터뜨리기 (위험도 +20 상승 / 5턴간 공속·치명타 +15% 각성)',
+          label: '⚡ [진척도 가속] 포자 주머니를 터뜨리기 (위험도 +20 상승 / 이번 원정 동안 공격력 +15% & 치명타율 +15% 가호)',
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('fire');
             const nextD = Math.min(maxDanger, danger + 20);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.party.forEach(h => {
-              gm.applyStatusEffectToHero(h, { type: 'buff_atk', turnsLeft: 5, totalTurns: 5, magnitude: 0.15, source: '핏빛 포자' });
+            gm.addExpeditionBuff({
+              id: 'expedition_blood_spores',
+              name: '핏빛 포자의 각성',
+              icon: '🌿',
+              category: 'ancestral',
+              description: '이번 원정 동안 공격력 +15% & 치명타율 +15%',
+              conditionText: '이번 원정 동안',
+              buffs: { atkBonus: 1.15, critRateBonus: 15 }
             });
             gm.addToDungeonInventory('herb', '심연 약초', '🌿', 4);
-            gm.addLog('⚡ [진척도 가속] 자극적인 마기 포자가 터져 원정대의 투기가 타오릅니다! (위험도 +20 상승, 5턴간 치명타/공격력 +15%)', 'reward');
+            gm.addLog('⚡ [진척도 가속] 자극적인 마기 포자가 터져 원정대의 투기가 타오릅니다! (위험도 +20 상승, 이번 원정 동안 공격력 +15% & 치명타율 +15% 가호)', 'reward');
             setEventCard(null);
           }
         },
@@ -220,7 +232,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 단지를 깨뜨려 원혼 해방 (위험도 +25 상승 / 🪙 80G, 💎 마력 수정 ×2, 3턴 공격력 +25%)',
+          label: '⚡ [진척도 가속] 단지를 깨뜨려 원혼 해방 (위험도 +25 상승 / 🪙 80G, 💎 마력 수정 ×2, 이번 원정 동안 공격력 +20% 가호)',
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('heavy_hit');
@@ -229,10 +241,16 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
             gm.dungeonDangerLevel = nextD;
             gm.addToDungeonInventory('gold', '골드', '🪙', 80);
             gm.addToDungeonInventory('crystal', '마력 수정', '💎', 2);
-            gm.party.forEach(h => {
-              gm.applyStatusEffectToHero(h, { type: 'buff_atk', turnsLeft: 3, totalTurns: 3, magnitude: 0.25, source: '원혼의 격노' });
+            gm.addExpeditionBuff({
+              id: 'expedition_ossuary_wrath',
+              name: '원혼의 격노',
+              icon: '🕯️',
+              category: 'ancestral',
+              description: '이번 원정 동안 공격력 +20%',
+              conditionText: '이번 원정 동안',
+              buffs: { atkBonus: 1.20 }
             });
-            gm.addLog('⚡ [진척도 가속] 단지가 깨지며 분출된 원혼의 마기가 던전을 뒤흔듭니다! (위험도 +25 급상승, 🪙 80G, 마력 수정 ×2, 파티 공격력 +25%)', 'reward');
+            gm.addLog('⚡ [진척도 가속] 단지가 깨지며 분출된 원혼의 마기가 원정대의 무기에 깃듭니다! (위험도 +25 급상승, 🪙 80G, 마력 수정 ×2, 이번 원정 동안 공격력 +20% 가호)', 'reward');
             setEventCard(null);
           }
         },
@@ -581,19 +599,25 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 미래의 기억 동기화 (위험도 +25 / 다음 3회 전투 선제공격 및 치명타 100%)',
+          label: '⚡ [진척도 가속] 미래의 기억 동기화 (위험도 +25 / 이번 원정 동안 공격력 +30% & 치명타율 +25% 가호)',
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('portal');
             const nextD = Math.min(maxDanger, danger + 25);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.party.forEach(h => {
-              gm.applyStatusEffectToHero(h, { type: 'buff_atk', turnsLeft: 6, totalTurns: 6, magnitude: 0.35, source: '미래의 결전 기억' });
+            gm.addExpeditionBuff({
+              id: 'expedition_future_echo',
+              name: '미래의 결전 기억',
+              icon: '⏳',
+              category: 'ancestral',
+              description: '이번 원정 동안 공격력 +30% & 치명타율 +25%',
+              conditionText: '이번 원정 동안',
+              buffs: { atkBonus: 1.30, critRateBonus: 25 }
             });
             gm.activateQuest('Q_SCENARIO_04');
             gm.updateQuestObjective('Q_SCENARIO_04', 0, 1);
-            gm.addLog('⚡ [진척도 가속] 미래의 결전 기억을 계승하여 전열의 전투 감각이 극대화되었습니다! (위험도 +25 상승, 공격력 +35%)', 'reward');
+            gm.addLog('⚡ [진척도 가속] 미래의 결전 기억을 계승하여 전열의 전투 감각이 극대화되었습니다! (위험도 +25 상승, 이번 원정 동안 공격력 +30% & 치명타율 +25% 가호)', 'reward');
             setEventCard(null);
           }
         },
@@ -771,19 +795,27 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       if (berserkerHero) {
         options.unshift({
-          label: `🌟 [${berserkerHero.name} 특기] 피의 광기 포효 (체력 소모 0 / 위험도 +35 폭증 / 치명타 피해 +50%)`,
+          label: `🌟 [${berserkerHero.name} 특기] 피의 광기 포효 (체력 소모 0 / 위험도 +35 폭증 / 이번 원정 동안 치명타 피해 +50% & 흡혈 10% 가호)`,
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('heavy_hit');
             const nextD = Math.min(maxDanger, danger + 35);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.applyStatusEffectToHero(berserkerHero, { type: 'buff_atk', turnsLeft: 99, totalTurns: 99, magnitude: 0.40, source: '버서커의 광기' });
+            gm.addExpeditionBuff({
+              id: 'expedition_berserker_frenzy',
+              name: '피의 광기 포효',
+              icon: '🪓',
+              category: 'ancestral',
+              description: '이번 원정 동안 치명타 피해 +50% & 흡혈 +10%',
+              conditionText: '이번 원정 동안',
+              buffs: { critDmgBonus: 0.50, drainBonus: 10 }
+            });
             const q4 = gm.quests.find(q => q.id === 'Q_SCENARIO_04');
             if (q4 && q4.status === 'active' && q4.objectives[0]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_04', 1, 1);
             }
-            gm.addLog(`🌟 [광전사 특기] [${berserkerHero.name}]이(가) 제단 앞에서 야수의 포효를 내질렀습니다! (위험도 +35 폭증, 보스 조우 임박!)`, 'reward');
+            gm.addLog(`🌟 [광전사 특기] [${berserkerHero.name}]이(가) 제단 앞에서 야수의 포효를 내질렀습니다! (위험도 +35 폭증, 이번 원정 동안 치명타 피해 +50% & 흡혈 10% 가호)`, 'reward');
             setEventCard(null);
           }
         });
@@ -831,21 +863,27 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
           }
         },
         {
-          label: '🛡️ [안전 파밍] 부서진 대검을 철광석으로 수리 (위험도 -25 / 거신의 가호: 물리방어 +30%)',
+          label: '🛡️ [안전 파밍] 부서진 대검을 철광석으로 수리 (위험도 -25 / 이번 원정 동안 물리방어 +30% 가호)',
           variant: 'primary',
           action: () => {
             SoundManager.getInstance().play('forge_success');
             const nextD = Math.max(0, danger - 25);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.party.forEach(h => {
-              gm.applyStatusEffectToHero(h, { type: 'buff_def', turnsLeft: 99, totalTurns: 99, magnitude: 0.30, source: '거신의 가호' });
+            gm.addExpeditionBuff({
+              id: 'expedition_titan_guard',
+              name: '거신의 수호 가호',
+              icon: '🗿',
+              category: 'ancestral',
+              description: '이번 원정 동안 물리 방어력 +30%',
+              conditionText: '이번 원정 동안',
+              buffs: { defBonus: 1.30 }
             });
             const q4 = gm.quests.find(q => q.id === 'Q_SCENARIO_04');
             if (q4 && q4.status === 'active' && q4.objectives[0]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_04', 1, 1);
             }
-            gm.addLog('🛡️ [안전 파밍] 거신의 대검을 보수하여 던전이 안정화되고 가호를 얻었습니다. (위험도 -25 감소, 물리 방어력 +30%)', 'reward');
+            gm.addLog('🛡️ [안전 파밍] 거신의 대검을 보수하여 던전이 안정화되고 이번 원정 동안 물리 방어력 +30% 가호를 얻었습니다! (위험도 -25 감소)', 'reward');
             setEventCard(null);
           }
         }
@@ -1002,7 +1040,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 온몸으로 가시밭을 부수며 혈로 돌파 (위험도 +25 / HP 10% 출혈 / 이번 원정 동안 공격력 +5 가호)',
+          label: '⚡ [진척도 가속] 온몸으로 가시밭을 부수며 혈로 돌파 (위험도 +25 / HP 10% 출혈 / 이번 원정 동안 공격력 +10% 가호)',
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('hero_hurt');
@@ -1017,9 +1055,9 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               name: '진홍 장미 정수',
               icon: '🥀',
               category: 'ancestral',
-              description: '이번 원정 동안 전원 공격력 +5',
+              description: '이번 원정 동안 전원 공격력 +10%',
               conditionText: '이번 원정 동안',
-              buffs: { flatAtkBonus: 5 }
+              buffs: { atkBonus: 1.10, flatAtkBonus: 5 }
             });
             const q2 = gm.quests.find(q => q.id === 'Q_SCENARIO_02');
             if (q2 && q2.status === 'active' && q2.objectives[0]?.isCompleted) {
@@ -1102,7 +1140,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 안개 속으로 살기 방출 (위험도 +30 / 파티 치명타율 +20% / 사신의 낫 파편)',
+          label: '⚡ [진척도 가속] 안개 속으로 살기 방출 (위험도 +30 / 이번 원정 동안 치명타율 +20% & 공격력 +20% 가호 / 사신의 낫 파편)',
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('heavy_hit');
@@ -1110,14 +1148,20 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
             gm.addToDungeonInventory('void_shard', '공허의 파편', '🌌', 3);
-            gm.party.forEach(h => {
-              gm.applyStatusEffectToHero(h, { type: 'buff_atk', turnsLeft: 6, totalTurns: 6, magnitude: 0.30, source: '사신의 살기' });
+            gm.addExpeditionBuff({
+              id: 'expedition_reaper_bloodlust',
+              name: '사신의 살기',
+              icon: '🌫️',
+              category: 'ancestral',
+              description: '이번 원정 동안 파티 치명타율 +20% & 공격력 +20%',
+              conditionText: '이번 원정 동안',
+              buffs: { critRateBonus: 20, atkBonus: 1.20 }
             });
             const q3 = gm.quests.find(q => q.id === 'Q_SCENARIO_03');
             if (q3 && q3.status === 'active' && q3.objectives[0]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_03', 1, 1);
             }
-            gm.addLog('⚡ [진척도 급가속] 살기를 방출하여 망각의 군주들을 불러 모았습니다! (위험도 +30 상승, 6턴간 치명타/공격력 +30%)', 'reward');
+            gm.addLog('⚡ [진척도 급가속] 살기를 방출하여 망각의 군주들을 불러 모았습니다! (위험도 +30 상승, 이번 원정 동안 치명타율 +20% & 공격력 +20% 가호)', 'reward');
             setEventCard(null);
           }
         },

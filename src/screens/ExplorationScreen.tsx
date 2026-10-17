@@ -1823,6 +1823,23 @@ export const ExplorationScreen: React.FC = () => {
                   gm.addLog('🔮 [에테르 결정화] 기류를 마도석에 농축하여 ✨ 에테르 +15 획득!', 'reward');
                   setEventCard(null);
                 }
+              },
+              {
+                label: '⚡ [기류 각인] 에테르 기류를 전신에 각인 (이번 원정 동안 치명타율 +10% & 공격력 +10% 가호)',
+                variant: 'danger',
+                action: () => {
+                  gm.addExpeditionBuff({
+                    id: 'expedition_aether_stream',
+                    name: '에테르 기류 각인',
+                    icon: '⚡',
+                    category: 'ancestral',
+                    description: '이번 원정 동안 치명타율 +10% & 공격력 +10%',
+                    conditionText: '이번 원정 동안',
+                    buffs: { critRateBonus: 10, atkBonus: 1.10 }
+                  });
+                  gm.addLog('⚡ [기류 각인] 순수 에테르 기류를 전신에 각인하여 이번 원정 동안 치명타율 +10% & 공격력 +10% 가호를 얻었습니다!', 'reward');
+                  setEventCard(null);
+                }
               }
             ]
           });
@@ -2278,6 +2295,21 @@ export const ExplorationScreen: React.FC = () => {
                 <span className="text-[10px] text-[#ffd54f] font-mono flex items-center gap-0.5">
                   🔥 온기 버프
                 </span>
+              )}
+              {/* 🌟 원정대 가호/버프 뱃지 리스트 */}
+              {gm.expeditionBuffs && gm.expeditionBuffs.length > 0 && (
+                <div className="flex items-center gap-1 flex-wrap">
+                  {gm.expeditionBuffs.map(eb => (
+                    <span
+                      key={eb.id}
+                      className="text-[10px] text-[#ff7043] bg-[#ff704318] border border-[#ff704344] px-1.5 py-0.5 rounded flex items-center gap-0.5 font-bold"
+                      title={`${eb.name}: ${eb.description || ''}`}
+                    >
+                      <span>{eb.icon || '✨'}</span>
+                      <span className="hidden sm:inline">{eb.name}</span>
+                    </span>
+                  ))}
+                </div>
               )}
             </div>
           </div>

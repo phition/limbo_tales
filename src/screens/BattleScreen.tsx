@@ -2401,15 +2401,18 @@ export const BattleScreen: React.FC = () => {
             mpRegenSynNames.push(syn.name);
           }
         });
-        if (totalSynergyRegen > 0 && hero.currentHp > 0 && hero.currentHp < hero.maxHp) {
-          const synHeal = Math.max(1, Math.round(hero.maxHp * totalSynergyRegen));
-          hero.currentHp = Math.min(hero.maxHp, hero.currentHp + synHeal);
+        const heroEffStats = gm.getHeroEffectiveStats(hero);
+        const effectiveMaxHp = Math.max(hero.maxHp, heroEffStats.maxHp);
+        const effectiveMaxMp = Math.max(hero.maxMp, heroEffStats.maxMp);
+        if (totalSynergyRegen > 0 && hero.currentHp > 0 && hero.currentHp < effectiveMaxHp) {
+          const synHeal = Math.max(1, Math.round(effectiveMaxHp * totalSynergyRegen));
+          hero.currentHp = Math.min(effectiveMaxHp, hero.currentHp + synHeal);
           logs.push(`✨ [${regenSynNames.join(', ')}] ${hero.name} 시너지 체력 회복 (+${synHeal})`);
         }
-        if (totalSynergyMpRegen > 0 && hero.currentHp > 0 && hero.currentMp < hero.maxMp) {
-          const actualGained = Math.min(hero.maxMp - hero.currentMp, totalSynergyMpRegen);
+        if (totalSynergyMpRegen > 0 && hero.currentHp > 0 && hero.currentMp < effectiveMaxMp) {
+          const actualGained = Math.min(effectiveMaxMp - hero.currentMp, totalSynergyMpRegen);
           if (actualGained > 0) {
-            hero.currentMp = Math.min(hero.maxMp, hero.currentMp + actualGained);
+            hero.currentMp = Math.min(effectiveMaxMp, hero.currentMp + actualGained);
             logs.push(`💧 [${mpRegenSynNames.join(', ')}] ${hero.name} 시너지 마나 회복 (+${actualGained} MP)`);
           }
         }
@@ -2727,7 +2730,7 @@ export const BattleScreen: React.FC = () => {
     if (skill !== 'basic' && !isFreeCast) hero.currentMp -= requiredMp;
 
     const stats = gm.getHeroEffectiveStats(hero);
-    let critChance = gm.getCritChance(stats.luck);
+    let critChance = gm.getCritChance(stats.luck) + (stats.critRateBonus || 0);
     let heroCritMult = stats.critDmg + (stats.luck * 0.005);
 
     // 🔥 [궁극기 판정 및 전술 모멘텀 FEVER 시너지 연동]
@@ -4309,12 +4312,23 @@ export const BattleScreen: React.FC = () => {
           const partyDrainBonus = partyDrainBuff ? Math.round(partyDrainBuff.magnitude * 100) : 0;
           const warlordDrain = hero.classId === 'valhalla_warlord' ? 10 : 0;
           const heroDrainPct = (stats.drainPercent || 0) + (effectType === 'drain' ? 50 : 0) + partyDrainBonus + warlordDrain;
-          if (heroDrainPct > 0 && totalActualDamageDealt > 0 && hero.currentHp > 0 && hero.currentHp < hero.maxHp) {
+          const effectiveMaxHp = Math.max(hero.maxHp, stats.maxHp);
+          if (heroDrainPct > 0 && totalActualDamageDealt > 0 && hero.currentHp > 0 && hero.currentHp < effectiveMaxHp) {
             const drainHeal = Math.max(1, Math.floor(totalActualDamageDealt * (heroDrainPct / 100)));
-            const actualHealed = Math.min(hero.maxHp - hero.currentHp, drainHeal);
+            const actualHealed = Math.min(effectiveMaxHp - hero.currentHp, drainHeal);
             if (actualHealed > 0) {
               hero.currentHp += actualHealed;
               logs.push(`🩸 [생명력 흡수] 가한 피해의 ${heroDrainPct}%를 흡혈하여 체력 +${actualHealed} 회복!`);
+              const heroPartyIdx = gm.party.findIndex(p => p.id === hero.id);
+              const heroPos = getHeroVfxPos(heroPartyIdx >= 0 ? heroPartyIdx : 0, false, gm.party.length);
+              triggerVFX({
+                type: 'necrotic_drain',
+                x: heroPos.x,
+                y: heroPos.y,
+                damage: actualHealed,
+                text: `+${actualHealed} 🩸`
+              });
+              SoundManager.getInstance().play('heal');
             }
           }
 

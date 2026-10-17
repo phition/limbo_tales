@@ -3659,6 +3659,7 @@ export class GameManager {
     defPenetration: number;
     drainPercent: number;
     critDmg: number;
+    critRateBonus: number;
   } {
     // 🌟 베이스 스탯은 calcHeroStatsForClassAndLevel로부터 순수하게 산출 (중복 가산 방지)
     const base = GameManager.calcHeroStatsForClassAndLevel(
@@ -3679,6 +3680,7 @@ export class GameManager {
     let defPenetration = 0;
     let drainPercent = 0;
     let critDmg = 1.5; // 기본 치명타 배율 150%
+    let critRateBonus = 0; // 치명타율 추가 보너스 (%)
 
     // 1. 장비 스탯 & 인챈트 스탯 가산 (클래스 호환성 검증)
     Object.values(hero.equipment || {}).forEach(eq => {
@@ -3750,7 +3752,7 @@ export class GameManager {
         if (syn.buffs.spdBonus) spd = Math.floor(spd * syn.buffs.spdBonus);
         if (syn.buffs.maxHpBonus) maxHp = Math.floor(maxHp * syn.buffs.maxHpBonus);
         if (syn.buffs.luckBonus) luck += syn.buffs.luckBonus;
-        if (syn.buffs.critRateBonus) luck += syn.buffs.critRateBonus;
+        if (syn.buffs.critRateBonus) critRateBonus += syn.buffs.critRateBonus;
         if (syn.buffs.flatAtkBonus) atk += syn.buffs.flatAtkBonus;
         if (syn.buffs.flatDefBonus) def += syn.buffs.flatDefBonus;
         if (syn.buffs.flatSpdBonus) spd += syn.buffs.flatSpdBonus;
@@ -3867,7 +3869,8 @@ export class GameManager {
       damageBonus: Math.round(damageBonus * 100) / 100,
       defPenetration: Math.round(defPenetration * 10) / 10,
       drainPercent: Math.round(drainPercent * 10) / 10,
-      critDmg: Math.round(critDmg * 100) / 100
+      critDmg: Math.round(critDmg * 100) / 100,
+      critRateBonus: Math.round(critRateBonus * 10) / 10
     };
   }
 
@@ -6401,7 +6404,9 @@ export class GameManager {
     } else {
       this.expeditionBuffs.push(buff);
     }
+    this.syncAllHeroesStats();
     this.emit('partyUpdated', this.party);
+    this.saveGame();
   }
 
   /** 🧹 이번 원정 가호/버프 초기화 (원정 종료 / 귀환 시 호출) */
@@ -11730,6 +11735,7 @@ export class GameManager {
         cemetery: this.cemetery,
         memorialExpBuffUntil: this.memorialExpBuffUntil,
         activeAncestralBlessing: this.activeAncestralBlessing,
+        expeditionBuffs: this.expeditionBuffs || [],
         bonfireAdCharges: this.bonfireAdCharges,
         wagonAdCharges: this.wagonAdCharges,
         hasCatalystCharge: this.hasCatalystCharge,
@@ -11947,6 +11953,7 @@ export class GameManager {
       cemetery: this.cemetery,
       memorialExpBuffUntil: this.memorialExpBuffUntil,
       activeAncestralBlessing: this.activeAncestralBlessing,
+      expeditionBuffs: this.expeditionBuffs || [],
       codexUnlockedItems: this.codexUnlockedItems,
       codexUnlockOrder: this.codexUnlockOrder,
       codexUnlockedTimestamps: this.codexUnlockedTimestamps,
@@ -12227,6 +12234,9 @@ export class GameManager {
       } else {
         this.activeAncestralBlessing = null;
       }
+    }
+    if (parsed.expeditionBuffs && Array.isArray(parsed.expeditionBuffs)) {
+      this.expeditionBuffs = parsed.expeditionBuffs as PartySynergy[];
     }
     if (parsed.codexUnlockedItems) {
       this.codexUnlockedItems = parsed.codexUnlockedItems as Record<string, boolean>;
@@ -12902,6 +12912,9 @@ export class GameManager {
           } else {
             this.activeAncestralBlessing = null;
           }
+        }
+        if (parsed.expeditionBuffs && Array.isArray(parsed.expeditionBuffs)) {
+          this.expeditionBuffs = parsed.expeditionBuffs as PartySynergy[];
         }
         if (parsed.marketStock && typeof parsed.marketStock === 'object') {
           this.marketStock = parsed.marketStock as Record<string, { current: number; restockAt?: number }>;
