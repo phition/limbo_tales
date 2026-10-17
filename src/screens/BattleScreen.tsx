@@ -1880,11 +1880,11 @@ export const BattleScreen: React.FC = () => {
       }
     });
 
-    // 👑 [보스 3세트 완성 효과] 전투 개시 효과 적용
+    // 👑 [보스 세트 효과] 전투 개시 효과 적용 (2세트 부분 및 3세트 풀세트)
     party.forEach(h => {
       const bossSet = getHeroEquippedBossSet(h);
       if (!bossSet) return;
-      if (bossSet.effectType === 'barrier') {
+      if (bossSet.effectType === 'barrier' && bossSet.count >= 3) {
         const shieldAmt = Math.max(1, Math.round(h.maxHp * 0.25));
         applyStatusEffect(h, {
           type: 'shield',
@@ -1893,11 +1893,13 @@ export const BattleScreen: React.FC = () => {
           magnitude: shieldAmt,
           source: bossSet.setName
         });
-        gm.addLog(`👑 [${bossSet.setName}] ${h.name}에게 최대 HP의 25%(🛡️${shieldAmt}) 거암 결계 보호막 전개!`, 'reward');
+        gm.addLog(`👑 [${bossSet.setName} (3/3 풀세트)] ${h.name}에게 최대 HP의 25%(🛡️${shieldAmt}) 거암 결계 보호막 전개!`, 'reward');
       } else if (bossSet.effectType === 'buff_def_crit') {
-        gm.addLog(`👑 [${bossSet.setName}] ${h.name}에게 침묵의 주시(방어력+15%, 행운+10) 상시 활성!`, 'reward');
+        const tag = bossSet.count >= 3 ? '방어력+25%, 행운+15' : '방어력+10%, 행운+5';
+        gm.addLog(`👑 [${bossSet.setName} (${bossSet.count}/3)] ${h.name}에게 ${bossSet.bonusName}(${tag}) 상시 활성!`, 'reward');
       } else if (bossSet.effectType === 'asmodeus_wrath') {
-        gm.addLog(`👑 [${bossSet.setName}] ${h.name}에게 종말의 심연 군주 권능(올스탯 +30%) 발현!`, 'reward');
+        const tag = bossSet.count >= 3 ? '올스탯 +30%' : '올스탯 +15%';
+        gm.addLog(`👑 [${bossSet.setName} (${bossSet.count}/3)] ${h.name}에게 종말의 심연 군주 권능(${tag}) 발현!`, 'reward');
       }
     });
 
@@ -2457,16 +2459,16 @@ export const BattleScreen: React.FC = () => {
           });
           logs.push(`✝️✨ [전투 신앙 기적] ${hero.name}의 신앙으로 파티 전원 체력 +${healAmt} 치유!`);
         }
-        // 👑 [보스 세트 효과] 턴 시작 MP 회복
+        // 👑 [보스 세트 효과] 턴 시작 MP 회복 및 심연 폭발 (3세트 풀세트)
         const heroBossSet = getHeroEquippedBossSet(hero);
-        if (heroBossSet?.effectType === 'mana_regen_spd' && hero.currentHp > 0 && hero.currentMp < hero.maxMp) {
+        if (heroBossSet?.effectType === 'mana_regen_spd' && heroBossSet.count >= 3 && hero.currentHp > 0 && hero.currentMp < hero.maxMp) {
           const actualGained = Math.min(hero.maxMp - hero.currentMp, 15);
           if (actualGained > 0) {
             hero.currentMp = Math.min(hero.maxMp, hero.currentMp + actualGained);
             logs.push(`🌀 [${heroBossSet.setName}] 시공 왜곡장 발동: ${hero.name} 마나 즉시 회복 (+${actualGained} MP)`);
           }
         }
-        if (heroBossSet?.effectType === 'asmodeus_wrath' && hero.currentHp > 0) {
+        if (heroBossSet?.effectType === 'asmodeus_wrath' && heroBossSet.count >= 3 && hero.currentHp > 0) {
           const qLen = turnQueueRef.current.length || 1;
           const currentRound = Math.floor(turnIdxRef.current / qLen) + 1;
           if (currentRound > 0 && currentRound % 3 === 0) {
@@ -3366,9 +3368,9 @@ export const BattleScreen: React.FC = () => {
             }
           }
 
-          // 👑 [7층 보스 세트 효과] 공격 시 25% 확률로 적에게 1턴간 [빙결] 부여
+          // 👑 [7층 보스 세트 효과] 공격 시 25% 확률로 적에게 1턴간 [빙결] 부여 (3세트 풀세트)
           const heroBossSetAttacking = getHeroEquippedBossSet(hero);
-          if (heroBossSetAttacking?.effectType === 'stun_chance' && m.currentHp > 0 && Math.random() < 0.25) {
+          if (heroBossSetAttacking?.effectType === 'stun_chance' && heroBossSetAttacking.count >= 3 && m.currentHp > 0 && Math.random() < 0.25) {
             const monResistChance = Math.min(50, (m.luck || 10) * 0.35);
             if (Math.random() * 100 < monResistChance) {
               logs.push(`🛡️ [저항(RESIST)] ${m.data.name}이(가) 높은 행운(🍀${m.luck})으로 원혼의 속박(빙결)을 저항했습니다!`);
@@ -6546,16 +6548,20 @@ export const BattleScreen: React.FC = () => {
             }
           }
 
-          // 👑 [보스 세트 효과] 방어 및 회피 발동
+          // 👑 [보스 세트 효과] 방어 및 회피 발동 (2세트 / 3세트 차등 적용)
           let finalDmgToHero = actualDamage;
           let finalComboExtraDmg = enemyComboExtraDmg;
           const targetBossSet = getHeroEquippedBossSet(target);
-          if (targetBossSet?.effectType === 'evade_chance' && Math.random() < 0.20) {
-            finalDmgToHero = 0;
-            finalComboExtraDmg = 0;
-            setTimeout(() => gm.addLog(`🪞 [${targetBossSet.setName}] 환영 굴절 발동! ${target.name}이(가) 적의 공격을 완전히 투영 회피했습니다!`, 'reward'), 0);
+          if (targetBossSet?.effectType === 'evade_chance') {
+            const dodgeChance = targetBossSet.count >= 3 ? 0.20 : 0.10;
+            if (Math.random() < dodgeChance) {
+              finalDmgToHero = 0;
+              finalComboExtraDmg = 0;
+              setTimeout(() => gm.addLog(`🪞 [${targetBossSet.setName} (${targetBossSet.count}/3)] 환영 굴절 발동! ${target.name}이(가) 적의 공격을 완전히 투영 회피했습니다!`, 'reward'), 0);
+            }
           } else if (targetBossSet?.effectType === 'dmg_reduction') {
-            finalDmgToHero = Math.round(finalDmgToHero * 0.80);
+            const redRate = targetBossSet.count >= 3 ? 0.80 : 0.90;
+            finalDmgToHero = Math.round(finalDmgToHero * redRate);
           }
 
           let newHp = target.currentHp - (finalDmgToHero + finalComboExtraDmg);
@@ -6735,10 +6741,14 @@ export const BattleScreen: React.FC = () => {
 
             let frontFinalDmg = frontCalc.actualDamage;
             const frontBossSet = getHeroEquippedBossSet(guardedFrontHero);
-            if (frontBossSet?.effectType === 'evade_chance' && Math.random() < 0.20) {
-              frontFinalDmg = 0;
+            if (frontBossSet?.effectType === 'evade_chance') {
+              const frontDodgeChance = frontBossSet.count >= 3 ? 0.20 : 0.10;
+              if (Math.random() < frontDodgeChance) {
+                frontFinalDmg = 0;
+              }
             } else if (frontBossSet?.effectType === 'dmg_reduction') {
-              frontFinalDmg = Math.round(frontFinalDmg * 0.80);
+              const frontRedRate = frontBossSet.count >= 3 ? 0.80 : 0.90;
+              frontFinalDmg = Math.round(frontFinalDmg * frontRedRate);
             }
 
             let frontNewHp = guardedFrontHero.currentHp - frontFinalDmg;

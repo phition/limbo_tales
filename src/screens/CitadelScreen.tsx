@@ -28,7 +28,9 @@ import {
   getForgeRarityRates,
   rollForgeItemRarity,
   getEquipmentTier,
-  detectWeaponType
+  detectWeaponType,
+  resolveEquipmentBossFloor,
+  BOSS_SET_BONUSES
 } from '../data/equipment';
 import { SoundManager } from '../managers/SoundManager';
 import { HERO_TRAITS, GameManager } from '../managers/GameManager';
@@ -1634,29 +1636,54 @@ const EquipmentOverlay: React.FC<{
 
             {/* 심연의 저주 */}
             {/* 👑 보스 고유 세트 보너스 정보 */}
-            {activeDetailItem.setId && (
-              <div className="p-2.5 rounded-xl bg-gradient-to-r from-[#201608] to-[#121927] border border-[#ffd54f55] flex flex-col gap-1.5 shadow-md">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 font-bold text-xs text-[#ffd54f]">
-                    <span>👑</span>
-                    <span>{activeDetailItem.setName || '보스 고유 세트'}</span>
+            {(() => {
+              const itemFloor = resolveEquipmentBossFloor(activeDetailItem);
+              const setBonusDef = itemFloor ? BOSS_SET_BONUSES[itemFloor] : null;
+              if (!setBonusDef) return null;
+
+              const heroEquips = Object.values(hero.equipment || {}).filter(Boolean);
+              const matchingCount = heroEquips.filter(e => resolveEquipmentBossFloor(e) === itemFloor).length;
+              const isFull = matchingCount >= 3;
+              const isTwoActive = matchingCount >= 2;
+
+              return (
+                <div className="p-2.5 rounded-xl bg-gradient-to-r from-[#201608] to-[#121927] border border-[#ffd54f55] flex flex-col gap-1.5 shadow-md">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 font-bold text-xs text-[#ffd54f]">
+                      <span>👑</span>
+                      <span>{setBonusDef.setName}</span>
+                    </div>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${
+                      isFull 
+                        ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55]' 
+                        : isTwoActive 
+                        ? 'bg-[#ffd54f33] text-[#ffd54f] border border-[#ffd54f88]' 
+                        : 'bg-[#37474f44] text-[#90a4ae]'
+                    }`}>
+                      {isFull ? '✨ 3/3 풀세트 완성' : isTwoActive ? '⚡ 2/3 세트 효과 활성' : `(${matchingCount}/3 세트 장착 중)`}
+                    </span>
                   </div>
-                  {(() => {
-                    const heroEquips = Object.values(hero.equipment || {}).filter(Boolean);
-                    const matchingCount = heroEquips.filter(e => e?.setId === activeDetailItem.setId).length;
-                    const isFull = matchingCount >= (activeDetailItem.setRequiredCount || 3);
-                    return (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${isFull ? 'bg-[#ffd54f33] text-[#ffd54f] border border-[#ffd54f88]' : 'bg-[#37474f44] text-[#90a4ae]'}`}>
-                        {isFull ? '✨ 3/3 풀세트 완성!' : `(${matchingCount}/3 세트 장착 중)`}
-                      </span>
-                    );
-                  })()}
+                  <div className="text-[11px] flex flex-col gap-1 mt-0.5">
+                    <div className={`p-1.5 rounded text-[10px] leading-tight flex items-start gap-1 ${
+                      isTwoActive 
+                        ? 'bg-[#38ef7d15] text-[#b9f6ca] border border-[#38ef7d33]' 
+                        : 'bg-[#1e293b44] text-[#90a4ae] border border-[#33415533]'
+                    }`}>
+                      <span className={`font-bold shrink-0 ${isTwoActive ? 'text-[#38ef7d]' : 'text-[#78909c]'}`}>[2세트]</span>
+                      <span>{setBonusDef.twoPieceDesc}</span>
+                    </div>
+                    <div className={`p-1.5 rounded text-[10px] leading-tight flex items-start gap-1 ${
+                      isFull 
+                        ? 'bg-[#ffd54f15] text-[#ffe082] border border-[#ffd54f33]' 
+                        : 'bg-[#1e293b44] text-[#607d8b] border border-[#33415533]'
+                    }`}>
+                      <span className={`font-bold shrink-0 ${isFull ? 'text-[#ffd54f]' : 'text-[#546e7a]'}`}>[3세트]</span>
+                      <span>{setBonusDef.threePieceDesc}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-[11px] text-[#ffecb3] leading-relaxed">
-                  {activeDetailItem.setBonusDesc || '무기/방어구/장신구 3세트 착용 시 특별한 보스 세트 보너스가 발현됩니다.'}
-                </div>
-              </div>
-            )}
+              );
+            })()}
 
             {(activeDetailItem.isCorrupted || activeDetailItem.isUnpurified || activeDetailItem.isCursed || activeDetailItem.name.startsWith('[침식된]')) && (
               <div className="p-2.5 rounded-lg bg-[#2a0f14] border border-[#ef535088] text-xs flex flex-col gap-1">

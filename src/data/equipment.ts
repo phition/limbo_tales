@@ -1174,6 +1174,10 @@ export interface BossUniqueDefinition {
   description: string;
   icon: string;
   affinity?: string[];
+  setId?: string;
+  setName?: string;
+  setRequiredCount?: number;
+  setBonusDesc?: string;
 }
 
 export const BOSS_UNIQUE_DEFINITIONS: Record<number, BossUniqueDefinition[]> = {
@@ -1559,8 +1563,17 @@ export interface BossSetBonus {
   setName: string;
   requiredCount: number;
   bonusName: string;
+  twoPieceBonusName: string;
+  twoPieceDesc: string;
+  threePieceBonusName: string;
+  threePieceDesc: string;
   description: string;
   effectType: 'buff_def_crit' | 'vampirism' | 'barrier' | 'mana_regen_spd' | 'skill_dmg_pen' | 'bloodlust' | 'stun_chance' | 'dmg_reduction' | 'evade_chance' | 'asmodeus_wrath';
+}
+
+export interface EquippedBossSetInfo extends BossSetBonus {
+  count: number;
+  isFullSet: boolean;
 }
 
 export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
@@ -1570,7 +1583,11 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '1F 침묵의 감시자 세트',
     requiredCount: 3,
     bonusName: '침묵의 주시',
-    description: '[3세트 완성] 침묵의 주시: 전투 시작 시 영구 방어력 +15% 및 치명타율 +10% 증가',
+    twoPieceBonusName: '감시자의 안광',
+    twoPieceDesc: '[2세트] 방어력 +10%, 행운 +5 증가',
+    threePieceBonusName: '침묵의 주시',
+    threePieceDesc: '[3세트] 전투 시작 시 상시 방어력 +15% 및 행운 +10 추가 증가 (총 방어력 +25%, 행운 +15)',
+    description: '[2세트] 방어력 +10%, 행운 +5 | [3세트] 상시 방어력 +15% 및 행운 +10 추가 증가',
     effectType: 'buff_def_crit'
   },
   2: {
@@ -1579,7 +1596,11 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '2F 망령의 군주 세트',
     requiredCount: 3,
     bonusName: '영혼 착취',
-    description: '[3세트 완성] 영혼 착취: 모든 공격 및 스킬 적중 시 가한 피해의 12%를 체력으로 흡혈',
+    twoPieceBonusName: '원혼의 흡수',
+    twoPieceDesc: '[2세트] 공격 및 스킬 적중 시 가한 피해의 6%를 체력으로 흡혈',
+    threePieceBonusName: '영혼 착취',
+    threePieceDesc: '[3세트] 흡혈 효과가 12%로 대폭 강화 (가한 피해의 12% 흡혈)',
+    description: '[2세트] 가한 피해의 6% 흡혈 | [3세트] 흡혈량 12%로 대폭 강화',
     effectType: 'vampirism'
   },
   3: {
@@ -1588,7 +1609,11 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '3F 원초의 골렘 세트',
     requiredCount: 3,
     bonusName: '대지의 결계',
-    description: '[3세트 완성] 대지의 결계: 전투 시작 시 최대 체력의 25%에 해당하는 바위 보호막 생성',
+    twoPieceBonusName: '태고의 암벽',
+    twoPieceDesc: '[2세트] 방어력 +15%, 최대 체력 +10% 증가',
+    threePieceBonusName: '대지의 결계',
+    threePieceDesc: '[3세트] 전투 시작 시 최대 체력의 25%에 해당하는 거암 보호막 생성',
+    description: '[2세트] 방어력 +15%, 최대 체력 +10% | [3세트] 전투 시작 시 최대 체력의 25% 거암 보호막 생성',
     effectType: 'barrier'
   },
   4: {
@@ -1597,7 +1622,11 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '4F 심연 시공왜곡 세트',
     requiredCount: 3,
     bonusName: '시공 왜곡장',
-    description: '[3세트 완성] 시공 왜곡장: 매 턴 시작 시 MP 15 회복 및 행동 속도(SPD) +20% 가속',
+    twoPieceBonusName: '시간 가속',
+    twoPieceDesc: '[2세트] 행동 속도(SPD) +10% 가속',
+    threePieceBonusName: '시공 왜곡장',
+    threePieceDesc: '[3세트] 매 턴 시작 시 MP 15 회복 및 행동 속도(SPD) +20% 추가 가속 (총 SPD +30%)',
+    description: '[2세트] SPD +10% | [3세트] 턴마다 MP 15 회복 및 SPD +20% 추가 가속',
     effectType: 'mana_regen_spd'
   },
   5: {
@@ -1606,7 +1635,11 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '5F 공허의 지배자 세트',
     requiredCount: 3,
     bonusName: '공허 붕괴역',
-    description: '[3세트 완성] 공허 붕괴역: 스킬 피해량 +25% 증폭 및 적 방어력 20% 관통 무시',
+    twoPieceBonusName: '모노리스 침식',
+    twoPieceDesc: '[2세트] 스킬 피해량 +10% 증폭 및 적 방어력 10% 관통',
+    threePieceBonusName: '공허 붕괴역',
+    threePieceDesc: '[3세트] 스킬 피해량 +25% 추가 증폭 및 적 방어력 20% 추가 관통 (총 피해 +35%, 관통 30%)',
+    description: '[2세트] 스킬 피해 +10%, 방어 관통 10% | [3세트] 피해량 +25% 및 관통 20% 추가 증폭',
     effectType: 'skill_dmg_pen'
   },
   6: {
@@ -1615,7 +1648,11 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '6F 핏빛 성역 세트',
     requiredCount: 3,
     bonusName: '선혈의 갈증',
-    description: '[3세트 완성] 선혈의 갈증: 체력 50% 이하 시 공격력 +35% 폭주 및 피해량의 20% 흡혈',
+    twoPieceBonusName: '핏빛 맹위',
+    twoPieceDesc: '[2세트] 공격력 +15% 증가',
+    threePieceBonusName: '선혈의 갈증',
+    threePieceDesc: '[3세트] 체력 50% 이하 시 공격력 +35% 추가 폭주 및 가한 피해의 20% 흡혈',
+    description: '[2세트] 공격력 +15% | [3세트] 체력 50% 이하 시 공격력 +35% 폭주 및 20% 흡혈',
     effectType: 'bloodlust'
   },
   7: {
@@ -1624,7 +1661,11 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '7F 망각의 묘지기 세트',
     requiredCount: 3,
     bonusName: '원혼의 속박',
-    description: '[3세트 완성] 원혼의 속박: 공격 시 25% 확률로 대상을 1턴간 [빙결] 상태로 행동 불능화',
+    twoPieceBonusName: '사령의 낙인',
+    twoPieceDesc: '[2세트] 공격력 +15%, 행운 +10 증가',
+    threePieceBonusName: '원혼의 속박',
+    threePieceDesc: '[3세트] 공격 시 25% 확률로 대상을 1턴간 [빙결] 상태로 행동 불능화',
+    description: '[2세트] 공격력 +15%, 행운 +10 | [3세트] 공격 시 25% 확률 대상 1턴 빙결',
     effectType: 'stun_chance'
   },
   8: {
@@ -1633,7 +1674,11 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '8F 단죄의 성기사 세트',
     requiredCount: 3,
     bonusName: '단죄의 불패성',
-    description: '[3세트 완성] 단죄의 불패성: 받는 모든 피해 20% 상시 경감 및 치명타 저항 20% 증가',
+    twoPieceBonusName: '수호의 맹세',
+    twoPieceDesc: '[2세트] 받는 모든 피해 10% 상시 경감',
+    threePieceBonusName: '단죄의 불패성',
+    threePieceDesc: '[3세트] 받는 모든 피해 20% 상시 경감으로 강화 및 방어력 +20% 증가',
+    description: '[2세트] 받는 피해 10% 경감 | [3세트] 받는 피해 20% 경감 및 방어력 +20%',
     effectType: 'dmg_reduction'
   },
   9: {
@@ -1642,7 +1687,11 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '9F 거울 미궁 세트',
     requiredCount: 3,
     bonusName: '환영 굴절',
-    description: '[3세트 완성] 환영 굴절: 20% 확률로 적의 단일 공격을 100% 완전 회피(굴절)',
+    twoPieceBonusName: '거울 분신',
+    twoPieceDesc: '[2세트] 적의 공격 10% 확률로 완전 회피(굴절)',
+    threePieceBonusName: '환영 굴절',
+    threePieceDesc: '[3세트] 적의 공격 완전 회피(굴절) 확률 20%로 상승 및 행동 속도(SPD) +15% 증가',
+    description: '[2세트] 공격 10% 완전 회피 | [3세트] 20% 완전 회피 및 SPD +15%',
     effectType: 'evade_chance'
   },
   10: {
@@ -1651,26 +1700,130 @@ export const BOSS_SET_BONUSES: Record<number, BossSetBonus> = {
     setName: '10F 종말의 심연군주 세트',
     requiredCount: 3,
     bonusName: '종말의 심연 군주',
-    description: '[3세트 완성] 종말의 군주: 올스탯 +30% 증폭 및 3턴마다 적 전체에 최대 체력 15% 심연 폭발',
+    twoPieceBonusName: '심연의 권능',
+    twoPieceDesc: '[2세트] 올스탯(ATK/DEF/SPD/LUCK/HP/MP) +15% 증폭',
+    threePieceBonusName: '종말의 군주',
+    threePieceDesc: '[3세트] 올스탯 +30% 증폭 및 3턴마다 적 전체에 최대 체력 15% 심연 폭발',
+    description: '[2세트] 올스탯 +15% | [3세트] 올스탯 +30% 및 3턴마다 적 전체 15% 심연 폭발',
     effectType: 'asmodeus_wrath'
   },
 };
 
-/**
- * 👑 영웅이 착용한 보스 세트 완성 여부 확인 (3세트 만족 시 해당 세트 정보 반환)
- */
-export function getHeroEquippedBossSet(hero?: { equipment?: Partial<Record<EquipmentSlot, EquipmentItem>> }): BossSetBonus | null {
-  if (!hero || !hero.equipment) return null;
-  const w = hero.equipment.weapon;
-  const a = hero.equipment.armor;
-  const acc = hero.equipment.accessory;
-  if (!w || !a || !acc) return null;
-  if (!w.setId || !a.setId || !acc.setId) return null;
-  if (w.setId === a.setId && a.setId === acc.setId) {
-    const matched = Object.values(BOSS_SET_BONUSES).find(b => b.setId === w.setId);
-    return matched || null;
+// BOSS_UNIQUE_DEFINITIONS 정의 항목에 세트 메타정보 자동 동기화
+Object.entries(BOSS_UNIQUE_DEFINITIONS).forEach(([floorStr, list]) => {
+  const f = parseInt(floorStr, 10);
+  const setDef = BOSS_SET_BONUSES[f];
+  if (setDef) {
+    list.forEach(item => {
+      item.setId = setDef.setId;
+      item.setName = setDef.setName;
+      item.setRequiredCount = 3;
+      item.setBonusDesc = setDef.description;
+    });
   }
+});
+
+/**
+ * 👑 장비 객체로부터 해당 보스 장비의 출처 층수(1~10)를 감지합니다.
+ * setId, templateId, id, baseName, name 등 다양한 속성을 종합 검사하여
+ * 구버전 세이브나 인챈트/정화 후에도 누락 없이 100% 감지합니다.
+ */
+export function resolveEquipmentBossFloor(item?: EquipmentItem | null): number | null {
+  if (!item) return null;
+
+  // 1. setId 검사 (e.g. "boss_set_1" -> 1)
+  if (item.setId) {
+    const match = item.setId.match(/^boss_set_(\d+)$/);
+    if (match) {
+      const f = parseInt(match[1], 10);
+      if (f >= 1 && f <= 10) return f;
+    }
+  }
+
+  // 2. templateId 검사 (e.g. "boss_uniq_3_wpn" -> 3)
+  if (item.templateId) {
+    const match = item.templateId.match(/^boss_uniq_(\d+)/);
+    if (match) {
+      const f = parseInt(match[1], 10);
+      if (f >= 1 && f <= 10) return f;
+    }
+  }
+
+  // 3. id 검사 (e.g. "boss_uniq_3_wpn", "equip_unique_3_12345")
+  if (item.id) {
+    const match1 = item.id.match(/^boss_uniq_(\d+)/);
+    if (match1) {
+      const f = parseInt(match1[1], 10);
+      if (f >= 1 && f <= 10) return f;
+    }
+    const match2 = item.id.match(/^equip_unique_(\d+)/);
+    if (match2) {
+      const f = parseInt(match2[1], 10);
+      if (f >= 1 && f <= 10) return f;
+    }
+  }
+
+  // 4. baseName 또는 name을 BOSS_UNIQUE_DEFINITIONS와 대조
+  const targetBaseName = item.baseName || '';
+  const targetName = item.name || '';
+  for (const [floorStr, list] of Object.entries(BOSS_UNIQUE_DEFINITIONS)) {
+    const floor = parseInt(floorStr, 10);
+    for (const def of list) {
+      if (
+        (targetBaseName && (targetBaseName === def.baseName || targetBaseName.includes(def.baseName))) ||
+        (targetName && targetName.includes(def.baseName)) ||
+        (item.templateId && item.templateId === def.id) ||
+        (item.id && item.id.includes(def.id))
+      ) {
+        return floor;
+      }
+    }
+  }
+
   return null;
+}
+
+/**
+ * 👑 영웅이 착용한 보스 세트 완성 여부 확인 (2세트 이상 착용 시 해당 세트 정보 반환)
+ * - 2피스 장착: 2세트 고유 효과 활성화 (count: 2, isFullSet: false)
+ * - 3피스 장착: 3세트 풀세트 효과 활성화 (count: 3, isFullSet: true)
+ */
+export function getHeroEquippedBossSet(hero?: { equipment?: Partial<Record<EquipmentSlot, EquipmentItem>> }): EquippedBossSetInfo | null {
+  if (!hero || !hero.equipment) return null;
+  const equips = [hero.equipment.weapon, hero.equipment.armor, hero.equipment.accessory].filter(Boolean) as EquipmentItem[];
+  if (equips.length < 2) return null;
+
+  // 층수별 장착 개수 집계
+  const floorCounts: Record<number, number> = {};
+  for (const item of equips) {
+    const floor = resolveEquipmentBossFloor(item);
+    if (floor) {
+      floorCounts[floor] = (floorCounts[floor] || 0) + 1;
+    }
+  }
+
+  // 가장 많이 장착된 층수 선택 (동률 시 더 높은 층수 우선)
+  let bestFloor: number | null = null;
+  let bestCount = 0;
+  for (const [fStr, count] of Object.entries(floorCounts)) {
+    const f = parseInt(fStr, 10);
+    if (count >= 2) {
+      if (count > bestCount || (count === bestCount && (bestFloor === null || f > bestFloor))) {
+        bestCount = count;
+        bestFloor = f;
+      }
+    }
+  }
+
+  if (!bestFloor || bestCount < 2) return null;
+  const baseDef = BOSS_SET_BONUSES[bestFloor];
+  if (!baseDef) return null;
+
+  return {
+    ...baseDef,
+    count: bestCount,
+    isFullSet: bestCount >= 3,
+  };
 }
 
 /**
@@ -2101,7 +2254,11 @@ export function purifyCorruptedEquipment(item: EquipmentItem): EquipmentItem {
     curseDesc: undefined,
     baseStats: { ...baseStatSource },
     stats: rolledStats,
-    description: cleanDesc
+    description: cleanDesc,
+    setId: item.setId || (resolveEquipmentBossFloor(item) ? BOSS_SET_BONUSES[resolveEquipmentBossFloor(item)!]?.setId : undefined),
+    setName: item.setName || (resolveEquipmentBossFloor(item) ? BOSS_SET_BONUSES[resolveEquipmentBossFloor(item)!]?.setName : undefined),
+    setRequiredCount: item.setRequiredCount || (resolveEquipmentBossFloor(item) ? 3 : undefined),
+    setBonusDesc: item.setBonusDesc || (resolveEquipmentBossFloor(item) ? BOSS_SET_BONUSES[resolveEquipmentBossFloor(item)!]?.description : undefined)
   };
 }
 
@@ -2648,6 +2805,16 @@ export function recalculateEquipmentStats(
         computed[key] = (computed[key] || 0) + v;
       }
     });
+  }
+
+  // 👑 보스 고유 세트 메타 정보 자동 보존/복원
+  const bossFloor = resolveEquipmentBossFloor(item);
+  if (bossFloor && BOSS_SET_BONUSES[bossFloor]) {
+    const sDef = BOSS_SET_BONUSES[bossFloor];
+    if (!item.setId) item.setId = sDef.setId;
+    if (!item.setName) item.setName = sDef.setName;
+    if (!item.setRequiredCount) item.setRequiredCount = 3;
+    if (!item.setBonusDesc) item.setBonusDesc = sDef.description;
   }
 
   return computed;
