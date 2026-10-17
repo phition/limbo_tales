@@ -156,10 +156,12 @@ function scanAndIndex(dir, baseRel = 'assets') {
         const sfxKey = baseName.replace('sfx_', '');
         existingPreset.sfxOverrides[sfxKey] = relPath;
       }
-      // 9. NPC Portraits
+      // 9. NPC Portraits (npc_ 접두사 정식 파일만 인덱싱하여 언더스코어 충돌 방지)
       else if ((baseName.startsWith('npc_') || relPath.includes('/npcs/')) && (ext === '.jpg' || ext === '.png' || ext === '.webp' || ext === '.gif')) {
         if (!existingPreset.npcOverrides) existingPreset.npcOverrides = {};
-        existingPreset.npcOverrides[baseName] = relPath;
+        if (baseName.startsWith('npc_')) {
+          existingPreset.npcOverrides[baseName] = relPath;
+        }
       }
     }
   }

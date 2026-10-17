@@ -84,6 +84,20 @@ function customAssetSyncPlugin(): Plugin {
               };
 
               // 3. 각 오버라이드 맵 처리
+              const NPC_NAME_TO_ID_MAP: Record<string, string> = {
+                '선봉대장 로이드': 'npc_lloyd',
+                '방주 총괄 참모': 'npc_chief_advisor',
+                '성녀 발키리아': 'npc_valkyria',
+                '수석 대장장이 불카누스': 'npc_vulcanus',
+                '수석 연금술사 알리샤': 'npc_alyssa',
+                '기사단장 베른하르트': 'npc_bernhard',
+                '보급관 엘릭': 'npc_elrik',
+                '연금술사 이안': 'npc_ian',
+                '성혈의 처녀 실비아': 'npc_sylvia_virgin',
+                '타락에서 해방된 기사단장의 영혼': 'npc_knights_soul',
+                '고대 방주의 잔류 사념': 'npc_ark_ai',
+              };
+
               const categories: Array<{ key: string; folder: string }> = [
                 { key: 'iconOverrides', folder: 'icons' },
                 { key: 'vfxOverrides', folder: 'vfx' },
@@ -102,11 +116,20 @@ function customAssetSyncPlugin(): Plugin {
                 if (incoming[key] && typeof incoming[key] === 'object') {
                   const updatedMap: Record<string, string> = { ...(preset[key] || {}) };
                   for (const [k, v] of Object.entries(incoming[key])) {
+                    if (/^_+$/.test(k)) continue; // 언더스코어 잔여물 키 무시
                     if (typeof v === 'string') {
-                      const finalUrl = saveBase64(v, folder, k);
+                      let fileKey = k;
+                      if (folder === 'npcs' && NPC_NAME_TO_ID_MAP[k]) {
+                        fileKey = NPC_NAME_TO_ID_MAP[k];
+                      }
+                      const finalUrl = saveBase64(v, folder, fileKey);
                       updatedMap[k] = finalUrl;
                     }
                   }
+                  // 언더스코어 잔여 키 정화
+                  Object.keys(updatedMap).forEach(k => {
+                    if (/^_+$/.test(k)) delete updatedMap[k];
+                  });
                   preset[key] = updatedMap;
                   processedPreset[key] = updatedMap;
                 }

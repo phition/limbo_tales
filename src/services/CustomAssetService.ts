@@ -264,6 +264,33 @@ export class CustomAssetService {
         delete mergedMonsterOverrides[bvk];
       }
 
+      const mergedNpcOverrides: Record<string, string> = { ...(staticPreset.npcOverrides || {}), ...(saved?.npcOverrides || {}) };
+      // 🛡️ 언더스코어(_) 키 및 겹친 파일 경로 자동 정화
+      for (const k of Object.keys(mergedNpcOverrides)) {
+        if (/^_+$/.test(k)) {
+          delete mergedNpcOverrides[k];
+        }
+      }
+      for (const [k, v] of Object.entries(mergedNpcOverrides)) {
+        if (typeof v === 'string' && (v.includes('________') || v.includes('___'))) {
+          if (k === 'npc_lloyd' || k === '선봉대장 로이드') {
+            mergedNpcOverrides[k] = 'assets/custom_uploaded/npcs/npc_lloyd.png';
+          } else if (k === 'npc_chief_advisor' || k === '방주 총괄 참모') {
+            mergedNpcOverrides[k] = 'assets/custom_uploaded/npcs/npc_chief_advisor.png';
+          } else {
+            const mappedId = NPC_NAME_TO_ID[k] || k;
+            if (staticPreset.npcOverrides?.[mappedId]) {
+              mergedNpcOverrides[k] = staticPreset.npcOverrides[mappedId];
+            } else {
+              delete mergedNpcOverrides[k];
+            }
+          }
+        }
+      }
+      // 선봉대장 로이드 & 방주 총괄 참모 독립 경로 보장
+      if (mergedNpcOverrides['npc_lloyd']) mergedNpcOverrides['선봉대장 로이드'] = mergedNpcOverrides['npc_lloyd'];
+      if (mergedNpcOverrides['npc_chief_advisor']) mergedNpcOverrides['방주 총괄 참모'] = mergedNpcOverrides['npc_chief_advisor'];
+
       this.config = {
         pureEmojiMode: saved?.pureEmojiMode ?? staticPreset.pureEmojiMode ?? false,
         syntheticAudioOnly: saved?.syntheticAudioOnly ?? staticPreset.syntheticAudioOnly ?? false,
@@ -276,7 +303,7 @@ export class CustomAssetService {
         monsterOverrides: mergedMonsterOverrides,
         monsterVideoOverrides: { ...(staticPreset.monsterVideoOverrides || {}), ...(saved?.monsterVideoOverrides || {}) },
         mercenaryOverrides: { ...(staticPreset.mercenaryOverrides || {}), ...(saved?.mercenaryOverrides || {}) },
-        npcOverrides: { ...(staticPreset.npcOverrides || {}), ...(saved?.npcOverrides || {}) },
+        npcOverrides: mergedNpcOverrides,
         version: Math.max(saved?.version || 1, staticPreset.version || 1),
       };
     } catch (err) {
@@ -457,25 +484,54 @@ export class CustomAssetService {
     const overrides = this.config.npcOverrides;
     if (!overrides) return undefined;
 
+    const sanitize = (val?: string): string | undefined => {
+      if (!val) return undefined;
+      if (typeof val === 'string' && (val.includes('________') || val.includes('___'))) {
+        if (nameOrId === 'npc_lloyd' || nameOrId === '선봉대장 로이드') return 'assets/custom_uploaded/npcs/npc_lloyd.png';
+        if (nameOrId === 'npc_chief_advisor' || nameOrId === '방주 총괄 참모') return 'assets/custom_uploaded/npcs/npc_chief_advisor.png';
+        return undefined;
+      }
+      return val;
+    };
+
     // 1. 직접 키 일치 (e.g. 'npc_lloyd' or '선봉대장 로이드')
-    if (overrides[nameOrId]) return overrides[nameOrId];
+    if (overrides[nameOrId]) {
+      const s = sanitize(overrides[nameOrId]);
+      if (s) return s;
+    }
 
     // 2. 한국어 NPC 이름 -> 영문 id 변환 조회
     const mappedId = NPC_NAME_TO_ID[nameOrId];
-    if (mappedId && overrides[mappedId]) return overrides[mappedId];
+    if (mappedId && overrides[mappedId]) {
+      const s = sanitize(overrides[mappedId]);
+      if (s) return s;
+    }
 
     // 3. 영문 id -> 한국어 NPC 이름 변환 조회
     const mappedName = NPC_ID_TO_NAME[nameOrId];
-    if (mappedName && overrides[mappedName]) return overrides[mappedName];
+    if (mappedName && overrides[mappedName]) {
+      const s = sanitize(overrides[mappedName]);
+      if (s) return s;
+    }
 
     // 4. 'npc_' 접두사 유무 상호 호환 조회
     if (nameOrId.startsWith('npc_')) {
       const stripped = nameOrId.replace(/^npc_/, '');
-      if (overrides[stripped]) return overrides[stripped];
+      if (overrides[stripped]) {
+        const s = sanitize(overrides[stripped]);
+        if (s) return s;
+      }
     } else {
       const prefixed = `npc_${nameOrId}`;
-      if (overrides[prefixed]) return overrides[prefixed];
+      if (overrides[prefixed]) {
+        const s = sanitize(overrides[prefixed]);
+        if (s) return s;
+      }
     }
+
+    // 특별 폴백: 선봉대장 로이드 & 방주 총괄 참모 기본 에셋 경로
+    if (nameOrId === 'npc_lloyd' || nameOrId === '선봉대장 로이드') return 'assets/custom_uploaded/npcs/npc_lloyd.png';
+    if (nameOrId === 'npc_chief_advisor' || nameOrId === '방주 총괄 참모') return 'assets/custom_uploaded/npcs/npc_chief_advisor.png';
 
     return undefined;
   }

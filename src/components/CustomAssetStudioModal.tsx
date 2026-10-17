@@ -448,14 +448,15 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
         showToast(`⚔️ [${targetUploadKey.key}] 용병 일러스트 대기 중! [프리셋 즉시 저장]을 누르면 적용됩니다.`);
       } else if (targetUploadKey.type === 'npc') {
         const mappedName = NPC_ID_TO_NAME[targetUploadKey.key] || targetUploadKey.key;
-        setConfig(prev => ({
-          ...prev,
-          npcOverrides: {
-            ...(prev.npcOverrides || {}),
-            [targetUploadKey.key]: dataUrl,
-            [mappedName]: dataUrl,
-          }
-        }));
+        setConfig(prev => {
+          const next = { ...(prev.npcOverrides || {}) };
+          Object.keys(next).forEach(k => {
+            if (/^_+$/.test(k)) delete next[k];
+          });
+          next[targetUploadKey.key] = dataUrl;
+          if (mappedName) next[mappedName] = dataUrl;
+          return { ...prev, npcOverrides: next };
+        });
         setHasUnsavedChanges(true);
         setPendingChangeCount(c => c + 1);
         showToast(`👑 [${mappedName}] 서사 NPC 포트레이트 대기 중! [프리셋 즉시 저장]을 누르면 적용됩니다.`);
@@ -1751,7 +1752,10 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[55vh] overflow-y-auto pr-1">
                 {filteredNpcList.map(npc => {
-                  const overrideAvatar = config.npcOverrides?.[npc.id] || config.npcOverrides?.[npc.name];
+                  const rawAvatar = config.npcOverrides?.[npc.id] || config.npcOverrides?.[npc.name];
+                  const overrideAvatar = (rawAvatar && rawAvatar.includes('___')) 
+                    ? (npc.id === 'npc_lloyd' ? 'assets/custom_uploaded/npcs/npc_lloyd.png' : npc.id === 'npc_chief_advisor' ? 'assets/custom_uploaded/npcs/npc_chief_advisor.png' : rawAvatar)
+                    : rawAvatar;
                   const isImage = overrideAvatar && (
                     overrideAvatar.startsWith('data:') ||
                     overrideAvatar.startsWith('http://') ||
