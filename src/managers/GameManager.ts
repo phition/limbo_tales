@@ -111,8 +111,8 @@ export class GameManager {
 
   public resources: GameResources = {
     // 🪵 기본 원자재
-    wood: 50,   stone: 50,  iron: 30,
-    food: 20,   gold: 200,  ether: 10,
+    wood: 100,  stone: 100, iron: 50,
+    food: 50,   gold: 250,  ether: 50,
     // 🌿 특수 파밍 재료
     herb: 15,   leather: 15, silk: 10, coal: 15, bone: 15,
     crystal: 5, void_shard: 2,
@@ -631,8 +631,8 @@ export class GameManager {
 
     // 3. 자원 초기화
     this.resources = {
-      wood: 50,   stone: 50,  iron: 30,
-      food: 20,   gold: 200,  ether: 10,
+      wood: 100,  stone: 100, iron: 50,
+      food: 50,   gold: 250,  ether: 50,
       herb: 15,   leather: 15, silk: 10, coal: 15, bone: 15,
       crystal: 5, void_shard: 2,
       prefix_stone: 3, suffix_stone: 2, pure_prefix_stone: 1, pure_suffix_stone: 0,
@@ -761,8 +761,8 @@ export class GameManager {
 
       if (options.resources) {
         this.resources = {
-          wood: 50,   stone: 50,  iron: 30,
-          food: 20,   gold: 200,  ether: 10,
+          wood: 100,  stone: 100, iron: 50,
+          food: 50,   gold: 250,  ether: 50,
           herb: 15,   leather: 15, silk: 10, coal: 15, bone: 15,
           crystal: 5, void_shard: 2,
           prefix_stone: 3, suffix_stone: 2, pure_prefix_stone: 1, pure_suffix_stone: 0,
