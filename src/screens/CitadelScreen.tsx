@@ -14187,6 +14187,7 @@ export const CitadelScreen: React.FC = () => {
 
   useEffect(() => {
     const fb = FirebaseService.getInstance();
+    fb.fetchGuestbookMessages().catch(() => {});
     const unsubscribe = fb.listenGuestbookMessages((msgs) => {
       setGuestbookMessages(msgs);
     });
@@ -15037,7 +15038,7 @@ export const CitadelScreen: React.FC = () => {
                   guestbookMessages.slice(0, 2).map((msg, idx) => {
                     const shortText = msg.content.slice(0, 10) + (msg.content.length > 10 ? '...' : '');
                     return (
-                      <span key={msg.id || idx} className="truncate flex items-center gap-1 shrink-0 max-w-[48%]">
+                      <span key={msg.id || idx} className={`truncate flex items-center gap-1 shrink-0 ${guestbookMessages.length === 1 ? 'max-w-[90%]' : 'max-w-[48%]'}`}>
                         {idx > 0 && <span className="text-[#3b4b68] mr-1 shrink-0">|</span>}
                         <strong className="text-[#00d2ff] font-bold shrink-0">[{msg.authorName}]</strong>
                         <span className="text-[#e2e8f0] truncate">{shortText}</span>

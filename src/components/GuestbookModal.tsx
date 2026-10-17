@@ -31,7 +31,7 @@ export const GuestbookModal: React.FC<Props> = ({
   currentUserProfile,
 }) => {
   const { gm } = useGameManager();
-  const [messages, setMessages] = useState<GuestbookMessage[]>([]);
+  const [messages, setMessages] = useState<GuestbookMessage[]>(() => FirebaseService.getInstance().getCachedGuestbookMessages());
   const [inputContent, setInputContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,6 +41,9 @@ export const GuestbookModal: React.FC<Props> = ({
   useEffect(() => {
     if (!open) return;
     const fb = FirebaseService.getInstance();
+    // 모달이 열릴 때 캐시 즉시 반영 및 1회 즉시 페치
+    setMessages(fb.getCachedGuestbookMessages());
+    fb.fetchGuestbookMessages().catch(() => {});
     const unsubscribe = fb.listenGuestbookMessages((updatedMessages) => {
       setMessages(updatedMessages);
     });
@@ -83,6 +86,7 @@ export const GuestbookModal: React.FC<Props> = ({
       if (res.success) {
         setInputContent('');
         setCurrentPage(1); // 새 글이 최상단에 있으므로 1페이지로 이동
+        setMessages(fb.getCachedGuestbookMessages()); // 새 글 즉시 화면 반영
         SoundManager.getInstance().play('forge_success');
         gm.addLog(`💬 [방명록 등록] "${clean.slice(0, 15)}..." 글이 전 서버 게시판에 등록되었습니다.`, 'system');
       } else {
@@ -103,8 +107,22 @@ export const GuestbookModal: React.FC<Props> = ({
       title="📋 방주 지휘관 방명록 (게시판)"
       footer={
         <div className="flex items-center justify-between w-full">
-          <div className="text-[10px] text-[#8b9bb4]">
-            총 <strong className="text-[#00d2ff]">{messages.length}</strong>개의 교신 기록 (최대 200개 보존)
+          <div className="flex items-center gap-2">
+            <div className="text-[10px] text-[#8b9bb4]">
+              총 <strong className="text-[#00d2ff]">{messages.length}</strong>개의 교신 기록 (최대 200개 보존)
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                fb.fetchGuestbookMessages();
+                SoundManager.getInstance().play('click');
+              }}
+              className="text-[10px] px-2 py-0.5 rounded bg-[#101726] border border-[#23324d] text-[#8b9bb4] hover:text-[#00d2ff] hover:border-[#00d2ff] transition-all cursor-pointer flex items-center gap-1"
+              title="최신 방명록 새로고침"
+            >
+              <span>🔄</span>
+              <span>새로고침</span>
+            </button>
           </div>
           <ActionButton label="닫기" variant="primary" size="sm" onClick={onClose} />
         </div>

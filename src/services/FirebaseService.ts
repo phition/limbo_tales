@@ -75,7 +75,13 @@ export class FirebaseService {
   private currentUser: User | null = null;
   private cachedProfile: UserProfile | null = null;
   private authListeners: Array<(user: User | null, profile: UserProfile | null) => void> = [];
-  private cachedGuestbookMessages: GuestbookMessage[] = [];
+  private cachedGuestbookMessages: GuestbookMessage[] = (() => {
+    try {
+      const saved = localStorage.getItem('limbo_cached_guestbook');
+      if (saved) return JSON.parse(saved);
+    } catch (_) {}
+    return [];
+  })();
   private guestbookListeners: Array<(messages: GuestbookMessage[]) => void> = [];
   private guestbookSubscribed: boolean = false;
 
@@ -1286,47 +1292,139 @@ export class FirebaseService {
   }
 
   /**
-   * 📡 방명록 실시간 구독
+   * 🔔 모든 등록된 리스너에게 캐시된 방명록 브로드캐스트 + 로컬스토리지 백업
+   */
+  private notifyGuestbookListeners(): void {
+    const msgs = this.cachedGuestbookMessages;
+    try {
+      localStorage.setItem('limbo_cached_guestbook', JSON.stringify(msgs));
+    } catch (_) {}
+    this.guestbookListeners.forEach((cb) => {
+      try {
+        cb(msgs);
+      } catch (cbErr) {
+        console.error('⚠️ [Firebase] 방명록 리스너 콜백 예외:', cbErr);
+      }
+    });
+  }
+
+  /**
+   * 🔄 RTDB 스냅샷 또는 REST JSON 객체를 GuestbookMessage[] 목록으로 변환 (최신순 내림차순 정렬)
+   */
+  private parseGuestbookSnapshot(snapshot: any): GuestbookMessage[] {
+    const list: GuestbookMessage[] = [];
+    if (snapshot && typeof snapshot.forEach === 'function') {
+      snapshot.forEach((childSnap: any) => {
+        const val = childSnap.val();
+        if (val && typeof val === 'object') {
+          list.push({
+            id: childSnap.key || val.id || '',
+            uid: val.uid || '',
+            authorName: val.authorName || '방주 지휘관',
+            content: val.content || '',
+            createdAt: Number(val.createdAt) || 0
+          });
+        }
+      });
+    } else if (snapshot && typeof snapshot.val === 'function') {
+      const data = snapshot.val();
+      if (data && typeof data === 'object') {
+        Object.entries(data).forEach(([key, val]: [string, any]) => {
+          if (val && typeof val === 'object') {
+            list.push({
+              id: key || val.id || '',
+              uid: val.uid || '',
+              authorName: val.authorName || '방주 지휘관',
+              content: val.content || '',
+              createdAt: Number(val.createdAt) || 0
+            });
+          }
+        });
+      }
+    } else if (snapshot && typeof snapshot === 'object') {
+      Object.entries(snapshot).forEach(([key, val]: [string, any]) => {
+        if (val && typeof val === 'object') {
+          list.push({
+            id: key || val.id || '',
+            uid: val.uid || '',
+            authorName: val.authorName || '방주 지휘관',
+            content: val.content || '',
+            createdAt: Number(val.createdAt) || 0
+          });
+        }
+      });
+    }
+
+    // 최신 글이 항상 위로 올라오도록 정렬 (createdAt 내림차순)
+    list.sort((a, b) => b.createdAt - a.createdAt);
+    return list.slice(0, 200);
+  }
+
+  /**
+   * ⚡ 방명록 수동/즉시 1회 페치 (RTDB get() 우선, 실패 시 REST API 폴백)
+   */
+  public async fetchGuestbookMessages(): Promise<GuestbookMessage[]> {
+    try {
+      const guestbookRef = ref(db, 'guestbook');
+      const snap = await get(guestbookRef);
+      if (snap.exists()) {
+        const list = this.parseGuestbookSnapshot(snap);
+        this.cachedGuestbookMessages = list;
+        this.notifyGuestbookListeners();
+        return list;
+      }
+    } catch (dbErr) {
+      console.warn('⚠️ [Firebase] get(guestbook) 실패, REST API fallback 시도:', dbErr);
+      try {
+        const resp = await fetch('https://limbo-cbcc4-default-rtdb.asia-southeast1.firebasedatabase.app/guestbook.json');
+        if (resp.ok) {
+          const json = await resp.json();
+          if (json && typeof json === 'object') {
+            const list = this.parseGuestbookSnapshot(json);
+            this.cachedGuestbookMessages = list;
+            this.notifyGuestbookListeners();
+            return list;
+          }
+        }
+      } catch (restErr) {
+        console.warn('⚠️ [Firebase] REST fallback 실패:', restErr);
+      }
+    }
+    return this.cachedGuestbookMessages;
+  }
+
+  /**
+   * 📡 방명록 실시간 구독 (단순 ref 구독으로 인덱스 제약 제거 & 즉시 1회 페칭 보장)
    */
   public listenGuestbookMessages(callback: (messages: GuestbookMessage[]) => void): () => void {
     this.guestbookListeners.push(callback);
+    // 1. 현재 캐시 즉각 전달
     callback(this.cachedGuestbookMessages);
 
+    // 2. 비동기 1회 즉시 페치 (서버 최신본 즉각 갱신)
+    this.fetchGuestbookMessages().catch(() => {});
+
+    // 3. 실시간 onValue 구독 (ref(db, 'guestbook') 직접 감시)
     if (!this.guestbookSubscribed) {
       this.guestbookSubscribed = true;
       try {
-        const guestbookQuery = query(ref(db, 'guestbook'), orderByChild('createdAt'), limitToLast(200));
-        onValue(guestbookQuery, (snapshot) => {
-          const list: GuestbookMessage[] = [];
+        const guestbookRef = ref(db, 'guestbook');
+        onValue(guestbookRef, (snapshot) => {
           if (snapshot.exists()) {
-            snapshot.forEach((childSnap) => {
-              const val = childSnap.val();
-              if (val && typeof val === 'object') {
-                list.push({
-                  id: childSnap.key || val.id || '',
-                  uid: val.uid || '',
-                  authorName: val.authorName || '방주 지휘관',
-                  content: val.content || '',
-                  createdAt: Number(val.createdAt) || 0
-                });
-              }
-            });
+            const list = this.parseGuestbookSnapshot(snapshot);
+            this.cachedGuestbookMessages = list;
+            this.notifyGuestbookListeners();
+          } else {
+            this.cachedGuestbookMessages = [];
+            this.notifyGuestbookListeners();
           }
-          // 최신 글이 항상 위로 올라오도록 정렬 (createdAt 내림차순)
-          list.sort((a, b) => b.createdAt - a.createdAt);
-          this.cachedGuestbookMessages = list;
-          this.guestbookListeners.forEach((cb) => {
-            try {
-              cb(list);
-            } catch (cbErr) {
-              console.error('⚠️ [Firebase] 방명록 리스너 콜백 예외:', cbErr);
-            }
-          });
         }, (error) => {
           console.warn('⚠️ [Firebase] 방명록 실시간 수신 경고:', error);
+          this.guestbookSubscribed = false; // 에러 발생 시 재시도 가능하도록 플래그 해제
         });
       } catch (e) {
         console.warn('⚠️ [Firebase] 방명록 구독 시작 예외:', e);
+        this.guestbookSubscribed = false;
       }
     }
 
@@ -1336,7 +1434,7 @@ export class FirebaseService {
   }
 
   /**
-   * ✍️ 방명록 글 등록 (최대 100자) 및 200개 초과 자동 삭제
+   * ✍️ 방명록 글 등록 (최대 100자, 낙관적 UI 즉시 반영 및 200개 초과 자동 정리)
    */
   public async addGuestbookMessage(rawContent: string): Promise<{ success: boolean; error?: string }> {
     // 🚫 익명(게스트) 지휘관은 방명록 등록 불가
@@ -1371,6 +1469,13 @@ export class FirebaseService {
 
       await set(newMsgRef, newMsg);
 
+      // ⚡ 낙관적 UI: 작성된 새 글을 캐시 맨 위에 즉시 추가하고 모든 리스너에 통지
+      this.cachedGuestbookMessages = [
+        newMsg,
+        ...this.cachedGuestbookMessages.filter((m) => m.id !== newMsg.id)
+      ].slice(0, 200);
+      this.notifyGuestbookListeners();
+
       // 🧹 파이어베이스에 최대 200개 유지 -> 초과 시 오래된 글 자동 삭제
       this.cleanupOldGuestbookMessages().catch((e) => {
         console.warn('⚠️ [cleanupOldGuestbookMessages] 자동 정리 경고:', e);
@@ -1389,7 +1494,7 @@ export class FirebaseService {
   private async cleanupOldGuestbookMessages(): Promise<void> {
     try {
       const guestbookRef = ref(db, 'guestbook');
-      const snapshot = await get(query(guestbookRef, orderByChild('createdAt')));
+      const snapshot = await get(guestbookRef);
       if (snapshot.exists()) {
         const all: { key: string; createdAt: number }[] = [];
         snapshot.forEach((childSnap) => {
@@ -1401,7 +1506,7 @@ export class FirebaseService {
         });
 
         if (all.length > 200) {
-          // 등록 일시 오름차순(가장 오래된 글 먼저)
+          // 등록 일시 오름차순 (가장 오래된 글 먼저)
           all.sort((a, b) => a.createdAt - b.createdAt);
           const removeCount = all.length - 200;
           const toRemove = all.slice(0, removeCount);
