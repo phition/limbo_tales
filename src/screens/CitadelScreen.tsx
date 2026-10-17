@@ -3765,7 +3765,7 @@ const BarracksDrawer: React.FC<{
       {/* ── ⚔️ / 🌌 / 🛡️ 카테고리 탭 (3인 던전 원정대 vs 3+1 차원 부대 vs 영지 수비 부대) ── */}
       <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0a0d16] border-b border-[#1f2738] shrink-0 overflow-x-auto">
         <button
-          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
+          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
             barracksCategory === 'dungeon'
               ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff66] shadow-sm'
               : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
@@ -3774,10 +3774,9 @@ const BarracksDrawer: React.FC<{
         >
           <span>⚔️</span>
           <span>던전 원정대</span>
-          <span className="text-[10px] font-mono text-[#38ef7d]">({state.party.length}/3)</span>
         </button>
         <button
-          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
+          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
             barracksCategory === 'dimensional'
               ? 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c66] shadow-sm'
               : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
@@ -3785,12 +3784,7 @@ const BarracksDrawer: React.FC<{
           onClick={() => setBarracksCategory('dimensional')}
         >
           <span>{isAnchorUnlocked ? '🌌' : '🔒'}</span>
-          <span>차원 부대 편성</span>
-          {isAnchorUnlocked ? (
-            <span className="text-[10px] font-mono text-[#ffd54f]">({mainHeroes.length}/3 + {activeOperator ? 'OP' : '0'})</span>
-          ) : (
-            <span className="text-[9px] px-1 py-0.2 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">앵커 필요</span>
-          )}
+          <span>차원 부대</span>
         </button>
 
         {/* 🛡️ 영지 수비부대 탭 (차원 앵커 게이트 Lv.6 해금) */}
@@ -3799,7 +3793,7 @@ const BarracksDrawer: React.FC<{
           const isDefenseUnlocked = gm.isMasterAccount || gateLv >= 6;
           return (
             <button
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
                 barracksCategory === 'defense'
                   ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66] shadow-sm'
                   : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
@@ -3815,11 +3809,6 @@ const BarracksDrawer: React.FC<{
             >
               <span>{isDefenseUnlocked ? '🛡️' : '🔒'}</span>
               <span>수비부대</span>
-              {isDefenseUnlocked ? (
-                <span className="text-[10px] font-mono text-[#38ef7d]">(수비 셋팅)</span>
-              ) : (
-                <span className="text-[9px] px-1 py-0.2 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">Lv.6 필요</span>
-              )}
             </button>
           );
         })()}
