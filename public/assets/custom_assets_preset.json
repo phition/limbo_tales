@@ -811,7 +811,16 @@
     "nemesis_boss": "assets/custom_uploaded/monsters/nemesis_boss.png",
     "nemesis_head": "assets/custom_uploaded/monsters/nemesis_head.jpg",
     "nemesis_body": "assets/custom_uploaded/monsters/nemesis_body.png",
-    "nemesis_tail": "assets/custom_uploaded/monsters/nemesis_tail.png"
+    "nemesis_tail": "assets/custom_uploaded/monsters/nemesis_tail.png",
+    "monster_abyssal_harbinger": "assets/monster_abyssal_harbinger.jpg",
+    "monster_aether_basilisk": "assets/monster_aether_basilisk.jpg",
+    "monster_crimson_vampire": "assets/monster_crimson_vampire.jpg",
+    "monster_crypt_necromancer": "assets/monster_crypt_necromancer.jpg",
+    "monster_dimension_eater": "assets/monster_dimension_eater.jpg",
+    "monster_grave_specter": "assets/monster_grave_specter.jpg",
+    "monster_iron_torturer": "assets/monster_iron_torturer.jpg",
+    "monster_primordial_shaman": "assets/monster_primordial_shaman.jpg",
+    "monster_prism_weaver": "assets/monster_prism_weaver.jpg"
   },
   "monsterVideoOverrides": {
     "boss_floor_1": "assets/boss_floor_1.mp4",
@@ -893,5 +902,5 @@
     "____________": "assets/custom_uploaded/npcs/____________.png",
     "_________________": "assets/custom_uploaded/npcs/_________________.png"
   },
-  "version": 639
+  "version": 642
 }

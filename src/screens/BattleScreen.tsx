@@ -4344,8 +4344,103 @@ export const BattleScreen: React.FC = () => {
 
           // 🔥 [FEVER 궁극기 부가 전술 효과 종합 발동]
           if (isUltimate && feverSynergy) {
+            // 🕊️💖 [기적의 소생 (Miracle Resurrection)]
+            if (feverSynergy.id === 'miracle_resurrection') {
+              const deadAlly = gm.party.find(ally => ally.currentHp <= 0 || ally.deathCountdown !== undefined || ally.isPermanentlyDead);
+              if (deadAlly) {
+                // 사망 아군 1인 30% 체력으로 부활
+                const effMaxHp = Math.max(deadAlly.maxHp, gm.getHeroEffectiveStats(deadAlly).maxHp);
+                const revHp = Math.max(1, Math.floor(effMaxHp * 0.3));
+                deadAlly.currentHp = revHp;
+                deadAlly.deathCountdown = undefined;
+                deadAlly.isPermanentlyDead = false;
+                deadAlly.statusEffects = [];
+                logs.push(`🩸🕊️ [기적의 소생] 쓰러졌던 ${deadAlly.name}이(가) 기적처럼 HP ${revHp}(30%)로 부활했습니다!`);
+
+                const heroPartyIdx = gm.party.findIndex(p => p.id === deadAlly.id);
+                const hPos = getHeroVfxPos(heroPartyIdx >= 0 ? heroPartyIdx : 0, false, gm.party.length);
+                triggerVFX({
+                  type: 'holy_heal',
+                  x: hPos.x,
+                  y: hPos.y,
+                  damage: revHp,
+                  text: `부활! +${revHp} 🕊️`
+                });
+                SoundManager.getInstance().play('heal');
+
+                // 회복된 체력만큼 적 전체에 신성 공격
+                const holyDmg = revHp;
+                const livingMons = nextMonsters.filter(m => m.currentHp > 0);
+                if (livingMons.length > 0) {
+                  livingMons.forEach((m, mIdx) => {
+                    m.currentHp = Math.max(0, m.currentHp - holyDmg);
+                    if (m.currentHp <= 0) anyDied = true;
+                    const mPos = getMonsterVfxPos(nextMonsters.indexOf(m), nextMonsters.length);
+                    setTimeout(() => {
+                      SoundManager.getInstance().play('spell');
+                      triggerVFX({
+                        type: 'divine_smite',
+                        x: mPos.x,
+                        y: mPos.y,
+                        damage: holyDmg,
+                        isCrit: true,
+                        text: `신성심판! ✨`
+                      });
+                    }, getBattleDelay(200 + mIdx * 60));
+                  });
+                  logs.push(`✨⚔️ [기적의 소생: 신성 심판] ${deadAlly.name}의 소생 체력(+${revHp})만큼 성스러운 빛이 폭발하여 적 전체에게 ${holyDmg}의 신성 피해를 입혔습니다!`);
+                }
+              } else {
+                // 사망한 아군이 없을 때: 아군 전체 체력의 30% 회복과 평균 회복량 만큼 적 전체 신성 공격
+                const livingParty = gm.party.filter(h => h.currentHp > 0);
+                let totalHealAmount = 0;
+                livingParty.forEach((ally, aIdx) => {
+                  const effMaxHp = Math.max(ally.maxHp, gm.getHeroEffectiveStats(ally).maxHp);
+                  const healAmt = Math.max(1, Math.floor(effMaxHp * 0.3));
+                  totalHealAmount += healAmt;
+                  ally.currentHp = Math.min(effMaxHp, ally.currentHp + healAmt);
+                  const heroPartyIdx = gm.party.findIndex(p => p.id === ally.id);
+                  const hPos = getHeroVfxPos(heroPartyIdx >= 0 ? heroPartyIdx : 0, false, gm.party.length);
+                  setTimeout(() => {
+                    triggerVFX({
+                      type: 'holy_heal',
+                      x: hPos.x,
+                      y: hPos.y,
+                      damage: healAmt,
+                      text: `+${healAmt} 💖`
+                    });
+                  }, aIdx * 60);
+                });
+                SoundManager.getInstance().play('heal');
+                logs.push(`💖✨ [기적의 소생] 생존 아군 전원의 체력을 30% 회복했습니다!`);
+
+                // 평균 회복량 만큼 적 전체 신성 공격
+                const avgHealDmg = Math.max(1, Math.round(totalHealAmount / Math.max(1, livingParty.length)));
+                const livingMons = nextMonsters.filter(m => m.currentHp > 0);
+                if (livingMons.length > 0) {
+                  livingMons.forEach((m, mIdx) => {
+                    m.currentHp = Math.max(0, m.currentHp - avgHealDmg);
+                    if (m.currentHp <= 0) anyDied = true;
+                    const mPos = getMonsterVfxPos(nextMonsters.indexOf(m), nextMonsters.length);
+                    setTimeout(() => {
+                      SoundManager.getInstance().play('spell');
+                      triggerVFX({
+                        type: 'divine_smite',
+                        x: mPos.x,
+                        y: mPos.y,
+                        damage: avgHealDmg,
+                        isCrit: true,
+                        text: `신성심판! ✨`
+                      });
+                    }, getBattleDelay(200 + mIdx * 60));
+                  });
+                  logs.push(`✨⚔️ [기적의 소생: 신성 심판] 파티 평균 치유량(+${avgHealDmg})에 상응하는 신성한 성광이 방출되어 적 전체에게 ${avgHealDmg}의 신성 피해를 입혔습니다!`);
+                }
+              }
+            }
+
             // 1. 🩸 기사회생 / 부활
-            if (feverSynergy.reviveFallen) {
+            if (feverSynergy.reviveFallen && feverSynergy.id !== 'miracle_resurrection') {
               let revivedCount = 0;
               gm.party.forEach(ally => {
                 const isDead = ally.currentHp <= 0 || ally.deathCountdown !== undefined || ally.isPermanentlyDead;
@@ -4361,12 +4456,12 @@ export const BattleScreen: React.FC = () => {
               });
             }
             // 2. 💖 파티 전원 체력 회복 (100% 완전 회복 또는 partyHealPct 비율 회복)
-            if (feverSynergy.partyFullHeal) {
+            if (feverSynergy.partyFullHeal && feverSynergy.id !== 'miracle_resurrection') {
               gm.party.filter(h => h.currentHp > 0).forEach(ally => {
                 ally.currentHp = ally.maxHp;
               });
               logs.push(`💖✨ [${feverSynergy.name}] 생존 아군 전원의 체력이 100% 완전 회복되었습니다!`);
-            } else if (feverSynergy.partyHealPct && feverSynergy.partyHealPct > 0) {
+            } else if (feverSynergy.partyHealPct && feverSynergy.partyHealPct > 0 && feverSynergy.id !== 'miracle_resurrection') {
               gm.party.filter(h => h.currentHp > 0).forEach(ally => {
                 const healAmt = Math.max(1, Math.floor(ally.maxHp * feverSynergy!.partyHealPct!));
                 ally.currentHp = Math.min(ally.maxHp, ally.currentHp + healAmt);
@@ -5083,8 +5178,107 @@ export const BattleScreen: React.FC = () => {
           if (ultMult > 1.0) {
             logs.push(`🔥⚡ [FEVER 위력 증폭] 【${feverSynergy.name}】 시너지로 지원/치유/버프 효과가 +${Math.round((ultMult - 1) * 100)}% 대폭 강화되었습니다!`);
           }
+          // 🕊️💖 [기적의 소생 (Miracle Resurrection)]
+          if (feverSynergy.id === 'miracle_resurrection') {
+            const deadAlly = gm.party.find(ally => ally.currentHp <= 0 || ally.deathCountdown !== undefined || ally.isPermanentlyDead);
+            if (deadAlly) {
+              // 사망 아군 1인 30% 체력으로 부활
+              const effMaxHp = Math.max(deadAlly.maxHp, gm.getHeroEffectiveStats(deadAlly).maxHp);
+              const revHp = Math.max(1, Math.floor(effMaxHp * 0.3));
+              deadAlly.currentHp = revHp;
+              deadAlly.deathCountdown = undefined;
+              deadAlly.isPermanentlyDead = false;
+              deadAlly.statusEffects = [];
+              logs.push(`🩸🕊️ [기적의 소생] 쓰러졌던 ${deadAlly.name}이(가) 기적처럼 HP ${revHp}(30%)로 부활했습니다!`);
+
+              const heroPartyIdx = gm.party.findIndex(p => p.id === deadAlly.id);
+              const hPos = getHeroVfxPos(heroPartyIdx >= 0 ? heroPartyIdx : 0, false, gm.party.length);
+              triggerVFX({
+                type: 'holy_heal',
+                x: hPos.x,
+                y: hPos.y,
+                damage: revHp,
+                text: `부활! +${revHp} 🕊️`
+              });
+              SoundManager.getInstance().play('heal');
+
+              // 회복된 체력만큼 적 전체에 신성 공격
+              const holyDmg = revHp;
+              const livingMons = nextMonsters.filter(m => m.currentHp > 0);
+              if (livingMons.length > 0) {
+                livingMons.forEach((m, mIdx) => {
+                  m.currentHp = Math.max(0, m.currentHp - holyDmg);
+                  if (m.currentHp <= 0) {
+                    setTimeout(() => SoundManager.getInstance().play('monster_death'), 100);
+                  }
+                  const mPos = getMonsterVfxPos(nextMonsters.indexOf(m), nextMonsters.length);
+                  setTimeout(() => {
+                    SoundManager.getInstance().play('spell');
+                    triggerVFX({
+                      type: 'divine_smite',
+                      x: mPos.x,
+                      y: mPos.y,
+                      damage: holyDmg,
+                      isCrit: true,
+                      text: `신성심판! ✨`
+                    });
+                  }, getBattleDelay(200 + mIdx * 60));
+                });
+                logs.push(`✨⚔️ [기적의 소생: 신성 심판] ${deadAlly.name}의 소생 체력(+${revHp})만큼 성스러운 빛이 폭발하여 적 전체에게 ${holyDmg}의 신성 피해를 입혔습니다!`);
+              }
+            } else {
+              // 사망한 아군이 없을 때: 아군 전체 체력의 30% 회복과 평균 회복량 만큼 적 전체 신성 공격
+              const livingParty = gm.party.filter(h => h.currentHp > 0);
+              let totalHealAmount = 0;
+              livingParty.forEach((ally, aIdx) => {
+                const effMaxHp = Math.max(ally.maxHp, gm.getHeroEffectiveStats(ally).maxHp);
+                const healAmt = Math.max(1, Math.floor(effMaxHp * 0.3));
+                totalHealAmount += healAmt;
+                ally.currentHp = Math.min(effMaxHp, ally.currentHp + healAmt);
+                const heroPartyIdx = gm.party.findIndex(p => p.id === ally.id);
+                const hPos = getHeroVfxPos(heroPartyIdx >= 0 ? heroPartyIdx : 0, false, gm.party.length);
+                setTimeout(() => {
+                  triggerVFX({
+                    type: 'holy_heal',
+                    x: hPos.x,
+                    y: hPos.y,
+                    damage: healAmt,
+                    text: `+${healAmt} 💖`
+                  });
+                }, aIdx * 60);
+              });
+              SoundManager.getInstance().play('heal');
+              logs.push(`💖✨ [기적의 소생] 생존 아군 전원의 체력을 30% 회복했습니다!`);
+
+              // 평균 회복량 만큼 적 전체 신성 공격
+              const avgHealDmg = Math.max(1, Math.round(totalHealAmount / Math.max(1, livingParty.length)));
+              const livingMons = nextMonsters.filter(m => m.currentHp > 0);
+              if (livingMons.length > 0) {
+                livingMons.forEach((m, mIdx) => {
+                  m.currentHp = Math.max(0, m.currentHp - avgHealDmg);
+                  if (m.currentHp <= 0) {
+                    setTimeout(() => SoundManager.getInstance().play('monster_death'), 100);
+                  }
+                  const mPos = getMonsterVfxPos(nextMonsters.indexOf(m), nextMonsters.length);
+                  setTimeout(() => {
+                    SoundManager.getInstance().play('spell');
+                    triggerVFX({
+                      type: 'divine_smite',
+                      x: mPos.x,
+                      y: mPos.y,
+                      damage: avgHealDmg,
+                      isCrit: true,
+                      text: `신성심판! ✨`
+                    });
+                  }, getBattleDelay(200 + mIdx * 60));
+                });
+                logs.push(`✨⚔️ [기적의 소생: 신성 심판] 파티 평균 치유량(+${avgHealDmg})에 상응하는 신성한 성광이 방출되어 적 전체에게 ${avgHealDmg}의 신성 피해를 입혔습니다!`);
+              }
+            }
+          }
+
           // 1. 🩸 기사회생 / 부활
-          if (feverSynergy.reviveFallen) {
+          if (feverSynergy.reviveFallen && feverSynergy.id !== 'miracle_resurrection') {
             let revivedCount = 0;
             gm.party.forEach(ally => {
               const isDead = ally.currentHp <= 0 || ally.deathCountdown !== undefined || ally.isPermanentlyDead;
@@ -5100,12 +5294,12 @@ export const BattleScreen: React.FC = () => {
             });
           }
           // 2. 💖 파티 전원 체력 회복 (100% 완전 회복 또는 partyHealPct 비율 회복)
-          if (feverSynergy.partyFullHeal) {
+          if (feverSynergy.partyFullHeal && feverSynergy.id !== 'miracle_resurrection') {
             gm.party.filter(h => h.currentHp > 0).forEach(ally => {
               ally.currentHp = ally.maxHp;
             });
             logs.push(`💖✨ [${feverSynergy.name}] 생존 아군 전원의 체력이 100% 완전 회복되었습니다!`);
-          } else if (feverSynergy.partyHealPct && feverSynergy.partyHealPct > 0) {
+          } else if (feverSynergy.partyHealPct && feverSynergy.partyHealPct > 0 && feverSynergy.id !== 'miracle_resurrection') {
             gm.party.filter(h => h.currentHp > 0).forEach(ally => {
               const healAmt = Math.max(1, Math.floor(ally.maxHp * feverSynergy!.partyHealPct!));
               ally.currentHp = Math.min(ally.maxHp, ally.currentHp + healAmt);

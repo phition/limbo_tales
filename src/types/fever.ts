@@ -22,11 +22,11 @@ export interface FeverBadgeMeta {
 }
 
 export type FeverSynergyId =
-  | 'miracle_resurrection' // 🕊️ 기적의 소생 (가드 2 + 힐 3: 아군 1인 부활 또는 70% 대량 치유)
+  | 'miracle_resurrection' // 🕊️ 기적의 소생 (가드 2 + 힐 3: 사망 1인 30% 부활 & 신성공격 / 전체 30% 회복 & 신성공격)
   | 'divine_sanctuary'     // 💖 신성 성역 (힐 3개 이상: 전체 회복 50% + 디버프 면역 1턴)
   | 'miracle_revive'       // 🩸 기사회생 (가드 3개 이상 또는 힐 3개 이상: 사망 1인 10% 부활, 사망자 없을 시 생존자 50% 회복)
   | 'iron_bulwark'         // 🛡️🧱 철벽 수호 (가드 4개 이상: 파티 전원 최대 HP 25% 에테르 보호막 부여)
-  | 'flurry_overdrive'     // ⚡ 질풍노도 (완전 관통 + 치명타 폭발)
+  | 'flurry_overdrive'     // ⚡ 질풍노도 (방어력 50% 관통 + 확정 치명타 + 치명타 피해 +30%)
   | 'total_assault'        // 🎯 총력 섬멸 (광역화 + 위력 60% 증폭)
   | 'immortal_bastion'     // 🛡️ 불멸의 요새 (HP 30% 보호막 + 반격 결계 2턴)
   | 'extra_onslaught'      // ⚡🌪️ 연격 폭풍 (엑스트라 4개 이상: 적 전체화 + 위력 50% + 치명타 50%)

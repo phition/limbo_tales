@@ -110,31 +110,31 @@ export function evaluateFeverSynergy(badges: FeverBadgeType[] = [], party: Merce
   const hasDyingHero = safeParty.some(h => h && h.currentHp > 0 && (h.currentHp / (h.maxHp || 1)) <= 0.35);
   const distinctCount = Object.values(counts).filter(c => c > 0).length;
 
-  // 1. 🕊️✨ 【기적의 소생 / 기적의 성역】: 가드(GUARD) 2개 이상 + 힐(HEAL) 3개 이상
+  // 1. 🕊️✨ 【기적의 소생】: 가드(GUARD) 2개 이상 + 힐(HEAL) 3개 이상
   if (counts.guard >= 2 && counts.heal >= 3) {
     return {
       id: 'miracle_resurrection',
-      name: hasFallenHero ? '기적의 소생' : '기적의 성역',
-      subTitle: hasFallenHero ? 'Miracle Resurrection' : 'Miracle Sanctuary',
+      name: '기적의 소생',
+      subTitle: 'Miracle Resurrection',
       icon: '🕊️💖',
       color: '#ff4081',
       bg: 'linear-gradient(135deg, rgba(255,64,129,0.3), rgba(30,10,25,0.95))',
       borderColor: '#ff4081',
-      summary: hasFallenHero
-        ? '사망 아군 1인 HP 60% 기적의 부활 + 생존 아군 전원 HP 50% 회복 & 디버프 완전 정화'
-        : '부활 대상 없음: 파티 전원 HP 70% 대량 치유 + 최대 HP 40% 보호막 & 디버프 면역 2턴',
+      summary: '사망 아군 1인 30% 체력으로 부활과 회복된 체력만큼 적 전체에 신성 공격',
       powerMult: 1.4,
       critRateBonus: 0.15,
       critDamageBonus: 0.2,
       armorPenetration: 0.2,
       isForceAoe: false,
       lifestealPct: 0.3,
-      partyShieldPct: hasFallenHero ? 0.3 : 0.4,
+      partyShieldPct: 0,
       reviveFallen: hasFallenHero,
-      reviveHpPct: 0.6,
+      reviveHpPct: 0.3,
+      reviveSingle: true,
       partyFullHeal: false,
+      partyHealPct: hasFallenHero ? 0 : 0.3,
       cleanseDebuffs: true,
-      immunityTurns: hasFallenHero ? 1 : 2,
+      immunityTurns: 1,
       riposteTurns: 0,
       stunTurns: 0,
       rechargePartyMp: false
@@ -277,11 +277,11 @@ export function evaluateFeverSynergy(badges: FeverBadgeType[] = [], party: Merce
       color: '#ff5252',
       bg: 'linear-gradient(135deg, rgba(255,82,82,0.3), rgba(41,10,10,0.9))',
       borderColor: '#ff5252',
-      summary: '방어력 100% 무시(순수 관통 피해) + 확정 치명타(100%) + 치명 피해 +150% 폭발',
+      summary: '방어력 50% 관통 + 확정 치명타 + 치명타 피해 +30%',
       powerMult: 1.5,
       critRateBonus: 1.0,      // 100% 확정 치명타
-      critDamageBonus: 1.5,    // 치명 피해 +150%
-      armorPenetration: 1.0,   // 방어력 100% 무시
+      critDamageBonus: 0.3,    // 치명타 피해 +30%로 조정
+      armorPenetration: 0.5,   // 방어력 50% 관통
       isForceAoe: false,
       lifestealPct: 0.2,
       partyShieldPct: 0,
@@ -661,7 +661,7 @@ export const ALL_FEVER_SYNERGIES_CODEX: FeverCodexItem[] = [
     handRankLabel: '풀하우스',
     tierRank: 3,
     requiredBadges: '🛡️ 가드 2개 + 💖 힐 3개',
-    summary: '사망 아군 1인 HP 60% 기적의 부활 + 생존 아군 전원 HP 50% 치유 & 정화',
+    summary: '사망 아군 1인 30% 체력으로 부활과 회복된 체력만큼 적 전체에 신성 공격',
     icon: '🕊️💖',
     color: '#ff4081',
     bg: 'linear-gradient(135deg, rgba(255,64,129,0.25), rgba(30,10,25,0.95))',
@@ -689,7 +689,7 @@ export const ALL_FEVER_SYNERGIES_CODEX: FeverCodexItem[] = [
     handRankLabel: '트리플 / 투페어',
     tierRank: 2,
     requiredBadges: '💥 크릿 3개 이상 (또는 크릿2 + 엑스트라2)',
-    summary: '방어력 100% 무시(순수 관통) + 확정 치명타(100%) + 치명 피해 +150% 폭발',
+    summary: '방어력 50% 관통 + 확정 치명타 + 치명타 피해 +30%',
     icon: '⚡💥',
     color: '#ff5252',
     bg: 'linear-gradient(135deg, rgba(255,82,82,0.25), rgba(41,10,10,0.9))',

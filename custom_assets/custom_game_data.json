@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 31,
-  "updatedAt": 1792202776268,
+  "version": 34,
+  "updatedAt": 1792206746026,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -253,8 +253,8 @@
       "faction": "construct"
     },
     "boss_floor_10": {
-      "atk": 480,
-      "def": 520,
+      "atk": 680,
+      "def": 620,
       "description": "심연의 심장부에 군림하는 궁극의 공허 군주. 차원 전체를 멸망시킬 종말의 숨결을 내뿜습니다.",
       "drainPct": 0.35,
       "id": "boss_floor_10",
@@ -452,8 +452,8 @@
       "faction": "corrupted"
     },
     "boss_floor_5": {
-      "atk": 588,
-      "def": 642,
+      "atk": 388,
+      "def": 442,
       "description": "Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다.",
       "id": "boss_floor_5",
       "imagePath": "assets/void_overlord.jpg",
@@ -517,14 +517,14 @@
           "statusDuration": 3
         }
       ],
-      "spd": 28,
+      "spd": 48,
       "themeColor": 16728428,
       "type": "boss",
       "faction": "corrupted"
     },
     "boss_floor_6": {
-      "atk": 540,
-      "def": 680,
+      "atk": 340,
+      "def": 380,
       "description": "핏빛 성역의 지배자. 거대한 박쥐 날개와 피의 마법으로 침입자의 생명력을 흡수합니다.",
       "drainPct": 0.4,
       "id": "boss_floor_6",
@@ -567,8 +567,8 @@
       "faction": "corrupted"
     },
     "boss_floor_7": {
-      "atk": 460,
-      "def": 680,
+      "atk": 360,
+      "def": 380,
       "description": "망각의 묘역을 수호하는 죽음의 묘지기. 거대한 영혼의 낫으로 산 자의 생명을 수확합니다.",
       "drainPct": 0.3,
       "id": "boss_floor_7",
@@ -609,8 +609,8 @@
       "faction": "undead"
     },
     "boss_floor_8": {
-      "atk": 590,
-      "def": 860,
+      "atk": 490,
+      "def": 560,
       "description": "단죄의 요새를 통솔하던 전설적인 기사단장. 타락한 성역 결계와 무자비한 심판의 검을 휘두릅니다.",
       "id": "boss_floor_8",
       "imagePath": "assets/boss_floor_8.jpg",
@@ -651,8 +651,8 @@
       "faction": "corrupted"
     },
     "boss_floor_9": {
-      "atk": 720,
-      "def": 710,
+      "atk": 520,
+      "def": 610,
       "description": "환영의 미궁 중심에서 차원 공간을 뒤틀어놓는 환각의 대마도사. 수많은 거울 파편으로 전장을 유린합니다.",
       "id": "boss_floor_9",
       "imagePath": "assets/boss_floor_9.jpg",
@@ -1721,9 +1721,9 @@
       "type": "boss",
       "faction": "corrupted",
       "level": 600,
-      "maxHp": 450000,
+      "maxHp": 850000,
       "atk": 3250,
-      "def": 1080,
+      "def": 2080,
       "spd": 376,
       "luck": 250,
       "piercePct": 0.7,
@@ -2147,17 +2147,16 @@
     "maxHp": 125000000,
     "parts": {
       "head": {
-        "id": "head",
-        "name": "네메시스 머리",
-        "position": "front",
         "archetype": "발할라 워로드 (Valhalla Warlord)",
-        "maxHp": 40000000,
         "atk": 825,
         "def": 1055,
-        "spd": 140,
-        "luck": 250,
-        "icon": "💥",
         "desc": "압도적인 물리 강타와 진동 파쇄를 시전하는 전열의 파멸 머리",
+        "icon": "💥",
+        "id": "head",
+        "luck": 250,
+        "maxHp": 40000000,
+        "name": "네메시스 머리",
+        "position": "front",
         "skills": [
           {
             "desc": "전열 대상에게 145% 물리 충격 관통 피해",
@@ -2185,20 +2184,20 @@
             "power": 1.6,
             "target": "all"
           }
-        ]
+        ],
+        "spd": 140
       },
       "body": {
-        "id": "body",
-        "name": "네메시스 몸통",
-        "position": "mid",
         "archetype": "크로노 아콘 (Chrono Archon)",
-        "maxHp": 50000000,
         "atk": 950,
         "def": 450,
-        "spd": 110,
-        "luck": 200,
-        "icon": "🌀",
         "desc": "시공간 조작과 광역 군중 제어(CC)를 담당하는 중심 몸통",
+        "icon": "🌀",
+        "id": "body",
+        "luck": 200,
+        "maxHp": 50000000,
+        "name": "네메시스 몸통",
+        "position": "mid",
         "skills": [
           {
             "desc": "아군 전체에게 110% 마법 피해 및 2턴간 행동 속도 30% 감속",
@@ -2227,20 +2226,20 @@
             "power": 1.2,
             "target": "all"
           }
-        ]
+        ],
+        "spd": 110
       },
       "tail": {
-        "id": "tail",
-        "name": "네메시스 꼬리",
-        "position": "back",
         "archetype": "오메가 데드아이 / 레인저 (Omega Deadeye)",
-        "maxHp": 35000000,
         "atk": 1040,
         "def": 935,
-        "spd": 220,
-        "luck": 145,
-        "icon": "🎯",
         "desc": "신속한 광역 휩쓸기와 급소 원샷원킬을 노리는 후열의 치명 꼬리",
+        "icon": "🎯",
+        "id": "tail",
+        "luck": 145,
+        "maxHp": 35000000,
+        "name": "네메시스 꼬리",
+        "position": "back",
         "skills": [
           {
             "desc": "아군 전열/중열을 쓸어버리는 135% 광역 물리 피해",
@@ -2266,7 +2265,8 @@
             "power": 1.4,
             "target": "all"
           }
-        ]
+        ],
+        "spd": 220
       }
     }
   },
