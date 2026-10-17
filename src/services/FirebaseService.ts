@@ -1437,20 +1437,20 @@ export class FirebaseService {
    * ✍️ 방명록 글 등록 (최대 100자, 낙관적 UI 즉시 반영 및 200개 초과 자동 정리)
    */
   public async addGuestbookMessage(rawContent: string): Promise<{ success: boolean; error?: string }> {
-    // 🚫 익명(게스트) 지휘관은 방명록 등록 불가
+    // 🚫 익명(게스트) 지휘관은 차원 메세지 등록 불가
     if (this.isAnonymousUser()) {
       return {
         success: false,
-        error: '익명(게스트) 지휘관은 방명록을 작성할 수 없습니다. 정식 계정(Google 또는 이메일)으로 로그인해 주세요.'
+        error: '익명(게스트) 지휘관은 차원 메세지를 작성할 수 없습니다. 정식 계정(Google 또는 이메일)으로 로그인해 주세요.'
       };
     }
 
     const clean = (rawContent || '').trim();
     if (!clean) {
-      return { success: false, error: '방명록 내용을 입력해 주세요.' };
+      return { success: false, error: '차원 메세지 내용을 입력해 주세요.' };
     }
     if (clean.length > 100) {
-      return { success: false, error: '방명록은 최대 100자까지 작성할 수 있습니다.' };
+      return { success: false, error: '차원 메세지는 최대 100자까지 작성할 수 있습니다.' };
     }
 
     const authorName = this.cachedProfile?.nickname || this.currentUser?.displayName || '방주 지휘관';
@@ -1483,8 +1483,8 @@ export class FirebaseService {
 
       return { success: true };
     } catch (err: any) {
-      console.error('⚠️ [addGuestbookMessage] 방명록 등록 실패:', err);
-      return { success: false, error: err.message || '방명록 등록 중 오류가 발생했습니다.' };
+      console.error('⚠️ [addGuestbookMessage] 차원 메세지 전송 실패:', err);
+      return { success: false, error: err.message || '차원 메세지 전송 중 오류가 발생했습니다.' };
     }
   }
 

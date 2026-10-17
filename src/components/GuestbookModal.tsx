@@ -73,6 +73,7 @@ export const GuestbookModal: React.FC<Props> = ({
   // 🌐 현재 언어 및 타겟 언어 라벨
   const currentLang = I18nService.getInstance().getCurrentLanguage();
   const targetLangLabel = currentLang === 'ja' ? '日本語' : currentLang === 'en' ? 'English' : '한국어';
+  const tr = (k: string) => I18nService.getInstance().tr(k);
 
   // 🌐 단일 글 번역 토글
   const handleToggleTranslate = async (msg: GuestbookMessage) => {
@@ -146,17 +147,17 @@ export const GuestbookModal: React.FC<Props> = ({
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (isAnonymous) {
-      setErrorMessage('익명(게스트) 지휘관은 방명록을 작성할 수 없습니다. 정식 계정으로 로그인해 주세요.');
+      setErrorMessage(tr('익명(게스트) 지휘관은 차원 메세지를 작성할 수 없습니다. 정식 계정으로 로그인해 주세요.'));
       return;
     }
 
     const clean = inputContent.trim();
     if (!clean) {
-      setErrorMessage('내용을 입력해 주세요.');
+      setErrorMessage(tr('차원 메세지 내용을 입력해 주세요.'));
       return;
     }
     if (clean.length > 100) {
-      setErrorMessage('최대 100자까지 작성할 수 있습니다.');
+      setErrorMessage(tr('차원 메세지는 최대 100자까지 작성할 수 있습니다.'));
       return;
     }
 
@@ -169,13 +170,13 @@ export const GuestbookModal: React.FC<Props> = ({
         setCurrentPage(1); // 새 글이 최상단에 있으므로 1페이지로 이동
         setMessages(fb.getCachedGuestbookMessages()); // 새 글 즉시 화면 반영
         SoundManager.getInstance().play('click');
-        gm.addLog(`💬 [방명록 등록] "${clean.slice(0, 15)}..." 글이 전 서버 게시판에 등록되었습니다.`, 'system');
+        gm.addLog(`💬 [차원 메세지] "${clean.slice(0, 15)}..." 메세지가 전 차원에 송신되었습니다.`, 'system');
       } else {
-        setErrorMessage(res.error || '글 등록에 실패했습니다.');
+        setErrorMessage(res.error || tr('메세지 전송에 실패했습니다.'));
         SoundManager.getInstance().play('click');
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || '등록 중 오류가 발생했습니다.');
+      setErrorMessage(err?.message || tr('차원 메세지 전송 중 오류가 발생했습니다.'));
     } finally {
       setIsSubmitting(false);
     }
@@ -185,14 +186,14 @@ export const GuestbookModal: React.FC<Props> = ({
     <Modal
       open={open}
       onClose={onClose}
-      title="📋 방주 지휘관 방명록 (게시판)"
+      title={tr('[차원 메세지]')}
       maxWidth="w-[96vw] max-w-[560px] sm:max-w-[640px] md:max-w-[740px]"
       maxHeight="h-[88vh] max-h-[88dvh]"
       footer={
         <div className="flex items-center justify-between w-full flex-wrap gap-2">
           <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
             <div className="text-[10px] text-[#8b9bb4]">
-              총 <strong className="text-[#c8aa6e]">{messages.length}</strong>개의 교신 기록
+              총 <strong className="text-[#c8aa6e]">{messages.length}</strong>{tr('개의 차원 교신 기록')}
             </div>
             <button
               type="button"
@@ -201,10 +202,10 @@ export const GuestbookModal: React.FC<Props> = ({
                 SoundManager.getInstance().play('click');
               }}
               className="text-[10px] px-2 py-0.5 rounded bg-[#12141a] border border-[#23324d] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e] transition-all cursor-pointer flex items-center gap-1"
-              title="최신 방명록 새로고침"
+              title={tr('최신 차원 메세지 새로고침')}
             >
               <span>🔄</span>
-              <span>새로고침</span>
+              <span>{tr('새로고침')}</span>
             </button>
             <button
               type="button"
@@ -215,15 +216,15 @@ export const GuestbookModal: React.FC<Props> = ({
                   ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e66]'
                   : 'bg-[#12141a] border-[#23324d] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e]'
               }`}
-              title="현재 페이지의 모든 글을 현재 게임 언어로 번역"
+              title={tr('현재 페이지의 모든 글을 현재 게임 언어로 번역')}
             >
               <span>{isTranslatingAll ? '⏳' : '🌐'}</span>
               <span>
                 {isTranslatingAll
-                  ? '번역 중...'
+                  ? tr('번역 중...')
                   : pageMessages.length > 0 && pageMessages.every((m) => !!translatedMap[m.id])
-                  ? '원문 보기'
-                  : `전체 번역 (${targetLangLabel})`}
+                  ? tr('원문 보기')
+                  : `${tr('전체 번역')} (${targetLangLabel})`}
               </span>
             </button>
           </div>
@@ -234,7 +235,7 @@ export const GuestbookModal: React.FC<Props> = ({
             style={{ borderColor: '#c56060', color: '#c56060', borderWidth: '1px', borderStyle: 'solid' }}
           >
             <span className="font-extrabold text-xs" style={{ color: '#c56060' }}>✕</span>
-            <span>닫기</span>
+            <span>{tr('닫기')}</span>
           </button>
         </div>
       }
@@ -261,9 +262,9 @@ export const GuestbookModal: React.FC<Props> = ({
         <div className="flex-1 overflow-y-auto min-h-0 flex flex-col gap-2 pr-1 custom-scrollbar">
           {pageMessages.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[#8b9bb4] gap-2">
-              <span className="text-3xl">💬</span>
-              <div className="text-xs font-bold text-[#cfd8e8]">등록된 방명록이 없습니다.</div>
-              <div className="text-[11px]">첫 번째 방주 지휘관 메시지를 남겨보세요!</div>
+              <span className="text-3xl">📡</span>
+              <div className="text-xs font-bold text-[#cfd8e8]">{tr('등록된 차원 메세지가 없습니다.')}</div>
+              <div className="text-[11px]">{tr('첫 번째 차원 메세지를 남겨보세요!')}</div>
             </div>
           ) : (
             pageMessages.map((msg) => {
@@ -310,10 +311,10 @@ export const GuestbookModal: React.FC<Props> = ({
                           ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e66]'
                           : 'bg-[#14161c] border-[#262830] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e]'
                       }`}
-                      title={isTranslated ? '원문으로 되돌리기' : `${targetLangLabel} 언어로 번역`}
+                      title={isTranslated ? tr('원문으로 되돌리기') : `${targetLangLabel} ${tr('언어로 번역')}`}
                     >
                       <span>{isTranslating ? '⏳' : isTranslated ? '↩️' : '🌐'}</span>
-                      <span>{isTranslating ? '...' : isTranslated ? '원문' : '번역'}</span>
+                      <span>{isTranslating ? '...' : isTranslated ? tr('원문') : tr('번역')}</span>
                     </button>
                     <div className="text-[10px] sm:text-[11px] text-[#8b9bb4] font-mono whitespace-nowrap text-right">
                       {formatTimestamp(msg.createdAt)}
@@ -336,7 +337,7 @@ export const GuestbookModal: React.FC<Props> = ({
                 SoundManager.getInstance().play('click');
               }}
             >
-              ◀ 이전
+              {tr('◀ 이전')}
             </button>
 
             <span className="text-xs font-mono font-bold text-[#c8aa6e] px-2">
@@ -351,7 +352,7 @@ export const GuestbookModal: React.FC<Props> = ({
                 SoundManager.getInstance().play('click');
               }}
             >
-              다음 ▶
+              {tr('다음 ▶')}
             </button>
           </div>
         )}
@@ -362,13 +363,13 @@ export const GuestbookModal: React.FC<Props> = ({
             <span className="text-2xl p-2 rounded-xl bg-[#ab47bc22] text-[#ce93d8] shrink-0">🔒</span>
             <div className="flex-1 min-w-0">
               <div className="text-xs font-bold text-[#ce93d8] flex items-center gap-1.5">
-                <span>방명록 작성 불가 (익명 지휘관)</span>
+                <span>{tr('차원 메세지 작성 불가 (익명 지휘관)')}</span>
                 <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ab47bc22] text-[#ce93d8] font-mono font-bold">
                   GUEST
                 </span>
               </div>
               <div className="text-[11px] text-[#90a4ae] mt-0.5 leading-relaxed">
-                익명(게스트) 계정은 방명록을 열람할 수만 있으며 글을 작성할 수 없습니다. 소통에 참여하시려면 정식 계정(Google 또는 이메일)으로 로그인해 주세요.
+                {tr('익명(게스트) 계정은 차원 메세지를 열람할 수만 있으며 글을 작성할 수 없습니다. 소통에 참여하시려면 정식 계정(Google 또는 이메일)으로 로그인해 주세요.')}
               </div>
             </div>
           </div>
@@ -383,7 +384,7 @@ export const GuestbookModal: React.FC<Props> = ({
                 <span className="text-xs sm:text-sm font-bold text-[#c8aa6e] truncate max-w-[200px]">
                   {currentNick}
                 </span>
-                <span className="text-[10px] text-[#8b9bb4]">지휘관님의 방명록 한마디</span>
+                <span className="text-[10px] text-[#8b9bb4]">{tr('지휘관님의 차원 메세지')}</span>
               </div>
               <span
                 className={`text-[10px] font-mono ${
@@ -403,7 +404,7 @@ export const GuestbookModal: React.FC<Props> = ({
                   setInputContent(e.target.value);
                   setErrorMessage(null);
                 }}
-                placeholder="방주 지휘관들에게 남길 응원과 전술 조언을 작성하세요 (최대 100자)"
+                placeholder={tr('다른 차원의 지휘관들에게 남길 교신 메세지를 작성하세요 (최대 100자)')}
                 className="flex-1 p-2 rounded-lg bg-[#090b0e] border border-[#1e2a3e] text-white text-xs placeholder-[#50607d] resize-none focus:border-[#c8aa6e] focus:outline-none transition-colors"
                 disabled={isSubmitting}
                 onKeyDown={(e) => {
@@ -423,7 +424,7 @@ export const GuestbookModal: React.FC<Props> = ({
                 }`}
               >
                 <span>{isSubmitting ? '...' : '✍️'}</span>
-                <span>등록</span>
+                <span>{tr('전송')}</span>
               </button>
             </div>
 

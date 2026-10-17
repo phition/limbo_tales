@@ -15020,16 +15020,16 @@ export const CitadelScreen: React.FC = () => {
       {/* 🎡 모바일 스와이프/드래그 지원 회전 휠 내비게이션 & 상단 방명록 티커 */}
       {!openDrawer ? (
         <div className="px-3 pt-1 pb-2 shrink-0 select-none flex flex-col gap-1.5">
-          {/* 📢 방명록 최신 글 1개 전체 내용 좌측 연속 흐름 티커 (하단 네비 메뉴 상단) */}
+          {/* 📢 [차원 메세지] 최신 글 1개 전체 내용 좌측 연속 흐름 티커 (하단 네비 메뉴 상단) */}
           <div
             className="w-full px-2.5 py-1.5 rounded-xl bg-[#0e1117]/90 border border-[#c8aa6e33] hover:border-[#c8aa6e88] cursor-pointer flex items-center justify-between transition-all backdrop-blur-xs shadow-md group active:scale-[0.99] overflow-hidden"
             onClick={() => gm.emit('openGuestbook')}
-            title="클릭 시 방주 지휘관 방명록(게시판) 모달이 열립니다"
+            title="클릭 시 [차원 메세지] 모달이 열립니다"
           >
             <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
               <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0 flex items-center gap-1 border border-[#c8aa6e44] z-10 shadow-xs">
                 <span className="text-xs">📢</span>
-                <span>방명록</span>
+                <span>[차원 메세지]</span>
               </span>
 
               <div
@@ -15040,7 +15040,7 @@ export const CitadelScreen: React.FC = () => {
                 }}
               >
                 {guestbookMessages.length === 0 ? (
-                  <span className="text-[11px] text-[#8b9bb4]">첫 번째 방주 지휘관 방명록을 등록해 보세요!</span>
+                  <span className="text-[11px] text-[#8b9bb4]">첫 번째 차원 메세지를 전송해 보세요!</span>
                 ) : (() => {
                   const latestMsg = guestbookMessages[0];
                   // 글자 수에 비례하여 부드럽고 천천히 일정한 속도로 흐르도록 애니메이션 지속 시간 산출 (최소 16초 ~ 최대 38초)

@@ -284,7 +284,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
 
         {/* 메뉴 목록 */}
         <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
-          {/* 📋 방주 지휘관 방명록 (게시판) */}
+          {/* 📡 [차원 메세지] */}
           <button
             className="w-full p-2.5 rounded-xl bg-[#14161c] border border-[#23324d] hover:border-[#c8aa6e] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
             onClick={() => {
@@ -297,13 +297,13 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             }}
           >
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
-              <span className="text-xl p-1 rounded-lg bg-[#c8aa6e22] text-[#c8aa6e] shrink-0">📋</span>
+              <span className="text-xl p-1 rounded-lg bg-[#c8aa6e22] text-[#c8aa6e] shrink-0">📡</span>
               <div className="min-w-0 flex-1">
                 <div className="font-bold text-xs text-white group-hover:text-[#c8aa6e] transition-colors break-words">
-                  방주 지휘관 방명록 (게시판)
+                  [차원 메세지]
                 </div>
                 <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">
-                  전 서버 지휘관 100자 실시간 교신 &amp; 자유 소통
+                  전 서버 지휘관 100자 실시간 차원 교신 &amp; 자유 소통
                 </div>
               </div>
             </div>
