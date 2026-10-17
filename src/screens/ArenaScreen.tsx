@@ -823,6 +823,7 @@ export const ArenaScreen: React.FC = () => {
 
   // ── ⚔️ 3v3+1+1 차원 아레나 몰입형 인터랙티브 전장 상태 ──
   const [activeBattleOpp, setActiveBattleOpp] = useState<ArenaOpponent | null>(null);
+  const [countdown, setCountdown] = useState<number | 'ENGAGE' | null>(null);
   const [playerTeam, setPlayerTeam] = useState<ArenaCombatant[]>([]);
   const [oppTeam, setOppTeam] = useState<ArenaCombatant[]>([]);
   const [activeCombatantId, setActiveCombatantId] = useState<string | null>(null);
@@ -1080,6 +1081,7 @@ export const ArenaScreen: React.FC = () => {
     }
 
     setActiveBattleOpp(opp);
+    setCountdown(3);
     setBattleLogs([]);
     setFinalReward(null);
     finalRewardRef.current = null;
@@ -1371,6 +1373,39 @@ export const ArenaScreen: React.FC = () => {
     isProcessingRef.current = false;
     setTurnTick(0);
   };
+
+  // ⏱️ 차원 아레나 3초 카운트다운 타이머 (영지 침공과 동일한 몰입형 카운트 인트로)
+  useEffect(() => {
+    if (!activeBattleOpp || countdown === null) return;
+    if (countdown === 3) {
+      SoundManager.getInstance().play('heavy_hit');
+      const timer3 = setTimeout(() => {
+        setCountdown(2);
+        SoundManager.getInstance().play('lightning');
+      }, 1000);
+      return () => clearTimeout(timer3);
+    }
+    if (countdown === 2) {
+      const timer2 = setTimeout(() => {
+        setCountdown(1);
+        SoundManager.getInstance().play('fire');
+      }, 1000);
+      return () => clearTimeout(timer2);
+    }
+    if (countdown === 1) {
+      const timer1 = setTimeout(() => {
+        setCountdown('ENGAGE');
+        SoundManager.getInstance().play('crit');
+      }, 1000);
+      return () => clearTimeout(timer1);
+    }
+    if (countdown === 'ENGAGE') {
+      const timerEnd = setTimeout(() => {
+        setCountdown(null);
+      }, 1100);
+      return () => clearTimeout(timerEnd);
+    }
+  }, [countdown, activeBattleOpp]);
 
   // 🔥 아군 피버 뱃지 추가 헬퍼 (주간 금지 배지 필터링)
   const addFeverBadge = useCallback((badgeType: FeverBadgeType) => {
@@ -2529,8 +2564,8 @@ export const ArenaScreen: React.FC = () => {
 
   // ── 턴 자동 진행 루프 (스킬 연계 최우선 콤보 AI & Auto Battle) ──────────────────────────────
   useEffect(() => {
-    // ⏸️ 피버콜 쇼다운 진행 중이거나 궁극기 컷인 연출 중일 때는 전투 완전 일시 정지!
-    if (isBattleEndedRef.current || !activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
+    // ⏸️ 카운트다운 중이거나 피버콜 쇼다운 진행 중이거나 궁극기 컷인 연출 중일 때는 전투 완전 일시 정지!
+    if (isBattleEndedRef.current || !activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin || countdown !== null) return;
     if (isProcessingRef.current) return;
 
     const pTeam = playerTeamRef.current;
@@ -2759,12 +2794,12 @@ export const ArenaScreen: React.FC = () => {
     }, delay);
 
     return () => clearTimeout(timer);
-  }, [activeBattleOpp, finalReward, activeCombatantId, isAuto, battleSpeed, turnTick, isShowdownCutin, isLeaderUltCutin, isOppLeaderUltCutin, executeCombatMove, finishBattle]);
+  }, [activeBattleOpp, finalReward, activeCombatantId, isAuto, battleSpeed, turnTick, isShowdownCutin, isLeaderUltCutin, isOppLeaderUltCutin, countdown, executeCombatMove, finishBattle]);
 
   // 🛡️ [아레나 멈춤 방지 워치독]: 만약 2.5초 이상 턴이 멈춰 있으면 강제 복구 및 다음 턴 진행
   useEffect(() => {
-    // ⏸️ 피버콜 쇼다운 진행 중이거나 궁극기 연출 중일 때는 워치독 개입 금지
-    if (isBattleEndedRef.current || !activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin) return;
+    // ⏸️ 카운트다운 중이거나 피버콜 쇼다운 진행 중이거나 궁극기 연출 중일 때는 워치독 개입 금지
+    if (isBattleEndedRef.current || !activeBattleOpp || finalReward || !activeCombatantId || isShowdownCutin || isLeaderUltCutin || isOppLeaderUltCutin || countdown !== null) return;
     const watchdog = setTimeout(() => {
       if (isBattleEndedRef.current || finalRewardRef.current) return;
       if (isProcessingRef.current) {
@@ -2783,11 +2818,12 @@ export const ArenaScreen: React.FC = () => {
       }
     }, 2500);
     return () => clearTimeout(watchdog);
-  }, [activeBattleOpp, finalReward, activeCombatantId, turnTick, isShowdownCutin, isLeaderUltCutin, isOppLeaderUltCutin]);
+  }, [activeBattleOpp, finalReward, activeCombatantId, turnTick, isShowdownCutin, isLeaderUltCutin, isOppLeaderUltCutin, countdown]);
 
   // ── ⏩ 즉시 결과 확인 (Skip) ──────────────────────────────────────────────
   const handleInstantSkip = () => {
     if (isBattleEndedRef.current || !activeBattleOpp || finalReward) return;
+    setCountdown(null);
     isProcessingRef.current = false;
 
     let pTeam = [...playerTeamRef.current];
@@ -4886,6 +4922,7 @@ export const ArenaScreen: React.FC = () => {
                       isBattleEndedRef.current = false;
                       finalRewardRef.current = null;
                       setActiveBattleOpp(null);
+                      setCountdown(null);
                       setFinalReward(null);
                       gm.emit('arenaBattleStateChanged', false);
                       gm.emit('phaserSceneChange', 'arena');
@@ -4912,11 +4949,95 @@ export const ArenaScreen: React.FC = () => {
                     isBattleEndedRef.current = false;
                     finalRewardRef.current = null;
                     setActiveBattleOpp(null);
+                    setCountdown(null);
                     setFinalReward(null);
                     gm.emit('arenaBattleStateChanged', false);
                     gm.emit('phaserSceneChange', 'arena');
                   }}
                 />
+              </div>
+            </div>
+          )}
+
+          {/* ── ⏱️ 3초 카운트다운 오버레이 (영지 침공과 동일한 아레나 인트로) ── */}
+          {countdown !== null && (
+            <div
+              className="fixed inset-0 flex flex-col items-center justify-center p-4 select-none overflow-hidden animate-fade-in pointer-events-auto"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: '100vw',
+                height: '100vh',
+                zIndex: 10000,
+                backgroundColor: 'rgba(5, 8, 17, 0.94)',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <div className="absolute w-96 h-96 rounded-full bg-gradient-to-tr from-[#3b82f655] via-[#8a2be244] to-[#ffd54f55] blur-3xl animate-pulse pointer-events-none" />
+              <div className="absolute w-72 h-72 rounded-full border-2 border-dashed border-[#ffd54f88] animate-spin pointer-events-none" style={{ animationDuration: '6s' }} />
+
+              {/* 상단 배너 */}
+              <div className="relative z-10 flex flex-col items-center gap-1.5 mb-6 text-center animate-fade-in">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ffd54f25] border border-[#ffd54f] text-[#ffd54f] text-xs font-mono font-bold tracking-widest uppercase shadow-[0_0_20px_rgba(255,213,79,0.5)]">
+                  <span>⚔️ DIMENSIONAL ARENA DUEL</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_2px_15px_rgba(255,213,79,0.8)] mt-2">
+                  vs {activeBattleOpp.name}
+                </h2>
+                <div className="text-xs text-[#a0aec0] mt-0.5">
+                  상대 레이팅 <span className="text-[#ffd54f] font-bold font-mono">{activeBattleOpp.rating}P</span> · 랭킹 <span className="text-white font-bold font-mono">#{activeBattleOpp.rank}</span> {activeBattleOpp.isBot ? '(차원 허상 AI)' : '(방주 사령관)'}
+                </div>
+              </div>
+
+              {/* 카운트다운 */}
+              <div className="relative z-10 flex items-center justify-center my-4 min-h-[180px] w-full">
+                {countdown === 'ENGAGE' ? (
+                  <div className="flex flex-col items-center justify-center text-center w-full animate-scale-up">
+                    <div
+                      className="text-5xl sm:text-7xl font-black font-cinzel text-transparent bg-clip-text bg-gradient-to-r from-[#00d2ff] via-[#ffd54f] to-[#ff416c] animate-bounce text-center w-full flex justify-center items-center"
+                      style={{
+                        filter: 'drop-shadow(0 0 35px rgba(255,213,79,0.95))',
+                        WebkitBackgroundClip: 'text',
+                      }}
+                    >
+                      ARENA ENGAGE!
+                    </div>
+                    <div className="text-xs sm:text-sm font-bold text-[#ffd54f] uppercase bg-black/80 px-6 py-2 rounded-full border border-[#ffd54f] shadow-[0_0_25px_rgba(255,213,79,0.6)] text-center mt-2">
+                      ⚔️ 차원 아레나 3v3 랭킹 결투 개시! ⚔️
+                    </div>
+                  </div>
+                ) : (
+                  <div key={countdown} className="relative flex items-center justify-center animate-scale-up">
+                    <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full border-4 border-t-transparent border-b-[#ff416c] border-l-[#00d2ff] border-r-[#ffd54f] animate-spin shadow-[0_0_35px_rgba(255,213,79,0.6)]" />
+                    <span
+                      className="absolute font-black font-cinzel leading-none select-none"
+                      style={{
+                        fontSize: '6.5rem',
+                        color: countdown === 3 ? '#ffd54f' : countdown === 2 ? '#00d2ff' : '#ff416c',
+                        textShadow: '0 0 50px rgba(255,213,79,0.95)',
+                      }}
+                    >
+                      {countdown}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="relative z-10 mt-6 flex flex-col items-center gap-2 text-center">
+                <div className="text-xs font-mono text-[#cbd5e1]">
+                  3인 결사대 + 1인 리더 + 1인 서포터 전술 편성 완료 · 결투장 진입 중
+                </div>
+                <div className="w-60 h-2 bg-[#141d2e] rounded-full overflow-hidden border border-[#23334d]">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#00d2ff] via-[#ffd54f] to-[#ff416c] transition-all duration-700"
+                    style={{
+                      width: countdown === 3 ? '33%' : countdown === 2 ? '66%' : '100%',
+                    }}
+                  />
+                </div>
               </div>
             </div>
           )}

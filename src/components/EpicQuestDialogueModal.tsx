@@ -3,6 +3,7 @@ import { Quest, GameResources } from '../types/game';
 import { SoundManager } from '../managers/SoundManager';
 import { CustomAssetService } from '../services/CustomAssetService';
 import { GameIcon } from './GameIcon';
+import { useI18n } from '../hooks/useI18n';
 
 interface Props {
   quest: Quest;
@@ -28,6 +29,7 @@ const RN: Record<string, string> = {
 };
 
 export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClaim }) => {
+  const { tr } = useI18n();
   const [selectedChoice, setSelectedChoice] = useState<'domain' | 'expedition'>('domain');
   const epicStory = quest.epicStory;
 
@@ -75,7 +77,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                 <span className="text-xs text-[#ffd54f] font-mono">Chapter {quest.chapter}</span>
               </div>
               <h2 className="text-base sm:text-lg font-bold text-white tracking-wide">
-                {epicStory.epilogueTitle || quest.title}
+                {tr(epicStory.epilogueTitle || quest.title)}
               </h2>
             </div>
           </div>
@@ -94,7 +96,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
           <div className="flex flex-col gap-3 bg-[#080b12] p-3.5 rounded-xl border border-[#1f293d]">
             <div className="text-xs font-bold text-[#e040fb] flex items-center gap-1.5 mb-1">
               <span>📜</span>
-              <span>스토리 대화 서사</span>
+              <span>{tr('스토리 대화 서사')}</span>
             </div>
             {epicStory.dialogues.map((dlg, idx) => {
               const customAvatar = CustomAssetService.getNpcOverride(dlg.speakerName) || (dlg.speakerRole ? CustomAssetService.getNpcOverride(dlg.speakerRole) : undefined);
@@ -122,15 +124,15 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                   </div>
                   <div className="flex-1 bg-[#101626] p-3 rounded-xl border border-[#222e46] shadow-sm">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-xs text-[#ffd54f]">{dlg.speakerName}</span>
+                      <span className="font-bold text-xs text-[#ffd54f]">{tr(dlg.speakerName)}</span>
                       {dlg.speakerRole && (
                         <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono border border-[#c8aa6e33]">
-                          {dlg.speakerRole}
+                          {tr(dlg.speakerRole)}
                         </span>
                       )}
                     </div>
                     <p className="text-xs text-[#cfd8e8] leading-relaxed whitespace-pre-line">
-                      {dlg.text}
+                      {tr(dlg.text)}
                     </p>
                   </div>
                 </div>
@@ -147,14 +149,14 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-bold text-xs sm:text-sm text-[#34d399]">
-                    [심연 정화] 심연 {purifiedFloors.map(f => `${f}층`).join(' & ')} 짙은 연무 영구 정화!
+                    [{tr('심연 정화')}] {tr('심연')} {purifiedFloors.map(f => `${f}${tr('층')}`).join(' & ')} {tr('짙은 연무 영구 정화!')}
                   </span>
                   <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold bg-[#10b98133] text-[#a7f3d0] border border-[#10b98155]">
                     PERMANENT
                   </span>
                 </div>
                 <div className="text-[11px] text-[#d1fae5] mt-1 leading-relaxed">
-                  고대 보스의 유물이 제단에 바쳐지며 해당 층의 심연 연무가 완전히 걷힙니다. 차후 반복 파밍 시 <strong className="text-[#ffd54f]">마물들의 공격력과 방어력 강화(+{purifiedFloors.map(f => `${f * 5}%`).join(', +')})가 영구 해제</strong>되어 한결 수월하게 탐험할 수 있습니다!
+                  {tr('고대 보스의 유물이 제단에 바쳐지며 해당 층의 심연 연무가 완전히 걷힙니다. 차후 반복 파밍 시 마물들의 강화가 영구 해제되어 한결 수월하게 탐험할 수 있습니다!')}
                 </div>
               </div>
             </div>
@@ -165,9 +167,9 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
             <div className="flex items-center justify-between">
               <div className="text-xs font-bold text-[#ffd54f] flex items-center gap-1.5">
                 <span>⚖️</span>
-                <span>지휘관의 중대 결단 : 보상 노선 선택</span>
+                <span>{tr('지휘관의 중대 결단 : 보상 노선 선택')}</span>
               </div>
-              <span className="text-[11px] text-[#8b9bb4]">원하는 보상 방침을 클릭하세요</span>
+              <span className="text-[11px] text-[#8b9bb4]">{tr('원하는 보상 방침을 클릭하세요')}</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -184,7 +186,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5 font-bold text-sm text-[#38ef7d]">
-                        <span>{domainChoice.title}</span>
+                        <span>{tr(domainChoice.title)}</span>
                       </div>
                       <input
                         type="radio"
@@ -195,10 +197,10 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                       />
                     </div>
                     <div className="text-[11px] text-[#cfd8e8] leading-relaxed">
-                      {domainChoice.desc}
+                      {tr(domainChoice.desc)}
                     </div>
                     <div className="text-[11px] text-[#ffd54f] italic bg-[#00000044] p-2 rounded border border-[#38ef7d33]">
-                      {domainChoice.flavorChoice}
+                      {tr(domainChoice.flavorChoice)}
                     </div>
                   </div>
 
@@ -217,7 +219,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                     {domainChoice.rewards.resources &&
                       Object.entries(domainChoice.rewards.resources).map(([k, amt]) => (
                         <span key={k} className="text-[10px] px-1.5 py-0.5 rounded bg-[#38ef7d15] text-[#38ef7d] font-mono font-bold border border-[#38ef7d33] flex items-center gap-1">
-                          <GameIcon name={k} size={13} /> {RN[k] || k} +{amt}
+                          <GameIcon name={k} size={13} /> {tr(RN[k] || k)} +{amt}
                         </span>
                       ))}
                   </div>
@@ -237,7 +239,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5 font-bold text-sm text-[#e040fb]">
-                        <span>{expeditionChoice.title}</span>
+                        <span>{tr(expeditionChoice.title)}</span>
                       </div>
                       <input
                         type="radio"
@@ -248,10 +250,10 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                       />
                     </div>
                     <div className="text-[11px] text-[#cfd8e8] leading-relaxed">
-                      {expeditionChoice.desc}
+                      {tr(expeditionChoice.desc)}
                     </div>
                     <div className="text-[11px] text-[#ce93d8] italic bg-[#00000044] p-2 rounded border border-[#e040fb33]">
-                      {expeditionChoice.flavorChoice}
+                      {tr(expeditionChoice.flavorChoice)}
                     </div>
                   </div>
 
@@ -264,10 +266,10 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                         </span>
                         <div className="flex-1 min-w-0">
                           <div className="font-bold text-[#ffd54f] truncate">
-                            {expeditionChoice.rewards.equipment.name}
+                            {tr(expeditionChoice.rewards.equipment.name)}
                           </div>
                           <div className="text-[10px] text-[#ce93d8] font-mono">
-                            공격+{expeditionChoice.rewards.equipment.stats?.atk || 0} 치명+{expeditionChoice.rewards.equipment.stats?.critRate || 0}% HP+{expeditionChoice.rewards.equipment.stats?.hp || 0}
+                            {tr('공격')}+{expeditionChoice.rewards.equipment.stats?.atk || 0} {tr('치명')}+{expeditionChoice.rewards.equipment.stats?.critRate || 0}% HP+{expeditionChoice.rewards.equipment.stats?.hp || 0}
                           </div>
                         </div>
                       </div>
@@ -291,7 +293,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                       <div className="flex flex-wrap gap-1 mt-0.5">
                         {expeditionChoice.rewards.supplies.map((s, idx) => (
                           <span key={idx} className="text-[10px] px-1.5 py-0.5 rounded bg-[#e040fb15] text-[#e040fb] font-mono font-bold border border-[#e040fb33] flex items-center gap-1">
-                            <GameIcon name={s.key} icon={s.icon} size={13} /> {s.name} ×{s.qty}
+                            <GameIcon name={s.key} icon={s.icon} size={13} /> {tr(s.name)} ×{s.qty}
                           </span>
                         ))}
                       </div>
@@ -303,7 +305,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                         <div className="flex flex-wrap gap-1.5 mt-0.5">
                           {Object.entries(expeditionChoice.rewards.resources).map(([k, amt]) => (
                             <span key={k} className="text-[10px] px-1.5 py-0.5 rounded bg-[#ab47bc15] text-[#ce93d8] font-mono font-bold border border-[#ab47bc33] flex items-center gap-1">
-                              <GameIcon name={k} size={13} /> {RN[k] || k} +{amt}
+                              <GameIcon name={k} size={13} /> {tr(RN[k] || k)} +{amt}
                             </span>
                           ))}
                         </div>
@@ -322,7 +324,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
             className="btn btn-ghost text-xs px-4 py-2 text-[#8b9bb4]"
             onClick={onClose}
           >
-            뒤로가기
+            {tr('뒤로가기')}
           </button>
           <button
             type="button"
@@ -336,7 +338,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
           >
             <span>{selectedChoice === 'domain' ? '🏛️' : '⚔️'}</span>
             <span>
-              {selectedChoice === 'domain' ? '영지 발전 보상 수령' : '결사대 무장 보상 수령'}
+              {selectedChoice === 'domain' ? tr('영지 발전 보상 수령') : tr('결사대 무장 보상 수령')}
             </span>
           </button>
         </div>

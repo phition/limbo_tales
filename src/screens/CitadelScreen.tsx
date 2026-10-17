@@ -11831,6 +11831,7 @@ const QuestsDrawer: React.FC<{
   onNavigateDrawer?: (key: string) => void;
   onNavigateBuilding?: (buildingId: string) => void;
 }> = ({ onClose, onNavigateDrawer, onNavigateBuilding }) => {
+  const { tr } = useI18n();
   const { state, gm, navigateTo } = useGameManager();
   const [catTab, setCatTab] = useState<'chain' | 'sub' | 'epic' | 'completed'>('chain');
   const [epicQuestForModal, setEpicQuestForModal] = useState<Quest | null>(null);
@@ -12566,7 +12567,7 @@ const QuestsDrawer: React.FC<{
                       )}
                       {(q.rewards.unlockBuildingId || (q.rewards.unlockBuildingIds && q.rewards.unlockBuildingIds.length > 0)) && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#42a5f515] text-[#42a5f5] font-bold border border-[#42a5f533] flex items-center gap-1">
-                          <GameIcon name="bonfire" icon="🏛️" size={13} /> 신규 시설 해금
+                          <GameIcon name="bonfire" icon="🏛️" size={13} /> {tr('신규 시설 해금')}
                         </span>
                       )}
                     </>
@@ -12594,7 +12595,7 @@ const QuestsDrawer: React.FC<{
                   }}
                 >
                   <span>{q.epicStory ? '📜' : '🎁'}</span>
-                  <span>{q.epicStory ? '서사 확인 및 분기 보상 수령' : '보상 수령하기'}</span>
+                  <span>{q.epicStory ? tr('서사 확인 및 분기 보상 수령') : tr('보상 수령하기')}</span>
                 </button>
               )}
             </div>

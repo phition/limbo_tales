@@ -561,6 +561,7 @@ const MonsterDetailModal: React.FC<{
   onClose: () => void;
 }> = ({ monster, onClose }) => {
   if (!monster) return null;
+  const { tr } = useI18n();
   const gm = GameManager.getInstance();
   const hpPct = clamp((monster.currentHp / monster.maxHp) * 100, 0, 100);
   const typeLabel = monster.data.type === 'boss' ? '👑 BOSS' : monster.data.type === 'elite' ? '⭐ ELITE' : '👾 NORMAL';
@@ -592,7 +593,7 @@ const MonsterDetailModal: React.FC<{
             )}
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="font-bold text-base text-white">{monster.data.name}</span>
+                <span className="font-bold text-base text-white">{tr(monster.data.name)}</span>
                 <span className="text-[9px] px-1.5 py-0.2 rounded font-bold" style={{ background: `${typeColor}22`, color: typeColor, border: `1px solid ${typeColor}44` }}>
                   {typeLabel}
                 </span>
@@ -608,7 +609,7 @@ const MonsterDetailModal: React.FC<{
                     }}
                   >
                     <span>⚡</span>
-                    <span>광폭화 (능력치 1.3배)</span>
+                    <span>{tr('광폭화 (능력치 1.3배)')}</span>
                   </span>
                 )}
               </div>
@@ -622,13 +623,13 @@ const MonsterDetailModal: React.FC<{
                       color: MONSTER_FACTION_META[monster.data.faction].color,
                       border: `1px solid ${MONSTER_FACTION_META[monster.data.faction].color}55`,
                     }}
-                    title={MONSTER_FACTION_META[monster.data.faction].desc}
+                    title={tr(MONSTER_FACTION_META[monster.data.faction].desc)}
                   >
                     <span>{MONSTER_FACTION_META[monster.data.faction].icon}</span>
-                    <span>{MONSTER_FACTION_META[monster.data.faction].label}</span>
+                    <span>{tr(MONSTER_FACTION_META[monster.data.faction].label)}</span>
                   </span>
                 ) : (
-                  <span>마물</span>
+                  <span>{tr('마물')}</span>
                 )}
               </div>
             </div>
@@ -638,7 +639,7 @@ const MonsterDetailModal: React.FC<{
 
         <div>
           <div className="flex justify-between text-xs font-mono mb-1">
-            <span className="text-[#8b9bb4]">체력 (HP)</span>
+            <span className="text-[#8b9bb4]">{tr('체력 (HP)')}</span>
             <span className="font-bold text-[#38ef7d]">{Math.round(monster.currentHp)} / {Math.round(monster.maxHp)} ({Math.round(hpPct)}%)</span>
           </div>
           <div className="bar-track h-2 bg-[#11192e] rounded-full overflow-hidden">
@@ -648,45 +649,45 @@ const MonsterDetailModal: React.FC<{
 
         <div className="grid grid-cols-4 gap-1.5 text-center font-mono">
           <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f]">
-            <span className="text-[9px] text-[#8b9bb4] block">공격력</span>
+            <span className="text-[9px] text-[#8b9bb4] block">{tr('공격력')}</span>
             <span className="text-xs font-bold text-[#ef5350]">{monster.atk}</span>
           </div>
           <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f]">
-            <span className="text-[9px] text-[#8b9bb4] block">방어력</span>
+            <span className="text-[9px] text-[#8b9bb4] block">{tr('방어력')}</span>
             <span className="text-xs font-bold text-[#42a5f5]">{monster.def}</span>
           </div>
           <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f]">
-            <span className="text-[9px] text-[#8b9bb4] block">속도</span>
+            <span className="text-[9px] text-[#8b9bb4] block">{tr('속도')}</span>
             <span className="text-xs font-bold text-[#ffd54f]">{monster.spd}</span>
           </div>
           <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f]">
-            <span className="text-[9px] text-[#8b9bb4] block">행운</span>
+            <span className="text-[9px] text-[#8b9bb4] block">{tr('행운')}</span>
             <span className="text-xs font-bold text-[#ab47bc]">🍀 {monster.luck}</span>
           </div>
         </div>
 
         <div className="px-2.5 py-1.5 rounded-lg bg-[#0d0f14] border border-[#1e2d45] text-[10px] text-[#8b9bb4] flex justify-between">
-          <span>치명타: <strong className="text-[#ce93d8]">{gm.getCritChance(monster.luck).toFixed(1)}%</strong></span>
-          <span>상태이상 저항: <strong className="text-[#38ef7d]">{Math.min(50, monster.luck * 0.35).toFixed(1)}%</strong></span>
-          <span>회피보정: <strong className="text-[#ffd54f]">+{Math.min(70, monster.luck * 0.3).toFixed(1)}%</strong></span>
+          <span>{tr('치명타:')} <strong className="text-[#ce93d8]">{gm.getCritChance(monster.luck).toFixed(1)}%</strong></span>
+          <span>{tr('상태이상 저항:')} <strong className="text-[#38ef7d]">{Math.min(50, monster.luck * 0.35).toFixed(1)}%</strong></span>
+          <span>{tr('회피보정:')} <strong className="text-[#ffd54f]">+{Math.min(70, monster.luck * 0.3).toFixed(1)}%</strong></span>
         </div>
 
         {monster.data.faction && MONSTER_FACTION_META[monster.data.faction] && (
           <div className="px-2.5 py-1.5 rounded-lg bg-[#0d0f14] border border-[#1e2d45] text-[10px] flex items-center justify-between">
-            <span className="text-[#8b9bb4]">마법 계열 상성:</span>
+            <span className="text-[#8b9bb4]">{tr('마법 계열 상성:')}</span>
             <span className="font-bold" style={{ color: MONSTER_FACTION_META[monster.data.faction].color }}>
               {monster.data.faction === 'undead' || monster.data.faction === 'corrupted'
-                ? '✨ 신성 마법 피격 시 +20% 추가 피해'
+                ? tr('✨ 신성 마법 피격 시 +20% 추가 피해')
                 : monster.data.faction === 'beast'
-                ? '🔮 암흑 마법 피격 시 +20% 추가 피해'
-                : '⚙️ 원소 마법 상태이상 / 물리 공격에 균형 대응'}
+                ? tr('🔮 암흑 마법 피격 시 +20% 추가 피해')
+                : tr('⚙️ 원소 마법 상태이상 / 물리 공격에 균형 대응')}
             </span>
           </div>
         )}
 
         {monster.data.description && (
           <div className="p-2 rounded-lg bg-[#11192e] border border-[#22324f] text-xs text-[#8b9bb4] leading-relaxed">
-            {monster.data.description}
+            {tr(monster.data.description)}
           </div>
         )}
 
@@ -708,41 +709,41 @@ const MonsterDetailModal: React.FC<{
               <div className="text-[11px] font-bold text-[#ff7043] flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <span>🗡️</span>
-                  <span>고유 특수 능력 (Special Stats)</span>
+                  <span>{tr('고유 특수 능력 (Special Stats)')}</span>
                 </span>
-                <span className="text-[9px] text-[#8b9bb4]">전투 패널 미표기 고유 스탯</span>
+                <span className="text-[9px] text-[#8b9bb4]">{tr('전투 패널 미표기 고유 스탯')}</span>
               </div>
               <div className="grid grid-cols-2 gap-1.5 text-xs">
                 {pierceVal > 0 && (
                   <div className="p-2 rounded bg-[#1a1322] border border-[#ff174444] flex flex-col gap-0.5">
                     <div className="flex items-center justify-between font-bold text-[#ff5252]">
-                      <span>🗡️ 방어 관통</span>
+                      <span>{tr('🗡️ 방어 관통')}</span>
                       <span className="font-mono text-sm">{pierceVal}%</span>
                     </div>
                     <div className="text-[10px] text-[#cfd8dc] leading-tight">
-                      아군의 방어력을 {pierceVal}% 무시하고 타격
+                      {tr(`아군의 방어력을 ${pierceVal}% 무시하고 타격`)}
                     </div>
                   </div>
                 )}
                 {drainVal > 0 && (
                   <div className="p-2 rounded bg-[#1f121d] border border-[#e91e6344] flex flex-col gap-0.5">
                     <div className="flex items-center justify-between font-bold text-[#ff4081]">
-                      <span>🩸 생명력 흡혈</span>
+                      <span>{tr('🩸 생명력 흡혈')}</span>
                       <span className="font-mono text-sm">{drainVal}%</span>
                     </div>
                     <div className="text-[10px] text-[#cfd8dc] leading-tight">
-                      가한 실제 피해의 {drainVal}%만큼 체력 회복
+                      {tr(`가한 실제 피해의 ${drainVal}%만큼 체력 회복`)}
                     </div>
                   </div>
                 )}
                 {shieldBreakVal > 0 && (
                   <div className="p-2 rounded bg-[#1f1912] border border-[#ff980044] flex flex-col gap-0.5">
                     <div className="flex items-center justify-between font-bold text-[#ffb74d]">
-                      <span>🛡️ 보호막 분쇄</span>
+                      <span>{tr('🛡️ 보호막 분쇄')}</span>
                       <span className="font-mono text-sm">x{shieldBreakVal}</span>
                     </div>
                     <div className="text-[10px] text-[#cfd8dc] leading-tight">
-                      보호막 타격 시 {shieldBreakVal}배 증폭 피해
+                      {tr(`보호막 타격 시 ${shieldBreakVal}배 증폭 피해`)}
                     </div>
                   </div>
                 )}
@@ -753,24 +754,24 @@ const MonsterDetailModal: React.FC<{
 
         <div className="p-2.5 rounded-lg bg-[#11192e] border border-[#22324f] flex flex-col gap-1.5">
           <div className="text-[11px] font-bold text-[#c8aa6e] flex items-center justify-between">
-            <span>✨ 활성화된 상태이상 / 버프 / 디버프</span>
+            <span>{tr('✨ 활성화된 상태이상 / 버프 / 디버프')}</span>
             <span className="text-[10px] text-[#8b9bb4] font-mono">
-              {monster.statusEffects.length + (monster.isGroggy ? 1 : 0)}개 활성
+              {monster.statusEffects.length + (monster.isGroggy ? 1 : 0)}{tr('개 활성')}
             </span>
           </div>
           {monster.statusEffects.length === 0 && !monster.isGroggy ? (
-            <div className="text-[11px] text-[#546e7a] py-1">현재 부여된 상태이상이나 버프/디버프가 없습니다.</div>
+            <div className="text-[11px] text-[#546e7a] py-1">{tr('현재 부여된 상태이상이나 버프/디버프가 없습니다.')}</div>
           ) : (
             <div className="flex flex-col gap-1">
               {monster.isGroggy && (
                 <div className="p-1.5 rounded bg-[#2b2210] border border-[#ffd54f55] flex items-center justify-between text-xs animate-pulse">
                   <div className="flex items-center gap-1.5">
                     <span className="text-base">💫</span>
-                    <span className="font-bold text-[#ffd54f]">그로기 (Groggy)</span>
-                    <span className="text-[10px] text-[#cfd8dc]">(차징 브레이크: 받는 피해 +50%)</span>
+                    <span className="font-bold text-[#ffd54f]">{tr('그로기 (Groggy)')}</span>
+                    <span className="text-[10px] text-[#cfd8dc]">{tr('(차징 브레이크: 받는 피해 +50%)')}</span>
                   </div>
                   <span className="text-[10px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#0d1424] text-[#ffd54f]">
-                    행동 불가
+                    {tr('행동 불가')}
                   </span>
                 </div>
               )}
@@ -780,11 +781,11 @@ const MonsterDetailModal: React.FC<{
                   <div key={idx} className="p-1.5 rounded bg-[#162035] border border-[#273859] flex items-center justify-between text-xs">
                     <div className="flex items-center gap-1.5">
                       <GameIcon name={se.type} icon={meta.icon} size={16} />
-                      <span className="font-bold" style={{ color: meta.color }}>{meta.label}</span>
-                      <span className="text-[10px] text-[#cfd8dc]">({meta.desc || `${se.magnitude || ''}`})</span>
+                      <span className="font-bold" style={{ color: meta.color }}>{tr(meta.label)}</span>
+                      <span className="text-[10px] text-[#cfd8dc]">({tr(meta.desc) || `${se.magnitude || ''}`})</span>
                     </div>
                     <span className="text-[10px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#0d1424] text-[#ffd54f]">
-                      남은 턴: {se.turnsLeft}턴
+                      {tr('남은 턴:')} {se.turnsLeft}{tr('턴')}
                     </span>
                   </div>
                 );
@@ -795,7 +796,7 @@ const MonsterDetailModal: React.FC<{
 
         {monster.data.skills && monster.data.skills.length > 0 && (
           <div className="p-2.5 rounded-lg bg-[#11192e] border border-[#22324f] flex flex-col gap-1.5">
-            <div className="text-[11px] font-bold text-[#ffd54f]">⚔️ 몬스터 사용 스킬</div>
+            <div className="text-[11px] font-bold text-[#ffd54f]">{tr('⚔️ 몬스터 사용 스킬')}</div>
             <div className="flex flex-col gap-1">
               {monster.data.skills.map((sk, idx) => {
                 const skPierce = sk.piercePct ? Math.round(sk.piercePct <= 1 ? sk.piercePct * 100 : sk.piercePct) : 0;
@@ -804,21 +805,21 @@ const MonsterDetailModal: React.FC<{
                   <div key={idx} className="p-1.5 rounded bg-[#162035] border border-[#273859] text-xs">
                     <div className="flex justify-between font-bold text-white mb-0.5">
                       <span className="flex items-center gap-1.5 flex-wrap">
-                        <span>{sk.name}</span>
+                        <span>{tr(sk.name)}</span>
                         {skPierce > 0 && (
                           <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#ff174422] text-[#ff5252] border border-[#ff174444]">
-                            관통 {skPierce}%
+                            {tr('관통')} {skPierce}%
                           </span>
                         )}
                         {skDrain > 0 && (
                           <span className="text-[8px] px-1 py-0.2 rounded font-bold bg-[#e91e6322] text-[#ff4081] border border-[#e91e6344]">
-                            흡혈 {skDrain}%
+                            {tr('흡혈')} {skDrain}%
                           </span>
                         )}
                       </span>
-                      <span className="text-[#38ef7d] font-mono shrink-0">{Math.round((sk.power || 1.0) * 100)}% 위력</span>
+                      <span className="text-[#38ef7d] font-mono shrink-0">{Math.round((sk.power || 1.0) * 100)}% {tr('위력')}</span>
                     </div>
-                    <div className="text-[10px] text-[#8b9bb4]">{sk.description}</div>
+                    <div className="text-[10px] text-[#8b9bb4]">{tr(sk.description)}</div>
                   </div>
                 );
               })}
@@ -827,7 +828,7 @@ const MonsterDetailModal: React.FC<{
         )}
 
         <div className="flex justify-end pt-1">
-          <button className="btn btn-ghost text-xs px-4 py-1.5" onClick={onClose}>닫기</button>
+          <button className="btn btn-ghost text-xs px-4 py-1.5" onClick={onClose}>{tr('닫기')}</button>
         </div>
       </div>
     </div>
@@ -7625,7 +7626,7 @@ export const BattleScreen: React.FC = () => {
                         border: `1px solid ${!isAlive ? '#26323844' : idx < 2 ? '#ef535044' : '#42a5f544'}`
                       }}
                     >
-                      {idx < 2 ? '전열' : '후열'}
+                      {idx < 2 ? tr('전열') : tr('후열')}
                     </span>
                     <span
                       className="font-bold text-xs truncate"
@@ -7635,7 +7636,7 @@ export const BattleScreen: React.FC = () => {
                         textDecoration: !isAlive ? 'line-through' : undefined
                       }}
                     >
-                      {m.data.name}
+                      {tr(m.data.name)}
                     </span>
                   </div>
                   <div className="flex items-center gap-0.5 shrink-0">
@@ -7645,13 +7646,13 @@ export const BattleScreen: React.FC = () => {
                         color: !isAlive ? '#607d8b' : hpPct > 50 ? '#38ef7d' : hpPct > 25 ? '#ffd54f' : '#ef5350'
                       }}
                     >
-                      {isAlive ? `${Math.round(m.currentHp)}` : '💀 사망'}
+                      {isAlive ? `${Math.round(m.currentHp)}` : `💀 ${tr('사망')}`}
                     </span>
                     {isAlive && (
                       <button
                         type="button"
                         className="text-[10px] text-[#8b9bb4] hover:text-[#c8aa6e] p-0.5"
-                        title="몬스터 정보 (홀드로도 확인 가능)"
+                        title={tr('몬스터 정보 (홀드로도 확인 가능)')}
                         onClick={(e) => {
                           e.stopPropagation();
                           setInspectedMonster(m);

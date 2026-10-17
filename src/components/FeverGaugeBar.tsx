@@ -3,6 +3,7 @@ import { FeverBadgeType } from '../types/fever';
 import { FEVER_BADGE_META, evaluateFeverSynergy } from '../utils/feverUtils';
 import { Mercenary } from '../types/game';
 import { GameIcon } from './GameIcon';
+import { useI18n } from '../hooks/useI18n';
 
 interface FeverGaugeBarProps {
   badges: FeverBadgeType[];
@@ -25,6 +26,7 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
   revealAll = false,
   showEffectDescription = true
 }) => {
+  const { tr } = useI18n();
   const maxSlots = 5;
   const isFull = (badges || []).length >= maxSlots;
   const isEnemy = side === 'enemy';
@@ -82,7 +84,7 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
               <div
                 key={idx}
                 className="relative group flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-[#7e57c288] bg-gradient-to-br from-[#211233] to-[#120a1c] shadow-[0_0_8px_rgba(126,87,194,0.3)] transition-all duration-200 animate-pulse cursor-help"
-                title="[블러핑 슬롯] 피버 콜 시 전광판에 공개됩니다."
+                title={tr('[블러핑 슬롯] 피버 콜 시 전광판에 공개됩니다.')}
               >
                 <span className="text-xs font-black text-[#d1c4e9]">❓</span>
                 <span className="absolute -bottom-1 text-[7.5px] font-mono font-black px-1 rounded-sm bg-[#000000ee] text-[#b39ddb] tracking-tighter">
@@ -98,7 +100,7 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
                   borderColor: meta.borderColor,
                   boxShadow: isFull ? `0 0 10px ${meta.color}66` : undefined
                 }}
-                title={`[${meta.label}] ${meta.description}`}
+                title={`[${tr(meta.label)}] ${tr(meta.description)}`}
               >
                 <GameIcon name={`badge_${meta.type}`} icon={meta.icon} size={16} />
                 <span className="absolute -bottom-1 text-[8px] font-black px-1 rounded-sm bg-[#000000dd] text-white tracking-tighter">
@@ -122,16 +124,16 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
             <div className="flex flex-col items-end animate-pulse">
               <span className="text-[10px] sm:text-xs font-black text-[#ffd54f] flex items-center gap-1">
                 <GameIcon name={`fever_${synergy.id}`} icon={synergy.icon} size={13} />
-                <span>{synergy.name}</span>
+                <span>{tr(synergy.name)}</span>
               </span>
             </div>
           ) : badges.length > 0 ? (
             <div className="text-[9px] text-[#80d8ff] font-medium hidden sm:block">
-              {maxSlots - badges.length}개 추가 시 FEVER 완충
+              {tr(`${maxSlots - badges.length}개 추가 시 FEVER 완충`)}
             </div>
           ) : (
             <span className="text-[9px] text-[#546e7a] font-normal hidden sm:block">
-              전술 모멘텀으로 뱃지 수집
+              {tr('전술 모멘텀으로 뱃지 수집')}
             </span>
           )}
         </div>
@@ -141,8 +143,8 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
       {showEffectDescription && isFull && (
         <div className="mt-1 pt-1 border-t border-[#ffd54f33] flex items-center justify-between text-[10px] text-[#fff9c4] px-0.5 animate-fade-in">
           <div className="flex items-center gap-1.5 truncate min-w-0">
-            <span className="font-extrabold text-[#ffd54f] shrink-0">★ 효과:</span>
-            <span className="truncate text-[#fff59d] font-semibold">{synergy.summary}</span>
+            <span className="font-extrabold text-[#ffd54f] shrink-0">{tr('★ 효과:')}</span>
+            <span className="truncate text-[#fff59d] font-semibold">{tr(synergy.summary)}</span>
           </div>
           <span className="text-[9px] text-[#ffd54f] font-mono font-black shrink-0 ml-1 tracking-wider animate-pulse">
             FEVER READY
