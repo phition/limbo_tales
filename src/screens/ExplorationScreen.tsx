@@ -500,20 +500,20 @@ export const ExplorationScreen: React.FC = () => {
     if (!nextId) {
       setTutorialStepId('');
       try {
-        localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: true, isSkipped: false }));
+        localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: true, isSkipped: false, hasStarted: true }));
       } catch {}
       return;
     }
     setTutorialStepId(nextId);
     try {
-      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: nextId, isCompleted: false, isSkipped: false }));
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: nextId, isCompleted: false, isSkipped: false, hasStarted: true }));
     } catch {}
   };
 
   const handleSkipTutorial = () => {
     setTutorialStepId('');
     try {
-      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: false, isSkipped: true }));
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: false, isSkipped: true, hasStarted: true }));
     } catch {}
   };
 

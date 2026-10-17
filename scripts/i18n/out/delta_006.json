@@ -1,0 +1,38 @@
+{
+  "🛡️ 포지션 설정 완료": {
+    "en": "🛡️ Position Setup Completed",
+    "ja": "🛡️ ポジション設定完了"
+  },
+  "1단계: 무료 배낭 [가벼운 백팩(12칸)]을 터치하여 선택하세요!": {
+    "en": "Step 1: Tap the free backpack [Light Backpack (12 slots)] to select it!",
+    "ja": "ステップ1：無料のリュック【軽めのバックパック(12枠)】をタップして選択してください！"
+  },
+  "2단계: [기본 (1,1,1,닻1)] 버튼을 눌러 필수 보급품을 1개씩 담으세요!": {
+    "en": "Step 2: Tap the [Basic (1,1,1,Anchor1)] button to pack 1 of each essential supply!",
+    "ja": "ステップ2：【基本(1,1,1,錨1)】ボタンを押して必須補給品を1つずつ詰めましょう！"
+  },
+  "채비 완료! 하단의 [진입 구역 선택 ▶]을 눌러 출격 준비를 마치세요!": {
+    "en": "Preparations complete! Tap [Select Entry Area ▶] at the bottom to finish readiness!",
+    "ja": "準備完了！下部の【進入区域選択 ▶】を押して出撃準備を完了させてください！"
+  },
+  "진입 위치 선택 ▶": {
+    "en": "Select Entry Point ▶",
+    "ja": "進入位置選択 ▶"
+  },
+  "◀ 채비 수정하기": {
+    "en": "◀ Edit Preparations",
+    "ja": "◀ 準備を変更する"
+  },
+  "경계 지휘": {
+    "en": "Vigilant Command",
+    "ja": "警戒指揮"
+  },
+  "안도 / 격려": {
+    "en": "Relief / Encouragement",
+    "ja": "安堵／激励"
+  },
+  "주의 / 염려": {
+    "en": "Caution / Concern",
+    "ja": "注意／懸念"
+  }
+}

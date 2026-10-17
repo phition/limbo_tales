@@ -292,6 +292,23 @@ export class I18nService {
       return res;
     }
 
+    // 2.35 대괄호 상태/장비 접두 태그 분리 번역 (예: "[침식된] 수습 대장장이의 철검", "[저주받은] 단검", "[전설] 흑철 검")
+    const bracketPrefixMatch = trimmed.match(/^(\[[^\]]+\])\s*(.+)$/);
+    if (bracketPrefixMatch) {
+      const prefix = bracketPrefixMatch[1].trim();
+      const restText = bracketPrefixMatch[2].trim();
+      // 긴 줄글/시스템 로그가 아닌 아이템명 또는 짧은 상태명 형태인 경우 (50자 이하)
+      if (!restText.includes('\n') && restText.length <= 50) {
+        const trPrefix = this.tr(prefix, lang);
+        const trRest = this.tr(restText, lang);
+        if ((trPrefix && trPrefix !== prefix) || (trRest && trRest !== restText)) {
+          const res = text.replace(trimmed, `${trPrefix} ${trRest}`);
+          this.translationCache.set(cacheKey, res);
+          return res;
+        }
+      }
+    }
+
     // 3. 동적 전투/탐험 로그 정규식 패턴 검사
     for (const p of LOG_PATTERNS) {
       const match = text.match(p.pattern);

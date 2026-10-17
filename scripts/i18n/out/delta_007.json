@@ -1,0 +1,314 @@
+{
+  "[침식된]": {
+    "en": "[Corrupted]",
+    "ja": "[侵蝕された]"
+  },
+  "침식된": {
+    "en": "Corrupted",
+    "ja": "侵蝕された"
+  },
+  "[저주받은]": {
+    "en": "[Cursed]",
+    "ja": "[呪われた]"
+  },
+  "저주받은": {
+    "en": "Cursed",
+    "ja": "呪われた"
+  },
+  "[정화된]": {
+    "en": "[Purified]",
+    "ja": "[浄化された]"
+  },
+  "정화된": {
+    "en": "Purified",
+    "ja": "浄化された"
+  },
+  "[봉인된]": {
+    "en": "[Sealed]",
+    "ja": "[封印された]"
+  },
+  "봉인된": {
+    "en": "Sealed",
+    "ja": "封印された"
+  },
+  "[축복받은]": {
+    "en": "[Blessed]",
+    "ja": "[祝福された]"
+  },
+  "축복받은": {
+    "en": "Blessed",
+    "ja": "祝福された"
+  },
+  "[오염된]": {
+    "en": "[Tainted]",
+    "ja": "[汚染された]"
+  },
+  "오염된": {
+    "en": "Tainted",
+    "ja": "汚染された"
+  },
+  "[심연에 침식된 장비]": {
+    "en": "[Abyss-Corrupted Equipment]",
+    "ja": "[深淵に侵蝕された装備]"
+  },
+  "[심연에 침식된 장구]": {
+    "en": "[Abyss-Corrupted Gear]",
+    "ja": "[深淵に侵蝕された装具]"
+  },
+  "침식된 장구": {
+    "en": "Corrupted Gear",
+    "ja": "侵蝕された装具"
+  },
+  "[침식 장비 획득]": {
+    "en": "[Corrupted Equipment Acquired]",
+    "ja": "[侵蝕装備獲得]"
+  },
+  "침식 장비 획득": {
+    "en": "Corrupted Equipment Acquired",
+    "ja": "侵蝕装備獲得"
+  },
+  "병기창 정화 필요": {
+    "en": "Requires Armory Purification",
+    "ja": "兵器廠浄化必要"
+  },
+  "[착용 불가]": {
+    "en": "[Cannot Equip]",
+    "ja": "[装備不可]"
+  },
+  "[정화 실패]": {
+    "en": "[Purification Failed]",
+    "ja": "[浄化失敗]"
+  },
+  "[정화 대성공]": {
+    "en": "[Purification Success]",
+    "ja": "[浄化大成功]"
+  },
+  "정화 대성공": {
+    "en": "Purification Success",
+    "ja": "浄化大成功"
+  },
+  "정화 실패": {
+    "en": "Purification Failed",
+    "ja": "浄化失敗"
+  },
+  "침식되거나 저주받은 장비가 아닙니다.": {
+    "en": "This equipment is neither corrupted nor cursed.",
+    "ja": "侵蝕または呪われた装備ではありません。"
+  },
+  "[심연에 침식된 장비] 사악한 마기에 오염되어 장착할 수 없습니다. 병기창 정화 시설에서 정화해야 합니다.": {
+    "en": "[Abyss-Corrupted Equipment] Tainted by wicked demonic energy; cannot be equipped. Must be purified at the Armory.",
+    "ja": "[深淵に侵蝕された装備] 邪悪な魔気に汚染され装備できません。兵器廠の浄化施設で浄化する必要があります。"
+  },
+  "수습": {
+    "en": "Salvage",
+    "ja": "回収"
+  },
+  "수습완료": {
+    "en": "Salvaged",
+    "ja": "回収完了"
+  },
+  "수습 완료": {
+    "en": "Salvage Complete",
+    "ja": "回収完了"
+  },
+  "수습했습니다": {
+    "en": "Salvaged",
+    "ja": "回収しました"
+  },
+  "수습했습니다.": {
+    "en": "Salvaged.",
+    "ja": "回収しました。"
+  },
+  "유해 수습": {
+    "en": "Recover Remains",
+    "ja": "遺骸回収"
+  },
+  "군번줄 수습": {
+    "en": "Retrieve Dogtags",
+    "ja": "認識票回収"
+  },
+  "보물 수습": {
+    "en": "Salvage Treasure",
+    "ja": "宝物回収"
+  },
+  "자원 수습": {
+    "en": "Salvage Resources",
+    "ja": "資源回収"
+  },
+  "[보물 수습]": {
+    "en": "[Salvage Treasure]",
+    "ja": "[宝物回収]"
+  },
+  "[맨손 채굴]": {
+    "en": "[Barehand Mining]",
+    "ja": "[素手採掘]"
+  },
+  "[맨손 채굴 완료]": {
+    "en": "[Barehand Mining Complete]",
+    "ja": "[素手採掘完了]"
+  },
+  "[우회로 정비]": {
+    "en": "[Detour Cleared]",
+    "ja": "[迂回路整備]"
+  },
+  "[과부하 발파]": {
+    "en": "[Overload Blasting]",
+    "ja": "[過負荷発破]"
+  },
+  "영목 파편": {
+    "en": "Timber Fragment",
+    "ja": "霊木の破片"
+  },
+  "석재 조각": {
+    "en": "Stone Shard",
+    "ja": "石材の欠片"
+  },
+  "녹슨 철조각": {
+    "en": "Rusted Iron Fragment",
+    "ja": "錆びた鉄片"
+  },
+  "떨어진 골드": {
+    "en": "Dropped Gold",
+    "ja": "落ちていたゴールド"
+  },
+  "낡은 군번줄": {
+    "en": "Worn Dogtag",
+    "ja": "古びた認識票"
+  },
+  "낡은 군번줄 수습": {
+    "en": "Retrieve Worn Dogtag",
+    "ja": "古びた認識票回収"
+  },
+  "심연의 흔적 속에서 50골드를 수습했습니다.": {
+    "en": "Salvaged 50 Gold amidst traces of the Abyss.",
+    "ja": "深淵の痕跡の中から50ゴールドを回収しました。"
+  },
+  "수습 검사 루키": {
+    "en": "Apprentice Swordsman Rookie",
+    "ja": "見習い剣士ルーキー"
+  },
+  "수습 대장장이의 입문 장구": {
+    "en": "Apprentice Blacksmith's Starter Kit",
+    "ja": "見習い鍛冶屋の入門装具"
+  },
+  "수습 대장장이의 철검": {
+    "en": "Apprentice Blacksmith's Iron Sword",
+    "ja": "見習い鍛冶屋の鉄剣"
+  },
+  "수습 대장장이의 창": {
+    "en": "Apprentice Blacksmith's Spear",
+    "ja": "見習い鍛冶屋の槍"
+  },
+  "수습 목재 장궁": {
+    "en": "Apprentice Wooden Longbow",
+    "ja": "見習い木製長弓"
+  },
+  "수습 원목 지팡이": {
+    "en": "Apprentice Wooden Staff",
+    "ja": "見習い原木杖"
+  },
+  "수습 단검": {
+    "en": "Apprentice Dagger",
+    "ja": "見習い短剣"
+  },
+  "수습 가죽 갑옷": {
+    "en": "Apprentice Leather Armor",
+    "ja": "見習い革鎧"
+  },
+  "수습 판금 갑옷": {
+    "en": "Apprentice Plate Armor",
+    "ja": "見習い板金鎧"
+  },
+  "수습 마나 로브": {
+    "en": "Apprentice Mana Robe",
+    "ja": "見習いマナローブ"
+  },
+  "2층 납골당의 무덤 틈새에서 수습한 3장의 쪽지로 완성한 비가.": {
+    "en": "An elegy completed from 3 notes salvaged from the crevices of tombs in the 2F Charnel House.",
+    "ja": "2層納骨堂の墓の隙間から回収した3枚の手記で完成した悲歌。"
+  },
+  "10층 최심부, 종말의 군주 아스모데우스의 옥좌 밑에서 수습한 5장의 고대 쪽지.": {
+    "en": "5 ancient notes salvaged beneath the throne of Asmodeus, Lord of the End, on the 10F deepest floor.",
+    "ja": "10層最深部、終末の君主アスモデウスの玉座の下から回収した5枚の古代手記。"
+  },
+  "성채 묘지에 잠든 결사대원들의 숭고한 넋을 기리고 비문을 수습하여 기록한 서사록. (최초로 영웅이 전사하여 묘비명이 새겨져야 등록 가능)": {
+    "en": "An epic chronicle recording epitaphs collected in honor of fallen heroes resting in the Citadel Cemetery. (Can only be registered after a hero falls and receives an epitaph)",
+    "ja": "城塞墓地に眠る決死隊員たちの崇高な魂を讃え、碑文を回収して記録した叙事録。（初めて英雄が戦死し墓碑銘が刻まれると登録可能）"
+  },
+  "1층 척후병의 유언 수습 ➔ 3층 보급관 엘릭 접선 ➔ 8층 기사단장 베른하르트 결판으로 이어지는 3단계 대형 연계 서사입니다.": {
+    "en": "A 3-stage linked epic narrative spanning from recovering the 1F scout's last words to meeting Quartermaster Elric on 3F and confronting Commander Bernhard on 8F.",
+    "ja": "1層斥候兵の遺言回収 ➔ 3層補給官エルリックと接触 ➔ 8層騎士団長ベルンハルトとの決着へと繋がる3段階の大型連続叙事です。"
+  },
+  "[1단계] 1층 침묵의 회랑: 쓰러진 척후병 루카스의 군번줄 수습": {
+    "en": "[Step 1] 1F Corridor of Silence: Retrieve fallen scout Lucas's dogtag",
+    "ja": "[第1段階] 1層沈黙の回廊：倒れた斥候兵ルーカスの認識票を回収"
+  },
+  "4층 크로노스 회중시계 조각 수습 ➔ 5층 시간 앵커 정렬 ➔ 11층 시간 종착역 아르케오스 대면으로 이어지는 3단계 연계 서사입니다.": {
+    "en": "A 3-stage linked narrative spanning from recovering the 4F Chronos pocket watch fragment to aligning the 5F Time Anchor and confronting Archeos at the 11F End of Time.",
+    "ja": "4層クロノス懐中時計の欠片回収 ➔ 5層タイムアンカー整列 ➔ 11層時間の終着駅アルケオス対面へと繋がる3段階の連続叙事です。"
+  },
+  "[1단계] 4층 거울의 미궁: 심연의 균열에서 차원의 태엽 부품 수습 및 크로노스 접선": {
+    "en": "[Step 1] 4F Mirror Labyrinth: Retrieve dimensional gear parts from abyssal rift and contact Chronos",
+    "ja": "[第1段階] 4層鏡の迷宮：深淵の亀裂から次元のゼンマイ部品を回収しクロノスと接触"
+  },
+  "⚡ [진척도 가속] 경보 룬 고의 격발 (위험도 +20 상승 / 이번 원정 동안 공격력 +15% 가호 / 군번줄 수습)": {
+    "en": "⚡ [Progress Accelerated] Deliberately trigger alarm rune (Hazard +20 / ATK +15% blessing for expedition / Retrieve Dogtags)",
+    "ja": "⚡ [進捗加速] 警報ルーン故意撃発（危険度+20上昇 / 今回遠征中攻撃力+15%加護 / 認識票回収）"
+  },
+  "⚡ [진척도 급가속] 경보 룬을 격발하여 마물들을 유인했습니다! (위험도 +20, 이번 원정 동안 파티 공격력 +15% 가호, 낡은 군번줄 수습)": {
+    "en": "⚡ [Rapid Progress Acceleration] Triggered alarm rune to lure monsters! (Hazard +20, party ATK +15% blessing for expedition, retrieved worn dogtag)",
+    "ja": "⚡ [進捗急加速] 警報ルーンを撃発して魔物を誘引しました！（危険度+20、今回遠征中パーティ攻撃力+15%加護、古びた認識票回収）"
+  },
+  "🛡️ [안전 파밍] 은밀하게 유해 수습 (위험도 -15 감소 / 붕대 ×2, 골드 15G 수습)": {
+    "en": "🛡️ [Safe Farming] Covertly recover remains (Hazard -15 / Bandage x2, 15G salvaged)",
+    "ja": "🛡️ [安全ファーミング] 密かに遺骸回収（危険度-15減少 / 包帯×2、15G回収）"
+  },
+  "🛡️ [안전 파밍] 불길로 이끼를 태워 마기 방출을 차단했습니다. (위험도 -15 감소, 심연 약초 ×5, ✨에테르 +15 수습)": {
+    "en": "🛡️ [Safe Farming] Burned moss with flames to block miasma. (Hazard -15, Abyssal Herb x5, ✨Ether +15 salvaged)",
+    "ja": "🛡️ [安全ファーミング] 炎で苔を焼き魔気の放出を遮断しました。（危険度-15減少、深淵薬草×5、✨エーテル+15回収）"
+  },
+  "🛡️ [안전 파밍] 우회 통로로 폐기 무기 수습 (위험도 -20 감소 / ⚙️ 철광석 ×15, 🪙 150G)": {
+    "en": "🛡️ [Safe Farming] Salvage discarded weapons via detour (Hazard -20 / ⚙️ Iron Ore x15, 🪙 150G)",
+    "ja": "🛡️ [安全ファーミング] 迂回路で廃棄武器回収（危険度-20減少 / ⚙️鉄鉱石×15、🪙150G）"
+  },
+  "🎁 [보물 수습] 고대의 보물 상자 개봉 (🪙 150G, ✨ 에테르 50, 순수 인챈트석 1개)": {
+    "en": "🎁 [Salvage Treasure] Open ancient treasure chest (🪙 150G, ✨ Ether 50, Pure Enchantment Stone x1)",
+    "ja": "🎁 [宝物回収] 古代の宝箱を開封（🪙150G、✨エーテル50、純粋なエンチャント石1個）"
+  },
+  "✨ [안식처] 고대의 보물 상자에서 150G, 에테르 50, 순수 인챈트석을 수습했습니다!": {
+    "en": "✨ [Sanctuary] Salvaged 150G, 50 Ether, and Pure Enchantment Stone from an ancient treasure chest!",
+    "ja": "✨ [安息所] 古代の宝箱から150G、エーテル50、純粋なエンチャント石を回収しました！"
+  },
+  "안치 잠금 (새 유해가 들어와도 밀려나지 않음)": {
+    "en": "Interment Lock (Will not be replaced when new remains arrive)",
+    "ja": "安置ロック（新しい遺骸が来ても押し出されない）"
+  },
+  "시공 침식": {
+    "en": "Spacetime Corruption",
+    "ja": "時空侵蝕"
+  },
+  "시공의 침식자": {
+    "en": "Corruptor of Spacetime",
+    "ja": "時空の侵蝕者"
+  },
+  "시공의 침식자, 네메시스": {
+    "en": "Nemesis, Corruptor of Spacetime",
+    "ja": "時空の侵蝕者ネメシス"
+  },
+  "[시공 침식]": {
+    "en": "[Spacetime Corruption]",
+    "ja": "[時空侵蝕]"
+  },
+  "[시공 침식 저지 성공]": {
+    "en": "[Spacetime Corruption Thwarted]",
+    "ja": "[時空侵蝕阻止成功]"
+  },
+  "🛡️ [시공 침식 저지 성공] 지난 6시간 동안 네메시스에게 체력의 1/24 이상의 피해를 입혀 차원 약탈을 무력화하고 영지를 방어했습니다!": {
+    "en": "🛡️ [Spacetime Corruption Thwarted] Dealt over 1/24 of Nemesis's max HP over the past 6 hours, neutralizing dimensional pillaging and defending the citadel!",
+    "ja": "🛡️ [時空侵蝕阻止成功] 過去6時間でネメシスにHPの1/24以上のダメージを与え、次元略奪を無力化して領地を防衛しました！"
+  },
+  "🛡️ [시공 침식] 네메시스의 영지 자원 약탈은 [휴무] 상태이므로 영지 자원 손실 없이 안전하게 방어되었습니다.": {
+    "en": "🛡️ [Spacetime Corruption] Nemesis's territory plunder is on [Rest], safely defending citadel resources without loss.",
+    "ja": "🛡️ [時空侵蝕] ネメシスの領地資源略奪は[休息]状態のため、領地資源の損失なく安全に防衛されました。"
+  }
+}

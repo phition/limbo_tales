@@ -293,12 +293,12 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide }
             }}
           >
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
-              <span className="text-xl p-1 rounded-lg bg-[#ffd54f22] text-[#ffd54f] shrink-0">📜</span>
+              <span className="text-xl p-1 rounded-lg bg-[#ffd54f22] text-[#ffd54f] shrink-0">🎬</span>
               <div className="min-w-0 flex-1">
                 <div className="font-bold text-xs text-white group-hover:text-[#ffd54f] transition-colors break-words">
-                  방주 프롤로그 서사 다시 보기
+                  방주 프롤로그 시네마틱 영상 다시 보기
                 </div>
-                <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">초반 세계관 및 작전 지침 서사</div>
+                <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">4막 구성의 세계관 시네마틱 컷씬 감상</div>
               </div>
             </div>
             <span className="text-xs text-[#ffd54f] shrink-0 ml-1.5">▶</span>

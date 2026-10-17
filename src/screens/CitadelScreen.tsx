@@ -10231,6 +10231,11 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               const isFullHp = hero.currentHp >= eff.maxHp;
               const isFullMp = infirmaryLv < 4 || hero.currentMp >= eff.maxMp;
               const isFullyRecovered = isFullHp && isFullMp;
+              const heroPortrait = CustomAssetService.getInstance().getMercenaryOverride(hero.classId)
+                || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
+                || (hero.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(hero.portraitPromptKey) : undefined)
+                || CustomAssetService.getInstance().getMercenaryOverride(hero.id)
+                || CustomAssetService.getInstance().getMercenaryOverride(hero.name);
 
               return (
                 <div
@@ -10253,8 +10258,17 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   </div>
 
                   <div className="flex items-center gap-2.5">
-                    <div className="text-2xl p-1.5 rounded-lg bg-[#182030] border border-[#24334a]">
-                      {cls?.skills[0]?.icon || '⚔️'}
+                    <div className="w-11 h-11 rounded-lg bg-[#182030] border border-[#24334a] overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
+                      {heroPortrait ? (
+                        <img
+                          src={heroPortrait}
+                          alt={hero.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                        />
+                      ) : (
+                        <span className="text-2xl">{cls?.skills[0]?.icon || '⚔️'}</span>
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5">
@@ -10390,6 +10404,11 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               const inParty = state.party.some(p => p.id === hero.id);
               const hpPct = Math.min(100, Math.round((hero.currentHp / eff.maxHp) * 100));
               const mpPct = Math.min(100, Math.round((hero.currentMp / eff.maxMp) * 100));
+              const heroPortrait = CustomAssetService.getInstance().getMercenaryOverride(hero.classId)
+                || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
+                || (hero.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(hero.portraitPromptKey) : undefined)
+                || CustomAssetService.getInstance().getMercenaryOverride(hero.id)
+                || CustomAssetService.getInstance().getMercenaryOverride(hero.name);
 
               return (
                 <div
@@ -10401,8 +10420,19 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       ? 'border-[#24334a] bg-[#0c101a]' : 'border-[#ef535044] bg-[#141b2b] hover:border-[#00d2ff]'
                   }`}
                 >
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <span className="text-xl">{cls?.skills[0]?.icon || '⚔️'}</span>
+                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                    <div className="w-8 h-8 rounded-lg bg-[#182030] border border-[#24334a] overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
+                      {heroPortrait ? (
+                        <img
+                          src={heroPortrait}
+                          alt={hero.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                        />
+                      ) : (
+                        <span className="text-lg">{cls?.skills[0]?.icon || '⚔️'}</span>
+                      )}
+                    </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
                         <span className="font-bold text-xs text-white truncate">{hero.name}</span>
@@ -13932,8 +13962,8 @@ export const ExploreDrawer: React.FC<{
             onClick={() => onAdvanceTutorial?.('TUTORIAL_PREP_SYNERGY')}
             className="btn btn-primary px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-black shadow-[0_0_25px_rgba(0,210,255,0.7)] bg-gradient-to-r from-[#00d2ff] via-[#0099ff] to-[#0055ff] text-white border-2 border-[#80e5ff] rounded-2xl flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95 transition-all"
           >
-            <span>🛡️ 포지션 설정 완료</span>
-            <span className="font-bold underline">다음: 시너지 확인 ▶</span>
+            <span>{tr('🛡️ 포지션 설정 완료')}</span>
+            <span className="font-bold underline">{tr('다음: 시너지 확인 ▶')}</span>
           </button>
         </div>
       )}
@@ -13944,17 +13974,17 @@ export const ExploreDrawer: React.FC<{
           {selectedBagId !== 'small' ? (
             <div className="p-2.5 rounded-xl bg-[#0e1626]/95 border-2 border-[#00d2ff] shadow-[0_4px_20px_rgba(0,210,255,0.4)] text-center text-xs font-bold text-[#00d2ff] animate-bounce flex items-center justify-center gap-2">
               <span>👉</span>
-              <span>1단계: 무료 배낭 [가벼운 백팩(12칸)]을 터치하여 선택하세요!</span>
+              <span>{tr('1단계: 무료 배낭 [가벼운 백팩(12칸)]을 터치하여 선택하세요!')}</span>
             </div>
           ) : !hasEssentialSupplies ? (
             <div className="p-2.5 rounded-xl bg-[#1e1507]/95 border-2 border-[#ffd54f] shadow-[0_4px_20px_rgba(255,213,79,0.5)] text-center text-xs font-bold text-[#ffd54f] animate-bounce flex items-center justify-center gap-2">
               <span>👉</span>
-              <span>2단계: [기본 (1,1,1,닻1)] 버튼을 눌러 필수 보급품을 1개씩 담으세요!</span>
+              <span>{tr('2단계: [기본 (1,1,1,닻1)] 버튼을 눌러 필수 보급품을 1개씩 담으세요!')}</span>
             </div>
           ) : (
             <div className="p-2.5 rounded-xl bg-[#092015]/95 border-2 border-[#38ef7d] shadow-[0_4px_20px_rgba(56,239,125,0.5)] text-center text-xs font-bold text-[#38ef7d] animate-pulse flex items-center justify-center gap-2">
               <span>✨</span>
-              <span>채비 완료! 하단의 [진입 구역 선택 ▶]을 눌러 출격 준비를 마치세요!</span>
+              <span>{tr('채비 완료! 하단의 [진입 구역 선택 ▶]을 눌러 출격 준비를 마치세요!')}</span>
             </div>
           )}
         </div>
@@ -13963,10 +13993,10 @@ export const ExploreDrawer: React.FC<{
       {/* 하단 비용 바 & 네비게이션 */}
       <div className="p-3 bg-[#080b11] border-t border-[#1f2738] shrink-0 flex items-center justify-between">
         <div>
-          <div className="text-[11px] text-[#8b9bb4]">총 채비 소모 자원</div>
+          <div className="text-[11px] text-[#8b9bb4]">{tr('총 채비 소모 자원')}</div>
           <div className="text-xs font-bold font-mono flex flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
             {Object.entries(totalCosts).length === 0 ? (
-              <span className="text-[#66bb6a]">소모 자원 없음</span>
+              <span className="text-[#66bb6a]">{tr('소모 자원 없음')}</span>
             ) : (
               Object.entries(totalCosts).map(([r, amt]) => {
                 const cur = resState[r] || 0;
@@ -14020,8 +14050,8 @@ export const ExploreDrawer: React.FC<{
             style={canAfford ? { background: 'linear-gradient(135deg, #1e0d2d 0%, #34144b 100%)', color: '#e2d4f0', border: '1px solid #5c2b8a', boxShadow: '0 3px 12px rgba(45, 15, 65, 0.4)' } : {}}
           >
             {gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id))
-              ? ('⚠️ 입원 환자 출전 불가')
-              : (partyCount < 3 ? ('⚠️ 3인 파티 필요') : ('진입 구역 선택 ▶'))}
+              ? tr('⚠️ 입원 환자 출전 불가')
+              : (partyCount < 3 ? tr('⚠️ 3인 파티 필요') : tr('진입 구역 선택 ▶'))}
           </button>
         ) : (
           <button
@@ -14033,7 +14063,7 @@ export const ExploreDrawer: React.FC<{
               }
             }}
           >
-            ◀ {'채비 수정하기'}
+            ◀ {tr('채비 수정하기')}
           </button>
         )}
       </div>
@@ -14149,24 +14179,24 @@ export const CitadelScreen: React.FC = () => {
   // 영지('citadel') 패널에서 개별 건물 패널로 진입한 경우에만 닫기 시 영지로 복귀, 그 외(바로가기 등)는 즉시 완전 닫기
   const [returnToCitadelOnClose, setReturnToCitadelOnClose] = useState<boolean>(false);
 
-  // ── 튜토리얼 상태 관리 (초반 강하까지 가이드) ──
+  // ── 튜토리얼 상태 관리 (프롤로그 확인 후 최초 1회만 발동) ──
   const [tutorialStepId, setTutorialStepId] = useState<string>(() => {
     try {
       const saved = localStorage.getItem('ark_tutorial_state');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.isCompleted || parsed.isSkipped) return '';
-        return parsed.currentStepId || 'TUTORIAL_WELCOME';
+        if (parsed.isCompleted || parsed.isSkipped || !parsed.hasStarted) return '';
+        return parsed.currentStepId || '';
       }
     } catch {}
-    return 'TUTORIAL_WELCOME';
+    return '';
   });
 
   const handleAdvanceTutorial = (nextId?: string) => {
     if (!nextId) {
       setTutorialStepId('');
       try {
-        localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: true, isSkipped: false }));
+        localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: true, isSkipped: false, hasStarted: true }));
       } catch {}
       SoundManager.getInstance().play('victory');
       gm.addLog('👑 [튜토리얼 완수] 첫 심연 정찰을 완벽히 마치고 정식 지휘관으로 임명되었습니다! 영지 시설을 발전시켜 심연을 정복하십시오!', 'reward');
@@ -14174,7 +14204,7 @@ export const CitadelScreen: React.FC = () => {
     }
     setTutorialStepId(nextId);
     try {
-      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: nextId, isCompleted: false, isSkipped: false }));
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: nextId, isCompleted: false, isSkipped: false, hasStarted: true }));
     } catch {}
 
     // 스텝 전환에 따른 자동 드로어 오픈 연계
@@ -14195,21 +14225,27 @@ export const CitadelScreen: React.FC = () => {
   const handleSkipTutorial = () => {
     setTutorialStepId('');
     try {
-      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: false, isSkipped: true }));
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: '', isCompleted: false, isSkipped: true, hasStarted: true }));
     } catch {}
   };
 
   const { state, gm, navigateTo } = useGameManager();
-  const { lang, dict } = useI18n();
+  const { lang, dict, tr } = useI18n();
   useCustomAssetVersion();
 
-  // 🔄 게임 데이터 초기화 시 튜토리얼 처음부터 다시 시작
+  // 🔄 게임 데이터 초기화 시 튜토리얼 상태 초기화 (프롤로그 확인 후 다시 시작되도록 대기)
   useEffect(() => {
     const handleGameReset = () => {
-      setTutorialStepId('TUTORIAL_WELCOME');
+      setTutorialStepId('');
       try {
-        localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_WELCOME', isCompleted: false, isSkipped: false }));
+        const uid = gm.getCurrentUserId();
+        localStorage.removeItem('ark_tutorial_state');
+        localStorage.removeItem(`limbo_intro_story_seen_${uid}`);
+        localStorage.removeItem('limbo_intro_story_seen_guest');
       } catch {}
+      setIsIntroReviewMode(false);
+      // 리셋 시 프롤로그가 다시 뜨도록 설정
+      setShowIntroStory(true);
     };
     gm.on('gameReset', handleGameReset);
     return () => {
@@ -14307,7 +14343,17 @@ export const CitadelScreen: React.FC = () => {
   const [pausedNoticeBuilding, setPausedNoticeBuilding] = useState<BuildingState | null>(null);
   const [offlineReportModal, setOfflineReportModal] = useState<any>(null);
   const [latestOfflineReport, setLatestOfflineReport] = useState<any>(gm.offlineReport || null);
-  const [showIntroStory, setShowIntroStory] = useState(false);
+  const [showIntroStory, setShowIntroStory] = useState<boolean>(() => {
+    try {
+      const uid = gm.getCurrentUserId();
+      const seen = localStorage.getItem(`limbo_intro_story_seen_${uid}`) || localStorage.getItem('limbo_intro_story_seen_guest');
+      return !seen;
+    } catch {
+      return false;
+    }
+  });
+  // 📜 방주 프롤로그 회상(다시보기) 모드 여부 (회상 모드로 닫았을 때는 일레인 튜토리얼이 재발동하지 않음)
+  const [isIntroReviewMode, setIsIntroReviewMode] = useState<boolean>(false);
   // 📜 심연의 백과 모달 상태
   const [showCodexModal, setShowCodexModal] = useState(false);
 
@@ -14413,18 +14459,17 @@ export const CitadelScreen: React.FC = () => {
     const uid = gm.getCurrentUserId();
     const introSeenKey = `limbo_intro_story_seen_${uid}`;
     try {
-      const seen = localStorage.getItem(introSeenKey);
+      const seen = localStorage.getItem(introSeenKey) || localStorage.getItem('limbo_intro_story_seen_guest');
       if (!seen) {
-        const timer = setTimeout(() => {
-          setShowIntroStory(true);
-        }, 500);
-        return () => clearTimeout(timer);
+        setIsIntroReviewMode(false);
+        setShowIntroStory(true);
       }
     } catch (_) {}
   }, [gm]);
 
   useEffect(() => {
     const handleOpenIntroStory = () => {
+      setIsIntroReviewMode(true);
       setShowIntroStory(true);
     };
     const handleOpenDimBarracks = () => {
@@ -14446,25 +14491,48 @@ export const CitadelScreen: React.FC = () => {
 
   const handleCloseIntroStory = useCallback(() => {
     const uid = gm.getCurrentUserId();
+    const introSeenKey = `limbo_intro_story_seen_${uid}`;
     try {
-      localStorage.setItem(`limbo_intro_story_seen_${uid}`, 'true');
+      localStorage.setItem(introSeenKey, 'true');
+      localStorage.setItem('limbo_intro_story_seen_guest', 'true');
     } catch (_) {}
     setShowIntroStory(false);
-    // 프롤로그 모달 닫힘 시점에 일레인 튜토리얼 반응 시작
-    setTutorialStepId(prev => {
-      if (!prev) {
+
+    // 🌟 회상으로 다시 열어본 경우(isIntroReviewMode === true) 튜토리얼 미발동
+    if (isIntroReviewMode) {
+      setIsIntroReviewMode(false);
+      return;
+    }
+
+    // 🌟 프롤로그 시네마틱 [정신을 차리고 방주로 진입] 버튼 클릭 시점에 일레인 튜토리얼 1단계 발동!
+    // (이미 튜토리얼을 완수했거나 스킵한 상태가 아니라면 TUTORIAL_WELCOME 시작)
+    setTimeout(() => {
+      setTutorialStepId(prev => {
         try {
           const saved = localStorage.getItem('ark_tutorial_state');
           if (saved) {
             const parsed = JSON.parse(saved);
-            if (parsed.isCompleted || parsed.isSkipped) return '';
+            // 이미 튜토리얼을 완료했거나 건너뛴 경우에는 발동하지 않음
+            if (parsed.isCompleted || parsed.isSkipped) {
+              return prev || '';
+            }
           }
         } catch {}
-        return 'TUTORIAL_WELCOME';
-      }
-      return prev;
-    });
-  }, [gm]);
+
+        // 방주 진입 직후 1단계 TUTORIAL_WELCOME 시작
+        const initialStep = 'TUTORIAL_WELCOME';
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({
+            currentStepId: initialStep,
+            isCompleted: false,
+            isSkipped: false,
+            hasStarted: true
+          }));
+        } catch {}
+        return initialStep;
+      });
+    }, 250);
+  }, [gm, isIntroReviewMode]);
 
   const handleOpenQuestsFromIntro = useCallback(() => {
     handleCloseIntroStory();
@@ -15288,7 +15356,8 @@ export const CitadelScreen: React.FC = () => {
               return;
             }
             await gm.resetGame();
-            setTutorialStepId('TUTORIAL_WELCOME');
+            setTutorialStepId('');
+            setShowIntroStory(true);
             setResetModal(false);
           }} /></>}>
         <p className="text-sm text-[#cfd8dc]">현재 계정의 로컬 및 Firebase 클라우드 데이터가 모두 초기화되고 처음부터 다시 시작합니다. 정말 초기화하시겠습니까?</p>

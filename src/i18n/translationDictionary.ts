@@ -6,6 +6,10 @@ import { CLASS_NAMES, RESOURCE_NAMES, BUILDING_NAMES } from './dataLocales';
 // ============================================================================
 export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
   en: {
+    "방주 프롤로그 시네마틱 영상 다시 보기": "Replay Ark Prologue Cinematic",
+    "4막 구성의 세계관 시네마틱 컷씬 감상": "Watch the 4-act world lore cinematic cutscene",
+    "방주 프롤로그 서사 다시 보기": "Replay Ark Prologue Narrative",
+    "초반 세계관 및 작전 지침 서사": "Early world lore and operational briefing",
     "⚡ [진척도 가속] 윤회의 고리 100 위험도 점프 (위험도 +100 / 📜 초월 비전서 ×3 획득)": "⚡ [Progress Accelerated] Reincarnation Ring 100 Hazard Jump (Hazard +100 / 📜 Transcendence Grimoires x3 obtained)",
     "⚡ [진척도 극한 가속] 시간선을 강제로 뛰어넘어 상위 계층으로 직행했습니다! (무간도 위험도 +100 폭발적 도약, 전원 EXP +1,000)": "⚡ [Extreme Progress Acceleration] Forcibly leaped timelines straight to upper strata! (Avici Hazard +100 explosive surge, all allies EXP +1,000)",
     "🛡️ [안전 파밍] 차원의 닻으로 시공간 안정화 (위험도 -50 감소 / 전리품 분실률 0% 보존)": "🛡️ [Safe Farming] Stabilize spacetime with Dimensional Anchor (Hazard -50 / 0% loot loss rate preserved)",
@@ -2469,6 +2473,10 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "차원 앵커 게이트 Lv.6 달성 시 병영에서 [수비부대] 탭이 해금됩니다. 보호막, 좌/우 타워, 오퍼레이터 슬롯에 용병을 선택하면 전술 모달이 열려, 영웅의 성향(Trait)과 클래스(Role)에 따른 12대 수성 전술(성벽 수호, 반격 포격 등)과 거점 탑승 시 최종 방어 스탯을 미리 확인하고 최적의 방어 부대를 편성할 수 있습니다.": "At Anchor Gate Lv.6, the [Defense] tab unlocks in the Barracks. Selecting heroes opens a tactics modal previewing 12 unique siege tactics (Wall Guard, Counter Bombard, etc.) and final fortification stats to build the optimal defensive fortress.",
   },
   ja: {
+    "방주 프롤로그 시네마틱 영상 다시 보기": "方舟プロローグ・シネマティック映像をもう一度見る",
+    "4막 구성의 세계관 시네마틱 컷씬 감상": "全4幕で描かれる世界観シネマティックカットシーンの鑑賞",
+    "방주 프롤로그 서사 다시 보기": "方舟プロローグ叙事をもう一度見る",
+    "초반 세계관 및 작전 지침 서사": "序盤の世界観および作戦方針の叙事",
     "⚡ [진척도 가속] 윤회의 고리 100 위험도 점프 (위험도 +100 / 📜 초월 비전서 ×3 획득)": "⚡ [進捗加速] 輪廻の環100危険度ジャンプ (危険度+100 / 📜 超越魔導書×3 獲得)",
     "⚡ [진척도 극한 가속] 시간선을 강제로 뛰어넘어 상위 계층으로 직행했습니다! (무간도 위험도 +100 폭발적 도약, 전원 EXP +1,000)": "⚡ [進捗極限加速] 時間軸を強制跳躍し上位階層へ直行！ (無間道危険度+100爆発的跳躍、全員EXP+1,000)",
     "🛡️ [안전 파밍] 차원의 닻으로 시공간 안정화 (위험도 -50 감소 / 전리품 분실률 0% 보존)": "🛡️ [安全ファーミング] 次元の錨で時空間安定化 (危険度-50減少 / 戦利品紛失率0%保存)",
@@ -6779,5 +6787,82 @@ export const LOG_PATTERNS: LogPatternDef[] = [
     pattern: /⚠️\s*\[출격 불가\]\s*차원 네메시스 토벌은 아케인 게이트 Lv\.(\d+) 이상부터 개방됩니다\.\s*\(현재 Lv\.(\d+)\)/i,
     en: m => `⚠️ [Sortie Unavailable] Dimensional Nemesis Raid unlocks at Arcane Gate Lv.${m[1]}+. (Current Lv.${m[2]})`,
     ja: m => `⚠️ [出撃不可] 次元ネメシス討伐はアルケインゲートLv.${m[1]}以上から開放されます。(現在 Lv.${m[2]})`
+  },
+  // 🎁 [침식 장비 획득] [이름]을(를) 획득했습니다! (병기창 정화 필요)
+  {
+    pattern: /🎁\s*\[침식 장비 획득\]\s*\[(.+?)\]을\(를\)\s*획득했습니다!\s*\(병기창 정화 필요\)/i,
+    en: m => `🎁 [Corrupted Equipment Acquired] Acquired [${trEntity(m[1], 'en')}]! (Requires Armory Purification)`,
+    ja: m => `🎁 [侵蝕装備獲得] [${trEntity(m[1], 'ja')}]を獲得しました！（兵器廠で浄化が必要）`
+  },
+  // ⚠️ [착용 불가] [이름]은(는) 심연에 침식된 장비입니다...
+  {
+    pattern: /⚠️\s*\[착용 불가\]\s*\[(.+?)\]은\(는\)\s*심연에 침식된 장비입니다\.\s*병기창에서 정화 과정을 거쳐야 착용할 수 있습니다!/i,
+    en: m => `⚠️ [Cannot Equip] [${trEntity(m[1], 'en')}] is corrupted by the Abyss. Must be purified at the Armory to equip!`,
+    ja: m => `⚠️ [装備不可] [${trEntity(m[1], 'ja')}]は深淵に侵蝕された装備です。兵器廠の浄化施設で浄化する必要があります！`
+  },
+  // 💀 [정화 실패] 심연의 침식이 폭주하여 [이름]이(가) 산산조각나 영구 파괴되었습니다! (성공률: N%)
+  {
+    pattern: /💀\s*\[정화 실패\]\s*심연의 침식이 폭주하여\s*\[(.+?)\]이\(가\)\s*산산조각나 영구 파괴되었습니다!\s*\(성공률:\s*(\d+)%\)/i,
+    en: m => `💀 [Purification Failed] Abyssal corruption ran rampant! [${trEntity(m[1], 'en')}] shattered into pieces and was destroyed! (Success rate: ${m[2]}%)`,
+    ja: m => `💀 [浄化失敗] 深淵の侵蝕が暴走し、[${trEntity(m[1], 'ja')}]が粉々に砕け散り永久破壊されました！（成功率: ${m[2]}%）`
+  },
+  // ✨ [정화 대성공] 심연의 침식을 온전히 씻어내고 순정 [이름] 장비로 복원했습니다! (병기창 Lv.N 성공률 N%)
+  {
+    pattern: /✨\s*\[정화 대성공\]\s*심연의 침식을 온전히 씻어내고 순정\s*\[(.+?)\]\s*장비로 복원했습니다!\s*\(병기창 Lv\.(\d+)\s*성공률\s*(\d+)%\)/i,
+    en: m => `✨ [Purification Success] Abyssal corruption cleansed! Restored to genuine [${trEntity(m[1], 'en')}] equipment! (Armory Lv.${m[2]} Success rate: ${m[3]}%)`,
+    ja: m => `✨ [浄化大成功] 深淵の侵蝕を完全に浄化し、純粋な[${trEntity(m[1], 'ja')}]装備として復元しました！（兵器廠Lv.${m[2]} 成功率 ${m[3]}%）`
+  },
+  // ⛏️ [맨손 채굴] 골드 NG 및 [이름 ×N] 수습 (...)
+  {
+    pattern: /⛏️\s*\[맨손 채굴\]\s*골드\s*([\d,]+)G 및\s*\[(.+?)\s*×(\d+)\]\s*수습\s*\(파편 반동으로 파티원 HP\s*(\d+)%\s*피해\)/i,
+    en: m => `⛏️ [Barehand Mining] Salvaged ${m[1]}G and [${trEntity(m[2], 'en')} x${m[3]}] (Debris recoil dealt ${m[4]}% HP damage to party)`,
+    ja: m => `⛏️ [素手採掘] ゴールド${m[1]}Gおよび[${trEntity(m[2], 'ja')} ×${m[3]}]を回収（破片の反動でパーティHPに${m[4]}%ダメージ）`
+  },
+  // ⛏️ [맨손 채굴 완료] 골드 NG 및 [이름 ×N] 채굴 완료!
+  {
+    pattern: /⛏️\s*\[맨손 채굴 완료\]\s*골드\s*([\d,]+)G 및\s*\[(.+?)\s*×(\d+)\]\s*채굴 완료!/i,
+    en: m => `⛏️ [Barehand Mining Complete] Successfully mined ${m[1]}G and [${trEntity(m[2], 'en')} x${m[3]}]!`,
+    ja: m => `⛏️ [素手採掘完了] ゴールド${m[1]}Gおよび[${trEntity(m[2], 'ja')} ×${m[3]}]の採掘完了！`
+  },
+  // 🪵 [우회로 정비] 안전한 통로에서 🪵 영목 N개, 🪨 석재 N개를 수습했습니다.
+  {
+    pattern: /🪵\s*\[우회로 정비\]\s*안전한 통로에서\s*🪵\s*영목\s*([\d,]+)개,\s*🪨\s*석재\s*([\d,]+)개를 수습했습니다\./i,
+    en: m => `🪵 [Detour Cleared] Salvaged 🪵 Timber x${m[1]}, 🪨 Stone x${m[2]} along a safe passage.`,
+    ja: m => `🪵 [迂回路整備] 安全な通路で🪵霊木${m[1]}個、🪨石材${m[2]}個を回収しました。`
+  },
+  // 심연의 흔적 속에서 N골드를 수습했습니다.
+  {
+    pattern: /심연의 흔적 속에서\s*([\d,]+)골드를 수습했습니다\./i,
+    en: m => `Salvaged ${m[1]} Gold amidst traces of the Abyss.`,
+    ja: m => `深淵の痕跡の中から${m[1]}ゴールドを回収しました。`
+  },
+  // ✨ [안식처] 고대의 보물 상자에서 ... 수습했습니다!
+  {
+    pattern: /✨\s*\[안식처\]\s*고대의 보물 상자에서\s*(.+?)을\(를\)?\s*수습했습니다!/i,
+    en: m => `✨ [Sanctuary] Salvaged ${trEntity(m[1], 'en')} from an ancient treasure chest!`,
+    ja: m => `✨ [安息所] 古代の宝箱から${trEntity(m[1], 'ja')}を回収しました！`
+  },
+  // 🛡️ [안전 파밍] 은밀하게 유해/군수 자원 수습
+  {
+    pattern: /🛡️\s*\[안전 파밍\]\s*경보를 건드리지 않고 조용히 척후병의 유해를 수습했습니다\.\s*\(위험도\s*(-?\d+)\s*감소,\s*(.+?)\)/i,
+    en: m => `🛡️ [Safe Farming] Quietly recovered the scout's remains without triggering alarms. (Hazard ${m[1]}, ${trEntity(m[2], 'en')})`,
+    ja: m => `🛡️ [安全ファーミング] 警報を作動させずに斥候兵の遺骸を回収しました。（危険度${m[1]}減少、${trEntity(m[2], 'ja')}）`
+  },
+  {
+    pattern: /🛡️\s*\[안전 파밍\]\s*소음 없이 안전하게 보관실 외곽의 군수 자원을 수습했습니다\.\s*\(위험도\s*(-?\d+)\s*감소,\s*(.+?)\)/i,
+    en: m => `🛡️ [Safe Farming] Quietly and safely salvaged military supplies outside the storage room. (Hazard ${m[1]}, ${trEntity(m[2], 'en')})`,
+    ja: m => `🛡️ [安全ファーミング] 物音を立てず保管室の外郭から軍需資源を回収しました。（危険度${m[1]}減少、${trEntity(m[2], 'ja')}）`
+  },
+  // 🌟 [특기] 무간도의 나선을 안정화하여 공허 파편을 다량 수습했습니다!
+  {
+    pattern: /🌟\s*\[(.+?)\]\s*\[(.+?)\]이\(가\)\s*무간도의 나선을 안정화하여 공허 파편을 다량 수습했습니다!\s*\(위험도\s*(-?\d+)\)/i,
+    en: m => `🌟 [${trEntity(m[1], 'en')}] [${trEntity(m[2], 'en')}] stabilized the spiral of Avici and salvaged abundant Void Shards! (Hazard ${m[3]})`,
+    ja: m => `🌟 [${trEntity(m[1], 'ja')}] [${trEntity(m[2], 'ja')}]が無間道の螺旋を安定化させ、虚空の破片を多量に回収しました！（危険度 ${m[3]}）`
+  },
+  // 통상 탐색 중 떨어진 자원 줍기 수습: (...을(를) 주워 [...] 수습)
+  {
+    pattern: /^(.+?)\s*\((.+?)을\(를\)\s*주워\s*\[(.+?)\s*\+(\d+)\]\s*수습\)$/i,
+    en: m => `${trEntity(m[1], 'en')} (Picked up ${trEntity(m[2], 'en')}, salvaging [${trEntity(m[3], 'en')} +${m[4]}])`,
+    ja: m => `${trEntity(m[1], 'ja')}（${trEntity(m[2], 'ja')}を拾って[${trEntity(m[3], 'ja')} +${m[4]}]回収）`
   },
 ];

@@ -2652,7 +2652,7 @@ export const NemesisView: React.FC = () => {
                     {leaderHero ? (
                       (() => {
                         const opCls = CHARACTER_CLASSES[leaderHero.classId];
-                        const opUlt = opCls?.specialSkill || leaderHero?.specialSkill || opCls?.skills?.[0] || null;
+                        const opUlt = opCls?.specialSkill || (leaderHero as any)?.specialSkill || opCls?.skills?.[0] || null;
                         return (
                           <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-b from-[#2a1b0a] to-[#161009] border border-[#ffd54f55] flex flex-col items-center text-center min-w-0 shadow-sm shadow-[#ffd54f22]">
                             <span className="text-[8px] font-bold text-[#ffd54f]">오퍼레이터</span>

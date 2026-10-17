@@ -893,7 +893,11 @@
     "npc_alyssa": "assets/custom_uploaded/npcs/npc_alyssa.png",
     "수석 연금술사 알리샤": "assets/custom_uploaded/npcs/npc_alyssa.png",
     "npc_ark_ai": "assets/custom_uploaded/npcs/npc_ark_ai.png",
-    "고대 방주의 잔류 사념": "assets/custom_uploaded/npcs/npc_ark_ai.png"
+    "고대 방주의 잔류 사념": "assets/custom_uploaded/npcs/npc_ark_ai.png",
+    "npc_void_overlord_echo": "assets/custom_uploaded/npcs/npc_void_overlord_echo.png",
+    "공허 지배자의 마지막 사념": "assets/custom_uploaded/npcs/______________.png",
+    "npc_asmodeus": "assets/custom_uploaded/npcs/npc_asmodeus.png",
+    "심연의 군주 아스모데우스": "assets/custom_uploaded/npcs/_____________.png"
   },
-  "version": 658
+  "version": 665
 }
