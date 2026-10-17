@@ -139,7 +139,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
 
           <div className="w-full bg-[#162035] h-2 rounded-full overflow-hidden border border-[#233352]">
             <div
-              className="bg-gradient-to-r from-[#00d2ff] to-[#38ef7d] h-full transition-all duration-500 rounded-full"
+              className="bg-gradient-to-r from-[#c8aa6e] to-[#38ef7d] h-full transition-all duration-500 rounded-full"
               style={{ width: `${completionPct}%` }}
             />
           </div>
@@ -147,7 +147,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
           {/* 활성화된 종합 패시브 배지 요약 */}
           <div className="pt-2 border-t border-[#1c283f] flex items-center justify-between flex-wrap gap-2 text-[10px]">
             <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
-            {totalBonus.allStatsBonus && totalBonus.allStatsBonus > 0 && <span className="px-1.5 py-0.5 rounded bg-[#00d2ff18] border border-[#00d2ff44] text-[#00d2ff] font-bold">전능력치 +{totalBonus.allStatsBonus}</span>}
+            {totalBonus.allStatsBonus && totalBonus.allStatsBonus > 0 && <span className="px-1.5 py-0.5 rounded bg-[#c8aa6e18] border border-[#c8aa6e44] text-[#c8aa6e] font-bold">전능력치 +{totalBonus.allStatsBonus}</span>}
             {totalBonus.atk > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ef535018] border border-[#ef535044] text-[#ef5350] font-bold">공격력 +{totalBonus.atk}</span>}
             {totalBonus.def > 0 && <span className="px-1.5 py-0.5 rounded bg-[#42a5f518] border border-[#42a5f544] text-[#42a5f5] font-bold">방어력 +{totalBonus.def}</span>}
             {totalBonus.hp > 0 && <span className="px-1.5 py-0.5 rounded bg-[#66bb6a18] border border-[#66bb6a44] text-[#66bb6a] font-bold">최대 HP +{totalBonus.hp}</span>}
@@ -157,7 +157,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
             {totalBonus.critRate > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ff704318] border border-[#ff704344] text-[#ff7043] font-bold">치명타 +{totalBonus.critRate}%</span>}
             {totalBonus.dmgReduction > 0 && <span className="px-1.5 py-0.5 rounded bg-[#38ef7d18] border border-[#38ef7d44] text-[#38ef7d] font-bold">피해감소 +{totalBonus.dmgReduction}%</span>}
             {totalBonus.allDmgPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ff416c18] border border-[#ff416c44] text-[#ff416c] font-bold">모든 피해 +{totalBonus.allDmgPct}%</span>}
-            {totalBonus.upkeepDiscountPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#00d2ff18] border border-[#00d2ff44] text-[#00d2ff] font-bold">유지비 -{totalBonus.upkeepDiscountPct}%</span>}
+            {totalBonus.upkeepDiscountPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#c8aa6e18] border border-[#c8aa6e44] text-[#c8aa6e] font-bold">유지비 -{totalBonus.upkeepDiscountPct}%</span>}
             {totalBonus.productionBonusPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ffd54f18] border border-[#ffd54f44] text-[#ffd54f] font-bold">자원 생산 +{totalBonus.productionBonusPct}%</span>}
             {totalBonus.expBonusPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#80deea18] border border-[#80deea44] text-[#80deea] font-bold">경험치 +{totalBonus.expBonusPct}%</span>}
             {totalBonus.goldBonusPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ffd54f18] border border-[#ffd54f44] text-[#ffd54f] font-bold">골드 획득 +{totalBonus.goldBonusPct}%</span>}
@@ -178,7 +178,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
                   selectedCategory === cat.id
-                    ? 'bg-[#00d2ff22] text-[#00d2ff] border-[#00d2ff66]'
+                    ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e66]'
                     : 'bg-[#111726] text-[#8b9bb4] border-[#1e2a40] hover:bg-[#182136]'
                 }`}
               >
@@ -236,7 +236,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                   isCompleted
                     ? item.id === latestUnlockedId
                       ? 'bg-[#0c182e] border-[#38ef7d88] shadow-[0_0_14px_rgba(56,239,125,0.15)]'
-                      : 'bg-[#0b1424] border-[#00d2ff55] shadow-[0_0_12px_rgba(0,210,255,0.08)]'
+                      : 'bg-[#0b1424] border-[#c8aa6e55] shadow-[0_0_12px_rgba(200, 170, 110,0.08)]'
                     : canRegister
                     ? 'bg-[#15121b] border-[#ef535088] shadow-[0_0_12px_rgba(239,83,80,0.15)]'
                     : 'bg-[#0f1422] border-[#222f46]'
@@ -328,7 +328,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                 </div>
 
                 {/* 요구 자원 슬롯 & 등록 버튼 */}
-                <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#182338]">
+                <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#15171e]">
                   <div className="flex items-center gap-2 flex-wrap">
                     {reqStatus.map((req, idx) => {
                       let equipTooltip: string | undefined = undefined;
@@ -358,7 +358,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                           title={equipTooltip || (req.type === 'supply' ? `성채 보급품 [${req.name}]` : undefined)}
                           className={`text-[10px] px-2 py-0.5 rounded-md font-mono flex items-center gap-1 border ${
                             isCompleted
-                              ? 'bg-[#182338] text-[#8b9bb4] border-[#223350]'
+                              ? 'bg-[#15171e] text-[#8b9bb4] border-[#223350]'
                               : req.isMet
                               ? 'bg-[#10241a] text-[#38ef7d] border-[#1e4a30]'
                               : 'bg-[#241316] text-[#ef5350] border-[#4a1e24]'
@@ -424,7 +424,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
               <div className="text-sm font-bold text-[#ffd54f] text-center">
                 {inspectedStory.name}
               </div>
-              <div className="p-3.5 rounded-xl bg-[#090d16] border border-[#233550] text-xs text-[#cfd8e8] leading-relaxed italic whitespace-pre-line font-serif">
+              <div className="p-3.5 rounded-xl bg-[#0a0b10] border border-[#233550] text-xs text-[#cfd8e8] leading-relaxed italic whitespace-pre-line font-serif">
                 "{inspectedStory.story}"
               </div>
               <div className="p-2.5 rounded-lg bg-[#101826] border border-[#1e2e48] text-xs text-[#38ef7d] font-bold text-center">

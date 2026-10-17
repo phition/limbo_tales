@@ -39,8 +39,8 @@ export const WEAPON_TRAITS: Record<WeaponType, WeaponTrait> = {
     weaponType: 'gun',
     badge: '🔫 연사',
     name: '연사',
-    color: '#00e5ff',
-    bgColor: 'rgba(0, 229, 255, 0.15)',
+    color: '#c8aa6e',
+    bgColor: 'rgba(200, 170, 110, 0.15)',
     shortDesc: '기본 공격 시 기본 15% + 행운 보정 추가 점사 (공격력 45% 피해)',
     description: '탄환을 일제 사격하여 기본 공격 시 기본 15%에 행운(🍀) 보정을 더한 확률로 공격력의 45% 위력을 지닌 추가 점사 탄환을 격발합니다.'
   },

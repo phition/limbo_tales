@@ -94,7 +94,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
       mediaSrc: 'assets/citadel_bonfire.jpg',
       ambientSound: 'fever_burst',
       bgmTrack: 'citadel',
-      accentColor: '#00e5ff',
+      accentColor: '#c8aa6e',
       badgeIcon: '⚔️'
     }
   ], [sceneLocales]);
@@ -243,7 +243,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
           {/* 4막 전용: 원정대 3대 영웅 오버레이 실루엣/포트레이트 */}
           {currentSceneIndex === 3 && (
             <div className="absolute inset-0 flex items-center justify-end pr-8 sm:pr-16 pointer-events-none opacity-40 mix-blend-screen transition-opacity duration-1000">
-              <div className="flex -space-x-12 filter drop-shadow-[0_0_25px_rgba(0,229,255,0.4)]">
+              <div className="flex -space-x-12 filter drop-shadow-[0_0_25px_rgba(200, 170, 110,0.4)]">
                 <img
                   src="assets/portraits/portrait_rogue.png"
                   alt="Rogue"
@@ -286,7 +286,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
                   className="h-1.5 sm:h-2 bg-white/20 rounded-full overflow-hidden cursor-pointer hover:bg-white/40 transition-colors"
                 >
                   <div
-                    className="h-full bg-gradient-to-r from-[#ffd54f] to-[#00e5ff] rounded-full transition-all duration-75"
+                    className="h-full bg-gradient-to-r from-[#ffd54f] to-[#c8aa6e] rounded-full transition-all duration-75"
                     style={{ width: `${width}%` }}
                   />
                 </div>
@@ -339,7 +339,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
                 onClick={() => setShowLogView(!showLogView)}
                 className={`px-2.5 py-1 rounded-lg border transition-all text-xs flex items-center gap-1.5 ${
                   showLogView
-                    ? 'bg-[#00e5ff]/20 border-[#00e5ff] text-[#00e5ff]'
+                    ? 'bg-[#c8aa6e]/20 border-[#c8aa6e] text-[#c8aa6e]'
                     : 'bg-black/50 border-white/20 text-white/90 hover:bg-white/10'
                 }`}
               >
@@ -369,7 +369,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
               </h3>
               {scenes.map((s, i) => (
                 <div key={i} className="space-y-1">
-                  <div className="font-bold text-[#00e5ff] flex items-center gap-1.5">
+                  <div className="font-bold text-[#c8aa6e] flex items-center gap-1.5">
                     <span>{s.badgeIcon}</span>
                     <span>{s.actNumber}: {s.actTitle}</span>
                   </div>
@@ -440,7 +440,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
                 onClick={() => handleJumpToScene(idx)}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
                   idx === currentSceneIndex
-                    ? 'w-7 bg-[#00e5ff] shadow-[0_0_8px_#00e5ff]'
+                    ? 'w-7 bg-[#c8aa6e] shadow-[0_0_8px_#c8aa6e]'
                     : 'bg-white/30 hover:bg-white/60'
                 }`}
                 title={`${scenes[idx]?.actNumber || idx + 1}`}
@@ -452,7 +452,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
           {isLastScene ? (
             <button
               onClick={handleComplete}
-              className="px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-[#00b4d8] via-[#0077b6] to-[#023e8a] hover:from-[#48cae4] hover:to-[#0096c7] text-white font-black text-xs sm:text-sm tracking-wider flex items-center gap-2 border border-[#90e0ef] shadow-[0_0_20px_rgba(0,180,216,0.5)] transition-all transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer animate-pulse"
+              className="px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-[#c8aa6e] via-[#0077b6] to-[#023e8a] hover:from-[#48cae4] hover:to-[#0096c7] text-white font-black text-xs sm:text-sm tracking-wider flex items-center gap-2 border border-[#90e0ef] shadow-[0_0_20px_rgba(0,180,216,0.5)] transition-all transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer animate-pulse"
             >
               <span>👁️</span>
               <span>{ui.enterCitadel}</span>

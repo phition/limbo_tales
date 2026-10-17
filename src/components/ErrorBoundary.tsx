@@ -45,7 +45,7 @@ export class ErrorBoundary extends Component<Props, State> {
         <div style={{
           position: 'fixed',
           inset: 0,
-          backgroundColor: '#070a12',
+          backgroundColor: '#08090d',
           color: '#ff5252',
           display: 'flex',
           flexDirection: 'column',
@@ -74,7 +74,7 @@ export class ErrorBoundary extends Component<Props, State> {
               브라우저 환경(CORS/서드파티 쿠키 차단 등) 또는 컴포넌트 렌더링 중 오류가 발생했습니다.
             </p>
             <div style={{
-              backgroundColor: '#070a12',
+              backgroundColor: '#08090d',
               border: '1px solid #ff525233',
               borderRadius: '8px',
               padding: '12px',
@@ -92,7 +92,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <button
                 onClick={this.handleReload}
                 style={{
-                  backgroundColor: '#00d2ff',
+                  backgroundColor: '#c8aa6e',
                   color: '#000',
                   border: 'none',
                   borderRadius: '8px',

@@ -102,7 +102,7 @@ export const WEAPON_TRAITS_GUIDE: WeaponTraitGuide[] = [
   { weapon: '검 계열 (검·대검·도끼류)', trait: '🗡️ 베기', icon: '🗡️', effect: '기본 공격 시 대상에게 1턴간 출혈(Bleed) 상태이상을 부여하여 지속 피해 유발 (도끼·배틀액스 포함)', color: '#ff5252', borderColor: '#ff525244' },
   { weapon: '창 계열 (창·망치·해머류)', trait: '🔱 방어 파쇄', icon: '🔱', effect: '적의 보호막(Shield)에 50% 추가 피해를 입혀 방어선을 신속히 붕괴 (망치·해머·둔기 포함)', color: '#ff9800', borderColor: '#ff980044' },
   { weapon: '활 계열 (활·장궁·석궁)', trait: '🏹 급소 사격', icon: '🏹', effect: '기본 공격 시 원거리 치명타율 +5% 및 치명타 피해 +5% 증폭으로 저격 특화 (석궁 포함)', color: '#69f0ae', borderColor: '#69f0ae44' },
-  { weapon: '총 계열 (마총·핸드건·분쇄포)', trait: '🔫 연사', icon: '🔫', effect: '기본 공격 시 기본 15% 확률 + 행운(🍀) 보정으로 추가 점사(공격력 45% 피해) 격발 (분쇄포·레일건 포함)', color: '#00e5ff', borderColor: '#00e5ff44' },
+  { weapon: '총 계열 (마총·핸드건·분쇄포)', trait: '🔫 연사', icon: '🔫', effect: '기본 공격 시 기본 15% 확률 + 행운(🍀) 보정으로 추가 점사(공격력 45% 피해) 격발 (분쇄포·레일건 포함)', color: '#c8aa6e', borderColor: '#c8aa6e44' },
   { weapon: '단검 계열 (단검·비수·낫류)', trait: '⚡ 암습', icon: '⚡', effect: '상대 마물보다 속도가 빠를수록 피해량 비례 증가 (최대 20% 증폭, 사신 낫·참살낫 포함)', color: '#b388ff', borderColor: '#b388ff44' },
   { weapon: '지팡이 계열 (지팡이·마도봉·완드)', trait: '🪄 마력 공명', icon: '🪄', effect: '모든 액티브 마도 스킬 사용 시 마나(MP) 소모량 5% 상시 절감 (마도봉·성봉 포함)', color: '#e040fb', borderColor: '#e040fb44' },
 ];

@@ -145,8 +145,8 @@ export const CallsignChangeModal: React.FC<Props> = ({
     >
       <div className="flex flex-col gap-3 py-1 text-xs text-[#cfd8dc]">
         {/* 안내 카드 */}
-        <div className="p-3 rounded-xl bg-[#141b2c] border border-[#00d2ff44] flex flex-col gap-1.5 shadow-sm">
-          <div className="flex items-center gap-2 font-bold text-sm text-[#00d2ff]">
+        <div className="p-3 rounded-xl bg-[#14161c] border border-[#c8aa6e44] flex flex-col gap-1.5 shadow-sm">
+          <div className="flex items-center gap-2 font-bold text-sm text-[#c8aa6e]">
             <span>ℹ️</span>
             <span>지휘관 콜사인 등록 안내</span>
           </div>
@@ -162,7 +162,7 @@ export const CallsignChangeModal: React.FC<Props> = ({
         <div className="p-2.5 rounded-xl bg-[#0d1424] border border-[#1e2a3e] flex items-center justify-between">
           <span className="text-[#8b9bb4]">현재 지휘관 콜사인:</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-[#00d2ff] font-bold text-sm">🎖️ [{currentNick}]</span>
+            <span className="text-[#c8aa6e] font-bold text-sm">🎖️ [{currentNick}]</span>
             {hasAlreadyChanged && (
               <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ef535022] text-[#ef5350] border border-[#ef535044] font-bold">
                 1회 변경 소진됨
@@ -190,15 +190,15 @@ export const CallsignChangeModal: React.FC<Props> = ({
                 value={candidate}
                 onChange={handleCandidateChange}
                 placeholder="새 콜사인 입력 (예: 발키리_01)"
-                className="flex-1 px-3 py-2 rounded-xl bg-[#090d18] border border-[#23324d] text-white text-xs placeholder-[#50607d] focus:border-[#00d2ff] focus:outline-none transition-colors"
+                className="flex-1 px-3 py-2 rounded-xl bg-[#090d18] border border-[#23324d] text-white text-xs placeholder-[#50607d] focus:border-[#c8aa6e] focus:outline-none transition-colors"
                 disabled={isSubmitting}
               />
               <button
                 type="button"
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                   isChecking
-                    ? 'bg-[#182338] text-[#8b9bb4]'
-                    : 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55] hover:bg-[#00d2ff33] active:scale-95'
+                    ? 'bg-[#15171e] text-[#8b9bb4]'
+                    : 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55] hover:bg-[#c8aa6e33] active:scale-95'
                 }`}
                 onClick={handleCheckDuplicate}
                 disabled={isChecking || !candidate.trim() || isSubmitting}

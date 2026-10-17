@@ -202,7 +202,7 @@ export const BossEntranceCutscene: React.FC<Props> = ({ boss, isOvercharged = fa
             className={`px-2.5 py-1 rounded-full text-xs font-mono font-bold flex items-center gap-1.5 border transition-all ${
               isBgmMuted
                 ? 'bg-red-950/80 border-red-500/50 text-red-400 shadow-[0_0_10px_rgba(255,0,0,0.3)]'
-                : 'bg-black/60 border-cyan-500/40 text-cyan-300 hover:border-cyan-400'
+                : 'bg-black/60 border-[#c8aa6e]/40 text-[#c8aa6e] hover:border-[#c8aa6e]'
             }`}
             title="배경음악 음소거 토글"
           >

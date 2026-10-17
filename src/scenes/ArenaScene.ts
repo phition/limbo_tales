@@ -412,7 +412,7 @@ export class ArenaScene extends Phaser.Scene {
       const isTop3 = entry.rank <= 3;
       bg.fillStyle(entry.isPlayer ? 0x2e2538 : (isTop3 ? 0x2c1822 : 0x18141e), 1);
       bg.fillRoundedRect(0, 0, w, 48, 6);
-      bg.lineStyle(1, entry.isPlayer ? 0x00d2ff : (isTop3 ? 0xffd54f : 0x3d2838), 1);
+      bg.lineStyle(1, entry.isPlayer ? 0xc8aa6e : (isTop3 ? 0xffd54f : 0x3d2838), 1);
       bg.strokeRoundedRect(0, 0, w, 48, 6);
 
       const rankBadge = this.add.text(14, 24, `#${entry.rank}`, {
@@ -454,7 +454,7 @@ export class ArenaScene extends Phaser.Scene {
       const bg = this.add.graphics();
       bg.fillStyle(0x1e1522, 1);
       bg.fillRoundedRect(0, 0, w, 85, 8);
-      bg.lineStyle(1.5, 0x00d2ff, 0.8);
+      bg.lineStyle(1.5, 0xc8aa6e, 0.8);
       bg.strokeRoundedRect(0, 0, w, 85, 8);
 
       const title = this.add.text(14, 14, item.name, {
@@ -477,7 +477,7 @@ export class ArenaScene extends Phaser.Scene {
         color: '#ffd54f'
       });
 
-      const buyBtn = this.createActionButton(w - 75, 20, 65, 42, '구매', 0x00d2ff, () => {
+      const buyBtn = this.createActionButton(w - 75, 20, 65, 42, '구매', 0xc8aa6e, () => {
         const canBuy = item.type === 'gold' ? this.gm.modifyResource('gold', -item.cost) : this.gm.modifyResource('ether', -item.cost);
         if (canBuy) {
           this.gm.addLog(`[명예 상점] [${item.name}]을(를) 성공적으로 구입했습니다!`, 'reward');

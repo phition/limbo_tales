@@ -683,7 +683,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
       {/* 토스트 알림 */}
       {toastMessage && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-60 bg-[#00d2ff] text-black font-bold text-xs px-4 py-2 rounded-full shadow-2xl animate-bounce">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-60 bg-[#c8aa6e] text-black font-bold text-xs px-4 py-2 rounded-full shadow-2xl animate-bounce">
           {toastMessage}
         </div>
       )}
@@ -694,7 +694,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
         {/* 모달 헤더 */}
         <div className="px-4 py-3 bg-[#111728] border-b border-[#1f2d48] flex items-center justify-between shrink-0 gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="text-2xl p-1.5 rounded-xl bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44] shrink-0">
+            <span className="text-2xl p-1.5 rounded-xl bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] shrink-0">
               🎨
             </span>
             <div className="min-w-0">
@@ -744,7 +744,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
         </div>
 
         {/* 상단 탭 네비게이션 */}
-        <div className="flex items-center gap-1 px-4 pt-2 pb-2 bg-[#090d16] border-b border-[#1a2336] shrink-0 overflow-x-auto">
+        <div className="flex items-center gap-1 px-4 pt-2 pb-2 bg-[#0a0b10] border-b border-[#1a2336] shrink-0 overflow-x-auto">
           {[
             { key: 'overview', icon: '⚡', label: '모드 & 자동 동기화' },
             { key: 'icons', icon: '🖼️', label: `아이콘 (${Object.keys(config.iconOverrides).length > 0 ? `커스텀 ${Object.keys(config.iconOverrides).length}` : '기본'})` },
@@ -760,7 +760,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
               key={tab.key}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 ${
                 activeTab === tab.key
-                  ? 'bg-[#00d2ff] text-black shadow-md'
+                  ? 'bg-[#c8aa6e] text-black shadow-md'
                   : 'bg-[#121929] text-[#8b9bb4] hover:text-white hover:bg-[#1b263d]'
               }`}
               onClick={() => setActiveTab(tab.key as StudioTab)}
@@ -834,7 +834,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                         외부 MP3 오디오 스트리밍을 사용할지, 순수 Web Audio 신디사이저 합성음만 사용할지 선택합니다.
                       </p>
                     </div>
-                    <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${config.syntheticAudioOnly ? 'bg-[#ce93d822] text-[#ce93d8] border border-[#ce93d844]' : 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]'}`}>
+                    <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${config.syntheticAudioOnly ? 'bg-[#ce93d822] text-[#ce93d8] border border-[#ce93d844]' : 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]'}`}>
                       {config.syntheticAudioOnly ? '🎹 순수 신디사이저 모드' : '🎧 하이브리드 오디오'}
                     </span>
                   </div>
@@ -866,11 +866,11 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 </div>
                 <div className="text-xs text-[#cfd8e8] leading-relaxed flex flex-col gap-2">
                   <p>
-                    프로젝트 루트의 <code className="text-[#00d2ff] font-mono bg-[#0c1424] px-1.5 py-0.5 rounded">custom_assets/</code> 폴더에 이미지, 음악, 영상 파일을 넣으면 <code className="text-[#38ef7d] font-mono bg-[#0c1424] px-1.5 py-0.5 rounded">npm run build</code> 또는 <code className="text-[#38ef7d] font-mono bg-[#0c1424] px-1.5 py-0.5 rounded">npm run dev</code> 실행 시 <strong>자동으로 게임 에셋 디렉토리로 복사되고 프리셋에 색인</strong>됩니다!
+                    프로젝트 루트의 <code className="text-[#c8aa6e] font-mono bg-[#0e1117] px-1.5 py-0.5 rounded">custom_assets/</code> 폴더에 이미지, 음악, 영상 파일을 넣으면 <code className="text-[#38ef7d] font-mono bg-[#0e1117] px-1.5 py-0.5 rounded">npm run build</code> 또는 <code className="text-[#38ef7d] font-mono bg-[#0e1117] px-1.5 py-0.5 rounded">npm run dev</code> 실행 시 <strong>자동으로 게임 에셋 디렉토리로 복사되고 프리셋에 색인</strong>됩니다!
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-[11px] font-mono text-[#8b9bb4] pt-1">
                     <div className="bg-[#080d16] p-2 rounded border border-[#1b283d]">
-                      <span className="text-[#00d2ff] block font-bold">🖼️ custom_assets/icons/</span>
+                      <span className="text-[#c8aa6e] block font-bold">🖼️ custom_assets/icons/</span>
                       아이콘 파일 (예: wood.png, torch.png)
                     </div>
                     <div className="bg-[#080d16] p-2 rounded border border-[#1b283d]">
@@ -911,7 +911,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 <div className="text-[11px] text-[#38ef7d] bg-[#0c1a14] p-2.5 rounded-lg border border-[#38ef7d33] leading-relaxed">
                   🛡️ <strong>저장소 독립 격리 완료:</strong> 모든 커스텀 에셋은 게임 세이브(localStorage 5MB)와 완전히 분리된 <strong>IndexedDB</strong>에 안전하게 독립 보관되어 게임 진행 및 클라우드 동기화에 전혀 부담을 주지 않습니다.
                 </div>
-                <div className="text-[11px] text-[#00d2ff] bg-[#0c1824] p-2.5 rounded-lg border border-[#00d2ff33] leading-relaxed flex flex-col gap-1.5">
+                <div className="text-[11px] text-[#c8aa6e] bg-[#0e1015] p-2.5 rounded-lg border border-[#c8aa6e33] leading-relaxed flex flex-col gap-1.5">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-white">🚀 배포 프리셋 및 자동 동기화 시스템:</span>
                     <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-bold ${isServerSyncReady ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]' : 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]'}`}>
@@ -919,7 +919,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     </span>
                   </div>
                   <div>
-                    • <strong>배포 시 포함:</strong> 에셋을 수정/업로드할 때마다 <code className="text-[#38ef7d] font-mono bg-[#111f30] px-1 rounded">public/assets/custom_assets_preset.json</code>에 즉시 기록되며, 업로드된 파일은 물리 에셋으로 저장되어 <code className="text-[#00d2ff] font-mono bg-[#111f30] px-1 rounded">npm run build</code> 및 <code className="text-[#00d2ff] font-mono bg-[#111f30] px-1 rounded">npx cap sync android</code> 시 100% 자동 포함됩니다.<br />
+                    • <strong>배포 시 포함:</strong> 에셋을 수정/업로드할 때마다 <code className="text-[#38ef7d] font-mono bg-[#111f30] px-1 rounded">public/assets/custom_assets_preset.json</code>에 즉시 기록되며, 업로드된 파일은 물리 에셋으로 저장되어 <code className="text-[#c8aa6e] font-mono bg-[#111f30] px-1 rounded">npm run build</code> 및 <code className="text-[#c8aa6e] font-mono bg-[#111f30] px-1 rounded">npx cap sync android</code> 시 100% 자동 포함됩니다.<br />
                     • <strong>즉시 동기화:</strong> 아래 <strong>[🚀 배포용 프리셋 즉시 저장]</strong>을 누르면 언제든 현재 설정을 파일시스템에 영구 반영합니다.
                   </div>
                 </div>
@@ -932,11 +932,11 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     <span>📥</span>
                     <span>JSON 파일 다운로드</span>
                   </button>
-                  <button className="btn btn-ghost text-xs px-4 py-2 border border-[#00d2ff88] text-[#00d2ff] hover:bg-[#00d2ff1f] flex items-center gap-1.5 font-bold" onClick={handleCopyJsonToClipboard}>
+                  <button className="btn btn-ghost text-xs px-4 py-2 border border-[#c8aa6e88] text-[#c8aa6e] hover:bg-[#c8aa6e1f] flex items-center gap-1.5 font-bold" onClick={handleCopyJsonToClipboard}>
                     <span>📋</span>
                     <span>클립보드 복사 (타 기기 공유)</span>
                   </button>
-                  <button className="btn btn-ghost text-xs px-4 py-2 border border-[#2d3e5e] text-white hover:bg-[#182338] flex items-center gap-1.5" onClick={() => setShowJsonModal(true)}>
+                  <button className="btn btn-ghost text-xs px-4 py-2 border border-[#2d3e5e] text-white hover:bg-[#15171e] flex items-center gap-1.5" onClick={() => setShowJsonModal(true)}>
                     <span>📤</span>
                     <span>JSON 붙여넣기 / 가져오기</span>
                   </button>
@@ -986,7 +986,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     <button
                       key={cat.key}
                       className={`px-2.5 py-1 rounded text-xs font-bold shrink-0 transition-all ${
-                        iconCategory === cat.key ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]' : 'text-[#8b9bb4] hover:text-white'
+                        iconCategory === cat.key ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55]' : 'text-[#8b9bb4] hover:text-white'
                       }`}
                       onClick={() => setIconCategory(cat.key as IconCategory)}
                     >
@@ -999,7 +999,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   placeholder="스킬/마도서/아이콘 검색 (이름/키/이모지)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-[#141b2c] border border-[#273650] text-xs px-3 py-1.5 rounded-lg text-white placeholder-[#546e7a] w-full sm:w-56 focus:outline-none focus:border-[#00d2ff]"
+                  className="bg-[#14161c] border border-[#273650] text-xs px-3 py-1.5 rounded-lg text-white placeholder-[#546e7a] w-full sm:w-56 focus:outline-none focus:border-[#c8aa6e]"
                 />
               </div>
 
@@ -1029,7 +1029,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     : (meta.label || key);
 
                   return (
-                    <div key={key} className={`p-2.5 rounded-xl bg-[#111828] border ${effectiveOverride ? 'border-[#00d2ff66] bg-[#101e30]' : 'border-[#1f2d48]'} flex items-center justify-between gap-2 text-xs`}>
+                    <div key={key} className={`p-2.5 rounded-xl bg-[#111828] border ${effectiveOverride ? 'border-[#c8aa6e66] bg-[#101e30]' : 'border-[#1f2d48]'} flex items-center justify-between gap-2 text-xs`}>
                       <div className="flex items-center gap-2.5 min-w-0 flex-1">
                         <div className="w-9 h-9 rounded-lg bg-[#070b14] border border-[#23314d] flex items-center justify-center shrink-0">
                           <GameIcon name={key} overrideUrl={effectiveOverride} size={22} />
@@ -1059,7 +1059,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             {/* 📖 마도서 일체형 뱃지 */}
                             {isGrimoireUnified && (
                               <span 
-                                className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#00d2ff18] text-[#00d2ff] border border-[#00d2ff44] shrink-0" 
+                                className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e44] shrink-0" 
                                 title="마도서와 스킬 아이콘이 100% 동일하게 일체화된 에셋"
                               >
                                 마도서 연동
@@ -1127,7 +1127,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
                         {/* 📁 이미지 파일 업로드 버튼 */}
                         <button
-                          className="btn btn-ghost text-[10px] px-2 py-1 border border-[#273859] text-[#00d2ff] hover:bg-[#162238]"
+                          className="btn btn-ghost text-[10px] px-2 py-1 border border-[#273859] text-[#c8aa6e] hover:bg-[#162238]"
                           title="로컬 이미지 파일(PNG/GIF/JPG/WebP/SVG) 업로드"
                           onClick={() => {
                             openFilePicker('icon', key, 'image/png,image/jpeg,image/webp,image/gif,image/svg+xml');
@@ -1190,7 +1190,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
               {/* 🌟 VFX 스트라이프/스프라이트 포맷 & 규격 공식 가이드 */}
               <div className="p-3.5 rounded-xl bg-[#111b2e] border border-[#1e3252] flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-[#00d2ff] flex items-center gap-1.5">
+                  <span className="font-bold text-xs text-[#c8aa6e] flex items-center gap-1.5">
                     <span>📋</span>
                     <span>VFX 스트라이프 & 애니메이션 스프라이트 포맷 규격</span>
                   </span>
@@ -1208,7 +1208,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     128×128 또는 256×256 px (1:1 정사각형, 투명 배경 필수)
                   </div>
                   <div className="bg-[#080d16] p-2 rounded border border-[#1f2d48]">
-                    <strong className="text-[#00d2ff] block">3. 스트라이프 시트 규격</strong>
+                    <strong className="text-[#c8aa6e] block">3. 스트라이프 시트 규격</strong>
                     가로 1줄 배열 (예: 64×64 4프레임 = 256×64 px)
                   </div>
                   <div className="bg-[#080d16] p-2 rounded border border-[#1f2d48]">
@@ -1289,7 +1289,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     const customCfg = config.vfxConfigs?.[v.type] || service.getVfxConfig(v.type);
 
                     return (
-                      <div key={v.type} className={`p-2.5 rounded-xl bg-[#111828] border ${effectiveOverride ? 'border-[#00d2ff66] bg-[#101e30]' : 'border-[#1f2d48]'} flex items-center justify-between gap-2 text-xs`}>
+                      <div key={v.type} className={`p-2.5 rounded-xl bg-[#111828] border ${effectiveOverride ? 'border-[#c8aa6e66] bg-[#101e30]' : 'border-[#1f2d48]'} flex items-center justify-between gap-2 text-xs`}>
                         <div className="flex items-center gap-2.5 min-w-0 flex-1">
                           <div className="w-10 h-10 rounded-lg bg-[#070b14] border border-[#23314d] flex items-center justify-center shrink-0 overflow-hidden text-xl shadow-inner">
                             {effectiveOverride ? (
@@ -1309,7 +1309,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 </span>
                               )}
                               {v.category === 'single' && (
-                                <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                                <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                                   ⚔️ 단일기
                                 </span>
                               )}
@@ -1334,7 +1334,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 </span>
                               )}
                               {effectiveOverride && (
-                                <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                                <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                                   스프라이트
                                 </span>
                               )}
@@ -1362,7 +1362,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             ▶ 테스트
                           </button>
                           <button
-                            className="btn btn-ghost text-[10px] px-2 py-1 border border-[#273859] text-[#00d2ff] hover:bg-[#162238]"
+                            className="btn btn-ghost text-[10px] px-2 py-1 border border-[#273859] text-[#c8aa6e] hover:bg-[#162238]"
                             title="커스텀 스프라이트시트/GIF/WebP 이미지 업로드"
                             onClick={() => {
                               openFilePicker('vfx', v.type, 'image/png,image/gif,image/webp,image/apng');
@@ -1421,18 +1421,18 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   const overrideUrl = config.dungeonFloorOverrides?.[`dungeon_${df.floor}`] || config.dungeonFloorOverrides?.[String(df.floor)];
                   const currentSrc = overrideUrl || df.defaultSrc;
                   return (
-                    <div key={df.floor} className={`p-3 rounded-xl bg-[#111828] border ${overrideUrl ? 'border-[#00d2ff66] bg-[#101e30]' : 'border-[#1f2d48]'} flex flex-col gap-2`}>
+                    <div key={df.floor} className={`p-3 rounded-xl bg-[#111828] border ${overrideUrl ? 'border-[#c8aa6e66] bg-[#101e30]' : 'border-[#1f2d48]'} flex flex-col gap-2`}>
                       <div className="relative h-28 rounded-lg overflow-hidden bg-black/40 border border-[#22324f]">
                         <img src={currentSrc} alt={df.name} className="w-full h-full object-cover" />
                         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-1.5 flex justify-between items-end">
                           <span className="font-bold text-xs text-white">{df.floor}F {df.name}</span>
-                          {overrideUrl && <span className="text-[9px] px-1 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">커스텀</span>}
+                          {overrideUrl && <span className="text-[9px] px-1 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">커스텀</span>}
                         </div>
                       </div>
                       <div className="text-[10px] text-[#8b9bb4] line-clamp-1">{df.desc}</div>
                       <div className="flex items-center gap-1 pt-1">
                         <button
-                          className="btn btn-ghost text-xs px-2.5 py-1 border border-[#273859] text-[#00d2ff] flex-1"
+                          className="btn btn-ghost text-xs px-2.5 py-1 border border-[#273859] text-[#c8aa6e] flex-1"
                           onClick={() => {
                             openFilePicker('dungeon', String(df.floor), 'image/png,image/jpeg,image/webp,image/gif');
                           }}
@@ -1478,7 +1478,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     <button
                       key={f.key}
                       className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
-                        monsterFilter === f.key ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]' : 'text-[#8b9bb4] hover:text-white'
+                        monsterFilter === f.key ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55]' : 'text-[#8b9bb4] hover:text-white'
                       }`}
                       onClick={() => setMonsterFilter(f.key as any)}
                     >
@@ -1491,7 +1491,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   placeholder="몬스터 이름/ID 검색..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-[#141b2c] border border-[#273650] text-xs px-3 py-1.5 rounded-lg text-white placeholder-[#546e7a] w-full sm:w-48 focus:outline-none focus:border-[#00d2ff]"
+                  className="bg-[#14161c] border border-[#273650] text-xs px-3 py-1.5 rounded-lg text-white placeholder-[#546e7a] w-full sm:w-48 focus:outline-none focus:border-[#c8aa6e]"
                 />
               </div>
 
@@ -1503,7 +1503,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   const isBoss = m.type === 'boss';
 
                   return (
-                    <div key={m.id} className={`p-3 rounded-xl bg-[#111828] border ${overrideImg || overrideVideo ? 'border-[#00d2ff66] bg-[#101e30]' : 'border-[#1f2d48]'} flex flex-col gap-2`}>
+                    <div key={m.id} className={`p-3 rounded-xl bg-[#111828] border ${overrideImg || overrideVideo ? 'border-[#c8aa6e66] bg-[#101e30]' : 'border-[#1f2d48]'} flex flex-col gap-2`}>
                       <div className="relative h-28 rounded-lg overflow-hidden bg-black/40 border border-[#22324f]">
                         {overrideImg ? (
                           <img src={overrideImg} alt={m.name} className="w-full h-full object-cover object-top" style={{ objectPosition: 'top' }} />
@@ -1515,7 +1515,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                               </span>
                               <button
                                 type="button"
-                                className="text-[9px] px-1.5 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] hover:bg-[#00d2ff44] border border-[#00d2ff44] font-bold transition-all flex items-center gap-0.5"
+                                className="text-[9px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] hover:bg-[#c8aa6e44] border border-[#c8aa6e44] font-bold transition-all flex items-center gap-0.5"
                                 title="프롬프트 복사"
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -1538,7 +1538,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                         )}
                         <div className="absolute top-1 right-1 flex gap-1 z-10">
                           {isBoss && <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#ff416c] text-white">BOSS</span>}
-                          {overrideImg && <span className="text-[9px] px-1 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">이미지 커스텀</span>}
+                          {overrideImg && <span className="text-[9px] px-1 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">이미지 커스텀</span>}
                           {overrideVideo && <span className="text-[9px] px-1 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]">영상 커스텀</span>}
                         </div>
                         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-1.5 pointer-events-none z-10">
@@ -1549,7 +1549,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
                       <div className="flex items-center gap-1 pt-1 flex-wrap">
                         <button
-                          className="btn btn-ghost text-[10px] px-2 py-1 border border-[#273859] text-[#00d2ff] flex-1"
+                          className="btn btn-ghost text-[10px] px-2 py-1 border border-[#273859] text-[#c8aa6e] flex-1"
                           title="이미지/움짤(GIF) 교체"
                           onClick={() => {
                             openFilePicker('monster', m.id, 'image/png,image/jpeg,image/webp,image/gif');
@@ -1623,7 +1623,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     <button
                       key={f.key}
                       className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
-                        mercenaryFilter === f.key ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]' : 'text-[#8b9bb4] hover:text-white'
+                        mercenaryFilter === f.key ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55]' : 'text-[#8b9bb4] hover:text-white'
                       }`}
                       onClick={() => setMercenaryFilter(f.key as any)}
                     >
@@ -1636,13 +1636,13 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   placeholder="용병 직업/이름 검색..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-[#141b2c] border border-[#273650] text-xs px-3 py-1.5 rounded-lg text-white placeholder-[#546e7a] w-full sm:w-48 focus:outline-none focus:border-[#00d2ff]"
+                  className="bg-[#14161c] border border-[#273650] text-xs px-3 py-1.5 rounded-lg text-white placeholder-[#546e7a] w-full sm:w-48 focus:outline-none focus:border-[#c8aa6e]"
                 />
               </div>
 
               <div className="text-xs text-[#8b9bb4] bg-[#0b101c] px-3 py-2 rounded-xl border border-[#1b263b] flex items-center justify-between">
                 <span>💡 용병의 클래스별 초상화, 카드 일러스트 이미지를 커스텀할 수 있습니다. (권장: 256x256 정사각형 PNG/JPG/WebP/GIF)</span>
-                <span className="text-[11px] text-[#00d2ff] font-mono shrink-0 ml-2">검색 결과: {mercenaryList.length}명</span>
+                <span className="text-[11px] text-[#c8aa6e] font-mono shrink-0 ml-2">검색 결과: {mercenaryList.length}명</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[55vh] overflow-y-auto pr-1">
@@ -1651,7 +1651,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   const icon = cls.skills?.[0]?.icon || '⚔️';
 
                   return (
-                    <div key={cls.id} className={`p-3 rounded-xl bg-[#111828] border ${overrideImg ? 'border-[#00d2ff66] bg-[#101e30]' : 'border-[#1f2d48]'} flex items-center justify-between gap-3 text-xs`}>
+                    <div key={cls.id} className={`p-3 rounded-xl bg-[#111828] border ${overrideImg ? 'border-[#c8aa6e66] bg-[#101e30]' : 'border-[#1f2d48]'} flex items-center justify-between gap-3 text-xs`}>
                       <div className="flex items-center gap-2.5 min-w-0 flex-1">
                         <div className="w-12 h-12 rounded-xl bg-[#070b14] border border-[#23314d] flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
                           {overrideImg ? (
@@ -1664,13 +1664,13 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           <div className="font-bold text-white flex items-center gap-1.5 truncate">
                             <span>{cls.name}</span>
                             {overrideImg && (
-                              <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                              <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                                 커스텀
                               </span>
                             )}
                           </div>
                           <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
-                            <span className={cls.tier === 0 ? 'text-[#8b9bb4]' : cls.tier === 1 ? 'text-[#00d2ff]' : 'text-[#ffd54f]'}>
+                            <span className={cls.tier === 0 ? 'text-[#8b9bb4]' : cls.tier === 1 ? 'text-[#c8aa6e]' : 'text-[#ffd54f]'}>
                               {cls.tier === 0 ? '기본 직업' : cls.tier === 1 ? '1차 승격' : '2차 각성'}
                             </span> • {cls.role}
                           </div>
@@ -1679,7 +1679,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
                       <div className="flex items-center gap-1 shrink-0">
                         <button
-                          className="btn btn-ghost text-[10px] px-2.5 py-1.5 border border-[#273859] text-[#00d2ff]"
+                          className="btn btn-ghost text-[10px] px-2.5 py-1.5 border border-[#273859] text-[#c8aa6e]"
                           title="용병 초상화/일러스트 이미지 교체"
                           onClick={() => {
                             openFilePicker('mercenary', cls.id, 'image/png,image/jpeg,image/webp,image/gif');
@@ -1728,7 +1728,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                         npcCategoryFilter === f.key
                           ? 'bg-[#e040fb] text-black shadow-md'
-                          : 'bg-[#141b2c] text-[#8b9bb4] hover:text-white hover:bg-[#1f2b42]'
+                          : 'bg-[#14161c] text-[#8b9bb4] hover:text-white hover:bg-[#1f2b42]'
                       }`}
                       onClick={() => setNpcCategoryFilter(f.key as any)}
                     >
@@ -1741,7 +1741,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   placeholder="NPC 이름/직책/서사 검색..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-[#141b2c] border border-[#273650] text-xs px-3 py-1.5 rounded-lg text-white placeholder-[#546e7a] w-full sm:w-48 focus:outline-none focus:border-[#e040fb]"
+                  className="bg-[#14161c] border border-[#273650] text-xs px-3 py-1.5 rounded-lg text-white placeholder-[#546e7a] w-full sm:w-48 focus:outline-none focus:border-[#e040fb]"
                 />
               </div>
 
@@ -1794,7 +1794,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             )}
                           </div>
                           <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
-                            <span className="text-[#00d2ff] font-mono font-bold">{npc.role}</span>
+                            <span className="text-[#c8aa6e] font-mono font-bold">{npc.role}</span>
                             <span className="text-[#546e7a]"> • {npc.categoryLabel}</span>
                           </div>
                           <div className="text-[9px] text-[#718096] truncate mt-0.5" title={npc.description}>
@@ -1891,12 +1891,12 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   const overrideUrl = config.bgmOverrides[t.key];
                   const isPlayingThis = playingBgm === t.key;
                   return (
-                    <div key={t.key} className={`p-3.5 rounded-xl bg-[#111828] border ${overrideUrl ? 'border-[#00d2ff66] bg-[#101e30]' : 'border-[#1f2d48]'} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs`}>
+                    <div key={t.key} className={`p-3.5 rounded-xl bg-[#111828] border ${overrideUrl ? 'border-[#c8aa6e66] bg-[#101e30]' : 'border-[#1f2d48]'} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs`}>
                       <div className="flex-1 min-w-0">
                         <div className="font-bold text-sm text-white flex items-center gap-2">
                           <span>{t.label}</span>
                           {overrideUrl && (
-                            <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                            <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                               커스텀 URL 적용 중
                             </span>
                           )}
@@ -1924,7 +1924,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           <span>{isPlayingThis ? '⏹ 정지' : '▶ 테스트'}</span>
                         </button>
                         <button
-                          className="btn btn-ghost text-xs px-2.5 py-1.5 border border-[#273859] text-[#00d2ff]"
+                          className="btn btn-ghost text-xs px-2.5 py-1.5 border border-[#273859] text-[#c8aa6e]"
                           onClick={() => {
                             openFilePicker('bgm', t.key, 'audio/mpeg,audio/ogg,audio/wav,audio/mp3');
                           }}
@@ -1961,7 +1961,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
             <div className="flex flex-col gap-3 animate-fade-in">
               <div className="text-xs text-[#8b9bb4] bg-[#0b101c] p-3 rounded-xl border border-[#1b263b] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <span>⚔️ 물리 스킬(검격, 분쇄, 관통, 사격 등), 🪄 마법 스킬(비전, 성광, 암흑, 원소 등) 및 상태이상 등 총 38종의 디테일 SFX를 청음하고 커스텀할 수 있습니다.</span>
-                <span className="text-[11px] text-[#00d2ff] shrink-0 font-mono">
+                <span className="text-[11px] text-[#c8aa6e] shrink-0 font-mono">
                   {SFX_LIST.filter(s => {
                     const matchGroup = sfxGroupFilter === 'all' || s.group === sfxGroupFilter || (sfxGroupFilter === '영지/시스템' && s.group.startsWith('영지'));
                     const q = sfxSearchQuery.trim().toLowerCase();
@@ -2003,7 +2003,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     value={sfxSearchQuery}
                     onChange={e => setSfxSearchQuery(e.target.value)}
                     placeholder="SFX 검색 (이름/키/설명)..."
-                    className="bg-[#0f172a] border border-[#1f2d48] rounded-lg px-2.5 py-1 text-xs text-white placeholder-[#546e7a] focus:outline-none focus:border-[#00d2ff] w-48"
+                    className="bg-[#0f172a] border border-[#1f2d48] rounded-lg px-2.5 py-1 text-xs text-white placeholder-[#546e7a] focus:outline-none focus:border-[#c8aa6e] w-48"
                   />
                   {sfxSearchQuery && (
                     <button
@@ -2025,13 +2025,13 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 }).map(s => {
                   const overrideUrl = config.sfxOverrides[s.type];
                   return (
-                    <div key={s.type} className={`p-2.5 rounded-xl bg-[#111828] border ${overrideUrl ? 'border-[#00d2ff66] bg-[#101e30]' : 'border-[#1f2d48]'} flex items-center justify-between gap-1.5 text-xs`}>
+                    <div key={s.type} className={`p-2.5 rounded-xl bg-[#111828] border ${overrideUrl ? 'border-[#c8aa6e66] bg-[#101e30]' : 'border-[#1f2d48]'} flex items-center justify-between gap-1.5 text-xs`}>
                       <div className="flex items-center gap-2 min-w-0 flex-1">
                         <span className="text-base shrink-0">{s.icon}</span>
                         <div className="min-w-0 flex-1">
                           <div className="font-bold text-white truncate flex items-center gap-1">
                             <span>{s.label}</span>
-                            {overrideUrl && <span className="text-[9px] text-[#00d2ff]">★</span>}
+                            {overrideUrl && <span className="text-[9px] text-[#c8aa6e]">★</span>}
                           </div>
                           <div className="text-[9px] text-[#546e7a] font-mono truncate">{s.type} · {s.desc || s.group}</div>
                         </div>
@@ -2039,7 +2039,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
                       <div className="flex items-center gap-1 shrink-0">
                         <button
-                          className="btn btn-ghost text-xs px-2 py-1 bg-[#141d30] text-[#00d2ff] hover:bg-[#1e2c48]"
+                          className="btn btn-ghost text-xs px-2 py-1 bg-[#141d30] text-[#c8aa6e] hover:bg-[#1e2c48]"
                           title="효과음 재생 테스트"
                           onClick={() => {
                             SoundManager.getInstance().play(s.type);
@@ -2105,7 +2105,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     <div>
                       <div className="font-bold text-sm text-white flex items-center gap-2">
                         <span>[{editingVfxConfig.label}] 스프라이트 규격 조정</span>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                           {editingVfxConfig.type}
                         </span>
                       </div>
@@ -2127,14 +2127,14 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   {/* 좌측: 전체 스프라이트 시트 슬라이스 가이드 */}
                   <div className="flex flex-col gap-1.5 min-w-0">
                     <div className="flex items-center justify-between text-[11px] text-[#cfd8e8]">
-                      <span className="font-bold text-[#00d2ff] flex items-center gap-1">
+                      <span className="font-bold text-[#c8aa6e] flex items-center gap-1">
                         <span>▦</span> 전체 시트 분할 가이드
                       </span>
                       <button
                         onClick={() => setShowGridGuide(prev => !prev)}
                         className={`text-[10px] px-2 py-0.5 rounded border font-bold ${
                           showGridGuide
-                            ? 'bg-[#00d2ff22] text-[#00d2ff] border-[#00d2ff55]'
+                            ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e55]'
                             : 'bg-[#152033] text-[#8b9bb4] border-[#223350]'
                         }`}
                       >
@@ -2164,9 +2164,9 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                               return (
                                 <div
                                   key={idx}
-                                  className={`border border-[#00d2ff44] relative flex items-center justify-center transition-colors ${
+                                  className={`border border-[#c8aa6e44] relative flex items-center justify-center transition-colors ${
                                     isCurrent
-                                      ? 'bg-[#00d2ff44] border-2 border-[#00d2ff] shadow-[0_0_8px_#00d2ff]'
+                                      ? 'bg-[#c8aa6e44] border-2 border-[#c8aa6e] shadow-[0_0_8px_#c8aa6e]'
                                       : isExcluded
                                       ? 'bg-red-950/50 border-red-500/30'
                                       : ''
@@ -2174,7 +2174,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 >
                                   <span className={`text-[7px] font-mono select-none px-0.5 rounded ${
                                     isCurrent
-                                      ? 'bg-[#00d2ff] text-black font-bold'
+                                      ? 'bg-[#c8aa6e] text-black font-bold'
                                       : isExcluded
                                       ? 'text-red-400'
                                       : 'text-white/70'
@@ -2231,7 +2231,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       </button>
                       <button
                         className={`btn text-xs px-3 py-1 font-bold ${
-                          isPlayingPreview ? 'btn-primary' : 'btn-ghost bg-[#141d30] text-[#00d2ff] border border-[#00d2ff55]'
+                          isPlayingPreview ? 'btn-primary' : 'btn-ghost bg-[#141d30] text-[#c8aa6e] border border-[#c8aa6e55]'
                         }`}
                         onClick={() => setIsPlayingPreview(prev => !prev)}
                       >
@@ -2332,7 +2332,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     ].map((preset, i) => (
                       <button
                         key={i}
-                        className="btn btn-ghost text-[10px] px-2.5 py-1 rounded bg-[#101726] border border-[#21324d] text-[#cfd8e8] hover:text-[#00d2ff] hover:border-[#00d2ff]"
+                        className="btn btn-ghost text-[10px] px-2.5 py-1 rounded bg-[#12141a] border border-[#21324d] text-[#cfd8e8] hover:text-[#c8aa6e] hover:border-[#c8aa6e]"
                         onClick={preset.onClick}
                       >
                         {preset.label}
@@ -2530,7 +2530,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
         {/* ── JSON 붙여넣기 모달 ── */}
         {showJsonModal && (
           <div className="absolute inset-0 z-30 bg-black/90 p-4 flex flex-col justify-center animate-scale-up">
-            <div className="bg-[#101726] border border-[#243552] rounded-xl p-4 flex flex-col gap-3 max-w-lg mx-auto w-full shadow-2xl">
+            <div className="bg-[#12141a] border border-[#243552] rounded-xl p-4 flex flex-col gap-3 max-w-lg mx-auto w-full shadow-2xl">
               <div className="flex items-center justify-between border-b border-[#243552] pb-2">
                 <span className="font-bold text-sm text-white flex items-center gap-1.5">
                   <span>📤</span>
@@ -2543,7 +2543,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 value={importJsonText}
                 onChange={(e) => setImportJsonText(e.target.value)}
                 placeholder='{"pureEmojiMode": false, "iconOverrides": {...}, ...}'
-                className="w-full bg-[#080d16] border border-[#212e45] text-xs font-mono p-2.5 rounded-lg text-[#cfd8e8] focus:outline-none focus:border-[#00d2ff]"
+                className="w-full bg-[#080d16] border border-[#212e45] text-xs font-mono p-2.5 rounded-lg text-[#cfd8e8] focus:outline-none focus:border-[#c8aa6e]"
               />
               <div className="flex justify-end gap-2">
                 <button className="btn btn-ghost text-xs px-3 py-1.5" onClick={() => setShowJsonModal(false)}>취소</button>

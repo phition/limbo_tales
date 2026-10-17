@@ -114,11 +114,11 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             </span>
           </h3>
           <p className="text-xs text-[#8b9bb4] max-w-sm mt-1 leading-relaxed">
-            차원 앵커 게이트를 <span className="text-[#ffd54f] font-bold">6레벨</span> 이상으로 증축하여 <span className="text-[#00d2ff] font-bold">영지 침공</span>이 열리면, 3대 방어 거점(차원 보호막, 좌/우 포탑)에 용병을 탑승시켜 영지를 수호할 수 있습니다.
+            차원 앵커 게이트를 <span className="text-[#ffd54f] font-bold">6레벨</span> 이상으로 증축하여 <span className="text-[#c8aa6e] font-bold">영지 침공</span>이 열리면, 3대 방어 거점(차원 보호막, 좌/우 포탑)에 용병을 탑승시켜 영지를 수호할 수 있습니다.
           </p>
         </div>
         <div className="text-[11px] text-[#546e7a] font-mono bg-[#060911] px-3 py-1 rounded-xl border border-[#151f33]">
-          현재 차원 게이트: <span className="text-[#00d2ff] font-bold">Lv.{gateLevel}</span> / 6
+          현재 차원 게이트: <span className="text-[#c8aa6e] font-bold">Lv.{gateLevel}</span> / 6
         </div>
       </div>
     );
@@ -141,13 +141,13 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
       {/* ── 상단 헤더 & 자동 편성 바 (모바일 반응형 한 줄 압축) ── */}
       <div className="p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#121c2e] via-[#0e1626] to-[#1a1124] border border-[#233554] flex items-center justify-between shadow-lg gap-2">
         <div className="flex items-center gap-2 min-w-0">
-          <span className="text-xl sm:text-2xl p-1 sm:p-1.5 rounded-xl bg-[#00d2ff18] border border-[#00d2ff44] text-[#00d2ff] shrink-0">
+          <span className="text-xl sm:text-2xl p-1 sm:p-1.5 rounded-xl bg-[#c8aa6e18] border border-[#c8aa6e44] text-[#c8aa6e] shrink-0">
             🛡️
           </span>
           <div className="min-w-0">
             <div className="text-xs sm:text-sm font-black text-white flex items-center gap-1.5 truncate">
               <span>수비 거점 결속 프로토콜</span>
-              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44] shrink-0">
+              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] shrink-0">
                 Gate Lv.{gateLevel}
               </span>
             </div>
@@ -169,19 +169,19 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
       {/* ════════ 1. 🛡️ 차원 왜곡 보호막 결속 (기본 7,000 HP + 탱커 체력/방어력 결속 합산) ════════ */}
       <div
         onClick={() => handleOpenModal('barrier')}
-        className="p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0a1e33] via-[#091b2e] to-[#061424] border-2 border-[#00d2ff77] hover:border-[#00d2ff] cursor-pointer transition-all flex flex-col gap-2 shadow-[0_0_15px_rgba(0,210,255,0.25)] relative overflow-hidden group"
+        className="p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0a1e33] via-[#091b2e] to-[#061424] border-2 border-[#c8aa6e77] hover:border-[#c8aa6e] cursor-pointer transition-all flex flex-col gap-2 shadow-[0_0_15px_rgba(200, 170, 110,0.25)] relative overflow-hidden group"
       >
         {/* 상단 타이틀 바 */}
-        <div className="flex items-center justify-between border-b border-[#00d2ff33] pb-1.5">
+        <div className="flex items-center justify-between border-b border-[#c8aa6e33] pb-1.5">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-base sm:text-lg">🛡️</span>
-            <span className="font-extrabold text-xs sm:text-sm text-white group-hover:text-[#00d2ff] transition-colors truncate">
+            <span className="font-extrabold text-xs sm:text-sm text-white group-hover:text-[#c8aa6e] transition-colors truncate">
               차원 왜곡 보호막 결속
             </span>
             <span className="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#42a5f525] text-[#42a5f5] border border-[#42a5f555] shrink-0">
               후열 거점
             </span>
-            <span className="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] shrink-0">
+            <span className="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] shrink-0">
               기본 2,500 HP
             </span>
           </div>
@@ -194,13 +194,13 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   setInspectHero({ hero: barrierHero, targetSlot: 'barrier' });
                   SoundManager.getInstance().play('click');
                 }}
-                className="text-[9.5px] px-2 py-0.5 rounded-lg bg-[#00d2ff22] border border-[#00d2ff66] text-[#00d2ff] hover:bg-[#00d2ff44] font-bold flex items-center gap-1 shrink-0"
+                className="text-[9.5px] px-2 py-0.5 rounded-lg bg-[#c8aa6e22] border border-[#c8aa6e66] text-[#c8aa6e] hover:bg-[#c8aa6e44] font-bold flex items-center gap-1 shrink-0"
               >
                 <span>🔍</span>
                 <span>전술/수치 상세</span>
               </button>
             )}
-            <span className="text-[11px] text-[#00d2ff] font-bold flex items-center gap-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform">
+            <span className="text-[11px] text-[#c8aa6e] font-bold flex items-center gap-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform">
               <span>결속자 변경</span>
               <span>➔</span>
             </span>
@@ -210,7 +210,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
         {/* 결속 용병 포트레이트 및 스탯 합산 미리보기 */}
         <div className="flex items-center gap-3">
           {/* 포트레이트 */}
-          <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shrink-0 border-2 border-[#00d2ff] shadow-[0_0_12px_rgba(0,210,255,0.5)] bg-[#0c1424] flex items-center justify-center">
+          <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shrink-0 border-2 border-[#c8aa6e] shadow-[0_0_12px_rgba(200, 170, 110,0.5)] bg-[#0e1117] flex items-center justify-center">
             {barrierHero && getHeroPortraitUrl(barrierHero) ? (
               <img
                 src={getHeroPortraitUrl(barrierHero)}
@@ -225,7 +225,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             <span className="absolute bottom-0.5 right-0.5 text-[8px] font-mono font-black bg-black/85 px-1 rounded text-[#ffd54f]">
               Lv.{barrierHero?.level || 1}
             </span>
-            <span className="absolute top-0.5 left-0.5 text-[6.5px] font-bold bg-[#00d2ff] text-black px-1 rounded">
+            <span className="absolute top-0.5 left-0.5 text-[6.5px] font-bold bg-[#c8aa6e] text-black px-1 rounded">
               WARDEN
             </span>
           </div>
@@ -249,7 +249,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             </div>
 
             {/* 총 내구도 및 결속 효과 요약 배너 */}
-            <div className="p-1.5 rounded-lg bg-black/50 border border-[#00d2ff33] flex items-center justify-between text-[10px] sm:text-[11px] font-mono">
+            <div className="p-1.5 rounded-lg bg-black/50 border border-[#c8aa6e33] flex items-center justify-between text-[10px] sm:text-[11px] font-mono">
               <span className="text-[#80deea] font-bold flex items-center gap-1">
                 <span>총 내구도:</span>
                 <span className="text-white font-black">{fortressStats.barrierMaxHp.toLocaleString()} HP</span>
@@ -344,12 +344,12 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
         {/* 🗼 우측 전술 포탑 (전술 지원 / 마나 & 행운 기반 증폭) */}
         <div
           onClick={() => handleOpenModal('right_turret')}
-          className="p-2.5 rounded-2xl bg-[#0c1824] border border-[#00d2ff55] hover:border-[#00d2ff] cursor-pointer transition-all flex flex-col gap-2 shadow group relative"
+          className="p-2.5 rounded-2xl bg-[#0e1015] border border-[#c8aa6e55] hover:border-[#c8aa6e] cursor-pointer transition-all flex flex-col gap-2 shadow group relative"
         >
-          <div className="flex items-center justify-between border-b border-[#00d2ff33] pb-1">
+          <div className="flex items-center justify-between border-b border-[#c8aa6e33] pb-1">
             <div className="flex items-center gap-1.5 truncate">
               <span className="text-base">🗼</span>
-              <span className="font-extrabold text-xs text-white group-hover:text-[#00d2ff] transition-colors truncate">
+              <span className="font-extrabold text-xs text-white group-hover:text-[#c8aa6e] transition-colors truncate">
                 우측 포탑 (전술 지원)
               </span>
               <span className="text-[7.5px] font-bold px-1 py-0.2 rounded bg-[#ef535025] text-[#ef5350] border border-[#ef535055] shrink-0">
@@ -371,13 +371,13 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   <span>상세</span>
                 </button>
               )}
-              <span className="text-[10px] text-[#00d2ff] font-bold shrink-0">사수 변경 ➔</span>
+              <span className="text-[10px] text-[#c8aa6e] font-bold shrink-0">사수 변경 ➔</span>
             </div>
           </div>
 
           <div className="flex items-center gap-2.5">
             {/* 사수 포트레이트 */}
-            <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 border-2 border-[#00d2ff] bg-[#0c1422] flex items-center justify-center">
+            <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 border-2 border-[#c8aa6e] bg-[#0c1422] flex items-center justify-center">
               {rightTurretHero && getHeroPortraitUrl(rightTurretHero) ? (
                 <img
                   src={getHeroPortraitUrl(rightTurretHero)}
@@ -515,7 +515,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
         {onNavigateToTowerResearch && (
           <button
             onClick={onNavigateToTowerResearch}
-            className="btn btn-ghost text-[10px] sm:text-[11px] px-2.5 py-1 border border-[#2b4168] text-[#00d2ff] hover:bg-[#00d2ff15] shrink-0 font-bold"
+            className="btn btn-ghost text-[10px] sm:text-[11px] px-2.5 py-1 border border-[#2b4168] text-[#c8aa6e] hover:bg-[#c8aa6e15] shrink-0 font-bold"
           >
             연구소 ➔
           </button>
@@ -547,7 +547,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               <div className="text-[11px] text-[#8b9bb4] bg-[#070b14] p-2 rounded-xl border border-[#162238] leading-relaxed">
                 {modalType === 'barrier' && (
                   <span>
-                    🛡️ 결속 용병은 <strong className="text-[#ffd54f]">직접 공격하지 않고</strong>, 자신의 <strong className="text-[#00d2ff]">MaxHP와 DEF</strong>를 차원 보호막에 100% 가산 합산합니다. 탱커를 배치할수록 보호막이 극적으로 두터워집니다.
+                    🛡️ 결속 용병은 <strong className="text-[#ffd54f]">직접 공격하지 않고</strong>, 자신의 <strong className="text-[#c8aa6e]">MaxHP와 DEF</strong>를 차원 보호막에 100% 가산 합산합니다. 탱커를 배치할수록 보호막이 극적으로 두터워집니다.
                   </span>
                 )}
                 {modalType === 'left_turret' && (
@@ -557,7 +557,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                 )}
                 {modalType === 'right_turret' && (
                   <span>
-                    🗼 우측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 <strong className="text-[#00d2ff]">공격력과 스킬</strong>로 공격합니다. <strong className="text-[#ffd54f]">전술 스킬 버프(쿨다운/계수)</strong>가 발동됩니다.
+                    🗼 우측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 <strong className="text-[#c8aa6e]">공격력과 스킬</strong>로 공격합니다. <strong className="text-[#ffd54f]">전술 스킬 버프(쿨다운/계수)</strong>가 발동됩니다.
                   </span>
                 )}
                 {modalType === 'operator' && (
@@ -604,8 +604,8 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                         isOccupiedElsewhere
                           ? 'bg-[#10141d]/50 border-[#1f2638] opacity-45 cursor-not-allowed'
                           : isSelectedForThis
-                          ? 'bg-[#0f2a42] border-[#00d2ff] shadow-[0_0_12px_rgba(0,210,255,0.4)]'
-                          : 'bg-[#101726] border-[#1e2a40] hover:border-[#00d2ff]/60'
+                          ? 'bg-[#0f2a42] border-[#c8aa6e] shadow-[0_0_12px_rgba(200, 170, 110,0.4)]'
+                          : 'bg-[#12141a] border-[#1e2a40] hover:border-[#c8aa6e]/60'
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
@@ -648,7 +648,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                             setInspectHero({ hero: h, targetSlot: modalType });
                             SoundManager.getInstance().play('click');
                           }}
-                          className="px-2 py-1 rounded-lg bg-[#00d2ff18] border border-[#00d2ff55] hover:bg-[#00d2ff33] text-[#00d2ff] text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                          className="px-2 py-1 rounded-lg bg-[#c8aa6e18] border border-[#c8aa6e55] hover:bg-[#c8aa6e33] text-[#c8aa6e] text-[10px] font-bold flex items-center gap-1 cursor-pointer"
                         >
                           <span>🔍</span>
                           <span>상세/전술</span>
@@ -669,7 +669,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                               ? 'bg-[#38ef7d22] border-[#38ef7d] text-[#38ef7d]'
                               : isOccupiedElsewhere
                               ? 'bg-[#10141d] border-[#1f2638] text-[#607d8b]'
-                              : 'bg-[#00d2ff22] border-[#00d2ff88] text-white hover:bg-[#00d2ff44]'
+                              : 'bg-[#c8aa6e22] border-[#c8aa6e88] text-white hover:bg-[#c8aa6e44]'
                           }`}
                         >
                           {isSelectedForThis ? '✓ 선택됨' : isOccupiedElsewhere ? '배치불가' : '선택'}
@@ -707,9 +707,9 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             name: '차원 왜곡 보호막',
             roleLabel: '수호 결속자 (탱커 권장)',
             icon: '🛡️',
-            color: '#00d2ff',
-            bgColor: '#00d2ff18',
-            borderColor: '#00d2ff77',
+            color: '#c8aa6e',
+            bgColor: '#c8aa6e18',
+            borderColor: '#c8aa6e77',
             badge: '후열 방어선 (내구&방어 대폭 증폭)'
           },
           left_turret: {
@@ -839,7 +839,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
 
                 {/* 1. 용병 프로필 요약 카드 */}
                 <div className="p-3 rounded-xl bg-[#0e1628] border border-[#1f2d48] flex items-center gap-3">
-                  <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 border-2 border-[#00d2ff] bg-[#070b14] flex items-center justify-center shadow-lg">
+                  <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 border-2 border-[#c8aa6e] bg-[#070b14] flex items-center justify-center shadow-lg">
                     {imgUrl ? (
                       <img src={imgUrl} alt={h.name} className="w-full h-full object-cover" />
                     ) : (
@@ -910,9 +910,9 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                   </div>
 
                   {/* 공성 침공 전술 (공격 시) */}
-                  <div className="p-2 rounded-lg bg-[#080d16] border border-[#00d2ff33] flex flex-col gap-1">
+                  <div className="p-2 rounded-lg bg-[#080d16] border border-[#c8aa6e33] flex flex-col gap-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black text-[#00d2ff] flex items-center gap-1.5">
+                      <span className="text-[11px] font-black text-[#c8aa6e] flex items-center gap-1.5">
                         <span className="text-sm">{tactic.siegeIcon}</span>
                         <span>[공성 침공 전술] {tactic.siegeSkillName}</span>
                       </span>
@@ -948,9 +948,9 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                         🛡️ 차원 보호막에 결속되어 후열에서 영지를 엄호합니다. 수호자는 직접 공격하지 않는 대신 자신의 <strong className="text-white">MaxHP(35% 증폭 반영)</strong>와 <strong className="text-white">방어력(50%)</strong>을 영지 전체 보호막에 가산하여 철벽을 형성합니다.
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 bg-black/60 p-2.5 rounded-xl border border-[#00d2ff33]">
+                      <div className="grid grid-cols-2 gap-2 bg-black/60 p-2.5 rounded-xl border border-[#c8aa6e33]">
                         {/* HP 비교 */}
-                        <div className="flex flex-col gap-1 border-r border-[#00d2ff22] pr-2">
+                        <div className="flex flex-col gap-1 border-r border-[#c8aa6e22] pr-2">
                           <span className="text-[10px] font-bold text-[#8b9bb4]">보호막 총 내구도 (HP)</span>
                           <div className="flex items-baseline gap-1.5">
                             <span className="text-[11px] text-[#546e7a] line-through font-mono">{baseBarrierHp.toLocaleString()}</span>

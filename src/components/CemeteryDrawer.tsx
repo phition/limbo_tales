@@ -193,7 +193,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                     ? 'bg-[#151722] border-[#ffd54f55] hover:border-[#ffd54faa] shadow-[0_0_8px_rgba(255,213,79,0.15)]'
                     : onCooldown
                     ? 'bg-[#0a0d14] border-[#1c2436] opacity-50 grayscale hover:opacity-75 hover:grayscale-0'
-                    : 'bg-[#101624] hover:bg-[#141d2f] border-[#202d44] hover:border-[#00d2ff66]'
+                    : 'bg-[#101624] hover:bg-[#141d2f] border-[#202d44] hover:border-[#c8aa6e66]'
                 }`}
               >
                 {/* 좌측: 얼굴(초상화) + 클래스/이름/레벨/등급 */}
@@ -272,7 +272,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                     </span>
                   )}
                   {!isBound && !onCooldown && (
-                    <span className="text-[11px] text-[#00d2ff] opacity-80 flex items-center gap-0.5">
+                    <span className="text-[11px] text-[#c8aa6e] opacity-80 flex items-center gap-0.5">
                       <span>상세</span>
                       <span className="text-[9px]">▶</span>
                     </span>
@@ -285,7 +285,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
       </div>
 
       {/* ── 2.5 🌟 패널 하단: 가로길이 반응형 헌화하기 버튼 바 (광고 완전 대체) ── */}
-      <div className="p-3 bg-[#080c14] border-t border-[#1c273a] shrink-0">
+      <div className="p-3 bg-[#08090d] border-t border-[#1c273a] shrink-0">
         <div className="max-w-md w-full mx-auto">
           <button
             type="button"
@@ -435,7 +435,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
               </div>
 
               {/* 비문 카드 */}
-              <div className="p-3 rounded-xl bg-[#090d16] border border-[#202c40] text-xs text-[#cfd8e8] italic leading-relaxed">
+              <div className="p-3 rounded-xl bg-[#0a0b10] border border-[#202c40] text-xs text-[#cfd8e8] italic leading-relaxed">
                 "{selectedHero.epitaph}"
               </div>
 
@@ -465,7 +465,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                       ⏳ 쿨다운 {formatCooldown(cooldownLeft)}
                     </span>
                   ) : (
-                    <span className="px-2 py-0.5 rounded bg-[#00d2ff18] text-[#00d2ff] border border-[#00d2ff44] text-[10px] shrink-0">
+                    <span className="px-2 py-0.5 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e44] text-[10px] shrink-0">
                       결속 가능
                     </span>
                   )}
@@ -480,7 +480,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                   <div className="flex items-center gap-1.5">
                     <span className="text-base select-none">🔮</span>
                     <span className="text-[#8b9bb4]">필요 공물:</span>
-                    <span className="font-bold text-[#00d2ff]">에테르 {ETHER_COST}개</span>
+                    <span className="font-bold text-[#c8aa6e]">에테르 {ETHER_COST}개</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-[11px] text-[#8b9bb4]">현재 보유:</span>
@@ -518,11 +518,11 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                 <div className="p-2.5 rounded-lg bg-[#141a29] border border-[#202c44] text-left text-xs">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] text-[#8b9bb4]">생전 유품 무구</span>
-                    <span className="text-[10px] text-[#00d2ff]">📦 성채 보관함으로 회수 완료</span>
+                    <span className="text-[10px] text-[#c8aa6e]">📦 성채 보관함으로 회수 완료</span>
                   </div>
                   <div className="flex gap-1.5 flex-wrap">
                     {selectedHero.equipmentSummary.map((eq, i) => (
-                      <span key={i} className="text-[11px] px-2 py-0.5 rounded bg-[#1f2a3f] text-[#00d2ff] border border-[#2e3e5c]">
+                      <span key={i} className="text-[11px] px-2 py-0.5 rounded bg-[#1f2a3f] text-[#c8aa6e] border border-[#2e3e5c]">
                         {eq}
                       </span>
                     ))}

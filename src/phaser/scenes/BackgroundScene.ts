@@ -47,7 +47,7 @@ export class BackgroundScene extends Phaser.Scene {
     for (let i = 0; i < 20; i++) {
       const x = Phaser.Math.Between(0, width);
       const y = Phaser.Math.Between(0, height);
-      const dot = this.add.circle(x, y, Phaser.Math.FloatBetween(1, 2.5), 0x00d2ff, Phaser.Math.FloatBetween(0.1, 0.35));
+      const dot = this.add.circle(x, y, Phaser.Math.FloatBetween(1, 2.5), 0xc8aa6e, Phaser.Math.FloatBetween(0.1, 0.35));
       this.tweens.add({
         targets: dot,
         y: y - Phaser.Math.Between(30, 80),

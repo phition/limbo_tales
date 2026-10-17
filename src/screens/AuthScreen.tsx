@@ -242,8 +242,8 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
               onClick={() => setLanguage(item.code)}
               className={`px-1.5 py-0.5 rounded text-[10px] font-bold font-mono transition-all cursor-pointer border ${
                 lang === item.code
-                  ? 'bg-[#00d2ff] text-black border-[#00d2ff] shadow-sm shadow-[#00d2ff55]'
-                  : 'bg-[#121927]/80 text-[#8b9bb4] border-[#22334f] hover:text-[#cfd8e8] hover:border-[#00d2ff66]'
+                  ? 'bg-[#c8aa6e] text-black border-[#c8aa6e] shadow-sm shadow-[#c8aa6e55]'
+                  : 'bg-[#121927]/80 text-[#8b9bb4] border-[#22334f] hover:text-[#cfd8e8] hover:border-[#c8aa6e66]'
               }`}
             >
               {item.label}
@@ -475,7 +475,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
           <button
             type="button"
             onClick={() => setShowPrivacyModal(true)}
-            className="text-[#94a3b8] hover:text-[#00d2ff] underline underline-offset-2 transition-colors cursor-pointer font-medium"
+            className="text-[#94a3b8] hover:text-[#c8aa6e] underline underline-offset-2 transition-colors cursor-pointer font-medium"
           >
             개인정보처리방침
           </button>
@@ -506,7 +506,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
             <button
               type="button"
               onClick={() => window.open('https://limbo-cbcc4.web.app/privacy.html', '_blank')}
-              className="text-[11px] text-[#00d2ff] hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-[11px] text-[#c8aa6e] hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>🌐 웹 브라우저로 열기</span>
             </button>

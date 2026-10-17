@@ -14,7 +14,7 @@ export interface SkillTag {
 export const ALL_SKILL_TAGS_META: Record<string, SkillTag> = {
   holy: { id: 'holy', label: '신성', bg: '#ffd54f1a', text: '#ffd54f', border: '#ffd54f44', icon: '✨' },
   crush: { id: 'crush', label: '강타', bg: '#ff91001a', text: '#ff9100', border: '#ff910044', icon: '🔨' },
-  storm: { id: 'storm', label: '폭풍', bg: '#00e5ff1a', text: '#00e5ff', border: '#00e5ff44', icon: '🌪️' },
+  storm: { id: 'storm', label: '폭풍', bg: '#c8aa6e1a', text: '#c8aa6e', border: '#c8aa6e44', icon: '🌪️' },
   lightning: { id: 'lightning', label: '뇌격', bg: '#ffeb3b1a', text: '#ffee58', border: '#ffeb3b44', icon: '⚡' },
   snipe: { id: 'snipe', label: '저격', bg: '#29b6f61a', text: '#29b6f6', border: '#29b6f644', icon: '🎯' },
   pierce: { id: 'pierce', label: '관통', bg: '#42a5f51a', text: '#42a5f5', border: '#42a5f544', icon: '🏹' },
@@ -26,7 +26,7 @@ export const ALL_SKILL_TAGS_META: Record<string, SkillTag> = {
   heal: { id: 'heal', label: '치유', bg: '#66bb6a1a', text: '#66bb6a', border: '#66bb6a44', icon: '💚' },
   regen: { id: 'regen', label: '재생', bg: '#26a69a1a', text: '#26a69a', border: '#26a69a44', icon: '🌱' },
   drain: { id: 'drain', label: '흡혈', bg: '#e91e631a', text: '#e91e63', border: '#e91e6344', icon: '🩸' },
-  shield: { id: 'shield', label: '보호막', bg: '#00d2ff1a', text: '#00d2ff', border: '#00d2ff44', icon: '🛡️' },
+  shield: { id: 'shield', label: '보호막', bg: '#c8aa6e1a', text: '#c8aa6e', border: '#c8aa6e44', icon: '🛡️' },
   stun: { id: 'stun', label: '기절', bg: '#ffea001a', text: '#ffea00', border: '#ffea0044', icon: '💫' },
   bleed: { id: 'bleed', label: '출혈', bg: '#ff17441a', text: '#ff1744', border: '#ff174444', icon: '🩸' },
   poison: { id: 'poison', label: '중독', bg: '#00e6761a', text: '#00e676', border: '#00e67644', icon: '☣️' },
@@ -137,7 +137,7 @@ export const COMBO_RULES: ComboRule[] = [
     requiredTagIds: ['crush', 'slash'],
     summary: '광역 얼음 파편 폭풍 피해 (45%)',
     fullDesc: '빙결/기절 상태의 적을 강타/베기로 타격 시 외피가 산산조각나며 주변 적들에게 45% 파편 피해',
-    bannerColor: '#00d2ff',
+    bannerColor: '#c8aa6e',
   },
   // ── 2. 과출혈 기폭 ──
   {
@@ -258,7 +258,7 @@ export const COMBO_RULES: ComboRule[] = [
     requiredTagIds: ['storm'],
     summary: '적 전체를 휩쓰는 벼락 폭풍 35% 연쇄 타격',
     fullDesc: '행동 불능 상태의 적에게 폭풍을 일으켜 전장에 거대한 뇌운을 소환하고 모든 적에게 35% 전격 폭풍 광역 피해',
-    bannerColor: '#00e5ff',
+    bannerColor: '#c8aa6e',
   },
   // ── 13. 산성 외골격 융해 ──
   {
@@ -334,7 +334,7 @@ export function getSkillTags(skill: Skill | 'basic'): SkillTag[] {
 
   // 3. 폭풍 / 바람 (storm / wind) 🌪️
   if (sName.includes('폭풍') || sName.includes('바람') || sName.includes('질풍') || sName.includes('돌풍') || sName.includes('회오리') || sName.includes('사이클론') || sName.includes('템페스트') || sName.includes('혈풍') || sDesc.includes('폭풍') || sDesc.includes('돌풍') || sDesc.includes('질풍') || sDesc.includes('바람') || sId.includes('storm') || sId.includes('cyclone') || sId.includes('wind') || sId.includes('flurry') || sId.includes('tempest') || sId.includes('gale') || sId.includes('tornado')) {
-    tags.push({ id: 'storm', label: '폭풍', bg: '#00e5ff1a', text: '#00e5ff', border: '#00e5ff44', icon: '🌪️' });
+    tags.push({ id: 'storm', label: '폭풍', bg: '#c8aa6e1a', text: '#c8aa6e', border: '#c8aa6e44', icon: '🌪️' });
   }
 
   // 4. 뇌격 / 전격 (lightning) ⚡
@@ -384,7 +384,7 @@ export function getSkillTags(skill: Skill | 'basic'): SkillTag[] {
 
   // 12. 보호막 (shield)
   if (eff === 'shield' || sName.includes('보호막') || sName.includes('방벽') || sName.includes('철벽') || sName.includes('방진') || sDesc.includes('보호막') || sDesc.includes('방어력') || sDesc.includes('방어 태세') || sId.includes('barrier') || sId.includes('shield') || sId.includes('bastion')) {
-    tags.push({ id: 'shield', label: '보호막', bg: '#00d2ff1a', text: '#00d2ff', border: '#00d2ff44', icon: '🛡️' });
+    tags.push({ id: 'shield', label: '보호막', bg: '#c8aa6e1a', text: '#c8aa6e', border: '#c8aa6e44', icon: '🛡️' });
   }
 
   // 13. 기절 / 출혈 / 중독 / 빙결 / 화상 상태이상 부여형
@@ -798,7 +798,7 @@ export function checkMonsterStatusComboOnHero(
     result.triggered = true;
     result.comboName = '빙결 쇄골 분쇄';
     result.icon = '❄️💥';
-    result.bannerColor = '#00d2ff';
+    result.bannerColor = '#c8aa6e';
     result.extraDamage = Math.max(1, Math.floor(baseDamage * 0.45));
     result.desc = `${monsterName}이(가) 얼어붙은 ${hero.name}의 외피를 내리찍어 ${result.extraDamage}의 산산조각 파편 피해를 입히고 기절을 연장시킵니다!`;
     result.effectType = 'stun';

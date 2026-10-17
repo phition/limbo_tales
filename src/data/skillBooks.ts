@@ -120,7 +120,7 @@ export const GRIMOIRE_RARITY_META: Record<'common' | 'rare' | 'epic' | 'legendar
   borderColor: string;
 }> = {
   common: { label: '일반', color: '#a0aec0', bg: '#a0aec018', borderColor: '#a0aec044' },
-  rare: { label: '희귀', color: '#00d2ff', bg: '#00d2ff18', borderColor: '#00d2ff44' },
+  rare: { label: '희귀', color: '#c8aa6e', bg: '#c8aa6e18', borderColor: '#c8aa6e44' },
   epic: { label: '에픽', color: '#ce93d8', bg: '#9c27b018', borderColor: '#ba68c844' },
   legendary: { label: '전설', color: '#ffd54f', bg: '#ff980018', borderColor: '#ffd54f44' }
 };
@@ -180,9 +180,9 @@ export const SKILL_AFFINITY_META: Record<SkillAffinityCategory, SkillAffinityMet
     shortName: '전 클래스',
     icon: '🌐',
     roles: ['all'],
-    color: '#00d2ff',
-    bg: '#00d2ff18',
-    borderColor: '#00d2ff44',
+    color: '#c8aa6e',
+    bg: '#c8aa6e18',
+    borderColor: '#c8aa6e44',
     description: '모든 직업군이 페널티 없이 온전한 위력(100%)으로 사용 가능한 비전서'
   }
 };

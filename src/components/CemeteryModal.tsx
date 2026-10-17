@@ -200,7 +200,7 @@ export const CemeteryModal: React.FC<Props> = ({ open, onClose, gm }) => {
                 {activeBlessing ? (
                   <div className="flex items-center gap-1 truncate">
                     <span className="font-bold text-[#ffd54f] truncate">{activeBlessing.name}</span>
-                    <span className="text-[10px] text-[#00d2ff] shrink-0">({activeBlessing.heroName})</span>
+                    <span className="text-[10px] text-[#c8aa6e] shrink-0">({activeBlessing.heroName})</span>
                   </div>
                 ) : (
                   <span className="text-[10px] text-[#78909c]">미결속 (공물 봉헌 시 발동)</span>
@@ -217,7 +217,7 @@ export const CemeteryModal: React.FC<Props> = ({ open, onClose, gm }) => {
 
         {/* 2. 묘비 목록 */}
         {cemetery.length === 0 ? (
-          <div className="p-8 rounded-2xl bg-[#090d16] border border-[#1a2338] text-center flex flex-col items-center gap-2">
+          <div className="p-8 rounded-2xl bg-[#0a0b10] border border-[#1a2338] text-center flex flex-col items-center gap-2">
             <span className="text-4xl opacity-50">🕊️</span>
             <div className="text-xs font-bold text-[#cfd8e8]">
               아직 방주를 위해 전사한 영웅이 없습니다.
@@ -302,7 +302,7 @@ export const CemeteryModal: React.FC<Props> = ({ open, onClose, gm }) => {
                           ⏳ {formatCooldown(cooldownLeft)}
                         </span>
                       ) : (
-                        <span className="px-1.5 py-0.2 rounded bg-[#00d2ff18] text-[#00d2ff] border border-[#00d2ff44] text-[9px]">
+                        <span className="px-1.5 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e44] text-[9px]">
                           🔮 에테르 {getOfferingEtherCost(h.grade)}개
                         </span>
                       )}
@@ -447,7 +447,7 @@ export const CemeteryModal: React.FC<Props> = ({ open, onClose, gm }) => {
                 </div>
 
                 {/* 비문 카드 */}
-                <div className="p-3 rounded-xl bg-[#090d16] border border-[#202c40] text-xs text-[#cfd8e8] italic leading-relaxed">
+                <div className="p-3 rounded-xl bg-[#0a0b10] border border-[#202c40] text-xs text-[#cfd8e8] italic leading-relaxed">
                   "{selectedHero.epitaph}"
                 </div>
 
@@ -477,7 +477,7 @@ export const CemeteryModal: React.FC<Props> = ({ open, onClose, gm }) => {
                         ⏳ 쿨다운 {formatCooldown(cooldownLeft)}
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded bg-[#00d2ff18] text-[#00d2ff] border border-[#00d2ff44] text-[10px] shrink-0">
+                      <span className="px-2 py-0.5 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e44] text-[10px] shrink-0">
                         결속 가능
                       </span>
                     )}
@@ -492,7 +492,7 @@ export const CemeteryModal: React.FC<Props> = ({ open, onClose, gm }) => {
                     <div className="flex items-center gap-1.5">
                       <span className="text-base">🔮</span>
                       <span className="text-[#8b9bb4]">필요 공물:</span>
-                      <span className="font-bold text-[#00d2ff]">에테르 {ETHER_COST}개</span>
+                      <span className="font-bold text-[#c8aa6e]">에테르 {ETHER_COST}개</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="text-[11px] text-[#8b9bb4]">현재 보유:</span>
@@ -536,11 +536,11 @@ export const CemeteryModal: React.FC<Props> = ({ open, onClose, gm }) => {
                   <div className="p-2.5 rounded-lg bg-[#141a29] border border-[#202c44] text-left text-xs">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-[10px] text-[#8b9bb4]">생전 유품 무구</span>
-                      <span className="text-[10px] text-[#00d2ff]">📦 성채 보관함으로 회수 완료</span>
+                      <span className="text-[10px] text-[#c8aa6e]">📦 성채 보관함으로 회수 완료</span>
                     </div>
                     <div className="flex gap-1.5 flex-wrap">
                       {selectedHero.equipmentSummary.map((eq, i) => (
-                        <span key={i} className="text-[11px] px-2 py-0.5 rounded bg-[#1f2a3f] text-[#00d2ff] border border-[#2e3e5c]">
+                        <span key={i} className="text-[11px] px-2 py-0.5 rounded bg-[#1f2a3f] text-[#c8aa6e] border border-[#2e3e5c]">
                           {eq}
                         </span>
                       ))}

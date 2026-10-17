@@ -68,7 +68,7 @@ export const CombatMeterTable: React.FC<Props> = ({
         <div>
           <div className="text-xs font-bold text-white flex items-center gap-1.5">
             <span>{title}</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff15] text-[#00d2ff] border border-[#00d2ff33] font-mono">
+            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] border border-[#c8aa6e33] font-mono">
               실시간 분석
             </span>
           </div>
@@ -77,11 +77,11 @@ export const CombatMeterTable: React.FC<Props> = ({
 
         {/* 필터 탭 (적군 메트릭스가 존재할 때만 표시) */}
         {metrics.some(m => !m.isPlayer) && (
-          <div className="flex items-center gap-1 bg-[#101726] p-0.5 rounded-lg border border-[#212f4d] text-[10px] font-bold">
+          <div className="flex items-center gap-1 bg-[#12141a] p-0.5 rounded-lg border border-[#212f4d] text-[10px] font-bold">
             <button
               type="button"
               className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
-                filter === 'all' ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]' : 'text-[#8b9bb4] hover:text-white'
+                filter === 'all' ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]' : 'text-[#8b9bb4] hover:text-white'
               }`}
               onClick={() => setFilter('all')}
             >
@@ -129,7 +129,7 @@ export const CombatMeterTable: React.FC<Props> = ({
             <span className="font-mono text-[#38ef7d] text-[8.5px]">{topHealer.healingDone.toLocaleString()} HEAL</span>
           </div>
         ) : (
-          <div className="p-1 rounded-lg bg-[#141b2c] border border-[#212f4d] flex flex-col items-center opacity-60">
+          <div className="p-1 rounded-lg bg-[#14161c] border border-[#212f4d] flex flex-col items-center opacity-60">
             <span className="text-[8.5px] text-[#8b9bb4] font-bold">💚 최고 치유</span>
             <span className="text-[#8b9bb4] text-[8.5px] mt-0.5">-</span>
           </div>
@@ -148,7 +148,7 @@ export const CombatMeterTable: React.FC<Props> = ({
       {/* 📋 상세 전투 리포트 표 */}
       <div className="max-h-[300px] overflow-y-auto rounded-xl border border-[#1b253b] bg-[#070b14]">
         <table className="w-full table-fixed text-left border-collapse text-[10px] sm:text-[11px]">
-          <thead className="bg-[#0e1424] text-[#8b9bb4] sticky top-0 border-b border-[#1b253b] z-10 font-mono text-[9px] sm:text-[10px]">
+          <thead className="bg-[#0e1016] text-[#8b9bb4] sticky top-0 border-b border-[#1b253b] z-10 font-mono text-[9px] sm:text-[10px]">
             <tr>
               <th className="w-[28%] py-1.5 px-1 font-bold text-left truncate">전투원</th>
               <th className="w-[24%] py-1.5 px-1 text-right font-bold text-[#ff80ab] truncate">💥 딜량</th>

@@ -63,7 +63,7 @@ export const NEMESIS_BOSS_CONFIG: NemesisBossConfig = {
       name: 'Phase 1: 차원의 균열 (Dimensional Rift)',
       threshold: 1.0,
       desc: '시공간의 균열을 열어 불안정한 중력 파동을 아군에게 방출합니다.',
-      badgeColor: '#00d2ff',
+      badgeColor: '#c8aa6e',
     },
     {
       phase: 2,

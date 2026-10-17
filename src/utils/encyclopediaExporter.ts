@@ -327,11 +327,11 @@ export function exportEncyclopediaToHtml(
   <title>${escapeHtml(docTitle)}</title>
   <style>
     :root {
-      --bg: #090d16;
+      --bg: #0a0b10;
       --card-bg: #111827;
       --card-border: #1f293d;
-      --accent: #00d2ff;
-      --accent-glow: rgba(0, 210, 255, 0.25);
+      --accent: #c8aa6e;
+      --accent-glow: rgba(200, 170, 110, 0.25);
       --gold: #f59e0b;
       --green: #10b981;
       --red: #ef4444;
@@ -350,7 +350,7 @@ export function exportEncyclopediaToHtml(
       margin: 0;
     }
     header {
-      background: linear-gradient(135deg, #0e1726 0%, #090d16 100%);
+      background: linear-gradient(135deg, #0e1726 0%, #0a0b10 100%);
       border-bottom: 1px solid #1f2d48;
       padding: 32px 20px;
       text-align: center;
@@ -410,8 +410,8 @@ export function exportEncyclopediaToHtml(
     }
     nav.toc a:hover {
       color: var(--accent);
-      background: rgba(0, 210, 255, 0.1);
-      border-color: rgba(0, 210, 255, 0.4);
+      background: rgba(200, 170, 110, 0.1);
+      border-color: rgba(200, 170, 110, 0.4);
     }
     main {
       max-width: 1200px;
@@ -475,9 +475,9 @@ export function exportEncyclopediaToHtml(
       letter-spacing: 0.3px;
     }
     .badge-accent {
-      background: rgba(0, 210, 255, 0.15);
+      background: rgba(200, 170, 110, 0.15);
       color: var(--accent);
-      border: 1px solid rgba(0, 210, 255, 0.4);
+      border: 1px solid rgba(200, 170, 110, 0.4);
     }
     .badge-subtle {
       background: rgba(255, 255, 255, 0.06);
@@ -592,7 +592,7 @@ export function exportEncyclopediaToHtml(
       flex-direction: column;
       gap: 2px;
     }
-    .skill-name { font-size: 11px; font-weight: 700; color: #38bdf8; }
+    .skill-name { font-size: 11px; font-weight: 700; color: #dfc488; }
     .skill-desc { font-size: 11px; color: #94a3b8; }
     .ult-pill {
       background: rgba(234, 179, 8, 0.1);
@@ -669,7 +669,7 @@ export function exportEncyclopediaToHtml(
       text-align: center;
       font-size: 12px;
       color: var(--text-dim);
-      background: #080c14;
+      background: #08090d;
     }
     @media print {
       nav.toc { display: none; }

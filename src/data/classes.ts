@@ -390,7 +390,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     specialSkill: { id: 'gun_orbital_strike', name: '[궁극기] 궤도 에테르 버스터', description: '방주 인공위성에서 에테르 융합 빔을 유도 폭격하여 적 전체의 방어력을 50% 관통하고 240% 위력으로 타격합니다.', manaCost: 85, cooldown: 5, targetType: 'all_enemies', power: 2.4, effectType: 'damage', piercePct: 50, icon: '🛰️', isSpecial: true },
     passiveDesc: '마도 탄도학 마스터: 치명타 공격 적중 시 방어력을 50% 관통하고 마나 15 자동 충전.',
     promptKey: 'hero_aether_meister',
-    themeColor: 0x00e5ff
+    themeColor: 0xc8aa6e
   },
 
   // 1차 전직 분기 B: 비전 학자 (Arcane Scholar)
@@ -701,7 +701,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     specialSkill: { id: 'omega_orbital_annihilation', name: '[초월기] 궤도 섬멸', description: '[후열] 단일 적 대상 300% 방어력 100% 무시 정밀 저격 + 적 전체 100% 광역 궤도 폭격을 가합니다.', manaCost: 150, cooldown: 5, targetType: 'single_enemy', power: 3.0, effectType: 'damage', positionBonus: 'back', piercePct: 100, icon: '🛰️', isSpecial: true },
     passiveDesc: '만마도서 & 연쇄 탄도학: 전 마도서 페널티 0% 해금. 상시 방어 관통 +50% 보유, 단일 공격 적중 시 50% 확률로 주변 적 전체에게 50% 위력의 연쇄 궤도 충격파 발생.',
     promptKey: 'hero_aether_meister',
-    themeColor: 0x00e5ff
+    themeColor: 0xc8aa6e
   }
 };
 

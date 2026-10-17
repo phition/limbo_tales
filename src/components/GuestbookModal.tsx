@@ -119,7 +119,7 @@ export const GuestbookModal: React.FC<Props> = ({
                 fb.fetchGuestbookMessages();
                 SoundManager.getInstance().play('click');
               }}
-              className="text-[10px] px-2 py-0.5 rounded bg-[#101726] border border-[#23324d] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e] transition-all cursor-pointer flex items-center gap-1"
+              className="text-[10px] px-2 py-0.5 rounded bg-[#12141a] border border-[#23324d] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e] transition-all cursor-pointer flex items-center gap-1"
               title="최신 방명록 새로고침"
             >
               <span>🔄</span>
@@ -182,7 +182,7 @@ export const GuestbookModal: React.FC<Props> = ({
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 pt-1 border-t border-[#1e2a3e] shrink-0">
             <button
-              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#141b2c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
               disabled={safePage <= 1}
               onClick={() => {
                 setCurrentPage((p) => Math.max(1, p - 1));
@@ -197,7 +197,7 @@ export const GuestbookModal: React.FC<Props> = ({
             </span>
 
             <button
-              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#141b2c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
               disabled={safePage >= totalPages}
               onClick={() => {
                 setCurrentPage((p) => Math.min(totalPages, p + 1));
@@ -228,7 +228,7 @@ export const GuestbookModal: React.FC<Props> = ({
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="p-3 rounded-xl bg-[#101726] border border-[#23324d] flex flex-col gap-2 shrink-0 shadow-sm"
+            className="p-3 rounded-xl bg-[#12141a] border border-[#23324d] flex flex-col gap-2 shrink-0 shadow-sm"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
@@ -257,7 +257,7 @@ export const GuestbookModal: React.FC<Props> = ({
                   setErrorMessage(null);
                 }}
                 placeholder="방주 지휘관들에게 남길 응원과 전술 조언을 작성하세요 (최대 100자)"
-                className="flex-1 p-2 rounded-lg bg-[#080d17] border border-[#1e2a3e] text-white text-xs placeholder-[#50607d] resize-none focus:border-[#c8aa6e] focus:outline-none transition-colors"
+                className="flex-1 p-2 rounded-lg bg-[#090b0e] border border-[#1e2a3e] text-white text-xs placeholder-[#50607d] resize-none focus:border-[#c8aa6e] focus:outline-none transition-colors"
                 disabled={isSubmitting}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -271,7 +271,7 @@ export const GuestbookModal: React.FC<Props> = ({
                 disabled={isSubmitting || !inputContent.trim()}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 flex flex-col items-center justify-center cursor-pointer ${
                   isSubmitting || !inputContent.trim()
-                    ? 'bg-[#182338] text-[#50607d] cursor-not-allowed border border-transparent'
+                    ? 'bg-[#15171e] text-[#50607d] cursor-not-allowed border border-transparent'
                     : 'bg-[#c8aa6e] hover:bg-[#d8bb7f] text-[#1c1408] border border-[#dfc48855] shadow-md shadow-[#c8aa6e22] active:scale-95'
                 }`}
               >

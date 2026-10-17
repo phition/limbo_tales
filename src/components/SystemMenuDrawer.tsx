@@ -108,7 +108,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         onClick={(e) => e.stopPropagation()}
       >
         {/* 드로어 헤더 */}
-        <div className="flex items-center justify-between px-4 py-3 bg-[#070a12] border-b border-[#1f2738] shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#08090d] border-b border-[#1f2738] shrink-0">
           <div className="flex items-center gap-2">
             <span className="text-base">⚙️</span>
             <span className="text-sm font-bold text-white">시스템 설정</span>
@@ -119,12 +119,12 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         </div>
 
         {/* 지휘관 프로필 카드 (로그인된 계정 정보) */}
-        <div className="p-3 bg-[#0e1424] border-b border-[#1f2738]">
+        <div className="p-3 bg-[#0e1016] border-b border-[#1f2738]">
           <div className="p-2.5 rounded-xl bg-[#141d30] border border-[#23324d] flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <span className="text-sm">🎖️</span>
-                <span className="font-bold text-xs text-[#00d2ff]">{profile?.nickname || '지휘관 정보'}</span>
+                <span className="font-bold text-xs text-[#c8aa6e]">{profile?.nickname || '지휘관 정보'}</span>
               </div>
               <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${!isMobilePlatform && fb.isMasterUser() ? 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]' : 'bg-[#38ef7d22] text-[#38ef7d]'}`}>
                 {!isMobilePlatform && fb.isMasterUser() ? '👑 마스터 계정' : user?.isAnonymous ? '게스트 계정' : '인증된 지휘관'}
@@ -137,12 +137,12 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             {/* 🎖️ 지휘관 콜사인 1회 수정 버튼 & 상태 */}
             <div className="flex items-center justify-between pt-1 border-t border-[#1f2738]/60 mt-0.5">
               <span className="text-[10px] text-[#8b9bb4]">
-                호출부호: <strong className="text-[#00d2ff]">[{profile?.nickname || '지휘관'}]</strong>
+                호출부호: <strong className="text-[#c8aa6e]">[{profile?.nickname || '지휘관'}]</strong>
               </span>
               {!profile?.callsignChanged ? (
                 <button
                   type="button"
-                  className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55] hover:bg-[#00d2ff33] active:scale-95 transition-all cursor-pointer flex items-center gap-1 shadow-xs"
+                  className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55] hover:bg-[#c8aa6e33] active:scale-95 transition-all cursor-pointer flex items-center gap-1 shadow-xs"
                   onClick={() => setCallsignModal(true)}
                   title="콜사인은 계정당 1회만 변경 가능합니다."
                 >
@@ -150,7 +150,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                   <span>콜사인 변경 (1회)</span>
                 </button>
               ) : (
-                <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-[#182338] text-[#8b9bb4] font-medium flex items-center gap-1">
+                <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-[#15171e] text-[#8b9bb4] font-medium flex items-center gap-1">
                   <span>🔒</span>
                   <span>1회 변경 완료</span>
                 </span>
@@ -167,7 +167,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
 
         {/* 🔊 사운드 & 음향 설정 패널 */}
         <div className="p-3 bg-[#0a0f1d] border-b border-[#1f2738] flex flex-col gap-2">
-          <div className="text-xs font-bold text-[#00d2ff] flex items-center justify-between">
+          <div className="text-xs font-bold text-[#c8aa6e] flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <span>🔊</span>
               <span>음향 효과 설정</span>
@@ -177,7 +177,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
           {/* BGM 볼륨 */}
           <div className="flex items-center justify-between gap-2">
             <button
-              className={`text-[10.5px] px-2 py-1 rounded font-bold transition-all shrink-0 ${bgmMuted ? 'bg-[#ef535022] text-[#ef5350] border border-[#ef535044]' : 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]'}`}
+              className={`text-[10.5px] px-2 py-1 rounded font-bold transition-all shrink-0 ${bgmMuted ? 'bg-[#ef535022] text-[#ef5350] border border-[#ef535044]' : 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]'}`}
               onClick={() => {
                 const muted = sm.toggleBgmMute();
                 setBgmMuted(muted);
@@ -197,7 +197,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 setBgmVol(v);
                 sm.setBgmVolume(v);
               }}
-              className="flex-1 accent-[#00d2ff] cursor-pointer h-1.5 bg-[#1f2738] rounded-lg"
+              className="flex-1 accent-[#c8aa6e] cursor-pointer h-1.5 bg-[#1f2738] rounded-lg"
             />
             <span className="text-[10px] font-mono text-[#8b9bb4] w-7 text-right shrink-0">
               {bgmMuted ? '0%' : `${Math.round(bgmVol * 100)}%`}
@@ -238,7 +238,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
           <div className="pt-2 border-t border-[#1f2738]/60 flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <span className="text-base text-[#00d2ff]">🌐</span>
+                <span className="text-base text-[#c8aa6e]">🌐</span>
                 <span className="font-bold text-xs text-white">
                   {dict.menu.language_setting || '언어 설정 (Language)'}
                 </span>
@@ -259,8 +259,8 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                   key={item.code}
                   className={`py-1.5 px-1 rounded-lg text-xs font-bold transition-all text-center cursor-pointer border truncate min-w-0 ${
                     lang === item.code
-                      ? 'bg-[#00d2ff] text-black border-[#00d2ff] shadow-md shadow-[#00d2ff44]'
-                      : 'bg-[#182338] text-[#cfd8e8] border-[#253550] hover:border-[#00d2ff88]'
+                      ? 'bg-[#c8aa6e] text-black border-[#c8aa6e] shadow-md shadow-[#c8aa6e44]'
+                      : 'bg-[#15171e] text-[#cfd8e8] border-[#253550] hover:border-[#c8aa6e88]'
                   }`}
                   onClick={() => {
                     setLanguage(item.code);
@@ -286,7 +286,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
           {/* 📋 방주 지휘관 방명록 (게시판) */}
           <button
-            className="w-full p-2.5 rounded-xl bg-[#141b2c] border border-[#23324d] hover:border-[#00d2ff] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
+            className="w-full p-2.5 rounded-xl bg-[#14161c] border border-[#23324d] hover:border-[#c8aa6e] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
             onClick={() => {
               onClose();
               if (onOpenGuestbook) {
@@ -297,9 +297,9 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             }}
           >
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
-              <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff] shrink-0">📋</span>
+              <span className="text-xl p-1 rounded-lg bg-[#c8aa6e22] text-[#c8aa6e] shrink-0">📋</span>
               <div className="min-w-0 flex-1">
-                <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors break-words">
+                <div className="font-bold text-xs text-white group-hover:text-[#c8aa6e] transition-colors break-words">
                   방주 지휘관 방명록 (게시판)
                 </div>
                 <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">
@@ -307,32 +307,32 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 </div>
               </div>
             </div>
-            <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
+            <span className="text-xs text-[#c8aa6e] shrink-0 ml-1.5">▶</span>
           </button>
 
           {/* 3. 도움말 (방주 백과사전 & 종합 도감) */}
           <button
-            className="w-full p-2.5 rounded-xl bg-[#141b2c] border border-[#23324d] hover:border-[#00d2ff] text-left flex items-center justify-between transition-all group cursor-pointer"
+            className="w-full p-2.5 rounded-xl bg-[#14161c] border border-[#23324d] hover:border-[#c8aa6e] text-left flex items-center justify-between transition-all group cursor-pointer"
             onClick={() => {
               onClose();
               onOpenGuide();
             }}
           >
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
-              <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff] shrink-0">📖</span>
+              <span className="text-xl p-1 rounded-lg bg-[#c8aa6e22] text-[#c8aa6e] shrink-0">📖</span>
               <div className="min-w-0 flex-1">
-                <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors break-words">
+                <div className="font-bold text-xs text-white group-hover:text-[#c8aa6e] transition-colors break-words">
                   방주 백과사전 & 도감
                 </div>
                 <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">전투 팁, 클래스, 장비, 몬스터 정보</div>
               </div>
             </div>
-            <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
+            <span className="text-xs text-[#c8aa6e] shrink-0 ml-1.5">▶</span>
           </button>
 
           {/* 📜 방주 프롤로그 서사 다시 보기 */}
           <button
-            className="w-full p-2.5 rounded-xl bg-[#141b2c] border border-[#23324d] hover:border-[#ffd54f] text-left flex items-center justify-between transition-all group cursor-pointer"
+            className="w-full p-2.5 rounded-xl bg-[#14161c] border border-[#23324d] hover:border-[#ffd54f] text-left flex items-center justify-between transition-all group cursor-pointer"
             onClick={() => {
               onClose();
               if (gm.currentScreen !== 'citadel') {
@@ -360,20 +360,20 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
           {/* 4. 🎨 커스텀 에셋 & 미디어 스튜디오 (마스터 계정 전용, 모바일 빌드 제외) */}
           {!isMobilePlatform && fb.isMasterUser() && (
             <button
-              className="w-full p-2.5 rounded-xl bg-[#131d2b] border border-[#00d2ff44] hover:border-[#00d2ff] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
+              className="w-full p-2.5 rounded-xl bg-[#131d2b] border border-[#c8aa6e44] hover:border-[#c8aa6e] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
               onClick={() => setAssetStudioModal(true)}
             >
               <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff] shrink-0">🎨</span>
+                <span className="text-xl p-1 rounded-lg bg-[#c8aa6e22] text-[#c8aa6e] shrink-0">🎨</span>
                 <div className="min-w-0 flex-1">
-                  <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors flex items-center gap-1.5 flex-wrap">
+                  <div className="font-bold text-xs text-white group-hover:text-[#c8aa6e] transition-colors flex items-center gap-1.5 flex-wrap">
                     <span className="break-words">에셋 & 사운드 스튜디오</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">MASTER</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0">MASTER</span>
                   </div>
                   <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">아이콘·이모지 전환, BGM & SFX 커스텀</div>
                 </div>
               </div>
-              <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
+              <span className="text-xs text-[#c8aa6e] shrink-0 ml-1.5">▶</span>
             </button>
           )}
 
@@ -469,7 +469,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
           {/* 5. 마스터 데이터 Firebase 시딩 (bumpcat.net 마스터 권한 전용, 모바일 빌드 제외) */}
           {!isMobilePlatform && fb.isMasterUser() && (
             <button
-              className="w-full p-2.5 rounded-xl bg-[#101b2b] border border-[#00d2ff55] hover:border-[#00d2ff] text-left flex items-center justify-between transition-all cursor-pointer shadow-md"
+              className="w-full p-2.5 rounded-xl bg-[#101b2b] border border-[#c8aa6e55] hover:border-[#c8aa6e] text-left flex items-center justify-between transition-all cursor-pointer shadow-md"
               onClick={async () => {
                 setIsSyncing(true);
                 setCloudStatus('파이어베이스 마스터 데이터 시딩 중...');
@@ -485,16 +485,16 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
               }}
             >
               <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff] shrink-0">👑</span>
+                <span className="text-xl p-1 rounded-lg bg-[#c8aa6e22] text-[#c8aa6e] shrink-0">👑</span>
                 <div className="min-w-0 flex-1">
-                  <div className="font-bold text-xs text-[#00d2ff] flex items-center gap-1.5 flex-wrap">
+                  <div className="font-bold text-xs text-[#c8aa6e] flex items-center gap-1.5 flex-wrap">
                     <span className="break-words">마스터 데이터 Firebase 시딩</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">MASTER</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0">MASTER</span>
                   </div>
                   <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">bumpcat.net 마스터 권한 전용 클라우드 동기화</div>
                 </div>
               </div>
-              <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
+              <span className="text-xs text-[#c8aa6e] shrink-0 ml-1.5">▶</span>
             </button>
           )}
 
@@ -530,10 +530,10 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         </div>
 
         {/* 푸터 */}
-        <div className="p-3 bg-[#070a12] border-t border-[#1f293d] text-center text-[10px] text-[#607d8b] flex flex-col items-center gap-0.5">
+        <div className="p-3 bg-[#08090d] border-t border-[#1f293d] text-center text-[10px] text-[#607d8b] flex flex-col items-center gap-0.5">
           <div className="font-medium text-[#8b9bb4]">Limbo: Ark of the Abyss</div>
           <div className="text-[10px] text-[#8b9bb4]">published by BumPCaT.net</div>
-          <div className="font-mono text-[11px] text-[#00d2ff] font-bold">V.0.9.9-rc10</div>
+          <div className="font-mono text-[11px] text-[#c8aa6e] font-bold">V.0.9.9-rc10</div>
           <div className="text-[9px] text-[#4a5568]">Firebase Connected</div>
         </div>
       </div>
@@ -547,19 +547,19 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
       >
         <div className="flex flex-col gap-3 text-xs text-[#cfd8dc] leading-relaxed max-h-[60vh] overflow-y-auto pr-1">
           {/* V.0.9.9-rc10 최신 패치노트 */}
-          <div className="p-3 rounded-xl bg-[#0f172a] border border-[#00d2ff] shadow-lg">
-            <div className="font-bold text-sm text-[#00d2ff] mb-2 flex items-center justify-between border-b border-[#00d2ff44] pb-1.5">
+          <div className="p-3 rounded-xl bg-[#0f172a] border border-[#c8aa6e] shadow-lg">
+            <div className="font-bold text-sm text-[#c8aa6e] mb-2 flex items-center justify-between border-b border-[#c8aa6e44] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>🔥</span>
                 <span>V.0.9.9-rc10 업데이트 패치노트</span>
               </span>
-              <span className="text-[10px] font-mono text-[#00d2ff] bg-[#00d2ff22] px-2 py-0.5 rounded font-bold border border-[#00d2ff55]">
+              <span className="text-[10px] font-mono text-[#c8aa6e] bg-[#c8aa6e22] px-2 py-0.5 rounded font-bold border border-[#c8aa6e55]">
                 v0.9.9-rc10
               </span>
             </div>
             <ul className="space-y-2.5 text-xs text-[#cfd8e8]">
               <li className="flex flex-col gap-0.5">
-                <span className="font-bold text-[#00d2ff] flex items-center gap-1">
+                <span className="font-bold text-[#c8aa6e] flex items-center gap-1">
                   <span>⚔️</span> 차원 아레나 (Dimensional Arena) 전면 개편 &amp; 정규 시즌 고도화
                 </span>
                 <span className="text-[11px] text-[#90a4ae] pl-4">
@@ -617,7 +617,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 <span>📜</span>
                 <span>V.0.9.9-rc1 업데이트 내역</span>
               </span>
-              <span className="text-[10px] font-mono text-[#8b9bb4] bg-[#1a2333] px-2 py-0.5 rounded font-bold border border-[#2a364f]">
+              <span className="text-[10px] font-mono text-[#8b9bb4] bg-[#15171d] px-2 py-0.5 rounded font-bold border border-[#2a364f]">
                 v0.9.9-rc1
               </span>
             </div>
@@ -667,7 +667,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 </span>
               </li>
               <li className="flex flex-col gap-0.5">
-                <span className="font-bold text-[#00d2ff] flex items-center gap-1">
+                <span className="font-bold text-[#c8aa6e] flex items-center gap-1">
                   <span>🛡️</span> 차원 부대 5인 편성 서포터 가이드 최신화 & 열별 테마 컬러 차별화
                 </span>
                 <span className="text-[11px] text-[#90a4ae] pl-4">
@@ -692,12 +692,12 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
 
           {/* V.0.9.8-rc1 이전 패치노트 */}
           <div className="p-3 rounded-xl bg-[#0b101b] border border-[#1f293d]">
-            <div className="font-bold text-sm text-[#00d2ff] mb-2 flex items-center justify-between border-b border-[#00d2ff44] pb-1.5">
+            <div className="font-bold text-sm text-[#c8aa6e] mb-2 flex items-center justify-between border-b border-[#c8aa6e44] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>🔥</span>
                 <span>V.0.9.8-rc1 업데이트 패치노트</span>
               </span>
-              <span className="text-[10px] font-mono text-[#00d2ff] bg-[#00d2ff22] px-2 py-0.5 rounded font-bold border border-[#00d2ff55]">
+              <span className="text-[10px] font-mono text-[#c8aa6e] bg-[#c8aa6e22] px-2 py-0.5 rounded font-bold border border-[#c8aa6e55]">
                 v0.9.8-rc1
               </span>
             </div>
@@ -724,7 +724,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 </span>
               </li>
               <li className="flex flex-col gap-0.5">
-                <span className="font-bold text-[#00d2ff] flex items-center gap-1">
+                <span className="font-bold text-[#c8aa6e] flex items-center gap-1">
                   <span>📖</span> 백과사전 13종 영지 시설 상세 번역 & 연계기 전투 로그 번역 완료
                 </span>
                 <span className="text-[11px] text-[#90a4ae] pl-4">
@@ -736,12 +736,12 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
 
           {/* V.0.9.7-rc1 이전 패치노트 */}
           <div className="p-3 rounded-xl bg-[#0b101b] border border-[#1f293d]">
-            <div className="font-bold text-sm text-[#00d2ff] mb-2 flex items-center justify-between border-b border-[#00d2ff44] pb-1.5">
+            <div className="font-bold text-sm text-[#c8aa6e] mb-2 flex items-center justify-between border-b border-[#c8aa6e44] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>🔥</span>
                 <span>V.0.9.7-rc1 업데이트 패치노트</span>
               </span>
-              <span className="text-[10px] font-mono text-[#00d2ff] bg-[#00d2ff22] px-2 py-0.5 rounded font-bold border border-[#00d2ff55]">
+              <span className="text-[10px] font-mono text-[#c8aa6e] bg-[#c8aa6e22] px-2 py-0.5 rounded font-bold border border-[#c8aa6e55]">
                 v0.9.7-rc1
               </span>
             </div>
@@ -768,7 +768,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 </span>
               </li>
               <li className="flex flex-col gap-0.5">
-                <span className="font-bold text-[#00d2ff] flex items-center gap-1">
+                <span className="font-bold text-[#c8aa6e] flex items-center gap-1">
                   <span>👑</span> 침공 전장 UI 리더 전술 체계 & 실시간 버프·디버프 뱃지 & 2.5배속 고속 전투
                 </span>
                 <span className="text-[11px] text-[#90a4ae] pl-4">
@@ -799,12 +799,12 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
 
           {/* V.0.9.6-rc8 이전 패치노트 */}
           <div className="p-3 rounded-xl bg-[#0b101b] border border-[#1f293d]">
-            <div className="font-bold text-sm text-[#00d2ff] mb-2 flex items-center justify-between border-b border-[#00d2ff44] pb-1.5">
+            <div className="font-bold text-sm text-[#c8aa6e] mb-2 flex items-center justify-between border-b border-[#c8aa6e44] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>🔥</span>
                 <span>V.0.9.6-rc8 업데이트 패치노트</span>
               </span>
-              <span className="text-[10px] font-mono text-[#00d2ff] bg-[#00d2ff22] px-2 py-0.5 rounded font-bold border border-[#00d2ff55]">
+              <span className="text-[10px] font-mono text-[#c8aa6e] bg-[#c8aa6e22] px-2 py-0.5 rounded font-bold border border-[#c8aa6e55]">
                 v0.9.6-rc8
               </span>
             </div>
@@ -834,7 +834,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 </span>
               </li>
               <li className="flex flex-col gap-0.5">
-                <span className="font-bold text-[#00d2ff] flex items-center gap-1">
+                <span className="font-bold text-[#c8aa6e] flex items-center gap-1">
                   <span>⚡</span> 자동 전투 1.5배 가속 및 스킬 콤보 / 막타 스마트 AI 알고리즘 적용
                 </span>
                 <span className="text-[11px] text-[#90a4ae] pl-4">
@@ -862,12 +862,12 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
 
           {/* V.0.9.6-rc7 이전 패치노트 */}
           <div className="p-3 rounded-xl bg-[#0b101b] border border-[#1f293d]">
-            <div className="font-bold text-sm text-[#00d2ff] mb-2 flex items-center justify-between border-b border-[#00d2ff44] pb-1.5">
+            <div className="font-bold text-sm text-[#c8aa6e] mb-2 flex items-center justify-between border-b border-[#c8aa6e44] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>🔥</span>
                 <span>V.0.9.6-rc7 업데이트 패치노트</span>
               </span>
-              <span className="text-[10px] font-mono text-[#00d2ff] bg-[#00d2ff22] px-2 py-0.5 rounded font-bold border border-[#00d2ff55]">
+              <span className="text-[10px] font-mono text-[#c8aa6e] bg-[#c8aa6e22] px-2 py-0.5 rounded font-bold border border-[#c8aa6e55]">
                 v0.9.6-rc7
               </span>
             </div>
@@ -893,7 +893,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 </span>
               </li>
               <li className="flex flex-col gap-0.5">
-                <span className="font-bold text-[#00d2ff] flex items-center gap-1">
+                <span className="font-bold text-[#c8aa6e] flex items-center gap-1">
                   <span>⭐</span> 용병 등급별 레벨업 스탯 성장치 차등화
                 </span>
                 <span className="text-[11px] text-[#90a4ae] pl-4">
@@ -975,7 +975,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
           </div>
 
           {/* V.0.9.6-rc2 패치노트 */}
-          <div className="p-3 rounded-xl bg-[#131d2e] border border-[#00d2ff44] shadow-md opacity-90">
+          <div className="p-3 rounded-xl bg-[#13151b] border border-[#c8aa6e44] shadow-md opacity-90">
             <div className="font-bold text-sm text-[#8b9bb4] mb-2 flex items-center justify-between border-b border-[#1f293d] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>✨</span>
@@ -1014,7 +1014,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
           </div>
 
           {/* V.0.9.6-rc1 핵심 시스템 하이라이트 */}
-          <div className="p-3 rounded-xl bg-[#131d2e] border border-[#00d2ff33] shadow-md opacity-90">
+          <div className="p-3 rounded-xl bg-[#13151b] border border-[#c8aa6e33] shadow-md opacity-90">
             <div className="font-bold text-sm text-[#8b9bb4] mb-2 flex items-center justify-between border-b border-[#1f293d] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>🚀</span>
@@ -1130,7 +1130,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             </div>
           </div>
 
-          <div className="p-3 rounded-lg bg-[#141b2c] border border-[#23324d] flex flex-col gap-1.5 text-[11px]">
+          <div className="p-3 rounded-lg bg-[#14161c] border border-[#23324d] flex flex-col gap-1.5 text-[11px]">
             <span className="font-bold text-[#ffd54f] mb-0.5">삭제 대상 목록:</span>
             <div className="flex items-center gap-1.5 text-[#cfd8dc]">
               <span>🏰</span> <span>거점 건물 레벨 및 시설 해금 전체 초기화</span>

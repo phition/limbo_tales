@@ -97,7 +97,7 @@ export const ResourceBar: React.FC<Props> = ({
 
         {/* 가장 오른쪽 햄버거 메뉴 버튼 */}
         <button
-          className="w-7 h-7 flex items-center justify-center rounded-lg bg-[#141a29] border border-[#27354d] text-white hover:border-[#00d2ff] hover:text-[#00d2ff] active:scale-95 transition-all text-sm shadow-sm cursor-pointer ml-0.5"
+          className="w-7 h-7 flex items-center justify-center rounded-lg bg-[#141a29] border border-[#27354d] text-white hover:border-[#c8aa6e] hover:text-[#c8aa6e] active:scale-95 transition-all text-sm shadow-sm cursor-pointer ml-0.5"
           onClick={onOpenMenu}
           title={menuTooltip}
         >

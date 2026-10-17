@@ -93,7 +93,7 @@ export const LootSelectionModal: React.FC<LootSelectionModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 animate-fade-in backdrop-blur-sm">
-      <div className="bg-[#0e131f] border border-[#00d2ff55] rounded-2xl w-full max-w-[760px] max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-scale-up">
+      <div className="bg-[#0e131f] border border-[#c8aa6e55] rounded-2xl w-full max-w-[760px] max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-scale-up">
         {/* Header */}
         <div className="px-4 py-3 border-b border-[#1f293d] flex items-center justify-between bg-[#131929]">
           <div className="flex items-center gap-2">
@@ -101,7 +101,7 @@ export const LootSelectionModal: React.FC<LootSelectionModalProps> = ({
             <span className="font-bold text-sm text-white">{title}</span>
           </div>
           <span className="text-xs text-[#8b9bb4]">
-            배낭 공간: <span className="text-[#00d2ff] font-bold">{currentInv.length}</span> / {currentCapacity}칸
+            배낭 공간: <span className="text-[#c8aa6e] font-bold">{currentInv.length}</span> / {currentCapacity}칸
           </span>
         </div>
 
@@ -110,7 +110,7 @@ export const LootSelectionModal: React.FC<LootSelectionModalProps> = ({
           {/* 왼쪽 모달: 🎒 현재 배낭 보관함 */}
           <div className="bg-[#121826] border border-[#222f47] rounded-xl p-3 flex flex-col">
             <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#222f47]">
-              <span className="text-xs font-bold text-[#00d2ff] flex items-center gap-1">
+              <span className="text-xs font-bold text-[#c8aa6e] flex items-center gap-1">
                 <span>🎒</span> 현재 배낭 아이템 ({currentInv.length}/{currentCapacity})
               </span>
               <span className="text-[11px] text-[#8b9bb4]">버릴 아이템 선택</span>
@@ -135,7 +135,7 @@ export const LootSelectionModal: React.FC<LootSelectionModalProps> = ({
                         </span>
                         <div className="min-w-0">
                           <div className="text-xs font-bold text-white truncate">{displayLabel}</div>
-                          <div className="text-[10px] text-[#8b9bb4]">수량: <span className="text-[#00d2ff] font-bold">{slot.qty}</span>개 (최대 {slot.maxStack})</div>
+                          <div className="text-[10px] text-[#8b9bb4]">수량: <span className="text-[#c8aa6e] font-bold">{slot.qty}</span>개 (최대 {slot.maxStack})</div>
                         </div>
                       </div>
                       <button

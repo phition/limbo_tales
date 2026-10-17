@@ -299,7 +299,7 @@ export const CraftProgressModal: React.FC<Props> = ({
     },
     enhance_equipment: {
       bgGradient: 'from-[#111e38] to-[#0c0d13]',
-      glowColor: isFailing ? '#ef5350' : '#00d2ff',
+      glowColor: isFailing ? '#ef5350' : '#c8aa6e',
       animIcon: isFailing ? '💥' : '⚡',
       badge: isFailing ? '⚠️ 마력 공명 붕괴' : '마도 장비 강화',
       iconKey: 'enhance_equipment',

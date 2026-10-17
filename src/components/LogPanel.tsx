@@ -217,7 +217,7 @@ export const LogPanel: React.FC<Props> = ({
         // Status - Freeze / Chill / Frostbite
         if (content.includes('동결') || content.includes('빙결') || content.includes('냉각') || content.includes('동상') || content.includes('결빙') || content.includes('Freeze') || content.includes('Frostbite') || content.includes('Chill') || content.includes('凍結') || content.includes('氷結') || content.includes('凍傷')) {
           return (
-            <span key={idx} className="font-bold text-[#38bdf8] bg-[#0c4a6e33] px-1 py-0.5 rounded border border-[#0284c744] text-[11px] sm:text-xs mx-0.5 inline-block">
+            <span key={idx} className="font-bold text-[#dfc488] bg-[#0c4a6e33] px-1 py-0.5 rounded border border-[#0284c744] text-[11px] sm:text-xs mx-0.5 inline-block">
               {part}
             </span>
           );
@@ -362,13 +362,13 @@ export const LogPanel: React.FC<Props> = ({
 
                 return (
                   <div key={log.id} className="flex items-center gap-2 my-1.5 py-0.5 select-none w-full min-w-0">
-                    <div className="h-[1px] flex-1 min-w-[8px] bg-gradient-to-r from-transparent via-[#00d2ff33] to-[#00d2ff66]" />
-                    <span className="text-[10px] sm:text-[11px] font-bold text-[#00d2ff] px-2.5 py-0.5 rounded-full bg-[#00d2ff14] border border-[#00d2ff3a] shadow-sm flex items-center gap-1.5 shrink-0 max-w-[85%] min-w-0">
+                    <div className="h-[1px] flex-1 min-w-[8px] bg-gradient-to-r from-transparent via-[#c8aa6e33] to-[#c8aa6e66]" />
+                    <span className="text-[10px] sm:text-[11px] font-bold text-[#c8aa6e] px-2.5 py-0.5 rounded-full bg-[#c8aa6e14] border border-[#c8aa6e3a] shadow-sm flex items-center gap-1.5 shrink-0 max-w-[85%] min-w-0">
                       <span>⏳</span>
                       <span className="truncate max-w-[130px] sm:max-w-[200px] text-white font-medium">{tr(actorName)}</span>
                       <span className="text-[#80d8ff] font-mono text-[9px] sm:text-[10px] shrink-0">({turnNum}{lang === 'ko' ? '턴' : lang === 'ja' ? 'ターン' : 'T'})</span>
                     </span>
-                    <div className="h-[1px] flex-1 min-w-[8px] bg-gradient-to-l from-transparent via-[#00d2ff33] to-[#00d2ff66]" />
+                    <div className="h-[1px] flex-1 min-w-[8px] bg-gradient-to-l from-transparent via-[#c8aa6e33] to-[#c8aa6e66]" />
                   </div>
                 );
               }

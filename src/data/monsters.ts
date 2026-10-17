@@ -290,7 +290,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     rewards: { gold: 140, ether: 10, exp: 135, resources: { crystal: 4, stone: 6 } },
     promptKey: 'monster_aether_basilisk',
     imagePath: 'assets/monster_aether_basilisk.jpg',
-    themeColor: 0x00e5ff,
+    themeColor: 0xc8aa6e,
     description: '에테르 광맥의 결정을 흡수하여 자란 마수. 석화의 시선과 수정 비늘 파편으로 적을 압박합니다.',
     imagePrompt: 'Dark fantasy anime style, serpentine aether basilisk coiled around massive glowing cyan crystal spires, iridescent crystalline reptilian scales reflecting magical light, piercing glowing amber eyes with petrifying glare, subterranean crystal cavern filled with luminous mana fog, sharp cel shading, 8k'
   },
@@ -1222,7 +1222,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     rewards: { gold: 3000, ether: 150, exp: 1500 },
     promptKey: 'nemesis_tail',
     imagePath: 'assets/nemesis_tail.jpg',
-    themeColor: 0x00d2ff,
+    themeColor: 0xc8aa6e,
     description: '치명적인 관통 침과 꼬리 휩쓸기로 후방을 기습하는 레인저 부위.'
   },
 };

@@ -104,7 +104,7 @@ export class BattleScene extends Phaser.Scene {
     }
 
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-      const circle = this.add.circle(pointer.worldX, pointer.worldY, 8, 0x00d2ff, 0.6).setDepth(9999);
+      const circle = this.add.circle(pointer.worldX, pointer.worldY, 8, 0xc8aa6e, 0.6).setDepth(9999);
       this.tweens.add({
         targets: circle,
         radius: 22,
@@ -257,7 +257,7 @@ export class BattleScene extends Phaser.Scene {
     const aBg = this.add.graphics();
     aBg.fillStyle(0x37474f, 0.9);
     aBg.fillRoundedRect(0, 0, 65, 30, 6);
-    aBg.lineStyle(1, 0x00d2ff, 1);
+    aBg.lineStyle(1, 0xc8aa6e, 1);
     aBg.strokeRoundedRect(0, 0, 65, 30, 6);
     const aLbl = this.add.text(32, 15, 'AUTO: OFF', {
       fontFamily: 'Noto Sans KR', fontSize: '10px', color: '#ffffff'
@@ -270,7 +270,7 @@ export class BattleScene extends Phaser.Scene {
       this.isAutoBattle = !this.isAutoBattle;
       aLbl.setText(this.isAutoBattle ? 'AUTO: ON' : 'AUTO: OFF');
       aBg.clear();
-      aBg.fillStyle(this.isAutoBattle ? 0x00d2ff : 0x37474f, 0.9);
+      aBg.fillStyle(this.isAutoBattle ? 0xc8aa6e : 0x37474f, 0.9);
       aBg.fillRoundedRect(0, 0, 65, 30, 6);
       if (this.isAutoBattle && !this.battleEnded) this.runAutoTurn();
     });
@@ -527,7 +527,7 @@ export class BattleScene extends Phaser.Scene {
     partyBox.add(pBg);
 
     const pTitle = this.add.text(14, 6, `🛡️ 원정대 현황  [Round ${this.roundCount}]`, {
-      fontFamily: 'Noto Sans KR', fontSize: '10.5px', color: '#00d2ff', fontStyle: 'bold'
+      fontFamily: 'Noto Sans KR', fontSize: '10.5px', color: '#c8aa6e', fontStyle: 'bold'
     });
     partyBox.add(pTitle);
 
@@ -1215,7 +1215,7 @@ export class BattleScene extends Phaser.Scene {
     const bg = this.add.graphics();
     bg.fillStyle(isSpecial ? 0x331422 : 0x212a3d, 1);
     bg.fillRoundedRect(0, 0, w, h, 8);
-    bg.lineStyle(1.5, isSpecial ? 0xffd54f : 0x00d2ff, 0.9);
+    bg.lineStyle(1.5, isSpecial ? 0xffd54f : 0xc8aa6e, 0.9);
     bg.strokeRoundedRect(0, 0, w, h, 8);
 
     const nameLbl = this.add.text(8, 6, `${skill.icon} ${skill.name}`, {

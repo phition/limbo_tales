@@ -103,7 +103,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
             </div>
           </div>
           <button 
-            className="w-7 h-7 rounded-lg bg-[#182338] text-[#8b9bb4] hover:text-white hover:bg-[#22324d] flex items-center justify-center text-sm font-bold transition-colors"
+            className="w-7 h-7 rounded-lg bg-[#15171e] text-[#8b9bb4] hover:text-white hover:bg-[#22324d] flex items-center justify-center text-sm font-bold transition-colors"
             onClick={onClose}
           >
             ✕
@@ -208,7 +208,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-1.5 flex-wrap">
                               <span className={`text-xs font-bold ${isDead ? 'text-[#8b9bb4] line-through' : 'text-white'}`}>{hero.name}</span>
-                              <span className="text-[10px] text-[#00d2ff]">{cls?.name || hero.classId}</span>
+                              <span className="text-[10px] text-[#c8aa6e]">{cls?.name || hero.classId}</span>
                               <span className="text-[10px] text-[#ffd54f]">Lv.{hero.level}</span>
                               {isDead && (
                                 <span className="text-[9px] bg-[#ef5350] text-white px-1.5 py-0.2 rounded font-bold">
@@ -452,7 +452,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                               <button
                                 className={`btn text-[10px] px-2.5 py-1 font-bold rounded-lg transition-colors ${
                                   isEquippedHere
-                                    ? 'btn-ghost text-[#00d2ff] border border-[#00d2ff55] cursor-default'
+                                    ? 'btn-ghost text-[#c8aa6e] border border-[#c8aa6e55] cursor-default'
                                     : 'btn-primary bg-[#ce93d8] hover:bg-[#ba68c8] text-black'
                                 }`}
                                 disabled={isEquippedHere}
@@ -492,7 +492,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                       </span>
                     )}
                     {normalAnchorCount > 0 && (
-                      <span className="text-xs font-mono font-bold text-[#00d2ff] bg-[#00d2ff18] px-2 py-0.5 rounded border border-[#00d2ff44] flex items-center gap-1">
+                      <span className="text-xs font-mono font-bold text-[#c8aa6e] bg-[#c8aa6e18] px-2 py-0.5 rounded border border-[#c8aa6e44] flex items-center gap-1">
                         <span>⚓</span>
                         <span>{`균열의 닻: ${normalAnchorCount}개 (3턴)`}</span>
                       </span>
@@ -690,7 +690,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                                 : hasEnhanced
                                 ? 'linear-gradient(135deg, #2b1f48 0%, #452b75 100%)'
                                 : 'linear-gradient(135deg, #423219 0%, #5c4524 100%)' 
-                              : '#1a2333',
+                              : '#15171d',
                             color: totalAnchorCount >= 1 && joinHeroId && leaveHeroId ? '#f3e5c8' : '#607d8b',
                             border: totalAnchorCount >= 1 && joinHeroId && leaveHeroId 
                               ? isTargetDead ? '1px solid #a83232' : hasEnhanced ? '1px solid #9c27b0' : '1px solid #876739' 

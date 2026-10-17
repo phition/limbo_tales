@@ -239,9 +239,9 @@ const MonsterImagePanel: React.FC<{ targetMonster?: MonsterState; totalCount: nu
             <div className="flex items-center gap-1.5">
               <span className="text-[10px] px-1.5 py-0.2 rounded font-bold"
                 style={{
-                  background: !isAlive ? '#37474f22' : mon.data.type === 'boss' ? '#ffd54f22' : mon.data.type === 'elite' ? '#ff6b6b22' : '#00d2ff22',
-                  color: !isAlive ? '#607d8b' : mon.data.type === 'boss' ? '#ffd54f' : mon.data.type === 'elite' ? '#ff6b6b' : '#00d2ff',
-                  border: `1px solid ${!isAlive ? '#37474f44' : mon.data.type === 'boss' ? '#ffd54f44' : mon.data.type === 'elite' ? '#ff6b6b44' : '#00d2ff44'}`
+                  background: !isAlive ? '#37474f22' : mon.data.type === 'boss' ? '#ffd54f22' : mon.data.type === 'elite' ? '#ff6b6b22' : '#c8aa6e22',
+                  color: !isAlive ? '#607d8b' : mon.data.type === 'boss' ? '#ffd54f' : mon.data.type === 'elite' ? '#ff6b6b' : '#c8aa6e',
+                  border: `1px solid ${!isAlive ? '#37474f44' : mon.data.type === 'boss' ? '#ffd54f44' : mon.data.type === 'elite' ? '#ff6b6b44' : '#c8aa6e44'}`
                 }}>
                 {!isAlive ? '💀 DEAD' : mon.data.type === 'boss' ? '👑 BOSS' : mon.data.type === 'elite' ? '⭐ ELITE' : '🎯 TARGET'}
               </span>
@@ -476,13 +476,13 @@ const SkillDetailModal: React.FC<{
         )}
 
         <div className="p-2.5 rounded-lg bg-[#11192e] border border-[#22324f] flex flex-col gap-1.5">
-          <div className="text-[11px] font-bold text-[#00d2ff]">📖 스킬 상세 효과</div>
+          <div className="text-[11px] font-bold text-[#c8aa6e]">📖 스킬 상세 효과</div>
           <div className="text-xs text-[#cfd8dc] leading-relaxed whitespace-pre-line">{skill.description}</div>
         </div>
 
         {/* ⚡ 상태이상 연계 콤보 안내 섹션 */}
         {combos.length > 0 && (
-          <div className="p-2.5 rounded-lg bg-[#131d2e] border border-[#00d2ff33] flex flex-col gap-1.5">
+          <div className="p-2.5 rounded-lg bg-[#13151b] border border-[#c8aa6e33] flex flex-col gap-1.5">
             <div className="text-[11px] font-bold text-[#ffd54f] flex items-center justify-between">
               <span className="flex items-center gap-1">
                 <span>⚡ 상태이상 연계 메커니즘</span>
@@ -564,7 +564,7 @@ const MonsterDetailModal: React.FC<{
   const gm = GameManager.getInstance();
   const hpPct = clamp((monster.currentHp / monster.maxHp) * 100, 0, 100);
   const typeLabel = monster.data.type === 'boss' ? '👑 BOSS' : monster.data.type === 'elite' ? '⭐ ELITE' : '👾 NORMAL';
-  const typeColor = monster.data.type === 'boss' ? '#ffd54f' : monster.data.type === 'elite' ? '#ff6b6b' : '#00d2ff';
+  const typeColor = monster.data.type === 'boss' ? '#ffd54f' : monster.data.type === 'elite' ? '#ff6b6b' : '#c8aa6e';
   const customOverride = monster.data.id ? CustomAssetService.getInstance().getMonsterOverride(monster.data.id) : undefined;
   const defMon = monster.data.id ? MONSTERS[monster.data.id] : undefined;
   const rawImageSrc = customOverride || defMon?.imagePath || monster.data.imagePath;
@@ -665,14 +665,14 @@ const MonsterDetailModal: React.FC<{
           </div>
         </div>
 
-        <div className="px-2.5 py-1.5 rounded-lg bg-[#0c1220] border border-[#1e2d45] text-[10px] text-[#8b9bb4] flex justify-between">
+        <div className="px-2.5 py-1.5 rounded-lg bg-[#0d0f14] border border-[#1e2d45] text-[10px] text-[#8b9bb4] flex justify-between">
           <span>치명타: <strong className="text-[#ce93d8]">{gm.getCritChance(monster.luck).toFixed(1)}%</strong></span>
           <span>상태이상 저항: <strong className="text-[#38ef7d]">{Math.min(50, monster.luck * 0.35).toFixed(1)}%</strong></span>
           <span>회피보정: <strong className="text-[#ffd54f]">+{Math.min(70, monster.luck * 0.3).toFixed(1)}%</strong></span>
         </div>
 
         {monster.data.faction && MONSTER_FACTION_META[monster.data.faction] && (
-          <div className="px-2.5 py-1.5 rounded-lg bg-[#0c1220] border border-[#1e2d45] text-[10px] flex items-center justify-between">
+          <div className="px-2.5 py-1.5 rounded-lg bg-[#0d0f14] border border-[#1e2d45] text-[10px] flex items-center justify-between">
             <span className="text-[#8b9bb4]">마법 계열 상성:</span>
             <span className="font-bold" style={{ color: MONSTER_FACTION_META[monster.data.faction].color }}>
               {monster.data.faction === 'undead' || monster.data.faction === 'corrupted'
@@ -752,7 +752,7 @@ const MonsterDetailModal: React.FC<{
         })()}
 
         <div className="p-2.5 rounded-lg bg-[#11192e] border border-[#22324f] flex flex-col gap-1.5">
-          <div className="text-[11px] font-bold text-[#00d2ff] flex items-center justify-between">
+          <div className="text-[11px] font-bold text-[#c8aa6e] flex items-center justify-between">
             <span>✨ 활성화된 상태이상 / 버프 / 디버프</span>
             <span className="text-[10px] text-[#8b9bb4] font-mono">
               {monster.statusEffects.length + (monster.isGroggy ? 1 : 0)}개 활성
@@ -775,7 +775,7 @@ const MonsterDetailModal: React.FC<{
                 </div>
               )}
               {monster.statusEffects.map((se, idx) => {
-                const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#00d2ff', desc: '' };
+                const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#c8aa6e', desc: '' };
                 return (
                   <div key={idx} className="p-1.5 rounded bg-[#162035] border border-[#273859] flex items-center justify-between text-xs">
                     <div className="flex items-center gap-1.5">
@@ -872,14 +872,14 @@ const HeroRow: React.FC<{
           : isDying
           ? '#ff1744'
           : isCurrentTurn
-          ? '#00d2ff'
+          ? '#c8aa6e'
           : isSelected
           ? '#38ef7d'
           : undefined,
       }}
     >
       <div className="flex items-center gap-1.5">
-        <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-[#00d2ff55] bg-[#1a2333] flex items-center justify-center relative shadow-xs" style={{ filter: hero.isPermanentlyDead ? 'grayscale(100%)' : undefined }}>
+        <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-[#c8aa6e55] bg-[#15171d] flex items-center justify-center relative shadow-xs" style={{ filter: hero.isPermanentlyDead ? 'grayscale(100%)' : undefined }}>
           {customPortrait ? (
             <img
               src={customPortrait}
@@ -908,7 +908,7 @@ const HeroRow: React.FC<{
             return (
               <div className="flex items-center gap-1 mb-0.5 flex-wrap">
                 <span className="font-bold text-xs" style={{ color: hero.isPermanentlyDead ? '#607d8b' : isDying ? '#ff8a80' : undefined, textDecoration: !isAlive ? 'line-through' : undefined }}>{hero.name}</span>
-                <span className="text-[10px] text-[#00d2ff] font-medium shrink-0">{cls?.name || hero.classId}</span>
+                <span className="text-[10px] text-[#c8aa6e] font-medium shrink-0">{cls?.name || hero.classId}</span>
                 <span className="text-[10px] font-mono font-bold" style={{ color: hero.isPermanentlyDead ? '#607d8b' : isDying ? '#ff5252' : '#ffd54f' }}>Lv.{hero.level}</span>
                 <span
                   className="text-[9px] px-1 py-0.2 rounded font-bold"
@@ -916,7 +916,7 @@ const HeroRow: React.FC<{
                 >
                   [{posMeta.label}]
                 </span>
-                {isAlive && isCurrentTurn && <span className="text-[9px] bg-[#00d2ff22] text-[#00d2ff] px-1 rounded font-bold border border-[#00d2ff44]">▶ 내 턴</span>}
+                {isAlive && isCurrentTurn && <span className="text-[9px] bg-[#c8aa6e22] text-[#c8aa6e] px-1 rounded font-bold border border-[#c8aa6e44]">▶ 내 턴</span>}
                 {isDying && (
                   <span className="text-[10px] text-white bg-[#d50000] border border-[#ff1744] px-2 py-0.5 rounded-full font-black animate-pulse shadow-[0_0_8px_#ff1744] flex items-center gap-1">
                     <span>⚠️ 사경 위기</span>
@@ -957,7 +957,7 @@ const HeroRow: React.FC<{
               {isDying ? `사경 (${hero.deathCountdown ?? 3}턴)` : `${Math.round(hero.currentHp)}/${Math.round(stats.maxHp)}`}
             </span>
             <button
-              className="text-[10px] text-[#8b9bb4] hover:text-[#00d2ff] px-0.5"
+              className="text-[10px] text-[#8b9bb4] hover:text-[#c8aa6e] px-0.5"
               title="상세 정보 보기"
               onClick={(e) => {
                 e.stopPropagation();
@@ -973,13 +973,13 @@ const HeroRow: React.FC<{
       {isAlive && hero.statusEffects.length > 0 && (
         <div className="flex gap-1 mt-0.5 flex-wrap">
           {hero.statusEffects.map((se, i) => {
-            const meta = STATUS_EFFECT_META[se.type] || { icon: se.icon || '✨', label: se.name || se.type, color: '#00d2ff', desc: '' };
+            const meta = STATUS_EFFECT_META[se.type] || { icon: se.icon || '✨', label: se.name || se.type, color: '#c8aa6e', desc: '' };
             const turns = se.turnsLeft ?? se.duration ?? 1;
             return (
               <span
                 key={i}
                 className="text-[10px] px-1 py-0.5 rounded flex items-center gap-0.5 font-bold"
-                style={{ background: (meta.color || '#00d2ff') + '33', color: meta.color || '#00d2ff', border: `1px solid ${(meta.color || '#00d2ff')}44` }}
+                style={{ background: (meta.color || '#c8aa6e') + '33', color: meta.color || '#c8aa6e', border: `1px solid ${(meta.color || '#c8aa6e')}44` }}
                 title={`${meta.label} (${turns}턴)`}
               >
                 <GameIcon name={se.type} icon={meta.icon || '✨'} size={12} />
@@ -1254,7 +1254,7 @@ export const BattleScreen: React.FC = () => {
       desc: '',
       extraDamage: 0,
       bonusLogs: [],
-      bannerColor: '#00d2ff'
+      bannerColor: '#c8aa6e'
     };
 
     if (targetMon.currentHp <= 0) return result;
@@ -1273,7 +1273,7 @@ export const BattleScreen: React.FC = () => {
       result.triggered = true;
       result.comboName = '빙결 분쇄 (Shatter)';
       result.icon = '❄️💥';
-      result.bannerColor = '#00d2ff';
+      result.bannerColor = '#c8aa6e';
       result.desc = '빙결된 외피가 산산조각나며 주변 적들에게 얼음 파편 폭풍을 흩뿌립니다!';
       result.extraDamage = Math.max(1, Math.floor(baseDamageDealt * 0.45));
       
@@ -1504,7 +1504,7 @@ export const BattleScreen: React.FC = () => {
       result.triggered = true;
       result.comboName = '뇌폭 폭풍 (Thunder Tempest)';
       result.icon = '⚡🌪️';
-      result.bannerColor = '#00e5ff';
+      result.bannerColor = '#c8aa6e';
       result.desc = '무력화된 적에게 뇌운 돌풍이 소환되어 모든 적을 휩쓰는 뇌폭 파동을 일으킵니다!';
       result.extraDamage = Math.max(1, Math.floor(baseDamageDealt * 0.35));
 
@@ -7375,7 +7375,7 @@ export const BattleScreen: React.FC = () => {
               ? 'bg-emerald-900/40'
               : skillCutIn.bannerType === 'counter'
               ? 'bg-purple-900/40'
-              : 'bg-cyan-900/40'
+              : 'bg-black/40'
           } animate-skill-speedlines`} />
 
           {/* 슬래시 컷인 배너 바 */}
@@ -7394,7 +7394,7 @@ export const BattleScreen: React.FC = () => {
               ? 'bg-gradient-to-r from-transparent via-[#330d00f5] via-50% to-transparent border-[#ff6d00] shadow-[#ff6d00aa]'
               : skillCutIn.bannerType === 'break'
               ? 'bg-gradient-to-r from-transparent via-[#2b1f00f5] via-50% to-transparent border-[#ffd600] shadow-[#ffd600aa]'
-              : 'bg-gradient-to-r from-transparent via-[#09152af5] via-50% to-transparent border-[#00d2ff] shadow-[#00d2ffaa]'
+              : 'bg-gradient-to-r from-transparent via-[#09152af5] via-50% to-transparent border-[#c8aa6e] shadow-[#c8aa6eaa]'
           }`}
           style={skillCutIn.bannerType === 'fever' && skillCutIn.feverBorderColor ? { borderColor: skillCutIn.feverBorderColor } : undefined}
           >
@@ -7410,7 +7410,7 @@ export const BattleScreen: React.FC = () => {
                   ? 'bg-[#0a2e1d] border-[#38ef7d] shadow-[#38ef7d]'
                   : skillCutIn.bannerType === 'counter'
                   ? 'bg-[#271038] border-[#ce93d8] shadow-[#ce93d8]'
-                  : 'bg-[#0c1f38] border-[#00d2ff] shadow-[#00d2ff]'
+                  : 'bg-[#0c1f38] border-[#c8aa6e] shadow-[#c8aa6e]'
               }`}>
                 {skillCutIn.icon}
               </div>
@@ -7499,7 +7499,7 @@ export const BattleScreen: React.FC = () => {
       {/* ── 💥 화면 타격 번쩍임 플래시 (Flash Overlay) ── */}
       {screenFlash && (
         <div className={`absolute inset-0 pointer-events-none z-50 animate-impact-flash ${
-          screenFlash === 'enemy' ? 'bg-[#ff174444]' : 'bg-[#00d2ff35]'
+          screenFlash === 'enemy' ? 'bg-[#ff174444]' : 'bg-[#c8aa6e35]'
         }`} />
       )}
 
@@ -7563,7 +7563,7 @@ export const BattleScreen: React.FC = () => {
                       </span>
                     )}
                     {m.statusEffects.map((se, i) => {
-                      const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#00d2ff' };
+                      const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#c8aa6e' };
                       return (
                         <span
                           key={i}
@@ -7650,7 +7650,7 @@ export const BattleScreen: React.FC = () => {
                     {isAlive && (
                       <button
                         type="button"
-                        className="text-[10px] text-[#8b9bb4] hover:text-[#00d2ff] p-0.5"
+                        className="text-[10px] text-[#8b9bb4] hover:text-[#c8aa6e] p-0.5"
                         title="몬스터 정보 (홀드로도 확인 가능)"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -7674,7 +7674,7 @@ export const BattleScreen: React.FC = () => {
           <LogPanel logs={state.battleLogs || []} isBattle maxHeight={148} emptyMessage="기록된 전투 로그가 없습니다." />
           <button
             type="button"
-            className="absolute top-1.5 right-2 px-2 py-0.5 rounded text-[11px] font-bold bg-[#141a27e0] hover:bg-[#1e273dee] text-[#00d2ff] hover:text-white border border-[#00d2ff44] shadow-md transition-all flex items-center gap-1 z-10"
+            className="absolute top-1.5 right-2 px-2 py-0.5 rounded text-[11px] font-bold bg-[#141a27e0] hover:bg-[#1e273dee] text-[#c8aa6e] hover:text-white border border-[#c8aa6e44] shadow-md transition-all flex items-center gap-1 z-10"
             title="전체 전투 상세 기록 모달 열기"
             onClick={() => setShowFullLogModal(true)}
           >
@@ -7704,10 +7704,10 @@ export const BattleScreen: React.FC = () => {
 
         {/* ── 행동 선택 창 (균일 높이 그리드 & 설명 제거 & 홀드 상세 모달 연동) ── */}
         {!battleEnded && !battleEndedRef.current && aliveMonsters.length > 0 && isHeroTurn && currentHeroPartyIdx === selectedHeroIdx && selectedHero && selectedHero.currentHp > 0 && (
-          <div className="panel p-2 mb-2 animate-slide-up" style={{ background: '#0b0d13dd', border: '1px solid #00d2ff44' }}>
-            <div className="text-xs text-[#00d2ff] font-bold mb-1.5 border-b border-[#00d2ff22] pb-1 flex items-center justify-between">
+          <div className="panel p-2 mb-2 animate-slide-up" style={{ background: '#0b0d13dd', border: '1px solid #c8aa6e44' }}>
+            <div className="text-xs text-[#c8aa6e] font-bold mb-1.5 border-b border-[#c8aa6e22] pb-1 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <span className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#00d2ff55] bg-[#1a2333] flex items-center justify-center">
+                <span className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#c8aa6e55] bg-[#15171d] flex items-center justify-center">
                   {(() => {
                     const selCls = Object.values(CHARACTER_CLASSES).find(c => c.id === selectedHero.classId);
                     const selPortrait = CustomAssetService.getInstance().getMercenaryOverride(selectedHero.classId)
@@ -7723,11 +7723,11 @@ export const BattleScreen: React.FC = () => {
                   })()}
                 </span>
                 <span>{selectedHero.name}</span>
-                <span className="text-[10px] text-[#00d2ff] font-medium">{CHARACTER_CLASSES[selectedHero.classId]?.name || selectedHero.classId}</span>
+                <span className="text-[10px] text-[#c8aa6e] font-medium">{CHARACTER_CLASSES[selectedHero.classId]?.name || selectedHero.classId}</span>
                 <span className="text-[10px] text-[#ffd54f] font-mono font-bold">Lv.{selectedHero.level}</span>
                 <span className="text-[10px] font-normal text-[#8b9bb4]">({selectedHero.position === 'front' ? '전열' : selectedHero.position === 'mid' ? '중열' : '후열'})</span>
               </span>
-              <span className="text-[10px] text-[#00d2ff] font-medium">(길게 눌러 스킬 상세)</span>
+              <span className="text-[10px] text-[#c8aa6e] font-medium">(길게 눌러 스킬 상세)</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {/* 기본 공격 또는 무기 접두사 인챈트 대체 스킬 */}
@@ -7763,10 +7763,10 @@ export const BattleScreen: React.FC = () => {
                     onLongPress={() => setSelectedSkillForModal(modalSkillInfo)}
                     onClick={() => !isProcessing && aliveMonsters.length > 0 && executeSkill(selectedHero, 'basic', targetedMonsterIdx)}
                     className={`btn btn-ghost flex flex-col justify-between p-2 sm:p-2.5 min-h-[82px] h-auto bg-transparent border relative select-none ${
-                      hasWeaponSkill ? 'shadow-[0_0_8px_rgba(0,210,255,0.15)]' : ''
+                      hasWeaponSkill ? 'shadow-[0_0_8px_rgba(200, 170, 110,0.15)]' : ''
                     } ${isProcessing || aliveMonsters.length === 0 ? 'opacity-40 cursor-not-allowed' : ''}`}
                     style={{
-                      borderColor: hasWeaponSkill ? (hasMp ? '#00d2ff' : '#ffd54f88') : getSkillBtnStyle('basic').borderColor,
+                      borderColor: hasWeaponSkill ? (hasMp ? '#c8aa6e' : '#ffd54f88') : getSkillBtnStyle('basic').borderColor,
                       borderRadius: 10
                     }}
                   >
@@ -7777,7 +7777,7 @@ export const BattleScreen: React.FC = () => {
                         </span>
                         <span
                           className="text-sm font-bold truncate break-words skill-btn-name"
-                          style={{ color: hasWeaponSkill ? (hasMp ? '#00e5ff' : '#ffd54f') : getSkillBtnStyle('basic').color }}
+                          style={{ color: hasWeaponSkill ? (hasMp ? '#c8aa6e' : '#ffd54f') : getSkillBtnStyle('basic').color }}
                         >
                           {displayName}
                         </span>
@@ -7962,7 +7962,7 @@ export const BattleScreen: React.FC = () => {
               <div className="flex flex-col gap-2 my-2.5 text-left">
                 {/* 획득 자원 및 경험치 종합 패널 */}
                 <div className="panel p-2.5 bg-[#0d1424] border border-[#1e2d45] rounded-xl flex flex-col gap-2">
-                  <div className="text-xs font-bold text-[#00d2ff] border-b border-[#1e2d45] pb-1 flex items-center justify-between">
+                  <div className="text-xs font-bold text-[#c8aa6e] border-b border-[#1e2d45] pb-1 flex items-center justify-between">
                     <span>전투 전리품 및 경험치</span>
                     {victorySummary?.exp ? (
                       <span className="text-[10px] text-[#38ef7d] font-mono">+{victorySummary.exp} EXP</span>
@@ -8248,7 +8248,7 @@ export const BattleScreen: React.FC = () => {
           <div className="flex flex-col gap-2">
             <div className="text-xs text-[#8b9bb4] flex items-center justify-between border-b border-[#1f2738] pb-1.5">
               <span>{tr(`총 ${(state.battleLogs || []).length}건의 전투 기록`)}</span>
-              <span className="text-[10px] text-[#00d2ff]">{tr('스크롤하여 이전 기록을 확인할 수 있습니다.')}</span>
+              <span className="text-[10px] text-[#c8aa6e]">{tr('스크롤하여 이전 기록을 확인할 수 있습니다.')}</span>
             </div>
             <div className="max-h-[60vh] overflow-y-auto pr-1">
               <LogPanel logs={state.battleLogs || []} isBattle maxHeight={520} emptyMessage={tr('기록된 전투 로그가 없습니다.')} />

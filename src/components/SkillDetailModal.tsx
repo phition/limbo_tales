@@ -129,13 +129,13 @@ export const SkillDetailModal: React.FC<SkillDetailModalProps> = ({
         )}
 
         <div className="p-2.5 rounded-lg bg-[#11192e] border border-[#22324f] flex flex-col gap-1.5">
-          <div className="text-[11px] font-bold text-[#00d2ff]">📖 스킬 상세 효과</div>
+          <div className="text-[11px] font-bold text-[#c8aa6e]">📖 스킬 상세 효과</div>
           <div className="text-xs text-[#cfd8dc] leading-relaxed whitespace-pre-line">{skill.description}</div>
         </div>
 
         {/* ⚡ 상태이상 연계 콤보 안내 섹션 */}
         {combos.length > 0 && (
-          <div className="p-2.5 rounded-lg bg-[#131d2e] border border-[#00d2ff33] flex flex-col gap-1.5">
+          <div className="p-2.5 rounded-lg bg-[#13151b] border border-[#c8aa6e33] flex flex-col gap-1.5">
             <div className="text-[11px] font-bold text-[#ffd54f] flex items-center justify-between">
               <span className="flex items-center gap-1">
                 <span>⚡ 상태이상 연계 메커니즘</span>

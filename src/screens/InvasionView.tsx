@@ -71,7 +71,7 @@ const TECH_DEFINITIONS: TechDefinition[] = [
     branch: 'defense',
     branchName: '방어 전술',
     branchIcon: '🛡️',
-    accentColor: '#00d2ff',
+    accentColor: '#c8aa6e',
     tier: 1,
     name: '나노 결계 복원 (성벽 회복)',
     icon: '💚',
@@ -83,7 +83,7 @@ const TECH_DEFINITIONS: TechDefinition[] = [
     branch: 'defense',
     branchName: '방어 전술',
     branchIcon: '🛡️',
-    accentColor: '#00d2ff',
+    accentColor: '#c8aa6e',
     tier: 2,
     name: '충격 전자기파 (기절)',
     icon: '⚡',
@@ -95,7 +95,7 @@ const TECH_DEFINITIONS: TechDefinition[] = [
     branch: 'defense',
     branchName: '방어 전술',
     branchIcon: '🛡️',
-    accentColor: '#00d2ff',
+    accentColor: '#c8aa6e',
     tier: 3,
     name: '극저온 동결 역장 (결빙)',
     icon: '❄️',
@@ -230,7 +230,7 @@ export const InvasionView: React.FC = () => {
           </p>
         </div>
         <div className="text-xs text-[#546e7a] font-mono bg-[#060911] px-4 py-2 rounded-xl border border-[#151f33]">
-          현재 차원 게이트 레벨: <span className="text-[#00d2ff] font-bold">Lv.{gateLevel}</span> / 6
+          현재 차원 게이트 레벨: <span className="text-[#c8aa6e] font-bold">Lv.{gateLevel}</span> / 6
         </div>
       </div>
     );
@@ -288,8 +288,8 @@ export const InvasionView: React.FC = () => {
           <div
             className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 text-xs ${
               isShieldActive
-                ? 'bg-[#00d2ff15] border-[#00d2ff44] text-[#00d2ff]'
-                : 'bg-[#141b2c] border-[#22324f] text-[#8b9bb4]'
+                ? 'bg-[#c8aa6e15] border-[#c8aa6e44] text-[#c8aa6e]'
+                : 'bg-[#14161c] border-[#22324f] text-[#8b9bb4]'
             }`}
           >
             <span>🛡️</span>
@@ -332,7 +332,7 @@ export const InvasionView: React.FC = () => {
           <div className="flex items-center justify-between bg-[#0b101c] p-2.5 rounded-xl border border-[#1b263b] text-xs text-[#8b9bb4]">
             <span>🎯 정찰할 사령관을 선택하여 부대 편성을 확인하고 목표 자원(30%)을 약탈하세요.</span>
             <button
-              className="btn btn-ghost text-xs px-3 py-1 border border-[#233554] text-[#00d2ff]"
+              className="btn btn-ghost text-xs px-3 py-1 border border-[#233554] text-[#c8aa6e]"
               disabled={isLoadingTargets}
               onClick={loadTargets}
             >
@@ -348,16 +348,16 @@ export const InvasionView: React.FC = () => {
                 onClick={() => {
                   setInspectTarget(t);
                 }}
-                className="w-full p-2.5 sm:p-3 rounded-xl bg-[#0e1424] border border-[#1f2d48] hover:border-[#00d2ff] cursor-pointer transition-all flex items-center justify-between shadow hover:shadow-cyan-950/30 group"
+                className="w-full p-2.5 sm:p-3 rounded-xl bg-[#0e1016] border border-[#1f2d48] hover:border-[#c8aa6e] cursor-pointer transition-all flex items-center justify-between shadow hover:shadow-[#c8aa6e]/20 group"
               >
                 {/* 좌측: 아바타 + 사령관 닉네임 + 영지명 + 게이트 레벨 */}
                 <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                  <div className="text-xl sm:text-2xl p-1.5 sm:p-2 rounded-xl bg-[#141d30] border border-[#233454] shrink-0 group-hover:border-[#00d2ff66] transition-colors">
+                  <div className="text-xl sm:text-2xl p-1.5 sm:p-2 rounded-xl bg-[#141d30] border border-[#233454] shrink-0 group-hover:border-[#c8aa6e66] transition-colors">
                     {t.avatarIcon || '🏰'}
                   </div>
                   <div className="min-w-0 truncate">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-xs sm:text-sm text-white group-hover:text-[#00d2ff] transition-colors truncate">
+                      <span className="font-bold text-xs sm:text-sm text-white group-hover:text-[#c8aa6e] transition-colors truncate">
                         {t.ownerNickname}
                       </span>
                       {t.isBot ? (
@@ -365,7 +365,7 @@ export const InvasionView: React.FC = () => {
                           🤖 BOT
                         </span>
                       ) : (
-                        <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44] font-mono shrink-0">
+                        <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] font-mono shrink-0">
                           🌐 지휘관
                         </span>
                       )}
@@ -399,7 +399,7 @@ export const InvasionView: React.FC = () => {
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     {t.isShielded ? (
-                      <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                      <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                         🛡️ 보호막
                       </span>
                     ) : (
@@ -407,7 +407,7 @@ export const InvasionView: React.FC = () => {
                         침공 가능
                       </span>
                     )}
-                    <span className="text-[9px] sm:text-[10px] text-[#607d8b] group-hover:text-[#00d2ff] flex items-center gap-0.5">
+                    <span className="text-[9px] sm:text-[10px] text-[#607d8b] group-hover:text-[#c8aa6e] flex items-center gap-0.5">
                       상세 정찰 ➔
                     </span>
                   </div>
@@ -433,7 +433,7 @@ export const InvasionView: React.FC = () => {
               </p>
             </div>
             <button
-              className="btn btn-ghost text-xs px-3 py-1.5 border border-[#243756] text-[#00d2ff]"
+              className="btn btn-ghost text-xs px-3 py-1.5 border border-[#243756] text-[#c8aa6e]"
               onClick={() => {
                 gm.activatePeaceShield(3);
               }}
@@ -505,7 +505,7 @@ export const InvasionView: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div className="p-8 text-center text-xs text-[#546e7a] bg-[#090d16] rounded-xl border border-[#172033]">
+              <div className="p-8 text-center text-xs text-[#546e7a] bg-[#0a0b10] rounded-xl border border-[#172033]">
                 🛡️ 아직 내 영지에 침공한 적 침략자가 없습니다. 평화로운 상태입니다.
               </div>
             )}
@@ -543,7 +543,7 @@ export const InvasionView: React.FC = () => {
               const branchTechs = TECH_DEFINITIONS.filter((t) => t.branch === branch);
               const branchName = branchTechs[0]?.branchName || '';
               const branchIcon = branchTechs[0]?.branchIcon || '';
-              const accentColor = branchTechs[0]?.accentColor || '#00d2ff';
+              const accentColor = branchTechs[0]?.accentColor || '#c8aa6e';
 
               return (
                 <div
@@ -591,23 +591,23 @@ export const InvasionView: React.FC = () => {
                           onClick={() => setSelectedTech(tech)}
                           className={`p-2.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
                             isLocked
-                              ? 'bg-[#090d16] border-[#151f30] opacity-50'
+                              ? 'bg-[#0a0b10] border-[#151f30] opacity-50'
                               : isMax
                               ? 'bg-[#0f1f1d] border-[#38ef7d55] hover:border-[#38ef7d]'
-                              : 'bg-[#101828] border-[#1d2c44] hover:border-[#00d2ff] hover:bg-[#142035]'
+                              : 'bg-[#101828] border-[#1d2c44] hover:border-[#c8aa6e] hover:bg-[#142035]'
                           } shadow group`}
                         >
                           {/* 좌측: 티어 배지 + 아이콘 + 이름 */}
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <span className="text-xl p-1 rounded-lg bg-[#080d17] border border-[#19263c] shrink-0">
+                            <span className="text-xl p-1 rounded-lg bg-[#090b0e] border border-[#19263c] shrink-0">
                               {tech.icon}
                             </span>
                             <div className="min-w-0">
                               <div className="flex items-center gap-1.5">
-                                <span className="text-[9px] font-bold font-mono px-1 py-0.2 rounded bg-[#172238] text-[#00d2ff] shrink-0">
+                                <span className="text-[9px] font-bold font-mono px-1 py-0.2 rounded bg-[#172238] text-[#c8aa6e] shrink-0">
                                   {tech.tier}차
                                 </span>
-                                <span className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors truncate">
+                                <span className="font-bold text-xs text-white group-hover:text-[#c8aa6e] transition-colors truncate">
                                   {tech.name}
                                 </span>
                               </div>
@@ -644,7 +644,7 @@ export const InvasionView: React.FC = () => {
                                 ))}
                               </div>
                             </div>
-                            <span className="text-xs text-[#546e7a] group-hover:text-[#00d2ff] transition-colors">
+                            <span className="text-xs text-[#546e7a] group-hover:text-[#c8aa6e] transition-colors">
                               ➔
                             </span>
                           </div>
@@ -677,7 +677,7 @@ export const InvasionView: React.FC = () => {
                         🤖 BOT
                       </span>
                     ) : (
-                      <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44] font-mono shrink-0">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] font-mono shrink-0">
                         🌐 지휘관
                       </span>
                     )}
@@ -719,7 +719,7 @@ export const InvasionView: React.FC = () => {
                   <div className="text-[10px] text-[#8b9bb4]">보호막 상태</div>
                   <div className="text-xs font-bold font-mono">
                     {inspectTarget.isShielded ? (
-                      <span className="text-[#00d2ff]">🛡️ 보호막 작동 중 (침공 불가)</span>
+                      <span className="text-[#c8aa6e]">🛡️ 보호막 작동 중 (침공 불가)</span>
                     ) : (
                       <span className="text-[#38ef7d]">⚡ 침공 가능</span>
                     )}
@@ -731,7 +731,7 @@ export const InvasionView: React.FC = () => {
               <div className="bg-[#090e1a] p-3 rounded-xl border border-[#162238] flex flex-col gap-2">
                 <div className="text-xs font-bold text-white flex items-center justify-between">
                   <span>🛡️ 상대 방어 부대 편성</span>
-                  <span className="text-[10px] font-mono text-[#00d2ff]">3인 결사대 + 1인 오퍼레이터</span>
+                  <span className="text-[10px] font-mono text-[#c8aa6e]">3인 결사대 + 1인 오퍼레이터</span>
                 </div>
                 <div className="grid grid-cols-4 gap-1.5">
                   {inspectTarget.defenseSquad.slice(0, 4).map((h, i) => {
@@ -743,7 +743,7 @@ export const InvasionView: React.FC = () => {
                         className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-center relative ${
                           isOperator
                             ? 'bg-[#1f1220] border-[#ff416c66]'
-                            : 'bg-[#101726] border-[#1e2a40]'
+                            : 'bg-[#12141a] border-[#1e2a40]'
                         }`}
                       >
                         <span
@@ -766,8 +766,8 @@ export const InvasionView: React.FC = () => {
                     );
                   })}
                 </div>
-                <div className="p-2 rounded-lg bg-[#0d1726] border border-[#00d2ff33] flex items-center justify-between text-xs">
-                  <span className="text-[#00d2ff] font-bold flex items-center gap-1.5">
+                <div className="p-2 rounded-lg bg-[#0d1726] border border-[#c8aa6e33] flex items-center justify-between text-xs">
+                  <span className="text-[#c8aa6e] font-bold flex items-center gap-1.5">
                     <span>🛡️</span>
                     <span>차원 왜곡 보호막 & 2대 전술 타워 방호</span>
                   </span>
@@ -793,7 +793,7 @@ export const InvasionView: React.FC = () => {
                   <div className="bg-[#090e1a] p-3 rounded-xl border border-[#162238] flex flex-col gap-2">
                     <div className="text-xs font-bold text-white flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[#00d2ff]">🗼</span>
+                        <span className="text-[#c8aa6e]">🗼</span>
                         <span>상대 방어 전술 타워 구축 현황</span>
                       </div>
                       <span className="text-[10px] font-mono text-[#ffd54f]">
@@ -827,9 +827,9 @@ export const InvasionView: React.FC = () => {
                       </div>
 
                       {/* 🛡️ 방어 전술 */}
-                      <div className="p-2 rounded-xl bg-[#0f1926] border border-[#00d2ff33] flex flex-col gap-1.5">
-                        <div className="flex items-center justify-between border-b border-[#00d2ff22] pb-1">
-                          <span className="font-bold text-[#00d2ff] flex items-center gap-1 text-[11px]">
+                      <div className="p-2 rounded-xl bg-[#0f1926] border border-[#c8aa6e33] flex flex-col gap-1.5">
+                        <div className="flex items-center justify-between border-b border-[#c8aa6e22] pb-1">
+                          <span className="font-bold text-[#c8aa6e] flex items-center gap-1 text-[11px]">
                             <span>🛡️</span>
                             <span>방어 전술</span>
                           </span>
@@ -837,15 +837,15 @@ export const InvasionView: React.FC = () => {
                         <div className="flex flex-col gap-1 text-[10px] font-mono">
                           <div className="flex justify-between items-center text-[#cfd8e8]">
                             <span className="text-[#8b9bb4]">1차(결계)</span>
-                            <span className="font-bold text-[#00d2ff]">Lv.{targetTower.defense.tier1}</span>
+                            <span className="font-bold text-[#c8aa6e]">Lv.{targetTower.defense.tier1}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
                             <span className="text-[#8b9bb4]">2차(재생)</span>
-                            <span className="font-bold text-[#00d2ff]">Lv.{targetTower.defense.tier2}</span>
+                            <span className="font-bold text-[#c8aa6e]">Lv.{targetTower.defense.tier2}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
                             <span className="text-[#8b9bb4]">3차(파쇄)</span>
-                            <span className="font-bold text-[#00d2ff]">Lv.{targetTower.defense.tier3}</span>
+                            <span className="font-bold text-[#c8aa6e]">Lv.{targetTower.defense.tier3}</span>
                           </div>
                         </div>
                       </div>
@@ -895,7 +895,7 @@ export const InvasionView: React.FC = () => {
                   <div className="p-2 rounded-lg bg-[#101728] border border-[#1e2d48] flex items-center gap-2">
                     <span className="text-xl">📦</span>
                     <div>
-                      <div className="text-[10px] text-[#00d2ff] font-bold">영지 생산자원 1종 랜덤 (30%)</div>
+                      <div className="text-[10px] text-[#c8aa6e] font-bold">영지 생산자원 1종 랜덤 (30%)</div>
                       <div className="text-[11px] text-[#cfd8e8]">목재🪵, 석재🪨, 철광⚙️, 식량🍖</div>
                     </div>
                   </div>
@@ -926,7 +926,7 @@ export const InvasionView: React.FC = () => {
                 취소
               </button>
               <button
-                className="btn btn-primary text-xs px-6 py-2.5 font-bold flex items-center gap-2 shadow-lg shadow-cyan-900/40"
+                className="btn btn-primary text-xs px-6 py-2.5 font-bold flex items-center gap-2 shadow-lg shadow-[#c8aa6e]/20"
                 disabled={inspectTarget.isShielded}
                 onClick={() => handleStartInvasion(inspectTarget)}
               >
@@ -1042,7 +1042,7 @@ export const InvasionView: React.FC = () => {
                     <span>전술 효과 수치</span>
                   </div>
                   <div className="flex flex-col gap-1.5 font-mono text-[11px]">
-                    <div className="flex items-center justify-between bg-[#101726] p-2 rounded-lg border border-[#1c2a40]">
+                    <div className="flex items-center justify-between bg-[#12141a] p-2 rounded-lg border border-[#1c2a40]">
                       <span className="text-[#8b9bb4]">현재 효과:</span>
                       <span className="text-[#38ef7d] font-bold">
                         {currentLv > 0 ? selectedTech.effectText(currentLv) : '미적용'}
@@ -1092,7 +1092,7 @@ export const InvasionView: React.FC = () => {
                             key={rKey}
                             className={`p-2 rounded-lg border flex items-center justify-between ${
                               hasEnough
-                                ? 'bg-[#101726] border-[#1d2a40] text-white'
+                                ? 'bg-[#12141a] border-[#1d2a40] text-white'
                                 : 'bg-[#261016] border-[#4a1c24] text-[#ff5252]'
                             }`}
                           >
@@ -1131,7 +1131,7 @@ export const InvasionView: React.FC = () => {
                   <button
                     className={`btn text-xs px-6 py-2.5 font-bold flex items-center gap-2 shadow-lg ${
                       !isLocked && canAfford
-                        ? 'btn-primary shadow-cyan-900/40'
+                        ? 'btn-primary shadow-[#c8aa6e]/20'
                         : 'btn-ghost opacity-50 cursor-not-allowed'
                     }`}
                     disabled={isLocked || !canAfford}

@@ -15,8 +15,8 @@ interface Props {
 const GRADE_META: Record<string, { label: string; tag: string; color: string }> = {
   rookie:  { label: 'N', tag: 'N', color: '#9e9e9e' },
   veteran: { label: 'V', tag: 'V', color: '#66bb6a' },
-  hero:    { label: 'H', tag: 'H', color: '#00d2ff' },
-  elite:   { label: 'H', tag: 'H', color: '#00d2ff' },
+  hero:    { label: 'H', tag: 'H', color: '#c8aa6e' },
+  elite:   { label: 'H', tag: 'H', color: '#c8aa6e' },
   epic:    { label: 'E', tag: 'E', color: '#ce93d8' },
   legend:  { label: 'E', tag: 'E', color: '#ce93d8' },
 };
@@ -53,7 +53,7 @@ export const HeroCard: React.FC<Props> = ({ hero, selected, onClick, compact }) 
             <img
               src={customPortrait}
               alt={hero.name}
-              className="w-7 h-7 object-cover rounded-full border border-[#00d2ff55] shadow-sm"
+              className="w-7 h-7 object-cover rounded-full border border-[#c8aa6e55] shadow-sm"
               onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
             />
           ) : (
@@ -70,7 +70,7 @@ export const HeroCard: React.FC<Props> = ({ hero, selected, onClick, compact }) 
             return (
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className={`font-bold text-xs truncate ${isDead ? 'line-through text-[#8b9bb4]' : ''}`}>{hero.name}</span>
-                <span className="text-[10px] text-[#00d2ff] font-medium shrink-0">{cls?.name || hero.classId}</span>
+                <span className="text-[10px] text-[#c8aa6e] font-medium shrink-0">{cls?.name || hero.classId}</span>
                 <span className="text-[10px] text-[#ffd54f] font-mono font-bold">Lv.{hero.level}</span>
                 {isDead && (
                   <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#ef535033] text-[#ef5350] border border-[#ef535066]">
@@ -118,7 +118,7 @@ export const HeroCard: React.FC<Props> = ({ hero, selected, onClick, compact }) 
           {hero.statusEffects && hero.statusEffects.length > 0 && (
             <div className="flex items-center gap-1 flex-wrap mt-1">
               {hero.statusEffects.map((se, idx) => {
-                const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#00d2ff' };
+                const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#c8aa6e' };
                 const effectLabel = se.source || meta.label;
                 return (
                   <span

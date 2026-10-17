@@ -103,7 +103,7 @@ export class InvasionBgScene extends Phaser.Scene {
     for (let j = 0; j < 16; j++) {
       const x = Phaser.Math.Between(0, width);
       const y = Phaser.Math.Between(height * 0.2, height * 0.85);
-      const color = Phaser.Math.RND.pick([0xffd54f, 0x00d2ff, 0xc084fc]);
+      const color = Phaser.Math.RND.pick([0xffd54f, 0xc8aa6e, 0xc084fc]);
       const star = this.add.circle(x, y, Phaser.Math.FloatBetween(1.0, 2.2), color, Phaser.Math.FloatBetween(0.1, 0.4));
       this.particles.push(star);
 

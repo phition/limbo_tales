@@ -164,16 +164,16 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
     <div
       className={`w-full px-2.5 py-1.5 rounded-2xl border transition-all relative overflow-hidden shadow-lg ${
         isPlayer
-          ? 'bg-gradient-to-r from-[#091424]/95 via-[#0d1c33]/95 to-[#07111e]/95 border-[#00d2ff55] shadow-[#00d2ff15]'
+          ? 'bg-gradient-to-r from-[#0d0f14]/95 via-[#12141a]/95 to-[#090a0d]/95 border-[#c8aa6e55] shadow-[#c8aa6e15]'
           : 'bg-gradient-to-r from-[#1c0c16]/95 via-[#270e1c]/95 to-[#140810]/95 border-[#ff416c55] shadow-[#ff416c15]'
-      } ${isActing ? (isPlayer ? 'ring-2 ring-[#00d2ff] animate-pulse' : 'ring-2 ring-[#ff416c] animate-pulse') : ''}`}
+      } ${isActing ? (isPlayer ? 'ring-2 ring-[#c8aa6e] animate-pulse' : 'ring-2 ring-[#ff416c] animate-pulse') : ''}`}
     >
       <div className="flex items-center gap-2.5">
         {/* 좌측: 오퍼레이터 포트레이트 */}
         <div
           className={`relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden shrink-0 border-2 ${
             isPlayer
-              ? 'border-[#00d2ff] shadow-[0_0_10px_rgba(0,210,255,0.4)]'
+              ? 'border-[#c8aa6e] shadow-[0_0_10px_rgba(200, 170, 110,0.4)]'
               : 'border-[#ff416c] shadow-[0_0_10px_rgba(255,65,108,0.4)]'
           } bg-[#0c1222] flex items-center justify-center`}
         >
@@ -204,7 +204,7 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
               <span
                 className={`text-[8px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider shrink-0 ${
                   isPlayer
-                    ? 'bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff66]'
+                    ? 'bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e66]'
                     : 'bg-[#ff416c25] text-[#ff80ab] border border-[#ff416c66]'
                 }`}
               >
@@ -216,7 +216,7 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
                     🤖 BOT
                   </span>
                 ) : (
-                  <span className="text-[7.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] shrink-0 font-mono">
+                  <span className="text-[7.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] shrink-0 font-mono">
                     🌐 지휘관
                   </span>
                 )
@@ -241,7 +241,7 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
               <span
                 className={`text-[7.5px] px-1.5 py-0.2 rounded font-black tracking-wider shrink-0 flex items-center gap-0.5 ${
                   isPlayer
-                    ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]'
+                    ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55]'
                     : 'bg-[#ff416c22] text-[#ff80ab] border border-[#ff416c55]'
                 }`}
               >
@@ -780,7 +780,7 @@ function generateOpponents(myRank: number, myRating: number, gateLevel: number =
 export function getRankBadge(rating: number): { label: string; color: string; border: string; bg: string; icon: string } {
   if (rating >= 2500) return { label: 'Grand Master', color: '#ff1744', border: '#ff174488', bg: '#ff174422', icon: '👑' };
   if (rating >= 2200) return { label: 'Master', color: '#e040fb', border: '#e040fb88', bg: '#e040fb22', icon: '💎' };
-  if (rating >= 1900) return { label: 'Diamond', color: '#00d2ff', border: '#00d2ff88', bg: '#00d2ff22', icon: '💠' };
+  if (rating >= 1900) return { label: 'Diamond', color: '#c8aa6e', border: '#c8aa6e88', bg: '#c8aa6e22', icon: '💠' };
   if (rating >= 1600) return { label: 'Platinum', color: '#00e676', border: '#00e67688', bg: '#00e67622', icon: '⚔️' };
   if (rating >= 1300) return { label: 'Gold', color: '#ffd54f', border: '#ffd54f88', bg: '#ffd54f22', icon: '🏆' };
   if (rating >= 1000) return { label: 'Silver', color: '#b0bec5', border: '#b0bec588', bg: '#b0bec522', icon: '🛡️' };
@@ -1461,7 +1461,7 @@ export const ArenaScreen: React.FC = () => {
         sub: isPlayerWin && opSpecialSkill
           ? `[오퍼레이터 궁극기] ${activeOperator?.name}의 [${opSpecialSkill.name}] 전탄 발사! (${showdown.playerSynergy.name})`
           : `${showdown.bannerSub} (${showdown.playerSynergy.name} vs ${showdown.oppSynergy.name})`,
-        color: isPlayerWin ? '#00d2ff' : isOppWin ? '#ff416c' : '#ffd54f'
+        color: isPlayerWin ? '#c8aa6e' : isOppWin ? '#ff416c' : '#ffd54f'
       });
     }
 
@@ -1534,7 +1534,7 @@ export const ArenaScreen: React.FC = () => {
             y: 24,
             duration: 700
           }]);
-          gm.emit('battleHitEffect', { x: colX, y: 24, color: 0x00d2ff, isCrit: true, type: opVfxPair.vfx });
+          gm.emit('battleHitEffect', { x: colX, y: 24, color: 0xc8aa6e, isCrit: true, type: opVfxPair.vfx });
         }, i * 70);
       });
       try {
@@ -2221,7 +2221,7 @@ export const ArenaScreen: React.FC = () => {
           gm.emit('battleHitEffect', {
             x: colX,
             y: rowY,
-            color: attacker.isPlayer ? 0x00d2ff : 0xff416c,
+            color: attacker.isPlayer ? 0xc8aa6e : 0xff416c,
             isCrit: res.isCrit,
             type: targetVfx,
           });
@@ -2263,7 +2263,7 @@ export const ArenaScreen: React.FC = () => {
       sub: isHealing
         ? `❤️ ${targetNames} 회복!`
         : `💥 ${isAoe ? `${targetUnits.length}인에게 총 -${totalDamageDealt} 피해` : `${target.name}에게 -${totalDamageDealt} 피해`} ${anyCrit ? '[CRIT!]' : ''}`,
-      color: attacker.isPlayer ? '#00d2ff' : '#ff416c',
+      color: attacker.isPlayer ? '#c8aa6e' : '#ff416c',
     });
 
     // 7. 팀 상태 동기화 (최신 ref 기반)
@@ -3224,7 +3224,7 @@ export const ArenaScreen: React.FC = () => {
           <div className="text-base font-bold text-white tracking-wide">차원 앵커 게이트 미건설</div>
           <div className="text-xs text-[#8b9bb4] max-w-[290px] leading-relaxed">
             차원의 관문이 아직 닫혀 있습니다.<br />
-            성채(Citadel)에서 <span className="text-[#ffd54f] font-bold">영혼의 제단(Lv.1)</span>을 먼저 세운 후 <span className="text-[#00d2ff] font-bold">차원 앵커 게이트</span>를 건설하여 3v3 아레나, 네메시스, 영지 침공을 개방하십시오.
+            성채(Citadel)에서 <span className="text-[#ffd54f] font-bold">영혼의 제단(Lv.1)</span>을 먼저 세운 후 <span className="text-[#c8aa6e] font-bold">차원 앵커 게이트</span>를 건설하여 3v3 아레나, 네메시스, 영지 침공을 개방하십시오.
           </div>
         </div>
         <ActionButton
@@ -3265,7 +3265,7 @@ export const ArenaScreen: React.FC = () => {
           <button
             className={`flex-1 min-w-0 py-2 px-1 sm:px-2 rounded-lg text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1 relative overflow-hidden ${
               !isNemesisUnlocked
-                ? 'text-[#506078] hover:bg-[#0c1220] opacity-65 cursor-pointer'
+                ? 'text-[#506078] hover:bg-[#0d0f14] opacity-65 cursor-pointer'
                 : gateMode === 'nemesis'
                 ? 'bg-gradient-to-r from-[#8a2be2] to-[#4a0e78] text-white shadow-md shadow-[#8a2be244] border border-[#a855f766]'
                 : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
@@ -3303,7 +3303,7 @@ export const ArenaScreen: React.FC = () => {
           <button
             className={`flex-1 min-w-0 py-2 px-1 sm:px-2 rounded-lg text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1 relative overflow-hidden ${
               !isInvasionUnlocked
-                ? 'text-[#506078] hover:bg-[#0c1220] opacity-65 cursor-pointer'
+                ? 'text-[#506078] hover:bg-[#0d0f14] opacity-65 cursor-pointer'
                 : gateMode === 'invasion'
                 ? 'bg-gradient-to-r from-[#e53e3e] via-[#dd6b20] to-[#d69e2e] text-white shadow-md shadow-[#e53e3e44] border border-[#f6ad5566]'
                 : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
@@ -3341,7 +3341,7 @@ export const ArenaScreen: React.FC = () => {
           <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
             <InvasionView />
           </div>
-          <div className="px-3 py-1.5 shrink-0 w-full max-w-full border-t border-[#1a2333] bg-[#090e18]">
+          <div className="px-3 py-1.5 shrink-0 w-full max-w-full border-t border-[#15171d] bg-[#090e18]">
             <ActionButton
               label="🏰 방주 성채로 귀환"
               variant="ghost"
@@ -3387,7 +3387,7 @@ export const ArenaScreen: React.FC = () => {
                 <span className="font-cinzel text-sm font-bold truncate" style={{ color: badge.color }}>
                   {badge.label}
                 </span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#1e293b] text-[#00d2ff] font-mono font-bold shrink-0">
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#1e293b] text-[#c8aa6e] font-mono font-bold shrink-0">
                   Rank #{state.currentArenaRank}
                 </span>
                 {streak > 1 && (
@@ -3409,7 +3409,7 @@ export const ArenaScreen: React.FC = () => {
               <span className="text-sm">🪙</span>
               <span className="font-mono text-sm font-bold text-[#ffd54f]">{state.arenaCoins ?? 0}</span>
             </div>
-            <span className="text-[9px] text-[#00d2ff]">'인장 획득 ➔ 명예 상점에서 장비 교환'</span>
+            <span className="text-[9px] text-[#c8aa6e]">'인장 획득 ➔ 명예 상점에서 장비 교환'</span>
           </div>
         </div>
       </div>
@@ -3456,7 +3456,7 @@ export const ArenaScreen: React.FC = () => {
                 <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
                   {allAvailableHeroes.length >= 3 ? (
                     <button
-                      className="btn btn-primary text-xs px-3 py-1.5 font-bold flex items-center gap-1 shadow-md shadow-[#00d2ff33] cursor-pointer"
+                      className="btn btn-primary text-xs px-3 py-1.5 font-bold flex items-center gap-1 shadow-md shadow-[#c8aa6e33] cursor-pointer"
                       onClick={() => {
                         const ok = gm.autoAssignDimensionalDeck();
                         if (ok) {
@@ -3480,7 +3480,7 @@ export const ArenaScreen: React.FC = () => {
                     </button>
                   )}
                   <button
-                    className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#00d2ff] border border-[#00d2ff44] hover:bg-[#00d2ff18] font-bold cursor-pointer"
+                    className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#c8aa6e] border border-[#c8aa6e44] hover:bg-[#c8aa6e18] font-bold cursor-pointer"
                     onClick={() => {
                       navigateTo('citadel');
                       gm.emit('openDimensionalBarracks');
@@ -3505,7 +3505,7 @@ export const ArenaScreen: React.FC = () => {
             )}
 
             {/* 🌱 프리시즌 AI 전술 훈련 리그 안내 배너 */}
-            <div className="p-3 rounded-xl bg-gradient-to-r from-[#00d2ff18] via-[#38ef7d15] to-[#00d2ff18] border border-[#00d2ff55] flex items-center justify-between shadow-sm">
+            <div className="p-3 rounded-xl bg-gradient-to-r from-[#c8aa6e18] via-[#38ef7d15] to-[#c8aa6e18] border border-[#c8aa6e55] flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-2.5 min-w-0">
                 <span className="text-xl shrink-0">🌱</span>
                 <div className="min-w-0">
@@ -3532,7 +3532,7 @@ export const ArenaScreen: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <button
-                    className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-[#00d2ff18] hover:bg-[#00d2ff33] text-[#00d2ff] border border-[#00d2ff44] font-bold flex items-center gap-1 cursor-pointer transition-all"
+                    className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-[#c8aa6e18] hover:bg-[#c8aa6e33] text-[#c8aa6e] border border-[#c8aa6e44] font-bold flex items-center gap-1 cursor-pointer transition-all"
                     onClick={() => {
                       navigateTo('citadel');
                       gm.emit('openDimensionalBarracks');
@@ -3577,14 +3577,14 @@ export const ArenaScreen: React.FC = () => {
 
             <div className="flex items-center justify-between text-xs text-[#8b9bb4] px-1">
               <span className="flex items-center gap-1.5">
-                <span className="text-[#00d2ff]">⚔️</span>
+                <span className="text-[#c8aa6e]">⚔️</span>
                 <span className="font-bold text-white">도전 가능한 AI 봇 대진표</span>
                 <span className="text-[9.5px] text-[#8b9bb4]">
                   (내 등급 <strong className="text-white">[{getRankBadge(state.currentArenaRating).label}]</strong> 맞춤 대진 & 상위 승급전)
                 </span>
               </span>
               <button
-                className="text-[11px] text-[#00d2ff] hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-[11px] text-[#c8aa6e] hover:underline flex items-center gap-1 cursor-pointer"
                 onClick={refreshOpponents}
               >
                 🔄 새로고침
@@ -3595,7 +3595,7 @@ export const ArenaScreen: React.FC = () => {
               const oppBadge = getRankBadge(opp.rating);
               const ratingGainDelta = Math.max(15, Math.floor((opp.rating - state.currentArenaRating) / 25 + 30));
               return (
-                <div key={opp.id} className="panel p-3 flex flex-col gap-2.5 border border-[#1f2738] hover:border-[#00d2ff44] transition-all bg-[#0e1320] rounded-xl w-full max-w-full overflow-hidden">
+                <div key={opp.id} className="panel p-3 flex flex-col gap-2.5 border border-[#1f2738] hover:border-[#c8aa6e44] transition-all bg-[#0e1320] rounded-xl w-full max-w-full overflow-hidden">
                   
                   {/* 카드 상단: 지휘관 정보 & 레이팅 & 도전 버튼 */}
                   <div className="flex items-center justify-between gap-2 w-full">
@@ -3607,7 +3607,7 @@ export const ArenaScreen: React.FC = () => {
                             🤖 BOT
                           </span>
                         ) : (
-                          <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] shrink-0 font-mono flex items-center gap-0.5">
+                          <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] shrink-0 font-mono flex items-center gap-0.5">
                             🌐 지휘관
                           </span>
                         )}
@@ -3633,7 +3633,7 @@ export const ArenaScreen: React.FC = () => {
                         variant={squadCheck.isReady ? 'primary' : 'ghost'}
                         size="sm"
                         className={`px-3 py-1.5 text-xs font-bold shrink-0 ${
-                          squadCheck.isReady ? 'shadow-md shadow-[#00d2ff22]' : 'opacity-80 border border-[#ef535044] text-[#ff8a80]'
+                          squadCheck.isReady ? 'shadow-md shadow-[#c8aa6e22]' : 'opacity-80 border border-[#ef535044] text-[#ff8a80]'
                         }`}
                         onClick={() => startPvpSimulation(opp)}
                       />
@@ -3653,7 +3653,7 @@ export const ArenaScreen: React.FC = () => {
                               : 'bg-[#1a2338] border-[#2c3b59] text-[#cfd8dc]'
                           }`}
                         >
-                          <span className="text-[9px] font-bold text-[#00d2ff] shrink-0">
+                          <span className="text-[9px] font-bold text-[#c8aa6e] shrink-0">
                             {idx === 0 ? '전열' : idx === 1 ? '중열' : '후열 ❓'}
                           </span>
                           <span className="font-semibold truncate w-full">
@@ -3685,7 +3685,7 @@ export const ArenaScreen: React.FC = () => {
                 </span>
               </span>
               <button
-                className="text-[11px] text-[#00d2ff] hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-[11px] text-[#c8aa6e] hover:underline flex items-center gap-1 cursor-pointer"
                 onClick={fetchLeaderboard}
                 disabled={isLoadingLb}
               >
@@ -3694,14 +3694,14 @@ export const ArenaScreen: React.FC = () => {
             </div>
 
             {/* 내 순위 핀 카드 */}
-            <div className="panel-accent p-3 flex items-center gap-2.5 border-2 border-[#00d2ff] bg-[#0c1b29] w-full max-w-full">
-              <div className="font-mono text-base font-bold w-8 text-center text-[#00d2ff] shrink-0">
+            <div className="panel-accent p-3 flex items-center gap-2.5 border-2 border-[#c8aa6e] bg-[#0c1b29] w-full max-w-full">
+              <div className="font-mono text-base font-bold w-8 text-center text-[#c8aa6e] shrink-0">
                 #{leaderboard.find(e => e.isPlayer)?.rank || state.currentArenaRank}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="font-bold text-xs text-white truncate">'내 원정단 (지휘관)'</span>
-                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">ME</span>
+                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0">ME</span>
                 </div>
                 <div className="text-[10px] text-[#8b9bb4] truncate">'방주 성채 수호단'</div>
               </div>
@@ -3721,7 +3721,7 @@ export const ArenaScreen: React.FC = () => {
                 return (
                   <div
                     key={`${entry.rank}_${entry.nickname}`}
-                    className={`panel p-2.5 flex items-center gap-2.5 transition-all w-full max-w-full ${entry.isPlayer ? 'border-[#00d2ff] bg-[#0d1f2d]' : 'border-[#1a2338] bg-[#0b101c]'}`}
+                    className={`panel p-2.5 flex items-center gap-2.5 transition-all w-full max-w-full ${entry.isPlayer ? 'border-[#c8aa6e] bg-[#0d1f2d]' : 'border-[#1a2338] bg-[#0b101c]'}`}
                   >
                     <div className="font-mono text-sm font-bold w-7 text-center shrink-0" style={{ color: rankColor }}>
                       {rankIcon}
@@ -3730,7 +3730,7 @@ export const ArenaScreen: React.FC = () => {
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="font-bold text-xs text-white truncate">{entry.nickname}</span>
                         {entry.isPlayer ? (
-                          <span className="text-[8.5px] px-1.5 py-0.2 rounded font-bold bg-[#00d2ff22] text-[#00d2ff] font-mono shrink-0">
+                          <span className="text-[8.5px] px-1.5 py-0.2 rounded font-bold bg-[#c8aa6e22] text-[#c8aa6e] font-mono shrink-0">
                             ME
                           </span>
                         ) : (
@@ -3814,7 +3814,7 @@ export const ArenaScreen: React.FC = () => {
                           <span className={`font-bold text-xs truncate ${isUnlocked ? 'text-white' : 'text-[#8b9bb4]'}`}>
                             {item.name}
                           </span>
-                          <span className="text-[9px] px-1 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">
+                          <span className="text-[9px] px-1 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0">
                             {item.tag}
                           </span>
                           {!isUnlocked && (
@@ -3874,7 +3874,7 @@ export const ArenaScreen: React.FC = () => {
           />
 
           {/* 전장 헤더 */}
-          <div className="w-full max-w-[500px] flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#0e1424] border border-[#1e2d48] shadow-lg shrink-0 z-10">
+          <div className="w-full max-w-[500px] flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#0e1016] border border-[#1e2d48] shadow-lg shrink-0 z-10">
             <div className="flex items-center gap-2 min-w-0">
               <span className="text-base">⚔️</span>
               <div className="min-w-0">
@@ -3885,7 +3885,7 @@ export const ArenaScreen: React.FC = () => {
                       🤖 BOT
                     </span>
                   ) : (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] font-mono shrink-0">
+                    <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] font-mono shrink-0">
                       🌐 지휘관
                     </span>
                   )}
@@ -3900,7 +3900,7 @@ export const ArenaScreen: React.FC = () => {
             {/* 전투 제어 컨트롤러 (1.5x / 2.0x 배속 전환 & 스킵, 수동 버튼 제거) */}
             <div className="flex items-center gap-1.5 shrink-0">
               <button
-                className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#141b2c] text-[#ffd54f] border border-[#212e48] hover:border-[#ffd54f]/50 transition-all cursor-pointer"
+                className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#14161c] text-[#ffd54f] border border-[#212e48] hover:border-[#ffd54f]/50 transition-all cursor-pointer"
                 onClick={() => setBattleSpeed(s => (s === 2 ? 1.5 : 2))}
               >
                 ⚡ {battleSpeed}x
@@ -3917,11 +3917,11 @@ export const ArenaScreen: React.FC = () => {
           {/* 🏆 피버콜 3승 선착 스코어보드 (Fever 3-Win Domination) */}
           <div className="w-full max-w-[500px] flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#090d19]/90 border border-amber-500/40 shadow-lg text-xs mt-1 z-10 backdrop-blur-sm">
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-cyan-300 text-[11px] flex items-center gap-1">
+              <span className="font-extrabold text-[#c8aa6e] text-[11px] flex items-center gap-1">
                 <span>🛡️</span>
                 <span>아군 피버</span>
               </span>
-              <div className="flex items-center gap-1 text-sm bg-black/40 px-1.5 py-0.5 rounded border border-cyan-500/30">
+              <div className="flex items-center gap-1 text-sm bg-black/40 px-1.5 py-0.5 rounded border border-[#c8aa6e]/30">
                 {[0, 1, 2].map(i => (
                   <span
                     key={i}
@@ -3977,9 +3977,9 @@ export const ArenaScreen: React.FC = () => {
               <div
                 className={`relative w-full max-w-md p-4 sm:p-5 rounded-3xl border-2 transition-all duration-500 flex flex-col gap-3 text-center shadow-2xl overflow-hidden ${
                   !isShowdownEvaluated
-                    ? 'bg-[#0c1220] border-[#00d2ff66] shadow-[0_0_40px_rgba(0,210,255,0.25)]'
+                    ? 'bg-[#0d0f14] border-[#c8aa6e66] shadow-[0_0_40px_rgba(200, 170, 110,0.25)]'
                     : showdownResult.outcome === 'player_win'
-                    ? 'bg-gradient-to-b from-[#0a1e36] via-[#081526] to-[#040912] border-[#00d2ff] shadow-[0_0_60px_rgba(0,210,255,0.7)]'
+                    ? 'bg-gradient-to-b from-[#0a1e36] via-[#081526] to-[#040912] border-[#c8aa6e] shadow-[0_0_60px_rgba(200, 170, 110,0.7)]'
                     : showdownResult.outcome === 'opp_win'
                     ? 'bg-gradient-to-b from-[#2e0911] via-[#1a050a] to-[#0d0205] border-[#ff1744] shadow-[0_0_60px_rgba(255,23,68,0.7)]'
                     : 'bg-gradient-to-b from-[#2a220a] via-[#171305] to-[#0c0902] border-[#ffd54f] shadow-[0_0_60px_rgba(255,213,79,0.7)]'
@@ -3992,7 +3992,7 @@ export const ArenaScreen: React.FC = () => {
                     className="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen animate-pulse"
                     style={{
                       background: showdownResult.outcome === 'player_win'
-                        ? 'radial-gradient(circle at center, #00d2ff 0%, transparent 70%)'
+                        ? 'radial-gradient(circle at center, #c8aa6e 0%, transparent 70%)'
                         : showdownResult.outcome === 'opp_win'
                         ? 'radial-gradient(circle at center, #ff1744 0%, transparent 70%)'
                         : 'radial-gradient(circle at center, #ffd54f 0%, transparent 70%)'
@@ -4010,14 +4010,14 @@ export const ArenaScreen: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-1 text-[10px] font-mono">
                     {!isShowdownEvaluated ? (
-                      <span className="text-[#00d2ff] font-bold animate-pulse flex items-center gap-1">
+                      <span className="text-[#c8aa6e] font-bold animate-pulse flex items-center gap-1">
                         <span>🃏</span>
                         <span>배지 오픈 {showdownRevealIndex}/5</span>
                       </span>
                     ) : (
                       <span className={`font-extrabold px-2 py-0.5 rounded-full ${
                         showdownResult.outcome === 'player_win'
-                          ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff88]'
+                          ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e88]'
                           : showdownResult.outcome === 'opp_win'
                           ? 'bg-[#ff174422] text-[#ff5252] border border-[#ff174488]'
                           : 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f88]'
@@ -4119,7 +4119,7 @@ export const ArenaScreen: React.FC = () => {
                 {/* ── 3. 아군 결투 부대 (PLAYER SIDE) ── */}
                 <div className={`p-2.5 rounded-2xl border transition-all duration-500 flex flex-col gap-2 relative ${
                   isShowdownEvaluated && showdownResult.outcome === 'player_win'
-                    ? 'bg-gradient-to-r from-[#0d2847] via-[#103a68] to-[#0d2847] border-[#00d2ff] shadow-[0_0_40px_rgba(0,210,255,0.95)] ring-2 ring-[#00e5ff]'
+                    ? 'bg-gradient-to-r from-[#0d2847] via-[#103a68] to-[#0d2847] border-[#c8aa6e] shadow-[0_0_40px_rgba(200, 170, 110,0.95)] ring-2 ring-[#c8aa6e]'
                     : isShowdownEvaluated && showdownResult.outcome === 'opp_win'
                     ? 'bg-[#0a121e]/60 border-[#14233a] opacity-45 grayscale'
                     : 'bg-[#0d1829] border-[#1d3558]'
@@ -4149,7 +4149,7 @@ export const ArenaScreen: React.FC = () => {
                           className={`h-11 rounded-xl flex flex-col items-center justify-center gap-0.5 border transition-all duration-300 text-center ${
                             isRevealed && meta
                               ? 'scale-100 rotate-0 shadow-md animate-scale-up'
-                              : 'scale-95 bg-[#0f1d33] border-[#1b355e] text-cyan-700/50'
+                              : 'scale-95 bg-[#111319] border-[#242730] text-[#c8aa6e]/50'
                           }`}
                           style={isRevealed && meta ? {
                             background: meta.bg,
@@ -4163,7 +4163,7 @@ export const ArenaScreen: React.FC = () => {
                               <span className="text-[7.5px] font-black tracking-tight">{meta.shortLabel}</span>
                             </>
                           ) : (
-                            <span className="text-xs font-mono font-bold text-cyan-400/50">🎴</span>
+                            <span className="text-xs font-mono font-bold text-[#c8aa6e]/50">🎴</span>
                           )}
                         </div>
                       );
@@ -4175,7 +4175,7 @@ export const ArenaScreen: React.FC = () => {
                     !isShowdownEvaluated
                       ? 'bg-black/40 border-stone-800 text-stone-500'
                       : showdownResult.outcome === 'player_win'
-                      ? 'bg-gradient-to-r from-[#00d2ff44] via-[#ffd54f33] to-[#00d2ff44] border-[#00d2ff] text-white shadow-lg shadow-[#00d2ff99]'
+                      ? 'bg-gradient-to-r from-[#c8aa6e44] via-[#ffd54f33] to-[#c8aa6e44] border-[#c8aa6e] text-white shadow-lg shadow-[#c8aa6e99]'
                       : 'bg-black/50 border-stone-800 text-stone-400'
                   }`}>
                     <div className="flex items-center gap-1.5 min-w-0">
@@ -4187,7 +4187,7 @@ export const ArenaScreen: React.FC = () => {
                       </span>
                     </div>
                     {isShowdownEvaluated && showdownResult.outcome === 'player_win' && (
-                      <span className="text-[9px] font-black px-2 py-0.5 rounded bg-gradient-to-r from-[#00d2ff] to-[#ffd54f] text-black font-mono animate-bounce shrink-0 shadow-md">
+                      <span className="text-[9px] font-black px-2 py-0.5 rounded bg-gradient-to-r from-[#c8aa6e] to-[#ffd54f] text-black font-mono animate-bounce shrink-0 shadow-md">
                         👑 WINNER!
                       </span>
                     )}
@@ -4308,7 +4308,7 @@ export const ArenaScreen: React.FC = () => {
                               key={eIdx}
                               className={`text-[8px] px-1 py-0.2 rounded font-bold flex items-center gap-0.5 ${
                                 isBuff
-                                  ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]'
+                                  ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]'
                                   : 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]'
                               }`}
                               title={`${label} (${turns}턴)`}
@@ -4399,7 +4399,7 @@ export const ArenaScreen: React.FC = () => {
             {/* ── 2. 중앙 배틀 아레나 (액션 배너 & 피버콜 3턴 유예 현황) ── */}
             <div className="h-10 w-full relative flex flex-col items-center justify-center pointer-events-none my-1">
               {actionBanner ? (
-                <div className="px-4 py-1 rounded-full bg-[#0d1527ee] border border-[#00d2ff66] shadow-xl animate-scale-up text-center max-w-[90%] z-20">
+                <div className="px-4 py-1 rounded-full bg-[#0d1527ee] border border-[#c8aa6e66] shadow-xl animate-scale-up text-center max-w-[90%] z-20">
                   <span className="text-xs font-bold block" style={{ color: actionBanner.color }}>
                     {actionBanner.text}
                   </span>
@@ -4453,11 +4453,11 @@ export const ArenaScreen: React.FC = () => {
                   <div
                     key={c.id}
                     className={`panel p-2 flex flex-col gap-0.5 rounded-xl transition-all relative ${
-                      isTurn ? 'border-2 border-[#00d2ff] shadow-lg shadow-[#00d2ff33] bg-[#0c1e30]' : 'border border-[#1a2d48] bg-[#0d1726]'
+                      isTurn ? 'border-2 border-[#c8aa6e] shadow-lg shadow-[#c8aa6e33] bg-[#0c1e30]' : 'border border-[#1a2d48] bg-[#0d1726]'
                     } ${isDying ? 'border-2 border-[#ff9800] ring-1 ring-[#ff9800] bg-[#1c150c]' : ''} ${isDead ? 'opacity-40 grayscale' : ''}`}
                   >
                     {isTurn && isAlive && (
-                      <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[8px] px-1.5 py-0.1 rounded-full font-bold bg-[#00d2ff] text-black shadow-md animate-bounce z-10">
+                      <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[8px] px-1.5 py-0.1 rounded-full font-bold bg-[#c8aa6e] text-black shadow-md animate-bounce z-10">
                         TURN
                       </span>
                     )}
@@ -4482,7 +4482,7 @@ export const ArenaScreen: React.FC = () => {
                               key={eIdx}
                               className={`text-[8px] px-1 py-0.2 rounded font-bold flex items-center gap-0.5 ${
                                 isBuff
-                                  ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]'
+                                  ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]'
                                   : 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]'
                               }`}
                               title={`${label} (${turns}턴)`}
@@ -4503,8 +4503,8 @@ export const ArenaScreen: React.FC = () => {
                             : isDying
                             ? 'border-[#ff9800] ring-2 ring-[#ff9800]/70 animate-pulse bg-[#2a1010]'
                             : isTurn
-                            ? 'border-[#00d2ff] ring-2 ring-[#00d2ff]/70 shadow-[0_0_10px_rgba(0,210,255,0.7)] animate-pulse bg-[#0a1e30]'
-                            : 'border-[#00d2ff66] bg-[#0c1626] shadow-sm'
+                            ? 'border-[#c8aa6e] ring-2 ring-[#c8aa6e]/70 shadow-[0_0_10px_rgba(200, 170, 110,0.7)] animate-pulse bg-[#0a1e30]'
+                            : 'border-[#c8aa6e66] bg-[#0c1626] shadow-sm'
                         } flex items-center justify-center transition-all`}
                       >
                         <img
@@ -4524,7 +4524,7 @@ export const ArenaScreen: React.FC = () => {
                           </div>
                         )}
                       </div>
-                      <span className="text-[8px] font-mono text-[#00d2ff] font-bold px-1.5 py-0.5 rounded bg-[#00d2ff15] border border-[#00d2ff33]">
+                      <span className="text-[8px] font-mono text-[#c8aa6e] font-bold px-1.5 py-0.5 rounded bg-[#c8aa6e15] border border-[#c8aa6e33]">
                         {c.position === 'front' ? '전열' : c.position === 'mid' ? '중열' : '후열'}
                       </span>
                     </div>
@@ -4540,7 +4540,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
                     {/* MP Bar */}
                     <div className="w-full bg-[#151f33] rounded-full h-1 overflow-hidden">
-                      <div className="bg-[#00d2ff] h-full transition-all duration-300" style={{ width: `${mpPct}%` }} />
+                      <div className="bg-[#c8aa6e] h-full transition-all duration-300" style={{ width: `${mpPct}%` }} />
                     </div>
 
                     <div className="text-[8px] text-right font-mono text-[#8b9bb4]">
@@ -4572,11 +4572,11 @@ export const ArenaScreen: React.FC = () => {
           {/* ── 4. 하단 액션 커맨드 바 (수동 플레이 시 스킬 직접 조작) ── */}
           <div className="w-full max-w-[500px] shrink-0">
             {isMyTurn && !isAuto ? (
-              <div className="panel p-2.5 rounded-xl bg-[#0a1220] border border-[#00d2ff55] flex flex-col gap-2 animate-fade-in shadow-2xl">
+              <div className="panel p-2.5 rounded-xl bg-[#0a1220] border border-[#c8aa6e55] flex flex-col gap-2 animate-fade-in shadow-2xl">
                 <div className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1.5">
                     <span className="text-sm">{activeAttacker?.icon}</span>
-                    <span className="font-bold text-[#00d2ff]">{activeAttacker?.name}의 행동 선택</span>
+                    <span className="font-bold text-[#c8aa6e]">{activeAttacker?.name}의 행동 선택</span>
                     <span className="text-[10px] text-[#8b9bb4] font-mono">({activeAttacker?.currentMp} MP)</span>
                   </div>
                   <span className="text-[10px] text-[#ffd54f]">타겟: {oppTeam.find(c => c.id === targetEnemyId)?.name || '상대'}</span>
@@ -4613,7 +4613,7 @@ export const ArenaScreen: React.FC = () => {
                             e.stopPropagation();
                             setSelectedSkillForModal(skill);
                           }}
-                          className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#0a1526]/80 text-[#8ba3c7] hover:text-[#00d2ff] hover:bg-[#1a2d48] flex items-center justify-center text-[9px] font-bold border border-[#243b5e]/50 cursor-pointer"
+                          className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#0a1526]/80 text-[#8ba3c7] hover:text-[#c8aa6e] hover:bg-[#1a2d48] flex items-center justify-center text-[9px] font-bold border border-[#243b5e]/50 cursor-pointer"
                           title="스킬 정보 상세 보기"
                         >
                           ℹ️
@@ -4663,7 +4663,7 @@ export const ArenaScreen: React.FC = () => {
           {/* ════════════════════════════════════════════════════════════════ */}
           {finalReward && (
             <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 animate-fade-in">
-              <div className="relative panel-accent w-full max-w-[520px] max-h-[90vh] overflow-y-auto p-4 bg-[#0c1424] border border-[#333d4e] rounded-2xl shadow-2xl flex flex-col gap-3 text-center animate-scale-up custom-scrollbar">
+              <div className="relative panel-accent w-full max-w-[520px] max-h-[90vh] overflow-y-auto p-4 bg-[#0e1117] border border-[#333d4e] rounded-2xl shadow-2xl flex flex-col gap-3 text-center animate-scale-up custom-scrollbar">
                 
                 {/* 헤더 승패 배너 */}
                 <div className={`py-2 px-3 rounded-xl border-2 ${finalReward.win ? 'bg-[#38ef7d18] border-[#38ef7d] text-[#38ef7d]' : 'bg-[#ef535018] border-[#ef5350] text-[#ef5350]'}`}>
@@ -4715,7 +4715,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="text-[10px] font-mono text-stone-400">
-                        아군 <span className="text-cyan-400 font-bold">{playerFeverWins}승</span> : <span className="text-rose-400 font-bold">{oppFeverWins}승</span> 상대
+                        아군 <span className="text-[#c8aa6e] font-bold">{playerFeverWins}승</span> : <span className="text-rose-400 font-bold">{oppFeverWins}승</span> 상대
                       </div>
                       <span className="text-[10px] font-bold text-amber-400/90 bg-black/50 px-1.5 py-0.5 rounded border border-amber-500/30 flex items-center gap-1">
                         <span>{isFeverReportExpanded ? '▲ 접기' : '▼ 펼치기'}</span>
@@ -4735,7 +4735,7 @@ export const ArenaScreen: React.FC = () => {
                               key={idx}
                               className={`p-2.5 rounded-xl border flex flex-col gap-1.5 transition-all ${
                                 isPlayerWin
-                                  ? 'bg-gradient-to-r from-[#0d2238] via-[#091726] to-[#0d2238] border-cyan-500/50'
+                                  ? 'bg-gradient-to-r from-[#12141a] via-[#0e1015] to-[#12141a] border-[#c8aa6e]/50'
                                   : isOppWin
                                   ? 'bg-gradient-to-r from-[#290d16] via-[#1a070e] to-[#290d16] border-rose-500/50'
                                   : 'bg-stone-900/80 border-stone-700'
@@ -4754,7 +4754,7 @@ export const ArenaScreen: React.FC = () => {
                                 <span
                                   className={`text-[9.5px] font-extrabold px-2 py-0.5 rounded-full font-mono ${
                                     isPlayerWin
-                                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
+                                      ? 'bg-[#c8aa6e]/20 text-[#c8aa6e] border border-[#c8aa6e]/50'
                                       : isOppWin
                                       ? 'bg-rose-500/20 text-rose-300 border border-rose-400/50'
                                       : 'bg-amber-500/20 text-amber-300 border border-amber-400/50'
@@ -4768,13 +4768,13 @@ export const ArenaScreen: React.FC = () => {
                               <div className="grid grid-cols-2 gap-2 text-xs mt-0.5">
                                 {/* 아군 피버 */}
                                 <div className={`p-2 rounded-lg border flex flex-col gap-1 ${
-                                  isPlayerWin ? 'bg-cyan-950/40 border-cyan-500/30' : 'bg-black/30 border-stone-800'
+                                  isPlayerWin ? 'bg-black/40 border-[#c8aa6e]/30' : 'bg-black/30 border-stone-800'
                                 }`}>
                                 <div className="flex items-center justify-between">
-                                  <span className="text-[10px] text-cyan-400 font-bold flex items-center gap-1">
+                                  <span className="text-[10px] text-[#c8aa6e] font-bold flex items-center gap-1">
                                     <span>🛡️</span> <span>아군 피버</span>
                                   </span>
-                                  <span className="text-[10px] font-mono text-cyan-300 font-bold">
+                                  <span className="text-[10px] font-mono text-[#c8aa6e] font-bold">
                                     {entry.playerScore} P
                                   </span>
                                 </div>
@@ -4881,7 +4881,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
                   </div>
                   <button
-                    className="px-2.5 py-1.5 rounded-lg bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff66] text-xs font-bold hover:bg-[#00d2ff44] transition-all shrink-0 ml-2"
+                    className="px-2.5 py-1.5 rounded-lg bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e66] text-xs font-bold hover:bg-[#c8aa6e44] transition-all shrink-0 ml-2"
                     onClick={() => {
                       isBattleEndedRef.current = false;
                       finalRewardRef.current = null;
@@ -4956,13 +4956,13 @@ export const ArenaScreen: React.FC = () => {
             {/* 모달 본문 (스크롤) */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
               {/* 섹션 1: 이번 주의 차원율 및 상성 규칙 */}
-              <div className="p-4 rounded-xl bg-gradient-to-br from-[#1a2035] to-[#121526] border border-cyan-500/30">
-                <div className="flex items-center justify-between mb-3 border-b border-cyan-500/20 pb-2">
+              <div className="p-4 rounded-xl bg-gradient-to-br from-[#15171f] to-[#111319] border border-[#c8aa6e]/30">
+                <div className="flex items-center justify-between mb-3 border-b border-[#c8aa6e]/20 pb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">🌌</span>
-                    <span className="font-bold text-cyan-300 text-base">이번 주의 차원율: {weeklyAffinity.title}</span>
+                    <span className="font-bold text-[#c8aa6e] text-base">이번 주의 차원율: {weeklyAffinity.title}</span>
                   </div>
-                  <span className="text-xs text-cyan-400/80 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800">
+                  <span className="text-xs text-[#c8aa6e]/80 bg-black/60 px-2 py-0.5 rounded border border-[#876739]">
                     매주 월요일 00:00 순환
                   </span>
                 </div>
@@ -5015,7 +5015,7 @@ export const ArenaScreen: React.FC = () => {
                     { badge: 'guard', label: '방어 (Guard)', score: 15, desc: '철벽 방어·막기', color: 'border-blue-500/40 bg-blue-950/30 text-blue-300' },
                     { badge: 'assist', label: '지원 (Assist)', score: 15, desc: '아군 버프·정화', color: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-300' },
                     { badge: 'heal', label: '치유 (Heal)', score: 10, desc: '생명력 회복', color: 'border-pink-500/40 bg-pink-950/30 text-pink-300' },
-                    { badge: 'evade', label: '회피 (Evade)', score: 10, desc: '완전 회피 기동', color: 'border-cyan-500/40 bg-cyan-950/30 text-cyan-300' },
+                    { badge: 'evade', label: '회피 (Evade)', score: 10, desc: '완전 회피 기동', color: 'border-[#c8aa6e]/40 bg-black/30 text-[#c8aa6e]' },
                   ].map((item) => (
                     <div key={item.badge} className={`p-2 rounded-lg border flex flex-col justify-between ${item.color}`}>
                       <div className="flex justify-between items-center mb-1">

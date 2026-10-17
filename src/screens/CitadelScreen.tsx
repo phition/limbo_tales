@@ -102,7 +102,7 @@ const DRAWER_ART_META: Record<string, { img: string; title: string; subtitle: st
 
 const WHEEL_ITEMS = [
   { key: 'citadel',  label: '방주 영지',     sub: '건설 & 자원 관리',         icon: '🏰', color: '#ff7b25' },
-  { key: 'barracks', label: '원정단 편성',   sub: '진형 & 전직 & 장비 관리',  icon: '⚔️', color: '#00d2ff' },
+  { key: 'barracks', label: '원정단 편성',   sub: '진형 & 전직 & 장비 관리',  icon: '⚔️', color: '#c8aa6e' },
   { key: 'quests',   label: '퀘스트 & 연계', sub: '메인 스토리 & 시설',       icon: '📜', color: '#38ef7d' },
   { key: 'explore',  label: '심연 탐험',     sub: 'MUD 던전 5층',             icon: '🌌', color: '#5c6bc0' },
   { key: 'arena',    label: '차원 게이트',   sub: '차원 아레나 & 네메시스',   icon: '🏆', color: '#ff416c' },
@@ -248,7 +248,7 @@ const renderTotalStats = (stats: EquipmentItem['stats']) => {
   return (
     <div className="flex flex-wrap gap-1.5 my-1">
       {list.map((item, idx) => (
-        <span key={idx} className="text-xs px-2 py-0.5 rounded bg-[#101726] border border-[#1f2b40] font-mono font-bold" style={{ color: item.color }}>
+        <span key={idx} className="text-xs px-2 py-0.5 rounded bg-[#12141a] border border-[#1f2b40] font-mono font-bold" style={{ color: item.color }}>
           {item.label} {item.value}
         </span>
       ))}
@@ -293,7 +293,7 @@ const renderEnchantBadge = (enchant: EnchantOption, slot?: EquipmentSlot) => {
             <span
               key={idx}
               className="text-[10px] px-1.5 py-0.5 rounded bg-[#162032] border border-[#263750] font-mono font-semibold"
-              style={{ color: st.color || '#00e5ff' }}
+              style={{ color: st.color || '#c8aa6e' }}
             >
               {st.label} <span className="font-bold">{st.value}</span>
             </span>
@@ -501,10 +501,10 @@ const EquipmentEnhanceModal: React.FC<EquipmentEnhanceModalProps> = ({
 
         {/* 스탯 변화 상세 비교 그리드 */}
         <div className="p-3 bg-[#0d121c] border border-[#1f2738] rounded-xl">
-          <div className="text-xs font-bold text-[#00d2ff] mb-2 flex items-center justify-between">
+          <div className="text-xs font-bold text-[#c8aa6e] mb-2 flex items-center justify-between">
             <span>{'📊 장비 기본 스탯 강화 상세 비교'}</span>
             {item.level + 1 === 3 && <span className="text-[10px] text-[#ffd54f] font-bold">{'✨ 3강 달성 시 접두 인챈트 해금!'}</span>}
-            {item.level + 1 === 7 && <span className="text-[10px] text-[#00d2ff] font-bold">{'🔮 7강 달성 시 접미 인챈트 해금!'}</span>}
+            {item.level + 1 === 7 && <span className="text-[10px] text-[#c8aa6e] font-bold">{'🔮 7강 달성 시 접미 인챈트 해금!'}</span>}
           </div>
 
           <div className="grid grid-cols-1 gap-1.5">
@@ -575,8 +575,8 @@ const EquipmentEnhanceModal: React.FC<EquipmentEnhanceModalProps> = ({
               {item.suffix && (
                 <div className="p-2 rounded-lg bg-[#182030] border border-[#2a3854] text-xs flex flex-col gap-0.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#00d2ff]">🔮 [{'접미사'}] {sufName}</span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44] font-bold">
+                    <span className="font-bold text-[#c8aa6e]">🔮 [{'접미사'}] {sufName}</span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] font-bold">
                       {'고정 수치 (강화불가)'}
                     </span>
                   </div>
@@ -648,7 +648,7 @@ const EquipmentEnhanceModal: React.FC<EquipmentEnhanceModalProps> = ({
               </div>
             </div>
 
-            <div className="text-[10px] text-[#8b9bb4] leading-relaxed mt-0.5 bg-[#0b0e17] p-2 rounded-lg border border-[#1a2333]">
+            <div className="text-[10px] text-[#8b9bb4] leading-relaxed mt-0.5 bg-[#0b0e17] p-2 rounded-lg border border-[#15171d]">
               💡 <span className="text-white font-semibold">'강화 규칙:'</span> {'인챈트 속성은 강화되지 않습니다.'}
             </div>
           </div>
@@ -723,7 +723,7 @@ const EquipmentEnhanceModal: React.FC<EquipmentEnhanceModalProps> = ({
                 </span>
               </div>
               <div className="text-[11px] text-[#cfd8e8] leading-relaxed">
-                성공 시 현재 +10강의 모든 능력치를 <strong className="text-[#38ef7d]">영구 기본 스탯</strong>으로 흡수 보존하고, <strong className="text-[#00d2ff]">강화 단계를 +0강으로 초기화</strong>하여 10강까지 재강화가 가능해집니다! (최대 3단계 누적)
+                성공 시 현재 +10강의 모든 능력치를 <strong className="text-[#38ef7d]">영구 기본 스탯</strong>으로 흡수 보존하고, <strong className="text-[#c8aa6e]">강화 단계를 +0강으로 초기화</strong>하여 10강까지 재강화가 가능해집니다! (최대 3단계 누적)
               </div>
               <div className="grid grid-cols-2 gap-2 text-center text-xs font-mono">
                 <div className="p-1.5 rounded-lg bg-[#38ef7d15] border border-[#38ef7d33]">
@@ -1009,9 +1009,9 @@ const EquipmentOverlay: React.FC<{
   return (
     <div className="absolute inset-0 z-50 bg-black/90 flex flex-col animate-fade-in">
       {/* ── 상단 고정 헤더 바 ── */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-[#1f2738] bg-[#0c1220] shrink-0 gap-2">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-[#1f2738] bg-[#0d0f14] shrink-0 gap-2">
         <div className="flex items-center gap-2 min-w-0">
-          <span className="text-sm font-bold text-[#00d2ff] truncate">
+          <span className="text-sm font-bold text-[#c8aa6e] truncate">
             🛡️ [{categoryFilter === 'all' ? '전체 장비' : { weapon: '무기', armor: '방어구', accessory: '장신구' }[categoryFilter]} 관리] — {hero.name}
           </span>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1e293b] text-[#8b9bb4] shrink-0">
@@ -1193,7 +1193,7 @@ const EquipmentOverlay: React.FC<{
               key={c.key}
               className={`px-2 py-0.5 rounded-md text-[11px] font-bold flex items-center gap-1 transition-all shrink-0 cursor-pointer ${
                 categoryFilter === c.key
-                  ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff88] shadow-xs'
+                  ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e88] shadow-xs'
                   : 'bg-[#131a29] text-[#8b9bb4] border border-[#212c40] hover:text-white'
               }`}
               onClick={() => setCategoryFilter(c.key as any)}
@@ -1245,7 +1245,7 @@ const EquipmentOverlay: React.FC<{
           <button
             className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all shrink-0 cursor-pointer ${
               rarityFilter === 'all'
-                ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff88]'
+                ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e88]'
                 : 'bg-[#131a29] text-[#8b9bb4] border border-[#212c40] hover:text-white'
             }`}
             onClick={() => setRarityFilter('all')}
@@ -1696,7 +1696,7 @@ const EquipmentOverlay: React.FC<{
               {/* 강화 버튼: 병기창 Lv.3 이상 해금 시에만 활성화, 미달 시 잠김 처리 */}
               {isEnhanceUnlocked ? (
                 <button
-                  className="btn btn-primary py-2 text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-[#00d2ff22]"
+                  className="btn btn-primary py-2 text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-[#c8aa6e22]"
                   onClick={() => {
                     setSelectedEnhanceItemId(activeDetailItem.id);
                   }}
@@ -2448,7 +2448,7 @@ const CitadelDrawer: React.FC<{
       <div className="flex items-center justify-between px-4 py-2 border-b border-[#1f2738] shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm font-bold text-[#ff7b25]">{'영지 시설 관리'}</span>
-          <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+          <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
             {'시설 보유 현황'}
           </span>
           {claimableQuestCount > 0 && (
@@ -2563,7 +2563,7 @@ const CitadelDrawer: React.FC<{
           return (
             <div className="panel p-2.5 bg-[#0e1422] border border-[#202c42] rounded-xl flex flex-col gap-1.5 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#00d2ff] font-bold flex items-center gap-1.5">
+                <span className="text-xs text-[#c8aa6e] font-bold flex items-center gap-1.5">
                   <span>🏛️</span>
                   <span>핵심 인프라 테크 시너지</span>
                   <EncyclopediaBadge query="인프라" tab="systems" label="시너지 백과" compact />
@@ -2607,7 +2607,7 @@ const CitadelDrawer: React.FC<{
                 {/* 🧪 에테르 환류관 */}
                 <div className={`p-1.5 rounded-lg border text-center flex flex-col items-center justify-center transition-all ${
                   syn.etherSynergy
-                    ? 'bg-[#1b2535] border-[#00d2ff66] text-[#00d2ff]' : 'bg-[#141822] border-[#222b3d] text-[#8b9bb4] opacity-70'
+                    ? 'bg-[#171920] border-[#c8aa6e66] text-[#c8aa6e]' : 'bg-[#141822] border-[#222b3d] text-[#8b9bb4] opacity-70'
                 }`}>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
                     <span>🧪</span>
@@ -2683,7 +2683,7 @@ const CitadelDrawer: React.FC<{
             <div
               key={item.id}
               id={`building-card-${item.id}`}
-              className={`panel p-3 flex flex-col gap-1.5 border transition-all rounded-xl cursor-pointer bg-[#111724] hover:border-[#00d2ff88] hover:bg-[#141c2c] ${
+              className={`panel p-3 flex flex-col gap-1.5 border transition-all rounded-xl cursor-pointer bg-[#111318] hover:border-[#c8aa6e88] hover:bg-[#14161c] ${
                 isHighlighted ? 'ring-2 ring-[#ffd700] shadow-[0_0_35px_rgba(255,215,0,0.5)] !border-[#ffd700]' : ''
               }`}
               style={{ borderColor: isHighlighted ? '#ffd700' : (isBuilt ? themeHex : '#2c384d') }}
@@ -2697,14 +2697,14 @@ const CitadelDrawer: React.FC<{
                   </span>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-sm text-white hover:text-[#00d2ff]">{bName}</span>
+                      <span className="font-bold text-sm text-white hover:text-[#c8aa6e]">{bName}</span>
                       {isBuilt ? (
                         b.maxLevel && b.level < b.maxLevel ? (
                           <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ff980022] text-[#ffb74d] font-bold border border-[#ff980066]" title={`유지비 미납으로 일시 하향됨 (원래 Lv.${b.maxLevel}, 유지비 지불 시 자동 복구)`}>
                             Lv.{b.level} <span className="text-[9px] text-[#ff8a80]">(원래 Lv.${b.maxLevel})</span>
                           </span>
                         ) : (
-                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold border border-[#00d2ff44]">
+                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e44]">
                             Lv.{b.level}
                           </span>
                         )
@@ -2739,14 +2739,14 @@ const CitadelDrawer: React.FC<{
                           );
                         } else if (b.level > 0 && upkeep.amount === 0) {
                           return (
-                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff15] text-[#00d2ff] font-mono border border-[#00d2ff33]">
+                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono border border-[#c8aa6e33]">
                               {item.id === 'bonfire' ? '유지비 면제' : '무료 유지'}
                             </span>
                           );
                         }
                         return null;
                       })()}
-                      <span className="text-[9px] text-[#8b9bb4] underline hover:text-[#00d2ff]">
+                      <span className="text-[9px] text-[#8b9bb4] underline hover:text-[#c8aa6e]">
                         ℹ️ 상세
                       </span>
                     </div>
@@ -2781,7 +2781,7 @@ const CitadelDrawer: React.FC<{
                       isHighlighted
                         ? 'ring-4 ring-[#ffd700] ring-offset-2 ring-offset-[#0e1422] border-2 border-white shadow-[0_0_25px_rgba(255,215,0,0.95)] !bg-gradient-to-r !from-[#ffe082] !to-[#ffd54f] !text-black font-extrabold scale-110 animate-pulse'
                         : ''
-                    } ${isConstructing ? '!text-[#00d2ff] !border-[#00d2ff88] !bg-[#00d2ff1a] animate-pulse' : ''}`}
+                    } ${isConstructing ? '!text-[#c8aa6e] !border-[#c8aa6e88] !bg-[#c8aa6e1a] animate-pulse' : ''}`}
                     disabled={isConstructing || isMax || (prereq.allowed && !canAfford)}
                     onClick={() => {
                       if (onClearHighlight) onClearHighlight();
@@ -2799,17 +2799,17 @@ const CitadelDrawer: React.FC<{
 
               {/* 🔨 공사 진행 중 실시간 진행률 바 */}
               {isConstructing && (
-                <div className="flex flex-col gap-1 p-2 rounded-lg bg-[#0a121f] border border-[#00d2ff44] my-0.5">
-                  <div className="flex items-center justify-between text-[10px] font-bold text-[#00d2ff]">
+                <div className="flex flex-col gap-1 p-2 rounded-lg bg-[#0b0d12] border border-[#c8aa6e44] my-0.5">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[#c8aa6e]">
                     <span className="flex items-center gap-1">
                       <span className="animate-spin inline-block text-xs">⚙️</span>
                       <span>Lv.{b.construction!.targetLevel} 증축 공사 진행 중...</span>
                     </span>
                     <span className="font-mono text-[9px] text-[#80deea]">{remainSec}초 ({progressPct}%)</span>
                   </div>
-                  <div className="w-full bg-[#050811] rounded-full h-1.5 overflow-hidden border border-[#00d2ff33]">
+                  <div className="w-full bg-[#050811] rounded-full h-1.5 overflow-hidden border border-[#c8aa6e33]">
                     <div
-                      className="bg-gradient-to-r from-[#00b4d8] to-[#00f2fe] h-full transition-all duration-300 shadow-[0_0_8px_#00d2ff]"
+                      className="bg-gradient-to-r from-[#c8aa6e] to-[#00f2fe] h-full transition-all duration-300 shadow-[0_0_8px_#c8aa6e]"
                       style={{ width: `${progressPct}%` }}
                     />
                   </div>
@@ -2878,7 +2878,7 @@ const CitadelDrawer: React.FC<{
                   </button>
                   {selectedIsConstructing ? (
                     <button
-                      className="btn btn-ghost text-xs px-4 py-1.5 font-bold opacity-75 cursor-not-allowed !text-[#00d2ff] !border-[#00d2ff88] !bg-[#00d2ff1a] animate-pulse"
+                      className="btn btn-ghost text-xs px-4 py-1.5 font-bold opacity-75 cursor-not-allowed !text-[#c8aa6e] !border-[#c8aa6e88] !bg-[#c8aa6e1a] animate-pulse"
                       disabled
                     >
                       🔨 공사 진행 중 ({selectedRemainSec}초)
@@ -2905,17 +2905,17 @@ const CitadelDrawer: React.FC<{
             <div className="flex flex-col gap-3 text-xs">
               {/* 🔨 공사 진행 중 안내 배너 */}
               {selectedIsConstructing && (
-                <div className="p-3 rounded-xl bg-[#0a1424] border border-[#00d2ff66] flex flex-col gap-2 shadow-md">
-                  <div className="flex items-center justify-between text-xs font-bold text-[#00d2ff]">
+                <div className="p-3 rounded-xl bg-[#0a1424] border border-[#c8aa6e66] flex flex-col gap-2 shadow-md">
+                  <div className="flex items-center justify-between text-xs font-bold text-[#c8aa6e]">
                     <span className="flex items-center gap-1.5">
                       <span className="animate-spin">⚙️</span>
                       <span>Lv.{selectedBuildingData.construction!.targetLevel} 증축 공사 진행 중...</span>
                     </span>
                     <span className="font-mono">{selectedRemainSec}초 남음 ({selectedProgressPct}%)</span>
                   </div>
-                  <div className="w-full bg-[#050c18] rounded-full h-2 overflow-hidden border border-[#00d2ff33]">
+                  <div className="w-full bg-[#050c18] rounded-full h-2 overflow-hidden border border-[#c8aa6e33]">
                     <div
-                      className="bg-gradient-to-r from-[#00b4d8] to-[#00f2fe] h-full transition-all duration-300 shadow-[0_0_8px_#00d2ff]"
+                      className="bg-gradient-to-r from-[#c8aa6e] to-[#00f2fe] h-full transition-all duration-300 shadow-[0_0_8px_#c8aa6e]"
                       style={{ width: `${selectedProgressPct}%` }}
                     />
                   </div>
@@ -2936,8 +2936,8 @@ const CitadelDrawer: React.FC<{
             {/* 상단: 배경 설명 및 로어 */}
             <div className="panel p-3 bg-[#131926] border border-[#27354d] rounded-xl flex flex-col gap-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-[#00d2ff] font-bold">📜 시설 서사 및 배경</span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff]">
+                <span className="text-[10px] text-[#c8aa6e] font-bold">📜 시설 서사 및 배경</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e]">
                   {selectedBuildingData.level > 0 ? `현재 Lv.${selectedBuildingData.level}` : '미건설 시설'}
                 </span>
               </div>
@@ -2987,7 +2987,7 @@ const CitadelDrawer: React.FC<{
                       </span>
                     )}
                     {!selectedIsMax && (selectedBuildingItem.id === 'lumberCamp' || selectedBuildingItem.id === 'quarry') && nextLevel >= 5 && (
-                      <span className="text-[10px] text-[#00d2ff] block mt-0.5 font-mono">
+                      <span className="text-[10px] text-[#c8aa6e] block mt-0.5 font-mono">
                         ⚙️ 시설 특화: 골드 유지비 -{Math.min(42, (nextLevel - 4) * 7)}% 고유 감면 적용{selectedBuildingItem.id === 'quarry' && nextLevel >= 7 ? ' (30% 식량 분담)' : ''}
                       </span>
                     )}
@@ -3073,8 +3073,8 @@ const CitadelDrawer: React.FC<{
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#111724] border border-[#1e2a3e] text-xs text-[#8b9bb4] leading-relaxed flex flex-col gap-1.5">
-              <div className="text-[#00d2ff] font-bold flex items-center gap-1">
+            <div className="p-3 rounded-xl bg-[#111318] border border-[#1e2a3e] text-xs text-[#8b9bb4] leading-relaxed flex flex-col gap-1.5">
+              <div className="text-[#c8aa6e] font-bold flex items-center gap-1">
                 <span>ℹ️</span>
                 <span>시설 이용 안내</span>
               </div>
@@ -3142,8 +3142,8 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
   const GRADE_META: Record<string, { label: string; tag: string; color: string }> = {
     rookie:  { label: 'N', tag: 'N', color: '#9e9e9e' },
     veteran: { label: 'V', tag: 'V', color: '#66bb6a' },
-    hero:    { label: 'H', tag: 'H', color: '#00d2ff' },
-    elite:   { label: 'H', tag: 'H', color: '#00d2ff' },
+    hero:    { label: 'H', tag: 'H', color: '#c8aa6e' },
+    elite:   { label: 'H', tag: 'H', color: '#c8aa6e' },
     epic:    { label: 'E', tag: 'E', color: '#ce93d8' },
     legend:  { label: 'E', tag: 'E', color: '#ce93d8' },
   };
@@ -3161,7 +3161,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
           <span className="text-base">🍺</span>
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-sm font-bold text-[#ffb74d]">{'방랑자의 라운지'}</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold border border-[#00d2ff44]">
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e44]">
               Lv.{tavernLv}
             </span>
             <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ffb74d22] text-[#ffb74d] font-bold">
@@ -3192,13 +3192,13 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
 
       {/* 🎒 [연계 퀘스트 바로가기] 용병 영입 완료 시 편성화면(인원 부족 시) 또는 심연 채비실로 이동 배너 */}
       {isReadyForExpedition && (
-        <div className="bg-gradient-to-r from-[#0d1e33] via-[#122e4c] to-[#0d1e33] border-b border-[#00d2ff88] px-4 py-2.5 flex items-center justify-between gap-2 shadow-lg shrink-0 animate-pulse">
+        <div className="bg-gradient-to-r from-[#0d1e33] via-[#122e4c] to-[#0d1e33] border-b border-[#c8aa6e88] px-4 py-2.5 flex items-center justify-between gap-2 shadow-lg shrink-0 animate-pulse">
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-xl shrink-0">{state.party.length < 3 ? '⚔️' : '🎒'}</span>
             <div className="min-w-0">
               <div className="text-xs font-bold text-[#b8e2ff] flex items-center gap-1.5 flex-wrap">
                 <span>용병 영입 완료!</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff33] text-[#00d2ff] font-extrabold border border-[#00d2ff55]">연계 퀘스트</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e33] text-[#c8aa6e] font-extrabold border border-[#c8aa6e55]">연계 퀘스트</span>
               </div>
               <div className="text-[11px] text-[#80d8ff] truncate mt-0.5">
                 {state.party.length < 3
@@ -3211,7 +3211,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
             data-tutorial-target={state.party.length < 3 ? "open-barracks-btn" : "open-explore-drawer"}
             className={`text-xs px-3 py-1.5 rounded-lg font-bold shrink-0 active:scale-95 shadow-md flex items-center gap-1 cursor-pointer transition-all ${
               state.party.length < 3
-                ? 'bg-[#0088cc] hover:bg-[#00a2f5] text-white border border-[#00d2ff]'
+                ? 'bg-[#0088cc] hover:bg-[#00a2f5] text-white border border-[#c8aa6e]'
                 : 'bg-[#5c2b8a] hover:bg-[#7236aa] text-white border border-[#9c4dcc]'
             }`}
             onClick={() => {
@@ -3233,7 +3233,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
       )}
 
       {/* ⏳ 10분 모험가 자동 도착 및 새로고침 비용 초기화 정보 바 */}
-      <div className="bg-[#101726] border-b border-[#1f2d42] px-4 py-2 flex items-center justify-between text-xs flex-wrap gap-2 shrink-0">
+      <div className="bg-[#12141a] border-b border-[#1f2d42] px-4 py-2 flex items-center justify-between text-xs flex-wrap gap-2 shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-[#ffd54f] font-medium flex items-center gap-1">
             <span>⏳</span>
@@ -3286,7 +3286,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
           return (
             <div
               key={cand.id}
-              className="panel p-3 bg-[#131926] border border-[#222d42] hover:border-[#00d2ff55] rounded-xl flex flex-col gap-2.5 transition-all cursor-pointer"
+              className="panel p-3 bg-[#131926] border border-[#222d42] hover:border-[#c8aa6e55] rounded-xl flex flex-col gap-2.5 transition-all cursor-pointer"
               onClick={() => setDetailCandidate(cand)}
             >
               <div className="flex items-start justify-between gap-2">
@@ -3314,7 +3314,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                       >
                         [{gMeta.tag}]
                       </span>
-                      <span className="text-xs text-[#00d2ff] font-medium">{cls.name}</span>
+                      <span className="text-xs text-[#c8aa6e] font-medium">{cls.name}</span>
                       {cand.trait && (
                         <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33] font-bold">
                           ✨ {cand.trait}
@@ -3446,7 +3446,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                     >
                       [{gMeta.tag}]
                     </span>
-                    <span className="text-xs text-[#00d2ff] font-bold">{cls.name}</span>
+                    <span className="text-xs text-[#c8aa6e] font-bold">{cls.name}</span>
                   </div>
                   {detailCandidate.trait && (() => {
                     const tInfo = HERO_TRAITS[detailCandidate.trait];
@@ -3477,7 +3477,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
 
               {/* 중단: 스탯 종합 분석 (RPG Initials) */}
               <div className="panel p-3 bg-[#0d1424] border border-[#1e293b] rounded-xl flex flex-col gap-2">
-                <span className="text-xs font-bold text-[#00d2ff]">📊 개별 능력치 (RPG Stat Profile)</span>
+                <span className="text-xs font-bold text-[#c8aa6e]">📊 개별 능력치 (RPG Stat Profile)</span>
                 <div className="grid grid-cols-3 gap-2 font-mono">
                   <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f] flex flex-col items-center">
                     <span className="text-[10px] text-[#ef5350] font-bold">HP (생명력)</span>
@@ -3532,7 +3532,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                       <GameIcon name={sk.id} icon={sk.icon} size={24} />
                       <div>
                         <div className="flex items-center gap-1">
-                          <span className="text-[9px] px-1 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">기본기</span>
+                          <span className="text-[9px] px-1 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">기본기</span>
                           <span className="font-bold text-xs text-white">{sk.name}</span>
                         </div>
                         <div className="text-[10px] text-[#8b9bb4] mt-0.5">{sk.description}</div>
@@ -3572,7 +3572,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
           }
         >
           <div className="space-y-3 py-1 text-xs">
-            <div className="p-3 rounded-xl bg-[#1a2333] border border-[#2d3a4f] text-[#cfd8e8] leading-relaxed flex items-start gap-2.5">
+            <div className="p-3 rounded-xl bg-[#15171d] border border-[#2d3a4f] text-[#cfd8e8] leading-relaxed flex items-start gap-2.5">
               <span className="text-2xl shrink-0">🍺</span>
               <div>
                 <p className="font-bold text-[#ffd54f] mb-1">
@@ -3583,7 +3583,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                   <span className="text-white font-mono font-bold">{timerText}</span>
                   {tr(')이 즉시 초기화되며, 새로운 방랑 모험가 후보가 라운지에 즉시 도착합니다.')}
                 </p>
-                <p className="text-[11px] text-[#00d2ff] mt-1.5 flex items-center gap-1">
+                <p className="text-[11px] text-[#c8aa6e] mt-1.5 flex items-center gap-1">
                   <span>✨</span>
                   <span>{tr('골드 새로고침 비용도 1단계(100G)로 함께 초기화됩니다.')}</span>
                 </p>
@@ -3638,7 +3638,7 @@ const PROMOTE_MAP: Record<string, { id: string; name: string; desc: string }[]> 
 const SKILL_RANK_COLORS: Record<string, { label: string; color: string; bg: string }> = {
   basic:    { label: '기본', color: '#9e9e9e', bg: '#9e9e9e22' },
   enhanced: { label: '강화', color: '#66bb6a', bg: '#66bb6a22' },
-  rare:     { label: '희귀', color: '#00d2ff', bg: '#00d2ff22' },
+  rare:     { label: '희귀', color: '#c8aa6e', bg: '#c8aa6e22' },
   epic:     { label: '에픽', color: '#ce93d8', bg: '#ce93d822' },
   mythic:   { label: '신화', color: '#ffd54f', bg: '#ffd54f22' },
 };
@@ -3771,8 +3771,8 @@ const BarracksDrawer: React.FC<{
   const GRADE_META: Record<string, { label: string; tag: string; color: string }> = {
     rookie:  { label: 'N', tag: 'N', color: '#9e9e9e' },
     veteran: { label: 'V', tag: 'V', color: '#66bb6a' },
-    hero:    { label: 'H', tag: 'H', color: '#00d2ff' },
-    elite:   { label: 'H', tag: 'H', color: '#00d2ff' },
+    hero:    { label: 'H', tag: 'H', color: '#c8aa6e' },
+    elite:   { label: 'H', tag: 'H', color: '#c8aa6e' },
     epic:    { label: 'E', tag: 'E', color: '#ce93d8' },
     legend:  { label: 'E', tag: 'E', color: '#ce93d8' },
   };
@@ -3795,8 +3795,8 @@ const BarracksDrawer: React.FC<{
         <div className="flex items-center gap-2">
           <span className="text-base">⚔️</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-sm font-bold text-[#00d2ff]">{'병영'}</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+            <span className="text-sm font-bold text-[#c8aa6e]">{'병영'}</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
               {`보유 ${state.barracks.length}/7명`}
             </span>
             <EncyclopediaBadge tab="classes" label="병영 백과" />
@@ -3825,7 +3825,7 @@ const BarracksDrawer: React.FC<{
         <button
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
             barracksCategory === 'dungeon'
-              ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff66] shadow-sm'
+              ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e66] shadow-sm'
               : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
           }`}
           onClick={() => setBarracksCategory('dungeon')}
@@ -3911,7 +3911,7 @@ const BarracksDrawer: React.FC<{
             </div>
             <h3 className="text-base font-extrabold text-white">차원 부대 편성 잠김</h3>
             <p className="text-xs text-[#8b9bb4] max-w-sm leading-relaxed">
-              차원 부대 편성은 영지 내 <strong className="text-[#00d2ff]">[차원 앵커 게이트]</strong>를 건설해야 해금되는 특수 부대 관리 기능입니다.<br />
+              차원 부대 편성은 영지 내 <strong className="text-[#c8aa6e]">[차원 앵커 게이트]</strong>를 건설해야 해금되는 특수 부대 관리 기능입니다.<br />
               차원 앵커를 완공하면 3인의 정예 결투원과 1인의 전술 오퍼레이터를 편성하여 차원 아레나 및 네메시스에 출전시킬 수 있습니다.
             </p>
             <button
@@ -3928,7 +3928,7 @@ const BarracksDrawer: React.FC<{
               <div>
                 <div className="font-extrabold text-white flex items-center gap-2 flex-wrap">
                   <span>🌌 내 차원 3인 결투 부대 & 전술 오퍼레이터</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                     총 전투력: ⚡ {Math.round(([...mainHeroes, ...(activeOperator ? [activeOperator] : [])]).reduce((sum, h) => sum + (h.stats.atk * 3 + h.stats.def * 2 + h.maxHp / 5), 0)).toLocaleString()}
                   </span>
                   <button
@@ -3955,9 +3955,9 @@ const BarracksDrawer: React.FC<{
 
             {/* 📖 전술 가이드 상세 패널 */}
             {showDimTacticsGuide && (
-              <div className="bg-[#0f172a] p-3 rounded-xl border border-[#00d2ff66] shadow-lg flex flex-col gap-2 text-xs animate-fade-in">
+              <div className="bg-[#0f172a] p-3 rounded-xl border border-[#c8aa6e66] shadow-lg flex flex-col gap-2 text-xs animate-fade-in">
                 <div className="flex items-center justify-between border-b border-[#1e293b] pb-1.5">
-                  <span className="font-bold text-[#00d2ff] flex items-center gap-1.5 text-xs">
+                  <span className="font-bold text-[#c8aa6e] flex items-center gap-1.5 text-xs">
                     <span>📖</span>
                     <span>차원 결투 부대 & 전술 오퍼레이터 시스템 가이드</span>
                   </span>
@@ -4123,7 +4123,7 @@ const BarracksDrawer: React.FC<{
                         >
                           <span className="font-black text-amber-400">#{pIdx + 1}</span>
                           <span className="font-bold text-white">{item.codex.name}</span>
-                          <span className="text-[9px] font-mono text-cyan-300">({item.probabilityPct}%)</span>
+                          <span className="text-[9px] font-mono text-[#c8aa6e]">({item.probabilityPct}%)</span>
                           <span
                             className="text-[8px] px-1 py-0.1 rounded border font-semibold ml-0.5"
                             style={{
@@ -4256,7 +4256,7 @@ const BarracksDrawer: React.FC<{
 
                   let assignedLabel = '대기';
                   let badgeStyle = '';
-                  let cardBgStyle = 'bg-[#121927] border-[#1d273a] hover:border-[#00d2ff44]';
+                  let cardBgStyle = 'bg-[#121927] border-[#1d273a] hover:border-[#c8aa6e44]';
 
                   if (mainIdx === 0) {
                     assignedLabel = '🔴 선발 전열';
@@ -4345,7 +4345,7 @@ const BarracksDrawer: React.FC<{
                     </span>
                   )}
                   {canAwakenHero && (
-                    <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#00d2ff] text-black font-bold animate-pulse shadow-sm shadow-[#00d2ff]">
+                    <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#c8aa6e] text-black font-bold animate-pulse shadow-sm shadow-[#c8aa6e]">
                       🔮각성
                     </span>
                   )}
@@ -4355,7 +4355,7 @@ const BarracksDrawer: React.FC<{
                       Lv.{h.level}
                     </span>
                   </div>
-                  <div className={`text-[10px] font-bold mt-0.5 ${isAdmitted ? 'text-[#ff7043]' : canAwakenHero ? 'text-[#00d2ff]' : canPromoteHero ? 'text-[#ffd54f]' : inParty ? 'text-[#38ef7d]' : 'text-[#8b9bb4]'}`}>
+                  <div className={`text-[10px] font-bold mt-0.5 ${isAdmitted ? 'text-[#ff7043]' : canAwakenHero ? 'text-[#c8aa6e]' : canPromoteHero ? 'text-[#ffd54f]' : inParty ? 'text-[#38ef7d]' : 'text-[#8b9bb4]'}`}>
                     {isAdmitted ? '🏥입원중' : canAwakenHero ? '🔮각성가능' : canPromoteHero ? '✨전직가능' : inParty ? '★ 파티원' : '대기중'}
                   </div>
                 </button>
@@ -4382,7 +4382,7 @@ const BarracksDrawer: React.FC<{
                         >
                           [{gMeta.tag}]
                         </span>
-                        <span className="text-xs text-[#00d2ff] font-medium">{cls.name}</span>
+                        <span className="text-xs text-[#c8aa6e] font-medium">{cls.name}</span>
                         <span className="text-xs font-bold font-mono text-[#ffd54f] bg-[#ffd54f18] px-2 py-0.5 rounded border border-[#ffd54f44] shadow-sm">
                           Lv.{hero.level}
                         </span>
@@ -4472,7 +4472,7 @@ const BarracksDrawer: React.FC<{
                     <button
                       type="button"
                       onClick={() => setEquipOverlay({ hero, slot: 'all' })}
-                      className="px-2 py-0.5 text-[11px] bg-[#00d2ff1a] hover:bg-[#00d2ff33] text-[#00d2ff] border border-[#00d2ff44] rounded transition-colors font-medium flex items-center gap-1 cursor-pointer"
+                      className="px-2 py-0.5 text-[11px] bg-[#c8aa6e1a] hover:bg-[#c8aa6e33] text-[#c8aa6e] border border-[#c8aa6e44] rounded transition-colors font-medium flex items-center gap-1 cursor-pointer"
                       title="전체 장비 보관함 열기 및 필터/일괄 판매 관리"
                     >
                       <span>🎒 전체 장비 관리 / 일괄 판매</span>
@@ -4495,7 +4495,7 @@ const BarracksDrawer: React.FC<{
                     return (
                       <button
                         key={slot}
-                        className="w-full min-w-0 overflow-hidden panel p-2 text-center flex flex-col items-center justify-between gap-1 rounded-lg transition-all hover:border-[#00d2ff66] select-none cursor-pointer"
+                        className="w-full min-w-0 overflow-hidden panel p-2 text-center flex flex-col items-center justify-between gap-1 rounded-lg transition-all hover:border-[#c8aa6e66] select-none cursor-pointer"
                         style={{ borderColor: eq ? '#38ef7d' : '#222d42', background: eq ? '#0d1f18' : '#141a29', minHeight: '84px' }}
                         onClick={() => setEquipOverlay({ hero, slot })}
                         title={eq ? `${eq.name} (+${eq.level}강)` : `[${label}] 슬롯 (미장착)`}
@@ -4550,14 +4550,14 @@ const BarracksDrawer: React.FC<{
               </div>
 
               {/* 📖 전술 스킬 슬롯 (고유기 + 장착 스킬 2개) */}
-              <div className="panel p-3 bg-[#131926] border border-[#00d2ff44] rounded-xl">
-                <div className="text-xs text-[#00d2ff] font-bold mb-2 flex items-center justify-between">
+              <div className="panel p-3 bg-[#131926] border border-[#c8aa6e44] rounded-xl">
+                <div className="text-xs text-[#c8aa6e] font-bold mb-2 flex items-center justify-between">
                   <span className="flex items-center gap-1">
                     <span>📖</span>
                     <span>전투 스킬 슬롯 (고유기 1 + 장착 2)</span>
                   </span>
                   <button
-                    className="text-[10px] px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44] font-bold hover:bg-[#00d2ff33]"
+                    className="text-[10px] px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] font-bold hover:bg-[#c8aa6e33]"
                     onClick={() => setSkillOverlayHero(hero)}
                   >
                     ⚙️ 스킬 관리 (습득: {learnedCount}/4)
@@ -4586,11 +4586,11 @@ const BarracksDrawer: React.FC<{
                   <div className="grid grid-cols-2 gap-1.5">
                     {/* 슬롯 1 */}
                     <button
-                      className="p-2 rounded-lg bg-[#141a29] border border-[#26334a] hover:border-[#00d2ff66] text-left flex flex-col justify-between transition-all"
+                      className="p-2 rounded-lg bg-[#141a29] border border-[#26334a] hover:border-[#c8aa6e66] text-left flex flex-col justify-between transition-all"
                       onClick={() => setSkillOverlayHero(hero)}
                     >
                       <div className="flex items-center justify-between w-full mb-1">
-                        <span className="text-[9px] text-[#00d2ff] font-bold">전술 스킬 1</span>
+                        <span className="text-[9px] text-[#c8aa6e] font-bold">전술 스킬 1</span>
                         {equippedSkill1 && <span className="text-[9px] text-[#64b5f6] font-mono">{equippedSkill1.manaCost}MP</span>}
                       </div>
                       <div className="flex items-center gap-1.5">
@@ -4607,11 +4607,11 @@ const BarracksDrawer: React.FC<{
 
                     {/* 슬롯 2 */}
                     <button
-                      className="p-2 rounded-lg bg-[#141a29] border border-[#26334a] hover:border-[#00d2ff66] text-left flex flex-col justify-between transition-all"
+                      className="p-2 rounded-lg bg-[#141a29] border border-[#26334a] hover:border-[#c8aa6e66] text-left flex flex-col justify-between transition-all"
                       onClick={() => setSkillOverlayHero(hero)}
                     >
                       <div className="flex items-center justify-between w-full mb-1">
-                        <span className="text-[9px] text-[#00d2ff] font-bold">전술 스킬 2</span>
+                        <span className="text-[9px] text-[#c8aa6e] font-bold">전술 스킬 2</span>
                         {equippedSkill2 && <span className="text-[9px] text-[#64b5f6] font-mono">{equippedSkill2.manaCost}MP</span>}
                       </div>
                       <div className="flex items-center gap-1.5">
@@ -4778,20 +4778,20 @@ const BarracksDrawer: React.FC<{
                             key={br.id}
                             className={`flex items-center justify-between p-2.5 rounded-lg border transition-all cursor-pointer ${
                               canPromote
-                                ? 'bg-[#241a0d] border-[#ffd54f44] hover:border-[#ffd54f] hover:bg-[#2e2110]' : 'bg-[#141a29] border-[#1e293b] hover:border-[#00d2ff44] opacity-90'
+                                ? 'bg-[#241a0d] border-[#ffd54f44] hover:border-[#ffd54f] hover:bg-[#2e2110]' : 'bg-[#141a29] border-[#1e293b] hover:border-[#c8aa6e44] opacity-90'
                             }`}
                             onClick={() => setPreviewClassTarget({ targetHero: hero, classId: br.id })}
                           >
                             <div className="flex-1 pr-2">
                               <div className="flex items-center gap-1.5">
                                 <span className="font-bold text-xs text-[#ffd54f]">{br.name}</span>
-                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff18] text-[#00d2ff] font-bold border border-[#00d2ff33]">
+                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] font-bold border border-[#c8aa6e33]">
                                   🔍 상세 정보
                                 </span>
                               </div>
                               <div className="text-[10px] text-[#cfd8dc] mt-0.5 leading-relaxed">{br.desc}</div>
                               <div className="text-[10px] font-mono mt-1 flex items-center gap-2">
-                                <span className={state.resources.ether >= etherCost ? 'text-[#00d2ff]' : 'text-[#ef5350]'}>
+                                <span className={state.resources.ether >= etherCost ? 'text-[#c8aa6e]' : 'text-[#ef5350]'}>
                                   ✨ 에테르 {etherCost}
                                 </span>
                                 <span className={state.resources.gold >= goldCost ? 'text-[#ffd54f]' : 'text-[#ef5350]'}>
@@ -4847,14 +4847,14 @@ const BarracksDrawer: React.FC<{
                 return (
                   <div className={`panel p-3 rounded-xl mt-1 border transition-all ${
                     canAwaken
-                      ? 'border-[#00d2ff] bg-[#0c1829] shadow-lg shadow-[#00d2ff22]' : 'border-[#26334a] bg-[#10141f]'
+                      ? 'border-[#c8aa6e] bg-[#0c1829] shadow-lg shadow-[#c8aa6e22]' : 'border-[#26334a] bg-[#10141f]'
                   }`}>
                     {/* 상단 헤더: 타이틀 + 각성 차수 + 등급 진화 확률 */}
                     <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
-                      <div className="text-xs font-bold text-[#00d2ff] flex items-center gap-1.5">
+                      <div className="text-xs font-bold text-[#c8aa6e] flex items-center gap-1.5">
                         <span className="text-base">{canAwaken ? '🔮' : '🔒'}</span>
                         <span>초월 각성 ({currentCount > 0 ? `${currentCount}단계 완료` : '미각성'})</span>
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-mono font-bold">
+                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-mono font-bold">
                           {targetStep}단계 의식
                         </span>
                       </div>
@@ -4897,7 +4897,7 @@ const BarracksDrawer: React.FC<{
                     {/* 비용 및 각성 실행 버튼 */}
                     <div className="flex items-center justify-between p-2.5 rounded-lg border border-[#1e293b] bg-[#141a29]">
                       <div className="flex items-center gap-2 text-[11px] font-mono">
-                        <span className={state.resources.ether >= etherCost ? 'text-[#00d2ff]' : 'text-[#ef5350]'}>
+                        <span className={state.resources.ether >= etherCost ? 'text-[#c8aa6e]' : 'text-[#ef5350]'}>
                           ✨ 에테르 {etherCost}
                         </span>
                         <span className={state.resources.gold >= goldCost ? 'text-[#ffd54f]' : 'text-[#ef5350]'}>
@@ -4907,7 +4907,7 @@ const BarracksDrawer: React.FC<{
                       <button
                         className={`btn text-xs px-3.5 py-1.5 font-bold transition-all ${
                           canAwaken
-                            ? 'btn-primary shadow-md shadow-[#00d2ff33] animate-bounce' : 'btn-ghost opacity-60'
+                            ? 'btn-primary shadow-md shadow-[#c8aa6e33] animate-bounce' : 'btn-ghost opacity-60'
                         }`}
                         onClick={() => {
                           setSelectedAwakenStat('atk');
@@ -5042,7 +5042,7 @@ const BarracksDrawer: React.FC<{
                         <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
                           {targetTier === 1 ? '1차 상위 클래스' : '2차 전설 클래스'}
                         </span>
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                           {targetClass.role === 'tank' ? '🛡️ 방어 수호자' : targetClass.role === 'dealer_phy' ? '⚔️ 물리 딜러' : targetClass.role === 'dealer_mag' ? '🔮 마법 딜러' : targetClass.role === 'healer' ? '✨ 신성 치유사' : '🔫 원거리 사격수'}
                         </span>
                       </div>
@@ -5053,9 +5053,9 @@ const BarracksDrawer: React.FC<{
                   </div>
 
                   {/* 🌟 전직 특화 스탯 1종 선택 (+30% 집중 상승) */}
-                  <div className="panel p-3 bg-[#131b2e] border border-[#00d2ff66] rounded-xl flex flex-col gap-2 shadow-lg">
+                  <div className="panel p-3 bg-[#131b2e] border border-[#c8aa6e66] rounded-xl flex flex-col gap-2 shadow-lg">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#00d2ff]">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#c8aa6e]">
                         <span>✨</span>
                         <span>전직 각성 특화 스탯 선택 (1종 +30% 집중 강화)</span>
                       </div>
@@ -5081,13 +5081,13 @@ const BarracksDrawer: React.FC<{
                             type="button"
                             className={`flex flex-col items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
                               isSelected
-                                ? 'bg-[#00d2ff22] border-[#00d2ff] shadow-md shadow-[#00d2ff33] ring-1 ring-[#00d2ff]' : 'bg-[#0d1424] border-[#1e2b40] hover:border-[#2f4260] opacity-85 hover:opacity-100'
+                                ? 'bg-[#c8aa6e22] border-[#c8aa6e] shadow-md shadow-[#c8aa6e33] ring-1 ring-[#c8aa6e]' : 'bg-[#0d1424] border-[#1e2b40] hover:border-[#2f4260] opacity-85 hover:opacity-100'
                             }`}
                             onClick={() => setSelectedBonusStat(s.key as any)}
                           >
                             <div className="flex items-center gap-1">
                               <span className="text-base">{s.icon}</span>
-                              <span className="text-xs font-bold" style={{ color: isSelected ? '#00d2ff' : s.color }}>
+                              <span className="text-xs font-bold" style={{ color: isSelected ? '#c8aa6e' : s.color }}>
                                 {s.label}
                               </span>
                             </div>
@@ -5137,7 +5137,7 @@ const BarracksDrawer: React.FC<{
 
                   {/* 기본 습득 전술 스킬 2종 */}
                   <div className="panel p-3 bg-[#0d1424] border border-[#1e293b] rounded-xl flex flex-col gap-1.5">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-[#00d2ff]">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-[#c8aa6e]">
                       <span>⚔️ 전용 전술 스킬 (기본 2종 자동 습득)</span>
                     </div>
                     <div className="flex flex-col gap-1.5">
@@ -5172,7 +5172,7 @@ const BarracksDrawer: React.FC<{
                   {/* 전직 비용 및 요구 조건 안내 바 */}
                   <div className="p-2.5 rounded-xl bg-[#090c14] border border-[#1f2738] flex items-center justify-between">
                     <div className="flex items-center gap-2 font-mono text-[11px]">
-                      <span className={state.resources.ether >= etherCost ? 'text-[#00d2ff]' : 'text-[#ef5350]'}>
+                      <span className={state.resources.ether >= etherCost ? 'text-[#c8aa6e]' : 'text-[#ef5350]'}>
                         ✨ 에테르 {etherCost} ({state.resources.ether}/{etherCost})
                       </span>
                       <span className={state.resources.gold >= goldCost ? 'text-[#ffd54f]' : 'text-[#ef5350]'}>
@@ -5257,7 +5257,7 @@ const BarracksDrawer: React.FC<{
                     <button
                       className={`btn text-xs px-4 py-2 font-bold ${
                         canAwaken
-                          ? 'btn-primary shadow-lg shadow-[#00d2ff33] animate-pulse' : 'btn-ghost opacity-50'
+                          ? 'btn-primary shadow-lg shadow-[#c8aa6e33] animate-pulse' : 'btn-ghost opacity-50'
                       }`}
                       disabled={!canAwaken}
                       onClick={() => {
@@ -5278,11 +5278,11 @@ const BarracksDrawer: React.FC<{
               >
                 <div className="flex flex-col gap-3 text-xs leading-relaxed">
                   {/* 상단 안내 & 등급 진화율 */}
-                  <div className="panel p-3 bg-[#0f172a] border border-[#00d2ff55] rounded-xl flex flex-col gap-2">
+                  <div className="panel p-3 bg-[#0f172a] border border-[#c8aa6e55] rounded-xl flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-base font-bold text-[#00d2ff]">🔮 {targetStep}단계 초월 각성 의식</span>
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+                        <span className="text-base font-bold text-[#c8aa6e]">🔮 {targetStep}단계 초월 각성 의식</span>
+                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                           {cClass.name}
                         </span>
                       </div>
@@ -5300,7 +5300,7 @@ const BarracksDrawer: React.FC<{
                         <span className="text-white">{GRADE_NAMES[targetHero.grade] || targetHero.grade}</span>
                         {nextGrade ? (
                           <>
-                            <span className="text-[#00d2ff]">➔</span>
+                            <span className="text-[#c8aa6e]">➔</span>
                             <span className="text-[#ffd54f] animate-pulse">{GRADE_NAMES[nextGrade]}</span>
                             <span className="text-[9px] text-[#38ef7d] font-mono">({upgradeChance}% 확률)</span>
                           </>
@@ -5312,9 +5312,9 @@ const BarracksDrawer: React.FC<{
                   </div>
 
                   {/* 🌟 각성 특화 스탯 1종 선택 (+15% 집중 상승) */}
-                  <div className="panel p-3 bg-[#131b2e] border border-[#00d2ff66] rounded-xl flex flex-col gap-2 shadow-lg">
+                  <div className="panel p-3 bg-[#131b2e] border border-[#c8aa6e66] rounded-xl flex flex-col gap-2 shadow-lg">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#00d2ff]">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#c8aa6e]">
                         <span>✨</span>
                         <span>각성 특화 스탯 선택 (1종 +15% 영구 증폭)</span>
                       </div>
@@ -5340,13 +5340,13 @@ const BarracksDrawer: React.FC<{
                             type="button"
                             className={`flex flex-col items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
                               isSelected
-                                ? 'bg-[#00d2ff22] border-[#00d2ff] shadow-md shadow-[#00d2ff33] ring-1 ring-[#00d2ff]' : 'bg-[#0d1424] border-[#1e2b40] hover:border-[#2f4260] opacity-85 hover:opacity-100'
+                                ? 'bg-[#c8aa6e22] border-[#c8aa6e] shadow-md shadow-[#c8aa6e33] ring-1 ring-[#c8aa6e]' : 'bg-[#0d1424] border-[#1e2b40] hover:border-[#2f4260] opacity-85 hover:opacity-100'
                             }`}
                             onClick={() => setSelectedAwakenStat(s.key as any)}
                           >
                             <div className="flex items-center gap-1">
                               <span className="text-base">{s.icon}</span>
-                              <span className="text-xs font-bold" style={{ color: isSelected ? '#00d2ff' : s.color }}>
+                              <span className="text-xs font-bold" style={{ color: isSelected ? '#c8aa6e' : s.color }}>
                                 {s.label}
                               </span>
                             </div>
@@ -5376,7 +5376,7 @@ const BarracksDrawer: React.FC<{
                   <div className="p-2 rounded-lg bg-[#090c14] border border-[#1b2334] flex items-center justify-between text-[11px] font-mono">
                     <span className="text-[#8b9bb4]">소모 재화:</span>
                     <div className="flex items-center gap-2">
-                      <span className={state.resources.ether >= etherCost ? 'text-[#00d2ff]' : 'text-[#ef5350]'}>
+                      <span className={state.resources.ether >= etherCost ? 'text-[#c8aa6e]' : 'text-[#ef5350]'}>
                         ✨ 에테르 {etherCost} ({state.resources.ether}/{etherCost})
                       </span>
                       <span className={state.resources.gold >= goldCost ? 'text-[#ffd54f]' : 'text-[#ef5350]'}>
@@ -5477,7 +5477,7 @@ const BarracksDrawer: React.FC<{
                         <div className="flex items-center gap-1.5">
                           <span className="font-bold text-[11px] text-white">{hero.name}</span>
                           <span className="text-[10px] text-[#ff416c] animate-pulse">🤝</span>
-                          <span className="font-bold text-[11px] text-[#00d2ff]">{other.name}</span>
+                          <span className="font-bold text-[11px] text-[#c8aa6e]">{other.name}</span>
                         </div>
                         <span className="text-[10px] font-bold text-[#ffd54f]">
                           {getHeartIcons(bInfo.level)}
@@ -5542,13 +5542,13 @@ const BarracksDrawer: React.FC<{
                 {/* 모달 본문 (스크롤) */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
                   {/* 섹션 1: 이번 주의 차원율 및 상성 규칙 */}
-                  <div className="p-4 rounded-xl bg-gradient-to-br from-[#1a2035] to-[#121526] border border-cyan-500/30">
-                    <div className="flex items-center justify-between mb-3 border-b border-cyan-500/20 pb-2">
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-[#15171f] to-[#111319] border border-[#c8aa6e]/30">
+                    <div className="flex items-center justify-between mb-3 border-b border-[#c8aa6e]/20 pb-2">
                       <div className="flex items-center gap-2">
                         <span className="text-xl">🌌</span>
-                        <span className="font-bold text-cyan-300 text-base">이번 주의 차원율: {weeklyAffinity.title}</span>
+                        <span className="font-bold text-[#c8aa6e] text-base">이번 주의 차원율: {weeklyAffinity.title}</span>
                       </div>
-                      <span className="text-xs text-cyan-400/80 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800">
+                      <span className="text-xs text-[#c8aa6e]/80 bg-black/60 px-2 py-0.5 rounded border border-[#876739]">
                         매주 월요일 00:00 순환
                       </span>
                     </div>
@@ -5601,7 +5601,7 @@ const BarracksDrawer: React.FC<{
                         { badge: 'guard', label: '방어 (Guard)', score: 15, desc: '철벽 방어·막기', color: 'border-blue-500/40 bg-blue-950/30 text-blue-300' },
                         { badge: 'assist', label: '지원 (Assist)', score: 15, desc: '아군 버프·정화', color: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-300' },
                         { badge: 'heal', label: '치유 (Heal)', score: 10, desc: '생명력 회복', color: 'border-pink-500/40 bg-pink-950/30 text-pink-300' },
-                        { badge: 'evade', label: '회피 (Evade)', score: 10, desc: '완전 회피 기동', color: 'border-cyan-500/40 bg-cyan-950/30 text-cyan-300' },
+                        { badge: 'evade', label: '회피 (Evade)', score: 10, desc: '완전 회피 기동', color: 'border-[#c8aa6e]/40 bg-black/30 text-[#c8aa6e]' },
                       ].map((item) => (
                         <div key={item.badge} className={`p-2 rounded-lg border flex flex-col justify-between ${item.color}`}>
                           <div className="flex justify-between items-center mb-1">
@@ -5808,7 +5808,7 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
                   [Lv.{currentLv}/10]
                 </span>
                 {bookItem && (
-                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#00d2ff15] text-[#00d2ff] border border-[#00d2ff33]">
+                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] border border-[#c8aa6e33]">
                     x{bookCount}권 보유
                   </span>
                 )}
@@ -5827,7 +5827,7 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
             </div>
           </div>
           <button
-            className="w-7 h-7 rounded-lg bg-[#141b2c] text-[#8b9bb4] hover:text-white flex items-center justify-center border border-[#23324d] transition-colors shrink-0"
+            className="w-7 h-7 rounded-lg bg-[#14161c] text-[#8b9bb4] hover:text-white flex items-center justify-center border border-[#23324d] transition-colors shrink-0"
             onClick={onClose}
           >
             ✕
@@ -5884,22 +5884,22 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
 
         {/* 4분할 핵심 스펙 그리드 */}
         <div className="grid grid-cols-4 gap-1.5 text-center font-mono">
-          <div className="bg-[#101726] p-2 rounded-xl border border-[#1e2a3f]">
+          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
             <span className="text-[10px] text-[#8b9bb4] block">마나 소모</span>
             <span className="text-xs font-bold text-[#64b5f6]">{skill.manaCost} MP</span>
           </div>
-          <div className="bg-[#101726] p-2 rounded-xl border border-[#1e2a3f]">
+          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
             <span className="text-[10px] text-[#8b9bb4] block">쿨다운</span>
             <span className="text-xs font-bold text-[#ffd54f]">{skill.cooldown || 0}턴</span>
           </div>
-          <div className="bg-[#101726] p-2 rounded-xl border border-[#1e2a3f]">
+          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
             <span className="text-[10px] text-[#8b9bb4] block">위력 계수</span>
             <span className="text-xs font-bold text-[#38ef7d]">{currentPowerPct}%</span>
             {currentLv > 1 && currentPowerPct !== basePowerPct && (
               <span className="text-[9px] text-[#ffd54f] font-mono block">(초기 {basePowerPct}%)</span>
             )}
           </div>
-          <div className="bg-[#101726] p-2 rounded-xl border border-[#1e2a3f]">
+          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
             <span className="text-[10px] text-[#8b9bb4] block">대상</span>
             <span className="text-[10px] font-bold text-[#cfd8dc] truncate block">{targetLabel}</span>
           </div>
@@ -5939,14 +5939,14 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
         </div>
 
         {/* 상세 효과 설명 */}
-        <div className="p-3 rounded-xl bg-[#101726] border border-[#1e2a3f] flex flex-col gap-1">
-          <div className="text-[11px] font-bold text-[#00d2ff]">📖 마도서 비전 효과</div>
+        <div className="p-3 rounded-xl bg-[#12141a] border border-[#1e2a3f] flex flex-col gap-1">
+          <div className="text-[11px] font-bold text-[#c8aa6e]">📖 마도서 비전 효과</div>
           <div className="text-xs text-[#e2e8f0] leading-relaxed whitespace-pre-line">{skill.description}</div>
         </div>
 
         {/* ⚡ 상태이상 연계 메커니즘 섹션 */}
         {combos.length > 0 && (
-          <div className="p-2.5 rounded-xl bg-[#111a2c] border border-[#00d2ff33] flex flex-col gap-1.5">
+          <div className="p-2.5 rounded-xl bg-[#111a2c] border border-[#c8aa6e33] flex flex-col gap-1.5">
             <div className="text-[11px] font-bold text-[#ffd54f] flex items-center justify-between">
               <span className="flex items-center gap-1">
                 <span>⚡ 상태이상 연계 메커니즘</span>
@@ -6007,16 +6007,16 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
               <span>📖 연구 습득률</span>
               <span className="text-[10px] text-[#80cbc4]">({rMeta.label} · 권당 +{gainPerBook}%)</span>
             </span>
-            <span className={`font-mono font-bold ${currentMastery >= 100 ? 'text-[#38ef7d]' : 'text-[#00d2ff]'}`}>
+            <span className={`font-mono font-bold ${currentMastery >= 100 ? 'text-[#38ef7d]' : 'text-[#c8aa6e]'}`}>
               {currentMastery}% / 100% {currentMastery >= 100 && '✓ 습득완료'}
             </span>
           </div>
-          <div className="w-full h-2 bg-[#141b2c] rounded-full overflow-hidden border border-[#23324d]">
+          <div className="w-full h-2 bg-[#14161c] rounded-full overflow-hidden border border-[#23324d]">
             <div
               className={`h-full transition-all duration-300 ${
                 currentMastery >= 100
                   ? 'bg-gradient-to-r from-[#26a69a] to-[#38ef7d]'
-                  : 'bg-gradient-to-r from-[#00b4db] to-[#00d2ff]'
+                  : 'bg-gradient-to-r from-[#00b4db] to-[#c8aa6e]'
               }`}
               style={{ width: `${Math.min(100, currentMastery)}%` }}
             />
@@ -6036,8 +6036,8 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
           <span className="text-[#8b9bb4]">서고 상태</span>
           {isLearned ? (
             <span className="font-bold flex items-center gap-1.5">
-              {slotIndex === 0 && <span className="text-[#00d2ff]">★ 1번 전투 슬롯 장착 중</span>}
-              {slotIndex === 1 && <span className="text-[#00d2ff]">★ 2번 전투 슬롯 장착 중</span>}
+              {slotIndex === 0 && <span className="text-[#c8aa6e]">★ 1번 전투 슬롯 장착 중</span>}
+              {slotIndex === 1 && <span className="text-[#c8aa6e]">★ 2번 전투 슬롯 장착 중</span>}
               {slotIndex === -1 && <span className="text-[#81c784]">✓ 습득 완료 (대기 상태)</span>}
             </span>
           ) : (
@@ -6202,8 +6202,8 @@ const SkillManagerOverlay: React.FC<{
           <span className="text-lg">📖</span>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-[#00d2ff]">{hero.name}의 스킬북 서고</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+              <span className="text-sm font-bold text-[#c8aa6e]">{hero.name}의 스킬북 서고</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                 습득 {learnedSkills.length}/6
               </span>
             </div>
@@ -6243,9 +6243,9 @@ const SkillManagerOverlay: React.FC<{
             {/* ⚔️ 섹션 1: 정식 습득 스킬 */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-bold text-[#00d2ff] flex items-center gap-1.5">
+                <span className="text-xs font-bold text-[#c8aa6e] flex items-center gap-1.5">
                   <span>⚔️ 정식 습득 스킬</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] font-mono">
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] font-mono">
                     {learnedSkills.length}/6
                   </span>
                 </span>
@@ -6257,7 +6257,7 @@ const SkillManagerOverlay: React.FC<{
               {learnedSkills.length === 0 ? (
                 <div className="panel p-4 text-center text-[#8b9bb4] text-xs bg-[#0f1420]">
                   정식 습득 완료된 스킬이 없습니다.<br />
-                  <span className="text-[10px] text-[#00d2ff] mt-0.5 block">
+                  <span className="text-[10px] text-[#c8aa6e] mt-0.5 block">
                     [보유 마도서] 탭에서 마도서를 연독해 스킬을 터득하세요.
                   </span>
                 </div>
@@ -6276,8 +6276,8 @@ const SkillManagerOverlay: React.FC<{
                   return (
                     <div
                       key={`${sk.id}_${skIdx}`}
-                      className={`panel p-3 rounded-xl flex flex-col gap-2 transition-all cursor-pointer hover:border-[#00d2ff88] group ${
-                        isEquippedAny ? 'border-[#00d2ff] bg-[#121c2c]' : 'border-[#222d42] bg-[#131926]'
+                      className={`panel p-3 rounded-xl flex flex-col gap-2 transition-all cursor-pointer hover:border-[#c8aa6e88] group ${
+                        isEquippedAny ? 'border-[#c8aa6e] bg-[#121c2c]' : 'border-[#222d42] bg-[#131926]'
                       }`}
                       onClick={() => {
                         setDetailModalItem({
@@ -6297,7 +6297,7 @@ const SkillManagerOverlay: React.FC<{
                           </span>
                           <div>
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="font-bold text-sm text-white group-hover:text-[#00d2ff] transition-colors">{sk.name}</span>
+                              <span className="font-bold text-sm text-white group-hover:text-[#c8aa6e] transition-colors">{sk.name}</span>
                               <span
                                 className="text-[9px] px-1.5 py-0.2 rounded font-bold"
                                 style={{ color: rMeta.color, background: rMeta.bg, border: `1px solid ${rMeta.borderColor}` }}
@@ -6308,12 +6308,12 @@ const SkillManagerOverlay: React.FC<{
                                 Lv.{bookLv}
                               </span>
                               {isEquippedSlot1 && (
-                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                                   ★ 1번 슬롯
                                 </span>
                               )}
                               {isEquippedSlot2 && (
-                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                                   ★ 2번 슬롯
                                 </span>
                               )}
@@ -6322,7 +6322,7 @@ const SkillManagerOverlay: React.FC<{
                         </div>
                         <div className="flex flex-col items-end gap-1 shrink-0">
                           <span className="text-xs text-[#64b5f6] font-mono font-bold">{sk.manaCost} MP</span>
-                          <span className="text-[9px] text-[#8b9bb4] group-hover:text-[#00d2ff] flex items-center gap-0.5 font-medium">
+                          <span className="text-[9px] text-[#8b9bb4] group-hover:text-[#c8aa6e] flex items-center gap-0.5 font-medium">
                             🔍 상세 보기
                           </span>
                         </div>
@@ -6478,7 +6478,7 @@ const SkillManagerOverlay: React.FC<{
                             {mastery}% / 100%
                           </span>
                         </div>
-                        <div className="w-full h-1.5 bg-[#141b2c] rounded-full overflow-hidden border border-[#23324d]">
+                        <div className="w-full h-1.5 bg-[#14161c] rounded-full overflow-hidden border border-[#23324d]">
                           <div
                             className="h-full bg-gradient-to-r from-[#ffd54f] to-[#ffb300] transition-all duration-300"
                             style={{ width: `${Math.min(100, mastery)}%` }}
@@ -6564,7 +6564,7 @@ const SkillManagerOverlay: React.FC<{
               return (
                 <div
                   key={item.id}
-                  className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl flex flex-col gap-2 cursor-pointer hover:border-[#00d2ff88] group transition-all"
+                  className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl flex flex-col gap-2 cursor-pointer hover:border-[#c8aa6e88] group transition-all"
                   onClick={() => {
                     setDetailModalItem({
                       skill: item.skill,
@@ -6584,7 +6584,7 @@ const SkillManagerOverlay: React.FC<{
                       <div className="min-w-0 flex-1 flex flex-col gap-1">
                         {/* 1행: 마도서 이름 + 등급 뱃지 + 계열 뱃지 + 직업 적합도 */}
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-bold text-sm text-white group-hover:text-[#00d2ff] transition-colors">{item.name}</span>
+                          <span className="font-bold text-sm text-white group-hover:text-[#c8aa6e] transition-colors">{item.name}</span>
                           <span
                             className="text-[9px] px-1.5 py-0.2 rounded font-bold shrink-0"
                             style={{ color: rMeta.color, background: rMeta.bg, border: `1px solid ${rMeta.borderColor}` }}
@@ -6614,7 +6614,7 @@ const SkillManagerOverlay: React.FC<{
                           <span className="text-[10px] font-mono font-bold text-[#ffd54f]">
                             Lv.{bookLv}
                           </span>
-                          <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#00d2ff15] text-[#00d2ff] border border-[#00d2ff33]">
+                          <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] border border-[#c8aa6e33]">
                             x{bookCount}권
                           </span>
                           {!alreadyKnows ? (
@@ -6648,7 +6648,7 @@ const SkillManagerOverlay: React.FC<{
                           gm.learnSkillFromBook(hero.id, item.id);
                         }}
                       />
-                      <span className="text-[9px] text-[#8b9bb4] group-hover:text-[#00d2ff] flex items-center gap-0.5 font-medium">
+                      <span className="text-[9px] text-[#8b9bb4] group-hover:text-[#c8aa6e] flex items-center gap-0.5 font-medium">
                         🔍 상세 보기
                       </span>
                     </div>
@@ -6893,12 +6893,12 @@ const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
                 : '병기창 Lv.7부터 +5%/Lv 증가'}
             </span>
           </div>
-          <div className="w-full bg-[#182338] h-2 rounded-full overflow-hidden">
+          <div className="w-full bg-[#15171e] h-2 rounded-full overflow-hidden">
             <div
               className="h-full transition-all duration-300 rounded-full"
               style={{
                 width: `${successRate}%`,
-                background: 'linear-gradient(90deg, #00d2ff, #38ef7d)'
+                background: 'linear-gradient(90deg, #c8aa6e, #38ef7d)'
               }}
             />
           </div>
@@ -6910,7 +6910,7 @@ const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
 
         {/* 현재 부여된 인챈트 상태 */}
         <div className="p-3 bg-[#0d121c] border border-[#1f2738] rounded-xl flex flex-col gap-2">
-          <div className="text-xs font-bold text-[#00d2ff]">{'✨ 현재 인챈트 현황'}</div>
+          <div className="text-xs font-bold text-[#c8aa6e]">{'✨ 현재 인챈트 현황'}</div>
           {(() => {
             const locPre = item.prefix;
             const preName = locPre?.name || item.prefix?.name;
@@ -6948,11 +6948,11 @@ const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
             const sufDesc = locSuf?.description || item.suffix?.description;
 
             return (
-              <div className={`p-2 rounded-lg border text-xs ${item.suffix ? 'bg-[#00d2ff15] border-[#00d2ff44] text-[#00d2ff]' : 'bg-[#141a27] border-[#222d42] text-[#8b9bb4]'}`}>
+              <div className={`p-2 rounded-lg border text-xs ${item.suffix ? 'bg-[#c8aa6e15] border-[#c8aa6e44] text-[#c8aa6e]' : 'bg-[#141a27] border-[#222d42] text-[#8b9bb4]'}`}>
                 <span className="font-bold">'🔮 접미사: '</span>
                 {item.suffix ? (
                   <span className="text-white">
-                    <span className="text-[#00d2ff] font-bold">[{sufName}]</span> {sufDesc}
+                    <span className="text-[#c8aa6e] font-bold">[{sufName}]</span> {sufDesc}
                   </span>
                 ) : (
                   <span>{canSuffix ? ('미부여 (인챈트 가능)') : ('🔒 +7강 이상 필요')}</span>
@@ -6988,7 +6988,7 @@ const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
           <button
             className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all ${
               enchantType === 'suffix'
-                ? 'bg-[#00d2ff22] border-[#00d2ff] text-[#00d2ff] shadow'
+                ? 'bg-[#c8aa6e22] border-[#c8aa6e] text-[#c8aa6e] shadow'
                 : canSuffix
                 ? 'bg-[#121724] border-[#26334a] text-[#8b9bb4] hover:text-white' : 'bg-[#121724] border-[#26334a] text-[#555] opacity-50 cursor-not-allowed'
             }`}
@@ -7051,7 +7051,7 @@ const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
               📜 {isPure
                 ? ('순수석 후보 풀 (에픽~전설 확정)')
                 : ('일반석 후보 풀 (희귀~에픽)')}
-              <span className="text-[#00d2ff] text-[10px] font-normal ml-1">
+              <span className="text-[#c8aa6e] text-[10px] font-normal ml-1">
                 [{item.slot === 'weapon' ? ('🗡️ 무기 전용') : item.slot === 'armor' ? ('🛡️ 방어구 전용') : ('💍 장신구 전용')}]
               </span>
             </span>
@@ -7296,7 +7296,7 @@ const EquipmentCraftModal: React.FC<EquipmentCraftModalProps> = ({
               >
                 [{getRarityLabel(recipe.rarity)}]
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                 {slotBadge}
               </span>
             </div>
@@ -7312,7 +7312,7 @@ const EquipmentCraftModal: React.FC<EquipmentCraftModalProps> = ({
         </div>
 
         {/* 🎲 단조 등급 확률 및 노강 안내 */}
-        <div className="p-2.5 rounded-xl bg-[#141b2c] border border-[#23324d] flex flex-col gap-1.5 text-xs">
+        <div className="p-2.5 rounded-xl bg-[#14161c] border border-[#23324d] flex flex-col gap-1.5 text-xs">
           <div className="flex items-center justify-between text-[#8b9bb4]">
             <span className="font-bold text-[#cfd8e8] flex items-center gap-1">
               🎲 단조 등급 확률 (병기창 Lv.{forgeLevel})
@@ -7382,13 +7382,13 @@ const EquipmentCraftModal: React.FC<EquipmentCraftModalProps> = ({
         })()}
 
         {/* 🎲 제작 스탯 및 ±30% 랜덤 편차 범위 안내 */}
-        <div className="panel p-3 bg-[#111724] border border-[#1f2b40] rounded-xl flex flex-col gap-2">
+        <div className="panel p-3 bg-[#111318] border border-[#1f2b40] rounded-xl flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-[#ffd54f] flex items-center gap-1">
               <span>🎲</span>
               <span>제작 예상 스탯 (±30% 무작위 편차)</span>
             </span>
-            <span className="text-[10px] text-[#00d2ff] font-medium bg-[#00d2ff15] px-2 py-0.5 rounded-full border border-[#00d2ff33]">
+            <span className="text-[10px] text-[#c8aa6e] font-medium bg-[#c8aa6e15] px-2 py-0.5 rounded-full border border-[#c8aa6e33]">
               70% ~ 130% 수치 롤
             </span>
           </div>
@@ -7424,7 +7424,7 @@ const EquipmentCraftModal: React.FC<EquipmentCraftModalProps> = ({
         </div>
 
         {/* 필요 재료 섹션 */}
-        <div className="panel p-3 bg-[#111724] border border-[#1f2b40] rounded-xl flex flex-col gap-2">
+        <div className="panel p-3 bg-[#111318] border border-[#1f2b40] rounded-xl flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-[#cfd8e8] flex items-center gap-1">
               <span>📦</span>
@@ -7657,8 +7657,8 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <span className="text-base">⚒️</span>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-[#00d2ff]">{'병기창 대장간'}</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+              <span className="text-sm font-bold text-[#c8aa6e]">{'병기창 대장간'}</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                 Lv.{forgeLv}
               </span>
               <EncyclopediaBadge tab="equipment" label="병기창 백과" />
@@ -7761,7 +7761,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               return (
                 <div
                   key={recipe.id}
-                  className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl hover:border-[#00d2ff66] transition-all flex flex-col gap-2 cursor-pointer"
+                  className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl hover:border-[#c8aa6e66] transition-all flex flex-col gap-2 cursor-pointer"
                   onClick={() => setSelectedCraftRecipe(recipe)}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -7782,7 +7782,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           >
                             [{getRarityLabel(recipe.rarity)}]
                           </span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0">
                             {slotBadge}
                           </span>
                           <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f15] text-[#ffd54f] font-mono border border-[#ffd54f33] shrink-0">
@@ -8008,7 +8008,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <>
               <div className="p-3 rounded-xl bg-[#121826] border border-[#1f2738] flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-[#00d2ff] flex items-center gap-1.5">
+                  <div className="text-xs font-bold text-[#c8aa6e] flex items-center gap-1.5">
                     <span>📦</span>
                     <span>성채 원정 보급품 사전 제작소</span>
                     <EncyclopediaBadge query="보급품" tab="systems" label="보급품 백과" compact />
@@ -8074,7 +8074,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   };
 
                   return (
-                    <div key={sup.key} className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl hover:border-[#00d2ff66] transition-all">
+                    <div key={sup.key} className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl hover:border-[#c8aa6e66] transition-all">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2.5">
                           <span className="p-1 rounded-lg bg-[#1a2234] border border-[#2b3952] flex items-center justify-center shrink-0 w-10 h-10">
@@ -8144,7 +8144,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <div>
                     <div className="font-bold text-xs text-[#ffd54f]">강화된 특수 보급품 (7종) 잠금</div>
                     <div className="text-[10px] text-[#8b9bb4] mt-0.5 leading-relaxed">
-                      병기창을 <strong className="text-[#00d2ff]">Lv.6</strong> 이상으로 증축하면 일반 보급품이 7종의 강화 보급품(에테르 횃불, 던전 도시락, 심연 곡괭이 등)으로 <strong className="text-[#ffd54f]">전면 대체 제작</strong>됩니다.
+                      병기창을 <strong className="text-[#c8aa6e]">Lv.6</strong> 이상으로 증축하면 일반 보급품이 7종의 강화 보급품(에테르 횃불, 던전 도시락, 심연 곡괭이 등)으로 <strong className="text-[#ffd54f]">전면 대체 제작</strong>됩니다.
                     </div>
                   </div>
                 </div>
@@ -8165,7 +8165,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               <span className="text-5xl">🔒</span>
               <div className="font-bold text-base text-[#ffd54f]">마도 대장간 Lv.3 필요</div>
               <div className="text-xs text-[#8b9bb4] max-w-[280px] leading-relaxed">
-                장비 강화 시설은 대장간을 <span className="text-[#00d2ff] font-bold">Lv.3</span> 이상으로 증축하면 해금됩니다.
+                장비 강화 시설은 대장간을 <span className="text-[#c8aa6e] font-bold">Lv.3</span> 이상으로 증축하면 해금됩니다.
                 <br />(현재 대장간: Lv.{forgeLv})
               </div>
             </div>
@@ -8174,7 +8174,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               {/* 강화 안내 배너 */}
               <div className="px-3 py-1.5 bg-[#161224] border-b border-[#1f2738] text-[10px] text-[#cfd8dc] flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-1.5">
-                  <span>💡 <span className="text-[#38ef7d] font-bold">+0~+3강</span>: 안전 | <span className="text-[#00d2ff] font-bold">최대 +{GameManager.getForgeMaxEnhanceLevel(forgeLv)}강</span></span>
+                  <span>💡 <span className="text-[#38ef7d] font-bold">+0~+3강</span>: 안전 | <span className="text-[#c8aa6e] font-bold">최대 +{GameManager.getForgeMaxEnhanceLevel(forgeLv)}강</span></span>
                   <EncyclopediaBadge query="강화" tab="systems" label="강화 백과" compact />
                 </div>
                 <span className="text-[#ffd54f] font-bold">특전 -{discountPct}%</span>
@@ -8401,7 +8401,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             <span className={item.prefix ? 'text-[#ffd54f] font-bold' : canPrefix ? 'text-[#38ef7d]' : 'text-[#607d8b]'}>
                               {item.prefix ? `✨${item.prefix.name}` : canPrefix ? '✨접두가능' : '🔒+3강'}
                             </span>
-                            <span className={item.suffix ? 'text-[#00d2ff] font-bold' : canSuffix ? 'text-[#38ef7d]' : 'text-[#607d8b]'}>
+                            <span className={item.suffix ? 'text-[#c8aa6e] font-bold' : canSuffix ? 'text-[#38ef7d]' : 'text-[#607d8b]'}>
                               {item.suffix ? `🔮${item.suffix.name}` : canSuffix ? '🔮접미가능' : '🔒+7강'}
                             </span>
                           </div>
@@ -8430,9 +8430,9 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
-              <div className="panel-accent p-3 bg-[#131b26] border border-[#00d2ff44] rounded-xl flex flex-col gap-1.5">
+              <div className="panel-accent p-3 bg-[#131b26] border border-[#c8aa6e44] rounded-xl flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#00d2ff] font-bold flex items-center gap-1.5">
+                  <span className="text-xs text-[#c8aa6e] font-bold flex items-center gap-1.5">
                     <span>✨</span>
                     <span>심연 침식 장비 정화 제단</span>
                     <EncyclopediaBadge query="정화" tab="systems" label="정화 백과" compact />
@@ -8444,7 +8444,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
                   던전에서 발굴된 [침식된] 장비의 마기를 정화하여 순정 상태로 복원합니다. 정화 시 단조 공정과 동일하게 기본 베이스 스탯의 <strong className="text-[#38ef7d]">±30% 랜덤 스탯 조정</strong>이 적용됩니다.
                 </div>
-                <div className="text-[10px] text-[#8b9bb4] pt-1 border-t border-[#00d2ff22] flex items-center justify-between">
+                <div className="text-[10px] text-[#8b9bb4] pt-1 border-t border-[#c8aa6e22] flex items-center justify-between">
                   <span>정화 1회 비용 (-{discountPct}% 할인 적용)</span>
                   <span className="font-mono text-white">🪙 {Math.max(1, Math.floor(100 * mult))}/{state.resources.gold || 0}G + ✨ {Math.max(1, Math.floor(5 * mult))}/{state.resources.ether || 0}</span>
                 </div>
@@ -9314,7 +9314,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold">
                 Lv.{storageLv}
               </span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff15] text-[#00d2ff] font-mono border border-[#00d2ff33]">
+              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono border border-[#c8aa6e33]">
                 {'유지비 완전 면제'}
               </span>
               <EncyclopediaBadge query="창고" tab="buildings" label="창고 백과" />
@@ -9322,7 +9322,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <div className="text-[10px] text-[#8b9bb4]">
               🏰 {'성채'}: <span className="text-white font-mono font-bold">{gm.getMaxResourceCapacity('wood').toLocaleString()}</span> | 
               🌿 {'파밍'}: <span className="text-[#66bb6a] font-mono font-bold">{gm.getMaxResourceCapacity('iron').toLocaleString()}</span> | 
-              🔮 {'심연'}: <span className="text-[#00d2ff] font-mono font-bold">{gm.getMaxResourceCapacity('crystal').toLocaleString()}</span> | 
+              🔮 {'심연'}: <span className="text-[#c8aa6e] font-mono font-bold">{gm.getMaxResourceCapacity('crystal').toLocaleString()}</span> | 
               {'금화'}: <span className="text-[#ffd54f] font-mono font-bold">{gm.getMaxResourceCapacity('gold').toLocaleString()}</span>G
             </div>
           </div>
@@ -9385,7 +9385,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           {RESOURCE_GROUPS.map(group => (
             <div key={group.title} className="flex flex-col gap-1.5">
               <div className="flex items-center gap-1.5 px-1">
-                <span className="text-xs font-bold text-[#00d2ff]">{group.title}</span>
+                <span className="text-xs font-bold text-[#c8aa6e]">{group.title}</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
@@ -9400,7 +9400,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   return (
                     <div
                       key={item.key}
-                      className="panel p-2.5 bg-[#131926] border border-[#222d42] hover:border-[#00d2ff88] hover:bg-[#172033] rounded-xl flex flex-col justify-between cursor-pointer transition-all active:scale-[0.98]"
+                      className="panel p-2.5 bg-[#131926] border border-[#222d42] hover:border-[#c8aa6e88] hover:bg-[#172033] rounded-xl flex flex-col justify-between cursor-pointer transition-all active:scale-[0.98]"
                       onClick={() => setSelectedItemDetail(item)}
                       title="탭하여 상세 정보 확인"
                     >
@@ -9410,7 +9410,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             <span className="text-base shrink-0 p-1 rounded-lg bg-[#323d4e] border border-[#4a576d] flex items-center justify-center">
                               <GameIcon name={item.key} icon={item.icon} size={18} />
                             </span>
-                            <span className="font-bold text-xs text-white truncate hover:text-[#00d2ff]">{item.label}</span>
+                            <span className="font-bold text-xs text-white truncate hover:text-[#c8aa6e]">{item.label}</span>
                           </div>
                           <div className="flex items-center gap-1 shrink-0">
                             {netInfo.trend === 'up' && (
@@ -9563,7 +9563,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               filteredEquipment.map(item => {
                 const RARITY_COLORS: Record<string, string> = {
                   common: '#cfd8dc',
-                  rare: '#00d2ff',
+                  rare: '#c8aa6e',
                   unique: '#ff9100',
                   epic: '#ce93d8',
                   legendary: '#ffd54f',
@@ -9580,7 +9580,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 return (
                   <div
                     key={item.id}
-                    className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl hover:border-[#00d2ff88] hover:bg-[#172033] cursor-pointer transition-all active:scale-[0.99] flex flex-col gap-2"
+                    className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl hover:border-[#c8aa6e88] hover:bg-[#172033] cursor-pointer transition-all active:scale-[0.99] flex flex-col gap-2"
                     onClick={() => setSelectedEquipDetail(item)}
                     title="탭하여 장비 상세 스탯 확인"
                   >
@@ -9593,7 +9593,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           <div className="flex items-center gap-1.5 flex-wrap">
                             <span className="font-bold text-sm truncate" style={{ color }}>{itemName}</span>
                             {item.level > 0 && (
-                              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+                              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                                 +{item.level}
                               </span>
                             )}
@@ -9625,7 +9625,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         </div>
                       </div>
 
-                      <span className="text-xs text-[#00d2ff] font-bold shrink-0 bg-[#00d2ff15] px-2 py-1 rounded border border-[#00d2ff33]">
+                      <span className="text-xs text-[#c8aa6e] font-bold shrink-0 bg-[#c8aa6e15] px-2 py-1 rounded border border-[#c8aa6e33]">
                         {'🔍 상세보기'}
                       </span>
                     </div>
@@ -9685,7 +9685,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   className={`panel p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2.5 ${
                     hasItem 
                       ? 'bg-[#131926] border-[#25354e] hover:border-[#7c3aed88] hover:bg-[#182033]' 
-                      : 'bg-[#0f141f] border-[#1a2333] opacity-60 hover:opacity-90'
+                      : 'bg-[#0f141f] border-[#15171d] opacity-60 hover:opacity-90'
                   }`}
                   onClick={() => setSelectedItemDetail(item)}
                   title="탭하여 상세 설명 및 획득처 확인"
@@ -9716,7 +9716,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
                         isCatalystActive 
                           ? 'bg-[#38ef7d22] text-[#38ef7d] border-[#38ef7d55]' 
-                          : 'bg-[#00d2ff15] text-[#00d2ff] border-[#00d2ff33]'
+                          : 'bg-[#c8aa6e15] text-[#c8aa6e] border-[#c8aa6e33]'
                       }`}>
                         {isCatalystActive ? '출격 활성' : '채비 가능'}
                       </span>
@@ -9727,7 +9727,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         </span>
                       </div>
                     )}
-                    <span className="text-[10px] text-[#00d2ff] font-bold hover:underline">
+                    <span className="text-[10px] text-[#c8aa6e] font-bold hover:underline">
                       상세보기 ➔
                     </span>
                   </div>
@@ -9743,7 +9743,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         const item = selectedEquipDetail;
         const RARITY_COLORS: Record<string, string> = {
           common: '#cfd8dc',
-          rare: '#00d2ff',
+          rare: '#c8aa6e',
           unique: '#ff9100',
           epic: '#ce93d8',
           legendary: '#ffd54f',
@@ -9842,7 +9842,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="font-bold text-sm" style={{ color }}>{equipName}</span>
                     {item.level > 0 && (
-                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold border border-[#00d2ff44]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e44]">
                         +{item.level}
                       </span>
                     )}
@@ -9864,7 +9864,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               {/* 기본 스탯 리스트 */}
               <div className="p-3 rounded-xl bg-[#0e131f] border border-[#1f2738] flex flex-col gap-1.5">
-                <div className="text-[10px] text-[#00d2ff] font-bold flex items-center gap-1">
+                <div className="text-[10px] text-[#c8aa6e] font-bold flex items-center gap-1">
                   <span>📊</span>
                   <span>{'장비 스탯 옵션'}</span>
                 </div>
@@ -9930,7 +9930,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       </div>
                     )}
                     {item.suffix && (
-                      <div className="text-[11px] text-[#00d2ff] bg-[#0c0915] p-2 rounded border border-[#00d2ff33]">
+                      <div className="text-[11px] text-[#c8aa6e] bg-[#0c0915] p-2 rounded border border-[#c8aa6e33]">
                         🔮 [{'접미'}: {sufName}] {sufDesc}
                       </div>
                     )}
@@ -10021,14 +10021,14 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           >
             <div className="flex flex-col gap-3 text-xs leading-relaxed">
               {/* 상단: 아이템 헤더 */}
-              <div className="panel p-3 bg-[#131926] border border-[#00d2ff44] rounded-xl flex items-center gap-3">
+              <div className="panel p-3 bg-[#131926] border border-[#c8aa6e44] rounded-xl flex items-center gap-3">
                 <span className="text-3xl p-2.5 rounded-xl bg-[#323d4e] border border-[#4a576d] shrink-0 flex items-center justify-center shadow-md">
                   <GameIcon name={item.key || (item as any).id} icon={item.icon} size={28} />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="font-bold text-sm text-white">{displayLabel}</span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold border border-[#00d2ff33]">
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e33]">
                       {displayCategory}
                     </span>
                     {isFull && (
@@ -10216,7 +10216,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
         <div className="text-xs font-bold text-[#8b9bb4] flex items-center justify-between px-1">
           <span>🛏️ {'집중 치료 병실 슬롯 (최대 7병상)'}</span>
-          <span className="text-[11px] text-[#00d2ff]">{'빈 병상 클릭 시 입원'}</span>
+          <span className="text-[11px] text-[#c8aa6e]">{'빈 병상 클릭 시 입원'}</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -10252,7 +10252,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         {'✨ 완치 및 충전 완료'}
                       </span>
                     ) : (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                         {`💉 생체 치료 중 (${healPeriod}s HP${infirmaryLv >= 4 ? ` / ${mpPeriod}s MP` : ''})`}
                       </span>
                     )}
@@ -10306,15 +10306,15 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       <div className="flex justify-between text-[11px] mb-1">
                         <span className="text-[#8b9bb4] flex items-center gap-1">
                           <span>✨ 마나 충전도</span>
-                          <span className="text-[9px] text-[#00d2ff] font-mono">({mpPeriod}s당 +4 MP)</span>
+                          <span className="text-[9px] text-[#c8aa6e] font-mono">({mpPeriod}s당 +4 MP)</span>
                         </span>
-                        <span className={`font-mono font-bold ${hero.currentMp >= eff.maxMp ? 'text-[#00d2ff]' : 'text-[#81d4fa]'}`}>
+                        <span className={`font-mono font-bold ${hero.currentMp >= eff.maxMp ? 'text-[#c8aa6e]' : 'text-[#81d4fa]'}`}>
                           {Math.round(hero.currentMp)} / {Math.round(eff.maxMp)} ({mpPct}%)
                         </span>
                       </div>
                       <div className="h-1.5 rounded-full bg-[#182030] overflow-hidden border border-[#24334a]">
                         <div
-                          className="h-full bg-gradient-to-r from-[#0288d1] to-[#00d2ff] transition-all duration-300"
+                          className="h-full bg-gradient-to-r from-[#0288d1] to-[#c8aa6e] transition-all duration-300"
                           style={{ width: `${mpPct}%` }}
                         />
                       </div>
@@ -10345,7 +10345,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               <div
                 key={`bed_${bedIdx}`}
                 onClick={() => setSelectedBedIdx(bedIdx)}
-                className="panel p-3.5 rounded-xl border border-dashed border-[#2a3b5c] bg-[#0e142288] hover:bg-[#141d30] hover:border-[#00d2ff] cursor-pointer flex flex-col items-center justify-center gap-2 min-h-[140px] transition-all group"
+                className="panel p-3.5 rounded-xl border border-dashed border-[#2a3b5c] bg-[#0e142288] hover:bg-[#141d30] hover:border-[#c8aa6e] cursor-pointer flex flex-col items-center justify-center gap-2 min-h-[140px] transition-all group"
               >
                 <div className="w-full flex items-center justify-between text-xs text-[#8b9bb4]">
                   <span className="font-bold flex items-center gap-1">
@@ -10355,10 +10355,10 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     {'빈 병상'}
                   </span>
                 </div>
-                <div className="text-3xl text-[#00d2ff] group-hover:scale-110 transition-transform">
+                <div className="text-3xl text-[#c8aa6e] group-hover:scale-110 transition-transform">
                   ➕
                 </div>
-                <div className="text-xs font-bold text-[#cfd8dc] group-hover:text-[#00d2ff]">
+                <div className="text-xs font-bold text-[#cfd8dc] group-hover:text-[#c8aa6e]">
                   {'용병 입원시키기'}
                 </div>
                 <div className="text-[10px] text-[#8b9bb4]">
@@ -10418,7 +10418,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     isAdmitted
                       ? 'opacity-40 border-[#1f2738]'
                       : isFullyHealthy
-                      ? 'border-[#24334a] bg-[#0c101a]' : 'border-[#ef535044] bg-[#141b2b] hover:border-[#00d2ff]'
+                      ? 'border-[#24334a] bg-[#0c101a]' : 'border-[#ef535044] bg-[#141b2b] hover:border-[#c8aa6e]'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0 flex-1">
@@ -10439,7 +10439,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <span className="font-bold text-xs text-white truncate">{hero.name}</span>
                         <span className="text-[10px] text-[#8b9bb4]">Lv.{hero.level}</span>
                         {inParty && (
-                          <span className="text-[9px] px-1 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+                          <span className="text-[9px] px-1 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                             원정대
                           </span>
                         )}
@@ -10447,7 +10447,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       <div className="flex items-center gap-2 text-[10px] text-[#8b9bb4]">
                         <span>HP {Math.round(hero.currentHp)}/{Math.round(eff.maxHp)}</span>
                         {infirmaryLv >= 4 && (
-                          <span className="text-[#00d2ff]">MP {Math.round(hero.currentMp)}/{Math.round(eff.maxMp)}</span>
+                          <span className="text-[#c8aa6e]">MP {Math.round(hero.currentMp)}/{Math.round(eff.maxMp)}</span>
                         )}
                       </div>
                       <div className="flex items-center gap-1.5 mt-1 max-w-[140px]">
@@ -10460,7 +10460,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         {infirmaryLv >= 4 && (
                           <div className="h-1.5 rounded-full bg-[#182030] overflow-hidden flex-1">
                             <div
-                              className={`h-full ${isFullMp ? 'bg-[#00d2ff]' : 'bg-[#0288d1]'}`}
+                              className={`h-full ${isFullMp ? 'bg-[#c8aa6e]' : 'bg-[#0288d1]'}`}
                               style={{ width: `${mpPct}%` }}
                             />
                           </div>
@@ -10652,7 +10652,7 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               key={item.key}
               className={`panel p-3 bg-[#131926] border rounded-xl transition-all cursor-pointer ${
                 isUnlocked
-                  ? 'border-[#222d42] hover:border-[#00d2ff88] hover:bg-[#161f30]' : 'border-[#1f2738] bg-[#0e121a] opacity-60 cursor-not-allowed'
+                  ? 'border-[#222d42] hover:border-[#c8aa6e88] hover:bg-[#161f30]' : 'border-[#1f2738] bg-[#0e121a] opacity-60 cursor-not-allowed'
               }`}
               onClick={() => {
                 if (isUnlocked) {
@@ -10869,7 +10869,7 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <div className="text-xs font-mono">
                     {tradeMode === 'buy' ? (
                       <span className="text-[#8b9bb4]">
-                        최대 매입 가능: <span className="text-[#00d2ff] font-bold">{maxPossible.toLocaleString()}개</span>
+                        최대 매입 가능: <span className="text-[#c8aa6e] font-bold">{maxPossible.toLocaleString()}개</span>
                         {stockInfo.isSoldOut ? (
                           <span className="text-[#ef5350] ml-1 font-bold">({formatRestockTime(stockInfo.restockRemainingSec)} 후 입고)</span>
                         ) : (
@@ -10926,7 +10926,7 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     value={maxPossible <= 0 ? 1 : Math.min(maxPossible, tradeQty)}
                     disabled={maxPossible <= 0}
                     onChange={(e) => setTradeQty(parseInt(e.target.value, 10))}
-                    className="w-full h-2 rounded-lg cursor-pointer bg-[#1a2234] accent-[#00d2ff]"
+                    className="w-full h-2 rounded-lg cursor-pointer bg-[#1a2234] accent-[#c8aa6e]"
                   />
                   <div className="flex justify-between text-[10px] font-mono text-[#505c73]">
                     <span>1개</span>
@@ -10945,7 +10945,7 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   ].map((p, idx) => (
                     <button
                       key={idx}
-                      className="btn btn-ghost py-1 text-[11px] font-bold rounded-lg bg-[#151c2c] border border-[#222d42] hover:border-[#00d2ff66]"
+                      className="btn btn-ghost py-1 text-[11px] font-bold rounded-lg bg-[#151c2c] border border-[#222d42] hover:border-[#c8aa6e66]"
                       disabled={maxPossible <= 0}
                       onClick={() => setTradeQty(Math.max(1, Math.min(maxPossible, p.val)))}
                     >
@@ -11117,7 +11117,7 @@ const GrimoireCraftDetailModal: React.FC<GrimoireCraftDetailModalProps> = ({
             </div>
           </div>
           <button
-            className="w-7 h-7 rounded-lg bg-[#141b2c] text-[#8b9bb4] hover:text-white flex items-center justify-center border border-[#23324d] transition-colors"
+            className="w-7 h-7 rounded-lg bg-[#14161c] text-[#8b9bb4] hover:text-white flex items-center justify-center border border-[#23324d] transition-colors"
             onClick={onClose}
           >
             ✕
@@ -11126,19 +11126,19 @@ const GrimoireCraftDetailModal: React.FC<GrimoireCraftDetailModalProps> = ({
 
         {/* 4분할 핵심 스펙 그리드 */}
         <div className="grid grid-cols-4 gap-1.5 text-center font-mono">
-          <div className="bg-[#101726] p-2 rounded-xl border border-[#1e2a3f]">
+          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
             <span className="text-[10px] text-[#8b9bb4] block">마나 소모</span>
             <span className="text-xs font-bold text-[#64b5f6]">{skill.manaCost} MP</span>
           </div>
-          <div className="bg-[#101726] p-2 rounded-xl border border-[#1e2a3f]">
+          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
             <span className="text-[10px] text-[#8b9bb4] block">쿨다운</span>
             <span className="text-xs font-bold text-[#ffd54f]">{skill.cooldown || 0}턴</span>
           </div>
-          <div className="bg-[#101726] p-2 rounded-xl border border-[#1e2a3f]">
+          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
             <span className="text-[10px] text-[#8b9bb4] block">위력 계수</span>
             <span className="text-xs font-bold text-[#38ef7d]">{Math.round((skill.power || 1.0) * 100)}%</span>
           </div>
-          <div className="bg-[#101726] p-2 rounded-xl border border-[#1e2a3f]">
+          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
             <span className="text-[10px] text-[#8b9bb4] block">대상</span>
             <span className="text-[10px] font-bold text-[#cfd8dc] truncate block">{targetLabel}</span>
           </div>
@@ -11178,8 +11178,8 @@ const GrimoireCraftDetailModal: React.FC<GrimoireCraftDetailModalProps> = ({
         </div>
 
         {/* 상세 효과 설명 */}
-        <div className="p-3 rounded-xl bg-[#101726] border border-[#1e2a3f] flex flex-col gap-1">
-          <div className="text-[11px] font-bold text-[#00d2ff]">📖 마도서 비전 효과</div>
+        <div className="p-3 rounded-xl bg-[#12141a] border border-[#1e2a3f] flex flex-col gap-1">
+          <div className="text-[11px] font-bold text-[#c8aa6e]">📖 마도서 비전 효과</div>
           <div className="text-xs text-[#e2e8f0] leading-relaxed whitespace-pre-line">
             {recipe.desc || skill.description}
           </div>
@@ -11187,7 +11187,7 @@ const GrimoireCraftDetailModal: React.FC<GrimoireCraftDetailModalProps> = ({
 
         {/* ⚡ 상태이상 연계 메커니즘 섹션 */}
         {combos.length > 0 ? (
-          <div className="p-2.5 rounded-xl bg-[#111a2c] border border-[#00d2ff33] flex flex-col gap-1.5">
+          <div className="p-2.5 rounded-xl bg-[#111a2c] border border-[#c8aa6e33] flex flex-col gap-1.5">
             <div className="text-[11px] font-bold text-[#ffd54f] flex items-center justify-between">
               <span className="flex items-center gap-1">
                 <span>⚡ 상태이상 연계 메커니즘</span>
@@ -11451,7 +11451,7 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all flex items-center gap-1.5 ${
                   selectedHeroFilter === 'all'
                     ? 'bg-[#26a69a] text-black font-extrabold shadow-sm'
-                    : 'bg-[#141b2c] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#222d42]'
+                    : 'bg-[#14161c] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#222d42]'
                 }`}
                 onClick={() => setSelectedHeroFilter('all')}
               >
@@ -11472,7 +11472,7 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all flex items-center gap-1.5 ${
                       isSelected
                         ? 'bg-[#26a69a] text-black font-extrabold shadow-sm'
-                        : 'bg-[#141b2c] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#222d42]'
+                        : 'bg-[#14161c] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#222d42]'
                     }`}
                     onClick={() => setSelectedHeroFilter(h.id)}
                   >
@@ -11571,7 +11571,7 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           <span className="text-[10px] font-mono font-bold text-[#ffd54f] shrink-0">
                             Lv.{bookLv}/10
                           </span>
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff15] text-[#00d2ff] font-bold border border-[#00d2ff33] shrink-0">
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-bold border border-[#c8aa6e33] shrink-0">
                             👤 {item.hero.name}
                           </span>
                         </div>
@@ -11638,7 +11638,7 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       ? 'bg-[#26a69a] text-black font-extrabold shadow-sm'
                       : !isTabUnlocked
                       ? 'bg-[#121622] text-[#546e7a] border border-[#1f2838] opacity-70'
-                      : 'bg-[#141b2c] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#222d42]'
+                      : 'bg-[#14161c] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#222d42]'
                   }`}
                   onClick={() => setRecipeRarityFilter(tab.key)}
                 >
@@ -12002,7 +12002,7 @@ const QuestsDrawer: React.FC<{
         if (state.party.length < 3) {
           return (
             <button
-              className="text-xs px-3 py-1.5 rounded-lg bg-[#0d2238] hover:bg-[#12304f] text-[#00d2ff] font-bold border border-[#00d2ff66] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+              className="text-xs px-3 py-1.5 rounded-lg bg-[#12141a] hover:bg-[#12304f] text-[#c8aa6e] font-bold border border-[#c8aa6e66] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
               onClick={() => onNavigateDrawer ? onNavigateDrawer('barracks') : onClose()}
             >
               <span>⚔️</span>
@@ -12156,7 +12156,7 @@ const QuestsDrawer: React.FC<{
       if (state.party.length < 3) {
         return (
           <button
-            className="text-xs px-3 py-1.5 rounded-lg bg-[#0d2238] hover:bg-[#12304f] text-[#00d2ff] font-bold border border-[#00d2ff66] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#12141a] hover:bg-[#12304f] text-[#c8aa6e] font-bold border border-[#c8aa6e66] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
             onClick={() => onNavigateDrawer ? onNavigateDrawer('barracks') : onClose()}
           >
             <span>⚔️</span>
@@ -12376,13 +12376,13 @@ const QuestsDrawer: React.FC<{
 
         {/* 10분 쿨다운 안내 카드 (주점 건설 완료 후 서브 슬롯 비었을 때) */}
         {catTab === 'sub' && hasTavern && subActive.length < 3 && state.subQuestCooldownUntil > 0 && (
-          <div className="panel p-3 bg-[#11192e] border border-[#00d2ff44] rounded-xl flex items-center justify-between gap-2">
+          <div className="panel p-3 bg-[#11192e] border border-[#c8aa6e44] rounded-xl flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="text-xl p-1.5 rounded-lg bg-[#16233d] border border-[#00d2ff33] animate-spin">⏳</span>
+              <span className="text-xl p-1.5 rounded-lg bg-[#16233d] border border-[#c8aa6e33] animate-spin">⏳</span>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-[#00d2ff]">신규 의뢰 접수 대기 중</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-mono font-bold">
+                  <span className="text-xs font-bold text-[#c8aa6e]">신규 의뢰 접수 대기 중</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-mono font-bold">
                     10분 쿨타임
                   </span>
                 </div>
@@ -12440,7 +12440,7 @@ const QuestsDrawer: React.FC<{
 
           const typeTag = {
             main: { label: '메인', color: '#ffd54f', bg: '#ffd54f15' },
-            building: { label: '시설', color: '#00d2ff', bg: '#00d2ff15' },
+            building: { label: '시설', color: '#c8aa6e', bg: '#c8aa6e15' },
             promotion: { label: '전직', color: '#ce93d8', bg: '#ce93d815' },
             field: { label: '탐험', color: '#66bb6a', bg: '#66bb6a15' },
             repeatable: { label: '🔄 반복', color: '#26c6da', bg: '#26c6da15' },
@@ -12485,7 +12485,7 @@ const QuestsDrawer: React.FC<{
                       🎁 완료! 수령 대기
                     </span>
                   ) : (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
                       진행 중
                     </span>
                   )}
@@ -12509,7 +12509,7 @@ const QuestsDrawer: React.FC<{
                       </div>
                       <div className="w-full h-1 bg-[#1a2234] rounded-full overflow-hidden">
                         <div
-                          className={`h-full transition-all duration-300 ${obj.isCompleted ? 'bg-[#38ef7d]' : 'bg-[#00d2ff]'}`}
+                          className={`h-full transition-all duration-300 ${obj.isCompleted ? 'bg-[#38ef7d]' : 'bg-[#c8aa6e]'}`}
                           style={{ width: `${pct}%` }}
                         />
                       </div>
@@ -12542,7 +12542,7 @@ const QuestsDrawer: React.FC<{
                         </span>
                       )}
                       {q.rewards.ether && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00d2ff15] text-[#00d2ff] font-mono font-bold border border-[#00d2ff33] flex items-center gap-1">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono font-bold border border-[#c8aa6e33] flex items-center gap-1">
                           <GameIcon name="ether" icon="✨" size={13} /> {q.rewards.ether} 에테르
                         </span>
                       )}
@@ -13239,7 +13239,7 @@ export const ExploreDrawer: React.FC<{
                         <div>
                           <div className="text-xs font-bold text-white flex items-center gap-1.5 flex-wrap">
                             <span>{hero.name}</span>
-                            <span className="text-[10px] text-[#00d2ff] font-medium">{cls?.name || hero.classId}</span>
+                            <span className="text-[10px] text-[#c8aa6e] font-medium">{cls?.name || hero.classId}</span>
                             <span className="text-[10px] text-[#8b9bb4]">Lv.{hero.level}</span>
                             {state.infirmaryPatients.includes(hero.id) && (
                               <span className="text-[9px] px-1 py-0.2 rounded bg-[#ff704322] text-[#ff7043] border border-[#ff704344] font-bold animate-pulse">
@@ -13283,10 +13283,10 @@ export const ExploreDrawer: React.FC<{
           {/* 2. 배낭 규격 선택 (테두리 가시성 강화) */}
           <div data-tutorial-target="backpack-section" className="panel p-3 bg-[#111622]">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#00d2ff]">
+              <span className="text-xs font-bold text-[#c8aa6e]">
                 🎒 2. {'배낭 규격 선택'}
               </span>
-              <span className="text-[10px] text-[#00d2ff]">
+              <span className="text-[10px] text-[#c8aa6e]">
                 '현재 선택:' {selectedBag.name}
               </span>
             </div>
@@ -13305,7 +13305,7 @@ export const ExploreDrawer: React.FC<{
                       isSelected 
                         ? 'border-2 border-[#876739] bg-[#42321944] shadow-[0_0_12px_rgba(135,103,57,0.35)] scale-[1.02]' 
                         : isSmallTutorialTarget
-                        ? 'border-2 border-[#00d2ff] bg-[#00d2ff18] shadow-[0_0_20px_rgba(0,210,255,0.7)] animate-pulse scale-[1.02]'
+                        ? 'border-2 border-[#c8aa6e] bg-[#c8aa6e18] shadow-[0_0_20px_rgba(200, 170, 110,0.7)] animate-pulse scale-[1.02]'
                         : 'border border-[#27354d] bg-[#141a29] hover:border-[#415473]'
                     }`}
                     onClick={() => handleSelectBag(bag.id)}
@@ -13317,7 +13317,7 @@ export const ExploreDrawer: React.FC<{
                       </div>
                     )}
                     {isSmallTutorialTarget && (
-                      <div className="absolute -top-2.5 px-2 py-0.5 bg-gradient-to-r from-[#00d2ff] to-[#0088ff] text-white font-bold text-[9px] rounded-full shadow-lg animate-bounce">
+                      <div className="absolute -top-2.5 px-2 py-0.5 bg-gradient-to-r from-[#c8aa6e] to-[#0088ff] text-white font-bold text-[9px] rounded-full shadow-lg animate-bounce">
                         👉 무료 배낭 선택
                       </div>
                     )}
@@ -13390,10 +13390,10 @@ export const ExploreDrawer: React.FC<{
 
             {/* 💡 병기창 Lv.6+ 보급품 운용 규칙 안내 배너 */}
             {forgeLv >= 6 && (
-              <div className="p-2.5 rounded-lg bg-[#141b2d] border border-[#00d2ff44] text-[10px] text-[#cfd8e8] mb-2.5 leading-relaxed flex items-start gap-2">
+              <div className="p-2.5 rounded-lg bg-[#141b2d] border border-[#c8aa6e44] text-[10px] text-[#cfd8e8] mb-2.5 leading-relaxed flex items-start gap-2">
                 <span className="text-base shrink-0">💡</span>
                 <div>
-                  <div className="text-[#00d2ff] font-bold text-[11px] mb-0.5">병기창 Lv.6+ 보급품 운용 안내</div>
+                  <div className="text-[#c8aa6e] font-bold text-[11px] mb-0.5">병기창 Lv.6+ 보급품 운용 안내</div>
                   <div>
                     채비실에서 즉시 추가(구매)하는 보급품은 <strong className="text-[#ffd54f]">일반 보급품</strong>입니다.
                     월등한 효과의 <strong className="text-[#38ef7d]">강화 보급품(에테르 횃불 등)</strong>을 지참하려면 <strong className="text-white underline">병기창에서 미리 생산</strong>해두어야 하며, 창고 재고가 채비 시 최우선 불출됩니다!
@@ -13431,7 +13431,7 @@ export const ExploreDrawer: React.FC<{
                           </span>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="text-xs font-bold text-white hover:text-[#00d2ff]">{sLabel}</span>
+                              <span className="text-xs font-bold text-white hover:text-[#c8aa6e]">{sLabel}</span>
                               <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d33] flex items-center gap-1">
                                 {enhInStock > 0 ? (
                                   <>
@@ -13478,9 +13478,9 @@ export const ExploreDrawer: React.FC<{
                       >
                         -
                       </button>
-                      <span className="w-5 text-center font-mono font-bold text-sm text-[#00d2ff]">{cnt}</span>
+                      <span className="w-5 text-center font-mono font-bold text-sm text-[#c8aa6e]">{cnt}</span>
                       <button
-                        className="btn btn-ghost px-2 py-0.5 text-xs text-[#00d2ff]"
+                        className="btn btn-ghost px-2 py-0.5 text-xs text-[#c8aa6e]"
                         onClick={() => setSupplyCounts({ ...supplyCounts, [item.key]: Math.min(10, cnt + 1) })}
                       >
                         +
@@ -13582,7 +13582,7 @@ export const ExploreDrawer: React.FC<{
                       <div className="text-[9px] text-[#8b9bb4] mt-0.5 line-clamp-2 leading-tight">{catDesc}</div>
                     </div>
                     <div className="mt-2 flex items-center justify-between">
-                      <span className="text-[9px] text-[#00d2ff] underline">
+                      <span className="text-[9px] text-[#c8aa6e] underline">
                         {'상세보기'}
                       </span>
                       {gm.hasCatalystCharge ? (
@@ -13825,7 +13825,7 @@ export const ExploreDrawer: React.FC<{
                     <GameIcon name={inspectItem.item.key || (inspectItem.item as any).id} icon={inspectItem.item.icon} size={24} />
                   </span>
                   <div>
-                    <div className="font-bold text-sm text-[#00d2ff]">{itemLabel}</div>
+                    <div className="font-bold text-sm text-[#c8aa6e]">{itemLabel}</div>
                     <div className="text-[10px] text-[#8b9bb4]">{categoryTag}</div>
                   </div>
                 </div>
@@ -13842,7 +13842,7 @@ export const ExploreDrawer: React.FC<{
                 <div className="text-[11px] font-bold text-[#ffd54f] mb-1.5 flex items-center justify-between">
                   <span>📦 필요 자원 / 영지 현재 자원</span>
                   {isSupply && (
-                    <span className="text-[10px] text-[#00d2ff] font-normal font-mono">
+                    <span className="text-[10px] text-[#c8aa6e] font-normal font-mono">
                       (수량: {supplyCounts[inspectItem.item.key] || 0}개 기준)
                     </span>
                   )}
@@ -13897,11 +13897,11 @@ export const ExploreDrawer: React.FC<{
                       >
                         -1
                       </button>
-                      <span className="font-mono font-bold text-sm text-[#00d2ff] w-6 text-center">
+                      <span className="font-mono font-bold text-sm text-[#c8aa6e] w-6 text-center">
                         {supplyCounts[inspectItem.item.key] || 0}
                       </span>
                       <button
-                        className="btn btn-ghost px-2.5 py-1 text-xs text-[#00d2ff]"
+                        className="btn btn-ghost px-2.5 py-1 text-xs text-[#c8aa6e]"
                         onClick={() => setSupplyCounts({
                           ...supplyCounts,
                           [inspectItem.item.key]: Math.min(10, (supplyCounts[inspectItem.item.key] || 0) + 1)
@@ -13961,7 +13961,7 @@ export const ExploreDrawer: React.FC<{
         <div className="absolute bottom-16 right-4 sm:right-6 z-40 animate-bounce">
           <button
             onClick={() => onAdvanceTutorial?.('TUTORIAL_PREP_SYNERGY')}
-            className="btn btn-primary px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-black shadow-[0_0_25px_rgba(0,210,255,0.7)] bg-gradient-to-r from-[#00d2ff] via-[#0099ff] to-[#0055ff] text-white border-2 border-[#80e5ff] rounded-2xl flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+            className="btn btn-primary px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-black shadow-[0_0_25px_rgba(200, 170, 110,0.7)] bg-gradient-to-r from-[#c8aa6e] via-[#0099ff] to-[#0055ff] text-white border-2 border-[#80e5ff] rounded-2xl flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95 transition-all"
           >
             <span>{tr('🛡️ 포지션 설정 완료')}</span>
             <span className="font-bold underline">{tr('다음: 시너지 확인 ▶')}</span>
@@ -13973,7 +13973,7 @@ export const ExploreDrawer: React.FC<{
       {tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && (
         <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-[500px]">
           {selectedBagId !== 'small' ? (
-            <div className="p-2.5 rounded-xl bg-[#0e1626]/95 border-2 border-[#00d2ff] shadow-[0_4px_20px_rgba(0,210,255,0.4)] text-center text-xs font-bold text-[#00d2ff] animate-bounce flex items-center justify-center gap-2">
+            <div className="p-2.5 rounded-xl bg-[#0e1626]/95 border-2 border-[#c8aa6e] shadow-[0_4px_20px_rgba(200, 170, 110,0.4)] text-center text-xs font-bold text-[#c8aa6e] animate-bounce flex items-center justify-center gap-2">
               <span>👉</span>
               <span>{tr('1단계: 무료 배낭 [가벼운 백팩(12칸)]을 터치하여 선택하세요!')}</span>
             </div>
@@ -14108,7 +14108,7 @@ export const ExploreDrawer: React.FC<{
             <div className="text-xs text-[#cfd8dc] leading-relaxed">
               심연 던전은 위험도가 극도로 높아 <strong className="text-[#ffd54f]">최소 3인의 정예 원정대</strong> 편성이 필수적입니다.
               <br /><br />
-              <span className="text-[#00d2ff] font-bold">[영지 관리 ➔ 원정단 편성]</span>에서 용병 3명을 파티에 출전시킨 후 다시 출정 채비를 진행해주세요!
+              <span className="text-[#c8aa6e] font-bold">[영지 관리 ➔ 원정단 편성]</span>에서 용병 3명을 파티에 출전시킨 후 다시 출정 채비를 진행해주세요!
             </div>
           </div>
         </Modal>
@@ -14564,7 +14564,7 @@ export const CitadelScreen: React.FC = () => {
 
     const items: Array<{ key: string; label: string; sub: string; icon: string; color: string }> = [
       { key: 'citadel',  label: isEn ? 'Citadel' : isJa ? '要塞' : '성채',  sub: isEn ? 'Ark Management' : isJa ? '方舟管理' : '방주 관리',  icon: '🏰', color: '#ff7b25' },
-      { key: 'barracks', label: isEn ? 'Barracks' : isJa ? '兵舎' : '병영', sub: isEn ? 'Squad Management' : isJa ? '部隊管理' : '부대 관리', icon: '⚔️', color: '#00d2ff' },
+      { key: 'barracks', label: isEn ? 'Barracks' : isJa ? '兵舎' : '병영', sub: isEn ? 'Squad Management' : isJa ? '部隊管理' : '부대 관리', icon: '⚔️', color: '#c8aa6e' },
     ];
 
     // 1. 방랑자의 라운지 (주점)
@@ -14975,12 +14975,12 @@ export const CitadelScreen: React.FC = () => {
               {/* 오프라인 결산 알림 마커 (퀘스트 알림 아래에 표시) */}
               {latestOfflineReport && (
                 <button
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#00d2ff] text-[#00d2ff] text-xs font-bold shadow-lg shadow-[#00d2ff33] hover:scale-105 transition-all cursor-pointer animate-fade-in"
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#c8aa6e] text-[#c8aa6e] text-xs font-bold shadow-lg shadow-[#c8aa6e33] hover:scale-105 transition-all cursor-pointer animate-fade-in"
                   onClick={() => setOfflineReportModal(latestOfflineReport)}
                 >
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00d2ff] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00d2ff]"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c8aa6e] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#c8aa6e]"></span>
                   </span>
                   <span className="text-sm">🌙</span>
                   <span className="text-[11px] font-bold tracking-wide">
@@ -14996,7 +14996,7 @@ export const CitadelScreen: React.FC = () => {
             <div className="flex items-center gap-1.5 min-w-0">
               <span className="text-base shrink-0">{artInfo.icon}</span>
               <div className="min-w-0">
-                <span className="font-cinzel text-sm sm:text-base font-bold text-[#00d2ff] tracking-wide truncate block">{artInfo.title}</span>
+                <span className="font-cinzel text-sm sm:text-base font-bold text-[#c8aa6e] tracking-wide truncate block">{artInfo.title}</span>
                 <div className="text-[11px] text-[#cfd8e8] mt-0.5 font-medium line-clamp-1">
                   {artInfo.subtitle}
                 </div>
@@ -15022,12 +15022,12 @@ export const CitadelScreen: React.FC = () => {
         <div className="px-3 pt-1 pb-2 shrink-0 select-none flex flex-col gap-1.5">
           {/* 📢 방명록 최신 글 1개 전체 내용 좌측 연속 흐름 티커 (하단 네비 메뉴 상단) */}
           <div
-            className="w-full px-2.5 py-1.5 rounded-xl bg-[#0c1424]/90 border border-[#00d2ff33] hover:border-[#00d2ff88] cursor-pointer flex items-center justify-between transition-all backdrop-blur-xs shadow-md group active:scale-[0.99] overflow-hidden"
+            className="w-full px-2.5 py-1.5 rounded-xl bg-[#0e1117]/90 border border-[#c8aa6e33] hover:border-[#c8aa6e88] cursor-pointer flex items-center justify-between transition-all backdrop-blur-xs shadow-md group active:scale-[0.99] overflow-hidden"
             onClick={() => gm.emit('openGuestbook')}
             title="클릭 시 방주 지휘관 방명록(게시판) 모달이 열립니다"
           >
             <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0 flex items-center gap-1 border border-[#00d2ff44] z-10 shadow-xs">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0 flex items-center gap-1 border border-[#c8aa6e44] z-10 shadow-xs">
                 <span className="text-xs">📢</span>
                 <span>방명록</span>
               </span>
@@ -15066,7 +15066,7 @@ export const CitadelScreen: React.FC = () => {
                 })()}
               </div>
             </div>
-            <span className="text-[10px] text-[#00d2ff] group-hover:text-white group-hover:translate-x-0.5 transition-all shrink-0 ml-1.5 font-bold flex items-center gap-0.5 z-10">
+            <span className="text-[10px] text-[#c8aa6e] group-hover:text-white group-hover:translate-x-0.5 transition-all shrink-0 ml-1.5 font-bold flex items-center gap-0.5 z-10">
               <span>💬</span>
               <span>열기 ▶</span>
             </span>
@@ -15301,7 +15301,7 @@ export const CitadelScreen: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <span className="text-2xl">🌌</span>
                 <div>
-                  <div className="text-xs font-bold text-[#00d2ff]">
+                  <div className="text-xs font-bold text-[#c8aa6e]">
                     심연 {expeditionReport.floor}층 원정 탐험 완료
                   </div>
                   <div className="text-[10px] text-[#8b9bb4]">
@@ -15483,8 +15483,8 @@ export const CitadelScreen: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#111724] border border-[#1e2a3e] text-xs text-[#8b9bb4] leading-relaxed flex flex-col gap-1.5">
-              <div className="text-[#00d2ff] font-bold flex items-center gap-1">
+            <div className="p-3 rounded-xl bg-[#111318] border border-[#1e2a3e] text-xs text-[#8b9bb4] leading-relaxed flex flex-col gap-1.5">
+              <div className="text-[#c8aa6e] font-bold flex items-center gap-1">
                 <span>ℹ️</span>
                 <span>시설 이용 안내</span>
               </div>
@@ -15522,11 +15522,11 @@ export const CitadelScreen: React.FC = () => {
         >
           <div className="flex flex-col gap-3 py-1 animate-fade-in">
             {/* 상단 경과 시간 배너 */}
-            <div className="p-3.5 rounded-xl bg-[#0f172a] border border-[#00d2ff55] flex items-center justify-between shadow-lg">
+            <div className="p-3.5 rounded-xl bg-[#0f172a] border border-[#c8aa6e55] flex items-center justify-between shadow-lg">
               <div className="flex items-center gap-2.5">
                 <span className="text-2xl">⏳</span>
                 <div>
-                  <div className="text-xs font-bold text-[#00d2ff]">
+                  <div className="text-xs font-bold text-[#c8aa6e]">
                     부재 중 경과 시간: {offlineReportModal.formattedTime}
                   </div>
                   <div className="text-[10px] text-[#8b9bb4]">

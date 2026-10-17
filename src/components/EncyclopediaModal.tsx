@@ -291,13 +291,13 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
         <div className="px-4 py-3 sm:px-6 sm:py-4 bg-[#111728] border-b border-[#1f2d48] flex flex-col gap-3 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <span className="text-2xl p-1.5 rounded-xl bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+              <span className="text-2xl p-1.5 rounded-xl bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                 📖
               </span>
               <div>
                 <h2 className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2">
                   <span>{tr('방주 종합 백과사전 & 도감')}</span>
-                  <span className="text-[11px] font-normal px-2 py-0.5 rounded-full bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                  <span className="text-[11px] font-normal px-2 py-0.5 rounded-full bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                     Total {totalResultsCount}
                   </span>
                 </h2>
@@ -324,7 +324,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               placeholder={tr('명칭, 스킬, 상태이상, 보스 기믹, 옵션 검색... (예: 성기사, 실명, 접두, 흑익박쥐, 유지비)')}
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 rounded-xl bg-[#090d16] border border-[#22334f] focus:border-[#00d2ff] text-white text-xs sm:text-sm placeholder:text-[#5a6a85] outline-none transition-all"
+              className="w-full pl-10 pr-10 py-2 rounded-xl bg-[#0a0b10] border border-[#22334f] focus:border-[#c8aa6e] text-white text-xs sm:text-sm placeholder:text-[#5a6a85] outline-none transition-all"
             />
             {searchTerm && (
               <button
@@ -346,7 +346,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                   onClick={() => setActiveTab(tab.key)}
                   className={"px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 flex items-center gap-1.5 transition-all cursor-pointer " + (
                     active
-                      ? "bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff88] shadow-[0_0_12px_rgba(0,210,255,0.25)]"
+                      ? "bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e88] shadow-[0_0_12px_rgba(200, 170, 110,0.25)]"
                       : "bg-[#151c2e] text-[#8b9bb4] hover:text-white border border-[#222f47] hover:border-[#33466a]"
                   )}
                 >
@@ -434,9 +434,9 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
 
               {/* 무기 6종 고유 특성 뱃지 해설 */}
               {filteredStarterGuide.traits.length > 0 && (
-                <div className="p-4 rounded-xl bg-[#111929] border border-[#00d2ff44] flex flex-col gap-3 shadow-lg">
-                  <div className="flex items-center justify-between border-b border-[#00d2ff28] pb-2">
-                    <span className="font-bold text-sm text-[#00d2ff] flex items-center gap-2">
+                <div className="p-4 rounded-xl bg-[#13151b] border border-[#c8aa6e44] flex flex-col gap-3 shadow-lg">
+                  <div className="flex items-center justify-between border-b border-[#c8aa6e28] pb-2">
+                    <span className="font-bold text-sm text-[#c8aa6e] flex items-center gap-2">
                       <span>🏷️</span>
                       <span>{tr('무기 6종 고유 특성 뱃지 (Weapon Traits) 완전 해설')}</span>
                     </span>
@@ -458,8 +458,8 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               <div className="text-base sm:text-lg text-white font-bold leading-relaxed bg-[#0e1626] p-5 rounded-2xl border shadow-inner" style={{ borderColor: wt.borderColor }}>
                                 {tr(wt.effect)}
                               </div>
-                              <div className="text-sm sm:text-base text-[#cfd8e8] bg-[#141b2c] p-4 rounded-xl border border-[#22334f] leading-relaxed">
-                                <span className="font-bold text-[#00d2ff]">💡 {tr('전술 운용 팁:')}</span> {tr('{0}을 착용한 영웅은 기본 공격 및 관련 전투 행동 시 위 고유 메커니즘이 상시 적용됩니다. 시너지 효과를 가진 클래스와 조합하면 전투 효율이 극대화됩니다.').replace('{0}', tr(wt.weapon))}
+                              <div className="text-sm sm:text-base text-[#cfd8e8] bg-[#14161c] p-4 rounded-xl border border-[#22334f] leading-relaxed">
+                                <span className="font-bold text-[#c8aa6e]">💡 {tr('전술 운용 팁:')}</span> {tr('{0}을 착용한 영웅은 기본 공격 및 관련 전투 행동 시 위 고유 메커니즘이 상시 적용됩니다. 시너지 효과를 가진 클래스와 조합하면 전투 효율이 극대화됩니다.').replace('{0}', tr(wt.weapon))}
                               </div>
                             </div>
                           ),
@@ -545,7 +545,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
           {(activeTab === 'all' || activeTab === 'classes') && (
             <div className="flex flex-col gap-5">
               <div className="flex items-center justify-between border-b border-[#1f2b42] pb-2">
-                <span className="font-bold text-sm sm:text-base text-[#00d2ff] flex items-center gap-2">
+                <span className="font-bold text-sm sm:text-base text-[#c8aa6e] flex items-center gap-2">
                   <span>👑</span>
                   <span>{tr('직업 & 전직 계통 도감')} ({totalClassesCount}{tr('클래스')} · {filteredLineageGroups.length}{tr('개 계통')})</span>
                 </span>
@@ -637,7 +637,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         ? { bg: 'rgba(255, 255, 255, 0.08)', color: '#e2e8f0', border: 'rgba(255, 255, 255, 0.22)' }
                         : cls.tier === 2
                         ? { bg: 'rgba(255, 215, 0, 0.18)', color: '#ffd700', border: 'rgba(255, 215, 0, 0.5)' }
-                        : { bg: 'rgba(0, 229, 255, 0.22)', color: '#00e5ff', border: 'rgba(0, 229, 255, 0.6)' };
+                        : { bg: 'rgba(200, 170, 110, 0.22)', color: '#c8aa6e', border: 'rgba(200, 170, 110, 0.6)' };
 
                       return (
                         <div
@@ -909,9 +909,9 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                     elite: { label: '⭐ ELITE', bg: '#ff416c22', color: '#ff416c', border: '#ff416c55' },
                     normal: {
                       label: tr('👾 일반'),
-                      bg: '#00d2ff22',
-                      color: '#00d2ff',
-                      border: '#00d2ff55'
+                      bg: '#c8aa6e22',
+                      color: '#c8aa6e',
+                      border: '#c8aa6e55'
                     }
                   };
                   const badge = typeBadge[mon.type] || { label: mon.type, bg: '#222d42', color: '#cfd8e8', border: '#334460' };
@@ -931,7 +931,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">{tr('최대 HP')}</span><span className="text-base font-bold text-[#ef5350]">{mon.maxHp.toLocaleString()}</span></div>
                               <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">{tr('공격력 (ATK)')}</span><span className="text-base font-bold text-[#ff7043]">{mon.atk}</span></div>
                               <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">{tr('방어력 (DEF)')}</span><span className="text-base font-bold text-[#ffd54f]">{mon.def}</span></div>
-                              <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">{tr('속도 (SPD)')}</span><span className="text-base font-bold text-[#00d2ff]">{mon.spd}</span></div>
+                              <div className="flex flex-col"><span className="text-[11px] text-[#8b9bb4]">{tr('속도 (SPD)')}</span><span className="text-base font-bold text-[#c8aa6e]">{mon.spd}</span></div>
                             </div>
 
                             {/* 사용 스킬 및 기믹 패턴 */}
@@ -943,7 +943,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 </span>
                                 <div className="flex flex-col gap-2">
                                   {mon.skills.map((sk, idx) => (
-                                    <div key={idx} className="p-3.5 rounded-xl bg-[#141b2c] border border-[#22334f] flex flex-col gap-1">
+                                    <div key={idx} className="p-3.5 rounded-xl bg-[#14161c] border border-[#22334f] flex flex-col gap-1">
                                       <div className="font-bold text-sm sm:text-base text-white">
                                         {tr(sk.name)}
                                       </div>
@@ -1072,7 +1072,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         icon: <GameIcon name={b.id} icon={b.icon || '🏰'} size={36} />,
                         content: (
                           <div className="flex flex-col gap-4">
-                            <div className="text-base sm:text-lg text-white font-medium leading-relaxed bg-[#0c1220] p-5 rounded-2xl border border-[#1e2c45] shadow-inner">
+                            <div className="text-base sm:text-lg text-white font-medium leading-relaxed bg-[#0d0f14] p-5 rounded-2xl border border-[#1e2c45] shadow-inner">
                               {bDesc}
                             </div>
                             {loreTips?.lore && (
@@ -1086,7 +1086,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 </div>
                               </div>
                             )}
-                            <div className="p-4 rounded-xl bg-[#111929] border border-[#38ef7d44] flex flex-col gap-2">
+                            <div className="p-4 rounded-xl bg-[#13151b] border border-[#38ef7d44] flex flex-col gap-2">
                               <span className="font-bold text-sm text-[#38ef7d] flex items-center gap-1.5">
                                 <span>💡</span>
                                 <span>{tr('시설 증축 및 전략 운영 방안')}</span>
@@ -1120,7 +1120,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                           <span className="text-xs text-[#556987] group-hover:text-white transition-colors">🔍</span>
                         </div>
                       </div>
-                      <div className="text-xs text-[#cfd8e8] leading-relaxed bg-[#0c1220] p-2.5 rounded-lg border border-[#1e2c45]">
+                      <div className="text-xs text-[#cfd8e8] leading-relaxed bg-[#0d0f14] p-2.5 rounded-lg border border-[#1e2c45]">
                         {bDesc}
                       </div>
                     </div>
@@ -1155,15 +1155,15 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                       onClick={() => setDetailData({
                         title: tr(eq.name),
                         subtitle: `${tr('장비 부위')}: ${eq.slot.toUpperCase()} • ${tr('등급')}: ${tr(eq.rarity)}`,
-                        categoryBadge: { label: eq.slot.toUpperCase(), bg: '#00d2ff22', color: '#00d2ff', border: '#00d2ff55' },
+                        categoryBadge: { label: eq.slot.toUpperCase(), bg: '#c8aa6e22', color: '#c8aa6e', border: '#c8aa6e55' },
                         icon: <GameIcon name={(eq as any).templateId || getEquipmentTemplateId(eq as any) || eq.id} icon={eq.icon || '🛡️'} size={48} />,
                         content: (
                           <div className="flex flex-col gap-4">
-                            <div className="text-base sm:text-lg text-white font-medium leading-relaxed bg-[#0c1220] p-4 rounded-xl border border-[#1e2c45]">
+                            <div className="text-base sm:text-lg text-white font-medium leading-relaxed bg-[#0d0f14] p-4 rounded-xl border border-[#1e2c45]">
                               {tr(eq.description)}
                             </div>
                             {/* 능력치 보정 */}
-                            <div className="p-4 rounded-xl bg-[#111929] border border-[#22334f] flex flex-col gap-2">
+                            <div className="p-4 rounded-xl bg-[#13151b] border border-[#22334f] flex flex-col gap-2">
                               <span className="font-bold text-sm text-[#38ef7d] flex items-center gap-1.5">
                                 <span>📊</span>
                                 <span>{tr('장비 기본 능력치 보정')}</span>
@@ -1195,17 +1195,17 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         ),
                         footerInfo: `${tr('장비 단조')} • ${tr(eq.name)}`
                       })}
-                      className="p-2.5 rounded-lg bg-[#111828] border border-[#22334f] text-[11px] flex flex-col gap-1 hover:border-[#00d2ff66] transition-all cursor-pointer hover:scale-[1.01] group"
+                      className="p-2.5 rounded-lg bg-[#111828] border border-[#22334f] text-[11px] flex flex-col gap-1 hover:border-[#c8aa6e66] transition-all cursor-pointer hover:scale-[1.01] group"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-white flex items-center gap-1.5 group-hover:text-[#00d2ff] transition-colors">
+                        <span className="font-bold text-white flex items-center gap-1.5 group-hover:text-[#c8aa6e] transition-colors">
                           <span className="p-0.5 rounded-md bg-[#323d4e] border border-[#4a576d] shrink-0 flex items-center justify-center">
                             <GameIcon name={(eq as any).templateId || getEquipmentTemplateId(eq as any) || eq.id} icon={eq.icon || '🛡️'} size={20} />
                           </span>
                           <span>{tr(eq.name)}</span>
                         </span>
                         <div className="flex items-center gap-1">
-                          <span className="text-[10px] font-mono text-[#00d2ff] uppercase">{eq.slot}</span>
+                          <span className="text-[10px] font-mono text-[#c8aa6e] uppercase">{eq.slot}</span>
                           <span className="text-[9px] text-[#556987] group-hover:text-white transition-colors">🔍</span>
                         </div>
                       </div>
@@ -1256,8 +1256,8 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 {tr(enc.description)}
                               </div>
                               {enc.grantedSkill && (
-                                <div className="p-4 rounded-xl bg-[#0f172a] border border-[#00d2ff44] flex flex-col gap-2">
-                                  <span className="font-bold text-sm text-[#00d2ff] flex items-center gap-1.5">
+                                <div className="p-4 rounded-xl bg-[#0f172a] border border-[#c8aa6e44] flex flex-col gap-2">
+                                  <span className="font-bold text-sm text-[#c8aa6e] flex items-center gap-1.5">
                                     <span>⚔️</span>
                                     <span>{tr('인챈트 부여 고유 스킬')}: [{tr(enc.grantedSkill.name)}]</span>
                                   </span>
@@ -1290,7 +1290,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         </div>
                         <div className="text-[#cfd8e8]">{tr(enc.description)}</div>
                         {enc.grantedSkill && (
-                          <div className="text-[10px] text-[#00d2ff]">
+                          <div className="text-[10px] text-[#c8aa6e]">
                             ⚔️ {tr('고유 스킬')}: [{tr(enc.grantedSkill.name)}] {tr(enc.grantedSkill.description)}
                           </div>
                         )}
@@ -1306,7 +1306,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
           {(activeTab === 'all' || activeTab === 'skills') && (
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between border-b border-[#1f2b42] pb-2">
-                <span className="font-bold text-sm sm:text-base text-[#00e5ff] flex items-center gap-2">
+                <span className="font-bold text-sm sm:text-base text-[#c8aa6e] flex items-center gap-2">
                   <span>📜</span>
                   <span>{tr('10대 상태이상 메커니즘 & 마도 비전서 스킬')}</span>
                 </span>
@@ -1331,14 +1331,14 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             <div className="text-base sm:text-lg text-white font-bold leading-relaxed bg-[#111828] p-5 rounded-2xl border border-[#22334f] shadow-inner">
                               {tr(meta.desc)}
                             </div>
-                            <div className="text-sm text-[#cfd8e8] bg-[#0c1220] p-4 rounded-xl border border-[#1e2c45] leading-relaxed">
+                            <div className="text-sm text-[#cfd8e8] bg-[#0d0f14] p-4 rounded-xl border border-[#1e2c45] leading-relaxed">
                               💡 {tr('전투 중 마물의 스킬이나 아군 장비/스킬의 효과로 해당 상태이상이 부여됩니다. 상태이상 지속 턴 수 동안 해당 패널티 또는 이로운 효과가 틱마다 적용됩니다.')}
                             </div>
                           </div>
                         ),
                         footerInfo: `${tr('상태이상')} • ${tr(meta.label)}`
                       })}
-                      className="p-2.5 rounded-lg bg-[#111828] border border-[#22334f] flex items-center justify-between text-[11px] hover:border-[#00d2ff66] transition-all cursor-pointer hover:scale-[1.01] group"
+                      className="p-2.5 rounded-lg bg-[#111828] border border-[#22334f] flex items-center justify-between text-[11px] hover:border-[#c8aa6e66] transition-all cursor-pointer hover:scale-[1.01] group"
                     >
                       <div className="flex items-center gap-2.5">
                         <GameIcon name={type} icon={meta.icon} size={22} className="shrink-0" />
@@ -1408,12 +1408,12 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                           ),
                           footerInfo: `${tr('스킬 연계 콤보')} • ${tr(c.comboName)}`
                         })}
-                        className="p-2.5 rounded-lg bg-[#111828] border border-[#22334f] flex flex-col justify-between gap-1.5 text-[11px] hover:border-[#00d2ff66] transition-all cursor-pointer hover:scale-[1.01] group"
+                        className="p-2.5 rounded-lg bg-[#111828] border border-[#22334f] flex flex-col justify-between gap-1.5 text-[11px] hover:border-[#c8aa6e66] transition-all cursor-pointer hover:scale-[1.01] group"
                       >
                         <div className="flex items-center justify-between gap-1">
                           <div className="flex items-center gap-1.5 font-bold">
                             <span className="text-base">{c.icon}</span>
-                            <span className="text-white group-hover:text-[#00d2ff] transition-colors">{tr(c.comboName)}</span>
+                            <span className="text-white group-hover:text-[#c8aa6e] transition-colors">{tr(c.comboName)}</span>
                           </div>
                           <span
                             className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold"
@@ -1516,7 +1516,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
 
               {/* 전술 비전서 스킬북 */}
               <div className="flex flex-col gap-2 pt-2">
-                <div className="text-xs font-bold text-[#00e5ff]">
+                <div className="text-xs font-bold text-[#c8aa6e]">
                   📖 {tr('전술 마도 비전서')} ({filteredSkills.books.length}{tr('종')})
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1536,7 +1536,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                       onClick={() => setDetailData({
                         title: tr(sb.name),
                         subtitle: `${tr('등급')}: ${sb.rank.toUpperCase()} • ${tr('전수 스킬')}: ${tr(resSk.name)}${currentLv > 1 ? ` (Lv.${currentLv})` : ''}`,
-                        categoryBadge: { label: sb.rank.toUpperCase(), bg: '#00d2ff22', color: '#00d2ff', border: '#00d2ff55' },
+                        categoryBadge: { label: sb.rank.toUpperCase(), bg: '#c8aa6e22', color: '#c8aa6e', border: '#c8aa6e55' },
                         icon: <GameIcon name={sb.id || sb.skill.id} icon={sb.icon} size={36} />,
                         content: (
                           <div className="flex flex-col gap-4">
@@ -1572,7 +1572,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                     </span>
                                   )}
                                 </span>
-                                <span className="text-xs font-mono font-bold text-[#00d2ff] bg-[#00d2ff18] px-2.5 py-1 rounded border border-[#00d2ff44]">
+                                <span className="text-xs font-mono font-bold text-[#c8aa6e] bg-[#c8aa6e18] px-2.5 py-1 rounded border border-[#c8aa6e44]">
                                   {resSk.manaCost} MP • {tr('쿨타임')} {resSk.cooldown}{tr('턴')}
                                 </span>
                               </div>
@@ -1580,17 +1580,17 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 {tr(resSk.description)}
                               </div>
                             </div>
-                            <div className="text-xs text-[#8b9bb4] p-3 rounded-lg bg-[#0c1220] border border-[#1e2c45]">
+                            <div className="text-xs text-[#8b9bb4] p-3 rounded-lg bg-[#0d0f14] border border-[#1e2c45]">
                               {tr('💡 성채 용병 관리 창에서 용병에게 전수하여 새로운 액티브 스킬 슬롯을 개방할 수 있습니다.')}
                             </div>
                           </div>
                         ),
                         footerInfo: `${tr('마도 비전서')} • ${tr(sb.name)}`
                       })}
-                      className="p-2.5 rounded-lg bg-[#10192e] border border-[#1d3557] flex flex-col gap-1 text-[11px] hover:border-[#00d2ff66] transition-all cursor-pointer hover:scale-[1.01] group"
+                      className="p-2.5 rounded-lg bg-[#10192e] border border-[#1d3557] flex flex-col gap-1 text-[11px] hover:border-[#c8aa6e66] transition-all cursor-pointer hover:scale-[1.01] group"
                     >
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 font-bold text-white group-hover:text-[#00d2ff] transition-colors">
+                        <div className="flex items-center gap-1.5 font-bold text-white group-hover:text-[#c8aa6e] transition-colors">
                           <GameIcon name={sb.id || sb.skill.id} icon={sb.icon} size={18} />
                           <span>{tr(sb.name)}</span>
                           {currentLv > 1 && (
@@ -1612,7 +1612,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               : sb.rank === 'mythic'
                               ? 'bg-[#ffd54f22] text-[#ffd54f] border-[#ffd54f55]'
                               : sb.rank === 'rare'
-                              ? 'bg-[#00d2ff22] text-[#00d2ff] border-[#00d2ff44]'
+                              ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e44]'
                               : sb.rank === 'enhanced'
                               ? 'bg-[#66bb6a22] text-[#66bb6a] border-[#66bb6a44]'
                               : 'bg-[#9e9e9e22] text-[#9e9e9e] border-[#9e9e9e44]'
@@ -1665,12 +1665,12 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                             {tr(sys.summary)}
                           </div>
                           <div className="flex flex-col gap-2.5 p-4 rounded-xl bg-[#0c101c] border border-[#1e2a40]">
-                            <span className="font-bold text-sm text-[#00d2ff]">
+                            <span className="font-bold text-sm text-[#c8aa6e]">
                               {tr('세부 가이드 & 룰 설명:')}
                             </span>
                             {sys.details.map((dt, idx) => (
                               <div key={idx} className="text-sm sm:text-base text-[#cfd8e8] flex items-start gap-2 leading-relaxed">
-                                <span className="text-[#00d2ff] shrink-0 font-bold">•</span>
+                                <span className="text-[#c8aa6e] shrink-0 font-bold">•</span>
                                 <span>{tr(dt)}</span>
                               </div>
                             ))}
@@ -1699,7 +1699,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                     <div className="flex flex-col gap-1 pt-1 border-t border-[#1b2a44]">
                       {sys.details.map((dt, idx) => (
                         <div key={idx} className="text-[11px] text-[#cfd8e8] flex items-start gap-1.5">
-                          <span className="text-[#00d2ff] shrink-0">•</span>
+                          <span className="text-[#c8aa6e] shrink-0">•</span>
                           <span>{tr(dt)}</span>
                         </div>
                       ))}
@@ -1722,7 +1722,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               </div>
               <button
                 onClick={() => setSearchTerm('')}
-                className="mt-2 px-3 py-1.5 rounded-lg bg-[#1d273d] hover:bg-[#2c3b5c] text-xs text-[#00d2ff] transition-colors"
+                className="mt-2 px-3 py-1.5 rounded-lg bg-[#1d273d] hover:bg-[#2c3b5c] text-xs text-[#c8aa6e] transition-colors"
               >
                 {tr('검색어 초기화')}
               </button>
@@ -1752,7 +1752,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 ${
                 downloadFeedback
                   ? 'bg-[#10b98144] text-[#a7f3d0] border border-[#10b981]'
-                  : 'bg-gradient-to-r from-[#10b98122] to-[#00d2ff22] hover:from-[#10b98133] hover:to-[#00d2ff33] text-[#38ef7d] hover:text-[#5ef599] border border-[#10b98166] hover:shadow-[0_0_12px_rgba(56,239,125,0.25)]'
+                  : 'bg-gradient-to-r from-[#10b98122] to-[#c8aa6e22] hover:from-[#10b98133] hover:to-[#c8aa6e33] text-[#38ef7d] hover:text-[#5ef599] border border-[#10b98166] hover:shadow-[0_0_12px_rgba(56,239,125,0.25)]'
               }`}
               title={tr('현재 설정된 언어의 독립형 HTML 백과사전 문서를 로컬 파일로 다운로드합니다.')}
             >
@@ -1765,7 +1765,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
           </div>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-[#00d2ff22] hover:bg-[#00d2ff33] text-[#00d2ff] border border-[#00d2ff66] text-xs font-bold transition-all cursor-pointer"
+            className="px-4 py-1.5 rounded-xl bg-[#c8aa6e22] hover:bg-[#c8aa6e33] text-[#c8aa6e] border border-[#c8aa6e66] text-xs font-bold transition-all cursor-pointer"
           >
             {tr('닫기 (ESC)')}
           </button>
@@ -1783,7 +1783,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
           />
 
           {/* 상세 팝업 컨테이너 */}
-          <div className="relative w-full max-w-xl max-h-[88dvh] bg-[#0c1220] border-2 border-[#00d2ff88] rounded-2xl shadow-[0_15px_60px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden text-[#e2e8f0]">
+          <div className="relative w-full max-w-xl max-h-[88dvh] bg-[#0d0f14] border-2 border-[#c8aa6e88] rounded-2xl shadow-[0_15px_60px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden text-[#e2e8f0]">
             
             {/* 상단 헤더 */}
             <div className="px-5 py-4 bg-gradient-to-r from-[#131d33] via-[#0f172a] to-[#0a101d] border-b border-[#223554] flex items-center justify-between shrink-0">
@@ -1802,9 +1802,9 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                       <span
                         className="text-[10px] px-2 py-0.5 rounded-full font-bold font-mono border"
                         style={{
-                          background: detailData.categoryBadge.bg || '#00d2ff22',
-                          color: detailData.categoryBadge.color || '#00d2ff',
-                          borderColor: detailData.categoryBadge.border || '#00d2ff44'
+                          background: detailData.categoryBadge.bg || '#c8aa6e22',
+                          color: detailData.categoryBadge.color || '#c8aa6e',
+                          borderColor: detailData.categoryBadge.border || '#c8aa6e44'
                         }}
                       >
                         {tr(detailData.categoryBadge.label)}
@@ -1839,7 +1839,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
               </span>
               <button
                 onClick={() => setDetailData(null)}
-                className="px-5 py-1.5 rounded-xl bg-[#00d2ff22] hover:bg-[#00d2ff33] text-[#00d2ff] border border-[#00d2ff66] text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-sm"
+                className="px-5 py-1.5 rounded-xl bg-[#c8aa6e22] hover:bg-[#c8aa6e33] text-[#c8aa6e] border border-[#c8aa6e66] text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-sm"
               >
                 {tr('확인 (닫기)')}
               </button>

@@ -70,7 +70,7 @@ export function createDirButton(
   const bg = scene.add.graphics();
   bg.fillStyle(0x1a2434, 1);
   bg.fillCircle(0, 0, r);
-  bg.lineStyle(1.5, 0x00d2ff, 0.8);
+  bg.lineStyle(1.5, 0xc8aa6e, 0.8);
   bg.strokeCircle(0, 0, r);
 
   const lbl = scene.add.text(0, 0, text, {
@@ -84,8 +84,8 @@ export function createDirButton(
   btn.add([bg, lbl]);
   btn.setSize(r * 2, r * 2);
   btn.setInteractive({ useHandCursor: true });
-  btn.on('pointerover', () => { bg.clear(); bg.fillStyle(0x00d2ff, 0.25); bg.fillCircle(0, 0, r); bg.lineStyle(2, 0x00d2ff, 1); bg.strokeCircle(0, 0, r); });
-  btn.on('pointerout',  () => { bg.clear(); bg.fillStyle(0x1a2434, 1); bg.fillCircle(0, 0, r); bg.lineStyle(1.5, 0x00d2ff, 0.8); bg.strokeCircle(0, 0, r); });
+  btn.on('pointerover', () => { bg.clear(); bg.fillStyle(0xc8aa6e, 0.25); bg.fillCircle(0, 0, r); bg.lineStyle(2, 0xc8aa6e, 1); bg.strokeCircle(0, 0, r); });
+  btn.on('pointerout',  () => { bg.clear(); bg.fillStyle(0x1a2434, 1); bg.fillCircle(0, 0, r); bg.lineStyle(1.5, 0xc8aa6e, 0.8); bg.strokeCircle(0, 0, r); });
   btn.on('pointerdown', () => callback());
   return btn;
 }
@@ -105,7 +105,7 @@ export function createSkillButton(
   const bg = scene.add.graphics();
   bg.fillStyle(isSpecial ? 0x331422 : 0x212a3d, 1);
   bg.fillRoundedRect(0, 0, w, h, 8);
-  bg.lineStyle(1.5, isSpecial ? 0xffd54f : 0x00d2ff, 0.9);
+  bg.lineStyle(1.5, isSpecial ? 0xffd54f : 0xc8aa6e, 0.9);
   bg.strokeRoundedRect(0, 0, w, h, 8);
 
   const nameLbl = scene.add.text(14, 10,

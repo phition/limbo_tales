@@ -12,7 +12,7 @@ export class BootScene extends Phaser.Scene {
     this.add.text(width / 2, height / 2 - 40, 'PROJECT: LIMBO TALES', {
       fontFamily: 'Cinzel',
       fontSize: '24px',
-      color: '#00d2ff',
+      color: '#c8aa6e',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
@@ -68,7 +68,7 @@ export class BootScene extends Phaser.Scene {
     const drawerGfx = this.make.graphics({ x: 0, y: 0 });
     drawerGfx.fillStyle(0x111520, 0.99);
     drawerGfx.fillRoundedRect(0, 0, 390, 485, 16);
-    drawerGfx.lineStyle(2, 0x00d2ff, 0.8);
+    drawerGfx.lineStyle(2, 0xc8aa6e, 0.8);
     drawerGfx.strokeRoundedRect(0, 0, 390, 485, 16);
     drawerGfx.generateTexture('expanded_drawer_bg', 390, 485);
     drawerGfx.destroy();

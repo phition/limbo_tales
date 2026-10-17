@@ -85,15 +85,15 @@ export const AttackerVisualBox: React.FC<AttackerVisualBoxProps> = ({
     <div
       className={`w-full p-2 rounded-xl border transition-all relative overflow-hidden shadow-lg ${
         isPlayer
-          ? 'bg-gradient-to-r from-[#091424]/90 via-[#0d1c33]/90 to-[#07111e]/90 border-[#00d2ff55] shadow-[#00d2ff15]'
+          ? 'bg-gradient-to-r from-[#0d0f14]/90 via-[#12141a]/90 to-[#090a0d]/90 border-[#c8aa6e55] shadow-[#c8aa6e15]'
           : 'bg-gradient-to-r from-[#1c0c16]/90 via-[#270e1c]/90 to-[#140810]/90 border-[#ff416c55] shadow-[#ff416c15]'
-      } ${isActing ? (isPlayer ? 'ring-2 ring-[#00d2ff] animate-pulse' : 'ring-2 ring-[#ff416c] animate-pulse') : ''} ${className}`}
+      } ${isActing ? (isPlayer ? 'ring-2 ring-[#c8aa6e] animate-pulse' : 'ring-2 ring-[#ff416c] animate-pulse') : ''} ${className}`}
     >
       {/* 액팅 뱃지 */}
       {isActing && (
         <div
           className={`absolute top-1 right-2 text-[9px] font-bold px-1.5 py-0.2 rounded-full font-mono uppercase ${
-            isPlayer ? 'bg-[#00d2ff] text-black' : 'bg-[#ff416c] text-white'
+            isPlayer ? 'bg-[#c8aa6e] text-black' : 'bg-[#ff416c] text-white'
           }`}
         >
           ATTACKING
@@ -104,7 +104,7 @@ export const AttackerVisualBox: React.FC<AttackerVisualBoxProps> = ({
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-1">
           <span className="text-xs">{isPlayer ? '🛡️' : '⚔️'}</span>
-          <span className={`text-[11px] font-bold ${isPlayer ? 'text-[#00d2ff]' : 'text-[#ff6b8b]'}`}>
+          <span className={`text-[11px] font-bold ${isPlayer ? 'text-[#c8aa6e]' : 'text-[#ff6b8b]'}`}>
             {title || (isPlayer ? '아군 공격자' : '적군 공격자')}
           </span>
           <span className="text-[10px] text-white font-bold ml-1">{attacker.name}</span>
@@ -144,14 +144,14 @@ export const AttackerVisualBox: React.FC<AttackerVisualBoxProps> = ({
         <div
           className={`p-2 rounded-lg border flex flex-col gap-1 text-[10px] ${
             isPlayer
-              ? 'bg-[#0b182b]/80 border-[#00d2ff33] text-[#e1f5fe]'
+              ? 'bg-[#0b182b]/80 border-[#c8aa6e33] text-[#e1f5fe]'
               : 'bg-[#230f1b]/80 border-[#ff416c33] text-[#ffebee]'
           }`}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1 font-bold text-[9px]">
               <span className="text-[#ffd54f]">🎨</span>
-              <span className={isPlayer ? 'text-[#00d2ff]' : 'text-[#ff80ab]'}>
+              <span className={isPlayer ? 'text-[#c8aa6e]' : 'text-[#ff80ab]'}>
                 AI 일러스트 프롬프트 매트릭스
               </span>
               <span className="text-[8.5px] text-[#90caf9] font-normal">[{promptTitle}]</span>

@@ -43,7 +43,7 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
               <img
                 src={customPortrait}
                 alt={hero.name}
-                className="w-11 h-11 object-cover rounded-xl border border-[#00d2ff55] shadow-md shrink-0"
+                className="w-11 h-11 object-cover rounded-xl border border-[#c8aa6e55] shadow-md shrink-0"
                 onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
               />
             ) : (
@@ -54,7 +54,7 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-bold text-base text-white">{hero.name}</span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded font-bold uppercase bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                <span className="text-[9px] px-1.5 py-0.2 rounded font-bold uppercase bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                   {hero.grade}
                 </span>
                 <span className="text-[9px] px-1.5 py-0.2 rounded font-bold" style={{ background: `${posColor}22`, color: posColor, border: `1px solid ${posColor}44` }}>
@@ -129,11 +129,11 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
         </div>
 
         {/* 보조 전투 스탯 (치명타/저항/명중/회피/흡혈) */}
-        <div className="px-2.5 py-1.5 rounded-lg bg-[#0c1220] border border-[#1e2d45] text-[10px] text-[#8b9bb4] flex justify-between font-mono flex-wrap gap-1">
+        <div className="px-2.5 py-1.5 rounded-lg bg-[#0d0f14] border border-[#1e2d45] text-[10px] text-[#8b9bb4] flex justify-between font-mono flex-wrap gap-1">
           <span>치명타: <strong className="text-[#ce93d8]">{(gm.getCritChance(stats.luck) + (stats.critRateBonus || 0)).toFixed(1)}%</strong></span>
           {stats.drainPercent > 0 && <span>흡혈: <strong className="text-[#e91e63]">+{stats.drainPercent}%</strong></span>}
           <span>저항: <strong className="text-[#38ef7d]">{Math.min(50, stats.luck * 0.35).toFixed(1)}%</strong></span>
-          <span>명중: <strong className="text-[#00d2ff]">+{ (stats.luck * 0.2).toFixed(1)}%</strong></span>
+          <span>명중: <strong className="text-[#c8aa6e]">+{ (stats.luck * 0.2).toFixed(1)}%</strong></span>
           <span>회피: <strong className="text-[#ffd54f]">+{Math.min(70, stats.luck * 0.3).toFixed(1)}%</strong></span>
         </div>
 
@@ -228,7 +228,7 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
 
         {/* 활성화된 상태이상 목록 */}
         <div className="p-2.5 rounded-lg bg-[#11192e] border border-[#22324f] flex flex-col gap-1.5">
-          <div className="text-[11px] font-bold text-[#00d2ff] flex items-center justify-between">
+          <div className="text-[11px] font-bold text-[#c8aa6e] flex items-center justify-between">
             <span>🛡️ 적용 중인 상태이상</span>
             <span className="text-[10px] text-[#8b9bb4] font-mono">{(hero.statusEffects || []).length}개 활성</span>
           </div>
@@ -237,7 +237,7 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
           ) : (
             <div className="flex flex-col gap-1">
               {hero.statusEffects.map((se, idx) => {
-                const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#00d2ff', desc: '' };
+                const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#c8aa6e', desc: '' };
                 const magnitudeDesc = se.type === 'shield'
                   ? `${se.magnitude} 피해 흡수`
                   : se.magnitude
@@ -290,7 +290,7 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
               장착 스킬: {(hero.equippedSkills || []).length > 0 ? (hero.equippedSkills || []).map(sid => gm.resolveSkillData(sid, hero)?.name || sid).join(', ') : '기본 직업 스킬'}
             </div>
             <div className="text-[10px] text-[#78909c] flex items-center gap-2">
-              <span>습득 완료: <strong className="text-[#00d2ff]">{(hero.learnedSkills || []).length}/6</strong></span>
+              <span>습득 완료: <strong className="text-[#c8aa6e]">{(hero.learnedSkills || []).length}/6</strong></span>
               <span>·</span>
               <span>학습(연독) 중: <strong className="text-[#ffd54f]">{(hero.studyingSkills || []).length}/6</strong></span>
             </div>

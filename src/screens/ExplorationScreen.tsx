@@ -426,7 +426,7 @@ function generateBossSquad(floor: number, isOvercharged: boolean = false, curren
   return [...minions, bossData];
 }
 const FLOOR_ACCENT = [
-  '#5c6bc0', '#78909c', '#00bcd4', '#ab47bc', '#ff416c',
+  '#5c6bc0', '#78909c', '#c8aa6e', '#ab47bc', '#ff416c',
   '#d32f2f', '#5c6bc0', '#37474f', '#0288d1', '#b71c1c',
   '#9c27b0'
 ];
@@ -2246,7 +2246,7 @@ export const ExplorationScreen: React.FC = () => {
 
         {/* 파티 요약 창 (하단) */}
         <div className="min-h-0 panel p-2.5 flex flex-col bg-[#0b0d13ee] border border-[#1f2738] rounded-xl" style={{ flex: '1 1 calc(50% + 20px)' }}>
-          <div className="flex items-center justify-between text-xs text-[#00d2ff] font-bold mb-1.5 border-b border-[#00d2ff22] pb-1">
+          <div className="flex items-center justify-between text-xs text-[#c8aa6e] font-bold mb-1.5 border-b border-[#c8aa6e22] pb-1">
             <div className="flex items-center gap-1.5">
               <span>🛡️ 원정대 현황</span>
               <span className="text-[10px] text-[#8b9bb4] font-normal">({gm.party.length}/3명)</span>
@@ -2254,7 +2254,7 @@ export const ExplorationScreen: React.FC = () => {
             <div className="flex items-center gap-2">
               {/* 🎒 배낭 빠른 열기 버튼 */}
               <button
-                className="text-[10px] px-2 py-0.5 rounded bg-[#162235] border border-[#263750] text-[#00d2ff] hover:bg-[#20304a] flex items-center gap-1 transition-all"
+                className="text-[10px] px-2 py-0.5 rounded bg-[#162235] border border-[#263750] text-[#c8aa6e] hover:bg-[#20304a] flex items-center gap-1 transition-all"
                 onClick={() => {
                   if (pendingLoot.length > 0) setShowPendingModal(true);
                   else setIsBackpackOpen(v => !v);
@@ -2342,7 +2342,7 @@ export const ExplorationScreen: React.FC = () => {
                   className={`p-1.5 rounded-lg flex flex-col gap-1 cursor-pointer transition-all ${
                     isPermanentlyDead
                       ? 'bg-[#14151c] border border-[#4a3838] grayscale opacity-75 hover:border-[#ef5350]'
-                      : 'bg-[#121722] border border-[#1e2738] hover:border-[#00d2ff66]'
+                      : 'bg-[#121722] border border-[#1e2738] hover:border-[#c8aa6e66]'
                   }`}
                   onClick={() => setInspectedHero(hero)}
                   title={isPermanentlyDead ? '💀 완전 전사한 대원 (용병 관리에서 긴급 이송 필요)' : '탭하여 영웅 상세 스탯 및 장비 확인'}
@@ -2350,7 +2350,7 @@ export const ExplorationScreen: React.FC = () => {
                   {/* 상단: 영웅 얼굴(초상화), 이름, 클래스 텍스트, 레벨, 포지션, HP/MP 수치 */}
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-[#00d2ff55] bg-[#1a2333] flex items-center justify-center relative shadow-xs">
+                      <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-[#c8aa6e55] bg-[#15171d] flex items-center justify-center relative shadow-xs">
                         {heroPortrait ? (
                           <img
                             src={heroPortrait}
@@ -2370,7 +2370,7 @@ export const ExplorationScreen: React.FC = () => {
                       <span className={`font-bold truncate ${isDead ? 'line-through text-[#8b9bb4]' : 'text-white'}`}>
                         {hero.name}
                       </span>
-                      <span className="text-[10px] text-[#00d2ff] font-medium shrink-0">
+                      <span className="text-[10px] text-[#c8aa6e] font-medium shrink-0">
                         {cls?.name || hero.classId}
                       </span>
                       <span className="text-[10px] text-[#ffd54f] font-mono font-bold shrink-0">
@@ -2401,7 +2401,7 @@ export const ExplorationScreen: React.FC = () => {
                       <span className="text-[#607d8b] mx-0.5">|</span>
                       <span className="text-[#64b5f6]">{Math.round(hero.currentMp)}</span>
                       <span className="text-[#607d8b]">/{Math.round(eff.maxMp)}</span>
-                      <span className="text-[#8b9bb4] hover:text-[#00d2ff] ml-0.5 text-[9px]">ℹ️</span>
+                      <span className="text-[#8b9bb4] hover:text-[#c8aa6e] ml-0.5 text-[9px]">ℹ️</span>
                     </div>
                   </div>
 
@@ -2419,7 +2419,7 @@ export const ExplorationScreen: React.FC = () => {
                   {hero.statusEffects && hero.statusEffects.length > 0 && (
                     <div className="flex items-center gap-1 flex-wrap pt-0.5">
                       {hero.statusEffects.map((se, i) => {
-                        const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#00d2ff' };
+                        const meta = STATUS_EFFECT_META[se.type] || { icon: '✨', label: se.type, color: '#c8aa6e' };
                         return (
                           <span
                             key={i}
@@ -2477,7 +2477,7 @@ export const ExplorationScreen: React.FC = () => {
         }}
       >
         <div className="flex justify-between items-center mb-2 pb-1 border-b border-[#2c384d]">
-           <div className="text-sm font-bold text-[#00d2ff]">
+           <div className="text-sm font-bold text-[#c8aa6e]">
              🎒 {lang === 'en' ? 'Dungeon Backpack' : lang === 'ja' ? 'ダンジョンリュック' : '던전 배낭'} <span className="text-xs font-mono font-normal text-[#8b9bb4]">({state.dungeonInventory.length}/{gm.backpackCapacity || 16}{lang === 'en' ? ' slots' : lang === 'ja' ? '枠' : '칸'})</span>
            </div>
            <button className="text-xs text-[#8b9bb4]" onClick={() => setIsBackpackOpen(false)}>{lang === 'en' ? 'Close ✕' : lang === 'ja' ? '閉じる ✕' : '닫기 ✕'}</button>
@@ -2500,7 +2500,7 @@ export const ExplorationScreen: React.FC = () => {
           <div className="grid grid-cols-2 gap-1.5">
             {state.dungeonInventory.map((slot, i) => {
               const isFull = slot.qty >= slot.maxStack;
-              const typeColor = slot.itemType === 'supply' ? '#66bb6a' : slot.itemType === 'equipment' ? '#ffd54f' : slot.itemType === 'skillBook' ? '#ce93d8' : '#00d2ff';
+              const typeColor = slot.itemType === 'supply' ? '#66bb6a' : slot.itemType === 'equipment' ? '#ffd54f' : slot.itemType === 'skillBook' ? '#ce93d8' : '#c8aa6e';
               const rMeta = GameManager.getResourceMeta(slot.key);
               const isEngOnly = slot.label && /^[a-zA-Z0-9_\-\s]+$/.test(slot.label);
               const displayLabel = lang !== 'ko' ? (rMeta?.name || slot.label || slot.key) : ((!isEngOnly && slot.label) || rMeta?.name || slot.label || slot.key);
@@ -2557,7 +2557,7 @@ export const ExplorationScreen: React.FC = () => {
                 <GameIcon name={eventCard.iconKey || eventCard.icon} icon={eventCard.icon} size={44} className="drop-shadow-md" />
               </div>
             </div>
-            <div className="font-bold text-xl text-[#00d2ff] mb-2">{tr(eventCard.title)}</div>
+            <div className="font-bold text-xl text-[#c8aa6e] mb-2">{tr(eventCard.title)}</div>
             <div className="text-sm text-[#cfd8e8] mb-6 leading-relaxed whitespace-pre-line">{tr(eventCard.desc)}</div>
             {eventCard.options ? (
               <div className="flex flex-col gap-2 w-full">
@@ -2674,11 +2674,11 @@ export const ExplorationScreen: React.FC = () => {
       >
         <div className="flex flex-col gap-3 py-1">
           {/* 야영 회복 상태 배너 */}
-          <div className="p-2.5 rounded-xl bg-[#091522] border border-[#00d2ff44] flex items-center justify-between">
+          <div className="p-2.5 rounded-xl bg-[#091522] border border-[#c8aa6e44] flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-xl">🔥</span>
               <div>
-                <span className="text-xs font-bold text-[#00d2ff]">{tr('모닥불 휴식 완료')}</span>
+                <span className="text-xs font-bold text-[#c8aa6e]">{tr('모닥불 휴식 완료')}</span>
                 <span className="text-[10px] text-[#8b9bb4] block">{tr('전 파티원 HP 및 MP +35% 회복')}</span>
               </div>
             </div>
@@ -2688,7 +2688,7 @@ export const ExplorationScreen: React.FC = () => {
           </div>
 
           {/* 대원들 간의 담소 대화창 */}
-          <div className="panel p-2.5 flex flex-col gap-2 max-h-[220px] overflow-y-auto bg-[#070a12] border border-[#1a2338]">
+          <div className="panel p-2.5 flex flex-col gap-2 max-h-[220px] overflow-y-auto bg-[#08090d] border border-[#1a2338]">
             {banterResult?.dialogues.map((d, i) => (
               <div
                 key={i}
@@ -2696,7 +2696,7 @@ export const ExplorationScreen: React.FC = () => {
               >
                 <span className="text-xl shrink-0">{d.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="font-bold text-xs text-[#00d2ff]">{tr(d.speakerName)}</div>
+                  <div className="font-bold text-xs text-[#c8aa6e]">{tr(d.speakerName)}</div>
                   <div className="text-xs text-[#cfd8e8] mt-0.5 leading-relaxed">{tr(d.text)}</div>
                 </div>
               </div>
@@ -2796,7 +2796,7 @@ export const ExplorationScreen: React.FC = () => {
                      campCooldown > 0
                        ? 'border-[#2c384d] text-[#607d8b] bg-[#0d1017] opacity-60'
                        : (enhancedFoodCount > 0 
-                           ? 'border-[#00d2ff88] text-[#00d2ff] bg-[#0c1f2e] hover:bg-[#132d42]' 
+                           ? 'border-[#c8aa6e88] text-[#c8aa6e] bg-[#0c1f2e] hover:bg-[#132d42]' 
                            : 'border-[#38ef7d66] text-[#38ef7d] bg-[#131f18] hover:bg-[#1a2d22]')
                    }`}
                    onClick={doCamp}
@@ -2907,8 +2907,8 @@ export const ExplorationScreen: React.FC = () => {
                    data-tutorial-target="btn-torch"
                    className={`btn h-full flex-1 flex flex-col items-center justify-center text-xs border rounded-xl ${
                      torchTurns > 0 
-                       ? (isEtherTorch ? 'border-[#00d2ff] text-[#00d2ff] bg-[#00d2ff22] animate-pulse' : 'border-[#ff7043] text-[#ff7043] bg-[#ff704322]')
-                       : (enhancedTorchCount > 0 ? 'border-[#00d2ff88] text-[#00d2ff] bg-[#0c1f2e]' : 'border-[#2c384d] text-[#cfd8e8] bg-[#131722]')
+                       ? (isEtherTorch ? 'border-[#c8aa6e] text-[#c8aa6e] bg-[#c8aa6e22] animate-pulse' : 'border-[#ff7043] text-[#ff7043] bg-[#ff704322]')
+                       : (enhancedTorchCount > 0 ? 'border-[#c8aa6e88] text-[#c8aa6e] bg-[#0c1f2e]' : 'border-[#2c384d] text-[#cfd8e8] bg-[#131722]')
                    }`}
                    onClick={toggleTorch}
                    title={

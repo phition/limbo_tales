@@ -124,7 +124,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-bold text-xs text-[#ffd54f]">{dlg.speakerName}</span>
                       {dlg.speakerRole && (
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#00d2ff15] text-[#00d2ff] font-mono border border-[#00d2ff33]">
+                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono border border-[#c8aa6e33]">
                           {dlg.speakerRole}
                         </span>
                       )}
@@ -210,7 +210,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                       </span>
                     )}
                     {domainChoice.rewards.ether && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00d2ff15] text-[#00d2ff] font-mono font-bold border border-[#00d2ff33] flex items-center gap-1">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono font-bold border border-[#c8aa6e33] flex items-center gap-1">
                         <GameIcon name="ether" icon="✨" size={13} /> {domainChoice.rewards.ether}
                       </span>
                     )}
@@ -280,7 +280,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                         </span>
                       )}
                       {expeditionChoice.rewards.ether && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00d2ff15] text-[#00d2ff] font-mono font-bold border border-[#00d2ff33] flex items-center gap-1">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono font-bold border border-[#c8aa6e33] flex items-center gap-1">
                           <GameIcon name="ether" icon="✨" size={13} /> {expeditionChoice.rewards.ether}
                         </span>
                       )}

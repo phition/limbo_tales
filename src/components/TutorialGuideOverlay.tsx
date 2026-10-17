@@ -271,7 +271,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
 
   // 감정 태그 라벨 및 색상
   const emotionMeta = {
-    normal: { label: '전술 보고', color: '#00d2ff' },
+    normal: { label: '전술 보고', color: '#c8aa6e' },
     serious: { label: '경계 지휘', color: '#ffd54f' },
     smile: { label: '안도 / 격려', color: '#38ef7d' },
     worry: { label: '주의 / 염려', color: '#ff7043' },
@@ -421,7 +421,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
           <div className="absolute -top-6 sm:-top-7 left-3 sm:left-4 z-30 flex items-end gap-2.5 pointer-events-none">
             {/* 일레인 초상화 아바타 (오버행 스쿼클 뱃지) */}
             <div className="relative">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 border-[#00d2ff] bg-[#090d17] shadow-[0_4px_16px_rgba(0,210,255,0.45)] relative group">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 border-[#c8aa6e] bg-[#090d17] shadow-[0_4px_16px_rgba(200, 170, 110,0.45)] relative group">
                 <img
                   src={elainePortrait}
                   alt={tr('수석 오퍼레이터 일레인')}
@@ -431,7 +431,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
                   }}
                 />
                 {/* 통신 홀로그램 스캔라인 효과 */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00d2ff22] to-transparent pointer-events-none animate-pulse" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#c8aa6e22] to-transparent pointer-events-none animate-pulse" />
               </div>
 
               {/* 감정 뱃지 (아바타 우하단 앵커링) */}
@@ -449,7 +449,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
 
             {/* 발화자 소속 & 이름 태그 */}
             <div className="flex items-center gap-1.5 pb-0.5 sm:pb-1">
-              <span className="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] backdrop-blur-md shadow">
+              <span className="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] backdrop-blur-md shadow">
                 {tr('통제실')}
               </span>
               <span className="text-xs sm:text-sm font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] tracking-wide">
@@ -472,7 +472,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
               <p className="text-sm sm:text-base text-[#d8e3f5] leading-relaxed min-h-[46px] sm:min-h-[48px]">
                 {displayedText}
                 {isTyping && (
-                  <span className="inline-block w-2 h-4 bg-[#00d2ff] ml-1 animate-ping" />
+                  <span className="inline-block w-2 h-4 bg-[#c8aa6e] ml-1 animate-ping" />
                 )}
               </p>
 
@@ -508,7 +508,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
                         const nextStep = TUTORIAL_STEPS[currentIndex + 1];
                         onAdvanceStep(nextStep?.id);
                       }}
-                      className="btn btn-primary text-xs px-4 py-2 font-bold shadow-lg flex items-center gap-1.5 bg-gradient-to-r from-[#00d2ff] via-[#00aaff] to-[#0088ff] text-white border border-[#80e5ff] cursor-pointer hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(0,210,255,0.4)]"
+                      className="btn btn-primary text-xs px-4 py-2 font-bold shadow-lg flex items-center gap-1.5 bg-gradient-to-r from-[#c8aa6e] via-[#00aaff] to-[#0088ff] text-white border border-[#80e5ff] cursor-pointer hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(200, 170, 110,0.4)]"
                     >
                       <span>{tr(currentStep.nextButtonLabel || '다음 단계로 ▶')}</span>
                     </button>

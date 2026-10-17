@@ -159,11 +159,11 @@ const HeroRow: React.FC<{
         !isAlive ? 'opacity-35 grayscale bg-[#0c101a] border-[#18202d] shadow-none' : ''
       }`}
       style={{
-        borderColor: !isAlive ? '#18202d' : isCurrentTurn ? '#00d2ff' : isSelected ? '#38ef7d' : undefined,
+        borderColor: !isAlive ? '#18202d' : isCurrentTurn ? '#c8aa6e' : isSelected ? '#38ef7d' : undefined,
       }}
     >
       <div className="flex items-center gap-1.5">
-        <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-[#00d2ff55] bg-[#1a2333] flex items-center justify-center relative shadow-xs">
+        <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-[#c8aa6e55] bg-[#15171d] flex items-center justify-center relative shadow-xs">
           {customPortrait ? (
             <img src={customPortrait} alt={hero.name} className={`w-full h-full object-cover ${!isAlive ? 'grayscale' : ''}`} />
           ) : (
@@ -178,7 +178,7 @@ const HeroRow: React.FC<{
             <span className="font-bold text-xs" style={{ color: !isAlive ? '#607d8b' : undefined, textDecoration: !isAlive ? 'line-through' : undefined }}>
               {hero.name}
             </span>
-            <span className="text-[10px] text-[#00d2ff] font-medium shrink-0">{hero.className}</span>
+            <span className="text-[10px] text-[#c8aa6e] font-medium shrink-0">{hero.className}</span>
             <span className="text-[10px] font-mono font-bold" style={{ color: !isAlive ? '#607d8b' : '#ffd54f' }}>Lv.{hero.level}</span>
             <span
               className="text-[9px] px-1 py-0.2 rounded font-bold"
@@ -186,7 +186,7 @@ const HeroRow: React.FC<{
             >
               [{posMeta.label}]
             </span>
-            {isAlive && isCurrentTurn && <span className="text-[9px] bg-[#00d2ff22] text-[#00d2ff] px-1 rounded font-bold border border-[#00d2ff44]">▶ 내 턴</span>}
+            {isAlive && isCurrentTurn && <span className="text-[9px] bg-[#c8aa6e22] text-[#c8aa6e] px-1 rounded font-bold border border-[#c8aa6e44]">▶ 내 턴</span>}
             {isAlive && hero.statusEffects && hero.statusEffects.length > 0 && (
               <span className="flex items-center gap-0.5 ml-1">
                 {hero.statusEffects.map((se, sIdx) => {
@@ -207,7 +207,7 @@ const HeroRow: React.FC<{
           <span style={{ color: !isAlive ? '#607d8b' : '#ef5350' }}>
             {isAlive ? `${Math.round(hero.currentHp)}/${Math.round(hero.maxHp)}` : '💀 전투불능'}
           </span>
-          <span className="text-[#00d2ff] text-[9px]">
+          <span className="text-[#c8aa6e] text-[9px]">
             {isAlive ? `${Math.round(hero.currentMp)}/${Math.round(hero.maxMp)}` : ''}
           </span>
         </div>
@@ -1495,7 +1495,7 @@ export const NemesisView: React.FC = () => {
         {/* 💥 화면 타격 플래시 */}
         {screenFlash && (
           <div className={`absolute inset-0 pointer-events-none z-50 animate-impact-flash ${
-            screenFlash === 'enemy' ? 'bg-[#ff174435]' : 'bg-[#00d2ff30]'
+            screenFlash === 'enemy' ? 'bg-[#ff174435]' : 'bg-[#c8aa6e30]'
           }`} />
         )}
 
@@ -1507,7 +1507,7 @@ export const NemesisView: React.FC = () => {
                 ? 'bg-red-900/40'
                 : skillCutIn.isUltimate
                 ? 'bg-amber-600/50'
-                : 'bg-cyan-900/40'
+                : 'bg-black/40'
             } animate-skill-speedlines`} />
 
             <div className={`relative w-[130%] py-3 px-6 flex items-center justify-center shadow-2xl border-y-2 transform -rotate-2 animate-skill-banner ${
@@ -1515,7 +1515,7 @@ export const NemesisView: React.FC = () => {
                 ? 'bg-gradient-to-r from-transparent via-[#200813f5] via-50% to-transparent border-[#ff1744] shadow-[#ff1744aa]'
                 : skillCutIn.isUltimate
                 ? 'bg-gradient-to-r from-transparent via-[#2a1a05f5] via-50% to-transparent border-[#ffd54f] shadow-[0_0_35px_rgba(255,213,79,0.7)]'
-                : 'bg-gradient-to-r from-transparent via-[#09152af5] via-50% to-transparent border-[#00d2ff] shadow-[#00d2ffaa]'
+                : 'bg-gradient-to-r from-transparent via-[#09152af5] via-50% to-transparent border-[#c8aa6e] shadow-[#c8aa6eaa]'
             }`}>
               <div className="flex items-center gap-3">
                 <div className={`text-2xl p-1.5 rounded-xl border-2 shadow-xl shrink-0 ${
@@ -1523,7 +1523,7 @@ export const NemesisView: React.FC = () => {
                     ? 'bg-[#2b0c1b] border-[#ff1744] shadow-[#ff1744]'
                     : skillCutIn.isUltimate
                     ? 'bg-[#3b2408] border-[#ffd54f] shadow-[#ffd54f] animate-bounce'
-                    : 'bg-[#0c1f38] border-[#00d2ff] shadow-[#00d2ff]'
+                    : 'bg-[#0c1f38] border-[#c8aa6e] shadow-[#c8aa6e]'
                 }`}>
                   {skillCutIn.icon}
                 </div>
@@ -1557,7 +1557,7 @@ export const NemesisView: React.FC = () => {
               <span>🏃</span>
               <span>퇴각</span>
             </button>
-            <span className="px-2 py-0.5 rounded font-mono text-xs font-bold bg-[#141d2f] text-[#00d2ff] border border-[#00d2ff44]">
+            <span className="px-2 py-0.5 rounded font-mono text-xs font-bold bg-[#141d2f] text-[#c8aa6e] border border-[#c8aa6e44]">
               턴 {Math.min(maxTurns, battleTurn)} / {maxTurns}
             </span>
           </div>
@@ -1587,7 +1587,7 @@ export const NemesisView: React.FC = () => {
               }}
               className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-all ${
                 isAutoBattle
-                  ? 'bg-[#00d2ff22] text-[#00d2ff] border-[#00d2ff] shadow-[0_0_8px_rgba(0,210,255,0.4)] animate-pulse'
+                  ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e] shadow-[0_0_8px_rgba(200, 170, 110,0.4)] animate-pulse'
                   : 'bg-[#141d2f] text-[#8b9bb4] border-[#25354e]'
               }`}
             >
@@ -1658,7 +1658,7 @@ export const NemesisView: React.FC = () => {
                 const posMeta = {
                   head: { label: '전열', color: '#ef5350' },
                   body: { label: '중열', color: '#ce93d8' },
-                  tail: { label: '후열', color: '#00d2ff' },
+                  tail: { label: '후열', color: '#c8aa6e' },
                 }[partKey];
                 const cleanName = (part.name || '').replace(/\s*\(.*?\)/g, '').trim();
 
@@ -1782,7 +1782,7 @@ export const NemesisView: React.FC = () => {
               <LogPanel logs={battleLogs} maxHeight={125} isBattle emptyMessage="기록된 전투 로그가 없습니다." />
               <button
                 type="button"
-                className="absolute top-1.5 right-2 px-2 py-0.5 rounded text-[11px] font-bold bg-[#141a27e0] hover:bg-[#1e273dee] text-[#00d2ff] hover:text-white border border-[#00d2ff44] shadow-md transition-all flex items-center gap-1 z-20"
+                className="absolute top-1.5 right-2 px-2 py-0.5 rounded text-[11px] font-bold bg-[#141a27e0] hover:bg-[#1e273dee] text-[#c8aa6e] hover:text-white border border-[#c8aa6e44] shadow-md transition-all flex items-center gap-1 z-20"
                 title="전체 전투 상세 기록 모달 열기"
                 onClick={() => setShowFullLogModal(true)}
               >
@@ -1798,13 +1798,13 @@ export const NemesisView: React.FC = () => {
             const opSpecial = opCls?.specialSkill ? gm.resolveSkillData(opCls.specialSkill.id, operatorHero) || opCls.specialSkill : null;
             return (
               <div className="px-3 pt-1 shrink-0 z-10">
-                <div className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#0d1627] via-[#14233e] to-[#0d1627] border border-[#00d2ff44] shadow-sm flex items-center justify-between gap-2">
+                <div className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#0d1627] via-[#14233e] to-[#0d1627] border border-[#c8aa6e44] shadow-sm flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#00d2ff88] bg-[#0c1424] flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#c8aa6e88] bg-[#0e1117] flex items-center justify-center">
                       {operatorPortrait ? <img src={operatorPortrait} alt={operatorHero.name} className="w-full h-full object-cover" /> : '📡'}
                     </div>
                     <span className="text-[11px] font-bold text-white truncate">{operatorHero.name}</span>
-                    <span className="text-[9.5px] text-[#00d2ff] font-medium shrink-0">{opCls?.name || operatorHero.classId}</span>
+                    <span className="text-[9.5px] text-[#c8aa6e] font-medium shrink-0">{opCls?.name || operatorHero.classId}</span>
                     <span className="text-[9.5px] text-[#ffd54f] font-mono font-bold shrink-0">Lv.{operatorHero.level}</span>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
@@ -1814,7 +1814,7 @@ export const NemesisView: React.FC = () => {
                         <span>전술 궁극기: [{opSpecial.name}]</span>
                       </span>
                     )}
-                    <span className="text-[9px] font-mono text-[#00d2ff] font-bold">
+                    <span className="text-[9px] font-mono text-[#c8aa6e] font-bold">
                       누적 {totalBattleDmg.toLocaleString()} DMG
                     </span>
                   </div>
@@ -1887,14 +1887,14 @@ export const NemesisView: React.FC = () => {
               const basicTags = weaponEnchantSkill ? getSkillTags(weaponEnchantSkill) : [];
 
               return (
-                <div className="panel p-2 animate-slide-up" style={{ background: '#0b0d13dd', border: '1px solid #00d2ff44' }}>
-                  <div className="text-xs text-[#00d2ff] font-bold mb-1.5 border-b border-[#00d2ff22] pb-1 flex items-center justify-between">
+                <div className="panel p-2 animate-slide-up" style={{ background: '#0b0d13dd', border: '1px solid #c8aa6e44' }}>
+                  <div className="text-xs text-[#c8aa6e] font-bold mb-1.5 border-b border-[#c8aa6e22] pb-1 flex items-center justify-between">
                     <span className="flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#00d2ff55] bg-[#1a2333] flex items-center justify-center">
+                      <span className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#c8aa6e55] bg-[#15171d] flex items-center justify-center">
                         {activeHeroPortrait ? <img src={activeHeroPortrait} alt={activeHero.name} className="w-full h-full object-cover" /> : '⚔️'}
                       </span>
                       <span>{activeHero.name}</span>
-                      <span className="text-[10px] text-[#00d2ff] font-medium">{activeHero.className}</span>
+                      <span className="text-[10px] text-[#c8aa6e] font-medium">{activeHero.className}</span>
                       <span className="text-[10px] text-[#ffd54f] font-mono font-bold">Lv.{activeHero.level}</span>
                       <span className="text-[10px] font-normal text-[#8b9bb4]">({activeHero.position === 'front' ? '전열' : activeHero.position === 'mid' ? '중열' : '후열'})</span>
                     </span>
@@ -1911,7 +1911,7 @@ export const NemesisView: React.FC = () => {
                         !basicCanUse ? 'opacity-40 cursor-not-allowed' : ''
                       } ${basicReadyCombo ? 'animate-pulse shadow-[0_0_12px_rgba(255,213,79,0.45)]' : ''}`}
                       style={{
-                        borderColor: basicReadyCombo ? '#ffd54f' : hasWeaponSkill ? (basicHasMp ? '#00d2ff' : '#ffd54f88') : '#8b9bb4',
+                        borderColor: basicReadyCombo ? '#ffd54f' : hasWeaponSkill ? (basicHasMp ? '#c8aa6e' : '#ffd54f88') : '#8b9bb4',
                         boxShadow: basicReadyCombo ? '0 0 14px rgba(255,213,79,0.5)' : undefined
                       }}
                     >
@@ -1929,7 +1929,7 @@ export const NemesisView: React.FC = () => {
                         <span className="shrink-0 flex items-center justify-center">
                           <GameIcon name={weaponEnchantSkill?.id || 'basic_attack'} icon={basicDisplayIcon} size={20} />
                         </span>
-                        <span className="text-xs font-bold truncate flex-1" style={{ color: basicReadyCombo ? '#ffe57f' : hasWeaponSkill ? (basicHasMp ? '#00e5ff' : '#ffd54f') : '#ffffff' }}>
+                        <span className="text-xs font-bold truncate flex-1" style={{ color: basicReadyCombo ? '#ffe57f' : hasWeaponSkill ? (basicHasMp ? '#c8aa6e' : '#ffd54f') : '#ffffff' }}>
                           {basicDisplayName}
                         </span>
                         {basicTags.slice(0, 1).map(t => (
@@ -2031,7 +2031,7 @@ export const NemesisView: React.FC = () => {
                           className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all select-none relative ${
                             !canUse
                               ? 'opacity-40 cursor-not-allowed border-[#37474f]'
-                              : 'border-[#00d2ff55] hover:border-[#00d2ff]'
+                              : 'border-[#c8aa6e55] hover:border-[#c8aa6e]'
                           } ${skReadyCombo ? 'animate-pulse shadow-[0_0_12px_rgba(255,213,79,0.45)]' : ''}`}
                           style={{
                             borderColor: skReadyCombo ? '#ffd54f' : canUse ? style.borderColor : undefined,
@@ -2065,7 +2065,7 @@ export const NemesisView: React.FC = () => {
                           </div>
                           <div className="flex items-center justify-between w-full text-[10px] mt-1">
                             <span className="text-[#8b9bb4] truncate mr-1">{targetLabel}</span>
-                            <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#00d2ff]' : 'text-[#ff5252]'}`}>
+                            <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#c8aa6e]' : 'text-[#ff5252]'}`}>
                               {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
                             </span>
                           </div>
@@ -2093,7 +2093,7 @@ export const NemesisView: React.FC = () => {
                           className={`btn btn-ghost flex flex-col justify-between p-2 min-h-[64px] bg-transparent border rounded-lg text-left transition-all select-none relative ${
                             !canUse
                               ? 'opacity-40 cursor-not-allowed border-[#37474f]'
-                              : 'border-[#00d2ff55] hover:border-[#00d2ff]'
+                              : 'border-[#c8aa6e55] hover:border-[#c8aa6e]'
                           } ${skReadyCombo ? 'animate-pulse shadow-[0_0_12px_rgba(255,213,79,0.45)]' : ''}`}
                           style={{
                             borderColor: skReadyCombo ? '#ffd54f' : canUse ? style.borderColor : undefined,
@@ -2127,7 +2127,7 @@ export const NemesisView: React.FC = () => {
                           </div>
                           <div className="flex items-center justify-between w-full text-[10px] mt-1">
                             <span className="text-[#8b9bb4] truncate mr-1">{targetLabel}</span>
-                            <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#00d2ff]' : 'text-[#ff5252]'}`}>
+                            <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#c8aa6e]' : 'text-[#ff5252]'}`}>
                               {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
                             </span>
                           </div>
@@ -2172,7 +2172,7 @@ export const NemesisView: React.FC = () => {
                 </div>
                 <div className="panel p-2 bg-[#141b2d] border border-[#23334d] text-center">
                   <span className="text-[10px] text-[#8b9bb4]">획득 에테르</span>
-                  <div className="font-mono text-xs font-bold text-[#00d2ff] mt-0.5">
+                  <div className="font-mono text-xs font-bold text-[#c8aa6e] mt-0.5">
                     ✨ {settlement.ether.toLocaleString()}
                   </div>
                 </div>
@@ -2194,7 +2194,7 @@ export const NemesisView: React.FC = () => {
                     <span className="font-mono font-bold text-white">{settlement.partDamages.body.toLocaleString()} DMG</span>
                   </div>
                   <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
-                    <span className="text-[#00d2ff] font-bold">꼬리 (후열)</span>
+                    <span className="text-[#c8aa6e] font-bold">꼬리 (후열)</span>
                     <span className="font-mono font-bold text-white">{settlement.partDamages.tail.toLocaleString()} DMG</span>
                   </div>
                 </div>
@@ -2202,7 +2202,7 @@ export const NemesisView: React.FC = () => {
 
               {/* 딜미터기 요약 (적군 리포트 완전 제거) */}
               {combatMetrics.length > 0 && (
-                <div className="panel p-2 bg-[#090d16] border border-[#1e2a40]">
+                <div className="panel p-2 bg-[#0a0b10] border border-[#1e2a40]">
                   <div className="text-xs font-bold text-white mb-1.5 flex items-center justify-between">
                     <span>📊 대원별 피해 및 기여도</span>
                     <span className="text-[9px] text-[#ffd54f]">전투 리포트</span>
@@ -2216,7 +2216,7 @@ export const NemesisView: React.FC = () => {
               <div className="flex gap-2 mt-1">
                 <button
                   type="button"
-                  className="px-3 py-2 rounded-xl text-xs font-bold bg-[#141d30] hover:bg-[#1f2b45] text-[#00d2ff] hover:text-white border border-[#00d2ff44] transition-all flex items-center justify-center gap-1.5 flex-1 shadow-md"
+                  className="px-3 py-2 rounded-xl text-xs font-bold bg-[#141d30] hover:bg-[#1f2b45] text-[#c8aa6e] hover:text-white border border-[#c8aa6e44] transition-all flex items-center justify-center gap-1.5 flex-1 shadow-md"
                   onClick={() => setShowFullLogModal(true)}
                 >
                   <span>📜</span>
@@ -2226,7 +2226,7 @@ export const NemesisView: React.FC = () => {
                   label="로비로 복귀"
                   variant="primary"
                   size="md"
-                  className="flex-1 font-bold shadow-lg shadow-[#00d2ff33]"
+                  className="flex-1 font-bold shadow-lg shadow-[#c8aa6e33]"
                   onClick={() => {
                     setSettlement(null);
                     setInBattle(false);
@@ -2280,7 +2280,7 @@ export const NemesisView: React.FC = () => {
             <div className="flex flex-col gap-2">
               <div className="text-xs text-[#8b9bb4] flex items-center justify-between border-b border-[#1f2738] pb-1.5">
                 <span>총 {battleLogs.length}건의 전투 기록</span>
-                <span className="text-[10px] text-[#00d2ff]">스크롤하여 이전 기록을 확인할 수 있습니다.</span>
+                <span className="text-[10px] text-[#c8aa6e]">스크롤하여 이전 기록을 확인할 수 있습니다.</span>
               </div>
               <div className="max-h-[60vh] overflow-y-auto pr-1">
                 <LogPanel logs={battleLogs} isBattle maxHeight={520} emptyMessage="기록된 전투 로그가 없습니다." />
@@ -2340,8 +2340,8 @@ export const NemesisView: React.FC = () => {
                 <span className="text-[10px] px-1.5 py-0.2 rounded font-bold shrink-0" style={{ backgroundColor: `${currentPhaseCfg.badgeColor}22`, color: currentPhaseCfg.badgeColor, border: `1px solid ${currentPhaseCfg.badgeColor}88` }}>
                   Phase {nemesisState.phase}
                 </span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded font-semibold shrink-0 bg-[#00d2ff1a] text-[#00d2ff] border border-[#00d2ff55] flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff] animate-ping inline-block" />
+                <span className="text-[9px] px-1.5 py-0.5 rounded font-semibold shrink-0 bg-[#c8aa6e1a] text-[#c8aa6e] border border-[#c8aa6e55] flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#c8aa6e] animate-ping inline-block" />
                   🌐 전 지휘관 실시간 공유 월드 보스
                 </span>
               </div>
@@ -2359,7 +2359,7 @@ export const NemesisView: React.FC = () => {
             <div className="flex items-center justify-between text-xs mb-1">
               <span className="text-[10px] text-[#8b9bb4] flex items-center gap-1">
                 <span>보스 전체 잔여 체력</span>
-                <span className="text-[9px] text-[#00d2ff]">(전 지휘관 공유)</span>
+                <span className="text-[9px] text-[#c8aa6e]">(전 지휘관 공유)</span>
               </span>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-xs font-bold text-[#ffd54f]">
@@ -2413,7 +2413,7 @@ export const NemesisView: React.FC = () => {
                       <div
                         className={`h-full transition-all duration-500 ${
                           cycleInfo.isWindowDefended
-                            ? 'bg-gradient-to-r from-[#38ef7d] to-[#00d2ff]'
+                            ? 'bg-gradient-to-r from-[#38ef7d] to-[#c8aa6e]'
                             : 'bg-gradient-to-r from-[#ff9800] via-[#ffd54f] to-[#38ef7d]'
                         }`}
                         style={{ width: `${Math.min(100, Math.max(0, cycleInfo.windowProgressPct))}%` }}
@@ -2441,7 +2441,7 @@ export const NemesisView: React.FC = () => {
                   const maxHp = part?.maxHp ?? pCfg.maxHp;
                   const isDefeated = part?.isDefeated || curHp <= 0;
                   const pct = Math.max(0, Math.min(100, (curHp / maxHp) * 100));
-                  const theme = pKey === 'head' ? '#ef5350' : pKey === 'body' ? '#ce93d8' : '#00d2ff';
+                  const theme = pKey === 'head' ? '#ef5350' : pKey === 'body' ? '#ce93d8' : '#c8aa6e';
                   const cleanName = (pCfg.name || '').replace(/\s*\(.*?\)/g, '').trim();
                   return (
                     <div
@@ -2558,7 +2558,7 @@ export const NemesisView: React.FC = () => {
                     <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
                       {allHeroes.length >= 4 ? (
                         <button
-                          className="btn btn-primary text-xs px-3 py-1.5 font-bold flex items-center gap-1 shadow-md shadow-[#00d2ff33]"
+                          className="btn btn-primary text-xs px-3 py-1.5 font-bold flex items-center gap-1 shadow-md shadow-[#c8aa6e33]"
                           onClick={() => {
                             const ok = gm.autoAssignDimensionalDeck();
                             if (ok) SoundManager.getInstance().play('equip');
@@ -2579,7 +2579,7 @@ export const NemesisView: React.FC = () => {
                         </button>
                       )}
                       <button
-                        className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#00d2ff] border border-[#00d2ff44] hover:bg-[#00d2ff18] font-bold"
+                        className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#c8aa6e] border border-[#c8aa6e44] hover:bg-[#c8aa6e18] font-bold"
                         onClick={() => {
                           navigateTo('citadel');
                           gm.emit('openDimensionalBarracks');
@@ -2601,7 +2601,7 @@ export const NemesisView: React.FC = () => {
                   <span>🛡️</span>
                   <span>출전 원정대 (3선발 + 1오퍼레이터)</span>
                 </span>
-                <span className="text-[10px] text-[#00d2ff] font-mono">
+                <span className="text-[10px] text-[#c8aa6e] font-mono">
                   차원 덱 연동
                 </span>
               </div>
@@ -2632,12 +2632,12 @@ export const NemesisView: React.FC = () => {
                           key={h.id}
                           className="p-1.5 sm:p-2 rounded-xl bg-[#141c2e] border border-[#23334d] flex flex-col items-center text-center min-w-0"
                         >
-                          <span className="text-[8px] font-bold text-[#00d2ff]">선발{idx + 1}</span>
+                          <span className="text-[8px] font-bold text-[#c8aa6e]">선발{idx + 1}</span>
                           <div className="text-base sm:text-xl">{cls?.skills[0]?.icon || '⚔️'}</div>
                           <span className="text-[10px] sm:text-xs font-bold text-white truncate w-full mt-0.5" title={h.name}>
                             {h.name}
                           </span>
-                          <span className="text-[8.5px] sm:text-[10px] text-[#00d2ff] truncate w-full">
+                          <span className="text-[8.5px] sm:text-[10px] text-[#c8aa6e] truncate w-full">
                             {cls?.name || h.classId}
                           </span>
                           <div className="flex items-center gap-1 text-[8px] text-[#8b9bb4] font-mono mt-0.5">
@@ -2689,7 +2689,7 @@ export const NemesisView: React.FC = () => {
               <div className="mt-2.5 pt-2 border-t border-[#1f2b42] flex items-center justify-between text-[10px] text-[#8b9bb4]">
                 <span>선발 3인이 전투에 직접 참전하며, 오퍼레이터가 파티 전체에 전술 지휘를 제공합니다.</span>
                 <button
-                  className="text-[#00d2ff] hover:underline font-bold shrink-0 ml-2"
+                  className="text-[#c8aa6e] hover:underline font-bold shrink-0 ml-2"
                   onClick={() => {
                     navigateTo('citadel');
                     gm.emit('openDimensionalBarracks');
@@ -2750,7 +2750,7 @@ export const NemesisView: React.FC = () => {
           <div className="flex flex-col gap-2 w-full max-w-full">
             <div className="text-xs text-[#8b9bb4] px-1 flex items-center justify-between">
               <span>네메시스에게 누적 피해를 입혀 단계별 특별 무구와 마도석을 획득하십시오.</span>
-              <span className="font-mono text-[#00d2ff] font-bold">누적: {nemesisState.totalDamage.toLocaleString()}</span>
+              <span className="font-mono text-[#c8aa6e] font-bold">누적: {nemesisState.totalDamage.toLocaleString()}</span>
             </div>
 
             {NEMESIS_MILESTONES.map(ms => {
@@ -2761,7 +2761,7 @@ export const NemesisView: React.FC = () => {
               return (
                 <div
                   key={ms.id}
-                  className={`panel p-3 flex items-center justify-between gap-2.5 transition-all ${isClaimed ? 'bg-[#0a0f1a] border-[#162133] opacity-60' : isUnlocked ? 'bg-[#10182b] border-[#00d2ff66] shadow-sm' : 'bg-[#0d121f] border-[#1f283d]'}`}
+                  className={`panel p-3 flex items-center justify-between gap-2.5 transition-all ${isClaimed ? 'bg-[#0a0f1a] border-[#162133] opacity-60' : isUnlocked ? 'bg-[#10182b] border-[#c8aa6e66] shadow-sm' : 'bg-[#0d121f] border-[#1f283d]'}`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0 flex-1">
                     <div className="w-10 h-10 rounded-xl bg-[#172033] border border-[#2b3b5c] flex items-center justify-center text-xl shrink-0">
@@ -2773,7 +2773,7 @@ export const NemesisView: React.FC = () => {
                         {isClaimed ? (
                           <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#4caf5022] text-[#4caf50] font-bold">수령 완료</span>
                         ) : isUnlocked ? (
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold animate-pulse">수령 가능!</span>
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold animate-pulse">수령 가능!</span>
                         ) : (
                           <span className="text-[9px] text-[#8b9bb4] font-mono">{progressPct.toFixed(0)}%</span>
                         )}
@@ -2782,7 +2782,7 @@ export const NemesisView: React.FC = () => {
 
                       {!isUnlocked && !isClaimed && (
                         <div className="w-full bg-[#151c2e] h-1.5 rounded-full overflow-hidden mt-1.5">
-                          <div className="bg-[#00d2ff] h-full" style={{ width: `${progressPct}%` }} />
+                          <div className="bg-[#c8aa6e] h-full" style={{ width: `${progressPct}%` }} />
                         </div>
                       )}
                     </div>
@@ -2815,7 +2815,7 @@ export const NemesisView: React.FC = () => {
             {NEMESIS_LEADERBOARD_MOCK.map(entry => (
               <div
                 key={entry.rank}
-                className="panel p-2.5 flex items-center justify-between gap-2 bg-[#0c1220] border border-[#1e2a40]"
+                className="panel p-2.5 flex items-center justify-between gap-2 bg-[#0d0f14] border border-[#1e2a40]"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-lg bg-[#151d30] border border-[#273754] flex items-center justify-center font-mono text-xs font-bold text-white shrink-0">
@@ -2831,7 +2831,7 @@ export const NemesisView: React.FC = () => {
                   <div className="font-mono text-xs font-bold text-[#ffd54f]">
                     {entry.damage.toLocaleString()} DMG
                   </div>
-                  <div className="text-[9px] text-[#00d2ff]">기여도 보상 획득</div>
+                  <div className="text-[9px] text-[#c8aa6e]">기여도 보상 획득</div>
                 </div>
               </div>
             ))}

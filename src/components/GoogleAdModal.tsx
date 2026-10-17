@@ -36,7 +36,7 @@ export const GoogleAdModal: React.FC = () => {
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-md animate-fade-in p-4 select-none">
       <div className="relative w-full max-w-[420px] bg-[#0c101a] border border-[#27354d] rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col">
         {/* 🏷️ 상단 Google AdMob 공식 헤더 바 */}
-        <div className="px-3.5 py-2.5 bg-[#070a12] border-b border-[#1b2538] flex items-center justify-between">
+        <div className="px-3.5 py-2.5 bg-[#08090d] border-b border-[#1b2538] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 bg-[#1a2336] px-2 py-0.5 rounded text-[11px] font-bold text-white border border-[#2b3a56]">
               <span className="text-[#4285f4] font-black">G</span>
@@ -72,10 +72,10 @@ export const GoogleAdModal: React.FC = () => {
         </div>
 
         {/* 🎬 광고 메인 비주얼 영역 */}
-        <div className="p-4 flex flex-col items-center justify-center text-center relative bg-gradient-to-b from-[#101726] to-[#0c101a]">
+        <div className="p-4 flex flex-col items-center justify-center text-center relative bg-gradient-to-b from-[#12141a] to-[#0c101a]">
           {/* 타이틀 및 배치 배너 */}
           <div className="mb-3">
-            <span className="text-[10px] text-[#00d2ff] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#00d2ff15] border border-[#00d2ff33]">
+            <span className="text-[10px] text-[#c8aa6e] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#c8aa6e15] border border-[#c8aa6e33]">
               {adState.title || '스폰서 보상형 비디오'}
             </span>
             <h3 className="text-sm font-bold text-white mt-1.5 line-clamp-1">
@@ -106,7 +106,7 @@ export const GoogleAdModal: React.FC = () => {
             {/* 하단 진행 프로그레스 바 */}
             <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-[#141b2a]">
               <div
-                className="h-full bg-gradient-to-r from-[#00d2ff] to-[#38ef7d] transition-all duration-300"
+                className="h-full bg-gradient-to-r from-[#c8aa6e] to-[#38ef7d] transition-all duration-300"
                 style={{ width: `${progressPct}%` }}
               />
             </div>
@@ -127,7 +127,7 @@ export const GoogleAdModal: React.FC = () => {
                   ✓ 지급 완료
                 </span>
               ) : (
-                <span className="text-xs font-mono font-bold text-[#00d2ff] bg-[#00d2ff15] px-2 py-0.5 rounded border border-[#00d2ff33]">
+                <span className="text-xs font-mono font-bold text-[#c8aa6e] bg-[#c8aa6e15] px-2 py-0.5 rounded border border-[#c8aa6e33]">
                   {adState.secondsRemaining}초 후 보상 지급
                 </span>
               )}
@@ -147,7 +147,7 @@ export const GoogleAdModal: React.FC = () => {
           {adState.canClose && (
             <button
               onClick={() => GoogleAdService.getInstance().closeAd(false)}
-              className="w-full mt-3 py-2.5 rounded-xl bg-gradient-to-r from-[#38ef7d] to-[#00d2ff] text-black font-extrabold text-xs shadow-lg hover:brightness-110 active:scale-[0.99] transition-all"
+              className="w-full mt-3 py-2.5 rounded-xl bg-gradient-to-r from-[#38ef7d] to-[#c8aa6e] text-black font-extrabold text-xs shadow-lg hover:brightness-110 active:scale-[0.99] transition-all"
             >
               확인하고 보상 받기 ➔
             </button>
@@ -165,7 +165,7 @@ export const GoogleAdModal: React.FC = () => {
             <div className="flex gap-2 w-full">
               <button
                 onClick={() => setShowExitConfirm(false)}
-                className="btn btn-primary flex-1 text-xs py-2 font-bold bg-[#00d2ff] text-black"
+                className="btn btn-primary flex-1 text-xs py-2 font-bold bg-[#c8aa6e] text-black"
               >
                 계속 시청하기
               </button>

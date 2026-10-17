@@ -39,7 +39,7 @@ export const PartySynergyPanel: React.FC<Props> = ({ party, onOpenGuide, onOpenC
   const getBuffBadges = (buffs: PartySynergy['buffs']) => {
     if (!buffs) return [];
     const badges: { text: string; color: string }[] = [];
-    if (buffs.allStatsBonus) badges.push({ text: `${tr('전능력치')} +${Math.round((buffs.allStatsBonus - 1) * 100)}%`, color: '#00d2ff' });
+    if (buffs.allStatsBonus) badges.push({ text: `${tr('전능력치')} +${Math.round((buffs.allStatsBonus - 1) * 100)}%`, color: '#c8aa6e' });
     if (buffs.atkBonus) {
       const diff = Math.round((buffs.atkBonus - 1) * 100);
       badges.push({ text: `${tr('공격력')} ${diff > 0 ? `+${diff}%` : `${diff}%`}`, color: diff > 0 ? '#ef5350' : '#8b9bb4' });
@@ -71,7 +71,7 @@ export const PartySynergyPanel: React.FC<Props> = ({ party, onOpenGuide, onOpenC
   const getCodexBadges = (bonus: ReturnType<typeof gm.getCodexBonus>) => {
     const badges: { text: string; color: string }[] = [];
     if (bonus.allStatsBonus && bonus.allStatsBonus > 0) {
-      badges.push({ text: `${tr('전능력치')} +${bonus.allStatsBonus}`, color: '#00d2ff' });
+      badges.push({ text: `${tr('전능력치')} +${bonus.allStatsBonus}`, color: '#c8aa6e' });
     }
     if (bonus.allDmgPct > 0) badges.push({ text: `${tr('모든피해')} +${bonus.allDmgPct}%`, color: '#ff416c' });
     if (bonus.atk > 0) badges.push({ text: `${tr('공격력')} +${bonus.atk}`, color: '#ef5350' });
@@ -84,7 +84,7 @@ export const PartySynergyPanel: React.FC<Props> = ({ party, onOpenGuide, onOpenC
     if (bonus.dmgReduction > 0) badges.push({ text: `${tr('피해감소')} -${bonus.dmgReduction}%`, color: '#38ef7d' });
     if (bonus.expBonusPct > 0) badges.push({ text: `${tr('경험치')} +${bonus.expBonusPct}%`, color: '#80deea' });
     if (bonus.goldBonusPct > 0) badges.push({ text: `${tr('골드')} +${bonus.goldBonusPct}%`, color: '#ffd54f' });
-    if (bonus.upkeepDiscountPct > 0) badges.push({ text: `${tr('유지비')} -${bonus.upkeepDiscountPct}%`, color: '#00d2ff' });
+    if (bonus.upkeepDiscountPct > 0) badges.push({ text: `${tr('유지비')} -${bonus.upkeepDiscountPct}%`, color: '#c8aa6e' });
     if (bonus.productionBonusPct > 0) badges.push({ text: `${tr('생산')} +${bonus.productionBonusPct}%`, color: '#aed581' });
     return badges;
   };
@@ -96,11 +96,11 @@ export const PartySynergyPanel: React.FC<Props> = ({ party, onOpenGuide, onOpenC
     <div className="panel p-3 bg-[#111622] border border-[#1f2738] rounded-xl flex flex-col gap-2">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-bold text-[#00d2ff]">✨ {tr('원정대 활성 시너지')}</span>
+          <span className="text-xs font-bold text-[#c8aa6e]">✨ {tr('원정대 활성 시너지')}</span>
           <span
             className={`text-[10px] font-bold px-1.5 py-0.2 rounded font-mono ${
               activeSynergies.length > 0
-                ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]'
+                ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]'
                 : 'bg-[#8b9bb422] text-[#8b9bb4]'
             }`}
           >
@@ -135,7 +135,7 @@ export const PartySynergyPanel: React.FC<Props> = ({ party, onOpenGuide, onOpenC
           {onOpenGuide && (
             <button
               type="button"
-              className="text-xs px-1.5 py-0.5 rounded bg-[#00d2ff15] text-[#00d2ff] border border-[#00d2ff33] font-bold hover:bg-[#00d2ff25] transition-all cursor-pointer flex items-center gap-1"
+              className="text-xs px-1.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] border border-[#c8aa6e33] font-bold hover:bg-[#c8aa6e25] transition-all cursor-pointer flex items-center gap-1"
               onClick={onOpenGuide}
               title={tr('시너지 조합 도감 열기')}
               aria-label={tr('시너지 조합 도감 열기')}
@@ -167,7 +167,7 @@ export const PartySynergyPanel: React.FC<Props> = ({ party, onOpenGuide, onOpenC
             {onOpenGuide && (
               <button
                 type="button"
-                className="btn btn-ghost text-[10px] px-2 py-1 text-[#00d2ff]"
+                className="btn btn-ghost text-[10px] px-2 py-1 text-[#c8aa6e]"
                 onClick={onOpenGuide}
               >
                 {tr('조합 확인 ➔')}
@@ -185,7 +185,7 @@ export const PartySynergyPanel: React.FC<Props> = ({ party, onOpenGuide, onOpenC
               {onOpenGuide && (
                 <button
                   type="button"
-                  className="btn btn-ghost text-[10px] px-2 py-0.5 text-[#00d2ff] shrink-0"
+                  className="btn btn-ghost text-[10px] px-2 py-0.5 text-[#c8aa6e] shrink-0"
                   onClick={onOpenGuide}
                 >
                   {tr('조합 확인 ➔')}
@@ -204,13 +204,13 @@ export const PartySynergyPanel: React.FC<Props> = ({ party, onOpenGuide, onOpenC
                   className={`p-2 rounded-lg border shadow-sm flex flex-col justify-between gap-1 transition-all ${
                     isAncestral
                       ? 'bg-gradient-to-r from-[#1f1032] to-[#131024] border-[#ba68c877] shadow-[0_0_8px_rgba(186,104,200,0.15)]'
-                      : 'bg-gradient-to-r from-[#0e1c2e] to-[#121826] border-[#00d2ff44]'
+                      : 'bg-gradient-to-r from-[#0e1c2e] to-[#121826] border-[#c8aa6e44]'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-1">
                     <div className="flex items-center gap-1.5 min-w-0 flex-1">
                       <span className="text-base shrink-0">{syn.icon}</span>
-                      <span className={`text-xs font-bold truncate ${isAncestral ? 'text-[#e1bee7]' : 'text-[#00d2ff]'}`}>
+                      <span className={`text-xs font-bold truncate ${isAncestral ? 'text-[#e1bee7]' : 'text-[#c8aa6e]'}`}>
                         {tr(syn.name)}
                       </span>
                     </div>
@@ -219,7 +219,7 @@ export const PartySynergyPanel: React.FC<Props> = ({ party, onOpenGuide, onOpenC
                         className={`text-[9px] px-1.5 py-0.2 rounded font-mono shrink-0 ${
                           isAncestral
                             ? 'bg-[#ab47bc22] text-[#ffd54f] border border-[#ba68c855]'
-                            : 'bg-[#00d2ff18] text-[#ffd54f] border border-[#ffd54f33]'
+                            : 'bg-[#c8aa6e18] text-[#ffd54f] border border-[#ffd54f33]'
                         }`}
                       >
                         {tr(syn.conditionText)}

@@ -185,7 +185,7 @@ export const GrimoireEnhanceModal: React.FC<Props> = ({ open, hero, skill, onClo
         </div>
 
         {/* 위력 및 MP 소모량 비교 카드 (파워와 함께 MP 소모도 증가) */}
-        <div className="p-3 rounded-xl bg-[#101726] border border-[#1e2a3f] flex flex-col gap-2.5">
+        <div className="p-3 rounded-xl bg-[#12141a] border border-[#1e2a3f] flex flex-col gap-2.5">
           <div className="text-xs font-bold text-[#80cbc4] flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <span>⚡ 위력 및 마나(MP) 변화</span>

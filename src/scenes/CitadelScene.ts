@@ -45,7 +45,7 @@ export class CitadelScene extends Phaser.Scene {
   private wheelContainer!: Phaser.GameObjects.Container;
   private wheelItems: WheelItem[] = [
     { key: 'citadel', label: '방주 영지', sub: '건설 & 자원 관리', icon: '🏰', promptKey: 'citadel_bonfire', themeColor: 0xff7b25 },
-    { key: 'barracks', label: '원정단 편성', sub: '진형 & 전직 & 장비 관리', icon: '⚔️', promptKey: 'hero_squire', themeColor: 0x00d2ff },
+    { key: 'barracks', label: '원정단 편성', sub: '진형 & 전직 & 장비 관리', icon: '⚔️', promptKey: 'hero_squire', themeColor: 0xc8aa6e },
     { key: 'quests', label: '퀘스트 & 연계', sub: '메인 스토리 & 시설', icon: '📜', promptKey: 'citadel_cabin', themeColor: 0x38ef7d },
     { key: 'explore', label: '심연 탐험', sub: 'MUD 던전 5층', icon: '🌌', promptKey: 'dungeon_limbo_gate', themeColor: 0x5c6bc0 },
     { key: 'arena', label: '차원 아레나', sub: '비동기 PVP 랭킹', icon: '🏆', promptKey: 'citadel_arena', themeColor: 0xff416c, isScene: true, sceneKey: 'ArenaScene' }
@@ -112,7 +112,7 @@ export class CitadelScene extends Phaser.Scene {
     this.bindEvents();
 
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-      const circle = this.add.circle(pointer.worldX, pointer.worldY, 8, 0x00d2ff, 0.6).setDepth(9999);
+      const circle = this.add.circle(pointer.worldX, pointer.worldY, 8, 0xc8aa6e, 0.6).setDepth(9999);
       this.tweens.add({
         targets: circle,
         radius: 22,
@@ -219,7 +219,7 @@ export class CitadelScene extends Phaser.Scene {
       speedX: { min: -10, max: 10 },
       scale: { start: 0.5, end: 0 },
       alpha: { start: 0.4, end: 0 },
-      tint: [0x00d2ff, 0xff7b25, 0xab47bc]
+      tint: [0xc8aa6e, 0xff7b25, 0xab47bc]
     });
     this.bgContainer.add(particles);
   }
@@ -244,7 +244,7 @@ export class CitadelScene extends Phaser.Scene {
     this.rankText = this.add.text(w - 15, 8, '', {
       fontFamily: 'Noto Sans KR',
       fontSize: '11px',
-      color: '#00d2ff',
+      color: '#c8aa6e',
       align: 'right'
     }).setOrigin(1, 0);
     barContainer.add(this.rankText);
@@ -269,7 +269,7 @@ export class CitadelScene extends Phaser.Scene {
     this.rankText.setText(
       `🏆 아레나 ${this.gm.currentArenaRank}위 (${this.gm.currentArenaRating}P)${buffMark}\n방주 성채 (Chapter 1)`
     );
-    this.rankText.setColor(this.gm.pveBuffActive ? '#ffeb3b' : '#00d2ff');
+    this.rankText.setColor(this.gm.pveBuffActive ? '#ffeb3b' : '#c8aa6e');
   }
 
   private cardArtImage!: Phaser.GameObjects.Image;
@@ -330,13 +330,13 @@ export class CitadelScene extends Phaser.Scene {
     const tBg = this.add.graphics();
     tBg.fillStyle(0x000000, 0.6);
     tBg.fillRoundedRect(0, 0, 120, 24, 12);
-    tBg.lineStyle(1, 0x00d2ff, 0.8);
+    tBg.lineStyle(1, 0xc8aa6e, 0.8);
     tBg.strokeRoundedRect(0, 0, 120, 24, 12);
 
     const tLbl = this.add.text(60, 12, '🎨 AI 프롬프트', {
       fontFamily: 'Noto Sans KR',
       fontSize: '10px',
-      color: '#00d2ff'
+      color: '#c8aa6e'
     }).setOrigin(0.5);
 
     toggleBtn.add([tBg, tLbl]);
@@ -401,7 +401,7 @@ export class CitadelScene extends Phaser.Scene {
     const header = this.add.text(14, 12, '📜 [방주 실시간 텍스트 기록]', {
       fontFamily: 'Noto Sans KR',
       fontSize: '12px',
-      color: '#00d2ff',
+      color: '#c8aa6e',
       fontStyle: 'bold'
     });
     this.logContainer.add(header);
@@ -427,7 +427,7 @@ export class CitadelScene extends Phaser.Scene {
     const bg = this.add.graphics();
     bg.fillStyle(0x0e111a, 0.98);
     bg.fillRoundedRect(0, 0, logW, 35, 8);
-    bg.lineStyle(1, 0x00d2ff, 0.8);
+    bg.lineStyle(1, 0xc8aa6e, 0.8);
     bg.strokeRoundedRect(0, 0, logW, 35, 8);
     this.singleLogContainer.add(bg);
 
@@ -456,7 +456,7 @@ export class CitadelScene extends Phaser.Scene {
         
         if (item.type === 'reward') { color = '#38ef7d'; prefix = '★ '; fontStyle = 'bold'; }
         if (item.type === 'danger') { color = '#ff416c'; prefix = '⚠️ '; fontStyle = 'bold'; }
-        if (item.type === 'story') { color = '#00d2ff'; prefix = '📜 '; fontStyle = 'bold'; }
+        if (item.type === 'story') { color = '#c8aa6e'; prefix = '📜 '; fontStyle = 'bold'; }
         if (item.type === 'bonfire0') { color = '#5c6c8c'; prefix = '❄️ '; }
         if (item.type === 'bonfire1') { color = '#ffb347'; prefix = '🔥 '; fontSize = '11px'; fontStyle = 'bold'; }
         if (item.type === 'bonfire2') { color = '#ff9f00'; prefix = '🔥 '; fontSize = '12px'; fontStyle = 'bold'; }
@@ -479,7 +479,7 @@ export class CitadelScene extends Phaser.Scene {
       let color = '#38ef7d';
       let prefix = '📢 [피드백] ';
       if (latest.type === 'danger') { color = '#ff416c'; prefix = '⚠️ [경고] '; }
-      if (latest.type === 'story') { color = '#00d2ff'; prefix = '📜 [스토리] '; }
+      if (latest.type === 'story') { color = '#c8aa6e'; prefix = '📜 [스토리] '; }
       if (latest.type === 'normal') { color = '#cfd8dc'; prefix = '• [안내] '; }
       if (latest.type.startsWith('bonfire')) { color = '#ff7b00'; prefix = '🔥 [모닥불] '; }
 
@@ -499,7 +499,7 @@ export class CitadelScene extends Phaser.Scene {
     const promptText = this.add.text(wheelW / 2, 16, '🎡 원하는 행동을 선택하세요 (탭하여 상세 열기)', {
       fontFamily: 'Noto Sans KR',
       fontSize: '12px',
-      color: '#00d2ff',
+      color: '#c8aa6e',
       fontStyle: 'bold'
     }).setOrigin(0.5);
     this.wheelContainer.add(promptText);
@@ -556,7 +556,7 @@ export class CitadelScene extends Phaser.Scene {
       const sub = this.add.text(curW / 2, 88, item.sub, {
         fontFamily: 'Noto Sans KR',
         fontSize: '9px',
-        color: isCenter ? '#00d2ff' : '#505c73',
+        color: isCenter ? '#c8aa6e' : '#505c73',
         align: 'center'
       }).setOrigin(0.5);
 
@@ -619,13 +619,13 @@ export class CitadelScene extends Phaser.Scene {
     const bg = this.add.graphics();
     bg.fillStyle(0x1a2130, 0.95);
     bg.fillCircle(20, 20, 18);
-    bg.lineStyle(1.5, 0x00d2ff, 0.9);
+    bg.lineStyle(1.5, 0xc8aa6e, 0.9);
     bg.strokeCircle(20, 20, 18);
 
     const lbl = this.add.text(20, 20, text, {
       fontFamily: 'Noto Sans KR',
       fontSize: '14px',
-      color: '#00d2ff',
+      color: '#c8aa6e',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
@@ -654,7 +654,7 @@ export class CitadelScene extends Phaser.Scene {
     const drawerBg = this.add.graphics();
     drawerBg.fillStyle(0x111520, 0.99);
     drawerBg.fillRoundedRect(0, 0, drawerW, drawerH, 16);
-    drawerBg.lineStyle(2, 0x00d2ff, 0.8);
+    drawerBg.lineStyle(2, 0xc8aa6e, 0.8);
     drawerBg.strokeRoundedRect(0, 0, drawerW, drawerH, 16);
     this.drawerContainer.add(drawerBg);
 
@@ -668,7 +668,7 @@ export class CitadelScene extends Phaser.Scene {
     this.drawerTitleText = this.add.text(16, 22, '', {
       fontFamily: 'Noto Sans KR',
       fontSize: '13px',
-      color: '#00d2ff',
+      color: '#c8aa6e',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
     this.drawerContainer.add(this.drawerTitleText);
@@ -899,7 +899,7 @@ export class CitadelScene extends Phaser.Scene {
       
       const isMaxLevel = b.level >= 10;
       const actBtnLbl = isBuilt ? (isMaxLevel ? 'MAX' : '강화') : '건설';
-      const actBtnColor = (b.unlocked || !isBuilt) && !isMaxLevel ? '#00d2ff' : '#546e7a';
+      const actBtnColor = (b.unlocked || !isBuilt) && !isMaxLevel ? '#c8aa6e' : '#546e7a';
 
       const actBtn = this.createActionButton(actBtnX, 17, actBtnW, 34, actBtnLbl, actBtnColor, () => {
         if (isMaxLevel) return;
@@ -961,7 +961,7 @@ export class CitadelScene extends Phaser.Scene {
     // ── 상단 서브 탭 네비게이션 바 (제작/강화 vs 마도 인챈트) ──
     const subTabW = Math.floor((w - 6) / 2);
     const tabs: Array<{ key: 'craft' | 'enchant'; label: string; icon: string; color: number }> = [
-      { key: 'craft',   label: '⚒️ 장비 제작 & 강화', icon: '⚒️', color: 0x00d2ff },
+      { key: 'craft',   label: '⚒️ 장비 제작 & 강화', icon: '⚒️', color: 0xc8aa6e },
       { key: 'enchant', label: '✨ 마도 인챈트 (+3/+7)', icon: '✨', color: 0xffd54f }
     ];
 
@@ -1006,11 +1006,11 @@ export class CitadelScene extends Phaser.Scene {
       const bg = this.add.graphics();
       bg.fillStyle(0x162335, 1);
       bg.fillRoundedRect(0, 0, w, 40, 6);
-      bg.lineStyle(1, 0x00d2ff, 0.7);
+      bg.lineStyle(1, 0xc8aa6e, 0.7);
       bg.strokeRoundedRect(0, 0, w, 40, 6);
 
       const bText = this.add.text(12, 20, '⚒️ 에테르 마도 단조대 (순수 기본 장비 단조 & +10강 강화)', {
-        fontFamily: 'Noto Sans KR', fontSize: '11px', color: '#00d2ff', fontStyle: 'bold'
+        fontFamily: 'Noto Sans KR', fontSize: '11px', color: '#c8aa6e', fontStyle: 'bold'
       }).setOrigin(0, 0.5);
       banner.add([bg, bText]);
       this.drawerContentScrollArea.add(banner);
@@ -1029,7 +1029,7 @@ export class CitadelScene extends Phaser.Scene {
           const iBg = this.add.graphics();
           iBg.fillStyle(0x151b27, 1);
           iBg.fillRoundedRect(0, 0, w, 66, 6);
-          iBg.lineStyle(1, item.level >= 10 ? 0xffd54f : (item.level >= 7 ? 0x00d2ff : 0x2e3d55), 1);
+          iBg.lineStyle(1, item.level >= 10 ? 0xffd54f : (item.level >= 7 ? 0xc8aa6e : 0x2e3d55), 1);
           iBg.strokeRoundedRect(0, 0, w, 66, 6);
 
           const iTitle = this.add.text(12, 10, `${item.icon} ${item.name} (+${item.level}/10)`, {
@@ -1184,7 +1184,7 @@ export class CitadelScene extends Phaser.Scene {
           let suffixColor = '#607d8b';
           if (item.suffix) {
             suffixText = `🔮 접미: [${item.suffix.name}] ${item.suffix.description}`;
-            suffixColor = '#00d2ff';
+            suffixColor = '#c8aa6e';
           } else if (canSuffix) {
             suffixText = `🔮 접미: 미부여 (+7강 해금 완료 / 인챈트 가능)`;
             suffixColor = '#38ef7d';
@@ -1209,7 +1209,7 @@ export class CitadelScene extends Phaser.Scene {
 
           // 2) 접미어 인챈트 버튼
           const sufBtnW = 100;
-          const sufBtn = this.createActionButton(12 + preBtnW + 8, 68, sufBtnW, 28, canSuffix ? '🔮 접미어 부여' : '🔒 +7강 필요', canSuffix ? '#00d2ff' : '#37474f', () => {
+          const sufBtn = this.createActionButton(12 + preBtnW + 8, 68, sufBtnW, 28, canSuffix ? '🔮 접미어 부여' : '🔒 +7강 필요', canSuffix ? '#c8aa6e' : '#37474f', () => {
             if (canSuffix) {
               const usePure = (this.gm.resources.pure_suffix_stone || 0) > 0;
               this.gm.enchantEquipment(item.id, 'suffix', usePure);
@@ -1315,13 +1315,13 @@ export class CitadelScene extends Phaser.Scene {
     const synBg = this.add.graphics();
     synBg.fillStyle(0x182436, 1);
     synBg.fillRoundedRect(0, 0, w, 44, 6);
-    synBg.lineStyle(1.5, 0x00d2ff, 0.8);
+    synBg.lineStyle(1.5, 0xc8aa6e, 0.8);
     synBg.strokeRoundedRect(0, 0, w, 44, 6);
     const synText = synergies.length > 0
       ? `✨ 활성 시너지: [${synergies.map(s => s.name).join(', ')}]`
       : '✨ 시너지: 3인 파티의 역할을 구성하세요. (전열/중앙/후방)';
     const sLbl = this.add.text(12, 22, synText, {
-      fontFamily: 'Noto Sans KR', fontSize: '11px', color: '#00d2ff', fontStyle: 'bold'
+      fontFamily: 'Noto Sans KR', fontSize: '11px', color: '#c8aa6e', fontStyle: 'bold'
     }).setOrigin(0, 0.5);
     synBanner.add([synBg, sLbl]);
     this.drawerContentScrollArea.add(synBanner);
@@ -1337,7 +1337,7 @@ export class CitadelScene extends Phaser.Scene {
       const bg = this.add.graphics();
       bg.fillStyle(isSelected ? 0x22354d : 0x141a24, 1);
       bg.fillRoundedRect(2, 0, tabW - 4, 36, 6);
-      bg.lineStyle(1.5, isSelected ? 0x00d2ff : (isInParty ? 0x38ef7d : 0x2e384d), 1);
+      bg.lineStyle(1.5, isSelected ? 0xc8aa6e : (isInParty ? 0x38ef7d : 0x2e384d), 1);
       bg.strokeRoundedRect(2, 0, tabW - 4, 36, 6);
 
       const lbl = this.add.text(tabW / 2, 11, hero.name, {
@@ -1397,14 +1397,14 @@ export class CitadelScene extends Phaser.Scene {
 
     // [3] 포지션 버튼 섹션
     const posHeader = this.add.text(14, 42, '📍 진형 배치 (클릭하여 변경):', {
-      fontFamily: 'Noto Sans KR', fontSize: '11px', color: '#00d2ff', fontStyle: 'bold'
+      fontFamily: 'Noto Sans KR', fontSize: '11px', color: '#c8aa6e', fontStyle: 'bold'
     });
     heroCard.add(posHeader);
 
     const posBtnDefs: { pos: PositionSlot; label: string; color: number }[] = [
       { pos: 'front', label: '⚔️ 전열\n방어+20%', color: 0xff6b6b },
       { pos: 'mid',   label: '🗡️ 중앙\n공격+12%', color: 0xffd54f },
-      { pos: 'back',  label: '🔮 후방\n마법+15%', color: 0x00d2ff }
+      { pos: 'back',  label: '🔮 후방\n마법+15%', color: 0xc8aa6e }
     ];
     const posBtnW = Math.floor((w - 42) / 3);
 
@@ -1502,7 +1502,7 @@ export class CitadelScene extends Phaser.Scene {
       isInParty
         ? `🔄 [${currentHero.name}] 파티 → 보관소로 교체`
         : `⚔️ [${currentHero.name}] 보관소 → 파티로 편성`,
-      isInParty ? '#ff6b6b' : '#00d2ff',
+      isInParty ? '#ff6b6b' : '#c8aa6e',
       () => { this.gm.swapPartyMember(currentHero.position, currentHero.id); this.renderDrawerContent(); }
     );
     heroCard.add(swapPartyBtn);
@@ -1691,7 +1691,7 @@ export class CitadelScene extends Phaser.Scene {
 
       const bg = this.add.graphics();
       let borderColor = 0x2e384d;
-      if (q.status === 'active') borderColor = 0x00d2ff;
+      if (q.status === 'active') borderColor = 0xc8aa6e;
       if (q.status === 'completed') borderColor = 0x38ef7d;
 
       bg.fillStyle(0x181f2c, 1);
@@ -1724,7 +1724,7 @@ export class CitadelScene extends Phaser.Scene {
       const statusBadge = this.add.text(w - 14, 14, q.status === 'completed' ? '완료' : (q.status === 'active' ? '진행중' : '잠김'), {
         fontFamily: 'Noto Sans KR',
         fontSize: '11px',
-        color: q.status === 'completed' ? '#38ef7d' : (q.status === 'active' ? '#00d2ff' : '#505c73'),
+        color: q.status === 'completed' ? '#38ef7d' : (q.status === 'active' ? '#c8aa6e' : '#505c73'),
         align: 'right'
       }).setOrigin(1, 0);
 
@@ -1765,7 +1765,7 @@ export class CitadelScene extends Phaser.Scene {
     const bg = this.add.graphics();
     bg.fillStyle(0x0c1220, 0.92);
     bg.fillRoundedRect(0, 0, cardW, cardH, 16);
-    bg.lineStyle(2, 0x00d2ff, 0.9);
+    bg.lineStyle(2, 0xc8aa6e, 0.9);
     bg.strokeRoundedRect(0, 0, cardW, cardH, 16);
     this.equipOverlayContainer.add(bg);
 
@@ -1780,7 +1780,7 @@ export class CitadelScene extends Phaser.Scene {
     const title = this.add.text(14, 22, `🛡️ [${slotName} 장착] — ${hero.name}`, {
       fontFamily: 'Noto Sans KR',
       fontSize: '13px',
-      color: '#00d2ff',
+      color: '#c8aa6e',
       fontStyle: 'bold'
     }).setOrigin(0, 0.5);
     this.equipOverlayContainer.add(title);
@@ -1914,10 +1914,10 @@ export class CitadelScene extends Phaser.Scene {
       const fBg = this.add.graphics();
       fBg.fillStyle(0x182438, 1);
       fBg.fillRoundedRect(0, 0, 160, 32, 6);
-      fBg.lineStyle(1.5, 0x00d2ff, 0.9);
+      fBg.lineStyle(1.5, 0xc8aa6e, 0.9);
       fBg.strokeRoundedRect(0, 0, 160, 32, 6);
       const fLbl = this.add.text(80, 16, '⚒️ 마도 대장간으로 이동', {
-        fontFamily: 'Noto Sans KR', fontSize: '11px', color: '#00d2ff', fontStyle: 'bold'
+        fontFamily: 'Noto Sans KR', fontSize: '11px', color: '#c8aa6e', fontStyle: 'bold'
       }).setOrigin(0.5);
       goForgeBtn.add([fBg, fLbl]);
       goForgeBtn.setSize(160, 32);
@@ -1941,7 +1941,7 @@ export class CitadelScene extends Phaser.Scene {
         const iBg = this.add.graphics();
         iBg.fillStyle(0x141a26, 1);
         iBg.fillRoundedRect(0, 0, itemW, 52, 8);
-        iBg.lineStyle(1.5, equippedByOther ? 0xffb74d : (item.prefix || item.suffix ? 0x00d2ff : 0x2c3b52), 1);
+        iBg.lineStyle(1.5, equippedByOther ? 0xffb74d : (item.prefix || item.suffix ? 0xc8aa6e : 0x2c3b52), 1);
         iBg.strokeRoundedRect(0, 0, itemW, 52, 8);
 
         const icon = this.add.text(20, 26, item.icon, { fontSize: '20px' }).setOrigin(0.5);
@@ -1971,10 +1971,10 @@ export class CitadelScene extends Phaser.Scene {
         const eBg = this.add.graphics();
         eBg.fillStyle(0x183040, 1);
         eBg.fillRoundedRect(0, 0, 60, 28, 6);
-        eBg.lineStyle(1.5, 0x00d2ff, 0.9);
+        eBg.lineStyle(1.5, 0xc8aa6e, 0.9);
         eBg.strokeRoundedRect(0, 0, 60, 28, 6);
         const eLbl = this.add.text(30, 14, '장착하기', {
-          fontFamily: 'Noto Sans KR', fontSize: '10px', color: '#00d2ff', fontStyle: 'bold'
+          fontFamily: 'Noto Sans KR', fontSize: '10px', color: '#c8aa6e', fontStyle: 'bold'
         }).setOrigin(0.5);
         equipBtn.add([eBg, eLbl]);
         equipBtn.setSize(60, 28);
@@ -2120,7 +2120,7 @@ export class CitadelScene extends Phaser.Scene {
   // ================= 영지 창고 (Storage) =================
   private renderStorageDrawer(w: number): void {
     const title = this.add.text(10, 0, '보관된 재료 및 장비', {
-      fontFamily: 'Noto Sans KR', fontSize: '14px', color: '#00d2ff', fontStyle: 'bold'
+      fontFamily: 'Noto Sans KR', fontSize: '14px', color: '#c8aa6e', fontStyle: 'bold'
     });
     this.drawerContentScrollArea.add(title);
 
@@ -2164,7 +2164,7 @@ export class CitadelScene extends Phaser.Scene {
     yPos += Math.ceil(rowCount / colCount) * 70 + 20;
 
     const eqTitle = this.add.text(10, yPos, '보관된 장비 (미착용)', {
-      fontFamily: 'Noto Sans KR', fontSize: '14px', color: '#00d2ff', fontStyle: 'bold'
+      fontFamily: 'Noto Sans KR', fontSize: '14px', color: '#c8aa6e', fontStyle: 'bold'
     });
     this.drawerContentScrollArea.add(eqTitle);
     yPos += 30;
@@ -2231,7 +2231,7 @@ export class CitadelScene extends Phaser.Scene {
 
     yPos += 10;
     const rosterTitle = this.add.text(10, yPos, '입원 가능한 대상 목록', {
-      fontFamily: 'Noto Sans KR', fontSize: '14px', color: '#00d2ff', fontStyle: 'bold'
+      fontFamily: 'Noto Sans KR', fontSize: '14px', color: '#c8aa6e', fontStyle: 'bold'
     });
     this.drawerContentScrollArea.add(rosterTitle);
     yPos += 30;

@@ -143,16 +143,16 @@ const OperatorCard: React.FC<OperatorCardProps> = ({
     <div
       className={`w-full p-2 rounded-2xl border transition-all relative overflow-hidden shadow-lg ${
         isPlayer
-          ? 'bg-gradient-to-r from-[#091424]/95 via-[#0d1c33]/95 to-[#07111e]/95 border-[#00d2ff55] shadow-[#00d2ff15]'
+          ? 'bg-gradient-to-r from-[#0d0f14]/95 via-[#12141a]/95 to-[#090a0d]/95 border-[#c8aa6e55] shadow-[#c8aa6e15]'
           : 'bg-gradient-to-r from-[#1c0c16]/95 via-[#270e1c]/95 to-[#140810]/95 border-[#ff416c55] shadow-[#ff416c15]'
-      } ${isActing ? (isPlayer ? 'ring-2 ring-[#00d2ff] animate-pulse' : 'ring-2 ring-[#ff416c] animate-pulse') : ''}`}
+      } ${isActing ? (isPlayer ? 'ring-2 ring-[#c8aa6e] animate-pulse' : 'ring-2 ring-[#ff416c] animate-pulse') : ''}`}
     >
       <div className="flex items-center gap-2.5">
         {/* 좌측: 오퍼레이터 대형 포트레이트 */}
         <div
           className={`relative w-12 h-12 sm:w-13 sm:h-13 rounded-xl overflow-hidden shrink-0 border-2 ${
             isPlayer
-              ? 'border-[#00d2ff] shadow-[0_0_10px_rgba(0,210,255,0.4)]'
+              ? 'border-[#c8aa6e] shadow-[0_0_10px_rgba(200, 170, 110,0.4)]'
               : 'border-[#ff416c] shadow-[0_0_10px_rgba(255,65,108,0.4)]'
           } bg-[#0c1222] flex items-center justify-center`}
         >
@@ -171,7 +171,7 @@ const OperatorCard: React.FC<OperatorCardProps> = ({
           <span className="absolute bottom-0.5 right-0.5 text-[7.5px] font-mono font-black bg-black/85 px-1 py-0.2 rounded text-[#ffd54f] border border-[#ffd54f]/40 leading-none">
             Lv.{hero?.level || 1}
           </span>
-          <span className={`absolute top-0.5 left-0.5 text-[6.5px] font-bold px-1 py-0.2 rounded leading-none ${isPlayer ? 'bg-[#00d2ff]/80 text-black' : 'bg-[#ff416c]/80 text-white'}`}>
+          <span className={`absolute top-0.5 left-0.5 text-[6.5px] font-bold px-1 py-0.2 rounded leading-none ${isPlayer ? 'bg-[#c8aa6e]/80 text-black' : 'bg-[#ff416c]/80 text-white'}`}>
             {isPlayer ? '🎯 OPERATOR' : '🛡️ DEF-OP'}
           </span>
         </div>
@@ -183,7 +183,7 @@ const OperatorCard: React.FC<OperatorCardProps> = ({
               <span
                 className={`text-[8px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider shrink-0 ${
                   isPlayer
-                    ? 'bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff66]'
+                    ? 'bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e66]'
                     : 'bg-[#ff416c25] text-[#ff80ab] border border-[#ff416c66]'
                 }`}
               >
@@ -212,7 +212,7 @@ const OperatorCard: React.FC<OperatorCardProps> = ({
                 {tacticSkillDesc}
               </span>
             </div>
-            <div className="shrink-0 flex items-center gap-1 pl-1.5 border-l border-white/10 font-mono text-[7px] text-[#00d2ff]">
+            <div className="shrink-0 flex items-center gap-1 pl-1.5 border-l border-white/10 font-mono text-[7px] text-[#c8aa6e]">
               계수 {isPlayer ? `${Math.round(tactic.siegePower * 100)}%` : `${Math.round(tactic.defensePower * 100)}%`}
             </div>
           </div>
@@ -357,7 +357,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const [actionBanner, setActionBanner] = useState<{ text: string; sub: string; color: string }>({
     text: '🏰 차원 공성전 프로토콜 개시 (3인 결사대 + 1인 오퍼레이터)',
     sub: `${MAX_SIEGE_ROUNDS}라운드 내에 적 영지의 차원 보호막을 돌파하십시오!`,
-    color: '#00d2ff',
+    color: '#c8aa6e',
   });
 
   const [battleResult, setBattleResult] = useState<{
@@ -821,7 +821,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     setActionBanner({
       text: `🎯 [공성 전술 발동] ${op ? op.name : '오퍼레이터'} ➔ ${tactic.siegeSkillName}!`,
       sub: `${tactic.siegeDesc} (공성 파괴력 ${Math.round(tactic.siegePower * 100)}%)`,
-      color: '#00d2ff',
+      color: '#c8aa6e',
     });
 
     const aliveP = playerTeamRef.current.filter(c => c.currentHp > 0);
@@ -885,7 +885,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         duration: 700,
       },
     ]);
-    gm.emit('battleHitEffect', { x: 50, y: 38, color: 0x00d2ff, isCrit: true, type: 'fire' });
+    gm.emit('battleHitEffect', { x: 50, y: 38, color: 0xc8aa6e, isCrit: true, type: 'fire' });
 
     setBattleLogs(prev => [
       ...prev.slice(-30),
@@ -1644,7 +1644,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           gm.emit('battleHitEffect', {
             x: targetPos.x,
             y: targetPos.y,
-            color: 0x00d2ff,
+            color: 0xc8aa6e,
             isCrit,
             type: isCrit ? 'crit_slash' : 'slash',
           });
@@ -1690,7 +1690,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         setActionBanner({
           text: `⚔️ [공성 돌격] ${attacker.name}의 ${chosenSkill.name}!`,
           sub: `${targetNames}에 총 ${totalDmgDealt.toLocaleString()}의 공성 타격! ${anyCrit ? '💥 치명타 작열!' : ''}${posBonusNotice}${debuffNotice}`,
-          color: '#00d2ff',
+          color: '#c8aa6e',
         });
 
         // 실시간 교전 정보 패널 업데이트
@@ -2113,7 +2113,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           setActionBanner({
             text: `🛡️ [결계 굴절 방호막${isTactCrit ? ' · 극대화' : ''}] ${attacker.name}!`,
             sub: `차원 결계에 고밀도 위상 굴절막 전개 (방어력 +${addedDef} 상승)!`,
-            color: '#00d2ff',
+            color: '#c8aa6e',
           });
           SoundManager.getInstance().play('shield');
 
@@ -2159,7 +2159,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             gm.emit('battleHitEffect', {
               x: defPos.x,
               y: defPos.y,
-              color: 0x00e5ff,
+              color: 0xc8aa6e,
               isCrit: isTactCrit,
               type: 'slash',
             });
@@ -2373,7 +2373,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                   🤖 BOT
                 </span>
               ) : (
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44] font-mono shrink-0">
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] font-mono shrink-0">
                   🌐 지휘관
                 </span>
               )}
@@ -2407,7 +2407,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             className={`px-2 py-1 rounded text-xs font-bold border transition-all cursor-pointer flex items-center gap-1 ${
               battleSpeed === 2.5
                 ? 'bg-[#ff704322] border-[#ff7043] text-[#ff7043] shadow-[0_0_10px_rgba(255,112,67,0.4)]'
-                : 'bg-[#141b2c] border-[#212e48] text-[#ffd54f] hover:border-[#ffd54f]/50'
+                : 'bg-[#14161c] border-[#212e48] text-[#ffd54f] hover:border-[#ffd54f]/50'
             }`}
             onClick={() => setBattleSpeed(s => (s === 2 ? 2.5 : 2))}
             title="전투 속도 전환"
@@ -2527,19 +2527,19 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                 turretRight.isDestroyed
                   ? 'bg-[#121216]/60 border-[#262832] opacity-45 grayscale'
                   : selectedFocusTargetId === 'turret_right'
-                  ? 'bg-gradient-to-r from-[#0c242c] to-[#0a1824] border-2 border-[#00d2ff] shadow-[0_0_15px_rgba(0,210,255,0.6)] ring-1 ring-[#00d2ff]'
-                  : 'bg-[#0f1726] border-[#1d2d46] hover:border-[#00d2ff]/60'
+                  ? 'bg-gradient-to-r from-[#0c242c] to-[#0a1824] border-2 border-[#c8aa6e] shadow-[0_0_15px_rgba(200, 170, 110,0.6)] ring-1 ring-[#c8aa6e]'
+                  : 'bg-[#0f1726] border-[#1d2d46] hover:border-[#c8aa6e]/60'
               }`}
             >
               {selectedFocusTargetId === 'turret_right' && !turretRight.isDestroyed && (
-                <span className="absolute top-1 right-1 text-[6.5px] px-1 py-0.2 rounded bg-[#00d2ff] text-black font-black uppercase tracking-wider animate-pulse z-10">
+                <span className="absolute top-1 right-1 text-[6.5px] px-1 py-0.2 rounded bg-[#c8aa6e] text-black font-black uppercase tracking-wider animate-pulse z-10">
                   🎯 집중 공격
                 </span>
               )}
 
               {/* 포탑 헤더 & 사수 포트레이트 */}
               <div className="flex items-center gap-1.5">
-                <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-[#00d2ff55] bg-black/60 flex items-center justify-center">
+                <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-[#c8aa6e55] bg-black/60 flex items-center justify-center">
                   {rightTurretHero && getHeroPortraitUrl(rightTurretHero.classId) ? (
                     <img
                       src={getHeroPortraitUrl(rightTurretHero.classId)}
@@ -2576,7 +2576,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
               {/* 버프 배지 */}
               <div className="flex items-center justify-between text-[7.5px] px-1 py-0.5 bg-black/40 rounded border border-white/5">
-                <span className="text-[#00d2ff] font-bold truncate">✨ 전술 증폭 (스킬)</span>
+                <span className="text-[#c8aa6e] font-bold truncate">✨ 전술 증폭 (스킬)</span>
                 <span className="font-mono text-[#ffd54f] shrink-0">
                   +{((oppTower?.defense?.tier3 || oppTower?.attack?.tier2 || 1) * 30)}%
                 </span>
@@ -2588,7 +2588,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               {/* HP Bar */}
               <div className="w-full bg-black/60 rounded-full h-1.5 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-[#00d2ff] to-[#38ef7d] h-full transition-all duration-300"
+                  className="bg-gradient-to-r from-[#c8aa6e] to-[#38ef7d] h-full transition-all duration-300"
                   style={{ width: `${turretRightHpPct}%` }}
                 />
               </div>
@@ -2610,15 +2610,15 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               barrierState.isDestroyed
                 ? 'bg-[#10141d]/70 border-[#262f40] opacity-40'
                 : selectedFocusTargetId === 'dimensional_barrier'
-                ? 'bg-gradient-to-r from-[#09223b]/95 via-[#0b3356]/95 to-[#081f36]/95 border-[#00d2ff] shadow-[0_0_25px_rgba(0,210,255,0.7)] ring-2 ring-[#00d2ff]'
-                : 'bg-gradient-to-r from-[#071728]/90 via-[#0a233b]/90 to-[#061525]/90 border-[#00d2ff66] shadow-[0_0_15px_rgba(0,210,255,0.35)] hover:border-[#00d2ff]'
+                ? 'bg-gradient-to-r from-[#09223b]/95 via-[#0b3356]/95 to-[#081f36]/95 border-[#c8aa6e] shadow-[0_0_25px_rgba(200, 170, 110,0.7)] ring-2 ring-[#c8aa6e]'
+                : 'bg-gradient-to-r from-[#071728]/90 via-[#0a233b]/90 to-[#061525]/90 border-[#c8aa6e66] shadow-[0_0_15px_rgba(200, 170, 110,0.35)] hover:border-[#c8aa6e]'
             } ${isBarrierHit ? 'animate-pulse scale-[1.01] border-[#ff1744] shadow-[0_0_35px_rgba(255,23,68,0.9)]' : ''}`}
           >
             {/* 육각형 홀로그램 배리어 배경 텍스처 오버레이 */}
             <div
               className="absolute inset-0 pointer-events-none opacity-20"
               style={{
-                backgroundImage: `radial-gradient(circle at 50% 50%, #00d2ff 10%, transparent 60%)`,
+                backgroundImage: `radial-gradient(circle at 50% 50%, #c8aa6e 10%, transparent 60%)`,
               }}
             />
 
@@ -2626,7 +2626,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             <div className="flex items-center justify-between relative z-10 gap-2">
               <div className="flex items-center gap-2 min-w-0">
                 {/* 결속 수호자 포트레이트 */}
-                <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shrink-0 border-2 border-[#00d2ff] bg-black/60 flex items-center justify-center shadow-[0_0_8px_rgba(0,210,255,0.4)]">
+                <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shrink-0 border-2 border-[#c8aa6e] bg-black/60 flex items-center justify-center shadow-[0_0_8px_rgba(200, 170, 110,0.4)]">
                   {barrierHero && getHeroPortraitUrl(barrierHero.classId) ? (
                     <img
                       src={getHeroPortraitUrl(barrierHero.classId)}
@@ -2640,20 +2640,20 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                   <span className="absolute bottom-0 right-0 text-[6.5px] font-mono font-bold bg-black/85 px-0.5 rounded text-[#ffd54f] leading-none">
                     Lv.{barrierHero?.level || target.gateLevel}
                   </span>
-                  <span className="absolute top-0 left-0 text-[5.5px] font-bold bg-[#00d2ff] text-black px-0.5 rounded-br leading-none">
+                  <span className="absolute top-0 left-0 text-[5.5px] font-bold bg-[#c8aa6e] text-black px-0.5 rounded-br leading-none">
                     결속
                   </span>
                 </div>
 
                 <div className="min-w-0">
                   <div className="text-[11px] sm:text-xs font-black text-white flex items-center gap-1.5 flex-wrap">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d2ff] via-[#80deea] to-[#ffffff] truncate">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c8aa6e] via-[#80deea] to-[#ffffff] truncate">
                       차원 왜곡 보호막
                     </span>
                     <span className="text-[7px] px-1 py-0.2 rounded font-bold bg-[#42a5f525] text-[#42a5f5] border border-[#42a5f555] shrink-0">
                       후열
                     </span>
-                    <span className="text-[7.5px] font-mono px-1 py-0.2 rounded bg-[#00d2ff25] text-[#00d2ff] border border-[#00d2ff55] shrink-0">
+                    <span className="text-[7.5px] font-mono px-1 py-0.2 rounded bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] shrink-0">
                       방어력 {barrierState.def}
                     </span>
                   </div>
@@ -2670,7 +2670,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               </div>
 
               {selectedFocusTargetId === 'dimensional_barrier' && (
-                <span className="text-[7.5px] sm:text-[8.5px] px-2 py-0.5 rounded-full font-black bg-[#00d2ff] text-black shadow-[0_0_12px_rgba(0,210,255,0.8)] animate-bounce shrink-0">
+                <span className="text-[7.5px] sm:text-[8.5px] px-2 py-0.5 rounded-full font-black bg-[#c8aa6e] text-black shadow-[0_0_12px_rgba(200, 170, 110,0.8)] animate-bounce shrink-0">
                   🎯 집중 돌파 중
                 </span>
               )}
@@ -2680,9 +2680,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             {renderStatusBadges(barrierState.statusEffects, barrierState.isDestroyed)}
 
             {/* 대형 보호막 HP 게이지 바 */}
-            <div className="relative w-full bg-black/80 rounded-full h-2.5 sm:h-3 overflow-hidden p-0.5 border border-[#00d2ff44]">
+            <div className="relative w-full bg-black/80 rounded-full h-2.5 sm:h-3 overflow-hidden p-0.5 border border-[#c8aa6e44]">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#00d2ff] via-[#38ef7d] to-[#ffd54f] transition-all duration-300 relative shadow-[0_0_15px_rgba(0,210,255,0.8)]"
+                className="h-full rounded-full bg-gradient-to-r from-[#c8aa6e] via-[#38ef7d] to-[#ffd54f] transition-all duration-300 relative shadow-[0_0_15px_rgba(200, 170, 110,0.8)]"
                 style={{ width: `${barrierHpPct}%` }}
               >
                 <div className="absolute inset-0 bg-white/25 animate-pulse" />
@@ -2714,7 +2714,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           </div>
 
           {/* 중앙 배지 */}
-          <div className="px-3 py-1 rounded-full bg-[#0d1527ee] border border-[#00d2ff55] shadow-xl text-center max-w-[95%] transition-all duration-300 z-10">
+          <div className="px-3 py-1 rounded-full bg-[#0d1527ee] border border-[#c8aa6e55] shadow-xl text-center max-w-[95%] transition-all duration-300 z-10">
             <span className="text-[10px] sm:text-[11px] font-bold block truncate" style={{ color: actionBanner.color }}>
               {actionBanner.text}
             </span>
@@ -2755,7 +2755,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                       : isTargeted
                       ? 'bg-[#3b0d18] border-2 border-[#ff1744] shadow-[0_0_20px_rgba(255,23,68,0.95)] scale-105 z-20'
                       : isActive
-                      ? 'bg-[#0f243c] border-[#00d2ff] shadow-[0_0_10px_rgba(0,210,255,0.4)] ring-1 ring-[#00d2ff]'
+                      ? 'bg-[#0f243c] border-[#c8aa6e] shadow-[0_0_10px_rgba(200, 170, 110,0.4)] ring-1 ring-[#c8aa6e]'
                       : 'bg-[#0d1726] border-[#1a2d48]'
                   }`}
                 >
@@ -2765,14 +2765,14 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                     </span>
                   )}
                   {isActive && !isDead && (
-                    <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[6.5px] px-1.5 py-0.1 rounded-full font-bold bg-[#00d2ff] text-black shadow-md z-10 animate-bounce">
+                    <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[6.5px] px-1.5 py-0.1 rounded-full font-bold bg-[#c8aa6e] text-black shadow-md z-10 animate-bounce">
                       돌격
                     </span>
                   )}
 
                   {/* 포트레이트 및 영웅 정보 */}
                   <div className="flex items-center gap-1.5">
-                    <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-[#00d2ff55] bg-black/60 flex items-center justify-center">
+                    <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-[#c8aa6e55] bg-black/60 flex items-center justify-center">
                       {portraitUrl ? (
                         <img
                           src={portraitUrl}
@@ -2791,7 +2791,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between">
                         <div className="text-[9px] sm:text-[9.5px] font-bold text-white truncate">{h.name}</div>
-                        <span className="text-[6.5px] font-mono text-[#00d2ff] font-bold shrink-0">
+                        <span className="text-[6.5px] font-mono text-[#c8aa6e] font-bold shrink-0">
                           {h.position === 'front' ? '전열' : '후열'}
                         </span>
                       </div>
@@ -2805,7 +2805,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                   </div>
                   {/* MP Bar */}
                   <div className="w-full bg-[#151f33] rounded-full h-0.5 overflow-hidden">
-                    <div className="bg-[#00d2ff] h-full transition-all duration-300" style={{ width: `${mpPct}%` }} />
+                    <div className="bg-[#c8aa6e] h-full transition-all duration-300" style={{ width: `${mpPct}%` }} />
                   </div>
 
                   {/* 상태이상 뱃지 표시 */}
@@ -2919,15 +2919,15 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             backdropFilter: 'blur(10px)',
           }}
         >
-          <div className="absolute w-96 h-96 rounded-full bg-gradient-to-tr from-[#ff416c55] via-[#8a2be244] to-[#00d2ff55] blur-3xl animate-pulse pointer-events-none" />
-          <div className="absolute w-72 h-72 rounded-full border-2 border-dashed border-[#00d2ff88] animate-spin pointer-events-none" style={{ animationDuration: '6s' }} />
+          <div className="absolute w-96 h-96 rounded-full bg-gradient-to-tr from-[#ff416c55] via-[#8a2be244] to-[#c8aa6e55] blur-3xl animate-pulse pointer-events-none" />
+          <div className="absolute w-72 h-72 rounded-full border-2 border-dashed border-[#c8aa6e88] animate-spin pointer-events-none" style={{ animationDuration: '6s' }} />
 
           {/* 상단 배너 */}
           <div className="relative z-10 flex flex-col items-center gap-1.5 mb-6 text-center animate-fade-in">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00d2ff25] border border-[#00d2ff] text-[#00d2ff] text-xs font-mono font-bold tracking-widest uppercase shadow-[0_0_20px_rgba(0,210,255,0.5)]">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#c8aa6e25] border border-[#c8aa6e] text-[#c8aa6e] text-xs font-mono font-bold tracking-widest uppercase shadow-[0_0_20px_rgba(200, 170, 110,0.5)]">
               <span>🛡️ DIMENSIONAL SIEGE ASSAULT</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_2px_15px_rgba(0,210,255,0.8)] mt-2">
+            <h2 className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_2px_15px_rgba(200, 170, 110,0.8)] mt-2">
               vs {target.name}
             </h2>
             <div className="text-xs text-[#a0aec0] mt-0.5">
@@ -2940,9 +2940,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             {countdown === 'ENGAGE' ? (
               <div className="flex flex-col items-center justify-center text-center w-full animate-scale-up">
                 <div
-                  className="text-5xl sm:text-7xl font-black font-cinzel text-transparent bg-clip-text bg-gradient-to-r from-[#ff416c] via-[#ffd54f] to-[#00d2ff] animate-bounce text-center w-full flex justify-center items-center"
+                  className="text-5xl sm:text-7xl font-black font-cinzel text-transparent bg-clip-text bg-gradient-to-r from-[#ff416c] via-[#ffd54f] to-[#c8aa6e] animate-bounce text-center w-full flex justify-center items-center"
                   style={{
-                    filter: 'drop-shadow(0 0 35px rgba(0,210,255,0.95))',
+                    filter: 'drop-shadow(0 0 35px rgba(200, 170, 110,0.95))',
                     WebkitBackgroundClip: 'text',
                   }}
                 >
@@ -2954,13 +2954,13 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               </div>
             ) : (
               <div key={countdown} className="relative flex items-center justify-center animate-scale-up">
-                <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full border-4 border-t-transparent border-b-[#ff416c] border-l-[#00d2ff] border-r-[#ffd54f] animate-spin shadow-[0_0_35px_rgba(0,210,255,0.6)]" />
+                <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full border-4 border-t-transparent border-b-[#ff416c] border-l-[#c8aa6e] border-r-[#ffd54f] animate-spin shadow-[0_0_35px_rgba(200, 170, 110,0.6)]" />
                 <span
                   className="absolute font-black font-cinzel leading-none select-none"
                   style={{
                     fontSize: '6.5rem',
-                    color: countdown === 3 ? '#ffd54f' : countdown === 2 ? '#ff416c' : '#00d2ff',
-                    textShadow: '0 0 50px rgba(0,210,255,0.95)',
+                    color: countdown === 3 ? '#ffd54f' : countdown === 2 ? '#ff416c' : '#c8aa6e',
+                    textShadow: '0 0 50px rgba(200, 170, 110,0.95)',
                   }}
                 >
                   {countdown}
@@ -2975,7 +2975,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             </div>
             <div className="w-60 h-2 bg-[#141d2e] rounded-full overflow-hidden border border-[#23334d]">
               <div
-                className="h-full bg-gradient-to-r from-[#00d2ff] via-[#ffd54f] to-[#ff416c] transition-all duration-700"
+                className="h-full bg-gradient-to-r from-[#c8aa6e] via-[#ffd54f] to-[#ff416c] transition-all duration-700"
                 style={{
                   width: countdown === 3 ? '33%' : countdown === 2 ? '66%' : '100%',
                 }}

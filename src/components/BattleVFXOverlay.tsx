@@ -293,7 +293,7 @@ export const CustomSpriteVFX: React.FC<{
         <img
           src={src}
           alt={type}
-          className="w-full h-full object-contain filter drop-shadow-[0_0_25px_rgba(0,210,255,0.85)]"
+          className="w-full h-full object-contain filter drop-shadow-[0_0_25px_rgba(200, 170, 110,0.85)]"
         />
       </div>
     );
@@ -306,7 +306,7 @@ export const CustomSpriteVFX: React.FC<{
   const posY = spriteInfo.rows > 1 ? (row / (spriteInfo.rows - 1)) * 100 : 0;
 
   return (
-    <div className={`relative w-48 h-48 flex items-center justify-center overflow-hidden animate-scale-up select-none filter drop-shadow-[0_0_30px_rgba(0,210,255,0.95)] transition-opacity duration-150 ${isFinished ? 'opacity-0' : 'opacity-100'}`}>
+    <div className={`relative w-48 h-48 flex items-center justify-center overflow-hidden animate-scale-up select-none filter drop-shadow-[0_0_30px_rgba(200, 170, 110,0.95)] transition-opacity duration-150 ${isFinished ? 'opacity-0' : 'opacity-100'}`}>
       <div
         className="w-full h-full"
         style={{
@@ -385,7 +385,7 @@ const VFXInstance: React.FC<{
             <div className="relative w-80 h-80 sm:w-104 sm:h-104 flex items-center justify-center animate-boss-vortex">
               {/* 블랙홀 흡입 왜곡 링 */}
               <div className="absolute inset-0 rounded-full border-4 border-[#aa00ff] animate-spin opacity-90" style={{ animationDuration: '2s', boxShadow: '0 0 40px #aa00ff, inset 0 0 40px #4a148c' }} />
-              <div className="absolute w-44 h-44 rounded-full border-4 border-[#00e5ff] animate-spin opacity-80" style={{ animationDirection: 'reverse', animationDuration: '1.5s', boxShadow: '0 0 30px #00e5ff' }} />
+              <div className="absolute w-44 h-44 rounded-full border-4 border-[#c8aa6e] animate-spin opacity-80" style={{ animationDirection: 'reverse', animationDuration: '1.5s', boxShadow: '0 0 30px #c8aa6e' }} />
               <div className="absolute w-28 h-28 rounded-full bg-black border-2 border-[#d500f9] shadow-[0_0_50px_#d500f9] flex items-center justify-center">
                 <span className="text-4xl animate-pulse">👁️</span>
               </div>
@@ -449,10 +449,10 @@ const VFXInstance: React.FC<{
             <div className="relative w-52 h-52 flex items-center justify-center animate-vfx-blizzard">
               {/* 혹한의 눈보라 폭풍 */}
               <svg className="w-full h-full animate-spin" style={{ animationDuration: '2s' }} viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#00e5ff" strokeWidth="3" strokeDasharray="12 6" filter="drop-shadow(0 0 12px #00e5ff)" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#c8aa6e" strokeWidth="3" strokeDasharray="12 6" filter="drop-shadow(0 0 12px #c8aa6e)" />
                 <polygon points="60,10 70,50 110,60 70,70 60,110 50,70 10,60 50,50" fill="none" stroke="#80d8ff" strokeWidth="2.5" />
               </svg>
-              <div className="text-4xl animate-pulse" style={{ filter: 'drop-shadow(0 0 15px #00e5ff)' }}>❄️</div>
+              <div className="text-4xl animate-pulse" style={{ filter: 'drop-shadow(0 0 15px #c8aa6e)' }}>❄️</div>
             </div>
           )}
 
@@ -475,7 +475,7 @@ const VFXInstance: React.FC<{
               <svg className="w-full h-full" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="40" fill="none" stroke="#d500f9" strokeWidth="3" strokeDasharray="8 6" filter="drop-shadow(0 0 15px #d500f9)" />
                 <polygon points="50,15 85,75 15,75" fill="none" stroke="#651fff" strokeWidth="2.5" />
-                <polygon points="50,85 85,25 15,25" fill="none" stroke="#00e5ff" strokeWidth="2" />
+                <polygon points="50,85 85,25 15,25" fill="none" stroke="#c8aa6e" strokeWidth="2" />
               </svg>
               <div className="text-4xl animate-pulse">🔮</div>
             </div>
@@ -526,7 +526,7 @@ const VFXInstance: React.FC<{
           {(vfx.type === 'slash' || vfx.type === 'slash_aoe') && (
             <div className="relative w-40 h-40 flex items-center justify-center animate-vfx-slash">
               <svg className="w-full h-full" viewBox="0 0 100 100">
-                <line x1="15" y1="85" x2="85" y2="15" stroke="#00d2ff" strokeWidth="6" strokeLinecap="round" filter="drop-shadow(0 0 8px #00d2ff)" />
+                <line x1="15" y1="85" x2="85" y2="15" stroke="#c8aa6e" strokeWidth="6" strokeLinecap="round" filter="drop-shadow(0 0 8px #c8aa6e)" />
                 <line x1="25" y1="80" x2="80" y2="25" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
               </svg>
               <div className="absolute w-8 h-8 rounded-full bg-white animate-vfx-flash" />
@@ -565,9 +565,9 @@ const VFXInstance: React.FC<{
 
           {(vfx.type === 'ice' || vfx.type === 'ice_aoe') && (
             <div className="relative w-40 h-40 flex items-center justify-center animate-vfx-ice">
-              <div className="text-4xl animate-spin" style={{ filter: 'drop-shadow(0 0 12px #00e5ff)' }}>❄️</div>
+              <div className="text-4xl animate-spin" style={{ filter: 'drop-shadow(0 0 12px #c8aa6e)' }}>❄️</div>
               <svg className="absolute w-full h-full animate-pulse" viewBox="0 0 100 100">
-                <polygon points="50,10 60,40 90,50 60,60 50,90 40,60 10,50 40,40" fill="none" stroke="#80d8ff" strokeWidth="3" filter="drop-shadow(0 0 8px #00e5ff)" />
+                <polygon points="50,10 60,40 90,50 60,60 50,90 40,60 10,50 40,40" fill="none" stroke="#80d8ff" strokeWidth="3" filter="drop-shadow(0 0 8px #c8aa6e)" />
               </svg>
             </div>
           )}
@@ -575,7 +575,7 @@ const VFXInstance: React.FC<{
           {(vfx.type === 'lightning' || vfx.type === 'lightning_aoe') && (
             <div className="relative w-40 h-48 flex items-center justify-center animate-vfx-lightning">
               <svg className="w-full h-full" viewBox="0 0 100 100">
-                <polyline points="50,0 35,40 65,45 40,100" fill="none" stroke="#ffd54f" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" filter="drop-shadow(0 0 12px #00e5ff)" />
+                <polyline points="50,0 35,40 65,45 40,100" fill="none" stroke="#ffd54f" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" filter="drop-shadow(0 0 12px #c8aa6e)" />
                 <polyline points="50,0 35,40 65,45 40,100" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <div className="absolute inset-0 bg-[#ffd54f15] animate-vfx-flash" />
@@ -593,7 +593,7 @@ const VFXInstance: React.FC<{
           {vfx.type === 'shield' && (
             <div className="relative w-40 h-40 flex items-center justify-center animate-vfx-shield">
               <svg className="w-full h-full" viewBox="0 0 100 100">
-                <polygon points="50,15 85,35 85,75 50,95 15,75 15,35" fill="#00d2ff22" stroke="#00d2ff" strokeWidth="4" strokeLinejoin="round" filter="drop-shadow(0 0 12px #00d2ff)" />
+                <polygon points="50,15 85,35 85,75 50,95 15,75 15,35" fill="#c8aa6e22" stroke="#c8aa6e" strokeWidth="4" strokeLinejoin="round" filter="drop-shadow(0 0 12px #c8aa6e)" />
               </svg>
               <span className="text-2xl">🛡️</span>
             </div>
@@ -609,9 +609,9 @@ const VFXInstance: React.FC<{
           {(vfx.type === 'bullet' || vfx.type === 'bullet_trail' || vfx.type === 'bullet_aoe') && (
             <div className="relative w-44 h-44 flex items-center justify-center animate-vfx-bullet">
               <svg className="w-full h-full" viewBox="0 0 100 100">
-                <line x1="0" y1="50" x2="100" y2="50" stroke="#00e5ff" strokeWidth="6" strokeLinecap="round" filter="drop-shadow(0 0 8px #00e5ff)" />
+                <line x1="0" y1="50" x2="100" y2="50" stroke="#c8aa6e" strokeWidth="6" strokeLinecap="round" filter="drop-shadow(0 0 8px #c8aa6e)" />
                 <line x1="30" y1="50" x2="100" y2="50" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
-                <circle cx="80" cy="50" r="12" fill="none" stroke="#00e5ff" strokeWidth="3" />
+                <circle cx="80" cy="50" r="12" fill="none" stroke="#c8aa6e" strokeWidth="3" />
               </svg>
             </div>
           )}
@@ -635,7 +635,7 @@ const VFXInstance: React.FC<{
 
           {vfx.type === 'sonic' && (
             <div className="relative w-40 h-40 flex items-center justify-center animate-vfx-sonic">
-              <div className="absolute w-20 h-20 rounded-full border-2 border-[#00e5ff] animate-ping opacity-80" />
+              <div className="absolute w-20 h-20 rounded-full border-2 border-[#c8aa6e] animate-ping opacity-80" />
               <div className="absolute w-32 h-32 rounded-full border border-[#80d8ff] animate-ping opacity-50" />
               <div className="text-2xl">🔊</div>
             </div>
@@ -697,15 +697,15 @@ const VFXInstance: React.FC<{
           {vfx.type === 'charge' && (
             <div className="relative w-56 h-56 flex items-center justify-center">
               <div
-                className="absolute inset-0 rounded-full border-4 border-dashed border-[#00e5ff] animate-spin opacity-85"
-                style={{ animationDuration: '1.2s', boxShadow: '0 0 35px #00e5ff, inset 0 0 25px #00b0ff' }}
+                className="absolute inset-0 rounded-full border-4 border-dashed border-[#c8aa6e] animate-spin opacity-85"
+                style={{ animationDuration: '1.2s', boxShadow: '0 0 35px #c8aa6e, inset 0 0 25px #00b0ff' }}
               />
               <div
                 className="absolute w-40 h-40 rounded-full border-2 border-dotted border-[#ffd54f] animate-spin opacity-75"
                 style={{ animationDirection: 'reverse', animationDuration: '0.8s', boxShadow: '0 0 20px #ffd54f' }}
               />
-              <div className="absolute inset-8 rounded-full bg-[#00e5ff22] animate-ping opacity-60" />
-              <div className="text-5xl animate-bounce filter drop-shadow-[0_0_20px_#00e5ff]">⚡</div>
+              <div className="absolute inset-8 rounded-full bg-[#c8aa6e22] animate-ping opacity-60" />
+              <div className="text-5xl animate-bounce filter drop-shadow-[0_0_20px_#c8aa6e]">⚡</div>
               <div className="absolute -top-2 text-xl animate-pulse">✨</div>
               <div className="absolute -bottom-2 text-xl animate-pulse">✨</div>
             </div>
@@ -752,7 +752,7 @@ const VFXInstance: React.FC<{
               : vfx.isHeal
               ? 'text-lg text-[#69f0ae]'
               : vfx.isShield
-              ? 'text-base text-[#00d2ff]'
+              ? 'text-base text-[#c8aa6e]'
               : (vfx.isBlock || vfx.text === 'Block!')
               ? 'text-xl sm:text-2xl text-[#64b5f6] scale-110'
               : (vfx.text?.includes('MISS') || vfx.text?.includes('EVADE') || vfx.type === 'evade')
@@ -765,7 +765,7 @@ const VFXInstance: React.FC<{
               : (vfx.isBlock || vfx.text === 'Block!')
               ? '0 0 10px #1e88e5, 0 0 20px #90caf9'
               : (vfx.text?.includes('MISS') || vfx.text?.includes('EVADE') || vfx.type === 'evade')
-              ? '0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.7), 0 2px 4px #000000'
+              ? '0 0 10px #c8aa6e, 0 0 20px rgba(200, 170, 110,0.7), 0 2px 4px #000000'
               : '0 0 8px rgba(0,0,0,0.8)'
           }}
         >

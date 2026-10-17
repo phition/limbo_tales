@@ -67,9 +67,9 @@ export const FEVER_BADGE_META: Record<FeverBadgeType, FeverBadgeMeta> = {
     label: '차징 붕괴',
     shortLabel: 'BREAK',
     icon: '💫',
-    color: '#00d2ff',
-    borderColor: '#00d2ff88',
-    bg: '#00d2ff22',
+    color: '#c8aa6e',
+    borderColor: '#c8aa6e88',
+    bg: '#c8aa6e22',
     description: '적의 차징 캔슬 및 그로기 유발'
   },
   evade: {
@@ -77,9 +77,9 @@ export const FEVER_BADGE_META: Record<FeverBadgeType, FeverBadgeMeta> = {
     label: '회피 기동',
     shortLabel: 'EVADE',
     icon: '🌀',
-    color: '#00e5ff',
-    borderColor: '#00e5ff88',
-    bg: '#00e5ff22',
+    color: '#c8aa6e',
+    borderColor: '#c8aa6e88',
+    bg: '#c8aa6e22',
     description: '적의 공격을 회피(EVADE)하여 흘려냄'
   }
 };
@@ -244,9 +244,9 @@ export function evaluateFeverSynergy(badges: FeverBadgeType[] = [], party: Merce
       name: '환영 신기루',
       subTitle: 'Mirage Step',
       icon: '🌀⚔️',
-      color: '#00e5ff',
-      bg: 'linear-gradient(135deg, rgba(0,229,255,0.3), rgba(0,25,35,0.9))',
-      borderColor: '#00e5ff',
+      color: '#c8aa6e',
+      bg: 'linear-gradient(135deg, rgba(200, 170, 110,0.3), rgba(0,25,35,0.9))',
+      borderColor: '#c8aa6e',
       summary: '파티 전원 명중력 +50% 증가 & 2턴간 [환영 반격 결계] 전개',
       powerMult: 1.35,
       critRateBonus: 0.20,
@@ -332,9 +332,9 @@ export function evaluateFeverSynergy(badges: FeverBadgeType[] = [], party: Merce
       name: '불멸의 요새',
       subTitle: 'Immortal Bastion',
       icon: '🛡️🏰',
-      color: '#00d2ff',
-      bg: 'linear-gradient(135deg, rgba(0,210,255,0.25), rgba(10,25,45,0.9))',
-      borderColor: '#00d2ff',
+      color: '#c8aa6e',
+      bg: 'linear-gradient(135deg, rgba(200, 170, 110,0.25), rgba(10,25,45,0.9))',
+      borderColor: '#c8aa6e',
       summary: '전 파티원 최대 HP 30% 에테르 방벽 부여 + 2턴간 100% 환영 반격 결계',
       powerMult: 1.4,
       critRateBonus: 0.2,
@@ -466,7 +466,7 @@ export const FEVER_AFFINITY_META: Record<FeverAffinity, { label: string; icon: s
   trick: {
     label: '변칙계',
     icon: '🌀',
-    color: '#00e5ff',
+    color: '#c8aa6e',
     desc: '회피/흡혈/브레이크 중심의 전술 교란 진형입니다.'
   },
   joker: {
@@ -719,9 +719,9 @@ export const ALL_FEVER_SYNERGIES_CODEX: FeverCodexItem[] = [
     requiredBadges: '🌀 회피 3개 이상',
     summary: '파티 전원 명중력 +50% 증가 & 2턴간 [환영 반격 결계] 전개',
     icon: '🌀⚔️',
-    color: '#00e5ff',
-    bg: 'linear-gradient(135deg, rgba(0,229,255,0.25), rgba(0,25,35,0.9))',
-    borderColor: '#00e5ff'
+    color: '#c8aa6e',
+    bg: 'linear-gradient(135deg, rgba(200, 170, 110,0.25), rgba(0,25,35,0.9))',
+    borderColor: '#c8aa6e'
   },
   {
     id: 'immortal_bastion',
@@ -733,9 +733,9 @@ export const ALL_FEVER_SYNERGIES_CODEX: FeverCodexItem[] = [
     requiredBadges: '🛡️ 가드 2개 + ⚔️ 카운터 2개',
     summary: '전 파티원 최대 HP 30% 에테르 방벽 부여 + 2턴간 100% 환영 반격 결계',
     icon: '🛡️🏰',
-    color: '#00d2ff',
-    bg: 'linear-gradient(135deg, rgba(0,210,255,0.25), rgba(10,25,45,0.9))',
-    borderColor: '#00d2ff'
+    color: '#c8aa6e',
+    bg: 'linear-gradient(135deg, rgba(200, 170, 110,0.25), rgba(10,25,45,0.9))',
+    borderColor: '#c8aa6e'
   },
   {
     id: 'vampiric_requiem',

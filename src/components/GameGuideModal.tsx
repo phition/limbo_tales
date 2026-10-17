@@ -26,19 +26,19 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-2.5 sm:p-5 animate-fade-in backdrop-blur-md">
       <div
-        className="relative w-full max-w-[860px] h-[94vh] max-h-[920px] bg-[#0c111d] border-2 border-[#00d2ff55] rounded-2xl flex flex-col shadow-2xl overflow-hidden shadow-[#00d2ff20]"
+        className="relative w-full max-w-[860px] h-[94vh] max-h-[920px] bg-[#0c111d] border-2 border-[#c8aa6e55] rounded-2xl flex flex-col shadow-2xl overflow-hidden shadow-[#c8aa6e20]"
         onClick={e => e.stopPropagation()}
       >
         {/* ── 📖 모달 최상단 헤더 ── */}
         <div className="flex items-center justify-between px-5 py-4 bg-[#070b14] border-b border-[#1f2b42] shrink-0">
           <div className="flex items-center gap-3">
-            <span className="text-3xl p-1.5 rounded-xl bg-[#00d2ff15] border border-[#00d2ff44]">📖</span>
+            <span className="text-3xl p-1.5 rounded-xl bg-[#c8aa6e15] border border-[#c8aa6e44]">📖</span>
             <div>
               <div className="flex items-center gap-2.5 flex-wrap">
-                <span className="text-xl sm:text-2xl font-bold text-[#00d2ff] font-cinzel tracking-wide">
+                <span className="text-xl sm:text-2xl font-bold text-[#c8aa6e] font-cinzel tracking-wide">
                   {lang === 'en' ? 'Ark Survival Master Compendium' : lang === 'ja' ? '方舟生存公式マスター大百科' : '방주 생존 공식 마스터 대백과'}
                 </span>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#00d2ff22] text-[#00d2ff] font-mono font-bold border border-[#00d2ff44]">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#c8aa6e22] text-[#c8aa6e] font-mono font-bold border border-[#c8aa6e44]">
                   v0.9.7 Master Edition
                 </span>
               </div>
@@ -71,7 +71,7 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                 key={k}
                 className={`flex-1 min-w-[125px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 shrink-0 ${
                   tab === k
-                    ? 'bg-gradient-to-r from-[#00b4db] to-[#0083b0] text-white shadow-lg shadow-[#00d2ff33] border border-[#00e5ff88] scale-[1.02]'
+                    ? 'bg-gradient-to-r from-[#00b4db] to-[#0083b0] text-white shadow-lg shadow-[#c8aa6e33] border border-[#c8aa6e88] scale-[1.02]'
                     : 'bg-[#111726] text-[#8b9bb4] hover:text-white hover:bg-[#182238] border border-[#1e2a40]'
                 }`}
                 onClick={() => setTab(k)}
@@ -126,15 +126,15 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
               </div>
 
               {/* 심연 10개 층계의 구조와 서사적 여정 */}
-              <div className="p-5 rounded-2xl bg-[#0f1626] border border-[#00d2ff44] flex flex-col gap-3.5">
+              <div className="p-5 rounded-2xl bg-[#0f1626] border border-[#c8aa6e44] flex flex-col gap-3.5">
                 <div className="flex items-center justify-between border-b border-[#1e2d48] pb-2.5">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">🗺️</span>
-                    <h3 className="text-base sm:text-lg font-bold text-[#00d2ff]">
+                    <h3 className="text-base sm:text-lg font-bold text-[#c8aa6e]">
                       심연의 탑 10개 층계와 2대 시나리오 챕터
                     </h3>
                   </div>
-                  <span className="text-xs font-mono px-2.5 py-0.5 rounded bg-[#00d2ff15] text-[#00d2ff] font-bold border border-[#00d2ff33]">
+                  <span className="text-xs font-mono px-2.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-bold border border-[#c8aa6e33]">
                     10 Floors Progression
                   </span>
                 </div>
@@ -167,7 +167,7 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
               </div>
 
               {/* 지휘관과 함께하는 초기 결사대 영웅 */}
-              <div className="p-5 rounded-2xl bg-[#0e1424] border border-[#22314d] flex flex-col gap-3">
+              <div className="p-5 rounded-2xl bg-[#0e1016] border border-[#22314d] flex flex-col gap-3">
                 <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                   <span>🛡️</span>
                   <span>방주를 수호하는 초기 2인의 결사대원</span>
@@ -178,7 +178,7 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                       <span className="text-2xl">🛡️</span>
                       <div>
                         <div className="font-bold text-sm sm:text-base text-white">아이리스 (Iris)</div>
-                        <div className="text-xs text-[#00d2ff] font-bold">견습 기사 • 전열 탱커</div>
+                        <div className="text-xs text-[#c8aa6e] font-bold">견습 기사 • 전열 탱커</div>
                       </div>
                     </div>
                     <p className="text-xs text-[#8b9bb4] leading-relaxed mt-1">
@@ -222,10 +222,10 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
              ══════════════════════════════════════════════════════════════ */}
           {tab === 'citadel' && (
             <div className="flex flex-col gap-4 animate-fade-in">
-              <div className="p-4 sm:p-5 rounded-xl bg-[#101728] border border-[#00d2ff44] flex flex-col gap-2">
-                <div className="text-base sm:text-lg font-bold text-[#00d2ff] flex items-center justify-between">
+              <div className="p-4 sm:p-5 rounded-xl bg-[#101728] border border-[#c8aa6e44] flex flex-col gap-2">
+                <div className="text-base sm:text-lg font-bold text-[#c8aa6e] flex items-center justify-between">
                   <span>🏰 방주 성채(Citadel) 영지 발전 & 건물 해금 체계</span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">13대 시설 완비</span>
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">13대 시설 완비</span>
                 </div>
                 <p className="text-sm text-[#cfd8dc]">
                   시설의 해금은 던전 층수에 종속되지 않고, <strong>기초 생산 시설 건설 및 레벨업, 시스템 1회 체험</strong> 등의 영지 발전 퀘스트를 통해 자연스럽게 순차적으로 개방됩니다.
@@ -249,12 +249,12 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                   { icon: '🏛️', name: '방주 중앙 병참고', role: '군수 물자 대용량 보관', desc: '27종의 모든 원자재와 무기, 방어구, 전리품을 안전하게 보관 및 적재 한도를 확장합니다. (Lv.1~10 소량의 골드 유지비 소모)' },
                   { icon: '🌀', name: '차원 앵커 게이트', role: '비동기 PVP & 월드 레이드', desc: '비동기 랭킹 결투, Lv.3 네메시스 월드 레이드, Lv.6 5인 영지 침공 및 명예 상점 1~10단계를 제공합니다. (Lv.4+ 에테르 유지비)' },
                 ].map((b, i) => (
-                  <div key={i} className="p-3.5 rounded-xl bg-[#0e1424] border border-[#1f2c42] flex items-start gap-3">
+                  <div key={i} className="p-3.5 rounded-xl bg-[#0e1016] border border-[#1f2c42] flex items-start gap-3">
                     <span className="text-2xl p-1.5 rounded-lg bg-[#141c2e] border border-[#223350] shrink-0 mt-0.5">{b.icon}</span>
                     <div className="flex-1 min-w-0">
                       <div className="font-bold text-white flex items-center justify-between flex-wrap gap-1">
                         <span className="text-sm sm:text-base">{b.name}</span>
-                        <span className="text-xs text-[#00d2ff] font-mono font-bold bg-[#00d2ff15] px-1.5 py-0.5 rounded">{b.role}</span>
+                        <span className="text-xs text-[#c8aa6e] font-mono font-bold bg-[#c8aa6e15] px-1.5 py-0.5 rounded">{b.role}</span>
                       </div>
                       <p className="text-xs sm:text-sm text-[#8b9bb4] mt-1 leading-relaxed">{b.desc}</p>
                     </div>
@@ -271,10 +271,10 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
             <div className="flex flex-col gap-4 animate-fade-in">
               
               {/* 1. 출정 채비실과 배낭 시스템 */}
-              <div className="p-4 sm:p-5 rounded-xl bg-[#111726] border border-[#00d2ff44] flex flex-col gap-3">
-                <div className="text-base sm:text-lg font-bold text-[#00d2ff] flex items-center justify-between">
+              <div className="p-4 sm:p-5 rounded-xl bg-[#111726] border border-[#c8aa6e44] flex flex-col gap-3">
+                <div className="text-base sm:text-lg font-bold text-[#c8aa6e] flex items-center justify-between">
                   <span>🎒 1. 출정 채비실 & 던전 임시 보관함(배낭)</span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">Pre-Descent Prep</span>
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">Pre-Descent Prep</span>
                 </div>
                 <div className="text-sm sm:text-base text-[#cfd8e8] space-y-2">
                   <p>
@@ -296,19 +296,19 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                   <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold">Interactive Choices</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs sm:text-sm">
-                  <div className="p-3 rounded-lg bg-[#0e1424] border border-[#38ef7d33]">
+                  <div className="p-3 rounded-lg bg-[#0e1016] border border-[#38ef7d33]">
                     <div className="font-bold text-[#38ef7d] mb-1">① 🗝️ 도구 사용 (안전)</div>
                     <div className="text-[#8b9bb4]">
                       열쇠, 곡괭이, 성수, 붕대 등을 소모하여 <strong>100% 안전하게 2배의 보상과 에테르</strong>를 수급합니다.
                     </div>
                   </div>
-                  <div className="p-3 rounded-lg bg-[#0e1424] border border-[#ef535033]">
+                  <div className="p-3 rounded-lg bg-[#0e1016] border border-[#ef535033]">
                     <div className="font-bold text-[#ef5350] mb-1">② 🔨 맨손/강제 시도 (위험)</div>
                     <div className="text-[#8b9bb4]">
                       도구 없이 무력/마력으로 강행 돌파합니다. 일정 확률로 성공하지만 <strong>함정, 파편 반동, 위험도 상승</strong>을 감수합니다.
                     </div>
                   </div>
-                  <div className="p-3 rounded-lg bg-[#0e1424] border border-[#9e9e9e33]">
+                  <div className="p-3 rounded-lg bg-[#0e1016] border border-[#9e9e9e33]">
                     <div className="font-bold text-[#cfd8dc] mb-1">③ 🚶 안전 포기 (지나침)</div>
                     <div className="text-[#8b9bb4]">
                       위험 오브젝트를 건드리지 않고 안전하게 통과하여 파티의 체력을 보존합니다.
@@ -341,10 +341,10 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
             <div className="flex flex-col gap-4 animate-fade-in">
               
               {/* 전투 기본 메커니즘 */}
-              <div className="p-4 sm:p-5 rounded-xl bg-[#131926] border border-[#00d2ff44] flex flex-col gap-2.5">
-                <div className="text-base sm:text-lg font-bold text-[#00d2ff] flex items-center justify-between">
+              <div className="p-4 sm:p-5 rounded-xl bg-[#131926] border border-[#c8aa6e44] flex flex-col gap-2.5">
+                <div className="text-base sm:text-lg font-bold text-[#c8aa6e] flex items-center justify-between">
                   <span>⚔️ 1. 속도(SPD) 기반 턴제 배틀 & 3열 포지션</span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">Speed-Turn Combat</span>
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">Speed-Turn Combat</span>
                 </div>
                 <div className="text-xs sm:text-sm text-[#cfd8dc] space-y-1.5">
                   <p>• <strong>속도(SPD) 선제권</strong>: 아군과 적군의 속도 수치에 따라 턴 큐가 자동 정렬되며, 행동속도가 빠른 영웅이 먼저 스킬을 시전합니다.</p>
@@ -422,16 +422,16 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
               </div>
 
               {/* 🏷️ 무기 6종 고유 특성 뱃지(Weapon Traits) 완전 해설 */}
-              <div className="p-4 sm:p-5 rounded-xl bg-[#151c2e] border border-[#00d2ff55] flex flex-col gap-3">
-                <div className="text-base sm:text-lg font-bold text-[#00d2ff] flex items-center justify-between">
+              <div className="p-4 sm:p-5 rounded-xl bg-[#151c2e] border border-[#c8aa6e55] flex flex-col gap-3">
+                <div className="text-base sm:text-lg font-bold text-[#c8aa6e] flex items-center justify-between">
                   <span>🏷️ 4. 무기 6종 고유 특성(Weapon Traits) & 전투 활용</span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">Weapon Mastery</span>
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">Weapon Mastery</span>
                 </div>
                 <p className="text-xs text-[#90a4ae]">
                   착용한 무기 종류에 따라 고유한 특성 뱃지가 부여되며, 전투 시 차별화된 특수 메커니즘이 발동합니다.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                  <div className="p-3 rounded-lg bg-[#0e1424] border border-[#ff525244] flex flex-col gap-1">
+                  <div className="p-3 rounded-lg bg-[#0e1016] border border-[#ff525244] flex flex-col gap-1">
                     <div className="font-bold text-[#ff5252] flex items-center justify-between">
                       <span>🗡️ [베기] 검 계열 (Sword)</span>
                       <span className="text-[10px] text-[#ff8a80]">상처 절개</span>
@@ -440,7 +440,7 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                       <strong>기본 공격 시</strong> 대상이 [출혈] 상태라면 [상처 절개]가 발동하여 <strong>20% 추가 물리 피해</strong>를 입힙니다. 출혈 스킬을 지닌 도적/전사와 최고의 궁합을 자랑합니다.
                     </div>
                   </div>
-                  <div className="p-3 rounded-lg bg-[#0e1424] border border-[#ff980044] flex flex-col gap-1">
+                  <div className="p-3 rounded-lg bg-[#0e1016] border border-[#ff980044] flex flex-col gap-1">
                     <div className="font-bold text-[#ff9800] flex items-center justify-between">
                       <span>🔱 [방어 파쇄] 창 계열 (Spear)</span>
                       <span className="text-[10px] text-[#ffb74d]">보호막 붕괴</span>
@@ -449,7 +449,7 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                       적의 단단한 <strong>보호막(Shield)에 50% 증폭 피해</strong>를 입힙니다. 두꺼운 보호막을 두르고 출현하는 골렘 및 정예 마물을 단숨에 무력화할 수 있습니다.
                     </div>
                   </div>
-                  <div className="p-3 rounded-lg bg-[#0e1424] border border-[#69f0ae44] flex flex-col gap-1">
+                  <div className="p-3 rounded-lg bg-[#0e1016] border border-[#69f0ae44] flex flex-col gap-1">
                     <div className="font-bold text-[#69f0ae] flex items-center justify-between">
                       <span>🏹 [급소 사격] 활 계열 (Bow)</span>
                       <span className="text-[10px] text-[#a7ffeb]">정밀 사격</span>
@@ -458,8 +458,8 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                       <strong>기본 공격 시 치명타율 +5% 및 치명타 피해 +5%</strong>가 가산됩니다. 후열에서 적의 약점을 노려 일격필살의 치명 피해를 꽂아넣습니다.
                     </div>
                   </div>
-                  <div className="p-3 rounded-lg bg-[#0e1424] border border-[#00e5ff44] flex flex-col gap-1">
-                    <div className="font-bold text-[#00e5ff] flex items-center justify-between">
+                  <div className="p-3 rounded-lg bg-[#0e1016] border border-[#c8aa6e44] flex flex-col gap-1">
+                    <div className="font-bold text-[#c8aa6e] flex items-center justify-between">
                       <span>🔫 [연사] 마총 계열 (Gun)</span>
                       <span className="text-[10px] text-[#80d8ff]">마도 점사</span>
                     </div>
@@ -467,7 +467,7 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                       <strong>기본 공격 시 기본 15% 확률 + 영웅의 행운(🍀) 보정치</strong>로 공격력 45% 위력의 <strong>[추가 점사 탄환]</strong>을 연속 격발합니다. 행운 스탯이 높을수록 연사 빈도가 비약적으로 상승합니다.
                     </div>
                   </div>
-                  <div className="p-3 rounded-lg bg-[#0e1424] border border-[#b388ff44] flex flex-col gap-1">
+                  <div className="p-3 rounded-lg bg-[#0e1016] border border-[#b388ff44] flex flex-col gap-1">
                     <div className="font-bold text-[#b388ff] flex items-center justify-between">
                       <span>⚡ [암습] 단검 계열 (Dagger)</span>
                       <span className="text-[10px] text-[#d1c4e9]">속도 우위</span>
@@ -476,7 +476,7 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                       대상 마물보다 <strong>행동 속도가 빠를수록 피해량이 최대 20%까지 증폭</strong>됩니다. 민첩한 그림자 계열 영웅의 폭발적인 기습 딜링을 보장합니다.
                     </div>
                   </div>
-                  <div className="p-3 rounded-lg bg-[#0e1424] border border-[#e040fb44] flex flex-col gap-1">
+                  <div className="p-3 rounded-lg bg-[#0e1016] border border-[#e040fb44] flex flex-col gap-1">
                     <div className="font-bold text-[#e040fb] flex items-center justify-between">
                       <span>🪄 [공명] 지팡이 계열 (Staff)</span>
                       <span className="text-[10px] text-[#f8bbd0]">마나 절감</span>
@@ -526,8 +526,8 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
               </div>
 
               {/* ⚔️ 차원 아레나 5인 부대 & 피버 콜(Fever Call) 가이드 */}
-              <div className="p-4 rounded-xl bg-[#141a2e] border border-[#00d2ff44] flex flex-col gap-2.5">
-                <div className="text-sm sm:text-base font-bold text-[#00d2ff] flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-[#141a2e] border border-[#c8aa6e44] flex flex-col gap-2.5">
+                <div className="text-sm sm:text-base font-bold text-[#c8aa6e] flex items-center justify-between">
                   <span>
                     {lang === 'en'
                       ? '⚔️ 6. Dimensional Arena 5-Hero Squad & Fever Call Guide'
@@ -584,10 +584,10 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
              ══════════════════════════════════════════════════════════════ */}
           {tab === 'classes' && (
             <div className="flex flex-col gap-4 animate-fade-in">
-              <div className="p-4 sm:p-5 rounded-xl bg-[#131b2e] border border-[#00d2ff44] flex flex-col gap-1.5">
-                <div className="text-base sm:text-lg font-bold text-[#00d2ff] flex items-center justify-between">
+              <div className="p-4 sm:p-5 rounded-xl bg-[#131b2e] border border-[#c8aa6e44] flex flex-col gap-1.5">
+                <div className="text-base sm:text-lg font-bold text-[#c8aa6e] flex items-center justify-between">
                   <span>👑 7대 기본 직업군 및 20종 상위 전직 계보도</span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold">Soul Promotion Tree</span>
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">Soul Promotion Tree</span>
                 </div>
                 <p className="text-xs sm:text-sm text-[#8b9bb4]">
                   용병의 레벨과 영혼의 성소(Sanctuary) 퀘스트를 완료하면 상위 클래스로 영혼을 승격시켜 결전 오의 스킬을 해금합니다.
@@ -633,13 +633,13 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                     desc: '자신의 체력이 낮아질수록 공격력이 기하급수적으로 폭증하며 흡혈 일격으로 자가 회복합니다.'
                   },
                 ].map((c, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-[#0e1424] border border-[#1f2c42] flex flex-col gap-2">
+                  <div key={i} className="p-4 rounded-xl bg-[#0e1016] border border-[#1f2c42] flex flex-col gap-2">
                     <div className="flex items-center justify-between border-b border-[#1f2c42] pb-1.5">
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">{c.icon}</span>
                         <span className="font-bold text-white text-sm sm:text-base">{c.title}</span>
                       </div>
-                      <span className="text-xs text-[#00d2ff] font-bold font-mono">{c.role}</span>
+                      <span className="text-xs text-[#c8aa6e] font-bold font-mono">{c.role}</span>
                     </div>
                     <div className="text-xs font-mono text-[#ffd54f] font-semibold">{c.tree}</div>
                     <p className="text-xs text-[#8b9bb4] leading-relaxed">{c.desc}</p>
@@ -674,8 +674,8 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
                 { step: '5', title: '🏛️ 병기창 & 생체 복원 병동 동시 해금 (이중 테크 전개)', desc: '첫 척후 완료 보상으로 [심연의 병기창]과 [생체 복원 병동]이 동시에 해금됩니다! 병기창에서는 무기 6종의 고유 특성(검: 출혈절개, 창: 쉴드파쇄, 활: 급소치명, 총: 점사)에 맞춰 장비를 단조하고, 부상당한 대원은 생체 병동 병상에 입원시켜 안전하게 회복시키세요.' },
                 { step: '6', title: '🏰 안전 귀환의 원칙 & 자원 유지비 체납 방지', desc: '탐험 중 획득한 전리품은 가방에 보관되므로 무리하게 전멸하지 말고 위험도 70% 이상이거나 체력이 부족하면 [성채 귀환]을 눌러 안전 입고하세요! 또한 시설 Lv.4부터는 골드/식량 유지비가 발생하므로 기초 생산량을 충분히 다지며 증축하는 것이 핵심입니다.' },
               ].map((tip, idx) => (
-                <div key={idx} className="p-3.5 rounded-xl bg-[#0e1424] border border-[#22314d] flex items-start gap-3.5">
-                  <span className="w-8 h-8 rounded-xl bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55] flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
+                <div key={idx} className="p-3.5 rounded-xl bg-[#0e1016] border border-[#22314d] flex items-start gap-3.5">
+                  <span className="w-8 h-8 rounded-xl bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55] flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
                     {tip.step}
                   </span>
                   <div className="flex-1 min-w-0">
@@ -686,8 +686,8 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
               ))}
 
               {/* 자주 묻는 질문 FAQ */}
-              <div className="p-4 sm:p-5 rounded-xl bg-[#111726] border border-[#00d2ff33] flex flex-col gap-3 mt-2">
-                <h3 className="font-bold text-base text-[#00d2ff] flex items-center gap-2">
+              <div className="p-4 sm:p-5 rounded-xl bg-[#111726] border border-[#c8aa6e33] flex flex-col gap-3 mt-2">
+                <h3 className="font-bold text-base text-[#c8aa6e] flex items-center gap-2">
                   <span>❓</span>
                   <span>자주 묻는 질문 (FAQ)</span>
                 </h3>
@@ -724,7 +724,7 @@ export const GameGuideModal: React.FC<Props> = ({ open, onClose }) => {
             Limbo: Ark of the Abyss Official Master Guide • All Rights Reserved
           </div>
           <button
-            className="btn btn-primary text-sm px-6 py-2.5 font-bold shadow-lg shadow-[#00d2ff33] rounded-xl hover:scale-105 transition-all"
+            className="btn btn-primary text-sm px-6 py-2.5 font-bold shadow-lg shadow-[#c8aa6e33] rounded-xl hover:scale-105 transition-all"
             onClick={onClose}
           >
             지침 숙지 완료 닫기

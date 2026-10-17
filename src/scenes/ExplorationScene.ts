@@ -110,7 +110,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.rebuildUI();
 
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-      const circle = this.add.circle(pointer.worldX, pointer.worldY, 8, 0x00d2ff, 0.6).setDepth(9999);
+      const circle = this.add.circle(pointer.worldX, pointer.worldY, 8, 0xc8aa6e, 0.6).setDepth(9999);
       this.tweens.add({
         targets: circle,
         radius: 22,
@@ -574,7 +574,7 @@ export class ExplorationScene extends Phaser.Scene {
     // 탐색 버튼
     this.exploreBtn = this.createLargeActionButton(
       6, 66, (panelW - 18) / 2, 50,
-      '🔍 탐색\n(위험도 1~5 증가)', 0x00d2ff,
+      '🔍 탐색\n(위험도 1~5 증가)', 0xc8aa6e,
       () => this.doExplore()
     );
     this.bottomPanel.add(this.exploreBtn);
@@ -665,7 +665,7 @@ export class ExplorationScene extends Phaser.Scene {
       mpBg.fillStyle(0x0f1b2e, 1);
       mpBg.fillRoundedRect(x + 6, 38, barW - 12, 8, 3);
       const mpFill = this.add.graphics();
-      mpFill.fillStyle(0x00d2ff, 0.8);
+      mpFill.fillStyle(0xc8aa6e, 0.8);
       mpFill.fillRoundedRect(x + 6, 38, Math.max(1, Math.floor((barW - 12) * mpRatio)), 8, 3);
 
       const hpLbl = this.add.text(x + barW / 2, 48, `${hero.currentHp}/${hero.maxHp}`, {
@@ -903,7 +903,7 @@ export class ExplorationScene extends Phaser.Scene {
         options: [
           {
             label: '1. 정밀하게 채굴한다 (에테르 +15, 철광 +10)',
-            color: 0x00d2ff,
+            color: 0xc8aa6e,
             action: () => {
               this.gm.addToDungeonInventory('ether', '에테르', '✨', 15);
               this.gm.addToDungeonInventory('iron', '철광석', '⛏️', 10);
@@ -941,7 +941,7 @@ export class ExplorationScene extends Phaser.Scene {
           },
           {
             label: '2. 신성한 물로 정화 (MP +30 전원 회복)',
-            color: 0x00d2ff,
+            color: 0xc8aa6e,
             action: () => {
               this.gm.party.forEach(h => { h.currentMp = Math.min(h.maxMp, h.currentMp + 30); });
               this.addLog('성소의 성수로 파티 전원 MP +30 회복!', 'reward');

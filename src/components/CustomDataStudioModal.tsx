@@ -551,7 +551,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
       <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
 
       {toastMessage && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[60] bg-[#1a2936] text-[#00d2ff] border border-[#00d2ff88] px-4 py-2.5 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2 animate-bounce">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[60] bg-[#1a2936] text-[#c8aa6e] border border-[#c8aa6e88] px-4 py-2.5 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2 animate-bounce">
           <span>✨</span>
           <span>{toastMessage}</span>
         </div>
@@ -624,7 +624,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
         </div>
 
         {/* 탭 네비게이션 */}
-        <div className="flex items-center gap-1 px-4 pt-2 pb-2 bg-[#090d16] border-b border-[#1a2336] shrink-0 overflow-x-auto">
+        <div className="flex items-center gap-1 px-4 pt-2 pb-2 bg-[#0a0b10] border-b border-[#1a2336] shrink-0 overflow-x-auto">
           {[
             { key: 'buildings', icon: '🏛️', label: '영지 시설 (건설·생산·유지비)' },
             { key: 'forge', icon: '⚒️', label: '단조 장비 소모 자원' },
@@ -639,7 +639,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
               key={tab.key}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 ${
                 activeTab === tab.key
-                  ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff66]'
+                  ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e66]'
                   : 'bg-transparent text-[#8b9bb4] hover:text-white hover:bg-[#131b2e]'
               }`}
               onClick={() => setActiveTab(tab.key as StudioTab)}
@@ -654,7 +654,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
               placeholder="🔍 검색 (이름, ID)..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full bg-[#111728] border border-[#1f2d48] rounded-lg px-2.5 py-1 text-xs text-white placeholder-[#4a5568] focus:border-[#00d2ff] focus:outline-none"
+              className="w-full bg-[#111728] border border-[#1f2d48] rounded-lg px-2.5 py-1 text-xs text-white placeholder-[#4a5568] focus:border-[#c8aa6e] focus:outline-none"
             />
           </div>
         </div>
@@ -672,7 +672,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     <span>🏛️</span>
                     <span>영지 설비 선택 (13종)</span>
                   </span>
-                  <span className="text-[11px] text-[#00d2ff]">
+                  <span className="text-[11px] text-[#c8aa6e]">
                     선택 설비: <strong className="text-white">{BUILDING_METADATA_MAP[selectedBuildingId]?.name}</strong>
                   </span>
                 </div>
@@ -690,14 +690,14 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           onClick={() => setSelectedBuildingId(idKey)}
                           className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                             isSelected
-                              ? 'bg-gradient-to-r from-[#00d2ff33] to-[#7c4dff33] text-white border border-[#00d2ff] shadow-md shadow-[#00d2ff22]'
+                              ? 'bg-gradient-to-r from-[#c8aa6e33] to-[#7c4dff33] text-white border border-[#c8aa6e] shadow-md shadow-[#c8aa6e22]'
                               : 'bg-[#151c2d] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#212d46]'
                           }`}
                         >
                           <span className="text-sm">{b.icon}</span>
                           <span>{b.name}</span>
                           {hasCustom && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ff] animate-pulse" title="커스텀 수치 적용됨" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c8aa6e] animate-pulse" title="커스텀 수치 적용됨" />
                           )}
                         </button>
                       );
@@ -714,14 +714,14 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   : 0;
 
                 return (
-                  <div className="p-3.5 bg-gradient-to-r from-[#11192e] via-[#0e1424] to-[#0c101d] rounded-xl border border-[#23314d] flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-lg">
+                  <div className="p-3.5 bg-gradient-to-r from-[#11192e] via-[#0e1016] to-[#0c101d] rounded-xl border border-[#23314d] flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-lg">
                     <div className="space-y-1.5 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-2xl p-1 bg-[#1a233a] rounded-lg border border-[#2e3e60]">{bState?.icon || '🏛️'}</span>
                         <span className="text-base font-extrabold text-white">{bMeta?.name}</span>
                         <span className="text-xs font-mono text-[#607d8b]">({selectedBuildingId})</span>
                         {customCount > 0 ? (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55]">
                             ✨ {customCount}개 레벨 커스텀 수정됨
                           </span>
                         ) : (
@@ -763,7 +763,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       <button
                         type="button"
                         onClick={() => handlePopulateBuildingDefaults(selectedBuildingId)}
-                        className="px-2.5 py-1.5 bg-[#18233c] hover:bg-[#202f50] text-[#00d2ff] hover:text-white border border-[#283b63] hover:border-[#00d2ff66] rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1"
+                        className="px-2.5 py-1.5 bg-[#18233c] hover:bg-[#202f50] text-[#c8aa6e] hover:text-white border border-[#283b63] hover:border-[#c8aa6e66] rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1"
                         title="1~10레벨의 기본 수치를 시트에 복사하여 손쉽게 미세조정합니다."
                       >
                         <span>📋</span>
@@ -830,7 +830,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                         key={level}
                         className={`p-3 rounded-xl border transition-all ${
                           isOverridden
-                            ? 'bg-[#101728] border-[#00d2ff55] shadow-md shadow-[#00d2ff11]'
+                            ? 'bg-[#101728] border-[#c8aa6e55] shadow-md shadow-[#c8aa6e11]'
                             : 'bg-[#0b101c] border-[#1a243a]'
                         }`}
                       >
@@ -843,7 +843,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 : level >= 7
                                   ? 'bg-[#7c4dff33] text-[#b388ff] border border-[#7c4dff66]'
                                   : level >= 4
-                                    ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]'
+                                    ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55]'
                                     : 'bg-[#1e293b] text-[#94a3b8] border border-[#334155]'
                             }`}>
                               Lv.{level}
@@ -857,7 +857,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                               </span>
                             )}
                             {isOverridden && (
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]">
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                                 ✨ 커스텀 설정 적용됨
                               </span>
                             )}
@@ -879,7 +879,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                         {/* 상세 인풋 그리드 (소모자재량 vs 생산량 & 유지비) */}
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
                           {/* 1. 소모자재량 (7컬럼) */}
-                          <div className="lg:col-span-7 bg-[#080d17] p-2.5 rounded-lg border border-[#162035] space-y-1.5">
+                          <div className="lg:col-span-7 bg-[#090b0e] p-2.5 rounded-lg border border-[#162035] space-y-1.5">
                             <div className="text-[11px] font-bold text-[#8b9bb4] flex items-center justify-between">
                               <span className="flex items-center gap-1">
                                 <span>🛠️</span>
@@ -898,25 +898,25 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                     key={rk}
                                     className={`p-1.5 rounded border transition-all ${
                                       isCustom
-                                        ? 'bg-[#0f1d2d] border-[#00d2ff77]'
+                                        ? 'bg-[#0f1d2d] border-[#c8aa6e77]'
                                         : displayVal > 0
-                                          ? 'bg-[#101726] border-[#1d2942]'
+                                          ? 'bg-[#12141a] border-[#1d2942]'
                                           : 'bg-[#0b0f19] border-[#141b2a] opacity-75'
                                     }`}
                                   >
                                     <label className="text-[10px] text-[#8b9bb4] flex items-center justify-between block mb-0.5">
                                       <span>{resLabels[rk]}</span>
-                                      {isCustom && <span className="text-[9px] text-[#00d2ff] font-bold">수정</span>}
+                                      {isCustom && <span className="text-[9px] text-[#c8aa6e] font-bold">수정</span>}
                                     </label>
                                     <input
                                       type="number"
                                       min="0"
                                       value={displayVal}
                                       onChange={e => handleBuildingTierCostChange(selectedBuildingId, level, rk, Number(e.target.value))}
-                                      className={`w-full rounded px-1.5 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#00d2ff] ${
+                                      className={`w-full rounded px-1.5 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#c8aa6e] ${
                                         isCustom
-                                          ? 'bg-[#07131e] text-[#00d2ff] font-bold border-[#00d2ff66]'
-                                          : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                          ? 'bg-[#07131e] text-[#c8aa6e] font-bold border-[#c8aa6e66]'
+                                          : 'bg-[#0a0b10] text-[#cfd8e8] border-[#1b273d]'
                                       }`}
                                     />
                                   </div>
@@ -928,7 +928,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           {/* 2. 생산량 & 유지비 (5컬럼) */}
                           <div className="lg:col-span-5 flex flex-col gap-2">
                             {/* 생산량 카드 */}
-                            <div className="flex-1 bg-[#080d17] p-2.5 rounded-lg border border-[#162035] space-y-1.5">
+                            <div className="flex-1 bg-[#090b0e] p-2.5 rounded-lg border border-[#162035] space-y-1.5">
                               <div className="text-[11px] font-bold text-[#81d4fa] flex items-center justify-between">
                                 <span className="flex items-center gap-1">
                                   <span>📦</span>
@@ -948,7 +948,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                     <div className="flex items-center justify-between text-[10px] text-[#8b9bb4] mb-0.5">
                                       <span>{bMeta.production.primaryIcon} {bMeta.production.primaryName} 생산</span>
                                       {tierConfig?.production?.primaryAmount !== undefined && (
-                                        <span className="text-[9px] text-[#00d2ff] font-bold">수정됨</span>
+                                        <span className="text-[9px] text-[#c8aa6e] font-bold">수정됨</span>
                                       )}
                                     </div>
                                     <div className="flex items-center gap-1.5">
@@ -961,10 +961,10 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                             : defaultProd.primaryAmount
                                         }
                                         onChange={e => handleBuildingTierProductionChange(selectedBuildingId, level, 'primaryAmount', Number(e.target.value))}
-                                        className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#00d2ff] ${
+                                        className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#c8aa6e] ${
                                           tierConfig?.production?.primaryAmount !== undefined
-                                            ? 'bg-[#07131e] text-[#00d2ff] font-bold border-[#00d2ff66]'
-                                            : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                            ? 'bg-[#07131e] text-[#c8aa6e] font-bold border-[#c8aa6e66]'
+                                            : 'bg-[#0a0b10] text-[#cfd8e8] border-[#1b273d]'
                                         }`}
                                       />
                                       <span className="text-xs text-[#8b9bb4] font-medium shrink-0">개/회</span>
@@ -980,7 +980,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                           {level < (bMeta.production.secondaryMinLevel || 1) && ' (기본 Lv.3+)'}
                                         </span>
                                         {tierConfig?.production?.secondaryAmount !== undefined && (
-                                          <span className="text-[9px] text-[#00d2ff] font-bold">수정됨</span>
+                                          <span className="text-[9px] text-[#c8aa6e] font-bold">수정됨</span>
                                         )}
                                       </div>
                                       <div className="flex items-center gap-1.5">
@@ -993,10 +993,10 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                               : defaultProd.secondaryAmount
                                           }
                                           onChange={e => handleBuildingTierProductionChange(selectedBuildingId, level, 'secondaryAmount', Number(e.target.value))}
-                                          className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#00d2ff] ${
+                                          className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#c8aa6e] ${
                                             tierConfig?.production?.secondaryAmount !== undefined
-                                              ? 'bg-[#07131e] text-[#00d2ff] font-bold border-[#00d2ff66]'
-                                              : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                              ? 'bg-[#07131e] text-[#c8aa6e] font-bold border-[#c8aa6e66]'
+                                              : 'bg-[#0a0b10] text-[#cfd8e8] border-[#1b273d]'
                                           }`}
                                         />
                                         <span className="text-xs text-[#8b9bb4] font-medium shrink-0">개/회</span>
@@ -1012,7 +1012,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             </div>
 
                             {/* 유지비 카드 */}
-                            <div className="flex-1 bg-[#080d17] p-2.5 rounded-lg border border-[#162035] space-y-1.5">
+                            <div className="flex-1 bg-[#090b0e] p-2.5 rounded-lg border border-[#162035] space-y-1.5">
                               <div className="text-[11px] font-bold text-[#ffd54f] flex items-center justify-between">
                                 <span className="flex items-center gap-1">
                                   <span>💸</span>
@@ -1048,7 +1048,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                         className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#ffd54f] ${
                                           tierConfig?.upkeep?.amount !== undefined
                                             ? 'bg-[#1f1a10] text-[#ffd54f] font-bold border-[#ffd54f66]'
-                                            : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                            : 'bg-[#0a0b10] text-[#cfd8e8] border-[#1b273d]'
                                         }`}
                                       />
                                       <span className="text-xs text-[#8b9bb4] font-medium shrink-0">개/틱</span>
@@ -1080,7 +1080,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                           className={`w-full rounded px-2 py-0.5 text-xs font-mono border focus:outline-none focus:border-[#ffd54f] ${
                                             tierConfig?.upkeep?.secondaryAmount !== undefined
                                               ? 'bg-[#1f1a10] text-[#ffd54f] font-bold border-[#ffd54f66]'
-                                              : 'bg-[#090d16] text-[#cfd8e8] border-[#1b273d]'
+                                              : 'bg-[#0a0b10] text-[#cfd8e8] border-[#1b273d]'
                                           }`}
                                         />
                                         <span className="text-xs text-[#8b9bb4] font-medium shrink-0">개/틱</span>
@@ -1143,13 +1143,13 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                   gold: '🪙 골드', ether: '✨ 에테르', herb: '🌿 약초'
                                 };
                                 return (
-                                  <div key={rk} className="bg-[#101726] p-1 rounded border border-[#19243a]">
+                                  <div key={rk} className="bg-[#12141a] p-1 rounded border border-[#19243a]">
                                     <label className="text-[9px] text-[#8b9bb4] block mb-0.5">{resLabels[rk] || rk}</label>
                                     <input
                                       type="number"
                                       value={val}
                                       onChange={e => handleBuildingCostChange(bId, rk, Number(e.target.value))}
-                                      className="w-full bg-[#070b14] border border-[#1f2d48] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                                      className="w-full bg-[#070b14] border border-[#1f2d48] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                                     />
                                   </div>
                                 );
@@ -1179,7 +1179,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     return (
                       <div key={itemKey} className="p-3.5 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2.5">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-sm text-[#00d2ff] capitalize">
+                          <span className="font-bold text-sm text-[#c8aa6e] capitalize">
                             ⚔️ {itemKey}
                           </span>
                         </div>
@@ -1193,13 +1193,13 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                               ether: '✨ 에테르', crystal: '🔮 수정', herb: '🌿 약초'
                             };
                             return (
-                              <div key={rk} className="bg-[#141c2c] p-1.5 rounded-lg border border-[#1a2438]">
+                              <div key={rk} className="bg-[#14161c] p-1.5 rounded-lg border border-[#1a2438]">
                                 <label className="text-[10px] text-[#8b9bb4] block mb-0.5">{resLabels[rk] || rk}</label>
                                 <input
                                   type="number"
                                   value={val}
                                   onChange={e => handleForgeCostChange(itemKey, rk, Number(e.target.value))}
-                                  className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                                  className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                                 />
                               </div>
                             );
@@ -1219,7 +1219,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 <div>
                   💡 심연 1~11층 마물 및 보스의 기본 스탯을 층별 순서로 일목요연하게 편집합니다.
                 </div>
-                <div className="text-[11px] text-[#00d2ff] font-bold">
+                <div className="text-[11px] text-[#c8aa6e] font-bold">
                   총 {sortedMonsters.length}종 (중복 마물 정리 완료)
                 </div>
               </div>
@@ -1231,8 +1231,8 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   onClick={() => setMonsterFloorFilter('all')}
                   className={`px-3 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
                     monsterFloorFilter === 'all'
-                      ? 'bg-[#00d2ff] text-black shadow-md'
-                      : 'bg-[#141c2c] text-[#8b9bb4] hover:text-white border border-[#233148]'
+                      ? 'bg-[#c8aa6e] text-black shadow-md'
+                      : 'bg-[#14161c] text-[#8b9bb4] hover:text-white border border-[#233148]'
                   }`}
                 >
                   전체 층 (1~11F)
@@ -1244,10 +1244,10 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     onClick={() => setMonsterFloorFilter(f)}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
                       monsterFloorFilter === f
-                        ? 'bg-[#00d2ff] text-black shadow-md'
+                        ? 'bg-[#c8aa6e] text-black shadow-md'
                         : f === 11
                           ? 'bg-[#2b1040] text-[#ce93d8] hover:bg-[#3d1859] border border-[#7b1fa255]'
-                          : 'bg-[#141c2c] text-[#8b9bb4] hover:text-white border border-[#233148]'
+                          : 'bg-[#14161c] text-[#8b9bb4] hover:text-white border border-[#233148]'
                     }`}
                   >
                     {f === 11 ? '11F (무간도)' : `${f}F`}
@@ -1303,7 +1303,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 ELITE
                               </span>
                             ) : (
-                              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff]">
+                              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e]">
                                 NORMAL
                               </span>
                             )}
@@ -1313,20 +1313,20 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           {(['maxHp', 'atk', 'def', 'spd', 'luck'] as const).map(statKey => {
                             const statLabels: Record<string, string> = { maxHp: 'HP', atk: 'ATK', def: 'DEF', spd: 'SPD', luck: 'LUCK' };
                             return (
-                              <div key={statKey} className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                              <div key={statKey} className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                                 <label className="text-[9px] text-[#8b9bb4] block">{statLabels[statKey]}</label>
                                 <input
                                   type="number"
                                   value={current[statKey] || 0}
                                   onChange={e => handleMonsterStatChange(monId, statKey, Number(e.target.value))}
-                                  className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                                  className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                                 />
                               </div>
                             );
                           })}
                         </div>
                         {m.imagePrompt && (
-                          <div className="p-2 bg-[#090d16] rounded-lg border border-[#1b263b] flex items-center justify-between gap-2 text-[11px]">
+                          <div className="p-2 bg-[#0a0b10] rounded-lg border border-[#1b263b] flex items-center justify-between gap-2 text-[11px]">
                             <div className="flex items-center gap-1.5 min-w-0">
                               <span className="text-xs">✨</span>
                               <span className="font-bold text-[#ce93d8] shrink-0">AI 프롬프트:</span>
@@ -1334,7 +1334,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             </div>
                             <button
                               type="button"
-                              className="shrink-0 px-2 py-0.5 rounded bg-[#00d2ff22] text-[#00d2ff] hover:bg-[#00d2ff44] border border-[#00d2ff44] text-[10px] font-bold transition-all flex items-center gap-1"
+                              className="shrink-0 px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] hover:bg-[#c8aa6e44] border border-[#c8aa6e44] text-[10px] font-bold transition-all flex items-center gap-1"
                               onClick={() => {
                                 navigator.clipboard.writeText(m.imagePrompt!);
                                 showToast(`📋 [${m.name}] 프롬프트가 복사되었습니다!`);
@@ -1431,88 +1431,88 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       <span className="text-xs text-[#ce93d8] font-bold">[{curNemesis.title}]</span>
                     </div>
                     <div className="text-xs text-[#8b9bb4]">
-                      총 체력: <span className="text-[#00d2ff] font-bold font-mono">{curNemesis.maxHp.toLocaleString()} HP</span> ({formatHpKorean(curNemesis.maxHp)}) | 
+                      총 체력: <span className="text-[#c8aa6e] font-bold font-mono">{curNemesis.maxHp.toLocaleString()} HP</span> ({formatHpKorean(curNemesis.maxHp)}) | 
                       머리: <span className="text-[#ef5350] font-bold font-mono">{formatHpKorean(curParts.head.maxHp)}</span> | 
                       몸통: <span className="text-[#ce93d8] font-bold font-mono">{formatHpKorean(curParts.body.maxHp)}</span> | 
-                      꼬리: <span className="text-[#00d2ff] font-bold font-mono">{formatHpKorean(curParts.tail.maxHp)}</span>
+                      꼬리: <span className="text-[#c8aa6e] font-bold font-mono">{formatHpKorean(curParts.tail.maxHp)}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* 1. 보스 기본 정보 & 스탯 편집 */}
                 <div className="p-4 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-3">
-                  <h3 className="text-xs font-bold text-[#00d2ff] flex items-center gap-1.5">
+                  <h3 className="text-xs font-bold text-[#c8aa6e] flex items-center gap-1.5">
                     <span>⚔️</span>
                     <span>1. 네메시스 기본 정보 & 전투 스탯 (Base Combat Stats)</span>
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="bg-[#141c2c] p-2 rounded-lg border border-[#1a2438]">
+                    <div className="bg-[#14161c] p-2 rounded-lg border border-[#1a2438]">
                       <label className="text-[10px] text-[#8b9bb4] block mb-1">보스 명칭</label>
                       <input
                         type="text"
                         value={curNemesis.name}
                         onChange={e => handleNemesisInfoChange('name', e.target.value)}
-                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-bold focus:border-[#00d2ff] focus:outline-none"
+                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-bold focus:border-[#c8aa6e] focus:outline-none"
                       />
                     </div>
-                    <div className="bg-[#141c2c] p-2 rounded-lg border border-[#1a2438]">
+                    <div className="bg-[#14161c] p-2 rounded-lg border border-[#1a2438]">
                       <label className="text-[10px] text-[#8b9bb4] block mb-1">보스 칭호</label>
                       <input
                         type="text"
                         value={curNemesis.title}
                         onChange={e => handleNemesisInfoChange('title', e.target.value)}
-                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white focus:border-[#00d2ff] focus:outline-none"
+                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white focus:border-[#c8aa6e] focus:outline-none"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                    <div className="bg-[#141c2c] p-2 rounded-lg border border-[#1a2438] col-span-2 md:col-span-1">
+                    <div className="bg-[#14161c] p-2 rounded-lg border border-[#1a2438] col-span-2 md:col-span-1">
                       <div className="flex items-center justify-between mb-1">
                         <label className="text-[10px] text-[#8b9bb4]">총합 체력 (HP)</label>
-                        <span className="text-[9px] text-[#00d2ff] font-mono font-bold">({formatHpKorean(curNemesis.maxHp)})</span>
+                        <span className="text-[9px] text-[#c8aa6e] font-mono font-bold">({formatHpKorean(curNemesis.maxHp)})</span>
                       </div>
                       <input
                         type="number"
                         step="100000"
                         value={curNemesis.maxHp}
                         onChange={e => handleNemesisStatChange('maxHp', Number(e.target.value))}
-                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono font-bold focus:border-[#00d2ff] focus:outline-none"
+                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono font-bold focus:border-[#c8aa6e] focus:outline-none"
                       />
                     </div>
-                    <div className="bg-[#141c2c] p-2 rounded-lg border border-[#1a2438]">
+                    <div className="bg-[#14161c] p-2 rounded-lg border border-[#1a2438]">
                       <label className="text-[10px] text-[#8b9bb4] block mb-1">공격력 (ATK)</label>
                       <input
                         type="number"
                         value={curNemesis.atk}
                         onChange={e => handleNemesisStatChange('atk', Number(e.target.value))}
-                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                       />
                     </div>
-                    <div className="bg-[#141c2c] p-2 rounded-lg border border-[#1a2438]">
+                    <div className="bg-[#14161c] p-2 rounded-lg border border-[#1a2438]">
                       <label className="text-[10px] text-[#8b9bb4] block mb-1">방어력 (DEF)</label>
                       <input
                         type="number"
                         value={curNemesis.def}
                         onChange={e => handleNemesisStatChange('def', Number(e.target.value))}
-                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                       />
                     </div>
-                    <div className="bg-[#141c2c] p-2 rounded-lg border border-[#1a2438]">
+                    <div className="bg-[#14161c] p-2 rounded-lg border border-[#1a2438]">
                       <label className="text-[10px] text-[#8b9bb4] block mb-1">속도 (SPD)</label>
                       <input
                         type="number"
                         value={curNemesis.spd}
                         onChange={e => handleNemesisStatChange('spd', Number(e.target.value))}
-                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                       />
                     </div>
-                    <div className="bg-[#141c2c] p-2 rounded-lg border border-[#1a2438]">
+                    <div className="bg-[#14161c] p-2 rounded-lg border border-[#1a2438]">
                       <label className="text-[10px] text-[#8b9bb4] block mb-1">행운 (LUCK)</label>
                       <input
                         type="number"
                         value={curNemesis.luck}
                         onChange={e => handleNemesisStatChange('luck', Number(e.target.value))}
-                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                        className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -1533,10 +1533,10 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                     {(['head', 'body', 'tail'] as const).map(partKey => {
                       const part = curParts[partKey];
-                      const themeColor = partKey === 'head' ? '#ef5350' : partKey === 'body' ? '#ce93d8' : '#00d2ff';
+                      const themeColor = partKey === 'head' ? '#ef5350' : partKey === 'body' ? '#ce93d8' : '#c8aa6e';
                       const posLabel = partKey === 'head' ? '전열 (Front)' : partKey === 'body' ? '중열 (Mid)' : '후열 (Back)';
                       return (
-                        <div key={partKey} className="p-3 bg-[#141c2c] border border-[#1f2d48] rounded-xl space-y-2.5">
+                        <div key={partKey} className="p-3 bg-[#14161c] border border-[#1f2d48] rounded-xl space-y-2.5">
                           <div className="flex items-center justify-between border-b border-[#233148] pb-1.5">
                             <span className="font-bold text-xs flex items-center gap-1.5" style={{ color: themeColor }}>
                               <span>{part.icon}</span>
@@ -1656,7 +1656,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {curNemesis.phases.map(ph => (
-                      <div key={ph.phase} className="p-3 bg-[#141c2c] border border-[#1f2d48] rounded-xl space-y-2">
+                      <div key={ph.phase} className="p-3 bg-[#14161c] border border-[#1f2d48] rounded-xl space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-xs" style={{ color: ph.badgeColor }}>
                             Phase {ph.phase}
@@ -1710,7 +1710,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {curNemesis.skills.map(sk => (
-                      <div key={sk.id} className="p-3 bg-[#141c2c] border border-[#1f2d48] rounded-xl space-y-2">
+                      <div key={sk.id} className="p-3 bg-[#14161c] border border-[#1f2d48] rounded-xl space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-xs text-white flex items-center gap-1.5">
                             <span className="text-base">{sk.icon}</span>
@@ -1792,7 +1792,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                               {roleLabel[cls.role] || cls.role}
                             </span>
                             <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                              cls.tier === 2 ? 'bg-[#ffd54f22] text-[#ffd54f]' : cls.tier === 1 ? 'bg-[#00d2ff22] text-[#00d2ff]' : 'bg-[#78909c22] text-[#90a4ae]'
+                              cls.tier === 2 ? 'bg-[#ffd54f22] text-[#ffd54f]' : cls.tier === 1 ? 'bg-[#c8aa6e22] text-[#c8aa6e]' : 'bg-[#78909c22] text-[#90a4ae]'
                             }`}>
                               {tierLabel}
                             </span>
@@ -1802,13 +1802,13 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           {(['hp', 'mp', 'atk', 'def', 'spd', 'luck'] as const).map(statKey => {
                             const statLabels: Record<string, string> = { hp: 'HP', mp: 'MP', atk: 'ATK', def: 'DEF', spd: 'SPD', luck: 'LUCK' };
                             return (
-                              <div key={statKey} className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                              <div key={statKey} className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                                 <label className="text-[9px] text-[#8b9bb4] block font-mono">{statLabels[statKey]}</label>
                                 <input
                                   type="number"
                                   value={currentStats[statKey] || 0}
                                   onChange={e => handleClassBaseStatChange(cls.id, statKey, Number(e.target.value))}
-                                  className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                                  className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                                 />
                               </div>
                             );
@@ -1862,7 +1862,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   <div>
                     💡 각 직업 클래스의 고유 액티브 스킬 및 궁극기의 피해 계수(Power), 소모 마나(MP), 쿨다운(턴)을 조정합니다.
                   </div>
-                  <div className="text-[11px] text-[#00d2ff] font-bold shrink-0">
+                  <div className="text-[11px] text-[#c8aa6e] font-bold shrink-0">
                     총 {filteredClassSkills.length}개 스킬 표시 중
                   </div>
                 </div>
@@ -1884,8 +1884,8 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                         }}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
                           isSelected
-                            ? 'bg-[#00d2ff] text-black shadow-md'
-                            : 'bg-[#141c2c] text-[#8b9bb4] hover:text-white border border-[#233148]'
+                            ? 'bg-[#c8aa6e] text-black shadow-md'
+                            : 'bg-[#14161c] text-[#8b9bb4] hover:text-white border border-[#233148]'
                         }`}
                       >
                         <span>{cat.icon}</span>
@@ -1956,7 +1956,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             <span className={`text-[9px] px-1 py-0.2 rounded font-mono ${
                               sk.tier === 3 ? 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]' :
                               sk.tier === 2 ? 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]' :
-                              sk.tier === 1 ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]' :
+                              sk.tier === 1 ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]' :
                               'bg-[#78909c22] text-[#90a4ae]'
                             }`}>
                               {tierLabel}
@@ -1970,32 +1970,32 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           <span className="text-[9px] text-[#8b9bb4] font-mono">{sk.id}</span>
                         </div>
                         <div className="grid grid-cols-3 gap-2">
-                          <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                          <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                             <label className="text-[9px] text-[#8b9bb4] block">위력 배율(1.0=100%)</label>
                             <input
                               type="number"
                               step="0.1"
                               value={curPower}
                               onChange={e => handleClassSkillChange(sk.id, 'power', Number(e.target.value))}
-                              className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                              className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                             />
                           </div>
-                          <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                          <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                             <label className="text-[9px] text-[#8b9bb4] block">마나 소모(MP)</label>
                             <input
                               type="number"
                               value={curMp}
                               onChange={e => handleClassSkillChange(sk.id, 'manaCost', Number(e.target.value))}
-                              className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                              className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                             />
                           </div>
-                          <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                          <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                             <label className="text-[9px] text-[#8b9bb4] block">쿨다운(턴)</label>
                             <input
                               type="number"
                               value={curCd}
                               onChange={e => handleClassSkillChange(sk.id, 'cooldown', Number(e.target.value))}
-                              className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                              className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                             />
                           </div>
                         </div>
@@ -2017,7 +2017,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 <div className="flex items-center gap-1 shrink-0 bg-[#0c101d] p-1 rounded-lg border border-[#1e293b]">
                   <button
                     className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
-                      grimoireSubTab === 'all' ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]' : 'text-[#8b9bb4] hover:text-white'
+                      grimoireSubTab === 'all' ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55]' : 'text-[#8b9bb4] hover:text-white'
                     }`}
                     onClick={() => setGrimoireSubTab('all')}
                   >
@@ -2025,7 +2025,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   </button>
                   <button
                     className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
-                      grimoireSubTab === 'standard' ? 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff55]' : 'text-[#8b9bb4] hover:text-white'
+                      grimoireSubTab === 'standard' ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e55]' : 'text-[#8b9bb4] hover:text-white'
                     }`}
                     onClick={() => setGrimoireSubTab('standard')}
                   >
@@ -2060,46 +2060,46 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             <span className="font-bold text-xs text-white flex items-center gap-1.5 min-w-0">
                               <GameIcon name={b.id} icon={b.icon} size={20} />
                               <span className="truncate">{b.name}</span>
-                              <span className="text-[10px] text-[#00d2ff] font-mono shrink-0">[{b.skill.name}]</span>
+                              <span className="text-[10px] text-[#c8aa6e] font-mono shrink-0">[{b.skill.name}]</span>
                             </span>
                             <span className="text-[10px] text-[#ffd54f] font-mono shrink-0">🪙 {curGold}G</span>
                           </div>
                           <div className="grid grid-cols-4 gap-1.5">
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">위력 배율</label>
                               <input
                                 type="number"
                                 step="0.05"
                                 value={curPower}
                                 onChange={e => handleSkillBookChange(b.id, 'power', Number(e.target.value))}
-                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                               />
                             </div>
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">MP 소모</label>
                               <input
                                 type="number"
                                 value={curMp}
                                 onChange={e => handleSkillBookChange(b.id, 'manaCost', Number(e.target.value))}
-                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                               />
                             </div>
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">쿨다운(턴)</label>
                               <input
                                 type="number"
                                 value={curCd}
                                 onChange={e => handleSkillBookChange(b.id, 'cooldown', Number(e.target.value))}
-                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                               />
                             </div>
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">상점가(G)</label>
                               <input
                                 type="number"
                                 value={curGold}
                                 onChange={e => handleSkillBookChange(b.id, 'costGold', Number(e.target.value))}
-                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                                className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                               />
                             </div>
                           </div>
@@ -2109,7 +2109,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                               type="text"
                               value={curDesc}
                               onChange={e => handleSkillBookDescChange(b.id, e.target.value)}
-                              className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-[11px] text-[#cfd8e8] focus:border-[#00d2ff] focus:outline-none"
+                              className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1.5 py-0.5 text-[11px] text-[#cfd8e8] focus:border-[#c8aa6e] focus:outline-none"
                             />
                           </div>
                         </div>
@@ -2143,7 +2143,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             </div>
                           </div>
                           <div className="grid grid-cols-4 gap-1.5">
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">위력 배율</label>
                               <input
                                 type="number"
@@ -2153,7 +2153,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono font-bold focus:border-[#ffd54f] focus:outline-none"
                               />
                             </div>
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">MP 소모</label>
                               <input
                                 type="number"
@@ -2162,7 +2162,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#ffd54f] focus:outline-none"
                               />
                             </div>
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">쿨다운(턴)</label>
                               <input
                                 type="number"
@@ -2171,7 +2171,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#ffd54f] focus:outline-none"
                               />
                             </div>
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">상점가(G)</label>
                               <input
                                 type="number"
@@ -2233,7 +2233,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             <span className="font-mono text-[9px] text-[#546e7a]">({b.bookId})</span>
                           </div>
                           <div className="grid grid-cols-4 gap-1.5">
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">위력 배율</label>
                               <input
                                 type="number"
@@ -2243,7 +2243,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono font-bold focus:border-[#ce93d8] focus:outline-none"
                               />
                             </div>
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">MP 소모</label>
                               <input
                                 type="number"
@@ -2252,7 +2252,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#ce93d8] focus:outline-none"
                               />
                             </div>
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">쿨다운(턴)</label>
                               <input
                                 type="number"
@@ -2261,7 +2261,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 className="w-full bg-[#0b0f19] border border-[#233148] rounded px-1 py-0.5 text-xs text-white font-mono focus:border-[#ce93d8] focus:outline-none"
                               />
                             </div>
-                            <div className="bg-[#141c2c] p-1 rounded border border-[#1a2438]">
+                            <div className="bg-[#14161c] p-1 rounded border border-[#1a2438]">
                               <label className="text-[9px] text-[#8b9bb4] block">상점가(G)</label>
                               <input
                                 type="number"
@@ -2312,7 +2312,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                         <span>📈</span>
                         <span>전투 경험치(EXP) 획득 배율</span>
                       </span>
-                      <span className="text-xs font-mono font-bold text-[#00d2ff]">
+                      <span className="text-xs font-mono font-bold text-[#c8aa6e]">
                         {curBalance.expMultiplier}x ({Math.round(curBalance.expMultiplier * 100)}%)
                       </span>
                     </div>
@@ -2323,7 +2323,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       max="10.0"
                       value={curBalance.expMultiplier}
                       onChange={e => handleBalanceChange('expMultiplier', Number(e.target.value))}
-                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                     />
                     <div className="text-[10px] text-[#8b9bb4]">전투 승리 시 파티원이 획득하는 기본 경험치 배율 (기본 1.0)</div>
                   </div>
@@ -2345,7 +2345,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       max="10.0"
                       value={curBalance.goldMultiplier}
                       onChange={e => handleBalanceChange('goldMultiplier', Number(e.target.value))}
-                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                     />
                     <div className="text-[10px] text-[#8b9bb4]">마물 토벌 및 던전 상자에서 획득하는 기본 골드 배율 (기본 1.0)</div>
                   </div>
@@ -2367,7 +2367,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       max="10.0"
                       value={curBalance.etherMultiplier}
                       onChange={e => handleBalanceChange('etherMultiplier', Number(e.target.value))}
-                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                     />
                     <div className="text-[10px] text-[#8b9bb4]">심연 탐사 및 이벤트에서 획득하는 에테르 배율 (기본 1.0)</div>
                   </div>
@@ -2389,7 +2389,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       max="10.0"
                       value={curBalance.itemDropRateMultiplier}
                       onChange={e => handleBalanceChange('itemDropRateMultiplier', Number(e.target.value))}
-                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                     />
                     <div className="text-[10px] text-[#8b9bb4]">장비 레시피, 완제품 및 전리품 기본 드랍 확률 배율 (기본 1.0)</div>
                   </div>
@@ -2411,7 +2411,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       max="3000"
                       value={curBalance.drConstant || 300}
                       onChange={e => handleBalanceChange('drConstant', Number(e.target.value))}
-                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                     />
                     <div className="text-[10px] text-[#8b9bb4]">
                       피해 공식 [K / (DEF + K)]의 기준 상수입니다. DEF = K일 때 대미지가 50% 경감됩니다. (기본: 300 / 6~10층: 1.67K / 11층: 2.67K)
@@ -2435,7 +2435,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       max="1.0"
                       value={curBalance.bossSkillBookDropRate}
                       onChange={e => handleBalanceChange('bossSkillBookDropRate', Number(e.target.value))}
-                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#00d2ff] focus:outline-none"
+                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#c8aa6e] focus:outline-none"
                     />
                     <div className="text-[10px] text-[#8b9bb4]">층별 보스 처치 시 고유 비기 마도서가 드랍될 기본 확률 (기본 0.04 = 4.0%)</div>
                   </div>

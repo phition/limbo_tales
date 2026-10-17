@@ -45,8 +45,8 @@ export const PROMPT_REGISTRY: Record<string, PromptData> = {
   },
   'citadel_blacksmith': {
     title: '마도 대장간 (Magitech Forge)',
-    themeColor: 0x00d2ff,
-    themeColorHex: '#00d2ff',
+    themeColor: 0xc8aa6e,
+    themeColorHex: '#c8aa6e',
     accentColorHex: '#80e5ff',
     prompt: `sci-fi fantasy forge with blue glowing mana furnace, anvils and tactical weapon racks, floating holographic blueprints, anime style forge, dark fantasy anime aesthetic, magitech style, sparks flying, high contrast clean lighting, 8k`,
     negativePrompt: MASTER_NEGATIVE_PROMPT,
@@ -221,7 +221,7 @@ export const PROMPT_REGISTRY: Record<string, PromptData> = {
   'hero_gunner': {
     title: '마총 수련생 (Gunner)',
     themeColor: 0x00bcd4,
-    themeColorHex: '#00bcd4',
+    themeColorHex: '#c8aa6e',
     accentColorHex: '#80deea',
     prompt: `1girl, solo, tactical aether gunslinger academy student, short silver hair, wearing high-tech visor and stylish trench coat, dual energy pistols, aiming forward with focused calm expression, cyan floating targeting reticle, dark fantasy anime style, 8k`,
     negativePrompt: MASTER_NEGATIVE_PROMPT,
@@ -238,8 +238,8 @@ export const PROMPT_REGISTRY: Record<string, PromptData> = {
   },
   'hero_aether_meister': {
     title: '2차 최종: 하이퍼 레인저 (Aether Gun Meister)',
-    themeColor: 0x00e5ff,
-    themeColorHex: '#00e5ff',
+    themeColor: 0xc8aa6e,
+    themeColorHex: '#c8aa6e',
     accentColorHex: '#ffffff',
     prompt: `1girl, solo, legendary aether gun meister floating surrounded by multi-lock floating laser bit drones and massive orbital beam cannon, sleek white and cyan cybernetic suit, magnificent dual aether wings, anime masterpiece, dark fantasy anime aesthetic, magitech style, 8k`,
     negativePrompt: MASTER_NEGATIVE_PROMPT,
@@ -377,7 +377,7 @@ export const PROMPT_REGISTRY: Record<string, PromptData> = {
   'boss_floor_3': {
     title: '3F 보스: 태고의 광맥 베히모스 (Primeval Vein Behemoth)',
     themeColor: 0x00bcd4,
-    themeColorHex: '#00bcd4',
+    themeColorHex: '#c8aa6e',
     accentColorHex: '#80deea',
     prompt: `Dark fantasy anime boss concept art, gigantic mythical crystal dragon behemoth with glowing magma and cyan aether veins across obsidian scales, underground glowing mineral cave, dark fantasy anime aesthetic, magitech style, epic perspective, masterpiece, 8k`,
     negativePrompt: MASTER_NEGATIVE_PROMPT,
@@ -451,7 +451,7 @@ export const PROMPT_REGISTRY: Record<string, PromptData> = {
   'monster_mirror_phantom': {
     title: '거울의 환영',
     themeColor: 0x00bcd4,
-    themeColorHex: '#00bcd4',
+    themeColorHex: '#c8aa6e',
     accentColorHex: '#4dd0e1',
     prompt: `a surreal humanoid phantom made of shattered glass and mirrors, reflecting distorted light, floating in a surreal void space, ethereal and dangerous, anime style, highly detailed, masterpiece`,
     negativePrompt: MASTER_NEGATIVE_PROMPT,
@@ -544,8 +544,8 @@ export const PROMPT_REGISTRY: Record<string, PromptData> = {
   },
   'monster_aether_basilisk': {
     title: '에테르 바실리스크 (Aether Basilisk)',
-    themeColor: 0x00e5ff,
-    themeColorHex: '#00e5ff',
+    themeColor: 0xc8aa6e,
+    themeColorHex: '#c8aa6e',
     accentColorHex: '#84ffff',
     prompt: `Dark fantasy anime style, serpentine aether basilisk coiled around massive glowing cyan crystal spires, iridescent crystalline reptilian scales reflecting magical light, piercing glowing amber eyes with petrifying glare, subterranean crystal cavern filled with luminous mana fog, sharp cel shading, 8k`,
     negativePrompt: MASTER_NEGATIVE_PROMPT,
@@ -599,7 +599,7 @@ export const PROMPT_REGISTRY: Record<string, PromptData> = {
   'monster_prism_weaver': {
     title: '프리즘 방직사 (Prism Illusion Weaver)',
     themeColor: 0x00bcd4,
-    themeColorHex: '#00bcd4',
+    themeColorHex: '#c8aa6e',
     accentColorHex: '#80deea',
     prompt: `Dark fantasy anime style, floating geometric prism weaver entity composed of crystalline mirrors and kaleidoscopic light ribbons, spinning sharp glass shards hovering around it, infinite mirrored labyrinth room refracting vibrant spectral light, surreal sci-fi fantasy, masterpiece, 8k`,
     negativePrompt: MASTER_NEGATIVE_PROMPT,

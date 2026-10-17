@@ -65,7 +65,7 @@ export const FeverGaugeBar: React.FC<FeverGaugeBarProps> = ({
               isFull
                 ? isEnemy ? 'bg-[#ff416c] text-white animate-pulse font-black' : 'bg-[#ffd54f] text-[#0b0d13] animate-pulse font-black'
                 : badges.length > 0
-                ? isEnemy ? 'bg-[#ff416c22] text-[#ff80ab] border border-[#ff416c44]' : 'bg-[#00d2ff22] text-[#00d2ff] border border-[#00d2ff44]'
+                ? isEnemy ? 'bg-[#ff416c22] text-[#ff80ab] border border-[#ff416c44]' : 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]'
                 : 'bg-[#151d2a] text-[#546e7a]'
             }`}
           >

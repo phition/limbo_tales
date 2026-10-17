@@ -591,7 +591,7 @@ export class FirebaseService {
       // 1️⃣ [저장 시도 단계 콘솔 출력 - 이중 체크 1단계]
       console.log(
         `%c🚀 [1/2 클라우드 저장 시도 시작] 크기: ${payloadSizeKb} KB | 시간: ${new Date().toLocaleTimeString()}`,
-        'color: #00d2ff; font-weight: bold; background: #0c1824; padding: 2px 6px; border-radius: 4px; border: 1px solid #00d2ff44;'
+        'color: #c8aa6e; font-weight: bold; background: #0e1015; padding: 2px 6px; border-radius: 4px; border: 1px solid #c8aa6e44;'
       );
 
       await set(userProgressRef, payload);
@@ -630,7 +630,7 @@ export class FirebaseService {
     try {
       await set(ref(db, `users/${user.uid}/ping`), Date.now());
       const ping = Math.round(performance.now() - t0);
-      console.log(`%c📡 [Firebase 핑 측정] 왕복 레이턴시: ${ping}ms`, 'color: #00d2ff; font-mono;');
+      console.log(`%c📡 [Firebase 핑 측정] 왕복 레이턴시: ${ping}ms`, 'color: #c8aa6e; font-mono;');
       return ping;
     } catch (e) {
       console.warn('⚠️ [Firebase 핑 측정 실패]', e);

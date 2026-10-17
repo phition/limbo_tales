@@ -90,7 +90,7 @@ export const INITIAL_BUILDINGS: Record<BuildingId, BuildingState> = {
     description: '장비 공방. 전술 무기 및 방어구 단조, 장비 강화 및 인챈트를 수행합니다.',
     icon: '⚒️',
     promptKey: 'citadel_blacksmith',
-    themeColor: 0x00e5ff
+    themeColor: 0xc8aa6e
   },
   'sanctuary': {
     id: 'sanctuary',

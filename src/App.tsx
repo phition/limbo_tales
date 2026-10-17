@@ -449,9 +449,9 @@ export const App: React.FC = () => {
   // 🌟 2. Firebase Auth 초기 상태 확인 중 (세션 없는 첫 방문 또는 대기 중)
   if (!authChecked) {
     return (
-      <div className="w-full h-full min-h-screen bg-[#070a12] flex flex-col items-center justify-center gap-3">
-        <div className="w-10 h-10 border-3 border-[#00d2ff] border-t-transparent rounded-full animate-spin" />
-        <div className="text-xs font-mono text-[#00d2ff] tracking-wider">CONNECTING TO LIMBO ARK...</div>
+      <div className="w-full h-full min-h-screen bg-[#08090d] flex flex-col items-center justify-center gap-3">
+        <div className="w-10 h-10 border-3 border-[#c8aa6e] border-t-transparent rounded-full animate-spin" />
+        <div className="text-xs font-mono text-[#c8aa6e] tracking-wider">CONNECTING TO LIMBO ARK...</div>
       </div>
     );
   }
@@ -468,7 +468,7 @@ export const App: React.FC = () => {
         {/* 🌟 창 및 전체 화면 모드 전환 시 하단 토스트 알림 (1초 후 자동 소멸) */}
         {fullscreenToast && (
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] pointer-events-none animate-fade-in transition-all">
-            <div className="px-4 py-2 rounded-full bg-[#0c1220ee] border border-[#00d2ff88] text-white text-xs font-bold shadow-[0_4px_25px_rgba(0,210,255,0.4)] backdrop-blur-md flex items-center gap-2 tracking-wide">
+            <div className="px-4 py-2 rounded-full bg-[#0d0f14ee] border border-[#c8aa6e88] text-white text-xs font-bold shadow-[0_4px_25px_rgba(200, 170, 110,0.4)] backdrop-blur-md flex items-center gap-2 tracking-wide">
               <span className="text-sm">{fullscreenToast.icon}</span>
               <span className="text-[#e2e8f0]">{fullscreenToast.text}</span>
             </div>
@@ -542,7 +542,7 @@ export const App: React.FC = () => {
       {/* 🌟 창 및 전체 화면 모드 전환 시 하단 토스트 알림 (1초 후 자동 소멸) */}
       {fullscreenToast && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] pointer-events-none animate-fade-in transition-all">
-          <div className="px-4 py-2 rounded-full bg-[#0c1220ee] border border-[#00d2ff88] text-white text-xs font-bold shadow-[0_4px_25px_rgba(0,210,255,0.4)] backdrop-blur-md flex items-center gap-2 tracking-wide">
+          <div className="px-4 py-2 rounded-full bg-[#0d0f14ee] border border-[#c8aa6e88] text-white text-xs font-bold shadow-[0_4px_25px_rgba(200, 170, 110,0.4)] backdrop-blur-md flex items-center gap-2 tracking-wide">
             <span className="text-sm">{fullscreenToast.icon}</span>
             <span className="text-[#e2e8f0]">{fullscreenToast.text}</span>
           </div>

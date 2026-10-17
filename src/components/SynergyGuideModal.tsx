@@ -45,7 +45,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
     const badges: { text: string; color: string }[] = [];
     if (buffs.allStatsBonus) {
       const pct = Math.round((buffs.allStatsBonus - 1) * 100);
-      badges.push({ text: `전 능력치 +${pct}%`, color: '#00d2ff' });
+      badges.push({ text: `전 능력치 +${pct}%`, color: '#c8aa6e' });
     }
     if (buffs.atkBonus) {
       const diff = Math.round((buffs.atkBonus - 1) * 100);
@@ -114,7 +114,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-3">
-      <div className="relative w-full max-w-lg max-h-[85vh] bg-[#0c101a] border border-[#00d2ff44] rounded-2xl flex flex-col shadow-2xl overflow-hidden animate-scale-up">
+      <div className="relative w-full max-w-lg max-h-[85vh] bg-[#0c101a] border border-[#c8aa6e44] rounded-2xl flex flex-col shadow-2xl overflow-hidden animate-scale-up">
         {/* 헤더 */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#1f2738] bg-[#080b11] shrink-0">
           <div className="flex items-center gap-2">
@@ -124,7 +124,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
                 <span className="text-base font-bold text-white">
                   원정대 시너지 도감
                 </span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-[#00d2ff22] text-[#00d2ff] font-bold border border-[#00d2ff44]">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e44]">
                   현재 {activeSynergies.length}개 발동 중
                 </span>
               </div>
@@ -152,7 +152,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
                 key={tab.key}
                 className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all shrink-0 ${
                   activeTab === tab.key
-                    ? 'bg-[#00d2ff] text-black shadow-md shadow-[#00d2ff33]'
+                    ? 'bg-[#c8aa6e] text-black shadow-md shadow-[#c8aa6e33]'
                     : 'bg-[#182030] text-[#cfd8e8] hover:bg-[#222d42]'
                 }`}
                 onClick={() => setActiveTab(tab.key as any)}
@@ -168,7 +168,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
               placeholder="시너지 이름, 발동 조건, 효과 검색..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs px-3 py-1.5 bg-[#141b29] border border-[#27354d] rounded-lg text-white placeholder-[#607d8b] focus:outline-none focus:border-[#00d2ff]"
+              className="w-full text-xs px-3 py-1.5 bg-[#141b29] border border-[#27354d] rounded-lg text-white placeholder-[#607d8b] focus:outline-none focus:border-[#c8aa6e]"
             />
             {searchQuery && (
               <button
@@ -181,7 +181,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
           </div>
 
           {/* 시너지 조합 규칙 안내 배너 */}
-          <div className="text-[11px] px-2.5 py-1.5 rounded-lg bg-[#00d2ff10] border border-[#00d2ff25] text-[#90caf9] flex items-center gap-1.5">
+          <div className="text-[11px] px-2.5 py-1.5 rounded-lg bg-[#c8aa6e10] border border-[#c8aa6e25] text-[#90caf9] flex items-center gap-1.5">
             <span className="shrink-0">💡</span>
             <span>원정대 시너지 상한: <b>직업군 최대 2개</b> + <b>진형 1개</b> + <b>숙련도 1개</b> (총 최대 4개 정예 적용)</span>
           </div>
@@ -203,7 +203,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
                   key={def.id}
                   className={`p-3 rounded-xl border transition-all relative ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#0d2238] to-[#121c2e] border-[#00d2ff] shadow-[0_0_15px_rgba(0,210,255,0.25)]'
+                      ? 'bg-gradient-to-r from-[#12141a] to-[#121c2e] border-[#c8aa6e] shadow-[0_0_15px_rgba(200, 170, 110,0.25)]'
                       : 'bg-[#121724] border-[#1e283d] opacity-75 hover:opacity-95'
                   }`}
                 >
@@ -214,7 +214,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
                       </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className={`font-bold text-sm ${isActive ? 'text-[#00d2ff]' : 'text-white'}`}>
+                          <span className={`font-bold text-sm ${isActive ? 'text-[#c8aa6e]' : 'text-white'}`}>
                             {def.name}
                           </span>
                           <span className="text-[10px] px-1.5 py-0.2 rounded font-mono bg-[#182030] text-[#ffd54f] border border-[#ffd54f33]">
