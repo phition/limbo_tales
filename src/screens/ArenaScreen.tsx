@@ -41,6 +41,84 @@ const DEFAULT_CLASS_IMAGES: Record<string, string> = {
   tactical_tower: 'assets/citadel_bonfire.jpg',
 };
 
+export const CLASS_PORTRAIT_MAP: Record<string, string> = {
+  // 기본 & 수호/성기사 계열
+  squire: 'assets/portraits/portrait_paladin.png',
+  paladin: 'assets/portraits/portrait_paladin.png',
+  guardian: 'assets/portraits/portrait_t1_guardian.png',
+  aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.png',
+  aegis_bastion: 'assets/portraits/portrait_t3_bastion.png',
+  fortress: 'assets/portraits/portrait_t3_bastion.png',
+  crusader_lord: 'assets/portraits/portrait_t3_bastion.png',
+
+  // 도적/암살 계열
+  rogue: 'assets/portraits/portrait_rogue.png',
+  duelist: 'assets/portraits/portrait_t1_duelist.png',
+  assassin: 'assets/portraits/portrait_t2_shadow_phantom.png',
+  shadow_phantom: 'assets/portraits/portrait_t2_shadow_phantom.png',
+  blade_dancer: 'assets/portraits/portrait_t1_duelist.png',
+  void_strider: 'assets/portraits/portrait_t3_void_strider.png',
+
+  // 마법사 계열
+  apprentice: 'assets/portraits/portrait_mage.png',
+  apprentice_mage: 'assets/portraits/portrait_mage.png',
+  elementalist: 'assets/portraits/portrait_mage.png',
+  arcane_scholar: 'assets/portraits/portrait_t1_scholar.png',
+  scholar: 'assets/portraits/portrait_t1_scholar.png',
+  calamity_mage: 'assets/portraits/portrait_t2_calamity_mage.png',
+  chronomancer: 'assets/portraits/portrait_t3_chrono_archon.png',
+  chrono_archon: 'assets/portraits/portrait_t3_chrono_archon.png',
+
+  // 사제/클레릭 계열
+  acolyte: 'assets/portraits/portrait_cleric.png',
+  novice_cleric: 'assets/portraits/portrait_cleric.png',
+  cleric: 'assets/portraits/portrait_cleric.png',
+  war_priest: 'assets/portraits/portrait_t1_war_priest.png',
+  bishop: 'assets/portraits/portrait_t2_high_saintess.png',
+  high_saintess: 'assets/portraits/portrait_t2_high_saintess.png',
+  seraphic_inquisitor: 'assets/portraits/portrait_t3_seraphic_inquisitor.png',
+
+  // 전사/버서커/전열 딜러 계열
+  vanguard: 'assets/portraits/portrait_t1_warlord.png',
+  warrior: 'assets/portraits/portrait_berserker.png',
+  berserker: 'assets/portraits/portrait_berserker.png',
+  warlord: 'assets/portraits/portrait_t1_warlord.png',
+  valhalla_blade: 'assets/portraits/portrait_t2_valhalla_blade.png',
+  iron_marshal: 'assets/portraits/portrait_t1_warlord.png',
+  valhalla_warlord: 'assets/portraits/portrait_t3_valhalla_warlord.png',
+
+  // 거너/궁수/원거리 딜러 계열
+  gunner: 'assets/portraits/portrait_gunner.png',
+  archer: 'assets/portraits/portrait_gunner.png',
+  tactical_gunner: 'assets/portraits/portrait_gunner.png',
+  sharpshooter: 'assets/portraits/portrait_t1_sharpshooter.png',
+  aether_gun_meister: 'assets/portraits/portrait_t2_gun_meister.png',
+  gun_meister: 'assets/portraits/portrait_t2_gun_meister.png',
+  ghost_sniper: 'assets/portraits/portrait_t3_omega_deadeye.png',
+  omega_deadeye: 'assets/portraits/portrait_t3_omega_deadeye.png',
+
+  tactical_tower: 'assets/citadel_bonfire.jpg',
+};
+
+export const getCombatantPortrait = (c: {
+  classId?: string;
+  id?: string;
+  name?: string;
+  portraitUrl?: string;
+  customPortraitUrl?: string;
+}): string => {
+  if (c.portraitUrl) return c.portraitUrl;
+  if (c.customPortraitUrl) return c.customPortraitUrl;
+  const customAssetService = CustomAssetService.getInstance();
+  const classId = c.classId || '';
+  const custom =
+    (c.id && customAssetService.getMercenaryOverride(c.id)) ||
+    (c.name && customAssetService.getMercenaryOverride(c.name)) ||
+    (classId && customAssetService.getMercenaryOverride(classId));
+  if (custom) return custom;
+  return CLASS_PORTRAIT_MAP[classId] || DEFAULT_CLASS_IMAGES[classId] || 'assets/portraits/portrait_paladin.png';
+};
+
 // 🚫 주간 차원의 금기 (Weekly Banned Badge) - 이번 주 획득 불가 배지
 export const WEEKLY_BANNED_BADGE: FeverBadgeType = 'crit';
 
@@ -179,6 +257,7 @@ interface ArenaCombatant {
   cooldowns: Record<string, number>;
   statusEffects: StatusEffect[];
   icon: string;
+  portraitUrl?: string;
   deathCountdown?: number;
   isDead?: boolean;
   isPermanentlyDead?: boolean;
@@ -1086,6 +1165,7 @@ export const ArenaScreen: React.FC = () => {
         cooldowns: {},
         statusEffects: [],
         icon: allSkills[1]?.icon || cls.skills[0]?.icon || '⚔️',
+        portraitUrl: (h as any).portraitUrl || (h as any).customPortraitUrl || getCombatantPortrait(h),
       };
     });
 
@@ -1128,6 +1208,7 @@ export const ArenaScreen: React.FC = () => {
         cooldowns: {},
         statusEffects: [],
         icon: allSkills[1]?.icon || cls.skills[0]?.icon || '👾',
+        portraitUrl: (h as any).portraitUrl || (h as any).customPortraitUrl || getCombatantPortrait(h),
       };
     });
 
@@ -4202,9 +4283,38 @@ export const ArenaScreen: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between">
-                      <span className="text-base">{c.icon}</span>
-                      <span className="text-[8px] font-mono text-[#ff80ab] font-bold">
+                    <div className="flex items-center justify-between gap-1">
+                      <div
+                        className={`relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden shrink-0 border-2 ${
+                          isDead
+                            ? 'border-[#455a64] grayscale opacity-50 bg-[#121824]'
+                            : isDying
+                            ? 'border-[#ff9800] ring-2 ring-[#ff9800]/70 animate-pulse bg-[#2a1010]'
+                            : isTarget
+                            ? 'border-[#ff416c] ring-2 ring-[#ff416c]/70 shadow-[0_0_10px_rgba(255,65,108,0.7)] bg-[#240e1c]'
+                            : isTurn
+                            ? 'border-[#ffd54f] ring-2 ring-[#ffd54f]/70 shadow-[0_0_10px_rgba(255,213,79,0.7)] animate-pulse bg-[#241c10]'
+                            : 'border-[#ff416c66] bg-[#160c18] shadow-sm'
+                        } flex items-center justify-center transition-all`}
+                      >
+                        <img
+                          src={c.portraitUrl || getCombatantPortrait(c)}
+                          alt={c.name}
+                          className={`w-full h-full object-cover object-top ${isDead ? 'grayscale' : ''}`}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                        <span className="text-xs absolute pointer-events-none -z-0 opacity-80 select-none">
+                          {c.icon}
+                        </span>
+                        {isDead && (
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-[10px]">
+                            💀
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-[8px] font-mono text-[#ff80ab] font-bold px-1.5 py-0.5 rounded bg-[#ff416c15] border border-[#ff416c33]">
                         {c.position === 'front' ? '전열' : c.position === 'mid' ? '중열' : '후열'}
                       </span>
                     </div>
@@ -4347,9 +4457,36 @@ export const ArenaScreen: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between">
-                      <span className="text-base">{c.icon}</span>
-                      <span className="text-[8px] font-mono text-[#00d2ff] font-bold">
+                    <div className="flex items-center justify-between gap-1">
+                      <div
+                        className={`relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden shrink-0 border-2 ${
+                          isDead
+                            ? 'border-[#455a64] grayscale opacity-50 bg-[#121824]'
+                            : isDying
+                            ? 'border-[#ff9800] ring-2 ring-[#ff9800]/70 animate-pulse bg-[#2a1010]'
+                            : isTurn
+                            ? 'border-[#00d2ff] ring-2 ring-[#00d2ff]/70 shadow-[0_0_10px_rgba(0,210,255,0.7)] animate-pulse bg-[#0a1e30]'
+                            : 'border-[#00d2ff66] bg-[#0c1626] shadow-sm'
+                        } flex items-center justify-center transition-all`}
+                      >
+                        <img
+                          src={c.portraitUrl || getCombatantPortrait(c)}
+                          alt={c.name}
+                          className={`w-full h-full object-cover object-top ${isDead ? 'grayscale' : ''}`}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                        <span className="text-xs absolute pointer-events-none -z-0 opacity-80 select-none">
+                          {c.icon}
+                        </span>
+                        {isDead && (
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-[10px]">
+                            💀
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-[8px] font-mono text-[#00d2ff] font-bold px-1.5 py-0.5 rounded bg-[#00d2ff15] border border-[#00d2ff33]">
                         {c.position === 'front' ? '전열' : c.position === 'mid' ? '중열' : '후열'}
                       </span>
                     </div>
