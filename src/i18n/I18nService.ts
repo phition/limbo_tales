@@ -24,6 +24,19 @@ export class I18nService {
   private patterns: Partial<Record<'en' | 'ja', { re: RegExp; frag: string; tpl: string }[]>> = {};
   private loading: Partial<Record<'en' | 'ja', Promise<void>>> = {};
 
+  /** 부분 어휘 치환 시 긴 단어 우선 치환(접두사 파괴 방지)을 위한 정렬 캐시 */
+  private sortedExactEntries: Partial<Record<'en' | 'ja', [string, string][]>> = {};
+
+  private getSortedExactEntries(lang: 'en' | 'ja'): [string, string][] {
+    if (!this.sortedExactEntries[lang]) {
+      const raw = EXACT_TRANSLATIONS[lang] || {};
+      this.sortedExactEntries[lang] = Object.entries(raw)
+        .filter(([k]) => k.length >= 2)
+        .sort((a, b) => b[0].length - a[0].length);
+    }
+    return this.sortedExactEntries[lang]!;
+  }
+
   private updateDocumentLang(lang: SupportedLanguage): void {
     if (typeof document !== 'undefined' && document.documentElement) {
       document.documentElement.lang = lang;
@@ -330,12 +343,12 @@ export class I18nService {
       return fallbackBattleLog;
     }
 
-    // 3. 부분 어휘 및 엔티티 치환 (자원, 시설, 클래스 등)
+    // 3. 부분 어휘 및 엔티티 치환 (긴 단어 우선 치환하여 접두사 파괴 방지)
     let transformed = fallbackBattleLog || text;
-    const dict = EXACT_TRANSLATIONS[tLang] || {};
+    const sortedEntries = this.getSortedExactEntries(tLang);
 
-    for (const [k, v] of Object.entries(dict)) {
-      if (k.length >= 2 && transformed.includes(k)) {
+    for (const [k, v] of sortedEntries) {
+      if (transformed.includes(k)) {
         transformed = transformed.split(k).join(v);
       }
     }
