@@ -611,7 +611,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
     if (iconCategory === 'forge' && !key.startsWith('forge_t') && !key.startsWith('rec_') && !['forge', 'anvil', 'enhance_equipment', 'craft_grimoire', 'enhance_skill', 'charge'].includes(key)) return false;
     if (iconCategory === 'boss_equip' && !key.startsWith('boss_uniq_')) return false;
-    if (iconCategory === 'buildings' && !['bonfire', 'cabin', 'lumberCamp', 'quarry', 'tavern', 'blacksmith', 'sanctuary', 'alchemy', 'arenaGate', 'infirmary', 'market', 'storage', 'butchery'].includes(key)) return false;
+    if (iconCategory === 'buildings' && !['bonfire', 'cabin', 'lumberCamp', 'quarry', 'tavern', 'blacksmith', 'sanctuary', 'alchemy', 'arenaGate', 'infirmary', 'market', 'storage', 'butchery', 'quests', 'codex'].includes(key)) return false;
     if (iconCategory === 'supplies' && !['torch', 'food', 'pickaxe', 'bandage', 'holy_water', 'key', 'skeleton_key', 'rift_anchor', 'compass', 'golden_toad', 'blood_contract', 'dimensional_whistle', 'enhanced_torch', 'enhanced_food', 'enhanced_pickaxe', 'enhanced_bandage', 'enhanced_holy_water', 'enhanced_key', 'enhanced_rift_anchor'].includes(key)) return false;
     if (iconCategory === 'events' && !key.startsWith('event_') && !key.startsWith('trap_')) return false;
     if (iconCategory === 'badges' && !key.startsWith('badge_') && !key.startsWith('fever_') && key !== 'battle_victory') return false;

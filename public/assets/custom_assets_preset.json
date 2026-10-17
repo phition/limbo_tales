@@ -314,6 +314,8 @@
     "market": "emoji",
     "necklace": "assets/custom_uploaded/icons/necklace.png",
     "quarry": "emoji",
+    "quests": "emoji",
+    "codex": "emoji",
     "relic": "assets/custom_uploaded/icons/relic.png",
     "ring": "assets/custom_uploaded/icons/ring.png",
     "sanctuary": "emoji",
@@ -895,9 +897,9 @@
     "npc_ark_ai": "assets/custom_uploaded/npcs/npc_ark_ai.png",
     "고대 방주의 잔류 사념": "assets/custom_uploaded/npcs/npc_ark_ai.png",
     "npc_void_overlord_echo": "assets/custom_uploaded/npcs/npc_void_overlord_echo.png",
-    "공허 지배자의 마지막 사념": "assets/custom_uploaded/npcs/______________.png",
+    "공허 지배자의 마지막 사념": "assets/custom_uploaded/npcs/npc_void_overlord_echo.png",
     "npc_asmodeus": "assets/custom_uploaded/npcs/npc_asmodeus.png",
-    "심연의 군주 아스모데우스": "assets/custom_uploaded/npcs/_____________.png"
+    "심연의 군주 아스모데우스": "assets/custom_uploaded/npcs/npc_asmodeus.png"
   },
-  "version": 666
+  "version": 668
 }

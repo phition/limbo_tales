@@ -2456,7 +2456,7 @@ const CitadelDrawer: React.FC<{
               onClick={() => onEnterDrawer('quests')}
               title="달성된 퀘스트 보상을 수령하세요!"
             >
-              <span>📜</span>
+              <GameIcon name="quests" icon="📜" size={13} />
               <span>보상 수령 ({claimableQuestCount})</span>
             </button>
           )}
@@ -12276,7 +12276,7 @@ const QuestsDrawer: React.FC<{
       {/* 헤더 */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1f2738] bg-[#070a10] shrink-0">
         <div className="flex items-center gap-2">
-          <span className="text-base">📜</span>
+          <GameIcon name="quests" icon="📜" size={18} />
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-sm font-bold text-[#38ef7d]">{'의뢰소'}</span>
@@ -14833,7 +14833,7 @@ export const CitadelScreen: React.FC = () => {
             onClick={() => setShowCodexModal(true)}
             title="심연의 백과 & 고대 컬렉션 열기"
           >
-            <span>📜</span>
+            <GameIcon name="codex" icon="📜" size={13} />
             <span>백과</span>
             {registerableCodexCount > 0 && (
               <span className="px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-sm animate-pulse">
@@ -14928,7 +14928,7 @@ export const CitadelScreen: React.FC = () => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef5350] opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ef5350]"></span>
                   </span>
-                  <span className="text-sm">📜</span>
+                  <GameIcon name="codex" icon="📜" size={14} />
                   <span className="text-[11px] font-bold text-white tracking-wide">
                     도감 등록 가능
                   </span>

@@ -6,6 +6,7 @@ import { CODEX_COLLECTIONS } from '../data/codex';
 import { CodexCollectionItem } from '../types/game';
 import { SoundManager } from '../managers/SoundManager';
 import { useI18n } from '../hooks/useI18n';
+import { GameIcon } from './GameIcon';
 
 interface Props {
   open: boolean;
@@ -123,7 +124,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
         <div className="p-3 rounded-2xl bg-gradient-to-r from-[#12192a] to-[#0c101c] border border-[#233550] shadow-md flex flex-col gap-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">📜</span>
+              <GameIcon name="codex" icon="📜" size={24} />
               <div>
                 <span className="text-xs font-bold text-white">백과 수집 진척도</span>
                 <div className="text-[10px] text-[#8b9bb4]">

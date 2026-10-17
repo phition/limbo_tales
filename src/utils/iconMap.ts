@@ -185,7 +185,7 @@ export const ICON_MAP: Record<string, IconMeta> = {
   trap_frost: { src: '/assets/icons/events/trap_frost.png', fallback: '❄️', label: '함정: 극저온 서리 룬' },
   trap_stun: { src: '/assets/icons/events/trap_stun.png', fallback: '💫', label: '함정: 낙석 충격 트랩' },
 
-  // 🏛️ 영지 건물 (13종)
+  // 🏛️ 영지 건물 (15종)
   bonfire: { src: '/assets/icons/buildings/bonfire.png', fallback: '🔥', label: '방주의 모닥불' },
   cabin: { src: '/assets/icons/buildings/cabin.png', fallback: '🛖', label: '피난민 오두막' },
   lumberCamp: { src: '/assets/icons/buildings/lumberCamp.png', fallback: '🪓', label: '성채 벌목소' },
@@ -199,6 +199,8 @@ export const ICON_MAP: Record<string, IconMeta> = {
   market: { src: '/assets/icons/buildings/market.png', fallback: '⚖️', label: '황혼의 교역소' },
   storage: { src: '/assets/icons/buildings/storage.png', fallback: '📦', label: '중앙 보관고' },
   butchery: { src: '/assets/icons/buildings/butchery.png', fallback: '🥩', label: '원정 도축장' },
+  quests: { src: '/assets/icons/buildings/quests.png', fallback: '📜', label: '방주 의뢰소' },
+  codex: { src: '/assets/icons/buildings/codex.png', fallback: '📜', label: '심연의 백과' },
 
   // 🪄 직업 고유 스킬 (Class Skills)
   squire_strike: { src: '/assets/icons/skills/squire_strike.png', fallback: '⚔️', label: '단련된 일격' },
@@ -555,6 +557,10 @@ export function getIconMeta(keyOrEmoji?: string): IconMeta | undefined {
   if (!keyOrEmoji) return undefined;
   if (ICON_MAP[keyOrEmoji]) {
     return ICON_MAP[keyOrEmoji];
+  }
+  // 🌟 의뢰소(quest / quests) 동의어 키 자동 매핑
+  if (keyOrEmoji === 'quest') {
+    return ICON_MAP.quests;
   }
   // 🌟 skill_ 스킬 조회 시 대응하는 마도서(book_) 메타로 자동 동기화 (skill_m_, skill_boss_ 등)
   if (keyOrEmoji.startsWith('skill_')) {

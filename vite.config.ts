@@ -96,6 +96,8 @@ function customAssetSyncPlugin(): Plugin {
                 '성혈의 처녀 실비아': 'npc_sylvia_virgin',
                 '타락에서 해방된 기사단장의 영혼': 'npc_knights_soul',
                 '고대 방주의 잔류 사념': 'npc_ark_ai',
+                '공허 지배자의 마지막 사념': 'npc_void_overlord_echo',
+                '심연의 군주 아스모데우스': 'npc_asmodeus',
               };
 
               const categories: Array<{ key: string; folder: string }> = [
