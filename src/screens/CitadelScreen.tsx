@@ -3921,10 +3921,10 @@ const BarracksDrawer: React.FC<{
               className="btn btn-primary text-xs px-4 py-2 mt-2"
               onClick={() => {
                 onClose();
-                onNavigateDrawer?.('arena');
+                onNavigateDrawer?.('citadel');
               }}
             >
-              {I18nService.getInstance().tr('🏛️ 차원 앵커 게이트로 이동하기')}
+              {I18nService.getInstance().tr('🏛️ 영지로 돌아가 건설하기')}
             </button>
           </div>
         ) : (
@@ -3951,9 +3951,12 @@ const BarracksDrawer: React.FC<{
             </p>
             <button
               className="btn btn-primary text-xs px-4 py-2 mt-2"
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                onNavigateDrawer?.('citadel');
+              }}
             >
-              {I18nService.getInstance().tr('🏛️ 영지로 돌아가 건물 건설하기')}
+              {I18nService.getInstance().tr('🏛️ 영지로 돌아가 건설하기')}
             </button>
           </div>
         ) : (
