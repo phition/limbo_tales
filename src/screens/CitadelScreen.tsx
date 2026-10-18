@@ -3917,23 +3917,15 @@ const BarracksDrawer: React.FC<{
               {I18nService.getInstance().tr('영지 수비 부대 및 방어 타워 편성은 [차원 앵커 게이트]가 6레벨 이상이어야 해금되는 엔드게임 방어 기능입니다.')}<br />
               {I18nService.getInstance().tr('수비 부대를 해금하면 보호막 거점, 방어 타워(좌/우), 수성 오퍼레이터를 배치하여 다른 지휘관의 영지 침공을 자동으로 요격할 수 있습니다.')}
             </p>
-            <div className="flex items-center gap-2 mt-2">
-              <button
-                className="btn btn-primary text-xs px-4 py-2"
-                onClick={() => {
-                  onClose();
-                  onNavigateDrawer?.('arena');
-                }}
-              >
-                {I18nService.getInstance().tr('🏛️ 차원 앵커 게이트로 이동하기')}
-              </button>
-              <button
-                className="btn btn-secondary text-xs px-4 py-2"
-                onClick={onClose}
-              >
-                {I18nService.getInstance().tr('닫기')}
-              </button>
-            </div>
+            <button
+              className="btn btn-primary text-xs px-4 py-2 mt-2"
+              onClick={() => {
+                onClose();
+                onNavigateDrawer?.('arena');
+              }}
+            >
+              {I18nService.getInstance().tr('🏛️ 차원 앵커 게이트로 이동하기')}
+            </button>
           </div>
         ) : (
           <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar w-full">
