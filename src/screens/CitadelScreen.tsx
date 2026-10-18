@@ -3670,18 +3670,41 @@ const BarracksDrawer: React.FC<{
     setBarracksCategory(initialCategory);
   }, [initialCategory]);
   const [selectedDimRole, setSelectedDimRole] = useState<'main_0' | 'main_1' | 'main_2' | 'operator' | 'leader' | null>(null);
+  const [dimSelectModalRole, setDimSelectModalRole] = useState<'main_0' | 'main_1' | 'main_2' | 'operator' | null>(null);
   const [showDimTacticsGuide, setShowDimTacticsGuide] = useState(false);
   const [isDimCodexModalOpen, setIsDimCodexModalOpen] = useState(false);
   const weeklyAffinity = useMemo(() => getWeeklyAffinityConfig(), []);
 
   const isAnchorUnlocked = gm.isMasterAccount || (state.buildings['arenaGate']?.level || 0) > 0;
+  const isDefenseUnlocked = gm.isMasterAccount || (state.buildings['arenaGate']?.level || 0) >= 6;
   const dimDeckData = gm.getDimensionalDeck();
+  const defenseDeckData = gm.getDefenseDeck();
   const { mainHeroes, operatorHero, leaderHero } = dimDeckData;
   const activeOperator = operatorHero || leaderHero;
   const dimSquad = gm.getInvasionSquad();
   const mainSynergies = calculatePartySynergies(mainHeroes);
   const operatorBlessing = activeOperator ? gm.getOperatorBlessing(activeOperator) : null;
   const predictedSynergies = useMemo(() => predictTopSynergies(mainHeroes), [mainHeroes]);
+
+  // 수비 부대에도 쓰이는 전체 가용 용병 리스트 (병영 + 파티 통합 중복 제거)
+  const allAvailableHeroes = useMemo(
+    () => [...state.barracks, ...state.party].filter((h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx),
+    [state.barracks, state.party]
+  );
+
+  // 포트레이트 이미지 URL 헬퍼
+  const getHeroPortraitUrl = (h: Mercenary | null | undefined) => {
+    if (!h) return '';
+    const hCls = CHARACTER_CLASSES[h.classId];
+    return (
+      CustomAssetService.getInstance().getMercenaryOverride(h.classId) ||
+      (hCls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(hCls.promptKey) : undefined) ||
+      (h.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(h.portraitPromptKey) : undefined) ||
+      CustomAssetService.getInstance().getMercenaryOverride(h.id) ||
+      CustomAssetService.getInstance().getMercenaryOverride(h.name) ||
+      (hCls?.promptKey ? `assets/portraits/${hCls.promptKey}.png` : '')
+    );
+  };
 
   // ⚡ 3인 결투 부대 + 1인 오퍼레이터 최적 자동 편성
   const handleAutoAssignDimSquad = () => {
@@ -3690,16 +3713,17 @@ const BarracksDrawer: React.FC<{
       SoundManager.getInstance().play('equip');
     } else {
       SoundManager.getInstance().play('debuff');
-      alert('보유 용병이 3명 미만입니다! 주점에서 용병을 3명 이상 고용해주세요.');
+      alert(I18nService.getInstance().tr('보유 용병이 3명 미만입니다! 주점에서 용병을 3명 이상 고용해주세요.'));
     }
   };
 
   // 슬롯에 용병 배치 / 스왑
-  const handleAssignHeroToDimSlot = (heroId: string) => {
+  const handleAssignHeroToDimSlot = (heroId: string, explicitRole?: 'main_0' | 'main_1' | 'main_2' | 'operator' | 'leader' | null) => {
+    const targetRole = explicitRole !== undefined ? explicitRole : selectedDimRole;
     const currentDeck = { ...dimDeckData.deck };
     const currentOpId = currentDeck.operatorHeroId || currentDeck.leaderHeroId || '';
 
-    if (!selectedDimRole) {
+    if (!targetRole) {
       // 자동 빈 자리 배치
       if (!currentDeck.mainHeroIds.includes(heroId) && currentOpId !== heroId) {
         if (currentDeck.mainHeroIds.length < 3) {
@@ -3723,8 +3747,8 @@ const BarracksDrawer: React.FC<{
     const prevMain = [...currentDeck.mainHeroIds];
     let prevOp = currentOpId;
 
-    if (selectedDimRole.startsWith('main_')) {
-      const idx = parseInt(selectedDimRole.split('_')[1], 10);
+    if (targetRole.startsWith('main_')) {
+      const idx = parseInt(targetRole.split('_')[1], 10);
       // 기존에 다른 슬롯에 들어가 있던 영웅인지 확인하여 스왑
       if (prevOp === heroId) prevOp = prevMain[idx] || '';
       else {
@@ -3732,7 +3756,7 @@ const BarracksDrawer: React.FC<{
         if (otherMainIdx !== -1) prevMain[otherMainIdx] = prevMain[idx];
       }
       prevMain[idx] = heroId;
-    } else if (selectedDimRole === 'operator' || selectedDimRole === 'leader') {
+    } else if (targetRole === 'operator' || targetRole === 'leader') {
       const mainIdx = prevMain.indexOf(heroId);
       if (mainIdx !== -1) prevMain[mainIdx] = prevOp;
       prevOp = heroId;
@@ -3744,8 +3768,10 @@ const BarracksDrawer: React.FC<{
       leaderHeroId: prevOp,
       supporterHeroId: '',
     });
-    setSelectedDimRole(null);
-    SoundManager.getInstance().play('click');
+    if (!explicitRole) {
+      setSelectedDimRole(null);
+    }
+    SoundManager.getInstance().play('equip');
   };
 
   // 슬롯에서 용병 제거
@@ -3795,9 +3821,9 @@ const BarracksDrawer: React.FC<{
         <div className="flex items-center gap-2">
           <span className="text-base">⚔️</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-sm font-bold text-[#c8aa6e]">{'병영'}</span>
+            <span className="text-sm font-bold text-[#c8aa6e]">{I18nService.getInstance().tr('병영')}</span>
             <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
-              {`보유 ${state.barracks.length}/7명`}
+              {I18nService.getInstance().tr(`보유 ${state.barracks.length}/7명`)}
             </span>
             <EncyclopediaBadge tab="classes" label="병영 백과" />
           </div>
@@ -3807,7 +3833,7 @@ const BarracksDrawer: React.FC<{
             className="text-[10px] px-2 py-1 rounded-lg bg-[#ff416c18] text-[#ff416c] border border-[#ff416c33] font-bold hover:bg-[#ff416c28] transition-all cursor-pointer shrink-0"
             onClick={() => setShowBondModal(true)}
           >
-            💞 유대 관계도
+            {I18nService.getInstance().tr('💞 유대 관계도')}
           </button>
           <button
             className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
@@ -3846,30 +3872,17 @@ const BarracksDrawer: React.FC<{
         </button>
 
         {/* 🛡️ 영지 수비부대 탭 (차원 앵커 게이트 Lv.6 해금) */}
-        {(() => {
-          const gateLv = state.buildings['arenaGate']?.level || 0;
-          const isDefenseUnlocked = gm.isMasterAccount || gateLv >= 6;
-          return (
-            <button
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
-                barracksCategory === 'defense'
-                  ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66] shadow-sm'
-                  : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
-              }`}
-              onClick={() => {
-                if (!isDefenseUnlocked) {
-                  SoundManager.getInstance().play('debuff');
-                  alert(I18nService.getInstance().tr('차원 앵커 게이트가 6레벨 이상이어야 영지 수비부대 셋팅이 해금됩니다.'));
-                  return;
-                }
-                setBarracksCategory('defense');
-              }}
-            >
-              <span>{isDefenseUnlocked ? '🛡️' : '🔒'}</span>
-              <span>{I18nService.getInstance().tr('수비 부대')}</span>
-            </button>
-          );
-        })()}
+        <button
+          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
+            barracksCategory === 'defense'
+              ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66] shadow-sm'
+              : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
+          }`}
+          onClick={() => setBarracksCategory('defense')}
+        >
+          <span>{isDefenseUnlocked ? '🛡️' : '🔒'}</span>
+          <span>{I18nService.getInstance().tr('수비 부대')}</span>
+        </button>
       </div>
 
       {/* 🎒 3인 편성 완료 시 출정 채비실 바로가기 안내 배너 */}
@@ -3878,8 +3891,8 @@ const BarracksDrawer: React.FC<{
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-lg shrink-0">🎒</span>
             <div className="min-w-0">
-              <div className="text-xs font-bold text-[#e9d5ff]">3인 원정대 편성 완료!</div>
-              <div className="text-[10px] text-[#c084fc] truncate">출정 채비실로 이동하여 진형과 보급품을 점검하세요.</div>
+              <div className="text-xs font-bold text-[#e9d5ff]">{I18nService.getInstance().tr('3인 원정대 편성 완료!')}</div>
+              <div className="text-[10px] text-[#c084fc] truncate">{I18nService.getInstance().tr('출정 채비실로 이동하여 진형과 보급품을 점검하세요.')}</div>
             </div>
           </div>
           <button
@@ -3887,21 +3900,51 @@ const BarracksDrawer: React.FC<{
             className="btn btn-primary text-xs px-3 py-1 font-bold shrink-0 flex items-center gap-1 shadow bg-[#7e22ce] hover:bg-[#9333ea] border border-[#c084fc] text-white"
             onClick={() => onNavigateDrawer('explore')}
           >
-            <span>출정 채비실로 이동</span>
+            <span>{I18nService.getInstance().tr('출정 채비실로 이동')}</span>
             <span>▶</span>
           </button>
         </div>
       )}
 
       {barracksCategory === 'defense' ? (
-        <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar w-full">
-          <DefenseSettingsView
-            onNavigateToTowerResearch={() => {
-              onClose();
-              onNavigateDrawer?.('arena');
-            }}
-          />
-        </div>
+        !isDefenseUnlocked ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-3">
+            <div className="text-4xl p-4 bg-[#38ef7d15] border border-[#38ef7d33] rounded-2xl text-[#38ef7d] animate-pulse">
+              🔒
+            </div>
+            <h3 className="text-base font-extrabold text-white">{I18nService.getInstance().tr('수비 부대 편성 잠김')}</h3>
+            <p className="text-xs text-[#8b9bb4] max-w-sm leading-relaxed">
+              {I18nService.getInstance().tr('영지 수비 부대 및 방어 타워 편성은 [차원 앵커 게이트]가 6레벨 이상이어야 해금되는 엔드게임 방어 기능입니다.')}<br />
+              {I18nService.getInstance().tr('수비 부대를 해금하면 보호막 거점, 방어 타워(좌/우), 수성 오퍼레이터를 배치하여 다른 지휘관의 영지 침공을 자동으로 요격할 수 있습니다.')}
+            </p>
+            <div className="flex items-center gap-2 mt-2">
+              <button
+                className="btn btn-primary text-xs px-4 py-2"
+                onClick={() => {
+                  onClose();
+                  onNavigateDrawer?.('arena');
+                }}
+              >
+                {I18nService.getInstance().tr('🏛️ 차원 앵커 게이트로 이동하기')}
+              </button>
+              <button
+                className="btn btn-secondary text-xs px-4 py-2"
+                onClick={onClose}
+              >
+                {I18nService.getInstance().tr('닫기')}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar w-full">
+            <DefenseSettingsView
+              onNavigateToTowerResearch={() => {
+                onClose();
+                onNavigateDrawer?.('arena');
+              }}
+            />
+          </div>
+        )
       ) : barracksCategory === 'dimensional' ? (
         // ── 🌌 차원 3인 결투 부대 & 전술 오퍼레이터 관리 뷰 ──
         !isAnchorUnlocked ? (
@@ -4045,18 +4088,23 @@ const BarracksDrawer: React.FC<{
                   const h = mainHeroes[idx];
                   const roleKey = (`main_${idx}` as 'main_0' | 'main_1' | 'main_2');
                   const isSelected = selectedDimRole === roleKey;
+                  const portraitUrl = getHeroPortraitUrl(h);
 
                   return (
                     <div
                       key={idx}
-                      className={`p-2 rounded-xl border flex flex-col justify-between gap-1 min-h-[120px] transition-all cursor-pointer relative ${
+                      className={`p-2 rounded-xl border flex flex-col justify-between gap-1.5 min-h-[130px] transition-all cursor-pointer relative ${
                         isSelected
                           ? posTheme.selectedStyle
                           : h
                           ? posTheme.normalStyle
                           : posTheme.emptyStyle
                       }`}
-                      onClick={() => setSelectedDimRole(isSelected ? null : roleKey)}
+                      onClick={() => {
+                        setSelectedDimRole(roleKey);
+                        setDimSelectModalRole(roleKey);
+                        SoundManager.getInstance().play('click');
+                      }}
                     >
                       <div className="flex items-center justify-between text-[9px]">
                         <span className={`font-mono font-bold px-1.5 py-0.2 rounded border text-[9px] ${posTheme.badgeClass}`}>
@@ -4077,13 +4125,23 @@ const BarracksDrawer: React.FC<{
                       </div>
 
                       {h ? (
-                        <div className="flex flex-col items-center text-center gap-0.5">
-                          <span className="text-2xl p-1 bg-[#090e18] rounded-lg border border-[#1b263b]">
-                            {CHARACTER_CLASSES[h.classId]?.skills[0]?.icon || '⚔️'}
-                          </span>
+                        <div className="flex flex-col items-center text-center gap-1">
+                          <div
+                            className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden shrink-0 border-2 bg-[#090e18] flex items-center justify-center shadow-md"
+                            style={{ borderColor: posTheme.color }}
+                          >
+                            {portraitUrl ? (
+                              <img src={portraitUrl} alt={h.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-xl">{CHARACTER_CLASSES[h.classId]?.skills[0]?.icon || '⚔️'}</span>
+                            )}
+                            <span className="absolute bottom-0.5 right-0.5 text-[7.5px] font-mono font-black bg-black/85 px-1 rounded text-[#ffd54f]">
+                              Lv.{h.level}
+                            </span>
+                          </div>
                           <div className="font-bold text-xs text-white truncate w-full">{h.name}</div>
-                          <div className="text-[9px] font-bold" style={{ color: posTheme.color }}>
-                            {CHARACTER_CLASSES[h.classId]?.name} Lv.{h.level}
+                          <div className="text-[9px] font-bold truncate w-full" style={{ color: posTheme.color }}>
+                            {I18nService.getInstance().tr(CHARACTER_CLASSES[h.classId]?.name || '')}
                           </div>
                           <div className="text-[9px] text-[#ffd54f] font-mono">
                             ⚔️{h.stats.atk} 🛡️{h.stats.def}
@@ -4119,10 +4177,10 @@ const BarracksDrawer: React.FC<{
                         <div
                           key={item.codex.id}
                           className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/40 border border-amber-500/30 text-[10px] text-stone-300 hover:border-amber-400 transition-colors"
-                          title={`${item.codex.handRankLabel} | ${item.codex.summary}\n💡 사유: ${item.reason}`}
+                          title={`${I18nService.getInstance().tr(item.codex.handRankLabel)} | ${I18nService.getInstance().tr(item.codex.summary)}\n💡 ${I18nService.getInstance().tr('사유:')} ${I18nService.getInstance().tr(item.reason)}`}
                         >
                           <span className="font-black text-amber-400">#{pIdx + 1}</span>
-                          <span className="font-bold text-white">{item.codex.name}</span>
+                          <span className="font-bold text-white">{I18nService.getInstance().tr(item.codex.name)}</span>
                           <span className="text-[9px] font-mono text-[#c8aa6e]">({item.probabilityPct}%)</span>
                           <span
                             className="text-[8px] px-1 py-0.1 rounded border font-semibold ml-0.5"
@@ -4132,7 +4190,7 @@ const BarracksDrawer: React.FC<{
                               color: aff.color
                             }}
                           >
-                            {aff.icon} {aff.label}
+                            {aff.icon} {I18nService.getInstance().tr(aff.label)}
                           </span>
                         </div>
                       );
@@ -4165,7 +4223,11 @@ const BarracksDrawer: React.FC<{
                     ? 'bg-[#18140c] border-[#ffb30044] hover:border-[#ffd54f88]'
                     : 'bg-[#100c06] border-[#3d2c0b] border-dashed hover:border-[#ffb30088]'
                 }`}
-                onClick={() => setSelectedDimRole(selectedDimRole === 'operator' ? null : 'operator')}
+                onClick={() => {
+                  setSelectedDimRole('operator');
+                  setDimSelectModalRole('operator');
+                  SoundManager.getInstance().play('click');
+                }}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-extrabold text-[#ffd54f] flex items-center gap-1.5">
@@ -4190,25 +4252,38 @@ const BarracksDrawer: React.FC<{
                   (() => {
                     const opCls = CHARACTER_CLASSES[activeOperator.classId];
                     const opSkill = opCls ? (opCls.specialSkill || opCls.skills[0]) : null;
+                    const opPortraitUrl = getHeroPortraitUrl(activeOperator);
                     return (
-                      <div className="flex items-start gap-3 mt-1.5">
-                        <span className="text-3xl p-2 bg-[#090e18] rounded-xl border border-[#ffd54f44] shrink-0">
-                          {opSkill?.icon || opCls?.skills?.[0]?.icon || '👑'}
-                        </span>
+                      <div className="flex items-center gap-3 mt-1.5">
+                        <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 border-2 border-[#ffd54f] bg-[#090e18] flex items-center justify-center shadow-[0_0_12px_rgba(255,213,79,0.35)]">
+                          {opPortraitUrl ? (
+                            <img src={opPortraitUrl} alt={activeOperator.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-2xl">{opSkill?.icon || opCls?.skills?.[0]?.icon || '👑'}</span>
+                          )}
+                          <span className="absolute bottom-0.5 right-0.5 text-[7.5px] font-mono font-black bg-black/85 px-1 rounded text-[#ffd54f]">
+                            Lv.{activeOperator.level}
+                          </span>
+                        </div>
                         <div className="min-w-0 flex-1 space-y-1">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <span className="font-bold text-sm text-white truncate">{activeOperator.name}</span>
                             <span className="text-xs text-[#ffd54f] font-mono">
-                              {opCls?.name} Lv.{activeOperator.level}
+                              {I18nService.getInstance().tr(opCls?.name || '')} Lv.{activeOperator.level}
                             </span>
+                            {activeOperator.trait && (
+                              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33]">
+                                {I18nService.getInstance().tr(activeOperator.trait)}
+                              </span>
+                            )}
                           </div>
                           <div className="text-[11px] text-[#ffecb3] truncate">
-                            ✨ <strong className="text-white">{I18nService.getInstance().tr('영령의 가호:')}</strong> {operatorBlessing ? operatorBlessing.name : I18nService.getInstance().tr('전술 가호 버프 적용')}
+                            ✨ <strong className="text-white">{I18nService.getInstance().tr('영령의 가호:')}</strong> {operatorBlessing ? I18nService.getInstance().tr(operatorBlessing.name) : I18nService.getInstance().tr('전술 가호 버프 적용')}
                           </div>
                           {opSkill && (
                             <div className="text-[11px] text-amber-300/90 truncate flex items-center gap-1">
                               <span>💥</span>
-                              <span><strong className="text-white">{I18nService.getInstance().tr('피버 궁극기:')}</strong> [{opSkill.name}] {I18nService.getInstance().tr('피버 승리 시 전장에 시전')}</span>
+                              <span><strong className="text-white">{I18nService.getInstance().tr('피버 궁극기:')}</strong> [{I18nService.getInstance().tr(opSkill.name)}] {I18nService.getInstance().tr('피버 승리 시 전장에 시전')}</span>
                             </div>
                           )}
                         </div>
@@ -4226,7 +4301,7 @@ const BarracksDrawer: React.FC<{
               </div>
             </div>
 
-            {/* 하단: 보유 용병 선택 리스트 */}
+            {/* 하단: 보유 용병 선택 리스트 (수비 부대와 동일한 포트레이트 리스트 스타일) */}
             <div className="panel p-3 bg-[#0c111e] border border-[#1b263b] rounded-xl flex flex-col gap-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-bold text-[#cfd8e8] flex items-center gap-1.5">
@@ -4243,70 +4318,287 @@ const BarracksDrawer: React.FC<{
                       : I18nService.getInstance().tr('보유 용병 선택 (위의 슬롯을 먼저 선택하거나 탭하여 바로 배치)')}
                   </span>
                 </span>
-                <span className="text-[10px] text-[#8b9bb4]">{state.barracks.length}{I18nService.getInstance().tr('명 보유')}</span>
+                <span className="text-[10px] text-[#8b9bb4]">{allAvailableHeroes.length}{I18nService.getInstance().tr('명 보유')}</span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {state.barracks.map(bHero => {
+              <div className="flex flex-col gap-1.5">
+                {allAvailableHeroes.map(bHero => {
                   const mainIdx = mainHeroes.findIndex(h => h.id === bHero.id);
                   const isLeader = activeOperator?.id === bHero.id;
                   const isAssigned = mainIdx !== -1 || isLeader;
+                  const isInDefense =
+                    defenseDeckData.deck.barrierHeroId === bHero.id ||
+                    defenseDeckData.deck.leftTurretHeroId === bHero.id ||
+                    defenseDeckData.deck.rightTurretHeroId === bHero.id ||
+                    defenseDeckData.deck.operatorHeroId === bHero.id;
                   const gMeta = GRADE_META[bHero.grade] || GRADE_META.rookie;
                   const bCls = CHARACTER_CLASSES[bHero.classId];
+                  const imgUrl = getHeroPortraitUrl(bHero);
 
                   let assignedLabel = '대기';
                   let badgeStyle = '';
-                  let cardBgStyle = 'bg-[#121927] border-[#1d273a] hover:border-[#c8aa6e44]';
+                  let cardBgStyle = 'bg-[#12141a] border-[#1e2a40] hover:border-[#c8aa6e]/60';
 
                   if (mainIdx === 0) {
                     assignedLabel = '🔴 선발 전열';
                     badgeStyle = 'bg-[#ff525222] text-[#ff5252] border-[#ff525255]';
-                    cardBgStyle = 'bg-[#1a0e10] border-[#ff525244]';
+                    cardBgStyle = 'bg-[#1a0e10] border-[#ff525266]';
                   } else if (mainIdx === 1) {
                     assignedLabel = '🟡 선발 중열';
                     badgeStyle = 'bg-[#ff980022] text-[#ff9800] border-[#ff980055]';
-                    cardBgStyle = 'bg-[#1a1208] border-[#ff980044]';
+                    cardBgStyle = 'bg-[#1a1208] border-[#ff980066]';
                   } else if (mainIdx === 2) {
                     assignedLabel = '🟢 선발 후열';
                     badgeStyle = 'bg-[#00e67622] text-[#00e676] border-[#00e67655]';
-                    cardBgStyle = 'bg-[#0a1810] border-[#00e67644]';
+                    cardBgStyle = 'bg-[#0a1810] border-[#00e67666]';
                   } else if (isLeader) {
                     assignedLabel = '👑 오퍼레이터';
                     badgeStyle = 'bg-[#ffd54f22] text-[#ffd54f] border-[#ffd54f44]';
-                    cardBgStyle = 'bg-[#1e170b] border-[#ffd54f55]';
+                    cardBgStyle = 'bg-[#1e170b] border-[#ffd54f66]';
                   }
+
+                  const isTargetSlotSelected =
+                    (selectedDimRole === 'main_0' && mainIdx === 0) ||
+                    (selectedDimRole === 'main_1' && mainIdx === 1) ||
+                    (selectedDimRole === 'main_2' && mainIdx === 2) ||
+                    ((selectedDimRole === 'operator' || selectedDimRole === 'leader') && isLeader);
 
                   return (
                     <div
                       key={bHero.id}
-                      className={`p-2 rounded-lg border transition-all cursor-pointer flex flex-col gap-1 ${cardBgStyle}`}
+                      className={`p-2 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${cardBgStyle}`}
                       onClick={() => handleAssignHeroToDimSlot(bHero.id)}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-lg">{bCls?.skills[0]?.icon || '⚔️'}</span>
-                        {isAssigned ? (
-                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold border ${badgeStyle}`}>
-                            {I18nService.getInstance().tr(assignedLabel)}
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {/* 포트레이트 아이콘 */}
+                        <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-[#2a3f64] bg-[#080d16] flex items-center justify-center">
+                          {imgUrl ? (
+                            <img src={imgUrl} alt={bHero.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-base">{bCls?.skills?.[0]?.icon || '⚔️'}</span>
+                          )}
+                          <span className="absolute bottom-0.2 right-0.5 text-[6.5px] font-mono font-bold bg-black/80 px-1 rounded text-[#ffd54f]">
+                            Lv.{bHero.level}
                           </span>
-                        ) : (
-                          <span className="text-[9px] px-1 py-0.2 rounded font-bold" style={{ color: gMeta.color, background: `${gMeta.color}15` }}>
-                            {I18nService.getInstance().tr('대기')}
-                          </span>
-                        )}
+                        </div>
+
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-xs font-bold text-white truncate">{bHero.name}</span>
+                            <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33]">
+                              {I18nService.getInstance().tr(bHero.trait || '균형잡힌 정예')}
+                            </span>
+                            {isAssigned ? (
+                              <span className={`text-[8.5px] px-1.5 py-0.2 rounded font-bold border ${badgeStyle}`}>
+                                {I18nService.getInstance().tr(assignedLabel)}
+                              </span>
+                            ) : (
+                              <span className="text-[8.5px] px-1 py-0.2 rounded font-bold" style={{ color: gMeta.color, background: `${gMeta.color}15` }}>
+                                {I18nService.getInstance().tr('대기')}
+                              </span>
+                            )}
+                            {isInDefense && (
+                              <span className="text-[8px] px-1 py-0.2 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/40">
+                                {I18nService.getInstance().tr('🛡️ 수비 부대')}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
+                            {I18nService.getInstance().tr(bCls?.name || '')} · ATK {bHero.stats.atk} · DEF {bHero.stats.def} · HP {bHero.maxHp.toLocaleString()}
+                          </div>
+                        </div>
                       </div>
-                      <div className="font-bold text-xs text-white truncate">{bHero.name}</div>
-                      <div className="text-[10px] text-[#8b9bb4]">
-                        {bCls?.name} Lv.{bHero.level}
-                      </div>
-                      <div className="text-[9px] text-[#ffd54f] font-mono flex items-center justify-between">
-                        <span>ATK {bHero.stats.atk}</span>
-                        <span>DEF {bHero.stats.def}</span>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAssignHeroToDimSlot(bHero.id);
+                          }}
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                            isTargetSlotSelected || (!selectedDimRole && isAssigned)
+                              ? 'bg-[#38ef7d22] border-[#38ef7d] text-[#38ef7d]'
+                              : 'bg-[#c8aa6e22] border-[#c8aa6e88] text-white hover:bg-[#c8aa6e44]'
+                          }`}
+                        >
+                          {isTargetSlotSelected
+                            ? I18nService.getInstance().tr('✓ 선택됨')
+                            : isAssigned && selectedDimRole
+                            ? I18nService.getInstance().tr('교체')
+                            : isAssigned
+                            ? I18nService.getInstance().tr('✓ 배치됨')
+                            : I18nService.getInstance().tr('선택')}
+                        </button>
                       </div>
                     </div>
                   );
                 })}
               </div>
             </div>
+
+            {/* ════════ 팝업 상세 모달: 포지션별 용병 선택 (전열 / 중열 / 후열 / 오퍼레이터) ════════ */}
+            {dimSelectModalRole && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/85 backdrop-blur-md animate-fade-in select-none">
+                <div className="relative w-full max-w-md bg-[#0d1424] border border-[#243554] rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+                  {/* 모달 헤더 */}
+                  <div className="px-3.5 py-2.5 bg-gradient-to-r from-[#141e33] to-[#0d1424] border-b border-[#1f2d48] flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">
+                        {dimSelectModalRole === 'main_0' ? '🔴' : dimSelectModalRole === 'main_1' ? '🟡' : dimSelectModalRole === 'main_2' ? '🟢' : '👑'}
+                      </span>
+                      <span className="font-extrabold text-xs sm:text-sm text-white">
+                        {dimSelectModalRole === 'main_0' && I18nService.getInstance().tr('선발 전열 결투원 지정 (방어 / 돌파)')}
+                        {dimSelectModalRole === 'main_1' && I18nService.getInstance().tr('선발 중열 결투원 지정 (연계 / 화력)')}
+                        {dimSelectModalRole === 'main_2' && I18nService.getInstance().tr('선발 후열 결투원 지정 (지원 / 원거리)')}
+                        {dimSelectModalRole === 'operator' && I18nService.getInstance().tr('전술 오퍼레이터 임명 (영령 가호 & 피버 궁극기)')}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setDimSelectModalRole(null)}
+                      className="text-gray-400 hover:text-white p-1 text-base cursor-pointer"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  {/* 모달 안내 및 용병 리스트 */}
+                  <div className="p-3 flex flex-col gap-2.5 overflow-y-auto custom-scrollbar">
+                    <div className="text-[11px] text-[#8b9bb4] bg-[#070b14] p-2 rounded-xl border border-[#162238] leading-relaxed">
+                      {dimSelectModalRole === 'main_0' && (
+                        <span>
+                          🔴 {I18nService.getInstance().tr('전열(1번)에 배치된 결투원은 적의 전열 집중 공격을 최우선으로 받아내며 아군 중·후열을 보호합니다. 체력과 방어력이 높은 탱커나 전사를 권장합니다.')}
+                        </span>
+                      )}
+                      {dimSelectModalRole === 'main_1' && (
+                        <span>
+                          🟡 {I18nService.getInstance().tr('중열(2번)에 배치된 결투원은 전열과 후열 사이에서 스킬 콤보 연계와 주력 화력을 담당합니다. 물리/마법 딜러나 암살자를 권장합니다.')}
+                        </span>
+                      )}
+                      {dimSelectModalRole === 'main_2' && (
+                        <span>
+                          🟢 {I18nService.getInstance().tr('후열(3번)에 배치된 결투원은 적의 일반 근접 공격으로부터 보호받으며 원거리 사격이나 아군 치유·지원을 수행합니다. 사수, 마도사, 성직자를 권장합니다.')}
+                        </span>
+                      )}
+                      {dimSelectModalRole === 'operator' && (
+                        <span>
+                          👑 {I18nService.getInstance().tr('전술 오퍼레이터는 직접 전장에 서지 않고 전 부대에 [영령의 가호] 상시 패시브를 부여하며, 피버 쇼다운 승리 시 자신의 궁극기를 전장에 즉시 투사합니다.')}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="text-xs font-bold text-white">{I18nService.getInstance().tr('보유 용병 선택 (포트레이트 클릭)')}</div>
+                    <div className="flex flex-col gap-1.5 max-h-64 overflow-y-auto custom-scrollbar">
+                      {allAvailableHeroes.map(h => {
+                        const mIdx = mainHeroes.findIndex(mh => mh.id === h.id);
+                        const isOp = activeOperator?.id === h.id;
+                        const isSelectedForThis =
+                          (dimSelectModalRole === 'main_0' && mIdx === 0) ||
+                          (dimSelectModalRole === 'main_1' && mIdx === 1) ||
+                          (dimSelectModalRole === 'main_2' && mIdx === 2) ||
+                          (dimSelectModalRole === 'operator' && isOp);
+                        const isAssignedElsewhere = (mIdx !== -1 || isOp) && !isSelectedForThis;
+                        const isInDefense =
+                          defenseDeckData.deck.barrierHeroId === h.id ||
+                          defenseDeckData.deck.leftTurretHeroId === h.id ||
+                          defenseDeckData.deck.rightTurretHeroId === h.id ||
+                          defenseDeckData.deck.operatorHeroId === h.id;
+
+                        const hCls = CHARACTER_CLASSES[h.classId];
+                        const imgUrl = getHeroPortraitUrl(h);
+
+                        let otherSlotLabel = '';
+                        if (mIdx === 0) otherSlotLabel = '🔴 선발 전열';
+                        else if (mIdx === 1) otherSlotLabel = '🟡 선발 중열';
+                        else if (mIdx === 2) otherSlotLabel = '🟢 선발 후열';
+                        else if (isOp) otherSlotLabel = '👑 오퍼레이터';
+
+                        return (
+                          <div
+                            key={h.id}
+                            onClick={() => {
+                              handleAssignHeroToDimSlot(h.id, dimSelectModalRole);
+                            }}
+                            className={`p-2 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
+                              isSelectedForThis
+                                ? 'bg-[#0f2a42] border-[#c8aa6e] shadow-[0_0_12px_rgba(200,170,110,0.4)]'
+                                : 'bg-[#12141a] border-[#1e2a40] hover:border-[#c8aa6e]/60'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              {/* 포트레이트 */}
+                              <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-[#2a3f64] bg-[#080d16] flex items-center justify-center">
+                                {imgUrl ? (
+                                  <img src={imgUrl} alt={h.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <span className="text-base">{hCls?.skills?.[0]?.icon || '⚔️'}</span>
+                                )}
+                                <span className="absolute bottom-0.2 right-0.5 text-[6.5px] font-mono font-bold bg-black/80 px-1 rounded text-[#ffd54f]">
+                                  Lv.{h.level}
+                                </span>
+                              </div>
+
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="text-xs font-bold text-white truncate">{h.name}</span>
+                                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33]">
+                                    {I18nService.getInstance().tr(h.trait || '균형잡힌 정예')}
+                                  </span>
+                                  {isAssignedElsewhere && otherSlotLabel && (
+                                    <span className="text-[8px] px-1 py-0.2 rounded bg-amber-950/40 text-amber-300 border border-amber-800/40">
+                                      {I18nService.getInstance().tr(otherSlotLabel)}
+                                    </span>
+                                  )}
+                                  {isInDefense && (
+                                    <span className="text-[8px] px-1 py-0.2 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/40">
+                                      {I18nService.getInstance().tr('🛡️ 수비 부대')}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
+                                  {I18nService.getInstance().tr(hCls?.name || '')} · ATK {h.stats.atk} · DEF {h.stats.def} · HP {h.maxHp.toLocaleString()}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleAssignHeroToDimSlot(h.id, dimSelectModalRole);
+                                }}
+                                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                                  isSelectedForThis
+                                    ? 'bg-[#38ef7d22] border-[#38ef7d] text-[#38ef7d]'
+                                    : 'bg-[#c8aa6e22] border-[#c8aa6e88] text-white hover:bg-[#c8aa6e44]'
+                                }`}
+                              >
+                                {isSelectedForThis
+                                  ? I18nService.getInstance().tr('✓ 선택됨')
+                                  : isAssignedElsewhere
+                                  ? I18nService.getInstance().tr('교체')
+                                  : I18nService.getInstance().tr('선택')}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 모달 풋터 */}
+                  <div className="px-3.5 py-2.5 bg-[#0a0f1d] border-t border-[#1f2d48] flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => setDimSelectModalRole(null)}
+                      className="btn btn-primary text-xs px-5 py-1.5 font-bold cursor-pointer"
+                    >
+                      {I18nService.getInstance().tr('배치 완료')}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )
       ) : (
@@ -5510,181 +5802,184 @@ const BarracksDrawer: React.FC<{
             party={state.party}
           />
 
-          {/* 📜 피버 족보 & 상성 대도감 (Grand Codex Modal) */}
-          {isDimCodexModalOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-              <div className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#14161f] border-2 border-[#ffcc00]/50 rounded-2xl shadow-2xl overflow-hidden text-stone-200">
-                {/* 모달 헤더 */}
-                <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#241a10] via-[#1c2236] to-[#121624] border-b border-[#ffcc00]/30">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl">📜</span>
-                    <div>
-                      <h2 className="text-xl font-bold text-[#ffdd66] tracking-wide flex items-center gap-2">
-                        차원 아레나: 피버 족보 & 상성 대도감
-                        <span className="text-xs px-2 py-0.5 rounded bg-[#ffcc00]/20 text-[#ffcc00] border border-[#ffcc00]/40 font-mono">
-                          GRAND CODEX
-                        </span>
-                      </h2>
-                      <p className="text-xs text-stone-400">
-                        3인의 수호자가 엮어내는 전술 포커의 위계와 주간 차원율의 상성을 한눈에 확인하십시오.
-                      </p>
-                    </div>
+        </>
+      ))}
+
+      {/* 📜 피버 족보 & 상성 대도감 (Grand Codex Modal) */}
+      {isDimCodexModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#14161f] border-2 border-[#ffcc00]/50 rounded-2xl shadow-2xl overflow-hidden text-stone-200">
+            {/* 모달 헤더 */}
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#241a10] via-[#1c2236] to-[#121624] border-b border-[#ffcc00]/30">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">📜</span>
+                <div>
+                  <h2 className="text-xl font-bold text-[#ffdd66] tracking-wide flex items-center gap-2">
+                    <span>{I18nService.getInstance().tr('차원 아레나: 피버 족보 & 상성 대도감')}</span>
+                    <span className="text-xs px-2 py-0.5 rounded bg-[#ffcc00]/20 text-[#ffcc00] border border-[#ffcc00]/40 font-mono">
+                      GRAND CODEX
+                    </span>
+                  </h2>
+                  <p className="text-xs text-stone-400">
+                    {I18nService.getInstance().tr('3인의 수호자가 엮어내는 전술 포커의 위계와 주간 차원율의 상성을 한눈에 확인하십시오.')}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsDimCodexModalOpen(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-stone-800/80 hover:bg-stone-700 text-stone-400 hover:text-white transition-colors"
+                title={I18nService.getInstance().tr('닫기')}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* 모달 본문 (스크롤) */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
+              {/* 섹션 1: 이번 주의 차원율 및 상성 규칙 */}
+              <div className="p-4 rounded-xl bg-gradient-to-br from-[#15171f] to-[#111319] border border-[#c8aa6e]/30">
+                <div className="flex items-center justify-between mb-3 border-b border-[#c8aa6e]/20 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🌌</span>
+                    <span className="font-bold text-[#c8aa6e] text-base">
+                      {I18nService.getInstance().tr('이번 주의 차원율:')} {I18nService.getInstance().tr(weeklyAffinity.title)}
+                    </span>
                   </div>
-                  <button
-                    onClick={() => setIsDimCodexModalOpen(false)}
-                    className="w-8 h-8 flex items-center justify-center rounded-full bg-stone-800/80 hover:bg-stone-700 text-stone-400 hover:text-white transition-colors"
-                    title="닫기"
-                  >
-                    ✕
-                  </button>
+                  <span className="text-xs text-[#c8aa6e]/80 bg-black/60 px-2 py-0.5 rounded border border-[#876739]">
+                    {I18nService.getInstance().tr('매주 월요일 00:00 순환')}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
+                  <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
+                    <span className="text-xs text-stone-400 font-semibold mb-1">{I18nService.getInstance().tr('상성 순환 구조')}</span>
+                    <span className="text-xs font-bold text-amber-300 tracking-wider">
+                      {I18nService.getInstance().tr(weeklyAffinity.relationText)}
+                    </span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
+                    <span className="text-xs text-stone-400 font-semibold mb-1">{I18nService.getInstance().tr('상성 우위 특전')}</span>
+                    <span className="text-xs text-emerald-400 font-bold">
+                      {I18nService.getInstance().tr('족보 맞대결 시 판정 계급 +1단계 보너스')}
+                    </span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-black/40 border border-red-900/40 flex flex-col items-center text-center">
+                    <span className="text-xs text-red-400 font-semibold mb-1">{I18nService.getInstance().tr('🏆 피버 3승 즉시 제압')}</span>
+                    <span className="text-xs text-amber-300 font-bold">
+                      {I18nService.getInstance().tr('피버콜 3승 선착 시 전투 즉시 압승')}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-stone-400 bg-black/30 p-2.5 rounded border border-stone-800/80 leading-relaxed">
+                  💡 <strong className="text-stone-300">{I18nService.getInstance().tr('상성 판정 원리:')}</strong> {I18nService.getInstance().tr('양측이 완성한 피버 족보의 계열(돌파/수호/변칙)을 대조하여 우위인 쪽은 족보 판정에서 1단계 높은 족보로 인정받습니다.')}
+                </p>
+              </div>
+
+              {/* 섹션 2: 배지 가중치 총점제 (하이 카드 판정) */}
+              <div className="p-4 rounded-xl bg-gradient-to-br from-[#241d14] to-[#171410] border border-amber-500/30">
+                <div className="flex items-center justify-between mb-2 border-b border-amber-500/20 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">⚖️</span>
+                    <span className="font-bold text-amber-300 text-base">{I18nService.getInstance().tr('배지 가중치 총점표 (High Card Score)')}</span>
+                  </div>
+                  <span className="text-xs text-amber-400/80 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800">
+                    {I18nService.getInstance().tr('노페어(전술 파동) 발생 시 적용')}
+                  </span>
+                </div>
+                <p className="text-xs text-stone-400 mb-3">
+                  {I18nService.getInstance().tr('양측 모두 유효한 족보를 완성하지 못해 [전술 파동(High Card)]으로 격돌할 경우, 게이지 5칸에 누적된 배지들의 개별 가중치 총점을 합산하여 승패를 결정합니다.')}
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                  {[
+                    { badge: 'extra', label: '연계 (Extra)', score: 35, desc: '스킬 콤보·추가타', color: 'border-purple-500/40 bg-purple-950/30 text-purple-300' },
+                    { badge: 'counter', label: '반격 (Counter)', score: 30, desc: '적 턴 반격 반응', color: 'border-orange-500/40 bg-orange-950/30 text-orange-300' },
+                    { badge: 'crit', label: '치명 (Crit)', score: 25, desc: '회심의 일격', color: 'border-red-500/40 bg-red-950/30 text-red-300' },
+                    { badge: 'break', label: '파쇄 (Break)', score: 20, desc: '방어 분쇄·실드 관통', color: 'border-yellow-500/40 bg-yellow-950/30 text-yellow-300' },
+                    { badge: 'guard', label: '방어 (Guard)', score: 15, desc: '철벽 방어·막기', color: 'border-blue-500/40 bg-blue-950/30 text-blue-300' },
+                    { badge: 'assist', label: '지원 (Assist)', score: 15, desc: '아군 버프·정화', color: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-300' },
+                    { badge: 'heal', label: '치유 (Heal)', score: 10, desc: '생명력 회복', color: 'border-pink-500/40 bg-pink-950/30 text-pink-300' },
+                    { badge: 'evade', label: '회피 (Evade)', score: 10, desc: '완전 회피 기동', color: 'border-[#c8aa6e]/40 bg-black/30 text-[#c8aa6e]' },
+                  ].map((item) => (
+                    <div key={item.badge} className={`p-2 rounded-lg border flex flex-col justify-between ${item.color}`}>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-bold">{I18nService.getInstance().tr(item.label)}</span>
+                        <span className="font-mono font-black text-amber-300 text-sm">{item.score}{I18nService.getInstance().tr('점')}</span>
+                      </div>
+                      <span className="text-[10px] text-stone-400">{I18nService.getInstance().tr(item.desc)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 섹션 3: 12종 포커 피버 시너지 족보 전체 목록 */}
+              <div>
+                <div className="flex items-center justify-between mb-3 border-b border-stone-800 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🃏</span>
+                    <span className="font-bold text-white text-base">{I18nService.getInstance().tr('차원 피버 12대 전술 족보 (Synergy Rankings)')}</span>
+                  </div>
+                  <span className="text-xs text-stone-400">{I18nService.getInstance().tr('위계 순위 높은 순 정렬')}</span>
                 </div>
 
-                {/* 모달 본문 (스크롤) */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
-                  {/* 섹션 1: 이번 주의 차원율 및 상성 규칙 */}
-                  <div className="p-4 rounded-xl bg-gradient-to-br from-[#15171f] to-[#111319] border border-[#c8aa6e]/30">
-                    <div className="flex items-center justify-between mb-3 border-b border-[#c8aa6e]/20 pb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">🌌</span>
-                        <span className="font-bold text-[#c8aa6e] text-base">이번 주의 차원율: {weeklyAffinity.title}</span>
-                      </div>
-                      <span className="text-xs text-[#c8aa6e]/80 bg-black/60 px-2 py-0.5 rounded border border-[#876739]">
-                        매주 월요일 00:00 순환
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
-                      <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
-                        <span className="text-xs text-stone-400 font-semibold mb-1">상성 순환 구조</span>
-                        <span className="text-xs font-bold text-amber-300 tracking-wider">
-                          {weeklyAffinity.relationText}
-                        </span>
-                      </div>
-                      <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
-                        <span className="text-xs text-stone-400 font-semibold mb-1">상성 우위 특전</span>
-                        <span className="text-xs text-emerald-400 font-bold">
-                          족보 맞대결 시 판정 계급 +1단계 보너스
-                        </span>
-                      </div>
-                      <div className="p-3 rounded-lg bg-black/40 border border-red-900/40 flex flex-col items-center text-center">
-                        <span className="text-xs text-red-400 font-semibold mb-1">🏆 피버 3승 즉시 제압</span>
-                        <span className="text-xs text-amber-300 font-bold">
-                          피버콜 3승 선착 시 전투 즉시 압승
-                        </span>
-                      </div>
-                    </div>
-                    <p className="text-xs text-stone-400 bg-black/30 p-2.5 rounded border border-stone-800/80 leading-relaxed">
-                      💡 <strong className="text-stone-300">상성 판정 원리:</strong> 양측이 완성한 피버 족보의 계열(돌파/수호/변칙)을 대조하여 우위인 쪽은 족보 판정에서 1단계 높은 족보로 인정받습니다.
-                    </p>
-                  </div>
-
-                  {/* 섹션 2: 배지 가중치 총점제 (하이 카드 판정) */}
-                  <div className="p-4 rounded-xl bg-gradient-to-br from-[#241d14] to-[#171410] border border-amber-500/30">
-                    <div className="flex items-center justify-between mb-2 border-b border-amber-500/20 pb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">⚖️</span>
-                        <span className="font-bold text-amber-300 text-base">배지 가중치 총점표 (High Card Score)</span>
-                      </div>
-                      <span className="text-xs text-amber-400/80 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800">
-                        노페어(전술 파동) 발생 시 적용
-                      </span>
-                    </div>
-                    <p className="text-xs text-stone-400 mb-3">
-                      양측 모두 유효한 족보를 완성하지 못해 <strong>[전술 파동(High Card)]</strong>으로 격돌할 경우, 게이지 5칸에 누적된 배지들의 개별 가중치 총점을 합산하여 승패를 결정합니다.
-                    </p>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                      {[
-                        { badge: 'extra', label: '연계 (Extra)', score: 35, desc: '스킬 콤보·추가타', color: 'border-purple-500/40 bg-purple-950/30 text-purple-300' },
-                        { badge: 'counter', label: '반격 (Counter)', score: 30, desc: '적 턴 반격 반응', color: 'border-orange-500/40 bg-orange-950/30 text-orange-300' },
-                        { badge: 'crit', label: '치명 (Crit)', score: 25, desc: '회심의 일격', color: 'border-red-500/40 bg-red-950/30 text-red-300' },
-                        { badge: 'break', label: '파쇄 (Break)', score: 20, desc: '방어 분쇄·실드 관통', color: 'border-yellow-500/40 bg-yellow-950/30 text-yellow-300' },
-                        { badge: 'guard', label: '방어 (Guard)', score: 15, desc: '철벽 방어·막기', color: 'border-blue-500/40 bg-blue-950/30 text-blue-300' },
-                        { badge: 'assist', label: '지원 (Assist)', score: 15, desc: '아군 버프·정화', color: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-300' },
-                        { badge: 'heal', label: '치유 (Heal)', score: 10, desc: '생명력 회복', color: 'border-pink-500/40 bg-pink-950/30 text-pink-300' },
-                        { badge: 'evade', label: '회피 (Evade)', score: 10, desc: '완전 회피 기동', color: 'border-[#c8aa6e]/40 bg-black/30 text-[#c8aa6e]' },
-                      ].map((item) => (
-                        <div key={item.badge} className={`p-2 rounded-lg border flex flex-col justify-between ${item.color}`}>
-                          <div className="flex justify-between items-center mb-1">
-                            <span className="font-bold">{item.label}</span>
-                            <span className="font-mono font-black text-amber-300 text-sm">{item.score}점</span>
+                <div className="space-y-2.5">
+                  {ALL_FEVER_SYNERGIES_CODEX.map((synergy, idx) => {
+                    const affinityMeta = FEVER_AFFINITY_META[synergy.affinity];
+                    return (
+                      <div
+                        key={synergy.id}
+                        className="p-3 rounded-xl bg-stone-900/70 border border-stone-800 hover:border-amber-500/50 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                      >
+                        <div className="flex items-start sm:items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-black/60 border border-stone-700 flex flex-col items-center justify-center shrink-0">
+                            <span className="text-[10px] text-stone-400 font-mono">RANK</span>
+                            <span className="text-xs font-black text-amber-400 font-mono">#{idx + 1}</span>
                           </div>
-                          <span className="text-[10px] text-stone-400">{item.desc}</span>
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-bold text-stone-100 text-sm">{I18nService.getInstance().tr(synergy.name)}</span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 border border-stone-700 text-stone-300 font-mono">
+                                {I18nService.getInstance().tr(synergy.handRankLabel)}
+                              </span>
+                              <span
+                                className="text-[10px] px-1.5 py-0.5 rounded border font-semibold flex items-center gap-1"
+                                style={{
+                                  backgroundColor: `${affinityMeta.color}1a`,
+                                  borderColor: `${affinityMeta.color}66`,
+                                  color: affinityMeta.color
+                                }}
+                              >
+                                {affinityMeta.icon} {I18nService.getInstance().tr(affinityMeta.label)}
+                              </span>
+                            </div>
+                            <div className="text-xs text-stone-400 mt-0.5">
+                              {I18nService.getInstance().tr(synergy.summary)}
+                            </div>
+                          </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
 
-                  {/* 섹션 3: 12종 포커 피버 시너지 족보 전체 목록 */}
-                  <div>
-                    <div className="flex items-center justify-between mb-3 border-b border-stone-800 pb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">🃏</span>
-                        <span className="font-bold text-white text-base">차원 피버 12대 전술 족보 (Synergy Rankings)</span>
+                        <div className="sm:text-right shrink-0 bg-black/40 px-3 py-1.5 rounded-lg border border-stone-800/80 w-full sm:w-auto">
+                          <div className="text-[10px] text-stone-500 font-semibold">{I18nService.getInstance().tr('필요 배지 조건')}</div>
+                          <div className="text-xs text-amber-300/95 font-mono">{I18nService.getInstance().tr(synergy.requiredBadges)}</div>
+                        </div>
                       </div>
-                      <span className="text-xs text-stone-400">위계 순위 높은 순 정렬</span>
-                    </div>
-
-                    <div className="space-y-2.5">
-                      {ALL_FEVER_SYNERGIES_CODEX.map((synergy, idx) => {
-                        const affinityMeta = FEVER_AFFINITY_META[synergy.affinity];
-                        return (
-                          <div
-                            key={synergy.id}
-                            className="p-3 rounded-xl bg-stone-900/70 border border-stone-800 hover:border-amber-500/50 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
-                          >
-                            <div className="flex items-start sm:items-center gap-3">
-                              <div className="w-9 h-9 rounded-lg bg-black/60 border border-stone-700 flex flex-col items-center justify-center shrink-0">
-                                <span className="text-[10px] text-stone-400 font-mono">RANK</span>
-                                <span className="text-xs font-black text-amber-400 font-mono">#{idx + 1}</span>
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="font-bold text-stone-100 text-sm">{synergy.name}</span>
-                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 border border-stone-700 text-stone-300 font-mono">
-                                    {synergy.handRankLabel}
-                                  </span>
-                                  <span
-                                    className="text-[10px] px-1.5 py-0.5 rounded border font-semibold flex items-center gap-1"
-                                    style={{
-                                      backgroundColor: `${affinityMeta.color}1a`,
-                                      borderColor: `${affinityMeta.color}66`,
-                                      color: affinityMeta.color
-                                    }}
-                                  >
-                                    {affinityMeta.icon} {affinityMeta.label}
-                                  </span>
-                                </div>
-                                <div className="text-xs text-stone-400 mt-0.5">
-                                  {synergy.summary}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="sm:text-right shrink-0 bg-black/40 px-3 py-1.5 rounded-lg border border-stone-800/80 w-full sm:w-auto">
-                              <div className="text-[10px] text-stone-500 font-semibold">필요 배지 조건</div>
-                              <div className="text-xs text-amber-300/95 font-mono">{synergy.requiredBadges}</div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* 모달 푸터 */}
-                <div className="px-6 py-3 bg-[#11131c] border-t border-stone-800 flex justify-end">
-                  <ActionButton
-                    label="확인 (닫기)"
-                    variant="secondary"
-                    className="px-6 py-1.5 text-xs font-bold"
-                    onClick={() => setIsDimCodexModalOpen(false)}
-                  />
+                    );
+                  })}
                 </div>
               </div>
             </div>
-          )}
-        </>
-      ))}
+
+            {/* 모달 푸터 */}
+            <div className="px-6 py-3 bg-[#11131c] border-t border-stone-800 flex justify-end">
+              <ActionButton
+                label={I18nService.getInstance().tr('확인 (닫기)')}
+                variant="secondary"
+                className="px-6 py-1.5 text-xs font-bold"
+                onClick={() => setIsDimCodexModalOpen(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

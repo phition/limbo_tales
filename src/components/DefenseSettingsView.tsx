@@ -64,7 +64,16 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
   // 포트레이트 이미지 URL 헬퍼
   const getHeroPortraitUrl = (h: Mercenary | null) => {
     if (!h) return '';
-    return customAssetService.getMercenaryOverride(h.classId) || DEFAULT_CLASS_IMAGES[h.classId] || '';
+    const hCls = CHARACTER_CLASSES[h.classId];
+    return (
+      customAssetService.getMercenaryOverride(h.classId) ||
+      (hCls?.promptKey ? customAssetService.getMercenaryOverride(hCls.promptKey) : undefined) ||
+      (h.portraitPromptKey ? customAssetService.getMercenaryOverride(h.portraitPromptKey) : undefined) ||
+      customAssetService.getMercenaryOverride(h.id) ||
+      customAssetService.getMercenaryOverride(h.name) ||
+      DEFAULT_CLASS_IMAGES[h.classId] ||
+      (hCls?.promptKey ? `assets/portraits/${hCls.promptKey}.png` : '')
+    );
   };
 
   // 모달 열기 핸들러
