@@ -20,6 +20,55 @@ export interface GameBalanceConfig {
   drConstant: number; // 🛡️ 방어력 피해 감소(DR%) 기준 상수 K (기본값: 300)
 }
 
+export type BannedFeverBadge = 'none' | 'crit' | 'break' | 'guard' | 'heal' | 'evade';
+
+export interface ArenaEdictConfig {
+  edictName: string; // 칙령 명칭 (기본: '회피 금지의 칙령')
+  bannedBadge: BannedFeverBadge; // 금지 뱃지 (기본: 'evade')
+  jokerRule: string; // 조커 및 기본 룰 (기본: '블러핑 앤 쇼다운 (2 공개 + 1 히든 실루엣)')
+  description: string; // 칙령 설명
+}
+
+export const DEFAULT_ARENA_EDICT: ArenaEdictConfig = {
+  edictName: '회피 금지의 칙령',
+  bannedBadge: 'evade',
+  jokerRule: '블러핑 앤 쇼다운 (2 공개 + 1 히든 실루엣)',
+  description: '차원 결투장 전역에 회피 불가 결계가 가동됩니다. (💨 EVADE 뱃지 획득 불가)',
+};
+
+export const ARENA_EDICT_PRESETS: Record<BannedFeverBadge, { edictName: string; description: string }> = {
+  evade: {
+    edictName: '회피 금지의 칙령',
+    description: '차원 결투장 전역에 회피 불가 결계가 가동됩니다. (💨 EVADE 뱃지 획득 불가)',
+  },
+  crit: {
+    edictName: '치명 금지의 칙령',
+    description: '차원 결투장 전역에 치명타 불가 결계가 가동됩니다. (💥 CRIT 뱃지 획득 불가)',
+  },
+  break: {
+    edictName: '파쇄 금지의 칙령',
+    description: '차원 결투장 전역에 파쇄 불가 결계가 가동됩니다. (💫 BREAK 뱃지 획득 불가)',
+  },
+  guard: {
+    edictName: '수호 금지의 칙령',
+    description: '차원 결투장 전역에 수호 개입 불가 결계가 가동됩니다. (🛡️ GUARD 뱃지 획득 불가)',
+  },
+  heal: {
+    edictName: '치유 금지의 칙령',
+    description: '차원 결투장 전역에 신성 치유 불가 결계가 가동됩니다. (✨ HEAL 뱃지 획득 불가)',
+  },
+  none: {
+    edictName: '자유 결투의 칙령',
+    description: '모든 피버 뱃지 획득이 자유롭게 허용되는 전술 칙령입니다. (🚫 금지 배지 없음)',
+  },
+};
+
+export const DEFAULT_NEMESIS_EQUIPMENTS_BASE_STATS: Record<'pendant' | 'core' | 'crown', NonNullable<EquipmentItem['baseStats']>> = {
+  pendant: { atk: 14, def: 10, spd: 5, luck: 8, hp: 80, mp: 0 },
+  core: { atk: 28, def: 22, spd: 8, luck: 14, hp: 180, mp: 60 },
+  crown: { atk: 45, def: 38, spd: 12, luck: 22, hp: 320, mp: 100 },
+};
+
 const DEFAULT_BALANCE_CONFIG: GameBalanceConfig = {
   expMultiplier: 1.0,
   goldMultiplier: 1.0,
@@ -40,6 +89,8 @@ export interface CustomGameDataPackage {
   skillBooks?: Record<string, { power?: number; manaCost?: number; cooldown?: number; costGold?: number; description?: string }>;
   balance?: Partial<GameBalanceConfig>;
   nemesis?: Partial<NemesisBossConfig>;
+  nemesisEquipments?: Record<'pendant' | 'core' | 'crown', Partial<EquipmentItem['baseStats']>>;
+  arenaEdict?: Partial<ArenaEdictConfig>;
   version?: number;
   updatedAt?: number;
   updatedBy?: string;
@@ -145,6 +196,20 @@ function deepMergeCustomPackage(base: CustomGameDataPackage, override: CustomGam
     result.nemesis = mergedNemesis;
   }
 
+  // 10. arenaEdict
+  if (base.arenaEdict || override.arenaEdict) {
+    result.arenaEdict = { ...(base.arenaEdict || {}), ...(override.arenaEdict || {}) };
+  }
+
+  // 11. nemesisEquipments
+  if (base.nemesisEquipments || override.nemesisEquipments) {
+    result.nemesisEquipments = {
+      pendant: { ...(base.nemesisEquipments?.pendant || {}), ...(override.nemesisEquipments?.pendant || {}) },
+      core: { ...(base.nemesisEquipments?.core || {}), ...(override.nemesisEquipments?.core || {}) },
+      crown: { ...(base.nemesisEquipments?.crown || {}), ...(override.nemesisEquipments?.crown || {}) },
+    };
+  }
+
   return result;
 }
 
@@ -169,7 +234,9 @@ export class GameDataService {
 
   private constructor() {
     this.initMaps();
-    this.initLocalStorageAndPreset();
+    this.initLocalStorageAndPreset().then(() => {
+      this.syncRemoteOverrides();
+    });
   }
 
   public static getInstance(): GameDataService {
@@ -445,6 +512,12 @@ export class GameDataService {
     return this.customOverrides.skillBooks?.[bookId];
   }
 
+  public getNemesisEquipmentBaseStats(tier: 'pendant' | 'core' | 'crown'): NonNullable<EquipmentItem['baseStats']> {
+    const defaults = DEFAULT_NEMESIS_EQUIPMENTS_BASE_STATS[tier];
+    const overrides = this.customOverrides.nemesisEquipments?.[tier] || {};
+    return { ...defaults, ...overrides };
+  }
+
   public getNemesisConfig(): NemesisBossConfig {
     return NEMESIS_BOSS_CONFIG;
   }
@@ -628,45 +701,90 @@ export class GameDataService {
     return updated;
   }
 
-  public initRealtimeSync(): void {
-    if (this.unsubscribeRealtime) return;
+  private unsubscribeArenaEdict: Unsubscribe | null = null;
 
-    try {
-      const dataRef = ref(db, 'game_data');
-      this.unsubscribeRealtime = onValue(
-        dataRef,
-        (snapshot) => {
-          if (snapshot.exists()) {
-            const remoteData = snapshot.val();
-            const updated = this.applyRemoteData(remoteData, 'Firebase Realtime');
-            if (updated) {
-              console.log('[GameDataService] ⚡ Remote game data updated in real-time from Firebase.');
+  public initRealtimeSync(): void {
+    if (!this.unsubscribeRealtime) {
+      try {
+        const dataRef = ref(db, 'game_data');
+        this.unsubscribeRealtime = onValue(
+          dataRef,
+          (snapshot) => {
+            if (snapshot.exists()) {
+              const remoteData = snapshot.val();
+              const updated = this.applyRemoteData(remoteData, 'Firebase Realtime');
+              if (updated) {
+                console.log('[GameDataService] ⚡ Remote game data updated in real-time from Firebase.');
+              }
             }
+          },
+          (error) => {
+            console.warn('[GameDataService] Failed to listen to game_data changes:', error);
           }
-        },
-        (error) => {
-          console.warn('[GameDataService] Failed to listen to game_data changes:', error);
-        }
-      );
-      console.log('[GameDataService] Realtime sync listener registered on /game_data.');
-    } catch (err) {
-      console.warn('[GameDataService] Error setting up realtime sync listener:', err);
+        );
+        console.log('[GameDataService] Realtime sync listener registered on /game_data.');
+      } catch (err) {
+        console.warn('[GameDataService] Error setting up realtime sync listener:', err);
+      }
     }
+
+    // 🔮 차원 칙령 전용 실시간 리스너 (/arena_edict)
+    if (!this.unsubscribeArenaEdict) {
+      try {
+        const edictRef = ref(db, 'arena_edict');
+        this.unsubscribeArenaEdict = onValue(
+          edictRef,
+          (snapshot) => {
+            if (snapshot.exists()) {
+              const edictData = snapshot.val();
+              if (edictData && typeof edictData === 'object') {
+                this.applyCustomPackage({ arenaEdict: edictData }, true);
+                console.log('[GameDataService] 🔮 Dimensional Arena Edict updated in real-time from Firebase:', edictData.edictName);
+              }
+            }
+          },
+          (error) => {
+            console.warn('[GameDataService] Failed to listen to arena_edict changes:', error);
+          }
+        );
+      } catch (err) {
+        console.warn('[GameDataService] Error setting up arena_edict listener:', err);
+      }
+    }
+
+    // 초기 로드 시 1회 즉시 get() 동기화 호출
+    this.syncRemoteOverrides();
   }
 
   public async syncRemoteOverrides(): Promise<boolean> {
+    let anyUpdated = false;
     try {
       const dataRef = ref(db, 'game_data');
       const snapshot = await get(dataRef);
 
       if (snapshot.exists()) {
         const remoteData = snapshot.val();
-        return this.applyRemoteData(remoteData, 'Firebase get()');
+        anyUpdated = this.applyRemoteData(remoteData, 'Firebase get()') || anyUpdated;
       }
     } catch (err) {
       console.warn('[GameDataService] Failed to sync remote overrides from Firebase. Using local master data.', err);
     }
-    return false;
+
+    // 🔮 차원 칙령 전용 노드 즉시 조회 (/arena_edict)
+    try {
+      const edictRef = ref(db, 'arena_edict');
+      const edictSnap = await get(edictRef);
+      if (edictSnap.exists()) {
+        const edictData = edictSnap.val();
+        if (edictData && typeof edictData === 'object') {
+          this.applyCustomPackage({ arenaEdict: edictData }, true);
+          anyUpdated = true;
+          console.log('[GameDataService] 🔮 Synced arena_edict on startup:', edictData.edictName);
+        }
+      }
+    } catch (_) {}
+
+    return anyUpdated;
   }
 
   /**
@@ -705,8 +823,16 @@ export class GameDataService {
     let cloudMessage = '';
     const fb = FirebaseService.getInstance();
     const currentUser = fb.getCurrentUser();
+    // 👑 마스터 권한 판별 (bumpcat.net 이메일 또는 마스터 UID 또는 인게임 마스터 플래그 활성화)
+    let isMaster = false;
+    try {
+      const { GameManager } = await import('../managers/GameManager');
+      isMaster = fb.isMasterUser() || GameManager.getInstance().isMasterAccount;
+    } catch (_) {
+      isMaster = fb.isMasterUser();
+    }
 
-    if (currentUser && fb.isMasterUser()) {
+    if (currentUser || isMaster) {
       try {
         const dataRef = ref(db, 'game_data');
         const payload = {
@@ -724,6 +850,15 @@ export class GameDataService {
           nemesis: NEMESIS_BOSS_CONFIG,
         };
         await set(dataRef, payload);
+        // 🔮 차원 칙령 전용 노드 동시 동기화 (/arena_edict)
+        try {
+          const edictRef = ref(db, 'arena_edict');
+          await set(edictRef, {
+            ...this.getArenaEdict(),
+            updatedAt: Date.now(),
+            updatedBy: currentUser?.email || currentUser?.uid || 'master'
+          });
+        } catch (_) {}
         cloudSynced = true;
         cloudMessage = 'Firebase 클라우드 배포 완료';
         console.log('[GameDataService] ✅ Master game data synced to Firebase /game_data successfully.');
@@ -778,5 +913,14 @@ export class GameDataService {
 
   public isSyncedWithRemote(): boolean {
     return this.isRemoteSynced;
+  }
+
+  /** ⚔️ 차원 아레나 칙령 및 금지 뱃지/조커 룰 설정 조회 */
+  public getArenaEdict(): ArenaEdictConfig {
+    const custom = this.customOverrides.arenaEdict || {};
+    return {
+      ...DEFAULT_ARENA_EDICT,
+      ...custom,
+    };
   }
 }

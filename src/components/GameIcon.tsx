@@ -97,6 +97,13 @@ export const GameIcon: React.FC<GameIconProps> = ({
   const isCustomEmojiString = !!(normalizedCustomSrc && normalizedCustomSrc !== 'emoji' && !isImageSource(normalizedCustomSrc));
   const effectiveEmoji = isCustomEmojiString ? normalizedCustomSrc : emoji;
 
+  // 🌟 Asset Mode 기본 이미지 fallback: customSrc가 명시적 'emoji'가 아니고 Pure Emoji 모드가 아니라면 meta.src 활용!
+  const effectiveImgSrc = (normalizedCustomSrc && normalizedCustomSrc !== 'emoji')
+    ? normalizedCustomSrc
+    : (!service.isPureEmojiMode() && normalizedCustomSrc !== 'emoji' && meta?.src)
+    ? meta.src
+    : undefined;
+
   // 2. 렌더링 노드 생성
   let node: React.ReactNode = null;
   if (normalizedCustomSrc === 'emoji' || (service.isPureEmojiMode() && !normalizedCustomSrc) || isCustomEmojiString) {
@@ -113,10 +120,10 @@ export const GameIcon: React.FC<GameIconProps> = ({
         {effectiveEmoji}
       </span>
     );
-  } else if (normalizedCustomSrc && normalizedCustomSrc !== 'emoji' && !imgError) {
+  } else if (effectiveImgSrc && !imgError) {
     node = (
       <img
-        src={normalizedCustomSrc}
+        src={effectiveImgSrc}
         alt={alt || meta?.label || targetKey || 'icon'}
         title={alt || meta?.label}
         onError={() => setImgError(true)}

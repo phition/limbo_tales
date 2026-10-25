@@ -87,7 +87,7 @@ export const INITIAL_BUILDINGS: Record<BuildingId, BuildingState> = {
     level: 0,
     unlocked: false,
     requiredQuestId: 'Q_BUILD_FORGE',
-    description: '장비 공방. 전술 무기 및 방어구 단조, 장비 강화 및 인챈트를 수행합니다.',
+    description: '장비 공방. 전술 무기 및 방어구 단조, 장비 강화 및 침식 정화를 수행합니다.',
     icon: '⚒️',
     promptKey: 'citadel_blacksmith',
     themeColor: 0xc8aa6e
@@ -109,7 +109,7 @@ export const INITIAL_BUILDINGS: Record<BuildingId, BuildingState> = {
     level: 0,
     unlocked: false,
     requiredQuestId: 'Q_BUILD_ALCHEMY',
-    description: '에테르 연금 및 마도 시설. 15초마다 에테르를 정기 생산하고 마도서를 제본합니다.',
+    description: '에테르 연금 및 마도 시설. 15초마다 에테르를 정기 생산하고 스킬 비전 강화 및 장비 인챈트를 수행합니다.',
     icon: '🧪',
     promptKey: 'citadel_blacksmith',
     themeColor: 0x26a69a
@@ -335,7 +335,7 @@ export const BUILDING_LORE_AND_TIPS: Record<BuildingId, { lore: string; strategy
   },
   alchemy: {
     lore: '복잡한 유리 플라스크와 자수정 도가니에서 푸른빛 에테르 증기가 끊임없이 피어오르는 연금술사들의 마도 연구소입니다. 방주 최고의 현자들이 모여 고대 비전서의 결손된 페이지를 복원하고 물질의 원소 전이를 실험합니다. 연구소 구석에서는 실패한 마나 폭발의 그을음 자국이 지워질 날이 없습니다.',
-    strategy: '15초마다 귀중한 마도 자원인 에테르를 정기 생산하며, 용병들에게 강력한 액티브 전술 스킬을 장착시키는 [마도서 제본]을 담당합니다. 7레벨 이상 고급 설비 증축의 선행 인프라로 요구되므로 중반 이후 집중적인 투자가 필요합니다.'
+    strategy: '15초마다 귀중한 마도 자원인 에테르를 정기 생산하며, 용병 습득 스킬 비전 강화 및 장비 마도 인챈트(Lv.3 해금)를 담당합니다. 7레벨 이상 고급 설비 증축의 선행 인프라로 요구되므로 중반 이후 집중적인 투자가 필요합니다.'
   },
   arenaGate: {
     lore: '차원 경계면의 왜곡된 균열을 안정화하여 다른 평행 세계의 방주들과 시공간으로 연결한 거대한 아치형 관문입니다. 지휘관들은 이 문을 통해 다른 세계의 방주 원정대와 무예를 겨루거나, 전 우주를 파멸로 몰고 가는 시공의 포식자 "네메시스"를 요격하기 위해 결사대를 파견합니다.',
@@ -486,7 +486,7 @@ export const BUILDING_METADATA_MAP: Record<BuildingId, BuildingMetadata> = {
     id: 'alchemy',
     name: '에테르 연금 공방',
     icon: '🧪',
-    description: '마도 시설. 15초마다 에테르를 정기 생산하고 마도서를 제본합니다.',
+    description: '마도 시설. 15초마다 에테르를 정기 생산하고 스킬 비전 강화 및 장비 인챈트를 수행합니다.',
     production: { hasPrimary: true, primaryRes: 'ether', primaryName: '에테르', primaryIcon: '✨', primaryCycleSec: 15 },
     upkeep: {
       hasPrimary: true, primaryRes: 'gold', primaryName: '골드', primaryIcon: '🪙',

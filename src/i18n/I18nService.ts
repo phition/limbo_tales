@@ -145,12 +145,14 @@ export class I18nService {
   private lookupGeneratedPattern(text: string, l: 'en' | 'ja', depth = 0): string | null {
     if (depth > 2) return null;
     const norm = text.replace(/\s+/g, ' ').trim();
-    // 문장이 길고 마침표가 여러 개 있는 복합 단락은 와일드카드 템플릿으로 함부로 분해하지 않음
-    if (norm.length > 80 && (norm.match(/\./g) || []).length >= 2) return null;
+    // 말줄임표(...)나 레벨 표기(Lv.1)를 제외한 실제 문장 마침표 개수 계산
+    const sentenceDots = (norm.replace(/\.{2,}/g, '').replace(/Lv\.\d+/gi, '').match(/\./g) || []).length;
 
     const pats = this.patterns[l] || [];
     for (const p of pats as any[]) {
       if (!norm.includes(p.frag)) continue;
+      // 문장이 길고 마침표가 여러 개 있는 복합 단락은 고정 구문(frag)이 짧은 일반 와일드카드 템플릿으로 함부로 분해하지 않음
+      if (norm.length > 80 && sentenceDots >= 2 && p.frag.length < 12) continue;
       const m = norm.match(p.re);
       if (!m) continue;
       const vals: Record<number, string> = {};
@@ -217,15 +219,29 @@ export class I18nService {
     if (!text || typeof text !== 'string') return text;
     const lang = targetLang || this.currentLanguage;
     if (lang === 'ko') return text;
-    if (!/[\uac00-\ud7af]/.test(text)) return text; // 한글 미포함 시 즉시 반환
+    const tLang = (lang === 'ja' ? 'ja' : 'en') as 'en' | 'ja';
+    const cacheKey = `${tLang}:${text}`;
+    const cached = this.translationCache.get(cacheKey);
+    if (cached !== undefined) return cached;
 
-    const cacheKey = `${lang}:${text}`;
-    if (this.translationCache.has(cacheKey)) {
-      return this.translationCache.get(cacheKey)!;
+    // 0. 순수 시간 표현식 (예: "1시간 30분", "25분 10초", "30초", "1시간 30분 경과", "10분 남음")
+    if (/\d+\s*(?:일|시간|분|초)/.test(text) && /^\s*(?:\d+\s*일\s*)?(?:\d+\s*시간\s*)?(?:\d+\s*분\s*)?(?:\d+\s*초)?(?:\s*남음|\s*경과)?\s*$/.test(text)) {
+      let timeRes = this.translateTimeExpression(text, tLang);
+      if (tLang === 'en') {
+        timeRes = timeRes.replace(/\s*남음/g, ' left').replace(/\s*경과/g, ' elapsed');
+      } else if (tLang === 'ja') {
+        timeRes = timeRes.replace(/\s*남음/g, ' 残り').replace(/\s*경과/g, ' 経過');
+      }
+      this.translationCache.set(cacheKey, timeRes);
+      return timeRes;
     }
 
+    const hasHangul = /[\uac00-\ud7af]/.test(text);
     const trimmed = text.trim();
-    const tLang = (lang === 'ja' ? 'ja' : 'en') as 'en' | 'ja';
+    if (!hasHangul && !EXACT_TRANSLATIONS[tLang]?.[trimmed] && !EXACT_TRANSLATIONS[tLang]?.[text] && !this.lookupGeneratedExact(text, tLang)) {
+      this.translationCache.set(cacheKey, text);
+      return text;
+    }
 
     // 1. 빌드 생성 전체 문장 번역표 (정확 완전 일치)
     const exactGen = this.lookupGeneratedExact(text, tLang);
@@ -246,6 +262,17 @@ export class I18nService {
       return res;
     }
 
+    // 2.005 문장 시작(^)이 명시된 수동 정규식 패턴 우선 검사 (복합 문장/선택적 구문 정밀 번역)
+    for (const p of LOG_PATTERNS) {
+      if (!p.pattern.source.startsWith('^')) continue;
+      const match = trimmed.match(p.pattern) || text.match(p.pattern);
+      if (match) {
+        const res = tLang === 'ja' ? p.ja(match) : p.en(match);
+        this.translationCache.set(cacheKey, res);
+        return res;
+      }
+    }
+
     // 2.01 빌드 생성 {N} 템플릿 패턴 매칭 (완전 일치 미매칭 시에만)
     const genPattern = this.lookupGeneratedPattern(text, tLang);
     if (genPattern !== null) {
@@ -255,6 +282,28 @@ export class I18nService {
       if (this.translationCache.size > 8000) this.translationCache.clear();
       this.translationCache.set(cacheKey, res);
       return res;
+    }
+
+    // 2.03 복합 다중 줄(Multiline) 텍스트 분할 번역 (이벤트 카드 desc, 멀티라인 모달 텍스트 등)
+    if (text.includes('\n')) {
+      const lines = text.split('\n');
+      const res = lines.map(line => line.trim() ? this.tr(line, lang) : line).join('\n');
+      this.translationCache.set(cacheKey, res);
+      return res;
+    }
+
+    // 2.04 큰따옴표 또는 작은따옴표로 둘러싸인 문장 언래핑 번역
+    const quoteMatch = trimmed.match(/^"([^"]+)"$/) || trimmed.match(/^'([^']+)'$/) || trimmed.match(/^“([^”]+)”$/);
+    if (quoteMatch) {
+      const inner = quoteMatch[1];
+      const trInner = this.tr(inner, lang);
+      if (trInner && trInner !== inner) {
+        const leadQuote = trimmed[0];
+        const trailQuote = trimmed[trimmed.length - 1];
+        const res = text.replace(trimmed, `${leadQuote}${trInner}${trailQuote}`);
+        this.translationCache.set(cacheKey, res);
+        return res;
+      }
     }
 
     // 2.05 복합 로그 분할 번역 (화살표 ➔ 또는 파이프 | 로 결합된 복합 다중 피격/원호 로그 - 전체 문장 미매칭 시 분할)
@@ -397,8 +446,60 @@ export class I18nService {
         .trim();
     }
 
+    // 4. 시간 표현식 및 잔여 구문 후처리
+    transformed = this.translateTimeExpression(transformed, tLang);
+    if (tLang === 'en') {
+      transformed = transformed
+        .replace(/남은\s*온기:\s*/g, 'Warmth left: ')
+        .replace(/\(\s*남은\s*온기\s*\)/g, '(Warmth left)')
+        .replace(/\s*경과\s*\)/g, ' elapsed)');
+    } else if (tLang === 'ja') {
+      transformed = transformed
+        .replace(/남은\s*온기:\s*/g, '残り温もり: ')
+        .replace(/\(\s*남은\s*온기\s*\)/g, '(残り温もり)')
+        .replace(/\s*경과\s*\)/g, ' 経過)');
+    }
+
     this.translationCache.set(cacheKey, transformed);
     return transformed;
+  }
+
+  /**
+   * ⏱️ 시간 표기 (일, 시간, 분, 초) 다국어 변환
+   */
+  public translateTimeExpression(str: string, lang: 'en' | 'ja'): string {
+    if (!str || typeof str !== 'string') return str;
+    let res = str;
+    if (lang === 'en') {
+      res = res
+        .replace(/(\d+)\s*일\s*(\d+)\s*시간/g, '$1d $2h')
+        .replace(/(\d+)\s*일/g, '$1d')
+        .replace(/(\d+)\s*시간\s*(\d+)\s*분\s*(\d+)\s*초/g, '$1h $2m $3s')
+        .replace(/(\d+)\s*시간\s*(\d+)\s*분/g, '$1h $2m')
+        .replace(/(\d+)\s*분\s*(\d+)\s*초/g, '$1m $2s')
+        .replace(/(\d+)\s*시간/g, '$1h')
+        .replace(/(\d+)\s*분/g, '$1m')
+        .replace(/(\d+)\s*초당/g, 'every $1s')
+        .replace(/(\d+)\s*초마다/g, 'every $1s')
+        .replace(/(\d+)\s*초\s*간/g, 'for $1s')
+        .replace(/(\d+)\s*분\s*간/g, 'for $1m')
+        .replace(/(\d+)\s*초/g, '$1s');
+    } else if (lang === 'ja') {
+      res = res
+        .replace(/(\d+)\s*일\s*(\d+)\s*시간/g, '$1日 $2時間')
+        .replace(/(\d+)\s*일/g, '$1日')
+        .replace(/(\d+)\s*시간\s*(\d+)\s*분\s*(\d+)\s*초/g, '$1時間 $2分 $3秒')
+        .replace(/(\d+)\s*시간\s*(\d+)\s*분/g, '$1時間 $2分')
+        .replace(/(\d+)\s*분\s*(\d+)\s*초/g, '$1分 $2秒')
+        .replace(/(\d+)\s*시간/g, '$1時間')
+        .replace(/(\d+)\s*분/g, '$1分')
+        .replace(/(\d+)\s*초당/g, '$1秒ごと')
+        .replace(/(\d+)\s*초마다/g, '$1秒ごと')
+        .replace(/(\d+)\s*초\s*간/g, '$1秒間')
+        .replace(/(\d+)\s*분\s*간/g, '$1分間')
+        .replace(/(\d+)\s*초/g, '$1秒');
+    }
+    return res;
   }
 
   /**
@@ -416,6 +517,33 @@ export class I18nService {
 
     // 1. 긴 전투 구문 및 서술어 치환 (길이가 긴 것부터 순차 치환)
     const BATTLE_PREDICATES: { ko: string; en: string; ja: string }[] = [
+      // Damage dealt predicates (longest matches first)
+      { ko: '가한 실제 피해의', en: 'of actual damage dealt', ja: '与えた実ダメージの' },
+      { ko: '가한 총 피해의', en: 'of total damage dealt', ja: '与えた総ダメージの' },
+      { ko: '가한 피해량의', en: 'of damage dealt', ja: '与えたダメージ量の' },
+      { ko: '가한 대미지의', en: 'of damage dealt', ja: '与えたダメージの' },
+      { ko: '가한 피해의', en: 'of damage dealt', ja: '与えたダメージの' },
+      { ko: '가한 실제 피해', en: 'actual damage dealt', ja: '与えた実ダメージ' },
+      { ko: '가한 총 피해', en: 'total damage dealt', ja: '与えた総ダメージ' },
+      { ko: '가한 피해량', en: 'damage dealt', ja: '与えたダメージ量' },
+      { ko: '가한 대미지', en: 'damage dealt', ja: '与えたダメージ' },
+      { ko: '가한 피해', en: 'damage dealt', ja: '与えたダメージ' },
+
+      // Holy / Divine phrases
+      { ko: '신성 마법이', en: 'Holy magic', ja: '神聖魔法が' },
+      { ko: '신성 마법', en: 'Holy Magic', ja: '神聖魔法' },
+      { ko: '신성 정화', en: 'Divine Cleansing', ja: '神聖浄化' },
+      { ko: '성광의 축복으로', en: 'with the blessing of Holy Light,', ja: '聖光の祝福により' },
+      { ko: '성스러운 빛이 방출되어', en: 'sacred light erupted,', ja: '聖なる光が放出され' },
+      { ko: '성스러운 빛이 폭발하여', en: 'sacred light exploded,', ja: '聖なる光が爆発し' },
+      { ko: '신성한 성광이 방출되어', en: 'sacred Holy Light erupted,', ja: '神聖な聖光が放出され' },
+      { ko: '성광 앞에', en: 'before the Holy Light,', ja: '聖光の前に' },
+      { ko: '즉시 신성 치유로 부여했습니다!', en: 'instantly granted as Holy Healing!', ja: '即座に神聖治癒として付与しました！' },
+      { ko: '신성 피해를 입혔습니다!', en: 'dealt Holy damage!', ja: '神聖ダメージを与えました！' },
+      { ko: '신성 피해', en: 'Holy damage', ja: '神聖ダメージ' },
+      { ko: '신성 치유', en: 'Holy Healing', ja: '神聖治癒' },
+      { ko: '신성 강타', en: 'Holy Smite', ja: '神聖強打' },
+      { ko: '신성 심판 강타를 가했습니다!', en: 'inflicted Divine Judgment Smite!', ja: '神聖審判強打を放ちました！' },
       { ko: '광폭화 결계로 인해 전투에서 철수할 수 없습니다!', en: 'Frenzy barrier prevents retreat from battle!', ja: '暴走結界により戦闘から撤退できません！' },
       { ko: '적의 추격을 뿌리치고 안전하게 후퇴했습니다.', en: 'Safely escaped enemy pursuit and retreated.', ja: '敵の追撃を振り切り無事に撤退しました。' },
       { ko: '퇴로가 막혀 도주에 실패했습니다!', en: 'Escape path was blocked; retreat failed!', ja: '退路を塞がれ逃走に失敗しました！' },

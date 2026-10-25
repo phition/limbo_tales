@@ -197,6 +197,7 @@ export const RESOURCE_NAMES: Record<string, Record<SupportedLanguage, string>> =
   suffix_stone: { ko: '일반 접미석', en: 'Suffix Stone', ja: '一般接尾石' },
   pure_prefix_stone: { ko: '순수 접두석', en: 'Pure Prefix Stone', ja: '純粋接頭石' },
   pure_suffix_stone: { ko: '순수 접미석', en: 'Pure Suffix Stone', ja: '純粋接尾石' },
+  pure_mana_stone: { ko: '순수 마도석', en: 'Pure Mana Stone', ja: '純粋魔導石' },
   potion: { ko: '체력 포션', en: 'Health Potion', ja: '体力ポーション' },
   torch: { ko: '횃불', en: 'Torch', ja: '松明' },
   pickaxe: { ko: '곡괭이', en: 'Pickaxe', ja: 'ツルハシ' },

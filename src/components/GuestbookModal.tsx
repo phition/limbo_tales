@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Modal } from './Modal';
 import { ActionButton } from './ActionButton';
 import { FirebaseService, GuestbookMessage, UserProfile } from '../services/FirebaseService';
@@ -26,6 +26,64 @@ function formatTimestamp(ts: number): string {
   const minutes = String(d.getMinutes()).padStart(2, '0');
   return `${year}.${month}.${day} ${hours}:${minutes}`;
 }
+
+/** 작성자 아이디 최소 폰트 크기(px) - 이 크기까지 줄여도 넘치면 줄바꿈 */
+const AUTHOR_MIN_FONT_PX = 9;
+
+/**
+ * 🎖️ 작성자 아이디 자동 맞춤 표시
+ * 1차: 영역을 넘치면 폰트 크기를 단계적으로 축소
+ * 2차: 최소 폰트에서도 넘치면 줄바꿈하여 아이디 전체를 표시
+ */
+const AutoFitAuthorName: React.FC<{ name: string }> = ({ name }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let lastWidth = -1;
+    const fit = () => {
+      const width = el.clientWidth;
+      if (width === lastWidth) return;
+      lastWidth = width;
+
+      // 초기화: 기본 폰트(클래스 지정값), 한 줄 표시
+      el.style.fontSize = '';
+      el.style.whiteSpace = 'nowrap';
+      el.style.wordBreak = 'normal';
+
+      // 1차: 폰트 축소
+      let size = parseFloat(getComputedStyle(el).fontSize) || 12;
+      while (el.scrollWidth > el.clientWidth && size > AUTHOR_MIN_FONT_PX) {
+        size = Math.max(AUTHOR_MIN_FONT_PX, size - 0.5);
+        el.style.fontSize = `${size}px`;
+      }
+
+      // 2차: 줄바꿈
+      if (el.scrollWidth > el.clientWidth) {
+        el.style.whiteSpace = 'normal';
+        el.style.wordBreak = 'break-all';
+      }
+    };
+
+    fit();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => fit());
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [name]);
+
+  return (
+    <span
+      ref={ref}
+      className="flex-1 min-w-0 overflow-hidden text-xs sm:text-sm font-bold text-[#c8aa6e] leading-tight block"
+      title={name}
+    >
+      {name}
+    </span>
+  );
+};
 
 export const GuestbookModal: React.FC<Props> = ({
   open,
@@ -281,12 +339,7 @@ export const GuestbookModal: React.FC<Props> = ({
                     {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) - 낮은 채도의 금색 */}
                     <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px]">
                       <span className="text-xs">🎖️</span>
-                      <span
-                        className="text-xs sm:text-sm font-bold text-[#c8aa6e] truncate block"
-                        title={msg.authorName}
-                      >
-                        {msg.authorName}
-                      </span>
+                      <AutoFitAuthorName name={msg.authorName} />
                     </div>
 
                     {/* 2. 중앙: 본문 내용 (최대 100자) 및 번역 태그 */}

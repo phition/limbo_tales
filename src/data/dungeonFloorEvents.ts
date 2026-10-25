@@ -1,5 +1,6 @@
 import { GameManager } from '../managers/GameManager';
-import { Mercenary, EventCardOption } from '../types/game';
+import { Mercenary, EventCardOption, EquipmentItem, MonsterData } from '../types/game';
+import { ALL_SKILLS_MAP } from './skillBooks';
 import { SoundManager } from '../managers/SoundManager';
 
 export interface FloorEventContext {
@@ -33,10 +34,10 @@ export const CLASS_GROUPS = {
   holy_knights: ['paladin', 'aegis_valkyrie'],
   holy_priests: ['acolyte', 'bishop', 'war_priest', 'high_saintess', 'inquisitor'],
   shadow_rogues: ['rogue', 'assassin', 'shadow_phantom', 'duelist', 'blade_dancer'],
-  arcane_mages: ['apprentice', 'elementalist', 'arcane_scholar', 'calamity_mage', 'void_scholar'],
+  arcane_mages: ['apprentice', 'elementalist', 'arcane_scholar', 'calamity_mage', 'void_scholar', 'chronomancer', 'chrono_archon'],
   warriors: ['squire', 'guardian', 'fortress', 'vanguard', 'berserker', 'warlord', 'abyssal_berserker', 'immortal_warlord'],
   heavy_guards: ['guardian', 'fortress'],
-  berserkers: ['vanguard', 'berserker', 'abyssal_berserker', 'immortal_warlord'],
+  berserkers: ['vanguard', 'berserker', 'warlord', 'abyssal_berserker', 'immortal_warlord'],
 };
 
 /** 층별 고유 이벤트 22종 (1~11층 각 2종) */
@@ -52,32 +53,80 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
     icon: '🛡️',
     iconKey: 'event_floor_1_scout',
     generateOptions: (ctx) => {
-      const { gm, danger, maxDanger, setDanger, setEventCard } = ctx;
+      const { gm, danger, maxDanger, setDanger, setEventCard, navigateTo } = ctx;
       const rogueHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.shadow_rogues);
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 경보 룬 고의 격발 (위험도 +20 상승 / 이번 원정 동안 공격력 +15% 가호 / 군번줄 수습)',
+          label: '⚡ [진척도 가속] 경보 룬 고의 격발 (위험도 +20 / 마물 토벌 시 공격력 +15% 가호 & 군번줄 수습)',
           variant: 'danger',
           action: () => {
-            SoundManager.getInstance().play('heavy_hit');
+            SoundManager.getInstance().play('combat_start');
             const nextD = Math.min(maxDanger, danger + 20);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.addExpeditionBuff({
-              id: 'expedition_scout_will',
-              name: '척후병의 유언',
-              icon: '🛡️',
-              category: 'ancestral',
-              description: '이번 원정 동안 공격력 +15%',
-              conditionText: '이번 원정 동안',
-              buffs: { atkBonus: 1.15 }
-            });
-            gm.addToDungeonInventory('memoir_1', '낡은 척후병의 군번줄', '📜', 1);
-            gm.activateQuest('Q_SCENARIO_01');
-            gm.updateQuestObjective('Q_SCENARIO_01', 0, 1);
-            gm.addLog('⚡ [진척도 급가속] 경보 룬을 격발하여 마물들을 유인했습니다! (위험도 +20, 이번 원정 동안 파티 공격력 +15% 가호, 낡은 군번줄 수습)', 'reward');
+
+            // 🛡️ 경보를 듣고 몰려온 1층 심연 마물 편대
+            const scoutAlarmSquad: MonsterData[] = [
+              {
+                id: `scout_alarm_revenant_${Date.now()}`,
+                name: '경보에 이끌린 망령',
+                type: 'elite',
+                faction: 'undead',
+                level: 8,
+                hp: 240,
+                maxHp: 240,
+                atk: 25,
+                def: 12,
+                spd: 11,
+                luck: 10,
+                promptKey: 'monster_cursed_revenant',
+                imagePath: 'assets/monster_cursed_revenant.jpg',
+                skills: [
+                  {
+                    id: 'revenant_claw',
+                    name: '원한의 할퀴기',
+                    power: 1.2,
+                    effectType: 'damage',
+                    description: '차가운 손톱으로 대상을 할큅니다.'
+                  }
+                ],
+                rewards: { gold: 25, ether: 10, exp: 90 }
+              },
+              {
+                id: `scout_alarm_imp_${Date.now()}`,
+                name: '회랑의 그림자 임프',
+                type: 'normal',
+                faction: 'demon',
+                level: 7,
+                hp: 160,
+                maxHp: 160,
+                atk: 20,
+                def: 8,
+                spd: 14,
+                luck: 12,
+                promptKey: 'monster_shadow_imp',
+                imagePath: 'assets/monster_shadow_imp.jpg',
+                skills: [
+                  {
+                    id: 'shadow_scratch',
+                    name: '그림자 습격',
+                    power: 1.1,
+                    effectType: 'damage',
+                    description: '그림자 속에서 불시에 습격합니다.'
+                  }
+                ],
+                rewards: { gold: 15, ether: 8, exp: 60 }
+              }
+            ];
+
+            gm.pendingEventBattleId = 'floor_1_a';
+            gm.currentMonsters = scoutAlarmSquad;
+            gm.clearBattleSnapshot();
+            gm.saveGame();
+            gm.addLog('⚡ [경보 룬 격발!] 날카로운 경보음이 회랑에 울려 퍼지며 어둠 속 마물들이 떼지어 몰려듭니다! (토벌 시 공격력 +15% 가호 & 군번줄 획득)', 'danger');
             setEventCard(null);
+            navigateTo('battle');
           }
         },
         {
@@ -226,32 +275,81 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
     icon: '🕯️',
     iconKey: 'event_floor_2_ossuary',
     generateOptions: (ctx) => {
-      const { gm, danger, maxDanger, setDanger, setEventCard } = ctx;
+      const { gm, danger, maxDanger, setDanger, setEventCard, navigateTo } = ctx;
       const mageHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.arcane_mages);
       const paladinHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.holy_knights);
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 단지를 깨뜨려 원혼 해방 (위험도 +25 상승 / 🪙 80G, 💎 마력 수정 ×2, 이번 원정 동안 공격력 +20% 가호)',
+          label: '⚡ [진척도 가속] 단지를 깨뜨려 원혼 해방 (위험도 +25 / 원혼 토벌 시 🪙 80G, 💎 마력 수정 ×2, 공격력 +20% 가호)',
           variant: 'danger',
           action: () => {
-            SoundManager.getInstance().play('heavy_hit');
+            SoundManager.getInstance().play('combat_start');
             const nextD = Math.min(maxDanger, danger + 25);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.addToDungeonInventory('gold', '골드', '🪙', 80);
-            gm.addToDungeonInventory('crystal', '마력 수정', '💎', 2);
-            gm.addExpeditionBuff({
-              id: 'expedition_ossuary_wrath',
-              name: '원혼의 격노',
-              icon: '🕯️',
-              category: 'ancestral',
-              description: '이번 원정 동안 공격력 +20%',
-              conditionText: '이번 원정 동안',
-              buffs: { atkBonus: 1.20 }
-            });
-            gm.addLog('⚡ [진척도 가속] 단지가 깨지며 분출된 원혼의 마기가 원정대의 무기에 깃듭니다! (위험도 +25 급상승, 🪙 80G, 마력 수정 ×2, 이번 원정 동안 공격력 +20% 가호)', 'reward');
+
+            // 🕯️ 단지가 깨지며 쏟아져 나온 고대 원혼 편대
+            const ossuarySquad: MonsterData[] = [
+              {
+                id: `ossuary_banshee_${Date.now()}`,
+                name: '비명의 납골 밴시',
+                type: 'elite',
+                faction: 'undead',
+                level: 15,
+                hp: 480,
+                maxHp: 480,
+                atk: 42,
+                def: 18,
+                spd: 15,
+                luck: 16,
+                promptKey: 'monster_tomb_banshee',
+                imagePath: 'assets/monster_tomb_banshee.jpg',
+                skills: [
+                  {
+                    id: 'banshee_scream',
+                    name: '비명의 원혼파',
+                    power: 1.2,
+                    effectType: 'damage',
+                    description: '귀를 찢는 비명으로 정신을 타격합니다.'
+                  }
+                ],
+                rewards: { gold: 45, ether: 20, exp: 160 }
+              },
+              {
+                id: `crypt_ghoul_${Date.now()}`,
+                name: '묘실의 굶주린 구울',
+                type: 'normal',
+                faction: 'undead',
+                level: 14,
+                hp: 360,
+                maxHp: 360,
+                atk: 35,
+                def: 14,
+                spd: 11,
+                luck: 10,
+                promptKey: 'monster_crypt_ghoul',
+                imagePath: 'assets/monster_crypt_ghoul.jpg',
+                skills: [
+                  {
+                    id: 'ghoul_bite',
+                    name: '부식성 물어뜯기',
+                    power: 1.15,
+                    effectType: 'damage',
+                    description: '부식성 이빨로 살점을 물어뜯습니다.'
+                  }
+                ],
+                rewards: { gold: 35, ether: 15, exp: 120 }
+              }
+            ];
+
+            gm.pendingEventBattleId = 'floor_2_a';
+            gm.currentMonsters = ossuarySquad;
+            gm.clearBattleSnapshot();
+            gm.saveGame();
+            gm.addLog('🕯️⚔️ [원혼 해방 폭주!] 깨진 점토 항아리에서 한 맺힌 원혼 밴시와 구울들이 비명을 지르며 덮쳐옵니다! (토벌 시 보물 & 가호 획득)', 'danger');
             setEventCard(null);
+            navigateTo('battle');
           }
         },
         {
@@ -326,23 +424,55 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
     icon: '🪦',
     iconKey: 'event_floor_2_martyr',
     generateOptions: (ctx) => {
-      const { gm, danger, maxDanger, setDanger, setEventCard } = ctx;
+      const { gm, danger, maxDanger, setDanger, setEventCard, navigateTo } = ctx;
       const warriorHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.warriors);
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 피로 룬을 적셔 결투 환영 소환 (위험도 +20 / 순교자의 제식 검 + EXP 200)',
+          label: '⚡ [진척도 가속] 피로 룬을 적셔 결투 환영 소환 (위험도 +20 / 환영 격파 시 순교자의 제식 검 & EXP 200 수습)',
           variant: 'danger',
           action: () => {
-            SoundManager.getInstance().play('level_up');
+            SoundManager.getInstance().play('combat_start');
             const nextD = Math.min(maxDanger, danger + 20);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.party.forEach(h => gm.addExpToHero(h, 200));
-            const rewardWeapon = gm.generateForgeEquipmentDrop(2);
-            gm.addToDungeonInventory(rewardWeapon.id, rewardWeapon.name, rewardWeapon.icon, 1, rewardWeapon, undefined, 'equipment');
-            gm.addLog('⚡ [진척도 가속] 순교자의 결투 환영을 극복하여 귀중한 검술 경험과 유품 검을 계승했습니다! (위험도 +20, 전원 EXP +200)', 'reward');
+
+            // 🪦 순교자 기사의 결투 환영 구성
+            const martyrPhantom: MonsterData[] = [
+              {
+                id: `martyr_phantom_${Date.now()}`,
+                name: '순교자의 결투 환영',
+                type: 'elite',
+                faction: 'undead',
+                level: 16,
+                hp: 550,
+                maxHp: 550,
+                atk: 48,
+                def: 22,
+                spd: 12,
+                luck: 14,
+                promptKey: 'monster_dread_knight',
+                imagePath: 'assets/monster_dread_knight.jpg',
+                skills: [
+                  {
+                    id: 'martyr_strike',
+                    name: '순교자의 단죄검',
+                    power: 1.25,
+                    effectType: 'damage',
+                    description: '검에 영령의 한을 실어 내리칩니다.'
+                  }
+                ],
+                rewards: { gold: 50, ether: 20, exp: 200 }
+              }
+            ];
+
+            gm.pendingEventBattleId = 'floor_2_b';
+            gm.currentMonsters = martyrPhantom;
+            gm.clearBattleSnapshot();
+            gm.saveGame();
+            gm.addLog('🪦⚔️ [순교자 결투 소환!] 피를 머금은 비문에서 검은 오라를 두른 고대 기사의 환영이 실체화되어 검을 뽑습니다! (승리 시 제식 검 & EXP 획득)', 'danger');
             setEventCard(null);
+            navigateTo('battle');
           }
         },
         {
@@ -841,25 +971,60 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
     icon: '🗿',
     iconKey: 'event_floor_5_statue',
     generateOptions: (ctx) => {
-      const { gm, danger, maxDanger, setDanger, setEventCard } = ctx;
+      const { gm, danger, maxDanger, setDanger, setEventCard, navigateTo } = ctx;
       const paladinHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.holy_knights);
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 석상 이마의 붉은 마핵 강제 적출 (위험도 +25 / 🌌 공허 파편 ×4)',
+          label: '⚡ [진척도 가속] 석상 이마의 붉은 마핵 강제 적출 (위험도 +25 / 각성한 거신 석상 파괴 시 🌌 공허 파편 ×4)',
           variant: 'danger',
           action: () => {
-            SoundManager.getInstance().play('heavy_hit');
+            SoundManager.getInstance().play('combat_start');
             const nextD = Math.min(maxDanger, danger + 25);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.addToDungeonInventory('void_shard', '공허의 파편', '🌌', 4);
+
+            // 🗿 마핵 적출로 폭주한 거신 석상 골렘 구성
+            const colossusSquad: MonsterData[] = [
+              {
+                id: `colossus_guardian_${Date.now()}`,
+                name: '각성한 심연의 수호 거신',
+                type: 'elite',
+                faction: 'construct',
+                level: 30,
+                hp: 1100,
+                maxHp: 1100,
+                atk: 78,
+                def: 45,
+                spd: 9,
+                luck: 10,
+                promptKey: 'monster_monolith_guardian',
+                imagePath: 'assets/monster_monolith_guardian.jpg',
+                skills: [
+                  {
+                    id: 'colossus_slam',
+                    name: '거신의 대지 파쇄',
+                    power: 1.3,
+                    effectType: 'damage',
+                    description: '석상 대검으로 지면을 내리쳐 파편을 흩뿌립니다.'
+                  }
+                ],
+                rewards: { gold: 100, ether: 40, exp: 500 }
+              }
+            ];
+
             const q4 = gm.quests.find(q => q.id === 'Q_SCENARIO_04');
             if (q4 && q4.status === 'active' && q4.objectives[0]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_04', 1, 1);
             }
-            gm.addLog('⚡ [진척도 가속] 거신의 핵을 뜯어내어 던전 전체의 마기가 흉포해졌습니다! (위험도 +25 상승, 공허의 파편 ×4)', 'reward');
+
+            gm.pendingEventBattleId = 'floor_5_b';
+            gm.currentMonsters = colossusSquad;
+            gm.clearBattleSnapshot();
+            gm.saveGame();
+            gm.addLog('🗿⚔️ [수호 거신 각성!] 이마의 마핵을 뜯어내자 거신의 석상이 붉은 안광을 켜고 대검을 휘두릅니다! (파괴 시 공허 파편 4개 획득)', 'danger');
             setEventCard(null);
+            navigateTo('battle');
           }
         },
         {
@@ -944,28 +1109,81 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
     icon: '🍷',
     iconKey: 'event_floor_6_confess',
     generateOptions: (ctx) => {
-      const { gm, danger, maxDanger, setDanger, setEventCard } = ctx;
+      const { gm, danger, maxDanger, setDanger, setEventCard, navigateTo } = ctx;
       const priestHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.holy_priests);
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 참회실 문을 박차고 도발 (위험도 +30 / 6티어 희귀 무기 드랍 / 정예 전투)',
+          label: '⚡ [진척도 가속] 참회실 문을 박차고 도발 (위험도 +30 / 흡혈 귀족 토벌 시 6티어 보구 강탈)',
           variant: 'danger',
           action: () => {
-            SoundManager.getInstance().play('heavy_hit');
+            SoundManager.getInstance().play('combat_start');
             const nextD = Math.min(maxDanger, danger + 30);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            const dropWeapon = gm.generateForgeEquipmentDrop(6);
-            gm.addToDungeonInventory(dropWeapon.id, dropWeapon.name, dropWeapon.icon, 1, dropWeapon, undefined, 'equipment');
-            const q2 = gm.quests.find(q => q.id === 'Q_SCENARIO_02');
-            if (q2 && q2.status === 'active' && q2.objectives[0]?.isCompleted) {
-              gm.updateQuestObjective('Q_SCENARIO_02', 1, 1);
-            }
-            gm.activateQuest('Q_SCENARIO_03');
-            gm.updateQuestObjective('Q_SCENARIO_03', 0, 1);
-            gm.addLog('⚡ [진척도 급가속] 숨어있던 흡혈 귀족을 제압하고 6티어 보구를 강탈했습니다! (위험도 +30 급상승, 보스 출현 가속)', 'reward');
+
+            // 🍷 참회실의 숨어있던 흡혈 귀족 정예 편대 구성
+            const vampireSquad: MonsterData[] = [
+              {
+                id: `elite_vampire_${Date.now()}`,
+                name: '참회실의 흡혈 백작',
+                type: 'elite',
+                faction: 'undead',
+                level: 35,
+                hp: 1200,
+                maxHp: 1200,
+                atk: 90,
+                def: 38,
+                spd: 16,
+                luck: 20,
+                promptKey: 'monster_crimson_vampire',
+                imagePath: 'assets/monster_crimson_vampire.jpg',
+                skills: [
+                  {
+                    id: 'vampire_blood_drain',
+                    name: '진홍의 생명 흡수',
+                    power: 1.3,
+                    effectType: 'damage',
+                    drainPct: 35,
+                    description: '대상의 생명력을 쥐어짜 체력을 회복합니다.'
+                  }
+                ],
+                rewards: { gold: 120, ether: 45, exp: 650 }
+              },
+              {
+                id: `cultist_priest_${Date.now()}`,
+                name: '타락한 혈사제',
+                type: 'normal',
+                faction: 'cultist',
+                level: 33,
+                hp: 850,
+                maxHp: 850,
+                atk: 75,
+                def: 28,
+                spd: 14,
+                luck: 15,
+                promptKey: 'monster_fallen_priest',
+                imagePath: 'assets/monster_fallen_priest.jpg',
+                skills: [
+                  {
+                    id: 'dark_curse_strike',
+                    name: '피의 저주',
+                    power: 1.15,
+                    effectType: 'damage',
+                    description: '암흑의 저주를 담아 타격합니다.'
+                  }
+                ],
+                rewards: { gold: 80, ether: 30, exp: 400 }
+              }
+            ];
+
+            gm.pendingEventBattleId = 'floor_6_a';
+            gm.currentMonsters = vampireSquad;
+            gm.clearBattleSnapshot();
+            gm.saveGame();
+            gm.addLog('🍷⚔️ [흡혈 귀족 기습 도발!] 참회실 문을 부수자 송곳니를 드러낸 흡혈 백작이 피의 마법을 흩뿌리며 덮쳐옵니다! (토벌 시 6티어 보구 획득)', 'danger');
             setEventCard(null);
+            navigateTo('battle');
           }
         },
         {
@@ -1314,27 +1532,80 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
     icon: '⛓️',
     iconKey: 'event_floor_8_knight',
     generateOptions: (ctx) => {
-      const { gm, danger, maxDanger, setDanger, setEventCard } = ctx;
+      const { gm, danger, maxDanger, setDanger, setEventCard, navigateTo } = ctx;
       const warriorHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.warriors);
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 간수실 경보를 울려 정예 유인 (위험도 +30 / 8티어 흑철 판금 갑옷 / 군사 열쇠)',
+          label: '⚡ [진척도 가속] 간수실 경보를 울려 정예 유인 (위험도 +30 / 간수단 토벌 시 8티어 흑철 판금 갑옷 & 비밀 서신 노획)',
           variant: 'danger',
           action: () => {
-            SoundManager.getInstance().play('heavy_hit');
+            SoundManager.getInstance().play('combat_start');
             const nextD = Math.min(maxDanger, danger + 30);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            const dropArmor = gm.generateForgeEquipmentDrop(8);
-            gm.addToDungeonInventory(dropArmor.id, dropArmor.name, dropArmor.icon, 1, dropArmor, undefined, 'equipment');
-            gm.addToDungeonInventory('memoir_8', '기사단장의 비밀 서신', '📜', 1);
-            const q1 = gm.quests.find(q => q.id === 'Q_SCENARIO_01');
-            if (q1 && q1.status === 'active' && q1.objectives[1]?.isCompleted) {
-              gm.updateQuestObjective('Q_SCENARIO_01', 2, 1);
-            }
-            gm.addLog('⚡ [진척도 가속] 고문실 정예 간수들을 제압하고 8티어 중갑을 노획했습니다! (위험도 +30, 비밀 서신 획득)', 'reward');
+
+            // ⛓️ 고문실 정예 간수 편대 구성 (철혈 고문관 & 이단심문관)
+            const torturerSquad: MonsterData[] = [
+              {
+                id: `elite_torturer_${Date.now()}`,
+                name: '단죄의 흑철 고문관',
+                type: 'elite',
+                faction: 'cultist',
+                level: 42,
+                hp: 1650,
+                maxHp: 1650,
+                atk: 115,
+                def: 55,
+                spd: 13,
+                luck: 10,
+                promptKey: 'monster_iron_torturer',
+                imagePath: 'assets/monster_iron_torturer.jpg',
+                skills: [
+                  {
+                    id: 'torture_cleave',
+                    name: '단죄의 쇠사슬 강타',
+                    power: 1.35,
+                    effectType: 'damage',
+                    description: '무거운 쇠사슬을 휘둘러 뼈를 부숩니다.'
+                  }
+                ],
+                rewards: { gold: 160, ether: 50, exp: 800 }
+              },
+              {
+                id: `elite_inquisitor_${Date.now()}`,
+                name: '심연의 심문집행관',
+                type: 'normal',
+                faction: 'cultist',
+                level: 40,
+                hp: 1100,
+                maxHp: 1100,
+                atk: 95,
+                def: 35,
+                spd: 15,
+                luck: 12,
+                promptKey: 'monster_inquisitor',
+                imagePath: 'assets/monster_inquisitor.jpg',
+                skills: [
+                  {
+                    id: 'inquisition_brand',
+                    name: '이단의 낙인',
+                    power: 1.2,
+                    effectType: 'damage',
+                    description: '달궈진 철인으로 죄를 심문합니다.'
+                  }
+                ],
+                rewards: { gold: 100, ether: 35, exp: 500 }
+              }
+            ];
+
+            gm.pendingEventBattleId = 'floor_8_a';
+            gm.currentMonsters = torturerSquad;
+            gm.clearBattleSnapshot();
+            gm.saveGame();
+            gm.addLog('⛓️⚔️ [간수실 경보 발령!] 쇠사슬을 쩔렁이며 고문관과 심문집행관이 살기를 뿜으며 들이닥칩니다! (토벌 시 8티어 갑옷 & 비밀 서신 획득)', 'danger');
             setEventCard(null);
+            navigateTo('battle');
           }
         },
         {
@@ -1574,26 +1845,77 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
     icon: '👥',
     iconKey: 'event_floor_9_clone',
     generateOptions: (ctx) => {
-      const { gm, danger, maxDanger, setDanger, setEventCard } = ctx;
+      const { gm, danger, maxDanger, setDanger, setEventCard, navigateTo } = ctx;
       const priestHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.holy_priests);
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 선제 결투 돌입 (위험도 +30 / 리더 무기와 동일한 9티어 장비 복제 획득)',
+          label: '⚡ [진척도 가속] 선제 결투 돌입 (위험도 +30 / 도플갱어 결투 승리 시 9티어 장비 복제 획득)',
           variant: 'danger',
           action: () => {
-            SoundManager.getInstance().play('heavy_hit');
+            SoundManager.getInstance().play('combat_start');
             const nextD = Math.min(maxDanger, danger + 30);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            const cloneWeapon = gm.generateForgeEquipmentDrop(9);
-            gm.addToDungeonInventory(cloneWeapon.id, cloneWeapon.name, cloneWeapon.icon, 1, cloneWeapon, undefined, 'equipment');
-            const q2 = gm.quests.find(q => q.id === 'Q_SCENARIO_02');
-            if (q2 && q2.status === 'active' && q2.objectives[1]?.isCompleted) {
-              gm.updateQuestObjective('Q_SCENARIO_02', 2, 1);
-            }
-            gm.addLog('⚡ [진척도 가속] 가짜를 일격에 쓰러뜨리고 복제된 9티어 보구를 강탈했습니다! (위험도 +30, 9티어 장비 복제)', 'reward');
+
+            // 👥 플레이어 원정대 복제본 생성 (상단 몬스터 일러스트: 프리즘 방직사 monster_prism_weaver 기본 적용)
+            const doppelgangers: MonsterData[] = gm.party.map((hero, idx) => {
+              const baseSkills = (hero.equippedSkills && hero.equippedSkills.length > 0)
+                ? hero.equippedSkills.map(sid => gm.resolveSkillData(sid, hero.level)).filter(Boolean)
+                : [];
+
+              const sanitizedSkills = (baseSkills as any[]).map((sk: any, skIdx: number) => ({
+                id: sk.id || `doppel_sk_${idx}_${skIdx}`,
+                name: sk.name || '거울의 암영격',
+                description: sk.description || '대원의 기술을 흉내 낸 암영 일격',
+                power: sk.power || 1.1,
+                effectType: sk.effectType || 'damage',
+                isCharge: false,
+                piercePct: sk.piercePct || 0,
+                drainPct: sk.drainPct || 0
+              }));
+
+              if (sanitizedSkills.length === 0) {
+                sanitizedSkills.push({
+                  id: `doppel_basic_${idx}`,
+                  name: '거울의 암영격',
+                  description: '자신의 원본을 겨누는 암영의 일격',
+                  power: 1.1,
+                  effectType: 'damage',
+                  isCharge: false
+                });
+              }
+
+              return {
+                id: `doppelganger_9f_${hero.id || idx}_${Date.now()}`,
+                name: `도플갱어 [${hero.name}]`,
+                type: 'elite',
+                faction: 'corrupt',
+                level: Math.max(30, hero.level),
+                hp: Math.round(hero.maxHp * 1.2),
+                maxHp: Math.round(hero.maxHp * 1.2),
+                atk: Math.round(hero.atk * 1.05),
+                def: hero.def,
+                spd: hero.spd,
+                luck: hero.luck,
+                promptKey: 'monster_prism_weaver',
+                imagePath: 'assets/monster_prism_weaver.jpg',
+                skills: sanitizedSkills,
+                rewards: {
+                  gold: 150,
+                  ether: 40,
+                  exp: 1000
+                }
+              };
+            });
+
+            gm.pendingEventBattleId = 'floor_9_b';
+            gm.currentMonsters = doppelgangers;
+            gm.clearBattleSnapshot();
+            gm.saveGame();
+            gm.addLog('⚡ [도플갱어 결투 돌입!] 거울 속에서 걸어나온 원정대 복제본들이 비릿한 미소를 지으며 무구를 겨눕니다! (승리 시 9티어 장비 복제 획득)', 'danger');
             setEventCard(null);
+            navigateTo('battle');
           }
         },
         {
@@ -2019,7 +2341,416 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       return options;
     }
+  },
+  // ================================================================
+  // 🕯️ [11층 특별 조우: 영혼 등대]
+  // ================================================================
+  {
+    id: 'floor_11_lighthouse',
+    floor: 11,
+    title: '🕯️ 영혼 등대와 망령의 제단',
+    desc: '무간도의 짙은 암흑 속에서 푸른 도깨비불을 밝히고 있는 영혼 등대입니다. 등대 기단에는 무수한 원혼들의 속삭임이 서린 제단이 놓여 있습니다.',
+    icon: '🕯️',
+    iconKey: 'event_floor_11_lighthouse',
+    generateOptions: (ctx) => {
+      const { gm, danger, maxDanger, setDanger, setEventCard } = ctx;
+      const berserkerHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.berserkers);
+
+      const options: EventCardOption[] = [
+        {
+          label: '🩸 [사경의 제물] 영혼을 담보로 한 계약 (파티원 최대 HP -20% 페널티 / 보스 방어력 -30% 영구 분쇄 및 치명타율 +25% [공허의 붕괴 인] 획득)',
+          variant: 'danger',
+          action: () => {
+            SoundManager.getInstance().play('buff');
+            gm.party.forEach(h => {
+              h.currentHp = Math.max(1, Math.min(h.currentHp, Math.floor(h.maxHp * 0.8)));
+            });
+            gm.addExpeditionBuff({
+              id: 'expedition_void_collapse_seal',
+              name: '공허의 붕괴 인',
+              icon: '🩸',
+              category: 'curse',
+              description: '파티원 최대 HP -20%, 보스 방어력 분쇄(관통 +30%), 치명타율 +25%',
+              conditionText: '이번 원정 동안',
+              buffs: {
+                maxHpBonus: 0.80,
+                critRateBonus: 0.25,
+                defPenetrationBonus: 0.30
+              }
+            });
+            gm.addLog('🩸 [사경의 제물] 원혼들에게 생명력을 바쳐 보스의 방어선을 무너뜨리는 붕괴 인을 획득했습니다! (파티원 최대 HP -20%, 치명타율 +25%, 방어 관통 30%)', 'reward');
+            setEventCard(null);
+          }
+        },
+        {
+          label: '🕯️ [망령의 결속] 불사의 등불 점화 (무간도 위험도 +100 증가 / 처음 사경에 빠진 아군 1회 즉시 50% HP로 부활 가호)',
+          variant: 'primary',
+          action: () => {
+            SoundManager.getInstance().play('buff');
+            const nextD = Math.min(maxDanger, danger + 100);
+            setDanger(nextD);
+            gm.dungeonDangerLevel = nextD;
+            gm.hasSoulLanternRevive = true;
+            gm.addExpeditionBuff({
+              id: 'expedition_soul_lantern',
+              name: '망령의 결속 [불사의 등불]',
+              icon: '🕯️',
+              category: 'ancestral',
+              description: '처음 사경(HP 0)에 도달한 아군 1회 즉시 50% HP로 부활',
+              conditionText: '원정 1회 한정'
+            });
+            gm.addLog('🕯️ [망령의 결속] 망령의 불꽃과 영혼을 결속했습니다! 처음 사경에 도달한 아군이 1회 즉시 50% 생명력으로 부활합니다. (위험도 +100 증가)', 'reward');
+            setEventCard(null);
+          }
+        },
+        {
+          label: '🕊️ [안식의 진혼곡] 진혼의 선율 연주 (무간도 위험도 -100 감소 / 전원 체력 및 마나 50% 즉시 회복)',
+          variant: 'success',
+          action: () => {
+            SoundManager.getInstance().play('heal');
+            const nextD = Math.max(0, danger - 100);
+            setDanger(nextD);
+            gm.dungeonDangerLevel = nextD;
+            gm.party.forEach(h => {
+              h.currentHp = Math.min(h.maxHp, Math.floor(h.currentHp + h.maxHp * 0.5));
+              h.currentMp = Math.min(h.maxMp, Math.floor(h.currentMp + h.maxMp * 0.5));
+            });
+            gm.addLog('🕊️ [안식의 진혼곡] 무간도의 원혼들을 달래어 위험도를 낮추고 원정대 전원의 활력을 회복했습니다! (위험도 -100 감소, 전원 HP/MP 50% 회복)', 'reward');
+            setEventCard(null);
+          }
+        }
+      ];
+
+      if (berserkerHero) {
+        options.unshift({
+          label: `⚔️ [${berserkerHero.name} 특기] 원혼의 행진곡 (위험도 +100 증가 / 아군 전체 공격력 +20% 증가, 방어력 -20%)`,
+          variant: 'danger',
+          action: () => {
+            SoundManager.getInstance().play('heavy_hit');
+            const nextD = Math.min(maxDanger, danger + 100);
+            setDanger(nextD);
+            gm.dungeonDangerLevel = nextD;
+            gm.addExpeditionBuff({
+              id: 'expedition_vengeful_march',
+              name: '원혼의 행진곡',
+              icon: '⚔️',
+              category: 'ancestral',
+              description: '아군 전체 공격력 +20%, 방어력 -20%',
+              conditionText: '이번 원정 동안',
+              buffs: {
+                atkBonus: 1.20,
+                defBonus: 0.80
+              }
+            });
+            gm.addLog(`⚔️ [원혼의 행진곡] [${berserkerHero.name}]이(가) 등대의 원혼들을 전투 함성으로 규합했습니다! (위험도 +100, 전원 공격력 +20%, 방어력 -20%)`, 'reward');
+            setEventCard(null);
+          }
+        });
+      }
+
+      options.push({
+        label: '🚶 등대를 지나쳐 전진한다',
+        variant: 'ghost',
+        action: () => {
+          gm.addLog('영혼 등대의 푸른 불빛을 뒤로하고 어둠 속으로 전진합니다.', 'normal');
+          setEventCard(null);
+        }
+      });
+
+      return options;
+    }
+  },
+
+  // ================================================================
+  // 🪞 [11층 특별 조우: 차원 거울]
+  // ================================================================
+  {
+    id: 'floor_11_mirror',
+    floor: 11,
+    title: '🪞 차원 거울의 환영',
+    desc: '공중에 떠 있는 거대한 균열 거울입니다. 거울 표면에는 심연의 탁류에 물든 원정대 자신의 모습이 기괴하게 비치고 있습니다.',
+    icon: '🪞',
+    iconKey: 'event_floor_11_mirror',
+    generateOptions: (ctx) => {
+      const { gm, danger, maxDanger, setDanger, setEventCard, navigateTo } = ctx;
+      const rogueHero = findPartyHeroByClasses(gm.party, CLASS_GROUPS.shadow_rogues);
+
+      const options: EventCardOption[] = [
+        {
+          label: '⚔️ [미러전] 거울 속 타락한 결사대와 혈투 (승리 시 경험치 2배 & 🌌 공허 파편 ×10 획득)',
+          variant: 'danger',
+          action: () => {
+            SoundManager.getInstance().play('heavy_hit');
+            // 파티원 기반 도플갱어 편대 생성
+            const doppelgangers: MonsterData[] = gm.party.map((hero, idx) => ({
+              id: `doppelganger_${hero.id || idx}_${Date.now()}`,
+              name: `타락한 도플갱어 [${hero.name}]`,
+              type: 'elite',
+              faction: 'corrupt',
+              level: Math.max(50, hero.level),
+              maxHp: Math.round(hero.maxHp * 1.5),
+              atk: Math.round(hero.atk * 1.1),
+              def: Math.round(hero.def * 1.0),
+              spd: hero.spd,
+              luck: hero.luck,
+              skills: [
+                {
+                  id: `mirror_strike_${idx}`,
+                  name: '거울의 암영격',
+                  type: 'attack',
+                  power: 1.2,
+                  target: 'single',
+                  cooldown: 0,
+                  description: '자신의 원본을 겨누는 암영의 일격'
+                }
+              ],
+              rewards: {
+                gold: 500,
+                ether: 150,
+                exp: 3000
+              }
+            }));
+
+            gm.isDoppelgangerBattle = true;
+            gm.currentMonsters = doppelgangers;
+            gm.clearBattleSnapshot();
+            gm.saveGame();
+            gm.addLog('⚔️ [도플갱어 출현!] 차원 거울을 깨고 나온 결사대의 거울 복제들과 사투가 시작됩니다! (승리 시 경험치 2배 & 공허 파편 ×10)', 'danger');
+            setEventCard(null);
+            navigateTo('battle');
+          }
+        },
+        {
+          label: '👁️ [비전 개안] 마도서 연구 즉시 완료 (무간도 위험도 +100 증가 / 연구 중인 마도서 습득률 100% 완전 개안)',
+          variant: 'primary',
+          action: () => {
+            SoundManager.getInstance().play('forge_success');
+            const nextD = Math.min(maxDanger, danger + 100);
+            setDanger(nextD);
+            gm.dungeonDangerLevel = nextD;
+
+            let completedCount = 0;
+            gm.party.forEach(hero => {
+              if (hero.studyingSkills && hero.studyingSkills.length > 0) {
+                const studying = [...hero.studyingSkills];
+                studying.forEach(sid => {
+                  hero.skillMastery[sid] = 100;
+                  if (!hero.learnedSkills.includes(sid)) {
+                    if (hero.learnedSkills.length < 6) {
+                      hero.learnedSkills.push(sid);
+                      hero.skillLevels[sid] = hero.skillLevels[sid] || 1;
+                      if (hero.equippedSkills.length < 2 && !hero.equippedSkills.includes(sid)) {
+                        hero.equippedSkills.push(sid);
+                      }
+                    }
+                  }
+                  hero.studyingSkills = (hero.studyingSkills || []).filter(s => s !== sid);
+                  completedCount++;
+                });
+              }
+            });
+
+            if (completedCount > 0) {
+              gm.addLog(`👁️ [비전 개안] 차원 거울의 지식을 흡수하여 연구 중이던 마도서 ${completedCount}개의 연구를 즉시 완료(습득률 100%)했습니다! (위험도 +100 증가)`, 'reward');
+            } else {
+              // 연구 중인 마도서가 없는 경우 전설급 비전서 제공 & 경험치 1,500 부여
+              gm.addToDungeonInventory('void_shard', '공허의 파편', '🌌', 5);
+              gm.party.forEach(h => gm.addExpToHero(h, 1500));
+              gm.addLog('👁️ [비전 개안] 현재 연구 중인 마도서가 없어 거울의 마력을 전원 EXP +1,500 및 공허 파편 5개로 정제했습니다. (위험도 +100 증가)', 'reward');
+            }
+            gm.emit('partyUpdated', gm.party);
+            gm.saveGame();
+            setEventCard(null);
+          }
+        }
+      ];
+
+      if (rogueHero) {
+        options.unshift({
+          label: `🗡️ [${rogueHero.name} 특기] 거울 너머 암영 강탈 (10티어 전설 무기 ×1 & 💎 순수 마도석 ×5 탈취)`,
+          variant: 'success',
+          action: () => {
+            SoundManager.getInstance().play('loot_open');
+            const t10Weapon: EquipmentItem = {
+              id: `eq_t10_shadow_dagger_${Date.now()}`,
+              templateId: 'forge_t10_dagger',
+              tier: 10,
+              baseName: '공허 분쇄의 암영단도',
+              name: '👑 [전설] 공허 분쇄의 암영단도 +5',
+              slot: 'weapon',
+              weaponType: 'dagger',
+              level: 5,
+              enhanceLevel: 5,
+              rarity: 'legendary',
+              baseStats: { atk: 185, spd: 16, critRate: 15, critDmg: 35 },
+              stats: { atk: 235, spd: 20, critRate: 18, critDmg: 45 },
+              description: '무간도의 차원 거울 금고에서 탈취한 전설의 10티어 암영 무기.',
+              icon: '🗡️'
+            };
+            gm.addToDungeonInventory(t10Weapon.id, t10Weapon.name, t10Weapon.icon, 1, t10Weapon);
+            gm.addToDungeonInventory('pure_mana_stone', '순수 마도석', '💎', 5);
+            gm.addLog(`🗡️ [암영 강탈] [${rogueHero.name}]이(가) 차원 거울 너머의 공허 금고를 털어 [👑 10티어 공허 분쇄의 암영단도 +5]와 [💎 순수 마도석 ×5]를 탈취했습니다!`, 'reward');
+            setEventCard(null);
+          }
+        });
+      }
+
+      options.push({
+        label: '🚶 거울을 깨뜨리지 않고 우회한다',
+        variant: 'ghost',
+        action: () => {
+          gm.addLog('차원 거울의 유혹을 뒤로하고 안전하게 우회했습니다.', 'normal');
+          setEventCard(null);
+        }
+      });
+
+      return options;
+    }
+  },
+
+  // ================================================================
+  // 💀 [11층 특별 조우: 사신 카론]
+  // ================================================================
+  {
+    id: 'floor_11_charon',
+    floor: 11,
+    title: '💀 망각의 뱃사공 카론',
+    desc: '침묵하는 망각의 강 위에서 낡은 나룻배를 젓는 사신 카론을 만났습니다. 그의 앙상한 손에는 영혼의 무게를 재는 저울이 쥐어져 있습니다.',
+    icon: '💀',
+    iconKey: 'event_floor_11_charon',
+    generateOptions: (ctx) => {
+      const { gm, danger, maxDanger, setDanger, setEventCard } = ctx;
+      const mageHero = findPartyHeroByClasses(gm.party, [
+        'apprentice', 'elementalist', 'arcane_scholar', 'calamity_mage', 'void_scholar', 'chronomancer', 'chrono_archon'
+      ]);
+
+      const generateMainOptions = (): EventCardOption[] => {
+        const opts: EventCardOption[] = [
+          {
+            label: '🩸 [광전사의 영혼 계약] 카론의 유혈 서약 (행운 -50 페널티 / 치명타 확률 +25%, 치명타 피해 +25% 대폭 증가)',
+            variant: 'danger',
+            action: () => {
+              SoundManager.getInstance().play('buff');
+              gm.addExpeditionBuff({
+                id: 'expedition_charon_covenant',
+                name: '카론의 유혈 서약',
+                icon: '💀',
+                category: 'curse',
+                description: '치명타율 +25%, 치명타 피해 +25%, 행운 -50',
+                conditionText: '이번 원정 동안',
+                buffs: {
+                  critRateBonus: 0.25,
+                  critDmgBonus: 0.25,
+                  luckBonus: -50
+                }
+              });
+              gm.addLog('💀 [카론의 유혈 서약] 행운을 망각의 강에 던지는 대가로 파멸적인 치명타 위력을 손에 넣었습니다! (행운 -50, 치명타율 +25%, 치명타 피해 +25%)', 'reward');
+              setEventCard(null);
+            }
+          },
+          {
+            label: '📖 [비전 공양] 망각의 강에 스킬 헌납 (습득한 스킬 1개 망각 ➔ 주력 스킬 1개 레벨 영구히 +1레벨 상승)',
+            variant: 'primary',
+            action: () => {
+              // 습득한 스킬이 있는 영웅 검색
+              const eligibleHeroes = gm.party.filter(h => (h.learnedSkills || []).length > 0);
+
+              if (eligibleHeroes.length === 0) {
+                gm.addLog('카론이 고개를 젓습니다. "망각의 강에 바칠 습득 비전이 없구나."', 'danger');
+                setEventCard(null);
+                return;
+              }
+
+              // 서브 선택 카드 생성
+              const subOptions: EventCardOption[] = [];
+              eligibleHeroes.forEach(hero => {
+                const learned = hero.learnedSkills || [];
+                learned.forEach(sacSid => {
+                  const targetSid = (hero.equippedSkills || []).find(sid => sid !== sacSid) ||
+                                    learned.find(sid => sid !== sacSid) ||
+                                    hero.classId;
+                  const sacDef = ALL_SKILLS_MAP[sacSid] || { name: sacSid };
+                  const targetDef = ALL_SKILLS_MAP[targetSid] || { name: targetSid };
+                  const curTargetLv = hero.skillLevels[targetSid] || 1;
+
+                  subOptions.push({
+                    label: `📖 [${hero.name}] [${sacDef.name}] 망각 ➔ [${targetDef.name}] Lv.${curTargetLv + 1}로 영구 승화`,
+                    variant: 'primary',
+                    action: () => {
+                      hero.learnedSkills = (hero.learnedSkills || []).filter(s => s !== sacSid);
+                      hero.equippedSkills = (hero.equippedSkills || []).filter(s => s !== sacSid);
+                      delete hero.skillLevels[sacSid];
+                      delete hero.skillMastery[sacSid];
+                      hero.skillLevels[targetSid] = curTargetLv + 1;
+
+                      SoundManager.getInstance().play('forge_success');
+                      gm.addLog(`📖✨ [비전 공양 완료] [${hero.name}]이(가) [${sacDef.name}]을(를) 카론에게 바쳐 [${targetDef.name}]의 레벨이 Lv.${curTargetLv + 1}(으)로 영구 상승했습니다!`, 'reward');
+                      gm.emit('partyUpdated', gm.party);
+                      gm.saveGame();
+                      setEventCard(null);
+                    }
+                  });
+                });
+              });
+
+              subOptions.push({
+                label: '↩️ 뒤로 가기',
+                variant: 'ghost',
+                action: () => {
+                  setEventCard({
+                    title: '💀 망각의 뱃사공 카론',
+                    desc: '침묵하는 망각의 강 위에서 낡은 나룻배를 젓는 사신 카론을 만났습니다. 그의 앙상한 손에는 영혼의 무게를 재는 저울이 쥐어져 있습니다.',
+                    icon: '💀',
+                    iconKey: 'event_floor_11_charon',
+                    options: generateMainOptions()
+                  });
+                }
+              });
+
+              setEventCard({
+                title: '📖 비전 공양: 망각과 승화',
+                desc: '카론이 앙상한 손을 내밉니다. "어떤 비전을 망각의 강물에 던져 주력 기술을 영구히 승화시키겠는가?"',
+                icon: '📖',
+                iconKey: 'event_floor_11_charon_sacrifice',
+                options: subOptions
+              });
+            }
+          }
+        ];
+
+        if (mageHero) {
+          opts.unshift({
+            label: `🌀 [${mageHero.name} 특기] 차원 왜곡 지름길 포탈 (위험도 +100 증가 / 카론의 나룻배를 차원 도약시켜 심연 포탈 개방)`,
+            variant: 'success',
+            action: () => {
+              SoundManager.getInstance().play('portal');
+              const nextD = Math.min(maxDanger, danger + 100);
+              setDanger(nextD);
+              gm.dungeonDangerLevel = nextD;
+              gm.portalAppeared = true;
+              gm.party.forEach(h => gm.addExpToHero(h, 500));
+              gm.addLog(`🌀 [마법사 특기] [${mageHero.name}]이(가) 카론의 나룻배를 차원 왜곡하여 심연 탈출/도약 지름길 포탈을 개방했습니다! (위험도 +100 증가, 전원 EXP +500, 차원 포탈 개방)`, 'reward');
+              setEventCard(null);
+            }
+          });
+        }
+
+        opts.push({
+          label: '🚶 카론에게 작별을 고하고 지나친다',
+          variant: 'ghost',
+          action: () => {
+            gm.addLog('카론의 나룻배를 뒤로하고 강변을 따라 전진합니다.', 'normal');
+            setEventCard(null);
+          }
+        });
+
+        return opts;
+      };
+
+      return generateMainOptions();
+    }
   }
+
 ];
 
 /** ✨ 에픽 퀘스트 종료 또는 중복 방지 필터링 후 고유 이벤트가 없을 때 제공되는 안식처 대체 이벤트 */
@@ -2073,6 +2804,10 @@ export function getFloorUniqueEvent(floor: number, gm?: GameManager): FloorEvent
   let floorEvents = FLOOR_UNIQUE_EVENTS.filter(e => e.floor === currentFloor);
 
   if (gm) {
+    // 0. 이번 원정에서 이미 등장한 이벤트 배제 (1원정당 1회 제한)
+    if (gm.expeditionTriggeredEventIds && gm.expeditionTriggeredEventIds.length > 0) {
+      floorEvents = floorEvents.filter(e => !gm.expeditionTriggeredEventIds.includes(e.id));
+    }
     // 퀘스트 상태 헬퍼 (수락/시작되었거나 이미 완료된 상태인지 확인)
     const isQuestStarted = (qId: string) => {
       const q = gm.quests.find(item => item.id === qId);

@@ -593,7 +593,7 @@ const VFXInstance: React.FC<{
           {vfx.type === 'shield' && (
             <div className="relative w-40 h-40 flex items-center justify-center animate-vfx-shield">
               <svg className="w-full h-full" viewBox="0 0 100 100">
-                <polygon points="50,15 85,35 85,75 50,95 15,75 15,35" fill="#c8aa6e22" stroke="#c8aa6e" strokeWidth="4" strokeLinejoin="round" filter="drop-shadow(0 0 12px #c8aa6e)" />
+                <polygon points="50,15 85,35 85,75 50,95 15,75 15,35" fill="#00d2ff22" stroke="#00d2ff" strokeWidth="4" strokeLinejoin="round" filter="drop-shadow(0 0 14px #00d2ff)" />
               </svg>
               <span className="text-2xl">🛡️</span>
             </div>
@@ -752,7 +752,7 @@ const VFXInstance: React.FC<{
               : vfx.isHeal
               ? 'text-lg text-[#69f0ae]'
               : vfx.isShield
-              ? 'text-base text-[#c8aa6e]'
+              ? 'text-base text-[#00d2ff]'
               : (vfx.isBlock || vfx.text === 'Block!')
               ? 'text-xl sm:text-2xl text-[#64b5f6] scale-110'
               : (vfx.text?.includes('MISS') || vfx.text?.includes('EVADE') || vfx.type === 'evade')
@@ -762,6 +762,8 @@ const VFXInstance: React.FC<{
           style={{
             textShadow: vfx.isCrit
               ? '0 0 10px #ff3d00, 0 0 20px #ffd54f'
+              : vfx.isShield
+              ? '0 0 10px #00d2ff, 0 0 20px rgba(0, 210, 255, 0.7), 0 2px 4px #000000'
               : (vfx.isBlock || vfx.text === 'Block!')
               ? '0 0 10px #1e88e5, 0 0 20px #90caf9'
               : (vfx.text?.includes('MISS') || vfx.text?.includes('EVADE') || vfx.type === 'evade')

@@ -64,16 +64,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
   // 포트레이트 이미지 URL 헬퍼
   const getHeroPortraitUrl = (h: Mercenary | null) => {
     if (!h) return '';
-    const hCls = CHARACTER_CLASSES[h.classId];
-    return (
-      customAssetService.getMercenaryOverride(h.classId) ||
-      (hCls?.promptKey ? customAssetService.getMercenaryOverride(hCls.promptKey) : undefined) ||
-      (h.portraitPromptKey ? customAssetService.getMercenaryOverride(h.portraitPromptKey) : undefined) ||
-      customAssetService.getMercenaryOverride(h.id) ||
-      customAssetService.getMercenaryOverride(h.name) ||
-      DEFAULT_CLASS_IMAGES[h.classId] ||
-      (hCls?.promptKey ? `assets/portraits/${hCls.promptKey}.png` : '')
-    );
+    return CustomAssetService.getHeroPortrait(h);
   };
 
   // 모달 열기 핸들러
@@ -544,27 +535,27 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
 
       {/* ════════ 팝업 상세 모달: 거점 용병 선택 (보호막 / 좌측 타워 / 우측 타워 / 오퍼레이터) ════════ */}
       {modalType && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/85 backdrop-blur-md animate-fade-in select-none">
-          <div className="relative w-full max-w-md bg-[#0d1424] border border-[#243554] rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in select-none">
+          <div className="relative w-full max-w-xl bg-[#0d1424] border border-[#243554] rounded-2xl shadow-2xl flex flex-col max-h-[88vh] overflow-hidden">
             {/* 모달 헤더 */}
-            <div className="px-3.5 py-2.5 bg-gradient-to-r from-[#141e33] to-[#0d1424] border-b border-[#1f2d48] flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-lg">
+            <div className="px-4 py-3 bg-gradient-to-r from-[#141e33] to-[#0d1424] border-b border-[#1f2d48] flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-xl shrink-0">
                   {modalType === 'barrier' ? '🛡️' : modalType === 'left_turret' ? '🗼' : modalType === 'right_turret' ? '🗼' : '📡'}
                 </span>
-                <span className="font-extrabold text-xs sm:text-sm text-white">
+                <span className="font-extrabold text-sm sm:text-base text-white truncate">
                   {modalType === 'barrier' && tr('차원 보호막 결속자 지정 (탱커 권장)')}
                   {modalType === 'left_turret' && tr('좌측 전술 포탑 사수 지정 (물리 딜러 권장)')}
                   {modalType === 'right_turret' && tr('우측 전술 포탑 사수 지정 (마법/힐러 권장)')}
                   {modalType === 'operator' && tr('수성 오퍼레이터 임명 (전술 조율)')}
                 </span>
               </div>
-              <button onClick={() => setModalType(null)} className="text-gray-400 hover:text-white p-1 text-base">✕</button>
+              <button onClick={() => setModalType(null)} className="text-gray-400 hover:text-white p-1 text-lg cursor-pointer transition-colors shrink-0">✕</button>
             </div>
 
             {/* 모달 안내 및 설명 */}
-            <div className="p-3 flex flex-col gap-2.5 overflow-y-auto custom-scrollbar">
-              <div className="text-[11px] text-[#8b9bb4] bg-[#070b14] p-2 rounded-xl border border-[#162238] leading-relaxed">
+            <div className="p-3.5 flex flex-col gap-3 overflow-y-auto custom-scrollbar">
+              <div className="text-xs text-[#9bb0ce] bg-[#070b14] p-3 rounded-xl border border-[#162238] leading-relaxed">
                 {modalType === 'barrier' && (
                   <span>
                     🛡️ {tr('결속 용병은 직접 공격하지 않고, 자신의 MaxHP와 DEF를 차원 보호막에 100% 가산 합산합니다. 탱커를 배치할수록 보호막이 극적으로 두터워집니다.')}
@@ -588,8 +579,11 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               </div>
 
               {/* 보유 용병 리스트 */}
-              <div className="text-xs font-bold text-white">{tr('보유 용병 선택 (포트레이트 클릭)')}</div>
-              <div className="flex flex-col gap-1.5 max-h-60 overflow-y-auto custom-scrollbar">
+              <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-white px-0.5">
+                <span>{tr('보유 용병 선택 (포트레이트 또는 카드 클릭)')}</span>
+                <span className="text-xs text-[#8b9bb4] font-normal">{allAvailableHeroes.length}{tr('명 보유')}</span>
+              </div>
+              <div className="flex flex-col gap-2 max-h-[56vh] overflow-y-auto custom-scrollbar pr-1">
                 {allAvailableHeroes.map(h => {
                   const isCurrentBarrier = tempBarrierHeroId === h.id;
                   const isCurrentLeft = tempLeftTurretHeroId === h.id;
@@ -620,46 +614,46 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                         setInspectHero({ hero: h, targetSlot: modalType });
                         SoundManager.getInstance().play('click');
                       }}
-                      className={`p-2 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
+                      className={`p-3 sm:p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
                         isOccupiedElsewhere
                           ? 'bg-[#10141d]/50 border-[#1f2638] opacity-45 cursor-not-allowed'
                           : isSelectedForThis
-                          ? 'bg-[#0f2a42] border-[#c8aa6e] shadow-[0_0_12px_rgba(200, 170, 110,0.4)]'
-                          : 'bg-[#12141a] border-[#1e2a40] hover:border-[#c8aa6e]/60'
+                          ? 'bg-[#0f2a42] border-[#c8aa6e] shadow-[0_0_14px_rgba(200, 170, 110,0.45)]'
+                          : 'bg-[#12141a] border-[#1e2a40] hover:border-[#c8aa6e]/60 hover:bg-[#151a24]'
                       }`}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        {/* 포트레이트 */}
-                        <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-[#2a3f64] bg-[#080d16] flex items-center justify-center">
+                      <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                        {/* 포트레이트 (크기 확대) */}
+                        <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shrink-0 border-2 border-[#2a3f64] bg-[#080d16] flex items-center justify-center shadow-md">
                           {imgUrl ? (
                             <img src={imgUrl} alt={h.name} className="w-full h-full object-cover" />
                           ) : (
-                            <span className="text-base">{cls?.skills?.[0]?.icon || '⚔️'}</span>
+                            <span className="text-2xl">{cls?.skills?.[0]?.icon || '⚔️'}</span>
                           )}
-                          <span className="absolute bottom-0.2 right-0.5 text-[6.5px] font-mono font-bold bg-black/80 px-1 rounded text-[#ffd54f]">
+                          <span className="absolute bottom-0.5 right-0.5 text-[8px] sm:text-[9px] font-mono font-bold bg-black/85 px-1.5 py-0.5 rounded text-[#ffd54f]">
                             Lv.{h.level}
                           </span>
                         </div>
 
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5 truncate">
-                            <span className="text-xs font-bold text-white truncate">{h.name}</span>
-                            <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33]">
+                        <div className="min-w-0 space-y-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-sm sm:text-base font-extrabold text-white truncate">{h.name}</span>
+                            <span className="text-[10px] sm:text-[11px] font-mono px-1.5 py-0.5 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33]">
                               {tr(h.trait || '균형잡힌 정예')}
                             </span>
                             {isOccupiedElsewhere && (
-                              <span className="text-[8px] px-1 py-0.2 rounded bg-red-950/40 text-red-300 border border-red-800/40">
+                              <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded bg-red-950/40 text-red-300 border border-red-800/40 font-bold">
                                 {tr('타 거점 배치 중')}
                               </span>
                             )}
                           </div>
-                          <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
-                            {tr(cls?.name || '')} · ATK {h.stats.atk} · DEF {h.stats.def} · HP {h.maxHp.toLocaleString()}
+                          <div className="text-xs text-[#8b9bb4] truncate font-mono">
+                            <span className="text-[#c8aa6e] font-bold">{tr(cls?.name || '')}</span> · ⚔️{h.stats.atk} · 🛡️{h.stats.def} · ❤️{h.maxHp.toLocaleString()}
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5 shrink-0">
+                      <div className="flex items-center gap-2 shrink-0">
                         <button
                           type="button"
                           onClick={(e) => {
@@ -668,7 +662,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                             setInspectHero({ hero: h, targetSlot: modalType });
                             SoundManager.getInstance().play('click');
                           }}
-                          className="px-2 py-1 rounded-lg bg-[#c8aa6e18] border border-[#c8aa6e55] hover:bg-[#c8aa6e33] text-[#c8aa6e] text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                          className="px-3 py-2 rounded-xl bg-[#c8aa6e18] border border-[#c8aa6e55] hover:bg-[#c8aa6e33] text-[#c8aa6e] text-xs font-bold flex items-center gap-1 cursor-pointer"
                         >
                           <span>🔍</span>
                           <span>{tr('상세/전술')}</span>
@@ -684,7 +678,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                             else if (modalType === 'operator') setTempOperatorId(h.id);
                             SoundManager.getInstance().play('equip');
                           }}
-                          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                          className={`px-3.5 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                             isSelectedForThis
                               ? 'bg-[#38ef7d22] border-[#38ef7d] text-[#38ef7d]'
                               : isOccupiedElsewhere
@@ -702,11 +696,11 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             </div>
 
             {/* 모달 풋터 */}
-            <div className="px-3.5 py-2.5 bg-[#0a0f1d] border-t border-[#1f2d48] flex items-center justify-end gap-2">
-              <button onClick={() => setModalType(null)} className="btn btn-ghost text-xs px-3.5 py-1.5 text-[#8b9bb4]">
+            <div className="px-4 py-3 bg-[#0a0f1d] border-t border-[#1f2d48] flex items-center justify-end gap-2.5 shrink-0">
+              <button onClick={() => setModalType(null)} className="btn btn-ghost text-xs sm:text-sm px-4 py-2 text-[#8b9bb4]">
                 {tr('취소')}
               </button>
-              <button onClick={handleSaveModal} className="btn btn-primary text-xs px-5 py-2 font-bold">
+              <button onClick={handleSaveModal} className="btn btn-primary text-xs sm:text-sm px-6 py-2 font-bold cursor-pointer">
                 {tr('배치 저장')}
               </button>
             </div>

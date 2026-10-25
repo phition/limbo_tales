@@ -53,6 +53,22 @@ html[data-lang="ja"], html[data-lang="ja"] body {
   line-height: 1.35;
 }
 
+/* 🌐 다국어 번역 시 긴 텍스트 UI 보호 (줄바꿈 및 자동 폰트 축소 방어) */
+html[data-lang="en"] .btn,
+html[data-lang="ja"] .btn {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  line-height: 1.2;
+}
+
+html[data-lang="en"] .panel,
+html[data-lang="ja"] .panel {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
 #root {
   width: 100%;
   height: 100%;
@@ -122,6 +138,32 @@ html[data-lang="ja"], html[data-lang="ja"] body {
     border-radius: clamp(12px, 1.5vw, 20px);
     box-shadow: 0 12px 48px rgba(0, 0, 0, 0.85), 0 0 0 1px #1f2738;
   }
+}
+
+/* 📱 네이티브 앱(Capacitor): 기기 종류/입력장치와 무관하게 항상 화면 전체를 꽉 채움
+   (시스템 바 영역은 네이티브 MainActivity 에서 패딩 처리하므로 웹뷰 영역 = 실제 게임 영역) */
+html.native-app,
+html.native-app body,
+html.native-app #root {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overscroll-behavior: none;
+}
+
+html.native-app #ui-layer {
+  padding: 0 !important;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+html.native-app .game-column {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 /* ─── 스크롤바 커스텀 ─────────────────────────────────── */

@@ -15,7 +15,7 @@ import { ALL_SKILL_BOOKS, MARKET_SKILL_BOOKS, BOSS_EXCLUSIVE_SKILL_BOOKS, getDro
 import { CHARACTER_CLASSES } from '../data/classes';
 import { NEMESIS_BOSS_CONFIG, NemesisBossConfig } from '../data/nemesis';
 import { BuildingId, GameResources } from '../types/game';
-import { GameBalanceConfig } from '../services/GameDataService';
+import { GameBalanceConfig, BannedFeverBadge, ArenaEdictConfig, DEFAULT_ARENA_EDICT, ARENA_EDICT_PRESETS } from '../services/GameDataService';
 import { GameIcon } from './GameIcon';
 import { GameManager } from '../managers/GameManager';
 import { SoundManager } from '../managers/SoundManager';
@@ -25,7 +25,7 @@ interface Props {
   onClose: () => void;
 }
 
-type StudioTab = 'buildings' | 'forge' | 'monsters' | 'nemesis' | 'classes' | 'skills' | 'grimoires' | 'balance';
+type StudioTab = 'buildings' | 'forge' | 'monsters' | 'nemesis' | 'classes' | 'skills' | 'grimoires' | 'balance' | 'arena';
 
 const MONSTER_FLOOR_MAP: Record<string, number> = {
   monster_cave_bat: 1,
@@ -383,6 +383,25 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
     setHasChanges(true);
   };
 
+  // 6-2-5. 🏆 네메시스 마일스톤 정벌 장비 기본 스탯 변경
+  const handleNemesisEquipStatChange = (tier: 'pendant' | 'core' | 'crown', statKey: 'atk' | 'def' | 'spd' | 'luck' | 'hp' | 'mp', val: number) => {
+    setOverrides(prev => {
+      const curEquips = prev.nemesisEquipments || {};
+      const curTierStats = curEquips[tier] || {};
+      return {
+        ...prev,
+        nemesisEquipments: {
+          ...curEquips,
+          [tier]: {
+            ...curTierStats,
+            [statKey]: Math.max(0, Number(val))
+          }
+        }
+      };
+    });
+    setHasChanges(true);
+  };
+
   // 6-2-2. 🌌 네메시스 부위 스탯 변경
   const handleNemesisPartStatChange = (partId: 'head' | 'body' | 'tail', field: 'maxHp' | 'atk' | 'def' | 'spd' | 'luck', val: number) => {
     setOverrides(prev => {
@@ -634,6 +653,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
             { key: 'skills', icon: '⚡', label: '직업 고유 스킬' },
             { key: 'grimoires', icon: '📖', label: '마도서/비전서 위력' },
             { key: 'balance', icon: '⚖️', label: '글로벌 밸런스' },
+            { key: 'arena', icon: '⚔️', label: '차원 아레나 칙령' },
           ].map(tab => (
             <button
               key={tab.key}
@@ -1756,6 +1776,91 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   </div>
                 </div>
 
+                {/* 6-3. 🏆 네메시스 마일스톤 정벌 장비 세트 3종 기본 스탯 편집 */}
+                <div className="p-4 bg-[#141d2e] rounded-xl border border-[#2b3d5b] shadow-lg">
+                  <div className="flex items-center justify-between mb-3 border-b border-[#233148] pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🏆</span>
+                      <div>
+                        <h4 className="font-bold text-white text-sm">네메시스 마일스톤 정벌 장비 세트 (기본 스탯)</h4>
+                        <p className="text-[10px] text-[#8b9bb4]">누적 피해 마일스톤(3단계·5단계·6단계) 달성 시 획득하는 고유 장신구 3종의 기초 능력치를 실시간 커스터마이징합니다.</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44] font-bold">
+                      MILESTONE ACCESSORIES
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {([
+                      {
+                        tier: 'pendant' as const,
+                        name: '시공의 왜곡 펜던트 (+3)',
+                        grade: '희귀 (Rare)',
+                        color: 'border-blue-500/40 bg-blue-950/20 text-blue-400',
+                        icon: '📿',
+                        desc: '3단계 (35만 피해) 보상: 시공간 균열 에너지를 정제한 목걸이',
+                        fields: ['atk', 'def', 'spd', 'luck', 'hp'] as const,
+                      },
+                      {
+                        tier: 'core' as const,
+                        name: '네메시스 종말 성핵 (+5)',
+                        grade: '에픽 (Epic)',
+                        color: 'border-purple-500/40 bg-purple-950/20 text-purple-400',
+                        icon: '👑',
+                        desc: '5단계 (150만 피해) 보상: 심장에서 추출한 에테르 성핵',
+                        fields: ['atk', 'def', 'spd', 'luck', 'hp', 'mp'] as const,
+                      },
+                      {
+                        tier: 'crown' as const,
+                        name: '패왕 네메시스 파멸 관 (+7)',
+                        grade: '전설 (Legendary)',
+                        color: 'border-amber-500/40 bg-amber-950/20 text-amber-400',
+                        icon: '🌌',
+                        desc: '6단계 (300만 피해) 보상: 절대 패왕의 파멸 성관',
+                        fields: ['atk', 'def', 'spd', 'luck', 'hp', 'mp'] as const,
+                      },
+                    ]).map(item => {
+                      const curStats = {
+                        ...(GameDataService.getInstance().getNemesisEquipmentBaseStats(item.tier)),
+                        ...(overrides.nemesisEquipments?.[item.tier] || {})
+                      };
+
+                      return (
+                        <div key={item.tier} className="p-3 bg-[#0c1017] rounded-xl border border-[#233148] flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <span className="text-xl shrink-0">{item.icon}</span>
+                                <span className="font-bold text-xs text-white truncate">{item.name}</span>
+                              </div>
+                              <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold border shrink-0 ${item.color}`}>
+                                {item.grade}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-[#8b9bb4] mb-3 leading-tight">{item.desc}</p>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                              {item.fields.map(statKey => (
+                                <div key={statKey}>
+                                  <label className="text-[9px] text-[#8b9bb4] uppercase font-bold block">{statKey}</label>
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    value={curStats[statKey] ?? 0}
+                                    onChange={e => handleNemesisEquipStatChange(item.tier, statKey, Number(e.target.value))}
+                                    className="w-full bg-[#141a24] border border-[#273650] rounded px-2 py-1 text-xs text-white font-mono focus:border-[#ffd54f] focus:outline-none"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
               </div>
             );
           })()}
@@ -2439,6 +2544,160 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     />
                     <div className="text-[10px] text-[#8b9bb4]">층별 보스 처치 시 고유 비기 마도서가 드랍될 기본 확률 (기본 0.04 = 4.0%)</div>
                   </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* 9. ⚔️ 차원 아레나 칙령 및 금지 뱃지 셋팅 */}
+          {activeTab === 'arena' && (() => {
+            const curEdict = {
+              ...DEFAULT_ARENA_EDICT,
+              ...(overrides.arenaEdict || {}),
+            };
+
+            const handleEdictChange = (field: keyof ArenaEdictConfig, value: any) => {
+              setOverrides(prev => ({
+                ...prev,
+                arenaEdict: {
+                  ...DEFAULT_ARENA_EDICT,
+                  ...(prev.arenaEdict || {}),
+                  [field]: value
+                }
+              }));
+              setHasChanges(true);
+            };
+
+            const BADGE_OPTIONS: { id: BannedFeverBadge; label: string; icon: string; desc: string }[] = [
+              { id: 'none', label: '금지 없음', icon: '⭕', desc: '모든 피버 뱃지(5종) 자유 획득 가능' },
+              { id: 'evade', label: '회피 (EVADE)', icon: '💨', desc: '회피 뱃지 획득 불가 (이번 주 기본 설정)' },
+              { id: 'crit', label: '치명 (CRIT)', icon: '💥', desc: '치명 뱃지 획득 불가' },
+              { id: 'break', label: '파쇄 (BREAK)', icon: '💫', desc: '파쇄 뱃지 획득 불가' },
+              { id: 'guard', label: '수호 (GUARD)', icon: '🛡️', desc: '수호 뱃지 획득 불가' },
+              { id: 'heal', label: '치유 (HEAL)', icon: '✨', desc: '치유 뱃지 획득 불가' },
+            ];
+
+            return (
+              <div className="space-y-4 animate-fade-in">
+                {/* 상단 안내 */}
+                <div className="p-4 rounded-xl bg-gradient-to-r from-[#24133b] via-[#170e28] to-[#120a21] border border-[#7e57c288] flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">⚔️</span>
+                    <div>
+                      <h3 className="font-extrabold text-sm text-[#ffd54f] flex items-center gap-2">
+                        차원 아레나 칙령 & 룰 셋팅 마스터
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#7e57c233] text-[#ce93d8] border border-[#7e57c255] font-mono">
+                          ARENA EDICT
+                        </span>
+                      </h3>
+                      <p className="text-xs text-[#b0bec5] mt-0.5">
+                        차원 결투장의 이번 주 차원 칙령, 금지 피버 뱃지, 조커 및 블러핑 룰을 실시간으로 설정하고 배포합니다.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setOverrides(prev => ({ ...prev, arenaEdict: { ...DEFAULT_ARENA_EDICT } }));
+                      setHasChanges(true);
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#141b2c] hover:bg-[#1a2338] text-[#8b9bb4] hover:text-white border border-[#23324d] transition-all cursor-pointer"
+                  >
+                    기본값 복원
+                  </button>
+                </div>
+
+                {/* 칙령 설정 폼 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* 1. 칙령 명칭 */}
+                  <div className="p-3.5 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2">
+                    <label className="font-bold text-xs text-white flex items-center gap-1.5">
+                      <span>📜</span>
+                      <span>이번 주 차원 칙령 명칭</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={curEdict.edictName}
+                      onChange={e => handleEdictChange('edictName', e.target.value)}
+                      placeholder="예: 회피 금지의 칙령, 치명 억제의 칙령"
+                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2.5 py-1.5 text-xs text-white font-bold focus:border-[#c8aa6e] focus:outline-none"
+                    />
+                    <div className="text-[10px] text-[#8b9bb4]">
+                      아레나 메인 배너 및 대전 화면 상단에 <strong>【{curEdict.edictName}】</strong> 형태로 표기됩니다.
+                    </div>
+                  </div>
+
+                  {/* 2. 조커 및 기본 룰 명칭 */}
+                  <div className="p-3.5 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2">
+                    <label className="font-bold text-xs text-white flex items-center gap-1.5">
+                      <span>🃏</span>
+                      <span>조커 & 기본 룰 표기</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={curEdict.jokerRule}
+                      onChange={e => handleEdictChange('jokerRule', e.target.value)}
+                      placeholder="예: 블러핑 앤 쇼다운 (2 공개 + 1 히든 실루엣)"
+                      className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2.5 py-1.5 text-xs text-white font-bold focus:border-[#c8aa6e] focus:outline-none"
+                    />
+                    <div className="text-[10px] text-[#8b9bb4]">
+                      기본 대전 룰 및 3인 홀덤 실루엣/조커 규칙 설명문입니다.
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. 금지 피버 뱃지 선택기 */}
+                <div className="p-4 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-sm text-white flex items-center gap-1.5">
+                      <span>🚫</span>
+                      <span>이번 주 금지 피버 뱃지 선택 (금기 룰)</span>
+                    </span>
+                    <span className="text-xs font-mono font-bold text-[#ff5252] bg-[#ff525222] px-2 py-0.5 rounded border border-[#ff525244]">
+                      현재 설정: {BADGE_OPTIONS.find(b => b.id === curEdict.bannedBadge)?.label || curEdict.bannedBadge}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                    {BADGE_OPTIONS.map(opt => {
+                      const isSelected = curEdict.bannedBadge === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          onClick={() => {
+                            const preset = ARENA_EDICT_PRESETS[opt.id];
+                            handleEdictChange('bannedBadge', opt.id);
+                            if (preset) {
+                              handleEdictChange('edictName', preset.edictName);
+                              handleEdictChange('description', preset.description);
+                            }
+                          }}
+                          className={`p-2.5 rounded-xl border flex flex-col items-center gap-1.5 text-center transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#ff525222] border-[#ff5252] text-white shadow-[0_0_12px_rgba(255,82,82,0.4)]'
+                              : 'bg-[#0a0d14] border-[#1f2838] text-[#8b9bb4] hover:border-[#c8aa6e44] hover:text-white'
+                          }`}
+                        >
+                          <span className="text-xl">{opt.icon}</span>
+                          <span className="text-xs font-bold">{opt.label}</span>
+                          <span className="text-[9px] text-[#8b9bb4] leading-tight line-clamp-2">{opt.desc}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 4. 칙령 상세 설명문 */}
+                <div className="p-3.5 bg-[#0f1422] border border-[#1c263c] rounded-xl space-y-2">
+                  <label className="font-bold text-xs text-white flex items-center gap-1.5">
+                    <span>📝</span>
+                    <span>차원 칙령 세부 설명</span>
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={curEdict.description}
+                    onChange={e => handleEdictChange('description', e.target.value)}
+                    placeholder="칙령에 관한 추가 설명"
+                    className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2.5 py-1.5 text-xs text-white focus:border-[#c8aa6e] focus:outline-none resize-none"
+                  />
                 </div>
               </div>
             );

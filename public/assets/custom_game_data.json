@@ -1,21 +1,5 @@
 {
   "buildingBaseCosts": {
-    "blacksmith": {
-      "gold": 500,
-      "iron": 100,
-      "stone": 80,
-      "wood": 100
-    },
-    "infirmary": {
-      "ether": 10,
-      "herb": 30,
-      "wood": 120
-    },
-    "market": {
-      "gold": 1000,
-      "stone": 150,
-      "wood": 150
-    },
     "alchemy": {
       "ether": 40,
       "gold": 600,
@@ -26,6 +10,12 @@
       "gold": 1500,
       "iron": 80,
       "stone": 150
+    },
+    "blacksmith": {
+      "gold": 500,
+      "iron": 100,
+      "stone": 80,
+      "wood": 100
     },
     "bonfire": {
       "wood": 10
@@ -38,9 +28,19 @@
       "stone": 10,
       "wood": 30
     },
+    "infirmary": {
+      "ether": 10,
+      "herb": 30,
+      "wood": 120
+    },
     "lumberCamp": {
       "gold": 100,
       "wood": 50
+    },
+    "market": {
+      "gold": 1000,
+      "stone": 150,
+      "wood": 150
     },
     "quarry": {
       "gold": 150,
@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 35,
-  "updatedAt": 1792212481667,
+  "version": 55,
+  "updatedAt": 1792891784764,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -148,6 +148,20 @@
     },
     "val_ultimate": {
       "power": 2.5
+    },
+    "gun_hyper_cannon": {
+      "power": 1.2
+    },
+    "gun_orbital_strike": {
+      "power": 1.8
+    },
+    "sniper_death_sentence": {
+      "cooldown": 4,
+      "power": 1.2,
+      "manaCost": 75
+    },
+    "marshal_ultimate": {
+      "power": 2
     }
   },
   "classBaseStats": {
@@ -201,10 +215,61 @@
     }
   },
   "monsters": {
+    "boss_avici_final": {
+      "atk": 3250,
+      "def": 2080,
+      "description": "무간도의 가장 깊은 심연에 도사린 태초의 공허 창조주. 존재 자체로 시공간을 소멸시키는 절대자입니다.",
+      "drainPct": 0.4,
+      "faction": "corrupted",
+      "id": "boss_avici_final",
+      "imagePath": "assets/void_overlord.jpg",
+      "level": 600,
+      "luck": 250,
+      "maxHp": 850000,
+      "name": "무간의 지배자 아르케오스 (진 최종 보스)",
+      "piercePct": 0.7,
+      "promptKey": "boss_avici_final",
+      "rewards": {
+        "ether": 5000,
+        "exp": 8000,
+        "gold": 50000
+      },
+      "shieldBreakMult": 2.5,
+      "skills": [
+        {
+          "breakGauge": 3000,
+          "description": "적 전체에 350% 마법 관통 파동 [집중 차징 & 진형 셔플]",
+          "disruptPosition": "shuffle",
+          "effectType": "damage",
+          "isCharge": true,
+          "name": "무간의 태초 파동",
+          "piercePct": 0.8,
+          "power": 3.5
+        },
+        {
+          "description": "대상 파티 전체 방어력 50% 감소 및 2턴 기절",
+          "effectType": "stun",
+          "name": "공허의 절대 침식",
+          "power": 1.5,
+          "statusDuration": 2
+        },
+        {
+          "description": "단일 대상 500% 치명 관통 강타 (방어 관통 90%)",
+          "effectType": "damage",
+          "name": "멸망의 창조 일격",
+          "piercePct": 0.9,
+          "power": 5
+        }
+      ],
+      "spd": 376,
+      "themeColor": 10233776,
+      "type": "boss"
+    },
     "boss_floor_1": {
       "atk": 88,
       "def": 300,
       "description": "침묵의 회랑 심부에 잠들어 있던 고대 석조 거신. 가슴의 흑핵에서 뿜어져 나오는 한기로 침입자를 얼어붙게 한다.",
+      "faction": "construct",
       "id": "boss_floor_1",
       "imagePath": "assets/boss_floor_1.jpg",
       "level": 4,
@@ -249,14 +314,14 @@
       ],
       "spd": 20,
       "themeColor": 6056896,
-      "type": "boss",
-      "faction": "construct"
+      "type": "boss"
     },
     "boss_floor_10": {
       "atk": 680,
       "def": 620,
       "description": "심연의 심장부에 군림하는 궁극의 공허 군주. 차원 전체를 멸망시킬 종말의 숨결을 내뿜습니다.",
       "drainPct": 0.35,
+      "faction": "corrupted",
       "id": "boss_floor_10",
       "imagePath": "assets/boss_floor_10.jpg",
       "level": 28,
@@ -300,13 +365,13 @@
       ],
       "spd": 70,
       "themeColor": 12000284,
-      "type": "boss",
-      "faction": "corrupted"
+      "type": "boss"
     },
     "boss_floor_2": {
       "atk": 180,
       "def": 320,
       "description": "납골당의 무수한 원혼을 통솔하는 망령들의 군주. 영혼을 베어넘기는 저주받은 대검을 휘두른다.",
+      "faction": "undead",
       "id": "boss_floor_2",
       "imagePath": "assets/boss_floor_2.jpg",
       "level": 6,
@@ -350,13 +415,13 @@
       ],
       "spd": 40,
       "themeColor": 7901340,
-      "type": "boss",
-      "faction": "undead"
+      "type": "boss"
     },
     "boss_floor_3": {
       "atk": 182,
       "def": 220,
       "description": "에테르 광맥 깊은 곳에서 결정을 먹고 자란 태고의 마도 생명체. 폭발적인 광맥 에너지를 방출한다.",
+      "faction": "beast",
       "id": "boss_floor_3",
       "imagePath": "assets/boss_floor_3.jpg",
       "level": 8,
@@ -398,13 +463,13 @@
       ],
       "spd": 43,
       "themeColor": 48340,
-      "type": "boss",
-      "faction": "beast"
+      "type": "boss"
     },
     "boss_floor_4": {
       "atk": 204,
       "def": 155,
       "description": "심연의 균열을 조작하여 시공간을 뒤틀어버리는 고대 차원 마도사. 시간의 흐름을 왜곡하여 공격을 무력화한다.",
+      "faction": "corrupted",
       "id": "boss_floor_4",
       "imagePath": "assets/boss_floor_4.jpg",
       "level": 10,
@@ -448,13 +513,13 @@
       ],
       "spd": 58,
       "themeColor": 11225020,
-      "type": "boss",
-      "faction": "corrupted"
+      "type": "boss"
     },
     "boss_floor_5": {
       "atk": 388,
       "def": 342,
       "description": "Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다.",
+      "faction": "corrupted",
       "id": "boss_floor_5",
       "imagePath": "assets/void_overlord.jpg",
       "level": 12,
@@ -519,14 +584,14 @@
       ],
       "spd": 48,
       "themeColor": 16728428,
-      "type": "boss",
-      "faction": "corrupted"
+      "type": "boss"
     },
     "boss_floor_6": {
       "atk": 240,
       "def": 380,
       "description": "핏빛 성역의 지배자. 거대한 박쥐 날개와 피의 마법으로 침입자의 생명력을 흡수합니다.",
       "drainPct": 0.4,
+      "faction": "corrupted",
       "id": "boss_floor_6",
       "imagePath": "assets/boss_floor_6.jpg",
       "level": 16,
@@ -563,14 +628,14 @@
       ],
       "spd": 88,
       "themeColor": 13840175,
-      "type": "boss",
-      "faction": "corrupted"
+      "type": "boss"
     },
     "boss_floor_7": {
       "atk": 360,
       "def": 380,
       "description": "망각의 묘역을 수호하는 죽음의 묘지기. 거대한 영혼의 낫으로 산 자의 생명을 수확합니다.",
       "drainPct": 0.3,
+      "faction": "undead",
       "id": "boss_floor_7",
       "imagePath": "assets/boss_floor_7.jpg",
       "level": 18,
@@ -605,13 +670,13 @@
       ],
       "spd": 70,
       "themeColor": 6056896,
-      "type": "boss",
-      "faction": "undead"
+      "type": "boss"
     },
     "boss_floor_8": {
       "atk": 490,
       "def": 560,
       "description": "단죄의 요새를 통솔하던 전설적인 기사단장. 타락한 성역 결계와 무자비한 심판의 검을 휘두릅니다.",
+      "faction": "corrupted",
       "id": "boss_floor_8",
       "imagePath": "assets/boss_floor_8.jpg",
       "level": 21,
@@ -647,13 +712,13 @@
       ],
       "spd": 80,
       "themeColor": 3622735,
-      "type": "boss",
-      "faction": "corrupted"
+      "type": "boss"
     },
     "boss_floor_9": {
       "atk": 520,
       "def": 610,
       "description": "환영의 미궁 중심에서 차원 공간을 뒤틀어놓는 환각의 대마도사. 수많은 거울 파편으로 전장을 유린합니다.",
+      "faction": "construct",
       "id": "boss_floor_9",
       "imagePath": "assets/boss_floor_9.jpg",
       "level": 24,
@@ -689,13 +754,13 @@
       ],
       "spd": 100,
       "themeColor": 166097,
-      "type": "boss",
-      "faction": "construct"
+      "type": "boss"
     },
     "monster_abyssal_behemoth": {
       "atk": 544,
       "def": 540,
       "description": "심연의 밑바닥을 배회하는 거대한 마수. 그 발걸음만으로도 던전 전체가 진동합니다.",
+      "faction": "beast",
       "id": "monster_abyssal_behemoth",
       "imagePath": "assets/monster_abyssal_behemoth_v2.jpg",
       "level": 27,
@@ -730,14 +795,14 @@
       ],
       "spd": 45,
       "themeColor": 4073251,
-      "type": "elite",
-      "faction": "beast"
+      "type": "elite"
     },
     "monster_abyssal_fiend": {
       "atk": 304,
       "def": 600,
       "description": "심연의 가장 깊은 틈새에서 소환된 고위 악마. 치명적인 독과 저주받은 손톱으로 살을 찢습니다.",
       "drainPct": 0.35,
+      "faction": "corrupted",
       "id": "monster_abyssal_fiend",
       "imagePath": "assets/monster_abyssal_fiend_v2.jpg",
       "level": 25,
@@ -764,13 +829,97 @@
       ],
       "spd": 88,
       "themeColor": 12986408,
-      "type": "normal",
-      "faction": "corrupted"
+      "type": "normal"
+    },
+    "monster_abyssal_harbinger": {
+      "atk": 205,
+      "def": 488,
+      "description": "심연의 심장부에서 종말을 예고하는 고위 악마. 공허의 중력 특이점과 멸망의 파멸인을 펼칩니다.",
+      "drainPct": 0.3,
+      "faction": "corrupted",
+      "id": "monster_abyssal_harbinger",
+      "imagePath": "assets/monster_abyssal_harbinger.jpg",
+      "imagePrompt": "Dark fantasy anime style, colossal abyssal harbinger demon hovering at the core of the abyss, massive obsidian horns crackling with dark lightning, six glowing crimson eyes, surrounded by orbiting black holes and floating dark matter runes, swirling apocalyptic vortex background, masterpiece, 8k",
+      "level": 26,
+      "luck": 78,
+      "maxHp": 2960,
+      "name": "심연의 전조자",
+      "piercePct": 0.5,
+      "promptKey": "monster_abyssal_harbinger",
+      "rewards": {
+        "ether": 26,
+        "exp": 180,
+        "gold": 220
+      },
+      "skills": [
+        {
+          "description": "적 전체 180% 암흑 중력 피해 + 진형 셔플",
+          "disruptPosition": "shuffle",
+          "effectType": "damage",
+          "name": "공허의 특이점",
+          "piercePct": 0.5,
+          "power": 1.8
+        },
+        {
+          "description": "단일 대상 220% 피해 + 3턴 출혈 (흡혈 30%)",
+          "drainPct": 0.3,
+          "effectType": "bleed",
+          "name": "종말의 파멸인",
+          "power": 2.2,
+          "statusDuration": 3
+        }
+      ],
+      "spd": 68,
+      "themeColor": 8916559,
+      "type": "normal"
+    },
+    "monster_aether_basilisk": {
+      "atk": 108,
+      "def": 142,
+      "description": "에테르 광맥의 결정을 흡수하여 자란 마수. 석화의 시선과 수정 비늘 파편으로 적을 압박합니다.",
+      "faction": "beast",
+      "id": "monster_aether_basilisk",
+      "imagePath": "assets/monster_aether_basilisk.jpg",
+      "imagePrompt": "Dark fantasy anime style, serpentine aether basilisk coiled around massive glowing cyan crystal spires, iridescent crystalline reptilian scales reflecting magical light, piercing glowing amber eyes with petrifying glare, subterranean crystal cavern filled with luminous mana fog, sharp cel shading, 8k",
+      "level": 7,
+      "luck": 45,
+      "maxHp": 275,
+      "name": "에테르 바실리스크",
+      "promptKey": "monster_aether_basilisk",
+      "rewards": {
+        "ether": 10,
+        "exp": 135,
+        "gold": 140,
+        "resources": {
+          "crystal": 4,
+          "stone": 6
+        }
+      },
+      "skills": [
+        {
+          "description": "단일 대상 150% 마법 피해 + 1턴 기절",
+          "effectType": "stun",
+          "name": "석화의 응시",
+          "power": 1.5,
+          "statusDuration": 1
+        },
+        {
+          "description": "적 전체 120% 관통 피해",
+          "effectType": "damage",
+          "name": "결정 비늘 분출",
+          "piercePct": 0.25,
+          "power": 1.2
+        }
+      ],
+      "spd": 14,
+      "themeColor": 58879,
+      "type": "normal"
     },
     "monster_altar_cultist": {
       "atk": 126,
       "def": 131,
       "description": "공허의 침식자를 숭배하며 제단을 수호하는 타락한 사제. 파괴적인 흑염 마법을 퍼붓는다.",
+      "faction": "corrupted",
       "id": "monster_altar_cultist",
       "imagePath": "assets/monster_altar_cultist.jpg",
       "level": 10,
@@ -803,14 +952,14 @@
       ],
       "spd": 45,
       "themeColor": 15277667,
-      "type": "normal",
-      "faction": "corrupted"
+      "type": "normal"
     },
     "monster_blood_wolf": {
       "atk": 155,
       "def": 210,
       "description": "핏빛 성역을 배회하는 흉포한 마수. 피 냄새를 맡으면 무리를 이끌고 광포화합니다.",
       "drainPct": 0.3,
+      "faction": "beast",
       "id": "monster_blood_wolf",
       "imagePath": "assets/monster_blood_wolf_v2.jpg",
       "level": 13,
@@ -841,13 +990,13 @@
       ],
       "spd": 86,
       "themeColor": 15684432,
-      "type": "normal",
-      "faction": "beast"
+      "type": "normal"
     },
     "monster_bone_golem": {
       "atk": 218,
       "def": 260,
       "description": "수천의 유골과 마수의 뼈가 결합되어 탄생한 거대한 뼈의 골렘. 막강한 방어력과 분쇄력을 지닙니다.",
+      "faction": "construct",
       "id": "monster_bone_golem",
       "imagePath": "assets/monster_bone_golem_v2.jpg",
       "level": 17,
@@ -875,13 +1024,13 @@
       ],
       "spd": 36,
       "themeColor": 12364452,
-      "type": "normal",
-      "faction": "construct"
+      "type": "normal"
     },
     "monster_cave_bat": {
       "atk": 35,
       "def": 166,
       "description": "고속으로 날며 음파 충격을 가하는 동굴 군집 몬스터. 속도가 가장 빠르다.",
+      "faction": "beast",
       "id": "monster_cave_bat",
       "imagePath": "assets/monster_cave_bat.jpg",
       "level": 1,
@@ -914,14 +1063,54 @@
       ],
       "spd": 20,
       "themeColor": 7901340,
-      "type": "normal",
-      "faction": "beast"
+      "type": "normal"
+    },
+    "monster_crimson_vampire": {
+      "atk": 180,
+      "def": 238,
+      "description": "핏빛 성역의 귀족 흡혈귀. 치명적인 흡혈과 박쥐 떼 환영으로 전장을 유린합니다.",
+      "drainPct": 0.35,
+      "faction": "corrupted",
+      "id": "monster_crimson_vampire",
+      "imagePath": "assets/monster_crimson_vampire.jpg",
+      "imagePrompt": "Dark fantasy anime style, aristocratic crimson vampire noble standing in a gothic cathedral ruin bathed in blood-red moonlight, flowing dark crimson cape, sharp fangs and glowing ruby eyes, holding an ornate blood chalice, fluttering shadow bats in background, magitech style, masterpiece, 8k",
+      "level": 14,
+      "luck": 55,
+      "maxHp": 730,
+      "name": "진홍의 흡혈귀",
+      "promptKey": "monster_crimson_vampire",
+      "rewards": {
+        "ether": 8,
+        "exp": 75,
+        "gold": 95
+      },
+      "skills": [
+        {
+          "description": "단일 160% 피해 (흡혈 40% & 2턴 출혈)",
+          "drainPct": 0.4,
+          "effectType": "drain",
+          "name": "진홍의 연회",
+          "power": 1.6,
+          "statusDuration": 2
+        },
+        {
+          "description": "적 전체 110% 마법 피해 + 적 전체 명중/속도 감소",
+          "effectType": "debuff",
+          "name": "박쥐 떼 소환",
+          "power": 1.1,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 110,
+      "themeColor": 12000284,
+      "type": "normal"
     },
     "monster_crypt_ghoul": {
       "atk": 65,
       "def": 175,
       "description": "어둠 속에서 시체를 파먹고 자란 흉폭한 구울. 강력한 턱과 출혈 공격을 가한다.",
       "drainPct": 0.25,
+      "faction": "undead",
       "id": "monster_crypt_ghoul",
       "imagePath": "assets/monster_crypt_ghoul.jpg",
       "level": 4,
@@ -956,13 +1145,54 @@
       ],
       "spd": 11,
       "themeColor": 9268835,
-      "type": "normal",
-      "faction": "undead"
+      "type": "normal"
+    },
+    "monster_crypt_necromancer": {
+      "atk": 52,
+      "def": 180,
+      "description": "납골당의 원혼들을 부리며 망자를 조종하는 사령술사. 저주와 사령 마법으로 아군을 괴롭힙니다.",
+      "faction": "undead",
+      "id": "monster_crypt_necromancer",
+      "imagePath": "assets/monster_crypt_necromancer.jpg",
+      "imagePrompt": "Dark fantasy anime style, sinister undead crypt necromancer floating above ancient catacomb coffins, draped in tattered obsidian burial robes, skull mask glowing with eerie cyan ghostfire, holding a floating necrotic lantern summoning wailing spectral souls, atmospheric dim crypt lighting, magitech style, clean sharp lineart, 8k",
+      "level": 5,
+      "luck": 14,
+      "maxHp": 130,
+      "name": "납골당 사령술사",
+      "promptKey": "monster_crypt_necromancer",
+      "rewards": {
+        "ether": 5,
+        "exp": 80,
+        "gold": 95,
+        "resources": {
+          "coal": 2,
+          "silk": 4
+        }
+      },
+      "skills": [
+        {
+          "description": "단일 대상 130% 암흑 피해 + 2턴 방어력 20% 감소",
+          "effectType": "debuff_def",
+          "name": "원혼 소환",
+          "power": 1.3,
+          "statusDuration": 2
+        },
+        {
+          "description": "가장 체력이 낮은 아군 언데드 25% 회복",
+          "effectType": "heal",
+          "name": "사령 치유",
+          "power": 0.25
+        }
+      ],
+      "spd": 15,
+      "themeColor": 8280002,
+      "type": "normal"
     },
     "monster_crystal_scorpion": {
       "atk": 124,
       "def": 162,
       "description": "광맥의 고농도 에테르가 응축된 푸른 수정 외피를 지닌 전갈. 강력한 독침으로 적을 마비시킨다.",
+      "faction": "beast",
       "id": "monster_crystal_scorpion",
       "imagePath": "assets/monster_crystal_scorpion.jpg",
       "level": 6,
@@ -997,13 +1227,13 @@
       ],
       "spd": 10,
       "themeColor": 2541274,
-      "type": "normal",
-      "faction": "beast"
+      "type": "normal"
     },
     "monster_cursed_revenant": {
       "atk": 47,
       "def": 174,
       "description": "방주 성채에서 쓰러진 병사의 혼이 공허에 흡수된 언데드. 자신의 HP를 흡수하며 싸운다.",
+      "faction": "undead",
       "id": "monster_cursed_revenant",
       "imagePath": "assets/monster_cursed_revenant.jpg",
       "level": 2,
@@ -1037,13 +1267,55 @@
       ],
       "spd": 10,
       "themeColor": 13538264,
-      "type": "normal",
-      "faction": "undead"
+      "type": "normal"
+    },
+    "monster_dimension_eater": {
+      "atk": 172,
+      "def": 232,
+      "description": "심연의 균열에서 시공간을 집어삼키는 차원 괴수. 공간을 왜곡하여 진형을 붕괴시킵니다.",
+      "faction": "beast",
+      "id": "monster_dimension_eater",
+      "imagePath": "assets/monster_dimension_eater.jpg",
+      "imagePrompt": "Dark fantasy anime style, cosmic eldritch dimensional devourer floating in shattered purple spacetime rift, floating geometric clockwork plates and dark purple cosmic vortex body, glowing void core pulsing with dimensional anomalies, floating shattered debris, masterpiece, 8k",
+      "level": 9,
+      "luck": 18,
+      "maxHp": 320,
+      "name": "차원 포식체",
+      "promptKey": "monster_dimension_eater",
+      "rewards": {
+        "ether": 18,
+        "exp": 200,
+        "gold": 220,
+        "resources": {
+          "crystal": 3,
+          "void_shard": 5
+        }
+      },
+      "skills": [
+        {
+          "description": "전체 적에게 140% 시공간 피해 + 진형 셔플",
+          "disruptPosition": "shuffle",
+          "effectType": "damage",
+          "name": "차원 균열 붕괴",
+          "power": 1.4
+        },
+        {
+          "description": "단일 대상 180% 피해 + 30% 흡혈",
+          "drainPct": 0.3,
+          "effectType": "drain",
+          "name": "공간 전이 흡수",
+          "power": 1.8
+        }
+      ],
+      "spd": 42,
+      "themeColor": 10233776,
+      "type": "normal"
     },
     "monster_dread_knight": {
       "atk": 110,
       "def": 348,
       "description": "과거 방주를 수호하다 타락한 영겁의 기사. 단단한 방벽과 저주받은 대검을 휘두른다.",
+      "faction": "undead",
       "id": "monster_dread_knight",
       "imagePath": "assets/monster_dread_knight.jpg",
       "level": 5,
@@ -1086,13 +1358,13 @@
       ],
       "spd": 19,
       "themeColor": 11225020,
-      "type": "elite",
-      "faction": "undead"
+      "type": "elite"
     },
     "monster_fallen_paladin": {
       "atk": 240,
       "def": 250,
       "description": "심연의 저주에 굴복한 고대 성기사. 칠흑의 검과 저주받은 방패로 전열을 압박합니다.",
+      "faction": "corrupted",
       "id": "monster_fallen_paladin",
       "imagePath": "assets/monster_fallen_paladin_v2.jpg",
       "level": 19,
@@ -1115,13 +1387,13 @@
       ],
       "spd": 45,
       "themeColor": 4545124,
-      "type": "normal",
-      "faction": "corrupted"
+      "type": "normal"
     },
     "monster_fallen_priest": {
       "atk": 182,
       "def": 140,
       "description": "심연의 어둠에 영혼을 바친 타락한 성직자. 어둠의 권능과 사악한 치유 의식을 행합니다.",
+      "faction": "corrupted",
       "id": "monster_fallen_priest",
       "imagePath": "assets/monster_fallen_priest_v2.jpg",
       "level": 14,
@@ -1152,13 +1424,55 @@
       ],
       "spd": 48,
       "themeColor": 8280002,
-      "type": "normal",
-      "faction": "corrupted"
+      "type": "normal"
+    },
+    "monster_grave_specter": {
+      "atk": 230,
+      "def": 260,
+      "description": "망각의 묘지를 지키는 유령 기사. 원혼의 한기와 영혼을 베는 녹슨 대검을 휘두릅니다.",
+      "faction": "undead",
+      "id": "monster_grave_specter",
+      "imagePath": "assets/monster_grave_specter.jpg",
+      "imagePrompt": "Dark fantasy anime style, haunting ghostly grave knight encased in rusted gothic plate armor with ethereal cyan flames bursting from visor, wielding a chipped rusted greatsword engulfed in soul fire, ruined foggy cemetery with cracked tombstones, masterpiece, 8k",
+      "level": 17,
+      "luck": 52,
+      "maxHp": 1640,
+      "name": "무덤의 망령 기사",
+      "promptKey": "monster_grave_specter",
+      "rewards": {
+        "ether": 11,
+        "exp": 95,
+        "gold": 115,
+        "resources": {
+          "bone": 2
+        }
+      },
+      "skills": [
+        {
+          "description": "전열 단일 160% 피해 (방어력 30% 무시 & 넉백)",
+          "disruptPosition": "knockback",
+          "effectType": "damage",
+          "name": "영혼 절단",
+          "piercePct": 0.3,
+          "power": 1.6
+        },
+        {
+          "description": "적 전체 100% 피해 + 1턴 빙결(스턴)",
+          "effectType": "stun",
+          "name": "망각의 한기",
+          "power": 1,
+          "statusDuration": 1
+        }
+      ],
+      "spd": 84,
+      "themeColor": 6056896,
+      "type": "normal"
     },
     "monster_inquisitor": {
       "atk": 280,
       "def": 220,
       "description": "단죄의 성채에서 이단을 심문하던 광기의 집행관. 불타는 사슬과 화형의 불길로 적을 태웁니다.",
+      "faction": "corrupted",
       "id": "monster_inquisitor",
       "imagePath": "assets/monster_inquisitor_v2.jpg",
       "level": 20,
@@ -1184,13 +1498,13 @@
       ],
       "spd": 57,
       "themeColor": 14172949,
-      "type": "normal",
-      "faction": "corrupted"
+      "type": "normal"
     },
     "monster_iron_golem": {
       "atk": 35,
       "def": 160,
       "description": "고대 연금술로 만들어진 철제 자동 병기의 잔해. 방어력이 매우 높고 둔중한 강타로 전열을 부순다.",
+      "faction": "construct",
       "id": "monster_iron_golem",
       "imagePath": "assets/monster_iron_golem.jpg",
       "level": 3,
@@ -1226,13 +1540,53 @@
       ],
       "spd": 4,
       "themeColor": 9479342,
-      "type": "normal",
-      "faction": "construct"
+      "type": "normal"
+    },
+    "monster_iron_torturer": {
+      "atk": 245,
+      "def": 272,
+      "description": "단죄의 성채에서 죄인을 처형하던 잔혹한 집행자. 붉게 달아오른 사슬과 철퇴로 적을 파쇄합니다.",
+      "faction": "corrupted",
+      "id": "monster_iron_torturer",
+      "imagePath": "assets/monster_iron_torturer.jpg",
+      "imagePrompt": "Dark fantasy anime style, menacing iron torturer executioner clad in spiked black iron armor and iron cage mask, wielding red-hot glowing torture chains and a barbed executioner flail, dark stone fortress torture chamber lit by burning braziers, cinematic lighting, 8k",
+      "level": 20,
+      "luck": 58,
+      "maxHp": 1680,
+      "name": "단죄의 고문관",
+      "piercePct": 0.35,
+      "promptKey": "monster_iron_torturer",
+      "rewards": {
+        "ether": 15,
+        "exp": 115,
+        "gold": 145
+      },
+      "shieldBreakMult": 2,
+      "skills": [
+        {
+          "description": "단일 150% 피해 + 진형 당기기(pull) + 2턴 화상",
+          "disruptPosition": "pull",
+          "effectType": "burn",
+          "name": "화형의 사슬",
+          "power": 1.5,
+          "statusDuration": 2
+        },
+        {
+          "description": "단일 190% 분쇄 피해 (보호막 분쇄 2.0배)",
+          "effectType": "damage",
+          "name": "단죄의 철퇴",
+          "power": 1.9
+        }
+      ],
+      "spd": 46,
+      "themeColor": 14172949,
+      "type": "normal"
     },
     "monster_mana_gargoyle": {
       "atk": 148,
       "def": 184,
       "description": "석재 조각상에 에테르 마력이 스며들어 깨어난 비행 가고일. 고속으로 급강하하여 후열을 노린다.",
+      "faction": "construct",
       "id": "monster_mana_gargoyle",
       "imagePath": "assets/monster_mana_gargoyle.jpg",
       "level": 6,
@@ -1265,13 +1619,13 @@
       ],
       "spd": 16,
       "themeColor": 5099745,
-      "type": "normal",
-      "faction": "construct"
+      "type": "normal"
     },
     "monster_mirror_phantom": {
       "atk": 365,
       "def": 450,
       "description": "환영의 미궁에 반사된 다중 차원의 그림자 분신. 실체 없는 공격으로 적의 급소를 유린합니다.",
+      "faction": "construct",
       "id": "monster_mirror_phantom",
       "imagePath": "assets/monster_mirror_phantom_v2.jpg",
       "level": 22,
@@ -1297,13 +1651,13 @@
       ],
       "spd": 74,
       "themeColor": 2733814,
-      "type": "normal",
-      "faction": "construct"
+      "type": "normal"
     },
     "monster_monolith_guardian": {
       "atk": 203,
       "def": 279,
       "description": "고대 모노리스의 파편으로 기동하는 거대한 골렘. 철벽의 방패와 무거운 석퇴로 침입자를 짓밟는다.",
+      "faction": "construct",
       "id": "monster_monolith_guardian",
       "imagePath": "assets/monster_monolith_guardian.jpg",
       "level": 11,
@@ -1338,13 +1692,13 @@
       ],
       "spd": 24,
       "themeColor": 16740419,
-      "type": "normal",
-      "faction": "construct"
+      "type": "normal"
     },
     "monster_oblivion_ghost": {
       "atk": 225,
       "def": 226,
       "description": "망각의 묘지에 갇힌 영혼들의 원념이 뭉쳐진 언데드 유체. 영혼을 얼어붙게 하는 한기를 내뿜습니다.",
+      "faction": "undead",
       "id": "monster_oblivion_ghost",
       "imagePath": "assets/monster_oblivion_ghost_v2.jpg",
       "level": 16,
@@ -1368,13 +1722,94 @@
       ],
       "spd": 78,
       "themeColor": 9489145,
-      "type": "normal",
-      "faction": "undead"
+      "type": "normal"
+    },
+    "monster_primordial_shaman": {
+      "atk": 192,
+      "def": 160,
+      "description": "원초의 제단에서 금단의 의식을 주재하는 고위 주술사. 혈염과 저주로 침입자를 제물로 바칩니다.",
+      "faction": "corrupted",
+      "id": "monster_primordial_shaman",
+      "imagePath": "assets/monster_primordial_shaman.jpg",
+      "imagePrompt": "Dark fantasy anime style, primordial void shaman hovering before an ancient black basalt altar, ritual mask carved from demon bone, draped in crimson ceremonial robes, casting dark blood flame hexes from floating sacrificial totems, starry cosmic void sky background, sharp cel shading, 8k",
+      "level": 11,
+      "luck": 30,
+      "maxHp": 690,
+      "name": "원초의 주술사",
+      "promptKey": "monster_primordial_shaman",
+      "rewards": {
+        "ether": 26,
+        "exp": 300,
+        "gold": 320,
+        "resources": {
+          "crystal": 5,
+          "void_shard": 6
+        }
+      },
+      "skills": [
+        {
+          "description": "적 전체 150% 암흑 피해 + 2턴 출혈",
+          "effectType": "bleed",
+          "name": "심연의 저주 제물",
+          "power": 1.5,
+          "statusDuration": 2
+        },
+        {
+          "description": "아군 전체 공격력 25% 증가 2턴",
+          "effectType": "buff_atk",
+          "name": "원초의 결계",
+          "power": 0.25,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 42,
+      "themeColor": 14162784,
+      "type": "normal"
+    },
+    "monster_prism_weaver": {
+      "atk": 375,
+      "def": 452,
+      "description": "환영의 미궁에서 빛과 거울을 엮어내는 마도 생명체. 굴절된 광선과 만화경 환각을 구사합니다.",
+      "faction": "construct",
+      "id": "monster_prism_weaver",
+      "imagePath": "assets/monster_prism_weaver.jpg",
+      "imagePrompt": "Dark fantasy anime style, floating geometric prism weaver entity composed of crystalline mirrors and kaleidoscopic light ribbons, spinning sharp glass shards hovering around it, infinite mirrored labyrinth room refracting vibrant spectral light, surreal sci-fi fantasy, masterpiece, 8k",
+      "level": 23,
+      "luck": 72,
+      "maxHp": 2600,
+      "name": "프리즘 방직사",
+      "piercePct": 0.45,
+      "promptKey": "monster_prism_weaver",
+      "rewards": {
+        "ether": 18,
+        "exp": 140,
+        "gold": 170
+      },
+      "skills": [
+        {
+          "description": "적 전체 160% 마법 관통 피해",
+          "effectType": "damage",
+          "name": "굴절 광선",
+          "piercePct": 0.45,
+          "power": 1.6
+        },
+        {
+          "description": "적 전체 2턴간 공격력 30% 감소 디버프",
+          "effectType": "debuff_atk",
+          "name": "만화경 혼란",
+          "power": 0.3,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 78,
+      "themeColor": 48340,
+      "type": "normal"
     },
     "monster_rift_stalker": {
       "atk": 158,
       "def": 225,
       "description": "시공간의 틈새를 자유자재로 넘나드는 차원 포식자. 방어력을 관통하는 기습 일격을 가한다.",
+      "faction": "beast",
       "id": "monster_rift_stalker",
       "imagePath": "assets/monster_rift_stalker.jpg",
       "level": 8,
@@ -1408,13 +1843,13 @@
       ],
       "spd": 55,
       "themeColor": 12216520,
-      "type": "normal",
-      "faction": "beast"
+      "type": "normal"
     },
     "monster_rot_slime": {
       "atk": 23,
       "def": 158,
       "description": "부패한 에테르에서 태어난 녹색 점액 괴물. 느리지만 체력이 높고 광역 독을 뿌린다.",
+      "faction": "beast",
       "id": "monster_rot_slime",
       "imagePath": "assets/monster_rot_slime.jpg",
       "level": 2,
@@ -1448,13 +1883,13 @@
       ],
       "spd": 5,
       "themeColor": 9159498,
-      "type": "normal",
-      "faction": "beast"
+      "type": "normal"
     },
     "monster_shadow_imp": {
       "atk": 30,
       "def": 166,
       "description": "공허에서 분열한 소형 악령. 기절 효과로 아군의 턴을 빼앗는다.",
+      "faction": "corrupted",
       "id": "monster_shadow_imp",
       "imagePath": "assets/monster_shadow_imp.jpg",
       "level": 2,
@@ -1487,13 +1922,95 @@
       ],
       "spd": 22,
       "themeColor": 6056896,
-      "type": "normal",
-      "faction": "corrupted"
+      "type": "normal"
+    },
+    "monster_stalker": {
+      "atk": 34,
+      "def": 180,
+      "description": "공허의 흑무에서 태어난 변이 맹수. 어둠 속에서 불시에 기습합니다.",
+      "faction": "beast",
+      "id": "monster_stalker",
+      "imagePath": "assets/monster_stalker.jpg",
+      "level": 2,
+      "luck": 8,
+      "maxHp": 159,
+      "name": "공허의 잠복자",
+      "promptKey": "monster_stalker",
+      "rewards": {
+        "ether": 2,
+        "exp": 30,
+        "gold": 40,
+        "resources": {
+          "leather": 2
+        }
+      },
+      "skills": [
+        {
+          "description": "전열 영웅에게 130% 물리 피해",
+          "effectType": "damage",
+          "name": "그림자 기습",
+          "power": 1.3
+        },
+        {
+          "description": "적 1체에 110% 피해 + 2턴 출혈(ATK 15%)",
+          "effectType": "bleed",
+          "name": "출혈 발톱",
+          "power": 1.1,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 14,
+      "themeColor": 15684432,
+      "type": "normal"
+    },
+    "monster_tomb_banshee": {
+      "atk": 64,
+      "def": 160,
+      "description": "납골당의 묘비를 떠도는 원혼. 차가운 비탄의 절규로 대상 파티의 마나를 메마르게 한다.",
+      "drainPct": 0.2,
+      "faction": "undead",
+      "id": "monster_tomb_banshee",
+      "imagePath": "assets/monster_tomb_banshee.jpg",
+      "level": 4,
+      "luck": 10,
+      "maxHp": 188,
+      "name": "납골당 묘지 밴시",
+      "promptKey": "monster_tomb_banshee",
+      "rewards": {
+        "ether": 5,
+        "exp": 65,
+        "gold": 75,
+        "resources": {
+          "silk": 3
+        }
+      },
+      "skills": [
+        {
+          "breakGauge": 120,
+          "description": "대상 파티 전체에 110% 마법 피해 + MP 15 흡수 [차징]",
+          "drainPct": 0.35,
+          "effectType": "drain",
+          "isCharge": true,
+          "name": "비탄의 절규",
+          "power": 1.1
+        },
+        {
+          "description": "단일 대상 140% 피해 + 속도 25% 감속 2턴",
+          "effectType": "debuff",
+          "name": "영혼 침식",
+          "power": 1.4,
+          "statusDuration": 2
+        }
+      ],
+      "spd": 24,
+      "themeColor": 8445674,
+      "type": "normal"
     },
     "monster_void_beast": {
       "atk": 122,
       "def": 288,
       "description": "심연의 어둠 속에서 꿈틀거리는 다수의 촉수를 지닌 거대 마물. 광역 출혈과 자가 재생을 구사한다.",
+      "faction": "beast",
       "id": "monster_void_beast",
       "imagePath": "assets/monster_void_beast.jpg",
       "level": 8,
@@ -1527,8 +2044,7 @@
       ],
       "spd": 18,
       "themeColor": 8280002,
-      "type": "normal",
-      "faction": "beast"
+      "type": "normal"
     },
     "monster_void_overlord": {
       "atk": 138,
@@ -1604,6 +2120,7 @@
       "atk": 510,
       "def": 420,
       "description": "어둠 속에서 먹잇감을 노리는 공허의 암살자. 기척을 숨기고 다가와 치명적인 일격을 가합니다.",
+      "faction": "beast",
       "id": "monster_void_stalker",
       "imagePath": "assets/monster_void_stalker_v2.jpg",
       "level": 26,
@@ -1630,563 +2147,18 @@
       ],
       "spd": 84,
       "themeColor": 4854924,
-      "type": "normal",
-      "faction": "beast"
-    },
-    "monster_tomb_banshee": {
-      "id": "monster_tomb_banshee",
-      "name": "납골당 묘지 밴시",
-      "type": "normal",
-      "faction": "undead",
-      "level": 4,
-      "maxHp": 188,
-      "atk": 64,
-      "def": 160,
-      "spd": 24,
-      "luck": 10,
-      "drainPct": 0.2,
-      "skills": [
-        {
-          "breakGauge": 120,
-          "description": "대상 파티 전체에 110% 마법 피해 + MP 15 흡수 [차징]",
-          "drainPct": 0.35,
-          "effectType": "drain",
-          "isCharge": true,
-          "name": "비탄의 절규",
-          "power": 1.1
-        },
-        {
-          "description": "단일 대상 140% 피해 + 속도 25% 감속 2턴",
-          "effectType": "debuff",
-          "name": "영혼 침식",
-          "power": 1.4,
-          "statusDuration": 2
-        }
-      ],
-      "rewards": {
-        "ether": 5,
-        "exp": 65,
-        "gold": 75,
-        "resources": {
-          "silk": 3
-        }
-      },
-      "promptKey": "monster_tomb_banshee",
-      "imagePath": "assets/monster_tomb_banshee.jpg",
-      "themeColor": 8445674,
-      "description": "납골당의 묘비를 떠도는 원혼. 차가운 비탄의 절규로 대상 파티의 마나를 메마르게 한다."
-    },
-    "monster_stalker": {
-      "id": "monster_stalker",
-      "name": "공허의 잠복자",
-      "type": "normal",
-      "faction": "beast",
-      "level": 2,
-      "maxHp": 159,
-      "atk": 34,
-      "def": 180,
-      "spd": 14,
-      "luck": 8,
-      "skills": [
-        {
-          "description": "전열 영웅에게 130% 물리 피해",
-          "effectType": "damage",
-          "name": "그림자 기습",
-          "power": 1.3
-        },
-        {
-          "description": "적 1체에 110% 피해 + 2턴 출혈(ATK 15%)",
-          "effectType": "bleed",
-          "name": "출혈 발톱",
-          "power": 1.1,
-          "statusDuration": 2
-        }
-      ],
-      "rewards": {
-        "ether": 2,
-        "exp": 30,
-        "gold": 40,
-        "resources": {
-          "leather": 2
-        }
-      },
-      "promptKey": "monster_stalker",
-      "imagePath": "assets/monster_stalker.jpg",
-      "themeColor": 15684432,
-      "description": "공허의 흑무에서 태어난 변이 맹수. 어둠 속에서 불시에 기습합니다."
-    },
-    "boss_avici_final": {
-      "id": "boss_avici_final",
-      "name": "무간의 지배자 아르케오스 (진 최종 보스)",
-      "type": "boss",
-      "faction": "corrupted",
-      "level": 600,
-      "maxHp": 850000,
-      "atk": 3250,
-      "def": 2080,
-      "spd": 376,
-      "luck": 250,
-      "piercePct": 0.7,
-      "drainPct": 0.4,
-      "shieldBreakMult": 2.5,
-      "skills": [
-        {
-          "breakGauge": 3000,
-          "description": "적 전체에 350% 마법 관통 파동 [집중 차징 & 진형 셔플]",
-          "disruptPosition": "shuffle",
-          "effectType": "damage",
-          "isCharge": true,
-          "name": "무간의 태초 파동",
-          "piercePct": 0.8,
-          "power": 3.5
-        },
-        {
-          "description": "대상 파티 전체 방어력 50% 감소 및 2턴 기절",
-          "effectType": "stun",
-          "name": "공허의 절대 침식",
-          "power": 1.5,
-          "statusDuration": 2
-        },
-        {
-          "description": "단일 대상 500% 치명 관통 강타 (방어 관통 90%)",
-          "effectType": "damage",
-          "name": "멸망의 창조 일격",
-          "piercePct": 0.9,
-          "power": 5
-        }
-      ],
-      "themeColor": 10233776,
-      "promptKey": "boss_avici_final",
-      "imagePath": "assets/void_overlord.jpg",
-      "description": "무간도의 가장 깊은 심연에 도사린 태초의 공허 창조주. 존재 자체로 시공간을 소멸시키는 절대자입니다.",
-      "rewards": {
-        "ether": 5000,
-        "exp": 8000,
-        "gold": 50000
-      }
-    },
-    "monster_crypt_necromancer": {
-      "id": "monster_crypt_necromancer",
-      "name": "납골당 사령술사",
-      "type": "normal",
-      "faction": "undead",
-      "level": 5,
-      "maxHp": 130,
-      "atk": 52,
-      "def": 180,
-      "spd": 15,
-      "luck": 14,
-      "skills": [
-        {
-          "description": "단일 대상 130% 암흑 피해 + 2턴 방어력 20% 감소",
-          "effectType": "debuff_def",
-          "name": "원혼 소환",
-          "power": 1.3,
-          "statusDuration": 2
-        },
-        {
-          "description": "가장 체력이 낮은 아군 언데드 25% 회복",
-          "effectType": "heal",
-          "name": "사령 치유",
-          "power": 0.25
-        }
-      ],
-      "rewards": {
-        "ether": 5,
-        "exp": 80,
-        "gold": 95,
-        "resources": {
-          "coal": 2,
-          "silk": 4
-        }
-      },
-      "promptKey": "monster_crypt_necromancer",
-      "imagePath": "assets/monster_crypt_necromancer.jpg",
-      "themeColor": 8280002,
-      "description": "납골당의 원혼들을 부리며 망자를 조종하는 사령술사. 저주와 사령 마법으로 아군을 괴롭힙니다.",
-      "imagePrompt": "Dark fantasy anime style, sinister undead crypt necromancer floating above ancient catacomb coffins, draped in tattered obsidian burial robes, skull mask glowing with eerie cyan ghostfire, holding a floating necrotic lantern summoning wailing spectral souls, atmospheric dim crypt lighting, magitech style, clean sharp lineart, 8k"
-    },
-    "monster_aether_basilisk": {
-      "id": "monster_aether_basilisk",
-      "name": "에테르 바실리스크",
-      "type": "normal",
-      "faction": "beast",
-      "level": 7,
-      "maxHp": 275,
-      "atk": 108,
-      "def": 142,
-      "spd": 14,
-      "luck": 45,
-      "skills": [
-        {
-          "description": "단일 대상 150% 마법 피해 + 1턴 기절",
-          "effectType": "stun",
-          "name": "석화의 응시",
-          "power": 1.5,
-          "statusDuration": 1
-        },
-        {
-          "description": "적 전체 120% 관통 피해",
-          "effectType": "damage",
-          "name": "결정 비늘 분출",
-          "piercePct": 0.25,
-          "power": 1.2
-        }
-      ],
-      "rewards": {
-        "ether": 10,
-        "exp": 135,
-        "gold": 140,
-        "resources": {
-          "crystal": 4,
-          "stone": 6
-        }
-      },
-      "promptKey": "monster_aether_basilisk",
-      "imagePath": "assets/monster_aether_basilisk.jpg",
-      "themeColor": 58879,
-      "description": "에테르 광맥의 결정을 흡수하여 자란 마수. 석화의 시선과 수정 비늘 파편으로 적을 압박합니다.",
-      "imagePrompt": "Dark fantasy anime style, serpentine aether basilisk coiled around massive glowing cyan crystal spires, iridescent crystalline reptilian scales reflecting magical light, piercing glowing amber eyes with petrifying glare, subterranean crystal cavern filled with luminous mana fog, sharp cel shading, 8k"
-    },
-    "monster_dimension_eater": {
-      "id": "monster_dimension_eater",
-      "name": "차원 포식체",
-      "type": "normal",
-      "faction": "beast",
-      "level": 9,
-      "maxHp": 320,
-      "atk": 172,
-      "def": 232,
-      "spd": 42,
-      "luck": 18,
-      "skills": [
-        {
-          "description": "전체 적에게 140% 시공간 피해 + 진형 셔플",
-          "disruptPosition": "shuffle",
-          "effectType": "damage",
-          "name": "차원 균열 붕괴",
-          "power": 1.4
-        },
-        {
-          "description": "단일 대상 180% 피해 + 30% 흡혈",
-          "drainPct": 0.3,
-          "effectType": "drain",
-          "name": "공간 전이 흡수",
-          "power": 1.8
-        }
-      ],
-      "rewards": {
-        "ether": 18,
-        "exp": 200,
-        "gold": 220,
-        "resources": {
-          "crystal": 3,
-          "void_shard": 5
-        }
-      },
-      "promptKey": "monster_dimension_eater",
-      "imagePath": "assets/monster_dimension_eater.jpg",
-      "themeColor": 10233776,
-      "description": "심연의 균열에서 시공간을 집어삼키는 차원 괴수. 공간을 왜곡하여 진형을 붕괴시킵니다.",
-      "imagePrompt": "Dark fantasy anime style, cosmic eldritch dimensional devourer floating in shattered purple spacetime rift, floating geometric clockwork plates and dark purple cosmic vortex body, glowing void core pulsing with dimensional anomalies, floating shattered debris, masterpiece, 8k"
-    },
-    "monster_primordial_shaman": {
-      "id": "monster_primordial_shaman",
-      "name": "원초의 주술사",
-      "type": "normal",
-      "faction": "corrupted",
-      "level": 11,
-      "maxHp": 690,
-      "atk": 192,
-      "def": 160,
-      "spd": 42,
-      "luck": 30,
-      "skills": [
-        {
-          "description": "적 전체 150% 암흑 피해 + 2턴 출혈",
-          "effectType": "bleed",
-          "name": "심연의 저주 제물",
-          "power": 1.5,
-          "statusDuration": 2
-        },
-        {
-          "description": "아군 전체 공격력 25% 증가 2턴",
-          "effectType": "buff_atk",
-          "name": "원초의 결계",
-          "power": 0.25,
-          "statusDuration": 2
-        }
-      ],
-      "rewards": {
-        "ether": 26,
-        "exp": 300,
-        "gold": 320,
-        "resources": {
-          "crystal": 5,
-          "void_shard": 6
-        }
-      },
-      "promptKey": "monster_primordial_shaman",
-      "imagePath": "assets/monster_primordial_shaman.jpg",
-      "themeColor": 14162784,
-      "description": "원초의 제단에서 금단의 의식을 주재하는 고위 주술사. 혈염과 저주로 침입자를 제물로 바칩니다.",
-      "imagePrompt": "Dark fantasy anime style, primordial void shaman hovering before an ancient black basalt altar, ritual mask carved from demon bone, draped in crimson ceremonial robes, casting dark blood flame hexes from floating sacrificial totems, starry cosmic void sky background, sharp cel shading, 8k"
-    },
-    "monster_crimson_vampire": {
-      "id": "monster_crimson_vampire",
-      "name": "진홍의 흡혈귀",
-      "type": "normal",
-      "faction": "corrupted",
-      "level": 14,
-      "maxHp": 730,
-      "atk": 180,
-      "def": 238,
-      "spd": 110,
-      "luck": 55,
-      "drainPct": 0.35,
-      "skills": [
-        {
-          "description": "단일 160% 피해 (흡혈 40% & 2턴 출혈)",
-          "drainPct": 0.4,
-          "effectType": "drain",
-          "name": "진홍의 연회",
-          "power": 1.6,
-          "statusDuration": 2
-        },
-        {
-          "description": "적 전체 110% 마법 피해 + 적 전체 명중/속도 감소",
-          "effectType": "debuff",
-          "name": "박쥐 떼 소환",
-          "power": 1.1,
-          "statusDuration": 2
-        }
-      ],
-      "themeColor": 12000284,
-      "description": "핏빛 성역의 귀족 흡혈귀. 치명적인 흡혈과 박쥐 떼 환영으로 전장을 유린합니다.",
-      "promptKey": "monster_crimson_vampire",
-      "imagePath": "assets/monster_crimson_vampire.jpg",
-      "imagePrompt": "Dark fantasy anime style, aristocratic crimson vampire noble standing in a gothic cathedral ruin bathed in blood-red moonlight, flowing dark crimson cape, sharp fangs and glowing ruby eyes, holding an ornate blood chalice, fluttering shadow bats in background, magitech style, masterpiece, 8k",
-      "rewards": {
-        "ether": 8,
-        "exp": 75,
-        "gold": 95
-      }
-    },
-    "monster_grave_specter": {
-      "id": "monster_grave_specter",
-      "name": "무덤의 망령 기사",
-      "type": "normal",
-      "faction": "undead",
-      "level": 17,
-      "maxHp": 1640,
-      "atk": 230,
-      "def": 260,
-      "spd": 84,
-      "luck": 52,
-      "skills": [
-        {
-          "description": "전열 단일 160% 피해 (방어력 30% 무시 & 넉백)",
-          "disruptPosition": "knockback",
-          "effectType": "damage",
-          "name": "영혼 절단",
-          "piercePct": 0.3,
-          "power": 1.6
-        },
-        {
-          "description": "적 전체 100% 피해 + 1턴 빙결(스턴)",
-          "effectType": "stun",
-          "name": "망각의 한기",
-          "power": 1,
-          "statusDuration": 1
-        }
-      ],
-      "themeColor": 6056896,
-      "description": "망각의 묘지를 지키는 유령 기사. 원혼의 한기와 영혼을 베는 녹슨 대검을 휘두릅니다.",
-      "promptKey": "monster_grave_specter",
-      "imagePath": "assets/monster_grave_specter.jpg",
-      "imagePrompt": "Dark fantasy anime style, haunting ghostly grave knight encased in rusted gothic plate armor with ethereal cyan flames bursting from visor, wielding a chipped rusted greatsword engulfed in soul fire, ruined foggy cemetery with cracked tombstones, masterpiece, 8k",
-      "rewards": {
-        "ether": 11,
-        "exp": 95,
-        "gold": 115,
-        "resources": {
-          "bone": 2
-        }
-      }
-    },
-    "monster_iron_torturer": {
-      "id": "monster_iron_torturer",
-      "name": "단죄의 고문관",
-      "type": "normal",
-      "faction": "corrupted",
-      "level": 20,
-      "maxHp": 1680,
-      "atk": 245,
-      "def": 272,
-      "spd": 46,
-      "luck": 58,
-      "piercePct": 0.35,
-      "shieldBreakMult": 2,
-      "skills": [
-        {
-          "description": "단일 150% 피해 + 진형 당기기(pull) + 2턴 화상",
-          "disruptPosition": "pull",
-          "effectType": "burn",
-          "name": "화형의 사슬",
-          "power": 1.5,
-          "statusDuration": 2
-        },
-        {
-          "description": "단일 190% 분쇄 피해 (보호막 분쇄 2.0배)",
-          "effectType": "damage",
-          "name": "단죄의 철퇴",
-          "power": 1.9
-        }
-      ],
-      "themeColor": 14172949,
-      "description": "단죄의 성채에서 죄인을 처형하던 잔혹한 집행자. 붉게 달아오른 사슬과 철퇴로 적을 파쇄합니다.",
-      "promptKey": "monster_iron_torturer",
-      "imagePath": "assets/monster_iron_torturer.jpg",
-      "imagePrompt": "Dark fantasy anime style, menacing iron torturer executioner clad in spiked black iron armor and iron cage mask, wielding red-hot glowing torture chains and a barbed executioner flail, dark stone fortress torture chamber lit by burning braziers, cinematic lighting, 8k",
-      "rewards": {
-        "ether": 15,
-        "exp": 115,
-        "gold": 145
-      }
-    },
-    "monster_prism_weaver": {
-      "id": "monster_prism_weaver",
-      "name": "프리즘 방직사",
-      "type": "normal",
-      "faction": "construct",
-      "level": 23,
-      "maxHp": 2600,
-      "atk": 375,
-      "def": 452,
-      "spd": 78,
-      "luck": 72,
-      "piercePct": 0.45,
-      "skills": [
-        {
-          "description": "적 전체 160% 마법 관통 피해",
-          "effectType": "damage",
-          "name": "굴절 광선",
-          "piercePct": 0.45,
-          "power": 1.6
-        },
-        {
-          "description": "적 전체 2턴간 공격력 30% 감소 디버프",
-          "effectType": "debuff_atk",
-          "name": "만화경 혼란",
-          "power": 0.3,
-          "statusDuration": 2
-        }
-      ],
-      "themeColor": 48340,
-      "description": "환영의 미궁에서 빛과 거울을 엮어내는 마도 생명체. 굴절된 광선과 만화경 환각을 구사합니다.",
-      "promptKey": "monster_prism_weaver",
-      "imagePath": "assets/monster_prism_weaver.jpg",
-      "imagePrompt": "Dark fantasy anime style, floating geometric prism weaver entity composed of crystalline mirrors and kaleidoscopic light ribbons, spinning sharp glass shards hovering around it, infinite mirrored labyrinth room refracting vibrant spectral light, surreal sci-fi fantasy, masterpiece, 8k",
-      "rewards": {
-        "ether": 18,
-        "exp": 140,
-        "gold": 170
-      }
-    },
-    "monster_abyssal_harbinger": {
-      "id": "monster_abyssal_harbinger",
-      "name": "심연의 전조자",
-      "type": "normal",
-      "faction": "corrupted",
-      "level": 26,
-      "maxHp": 2960,
-      "atk": 205,
-      "def": 488,
-      "spd": 68,
-      "luck": 78,
-      "piercePct": 0.5,
-      "drainPct": 0.3,
-      "skills": [
-        {
-          "description": "적 전체 180% 암흑 중력 피해 + 진형 셔플",
-          "disruptPosition": "shuffle",
-          "effectType": "damage",
-          "name": "공허의 특이점",
-          "piercePct": 0.5,
-          "power": 1.8
-        },
-        {
-          "description": "단일 대상 220% 피해 + 3턴 출혈 (흡혈 30%)",
-          "drainPct": 0.3,
-          "effectType": "bleed",
-          "name": "종말의 파멸인",
-          "power": 2.2,
-          "statusDuration": 3
-        }
-      ],
-      "themeColor": 8916559,
-      "description": "심연의 심장부에서 종말을 예고하는 고위 악마. 공허의 중력 특이점과 멸망의 파멸인을 펼칩니다.",
-      "promptKey": "monster_abyssal_harbinger",
-      "imagePath": "assets/monster_abyssal_harbinger.jpg",
-      "imagePrompt": "Dark fantasy anime style, colossal abyssal harbinger demon hovering at the core of the abyss, massive obsidian horns crackling with dark lightning, six glowing crimson eyes, surrounded by orbiting black holes and floating dark matter runes, swirling apocalyptic vortex background, masterpiece, 8k",
-      "rewards": {
-        "ether": 26,
-        "exp": 180,
-        "gold": 220
-      }
+      "type": "normal"
     }
   },
   "balance": {
-    "itemDropRateMultiplier": 0.7
+    "itemDropRateMultiplier": 0.3
   },
   "nemesis": {
     "atk": 850,
     "def": 1800,
     "luck": 480,
-    "spd": 85,
     "maxHp": 125000000,
     "parts": {
-      "head": {
-        "archetype": "발할라 워로드 (Valhalla Warlord)",
-        "atk": 825,
-        "def": 1055,
-        "desc": "압도적인 물리 강타와 진동 파쇄를 시전하는 전열의 파멸 머리",
-        "icon": "💥",
-        "id": "head",
-        "luck": 250,
-        "maxHp": 40000000,
-        "name": "네메시스 머리",
-        "position": "front",
-        "skills": [
-          {
-            "desc": "전열 대상에게 145% 물리 충격 관통 피해",
-            "icon": "⚡",
-            "id": "nemesis_head_cleave",
-            "name": "파멸의 쇄도",
-            "power": 1.45,
-            "target": "front"
-          },
-          {
-            "desc": "아군 전체에게 125% 광역 물리 피해 및 2턴간 방어력 25% 파쇄",
-            "effectType": "debuff",
-            "icon": "📢",
-            "id": "nemesis_head_roar",
-            "name": "종말의 포효",
-            "power": 1.25,
-            "target": "all"
-          },
-          {
-            "desc": "아군 전체에게 160% 궤멸 피해 및 2턴간 치명적인 출혈 부여",
-            "effectType": "damage",
-            "icon": "🩸",
-            "id": "nemesis_head_cataclysm",
-            "name": "피의 궤멸격",
-            "power": 1.6,
-            "target": "all"
-          }
-        ],
-        "spd": 140
-      },
       "body": {
         "archetype": "크로노 아콘 (Chrono Archon)",
         "atk": 950,
@@ -2229,6 +2201,47 @@
         ],
         "spd": 110
       },
+      "head": {
+        "archetype": "발할라 워로드 (Valhalla Warlord)",
+        "atk": 825,
+        "def": 1055,
+        "desc": "압도적인 물리 강타와 진동 파쇄를 시전하는 전열의 파멸 머리",
+        "icon": "💥",
+        "id": "head",
+        "luck": 250,
+        "maxHp": 40000000,
+        "name": "네메시스 머리",
+        "position": "front",
+        "skills": [
+          {
+            "desc": "전열 대상에게 145% 물리 충격 관통 피해",
+            "icon": "⚡",
+            "id": "nemesis_head_cleave",
+            "name": "파멸의 쇄도",
+            "power": 1.45,
+            "target": "front"
+          },
+          {
+            "desc": "아군 전체에게 125% 광역 물리 피해 및 2턴간 방어력 25% 파쇄",
+            "effectType": "debuff",
+            "icon": "📢",
+            "id": "nemesis_head_roar",
+            "name": "종말의 포효",
+            "power": 1.25,
+            "target": "all"
+          },
+          {
+            "desc": "아군 전체에게 160% 궤멸 피해 및 2턴간 치명적인 출혈 부여",
+            "effectType": "damage",
+            "icon": "🩸",
+            "id": "nemesis_head_cataclysm",
+            "name": "피의 궤멸격",
+            "power": 1.6,
+            "target": "all"
+          }
+        ],
+        "spd": 140
+      },
       "tail": {
         "archetype": "오메가 데드아이 / 레인저 (Omega Deadeye)",
         "atk": 1040,
@@ -2268,23 +2281,160 @@
         ],
         "spd": 220
       }
-    }
+    },
+    "spd": 85
   },
   "buildingTierConfigs": {
+    "arenaGate": {
+      "1": {
+        "upkeep": {
+          "amount": 2,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "2": {
+        "upkeep": {
+          "amount": 4,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "3": {
+        "upkeep": {
+          "amount": 6,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "4": {
+        "upkeep": {
+          "amount": 12,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "5": {
+        "upkeep": {
+          "amount": 16,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "6": {
+        "upkeep": {
+          "amount": 20,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "7": {
+        "upkeep": {
+          "amount": 24,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "8": {
+        "upkeep": {
+          "amount": 28,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "9": {
+        "upkeep": {
+          "amount": 32,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      },
+      "10": {
+        "upkeep": {
+          "amount": 36,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "production": {}
+      }
+    },
+    "blacksmith": {
+      "1": {
+        "cost": {
+          "gold": 1050,
+          "iron": 150,
+          "stone": 168,
+          "wood": 100
+        },
+        "production": {},
+        "upkeep": {}
+      },
+      "8": {
+        "upkeep": {
+          "amount": 20,
+          "secondaryAmount": 10
+        },
+        "cost": {},
+        "production": {}
+      },
+      "9": {
+        "upkeep": {
+          "amount": 25,
+          "secondaryAmount": 15
+        },
+        "cost": {},
+        "production": {}
+      },
+      "10": {
+        "upkeep": {
+          "amount": 30,
+          "secondaryAmount": 20
+        },
+        "cost": {},
+        "production": {}
+      }
+    },
+    "butchery": {
+      "9": {
+        "production": {
+          "primaryAmount": 32,
+          "secondaryAmount": 3
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "10": {
+        "production": {
+          "primaryAmount": 38,
+          "secondaryAmount": 3
+        },
+        "cost": {},
+        "upkeep": {}
+      }
+    },
     "cabin": {
       "3": {
         "cost": {
-          "wood": 76,
-          "stone": 120
+          "stone": 120,
+          "wood": 76
         },
         "production": {},
         "upkeep": {}
       },
       "4": {
         "cost": {
-          "wood": 244,
+          "iron": 50,
           "stone": 200,
-          "iron": 50
+          "wood": 244
         },
         "upkeep": {
           "amount": 5,
@@ -2294,19 +2444,19 @@
       },
       "5": {
         "cost": {
-          "wood": 392,
+          "iron": 80,
           "stone": 336,
-          "iron": 80
+          "wood": 392
         },
         "production": {},
         "upkeep": {}
       },
       "6": {
         "cost": {
-          "wood": 628,
-          "stone": 518,
+          "ether": 41,
           "iron": 139,
-          "ether": 41
+          "stone": 518,
+          "wood": 628
         },
         "upkeep": {
           "amount": 10,
@@ -2316,32 +2466,32 @@
       },
       "7": {
         "cost": {
-          "wood": 1006,
-          "stone": 750,
+          "ether": 66,
           "iron": 228,
-          "ether": 66
+          "stone": 750,
+          "wood": 1006
         },
         "production": {},
         "upkeep": {}
       },
       "8": {
         "cost": {
-          "wood": 2415,
-          "stone": 1562,
-          "iron": 305,
           "ether": 152,
-          "leather": 242
+          "iron": 305,
+          "leather": 242,
+          "stone": 1562,
+          "wood": 2415
         },
         "production": {},
         "upkeep": {}
       },
       "9": {
         "cost": {
-          "wood": 3864,
-          "stone": 2900,
-          "iron": 429,
           "ether": 284,
-          "leather": 567
+          "iron": 429,
+          "leather": 567,
+          "stone": 2900,
+          "wood": 3864
         },
         "upkeep": {
           "amount": 24,
@@ -2351,12 +2501,12 @@
       },
       "10": {
         "cost": {
-          "wood": 6183,
-          "stone": 4442,
-          "iron": 627,
           "ether": 368,
+          "iron": 627,
           "leather": 707,
-          "void_shard": 20
+          "stone": 4442,
+          "void_shard": 20,
+          "wood": 6183
         },
         "upkeep": {
           "amount": 28,
@@ -2365,86 +2515,194 @@
         "production": {}
       }
     },
+    "infirmary": {
+      "4": {
+        "upkeep": {
+          "amount": 3,
+          "secondaryAmount": 3
+        },
+        "cost": {},
+        "production": {}
+      },
+      "5": {
+        "upkeep": {
+          "amount": 6,
+          "secondaryAmount": 3
+        },
+        "cost": {},
+        "production": {}
+      },
+      "6": {
+        "upkeep": {
+          "amount": 9,
+          "secondaryAmount": 10
+        },
+        "cost": {},
+        "production": {}
+      },
+      "7": {
+        "upkeep": {
+          "amount": 14,
+          "secondaryAmount": 14
+        },
+        "cost": {},
+        "production": {}
+      },
+      "8": {
+        "upkeep": {
+          "amount": 18,
+          "secondaryAmount": 18
+        },
+        "cost": {},
+        "production": {}
+      },
+      "9": {
+        "upkeep": {
+          "amount": 22,
+          "secondaryAmount": 22
+        },
+        "cost": {},
+        "production": {}
+      },
+      "10": {
+        "upkeep": {
+          "amount": 28,
+          "secondaryAmount": 26
+        },
+        "cost": {},
+        "production": {}
+      }
+    },
     "lumberCamp": {
       "4": {
         "cost": {
-          "wood": 254,
           "gold": 858,
-          "iron": 210
+          "iron": 210,
+          "wood": 254
         },
         "production": {},
         "upkeep": {}
       },
       "5": {
         "cost": {
-          "wood": 427,
           "gold": 1375,
-          "iron": 250
+          "iron": 250,
+          "wood": 427
         },
         "production": {},
         "upkeep": {}
       },
       "6": {
         "cost": {
-          "wood": 624,
+          "ether": 55,
           "gold": 2200,
           "iron": 379,
-          "ether": 55
+          "wood": 624
         },
         "production": {},
         "upkeep": {}
       },
       "7": {
         "cost": {
-          "wood": 838,
+          "ether": 96,
           "gold": 5521,
           "iron": 528,
-          "ether": 96
+          "wood": 838
         },
         "production": {},
         "upkeep": {}
       },
       "8": {
         "cost": {
-          "wood": 1342,
+          "ether": 152,
           "gold": 7636,
           "iron": 605,
-          "ether": 152,
-          "leather": 42
+          "leather": 42,
+          "wood": 1342
         },
         "production": {},
         "upkeep": {}
       },
       "9": {
         "cost": {
-          "wood": 3150,
+          "ether": 284,
           "gold": 9017,
           "iron": 729,
-          "ether": 284,
-          "leather": 167
+          "leather": 167,
+          "wood": 3150
         },
         "production": {},
         "upkeep": {}
       },
       "10": {
         "cost": {
-          "wood": 4435,
+          "ether": 436,
           "gold": 14429,
           "iron": 827,
-          "ether": 436,
           "leather": 507,
-          "void_shard": 10
+          "void_shard": 10,
+          "wood": 4435
         },
         "production": {},
+        "upkeep": {}
+      }
+    },
+    "market": {
+      "5": {
+        "production": {
+          "primaryAmount": 10,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "6": {
+        "production": {
+          "primaryAmount": 12,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "7": {
+        "production": {
+          "primaryAmount": 15,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "8": {
+        "production": {
+          "primaryAmount": 20,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "9": {
+        "production": {
+          "primaryAmount": 24,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "10": {
+        "production": {
+          "primaryAmount": 28,
+          "secondaryAmount": 0
+        },
+        "cost": {},
         "upkeep": {}
       }
     },
     "quarry": {
       "1": {
         "cost": {
-          "wood": 40,
+          "gold": 315,
           "stone": 63,
-          "gold": 315
+          "wood": 40
         },
         "production": {
           "primaryAmount": 2,
@@ -2457,9 +2715,9 @@
       },
       "2": {
         "cost": {
-          "wood": 64,
+          "gold": 504,
           "stone": 100,
-          "gold": 504
+          "wood": 64
         },
         "production": {
           "primaryAmount": 4,
@@ -2472,9 +2730,9 @@
       },
       "3": {
         "cost": {
-          "wood": 102,
+          "gold": 806,
           "stone": 159,
-          "gold": 806
+          "wood": 102
         },
         "production": {
           "primaryAmount": 5,
@@ -2487,10 +2745,10 @@
       },
       "4": {
         "cost": {
-          "wood": 163,
-          "stone": 256,
           "gold": 1289,
-          "iron": 31
+          "iron": 31,
+          "stone": 256,
+          "wood": 163
         },
         "production": {
           "primaryAmount": 7,
@@ -2503,10 +2761,10 @@
       },
       "5": {
         "cost": {
-          "wood": 786,
-          "stone": 411,
           "gold": 2064,
-          "iron": 50
+          "iron": 50,
+          "stone": 411,
+          "wood": 786
         },
         "production": {
           "primaryAmount": 9,
@@ -2519,11 +2777,11 @@
       },
       "6": {
         "cost": {
-          "wood": 1257,
-          "stone": 659,
+          "ether": 21,
           "gold": 3301,
           "iron": 79,
-          "ether": 21
+          "stone": 659,
+          "wood": 1257
         },
         "production": {
           "primaryAmount": 11,
@@ -2536,11 +2794,11 @@
       },
       "7": {
         "cost": {
-          "wood": 2013,
-          "stone": 1056,
+          "ether": 33,
           "gold": 5283,
           "iron": 128,
-          "ether": 33
+          "stone": 1056,
+          "wood": 2013
         },
         "production": {
           "primaryAmount": 13,
@@ -2553,12 +2811,12 @@
       },
       "8": {
         "cost": {
-          "wood": 3219,
-          "stone": 1690,
+          "ether": 52,
           "gold": 8454,
           "iron": 205,
-          "ether": 52,
-          "leather": 42
+          "leather": 42,
+          "stone": 1690,
+          "wood": 3219
         },
         "production": {
           "primaryAmount": 14,
@@ -2571,12 +2829,12 @@
       },
       "9": {
         "cost": {
-          "wood": 5151,
-          "stone": 2704,
+          "ether": 84,
           "gold": 13528,
           "iron": 329,
-          "ether": 84,
-          "leather": 67
+          "leather": 67,
+          "stone": 2704,
+          "wood": 5151
         },
         "production": {
           "primaryAmount": 16,
@@ -2589,13 +2847,13 @@
       },
       "10": {
         "cost": {
-          "wood": 8244,
-          "stone": 4328,
+          "ether": 136,
           "gold": 21644,
           "iron": 527,
-          "ether": 136,
           "leather": 107,
-          "void_shard": 10
+          "stone": 4328,
+          "void_shard": 10,
+          "wood": 8244
         },
         "production": {
           "primaryAmount": 18,
@@ -2665,98 +2923,24 @@
         "production": {}
       }
     },
-    "arenaGate": {
-      "1": {
-        "upkeep": {
-          "amount": 2,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      },
-      "2": {
-        "upkeep": {
-          "amount": 4,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      },
-      "3": {
-        "upkeep": {
-          "amount": 6,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      },
-      "4": {
-        "upkeep": {
-          "amount": 12,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      },
-      "5": {
-        "upkeep": {
-          "amount": 16,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      },
-      "6": {
-        "upkeep": {
-          "amount": 20,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      },
-      "7": {
-        "upkeep": {
-          "amount": 24,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      },
-      "8": {
-        "upkeep": {
-          "amount": 28,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      },
-      "9": {
-        "upkeep": {
-          "amount": 34,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      },
-      "10": {
-        "upkeep": {
-          "amount": 40,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "production": {}
-      }
-    },
-    "market": {
+    "tavern": {
       "5": {
         "production": {
-          "primaryAmount": 10,
+          "primaryAmount": 2,
           "secondaryAmount": 0
         },
         "cost": {},
         "upkeep": {}
       },
-      "6": {
+      "7": {
+        "production": {
+          "primaryAmount": 8,
+          "secondaryAmount": 0
+        },
+        "cost": {},
+        "upkeep": {}
+      },
+      "8": {
         "production": {
           "primaryAmount": 12,
           "secondaryAmount": 0
@@ -2764,131 +2948,21 @@
         "cost": {},
         "upkeep": {}
       },
-      "7": {
+      "9": {
         "production": {
-          "primaryAmount": 15,
+          "primaryAmount": 16,
           "secondaryAmount": 0
         },
         "cost": {},
         "upkeep": {}
       },
-      "8": {
+      "10": {
         "production": {
           "primaryAmount": 20,
           "secondaryAmount": 0
         },
         "cost": {},
         "upkeep": {}
-      },
-      "9": {
-        "production": {
-          "primaryAmount": 24,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "upkeep": {}
-      },
-      "10": {
-        "production": {
-          "primaryAmount": 28,
-          "secondaryAmount": 0
-        },
-        "cost": {},
-        "upkeep": {}
-      }
-    },
-    "infirmary": {
-      "4": {
-        "upkeep": {
-          "amount": 3,
-          "secondaryAmount": 3
-        },
-        "cost": {},
-        "production": {}
-      },
-      "5": {
-        "upkeep": {
-          "amount": 6,
-          "secondaryAmount": 3
-        },
-        "cost": {},
-        "production": {}
-      },
-      "6": {
-        "upkeep": {
-          "amount": 9,
-          "secondaryAmount": 10
-        },
-        "cost": {},
-        "production": {}
-      },
-      "7": {
-        "upkeep": {
-          "amount": 15,
-          "secondaryAmount": 14
-        },
-        "cost": {},
-        "production": {}
-      },
-      "8": {
-        "upkeep": {
-          "amount": 21,
-          "secondaryAmount": 18
-        },
-        "cost": {},
-        "production": {}
-      },
-      "9": {
-        "upkeep": {
-          "amount": 27,
-          "secondaryAmount": 20
-        },
-        "cost": {},
-        "production": {}
-      },
-      "10": {
-        "upkeep": {
-          "amount": 36,
-          "secondaryAmount": 24
-        },
-        "cost": {},
-        "production": {}
-      }
-    },
-    "blacksmith": {
-      "1": {
-        "cost": {
-          "wood": 100,
-          "stone": 168,
-          "iron": 150,
-          "gold": 1050
-        },
-        "production": {},
-        "upkeep": {}
-      },
-      "8": {
-        "upkeep": {
-          "amount": 20,
-          "secondaryAmount": 10
-        },
-        "cost": {},
-        "production": {}
-      },
-      "9": {
-        "upkeep": {
-          "amount": 25,
-          "secondaryAmount": 12
-        },
-        "cost": {},
-        "production": {}
-      },
-      "10": {
-        "upkeep": {
-          "amount": 30,
-          "secondaryAmount": 15
-        },
-        "cost": {},
-        "production": {}
       }
     }
   },
@@ -2965,5 +3039,29 @@
       "iron": 35,
       "wood": 10
     }
+  },
+  "nemesisEquipments": {
+    "pendant": {
+      "spd": 45,
+      "luck": 20,
+      "hp": 120
+    },
+    "core": {
+      "atk": 66,
+      "def": 35,
+      "luck": 28
+    },
+    "crown": {
+      "atk": 64,
+      "def": 125,
+      "luck": 35,
+      "spd": 5
+    }
+  },
+  "arenaEdict": {
+    "edictName": "수호 금지의 칙령",
+    "bannedBadge": "guard",
+    "jokerRule": "블러핑 앤 쇼다운 (2 공개 + 1 히든 실루엣)",
+    "description": "차원 결투장 전역에 수호 개입 불가 결계가 가동됩니다. (🛡️ GUARD 뱃지 획득 불가)"
   }
 }

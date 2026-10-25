@@ -79,6 +79,11 @@ function customAssetSyncPlugin(): Plugin {
                 const targetPath = path.join(targetDir, filename);
                 fs.writeFileSync(targetPath, Buffer.from(b64, 'base64'));
 
+                // 루트 custom_assets 에도 백업 저장
+                const backupUploadDir = path.join(rootDir, 'custom_assets', 'custom_uploaded', subfolder);
+                fs.mkdirSync(backupUploadDir, { recursive: true });
+                fs.writeFileSync(path.join(backupUploadDir, filename), Buffer.from(b64, 'base64'));
+
                 // 상대 에셋 경로 반환 (배포/서빙 호환)
                 return `assets/custom_uploaded/${subfolder}/${filename}`;
               };
@@ -126,6 +131,16 @@ function customAssetSyncPlugin(): Plugin {
                       }
                       const finalUrl = saveBase64(v, folder, fileKey);
                       updatedMap[k] = finalUrl;
+
+                      // 🏛️ 영지 건물 및 성채 휠 내비게이션 키 상호 미러링 보장
+                      if (folder === 'icons') {
+                        if (k === 'blacksmith') updatedMap['forge'] = finalUrl;
+                        else if (k === 'forge') updatedMap['blacksmith'] = finalUrl;
+                        else if (k === 'arenaGate') updatedMap['arena'] = finalUrl;
+                        else if (k === 'arena') updatedMap['arenaGate'] = finalUrl;
+                        else if (k === 'bonfire') updatedMap['citadel'] = finalUrl;
+                        else if (k === 'citadel') updatedMap['bonfire'] = finalUrl;
+                      }
                     }
                   }
                   // 언더스코어 잔여 키 정화
@@ -154,6 +169,12 @@ function customAssetSyncPlugin(): Plugin {
               const customAssetsBackup = path.join(rootDir, 'custom_assets', 'custom_assets_preset.json');
               fs.mkdirSync(path.dirname(customAssetsBackup), { recursive: true });
               fs.writeFileSync(customAssetsBackup, JSON.stringify(preset, null, 2), 'utf-8');
+
+              // 6. dist/assets 가 존재하는 경우 실시간 동기화 (배포 보장)
+              const distAssetsDir = path.join(rootDir, 'dist', 'assets');
+              if (fs.existsSync(distAssetsDir)) {
+                fs.writeFileSync(path.join(distAssetsDir, 'custom_assets_preset.json'), JSON.stringify(preset, null, 2), 'utf-8');
+              }
 
               console.log(`[customAssetSyncPlugin] ✅ 에셋 프리셋이 로컬 파일시스템에 저장되었습니다. (version ${preset.version})`);
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Google Play game services IDs. Save this file as res/values/games-ids.xml in your project.-->
+<resources>
+  <!--app_id-->
+  <string name="app_id" translatable="false">994199040524</string>
+  <!--package_name (defined in strings.xml)
+  <string name="package_name" translatable="false">com.limbo.tales</string>
+  -->
+  <!--achievement 심연과의 조우-->
+  <string name="achievement" translatable="false">CgkIjOSF1_ccEAIQAg</string>
+  <!--achievement 심연의 정화-->
+  <string name="achievement_2" translatable="false">CgkIjOSF1_ccEAIQAw</string>
+  <!--achievement 무저갱의 출구-->
+  <string name="achievement_3" translatable="false">CgkIjOSF1_ccEAIQBA</string>
+  <!--achievement 차원 아레나의 데뷔-->
+  <string name="achievement_4" translatable="false">CgkIjOSF1_ccEAIQBQ</string>
+  <!--achievement 차원 아레나의 돌풍-->
+  <string name="achievement_5" translatable="false">CgkIjOSF1_ccEAIQBg</string>
+  <!--achievement 차원 아레나의 승리자-->
+  <string name="achievement_6" translatable="false">CgkIjOSF1_ccEAIQBw</string>
+  <!--achievement 차원 아레나의 정복자-->
+  <string name="achievement_7" translatable="false">CgkIjOSF1_ccEAIQCA</string>
+  <!--achievement 차원 아레나의 지배자-->
+  <string name="achievement_8" translatable="false">CgkIjOSF1_ccEAIQCQ</string>
+  <!--leaderboard 심연의 정화자-->
+  <string name="leaderboard" translatable="false">CgkIjOSF1_ccEAIQCg</string>
+  <!--leaderboard 무저갱의 방랑자-->
+  <string name="leaderboard_2" translatable="false">CgkIjOSF1_ccEAIQCw</string>
+  <!--leaderboard 차원의 무법자-->
+  <string name="leaderboard_3" translatable="false">CgkIjOSF1_ccEAIQDA</string>
+</resources>

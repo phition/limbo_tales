@@ -1,6 +1,82 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LogEntry } from '../types/game';
 import { useI18n } from '../hooks/useI18n';
+import { GameIcon } from './GameIcon';
+
+const LOG_ICON_MAP: Record<string, string> = {
+  // 6대 기본 자원
+  '🪙': 'gold',
+  '✨': 'ether',
+  '🪵': 'wood',
+  '🪨': 'stone',
+  '⚙️': 'iron',
+  '⚙': 'iron',
+  '🍖': 'food',
+  '🌾': 'food',
+  // 던전 파밍 재료 (5종)
+  '🌿': 'herb',
+  '🥋': 'leather',
+  '🧱': 'leather',
+  '🧵': 'silk',
+  '🕸️': 'silk',
+  '🕸': 'silk',
+  '⚫': 'coal',
+  '⬛': 'coal',
+  '🦴': 'bone',
+  // 심연 희귀 유물 및 인챈트석
+  '💎': 'crystal',
+  '🔮': 'crystal',
+  '🌌': 'void_shard',
+  '💠': 'void_shard',
+  '🌑': 'dark_essence',
+  '⭐': 'prefix_stone',
+  '🌟': 'pure_prefix_stone',
+  '🪐': 'pure_suffix_stone',
+  // 10대 보스 신화 유물
+  '🖤': 'relic_floor_1',
+  '👻': 'relic_floor_2',
+  '🫀': 'relic_floor_3',
+  '⚓': 'relic_floor_4',
+  '👁️': 'relic_floor_5',
+  '👁': 'relic_floor_5',
+  '🍷': 'relic_floor_6',
+  '🎖️': 'relic_floor_8',
+  '🎖': 'relic_floor_8',
+  '🪞': 'relic_floor_9',
+  // 보급품 및 던전 아이템
+  '🩹': 'bandage',
+  '🕯️': 'torch',
+  '🕯': 'torch',
+  '🔥': 'bonfire',
+  '⛏️': 'pickaxe',
+  '⛏': 'pickaxe',
+  '🧪': 'holy_water',
+  '💧': 'holy_water',
+  '🗝️': 'skeleton_key',
+  '🗝': 'skeleton_key',
+  '🧭': 'compass',
+  '🍱': 'enhanced_food',
+  // 영지 및 기타
+  '🏛️': 'cabin',
+  '🏛': 'cabin',
+  '👑': 'crown',
+  '💀': 'skull_key',
+  '📜': 'scroll',
+  '⚔️': 'vanguard',
+  '⚔': 'vanguard',
+  '🛡️': 'paladin',
+  '🛡': 'paladin',
+};
+
+const EMOJI_REGEX_STR = Object.keys(LOG_ICON_MAP)
+  .sort((a, b) => b.length - a.length)
+  .map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  .join('|');
+
+const TOKEN_REGEX = new RegExp(
+  `(\\[[^\\]]+\\]|-[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?(?:[a-zA-Z가-힣%]+)?|\\+[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?(?:[a-zA-Z가-힣%]+)?|💨\\s*\\[[^\\]]+\\]\\s*회피(?:\\(EVADE\\))?|💨\\s*회피(?:\\(EVADE\\))?|💨\\s*빗나감(?:\\(MISS\\))?|\\(보호막\\s*[0-9,]+\\s*(?:흡수)?\\)|\\(방어력\\s*차단\\)|\\bEVADE\\b|\\bMISS\\b|\\||➔|→|${EMOJI_REGEX_STR})`,
+  'g'
+);
 
 interface Props {
   logs: LogEntry[];
@@ -154,10 +230,8 @@ export const LogPanel: React.FC<Props> = ({
   const renderFormattedLogText = (text: string): React.ReactNode => {
     if (!text) return null;
 
-    // Split regex to extract brackets, damages, upkeep costs, status icons, absorbs, and separators
-    const tokenRegex = /(\[[^\]]+\]|-[0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?(?:[a-zA-Z가-힣🪙🪵🪨⚙️🌾✨🍖🌿🦴🧱🧵⚫🔮💠🌑⭐🌌%]+)?|\+[0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?(?:[a-zA-Z가-힣🪙🪵🪨⚙️🌾✨🍖🌿🦴🧱🧵⚫🔮💠🌑⭐🌌%]+)?|💨\s*\[[^\]]+\]\s*회피(?:\(EVADE\))?|💨\s*회피(?:\(EVADE\))?|💨\s*빗나감(?:\(MISS\))?|\(보호막\s*[0-9,]+\s*(?:흡수)?\)|\(방어력\s*차단\)|\bEVADE\b|\bMISS\b|\||➔|→)/g;
-
-    const parts = text.split(tokenRegex);
+    // Split regex to extract brackets, damages, upkeep costs, status icons, absorbs, separators, and resource emojis
+    const parts = text.split(TOKEN_REGEX);
 
     return parts.map((part, idx) => {
       if (!part) return null;
@@ -165,6 +239,37 @@ export const LogPanel: React.FC<Props> = ({
       // 1. Bracketed tags
       if (part.startsWith('[') && part.endsWith(']')) {
         const content = part.slice(1, -1);
+
+        // Special System / Quest / Upkeep tags
+        if (content.includes('심연 정화') || content.includes('深淵浄化') || content.includes('Abyssal Purification')) {
+          return (
+            <span key={idx} className="font-bold text-[#38ef7d] bg-[#38ef7d22] px-1.5 py-0.5 rounded border border-[#38ef7d55] text-[11px] sm:text-xs mx-0.5 inline-flex items-center gap-1">
+              <GameIcon name="abyss_purify" icon="✨" size={13} />
+              <span>{part}</span>
+            </span>
+          );
+        }
+        if (content.includes('유지비 체납') || content.includes('Upkeep Arrears') || content.includes('維持費滞納')) {
+          return (
+            <span key={idx} className="font-extrabold text-[#ff4d4f] bg-[#ff4d4f22] px-1.5 py-0.5 rounded border border-[#ff4d4f55] text-[11px] sm:text-xs mx-0.5 inline-block animate-pulse">
+              {part}
+            </span>
+          );
+        }
+        if (content.includes('시설 복구') || content.includes('Facility Restored') || content.includes('施設復旧')) {
+          return (
+            <span key={idx} className="font-bold text-[#38ef7d] bg-[#38ef7d22] px-1.5 py-0.5 rounded border border-[#38ef7d55] text-[11px] sm:text-xs mx-0.5 inline-block">
+              {part}
+            </span>
+          );
+        }
+        if (content.includes('퀘스트 보상 수령') || content.includes('Quest Reward Claimed') || content.includes('クエスト報酬受取完了')) {
+          return (
+            <span key={idx} className="font-bold text-[#ffd54f] bg-[#ffd54f22] px-1.5 py-0.5 rounded border border-[#ffd54f55] text-[11px] sm:text-xs mx-0.5 inline-block">
+              {part}
+            </span>
+          );
+        }
 
         // Block / Guard
         if (content === 'Block!' || content.includes('Block') || content.includes('Guard') || content.includes('수호') || content.includes('엄호') || content.includes('ガード')) {
@@ -309,6 +414,21 @@ export const LogPanel: React.FC<Props> = ({
         );
       }
 
+      // 8. Custom GameIcon for resource/currency/supplies/building emojis
+      const cleanPart = part.replace(/\uFE0F/g, '');
+      const iconKey = LOG_ICON_MAP[part] || LOG_ICON_MAP[cleanPart];
+      if (iconKey) {
+        return (
+          <GameIcon
+            key={idx}
+            name={iconKey}
+            icon={part}
+            size={14}
+            className="inline-block align-middle mx-0.5 -mt-0.5 shrink-0"
+          />
+        );
+      }
+
       return <span key={idx}>{part}</span>;
     });
   };
@@ -378,7 +498,7 @@ export const LogPanel: React.FC<Props> = ({
                   {!effectiveIsBattle && (
                     <span className="text-[#4a5568] font-mono text-xs mr-2 shrink-0">{log.timestamp}</span>
                   )}
-                  <div className="flex-1 min-w-0 leading-normal">{renderFormattedLogText(tr(log.text))}</div>
+                  <div className="flex-1 min-w-0 leading-normal break-words overflow-hidden text-[11px] sm:text-xs md:text-sm">{renderFormattedLogText(tr(log.text))}</div>
                 </div>
               );
             });

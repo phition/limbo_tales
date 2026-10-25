@@ -12,6 +12,9 @@ import { CHARACTER_CLASSES } from '../data/classes';
 import { SoundManager } from '../managers/SoundManager';
 import { InvasionBattleScreen } from './InvasionBattleScreen';
 import { gameDialog } from '../services/DialogService';
+import { useI18n } from '../hooks/useI18n';
+import { GoogleAdService } from '../services/GoogleAdService';
+import { formatDuration } from '../utils/timeUtils';
 
 type InvasionTab = 'scout' | 'defense' | 'tower';
 
@@ -143,6 +146,7 @@ const TECH_DEFINITIONS: TechDefinition[] = [
 ];
 
 export const InvasionView: React.FC = () => {
+  const { tr, lang } = useI18n();
   const { state, gm } = useGameManager();
   const gateLevel = state.buildings['arenaGate']?.level || 0;
   const isUnlocked = gm.isMasterAccount || gateLevel >= 6;
@@ -162,6 +166,57 @@ export const InvasionView: React.FC = () => {
 
   // 타워 상태 갱신 트리거
   const [towerVersion, setTowerVersion] = useState(0);
+
+  // 🛡️ 차원 왜곡 평화 보호막 실시간 카운트다운 타이머 & 광고 로딩 상태
+  const [, setTimerTick] = useState(0);
+  const [isAdLoading, setIsAdLoading] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimerTick((t) => t + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const remainingShieldSec = gm.getPeaceShieldRemainingSeconds();
+  const isPeaceShieldActive = gm.isPeaceShieldActive();
+
+  const formatShieldDuration = (sec: number) => {
+    return formatDuration(sec, lang, true);
+  };
+
+  const handleTogglePeaceShield = () => {
+    const res = gm.togglePeaceShield();
+    if (!res.success) {
+      SoundManager.getInstance().play('debuff');
+      gameDialog.alert({
+        title: tr('🛡️ 차원 왜곡 평화 보호막'),
+        message: tr(res.message),
+        icon: '⚠️',
+      });
+    } else {
+      SoundManager.getInstance().play(res.active ? 'shield' : 'click');
+    }
+  };
+
+  const handleAddShieldWithAd = async () => {
+    if (isAdLoading) return;
+    setIsAdLoading(true);
+    try {
+      const res = await GoogleAdService.getInstance().showRewardedAd({
+        placement: 'invasion',
+        title: tr('차원 왜곡 평화 보호막 충전'),
+        description: tr('후원사 영상을 시청하고 평화 보호막 시간 6시간(21,600초)을 충전합니다.'),
+        rewardText: tr('평화 보호막 +6시간 충전'),
+      });
+      if (res.rewarded) {
+        gm.addPeaceShieldWithAd();
+        SoundManager.getInstance().play('reward');
+      }
+    } finally {
+      setIsAdLoading(false);
+    }
+  };
 
   // 타겟 목록 로드
   const loadTargets = useCallback(async () => {
@@ -186,12 +241,21 @@ export const InvasionView: React.FC = () => {
 
   // ── ⚔️ 침공 시작 핸들러 ──────────────────────────────────────────────
   const handleStartInvasion = (target: InvasionTarget) => {
+    if (gm.isPeaceShieldActive()) {
+      SoundManager.getInstance().play('debuff');
+      gameDialog.alert({
+        title: tr('🛡️ 차원 왜곡 평화 보호막 가동 중'),
+        message: tr('차원 왜곡 평화 보호막이 켜져 있는 동안에는 다른 영지를 공격할 수 없습니다.\n보호막을 해제한 후 공격해 주세요.'),
+        icon: '⚠️',
+      });
+      return;
+    }
     const squadCheck = gm.isDimensionalSquadReady();
     if (!squadCheck.isReady) {
       SoundManager.getInstance().play('debuff');
       gameDialog.alert({
-        title: '⚔️ 차원 공성 부대 편성 필요',
-        message: squadCheck.reason || '차원 영지 침공은 3인 결사대 + 1인 오퍼레이터가 모두 편성되어야 진행할 수 있습니다.',
+        title: tr('⚔️ 차원 공성 부대 편성 필요'),
+        message: tr(squadCheck.reason || '차원 영지 침공은 3인 결사대 + 1인 오퍼레이터가 모두 편성되어야 진행할 수 있습니다.'),
         icon: '⚠️',
       });
       return;
@@ -204,7 +268,7 @@ export const InvasionView: React.FC = () => {
   const handleUpgradeTower = (branch: TacticalTowerBranch, tier: 1 | 2 | 3) => {
     const res = gm.upgradeTacticalTower(branch, tier);
     if (!res.success) {
-      alert(res.message);
+      alert(tr(res.message));
       return;
     }
     SoundManager.getInstance().play('build');
@@ -220,17 +284,17 @@ export const InvasionView: React.FC = () => {
         </div>
         <div>
           <h3 className="text-lg font-black text-white flex items-center justify-center gap-2">
-            <span>차원 영지 침공 & 자원 약탈</span>
+            <span>{tr('차원 영지 침공 & 자원 약탈')}</span>
             <span className="text-xs px-2 py-0.5 rounded font-mono bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">
-              Gate Lv.6 필요
+              {tr('Gate Lv.6 필요')}
             </span>
           </h3>
           <p className="text-xs text-[#8b9bb4] max-w-md mt-1.5 leading-relaxed">
-            차원 앵커 게이트를 <span className="text-[#ffd54f] font-bold">6레벨</span> 이상으로 증축하면, 3인 결사대 + 1인 오퍼레이터 차원 공성 부대를 결성하여 다른 사령관의 영지를 침공하고 차원 보호막을 돌파하여 영지 자원의 <span className="text-[#ff416c] font-bold">30%를 약탈</span>하는 엔드 전략 컨텐츠가 영구 해금됩니다.
+            {tr('차원 앵커 게이트를')} <span className="text-[#ffd54f] font-bold">{tr('6레벨')}</span> {tr('이상으로 증축하면, 3인 결사대 + 1인 오퍼레이터 차원 공성 부대를 결성하여 다른 사령관의 영지를 침공하고 차원 보호막을 돌파하여 영지 자원의')} <span className="text-[#ff416c] font-bold">{tr('30%를 약탈')}</span>{tr('하는 엔드 전략 컨텐츠가 영구 해금됩니다.')}
           </p>
         </div>
         <div className="text-xs text-[#546e7a] font-mono bg-[#060911] px-4 py-2 rounded-xl border border-[#151f33]">
-          현재 차원 게이트 레벨: <span className="text-[#c8aa6e] font-bold">Lv.{gateLevel}</span> / 6
+          {tr('현재 차원 게이트 레벨:')} <span className="text-[#c8aa6e] font-bold">Lv.{gateLevel}</span> / 6
         </div>
       </div>
     );
@@ -275,32 +339,74 @@ export const InvasionView: React.FC = () => {
           </span>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-extrabold text-white">차원 영지 침공</h2>
+              <h2 className="text-base font-extrabold text-white">{tr('차원 영지 침공')}</h2>
             </div>
             <p className="text-[11px] text-[#8b9bb4] mt-0.5">
-              상대 영지를 정찰하여 자원 30%를 약탈하고, 방어 전술 타워를 연구하여 내 영지를 결속하세요.
+              {tr('상대 영지를 정찰하여 자원 30%를 약탈하고, 방어 전술 타워를 연구하여 내 영지를 결속하세요.')}
             </p>
           </div>
         </div>
 
-        {/* 내 영지 보호막 현황 */}
+        {/* 내 영지 평화 보호막 현황 및 토글/충전 */}
         <div className="flex items-center gap-2 self-end sm:self-center">
           <div
-            className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 text-xs ${
-              isShieldActive
-                ? 'bg-[#c8aa6e15] border-[#c8aa6e44] text-[#c8aa6e]'
-                : 'bg-[#14161c] border-[#22324f] text-[#8b9bb4]'
+            className={`px-3 py-1.5 rounded-xl border flex items-center gap-2.5 text-xs transition-all ${
+              isPeaceShieldActive
+                ? 'bg-[#c8aa6e18] border-[#c8aa6e66] text-[#c8aa6e] shadow-md shadow-[#c8aa6e15]'
+                : remainingShieldSec > 0
+                ? 'bg-[#101728] border-[#22324f] text-[#8b9bb4]'
+                : 'bg-[#1c1218] border-[#3f1f28] text-[#ff8a80]'
             }`}
           >
-            <span>🛡️</span>
+            <span className={isPeaceShieldActive ? 'animate-pulse text-base' : 'text-base'}>🛡️</span>
             <div>
-              <div className="text-[9px] text-[#8b9bb4]">내 영지 보호막</div>
-              <div className="font-bold font-mono">
-                {isShieldActive
-                  ? `${Math.floor(shieldMinutesLeft / 60)}시간 ${shieldMinutesLeft % 60}분`
-                  : '비활성'}
+              <div className="text-[9px] flex items-center gap-1.5 font-bold">
+                <span className={isPeaceShieldActive ? 'text-[#ffd54f]' : 'text-[#8b9bb4]'}>
+                  {tr('차원 왜곡 평화 보호막')}
+                </span>
+                <span
+                  className={`text-[8.5px] px-1.5 py-0.2 rounded font-mono font-bold ${
+                    isPeaceShieldActive
+                      ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]'
+                      : 'bg-[#8b9bb422] text-[#8b9bb4] border border-[#8b9bb444]'
+                  }`}
+                >
+                  {isPeaceShieldActive ? tr('ON (가동 중)') : tr('OFF (정지)')}
+                </span>
+              </div>
+              <div className="font-bold font-mono text-xs flex items-center gap-2 mt-0.5">
+                <span className={isPeaceShieldActive ? 'text-[#38ef7d]' : 'text-white'}>
+                  {formatShieldDuration(remainingShieldSec)}
+                </span>
+                {isPeaceShieldActive && (
+                  <span className="text-[9px] text-[#ff8a80] font-normal">
+                    ({tr('적 영지 침공 불가')})
+                  </span>
+                )}
               </div>
             </div>
+            {/* 켜기/끄기 또는 광고 충전 버튼 */}
+            {remainingShieldSec > 0 ? (
+              <button
+                className={`btn text-xs px-2.5 py-1 font-bold ml-1 rounded-lg transition-all ${
+                  isPeaceShieldActive
+                    ? 'btn-ghost border border-[#ef535066] text-[#ef5350] hover:bg-[#ef535015]'
+                    : 'btn-primary bg-[#c8aa6e] hover:bg-[#dfc082] text-black font-extrabold'
+                }`}
+                onClick={handleTogglePeaceShield}
+              >
+                {isPeaceShieldActive ? tr('보호막 끄기') : tr('보호막 켜기')}
+              </button>
+            ) : (
+              <button
+                className="btn btn-primary text-xs px-2.5 py-1 font-bold ml-1 rounded-lg bg-gradient-to-r from-[#00b4db] to-[#0083b0] text-white border border-[#00e5ff66] animate-pulse flex items-center gap-1"
+                onClick={handleAddShieldWithAd}
+                disabled={isAdLoading}
+              >
+                <span>📺</span>
+                <span>{isAdLoading ? tr('...') : tr('광고 +6시간')}</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -308,9 +414,9 @@ export const InvasionView: React.FC = () => {
       {/* ── 탭 네비게이션 (이모지 제거, 방어기록 표기) ── */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
         {[
-          { key: 'scout', label: '영지 정찰' },
-          { key: 'defense', label: '방어기록' },
-          { key: 'tower', label: '방어 전술 타워' },
+          { key: 'scout', label: tr('영지 정찰') },
+          { key: 'defense', label: tr('방어기록') },
+          { key: 'tower', label: tr('방어 전술 타워') },
         ].map((tab) => (
           <button
             key={tab.key}
@@ -329,14 +435,33 @@ export const InvasionView: React.FC = () => {
       {/* ════════ 1. 🏰 상대 영지 정찰 (한 줄 반응형 가로 리스트) ════════ */}
       {activeTab === 'scout' && (
         <div className="flex flex-col gap-2 animate-fade-in">
+          {/* 평화 보호막 가동 중 알림 배너 */}
+          {isPeaceShieldActive && (
+            <div className="p-3 rounded-xl bg-[#ff980015] border border-[#ff980044] text-xs text-[#ffd54f] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-base">🛡️</span>
+                <span>
+                  <strong>{tr('차원 왜곡 평화 보호막 가동 중')}:</strong>{' '}
+                  {tr('보호막이 켜져 있는 동안에는 다른 영지를 공격할 수 없습니다. 침공하려면 보호막을 해제하세요.')}
+                </span>
+              </div>
+              <button
+                className="btn btn-ghost text-xs px-3 py-1 border border-[#ff980088] text-[#ffd54f] hover:bg-[#ff980022] font-bold shrink-0 self-end sm:self-center"
+                onClick={handleTogglePeaceShield}
+              >
+                {tr('보호막 해제하고 침공하기')}
+              </button>
+            </div>
+          )}
+
           <div className="flex items-center justify-between bg-[#0b101c] p-2.5 rounded-xl border border-[#1b263b] text-xs text-[#8b9bb4]">
-            <span>🎯 정찰할 사령관을 선택하여 부대 편성을 확인하고 목표 자원(30%)을 약탈하세요.</span>
+            <span>{tr('🎯 정찰할 사령관을 선택하여 부대 편성을 확인하고 목표 자원(30%)을 약탈하세요.')}</span>
             <button
               className="btn btn-ghost text-xs px-3 py-1 border border-[#233554] text-[#c8aa6e]"
               disabled={isLoadingTargets}
               onClick={loadTargets}
             >
-              {isLoadingTargets ? '정찰 중...' : '🔄 새로고침'}
+              {isLoadingTargets ? tr('정찰 중...') : tr('🔄 새로고침')}
             </button>
           </div>
 
@@ -358,15 +483,15 @@ export const InvasionView: React.FC = () => {
                   <div className="min-w-0 truncate">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-bold text-xs sm:text-sm text-white group-hover:text-[#c8aa6e] transition-colors truncate">
-                        {t.ownerNickname}
+                        {tr(t.ownerNickname)}
                       </span>
                       {t.isBot ? (
                         <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff704322] text-[#ff7043] border border-[#ff704344] font-mono shrink-0">
-                          🤖 BOT
+                          {tr('🤖 BOT')}
                         </span>
                       ) : (
                         <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] font-mono shrink-0">
-                          🌐 지휘관
+                          {tr('🌐 지휘관')}
                         </span>
                       )}
                       <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44] shrink-0">
@@ -374,17 +499,17 @@ export const InvasionView: React.FC = () => {
                       </span>
                       {t.defenseConcept && (
                         <span className="text-[9.5px] px-1.5 py-0.2 rounded font-bold bg-[#ffd54f18] text-[#ffd54f] border border-[#ffd54f44] shrink-0">
-                          {t.defenseConcept}
+                          {tr(t.defenseConcept)}
                         </span>
                       )}
                       {t.guildName && (
                         <span className="text-[10px] text-[#8b9bb4] hidden md:inline truncate">
-                          ({t.guildName})
+                          ({tr(t.guildName)})
                         </span>
                       )}
                     </div>
                     <div className="text-[11px] text-[#8b9bb4] truncate mt-0.5">
-                      영지: <span className="text-[#cfd8e8]">{t.name}</span>
+                      {tr('영지:')} <span className="text-[#cfd8e8]">{tr(t.name)}</span>
                     </div>
                   </div>
                 </div>
@@ -392,7 +517,7 @@ export const InvasionView: React.FC = () => {
                 {/* 우측: 방어 전투력 + 보호막/침공상태 + 화살표 */}
                 <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
                   <div className="text-right">
-                    <div className="text-[9px] sm:text-[10px] text-[#8b9bb4]">방어 전투력</div>
+                    <div className="text-[9px] sm:text-[10px] text-[#8b9bb4]">{tr('방어 전투력')}</div>
                     <div className="text-xs sm:text-sm font-black text-[#ffd54f] font-mono">
                       ⚡ {t.defensePower.toLocaleString()}
                     </div>
@@ -400,15 +525,15 @@ export const InvasionView: React.FC = () => {
                   <div className="flex flex-col items-end gap-1">
                     {t.isShielded ? (
                       <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
-                        🛡️ 보호막
+                        {tr('🛡️ 보호막')}
                       </span>
                     ) : (
                       <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]">
-                        침공 가능
+                        {tr('침공 가능')}
                       </span>
                     )}
                     <span className="text-[9px] sm:text-[10px] text-[#607d8b] group-hover:text-[#c8aa6e] flex items-center gap-0.5">
-                      상세 정찰 ➔
+                      {tr('상세 정찰 ➔')}
                     </span>
                   </div>
                 </div>
@@ -421,25 +546,57 @@ export const InvasionView: React.FC = () => {
       {/* ════════ 2. 📜 방어 기록 & 복수전 탭 ════════ */}
       {activeTab === 'defense' && (
         <div className="flex flex-col gap-3 animate-fade-in">
-          {/* 보호막 수동 전개 카드 */}
-          <div className="p-3.5 rounded-xl bg-[#0e1526] border border-[#1f2d48] flex items-center justify-between gap-3 text-xs">
-            <div>
-              <div className="font-bold text-white flex items-center gap-1.5">
-                <span>🛡️</span>
-                <span>차원 왜곡 평화 보호막</span>
+          {/* 차원 왜곡 평화 보호막 제어 패널 */}
+          <div className="p-4 rounded-xl bg-gradient-to-r from-[#0d1527] to-[#121c33] border border-[#223554] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs shadow-md">
+            <div className="flex-1">
+              <div className="font-bold text-white flex items-center gap-2 text-sm">
+                <span className={isPeaceShieldActive ? 'text-lg animate-pulse' : 'text-lg'}>🛡️</span>
+                <span className="text-[#ffd54f]">{tr('차원 왜곡 평화 보호막')}</span>
+                <span
+                  className={`text-[9.5px] px-2 py-0.5 rounded font-mono font-bold ${
+                    isPeaceShieldActive
+                      ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]'
+                      : 'bg-[#8b9bb422] text-[#8b9bb4] border border-[#8b9bb444]'
+                  }`}
+                >
+                  {isPeaceShieldActive ? tr('가동 중 (피침공 면역 / 공격 불가)') : tr('대기 중 (침공 가능 / 시간 보존)')}
+                </span>
               </div>
-              <p className="text-[11px] text-[#8b9bb4] mt-0.5">
-                침공당해 패배 시 3시간 자동 보호막이 전개되며, 수동으로 즉시 3시간 전개할 수도 있습니다.
+              <p className="text-[11px] text-[#8b9bb4] mt-1 leading-relaxed">
+                {tr('기본 6시간 제공되며, 켜고 끌 때마다 잔여 시간이 차감되거나 보존됩니다. 보호막이 켜져 있는 동안에는 다른 영지를 공격할 수 없으며, 6시간이 모두 소모되면 광고를 1회 볼 때마다 6시간이 추가 충전됩니다.')}
               </p>
+              <div className="mt-2 flex items-center gap-2 font-mono text-xs">
+                <span className="text-[#8b9bb4]">{tr('잔여 보호 시간')}:</span>
+                <span className={`font-bold ${isPeaceShieldActive ? 'text-[#38ef7d]' : remainingShieldSec > 0 ? 'text-[#ffd54f]' : 'text-[#ef5350]'}`}>
+                  {formatShieldDuration(remainingShieldSec)}
+                </span>
+              </div>
             </div>
-            <button
-              className="btn btn-ghost text-xs px-3 py-1.5 border border-[#243756] text-[#c8aa6e]"
-              onClick={() => {
-                gm.activatePeaceShield(3);
-              }}
-            >
-              + 3시간 보호막 전개
-            </button>
+
+            <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+              {remainingShieldSec > 0 ? (
+                <button
+                  className={`btn text-xs px-4 py-2 font-bold rounded-xl transition-all ${
+                    isPeaceShieldActive
+                      ? 'btn-ghost border border-[#ef535066] text-[#ef5350] hover:bg-[#ef535015]'
+                      : 'btn-primary bg-[#c8aa6e] hover:bg-[#dfc082] text-black font-extrabold shadow-md shadow-[#c8aa6e33]'
+                  }`}
+                  onClick={handleTogglePeaceShield}
+                >
+                  {isPeaceShieldActive ? tr('🛡️ 보호막 끄기 (시간 보존)') : tr('🛡️ 보호막 켜기 (영지 보호)')}
+                </button>
+              ) : null}
+              {remainingShieldSec <= 0 && (
+                <button
+                  className="btn btn-primary text-xs px-4 py-2 font-bold rounded-xl bg-gradient-to-r from-[#00b4db] to-[#0083b0] text-white border border-[#00e5ff66] shadow-md shadow-[#00e5ff22] flex items-center gap-1.5 animate-pulse"
+                  onClick={handleAddShieldWithAd}
+                  disabled={isAdLoading}
+                >
+                  <span>📺</span>
+                  <span>{isAdLoading ? tr('광고 준비 중...') : tr('광고 시청하고 6시간 충전')}</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* 방어 로그 목록 */}
@@ -457,15 +614,15 @@ export const InvasionView: React.FC = () => {
                     <div>
                       <div className="font-bold text-white flex items-center gap-1.5">
                         <span className={log.isVictory ? 'text-[#38ef7d]' : 'text-[#ff416c]'}>
-                          {log.isVictory ? '방어 성공!' : '영지 함락 (약탈당함)'}
+                          {log.isVictory ? tr('방어 성공!') : tr('영지 함락 (약탈당함)')}
                         </span>
-                        <span className="text-[#8b9bb4] font-normal">침공자: {log.attackerName}</span>
+                        <span className="text-[#8b9bb4] font-normal">{tr(`침공자: ${log.attackerName}`)}</span>
                       </div>
                       <div className="text-[10px] text-[#8b9bb4] mt-0.5">
                         {new Date(log.timestamp).toLocaleString()}
                         {log.plunderedResource && (
                           <span className="text-[#ff416c] font-bold ml-2">
-                            약탈 손실: -{log.plunderedResource.amount.toLocaleString()} {log.plunderedResource.name}
+                            {tr(`약탈 손실: -${log.plunderedResource.amount.toLocaleString()} ${log.plunderedResource.name}`)}
                           </span>
                         )}
                       </div>
@@ -499,14 +656,14 @@ export const InvasionView: React.FC = () => {
                       }}
                     >
                       <span>⚔️</span>
-                      <span>즉시 복수전</span>
+                      <span>{tr('즉시 복수전')}</span>
                     </button>
                   )}
                 </div>
               ))
             ) : (
               <div className="p-8 text-center text-xs text-[#546e7a] bg-[#0a0b10] rounded-xl border border-[#172033]">
-                🛡️ 아직 내 영지에 침공한 적 침략자가 없습니다. 평화로운 상태입니다.
+                {tr('🛡️ 아직 내 영지에 침공한 적 침략자가 없습니다. 평화로운 상태입니다.')}
               </div>
             )}
           </div>
@@ -521,10 +678,10 @@ export const InvasionView: React.FC = () => {
             <div>
               <div className="font-extrabold text-white flex items-center gap-1.5">
                 <span>🗼</span>
-                <span>영지 방어 전술 타워 연구소</span>
+                <span>{tr('영지 방어 전술 타워 연구소')}</span>
               </div>
               <p className="text-[11px] text-[#8b9bb4] mt-0.5">
-                수비 시 발동되는 3대 전술 효과를 강화합니다. 각 테크를 눌러 상세 효과를 확인하고 심연 재료로 연구하세요.
+                {tr('수비 시 발동되는 3대 전술 효과를 강화합니다. 각 테크를 눌러 상세 효과를 확인하고 심연 재료로 연구하세요.')}
               </p>
             </div>
 
@@ -532,8 +689,8 @@ export const InvasionView: React.FC = () => {
             <div className="flex items-center gap-2 flex-wrap text-[11px] font-mono bg-[#060a14] px-3 py-1.5 rounded-xl border border-[#17243c]">
               <span className="text-[#ffd54f]">🪙 {(curGold >= 1000 ? `${(curGold / 1000).toFixed(1)}k` : curGold)}</span>
               <span className="text-[#81d4fa]">✨ {(curEther >= 1000 ? `${(curEther / 1000).toFixed(1)}k` : curEther)}</span>
-              <span className="text-[#ce93d8]">🔮 {curCrystal.toLocaleString()}개</span>
-              <span className="text-[#b39ddb]">🌌 {curVoidShard.toLocaleString()}개</span>
+              <span className="text-[#ce93d8]">{tr(`🔮 ${curCrystal.toLocaleString()}개`)}</span>
+              <span className="text-[#b39ddb]">{tr(`🌌 ${curVoidShard.toLocaleString()}개`)}</span>
             </div>
           </div>
 
@@ -561,7 +718,7 @@ export const InvasionView: React.FC = () => {
                         {branchIcon}
                       </span>
                       <h3 className="font-extrabold text-sm text-white" style={{ color: accentColor }}>
-                        {branchName}
+                        {tr(branchName)}
                       </h3>
                     </div>
                     <span className="text-[10px] font-mono text-[#8b9bb4]">
@@ -605,19 +762,19 @@ export const InvasionView: React.FC = () => {
                             <div className="min-w-0">
                               <div className="flex items-center gap-1.5">
                                 <span className="text-[9px] font-bold font-mono px-1 py-0.2 rounded bg-[#172238] text-[#c8aa6e] shrink-0">
-                                  {tech.tier}차
+                                  {tr(`${tech.tier}차`)}
                                 </span>
                                 <span className="font-bold text-xs text-white group-hover:text-[#c8aa6e] transition-colors truncate">
-                                  {tech.name}
+                                  {tr(tech.name)}
                                 </span>
                               </div>
                               <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
                                 {isLocked ? (
-                                  <span className="text-[#ff7043]">🔒 선행 {tech.tier - 1}차 Lv.1 필요</span>
+                                  <span className="text-[#ff7043]">{tr(`🔒 선행 ${tech.tier - 1}차 Lv.1 필요`)}</span>
                                 ) : isMax ? (
-                                  <span className="text-[#38ef7d]">★ 최고 연구 단계 (Lv.5)</span>
+                                  <span className="text-[#38ef7d]">{tr('★ 최고 연구 단계 (Lv.5)')}</span>
                                 ) : (
-                                  <span className="text-[#cfd8e8]">{tech.effectText(currentLv)}</span>
+                                  <span className="text-[#cfd8e8]">{tr(tech.effectText(currentLv))}</span>
                                 )}
                               </div>
                             </div>
@@ -671,28 +828,28 @@ export const InvasionView: React.FC = () => {
                 </span>
                 <div>
                   <div className="font-extrabold text-sm text-white flex items-center gap-1.5 flex-wrap">
-                    <span>{inspectTarget.name}</span>
+                    <span>{tr(inspectTarget.name)}</span>
                     {inspectTarget.isBot ? (
                       <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff704322] text-[#ff7043] border border-[#ff704344] font-mono shrink-0">
-                        🤖 BOT
+                        {tr('🤖 BOT')}
                       </span>
                     ) : (
                       <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] font-mono shrink-0">
-                        🌐 지휘관
+                        {tr('🌐 지휘관')}
                       </span>
                     )}
                     <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]">
-                      게이트 Lv.{inspectTarget.gateLevel}
+                      {tr(`게이트 Lv.${inspectTarget.gateLevel}`)}
                     </span>
                     {inspectTarget.defenseConcept && (
                       <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]">
-                        {inspectTarget.defenseConcept}
+                        {tr(inspectTarget.defenseConcept)}
                       </span>
                     )}
                   </div>
                   <div className="text-[11px] text-[#8b9bb4]">
-                    사령관: <span className="text-white font-bold">{inspectTarget.ownerNickname}</span>
-                    {inspectTarget.guildName ? ` (${inspectTarget.guildName})` : ''}
+                    {tr('사령관:')} <span className="text-white font-bold">{tr(inspectTarget.ownerNickname)}</span>
+                    {inspectTarget.guildName ? ` (${tr(inspectTarget.guildName)})` : ''}
                   </div>
                 </div>
               </div>
@@ -710,18 +867,18 @@ export const InvasionView: React.FC = () => {
               {/* 전투력 비교 바 */}
               <div className="bg-[#090e1a] p-3 rounded-xl border border-[#162238] flex items-center justify-between">
                 <div>
-                  <div className="text-[10px] text-[#8b9bb4]">상대 방어 총 전투력</div>
+                  <div className="text-[10px] text-[#8b9bb4]">{tr('상대 방어 총 전투력')}</div>
                   <div className="text-base font-black text-[#ffd54f] font-mono">
                     ⚡ {inspectTarget.defensePower.toLocaleString()}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-[10px] text-[#8b9bb4]">보호막 상태</div>
+                  <div className="text-[10px] text-[#8b9bb4]">{tr('보호막 상태')}</div>
                   <div className="text-xs font-bold font-mono">
                     {inspectTarget.isShielded ? (
-                      <span className="text-[#c8aa6e]">🛡️ 보호막 작동 중 (침공 불가)</span>
+                      <span className="text-[#c8aa6e]">{tr('🛡️ 보호막 작동 중 (침공 불가)')}</span>
                     ) : (
-                      <span className="text-[#38ef7d]">⚡ 침공 가능</span>
+                      <span className="text-[#38ef7d]">{tr('⚡ 침공 가능')}</span>
                     )}
                   </div>
                 </div>
@@ -730,8 +887,8 @@ export const InvasionView: React.FC = () => {
               {/* 상대 부대 편성 (3인 수비대 + 1인 오퍼레이터) */}
               <div className="bg-[#090e1a] p-3 rounded-xl border border-[#162238] flex flex-col gap-2">
                 <div className="text-xs font-bold text-white flex items-center justify-between">
-                  <span>🛡️ 상대 방어 부대 편성</span>
-                  <span className="text-[10px] font-mono text-[#c8aa6e]">3인 결사대 + 1인 오퍼레이터</span>
+                  <span>{tr('🛡️ 상대 방어 부대 편성')}</span>
+                  <span className="text-[10px] font-mono text-[#c8aa6e]">{tr('3인 결사대 + 1인 오퍼레이터')}</span>
                 </div>
                 <div className="grid grid-cols-4 gap-1.5">
                   {inspectTarget.defenseSquad.slice(0, 4).map((h, i) => {
@@ -753,14 +910,14 @@ export const InvasionView: React.FC = () => {
                             backgroundColor: isOperator ? '#381428' : '#18243c',
                           }}
                         >
-                          {isOperator ? '🛡️ 오퍼레이터' : `수비대 ${i + 1}`}
+                          {isOperator ? tr('🛡️ 오퍼레이터') : tr(`수비대 ${i + 1}`)}
                         </span>
                         <span className="text-3xl my-1.5">{cls?.skills?.[0]?.icon || '⚔️'}</span>
                         <span className="text-[11px] font-mono font-black text-[#ffd54f]">
                           Lv.{h.level}
                         </span>
                         <span className="text-[9px] text-[#8b9bb4] truncate w-full">
-                          {cls?.name || '용병'}
+                          {tr(cls?.name || '용병')}
                         </span>
                       </div>
                     );
@@ -769,10 +926,10 @@ export const InvasionView: React.FC = () => {
                 <div className="p-2 rounded-lg bg-[#0d1726] border border-[#c8aa6e33] flex items-center justify-between text-xs">
                   <span className="text-[#c8aa6e] font-bold flex items-center gap-1.5">
                     <span>🛡️</span>
-                    <span>차원 왜곡 보호막 & 2대 전술 타워 방호</span>
+                    <span>{tr('차원 왜곡 보호막 & 2대 전술 타워 방호')}</span>
                   </span>
                   <span className="text-[11px] font-mono text-[#ffd54f]">
-                    예상 내구도 {Math.round(inspectTarget.defensePower * 1.5).toLocaleString()} HP
+                    {tr(`예상 내구도 ${Math.round(inspectTarget.defensePower * 1.5).toLocaleString()} HP`)}
                   </span>
                 </div>
               </div>
@@ -794,10 +951,10 @@ export const InvasionView: React.FC = () => {
                     <div className="text-xs font-bold text-white flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
                         <span className="text-[#c8aa6e]">🗼</span>
-                        <span>상대 방어 전술 타워 구축 현황</span>
+                        <span>{tr('상대 방어 전술 타워 구축 현황')}</span>
                       </div>
                       <span className="text-[10px] font-mono text-[#ffd54f]">
-                        총 Lv.{totalTowerLv} / 27
+                        {tr(`총 Lv.${totalTowerLv} / 27`)}
                       </span>
                     </div>
 
@@ -807,20 +964,20 @@ export const InvasionView: React.FC = () => {
                         <div className="flex items-center justify-between border-b border-[#ff416c22] pb-1">
                           <span className="font-bold text-[#ff416c] flex items-center gap-1 text-[11px]">
                             <span>⚔️</span>
-                            <span>공격 전술</span>
+                            <span>{tr('공격 전술')}</span>
                           </span>
                         </div>
                         <div className="flex flex-col gap-1 text-[10px] font-mono">
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">1차(진지)</span>
+                            <span className="text-[#8b9bb4]">{tr('1차(진지)')}</span>
                             <span className="font-bold text-[#ff416c]">Lv.{targetTower.attack.tier1}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">2차(포격)</span>
+                            <span className="text-[#8b9bb4]">{tr('2차(포격)')}</span>
                             <span className="font-bold text-[#ff416c]">Lv.{targetTower.attack.tier2}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">3차(시들음)</span>
+                            <span className="text-[#8b9bb4]">{tr('3차(시들음)')}</span>
                             <span className="font-bold text-[#ff416c]">Lv.{targetTower.attack.tier3}</span>
                           </div>
                         </div>
@@ -831,20 +988,20 @@ export const InvasionView: React.FC = () => {
                         <div className="flex items-center justify-between border-b border-[#c8aa6e22] pb-1">
                           <span className="font-bold text-[#c8aa6e] flex items-center gap-1 text-[11px]">
                             <span>🛡️</span>
-                            <span>방어 전술</span>
+                            <span>{tr('방어 전술')}</span>
                           </span>
                         </div>
                         <div className="flex flex-col gap-1 text-[10px] font-mono">
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">1차(결계)</span>
+                            <span className="text-[#8b9bb4]">{tr('1차(결계)')}</span>
                             <span className="font-bold text-[#c8aa6e]">Lv.{targetTower.defense.tier1}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">2차(재생)</span>
+                            <span className="text-[#8b9bb4]">{tr('2차(재생)')}</span>
                             <span className="font-bold text-[#c8aa6e]">Lv.{targetTower.defense.tier2}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">3차(파쇄)</span>
+                            <span className="text-[#8b9bb4]">{tr('3차(파쇄)')}</span>
                             <span className="font-bold text-[#c8aa6e]">Lv.{targetTower.defense.tier3}</span>
                           </div>
                         </div>
@@ -855,20 +1012,20 @@ export const InvasionView: React.FC = () => {
                         <div className="flex items-center justify-between border-b border-[#ffd54f22] pb-1">
                           <span className="font-bold text-[#ffd54f] flex items-center gap-1 text-[11px]">
                             <span>⚡</span>
-                            <span>유틸 전술</span>
+                            <span>{tr('유틸 전술')}</span>
                           </span>
                         </div>
                         <div className="flex flex-col gap-1 text-[10px] font-mono">
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">1차(감속)</span>
+                            <span className="text-[#8b9bb4]">{tr('1차(감속)')}</span>
                             <span className="font-bold text-[#ffd54f]">Lv.{targetTower.utility.tier1}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">2차(누출)</span>
+                            <span className="text-[#8b9bb4]">{tr('2차(누출)')}</span>
                             <span className="font-bold text-[#ffd54f]">Lv.{targetTower.utility.tier2}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">3차(저주)</span>
+                            <span className="text-[#8b9bb4]">{tr('3차(저주)')}</span>
                             <span className="font-bold text-[#ffd54f]">Lv.{targetTower.utility.tier3}</span>
                           </div>
                         </div>
@@ -881,36 +1038,36 @@ export const InvasionView: React.FC = () => {
               {/* 약탈 전리품 안내 (고정 2종 + 카테고리별 랜덤 3종, 각 30% 약탈) */}
               <div className="bg-[#090e1a] p-3 rounded-xl border border-[#162238] flex flex-col gap-2">
                 <div className="text-xs font-bold text-white flex items-center justify-between">
-                  <span>🪙 약탈 전리품 안내 (침공 승리 시 각 30% 약탈)</span>
-                  <span className="text-[#38ef7d] font-mono font-bold text-xs">고정 2종 + 카테고리별 랜덤 3종</span>
+                  <span>{tr('🪙 약탈 전리품 안내 (침공 승리 시 각 30% 약탈)')}</span>
+                  <span className="text-[#38ef7d] font-mono font-bold text-xs">{tr('고정 2종 + 카테고리별 랜덤 3종')}</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   <div className="p-2 rounded-lg bg-[#101728] border border-[#1e2d48] flex items-center gap-2">
                     <span className="text-xl">💰</span>
                     <div>
-                      <div className="text-[10px] text-[#ffd54f] font-bold">고정 약탈 (30%)</div>
-                      <div className="text-[11px] text-[#cfd8e8]">골드 🪙 · 에테르 ✨</div>
+                      <div className="text-[10px] text-[#ffd54f] font-bold">{tr('고정 약탈 (30%)')}</div>
+                      <div className="text-[11px] text-[#cfd8e8]">{tr('골드 🪙 · 에테르 ✨')}</div>
                     </div>
                   </div>
                   <div className="p-2 rounded-lg bg-[#101728] border border-[#1e2d48] flex items-center gap-2">
                     <span className="text-xl">📦</span>
                     <div>
-                      <div className="text-[10px] text-[#c8aa6e] font-bold">영지 생산자원 1종 랜덤 (30%)</div>
-                      <div className="text-[11px] text-[#cfd8e8]">목재🪵, 석재🪨, 철광⚙️, 식량🍖</div>
+                      <div className="text-[10px] text-[#c8aa6e] font-bold">{tr('영지 생산자원 1종 랜덤 (30%)')}</div>
+                      <div className="text-[11px] text-[#cfd8e8]">{tr('목재🪵, 석재🪨, 철광⚙️, 식량🍖')}</div>
                     </div>
                   </div>
                   <div className="p-2 rounded-lg bg-[#101728] border border-[#1e2d48] flex items-center gap-2">
                     <span className="text-xl">🌿</span>
                     <div>
-                      <div className="text-[10px] text-[#38ef7d] font-bold">파밍 재료 1종 랜덤 (30%)</div>
-                      <div className="text-[11px] text-[#cfd8e8]">약초🌿, 가죽🧱, 실크🧵, 석탄⚫, 뼈🦴</div>
+                      <div className="text-[10px] text-[#38ef7d] font-bold">{tr('파밍 재료 1종 랜덤 (30%)')}</div>
+                      <div className="text-[11px] text-[#cfd8e8]">{tr('약초🌿, 가죽🧱, 실크🧵, 석탄⚫, 뼈🦴')}</div>
                     </div>
                   </div>
                   <div className="p-2 rounded-lg bg-[#101728] border border-[#1e2d48] flex items-center gap-2">
                     <span className="text-xl">🔮</span>
                     <div>
-                      <div className="text-[10px] text-[#ce93d8] font-bold">심연 재료 1종 랜덤 (30%)</div>
-                      <div className="text-[11px] text-[#cfd8e8]">마법수정🔮, 공허파편🌌, 접두석💎, 접미석💠</div>
+                      <div className="text-[10px] text-[#ce93d8] font-bold">{tr('심연 재료 1종 랜덤 (30%)')}</div>
+                      <div className="text-[11px] text-[#cfd8e8]">{tr('마법수정🔮, 공허파편🌌, 접두석💎, 접미석💠')}</div>
                     </div>
                   </div>
                 </div>
@@ -923,15 +1080,16 @@ export const InvasionView: React.FC = () => {
                 className="btn btn-ghost text-xs px-4 py-2 text-[#8b9bb4]"
                 onClick={() => setInspectTarget(null)}
               >
-                취소
+                {tr('취소')}
               </button>
               <button
                 className="btn btn-primary text-xs px-6 py-2.5 font-bold flex items-center gap-2 shadow-lg shadow-[#c8aa6e]/20"
-                disabled={inspectTarget.isShielded}
+                disabled={inspectTarget.isShielded || isPeaceShieldActive}
                 onClick={() => handleStartInvasion(inspectTarget)}
+                title={isPeaceShieldActive ? tr('차원 왜곡 평화 보호막 가동 중에는 다른 영지를 공격할 수 없습니다.') : undefined}
               >
                 <span>⚔️</span>
-                <span>원정대 출격 및 침공 시작</span>
+                <span>{isPeaceShieldActive ? tr('🛡️ 평화 보호막 가동 중 (침공 불가)') : tr('원정대 출격 및 침공 시작')}</span>
               </button>
             </div>
           </div>
@@ -979,7 +1137,7 @@ export const InvasionView: React.FC = () => {
                   </span>
                   <div>
                     <div className="font-extrabold text-sm text-white flex items-center gap-1.5">
-                      <span>{selectedTech.name}</span>
+                      <span>{tr(selectedTech.name)}</span>
                       <span
                         className="text-[10px] font-mono px-1.5 py-0.2 rounded font-bold"
                         style={{
@@ -988,11 +1146,11 @@ export const InvasionView: React.FC = () => {
                           border: `1px solid ${selectedTech.accentColor}44`,
                         }}
                       >
-                        {selectedTech.branchName} · {selectedTech.tier}차 테크
+                        {tr(`${selectedTech.branchName} · ${selectedTech.tier}차 테크`)}
                       </span>
                     </div>
                     <div className="text-[11px] text-[#8b9bb4] mt-0.5">
-                      연구 단계: <span className="font-bold text-white">Lv.{currentLv}</span> / 5
+                      {tr('연구 단계:')} <span className="font-bold text-white">Lv.{currentLv}</span> / 5
                     </div>
                   </div>
                 </div>
@@ -1010,12 +1168,12 @@ export const InvasionView: React.FC = () => {
                 {/* 레벨 표시기 */}
                 <div className="bg-[#090e1a] p-3 rounded-xl border border-[#162238] flex items-center justify-between">
                   <div>
-                    <div className="text-[10px] text-[#8b9bb4]">현재 연구 상태</div>
+                    <div className="text-[10px] text-[#8b9bb4]">{tr('현재 연구 상태')}</div>
                     <div
                       className="text-sm font-black font-mono mt-0.5"
                       style={{ color: currentLv > 0 ? selectedTech.accentColor : '#78909c' }}
                     >
-                      {currentLv > 0 ? `Lv.${currentLv} 강화 활성` : '미연구 (Lv.0)'}
+                      {currentLv > 0 ? tr(`Lv.${currentLv} 강화 활성`) : tr('미연구 (Lv.0)')}
                     </div>
                   </div>
                   <div className="flex gap-1">
@@ -1033,26 +1191,26 @@ export const InvasionView: React.FC = () => {
 
                 {/* 기술 설명 */}
                 <div className="p-3 bg-[#0a101d] rounded-xl border border-[#172338] text-xs text-[#cfd8e8] leading-relaxed">
-                  {selectedTech.desc}
+                  {tr(selectedTech.desc)}
                 </div>
 
                 {/* 효과 비교 박스 */}
                 <div className="bg-[#090e1a] p-3 rounded-xl border border-[#162238] flex flex-col gap-2 text-xs">
                   <div className="font-bold text-white flex items-center justify-between">
-                    <span>전술 효과 수치</span>
+                    <span>{tr('전술 효과 수치')}</span>
                   </div>
                   <div className="flex flex-col gap-1.5 font-mono text-[11px]">
                     <div className="flex items-center justify-between bg-[#12141a] p-2 rounded-lg border border-[#1c2a40]">
-                      <span className="text-[#8b9bb4]">현재 효과:</span>
+                      <span className="text-[#8b9bb4]">{tr('현재 효과:')}</span>
                       <span className="text-[#38ef7d] font-bold">
-                        {currentLv > 0 ? selectedTech.effectText(currentLv) : '미적용'}
+                        {currentLv > 0 ? tr(selectedTech.effectText(currentLv)) : tr('미적용')}
                       </span>
                     </div>
                     {!isMax && (
                       <div className="flex items-center justify-between bg-[#141b2a] p-2 rounded-lg border border-[#233550]">
-                        <span className="text-[#ffd54f]">다음 레벨 (Lv.{currentLv + 1}):</span>
+                        <span className="text-[#ffd54f]">{tr(`다음 레벨 (Lv.${currentLv + 1}):`)}</span>
                         <span className="text-[#ffd54f] font-bold">
-                          {selectedTech.nextEffectText(currentLv)}
+                          {tr(selectedTech.nextEffectText(currentLv))}
                         </span>
                       </div>
                     )}
@@ -1063,7 +1221,7 @@ export const InvasionView: React.FC = () => {
                 {isLocked && (
                   <div className="p-3 bg-[#241316] rounded-xl border border-[#4d1f27] text-xs text-[#ff5252] flex items-center gap-2">
                     <span>🔒</span>
-                    <span>선행 기술인 {selectedTech.tier - 1}차 테크를 1레벨 이상 먼저 연구해야 활성화됩니다.</span>
+                    <span>{tr(`선행 기술인 ${selectedTech.tier - 1}차 테크를 1레벨 이상 먼저 연구해야 활성화됩니다.`)}</span>
                   </div>
                 )}
 
@@ -1071,8 +1229,8 @@ export const InvasionView: React.FC = () => {
                 {!isMax && (
                   <div className="bg-[#090e1a] p-3 rounded-xl border border-[#162238] flex flex-col gap-2">
                     <div className="text-xs font-bold text-white flex items-center justify-between">
-                      <span>필요 심연 연구 재료</span>
-                      <span className="text-[10px] text-[#8b9bb4]">소모 자원 / 보유량</span>
+                      <span>{tr('필요 심연 연구 재료')}</span>
+                      <span className="text-[10px] text-[#8b9bb4]">{tr('소모 자원 / 보유량')}</span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-xs font-mono">
@@ -1098,7 +1256,7 @@ export const InvasionView: React.FC = () => {
                           >
                             <div className="flex items-center gap-1.5">
                               <span>{meta.icon}</span>
-                              <span className="text-[11px]">{meta.name}</span>
+                              <span className="text-[11px]">{tr(meta.name)}</span>
                             </div>
                             <div className="text-right text-[11px]">
                               <span className="font-bold">{(amt as number).toLocaleString()}</span>
@@ -1120,12 +1278,12 @@ export const InvasionView: React.FC = () => {
                   className="btn btn-ghost text-xs px-4 py-2 text-[#8b9bb4]"
                   onClick={() => setSelectedTech(null)}
                 >
-                  닫기
+                  {tr('닫기')}
                 </button>
 
                 {isMax ? (
                   <div className="px-4 py-2 rounded-xl bg-[#122b22] text-[#38ef7d] font-bold text-xs border border-[#1e4e3b]">
-                    ★ 최고 레벨 연구 완료
+                    {tr('★ 최고 레벨 연구 완료')}
                   </div>
                 ) : (
                   <button
@@ -1140,7 +1298,7 @@ export const InvasionView: React.FC = () => {
                     }}
                   >
                     <span>⚡</span>
-                    <span>연구 진행 (Lv.{currentLv + 1} 달성)</span>
+                    <span>{tr(`연구 진행 (Lv.${currentLv + 1} 달성)`)}</span>
                   </button>
                 )}
               </div>

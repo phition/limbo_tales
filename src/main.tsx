@@ -3,6 +3,12 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './styles/main.css';
+import { Capacitor } from '@capacitor/core';
+
+// 📱 네이티브 앱(Capacitor) 환경 표식: 태블릿/폴더블/DeX 등에서도 데스크탑용 카드 프레임 없이 화면을 꽉 채우도록 CSS 분기
+if (Capacitor.isNativePlatform()) {
+  document.documentElement.classList.add('native-app');
+}
 
 const rootEl = document.getElementById('root');
 if (!rootEl) throw new Error('Root element not found');

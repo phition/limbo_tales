@@ -43,7 +43,7 @@ import { CemeteryDrawer } from '../components/CemeteryDrawer';
 import { CodexModal } from '../components/CodexModal';
 import { GrimoireEnhanceModal } from '../components/GrimoireEnhanceModal';
 import { getSkillTags, getTriggerableCombos, getTagMeta, SkillTag, ComboRule } from '../utils/skillComboUtils';
-import { GrimoireRecipe, GRIMOIRE_CRAFT_RECIPES, GRIMOIRE_CRAFT_SUCCESS_RATES, GRIMOIRE_RARITY_REQ_ALCHEMIST_LV } from '../data/classSkillRecipes';
+import { registerBackButtonHandler } from '../utils/nativeBridge';
 import { useCustomAssetVersion } from '../hooks/useCustomAssetVersion';
 import { GoogleAdService } from '../services/GoogleAdService';
 import { GameIcon } from '../components/GameIcon';
@@ -51,6 +51,8 @@ import { CraftProgressModal } from '../components/CraftProgressModal';
 import { useI18n } from '../hooks/useI18n';
 import { I18nService } from '../i18n/I18nService';
 import { getLocalizedBuildingName, getLocalizedClassName, getLocalizedResourceName } from '../i18n/dataLocales';
+import { INITIAL_BUILDINGS } from '../data/buildings';
+import { getPurifiedFloorsForQuest } from '../data/quests';
 import { EncyclopediaBadge } from '../components/EncyclopediaBadge';
 import { triggerHaptic } from '../utils/haptics';
 import { calculatePartySynergies } from '../data/synergies';
@@ -62,6 +64,9 @@ import {
   getWeeklyAffinityConfig,
 } from '../utils/feverUtils';
 import { FirebaseService, GuestbookMessage } from '../services/FirebaseService';
+import { findBestUnassignedEquipment } from '../utils/autoEquipUtils';
+import { gameDialog } from '../services/DialogService';
+import { formatDuration, formatTimeLeft } from '../utils/timeUtils';
 
 // ─────────────────────────────────────────────────────────────
 //  휠 내비게이션 & 시설 매핑
@@ -92,9 +97,12 @@ const DRAWER_ART_META: Record<string, { img: string; title: string; subtitle: st
   barracks:  { img: 'assets/menu_barracks.jpg',    title: '원정단 병영 & 전략 작전실', subtitle: '대원 진형 편성, 전직 각성 및 마도 비전서 스킬 전수', icon: '⚔️' },
   quests:    { img: 'assets/menu_quests.jpg',      title: '지휘관 퀘스트 & 작전 지도', subtitle: '메인 스토리 임무 완수 및 단계별 시설 연계', icon: '📜' },
   explore:   { img: 'assets/menu_explore.jpg',     title: '심연 강하 차원 관문', subtitle: '침묵의 회랑 5층 탐험 채비 및 전술 보급품 편성', icon: '🌌' },
+  arena:     { img: 'assets/menu_arena.jpg',       title: '차원 게이트 (Dimensional Gate)', subtitle: '차원 아레나 & 네메시스 침공의 문', icon: '🏆' },
+  cemetery:  { img: 'assets/menu_cemetery.jpg',    title: '성채 묘지 (Citadel Cemetery)', subtitle: '전사한 영령들의 안식처 & 조상의 가호 결속', icon: '🪦' },
+  codex:     { img: 'assets/menu_codex.jpg',       title: '심연의 백과 & 서고 (Abyssal Codex)', subtitle: '고대 컬렉션 수집 및 영구적 패시브 연구', icon: '📜' },
   tavern:    { img: 'assets/menu_tavern.jpg',      title: '방랑자의 라운지 (Wanderer\'s Lounge)', subtitle: '실력파 용병 모집 및 방랑 모험가 계약 영입', icon: '🍸' },
-  forge:     { img: 'assets/menu_forge.jpg',       title: '심연의 병기창 (Abyssal Armory)', subtitle: '에테르 룬 장비 단조, 강화 및 접두/접미 인챈트', icon: '⚒️' },
-  alchemy:   { img: 'assets/citadel_bonfire.jpg',  title: '에테르 연금 공방 (Aether Alchemy Workshop)', subtitle: '마도서 제작 및 최고 10레벨 비전 마도 강화', icon: '🧪' },
+  forge:     { img: 'assets/menu_forge.jpg',       title: '심연의 병기창 (Abyssal Armory)', subtitle: '에테르 룬 장비 단조, 강화 및 침식 장비 정화', icon: '⚒️' },
+  alchemy:   { img: 'assets/menu_alchemy.jpg',     title: '에테르 연금 공방 (Aether Alchemy Workshop)', subtitle: '스킬 비전 강화 및 장비 마도 인챈트', icon: '🧪' },
   storage:   { img: 'assets/menu_storage.jpg',     title: '방주 중앙 병참고 (Ark Central Logistics)', subtitle: '16종 군수 물자 적재 용량 관리 및 증축 (유지비 면제)', icon: '📦' },
   infirmary: { img: 'assets/menu_infirmary.jpg',   title: '생체 복원 병동 (Bio-Restoration Ward)', subtitle: '전투 부상자 치료, 출혈 정화 및 빠른 생체 회복', icon: '💉' },
   market:    { img: 'assets/menu_market.jpg',      title: '황혼의 블랙 마켓 (Twilight Black Market)', subtitle: '17종 군수 물자 및 암시장 자원 거래', icon: '🕶️' },
@@ -127,12 +135,14 @@ const RES_NAMES_AND_ICONS: Record<string, { label: string; icon: string }> = {
   suffix_stone: { label: '접미석', icon: '🔮' },
   pure_prefix_stone: { label: '순수접두석', icon: '🌟' },
   pure_suffix_stone: { label: '순수접미석', icon: '🪐' },
+  pure_mana_stone: { label: '순수마도석', icon: '💠' },
 };
 
 function renderCostBadges(cost: Partial<GameResources> | Record<string, number>, resState: GameResources, isMax: boolean) {
-  if (isMax) return <span className="text-[#ffd54f] font-mono text-xs font-bold">★ 최고 레벨 도달</span>;
+  const i18n = I18nService.getInstance();
+  if (isMax) return <span className="text-[#ffd54f] font-mono text-xs font-bold">{i18n.t('★ 최고 레벨 도달')}</span>;
   const entries = Object.entries(cost).filter(([, amt]) => (amt || 0) > 0);
-  if (entries.length === 0) return <span className="text-[#38ef7d] font-mono text-xs font-bold">무료</span>;
+  if (entries.length === 0) return <span className="text-[#38ef7d] font-mono text-xs font-bold">{i18n.t('무료')}</span>;
   return (
     <div className="flex items-center gap-1.5 flex-wrap">
       {entries.map(([res, reqAmt]) => {
@@ -149,7 +159,7 @@ function renderCostBadges(cost: Partial<GameResources> | Record<string, number>,
             }`}
           >
             <GameIcon name={res} icon={meta.icon} size={15} />
-            <span>{meta.label}</span>
+            <span>{i18n.t(meta.label)}</span>
             <span>{curAmt}/{reqAmt}</span>
           </span>
         );
@@ -339,6 +349,7 @@ const EquipmentEnhanceModal: React.FC<EquipmentEnhanceModalProps> = ({
   discountPct,
   mult,
 }) => {
+  const { tr } = useI18n();
     const isMax = item.level >= 10;
   const forgeLv = gm.buildings['blacksmith']?.level || 0;
   const maxAllowed = GameManager.getForgeMaxEnhanceLevel(forgeLv);
@@ -779,7 +790,7 @@ const EquipmentEnhanceModal: React.FC<EquipmentEnhanceModalProps> = ({
             onClick={onClose}
           >
             <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-            <span style={{ color: '#c56060' }}>닫기</span>
+            <span style={{ color: '#c56060' }}>{tr('닫기')}</span>
           </button>
         </div>
 
@@ -803,6 +814,421 @@ const EquipmentEnhanceModal: React.FC<EquipmentEnhanceModalProps> = ({
 };
 
 // ─────────────────────────────────────────────────────────────
+//  🔮 마도 인챈트 상세 설정 모달 (EquipmentEnchantModal)
+// ─────────────────────────────────────────────────────────────
+interface EquipmentEnchantModalProps {
+  item: EquipmentItem;
+  onClose: () => void;
+  gm: GameManager;
+  resources: GameResources;
+  discountPct: number;
+  mult: number;
+}
+
+const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
+  item: initialItem,
+  onClose,
+  gm,
+  resources,
+  discountPct,
+  mult,
+}) => {
+  const [enchantType, setEnchantType] = useState<'prefix' | 'suffix'>('prefix');
+  const [isPure, setIsPure] = useState<boolean>(false);
+  const [isEnchanting, setIsEnchanting] = useState<boolean>(false);
+  const [pendingOutcome, setPendingOutcome] = useState<'success' | 'keep' | 'drop' | undefined>(undefined);
+
+  const item = useMemo(() => {
+    return (gm.equipmentInventory || []).find(e => e.id === initialItem.id)
+      || (gm.party || []).flatMap(h => Object.values(h.equipment || {})).find(e => e && e.id === initialItem.id)
+      || (gm.barracks || []).flatMap(h => Object.values(h.equipment || {})).find(e => e && e.id === initialItem.id)
+      || initialItem;
+  }, [initialItem, gm, resources]);
+
+  const canPrefix = item.level >= 3;
+  const canSuffix = item.level >= 7;
+  const hasAnyEnchant = !!item.prefix || !!item.suffix;
+
+  const alchemyLv = (gm.buildings as unknown as Record<string, { level?: number }>)['alchemy']?.level || 1;
+  const wearer = item.equippedHeroId ? (gm.barracks || []).find(h => h.id === item.equippedHeroId) : null;
+  const successRate = getEnchantSuccessRate(alchemyLv, isPure);
+  const stoneCost = getEnchantStoneCost(item, isPure);
+  const { gold: goldCost, ether: etherCost } = getEnchantResourceCosts(isPure, mult);
+
+  const locItem = item;
+  const itemName = locItem?.name || item.name;
+
+  const stoneKey = isPure
+    ? (enchantType === 'prefix' ? 'pure_prefix_stone' : 'pure_suffix_stone')
+    : (enchantType === 'prefix' ? 'prefix_stone' : 'suffix_stone');
+
+  const stoneCount = (resources as unknown as Record<string, number>)[stoneKey] || 0;
+
+  const canEnchantSlot = enchantType === 'prefix' ? canPrefix : canSuffix;
+  const canAfford = stoneCount >= stoneCost && (resources.gold || 0) >= goldCost && (resources.ether || 0) >= etherCost;
+  const canExecute = canEnchantSlot && canAfford;
+
+  const handleStartEnchant = () => {
+    if (!canExecute || isEnchanting) return;
+    const roll = Math.random() * 100;
+    const outcome: 'success' | 'keep' = roll < successRate ? 'success' : 'keep';
+    setPendingOutcome(outcome);
+    setIsEnchanting(true);
+  };
+
+  const handleEnchantComplete = () => {
+    setIsEnchanting(false);
+    gm.enchantEquipment(item.id, enchantType, isPure, pendingOutcome);
+    setPendingOutcome(undefined);
+  };
+
+  // Options Pool for preview (장비 슬롯 및 순수석 등급에 맞춤)
+  const wType = item.slot === 'weapon' ? (item.weaponType || detectWeaponType(item)) : undefined;
+  const candidates = getEnchantCandidates(item.slot, enchantType, isPure, wType);
+
+  const stoneMeta: Record<string, { name: string; icon: string }> = {
+    prefix_stone: { name: '일반 접두석', icon: '✨' },
+    pure_prefix_stone: { name: '순수 접두석', icon: '⭐' },
+    suffix_stone: { name: '일반 접미석', icon: '🔮' },
+    pure_suffix_stone: { name: '순수 접미석', icon: '🌌' },
+    pure_mana_stone: { name: '순수 마도석', icon: '💠' },
+  };
+
+  const slotLabel = item.slot === 'weapon'
+    ? ('🗡️ 주무기')
+    : item.slot === 'armor'
+    ? ('🛡️ 방어구')
+    : ('💍 장신구');
+
+  const modalTitle = '🔮 마도 장비 인챈트 공방';
+
+  return (
+    <Modal title={modalTitle} open={true} onClose={onClose}>
+      <div className="flex flex-col gap-3.5">
+        {/* 장비 헤더 */}
+        <div className="p-3 bg-[#131926] border border-[#222d42] rounded-xl flex items-center gap-3">
+          <span 
+            className="p-2 rounded-xl bg-[#323d4e] border shrink-0 flex items-center justify-center shadow-lg transition-all"
+            style={getRarityBorderStyle(item.rarity)}
+          >
+            <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={48} />
+          </span>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-bold text-sm text-white truncate">{itemName}</span>
+              <span
+                className="text-[9px] px-1.5 py-0.5 rounded font-bold"
+                style={{ backgroundColor: `${getRarityColor(item.rarity)}22`, color: getRarityColor(item.rarity), border: `1px solid ${getRarityColor(item.rarity)}44` }}
+              >
+                [{getRarityLabel(item.rarity)}]
+              </span>
+              <EncyclopediaBadge query="인챈트" tab="systems" label="인챈트 백과" compact />
+              {wearer ? (
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
+                  👤 {wearer.name} {'착용중'}
+                </span>
+              ) : (
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#607d8b22] text-[#8b9bb4]">
+                  {'보관함'}
+                </span>
+              )}
+            </div>
+            <div className="text-[11px] text-[#8b9bb4] mt-0.5">
+              {slotLabel} | 강화 단계: <span className="text-[#ffd54f] font-bold font-mono">+{item.level}</span> | 필요 인챈트석: <span className="text-[#38ef7d] font-bold font-mono">{stoneCost}개</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 성공 확률 및 레벨 보너스 게이지 */}
+        <div className="p-2.5 rounded-xl bg-[#101624] border border-[#233554] flex flex-col gap-1.5">
+          <div className="flex items-center justify-between text-xs font-bold">
+            <span className="text-white flex items-center gap-1">
+              <span>🎲 인챈트 성공 확률:</span>
+              <span className={`font-mono text-sm ${isPure ? 'text-[#ce93d8]' : 'text-[#38ef7d]'}`}>
+                {successRate}%
+              </span>
+              {isPure && <span className="text-[10px] text-[#ce93d8] font-normal">(순수석 50% 반감)</span>}
+            </span>
+            <span className="text-[10px] text-[#8b9bb4]">
+              {alchemyLv > 3
+                ? `에테르 공방 Lv.${alchemyLv} (+${(alchemyLv - 3) * 2}% 상승)`
+                : '에테르 공방 Lv.4부터 +2%/Lv 증가'}
+            </span>
+          </div>
+          <div className="w-full bg-[#15171e] h-2 rounded-full overflow-hidden">
+            <div
+              className="h-full transition-all duration-300 rounded-full"
+              style={{
+                width: `${successRate}%`,
+                background: 'linear-gradient(90deg, #c8aa6e, #38ef7d)'
+              }}
+            />
+          </div>
+          <div className="text-[10px] text-[#64b5f6] flex items-center justify-between">
+            <span>🛡️ 실패 시 장비 손상/파괴/하락 없음 (재료만 소모)</span>
+            <span className="text-[#8b9bb4]">등급 소모: <span className="text-[#ffd54f] font-bold">{stoneCost}개</span></span>
+          </div>
+        </div>
+
+        {/* 현재 부여된 인챈트 상태 */}
+        <div className="p-3 bg-[#0d121c] border border-[#1f2738] rounded-xl flex flex-col gap-2">
+          <div className="text-xs font-bold text-[#c8aa6e]">{'✨ 현재 인챈트 현황'}</div>
+          {(() => {
+            const locPre = item.prefix;
+            const preName = locPre?.name || item.prefix?.name;
+            const rawPreDesc = locPre?.description || item.prefix?.description;
+            const cleanPreDesc = (item.slot !== 'weapon' && rawPreDesc)
+              ? rawPreDesc
+                  .replace(', 고유스킬 [작열탄] 부여 (기본 공격 대체)', '')
+                  .replace(', 고유스킬 [동결 타격] 부여 (기본 공격 대체)', '')
+                  .replace(', 고유스킬 [신성 심판] 부여 (기본 공격 대체)', '')
+                  .replace(', 고유스킬 [파멸 강타] 부여 (기본 공격 대체)', '')
+              : rawPreDesc;
+
+            return (
+              <div className={`p-2 rounded-lg border text-xs ${item.prefix ? 'bg-[#ffd54f15] border-[#ffd54f44] text-[#ffd54f]' : 'bg-[#141a27] border-[#222d42] text-[#8b9bb4]'}`}>
+                <span className="font-bold">'✨ 접두사: '</span>
+                {item.prefix ? (
+                  <span className="text-white">
+                    <span className="text-[#ffd54f] font-bold">[{preName}]</span> {cleanPreDesc}
+                    {item.slot === 'weapon' && item.prefix.grantedSkill && (
+                      <span className="text-[#38ef7d] font-bold block mt-0.5">
+                        '⚔️ 기본공격 대체: '[{item.prefix.grantedSkill.name}]
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <span>{canPrefix ? ('미부여 (인챈트 가능)') : ('🔒 +3강 이상 필요')}</span>
+                )}
+              </div>
+            );
+          })()}
+
+          {(() => {
+            const locSuf = item.suffix;
+            const sufName = locSuf?.name || item.suffix?.name;
+            const sufDesc = locSuf?.description || item.suffix?.description;
+
+            return (
+              <div className={`p-2 rounded-lg border text-xs ${item.suffix ? 'bg-[#c8aa6e15] border-[#c8aa6e44] text-[#c8aa6e]' : 'bg-[#141a27] border-[#222d42] text-[#8b9bb4]'}`}>
+                <span className="font-bold">'🔮 접미사: '</span>
+                {item.suffix ? (
+                  <span className="text-white">
+                    <span className="text-[#c8aa6e] font-bold">[{sufName}]</span> {sufDesc}
+                  </span>
+                ) : (
+                  <span>{canSuffix ? ('미부여 (인챈트 가능)') : ('🔒 +7강 이상 필요')}</span>
+                )}
+              </div>
+            );
+          })()}
+        </div>
+
+        {/* 슬롯 선택 (접두사 vs 접미사) */}
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all ${
+              enchantType === 'prefix'
+                ? 'bg-[#ffd54f22] border-[#ffd54f] text-[#ffd54f] shadow'
+                : canPrefix
+                ? 'bg-[#121724] border-[#26334a] text-[#8b9bb4] hover:text-white' : 'bg-[#121724] border-[#26334a] text-[#555] opacity-50 cursor-not-allowed'
+            }`}
+            onClick={() => setEnchantType('prefix')}
+          >
+            <span className="text-sm">{'✨ 접두어 슬롯'}</span>
+            <span className="text-[10px]">
+              {canPrefix
+                ? (item.slot === 'weapon'
+                    ? ('공격/속성/스킬 (+3강)')
+                    : item.slot === 'armor'
+                    ? ('방어/생명/수호 (+3강)')
+                    : ('마나/속도/행운 (+3강)'))
+                : ('🔒 +3강 이상 필요')}
+            </span>
+          </button>
+
+          <button
+            className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all ${
+              enchantType === 'suffix'
+                ? 'bg-[#c8aa6e22] border-[#c8aa6e] text-[#c8aa6e] shadow'
+                : canSuffix
+                ? 'bg-[#121724] border-[#26334a] text-[#8b9bb4] hover:text-white' : 'bg-[#121724] border-[#26334a] text-[#555] opacity-50 cursor-not-allowed'
+            }`}
+            onClick={() => setEnchantType('suffix')}
+          >
+            <span className="text-sm">{'🔮 접미어 슬롯'}</span>
+            <span className="text-[10px]">
+              {canSuffix
+                ? (item.slot === 'weapon'
+                    ? ('피해증폭/흡혈/관통 (+7강)')
+                    : item.slot === 'armor'
+                    ? ('방어/재생/가호 (+7강)')
+                    : ('신속/마력/지혜 (+7강)'))
+                : ('🔒 +7강 이상 필요')}
+            </span>
+          </button>
+        </div>
+
+        {/* 인챈트석 등급 선택 (일반 vs 순수) */}
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            className={`p-2 rounded-lg border text-xs font-bold flex items-center justify-between transition-all ${
+              !isPure
+                ? 'bg-[#38ef7d22] border-[#38ef7d] text-[#38ef7d]' : 'bg-[#121724] border-[#26334a] text-[#8b9bb4]'
+            }`}
+            onClick={() => setIsPure(false)}
+          >
+            <span>🔹 일반 인챈트석</span>
+            <span className="text-xs font-mono font-bold">
+              ({(resources as unknown as Record<string, number>)[enchantType === 'prefix' ? 'prefix_stone' : 'suffix_stone'] || 0} / {stoneCost}개)
+            </span>
+          </button>
+
+          <button
+            className={`p-2 rounded-lg border text-xs font-bold flex items-center justify-between transition-all ${
+              isPure
+                ? 'bg-[#ce93d822] border-[#ce93d8] text-[#ce93d8]' : 'bg-[#121724] border-[#26334a] text-[#8b9bb4]'
+            }`}
+            onClick={() => setIsPure(true)}
+          >
+            <span>⭐ 순수 인챈트석</span>
+            <span className="text-xs font-mono font-bold">
+              ({(resources as unknown as Record<string, number>)[enchantType === 'prefix' ? 'pure_prefix_stone' : 'pure_suffix_stone'] || 0} / {stoneCost}개)
+            </span>
+          </button>
+        </div>
+
+        {/* 무기 접두사 스킬 특화 알림 */}
+        {item.slot === 'weapon' && enchantType === 'prefix' && (
+          <div className="p-2 rounded-lg bg-[#38ef7d15] border border-[#38ef7d33] text-[11px] text-[#38ef7d] flex items-center gap-1.5">
+            <span>🗡️</span>
+            <span>{'무기 접두사 인챈트 시 기본 공격을 대체하는 고유 스킬(작열탄, 동결 타격, 신성 심판, 파멸 강타 등)을 획득할 수 있습니다!'}</span>
+          </div>
+        )}
+
+        {/* 부여 가능 후보 풀 미리보기 (슬롯 전용 카테고리) */}
+        <div className="p-2.5 bg-[#0d121c] border border-[#1f2738] rounded-xl flex flex-col gap-1.5">
+          <div className="flex items-center justify-between text-xs text-[#8b9bb4]">
+            <span className="font-bold text-white">
+              📜 {isPure
+                ? ('순수석 후보 풀 (에픽~전설 확정)')
+                : ('일반석 후보 풀 (희귀~에픽)')}
+              <span className="text-[#c8aa6e] text-[10px] font-normal ml-1">
+                [{item.slot === 'weapon' ? ('🗡️ 무기 전용') : item.slot === 'armor' ? ('🛡️ 방어구 전용') : ('💍 장신구 전용')}]
+              </span>
+            </span>
+            <span className="text-[10px] font-mono">{'총'} {candidates.length}{'종'}</span>
+          </div>
+          <div className="max-h-28 overflow-y-auto flex flex-col gap-1 pr-1">
+            {candidates.map(opt => {
+              const rColor = opt.rarity === 'legendary' ? '#ffd54f' : opt.rarity === 'epic' ? '#ce93d8' : '#42a5f5';
+              const locCand = opt;
+              const candName = locCand?.name || opt.name;
+              const rawDesc = locCand?.description || opt.description;
+              const cleanDesc = (item.slot !== 'weapon' && enchantType === 'prefix')
+                ? rawDesc
+                    .replace(', 고유스킬 [작열탄] 부여 (기본 공격 대체)', '')
+                    .replace(', 고유스킬 [동결 타격] 부여 (기본 공격 대체)', '')
+                    .replace(', 고유스킬 [신성 심판] 부여 (기본 공격 대체)', '')
+                    .replace(', 고유스킬 [파멸 강타] 부여 (기본 공격 대체)', '')
+                : rawDesc;
+              return (
+                <div key={opt.id} className="p-1 px-2 rounded bg-[#141a27] border border-[#232f46] text-[11px] flex items-center justify-between">
+                  <span className="font-bold" style={{ color: rColor }}>[{candName}]</span>
+                  <span className="text-[10px] text-[#cfd8dc] truncate max-w-[210px]">{cleanDesc}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 소모 재화 */}
+        <div className="p-2.5 bg-[#0d121c] border border-[#1f2738] rounded-xl flex flex-col gap-1.5">
+          <div className="text-xs font-bold text-[#cfd8dc]">
+            📦 {'소모 재화'} ({'대장간'} -{discountPct}%)
+          </div>
+          <div className="flex items-center gap-2 flex-wrap text-xs font-mono pt-0.5">
+            <span className={`px-2.5 py-1 rounded-md border font-bold flex items-center gap-1 ${stoneCount >= stoneCost ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'}`}>
+              <span>{stoneMeta[stoneKey]?.icon}</span>
+              <span>{stoneMeta[stoneKey]?.name}:</span>
+              <span>{stoneCost}/{stoneCount}개</span>
+            </span>
+            <span className={`px-2.5 py-1 rounded-md border font-bold flex items-center gap-1 ${(resources.gold || 0) >= goldCost ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'}`}>
+              <span>🪙</span>
+              <span>골드:</span>
+              <span>{goldCost.toLocaleString()}/{(resources.gold || 0).toLocaleString()}</span>
+            </span>
+            <span className={`px-2.5 py-1 rounded-md border font-bold flex items-center gap-1 ${(resources.ether || 0) >= etherCost ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'}`}>
+              <span>✨</span>
+              <span>에테르:</span>
+              <span>{etherCost.toLocaleString()}/{(resources.ether || 0).toLocaleString()}</span>
+            </span>
+          </div>
+        </div>
+
+        {/* 하단 액션 버튼 */}
+        <div className="flex items-center gap-2 pt-1">
+          <ActionButton
+            label={
+              !canEnchantSlot
+                ? (enchantType === 'prefix'
+                    ? ('🔒 +3강 이상 필요')
+                    : ('🔒 +7강 이상 필요'))
+                : canAfford
+                ? (`🔮 인챈트 시도 (${successRate}%)`)
+                : ('재화/인챈트석 부족')
+            }
+            variant={canExecute ? 'primary' : 'ghost'}
+            className="flex-1 py-2 font-bold shadow-lg"
+            disabled={!canExecute || isEnchanting}
+            onClick={handleStartEnchant}
+          />
+          {hasAnyEnchant && (
+            <ActionButton
+              label={'✕ 초기화 (에테르 50)'}
+              variant="danger-outline"
+              size="sm"
+              className="py-2"
+              style={{
+                border: '1.5px solid #c56060',
+                color: '#ffffff',
+                backgroundColor: 'transparent'
+              }}
+              disabled={(resources.ether || 0) < 50 || isEnchanting}
+              onClick={() => {
+                gm.cleanseEnchant(item.id);
+              }}
+            />
+          )}
+          <button
+            className="btn btn-ghost px-4 py-2 text-xs hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center gap-1"
+            style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
+            onClick={onClose}
+            disabled={isEnchanting}
+          >
+            <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
+            <span style={{ color: '#c56060' }}>닫기</span>
+          </button>
+        </div>
+      </div>
+
+      {/* 🌟 마도 인챈트 연출 모달 🌟 */}
+      <CraftProgressModal
+        open={isEnchanting}
+        type="enchant_equipment"
+        title="마도 장비 인챈트"
+        itemName={itemName}
+        itemIcon={item.icon || '🔮'}
+        itemSub={`${enchantType === 'prefix' ? '접두어' : '접미어'} ${isPure ? '순수석 인챈트' : '일반 인챈트'}`}
+        durationMs={2000}
+        outcome={pendingOutcome}
+        onComplete={handleEnchantComplete}
+      />
+    </Modal>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────
 //  장비 선택 오버레이
 // ─────────────────────────────────────────────────────────────
 const EquipmentOverlay: React.FC<{
@@ -814,6 +1240,7 @@ const EquipmentOverlay: React.FC<{
   onClose: () => void;
 }> = ({ hero, slot = 'weapon', onEquip, onUnequip, onClose }) => {
   const { state, gm } = useGameManager();
+  const { tr } = useI18n();
   const currentHero = state.barracks.find(h => h.id === hero.id) || hero;
 
   // 1. 카테고리(슬롯) 필터 ('all' | 'weapon' | 'armor' | 'accessory')
@@ -830,16 +1257,34 @@ const EquipmentOverlay: React.FC<{
   const [selectedEquipIds, setSelectedEquipIds] = useState<Set<string>>(new Set());
   const [confirmBatchModal, setConfirmBatchModal] = useState(false);
 
-  // 모달 상태 관리: 아이템 상세 및 액션 팝업, 강화 모달
+  // 모달 상태 관리: 아이템 상세 및 액션 팝업, 강화 모달, 인챈트 모달
   const [selectedDetailItem, setSelectedDetailItem] = useState<EquipmentItem | null>(null);
   const [selectedEnhanceItemId, setSelectedEnhanceItemId] = useState<string | null>(null);
+  const [selectedEnchantItemId, setSelectedEnchantItemId] = useState<string | null>(null);
 
-  // 대장간 할인율 및 기능 해금 상태 계산
+  // 📱 장비 선택/상세 오버레이가 열려있을 때 뒤로가기 버튼 처리
+  useEffect(() => {
+    const unregister = registerBackButtonHandler(() => {
+      if (selectedDetailItem) {
+        setSelectedDetailItem(null);
+        return true;
+      }
+      onClose();
+      return true;
+    });
+    return () => unregister();
+  }, [selectedDetailItem, onClose]);
+
+  // 대장간/에테르 공방 할인율 및 기능 해금 상태 계산
   const forgeLv = state.buildings['blacksmith']?.level || 1;
+  const alchemyLv = state.buildings['alchemy']?.level || 1;
   const unlocks = gm.getForgeFeatureUnlocks();
   const isEnhanceUnlocked = unlocks.enhance.unlocked;
+  const isEnchantUnlocked = alchemyLv >= 3;
   const discountPct = Math.min(25, (forgeLv - 1) * 2.5);
   const mult = 1 - discountPct / 100;
+  const alchemyDiscountPct = Math.min(50, alchemyLv * 3);
+  const alchemyMult = Math.max(0.5, 1 - (alchemyLv * 0.03));
 
   // 장비 착용 여부 판별 헬퍼 (누군가 착용 중이면 판매 보호)
   const isItemEquipped = useCallback((item: EquipmentItem) => {
@@ -994,8 +1439,12 @@ const EquipmentOverlay: React.FC<{
     if (!selectedDetailItem) return null;
     return state.equipmentInventory.find(e => e.id === selectedDetailItem.id)
       || (curEquipForCategory?.id === selectedDetailItem.id ? curEquipForCategory : null)
+      || (currentHero.equipment?.weapon?.id === selectedDetailItem.id ? currentHero.equipment.weapon : null)
+      || (currentHero.equipment?.armor?.id === selectedDetailItem.id ? currentHero.equipment.armor : null)
+      || (currentHero.equipment?.accessory?.id === selectedDetailItem.id ? currentHero.equipment.accessory : null)
+      || state.barracks.flatMap(h => Object.values(h.equipment || {})).find(e => e && e.id === selectedDetailItem.id)
       || selectedDetailItem;
-  }, [selectedDetailItem, state.equipmentInventory, curEquipForCategory]);
+  }, [selectedDetailItem, state.equipmentInventory, curEquipForCategory, currentHero, state.barracks]);
   const curEquip = activeDetailItem ? currentHero.equipment?.[activeDetailItem.slot] : curEquipForCategory;
 
   // 최신 상태의 강화 대상 아이템 동기화
@@ -1003,8 +1452,24 @@ const EquipmentOverlay: React.FC<{
     if (!selectedEnhanceItemId) return null;
     return state.equipmentInventory.find(e => e.id === selectedEnhanceItemId)
       || (curEquipForCategory?.id === selectedEnhanceItemId ? curEquipForCategory : null)
+      || (currentHero.equipment?.weapon?.id === selectedEnhanceItemId ? currentHero.equipment.weapon : null)
+      || (currentHero.equipment?.armor?.id === selectedEnhanceItemId ? currentHero.equipment.armor : null)
+      || (currentHero.equipment?.accessory?.id === selectedEnhanceItemId ? currentHero.equipment.accessory : null)
+      || state.barracks.flatMap(h => Object.values(h.equipment || {})).find(e => e && e.id === selectedEnhanceItemId)
       || null;
-  }, [selectedEnhanceItemId, state.equipmentInventory, curEquipForCategory]);
+  }, [selectedEnhanceItemId, state.equipmentInventory, curEquipForCategory, currentHero, state.barracks]);
+
+  // 최신 상태의 인챈트 대상 아이템 동기화
+  const enchantTargetItem = useMemo(() => {
+    if (!selectedEnchantItemId) return null;
+    return state.equipmentInventory.find(e => e.id === selectedEnchantItemId)
+      || (curEquipForCategory?.id === selectedEnchantItemId ? curEquipForCategory : null)
+      || (currentHero.equipment?.weapon?.id === selectedEnchantItemId ? currentHero.equipment.weapon : null)
+      || (currentHero.equipment?.armor?.id === selectedEnchantItemId ? currentHero.equipment.armor : null)
+      || (currentHero.equipment?.accessory?.id === selectedEnchantItemId ? currentHero.equipment.accessory : null)
+      || state.barracks.flatMap(h => Object.values(h.equipment || {})).find(e => e && e.id === selectedEnchantItemId)
+      || null;
+  }, [selectedEnchantItemId, state.equipmentInventory, curEquipForCategory, currentHero, state.barracks]);
 
   return (
     <div className="absolute inset-0 z-50 bg-black/90 flex flex-col animate-fade-in">
@@ -1151,6 +1616,23 @@ const EquipmentOverlay: React.FC<{
                     {!gm.isEquipmentCompatible(hero.classId, curEquipForCategory) && (
                       <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#ef535022] text-[#ef5350] font-bold border border-[#ef535044]">
                         ⚠️ 비호환(-50%)
+                      </span>
+                    )}
+                    {curEquipForCategory.isMemento && (
+                      <span
+                        className={`text-[9px] px-1.5 py-0.5 rounded font-bold border flex items-center gap-1 ${
+                          gm.isMementoResonated(curEquipForCategory)
+                            ? 'bg-[#311b9244] text-[#ffd54f] border-[#ffd54f88] shadow-sm shadow-[#ffd54f44] animate-pulse'
+                            : 'bg-[#ab47bc22] text-[#ce93d8] border-[#ab47bc55]'
+                        }`}
+                        title={
+                          gm.isMementoResonated(curEquipForCategory)
+                            ? tr('🪦 [전사자의 유품] 영령의 가호 공명 활성화! 성능 +10% 증폭 중!')
+                            : tr('🪦 [전사자의 유품] 묘지에서 해당 영웅의 가호를 받으면 성능 +10% 증폭')
+                        }
+                      >
+                        <span>🪦 {tr('유품')}</span>
+                        {gm.isMementoResonated(curEquipForCategory) && <span>(+10%)</span>}
                       </span>
                     )}
                   </div>
@@ -1456,6 +1938,23 @@ const EquipmentOverlay: React.FC<{
                         💀 침식됨
                       </span>
                     )}
+                    {eq.isMemento && (
+                      <span
+                        className={`text-[9px] px-1.5 py-0.5 rounded font-bold border flex items-center gap-1 ${
+                          gm.isMementoResonated(eq)
+                            ? 'bg-[#311b9244] text-[#ffd54f] border-[#ffd54f88] shadow-sm shadow-[#ffd54f44] animate-pulse'
+                            : 'bg-[#ab47bc22] text-[#ce93d8] border-[#ab47bc55]'
+                        }`}
+                        title={
+                          gm.isMementoResonated(eq)
+                            ? tr('🪦 [전사자의 유품] 영령의 가호 공명 활성화! 성능 +10% 증폭 중!')
+                            : tr('🪦 [전사자의 유품] 묘지에서 해당 영웅의 가호를 받으면 성능 +10% 증폭')
+                        }
+                      >
+                        <span>🪦 {tr('유품')}</span>
+                        {gm.isMementoResonated(eq) && <span>(+10%)</span>}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-1 shrink-0">
@@ -1631,7 +2130,7 @@ const EquipmentOverlay: React.FC<{
             {/* 인챈트 없을 때 안내 */}
             {!activeDetailItem.prefix && !activeDetailItem.suffix && (
               <div className="text-[10px] text-[#607d8b] px-1">
-                💡 대장간에서 [접두사] 및 [접미사] 인챈트를 부여해 추가 스탯과 고유 스킬을 획득할 수 있습니다.
+                💡 에테르 공방에서 [접두사] 및 [접미사] 인챈트를 부여해 추가 스탯과 고유 스킬을 획득할 수 있습니다.
               </div>
             )}
 
@@ -1680,6 +2179,37 @@ const EquipmentOverlay: React.FC<{
               </div>
             )}
 
+            {activeDetailItem.isMemento && (
+              <div
+                className={`p-2.5 rounded-lg border text-xs flex flex-col gap-1.5 ${
+                  gm.isMementoResonated(activeDetailItem)
+                    ? 'bg-[#2a1738] border-[#ba68c8] shadow-md shadow-[#ba68c833]'
+                    : 'bg-[#1b1929] border-[#7e57c255]'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-[#ce93d8] flex items-center gap-1.5">
+                    <span>🪦</span>
+                    <span>[{tr('전사자의 유품')}: {activeDetailItem.mementoHeroName || tr('이름 모를 결사대원')}]</span>
+                  </span>
+                  {gm.isMementoResonated(activeDetailItem) ? (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded font-bold bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f66] animate-pulse">
+                      ✨ {tr('영웅 가호 공명 (+10% 성능 증폭)')}
+                    </span>
+                  ) : (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded text-[#90a4ae] bg-[#37474f22] border border-[#37474f44]">
+                      {tr('가호 미결속')}
+                    </span>
+                  )}
+                </div>
+                <span className="text-[11px] text-[#e1bee7] leading-relaxed">
+                  {gm.isMementoResonated(activeDetailItem)
+                    ? `${tr('전사한 영령의 가호가 성채와 공명하여 이 장비의 모든 스탯 성능이 +10% 증폭되었습니다.')} (${activeDetailItem.mementoHeroName || ''})`
+                    : `${tr('묘지에서 전사한 영웅에게 공물(에테르)을 바쳐 가호를 결속하면, 이 장비의 모든 성능이 10% 상승합니다.')} (${activeDetailItem.mementoHeroName || ''})`}
+                </span>
+              </div>
+            )}
+
             {/* 클래스 적합성 안내 */}
             <div className="px-1">
               {slot === 'accessory' ? (
@@ -1693,25 +2223,48 @@ const EquipmentOverlay: React.FC<{
 
             {/* 액션 버튼 그룹 */}
             <div className="flex flex-col gap-2 pt-2 border-t border-[#1f2738]">
-              {/* 강화 버튼: 병기창 Lv.3 이상 해금 시에만 활성화, 미달 시 잠김 처리 */}
-              {isEnhanceUnlocked ? (
-                <button
-                  className="btn btn-primary py-2 text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-[#c8aa6e22]"
-                  onClick={() => {
-                    setSelectedEnhanceItemId(activeDetailItem.id);
-                  }}
-                >
-                  <span>⚡ 마도 강화 ({activeDetailItem.level < 10 ? `+${activeDetailItem.level + 1}강 시도` : '최고레벨'})</span>
-                </button>
-              ) : (
-                <button
-                  className="btn btn-ghost py-2 text-xs font-bold flex items-center justify-center gap-1.5 opacity-50 cursor-not-allowed border border-[#2c384d] text-[#8b9bb4]"
-                  disabled={true}
-                  title="병기창(대장간)을 Lv.3 이상으로 증축해야 장비 강화 공방이 해금됩니다."
-                >
-                  <span>🔒 마도 강화 (병기창 Lv.3 필요)</span>
-                </button>
-              )}
+              {/* 강화 & 인챈트 버튼 그리드 */}
+              <div className="grid grid-cols-2 gap-2">
+                {/* 강화 버튼: 병기창 Lv.3 이상 해금 시에만 활성화, 미달 시 잠김 처리 */}
+                {isEnhanceUnlocked ? (
+                  <button
+                    className="btn btn-primary py-2 text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-[#c8aa6e22]"
+                    onClick={() => {
+                      setSelectedEnhanceItemId(activeDetailItem.id);
+                    }}
+                  >
+                    <span>⚡ {tr('마도 강화')} ({activeDetailItem.level < 10 ? `+${activeDetailItem.level + 1}${tr('강')}` : tr('최고')})</span>
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-ghost py-2 text-xs font-bold flex items-center justify-center gap-1.5 opacity-50 cursor-not-allowed border border-[#2c384d] text-[#8b9bb4]"
+                    disabled={true}
+                    title={tr('병기창(대장간)을 Lv.3 이상으로 증축해야 장비 강화 공방이 해금됩니다.')}
+                  >
+                    <span>🔒 {tr('강화')} ({tr('Lv.3 필요')})</span>
+                  </button>
+                )}
+
+                {/* 인챈트 버튼: 에테르 공방 Lv.3 이상 해금 시에만 활성화, 미달 시 잠김 처리 */}
+                {isEnchantUnlocked ? (
+                  <button
+                    className="btn py-2 text-xs font-bold flex items-center justify-center gap-1.5 bg-[#4a148c33] hover:bg-[#6a1b9a55] border border-[#ab47bc88] text-[#e1bee7] transition-all shadow-md shadow-[#8e24aa22]"
+                    onClick={() => {
+                      setSelectedEnchantItemId(activeDetailItem.id);
+                    }}
+                  >
+                    <span>🔮 {tr('마도 인챈트')}</span>
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-ghost py-2 text-xs font-bold flex items-center justify-center gap-1.5 opacity-50 cursor-not-allowed border border-[#2c384d] text-[#8b9bb4]"
+                    disabled={true}
+                    title={tr('에테르 공방을 Lv.3 이상으로 증축해야 마도 인챈트 공방이 해금됩니다.')}
+                  >
+                    <span>🔒 {tr('인챈트')} ({tr('Lv.3 필요')})</span>
+                  </button>
+                )}
+              </div>
 
               <div className="flex items-center gap-2">
                 {/* 장착 / 해제 / 교체 / 인계 버튼 */}
@@ -1719,9 +2272,9 @@ const EquipmentOverlay: React.FC<{
                   <button
                     className="btn btn-ghost flex-1 py-2 text-xs font-bold opacity-60 cursor-not-allowed border border-[#ef535066] text-[#ef5350]"
                     disabled={true}
-                    title="침식된 장비는 병기창 정화 시설에서 정화하기 전까지 착용할 수 없습니다."
+                    title={tr('침식된 장비는 병기창 정화 시설에서 정화하기 전까지 착용할 수 없습니다.')}
                   >
-                    ⚠️ 착용 불가 (정화 필요)
+                    ⚠️ {tr('착용 불가 (정화 필요)')}
                   </button>
                 ) : curEquip?.id === activeDetailItem.id ? (
                   <button
@@ -1731,7 +2284,7 @@ const EquipmentOverlay: React.FC<{
                       setSelectedDetailItem(null);
                     }}
                   >
-                    🛡️ 장비 해제
+                    🛡️ {tr('장비 해제')}
                   </button>
                 ) : activeDetailItem.equippedHeroId ? (
                   <button
@@ -1741,7 +2294,7 @@ const EquipmentOverlay: React.FC<{
                       setSelectedDetailItem(null);
                     }}
                   >
-                    🔄 {state.barracks.find(h => h.id === activeDetailItem.equippedHeroId)?.name || '용병'} 장비 인계 장착
+                    🔄 {state.barracks.find(h => h.id === activeDetailItem.equippedHeroId)?.name || tr('용병')} {tr('장비 인계 장착')}
                   </button>
                 ) : (
                   <button
@@ -1751,7 +2304,7 @@ const EquipmentOverlay: React.FC<{
                       setSelectedDetailItem(null);
                     }}
                   >
-                    {curEquip ? '🔄 교체 장착' : '🛡️ 장착'}
+                    {curEquip ? `🔄 ${tr('교체 장착')}` : `🛡️ ${tr('장착')}`}
                   </button>
                 )}
 
@@ -1798,6 +2351,18 @@ const EquipmentOverlay: React.FC<{
           resources={state.resources}
           discountPct={discountPct}
           mult={mult}
+        />
+      )}
+
+      {/* ── 🔮 마도 인챈트 상세 설정 모달 연동 ── */}
+      {enchantTargetItem && (
+        <EquipmentEnchantModal
+          item={enchantTargetItem}
+          onClose={() => setSelectedEnchantItemId(null)}
+          gm={gm}
+          resources={state.resources}
+          discountPct={alchemyDiscountPct}
+          mult={alchemyMult}
         />
       )}
 
@@ -2390,7 +2955,7 @@ const CitadelDrawer: React.FC<{
   onClearHighlight?: () => void;
 }> = ({ onClose, onEnterDrawer, highlightedBuildingId, onClearHighlight }) => {
   const { state, gm, navigateTo } = useGameManager();
-  const { lang, dict } = useI18n();
+  const { lang, dict, tr } = useI18n();
   const [detailBuildingId, setDetailBuildingId] = useState<BuildingId | null>(null);
   const [pausedNoticeBuilding, setPausedNoticeBuilding] = useState<BuildingState | null>(null);
 
@@ -2429,8 +2994,8 @@ const CitadelDrawer: React.FC<{
   ];
   const hasWarmth = gm.bonfireWarmthTime > 0 && gm.bonfireStacks >= 5;
   const warmthLabel = gm.bonfireWarmthTime > 0
-    ? `🔥 온기 ${Math.floor(gm.bonfireWarmthTime / 60)}분 ${String(gm.bonfireWarmthTime % 60).padStart(2, '0')}초 남음 (생산량 +15%)`
-    : (gm.bonfireStacks > 0 ? `🔥 점화 중: ${gm.bonfireStacks}/5 스택` : '성화 꺼짐');
+    ? `🔥 ${tr('온기')} ${formatTimeLeft(gm.bonfireWarmthTime, lang)} (${tr('생산량 +15%')})`
+    : (gm.bonfireStacks > 0 ? `🔥 ${tr('점화 중')}: ${gm.bonfireStacks}/5 ${tr('스택')}` : tr('성화 꺼짐'));
 
   const selectedBuildingData = detailBuildingId ? state.buildings[detailBuildingId] : null;
   const selectedBuildingItem = detailBuildingId ? buildingsList.find(b => b.id === detailBuildingId) : null;
@@ -2442,6 +3007,9 @@ const CitadelDrawer: React.FC<{
   const selectedStatusInfo = detailBuildingId && selectedBuildingData ? getBuildingStatusInfo(detailBuildingId, selectedBuildingData.level, hasWarmth) : null;
   const selectedPrereq = detailBuildingId && selectedBuildingData ? gm.checkBuildingPrerequisites(detailBuildingId, selectedBuildingData.level + 1) : { allowed: true };
   const claimableQuestCount = state.quests.filter(q => q.status === 'active' && q.objectives.every(o => o.isCompleted)).length;
+  const unpurifiedEquipCount = (state.equipmentInventory || []).filter(
+    i => i && (i.isCorrupted || i.isCursed || i.isUnpurified || (i.name && i.name.startsWith('[침식된]')))
+  ).length;
 
   return (
     <div className="flex flex-col h-full relative">
@@ -2481,12 +3049,11 @@ const CitadelDrawer: React.FC<{
             <div id="building-card-bonfire" className="panel p-3 bg-[#131926] border border-[#222d42] flex flex-col gap-2 rounded-xl">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-[#ffb347] font-bold flex items-center gap-1.5">
-                  <span className="text-base">🔥</span>
+                  <GameIcon name="bonfire" icon="🔥" size={20} />
                   <span className="text-white font-bold">{'성화'}</span>
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ff7b2522] text-[#ff7b25] font-mono">
                     {isFullyLit ? '최대 활성화' : `${gm.bonfireStacks}/5`}
                   </span>
-                  <EncyclopediaBadge query="성화" tab="starter" label="성화 백과" compact />
                 </span>
                 <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-bold ${hasWarmth ? 'bg-[#ff7b2522] text-[#ff7b25] border border-[#ff7b2544] animate-pulse' : 'bg-[#222d42] text-[#8b9bb4]'}`}>
                   {warmthLabel}
@@ -2504,11 +3071,11 @@ const CitadelDrawer: React.FC<{
                 )}
               </div>
               <div className="flex gap-2 pt-1">
-                <ActionButton label={'🪵 영목 줍기'} variant="ghost" size="sm" className="flex-1 font-bold" onClick={() => gm.gatherWood()} />
+                <ActionButton label={tr('🪵 영목 줍기')} variant="ghost" size="sm" className="flex-1 font-bold" onClick={() => gm.gatherWood()} />
                 {isFullyLit ? (
                   // 🔥 완전 점화된 상태: 추가 목재 투입으로 불을 꺼뜨리지 않는 한 횟수 차감 없이 무제한 연장 가능!
                   <ActionButton
-                    label={`🔥 성화 온기 연장 (-${reqWood} 목재)`}
+                    label={`${tr('🔥 성화 온기 연장')} (-${reqWood} ${tr('목재')})`}
                     variant="ghost"
                     size="sm"
                     className="flex-1 font-bold text-[#ff7b25] border-[#ff7b2566] hover:bg-[#ff7b2522]"
@@ -2519,8 +3086,8 @@ const CitadelDrawer: React.FC<{
                   // 불씨 스택 쌓기(1~4단계) 또는 잔여 점화 횟수가 남아있는 경우
                   <ActionButton
                     label={state.bonfireStacks === 4 
-                      ? `🔥 성화 완전 점화 (-${reqWood} 목재) [점화권 ${gm.bonfireAdCharges ?? 5}/5회]` 
-                      : `🔥 불씨 지피기 (-${reqWood} 목재) [${state.bonfireStacks}/5]`}
+                      ? `${tr('🔥 성화 완전 점화')} (-${reqWood} ${tr('목재')}) [${tr('점화권')} ${gm.bonfireAdCharges ?? 5}/5${tr('회')}]` 
+                      : `${tr('🔥 불씨 지피기')} (-${reqWood} ${tr('목재')}) [${state.bonfireStacks}/5]`}
                     variant="ghost"
                     size="sm"
                     className="flex-1 font-bold text-[#ff7b25] border-[#ff7b2566] hover:bg-[#ff7b2522]"
@@ -2535,9 +3102,9 @@ const CitadelDrawer: React.FC<{
                     onClick={async () => {
                       const res = await GoogleAdService.getInstance().showRewardedAd({
                         placement: 'bonfire',
-                        title: '신성한 성화 점화 5회 충전',
-                        description: '광고를 시청하여 신성한 성화 점화 5회를 재충전합니다.',
-                        rewardText: '성화 점화 5회 & 심연 촉매 슬롯 개방',
+                        title: tr('신성한 성화 점화 5회 충전'),
+                        description: tr('광고를 시청하여 신성한 성화 점화 5회를 재충전합니다.'),
+                        rewardText: tr('성화 점화 5회 & 심연 촉매 슬롯 개방'),
                       });
                       if (res.rewarded) {
                         gm.refillBonfireCharges();
@@ -2545,7 +3112,7 @@ const CitadelDrawer: React.FC<{
                     }}
                   >
                     <span>🎬</span>
-                    <span>광고 보고 점화 5회 충전 (+촉매)</span>
+                    <span>{tr('광고 보고 점화 5회 충전 (+촉매)')}</span>
                   </button>
                 )}
               </div>
@@ -2700,8 +3267,8 @@ const CitadelDrawer: React.FC<{
                       <span className="font-bold text-sm text-white hover:text-[#c8aa6e]">{bName}</span>
                       {isBuilt ? (
                         b.maxLevel && b.level < b.maxLevel ? (
-                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ff980022] text-[#ffb74d] font-bold border border-[#ff980066]" title={`유지비 미납으로 일시 하향됨 (원래 Lv.${b.maxLevel}, 유지비 지불 시 자동 복구)`}>
-                            Lv.{b.level} <span className="text-[9px] text-[#ff8a80]">(원래 Lv.${b.maxLevel})</span>
+                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ff980022] text-[#ffb74d] font-bold border border-[#ff980066]" title={tr(`유지비 미납으로 일시 하향됨 (원래 Lv.${b.maxLevel}, 유지비 지불 시 자동 복구)`)}>
+                            Lv.{b.level} <span className="text-[9px] text-[#ff8a80]">({tr('원래')} Lv.${b.maxLevel})</span>
                           </span>
                         ) : (
                           <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e44]">
@@ -2716,6 +3283,11 @@ const CitadelDrawer: React.FC<{
                       {statusInfo.badge && (
                         <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d15] text-[#38ef7d] font-mono font-bold border border-[#38ef7d33]">
                           {statusInfo.badge}
+                        </span>
+                      )}
+                      {item.id === 'blacksmith' && unpurifiedEquipCount > 0 && isBuilt && (
+                        <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white font-mono font-bold shadow-sm animate-pulse">
+                          {tr('정화 필요')} {unpurifiedEquipCount}
                         </span>
                       )}
                       {(() => {
@@ -2756,7 +3328,7 @@ const CitadelDrawer: React.FC<{
                 {/* 버튼 그룹 (클릭 이벤트 버블링 방지) */}
                 <div className="flex items-center gap-1.5 shrink-0" onClick={e => e.stopPropagation()}>
                   {item.drawerKey && isBuilt && (
-                    <div data-tutorial-target={item.id === 'tavern' ? 'enter-tavern' : undefined}>
+                    <div className="relative" data-tutorial-target={item.id === 'tavern' ? 'enter-tavern' : undefined}>
                       <ActionButton
                         label="입장"
                         variant="success"
@@ -2767,6 +3339,11 @@ const CitadelDrawer: React.FC<{
                           else onEnterDrawer(item.drawerKey!);
                         }}
                       />
+                      {item.id === 'blacksmith' && unpurifiedEquipCount > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-md animate-pulse pointer-events-none">
+                          {unpurifiedEquipCount}
+                        </span>
+                      )}
                     </div>
                   )}
                   <div data-tutorial-target={
@@ -2774,7 +3351,7 @@ const CitadelDrawer: React.FC<{
                     item.id === 'tavern' && !isBuilt ? 'build-tavern' : undefined
                   }>
                     <ActionButton
-                      label={isConstructing ? `🔨 ${remainSec}초` : (isMax ? 'MAX' : (!prereq.allowed ? '선행 필요' : (isBuilt ? '강화' : '건설')))}
+                      label={isConstructing ? `🔨 ${formatDuration(remainSec, lang)}` : (isMax ? 'MAX' : (!prereq.allowed ? tr('선행 필요') : (isBuilt ? tr('강화') : tr('건설'))))}
                     variant={isConstructing ? 'ghost' : (canAfford && !isMax && prereq.allowed ? 'primary' : 'ghost')}
                     size="sm"
                     className={`px-3 font-bold transition-all ${
@@ -2850,7 +3427,12 @@ const CitadelDrawer: React.FC<{
           <Modal
             open={!!detailBuildingId}
             onClose={() => setDetailBuildingId(null)}
-            title={`${selectedBuildingData.icon} ${selectedBuildingData.name} (Lv.${selectedBuildingData.level}/10)`}
+            title={
+              <div className="flex items-center gap-2">
+                <GameIcon name={selectedBuildingData.id} icon={selectedBuildingData.icon} size={22} />
+                <span>{selectedBuildingData.name} (Lv.{selectedBuildingData.level}/10)</span>
+              </div>
+            }
             footer={
               <div className="flex items-center justify-between w-full">
                 {selectedBuildingItem.drawerKey && selectedBuildingData.level > 0 ? (
@@ -2863,7 +3445,7 @@ const CitadelDrawer: React.FC<{
                     }}
                   >
                     <span>🚪</span>
-                    <span>시설 바로 입장</span>
+                    <span>{tr('시설 바로 입장')}</span>
                   </button>
                 ) : <div />}
                 
@@ -2881,7 +3463,7 @@ const CitadelDrawer: React.FC<{
                       className="btn btn-ghost text-xs px-4 py-1.5 font-bold opacity-75 cursor-not-allowed !text-[#c8aa6e] !border-[#c8aa6e88] !bg-[#c8aa6e1a] animate-pulse"
                       disabled
                     >
-                      🔨 공사 진행 중 ({selectedRemainSec}초)
+                      🔨 {tr('공사 진행 중')} ({formatDuration(selectedRemainSec, lang)})
                     </button>
                   ) : (
                     <button
@@ -2895,7 +3477,7 @@ const CitadelDrawer: React.FC<{
                         }
                       }}
                     >
-                      {selectedIsMax ? '★ 최고 레벨' : (!selectedPrereq.allowed ? '선행 조건 필요' : (selectedBuildingData.level > 0 ? '⚡ 레벨업 공사 시작' : '🔨 건설 시작'))}
+                      {selectedIsMax ? tr('★ 최고 레벨') : (!selectedPrereq.allowed ? tr('선행 조건 필요') : (selectedBuildingData.level > 0 ? tr('⚡ 레벨업 공사 시작') : tr('🔨 건설 시작')))}
                     </button>
                   )}
                 </div>
@@ -2909,9 +3491,9 @@ const CitadelDrawer: React.FC<{
                   <div className="flex items-center justify-between text-xs font-bold text-[#c8aa6e]">
                     <span className="flex items-center gap-1.5">
                       <span className="animate-spin">⚙️</span>
-                      <span>Lv.{selectedBuildingData.construction!.targetLevel} 증축 공사 진행 중...</span>
+                      <span>Lv.{selectedBuildingData.construction!.targetLevel} {tr('증축 공사 진행 중...')}</span>
                     </span>
-                    <span className="font-mono">{selectedRemainSec}초 남음 ({selectedProgressPct}%)</span>
+                    <span className="font-mono">{formatTimeLeft(selectedRemainSec, lang)} ({selectedProgressPct}%)</span>
                   </div>
                   <div className="w-full bg-[#050c18] rounded-full h-2 overflow-hidden border border-[#c8aa6e33]">
                     <div
@@ -2927,7 +3509,7 @@ const CitadelDrawer: React.FC<{
               <div className="p-2.5 rounded-xl bg-[#2a1412] border border-[#ef535066] text-xs text-[#ff8a80] flex items-center gap-2 shadow-sm">
                 <span className="text-lg">🔒</span>
                 <div>
-                  <div className="font-bold text-[#ef5350]">테크트리 선행 조건 미달</div>
+                  <div className="font-bold text-[#ef5350]">{tr('테크트리 선행 조건 미달')}</div>
                   <div className="text-[11px] text-[#cfd8dc] mt-0.5">{selectedPrereq.reason}</div>
                 </div>
               </div>
@@ -2936,7 +3518,7 @@ const CitadelDrawer: React.FC<{
             {/* 상단: 배경 설명 및 로어 */}
             <div className="panel p-3 bg-[#131926] border border-[#27354d] rounded-xl flex flex-col gap-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-[#c8aa6e] font-bold">📜 시설 서사 및 배경</span>
+                <span className="text-[10px] text-[#c8aa6e] font-bold">📜 {tr('시설 서사 및 배경')}</span>
                 <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e]">
                   {selectedBuildingData.level > 0 ? `현재 Lv.${selectedBuildingData.level}` : '미건설 시설'}
                 </span>
@@ -2949,7 +3531,7 @@ const CitadelDrawer: React.FC<{
             {/* 중단 1: 현재 가동 효과 */}
             <div className="panel p-3 bg-[#0d1522] border border-[#1e2a3e] rounded-xl flex flex-col gap-1">
               <div className="flex items-center justify-between text-[#38ef7d] font-bold text-xs">
-                <span>✨ 현재 가동 효과 (Lv.{selectedBuildingData.level})</span>
+                <span>✨ {tr('현재 가동 효과')} (Lv.{selectedBuildingData.level})</span>
                 {selectedStatusInfo.badge && (
                   <span className="font-mono text-[10px] text-[#38ef7d]">{selectedStatusInfo.badge}</span>
                 )}
@@ -2967,7 +3549,7 @@ const CitadelDrawer: React.FC<{
               return (
                 <div className="panel p-3 bg-[#181326] border border-[#2d2244] rounded-xl flex flex-col gap-1">
                   <div className="text-[#ffd54f] font-bold text-xs flex items-center justify-between">
-                    <span>🔮 다음 레벨 특전 (Lv.{nextLevel})</span>
+                    <span>🔮 {tr('다음 레벨 특전')} (Lv.{nextLevel})</span>
                     {selectedIsMax ? (
                       <span className="text-[10px] text-[#8b9bb4]">MAX</span>
                     ) : (nextUpkeep.amount > 0 || (nextUpkeep.secondaryAmount && nextUpkeep.secondaryAmount > 0)) ? (
@@ -3095,7 +3677,7 @@ const CitadelDrawer: React.FC<{
 // ─────────────────────────────────────────────────────────────
 const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: string) => void }> = ({ onBack, onNavigateDrawer }) => {
   const { state, gm } = useGameManager();
-  const { tr } = useI18n();
+  const { tr, lang } = useI18n();
   useCustomAssetVersion();
   const [detailCandidate, setDetailCandidate] = useState<TavernCandidate | null>(null);
   const [isAdLoading, setIsAdLoading] = useState(false);
@@ -3142,15 +3724,13 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
   const GRADE_META: Record<string, { label: string; tag: string; color: string }> = {
     rookie:  { label: 'N', tag: 'N', color: '#9e9e9e' },
     veteran: { label: 'V', tag: 'V', color: '#66bb6a' },
-    hero:    { label: 'H', tag: 'H', color: '#c8aa6e' },
-    elite:   { label: 'H', tag: 'H', color: '#c8aa6e' },
+    hero:    { label: 'H', tag: 'H', color: '#00d2ff' },
+    elite:   { label: 'H', tag: 'H', color: '#00d2ff' },
     epic:    { label: 'E', tag: 'E', color: '#ce93d8' },
     legend:  { label: 'E', tag: 'E', color: '#ce93d8' },
   };
 
-  const mins = Math.floor((state.tavernArrivalSecondsLeft || 0) / 60);
-  const secs = (state.tavernArrivalSecondsLeft || 0) % 60;
-  const timerText = `${mins}분 ${String(secs).padStart(2, '0')}초`;
+  const timerText = formatDuration(state.tavernArrivalSecondsLeft || 0, lang, true);
   const refreshCost = state.tavernRefreshCost ?? 100;
   const refreshStage = (state.tavernRefreshCount || 0) + 1;
 
@@ -3160,7 +3740,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
         <div className="flex items-center gap-2">
           <span className="text-base">🍺</span>
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-sm font-bold text-[#ffb74d]">{'방랑자의 라운지'}</span>
+            <span className="text-sm font-bold text-[#ffb74d]">{tr('방랑자의 라운지')}</span>
             <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e44]">
               Lv.{tavernLv}
             </span>
@@ -3278,10 +3858,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
           if (!cls) return null;
           const canAfford = state.resources.gold >= cand.hiringCost;
           const gMeta = GRADE_META[cand.grade] || GRADE_META.rookie;
-          const customPortrait = CustomAssetService.getInstance().getMercenaryOverride(cand.classId)
-            || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
-            || CustomAssetService.getInstance().getMercenaryOverride(cand.id)
-            || CustomAssetService.getInstance().getMercenaryOverride(cand.name);
+          const customPortrait = cand.portraitUrl || CustomAssetService.getHeroPortrait(cand);
 
           return (
             <div
@@ -3384,10 +3961,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
         const canAfford = state.resources.gold >= detailCandidate.hiringCost;
         const gMeta = GRADE_META[detailCandidate.grade] || GRADE_META.rookie;
         if (!cls) return null;
-        const detailPortrait = CustomAssetService.getInstance().getMercenaryOverride(detailCandidate.classId)
-          || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
-          || CustomAssetService.getInstance().getMercenaryOverride(detailCandidate.id)
-          || CustomAssetService.getInstance().getMercenaryOverride(detailCandidate.name);
+        const detailPortrait = detailCandidate.portraitUrl || CustomAssetService.getHeroPortrait(detailCandidate);
 
         return (
           <Modal
@@ -3650,6 +4224,7 @@ const BarracksDrawer: React.FC<{
   tutorialStepId?: string;
   onAdvanceTutorial?: (nextStepId?: string) => void;
 }> = ({ onClose, onNavigateDrawer, initialCategory = 'dungeon', tutorialStepId, onAdvanceTutorial }) => {
+  const { tr } = useI18n();
   const { state, gm } = useGameManager();
   const [selectedIdx, setSelectedIdx] = useState(() => {
     const unassignedIdx = state.barracks.findIndex(h => !state.party.some(p => p.id === h.id));
@@ -3695,15 +4270,7 @@ const BarracksDrawer: React.FC<{
   // 포트레이트 이미지 URL 헬퍼
   const getHeroPortraitUrl = (h: Mercenary | null | undefined) => {
     if (!h) return '';
-    const hCls = CHARACTER_CLASSES[h.classId];
-    return (
-      CustomAssetService.getInstance().getMercenaryOverride(h.classId) ||
-      (hCls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(hCls.promptKey) : undefined) ||
-      (h.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(h.portraitPromptKey) : undefined) ||
-      CustomAssetService.getInstance().getMercenaryOverride(h.id) ||
-      CustomAssetService.getInstance().getMercenaryOverride(h.name) ||
-      (hCls?.promptKey ? `assets/portraits/${hCls.promptKey}.png` : '')
-    );
+    return CustomAssetService.getHeroPortrait(h);
   };
 
   // ⚡ 3인 결투 부대 + 1인 오퍼레이터 최적 자동 편성
@@ -3797,8 +4364,8 @@ const BarracksDrawer: React.FC<{
   const GRADE_META: Record<string, { label: string; tag: string; color: string }> = {
     rookie:  { label: 'N', tag: 'N', color: '#9e9e9e' },
     veteran: { label: 'V', tag: 'V', color: '#66bb6a' },
-    hero:    { label: 'H', tag: 'H', color: '#c8aa6e' },
-    elite:   { label: 'H', tag: 'H', color: '#c8aa6e' },
+    hero:    { label: 'H', tag: 'H', color: '#00d2ff' },
+    elite:   { label: 'H', tag: 'H', color: '#00d2ff' },
     epic:    { label: 'E', tag: 'E', color: '#ce93d8' },
     legend:  { label: 'E', tag: 'E', color: '#ce93d8' },
   };
@@ -3808,6 +4375,33 @@ const BarracksDrawer: React.FC<{
     { slot: 'armor', label: '방어구', icon: '🛡️' },
     { slot: 'accessory', label: '장신구', icon: '💍' },
   ];
+
+  // ⚡ 미장착 장비 중 클래스 최적 장비 일괄 장착 핸들러
+  const handleAutoEquipBest = useCallback(() => {
+    if (!hero) return;
+    const res = findBestUnassignedEquipment(hero, state.equipmentInventory, allAvailableHeroes, gm);
+    if (res.equippedCount === 0) {
+      gameDialog.alert({
+        title: tr('장비 일괄 장착'),
+        message: tr('이미 모든 슬롯에 최적의 장비를 장착 중이거나 교체할 더 좋은 미장착 장비가 없습니다.'),
+        icon: 'ℹ️',
+      });
+      return;
+    }
+
+    res.chosenItems.forEach(({ item }) => {
+      gm.equipItem(hero.id, item.id);
+    });
+
+    SoundManager.getInstance().play('equip');
+    gameDialog.alert({
+      title: tr('최적 장비 일괄 장착 완료'),
+      message: tr('{0}의 추천 장비 {1}개를 일괄 장착했습니다.')
+        .replace('{0}', hero.name)
+        .replace('{1}', String(res.equippedCount)),
+      icon: '✨',
+    });
+  }, [hero, state.equipmentInventory, allAvailableHeroes, gm, tr]);
 
   // 영웅이 장착 중인 2개 스킬 데이터 조회
   const equippedSkill1 = hero && hero.equippedSkills?.[0] ? gm.resolveSkillData(hero.equippedSkills[0]) : null;
@@ -4296,153 +4890,17 @@ const BarracksDrawer: React.FC<{
               </div>
             </div>
 
-            {/* 하단: 보유 용병 선택 리스트 (수비 부대와 동일한 포트레이트 리스트 스타일) */}
-            <div className="panel p-3 bg-[#0c111e] border border-[#1b263b] rounded-xl flex flex-col gap-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[#cfd8e8] flex items-center gap-1.5">
-                  <span>👥</span>
-                  <span>
-                    {selectedDimRole
-                      ? selectedDimRole === 'main_0'
-                        ? I18nService.getInstance().tr('[선발 전열 (🔴 방어/돌파)]에 배치할 용병을 탭하세요')
-                        : selectedDimRole === 'main_1'
-                        ? I18nService.getInstance().tr('[선발 중열 (🟡 연계/화력)]에 배치할 용병을 탭하세요')
-                        : selectedDimRole === 'main_2'
-                        ? I18nService.getInstance().tr('[선발 후열 (🟢 지원/원거리)]에 배치할 용병을 탭하세요')
-                        : I18nService.getInstance().tr('[전술 오퍼레이터 (👑 가호/피버 궁극기)]로 지정할 용병을 탭하세요')
-                      : I18nService.getInstance().tr('보유 용병 선택 (위의 슬롯을 먼저 선택하거나 탭하여 바로 배치)')}
-                  </span>
-                </span>
-                <span className="text-[10px] text-[#8b9bb4]">{allAvailableHeroes.length}{I18nService.getInstance().tr('명 보유')}</span>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                {allAvailableHeroes.map(bHero => {
-                  const mainIdx = mainHeroes.findIndex(h => h.id === bHero.id);
-                  const isLeader = activeOperator?.id === bHero.id;
-                  const isAssigned = mainIdx !== -1 || isLeader;
-                  const isInDefense =
-                    defenseDeckData.deck.barrierHeroId === bHero.id ||
-                    defenseDeckData.deck.leftTurretHeroId === bHero.id ||
-                    defenseDeckData.deck.rightTurretHeroId === bHero.id ||
-                    defenseDeckData.deck.operatorHeroId === bHero.id;
-                  const gMeta = GRADE_META[bHero.grade] || GRADE_META.rookie;
-                  const bCls = CHARACTER_CLASSES[bHero.classId];
-                  const imgUrl = getHeroPortraitUrl(bHero);
-
-                  let assignedLabel = '대기';
-                  let badgeStyle = '';
-                  let cardBgStyle = 'bg-[#12141a] border-[#1e2a40] hover:border-[#c8aa6e]/60';
-
-                  if (mainIdx === 0) {
-                    assignedLabel = '🔴 선발 전열';
-                    badgeStyle = 'bg-[#ff525222] text-[#ff5252] border-[#ff525255]';
-                    cardBgStyle = 'bg-[#1a0e10] border-[#ff525266]';
-                  } else if (mainIdx === 1) {
-                    assignedLabel = '🟡 선발 중열';
-                    badgeStyle = 'bg-[#ff980022] text-[#ff9800] border-[#ff980055]';
-                    cardBgStyle = 'bg-[#1a1208] border-[#ff980066]';
-                  } else if (mainIdx === 2) {
-                    assignedLabel = '🟢 선발 후열';
-                    badgeStyle = 'bg-[#00e67622] text-[#00e676] border-[#00e67655]';
-                    cardBgStyle = 'bg-[#0a1810] border-[#00e67666]';
-                  } else if (isLeader) {
-                    assignedLabel = '👑 오퍼레이터';
-                    badgeStyle = 'bg-[#ffd54f22] text-[#ffd54f] border-[#ffd54f44]';
-                    cardBgStyle = 'bg-[#1e170b] border-[#ffd54f66]';
-                  }
-
-                  const isTargetSlotSelected =
-                    (selectedDimRole === 'main_0' && mainIdx === 0) ||
-                    (selectedDimRole === 'main_1' && mainIdx === 1) ||
-                    (selectedDimRole === 'main_2' && mainIdx === 2) ||
-                    ((selectedDimRole === 'operator' || selectedDimRole === 'leader') && isLeader);
-
-                  return (
-                    <div
-                      key={bHero.id}
-                      className={`p-2 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${cardBgStyle}`}
-                      onClick={() => handleAssignHeroToDimSlot(bHero.id)}
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        {/* 포트레이트 아이콘 */}
-                        <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-[#2a3f64] bg-[#080d16] flex items-center justify-center">
-                          {imgUrl ? (
-                            <img src={imgUrl} alt={bHero.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <span className="text-base">{bCls?.skills?.[0]?.icon || '⚔️'}</span>
-                          )}
-                          <span className="absolute bottom-0.2 right-0.5 text-[6.5px] font-mono font-bold bg-black/80 px-1 rounded text-[#ffd54f]">
-                            Lv.{bHero.level}
-                          </span>
-                        </div>
-
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="text-xs font-bold text-white truncate">{bHero.name}</span>
-                            <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33]">
-                              {I18nService.getInstance().tr(bHero.trait || '균형잡힌 정예')}
-                            </span>
-                            {isAssigned ? (
-                              <span className={`text-[8.5px] px-1.5 py-0.2 rounded font-bold border ${badgeStyle}`}>
-                                {I18nService.getInstance().tr(assignedLabel)}
-                              </span>
-                            ) : (
-                              <span className="text-[8.5px] px-1 py-0.2 rounded font-bold" style={{ color: gMeta.color, background: `${gMeta.color}15` }}>
-                                {I18nService.getInstance().tr('대기')}
-                              </span>
-                            )}
-                            {isInDefense && (
-                              <span className="text-[8px] px-1 py-0.2 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/40">
-                                {I18nService.getInstance().tr('🛡️ 수비 부대')}
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
-                            {I18nService.getInstance().tr(bCls?.name || '')} · ATK {bHero.stats.atk} · DEF {bHero.stats.def} · HP {bHero.maxHp.toLocaleString()}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAssignHeroToDimSlot(bHero.id);
-                          }}
-                          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
-                            isTargetSlotSelected || (!selectedDimRole && isAssigned)
-                              ? 'bg-[#38ef7d22] border-[#38ef7d] text-[#38ef7d]'
-                              : 'bg-[#c8aa6e22] border-[#c8aa6e88] text-white hover:bg-[#c8aa6e44]'
-                          }`}
-                        >
-                          {isTargetSlotSelected
-                            ? I18nService.getInstance().tr('✓ 선택됨')
-                            : isAssigned && selectedDimRole
-                            ? I18nService.getInstance().tr('교체')
-                            : isAssigned
-                            ? I18nService.getInstance().tr('✓ 배치됨')
-                            : I18nService.getInstance().tr('선택')}
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
             {/* ════════ 팝업 상세 모달: 포지션별 용병 선택 (전열 / 중열 / 후열 / 오퍼레이터) ════════ */}
             {dimSelectModalRole && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/85 backdrop-blur-md animate-fade-in select-none">
-                <div className="relative w-full max-w-md bg-[#0d1424] border border-[#243554] rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in select-none">
+                <div className="relative w-full max-w-xl bg-[#0d1424] border border-[#243554] rounded-2xl shadow-2xl flex flex-col max-h-[88vh] overflow-hidden">
                   {/* 모달 헤더 */}
-                  <div className="px-3.5 py-2.5 bg-gradient-to-r from-[#141e33] to-[#0d1424] border-b border-[#1f2d48] flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">
+                  <div className="px-4 py-3 bg-gradient-to-r from-[#141e33] to-[#0d1424] border-b border-[#1f2d48] flex items-center justify-between shrink-0">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="text-xl shrink-0">
                         {dimSelectModalRole === 'main_0' ? '🔴' : dimSelectModalRole === 'main_1' ? '🟡' : dimSelectModalRole === 'main_2' ? '🟢' : '👑'}
                       </span>
-                      <span className="font-extrabold text-xs sm:text-sm text-white">
+                      <span className="font-extrabold text-sm sm:text-base text-white truncate">
                         {dimSelectModalRole === 'main_0' && I18nService.getInstance().tr('선발 전열 결투원 지정 (방어 / 돌파)')}
                         {dimSelectModalRole === 'main_1' && I18nService.getInstance().tr('선발 중열 결투원 지정 (연계 / 화력)')}
                         {dimSelectModalRole === 'main_2' && I18nService.getInstance().tr('선발 후열 결투원 지정 (지원 / 원거리)')}
@@ -4451,15 +4909,15 @@ const BarracksDrawer: React.FC<{
                     </div>
                     <button
                       onClick={() => setDimSelectModalRole(null)}
-                      className="text-gray-400 hover:text-white p-1 text-base cursor-pointer"
+                      className="text-gray-400 hover:text-white p-1 text-lg cursor-pointer transition-colors shrink-0"
                     >
                       ✕
                     </button>
                   </div>
 
                   {/* 모달 안내 및 용병 리스트 */}
-                  <div className="p-3 flex flex-col gap-2.5 overflow-y-auto custom-scrollbar">
-                    <div className="text-[11px] text-[#8b9bb4] bg-[#070b14] p-2 rounded-xl border border-[#162238] leading-relaxed">
+                  <div className="p-3.5 flex flex-col gap-3 overflow-y-auto custom-scrollbar">
+                    <div className="text-xs text-[#9bb0ce] bg-[#070b14] p-3 rounded-xl border border-[#162238] leading-relaxed">
                       {dimSelectModalRole === 'main_0' && (
                         <span>
                           🔴 {I18nService.getInstance().tr('전열(1번)에 배치된 결투원은 적의 전열 집중 공격을 최우선으로 받아내며 아군 중·후열을 보호합니다. 체력과 방어력이 높은 탱커나 전사를 권장합니다.')}
@@ -4482,8 +4940,12 @@ const BarracksDrawer: React.FC<{
                       )}
                     </div>
 
-                    <div className="text-xs font-bold text-white">{I18nService.getInstance().tr('보유 용병 선택 (포트레이트 클릭)')}</div>
-                    <div className="flex flex-col gap-1.5 max-h-64 overflow-y-auto custom-scrollbar">
+                    <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-white px-0.5">
+                      <span>{I18nService.getInstance().tr('보유 용병 선택 (포트레이트 또는 카드 클릭)')}</span>
+                      <span className="text-xs text-[#8b9bb4] font-normal">{allAvailableHeroes.length}{I18nService.getInstance().tr('명 보유')}</span>
+                    </div>
+
+                    <div className="flex flex-col gap-2 max-h-[56vh] overflow-y-auto custom-scrollbar pr-1">
                       {allAvailableHeroes.map(h => {
                         const mIdx = mainHeroes.findIndex(mh => mh.id === h.id);
                         const isOp = activeOperator?.id === h.id;
@@ -4514,56 +4976,56 @@ const BarracksDrawer: React.FC<{
                             onClick={() => {
                               handleAssignHeroToDimSlot(h.id, dimSelectModalRole);
                             }}
-                            className={`p-2 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
+                            className={`p-3 sm:p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
                               isSelectedForThis
-                                ? 'bg-[#0f2a42] border-[#c8aa6e] shadow-[0_0_12px_rgba(200,170,110,0.4)]'
-                                : 'bg-[#12141a] border-[#1e2a40] hover:border-[#c8aa6e]/60'
+                                ? 'bg-[#0f2a42] border-[#c8aa6e] shadow-[0_0_14px_rgba(200,170,110,0.45)]'
+                                : 'bg-[#12141a] border-[#1e2a40] hover:border-[#c8aa6e]/60 hover:bg-[#151a24]'
                             }`}
                           >
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              {/* 포트레이트 */}
-                              <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-[#2a3f64] bg-[#080d16] flex items-center justify-center">
+                            <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                              {/* 포트레이트 (크기 확대) */}
+                              <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shrink-0 border-2 border-[#2a3f64] bg-[#080d16] flex items-center justify-center shadow-md">
                                 {imgUrl ? (
                                   <img src={imgUrl} alt={h.name} className="w-full h-full object-cover" />
                                 ) : (
-                                  <span className="text-base">{hCls?.skills?.[0]?.icon || '⚔️'}</span>
+                                  <span className="text-2xl">{hCls?.skills?.[0]?.icon || '⚔️'}</span>
                                 )}
-                                <span className="absolute bottom-0.2 right-0.5 text-[6.5px] font-mono font-bold bg-black/80 px-1 rounded text-[#ffd54f]">
+                                <span className="absolute bottom-0.5 right-0.5 text-[8px] sm:text-[9px] font-mono font-bold bg-black/85 px-1.5 py-0.5 rounded text-[#ffd54f]">
                                   Lv.{h.level}
                                 </span>
                               </div>
 
-                              <div className="min-w-0">
-                                <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="text-xs font-bold text-white truncate">{h.name}</span>
-                                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33]">
+                              <div className="min-w-0 space-y-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="text-sm sm:text-base font-extrabold text-white truncate">{h.name}</span>
+                                  <span className="text-[10px] sm:text-[11px] font-mono px-1.5 py-0.5 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33]">
                                     {I18nService.getInstance().tr(h.trait || '균형잡힌 정예')}
                                   </span>
                                   {isAssignedElsewhere && otherSlotLabel && (
-                                    <span className="text-[8px] px-1 py-0.2 rounded bg-amber-950/40 text-amber-300 border border-amber-800/40">
+                                    <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded bg-amber-950/40 text-amber-300 border border-amber-800/40 font-bold">
                                       {I18nService.getInstance().tr(otherSlotLabel)}
                                     </span>
                                   )}
                                   {isInDefense && (
-                                    <span className="text-[8px] px-1 py-0.2 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/40">
+                                    <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/40 font-bold">
                                       {I18nService.getInstance().tr('🛡️ 수비 부대')}
                                     </span>
                                   )}
                                 </div>
-                                <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
-                                  {I18nService.getInstance().tr(hCls?.name || '')} · ATK {h.stats.atk} · DEF {h.stats.def} · HP {h.maxHp.toLocaleString()}
+                                <div className="text-xs text-[#8b9bb4] truncate font-mono">
+                                  <span className="text-[#c8aa6e] font-bold">{I18nService.getInstance().tr(hCls?.name || '')}</span> · ⚔️{h.stats.atk} · 🛡️{h.stats.def} · ❤️{h.maxHp.toLocaleString()}
                                 </div>
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-1.5 shrink-0">
+                            <div className="flex items-center gap-2 shrink-0">
                               <button
                                 type="button"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleAssignHeroToDimSlot(h.id, dimSelectModalRole);
                                 }}
-                                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                                className={`px-3.5 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                                   isSelectedForThis
                                     ? 'bg-[#38ef7d22] border-[#38ef7d] text-[#38ef7d]'
                                     : 'bg-[#c8aa6e22] border-[#c8aa6e88] text-white hover:bg-[#c8aa6e44]'
@@ -4583,10 +5045,10 @@ const BarracksDrawer: React.FC<{
                   </div>
 
                   {/* 모달 풋터 */}
-                  <div className="px-3.5 py-2.5 bg-[#0a0f1d] border-t border-[#1f2d48] flex items-center justify-end gap-2">
+                  <div className="px-4 py-3 bg-[#0a0f1d] border-t border-[#1f2d48] flex items-center justify-end gap-2 shrink-0">
                     <button
                       onClick={() => setDimSelectModalRole(null)}
-                      className="btn btn-primary text-xs px-5 py-1.5 font-bold cursor-pointer"
+                      className="btn btn-primary text-xs sm:text-sm px-6 py-2 font-bold cursor-pointer"
                     >
                       {I18nService.getInstance().tr('배치 완료')}
                     </button>
@@ -4753,19 +5215,17 @@ const BarracksDrawer: React.FC<{
 
               {/* 🛡️ 장착 장비 슬롯 */}
               <div className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl">
-                <div className="text-xs text-[#38ef7d] font-bold mb-2 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span>🛡️ 장착 장비</span>
-                    <button
-                      type="button"
-                      onClick={() => setEquipOverlay({ hero, slot: 'all' })}
-                      className="px-2 py-0.5 text-[11px] bg-[#c8aa6e1a] hover:bg-[#c8aa6e33] text-[#c8aa6e] border border-[#c8aa6e44] rounded transition-colors font-medium flex items-center gap-1 cursor-pointer"
-                      title="전체 장비 보관함 열기 및 필터/일괄 판매 관리"
-                    >
-                      <span>🎒 전체 장비 관리 / 일괄 판매</span>
-                    </button>
-                  </div>
-                  <span className="text-[10px] text-[#8b9bb4]">탭하여 장착/해제</span>
+                <div className="text-xs text-[#38ef7d] font-bold mb-2 flex items-center justify-between flex-wrap gap-1.5">
+                  <span>🛡️ {tr('장착 장비')}</span>
+                  <button
+                    type="button"
+                    onClick={handleAutoEquipBest}
+                    className="px-2.5 py-1 text-[11px] bg-[#38ef7d1a] hover:bg-[#38ef7d33] text-[#38ef7d] border border-[#38ef7d44] hover:border-[#38ef7d88] rounded-lg transition-all font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-sm"
+                    title={tr('보관함의 미장착 장비 중 클래스 최적 장비를 일괄 장착합니다')}
+                  >
+                    <span>⚡</span>
+                    <span>{tr('탭하여 일괄 장착')}</span>
+                  </button>
                 </div>
                 <div className="grid grid-cols-3 gap-2 w-full">
                   {EQ_SLOTS.map(({ slot, label, icon }) => {
@@ -4783,9 +5243,18 @@ const BarracksDrawer: React.FC<{
                       <button
                         key={slot}
                         className="w-full min-w-0 overflow-hidden panel p-2 text-center flex flex-col items-center justify-between gap-1 rounded-lg transition-all hover:border-[#c8aa6e66] select-none cursor-pointer"
-                        style={{ borderColor: eq ? '#38ef7d' : '#222d42', background: eq ? '#0d1f18' : '#141a29', minHeight: '84px' }}
+                        style={{
+                          borderColor: eq ? (gm.isMementoResonated(eq) ? '#ba68c8' : '#38ef7d') : '#222d42',
+                          background: eq ? (gm.isMementoResonated(eq) ? '#1c1026' : '#0d1f18') : '#141a29',
+                          minHeight: '84px',
+                          boxShadow: gm.isMementoResonated(eq) ? '0 0 8px #ba68c833' : undefined
+                        }}
                         onClick={() => setEquipOverlay({ hero, slot })}
-                        title={eq ? `${eq.name} (+${eq.level}강)` : `[${label}] 슬롯 (미장착)`}
+                        title={
+                          eq
+                            ? `${eq.name} (+${eq.level}${tr('강')})${eq.isMemento ? ` [🪦 ${eq.mementoHeroName || tr('영웅')}${tr('의 유품')}]` : ''}${gm.isMementoResonated(eq) ? ` ✨ ${tr('영령 가호 공명 중 (+10% 성능 증폭)')}` : ''}`
+                            : `[${tr(label)}] ${tr('슬롯 (미장착)')}`
+                        }
                       >
                         {/* 아이콘 및 인챈트 인디케이터 */}
                         <div className="text-xl flex items-center justify-center gap-0.5 shrink-0">
@@ -4799,10 +5268,22 @@ const BarracksDrawer: React.FC<{
                           ) : (
                             <span>{icon}</span>
                           )}
-                          {(hasPrefix || hasSuffix) && (
+                          {(hasPrefix || hasSuffix || eq?.isMemento) && (
                             <span className="text-[10px] flex gap-0.5 ml-0.5">
-                              {hasPrefix && <span title={`접두사: ${eq.prefix?.name}`}>✨</span>}
-                              {hasSuffix && <span title={`접미사: ${eq.suffix?.name}`}>🔮</span>}
+                              {hasPrefix && <span title={`${tr('접두사')}: ${eq.prefix?.name}`}>✨</span>}
+                              {hasSuffix && <span title={`${tr('접미사')}: ${eq.suffix?.name}`}>🔮</span>}
+                              {eq?.isMemento && (
+                                <span
+                                  className={gm.isMementoResonated(eq) ? 'animate-bounce' : ''}
+                                  title={
+                                    gm.isMementoResonated(eq)
+                                      ? tr('🪦 [전사자의 유품] 영령의 가호 공명 활성화! 성능 +10% 증폭 중!')
+                                      : tr('🪦 [전사자의 유품] 묘지에서 해당 영웅의 가호를 받으면 성능 +10% 증폭')
+                                  }
+                                >
+                                  🪦
+                                </span>
+                              )}
                             </span>
                           )}
                         </div>
@@ -4951,40 +5432,6 @@ const BarracksDrawer: React.FC<{
                         {state.barracks.length <= 3 ? '🔒 해고(최소 3명)' : '👋 해고'}
                       </button>
                     </div>
-
-                    {/* 🎒 출정 채비실 바로가기 버튼 (파티 출전 후 채비실로 즉시 이동) */}
-                    {onNavigateDrawer && (
-                      <div className="mt-1 flex flex-col gap-1 animate-fade-in">
-                        <button
-                          data-tutorial-target="open-explore-drawer"
-                          className={`btn w-full py-1.5 px-3 text-sm font-bold shadow-md flex items-center justify-center gap-1.5 rounded-lg leading-tight transition-all cursor-pointer ${
-                            state.party.length >= 3
-                              ? 'btn-primary bg-gradient-to-r from-[#7e22ce] via-[#9333ea] to-[#7e22ce] hover:from-[#9333ea] hover:to-[#a855f7] border border-[#c084fc] text-white active:scale-95'
-                              : 'bg-[#1e142e] hover:bg-[#2a1b42] text-[#ce93d8] border border-[#7e22ce55]'
-                          }`}
-                          onClick={() => onNavigateDrawer('explore')}
-                        >
-                          <span className="text-sm shrink-0">🎒</span>
-                          <span className="font-bold">출정 채비실로 이동</span>
-                          <span className="text-xs shrink-0">▶</span>
-                        </button>
-                        {state.party.length >= 3 && (
-                          <span className="text-[10px] text-center text-[#c084fc] font-medium leading-tight">
-                            3인 원정대 편성이 완료되었습니다. 채비실에서 진형과 보급품을 점검하세요!
-                          </span>
-                        )}
-                      </div>
-                    )}
-                    {isAdmitted && (
-                      <div
-                        className="text-[10px] text-[#ff7043] bg-[#ff704312] border border-[#ff704333] hover:bg-[#ff704322] px-2.5 py-1 rounded flex items-center gap-1.5 leading-tight cursor-pointer transition-all"
-                        onClick={() => onNavigateDrawer?.('infirmary')}
-                        title="생체 복원 병동으로 즉시 이동"
-                      >
-                        <span>🏥</span>
-                        <span>생체 복원 병동에서 집중 치료 중입니다. 완치 후 퇴원하거나 병동에서 수동 퇴원시켜야 파티 편성이 가능합니다. (클릭하여 병동으로 바로가기 ▶)</span>
-                      </div>
-                    )}
                   </div>
                 );
               })()}
@@ -6003,6 +6450,19 @@ interface SkillBookDetailModalProps {
   gm: ReturnType<typeof useGameManager>['gm'];
 }
 
+const formatBookName = (name: string, trFn: (k: string) => string) => {
+  if (!name) return '';
+  if (name.startsWith('마도서: ')) {
+    const skillPart = name.replace('마도서: ', '');
+    return `${trFn('마도서')}: ${trFn(skillPart)}`;
+  }
+  if (name.startsWith('비전 마도서: ')) {
+    const skillPart = name.replace('비전 마도서: ', '');
+    return `${trFn('비전 마도서')}: ${trFn(skillPart)}`;
+  }
+  return trFn(name);
+};
+
 const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
   hero,
   detail,
@@ -6013,6 +6473,7 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
   onAbandon,
   gm
 }) => {
+  const { tr, lang } = useI18n();
   const { skill: rawSkill, bookItem, isLearned, slotIndex, bookLv, rarity } = detail;
   const currentHero = gm.barracks.find(h => h.id === hero.id) || gm.party.find(h => h.id === hero.id) || hero;
   const currentLv = currentHero.skillLevels?.[rawSkill.id] || bookLv || 1;
@@ -6087,31 +6548,31 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
             </span>
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="font-bold text-base text-white">{bookItem?.name || skill.name}</span>
+                <span className="font-bold text-base text-white">{bookItem ? formatBookName(bookItem.name, tr) : tr(skill.name)}</span>
                 <span
                   className="text-[10px] px-2 py-0.5 rounded font-bold"
                   style={{ color: rMeta.color, background: rMeta.bg, border: `1px solid ${rMeta.borderColor}` }}
                 >
-                  {rMeta.label} 등급
+                  {tr(rMeta.label)} {tr('등급')}
                 </span>
                 <span className="text-[11px] font-mono font-bold text-[#ffd54f]">
                   [Lv.{currentLv}/10]
                 </span>
                 {bookItem && (
                   <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] border border-[#c8aa6e33]">
-                    x{bookCount}권 보유
+                    x{bookCount}{tr('권 보유')}
                   </span>
                 )}
               </div>
               <div className="text-[11px] text-[#8b9bb4] mt-0.5">
                 {dropOrigin ? (
                   <span className="text-[#ffb74d] font-bold flex items-center gap-1">
-                    <span>👾 드랍 마물:</span>
-                    <strong className="text-white underline underline-offset-2">{dropOrigin.monsterName}</strong>
-                    {dropOrigin.floor && <span className="text-[#ffd54f] font-mono">({dropOrigin.floor}F {dropOrigin.isBoss ? '보스' : dropOrigin.monsterType === 'elite' ? '정예' : '마물'})</span>}
+                    <span>👾 {tr('드랍 마물')}:</span>
+                    <strong className="text-white underline underline-offset-2">{tr(dropOrigin.monsterName)}</strong>
+                    {dropOrigin.floor && <span className="text-[#ffd54f] font-mono">({dropOrigin.floor}F {dropOrigin.isBoss ? tr('보스') : dropOrigin.monsterType === 'elite' ? tr('정예') : tr('마물')})</span>}
                   </span>
                 ) : (
-                  <span>📖 방주 고대 비전 마도서 (에테르 제본)</span>
+                  <span>📖 {tr('방주 고대 비전 마도서 (에테르 제본)')}</span>
                 )}
               </div>
             </div>
@@ -6131,11 +6592,11 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
           <div className="p-2 rounded-xl bg-[#ff980018] border border-[#ff980044] text-xs flex items-center justify-between gap-2 shadow-sm">
             <div className="flex items-center gap-1.5 font-bold text-[#ffb74d]">
               <span className="text-base">👾</span>
-              <span>드랍 마물:</span>
-              <strong className="text-white text-sm tracking-wide">{dropOrigin.monsterName}</strong>
+              <span>{tr('드랍 마물')}:</span>
+              <strong className="text-white text-sm tracking-wide">{tr(dropOrigin.monsterName)}</strong>
             </div>
             <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-[#0b0f19] text-[#ffd54f] border border-[#ff980033]">
-              {dropOrigin.floor ? `${dropOrigin.floor}F ` : ''}{dropOrigin.isBoss ? '👑 보스 전리품' : dropOrigin.monsterType === 'elite' ? '⚡ 정예 마물' : '일반 마물'}
+              {dropOrigin.floor ? `${dropOrigin.floor}F ` : ''}{dropOrigin.isBoss ? `👑 ${tr('보스 전리품')}` : dropOrigin.monsterType === 'elite' ? `⚡ ${tr('정예 마물')}` : tr('일반 마물')}
             </span>
           </div>
         )}
@@ -6147,15 +6608,15 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
         >
           <div className="flex items-center gap-1.5 font-bold" style={{ color: affMeta.color }}>
             <span className="text-base">{affMeta.icon}</span>
-            <span>{affMeta.name}</span>
+            <span>{tr(affMeta.name)}</span>
           </div>
           {isMatch ? (
             <span className="text-[10px] font-bold text-[#4ade80] bg-[#4ade8022] px-2 py-0.5 rounded border border-[#4ade8044]">
-              ✓ 계열 적합 (위력 100%)
+              ✓ {tr('계열 적합 (위력 100%)')}
             </span>
           ) : (
             <span className="text-[10px] font-bold text-[#f87171] bg-[#f8717122] px-2 py-0.5 rounded border border-[#f8717144] animate-pulse">
-              ⚠️ 계열 부조화 (위력 50% 반감)
+              ⚠️ {tr('계열 부조화 (위력 50% 반감)')}
             </span>
           )}
         </div>
@@ -6164,9 +6625,9 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
           <div className="p-2.5 rounded-xl bg-[#2a1215] border border-[#ef535066] text-xs text-[#ffcdd2] flex items-start gap-2">
             <span className="text-base leading-none">⚠️</span>
             <div className="flex flex-col gap-0.5">
-              <span className="font-bold text-[#ff8a80]">직업군 계열 불일치 페널티 경고</span>
+              <span className="font-bold text-[#ff8a80]">{tr('직업군 계열 불일치 페널티 경고')}</span>
               <span className="text-[10px] text-[#ffcdd2] leading-relaxed">
-                {hero.name}({heroClassName})의 계열과 맞지 않는 비전서입니다. 전투 중 사용 시 스킬의 모든 위력(피해/치유/보호막/버프)이 <span className="font-bold text-[#ff5252]">50% 반감</span>됩니다.
+                {hero.name}({heroClassName}){tr('의 계열과 맞지 않는 비전서입니다. 전투 중 사용 시 스킬의 모든 위력(피해/치유/보호막/버프)이')} <span className="font-bold text-[#ff5252]">{tr('50% 반감')}</span>{tr('됩니다.')}
               </span>
             </div>
           </div>
@@ -6175,23 +6636,23 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
         {/* 4분할 핵심 스펙 그리드 */}
         <div className="grid grid-cols-4 gap-1.5 text-center font-mono">
           <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
-            <span className="text-[10px] text-[#8b9bb4] block">마나 소모</span>
+            <span className="text-[10px] text-[#8b9bb4] block">{tr('마나 소모')}</span>
             <span className="text-xs font-bold text-[#64b5f6]">{skill.manaCost} MP</span>
           </div>
           <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
-            <span className="text-[10px] text-[#8b9bb4] block">쿨다운</span>
-            <span className="text-xs font-bold text-[#ffd54f]">{skill.cooldown || 0}턴</span>
+            <span className="text-[10px] text-[#8b9bb4] block">{tr('쿨다운')}</span>
+            <span className="text-xs font-bold text-[#ffd54f]">{skill.cooldown || 0}{tr('턴')}</span>
           </div>
           <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
-            <span className="text-[10px] text-[#8b9bb4] block">위력 계수</span>
+            <span className="text-[10px] text-[#8b9bb4] block">{tr('위력 계수')}</span>
             <span className="text-xs font-bold text-[#38ef7d]">{currentPowerPct}%</span>
             {currentLv > 1 && currentPowerPct !== basePowerPct && (
-              <span className="text-[9px] text-[#ffd54f] font-mono block">(초기 {basePowerPct}%)</span>
+              <span className="text-[9px] text-[#ffd54f] font-mono block">({tr('초기')} {basePowerPct}%)</span>
             )}
           </div>
           <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
-            <span className="text-[10px] text-[#8b9bb4] block">대상</span>
-            <span className="text-[10px] font-bold text-[#cfd8dc] truncate block">{targetLabel}</span>
+            <span className="text-[10px] text-[#8b9bb4] block">{tr('대상')}</span>
+            <span className="text-[10px] font-bold text-[#cfd8dc] truncate block">{tr(targetLabel)}</span>
           </div>
         </div>
 
@@ -6204,7 +6665,7 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
               style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
             >
               <span>{t.icon}</span>
-              <span>{t.label}</span>
+              <span>{tr(t.label)}</span>
             </span>
           ))}
         </div>
@@ -6212,10 +6673,10 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
         {/* 효과 유형 & 포지션 보너스 */}
         <div className="flex items-center gap-2 flex-wrap text-xs">
           <div className="px-2.5 py-1 rounded-lg bg-[#141d2f] border border-[#22314d] text-[#b0bec5] flex items-center gap-1.5">
-            <span className="text-[10px] text-[#8b9bb4]">효과 속성:</span>
-            <span className="font-bold text-white">{effectText}</span>
+            <span className="text-[10px] text-[#8b9bb4]">{tr('효과 속성')}:</span>
+            <span className="font-bold text-white">{tr(effectText)}</span>
             {skill.statusDuration && (
-              <span className="text-[10px] text-[#ffd54f]">({skill.statusDuration}턴)</span>
+              <span className="text-[10px] text-[#ffd54f]">({skill.statusDuration}{tr('턴')})</span>
             )}
           </div>
           {posLabel && (
@@ -6223,15 +6684,15 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
               className="px-2.5 py-1 rounded-lg border flex items-center gap-1 font-bold"
               style={{ borderColor: `${posColor}44`, backgroundColor: `${posColor}15`, color: posColor }}
             >
-              <span>📍 {posLabel}</span>
+              <span>📍 {tr(posLabel)}</span>
             </div>
           )}
         </div>
 
         {/* 상세 효과 설명 */}
         <div className="p-3 rounded-xl bg-[#12141a] border border-[#1e2a3f] flex flex-col gap-1">
-          <div className="text-[11px] font-bold text-[#c8aa6e]">📖 마도서 비전 효과</div>
-          <div className="text-xs text-[#e2e8f0] leading-relaxed whitespace-pre-line">{skill.description}</div>
+          <div className="text-[11px] font-bold text-[#c8aa6e]">📖 {tr('마도서 비전 효과')}</div>
+          <div className="text-xs text-[#e2e8f0] leading-relaxed whitespace-pre-line">{tr(skill.description)}</div>
         </div>
 
         {/* ⚡ 상태이상 연계 메커니즘 섹션 */}
@@ -6239,9 +6700,9 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
           <div className="p-2.5 rounded-xl bg-[#111a2c] border border-[#c8aa6e33] flex flex-col gap-1.5">
             <div className="text-[11px] font-bold text-[#ffd54f] flex items-center justify-between">
               <span className="flex items-center gap-1">
-                <span>⚡ 상태이상 연계 메커니즘</span>
+                <span>⚡ {tr('상태이상 연계 메커니즘')}</span>
               </span>
-              <span className="text-[9px] text-[#8b9bb4] font-normal">적 상태이상 시 발동</span>
+              <span className="text-[9px] text-[#8b9bb4] font-normal">{tr('적 상태이상 시 발동')}</span>
             </div>
             <div className="flex flex-col gap-1.5 max-h-[160px] overflow-y-auto pr-0.5">
               {combos.map(c => (
@@ -6249,18 +6710,18 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
                   <div className="flex items-center justify-between gap-1 flex-wrap">
                     <span className="font-bold text-white text-[11px] flex items-center gap-1">
                       <span>{c.icon}</span>
-                      <span>{c.comboName}</span>
+                      <span>{tr(c.comboName)}</span>
                     </span>
                     <span
                       className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold"
                       style={{ backgroundColor: `${c.bannerColor}18`, color: c.bannerColor, border: `1px solid ${c.bannerColor}44` }}
                     >
-                      필요 적 상태: {c.triggerStatus}
+                      {tr('필요 적 상태')}: {tr(c.triggerStatus)}
                     </span>
                   </div>
                   {/* 연계 스킬 태그 뱃지 */}
                   <div className="flex items-center gap-1 flex-wrap text-[9px]">
-                    <span className="text-[#8b9bb4]">연계 스킬 태그:</span>
+                    <span className="text-[#8b9bb4]">{tr('연계 스킬 태그')}:</span>
                     {c.requiredTagIds.map(tId => {
                       const tMeta = getTagMeta(tId);
                       return (
@@ -6270,12 +6731,12 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
                           style={{ backgroundColor: tMeta.bg, color: tMeta.text, border: `1px solid ${tMeta.border}` }}
                         >
                           <span>{tMeta.icon}</span>
-                          <span>{tMeta.label}</span>
+                          <span>{tr(tMeta.label)}</span>
                         </span>
                       );
                     })}
                   </div>
-                  <div className="text-[10px] text-[#cfd8dc] leading-snug">{c.fullDesc}</div>
+                  <div className="text-[10px] text-[#cfd8dc] leading-snug">{tr(c.fullDesc)}</div>
                 </div>
               ))}
             </div>
@@ -6283,9 +6744,9 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
             <div className="p-2 rounded-lg bg-[#0a1220] border border-[#223652] text-[10px] text-[#90caf9] flex items-center justify-between gap-1.5">
               <span className="flex items-center gap-1.5">
                 <span className="text-sm">💡</span>
-                <span>적 상태이상 시 일치 태그 스킬로 공격 시 연계 폭발</span>
+                <span>{tr('적 상태이상 시 일치 태그 스킬로 공격 시 연계 폭발')}</span>
               </span>
-              <EncyclopediaBadge query="스킬 연계" tab="skills" label="연계 백과" compact />
+              <EncyclopediaBadge query="스킬 연계" tab="skills" label={tr('연계 백과')} compact />
             </div>
           </div>
         )}
@@ -6294,11 +6755,11 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
         <div className="p-2.5 rounded-xl bg-[#0f1523] border border-[#1e2a3f] flex flex-col gap-1.5">
           <div className="flex items-center justify-between text-xs">
             <span className="text-[#8b9bb4] flex items-center gap-1 font-medium">
-              <span>📖 연구 습득률</span>
-              <span className="text-[10px] text-[#80cbc4]">({rMeta.label} · 권당 +{gainPerBook}%)</span>
+              <span>📖 {tr('연구 습득률')}</span>
+              <span className="text-[10px] text-[#80cbc4]">({tr(rMeta.label)} · {tr('권당')} +{gainPerBook}%)</span>
             </span>
             <span className={`font-mono font-bold ${currentMastery >= 100 ? 'text-[#38ef7d]' : 'text-[#c8aa6e]'}`}>
-              {currentMastery}% / 100% {currentMastery >= 100 && '✓ 습득완료'}
+              {currentMastery}% / 100% {currentMastery >= 100 && `✓ ${tr('습득완료')}`}
             </span>
           </div>
           <div className="w-full h-2 bg-[#14161c] rounded-full overflow-hidden border border-[#23324d]">
@@ -6313,9 +6774,9 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
           </div>
           {currentMastery < 100 && (
             <div className="text-[10px] text-[#8b9bb4] flex items-center justify-between">
-              <span>완전 습득까지 필요한 연독:</span>
+              <span>{tr('완전 습득까지 필요한 연독')}:</span>
               <span className="text-[#ffd54f] font-bold font-mono">
-                약 {Math.max(1, Math.ceil((100 - currentMastery) / gainPerBook))}권 추가 필요
+                {tr('완전 습득까지 약')} {Math.max(1, Math.ceil((100 - currentMastery) / gainPerBook))}{tr('권 추가 필요')}
               </span>
             </div>
           )}
@@ -6323,110 +6784,145 @@ const SkillBookDetailModal: React.FC<SkillBookDetailModalProps> = ({
 
         {/* 서고 상태 안내 바 */}
         <div className="px-3 py-2 rounded-xl bg-[#0f1523] border border-[#1a2538] flex items-center justify-between text-xs">
-          <span className="text-[#8b9bb4]">서고 상태</span>
+          <span className="text-[#8b9bb4]">{tr('서고 상태')}</span>
           {isLearned ? (
             <span className="font-bold flex items-center gap-1.5">
-              {slotIndex === 0 && <span className="text-[#c8aa6e]">★ 1번 전투 슬롯 장착 중</span>}
-              {slotIndex === 1 && <span className="text-[#c8aa6e]">★ 2번 전투 슬롯 장착 중</span>}
-              {slotIndex === -1 && <span className="text-[#81c784]">✓ 습득 완료 (대기 상태)</span>}
+              {slotIndex === 0 && <span className="text-[#c8aa6e]">★ 1{tr('번 전투 슬롯 장착 중')}</span>}
+              {slotIndex === 1 && <span className="text-[#c8aa6e]">★ 2{tr('번 전투 슬롯 장착 중')}</span>}
+              {slotIndex === -1 && <span className="text-[#81c784]">✓ {tr('습득 완료 (대기 상태)')}</span>}
             </span>
           ) : (
             <span className="font-bold text-[#ffd54f]">
-              {isFullLearned ? '⚠️ 습득 슬롯 가득 참 (4/4)' : '○ 미습득 (보유 중)'}
+              {isFullLearned ? `⚠️ ${tr('습득 슬롯 가득 참 (4/4)')}` : `○ ${tr('미습득 (보유 중)')}`}
             </span>
           )}
         </div>
         </div>
 
-        {/* 하단 액션 버튼 바 (하단 고정) */}
-        <div className="shrink-0 p-3 pt-2.5 border-t border-[#1b263b] bg-[#0c101c] flex items-center justify-between gap-2 flex-wrap">
-          <div>
-            {isLearned && onOpenEnhance && (
-              <button
-                className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#26a69a] hover:bg-[#26a69a22] border border-[#26a69a55] font-bold flex items-center gap-1"
-                onClick={() => {
-                  onClose();
-                  onOpenEnhance(skill);
-                }}
-                title="에테르 연금 공방에서 스킬을 비전 강화합니다"
-              >
-                <span>⚡ 비전 강화</span>
-              </button>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            {isLearned ? (
-              <>
+        {/* 하단 액션 버튼 바 (하단 고정: 2번 좌우 비대칭 분할형 레이아웃) */}
+        <div className="shrink-0 p-3 pt-2.5 border-t border-[#1b263b] bg-[#0c101c]">
+          {isLearned ? (
+            <div className="flex items-stretch gap-2.5 w-full">
+              {/* 좌측: 스킬 강화 Hero 버튼 (비대칭 분할, 글로우 없는 차분한 매트 솔리드 디자인) */}
+              {onOpenEnhance ? (
                 <button
-                  className={`btn text-xs px-3 py-1.5 font-bold ${slotIndex === 0 ? 'btn-primary' : 'btn-ghost'}`}
+                  type="button"
+                  className="w-[42%] shrink-0 rounded-xl bg-[#142622] hover:bg-[#1b342e] active:bg-[#0f1d1a] border border-[#295045] text-[#99f6e4] flex flex-col items-center justify-center gap-0.5 p-2 transition-colors cursor-pointer select-none active:scale-[0.98]"
                   onClick={() => {
-                    if (slotIndex === 0) gm.unequipSkillSlot(hero.id, 0);
-                    else gm.equipSkillToSlot(hero.id, skill.id, 0);
                     onClose();
+                    onOpenEnhance(skill);
                   }}
+                  title={tr('에테르 연금 공방에서 스킬을 강화합니다')}
                 >
-                  {slotIndex === 0 ? '✓ 1번 슬롯 해제' : '1번 슬롯 장착'}
+                  <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm text-[#a7f3d0]">
+                    <span>⚡</span>
+                    <span>{tr('스킬 강화')}</span>
+                  </div>
+                  <span className="text-[10px] text-[#5eead4] font-medium tracking-tight opacity-90">
+                    Lv.{currentLv} ➔ Lv.{Math.min(10, currentLv + 1)} ({tr('공방')})
+                  </span>
                 </button>
-                <button
-                  className={`btn text-xs px-3 py-1.5 font-bold ${slotIndex === 1 ? 'btn-primary' : 'btn-ghost'}`}
-                  onClick={() => {
-                    if (slotIndex === 1) gm.unequipSkillSlot(hero.id, 1);
-                    else gm.equipSkillToSlot(hero.id, skill.id, 1);
-                    onClose();
-                  }}
-                >
-                  {slotIndex === 1 ? '✓ 2번 슬롯 해제' : '2번 슬롯 장착'}
-                </button>
-                <button
-                  className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#ef5350] hover:bg-[#ef535022] border border-[#ef535033]"
-                  onClick={() => {
-                    if (onUnlearn) onUnlearn(skill);
-                    else gm.unlearnSkill(hero.id, skill.id);
-                    onClose();
-                  }}
-                >
-                  🗑️ 스킬 망각
-                </button>
-              </>
-            ) : (
-              <>
-                {currentMastery > 0 && (
+              ) : null}
+
+              {/* 우측: 전투 슬롯 2분할 버튼 + 하단 스킬 망각/닫기 버튼 */}
+              <div className="flex-1 min-w-0 flex flex-col gap-1.5 justify-between">
+                <div className="grid grid-cols-2 gap-1.5">
                   <button
-                    className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#ef5350] hover:bg-[#ef535022] border border-[#ef535033]"
+                    type="button"
+                    className={`text-xs py-2 px-1 rounded-lg font-bold text-center border transition-colors select-none ${
+                      slotIndex === 0
+                        ? 'bg-[#1a2e24] text-[#86efac] border-[#2d5642] hover:bg-[#20392c]'
+                        : 'bg-[#131b29] text-[#94a3b8] border-[#223048] hover:text-[#e2e8f0] hover:border-[#344869]'
+                    }`}
                     onClick={() => {
-                      if (onAbandon) onAbandon(skill, currentMastery);
-                      else gm.abandonStudyingSkill(hero.id, skill.id);
+                      if (slotIndex === 0) gm.unequipSkillSlot(hero.id, 0);
+                      else gm.equipSkillToSlot(hero.id, skill.id, 0);
                       onClose();
                     }}
                   >
-                    🚫 중도 포기
+                    {slotIndex === 0 ? `✓ 1${tr('번 해제')}` : `1${tr('번 장착')}`}
                   </button>
-                )}
-                {bookItem && (
-                  <ActionButton
-                    label={
-                      isFullLearned
-                        ? '슬롯 가득 참'
-                        : `📖 마도서 연독 (${currentMastery}% / +${gainPerBook}%)`
-                    }
-                    variant={canLearn ? 'primary' : 'ghost'}
-                    size="sm"
-                    disabled={!canLearn}
+                  <button
+                    type="button"
+                    className={`text-xs py-2 px-1 rounded-lg font-bold text-center border transition-colors select-none ${
+                      slotIndex === 1
+                        ? 'bg-[#1a2e24] text-[#86efac] border-[#2d5642] hover:bg-[#20392c]'
+                        : 'bg-[#131b29] text-[#94a3b8] border-[#223048] hover:text-[#e2e8f0] hover:border-[#344869]'
+                    }`}
                     onClick={() => {
-                      gm.learnSkillFromBook(hero.id, bookItem.id);
+                      if (slotIndex === 1) gm.unequipSkillSlot(hero.id, 1);
+                      else gm.equipSkillToSlot(hero.id, skill.id, 1);
                       onClose();
                     }}
-                  />
-                )}
-              </>
-            )}
-            <button
-              className="btn btn-ghost text-xs px-3 py-1.5 font-bold text-[#8b9bb4] hover:text-white"
-              onClick={onClose}
-            >
-              닫기
-            </button>
-          </div>
+                  >
+                    {slotIndex === 1 ? `✓ 2${tr('번 해제')}` : `2${tr('번 장착')}`}
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-[1fr_auto] gap-1.5">
+                  <button
+                    type="button"
+                    className="py-1 px-2 text-[11px] rounded-lg bg-[#1a1215] hover:bg-[#26171c] border border-[#3d1c23] text-[#f87171] font-medium flex items-center justify-center gap-1 transition-colors select-none"
+                    onClick={() => {
+                      if (onUnlearn) onUnlearn(skill);
+                      else gm.unlearnSkill(hero.id, skill.id);
+                      onClose();
+                    }}
+                    title={tr('스킬을 망각하여 슬롯을 비웁니다')}
+                  >
+                    <span>🗑️</span>
+                    <span>{tr('스킬 망각')}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="py-1 px-3 text-[11px] rounded-lg bg-[#131b29] hover:bg-[#1c2638] border border-[#223048] text-[#94a3b8] hover:text-[#e2e8f0] font-medium transition-colors select-none"
+                    onClick={onClose}
+                  >
+                    {tr('닫기')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-end gap-2 w-full">
+              {currentMastery > 0 && (
+                <button
+                  type="button"
+                  className="btn btn-ghost text-xs px-2.5 py-1.5 text-[#ef5350] hover:bg-[#ef535022] border border-[#ef535033]"
+                  onClick={() => {
+                    if (onAbandon) onAbandon(skill, currentMastery);
+                    else gm.abandonStudyingSkill(hero.id, skill.id);
+                    onClose();
+                  }}
+                >
+                  🚫 {tr('중도 포기')}
+                </button>
+              )}
+              {bookItem && (
+                <ActionButton
+                  label={
+                    isFullLearned
+                      ? tr('슬롯 가득 참')
+                      : `📖 ${tr('마도서 연독')} (${currentMastery}% / +${gainPerBook}%)`
+                  }
+                  variant={canLearn ? 'primary' : 'ghost'}
+                  size="sm"
+                  disabled={!canLearn}
+                  onClick={() => {
+                    gm.learnSkillFromBook(hero.id, bookItem.id);
+                    onClose();
+                  }}
+                />
+              )}
+              <button
+                type="button"
+                className="btn btn-ghost text-xs px-3 py-1.5 font-bold text-[#8b9bb4] hover:text-white"
+                onClick={onClose}
+              >
+                {tr('닫기')}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -6438,6 +6934,7 @@ const SkillManagerOverlay: React.FC<{
   skillBooks: SkillBookItem[];
   onClose: () => void;
 }> = ({ hero, skillBooks, onClose }) => {
+  const { tr, lang } = useI18n();
   const { state, gm } = useGameManager();
   const [tab, setTab] = useState<'learned' | 'books'>('learned');
   const [enhanceTargetSkill, setEnhanceTargetSkill] = useState<Skill | null>(null);
@@ -6492,9 +6989,9 @@ const SkillManagerOverlay: React.FC<{
           <span className="text-lg">📖</span>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-[#c8aa6e]">{hero.name}의 스킬북 서고</span>
+              <span className="text-sm font-bold text-[#c8aa6e]">{hero.name}{tr('의 스킬북 서고')}</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
-                습득 {learnedSkills.length}/6
+                {tr('습득')} {learnedSkills.length}/6
               </span>
             </div>
           </div>
@@ -6505,7 +7002,7 @@ const SkillManagerOverlay: React.FC<{
           onClick={onClose}
         >
           <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-          <span style={{ color: '#c56060' }}>닫기</span>
+          <span style={{ color: '#c56060' }}>{tr('닫기')}</span>
         </button>
       </div>
 
@@ -6515,13 +7012,13 @@ const SkillManagerOverlay: React.FC<{
           className={`btn flex-1 py-1.5 text-xs font-bold transition-all ${tab === 'learned' ? 'btn-primary' : 'btn-ghost'}`}
           onClick={() => setTab('learned')}
         >
-          ⚔️ 습득 스킬 ({learnedSkills.length}/6)
+          ⚔️ {tr('습득 스킬')} ({learnedSkills.length}/6)
         </button>
         <button
           className={`btn flex-1 py-1.5 text-xs font-bold transition-all ${tab === 'books' ? 'btn-primary' : 'btn-ghost'}`}
           onClick={() => setTab('books')}
         >
-          📚 보유 마도서 ({skillBooks.reduce((sum, b) => sum + (b.count || 1), 0)}권)
+          📚 {tr('보유 마도서')} ({skillBooks.reduce((sum, b) => sum + (b.count || 1), 0)}{tr('권')})
         </button>
       </div>
 
@@ -6534,21 +7031,21 @@ const SkillManagerOverlay: React.FC<{
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between px-1">
                 <span className="text-xs font-bold text-[#c8aa6e] flex items-center gap-1.5">
-                  <span>⚔️ 정식 습득 스킬</span>
+                  <span>⚔️ {tr('정식 습득 스킬')}</span>
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] font-mono">
                     {learnedSkills.length}/6
                   </span>
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">
-                  최대 6개 습득 · 2개 장착
+                  {tr('최대 6개 습득 · 2개 장착')}
                 </span>
               </div>
 
               {learnedSkills.length === 0 ? (
                 <div className="panel p-4 text-center text-[#8b9bb4] text-xs bg-[#0f1420]">
-                  정식 습득 완료된 스킬이 없습니다.<br />
+                  {tr('정식 습득 완료된 스킬이 없습니다.')}<br />
                   <span className="text-[10px] text-[#c8aa6e] mt-0.5 block">
-                    [보유 마도서] 탭에서 마도서를 연독해 스킬을 터득하세요.
+                    {tr('[보유 마도서] 탭에서 마도서를 연독해 스킬을 터득하세요.')}
                   </span>
                 </div>
               ) : (
@@ -6587,24 +7084,24 @@ const SkillManagerOverlay: React.FC<{
                           </span>
                           <div>
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="font-bold text-sm text-white group-hover:text-[#c8aa6e] transition-colors">{sk.name}</span>
+                              <span className="font-bold text-sm text-white group-hover:text-[#c8aa6e] transition-colors">{tr(sk.name)}</span>
                               <span
                                 className="text-[9px] px-1.5 py-0.2 rounded font-bold"
                                 style={{ color: rMeta.color, background: rMeta.bg, border: `1px solid ${rMeta.borderColor}` }}
                               >
-                                {rMeta.label}
+                                {tr(rMeta.label)}
                               </span>
                               <span className="text-[10px] font-mono font-bold text-[#ffd54f]">
                                 Lv.{bookLv}
                               </span>
                               {isEquippedSlot1 && (
                                 <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
-                                  ★ 1번 슬롯
+                                  ★ 1{tr('번 슬롯')}
                                 </span>
                               )}
                               {isEquippedSlot2 && (
                                 <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
-                                  ★ 2번 슬롯
+                                  ★ 2{tr('번 슬롯')}
                                 </span>
                               )}
                             </div>
@@ -6613,7 +7110,7 @@ const SkillManagerOverlay: React.FC<{
                         <div className="flex flex-col items-end gap-1 shrink-0">
                           <span className="text-xs text-[#64b5f6] font-mono font-bold">{sk.manaCost} MP</span>
                           <span className="text-[9px] text-[#8b9bb4] group-hover:text-[#c8aa6e] flex items-center gap-0.5 font-medium">
-                            🔍 상세 보기
+                            🔍 {tr('상세 보기')}
                           </span>
                         </div>
                       </div>
@@ -6629,7 +7126,7 @@ const SkillManagerOverlay: React.FC<{
                               else gm.equipSkillToSlot(hero.id, sk.id, 0);
                             }}
                           >
-                            {isEquippedSlot1 ? '✓ 1번 해제' : '1번 장착'}
+                            {isEquippedSlot1 ? `✓ 1${tr('번 해제')}` : `1${tr('번 장착')}`}
                           </button>
                           <button
                             className={`btn text-xs px-2.5 py-1 font-bold ${isEquippedSlot2 ? 'btn-primary' : 'btn-ghost'}`}
@@ -6639,7 +7136,7 @@ const SkillManagerOverlay: React.FC<{
                               else gm.equipSkillToSlot(hero.id, sk.id, 1);
                             }}
                           >
-                            {isEquippedSlot2 ? '✓ 2번 해제' : '2번 장착'}
+                            {isEquippedSlot2 ? `✓ 2${tr('번 해제')}` : `2${tr('번 장착')}`}
                           </button>
                         </div>
 
@@ -6650,9 +7147,9 @@ const SkillManagerOverlay: React.FC<{
                               e.stopPropagation();
                               setEnhanceTargetSkill(sk);
                             }}
-                            title="에테르 연금 공방에서 스킬을 비전 강화합니다"
+                            title={tr('에테르 연금 공방에서 스킬을 비전 강화합니다')}
                           >
-                            <span>⚡ 강화</span>
+                            <span>⚡ {tr('강화')}</span>
                           </button>
                           <button
                             className="btn btn-ghost text-xs px-2.5 py-1 text-[#ef5350] hover:bg-[#ef535022] border border-[#ef535033]"
@@ -6660,9 +7157,9 @@ const SkillManagerOverlay: React.FC<{
                               e.stopPropagation();
                               setConfirmModal({ type: 'unlearn', skill: sk });
                             }}
-                            title="스킬을 망각하여 슬롯을 비웁니다"
+                            title={tr('스킬을 망각하여 슬롯을 비웁니다')}
                           >
-                            🗑️ 망각
+                            🗑️ {tr('망각')}
                           </button>
                         </div>
                       </div>
@@ -6676,7 +7173,7 @@ const SkillManagerOverlay: React.FC<{
             <div className="flex flex-col gap-2 pt-2 border-t border-[#1e283d]">
               <div className="flex items-center justify-between px-1">
                 <span className="text-xs font-bold text-[#ffd54f] flex items-center gap-1.5">
-                  <span>📖 학습(연독) 중인 스킬</span>
+                  <span>📖 {tr('학습(연독) 중인 스킬')}</span>
                   <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
                     studyingSkills.length >= 6 ? 'bg-[#ef535022] text-[#ef5350] font-bold' : 'bg-[#ffd54f22] text-[#ffd54f]'
                   }`}>
@@ -6684,22 +7181,22 @@ const SkillManagerOverlay: React.FC<{
                   </span>
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">
-                  최대 6개 동시 연구 가능
+                  {tr('최대 6개 동시 연구 가능')}
                 </span>
               </div>
 
               {studyingSkills.length >= 6 && (
                 <div className="px-2.5 py-1.5 rounded-lg bg-[#ef535018] border border-[#ef535044] text-[10px] text-[#ff8a80] flex items-center gap-1.5">
                   <span>⚠️</span>
-                  <span>학습 슬롯이 가득 찼습니다 (6/6). 새 마도서를 읽으려면 기존 학습을 완료하거나 중도 포기하세요.</span>
+                  <span>{tr('학습 슬롯이 가득 찼습니다 (6/6). 새 마도서를 읽으려면 기존 학습을 완료하거나 중도 포기하세요.')}</span>
                 </div>
               )}
 
               {studyingSkills.length === 0 ? (
                 <div className="panel p-4 text-center text-[#8b9bb4] text-xs bg-[#0f1420]">
-                  현재 학습 중인 스킬이 없습니다.<br />
+                  {tr('현재 학습 중인 스킬이 없습니다.')}<br />
                   <span className="text-[10px] text-[#ffd54f] mt-0.5 block">
-                    [보유 마도서] 탭에서 마도서를 읽어 최대 6개까지 동시에 연구할 수 있습니다.
+                    {tr('[보유 마도서] 탭에서 마도서를 읽어 최대 6개까지 동시에 연구할 수 있습니다.')}
                   </span>
                 </div>
               ) : (
@@ -6735,15 +7232,15 @@ const SkillManagerOverlay: React.FC<{
                           </span>
                           <div>
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="font-bold text-sm text-white group-hover:text-[#ffd54f] transition-colors">{sk.name}</span>
+                              <span className="font-bold text-sm text-white group-hover:text-[#ffd54f] transition-colors">{tr(sk.name)}</span>
                               <span
                                 className="text-[9px] px-1.5 py-0.2 rounded font-bold"
                                 style={{ color: rMeta.color, background: rMeta.bg, border: `1px solid ${rMeta.borderColor}` }}
                               >
-                                {rMeta.label}
+                                {tr(rMeta.label)}
                               </span>
                               <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold">
-                                연독 중
+                                {tr('연독 중')}
                               </span>
                             </div>
                           </div>
@@ -6751,7 +7248,7 @@ const SkillManagerOverlay: React.FC<{
                         <div className="flex flex-col items-end gap-0.5 shrink-0">
                           <span className="text-xs text-[#ffd54f] font-mono font-bold">{mastery}%</span>
                           <span className="text-[9px] text-[#8b9bb4] group-hover:text-[#ffd54f] flex items-center gap-0.5 font-medium">
-                            🔍 상세 보기
+                            🔍 {tr('상세 보기')}
                           </span>
                         </div>
                       </div>
@@ -6760,9 +7257,9 @@ const SkillManagerOverlay: React.FC<{
                       <div className="flex flex-col gap-1 bg-[#0d121c] p-2 rounded-lg border border-[#1b263b]" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-between text-[10px]">
                           <span className="text-[#8b9bb4] flex items-center gap-1">
-                            <span>권당 +{gainPerBook}%</span>
+                            <span>{tr('권당')} +{gainPerBook}%</span>
                             <span>·</span>
-                            <span className="text-[#80cbc4]">완전 습득까지 약 {booksNeeded}권</span>
+                            <span className="text-[#80cbc4]">{tr('완전 습득까지 약')} {booksNeeded}{tr('권')}</span>
                           </span>
                           <span className="text-[#ffd54f] font-mono font-bold">
                             {mastery}% / 100%
@@ -6775,8 +7272,8 @@ const SkillManagerOverlay: React.FC<{
                           />
                         </div>
                         <div className="flex items-center justify-between text-[9px] text-[#8b9bb4] pt-0.5">
-                          <span>서고 보유: <strong className="text-white font-mono">{availableBooks}권</strong></span>
-                          <span>{availableBooks >= booksNeeded ? '✨ 즉시 완전 습득 가능' : '마도서 추가 수집 필요'}</span>
+                          <span>{tr('서고 보유')}: <strong className="text-white font-mono">{availableBooks}{tr('권')}</strong></span>
+                          <span>{availableBooks >= booksNeeded ? `✨ ${tr('즉시 완전 습득 가능')}` : tr('마도서 추가 수집 필요')}</span>
                         </div>
                       </div>
 
@@ -6788,9 +7285,9 @@ const SkillManagerOverlay: React.FC<{
                             e.stopPropagation();
                             setConfirmModal({ type: 'abandon', skill: sk, mastery });
                           }}
-                          title="학습을 중도 포기하고 연독률을 초기화합니다"
+                          title={tr('학습을 중도 포기하고 연독률을 초기화합니다')}
                         >
-                          🚫 중도 포기
+                          🚫 {tr('중도 포기')}
                         </button>
 
                         <button
@@ -6806,10 +7303,10 @@ const SkillManagerOverlay: React.FC<{
                           }}
                         >
                           {isFullLearned
-                            ? '습득 슬롯 가득참'
+                            ? tr('습득 슬롯 가득참')
                             : availableBooks > 0
-                            ? `📖 이어서 연독 (+${gainPerBook}%)`
-                            : '마도서 부족'}
+                            ? `📖 ${tr('이어서 연독')} (+${gainPerBook}%)`
+                            : tr('마도서 부족')}
                         </button>
                       </div>
                     </div>
@@ -6825,13 +7322,13 @@ const SkillManagerOverlay: React.FC<{
           <>
             {skillBooks.length === 0 && (
               <div className="panel p-8 text-center text-[#8b9bb4] text-sm">
-                보관함에 보유 중인 마도서가 없습니다.
+                {tr('보관함에 보유 중인 마도서가 없습니다.')}
               </div>
             )}
 
             {isFullLearned && (
               <div className="bg-[#ffd54f15] border border-[#ffd54f44] p-2 rounded-lg text-center text-xs text-[#ffd54f] font-bold">
-                ⚠️ 습득 슬롯 가득 참 (6/6). 새 스킬을 배우려면 [습득 스킬] 탭에서 기존 스킬을 망각하세요.
+                {tr('⚠️ 습득 슬롯 가득 참 (6/6). 새 스킬을 배우려면 [습득 스킬] 탭에서 기존 스킬을 망각하세요.')}
               </div>
             )}
 
@@ -6874,27 +7371,27 @@ const SkillManagerOverlay: React.FC<{
                       <div className="min-w-0 flex-1 flex flex-col gap-1">
                         {/* 1행: 마도서 이름 + 등급 뱃지 + 계열 뱃지 + 직업 적합도 */}
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-bold text-sm text-white group-hover:text-[#c8aa6e] transition-colors">{item.name}</span>
+                          <span className="font-bold text-sm text-white group-hover:text-[#c8aa6e] transition-colors">{formatBookName(item.name, tr)}</span>
                           <span
                             className="text-[9px] px-1.5 py-0.2 rounded font-bold shrink-0"
                             style={{ color: rMeta.color, background: rMeta.bg, border: `1px solid ${rMeta.borderColor}` }}
                           >
-                            {rMeta.label}
+                            {tr(rMeta.label)}
                           </span>
                           <span
                             className="text-[9px] px-1.5 py-0.2 rounded font-bold flex items-center gap-0.5 shrink-0"
                             style={{ backgroundColor: cardAffMeta.bg, color: cardAffMeta.color, border: `1px solid ${cardAffMeta.borderColor}` }}
                           >
                             <span>{cardAffMeta.icon}</span>
-                            <span>{cardAffMeta.shortName}</span>
+                            <span>{tr(cardAffMeta.shortName)}</span>
                           </span>
                           {cardIsMatch ? (
                             <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#4ade8015] text-[#4ade80] border border-[#4ade8033] shrink-0">
-                              적합
+                              {tr('적합')}
                             </span>
                           ) : (
                             <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#f8717122] text-[#f87171] border border-[#f8717144] shrink-0">
-                              ⚠️ 위력 50%
+                              ⚠️ {tr('위력 50%')}
                             </span>
                           )}
                         </div>
@@ -6905,16 +7402,16 @@ const SkillManagerOverlay: React.FC<{
                             Lv.{bookLv}
                           </span>
                           <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] border border-[#c8aa6e33]">
-                            x{bookCount}권
+                            x{bookCount}{tr('권')}
                           </span>
                           {!alreadyKnows ? (
                             <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33] flex items-center gap-1">
-                              <span>습득률 {mastery}%</span>
+                              <span>{tr('습득률')} {mastery}%</span>
                               <span className="text-[9px] text-[#ffb74d] font-normal">(+{gain}%)</span>
                             </span>
                           ) : (
                             <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#4ade8015] text-[#4ade80] border border-[#4ade8033]">
-                              ✓ 습득 완료 (100%)
+                              {tr('✓ 습득 완료 (100%)')}
                             </span>
                           )}
                         </div>
@@ -6925,10 +7422,10 @@ const SkillManagerOverlay: React.FC<{
                       <ActionButton
                         label={
                           alreadyKnows
-                            ? '✓ 습득 완료'
+                            ? tr('✓ 습득 완료')
                             : isFullLearned
-                            ? '슬롯 가득참'
-                            : `📖 연독 (${mastery}% / +${gain}%)`
+                            ? tr('슬롯 가득참')
+                            : `📖 ${tr('연독')} (${mastery}% / +${gain}%)`
                         }
                         variant={canLearn ? 'primary' : 'ghost'}
                         size="sm"
@@ -6939,7 +7436,7 @@ const SkillManagerOverlay: React.FC<{
                         }}
                       />
                       <span className="text-[9px] text-[#8b9bb4] group-hover:text-[#c8aa6e] flex items-center gap-0.5 font-medium">
-                        🔍 상세 보기
+                        🔍 {tr('상세 보기')}
                       </span>
                     </div>
                   </div>
@@ -6990,27 +7487,27 @@ const SkillManagerOverlay: React.FC<{
                 {confirmModal.type === 'unlearn' ? '🗑️' : '🚫'}
               </span>
               <span className="font-bold text-sm text-white">
-                {confirmModal.type === 'unlearn' ? '스킬 망각 확인' : '학습 중도 포기 확인'}
+                {confirmModal.type === 'unlearn' ? tr('스킬 망각 확인') : tr('학습 중도 포기 확인')}
               </span>
             </div>
 
             <div className="text-xs text-[#cfd8dc] leading-relaxed flex flex-col gap-2">
               <div>
-                <strong className="text-white text-sm">[{confirmModal.skill.name}]</strong>
+                <strong className="text-white text-sm">[{tr(confirmModal.skill.name)}]</strong>
                 {confirmModal.type === 'unlearn' ? (
-                  <span> 스킬을 완전히 망각하시겠습니까?</span>
+                  <span> {tr('스킬을 완전히 망각하시겠습니까?')}</span>
                 ) : (
-                  <span>의 학습(연독)을 중도 포기하시겠습니까?</span>
+                  <span>{tr('의 학습(연독)을 중도 포기하시겠습니까?')}</span>
                 )}
               </div>
 
               {confirmModal.type === 'unlearn' ? (
                 <div className="p-2.5 rounded-lg bg-[#ef535015] border border-[#ef535033] text-[11px] text-[#ff8a80]">
-                  ⚠️ <strong>주의:</strong> 스킬을 망각하면 전투 슬롯에서 즉시 해제되며, 다시 습득하려면 마도서를 처음부터(0%) 다시 연독해야 합니다.
+                  ⚠️ <strong>{tr('주의')}:</strong> {tr('스킬을 망각하면 전투 슬롯에서 즉시 해제되며, 다시 습득하려면 마도서를 처음부터(0%) 다시 연독해야 합니다.')}
                 </div>
               ) : (
                 <div className="p-2.5 rounded-lg bg-[#ef535015] border border-[#ef535033] text-[11px] text-[#ff8a80]">
-                  ⚠️ <strong>주의:</strong> 현재까지 달성한 연독률(<strong className="text-white font-mono">{confirmModal.mastery || 0}%</strong>)이 완전히 초기화되며, 학습 슬롯(1칸)이 반환됩니다.
+                  ⚠️ <strong>{tr('주의')}:</strong> {tr('현재까지 달성한 연독률(')}<strong className="text-white font-mono">{confirmModal.mastery || 0}%</strong>{tr(')이 완전히 초기화되며, 학습 슬롯(1칸)이 반환됩니다.')}
                 </div>
               )}
             </div>
@@ -7020,7 +7517,7 @@ const SkillManagerOverlay: React.FC<{
                 className="btn btn-ghost text-xs px-3 py-1.5 text-[#8b9bb4] hover:text-white"
                 onClick={() => setConfirmModal(null)}
               >
-                취소
+                {tr('취소')}
               </button>
               <button
                 className="btn btn-danger text-xs px-3.5 py-1.5 font-bold"
@@ -7034,7 +7531,7 @@ const SkillManagerOverlay: React.FC<{
                   setDetailModalItem(null);
                 }}
               >
-                {confirmModal.type === 'unlearn' ? '망각하기' : '중도 포기'}
+                {confirmModal.type === 'unlearn' ? tr('망각하기') : tr('중도 포기')}
               </button>
             </div>
           </div>
@@ -7046,415 +7543,8 @@ const SkillManagerOverlay: React.FC<{
 
 
 
-// (EquipmentEnhanceModal is defined at the top of the file)
+// (EquipmentEnhanceModal & EquipmentEnchantModal are defined at the top of the file)
 
-
-// ─────────────────────────────────────────────────────────────
-//  🔮 마도 인챈트 상세 설정 모달 (EquipmentEnchantModal)
-// ─────────────────────────────────────────────────────────────
-interface EquipmentEnchantModalProps {
-  item: EquipmentItem;
-  onClose: () => void;
-  gm: GameManager;
-  resources: GameResources;
-  discountPct: number;
-  mult: number;
-}
-
-const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
-  item,
-  onClose,
-  gm,
-  resources,
-  discountPct,
-  mult,
-}) => {
-  const [enchantType, setEnchantType] = useState<'prefix' | 'suffix'>('prefix');
-  const [isPure, setIsPure] = useState<boolean>(false);
-  const [isEnchanting, setIsEnchanting] = useState<boolean>(false);
-  const [pendingOutcome, setPendingOutcome] = useState<'success' | 'keep' | 'drop' | undefined>(undefined);
-
-  const canPrefix = item.level >= 3;
-  const canSuffix = item.level >= 7;
-  const hasAnyEnchant = !!item.prefix || !!item.suffix;
-
-  const forgeLv = (gm.buildings as unknown as Record<string, { level?: number }>)['blacksmith']?.level || (gm.buildings as unknown as Record<string, { level?: number }>)['forge']?.level || 1;
-  const wearer = item.equippedHeroId ? (gm.barracks || []).find(h => h.id === item.equippedHeroId) : null;
-  const successRate = getEnchantSuccessRate(forgeLv, isPure);
-  const stoneCost = getEnchantStoneCost(item.rarity);
-  const { gold: goldCost, ether: etherCost } = getEnchantResourceCosts(isPure, mult);
-
-  const locItem = item;
-  const itemName = locItem?.name || item.name;
-
-  const stoneKey = isPure
-    ? (enchantType === 'prefix' ? 'pure_prefix_stone' : 'pure_suffix_stone')
-    : (enchantType === 'prefix' ? 'prefix_stone' : 'suffix_stone');
-
-  const stoneCount = (resources as unknown as Record<string, number>)[stoneKey] || 0;
-
-  const canEnchantSlot = enchantType === 'prefix' ? canPrefix : canSuffix;
-  const canAfford = stoneCount >= stoneCost && (resources.gold || 0) >= goldCost && (resources.ether || 0) >= etherCost;
-  const canExecute = canEnchantSlot && canAfford;
-
-  const handleStartEnchant = () => {
-    if (!canExecute || isEnchanting) return;
-    const roll = Math.random() * 100;
-    const outcome: 'success' | 'keep' = roll < successRate ? 'success' : 'keep';
-    setPendingOutcome(outcome);
-    setIsEnchanting(true);
-  };
-
-  const handleEnchantComplete = () => {
-    setIsEnchanting(false);
-    gm.enchantEquipment(item.id, enchantType, isPure, pendingOutcome);
-    setPendingOutcome(undefined);
-  };
-
-  // Options Pool for preview (장비 슬롯 및 순수석 등급에 맞춤)
-  const wType = item.slot === 'weapon' ? (item.weaponType || detectWeaponType(item)) : undefined;
-  const candidates = getEnchantCandidates(item.slot, enchantType, isPure, wType);
-
-  const stoneMeta: Record<string, { name: string; icon: string }> = {
-    prefix_stone: { name: '일반 접두석', icon: '✨' },
-    pure_prefix_stone: { name: '순수 접두석', icon: '⭐' },
-    suffix_stone: { name: '일반 접미석', icon: '🔮' },
-    pure_suffix_stone: { name: '순수 접미석', icon: '🌌' },
-  };
-
-  const slotLabel = item.slot === 'weapon'
-    ? ('🗡️ 주무기')
-    : item.slot === 'armor'
-    ? ('🛡️ 방어구')
-    : ('💍 장신구');
-
-  const modalTitle = '🔮 마도 장비 인챈트 공방';
-
-  return (
-    <Modal title={modalTitle} open={true} onClose={onClose}>
-      <div className="flex flex-col gap-3.5">
-        {/* 장비 헤더 */}
-        <div className="p-3 bg-[#131926] border border-[#222d42] rounded-xl flex items-center gap-3">
-          <span 
-            className="p-2 rounded-xl bg-[#323d4e] border shrink-0 flex items-center justify-center shadow-lg transition-all"
-            style={getRarityBorderStyle(item.rarity)}
-          >
-            <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={48} />
-          </span>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="font-bold text-sm text-white truncate">{itemName}</span>
-              <span
-                className="text-[9px] px-1.5 py-0.5 rounded font-bold"
-                style={{ backgroundColor: `${getRarityColor(item.rarity)}22`, color: getRarityColor(item.rarity), border: `1px solid ${getRarityColor(item.rarity)}44` }}
-              >
-                [{getRarityLabel(item.rarity)}]
-              </span>
-              <EncyclopediaBadge query="인챈트" tab="systems" label="인챈트 백과" compact />
-              {wearer ? (
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
-                  👤 {wearer.name} {'착용중'}
-                </span>
-              ) : (
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#607d8b22] text-[#8b9bb4]">
-                  {'보관함'}
-                </span>
-              )}
-            </div>
-            <div className="text-[11px] text-[#8b9bb4] mt-0.5">
-              {slotLabel} | 강화 단계: <span className="text-[#ffd54f] font-bold font-mono">+{item.level}</span> | 필요 인챈트석: <span className="text-[#38ef7d] font-bold font-mono">{stoneCost}개</span>
-            </div>
-          </div>
-        </div>
-
-        {/* 성공 확률 및 레벨 보너스 게이지 */}
-        <div className="p-2.5 rounded-xl bg-[#101624] border border-[#233554] flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-xs font-bold">
-            <span className="text-white flex items-center gap-1">
-              <span>🎲 인챈트 성공 확률:</span>
-              <span className={`font-mono text-sm ${isPure ? 'text-[#ce93d8]' : 'text-[#38ef7d]'}`}>
-                {successRate}%
-              </span>
-              {isPure && <span className="text-[10px] text-[#ce93d8] font-normal">(순수석 50% 반감)</span>}
-            </span>
-            <span className="text-[10px] text-[#8b9bb4]">
-              {forgeLv > 6
-                ? `병기창 Lv.${forgeLv} (+${(forgeLv - 6) * 5}% 상승)`
-                : '병기창 Lv.7부터 +5%/Lv 증가'}
-            </span>
-          </div>
-          <div className="w-full bg-[#15171e] h-2 rounded-full overflow-hidden">
-            <div
-              className="h-full transition-all duration-300 rounded-full"
-              style={{
-                width: `${successRate}%`,
-                background: 'linear-gradient(90deg, #c8aa6e, #38ef7d)'
-              }}
-            />
-          </div>
-          <div className="text-[10px] text-[#64b5f6] flex items-center justify-between">
-            <span>🛡️ 실패 시 장비 손상/파괴/하락 없음 (재료만 소모)</span>
-            <span className="text-[#8b9bb4]">등급 소모: <span className="text-[#ffd54f] font-bold">{stoneCost}개</span></span>
-          </div>
-        </div>
-
-        {/* 현재 부여된 인챈트 상태 */}
-        <div className="p-3 bg-[#0d121c] border border-[#1f2738] rounded-xl flex flex-col gap-2">
-          <div className="text-xs font-bold text-[#c8aa6e]">{'✨ 현재 인챈트 현황'}</div>
-          {(() => {
-            const locPre = item.prefix;
-            const preName = locPre?.name || item.prefix?.name;
-            const rawPreDesc = locPre?.description || item.prefix?.description;
-            const cleanPreDesc = (item.slot !== 'weapon' && rawPreDesc)
-              ? rawPreDesc
-                  .replace(', 고유스킬 [작열탄] 부여 (기본 공격 대체)', '')
-                  .replace(', 고유스킬 [동결 타격] 부여 (기본 공격 대체)', '')
-                  .replace(', 고유스킬 [신성 심판] 부여 (기본 공격 대체)', '')
-                  .replace(', 고유스킬 [파멸 강타] 부여 (기본 공격 대체)', '')
-              : rawPreDesc;
-
-            return (
-              <div className={`p-2 rounded-lg border text-xs ${item.prefix ? 'bg-[#ffd54f15] border-[#ffd54f44] text-[#ffd54f]' : 'bg-[#141a27] border-[#222d42] text-[#8b9bb4]'}`}>
-                <span className="font-bold">'✨ 접두사: '</span>
-                {item.prefix ? (
-                  <span className="text-white">
-                    <span className="text-[#ffd54f] font-bold">[{preName}]</span> {cleanPreDesc}
-                    {item.slot === 'weapon' && item.prefix.grantedSkill && (
-                      <span className="text-[#38ef7d] font-bold block mt-0.5">
-                        '⚔️ 기본공격 대체: '[{item.prefix.grantedSkill.name}]
-                      </span>
-                    )}
-                  </span>
-                ) : (
-                  <span>{canPrefix ? ('미부여 (인챈트 가능)') : ('🔒 +3강 이상 필요')}</span>
-                )}
-              </div>
-            );
-          })()}
-
-          {(() => {
-            const locSuf = item.suffix;
-            const sufName = locSuf?.name || item.suffix?.name;
-            const sufDesc = locSuf?.description || item.suffix?.description;
-
-            return (
-              <div className={`p-2 rounded-lg border text-xs ${item.suffix ? 'bg-[#c8aa6e15] border-[#c8aa6e44] text-[#c8aa6e]' : 'bg-[#141a27] border-[#222d42] text-[#8b9bb4]'}`}>
-                <span className="font-bold">'🔮 접미사: '</span>
-                {item.suffix ? (
-                  <span className="text-white">
-                    <span className="text-[#c8aa6e] font-bold">[{sufName}]</span> {sufDesc}
-                  </span>
-                ) : (
-                  <span>{canSuffix ? ('미부여 (인챈트 가능)') : ('🔒 +7강 이상 필요')}</span>
-                )}
-              </div>
-            );
-          })()}
-        </div>
-
-        {/* 슬롯 선택 (접두사 vs 접미사) */}
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all ${
-              enchantType === 'prefix'
-                ? 'bg-[#ffd54f22] border-[#ffd54f] text-[#ffd54f] shadow'
-                : canPrefix
-                ? 'bg-[#121724] border-[#26334a] text-[#8b9bb4] hover:text-white' : 'bg-[#121724] border-[#26334a] text-[#555] opacity-50 cursor-not-allowed'
-            }`}
-            onClick={() => setEnchantType('prefix')}
-          >
-            <span className="text-sm">{'✨ 접두어 슬롯'}</span>
-            <span className="text-[10px]">
-              {canPrefix
-                ? (item.slot === 'weapon'
-                    ? ('공격/속성/스킬 (+3강)')
-                    : item.slot === 'armor'
-                    ? ('방어/생명/수호 (+3강)')
-                    : ('마나/속도/행운 (+3강)'))
-                : ('🔒 +3강 이상 필요')}
-            </span>
-          </button>
-
-          <button
-            className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all ${
-              enchantType === 'suffix'
-                ? 'bg-[#c8aa6e22] border-[#c8aa6e] text-[#c8aa6e] shadow'
-                : canSuffix
-                ? 'bg-[#121724] border-[#26334a] text-[#8b9bb4] hover:text-white' : 'bg-[#121724] border-[#26334a] text-[#555] opacity-50 cursor-not-allowed'
-            }`}
-            onClick={() => setEnchantType('suffix')}
-          >
-            <span className="text-sm">{'🔮 접미어 슬롯'}</span>
-            <span className="text-[10px]">
-              {canSuffix
-                ? (item.slot === 'weapon'
-                    ? ('피해증폭/흡혈/관통 (+7강)')
-                    : item.slot === 'armor'
-                    ? ('방어/재생/가호 (+7강)')
-                    : ('신속/마력/지혜 (+7강)'))
-                : ('🔒 +7강 이상 필요')}
-            </span>
-          </button>
-        </div>
-
-        {/* 인챈트석 등급 선택 (일반 vs 순수) */}
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            className={`p-2 rounded-lg border text-xs font-bold flex items-center justify-between transition-all ${
-              !isPure
-                ? 'bg-[#38ef7d22] border-[#38ef7d] text-[#38ef7d]' : 'bg-[#121724] border-[#26334a] text-[#8b9bb4]'
-            }`}
-            onClick={() => setIsPure(false)}
-          >
-            <span>🔹 일반 인챈트석</span>
-            <span className="text-xs font-mono font-bold">
-              ({(resources as unknown as Record<string, number>)[enchantType === 'prefix' ? 'prefix_stone' : 'suffix_stone'] || 0} / {stoneCost}개)
-            </span>
-          </button>
-
-          <button
-            className={`p-2 rounded-lg border text-xs font-bold flex items-center justify-between transition-all ${
-              isPure
-                ? 'bg-[#ce93d822] border-[#ce93d8] text-[#ce93d8]' : 'bg-[#121724] border-[#26334a] text-[#8b9bb4]'
-            }`}
-            onClick={() => setIsPure(true)}
-          >
-            <span>⭐ 순수 인챈트석</span>
-            <span className="text-xs font-mono font-bold">
-              ({(resources as unknown as Record<string, number>)[enchantType === 'prefix' ? 'pure_prefix_stone' : 'pure_suffix_stone'] || 0} / {stoneCost}개)
-            </span>
-          </button>
-        </div>
-
-        {/* 무기 접두사 스킬 특화 알림 */}
-        {item.slot === 'weapon' && enchantType === 'prefix' && (
-          <div className="p-2 rounded-lg bg-[#38ef7d15] border border-[#38ef7d33] text-[11px] text-[#38ef7d] flex items-center gap-1.5">
-            <span>🗡️</span>
-            <span>{'무기 접두사 인챈트 시 기본 공격을 대체하는 고유 스킬(작열탄, 동결 타격, 신성 심판, 파멸 강타 등)을 획득할 수 있습니다!'}</span>
-          </div>
-        )}
-
-        {/* 부여 가능 후보 풀 미리보기 (슬롯 전용 카테고리) */}
-        <div className="p-2.5 bg-[#0d121c] border border-[#1f2738] rounded-xl flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-xs text-[#8b9bb4]">
-            <span className="font-bold text-white">
-              📜 {isPure
-                ? ('순수석 후보 풀 (에픽~전설 확정)')
-                : ('일반석 후보 풀 (희귀~에픽)')}
-              <span className="text-[#c8aa6e] text-[10px] font-normal ml-1">
-                [{item.slot === 'weapon' ? ('🗡️ 무기 전용') : item.slot === 'armor' ? ('🛡️ 방어구 전용') : ('💍 장신구 전용')}]
-              </span>
-            </span>
-            <span className="text-[10px] font-mono">{'총'} {candidates.length}{'종'}</span>
-          </div>
-          <div className="max-h-28 overflow-y-auto flex flex-col gap-1 pr-1">
-            {candidates.map(opt => {
-              const rColor = opt.rarity === 'legendary' ? '#ffd54f' : opt.rarity === 'epic' ? '#ce93d8' : '#42a5f5';
-              const locCand = opt;
-              const candName = locCand?.name || opt.name;
-              const rawDesc = locCand?.description || opt.description;
-              const cleanDesc = (item.slot !== 'weapon' && enchantType === 'prefix')
-                ? rawDesc
-                    .replace(', 고유스킬 [작열탄] 부여 (기본 공격 대체)', '')
-                    .replace(', 고유스킬 [동결 타격] 부여 (기본 공격 대체)', '')
-                    .replace(', 고유스킬 [신성 심판] 부여 (기본 공격 대체)', '')
-                    .replace(', 고유스킬 [파멸 강타] 부여 (기본 공격 대체)', '')
-                : rawDesc;
-              return (
-                <div key={opt.id} className="p-1 px-2 rounded bg-[#141a27] border border-[#232f46] text-[11px] flex items-center justify-between">
-                  <span className="font-bold" style={{ color: rColor }}>[{candName}]</span>
-                  <span className="text-[10px] text-[#cfd8dc] truncate max-w-[210px]">{cleanDesc}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 소모 재화 */}
-        <div className="p-2.5 bg-[#0d121c] border border-[#1f2738] rounded-xl flex flex-col gap-1.5">
-          <div className="text-xs font-bold text-[#cfd8dc]">
-            📦 {'소모 재화'} ({'대장간'} -{discountPct}%)
-          </div>
-          <div className="flex items-center gap-2 flex-wrap text-xs font-mono pt-0.5">
-            <span className={`px-2.5 py-1 rounded-md border font-bold flex items-center gap-1 ${stoneCount >= stoneCost ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'}`}>
-              <span>{stoneMeta[stoneKey]?.icon}</span>
-              <span>{stoneMeta[stoneKey]?.name}:</span>
-              <span>{stoneCost}/{stoneCount}개</span>
-            </span>
-            <span className={`px-2.5 py-1 rounded-md border font-bold flex items-center gap-1 ${(resources.gold || 0) >= goldCost ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'}`}>
-              <span>🪙</span>
-              <span>골드:</span>
-              <span>{goldCost.toLocaleString()}/{(resources.gold || 0).toLocaleString()}</span>
-            </span>
-            <span className={`px-2.5 py-1 rounded-md border font-bold flex items-center gap-1 ${(resources.ether || 0) >= etherCost ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'}`}>
-              <span>✨</span>
-              <span>에테르:</span>
-              <span>{etherCost.toLocaleString()}/{(resources.ether || 0).toLocaleString()}</span>
-            </span>
-          </div>
-        </div>
-
-        {/* 하단 액션 버튼 */}
-        <div className="flex items-center gap-2 pt-1">
-          <ActionButton
-            label={
-              !canEnchantSlot
-                ? (enchantType === 'prefix'
-                    ? ('🔒 +3강 이상 필요')
-                    : ('🔒 +7강 이상 필요'))
-                : canAfford
-                ? (`🔮 인챈트 시도 (${successRate}%)`)
-                : ('재화/인챈트석 부족')
-            }
-            variant={canExecute ? 'primary' : 'ghost'}
-            className="flex-1 py-2 font-bold shadow-lg"
-            disabled={!canExecute || isEnchanting}
-            onClick={handleStartEnchant}
-          />
-          {hasAnyEnchant && (
-            <ActionButton
-              label={'✕ 초기화 (에테르 50)'}
-              variant="danger-outline"
-              size="sm"
-              className="py-2"
-              style={{
-                border: '1.5px solid #c56060',
-                color: '#ffffff',
-                backgroundColor: 'transparent'
-              }}
-              disabled={(resources.ether || 0) < 50 || isEnchanting}
-              onClick={() => {
-                gm.cleanseEnchant(item.id);
-              }}
-            />
-          )}
-          <button
-            className="btn btn-ghost px-4 py-2 text-xs hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center gap-1"
-            style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-            onClick={onClose}
-            disabled={isEnchanting}
-          >
-            <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-            <span style={{ color: '#c56060' }}>닫기</span>
-          </button>
-        </div>
-      </div>
-
-      {/* 🌟 마도 인챈트 연출 모달 🌟 */}
-      <CraftProgressModal
-        open={isEnchanting}
-        type="enchant_equipment"
-        title="마도 장비 인챈트"
-        itemName={itemName}
-        itemIcon={item.icon || '🔮'}
-        itemSub={`${enchantType === 'prefix' ? '접두어' : '접미어'} ${isPure ? '순수석 인챈트' : '일반 인챈트'}`}
-        durationMs={2000}
-        outcome={pendingOutcome}
-        onComplete={handleEnchantComplete}
-      />
-    </Modal>
-  );
-};
 
 const getSuitableClassesText = (recipeId: string, slot: EquipmentSlot): string => {
   if (slot === 'accessory') return '전 클래스 공용';
@@ -7508,6 +7598,7 @@ const EquipmentCraftModal: React.FC<EquipmentCraftModalProps> = ({
   discountPct,
   mult,
 }) => {
+  const { tr } = useI18n();
   const [craftedItem, setCraftedItem] = useState<EquipmentItem | null>(null);
 
   const res = resources as unknown as Record<string, number>;
@@ -7741,7 +7832,7 @@ const EquipmentCraftModal: React.FC<EquipmentCraftModalProps> = ({
                 >
                   <span className="flex items-center gap-1 text-white font-sans text-[11px]">
                     <span>{meta.icon}</span>
-                    <span>{label}</span>
+                    <span>{tr(label)}</span>
                   </span>
                   <span className="font-bold">
                     {req} / {cur}
@@ -7834,16 +7925,15 @@ const EquipmentCraftModal: React.FC<EquipmentCraftModalProps> = ({
 //  ⚒️ 마도 대장간 (레벨별 할인 & 3레벨 주기 해금 시스템)
 // ─────────────────────────────────────────────────────────────
 const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+  const { tr } = useI18n();
   const { state, gm } = useGameManager();
-    const [mainTab, setMainTab] = useState<'craft' | 'supplies' | 'enhance' | 'enchant' | 'curse'>('craft');
+  const [mainTab, setMainTab] = useState<'craft' | 'supplies' | 'enhance' | 'curse'>('craft');
   const [craftCategory, setCraftCategory] = useState<'all' | 'weapon' | 'armor' | 'accessory'>('all');
   const [enhanceCategory, setEnhanceCategory] = useState<'all' | 'weapon' | 'armor' | 'accessory'>('all');
-  const [enchantCategory, setEnchantCategory] = useState<'all' | 'weapon' | 'armor' | 'accessory'>('all');
 
   const [selectedCraftRecipe, setSelectedCraftRecipe] = useState<EquipmentRecipe | null>(null);
   const [cleanseOutcome, setCleanseOutcome] = useState<{ type: 'success' | 'fail'; message: string; item?: EquipmentItem } | null>(null);
   const [selectedEnhanceItemId, setSelectedEnhanceItemId] = useState<string | null>(null);
-  const [selectedEnchantItemId, setSelectedEnchantItemId] = useState<string | null>(null);
 
   // ✨ 침식 장비 신성 정화 연출 모달 상태
   const [isPurifying, setIsPurifying] = useState(false);
@@ -7869,11 +7959,6 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     if (!selectedEnhanceItemId) return null;
     return state.equipmentInventory.find(i => i.id === selectedEnhanceItemId) || null;
   }, [selectedEnhanceItemId, state.equipmentInventory]);
-
-  const selectedEnchantItem = useMemo(() => {
-    if (!selectedEnchantItemId) return null;
-    return state.equipmentInventory.find(i => i.id === selectedEnchantItemId) || null;
-  }, [selectedEnchantItemId, state.equipmentInventory]);
 
   const res = state.resources as unknown as Record<string, number>;
 
@@ -7926,19 +8011,6 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     return sortEquipByEquippedAndAcquisition(list);
   }, [state.equipmentInventory, enhanceCategory, sortEquipByEquippedAndAcquisition]);
 
-  // 보유 장비 카테고리 필터링 (인챈트) - ID 중복 방지 및 장착 장비 상단 + 획득 순서 정렬
-  const filteredEnchantInventory = useMemo(() => {
-    const seen = new Set<string>();
-    const list = (state.equipmentInventory || []).filter(item => {
-      if (!item || !item.id) return false;
-      if (seen.has(item.id)) return false;
-      seen.add(item.id);
-      if (enchantCategory === 'all') return true;
-      return item.slot === enchantCategory;
-    });
-    return sortEquipByEquippedAndAcquisition(list);
-  }, [state.equipmentInventory, enchantCategory, sortEquipByEquippedAndAcquisition]);
-
   return (
     <div className="flex flex-col h-full bg-[#0b0e17] text-[#cfd8e8]">
       {/* 헤더 */}
@@ -7968,8 +8040,8 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </button>
       </div>
 
-      {/* 대분류 탭 (5개 탭 연동) */}
-      <div className="grid grid-cols-5 gap-1 p-2 bg-[#0e121d] border-b border-[#1f2738] shrink-0">
+      {/* 대분류 탭 (4개 탭 연동) */}
+      <div className="grid grid-cols-4 gap-1 p-2 bg-[#0e121d] border-b border-[#1f2738] shrink-0">
         <button
           className={`btn py-1.5 text-[11px] font-bold transition-all ${mainTab === 'craft' ? 'btn-primary' : 'btn-ghost'}`}
           onClick={() => setMainTab('craft')}
@@ -7991,14 +8063,6 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           {unlocks.enhance.unlocked ? ('⚡ 강화') : '🔒 Lv.3'}
         </button>
         <button
-          className={`btn py-1.5 text-[11px] font-bold transition-all ${
-            mainTab === 'enchant' ? 'btn-primary' : unlocks.enchant.unlocked ? 'btn-ghost' : 'btn-ghost opacity-50'
-          }`}
-          onClick={() => setMainTab('enchant')}
-        >
-          {unlocks.enchant.unlocked ? ('✨ 인챈트') : '🔒 Lv.6'}
-        </button>
-        <button
           className={`btn py-1.5 text-[11px] font-bold transition-all relative ${
             mainTab === 'curse' ? 'btn-primary' : unlocks.curse.unlocked ? 'btn-ghost' : 'btn-ghost opacity-50'
           }`}
@@ -8006,7 +8070,9 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         >
           {unlocks.curse.unlocked ? ('✨ 정화') : '🔒 Lv.1'}
           {unlocks.curse.unlocked && cursedItems.length > 0 && (
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#ef5350] animate-pulse" />
+            <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[8px] font-extrabold shadow-sm animate-pulse">
+              {cursedItems.length}
+            </span>
           )}
         </button>
       </div>
@@ -8250,7 +8316,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                       <div className="flex items-center justify-between pt-2 border-t border-[#2a223d] flex-wrap gap-2">
                         <div className="text-xs text-[#ffd54f] flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[#8b9bb4]">소모/재고:</span>
+                          <span className="text-[#8b9bb4]">{tr('소모/재고:')}</span>
                           {Object.entries(cost1).map(([r, c]) => {
                             const cur = res[r] || 0;
                             const ok = cur >= c;
@@ -8264,7 +8330,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                                 }`}
                               >
                                 <span>{meta.icon}</span>
-                                <span>{label}</span>
+                                <span>{tr(label)}</span>
                                 <span>{c}/{cur}</span>
                               </span>
                             );
@@ -8384,7 +8450,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                       <div className="flex items-center justify-between pt-2 border-t border-[#1f2738] flex-wrap gap-2">
                         <div className="text-xs text-[#ffd54f] flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[#8b9bb4]">소모/재고:</span>
+                          <span className="text-[#8b9bb4]">{tr('소모/재고:')}</span>
                           {Object.entries(cost1).map(([r, c]) => {
                             const cur = res[r] || 0;
                             const ok = cur >= c;
@@ -8398,7 +8464,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                                 }`}
                               >
                                 <span>{meta.icon}</span>
-                                <span>{label}</span>
+                                <span>{tr(label)}</span>
                                 <span>{c}/{cur}</span>
                               </span>
                             );
@@ -8573,140 +8639,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </div>
       )}
 
-      {/* ── 4. ✨ 마도 인챈트 탭 (Lv.6 해금) ── */}
-      {mainTab === 'enchant' && (
-        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-          {!unlocks.enchant.unlocked ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-3">
-              <span className="text-5xl">🔒</span>
-              <div className="font-bold text-base text-[#ce93d8]">마도 대장간 Lv.6 필요</div>
-              <div className="text-xs text-[#8b9bb4] max-w-[280px] leading-relaxed">
-                고급 마도 인챈트 공방은 대장간을 <span className="text-[#ce93d8] font-bold">Lv.6</span> 이상으로 증축하면 해금됩니다.
-                <br />(현재 대장간: Lv.{forgeLv})
-              </div>
-            </div>
-          ) : (
-            <>
-              {/* 분류 칩 바 */}
-              <div className="flex items-center gap-1.5 px-3 py-2 bg-[#121724] border-b border-[#1f2738] shrink-0">
-                {[
-                  { key: 'all', label: '전체' },
-                  { key: 'weapon', label: '🗡️ 무기' },
-                  { key: 'armor', label: '🛡️ 방어구' },
-                  { key: 'accessory', label: '💍 장신구' },
-                ].map(cat => (
-                  <button
-                    key={cat.key}
-                    className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all ${
-                      enchantCategory === cat.key
-                        ? 'bg-[#ce93d8] text-[#000] shadow' : 'bg-[#182030] text-[#8b9bb4] border border-[#26334a]'
-                    }`}
-                    onClick={() => setEnchantCategory(cat.key as any)}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
-                <div className="panel-accent p-3 bg-[#161224] border border-[#ce93d844]">
-                  <div className="text-xs text-[#ffd54f] font-bold">✨ 접두석: {res.prefix_stone || 0}개 | 🔮 접미석: {res.suffix_stone || 0}개</div>
-                  <div className="text-[11px] text-[#ce93d8] mt-0.5">⭐ 순수 접두석: {res.pure_prefix_stone || 0}개 | 🌌 순수 접미석: {res.pure_suffix_stone || 0}개</div>
-                  <div className="text-[10px] text-[#8b9bb4] mt-1">💡 +3강 이상 접두어 인챈트 / +7강 이상 접미어 인챈트 해금 (인챈트 비용 -{discountPct}% 할인)</div>
-                </div>
-
-                {filteredEnchantInventory.length === 0 ? (
-                  <div className="panel p-8 text-center text-sm text-[#8b9bb4]">
-                    보유 중인 해당 분류의 장비가 없습니다.<br />
-                    <span className="text-xs text-[#607d8b] mt-1 block">[단조] 탭에서 새로운 장비를 제작하거나 획득하세요.</span>
-                  </div>
-                ) : (
-                  filteredEnchantInventory.map(item => {
-                    const canPrefix = item.level >= 3;
-                    const canSuffix = item.level >= 7;
-                    const wearer = item.equippedHeroId ? state.barracks.find(h => h.id === item.equippedHeroId) : null;
-                    const isUnique = item.rarity === 'unique' || item.id.startsWith('boss_') || item.id.includes('unique');
-                    const rarityMeta = {
-                      common:    { label: '일반', color: '#9e9e9e', bg: '#9e9e9e22' },
-                      rare:      { label: '희귀', color: '#42a5f5', bg: '#42a5f522' },
-                      epic:      { label: '에픽', color: '#ce93d8', bg: '#ce93d822' },
-                      unique:    { label: '고유', color: '#ffb74d', bg: '#ff980022' },
-                      legendary: { label: '전설', color: '#ffd54f', bg: '#ffd54f22' },
-                    }[item.rarity || 'common'] || { label: '일반', color: '#9e9e9e', bg: '#9e9e9e22' };
-
-                    return (
-                      <div
-                        key={item.id}
-                        className="panel p-2.5 flex flex-col gap-1.5 cursor-pointer transition-all hover:border-[#ce93d888] hover:bg-[#1a1528] border-[#222d42] bg-[#131926]"
-                        onClick={() => setSelectedEnchantItemId(item.id)}
-                      >
-                        {/* 1행: 아이콘 + 이름 + (+강화강) + [등급 뱃지] + [인챈트 아이콘] + [착용자 뱃지] */}
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-                            <span className="p-1 rounded-md bg-[#323d4e] border border-[#4a576d] shrink-0 flex items-center justify-center">
-                              <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={22} />
-                            </span>
-                            <span
-                              className={`font-bold ${item.name.length >= 15 ? 'text-xs' : 'text-sm'} text-white truncate max-w-[170px] sm:max-w-[220px]`}
-                              title={item.name}
-                            >
-                              {item.name}
-                            </span>
-                            <span className="text-xs text-[#ffd54f] font-mono shrink-0">(+{item.level}강)</span>
-                            <span
-                              className="text-[9px] px-1.5 py-0.5 rounded font-bold"
-                              style={{
-                                color: isUnique ? '#ffb74d' : rarityMeta.color,
-                                backgroundColor: isUnique ? '#ff980022' : rarityMeta.bg,
-                                border: `1px solid ${isUnique ? '#ff980055' : `${rarityMeta.color}44`}`
-                              }}
-                            >
-                              {isUnique ? '👑 고유/보스' : `[${rarityMeta.label}]`}
-                            </span>
-                            {(item.prefix || item.suffix) && (
-                              <span className="text-[10px] flex items-center gap-0.5 ml-0.5">
-                                {item.prefix && <span title={`접두사: ${item.prefix.name}`}>✨</span>}
-                                {item.suffix && <span title={`접미사: ${item.suffix.name}`}>🔮</span>}
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="flex items-center gap-1 shrink-0">
-                            {wearer ? (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
-                                👤 {wearer.name}
-                              </span>
-                            ) : (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#607d8b22] text-[#8b9bb4]">
-                                보관함
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* 2행: 종합 스탯 요약 수치 및 인챈트 가능/부여 상태 */}
-                        <div className="pt-0.5 flex items-center justify-between gap-1 flex-wrap">
-                          {renderTotalStats(item.stats)}
-                          <div className="text-[9px] font-mono flex items-center gap-1.5">
-                            <span className={item.prefix ? 'text-[#ffd54f] font-bold' : canPrefix ? 'text-[#38ef7d]' : 'text-[#607d8b]'}>
-                              {item.prefix ? `✨${item.prefix.name}` : canPrefix ? '✨접두가능' : '🔒+3강'}
-                            </span>
-                            <span className={item.suffix ? 'text-[#c8aa6e] font-bold' : canSuffix ? 'text-[#38ef7d]' : 'text-[#607d8b]'}>
-                              {item.suffix ? `🔮${item.suffix.name}` : canSuffix ? '🔮접미가능' : '🔒+7강'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* ── 5. ✨ 침식 장비 정화 탭 (Lv.1 해금) ── */}
+      {/* ── 4. ✨ 침식 장비 정화 탭 (Lv.1 해금) ── */}
       {mainTab === 'curse' && (
         <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
           {!unlocks.curse.unlocked ? (
@@ -8929,7 +8862,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </div>
       )}
 
-      {/* ── 6. ⚒️ 단조 상세 모달 & ⚡ 장비 강화 모달 & 🔮 인챈트 모달 마운트 ── */}
+      {/* ── 6. ⚒️ 단조 상세 모달 & ⚡ 장비 강화 모달 마운트 ── */}
       {selectedCraftRecipe && (
         <EquipmentCraftModal
           recipe={selectedCraftRecipe}
@@ -8945,17 +8878,6 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <EquipmentEnhanceModal
           item={selectedEnhanceItem}
           onClose={() => setSelectedEnhanceItemId(null)}
-          gm={gm}
-          resources={state.resources}
-          discountPct={discountPct}
-          mult={mult}
-        />
-      )}
-
-      {selectedEnchantItem && (
-        <EquipmentEnchantModal
-          item={selectedEnchantItem}
-          onClose={() => setSelectedEnchantItemId(null)}
           gm={gm}
           resources={state.resources}
           discountPct={discountPct}
@@ -9008,6 +8930,7 @@ interface StorageItemDef {
 
 const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const { state, gm } = useGameManager();
+  const { tr } = useI18n();
   const [storageTab, setStorageTab] = useState<'resources' | 'supplies' | 'equipment' | 'quest'>('resources');
   const [selectedItemDetail, setSelectedItemDetail] = useState<StorageItemDef | null>(null);
   const [selectedEquipDetail, setSelectedEquipDetail] = useState<EquipmentItem | null>(null);
@@ -9344,25 +9267,25 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       key: 'compass', label: '차원의 나침반', icon: '🧭', subCategory: 'catalyst', category: '심연 특수 촉매',
       desc: '용병 긴급 이송 턴 1턴 단축 & 차원 포탈 발견↑',
       detailDesc: '공허의 에테르 흐름을 감지하고 차원 통로를 단축하는 마도 나침반입니다. 던전 내에서 예비 대원을 긴급 이송할 때 소요되는 대기 턴을 1턴 줄여줍니다. 또한 탐험 중 비밀 차원 포탈의 발견 확률도 함께 증가합니다.',
-      sources: ['탐험 채비실 촉매 제작 (골드 50 + 마력 수정 1 + 에테르 10)'], usages: ['채비실에서 활성화하여 던전 출격']
+      sources: ['탐험 채비실 광고 시청 시 무료 장착 (최대 2개)'], usages: ['채비실에서 활성화하여 던전 출격']
     },
     {
       key: 'blood_contract', label: '피의 서약서', icon: '📜', subCategory: 'catalyst', category: '심연 특수 촉매',
       desc: '강적 출현율 증가 & 전리품 2배',
       detailDesc: '마물의 피와 약초, 질긴 가죽에 새긴 피의 계약입니다. 몬스터 조우 확률이 상승하지만, 탐험에서 획득하는 모든 골드 전리품이 2배로 증폭됩니다.',
-      sources: ['탐험 채비실 촉매 제작 (골드 50 + 가죽 2 + 약초 2)'], usages: ['채비실에서 활성화하여 던전 출격']
+      sources: ['탐험 채비실 광고 시청 시 무료 장착 (최대 2개)'], usages: ['채비실에서 활성화하여 던전 출격']
     },
     {
       key: 'dimensional_whistle', label: '차원의 호각', icon: '📯', subCategory: 'catalyst', category: '심연 특수 촉매',
       desc: '전멸 시 배낭 전리품 10~50% 회수',
       detailDesc: '공간 왜곡 신호를 보내는 비상 호각입니다. 파티 전멸 시 구조대를 긴급 호출하여 배낭 전리품의 10~50%를 회수합니다. (미장착 시 전멸하면 배낭 전리품 100% 소실)',
-      sources: ['탐험 채비실 촉매 제작 (골드 150 + 에테르 20 + 공허의 파편 1)'], usages: ['채비실에서 활성화하여 던전 출격']
+      sources: ['탐험 채비실 광고 시청 시 무료 장착 (최대 2개)'], usages: ['채비실에서 활성화하여 던전 출격']
     },
     {
       key: 'golden_toad', label: '황금 두꺼비', icon: '🐸', subCategory: 'catalyst', category: '심연 특수 촉매',
       desc: '드랍 자원 즉시 골드 자동 변환',
       detailDesc: '고대 심연의 탐욕을 머금은 황금 두꺼비 유물입니다. 던전에서 획득하는 장비, 오파츠, 수집품을 제외한 모든 자원류(목재, 석재, 철광석, 약초, 가죽 등)를 얻는 즉시 블랙마켓 기본 시세에 따라 골드로 환전하여 배낭에 입고합니다.',
-      sources: ['탐험 채비실 촉매 제작 (골드 1000 + 철광석 20 + 에테르 50)'], usages: ['채비실에서 활성화하여 던전 출격']
+      sources: ['탐험 채비실 광고 시청 시 무료 장착 (최대 2개)'], usages: ['채비실에서 활성화하여 던전 출격']
     }
   ];
 
@@ -9587,6 +9510,16 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           detailDesc: '심연의 공간 응축 보석으로 제작된 궁극의 인챈트석입니다. +10강 이상의 장비에 최고의 방어력 및 방어구 관통 접미 옵션을 부여합니다.',
           sources: ['심연 3~5층 고대 석관 개방', '5층 최종 보스 토벌', '블랙 마켓(Lv.8)'],
           usages: ['대장간 최상급 접미 인챈트']
+        },
+        {
+          key: 'pure_mana_stone',
+          label: '순수 마도석',
+          icon: '💠',
+          category: '마도 인챈트석',
+          desc: '신화급 각성 및 차원 왜곡',
+          detailDesc: '고순도의 순수 마력이 응집된 심연의 결정체입니다. 장비의 잠재력을 극한으로 각성시키고 신화급 마도를 부여합니다.',
+          sources: ['심연 4~10층 보물상자 및 보스 토벌', '블랙 마켓(Lv.9)'],
+          usages: ['신화급 각성 및 고급 거래']
         },
       ]
     }
@@ -10352,7 +10285,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     {displaySources.map((src, i) => (
                       <li key={i} className="text-[10px] text-[#cfd8dc] flex items-start gap-1">
                         <span className="text-[#38ef7d] shrink-0">•</span>
-                        <span>{src}</span>
+                        <span>{tr(src)}</span>
                       </li>
                     ))}
                   </ul>
@@ -10362,13 +10295,13 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="p-2.5 rounded-xl bg-[#0f1726] border border-[#24334a] flex flex-col gap-1">
                   <div className="text-[11px] font-bold text-[#ffd54f] flex items-center gap-1">
                     <span>📤</span>
-                    <span>{'주요 활용처'}</span>
+                    <span>{tr('주요 활용처')}</span>
                   </div>
                   <ul className="flex flex-col gap-1 mt-0.5">
                     {displayUsages.map((use, i) => (
                       <li key={i} className="text-[10px] text-[#cfd8dc] flex items-start gap-1">
                         <span className="text-[#ffd54f] shrink-0">•</span>
-                        <span>{use}</span>
+                        <span>{tr(use)}</span>
                       </li>
                     ))}
                   </ul>
@@ -10522,11 +10455,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               const isFullHp = hero.currentHp >= eff.maxHp;
               const isFullMp = infirmaryLv < 4 || hero.currentMp >= eff.maxMp;
               const isFullyRecovered = isFullHp && isFullMp;
-              const heroPortrait = CustomAssetService.getInstance().getMercenaryOverride(hero.classId)
-                || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
-                || (hero.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(hero.portraitPromptKey) : undefined)
-                || CustomAssetService.getInstance().getMercenaryOverride(hero.id)
-                || CustomAssetService.getInstance().getMercenaryOverride(hero.name);
+              const heroPortrait = CustomAssetService.getHeroPortrait(hero);
 
               return (
                 <div
@@ -10695,11 +10624,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               const inParty = state.party.some(p => p.id === hero.id);
               const hpPct = Math.min(100, Math.round((hero.currentHp / eff.maxHp) * 100));
               const mpPct = Math.min(100, Math.round((hero.currentMp / eff.maxMp) * 100));
-              const heroPortrait = CustomAssetService.getInstance().getMercenaryOverride(hero.classId)
-                || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
-                || (hero.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(hero.portraitPromptKey) : undefined)
-                || CustomAssetService.getInstance().getMercenaryOverride(hero.id)
-                || CustomAssetService.getInstance().getMercenaryOverride(hero.name);
+              const heroPortrait = CustomAssetService.getHeroPortrait(hero);
 
               return (
                 <div
@@ -10789,6 +10714,7 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 //  🕵️‍♂️ 블랙 마켓 (15종 자원 거래 & 레벨별 마도 비전서 스킬북 상점)
 // ─────────────────────────────────────────────────────────────
 const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+  const { tr, lang } = useI18n();
   const { state, gm } = useGameManager();
   const [filterCat, setFilterCat] = useState<'all' | 'basic' | 'farming' | 'rare'>('all');
   const [tradeModalItem, setTradeModalItem] = useState<{
@@ -10873,7 +10799,7 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
             <div className="text-[10px] text-[#ffd54f]">
               {'금화'}: <span className="font-mono font-bold">🪙 {state.resources.gold.toLocaleString()}G</span>
-              <span className="text-[#38ef7d] ml-2 font-bold">⏱️ {`유지비 주기: ${20 + marketLv}초`}</span>
+              <span className="text-[#38ef7d] ml-2 font-bold">⏱️ {tr('유지비 주기')}: {formatDuration(20 + marketLv, lang)}</span>
             </div>
           </div>
         </div>
@@ -10959,12 +10885,12 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   </span>
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-sm text-white">{item.name}</span>
+                      <span className="font-bold text-sm text-white">{tr(item.name)}</span>
                       <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#1e293b] text-[#8b9bb4]">
-                        {item.tierName}
+                        {tr(item.tierName)}
                       </span>
                     </div>
-                    <div className="text-[10px] text-[#8b9bb4] mt-0.5">{item.desc}</div>
+                    <div className="text-[10px] text-[#8b9bb4] mt-0.5">{tr(item.desc)}</div>
                   </div>
                 </div>
 
@@ -10972,11 +10898,11 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   {isUnlocked ? (
                     isSoldOut ? (
                       <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef535022] text-[#ef5350] font-bold border border-[#ef535044] animate-pulse">
-                        ⏳ 매진 ({formatRestockTime(stockInfo.restockRemainingSec)})
+                        ⏳ {tr('매진')} ({formatRestockTime(stockInfo.restockRemainingSec)})
                       </span>
                     ) : (
                       <span className="text-[10px] px-2 py-0.5 rounded bg-[#ffd54f18] text-[#ffd54f] font-mono font-bold border border-[#ffd54f33]">
-                        매입 재고: {stockInfo.current}/{stockInfo.max}
+                        {tr('매입 재고')}: {stockInfo.current}/{stockInfo.max}
                       </span>
                     )
                   ) : (
@@ -11083,7 +11009,7 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
         return (
           <Modal
-            title={`자원 일괄 거래 — ${item.name}`}
+            title={`${tr('자원 일괄 거래')} — ${tr(item.name)}`}
             open={true}
             onClose={() => setTradeModalItem(null)}
           >
@@ -11095,18 +11021,18 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-sm text-white">{item.name}</span>
+                    <span className="font-bold text-sm text-white">{tr(item.name)}</span>
                     <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#1e293b] text-[#8b9bb4] font-bold">
-                      {item.tierName}
+                      {tr(item.tierName)}
                     </span>
                   </div>
-                  <div className="text-[11px] text-[#8b9bb4] mt-0.5">{item.desc}</div>
+                  <div className="text-[11px] text-[#8b9bb4] mt-0.5">{tr(item.desc)}</div>
                   <div className="text-xs font-mono mt-1 flex items-center gap-2 flex-wrap">
-                    <span className="text-[#ffd54f]">창고: <span className="font-bold text-white">{cur.toLocaleString()}</span>/{maxCap.toLocaleString()}개</span>
+                    <span className="text-[#ffd54f]">{tr('창고')}: <span className="font-bold text-white">{cur.toLocaleString()}</span>/{maxCap.toLocaleString()}{tr('개')}</span>
                     <span className="text-[#64748b]">|</span>
                     <span className={stockInfo.isSoldOut ? 'text-[#ef5350] font-bold' : 'text-[#38ef7d]'}>
-                      상점 재고: <span className="font-bold">{stockInfo.current}</span>/{stockInfo.max}개
-                      {stockInfo.isSoldOut && ` (매진: ${formatRestockTime(stockInfo.restockRemainingSec)})`}
+                      {tr('상점 재고')}: <span className="font-bold">{stockInfo.current}</span>/{stockInfo.max}{tr('개')}
+                      {stockInfo.isSoldOut && ` (${tr('매진')}: ${formatRestockTime(stockInfo.restockRemainingSec)})`}
                     </span>
                   </div>
                 </div>
@@ -11115,8 +11041,8 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               {/* 매진 시 안내 경고창 */}
               {tradeMode === 'buy' && stockInfo.isSoldOut && (
                 <div className="p-2.5 rounded-xl bg-[#ef535018] border border-[#ef535033] text-center text-xs text-[#ef5350] font-bold">
-                  ⏳ 상점의 매입 물량이 전량 매진되었습니다.
-                  <div className="font-mono text-sm text-white mt-1">재입고까지 {formatRestockTime(stockInfo.restockRemainingSec)}</div>
+                  ⏳ {tr('상점의 매입 물량이 전량 매진되었습니다.')}
+                  <div className="font-mono text-sm text-white mt-1">{tr('재입고까지')} {formatRestockTime(stockInfo.restockRemainingSec)}</div>
                 </div>
               )}
 
@@ -11309,300 +11235,59 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 };
 
 // ─────────────────────────────────────────────────────────────
-//  🧪 마도서 제작 비전 & 상세 설명 모달 (GrimoireCraftDetailModal)
-// ─────────────────────────────────────────────────────────────
-interface GrimoireCraftDetailModalProps {
-  recipe: GrimoireRecipe;
-  alchemyLv: number;
-  isPaused: boolean;
-  resources: GameResources;
-  onClose: () => void;
-  onCraft: (recipeId: string) => void;
-}
-
-const GrimoireCraftDetailModal: React.FC<GrimoireCraftDetailModalProps> = ({
-  recipe,
-  alchemyLv,
-  isPaused,
-  resources,
-  onClose,
-  onCraft
-}) => {
-  const rMeta = GRIMOIRE_RARITY_META[recipe.rarity] || GRIMOIRE_RARITY_META.common;
-  const isUnlocked = alchemyLv >= recipe.reqAlchemyLv;
-  const res = resources as unknown as Record<string, number>;
-  const canAfford = isUnlocked && !isPaused && Object.entries(recipe.cost).every(
-    ([k, v]) => (res[k] || 0) >= (v as number)
-  );
-
-  const skill = recipe.skill;
-  const tags = getSkillTags(skill);
-  const combos = getTriggerableCombos(skill);
-
-  const targetLabel = skill.targetType === 'all_enemies' ? '대상 파티 (적 전체)'
-    : skill.targetType === 'all_allies' ? '아군 파티 (전체)'
-    : skill.targetType === 'single_ally' ? '단일 아군'
-    : skill.targetType === 'self' ? '자신 (시전자)'
-    : '단일 적';
-
-  const posLabel = skill.positionBonus === 'front' ? '전열 특화' : skill.positionBonus === 'back' ? '후열 저격' : skill.positionBonus === 'any' ? '전/후열 대응' : null;
-  const posColor = skill.positionBonus === 'front' ? '#ef5350' : skill.positionBonus === 'back' ? '#42a5f5' : '#ab47bc';
-
-  const effectLabelMap: Record<string, string> = {
-    damage: '물리/마법 피해',
-    heal: '생명력 치유',
-    shield: '보호막 방벽',
-    buff: '능력치 강화 버프',
-    debuff: '능력치 약화 디버프',
-    bleed: '지속 출혈 피해',
-    poison: '맹독 누적 피해',
-    stun: '행동 불능 기절',
-    drain: '생명력/마나 흡수'
-  };
-  const effectText = effectLabelMap[skill.effectType || 'damage'] || '전투 마도 효과';
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in" onClick={onClose}>
-      <div
-        className="relative w-full max-w-[420px] bg-[#0b0f19] border rounded-2xl shadow-2xl p-4 flex flex-col gap-3 text-left animate-scale-up max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-        style={{ borderColor: `${rMeta.color}88` }}
-      >
-        {/* 헤더: 아이콘 + 이름 + 등급 뱃지 + 출처 클래스 + 닫기 */}
-        <div className="flex items-start justify-between gap-2 border-b border-[#1b263b] pb-2.5">
-          <div className="flex items-center gap-2.5">
-            <span
-              className="text-3xl p-2 rounded-xl bg-[#141d2f] border flex items-center justify-center shadow-md shrink-0"
-              style={{ borderColor: `${rMeta.color}55` }}
-            >
-              <GameIcon name={skill.id} icon={skill.icon || '📖'} size={32} />
-            </span>
-            <div>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="font-bold text-base text-white">{recipe.name}</span>
-                <span
-                  className="text-[10px] px-2 py-0.5 rounded font-bold"
-                  style={{ color: rMeta.color, background: rMeta.bg, border: `1px solid ${rMeta.borderColor}` }}
-                >
-                  {rMeta.label} 등급
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-[#ffd54f1f] text-[#ffd54f] border border-[#ffd54f44]">
-                  🎲 성공률 {GRIMOIRE_CRAFT_SUCCESS_RATES[recipe.rarity] || 80}%
-                </span>
-                {recipe.sourceClass && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-[#3949ab22] text-[#7986cb] border border-[#3949ab44] font-bold">
-                    👤 {recipe.sourceClass} 비전
-                  </span>
-                )}
-              </div>
-              <div className="text-[11px] text-[#8b9bb4] mt-0.5 flex items-center gap-1.5">
-                <span>📖 에테르 제본 마도서</span>
-                <span>•</span>
-                {isUnlocked ? (
-                  <span className="text-[#38ef7d] font-bold">제작 가능 (성공률 {GRIMOIRE_CRAFT_SUCCESS_RATES[recipe.rarity] || 80}%)</span>
-                ) : (
-                  <span className="text-[#ef5350] font-bold">공방 Lv.{recipe.reqAlchemyLv} 이상 해금</span>
-                )}
-              </div>
-            </div>
-          </div>
-          <button
-            className="w-7 h-7 rounded-lg bg-[#14161c] text-[#8b9bb4] hover:text-white flex items-center justify-center border border-[#23324d] transition-colors"
-            onClick={onClose}
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* 4분할 핵심 스펙 그리드 */}
-        <div className="grid grid-cols-4 gap-1.5 text-center font-mono">
-          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
-            <span className="text-[10px] text-[#8b9bb4] block">마나 소모</span>
-            <span className="text-xs font-bold text-[#64b5f6]">{skill.manaCost} MP</span>
-          </div>
-          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
-            <span className="text-[10px] text-[#8b9bb4] block">쿨다운</span>
-            <span className="text-xs font-bold text-[#ffd54f]">{skill.cooldown || 0}턴</span>
-          </div>
-          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
-            <span className="text-[10px] text-[#8b9bb4] block">위력 계수</span>
-            <span className="text-xs font-bold text-[#38ef7d]">{Math.round((skill.power || 1.0) * 100)}%</span>
-          </div>
-          <div className="bg-[#12141a] p-2 rounded-xl border border-[#1e2a3f]">
-            <span className="text-[10px] text-[#8b9bb4] block">대상</span>
-            <span className="text-[10px] font-bold text-[#cfd8dc] truncate block">{targetLabel}</span>
-          </div>
-        </div>
-
-        {/* 🏷️ 스킬 특성 태그 뱃지 바 */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          {tags.map(t => (
-            <span
-              key={t.id}
-              className="text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1 shadow-sm"
-              style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
-            >
-              <span>{t.icon}</span>
-              <span>{t.label}</span>
-            </span>
-          ))}
-        </div>
-
-        {/* 효과 유형 & 포지션 보너스 */}
-        <div className="flex items-center gap-2 flex-wrap text-xs">
-          <div className="px-2.5 py-1 rounded-lg bg-[#141d2f] border border-[#22314d] text-[#b0bec5] flex items-center gap-1.5">
-            <span className="text-[10px] text-[#8b9bb4]">효과 속성:</span>
-            <span className="font-bold text-white">{effectText}</span>
-            {skill.statusDuration && (
-              <span className="text-[10px] text-[#ffd54f]">({skill.statusDuration}턴)</span>
-            )}
-          </div>
-          {posLabel && (
-            <div
-              className="px-2.5 py-1 rounded-lg border flex items-center gap-1 font-bold"
-              style={{ borderColor: `${posColor}44`, backgroundColor: `${posColor}15`, color: posColor }}
-            >
-              <span>📍 {posLabel}</span>
-            </div>
-          )}
-        </div>
-
-        {/* 상세 효과 설명 */}
-        <div className="p-3 rounded-xl bg-[#12141a] border border-[#1e2a3f] flex flex-col gap-1">
-          <div className="text-[11px] font-bold text-[#c8aa6e]">📖 마도서 비전 효과</div>
-          <div className="text-xs text-[#e2e8f0] leading-relaxed whitespace-pre-line">
-            {recipe.desc || skill.description}
-          </div>
-        </div>
-
-        {/* ⚡ 상태이상 연계 메커니즘 섹션 */}
-        {combos.length > 0 ? (
-          <div className="p-2.5 rounded-xl bg-[#111a2c] border border-[#c8aa6e33] flex flex-col gap-1.5">
-            <div className="text-[11px] font-bold text-[#ffd54f] flex items-center justify-between">
-              <span className="flex items-center gap-1">
-                <span>⚡ 상태이상 연계 메커니즘</span>
-              </span>
-              <span className="text-[9px] text-[#8b9bb4] font-normal">적 상태이상 시 발동</span>
-            </div>
-            <div className="flex flex-col gap-1.5 max-h-[160px] overflow-y-auto pr-0.5">
-              {combos.map(c => (
-                <div key={c.comboName} className="text-xs p-2 rounded-lg bg-[#0b101b] border border-[#1d273a] flex flex-col gap-1">
-                  <div className="flex items-center justify-between gap-1 flex-wrap">
-                    <span className="font-bold text-white text-[11px] flex items-center gap-1">
-                      <span>{c.icon}</span>
-                      <span>{c.comboName}</span>
-                    </span>
-                    <span
-                      className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold"
-                      style={{ backgroundColor: `${c.bannerColor}18`, color: c.bannerColor, border: `1px solid ${c.bannerColor}44` }}
-                    >
-                      필요 적 상태: {c.triggerStatus}
-                    </span>
-                  </div>
-                  {/* 연계 스킬 태그 뱃지 */}
-                  <div className="flex items-center gap-1 flex-wrap text-[9px]">
-                    <span className="text-[#8b9bb4]">연계 스킬 태그:</span>
-                    {c.requiredTagIds.map(tId => {
-                      const tMeta = getTagMeta(tId);
-                      return (
-                        <span
-                          key={tId}
-                          className="px-1.5 py-0.2 rounded font-bold flex items-center gap-0.5"
-                          style={{ backgroundColor: tMeta.bg, color: tMeta.text, border: `1px solid ${tMeta.border}` }}
-                        >
-                          <span>{tMeta.icon}</span>
-                          <span>{tMeta.label}</span>
-                        </span>
-                      );
-                    })}
-                  </div>
-                  <div className="text-[10px] text-[#cfd8dc] leading-snug">{c.fullDesc}</div>
-                </div>
-              ))}
-            </div>
-            {/* 💡 연계 메커니즘 안내 팁 */}
-            <div className="p-2 rounded-lg bg-[#0a1220] border border-[#223652] text-[10px] text-[#90caf9] flex items-center gap-1.5">
-              <span className="text-sm">💡</span>
-              <span>
-                적에게 해당 상태이상이 걸려 있을 때 일치하는 태그 스킬로 공격하면 연계 콤보가 폭발합니다.
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div className="p-2.5 rounded-xl bg-[#111a2c] border border-[#22324f] text-[11px] text-[#8b9bb4]">
-            💡 이 스킬은 독립적인 직타/강화형 비전으로, 언제나 즉시 최대 위력을 발휘합니다.
-          </div>
-        )}
-
-        {/* 🧪 제작 비용 및 보유 자원 */}
-        <div className="p-3 rounded-xl bg-[#0c101a] border border-[#1f2738] flex flex-col gap-2">
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-[#8b9bb4] font-bold">🧪 제본 소모 재료</span>
-            {!isUnlocked && (
-              <span className="text-[#ef5350] text-[11px] font-bold">공방 Lv.{recipe.reqAlchemyLv} 이상 필요</span>
-            )}
-            {isPaused && (
-              <span className="text-[#ef5350] text-[11px] font-bold">공방 가동 중단 상태</span>
-            )}
-          </div>
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {renderCostBadges(recipe.cost, resources, false)}
-          </div>
-        </div>
-
-        {/* 하단 버튼 */}
-        <div className="flex gap-2 justify-end pt-1">
-          <button className="btn btn-ghost text-xs px-3 py-2" onClick={onClose}>
-            닫기
-          </button>
-          <button
-            className={`btn text-xs px-4 py-2 font-bold flex items-center gap-1.5 ${
-              !isUnlocked || !canAfford || isPaused ? 'btn-ghost opacity-60 cursor-not-allowed' : 'btn-primary'
-            }`}
-            disabled={!isUnlocked || !canAfford || isPaused}
-            onClick={() => {
-              onCraft(recipe.id);
-            }}
-          >
-            <span>🧪</span>
-            <span>
-              {!isUnlocked
-                ? `공방 Lv.${recipe.reqAlchemyLv} 필요`
-                : isPaused
-                ? '공방 가동 중단'
-                : canAfford
-                ? '마도서 제작하기'
-                : '제작 재료 부족'}
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ─────────────────────────────────────────────────────────────
-//  🧪 에테르 연금 공방 (마도서 제작 & 최고 10레벨 비전 강화)
+//  🧪 에테르 연금 공방 (스킬 비전 강화 & 장비 마도 인챈트)
 // ─────────────────────────────────────────────────────────────
 const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const { state, gm } = useGameManager();
-  const [activeTab, setActiveTab] = useState<'enhance' | 'craft'>('enhance');
+  const { tr } = useI18n();
+  const [activeTab, setActiveTab] = useState<'enhance' | 'enchant'>('enhance');
   const [selectedHeroFilter, setSelectedHeroFilter] = useState<string>('all');
-  const [recipeRarityFilter, setRecipeRarityFilter] = useState<'all' | 'common' | 'rare' | 'epic' | 'legendary'>('all');
+  const [enchantCategory, setEnchantCategory] = useState<'all' | 'weapon' | 'armor' | 'accessory'>('all');
   const [enhanceModalTarget, setEnhanceModalTarget] = useState<{ hero: Mercenary; skill: Skill } | null>(null);
-  const [selectedRecipeForModal, setSelectedRecipeForModal] = useState<GrimoireRecipe | null>(null);
+  const [selectedEnchantItemId, setSelectedEnchantItemId] = useState<string | null>(null);
 
   const alchemyLv = state.buildings['alchemy']?.level || 1;
   const isPaused = state.buildings['alchemy']?.isPaused || false;
   const res = state.resources as unknown as Record<string, number>;
   const maxEnhanceAllowed = GameManager.getAlchemyMaxEnhanceLevel(alchemyLv);
+  const isEnchantUnlocked = alchemyLv >= 3;
+  const discountPct = Math.min(50, alchemyLv * 3);
+  const mult = Math.max(0.5, 1 - (alchemyLv * 0.03));
 
-  const recipes = useMemo(() => gm.getGrimoireRecipes(), [gm]);
+  // 🌟 공통 장비 정렬 헬퍼: 장착된 장비 최상단 배치 ➔ 이후 획득 순서대로 정렬
+  const sortEquipByEquippedAndAcquisition = useCallback((items: EquipmentItem[]) => {
+    const invOrderMap = new Map<string, number>();
+    (state.equipmentInventory || []).forEach((item, idx) => {
+      if (item?.id) invOrderMap.set(item.id, idx);
+    });
 
-  const filteredRecipes = useMemo(() => {
-    if (recipeRarityFilter === 'all') return recipes;
-    return recipes.filter(r => r.rarity === recipeRarityFilter);
-  }, [recipes, recipeRarityFilter]);
+    return [...items].sort((a, b) => {
+      const aEquipped = Boolean(a.equippedHeroId);
+      const bEquipped = Boolean(b.equippedHeroId);
+      if (aEquipped !== bEquipped) {
+        return aEquipped ? -1 : 1;
+      }
+      return (invOrderMap.get(a.id) ?? 0) - (invOrderMap.get(b.id) ?? 0);
+    });
+  }, [state.equipmentInventory]);
+
+  // 보유 장비 카테고리 필터링 (인챈트) - ID 중복 방지 및 장착 장비 상단 + 획득 순서 정렬
+  const filteredEnchantInventory = useMemo(() => {
+    const seen = new Set<string>();
+    const list = (state.equipmentInventory || []).filter(item => {
+      if (!item || !item.id) return false;
+      if (seen.has(item.id)) return false;
+      seen.add(item.id);
+      if (enchantCategory === 'all') return true;
+      return item.slot === enchantCategory;
+    });
+    return sortEquipByEquippedAndAcquisition(list);
+  }, [state.equipmentInventory, enchantCategory, sortEquipByEquippedAndAcquisition]);
+
+  const selectedEnchantItem = useMemo(() => {
+    if (!selectedEnchantItemId) return null;
+    return state.equipmentInventory.find(i => i.id === selectedEnchantItemId) || null;
+  }, [selectedEnchantItemId, state.equipmentInventory]);
 
   // 성채의 모든 가용 용병 (barracks + party 고유 목록)
   const allAvailableHeroes = useMemo(() => {
@@ -11654,31 +11339,6 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     return allAvailableHeroes.find(h => h.id === selectedHeroFilter) || null;
   }, [allAvailableHeroes, selectedHeroFilter]);
 
-  const [craftingRecipe, setCraftingRecipe] = useState<GrimoireRecipe | null>(null);
-  const [pendingGrimoireOutcome, setPendingGrimoireOutcome] = useState<'success' | 'drop'>('success');
-  // ⏳ 마도서 티어별 점진적 소요 시간 (1티어: 2.0초, 2티어: 2.8초, 3티어: 3.8초)
-  const grimoireDurationMs = (craftingRecipe?.tier || 1) <= 1 ? 2000 : ((craftingRecipe?.tier || 1) === 2 ? 2800 : 3800);
-
-  const handleCraft = (recipeId: string) => {
-    const r = GRIMOIRE_CRAFT_RECIPES.find(rc => rc.id === recipeId);
-    if (r) {
-      const successRate = gm.getGrimoireCraftSuccessRate(r.rarity);
-      const willSucceed = (Math.random() * 100) < successRate;
-      setPendingGrimoireOutcome(willSucceed ? 'success' : 'drop');
-      setCraftingRecipe(r);
-    } else {
-      gm.craftSkillBook(recipeId);
-    }
-  };
-
-  const handleGrimoireCraftComplete = () => {
-    if (craftingRecipe) {
-      const isForcedSuccess = pendingGrimoireOutcome === 'success';
-      gm.craftSkillBook(craftingRecipe.id, isForcedSuccess);
-      setCraftingRecipe(null);
-    }
-  };
-
   return (
     <div className="flex flex-col h-full bg-[#0b0e17] text-[#cfd8e8]">
       {/* 헤더 */}
@@ -11702,6 +11362,7 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               {'에테르'}: <span className="font-mono font-bold">✨ {state.resources.ether.toLocaleString()}</span>
               <span className="text-[#ffd54f] ml-2 font-bold">🪙 {state.resources.gold.toLocaleString()}G</span>
               <span className="text-[#8b9bb4] ml-2 font-mono">최대 강화 한도: Lv.{maxEnhanceAllowed}</span>
+              <span className="text-[#38ef7d] ml-2 font-bold">✨ 특전: 인챈트 -{discountPct}%</span>
             </div>
           </div>
         </div>
@@ -11724,10 +11385,12 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           ✨ {`습득 스킬 강화 (${allLearnedSkills.length}개)`}
         </button>
         <button
-          className={`btn flex-1 py-1.5 text-xs font-bold transition-all ${activeTab === 'craft' ? 'btn-primary' : 'btn-ghost'}`}
-          onClick={() => setActiveTab('craft')}
+          className={`btn flex-1 py-1.5 text-xs font-bold transition-all ${
+            activeTab === 'enchant' ? 'btn-primary' : isEnchantUnlocked ? 'btn-ghost' : 'btn-ghost opacity-50'
+          }`}
+          onClick={() => setActiveTab('enchant')}
         >
-          📖 {`마도서 제작 (${recipes.length}종)`}
+          {isEnchantUnlocked ? '🔮 마도 인챈트' : '🔒 Lv.3 인챈트'}
         </button>
       </div>
 
@@ -11786,7 +11449,7 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             {isPaused && (
               <div className="p-2.5 rounded-lg bg-[#2a1215] border border-[#ef535055] text-xs text-[#ef5350] flex items-center gap-2">
                 <span>⚠️</span>
-                <span>식량 부족으로 공방 가동이 중단되었습니다. 식량을 보충하여 공방을 재가동하세요.</span>
+                <span>{tr('식량 부족으로 공방 가동이 중단되었습니다. 식량을 보충하여 공방을 재가동하세요.')}</span>
               </div>
             )}
 
@@ -11901,188 +11564,137 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       </div>
     )}
 
-      {/* 탭 2: 마도서 제작 */}
-      {activeTab === 'craft' && (
-        <div className="flex-1 min-h-0 flex flex-col">
-          {/* ── 등급별 필터 탭 바 (상단 고정 shrink-0) ── */}
-          <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0a0d16] border-b border-[#1f2738] overflow-x-auto shrink-0 scrollbar-none shadow-inner">
-            {(
-              [
-                { key: 'all', label: '전체', color: '#26a69a', reqLv: 1, rate: 0 },
-                { key: 'common', label: '일반', color: '#9e9e9e', reqLv: 1, rate: 80 },
-                { key: 'rare', label: '희귀', color: '#42a5f5', reqLv: 3, rate: 50 },
-                { key: 'epic', label: '영웅', color: '#ab47bc', reqLv: 5, rate: 30 },
-                { key: 'legendary', label: '전설', color: '#ffd54f', reqLv: 7, rate: 10 },
-              ] as const
-            ).map(tab => {
-              const count = tab.key === 'all' 
-                ? recipes.length 
-                : recipes.filter(r => r.rarity === tab.key).length;
-              const isSelected = recipeRarityFilter === tab.key;
-              const isTabUnlocked = tab.key === 'all' || alchemyLv >= tab.reqLv;
-              return (
-                <button
-                  key={tab.key}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all flex items-center gap-1.5 ${
-                    isSelected
-                      ? 'bg-[#26a69a] text-black font-extrabold shadow-sm'
-                      : !isTabUnlocked
-                      ? 'bg-[#121622] text-[#546e7a] border border-[#1f2838] opacity-70'
-                      : 'bg-[#14161c] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#222d42]'
-                  }`}
-                  onClick={() => setRecipeRarityFilter(tab.key)}
-                >
-                  <span style={{ color: isSelected ? '#000' : tab.color }}>●</span>
-                  <span>{tab.label}</span>
-                  {!isTabUnlocked && <span className="text-[9px] text-[#ef5350]">🔒Lv.{tab.reqLv}</span>}
-                  {tab.rate > 0 && <span className={`text-[9px] ${isSelected ? 'text-black/80 font-bold' : 'text-[#80cbc4]'}`}>({tab.rate}%)</span>}
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
-                    isSelected ? 'bg-black/30 text-black font-black' : 'bg-[#0a0d14] text-[#80cbc4]'
-                  }`}>
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-2.5">
-            <div className="p-3 bg-[#121926] border border-[#26a69a44] rounded-xl text-[11px] text-[#cfd8dc] flex items-center justify-between">
-              <div>
-                <div className="font-bold text-[#26a69a] text-xs">🧪 에테르 마도서 제본 공방 (등급별 점진 해금 & 성공 확률)</div>
-                <div className="mt-0.5 text-[#b0bec5]">
-                  공방 레벨에 따라 등급이 점진 해금됩니다:
-                  <span className="text-white font-medium"> Lv.1 일반(80%) ➔ Lv.3 희귀(50%) ➔ Lv.5 영웅(30%) ➔ Lv.7 전설(10%)</span>
-                </div>
-              </div>
-              <div className="text-right text-[10px] text-[#80cbc4] shrink-0 ml-2">
-                <div>표시 중: <span className="font-bold text-white">{filteredRecipes.length}종</span> / 총 {recipes.length}종</div>
-                <div className="text-[#8b9bb4]">공방 Lv.{alchemyLv} 가동 중</div>
+      {/* 탭 2: 🔮 마도 장비 인챈트 (Lv.3 해금) */}
+      {activeTab === 'enchant' && (
+        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+          {!isEnchantUnlocked ? (
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-3">
+              <span className="text-5xl">🔒</span>
+              <div className="font-bold text-base text-[#ce93d8]">에테르 공방 Lv.3 필요</div>
+              <div className="text-xs text-[#8b9bb4] max-w-[280px] leading-relaxed">
+                고급 마도 인챈트 공방은 에테르 공방을 <span className="text-[#ce93d8] font-bold">Lv.3</span> 이상으로 증축하면 해금됩니다.
+                <br />(현재 공방: Lv.{alchemyLv})
               </div>
             </div>
-
-            {filteredRecipes.length === 0 ? (
-              <div className="p-8 text-center text-xs text-[#8b9bb4] bg-[#131926] rounded-xl border border-[#222d42] flex flex-col items-center gap-2">
-                <span className="text-3xl">📭</span>
-                <span className="font-bold text-white">해당 등급의 제작 가능한 마도서가 없습니다.</span>
+          ) : (
+            <>
+              {/* 분류 칩 바 */}
+              <div className="flex items-center gap-1.5 px-3 py-2 bg-[#121724] border-b border-[#1f2738] shrink-0">
+                {[
+                  { key: 'all', label: '전체' },
+                  { key: 'weapon', label: '🗡️ 무기' },
+                  { key: 'armor', label: '🛡️ 방어구' },
+                  { key: 'accessory', label: '💍 장신구' },
+                ].map(cat => (
+                  <button
+                    key={cat.key}
+                    className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all ${
+                      enchantCategory === cat.key
+                        ? 'bg-[#ce93d8] text-[#000] shadow' : 'bg-[#182030] text-[#8b9bb4] border border-[#26334a]'
+                    }`}
+                    onClick={() => setEnchantCategory(cat.key as any)}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
               </div>
-            ) : (
-              <div className="flex flex-col gap-2">
-                {filteredRecipes.map(recipe => {
-                  const isUnlocked = alchemyLv >= recipe.reqAlchemyLv;
-                  const rMeta = GRIMOIRE_RARITY_META[recipe.rarity] || GRIMOIRE_RARITY_META.common;
-                  const canAfford = isUnlocked && !isPaused && Object.entries(recipe.cost).every(
-                    ([k, v]) => (res[k] || 0) >= (v as number)
-                  );
-                  const skillTags = getSkillTags(recipe.skill);
 
-                  return (
-                    <div
-                      key={recipe.id}
-                      onClick={() => setSelectedRecipeForModal(recipe)}
-                      className={`panel p-2.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer group transition-all ${
-                        isUnlocked
-                          ? 'bg-[#131926] border-[#222d42] hover:border-[#26a69a88] hover:bg-[#161f30]'
-                          : 'bg-[#0e121a] border-[#1f2738] opacity-60'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="text-2xl p-1.5 rounded-lg bg-[#323d4e] border border-[#4a576d] group-hover:scale-105 transition-transform shrink-0 shadow-sm">
-                          <GameIcon name={recipe.skill.id || recipe.id} icon={recipe.skill.icon || '📖'} size={24} />
-                        </span>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-bold text-sm text-white group-hover:text-[#26a69a] transition-colors truncate">
-                              {recipe.name}
+              <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
+                <div className="panel-accent p-3 bg-[#161224] border border-[#ce93d844]">
+                  <div className="text-xs text-[#ffd54f] font-bold">✨ {tr('접두석')}: {res.prefix_stone || 0}{tr('개')} | 🔮 {tr('접미석')}: {res.suffix_stone || 0}{tr('개')}</div>
+                  <div className="text-[11px] text-[#ce93d8] mt-0.5">⭐ {tr('순수 접두석')}: {res.pure_prefix_stone || 0}{tr('개')} | 🌌 {tr('순수 접미석')}: {res.pure_suffix_stone || 0}{tr('개')}</div>
+                  <div className="text-[10px] text-[#8b9bb4] mt-1">💡 +3강 이상 접두어 인챈트 / +7강 이상 접미어 인챈트 해금 (인챈트 비용 -{discountPct}% 할인)</div>
+                </div>
+
+                {filteredEnchantInventory.length === 0 ? (
+                  <div className="panel p-8 text-center text-sm text-[#8b9bb4]">
+                    보유 중인 해당 분류의 장비가 없습니다.<br />
+                    <span className="text-xs text-[#607d8b] mt-1 block">대장간에서 새로운 장비를 제작하거나 던전에서 획득하세요.</span>
+                  </div>
+                ) : (
+                  filteredEnchantInventory.map(item => {
+                    const canPrefix = item.level >= 3;
+                    const canSuffix = item.level >= 7;
+                    const wearer = item.equippedHeroId ? state.barracks.find(h => h.id === item.equippedHeroId) : null;
+                    const isUnique = item.rarity === 'unique' || item.id.startsWith('boss_') || item.id.includes('unique');
+                    const rarityMeta = {
+                      common:    { label: '일반', color: '#9e9e9e', bg: '#9e9e9e22' },
+                      rare:      { label: '희귀', color: '#42a5f5', bg: '#42a5f522' },
+                      epic:      { label: '에픽', color: '#ce93d8', bg: '#ce93d822' },
+                      unique:    { label: '고유', color: '#ffb74d', bg: '#ff980022' },
+                      legendary: { label: '전설', color: '#ffd54f', bg: '#ffd54f22' },
+                    }[item.rarity || 'common'] || { label: '일반', color: '#9e9e9e', bg: '#9e9e9e22' };
+
+                    return (
+                      <div
+                        key={item.id}
+                        className="panel p-2.5 flex flex-col gap-1.5 cursor-pointer transition-all hover:border-[#ce93d888] hover:bg-[#1a1528] border-[#222d42] bg-[#131926]"
+                        onClick={() => setSelectedEnchantItemId(item.id)}
+                      >
+                        {/* 1행: 아이콘 + 이름 + (+강화강) + [등급 뱃지] + [인챈트 아이콘] + [착용자 뱃지] */}
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                            <span className="p-1 rounded-md bg-[#323d4e] border border-[#4a576d] shrink-0 flex items-center justify-center">
+                              <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={22} />
                             </span>
                             <span
-                              className="text-[9px] px-1.5 py-0.2 rounded font-bold shrink-0"
-                              style={{ color: rMeta.color, background: rMeta.bg, border: `1px solid ${rMeta.borderColor}` }}
+                              className={`font-bold ${item.name.length >= 15 ? 'text-xs' : 'text-sm'} text-white truncate max-w-[170px] sm:max-w-[220px]`}
+                              title={item.name}
                             >
-                              {rMeta.label}
+                              {item.name}
                             </span>
-                            <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33] shrink-0 font-mono">
-                              성공률 {GRIMOIRE_CRAFT_SUCCESS_RATES[recipe.rarity] || 80}%
+                            <span className="text-xs text-[#ffd54f] font-mono shrink-0">(+{item.level}강)</span>
+                            <span
+                              className="text-[9px] px-1.5 py-0.5 rounded font-bold"
+                              style={{
+                                color: isUnique ? '#ffb74d' : rarityMeta.color,
+                                backgroundColor: isUnique ? '#ff980022' : rarityMeta.bg,
+                                border: `1px solid ${isUnique ? '#ff980055' : `${rarityMeta.color}44`}`
+                              }}
+                            >
+                              {isUnique ? '👑 고유/보스' : `[${rarityMeta.label}]`}
                             </span>
-                            {recipe.sourceClass && (
-                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#3949ab22] text-[#7986cb] border border-[#3949ab44] font-bold shrink-0">
-                                {recipe.sourceClass}
-                              </span>
-                            )}
-                            <span className="text-[10px] text-[#80cbc4] shrink-0">
-                              위력 {Math.round((recipe.skill.power || 1) * 100)}%
-                            </span>
-                            {recipe.skill.manaCost > 0 && (
-                              <span className="text-[10px] text-[#64b5f6] font-mono shrink-0">
-                                MP {recipe.skill.manaCost}
+                            {(item.prefix || item.suffix) && (
+                              <span className="text-[10px] flex items-center gap-0.5 ml-0.5">
+                                {item.prefix && <span title={`접두사: ${item.prefix.name}`}>✨</span>}
+                                {item.suffix && <span title={`접미사: ${item.suffix.name}`}>🔮</span>}
                               </span>
                             )}
                           </div>
 
-                          {/* 태그 뱃지 간략 노출 */}
-                          {skillTags.length > 0 && (
-                            <div className="flex items-center gap-1 mt-1 flex-wrap">
-                              {skillTags.map(tag => (
-                                <span
-                                  key={tag.id}
-                                  className="text-[9px] px-1.5 py-0.2 rounded-full font-bold flex items-center gap-0.5"
-                                  style={{ backgroundColor: tag.bg, color: tag.text, border: `1px solid ${tag.border}` }}
-                                >
-                                  <span>{tag.icon}</span>
-                                  <span>{tag.label}</span>
-                                </span>
-                              ))}
-                            </div>
-                          )}
+                          <div className="flex items-center gap-1 shrink-0">
+                            {wearer ? (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
+                                👤 {wearer.name}
+                              </span>
+                            ) : (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#607d8b22] text-[#8b9bb4]">
+                                보관함
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* 2행: 종합 스탯 요약 수치 및 인챈트 가능/부여 상태 */}
+                        <div className="pt-0.5 flex items-center justify-between gap-1 flex-wrap">
+                          {renderTotalStats(item.stats)}
+                          <div className="text-[9px] font-mono flex items-center gap-1.5">
+                            <span className={item.prefix ? 'text-[#ffd54f] font-bold' : canPrefix ? 'text-[#38ef7d]' : 'text-[#607d8b]'}>
+                              {item.prefix ? `✨${item.prefix.name}` : canPrefix ? '✨접두가능' : '🔒+3강'}
+                            </span>
+                            <span className={item.suffix ? 'text-[#c8aa6e] font-bold' : canSuffix ? 'text-[#38ef7d]' : 'text-[#607d8b]'}>
+                              {item.suffix ? `🔮${item.suffix.name}` : canSuffix ? '🔮접미가능' : '🔒+7강'}
+                            </span>
+                          </div>
                         </div>
                       </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
-                        {isUnlocked ? (
-                          <span className={`text-[10px] px-2 py-0.5 rounded font-bold border ${
-                            canAfford
-                              ? 'bg-[#38ef7d18] text-[#38ef7d] border-[#38ef7d33]'
-                              : 'bg-[#ffd54f18] text-[#ffd54f] border-[#ffd54f33]'
-                          }`}>
-                            {canAfford ? '제본 가능' : '재료 확인'}
-                          </span>
-                        ) : (
-                          <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef535018] text-[#ef5350] font-bold border border-[#ef535033]">
-                            🔒 Lv.{recipe.reqAlchemyLv} 해금
-                          </span>
-                        )}
-                        <button
-                          className="btn btn-primary text-xs px-2.5 py-1 font-bold flex items-center gap-1"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedRecipeForModal(recipe);
-                          }}
-                        >
-                          <span>🔍 상세/제작</span>
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
-      )}
-
-      {/* ── 🧪 마도서 제작 상세 모달 ── */}
-      {selectedRecipeForModal && (
-        <GrimoireCraftDetailModal
-          recipe={selectedRecipeForModal}
-          alchemyLv={alchemyLv}
-          isPaused={isPaused}
-          resources={state.resources}
-          onClose={() => setSelectedRecipeForModal(null)}
-          onCraft={(recipeId) => {
-            setSelectedRecipeForModal(null);
-            handleCraft(recipeId);
-          }}
-        />
       )}
 
       {/* ── ⚡ 스킬 비전 강화 팝업 모달 ── */}
@@ -12096,18 +11708,15 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         />
       )}
 
-      {/* 🌟 마도서 제작 집필 연출 모달 🌟 */}
-      {craftingRecipe && (
-        <CraftProgressModal
-          open={!!craftingRecipe}
-          type="craft_grimoire"
-          title="비전 마도서 연성 공정"
-          itemName={craftingRecipe.name}
-          itemIcon={craftingRecipe.icon || '📖'}
-          itemSub={`성공률 ${GRIMOIRE_CRAFT_SUCCESS_RATES[craftingRecipe.rarity] || 80}% (${GRIMOIRE_RARITY_META[craftingRecipe.rarity]?.label || '일반'})`}
-          durationMs={grimoireDurationMs}
-          outcome={pendingGrimoireOutcome}
-          onComplete={handleGrimoireCraftComplete}
+      {/* ── 🔮 마도 인챈트 상세 설정 모달 ── */}
+      {selectedEnchantItem && (
+        <EquipmentEnchantModal
+          item={selectedEnchantItem}
+          onClose={() => setSelectedEnchantItemId(null)}
+          gm={gm}
+          resources={state.resources}
+          discountPct={discountPct}
+          mult={mult}
         />
       )}
     </div>
@@ -12121,7 +11730,7 @@ const QuestsDrawer: React.FC<{
   onNavigateDrawer?: (key: string) => void;
   onNavigateBuilding?: (buildingId: string) => void;
 }> = ({ onClose, onNavigateDrawer, onNavigateBuilding }) => {
-  const { tr } = useI18n();
+  const { tr, lang } = useI18n();
   const { state, gm, navigateTo } = useGameManager();
   const [catTab, setCatTab] = useState<'chain' | 'sub' | 'epic' | 'completed'>('chain');
   const [epicQuestForModal, setEpicQuestForModal] = useState<Quest | null>(null);
@@ -12201,7 +11810,7 @@ const QuestsDrawer: React.FC<{
     herb: '약초', leather: '가죽', silk: '실크', coal: '석탄',
     crystal: '마력수정', void_shard: '공허파편',
     prefix_stone: '일반 접두석', suffix_stone: '일반 접미석',
-    pure_prefix_stone: '순수 접두석', pure_suffix_stone: '순수 접미석',
+    pure_prefix_stone: '순수 접두석', pure_suffix_stone: '순수 접미석', pure_mana_stone: '순수 마도석',
     relic_floor_1: '침묵의 흑핵', relic_floor_2: '망령의 영혼수정',
     relic_floor_3: '원초의 광맥 심장', relic_floor_4: '심연의 시공 닻',
     relic_floor_5: '공허 지배자의 모노리스 핵',
@@ -12339,8 +11948,8 @@ const QuestsDrawer: React.FC<{
       );
     }
 
-    // 1. 심연의 병기창 / 장비 단조 / 강화 / 인챈트 분기 (Q_CRAFT_EQUIP 등)
-    const isForgeObjective = desc.includes('단조') || desc.includes('장비 1회') || desc.includes('장비 제작') || desc.includes('인챈트') || desc.includes('장비 강화') || quest.id === 'Q_CRAFT_EQUIP';
+    // 1. 심연의 병기창 / 장비 단조 / 강화 분기 (Q_CRAFT_EQUIP 등)
+    const isForgeObjective = desc.includes('단조') || desc.includes('장비 1회') || desc.includes('장비 제작') || desc.includes('장비 강화') || quest.id === 'Q_CRAFT_EQUIP';
     if (isForgeObjective) {
       const blacksmithLevel = state.buildings['blacksmith']?.level || 0;
       if (blacksmithLevel >= 1) {
@@ -12372,8 +11981,8 @@ const QuestsDrawer: React.FC<{
       }
     }
 
-    // 1-1. 에테르 공방 / 스킬 강화 / 마도서 연성 분기 (Q_CRAFT_GRIMOIRE 등)
-    const isAlchemyObjective = desc.includes('마도서') || desc.includes('연성') || desc.includes('스킬 강화') || desc.includes('스킬 비전') || desc.includes('물약') || desc.includes('촉매') || quest.id === 'Q_CRAFT_GRIMOIRE';
+    // 1-1. 에테르 공방 / 스킬 강화 / 마도 인챈트 분기 (Q_CRAFT_GRIMOIRE 등)
+    const isAlchemyObjective = desc.includes('마도서') || desc.includes('연성') || desc.includes('스킬 강화') || desc.includes('스킬 비전') || desc.includes('물약') || desc.includes('촉매') || desc.includes('인챈트') || quest.id === 'Q_CRAFT_GRIMOIRE';
     if (isAlchemyObjective) {
       const alchemyLevel = state.buildings['alchemy']?.level || 0;
       if (alchemyLevel >= 1) {
@@ -12672,17 +12281,15 @@ const QuestsDrawer: React.FC<{
               <span className="text-xl p-1.5 rounded-lg bg-[#16233d] border border-[#c8aa6e33] animate-spin">⏳</span>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-[#c8aa6e]">신규 의뢰 접수 대기 중</span>
+                  <span className="text-xs font-bold text-[#c8aa6e]">{tr('신규 의뢰 접수 대기 중')}</span>
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-mono font-bold">
-                    10분 쿨타임
+                    {tr('10분 쿨타임')}
                   </span>
                 </div>
                 <div className="text-[10px] text-[#8b9bb4] mt-0.5">
                   {(() => {
                     const diffSec = Math.max(0, Math.ceil((state.subQuestCooldownUntil - Date.now()) / 1000));
-                    const mm = Math.floor(diffSec / 60);
-                    const ss = diffSec % 60;
-                    return `다음 주민/길드 의뢰 도착까지: ${mm}분 ${ss < 10 ? '0' : ''}${ss}초`;
+                    return `${tr('다음 주민/길드 의뢰 도착까지')}: ${formatDuration(diffSec, lang, true)}`;
                   })()}
                 </div>
               </div>
@@ -12730,14 +12337,14 @@ const QuestsDrawer: React.FC<{
           const isClaimable = !isCompleted && isAllDone;
 
           const typeTag = {
-            main: { label: '메인', color: '#ffd54f', bg: '#ffd54f15' },
-            building: { label: '시설', color: '#c8aa6e', bg: '#c8aa6e15' },
-            promotion: { label: '전직', color: '#ce93d8', bg: '#ce93d815' },
-            field: { label: '탐험', color: '#66bb6a', bg: '#66bb6a15' },
-            repeatable: { label: '🔄 반복', color: '#26c6da', bg: '#26c6da15' },
-            sub: { label: '서브', color: '#26c6da', bg: '#26c6da15' },
-            epic: { label: '👑 에픽 스토리', color: '#e040fb', bg: '#e040fb20' },
-          }[q.type] || { label: '임무', color: '#8b9bb4', bg: '#182030' };
+            main: { label: tr('메인'), color: '#ffd54f', bg: '#ffd54f15' },
+            building: { label: tr('시설'), color: '#c8aa6e', bg: '#c8aa6e15' },
+            promotion: { label: tr('전직'), color: '#ce93d8', bg: '#ce93d815' },
+            field: { label: tr('탐험'), color: '#66bb6a', bg: '#66bb6a15' },
+            repeatable: { label: tr('🔄 반복'), color: '#26c6da', bg: '#26c6da15' },
+            sub: { label: tr('서브'), color: '#26c6da', bg: '#26c6da15' },
+            epic: { label: tr('👑 에픽 스토리'), color: '#e040fb', bg: '#e040fb20' },
+          }[q.type] || { label: tr('임무'), color: '#8b9bb4', bg: '#182030' };
 
           return (
             <div
@@ -12761,23 +12368,23 @@ const QuestsDrawer: React.FC<{
                     >
                       {typeTag.label}
                     </span>
-                    <span className="font-bold text-sm text-white">{q.title}</span>
+                    <span className="font-bold text-sm text-white">{tr(q.title)}</span>
                   </div>
-                  <div className="text-[11px] text-[#cfd8dc] mt-1 leading-relaxed">{q.summary}</div>
+                  <div className="text-[11px] text-[#cfd8dc] mt-1 leading-relaxed">{tr(q.summary)}</div>
                 </div>
 
                 <div className="shrink-0">
                   {isCompleted ? (
                     <span className="text-[10px] px-2 py-0.5 rounded bg-[#607d8b22] text-[#8b9bb4] font-bold">
-                      완료됨
+                      {tr('완료됨')}
                     </span>
                   ) : isClaimable ? (
                     <span className="text-[10px] px-2 py-0.5 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d44] animate-pulse">
-                      🎁 완료! 수령 대기
+                      {tr('🎁 완료! 수령 대기')}
                     </span>
                   ) : (
                     <span className="text-[10px] px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
-                      진행 중
+                      {tr('진행 중')}
                     </span>
                   )}
                 </div>
@@ -12792,7 +12399,7 @@ const QuestsDrawer: React.FC<{
                       <div className="flex items-center justify-between text-[11px]">
                         <span className={`flex items-center gap-1 ${obj.isCompleted ? 'text-[#38ef7d] line-through' : 'text-[#cfd8dc]'}`}>
                           <span>{obj.isCompleted ? '✅' : '⏳'}</span>
-                          <span>{obj.description}</span>
+                          <span>{tr(obj.description)}</span>
                         </span>
                         <span className="font-mono text-xs font-bold text-[#ffd54f]">
                           {obj.current}/{obj.required}
@@ -12812,52 +12419,125 @@ const QuestsDrawer: React.FC<{
               {/* 보상 미리보기 뱃지 바 */}
               <div className="pt-2 border-t border-[#1f2738] flex flex-col gap-1.5">
                 <span className="text-[10px] text-[#8b9bb4]">
-                  {q.epicStory ? '달성 시나리오 & 분기 선택 보상:' : '달성 보상:'}
+                  {q.epicStory ? tr('달성 시나리오 & 분기 선택 보상:') : tr('달성 보상:')}
                 </span>
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {q.epicStory ? (
                     <div className="flex items-center gap-1 flex-wrap">
+                      {/* 🌟 심연 정화 혜택 안내 (에픽 퀘스트 부가 효과) */}
+                      {(() => {
+                        const purified = getPurifiedFloorsForQuest(q.id);
+                        if (purified.length === 0) return null;
+                        return (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#10b98115] text-[#34d399] font-bold border border-[#10b98133] flex items-center gap-1 shadow-sm">
+                            <GameIcon name="abyss_purify" icon="✨" size={13} />
+                            <span>[{tr('심연 정화')}] {tr('심연')} {purified.map(f => `${f}${tr('층')}`).join(' & ')} {tr('영구 정화')}</span>
+                          </span>
+                        );
+                      })()}
+
+                      {/* 🌟 분기 선택 보상 A: 영지 발전 */}
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f15] text-[#ffd54f] font-bold border border-[#ffd54f33] flex items-center gap-1">
-                        <GameIcon name="storage" icon="🏛️" size={13} /> 영지 발전 (대량 자원 & 재료)
+                        <GameIcon name="storage" icon="🏛️" size={13} />
+                        <span>{tr('영지 발전')} ({tr('대량 자원 & 재료')})</span>
                       </span>
-                      <span className="text-[10px] text-[#8b9bb4]">or</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ce93d815] text-[#ce93d8] font-bold border border-[#ce93d833] flex items-center gap-1">
-                        <GameIcon name="blacksmith" icon="⚔️" size={13} /> 결사대 무장 (여명검 & 보급품 풀세트)
-                      </span>
+
+                      <span className="text-[10px] text-[#8b9bb4]">{tr('or')}</span>
+
+                      {/* 🌟 분기 선택 보상 B: 결사대 무장 */}
+                      {(() => {
+                        const expChoice = q.epicStory?.choices?.find(c => c.id === 'expedition');
+                        const equip = expChoice?.rewards?.equipment;
+                        const equipCleanName = equip ? equip.name.replace(/^[^\w가-힣\[]+/, '').trim() : null;
+                        return (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ce93d815] text-[#ce93d8] font-bold border border-[#ce93d833] flex items-center gap-1">
+                            {equip ? (
+                              <GameIcon name={equip.id} icon={equip.icon || '⚔️'} size={13} rarity={equip.rarity} />
+                            ) : (
+                              <GameIcon name="blacksmith" icon="⚔️" size={13} />
+                            )}
+                            <span>{tr('결사대 무장')} ({equipCleanName ? tr(equipCleanName) : tr('보급품 풀세트')})</span>
+                          </span>
+                        );
+                      })()}
                     </div>
                   ) : (
                     <>
+                      {/* 골드 */}
                       {q.rewards.gold && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f15] text-[#ffd54f] font-mono font-bold border border-[#ffd54f33] flex items-center gap-1">
-                          <GameIcon name="gold" icon="🪙" size={13} /> {q.rewards.gold}G
+                          <GameIcon name="gold" icon="🪙" size={13} /> {q.rewards.gold.toLocaleString()}G
                         </span>
                       )}
+                      {/* 에테르 */}
                       {q.rewards.ether && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono font-bold border border-[#c8aa6e33] flex items-center gap-1">
-                          <GameIcon name="ether" icon="✨" size={13} /> {q.rewards.ether} 에테르
+                          <GameIcon name="ether" icon="✨" size={13} /> {q.rewards.ether.toLocaleString()} {tr('에테르')}
                         </span>
                       )}
+                      {/* 자원 */}
                       {q.rewards.resources && Object.entries(q.rewards.resources).map(([k, amt]) => (
                         <span key={k} className="text-[10px] px-1.5 py-0.5 rounded bg-[#38ef7d15] text-[#38ef7d] font-mono font-bold border border-[#38ef7d33] flex items-center gap-1">
-                          <GameIcon name={k} size={13} /> {RN[k] || k} +{amt}
+                          <GameIcon name={k} size={13} /> {tr(getLocalizedResourceName(k, lang) || RN[k] || k)} +{amt}
                         </span>
                       ))}
+                      {/* 보급품 */}
                       {q.rewards.supplies?.map((s, idx) => (
                         <span key={idx} className="text-[10px] px-1.5 py-0.5 rounded bg-[#ab47bc15] text-[#ce93d8] font-mono font-bold border border-[#ab47bc33] flex items-center gap-1">
-                          <GameIcon name={s.key} icon={s.icon} size={13} /> {s.name} ×{s.qty}
+                          <GameIcon name={s.key} icon={s.icon} size={13} /> {tr(s.name)} ×{s.qty}
                         </span>
                       ))}
+                      {/* 장비 */}
                       {q.rewards.equipment && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ff704315] text-[#ff7043] font-bold border border-[#ff704333] flex items-center gap-1">
-                          <GameIcon name={q.rewards.equipment.id} icon={q.rewards.equipment.icon} size={13} /> {(() => {
-                            const cleanName = q.rewards.equipment.name.replace(/^[^\w가-힣\[]+/, '').trim();
-                            return cleanName.startsWith('[') ? cleanName : `[${cleanName}]`;
+                          <GameIcon name={q.rewards.equipment.id} icon={q.rewards.equipment.icon || '🗡️'} size={13} rarity={q.rewards.equipment.rarity} />
+                          {(() => {
+                            const raw = q.rewards.equipment.name.replace(/^[^\w가-힣\[]+/, '').trim();
+                            const cleanName = raw.startsWith('[') ? raw : `[${raw}]`;
+                            return tr(cleanName);
                           })()}
                         </span>
                       )}
-                      {(q.rewards.unlockBuildingId || (q.rewards.unlockBuildingIds && q.rewards.unlockBuildingIds.length > 0)) && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#42a5f515] text-[#42a5f5] font-bold border border-[#42a5f533] flex items-center gap-1">
-                          <GameIcon name="bonfire" icon="🏛️" size={13} /> {tr('신규 시설 해금')}
+                      {/* 마도 비전서 (스킬북) */}
+                      {q.rewards.skillBooks?.map((book, idx) => (
+                        <span key={idx} className="text-[10px] px-1.5 py-0.5 rounded bg-[#7e57c215] text-[#b39ddb] font-bold border border-[#7e57c233] flex items-center gap-1">
+                          <GameIcon name={book.id || book.skill?.id} icon={book.icon || '📖'} size={13} />
+                          {tr(book.name)}
+                        </span>
+                      ))}
+                      {/* 🏛️ 신규 시설 건설 해금 (개별 시설마다 고유 커스텀 건물 아이콘 및 명칭 표시) */}
+                      {(() => {
+                        const unlockIds: string[] = [];
+                        if (q.rewards.unlockBuildingId) unlockIds.push(q.rewards.unlockBuildingId);
+                        if (q.rewards.unlockBuildingIds) {
+                          q.rewards.unlockBuildingIds.forEach(id => {
+                            if (!unlockIds.includes(id)) unlockIds.push(id);
+                          });
+                        }
+                        if (unlockIds.length === 0) return null;
+                        return unlockIds.map(bId => {
+                          const bDef = INITIAL_BUILDINGS[bId as BuildingId];
+                          const localizedName = getLocalizedBuildingName(bId, lang).name || bDef?.name || bId;
+                          return (
+                            <span key={bId} className="text-[10px] px-1.5 py-0.5 rounded bg-[#42a5f515] text-[#42a5f5] font-bold border border-[#42a5f533] flex items-center gap-1">
+                              <GameIcon name={bId} icon={bDef?.icon || '🏛️'} size={13} />
+                              <span>{tr('건설 해금')}: {tr(localizedName)}</span>
+                            </span>
+                          );
+                        });
+                      })()}
+                      {/* 클래스 해금 */}
+                      {q.rewards.unlockClassId && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ab47bc15] text-[#ba68c8] font-bold border border-[#ab47bc33] flex items-center gap-1">
+                          <GameIcon name="sanctuary" icon="⛪" size={13} />
+                          <span>{tr('클래스 해금')}: {tr(getLocalizedClassName(q.rewards.unlockClassId, lang))}</span>
+                        </span>
+                      )}
+                      {/* 던전 해금 */}
+                      {q.rewards.unlockDungeonId && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ef535015] text-[#ef5350] font-bold border border-[#ef535033] flex items-center gap-1">
+                          <GameIcon name="event_portal" icon="🌀" size={13} />
+                          <span>{tr('던전 해금')}: {tr(q.rewards.unlockDungeonId)}</span>
                         </span>
                       )}
                     </>
@@ -13084,25 +12764,25 @@ const CATALYSTS: ItemCostDef[] = [
     id: 'compass', key: 'compass', name: '차원의 나침반', label: '차원의 나침반', icon: '🧭',
     desc: '용병 긴급 이송 턴 1턴 단축 & 차원 포탈 발견↑',
     detailDesc: '공허의 에테르 흐름을 감지하고 차원 통로를 단축하는 마도 나침반입니다. 던전 내에서 예비 대원을 긴급 이송할 때 소요되는 대기 턴을 1턴 줄여줍니다. 또한 탐험 중 비밀 차원 포탈의 발견 확률도 함께 증가합니다.',
-    costs: { gold: 50, crystal: 1, ether: 10 }
+    costs: {}
   } as ItemCostDef & { id: string; name: string },
   {
     id: 'blood_contract', key: 'blood_contract', name: '피의 서약서', label: '피의 서약서', icon: '📜',
     desc: '강적 출현율 증가 & 전리품 2배',
     detailDesc: '마물의 피와 약초, 질긴 가죽에 새긴 피의 계약입니다. 몬스터 조우 확률이 상승하지만, 탐험에서 획득하는 모든 골드 전리품이 2배로 증폭됩니다.',
-    costs: { gold: 50, leather: 2, herb: 2 }
+    costs: {}
   } as ItemCostDef & { id: string; name: string },
   {
     id: 'dimensional_whistle', key: 'dimensional_whistle', name: '차원의 호각', label: '차원의 호각', icon: '📯',
     desc: '전멸 시 배낭 전리품 10~50% 회수',
     detailDesc: '공간 왜곡 신호를 보내는 비상 호각입니다. 파티 전멸 시 구조대를 긴급 호출하여 배낭 전리품의 10~50%를 회수합니다. (미장착 시 전멸하면 배낭 전리품 100% 소실)',
-    costs: { gold: 150, ether: 20, void_shard: 1 }
+    costs: {}
   } as ItemCostDef & { id: string; name: string },
   {
     id: 'golden_toad', key: 'golden_toad', name: '황금 두꺼비', label: '황금 두꺼비', icon: '🐸',
     desc: '드랍 자원 즉시 골드 변환',
     detailDesc: '고대 심연의 탐욕을 머금은 황금 두꺼비 유물입니다. 던전에서 획득하는 장비, 오파츠, 수집품을 제외한 모든 자원류(목재, 석재, 철광석, 약초, 가죽 등)를 얻는 즉시 블랙마켓 기본 시세에 따라 골드로 환전하여 배낭에 입고합니다.',
-    costs: { gold: 1000, iron: 20, ether: 50 }
+    costs: {}
   } as ItemCostDef & { id: string; name: string },
 ];
 
@@ -13110,7 +12790,7 @@ const BAG_OPTIONS = [
   { id: 'small', name: '가벼운 백팩', slots: 12, perk: '기습 회피율 +10%', costs: {} },
   { id: 'medium', name: '표준 군장', slots: 16, perk: '표준 밸런스형', costs: { gold: 100, leather: 2 } },
   { id: 'large', name: '완전 군장', slots: 20, perk: '대용량 보관함', costs: { gold: 300, ether: 30, void_shard: 1 } },
-  { id: 'wagon', name: '견고한 짐수레', slots: 30, perk: '30칸 & 자원 스택 99', costs: { gold: 1200, wood: 20, iron: 15, leather: 10, ether: 50, void_shard: 3 } },
+  { id: 'wagon', name: '견고한 짐수레', slots: 30, perk: '30칸 & 자원 스택 99', costs: {} },
 ];
 
 export const ExploreDrawer: React.FC<{ 
@@ -13184,9 +12864,9 @@ export const ExploreDrawer: React.FC<{
     try {
       const res = await GoogleAdService.getInstance().showRewardedAd({
         placement: 'catalyst',
-        title: '심연 촉매 슬롯 개방',
-        description: '광고를 시청하여 다음 원정에서 심연 촉매를 최대 2개 장착할 수 있도록 슬롯을 개방합니다.',
-        rewardText: '심연 촉매 슬롯 개방 (최대 2개 무료 장착)',
+        title: tr('심연 촉매 슬롯 개방'),
+        description: tr('광고를 시청하여 다음 원정에서 심연 촉매를 최대 2개 장착할 수 있도록 슬롯을 개방합니다.'),
+        rewardText: tr('심연 촉매 슬롯 개방 (최대 2개 무료 장착)'),
       });
       if (res.rewarded) {
         gm.grantCatalystCharge();
@@ -13218,9 +12898,9 @@ export const ExploreDrawer: React.FC<{
     setShowWagonAdConfirm(false);
     const res = await GoogleAdService.getInstance().showRewardedAd({
       placement: 'wagon',
-      title: '견고한 짐수레 1회 사용',
-      description: '광고를 시청하여 이번 원정에서 30칸 대용량 짐수레(자원 스택 99) 1회 사용 및 심연 촉매 슬롯을 개방합니다.',
-      rewardText: '짐수레 1회 사용 & 심연 촉매 슬롯 개방',
+      title: tr('견고한 짐수레 1회 사용'),
+      description: tr('광고를 시청하여 이번 원정에서 30칸 대용량 짐수레(자원 스택 99) 1회 사용 및 심연 촉매 슬롯을 개방합니다.'),
+      rewardText: tr('짐수레 1회 사용 & 심연 촉매 슬롯 개방'),
     });
     if (res.rewarded) {
       gm.refillWagonCharges();
@@ -13394,6 +13074,10 @@ export const ExploreDrawer: React.FC<{
     const dangerLog = initialDanger > 0 ? ` (시작 위험도: ${initialDanger.toLocaleString()})` : '';
     gm.addLog(`⚔️ [심연 강하] ${selectedBag.name}과 보급품을 채비하고 ${floorNum === 11 ? '무간도' : `${floorNum}층`}으로 진입합니다!${dangerLog}`, 'story');
     gm.saveGame();
+    // 🗺️ 1시간 내 던전 방문 기록 등록 (원정대 스펙 및 콜사인 Firebase RTDB 기록)
+    try {
+      FirebaseService.getInstance().recordDungeonVisit(floorNum, gm.party, gm);
+    } catch (_) {}
     navigateTo('exploration');
   };
 
@@ -13503,11 +13187,7 @@ export const ExploreDrawer: React.FC<{
                   }[pos];
                   const cls = CHARACTER_CLASSES[hero.classId];
                   const classEmoji = getClassEmoji(hero.classId);
-                  const heroPortrait = CustomAssetService.getInstance().getMercenaryOverride(hero.classId)
-                    || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
-                    || (hero.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(hero.portraitPromptKey) : undefined)
-                    || CustomAssetService.getInstance().getMercenaryOverride(hero.id)
-                    || CustomAssetService.getInstance().getMercenaryOverride(hero.name);
+                  const heroPortrait = CustomAssetService.getHeroPortrait(hero);
 
                   return (
                     <div key={hero.id} className="flex items-center justify-between p-2 rounded bg-[#182030] border border-[#27354d]">
@@ -13578,7 +13258,7 @@ export const ExploreDrawer: React.FC<{
                 🎒 2. {'배낭 규격 선택'}
               </span>
               <span className="text-[10px] text-[#c8aa6e]">
-                '현재 선택:' {selectedBag.name}
+                {tr('현재 선택:')} {tr(selectedBag.name)}
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -13609,14 +13289,14 @@ export const ExploreDrawer: React.FC<{
                     )}
                     {isSmallTutorialTarget && (
                       <div className="absolute -top-2.5 px-2 py-0.5 bg-gradient-to-r from-[#c8aa6e] to-[#0088ff] text-white font-bold text-[9px] rounded-full shadow-lg animate-bounce">
-                        👉 무료 배낭 선택
+                        👉 {tr('무료 배낭 선택')}
                       </div>
                     )}
-                    <div className={`text-xs font-bold ${isSelected ? 'text-[#f3e5c8]' : 'text-white'}`}>{bName}</div>
+                    <div className={`text-xs font-bold ${isSelected ? 'text-[#f3e5c8]' : 'text-white'}`}>{tr(bName)}</div>
                     <div className={`text-base font-mono font-bold my-0.5 ${isSelected ? 'text-[#f3e5c8]' : 'text-[#8b9bb4]'}`}>
-                      {bag.slots}{'칸'}
+                      {bag.slots}{tr('칸')}
                     </div>
-                    <div className="text-[9px] text-[#8b9bb4] mb-1">{bPerk}</div>
+                    <div className="text-[9px] text-[#8b9bb4] mb-1">{tr(bPerk)}</div>
                     <div className="text-[10px] font-mono flex flex-wrap justify-center gap-1">
                       {bag.id === 'wagon' ? (
                         (gm.wagonAdCharges ?? 0) > 0 ? (
@@ -13625,7 +13305,7 @@ export const ExploreDrawer: React.FC<{
                           <span className="text-[#ffd54f] font-bold flex items-center gap-0.5">🎬 {tr('광고 시청')}</span>
                         )
                       ) : Object.keys(bag.costs).length === 0 ? (
-                        <span className="text-[#66bb6a]">{'무료'}</span>
+                        <span className="text-[#66bb6a]">{tr('무료')}</span>
                       ) : (
                         Object.entries(bag.costs).map(([r, c]) => (
                           <span key={r} className="text-[#ffd54f]">{RES_META[r]?.icon || '📦'}{c}</span>
@@ -13792,22 +13472,22 @@ export const ExploreDrawer: React.FC<{
             <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-[#ce93d8]">
-                  🔮 4. 심연 촉매 & 특수 유물
+                  🔮 {tr('4. 심연 촉매 & 특수 유물')}
                 </span>
                 {gm.hasCatalystCharge ? (
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d44] flex items-center gap-0.5">
                     <span>✨</span>
-                    <span>슬롯 개방됨 (0/2)</span>
+                    <span>{tr('슬롯 개방됨 (0/2)')}</span>
                   </span>
                 ) : (
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ef535015] text-[#ef5350] font-bold border border-[#ef535033] flex items-center gap-0.5">
                     <span>🔒</span>
-                    <span>슬롯 잠김 (0/0)</span>
+                    <span>{tr('슬롯 잠김 (0/0)')}</span>
                   </span>
                 )}
               </div>
               <span className={`text-[10px] font-mono font-bold ${gm.hasCatalystCharge ? 'text-[#ce93d8]' : 'text-[#ef5350]'}`}>
-                {gm.hasCatalystCharge ? `${selectedCatalysts.length}/2개 선택됨` : '0/0개 선택 가능'}
+                {gm.hasCatalystCharge ? `${selectedCatalysts.length}/2${tr('개 선택됨')}` : tr('0/0개 선택 가능')}
               </span>
             </div>
 
@@ -13818,10 +13498,10 @@ export const ExploreDrawer: React.FC<{
                   <span className="text-2xl select-none shrink-0">🔮</span>
                   <div className="min-w-0">
                     <div className="text-xs font-bold text-[#e1bee7]">
-                      광고를 시청하면 촉매 선택 슬롯이 <strong className="text-[#ffd54f]">0/2</strong>로 개방됩니다!
+                      {tr('광고를 시청하면 촉매 선택 슬롯이 0/2로 개방됩니다!')}
                     </div>
                     <div className="text-[10px] text-[#9e9e9e] mt-0.5 leading-tight">
-                      원정 1회 동안 촉매 4종 중 최대 2개 무료 장착 <span className="text-[#38ef7d]">(묘지·성화·짐수레 광고로도 동시 개방)</span>
+                      {tr('원정 1회 동안 촉매 4종 중 최대 2개 무료 장착')} <span className="text-[#38ef7d]">({tr('묘지·성화·짐수레 광고로도 동시 개방')})</span>
                     </div>
                   </div>
                 </div>
@@ -13833,7 +13513,7 @@ export const ExploreDrawer: React.FC<{
                   onClick={handleWatchAdForCatalyst}
                 >
                   <span>🎬</span>
-                  <span>{isCatalystAdLoading ? '로딩 중...' : '광고 보고 0/2 개방'}</span>
+                  <span>{isCatalystAdLoading ? tr('로딩 중...') : tr('광고 보고 0/2 개방')}</span>
                 </button>
               </div>
             )}
@@ -13842,8 +13522,8 @@ export const ExploreDrawer: React.FC<{
             <div className="grid grid-cols-2 gap-2">
               {CATALYSTS.map((cat) => {
                 const isSelected = selectedCatalysts.includes(cat.key);
-                const catLabel = cat.label;
-                const catDesc = cat.desc;
+                const catLabel = tr(cat.label);
+                const catDesc = tr(cat.desc);
                 return (
                   <div
                     key={cat.key}
@@ -13861,11 +13541,11 @@ export const ExploreDrawer: React.FC<{
                         <span className="text-sm">{cat.icon}</span>
                         {gm.hasCatalystCharge ? (
                           <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#38ef7d15] text-[#38ef7d] font-bold border border-[#38ef7d33]">
-                            무료 장착
+                            {tr('무료 장착')}
                           </span>
                         ) : (
                           <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535015] text-[#ef5350] font-bold border border-[#ef535033]">
-                            0/0 잠김
+                            {tr('0/0 잠김')}
                           </span>
                         )}
                       </div>
@@ -13874,7 +13554,7 @@ export const ExploreDrawer: React.FC<{
                     </div>
                     <div className="mt-2 flex items-center justify-between">
                       <span className="text-[9px] text-[#c8aa6e] underline">
-                        {'상세보기'}
+                        {tr('상세보기')}
                       </span>
                       {gm.hasCatalystCharge ? (
                         <button
@@ -13886,7 +13566,7 @@ export const ExploreDrawer: React.FC<{
                             toggleCatalyst(cat.key);
                           }}
                         >
-                          {isSelected ? '✓ 장착됨' : '+ 장착'}
+                          {isSelected ? tr('✓ 장착됨') : tr('+ 장착')}
                         </button>
                       ) : (
                         <button
@@ -13897,7 +13577,7 @@ export const ExploreDrawer: React.FC<{
                           }}
                         >
                           <span>🎬</span>
-                          <span>개방</span>
+                          <span>{tr('개방')}</span>
                         </button>
                       )}
                     </div>
@@ -14095,9 +13775,11 @@ export const ExploreDrawer: React.FC<{
       {/* ── 상세 정보 & 자원 확인 팝업 모달 ── */}
       {inspectItem && (() => {
         const isSupply = inspectItem.type === 'supply';
-        const itemLabel = inspectItem.item.label;
-        const itemDesc = inspectItem.item.detailDesc || inspectItem.item.desc;
-        const categoryTag = isSupply ? '필수 소모품' : '심연 촉매 유물';
+        const itemLabel = tr(inspectItem.item.label);
+        const itemDesc = tr(inspectItem.item.detailDesc || inspectItem.item.desc);
+        const categoryTag = isSupply ? tr('필수 소모품') : tr('심연 촉매 유물');
+        const costEntries = Object.entries(inspectItem.item.costs || {});
+        const isFreeBenefit = costEntries.length === 0;
 
         return (
           <div 
@@ -14131,53 +13813,65 @@ export const ExploreDrawer: React.FC<{
               {/* 필요 자원 vs 영지 보유 자원 리스트 (수량 연동 실시간 계산) */}
               <div>
                 <div className="text-[11px] font-bold text-[#ffd54f] mb-1.5 flex items-center justify-between">
-                  <span>📦 필요 자원 / 영지 현재 자원</span>
+                  <span>📦 {isSupply ? tr('필요 자원 / 영지 현재 자원') : tr('장착 비용 / 영지 현재 자원')}</span>
                   {isSupply && (
                     <span className="text-[10px] text-[#c8aa6e] font-normal font-mono">
-                      (수량: {supplyCounts[inspectItem.item.key] || 0}개 기준)
+                      ({tr('수량')}: {supplyCounts[inspectItem.item.key] || 0}{tr('개 기준')})
                     </span>
                   )}
                 </div>
-                <div className="flex flex-col gap-1.5">
-                  {Object.entries(inspectItem.item.costs).map(([res, unitReq]) => {
-                    const meta = RES_META[res] || GameManager.getResourceMeta(res);
-                    const resName = ('label' in meta ? meta.label : (meta as any)?.name) || res;
-                    const curAmt = resState[res] || 0;
-                    const count = isSupply ? (supplyCounts[inspectItem.item.key] || 0) : 1;
-                    const totalReq = count > 0 ? unitReq * count : unitReq;
-                    const isEnough = curAmt >= (count > 0 ? unitReq * count : 0);
-                    
-                    return (
-                      <div key={res} className="flex items-center justify-between text-xs px-2.5 py-1.5 rounded bg-[#141a29] border border-[#27354d]">
-                        <span className="flex items-center gap-1.5 font-bold text-white">
-                          <span>{meta?.icon || '📦'}</span>
-                          <span>{resName}</span>
-                          {count > 1 && (
-                            <span className="text-[9px] text-[#8b9bb4] font-normal">
-                              (개당 {unitReq})
+                {isFreeBenefit ? (
+                  <div className="p-3 rounded-lg bg-[#141b2d] border border-[#38ef7d44] text-center flex flex-col items-center gap-1 shadow-inner">
+                    <div className="text-xs font-bold text-[#38ef7d] flex items-center justify-center gap-1.5">
+                      <span>✨</span>
+                      <span>{tr('광고 시청 혜택 (무료 장착)')}</span>
+                    </div>
+                    <div className="text-[11px] text-[#8b9bb4] leading-relaxed">
+                      {tr('광고 시청 보상으로 추가 자원 소모 없이 무료로 장착됩니다.')}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-1.5">
+                    {costEntries.map(([res, unitReq]) => {
+                      const meta = RES_META[res] || GameManager.getResourceMeta(res);
+                      const resName = ('label' in meta ? meta.label : (meta as any)?.name) || res;
+                      const curAmt = resState[res] || 0;
+                      const count = isSupply ? (supplyCounts[inspectItem.item.key] || 0) : 1;
+                      const totalReq = count > 0 ? unitReq * count : unitReq;
+                      const isEnough = curAmt >= (count > 0 ? unitReq * count : 0);
+                      
+                      return (
+                        <div key={res} className="flex items-center justify-between text-xs px-2.5 py-1.5 rounded bg-[#141a29] border border-[#27354d]">
+                          <span className="flex items-center gap-1.5 font-bold text-white">
+                            <span>{meta?.icon || '📦'}</span>
+                            <span>{tr(resName)}</span>
+                            {count > 1 && (
+                              <span className="text-[9px] text-[#8b9bb4] font-normal">
+                                ({tr('개당')} {unitReq})
+                              </span>
+                            )}
+                          </span>
+                          <span className="font-mono text-xs flex items-center gap-1">
+                            <span className="text-[#ffd54f] font-bold">
+                              {tr('필요')} {count === 0 ? `0 (${unitReq})` : totalReq}
                             </span>
-                          )}
-                        </span>
-                        <span className="font-mono text-xs flex items-center gap-1">
-                          <span className="text-[#ffd54f] font-bold">
-                            필요 {count === 0 ? `0 (${unitReq})` : totalReq}
+                            <span className="text-[#8b9bb4]">/</span>
+                            <span className={isEnough ? 'text-[#66bb6a] font-bold' : 'text-[#ef5350] font-bold'}>
+                              {tr('보유')} {curAmt}
+                            </span>
                           </span>
-                          <span className="text-[#8b9bb4]">/</span>
-                          <span className={isEnough ? 'text-[#66bb6a] font-bold' : 'text-[#ef5350] font-bold'}>
-                            보유 {curAmt}
-                          </span>
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* 팝업 하단 액션 */}
               <div className="border-t border-[#27354d] pt-2 flex items-center justify-between">
                 {isSupply ? (
                   <div className="flex items-center justify-between w-full">
-                    <span className="text-xs text-[#8b9bb4]">보급 수량:</span>
+                    <span className="text-xs text-[#8b9bb4]">{tr('보급 수량:')}</span>
                     <div className="flex items-center gap-2">
                       <button
                         className="btn btn-ghost px-2.5 py-1 text-xs"
@@ -14204,7 +13898,7 @@ export const ExploreDrawer: React.FC<{
                         className="btn btn-primary text-xs px-3 py-1 ml-1"
                         onClick={() => setInspectItem(null)}
                       >
-                        완료
+                        {tr('완료')}
                       </button>
                     </div>
                   </div>
@@ -14212,8 +13906,8 @@ export const ExploreDrawer: React.FC<{
                   <div className="flex items-center justify-between w-full">
                     <span className="text-xs text-[#8b9bb4]">
                       {gm.hasCatalystCharge 
-                        ? (selectedCatalysts.includes(inspectItem.item.key) ? '현재 장착 중' : '미장착 상태 (최대 2개)') 
-                        : '슬롯 잠김 (0/0개 선택 가능)'}
+                        ? (selectedCatalysts.includes(inspectItem.item.key) ? tr('현재 장착 중') : tr('미장착 상태 (최대 2개)')) 
+                        : tr('슬롯 잠김 (0/0개 선택 가능)')}
                     </span>
                     {gm.hasCatalystCharge ? (
                       <button
@@ -14225,7 +13919,7 @@ export const ExploreDrawer: React.FC<{
                           setInspectItem(null);
                         }}
                       >
-                        {selectedCatalysts.includes(inspectItem.item.key) ? '장착 해제' : '장착하기'}
+                        {selectedCatalysts.includes(inspectItem.item.key) ? tr('장착 해제') : tr('장착하기')}
                       </button>
                     ) : (
                       <button
@@ -14236,7 +13930,7 @@ export const ExploreDrawer: React.FC<{
                         }}
                       >
                         <span>🎬</span>
-                        <span>광고 보고 0/2 개방</span>
+                        <span>{tr('광고 보고 0/2 개방')}</span>
                       </button>
                     )}
                   </div>
@@ -14454,7 +14148,12 @@ export const ExploreDrawer: React.FC<{
               {tr('광고를 시청하시겠습니까?')}
             </p>
             <div className="p-2.5 rounded-lg bg-[#2a133844] border border-[#ce93d833] text-[11px] text-[#e1bee7] w-full text-center">
-              ✨ <strong>{tr('보너스')}:</strong> {tr('심연 촉매 슬롯(최대 2개 무료 장착)도 함께 개방됩니다!')}
+              ✨ <strong>{tr('보너스')}:</strong>{' '}
+              {lang === 'en'
+                ? 'Also unlocks Abyssal Catalyst Slots (equip up to 2 for free)!'
+                : lang === 'ja'
+                ? '深淵触媒スロット(最大2個無料装着)も同時に開放されます！'
+                : '심연 촉매 슬롯(최대 2개 무료 장착)도 함께 개방됩니다!'}
             </div>
           </div>
         </Modal>
@@ -14626,9 +14325,9 @@ export const CitadelScreen: React.FC = () => {
     try {
       const res = await GoogleAdService.getInstance().showRewardedAd({
         placement: 'loot_double',
-        title: '원정 전리품 자원 2배',
-        description: '획득한 모든 수량성 파밍 자원을 2배로 증폭하여 입고합니다.',
-        rewardText: '파밍 자원 2배 획득',
+        title: tr('원정 전리품 자원 2배'),
+        description: tr('획득한 모든 수량성 파밍 자원을 2배로 증폭하여 입고합니다.'),
+        rewardText: tr('파밍 자원 2배 획득'),
       });
       if (res.rewarded) {
         if (expeditionReport.totalGold > 0) {
@@ -14651,6 +14350,7 @@ export const CitadelScreen: React.FC = () => {
   const [pausedNoticeBuilding, setPausedNoticeBuilding] = useState<BuildingState | null>(null);
   const [offlineReportModal, setOfflineReportModal] = useState<any>(null);
   const [latestOfflineReport, setLatestOfflineReport] = useState<any>(gm.offlineReport || null);
+  const activeOfflineReport = latestOfflineReport || gm.offlineReport;
   const [showIntroStory, setShowIntroStory] = useState<boolean>(() => {
     try {
       const uid = gm.getCurrentUserId();
@@ -14721,21 +14421,71 @@ export const CitadelScreen: React.FC = () => {
     }, 6000);
   }, []);
 
-  // 🌙 부재 중 오프라인 정산 발생 시 이미지 창 상단에 결산 알림 버튼 표시
+  // 🌙 부재 중 오프라인 정산 발생 시 이미지 창 상단에 결산 알림 버튼 표시 및 전역 호출 연동
   useEffect(() => {
+    // 📬 오프라인/원격 동안 들어온 지휘관 습격 피격 알림 실시간 수신 및 영지 로그 / 오프라인 보고서 기록
+    FirebaseService.getInstance().consumeCommanderAttackNotices().then(notices => {
+      if (notices && notices.length > 0) {
+        notices.forEach(n => {
+          const outcomeText = n.attackerWon ? '패배 (방어 실패)' : '방어 성공 (격퇴)';
+          const logCategory = n.attackerWon ? 'danger' : 'reward';
+          gm.addLog(`⚔️ [지휘관 습격 발생!] [${n.attackerCallsign}] 지휘관의 원정대가 던전 ${n.floor}층에서 당신의 원정대를 습격했습니다! 결과: ${outcomeText}`, logCategory);
+
+          // 오프라인 보고서에도 기록 누적
+          if (!gm.offlineReport) {
+            gm.offlineReport = {
+              elapsedSeconds: 0,
+              formattedTime: '0초',
+              resourcesGained: {},
+              foodConsumedByInfirmary: 0,
+              healedHeroes: [],
+              bonfireWarmthExpired: false,
+              bonfireSecondsLeft: gm.bonfireWarmthTime || 0,
+              upkeepGoldPaid: 0,
+              encounterAttacks: []
+            };
+          }
+          if (!gm.offlineReport.encounterAttacks) {
+            gm.offlineReport.encounterAttacks = [];
+          }
+          gm.offlineReport.encounterAttacks.push({
+            attackerCallsign: n.attackerCallsign,
+            attackerWon: n.attackerWon,
+            floor: n.floor,
+            timestamp: n.timestamp
+          });
+          setLatestOfflineReport({ ...gm.offlineReport });
+        });
+        gm.saveGame();
+      }
+    }).catch(() => {});
+
     if (gm.offlineReport) {
       setLatestOfflineReport(gm.offlineReport);
     }
     const handleOfflineSettled = (report: any) => {
-      if (report) {
-        setLatestOfflineReport(report);
+      setLatestOfflineReport(report);
+    };
+    const handleUpdate = () => {
+      if (gm.offlineReport !== latestOfflineReport) {
+        setLatestOfflineReport(gm.offlineReport);
+      }
+    };
+    const handleOpenOfflineReport = () => {
+      const rep = gm.offlineReport || latestOfflineReport;
+      if (rep) {
+        setOfflineReportModal(rep);
       }
     };
     gm.on('offlineProgressSettled', handleOfflineSettled);
+    gm.on('update', handleUpdate);
+    gm.on('openOfflineReport', handleOpenOfflineReport);
     return () => {
       gm.off('offlineProgressSettled', handleOfflineSettled);
+      gm.off('update', handleUpdate);
+      gm.off('openOfflineReport', handleOpenOfflineReport);
     };
-  }, [gm]);
+  }, [gm, latestOfflineReport]);
 
   // 🏰 던전 원정 귀환 시 전리품 정산 보고서 자동 팝업
   useEffect(() => {
@@ -14888,12 +14638,12 @@ export const CitadelScreen: React.FC = () => {
         color: '#ef5350'
       });
     }
-    // 4. 에테르 연금 공방 (마도서 제작 & 강화)
+    // 4. 에테르 연금 공방 (스킬 강화 & 인챈트)
     if ((state.buildings['alchemy']?.level || 0) > 0) {
       items.push({
         key: 'alchemy',
         label: isEn ? 'Aether Workshop' : isJa ? 'エーテル工房' : '에테르 공방',
-        sub: isEn ? 'Grimoires & Alchemy' : isJa ? '魔導書製作 & 強化' : '마도서 제작 & 강화',
+        sub: isEn ? 'Skills & Enchant' : isJa ? 'スキル強化 & 付魔' : '스킬 비전 강화 & 인챈트',
         icon: '🧪',
         color: '#26a69a'
       });
@@ -14993,6 +14743,16 @@ export const CitadelScreen: React.FC = () => {
     setOpenDrawer(null);
   }, []);
 
+  // 📱 성채 드로어(영지, 병영, 대장간, 묘지 등)가 열려있을 때 뒤로가기 누르면 드로어만 닫고 성채로 복귀
+  useEffect(() => {
+    if (!openDrawer) return;
+    const unregister = registerBackButtonHandler(() => {
+      handleCloseAllDrawers();
+      return true;
+    });
+    return () => unregister();
+  }, [openDrawer, handleCloseAllDrawers]);
+
   const handleWheelSelect = useCallback((item: { key: string; label: string; sub: string; icon: string; color: string }) => {
     handleTryOpenDrawer(item.key);
   }, [handleTryOpenDrawer]);
@@ -15068,6 +14828,32 @@ export const CitadelScreen: React.FC = () => {
     return gm.getRegisterableCodexCount();
   }, [state.resources, state.citadelSupplies, state.equipmentInventory, state.skillBookInventory, state.codexUnlockedItems, gm]);
 
+  // ⚔️ 전직 가능한 용병 수 계산 (1차/2차/3차 승급 레벨 도달 및 전직 트리 보유)
+  const promotableHeroCount = useMemo(() => {
+    const seen = new Set<string>();
+    const all = [...(state.barracks || []), ...(state.party || [])];
+    let count = 0;
+    for (const h of all) {
+      if (!h || !h.id || seen.has(h.id)) continue;
+      seen.add(h.id);
+      const cls = CHARACTER_CLASSES[h.classId];
+      const tier = cls?.tier || 0;
+      const reqLv = tier === 0 ? 10 : (tier === 1 ? 30 : 60);
+      const hasBranch = (PROMOTE_MAP[h.classId]?.length || 0) > 0;
+      if (h.level >= reqLv && hasBranch) {
+        count++;
+      }
+    }
+    return count;
+  }, [state.barracks, state.party]);
+
+  // ⚒️ 정화할 침식/저주 장비 수 계산
+  const unpurifiedEquipCount = useMemo(() => {
+    return (state.equipmentInventory || []).filter(
+      i => i && (i.isCorrupted || i.isCursed || i.isUnpurified || (i.name && i.name.startsWith('[침식된]')))
+    ).length;
+  }, [state.equipmentInventory]);
+
   const currentArtKey = openDrawer || selectedItem?.key || 'citadel';
   const artInfo = DRAWER_ART_META[currentArtKey] || DRAWER_ART_META.citadel;
   const warmthLabel = state.bonfireWarmthTime > 0
@@ -15096,16 +14882,16 @@ export const CitadelScreen: React.FC = () => {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-[#423219] text-[#f3e5c8] border border-[#876739]">
-                    퀘스트 목표 달성!
+                    {tr('퀘스트 목표 달성!')}
                   </span>
                   {questCompleteToast.rewardSummary && (
                     <span className="text-[10px] text-[#ffd54f] font-mono truncate">
-                      🎁 {questCompleteToast.rewardSummary}
+                      🎁 {tr(questCompleteToast.rewardSummary)}
                     </span>
                   )}
                 </div>
                 <div className="text-xs font-bold text-[#f3e5c8] truncate mt-0.5">
-                  {questCompleteToast.title}
+                  {tr(questCompleteToast.title)}
                 </div>
               </div>
             </div>
@@ -15139,10 +14925,10 @@ export const CitadelScreen: React.FC = () => {
           <button
             className="px-2 py-0.5 rounded bg-[#ffd54f15] hover:bg-[#ffd54f33] text-[#ffd54f] border border-[#ffd54f44] text-[10px] font-bold shadow-sm flex items-center gap-1 transition-all"
             onClick={() => setShowCodexModal(true)}
-            title="심연의 백과 & 고대 컬렉션 열기"
+            title={tr('심연의 백과 & 고대 컬렉션 열기')}
           >
             <GameIcon name="codex" icon="📜" size={13} />
-            <span>백과</span>
+            <span>{tr('백과')}</span>
             {registerableCodexCount > 0 && (
               <span className="px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-sm animate-pulse">
                 {registerableCodexCount}
@@ -15152,20 +14938,20 @@ export const CitadelScreen: React.FC = () => {
           <button
             className="px-2 py-0.5 rounded bg-[#78909c15] hover:bg-[#78909c33] text-[#cfd8dc] border border-[#78909c44] text-[10px] font-bold shadow-sm flex items-center gap-1 transition-all"
             onClick={() => handleTryOpenDrawer('cemetery')}
-            title="성채 묘지 & 영령의 가호"
+            title={tr('성채 묘지 & 영령의 가호')}
           >
             <span>🪦</span>
-            <span>묘지</span>
+            <span>{tr('묘지')}</span>
             {gm.cemetery && gm.cemetery.length > 0 && (
               <span className="text-[9px] text-[#ff7043] font-mono font-bold">
                 {gm.cemetery.length}/5
               </span>
             )}
             {gm.activeAncestralBlessing && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ba68c8] animate-pulse" title={`영령 결속: ${gm.activeAncestralBlessing.name}`} />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ba68c8] animate-pulse" title={`${tr('영령 결속')}: ${tr(gm.activeAncestralBlessing.name)}`} />
             )}
           </button>
-          <button className="text-[11px] text-[#ff4444] opacity-50 hover:opacity-100 ml-1" onClick={() => setResetModal(true)}>초기화</button>
+          <button className="text-[11px] text-[#ff4444] opacity-50 hover:opacity-100 ml-1" onClick={() => setResetModal(true)}>{tr('초기화')}</button>
         </div>
       )}
 
@@ -15195,7 +14981,7 @@ export const CitadelScreen: React.FC = () => {
             <source src={artInfo.img.replace(/\.[^/.]+$/, ".mp4")} type="video/mp4" />
             <img
               src={artInfo.img}
-              alt={artInfo.title}
+              alt={tr(artInfo.title)}
               className="w-full h-full object-cover animate-fade-in transition-all duration-300"
               style={{ filter: 'brightness(0.96) contrast(1.05)' }}
               onError={(e) => {
@@ -15205,8 +14991,8 @@ export const CitadelScreen: React.FC = () => {
           </video>
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 35%, #0b0d13cc 85%, #0b0d13 100%)' }} />
 
-          {/* 퀘스트 & 오프라인 결산 알림 마커 컨테이너 (드로어가 열려 있어도 보상 수령 대기 시 상단 일러스트 위에 표시) */}
-          {(!openDrawer || claimableQuestCount > 0) && (
+          {/* 퀘스트 & 오프라인 결산 알림 마커 컨테이너 (드로어가 열려 있어도 보상 수령 대기 또는 미확인 오프라인 정산 시 상단 일러스트 위에 표시) */}
+          {(!openDrawer || claimableQuestCount > 0 || Boolean(activeOfflineReport) || isEpicRebuildReady || registerableCodexCount > 0) && (
             <div className="absolute top-2.5 left-2.5 z-30 flex flex-col gap-1.5 items-start">
               {/* 👑 1차 영지 재건 완성 대서사 에픽 퀘스트 알림 마커 */}
               {isEpicRebuildReady && (
@@ -15264,18 +15050,22 @@ export const CitadelScreen: React.FC = () => {
               )}
 
               {/* 오프라인 결산 알림 마커 (퀘스트 알림 아래에 표시) */}
-              {latestOfflineReport && (
+              {activeOfflineReport && (
                 <button
                   className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#c8aa6e] text-[#c8aa6e] text-xs font-bold shadow-lg shadow-[#c8aa6e33] hover:scale-105 transition-all cursor-pointer animate-fade-in"
-                  onClick={() => setOfflineReportModal(latestOfflineReport)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOfflineReportModal(activeOfflineReport);
+                  }}
+                  title={tr('오프라인 영지 수익 정산 보고서 열기')}
                 >
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c8aa6e] opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#c8aa6e]"></span>
                   </span>
                   <span className="text-sm">🌙</span>
-                  <span className="text-[11px] font-bold tracking-wide">
-                    {'오프라인 영지 수익 정산'} ({latestOfflineReport.formattedTime})
+                  <span className="text-[10px] sm:text-[11px] font-bold tracking-wide break-words max-w-[200px] sm:max-w-none truncate sm:whitespace-normal">
+                    {tr('오프라인 영지 수익 정산')} ({tr(activeOfflineReport.formattedTime)})
                   </span>
                 </button>
               )}
@@ -15287,15 +15077,15 @@ export const CitadelScreen: React.FC = () => {
             <div className="flex items-center gap-1.5 min-w-0">
               <span className="text-base shrink-0">{artInfo.icon}</span>
               <div className="min-w-0">
-                <span className="font-cinzel text-sm sm:text-base font-bold text-[#c8aa6e] tracking-wide truncate block">{artInfo.title}</span>
+                <span className="font-cinzel text-sm sm:text-base font-bold text-[#c8aa6e] tracking-wide truncate block">{tr(artInfo.title)}</span>
                 <div className="text-[11px] text-[#cfd8e8] mt-0.5 font-medium line-clamp-1">
-                  {artInfo.subtitle}
+                  {tr(artInfo.subtitle)}
                 </div>
               </div>
             </div>
 
             <div className="text-[10px] text-[#8b9bb4] mt-0.5 shrink-0">
-              {`아레나 ${state.currentArenaRank}위`} ({state.currentArenaRating}P){warmthLabel && ` | ${warmthLabel}`}
+              {`${tr('아레나')} ${state.currentArenaRank}${tr('위')}`} ({state.currentArenaRating}P){warmthLabel && ` | ${warmthLabel}`}
             </div>
           </div>
         </div>
@@ -15311,16 +15101,16 @@ export const CitadelScreen: React.FC = () => {
       {/* 🎡 모바일 스와이프/드래그 지원 회전 휠 내비게이션 & 상단 방명록 티커 */}
       {!openDrawer ? (
         <div className="px-3 pt-1 pb-2 shrink-0 select-none flex flex-col gap-1.5">
-          {/* 📢 [차원 메세지] 최신 글 1개 전체 내용 좌측 연속 흐름 티커 (하단 네비 메뉴 상단) */}
+          {/* 📢 [D.M] 최신 글 1개 전체 내용 좌측 연속 흐름 티커 (하단 네비 메뉴 상단) */}
           <div
             className="w-full px-2.5 py-1.5 rounded-xl bg-[#0e1117]/90 border border-[#c8aa6e33] hover:border-[#c8aa6e88] cursor-pointer flex items-center justify-between transition-all backdrop-blur-xs shadow-md group active:scale-[0.99] overflow-hidden"
             onClick={() => gm.emit('openGuestbook')}
-            title="클릭 시 [차원 메세지] 모달이 열립니다"
+            title="D.M (Dimension Message)"
           >
             <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0 flex items-center gap-1 border border-[#c8aa6e44] z-10 shadow-xs">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0 flex items-center gap-1 border border-[#c8aa6e44] z-10 shadow-xs font-mono tracking-wider">
                 <span className="text-xs">📢</span>
-                <span>[차원 메세지]</span>
+                <span>D.M</span>
               </span>
 
               <div
@@ -15427,6 +15217,21 @@ export const CitadelScreen: React.FC = () => {
                     {item.key === 'codex' && registerableCodexCount > 0 && (
                       <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-md animate-pulse">
                         {registerableCodexCount}
+                      </span>
+                    )}
+                    {item.key === 'quests' && claimableQuestCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-md animate-pulse">
+                        {claimableQuestCount}
+                      </span>
+                    )}
+                    {item.key === 'barracks' && promotableHeroCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ffd54f] text-black text-[9px] font-extrabold shadow-md animate-pulse whitespace-nowrap">
+                        ✨ {tr('전직 가능')}
+                      </span>
+                    )}
+                    {item.key === 'forge' && unpurifiedEquipCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-md animate-pulse">
+                        {unpurifiedEquipCount}
                       </span>
                     )}
                     <div className="flex items-center justify-center shrink-0" style={{ minHeight: isCenter ? 28 : 22 }}>
@@ -15793,12 +15598,12 @@ export const CitadelScreen: React.FC = () => {
       {/* ── 🌙 부재 중 영지 오프라인 정산 보고서 모달 ── */}
       {offlineReportModal && (
         <Modal
-          title="🌙 부재 중 영지 활동 정산 보고서"
+          title={`🌙 ${tr('오프라인 영지 활동 정산 보고서')}`}
           open={!!offlineReportModal}
           onClose={() => setOfflineReportModal(null)}
           footer={
             <ActionButton
-              label="🏰 방주 성채 업무 시작"
+              label={`🏰 ${tr('방주 성채 업무 시작')}`}
               variant="primary"
               className="w-full text-sm font-bold py-2.5 shadow-lg shadow-[#42321955]"
               onClick={() => {
@@ -15817,11 +15622,11 @@ export const CitadelScreen: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <span className="text-2xl">⏳</span>
                 <div>
-                  <div className="text-xs font-bold text-[#c8aa6e]">
-                    부재 중 경과 시간: {offlineReportModal.formattedTime}
+                  <div className="text-xs font-bold text-[#c8aa6e] break-words">
+                    {tr('부재 중 경과 시간')}: {tr(offlineReportModal.formattedTime)}
                   </div>
                   <div className="text-[10px] text-[#8b9bb4]">
-                    지휘관님이 자리를 비우신 동안에도 방주 시설이 멈추지 않고 가동되었습니다.
+                    {tr('지휘관님이 자리를 비우신 동안에도 방주 시설이 멈추지 않고 가동되었습니다.')}
                   </div>
                 </div>
               </div>
@@ -15831,20 +15636,20 @@ export const CitadelScreen: React.FC = () => {
             {offlineReportModal.grossProduced && Object.keys(offlineReportModal.grossProduced).length > 0 && (
               <div>
                 <div className="text-xs font-bold text-[#cfd8dc] mb-1.5 flex items-center justify-between">
-                  <span className="flex items-center gap-1">📦 부재 중 총 생산 자원</span>
-                  <span className="text-[10px] text-[#38ef7d]">실시간 생산 완료</span>
+                  <span className="flex items-center gap-1">📦 {tr('부재 중 총 생산 자원')}</span>
+                  <span className="text-[10px] text-[#38ef7d]">{tr('실시간 생산 완료')}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-1.5 max-h-[180px] overflow-y-auto pr-0.5">
                   {Object.entries(offlineReportModal.grossProduced).map(([k, amt]) => {
                     if (!amt || (amt as number) <= 0) return null;
                     const resMeta: Record<string, { icon: string; name: string }> = {
-                      gold: { icon: '🪙', name: '골드' },
-                      wood: { icon: '🪵', name: '목재' },
-                      stone: { icon: '🪨', name: '석재' },
-                      iron: { icon: '⚙️', name: '철광석' },
-                      food: { icon: '🍖', name: '식량' },
-                      ether: { icon: '✨', name: '에테르' },
-                      leather: { icon: '🥋', name: '가죽' },
+                      gold: { icon: '🪙', name: tr('골드') },
+                      wood: { icon: '🪵', name: tr('목재') },
+                      stone: { icon: '🪨', name: tr('석재') },
+                      iron: { icon: '⚙️', name: tr('철광석') },
+                      food: { icon: '🍖', name: tr('식량') },
+                      ether: { icon: '✨', name: tr('에테르') },
+                      leather: { icon: '🥋', name: tr('가죽') },
                     };
                     const meta = resMeta[k] || { icon: '📦', name: k };
                     const cap = gm.getMaxResourceCapacity(k as any);
@@ -15864,7 +15669,7 @@ export const CitadelScreen: React.FC = () => {
                           </span>
                           {isAtCap && (
                             <span className="text-[9px] font-bold text-[#ffd54f] block font-mono">
-                              [창고 한계]
+                              [{tr('창고 한계')}]
                             </span>
                           )}
                         </div>
@@ -15879,28 +15684,28 @@ export const CitadelScreen: React.FC = () => {
             {(offlineReportModal.upkeepGoldPaid > 0 || offlineReportModal.upkeepFoodPaid > 0 || offlineReportModal.upkeepEtherPaid > 0) && (
               <div className="p-3 rounded-xl bg-[#141724] border border-[#2c384d] flex flex-col gap-2">
                 <div className="text-xs font-bold text-[#ffd54f] flex items-center justify-between">
-                  <span>📉 시설 운영 유지비 정산</span>
-                  <span className="text-[10px] text-[#38ef7d] font-normal">생산량으로 자동 충당</span>
+                  <span>📉 {tr('시설 운영 유지비 정산')}</span>
+                  <span className="text-[10px] text-[#38ef7d] font-normal">{tr('생산량으로 자동 충당')}</span>
                 </div>
                 <div className="flex gap-2 flex-wrap text-xs font-mono">
                   {offlineReportModal.upkeepGoldPaid > 0 && (
                     <span className="px-2 py-1 rounded bg-[#2a1d12] text-[#ffb74d] border border-[#ff980044]">
-                      🪙 골드 -{offlineReportModal.upkeepGoldPaid.toLocaleString()}G
+                      🪙 {tr('골드')} -{offlineReportModal.upkeepGoldPaid.toLocaleString()}G
                     </span>
                   )}
                   {offlineReportModal.upkeepFoodPaid > 0 && (
                     <span className="px-2 py-1 rounded bg-[#2a1d12] text-[#ffb74d] border border-[#ff980044]">
-                      🍖 식량 -{offlineReportModal.upkeepFoodPaid.toLocaleString()}
+                      🍖 {tr('식량')} -{offlineReportModal.upkeepFoodPaid.toLocaleString()}
                     </span>
                   )}
                   {offlineReportModal.upkeepEtherPaid > 0 && (
                     <span className="px-2 py-1 rounded bg-[#2a1d12] text-[#ffb74d] border border-[#ff980044]">
-                      ✨ 에테르 -{offlineReportModal.upkeepEtherPaid.toLocaleString()}
+                      ✨ {tr('에테르')} -{offlineReportModal.upkeepEtherPaid.toLocaleString()}
                     </span>
                   )}
                 </div>
                 <div className="text-[10px] text-[#8b9bb4] leading-relaxed">
-                  💡 창고가 가득 차더라도 유지비가 소비되면 다음 생산으로 즉시 재충전되어 창고 한계치가 안전하게 보전되었습니다.
+                  {tr('💡 창고가 가득 차더라도 유지비가 소비되면 다음 생산으로 즉시 재충전되어 창고 한계치가 안전하게 보전되었습니다.')}
                 </div>
               </div>
             )}
@@ -15909,14 +15714,41 @@ export const CitadelScreen: React.FC = () => {
             {offlineReportModal.healedHeroes && offlineReportModal.healedHeroes.length > 0 && (
               <div className="p-3 rounded-xl bg-[#0f241a] border border-[#10b98155] flex flex-col gap-1.5">
                 <div className="text-xs font-bold text-[#34d399] flex items-center gap-1">
-                  <span>💉 생체 복원 병동 치료 완료</span>
+                  <span>💉 {tr('생체 복원 병동 치료 완료')}</span>
                 </div>
                 <div className="text-xs text-[#cfd8dc] flex flex-col gap-0.5">
                   {offlineReportModal.healedHeroes.map((h: any) => (
                     <div key={h.id} className="flex items-center justify-between">
                       <span>• {h.name}</span>
                       <span className="text-[#34d399] font-mono">
-                        HP +{h.hpGained} {h.isFullyHealed ? ' [완치!]' : ''}
+                        HP +{h.hpGained} {h.isFullyHealed ? ` [${tr('완치!')}]` : ''}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ⚔️ 부재 중 다른 지휘관의 습격 피격 내역 */}
+            {offlineReportModal.encounterAttacks && offlineReportModal.encounterAttacks.length > 0 && (
+              <div className="p-2.5 rounded-xl bg-[#2a131b] border border-[#ff174444] flex flex-col gap-1.5 text-xs">
+                <div className="flex items-center justify-between font-bold text-[#ff5252]">
+                  <span className="flex items-center gap-1">
+                    <span>⚔️</span>
+                    <span>{tr('부재 중 지휘관 습격 발생 내역')}</span>
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ff174422] text-[#ff5252]">
+                    {offlineReportModal.encounterAttacks.length}건 발생
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  {offlineReportModal.encounterAttacks.map((atk: any, idx: number) => (
+                    <div key={idx} className="flex items-center justify-between bg-[#150a10] px-2 py-1 rounded border border-[#ff174422] text-[11px]">
+                      <span className="text-white font-medium">
+                        <strong className="text-[#ffd54f]">[{atk.attackerCallsign}]</strong> {tr('지휘관의 기습')}
+                      </span>
+                      <span className={atk.attackerWon ? 'text-[#ef5350] font-bold' : 'text-[#4caf50] font-bold'}>
+                        {atk.attackerWon ? tr('방어 실패 (패배)') : tr('격퇴 성공 (승리)')}
                       </span>
                     </div>
                   ))}
@@ -15927,12 +15759,12 @@ export const CitadelScreen: React.FC = () => {
             {/* 성화 온기 알림 */}
             <div className="p-2.5 rounded-xl bg-[#111622] border border-[#1e2738] flex items-center justify-between text-xs">
               <span className="text-[#8b9bb4] flex items-center gap-1.5">
-                <span>🔥 방주의 성화</span>
+                <span>🔥 {tr('방주의 성화')}</span>
               </span>
               <span className={offlineReportModal.bonfireWarmthExpired ? 'text-[#ef5350] font-bold' : 'text-[#ffd54f] font-mono'}>
                 {offlineReportModal.bonfireWarmthExpired
-                  ? '부재 중 성화 소멸 (재점화 필요)'
-                  : `남은 온기: ${Math.floor((offlineReportModal.bonfireSecondsLeft || 0) / 60)}분`}
+                  ? tr('부재 중 성화 소멸 (재점화 필요)')
+                  : `${tr('남은 온기')}: ${formatDuration(offlineReportModal.bonfireSecondsLeft || 0, lang)}`}
               </span>
             </div>
           </div>

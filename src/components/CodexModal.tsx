@@ -30,6 +30,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
     { id: 'all', label: '전체 컬렉션', icon: '📜' },
     { id: 'armory', label: '병기창 무구', icon: '⚔️' },
     { id: 'boss_equip', label: '보스 세트', icon: '👑' },
+    { id: 'arena_equip', label: '투사 무구', icon: '🏆' },
     { id: 'skillbook', label: '비전 마도서', icon: '📖' },
     { id: 'lore', label: '서사 회고록', icon: '📜' },
     { id: 'artifact', label: '고대 오파츠', icon: '⚓' },
@@ -101,7 +102,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
 
   return (
     <Modal
-      title="📜 심연의 백과 & 회고록 — 고대 컬렉션 (Abyssal Codex)"
+      title={tr('📜 심연의 백과 & 회고록 — 고대 컬렉션 (Abyssal Codex)')}
       open={open}
       onClose={() => {
         setInspectedStory(null);
@@ -109,7 +110,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
       }}
       footer={
         <ActionButton
-          label="닫기"
+          label={tr('닫기')}
           variant="ghost"
           className="w-full"
           onClick={() => {
@@ -120,20 +121,47 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
       }
     >
       <div className="flex flex-col gap-3 py-1">
+        {/* 상단 일러스트 배너 */}
+        <div className="relative w-full h-24 sm:h-32 rounded-xl overflow-hidden border border-[#233550] shadow-md shrink-0">
+          <img
+            src="assets/menu_codex.jpg"
+            alt="Abyssal Codex"
+            className="w-full h-full object-cover"
+            style={{ filter: 'brightness(0.92) contrast(1.05)' }}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = 'none';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0c101c] via-[#0c101c]/40 to-transparent" />
+          <div className="absolute bottom-2 left-3 right-3 flex items-end justify-between">
+            <div>
+              <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-[#c8aa6e33] text-[#f5d491] border border-[#c8aa6e55] font-bold">
+                {tr('ABYSSAL ARCHIVES')}
+              </span>
+              <h3 className="text-xs sm:text-sm font-extrabold text-white mt-0.5 drop-shadow-md">
+                {tr('심연의 서고 & 고대 비전 컬렉션')}
+              </h3>
+            </div>
+            <span className="text-xs font-mono font-extrabold text-[#ffd54f] bg-[#ffd54f22] px-2 py-0.5 rounded-lg border border-[#ffd54f44] backdrop-blur-sm">
+              {completionPct}% {tr('완성')}
+            </span>
+          </div>
+        </div>
+
         {/* 상단 컬렉션 진행도 및 총 누적 패시브 헤더 */}
         <div className="p-3 rounded-2xl bg-gradient-to-r from-[#12192a] to-[#0c101c] border border-[#233550] shadow-md flex flex-col gap-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <GameIcon name="codex" icon="📜" size={24} />
               <div>
-                <span className="text-xs font-bold text-white">백과 수집 진척도</span>
+                <span className="text-xs font-bold text-white">{tr('백과 수집 진척도')}</span>
                 <div className="text-[10px] text-[#8b9bb4]">
-                  {completedCount} / {totalCount} 항목 완성 ({completionPct}%)
+                  {completedCount} / {totalCount} {tr('항목 완성')} ({completionPct}%)
                 </div>
               </div>
             </div>
             <span className="text-xs font-mono font-extrabold text-[#ffd54f] bg-[#ffd54f18] px-2.5 py-1 rounded-lg border border-[#ffd54f33]">
-              {completionPct}% 달성
+              {completionPct}% {tr('달성')}
             </span>
           </div>
 
@@ -147,22 +175,22 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
           {/* 활성화된 종합 패시브 배지 요약 */}
           <div className="pt-2 border-t border-[#1c283f] flex items-center justify-between flex-wrap gap-2 text-[10px]">
             <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
-            {totalBonus.allStatsBonus && totalBonus.allStatsBonus > 0 && <span className="px-1.5 py-0.5 rounded bg-[#c8aa6e18] border border-[#c8aa6e44] text-[#c8aa6e] font-bold">전능력치 +{totalBonus.allStatsBonus}</span>}
-            {totalBonus.atk > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ef535018] border border-[#ef535044] text-[#ef5350] font-bold">공격력 +{totalBonus.atk}</span>}
-            {totalBonus.def > 0 && <span className="px-1.5 py-0.5 rounded bg-[#42a5f518] border border-[#42a5f544] text-[#42a5f5] font-bold">방어력 +{totalBonus.def}</span>}
-            {totalBonus.hp > 0 && <span className="px-1.5 py-0.5 rounded bg-[#66bb6a18] border border-[#66bb6a44] text-[#66bb6a] font-bold">최대 HP +{totalBonus.hp}</span>}
-            {totalBonus.mp > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ab47bc18] border border-[#ab47bc44] text-[#ab47bc] font-bold">최대 MP +{totalBonus.mp}</span>}
-            {totalBonus.spd > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ffd54f18] border border-[#ffd54f44] text-[#ffd54f] font-bold">속도 +{totalBonus.spd}</span>}
-            {totalBonus.luck > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ce93d818] border border-[#ce93d844] text-[#ce93d8] font-bold">행운 +{totalBonus.luck}</span>}
-            {totalBonus.critRate > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ff704318] border border-[#ff704344] text-[#ff7043] font-bold">치명타 +{totalBonus.critRate}%</span>}
-            {totalBonus.dmgReduction > 0 && <span className="px-1.5 py-0.5 rounded bg-[#38ef7d18] border border-[#38ef7d44] text-[#38ef7d] font-bold">피해감소 +{totalBonus.dmgReduction}%</span>}
-            {totalBonus.allDmgPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ff416c18] border border-[#ff416c44] text-[#ff416c] font-bold">모든 피해 +{totalBonus.allDmgPct}%</span>}
-            {totalBonus.upkeepDiscountPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#c8aa6e18] border border-[#c8aa6e44] text-[#c8aa6e] font-bold">유지비 -{totalBonus.upkeepDiscountPct}%</span>}
-            {totalBonus.productionBonusPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ffd54f18] border border-[#ffd54f44] text-[#ffd54f] font-bold">자원 생산 +{totalBonus.productionBonusPct}%</span>}
-            {totalBonus.expBonusPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#80deea18] border border-[#80deea44] text-[#80deea] font-bold">경험치 +{totalBonus.expBonusPct}%</span>}
-            {totalBonus.goldBonusPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ffd54f18] border border-[#ffd54f44] text-[#ffd54f] font-bold">골드 획득 +{totalBonus.goldBonusPct}%</span>}
+            {totalBonus.allStatsBonus && totalBonus.allStatsBonus > 0 && <span className="px-1.5 py-0.5 rounded bg-[#c8aa6e18] border border-[#c8aa6e44] text-[#c8aa6e] font-bold">{tr('전능력치')} +{totalBonus.allStatsBonus}</span>}
+            {totalBonus.atk > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ef535018] border border-[#ef535044] text-[#ef5350] font-bold">{tr('공격력')} +{totalBonus.atk}</span>}
+            {totalBonus.def > 0 && <span className="px-1.5 py-0.5 rounded bg-[#42a5f518] border border-[#42a5f544] text-[#42a5f5] font-bold">{tr('방어력')} +{totalBonus.def}</span>}
+            {totalBonus.hp > 0 && <span className="px-1.5 py-0.5 rounded bg-[#66bb6a18] border border-[#66bb6a44] text-[#66bb6a] font-bold">{tr('최대 HP')} +{totalBonus.hp}</span>}
+            {totalBonus.mp > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ab47bc18] border border-[#ab47bc44] text-[#ab47bc] font-bold">{tr('최대 MP')} +{totalBonus.mp}</span>}
+            {totalBonus.spd > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ffd54f18] border border-[#ffd54f44] text-[#ffd54f] font-bold">{tr('속도')} +{totalBonus.spd}</span>}
+            {totalBonus.luck > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ce93d818] border border-[#ce93d844] text-[#ce93d8] font-bold">{tr('행운')} +{totalBonus.luck}</span>}
+            {totalBonus.critRate > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ff704318] border border-[#ff704344] text-[#ff7043] font-bold">{tr('치명타')} +{totalBonus.critRate}%</span>}
+            {totalBonus.dmgReduction > 0 && <span className="px-1.5 py-0.5 rounded bg-[#38ef7d18] border border-[#38ef7d44] text-[#38ef7d] font-bold">{tr('피해감소')} +{totalBonus.dmgReduction}%</span>}
+            {totalBonus.allDmgPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ff416c18] border border-[#ff416c44] text-[#ff416c] font-bold">{tr('모든 피해')} +{totalBonus.allDmgPct}%</span>}
+            {totalBonus.upkeepDiscountPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#c8aa6e18] border border-[#c8aa6e44] text-[#c8aa6e] font-bold">{tr('유지비')} -{totalBonus.upkeepDiscountPct}%</span>}
+            {totalBonus.productionBonusPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ffd54f18] border border-[#ffd54f44] text-[#ffd54f] font-bold">{tr('자원 생산')} +{totalBonus.productionBonusPct}%</span>}
+            {totalBonus.expBonusPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#80deea18] border border-[#80deea44] text-[#80deea] font-bold">{tr('경험치')} +{totalBonus.expBonusPct}%</span>}
+            {totalBonus.goldBonusPct > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ffd54f18] border border-[#ffd54f44] text-[#ffd54f] font-bold">{tr('골드 획득')} +{totalBonus.goldBonusPct}%</span>}
             {Object.entries(totalBonus).every(([_, v]) => (v ?? 0) === 0) && (
-              <span className="text-[#607d8b] italic">아이템을 등록하여 영구 패시브를 해금하세요.</span>
+              <span className="text-[#607d8b] italic">{tr('아이템을 등록하여 영구 패시브를 해금하세요.')}</span>
             )}
             </div>
           </div>
@@ -244,12 +272,12 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-2xl shrink-0 p-1.5 rounded-lg bg-[#162035] border border-[#263757]">
-                      {item.icon}
+                    <span className="text-2xl shrink-0 p-1.5 rounded-lg bg-[#162035] border border-[#263757] flex items-center justify-center">
+                      <GameIcon name={item.id} icon={item.icon} size={24} />
                     </span>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-white truncate">{item.name}</span>
+                        <span className="text-xs font-bold text-white truncate">{tr(item.name)}</span>
                         {isCompleted ? (
                           <span
                             className={`text-[9px] px-1.5 py-0.2 rounded font-bold flex items-center gap-0.5 ${
@@ -259,24 +287,24 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                             }`}
                           >
                             {item.id === latestUnlockedId && <span>✨</span>}
-                            <span>{item.id === latestUnlockedId ? '✓ 최근 등록' : '✓ 완성됨'}</span>
+                            <span>{item.id === latestUnlockedId ? tr('✓ 최근 등록') : tr('✓ 완성됨')}</span>
                           </span>
                         ) : canRegister ? (
                           <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535022] text-[#ff7043] border border-[#ef535055] font-extrabold animate-pulse">
-                            ✨ 등록 가능
+                            {tr('✨ 등록 가능')}
                           </span>
                         ) : null}
                       </div>
                       <div className="text-[11px] text-[#8b9bb4] leading-relaxed mt-0.5">
                         {(() => {
-                          const desc = item.desc;
+                          const desc = tr(item.desc);
                           if (desc.includes('[에픽 등급 이상]')) {
                             const [pre, post] = desc.split('[에픽 등급 이상]');
                             return (
                               <>
                                 {pre}
                                 <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold text-[#ce93d8] bg-[#ab47bc22] border border-[#ab47bc55]">
-                                  [에픽 등급 이상]
+                                  {tr('[에픽 등급 이상]')}
                                 </span>
                                 {post}
                               </>
@@ -288,7 +316,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                               <>
                                 {pre}
                                 <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold text-[#42a5f5] bg-[#42a5f522] border border-[#42a5f555]">
-                                  [희귀 등급 이상]
+                                  {tr('[희귀 등급 이상]')}
                                 </span>
                                 {post}
                               </>
@@ -307,15 +335,15 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                         className="px-2.5 py-1 rounded bg-[#ab47bc22] hover:bg-[#ab47bc44] text-[#ce93d8] border border-[#ab47bc66] text-[10px] font-bold shrink-0 transition-all flex items-center gap-1 shadow-sm cursor-pointer"
                       >
                         <span>{item.category === 'artifact' ? '🏛️' : '📖'}</span>
-                        <span>{item.category === 'artifact' ? '구세계 기록' : '회고록 열람'}</span>
+                        <span>{item.category === 'artifact' ? tr('구세계 기록') : tr('회고록 열람')}</span>
                       </button>
                     ) : (
                       <div
-                        title={item.category === 'artifact' ? '해당 층의 오파츠 페어를 모두 발굴하여 기증하면 구세계의 과거 기록이 해금됩니다.' : '해당 층의 쪽지를 모두 모아 등록하면 회고록이 해금됩니다.'}
+                        title={item.category === 'artifact' ? tr('해당 층의 오파츠 페어를 모두 발굴하여 기증하면 구세계의 과거 기록이 해금됩니다.') : tr('해당 층의 쪽지를 모두 모아 등록하면 회고록이 해금됩니다.')}
                         className="px-2 py-1 rounded bg-[#161a26] text-[#78909c] border border-[#263248] text-[9px] font-bold shrink-0 flex items-center gap-1 opacity-70"
                       >
                         <span>🔒</span>
-                        <span>미등록</span>
+                        <span>{tr('미등록')}</span>
                       </div>
                     )
                   )}
@@ -323,8 +351,8 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
 
                 {/* 영구 패시브 보너스 표시 */}
                 <div className="px-2 py-1 rounded-lg bg-[#141c2e] border border-[#21304c] text-[11px] font-bold text-[#ffd54f] flex items-center justify-between">
-                  <span>✨ 영구 효과</span>
-                  <span>{item.bonus.label}</span>
+                  <span>{tr('✨ 영구 효과')}</span>
+                  <span>{tr(item.bonus.label)}</span>
                 </div>
 
                 {/* 요구 자원 슬롯 & 등록 버튼 */}
@@ -355,7 +383,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                       return (
                         <span
                           key={idx}
-                          title={equipTooltip || (req.type === 'supply' ? `성채 보급품 [${req.name}]` : undefined)}
+                          title={equipTooltip || (req.type === 'supply' ? `${tr('성채 보급품')} [${tr(req.name)}]` : undefined)}
                           className={`text-[10px] px-2 py-0.5 rounded-md font-mono flex items-center gap-1 border ${
                             isCompleted
                               ? 'bg-[#15171e] text-[#8b9bb4] border-[#223350]'
@@ -364,8 +392,8 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                               : 'bg-[#241316] text-[#ef5350] border-[#4a1e24]'
                           }`}
                         >
-                          <span>{req.icon}</span>
-                          <span>{req.name}</span>
+                          <GameIcon name={req.key} icon={req.icon} size={14} />
+                          <span>{tr(req.name)}</span>
                           {rarityBadge && (
                             <span
                               className={`text-[9px] px-1 rounded font-sans font-bold border ${
@@ -374,7 +402,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                                   : 'bg-[#42a5f522] text-[#42a5f5] border-[#42a5f555]'
                               }`}
                             >
-                              {rarityBadge}
+                              {tr(rarityBadge)}
                             </span>
                           )}
                           <span className="font-bold">
@@ -395,7 +423,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                           : 'bg-[#141a28] text-[#546e7a] border-[#222d42] cursor-not-allowed opacity-60'
                       }`}
                     >
-                      기증·등록
+                      {tr('기증·등록')}
                     </button>
                   )}
                 </div>
@@ -407,12 +435,12 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
         {/* 서사 일지 / 회고록 / 구세계 기록 전문 모달 */}
         {inspectedStory && (
           <Modal
-            title={inspectedStory.category === 'artifact' ? `🏛️ [${inspectedStory.name}] 구세계 발굴 기록` : `📖 [${inspectedStory.name}] 회고록`}
+            title={inspectedStory.category === 'artifact' ? `🏛️ [${tr(inspectedStory.name)}] ${tr('구세계 발굴 기록')}` : `📖 [${tr(inspectedStory.name)}] ${tr('회고록')}`}
             open={!!inspectedStory}
             onClose={() => setInspectedStory(null)}
             footer={
               <ActionButton
-                label="닫기"
+                label={tr('닫기')}
                 variant="ghost"
                 className="w-full"
                 onClick={() => setInspectedStory(null)}
@@ -422,13 +450,13 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
             <div className="flex flex-col gap-3 py-2">
               <div className="text-3xl text-center">{inspectedStory.category === 'artifact' ? '🏛️' : '📜'}</div>
               <div className="text-sm font-bold text-[#ffd54f] text-center">
-                {inspectedStory.name}
+                {tr(inspectedStory.name)}
               </div>
               <div className="p-3.5 rounded-xl bg-[#0a0b10] border border-[#233550] text-xs text-[#cfd8e8] leading-relaxed italic whitespace-pre-line font-serif">
-                "{inspectedStory.story}"
+                "{tr(inspectedStory.story || '')}"
               </div>
               <div className="p-2.5 rounded-lg bg-[#101826] border border-[#1e2e48] text-xs text-[#38ef7d] font-bold text-center">
-                ✨ 컬렉션 활성화 효과: {inspectedStory.bonus.label}
+                {tr('✨ 컬렉션 활성화 효과')}: {tr(inspectedStory.bonus.label)}
               </div>
             </div>
           </Modal>

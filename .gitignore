@@ -16,6 +16,7 @@ build/
 
 # Android / Mobile build files
 android/app/build/
+android/app/debug/
 android/build/
 android/.gradle/
 android/local.properties
@@ -23,6 +24,7 @@ android/captures/
 android/.idea/
 android/*.iml
 android/app/*.iml
+*.apk
 
 # Firebase cache
 .firebase/

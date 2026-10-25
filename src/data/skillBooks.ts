@@ -79,14 +79,16 @@ export function adjustSkillDescriptionForDrop(
   desc = desc.replace(/(\d+)\s*%/g, (match, p1) => {
     const val = parseInt(p1, 10);
     if (val === weakPct) return match; // 이미 약화된 주 위력이면 유지
-    const halved = Math.max(1, Math.round(val * 0.5));
+    const powerRatio = basePower > 0 ? (weakenedPower / basePower) : 0.7;
+    const halved = Math.max(1, Math.round(val * powerRatio));
     return `${halved}%`;
   });
 
   // 3. 고정 수치(MP N 강탈 등)도 약화 버전에 맞춰 조정
   desc = desc.replace(/MP\s*(\d+)/gi, (_match, p1) => {
     const val = parseInt(p1, 10);
-    const halved = Math.max(5, Math.round(val * 0.5));
+    const powerRatio = basePower > 0 ? (weakenedPower / basePower) : 0.7;
+    const halved = Math.max(5, Math.round(val * powerRatio));
     return `MP ${halved}`;
   });
 
@@ -1195,7 +1197,7 @@ export function getDroppableMonsterSkillBooks(monstersRecord: Record<string, any
     if (!mSkill) return;
 
     const basePwr = mSkill.power || 1.0;
-    const weakenedPower = Number((basePwr * 0.5).toFixed(2));
+    const weakenedPower = Number((basePwr * 0.7).toFixed(2));
     const cleanSkillName = (mSkill.name || '비기').trim();
     const cleanSkillDesc = adjustSkillDescriptionForDrop(mSkill.description || mSkill.name, basePwr, weakenedPower);
     const affinity = determineSkillAffinity(mSkill, cleanMonName);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal } from './Modal';
 import { ActionButton } from './ActionButton';
-import { FirebaseService, UserProfile } from '../services/FirebaseService';
+import { FirebaseService, UserProfile, getCallsignWidth, CALLSIGN_MAX_WIDTH } from '../services/FirebaseService';
 import { SoundManager } from '../managers/SoundManager';
 import { useGameManager } from '../hooks/useGameManager';
 
@@ -40,6 +40,11 @@ export const CallsignChangeModal: React.FC<Props> = ({
 
   const handleCandidateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
+    // 최대 한글 6자(표시 폭 12) 초과 입력 차단 (IME 조합 중 일시 초과는 허용 후 검증에서 차단)
+    const native = e.nativeEvent as InputEvent;
+    if (!native?.isComposing && getCallsignWidth(val.trim()) > CALLSIGN_MAX_WIDTH) {
+      return;
+    }
     setCandidate(val);
     setCheckStatus({ checked: false, available: false, message: '' });
     setErrorMessage(null);
@@ -154,7 +159,7 @@ export const CallsignChangeModal: React.FC<Props> = ({
             방주 사령부에 등록되는 지휘관님의 공식 호출부호(Callsign)입니다.
             <br />• <strong>단 1회만</strong> 변경할 수 있으며 등록 후 추가 수정이 불가합니다.
             <br />• 전 서버에서 유일한 고유 명칭이어야 하며, <strong>중복 검증</strong>을 통과해야 합니다.
-            <br />• 한글, 영문, 숫자, 밑줄(_) 2~12자까지 허용됩니다.
+            <br />• 한글, 영문, 숫자, 밑줄(_)로 2자 이상, <strong>최대 한글 6자</strong>(영문·숫자 12자)까지 허용됩니다.
           </div>
         </div>
 
@@ -180,7 +185,14 @@ export const CallsignChangeModal: React.FC<Props> = ({
           <div className="flex flex-col gap-2">
             <label className="text-[11px] font-bold text-white flex items-center gap-1">
               <span>새로운 지휘관 콜사인</span>
-              <span className="text-[#8b9bb4] font-normal">(2 ~ 12자)</span>
+              <span className="text-[#8b9bb4] font-normal">(최대 한글 6자 / 영문·숫자 12자)</span>
+              <span
+                className={`ml-auto font-mono font-normal ${
+                  getCallsignWidth(candidate.trim()) > CALLSIGN_MAX_WIDTH ? 'text-[#ef5350]' : 'text-[#8b9bb4]'
+                }`}
+              >
+                {getCallsignWidth(candidate.trim())}/{CALLSIGN_MAX_WIDTH}
+              </span>
             </label>
 
             <div className="flex gap-1.5">

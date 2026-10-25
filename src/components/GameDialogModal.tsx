@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { gameDialog, DialogOptions } from '../services/DialogService';
+import { useI18n } from '../hooks/useI18n';
+import { registerBackButtonHandler } from '../utils/nativeBridge';
 
 type ActiveDialog = DialogOptions & { id: number; resolve: (result: boolean) => void };
 
 export const GameDialogModal: React.FC = () => {
+  const { tr } = useI18n();
   const [dialog, setDialog] = useState<ActiveDialog | null>(null);
 
   useEffect(() => {
@@ -11,6 +14,21 @@ export const GameDialogModal: React.FC = () => {
       setDialog(current);
     });
   }, []);
+
+  // 📱 뒤로가기 버튼(하드웨어/브라우저) 시 대화상자 취소 처리
+  useEffect(() => {
+    if (!dialog) return;
+
+    const unregister = registerBackButtonHandler(() => {
+      if (dialog.isConfirm) {
+        dialog.resolve(false);
+      } else {
+        dialog.resolve(true);
+      }
+      return true;
+    });
+    return () => unregister();
+  }, [dialog]);
 
   useEffect(() => {
     if (!dialog) return;
@@ -57,13 +75,13 @@ export const GameDialogModal: React.FC = () => {
             </span>
           )}
           <h3 className="text-[#f3e5c8] font-bold text-base tracking-wide flex items-center gap-1.5">
-            {dialog.title}
+            {tr(dialog.title)}
           </h3>
         </div>
 
         {/* 본문 메시지 */}
         <div className="px-5 py-3 text-[#cbd5e1] text-xs leading-relaxed text-center whitespace-pre-line break-keep font-sans">
-          {dialog.message}
+          {tr(dialog.message)}
         </div>
 
         {/* 하단 버튼 바 */}
@@ -74,7 +92,7 @@ export const GameDialogModal: React.FC = () => {
               className="btn btn-ghost text-xs px-4 py-2 rounded-xl text-[#94a3b8] hover:text-white transition-colors min-w-[80px]"
               onClick={handleCancel}
             >
-              {dialog.cancelText || '취소'}
+              {dialog.cancelText ? tr(dialog.cancelText) : tr('취소')}
             </button>
           )}
           <button
@@ -87,7 +105,7 @@ export const GameDialogModal: React.FC = () => {
             onClick={handleConfirm}
             autoFocus
           >
-            {dialog.confirmText || '확인'}
+            {dialog.confirmText ? tr(dialog.confirmText) : tr('확인')}
           </button>
         </div>
       </div>

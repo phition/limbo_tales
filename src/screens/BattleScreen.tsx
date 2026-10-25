@@ -1,3 +1,4 @@
+import { FirebaseService } from '../services/FirebaseService';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ResourceBar } from '../components/ResourceBar';
 import { useGameManager } from '../hooks/useGameManager';
@@ -28,6 +29,7 @@ import { FeverBadgeType, FeverSynergyResult } from '../types/fever';
 import { evaluateFeverSynergy } from '../utils/feverUtils';
 import { FeverGaugeBar } from '../components/FeverGaugeBar';
 import { TutorialGuideOverlay } from '../components/TutorialGuideOverlay';
+import { registerBackButtonHandler } from '../utils/nativeBridge';
 
 // ── 몬스터 런타임 상태 ──────────────────────────────────────────────────────
 interface MonsterState {
@@ -70,6 +72,7 @@ const RES_NAME_MAP: Record<string, { name: string; icon: string }> = {
   suffix_stone: { name: '일반 접미석', icon: '🔮' },
   pure_prefix_stone: { name: '순수 접두석', icon: '⭐' },
   pure_suffix_stone: { name: '순수 접미석', icon: '🌌' },
+  pure_mana_stone: { name: '순수 마도석', icon: '💠' },
   relic_floor_1: { name: '침묵의 흑핵', icon: '🔮' },
   relic_floor_2: { name: '망령의 영혼수정', icon: '💠' },
   relic_floor_3: { name: '원초의 광맥 심장', icon: '🫀' },
@@ -844,17 +847,14 @@ const HeroRow: React.FC<{
   onClick: () => void;
   onInspect: (hero: Mercenary) => void;
 }> = ({ hero, gm, isCurrentTurn, isSelected, onClick, onInspect }) => {
+  const { tr } = useI18n();
   const isAlive = hero.currentHp > 0;
   const isDying = !isAlive && !hero.isPermanentlyDead;
   const stats = gm.getHeroEffectiveStats(hero);
   const hpPct = isAlive ? clamp((hero.currentHp / stats.maxHp) * 100, 0, 100) : 0;
   const mpPct = isAlive ? clamp((hero.currentMp / stats.maxMp) * 100, 0, 100) : 0;
   const cls = Object.values(CHARACTER_CLASSES).find(c => c.id === hero.classId);
-  const customPortrait = CustomAssetService.getInstance().getMercenaryOverride(hero.classId)
-    || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
-    || (hero.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(hero.portraitPromptKey) : undefined)
-    || CustomAssetService.getInstance().getMercenaryOverride(hero.id)
-    || CustomAssetService.getInstance().getMercenaryOverride(hero.name);
+  const customPortrait = CustomAssetService.getHeroPortrait(hero);
 
   return (
     <LongPressBox
@@ -873,7 +873,7 @@ const HeroRow: React.FC<{
           : isDying
           ? '#ff1744'
           : isCurrentTurn
-          ? '#c8aa6e'
+          ? '#38ef7d'
           : isSelected
           ? '#38ef7d'
           : undefined,
@@ -917,7 +917,11 @@ const HeroRow: React.FC<{
                 >
                   [{posMeta.label}]
                 </span>
-                {isAlive && isCurrentTurn && <span className="text-[9px] bg-[#c8aa6e22] text-[#c8aa6e] px-1 rounded font-bold border border-[#c8aa6e44]">▶ 내 턴</span>}
+                {isAlive && isCurrentTurn && (
+                  <span className="text-[9px] bg-[#38ef7d22] text-[#38ef7d] px-1 rounded font-bold border border-[#38ef7d66] shadow-[0_0_6px_rgba(56,239,125,0.35)] animate-pulse">
+                    ▶ {tr('내 턴')}
+                  </span>
+                )}
                 {isDying && (
                   <span className="text-[10px] text-white bg-[#d50000] border border-[#ff1744] px-2 py-0.5 rounded-full font-black animate-pulse shadow-[0_0_8px_#ff1744] flex items-center gap-1">
                     <span>⚠️ 사경 위기</span>
@@ -1037,6 +1041,27 @@ export const BattleScreen: React.FC = () => {
   const [bossForCutscene, setBossForCutscene] = useState<MonsterData | null>(null);
   const [, setInventoryVersion] = useState(0);
 
+  // 📱 전투 중 스킬/몬스터 상세 팝업 또는 컷씬이 열려있을 때 뒤로가기 누르면 팝업만 닫기
+  useEffect(() => {
+    if (!selectedSkillForModal && !inspectedMonster && !showBossCutscene) return;
+    const unregister = registerBackButtonHandler(() => {
+      if (selectedSkillForModal) {
+        setSelectedSkillForModal(null);
+        return true;
+      }
+      if (inspectedMonster) {
+        setInspectedMonster(null);
+        return true;
+      }
+      if (showBossCutscene) {
+        setShowBossCutscene(false);
+        return true;
+      }
+      return false;
+    });
+    return () => unregister();
+  }, [selectedSkillForModal, inspectedMonster, showBossCutscene]);
+
   // ── 튜토리얼 상태 관리 ──
   const [tutorialStepId, setTutorialStepId] = useState<string>(() => {
     try {
@@ -1073,6 +1098,17 @@ export const BattleScreen: React.FC = () => {
 
   // 🔥 전술 모멘텀 파티 공유 FEVER 게이지 상태 (0~5 슬롯)
   const [feverBadges, setFeverBadges] = useState<FeverBadgeType[]>([]);
+  const [enemyFeverBadges, setEnemyFeverBadges] = useState<FeverBadgeType[]>([]);
+  const enemyFeverBadgesRef = useRef<FeverBadgeType[]>([]);
+  enemyFeverBadgesRef.current = enemyFeverBadges;
+
+  const addEnemyFeverBadge = useCallback((badge: FeverBadgeType) => {
+    setEnemyFeverBadges(prev => {
+      const next = [...prev, badge];
+      enemyFeverBadgesRef.current = next;
+      return next;
+    });
+  }, []);
   const feverBadgesRef = useRef<FeverBadgeType[]>([]);
   feverBadgesRef.current = feverBadges;
 
@@ -1592,6 +1628,7 @@ export const BattleScreen: React.FC = () => {
     id: string;
     skillName: string;
     icon: string;
+    skillId?: string;
     isEnemy: boolean;
     bannerType?: 'skill' | 'assist' | 'extra' | 'guard' | 'counter' | 'detonation' | 'break' | 'fever';
     heroName?: string;
@@ -1993,10 +2030,93 @@ export const BattleScreen: React.FC = () => {
         const isBoss = currentMonsters.some(m => m.data.type === 'boss');
         if (isBoss) {
           gm.portalAppeared = true;
+
+          // 🎮 PGS 리더보드: 심연의 정화자 (1~10층 보스 격파 및 최단 시간 주파)
+          if (gm.dungeonFloor >= 1 && gm.dungeonFloor <= 10) {
+            if (gm.dungeonFloor === 1) {
+              gm.currentRunF1BossKillTimestamp = Date.now();
+            }
+            if (!gm.bossClearTimes) gm.bossClearTimes = {};
+            gm.bossClearTimes[gm.dungeonFloor] = Date.now();
+
+            if (gm.dungeonFloor === 10) {
+              if (gm.currentRunF1BossKillTimestamp > 0) {
+                const elapsedSec = Math.max(1, Math.floor((Date.now() - gm.currentRunF1BossKillTimestamp) / 1000));
+                if (!gm.bestAbyss10FClearTime || elapsedSec < gm.bestAbyss10FClearTime) {
+                  gm.bestAbyss10FClearTime = elapsedSec;
+                }
+              }
+            }
+            gm.submitAbyssPurifierLeaderboard();
+          } else if (gm.dungeonFloor === 11) {
+            // 🎮 PGS 리더보드: 무저갱의 방랑자 (11층 진 최종 보스 & 광폭화 보스)
+            const archeosMon = currentMonsters.find(m => m.data.id === 'boss_avici_final' || (m.data.name && m.data.name.includes('아르케오스')));
+            if (archeosMon) {
+              if (!gm.aviciBossBonusClaimed) {
+                gm.aviciBossBonusClaimed = { archeosNormal: false, archeosOvercharged: false };
+              }
+              const isEnragedBoss = isBossBattle && (gm.isOvercharged || archeosMon.isEnraged || (archeosMon.data.name && archeosMon.data.name.includes('광폭')));
+              if (isEnragedBoss) {
+                if (!gm.aviciBossBonusClaimed.archeosOvercharged) {
+                  gm.aviciBossBonusClaimed.archeosOvercharged = true;
+                  gm.addLog('💀⚡ [리더보드 보너스] 광폭화 진 최종 보스 아르케오스 격파! [무저갱의 방랑자] 리더보드 +50,000점 획득!', 'reward');
+                }
+                if (gm.avici9001Timestamp > 0) {
+                  const deltaSec = Math.max(1, Math.floor((Date.now() - gm.avici9001Timestamp) / 1000));
+                  const timeAttackBonus = Math.max(0, Math.floor((1800 - deltaSec) * 20));
+                  if (timeAttackBonus > (gm.bestAviciTimeAttackBonus || 0)) {
+                    gm.bestAviciTimeAttackBonus = timeAttackBonus;
+                  }
+                  gm.addLog(`⚡ [타임어택 보너스] 위험도 9,001 진입 후 ${deltaSec}초 만에 광폭화 보스 격파! 리더보드 보너스 +${timeAttackBonus.toLocaleString()}점 가산!`, 'reward');
+                }
+              } else {
+                if (!gm.aviciBossBonusClaimed.archeosNormal) {
+                  gm.aviciBossBonusClaimed.archeosNormal = true;
+                  gm.addLog('👑 [리더보드 보너스] 진 최종 보스 아르케오스 격파! [무저갱의 방랑자] 리더보드 +20,000점 획득!', 'reward');
+                }
+              }
+              gm.submitAviciWandererLeaderboard();
+            }
+          }
         }
 
         // 🌟 전체 몬스터 편대 보상 통합 정산 (최대 4종류 자원 엄격 제한 적용)
+        // ⚔️ [지휘관 습격 전투 정산] 전리품(자원/장비/스킬북)은 없으나 경험치는 일반 전투 대비 2배 지급!
+        const isPvp = !!gm.isEncounterPvP;
+        const visitorRec = gm.encounterVisitorRecord;
+
         const res = gm.claimSquadBattleRewards(currentMonsters.map(m => m.data));
+
+        if (isPvp) {
+          const myCallsign = FirebaseService.getInstance().getCachedProfile()?.nickname || '방주 지휘관';
+          const oppCallsign = visitorRec?.callsign || '상대 지휘관';
+          gm.addLog(`🏆⚔️ [습격 승리!] [${oppCallsign}] 지휘관의 원정대와의 혈투에서 승리했습니다! (⚔️ 경험치 2배: +${res.exp.toLocaleString()} EXP, 전리품 획득 없음)`, 'reward');
+          
+          if (visitorRec && visitorRec.uid) {
+            FirebaseService.getInstance().sendCommanderAttackNotice({
+              targetUid: visitorRec.uid,
+              attackerCallsign: myCallsign,
+              defenderCallsign: oppCallsign,
+              attackerWon: true,
+              floor: gm.dungeonFloor || 1
+            }).catch(() => {});
+          }
+
+          gm.isEncounterPvP = false;
+          setVictorySummary({
+            gold: 0,
+            ether: 0,
+            guaranteedResource: { key: 'void_shard', name: '영지 명예', icon: '🎖️', amount: 0 },
+            exp: res.exp,
+            resources: {},
+            equipment: [],
+            skillBooks: [],
+            levelUps: res.levelUps
+          });
+          isProcessingRef.current = false;
+          setIsProcessing(false);
+          return true;
+        }
 
         setVictorySummary({
           gold: res.gold,
@@ -2028,7 +2148,25 @@ export const BattleScreen: React.FC = () => {
         setBattleResult('lose');
         gm.clearBattleSnapshot();
         SoundManager.getInstance().play('defeat');
-        gm.addLog('💀 전투 패배...', 'danger');
+        const isPvp = !!gm.isEncounterPvP;
+        const visitorRec = gm.encounterVisitorRecord;
+        if (isPvp) {
+          const myCallsign = FirebaseService.getInstance().getCachedProfile()?.nickname || '방주 지휘관';
+          const oppCallsign = visitorRec?.callsign || '상대 지휘관';
+          gm.addLog(`💀⚔️ [습격 패배...] [${oppCallsign}] 지휘관의 원정대를 기습했으나 격퇴당했습니다...`, 'danger');
+          if (visitorRec && visitorRec.uid) {
+            FirebaseService.getInstance().sendCommanderAttackNotice({
+              targetUid: visitorRec.uid,
+              attackerCallsign: myCallsign,
+              defenderCallsign: oppCallsign,
+              attackerWon: false,
+              floor: gm.dungeonFloor || 1
+            }).catch(() => {});
+          }
+          gm.isEncounterPvP = false;
+        } else {
+          gm.addLog('💀 전투 패배...', 'danger');
+        }
         isProcessingRef.current = false;
         setIsProcessing(false);
       }, delayMs);
@@ -2733,7 +2871,7 @@ export const BattleScreen: React.FC = () => {
 
     const stats = gm.getHeroEffectiveStats(hero);
     let critChance = gm.getCritChance(stats.luck) + (stats.critRateBonus || 0);
-    let heroCritMult = stats.critDmg + (stats.luck * 0.005);
+    let heroCritMult = stats.critDmg;
 
     // 🔥 [궁극기 판정 및 전술 모멘텀 FEVER 시너지 연동]
     // ⚠️ 인챈트 스킬은 절대로 궁극기로 취급되지 않으며, 피버 게이지는 오직 캐릭터 본연의 궁극기에만 터집니다.
@@ -2871,6 +3009,7 @@ export const BattleScreen: React.FC = () => {
         setSkillCutIn({
           id: String(Date.now()),
           skillName: skill.name,
+          skillId: skill.id,
           icon: feverSynergy.icon.split(' ')[0] || skill.icon || '🔥',
           isEnemy: false,
           bannerType: 'fever',
@@ -2886,6 +3025,7 @@ export const BattleScreen: React.FC = () => {
         setSkillCutIn({
           id: String(Date.now()),
           skillName: skill.name,
+          skillId: skill.id,
           icon: skill.icon || '⚔️',
           isEnemy: false,
         });
@@ -5654,7 +5794,7 @@ export const BattleScreen: React.FC = () => {
                           targetM.def,
                           targetM.statusEffects || [],
                           true, // 약점 추격: 치명타 확정
-                          1.5 + (aStats.luck * 0.005),
+                          1.5,
                           0,
                           1,
                           false,
@@ -5761,7 +5901,7 @@ export const BattleScreen: React.FC = () => {
                           }
                         } else {
                           const isCrit = Math.random() * 100 < gm.getCritChance(aStats.luck);
-                          const critMult = 1.5 + (aStats.luck * 0.005);
+                          const critMult = 1.5;
                           const rawAssistDmg = Math.max(1, Math.floor(effectiveAtk * 0.80));
                           const assistWeaponEnhance = assistHero.equipment?.weapon?.enhanceLevel || 0;
                           const assistTrueDmgRate = assistWeaponEnhance * 0.01;
@@ -5893,7 +6033,31 @@ export const BattleScreen: React.FC = () => {
     // 동상/결빙 또는 기절 상태인 경우 행동 완전 차단 (차징 중이었다면 차징 해제)
     const ccEffects = (monster.statusEffects || []).filter(se => se.type === 'freeze' || se.type === 'stun');
     if (ccEffects.length > 0 || turnSkippedRef.current) {
-      if (monster.chargingState) {
+      // ⚔️ [지휘관 습격 원정대 전투 AI]: 차징 절대 없음, 자동전투 알고리즘 기반 스킬/행동 선택 & 적 피버 게이지 축적
+      if (gm.isEncounterPvP) {
+        // 1) 적 피버 뱃지 적립
+        addEnemyFeverBadge(Math.random() < 0.5 ? 'crit' : 'extra');
+
+        // 2) 피버 게이지 5개 이상 시 피버 방출
+        if (enemyFeverBadgesRef.current.length >= 5) {
+          setEnemyFeverBadges([]);
+          enemyFeverBadgesRef.current = [];
+          gm.addLog(`🔥⚡ [상대 FEVER 폭발!] ${monster.data.name}이(가) 적 전술 모멘텀 FEVER를 방출하여 극대 피해를 가합니다!`, 'danger');
+          SoundManager.getInstance().play('fever_burst');
+        }
+
+        // 3) 자동전투 AI: 차징 스킬 제외, 일반 공격 및 즉발 스킬 최우선 고려
+        const pvpSkills = skillList.filter(s => !s.isCharge);
+        // 딸피 아군(영웅)이 있으면 마무리 타격 우선, 아니면 계수 높은 스킬 시전
+        const killableHero = gm.party.find(h => h.currentHp > 0 && h.currentHp <= (monster.atk || 30) * 1.5);
+        if (killableHero && pvpSkills.length > 0) {
+          selectedSkill = pvpSkills[0];
+        } else if (pvpSkills.length > 0 && Math.random() < 0.7) {
+          selectedSkill = pvpSkills[Math.floor(Math.random() * pvpSkills.length)];
+        } else {
+          selectedSkill = null; // 일반 공격
+        }
+      } else if (monster.chargingState) {
         if (monster.chargingState.originalLuck !== undefined) {
           monster.luck = monster.chargingState.originalLuck;
         }
@@ -5936,12 +6100,16 @@ export const BattleScreen: React.FC = () => {
         isReleasingCharge = true;
         gm.addLog(`💥⚠️ [차징 완료!] ${monster.data.name}이(가) 응축된 힘을 폭발시키며 [${selectedSkill.name}]을(를) 방출합니다! (확정 치명타 & 방어 관통 50%, 행운 정상화)`, 'danger');
       } else {
-        // 차징 스킬 시전 확률 상향 (차징 스킬이 있는 경우 55% 확률로 차징 스킬 우선 고려)
+        // ⚡ 차징 기술 시전 조건: 마물이 자신 포함 3마리 이상 생존해 있을 때만 차징 스킬 고려
+        const aliveMonstersCount = currentMonsters.filter(m => m.currentHp > 0).length;
         const chargeSkills = skillList.filter(s => s.isCharge);
-        if (chargeSkills.length > 0 && Math.random() < 0.55) {
+        if (aliveMonstersCount >= 3 && chargeSkills.length > 0 && Math.random() < 0.55) {
           selectedSkill = chargeSkills[Math.floor(Math.random() * chargeSkills.length)];
         } else {
-          selectedSkill = skillList.length > 0 && Math.random() > 0.25 ? skillList[Math.floor(Math.random() * skillList.length)] : null;
+          // 생존 마물이 3마리 미만이거나 차징 스킬 미선택 시, 차징 스킬을 제외한 일반 스킬 또는 기본 공격 선택
+          const nonChargeSkills = skillList.filter(s => !s.isCharge);
+          const availableSkills = aliveMonstersCount >= 3 ? skillList : nonChargeSkills;
+          selectedSkill = availableSkills.length > 0 && Math.random() > 0.25 ? availableSkills[Math.floor(Math.random() * availableSkills.length)] : null;
         }
       }
 
@@ -6162,6 +6330,7 @@ export const BattleScreen: React.FC = () => {
         setSkillCutIn({
           id: String(Date.now()),
           skillName: selectedSkill.name,
+          skillId: selectedSkill.id,
           icon: monster.data.type === 'boss' ? '👑' : monster.data.type === 'elite' ? '⭐' : '👾',
           isEnemy: true,
         });
@@ -6316,7 +6485,7 @@ export const BattleScreen: React.FC = () => {
           // 🌟 [몬스터 크리티컬 판정]: 몬스터 행운 기반 (차징 방출 시 확정 치명타)
           const monCritChance = gm.getCritChance(monLuck);
           const isMonsterCrit = isReleasingCharge ? true : (Math.random() * 100 < monCritChance);
-          const monsterCritMult = 1.5 + (monLuck * 0.005);
+          const monsterCritMult = isReleasingCharge ? 2.0 : 1.5;
 
           let rawDmg = selectedSkill ? Math.floor(atk * selectedSkill.power) : atk;
           if (target.position === 'front') rawDmg = Math.max(1, Math.floor(rawDmg * 0.9));
@@ -6614,16 +6783,35 @@ export const BattleScreen: React.FC = () => {
               });
               setTimeout(() => gm.addLog(`🕊️👑 [불멸의 수호] 발키리 ${target.name}이(가) 쓰러지는 순간 기적의 빛으로 부활하며 생존 파티원의 상처를 치유했습니다!`, 'reward'), 0);
             } else {
-              target.currentHp = 0;
-              target.statusEffects = [];
-              if (target.deathCountdown === undefined && !target.isPermanentlyDead) {
-                target.deathCountdown = 3;
-                setTimeout(() => gm.addLog(`💀 [사경의 위기] 치명상을 입은 ${target.name} 대원이 의식을 잃고 차가운 바닥에 쓰러졌습니다! 숨결이 완전히 멎기 전에 마물을 베어 넘기거나 성스러운 구원의 손길을 뻗어야 합니다!`, 'danger'), 0);
-              }
-              triggerHaptic('heroDeath');
-              // 💀 마지막 남은 용병이 사경에 돌입하면 그 즉시 패배!
-              if (gm.party.every(h => h.currentHp <= 0)) {
-                checkBattleOutcome(monstersRef.current);
+              if (gm.hasSoulLanternRevive) {
+                gm.hasSoulLanternRevive = false;
+                target.currentHp = Math.max(1, Math.floor(target.maxHp * 0.5));
+                target.deathCountdown = undefined;
+                target.isPermanentlyDead = false;
+                target.statusEffects = [];
+                SoundManager.getInstance().play('heal');
+                setSkillCutIn({
+                  id: String(Date.now()),
+                  skillName: `🕯️ [망령의 결속] ${target.name} 기사회생!`,
+                  icon: '🕯️✨',
+                  isEnemy: false,
+                  bannerType: 'guard',
+                  heroName: target.name,
+                  subText: '영혼 등대의 불사의 등불로 1회 즉시 부활!'
+                });
+                setTimeout(() => gm.addLog(`🕯️✨ [망령의 결속] 영혼 등대의 불사의 등불이 반응하여 사경에 빠진 ${target.name} 대원을 즉시 소생시켰습니다! (HP 50% 회복)`, 'reward'), 0);
+              } else {
+                target.currentHp = 0;
+                target.statusEffects = [];
+                if (target.deathCountdown === undefined && !target.isPermanentlyDead) {
+                  target.deathCountdown = 3;
+                  setTimeout(() => gm.addLog(`💀 [사경의 위기] 치명상을 입은 ${target.name} 대원이 의식을 잃고 차가운 바닥에 쓰러졌습니다! 숨결이 완전히 멎기 전에 마물을 베어 넘기거나 성스러운 구원의 손길을 뻗어야 합니다!`, 'danger'), 0);
+                }
+                triggerHaptic('heroDeath');
+                // 💀 마지막 남은 용병이 사경에 돌입하면 그 즉시 패배!
+                if (gm.party.every(h => h.currentHp <= 0)) {
+                  checkBattleOutcome(monstersRef.current);
+                }
               }
             }
           }
@@ -7101,10 +7289,25 @@ export const BattleScreen: React.FC = () => {
       gm.emit('partyUpdated', gm.party);
       gm.saveGame();
 
-      gm.addLog(`🏃 [전투 철수 성공!] 적의 추격을 뿌리치고 안전하게 후퇴했습니다. (탈출 확률: ${Math.floor(finalFleeRate * 100)}%, 행운 보정: ${luckBonus >= 0 ? '+' : ''}${Math.round(luckBonus * 100)}%)`, 'system');
-      setTimeout(() => {
-        navigateTo('exploration');
-      }, 500);
+      if (gm.isEmergencyEscapeBattle) {
+        gm.isEmergencyEscapeBattle = false;
+        const { lostCount, keptCount } = gm.settleEmergencyEscapeLoot();
+        gm.addLog(`🏃💨 [추격전 탈출 성공!] 추격해온 마물들을 뿌리치고 성채로 안전하게 탈출했습니다! (전리품 [${lostCount}개] 유실, [${keptCount}개] 보존)`, 'reward', 'citadel');
+        gm.clearPartyStatusEffects();
+        gm.hasEnteredDungeon = true;
+        gm.updateQuestObjective('Q_MAIN_02', 2, 1);
+        gm.settleDungeonInventory(gm.dungeonFloor);
+        gm.clearDungeonSession();
+        gm.saveGame();
+        setTimeout(() => {
+          navigateTo('citadel');
+        }, 500);
+      } else {
+        gm.addLog(`🏃 [전투 철수 성공!] 적의 추격을 뿌리치고 안전하게 후퇴했습니다. (탈출 확률: ${Math.floor(finalFleeRate * 100)}%, 행운 보정: ${luckBonus >= 0 ? '+' : ''}${Math.round(luckBonus * 100)}%)`, 'system');
+        setTimeout(() => {
+          navigateTo('exploration');
+        }, 500);
+      }
     } else {
       SoundManager.getInstance().play('heavy_hit');
       gm.addLog(`⚠️ [전투 철수 실패!] 퇴로가 막혀 도주에 실패했습니다! (성공률: ${Math.floor(finalFleeRate * 100)}% 실패, 적 반격 턴)`, 'danger');
@@ -7400,7 +7603,7 @@ export const BattleScreen: React.FC = () => {
           style={skillCutIn.bannerType === 'fever' && skillCutIn.feverBorderColor ? { borderColor: skillCutIn.feverBorderColor } : undefined}
           >
             <div className="flex items-center gap-3.5">
-              <div className={`text-2xl sm:text-3xl p-2 rounded-xl border-2 shadow-xl shrink-0 ${
+              <div className={`p-2 rounded-xl border-2 shadow-xl shrink-0 flex items-center justify-center ${
                 skillCutIn.isEnemy
                   ? 'bg-[#2b0c1b] border-[#ff1744] shadow-[#ff1744]'
                   : skillCutIn.bannerType === 'fever'
@@ -7413,7 +7616,7 @@ export const BattleScreen: React.FC = () => {
                   ? 'bg-[#271038] border-[#ce93d8] shadow-[#ce93d8]'
                   : 'bg-[#0c1f38] border-[#c8aa6e] shadow-[#c8aa6e]'
               }`}>
-                {skillCutIn.icon}
+                <GameIcon name={skillCutIn.skillId || skillCutIn.icon} icon={skillCutIn.icon} size={32} />
               </div>
               <div className="flex flex-col">
                 {skillCutIn.bannerType === 'fever' && (
@@ -7670,6 +7873,17 @@ export const BattleScreen: React.FC = () => {
       </div>
 
       {/* ── 📜 전투 로그 패널 (상세 로그 팝업 아이콘 연동) ── */}
+      {gm.isEncounterPvP && (
+        <div className="px-3 pt-1 pb-1">
+          <FeverGaugeBar
+            badges={enemyFeverBadges}
+            party={monsters.map(m => ({ classId: 'assassin' } as any))}
+            label={tr(`[${gm.encounterVisitorRecord?.callsign || '적 지휘관'}] ENEMY FEVER`)}
+            side="enemy"
+            showEffectDescription={false}
+          />
+        </div>
+      )}
       <div className="px-3 pt-1 flex-1 min-h-0 relative">
         <div className="relative">
           <LogPanel logs={state.battleLogs || []} isBattle maxHeight={148} emptyMessage="기록된 전투 로그가 없습니다." />
@@ -7711,11 +7925,7 @@ export const BattleScreen: React.FC = () => {
                 <span className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-[#c8aa6e55] bg-[#15171d] flex items-center justify-center">
                   {(() => {
                     const selCls = Object.values(CHARACTER_CLASSES).find(c => c.id === selectedHero.classId);
-                    const selPortrait = CustomAssetService.getInstance().getMercenaryOverride(selectedHero.classId)
-                      || (selCls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(selCls.promptKey) : undefined)
-                      || (selectedHero.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(selectedHero.portraitPromptKey) : undefined)
-                      || CustomAssetService.getInstance().getMercenaryOverride(selectedHero.id)
-                      || CustomAssetService.getInstance().getMercenaryOverride(selectedHero.name);
+                    const selPortrait = CustomAssetService.getHeroPortrait(selectedHero);
                     return selPortrait ? (
                       <img src={selPortrait} alt={selectedHero.name} className="w-full h-full object-cover" />
                     ) : (
@@ -7956,7 +8166,9 @@ export const BattleScreen: React.FC = () => {
             </div>
             <div className={`text-2xl font-bold font-cinzel mb-2 ${battleResult === 'win' ? (isBossBattle ? 'text-[#e0b0ff]' : 'text-[#66bb6a]') : 'text-[#ef5350]'}`}>
               {battleResult === 'win'
-                ? (isBossBattle ? (dict.battle.boss_victory || '👑 보스 토벌 대승리!') : (dict.battle.victory || '🎉 전투 승리!'))
+                ? (gm.isEmergencyEscapeBattle
+                    ? '🏃💥 추격대 격파 대승리!'
+                    : (isBossBattle ? (dict.battle.boss_victory || '👑 보스 토벌 대승리!') : (dict.battle.victory || '🎉 전투 승리!')))
                 : (dict.battle.defeat || '💀 전투 패배...')}
             </div>
             {battleResult === 'win' && (
@@ -8096,9 +8308,11 @@ export const BattleScreen: React.FC = () => {
               <ActionButton 
                 label={
                   battleResult === 'win'
-                    ? (gm.pendingLoot.length > 0
-                        ? `📦 전리품 정리 (${gm.pendingLoot.length})`
-                        : (isBossBattle ? '🌀 포탈을 타고 계속 탐험' : '탐험 계속하기'))
+                    ? (gm.isEmergencyEscapeBattle
+                        ? (gm.pendingLoot.length > 0 ? `📦 전리품 정리 (${gm.pendingLoot.length})` : '🏃 추격대 격파 후 성채로 귀환')
+                        : (gm.pendingLoot.length > 0
+                            ? `📦 전리품 정리 (${gm.pendingLoot.length})`
+                            : (isBossBattle ? '🌀 포탈을 타고 계속 탐험' : '탐험 계속하기')))
                     : '성채로 귀환'
                 } 
                 size="lg" 
@@ -8138,6 +8352,20 @@ export const BattleScreen: React.FC = () => {
                     gm.emit('partyUpdated', gm.party);
                     gm.saveGame();
 
+                    // 🏃 비상 탈출 추격전 승리 후 성채 귀환 처리
+                    const toCitadelAfterEscapeBattle = () => {
+                      gm.isEmergencyEscapeBattle = false;
+                      const { lostCount, keptCount } = gm.settleEmergencyEscapeLoot();
+                      gm.addLog(`🏃⚔️ [추격 마물 격파 후 귀환!] 도주로를 막아서던 추격대를 사투 끝에 물리치고 성채로 안전하게 귀환했습니다! (긴급 도주 중 전리품 [${lostCount}개] 유실, [${keptCount}개] 보존)`, 'reward', 'citadel');
+                      gm.clearPartyStatusEffects();
+                      gm.hasEnteredDungeon = true;
+                      gm.updateQuestObjective('Q_MAIN_02', 2, 1);
+                      gm.settleDungeonInventory(gm.dungeonFloor);
+                      gm.clearDungeonSession();
+                      gm.saveGame();
+                      navigateTo('citadel');
+                    };
+
                     const toExplorationAfterBattle = () => {
                       if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {
                         handleAdvanceTutorial('TUTORIAL_EXPLORE_CAMP');
@@ -8147,6 +8375,8 @@ export const BattleScreen: React.FC = () => {
 
                     if (gm.pendingLoot.length > 0) {
                       setShowLootModal(true);
+                    } else if (gm.isEmergencyEscapeBattle) {
+                      toCitadelAfterEscapeBattle();
                     } else {
                       toExplorationAfterBattle();
                     }
@@ -8166,18 +8396,44 @@ export const BattleScreen: React.FC = () => {
         open={showLootModal}
         onClose={() => {
           setShowLootModal(false);
-          if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {
-            handleAdvanceTutorial('TUTORIAL_EXPLORE_CAMP');
+          if (gm.isEmergencyEscapeBattle) {
+            gm.isEmergencyEscapeBattle = false;
+            const { lostCount, keptCount } = gm.settleEmergencyEscapeLoot();
+            gm.addLog(`🏃⚔️ [추격 마물 격파 후 귀환!] 도주로를 막아서던 추격대를 사투 끝에 물리치고 성채로 안전하게 귀환했습니다! (긴급 도주 중 전리품 [${lostCount}개] 유실, [${keptCount}개] 보존)`, 'reward', 'citadel');
+            gm.clearPartyStatusEffects();
+            gm.hasEnteredDungeon = true;
+            gm.updateQuestObjective('Q_MAIN_02', 2, 1);
+            gm.settleDungeonInventory(gm.dungeonFloor);
+            gm.clearDungeonSession();
+            gm.saveGame();
+            navigateTo('citadel');
+          } else {
+            if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {
+              handleAdvanceTutorial('TUTORIAL_EXPLORE_CAMP');
+            }
+            navigateTo('exploration');
           }
-          navigateTo('exploration');
         }}
-        completeButtonText="✅ 정리 완료 (탐험으로 이동)"
+        completeButtonText={gm.isEmergencyEscapeBattle ? "✅ 정리 완료 (성채로 귀환)" : "✅ 정리 완료 (탐험으로 이동)"}
         onComplete={() => {
           setShowLootModal(false);
-          if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {
-            handleAdvanceTutorial('TUTORIAL_EXPLORE_CAMP');
+          if (gm.isEmergencyEscapeBattle) {
+            gm.isEmergencyEscapeBattle = false;
+            const { lostCount, keptCount } = gm.settleEmergencyEscapeLoot();
+            gm.addLog(`🏃⚔️ [추격 마물 격파 후 귀환!] 도주로를 막아서던 추격대를 사투 끝에 물리치고 성채로 안전하게 귀환했습니다! (긴급 도주 중 전리품 [${lostCount}개] 유실, [${keptCount}개] 보존)`, 'reward', 'citadel');
+            gm.clearPartyStatusEffects();
+            gm.hasEnteredDungeon = true;
+            gm.updateQuestObjective('Q_MAIN_02', 2, 1);
+            gm.settleDungeonInventory(gm.dungeonFloor);
+            gm.clearDungeonSession();
+            gm.saveGame();
+            navigateTo('citadel');
+          } else {
+            if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {
+              handleAdvanceTutorial('TUTORIAL_EXPLORE_CAMP');
+            }
+            navigateTo('exploration');
           }
-          navigateTo('exploration');
         }}
       />
 

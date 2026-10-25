@@ -1,0 +1,970 @@
+{
+  "수습 검사 루키": {
+    "en": "Novice Swordsman Rookie",
+    "ja": "見習い剣士ルーキー"
+  },
+  "견습 수녀 릴리": {
+    "en": "Apprentice Nun Lily",
+    "ja": "見習い修道女リリー"
+  },
+  "훈련병 한스": {
+    "en": "Trainee Hans",
+    "ja": "訓練兵ハンス"
+  },
+  "마도 실습생 핀": {
+    "en": "Mage Apprentice Finn",
+    "ja": "魔導実習生フィン"
+  },
+  "길거리 격투가 잭": {
+    "en": "Street Brawler Jack",
+    "ja": "路地裏の喧嘩屋ジャック"
+  },
+  "창술사 볼트": {
+    "en": "Lancer Bolt",
+    "ja": "槍術士ボルト"
+  },
+  "그림자 연습생": {
+    "en": "Shadow Trainee",
+    "ja": "影の練習生"
+  },
+  "강철 수호병 바란": {
+    "en": "Iron Sentinel Baran",
+    "ja": "鋼鉄の守護兵バラン"
+  },
+  "성역의 순례자 엘렌": {
+    "en": "Sanctuary Pilgrim Ellen",
+    "ja": "聖域の巡礼者エレン"
+  },
+  "황야의 저격수 로빈": {
+    "en": "Wasteland Marksman Robin",
+    "ja": "荒野の狙撃手ロビン"
+  },
+  "철혈의 바사라": {
+    "en": "Iron-Blooded Basara",
+    "ja": "鉄血のバサラ"
+  },
+  "황금의 아라나": {
+    "en": "Golden Arana",
+    "ja": "黄金のアラナ"
+  },
+  "진홍의 저격수 레이첼": {
+    "en": "Crimson Marksman Rachel",
+    "ja": "真紅の狙撃手レイチェル"
+  },
+  "비전의 마도사 레온": {
+    "en": "Arcane Mage Leon",
+    "ja": "秘術の魔導士レオン"
+  },
+  "질풍의 검사 렌": {
+    "en": "Gale Swordsman Ren",
+    "ja": "疾風の剣士レン"
+  },
+  "심연의 루나": {
+    "en": "Abyssal Luna",
+    "ja": "深淵のルナ"
+  },
+  "폭풍의 제라드": {
+    "en": "Storm Gerard",
+    "ja": "嵐のジェラード"
+  },
+  "철벽의 수호자 가렌": {
+    "en": "Ironclad Guardian Garen",
+    "ja": "鉄壁の守護者ガレン"
+  },
+  "시공의 마탄사 카일": {
+    "en": "Chrono Gunslinger Kyle",
+    "ja": "時空の魔弾士カイル"
+  },
+  "성역의 수호희 세실리아": {
+    "en": "Sanctuary Maiden Cecilia",
+    "ja": "聖域の守護姫セシリア"
+  },
+  "절대방벽 볼코프": {
+    "en": "Absolute Aegis Volkov",
+    "ja": "絶対防壁ヴォルコフ"
+  },
+  "환영술사 미라주": {
+    "en": "Illusionist Mirage",
+    "ja": "幻影術士ミラージュ"
+  },
+  "발할라 선봉장 지그프리트": {
+    "en": "Valhalla Vanguard Siegfried",
+    "ja": "ヴァルハラ先鋒長ジークフリート"
+  },
+  "여명의 대주교 세라핌": {
+    "en": "Archbishop of Dawn Seraphim",
+    "ja": "黎明の大主教セラフィム"
+  },
+  "심연의 마탄황 로이드": {
+    "en": "Abyssal Bullet King Lloyd",
+    "ja": "深淵の魔弾皇ロイド"
+  },
+  "신벌의 발키리아": {
+    "en": "Divine Punishment Valkyria",
+    "ja": "神罰のヴァルキリア"
+  },
+  "재앙의 인도자 벨리알": {
+    "en": "Herald of Calamity Belial",
+    "ja": "災厄の導き手ベリアル"
+  },
+  "불멸의 검성 렌": {
+    "en": "Immortal Sword Saint Ren",
+    "ja": "不滅の剣聖レン"
+  },
+  "공허의 지배관 에레보스": {
+    "en": "Void Ruler Erebos",
+    "ja": "虚空の支配官エレボス"
+  },
+  "차원의 지배자 크로노스": {
+    "en": "Dimensional Overlord Chronos",
+    "ja": "次元の支配者クロノス"
+  },
+  "무한의 수호룡 테라": {
+    "en": "Infinite Guardian Dragon Terra",
+    "ja": "無限の守護竜テラ"
+  },
+  "황혼의 심판자 오리온": {
+    "en": "Twilight Arbiter Orion",
+    "ja": "黄昏の審判者オリオン"
+  },
+  "모험가 초보자단": {
+    "en": "Novice Adventurers",
+    "ja": "冒険者初心者団"
+  },
+  "신록의 기도원": {
+    "en": "Verdant Sanctuary",
+    "ja": "新緑の祈祷院"
+  },
+  "성채 방위대 훈련소": {
+    "en": "Citadel Guard Camp",
+    "ja": "城砦防衛隊訓練所"
+  },
+  "마법 학술원 초급반": {
+    "en": "Mage Academy Junior Class",
+    "ja": "魔法学術院初級クラス"
+  },
+  "뒷골목 자경단": {
+    "en": "Backstreet Vigilantes",
+    "ja": "裏通りの自警団"
+  },
+  "붉은 창끝 길드": {
+    "en": "Red Spearpoint Guild",
+    "ja": "紅き槍先ギルド"
+  },
+  "밤까마귀 도적단": {
+    "en": "Night Raven Bandits",
+    "ja": "夜烏の盗賊団"
+  },
+  "아이언 가드 연대": {
+    "en": "Iron Guard Regiment",
+    "ja": "アイアンガード連隊"
+  },
+  "여명의 수도회": {
+    "en": "Dawn Fellowship",
+    "ja": "黎明の修道会"
+  },
+  "은빛 화살 용병단": {
+    "en": "Silver Arrow Mercenaries",
+    "ja": "銀の矢傭兵団"
+  },
+  "달빛 기사단": {
+    "en": "Moonlight Knights",
+    "ja": "月光騎士団"
+  },
+  "비호 용병단": {
+    "en": "Flying Tiger Mercenaries",
+    "ja": "飛虎傭兵団"
+  },
+  "상아탑 마도연맹": {
+    "en": "Ivory Tower Mage League",
+    "ja": "象牙の塔魔導連盟"
+  },
+  "일섬 유파": {
+    "en": "Single Flash School",
+    "ja": "一閃流派"
+  },
+  "심연 탐험단": {
+    "en": "Abyssal Expedition",
+    "ja": "深淵探検団"
+  },
+  "황금 독수리단": {
+    "en": "Golden Eagle Order",
+    "ja": "黄金の鷲団"
+  },
+  "방주 방위사령부": {
+    "en": "Ark Defense HQ",
+    "ja": "方舟防衛司令部"
+  },
+  "에테르 연금단": {
+    "en": "Aether Alchemists",
+    "ja": "エーテル錬金団"
+  },
+  "빛의 수호성당": {
+    "en": "Cathedral of Light",
+    "ja": "光の守護聖堂"
+  },
+  "아이언 가디언즈": {
+    "en": "Iron Guardians",
+    "ja": "アイアンガーディアンズ"
+  },
+  "시공의 유랑단": {
+    "en": "Chrono Nomads",
+    "ja": "時空の流浪団"
+  },
+  "발할라 기사단": {
+    "en": "Valhalla Knights",
+    "ja": "ヴァルハラ騎士団"
+  },
+  "천상 성역 수도원": {
+    "en": "Celestial Sanctuary Abbey",
+    "ja": "天上聖域修道院"
+  },
+  "블랙 불릿 여단": {
+    "en": "Black Bullet Brigade",
+    "ja": "ブラックブレット旅団"
+  },
+  "천상의 성역": {
+    "en": "Celestial Sanctuary",
+    "ja": "天上の聖域"
+  },
+  "흑사자 정예대": {
+    "en": "Black Lion Elites",
+    "ja": "黒獅子精鋭隊"
+  },
+  "심연의 무극관": {
+    "en": "Abyssal Martial Hall",
+    "ja": "深淵の無極館"
+  },
+  "공허 숭배단": {
+    "en": "Void Cult",
+    "ja": "虚空崇拝団"
+  },
+  "시공간 최고평의회": {
+    "en": "Space-Time High Council",
+    "ja": "時空間最高評議会"
+  },
+  "용혈의 성채": {
+    "en": "Dragonblood Citadel",
+    "ja": "竜血の城砦"
+  },
+  "별빛 천구관": {
+    "en": "Starlight Celestial Hall",
+    "ja": "星光の天球館"
+  },
+  "회피 금지의 칙령": {
+    "en": "Edict of No Evade",
+    "ja": "回避禁止の勅令"
+  },
+  "차원 결투장 전역에 회피 불가 결계가 가동됩니다. (💨 EVADE 뱃지 획득 불가)": {
+    "en": "An anti-evasion barrier is active across the Arena. (💨 EVADE badges disabled)",
+    "ja": "次元決闘場全域に回避不可結界が展開されます。(💨 EVADEバッジ獲得不可)"
+  },
+  "치명 금지의 칙령": {
+    "en": "Edict of No Crit",
+    "ja": "致命禁止の勅令"
+  },
+  "차원 결투장 전역에 치명타 불가 결계가 가동됩니다. (💥 CRIT 뱃지 획득 불가)": {
+    "en": "An anti-critical barrier is active across the Arena. (💥 CRIT badges disabled)",
+    "ja": "次元決闘場全域に会心不可結界が展開されます。(💥 CRITバッジ獲得不可)"
+  },
+  "파쇄 금지의 칙령": {
+    "en": "Edict of No Break",
+    "ja": "破砕禁止の勅令"
+  },
+  "차원 결투장 전역에 파쇄 불가 결계가 가동됩니다. (💫 BREAK 뱃지 획득 불가)": {
+    "en": "An anti-shatter barrier is active across the Arena. (💫 BREAK badges disabled)",
+    "ja": "次元決闘場全域に破砕不可結界が展開されます。(💫 BREAKバッジ獲得不可)"
+  },
+  "수호 금지의 칙령": {
+    "en": "Edict of No Guard",
+    "ja": "守護禁止の勅令"
+  },
+  "차원 결투장 전역에 수호 개입 불가 결계가 가동됩니다. (🛡️ GUARD 뱃지 획득 불가)": {
+    "en": "An anti-guard barrier is active across the Arena. (🛡️ GUARD badges disabled)",
+    "ja": "次元決闘場全域に守護介入不可結界が展開されます。(🛡️ GUARDバッジ獲得不可)"
+  },
+  "치유 금지의 칙령": {
+    "en": "Edict of No Heal",
+    "ja": "治癒禁止の勅令"
+  },
+  "차원 결투장 전역에 신성 치유 불가 결계가 가동됩니다. (✨ HEAL 뱃지 획득 불가)": {
+    "en": "An anti-healing barrier is active across the Arena. (✨ HEAL badges disabled)",
+    "ja": "次元決闘場全域に治癒不可結界が展開されます。(✨ HEALバッジ獲得不可)"
+  },
+  "자유 결투의 칙령": {
+    "en": "Edict of Free Duel",
+    "ja": "自由決闘の勅令"
+  },
+  "모든 피버 뱃지 획득이 자유롭게 허용되는 전술 칙령입니다. (🚫 금지 배지 없음)": {
+    "en": "A tactical edict where all Fever badges are permitted. (🚫 No Banned Badges)",
+    "ja": "すべてのフィーバーバッジ獲得が許可される戦術勅令です。(🚫 禁止バッジなし)"
+  },
+  "원정대 사령관": {
+    "en": "Expedition Commander",
+    "ja": "遠征隊司令官"
+  },
+  "수비대 사령관": {
+    "en": "Defense Commander",
+    "ja": "防衛隊司令官"
+  },
+  "아군 오퍼레이터": {
+    "en": "Ally Operator",
+    "ja": "味方オペレーター"
+  },
+  "상대 오퍼레이터": {
+    "en": "Opponent Operator",
+    "ja": "相手オペレーター"
+  },
+  "지휘관": {
+    "en": "Commander",
+    "ja": "指揮官"
+  },
+  "궁극기": {
+    "en": "Ultimate",
+    "ja": "究極技"
+  },
+  "기본 오의": {
+    "en": "Basic Secret Skill",
+    "ja": "基本奥義"
+  },
+  "가호": {
+    "en": "Blessing",
+    "ja": "加護"
+  },
+  "💨 EVADE (회피 뱃지 획득 불가)": {
+    "en": "💨 EVADE (Cannot acquire Evade badges)",
+    "ja": "💨 EVADE (回避バッジ獲得不可)"
+  },
+  "💥 CRIT (치명 뱃지 획득 불가)": {
+    "en": "💥 CRIT (Cannot acquire Crit badges)",
+    "ja": "💥 CRIT (会心バッジ獲得不可)"
+  },
+  "💫 BREAK (파쇄 뱃지 획득 불가)": {
+    "en": "💫 BREAK (Cannot acquire Break badges)",
+    "ja": "💫 BREAK (破砕バッジ獲得不可)"
+  },
+  "🛡️ GUARD (수호 뱃지 획득 불가)": {
+    "en": "🛡️ GUARD (Cannot acquire Guard badges)",
+    "ja": "🛡️ GUARD (守護バッジ獲得不可)"
+  },
+  "✨ HEAL (치유 뱃지 획득 불가)": {
+    "en": "✨ HEAL (Cannot acquire Heal badges)",
+    "ja": "✨ HEAL (治癒バッジ獲得不可)"
+  },
+  "🚫 금지 배지 없음": {
+    "en": "🚫 No Banned Badges",
+    "ja": "🚫 禁止バッジなし"
+  },
+  "차원 앵커 게이트 미건설": {
+    "en": "Dimensional Gate Not Built",
+    "ja": "次元アンカーゲート未建設"
+  },
+  "차원의 관문이 아직 닫혀 있습니다.": {
+    "en": "The Dimensional Gate is still closed.",
+    "ja": "次元の門がまだ閉ざされています。"
+  },
+  "성채(Citadel)에서 영혼의 제단(Lv.1)을 먼저 세운 후 차원 앵커 게이트를 건설하여 3v3 아레나, 네메시스, 영지 침공을 개방하십시오.": {
+    "en": "Build the Altar of Souls (Lv.1) in the Citadel first, then erect the Dimensional Anchor Gate to unlock 3v3 Arena, Nemesis, and Territory Invasion.",
+    "ja": "方舟城砦で魂の祭壇(Lv.1)を建立後、次元アンカーゲートを建設して3v3アリーナ、ネメシス、領地侵攻を開放してください。"
+  },
+  "🏰 방주 성채로 돌아가기": {
+    "en": "🏰 Return to Citadel",
+    "ja": "🏰 方舟城砦へ戻る"
+  },
+  "차원 아레나": {
+    "en": "Dimensional Arena",
+    "ja": "次元アリーナ"
+  },
+  "차원 관문 미개방": {
+    "en": "Dimensional Gate Locked",
+    "ja": "次元の門未開放"
+  },
+  "차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다.\n(현재 게이트 레벨: Lv.{0})\n\n성채에서 차원 앵커 게이트를 증축해주세요.": {
+    "en": "Dimensional Nemesis World Raid unlocks from Dimensional Gate Lv.3.\n(Current Gate Level: Lv.{0})\n\nPlease upgrade the Dimensional Anchor Gate in the Citadel.",
+    "ja": "次元ネメシス・ワールドレイドは次元アンカーゲートLv.3以上から開放されます。\n(現在のゲートレベル: Lv.{0})\n\n城砦で次元アンカーゲートを増築してください。"
+  },
+  "네메시스": {
+    "en": "Nemesis",
+    "ja": "ネメシス"
+  },
+  "차원 영지 침공(5인 원정대 약탈전)은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.\n(현재 게이트 레벨: Lv.{0})\n\n성채에서 차원 앵커 게이트를 증축해주세요.": {
+    "en": "Territory Invasion (5v5 Plunder Raid) unlocks from Dimensional Gate Lv.6.\n(Current Gate Level: Lv.{0})\n\nPlease upgrade the Dimensional Anchor Gate in the Citadel.",
+    "ja": "次元領地侵攻(5人遠征隊略奪戦)は次元アンカーゲートLv.6以上から開放されます。\n(現在のゲートレベル: Lv.{0})\n\n城砦で次元アンカーゲートを増築してください。"
+  },
+  "영지 침공": {
+    "en": "Territory Invasion",
+    "ja": "領地侵攻"
+  },
+  "Top 10 랭커 전용 PVE 버프 발동 중": {
+    "en": "Top 10 Ranker Exclusive PVE Buff Active",
+    "ja": "Top 10 ランカー専用PVEバフ発動中"
+  },
+  "전 파티원 ATK/HP +15% · 식량 소모 -20% · 희귀 드랍률 +25%": {
+    "en": "All Allies ATK/HP +15% · Food Consumption -20% · Rare Drop Rate +25%",
+    "ja": "全パーティ ATK/HP +15% · 食糧消費 -20% · レアドロップ率 +25%"
+  },
+  "보유 투사의 인장": {
+    "en": "Fighter's Seals Owned",
+    "ja": "所持している闘士の印章"
+  },
+  "인장 획득 ➔ 명예 상점에서 장비 교환": {
+    "en": "Earn Seals ➔ Exchange Gear in Honor Shop",
+    "ja": "印章獲得 ➔ 名誉商店で装備交換"
+  },
+  "⚔️ 차원 매칭": {
+    "en": "⚔️ Matchmaking",
+    "ja": "⚔️ 次元マッチング"
+  },
+  "🏆 클라우드 랭킹": {
+    "en": "🏆 Cloud Rankings",
+    "ja": "🏆 クラウドランキング"
+  },
+  "🎖️ 명예 암시장": {
+    "en": "🎖️ Honor Black Market",
+    "ja": "🎖️ 名誉の闇市場"
+  },
+  "차원 3인 결투 부대 미편성": {
+    "en": "3-Hero Duel Squad Incomplete",
+    "ja": "次元3人決闘部隊未編成"
+  },
+  "현재 {0}/3인 배치": {
+    "en": "Current {0}/3 Deployed",
+    "ja": "現在 {0}/3人配置"
+  },
+  "차원 아레나는 전열/중열/후열 3인 부대가 모두 배치되어야 결투를 치를 수 있습니다.": {
+    "en": "Dimensional Arena requires all 3 slots (Front/Mid/Back) to be deployed before dueling.",
+    "ja": "次元アリーナは前衛・中衛・後衛の3人部隊がすべて配置されていないと決闘できません。"
+  },
+  "3인 자동 편성": {
+    "en": "Auto-Deploy 3",
+    "ja": "3人自動編成"
+  },
+  "주점에서 영입": {
+    "en": "Recruit at Tavern",
+    "ja": "酒場で雇用"
+  },
+  "부대 직접 편성": {
+    "en": "Manual Squad Deployment",
+    "ja": "部隊を手動編成"
+  },
+  "투사의 연속 승리 특전:": {
+    "en": "Fighter's Winning Streak Bonus:",
+    "ja": "闘士の連勝特典:"
+  },
+  "{0}연승 진행 중!": {
+    "en": "{0}-Win Streak Active!",
+    "ja": "{0}連勝中！"
+  },
+  "장비 강화 보너스 & 추가 인장 획득": {
+    "en": "Gear Enhancement Bonus & Extra Seals",
+    "ja": "装備強化ボーナス＆追加印章獲得"
+  },
+  "프리시즌 AI 전술 훈련 리그 진행 중": {
+    "en": "Pre-Season AI Tactical Training League in Progress",
+    "ja": "プレシーズンAI戦術訓練リーグ開催中"
+  },
+  "브론즈부터 마스터까지 전 등급 AI 봇이 균등 배치되어 3인 홀덤 & 피버 전략을 연습할 수 있습니다.": {
+    "en": "AI bots across all tiers from Bronze to Master are deployed so you can practice 3-Hero Hold'em & Fever tactics.",
+    "ja": "ブロンズからマスターまで全ランクのAIボットが均等に配置され、3人ホールデム＆フィーバー戦略を練習できます。"
+  },
+  "이번 주의 차원 칙령:": {
+    "en": "Weekly Dimensional Edict:",
+    "ja": "今週の次元勅令:"
+  },
+  "성채 병영의 차원 결투 부대 편성 화면으로 이동": {
+    "en": "Go to the Barracks Dimensional Squad Setup in Citadel",
+    "ja": "城砦兵舎の次元決闘部隊編成画面へ移動"
+  },
+  "부대 편성": {
+    "en": "Squad Setup",
+    "ja": "部隊編成"
+  },
+  "족보 도감 열람": {
+    "en": "View Fever Codex",
+    "ja": "役図鑑を閲覧"
+  },
+  "도전 가능한 AI 봇 대진표": {
+    "en": "Challengeable AI Bot Roster",
+    "ja": "挑戦可能なAIボット対陣表"
+  },
+  "내 등급": {
+    "en": "My Tier",
+    "ja": "自分のランク"
+  },
+  "맞춤 대진 & 상위 승급전": {
+    "en": "Custom Match & Promotion Matches",
+    "ja": "カスタム対陣＆上位昇格戦"
+  },
+  "승급 도전": {
+    "en": "Promotion Match",
+    "ja": "昇格挑戦"
+  },
+  "⚔️ 결투 시작": {
+    "en": "⚔️ Start Duel",
+    "ja": "⚔️ 決闘開始"
+  },
+  "❓ [비공개]": {
+    "en": "❓ [Hidden]",
+    "ja": "❓ [非公開]"
+  },
+  "히든 실루엣": {
+    "en": "Hidden Silhouette",
+    "ja": "ヒドゥンシルエット"
+  },
+  "프리시즌 AI 전술 훈련 리그 순위표": {
+    "en": "Pre-Season AI Tactical Training Leaderboard",
+    "ja": "プレシーズンAI戦術訓練リーグ順位表"
+  },
+  "동기화 중...": {
+    "en": "Syncing...",
+    "ja": "同期中..."
+  },
+  "🔄 갱신": {
+    "en": "🔄 Refresh",
+    "ja": "🔄 更新"
+  },
+  "내 원정단 (지휘관)": {
+    "en": "My Expedition (Commander)",
+    "ja": "我が遠征隊 (指揮官)"
+  },
+  "방주 성채 수호단": {
+    "en": "Ark Citadel Guardians",
+    "ja": "方舟城砦守護団"
+  },
+  "AI 봇": {
+    "en": "AI Bot",
+    "ja": "AIボット"
+  },
+  "명예의 암시장": {
+    "en": "Honor Black Market",
+    "ja": "名誉の闇市場"
+  },
+  "게이트": {
+    "en": "Gate",
+    "ja": "ゲート"
+  },
+  "게이트 증축에 따라 상위 장비·보급함·마도석이 개방됩니다.": {
+    "en": "Upgrading the gate unlocks higher-tier gear, supply chests, and magic stones.",
+    "ja": "ゲートの増築に応じて上位装備・補給箱・魔導石が開放されます。"
+  },
+  "🎁 장비 보급함": {
+    "en": "🎁 Gear Chests",
+    "ja": "🎁 装備補給箱"
+  },
+  "⚔️ 투사 무구": {
+    "en": "⚔️ Gladiator Gear",
+    "ja": "⚔️ 闘士の武具"
+  },
+  "💎 촉매/마도석": {
+    "en": "💎 Catalysts & Stones",
+    "ja": "💎 触媒/魔導石"
+  },
+  "🍖 보급품": {
+    "en": "🍖 Supplies",
+    "ja": "🍖 補給品"
+  },
+  "필요": {
+    "en": "Required",
+    "ja": "必要"
+  },
+  "교환": {
+    "en": "Exchange",
+    "ja": "交換"
+  },
+  "잠김": {
+    "en": "Locked",
+    "ja": "施錠"
+  },
+  "🏰 방주 성채로 귀환": {
+    "en": "🏰 Return to Ark Citadel",
+    "ja": "🏰 方舟城砦へ帰還"
+  },
+  "3v3 차원 아레나 제{0}라운드 · 속도(SPD) 턴제 교전": {
+    "en": "3v3 Dimensional Arena Round {0} · SPD Turn-based Combat",
+    "ja": "3v3次元アリーナ第{0}ラウンド · 速度(SPD)ターン制戦闘"
+  },
+  "스킵": {
+    "en": "Skip",
+    "ja": "スキップ"
+  },
+  "아군 피버": {
+    "en": "Ally Fever",
+    "ja": "味方フィーバー"
+  },
+  "피버 3선승": {
+    "en": "Fever Best of 3",
+    "ja": "フィーバー3先取"
+  },
+  "상대 피버": {
+    "en": "Opponent Fever",
+    "ja": "相手フィーバー"
+  },
+  "배지 오픈 {0}/5": {
+    "en": "Badges Revealed {0}/5",
+    "ja": "バッジオープン {0}/5"
+  },
+  "🎉 아군 승리": {
+    "en": "🎉 Ally Victory",
+    "ja": "🎉 味方勝利"
+  },
+  "💀 적군 승리": {
+    "en": "💀 Enemy Victory",
+    "ja": "💀 敵軍勝利"
+  },
+  "⚡ 전술 무승부": {
+    "en": "⚡ Tactical Draw",
+    "ja": "⚡ 戦術引き分け"
+  },
+  "상대 결투 부대": {
+    "en": "Opponent Duel Squad",
+    "ja": "相手の決闘部隊"
+  },
+  "점수 {0} P": {
+    "en": "Score {0} P",
+    "ja": "スコア {0} P"
+  },
+  "족보 분석 중...": {
+    "en": "Analyzing Hand...",
+    "ja": "役を分析中..."
+  },
+  "내 차원 결투 부대": {
+    "en": "My Dimensional Duel Squad",
+    "ja": "我が次元決闘部隊"
+  },
+  "전술 오퍼레이터 궁극기 연계 발동!": {
+    "en": "Tactical Operator Ultimate Combo Activated!",
+    "ja": "戦術オペレーター究極技連携発動！"
+  },
+  "화면을 터치하면 즉시 전장으로 이어집니다.": {
+    "en": "Tap the screen to return to the battlefield immediately.",
+    "ja": "画面をタップすると即座に戦場へ移行します。"
+  },
+  "{0}의 궁극기 폭발!": {
+    "en": "{0}'s Ultimate Burst!",
+    "ja": "{0}の究極技炸裂！"
+  },
+  "차원 리더": {
+    "en": "Dimensional Leader",
+    "ja": "次元リーダー"
+  },
+  "{0}의 심연 궁극기 발동!": {
+    "en": "{0}'s Abyssal Ultimate Unleashed!",
+    "ja": "{0}の深淵究極技発動！"
+  },
+  "상대 리더": {
+    "en": "Opponent Leader",
+    "ja": "相手リーダー"
+  },
+  "상대 아레나 방어자": {
+    "en": "Opponent Arena Defender",
+    "ja": "相手アリーナ防御者"
+  },
+  "💀 사경 ({0}T)": {
+    "en": "💀 Dying ({0}T)",
+    "ja": "💀 死線 ({0}T)"
+  },
+  "사경 ({0}턴)": {
+    "en": "Dying ({0} turns)",
+    "ja": "死線 ({0}ターン)"
+  },
+  "⚡ 아군 [피버 콜!] (상대 유예: {0}턴 남음)": {
+    "en": "⚡ Ally [Fever Call!] (Opponent Grace: {0} turns left)",
+    "ja": "⚡ 味方 [フィーバーコール！] (相手猶予: 残り{0}ターン)"
+  },
+  "⚠️ 상대 [피버 콜!] (아군 유예: {0}턴 남음)": {
+    "en": "⚠️ Opponent [Fever Call!] (Ally Grace: {0} turns left)",
+    "ja": "⚠️ 相手 [フィーバーコール！] (味方猶予: 残り{0}ターン)"
+  },
+  "아군 차원 투사": {
+    "en": "Ally Dimensional Gladiator",
+    "ja": "味方次元闘士"
+  },
+  "{0}의 행동 선택": {
+    "en": "Select Action for {0}",
+    "ja": "{0}の行動選択"
+  },
+  "타겟": {
+    "en": "Target",
+    "ja": "ターゲット"
+  },
+  "마나": {
+    "en": "Mana",
+    "ja": "マナ"
+  },
+  "쿨타임": {
+    "en": "Cooldown",
+    "ja": "クールダウン"
+  },
+  "턴": {
+    "en": "Turns",
+    "ja": "ターン"
+  },
+  "{0}턴 대기": {
+    "en": "{0} Turn Cooldown",
+    "ja": "{0}ターン待機"
+  },
+  "스킬 정보 상세 보기": {
+    "en": "View Skill Details",
+    "ja": "スキル詳細を確認"
+  },
+  "차원 결투 진행 중": {
+    "en": "Dimensional Duel in Progress",
+    "ja": "次元決闘進行中"
+  },
+  "▶️ 자동 전투 연계": {
+    "en": "▶️ Auto Battle Combo",
+    "ja": "▶️ 自動戦闘連携"
+  },
+  "⏸️ 상대 행동 중": {
+    "en": "⏸️ Opponent Acting",
+    "ja": "⏸️ 相手の行動中"
+  },
+  "차원 결투 대승리!": {
+    "en": "Dimensional Duel Glorious Victory!",
+    "ja": "次元決闘大勝利！"
+  },
+  "차원 결투 패배...": {
+    "en": "Dimensional Duel Defeat...",
+    "ja": "次元決闘敗北..."
+  },
+  "레이팅 변화": {
+    "en": "Rating Change",
+    "ja": "レート変動"
+  },
+  "투사의 인장": {
+    "en": "Fighter's Seal",
+    "ja": "闘士の印章"
+  },
+  "연승 기록": {
+    "en": "Winning Streak",
+    "ja": "連勝記録"
+  },
+  "연승 🔥": {
+    "en": "Streak 🔥",
+    "ja": "連勝 🔥"
+  },
+  "클릭하여 리포트 접기": {
+    "en": "Click to Collapse Report",
+    "ja": "クリックしてレポートを折りたたむ"
+  },
+  "클릭하여 리포트 펼치기": {
+    "en": "Click to Expand Report",
+    "ja": "クリックしてレポートを展開"
+  },
+  "회 격돌": {
+    "en": "Clashes",
+    "ja": "回激突"
+  },
+  "승": {
+    "en": "W",
+    "ja": "勝"
+  },
+  "상대": {
+    "en": "Opponent",
+    "ja": "相手"
+  },
+  "▲ 접기": {
+    "en": "▲ Collapse",
+    "ja": "▲ 折りたたむ"
+  },
+  "▼ 펼치기": {
+    "en": "▼ Expand",
+    "ja": "▼ 展開"
+  },
+  "차 피버콜 격돌": {
+    "en": "th Fever Call Clash",
+    "ja": "回目フィーバーコール激突"
+  },
+  "3턴 유예 타임아웃": {
+    "en": "3-Turn Grace Timeout",
+    "ja": "3ターン猶予タイムアウト"
+  },
+  "👑 아군 승리": {
+    "en": "👑 Ally Victory",
+    "ja": "👑 味方勝利"
+  },
+  "💀 상대 승리": {
+    "en": "💀 Opponent Victory",
+    "ja": "💀 相手勝利"
+  },
+  "이번 결투에서는 피버 완충 전 승패가 결정되어 피버콜이 발생하지 않았습니다.": {
+    "en": "The duel concluded before either side fully charged their Fever, so no Fever Call occurred.",
+    "ja": "今回の決闘ではフィーバー満タン前に勝敗が決したため、フィーバーコールは発生しませんでした。"
+  },
+  "명예 암시장 오픈": {
+    "en": "Honor Black Market Open",
+    "ja": "名誉の闇市場オープン"
+  },
+  "획득한 인장으로 등급별 장비함 및 무구를 구매하세요": {
+    "en": "Purchase tiered gear chests and weapons using your earned seals.",
+    "ja": "獲得した印章でランク別装備箱や武具を購入しましょう"
+  },
+  "상점 이동 ➔": {
+    "en": "Go to Shop ➔",
+    "ja": "商店へ移動 ➔"
+  },
+  "🎉 영웅 레벨업 달성: {0}": {
+    "en": "🎉 Heroes Leveled Up: {0}",
+    "ja": "🎉 英雄レベルアップ達成: {0}"
+  },
+  "🏆 결투 결과 확인 (아레나 로비 복귀)": {
+    "en": "🏆 Confirm Results (Return to Arena Lobby)",
+    "ja": "🏆 決闘結果を確認 (アリーナロビーへ帰還)"
+  },
+  "상대 레이팅": {
+    "en": "Opponent Rating",
+    "ja": "相手レート"
+  },
+  "랭킹": {
+    "en": "Ranking",
+    "ja": "ランキング"
+  },
+  "(차원 허상 AI)": {
+    "en": "(Dimensional Phantom AI)",
+    "ja": "(次元虚像AI)"
+  },
+  "(방주 사령관)": {
+    "en": "(Ark Commander)",
+    "ja": "(方舟司令官)"
+  },
+  "차원 아레나 3v3 랭킹 결투 개시!": {
+    "en": "Dimensional Arena 3v3 Ranked Duel Engage!",
+    "ja": "次元アリーナ3v3ランキング決闘開始！"
+  },
+  "3인 결사대 + 1인 리더 + 1인 서포터 전술 편성 완료 · 결투장 진입 중": {
+    "en": "3-Hero Squad + 1 Leader + 1 Supporter tactical formation ready · Entering the Arena",
+    "ja": "3人決死隊＋1人リーダー＋1人サポーターの戦術編成完了 · 決闘場へ入場中"
+  },
+  "차원 아레나: 피버 족보 & 상성 대도감": {
+    "en": "Dimensional Arena: Fever Hand Codex & Affinities",
+    "ja": "次元アリーナ: フィーバー役＆相性大図鑑"
+  },
+  "3인의 수호자가 엮어내는 전술 포커의 위계와 주간 차원율의 상성을 한눈에 확인하십시오.": {
+    "en": "Review the tactical poker hierarchy forged by the 3 guardians and the weekly dimensional affinity cycles at a glance.",
+    "ja": "3人の守護者が織りなす戦術ポーカーの階級と週間次元率の相性を一目でご確認ください。"
+  },
+  "이번 주의 차원율:": {
+    "en": "Weekly Dimensional Rate:",
+    "ja": "今週の次元率:"
+  },
+  "매주 월요일 00:00 순환": {
+    "en": "Cycles every Monday at 00:00",
+    "ja": "毎週月曜日 00:00 循環"
+  },
+  "상성 순환 구조": {
+    "en": "Affinity Cycle System",
+    "ja": "相性循環構造"
+  },
+  "상성 우위 특전": {
+    "en": "Affinity Advantage Perk",
+    "ja": "相性優位特典"
+  },
+  "족보 맞대결 시 판정 계급 +1단계 보너스": {
+    "en": "+1 Hand Tier Judgment Bonus during Showdowns",
+    "ja": "役の直接対決時に判定階級+1段階ボーナス"
+  },
+  "🚫 이번 주 금기 배지": {
+    "en": "🚫 Banned Badge of the Week",
+    "ja": "🚫 今週の禁忌バッジ"
+  },
+  "상성 판정 원리:": {
+    "en": "Affinity Judgment Principle:",
+    "ja": "相性判定の原理:"
+  },
+  "양측이 완성한 피버 족보의 계열(돌파/수호/변칙)을 대조하여 우위인 쪽은 족보 판정에서 1단계 높은 족보로 인정받습니다.": {
+    "en": "Comparing the categories (Breakthrough/Guard/Anomaly) of Fever hands, the advantageous side is treated as one tier higher in showdown judgment.",
+    "ja": "両陣営が完成させたフィーバー役の系統(突破/守護/変則)を対照し、優位な側は判定時に1段階高い役として認められます。"
+  },
+  "배지 가중치 총점표 (High Card Score)": {
+    "en": "Badge Weight Total Table (High Card Score)",
+    "ja": "バッジ加重合計表 (High Card Score)"
+  },
+  "노페어(전술 파동) 발생 시 적용": {
+    "en": "Applied when No Pair (Tactical Wave) occurs",
+    "ja": "ノーペア(戦術波動)発生時に適用"
+  },
+  "양측 모두 유효한 족보를 완성하지 못해 [전술 파동(High Card)]으로 격돌할 경우, 게이지 5칸에 누적된 배지들의 개별 가중치 총점을 합산하여 승패를 결정합니다.": {
+    "en": "When neither side completes a valid hand and clashes with [Tactical Wave (High Card)], victory is decided by summing the individual weight scores of the 5 accumulated badges.",
+    "ja": "双方が有効な役を完成できず[戦術波動(High Card)]で激突した場合、ゲージ5枠に累積された各バッジの個別加重合計点によって勝敗を決定します。"
+  },
+  "연계 (Extra)": {
+    "en": "Combo (Extra)",
+    "ja": "連携 (Extra)"
+  },
+  "스킬 콤보·추가타": {
+    "en": "Skill Combos & Extra Attacks",
+    "ja": "スキルコンボ・追撃"
+  },
+  "반격 (Counter)": {
+    "en": "Counter (Counter)",
+    "ja": "反撃 (Counter)"
+  },
+  "적 턴 반격 반응": {
+    "en": "Enemy Turn Counter Reactions",
+    "ja": "敵ターン反撃反応"
+  },
+  "치명 (Crit)": {
+    "en": "Critical (Crit)",
+    "ja": "会心 (Crit)"
+  },
+  "회심의 일격": {
+    "en": "Critical Strikes",
+    "ja": "会心の一撃"
+  },
+  "파쇄 (Break)": {
+    "en": "Shatter (Break)",
+    "ja": "破砕 (Break)"
+  },
+  "방어 분쇄·실드 관통": {
+    "en": "Armor Shred & Shield Piercing",
+    "ja": "防御粉砕・シールド貫通"
+  },
+  "방어 (Guard)": {
+    "en": "Defense (Guard)",
+    "ja": "防御 (Guard)"
+  },
+  "철벽 방어·막기": {
+    "en": "Ironclad Defense & Blocks",
+    "ja": "鉄壁防御・ガード"
+  },
+  "지원 (Assist)": {
+    "en": "Support (Assist)",
+    "ja": "支援 (Assist)"
+  },
+  "아군 버프·정화": {
+    "en": "Ally Buffs & Cleanses",
+    "ja": "味方バフ・浄化"
+  },
+  "치유 (Heal)": {
+    "en": "Healing (Heal)",
+    "ja": "治癒 (Heal)"
+  },
+  "생명력 회복": {
+    "en": "Health Recovery",
+    "ja": "生命力回復"
+  },
+  "회피 (Evade)": {
+    "en": "Evasion (Evade)",
+    "ja": "回避 (Evade)"
+  },
+  "완전 회피 기동": {
+    "en": "Complete Evasion Maneuver",
+    "ja": "完全回避機動"
+  },
+  "점": {
+    "en": "Pts",
+    "ja": "点"
+  },
+  "차원 피버 12대 전술 족보 (Synergy Rankings)": {
+    "en": "12 Dimensional Fever Tactical Hands (Synergy Rankings)",
+    "ja": "次元フィーバー12大戦術役 (Synergy Rankings)"
+  },
+  "위계 순위 높은 순 정렬": {
+    "en": "Sorted by Highest Rank Tier",
+    "ja": "階級順位の高い順に整列"
+  },
+  "필요 배지 조건": {
+    "en": "Required Badge Conditions",
+    "ja": "必要バッジ条件"
+  }
+}

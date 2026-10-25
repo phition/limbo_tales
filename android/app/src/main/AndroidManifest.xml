@@ -35,10 +35,15 @@
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
 
-        <!-- 📢 Google AdMob App ID (개발/테스트 중에는 샘플 App ID가 기본 적용되며, 실서비스 릴리즈 시 본인의 AdMob App ID로 교체합니다) -->
+        <!-- 📢 Google AdMob App ID (실서비스 릴리즈용 App ID) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-6764468741905727~8384969973" />
+
+        <!-- 🎮 Google Play Games Services v2 Project ID -->
+        <meta-data
+            android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/game_services_project_id" />
     </application>
 
     <!-- Permissions -->

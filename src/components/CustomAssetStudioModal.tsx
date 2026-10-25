@@ -15,7 +15,7 @@ interface Props {
 }
 
 type StudioTab = 'overview' | 'icons' | 'vfx' | 'dungeon' | 'monsters' | 'mercenaries' | 'npc' | 'bgm' | 'sfx';
-type IconCategory = 'all' | 'skills' | 'monster_skills' | 'resources' | 'status' | 'forge' | 'boss_equip' | 'buildings' | 'supplies' | 'events' | 'badges';
+type IconCategory = 'all' | 'skills' | 'monster_skills' | 'resources' | 'status' | 'forge' | 'boss_equip' | 'honor_equip' | 'nemesis_equip' | 'rank' | 'buildings' | 'supplies' | 'events' | 'badges';
 
 // 👑 직업 궁극기 및 마도서 미보유 고유 특수기 목록
 export const ULTIMATE_SKILL_KEYS = new Set<string>([
@@ -26,7 +26,9 @@ export const ULTIMATE_SKILL_KEYS = new Set<string>([
   'warlord_overwhelm', 'gun_aimed_snipe', 'tac_orbital_flare', 'sharp_abyssal_bullet',
   'gun_orbital_strike', 'scholar_arcane_overload', 'bishop_holy_assembly',
   'warpriest_holy_proclamation', 'fortress_ultimate', 'dancer_ultimate',
-  'chrono_ultimate', 'crusader_ultimate', 'marshal_ultimate', 'sniper_ultimate'
+  'chrono_ultimate', 'crusader_ultimate', 'marshal_ultimate', 'sniper_ultimate',
+  'bastion_avalon', 'void_dimension_slash', 'chrono_bigbang', 'seraph_grand_judgment',
+  'warlord_blood_tactics', 'omega_orbital_annihilation'
 ]);
 
 export type VfxCategoryFilter = 'all' | 'single' | 'aoe' | 'support' | 'craft' | 'boss' | 'monster' | 'status';
@@ -395,6 +397,16 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
             next[targetUploadKey.key.replace(/^book_/, 'skill_')] = dataUrl;
           } else if (targetUploadKey.key.startsWith('skill_')) {
             next[targetUploadKey.key.replace(/^skill_/, 'book_')] = dataUrl;
+          } else if (targetUploadKey.key === 'blacksmith') {
+            next['forge'] = dataUrl;
+          } else if (targetUploadKey.key === 'forge') {
+            next['blacksmith'] = dataUrl;
+          } else if (targetUploadKey.key === 'arenaGate') {
+            next['arena'] = dataUrl;
+          } else if (targetUploadKey.key === 'arena') {
+            next['arenaGate'] = dataUrl;
+          } else if (targetUploadKey.key === 'bonfire' && !next['citadel']) {
+            next['citadel'] = dataUrl;
           }
           return { ...prev, iconOverrides: next };
         });
@@ -593,7 +605,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
     }
 
     if (iconCategory === 'skills') {
-      const isClassSkill = key.startsWith('squire_') || key.startsWith('paladin_') || key.startsWith('guard_') || key.startsWith('valk_') || key.startsWith('rogue_') || key.startsWith('assassin_') || key.startsWith('phantom_') || key.startsWith('duel_') || key.startsWith('apprentice_') || key.startsWith('elem_') || key.startsWith('calamity_') || key.startsWith('acolyte_') || key.startsWith('saint_') || key.startsWith('van_') || key.startsWith('ber_') || key.startsWith('val_') || key.startsWith('warlord_') || key.startsWith('gun_') || key.startsWith('tac_') || key.startsWith('sharp_') || key.startsWith('scholar_') || key.startsWith('bishop_') || key.startsWith('warpriest_') || key.startsWith('fortress_') || key.startsWith('dancer_') || key.startsWith('chrono_') || key.startsWith('crusader_') || key.startsWith('marshal_') || key.startsWith('sniper_');
+      const isClassSkill = key.startsWith('squire_') || key.startsWith('paladin_') || key.startsWith('guard_') || key.startsWith('valk_') || key.startsWith('rogue_') || key.startsWith('assassin_') || key.startsWith('phantom_') || key.startsWith('duel_') || key.startsWith('apprentice_') || key.startsWith('elem_') || key.startsWith('calamity_') || key.startsWith('acolyte_') || key.startsWith('saint_') || key.startsWith('van_') || key.startsWith('ber_') || key.startsWith('val_') || key.startsWith('warlord_') || key.startsWith('gun_') || key.startsWith('tac_') || key.startsWith('sharp_') || key.startsWith('scholar_') || key.startsWith('bishop_') || key.startsWith('warpriest_') || key.startsWith('fortress_') || key.startsWith('dancer_') || key.startsWith('chrono_') || key.startsWith('crusader_') || key.startsWith('marshal_') || key.startsWith('sniper_') || key.startsWith('bastion_') || key.startsWith('void_') || key.startsWith('seraph_') || key.startsWith('omega_');
       const isGrimoireBookOrSkill = key.startsWith('book_') || key.startsWith('skill_');
       const isSpecialSkill = key === 'charge' || key === 'enhance_skill';
       if (!isClassSkill && !isGrimoireBookOrSkill && !isSpecialSkill) return false;
@@ -606,15 +618,40 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
       const isDroppableMonsterOrBossBook = key.startsWith('book_m_') || key.startsWith('book_boss_');
       if (!isDroppableMonsterOrBossBook) return false;
     }
-    if (iconCategory === 'resources' && !key.startsWith('wood') && !key.startsWith('stone') && !key.startsWith('iron') && !key.startsWith('food') && !key.startsWith('gold') && !key.startsWith('ether') && !key.startsWith('herb') && !key.startsWith('leather') && !key.startsWith('silk') && !key.startsWith('coal') && !key.startsWith('bone') && !key.startsWith('crystal') && !key.startsWith('void_shard') && !key.startsWith('prefix_stone') && !key.startsWith('suffix_stone') && !key.startsWith('relic_floor_')) return false;
+    if (iconCategory === 'resources' && 
+      !key.startsWith('wood') && 
+      !key.startsWith('stone') && 
+      !key.startsWith('iron') && 
+      !key.startsWith('food') && 
+      !key.startsWith('gold') && 
+      !key.startsWith('ether') && 
+      !key.startsWith('herb') && 
+      !key.startsWith('leather') && 
+      !key.startsWith('silk') && 
+      !key.startsWith('coal') && 
+      !key.startsWith('bone') && 
+      !key.startsWith('crystal') && 
+      !key.startsWith('void_shard') && 
+      !key.startsWith('dark_essence') && 
+      !key.startsWith('prefix_stone') && 
+      !key.startsWith('suffix_stone') && 
+      !key.startsWith('pure_prefix_stone') && 
+      !key.startsWith('pure_suffix_stone') && 
+      !key.startsWith('pure_mana_stone') && 
+      !key.startsWith('pure_') && 
+      !key.startsWith('relic_floor_')
+    ) return false;
     if (iconCategory === 'status' && !['bleed', 'poison', 'burn', 'freeze', 'stun', 'shield', 'debuff_atk', 'debuff_def', 'buff_atk', 'buff_def', 'regen', 'blind', 'riposte', 'immunity', 'aether_barrier', 'groggy', 'overcharge', 'warmth', 'stealth', 'vampiric', 'true_damage'].includes(key)) return false;
 
-    if (iconCategory === 'forge' && !key.startsWith('forge_t') && !key.startsWith('rec_') && !['forge', 'anvil', 'enhance_equipment', 'craft_grimoire', 'enhance_skill', 'charge'].includes(key)) return false;
+    if (iconCategory === 'forge' && !key.startsWith('forge_t') && !key.startsWith('rec_') && !['forge', 'anvil', 'enhance_equipment', 'craft_grimoire', 'enhance_skill', 'charge', 'prefix_stone', 'suffix_stone', 'pure_prefix_stone', 'pure_suffix_stone', 'pure_mana_stone'].includes(key)) return false;
     if (iconCategory === 'boss_equip' && !key.startsWith('boss_uniq_')) return false;
-    if (iconCategory === 'buildings' && !['bonfire', 'cabin', 'lumberCamp', 'quarry', 'tavern', 'blacksmith', 'sanctuary', 'alchemy', 'arenaGate', 'infirmary', 'market', 'storage', 'butchery', 'quests', 'codex'].includes(key)) return false;
+    if (iconCategory === 'honor_equip' && !key.startsWith('glory_') && !key.startsWith('equip_arena_') && key !== 'overlord_crown') return false;
+    if (iconCategory === 'nemesis_equip' && !key.includes('nemesis')) return false;
+    if (iconCategory === 'buildings' && !['bonfire', 'cabin', 'lumberCamp', 'quarry', 'tavern', 'blacksmith', 'forge', 'sanctuary', 'alchemy', 'arenaGate', 'arena', 'infirmary', 'market', 'storage', 'butchery', 'quests', 'codex', 'citadel', 'barracks', 'cemetery', 'explore'].includes(key)) return false;
     if (iconCategory === 'supplies' && !['torch', 'food', 'pickaxe', 'bandage', 'holy_water', 'key', 'skeleton_key', 'rift_anchor', 'compass', 'golden_toad', 'blood_contract', 'dimensional_whistle', 'enhanced_torch', 'enhanced_food', 'enhanced_pickaxe', 'enhanced_bandage', 'enhanced_holy_water', 'enhanced_key', 'enhanced_rift_anchor'].includes(key)) return false;
     if (iconCategory === 'events' && !key.startsWith('event_') && !key.startsWith('trap_')) return false;
-    if (iconCategory === 'badges' && !key.startsWith('badge_') && !key.startsWith('fever_') && key !== 'battle_victory') return false;
+    if (iconCategory === 'badges' && !key.startsWith('badge_') && !key.startsWith('fever_') && !key.startsWith('rank_') && key !== 'battle_victory') return false;
+    if (iconCategory === 'rank' && !key.startsWith('rank_')) return false;
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -978,6 +1015,9 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
                     { key: 'forge', label: '⚔️ 병기창 & 제작/단조' },
                     { key: 'boss_equip', label: '👑 보스 세트 (1~10F)' },
+                    { key: 'honor_equip', label: '🎖️ 명예 암시장 무구' },
+                    { key: 'nemesis_equip', label: '🌌 네메시스 정벌 무구' },
+                    { key: 'rank', label: '🏆 아레나 랭크 아이콘' },
                     { key: 'buildings', label: '영지 건물' },
                     { key: 'supplies', label: '보급품' },
                     { key: 'events', label: '🧭 던전 조우 이벤트' },
@@ -1022,7 +1062,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   const isCustomImage = isImageLike;
                   const isCustomEmoji = !!effectiveOverride && effectiveOverride !== 'emoji' && !isImageLike;
                   const isEmojiRestored = effectiveOverride === 'emoji';
-                  const isUltimate = ULTIMATE_SKILL_KEYS.has(key) || (meta.label && meta.label.includes('[궁극기]'));
+                  const isUltimate = ULTIMATE_SKILL_KEYS.has(key) || (meta.label && (meta.label.includes('[궁극기]') || meta.label.includes('[초월기]')));
                   const isGrimoireUnified = key.startsWith('book_');
                   const displayLabel = isGrimoireUnified
                     ? (meta.label || key).replace(/^(비전서|고대 마도서|신성 성전|태초의 성전):\s*/, '')
@@ -1045,6 +1085,15 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 title="전투 승리 모달 상단에 노출되는 승리 이모지/엠블럼"
                               >
                                 전투 승리 엠블럼
+                              </span>
+                            )}
+                            {/* ✨ 순수/인챈트 마도석 뱃지 */}
+                            {(key === 'pure_prefix_stone' || key === 'pure_suffix_stone' || key === 'pure_mana_stone' || key === 'prefix_stone' || key === 'suffix_stone') && (
+                              <span 
+                                className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#ce93d822] text-[#ce93d8] border border-[#ce93d844] shrink-0" 
+                                title="장비 인챈트 및 각성에 사용되는 핵심 마도석"
+                              >
+                                {key.startsWith('pure_') ? '순수 마도석' : '인챈트석'}
                               </span>
                             )}
                             {/* 👑 궁극기 / 마도서 없음 뱃지 */}
@@ -1113,6 +1162,12 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                   const next = { ...prev.iconOverrides, [key]: trimmed };
                                   if (key.startsWith('book_')) next[key.replace(/^book_/, 'skill_')] = trimmed;
                                   else if (key.startsWith('skill_')) next[key.replace(/^skill_/, 'book_')] = trimmed;
+                                  if (key === 'blacksmith') next['forge'] = trimmed;
+                                  else if (key === 'forge') next['blacksmith'] = trimmed;
+                                  else if (key === 'arenaGate') next['arena'] = trimmed;
+                                  else if (key === 'arena') next['arenaGate'] = trimmed;
+                                  else if (key === 'bonfire') next['citadel'] = trimmed;
+                                  else if (key === 'citadel') next['bonfire'] = trimmed;
                                   return { ...prev, iconOverrides: next };
                                 });
                                 setHasUnsavedChanges(true);
@@ -1136,7 +1191,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           📁 파일
                         </button>
 
-                        {(isCustomImage || isCustomEmoji) && (
+                        {(isCustomImage || isCustomEmoji || (!effectiveOverride && !!meta.src)) && (
                           <button
                             className="btn btn-danger text-[10px] px-2 py-1"
                             title="기존 유니코드 이모지 아이콘으로 복원/초기화하기"
@@ -1146,6 +1201,12 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 next[key] = 'emoji';
                                 if (key.startsWith('book_')) next[key.replace(/^book_/, 'skill_')] = 'emoji';
                                 else if (key.startsWith('skill_')) next[key.replace(/^skill_/, 'book_')] = 'emoji';
+                                if (key === 'blacksmith') next['forge'] = 'emoji';
+                                else if (key === 'forge') next['blacksmith'] = 'emoji';
+                                else if (key === 'arenaGate') next['arena'] = 'emoji';
+                                else if (key === 'arena') next['arenaGate'] = 'emoji';
+                                else if (key === 'bonfire') next['citadel'] = 'emoji';
+                                else if (key === 'citadel') next['bonfire'] = 'emoji';
                                 return { ...prev, iconOverrides: next };
                               });
                               setHasUnsavedChanges(true);
@@ -1166,6 +1227,12 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 delete next[key];
                                 if (key.startsWith('book_')) delete next[key.replace(/^book_/, 'skill_')];
                                 else if (key.startsWith('skill_')) delete next[key.replace(/^skill_/, 'book_')];
+                                if (key === 'blacksmith') delete next['forge'];
+                                else if (key === 'forge') delete next['blacksmith'];
+                                else if (key === 'arenaGate') delete next['arena'];
+                                else if (key === 'arena') delete next['arenaGate'];
+                                else if (key === 'bonfire') delete next['citadel'];
+                                else if (key === 'citadel') delete next['bonfire'];
                                 return { ...prev, iconOverrides: next };
                               });
                               setHasUnsavedChanges(true);
@@ -1615,10 +1682,11 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
               <div className="flex flex-col sm:flex-row gap-2 items-center justify-between bg-[#0b101c] p-2.5 rounded-xl border border-[#1b263b]">
                 <div className="flex items-center gap-1 flex-wrap">
                   {[
-                    { key: 'all', label: '전체 클래스 (24종)' },
-                    { key: '0', label: '⚔️ 기본 직업 (8종)' },
-                    { key: '1', label: '🛡️ 1차 승격 (8종)' },
-                    { key: '2', label: '👑 2차 각성 (8종)' },
+                    { key: 'all', label: '전체 클래스' },
+                    { key: '0', label: '⚔️ 기본 직업' },
+                    { key: '1', label: '🛡️ 1차 승격' },
+                    { key: '2', label: '👑 2차 각성' },
+                    { key: '3', label: '🌌 3차 초월' },
                   ].map(f => (
                     <button
                       key={f.key}
@@ -1647,63 +1715,112 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[55vh] overflow-y-auto pr-1">
                 {mercenaryList.map(cls => {
-                  const overrideImg = config.mercenaryOverrides?.[cls.id] || (cls.promptKey ? config.mercenaryOverrides?.[cls.promptKey] : undefined);
+                  const maleOverride = config.mercenaryOverrides?.[`${cls.id}_male`];
+                  const femaleOverride = config.mercenaryOverrides?.[`${cls.id}_female`];
+                  const genericOverride = config.mercenaryOverrides?.[cls.id] || (cls.promptKey ? config.mercenaryOverrides?.[cls.promptKey] : undefined);
+                  const hasCustom = !!(maleOverride || femaleOverride || genericOverride);
+
+                  const maleImg = maleOverride || genericOverride || CustomAssetService.getGenderPortrait(cls.id, 'male');
+                  const femaleImg = femaleOverride || genericOverride || CustomAssetService.getGenderPortrait(cls.id, 'female');
                   const icon = cls.skills?.[0]?.icon || '⚔️';
 
                   return (
-                    <div key={cls.id} className={`p-3 rounded-xl bg-[#111828] border ${overrideImg ? 'border-[#c8aa6e66] bg-[#101e30]' : 'border-[#1f2d48]'} flex items-center justify-between gap-3 text-xs`}>
-                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                        <div className="w-12 h-12 rounded-xl bg-[#070b14] border border-[#23314d] flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
-                          {overrideImg ? (
-                            <img src={overrideImg} alt={cls.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <span className="text-2xl">{icon}</span>
-                          )}
-                        </div>
+                    <div key={cls.id} className={`p-3 rounded-xl bg-[#111828] border ${hasCustom ? 'border-[#c8aa6e66] bg-[#101e30]' : 'border-[#1f2d48]'} flex flex-col gap-2.5 text-xs`}>
+                      <div className="flex items-center justify-between gap-2">
                         <div className="min-w-0 flex-1">
                           <div className="font-bold text-white flex items-center gap-1.5 truncate">
                             <span>{cls.name}</span>
-                            {overrideImg && (
+                            {hasCustom && (
                               <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
                                 커스텀
                               </span>
                             )}
                           </div>
                           <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">
-                            <span className={cls.tier === 0 ? 'text-[#8b9bb4]' : cls.tier === 1 ? 'text-[#c8aa6e]' : 'text-[#ffd54f]'}>
-                              {cls.tier === 0 ? '기본 직업' : cls.tier === 1 ? '1차 승격' : '2차 각성'}
+                            <span className={cls.tier === 0 ? 'text-[#8b9bb4]' : cls.tier === 1 ? 'text-[#c8aa6e]' : cls.tier === 2 ? 'text-[#ffd54f]' : 'text-[#ce93d8]'}>
+                              {cls.tier === 0 ? '기본 직업' : cls.tier === 1 ? '1차 승격' : cls.tier === 2 ? '2차 각성' : '3차 초월'}
                             </span> • {cls.role}
                           </div>
                         </div>
-                      </div>
 
-                      <div className="flex items-center gap-1 shrink-0">
-                        <button
-                          className="btn btn-ghost text-[10px] px-2.5 py-1.5 border border-[#273859] text-[#c8aa6e]"
-                          title="용병 초상화/일러스트 이미지 교체"
-                          onClick={() => {
-                            openFilePicker('mercenary', cls.id, 'image/png,image/jpeg,image/webp,image/gif');
-                          }}
-                        >
-                          📁 일러스트
-                        </button>
-                        {overrideImg && (
+                        {hasCustom && (
                           <button
-                            className="btn btn-danger text-[10px] px-2 py-1.5"
+                            className="btn btn-danger text-[9px] px-1.5 py-0.5 shrink-0"
+                            title="커스텀 초기화"
                             onClick={() => {
                               setConfig(prev => {
                                 const next = { ...prev.mercenaryOverrides };
                                 delete next[cls.id];
+                                delete next[`${cls.id}_male`];
+                                delete next[`${cls.id}_female`];
+                                if (cls.promptKey) delete next[cls.promptKey];
                                 return { ...prev, mercenaryOverrides: next };
                               });
                               setHasUnsavedChanges(true);
                               setPendingChangeCount(c => c + 1);
-                              showToast(`🔄 [${cls.name}] 일러스트 복원 대기 중. [프리셋 즉시 저장] 시 적용됩니다.`);
+                              showToast(`🔄 [${cls.name}] 포트레이트 복원 대기 중. [프리셋 즉시 저장] 시 적용됩니다.`);
                             }}
                           >
-                            ✕
+                            초기화
                           </button>
                         )}
+                      </div>
+
+                      {/* 남 / 여 포트레이트 듀얼 뷰 */}
+                      <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#1b263b]">
+                        {/* 남성 포트레이트 */}
+                        <div className="flex items-center gap-2 p-1.5 rounded-lg bg-[#0b101c] border border-[#1e293b]">
+                          <div
+                            className="w-10 h-10 rounded-lg bg-[#070b14] border border-[#3b82f655] flex items-center justify-center shrink-0 overflow-hidden shadow-inner cursor-pointer hover:border-[#3b82f6] relative group"
+                            onClick={() => openFilePicker('mercenary', `${cls.id}_male`, 'image/png,image/jpeg,image/webp,image/gif')}
+                            title="남성 포트레이트 교체"
+                          >
+                            {maleImg ? (
+                              <img src={maleImg} alt={`${cls.name} 남성`} className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-xl">{icon}</span>
+                            )}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[9px] text-white font-bold transition-opacity">
+                              변경
+                            </div>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <span className="text-[10px] font-bold text-[#60a5fa] block">♂ 남성</span>
+                            <button
+                              className="text-[9px] text-[#8b9bb4] hover:text-[#ffd54f] underline truncate block mt-0.5"
+                              onClick={() => openFilePicker('mercenary', `${cls.id}_male`, 'image/png,image/jpeg,image/webp,image/gif')}
+                            >
+                              📁 파일 선택
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* 여성 포트레이트 */}
+                        <div className="flex items-center gap-2 p-1.5 rounded-lg bg-[#0b101c] border border-[#1e293b]">
+                          <div
+                            className="w-10 h-10 rounded-lg bg-[#070b14] border border-[#ec489955] flex items-center justify-center shrink-0 overflow-hidden shadow-inner cursor-pointer hover:border-[#ec4899] relative group"
+                            onClick={() => openFilePicker('mercenary', `${cls.id}_female`, 'image/png,image/jpeg,image/webp,image/gif')}
+                            title="여성 포트레이트 교체"
+                          >
+                            {femaleImg ? (
+                              <img src={femaleImg} alt={`${cls.name} 여성`} className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-xl">{icon}</span>
+                            )}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[9px] text-white font-bold transition-opacity">
+                              변경
+                            </div>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <span className="text-[10px] font-bold text-[#f472b6] block">♀ 여성</span>
+                            <button
+                              className="text-[9px] text-[#8b9bb4] hover:text-[#ffd54f] underline truncate block mt-0.5"
+                              onClick={() => openFilePicker('mercenary', `${cls.id}_female`, 'image/png,image/jpeg,image/webp,image/gif')}
+                            >
+                              📁 파일 선택
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   );

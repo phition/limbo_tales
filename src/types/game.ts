@@ -168,6 +168,9 @@ export interface EquipmentItem {
   setName?: string;            // 👑 세트 명칭 (e.g. "공허 지배자 세트")
   setRequiredCount?: number;   // 👑 풀 세트 필요 장비 수 (3)
   setBonusDesc?: string;       // 👑 풀 세트 달성 시 특별 보너스 설명
+  isMemento?: boolean;         // 🪦 전사자의 유품 태그 여부 (사망 시 1점만 회수)
+  mementoHeroId?: string;      // ⚰️ 유품을 남긴 전사자 영웅 ID
+  mementoHeroName?: string;    // ⚰️ 유품을 남긴 전사자 영웅 이름
 }
 
 export interface EquipmentRecipe {
@@ -198,6 +201,8 @@ export interface EquipmentRecipe {
 export interface TavernCandidate {
   id: string;
   name: string;
+  gender?: 'male' | 'female';
+  portraitUrl?: string;
   classId: string;
   grade: MercenaryGrade;
   trait: string;
@@ -381,6 +386,8 @@ export interface Mercenary {
   id: string;
   name: string;
   title: string;
+  gender?: 'male' | 'female';
+  portraitUrl?: string;
   trait?: string; // ✨ 개인 고유 성향 특성
   promotionBonuses?: Array<'hp' | 'mp' | 'atk' | 'def' | 'spd' | 'luck'>; // ✨ 전직 시 선택한 30% 특화 스탯 목록
   awakeningCount?: number; // 🔮 2차 전직 이후 10레벨마다 거행한 초월 각성 차수
@@ -432,6 +439,8 @@ export interface FallenHero {
   id: string;
   name: string;
   title: string;
+  gender?: 'male' | 'female';
+  portraitUrl?: string;
   classId: string;
   grade: MercenaryGrade;
   level: number;
@@ -444,6 +453,7 @@ export interface FallenHero {
   battlesFought?: number; // 생전 참전 횟수
   lastOfferedAt?: number; // ⚰️ 마지막으로 공물을 바친 시점 (1시간 쿨다운 체크용)
   isLocked?: boolean; // 🔒 안치 보존 잠금 (최대 3명까지 잠금, 새 유해가 들어와도 밀려나지 않음)
+  mementoItemName?: string; // 🪦 영지로 회수된 유품 장비 명칭
 }
 
 /** ⚰️ 활성화된 영령의 가호 (Ancestral Blessing) 정보 */
@@ -467,7 +477,7 @@ export interface CodexCollectionItem {
   id: string;
   name: string;
   icon: string;
-  category: 'resource' | 'supply' | 'material' | 'armory' | 'boss_equip' | 'skillbook' | 'lore' | 'artifact';
+  category: 'resource' | 'supply' | 'material' | 'armory' | 'boss_equip' | 'arena_equip' | 'skillbook' | 'lore' | 'artifact';
   desc: string;
   story?: string; // 서사 일지 전문 (회고록 완성 시 열람 가능)
   requirements: {
@@ -692,7 +702,7 @@ export interface LogEntry {
   text: string;
   type: 'normal' | 'reward' | 'danger' | 'story' | 'system' | 'bonfire0' | 'bonfire1' | 'bonfire2' | 'bonfire3' | 'bonfire4' | 'bonfire5' | 'bonfire_extend' | 'round_divider' | 'turn_divider';
   timestamp: string;
-  category?: 'citadel' | 'dungeon' | 'battle';
+  category?: 'citadel' | 'dungeon' | 'battle' | 'arena';
   turn?: number;
   round?: number;
   actorName?: string;
@@ -868,6 +878,9 @@ export interface InvasionState {
   defenseDeck?: DefenseDeck; // 🛡️ 수비 부대 및 방어 타워 세팅
   invasionCoins?: number; // 🎖️ 차원 침공 훈장 (레거시 호환)
   peaceShieldUntil: number; // 🛡️ 내 영지 평화 보호막 만료 시각 (ms)
+  peaceShieldSecondsRemaining?: number; // 🛡️ 차원 왜곡 평화 보호막 잔여 시간 (초, 기본 21600 = 6시간)
+  peaceShieldActive?: boolean; // 🛡️ 차원 왜곡 평화 보호막 활성화(ON) 여부
+  peaceShieldLastActivatedAt?: number; // 🛡️ 마지막으로 보호막이 활성화/갱신된 타임스탬프 (ms)
   defenseLogs: InvasionDefenseLog[]; // 피침공 방어 기록
   totalInvasions: number; // 총 침공 횟수
   totalWins: number; // 총 침공 승리 횟수

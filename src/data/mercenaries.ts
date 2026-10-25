@@ -4,6 +4,8 @@ export const INITIAL_HEROES_CONFIG: Mercenary[] = [
   {
     id: 'hero_01',
     name: '아이리스',
+    gender: 'female',
+    portraitUrl: 'assets/portraits/portrait_squire_female.png',
     title: '강철의 수호자',
     classId: 'squire',
     grade: 'rookie',
@@ -25,6 +27,8 @@ export const INITIAL_HEROES_CONFIG: Mercenary[] = [
   {
     id: 'hero_02',
     name: '시안',
+    gender: 'male',
+    portraitUrl: 'assets/portraits/portrait_rogue_male.png',
     title: '신속한 그림자',
     classId: 'rogue',
     grade: 'rookie',

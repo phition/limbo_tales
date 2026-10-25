@@ -14,6 +14,185 @@
 
 import { NPC_NAME_TO_ID, NPC_ID_TO_NAME } from '../data/npcs';
 
+export const CLASS_GENDER_PORTRAITS: Record<string, { male: string; female: string }> = {
+  squire: {
+    male: 'assets/portraits/portrait_squire_male.png',
+    female: 'assets/portraits/portrait_squire_female.png',
+  },
+  paladin: {
+    male: 'assets/portraits/portrait_paladin_male.png',
+    female: 'assets/portraits/portrait_paladin_female.png',
+  },
+  guardian: {
+    male: 'assets/portraits/portrait_t1_guardian.png',
+    female: 'assets/portraits/portrait_paladin_female.png',
+  },
+  aegis_valkyrie: {
+    male: 'assets/portraits/portrait_t2_valkyrie_male.png',
+    female: 'assets/portraits/portrait_t2_valkyrie.png',
+  },
+  aegis_bastion: {
+    male: 'assets/portraits/portrait_t3_bastion.png',
+    female: 'assets/portraits/portrait_t3_bastion_female.png',
+  },
+  fortress: {
+    male: 'assets/portraits/portrait_t3_bastion.png',
+    female: 'assets/portraits/portrait_t3_bastion_female.png',
+  },
+  crusader_lord: {
+    male: 'assets/portraits/portrait_t3_seraphic_inquisitor.png',
+    female: 'assets/portraits/portrait_t3_seraphic_inquisitor_female.png',
+  },
+  rogue: {
+    male: 'assets/portraits/portrait_rogue_male.png',
+    female: 'assets/portraits/portrait_rogue_female.png',
+  },
+  duelist: {
+    male: 'assets/portraits/portrait_t1_duelist.png',
+    female: 'assets/portraits/portrait_rogue_female.png',
+  },
+  blade_dancer: {
+    male: 'assets/portraits/portrait_t1_duelist.png',
+    female: 'assets/portraits/portrait_t2_shadow_phantom.png',
+  },
+  assassin: {
+    male: 'assets/portraits/portrait_t2_shadow_phantom_male.png',
+    female: 'assets/portraits/portrait_t2_shadow_phantom.png',
+  },
+  shadow_phantom: {
+    male: 'assets/portraits/portrait_t2_shadow_phantom_male.png',
+    female: 'assets/portraits/portrait_t2_shadow_phantom.png',
+  },
+  void_strider: {
+    male: 'assets/portraits/portrait_t3_void_strider.png',
+    female: 'assets/portraits/portrait_t3_void_strider_female.png',
+  },
+  apprentice: {
+    male: 'assets/portraits/portrait_apprentice_male.png',
+    female: 'assets/portraits/portrait_apprentice_female.png',
+  },
+  apprentice_mage: {
+    male: 'assets/portraits/portrait_apprentice_male.png',
+    female: 'assets/portraits/portrait_apprentice_female.png',
+  },
+  mage: {
+    male: 'assets/portraits/portrait_mage_male.png',
+    female: 'assets/portraits/portrait_mage_female.png',
+  },
+  elementalist: {
+    male: 'assets/portraits/portrait_mage_male.png',
+    female: 'assets/portraits/portrait_mage_female.png',
+  },
+  arcane_scholar: {
+    male: 'assets/portraits/portrait_t1_scholar.png',
+    female: 'assets/portraits/portrait_mage_female.png',
+  },
+  scholar: {
+    male: 'assets/portraits/portrait_t1_scholar.png',
+    female: 'assets/portraits/portrait_mage_female.png',
+  },
+  calamity_mage: {
+    male: 'assets/portraits/portrait_t2_calamity_mage_male.png',
+    female: 'assets/portraits/portrait_t2_calamity_mage.png',
+  },
+  chronomancer: {
+    male: 'assets/portraits/portrait_t3_chrono_archon.png',
+    female: 'assets/portraits/portrait_t3_chrono_archon_female.png',
+  },
+  chrono_archon: {
+    male: 'assets/portraits/portrait_t3_chrono_archon.png',
+    female: 'assets/portraits/portrait_t3_chrono_archon_female.png',
+  },
+  acolyte: {
+    male: 'assets/portraits/portrait_acolyte_male.png',
+    female: 'assets/portraits/portrait_acolyte_female.png',
+  },
+  novice_cleric: {
+    male: 'assets/portraits/portrait_acolyte_male.png',
+    female: 'assets/portraits/portrait_acolyte_female.png',
+  },
+  cleric: {
+    male: 'assets/portraits/portrait_cleric_male.png',
+    female: 'assets/portraits/portrait_cleric_female.png',
+  },
+  war_priest: {
+    male: 'assets/portraits/portrait_t1_war_priest.png',
+    female: 'assets/portraits/portrait_cleric_female.png',
+  },
+  bishop: {
+    male: 'assets/portraits/portrait_t2_high_saintess_male.png',
+    female: 'assets/portraits/portrait_t2_high_saintess.png',
+  },
+  high_saintess: {
+    male: 'assets/portraits/portrait_t2_high_saintess_male.png',
+    female: 'assets/portraits/portrait_t2_high_saintess.png',
+  },
+  seraphic_inquisitor: {
+    male: 'assets/portraits/portrait_t3_seraphic_inquisitor.png',
+    female: 'assets/portraits/portrait_t3_seraphic_inquisitor_female.png',
+  },
+  vanguard: {
+    male: 'assets/portraits/portrait_vanguard_male.png',
+    female: 'assets/portraits/portrait_vanguard_female.png',
+  },
+  warrior: {
+    male: 'assets/portraits/portrait_berserker_male.png',
+    female: 'assets/portraits/portrait_berserker_female.png',
+  },
+  berserker: {
+    male: 'assets/portraits/portrait_berserker_male.png',
+    female: 'assets/portraits/portrait_berserker_female.png',
+  },
+  warlord: {
+    male: 'assets/portraits/portrait_t1_warlord.png',
+    female: 'assets/portraits/portrait_berserker_female.png',
+  },
+  valhalla_blade: {
+    male: 'assets/portraits/portrait_t2_valhalla_blade_male.png',
+    female: 'assets/portraits/portrait_t2_valhalla_blade.png',
+  },
+  iron_marshal: {
+    male: 'assets/portraits/portrait_t3_valhalla_warlord.png',
+    female: 'assets/portraits/portrait_t3_valhalla_warlord_female.png',
+  },
+  valhalla_warlord: {
+    male: 'assets/portraits/portrait_t3_valhalla_warlord.png',
+    female: 'assets/portraits/portrait_t3_valhalla_warlord_female.png',
+  },
+  gunner: {
+    male: 'assets/portraits/portrait_gunner_male.png',
+    female: 'assets/portraits/portrait_gunner_female.png',
+  },
+  archer: {
+    male: 'assets/portraits/portrait_gunner_male.png',
+    female: 'assets/portraits/portrait_gunner_female.png',
+  },
+  tactical_gunner: {
+    male: 'assets/portraits/portrait_gunner_male.png',
+    female: 'assets/portraits/portrait_gunner_female.png',
+  },
+  sharpshooter: {
+    male: 'assets/portraits/portrait_gunner_male.png',
+    female: 'assets/portraits/portrait_t1_sharpshooter.png',
+  },
+  aether_gun_meister: {
+    male: 'assets/portraits/portrait_t2_gun_meister_male.png',
+    female: 'assets/portraits/portrait_t2_gun_meister.png',
+  },
+  gun_meister: {
+    male: 'assets/portraits/portrait_t2_gun_meister_male.png',
+    female: 'assets/portraits/portrait_t2_gun_meister.png',
+  },
+  ghost_sniper: {
+    male: 'assets/portraits/portrait_t3_omega_deadeye.png',
+    female: 'assets/portraits/portrait_t3_omega_deadeye_female.png',
+  },
+  omega_deadeye: {
+    male: 'assets/portraits/portrait_t3_omega_deadeye.png',
+    female: 'assets/portraits/portrait_t3_omega_deadeye_female.png',
+  },
+};
+
 export interface SpriteSheetConfig {
   cols: number;
   rows: number;
@@ -102,6 +281,21 @@ export class CustomAssetService {
 
   public static getMercenaryOverride(idOrClass: string): string | undefined {
     return CustomAssetService.getInstance().getMercenaryOverride(idOrClass);
+  }
+
+  public static getGenderPortrait(classId: string, gender: 'male' | 'female' = 'male'): string {
+    return CustomAssetService.getInstance().getGenderPortrait(classId, gender);
+  }
+
+  public static getHeroPortrait(hero?: {
+    id?: string;
+    name?: string;
+    classId?: string;
+    gender?: 'male' | 'female';
+    portraitUrl?: string;
+    portraitPromptKey?: string;
+  }): string {
+    return CustomAssetService.getInstance().getHeroPortrait(hero);
   }
 
   public static getNpcOverride(nameOrId: string): string | undefined {
@@ -224,10 +418,17 @@ export class CustomAssetService {
         '/assets/custom_assets_preset.json'
       ];
 
+      const cacheBustQuery = `?v=${Date.now()}`;
       for (const url of candidateUrls) {
         try {
-          const res = await fetch(url);
-          if (res.ok) {
+          let res: Response | null = null;
+          try {
+            res = await fetch(url + cacheBustQuery, { cache: 'no-cache' });
+          } catch (_) {
+            // 폴백: 쿼리스트링 미지원 환경(일부 로컬 파일 스킴 등)
+            res = await fetch(url);
+          }
+          if (res && res.ok) {
             const data = await res.json();
             if (data && typeof data === 'object') {
               staticPreset = data;
@@ -238,10 +439,36 @@ export class CustomAssetService {
       }
 
       // 4. Two-Tier Merge: 배포 정적 프리셋(기본) + 기기 로컬 IndexedDB 사용자 오버라이드
-      // (사용자가 특정 아이콘을 'emoji'로 복원/초기화한 설정도 온전히 유지)
-      const mergedOverrides = { ...(staticPreset.iconOverrides || {}), ...(saved?.iconOverrides || {}) };
+      // 🌟 배포 프리셋 버전이 로컬 저장소보다 높으면 배포 버전의 최신 에셋이 최우선 적용되도록 보장
+      const isNewPresetVersion = (staticPreset.version || 0) > (saved?.version || 0);
 
-      const mergedVfxOverrides = { ...(staticPreset.vfxOverrides || {}), ...(saved?.vfxOverrides || {}) };
+      const mergeAssetMap = (
+        staticMap: Record<string, string> = {},
+        savedMap: Record<string, string> = {},
+        preferStatic: boolean = false
+      ): Record<string, string> => {
+        const result: Record<string, string> = preferStatic
+          ? { ...savedMap, ...staticMap }
+          : { ...staticMap, ...savedMap };
+
+        // 🛡️ 레거시 base64('data:...')만 실제 파일 경로('assets/...')로 보정
+        // ⚠️ 사용자가 명시적으로 선택한 'emoji' 또는 유니코드 이모지 문자열은 절대 파일 경로로 강제 덮어쓰지 않음!
+        for (const [key, staticVal] of Object.entries(staticMap)) {
+          if (staticVal && staticVal.startsWith('assets/') && (!result[key] || result[key].startsWith('data:'))) {
+            result[key] = staticVal;
+          }
+        }
+        for (const [key, savedVal] of Object.entries(savedMap)) {
+          if (savedVal && savedVal.startsWith('assets/') && (!result[key] || result[key].startsWith('data:'))) {
+            result[key] = savedVal;
+          }
+        }
+        return result;
+      };
+
+      const mergedOverrides = mergeAssetMap(staticPreset.iconOverrides, saved?.iconOverrides, isNewPresetVersion);
+      const mergedVfxOverrides = mergeAssetMap(staticPreset.vfxOverrides, saved?.vfxOverrides, isNewPresetVersion);
+
       // 🛡️ 레거시 고정 저해상도 base64 플레이스홀더 정리 (배포 정적 스프라이트 에셋이 존재하면 우선 적용)
       for (const [k, v] of Object.entries(staticPreset.vfxOverrides || {})) {
         if (v && !v.startsWith('data:') && (!mergedVfxOverrides[k] || mergedVfxOverrides[k].startsWith('data:image/png;base64,iVBORw0KGgoAAA') || mergedVfxOverrides[k].startsWith('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4'))) {
@@ -249,22 +476,17 @@ export class CustomAssetService {
         }
       }
 
-      const mergedMonsterOverrides = { ...(staticPreset.monsterOverrides || {}) };
-      if (saved?.monsterOverrides) {
-        for (const [k, v] of Object.entries(saved.monsterOverrides)) {
-          // VFX 키가 실수로 monsterOverrides에 들어간 경우 제외
-          if (!mergedVfxOverrides[k]) {
-            mergedMonsterOverrides[k] = v;
-          }
-        }
-      }
-      // 보스 결전기 VFX 키가 monsterOverrides에 잔류하지 않도록 제거
+      const mergedMonsterOverrides = mergeAssetMap(staticPreset.monsterOverrides, saved?.monsterOverrides, isNewPresetVersion);
+      // 보스 결전기 및 VFX 키가 실수로 monsterOverrides에 잔류하지 않도록 제거
       const bossVfxKeys = ['boss_apocalypse', 'boss_cataclysm', 'boss_dragon_breath', 'boss_abyss_vortex'];
       for (const bvk of bossVfxKeys) {
         delete mergedMonsterOverrides[bvk];
       }
+      for (const vk of Object.keys(mergedVfxOverrides)) {
+        delete mergedMonsterOverrides[vk];
+      }
 
-      const mergedNpcOverrides: Record<string, string> = { ...(staticPreset.npcOverrides || {}), ...(saved?.npcOverrides || {}) };
+      const mergedNpcOverrides: Record<string, string> = mergeAssetMap(staticPreset.npcOverrides, saved?.npcOverrides, isNewPresetVersion);
       // 🛡️ 언더스코어(_) 키 및 겹친 파일 경로 자동 정화
       for (const k of Object.keys(mergedNpcOverrides)) {
         if (/^_+$/.test(k)) {
@@ -292,20 +514,25 @@ export class CustomAssetService {
       if (mergedNpcOverrides['npc_chief_advisor']) mergedNpcOverrides['방주 총괄 참모'] = mergedNpcOverrides['npc_chief_advisor'];
 
       this.config = {
-        pureEmojiMode: saved?.pureEmojiMode ?? staticPreset.pureEmojiMode ?? false,
+        pureEmojiMode: isNewPresetVersion ? (staticPreset.pureEmojiMode ?? false) : (saved?.pureEmojiMode ?? staticPreset.pureEmojiMode ?? false),
         syntheticAudioOnly: saved?.syntheticAudioOnly ?? staticPreset.syntheticAudioOnly ?? false,
         iconOverrides: mergedOverrides,
-        bgmOverrides: { ...(staticPreset.bgmOverrides || {}), ...(saved?.bgmOverrides || {}) },
-        sfxOverrides: { ...(staticPreset.sfxOverrides || {}), ...(saved?.sfxOverrides || {}) },
+        bgmOverrides: mergeAssetMap(staticPreset.bgmOverrides, saved?.bgmOverrides, isNewPresetVersion),
+        sfxOverrides: mergeAssetMap(staticPreset.sfxOverrides, saved?.sfxOverrides, isNewPresetVersion),
         vfxOverrides: mergedVfxOverrides,
         vfxConfigs: { ...(staticPreset.vfxConfigs || {}), ...(saved?.vfxConfigs || {}) },
-        dungeonFloorOverrides: { ...(staticPreset.dungeonFloorOverrides || {}), ...(saved?.dungeonFloorOverrides || {}) },
+        dungeonFloorOverrides: mergeAssetMap(staticPreset.dungeonFloorOverrides, saved?.dungeonFloorOverrides, isNewPresetVersion),
         monsterOverrides: mergedMonsterOverrides,
-        monsterVideoOverrides: { ...(staticPreset.monsterVideoOverrides || {}), ...(saved?.monsterVideoOverrides || {}) },
-        mercenaryOverrides: { ...(staticPreset.mercenaryOverrides || {}), ...(saved?.mercenaryOverrides || {}) },
+        monsterVideoOverrides: mergeAssetMap(staticPreset.monsterVideoOverrides, saved?.monsterVideoOverrides, isNewPresetVersion),
+        mercenaryOverrides: mergeAssetMap(staticPreset.mercenaryOverrides, saved?.mercenaryOverrides, isNewPresetVersion),
         npcOverrides: mergedNpcOverrides,
         version: Math.max(saved?.version || 1, staticPreset.version || 1),
       };
+
+      // 🌟 새로운 배포 프리셋이 로드되었거나 로컬 저장소가 없었던 경우 최신 상태를 IndexedDB에 즉시 보관
+      if (isNewPresetVersion || !saved) {
+        await this.saveToIdb(this.config);
+      }
     } catch (err) {
       console.warn('[CustomAssetService] Failed to init custom asset storage:', err);
     } finally {
@@ -401,6 +628,24 @@ export class CustomAssetService {
     // 1. 직접 키 일치
     if (this.config.iconOverrides[key]) return this.config.iconOverrides[key];
 
+    // 1-0. 촉매/보급품 묶음 팩 키 자동 호환 (e.g. 'enhanced_torch_pack_10' -> 'enhanced_torch', 'prefix_stone_pack_10' -> 'prefix_stone')
+    const packBaseKey = key.replace(/_pack(?:_\d+)?$/, '');
+    if (packBaseKey !== key) {
+      if (this.config.iconOverrides[packBaseKey]) return this.config.iconOverrides[packBaseKey];
+      if (packBaseKey === 'pure_prefix' && this.config.iconOverrides['pure_prefix_stone']) return this.config.iconOverrides['pure_prefix_stone'];
+      if (packBaseKey === 'pure_suffix' && this.config.iconOverrides['pure_suffix_stone']) return this.config.iconOverrides['pure_suffix_stone'];
+    }
+    if (key === 'pure_prefix' && this.config.iconOverrides['pure_prefix_stone']) return this.config.iconOverrides['pure_prefix_stone'];
+    if (key === 'pure_suffix' && this.config.iconOverrides['pure_suffix_stone']) return this.config.iconOverrides['pure_suffix_stone'];
+
+    // 1-1. 영지 건물 및 성채 네비게이션 휠 키 상호 호환 참조
+    if (key === 'forge' && this.config.iconOverrides['blacksmith']) return this.config.iconOverrides['blacksmith'];
+    if (key === 'blacksmith' && this.config.iconOverrides['forge']) return this.config.iconOverrides['forge'];
+    if (key === 'arena' && this.config.iconOverrides['arenaGate']) return this.config.iconOverrides['arenaGate'];
+    if (key === 'arenaGate' && this.config.iconOverrides['arena']) return this.config.iconOverrides['arena'];
+    if (key === 'citadel' && this.config.iconOverrides['bonfire']) return this.config.iconOverrides['bonfire'];
+    if (key === 'bonfire' && this.config.iconOverrides['citadel']) return this.config.iconOverrides['citadel'];
+
     // 2. 마도서(book_) <-> 스킬(skill_) 일체화 상호 참조
     if (key.startsWith('skill_')) {
       const bookKey = key.replace(/^skill_/, 'book_');
@@ -477,6 +722,59 @@ export class CustomAssetService {
   public getMercenaryOverride(classIdOrKey: string): string | undefined {
     if (!classIdOrKey) return undefined;
     return this.config.mercenaryOverrides[classIdOrKey];
+  }
+
+  public getGenderPortrait(classId: string, gender: 'male' | 'female' = 'male'): string {
+    if (!classId) return gender === 'female' ? 'assets/portraits/portrait_paladin_female.png' : 'assets/portraits/portrait_paladin_male.png';
+    const norm = classId.toLowerCase().replace(/^hero_/, '');
+    const gKey = gender === 'female' ? 'female' : 'male';
+
+    // 1. 개별 커스텀 오버라이드 확인 (예: 'squire_female', 'squire_male', 'paladin_female' 등)
+    const specificOverride = this.config.mercenaryOverrides[`${norm}_${gKey}`] 
+      || this.config.mercenaryOverrides[`hero_${norm}_${gKey}`];
+    if (specificOverride) return specificOverride;
+
+    // 2. 클래스 성별 매핑 테이블 조회
+    const mapping = CLASS_GENDER_PORTRAITS[norm];
+    if (mapping && mapping[gKey]) {
+      return mapping[gKey];
+    }
+
+    // 3. 일반 클래스 오버라이드 조회
+    const generalOverride = this.config.mercenaryOverrides[norm] || this.config.mercenaryOverrides[`hero_${norm}`];
+    if (generalOverride) return generalOverride;
+
+    // 4. 기본 폴백
+    return gKey === 'female' ? 'assets/portraits/portrait_paladin_female.png' : 'assets/portraits/portrait_paladin_male.png';
+  }
+
+  public getHeroPortrait(hero?: {
+    id?: string;
+    name?: string;
+    classId?: string;
+    gender?: 'male' | 'female';
+    portraitUrl?: string;
+    portraitPromptKey?: string;
+  }): string {
+    if (!hero) return 'assets/portraits/portrait_paladin_male.png';
+
+    // 1. 영웅 ID 또는 이름 기준 직접 커스텀 오버라이드 확인
+    if (hero.id && this.config.mercenaryOverrides[hero.id]) {
+      return this.config.mercenaryOverrides[hero.id];
+    }
+    if (hero.name && this.config.mercenaryOverrides[hero.name]) {
+      return this.config.mercenaryOverrides[hero.name];
+    }
+
+    // 2. hero.portraitUrl 명시되어 있는 경우 (단, 유효한 경로인 경우)
+    if (hero.portraitUrl && typeof hero.portraitUrl === 'string' && hero.portraitUrl.trim().length > 0) {
+      return hero.portraitUrl;
+    }
+
+    // 3. 성별 및 클래스 기반 초상화 조회
+    const classId = hero.classId || (hero.portraitPromptKey ? hero.portraitPromptKey.replace(/^hero_/, '') : 'squire');
+    const gender = hero.gender || (hero.name === '아이리스' ? 'female' : hero.name === '시안' ? 'male' : 'male');
+    return this.getGenderPortrait(classId, gender);
   }
 
   public getNpcOverride(nameOrId: string): string | undefined {
@@ -562,22 +860,29 @@ export class CustomAssetService {
 
   public setIconOverride(key: string, urlOrDataUri: string | null): void {
     const val = urlOrDataUri ? urlOrDataUri.trim() : null;
-    if (!val) {
-      delete this.config.iconOverrides[key];
-      if (key.startsWith('book_')) {
-        delete this.config.iconOverrides[key.replace(/^book_/, 'skill_')];
-      } else if (key.startsWith('skill_')) {
-        delete this.config.iconOverrides[key.replace(/^skill_/, 'book_')];
+    const applyVal = (k: string, v: string | null) => {
+      if (!v) {
+        delete this.config.iconOverrides[k];
+      } else {
+        this.config.iconOverrides[k] = v;
       }
-    } else {
-      this.config.iconOverrides[key] = val;
-      // 마도서(book_) 설정 시 대응하는 스킬(skill_) 아이콘도 100% 동일하게 일체화
-      if (key.startsWith('book_')) {
-        this.config.iconOverrides[key.replace(/^book_/, 'skill_')] = val;
-      } else if (key.startsWith('skill_')) {
-        this.config.iconOverrides[key.replace(/^skill_/, 'book_')] = val;
-      }
+    };
+
+    applyVal(key, val);
+
+    // 마도서(book_) 설정 시 대응하는 스킬(skill_) 아이콘도 100% 동일하게 일체화
+    if (key.startsWith('book_')) {
+      applyVal(key.replace(/^book_/, 'skill_'), val);
+    } else if (key.startsWith('skill_')) {
+      applyVal(key.replace(/^skill_/, 'book_'), val);
     }
+
+    // 영지 시설 / 휠 버튼 상호 일원화 동기화
+    if (key === 'blacksmith') applyVal('forge', val);
+    else if (key === 'forge') applyVal('blacksmith', val);
+    else if (key === 'arenaGate') applyVal('arena', val);
+    else if (key === 'arena') applyVal('arenaGate', val);
+
     this.saveToStorage();
   }
 

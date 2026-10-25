@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { useGameManager } from '../hooks/useGameManager';
 import { Modal } from './Modal';
 import { ActionButton } from './ActionButton';
 import { FirebaseService } from '../services/FirebaseService';
+import { PlayGamesService, PlayGamesPlayer } from '../services/PlayGamesService';
 import { SoundManager } from '../managers/SoundManager';
 import { GameDataService } from '../services/GameDataService';
 import { CustomAssetStudioModal } from './CustomAssetStudioModal';
@@ -31,6 +32,20 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
   const [callsignModal, setCallsignModal] = useState(false);
   const [cloudStatus, setCloudStatus] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
+
+  const pgs = PlayGamesService.getInstance();
+  const [pgAuthenticated, setPgAuthenticated] = useState<boolean>(pgs.getIsAuthenticated());
+  const [pgPlayer, setPgPlayer] = useState<PlayGamesPlayer | null>(pgs.getPlayer());
+
+  useEffect(() => {
+    if (!open || !pgs.isAvailable()) return;
+    const unsub = pgs.onAuthStateChange((isAuth, player) => {
+      setPgAuthenticated(isAuth);
+      setPgPlayer(player);
+    });
+    pgs.checkIsAuthenticated().catch(() => {});
+    return unsub;
+  }, [open, pgs]);
 
   const sm = SoundManager.getInstance();
   const [bgmVol, setBgmVol] = useState(sm.getBgmVolume());
@@ -160,6 +175,74 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             {cloudStatus && (
               <div className="text-[10px] text-[#ffd54f] font-medium bg-[#ffd54f15] px-2 py-0.5 rounded text-center animate-pulse">
                 {cloudStatus}
+              </div>
+            )}
+
+            {/* 🎮 Google Play 게임즈 서비스 연동 패널 (Android 전용) */}
+            {pgs.isAvailable() && (
+              <div className="pt-1.5 mt-0.5 border-t border-[#1f2738]/70 flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-[#66bb6a] flex items-center gap-1">
+                    <span>🎮</span>
+                    <span>Google Play 게임즈</span>
+                  </span>
+                  {pgAuthenticated ? (
+                    <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-[#66bb6a22] text-[#66bb6a] border border-[#66bb6a44] font-bold">
+                      {pgPlayer?.displayName ? `${pgPlayer.displayName}${pgPlayer.level ? ` (Lv.${pgPlayer.level})` : ''}` : '연동됨'}
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#66bb6a22] text-[#66bb6a] border border-[#66bb6a55] hover:bg-[#66bb6a33] cursor-pointer"
+                      onClick={async () => {
+                        setCloudStatus('🎮 Google Play 게임즈 로그인 중...');
+                        const res = await fb.signInWithPlayGames();
+                        if (res.success) {
+                          gm.syncAllPgsProgress();
+                        }
+                        setCloudStatus(res.success ? '✅ Play 게임즈 계정 연동 완료!' : (res.error || '❌ Play 게임즈 로그인 실패'));
+                        setTimeout(() => setCloudStatus(null), 3000);
+                      }}
+                    >
+                      Play 게임즈 로그인
+                    </button>
+                  )}
+                </div>
+
+                {pgAuthenticated && (
+                  <div className="flex items-center gap-1.5 pt-0.5">
+                    <button
+                      type="button"
+                      className="flex-1 py-1 px-1.5 rounded bg-[#1f2738] hover:bg-[#28354d] active:scale-95 text-white text-[10px] font-bold flex items-center justify-center gap-1 border border-[#2d3a52] transition-all cursor-pointer"
+                      onClick={() => pgs.showAchievements()}
+                      title="Google Play 게임즈 업적 화면 열기"
+                    >
+                      <span>🏆</span>
+                      <span>업적</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="flex-1 py-1 px-1.5 rounded bg-[#1f2738] hover:bg-[#28354d] active:scale-95 text-white text-[10px] font-bold flex items-center justify-center gap-1 border border-[#2d3a52] transition-all cursor-pointer"
+                      onClick={() => pgs.showLeaderboard()}
+                      title="Google Play 게임즈 순위표 화면 열기"
+                    >
+                      <span>📊</span>
+                      <span>순위표</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="py-1 px-2 rounded bg-[#66bb6a1a] hover:bg-[#66bb6a33] active:scale-95 text-[#66bb6a] text-[10px] font-bold flex items-center justify-center gap-0.5 border border-[#66bb6a44] transition-all cursor-pointer"
+                      onClick={() => {
+                        gm.syncAllPgsProgress();
+                        setCloudStatus('✅ PGS 업적 및 리더보드 동기화 완료');
+                        setTimeout(() => setCloudStatus(null), 2500);
+                      }}
+                      title="진행 상황 구글 플레이 게임즈에 동기화"
+                    >
+                      <span>🔄</span>
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -533,7 +616,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         <div className="p-3 bg-[#08090d] border-t border-[#1f293d] text-center text-[10px] text-[#607d8b] flex flex-col items-center gap-0.5">
           <div className="font-medium text-[#8b9bb4]">Limbo: Ark of the Abyss</div>
           <div className="text-[10px] text-[#8b9bb4]">published by BumPCaT.net</div>
-          <div className="font-mono text-[11px] text-[#c8aa6e] font-bold">V.0.9.9-rc10</div>
+          <div className="font-mono text-[11px] text-[#c8aa6e] font-bold">V.1.1.2</div>
           <div className="text-[9px] text-[#4a5568]">Firebase Connected</div>
         </div>
       </div>
@@ -546,14 +629,125 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         footer={<ActionButton label="닫기" variant="primary" size="sm" onClick={() => setPatchModal(false)} />}
       >
         <div className="flex flex-col gap-3 text-xs text-[#cfd8dc] leading-relaxed max-h-[60vh] overflow-y-auto pr-1">
-          {/* V.0.9.9-rc10 최신 패치노트 */}
+          {/* V.1.1.2 최신 패치노트 */}
           <div className="p-3 rounded-xl bg-[#0f172a] border border-[#c8aa6e] shadow-lg">
             <div className="font-bold text-sm text-[#c8aa6e] mb-2 flex items-center justify-between border-b border-[#c8aa6e44] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>🔥</span>
-                <span>V.0.9.9-rc10 업데이트 패치노트</span>
+                <span>V.1.1.2 정식 업데이트 패치노트</span>
               </span>
               <span className="text-[10px] font-mono text-[#c8aa6e] bg-[#c8aa6e22] px-2 py-0.5 rounded font-bold border border-[#c8aa6e55]">
+                v1.1.2
+              </span>
+            </div>
+            <ul className="space-y-2.5 text-xs text-[#cfd8e8]">
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#ffd54f] flex items-center gap-1">
+                  <span>🧭</span> 탐험 &amp; 이벤트 시스템 대폭 개편
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>층별 고유 이벤트 '가속' 실제 전투 연동</strong>: 9층 도플갱어(프리즘 방직사 일러스트 및 플레이어 원정대 복제본 결투), 6층 참회실 흡혈 귀족, 8층 고문실 간수 등 7종의 가속 선택지가 실제 전투로 연결되며, 승리 시 확정 보상을 획득합니다.
+                  <br />• <strong>비상 탈출(닻 부재) 추격전 메커니즘</strong>: 균열의 닻 없이 시도하는 비상 탈출 실패 시 마물 추격대와의 사투가 벌어지며, 승리 또는 도주 성공 시 성채로 안전하게 귀환합니다.
+                  <br />• <strong>이전 지휘관 조우 이벤트 (PvP / 교류)</strong>: 최근 1시간 내 던전을 방문한 타 지휘관의 잔영과 조우하여 정보 교류(행운 가호) 또는 기습 습격(경험치 2배 비동기 PvP 대결)을 펼칠 수 있습니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#ff7043] flex items-center gap-1">
+                  <span>⚔️</span> 전투 메커니즘 &amp; 밸런스 정밀 조정
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>치명타 피해 계산식 개편</strong>: 행운(Luck) 스탯의 치명타 피해 배율 보정을 제외하여 행운은 발생 확률과 회피에 집중되고, 피해 배율은 고유 장비 및 스킬에 온전히 비례하도록 조정되었습니다.
+                  <br />• <strong>적 차징(집중 공격) 스마트 알고리즘</strong>: 마물이 3마리 이상 생존해 있을 때만 차징을 시도하며, 차징 공격 발동 시 100% 확정 치명타로 적중합니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#80deea] flex items-center gap-1">
+                  <span>🏆</span> 차원 아레나 &amp; 멀티플레이 기능 강화
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>7단계 등급별 랭크 아이콘 &amp; 에셋 스튜디오 연동</strong>: 브론즈부터 그랜드마스터까지 7단계 고유 아이콘이 실시간 반영되며, 커스텀 에셋 스튜디오에서 자유롭게 커스텀할 수 있습니다.
+                  <br />• <strong>데이터 스튜디오 '차원 칙령' 실시간 배포</strong>: 차원 칙령 규칙이 Firebase 클라우드를 통해 웹과 모바일에 즉시 동기화됩니다.
+                  <br />• <strong>명예 암시장 투사 무구 도감 등록</strong>: 암시장 결투 장비 시리즈를 심연의 백과 컬렉션에 세트로 등록할 수 있습니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#69f0ae] flex items-center gap-1">
+                  <span>✨</span> UI / UX 테마 &amp; 시스템 안정화
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>다크 판타지 골드 &amp; 차콜 테마 리뉴얼</strong>: 고채도 청록 톤을 배제하고 깊이 있는 저채도 골드와 차콜 블랙 테마로 전면 개편되었습니다.
+                  <br />• <strong>차원 메세지 티커 [D.M] 간소화 표기</strong>: 영지 하단 내비게이션 상단 티커 뱃지를 모든 언어에서 컴팩트하게 [D.M]으로 통일했습니다.
+                  <br />• <strong>의무실 영웅 초상화 렌더링</strong>: 입원실 침상 및 모달에 이모지 대신 영웅의 실제 포트레이트가 표시됩니다.
+                  <br />• <strong>다국어 및 레이아웃 안정화</strong>: 런타임 캐시 참조 에러 해결, 텍스트 자동 축소/줄바꿈으로 UI 깨짐 현상을 완벽 방지했습니다.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* V.1.0.1 이전 패치노트 */}
+          <div className="p-3 rounded-xl bg-[#0b101d] border border-[#1f2b42] shadow-sm opacity-90">
+            <div className="font-bold text-xs text-[#8b9bb4] mb-2 flex items-center justify-between border-b border-[#1f2b42] pb-1.5">
+              <span className="flex items-center gap-1.5">
+                <span>📜</span>
+                <span>V.1.0.1 업데이트 내역</span>
+              </span>
+              <span className="text-[10px] font-mono text-[#8b9bb4] bg-[#15171d] px-2 py-0.5 rounded font-bold border border-[#2a364f]">
+                v1.0.1
+              </span>
+            </div>
+            <ul className="space-y-2.5 text-xs text-[#cfd8e8]">
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#ffd54f] flex items-center gap-1">
+                  <span>⚔️</span> 차원 아레나 (Dimensional Arena) 룰 및 결투 메커니즘 정밀 개편
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>3v3+1 차원 결투단 정규화</strong>: 선발 3인(전열·중열·후열)과 전술 오퍼레이터 리더 1인 체제로 정식 개편되어, 리더의 상시 [영령의 가호] 및 피버 초월 궁극기 투사가 결투의 핵심 승부처가 됩니다.
+                  <br />• <strong>홀덤 블러핑 시스템 (2인 공개 + 1인 히든 실루엣)</strong>: 상대의 3번 슬롯 히든 영웅과 노림수 족보를 예측하고 카운터 덱을 맞추는 고도의 심리전이 도입되었습니다.
+                  <br />• <strong>주간 차원율 가위바위보 상성 순환 (돌파 &gt; 변칙 &gt; 수호 &gt; 돌파)</strong>: 주간 차원율 상성 우위 시 +1단계 판정 계급 보너스를 획득하며, 5종 배지 [스트레이트] 조커는 상성을 초월해 절대 승리합니다.
+                  <br />• <strong>노페어 배지 가중치 총점제 &amp; 피버 3선승 압승 룰</strong>: 전술 파동 격돌 시 8대 배지 개별 가중치 총점(연계 35, 반격 30, 치명 25, 파쇄 20 등)으로 승패를 가르며, 피버 쇼다운 3승 선착 시 상대 잔여 체력과 무관하게 즉시 압승합니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#ff416c] flex items-center gap-1">
+                  <span>👾</span> 시공의 침식자 네메시스 &amp; 차원 영지 침공전 수정 및 밸런스 고도화
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>네메시스 3부위 독립 타겟팅 공략</strong>: 총 1,250만 HP 월드 보스의 3개 부위(머리: 발할라 워로드 400만, 몸통: 크로노 아콘 500만, 꼬리: 오메가 데드아이 350만) 고유 패턴 및 절멸기 저지 시스템이 정밀 동기화되었습니다.
+                  <br />• <strong>6시간 주기 요격 목표치 &amp; 수요일 자정(00:00) 정기 완전 초기화</strong>: 6시간당 1/24 요격 컷을 통한 영지 자원 약탈 방어선 및 주간 정기 초기화 사이클이 백과사전과 인게임에 완벽히 정립되었습니다.
+                  <br />• <strong>차원 영지 침공전 7라운드 거점 공방전</strong>: 성벽(기본 2,500 HP)과 좌/우 방어 포탑(기본 400 HP), 4대 핵심 자원 최대 30% 약탈 &amp; 8시간 보호막, 영웅 성향 연동 12대 수성 전술 메커니즘이 확립되었습니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#80deea] flex items-center gap-1">
+                  <span>🌐</span> 방주 백과사전 전면 검증 &amp; 다국어(EN/JA) 번역 품질 개선
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>실제 게임 데이터와 100% 동기화</strong>: 심연 생체 정제소 건설 비용(목재 10, 석재 5), 전열 피격 가중치 및 스킬 보호막 진형 보너스, 무기 6종 고유 특성(베기, 방어 파쇄, 급소 사격, 연사, 암습, 마력 공명), 몬스터 구조체 팩션(⚙️), 전직 직업명 등이 실제 구현에 맞게 완벽히 수정되었습니다.
+                  <br />• <strong>다국어 번역 전수 보강</strong>: 백과사전 공략, 무기 특성, 3v3+1 아레나 룰, 12대 피버 족보, 네메시스 레이드, 영지 침공 및 12대 수성 전술 등 175건의 핵심 전문 용어가 영어와 일본어로 정교하게 번역되었습니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#69f0ae] flex items-center gap-1">
+                  <span>✨</span> 편의성(UX) &amp; 시인성 혁신 업데이트
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>원정대 편성 [스마트 일괄 장착]</strong>: 각 클래스별 역할(탱커/딜러/힐러 등) 핵심 스탯에 가중치를 두고 보유한 미장착 최상급 무기·방어구·장신구를 한 번의 탭으로 자동 장착하는 기능이 도입되었습니다.
+                  <br />• <strong>직관적인 거점 알림 뱃지 시스템</strong>: 의뢰소 수령 가능한 보상 수량 레드 뱃지, 병영 내 전직 가능 용병 발견 시 골드(✨ 전직 가능) 뱃지, 병기창 외부 미정화 저주 장비 수량 레드 뱃지가 실시간 연동됩니다.
+                  <br />• <strong>전투 시인성 강화</strong>: 내 턴 진입 시 표시되는 [▶ 내 턴] 뱃지와 카드 테두리를 시인성 높은 형광 녹색 네온 글로우 및 펄스 이펙트로 시각화하여 턴 식별성을 극대화했습니다.
+                  <br />• <strong>HERO 등급 시안 컬러 지정 &amp; 3차 전직 아이콘 에셋 스튜디오 완비</strong>: 영웅(HERO) 등급 'H' 마크에 고유 시안(Cyan) 색상을 적용하고, 3차 초월 전직 6종의 고유 스킬 12종 및 초월 궁극기 6종의 아이콘을 에셋 스튜디오에 정식 등록했습니다.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* V.0.9.9-rc10 이전 패치노트 */}
+          <div className="p-3 rounded-xl bg-[#0b101d] border border-[#1f2b42] shadow-sm opacity-90">
+            <div className="font-bold text-xs text-[#8b9bb4] mb-2 flex items-center justify-between border-b border-[#1f2b42] pb-1.5">
+              <span className="flex items-center gap-1.5">
+                <span>📜</span>
+                <span>V.0.9.9-rc10 업데이트 내역</span>
+              </span>
+              <span className="text-[10px] font-mono text-[#8b9bb4] bg-[#15171d] px-2 py-0.5 rounded font-bold border border-[#2a364f]">
                 v0.9.9-rc10
               </span>
             </div>

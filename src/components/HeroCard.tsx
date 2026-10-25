@@ -15,8 +15,8 @@ interface Props {
 const GRADE_META: Record<string, { label: string; tag: string; color: string }> = {
   rookie:  { label: 'N', tag: 'N', color: '#9e9e9e' },
   veteran: { label: 'V', tag: 'V', color: '#66bb6a' },
-  hero:    { label: 'H', tag: 'H', color: '#c8aa6e' },
-  elite:   { label: 'H', tag: 'H', color: '#c8aa6e' },
+  hero:    { label: 'H', tag: 'H', color: '#00d2ff' },
+  elite:   { label: 'H', tag: 'H', color: '#00d2ff' },
   epic:    { label: 'E', tag: 'E', color: '#ce93d8' },
   legend:  { label: 'E', tag: 'E', color: '#ce93d8' },
 };
@@ -30,11 +30,7 @@ export const HeroCard: React.FC<Props> = ({ hero, selected, onClick, compact }) 
   const hpPct = Math.max(0, (hero.currentHp / maxHp) * 100);
   const mpPct = Math.max(0, (hero.currentMp / maxMp) * 100);
   const gMeta = GRADE_META[hero.grade] || GRADE_META.rookie;
-  const customPortrait = CustomAssetService.getInstance().getMercenaryOverride(hero.classId)
-    || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
-    || (hero.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(hero.portraitPromptKey) : undefined)
-    || CustomAssetService.getInstance().getMercenaryOverride(hero.id)
-    || CustomAssetService.getInstance().getMercenaryOverride(hero.name);
+  const portrait = CustomAssetService.getHeroPortrait(hero);
 
   // 🛡️ 체력이 0보다 큰 생존 대원은 절대 사망(grayscale) 처리되지 않도록 엄격 보장
   const isDead = hero.currentHp <= 0;
@@ -49,9 +45,9 @@ export const HeroCard: React.FC<Props> = ({ hero, selected, onClick, compact }) 
     >
       <div className="flex items-center gap-2">
         <div className="text-xl shrink-0 flex items-center justify-center">
-          {customPortrait ? (
+          {portrait ? (
             <img
-              src={customPortrait}
+              src={portrait}
               alt={hero.name}
               className="w-7 h-7 object-cover rounded-full border border-[#c8aa6e55] shadow-sm"
               onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}

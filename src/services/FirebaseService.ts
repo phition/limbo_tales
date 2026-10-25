@@ -15,6 +15,7 @@ import { ArenaOpponent, Mercenary } from '../types/game';
 import { CHARACTER_CLASSES } from '../data/classes';
 import { NEMESIS_BOSS_CONFIG, NEMESIS_CYCLE_CONSTANTS } from '../data/nemesis';
 import { Capacitor } from '@capacitor/core';
+import { PlayGamesService } from './PlayGamesService';
 
 /**
  * 🎖️ 지휘관 닉네임 결정 헬퍼 함수
@@ -40,6 +41,41 @@ export function resolveCommanderNickname(rawNickname: string | undefined | null,
   return trimmed;
 }
 
+export interface DungeonVisitRecord {
+  uid: string;
+  callsign: string;
+  floor: number;
+  timestamp: number;
+  squad: Array<{
+    id: string;
+    name: string;
+    classId: string;
+    level: number;
+    grade: string;
+    position: 'front' | 'mid' | 'back';
+    stats: {
+      atk: number;
+      def: number;
+      spd: number;
+      luck: number;
+      maxHp: number;
+      maxMp: number;
+      critRateBonus?: number;
+      critDmg?: number;
+    };
+    equippedSkills?: string[];
+  }>;
+}
+
+export interface CommanderAttackNotice {
+  id: string;
+  attackerCallsign: string;
+  defenderCallsign: string;
+  attackerWon: boolean;
+  floor: number;
+  timestamp: number;
+}
+
 export interface LeaderboardEntry {
   rank: number;
   nickname: string;
@@ -60,6 +96,7 @@ export interface UserProfile {
   lastSavedAt?: number;
   callsignChanged?: boolean; // 🎖️ 콜사인 1회 변경 여부
   callsignChangedAt?: number;
+  playGamesPlayerId?: string; // 🎮 Google Play Games 플레이어 ID
 }
 
 export interface GuestbookMessage {
@@ -68,6 +105,18 @@ export interface GuestbookMessage {
   authorName: string;
   content: string; // 최대 100자
   createdAt: number;
+}
+
+/** 🎖️ 콜사인 최대 표시 폭 (한글 1자 = 2, 영문/숫자/밑줄 1자 = 1 → 한글 최대 6자) */
+export const CALLSIGN_MAX_WIDTH = 12;
+
+/** 🎖️ 콜사인 표시 폭 계산 (한글 2, 그 외 1) */
+export function getCallsignWidth(text: string): number {
+  let width = 0;
+  for (const ch of text || '') {
+    width += /[가-힣ㄱ-ㅎㅏ-ㅣ]/.test(ch) ? 2 : 1;
+  }
+  return width;
 }
 
 export class FirebaseService {
@@ -186,6 +235,50 @@ export class FirebaseService {
   }
 
   /**
+   * ⏱️ Promise 타임아웃 래퍼 (지정 시간 초과 시 에러 발생)
+   */
+  private withTimeout<T>(promise: Promise<T>, ms: number, timeoutMessage = '서버 응답 시간이 초과되었습니다.'): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        const err: any = new Error(timeoutMessage);
+        err.code = 'auth/timeout';
+        reject(err);
+      }, ms);
+      promise
+        .then((val) => {
+          clearTimeout(timer);
+          resolve(val);
+        })
+        .catch((err) => {
+          clearTimeout(timer);
+          reject(err);
+        });
+    });
+  }
+
+  /**
+   * 🛡️ Promise 안전 폴백 타임아웃 래퍼 (DB 지연/무응답 시 지정 시간 후 fallback 반환하여 블로킹 방지)
+   */
+  private withTimeoutFallback<T>(promise: Promise<T>, ms: number, fallback: T, label = 'DB 작업'): Promise<T> {
+    return new Promise<T>((resolve) => {
+      const timer = setTimeout(() => {
+        console.warn(`⚠️ [FirebaseService] ${label} 타임아웃(${ms}ms) - 로컬 폴백으로 즉시 진행합니다.`);
+        resolve(fallback);
+      }, ms);
+      promise
+        .then((val) => {
+          clearTimeout(timer);
+          resolve(val);
+        })
+        .catch((err) => {
+          clearTimeout(timer);
+          console.warn(`⚠️ [FirebaseService] ${label} 예외 무시:`, err);
+          resolve(fallback);
+        });
+    });
+  }
+
+  /**
    * 🌟 로그인 상태 확인 (현재 인증된 사용자 반환)
    */
   public async ensureUser(): Promise<User | null> {
@@ -196,7 +289,7 @@ export class FirebaseService {
     }
     if (typeof auth.authStateReady === 'function') {
       try {
-        await auth.authStateReady();
+        await this.withTimeoutFallback(auth.authStateReady(), 2000, undefined, 'authStateReady');
         if (auth.currentUser) {
           this.currentUser = auth.currentUser;
           return this.currentUser;
@@ -238,9 +331,15 @@ export class FirebaseService {
 
   /** Firebase Auth 에러 코드를 친절한 한국어 안내문으로 변환 */
   public getFriendlyErrorMessage(err: any): string {
+    if (typeof err === 'string' && err.trim().length > 0) {
+      return err;
+    }
     const code = err?.code || '';
     const msg = err?.message || '';
 
+    if (code === 'auth/timeout') {
+      return "서버 응답 시간이 초과되었습니다. 네트워크 연결 상태를 확인하거나(디버그 빌드인 경우 Firebase 승인 도메인/API 키 제한 설정 확인), 게스트 모드로 먼저 입성해 주세요.";
+    }
     if (code === 'auth/operation-not-allowed') {
       return "⚠️ Firebase 콘솔에서 [이메일/비밀번호] 인증이 비활성화되어 있습니다.\nFirebase Console > Authentication > Sign-in method에서 '이메일/비밀번호'를 [사용 설정]해 주세요.";
     }
@@ -281,9 +380,26 @@ export class FirebaseService {
 
     localStorage.removeItem('auth_explicitly_logged_out');
     try {
-      const cred = await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+      const cred = await this.withTimeout(
+        signInWithEmailAndPassword(auth, cleanEmail, cleanPass),
+        8000,
+        '인증 서버 응답 시간이 초과되었습니다.'
+      );
       this.currentUser = cred.user;
-      this.cachedProfile = await this.fetchUserProfile(cred.user.uid, cred.user.email, cred.user.displayName || '지휘관');
+      const fallbackProfile: UserProfile = {
+        uid: cred.user.uid,
+        email: cred.user.email,
+        nickname: resolveCommanderNickname(cred.user.displayName || cleanEmail.split('@')[0] || '지휘관', cred.user.uid),
+        isAnonymous: false,
+        createdAt: Date.now(),
+        lastLoginAt: Date.now(),
+      };
+      this.cachedProfile = await this.withTimeoutFallback(
+        this.fetchUserProfile(cred.user.uid, cred.user.email, cred.user.displayName || '지휘관'),
+        3000,
+        fallbackProfile,
+        '로그인 프로필 조회'
+      );
       this.notifyAuthListeners();
       return { success: true };
     } catch (err: any) {
@@ -308,13 +424,22 @@ export class FirebaseService {
 
     localStorage.removeItem('auth_explicitly_logged_out');
     try {
-      const cred = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPass);
+      const cred = await this.withTimeout(
+        createUserWithEmailAndPassword(auth, cleanEmail, cleanPass),
+        8000,
+        '회원가입 서버 응답 시간이 초과되었습니다.'
+      );
       this.currentUser = cred.user;
 
       // 🎖️ 유저가 '지휘관'을 그대로 두거나 비워둔 경우 UID 순번 숫자 부여 (예: 지휘관1042)
       const cleanNick = resolveCommanderNickname(nickname, cred.user.uid);
 
-      await updateProfile(cred.user, { displayName: cleanNick }).catch(() => {});
+      await this.withTimeoutFallback(
+        updateProfile(cred.user, { displayName: cleanNick }),
+        2000,
+        undefined,
+        'Auth 프로필 닉네임 갱신'
+      );
 
       const profileData: UserProfile = {
         uid: cred.user.uid,
@@ -325,11 +450,12 @@ export class FirebaseService {
         lastLoginAt: Date.now(),
       };
 
-      try {
-        await set(ref(db, `users/${cred.user.uid}/profile`), profileData);
-      } catch (dbErr) {
-        console.warn('[Firebase DB] Profile init warning:', dbErr);
-      }
+      await this.withTimeoutFallback(
+        set(ref(db, `users/${cred.user.uid}/profile`), profileData),
+        2500,
+        undefined,
+        'RTDB 신규 프로필 생성'
+      );
 
       this.cachedProfile = profileData;
       this.notifyAuthListeners();
@@ -341,30 +467,172 @@ export class FirebaseService {
   }
 
   /**
+   * 🎮 Android Google Play 게임즈 서비스 v2 로그인 및 프로필 연동
+   */
+  public async signInWithPlayGames(customNickname?: string): Promise<{ success: boolean; isNewUser: boolean; error?: string }> {
+    localStorage.removeItem('auth_explicitly_logged_out');
+    const pgs = PlayGamesService.getInstance();
+    if (!pgs.isAvailable()) {
+      return { success: false, isNewUser: false, error: 'Google Play 게임즈 서비스는 Android 기기에서만 지원됩니다.' };
+    }
+
+    try {
+      let pgResult = await pgs.checkIsAuthenticated();
+      if (!pgResult.isAuthenticated) {
+        pgResult = await pgs.signIn();
+      }
+      if (!pgResult.isAuthenticated || !pgResult.playerId) {
+        return {
+          success: false,
+          isNewUser: false,
+          error: 'Google Play 게임즈 인증에 실패했습니다. (디버그 APK의 경우 Play Console에 디버그 SHA-1 인증서 지문이 등록되어 있는지 확인해 주세요.)'
+        };
+      }
+
+      // Firebase Auth 세션 확보 (5초 타임아웃 적용, 실패 시에도 Play Games 로컬 세션으로 진행 가능하도록 폴백)
+      let fbUser = auth.currentUser;
+      if (!fbUser) {
+        try {
+          const cred = await this.withTimeout(
+            signInAnonymously(auth),
+            5000,
+            'Firebase 세션 연결 시간 초과'
+          );
+          fbUser = cred.user;
+        } catch (anonErr) {
+          console.warn('⚠️ [PlayGames] Firebase 익명 세션 생성 타임아웃/실패 - Play Games 단독 프로필로 진입합니다:', anonErr);
+          const fallbackUid = `pg_${pgResult.playerId}`;
+          const finalNickname = resolveCommanderNickname(customNickname?.trim() || pgResult.displayName || '지휘관', fallbackUid);
+          this.currentUser = { uid: fallbackUid, email: `playgames:${pgResult.playerId}`, displayName: finalNickname, isAnonymous: false } as User;
+          this.cachedProfile = {
+            uid: fallbackUid,
+            email: `playgames:${pgResult.playerId}`,
+            nickname: finalNickname,
+            isAnonymous: false,
+            playGamesPlayerId: pgResult.playerId,
+            createdAt: Date.now(),
+            lastLoginAt: Date.now(),
+          };
+          this.notifyAuthListeners();
+          return { success: true, isNewUser: false };
+        }
+      }
+      this.currentUser = fbUser;
+
+      let isNewUser = false;
+      const snapshot = await this.withTimeoutFallback(
+        get(child(ref(db), `users/${fbUser.uid}/profile`)),
+        2500,
+        null,
+        'PlayGames 프로필 조회'
+      );
+      if (snapshot && snapshot.exists()) {
+        const existingProfile = snapshot.val() as UserProfile;
+        const nick = (!existingProfile.nickname || existingProfile.nickname === '지휘관')
+          ? resolveCommanderNickname(pgResult.displayName || '지휘관', fbUser.uid)
+          : existingProfile.nickname;
+        const updatedProfile: UserProfile = {
+          ...existingProfile,
+          nickname: nick,
+          isAnonymous: false,
+          playGamesPlayerId: pgResult.playerId,
+          lastLoginAt: Date.now(),
+        };
+        await this.withTimeoutFallback(
+          update(ref(db, `users/${fbUser.uid}/profile`), {
+            nickname: nick,
+            isAnonymous: false,
+            playGamesPlayerId: pgResult.playerId,
+            lastLoginAt: Date.now(),
+          }),
+          2000,
+          undefined,
+          'PlayGames 프로필 업데이트'
+        );
+        this.cachedProfile = updatedProfile;
+      } else {
+        isNewUser = true;
+        const candidate = (customNickname && customNickname.trim())
+          || pgResult.displayName?.trim()
+          || '지휘관';
+        const finalNickname = resolveCommanderNickname(candidate, fbUser.uid);
+        await this.withTimeoutFallback(
+          updateProfile(fbUser, { displayName: finalNickname }),
+          2000,
+          undefined,
+          'PlayGames displayName 갱신'
+        );
+
+        const profileData: UserProfile = {
+          uid: fbUser.uid,
+          email: fbUser.email || `playgames:${pgResult.playerId}`,
+          nickname: finalNickname,
+          isAnonymous: false,
+          playGamesPlayerId: pgResult.playerId,
+          createdAt: Date.now(),
+          lastLoginAt: Date.now(),
+        };
+        await this.withTimeoutFallback(
+          set(ref(db, `users/${fbUser.uid}/profile`), profileData),
+          2500,
+          undefined,
+          'PlayGames 신규 프로필 저장'
+        );
+        this.cachedProfile = profileData;
+      }
+
+      this.notifyAuthListeners();
+      return { success: true, isNewUser };
+    } catch (err: any) {
+      console.error('[Firebase Auth] Play Games sign-in failed:', err);
+      return { success: false, isNewUser: false, error: err?.message || 'Play 게임즈 로그인 중 오류가 발생했습니다.' };
+    }
+  }
+
+  /**
    * 🌐 구글 계정으로 로그인 또는 회원가입
    * @param customNickname 가입 시 사용자가 지정한 닉네임 (미지정 또는 '지휘관'일 경우 UID 순번 번호 자동 생성)
    */
   public async signInWithGoogle(customNickname?: string): Promise<{ success: boolean; isNewUser: boolean; error?: string }> {
     localStorage.removeItem('auth_explicitly_logged_out');
+    // Android 네이티브 앱에서는 WebView 팝업 제한을 피하고 공식 Google Play 게임즈 서비스 v2 SDK를 통해 인증 수행
+    if (PlayGamesService.getInstance().isAvailable()) {
+      return this.signInWithPlayGames(customNickname);
+    }
     try {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
       const cred = await signInWithPopup(auth, provider);
       this.currentUser = cred.user;
 
-      // Realtime Database에서 기존 프로필 확인
+      // Realtime Database에서 기존 프로필 확인 (2.5초 타임아웃)
       let isNewUser = false;
-      const snapshot = await get(child(ref(db), `users/${cred.user.uid}/profile`));
+      const snapshot = await this.withTimeoutFallback(
+        get(child(ref(db), `users/${cred.user.uid}/profile`)),
+        2500,
+        null,
+        'Google 프로필 조회'
+      );
 
-      if (snapshot.exists()) {
+      if (snapshot && snapshot.exists()) {
         const existingProfile = snapshot.val() as UserProfile;
         let nick = existingProfile.nickname;
         // 만약 기존 프로필이 '지휘관' 기본명으로 되어 있었다면 순번 숫자로 보정
         if (!nick || nick === '지휘관') {
           nick = resolveCommanderNickname('지휘관', cred.user.uid);
-          await update(ref(db, `users/${cred.user.uid}/profile`), { nickname: nick }).catch(() => {});
+          await this.withTimeoutFallback(
+            update(ref(db, `users/${cred.user.uid}/profile`), { nickname: nick }),
+            2000,
+            undefined,
+            'Google 닉네임 보정'
+          );
         }
-        await update(ref(db, `users/${cred.user.uid}/profile`), { lastLoginAt: Date.now() }).catch(() => {});
+        await this.withTimeoutFallback(
+          update(ref(db, `users/${cred.user.uid}/profile`), { lastLoginAt: Date.now() }),
+          2000,
+          undefined,
+          'Google 로그인 시간 갱신'
+        );
         this.cachedProfile = { ...existingProfile, nickname: nick, lastLoginAt: Date.now() };
       } else {
         isNewUser = true;
@@ -374,7 +642,12 @@ export class FirebaseService {
           || '지휘관';
         const finalNickname = resolveCommanderNickname(candidate, cred.user.uid);
 
-        await updateProfile(cred.user, { displayName: finalNickname }).catch(() => {});
+        await this.withTimeoutFallback(
+          updateProfile(cred.user, { displayName: finalNickname }),
+          2000,
+          undefined,
+          'Google displayName 설정'
+        );
 
         const profileData: UserProfile = {
           uid: cred.user.uid,
@@ -385,11 +658,12 @@ export class FirebaseService {
           lastLoginAt: Date.now(),
         };
 
-        try {
-          await set(ref(db, `users/${cred.user.uid}/profile`), profileData);
-        } catch (dbErr) {
-          console.warn('[Firebase DB] Google profile creation warning:', dbErr);
-        }
+        await this.withTimeoutFallback(
+          set(ref(db, `users/${cred.user.uid}/profile`), profileData),
+          2500,
+          undefined,
+          'Google 신규 프로필 저장'
+        );
 
         this.cachedProfile = profileData;
       }
@@ -430,9 +704,26 @@ export class FirebaseService {
 
     try {
       // 1. 로그인 우선 시도
-      const cred = await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+      const cred = await this.withTimeout(
+        signInWithEmailAndPassword(auth, cleanEmail, cleanPass),
+        8000,
+        '인증 서버 응답 시간이 초과되었습니다.'
+      );
       this.currentUser = cred.user;
-      this.cachedProfile = await this.fetchUserProfile(cred.user.uid, cred.user.email, nickname);
+      const fallbackProfile: UserProfile = {
+        uid: cred.user.uid,
+        email: cred.user.email,
+        nickname: resolveCommanderNickname(nickname, cred.user.uid),
+        isAnonymous: false,
+        createdAt: Date.now(),
+        lastLoginAt: Date.now(),
+      };
+      this.cachedProfile = await this.withTimeoutFallback(
+        this.fetchUserProfile(cred.user.uid, cred.user.email, nickname),
+        3000,
+        fallbackProfile,
+        '스마트 로그인 프로필 조회'
+      );
       return { success: true, isNewUser: false };
     } catch (loginErr: any) {
       const code = loginErr.code || '';
@@ -445,13 +736,22 @@ export class FirebaseService {
         code === 'auth/invalid-login-credentials'
       ) {
         try {
-          const createCred = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPass);
+          const createCred = await this.withTimeout(
+            createUserWithEmailAndPassword(auth, cleanEmail, cleanPass),
+            8000,
+            '회원가입 서버 응답 시간이 초과되었습니다.'
+          );
           this.currentUser = createCred.user;
 
           // 🎖️ 유저가 '지휘관'을 그대로 두거나 비워둔 경우 UID 순번 숫자 부여
           const finalNick = resolveCommanderNickname(nickname, createCred.user.uid);
 
-          await updateProfile(createCred.user, { displayName: finalNick }).catch(() => {});
+          await this.withTimeoutFallback(
+            updateProfile(createCred.user, { displayName: finalNick }),
+            2000,
+            undefined,
+            '스마트 가입 닉네임 갱신'
+          );
 
           // Realtime Database에 초기 프로필 생성
           const profileData: UserProfile = {
@@ -463,11 +763,12 @@ export class FirebaseService {
             lastLoginAt: Date.now(),
           };
 
-          try {
-            await set(ref(db, `users/${createCred.user.uid}/profile`), profileData);
-          } catch (dbErr) {
-            console.warn('[Firebase DB] Profile init warning:', dbErr);
-          }
+          await this.withTimeoutFallback(
+            set(ref(db, `users/${createCred.user.uid}/profile`), profileData),
+            2500,
+            undefined,
+            '스마트 가입 프로필 저장'
+          );
 
           this.cachedProfile = profileData;
           this.notifyAuthListeners();
@@ -479,7 +780,7 @@ export class FirebaseService {
           if (signupErr.code === 'auth/weak-password') {
             return { success: false, isNewUser: false, error: '비밀번호는 최소 6자 이상이어야 합니다.' };
           }
-          return { success: false, isNewUser: false, error: signupErr.message || '회원가입 중 오류가 발생했습니다.' };
+          return { success: false, isNewUser: false, error: this.getFriendlyErrorMessage(signupErr) };
         }
       }
 
@@ -490,17 +791,21 @@ export class FirebaseService {
         return { success: false, isNewUser: false, error: '유효한 이메일 형식이 아닙니다.' };
       }
 
-      return { success: false, isNewUser: false, error: loginErr.message || '인증에 실패했습니다.' };
+      return { success: false, isNewUser: false, error: this.getFriendlyErrorMessage(loginErr) };
     }
   }
 
   /**
-   * 익명(게스트) 로그인
+   * 익명(게스트) 로그인 (Firebase 응답 지연/실패 시 로컬 오프라인 게스트 세션으로 즉시 진입 보장)
    */
   public async signInGuest(): Promise<{ success: boolean; error?: string }> {
     localStorage.removeItem('auth_explicitly_logged_out');
     try {
-      const cred = await signInAnonymously(auth);
+      const cred = await this.withTimeout(
+        signInAnonymously(auth),
+        4500,
+        '익명 인증 서버 응답 시간 초과'
+      );
       this.currentUser = cred.user;
       this.cachedProfile = {
         uid: cred.user.uid,
@@ -513,8 +818,19 @@ export class FirebaseService {
       this.notifyAuthListeners();
       return { success: true };
     } catch (err: any) {
-      console.error('[Firebase Auth] Guest sign-in failed:', err);
-      return { success: false, error: err.message || '게스트 접속에 실패했습니다.' };
+      console.warn('[Firebase Auth] 온라인 익명 인증 지연/실패 -> 오프라인 로컬 게스트 세션으로 즉시 진입합니다:', err);
+      const localGuestUid = 'guest';
+      this.currentUser = { uid: localGuestUid, email: null, isAnonymous: true } as User;
+      this.cachedProfile = {
+        uid: localGuestUid,
+        email: null,
+        nickname: '방랑 지휘관_로컬',
+        isAnonymous: true,
+        createdAt: Date.now(),
+        lastLoginAt: Date.now()
+      };
+      this.notifyAuthListeners();
+      return { success: true };
     }
   }
 
@@ -526,19 +842,24 @@ export class FirebaseService {
     localStorage.removeItem('limbo_has_session');
     this.currentUser = null;
     this.cachedProfile = null;
-    await signOut(auth).catch(() => {});
+    await this.withTimeoutFallback(signOut(auth), 2000, undefined, 'signOut');
     this.notifyAuthListeners();
   }
 
   /**
-   * Realtime Database에서 사용자 프로필 불러오기/생성
+   * Realtime Database에서 사용자 프로필 불러오기/생성 (각 단계 2.5초 안전 타임아웃 적용)
    */
   private async fetchUserProfile(uid: string, email: string | null, fallbackNickname?: string | null): Promise<UserProfile> {
     try {
-      const snapshot = await get(child(ref(db), `users/${uid}/profile`));
-      if (snapshot.exists()) {
+      const snapshot = await this.withTimeoutFallback(
+        get(child(ref(db), `users/${uid}/profile`)),
+        2500,
+        null,
+        'fetchUserProfile 조회'
+      );
+      if (snapshot && snapshot.exists()) {
         const val = snapshot.val() as UserProfile;
-        // 마지막 로그인 갱신
+        // 마지막 로그인 갱신 (비동기 논블로킹)
         update(ref(db, `users/${uid}/profile`), { lastLoginAt: Date.now() }).catch(() => {});
         return val;
       }
@@ -558,9 +879,12 @@ export class FirebaseService {
       lastLoginAt: Date.now()
     };
 
-    try {
-      await set(ref(db, `users/${uid}/profile`), defaultProfile);
-    } catch (_) {}
+    await this.withTimeoutFallback(
+      set(ref(db, `users/${uid}/profile`), defaultProfile),
+      2000,
+      undefined,
+      'fetchUserProfile 기본 프로필 저장'
+    );
 
     return defaultProfile;
   }
@@ -570,7 +894,7 @@ export class FirebaseService {
    */
   public async saveProgress(progressData: Record<string, unknown>): Promise<boolean> {
     const user = await this.ensureUser();
-    if (!user) {
+    if (!user || user.uid === 'guest') {
       console.warn('⚠️ [Firebase RTDB] 클라우드 저장 건너뜀: 로그인되지 않은 게스트 상태입니다.');
       return false;
     }
@@ -594,10 +918,10 @@ export class FirebaseService {
         'color: #c8aa6e; font-weight: bold; background: #0e1015; padding: 2px 6px; border-radius: 4px; border: 1px solid #c8aa6e44;'
       );
 
-      await set(userProgressRef, payload);
+      await this.withTimeout(set(userProgressRef, payload), 6000, '클라우드 세이브 업로드 시간 초과');
 
-      // 프로필 저장 타임스탬프 갱신
-      await update(ref(db, `users/${uid}/profile`), {
+      // 프로필 저장 타임스탬프 갱신 (비동기 논블로킹)
+      update(ref(db, `users/${uid}/profile`), {
         lastSavedAt: Date.now()
       }).catch(() => {});
 
@@ -625,10 +949,10 @@ export class FirebaseService {
    */
   public async measurePing(): Promise<number> {
     const user = await this.ensureUser();
-    if (!user) return -1;
+    if (!user || user.uid === 'guest') return -1;
     const t0 = performance.now();
     try {
-      await set(ref(db, `users/${user.uid}/ping`), Date.now());
+      await this.withTimeout(set(ref(db, `users/${user.uid}/ping`), Date.now()), 3000, 'Ping timeout');
       const ping = Math.round(performance.now() - t0);
       console.log(`%c📡 [Firebase 핑 측정] 왕복 레이턴시: ${ping}ms`, 'color: #c8aa6e; font-mono;');
       return ping;
@@ -639,14 +963,18 @@ export class FirebaseService {
   }
 
   /**
-   * 📥 Realtime Database에서 게임 진행 데이터 불러오기 (Cloud Load)
+   * 📥 Realtime Database에서 게임 진행 데이터 불러오기 (Cloud Load - 3.5초 안전 타임아웃 적용)
    */
   public async loadProgress(): Promise<Record<string, unknown> | null> {
     const user = await this.ensureUser();
-    if (!user) return null;
+    if (!user || user.uid === 'guest') return null;
     const uid = user.uid;
     try {
-      const snapshot = await get(child(ref(db), `users/${uid}/progress`));
+      const snapshot = await this.withTimeout(
+        get(child(ref(db), `users/${uid}/progress`)),
+        3500,
+        '클라우드 세이브 로드 시간 초과'
+      );
       if (snapshot.exists()) {
         console.log('[Firebase RTDB] Cloud load successful');
         return snapshot.val() as Record<string, unknown>;
@@ -681,6 +1009,163 @@ export class FirebaseService {
    * 🏆 아레나 방어 덱 및 랭킹 데이터 동기화
    * - gateLevel < 1 (앵커 게이트 미건설)인 경우 리더보드/매칭풀에서 즉시 제거
    */
+  
+  /**
+   * 🗺️ 1시간 내 던전 방문 기록 등록 (Firebase Realtime DB)
+   */
+  public async recordDungeonVisit(floor: number, party: any[], gm?: any): Promise<void> {
+    const profile = this.cachedProfile;
+    const callsign = profile?.nickname || '방주 지휘관';
+    const uid = this.currentUser ? this.currentUser.uid : 'guest_' + (localStorage.getItem('guest_commander_id') || '001');
+
+    try {
+      const safeSquad = (Array.isArray(party) ? party : []).filter(Boolean).map(h => {
+        const eff = gm ? gm.getHeroEffectiveStats(h) : (h.stats || {});
+        return {
+          id: h.id || 'hero',
+          name: h.name || '대원',
+          classId: h.classId || 'squire',
+          level: h.level || 1,
+          grade: h.grade || 'rookie',
+          position: h.position || 'mid',
+          stats: {
+            atk: Math.round(eff.atk || 25),
+            def: Math.round(eff.def || 10),
+            spd: Math.round(eff.spd || 12),
+            luck: Math.round(eff.luck || 10),
+            maxHp: Math.round(eff.maxHp || 120),
+            maxMp: Math.round(eff.maxMp || 40),
+            critRateBonus: eff.critRateBonus || 0,
+            critDmg: eff.critDmg || 1.5
+          },
+          equippedSkills: Array.isArray(h.equippedSkills) ? [...h.equippedSkills] : []
+        };
+      });
+
+      const record: DungeonVisitRecord = {
+        uid,
+        callsign,
+        floor,
+        timestamp: Date.now(),
+        squad: safeSquad
+      };
+
+      // 1. Firebase RTDB에 등록
+      await set(ref(db, `dungeon_recent_visits/${uid}`), record).catch(() => {});
+
+      // 2. 로컬 캐시에도 보관 (오프라인/게스트 폴백용)
+      try {
+        const localList: DungeonVisitRecord[] = JSON.parse(localStorage.getItem('limbo_recent_visits') || '[]');
+        const filtered = localList.filter(r => r.uid !== uid && (Date.now() - r.timestamp) < 3600000);
+        filtered.push(record);
+        localStorage.setItem('limbo_recent_visits', JSON.stringify(filtered.slice(-15)));
+      } catch (_) {}
+    } catch (err) {
+      console.warn('[Firebase RTDB] Dungeon visit record error:', err);
+    }
+  }
+
+  /**
+   * 🗺️ 1시간 내에 던전을 방문했던 다른 지휘관 기록 조회 (본인 제외)
+   */
+  public async getRecentDungeonVisitors(excludeUid?: string): Promise<DungeonVisitRecord[]> {
+    const myUid = excludeUid || (this.currentUser ? this.currentUser.uid : 'guest_' + (localStorage.getItem('guest_commander_id') || '001'));
+    const oneHourAgo = Date.now() - 3600000;
+    const results: DungeonVisitRecord[] = [];
+
+    try {
+      const visitsRef = query(ref(db, 'dungeon_recent_visits'), orderByChild('timestamp'), limitToLast(20));
+      const snap = await get(visitsRef);
+      if (snap.exists()) {
+        const val = snap.val() as Record<string, DungeonVisitRecord>;
+        Object.values(val).forEach(rec => {
+          if (rec && rec.uid !== myUid && rec.timestamp >= oneHourAgo && Array.isArray(rec.squad) && rec.squad.length > 0) {
+            results.push(rec);
+          }
+        });
+      }
+    } catch (err) {
+      console.warn('[Firebase RTDB] Fetch recent dungeon visitors warning:', err);
+    }
+
+    // 로컬 폴백 병합
+    try {
+      const localList: DungeonVisitRecord[] = JSON.parse(localStorage.getItem('limbo_recent_visits') || '[]');
+      localList.forEach(rec => {
+        if (rec && rec.uid !== myUid && rec.timestamp >= oneHourAgo && !results.some(r => r.uid === rec.uid)) {
+          results.push(rec);
+        }
+      });
+    } catch (_) {}
+
+    return results;
+  }
+
+  /**
+   * ⚔️ 습격 전투 발생 결과 노티 등록 (피습격자의 피격 알림 저장)
+   */
+  public async sendCommanderAttackNotice(notice: Omit<CommanderAttackNotice, 'id' | 'timestamp'> & { targetUid: string }): Promise<void> {
+    const fullNotice: CommanderAttackNotice = {
+      id: 'atk_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      attackerCallsign: notice.attackerCallsign,
+      defenderCallsign: notice.defenderCallsign,
+      attackerWon: notice.attackerWon,
+      floor: notice.floor,
+      timestamp: Date.now()
+    };
+
+    try {
+      if (notice.targetUid && !notice.targetUid.startsWith('guest_') && !notice.targetUid.startsWith('mock_')) {
+        await push(ref(db, `commander_attack_notices/${notice.targetUid}`), fullNotice).catch(() => {});
+      }
+    } catch (_) {}
+
+    // 로컬 테스트 및 시뮬레이션을 위해 로컬 알림 큐에도 보관
+    try {
+      const key = `limbo_pending_notices_${notice.targetUid}`;
+      const notices: CommanderAttackNotice[] = JSON.parse(localStorage.getItem(key) || '[]');
+      notices.push(fullNotice);
+      localStorage.setItem(key, JSON.stringify(notices.slice(-10)));
+    } catch (_) {}
+  }
+
+  /**
+   * 📬 자신에게 온 습격 피격 알림 목록 수신 및 소모
+   */
+  public async consumeCommanderAttackNotices(): Promise<CommanderAttackNotice[]> {
+    const myUid = this.currentUser ? this.currentUser.uid : 'guest_' + (localStorage.getItem('guest_commander_id') || '001');
+    const notices: CommanderAttackNotice[] = [];
+
+    // 1. Firebase RTDB 확인
+    try {
+      if (this.currentUser) {
+        const noticeRef = ref(db, `commander_attack_notices/${myUid}`);
+        const snap = await get(noticeRef);
+        if (snap.exists()) {
+          const val = snap.val() as Record<string, CommanderAttackNotice>;
+          Object.values(val).forEach(n => {
+            if (n && n.attackerCallsign) notices.push(n);
+          });
+          await set(noticeRef, null).catch(() => {});
+        }
+      }
+    } catch (_) {}
+
+    // 2. 로컬 큐 확인
+    try {
+      const key = `limbo_pending_notices_${myUid}`;
+      const localNotices: CommanderAttackNotice[] = JSON.parse(localStorage.getItem(key) || '[]');
+      localNotices.forEach(n => {
+        if (!notices.some(item => item.id === n.id)) {
+          notices.push(n);
+        }
+      });
+      localStorage.removeItem(key);
+    } catch (_) {}
+
+    return notices;
+  }
+
   public async syncArenaLeaderboard(rating: number, rank: number, gateLevel: number = 0, defenseDeck: unknown[] = []): Promise<void> {
     if (!this.currentUser) return;
     const uid = this.currentUser.uid;
@@ -893,6 +1378,8 @@ export class FirebaseService {
       const oppRating = Math.max(900, myRating - 120 + i * 60 + Math.floor(Math.random() * 40));
       const botGateLevel = Math.max(1, Math.min(10, myGateLevel + (i % 3 === 0 ? 0 : i % 3 === 1 ? (myGateLevel < 10 ? 1 : -1) : (myGateLevel > 1 ? -1 : 1))));
 
+      const botLevel = Math.max(20, Math.min(55, Math.round(20 + ((Math.max(750, Math.min(2500, oppRating)) - 750) / 1750) * 35)));
+
       const mockDeck: Mercenary[] = cfg.classes.map((clsId, idx) => {
         const cls = CHARACTER_CLASSES[clsId] || CHARACTER_CLASSES['squire'];
         const pos = idx < 2 ? 'front' : idx === 2 ? 'mid' : 'back';
@@ -901,8 +1388,8 @@ export class FirebaseService {
           name: `${cfg.name}의 ${cls.name}`,
           title: cls.name,
           classId: clsId,
-          grade: 'veteran',
-          level: Math.max(1, Math.floor(oppRating / 80)),
+          grade: oppRating >= 2200 ? 'legend' : oppRating >= 1900 ? 'epic' : oppRating >= 1600 ? 'hero' : 'veteran',
+          level: botLevel,
           exp: 0,
           expToNext: 100,
           currentHp: cls.baseStats.hp * 2,
@@ -961,24 +1448,11 @@ export class FirebaseService {
    */
   public async initNemesisWorldBoss(): Promise<WorldBossNemesisData> {
     const bossRef = ref(db, 'world_boss/nemesis');
-    const now = Date.now();
-    const d = new Date(now);
-    const daysSinceWed = (d.getDay() + 7 - 3) % 7;
-    const wedTimestamp = new Date(d.getFullYear(), d.getMonth(), d.getDate() - daysSinceWed, 0, 0, 0, 0).getTime();
-
-    try {
-      const snapshot = await get(bossRef);
-      if (snapshot.exists()) {
-        const val = snapshot.val() as WorldBossNemesisData;
-        if (!val.cycleStartTime || val.cycleStartTime < wedTimestamp) {
-          const restored = await this.restoreNemesisWorldBossHp();
-          if (restored) return restored;
-        }
-        return val;
-      }
-    } catch (_) {}
-
-    const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
+            const now = Date.now();
+        const d = new Date(now);
+        const daysSinceWed = (d.getDay() + 7 - 3) % 7;
+        const wedTimestamp = new Date(d.getFullYear(), d.getMonth(), d.getDate() - daysSinceWed, 0, 0, 0, 0).getTime();
+        const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
     const bodyCfg = NEMESIS_BOSS_CONFIG.parts.body;
     const tailCfg = NEMESIS_BOSS_CONFIG.parts.tail;
     const totalMaxHp = NEMESIS_BOSS_CONFIG.maxHp;
@@ -1123,7 +1597,7 @@ export class FirebaseService {
   /**
    * 🌌 월드 보스: 네메시스 체력 100% 완전 복구 (실시간 DB 동기화)
    */
-  public async restoreNemesisWorldBossHp(): Promise<WorldBossNemesisData | null> {
+  public async restoreNemesisWorldBossHp(cycleStartTimeOverride?: number): Promise<WorldBossNemesisData | null> {
     const bossRef = ref(db, 'world_boss/nemesis');
     try {
       const result = await runTransaction(bossRef, (currentData: WorldBossNemesisData | null) => {
@@ -1142,7 +1616,7 @@ export class FirebaseService {
             tail: { id: 'tail', name: tailCfg.name, position: 'back', currentHp: tailCfg.maxHp, maxHp: tailCfg.maxHp, isDefeated: false }
           },
           phase: 1,
-          cycleStartTime: currentData?.cycleStartTime || now,
+          cycleStartTime: cycleStartTimeOverride || (Date.now() - ((new Date().getDay() + 4) % 7) * 86400000),
           lastPlunderCheckTime: now,
           windowStartHp: totalMaxHp,
           isDefeated: false,
@@ -1173,8 +1647,8 @@ export class FirebaseService {
     if (!trimmed) {
       return { available: false, reason: '콜사인을 입력해 주세요.' };
     }
-    if (trimmed.length < 2 || trimmed.length > 12) {
-      return { available: false, reason: '콜사인은 2자 이상 12자 이하로 입력해 주세요.' };
+    if (trimmed.length < 2 || getCallsignWidth(trimmed) > CALLSIGN_MAX_WIDTH) {
+      return { available: false, reason: '콜사인은 2자 이상, 최대 한글 6자(영문·숫자 12자) 이하로 입력해 주세요.' };
     }
 
     const validRegex = /^[a-zA-Z0-9가-힣_]+$/;

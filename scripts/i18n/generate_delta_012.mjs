@@ -1,0 +1,695 @@
+import fs from 'fs';
+import path from 'path';
+
+const delta = {
+  // ── 네메시스 전투 및 헤더 UI ──
+  "퇴각": {
+    "en": "Retreat",
+    "ja": "撤退"
+  },
+  "자동 ON": {
+    "en": "Auto ON",
+    "ja": "自動 ON"
+  },
+  "자동 OFF": {
+    "en": "Auto OFF",
+    "ja": "自動 OFF"
+  },
+  "집중 타겟:": {
+    "en": "Focused Target:",
+    "ja": "集中ターゲット:"
+  },
+  "보스 잔여": {
+    "en": "Boss Remaining",
+    "ja": "ボス残量"
+  },
+  "절멸 차징": {
+    "en": "Cataclysm Charge",
+    "ja": "絶滅チャージ"
+  },
+  "그로기": {
+    "en": "Groggy",
+    "ja": "気絶"
+  },
+  "파괴": {
+    "en": "Destroyed",
+    "ja": "破壊"
+  },
+  "상세 로그": {
+    "en": "Detailed Log",
+    "ja": "詳細ログ"
+  },
+  "전체 전투 상세 기록 모달 열기": {
+    "en": "Open Full Battle Log Modal",
+    "ja": "全戦闘詳細ログを開く"
+  },
+  "전술 궁극기": {
+    "en": "Tactical Ultimate",
+    "ja": "戦術必殺技"
+  },
+  "누적": {
+    "en": "Cumulative",
+    "ja": "累積"
+  },
+  "타겟": {
+    "en": "Target",
+    "ja": "ターゲット"
+  },
+  "기본 공격": {
+    "en": "Basic Attack",
+    "ja": "基本攻撃"
+  },
+  "기본 물리 공격": {
+    "en": "Basic Physical Attack",
+    "ja": "基本物理攻撃"
+  },
+  "단일 적": {
+    "en": "Single Enemy",
+    "ja": "単体敵"
+  },
+  "적 전체": {
+    "en": "All Enemies",
+    "ja": "敵全体"
+  },
+  "아군 전체": {
+    "en": "All Allies",
+    "ja": "味方全体"
+  },
+  "아군 치유": {
+    "en": "Ally Heal",
+    "ja": "味方回復"
+  },
+  "보호막": {
+    "en": "Barrier",
+    "ja": "シールド"
+  },
+  "고유 강타": {
+    "en": "Unique Strike",
+    "ja": "固有強打"
+  },
+  "지원/마법": {
+    "en": "Support/Magic",
+    "ja": "支援/魔法"
+  },
+  "전투 스킬": {
+    "en": "Combat Skill",
+    "ja": "戦闘スキル"
+  },
+  "일반 공격": {
+    "en": "Normal Attack",
+    "ja": "通常攻撃"
+  },
+  "연계!": {
+    "en": "Combo!",
+    "ja": "連携！"
+  },
+  "궁극 연계!": {
+    "en": "Ultimate Combo!",
+    "ja": "究極連携！"
+  },
+  "궁극기": {
+    "en": "Ultimate",
+    "ja": "必殺技"
+  },
+  "턴 대기": {
+    "en": "turn(s) CD",
+    "ja": "ターン待機"
+  },
+  "기록된 전투 로그가 없습니다.": {
+    "en": "No battle logs recorded.",
+    "ja": "記録された戦闘ログがありません。"
+  },
+  "내 턴": {
+    "en": "My Turn",
+    "ja": "自ターン"
+  },
+  "전투불능": {
+    "en": "Incapacitated",
+    "ja": "戦闘不能"
+  },
+
+  // ── 정산 및 전체 로그 모달 ──
+  "네메시스 토벌전 정산 리포트": {
+    "en": "Nemesis Raid Settlement Report",
+    "ja": "ネメシストバル戦精算レポート"
+  },
+  "🎉 단일 전투 최고 피해 기록 갱신!": {
+    "en": "🎉 New Single-Battle Damage Record!",
+    "ja": "🎉 単一戦闘最高ダメージ記録更新！"
+  },
+  "총 누적 피해": {
+    "en": "Total Cumulative Damage",
+    "ja": "総累積ダメージ"
+  },
+  "획득 골드": {
+    "en": "Gold Acquired",
+    "ja": "獲得ゴールド"
+  },
+  "획득 에테르": {
+    "en": "Aether Acquired",
+    "ja": "獲得エーテル"
+  },
+  "부위별 타격 피해 정산": {
+    "en": "Part-by-Part Damage Settlement",
+    "ja": "部位別打撃ダメージ精算"
+  },
+  "영구 누적 저장": {
+    "en": "Permanently Stored",
+    "ja": "永久累積保存"
+  },
+  "대원별 피해 및 기여도": {
+    "en": "Hero Damage & Contribution",
+    "ja": "隊員別ダメージおよび貢献度"
+  },
+  "전투 리포트": {
+    "en": "Combat Report",
+    "ja": "戦闘レポート"
+  },
+  "상세 로그 보기": {
+    "en": "View Detailed Log",
+    "ja": "詳細ログを見る"
+  },
+  "로비로 복귀": {
+    "en": "Return to Lobby",
+    "ja": "ロビーへ復帰"
+  },
+  "전투 상세 기록 (전체 로그)": {
+    "en": "Battle Details (Full Log)",
+    "ja": "戦闘詳細記録（全ログ）"
+  },
+  "총 {count}건의 전투 기록": {
+    "en": "Total {count} battle log entries",
+    "ja": "計{count}件の戦闘記録"
+  },
+  "스크롤하여 이전 기록을 확인할 수 있습니다.": {
+    "en": "Scroll to view previous log entries.",
+    "ja": "スクロールして過去の記録を確認できます。"
+  },
+
+  // ── 네메시스 로비 허브 ──
+  "영지 복귀": {
+    "en": "Return to Citadel",
+    "ja": "領地復帰"
+  },
+  "차원 네메시스": {
+    "en": "Dimensional Nemesis",
+    "ja": "次元ネメシス"
+  },
+  "🟢 토벌 진행 중": {
+    "en": "🟢 Raid in Progress",
+    "ja": "🟢 トバル進行中"
+  },
+  "👑 토벌 완료": {
+    "en": "👑 Raid Cleared",
+    "ja": "👑 トバル完了"
+  },
+  "💤 재소환 대기": {
+    "en": "💤 Awaiting Respawn",
+    "ja": "💤 再召喚待機"
+  },
+  "주기": {
+    "en": "Cycle",
+    "ja": "周期"
+  },
+  "🌐 전 지휘관 실시간 공유 월드 보스": {
+    "en": "🌐 All-Commander Real-Time Shared World Boss",
+    "ja": "🌐 全指揮官リアルタイム共有ワールドボス"
+  },
+  "보스 전체 잔여 체력": {
+    "en": "Boss Remaining Total HP",
+    "ja": "ボス全体残余体力"
+  },
+  "(전 지휘관 공유)": {
+    "en": "(Shared by all commanders)",
+    "ja": "（全指揮官共有）"
+  },
+  "전 지휘관 요격 목표치": {
+    "en": "Global Commander Defense Goal",
+    "ja": "全指揮官迎撃目標値"
+  },
+  "(6시간 체력 1/24 저지)": {
+    "en": "(6-hour window 1/24 HP intercept)",
+    "ja": "（6時間体力1/24阻止）"
+  },
+  "잔여 목표:": {
+    "en": "Remaining Goal:",
+    "ja": "残余目標:"
+  },
+  "✅ 요격 달성": {
+    "en": "✅ Intercept Accomplished",
+    "ja": "✅ 迎撃達成"
+  },
+  "{pct}% 저지": {
+    "en": "{pct}% Defended",
+    "ja": "{pct}% 阻止"
+  },
+  "다음 요격 주기 갱신": {
+    "en": "Next Window Refresh",
+    "ja": "次回迎撃周期更新"
+  },
+  "전 지휘관 누적 피해": {
+    "en": "Global Cumulative Damage",
+    "ja": "全指揮官累積ダメージ"
+  },
+  "(방어 성공)": {
+    "en": "(Defense Success)",
+    "ja": "（防衛成功）"
+  },
+  "💀패퇴": {
+    "en": "💀Fallen",
+    "ja": "💀敗退"
+  },
+  "회복 불가": {
+    "en": "Unrecoverable",
+    "ja": "回復不可"
+  },
+  "나의 누적 피해량": {
+    "en": "My Cumulative Damage",
+    "ja": "自分の累積ダメージ"
+  },
+  "단일 최고 기록": {
+    "en": "Personal Best Record",
+    "ja": "単一最高記録"
+  },
+  "일일 도전 횟수": {
+    "en": "Daily Challenge Attempts",
+    "ja": "日課挑戦回数"
+  },
+  "충전": {
+    "en": "Refill",
+    "ja": "チャージ"
+  },
+  "에테르 50개로 +1회 충전": {
+    "en": "+1 attempt for 50 Aether",
+    "ja": "エーテル50個で+1回チャージ"
+  },
+  "회": {
+    "en": " attempts",
+    "ja": "回"
+  },
+  "⚔️ 토벌전 출격": {
+    "en": "⚔️ Sortie to Raid",
+    "ja": "⚔️ トバル戦出撃"
+  },
+  "🎁 마일스톤": {
+    "en": "🎁 Milestones",
+    "ja": "🎁 マイルストーン"
+  },
+  "🏆 토벌 랭킹": {
+    "en": "🏆 Raid Ranking",
+    "ja": "🏆 トバルランキング"
+  },
+  "차원 원정대 편성 필요": {
+    "en": "Dimensional Squad Setup Required",
+    "ja": "次元遠征隊の編成が必要"
+  },
+  "인 편성됨": {
+    "en": "/4 Assigned",
+    "ja": "名編成済"
+  },
+  "차원 네메시스 레이드는 선발 3인과 전술 오퍼레이터 1인이 모두 편성되어야 출전할 수 있습니다.": {
+    "en": "Dimensional Nemesis Raid requires 3 Starters and 1 Tactical Operator to be fully assigned before deploying.",
+    "ja": "次元ネメシスレイドは先発3名と戦術オペレーター1名がすべて編成されて初めて出撃できます。"
+  },
+  "부대 자동 편성": {
+    "en": "Auto Squad Setup",
+    "ja": "部隊自動編成"
+  },
+  "🍻 주점에서 영입": {
+    "en": "🍻 Recruit at Tavern",
+    "ja": "🍻 酒場で雇用"
+  },
+  "🏛️ 직접 편성": {
+    "en": "🏛️ Manual Setup",
+    "ja": "🏛️ 直接編成"
+  },
+  "출전 원정대 (3선발 + 1오퍼레이터)": {
+    "en": "Raid Expedition (3 Starters + 1 Operator)",
+    "ja": "出陣遠征隊（先発3名＋オペレーター1名）"
+  },
+  "차원 덱 연동": {
+    "en": "Linked to Dimensional Deck",
+    "ja": "次元デッキ連動"
+  },
+  "선발": {
+    "en": "Starter",
+    "ja": "先発"
+  },
+  "선발1": {
+    "en": "Starter 1",
+    "ja": "先発1"
+  },
+  "선발2": {
+    "en": "Starter 2",
+    "ja": "先発2"
+  },
+  "선발3": {
+    "en": "Starter 3",
+    "ja": "先発3"
+  },
+  "오퍼레이터": {
+    "en": "Operator",
+    "ja": "オペレーター"
+  },
+  "지휘 가호": {
+    "en": "Command Aegis",
+    "ja": "指揮加護"
+  },
+  "선발 3인이 전투에 직접 참전하며, 오퍼레이터가 파티 전체에 전술 지휘를 제공합니다.": {
+    "en": "3 Starters battle directly in combat, while the Operator provides party-wide tactical command.",
+    "ja": "先発3名が直接交戦し、オペレーターがパーティ全体に戦術指揮を提供します。"
+  },
+  "원정대 변경 ➔": {
+    "en": "Change Expedition ➔",
+    "ja": "遠征隊変更 ➔"
+  },
+  "⚠️ 차원 네메시스 침식 & 약탈 규칙": {
+    "en": "⚠️ Dimensional Nemesis Erosion & Plunder Rules",
+    "ja": "⚠️ 次元ネメシス侵蝕＆略奪ルール"
+  },
+  "차원 앵커 연동 침공": {
+    "en": "Dimensional Anchor Linked Invasion",
+    "ja": "次元アンカー連動侵攻"
+  },
+  "6일 활동 & 1일 재소환 주기": {
+    "en": "6-Day Active & 1-Day Respawn Cycle",
+    "ja": "6日活動＆1日再召喚周期"
+  },
+  "6시간 주기 20% 약탈": {
+    "en": "6-Hour 20% Plunder Window",
+    "ja": "6時間周期20%略奪"
+  },
+  "체력 자연 회복": {
+    "en": "Natural HP Regeneration",
+    "ja": "体力自然回復"
+  },
+  "최대 15턴 전투 & 마일스톤": {
+    "en": "Max 15-Turn Battle & Milestones",
+    "ja": "最大15ターン戦闘＆マイルストーン"
+  },
+  "차원 앵커 게이트(Lv.3+)가 개방되어 활성화된 상태에서만 침식과 약탈이 발생합니다. 차원 앵커가 닫혀 있는 동안에는 네메시스 침공과 자원 약탈이 전면 중단되어 영지 자원이 100% 안전하게 보호됩니다.": {
+    "en": "Erosion and plunder only occur when the Dimensional Anchor Gate (Lv.3+) is unlocked and active. While the anchor is closed, invasions and resource plunder are halted, keeping 100% of territory resources safe.",
+    "ja": "次元アンカーゲート（Lv.3+）が開放され活性化している状態でのみ侵蝕と略奪が発生します。アンカーが閉じている間はネメシス侵攻と略奪が全面的に中断され、領地資源は100%安全に保護されます。"
+  },
+  "6일 동안 활동하며 완전 토벌 시 다음 7일차 재소환 주기까지 평화 상태가 유지됩니다.": {
+    "en": "Remains active for 6 days; once completely cleared, peace is maintained until the next day 7 respawn cycle.",
+    "ja": "6日間活動し、完全討伐時は次の7日目再召喚周期まで平和状態が維持されます。"
+  },
+  "침공 활성화 중 6시간마다 네메시스 체력의 1/24({damage} DMG) 이상을 깎지 못하면 영지 전 자원의 20%를 약탈당합니다.": {
+    "en": "During active invasion, failing to deal at least 1/24 of Nemesis HP ({damage} DMG) every 6 hours results in losing 20% of all territory resources.",
+    "ja": "侵攻活性化中、6時間ごとにネメシスの体力の1/24（{damage} DMG）以上を削れない場合、領地の全資源の20%が略奪されます。"
+  },
+  "네메시스는 활동 중 매 분마다 생존 부위 체력을 지속 회복합니다. (파괴된 부위는 영구 회복 불가)": {
+    "en": "Nemesis continually regenerates living body parts every minute during active periods. (Destroyed parts never recover)",
+    "ja": "ネメシスは活動中、毎分ごとに生存部位の体力を継続回復します。（破壊された部位は永久に回復不可）"
+  },
+  "매 전투마다 피해량을 누적하여 마일스톤 장비와 대량의 인장을 수령하십시오.": {
+    "en": "Accumulate damage with each battle to claim milestone equipment and massive supplies of seals.",
+    "ja": "各戦闘ごとにダメージを蓄積し、マイルストーン装備と大量の印章を受け取ってください。"
+  },
+  "이번 주기 토벌 완료 (재소환 대기 중: {time})": {
+    "en": "Current Cycle Cleared (Awaiting respawn: {time})",
+    "ja": "今周期討伐完了（再召喚待機中：{time}）"
+  },
+  "1일 재소환 대기 기간 (재소환까지: {time})": {
+    "en": "1-Day Respawn Period (Until respawn: {time})",
+    "ja": "1日再召喚待機期間（再召喚まで：{time}）"
+  },
+  "차원 앵커 게이트 Lv.3 필요 (현재 Lv.{gateLevel})": {
+    "en": "Dimensional Gate Lv.3 Required (Current Lv.{gateLevel})",
+    "ja": "次元アンカーゲートLv.3が必要（現在Lv.{gateLevel}）"
+  },
+  "차원 원정대 미편성 (출격 불가: {count}/4인)": {
+    "en": "Expedition Not Ready (Cannot deploy: {count}/4)",
+    "ja": "次元遠征隊未編成（出撃不可：{count}/4名）"
+  },
+  "네메시스 토벌전 출격 (전투 시작)": {
+    "en": "Sortie to Nemesis Raid (Begin Battle)",
+    "ja": "ネメシストバル戦出撃（戦闘開始）"
+  },
+  "일일 도전 횟수 소진 (에테르 충전 필요)": {
+    "en": "Daily Attempts Exhausted (Aether refill required)",
+    "ja": "日課挑戦回数終了（エーテルチャージが必要）"
+  },
+  "토벌 대기 중": {
+    "en": "Awaiting Raid",
+    "ja": "討伐待機中"
+  },
+  "네메시스는 이미 이번 주기에 토벌되었습니다. 다음 주기({waitMinutes}분 후)에 다시 도전할 수 있습니다.": {
+    "en": "Nemesis has already been defeated in this cycle. You can challenge again in the next cycle ({waitMinutes}m).",
+    "ja": "ネメシスは今周期すでに討伐されました。次の周期（{waitMinutes}分後）に再挑戦できます。"
+  },
+  "현재 네메시스는 심연 재소환 준비 중입니다. ({waitMinutes}분 남음)": {
+    "en": "Nemesis is currently preparing for abyssal respawn. ({waitMinutes}m remaining)",
+    "ja": "現在ネメシスは深淵再召喚の準備中です。（残り{waitMinutes}分）"
+  },
+  "차원 네메시스는 차원 앵커 게이트 Lv.3 이상에 개방됩니다. (현재 Lv.{gateLevel})": {
+    "en": "Dimensional Nemesis unlocks at Dimensional Gate Lv.3 or higher. (Current Lv.{gateLevel})",
+    "ja": "次元ネメシスは次元アンカーゲートLv.3以上で開放されます。（現在Lv.{gateLevel}）"
+  },
+  "네메시스에게 누적 피해를 입혀 단계별 특별 무구와 마도석을 획득하십시오.": {
+    "en": "Inflict cumulative damage on Nemesis to earn tier-based special equipment and magigems.",
+    "ja": "ネメシスに累積ダメージを与え、段階別の特別な武具や魔導石を獲得してください。"
+  },
+  "수령 완료": {
+    "en": "Claimed",
+    "ja": "受取完了"
+  },
+  "수령 가능!": {
+    "en": "Ready to Claim!",
+    "ja": "受取可能！"
+  },
+  "완료": {
+    "en": "Completed",
+    "ja": "完了"
+  },
+  "수령": {
+    "en": "Claim",
+    "ja": "受取"
+  },
+  "잠김": {
+    "en": "Locked",
+    "ja": "ロック"
+  },
+  "전 서버 지휘관 토벌 랭킹 (시즌 누적)": {
+    "en": "Global Commander Raid Ranking (Season Cumulative)",
+    "ja": "全サーバー指揮官トバルランキング（シーズン累積）"
+  },
+  "나의 순위": {
+    "en": "My Rank",
+    "ja": "自分の順位"
+  },
+  "기여도 보상 획득": {
+    "en": "Contribution Reward Acquired",
+    "ja": "貢献度報酬獲得"
+  },
+
+  // ── 보스 부위 및 스킬명 ──
+  "머리": {
+    "en": "Head",
+    "ja": "頭部"
+  },
+  "몸통": {
+    "en": "Body",
+    "ja": "胴体"
+  },
+  "꼬리": {
+    "en": "Tail",
+    "ja": "尻尾"
+  },
+  "심연의 용두 (전열)": {
+    "en": "Abyssal Dragon Head (Front)",
+    "ja": "深淵の竜頭（前列）"
+  },
+  "혼돈의 핵 (중열)": {
+    "en": "Chaos Core (Mid)",
+    "ja": "混沌の核（中列）"
+  },
+  "공허의 채찍 (후열)": {
+    "en": "Void Whip (Back)",
+    "ja": "虚空の鞭（後列）"
+  },
+  "심연의 용두": {
+    "en": "Abyssal Dragon Head",
+    "ja": "深淵の竜頭"
+  },
+  "혼돈의 핵": {
+    "en": "Chaos Core",
+    "ja": "混沌の核"
+  },
+  "공허의 채찍": {
+    "en": "Void Whip",
+    "ja": "虚空の鞭"
+  },
+  "시공의 침식자 네메시스": {
+    "en": "Nemesis, the Spacetime Corruptor",
+    "ja": "時空の侵蝕者ネメシス"
+  },
+  "네메시스": {
+    "en": "Nemesis",
+    "ja": "ネメシス"
+  },
+  "심연의 각성": {
+    "en": "Abyssal Awakening",
+    "ja": "深淵の覚醒"
+  },
+  "혼돈의 격류": {
+    "en": "Torrent of Chaos",
+    "ja": "混沌の激流"
+  },
+  "종말의 강림": {
+    "en": "Advent of the End",
+    "ja": "終末の降臨"
+  },
+  "네메시스가 심연의 마기를 방출하기 시작합니다.": {
+    "en": "Nemesis begins releasing abyssal demonic energy.",
+    "ja": "ネメシスが深淵の魔気を放出し始めます。"
+  },
+  "차원의 뒤틀림이 심화되며 네메시스의 공격성이 급증합니다.": {
+    "en": "Dimensional distortions deepen, surging Nemesis's aggressiveness.",
+    "ja": "次元の歪みが激化し、ネメシスの攻撃性が急増します。"
+  },
+  "완전한 파멸의 형태. 모든 부위가 가공할 위력을 발휘합니다.": {
+    "en": "Form of total ruin. All parts unleash formidable cataclysmic power.",
+    "ja": "完全なる破滅の形態。すべての部位が恐るべき威力を発揮します。"
+  },
+  "멸망의 용식포": {
+    "en": "Dragon Breath of Ruin",
+    "ja": "滅亡の竜蝕砲"
+  },
+  "초신성 붕괴": {
+    "en": "Supernova Collapse",
+    "ja": "超新星崩壊"
+  },
+  "차원 절단 채찍": {
+    "en": "Dimensional Cleaving Whip",
+    "ja": "次元切断鞭"
+  },
+  "공허의 파편": {
+    "en": "Void Shard",
+    "ja": "虚空の破片"
+  },
+  "심연의 정수": {
+    "en": "Abyssal Essence",
+    "ja": "深淵の精髄"
+  },
+  "차원의 인장 묶음": {
+    "en": "Dimensional Seal Bundle",
+    "ja": "次元の印章束"
+  },
+  "네메시스 슬레이어 투구": {
+    "en": "Nemesis Slayer Helm",
+    "ja": "ネメシススレイヤーの兜"
+  },
+  "네메시스 파괴자의 대검": {
+    "en": "Nemesis Destroyer Greatsword",
+    "ja": "ネメシス破壊者の大剣"
+  },
+  "시공간 지배자의 심장": {
+    "en": "Heart of the Spacetime Ruler",
+    "ja": "時空支配者の心臓"
+  },
+  "공허의 에너지가 응축된 파편": {
+    "en": "A fragment condensed with void energy",
+    "ja": "虚空のエネルギーが凝縮された破片"
+  },
+  "심연의 마력이 서린 정수": {
+    "en": "An essence imbued with abyssal magic",
+    "ja": "深淵の魔力が宿る精髄"
+  },
+  "차원 상점에서 사용 가능한 인장 500개": {
+    "en": "500 seals usable in the Dimensional Shop",
+    "ja": "次元商店で使用可能な印章500個"
+  },
+  "네메시스의 침식을 견뎌낸 전설의 투구": {
+    "en": "Legendary helm that endured Nemesis's erosion",
+    "ja": "ネメシスの侵蝕に耐え抜いた伝説の兜"
+  },
+  "네메시스의 핵을 파괴하기 위해 벼려진 신화 대검": {
+    "en": "Mythic greatsword forged to destroy Nemesis's core",
+    "ja": "ネメシスの核を破壊するために鍛えられた神話の大剣"
+  },
+  "시공간을 왜곡하는 네메시스의 최심부 유핵": {
+    "en": "Nemesis's innermost core that warps spacetime",
+    "ja": "時空を歪めるネメシスの最深部核"
+  },
+
+  // ── 랭킹 모의 지휘관 및 길드 ──
+  "지휘관 아르테미스": {
+    "en": "Commander Artemis",
+    "ja": "指揮官アルテミス"
+  },
+  "발할라 기사단": {
+    "en": "Valhalla Order",
+    "ja": "ヴァルハラ騎士団"
+  },
+  "철혈의 지휘관 카인": {
+    "en": "Ironblood Cain",
+    "ja": "鉄血の指揮官カイン"
+  },
+  "심연 탐사대": {
+    "en": "Abyss Seekers",
+    "ja": "深淵探査隊"
+  },
+  "성광의 인도자 세라": {
+    "en": "Holy Guide Sera",
+    "ja": "聖光の導き手セラ"
+  },
+  "새벽의 여명": {
+    "en": "Dawnbreak",
+    "ja": "暁の夜明け"
+  },
+  "지휘관 레이븐": {
+    "en": "Commander Raven",
+    "ja": "指揮官レイヴン"
+  },
+  "그림자 용병단": {
+    "en": "Shadow Mercenaries",
+    "ja": "影の傭兵団"
+  },
+  "지휘관 지그프리트": {
+    "en": "Commander Siegfried",
+    "ja": "指揮官ジークフリート"
+  },
+  "드래곤 슬레이어": {
+    "en": "Dragon Slayers",
+    "ja": "ドラゴンスレイヤー"
+  },
+  "지휘관 엘레나": {
+    "en": "Commander Elena",
+    "ja": "指揮官エレナ"
+  },
+  "달빛 연구회": {
+    "en": "Moonlight Society",
+    "ja": "月光研究会"
+  },
+  "지휘관 볼프강": {
+    "en": "Commander Wolfgang",
+    "ja": "指揮官ヴォルフガング"
+  },
+  "은빛 날개": {
+    "en": "Silver Wings",
+    "ja": "銀の翼"
+  },
+  "지휘관 클레어": {
+    "en": "Commander Claire",
+    "ja": "指揮官クレア"
+  },
+  "에테르 학회": {
+    "en": "Aether Academy",
+    "ja": "エーテル学会"
+  }
+};
+
+const outDir = path.resolve('scripts/i18n/out');
+if (!fs.existsSync(outDir)) {
+  fs.mkdirSync(outDir, { recursive: true });
+}
+
+fs.writeFileSync(
+  path.join(outDir, 'delta_012.json'),
+  JSON.stringify(delta, null, 2),
+  'utf-8'
+);
+
+console.log(`Generated delta_012.json with ${Object.keys(delta).length} entries.`);

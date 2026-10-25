@@ -1,3 +1,4 @@
+import { FirebaseService, DungeonVisitRecord } from '../services/FirebaseService';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useGameManager } from '../hooks/useGameManager';
 import { useI18n } from '../hooks/useI18n';
@@ -15,9 +16,11 @@ import { SoundManager } from '../managers/SoundManager';
 import { GameManager } from '../managers/GameManager';
 import { GameIcon } from '../components/GameIcon';
 import { CustomAssetService } from '../services/CustomAssetService';
+import { PlayGamesService } from '../services/PlayGamesService';
 import { useCustomAssetVersion } from '../hooks/useCustomAssetVersion';
 import { getFloorUniqueEvent, CLASS_GROUPS, findPartyHeroByClasses } from '../data/dungeonFloorEvents';
 import { TutorialGuideOverlay } from '../components/TutorialGuideOverlay';
+import { registerBackButtonHandler } from '../utils/nativeBridge';
 
 const FLOOR_NAMES_I18N: Record<string, string[]> = {
   ko: [
@@ -472,6 +475,16 @@ export const ExplorationScreen: React.FC = () => {
   
   // 배낭 드로어 및 아이템 버리기 상태
   const [isBackpackOpen, setIsBackpackOpen] = useState(false);
+
+  // 🎒 배낭이 열려있을 때 뒤로가기 버튼 누르면 배낭만 닫고 던전으로 복귀
+  useEffect(() => {
+    if (!isBackpackOpen) return;
+    const unregister = registerBackButtonHandler(() => {
+      setIsBackpackOpen(false);
+      return true;
+    });
+    return () => unregister();
+  }, [isBackpackOpen]);
   const [isMercenaryManageOpen, setIsMercenaryManageOpen] = useState(false);
   const [pendingLoot, setPendingLoot] = useState<any[]>(gm.pendingLoot || []);
   const [showPendingModal, setShowPendingModal] = useState(false);
@@ -558,16 +571,37 @@ export const ExplorationScreen: React.FC = () => {
     }
   }, [floor, gm]);
 
-  // 🌌 무간도(11층) 1,000 단위 위험도 돌파 시 세부 진입 계층(1~10계층) 자동 영구 해금
+  // 🌌 무간도(11층) 1,000 단위 위험도 돌파 시 세부 진입 계층(1~10계층) 자동 영구 해금 및 업적/리더보드 동기화
   useEffect(() => {
-    if (floor === 11 && danger >= 1000) {
-      const unlockedTier = Math.min(10, Math.floor(danger / 1000) + 1);
-      if (unlockedTier > (gm.unlockedAviciTier || 1)) {
-        gm.unlockedAviciTier = unlockedTier;
-        const reachedDanger = (unlockedTier - 1) * 1000;
-        const startDanger = unlockedTier === 1 ? 0 : reachedDanger + 1;
-        gm.addLog(`🌌 [무간도 진입로 개방] 위험도 ${reachedDanger.toLocaleString()} 보스 격파 돌파! 성채 채비실에 [무간도 ${unlockedTier}계층 (시작 위험도 ${startDanger.toLocaleString()})] 진입로가 영구 해금되었습니다!`, 'reward');
-        gm.saveGame();
+    if (floor === 11) {
+      // 1계층 첫 진입(위험도 0 진입) 시 업적 1단계 보장
+      if ((gm.pgsAviciTiersClaimed || 0) < 1) {
+        gm.pgsAviciTiersClaimed = 1;
+        PlayGamesService.getInstance().trackAviciTierUnlock(1);
+      }
+      // 위험도 갱신 시 최고 기록 갱신 및 리더보드 제출
+      if (danger > (gm.maxAviciDangerReached || 0)) {
+        gm.maxAviciDangerReached = danger;
+        gm.submitAviciWandererLeaderboard();
+      }
+      // 위험도 9,001 진입 시 타임스탬프 기록
+      if (danger >= 9001 && !gm.avici9001Timestamp) {
+        gm.avici9001Timestamp = Date.now();
+      }
+
+      if (danger >= 1000) {
+        const unlockedTier = Math.min(10, Math.floor(danger / 1000) + 1);
+        const prevTier = gm.unlockedAviciTier || 1;
+        if (unlockedTier > prevTier) {
+          const diff = unlockedTier - prevTier;
+          gm.unlockedAviciTier = unlockedTier;
+          gm.pgsAviciTiersClaimed = Math.max(gm.pgsAviciTiersClaimed || 0, unlockedTier);
+          PlayGamesService.getInstance().trackAviciTierUnlock(diff);
+          const reachedDanger = (unlockedTier - 1) * 1000;
+          const startDanger = unlockedTier === 1 ? 0 : reachedDanger + 1;
+          gm.addLog(`🌌 [무간도 진입로 개방] 위험도 ${reachedDanger.toLocaleString()} 보스 격파 돌파! 성채 채비실에 [무간도 ${unlockedTier}계층 (시작 위험도 ${startDanger.toLocaleString()})] 진입로가 영구 해금되었습니다!`, 'reward');
+          gm.saveGame();
+        }
       }
     }
   }, [danger, floor, gm]);
@@ -646,7 +680,7 @@ export const ExplorationScreen: React.FC = () => {
       returnToCitadel();
     } else {
       SoundManager.getInstance().play('heavy_hit');
-      gm.addLog('⚠️💥 [비상 탈출 실패!] 도주로가 차단되고 마물들에게 기습 습격을 당했습니다!', 'danger');
+      gm.addLog('⚠️💥 [비상 탈출 실패!] 도주로가 차단되고 마물 추격대에게 기습 습격을 당했습니다! (추격전투 승리 시 성채 귀환)', 'danger');
       // 파티원 기습 피해 (HP 10% 감소)
       gm.party.forEach(h => {
         if (h.currentHp > 0) {
@@ -656,6 +690,7 @@ export const ExplorationScreen: React.FC = () => {
       const squad = generateMonsterSquad(floor, false, danger);
       if (squad && squad.length > 0) {
         gm.currentMonsters = squad;
+        gm.isEmergencyEscapeBattle = true; // 🏃 비상 탈출 추격전 플래그 설정 (전투 승리 후 성채로 귀환)
         gm.clearBattleSnapshot();
         gm.saveGame();
         navigateTo('battle');
@@ -778,7 +813,7 @@ export const ExplorationScreen: React.FC = () => {
   }, [floor, floorName, gm]);
 
   // 탐험 이벤트 롤 (위험도 기반 3단계 다이내믹 밸런스: 아무 일도 없음 / 몬스터 조우 / 오브젝트 이벤트)
-  const rollEvent = useCallback((): 'monster' | 'loot' | 'ore_vein' | 'altar' | 'sarcophagus' | 'branching' | 'merchant' | 'nothing' | 'trap' | 'buff' | 'portal' | 'return_portal' | 'floor_unique' => {
+  const rollEvent = useCallback((): 'monster' | 'loot' | 'ore_vein' | 'altar' | 'sarcophagus' | 'branching' | 'merchant' | 'nothing' | 'trap' | 'buff' | 'portal' | 'return_portal' | 'floor_unique' | 'commander_encounter' => {
     const hasCompass = gm.activeCatalysts.includes('compass');
     const hasBlood = gm.activeCatalysts.includes('blood_contract');
 
@@ -845,6 +880,11 @@ export const ExplorationScreen: React.FC = () => {
     }
 
     // 일반 오브젝트 이벤트 배분 (🌟 층별 고유 이벤트 30% 확률 배치)
+    // 🌟 1시간 내 방문한 이전 지휘관 조우 이벤트 (원정 당 1회 제한, 20% 확률로 우선 배치)
+    if (!gm.encounterEventTriggeredThisRun && Math.random() < 0.20) {
+      return 'commander_encounter';
+    }
+
     const otherRoll = Math.random() * 100;
     if (otherRoll < 30) return 'floor_unique';
     if (otherRoll < 48) return 'loot';
@@ -1739,9 +1779,11 @@ export const ExplorationScreen: React.FC = () => {
             const evadeChance = Math.min(70, Math.max(25, Math.round(30 + heroLuck * 1.5)));
             const isEvaded = Math.random() * 100 < evadeChance;
 
+            const heroTrName = tr(hero.name);
             if (isEvaded) {
               evadeCount++;
-              resultLines.push(`  💨 ${hero.name}: 회피 성공 (${trap.evadeVerb})`);
+              const evadeVerbTr = tr(trap.evadeVerb);
+              resultLines.push(`💨 ${heroTrName}: ${tr('회피 성공')} (${evadeVerbTr})`);
             } else {
               hitCount++;
               gm.applyStatusEffectToHero(hero, {
@@ -1751,7 +1793,9 @@ export const ExplorationScreen: React.FC = () => {
                 magnitude: trap.magnitude,
                 source: trap.name
               });
-              resultLines.push(`  💥 ${hero.name}: 피격! ➔ ${trap.statusIcon} ${trap.statusLabel} (${trap.duration}턴)`);
+              const statusLabelTr = tr(trap.statusLabel);
+              const turnsText = lang === 'en' ? `${trap.duration} turns` : lang === 'ja' ? `${trap.duration}ターン` : `${trap.duration}턴`;
+              resultLines.push(`💥 ${heroTrName}: ${tr('피격!')} ➔ ${trap.statusIcon} ${statusLabelTr} (${turnsText})`);
             }
           });
 
@@ -1762,27 +1806,29 @@ export const ExplorationScreen: React.FC = () => {
           }
 
           gm.emit('partyUpdated');
+          const trapNameTr = tr(trap.name);
+          const statusLabelTr = tr(trap.statusLabel);
           gm.addLog(
             hitCount === 0
-              ? `💨 [함정 회피] ${trap.name}의 기습을 전원 기민하게 회피했습니다!`
-              : `💥 [함정 피격] ${trap.name} 발동! ${hitCount}명 피격 [${trap.statusIcon}${trap.statusLabel} 부여], ${evadeCount}명 회피`,
+              ? tr(`💨 [함정 회피] ${trapNameTr}의 기습을 전원 기민하게 회피했습니다!`)
+              : tr(`💥 [함정 피격] ${trapNameTr} 발동! ${hitCount}명 피격 [${trap.statusIcon}${statusLabelTr} 부여], ${evadeCount}명 회피`),
             hitCount > 0 ? 'danger' : 'reward'
           );
 
           const summaryBanner = hitCount === 0
-            ? '✨ [전원 회피 완벽 성공!]'
+            ? tr('✨ [전원 회피 완벽 성공!]')
             : hitCount === aliveHeroes.length
-            ? '💥 [전원 피격 — 긴급 상태이상 부여]'
-            : `⚠️ [피격 ${hitCount}명 / 회피 ${evadeCount}명]`;
+            ? tr('💥 [전원 피격 — 긴급 상태이상 부여]')
+            : tr(`⚠️ [피격 ${hitCount}명 / 회피 ${evadeCount}명]`);
 
           setEventCard({
-            title: `⚠️ [함정 발동] ${trap.name}`,
-            desc: `"${trap.desc}"\n\n${summaryBanner}\n━━━━━━━━━━━━━━━━━━\n${resultLines.join('\n')}`,
+            title: `⚠️ [${tr('함정 발동')}] ${tr(trap.name)}`,
+            desc: `"${tr(trap.desc)}"\n\n${summaryBanner}\n━━━━━━━━━━━━━━━━━━\n${resultLines.join('\n')}`,
             icon: trap.icon,
             iconKey: trap.id || 'event_trap',
             options: [
               {
-                label: hitCount > 0 ? '🩸 [피해 확인] 대열을 정비하고 전진' : '✨ [전원 무사] 대열을 유지하며 전진',
+                label: hitCount > 0 ? tr('🩸 [피해 확인] 대열을 정비하고 전진') : tr('✨ [전원 무사] 대열을 유지하며 전진'),
                 variant: hitCount > 0 ? 'danger' : 'primary',
                 action: () => {
                   setEventCard(null);
@@ -1949,9 +1995,149 @@ export const ExplorationScreen: React.FC = () => {
           break;
         }
 
+        case 'commander_encounter': {
+          SoundManager.getInstance().play('portal');
+          (async () => {
+            let visitors: DungeonVisitRecord[] = [];
+            try {
+              visitors = await FirebaseService.getInstance().getRecentDungeonVisitors();
+            } catch (err) {
+              console.warn('Failed to fetch recent dungeon visitors:', err);
+            }
+
+            if (!visitors || visitors.length === 0) {
+              const uEvent = getFloorUniqueEvent(floor, gm);
+              if (uEvent) {
+                if (!gm.expeditionTriggeredEventIds) gm.expeditionTriggeredEventIds = [];
+                if (!gm.expeditionTriggeredEventIds.includes(uEvent.id)) gm.expeditionTriggeredEventIds.push(uEvent.id);
+                const opts = uEvent.generateOptions({ gm, danger, maxDanger, floor, setDanger, setEventCard, navigateTo, returnToCitadel });
+                setEventCard({ title: uEvent.title, desc: uEvent.desc, icon: uEvent.icon, iconKey: uEvent.iconKey, options: opts });
+              } else {
+                SoundManager.getInstance().play('loot_open');
+                gm.addToDungeonInventory('gold', '골드', '🪙', 50);
+                gm.addToDungeonInventory('ether', '에테르', '✨', 10);
+                gm.addLog('✨ [고대 유적 발굴] 낡은 유적에서 🪙 50G와 ✨ 10 에테르를 발견했습니다.', 'reward');
+                setEventCard(null);
+              }
+              return;
+            }
+
+            gm.encounterEventTriggeredThisRun = true;
+            const visitor = visitors[Math.floor(Math.random() * visitors.length)];
+            gm.encounterVisitorRecord = visitor;
+
+            const myCallsign = FirebaseService.getInstance().getCachedProfile()?.nickname || '방주 지휘관';
+            const elapsedMins = Math.max(1, Math.round((Date.now() - visitor.timestamp) / 60000));
+            const visitorSquadNames = visitor.squad.map(h => h.name).join(', ');
+
+            setEventCard({
+              title: `🏕️ 다른 지휘관과의 조우 [${visitor.callsign}]`,
+              desc: `심연의 안개 너머에서 ${elapsedMins}분 전 이곳을 지나간 지휘관 [${visitor.callsign}]의 결사대 흔적과 실루엣이 감지되었습니다!\n(원정대: ${visitorSquadNames})\n\n어떤 결정을 내리시겠습니까?`,
+              icon: '⚔️👥',
+              iconKey: 'event_branching',
+              options: [
+                {
+                  label: `🤝 [정보 교류] 인사하고 정보를 얻는다 (행운 +10 가호)`,
+                  variant: 'primary',
+                  action: () => {
+                    SoundManager.getInstance().play('heal');
+                    gm.addExpeditionBuff({
+                      id: 'expedition_commander_handshake',
+                      name: `[${visitor.callsign}] 지휘관과의 교류`,
+                      icon: '🍀',
+                      category: 'ancestral',
+                      description: '이번 원정 동안 파티 행운 +10',
+                      conditionText: '이번 원정 동안',
+                      buffs: { luckBonus: 10 }
+                    });
+                    gm.addLog(`🤝 [지휘관 조우] [${myCallsign}] 지휘관과 [${visitor.callsign}] 지휘관이 서로 정중히 목례를 나누고 심연의 동향을 공유했습니다! (이번 원정 동안 행운 +10 획득)`, 'reward');
+                    setEventCard(null);
+                  }
+                },
+                {
+                  label: `⚔️ [기습 습격] 적 원정대를 공격한다 (전투 돌입)`,
+                  variant: 'danger',
+                  action: () => {
+                    SoundManager.getInstance().play('combat_start');
+                    gm.addLog(`⚔️ [원정대 습격!] [${visitor.callsign}] 지휘관의 원정대에게 기습 칼날을 겨눕니다!`, 'danger');
+
+                    const enemySquad = visitor.squad.map((h, sIdx) => {
+                      const baseSkills = (h.equippedSkills && h.equippedSkills.length > 0)
+                        ? h.equippedSkills.map(sid => gm.resolveSkillData(sid, h.level)).filter(Boolean)
+                        : [];
+                      
+                      const sanitizedSkills = (baseSkills as any[]).map((sk: any, skIdx: number) => ({
+                        id: sk.id || `pvp_sk_${sIdx}_${skIdx}`,
+                        name: sk.name || '비전 격타',
+                        description: sk.description || '대원의 숙련된 전투 기술',
+                        power: sk.power || 1.2,
+                        effectType: sk.effectType || 'damage',
+                        isCharge: false,
+                        piercePct: sk.piercePct || 0,
+                        drainPct: sk.drainPct || 0
+                      }));
+
+                      if (sanitizedSkills.length === 0) {
+                        sanitizedSkills.push({
+                          id: `pvp_basic_${sIdx}`,
+                          name: '단련된 일격',
+                          description: '무구를 휘둘러 가하는 강력한 물리 타격',
+                          power: 1.1,
+                          effectType: 'damage',
+                          isCharge: false
+                        });
+                      }
+
+                      return {
+                        id: `encounter_enemy_${sIdx}_${h.id}`,
+                        name: `[${visitor.callsign}] ${h.name}`,
+                        type: 'elite',
+                        faction: 'corrupted',
+                        level: h.level || 1,
+                        hp: h.stats.maxHp || 150,
+                        maxHp: h.stats.maxHp || 150,
+                        atk: h.stats.atk || 30,
+                        def: h.stats.def || 10,
+                        spd: h.stats.spd || 12,
+                        luck: h.stats.luck || 10,
+                        skills: sanitizedSkills,
+                        rewards: { gold: 0, ether: 0, exp: 0 }
+                      };
+                    });
+
+                    gm.isEncounterPvP = true;
+                    gm.encounterVisitorRecord = visitor;
+                    gm.currentMonsters = enemySquad;
+                    gm.clearBattleSnapshot();
+                    gm.saveGame();
+                    setEventCard(null);
+                    setIsAnimating(false);
+                    navigateTo('battle');
+                  }
+                },
+                {
+                  label: '🤫 [은밀한 우회] 은밀히 지나간다',
+                  variant: 'ghost',
+                  action: () => {
+                    gm.addLog(`🤫 [우회 통과] [${visitor.callsign}] 지휘관 원정대의 시야를 피해 조용히 발걸음을 옮겼습니다.`, 'normal');
+                    setEventCard(null);
+                  }
+                }
+              ]
+            });
+          })();
+          break;
+        }
+
         case 'floor_unique': {
           const uEvent = getFloorUniqueEvent(floor, gm);
           if (uEvent) {
+            if (!gm.expeditionTriggeredEventIds) {
+              gm.expeditionTriggeredEventIds = [];
+            }
+            if (!gm.expeditionTriggeredEventIds.includes(uEvent.id)) {
+              gm.expeditionTriggeredEventIds.push(uEvent.id);
+            }
             SoundManager.getInstance().play('portal');
             const opts = uEvent.generateOptions({
               gm,
@@ -2768,9 +2954,9 @@ export const ExplorationScreen: React.FC = () => {
                 <span>⚠️</span> <span>{tr('비상 탈출 위험 수칙:')}</span>
               </div>
               <ul className="list-disc list-inside space-y-1 text-[11px] text-[#ffcdd2]">
-                <li><strong className="text-[#38ef7d]">{tr('성공 확률 30%')}</strong>: {tr('포위망을 뚫고 성채로 탈출합니다.')}</li>
-                <li><strong className="text-[#ffb74d]">{tr('전리품 80% 유실')}</strong>: {tr('성공하더라도 긴급 도주 중 배낭 자원의 80%를 잃어버립니다. (20%만 보존)')}</li>
-                <li><strong className="text-[#ff5252]">{tr('실패 시 70% 마물 기습')}</strong>: {tr('퇴로가 차단되어 기습 피해를 입고 즉시 전투에 돌입합니다.')}</li>
+                <li><strong className="text-[#38ef7d]">{tr('성공 확률 30%')}</strong>: {tr('포위망을 뚫고 즉시 성채로 탈출합니다.')}</li>
+                <li><strong className="text-[#ffb74d]">{tr('전리품 80% 유실')}</strong>: {tr('긴급 도주 중 배낭 자원의 80%를 떨어뜨립니다. (20%만 보존)')}</li>
+                <li><strong className="text-[#ff5252]">{tr('실패 시 70% 마물 추격전')}</strong>: {tr('퇴로가 차단되어 기습 피해를 입고 추격대와 사투를 벌이며, 전투 승리 시 성채로 귀환합니다.')}</li>
                 <li>{tr('시도 후')} <strong className="text-[#ffd54f]">{tr('1턴의 재탈출 준비 쿨다운')}</strong>{tr('이 소요됩니다.')}</li>
               </ul>
             </div>

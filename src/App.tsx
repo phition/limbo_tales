@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PhaserGame } from './PhaserGame';
 import { useGameManager } from './hooks/useGameManager';
 import { ResourceBar } from './components/ResourceBar';
@@ -10,6 +10,7 @@ import { CommanderAuthOverlay } from './components/CommanderAuthOverlay';
 import { FirebaseService, UserProfile } from './services/FirebaseService';
 import { User } from 'firebase/auth';
 import { Capacitor } from '@capacitor/core';
+import { App as CapApp } from '@capacitor/app';
 import { isFullscreen } from './utils/fullscreen';
 import { SoundManager } from './managers/SoundManager';
 import { initNativeBridge, registerBackButtonHandler, checkPendingBackgroundTimeout } from './utils/nativeBridge';
@@ -19,6 +20,7 @@ import { BattleScreen } from './screens/BattleScreen';
 import { ArenaScreen } from './screens/ArenaScreen';
 import { GameDialogModal } from './components/GameDialogModal';
 import { GoogleAdModal } from './components/GoogleAdModal';
+import { gameConfirm } from './services/DialogService';
 import { I18nService } from './i18n/I18nService';
 
 const SCREEN_COMPONENTS: Record<string, React.ComponentType> = {
@@ -225,8 +227,17 @@ export const App: React.FC = () => {
           if (localData) {
             console.log('💾 [세이브 동기화] 네트워크 장애 발생 -> 로컬 캐시 데이터 적용 (클라우드 덮어쓰기 방지)');
             gm.loadGame();
+          } else if (guestData && guestScore > 14000) {
+            console.log('💾 [세이브 동기화] 클라우드 응답 지연 -> 로컬 게스트 진행 데이터를 우선 적용합니다.');
+            gm.applyCloudProgress(guestData);
+            gm.saveGame();
           } else {
-            console.warn('⚠️ [세이브 동기화] 네트워크 장애 발생 및 로컬 데이터 없음 -> 대기');
+            console.warn('⚠️ [세이브 동기화] 클라우드 응답 지연 및 로컬 데이터 없음 -> 기본 초기 데이터로 로컬 시작');
+            const hasLocal = gm.loadGame();
+            if (!hasLocal) {
+              gm.initDefaultData();
+              gm.saveGame();
+            }
           }
         } else if (cloudData && localData) {
           // 양쪽 모두 데이터가 존재할 때: 진행도 가치 우선 비교
@@ -363,14 +374,43 @@ export const App: React.FC = () => {
     };
   }, []);
 
-  // 📱 모바일 네이티브 브릿지 (상태바, 세로 고정, 뒤로가기 버튼) 초기화 및 백그라운드 초과 복구
-  useEffect(() => {
-    initNativeBridge();
-    checkPendingBackgroundTimeout(gm);
+  // 🚪 게임 종료 확인 대화상자 처리
+  const isExitConfirmOpenRef = useRef(false);
+
+  const requestGameExit = useCallback(async () => {
+    if (isExitConfirmOpenRef.current) return;
+    isExitConfirmOpenRef.current = true;
+    try {
+      const confirmed = await gameConfirm({
+        title: '게임 종료',
+        message: '게임을 종료할까요?\n(진행 중인 모든 상태는 자동으로 안전하게 저장됩니다)',
+        icon: '🚪',
+        confirmText: '종료',
+        cancelText: '계속하기',
+        tone: 'danger',
+      });
+      if (confirmed) {
+        gm.saveGame();
+        if (Capacitor.isNativePlatform()) {
+          CapApp.exitApp();
+        } else {
+          window.close();
+        }
+      }
+    } finally {
+      isExitConfirmOpenRef.current = false;
+    }
   }, [gm]);
 
+  // 📱 모바일 네이티브 브릿지 (상태바, 세로 고정, 뒤로가기 버튼) 초기화 및 백그라운드 초과 복구
   useEffect(() => {
-    const unregister = registerBackButtonHandler(() => {
+    initNativeBridge(requestGameExit);
+    checkPendingBackgroundTimeout(gm);
+  }, [gm, requestGameExit]);
+
+  useEffect(() => {
+    const unregister = registerBackButtonHandler(async () => {
+      // 1. 최상위 메뉴창들 (가이드, 방명록, 시스템 메뉴 드로어)
       if (guideOpen) {
         setGuideOpen(false);
         return true;
@@ -383,14 +423,30 @@ export const App: React.FC = () => {
         setMenuOpen(false);
         return true;
       }
-      if (state.currentScreen !== 'citadel' && state.currentScreen !== 'battle') {
+
+      // 2. ⚔️ 던전 탐험('exploration') 또는 전투('battle') 화면:
+      // 뒤로 돌아가는 것(성채 복귀 등)을 완전히 차단하고 "게임을 종료할까요?" 모달 표시
+      if (state.currentScreen === 'exploration' || state.currentScreen === 'battle') {
+        requestGameExit();
+        return true;
+      }
+
+      // 3. 🏰 성채('citadel') 화면에서도 뒤로가기 시 게임 종료 확인 모달 표시
+      if (state.currentScreen === 'citadel') {
+        requestGameExit();
+        return true;
+      }
+
+      // 4. 아레나 등 기타 화면에서는 성채로 복귀
+      if (state.currentScreen === 'arena') {
         gm.navigateTo('citadel');
         return true;
       }
+
       return false;
     });
     return () => unregister();
-  }, [guideOpen, menuOpen, state.currentScreen, gm]);
+  }, [guideOpen, guestbookOpen, menuOpen, state.currentScreen, gm, requestGameExit]);
 
   // 🎵 상황별 배경 음악(BGM) 중앙 자동 전환 관리
   useEffect(() => {

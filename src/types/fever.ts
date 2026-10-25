@@ -7,7 +7,7 @@ export type FeverBadgeType =
   | 'guard'    // 🛡️ 수호 개입 (GUARD)
   | 'heal'     // 💖 신성 치유 (HEAL)
   | 'counter'  // ⚔️ 환영 반격 (COUNTER)
-  | 'break'    // 💫 차징 붕괴 (BREAK)
+  | 'break'    // 💫 파쇄 (BREAK)
   | 'evade';   // 🌀 회피 기동 (EVADE)
 
 export interface FeverBadgeMeta {

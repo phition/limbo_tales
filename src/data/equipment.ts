@@ -1087,14 +1087,14 @@ export const SUFFIX_ENCHANT_OPTIONS: Record<string, EnchantOption> = {
 };
 
 /**
- * 🔮 인챈트 성공 확률 계산 (기본 20%, 병기창 Lv.6부터 레벨당 +5% 증가, 실패 페널티 없음)
+ * 🔮 인챈트 성공 확률 계산 (기본 20%, 에테르 공방 Lv.3부터 레벨당 +2% 증가, 실패 페널티 없음)
  * - 순수 접두/접미석을 이용하는 상위 인챈트 시 성공 확률이 일반의 절반(50%)으로 조정
  */
-export function getEnchantSuccessRate(forgeLv: number = 1, isPure: boolean = false): number {
-  const lv = Math.max(1, Math.min(10, forgeLv));
-  const baseRate = lv <= 6 ? 20 : 20 + (lv - 6) * 5; // Lv.1~6: 20%, Lv.7: 25%, Lv.8: 30%, Lv.9: 35%, Lv.10: 40%
+export function getEnchantSuccessRate(workshopLv: number = 1, isPure: boolean = false): number {
+  const lv = Math.max(1, Math.min(10, workshopLv));
+  const baseRate = lv <= 3 ? 20 : 20 + (lv - 3) * 2; // Lv.1~3: 20%, Lv.4: 22%, Lv.5: 24%, ... Lv.10: 34%
   if (isPure) {
-    return Math.floor(baseRate / 2); // Lv.1~6: 10%, Lv.7: 12%, Lv.8: 15%, Lv.9: 17%, Lv.10: 20%
+    return Math.floor(baseRate / 2);
   }
   return baseRate;
 }
@@ -1107,15 +1107,50 @@ export function getEnchantSuccessRate(forgeLv: number = 1, isPure: boolean = fal
  * - 고유(Unique): 4개
  * - 전설(Legendary): 5개
  */
-export function getEnchantStoneCost(rarity: EquipmentItem['rarity'] = 'common'): number {
-  switch (rarity) {
-    case 'common': return 1;
-    case 'rare': return 2;
-    case 'epic': return 3;
-    case 'unique': return 4;
-    case 'legendary': return 5;
-    default: return 1;
+export function getEnchantStoneCost(
+  itemOrRarity: EquipmentItem | EquipmentItem['rarity'] | string = 'common',
+  isPure: boolean = false
+): number {
+  let baseCost = 1;
+  const rarityStr = typeof itemOrRarity === 'string' ? itemOrRarity : itemOrRarity?.rarity || 'common';
+  const isBossOrUnique = typeof itemOrRarity === 'object' && itemOrRarity !== null && (
+    itemOrRarity.templateId?.startsWith('boss_') ||
+    itemOrRarity.id?.startsWith('boss_') ||
+    itemOrRarity.setId?.startsWith('boss_') ||
+    itemOrRarity.rarity === 'unique' ||
+    (itemOrRarity.rarity as string) === 'boss'
+  );
+
+  if (isBossOrUnique || rarityStr === 'unique' || rarityStr === 'boss') {
+    baseCost = 4;
+  } else {
+    switch (rarityStr) {
+      case 'common':
+        baseCost = 1;
+        break;
+      case 'uncommon':
+        baseCost = 2;
+        break;
+      case 'rare':
+        baseCost = 2;
+        break;
+      case 'epic':
+        baseCost = 3;
+        break;
+      case 'legendary':
+      case 'mythic':
+        baseCost = 5;
+        break;
+      default:
+        baseCost = 1;
+        break;
+    }
   }
+
+  if (isPure) {
+    return Math.round(baseCost * 1.5);
+  }
+  return baseCost;
 }
 
 /**
@@ -2822,19 +2857,19 @@ export function generateArenaRewardEquipment(
   // 장비 베이스 후보 추첨 (기존 대비 약 30% 스탯 하향 조정)
   const ARENA_BASE_TEMPLATES = [
     // 무기
-    { baseName: '투사의 처형검', slot: 'weapon' as EquipmentSlot, icon: '🗡️', baseStats: { atk: 22, def: 7, luck: 6 }, desc: '차원 결투장에서 수많은 강자를 쓰러뜨린 투사의 명검.' },
-    { baseName: '투사의 파쇄창', slot: 'weapon' as EquipmentSlot, icon: '🔱', baseStats: { atk: 25, def: 8 }, desc: '적의 전열을 분쇄하는 거대한 투사의 전술 장창.' },
-    { baseName: '투사의 결전 마총', slot: 'weapon' as EquipmentSlot, icon: '🔫', baseStats: { atk: 24, spd: 4, luck: 4 }, desc: '에테르 탄환을 고속 연사하는 차원 아레나 제식 마총.' },
-    { baseName: '투사의 저격궁', slot: 'weapon' as EquipmentSlot, icon: '🏹', baseStats: { atk: 23, luck: 8, spd: 3 }, desc: '후열의 적을 정확히 꿰뚫는 투사의 초장거리 강궁.' },
-    { baseName: '투사의 원소 마도봉', slot: 'weapon' as EquipmentSlot, icon: '🪄', baseStats: { atk: 21, mp: 56, def: 6 }, desc: '차원 마력을 벼려 만든 투사의 비전 지팡이.' },
-    { baseName: '투사의 암살 비수', slot: 'weapon' as EquipmentSlot, icon: '🗡️', baseStats: { atk: 20, spd: 7, luck: 7 }, desc: '급소를 기습하기 위해 정밀 연마된 투사의 비수.' },
+    { templateId: 'equip_arena_sword', baseName: '투사의 처형검', slot: 'weapon' as EquipmentSlot, icon: '🗡️', baseStats: { atk: 33, def: 11, luck: 9 }, desc: '차원 결투장에서 수많은 강자를 쓰러뜨린 투사의 명검.' },
+    { templateId: 'equip_arena_spear', baseName: '투사의 파쇄창', slot: 'weapon' as EquipmentSlot, icon: '🔱', baseStats: { atk: 38, def: 12 }, desc: '적의 전열을 분쇄하는 거대한 투사의 전술 장창.' },
+    { templateId: 'equip_arena_gun', baseName: '투사의 결전 마총', slot: 'weapon' as EquipmentSlot, icon: '🔫', baseStats: { atk: 36, spd: 6, luck: 6 }, desc: '에테르 탄환을 고속 연사하는 차원 아레나 제식 마총.' },
+    { templateId: 'equip_arena_bow', baseName: '투사의 저격궁', slot: 'weapon' as EquipmentSlot, icon: '🏹', baseStats: { atk: 35, luck: 12, spd: 5 }, desc: '후열의 적을 정확히 꿰뚫는 투사의 초장거리 강궁.' },
+    { templateId: 'equip_arena_staff', baseName: '투사의 원소 마도봉', slot: 'weapon' as EquipmentSlot, icon: '🪄', baseStats: { atk: 32, mp: 84, def: 9 }, desc: '차원 마력을 벼려 만든 투사의 비전 지팡이.' },
+    { templateId: 'equip_arena_dagger', baseName: '투사의 암살 비수', slot: 'weapon' as EquipmentSlot, icon: '🗡️', baseStats: { atk: 30, spd: 11, luck: 11 }, desc: '급소를 기습하기 위해 정밀 연마된 투사의 비수.' },
     // 방어구
-    { baseName: '투사의 불패 판금갑', slot: 'armor' as EquipmentSlot, icon: '🛡️', baseStats: { def: 27, hp: 98 }, desc: '어떠한 맹공도 버텨내는 불패의 투사 중장갑주.' },
-    { baseName: '투사의 신속 경갑주', slot: 'armor' as EquipmentSlot, icon: '🥋', baseStats: { def: 18, spd: 4, hp: 63 }, desc: '민첩한 기동과 회피를 극대화한 투사의 전투 경갑.' },
-    { baseName: '투사의 마나 성의', slot: 'armor' as EquipmentSlot, icon: '🥻', baseStats: { def: 14, mp: 77, hp: 49 }, desc: '마나 순환과 보호 결계를 증폭하는 투사의 마도 로브.' },
+    { templateId: 'equip_arena_plate', baseName: '투사의 불패 판금갑', slot: 'armor' as EquipmentSlot, icon: '🛡️', baseStats: { def: 41, hp: 147 }, desc: '어떠한 맹공도 버텨내는 불패의 투사 중장갑주.' },
+    { templateId: 'equip_arena_leather', baseName: '투사의 신속 경갑주', slot: 'armor' as EquipmentSlot, icon: '🥋', baseStats: { def: 27, spd: 6, hp: 95 }, desc: '민첩한 기동과 회피를 극대화한 투사의 전투 경갑.' },
+    { templateId: 'equip_arena_robe', baseName: '투사의 마나 성의', slot: 'armor' as EquipmentSlot, icon: '🥻', baseStats: { def: 21, mp: 116, hp: 74 }, desc: '마나 순환과 보호 결계를 증폭하는 투사의 마도 로브.' },
     // 장신구
-    { baseName: '투사의 영광 반지', slot: 'accessory' as EquipmentSlot, icon: '💍', baseStats: { atk: 11, def: 7, luck: 8, spd: 4 }, desc: '차원 투기장 승리자에게 주어지는 영예로운 반지.' },
-    { baseName: '투사의 결전 목걸이', slot: 'accessory' as EquipmentSlot, icon: '📿', baseStats: { hp: 84, def: 10, mp: 35 }, desc: '위기 순간 착용자의 생체 에너지를 지탱하는 결전 펜던트.' },
+    { templateId: 'equip_arena_ring', baseName: '투사의 영광 반지', slot: 'accessory' as EquipmentSlot, icon: '💍', baseStats: { atk: 17, def: 11, luck: 12, spd: 6 }, desc: '차원 투기장 승리자에게 주어지는 영예로운 반지.' },
+    { templateId: 'equip_arena_necklace', baseName: '투사의 결전 목걸이', slot: 'accessory' as EquipmentSlot, icon: '📿', baseStats: { hp: 126, def: 15, mp: 53 }, desc: '위기 순간 착용자의 생체 에너지를 지탱하는 결전 펜던트.' },
   ];
 
   const pickedTemplate = ARENA_BASE_TEMPLATES[Math.floor(Math.random() * ARENA_BASE_TEMPLATES.length)];
@@ -2873,6 +2908,7 @@ export function generateArenaRewardEquipment(
   const baseStats = { ...pickedTemplate.baseStats };
   const rawItem: EquipmentItem = {
     id: `equip_arena_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
+    templateId: pickedTemplate.templateId,
     baseName: pickedTemplate.baseName,
     name: fullName,
     slot: pickedTemplate.slot,
@@ -2926,16 +2962,16 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 300,
     reqGateLv: 1,
     icon: '🛡️',
-    desc: 'DEF+10, HP+42, LUCK+1 [기사 특화] 결전 방패',
+    desc: 'DEF+15, HP+63, LUCK+2 [기사 특화] 결전 방패',
     description: '차원 투기장에서 맹활약하는 기사를 위한 결전 방패. 강력한 방어력과 생명력을 제공합니다.',
-    baseStats: { def: 10, hp: 42, luck: 1 },
+    baseStats: { def: 15, hp: 63, luck: 2 },
     prefix: {
       id: 'pre_glory_sturdy',
       name: '견고한',
       type: 'prefix',
       rarity: 'rare',
-      stats: { def: 6, hp: 28 },
-      description: '방어력 +6, HP +28',
+      stats: { def: 9, hp: 42 },
+      description: '방어력 +9, HP +42',
     },
   },
   glory_knight_epic: {
@@ -2950,24 +2986,24 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 650,
     reqGateLv: 3,
     icon: '🛡️',
-    desc: 'DEF+17, HP+84, ATK+4 [기사 특화] 영광 판금갑',
+    desc: 'DEF+26, HP+126, ATK+6 [기사 특화] 영광 판금갑',
     description: '어떠한 맹공도 버텨내는 기사 계열 전용 판금갑. 최전선에서 파티원을 굳건하게 지켜냅니다.',
-    baseStats: { def: 17, hp: 84, atk: 4 },
+    baseStats: { def: 26, hp: 126, atk: 6 },
     prefix: {
       id: 'pre_glory_invincible',
       name: '불패의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { def: 13, hp: 70 },
-      description: '방어력 +13, HP +70',
+      stats: { def: 20, hp: 105 },
+      description: '방어력 +20, HP +105',
     },
     suffix: {
       id: 'suf_glory_protection',
       name: '수호',
       type: 'suffix',
       rarity: 'epic',
-      stats: { def: 8, hp: 42, atk: 4 },
-      description: '방어력 +8, HP +42, 공격력 +4',
+      stats: { def: 12, hp: 63, atk: 6 },
+      description: '방어력 +12, HP +63, 공격력 +6',
     },
   },
 
@@ -2984,16 +3020,16 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 300,
     reqGateLv: 1,
     icon: '🗡️',
-    desc: 'ATK+11, SPD+2, LUCK+4 [도적 특화] 기습 단도',
+    desc: 'ATK+17, SPD+3, LUCK+6 [도적 특화] 기습 단도',
     description: '도적 계열을 위한 예리한 결전 비수. 빠른 행동 속도와 날카로운 치명타율을 부여합니다.',
-    baseStats: { atk: 11, spd: 2, luck: 4 },
+    baseStats: { atk: 17, spd: 3, luck: 6 },
     prefix: {
       id: 'pre_glory_agile',
       name: '날렵한',
       type: 'prefix',
       rarity: 'rare',
-      stats: { atk: 6, spd: 2, luck: 3 },
-      description: '공격력 +6, 속도 +2, 행운 +3',
+      stats: { atk: 9, spd: 3, luck: 5 },
+      description: '공격력 +9, 속도 +3, 행운 +5',
     },
   },
   glory_rogue_epic: {
@@ -3008,24 +3044,24 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 650,
     reqGateLv: 3,
     icon: '🗡️',
-    desc: 'ATK+18, SPD+4, LUCK+7 [도적 특화] 사신의 비도',
+    desc: 'ATK+27, SPD+6, LUCK+11 [도적 특화] 사신의 비도',
     description: '암흑 속에서 적의 심장을 겨누는 도적 계열 최고위 비도. 치명적인 암살 일격을 보장합니다.',
-    baseStats: { atk: 18, spd: 4, luck: 7 },
+    baseStats: { atk: 27, spd: 6, luck: 11 },
     prefix: {
       id: 'pre_glory_shadow',
       name: '암영의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 13, spd: 3, luck: 4 },
-      description: '공격력 +13, 속도 +3, 행운 +4',
+      stats: { atk: 20, spd: 5, luck: 6 },
+      description: '공격력 +20, 속도 +5, 행운 +6',
     },
     suffix: {
       id: 'suf_glory_critical',
       name: '치명',
       type: 'suffix',
       rarity: 'epic',
-      stats: { atk: 7, luck: 7 },
-      description: '공격력 +7, 행운 +7',
+      stats: { atk: 11, luck: 11 },
+      description: '공격력 +11, 행운 +11',
     },
   },
 
@@ -3042,16 +3078,16 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 300,
     reqGateLv: 1,
     icon: '🪄',
-    desc: 'ATK+10, MP+25, LUCK+2 [마법사 특화] 원소 완드',
+    desc: 'ATK+15, MP+38, LUCK+3 [마법사 특화] 원소 완드',
     description: '마법사 계열을 위해 가공된 에테르 완드. 마법 공격력과 최대 마나를 균형 있게 상승시킵니다.',
-    baseStats: { atk: 10, mp: 25, luck: 2 },
+    baseStats: { atk: 15, mp: 38, luck: 3 },
     prefix: {
       id: 'pre_glory_mystic',
       name: '신비로운',
       type: 'prefix',
       rarity: 'rare',
-      stats: { atk: 6, mp: 18 },
-      description: '공격력 +6, 마나 +18',
+      stats: { atk: 9, mp: 27 },
+      description: '공격력 +9, 마나 +27',
     },
   },
   glory_mage_epic: {
@@ -3066,24 +3102,24 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 650,
     reqGateLv: 3,
     icon: '🔮',
-    desc: 'ATK+18, MP+42, LUCK+4 [마법사 특화] 재앙 지팡이',
+    desc: 'ATK+27, MP+63, LUCK+6 [마법사 특화] 재앙 지팡이',
     description: '광범위 마법 폭격에 필요한 압도적인 마력을 품은 마법사 계열의 결전 대지팡이.',
-    baseStats: { atk: 18, mp: 42, luck: 4 },
+    baseStats: { atk: 27, mp: 63, luck: 6 },
     prefix: {
       id: 'pre_glory_ruin',
       name: '파멸의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 14, mp: 35 },
-      description: '공격력 +14, 마나 +35',
+      stats: { atk: 21, mp: 53 },
+      description: '공격력 +21, 마나 +53',
     },
     suffix: {
       id: 'suf_glory_arcanum',
       name: '마도',
       type: 'suffix',
       rarity: 'epic',
-      stats: { atk: 8, mp: 28, luck: 4 },
-      description: '공격력 +8, 마나 +28, 행운 +4',
+      stats: { atk: 12, mp: 42, luck: 6 },
+      description: '공격력 +12, 마나 +42, 행운 +6',
     },
   },
 
@@ -3100,16 +3136,16 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 300,
     reqGateLv: 1,
     icon: '🥼',
-    desc: 'DEF+8, HP+32, MP+21, LUCK+2 [사제 특화] 축복 로브',
+    desc: 'DEF+12, HP+48, MP+32, LUCK+3 [사제 특화] 축복 로브',
     description: '사제 계열의 숭고한 성의. 높은 생존력과 아군 치유를 위한 지속적인 마나 흐름을 제공합니다.',
-    baseStats: { def: 8, hp: 32, mp: 21, luck: 2 },
+    baseStats: { def: 12, hp: 48, mp: 32, luck: 3 },
     prefix: {
       id: 'pre_glory_grace',
       name: '은총의',
       type: 'prefix',
       rarity: 'rare',
-      stats: { def: 4, hp: 25, mp: 14 },
-      description: '방어력 +4, HP +25, 마나 +14',
+      stats: { def: 6, hp: 38, mp: 21 },
+      description: '방어력 +6, HP +38, 마나 +21',
     },
   },
   glory_priest_epic: {
@@ -3124,24 +3160,24 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 650,
     reqGateLv: 3,
     icon: '✨',
-    desc: 'ATK+13, DEF+7, HP+49, MP+35 [사제 특화] 기적 성홀',
+    desc: 'ATK+20, DEF+11, HP+74, MP+53 [사제 특화] 기적 성홀',
     description: '파티원 전체의 생명력을 수호하고 기적의 치유를 베푸는 사제 계열 최고위 성홀.',
-    baseStats: { atk: 13, def: 7, hp: 49, mp: 35 },
+    baseStats: { atk: 20, def: 11, hp: 74, mp: 53 },
     prefix: {
       id: 'pre_glory_holy_spirit',
       name: '성령의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 8, def: 6, mp: 28 },
-      description: '공격력 +8, 방어력 +6, 마나 +28',
+      stats: { atk: 12, def: 9, mp: 42 },
+      description: '공격력 +12, 방어력 +9, 마나 +42',
     },
     suffix: {
       id: 'suf_glory_vitality',
       name: '생명',
       type: 'suffix',
       rarity: 'epic',
-      stats: { hp: 56, mp: 21 },
-      description: 'HP +56, 마나 +21',
+      stats: { hp: 84, mp: 32 },
+      description: 'HP +84, 마나 +32',
     },
   },
 
@@ -3158,16 +3194,16 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 300,
     reqGateLv: 1,
     icon: '🪓',
-    desc: 'ATK+11, HP+28, LUCK+3 [전사 특화] 처형도끼',
+    desc: 'ATK+17, HP+42, LUCK+5 [전사 특화] 처형도끼',
     description: '전열에서 적진을 분쇄하는 전사 계열의 처형도끼. 강력한 타격과 생존 체력을 제공합니다.',
-    baseStats: { atk: 11, hp: 28, luck: 3 },
+    baseStats: { atk: 17, hp: 42, luck: 5 },
     prefix: {
       id: 'pre_glory_onslaught',
       name: '맹공의',
       type: 'prefix',
       rarity: 'rare',
-      stats: { atk: 7, hp: 21 },
-      description: '공격력 +7, HP +21',
+      stats: { atk: 11, hp: 32 },
+      description: '공격력 +11, HP +32',
     },
   },
   glory_vanguard_epic: {
@@ -3182,24 +3218,24 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 650,
     reqGateLv: 3,
     icon: '⚔️',
-    desc: 'ATK+20, HP+49, LUCK+6, SPD+2 [전사 특화] 학살검',
+    desc: 'ATK+30, HP+74, LUCK+9, SPD+3 [전사 특화] 학살검',
     description: '피와 전투에 굶주린 전사 계열 최고위 결전 대검. 전열을 일격에 휩쓰는 광란의 공격력을 뿜어냅니다.',
-    baseStats: { atk: 20, hp: 49, luck: 6, spd: 2 },
+    baseStats: { atk: 30, hp: 74, luck: 9, spd: 3 },
     prefix: {
       id: 'pre_glory_frenzy',
       name: '광란의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 14, luck: 4 },
-      description: '공격력 +14, 행운 +4',
+      stats: { atk: 21, luck: 6 },
+      description: '공격력 +21, 행운 +6',
     },
     suffix: {
       id: 'suf_glory_bloodwind',
       name: '혈풍',
       type: 'suffix',
       rarity: 'epic',
-      stats: { atk: 7, hp: 49, spd: 2 },
-      description: '공격력 +7, HP +49, 속도 +2',
+      stats: { atk: 11, hp: 74, spd: 3 },
+      description: '공격력 +11, HP +74, 속도 +3',
     },
   },
 
@@ -3216,16 +3252,16 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 300,
     reqGateLv: 1,
     icon: '🔫',
-    desc: 'ATK+8, SPD+2, LUCK+4 [마총사 특화] 전술 리볼버',
+    desc: 'ATK+12, SPD+3, LUCK+6 [마총사 특화] 전술 리볼버',
     description: '마총사 계열의 전술 기동 사격용 리볼버. 빠른 연사력과 안정적인 치명타를 자랑합니다.',
-    baseStats: { atk: 8, spd: 2, luck: 4 },
+    baseStats: { atk: 12, spd: 3, luck: 6 },
     prefix: {
       id: 'pre_glory_precision',
       name: '정밀한',
       type: 'prefix',
       rarity: 'rare',
-      stats: { atk: 6, spd: 2, luck: 3 },
-      description: '공격력 +6, 속도 +2, 행운 +3',
+      stats: { atk: 9, spd: 3, luck: 5 },
+      description: '공격력 +9, 속도 +3, 행운 +5',
     },
   },
   glory_gunner_epic: {
@@ -3240,24 +3276,24 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 650,
     reqGateLv: 3,
     icon: '🔫',
-    desc: 'ATK+14, SPD+4, LUCK+6, MP+18 [마총사 특화] 레일 버스터',
+    desc: 'ATK+21, SPD+6, LUCK+9, MP+27 [마총사 특화] 레일 버스터',
     description: '고출력 에테르 레일을 형성하여 적의 방어선을 일격에 꿰뚫어버리는 마총사 계열의 결전 중화기.',
-    baseStats: { atk: 14, spd: 4, luck: 6, mp: 18 },
+    baseStats: { atk: 21, spd: 6, luck: 9, mp: 27 },
     prefix: {
       id: 'pre_glory_orbital',
       name: '궤도의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 13, spd: 3, luck: 4 },
-      description: '공격력 +13, 속도 +3, 행운 +4',
+      stats: { atk: 20, spd: 5, luck: 6 },
+      description: '공격력 +20, 속도 +5, 행운 +6',
     },
     suffix: {
       id: 'suf_glory_piercing',
       name: '관통',
       type: 'suffix',
       rarity: 'epic',
-      stats: { atk: 8, mp: 18, luck: 4 },
-      description: '공격력 +8, 마나 +18, 행운 +4',
+      stats: { atk: 12, mp: 27, luck: 6 },
+      description: '공격력 +12, 마나 +27, 행운 +6',
     },
   },
 };

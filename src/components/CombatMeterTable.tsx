@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useI18n } from '../hooks/useI18n';
 
 export interface CombatantMetrics {
   id: string;
@@ -29,8 +30,8 @@ interface Props {
 const GRADE_COLOR: Record<string, string> = {
   rookie: '#9e9e9e',
   veteran: '#4caf50',
-  hero: '#29b6f6',
-  elite: '#29b6f6',
+  hero: '#00d2ff',
+  elite: '#00d2ff',
   epic: '#ab47bc',
   legend: '#ffd54f',
 };
@@ -41,6 +42,7 @@ export const CombatMeterTable: React.FC<Props> = ({
   subtitle,
   className = '',
 }) => {
+  const { tr } = useI18n();
   const [filter, setFilter] = useState<'all' | 'player' | 'enemy'>('all');
 
   const filtered = metrics.filter(m => {
@@ -67,12 +69,12 @@ export const CombatMeterTable: React.FC<Props> = ({
       <div className="flex items-center justify-between flex-wrap gap-2 border-b border-[#1b253b] pb-2">
         <div>
           <div className="text-xs font-bold text-white flex items-center gap-1.5">
-            <span>{title}</span>
+            <span>{tr(title)}</span>
             <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] border border-[#c8aa6e33] font-mono">
-              실시간 분석
+              {tr('실시간 분석')}
             </span>
           </div>
-          {subtitle && <div className="text-[10px] text-[#8b9bb4] mt-0.5">{subtitle}</div>}
+          {subtitle && <div className="text-[10px] text-[#8b9bb4] mt-0.5">{tr(subtitle)}</div>}
         </div>
 
         {/* 필터 탭 (적군 메트릭스가 존재할 때만 표시) */}
@@ -85,7 +87,7 @@ export const CombatMeterTable: React.FC<Props> = ({
               }`}
               onClick={() => setFilter('all')}
             >
-              전체 ({metrics.length})
+              {tr('전체')} ({metrics.length})
             </button>
             <button
               type="button"
@@ -94,7 +96,7 @@ export const CombatMeterTable: React.FC<Props> = ({
               }`}
               onClick={() => setFilter('player')}
             >
-              아군
+              {tr('아군')}
             </button>
             <button
               type="button"
@@ -103,7 +105,7 @@ export const CombatMeterTable: React.FC<Props> = ({
               }`}
               onClick={() => setFilter('enemy')}
             >
-              적군
+              {tr('적군')}
             </button>
           </div>
         )}
@@ -114,32 +116,34 @@ export const CombatMeterTable: React.FC<Props> = ({
         {topDealer && (
           <div className="p-1 rounded-lg bg-[#ff416c10] border border-[#ff416c33] flex flex-col items-center">
             <span className="text-[8.5px] text-[#ff416c] font-bold flex items-center gap-0.5">
-              <span>💥</span> <span>최고 딜러</span>
+              <span>💥</span> <span>{tr('최고 딜러')}</span>
             </span>
-            <span className="text-white font-bold truncate max-w-full text-[9px] sm:text-[10px] mt-0.5">{topDealer.name}</span>
+            <span className="text-white font-bold truncate max-w-full text-[9px] sm:text-[10px] mt-0.5">{tr(topDealer.name)}</span>
             <span className="font-mono text-[#ffd54f] text-[8.5px]">{topDealer.damageDealt.toLocaleString()} DMG</span>
           </div>
         )}
         {topHealer ? (
           <div className="p-1 rounded-lg bg-[#38ef7d10] border border-[#38ef7d33] flex flex-col items-center">
             <span className="text-[8.5px] text-[#38ef7d] font-bold flex items-center gap-0.5">
-              <span>💚</span> <span>최고 치유</span>
+              <span>💚</span> <span>{tr('최고 치유')}</span>
             </span>
-            <span className="text-white font-bold truncate max-w-full text-[9px] sm:text-[10px] mt-0.5">{topHealer.name}</span>
+            <span className="text-white font-bold truncate max-w-full text-[9px] sm:text-[10px] mt-0.5">{tr(topHealer.name)}</span>
             <span className="font-mono text-[#38ef7d] text-[8.5px]">{topHealer.healingDone.toLocaleString()} HEAL</span>
           </div>
         ) : (
           <div className="p-1 rounded-lg bg-[#14161c] border border-[#212f4d] flex flex-col items-center opacity-60">
-            <span className="text-[8.5px] text-[#8b9bb4] font-bold">💚 최고 치유</span>
+            <span className="text-[8.5px] text-[#8b9bb4] font-bold flex items-center gap-0.5">
+              <span>💚</span> <span>{tr('최고 치유')}</span>
+            </span>
             <span className="text-[#8b9bb4] text-[8.5px] mt-0.5">-</span>
           </div>
         )}
         {topTank && (
           <div className="p-1 rounded-lg bg-[#42a5f510] border border-[#42a5f533] flex flex-col items-center">
             <span className="text-[8.5px] text-[#42a5f5] font-bold flex items-center gap-0.5">
-              <span>🛡️</span> <span>최고 방어</span>
+              <span>🛡️</span> <span>{tr('최고 방어')}</span>
             </span>
-            <span className="text-white font-bold truncate max-w-full text-[9px] sm:text-[10px] mt-0.5">{topTank.name}</span>
+            <span className="text-white font-bold truncate max-w-full text-[9px] sm:text-[10px] mt-0.5">{tr(topTank.name)}</span>
             <span className="font-mono text-[#90caf9] text-[8.5px]">{topTank.damageTaken.toLocaleString()} GUARD</span>
           </div>
         )}
@@ -150,10 +154,10 @@ export const CombatMeterTable: React.FC<Props> = ({
         <table className="w-full table-fixed text-left border-collapse text-[10px] sm:text-[11px]">
           <thead className="bg-[#0e1016] text-[#8b9bb4] sticky top-0 border-b border-[#1b253b] z-10 font-mono text-[9px] sm:text-[10px]">
             <tr>
-              <th className="w-[28%] py-1.5 px-1 font-bold text-left truncate">전투원</th>
-              <th className="w-[24%] py-1.5 px-1 text-right font-bold text-[#ff80ab] truncate">💥 딜량</th>
-              <th className="w-[13%] py-1.5 px-1 text-right font-bold text-[#38ef7d] truncate">💚 치유</th>
-              <th className="w-[13%] py-1.5 px-1 text-right font-bold text-[#90caf9] truncate">🛡️ 피해</th>
+              <th className="w-[28%] py-1.5 px-1 font-bold text-left truncate">{tr('전투원')}</th>
+              <th className="w-[24%] py-1.5 px-1 text-right font-bold text-[#ff80ab] truncate">💥 {tr('딜량')}</th>
+              <th className="w-[13%] py-1.5 px-1 text-right font-bold text-[#38ef7d] truncate">💚 {tr('치유')}</th>
+              <th className="w-[13%] py-1.5 px-1 text-right font-bold text-[#90caf9] truncate">🛡️ {tr('피해')}</th>
               <th className="w-[7.3%] py-1.5 px-0.5 text-center font-bold text-[#ffd54f]">💨</th>
               <th className="w-[7.3%] py-1.5 px-0.5 text-center font-bold text-[#ce93d8]">⚡</th>
               <th className="w-[7.3%] py-1.5 px-0.5 text-center font-bold text-[#ffb74d]">🎯</th>
@@ -174,13 +178,13 @@ export const CombatMeterTable: React.FC<Props> = ({
                       <span className="text-xs sm:text-sm select-none shrink-0">{item.icon}</span>
                       <div className="min-w-0 flex-1">
                         <div className="font-bold text-white truncate flex items-center gap-0.5 text-[9px] sm:text-[10px] leading-tight">
-                          <span className="truncate">{item.name}</span>
+                          <span className="truncate">{tr(item.name)}</span>
                           <span className="text-[7.5px] font-mono font-bold px-0.5 rounded shrink-0" style={{ color: gradeColor, backgroundColor: `${gradeColor}22` }}>
                             {item.grade?.slice(0, 1).toUpperCase()}
                           </span>
                         </div>
                         <div className="text-[7.5px] sm:text-[8.5px] text-[#8b9bb4] truncate leading-tight">
-                          {item.className}
+                          {tr(item.className)}
                         </div>
                       </div>
                     </div>

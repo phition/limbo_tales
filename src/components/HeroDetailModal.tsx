@@ -6,6 +6,7 @@ import { GameIcon } from './GameIcon';
 import { CustomAssetService } from '../services/CustomAssetService';
 import { getHeroEquippedBossSet, getWeaponTrait, getEquipmentTemplateId } from '../data/equipment';
 import { getRarityBorderStyle } from '../utils/rarity';
+import { useI18n } from '../hooks/useI18n';
 
 interface Props {
   hero: Mercenary | null;
@@ -19,6 +20,7 @@ function clamp(val: number, min: number, max: number): number {
 
 export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
   if (!hero) return null;
+  const { tr } = useI18n();
   const stats = gm.getHeroEffectiveStats(hero);
   const hpPct = clamp((hero.currentHp / stats.maxHp) * 100, 0, 100);
   const mpPct = clamp((hero.currentMp / stats.maxMp) * 100, 0, 100);
@@ -26,9 +28,12 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
   const posColor = hero.position === 'front' ? '#ef5350' : hero.position === 'back' ? '#42a5f5' : '#ffd54f';
 
   const cls = Object.values(CHARACTER_CLASSES).find(c => c.id === hero.classId);
-  const customPortrait = CustomAssetService.getInstance().getMercenaryOverride(hero.classId)
-    || CustomAssetService.getInstance().getMercenaryOverride(hero.id)
-    || CustomAssetService.getInstance().getMercenaryOverride(hero.name);
+  const portrait = CustomAssetService.getHeroPortrait(hero);
+
+  const handleToggleGender = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    gm.toggleHeroGender(hero.id);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-fade-in" onClick={onClose}>
@@ -39,18 +44,35 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
         {/* 상단 헤더 */}
         <div className="flex items-center justify-between border-b border-[#1e2d45] pb-2.5">
           <div className="flex items-center gap-2">
-            {customPortrait ? (
-              <img
-                src={customPortrait}
-                alt={hero.name}
-                className="w-11 h-11 object-cover rounded-xl border border-[#c8aa6e55] shadow-md shrink-0"
-                onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
-              />
-            ) : (
-              <span className="p-1.5 rounded-lg bg-[#11192e] border border-[#22324f] flex items-center justify-center">
-                <GameIcon name={cls?.skills[0]?.id || hero.classId} icon={cls?.skills[0]?.icon ?? '⚔️'} size={24} />
-              </span>
-            )}
+            <div className="relative group shrink-0">
+              {portrait ? (
+                <img
+                  src={portrait}
+                  alt={hero.name}
+                  className="w-11 h-11 object-cover rounded-xl border border-[#c8aa6e55] shadow-md shrink-0 cursor-pointer hover:border-[#ffd54f]"
+                  onClick={handleToggleGender}
+                  title="클릭하여 남/여 포트레이트 전환"
+                  onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                />
+              ) : (
+                <span className="p-1.5 rounded-lg bg-[#11192e] border border-[#22324f] flex items-center justify-center">
+                  <GameIcon name={cls?.skills[0]?.id || hero.classId} icon={cls?.skills[0]?.icon ?? '⚔️'} size={24} />
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={handleToggleGender}
+                className="absolute -bottom-1 -right-1 px-1 py-0.2 rounded-full text-[10px] font-bold border shadow-md flex items-center justify-center transition-transform hover:scale-110"
+                style={{
+                  backgroundColor: hero.gender === 'female' ? '#ec4899' : '#3b82f6',
+                  borderColor: '#ffffff55',
+                  color: '#ffffff'
+                }}
+                title={`성별 전환 (${hero.gender === 'female' ? '여성 ➔ 남성' : '남성 ➔ 여성'})`}
+              >
+                {hero.gender === 'female' ? '♀' : '♂'}
+              </button>
+            </div>
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-bold text-base text-white">{hero.name}</span>
@@ -59,6 +81,18 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
                 </span>
                 <span className="text-[9px] px-1.5 py-0.2 rounded font-bold" style={{ background: `${posColor}22`, color: posColor, border: `1px solid ${posColor}44` }}>
                   [{posLabel}]
+                </span>
+                <span
+                  className="text-[9px] px-1.5 py-0.2 rounded font-bold cursor-pointer hover:opacity-80 transition-opacity"
+                  style={{
+                    backgroundColor: hero.gender === 'female' ? '#ec489922' : '#3b82f622',
+                    color: hero.gender === 'female' ? '#f472b6' : '#60a5fa',
+                    border: `1px solid ${hero.gender === 'female' ? '#ec489955' : '#3b82f655'}`
+                  }}
+                  onClick={handleToggleGender}
+                  title="클릭하여 남/여 포트레이트 전환"
+                >
+                  {hero.gender === 'female' ? '♀ 여성' : '♂ 남성'}
                 </span>
                 {gm.isHeroAlienated(hero.id) && (
                   <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[#ef535022] text-[#ef5350] border border-[#ef535044] animate-pulse">
@@ -194,6 +228,23 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
                           </span>
                         );
                       })()}
+                      {eq.isMemento && (
+                        <span
+                          className={`text-[8px] px-1 py-0.2 rounded font-bold mt-0.5 border flex items-center justify-center gap-0.5 ${
+                            gm.isMementoResonated(eq)
+                              ? 'bg-[#311b9244] text-[#ffd54f] border-[#ffd54f88] animate-pulse'
+                              : 'bg-[#ab47bc22] text-[#ce93d8] border-[#ab47bc55]'
+                          }`}
+                          title={
+                            gm.isMementoResonated(eq)
+                              ? tr('🪦 [전사자의 유품] 영령의 가호 공명 활성화! 성능 +10% 증폭 중!')
+                              : tr('🪦 [전사자의 유품] 묘지에서 해당 영웅의 가호를 받으면 성능 +10% 증폭')
+                          }
+                        >
+                          <span>🪦 {tr('유품')}</span>
+                          {gm.isMementoResonated(eq) && <span>(+10%)</span>}
+                        </span>
+                      )}
                     </>
                   ) : (
                     <span className="text-[10px] text-[#546e7a]">비어있음</span>

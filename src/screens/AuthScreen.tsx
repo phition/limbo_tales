@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FirebaseService, UserProfile } from '../services/FirebaseService';
+import { PlayGamesService } from '../services/PlayGamesService';
 import { useGameManager } from '../hooks/useGameManager';
 import { useI18n } from '../hooks/useI18n';
 import { SupportedLanguage } from '../i18n/types';
@@ -26,8 +27,10 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   const fb = FirebaseService.getInstance();
+  const pgs = PlayGamesService.getInstance();
+  const isPlayGamesAvailable = pgs.isAvailable();
 
-  // 저장된 이메일 및 환경설정 복원
+  // 저장된 이메일 및 환경설정 복원 + Android Play 게임즈 자동 인증 연동
   useEffect(() => {
     try {
       const savedEmail = localStorage.getItem('limbo_saved_email');
@@ -41,7 +44,38 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
     } catch {
       // localStorage 접근 불가 환경 대비
     }
-  }, []);
+
+    if (isPlayGamesAvailable) {
+      let explicitlyLoggedOut = false;
+      try {
+        explicitlyLoggedOut = localStorage.getItem('auth_explicitly_logged_out') === 'true';
+      } catch {}
+
+      if (!explicitlyLoggedOut) {
+        pgs.initialize().then(async (pgRes) => {
+          if (pgRes.isAuthenticated) {
+            setLoading(true);
+            setStatusMessage('Google Play 게임즈 프로필 동기화 중...');
+            try {
+              const res = await fb.signInWithPlayGames();
+              if (res.success) {
+                onLoginSuccess(fb.getCachedProfile());
+              } else {
+                setLoading(false);
+                setStatusMessage(null);
+              }
+            } catch {
+              setLoading(false);
+              setStatusMessage(null);
+            }
+          }
+        }).catch(() => {
+          setLoading(false);
+          setStatusMessage(null);
+        });
+      }
+    }
+  }, [isPlayGamesAvailable, fb, onLoginSuccess, pgs]);
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,9 +110,22 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
     setLoading(true);
     setStatusMessage(mode === 'login' ? '방주 인증 서버와 교신 중...' : '신규 지휘관 서약 등록 중...');
 
+    let settled = false;
+    const uiWatchdog = setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        setLoading(false);
+        setStatusMessage(null);
+        setErrorMessage('서버 응답이 지연되고 있습니다. 네트워크 상태를 확인하거나 하단의 [게스트로 즉시 입성]을 이용해 주세요.');
+      }
+    }, 12000);
+
     try {
       if (mode === 'login') {
         const res = await fb.signInWithEmail(cleanEmail, cleanPass);
+        if (settled) return;
+        settled = true;
+        clearTimeout(uiWatchdog);
         if (res.success) {
           setStatusMessage('인증 완료! 방주 성채로 진입합니다...');
           setTimeout(() => {
@@ -92,6 +139,9 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
         }
       } else {
         const res = await fb.signUpWithEmail(cleanEmail, cleanPass, nickname.trim() || '지휘관');
+        if (settled) return;
+        settled = true;
+        clearTimeout(uiWatchdog);
         if (res.success) {
           setStatusMessage('서약 완료! 방주 성채로 진입합니다...');
           setTimeout(() => {
@@ -105,6 +155,9 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
         }
       }
     } catch (err: any) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(uiWatchdog);
       setErrorMessage(err?.message || '인증 중 오류가 발생했습니다.');
       setLoading(false);
       setStatusMessage(null);
@@ -114,11 +167,24 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
   const handleGoogleAuth = async () => {
     setErrorMessage(null);
     setLoading(true);
-    setStatusMessage('Google 계정 인증 교신 중...');
+    setStatusMessage(isPlayGamesAvailable ? 'Google Play 게임즈 인증 교신 중...' : 'Google 계정 인증 교신 중...');
+
+    let settled = false;
+    const uiWatchdog = setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        setLoading(false);
+        setStatusMessage(null);
+        setErrorMessage('Google 인증 응답 시간이 초과되었습니다. Play Console 서명(SHA-1) 설정 또는 네트워크를 확인해 주세요.');
+      }
+    }, 15000);
 
     try {
       const targetNickname = mode === 'signup' ? nickname.trim() : undefined;
       const res = await fb.signInWithGoogle(targetNickname);
+      if (settled) return;
+      settled = true;
+      clearTimeout(uiWatchdog);
 
       if (res.success) {
         setStatusMessage(res.isNewUser ? '지휘관 서약 완료! 방주 성채로 진입합니다...' : '인증 완료! 방주 성채로 진입합니다...');
@@ -132,6 +198,9 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
         setStatusMessage(null);
       }
     } catch (err: any) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(uiWatchdog);
       setErrorMessage(err?.message || 'Google 인증 중 오류가 발생했습니다.');
       setLoading(false);
       setStatusMessage(null);
@@ -454,7 +523,11 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
           </svg>
-          <span>{mode === 'signup' ? 'Google 계정으로 가입' : 'Google 계정으로 로그인'}</span>
+          <span>
+            {isPlayGamesAvailable
+              ? '🎮 Google Play 게임즈로 로그인'
+              : (mode === 'signup' ? 'Google 계정으로 가입' : 'Google 계정으로 로그인')}
+          </span>
         </button>
 
         {/* 방랑자(게스트) 즉시 시작 버튼 */}
@@ -488,7 +561,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
             <span className="font-mono">ARK CLOUD STATUS: ONLINE</span>
             <span>•</span>
-            <span className="font-mono">v0.9.9-rc10</span>
+            <span className="font-mono">v1.1.2</span>
           </div>
           <div className="text-[10px] text-[#475569] italic font-serif">
             &ldquo;어둠이 깊을수록, 성화의 불꽃은 더욱 찬란히 타오른다.&rdquo;

@@ -1,0 +1,314 @@
+import fs from 'fs';
+import path from 'path';
+
+const delta = {
+  // ── 1. 3v3+1 및 서포터 난입 제거 관련 수정 ──
+  "3v3+1 차원 결투단 편성 (선발 3인 + 전술 리더 1인)": {
+    "en": "3v3+1 Dimensional Squad Setup (3 Vanguard + 1 Tactical Leader)",
+    "ja": "3v3+1 次元決闘団編成（先発3名＋戦術リーダー1名）"
+  },
+  "아레나 결투단은 필드에서 직접 교전하는 선발 3인(전열·중열·후열)과 전장을 총괄하며 전세를 결정짓는 전술 리더(상시 영령 가호 & 피버 궁극기)로 구성됩니다.": {
+    "en": "The arena squad consists of 3 vanguards battling on the field (Front, Mid, Back) and a tactical leader commanding the battle (Permanent Heroic Aegis & Fever Ultimate).",
+    "ja": "アリーナ決闘団はフィールドで直接交戦する先発3名（前列・中列・後列）と、戦場を統括し戦勢を決する戦術リーダー（常時英霊の加護＆フィーバー必殺技）で構成されます。"
+  },
+  "오퍼레이터 전술 리더: 직접 필드에서 피격당하지 않으나 아군 전체에 상시 [영령의 가호] 패시브 버프를 부여하고, 피버 쇼다운 승리 시 자신의 초월 궁극기를 적진에 투사합니다.": {
+    "en": "Operator Tactical Leader: Cannot be targeted on the field, but grants a permanent [Heroic Aegis] passive buff to all allies and casts their transcendent ultimate into enemy ranks upon winning a Fever Showdown.",
+    "ja": "オペレーター戦術リーダー：フィールドで直接攻撃を受けることはありませんが、味方全体に常時［英霊の加護］パッシブバフを付与し、フィーバーショーダウン勝利時に自身の超越必殺技を敵陣に放ちます。"
+  },
+  "서포터 난입 폐지 & 리더 집중: 서포터 난입 시스템이 개편되어 선발 3인의 포메이션 유지력과 리더 궁극기의 한 방 연계가 결투의 핵심 승부처가 됩니다.": {
+    "en": "Supporter Intrusion Removed & Leader Focus: With the supporter intrusion system streamlined, formation sustain of the 3 vanguards and leader ultimate combos are now the core keys to victory.",
+    "ja": "サポーター乱入廃止＆リーダー集中：サポーター乱入システムが改編され、先発3名の陣形維持力とリーダー必殺技の一撃連携が決闘の核心勝負所となります。"
+  },
+  "차원 앵커 게이트 완공 & 4인 차원 부대 출격 (아레나·네메시스·영지 침공)": {
+    "en": "Dimensional Anchor Gate Completed & 4-Hero Squad Deployed (Arena, Nemesis, Invasion)",
+    "ja": "次元アンカーゲート完成＆4人次元部隊出撃（アリーナ・ネメシス・領地侵攻）"
+  },
+  "성채에서 [차원 게이트]를 완공하면 4인 결투 부대(선발 3인 + 전술 리더 1인)로 출격하는 [차원 아레나](실시간 속도제 결투 & 피버콜 대전), 주간 차원 네메시스 월드 레이드, 그리고 [차원 영지 침공]이 모두 개방됩니다. 아레나 승리 시 투사의 인장을 모아 명예 암시장에서 최고급 장비를 교환하세요!": {
+    "en": "Completing the [Dimensional Gate] in the Citadel unlocks [Dimensional Arena] (Real-time speed duel & Fever Call battle) deploying a 4-hero squad (3 Vanguards + 1 Tactical Leader), the weekly Nemesis World Raid, and [Territory Invasion]. Collect Fighter's Seals from arena victories to trade for top-tier gear in the Black Market!",
+    "ja": "城塞で［次元ゲート］を完成させると、4人決闘部隊（先発3名＋戦術リーダー1名）で出撃する［次元アリーナ］（リアルタイム速度制決闘＆フィーバーコール大戦）、週間次元ネメシスワールドレイド、そして［次元領地侵攻］がすべて解放されます。アリーナ勝利で闘士の印章を集め、名誉ブラックマーケットで最高級装備と交換しましょう！"
+  },
+  "전열 엄호의 데미지 계산 방식은 어떻게 되나요?": {
+    "en": "How is damage calculated for front-row cover defense?",
+    "ja": "前列援護のダメージ計算方式はどうなっていますか？"
+  },
+  "차원 아레나(Dimensional Arena)의 기본 진행 규칙과 3v3+1 부대 편성은 어떻게 되나요?": {
+    "en": "What are the core rules of Dimensional Arena and how does the 3v3+1 squad setup work?",
+    "ja": "次元アリーナ（Dimensional Arena）の基本進行ルールと3v3+1部隊編成はどうなっていますか？"
+  },
+  "차원 아레나는 3인의 선발 돌격대(전열/중열/후열)와 1인의 전술 오퍼레이터 리더(영령 가호 및 궁극기 투사)로 구성된 4인 차원 결투 부대로 출격합니다. 참가자 전원의 행동 속도(SPD)에 따라 실시간 턴 큐가 생성되어 자동 AI 연계로 전투가 진행되며, 기본 2.0배속(1.5x 전환 가능)과 즉시 스킵(Skip)을 지원합니다.": {
+    "en": "Dimensional Arena deploys a 4-hero squad consisting of 3 vanguard strikers (Front/Mid/Back) and 1 tactical operator leader (Heroic Aegis & Ultimate projection). A real-time turn queue is generated based on all participants' Speed (SPD), executing automated AI combo battles at 2.0x base speed (switchable to 1.5x) with instant Skip support.",
+    "ja": "次元アリーナは3名の先発突撃隊（前列／中列／後列）と1名の戦術オペレーターリーダー（英霊加護および必殺技投射）で構成された4人次元決闘部隊で出撃します。参加者全員の行動速度（SPD）に応じてリアルタイムのターンキューが生成され、自動AI連携で戦闘が進行します。基本2.0倍速（1.5x切替可）と即時スキップ（Skip）に対応しています。"
+  },
+  "차원 아레나의 사경(Death's Door) 시스템은 어떻게 작동하나요?": {
+    "en": "How does the Death's Door system work in Dimensional Arena?",
+    "ja": "次元アリーナの死境（Death's Door）システムはどう作動しますか？"
+  },
+  "전투 중 치명상을 입고 체력이 0 이하가 된 영웅은 즉시 전사하지 않고 3턴간 사경(Death's Door)을 헤매는 유예 상태에 돌입합니다. 3턴 내에 아군 힐러의 스킬로 체력을 1 이상 회복하면 즉시 부활하여 전선에 복귀할 수 있습니다. 단, 마지막 남은 영웅이 사경에 진입하면 즉시 결투에서 패배합니다.": {
+    "en": "Heroes who suffer fatal damage and fall to 0 or less HP do not perish immediately, but enter a 3-turn Death's Door grace state. Restoring at least 1 HP via ally healer skills within 3 turns revives them back into combat. However, if the last surviving hero enters Death's Door, the duel ends in immediate defeat.",
+    "ja": "戦闘中に致命傷を負いHPが0以下になった英雄は即座に死亡せず、3ターンの間死境（Death's Door）を彷徨う猶予状態に入ります。3ターン以内に味方ヒーラーのスキルでHPを1以上回復させれば即座に復活して前線に復帰できます。ただし、最後の生存英雄が死境に入ると即座に敗北となります。"
+  },
+
+  // ── 2. 네메시스 월드 레이드 가이드 ──
+  "시공의 침식자 네메시스 월드 레이드 가이드": {
+    "en": "Spacetime Corruptor Nemesis World Raid Guide",
+    "ja": "時空の侵食者ネメシス ワールドレイドガイド"
+  },
+  "전 서버 실시간 공유 1,250만 HP": {
+    "en": "All-Server Real-Time Shared 12.5M HP",
+    "ja": "全サーバーリアルタイム共有 1,250万HP"
+  },
+  "네메시스 월드 보스 레이드 가이드": {
+    "en": "Nemesis World Boss Raid Guide",
+    "ja": "ネメシス ワールドボスレイドガイド"
+  },
+  "네메시스 레이드": {
+    "en": "Nemesis Raid",
+    "ja": "ネメシスレイド"
+  },
+  "월드 레이드": {
+    "en": "World Raid",
+    "ja": "ワールドレイド"
+  },
+  "부위 공략": {
+    "en": "Part Strategy",
+    "ja": "部位攻略"
+  },
+  "약탈 저지": {
+    "en": "Raid Prevention",
+    "ja": "略奪阻止"
+  },
+  "토벌 보상": {
+    "en": "Slayer Rewards",
+    "ja": "討伐報酬"
+  },
+  "시공의 침식자 네메시스: 전 서버 실시간 공유 월드 레이드": {
+    "en": "Spacetime Corruptor Nemesis: All-Server Real-Time Shared World Raid",
+    "ja": "時空の侵食者ネメシス：全サーバーリアルタイム共有ワールドレイド"
+  },
+  "모든 방주의 지휘관들이 실시간(Firebase RTDB)으로 힘을 합쳐 총 체력 1,250만의 거대 월드 보스 네메시스를 협공 토벌하는 전 서버 연합 레이드입니다.": {
+    "en": "An all-server united raid where commanders across all arks unite in real time (Firebase RTDB) to coordinate attacks on the 12.5M HP colossal world boss Nemesis.",
+    "ja": "すべての箱舟の指揮官がリアルタイム（Firebase RTDB）で力を合わせ、総HP1,250万の巨大ワールドボス・ネメシスを挟撃討伐する全サーバー連合レイドです。"
+  },
+  "전 서버 실시간 HP 공유: 지휘관들이 가한 모든 피해가 실시간 동기화되어 네메시스의 체력을 함께 깎아냅니다.": {
+    "en": "All-Server Real-Time HP Sync: All damage dealt by commanders syncs instantly, reducing Nemesis's health pool together.",
+    "ja": "全サーバーリアルタイムHP共有：指揮官たちが与えたすべてのダメージがリアルタイムで同期され、ネメシスの体力を共に削り取ります。"
+  },
+  "3개 페이즈 진화: 잔여 HP에 따라 Phase 1(차원의 균열) ➔ Phase 2(시공 붕괴) ➔ Phase 3(네메시스 각성)으로 패턴과 위력이 극대화됩니다.": {
+    "en": "3 Phase Evolutions: As remaining HP drops, battle evolves through Phase 1 (Dimensional Rift) ➔ Phase 2 (Spacetime Collapse) ➔ Phase 3 (Nemesis Awakening) with escalating attack patterns and power.",
+    "ja": "3段階フェーズ進化：残りHPに応じてPhase 1（次元の亀裂）➔ Phase 2（時空崩壊）➔ Phase 3（ネメシス覚醒）へとパターンと威力が劇的に強化されます。"
+  },
+  "수요일 자정(00:00) 정기 완전 초기화: 매주 수요일 자정에 최대 체력으로 부활하며, 주기 내 토벌 시 전 서버에 막대한 보급이 지급됩니다.": {
+    "en": "Wednesday Midnight (00:00) Reset: Resurrects with full HP every Wednesday at midnight, rewarding the entire server with massive supplies if defeated in time.",
+    "ja": "水曜午前0時（00:00）定期完全初期化：毎週水曜日の深夜に最大HPで復活し、期間内に討伐すると全サーバーに莫大な補給が支給されます。"
+  },
+  "💡 팁: 네메시스가 격퇴되면 다음 정기 점검까지 토벌 완료 상태가 유지되며, 참여한 모든 지휘관이 영광의 보상을 수령합니다.": {
+    "en": "💡 Tip: When Nemesis is defeated, the victory state persists until the next cycle reset, allowing all participating commanders to claim prestigious rewards.",
+    "ja": "💡 ヒント：ネメシスが撃退されると次の定期リセットまで討伐完了状態が維持され、参加した全指揮官が栄光の報酬を受け取れます。"
+  },
+  "3부위 독립 타겟팅 (머리 · 몸통 · 꼬리) 공략": {
+    "en": "3 Independent Targetable Parts (Head · Body · Tail) Strategy",
+    "ja": "3部位独立ターゲティング（頭・胴体・尾）攻略"
+  },
+  "네메시스는 머리(400만 HP), 몸통(500만 HP), 꼬리(350만 HP)의 3개 독립 부위로 나뉘며, 부위별로 상이한 직업 아키타입과 파멸 스킬을 구사합니다.": {
+    "en": "Nemesis is divided into 3 independent parts: Head (4M HP), Body (5M HP), and Tail (3.5M HP), each wielding distinct class archetypes and cataclysmic skills.",
+    "ja": "ネメシスは頭（400万HP）、胴体（500万HP）、尾（350万HP）の3つの独立部位に分かれており、部位ごとに異なる職業アーキタイプと破滅スキルを駆使します。"
+  },
+  "💥 머리 (전열 / 400만 HP): 발할라 워로드 아키타입. 압도적인 물리 충격파와 파쇄 강타를 시전하므로 전열 탱커의 수호가 필수적입니다.": {
+    "en": "💥 Head (Front / 4M HP): Valhalla Warlord archetype. Unleashes overwhelming physical shockwaves and crushing strikes, making front-row tank defense crucial.",
+    "ja": "💥 頭（前列／400万HP）：ヴァルハラウォーロード系。圧倒的な物理衝撃波と破砕強打を放つため、前列タンクの守護が不可欠です。"
+  },
+  "🔮 몸통 (중열 / 500만 HP): 크로노 아콘 아키타입. 시공 왜곡과 광역 마법 폭격을 퍼부으며 아군의 에테르를 흡수합니다.": {
+    "en": "🔮 Body (Mid / 5M HP): Chrono Archon archetype. Bombards with spacetime distortions and wide-area magic blasts while draining ally aether.",
+    "ja": "🔮 胴体（中列／500万HP）：クロノアルコン系。時空の歪みと広域魔法爆撃を浴びせ、味方のエーテルを吸収します。"
+  },
+  "⚡ 꼬리 (후열 / 350만 HP): 보이드 스트라이더 아키타입. 맹독 분사와 차원 암습을 가해 후열 딜러와 힐러를 기습 저격합니다.": {
+    "en": "⚡ Tail (Back / 3.5M HP): Void Strider archetype. Sprays deadly venom and executes dimensional ambushes targeting back-row DPS and healers.",
+    "ja": "⚡ 尾（後列／350万HP）：ヴォイドストライダー系。猛毒噴射と次元奇襲を仕掛け、後列のアタッカーやヒーラーを奇襲狙撃します。"
+  },
+  "💡 팁: 아군 파티의 특성에 맞춰 가장 위협적인 부위를 집중 타겟팅하여 빠르게 부위 파괴를 노리십시오.": {
+    "en": "💡 Tip: Focus target the most threatening part based on your party composition to achieve quick part destructions.",
+    "ja": "💡 ヒント：味方パーティの特性に合わせて最も脅威となる部位を集中攻撃し、迅速な部位破壊を狙いましょう。"
+  },
+  "6시간 주기 방어 퀘스트: 영지 자원 약탈 저지선": {
+    "en": "6-Hour Cycle Defense Quest: Territory Resource Raid Blockade",
+    "ja": "6時間周期防衛クエスト：領地資源略奪阻止線"
+  },
+  "네메시스의 침식 파동은 매 6시간마다 방주 영지를 위협합니다. 전 서버 지휘관들의 협동 누적 피해량으로 약탈 저지선을 방어해야 합니다.": {
+    "en": "Nemesis's erosion wave threatens ark territories every 6 hours. Commanders across the server must unite their cumulative damage to hold the defense line.",
+    "ja": "ネメシスの侵食波動は6時間ごとに箱舟領地を脅かします。全サーバーの指揮官たちの協力累積ダメージで略奪阻止線を死守しなければなりません。"
+  },
+  "6시간당 1/24 요격 컷: 매 6시간마다 전체 체력의 1/24(약 520,833 DMG) 이상의 누적 피해를 전 서버가 입혀야 영지 자원 약탈을 방어할 수 있습니다.": {
+    "en": "1/24 Interception Cut per 6h: The server must deal at least 1/24th of total HP (approx. 520,833 DMG) every 6 hours to prevent resource looting.",
+    "ja": "6時間あたり1/24迎撃ライン：6時間ごとに全体HPの1/24（約520,833 DMG）以上の累積ダメージを全サーバーで与えなければ、領地資源の略奪を防ぐことができません。"
+  },
+  "약탈 저지 성공: 6시간 요격 컷을 달성하면 방주 거점이 안전하게 보호되며 추가 수호 보급을 획득합니다.": {
+    "en": "Interception Success: Hitting the 6-hour quota safely protects the ark base and yields bonus guardian supplies.",
+    "ja": "略奪阻止成功：6時間迎撃ラインを達成すると箱舟拠点が安全に保護され、追加の守護補給を獲得します。"
+  },
+  "저지선 돌파 실패 경고: 요격량이 부족하면 네메시스의 차원 파동이 영지를 강타하여 일부 자원 손실이 발생할 수 있습니다.": {
+    "en": "Breach Warning: Failing to reach the quota causes Nemesis's dimensional wave to hit territories, causing partial resource losses.",
+    "ja": "阻止線突破失敗警告：迎撃量が不足するとネメシスの次元波動が領地を直撃し、一部の資源損失が発生する恐れがあります。"
+  },
+  "💡 팁: 하루 4번 주기마다 잊지 말고 네메시스에 출격하여 저지선 딜량을 기여하세요.": {
+    "en": "💡 Tip: Don't forget to sortie against Nemesis during each of the 4 daily cycles to contribute to the defense quota.",
+    "ja": "💡 ヒント：1日4回の周期ごとに忘れずにネメシスへ出撃し、阻止線ダメージに貢献しましょう。"
+  },
+  "누적 딜량 랭킹 & 단계별 토벌 마일스톤 보상": {
+    "en": "Cumulative Damage Rankings & Tiered Milestone Rewards",
+    "ja": "累積ダメージランキング＆段階別討伐マイルストーン報酬"
+  },
+  "전투에서 기록한 1회 최고 피해량 및 시즌 누적 피해량에 따라 전 서버 명예 랭킹이 산정되며, 다채로운 마일스톤 보상이 해금됩니다.": {
+    "en": "Server-wide honor rankings are calculated based on single-battle best damage and seasonal cumulative damage, unlocking generous milestone rewards.",
+    "ja": "戦闘で記録した1回の最高ダメージおよびシーズン累積ダメージに応じて全サーバー名誉ランキングが集計され、多彩なマイルストーン報酬が解放されます。"
+  },
+  "개인 누적 딜량 마일스톤: 누적 데미지 구간마다 골드, 에테르 결정, 고대 유물 파편, 고급 장비 상자가 즉시 지급됩니다.": {
+    "en": "Personal Milestone Rewards: Gold, aether crystals, ancient artifact shards, and high-tier gear chests are granted at each damage threshold.",
+    "ja": "個人累積ダメージマイルストーン：累積ダメージ区間ごとにゴールド、エーテル結晶、古代遺物破片、高級装備箱が即時支給されます。"
+  },
+  "전 서버 토벌 완료 포상: 1,250만 HP가 전소되어 네메시스가 격퇴되면 출격했던 모든 지휘관에게 초월 칭호와 최고급 보급품이 수여됩니다.": {
+    "en": "Server-wide Slaying Triumph: When Nemesis's 12.5M HP is exhausted and defeated, all sortied commanders receive transcendent titles and premium supplies.",
+    "ja": "全サーバー討伐完了褒賞：1,250万HPが削り切られてネメシスが撃退されると、出撃した全指揮官に超越称号と最高級補給品が授与されます。"
+  },
+  "명예의 전당 랭킹: 주간 딜량 TOP 지휘관들에게는 특별 오파츠와 차원 명예 훈장이 차등 지급됩니다.": {
+    "en": "Hall of Fame Rankings: Top weekly damage commanders receive exclusive OOPArts and dimensional honor medals.",
+    "ja": "名誉の殿堂ランキング：週間ダメージTOP指揮官たちには特別なオーパーツと次元名誉勲章が格付け支給されます。"
+  },
+  "💡 팁: 오퍼레이터 리더의 궁극기와 고화력 연계 스킬을 집중시켜 1회 출격 시 최대 딜량을 뽑아내세요.": {
+    "en": "💡 Tip: Concentrate operator leader ultimates and high-burst combo skills to maximize single-sortie damage output.",
+    "ja": "💡 ヒント：オペレーターリーダーの必殺技と高火力連携スキルを集中させ、1回の出撃で最大ダメージを引き出しましょう。"
+  },
+
+  // ── 3. 차원 영지 침공전 가이드 ──
+  "차원 영지 침공전 & 수성 방어 가이드": {
+    "en": "Territory Invasion & Castle Defense Guide",
+    "ja": "次元領地侵攻戦＆籠城防衛ガイド"
+  },
+  "7라운드 거점 공방 · 30% 자원 약탈": {
+    "en": "7-Round Siege Battle · 30% Resource Plunder",
+    "ja": "7ラウンド拠点攻防・30％資源略奪"
+  },
+  "차원 영지 침공 & 수성 전술 가이드": {
+    "en": "Territory Invasion & Defense Tactics Guide",
+    "ja": "次元領地侵攻＆籠城戦術ガイド"
+  },
+  "영지 침공전": {
+    "en": "Territory Invasion",
+    "ja": "領地侵攻戦"
+  },
+  "거점 공방전": {
+    "en": "Base Siege Battle",
+    "ja": "拠点攻防戦"
+  },
+  "자원 약탈": {
+    "en": "Resource Plunder",
+    "ja": "資源略奪"
+  },
+  "수성 거점": {
+    "en": "Castle Defense Base",
+    "ja": "籠城拠点"
+  },
+  "수성 전술": {
+    "en": "Castle Defense Tactics",
+    "ja": "籠城戦術"
+  },
+  "차원 영지 침공전: 7라운드 제한 거점 공방전": {
+    "en": "Territory Invasion: 7-Round Limit Base Siege Battle",
+    "ja": "次元領地侵攻戦：7ラウンド制限拠点攻防戦"
+  },
+  "차원의 틈새를 넘어 다른 방주의 영지를 공격하여 자원을 쟁탈하거나, 적의 침공으로부터 자신의 성채를 사수하는 턴제 영지 공방전입니다.": {
+    "en": "A turn-based territory siege where you cross dimensional rifts to attack other arks for resources, or defend your fortress against incoming invasions.",
+    "ja": "次元の狭間を越えて他箱舟の領地を攻め落とし資源を争奪するか、敵の侵攻から自身の城塞を死守するターン制領地攻防戦です。"
+  },
+  "7라운드 공격 제한: 공격측은 7라운드 이내에 적의 차원 보호막과 성벽(기본 2,500 HP)을 파괴해야 승리하며, 시간 초과 시 수비측이 승리합니다.": {
+    "en": "7-Round Attack Limit: The attacking side must destroy the enemy dimensional barrier and castle wall (base 2,500 HP) within 7 rounds to win; otherwise, defenders prevail.",
+    "ja": "7ラウンド攻撃制限：攻撃側は7ラウンド以内に敵の次元バリアと城壁（基本2,500 HP）を破壊すれば勝利となり、時間超過時は防衛側が勝利します。"
+  },
+  "차원 앵커 게이트 연동: 거점의 차원 게이트 레벨이 상승할수록 침공 보너스와 약탈 수용량이 증가합니다.": {
+    "en": "Dimensional Anchor Gate Synergy: As your ark's Dimensional Gate level increases, invasion bonuses and plunder capacity scale up.",
+    "ja": "次元アンカーゲート連動：拠点の次元ゲートレベルが上がるほど、侵攻ボーナスと略奪受容量が増加します。"
+  },
+  "실시간 상대 영지 매칭: 비슷한 전력의 라이벌 영지가 추천되며, 방어 진형을 정찰한 후 침공을 개시할 수 있습니다.": {
+    "en": "Real-Time Opponent Matching: Recommends rival territories of similar power, allowing you to scout their defense formation before launching an invasion.",
+    "ja": "リアルタイム対戦相手マッチング：同等戦力のライバル領地が推薦され、防衛陣形を偵察してから侵攻を開始できます。"
+  },
+  "💡 팁: 7라운드는 짧은 시간이므로 단일 고화력 돌파 덱이나 성벽 분쇄 특화 스킬을 적극 채용하십시오.": {
+    "en": "💡 Tip: 7 rounds is a tight limit, so heavily employ single-target burst decks or wall-breaching skills.",
+    "ja": "💡 ヒント：7ラウンドは短いため、単体高火力の突破デッキや城壁粉砕特化スキルを積極的に採用しましょう。"
+  },
+  "4대 핵심 자원 대량 약탈 (최대 30%) & 보호막": {
+    "en": "Mass Plunder of 4 Core Resources (Up to 30%) & Protective Shield",
+    "ja": "4大核心資源の大量略奪（最大30％）＆保護シールド"
+  },
+  "침공 승리 시 상대 영지에서 방대한 양의 생산 및 가공 자원을 즉시 약탈하여 아군 방주 창고로 이송합니다.": {
+    "en": "Upon invasion victory, vast amounts of production and refined resources are immediately looted from the rival territory and shipped to your ark storage.",
+    "ja": "侵攻勝利時、相手領地から膨大な量の生産および加工資源を即時略奪し、味方箱舟の倉庫へ移送します。"
+  },
+  "기본 목표 자원 (골드/식량): 침공 성공 시 상대 영지의 골드와 식량을 최우선으로 대량 약탈합니다.": {
+    "en": "Primary Target Resources (Gold/Food): Successfully invading loots large amounts of the enemy territory's gold and food first.",
+    "ja": "基本目標資源（ゴールド／食糧）：侵攻成功時、相手領地のゴールドと食糧を最優先で大量略奪します。"
+  },
+  "무작위 3종 추가 약탈: 기초 자원(목재/석재/철광), 정제 자원, 심연 파밍 전리품, 소모품 4개 카테고리 중 무작위 3종을 상대 보유량의 최대 30%까지 약탈합니다.": {
+    "en": "Random 3 Additional Loot Categories: Randomly draws 3 resources from basic resources (Wood/Stone/Iron), refined materials, abyss loot, and consumables up to 30% of their storage.",
+    "ja": "ランダム3種追加略奪：基礎資源（木材／石材／鉄鉱）、精製資源、深淵ドロップ品、消耗品の4カテゴリからランダムに3種を相手保有量の最大30％まで略奪します。"
+  },
+  "일일 3회 제한 & 8시간 보호막: 무분별한 침공을 방지하기 위해 1일 3회만 침공 가능하며, 약탈당한 영지에는 즉시 8시간 동안 침공 불가 보호막이 전개됩니다.": {
+    "en": "Daily 3 Invasions Limit & 8-Hour Shield: Invasions are capped at 3 times per day, and looted territories immediately receive an 8-hour invasion-immune shield.",
+    "ja": "1日3回制限＆8時間シールド：無差別な侵攻を防ぐため1日3回のみ侵攻可能で、略奪された領地には即座に8時間の侵攻不可シールドが展開されます。"
+  },
+  "💡 팁: 영지 창고에 자원을 무한정 쌓아두면 타겟이 되기 쉬우므로 제련이나 시설 증축에 빠르게 투자하세요.": {
+    "en": "💡 Tip: Hoarding endless resources in your warehouse makes you an easy target; quickly invest them into refining or facility upgrades.",
+    "ja": "💡 ヒント：領地倉庫に資源を溜め込みすぎると標的になりやすいため、製錬や施設増築へ素早く投資しましょう。"
+  },
+  "성벽 내구도 & 3대 전술 방어 타워 시스템": {
+    "en": "Castle Wall Durability & 3 Tactical Defense Tower System",
+    "ja": "城壁耐久度＆3大戦術防衛タワーシステム"
+  },
+  "수비측 방주는 중앙 성벽과 좌/우 방어 타워(기본 400 HP)를 배치하여 침공해 오는 적군을 요격합니다.": {
+    "en": "Defending arks deploy a central castle wall and left/right defense towers (base 400 HP) to intercept incoming invaders.",
+    "ja": "防衛側の箱舟は中央城壁と左／右防衛タワー（基本400 HP）を配置し、侵攻してくる敵軍を迎撃します。"
+  },
+  "방어 타워 영웅 탑승: 좌/우 타워에 수비 영웅을 탑승시키면 해당 영웅의 체력과 방어력에 비례하여 타워 스탯이 대폭 증폭됩니다.": {
+    "en": "Manning Defense Towers: Stationing defensive heroes on the left/right towers dramatically scales tower stats based on the hero's HP and Defense.",
+    "ja": "防衛タワー英雄搭乗：左／右タワーに防衛英雄を搭乗させると、その英雄のHPと防御力に比例してタワーステータスが大幅に増幅されます。"
+  },
+  "공격형 포격 타워: 매 라운드 시작 시 별도의 독립 턴으로 적 전체에 광역 지원 포격을 쏟아부어 진형을 붕괴시킵니다.": {
+    "en": "Offensive Bombardment Tower: Fires a wide-area support bombardment against all invaders at the start of each round as an independent turn.",
+    "ja": "攻撃型砲撃タワー：毎ラウンド開始時に独立ターンとして敵全体に広域支援砲撃を浴びせ、陣形を崩壊させます。"
+  },
+  "방어형 & 유틸형 타워: 아군 성벽과 수비 병력에 보호막/재생을 부여하거나, 침공군의 방어력을 분쇄하는 약화 결계를 시전합니다.": {
+    "en": "Defensive & Utility Towers: Casts barriers and regeneration onto castle walls and defending troops, or weakens invaders' armor with debilitating fields.",
+    "ja": "防御型＆ユーティリティ型タワー：味方城壁と防衛部隊にシールド／再生を付与するか、侵攻軍の防御力を粉砕する弱体化結界を展開します。"
+  },
+  "💡 팁: 타워에 체력과 방어력이 높은 기사나 가디언을 배치하면 성벽이 무너지기 전에 침공군을 전멸시킬 수 있습니다.": {
+    "en": "💡 Tip: Stationing high-HP, high-DEF knights or guardians on towers can wipe out attackers before the wall breaches.",
+    "ja": "💡 ヒント：タワーにHPと防御力が高い騎士やガーディアンを配置すれば、城壁が崩れる前に侵攻軍を全滅させることができます。"
+  },
+  "병영 수비부대 편성 & 12대 수성 전술 세팅": {
+    "en": "Barracks Defense Squad Setup & 12 Castle Tactics",
+    "ja": "兵舎防衛部隊編成＆12大籠城戦術セッティング"
+  },
+  "성채 병영의 [수비부대] 편성 화면에서 침공에 대비하는 전용 방어 덱과 거점 수성 전술을 사전 구축할 수 있습니다.": {
+    "en": "Configure your dedicated defense deck and castle siege tactics in advance through the Citadel Barracks [Defense Squad] screen.",
+    "ja": "城塞兵舎の［防衛部隊］編成画面で、侵攻に備える専用防衛デッキと拠点籠城戦術を事前に構築できます。"
+  },
+  "수비 슬롯 4인 배치: 성벽 방어선, 좌/우 타워, 그리고 방어 오퍼레이터 리더 슬롯에 최적의 영웅들을 배치합니다.": {
+    "en": "4-Slot Defense Setup: Assign optimal heroes to the Castle Wall line, Left/Right Towers, and Defense Operator Leader slots.",
+    "ja": "防衛スロット4名配置：城壁防衛ライン、左／右タワー、そして防衛オペレーターリーダースロットに最適な英雄たちを配置します。"
+  },
+  "12대 수성 전술 발동: 배치된 영웅의 성향(Trait)과 클래스에 따라 [성벽 수호], [반격 포격], [철벽 방진] 등 고유 수성 전술이 자동 활성화됩니다.": {
+    "en": "12 Castle Tactics Triggered: Automatically activates unique tactics such as [Wall Protection], [Counter Bombardment], and [Ironclad Phalanx] based on assigned heroes' traits and classes.",
+    "ja": "12大籠城戦術発動：配置された英雄の特性（Trait）やクラスに応じて［城壁守護］、［反撃砲撃］、［鉄壁方陣］など固有の籠城戦術が自動活性化します。"
+  },
+  "방어 성공 보상: 침공해 온 적을 7라운드 동안 막아내면 방어 성공 명예 보상과 방어 훈장을 획득합니다.": {
+    "en": "Defense Success Rewards: Successfully repelling invading forces for 7 rounds grants defense honor rewards and guardian medals.",
+    "ja": "防衛成功報酬：侵攻してきた敵を7ラウンド間防ぎきると、防衛成功名誉報酬と防衛勲章を獲得します。"
+  },
+  "💡 팁: 오프라인 상태에서도 수비부대가 자동으로 작동하므로 항상 최신 장비로 수비 병력을 세팅해 두십시오.": {
+    "en": "💡 Tip: Your defense squad operates automatically even while offline, so always equip them with your latest and best gear.",
+    "ja": "💡 ヒント：オフライン状態でも防衛部隊は自動で作動するため、常に最新装備で防衛戦力を整えておきましょう。"
+  }
+};
+
+const outPath = path.resolve('scripts/i18n/out/delta_011.json');
+fs.writeFileSync(outPath, JSON.stringify(delta, null, 2), 'utf8');
+console.log(`Successfully generated ${outPath} with ${Object.keys(delta).length} entries.`);

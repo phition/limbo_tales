@@ -7,8 +7,14 @@
  */
 
 export const AD_CONFIG = {
+  // 🏷️ 사용자가 발급받은 실제 AdMob App ID
+  PROD_APP_ID: 'ca-app-pub-6764468741905727~8384969973',
+
   // 🏷️ 사용자가 발급받은 실제 보상형(Rewarded) 광고 단위 키
   PROD_REWARDED_UNIT_ID: 'ca-app-pub-6764468741905727/1175554637',
+
+  // 🏷️ 실제 게시자(Publisher) ID
+  PROD_PUBLISHER_ID: 'ca-pub-6764468741905727',
 
   // 🧪 구글 공식 보상형 동영상 테스트 광고 단위 키 (Android)
   TEST_REWARDED_UNIT_ID: 'ca-app-pub-3940256099942544/5224354917',
@@ -17,20 +23,24 @@ export const AD_CONFIG = {
   TEST_APP_ID: 'ca-app-pub-3940256099942544~3347511713',
 } as const;
 
-// 런타임 오버라이드 플래그 (기본값: .env의 VITE_ENABLE_REAL_ADS 값 참조)
-let runtimeRealAdsOverride: boolean | null = null;
+// 런타임 오버라이드 플래그 (기본값: true - 실제 라이브 광고 송출 모드)
+let runtimeRealAdsOverride: boolean | null = true;
 
 /**
  * 실제 광고 송출 모드가 활성화되어 있는지 여부를 확인합니다.
- * - 개발 및 비출시 테스트 중에는 부정 클릭 방지를 위해 false(테스트 모드)를 권장합니다.
+ * - 기본값: true (실제 발급받은 라이브 AdMob 광고 단위 키 사용)
  */
 export function isRealAdsEnabled(): boolean {
   if (runtimeRealAdsOverride !== null) {
     return runtimeRealAdsOverride;
   }
   const envVal = import.meta.env?.VITE_ENABLE_REAL_ADS;
-  return envVal === 'true' || envVal === true;
+  if (envVal !== undefined) {
+    return envVal === 'true' || envVal === true;
+  }
+  return true;
 }
+
 
 /**
  * 런타임에 실제 광고 모드를 즉시 활성화하거나 비활성화합니다.

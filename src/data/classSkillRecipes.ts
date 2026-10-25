@@ -826,7 +826,7 @@ export const GRIMOIRE_CRAFT_RECIPES: GrimoireRecipe[] = [
     name: '고대 마도서: 아마겟돈',
     rarity: 'legendary',
     reqAlchemyLv: 7,
-    cost: { ether: 500, void_shard: 15, pure_prefix_stone: 2, gold: 3000 },
+    cost: { ether: 500, void_shard: 15, pure_prefix_stone: 4, gold: 3000 },
     desc: '적 전체에 160% 파멸의 암흑 마법 폭발 피해를 가합니다.',
     skill: {
       id: 'skill_craft_apocalypse',
@@ -845,7 +845,7 @@ export const GRIMOIRE_CRAFT_RECIPES: GrimoireRecipe[] = [
     name: '고대 마도서: 영겁의 수호 결계',
     rarity: 'legendary',
     reqAlchemyLv: 7,
-    cost: { ether: 500, void_shard: 15, pure_suffix_stone: 2, gold: 3000 },
+    cost: { ether: 500, void_shard: 15, pure_suffix_stone: 4, gold: 3000 },
     desc: '아군 전체에게 150% 수호 결계를 2턴간 부여하고 디버프를 차단합니다.',
     skill: {
       id: 'skill_craft_aegis_eternity',
@@ -865,7 +865,7 @@ export const GRIMOIRE_CRAFT_RECIPES: GrimoireRecipe[] = [
     name: '고대 마도서: 라그나로크',
     rarity: 'legendary',
     reqAlchemyLv: 8,
-    cost: { ether: 700, void_shard: 20, pure_prefix_stone: 4, gold: 5000 },
+    cost: { ether: 700, void_shard: 20, pure_prefix_stone: 8, gold: 5000 },
     desc: '적 전체에 185% 화염 폭발을 일으키고 2턴간 격렬한 화상을 입힙니다.',
     skill: {
       id: 'skill_craft_ragnarok',
@@ -885,7 +885,7 @@ export const GRIMOIRE_CRAFT_RECIPES: GrimoireRecipe[] = [
     name: '고대 마도서: 신의 은총',
     rarity: 'legendary',
     reqAlchemyLv: 8,
-    cost: { ether: 700, void_shard: 20, pure_suffix_stone: 4, gold: 5000 },
+    cost: { ether: 700, void_shard: 20, pure_suffix_stone: 8, gold: 5000 },
     desc: '아군 전체 HP를 45% 완전 치유하고 2턴간 지속 재생시킵니다.',
     skill: {
       id: 'skill_craft_divine_grace',
@@ -905,7 +905,7 @@ export const GRIMOIRE_CRAFT_RECIPES: GrimoireRecipe[] = [
     name: '시공의 마도서: 차원 붕괴',
     rarity: 'legendary',
     reqAlchemyLv: 9,
-    cost: { ether: 950, void_shard: 30, pure_prefix_stone: 6, pure_suffix_stone: 6, gold: 8000 },
+    cost: { ether: 950, void_shard: 30, pure_prefix_stone: 12, pure_suffix_stone: 12, gold: 8000 },
     desc: '단일 적에게 280% 방어 무시 절대 차원 피해를 꽂아넣습니다.',
     skill: {
       id: 'skill_craft_dimensional_rift',
@@ -924,7 +924,7 @@ export const GRIMOIRE_CRAFT_RECIPES: GrimoireRecipe[] = [
     name: '태초의 마도서: 창세의 여명',
     rarity: 'legendary',
     reqAlchemyLv: 10,
-    cost: { ether: 1500, void_shard: 50, pure_prefix_stone: 10, pure_suffix_stone: 10, gold: 15000 },
+    cost: { ether: 1500, void_shard: 50, pure_prefix_stone: 20, pure_suffix_stone: 20, gold: 15000 },
     desc: '적 전체에 220% 창세의 신성 피해를 퍼붓고, 아군 전체 HP를 35% 치유합니다.',
     skill: {
       id: 'craft_genesis_light',
@@ -943,7 +943,7 @@ export const GRIMOIRE_CRAFT_RECIPES: GrimoireRecipe[] = [
     name: '태초의 마도서: 공허의 종말',
     rarity: 'legendary',
     reqAlchemyLv: 10,
-    cost: { ether: 1500, void_shard: 50, pure_prefix_stone: 10, pure_suffix_stone: 10, gold: 15000 },
+    cost: { ether: 1500, void_shard: 50, pure_prefix_stone: 20, pure_suffix_stone: 20, gold: 15000 },
     desc: '적 전체에 240% 공허 절대 피해를 입히고 2턴간 치명적 맹독을 누적시킵니다.',
     skill: {
       id: 'craft_void_cataclysm',

@@ -154,6 +154,33 @@ export const GrimoireEnhanceModal: React.FC<Props> = ({ open, hero, skill, onClo
       }
     >
       <div className="flex flex-col gap-3 py-1 text-left">
+        {/* 상단 에테르 공방 일러스트 배너 */}
+        <div className="relative w-full h-24 sm:h-28 rounded-xl overflow-hidden border border-[#26a69a44] shadow-md shrink-0">
+          <img
+            src="assets/menu_alchemy.jpg"
+            alt="Aether Alchemy Workshop"
+            className="w-full h-full object-cover"
+            style={{ filter: 'brightness(0.92) contrast(1.05)' }}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = 'none';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e17] via-[#0b0e17]/40 to-transparent" />
+          <div className="absolute bottom-2 left-3 right-3 flex items-end justify-between">
+            <div>
+              <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-[#26a69a33] text-[#80cbc4] border border-[#26a69a55] font-bold">
+                AETHER ALCHEMY
+              </span>
+              <h3 className="text-xs sm:text-sm font-extrabold text-white mt-0.5 drop-shadow-md">
+                에테르 연금 공방 — 마도 비전 강화
+              </h3>
+            </div>
+            <span className="text-[10px] font-mono font-bold text-[#80cbc4] bg-[#26a69a22] px-2 py-0.5 rounded-lg border border-[#26a69a44] backdrop-blur-sm">
+              공방 Lv.{alchemyLv}
+            </span>
+          </div>
+        </div>
+
         {/* 대상 영웅 및 스킬 헤더 */}
         <div
           className="flex items-center gap-3 p-3 rounded-xl bg-[#0e1320] border"

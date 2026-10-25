@@ -5,7 +5,7 @@ import { SoundManager } from '../managers/SoundManager';
 import { getActiveRewardedAdUnitId, isRealAdsEnabled, setRealAdsEnabled, AD_CONFIG } from '../config/adConfig';
 
 export interface AdRequestOptions {
-  placement: 'bonfire' | 'wagon' | 'catalyst' | 'cemetery' | 'loot_double' | 'general' | 'tavern';
+  placement: 'bonfire' | 'wagon' | 'catalyst' | 'cemetery' | 'loot_double' | 'general' | 'tavern' | 'nemesis' | 'invasion';
   title: string;
   description: string;
   rewardText: string;
@@ -93,7 +93,8 @@ export class GoogleAdService {
         const script = document.createElement('script');
         script.async = true;
         script.crossOrigin = 'anonymous';
-        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-test';
+        const clientId = isRealAdsEnabled() ? AD_CONFIG.PROD_PUBLISHER_ID : 'ca-pub-test';
+        script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`;
         script.onerror = () => {
           console.log('[GoogleAdService] AdSense 스크립트 오프라인/차단 감지 -> 내장 리워드 플레이어로 전환');
         };
@@ -159,8 +160,11 @@ export class GoogleAdService {
           await this.initAdMobServices();
         }
 
-        // 보상형 광고 로드 준비
-        await AdMob.prepareRewardVideoAd({ adId: adUnitId });
+        // 보상형 광고 로드 준비 (라이브 모드 시 isTesting: false)
+        await AdMob.prepareRewardVideoAd({
+          adId: adUnitId,
+          isTesting: !this.isProductionMode(),
+        });
 
         // 보상형 광고 재생
         const rewardItem = await AdMob.showRewardVideoAd();

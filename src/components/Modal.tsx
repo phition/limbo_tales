@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { registerBackButtonHandler } from '../utils/nativeBridge';
 
 interface Props {
   title: React.ReactNode;
@@ -23,6 +24,16 @@ export const Modal: React.FC<Props> = ({
   maxHeight = 'max-h-[90dvh]',
   className = ''
 }) => {
+  // 📱 모달 활성화 시 뒤로가기 버튼(하드웨어/브라우저)으로 모달 닫기
+  useEffect(() => {
+    if (!open) return;
+    const unregister = registerBackButtonHandler(() => {
+      onClose();
+      return true;
+    });
+    return () => unregister();
+  }, [open, onClose]);
+
   if (!open) return null;
   return (
     <div className={`fixed inset-0 ${zIndex} flex items-center justify-center p-2.5 sm:p-4`}>

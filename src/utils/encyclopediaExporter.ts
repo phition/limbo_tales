@@ -4,11 +4,10 @@ import { INITIAL_BUILDINGS } from '../data/buildings';
 import { BUILDING_NAMES } from '../i18n/dataLocales';
 import { EQUIPMENT_RECIPES } from '../data/equipment';
 import { ALL_SKILL_BOOKS, getSkillBookRarity } from '../data/skillBooks';
-import { SYSTEM_GUIDES } from '../data/systemGuides';
 import { COMBO_RULES } from './skillComboUtils';
-import { STARTER_STEPS, WEAPON_TRAITS_GUIDE, FAQS_GUIDE, CLASS_LINEAGES } from '../data/encyclopediaData';
 import { SupportedLanguage } from '../i18n/types';
 import { MONSTER_FACTION_META } from '../types/game';
+import { EncyclopediaDataService } from '../services/EncyclopediaDataService';
 
 function escapeHtml(str: string | undefined | null): string {
   if (!str) return '';
@@ -55,8 +54,15 @@ export function exportEncyclopediaToHtml(
     { id: 'sec-faqs', label: tr('생존 FAQ') },
   ];
 
+  const service = EncyclopediaDataService.getInstance();
+  const starterSteps = service.getStarterSteps();
+  const weaponTraits = service.getWeaponTraits();
+  const classLineages = service.getClassLineages();
+  const systemGuides = service.getSystemGuides();
+  const faqsGuide = service.getFaqs();
+
   // 1. Starter steps
-  const starterHtml = (STARTER_STEPS || []).map(s => `
+  const starterHtml = (starterSteps || []).map(s => `
     <div class="card">
       <div class="card-header">
         <span class="icon">${s.icon}</span>
@@ -71,7 +77,7 @@ export function exportEncyclopediaToHtml(
   `).join('');
 
   // 2. Weapon traits
-  const traitsHtml = (WEAPON_TRAITS_GUIDE || []).map(t => `
+  const traitsHtml = (weaponTraits || []).map(t => `
     <div class="grid-card">
       <div class="grid-card-head">
         <span class="badge" style="background:${t.color}22; color:${t.color}; border:1px solid ${t.borderColor};">${escapeHtml(t.icon)} ${escapeHtml(tr(t.weapon))}</span>
@@ -82,7 +88,7 @@ export function exportEncyclopediaToHtml(
   `).join('');
 
   // 3. Classes & Lineages
-  const lineagesHtml = (CLASS_LINEAGES || []).map(lineage => {
+  const lineagesHtml = (classLineages || []).map(lineage => {
     const classCards = (lineage.classOrder || [])
       .map(id => CHARACTER_CLASSES[id])
       .filter(Boolean)
@@ -295,7 +301,7 @@ export function exportEncyclopediaToHtml(
   `).join('');
 
   // 9. System Guides
-  const systemsHtml = (SYSTEM_GUIDES || []).map(g => `
+  const systemsHtml = (systemGuides || []).map(g => `
     <div class="card">
       <div class="card-header">
         <span class="icon">${g.icon || '🗺️'}</span>
@@ -312,7 +318,7 @@ export function exportEncyclopediaToHtml(
   `).join('');
 
   // 10. FAQs
-  const faqsHtml = (FAQS_GUIDE || []).map(f => `
+  const faqsHtml = (faqsGuide || []).map(f => `
     <div class="faq-item">
       <h4 class="faq-q">❓ ${escapeHtml(tr(f.question))}</h4>
       <p class="faq-a">💡 ${escapeHtml(tr(f.answer))}</p>
@@ -686,7 +692,7 @@ export function exportEncyclopediaToHtml(
     <div class="meta-bar">
       <span>🌐 LANG: ${lang.toUpperCase()}</span>
       <span>📅 ${escapeHtml(generatedDate)}</span>
-      <span>📦 VERSION: 0.9.9-rc10</span>
+      <span>📦 VERSION: 1.1.2</span>
     </div>
   </header>
 
@@ -798,6 +804,20 @@ export function exportEncyclopediaToHtml(
     <p style="margin-top:4px;">© 2026 Project Limbo Tales. All rights reserved.</p>
   </footer>
 
+  <!-- 
+    ===================================================================
+    👑 Project Limbo Ark Master Encyclopedia Data Package
+    [마스터 계정 안내]
+    이 HTML 문서는 오프라인 도감이자, 게임 내 [백과사전 업로드] 지원 파일입니다.
+    아래 <script id="limbo-encyclopedia-data" type="application/json"> 내부의
+    JSON 데이터를 텍스트 에디터로 수정한 뒤 이 파일(또는 JSON)을 업로드하면
+    인게임 백과사전 내용이 실시간으로 업데이트 및 배포됩니다.
+    ===================================================================
+  -->
+  <script id="limbo-encyclopedia-data" type="application/json">
+${JSON.stringify(service.getCurrentPackage(lang), null, 2)}
+  </script>
+
 </body>
 </html>`;
 
@@ -841,6 +861,48 @@ export function exportEncyclopediaToHtml(
       success: false,
       filename,
       error: err?.message || 'Download failed'
+    };
+  }
+}
+
+/** 👑 마스터 계정용 백과사전 JSON 단독 다운로드 */
+export function exportEncyclopediaToJson(lang: SupportedLanguage = 'ko'): ExportResult {
+  const service = EncyclopediaDataService.getInstance();
+  const pkg = service.getCurrentPackage(lang);
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const filename = `limbo_encyclopedia_data_${lang}_${dateStr}.json`;
+
+  try {
+    const jsonStr = JSON.stringify(pkg, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+
+    if (typeof (window.navigator as any)?.msSaveBlob === 'function') {
+      (window.navigator as any).msSaveBlob(blob, filename);
+      return { success: true, filename };
+    }
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+
+    setTimeout(() => {
+      try {
+        if (a.parentNode) document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (_) {}
+    }, 5000);
+
+    return { success: true, filename };
+  } catch (err: any) {
+    console.error('[encyclopediaExporter] JSON download failed:', err);
+    return {
+      success: false,
+      filename,
+      error: err?.message || 'JSON Download failed'
     };
   }
 }

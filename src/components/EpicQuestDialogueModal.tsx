@@ -4,6 +4,8 @@ import { SoundManager } from '../managers/SoundManager';
 import { CustomAssetService } from '../services/CustomAssetService';
 import { GameIcon } from './GameIcon';
 import { useI18n } from '../hooks/useI18n';
+import { getPurifiedFloorsForQuest } from '../data/quests';
+import { getLocalizedResourceName } from '../i18n/dataLocales';
 
 interface Props {
   quest: Quest;
@@ -26,10 +28,11 @@ const RN: Record<string, string> = {
   suffix_stone: '일반 접미석',
   pure_prefix_stone: '순수 접두석',
   pure_suffix_stone: '순수 접미석',
+  pure_mana_stone: '순수 마도석',
 };
 
 export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClaim }) => {
-  const { tr } = useI18n();
+  const { tr, lang } = useI18n();
   const [selectedChoice, setSelectedChoice] = useState<'domain' | 'expedition'>('domain');
   const epicStory = quest.epicStory;
 
@@ -38,19 +41,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
   const domainChoice = epicStory.choices.find(c => c.id === 'domain') || epicStory.choices[0];
   const expeditionChoice = epicStory.choices.find(c => c.id === 'expedition') || epicStory.choices[1];
 
-  const getPurifiedFloors = (questId: string): number[] => {
-    switch (questId) {
-      case 'Q_EPIC_LORE_01': return [1, 2];
-      case 'Q_EPIC_LORE_02': return [3, 4];
-      case 'Q_EPIC_LORE_03': return [5];
-      case 'Q_EPIC_LORE_04': return [6, 7];
-      case 'Q_EPIC_LORE_05': return [8, 9];
-      case 'Q_SLAY_BOSS_10':
-      case 'Q_EPIC_AVICI_ENDING': return [10];
-      default: return [];
-    }
-  };
-  const purifiedFloors = getPurifiedFloors(quest.id);
+  const purifiedFloors = getPurifiedFloorsForQuest(quest.id);
 
   const handleConfirm = () => {
     SoundManager.getInstance().play('quest_complete');
@@ -144,7 +135,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
           {purifiedFloors.length > 0 && (
             <div className="p-3.5 rounded-xl bg-gradient-to-r from-[#064e3b55] via-[#05966928] to-[#064e3b55] border border-[#10b98166] flex items-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.18)] animate-fade-in">
               <div className="w-10 h-10 rounded-xl bg-[#064e3b] border border-[#10b981] flex items-center justify-center text-xl shrink-0 shadow-md">
-                ✨
+                <GameIcon name="abyss_purify" icon="✨" size={24} />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -208,18 +199,18 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                   <div className="pt-2 border-t border-[#1f2b3a] flex flex-wrap gap-1.5">
                     {domainChoice.rewards.gold && (
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f15] text-[#ffd54f] font-mono font-bold border border-[#ffd54f33] flex items-center gap-1">
-                        <GameIcon name="gold" icon="🪙" size={13} /> {domainChoice.rewards.gold}G
+                        <GameIcon name="gold" icon="🪙" size={13} /> {domainChoice.rewards.gold.toLocaleString()}G
                       </span>
                     )}
                     {domainChoice.rewards.ether && (
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono font-bold border border-[#c8aa6e33] flex items-center gap-1">
-                        <GameIcon name="ether" icon="✨" size={13} /> {domainChoice.rewards.ether}
+                        <GameIcon name="ether" icon="✨" size={13} /> {domainChoice.rewards.ether.toLocaleString()} {tr('에테르')}
                       </span>
                     )}
                     {domainChoice.rewards.resources &&
                       Object.entries(domainChoice.rewards.resources).map(([k, amt]) => (
                         <span key={k} className="text-[10px] px-1.5 py-0.5 rounded bg-[#38ef7d15] text-[#38ef7d] font-mono font-bold border border-[#38ef7d33] flex items-center gap-1">
-                          <GameIcon name={k} size={13} /> {tr(RN[k] || k)} +{amt}
+                          <GameIcon name={k} size={13} /> {getLocalizedResourceName(k, lang) || tr(RN[k] || k)} +{amt}
                         </span>
                       ))}
                   </div>
@@ -262,7 +253,12 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                     {expeditionChoice.rewards.equipment && (
                       <div className="flex items-center gap-1.5 p-1.5 rounded bg-[#2c133a] border border-[#e040fb44] text-[11px]">
                         <span className="text-base shrink-0">
-                          <GameIcon name={expeditionChoice.rewards.equipment.id} icon={expeditionChoice.rewards.equipment.icon || '🗡️'} size={18} />
+                          <GameIcon
+                            name={expeditionChoice.rewards.equipment.id}
+                            icon={expeditionChoice.rewards.equipment.icon || '🗡️'}
+                            rarity={expeditionChoice.rewards.equipment.rarity}
+                            size={18}
+                          />
                         </span>
                         <div className="flex-1 min-w-0">
                           <div className="font-bold text-[#ffd54f] truncate">
@@ -278,12 +274,12 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {expeditionChoice.rewards.gold && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f15] text-[#ffd54f] font-mono font-bold border border-[#ffd54f33] flex items-center gap-1">
-                          <GameIcon name="gold" icon="🪙" size={13} /> {expeditionChoice.rewards.gold}G
+                          <GameIcon name="gold" icon="🪙" size={13} /> {expeditionChoice.rewards.gold.toLocaleString()}G
                         </span>
                       )}
                       {expeditionChoice.rewards.ether && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono font-bold border border-[#c8aa6e33] flex items-center gap-1">
-                          <GameIcon name="ether" icon="✨" size={13} /> {expeditionChoice.rewards.ether}
+                          <GameIcon name="ether" icon="✨" size={13} /> {expeditionChoice.rewards.ether.toLocaleString()} {tr('에테르')}
                         </span>
                       )}
                     </div>
@@ -305,7 +301,7 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                         <div className="flex flex-wrap gap-1.5 mt-0.5">
                           {Object.entries(expeditionChoice.rewards.resources).map(([k, amt]) => (
                             <span key={k} className="text-[10px] px-1.5 py-0.5 rounded bg-[#ab47bc15] text-[#ce93d8] font-mono font-bold border border-[#ab47bc33] flex items-center gap-1">
-                              <GameIcon name={k} size={13} /> {tr(RN[k] || k)} +{amt}
+                              <GameIcon name={k} size={13} /> {getLocalizedResourceName(k, lang) || tr(RN[k] || k)} +{amt}
                             </span>
                           ))}
                         </div>

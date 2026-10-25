@@ -1,0 +1,34 @@
+{
+  "탭하여 일괄 장착": {
+    "en": "Tap for Auto Equip",
+    "ja": "タップして一括装備"
+  },
+  "보관함의 미장착 장비 중 클래스 최적 장비를 일괄 장착합니다": {
+    "en": "Auto-equips the best unequipped gear for this class from inventory.",
+    "ja": "保管庫の未装備アイテムの中からクラスに最適な装備を一括装備します。"
+  },
+  "장비 일괄 장착": {
+    "en": "Auto Equip Gear",
+    "ja": "装備一括装着"
+  },
+  "이미 모든 슬롯에 최적의 장비를 장착 중이거나 교체할 더 좋은 미장착 장비가 없습니다.": {
+    "en": "Already equipped with the best gear, or no better unequipped gear is available.",
+    "ja": "既に全スロットに最適な装備が装着されているか、交換可能なより良い未装備アイテムがありません。"
+  },
+  "최적 장비 일괄 장착 완료": {
+    "en": "Auto Equip Complete",
+    "ja": "最適装備の一括装着完了"
+  },
+  "{0}의 추천 장비 {1}개를 일괄 장착했습니다.": {
+    "en": "Auto-equipped {1} recommended gear item(s) on {0}.",
+    "ja": "{0}のおすすめ装備{1}個を一括装着しました。"
+  },
+  "장착 장비": {
+    "en": "Equipped Gear",
+    "ja": "装着装備"
+  },
+  "전체 장비 관리 / 일괄 판매": {
+    "en": "Manage Gear / Bulk Sell",
+    "ja": "装備全体管理 / 一括売却"
+  }
+}

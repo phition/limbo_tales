@@ -1,4 +1,5 @@
 import { EquipmentItem, NemesisMilestone, NemesisPartId } from '../types/game';
+import { GameDataService } from '../services/GameDataService';
 import { recalculateEquipmentStats } from './equipment';
 
 export interface NemesisBossSkill {
@@ -245,16 +246,18 @@ export const NEMESIS_BOSS_CONFIG: NemesisBossConfig = {
  * 🎖️ 네메시스 전용 장비 생성 헬퍼
  */
 export function createNemesisRewardEquipment(tier: 'pendant' | 'core' | 'crown'): EquipmentItem {
+  const baseStats = GameDataService.getInstance().getNemesisEquipmentBaseStats(tier);
   if (tier === 'pendant') {
     const raw: EquipmentItem = {
       id: `equip_nemesis_pendant_${Date.now()}`,
+      templateId: 'equip_nemesis_pendant',
       name: '[시공의] 왜곡 펜던트 (+3)',
       baseName: '왜곡 펜던트',
       slot: 'accessory',
       level: 3,
       rarity: 'rare',
-      baseStats: { atk: 14, def: 10, spd: 5, luck: 8, hp: 80 },
-      stats: { atk: 14, def: 10, spd: 5, luck: 8, hp: 80 },
+      baseStats: { ...baseStats },
+      stats: { ...baseStats },
       prefix: {
         id: 'pre_nemesis_spacetime',
         name: '시공의',
@@ -271,13 +274,14 @@ export function createNemesisRewardEquipment(tier: 'pendant' | 'core' | 'crown')
   } else if (tier === 'core') {
     const raw: EquipmentItem = {
       id: `equip_nemesis_core_${Date.now()}`,
+      templateId: 'equip_nemesis_core',
       name: '[파멸의] 네메시스 종말 성핵 (+5) [차원]',
       baseName: '네메시스 종말 성핵',
       slot: 'accessory',
       level: 5,
       rarity: 'epic',
-      baseStats: { atk: 28, def: 22, spd: 8, luck: 14, hp: 180, mp: 60 },
-      stats: { atk: 28, def: 22, spd: 8, luck: 14, hp: 180, mp: 60 },
+      baseStats: { ...baseStats },
+      stats: { ...baseStats },
       prefix: {
         id: 'pre_nemesis_ruin',
         name: '파멸의',
@@ -302,13 +306,14 @@ export function createNemesisRewardEquipment(tier: 'pendant' | 'core' | 'crown')
   } else {
     const raw: EquipmentItem = {
       id: `equip_nemesis_crown_${Date.now()}`,
+      templateId: 'equip_nemesis_crown',
       name: '[절대의] 패왕 네메시스 파멸 관 (+7) [종결]',
       baseName: '패왕 네메시스 파멸 관',
       slot: 'accessory',
       level: 7,
       rarity: 'legendary',
-      baseStats: { atk: 45, def: 38, spd: 12, luck: 22, hp: 320, mp: 100 },
-      stats: { atk: 45, def: 38, spd: 12, luck: 22, hp: 320, mp: 100 },
+      baseStats: { ...baseStats },
+      stats: { ...baseStats },
       prefix: {
         id: 'pre_nemesis_absolute',
         name: '절대의',

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { GameResources } from '../types/game';
 import { GameManager } from '../managers/GameManager';
 import { GameIcon } from './GameIcon';
+import { useI18n } from '../hooks/useI18n';
+import { formatDuration } from '../utils/timeUtils';
 
 interface Props {
   resources: GameResources;
@@ -21,6 +23,7 @@ export const ResourceBar: React.FC<Props> = ({
   bonfireWarmthTime,
   onOpenMenu
 }) => {
+  const { tr, lang } = useI18n();
   const [upkeepTicker, setUpkeepTicker] = useState<{ id: number; text: string } | null>(null);
 
   useEffect(() => {
@@ -50,10 +53,21 @@ export const ResourceBar: React.FC<Props> = ({
     { key: 'food', val: resources.food },
     { key: 'ether', val: resources.ether },
   ];
-  const fmt = (n: number) => n >= 1000 ? `${(n/1000).toFixed(1)}k` : String(n);
+  const fmt = (n: number) => {
+    if (n >= 1_000_000_000) {
+      return `${(n / 1_000_000_000).toFixed(2)}B`;
+    }
+    if (n >= 1_000_000) {
+      const inM = n / 1_000_000;
+      return `${inM >= 10 ? inM.toFixed(1) : inM.toFixed(2)}M`;
+    }
+    return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
+  };
 
-  const bonfireTooltip = `🔥 방주의 성화 온기 유지 중 (남은 시간: ${Math.floor(bonfireWarmthTime / 60)}분 ${bonfireWarmthTime % 60}초)`;
-  const menuTooltip = '시스템 메뉴 & 도움말 열기';
+  const bonfireTooltip = bonfireWarmthTime > 0
+    ? `🔥 ${tr('방주의 성화 온기 유지 중')} (${tr('남은 시간')}: ${formatDuration(bonfireWarmthTime, lang)})`
+    : '';
+  const menuTooltip = tr('시스템 메뉴 & 도움말 열기');
 
   return (
     <div id="global-resource-bar" className="relative flex items-center justify-between px-3 py-1.5 bg-[#0c0f17] border-b border-[#1f2738] shrink-0 z-20 w-full overflow-hidden">
@@ -65,7 +79,7 @@ export const ResourceBar: React.FC<Props> = ({
         >
           <div className="flex items-center gap-1.5 text-xs text-[#ffd54f] font-bold tracking-wide text-center truncate max-w-full shadow-sm">
             <span className="text-sm shrink-0">🏢</span>
-            <span className="truncate">{upkeepTicker.text}</span>
+            <span className="truncate">{tr(upkeepTicker.text)}</span>
           </div>
         </div>
       )}
@@ -73,7 +87,11 @@ export const ResourceBar: React.FC<Props> = ({
       {/* 좌측: 주요 자원 목록 */}
       <div className="flex items-center gap-1.5 sm:gap-2 flex-nowrap min-w-0 overflow-x-auto no-scrollbar py-0.5">
         {mainResources.map(({ key, val }) => (
-          <span key={key} className="flex items-center gap-0.5 text-[11px] sm:text-xs font-mono text-[#cfd8e8] shrink-0">
+          <span
+            key={key}
+            className="flex items-center gap-0.5 text-[11px] sm:text-xs font-mono text-[#cfd8e8] shrink-0 select-none cursor-default"
+            title={`${GameManager.getResourceMeta(key as any)?.name || key}: ${val.toLocaleString()}`}
+          >
             <GameIcon name={key} icon={RESOURCE_ICONS[key]} size={13} className="shrink-0" />
             <span>{fmt(val)}</span>
           </span>

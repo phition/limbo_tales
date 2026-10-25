@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useGameManager } from '../hooks/useGameManager';
+import { useI18n } from '../hooks/useI18n';
 import { ActionButton } from '../components/ActionButton';
+import { GameIcon } from '../components/GameIcon';
 import { ArenaOpponent, CharacterClass, EquipmentItem, Mercenary, Skill, StatusEffect, STATUS_EFFECT_META } from '../types/game';
 import { FirebaseService, LeaderboardEntry } from '../services/FirebaseService';
+import { PlayGamesService } from '../services/PlayGamesService';
 import { CHARACTER_CLASSES } from '../data/classes';
 import { SoundManager } from '../managers/SoundManager';
 import { GameManager } from '../managers/GameManager';
@@ -104,23 +107,20 @@ export const getCombatantPortrait = (c: {
   classId?: string;
   id?: string;
   name?: string;
+  gender?: 'male' | 'female';
   portraitUrl?: string;
   customPortraitUrl?: string;
 }): string => {
   if (c.portraitUrl) return c.portraitUrl;
   if (c.customPortraitUrl) return c.customPortraitUrl;
-  const customAssetService = CustomAssetService.getInstance();
-  const classId = c.classId || '';
-  const custom =
-    (c.id && customAssetService.getMercenaryOverride(c.id)) ||
-    (c.name && customAssetService.getMercenaryOverride(c.name)) ||
-    (classId && customAssetService.getMercenaryOverride(classId));
-  if (custom) return custom;
-  return CLASS_PORTRAIT_MAP[classId] || DEFAULT_CLASS_IMAGES[classId] || 'assets/portraits/portrait_paladin.png';
+  return CustomAssetService.getHeroPortrait(c);
 };
 
-// 🚫 주간 차원의 금기 (Weekly Banned Badge) - 이번 주 획득 불가 배지
-export const WEEKLY_BANNED_BADGE: FeverBadgeType = 'crit';
+// 🚫 이번 주 차원 칙령 금기 배지 (기본 'evade' 회피 배지 금지, 마스터 스튜디오 실시간 반영)
+export const WEEKLY_BANNED_BADGE: FeverBadgeType = 'evade';
+export const getWeeklyBannedBadge = (): FeverBadgeType | 'none' => {
+  return GameDataService.getInstance().getArenaEdict().bannedBadge || 'evade';
+};
 
 // ⚔️ 차원 아레나 PVP 전투 스케일 밸런스 상수 (순수 3인 전투 정렬)
 export const ARENA_ATK_SCALE = 1.0; 
@@ -148,6 +148,7 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
   isActing,
   isBot,
 }) => {
+  const { tr } = useI18n();
   const isPlayer = side === 'player';
   const customAssetService = CustomAssetService.getInstance();
   const classId = leader?.classId || '';
@@ -157,7 +158,7 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
     customAssetService.getMercenaryOverride(classId) ||
     getCombatantPortrait(leader || { classId });
   const clsInfo = CHARACTER_CLASSES[classId];
-  const clsName = clsInfo?.name || leader?.className || (isPlayer ? '원정대 사령관' : '수비대 사령관');
+  const clsName = clsInfo?.name ? tr(clsInfo.name) : leader?.className ? tr(leader.className) : (isPlayer ? tr('원정대 사령관') : tr('수비대 사령관'));
   const ultSkill = clsInfo?.specialSkill || leader?.specialSkill || clsInfo?.skills?.[0] || null;
 
   return (
@@ -208,7 +209,7 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
                     : 'bg-[#ff416c25] text-[#ff80ab] border border-[#ff416c66]'
                 }`}
               >
-                {isPlayer ? '아군 오퍼레이터' : '상대 오퍼레이터'}
+                {isPlayer ? tr('아군 오퍼레이터') : tr('상대 오퍼레이터')}
               </span>
               {!isPlayer && (
                 isBot ? (
@@ -217,12 +218,12 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
                   </span>
                 ) : (
                   <span className="text-[7.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] shrink-0 font-mono">
-                    🌐 지휘관
+                    🌐 {tr('지휘관')}
                   </span>
                 )
               )}
               <span className="text-xs font-black text-white truncate">
-                {leader?.name || (isPlayer ? '아군 오퍼레이터' : '상대 오퍼레이터')}
+                {leader?.name ? tr(leader.name) : (isPlayer ? tr('아군 오퍼레이터') : tr('상대 오퍼레이터'))}
               </span>
               {leader?.grade && (
                 <span className="text-[8px] font-bold text-[#ffd54f] shrink-0 font-mono">
@@ -246,24 +247,24 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
                 }`}
               >
                 <span>⚡</span>
-                <span>궁극기</span>
+                <span>{tr('궁극기')}</span>
               </span>
               <span
                 className="text-[10px] font-extrabold text-[#ffd54f] truncate flex items-center gap-1"
-                title={ultSkill?.description || ultSkill?.name}
+                title={ultSkill?.description ? tr(ultSkill.description) : ultSkill?.name ? tr(ultSkill.name) : ''}
               >
                 <span>{ultSkill?.icon || '💥'}</span>
                 <span className="text-white hover:text-[#ffd54f] transition-colors">
-                  {ultSkill?.name || '기본 오의'}
+                  {ultSkill?.name ? tr(ultSkill.name) : tr('기본 오의')}
                 </span>
               </span>
             </div>
             {blessing?.name && (
               <span
                 className="text-[8px] text-[#8b9bb4] truncate font-mono shrink-0 hidden sm:inline"
-                title={blessing.name}
+                title={tr(blessing.name)}
               >
-                가호: <span className="text-[#ce93d8] font-bold">{blessing.name}</span>
+                {tr('가호')}: <span className="text-[#ce93d8] font-bold">{tr(blessing.name)}</span>
               </span>
             )}
           </div>
@@ -309,19 +310,27 @@ export interface PreseasonBotConfig {
   guild: string;
   tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond' | 'master' | 'grandmaster';
   rating: number;
+  level: number; // 🤖 봇 레벨 (브론즈 Lv.20 ~ 마스터 Lv.55 분포)
   classes: [string, string, string]; // 전열, 중열, 후열
   opClass: string; // 전술 오퍼레이터
   feverConcept: string; // 전술 특징
 }
 
+/** 레이팅 기반 아레나 봇 표준 레벨 계산 헬퍼 (브론즈 Lv.20 ~ 마스터/그랜드마스터 Lv.55) */
+export function calcArenaBotLevelFromRating(rating: number): number {
+  const clamped = Math.max(750, Math.min(2500, rating));
+  return Math.max(20, Math.min(55, Math.round(20 + ((clamped - 750) / 1750) * 35)));
+}
+
 export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
-  // 🥉 브론즈 (Bronze: 700 ~ 990) - 기본기 훈련 및 피버 연습용
+  // 🥉 브론즈 (Bronze: 700 ~ 990, Lv.20 ~ 24) - 기본기 훈련 및 피버 연습용
   {
     id: 'bot_bronze_1',
     name: '수습 검사 루키',
     guild: '모험가 초보자단',
     tier: 'bronze',
     rating: 760,
+    level: 20,
     classes: ['squire', 'vanguard', 'squire'],
     opClass: 'squire',
     feverConcept: '기본 돌격 및 연계 기초'
@@ -332,6 +341,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '신록의 기도원',
     tier: 'bronze',
     rating: 810,
+    level: 21,
     classes: ['paladin', 'squire', 'novice_cleric'],
     opClass: 'novice_cleric',
     feverConcept: '수호 방어 및 지속 치유'
@@ -342,6 +352,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '성채 방위대 훈련소',
     tier: 'bronze',
     rating: 870,
+    level: 22,
     classes: ['guardian', 'squire', 'archer'],
     opClass: 'guardian',
     feverConcept: '전열 방벽 & 견제 사격'
@@ -352,6 +363,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '마법 학술원 초급반',
     tier: 'bronze',
     rating: 920,
+    level: 23,
     classes: ['squire', 'apprentice_mage', 'novice_cleric'],
     opClass: 'apprentice_mage',
     feverConcept: '마력 탄환 기초 연계'
@@ -362,18 +374,20 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '뒷골목 자경단',
     tier: 'bronze',
     rating: 960,
+    level: 24,
     classes: ['rogue', 'vanguard', 'squire'],
     opClass: 'rogue',
     feverConcept: '연속 급소 찌르기'
   },
 
-  // 🥈 실버 (Silver: 1000 ~ 1290) - 초중급 진형 훈련용
+  // 🥈 실버 (Silver: 1000 ~ 1290, Lv.25 ~ 30) - 초중급 진형 훈련용
   {
     id: 'bot_silver_1',
     name: '창술사 볼트',
     guild: '붉은 창끝 길드',
     tier: 'silver',
     rating: 1050,
+    level: 25,
     classes: ['vanguard', 'tactical_gunner', 'bishop'],
     opClass: 'vanguard',
     feverConcept: '원거리 저격 및 전열 견제'
@@ -384,6 +398,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '밤까마귀 도적단',
     tier: 'silver',
     rating: 1110,
+    level: 26,
     classes: ['assassin', 'duelist', 'rogue'],
     opClass: 'assassin',
     feverConcept: '회피 기동 및 치명타 노림수'
@@ -394,6 +409,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '아이언 가드 연대',
     tier: 'silver',
     rating: 1160,
+    level: 28,
     classes: ['guardian', 'paladin', 'bishop'],
     opClass: 'paladin',
     feverConcept: '신성 방벽 & 철벽 수호'
@@ -404,6 +420,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '여명의 수도회',
     tier: 'silver',
     rating: 1210,
+    level: 29,
     classes: ['paladin', 'bishop', 'novice_cleric'],
     opClass: 'bishop',
     feverConcept: '이중 치유 & 성스러운 오라'
@@ -414,18 +431,20 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '은빛 화살 용병단',
     tier: 'silver',
     rating: 1260,
+    level: 30,
     classes: ['guardian', 'sharpshooter', 'tactical_gunner'],
     opClass: 'sharpshooter',
     feverConcept: '정밀 조준 관통 저격'
   },
 
-  // 🏆 골드 (Gold: 1300 ~ 1590) - 정석 조합 대결용
+  // 🏆 골드 (Gold: 1300 ~ 1590, Lv.31 ~ 36) - 정석 조합 대결용
   {
     id: 'bot_gold_1',
     name: '철혈의 바사라',
     guild: '붉은 창끝 길드',
     tier: 'gold',
     rating: 1350,
+    level: 31,
     classes: ['paladin', 'tactical_gunner', 'high_saintess'],
     opClass: 'aegis_valkyrie',
     feverConcept: '철벽 수호 & 원거리 화력 투사'
@@ -436,6 +455,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '달빛 기사단',
     tier: 'gold',
     rating: 1410,
+    level: 32,
     classes: ['aegis_valkyrie', 'elementalist', 'arcane_scholar'],
     opClass: 'bishop',
     feverConcept: '마법 변칙계 & 에테르 증폭'
@@ -446,6 +466,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '비호 용병단',
     tier: 'gold',
     rating: 1460,
+    level: 34,
     classes: ['vanguard', 'sharpshooter', 'shadow_phantom'],
     opClass: 'sharpshooter',
     feverConcept: '은신 기습 & 즉사 저격'
@@ -456,6 +477,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '상아탑 마도연맹',
     tier: 'gold',
     rating: 1510,
+    level: 35,
     classes: ['guardian', 'elementalist', 'calamity_mage'],
     opClass: 'elementalist',
     feverConcept: '원소 폭풍 & 마력 연쇄'
@@ -466,18 +488,20 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '일섬 유파',
     tier: 'gold',
     rating: 1560,
+    level: 36,
     classes: ['duelist', 'assassin', 'shadow_phantom'],
     opClass: 'duelist',
     feverConcept: '연속 난무 & 치명 반격'
   },
 
-  // ⚔️ 플래티넘 (Platinum: 1600 ~ 1890) - 상급 연계 공략용
+  // ⚔️ 플래티넘 (Platinum: 1600 ~ 1890, Lv.37 ~ 42) - 상급 연계 공략용
   {
     id: 'bot_plat_1',
     name: '심연의 루나',
     guild: '심연 탐험단',
     tier: 'platinum',
     rating: 1640,
+    level: 37,
     classes: ['assassin', 'shadow_phantom', 'calamity_mage'],
     opClass: 'valhalla_blade',
     feverConcept: '극딜 암살 & 돌파계 포카드 노림수'
@@ -488,6 +512,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '황금 독수리단',
     tier: 'platinum',
     rating: 1700,
+    level: 38,
     classes: ['vanguard', 'valhalla_blade', 'bishop'],
     opClass: 'paladin',
     feverConcept: '연격 폭풍 & 성기사 가호 지속전'
@@ -498,6 +523,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '방주 방위사령부',
     tier: 'platinum',
     rating: 1760,
+    level: 40,
     classes: ['aegis_valkyrie', 'guardian', 'high_saintess'],
     opClass: 'aegis_valkyrie',
     feverConcept: '난공불락 요새 & 기적의 치유'
@@ -508,6 +534,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '에테르 연금단',
     tier: 'platinum',
     rating: 1810,
+    level: 41,
     classes: ['tactical_gunner', 'arcane_scholar', 'calamity_mage'],
     opClass: 'tactical_gunner',
     feverConcept: '시공 탄환 난사 & 왜곡 결계'
@@ -518,18 +545,20 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '빛의 수호성당',
     tier: 'platinum',
     rating: 1860,
+    level: 42,
     classes: ['aegis_valkyrie', 'paladin', 'high_saintess'],
     opClass: 'high_saintess',
     feverConcept: '신성 축복 풀하우스 연계'
   },
 
-  // 💠 다이아몬드 (Diamond: 1900 ~ 2190) - 최정예 고수 덱
+  // 💠 다이아몬드 (Diamond: 1900 ~ 2190, Lv.43 ~ 48) - 최정예 고수 덱
   {
     id: 'bot_dia_1',
     name: '절대방벽 볼코프',
     guild: '아이언 가디언즈',
     tier: 'diamond',
     rating: 1940,
+    level: 43,
     classes: ['guardian', 'paladin', 'high_saintess'],
     opClass: 'aegis_valkyrie',
     feverConcept: '불멸의 방진 & 결계 반사'
@@ -540,6 +569,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '시공의 유랑단',
     tier: 'diamond',
     rating: 2000,
+    level: 44,
     classes: ['shadow_phantom', 'duelist', 'arcane_scholar'],
     opClass: 'calamity_mage',
     feverConcept: '변칙계 환영 회피 & 흡혈 진혼곡'
@@ -550,6 +580,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '발할라 기사단',
     tier: 'diamond',
     rating: 2060,
+    level: 46,
     classes: ['valhalla_blade', 'vanguard', 'aegis_valkyrie'],
     opClass: 'valhalla_blade',
     feverConcept: '투신 강림 & 파쇄 스트레이트'
@@ -560,6 +591,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '천상 성역 수도원',
     tier: 'diamond',
     rating: 2110,
+    level: 47,
     classes: ['high_saintess', 'paladin', 'bishop'],
     opClass: 'high_saintess',
     feverConcept: '영원한 부활 & 성스러운 기적'
@@ -570,18 +602,20 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '블랙 불릿 여단',
     tier: 'diamond',
     rating: 2160,
+    level: 48,
     classes: ['tactical_gunner', 'shadow_phantom', 'calamity_mage'],
     opClass: 'tactical_gunner',
     feverConcept: '암흑 탄환 탄막 & 파멸 광역기'
   },
 
-  // 💎 마스터 (Master: 2200 ~ 2490) - 아레나 챔피언 덱
+  // 💎 마스터 (Master: 2200 ~ 2490, Lv.49 ~ 55) - 아레나 챔피언 덱
   {
     id: 'bot_master_1',
     name: '신벌의 발키리아',
     guild: '천상의 성역',
     tier: 'master',
     rating: 2240,
+    level: 49,
     classes: ['aegis_valkyrie', 'valhalla_blade', 'high_saintess'],
     opClass: 'paladin',
     feverConcept: '성역 결계 & 기적의 소생 풀하우스'
@@ -592,6 +626,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '흑사자 정예대',
     tier: 'master',
     rating: 2310,
+    level: 51,
     classes: ['calamity_mage', 'shadow_phantom', 'tactical_gunner'],
     opClass: 'duelist',
     feverConcept: '치명 타격 & 파쇄 스트레이트 극의'
@@ -602,6 +637,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '심연의 무극관',
     tier: 'master',
     rating: 2380,
+    level: 53,
     classes: ['valhalla_blade', 'duelist', 'shadow_phantom'],
     opClass: 'valhalla_blade',
     feverConcept: '무한의 검막 & 신속 섬격'
@@ -612,18 +648,20 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '공허 숭배단',
     tier: 'master',
     rating: 2450,
+    level: 55,
     classes: ['aegis_valkyrie', 'calamity_mage', 'arcane_scholar'],
     opClass: 'calamity_mage',
     feverConcept: '블랙홀 왜곡 & 심연 압살'
   },
 
-  // 👑 그랜드마스터 (Grand Master: 2500+) - 전 서버 절대자 덱
+  // 👑 그랜드마스터 (Grand Master: 2500+, Lv.55) - 전 서버 절대자 덱
   {
     id: 'bot_grand_1',
     name: '차원의 지배자 크로노스',
     guild: '시공간 최고평의회',
     tier: 'grandmaster',
     rating: 2560,
+    level: 55,
     classes: ['aegis_valkyrie', 'calamity_mage', 'high_saintess'],
     opClass: 'valhalla_blade',
     feverConcept: '5색 무지개 전술의 극의 (Grand Maestro)'
@@ -634,6 +672,7 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '용혈의 성채',
     tier: 'grandmaster',
     rating: 2640,
+    level: 55,
     classes: ['aegis_valkyrie', 'guardian', 'paladin'],
     opClass: 'aegis_valkyrie',
     feverConcept: '절대 무적의 용린 결계'
@@ -644,21 +683,15 @@ export const PRESEASON_BOT_ROSTER: PreseasonBotConfig[] = [
     guild: '별빛 천구관',
     tier: 'grandmaster',
     rating: 2730,
+    level: 55,
     classes: ['valhalla_blade', 'calamity_mage', 'shadow_phantom'],
     opClass: 'tactical_gunner',
     feverConcept: '초신성 폭발 & 영혼 흡수'
   }
 ];
 
-export function getTierFromRating(rating: number): 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond' | 'master' | 'grandmaster' {
-  if (rating >= 2500) return 'grandmaster';
-  if (rating >= 2200) return 'master';
-  if (rating >= 1900) return 'diamond';
-  if (rating >= 1600) return 'platinum';
-  if (rating >= 1300) return 'gold';
-  if (rating >= 1000) return 'silver';
-  return 'bronze';
-}
+import { PGS_ACHIEVEMENTS, PGS_LEADERBOARDS, getTierFromRating } from '../constants/playGamesIds';
+export { getTierFromRating };
 
 // ── 등급 사다리 기반 대진표 생성 (유저 등급 맞춤 대진 + 상위 승급 도전 배치) ─────────────
 function generateOpponents(myRank: number, myRating: number, gateLevel: number = 1): ArenaOpponent[] {
@@ -731,6 +764,7 @@ function generateOpponents(myRank: number, myRating: number, gateLevel: number =
 
     const botGateLevel = Math.max(1, Math.min(10, gateLevel + (i % 2 === 0 ? 0 : 1)));
     const isPromotion = TIER_ORDER.indexOf(cfg.tier) > curTierIdx;
+    const botLevel = cfg.level || calcArenaBotLevelFromRating(cfg.rating);
 
     // 3인 선발 + 1인 오퍼레이터 덱 생성
     const allRoleClasses = [...cfg.classes, cfg.opClass];
@@ -745,7 +779,7 @@ function generateOpponents(myRank: number, myRating: number, gateLevel: number =
         title: cls.name,
         classId: clsId,
         grade: cfg.tier === 'master' || cfg.tier === 'grandmaster' ? 'legend' : cfg.tier === 'diamond' ? 'epic' : cfg.tier === 'platinum' ? 'hero' : 'veteran',
-        level: Math.max(1, Math.floor(cfg.rating / 75)),
+        level: botLevel,
         exp: 0,
         expToNext: 100,
         currentHp: Math.round(cls.baseStats.hp * 1.5),
@@ -764,7 +798,7 @@ function generateOpponents(myRank: number, myRating: number, gateLevel: number =
 
     return {
       id: `opp_${cfg.id}_${Date.now()}_${i}`,
-      name: `${cfg.name} [${cfg.feverConcept}]`,
+      name: cfg.name,
       rank: oppRank,
       rating: cfg.rating,
       defenseDeck: mockDeck,
@@ -777,14 +811,14 @@ function generateOpponents(myRank: number, myRating: number, gateLevel: number =
 }
 
 // ── 7개 표준 랭크 뱃지 (브론즈 ~ 그랜드마스터) ──────────────────────────────
-export function getRankBadge(rating: number): { label: string; color: string; border: string; bg: string; icon: string } {
-  if (rating >= 2500) return { label: 'Grand Master', color: '#ff1744', border: '#ff174488', bg: '#ff174422', icon: '👑' };
-  if (rating >= 2200) return { label: 'Master', color: '#e040fb', border: '#e040fb88', bg: '#e040fb22', icon: '💎' };
-  if (rating >= 1900) return { label: 'Diamond', color: '#c8aa6e', border: '#c8aa6e88', bg: '#c8aa6e22', icon: '💠' };
-  if (rating >= 1600) return { label: 'Platinum', color: '#00e676', border: '#00e67688', bg: '#00e67622', icon: '⚔️' };
-  if (rating >= 1300) return { label: 'Gold', color: '#ffd54f', border: '#ffd54f88', bg: '#ffd54f22', icon: '🏆' };
-  if (rating >= 1000) return { label: 'Silver', color: '#b0bec5', border: '#b0bec588', bg: '#b0bec522', icon: '🛡️' };
-  return { label: 'Bronze', color: '#cd7f32', border: '#cd7f3288', bg: '#cd7f3222', icon: '🥉' };
+export function getRankBadge(rating: number): { label: string; color: string; border: string; bg: string; icon: string; iconKey: string } {
+  if (rating >= 2500) return { label: 'Grand Master', color: '#ff1744', border: '#ff174488', bg: '#ff174422', icon: '👑', iconKey: 'rank_grandmaster' };
+  if (rating >= 2200) return { label: 'Master', color: '#e040fb', border: '#e040fb88', bg: '#e040fb22', icon: '💎', iconKey: 'rank_master' };
+  if (rating >= 1900) return { label: 'Diamond', color: '#c8aa6e', border: '#c8aa6e88', bg: '#c8aa6e22', icon: '💠', iconKey: 'rank_diamond' };
+  if (rating >= 1600) return { label: 'Platinum', color: '#00e676', border: '#00e67688', bg: '#00e67622', icon: '⚔️', iconKey: 'rank_platinum' };
+  if (rating >= 1300) return { label: 'Gold', color: '#ffd54f', border: '#ffd54f88', bg: '#ffd54f22', icon: '🏆', iconKey: 'rank_gold' };
+  if (rating >= 1000) return { label: 'Silver', color: '#b0bec5', border: '#b0bec588', bg: '#b0bec522', icon: '🛡️', iconKey: 'rank_silver' };
+  return { label: 'Bronze', color: '#cd7f32', border: '#cd7f3288', bg: '#cd7f3222', icon: '🥉', iconKey: 'rank_bronze' };
 }
 
 type Tab = 'match' | 'ranking' | 'shop';
@@ -800,6 +834,7 @@ interface CombatLogItem {
 }
 
 export const ArenaScreen: React.FC = () => {
+  const { tr } = useI18n();
   const { state, gm, navigateTo } = useGameManager();
   const gateLevel = gm.isMasterAccount ? 10 : (state.buildings['arenaGate']?.level || 0);
   const isGateBuilt = gateLevel >= 1;
@@ -862,6 +897,30 @@ export const ArenaScreen: React.FC = () => {
   const [isCodexModalOpen, setIsCodexModalOpen] = useState(false);
   const [selectedSkillForModal, setSelectedSkillForModal] = useState<Skill | null>(null);
   const weeklyAffinity = useMemo(() => getWeeklyAffinityConfig(), []);
+  const [arenaEdict, setArenaEdict] = useState<ArenaEdictConfig>(() => GameDataService.getInstance().getArenaEdict());
+
+  useEffect(() => {
+    // 🔮 아레나 진입 시 및 원격 실시간 칙령 변경 시 즉시 갱신
+    GameDataService.getInstance().syncRemoteOverrides().then(() => {
+      setArenaEdict(GameDataService.getInstance().getArenaEdict());
+    });
+    const unsub = GameDataService.getInstance().onUpdate(() => {
+      setArenaEdict(GameDataService.getInstance().getArenaEdict());
+    });
+    return () => unsub();
+  }, []);
+  const bannedBadgeLabel = useMemo(() => {
+    switch (arenaEdict.bannedBadge) {
+      case 'evade': return tr('💨 EVADE (회피 뱃지 획득 불가)');
+      case 'crit': return tr('💥 CRIT (치명 뱃지 획득 불가)');
+      case 'break': return tr('💫 BREAK (파쇄 뱃지 획득 불가)');
+      case 'guard': return tr('🛡️ GUARD (수호 뱃지 획득 불가)');
+      case 'heal': return tr('✨ HEAL (치유 뱃지 획득 불가)');
+      case 'none':
+      default:
+        return tr('🚫 금지 배지 없음');
+    }
+  }, [arenaEdict.bannedBadge, tr]);
 
   // 🏆 피버콜 3회 승리 즉시 제압 카운터 (3-Win Domination)
   const [playerFeverWins, setPlayerFeverWins] = useState(0);
@@ -1044,8 +1103,8 @@ export const ArenaScreen: React.FC = () => {
       rank: 0,
       nickname: `${b.name} (${b.guild})`,
       rating: b.rating,
-      level: Math.max(1, Math.floor(b.rating / 75)),
-      leaderTitle: `[${b.feverConcept}]`,
+      level: b.level || calcArenaBotLevelFromRating(b.rating),
+      leaderTitle: '',
       gateLevel: Math.max(1, Math.min(10, Math.floor(b.rating / 250))),
       isPlayer: false,
     }));
@@ -1113,21 +1172,21 @@ export const ArenaScreen: React.FC = () => {
     gm.emit('arenaBattleStateChanged', true);
     gm.emit('phaserSceneChange', 'arena_battle');
 
-    // 1. 아군 3+1+1 덱 파싱
-    const { mainHeroes, leaderHero, supporterHero } = gm.getDimensionalDeck();
-    setPlayerLeader(leaderHero);
-    setPlayerSupporter(supporterHero);
+    // 1. 아군 3+1 덱 파싱 (3인 선발 + 1인 전술 오퍼레이터)
+    const { mainHeroes, operatorHero, leaderHero } = gm.getDimensionalDeck();
+    const activePlayerOp = operatorHero || leaderHero;
+    setPlayerLeader(activePlayerOp);
+    setPlayerSupporter(null);
 
-    // 2. 적군 3+1+1 덱 파싱 (opp.defenseDeck 기준 3선발 + 1리더 + 1서포터)
+    // 2. 적군 3+1 덱 파싱 (opp.defenseDeck 기준 3선발 + 1인 오퍼레이터)
     const oDeck = opp.defenseDeck || [];
     const oppMainHeroes = oDeck.slice(0, 3);
-    const oppLeaderHero = oDeck[3] || null;
-    const oppSupporterHero = oDeck[4] || null;
-    setOppLeader(oppLeaderHero);
-    setOppSupporter(oppSupporterHero);
+    const oppOperatorHero = oDeck[3] || null;
+    setOppLeader(oppOperatorHero);
+    setOppSupporter(null);
 
-    // 적 리더 가호 보너스 계산 (동등한 전투 조건)
-    const oppLeaderBlessing = oppLeaderHero ? gm.getLeaderBlessing(oppLeaderHero) : null;
+    // 적 오퍼레이터 가호 보너스 계산 (동등한 전투 조건)
+    const oppLeaderBlessing = oppOperatorHero ? gm.getOperatorBlessing(oppOperatorHero) : null;
     setOppLeaderBlessing(oppLeaderBlessing);
 
     // 🌟 [PVE 통일성] 클래스 고유 스킬, 장착 마도서 스킬, 특수 궁극기 및 무기 인챈트 스킬을 PVE와 100% 동일하게 해석
@@ -1261,13 +1320,17 @@ export const ArenaScreen: React.FC = () => {
     if (pCombatants.length > 0) setLastPlayerAttacker(pCombatants[0]);
     if (oCombatants.length > 0) setLastEnemyAttacker(oCombatants[0]);
 
-    // 📊 전투 딜미터기 메트릭스 초기화
+    // 📊 전투 딜미터기 메트릭스 초기화 (3인 선발 + 1인 오퍼레이터 구성)
     const initMetrics: Record<string, CombatantMetrics> = {};
     pCombatants.forEach(c => {
       initMetrics[c.id] = {
         id: c.id,
         name: c.name,
         className: c.className,
+        classId: c.classId,
+        grade: c.grade,
+        level: c.level,
+        icon: c.icon,
         isPlayer: true,
         damageDealt: 0,
         healingDone: 0,
@@ -1279,27 +1342,15 @@ export const ArenaScreen: React.FC = () => {
         actionsCount: 0,
       };
     });
-    if (leaderHero) {
-      initMetrics[leaderHero.id] = {
-        id: leaderHero.id,
-        name: `${leaderHero.name} (👑리더)`,
-        className: CHARACTER_CLASSES[leaderHero.classId]?.name || '리더',
-        isPlayer: true,
-        damageDealt: 0,
-        healingDone: 0,
-        damageTaken: 0,
-        dodges: 0,
-        combosTriggered: 0,
-        critCount: 0,
-        kills: 0,
-        actionsCount: 0,
-      };
-    }
-    if (supporterHero) {
-      initMetrics[supporterHero.id] = {
-        id: supporterHero.id,
-        name: `${supporterHero.name} (🤝서포터)`,
-        className: CHARACTER_CLASSES[supporterHero.classId]?.name || '서포터',
+    if (activePlayerOp) {
+      initMetrics[activePlayerOp.id] = {
+        id: activePlayerOp.id,
+        name: `${activePlayerOp.name} (⚡오퍼레이터)`,
+        className: CHARACTER_CLASSES[activePlayerOp.classId]?.name || '오퍼레이터',
+        classId: activePlayerOp.classId,
+        grade: activePlayerOp.grade,
+        level: activePlayerOp.level,
+        icon: '⚡',
         isPlayer: true,
         damageDealt: 0,
         healingDone: 0,
@@ -1316,6 +1367,10 @@ export const ArenaScreen: React.FC = () => {
         id: c.id,
         name: c.name,
         className: c.className,
+        classId: c.classId,
+        grade: c.grade,
+        level: c.level,
+        icon: c.icon,
         isPlayer: false,
         damageDealt: 0,
         healingDone: 0,
@@ -1327,27 +1382,15 @@ export const ArenaScreen: React.FC = () => {
         actionsCount: 0,
       };
     });
-    if (oppLeaderHero) {
-      initMetrics['opp_leader'] = {
-        id: 'opp_leader',
-        name: `${oppLeaderHero.name} (💀적 리더)`,
-        className: CHARACTER_CLASSES[oppLeaderHero.classId]?.name || '리더',
-        isPlayer: false,
-        damageDealt: 0,
-        healingDone: 0,
-        damageTaken: 0,
-        dodges: 0,
-        combosTriggered: 0,
-        critCount: 0,
-        kills: 0,
-        actionsCount: 0,
-      };
-    }
-    if (oppSupporterHero) {
-      initMetrics['opp_supporter'] = {
-        id: 'opp_supporter',
-        name: `${oppSupporterHero.name} (🛡️적 서포터)`,
-        className: CHARACTER_CLASSES[oppSupporterHero.classId]?.name || '서포터',
+    if (oppOperatorHero) {
+      initMetrics['opp_operator'] = {
+        id: 'opp_operator',
+        name: `${oppOperatorHero.name} (⚡상대 오퍼레이터)`,
+        className: CHARACTER_CLASSES[oppOperatorHero.classId]?.name || '오퍼레이터',
+        classId: oppOperatorHero.classId,
+        grade: oppOperatorHero.grade,
+        level: oppOperatorHero.level,
+        icon: '⚡',
         isPlayer: false,
         damageDealt: 0,
         healingDone: 0,
@@ -1409,7 +1452,8 @@ export const ArenaScreen: React.FC = () => {
 
   // 🔥 아군 피버 뱃지 추가 헬퍼 (주간 금지 배지 필터링)
   const addFeverBadge = useCallback((badgeType: FeverBadgeType) => {
-    if (badgeType === WEEKLY_BANNED_BADGE) return;
+    const banned = getWeeklyBannedBadge();
+    if (banned !== 'none' && badgeType === banned) return;
     let becameFull = false;
     setFeverBadges(prev => {
       if (prev.length >= 5) return prev;
@@ -1428,7 +1472,8 @@ export const ArenaScreen: React.FC = () => {
 
   // 💀 적군 피버 뱃지 추가 헬퍼 (주간 금지 배지 필터링)
   const addOppFeverBadge = useCallback((badgeType: FeverBadgeType) => {
-    if (badgeType === WEEKLY_BANNED_BADGE) return;
+    const banned = getWeeklyBannedBadge();
+    if (banned !== 'none' && badgeType === banned) return;
     let becameFull = false;
     setOppFeverBadges(prev => {
       if (prev.length >= 5) return prev;
@@ -1601,6 +1646,26 @@ export const ArenaScreen: React.FC = () => {
       setOppTeam(updatedOpp);
       playerTeamRef.current = updatedPTeam;
       setPlayerTeam(updatedPTeam);
+
+      // 📊 아군 오퍼레이터 딜미터기 기록 갱신
+      if (activeOperator && combatMetricsRef.current[activeOperator.id]) {
+        const mOp = combatMetricsRef.current[activeOperator.id];
+        mOp.actionsCount = (mOp.actionsCount || 0) + 1;
+        const totalOpDmg = finalDmg * livingOpp.length;
+        mOp.damageDealt += totalOpDmg;
+        mOp.combosTriggered += 1;
+        if (syn.partyShieldPct > 0 || syn.reviveFallen) {
+          mOp.healingDone += Math.round(finalDmg * 0.3);
+        }
+        livingOpp.forEach(t => {
+          if (t.currentHp <= finalDmg || isPlayerDomination) {
+            mOp.kills += 1;
+          }
+          if (combatMetricsRef.current[t.id]) {
+            combatMetricsRef.current[t.id].damageTaken += isPlayerDomination ? t.currentHp : Math.min(t.currentHp, finalDmg);
+          }
+        });
+      }
     }
 
     // 2. 적군 공격/효과 적용 (적군 승리 또는 동급 격돌)
@@ -1651,6 +1716,23 @@ export const ArenaScreen: React.FC = () => {
 
       playerTeamRef.current = updatedP;
       setPlayerTeam(updatedP);
+
+      // 📊 상대 오퍼레이터 딜미터기 기록 갱신
+      if (combatMetricsRef.current['opp_operator']) {
+        const mOppOp = combatMetricsRef.current['opp_operator'];
+        mOppOp.actionsCount = (mOppOp.actionsCount || 0) + 1;
+        const totalOppDmg = finalDmg * livingP.length;
+        mOppOp.damageDealt += totalOppDmg;
+        mOppOp.combosTriggered += 1;
+        livingP.forEach(t => {
+          if (t.currentHp <= finalDmg || isOppDomination) {
+            mOppOp.kills += 1;
+          }
+          if (combatMetricsRef.current[t.id]) {
+            combatMetricsRef.current[t.id].damageTaken += isOppDomination ? t.currentHp : Math.min(t.currentHp, finalDmg);
+          }
+        });
+      }
     }
 
     // 4. 궁극기 연출 지속(1.6초) 후 승패 체크 및 전투 재개
@@ -2921,7 +3003,7 @@ export const ArenaScreen: React.FC = () => {
         gm.addLog(`🎖️ [명예 상점] [${CLASS_HONOR_SHOP_DEFINITIONS[itemKey].className}] ${equip.rarity.toUpperCase()} [${equip.name}]을(를) 획득하여 장비함에 보관했습니다!`, 'reward');
       }
     }
-    // 3. 직군별 투사의 무기 & 판금갑 (호환성 유지)
+    // 3. 직군별 투사의 무기 & 판금갑 (호환성 유지 및 50% 상향 반영)
     else if (itemKey === 'glory_sword') {
       const hasPrefix = Math.random() < 0.20;
       const prefix = hasPrefix ? {
@@ -2929,18 +3011,19 @@ export const ArenaScreen: React.FC = () => {
         name: '맹렬한',
         type: 'prefix' as const,
         rarity: 'epic' as const,
-        stats: { atk: 6, luck: 3 },
-        description: '공격력 +6, 행운 +3'
+        stats: { atk: 9, luck: 5 },
+        description: '공격력 +9, 행운 +5'
       } : undefined;
       const sword: EquipmentItem = {
         id: `equip_glory_sword_${Date.now()}`,
+        templateId: 'equip_arena_sword',
         name: prefix ? `[${prefix.name}] 투사의 처형검` : '투사의 처형검',
         baseName: '투사의 처형검',
         slot: 'weapon',
         level: 0,
         rarity: 'epic',
-        baseStats: { atk: 22, def: 7, luck: 6 },
-        stats: { atk: 22, def: 7, luck: 6 },
+        baseStats: { atk: 33, def: 11, luck: 9 },
+        stats: { atk: 33, def: 11, luck: 9 },
         prefix,
         description: '차원 투기장에서 승리를 거듭한 지휘관에게 수여되는 결전 명검.',
         icon: '🗡️'
@@ -2955,18 +3038,19 @@ export const ArenaScreen: React.FC = () => {
         name: '정밀한',
         type: 'prefix' as const,
         rarity: 'epic' as const,
-        stats: { atk: 6, spd: 2 },
-        description: '공격력 +6, 속도 +2'
+        stats: { atk: 9, spd: 3 },
+        description: '공격력 +9, 속도 +3'
       } : undefined;
       const gun: EquipmentItem = {
         id: `equip_glory_gun_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        templateId: 'equip_arena_gun',
         name: prefix ? `[${prefix.name}] 투사의 결전 마총` : '투사의 결전 마총',
         baseName: '투사의 결전 마총',
         slot: 'weapon',
         level: 0,
         rarity: 'epic',
-        baseStats: { atk: 15, spd: 4, luck: 4 },
-        stats: { atk: 15, spd: 4, luck: 4 },
+        baseStats: { atk: 23, spd: 6, luck: 6 },
+        stats: { atk: 23, spd: 6, luck: 6 },
         prefix,
         description: '고열 에테르 탄환을 고속 연사하는 차원 아레나 제식 마총.',
         icon: '🔫'
@@ -2981,18 +3065,19 @@ export const ArenaScreen: React.FC = () => {
         name: '수호',
         type: 'suffix' as const,
         rarity: 'epic' as const,
-        stats: { def: 8, hp: 42 },
-        description: '방어력 +8, HP +42'
+        stats: { def: 12, hp: 63 },
+        description: '방어력 +12, HP +63'
       } : undefined;
       const plate: EquipmentItem = {
         id: `equip_glory_plate_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        templateId: 'equip_arena_plate',
         name: suffix ? `투사의 불패 판금갑 [${suffix.name}]` : '투사의 불패 판금갑',
         baseName: '투사의 불패 판금갑',
         slot: 'armor',
         level: 0,
         rarity: 'epic',
-        baseStats: { def: 27, hp: 98 },
-        stats: { def: 27, hp: 98 },
+        baseStats: { def: 41, hp: 147 },
+        stats: { def: 41, hp: 147 },
         suffix,
         description: '어떠한 맹공도 버텨내는 불패의 투사 중장갑주.',
         icon: '🛡️'
@@ -3001,7 +3086,7 @@ export const ArenaScreen: React.FC = () => {
       gm.addEquipmentToInventory(plate);
       gm.addLog(`🎖️ [명예 상점] 에픽 방어구 [${name}]을(를) 장비함에 보관했습니다!`, 'reward');
     }
-    // 3. 기존 자원/악세서리/유물
+    // 3. 자원/악세서리/유물 및 인챈트/촉매/보급품 묶음
     else if (itemKey === 'food_pack') {
       gm.modifyResource('food', 25);
       gm.addLog(`🎖️ [명예 상점] 특제 보급 식량 세트를 구매했습니다! (식량 +25)`, 'reward');
@@ -3014,16 +3099,48 @@ export const ArenaScreen: React.FC = () => {
     } else if (itemKey === 'pure_suffix') {
       gm.modifyResource('pure_suffix_stone', 1);
       gm.addLog(`🎖️ [명예 상점] 순수 접미 마도석 1개를 획득했습니다!`, 'reward');
-    } else if (itemKey === 'glory_amulet') {
+    }
+    // 🔮 촉매마도석 묶음 세트
+    else if (itemKey === 'prefix_stone_pack_10') {
+      gm.modifyResource('prefix_stone', 10);
+      gm.addLog(`🎖️ [명예 상점] 일반 접두석 10개를 획득했습니다!`, 'reward');
+    } else if (itemKey === 'suffix_stone_pack_10') {
+      gm.modifyResource('suffix_stone', 10);
+      gm.addLog(`🎖️ [명예 상점] 일반 접미석 10개를 획득했습니다!`, 'reward');
+    } else if (itemKey === 'pure_prefix_pack_10') {
+      gm.modifyResource('pure_prefix_stone', 10);
+      gm.addLog(`🎖️ [명예 상점] 순수 접두 마도석 10개를 획득했습니다!`, 'reward');
+    } else if (itemKey === 'pure_suffix_pack_10') {
+      gm.modifyResource('pure_suffix_stone', 10);
+      gm.addLog(`🎖️ [명예 상점] 순수 접미 마도석 10개를 획득했습니다!`, 'reward');
+    } else if (itemKey === 'pure_mana_stone_pack_5') {
+      gm.modifyResource('pure_mana_stone', 5);
+      gm.addLog(`🎖️ [명예 상점] 순수 마도석 5개를 획득했습니다!`, 'reward');
+    } else if (itemKey === 'void_shard_pack_5') {
+      gm.modifyResource('void_shard', 5);
+      gm.addLog(`🎖️ [명예 상점] 공허 파편 5개를 획득했습니다!`, 'reward');
+    }
+    // 📦 강화 보급품 5개 / 10개 묶음 세트
+    else if (itemKey.startsWith('enhanced_') && (itemKey.endsWith('_pack_5') || itemKey.endsWith('_pack_10'))) {
+      const match = itemKey.match(/^(enhanced_[a-z_]+)_pack_(5|10)$/);
+      if (match) {
+        const supplyKey = match[1];
+        const qty = parseInt(match[2], 10);
+        gm.addCitadelSupply(supplyKey, qty);
+        gm.addLog(`🎖️ [명예 상점] [${name}]을(를) 구매하여 성채 창고에 보관했습니다! (+${qty}개)`, 'reward');
+      }
+    }
+    else if (itemKey === 'glory_amulet') {
       const amulet: EquipmentItem = {
         id: `equip_glory_amulet_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        templateId: 'equip_arena_amulet',
         name: '투사의 용맹 목걸이',
         baseName: '투사의 용맹 목걸이',
         slot: 'accessory',
         level: 0,
         rarity: 'rare',
-        baseStats: { hp: 84, def: 14, luck: 8, spd: 4 },
-        stats: { hp: 84, def: 14, luck: 8, spd: 4 },
+        baseStats: { hp: 126, def: 21, luck: 12, spd: 6 },
+        stats: { hp: 126, def: 21, luck: 12, spd: 6 },
         description: '차원 투기장에서 용맹을 증명한 투사에게 수여되는 펜던트.',
         icon: '📿'
       };
@@ -3037,18 +3154,19 @@ export const ArenaScreen: React.FC = () => {
         name: '투사의',
         type: 'prefix' as const,
         rarity: 'legendary' as const,
-        stats: { atk: 10, luck: 6 },
-        description: '공격력 +10, 행운 +6'
+        stats: { atk: 15, luck: 9 },
+        description: '공격력 +15, 행운 +9'
       } : undefined;
       const ring: EquipmentItem = {
         id: `equip_glory_ring_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        templateId: 'equip_arena_ring',
         name: prefix ? `[${prefix.name}] 투사의 영광 반지` : '투사의 영광 반지',
         baseName: '투사의 영광 반지',
         slot: 'accessory',
         level: 0,
         rarity: 'legendary',
-        baseStats: { atk: 25, def: 18, luck: 11, spd: 6, mp: 42 },
-        stats: { atk: 25, def: 18, luck: 11, spd: 6, mp: 42 },
+        baseStats: { atk: 38, def: 27, luck: 17, spd: 9, mp: 63 },
+        stats: { atk: 38, def: 27, luck: 17, spd: 9, mp: 63 },
         prefix,
         description: '차원 투기장에서 승리를 거듭한 지휘관에게 수여되는 전설의 반지.',
         icon: '💍'
@@ -3064,16 +3182,16 @@ export const ArenaScreen: React.FC = () => {
         name: '패왕의',
         type: 'prefix' as const,
         rarity: 'legendary' as const,
-        stats: { atk: 21, luck: 10 },
-        description: '공격력 +21, 행운 +10'
+        stats: { atk: 32, luck: 15 },
+        description: '공격력 +32, 행운 +15'
       } : undefined;
       const suffix = hasSuffix ? {
         id: 'suffix_dimension',
         name: '차원의',
         type: 'suffix' as const,
         rarity: 'legendary' as const,
-        stats: { def: 18, hp: 105 },
-        description: '방어력 +18, 최대 HP +105'
+        stats: { def: 27, hp: 158 },
+        description: '방어력 +27, 최대 HP +158'
       } : undefined;
       const prefixPart = prefix ? `[${prefix.name}] ` : '';
       const suffixPart = suffix ? ` [${suffix.name}]` : '';
@@ -3084,8 +3202,8 @@ export const ArenaScreen: React.FC = () => {
         slot: 'accessory',
         level: 0,
         rarity: 'legendary',
-        baseStats: { atk: 42, def: 35, luck: 20, spd: 8, hp: 210, mp: 84 },
-        stats: { atk: 42, def: 35, luck: 20, spd: 8, hp: 210, mp: 84 },
+        baseStats: { atk: 63, def: 53, luck: 30, spd: 12, hp: 315, mp: 126 },
+        stats: { atk: 63, def: 53, luck: 30, spd: 12, hp: 315, mp: 126 },
         prefix,
         suffix,
         description: '차원 게이트 10레벨의 극한을 뚫고 모든 차원을 평정한 절대 패왕의 신화 보관.',
@@ -3168,7 +3286,7 @@ export const ArenaScreen: React.FC = () => {
     {
       key: 'glory_amulet',
       name: '희귀 장신구: 투사의 용맹 목걸이',
-      desc: 'HP+84, DEF+14, CRIT+6%, SPD+4',
+      desc: 'HP+126, DEF+21, CRIT+9%, SPD+6',
       cost: 450,
       icon: '📿',
       tag: '희귀 장신구',
@@ -3178,7 +3296,7 @@ export const ArenaScreen: React.FC = () => {
     {
       key: 'glory_ring',
       name: '전설 장신구: 투사의 영광 반지',
-      desc: 'ATK+25, DEF+18, CRIT+7%, SPD+6, MP+42',
+      desc: 'ATK+38, DEF+27, CRIT+11%, SPD+9, MP+63',
       cost: 800,
       icon: '💍',
       tag: '전설 장비',
@@ -3188,7 +3306,7 @@ export const ArenaScreen: React.FC = () => {
     {
       key: 'overlord_crown',
       name: '신화 아티팩트: 차원 패왕의 주권 관',
-      desc: 'ATK+42, DEF+35, CRIT+20%, SPD+8, HP+210, MP+84',
+      desc: 'ATK+63, DEF+53, CRIT+30%, SPD+12, HP+315, MP+126',
       cost: 3000,
       icon: '👑',
       tag: '신화 장비',
@@ -3196,31 +3314,78 @@ export const ArenaScreen: React.FC = () => {
       reqGateLv: 10,
     },
 
-    // ── 3. 재료 / 인챈트 ──
+    // ── 3. 재료 / 촉매 마도석 묶음 세트 ──
     {
-      key: 'pure_prefix',
-      name: '순수 접두 마도석 (Pure Prefix)',
-      desc: '+7강 이상 장비에 파괴적 상위 접두어 마법 부여',
-      cost: 250,
+      key: 'prefix_stone_pack_10',
+      iconKey: 'prefix_stone',
+      name: '일반 접두석 묶음 세트 (10개)',
+      desc: '장비에 일반 접두어 마법을 부여할 수 있는 접두석 10개 묶음',
+      cost: 150,
+      icon: '💎',
+      tag: '접두석 x10',
+      category: 'material' as const,
+      reqGateLv: 1,
+    },
+    {
+      key: 'suffix_stone_pack_10',
+      iconKey: 'suffix_stone',
+      name: '일반 접미석 묶음 세트 (10개)',
+      desc: '장비에 일반 접미어 마법을 부여할 수 있는 접미석 10개 묶음',
+      cost: 150,
+      icon: '💎',
+      tag: '접미석 x10',
+      category: 'material' as const,
+      reqGateLv: 1,
+    },
+    {
+      key: 'pure_prefix_pack_10',
+      iconKey: 'pure_prefix_stone',
+      name: '순수 접두석 묶음 세트 (10개)',
+      desc: '+7강 이상 장비에 파괴적 상위 접두어를 부여하는 순수 접두 마도석 10개 묶음',
+      cost: 750,
       icon: '🔮',
-      tag: '인챈트',
+      tag: '순수접두 x10',
       category: 'material' as const,
       reqGateLv: 2,
     },
     {
-      key: 'pure_suffix',
-      name: '순수 접미 마도석 (Pure Suffix)',
-      desc: '+7강 이상 장비에 수호/생명 상위 접미어 부여',
-      cost: 250,
+      key: 'pure_suffix_pack_10',
+      iconKey: 'pure_suffix_stone',
+      name: '순수 접미석 묶음 세트 (10개)',
+      desc: '+7강 이상 장비에 수호/생명 상위 접미어를 부여하는 순수 접미 마도석 10개 묶음',
+      cost: 750,
       icon: '🔮',
-      tag: '인챈트',
+      tag: '순수접미 x10',
       category: 'material' as const,
       reqGateLv: 2,
+    },
+    {
+      key: 'pure_mana_stone_pack_5',
+      iconKey: 'pure_mana_stone',
+      name: '순수 마도석 세트 (5개)',
+      desc: '고농축 순수 에테르가 응축된 순수 마도석 5개 묶음',
+      cost: 350,
+      icon: '💠',
+      tag: '순수마도석 x5',
+      category: 'material' as const,
+      reqGateLv: 2,
+    },
+    {
+      key: 'void_shard_pack_5',
+      iconKey: 'void_shard',
+      name: '공허 파편 세트 (5개)',
+      desc: '차원의 틈새에서 추출된 신비로운 공허 파편 5개 묶음',
+      cost: 250,
+      icon: '🌌',
+      tag: '공허파편 x5',
+      category: 'material' as const,
+      reqGateLv: 3,
     },
 
-    // ── 4. 보급품 ──
+    // ── 4. 보급품 & 강화 보급품 묶음 세트 ──
     {
       key: 'food_pack',
+      iconKey: 'food',
       name: '특제 원정 보급 식량 세트',
       desc: '심연 탐험 시 허기를 달래주는 전술 보급 식량 +25개',
       cost: 100,
@@ -3231,6 +3396,7 @@ export const ArenaScreen: React.FC = () => {
     },
     {
       key: 'torch_pack',
+      iconKey: 'torch',
       name: '에테르 횃불 연료 세트',
       desc: '심연의 흑무를 밝혀주는 고열 제련 석탄 +20개',
       cost: 100,
@@ -3238,6 +3404,167 @@ export const ArenaScreen: React.FC = () => {
       tag: '보급품',
       category: 'supply' as const,
       reqGateLv: 1,
+    },
+    // 강화 횃불
+    {
+      key: 'enhanced_torch_pack_5',
+      iconKey: 'enhanced_torch',
+      name: '에테르 횃불 세트 (5개)',
+      desc: '심연의 어둠 피해를 무효화하는 에테르 횃불 5개 묶음',
+      cost: 120,
+      icon: '✨🔥',
+      tag: '강화보급 x5',
+      category: 'supply' as const,
+      reqGateLv: 1,
+    },
+    {
+      key: 'enhanced_torch_pack_10',
+      iconKey: 'enhanced_torch',
+      name: '에테르 횃불 대형 세트 (10개)',
+      desc: '심연의 어둠 피해를 무효화하는 에테르 횃불 10개 대용량 묶음',
+      cost: 220,
+      icon: '✨🔥',
+      tag: '강화보급 x10',
+      category: 'supply' as const,
+      reqGateLv: 1,
+    },
+    // 강화 식량
+    {
+      key: 'enhanced_food_pack_5',
+      iconKey: 'enhanced_food',
+      name: '던전 도시락 세트 (5개)',
+      desc: '파티 허기 회복 및 사기를 진작시키는 던전 도시락 5개 묶음',
+      cost: 120,
+      icon: '🍱✨',
+      tag: '강화보급 x5',
+      category: 'supply' as const,
+      reqGateLv: 1,
+    },
+    {
+      key: 'enhanced_food_pack_10',
+      iconKey: 'enhanced_food',
+      name: '던전 도시락 대형 세트 (10개)',
+      desc: '파티 허기 회복 및 사기를 진작시키는 던전 도시락 10개 대용량 묶음',
+      cost: 220,
+      icon: '🍱✨',
+      tag: '강화보급 x10',
+      category: 'supply' as const,
+      reqGateLv: 1,
+    },
+    // 강화 곡괭이
+    {
+      key: 'enhanced_pickaxe_pack_5',
+      iconKey: 'enhanced_pickaxe',
+      name: '심연 곡괭이 세트 (5개)',
+      desc: '희귀 광맥을 파괴 없이 온전히 채굴하는 심연 곡괭이 5개 묶음',
+      cost: 150,
+      icon: '⛏️✨',
+      tag: '강화보급 x5',
+      category: 'supply' as const,
+      reqGateLv: 1,
+    },
+    {
+      key: 'enhanced_pickaxe_pack_10',
+      iconKey: 'enhanced_pickaxe',
+      name: '심연 곡괭이 대형 세트 (10개)',
+      desc: '희귀 광맥을 파괴 없이 온전히 채굴하는 심연 곡괭이 10개 대용량 묶음',
+      cost: 280,
+      icon: '⛏️✨',
+      tag: '강화보급 x10',
+      category: 'supply' as const,
+      reqGateLv: 1,
+    },
+    // 강화 붕대
+    {
+      key: 'enhanced_bandage_pack_5',
+      iconKey: 'enhanced_bandage',
+      name: '성유 붕대 세트 (5개)',
+      desc: '출혈과 중상을 즉시 치료하는 성유 붕대 5개 묶음',
+      cost: 150,
+      icon: '🩹✨',
+      tag: '강화보급 x5',
+      category: 'supply' as const,
+      reqGateLv: 1,
+    },
+    {
+      key: 'enhanced_bandage_pack_10',
+      iconKey: 'enhanced_bandage',
+      name: '성유 붕대 대형 세트 (10개)',
+      desc: '출혈과 중상을 즉시 치료하는 성유 붕대 10개 대용량 묶음',
+      cost: 280,
+      icon: '🩹✨',
+      tag: '강화보급 x10',
+      category: 'supply' as const,
+      reqGateLv: 1,
+    },
+    // 강화 성수
+    {
+      key: 'enhanced_holy_water_pack_5',
+      iconKey: 'enhanced_holy_water',
+      name: '여신의 성수 세트 (5개)',
+      desc: '심연의 저주와 악성 상태이상을 정화하는 성수 5개 묶음',
+      cost: 180,
+      icon: '💧✨',
+      tag: '강화보급 x5',
+      category: 'supply' as const,
+      reqGateLv: 2,
+    },
+    {
+      key: 'enhanced_holy_water_pack_10',
+      iconKey: 'enhanced_holy_water',
+      name: '여신의 성수 대형 세트 (10개)',
+      desc: '심연의 저주와 악성 상태이상을 정화하는 성수 10개 대용량 묶음',
+      cost: 320,
+      icon: '💧✨',
+      tag: '강화보급 x10',
+      category: 'supply' as const,
+      reqGateLv: 2,
+    },
+    // 강화 열쇠
+    {
+      key: 'enhanced_key_pack_5',
+      iconKey: 'enhanced_key',
+      name: '황금 열쇠 세트 (5개)',
+      desc: '심연의 모든 고대 황금 보물상자를 해제하는 황금 열쇠 5개 묶음',
+      cost: 200,
+      icon: '🗝️✨',
+      tag: '강화보급 x5',
+      category: 'supply' as const,
+      reqGateLv: 2,
+    },
+    {
+      key: 'enhanced_key_pack_10',
+      iconKey: 'enhanced_key',
+      name: '황금 열쇠 대형 세트 (10개)',
+      desc: '심연의 모든 고대 황금 보물상자를 해제하는 황금 열쇠 10개 대용량 묶음',
+      cost: 360,
+      icon: '🗝️✨',
+      tag: '강화보급 x10',
+      category: 'supply' as const,
+      reqGateLv: 2,
+    },
+    // 강화 귀환 닻
+    {
+      key: 'enhanced_rift_anchor_pack_5',
+      iconKey: 'enhanced_rift_anchor',
+      name: '심연의 닻 세트 (5개)',
+      desc: '심연 어디서든 즉시 안전 귀환 균열을 여는 심연의 닻 5개 묶음',
+      cost: 250,
+      icon: '⚓✨',
+      tag: '강화보급 x5',
+      category: 'supply' as const,
+      reqGateLv: 3,
+    },
+    {
+      key: 'enhanced_rift_anchor_pack_10',
+      iconKey: 'enhanced_rift_anchor',
+      name: '심연의 닻 대형 세트 (10개)',
+      desc: '심연 어디서든 즉시 안전 귀환 균열을 여는 심연의 닻 10개 대용량 묶음',
+      cost: 450,
+      icon: '⚓✨',
+      tag: '강화보급 x10',
+      category: 'supply' as const,
+      reqGateLv: 3,
     },
   ];
 
@@ -3257,14 +3584,14 @@ export const ArenaScreen: React.FC = () => {
           🏆
         </div>
         <div className="flex flex-col gap-1.5">
-          <div className="text-base font-bold text-white tracking-wide">차원 앵커 게이트 미건설</div>
+          <div className="text-base font-bold text-white tracking-wide">{tr('차원 앵커 게이트 미건설')}</div>
           <div className="text-xs text-[#8b9bb4] max-w-[290px] leading-relaxed">
-            차원의 관문이 아직 닫혀 있습니다.<br />
-            성채(Citadel)에서 <span className="text-[#ffd54f] font-bold">영혼의 제단(Lv.1)</span>을 먼저 세운 후 <span className="text-[#c8aa6e] font-bold">차원 앵커 게이트</span>를 건설하여 3v3 아레나, 네메시스, 영지 침공을 개방하십시오.
+            {tr('차원의 관문이 아직 닫혀 있습니다.')}<br />
+            {tr('성채(Citadel)에서 영혼의 제단(Lv.1)을 먼저 세운 후 차원 앵커 게이트를 건설하여 3v3 아레나, 네메시스, 영지 침공을 개방하십시오.')}
           </div>
         </div>
         <ActionButton
-          label="🏰 방주 성채로 돌아가기"
+          label={tr('🏰 방주 성채로 돌아가기')}
           variant="primary"
           size="md"
           className="px-6 font-bold"
@@ -3293,7 +3620,7 @@ export const ArenaScreen: React.FC = () => {
             }}
           >
             <span className="shrink-0">⚔️</span>
-            <span className="truncate">차원 아레나</span>
+            <span className="truncate">{tr('차원 아레나')}</span>
             <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded bg-black/40 text-[#ffd54f] font-mono shrink-0">PvP</span>
           </button>
 
@@ -3309,8 +3636,8 @@ export const ArenaScreen: React.FC = () => {
             onClick={() => {
               if (!isNemesisUnlocked) {
                 gameDialog.alert({
-                  title: '차원 관문 미개방',
-                  message: `차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다.\n(현재 게이트 레벨: Lv.${gateLevel})\n\n성채에서 차원 앵커 게이트를 증축해주세요.`,
+                  title: tr('차원 관문 미개방'),
+                  message: `${tr('차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})\n\n${tr('성채에서 차원 앵커 게이트를 증축해주세요.')}`,
                   icon: '🔒',
                 });
                 return;
@@ -3320,13 +3647,13 @@ export const ArenaScreen: React.FC = () => {
             }}
           >
             <span className={`shrink-0 ${isNemesisUnlocked ? 'animate-pulse' : ''}`}>🌌</span>
-            <span className="truncate">네메시스</span>
+            <span className="truncate">{tr('네메시스')}</span>
             {isNemesisUnlocked ? (
               <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded bg-purple-950/80 border border-purple-500/50 text-[#e0aaff] font-mono shrink-0">
                 RAID
               </span>
             ) : (
-              <span className="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-[#1e2538] border border-[#2d3a54] text-[#90a4ae] font-mono shrink-0">
+              <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded bg-[#1e2538] border border-[#2d3a54] text-[#90a4ae] font-mono shrink-0">
                 🔒Lv.3
               </span>
             )}
@@ -3347,8 +3674,8 @@ export const ArenaScreen: React.FC = () => {
             onClick={() => {
               if (!isInvasionUnlocked) {
                 gameDialog.alert({
-                  title: '차원 관문 미개방',
-                  message: `차원 영지 침공(5인 원정대 약탈전)은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.\n(현재 게이트 레벨: Lv.${gateLevel})\n\n성채에서 차원 앵커 게이트를 증축해주세요.`,
+                  title: tr('차원 관문 미개방'),
+                  message: `${tr('차원 영지 침공(5인 원정대 약탈전)은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})\n\n${tr('성채에서 차원 앵커 게이트를 증축해주세요.')}`,
                   icon: '🔒',
                 });
                 return;
@@ -3358,7 +3685,7 @@ export const ArenaScreen: React.FC = () => {
             }}
           >
             <span className={`shrink-0 ${isInvasionUnlocked ? 'animate-bounce' : ''}`}>🏰</span>
-            <span className="truncate">영지 침공</span>
+            <span className="truncate">{tr('영지 침공')}</span>
             {isInvasionUnlocked ? (
               <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded bg-amber-950/80 border border-amber-500/50 text-[#ffd54f] font-mono shrink-0">
                 5v5
@@ -3399,8 +3726,8 @@ export const ArenaScreen: React.FC = () => {
             <div className="flex items-center gap-1.5 min-w-0 flex-1">
               <span className="text-base shrink-0">👑</span>
               <div className="min-w-0">
-                <span className="text-xs font-bold text-[#ffd54f] truncate block">Top 10 랭커 전용 PVE 버프 발동 중</span>
-                <span className="text-[10px] text-[#ffdd88] truncate block">전 파티원 ATK/HP +15% · 식량 소모 -20% · 희귀 드랍률 +25%</span>
+                <span className="text-xs font-bold text-[#ffd54f] truncate block">{tr('Top 10 랭커 전용 PVE 버프 발동 중')}</span>
+                <span className="text-[10px] text-[#ffdd88] truncate block">{tr('전 파티원 ATK/HP +15% · 식량 소모 -20% · 희귀 드랍률 +25%')}</span>
               </div>
             </div>
             <span className="text-xs font-bold text-[#ff416c] font-mono shrink-0 ml-2">Rank #{state.currentArenaRank}</span>
@@ -3413,10 +3740,11 @@ export const ArenaScreen: React.FC = () => {
         <div className="panel-accent p-3 flex items-center justify-between relative overflow-hidden">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <div
-              className="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 shadow-md"
+              className="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 shadow-md overflow-hidden"
               style={{ background: badge.bg, border: `2px solid ${badge.border}` }}
+              title={`랭크 아이콘: ${badge.label}`}
             >
-              {badge.icon}
+              <GameIcon name={badge.iconKey} icon={badge.icon} size={28} inline={false} />
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 flex-wrap">
@@ -3440,12 +3768,12 @@ export const ArenaScreen: React.FC = () => {
           </div>
 
           <div className="flex flex-col items-end shrink-0 pl-2">
-            <span className="text-[10px] text-[#8b9bb4]">'보유 투사의 인장'</span>
+            <span className="text-[10px] text-[#8b9bb4]">{tr('보유 투사의 인장')}</span>
             <div className="flex items-center gap-1 mt-0.5">
               <span className="text-sm">🪙</span>
               <span className="font-mono text-sm font-bold text-[#ffd54f]">{state.arenaCoins ?? 0}</span>
             </div>
-            <span className="text-[9px] text-[#c8aa6e]">'인장 획득 ➔ 명예 상점에서 장비 교환'</span>
+            <span className="text-[9px] text-[#c8aa6e]">{tr('인장 획득 ➔ 명예 상점에서 장비 교환')}</span>
           </div>
         </div>
       </div>
@@ -3453,9 +3781,9 @@ export const ArenaScreen: React.FC = () => {
       {/* 탭 내비게이션 (3단 탭) */}
       <div className="px-3 pt-2 flex gap-1.5 shrink-0 w-full max-w-full">
         {[
-          { key: 'match', label: '⚔️ 차원 매칭' },
-          { key: 'ranking', label: '🏆 클라우드 랭킹' },
-          { key: 'shop', label: '🎖️ 명예 암시장' },
+          { key: 'match', label: tr('⚔️ 차원 매칭') },
+          { key: 'ranking', label: tr('🏆 클라우드 랭킹') },
+          { key: 'shop', label: tr('🎖️ 명예 암시장') },
         ].map(t => (
           <button
             key={t.key}
@@ -3479,13 +3807,13 @@ export const ArenaScreen: React.FC = () => {
                   <span className="text-2xl p-1.5 rounded-lg bg-black/40 border border-[#ef535044] shrink-0">⚠️</span>
                   <div className="min-w-0">
                     <div className="font-extrabold text-xs text-[#ff8a80] flex items-center gap-1.5 flex-wrap">
-                      <span>차원 3인 결투 부대 미편성</span>
+                      <span>{tr('차원 3인 결투 부대 미편성')}</span>
                       <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/50 text-[#ffd54f] font-mono font-bold border border-[#ffd54f33]">
-                        현재 {squadCheck.count}/3인 배치
+                        {tr('현재')} {squadCheck.count}/3{tr('인 배치')}
                       </span>
                     </div>
                     <div className="text-[10px] text-[#cfd8dc] mt-0.5 leading-relaxed">
-                      차원 아레나는 전열/중열/후열 3인 부대가 모두 배치되어야 결투를 치를 수 있습니다.
+                      {tr('차원 아레나는 전열/중열/후열 3인 부대가 모두 배치되어야 결투를 치를 수 있습니다.')}
                     </div>
                   </div>
                 </div>
@@ -3502,7 +3830,7 @@ export const ArenaScreen: React.FC = () => {
                       }}
                     >
                       <span>⚡</span>
-                      <span>3인 자동 편성</span>
+                      <span>{tr('3인 자동 편성')}</span>
                     </button>
                   ) : (
                     <button
@@ -3512,7 +3840,7 @@ export const ArenaScreen: React.FC = () => {
                         gm.emit('openTavernDrawer');
                       }}
                     >
-                      🍻 주점에서 영입
+                      🍻 {tr('주점에서 영입')}
                     </button>
                   )}
                   <button
@@ -3522,7 +3850,7 @@ export const ArenaScreen: React.FC = () => {
                       gm.emit('openDimensionalBarracks');
                     }}
                   >
-                    🏛️ 부대 직접 편성
+                    🏛️ {tr('부대 직접 편성')}
                   </button>
                 </div>
               </div>
@@ -3533,10 +3861,10 @@ export const ArenaScreen: React.FC = () => {
               <div className="p-2 rounded-xl bg-gradient-to-r from-[#ff416c15] via-[#ffd54f15] to-[#ff416c15] border border-[#ff416c55] flex items-center justify-between">
                 <div className="flex items-center gap-1.5 text-xs">
                   <span>🔥</span>
-                  <span className="font-bold text-[#ffdd88]">투사의 연속 승리 특전:</span>
-                  <span className="font-mono text-[#ff416c] font-bold">{streak}연승 진행 중!</span>
+                  <span className="font-bold text-[#ffdd88]">{tr('투사의 연속 승리 특전:')}</span>
+                  <span className="font-mono text-[#ff416c] font-bold">{streak}{tr('연승 진행 중!')}</span>
                 </div>
-                <span className="text-[10px] text-[#ffd54f] font-bold">장비 강화 보너스 & 추가 인장 획득</span>
+                <span className="text-[10px] text-[#ffd54f] font-bold">{tr('장비 강화 보너스 & 추가 인장 획득')}</span>
               </div>
             )}
 
@@ -3546,67 +3874,63 @@ export const ArenaScreen: React.FC = () => {
                 <span className="text-xl shrink-0">🌱</span>
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-xs font-bold text-white">프리시즌 AI 전술 훈련 리그 진행 중</span>
+                    <span className="text-xs font-bold text-white">{tr('프리시즌 AI 전술 훈련 리그 진행 중')}</span>
                     <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66]">
                       PRE-SEASON
                     </span>
                   </div>
                   <span className="text-[10px] text-[#b0bec5] truncate block mt-0.5">
-                    브론즈부터 마스터까지 전 등급 AI 봇이 균등 배치되어 3인 홀덤 & 피버 전략을 연습할 수 있습니다.
+                    {tr('브론즈부터 마스터까지 전 등급 AI 봇이 균등 배치되어 3인 홀덤 & 피버 전략을 연습할 수 있습니다.')}
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* 🚫 주간 차원의 금기 & 블러핑 앤 쇼다운 룰 배너 */}
+            {/* 🔮 이번 주 차원 칙령 배너 (블러핑 앤 쇼다운 기본 룰 + 금지 뱃지 & 조커 통합 표기) */}
             <div className="p-3 rounded-xl bg-gradient-to-r from-[#170e28] via-[#24133b] to-[#120a21] border border-[#7e57c266] flex flex-col gap-2 shadow-md">
-              <div className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-1.5 font-bold text-[#d1c4e9]">
+              <div className="flex items-center justify-between text-xs gap-2">
+                <div className="flex items-center gap-1.5 font-bold text-[#d1c4e9] flex-wrap">
                   <span>🔮</span>
-                  <span>이번 주의 차원 칙령:</span>
-                  <span className="text-[#ffd54f] font-black">【블러핑 앤 쇼다운】</span>
+                  <span>{tr('이번 주의 차원 칙령:')}</span>
+                  <span className="text-[#ffd54f] font-black">【{tr(arenaEdict.edictName)}】</span>
+                  {/* 금지 뱃지 칙령 영역에 직접 표시 */}
+                  <span className="text-[9.5px] font-mono font-bold text-[#ff8a80] bg-[#ff525222] px-2 py-0.5 rounded border border-[#ff525244] ml-0.5">
+                    🚫 {bannedBadgeLabel}
+                  </span>
                 </div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 shrink-0">
                   <button
                     className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-[#c8aa6e18] hover:bg-[#c8aa6e33] text-[#c8aa6e] border border-[#c8aa6e44] font-bold flex items-center gap-1 cursor-pointer transition-all"
                     onClick={() => {
                       navigateTo('citadel');
                       gm.emit('openDimensionalBarracks');
                     }}
-                    title="성채 병영의 차원 결투 부대 편성 화면으로 이동"
+                    title={tr('성채 병영의 차원 결투 부대 편성 화면으로 이동')}
                   >
                     <span>🏛️</span>
-                    <span>부대 편성</span>
+                    <span>{tr('부대 편성')}</span>
                   </button>
                   <button
                     className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-[#7e57c233] hover:bg-[#7e57c255] text-[#ce93d8] border border-[#7e57c255] font-bold flex items-center gap-1 cursor-pointer transition-all"
                     onClick={() => setIsCodexModalOpen(true)}
                   >
-                    <span>📜 족보 도감 열람</span>
+                    <span>📜 {tr('족보 도감 열람')}</span>
                   </button>
                 </div>
               </div>
 
-              {/* 주간 가위바위보 상성 순환 안내 */}
-              <div className="flex items-center justify-between text-[10.5px] bg-black/40 rounded-lg px-2.5 py-1.5 border border-[#7e57c233]">
+              {/* 기본 룰 (블러핑 앤 쇼다운) & 조커 규칙 & 상성 순환 */}
+              <div className="flex items-center justify-between text-[10.5px] bg-black/40 rounded-lg px-2.5 py-1.5 border border-[#7e57c233] flex-wrap gap-1">
                 <div className="flex items-center gap-1 text-[#ffd54f]">
                   <span>⚖️</span>
-                  <span className="font-bold">{weeklyAffinity.title}:</span>
-                </div>
-                <span className="font-mono font-bold text-[#80d8ff] tracking-tight">
-                  {weeklyAffinity.relationText}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between text-[11px] text-[#b0bec5] px-0.5">
-                <div className="flex items-center gap-1">
-                  <span className="text-[#ff5252] font-bold">🚫 금지 배지:</span>
-                  <span className="font-mono font-bold text-[#ff8a80] bg-[#ff525222] px-1.5 py-0.2 rounded border border-[#ff525244]">
-                    💥 CRIT (치명 일격 획득 불가)
+                  <span className="font-bold">{tr(weeklyAffinity.title)}:</span>
+                  <span className="font-mono font-bold text-[#80d8ff] tracking-tight ml-1">
+                    {tr(weeklyAffinity.relationText)}
                   </span>
                 </div>
-                <span className="text-[10px] text-[#80d8ff] font-medium">
-                  🃏 3인 홀덤 실루엣 (2 공개 + 1 히든)
+                <span className="text-[10px] text-[#80d8ff] font-medium flex items-center gap-1">
+                  <span>🃏</span>
+                  <span>{tr(arenaEdict.jokerRule)}</span>
                 </span>
               </div>
             </div>
@@ -3614,16 +3938,16 @@ export const ArenaScreen: React.FC = () => {
             <div className="flex items-center justify-between text-xs text-[#8b9bb4] px-1">
               <span className="flex items-center gap-1.5">
                 <span className="text-[#c8aa6e]">⚔️</span>
-                <span className="font-bold text-white">도전 가능한 AI 봇 대진표</span>
+                <span className="font-bold text-white">{tr('도전 가능한 AI 봇 대진표')}</span>
                 <span className="text-[9.5px] text-[#8b9bb4]">
-                  (내 등급 <strong className="text-white">[{getRankBadge(state.currentArenaRating).label}]</strong> 맞춤 대진 & 상위 승급전)
+                  ({tr('내 등급')} <strong className="text-white">[{tr(getRankBadge(state.currentArenaRating).label)}]</strong> {tr('맞춤 대진 & 상위 승급전')})
                 </span>
               </span>
               <button
                 className="text-[11px] text-[#c8aa6e] hover:underline flex items-center gap-1 cursor-pointer"
                 onClick={refreshOpponents}
               >
-                🔄 새로고침
+                🔄 {tr('새로고침')}
               </button>
             </div>
 
@@ -3637,26 +3961,27 @@ export const ArenaScreen: React.FC = () => {
                   <div className="flex items-center justify-between gap-2 w-full">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-sm text-white truncate">{opp.name}</span>
+                        <span className="font-bold text-sm text-white truncate">{tr(opp.name)}</span>
                         {opp.isBot ? (
                           <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff704325] text-[#ff7043] border border-[#ff704355] shrink-0 font-mono flex items-center gap-0.5">
                             🤖 BOT
                           </span>
                         ) : (
                           <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] shrink-0 font-mono flex items-center gap-0.5">
-                            🌐 지휘관
+                            🌐 {tr('지휘관')}
                           </span>
                         )}
-                        <span className="text-[10px] px-1.5 py-0.2 rounded font-mono font-bold shrink-0" style={{ background: oppBadge.bg, color: oppBadge.color, border: `1px solid ${oppBadge.border}` }}>
-                          {oppBadge.label}
+                        <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold shrink-0 flex items-center gap-1" style={{ background: oppBadge.bg, color: oppBadge.color, border: `1px solid ${oppBadge.border}` }}>
+                          <GameIcon name={oppBadge.iconKey} icon={oppBadge.icon} size={12} inline={false} />
+                          {tr(oppBadge.label)}
                         </span>
                         {opp.isPromotion && (
                           <span className="text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff980025] text-[#ffd54f] border border-[#ff980066] shrink-0 font-mono flex items-center gap-0.5 animate-pulse">
-                            🔥 승급 도전
+                            🔥 {tr('승급 도전')}
                           </span>
                         )}
                       </div>
-                      <div className="text-[11px] text-[#8b9bb4] mt-0.5 truncate">{opp.guild} · Rank #{opp.rank}</div>
+                      <div className="text-[11px] text-[#8b9bb4] mt-0.5 truncate">{tr(opp.guild)} · Rank #{opp.rank}</div>
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
@@ -3665,7 +3990,7 @@ export const ArenaScreen: React.FC = () => {
                         <span className="text-[9px] text-[#38ef7d] font-mono block">+{ratingGainDelta} P</span>
                       </div>
                       <ActionButton
-                        label="⚔️ 결투 시작"
+                        label={tr('⚔️ 결투 시작')}
                         variant={squadCheck.isReady ? 'primary' : 'ghost'}
                         size="sm"
                         className={`px-3 py-1.5 text-xs font-bold shrink-0 ${
@@ -3690,13 +4015,13 @@ export const ArenaScreen: React.FC = () => {
                           }`}
                         >
                           <span className="text-[9px] font-bold text-[#c8aa6e] shrink-0">
-                            {idx === 0 ? '전열' : idx === 1 ? '중열' : '후열 ❓'}
+                            {idx === 0 ? tr('전열') : idx === 1 ? tr('중열') : `${tr('후열')} ❓`}
                           </span>
                           <span className="font-semibold truncate w-full">
-                            {isHidden ? '❓ [비공개]' : hero.title}
+                            {isHidden ? tr('❓ [비공개]') : tr(hero.title)}
                           </span>
                           <span className="text-[8px] font-mono shrink-0 text-[#8b9bb4]">
-                            {isHidden ? '히든 실루엣' : `Lv.${hero.level}`}
+                            {isHidden ? tr('히든 실루엣') : `Lv.${hero.level}`}
                           </span>
                         </div>
                       );
@@ -3715,18 +4040,31 @@ export const ArenaScreen: React.FC = () => {
             <div className="flex items-center justify-between text-xs text-[#8b9bb4] px-1">
               <span className="flex items-center gap-1.5 font-bold text-[#b0bec5]">
                 <span className="text-[#38ef7d]">🌱</span>
-                <span>프리시즌 AI 전술 훈련 리그 순위표</span>
+                <span>{tr('프리시즌 AI 전술 훈련 리그 순위표')}</span>
                 <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55]">
                   AI LEAGUE
                 </span>
               </span>
-              <button
-                className="text-[11px] text-[#c8aa6e] hover:underline flex items-center gap-1 cursor-pointer"
-                onClick={fetchLeaderboard}
-                disabled={isLoadingLb}
-              >
-                {isLoadingLb ? '동기화 중...' : '🔄 갱신'}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  className="text-[11px] text-[#c8aa6e] hover:underline flex items-center gap-1 cursor-pointer"
+                  onClick={fetchLeaderboard}
+                  disabled={isLoadingLb}
+                >
+                  {isLoadingLb ? tr('동기화 중...') : tr('🔄 갱신')}
+                </button>
+                {PlayGamesService.getInstance().isAvailable() && (
+                  <button
+                    type="button"
+                    className="text-[11px] text-[#38ef7d] hover:underline flex items-center gap-1 cursor-pointer font-bold"
+                    onClick={() => PlayGamesService.getInstance().showLeaderboard(PGS_LEADERBOARDS.DIMENSIONAL_OUTLAW)}
+                    title="Google Play Games 차원의 무법자 리더보드 열기"
+                  >
+                    <span>🎮</span>
+                    <span>{tr('PGS 순위표')}</span>
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* 내 순위 핀 카드 */}
@@ -3736,14 +4074,14 @@ export const ArenaScreen: React.FC = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-xs text-white truncate">'내 원정단 (지휘관)'</span>
+                  <span className="font-bold text-xs text-white truncate">{tr('내 원정단 (지휘관)')}</span>
                   <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0">ME</span>
                 </div>
-                <div className="text-[10px] text-[#8b9bb4] truncate">'방주 성채 수호단'</div>
+                <div className="text-[10px] text-[#8b9bb4] truncate">{tr('방주 성채 수호단')}</div>
               </div>
               <div className="text-right shrink-0">
                 <div className="text-xs font-mono font-bold text-[#ffd54f]">{state.currentArenaRating} P</div>
-                <div className="text-[9px]" style={{ color: badge.color }}>{badge.label}</div>
+                <div className="text-[9px]" style={{ color: badge.color }}>{tr(badge.label)}</div>
               </div>
             </div>
 
@@ -3764,23 +4102,26 @@ export const ArenaScreen: React.FC = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-xs text-white truncate">{entry.nickname}</span>
+                        <span className="font-bold text-xs text-white truncate">{tr(entry.nickname)}</span>
                         {entry.isPlayer ? (
                           <span className="text-[8.5px] px-1.5 py-0.2 rounded font-bold bg-[#c8aa6e22] text-[#c8aa6e] font-mono shrink-0">
                             ME
                           </span>
                         ) : (
                           <span className="text-[8.5px] px-1.5 py-0.2 rounded font-bold bg-[#ff704322] text-[#ff7043] border border-[#ff704344] font-mono shrink-0">
-                            🤖 AI 봇
+                            🤖 {tr('AI 봇')}
                           </span>
                         )}
                         <span className="text-[9px] text-[#8b9bb4] shrink-0">Lv.{entry.level}</span>
                       </div>
-                      <div className="text-[10px] text-[#6e82a0] truncate">{entry.leaderTitle}</div>
+                      <div className="text-[10px] text-[#6e82a0] truncate">{tr(entry.leaderTitle)}</div>
                     </div>
                     <div className="text-right shrink-0">
                       <div className="text-xs font-mono font-bold text-[#ffd54f]">{entry.rating} P</div>
-                      <div className="text-[9px]" style={{ color: entryBadge.color }}>{entryBadge.label}</div>
+                      <div className="text-[9px] flex items-center justify-end gap-1" style={{ color: entryBadge.color }}>
+                        <GameIcon name={entryBadge.iconKey} icon={entryBadge.icon} size={11} inline={false} />
+                        {tr(entryBadge.label)}
+                      </div>
                     </div>
                   </div>
                 );
@@ -3796,13 +4137,13 @@ export const ArenaScreen: React.FC = () => {
             <div className="p-2.5 rounded-xl bg-[#141d30] border border-[#23324d] flex items-center justify-between w-full">
               <div className="min-w-0 flex-1 mr-2">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-[#ffd54f] block truncate">'명예의 암시장'</span>
+                  <span className="text-xs font-bold text-[#ffd54f] block truncate">{tr('명예의 암시장')}</span>
                   <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#7c4dff33] text-[#b388ff] border border-[#7c4dff66] font-mono font-bold shrink-0">
-                    {`게이트 Lv.${gateLevel}`}
+                    {`${tr('게이트')} Lv.${gateLevel}`}
                   </span>
                 </div>
                 <span className="text-[10px] text-[#8b9bb4] block truncate">
-                  '게이트 증축에 따라 상위 장비·보급함·마도석이 개방됩니다.'
+                  {tr('게이트 증축에 따라 상위 장비·보급함·마도석이 개방됩니다.')}
                 </span>
               </div>
               <div className="flex items-center gap-1 bg-[#0b101c] px-2 py-1 rounded-lg border border-[#ffd54f44] shrink-0">
@@ -3814,11 +4155,11 @@ export const ArenaScreen: React.FC = () => {
             {/* 🏷️ 카테고리 필터 탭 */}
             <div className="flex gap-1 overflow-x-auto pb-0.5 no-scrollbar">
               {[
-                { key: 'all', label: '전체' },
-                { key: 'box', label: '🎁 장비 보급함' },
-                { key: 'equip', label: '⚔️ 투사 무구' },
-                { key: 'material', label: '💎 촉매/마도석' },
-                { key: 'supply', label: '🍖 보급품' },
+                { key: 'all', label: tr('전체') },
+                { key: 'box', label: tr('🎁 장비 보급함') },
+                { key: 'equip', label: tr('⚔️ 투사 무구') },
+                { key: 'material', label: tr('💎 촉매/마도석') },
+                { key: 'supply', label: tr('🍖 보급품') },
               ].map(cat => (
                 <button
                   key={cat.key}
@@ -3843,23 +4184,25 @@ export const ArenaScreen: React.FC = () => {
                   >
                     <div className="flex items-center gap-2.5 min-w-0 flex-1">
                       <div className="w-9 h-9 rounded-lg bg-[#141b2b] border border-[#25334d] flex items-center justify-center text-lg shrink-0">
-                        {isUnlocked ? item.icon : '🔒'}
+                        {isUnlocked ? (
+                          <GameIcon name={(item as any).iconKey || item.key} icon={item.icon} size={22} />
+                        ) : '🔒'}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <span className={`font-bold text-xs truncate ${isUnlocked ? 'text-white' : 'text-[#8b9bb4]'}`}>
-                            {item.name}
+                            {tr(item.name)}
                           </span>
                           <span className="text-[9px] px-1 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0">
-                            {item.tag}
+                            {tr(item.tag)}
                           </span>
                           {!isUnlocked && (
                             <span className="text-[9px] px-1 py-0.2 rounded bg-[#ef535022] text-[#ef5350] border border-[#ef535044] font-mono font-bold shrink-0">
-                              게이트 Lv.{item.reqGateLv} 필요
+                              {tr('게이트')} Lv.{item.reqGateLv} {tr('필요')}
                             </span>
                           )}
                         </div>
-                        <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">{item.desc}</div>
+                        <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">{tr(item.desc)}</div>
                       </div>
                     </div>
 
@@ -3869,7 +4212,7 @@ export const ArenaScreen: React.FC = () => {
                         <span>{item.cost}</span>
                       </div>
                       <ActionButton
-                        label={isUnlocked ? '교환' : '잠김'}
+                        label={isUnlocked ? tr('교환') : tr('잠김')}
                         variant={canAfford ? 'success' : 'ghost'}
                         size="sm"
                         disabled={!canAfford}
@@ -3888,7 +4231,7 @@ export const ArenaScreen: React.FC = () => {
       {/* 성채 복귀 버튼 */}
       <div className="px-3 py-2 shrink-0 w-full max-w-full">
         <ActionButton
-          label="🏰 방주 성채로 귀환"
+          label={tr('🏰 방주 성채로 귀환')}
           variant="ghost"
           className="w-full py-2 text-xs"
           onClick={() => navigateTo('citadel')}
@@ -3915,20 +4258,20 @@ export const ArenaScreen: React.FC = () => {
               <span className="text-base">⚔️</span>
               <div className="min-w-0">
                 <div className="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                  <span>vs {activeBattleOpp.name}</span>
+                  <span>vs {tr(activeBattleOpp.name)}</span>
                   {activeBattleOpp.isBot ? (
                     <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff704325] text-[#ff7043] border border-[#ff704355] font-mono shrink-0">
                       🤖 BOT
                     </span>
                   ) : (
                     <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] font-mono shrink-0">
-                      🌐 지휘관
+                      🌐 {tr('지휘관')}
                     </span>
                   )}
                   <span className="text-[#ffd54f] font-mono font-normal">({activeBattleOpp.rating}P)</span>
                 </div>
                 <span className="text-[10px] text-[#8b9bb4] truncate block">
-                  3v3 차원 아레나 제{battleRound}라운드 · 속도(SPD) 턴제 교전
+                  {tr(`3v3 차원 아레나 제${battleRound}라운드 · 속도(SPD) 턴제 교전`)}
                 </span>
               </div>
             </div>
@@ -3945,7 +4288,7 @@ export const ArenaScreen: React.FC = () => {
                 className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#ff416c22] text-[#ff416c] border border-[#ff416c66] hover:bg-[#ff416c44] cursor-pointer"
                 onClick={handleInstantSkip}
               >
-                ⏭️ 스킵
+                ⏭️ {tr('스킵')}
               </button>
             </div>
           </div>
@@ -3955,7 +4298,7 @@ export const ArenaScreen: React.FC = () => {
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-[#c8aa6e] text-[11px] flex items-center gap-1">
                 <span>🛡️</span>
-                <span>아군 피버</span>
+                <span>{tr('아군 피버')}</span>
               </span>
               <div className="flex items-center gap-1 text-sm bg-black/40 px-1.5 py-0.5 rounded border border-[#c8aa6e]/30">
                 {[0, 1, 2].map(i => (
@@ -3970,7 +4313,7 @@ export const ArenaScreen: React.FC = () => {
             </div>
 
             <span className="text-[10px] font-black text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/50 font-mono tracking-wider shadow-inner">
-              ⚡ 3승 선착 시 즉시 압승 ⚡
+              ⚡ {tr('피버 3선승')} ⚡
             </span>
 
             <div className="flex items-center gap-1.5">
@@ -3985,7 +4328,7 @@ export const ArenaScreen: React.FC = () => {
                 ))}
               </div>
               <span className="font-extrabold text-red-400 text-[11px] flex items-center gap-1">
-                <span>적군 피버</span>
+                <span>{tr('상대 피버')}</span>
                 <span>⚔️</span>
               </span>
             </div>
@@ -4048,7 +4391,7 @@ export const ArenaScreen: React.FC = () => {
                     {!isShowdownEvaluated ? (
                       <span className="text-[#c8aa6e] font-bold animate-pulse flex items-center gap-1">
                         <span>🃏</span>
-                        <span>배지 오픈 {showdownRevealIndex}/5</span>
+                        <span>{tr(`배지 오픈 ${showdownRevealIndex}/5`)}</span>
                       </span>
                     ) : (
                       <span className={`font-extrabold px-2 py-0.5 rounded-full ${
@@ -4058,7 +4401,7 @@ export const ArenaScreen: React.FC = () => {
                           ? 'bg-[#ff174422] text-[#ff5252] border border-[#ff174488]'
                           : 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f88]'
                       }`}>
-                        {showdownResult.outcome === 'player_win' ? '🎉 아군 승리' : showdownResult.outcome === 'opp_win' ? '💀 적군 승리' : '⚡ 전술 무승부'}
+                        {showdownResult.outcome === 'player_win' ? tr('🎉 아군 승리') : showdownResult.outcome === 'opp_win' ? tr('💀 적군 승리') : tr('⚡ 전술 무승부')}
                       </span>
                     )}
                   </div>
@@ -4075,11 +4418,11 @@ export const ArenaScreen: React.FC = () => {
                   <div className="flex items-center justify-between text-xs px-1">
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs">💀</span>
-                      <span className="font-bold text-[#ff80ab] text-[11px]">상대 결투 부대</span>
+                      <span className="font-bold text-[#ff80ab] text-[11px]">{tr('상대 결투 부대')}</span>
                     </div>
                     {isShowdownEvaluated && (
                       <span className="text-[10px] font-mono text-[#ff80ab]">
-                        점수 {showdownResult.oppScore} P
+                        {tr(`점수 ${showdownResult.oppScore} P`)}
                       </span>
                     )}
                   </div>
@@ -4129,7 +4472,7 @@ export const ArenaScreen: React.FC = () => {
                     <div className="flex items-center gap-1.5 min-w-0">
                       <span className="text-sm">{isShowdownEvaluated ? showdownResult.oppSynergy.icon : '❓'}</span>
                       <span className="font-extrabold text-xs truncate">
-                        {isShowdownEvaluated ? showdownResult.oppSynergy.name : '족보 분석 중...'}
+                        {isShowdownEvaluated ? tr(showdownResult.oppSynergy.name) : tr('족보 분석 중...')}
                       </span>
                     </div>
                     {isShowdownEvaluated && showdownResult.outcome === 'opp_win' && (
@@ -4163,11 +4506,11 @@ export const ArenaScreen: React.FC = () => {
                   <div className="flex items-center justify-between text-xs px-1">
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs">🛡️</span>
-                      <span className="font-bold text-[#80d8ff] text-[11px]">내 차원 결투 부대</span>
+                      <span className="font-bold text-[#80d8ff] text-[11px]">{tr('내 차원 결투 부대')}</span>
                     </div>
                     {isShowdownEvaluated && (
                       <span className="text-[10px] font-mono text-[#80d8ff]">
-                        점수 {showdownResult.playerScore} P
+                        {tr(`점수 ${showdownResult.playerScore} P`)}
                       </span>
                     )}
                   </div>
@@ -4219,7 +4562,7 @@ export const ArenaScreen: React.FC = () => {
                       <span className={`font-extrabold text-xs truncate ${
                         isShowdownEvaluated && showdownResult.outcome === 'player_win' ? 'text-[#ffd54f] drop-shadow-[0_0_8px_rgba(255,213,79,0.8)]' : ''
                       }`}>
-                        {isShowdownEvaluated ? showdownResult.playerSynergy.name : '족보 분석 중...'}
+                        {isShowdownEvaluated ? tr(showdownResult.playerSynergy.name) : tr('족보 분석 중...')}
                       </span>
                     </div>
                     {isShowdownEvaluated && showdownResult.outcome === 'player_win' && (
@@ -4234,15 +4577,15 @@ export const ArenaScreen: React.FC = () => {
                 {isShowdownEvaluated && (
                   <div className="p-2.5 rounded-xl bg-black/60 border border-white/10 flex flex-col gap-1 text-center animate-fade-in">
                     <div className="text-[11px] text-white font-bold truncate">
-                      {showdownResult.narrative}
+                      {tr(showdownResult.narrative)}
                     </div>
                     {showdownResult.outcome === 'player_win' && (
                       <div className="text-[10px] text-[#ffd54f] font-mono flex items-center justify-center gap-1">
                         <span>💥</span>
-                        <span>전술 오퍼레이터 궁극기 연계 발동!</span>
+                        <span>{tr('전술 오퍼레이터 궁극기 연계 발동!')}</span>
                       </div>
                     )}
-                    <span className="text-[8.5px] text-stone-400 mt-0.5">화면을 터치하면 즉시 전장으로 이어집니다.</span>
+                    <span className="text-[8.5px] text-stone-400 mt-0.5">{tr('화면을 터치하면 즉시 전장으로 이어집니다.')}</span>
                   </div>
                 )}
               </div>
@@ -4256,8 +4599,8 @@ export const ArenaScreen: React.FC = () => {
                 <div className="bg-[#120e06] px-6 py-3 rounded-2xl flex items-center gap-3">
                   <span className="text-4xl animate-spin">👑</span>
                   <div>
-                    <div className="text-xs font-bold text-[#ffe082]">DIMENSIONAL LEADER ULTIMATE</div>
-                    <div className="text-lg font-black text-white">{playerLeader?.name || '차원 리더'}의 궁극기 폭발!</div>
+                    <div className="text-xs font-bold text-[#ffe082]">TACTICAL OPERATOR ULTIMATE</div>
+                    <div className="text-lg font-black text-white">{tr(`${playerLeader?.name || '전술 오퍼레이터'}의 궁극기 폭발!`)}</div>
                   </div>
                 </div>
               </div>
@@ -4271,8 +4614,8 @@ export const ArenaScreen: React.FC = () => {
                 <div className="bg-[#1a050d] px-6 py-3 rounded-2xl flex items-center gap-3">
                   <span className="text-4xl animate-spin">💀</span>
                   <div>
-                    <div className="text-xs font-bold text-[#ff80ab]">ENEMY LEADER ULTIMATE</div>
-                    <div className="text-lg font-black text-white">{oppLeader?.name || '상대 리더'}의 심연 궁극기 발동!</div>
+                    <div className="text-xs font-bold text-[#ff80ab]">ENEMY OPERATOR ULTIMATE</div>
+                    <div className="text-lg font-black text-white">{tr(`${oppLeader?.name || '상대 오퍼레이터'}의 심연 궁극기 발동!`)}</div>
                   </div>
                 </div>
               </div>
@@ -4295,7 +4638,7 @@ export const ArenaScreen: React.FC = () => {
             <AttackerVisualBox
               attacker={lastEnemyAttacker}
               side="enemy"
-              title="상대 아레나 방어자"
+              title={tr('상대 아레나 방어자')}
               isActing={activeCombatantId === lastEnemyAttacker?.id}
             />
 
@@ -4326,7 +4669,7 @@ export const ArenaScreen: React.FC = () => {
 
                     {isDying && (
                       <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[7.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff9800] text-black shadow-md z-10 animate-pulse border border-[#ffd54f]">
-                        💀 사경 ({c.deathCountdown}T)
+                        {tr(`💀 사경 (${c.deathCountdown ?? 0}T)`)}
                       </span>
                     )}
 
@@ -4347,7 +4690,7 @@ export const ArenaScreen: React.FC = () => {
                                   ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]'
                                   : 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]'
                               }`}
-                              title={`${label} (${turns}턴)`}
+                              title={`${tr(label)} (${turns}${tr('턴')})`}
                             >
                               <span>{icon}</span>
                               <span className="font-mono text-[7px]">{turns}T</span>
@@ -4389,13 +4732,13 @@ export const ArenaScreen: React.FC = () => {
                         )}
                       </div>
                       <span className="text-[8px] font-mono text-[#ff80ab] font-bold px-1.5 py-0.5 rounded bg-[#ff416c15] border border-[#ff416c33]">
-                        {c.position === 'front' ? '전열' : c.position === 'mid' ? '중열' : '후열'}
+                        {c.position === 'front' ? tr('전열') : c.position === 'mid' ? tr('중열') : tr('후열')}
                       </span>
                     </div>
 
                     <div className="min-w-0">
-                      <div className="text-[11px] font-bold text-white truncate">{c.name.split('의 ')[1] || c.name}</div>
-                      <div className="text-[9px] text-[#b39ddb] truncate">{c.className} Lv.{c.level}</div>
+                      <div className="text-[11px] font-bold text-white truncate">{tr(c.name.split('의 ')[1] || c.name)}</div>
+                      <div className="text-[9px] text-[#b39ddb] truncate">{tr(c.className)} Lv.{c.level}</div>
                     </div>
 
                     {/* HP Bar */}
@@ -4408,7 +4751,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
 
                     <div className="text-[8px] text-right font-mono text-[#8b9bb4]">
-                      {isAlive ? `${c.currentHp}/${c.maxHp}` : isDying ? <span className="text-[#ffeb3b] font-bold">💀 사경 ({c.deathCountdown}턴)</span> : '⚰️ DEAD'}
+                      {isAlive ? `${c.currentHp}/${c.maxHp}` : isDying ? <span className="text-[#ffeb3b] font-bold">💀 {tr(`사경 (${c.deathCountdown ?? 0}턴)`)}</span> : '⚰️ DEAD'}
                     </div>
                   </div>
                 );
@@ -4446,13 +4789,13 @@ export const ArenaScreen: React.FC = () => {
               ) : feverCallLead === 'player' ? (
                 <div className="px-3 py-1 rounded-full bg-[#ffd54f15] border border-[#ffd54f55] text-center z-10 animate-pulse">
                   <span className="text-[10px] font-bold text-[#ffd54f]">
-                    ⚡ 아군 [피버 콜!] (상대 유예: {feverCallCountdown}턴 남음)
+                    {tr(`⚡ 아군 [피버 콜!] (상대 유예: ${feverCallCountdown}턴 남음)`)}
                   </span>
                 </div>
               ) : feverCallLead === 'opp' ? (
                 <div className="px-3 py-1 rounded-full bg-[#ff416c15] border border-[#ff416c55] text-center z-10 animate-pulse">
                   <span className="text-[10px] font-bold text-[#ff80ab]">
-                    ⚠️ 상대 [피버 콜!] (아군 유예: {feverCallCountdown}턴 남음)
+                    {tr(`⚠️ 상대 [피버 콜!] (아군 유예: ${feverCallCountdown}턴 남음)`)}
                   </span>
                 </div>
               ) : null}
@@ -4500,7 +4843,7 @@ export const ArenaScreen: React.FC = () => {
 
                     {isDying && (
                       <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[7.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff9800] text-black shadow-md z-10 animate-pulse border border-[#ffd54f]">
-                        💀 사경 ({c.deathCountdown}T)
+                        {tr(`💀 사경 (${c.deathCountdown ?? 0}T)`)}
                       </span>
                     )}
 
@@ -4521,7 +4864,7 @@ export const ArenaScreen: React.FC = () => {
                                   ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]'
                                   : 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c44]'
                               }`}
-                              title={`${label} (${turns}턴)`}
+                              title={`${tr(label)} (${turns}${tr('턴')})`}
                             >
                               <span>{icon}</span>
                               <span className="font-mono text-[7px]">{turns}T</span>
@@ -4561,13 +4904,13 @@ export const ArenaScreen: React.FC = () => {
                         )}
                       </div>
                       <span className="text-[8px] font-mono text-[#c8aa6e] font-bold px-1.5 py-0.5 rounded bg-[#c8aa6e15] border border-[#c8aa6e33]">
-                        {c.position === 'front' ? '전열' : c.position === 'mid' ? '중열' : '후열'}
+                        {c.position === 'front' ? tr('전열') : c.position === 'mid' ? tr('중열') : tr('후열')}
                       </span>
                     </div>
 
                     <div className="min-w-0">
-                      <div className="text-[11px] font-bold text-white truncate">{c.name}</div>
-                      <div className="text-[9px] text-[#80deea] truncate">{c.className} Lv.{c.level}</div>
+                      <div className="text-[11px] font-bold text-white truncate">{tr(c.name)}</div>
+                      <div className="text-[9px] text-[#80deea] truncate">{tr(c.className)} Lv.{c.level}</div>
                     </div>
 
                     {/* HP Bar */}
@@ -4580,7 +4923,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
 
                     <div className="text-[8px] text-right font-mono text-[#8b9bb4]">
-                      {isAlive ? `${c.currentHp}/${c.maxHp}` : isDying ? <span className="text-[#ffeb3b] font-bold">💀 사경 ({c.deathCountdown}턴)</span> : '⚰️ DEAD'}
+                      {isAlive ? `${c.currentHp}/${c.maxHp}` : isDying ? <span className="text-[#ffeb3b] font-bold">💀 {tr(`사경 (${c.deathCountdown ?? 0}턴)`)}</span> : '⚰️ DEAD'}
                     </div>
                   </div>
                 );
@@ -4591,7 +4934,7 @@ export const ArenaScreen: React.FC = () => {
             <AttackerVisualBox
               attacker={lastPlayerAttacker}
               side="player"
-              title="아군 차원 투사"
+              title={tr('아군 차원 투사')}
               isActing={activeCombatantId === lastPlayerAttacker?.id}
             />
 
@@ -4612,10 +4955,10 @@ export const ArenaScreen: React.FC = () => {
                 <div className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1.5">
                     <span className="text-sm">{activeAttacker?.icon}</span>
-                    <span className="font-bold text-[#c8aa6e]">{activeAttacker?.name}의 행동 선택</span>
+                    <span className="font-bold text-[#c8aa6e]">{tr(`${activeAttacker?.name || ''}의 행동 선택`)}</span>
                     <span className="text-[10px] text-[#8b9bb4] font-mono">({activeAttacker?.currentMp} MP)</span>
                   </div>
-                  <span className="text-[10px] text-[#ffd54f]">타겟: {oppTeam.find(c => c.id === targetEnemyId)?.name || '상대'}</span>
+                  <span className="text-[10px] text-[#ffd54f]">{tr('타겟')}: {tr(oppTeam.find(c => c.id === targetEnemyId)?.name || '상대')}</span>
                 </div>
 
                 {/* 스킬 버튼 그리드 */}
@@ -4628,7 +4971,7 @@ export const ArenaScreen: React.FC = () => {
                       <div key={`${skill.id}_${sIdx}`} className="relative group">
                         <button
                           disabled={!canAfford}
-                          title={`${skill.name}\n${skill.description || ''}\n마나: ${skill.manaCost} MP | 쿨타임: ${skill.cooldown}턴`}
+                          title={`${tr(skill.name)}\n${tr(skill.description || '')}\n${tr('마나')}: ${skill.manaCost} MP | ${tr('쿨타임')}: ${skill.cooldown}${tr('턴')}`}
                           className={`w-full p-2 rounded-lg flex flex-col items-center justify-center gap-0.5 transition-all text-center ${
                             canAfford
                               ? 'bg-[#14233c] hover:bg-[#1a3154] border border-[#234272] text-white cursor-pointer active:scale-95'
@@ -4637,9 +4980,9 @@ export const ArenaScreen: React.FC = () => {
                           onClick={() => handleManualSkillClick(skill)}
                         >
                           <span className="text-base">{skill.icon || '⚔️'}</span>
-                          <span className="text-xs font-bold truncate max-w-full">{skill.name}</span>
+                          <span className="text-xs font-bold truncate max-w-full">{tr(skill.name)}</span>
                           <span className="text-[9px] font-mono text-[#64b5f6]">
-                            {cd > 0 ? `${cd}턴 대기` : skill.manaCost > 0 ? `${skill.manaCost} MP` : '0 MP'}
+                            {cd > 0 ? tr(`${cd}턴 대기`) : skill.manaCost > 0 ? `${skill.manaCost} MP` : '0 MP'}
                           </span>
                         </button>
                         {/* 스킬 정보 상세 보기 버튼 (PVE 통일성) */}
@@ -4650,7 +4993,7 @@ export const ArenaScreen: React.FC = () => {
                             setSelectedSkillForModal(skill);
                           }}
                           className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#0a1526]/80 text-[#8ba3c7] hover:text-[#c8aa6e] hover:bg-[#1a2d48] flex items-center justify-center text-[9px] font-bold border border-[#243b5e]/50 cursor-pointer"
-                          title="스킬 정보 상세 보기"
+                          title={tr('스킬 정보 상세 보기')}
                         >
                           ℹ️
                         </button>
@@ -4662,10 +5005,10 @@ export const ArenaScreen: React.FC = () => {
             ) : (
               <div className="panel px-3 py-1.5 rounded-xl bg-[#090e1a]/85 border border-[#1a253a]/80 flex items-center justify-between text-[10px] shadow-md">
                 <span className="text-[#8b9bb4] flex items-center gap-1.5 font-medium">
-                  <span className="animate-spin">⚔️</span> <span>차원 결투 진행 중</span>
+                  <span className="animate-spin">⚔️</span> <span>{tr('차원 결투 진행 중')}</span>
                 </span>
                 <span className="text-[#38ef7d] font-mono flex items-center gap-1 text-[9px] font-bold">
-                  <span>{isAuto ? '▶️ 자동 전투 연계' : '⏸️ 상대 행동 중'}</span>
+                  <span>{isAuto ? tr('▶️ 자동 전투 연계') : tr('⏸️ 상대 행동 중')}</span>
                 </span>
               </div>
             )}
@@ -4707,28 +5050,28 @@ export const ArenaScreen: React.FC = () => {
                     {finalReward.win ? '🎉 VICTORY' : '💀 DEFEAT'}
                   </div>
                   <div className="text-xs font-mono text-white mt-0.5">
-                    {finalReward.win ? '차원 결투 대승리!' : '차원 결투 패배...'}
+                    {finalReward.win ? tr('차원 결투 대승리!') : tr('차원 결투 패배...')}
                   </div>
                 </div>
 
                 {/* 결과 요약 스탯 카드 */}
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div className="bg-[#131d30] p-2 rounded-lg border border-[#21314f]">
-                    <span className="text-[10px] text-[#8b9bb4] block">레이팅 변화</span>
+                    <span className="text-[10px] text-[#8b9bb4] block">{tr('레이팅 변화')}</span>
                     <span className={`text-sm font-bold font-mono ${finalReward.ratingDelta > 0 ? 'text-[#38ef7d]' : 'text-[#ef5350]'}`}>
                       {finalReward.ratingDelta > 0 ? `+${finalReward.ratingDelta}` : finalReward.ratingDelta} P
                     </span>
                   </div>
                   <div className="bg-[#131d30] p-2 rounded-lg border border-[#21314f]">
-                    <span className="text-[10px] text-[#8b9bb4] block">투사의 인장</span>
+                    <span className="text-[10px] text-[#8b9bb4] block">{tr('투사의 인장')}</span>
                     <span className="text-sm font-bold font-mono text-[#ffd54f]">
                       +{finalReward.coins} 🪙
                     </span>
                   </div>
                   <div className="bg-[#131d30] p-2 rounded-lg border border-[#21314f]">
-                    <span className="text-[10px] text-[#8b9bb4] block">연승 기록</span>
+                    <span className="text-[10px] text-[#8b9bb4] block">{tr('연승 기록')}</span>
                     <span className="text-sm font-bold font-mono text-[#ff416c]">
-                      {finalReward.streak}연승 🔥
+                      {finalReward.streak}{tr('연승 🔥')}
                     </span>
                   </div>
                 </div>
@@ -4740,21 +5083,21 @@ export const ArenaScreen: React.FC = () => {
                     className={`flex items-center justify-between cursor-pointer select-none hover:opacity-90 transition-all ${
                       isFeverReportExpanded ? 'border-b border-white/10 pb-1.5' : ''
                     }`}
-                    title={isFeverReportExpanded ? '클릭하여 리포트 접기' : '클릭하여 리포트 펼치기'}
+                    title={isFeverReportExpanded ? tr('클릭하여 리포트 접기') : tr('클릭하여 리포트 펼치기')}
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="text-base">🔥</span>
-                      <span className="font-bold text-xs text-white">피버 콜 격돌 리포트</span>
+                      <span className="font-bold text-xs text-white">{tr('피버 콜 격돌 리포트')}</span>
                       <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-1.5 py-0.2 rounded border border-amber-800">
-                        총 {feverCallHistory.length}회 격돌
+                        {tr('총')} {feverCallHistory.length}{tr('회 격돌')}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="text-[10px] font-mono text-stone-400">
-                        아군 <span className="text-[#c8aa6e] font-bold">{playerFeverWins}승</span> : <span className="text-rose-400 font-bold">{oppFeverWins}승</span> 상대
+                        {tr('아군')} <span className="text-[#c8aa6e] font-bold">{playerFeverWins}{tr('승')}</span> : <span className="text-rose-400 font-bold">{oppFeverWins}{tr('승')}</span> {tr('상대')}
                       </div>
                       <span className="text-[10px] font-bold text-amber-400/90 bg-black/50 px-1.5 py-0.5 rounded border border-amber-500/30 flex items-center gap-1">
-                        <span>{isFeverReportExpanded ? '▲ 접기' : '▼ 펼치기'}</span>
+                        <span>{isFeverReportExpanded ? tr('▲ 접기') : tr('▼ 펼치기')}</span>
                       </span>
                     </div>
                   </div>
@@ -4780,10 +5123,10 @@ export const ArenaScreen: React.FC = () => {
                               {/* 회차 및 승패 뱃지 */}
                               <div className="flex items-center justify-between text-[11px]">
                                 <span className="font-bold text-stone-300 flex items-center gap-1.5">
-                                  <span className="text-amber-400">⚡ #{entry.round}차 피버콜 격돌</span>
+                                  <span className="text-amber-400">⚡ #{entry.round}{tr('차 피버콜 격돌')}</span>
                                   {entry.isTimeout && (
                                     <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                                      ⏱️ 3턴 유예 타임아웃
+                                      ⏱️ {tr('3턴 유예 타임아웃')}
                                     </span>
                                   )}
                                 </span>
@@ -4796,7 +5139,7 @@ export const ArenaScreen: React.FC = () => {
                                       : 'bg-amber-500/20 text-amber-300 border border-amber-400/50'
                                   }`}
                                 >
-                                  {isPlayerWin ? '👑 아군 승리' : isOppWin ? '💀 상대 승리' : '⚡ 전술 무승부'}
+                                  {isPlayerWin ? tr('👑 아군 승리') : isOppWin ? tr('💀 상대 승리') : tr('⚡ 전술 무승부')}
                                 </span>
                               </div>
 
@@ -4808,7 +5151,7 @@ export const ArenaScreen: React.FC = () => {
                                 }`}>
                                 <div className="flex items-center justify-between">
                                   <span className="text-[10px] text-[#c8aa6e] font-bold flex items-center gap-1">
-                                    <span>🛡️</span> <span>아군 피버</span>
+                                    <span>🛡️</span> <span>{tr('아군 피버')}</span>
                                   </span>
                                   <span className="text-[10px] font-mono text-[#c8aa6e] font-bold">
                                     {entry.playerScore} P
@@ -4817,11 +5160,11 @@ export const ArenaScreen: React.FC = () => {
                                 <div className="flex items-center gap-1.5 min-w-0">
                                   <span className="text-sm shrink-0">{entry.playerSynergy.icon}</span>
                                   <span className="font-extrabold text-white text-xs truncate">
-                                    {entry.playerSynergy.name}
+                                    {tr(entry.playerSynergy.name)}
                                   </span>
                                 </div>
                                 <div className="text-[9.5px] text-stone-400 truncate">
-                                  {entry.playerSynergy.summary}
+                                  {tr(entry.playerSynergy.summary)}
                                 </div>
                                 {/* 5개 배지 나열 */}
                                 <div className="flex items-center gap-1 flex-wrap mt-0.5">
@@ -4831,7 +5174,7 @@ export const ArenaScreen: React.FC = () => {
                                       <span
                                         key={bIdx}
                                         className="text-[8px] px-1 py-0.2 rounded bg-black/60 border border-stone-700 text-stone-300 font-mono flex items-center gap-0.5"
-                                        title={bMeta ? bMeta.label : b}
+                                        title={bMeta ? tr(bMeta.label) : b}
                                       >
                                         <span>{bMeta?.icon}</span>
                                         <span>{bMeta?.shortLabel}</span>
@@ -4847,7 +5190,7 @@ export const ArenaScreen: React.FC = () => {
                               }`}>
                                 <div className="flex items-center justify-between">
                                   <span className="text-[10px] text-rose-400 font-bold flex items-center gap-1">
-                                    <span>💀</span> <span>상대 피버</span>
+                                    <span>💀</span> <span>{tr('상대 피버')}</span>
                                   </span>
                                   <span className="text-[10px] font-mono text-rose-300 font-bold">
                                     {entry.oppScore} P
@@ -4856,11 +5199,11 @@ export const ArenaScreen: React.FC = () => {
                                 <div className="flex items-center gap-1.5 min-w-0">
                                   <span className="text-sm shrink-0">{entry.oppSynergy.icon}</span>
                                   <span className="font-extrabold text-white text-xs truncate">
-                                    {entry.oppSynergy.name}
+                                    {tr(entry.oppSynergy.name)}
                                   </span>
                                 </div>
                                 <div className="text-[9.5px] text-stone-400 truncate">
-                                  {entry.oppSynergy.summary}
+                                  {tr(entry.oppSynergy.summary)}
                                 </div>
                                 {/* 5개 배지 나열 */}
                                 <div className="flex items-center gap-1 flex-wrap mt-0.5">
@@ -4870,7 +5213,7 @@ export const ArenaScreen: React.FC = () => {
                                       <span
                                         key={bIdx}
                                         className="text-[8px] px-1 py-0.2 rounded bg-black/60 border border-stone-700 text-stone-300 font-mono flex items-center gap-0.5"
-                                        title={bMeta ? bMeta.label : b}
+                                        title={bMeta ? tr(bMeta.label) : b}
                                       >
                                         <span>{bMeta?.icon}</span>
                                         <span>{bMeta?.shortLabel}</span>
@@ -4883,7 +5226,7 @@ export const ArenaScreen: React.FC = () => {
 
                             {/* 대결 요약 배너 */}
                             <div className="text-[10px] text-stone-400 px-1 truncate">
-                              💡 {entry.bannerTitle}
+                              💡 {tr(entry.bannerTitle)}
                             </div>
                           </div>
                         );
@@ -4892,7 +5235,7 @@ export const ArenaScreen: React.FC = () => {
                   ) : (
                     <div className="p-3 rounded-xl bg-stone-900/40 border border-stone-800 text-center text-xs text-stone-400 flex items-center justify-center gap-2 animate-fade-in">
                       <span>ℹ️</span>
-                      <span>이번 결투에서는 피버 완충 전 승패가 결정되어 피버콜이 발생하지 않았습니다.</span>
+                      <span>{tr('이번 결투에서는 피버 완충 전 승패가 결정되어 피버콜이 발생하지 않았습니다.')}</span>
                     </div>
                   )
                 )}
@@ -4900,7 +5243,7 @@ export const ArenaScreen: React.FC = () => {
 
                 {/* 📊 전투 상세 리포트 (MVP 배지, 딜량 점유율, 회복/방어/회피/연계) */}
                 <div className="text-left">
-                  <CombatMeterTable metrics={combatMetrics} title="⚔️ 3v3 아레나 전투 리포트" />
+                  <CombatMeterTable metrics={combatMetrics} title="⚔️ 차원 아레나 전투 리포트 (3인 파티 + 1인 오퍼레이터)" />
                 </div>
 
                 {/* 🎖️ 명예 암시장 안내 카드 (인장 모아서 장비 교환) */}
@@ -4909,10 +5252,10 @@ export const ArenaScreen: React.FC = () => {
                     <span className="text-2xl shrink-0">🎖️</span>
                     <div className="min-w-0">
                       <div className="text-xs font-bold text-white truncate">
-                        '명예 암시장 오픈'
+                        {tr('명예 암시장 오픈')}
                       </div>
                       <div className="text-[10px] text-[#8b9bb4] truncate">
-                        '획득한 인장으로 등급별 장비함 및 무구를 구매하세요'
+                        {tr('획득한 인장으로 등급별 장비함 및 무구를 구매하세요')}
                       </div>
                     </div>
                   </div>
@@ -4929,20 +5272,20 @@ export const ArenaScreen: React.FC = () => {
                       setTab('shop');
                     }}
                   >
-                    '상점 이동 ➔'
+                    {tr('상점 이동 ➔')}
                   </button>
                 </div>
 
                 {/* 레벨업 알림 */}
                 {finalReward.levelUps && finalReward.levelUps.length > 0 && (
                   <div className="p-2 rounded-lg bg-[#38ef7d15] border border-[#38ef7d44] text-[11px] text-[#38ef7d] font-bold">
-                    🎉 영웅 레벨업 달성: {finalReward.levelUps.join(', ')}
+                    {tr(`🎉 영웅 레벨업 달성: ${finalReward.levelUps.map(n => tr(n)).join(', ')}`)}
                   </div>
                 )}
 
                 {/* 확인 및 닫기 버튼 */}
                 <ActionButton
-                  label="🏆 결투 결과 확인 (아레나 로비 복귀)"
+                  label={tr('🏆 결투 결과 확인 (아레나 로비 복귀)')}
                   variant="primary"
                   className="w-full py-2.5 font-bold shadow-lg shadow-[#42321955]"
                   onClick={() => {
@@ -4969,8 +5312,8 @@ export const ArenaScreen: React.FC = () => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                width: '100vw',
-                height: '100vh',
+                width: '100%',
+                height: '100%',
                 zIndex: 10000,
                 backgroundColor: 'rgba(5, 8, 17, 0.94)',
                 backdropFilter: 'blur(10px)',
@@ -4985,10 +5328,10 @@ export const ArenaScreen: React.FC = () => {
                   <span>⚔️ DIMENSIONAL ARENA DUEL</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_2px_15px_rgba(255,213,79,0.8)] mt-2">
-                  vs {activeBattleOpp.name}
+                  vs {tr(activeBattleOpp.name)}
                 </h2>
                 <div className="text-xs text-[#a0aec0] mt-0.5">
-                  상대 레이팅 <span className="text-[#ffd54f] font-bold font-mono">{activeBattleOpp.rating}P</span> · 랭킹 <span className="text-white font-bold font-mono">#{activeBattleOpp.rank}</span> {activeBattleOpp.isBot ? '(차원 허상 AI)' : '(방주 사령관)'}
+                  {tr('상대 레이팅')} <span className="text-[#ffd54f] font-bold font-mono">{activeBattleOpp.rating}P</span> · {tr('랭킹')} <span className="text-white font-bold font-mono">#{activeBattleOpp.rank}</span> {activeBattleOpp.isBot ? tr('(차원 허상 AI)') : tr('(방주 사령관)')}
                 </div>
               </div>
 
@@ -5006,7 +5349,7 @@ export const ArenaScreen: React.FC = () => {
                       ARENA ENGAGE!
                     </div>
                     <div className="text-xs sm:text-sm font-bold text-[#ffd54f] uppercase bg-black/80 px-6 py-2 rounded-full border border-[#ffd54f] shadow-[0_0_25px_rgba(255,213,79,0.6)] text-center mt-2">
-                      ⚔️ 차원 아레나 3v3 랭킹 결투 개시! ⚔️
+                      ⚔️ {tr('차원 아레나 3v3 랭킹 결투 개시!')} ⚔️
                     </div>
                   </div>
                 ) : (
@@ -5026,9 +5369,97 @@ export const ArenaScreen: React.FC = () => {
                 )}
               </div>
 
-              <div className="relative z-10 mt-6 flex flex-col items-center gap-2 text-center">
-                <div className="text-xs font-mono text-[#cbd5e1]">
-                  3인 결사대 + 1인 리더 + 1인 서포터 전술 편성 완료 · 결투장 진입 중
+              {/* 🛡️ 3인 파티 + 1인 오퍼레이터 전술 편성 칩 (총 4인 구성) */}
+              <div className="relative z-10 my-3 w-full max-w-md px-2 animate-fade-in">
+                <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                  {/* 1. 전열 */}
+                  {playerTeam[0] ? (
+                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/90 border border-[#3b82f6]/40 shadow-sm text-center">
+                      <span className="text-[9px] font-bold text-[#60a5fa] px-1.5 py-0.2 rounded bg-[#1e293b] mb-1">
+                        🛡️ {tr('전열')}
+                      </span>
+                      <span className="text-xl my-0.5">
+                        {CHARACTER_CLASSES[playerTeam[0].classId]?.skills?.[0]?.icon || '🛡️'}
+                      </span>
+                      <span className="text-[11px] font-bold text-white truncate max-w-full">
+                        {tr(playerTeam[0].name)}
+                      </span>
+                      <span className="text-[9px] font-mono text-[#ffd54f]">
+                        Lv.{playerTeam[0].level}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/60 border border-dashed border-[#3b82f6]/30 text-center text-[#8b9bb4] text-[10px]">
+                      🛡️ {tr('전열')}
+                    </div>
+                  )}
+
+                  {/* 2. 중열 */}
+                  {playerTeam[1] ? (
+                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/90 border border-[#10b981]/40 shadow-sm text-center">
+                      <span className="text-[9px] font-bold text-[#34d399] px-1.5 py-0.2 rounded bg-[#1e293b] mb-1">
+                        ⚔️ {tr('중열')}
+                      </span>
+                      <span className="text-xl my-0.5">
+                        {CHARACTER_CLASSES[playerTeam[1].classId]?.skills?.[0]?.icon || '⚔️'}
+                      </span>
+                      <span className="text-[11px] font-bold text-white truncate max-w-full">
+                        {tr(playerTeam[1].name)}
+                      </span>
+                      <span className="text-[9px] font-mono text-[#ffd54f]">
+                        Lv.{playerTeam[1].level}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/60 border border-dashed border-[#10b981]/30 text-center text-[#8b9bb4] text-[10px]">
+                      ⚔️ {tr('중열')}
+                    </div>
+                  )}
+
+                  {/* 3. 후열 */}
+                  {playerTeam[2] ? (
+                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/90 border border-[#a855f7]/40 shadow-sm text-center">
+                      <span className="text-[9px] font-bold text-[#c084fc] px-1.5 py-0.2 rounded bg-[#1e293b] mb-1">
+                        🏹 {tr('후열')}
+                      </span>
+                      <span className="text-xl my-0.5">
+                        {CHARACTER_CLASSES[playerTeam[2].classId]?.skills?.[0]?.icon || '🏹'}
+                      </span>
+                      <span className="text-[11px] font-bold text-white truncate max-w-full">
+                        {tr(playerTeam[2].name)}
+                      </span>
+                      <span className="text-[9px] font-mono text-[#ffd54f]">
+                        Lv.{playerTeam[2].level}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/60 border border-dashed border-[#a855f7]/30 text-center text-[#8b9bb4] text-[10px]">
+                      🏹 {tr('후열')}
+                    </div>
+                  )}
+
+                  {/* 4. 오퍼레이터 */}
+                  <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#1c1328]/95 border border-[#ffd54f]/60 shadow-[0_0_12px_rgba(255,213,79,0.2)] text-center ring-1 ring-[#ffd54f]/30">
+                    <span className="text-[9px] font-black text-[#ffd54f] px-1.5 py-0.2 rounded bg-[#3b2a1a] mb-1">
+                      ⚡ {tr('오퍼레이터')}
+                    </span>
+                    <span className="text-xl my-0.5">
+                      {playerLeader ? (CHARACTER_CLASSES[playerLeader.classId]?.skills?.[0]?.icon || '👑') : '👑'}
+                    </span>
+                    <span className="text-[11px] font-black text-[#ffd54f] truncate max-w-full">
+                      {playerLeader?.name ? tr(playerLeader.name) : tr('지휘관')}
+                    </span>
+                    <span className="text-[9px] font-mono text-[#ffd54f]">
+                      {playerLeader?.level ? `Lv.${playerLeader.level}` : 'Commander'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative z-10 mt-2 flex flex-col items-center gap-2 text-center">
+                <div className="text-xs font-mono text-[#cbd5e1] font-bold flex items-center gap-1.5">
+                  <span className="text-[#38ef7d]">✓</span>
+                  <span>{tr('3인 파티 + 1인 오퍼레이터 전술 편성 완료 · 결투장 진입 중')}</span>
                 </div>
                 <div className="w-60 h-2 bg-[#141d2e] rounded-full overflow-hidden border border-[#23334d]">
                   <div
@@ -5055,20 +5486,20 @@ export const ArenaScreen: React.FC = () => {
                 <span className="text-3xl">📜</span>
                 <div>
                   <h2 className="text-xl font-bold text-[#ffdd66] tracking-wide flex items-center gap-2">
-                    차원 아레나: 피버 족보 & 상성 대도감
+                    {tr('차원 아레나: 피버 족보 & 상성 대도감')}
                     <span className="text-xs px-2 py-0.5 rounded bg-[#ffcc00]/20 text-[#ffcc00] border border-[#ffcc00]/40 font-mono">
                       GRAND CODEX
                     </span>
                   </h2>
                   <p className="text-xs text-stone-400">
-                    3인의 수호자가 엮어내는 전술 포커의 위계와 주간 차원율의 상성을 한눈에 확인하십시오.
+                    {tr('3인의 수호자가 엮어내는 전술 포커의 위계와 주간 차원율의 상성을 한눈에 확인하십시오.')}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsCodexModalOpen(false)}
                 className="w-8 h-8 flex items-center justify-center rounded-full bg-stone-800/80 hover:bg-stone-700 text-stone-400 hover:text-white transition-colors"
-                title="닫기"
+                title={tr('닫기')}
               >
                 ✕
               </button>
@@ -5081,34 +5512,34 @@ export const ArenaScreen: React.FC = () => {
                 <div className="flex items-center justify-between mb-3 border-b border-[#c8aa6e]/20 pb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">🌌</span>
-                    <span className="font-bold text-[#c8aa6e] text-base">이번 주의 차원율: {weeklyAffinity.title}</span>
+                    <span className="font-bold text-[#c8aa6e] text-base">{tr('이번 주의 차원율:')} {tr(weeklyAffinity.title)}</span>
                   </div>
                   <span className="text-xs text-[#c8aa6e]/80 bg-black/60 px-2 py-0.5 rounded border border-[#876739]">
-                    매주 월요일 00:00 순환
+                    {tr('매주 월요일 00:00 순환')}
                   </span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
                   <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
-                    <span className="text-xs text-stone-400 font-semibold mb-1">상성 순환 구조</span>
+                    <span className="text-xs text-stone-400 font-semibold mb-1">{tr('상성 순환 구조')}</span>
                     <span className="text-xs font-bold text-amber-300 tracking-wider">
-                      {weeklyAffinity.relationText}
+                      {tr(weeklyAffinity.relationText)}
                     </span>
                   </div>
                   <div className="p-3 rounded-lg bg-black/40 border border-stone-800 flex flex-col items-center text-center">
-                    <span className="text-xs text-stone-400 font-semibold mb-1">상성 우위 특전</span>
+                    <span className="text-xs text-stone-400 font-semibold mb-1">{tr('상성 우위 특전')}</span>
                     <span className="text-xs text-emerald-400 font-bold">
-                      족보 맞대결 시 판정 계급 +1단계 보너스
+                      {tr('족보 맞대결 시 판정 계급 +1단계 보너스')}
                     </span>
                   </div>
                   <div className="p-3 rounded-lg bg-black/40 border border-red-900/40 flex flex-col items-center text-center">
-                    <span className="text-xs text-red-400 font-semibold mb-1">🚫 이번 주 금기 배지</span>
+                    <span className="text-xs text-red-400 font-semibold mb-1">{tr('🚫 이번 주 금기 배지')}</span>
                     <span className="text-xs text-red-300 font-bold">
-                      회심 배지(Crit) 발동 불가
+                      {bannedBadgeLabel}
                     </span>
                   </div>
                 </div>
                 <p className="text-xs text-stone-400 bg-black/30 p-2.5 rounded border border-stone-800/80 leading-relaxed">
-                  💡 <strong className="text-stone-300">상성 판정 원리:</strong> 양측이 완성한 피버 족보의 계열(돌파/수호/변칙)을 대조하여 우위인 쪽은 족보 판정에서 1단계 높은 족보로 인정받습니다. (예: 상대의 원페어 vs 나의 하이카드이나 상성 우위 시 무승부 또는 역전 가능!)
+                  💡 <strong className="text-stone-300">{tr('상성 판정 원리:')}</strong> {tr('양측이 완성한 피버 족보의 계열(돌파/수호/변칙)을 대조하여 우위인 쪽은 족보 판정에서 1단계 높은 족보로 인정받습니다.')}
                 </p>
               </div>
 
@@ -5117,31 +5548,31 @@ export const ArenaScreen: React.FC = () => {
                 <div className="flex items-center justify-between mb-2 border-b border-amber-500/20 pb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">⚖️</span>
-                    <span className="font-bold text-amber-300 text-base">배지 가중치 총점표 (High Card Score)</span>
+                    <span className="font-bold text-amber-300 text-base">{tr('배지 가중치 총점표 (High Card Score)')}</span>
                   </div>
                   <span className="text-xs text-amber-400/80 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800">
-                    노페어(전술 파동) 발생 시 적용
+                    {tr('노페어(전술 파동) 발생 시 적용')}
                   </span>
                 </div>
                 <p className="text-xs text-stone-400 mb-3">
-                  양측 모두 유효한 족보를 완성하지 못해 <strong>[전술 파동(High Card)]</strong>으로 격돌할 경우, 게이지 5칸에 누적된 배지들의 개별 가중치 총점을 합산하여 승패를 결정합니다.
+                  {tr('양측 모두 유효한 족보를 완성하지 못해 [전술 파동(High Card)]으로 격돌할 경우, 게이지 5칸에 누적된 배지들의 개별 가중치 총점을 합산하여 승패를 결정합니다.')}
                 </p>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                   {[
-                    { badge: 'extra', label: '연계 (Extra)', score: 35, desc: '스킬 콤보·추가타', color: 'border-purple-500/40 bg-purple-950/30 text-purple-300' },
-                    { badge: 'counter', label: '반격 (Counter)', score: 30, desc: '적 턴 반격 반응', color: 'border-orange-500/40 bg-orange-950/30 text-orange-300' },
-                    { badge: 'crit', label: '치명 (Crit)', score: 25, desc: '회심의 일격', color: 'border-red-500/40 bg-red-950/30 text-red-300' },
-                    { badge: 'break', label: '파쇄 (Break)', score: 20, desc: '방어 분쇄·실드 관통', color: 'border-yellow-500/40 bg-yellow-950/30 text-yellow-300' },
-                    { badge: 'guard', label: '방어 (Guard)', score: 15, desc: '철벽 방어·막기', color: 'border-blue-500/40 bg-blue-950/30 text-blue-300' },
-                    { badge: 'assist', label: '지원 (Assist)', score: 15, desc: '아군 버프·정화', color: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-300' },
-                    { badge: 'heal', label: '치유 (Heal)', score: 10, desc: '생명력 회복', color: 'border-pink-500/40 bg-pink-950/30 text-pink-300' },
-                    { badge: 'evade', label: '회피 (Evade)', score: 10, desc: '완전 회피 기동', color: 'border-[#c8aa6e]/40 bg-black/30 text-[#c8aa6e]' },
+                    { badge: 'extra', label: tr('연계 (Extra)'), score: 35, desc: tr('스킬 콤보·추가타'), color: 'border-purple-500/40 bg-purple-950/30 text-purple-300' },
+                    { badge: 'counter', label: tr('반격 (Counter)'), score: 30, desc: tr('적 턴 반격 반응'), color: 'border-orange-500/40 bg-orange-950/30 text-orange-300' },
+                    { badge: 'crit', label: tr('치명 (Crit)'), score: 25, desc: tr('회심의 일격'), color: 'border-red-500/40 bg-red-950/30 text-red-300' },
+                    { badge: 'break', label: tr('파쇄 (Break)'), score: 20, desc: tr('방어 분쇄·실드 관통'), color: 'border-yellow-500/40 bg-yellow-950/30 text-yellow-300' },
+                    { badge: 'guard', label: tr('방어 (Guard)'), score: 15, desc: tr('철벽 방어·막기'), color: 'border-blue-500/40 bg-blue-950/30 text-blue-300' },
+                    { badge: 'assist', label: tr('지원 (Assist)'), score: 15, desc: tr('아군 버프·정화'), color: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-300' },
+                    { badge: 'heal', label: tr('치유 (Heal)'), score: 10, desc: tr('생명력 회복'), color: 'border-pink-500/40 bg-pink-950/30 text-pink-300' },
+                    { badge: 'evade', label: tr('회피 (Evade)'), score: 10, desc: tr('완전 회피 기동'), color: 'border-[#c8aa6e]/40 bg-black/30 text-[#c8aa6e]' },
                   ].map((item) => (
                     <div key={item.badge} className={`p-2 rounded-lg border flex flex-col justify-between ${item.color}`}>
                       <div className="flex justify-between items-center mb-1">
                         <span className="font-bold">{item.label}</span>
-                        <span className="font-mono font-black text-amber-300 text-sm">{item.score}점</span>
+                        <span className="font-mono font-black text-amber-300 text-sm">{item.score}{tr('점')}</span>
                       </div>
                       <span className="text-[10px] text-stone-400">{item.desc}</span>
                     </div>
@@ -5154,9 +5585,9 @@ export const ArenaScreen: React.FC = () => {
                 <div className="flex items-center justify-between mb-3 border-b border-stone-800 pb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">🃏</span>
-                    <span className="font-bold text-white text-base">차원 피버 12대 전술 족보 (Synergy Rankings)</span>
+                    <span className="font-bold text-white text-base">{tr('차원 피버 12대 전술 족보 (Synergy Rankings)')}</span>
                   </div>
-                  <span className="text-xs text-stone-400">위계 순위 높은 순 정렬</span>
+                  <span className="text-xs text-stone-400">{tr('위계 순위 높은 순 정렬')}</span>
                 </div>
 
                 <div className="space-y-2.5">
@@ -5174,9 +5605,9 @@ export const ArenaScreen: React.FC = () => {
                           </div>
                           <div>
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-bold text-stone-100 text-sm">{synergy.name}</span>
+                              <span className="font-bold text-stone-100 text-sm">{tr(synergy.name)}</span>
                               <span className="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 border border-stone-700 text-stone-300 font-mono">
-                                {synergy.handRankLabel}
+                                {tr(synergy.handRankLabel)}
                               </span>
                               <span
                                 className="text-[10px] px-1.5 py-0.5 rounded border font-semibold flex items-center gap-1"
@@ -5186,18 +5617,18 @@ export const ArenaScreen: React.FC = () => {
                                   color: affinityMeta.color
                                 }}
                               >
-                                {affinityMeta.icon} {affinityMeta.label}
+                                {affinityMeta.icon} {tr(affinityMeta.label)}
                               </span>
                             </div>
                             <div className="text-xs text-stone-400 mt-0.5">
-                              {synergy.summary}
+                              {tr(synergy.summary)}
                             </div>
                           </div>
                         </div>
 
                         <div className="sm:text-right shrink-0 bg-black/40 px-3 py-1.5 rounded-lg border border-stone-800/80 w-full sm:w-auto">
-                          <div className="text-[10px] text-stone-500 font-semibold">필요 배지 조건</div>
-                          <div className="text-xs text-amber-300/95 font-mono">{synergy.requiredBadges}</div>
+                          <div className="text-[10px] text-stone-500 font-semibold">{tr('필요 배지 조건')}</div>
+                          <div className="text-xs text-amber-300/95 font-mono">{tr(synergy.requiredBadges)}</div>
                         </div>
                       </div>
                     );
@@ -5209,7 +5640,7 @@ export const ArenaScreen: React.FC = () => {
             {/* 모달 푸터 */}
             <div className="px-6 py-3 bg-[#11131c] border-t border-stone-800 flex justify-end">
               <ActionButton
-                label="확인 (닫기)"
+                label={tr('확인 (닫기)')}
                 variant="secondary"
                 className="px-6 py-1.5 text-xs font-bold"
                 onClick={() => setIsCodexModalOpen(false)}

@@ -1610,3 +1610,19 @@ export const INITIAL_QUESTS: Quest[] = [
     status: 'locked'
   }
 ];
+
+/**
+ * 🌟 에픽 퀘스트 클리어 시 영구 정화되는 심연 층계 목록 반환
+ */
+export function getPurifiedFloorsForQuest(questId: string): number[] {
+  switch (questId) {
+    case 'Q_EPIC_LORE_01': return [1, 2];
+    case 'Q_EPIC_LORE_02': return [3, 4];
+    case 'Q_EPIC_LORE_03': return [5];
+    case 'Q_EPIC_LORE_04': return [6, 7];
+    case 'Q_EPIC_LORE_05': return [8, 9];
+    case 'Q_SLAY_BOSS_10':
+    case 'Q_EPIC_AVICI_ENDING': return [10];
+    default: return [];
+  }
+}

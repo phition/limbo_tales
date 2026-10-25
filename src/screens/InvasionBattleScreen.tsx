@@ -64,21 +64,38 @@ export interface InvasionStatusEffect {
 }
 
 export function applyInvasionStatusEffect(
-  target: { statusEffects: InvasionStatusEffect[] },
+  target: { statusEffects: InvasionStatusEffect[]; luck?: number; name?: string },
   effect: InvasionStatusEffect,
-  maxCapTurns = 5
-): { isNew: boolean; currentTurns: number } {
+  maxCapTurns = 5,
+  options?: {
+    skipResistCheck?: boolean;
+    onResist?: (targetName: string, luck: number, effectName: string) => void;
+  }
+): { isNew: boolean; currentTurns: number; resisted?: boolean } {
   if (!Array.isArray(target.statusEffects)) {
     target.statusEffects = [];
   }
+
+  // 🛡️ 상태이상/디버프 피격 시 피격자의 행운(Luck) 비례 완전 저항 판정 (최대 50% 상한 - PvE 표준 규격 100% 동일)
+  if (effect.type === 'debuff' && !options?.skipResistCheck) {
+    const luck = Math.max(1, target.luck ?? 10);
+    const resistChance = Math.min(50, luck * 0.35);
+    if (Math.random() * 100 < resistChance) {
+      if (options?.onResist) {
+        options.onResist(target.name || '대상', luck, effect.name);
+      }
+      return { isNew: false, currentTurns: 0, resisted: true };
+    }
+  }
+
   const existing = target.statusEffects.find(se => se.id === effect.id);
   if (existing) {
     existing.duration = Math.min(maxCapTurns, (existing.duration || 1) + (effect.duration || 1));
     if (effect.value !== undefined) existing.value = effect.value;
-    return { isNew: false, currentTurns: existing.duration };
+    return { isNew: false, currentTurns: existing.duration, resisted: false };
   } else {
     target.statusEffects.push({ ...effect });
-    return { isNew: true, currentTurns: effect.duration || 1 };
+    return { isNew: true, currentTurns: effect.duration || 1, resisted: false };
   }
 }
 
@@ -113,6 +130,7 @@ interface SiegeTargetObject {
   isDestroyed: boolean;
   description: string;
   statusEffects: InvasionStatusEffect[];
+  luck?: number; // 🍀 상태이상 저항용 행운 수치
 }
 
 interface OperatorCardProps {
@@ -286,6 +304,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     isDestroyed: false,
     description: '수비대 전면을 가로지르는 절대 차원 역장',
     statusEffects: [],
+    luck: 10,
   });
   const [turretLeft, setTurretLeft] = useState<SiegeTargetObject>({
     id: 'turret_left',
@@ -300,6 +319,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     isDestroyed: false,
     description: '화력 공세 & 요격 사격 (광역 폭격 / 집중 요격)',
     statusEffects: [],
+    luck: 10,
   });
   const [turretRight, setTurretRight] = useState<SiegeTargetObject>({
     id: 'turret_right',
@@ -314,6 +334,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     isDestroyed: false,
     description: '성역 결계 & 전술 지원 (마나·행운 기반 증폭)',
     statusEffects: [],
+    luck: 15,
   });
 
   const barrierStateRef = useRef(barrierState);
@@ -458,6 +479,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         ? `게이트 Lv.${baseGateLv} | 결속 수호자: ${bHero.name} (+${extraBarrierHp.toLocaleString()} HP)`
         : `게이트 Lv.${baseGateLv} 에너지 공급 역장`,
       statusEffects: [],
+      luck: turretLuck + (bHero ? Math.round((bHero.stats?.luck || 15) * 0.5) : 0),
     };
     const initLeftTurret: SiegeTargetObject = {
       id: 'turret_left',
@@ -474,6 +496,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         ? `사수: ${lTurretHero.name} | 화력 복합 지원 (포탑+용병 공격력 합산)`
         : `자동 요격 포탑`,
       statusEffects: [],
+      luck: turretLuck + (lTurretHero ? (lTurretHero.stats?.luck || 15) : 10),
     };
     const initRightTurret: SiegeTargetObject = {
       id: 'turret_right',
@@ -490,6 +513,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         ? `사수: ${rTurretHero.name} | 전술 증폭 지원 (마나·행운 기반 전술 지원)`
         : `성역 결계 포탑`,
       statusEffects: [],
+      luck: turretLuck + (rTurretHero ? (rTurretHero.stats?.luck || 15) : 10),
     };
 
     setBarrierState(initBarrier);
@@ -1508,7 +1532,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           if (targetObj.currentHp <= 0) targetObj.isDestroyed = true;
           totalDmgDealt += finalDmg;
 
-          // 🌟 PvE 표준 상태이상 및 디버프 성벽/타워 부여 판정
+          // 🌟 PvE 표준 상태이상 및 디버프 성벽/타워 부여 판정 (행운 비례 저항 시스템 연동)
           const sName = (chosenSkill.name || '').toLowerCase();
           const sId = (chosenSkill.id || '').toLowerCase();
           const sDesc = (chosenSkill.description || '').toLowerCase();
@@ -1516,7 +1540,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           // 1. 🔥 화상 (Burn)
           const isBurn = chosenSkill.effectType === 'burn' || sId.includes('flame') || sId.includes('burn') || sId.includes('meteor') || sName.includes('화염') || sName.includes('화상') || sDesc.includes('화염') || sDesc.includes('화상');
           if (isBurn) {
-            applyInvasionStatusEffect(targetObj, {
+            const res = applyInvasionStatusEffect(targetObj, {
               id: 'burn',
               name: '작열 화상',
               type: 'debuff',
@@ -1524,13 +1548,17 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               duration: chosenSkill.statusDuration || 2,
               value: 0.08,
             });
-            if (!allDebuffsApplied.includes('🔥화상')) allDebuffsApplied.push('🔥화상');
+            if (res.resisted) {
+              if (!allDebuffsApplied.includes('🛡️화상저항')) allDebuffsApplied.push('🛡️화상저항');
+            } else {
+              if (!allDebuffsApplied.includes('🔥화상')) allDebuffsApplied.push('🔥화상');
+            }
           }
 
           // 2. ☠️ 중독 (Poison)
           const isPoison = chosenSkill.effectType === 'poison' || sId.includes('poison') || sName.includes('독') || sDesc.includes('중독');
           if (isPoison) {
-            applyInvasionStatusEffect(targetObj, {
+            const res = applyInvasionStatusEffect(targetObj, {
               id: 'poison',
               name: '맹독 부식',
               type: 'debuff',
@@ -1538,13 +1566,17 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               duration: chosenSkill.statusDuration || 3,
               value: 0.14,
             });
-            if (!allDebuffsApplied.includes('☠️중독')) allDebuffsApplied.push('☠️중독');
+            if (res.resisted) {
+              if (!allDebuffsApplied.includes('🛡️중독저항')) allDebuffsApplied.push('🛡️중독저항');
+            } else {
+              if (!allDebuffsApplied.includes('☠️중독')) allDebuffsApplied.push('☠️중독');
+            }
           }
 
           // 3. ❄️ 결빙 (Freeze)
           const isFreeze = chosenSkill.effectType === 'freeze' || sId.includes('freeze') || sId.includes('blizzard') || sName.includes('빙결') || sName.includes('냉각') || sName.includes('눈보라') || sDesc.includes('빙결') || sDesc.includes('냉각') || sDesc.includes('동상');
           if (isFreeze) {
-            applyInvasionStatusEffect(targetObj, {
+            const res = applyInvasionStatusEffect(targetObj, {
               id: 'freeze',
               name: '극저온 동결',
               type: 'debuff',
@@ -1552,26 +1584,34 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               duration: chosenSkill.statusDuration || 2,
               value: 0.04,
             });
-            if (!allDebuffsApplied.includes('❄️결빙')) allDebuffsApplied.push('❄️결빙');
+            if (res.resisted) {
+              if (!allDebuffsApplied.includes('🛡️결빙저항')) allDebuffsApplied.push('🛡️결빙저항');
+            } else {
+              if (!allDebuffsApplied.includes('❄️결빙')) allDebuffsApplied.push('❄️결빙');
+            }
           }
 
           // 4. 💫 기절 (Stun)
           const isStun = chosenSkill.effectType === 'stun' || sDesc.includes('기절') || sDesc.includes('속박');
           if (isStun) {
-            applyInvasionStatusEffect(targetObj, {
+            const res = applyInvasionStatusEffect(targetObj, {
               id: 'stun',
               name: '기절 무력화',
               type: 'debuff',
               icon: '💫',
               duration: chosenSkill.statusDuration || 1,
             });
-            if (!allDebuffsApplied.includes('💫기절')) allDebuffsApplied.push('💫기절');
+            if (res.resisted) {
+              if (!allDebuffsApplied.includes('🛡️기절저항')) allDebuffsApplied.push('🛡️기절저항');
+            } else {
+              if (!allDebuffsApplied.includes('💫기절')) allDebuffsApplied.push('💫기절');
+            }
           }
 
           // 5. 🛡️⬇️ 방어력 분쇄 (debuff_def)
           const isDefDebuff = chosenSkill.effectType === 'debuff' || chosenSkill.effectType === 'debuff_def' || (sDesc.includes('방어력') && (sDesc.includes('분쇄') || sDesc.includes('감소') || sDesc.includes('파쇄') || sDesc.includes('약화')));
           if (isDefDebuff) {
-            applyInvasionStatusEffect(targetObj, {
+            const res = applyInvasionStatusEffect(targetObj, {
               id: 'debuff_def',
               name: '방어력 분쇄',
               type: 'debuff',
@@ -1579,13 +1619,17 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               duration: chosenSkill.statusDuration || 3,
               value: 0.35,
             });
-            if (!allDebuffsApplied.includes('🛡️방어분쇄')) allDebuffsApplied.push('🛡️방어분쇄');
+            if (res.resisted) {
+              if (!allDebuffsApplied.includes('🛡️방어저항')) allDebuffsApplied.push('🛡️방어저항');
+            } else {
+              if (!allDebuffsApplied.includes('🛡️방어분쇄')) allDebuffsApplied.push('🛡️방어분쇄');
+            }
           }
 
           // 6. ⚔️⬇️ 공격력 약화 (debuff_atk)
           const isAtkDebuff = chosenSkill.effectType === 'debuff_atk' || (sDesc.includes('공격력') && (sDesc.includes('감소') || sDesc.includes('약화')));
           if (isAtkDebuff) {
-            applyInvasionStatusEffect(targetObj, {
+            const res = applyInvasionStatusEffect(targetObj, {
               id: 'debuff_atk',
               name: '공격력 약화',
               type: 'debuff',
@@ -1593,13 +1637,17 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               duration: chosenSkill.statusDuration || 2,
               value: 0.30,
             });
-            if (!allDebuffsApplied.includes('⚔️공격감소')) allDebuffsApplied.push('⚔️공격감소');
+            if (res.resisted) {
+              if (!allDebuffsApplied.includes('🛡️공격저항')) allDebuffsApplied.push('🛡️공격저항');
+            } else {
+              if (!allDebuffsApplied.includes('⚔️공격감소')) allDebuffsApplied.push('⚔️공격감소');
+            }
           }
 
           // 7. 🩸 출혈 (Bleed)
           const isBleed = chosenSkill.effectType === 'bleed' || sName.includes('출혈') || sDesc.includes('출혈');
           if (isBleed) {
-            applyInvasionStatusEffect(targetObj, {
+            const res = applyInvasionStatusEffect(targetObj, {
               id: 'bleed',
               name: '치명 출혈',
               type: 'debuff',
@@ -1607,7 +1655,11 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               duration: chosenSkill.statusDuration || 3,
               value: 0.07,
             });
-            if (!allDebuffsApplied.includes('🩸출혈')) allDebuffsApplied.push('🩸출혈');
+            if (res.resisted) {
+              if (!allDebuffsApplied.includes('🛡️출혈저항')) allDebuffsApplied.push('🛡️출혈저항');
+            } else {
+              if (!allDebuffsApplied.includes('🩸출혈')) allDebuffsApplied.push('🩸출혈');
+            }
           }
 
           // 거점 상태 동기화
@@ -1826,33 +1878,39 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           const finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + effectiveDef * INVASION_DEF_SCALE))));
           targetDefender.currentHp = Math.max(0, targetDefender.currentHp - finalDmg);
 
-          // 🔥 작열 화상 (공격 2차 테크) 부여 판정: PvE 규격 2턴 지속, 8% 화염 DoT & 방어력 50% 분쇄
+          // 🔥 작열 화상 (공격 2차 테크) 부여 판정: PvE 규격 2턴 지속, 8% 화염 DoT & 방어력 50% 분쇄 (행운 저항 연동)
           let debuffSuffix = '';
           if (burnTier > 0 && Math.random() < burnChance) {
-            if (!targetDefender.statusEffects.some(e => e.id === 'burn')) {
-              targetDefender.statusEffects.push({
-                id: 'burn',
-                name: '작열 화상',
-                type: 'debuff',
-                icon: '🔥',
-                duration: 2,
-                value: 0.08,
-              });
+            const res = applyInvasionStatusEffect(targetDefender, {
+              id: 'burn',
+              name: '작열 화상',
+              type: 'debuff',
+              icon: '🔥',
+              duration: 2,
+              value: 0.08,
+            });
+            if (res.resisted) {
+              debuffSuffix += ` [🛡️화상저항(🍀${targetDefender.luck})]`;
+              SoundManager.getInstance().play('shield');
+            } else {
               debuffSuffix += ' [🔥화상]';
             }
           }
 
-          // 🧪 맹독 부식 (공격 3차 테크) 부여 판정: PvE 규격 3턴 지속, 14% 치명적 중독 DoT
+          // 🧪 맹독 부식 (공격 3차 테크) 부여 판정: PvE 규격 3턴 지속, 14% 치명적 중독 DoT (행운 저항 연동)
           if (poisonTier > 0 && Math.random() < poisonChance) {
-            if (!targetDefender.statusEffects.some(e => e.id === 'poison')) {
-              targetDefender.statusEffects.push({
-                id: 'poison',
-                name: '맹독 부식',
-                type: 'debuff',
-                icon: '☠️',
-                duration: 3,
-                value: 0.14,
-              });
+            const res = applyInvasionStatusEffect(targetDefender, {
+              id: 'poison',
+              name: '맹독 부식',
+              type: 'debuff',
+              icon: '☠️',
+              duration: 3,
+              value: 0.14,
+            });
+            if (res.resisted) {
+              debuffSuffix += ` [🛡️맹독저항(🍀${targetDefender.luck})]`;
+              SoundManager.getInstance().play('shield');
+            } else {
               debuffSuffix += ' [☠️중독]';
             }
           }
@@ -1925,6 +1983,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           let totalDmg = 0;
           let anyBurnApplied = false;
           let anyPoisonApplied = false;
+          let anyBurnResisted = false;
+          let anyPoisonResisted = false;
 
           aliveP.forEach((defender, idx) => {
             const rawDmg = effectiveTurretAtk * 0.72 * (isCrit ? 1.35 : 1.0) * atkBuffMult;
@@ -1935,32 +1995,36 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             defender.currentHp = Math.max(0, defender.currentHp - finalDmg);
             totalDmg += finalDmg;
 
-            // 🔥 광역 작열 화상 (공격 2차): PvE 규격 2턴 지속, 8% 화염 DoT & 방어력 50% 분쇄
+            // 🔥 광역 작열 화상 (공격 2차): PvE 규격 2턴 지속, 8% 화염 DoT & 방어력 50% 분쇄 (행운 저항 연동)
             if (burnTier > 0 && Math.random() < burnChance) {
-              if (!defender.statusEffects.some(e => e.id === 'burn')) {
-                defender.statusEffects.push({
-                  id: 'burn',
-                  name: '작열 화상',
-                  type: 'debuff',
-                  icon: '🔥',
-                  duration: 2,
-                  value: 0.08,
-                });
+              const res = applyInvasionStatusEffect(defender, {
+                id: 'burn',
+                name: '작열 화상',
+                type: 'debuff',
+                icon: '🔥',
+                duration: 2,
+                value: 0.08,
+              });
+              if (res.resisted) {
+                anyBurnResisted = true;
+              } else {
                 anyBurnApplied = true;
               }
             }
 
-            // 🧪 광역 맹독 부식 (공격 3차): PvE 규격 3턴 지속, 14% 치명적 중독 DoT
+            // 🧪 광역 맹독 부식 (공격 3차): PvE 규격 3턴 지속, 14% 치명적 중독 DoT (행운 저항 연동)
             if (poisonTier > 0 && Math.random() < poisonChance) {
-              if (!defender.statusEffects.some(e => e.id === 'poison')) {
-                defender.statusEffects.push({
-                  id: 'poison',
-                  name: '맹독 부식',
-                  type: 'debuff',
-                  icon: '☠️',
-                  duration: 3,
-                  value: 0.14,
-                });
+              const res = applyInvasionStatusEffect(defender, {
+                id: 'poison',
+                name: '맹독 부식',
+                type: 'debuff',
+                icon: '☠️',
+                duration: 3,
+                value: 0.14,
+              });
+              if (res.resisted) {
+                anyPoisonResisted = true;
+              } else {
                 anyPoisonApplied = true;
               }
             }
@@ -2004,7 +2068,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           if (isCrit) addOppFeverBadge('crit');
           else addOppFeverBadge('break');
 
-          const debuffMsg = (anyBurnApplied ? ' [🔥화상]' : '') + (anyPoisonApplied ? ' [🧪중독]' : '');
+          const debuffMsg = (anyBurnApplied ? ' [🔥화상]' : (anyBurnResisted ? ' [🛡️화상저항]' : '')) + (anyPoisonApplied ? ' [🧪중독]' : (anyPoisonResisted ? ' [🛡️중독저항]' : ''));
 
           setActionBanner({
             text: `🚀 [전탄 광역 폭격${isCrit ? ' · 융단폭격!' : ''}] ${attacker.name}!`,
@@ -2233,47 +2297,72 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           ]);
         }
 
-        // ⚡ 방어 2차 연구: 충격 전자기파 (기절 유발 판정) - PvE 규격 1턴간 완전 행동 불능
+        // ⚡ 방어 2차 연구: 충격 전자기파 (기절 유발 판정) - PvE 규격 1턴간 완전 행동 불능 (행운 저항 연동)
         const stunChance = stunTier * 0.16;
         if (stunTier > 0 && Math.random() < stunChance && aliveP.length > 0) {
           const stunTarget = aliveP[Math.floor(Math.random() * aliveP.length)];
-          if (stunTarget && !stunTarget.statusEffects.some(e => e.id === 'stun')) {
-            stunTarget.statusEffects.push({
+          if (stunTarget) {
+            const res = applyInvasionStatusEffect(stunTarget, {
               id: 'stun',
               name: '기절 무력화',
               type: 'debuff',
               icon: '💫',
               duration: 1,
             });
-            SoundManager.getInstance().play('stun');
-            setActionBanner(prev => ({
-              text: `${prev.text} · 💫 [기절 유발!]`,
-              sub: `${prev.sub} | [${stunTarget.name}]의 신경계가 마비되어 1턴간 완전 행동 불능에 빠집니다!`,
-              color: '#ffd54f',
-            }));
+            if (res.resisted) {
+              SoundManager.getInstance().play('shield');
+              setActionBanner(prev => ({
+                text: `${prev.text} · 🛡️ [기절 저항!]`,
+                sub: `${prev.sub} | [${stunTarget.name}]이(가) 높은 행운(🍀${stunTarget.luck})으로 충격 전자기파(기절)를 완전히 저항해냈습니다!`,
+                color: '#38ef7d',
+              }));
+            } else {
+              SoundManager.getInstance().play('stun');
+              setActionBanner(prev => ({
+                text: `${prev.text} · 💫 [기절 유발!]`,
+                sub: `${prev.sub} | [${stunTarget.name}]의 신경계가 마비되어 1턴간 완전 행동 불능에 빠집니다!`,
+                color: '#ffd54f',
+              }));
+            }
           }
         }
 
-        // ❄️ 방어 3차 연구: 극저온 동결 역장 (결빙 유발 판정) - PvE 규격 2턴 지속, 4% 동상 DoT & 행동 불가 & 방어력 +40%
+        // ❄️ 방어 3차 연구: 극저온 동결 역장 (결빙 유발 판정) - PvE 규격 2턴 지속, 4% 동상 DoT & 행동 불가 & 방어력 +40% (행운 저항 연동)
         const freezeChance = freezeTier * 0.18;
         if (freezeTier > 0 && Math.random() < freezeChance && aliveP.length > 0) {
+          const appliedHeroes: string[] = [];
+          const resistedHeroes: string[] = [];
           aliveP.forEach(defender => {
-            if (!defender.statusEffects.some(e => e.id === 'freeze')) {
-              defender.statusEffects.push({
-                id: 'freeze',
-                name: '극저온 동결',
-                type: 'debuff',
-                icon: '❄️',
-                duration: 2,
-                value: 0.04,
-              });
+            const res = applyInvasionStatusEffect(defender, {
+              id: 'freeze',
+              name: '극저온 동결',
+              type: 'debuff',
+              icon: '❄️',
+              duration: 2,
+              value: 0.04,
+            });
+            if (res.resisted) {
+              resistedHeroes.push(`${defender.name}(🍀${defender.luck})`);
+            } else {
+              appliedHeroes.push(defender.name);
             }
           });
-          SoundManager.getInstance().play('ice');
+
+          if (appliedHeroes.length > 0) {
+            SoundManager.getInstance().play('ice');
+          } else if (resistedHeroes.length > 0) {
+            SoundManager.getInstance().play('shield');
+          }
+
+          const freezeSubNotice = [
+            appliedHeroes.length > 0 ? `[${appliedHeroes.join(', ')}] 동결 구속` : '',
+            resistedHeroes.length > 0 ? `🛡️[${resistedHeroes.join(', ')}] 행운 저항!` : '',
+          ].filter(Boolean).join(' | ');
+
           setActionBanner(prev => ({
             text: `${prev.text} · ❄️ [극저온 동결!]`,
-            sub: `${prev.sub} | 결사대 전원에게 동결 역장이 전개되어 2턴간 행동 불가 및 동상 피해를 입습니다!`,
-            color: '#80d8ff',
+            sub: `${prev.sub} | ${freezeSubNotice}`,
+            color: appliedHeroes.length > 0 ? '#80d8ff' : '#38ef7d',
           }));
         }
 
@@ -2352,8 +2441,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         left: 0,
         right: 0,
         bottom: 0,
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
         zIndex: 9999,
       }}
     >
@@ -2912,8 +3001,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             left: 0,
             right: 0,
             bottom: 0,
-            width: '100vw',
-            height: '100vh',
+            width: '100%',
+            height: '100%',
             zIndex: 10000,
             backgroundColor: 'rgba(5, 8, 17, 0.94)',
             backdropFilter: 'blur(10px)',

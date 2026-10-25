@@ -98,6 +98,8 @@ import { GRIMOIRE_CRAFT_RECIPES, GRIMOIRE_CRAFT_SUCCESS_RATES, GrimoireRecipe } 
 import { BUILDING_TECH_TREE, BUILDING_MILESTONE_TIERS, getBuildingConstructionDurationSec } from '../data/buildings';
 import { FirebaseService, WorldBossNemesisData } from '../services/FirebaseService';
 import { GameDataService } from '../services/GameDataService';
+import { CustomAssetService } from '../services/CustomAssetService';
+import { PlayGamesService } from '../services/PlayGamesService';
 import { I18nService } from '../i18n/I18nService';
 import { RESOURCE_NAMES } from '../i18n/dataLocales';
 import { SoundManager } from './SoundManager';
@@ -152,6 +154,7 @@ export class GameManager {
   public citadelLogs: LogEntry[] = [];
   public dungeonLogs: LogEntry[] = [];
   public battleLogs: LogEntry[] = [];
+  public arenaLogs: LogEntry[] = [];
   public currentBattleTurn: number = 1;
 
   public setBattleTurn(turn: number): void {
@@ -183,12 +186,16 @@ export class GameManager {
     windowStartHp: NEMESIS_BOSS_CONFIG.maxHp,
     isDefeated: false,
   };
+  private isWednesdayResetting: boolean = false;
 
   // ── 🏰 차원 영지 침공 (Dimensional Estate Invasion) 상태 ──
   public invasionState: InvasionState = {
     squadHeroIds: [],
     invasionCoins: 0,
     peaceShieldUntil: 0,
+    peaceShieldSecondsRemaining: 21600, // 🛡️ 기본 6시간 (21,600초)
+    peaceShieldActive: false,
+    peaceShieldLastActivatedAt: undefined,
     defenseLogs: [],
     totalInvasions: 0,
     totalWins: 0,
@@ -218,6 +225,12 @@ export class GameManager {
     upkeepGoldPaid: number;
     upkeepFoodPaid?: number;
     upkeepEtherPaid?: number;
+    encounterAttacks?: Array<{
+      attackerCallsign: string;
+      attackerWon: boolean;
+      floor: number;
+      timestamp: number;
+    }>;
   } | null = null;
   public lastOfflineReport: any = null;
   public currentSceneContext: 'citadel' | 'exploration' | 'battle' | 'arena' = 'citadel';
@@ -274,11 +287,33 @@ export class GameManager {
 
   // ✨ 던전 탐험 이벤트 가호 (이번 원정 동안 유지되는 파티 버프/시너지)
   public expeditionBuffs: PartySynergy[] = [];
+  public expeditionTriggeredEventIds: string[] = [];
+  public hasSoulLanternRevive: boolean = false;
+    public isDoppelgangerBattle: boolean = false;
+    public isEncounterPvP: boolean = false;
+    public isEmergencyEscapeBattle: boolean = false; // 🏃 균열의 닻 없는 비상 탈출 실패 후 추격 마물 전투 플래그
+    public pendingEventBattleId: string | null = null; // ⚔️ 층별 고유 이벤트 '가속' 연계 전투 승리 보상 식별 ID
+  public encounterEventTriggeredThisRun: boolean = false; // 🗺️ 이전 지휘관 조우 이벤트 원정 당 1회 제한
+  public encounterVisitorRecord: any = null; // 조우한 다른 지휘관 기록
 
   // 📜 심연의 백과 및 회고록 (완료/해금된 컬렉션 ID 목록 및 등록 순서)
   public codexUnlockedItems: Record<string, boolean> = {};
   public codexUnlockOrder: string[] = [];
   public codexUnlockedTimestamps: Record<string, number> = {};
+
+  // ── 🎮 Google Play Games (PGS) 연동 상태 및 기록 ──
+  public arenaWins: number = 0;
+  public arenaLosses: number = 0;
+  public arenaOutlawScore: number = 0;
+  public bossClearTimes: Record<number, number> = {}; // 1~10층 보스 최초/최단 클리어 타임스탬프
+  public bestAbyss10FClearTime: number = 0; // 1F~10F 주파 최단 소요 시간 (초 단위)
+  public currentRunF1BossKillTimestamp: number = 0; // 현재 런에서 1층 보스 격파 시점 타임스탬프
+  public maxAviciDangerReached: number = 0; // 11층 무간도 최고 도달 위험도 (0 ~ 10,000)
+  public avici9001Timestamp: number = 0; // 위험도 9,001 진입 시점 타임스탬프
+  public aviciBossBonusClaimed: { archeosNormal: boolean; archeosOvercharged: boolean } = { archeosNormal: false, archeosOvercharged: false };
+  public bestAviciTimeAttackBonus: number = 0; // 9,001~광폭화 보스 타임어택 최고 보너스 점수
+  public pgsPurificationQuestsClaimed: string[] = []; // 완료되어 업적 단계가 가산된 정화 에픽 퀘스트 ID 목록
+  public pgsAviciTiersClaimed: number = 0; // 업적 단계가 가산된 무간도 진입 계층 단계 (최대 10)
 
   // 👑 마스터 계정 플래그 (차원 앵커 멀티 요소 노출 및 관리자 기능)
   private _isMasterAccount: boolean = false;
@@ -599,6 +634,20 @@ export class GameManager {
       hero.currentHp = 0;
     }
 
+    // 🎨 성별 및 포트레이트 무결성 보장
+    if (!hero.gender) {
+      if (hero.name === '아이리스' || hero.name === '실비아' || hero.name === '세실리아' || hero.name === '루나' || hero.name === '미아' || hero.name === '클로에' || hero.name === '일레인' || hero.name === '비비안') {
+        hero.gender = 'female';
+      } else if (hero.name === '시안' || hero.name === '로이드' || hero.name === '카엘' || hero.name === '로건' || hero.name === '아서' || hero.name === '란슬롯') {
+        hero.gender = 'male';
+      } else {
+        hero.gender = (hero.classId === 'rogue' || hero.classId === 'apprentice' || hero.classId === 'gunner') ? 'female' : 'male';
+      }
+    }
+    if (!hero.portraitUrl && hero.classId) {
+      hero.portraitUrl = CustomAssetService.getGenderPortrait(hero.classId, hero.gender);
+    }
+
     return hero as Mercenary;
   }
 
@@ -675,6 +724,18 @@ export class GameManager {
     this.currentArenaRank = 850;
     this.currentArenaRating = 800;
     this.arenaCoins = 0;
+    this.arenaWins = 0;
+    this.arenaLosses = 0;
+    this.arenaOutlawScore = 0;
+    this.bossClearTimes = {};
+    this.bestAbyss10FClearTime = 0;
+    this.currentRunF1BossKillTimestamp = 0;
+    this.maxAviciDangerReached = 0;
+    this.avici9001Timestamp = 0;
+    this.aviciBossBonusClaimed = { archeosNormal: false, archeosOvercharged: false };
+    this.bestAviciTimeAttackBonus = 0;
+    this.pgsPurificationQuestsClaimed = [];
+    this.pgsAviciTiersClaimed = 0;
     this.pveBuffActive = false;
     this.bonfireStacks = 0;
     this.bonfireWarmthTime = 0;
@@ -700,9 +761,29 @@ export class GameManager {
     this.tavernRefreshCount = 0;
     this.refreshTavernPool();
 
+    this.invasionState = {
+      squadHeroIds: [],
+      invasionCoins: 0,
+      peaceShieldUntil: 0,
+      peaceShieldSecondsRemaining: 21600,
+      peaceShieldActive: false,
+      peaceShieldLastActivatedAt: undefined,
+      defenseLogs: [],
+      totalInvasions: 0,
+      totalWins: 0,
+      totalPlundered: {},
+      lastScoutedAt: 0,
+      tacticalTower: {
+        attack: { tier1: 0, tier2: 0, tier3: 0 },
+        defense: { tier1: 0, tier2: 0, tier3: 0 },
+        utility: { tier1: 0, tier2: 0, tier3: 0 },
+      },
+    };
+
     this.citadelLogs = [];
     this.dungeonLogs = [];
     this.battleLogs = [];
+    this.arenaLogs = [];
     this.logs = [];
     this.addLog('차가운 흑무가 방주 성채를 감싸고 있습니다.', 'normal', 'citadel');
     this.addLog('📜 [방주 회고록: 선발 원정대의 비극] 심연으로 강하했던 3인의 선발대 중 견습 사제 [엘레나]가 마물의 습격에 쓰러져 성채 묘지에 안치되었습니다.', 'story', 'citadel');
@@ -1247,19 +1328,72 @@ export class GameManager {
       this.addLog(`🔥 [방주의 성화] 성화가 유지 중입니다. (남은 온기: ${warmthMins}분)`, 'bonfire1');
     }
 
+    // 🌟 이전에 아직 사용자가 모달에서 확인/정리하지 않은 오프라인 결산 보고서가 있다면 누적 합산하여 유실 방지
+    const prevReport = this.offlineReport;
+    let finalElapsedSec = elapsedSec;
+    const finalResourcesGained: Partial<Record<keyof GameResources, number>> = { ...resourcesGained };
+    const finalGrossProduced: Partial<Record<keyof GameResources, number>> = { ...(grossProduced || {}) };
+    let finalFoodConsumed = foodConsumedByInfirmary;
+    let finalEtherConsumed = etherConsumedByInfirmary;
+    const finalHealedHeroes = [...healedHeroes];
+    let finalUpkeepGold = upkeepGoldPaid;
+    let finalUpkeepFood = upkeepFoodPaid;
+    let finalUpkeepEther = upkeepEtherPaid;
+
+    if (prevReport) {
+      finalElapsedSec += (prevReport.elapsedSeconds || 0);
+      if (prevReport.resourcesGained) {
+        Object.entries(prevReport.resourcesGained).forEach(([res, amt]) => {
+          const k = res as keyof GameResources;
+          finalResourcesGained[k] = (finalResourcesGained[k] || 0) + (amt as number);
+        });
+      }
+      if (prevReport.grossProduced) {
+        Object.entries(prevReport.grossProduced).forEach(([res, amt]) => {
+          const k = res as keyof GameResources;
+          finalGrossProduced[k] = (finalGrossProduced[k] || 0) + (amt as number);
+        });
+      }
+      finalFoodConsumed += (prevReport.foodConsumedByInfirmary || 0);
+      finalEtherConsumed += (prevReport.etherConsumedByInfirmary || 0);
+      if (prevReport.healedHeroes && Array.isArray(prevReport.healedHeroes)) {
+        prevReport.healedHeroes.forEach((ph: any) => {
+          const existing = finalHealedHeroes.find(h => h.id === ph.id);
+          if (existing) {
+            existing.hpGained += ph.hpGained;
+            existing.isFullyHealed = existing.isFullyHealed || ph.isFullyHealed;
+          } else {
+            finalHealedHeroes.push({ ...ph });
+          }
+        });
+      }
+      finalUpkeepGold += (prevReport.upkeepGoldPaid || 0);
+      finalUpkeepFood += (prevReport.upkeepFoodPaid || 0);
+      finalUpkeepEther += (prevReport.upkeepEtherPaid || 0);
+    }
+
+    const finalHours = Math.floor(finalElapsedSec / 3600);
+    const finalMins = Math.floor((finalElapsedSec % 3600) / 60);
+    const finalSecs = finalElapsedSec % 60;
+    let finalFormattedTime = '';
+    if (finalHours > 0) finalFormattedTime += `${finalHours}시간 `;
+    if (finalMins > 0 || finalHours > 0) finalFormattedTime += `${finalMins}분 `;
+    finalFormattedTime += `${finalSecs}초`;
+
     const report = {
-      elapsedSeconds: elapsedSec,
-      formattedTime,
-      resourcesGained,
-      grossProduced,
-      foodConsumedByInfirmary,
-      etherConsumedByInfirmary,
-      healedHeroes,
-      bonfireWarmthExpired,
+      elapsedSeconds: finalElapsedSec,
+      formattedTime: finalFormattedTime,
+      resourcesGained: finalResourcesGained,
+      grossProduced: finalGrossProduced,
+      foodConsumedByInfirmary: finalFoodConsumed,
+      etherConsumedByInfirmary: finalEtherConsumed,
+      healedHeroes: finalHealedHeroes,
+      bonfireWarmthExpired: bonfireWarmthExpired || Boolean(prevReport?.bonfireWarmthExpired),
       bonfireSecondsLeft: this.bonfireWarmthTime,
-      upkeepGoldPaid,
-      upkeepFoodPaid,
-      upkeepEtherPaid
+      upkeepGoldPaid: finalUpkeepGold,
+      upkeepFoodPaid: finalUpkeepFood,
+      upkeepEtherPaid: finalUpkeepEther,
+      encounterAttacks: prevReport?.encounterAttacks ? [...prevReport.encounterAttacks] : []
     };
 
     this.offlineReport = report;
@@ -1321,6 +1455,11 @@ export class GameManager {
           this.addLog('방주의 성화가 꺼졌습니다. 다시 한기가 몰려옵니다.', 'bonfire0');
           this.emit('buildingUpdated');
         }
+      }
+
+      // 🛡️ 차원 왜곡 평화 보호막 실시간 차감 (활성화 시)
+      if (this.invasionState?.peaceShieldActive) {
+        this.updatePeaceShieldTime();
       }
 
       for (const [bId, res, perLevel, period] of productionConfig) {
@@ -1925,7 +2064,7 @@ export class GameManager {
 
     if (restored.length > 0) {
       restored.forEach(r => {
-        this.addLog(`✨ [시설 복구] 충분한 유지비가 확보되어 [${r.name}]의 기능이 정상 레벨(Lv.${r.newLv})로 복구되었습니다!`, 'reward');
+        this.addLog(`✨ [시설 복구] 충분한 유지비가 확보되어 [${r.name}]의 기능이 정상 레벨(Lv.${r.newLv})로 복구되었습니다!`, 'reward', 'citadel');
       });
       this.emit('buildingUpdated');
       this.saveGame();
@@ -1933,7 +2072,7 @@ export class GameManager {
 
     if (demoted.length > 0) {
       demoted.forEach(d => {
-        this.addLog(`⚠️ [유지비 체납!] ${d.resName} 부족으로 인해 [${d.name}]의 시설 유지가 중단되어 기능이 일시 하향되었습니다. (Lv.${d.prevLv} ➔ Lv.${d.newLv}, 유지비 확보 시 자동 복구)`, 'danger');
+        this.addLog(`⚠️ [유지비 체납!] ${d.resName} 부족으로 인해 [${d.name}]의 시설 유지가 중단되어 기능이 일시 하향되었습니다. (Lv.${d.prevLv} ➔ Lv.${d.newLv}, 유지비 확보 시 자동 복구)`, 'danger', 'citadel');
       });
       this.emit('buildingUpdated');
       this.saveGame();
@@ -1985,10 +2124,21 @@ export class GameManager {
       citadelLogs: [...this.citadelLogs],
       dungeonLogs: [...this.dungeonLogs],
       battleLogs: [...this.battleLogs],
+      arenaLogs: [...this.arenaLogs],
       currentArenaRank: this.currentArenaRank,
       currentArenaRating: this.currentArenaRating,
       arenaCoins: this.arenaCoins,
       arenaStreak: this.arenaStreak,
+      arenaWins: this.arenaWins,
+      arenaLosses: this.arenaLosses,
+      arenaOutlawScore: this.arenaOutlawScore,
+      bossClearTimes: this.bossClearTimes,
+      bestAbyss10FClearTime: this.bestAbyss10FClearTime,
+      maxAviciDangerReached: this.maxAviciDangerReached,
+      aviciBossBonusClaimed: this.aviciBossBonusClaimed,
+      bestAviciTimeAttackBonus: this.bestAviciTimeAttackBonus,
+      pgsPurificationQuestsClaimed: this.pgsPurificationQuestsClaimed,
+      pgsAviciTiersClaimed: this.pgsAviciTiersClaimed,
       pveBuffActive: this.pveBuffActive,
       bonfireStacks: this.bonfireStacks,
       bonfireWarmthTime: this.bonfireWarmthTime,
@@ -2093,6 +2243,49 @@ export class GameManager {
     this.emit('update');
   }
 
+  public clearArenaLogs(): void {
+    this.arenaLogs = [];
+    this.emit('update');
+  }
+
+  /** 🌌 차원 앵커 게이트 내의 컨텐츠(아레나, 네메시스, 침공 등) 관련 로그 여부 판별 */
+  public static isAnchorGateLog(text: string): boolean {
+    if (!text) return false;
+    // 퀘스트 관련 알림은 영지 성채 퀘스트 기록이므로 제외
+    if (text.includes('[신규 퀘스트]') || text.includes('[퀘스트 완료]')) {
+      return false;
+    }
+    const lower = text.toLowerCase();
+    return (
+      text.includes('[명예 상점]') ||
+      text.includes('투사의 인장') ||
+      text.includes('차원 아레나') ||
+      text.includes('[차원 아레나') ||
+      text.includes('[아레나') ||
+      text.includes('아레나 전투') ||
+      text.includes('아레나 랭크') ||
+      text.includes('아레나 레이팅') ||
+      text.includes('[사경 위기]') ||
+      text.includes('[사경 헤맴]') ||
+      text.includes('[영면]') ||
+      text.includes('사경 위기') ||
+      text.includes('사경을 헤맵니다') ||
+      text.includes('네메시스') ||
+      text.includes('Nemesis') ||
+      text.includes('시공의 침식자') ||
+      text.includes('시공 침식') ||
+      text.includes('차원 침공') ||
+      text.includes('영지 침공') ||
+      text.includes('영지 피침공') ||
+      text.includes('영지 방어 성공') ||
+      text.includes('차원 보호막') ||
+      text.includes('차원 왜곡 평화 보호막') ||
+      text.includes('평화 보호막') ||
+      text.includes('차원 앵커 멀티 요소') ||
+      lower.includes('invasion')
+    );
+  }
+
   /** 📖 전역 백과사전 모달 호출 브릿지 (검색어 및 탭 자동 포커스) */
   public openEncyclopedia(query?: string, tab?: string): void {
     this.emit('openEncyclopedia', { query: query || '', tab: tab || 'all' });
@@ -2104,7 +2297,7 @@ export class GameManager {
   public addLog(
     text: string,
     type: LogEntry['type'] = 'normal',
-    category?: 'citadel' | 'dungeon' | 'battle',
+    category?: 'citadel' | 'dungeon' | 'battle' | 'arena',
     extra?: { round?: number; turn?: number; actorName?: string }
   ): void {
     const now = Date.now();
@@ -2115,16 +2308,33 @@ export class GameManager {
     this.lastLogText = text;
     this.lastLogTime = now;
 
-    let targetCategory: 'citadel' | 'dungeon' | 'battle' = category || (
+    let targetCategory: 'citadel' | 'dungeon' | 'battle' | 'arena' = category || (
       type === 'round_divider' || type === 'turn_divider' ? 'battle'
       : this.currentScreen === 'battle' ? 'battle'
       : this.currentScreen === 'exploration' ? 'dungeon'
+      : this.currentScreen === 'arena' ? 'arena'
       : 'citadel'
     );
 
-    // 📜 서브 의뢰 도착 관련 로그는 항상 영지(성채) 로그로 분류하여 던전/전투 로그에 혼입 방지
-    if (text.includes('[신규 서브 의뢰 도착]') || text.includes('서브 의뢰 도착')) {
+    // 📜 서브 의뢰 도착 및 유지비/시설 복구 로그는 항상 영지(성채) 로그로 분류하여 던전/전투 로그에 혼입 방지
+    if (
+      text.includes('[신규 서브 의뢰 도착]') ||
+      text.includes('서브 의뢰 도착') ||
+      text.includes('유지비 체납') ||
+      text.includes('시설 복구') ||
+      text.includes('유지비가 결제되었습니다') ||
+      text.includes('Upkeep Arrears') ||
+      text.includes('Facility Restored') ||
+      text.includes('維持費滞納') ||
+      text.includes('施設復旧')
+    ) {
       targetCategory = 'citadel';
+    }
+
+    // 🌌 차원 앵커 게이트 내의 컨텐츠(차원 아레나, 시공의 네메시스, 차원 침공 등)의 상황 및 로그는
+    // 영지 로그(citadelLogs)에 혼입되지 않도록 전용 arena 카테고리로 강제 분류
+    if (GameManager.isAnchorGateLog(text) || (this.currentScreen === 'arena' && targetCategory !== 'battle' && targetCategory !== 'dungeon')) {
+      targetCategory = 'arena';
     }
 
     const time = new Date().toTimeString().split(' ')[0];
@@ -2145,6 +2355,9 @@ export class GameManager {
     } else if (targetCategory === 'dungeon') {
       this.dungeonLogs.push(newEntry);
       if (this.dungeonLogs.length > 45) this.dungeonLogs.shift();
+    } else if (targetCategory === 'arena') {
+      this.arenaLogs.push(newEntry);
+      if (this.arenaLogs.length > 60) this.arenaLogs.shift();
     } else {
       this.citadelLogs.push(newEntry);
       if (this.citadelLogs.length > 45) this.citadelLogs.shift();
@@ -2817,7 +3030,8 @@ export class GameManager {
       const num = amt || 0;
       if (num > 0) {
         this.modifyResource(res as keyof GameResources, -num);
-        const icon = res === 'gold' ? '🪙' : res === 'wood' ? '🪵' : res === 'stone' ? '🪨' : res === 'iron' ? '⚙️' : res === 'food' ? '🌾' : res === 'ether' ? '✨' : res;
+        const meta = GameManager.getResourceMeta(res as keyof GameResources);
+        const icon = meta?.icon || (res === 'gold' ? '🪙' : res === 'wood' ? '🪵' : res === 'stone' ? '🪨' : res === 'iron' ? '⚙️' : res === 'food' ? '🍖' : res === 'ether' ? '✨' : '📦');
         costParts.push(`${icon}${num}`);
       }
     }
@@ -3254,35 +3468,35 @@ export class GameManager {
       }
     }
 
-    // 4. 고유/에픽/전설 장비 및 상위 강화 단계 시 순수 인챈트석 (Pure Stones)
+    // 4. 고유/에픽/전설 장비 및 상위 강화 단계 시 순수 인챈트석 (Pure Stones - 2배 상향)
     if (isUnique) {
       if (nextLevel >= 5) {
-        cost.pure_prefix_stone = 1;
+        cost.pure_prefix_stone = 2;
       }
       if (nextLevel >= 8) {
-        cost.pure_suffix_stone = 1;
+        cost.pure_suffix_stone = 2;
       }
       if (nextLevel >= 10) {
-        cost.pure_prefix_stone = 2;
-        cost.pure_suffix_stone = 2;
+        cost.pure_prefix_stone = 4;
+        cost.pure_suffix_stone = 4;
       }
     } else if (rarity === 'legendary') {
       if (nextLevel >= 5) {
-        cost.pure_prefix_stone = 1;
+        cost.pure_prefix_stone = 2;
       }
       if (nextLevel >= 8) {
-        cost.pure_suffix_stone = 1;
+        cost.pure_suffix_stone = 2;
       }
       if (nextLevel >= 10) {
-        cost.pure_prefix_stone = 2;
-        cost.pure_suffix_stone = 2;
+        cost.pure_prefix_stone = 4;
+        cost.pure_suffix_stone = 4;
       }
     } else if (rarity === 'epic') {
       if (nextLevel >= 7) {
-        cost.pure_prefix_stone = 1;
+        cost.pure_prefix_stone = 2;
       }
       if (nextLevel >= 10) {
-        cost.pure_suffix_stone = 1;
+        cost.pure_suffix_stone = 2;
       }
     }
 
@@ -3551,15 +3765,14 @@ export class GameManager {
       return false;
     }
 
-    const forgeLv = (this.buildings as unknown as Record<string, { level?: number }>)['blacksmith']?.level || (this.buildings as unknown as Record<string, { level?: number }>)['forge']?.level || 1;
-    const unlocks = this.getForgeFeatureUnlocks();
-    if (!unlocks.enchant.unlocked) {
-      this.addLog(`인챈트 불가: 마도 대장간 Lv.${unlocks.enchant.reqLv} 이상 증축이 필요합니다!`, 'danger');
+    const alchemyLv = (this.buildings as unknown as Record<string, { level?: number }>)['alchemy']?.level || 1;
+    if (alchemyLv < 3) {
+      this.addLog(`인챈트 불가: 에테르 공방 Lv.3 이상 증축이 필요합니다!`, 'danger');
       return false;
     }
 
-    const mult = this.getForgeDiscountMultiplier();
-    const stoneCost = getEnchantStoneCost(item.rarity);
+    const mult = this.getAlchemyDiscountMultiplier();
+    const stoneCost = getEnchantStoneCost(item, isPure);
     const { gold: goldCost, ether: etherCost } = getEnchantResourceCosts(isPure, mult);
 
     const stoneKey = type === 'prefix'
@@ -3583,8 +3796,8 @@ export class GameManager {
     this.modifyResource('gold', -goldCost);
     this.modifyResource('ether', -etherCost);
 
-    // 성공 확률 판정 (기본 20%, 병기창 Lv.6부터 레벨당 +5% 증가, 순수석 사용 시 50% 반감)
-    const successRate = getEnchantSuccessRate(forgeLv, isPure);
+    // 성공 확률 판정 (기본 20%, 에테르 공방 Lv.3부터 레벨당 +2% 증가, 순수석 사용 시 50% 반감)
+    const successRate = getEnchantSuccessRate(alchemyLv, isPure);
     const roll = Math.random() * 100;
     const isSuccess = forcedOutcome !== undefined ? (forcedOutcome === 'success') : (roll < successRate);
 
@@ -3687,9 +3900,15 @@ export class GameManager {
       if (!eq) return;
 
       const isComp = this.isEquipmentCompatible(hero.classId, eq);
-      const mult = isComp ? 1.0 : 0.5; // 비호환 장비 스탯 50% 반감
+      let mult = isComp ? 1.0 : 0.5; // 비호환 장비 스탯 50% 반감
       if (!isComp) {
         spd = Math.max(1, spd - 3); // 비호환 페널티: 행동속도 -3
+      }
+
+      // 🪦✨ 유품(Memento) 영웅 가호 공명:
+      // 유품을 남긴 영웅의 가호가 활성화되어 있으면 해당 장비의 모든 성능 10% 상승
+      if (this.isMementoResonated(eq)) {
+        mult *= 1.10;
       }
 
       if (eq.stats.atk) atk += Math.floor(eq.stats.atk * mult);
@@ -3931,7 +4150,7 @@ export class GameManager {
 
   // ================= 장비 클래스 적합성 & 인계/장착 로직 =================
   /** 장비가 해당 클래스에 적합한지 검사 (악세사리는 전 클래스 공용) */
-  // ================= 마도 대장간 레벨 할인 & 순차 해금 시스템 =================
+  // ================= 마도 대장간 & 에테르 공방 레벨 할인 & 순차 해금 시스템 =================
   /** 대장간 레벨에 따른 비용 할인율 (레벨당 3% 할인, 최대 50%) */
   public getForgeDiscountMultiplier(): number {
     const forgeLv = this.buildings['blacksmith']?.level || 1;
@@ -3939,7 +4158,14 @@ export class GameManager {
     return Math.max(0.5, (100 - discountPct) / 100);
   }
 
-  /** 대장간 기능별 해금 최소 레벨 (매 3레벨마다 해금) */
+  /** 에테르 공방 레벨에 따른 비용 할인율 (레벨당 3% 할인, 최대 50%) */
+  public getAlchemyDiscountMultiplier(): number {
+    const alchemyLv = this.buildings['alchemy']?.level || 1;
+    const discountPct = Math.min(50, alchemyLv * 3);
+    return Math.max(0.5, (100 - discountPct) / 100);
+  }
+
+  /** 대장간 기능별 해금 최소 레벨 */
   public getForgeFeatureUnlocks(): {
     craft: { reqLv: number; unlocked: boolean };
     enhance: { reqLv: number; unlocked: boolean };
@@ -3947,12 +4173,31 @@ export class GameManager {
     curse: { reqLv: number; unlocked: boolean };
   } {
     const forgeLv = this.buildings['blacksmith']?.level || 0;
+    const alchemyLv = this.buildings['alchemy']?.level || 0;
     return {
       craft:   { reqLv: 1, unlocked: forgeLv >= 1 },
       enhance: { reqLv: 3, unlocked: forgeLv >= 3 },
-      enchant: { reqLv: 6, unlocked: forgeLv >= 6 },
+      enchant: { reqLv: 3, unlocked: alchemyLv >= 3 },
       curse:   { reqLv: 1, unlocked: forgeLv >= 1 },
     };
+  }
+
+  /** 에테르 공방 기능별 해금 최소 레벨 */
+  public getAlchemyFeatureUnlocks(): {
+    enhance: { reqLv: number; unlocked: boolean };
+    enchant: { reqLv: number; unlocked: boolean };
+  } {
+    const alchemyLv = this.buildings['alchemy']?.level || 0;
+    return {
+      enhance: { reqLv: 1, unlocked: alchemyLv >= 1 },
+      enchant: { reqLv: 3, unlocked: alchemyLv >= 3 },
+    };
+  }
+
+  /** 🪦✨ 유품 장비가 현재 활성화된 영령의 가호와 공명하는지 판별 (해당 유품을 남긴 영웅의 가호 활성 시 성능 +10% 발동) */
+  public isMementoResonated(item?: EquipmentItem | null): boolean {
+    if (!item || !item.isMemento || !item.mementoHeroId) return false;
+    return !!(this.activeAncestralBlessing && this.activeAncestralBlessing.heroId === item.mementoHeroId);
   }
 
   public isEquipmentCompatible(classId: string, item: EquipmentItem): boolean {
@@ -4498,10 +4743,10 @@ export class GameManager {
       5: { ether: 160, gold: 1300, crystal: 28 },
       6: { ether: 230, gold: 2000, crystal: 20, void_shard: 12 },
       7: { ether: 320, gold: 3200, crystal: 30, void_shard: 20 },
-      8: { ether: 450, gold: 5000, void_shard: 30, pure_prefix_stone: 6 },
-      9: { ether: 650, gold: 8000, void_shard: 45, pure_prefix_stone: 12, pure_suffix_stone: 6 },
+      8: { ether: 450, gold: 5000, void_shard: 30, pure_prefix_stone: 12 },
+      9: { ether: 650, gold: 8000, void_shard: 45, pure_prefix_stone: 24, pure_suffix_stone: 12 },
     };
-    return costs[currentLevel] || { ether: 800, gold: 10000, void_shard: 50, pure_prefix_stone: 15 };
+    return costs[currentLevel] || { ether: 800, gold: 10000, void_shard: 50, pure_prefix_stone: 30 };
   }
 
   /** 🧪 에테르 연금 공방: 마도서 강화 (최고 10레벨) */
@@ -5289,17 +5534,23 @@ export class GameManager {
 
   // ================= 주점 (용병 고용 풀 & 개별 스탯 랜덤 편차 엔진) =================
   public refreshTavernPool(): void {
-    const ALL_NAMES = [
-      '루나', '카엘', '미아', '발렌타인', '클로에', '알렉스', '세린', '로건', '레이',
-      '베아트리스', '다리우스', '일레인', '트리스탄', '실비아', '가웨인', '오리온', '세실리아', '펠릭스',
-      '발레리아', '란슬롯', '카밀라', '베르나르', '로웨나', '하비', '아델라인', '아서', '모건', '기드온',
-      '클레어', '로이드', '아우렐리아', '시그루드', '비비안', '롤랑', '헥터', '헬레나', '에드워드', '에블린',
-      '가브리엘', '빅터', '이사벨라', '타리크', '레오나', '카이엔', '디아나', '유리엘', '오스카', '제노'
+    const MALE_NAMES = [
+      '카엘', '발렌타인', '알렉스', '로건', '레이',
+      '다리우스', '트리스탄', '가웨인', '오리온', '펠릭스',
+      '란슬롯', '베르나르', '하비', '아서', '모건', '기드온',
+      '로이드', '시그루드', '롤랑', '헥터', '에드워드',
+      '가브리엘', '빅터', '타리크', '카이엔', '유리엘', '오스카', '제노'
+    ];
+    const FEMALE_NAMES = [
+      '루나', '미아', '클로에', '세린',
+      '베아트리스', '일레인', '실비아', '세실리아',
+      '발레리아', '카밀라', '로웨나', '아델라인',
+      '클레어', '아우렐리아', '비비안', '헬레나', '에블린',
+      '이사벨라', '레오나', '디아나', '아이리스', '에스텔', '아이린'
     ];
 
     // 현재 보유 중인 용병단(barracks/party) 이름 수집하여 중복 제외
     const existingHeroNames = new Set(this.barracks.map(h => h.name));
-    const availableNames = ALL_NAMES.filter(n => !existingHeroNames.has(n));
     const classIds = ['squire', 'rogue', 'apprentice', 'acolyte', 'vanguard', 'gunner'];
     const tavernLv = this.buildings['tavern']?.level || 1;
     const sanctuaryLv = this.buildings['sanctuary']?.level || 0;
@@ -5379,18 +5630,26 @@ export class GameManager {
         mp: Math.max(10, Math.floor(cData.baseStats.mp * statMult * traitObj.mpMod * rollVar()))
       };
 
-      // 중복되지 않는 이름 선별
-      let candidateName = '방랑자';
-      if (availableNames.length > 0) {
-        const randNameIdx = Math.floor(Math.random() * availableNames.length);
-        candidateName = availableNames.splice(randNameIdx, 1)[0];
+      // 🌟 성별 결정 및 성별 일치 이름 선별
+      const candGender: 'male' | 'female' = Math.random() < 0.5 ? 'male' : 'female';
+      const namePool = candGender === 'female' ? FEMALE_NAMES : MALE_NAMES;
+      const filteredPool = namePool.filter(n => !existingHeroNames.has(n));
+      let candidateName = candGender === 'female' ? '방랑녀' : '방랑자';
+      if (filteredPool.length > 0) {
+        const randNameIdx = Math.floor(Math.random() * filteredPool.length);
+        candidateName = filteredPool[randNameIdx];
+        existingHeroNames.add(candidateName);
       } else {
-        candidateName = `용병_${Math.floor(Math.random() * 900 + 100)}`;
+        candidateName = `${candGender === 'female' ? '여용병' : '남용병'}_${Math.floor(Math.random() * 900 + 100)}`;
       }
+
+      const candPortraitUrl = CustomAssetService.getGenderPortrait(cId, candGender);
 
       return {
         id: `cand_${Date.now()}_${idx}`,
         name: candidateName,
+        gender: candGender,
+        portraitUrl: candPortraitUrl,
         classId: cId,
         grade,
         trait: traitObj.name,
@@ -5498,9 +5757,14 @@ export class GameManager {
     }
 
     const cClass = CHARACTER_CLASSES[cand.classId];
+    const candGender = cand.gender || (Math.random() < 0.5 ? 'male' : 'female');
+    const candPortrait = cand.portraitUrl || CustomAssetService.getGenderPortrait(cand.classId, candGender);
+
     const newHero: Mercenary = this.sanitizeHero({
       id: `hero_${Date.now()}`,
       name: cand.name,
+      gender: candGender,
+      portraitUrl: candPortrait,
       title: cand.trait || '주점 영입 용병',
       trait: cand.trait || '균형잡힌 정예',
       classId: cand.classId,
@@ -5526,6 +5790,50 @@ export class GameManager {
     this.emit('partyUpdated', this.party);
     this.emit('questUpdated');
     this.saveGame();
+    return true;
+  }
+
+  /**
+   * 🔄 용병 성별 전환 및 대응 포트레이트 자동 변경 (남 ↔ 여)
+   */
+  public toggleHeroGender(heroId: string): boolean {
+    const hero = this.barracks.find(h => h.id === heroId);
+    if (!hero) return false;
+    const targetGender: 'male' | 'female' = hero.gender === 'female' ? 'male' : 'female';
+    hero.gender = targetGender;
+    hero.portraitUrl = CustomAssetService.getGenderPortrait(hero.classId, targetGender);
+
+    const inParty = this.party.find(p => p.id === heroId);
+    if (inParty) {
+      inParty.gender = targetGender;
+      inParty.portraitUrl = hero.portraitUrl;
+    }
+
+    this.addLog(`🎭 [외형 변경] ${hero.name}의 포트레이트가 ${targetGender === 'female' ? '여성' : '남성'} 스타일로 전환되었습니다.`, 'system');
+    this.saveGame();
+    this.emit('partyUpdated', this.party);
+    this.emit('update');
+    return true;
+  }
+
+  /**
+   * 🖼️ 용병 포트레이트 및 성별 직접 지정
+   */
+  public setHeroPortrait(heroId: string, portraitUrl: string, gender?: 'male' | 'female'): boolean {
+    const hero = this.barracks.find(h => h.id === heroId);
+    if (!hero) return false;
+    hero.portraitUrl = portraitUrl;
+    if (gender) hero.gender = gender;
+
+    const inParty = this.party.find(p => p.id === heroId);
+    if (inParty) {
+      inParty.portraitUrl = portraitUrl;
+      if (gender) inParty.gender = gender;
+    }
+
+    this.saveGame();
+    this.emit('partyUpdated', this.party);
+    this.emit('update');
     return true;
   }
 
@@ -5751,9 +6059,9 @@ export class GameManager {
               rarity = floor >= 7 ? 'rare' : 'common';
             }
 
-            // 드랍 시점의 마도서 성능은 몬스터 원본 대비 50% 약화 (0.5배 기본값)
+            // 드랍 시점의 마도서 성능은 몬스터 원본 대비 30% 감소 (0.7배 기본값)
             const basePwr = mSkill.power || 1.0;
-            const weakenedPower = Number((basePwr * 0.5).toFixed(2));
+            const weakenedPower = Number((basePwr * 0.7).toFixed(2));
             const cleanMonName = cleanMonsterNameForDrop(m.name);
             const cleanMonId = (m.id || 'monster').replace(/_[A-Z]$/, '').replace(/_mon_\d+.*$/, '');
             const cleanSkillName = (mSkill.name || '비기').trim();
@@ -5990,6 +6298,100 @@ export class GameManager {
       const effectiveMax = isOvc ? Math.floor(maxCap * 1.3) : maxCap;
       baseTotalExp = Math.max(effectiveMin, Math.min(effectiveMax, baseTotalExp));
     }
+    if (this.isDoppelgangerBattle) {
+      baseTotalExp *= 2;
+      this.addToDungeonInventory('void_shard', '공허의 파편', '🌌', 10);
+      finalResources['void_shard'] = (finalResources['void_shard'] || 0) + 10;
+      this.isDoppelgangerBattle = false;
+      this.addLog('🪞🎉 [도플갱어 격퇴!] 타락한 자아를 극복하여 2배의 경험치와 공허의 파편 10개를 획득했습니다!', 'reward');
+    }
+
+    // ⚔️ [지휘관 습격 승리 보상]: 일반 전투 대비 경험치 2배 지급, 전리품 자원은 0으로 소거
+    if (this.isEncounterPvP) {
+      baseTotalExp *= 2;
+      totGold = 0;
+      totGuaranteedAmt = 0;
+      Object.keys(finalResources).forEach(k => delete finalResources[k]);
+      droppedEquips.length = 0;
+      droppedSkillBooks.length = 0;
+    }
+
+    // 🌟 [층별 고유 이벤트 '가속' 연계 전투 승리 확정 보상 정산]
+    if (this.pendingEventBattleId) {
+      const eventId = this.pendingEventBattleId;
+      this.pendingEventBattleId = null;
+
+      if (eventId === 'floor_9_b') {
+        const cloneWeapon = this.generateForgeEquipmentDrop(9);
+        this.addToDungeonInventory(cloneWeapon.id, cloneWeapon.name, cloneWeapon.icon, 1, cloneWeapon, undefined, 'equipment');
+        droppedEquips.push(cloneWeapon);
+        const q2 = this.quests.find(q => q.id === 'Q_SCENARIO_02');
+        if (q2 && q2.status === 'active' && q2.objectives[1]?.isCompleted) {
+          this.updateQuestObjective('Q_SCENARIO_02', 2, 1);
+        }
+        this.addLog(`👥⚔️ [도플갱어 격파 대승리!] 거울 속 도플갱어 결사대를 전원 제압하고 9티어 보구 [${cloneWeapon.name}]을(를) 복제 탈취했습니다!`, 'reward');
+      } else if (eventId === 'floor_6_a') {
+        const dropWeapon = this.generateForgeEquipmentDrop(6);
+        this.addToDungeonInventory(dropWeapon.id, dropWeapon.name, dropWeapon.icon, 1, dropWeapon, undefined, 'equipment');
+        droppedEquips.push(dropWeapon);
+        const q2 = this.quests.find(q => q.id === 'Q_SCENARIO_02');
+        if (q2 && q2.status === 'active' && q2.objectives[0]?.isCompleted) {
+          this.updateQuestObjective('Q_SCENARIO_02', 1, 1);
+        }
+        this.activateQuest('Q_SCENARIO_03');
+        this.updateQuestObjective('Q_SCENARIO_03', 0, 1);
+        this.addLog(`🍷⚔️ [흡혈 귀족 토벌!] 참회실을 박차고 나온 흡혈 귀족을 처단하고 6티어 보구 [${dropWeapon.name}]을(를) 강탈했습니다!`, 'reward');
+      } else if (eventId === 'floor_8_a') {
+        const dropArmor = this.generateForgeEquipmentDrop(8);
+        this.addToDungeonInventory(dropArmor.id, dropArmor.name, dropArmor.icon, 1, dropArmor, undefined, 'equipment');
+        droppedEquips.push(dropArmor);
+        this.addToDungeonInventory('memoir_8', '기사단장의 비밀 서신', '📜', 1);
+        const q1 = this.quests.find(q => q.id === 'Q_SCENARIO_01');
+        if (q1 && q1.status === 'active' && q1.objectives[1]?.isCompleted) {
+          this.updateQuestObjective('Q_SCENARIO_01', 2, 1);
+        }
+        this.addLog(`⛓️⚔️ [정예 간수단 섬멸!] 고문실로 몰려온 흑철 간수들을 모두 격파하고 8티어 판금 갑옷 [${dropArmor.name}]과 비밀 서신을 노획했습니다!`, 'reward');
+      } else if (eventId === 'floor_2_b') {
+        const martyrSword = this.generateForgeEquipmentDrop(2);
+        martyrSword.name = '순교자의 제식 검';
+        this.addToDungeonInventory(martyrSword.id, martyrSword.name, martyrSword.icon, 1, martyrSword, undefined, 'equipment');
+        droppedEquips.push(martyrSword);
+        baseTotalExp += 200;
+        this.addLog(`🪦⚔️ [결투 환영 격파!] 순교자 기사의 결투 환영을 꺾고 인정받아 [${martyrSword.name}]과 추가 경험치를 수습했습니다!`, 'reward');
+      } else if (eventId === 'floor_1_a') {
+        this.addExpeditionBuff({
+          id: 'expedition_scout_will',
+          name: '척후병의 유언',
+          icon: '🛡️',
+          category: 'ancestral',
+          description: '이번 원정 동안 공격력 +15%',
+          conditionText: '이번 원정 동안',
+          buffs: { atkBonus: 1.15 }
+        });
+        this.addToDungeonInventory('memoir_1', '낡은 척후병의 군번줄', '📜', 1);
+        this.activateQuest('Q_SCENARIO_01');
+        this.updateQuestObjective('Q_SCENARIO_01', 0, 1);
+        this.addLog(`🛡️⚔️ [경보 마물 편대 격퇴!] 경보 룬에 유인된 마물들을 섬멸하고 [척후병의 유언] 공격력 +15% 가호와 낡은 군번줄을 수습했습니다!`, 'reward');
+      } else if (eventId === 'floor_5_b') {
+        this.addToDungeonInventory('void_shard', '공허의 파편', '🌌', 4);
+        finalResources['void_shard'] = (finalResources['void_shard'] || 0) + 4;
+        this.addLog(`🗿⚔️ [거신 석상 수호자 파괴!] 마핵 적출로 각성한 거신 석상을 파쇄하고 🌌 공허의 파편 4개를 획득했습니다!`, 'reward');
+      } else if (eventId === 'floor_2_a') {
+        totGold += 80;
+        this.addToDungeonInventory('crystal', '마력 수정', '💎', 2);
+        finalResources['crystal'] = (finalResources['crystal'] || 0) + 2;
+        this.addExpeditionBuff({
+          id: 'expedition_ossuary_wrath',
+          name: '원혼의 분노',
+          icon: '🕯️',
+          category: 'ancestral',
+          description: '이번 원정 동안 공격력 +20%',
+          conditionText: '이번 원정 동안',
+          buffs: { atkBonus: 1.20 }
+        });
+        this.addLog(`🕯️⚔️ [해방된 원혼 제압!] 납골단지에서 쏟아져 나온 고대 원혼 무리를 제압하고 🪙 80G, 💎 마력 수정 2개와 [원혼의 분노] 공격력 +20% 가호를 획득했습니다!`, 'reward');
+      }
+    }
 
     this.addToDungeonInventory('gold', '골드', '🪙', totGold);
     this.addToDungeonInventory(guaranteedRes.key, guaranteedRes.name, guaranteedRes.icon, totGuaranteedAmt);
@@ -6079,7 +6481,7 @@ export class GameManager {
       herb: { name: '약초', icon: '🌿' },
       bone: { name: '짐승 뼈', icon: '🦴' },
       leather: { name: '가죽', icon: '🥋' },
-      silk: { name: '실크', icon: '🕸️' },
+      silk: { name: '실크', icon: '🧵' },
       coal: { name: '석탄', icon: '⬛' },
       crystal: { name: '마력수정', icon: '💎' },
       void_shard: { name: '공허파편', icon: '🌌' },
@@ -7608,6 +8010,18 @@ export class GameManager {
       rewardLogs.push(`✨ [심연 정화] 심연 ${purifiedFloorsAdded.map(f => `${f}층`).join(', ')} 마기 정화 및 연무 해제`);
     }
 
+    // 🎮 Google Play 게임즈 업적: 심연의 정화 (총 6단계 마일스톤)
+    const epicPurificationQuests = ['Q_EPIC_LORE_01', 'Q_EPIC_LORE_02', 'Q_EPIC_LORE_03', 'Q_EPIC_LORE_04', 'Q_EPIC_LORE_05', 'Q_SLAY_BOSS_10', 'Q_EPIC_AVICI_ENDING'];
+    if (epicPurificationQuests.includes(questId)) {
+      if (!Array.isArray(this.pgsPurificationQuestsClaimed)) {
+        this.pgsPurificationQuestsClaimed = [];
+      }
+      if (!this.pgsPurificationQuestsClaimed.includes(questId)) {
+        this.pgsPurificationQuestsClaimed.push(questId);
+        PlayGamesService.getInstance().trackPurificationQuest(questId);
+      }
+    }
+
     // 🧭⌛ 크로노스 시공간 에픽 시나리오 최종 보상: [시공간의 나침반] 해금 및 차원의 나침반 완전 대체
     if (questId === 'Q_SCENARIO_04' || questId === 'Q_SCENARIO_4_3') {
       this.hasChronoCompass = true;
@@ -7678,6 +8092,77 @@ export class GameManager {
     if (changed) {
       this.purifiedFloors.sort((a, b) => a - b);
     }
+  }
+
+  /**
+   * 📊 심연의 정화자 (정복자) PGS 리더보드 점수 계산 및 제출
+   * 총점 = 1~10층 보스 격파 기본점(층당 floor * 1,000) + 1F~10F 클리어 최단 시간 타임어택 보너스
+   */
+  public submitAbyssPurifierLeaderboard(): void {
+    const defeatedFloors: number[] = [];
+    for (let f = 1; f <= 10; f++) {
+      if (this.bossClearTimes && this.bossClearTimes[f] !== undefined) {
+        defeatedFloors.push(f);
+      } else if (this.unlockedDungeonFloor > f || (this.purifiedFloors && this.purifiedFloors.includes(f))) {
+        defeatedFloors.push(f);
+      }
+    }
+    PlayGamesService.getInstance().submitAbyssPurifierScore(defeatedFloors, this.bestAbyss10FClearTime);
+  }
+
+  /**
+   * 📊 무저갱의 방랑자 PGS 리더보드 점수 계산 및 제출
+   * 총점 = (최대 위험도 * 10) + 진 최종보스(20,000) + 광폭화 보스(50,000) + 타임어택 보너스
+   */
+  public submitAviciWandererLeaderboard(): void {
+    PlayGamesService.getInstance().submitAviciWandererScore(
+      this.maxAviciDangerReached,
+      !!this.aviciBossBonusClaimed?.archeosNormal,
+      !!this.aviciBossBonusClaimed?.archeosOvercharged,
+      this.bestAviciTimeAttackBonus
+    );
+  }
+
+  /**
+   * 🔄 기존 진행 상황을 Google Play 게임즈 업적 및 리더보드와 소급 동기화
+   */
+  public syncAllPgsProgress(): void {
+    const pgs = PlayGamesService.getInstance();
+    if (!pgs.isAvailable()) return;
+
+    // 1. 심연과의 조우 (최초 탐험 귀환)
+    if (this.hasReturnedFromDungeon) {
+      pgs.trackAbyssEncounter();
+    }
+
+    // 2. 심연의 정화 (에픽 퀘스트 6단계)
+    const purificationQuests = ['Q_EPIC_LORE_01', 'Q_EPIC_LORE_02', 'Q_EPIC_LORE_03', 'Q_EPIC_LORE_04', 'Q_EPIC_LORE_05', 'Q_SLAY_BOSS_10'];
+    if (!Array.isArray(this.pgsPurificationQuestsClaimed)) {
+      this.pgsPurificationQuestsClaimed = [];
+    }
+    purificationQuests.forEach(qId => {
+      const q = this.quests.find(item => item.id === qId);
+      if (q && q.status === 'completed' && !this.pgsPurificationQuestsClaimed.includes(qId)) {
+        this.pgsPurificationQuestsClaimed.push(qId);
+        pgs.trackPurificationQuest(qId);
+      }
+    });
+
+    // 3. 무저갱의 출구 (11층 진입 계층 1~10)
+    const targetTiers = Math.min(10, Math.max(this.unlockedDungeonFloor >= 11 ? 1 : 0, this.unlockedAviciTier || 0));
+    if (targetTiers > (this.pgsAviciTiersClaimed || 0)) {
+      const steps = targetTiers - (this.pgsAviciTiersClaimed || 0);
+      this.pgsAviciTiersClaimed = targetTiers;
+      pgs.trackAviciTierUnlock(steps);
+    }
+
+    // 4. 차원 아레나 업적 및 차원의 무법자 리더보드
+    this.arenaOutlawScore = Math.max(0, (this.arenaWins || 0) * 3 - (this.arenaLosses || 0) * 1);
+    pgs.trackArenaMatchResult(this.arenaWins > 0, this.currentArenaRating, this.arenaWins, this.arenaLosses);
+
+    // 5. 던전 리더보드 2종 동기화
+    this.submitAbyssPurifierLeaderboard();
+    this.submitAviciWandererLeaderboard();
   }
 
   public activateQuest(questId: string): void {
@@ -8036,10 +8521,12 @@ export class GameManager {
   } {
     if (isWin) {
       this.arenaStreak += 1;
-
+      this.arenaWins = (this.arenaWins || 0) + 1;
     } else {
       this.arenaStreak = 0;
+      this.arenaLosses = (this.arenaLosses || 0) + 1;
     }
+    this.arenaOutlawScore = Math.max(0, this.arenaWins * 3 - this.arenaLosses * 1);
 
     const ratingDelta = isWin
       ? Math.max(15, Math.floor((opp.rating - this.currentArenaRating) / 25 + 30 + Math.min(10, this.arenaStreak * 2)))
@@ -8051,6 +8538,14 @@ export class GameManager {
     const totalCoins = baseCoins + streakCoinBonus;
 
     this.updateArenaRating(ratingDelta, totalCoins);
+
+    // 🎮 Google Play 게임즈 업적 & [차원의 무법자] 리더보드 즉시 제출
+    PlayGamesService.getInstance().trackArenaMatchResult(
+      isWin,
+      this.currentArenaRating,
+      this.arenaWins,
+      this.arenaLosses
+    );
 
     // 🎖️ 전투 결과 직접 장비 드랍 제거 -> 명예 상점 포인트(투사의 인장) 지급
     if (isWin) {
@@ -8099,6 +8594,7 @@ export class GameManager {
    */
   public checkNemesisWednesdayReset(now: number = Date.now()): boolean {
     if (!this.isNemesisInvasionActive()) return false;
+    if (this.isWednesdayResetting) return false;
 
     const d = new Date(now);
     const day = d.getDay(); // 0:일, 1:월, 2:화, 3:수, 4:목, 5:금, 6:토
@@ -8108,19 +8604,26 @@ export class GameManager {
     const wedDateStr = `${wedDateObj.getFullYear()}-${String(wedDateObj.getMonth() + 1).padStart(2, '0')}-${String(wedDateObj.getDate()).padStart(2, '0')}`;
 
     const lastReset = this.nemesisState.lastWednesdayResetDate;
-    const isNewWednesday = !lastReset || lastReset !== wedDateStr || (this.nemesisState.cycleStartTime !== undefined && this.nemesisState.cycleStartTime < wedTimestamp);
 
-    if (isNewWednesday) {
+    // 🛑 [수요일 00시 기점 1회 실행 보장]
+    // 이번 주 수요일 기준일자(wedDateStr)와 lastWednesdayResetDate가 동일하면 이미 이번 주차 초기화가 완료되었으므로 절대 재실행하지 않음
+    if (lastReset === wedDateStr) {
+      return false;
+    }
+
+    this.isWednesdayResetting = true;
+    try {
       this.nemesisState.lastWednesdayResetDate = wedDateStr;
-      this.restoreNemesisHealth(true);
       this.nemesisState.cycleStartTime = wedTimestamp;
-      this.addLog(`🌌 [수요일 정기 초기화] 매주 수요일 정기 리셋으로 네메시스가 설정된 최대 체력(${(this.nemesisState.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp).toLocaleString()} HP)으로 완전 초기화 및 재소환되었습니다!`, 'danger');
+      this.restoreNemesisHealth(true, true);
+      this.nemesisState.cycleStartTime = wedTimestamp; // 복구 후에도 수요일 00시 타임스탬프 유지
+      this.addLog(`🌌 [수요일 정기 초기화] 매주 수요일(00:00) 정기 리셋으로 네메시스가 설정된 최대 체력(${(this.nemesisState.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp).toLocaleString()} HP)으로 완전 초기화 및 재소환되었습니다!`, 'danger');
       this.saveGame();
       this.emit('nemesisUpdated', this.nemesisState);
       return true;
+    } finally {
+      this.isWednesdayResetting = false;
     }
-
-    return false;
   }
 
   /** 일일 토벌 도전 횟수 갱신 확인 (매일 자정 3회 자동 충전 및 수요일 주간 초기화 확인) */
@@ -8442,7 +8945,12 @@ export class GameManager {
     this.nemesisState.currentBossHp = remote.currentBossHp;
     this.nemesisState.maxBossHp = remote.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp;
     this.nemesisState.phase = remote.phase || 1;
-    if (remote.cycleStartTime) this.nemesisState.cycleStartTime = remote.cycleStartTime;
+    if (remote.cycleStartTime) {
+      // 🛑 원격에서 들어온 cycleStartTime이 로컬의 최신 cycleStartTime보다 과거 값이면 덮어쓰지 않음
+      if (!this.nemesisState.cycleStartTime || remote.cycleStartTime >= this.nemesisState.cycleStartTime) {
+        this.nemesisState.cycleStartTime = remote.cycleStartTime;
+      }
+    }
     if (remote.lastPlunderCheckTime) this.nemesisState.lastPlunderCheckTime = remote.lastPlunderCheckTime;
     if (remote.windowStartHp !== undefined) this.nemesisState.windowStartHp = remote.windowStartHp;
     this.nemesisState.isDefeated = !!remote.isDefeated;
@@ -8640,15 +9148,35 @@ export class GameManager {
     return true;
   }
 
-  /** 에테르를 소모하여 일일 토벌 도전 횟수 1회 충전 */
+  /** 에테르를 소모하여 일일 토벌 도전 횟수 1회 충전 (최대 3회 제한) */
   public refillNemesisAttempts(): boolean {
+    if (this.nemesisState.dailyAttempts >= 3) {
+      this.addLog('⚠️ [차원 네메시스] 일일 토벌 도전 횟수가 이미 최대(3회)입니다.', 'danger');
+      return false;
+    }
     if (this.resources.ether < 50) {
       this.addLog('에테르가 부족합니다! (필요: 50개)', 'danger');
       return false;
     }
     this.modifyResource('ether', -50);
-    this.nemesisState.dailyAttempts += 1;
-    this.addLog(`✨ [차원 네메시스] 에테르 50개를 소모하여 토벌 도전 횟수를 1회 충전했습니다! (잔여: ${this.nemesisState.dailyAttempts}회)`, 'reward');
+    this.nemesisState.dailyAttempts = Math.min(3, this.nemesisState.dailyAttempts + 1);
+    this.addLog(`✨ [차원 네메시스] 에테르 50개를 소모하여 토벌 도전 횟수를 1회 충전했습니다! (보유: ${this.nemesisState.dailyAttempts}/3회)`, 'reward');
+    this.saveGame();
+    return true;
+  }
+
+  /** 🎬 광고 시청을 통한 차원 네메시스 일일 토벌 공격 횟수 충전 (최대 3회 제한) */
+  public refillNemesisAttemptsWithAd(): boolean {
+    if (this.nemesisState.dailyAttempts >= 3) {
+      this.addLog('⚠️ [차원 네메시스] 일일 토벌 도전 횟수가 이미 최대(3회)입니다.', 'danger');
+      return false;
+    }
+    const prev = this.nemesisState.dailyAttempts;
+    this.nemesisState.dailyAttempts = Math.min(3, this.nemesisState.dailyAttempts + 3);
+    const charged = this.nemesisState.dailyAttempts - prev;
+    this.addLog(`📺 [차원 네메시스] 광고를 시청하여 네메시스 토벌 공격 횟수를 ${charged}회 충전했습니다! (보유: ${this.nemesisState.dailyAttempts}/3회)`, 'reward');
+    this.emit('nemesisUpdated', this.nemesisState);
+    this.emit('update');
     this.saveGame();
     return true;
   }
@@ -8657,7 +9185,7 @@ export class GameManager {
    * 🌌 네메시스 월드 보스 체력 완전 복구:
    * 전체 체력 1,250만 HP 및 3대 부위(머리 400만, 몸통 500만, 꼬리 350만)를 100% 완전 회복하고 부활시킵니다.
    */
-  public restoreNemesisHealth(syncRemote: boolean = true): void {
+  public restoreNemesisHealth(syncRemote: boolean = true, skipLog: boolean = false): void {
     const headCfg = NEMESIS_BOSS_CONFIG.parts.head;
     const bodyCfg = NEMESIS_BOSS_CONFIG.parts.body;
     const tailCfg = NEMESIS_BOSS_CONFIG.parts.tail;
@@ -8698,14 +9226,16 @@ export class GameManager {
       },
     };
 
-    this.addLog('🌌 [시공의 네메시스] 네메시스의 체력과 모든 부위(머리 400만 / 몸통 500만 / 꼬리 350만)가 100% 완전 복구되었습니다!', 'reward');
+    if (!skipLog) {
+      this.addLog('🌌 [시공의 네메시스] 네메시스의 체력과 모든 부위(머리 400만 / 몸통 500만 / 꼬리 350만)가 100% 완전 복구되었습니다!', 'reward');
+    }
     this.saveGame();
     this.emit('nemesisUpdated', this.nemesisState);
     this.emit('update');
 
     if (syncRemote) {
       try {
-        FirebaseService.getInstance().restoreNemesisWorldBossHp().then(remote => {
+        FirebaseService.getInstance().restoreNemesisWorldBossHp(this.nemesisState.cycleStartTime).then(remote => {
           if (remote) {
             this.applyRemoteNemesisData(remote);
           }
@@ -9218,7 +9748,7 @@ export class GameManager {
         defenseConcept: '🔰 입문 훈련 (기본 검증)',
         gateLevel: 6,
         bonfireLevel: 6,
-        heroLevelRange: [21, 25],
+        heroLevelRange: [30, 33],
         classes: ['paladin', 'sharpshooter', 'bishop', 'warlord', 'squire'],
         traits: ['수호의 결속', '집중 사격', '성스러운 치유', '신병 지휘', '성실'],
         avatarIcon: '🔰',
@@ -9232,64 +9762,44 @@ export class GameManager {
         bonusLoot: { herb: 80, leather: 80, coal: 60, crystal: 10, void_shard: 5 },
       },
       {
-        name: '아이언팽 철벽 요새',
-        ownerNickname: '사령관 바르가스',
-        guildName: '강철의 여명회',
-        defenseConcept: '🛡️ 성벽 극방어 (내구&방어 증폭)',
-        gateLevel: 8,
+        name: '황금 실크로드 보급성채',
+        ownerNickname: '대상인 골드마이어',
+        guildName: '번영의 황금상단',
+        defenseConcept: '💰 부유한 상단 (약탈 자원 대량)',
+        gateLevel: 6,
         bonfireLevel: 8,
-        heroLevelRange: [38, 43],
-        classes: ['aegis_valkyrie', 'paladin', 'high_saintess', 'guardian', 'warlord'],
-        traits: ['철벽의 금강', '투사의 요격', '성스러운 수복', '불굴의 지휘', '수호자'],
-        avatarIcon: '🏰',
+        heroLevelRange: [33, 36],
+        classes: ['guardian', 'tactical_gunner', 'high_saintess', 'duelist', 'arcane_scholar'],
+        traits: ['금고 수호', '용병 경호', '치유 기도', '재력의 전술', '상인'],
+        avatarIcon: '💰',
         tacticalTower: {
           attack: { tier1: 2, tier2: 0, tier3: 0 },
-          defense: { tier1: 5, tier2: 4, tier3: 5 },
-          utility: { tier1: 2, tier2: 1, tier3: 1 },
+          defense: { tier1: 3, tier2: 1, tier3: 1 },
+          utility: { tier1: 1, tier2: 1, tier3: 1 },
         },
-        statMultiplier: 1.20,
-        gold: 62000, wood: 35000, stone: 65000, iron: 52000, food: 25000, ether: 4500,
-        bonusLoot: { coal: 220, stone: 500, iron: 400, prefix_stone: 20 },
+        statMultiplier: 0.95,
+        gold: 150000, wood: 75000, stone: 60000, iron: 45000, food: 65000, ether: 18000,
+        bonusLoot: { silk: 350, crystal: 30, void_shard: 20, leather: 250 },
       },
       {
-        name: '진홍의 화룡 포병대',
-        ownerNickname: '포병단장 이그니스',
-        guildName: '홍련의 학살자들',
-        defenseConcept: '🔥 작열 포격 (화상 DoT & 집중 포격)',
-        gateLevel: 8,
-        bonfireLevel: 8,
-        heroLevelRange: [42, 47],
-        classes: ['berserker', 'aether_gun_meister', 'calamity_mage', 'warlord', 'valhalla_blade'],
-        traits: ['불굴의 돌파', '치명적 폭격', '작열의 마탄', '피의 전술', '투사'],
-        avatarIcon: '🔥',
-        tacticalTower: {
-          attack: { tier1: 5, tier2: 5, tier3: 2 },
-          defense: { tier1: 1, tier2: 1, tier3: 1 },
-          utility: { tier1: 3, tier2: 1, tier3: 1 },
-        },
-        statMultiplier: 1.15,
-        gold: 68000, wood: 40000, stone: 30000, iron: 58000, food: 32000, ether: 4000,
-        bonusLoot: { coal: 300, iron: 500, crystal: 25, void_shard: 15 },
-      },
-      {
-        name: '서리꽃 혹한 연구소',
-        ownerNickname: '빙결사 프로스트',
-        guildName: '혹한의 탐구자',
-        defenseConcept: '❄️ 결빙 CC (동결 & 기절 교란)',
-        gateLevel: 8,
+        name: '발할라 기사단 주둔지',
+        ownerNickname: '기사단장 지그문트',
+        guildName: '발할라의 방패',
+        defenseConcept: '🏰 표준 균형 (공/방/유틸 밸런스)',
+        gateLevel: 7,
         bonfireLevel: 7,
-        heroLevelRange: [36, 41],
-        classes: ['guardian', 'sharpshooter', 'elementalist', 'arcane_scholar', 'bishop'],
-        traits: ['냉혹의 수호', '약점 관통', '절대영도 결빙', '지성의 전술', '신비'],
-        avatarIcon: '❄️',
+        heroLevelRange: [36, 40],
+        classes: ['warlord', 'valhalla_blade', 'bishop', 'tactical_gunner', 'paladin'],
+        traits: ['진형 엄호', '돌격 검격', '축복의 성수', '정석 전술', '용맹'],
+        avatarIcon: '🏰',
         tacticalTower: {
-          attack: { tier1: 2, tier2: 1, tier3: 0 },
-          defense: { tier1: 2, tier2: 5, tier3: 4 },
-          utility: { tier1: 4, tier2: 4, tier3: 2 },
+          attack: { tier1: 3, tier2: 2, tier3: 1 },
+          defense: { tier1: 3, tier2: 2, tier3: 2 },
+          utility: { tier1: 2, tier2: 2, tier3: 2 },
         },
-        statMultiplier: 1.10,
-        gold: 58000, wood: 25000, stone: 22000, iron: 20000, food: 25000, ether: 9500,
-        bonusLoot: { crystal: 45, void_shard: 25, silk: 200 },
+        statMultiplier: 1.0,
+        gold: 50000, wood: 35000, stone: 30000, iron: 25000, food: 25000, ether: 4000,
+        bonusLoot: { iron: 200, wood: 200, coal: 150 },
       },
       {
         name: '섀도우 리퍼 암영 기지',
@@ -9298,7 +9808,7 @@ export class GameManager {
         defenseConcept: '⚡ 초고속 급습 (감속 & 치명타 저격)',
         gateLevel: 7,
         bonfireLevel: 7,
-        heroLevelRange: [31, 36],
+        heroLevelRange: [39, 43],
         classes: ['shadow_phantom', 'assassin', 'duelist', 'sharpshooter', 'arcane_scholar'],
         traits: ['암영의 은신', '치명적 암살', '신속의 칼날', '그림자 전술', '암살'],
         avatarIcon: '⚡',
@@ -9318,7 +9828,7 @@ export class GameManager {
         defenseConcept: '🧪 맹독 부식 (14% DoT 지속 피해)',
         gateLevel: 8,
         bonfireLevel: 7,
-        heroLevelRange: [34, 39],
+        heroLevelRange: [42, 46],
         classes: ['paladin', 'sharpshooter', 'arcane_scholar', 'assassin', 'berserker'],
         traits: ['독기 저항', '맹독의 저격', '부식 전염', '역병 전술', '냉혹'],
         avatarIcon: '🧪',
@@ -9332,13 +9842,93 @@ export class GameManager {
         bonusLoot: { bone: 300, herb: 320, crystal: 20 },
       },
       {
+        name: '서리꽃 혹한 연구소',
+        ownerNickname: '빙결사 프로스트',
+        guildName: '혹한의 탐구자',
+        defenseConcept: '❄️ 결빙 CC (동결 & 기절 교란)',
+        gateLevel: 8,
+        bonfireLevel: 7,
+        heroLevelRange: [45, 49],
+        classes: ['guardian', 'sharpshooter', 'elementalist', 'arcane_scholar', 'bishop'],
+        traits: ['냉혹의 수호', '약점 관통', '절대영도 결빙', '지성의 전술', '신비'],
+        avatarIcon: '❄️',
+        tacticalTower: {
+          attack: { tier1: 2, tier2: 1, tier3: 0 },
+          defense: { tier1: 2, tier2: 5, tier3: 4 },
+          utility: { tier1: 4, tier2: 4, tier3: 2 },
+        },
+        statMultiplier: 1.10,
+        gold: 58000, wood: 25000, stone: 22000, iron: 20000, food: 25000, ether: 9500,
+        bonusLoot: { crystal: 45, void_shard: 25, silk: 200 },
+      },
+      {
+        name: '아이언팽 철벽 요새',
+        ownerNickname: '사령관 바르가스',
+        guildName: '강철의 여명회',
+        defenseConcept: '🛡️ 성벽 극방어 (내구&방어 증폭)',
+        gateLevel: 8,
+        bonfireLevel: 8,
+        heroLevelRange: [48, 52],
+        classes: ['aegis_valkyrie', 'paladin', 'high_saintess', 'guardian', 'warlord'],
+        traits: ['철벽의 금강', '투사의 요격', '성스러운 수복', '불굴의 지휘', '수호자'],
+        avatarIcon: '🏰',
+        tacticalTower: {
+          attack: { tier1: 2, tier2: 0, tier3: 0 },
+          defense: { tier1: 5, tier2: 4, tier3: 5 },
+          utility: { tier1: 2, tier2: 1, tier3: 1 },
+        },
+        statMultiplier: 1.20,
+        gold: 62000, wood: 35000, stone: 65000, iron: 52000, food: 25000, ether: 4500,
+        bonusLoot: { coal: 220, stone: 500, iron: 400, prefix_stone: 20 },
+      },
+      {
+        name: '진홍의 화룡 포병대',
+        ownerNickname: '포병단장 이그니스',
+        guildName: '홍련의 학살자들',
+        defenseConcept: '🔥 작열 포격 (화상 DoT & 집중 포격)',
+        gateLevel: 8,
+        bonfireLevel: 8,
+        heroLevelRange: [51, 55],
+        classes: ['berserker', 'aether_gun_meister', 'calamity_mage', 'warlord', 'valhalla_blade'],
+        traits: ['불굴의 돌파', '치명적 폭격', '작열의 마탄', '피의 전술', '투사'],
+        avatarIcon: '🔥',
+        tacticalTower: {
+          attack: { tier1: 5, tier2: 5, tier3: 2 },
+          defense: { tier1: 1, tier2: 1, tier3: 1 },
+          utility: { tier1: 3, tier2: 1, tier3: 1 },
+        },
+        statMultiplier: 1.15,
+        gold: 68000, wood: 40000, stone: 30000, iron: 58000, food: 32000, ether: 4000,
+        bonusLoot: { coal: 300, iron: 500, crystal: 25, void_shard: 15 },
+      },
+      {
+        name: '공허의 틈새 관측탑',
+        ownerNickname: '차원학자 노바',
+        guildName: '공허의 관측자',
+        defenseConcept: '🌌 마나 세금 (공허 파편 & MP소모 증가)',
+        gateLevel: 9,
+        bonfireLevel: 9,
+        heroLevelRange: [54, 58],
+        classes: ['calamity_mage', 'aether_gun_meister', 'arcane_scholar', 'elementalist', 'shadow_phantom'],
+        traits: ['공허 왜곡', '에테르 과충전', '마나 붕괴', '시공간 전술', '비전'],
+        avatarIcon: '🌌',
+        tacticalTower: {
+          attack: { tier1: 3, tier2: 2, tier3: 3 },
+          defense: { tier1: 4, tier2: 3, tier3: 4 },
+          utility: { tier1: 4, tier2: 5, tier3: 3 },
+        },
+        statMultiplier: 1.20,
+        gold: 80000, wood: 45000, stone: 40000, iron: 35000, food: 35000, ether: 12000,
+        bonusLoot: { void_shard: 45, crystal: 50, prefix_stone: 30, suffix_stone: 30 },
+      },
+      {
         name: '성스러운 빛의 대성채',
         ownerNickname: '대주교 발렌타인',
         guildName: '빛의 성기사단',
-        defenseConcept: '👑 총력전 요새 (Gate Lv.10 최고 난도)',
+        defenseConcept: '👑 성역 수호전 (Gate Lv.10 상급 난도)',
         gateLevel: 10,
         bonfireLevel: 10,
-        heroLevelRange: [50, 56],
+        heroLevelRange: [57, 61],
         classes: ['aegis_valkyrie', 'valhalla_blade', 'high_saintess', 'paladin', 'warlord'],
         traits: ['불멸의 성역', '신성한 심판', '기적의 소생', '성전의 총지휘', '수호'],
         avatarIcon: '👑',
@@ -9352,64 +9942,44 @@ export class GameManager {
         bonusLoot: { crystal: 60, void_shard: 40, prefix_stone: 35, suffix_stone: 35 },
       },
       {
-        name: '발할라 기사단 주둔지',
-        ownerNickname: '기사단장 지그문트',
-        guildName: '발할라의 방패',
-        defenseConcept: '🏰 표준 균형 (공/방/유틸 밸런스)',
-        gateLevel: 7,
-        bonfireLevel: 7,
-        heroLevelRange: [28, 33],
-        classes: ['warlord', 'valhalla_blade', 'bishop', 'tactical_gunner', 'paladin'],
-        traits: ['진형 엄호', '돌격 검격', '축복의 성수', '정석 전술', '용맹'],
-        avatarIcon: '🏰',
+        name: '크로노스 시공간 성역',
+        ownerNickname: '시공집행관 아르카나',
+        guildName: '영겁의 파수꾼',
+        defenseConcept: '⏳ 시공간 결박 (극한 감속 & 마력 붕괴)',
+        gateLevel: 10,
+        bonfireLevel: 10,
+        heroLevelRange: [60, 63],
+        classes: ['fortress', 'chronomancer', 'crusader_lord', 'ghost_sniper', 'calamity_mage'],
+        traits: ['시간 정지', '인과율 왜곡', '성광 파쇄', '초정밀 저격', '초월'],
+        avatarIcon: '⏳',
         tacticalTower: {
-          attack: { tier1: 3, tier2: 2, tier3: 1 },
-          defense: { tier1: 3, tier2: 2, tier3: 2 },
-          utility: { tier1: 2, tier2: 2, tier3: 2 },
+          attack: { tier1: 5, tier2: 4, tier3: 5 },
+          defense: { tier1: 5, tier2: 5, tier3: 4 },
+          utility: { tier1: 5, tier2: 5, tier3: 5 },
         },
-        statMultiplier: 1.0,
-        gold: 50000, wood: 35000, stone: 30000, iron: 25000, food: 25000, ether: 4000,
-        bonusLoot: { iron: 200, wood: 200, coal: 150 },
+        statMultiplier: 1.40,
+        gold: 135000, wood: 90000, stone: 85000, iron: 75000, food: 70000, ether: 22000,
+        bonusLoot: { crystal: 75, void_shard: 55, prefix_stone: 40, suffix_stone: 40 },
       },
       {
-        name: '황금 실크로드 보급성채',
-        ownerNickname: '대상인 골드마이어',
-        guildName: '번영의 황금상단',
-        defenseConcept: '💰 부유한 상단 (약탈 자원 대량)',
-        gateLevel: 6,
-        bonfireLevel: 8,
-        heroLevelRange: [23, 27],
-        classes: ['guardian', 'tactical_gunner', 'high_saintess', 'duelist', 'arcane_scholar'],
-        traits: ['금고 수호', '용병 경호', '치유 기도', '재력의 전술', '상인'],
-        avatarIcon: '💰',
+        name: '무간도 심연 왕좌 요새',
+        ownerNickname: '심연군주 말렉',
+        guildName: '종언의 왕좌',
+        defenseConcept: '🌌 종언의 총력전 (Gate Lv.10 최고 난도)',
+        gateLevel: 10,
+        bonfireLevel: 10,
+        heroLevelRange: [62, 65],
+        classes: ['aegis_valkyrie', 'valhalla_blade', 'calamity_mage', 'high_saintess', 'aether_gun_meister'],
+        traits: ['심연의 지배', '파멸의 참격', '종언의 마력', '영혼의 속박', '절대자'],
+        avatarIcon: '💀',
         tacticalTower: {
-          attack: { tier1: 2, tier2: 0, tier3: 0 },
-          defense: { tier1: 3, tier2: 1, tier3: 1 },
-          utility: { tier1: 1, tier2: 1, tier3: 1 },
+          attack: { tier1: 5, tier2: 5, tier3: 5 },
+          defense: { tier1: 5, tier2: 5, tier3: 5 },
+          utility: { tier1: 5, tier2: 5, tier3: 5 },
         },
-        statMultiplier: 0.95,
-        gold: 150000, wood: 75000, stone: 60000, iron: 45000, food: 65000, ether: 18000,
-        bonusLoot: { silk: 350, crystal: 30, void_shard: 20, leather: 250 },
-      },
-      {
-        name: '공허의 틈새 관측탑',
-        ownerNickname: '차원학자 노바',
-        guildName: '공허의 관측자',
-        defenseConcept: '🌌 마나 세금 (공허 파편 & MP소모 증가)',
-        gateLevel: 9,
-        bonfireLevel: 9,
-        heroLevelRange: [48, 53],
-        classes: ['calamity_mage', 'aether_gun_meister', 'arcane_scholar', 'elementalist', 'shadow_phantom'],
-        traits: ['공허 왜곡', '에테르 과충전', '마나 붕괴', '시공간 전술', '비전'],
-        avatarIcon: '🌌',
-        tacticalTower: {
-          attack: { tier1: 3, tier2: 2, tier3: 3 },
-          defense: { tier1: 4, tier2: 3, tier3: 4 },
-          utility: { tier1: 4, tier2: 5, tier3: 3 },
-        },
-        statMultiplier: 1.20,
-        gold: 80000, wood: 45000, stone: 40000, iron: 35000, food: 35000, ether: 12000,
-        bonusLoot: { void_shard: 45, crystal: 50, prefix_stone: 30, suffix_stone: 30 },
+        statMultiplier: 1.45,
+        gold: 165000, wood: 100000, stone: 95000, iron: 85000, food: 80000, ether: 26000,
+        bonusLoot: { crystal: 90, void_shard: 70, prefix_stone: 50, suffix_stone: 50 },
       },
     ];
 
@@ -9425,10 +9995,10 @@ export class GameManager {
       const defenseSquad: Mercenary[] = arch.classes.map((clsId, cIdx) => {
         const cls = CHARACTER_CLASSES[clsId] || CHARACTER_CLASSES['squire'];
         const pos = cIdx < 3 ? 'front' : 'back';
-        const [minLv, maxLv] = arch.heroLevelRange || [21, 30];
+        const [minLv, maxLv] = arch.heroLevelRange || [30, 40];
         const lvSpread = maxLv - minLv;
         const lvOffset = lvSpread > 0 ? (cIdx === 0 || cIdx === 4 ? lvSpread : Math.floor(Math.random() * (lvSpread + 1))) : 0;
-        const lv = Math.max(21, Math.min(60, minLv + lvOffset));
+        const lv = Math.max(30, Math.min(65, minLv + lvOffset));
         const heroTrait = (arch.traits && arch.traits[cIdx]) || (cIdx === 0 ? '철벽의' : cIdx === 1 ? '사격' : cIdx === 2 ? '비전' : '지휘');
         return {
           id: `inv_bot_hero_${idx}_${cIdx}`,
@@ -9737,8 +10307,110 @@ export class GameManager {
     return true;
   }
 
+  /** 🛡️ 차원 왜곡 평화 보호막 경과 시간 실시간 정산 (초 단위 차감) */
+  public updatePeaceShieldTime(): number {
+    if (!this.invasionState) return 0;
+    if (this.invasionState.peaceShieldSecondsRemaining === undefined) {
+      this.invasionState.peaceShieldSecondsRemaining = 21600; // 기본 6시간 (21,600초)
+    }
+    if (this.invasionState.peaceShieldActive && this.invasionState.peaceShieldLastActivatedAt) {
+      const now = Date.now();
+      const elapsedSec = Math.floor((now - this.invasionState.peaceShieldLastActivatedAt) / 1000);
+      if (elapsedSec > 0) {
+        this.invasionState.peaceShieldSecondsRemaining = Math.max(0, this.invasionState.peaceShieldSecondsRemaining - elapsedSec);
+        this.invasionState.peaceShieldLastActivatedAt = now;
+        if (this.invasionState.peaceShieldSecondsRemaining <= 0) {
+          this.invasionState.peaceShieldActive = false;
+          this.invasionState.peaceShieldLastActivatedAt = undefined;
+          this.addLog('🛡️ [차원 왜곡 평화 보호막] 보유 보호막 시간(6시간)이 모두 소진되어 보호막이 자동 해제되었습니다. 광고 시청으로 6시간을 추가 충전할 수 있습니다.', 'system');
+          this.emit('invasionUpdated', this.invasionState);
+          this.emit('update');
+          this.saveGame();
+        }
+      }
+    }
+    return this.invasionState.peaceShieldSecondsRemaining;
+  }
+
+  /** 🛡️ 차원 왜곡 평화 보호막 잔여 시간(초) 반환 */
+  public getPeaceShieldRemainingSeconds(): number {
+    return this.updatePeaceShieldTime();
+  }
+
+  /** 🛡️ 현재 영지 평화 보호막 활성화(ON) 여부 반환 (가동 중에는 피침공 방어 및 타 영지 공격 불가) */
+  public isPeaceShieldActive(): boolean {
+    const remaining = this.updatePeaceShieldTime();
+    if (this.invasionState.peaceShieldActive && remaining > 0) {
+      return true;
+    }
+    if (this.invasionState.peaceShieldUntil && this.invasionState.peaceShieldUntil > Date.now()) {
+      return true;
+    }
+    return false;
+  }
+
+  /** 🛡️ 차원 왜곡 평화 보호막 ON/OFF 토글 (켜고 끌 때마다 잔여 시간 차감/보존) */
+  public togglePeaceShield(enable?: boolean): { success: boolean; active: boolean; remainingSeconds: number; message: string } {
+    const currentRemaining = this.updatePeaceShieldTime();
+    const nextState = enable !== undefined ? enable : !this.invasionState.peaceShieldActive;
+
+    if (nextState) {
+      if (currentRemaining <= 0) {
+        return {
+          success: false,
+          active: false,
+          remainingSeconds: 0,
+          message: '보호막 잔여 시간이 없습니다. 광고를 시청하여 6시간을 충전해 주세요.',
+        };
+      }
+      this.invasionState.peaceShieldActive = true;
+      this.invasionState.peaceShieldLastActivatedAt = Date.now();
+      const hours = Math.floor(currentRemaining / 3600);
+      const mins = Math.floor((currentRemaining % 3600) / 60);
+      this.addLog(`🛡️ [차원 왜곡 평화 보호막] 평화 보호막이 켜졌습니다! (잔여: ${hours}시간 ${mins}분 / 가동 중 다른 영지 공격 불가)`, 'reward');
+    } else {
+      this.invasionState.peaceShieldActive = false;
+      this.invasionState.peaceShieldLastActivatedAt = undefined;
+      const hours = Math.floor(currentRemaining / 3600);
+      const mins = Math.floor((currentRemaining % 3600) / 60);
+      this.addLog(`🛡️ [차원 왜곡 평화 보호막] 평화 보호막이 꺼졌습니다. 잔여 시간 소모가 정지됩니다. (잔여: ${hours}시간 ${mins}분)`, 'system');
+    }
+
+    this.emit('invasionUpdated', this.invasionState);
+    this.emit('update');
+    this.saveGame();
+
+    return {
+      success: true,
+      active: !!this.invasionState.peaceShieldActive,
+      remainingSeconds: this.invasionState.peaceShieldSecondsRemaining || 0,
+      message: nextState ? '평화 보호막이 활성화되었습니다.' : '평화 보호막이 비활성화되었습니다.',
+    };
+  }
+
+  /** 🎬 광고 시청을 통한 차원 왜곡 평화 보호막 6시간(21,600초) 추가 충전 */
+  public addPeaceShieldWithAd(): { success: boolean; addedSeconds: number; remainingSeconds: number; message: string } {
+    this.updatePeaceShieldTime();
+    const addSec = 6 * 3600; // 6시간 = 21,600초
+    this.invasionState.peaceShieldSecondsRemaining = (this.invasionState.peaceShieldSecondsRemaining || 0) + addSec;
+    this.addLog(`📺 [차원 왜곡 평화 보호막] 광고 시청 보상으로 보호막 6시간(21,600초)이 추가되었습니다!`, 'reward');
+    this.emit('invasionUpdated', this.invasionState);
+    this.emit('update');
+    this.saveGame();
+    return {
+      success: true,
+      addedSeconds: addSec,
+      remainingSeconds: this.invasionState.peaceShieldSecondsRemaining,
+      message: '보호막 6시간이 충전되었습니다!',
+    };
+  }
+
   /** 피침공 방어 로그 추가 (패배 시 3시간 자동 보호막) */
   public addDefenseLog(log: InvasionDefenseLog): void {
+    if (this.isPeaceShieldActive()) {
+      // 🛡️ 평화 보호막 가동 중에는 모든 피침공 피해 무효화
+      return;
+    }
     if (!this.invasionState.defenseLogs) this.invasionState.defenseLogs = [];
     this.invasionState.defenseLogs.unshift(log);
     if (this.invasionState.defenseLogs.length > 20) {
@@ -10894,6 +11566,7 @@ export class GameManager {
       this.addLog(`⚰️ [영령의 안식] 이번 원정이 종료되어 결속되었던 [${this.activeAncestralBlessing.name}] 가호가 영령의 곁으로 돌아갔습니다.`, 'normal', 'citadel');
       this.activeAncestralBlessing = null;
       this.emit('ancestralBlessingUpdated', null);
+      this.syncAllHeroesStats();
     }
     this.clearExpeditionBuffs();
 
@@ -10915,7 +11588,13 @@ export class GameManager {
       this.hasReturnedFromDungeon = true;
       this.activateQuest('Q_MEMORIAL_TRIBUTE');
       this.addLog('🪦 [진혼의 묘비] 첫 심연 탐험에서 무사히 성채로 귀환했습니다. 성채 묘지를 방문하여 영령들에게 헌화하는 퀘스트가 개방되었습니다.', 'story', 'citadel');
+      PlayGamesService.getInstance().trackAbyssEncounter();
     }
+    if (floor === 11) {
+      this.submitAviciWandererLeaderboard();
+    }
+    this.currentRunF1BossKillTimestamp = 0;
+    this.avici9001Timestamp = 0;
     return settled;
   }
 
@@ -10998,6 +11677,7 @@ export class GameManager {
       this.addLog(`⚰️ [영령의 안식] 원정이 종료되어 결속되었던 [${this.activeAncestralBlessing.name}] 가호가 영령의 곁으로 돌아갔습니다.`, 'normal', 'citadel');
       this.activeAncestralBlessing = null;
       this.emit('ancestralBlessingUpdated', null);
+      this.syncAllHeroesStats();
     }
     this.clearExpeditionBuffs();
 
@@ -11068,29 +11748,57 @@ export class GameManager {
         if (this.activeAncestralBlessing?.heroId === oldestHero.id) {
           this.activeAncestralBlessing = null;
           this.emit('ancestralBlessingUpdated', null);
+          this.syncAllHeroesStats();
         }
         this.addLog(`🕊️ [영령 승천] [${oldestHero.name} (Lv.${oldestHero.level})] 영웅의 혼이 본분을 다하고 안식을 찾아 영겁의 평온 속으로 흩어져 사라집니다.`, 'story', 'citadel');
       }
     }
 
-    // ⚔️ 전사자의 유품(장착 장비)을 성채 인벤토리(보관함)로 전리품 회수
+    // ⚔️ 전사자의 유품(장착 장비) 중 단 1점만 성채 인벤토리(보관함)로 회수하고 [유품] 태그 부여
     const recoveredEquips: string[] = [];
+    let lostEquipsCount = 0;
     if (hero.equipment) {
       if (!this.equipmentInventory) this.equipmentInventory = [];
-      (['weapon', 'armor', 'accessory'] as const).forEach(slot => {
-        const item = hero.equipment[slot];
-        if (item) {
-          item.equippedHeroId = undefined;
-          const invItem = this.equipmentInventory.find(e => e.id === item.id);
-          if (invItem) {
-            invItem.equippedHeroId = undefined;
-          } else {
-            this.addEquipmentToInventory(item);
-          }
-          recoveredEquips.push(`${item.icon || '🛡️'} ${item.name}`);
-          delete hero.equipment[slot];
+      const equippedSlots = (['weapon', 'armor', 'accessory'] as const).filter(
+        slot => !!hero.equipment[slot]
+      );
+
+      if (equippedSlots.length > 0) {
+        // 장착된 장비 중 무작위 1점만 회수 대상으로 선정
+        const chosenSlotIndex = Math.floor(Math.random() * equippedSlots.length);
+        const chosenSlot = equippedSlots[chosenSlotIndex];
+        const chosenItem = hero.equipment[chosenSlot]!;
+
+        // 선정된 1개 장비에 유품 태그 부여 및 성채 보관함으로 회수
+        chosenItem.isMemento = true;
+        chosenItem.mementoHeroId = hero.id;
+        chosenItem.mementoHeroName = hero.name;
+        chosenItem.equippedHeroId = undefined;
+        fallen.mementoItemName = chosenItem.name;
+
+        const invItem = this.equipmentInventory.find(e => e.id === chosenItem.id);
+        if (invItem) {
+          invItem.isMemento = true;
+          invItem.mementoHeroId = hero.id;
+          invItem.mementoHeroName = hero.name;
+          invItem.equippedHeroId = undefined;
+        } else {
+          this.addEquipmentToInventory(chosenItem);
         }
-      });
+        recoveredEquips.push(`${chosenItem.icon || '🛡️'} ${chosenItem.name}`);
+
+        // 회수되지 못한 나머지 장착 장비들은 심연 속으로 영구 유실 (성채 보관함에서도 제거)
+        equippedSlots.forEach(slot => {
+          if (slot !== chosenSlot) {
+            const lostItem = hero.equipment[slot];
+            if (lostItem) {
+              lostEquipsCount++;
+              this.equipmentInventory = this.equipmentInventory.filter(e => e.id !== lostItem.id);
+            }
+          }
+          delete hero.equipment[slot];
+        });
+      }
       this.reconcileEquipment();
     }
 
@@ -11100,7 +11808,11 @@ export class GameManager {
     this.infirmaryPatients = this.infirmaryPatients.filter(pid => pid !== hero.id);
 
     if (recoveredEquips.length > 0) {
-      this.addLog(`📦 [유품 회수] 전사한 [${hero.name}]의 유품 장비(${recoveredEquips.join(', ')})를 성채 인벤토리(보관함)로 전리품처럼 안전하게 회수했습니다!`, 'reward', 'citadel');
+      if (lostEquipsCount > 0) {
+        this.addLog(`📦 [유품 회수] 전사한 [${hero.name}]의 무구 중 유품 [${recoveredEquips[0]}] 1점만이 성채로 무사히 회수되었습니다. (나머지 장비 ${lostEquipsCount}점은 심연 속으로 영구 유실되었습니다)`, 'reward', 'citadel');
+      } else {
+        this.addLog(`📦 [유품 회수] 전사한 [${hero.name}]의 유품 [${recoveredEquips[0]}] 1점이 성채 보관함으로 무사히 회수되었습니다!`, 'reward', 'citadel');
+      }
       this.emit('inventoryUpdated', this.equipmentInventory);
       this.emit('equipmentUpdated', this.equipmentInventory);
     }
@@ -11280,8 +11992,26 @@ export class GameManager {
       );
     }
 
+    // 🪦✨ 유품 영웅 가호 공명 장비 탐색 및 모든 영웅 스탯 즉시 동기화
+    this.syncAllHeroesStats();
+    const resonatingMementoNames: string[] = [];
+    (this.equipmentInventory || []).forEach(eq => {
+      if (eq.isMemento && eq.mementoHeroId === hero.id) {
+        resonatingMementoNames.push(eq.name);
+      }
+    });
+    if (resonatingMementoNames.length > 0) {
+      this.addLog(
+        `✨ [유품 가호 공명] 전사한 [${hero.name}]의 유품 무구(${resonatingMementoNames.join(', ')})가 영령의 가호와 공명하여 장비 성능이 +10% 상승했습니다!`,
+        'reward',
+        'citadel'
+      );
+    }
+
     this.emit('resourcesChanged', this.resources);
     this.emit('ancestralBlessingUpdated', this.activeAncestralBlessing);
+    this.emit('partyUpdated', this.party);
+    this.emit('equipmentUpdated', this.equipmentInventory);
     this.emit('cemeteryUpdated', this.cemetery);
     this.emit('update');
     this.saveGame();
@@ -11707,6 +12437,17 @@ export class GameManager {
         currentArenaRating: this.currentArenaRating,
         arenaCoins: this.arenaCoins,
         arenaStreak: this.arenaStreak,
+        arenaWins: this.arenaWins,
+        arenaLosses: this.arenaLosses,
+        arenaOutlawScore: this.arenaOutlawScore,
+        bossClearTimes: this.bossClearTimes,
+        bestAbyss10FClearTime: this.bestAbyss10FClearTime,
+        maxAviciDangerReached: this.maxAviciDangerReached,
+        avici9001Timestamp: this.avici9001Timestamp,
+        aviciBossBonusClaimed: this.aviciBossBonusClaimed,
+        bestAviciTimeAttackBonus: this.bestAviciTimeAttackBonus,
+        pgsPurificationQuestsClaimed: this.pgsPurificationQuestsClaimed,
+        pgsAviciTiersClaimed: this.pgsAviciTiersClaimed,
         pveBuffActive: this.pveBuffActive,
         bonfireStacks: this.bonfireStacks,
         bonfireWarmthTime: this.bonfireWarmthTime,
@@ -11763,6 +12504,7 @@ export class GameManager {
           this.citadelLogs = this.citadelLogs.slice(-20);
           this.dungeonLogs = this.dungeonLogs.slice(-20);
           this.battleLogs = this.battleLogs.slice(-20);
+          this.arenaLogs = this.arenaLogs.slice(-20);
           if (this.invasionState?.defenseLogs) {
             this.invasionState.defenseLogs = this.invasionState.defenseLogs.slice(0, 10);
           }
@@ -11786,6 +12528,16 @@ export class GameManager {
             currentArenaRating: this.currentArenaRating,
             arenaCoins: this.arenaCoins,
             arenaStreak: this.arenaStreak,
+            arenaWins: this.arenaWins,
+            arenaLosses: this.arenaLosses,
+            arenaOutlawScore: this.arenaOutlawScore,
+            bossClearTimes: this.bossClearTimes,
+            bestAbyss10FClearTime: this.bestAbyss10FClearTime,
+            maxAviciDangerReached: this.maxAviciDangerReached,
+            aviciBossBonusClaimed: this.aviciBossBonusClaimed,
+            bestAviciTimeAttackBonus: this.bestAviciTimeAttackBonus,
+            pgsPurificationQuestsClaimed: this.pgsPurificationQuestsClaimed,
+            pgsAviciTiersClaimed: this.pgsAviciTiersClaimed,
             pveBuffActive: this.pveBuffActive,
             bonfireStacks: this.bonfireStacks,
             bonfireWarmthTime: this.bonfireWarmthTime,
@@ -11827,6 +12579,8 @@ export class GameManager {
       session.dungeonFloor = this.dungeonFloor;
       session.dungeonDangerLevel = this.dungeonDangerLevel;
       session.isOvercharged = this.isOvercharged;
+      session.isEmergencyEscapeBattle = this.isEmergencyEscapeBattle;
+      session.pendingEventBattleId = this.pendingEventBattleId;
       session.dungeonInventory = this.dungeonInventory;
       session.pendingLoot = this.pendingLoot;
       session.campCooldown = this.campCooldown;
@@ -11846,6 +12600,8 @@ export class GameManager {
       session.dungeonFloor = this.dungeonFloor;
       session.dungeonDangerLevel = this.dungeonDangerLevel;
       session.isOvercharged = this.isOvercharged;
+      session.isEmergencyEscapeBattle = this.isEmergencyEscapeBattle;
+      session.pendingEventBattleId = this.pendingEventBattleId;
       session.dungeonInventory = this.dungeonInventory;
       session.pendingLoot = this.pendingLoot;
       session.campCooldown = this.campCooldown;
@@ -11890,6 +12646,15 @@ export class GameManager {
   }
 
   public clearDungeonSession(): void {
+    this.expeditionTriggeredEventIds = [];
+    this.hasSoulLanternRevive = false;
+    this.isDoppelgangerBattle = false;
+    this.isEncounterPvP = false;
+    this.isEmergencyEscapeBattle = false;
+    this.pendingEventBattleId = null;
+    this.encounterEventTriggeredThisRun = false;
+    this.encounterVisitorRecord = null;
+    this.clearExpeditionBuffs();
     try {
       localStorage.removeItem('limbo_dungeon_session');
     } catch (_) {}
@@ -11929,6 +12694,16 @@ export class GameManager {
       currentArenaRating: this.currentArenaRating,
       arenaCoins: this.arenaCoins,
       arenaStreak: this.arenaStreak,
+      arenaWins: this.arenaWins,
+      arenaLosses: this.arenaLosses,
+      arenaOutlawScore: this.arenaOutlawScore,
+      bossClearTimes: this.bossClearTimes,
+      bestAbyss10FClearTime: this.bestAbyss10FClearTime,
+      maxAviciDangerReached: this.maxAviciDangerReached,
+      aviciBossBonusClaimed: this.aviciBossBonusClaimed,
+      bestAviciTimeAttackBonus: this.bestAviciTimeAttackBonus,
+      pgsPurificationQuestsClaimed: this.pgsPurificationQuestsClaimed,
+      pgsAviciTiersClaimed: this.pgsAviciTiersClaimed,
       pveBuffActive: this.pveBuffActive,
       bonfireStacks: this.bonfireStacks,
       bonfireWarmthTime: this.bonfireWarmthTime,
@@ -12168,6 +12943,24 @@ export class GameManager {
     if (parsed.currentArenaRating) this.currentArenaRating = parsed.currentArenaRating as number;
     if (parsed.arenaCoins !== undefined) this.arenaCoins   = parsed.arenaCoins as number;
     if (parsed.arenaStreak !== undefined) this.arenaStreak = parsed.arenaStreak as number;
+    if (parsed.arenaWins !== undefined) this.arenaWins = parsed.arenaWins as number;
+    if (parsed.arenaLosses !== undefined) this.arenaLosses = parsed.arenaLosses as number;
+    if (parsed.arenaOutlawScore !== undefined) this.arenaOutlawScore = parsed.arenaOutlawScore as number;
+    else this.arenaOutlawScore = Math.max(0, (this.arenaWins || 0) * 3 - (this.arenaLosses || 0) * 1);
+    if (parsed.bossClearTimes && typeof parsed.bossClearTimes === 'object') {
+      this.bossClearTimes = parsed.bossClearTimes as Record<number, number>;
+    }
+    if (parsed.bestAbyss10FClearTime !== undefined) this.bestAbyss10FClearTime = parsed.bestAbyss10FClearTime as number;
+    if (parsed.maxAviciDangerReached !== undefined) this.maxAviciDangerReached = parsed.maxAviciDangerReached as number;
+    if (parsed.avici9001Timestamp !== undefined) this.avici9001Timestamp = parsed.avici9001Timestamp as number;
+    if (parsed.aviciBossBonusClaimed) {
+      this.aviciBossBonusClaimed = { ...this.aviciBossBonusClaimed, ...(parsed.aviciBossBonusClaimed as any) };
+    }
+    if (parsed.bestAviciTimeAttackBonus !== undefined) this.bestAviciTimeAttackBonus = parsed.bestAviciTimeAttackBonus as number;
+    if (parsed.pgsPurificationQuestsClaimed && Array.isArray(parsed.pgsPurificationQuestsClaimed)) {
+      this.pgsPurificationQuestsClaimed = parsed.pgsPurificationQuestsClaimed as string[];
+    }
+    if (parsed.pgsAviciTiersClaimed !== undefined) this.pgsAviciTiersClaimed = parsed.pgsAviciTiersClaimed as number;
     // 프리시즌 브론즈 시작 보정: 과거 하드코딩 기본값(1200, 1000)이고 대전 전적이 없으면 브론즈(800P, #850)에서 시작
     if ((this.currentArenaRating === 1200 || this.currentArenaRating === 1000) && (!this.arenaStreak || this.arenaStreak === 0)) {
       this.currentArenaRating = 800;
@@ -12205,12 +12998,22 @@ export class GameManager {
     if (parsed.tavernRefreshCount !== undefined) this.tavernRefreshCount = parsed.tavernRefreshCount as number;
     if (parsed.nemesisState) {
       this.nemesisState = { ...this.nemesisState, ...(parsed.nemesisState as Partial<NemesisState>) };
+      if (this.nemesisState.dailyAttempts > 3) {
+        this.nemesisState.dailyAttempts = 3;
+      }
     }
     // 🌌 네메시스 체력 100% 완전 복구 보장
     this.restoreNemesisHealth(true);
     if (parsed.invasionState) {
       this.invasionState = { ...this.invasionState, ...(parsed.invasionState as Partial<InvasionState>) };
     }
+    if (this.invasionState.peaceShieldSecondsRemaining === undefined) {
+      this.invasionState.peaceShieldSecondsRemaining = 21600;
+    }
+    if (this.invasionState.peaceShieldActive === undefined) {
+      this.invasionState.peaceShieldActive = false;
+    }
+    this.updatePeaceShieldTime();
     if (parsed.cemetery && Array.isArray(parsed.cemetery)) {
       this.cemetery = (parsed.cemetery as FallenHero[]).slice(0, 5);
     }
@@ -12274,9 +13077,10 @@ export class GameManager {
         }
         return l;
       });
-      this.citadelLogs = this.logs.filter(l => !l.category || l.category === 'citadel');
+      this.citadelLogs = this.logs.filter(l => (!l.category || l.category === 'citadel') && !GameManager.isAnchorGateLog(l.text));
       this.dungeonLogs = this.logs.filter(l => l.category === 'dungeon');
       this.battleLogs = this.logs.filter(l => l.category === 'battle');
+      this.arenaLogs = this.logs.filter(l => l.category === 'arena' || GameManager.isAnchorGateLog(l.text));
     } else {
       this.logs = this.logs.map(l => {
         if (l.text && (l.text.includes('초기 2인 결사대') || l.text.includes('현재 원정대로'))) {
@@ -12288,7 +13092,8 @@ export class GameManager {
         this.addLog('차가운 흑무가 방주 성채를 감싸고 있습니다.', 'normal', 'citadel');
         this.addLog(this.getCurrentPartyLogText(), 'story', 'citadel');
       } else {
-        this.citadelLogs = this.logs.filter(l => !l.category || l.category === 'citadel');
+        this.citadelLogs = this.logs.filter(l => (!l.category || l.category === 'citadel') && !GameManager.isAnchorGateLog(l.text));
+        this.arenaLogs = this.logs.filter(l => l.category === 'arena' || GameManager.isAnchorGateLog(l.text));
       }
     }
 
@@ -12852,6 +13657,24 @@ export class GameManager {
         if (parsed.currentArenaRating) this.currentArenaRating = parsed.currentArenaRating as number;
         if (parsed.arenaCoins !== undefined) this.arenaCoins   = parsed.arenaCoins as number;
         if (parsed.arenaStreak !== undefined) this.arenaStreak = parsed.arenaStreak as number;
+        if (parsed.arenaWins !== undefined) this.arenaWins = parsed.arenaWins as number;
+        if (parsed.arenaLosses !== undefined) this.arenaLosses = parsed.arenaLosses as number;
+        if (parsed.arenaOutlawScore !== undefined) this.arenaOutlawScore = parsed.arenaOutlawScore as number;
+        else this.arenaOutlawScore = Math.max(0, (this.arenaWins || 0) * 3 - (this.arenaLosses || 0) * 1);
+        if (parsed.bossClearTimes && typeof parsed.bossClearTimes === 'object') {
+          this.bossClearTimes = parsed.bossClearTimes as Record<number, number>;
+        }
+        if (parsed.bestAbyss10FClearTime !== undefined) this.bestAbyss10FClearTime = parsed.bestAbyss10FClearTime as number;
+        if (parsed.maxAviciDangerReached !== undefined) this.maxAviciDangerReached = parsed.maxAviciDangerReached as number;
+        if (parsed.avici9001Timestamp !== undefined) this.avici9001Timestamp = parsed.avici9001Timestamp as number;
+        if (parsed.aviciBossBonusClaimed) {
+          this.aviciBossBonusClaimed = { ...this.aviciBossBonusClaimed, ...(parsed.aviciBossBonusClaimed as any) };
+        }
+        if (parsed.bestAviciTimeAttackBonus !== undefined) this.bestAviciTimeAttackBonus = parsed.bestAviciTimeAttackBonus as number;
+        if (parsed.pgsPurificationQuestsClaimed && Array.isArray(parsed.pgsPurificationQuestsClaimed)) {
+          this.pgsPurificationQuestsClaimed = parsed.pgsPurificationQuestsClaimed as string[];
+        }
+        if (parsed.pgsAviciTiersClaimed !== undefined) this.pgsAviciTiersClaimed = parsed.pgsAviciTiersClaimed as number;
         // 프리시즌 브론즈 시작 보정: 과거 하드코딩 기본값(1200, 1000)이고 대전 전적이 없으면 브론즈(800P, #850)에서 시작
         if ((this.currentArenaRating === 1200 || this.currentArenaRating === 1000) && (!this.arenaStreak || this.arenaStreak === 0)) {
           this.currentArenaRating = 800;
@@ -12891,12 +13714,22 @@ export class GameManager {
         if (parsed.tavernRefreshCount !== undefined) this.tavernRefreshCount = parsed.tavernRefreshCount as number;
         if (parsed.nemesisState) {
           this.nemesisState = { ...this.nemesisState, ...(parsed.nemesisState as Partial<NemesisState>) };
+          if (this.nemesisState.dailyAttempts > 3) {
+            this.nemesisState.dailyAttempts = 3;
+          }
         }
         // 🌌 네메시스 체력 100% 완전 복구 보장
         this.restoreNemesisHealth(true);
         if (parsed.invasionState) {
           this.invasionState = { ...this.invasionState, ...(parsed.invasionState as Partial<InvasionState>) };
         }
+        if (this.invasionState.peaceShieldSecondsRemaining === undefined) {
+          this.invasionState.peaceShieldSecondsRemaining = 21600;
+        }
+        if (this.invasionState.peaceShieldActive === undefined) {
+          this.invasionState.peaceShieldActive = false;
+        }
+        this.updatePeaceShieldTime();
         if (parsed.cemetery && Array.isArray(parsed.cemetery)) {
           this.cemetery = (parsed.cemetery as FallenHero[]).slice(0, 5);
         }
@@ -12948,6 +13781,10 @@ export class GameManager {
           this.purifiedEquipmentHistory = parsed.purifiedEquipmentHistory as { item: EquipmentItem; purifiedAt: number }[];
           this.cleanExpiredPurifiedItems();
         }
+        if (parsed.offlineReport && typeof parsed.offlineReport === 'object') {
+          this.offlineReport = parsed.offlineReport as any;
+          this.lastOfflineReport = parsed.offlineReport as any;
+        }
         this.checkNemesisDailyReset();
         if (Array.isArray(parsed.logs) && parsed.logs.length > 0) {
           this.logs = (parsed.logs as LogEntry[]).map(l => {
@@ -12959,9 +13796,10 @@ export class GameManager {
             }
             return l;
           });
-          this.citadelLogs = this.logs.filter(l => !l.category || l.category === 'citadel');
+          this.citadelLogs = this.logs.filter(l => (!l.category || l.category === 'citadel') && !GameManager.isAnchorGateLog(l.text));
           this.dungeonLogs = this.logs.filter(l => l.category === 'dungeon');
           this.battleLogs = this.logs.filter(l => l.category === 'battle');
+          this.arenaLogs = this.logs.filter(l => l.category === 'arena' || GameManager.isAnchorGateLog(l.text));
         } else {
           this.logs = this.logs.map(l => {
             if (l.text && (l.text.includes('초기 2인 결사대') || l.text.includes('현재 원정대로'))) {
@@ -12973,7 +13811,8 @@ export class GameManager {
             this.addLog('차가운 흑무가 방주 성채를 감싸고 있습니다.', 'normal', 'citadel');
             this.addLog(this.getCurrentPartyLogText(), 'story', 'citadel');
           } else {
-            this.citadelLogs = this.logs.filter(l => !l.category || l.category === 'citadel');
+            this.citadelLogs = this.logs.filter(l => (!l.category || l.category === 'citadel') && !GameManager.isAnchorGateLog(l.text));
+            this.arenaLogs = this.logs.filter(l => l.category === 'arena' || GameManager.isAnchorGateLog(l.text));
           }
         }
 

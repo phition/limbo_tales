@@ -14,6 +14,8 @@ import {
 import { CustomAssetService } from '../services/CustomAssetService';
 import { EncyclopediaBadge } from './EncyclopediaBadge';
 import { GoogleAdService } from '../services/GoogleAdService';
+import { useI18n } from '../hooks/useI18n';
+import { formatCooldownMs } from '../utils/timeUtils';
 
 interface Props {
   onBack: () => void;
@@ -22,22 +24,14 @@ interface Props {
 const GRADE_INFO: Record<string, { label: string; color: string; border: string; bg: string }> = {
   rookie: { label: 'N', color: '#9e9e9e', border: '#75757544', bg: '#42424222' },
   veteran: { label: 'V', color: '#4caf50', border: '#4caf5044', bg: '#4caf5022' },
-  hero: { label: 'H', color: '#29b6f6', border: '#29b6f644', bg: '#29b6f622' },
-  elite: { label: 'H', color: '#29b6f6', border: '#29b6f644', bg: '#29b6f622' },
+  hero: { label: 'H', color: '#00d2ff', border: '#00d2ff44', bg: '#00d2ff22' },
+  elite: { label: 'H', color: '#00d2ff', border: '#00d2ff44', bg: '#00d2ff22' },
   epic: { label: 'E', color: '#ab47bc', border: '#ab47bc44', bg: '#ab47bc22' },
   legend: { label: 'L', color: '#ffd54f', border: '#ffd54f44', bg: '#ffd54f22' },
 };
 
-const formatCooldown = (ms: number): string => {
-  if (ms <= 0) return '0초';
-  const totalSec = Math.ceil(ms / 1000);
-  const mins = Math.floor(totalSec / 60);
-  const secs = totalSec % 60;
-  if (mins > 0) return `${mins}분 ${secs < 10 ? '0' : ''}${secs}초`;
-  return `${secs}초`;
-};
-
 export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
+  const { tr, lang } = useI18n();
   const { state, gm } = useGameManager();
   useCustomAssetVersion();
   const [selectedHero, setSelectedHero] = useState<FallenHero | null>(null);
@@ -78,9 +72,9 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
     try {
       const res = await GoogleAdService.getInstance().showRewardedAd({
         placement: 'cemetery',
-        title: '영령 추모 헌화',
-        description: `위령비에 등불을 바치고 5분간 전투 EXP +${expBonusPct}% 가호를 얻습니다.`,
-        rewardText: `전투 EXP +${expBonusPct}% 가호 (5분) & 심연 촉매 슬롯 개방`,
+        title: tr('영령 추모 헌화'),
+        description: tr(`위령비에 등불을 바치고 5분간 전투 EXP +${expBonusPct}% 가호를 얻습니다.`),
+        rewardText: tr(`전투 EXP +${expBonusPct}% 가호 (5분) & 심연 촉매 슬롯 개방`),
       });
       if (res.rewarded) {
         gm.payMemorialRespectAd();
@@ -103,10 +97,10 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
         <div className="flex items-center gap-2">
           <span className="text-base select-none">🪦</span>
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-sm font-bold text-[#e2ecf8]">성채 묘지</span>
-            <span className="text-[10px] text-[#8b9bb4]">영령의 안식처</span>
+            <span className="text-sm font-bold text-[#e2ecf8]">{tr('성채 묘지')}</span>
+            <span className="text-[10px] text-[#8b9bb4]">{tr('영령의 안식처')}</span>
             <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ff416c22] text-[#ff7043] font-mono font-bold border border-[#ff416c44]">
-              {cemetery.length}/5명
+              {cemetery.length}/5{tr('명')}
             </span>
             <span
               className={`text-[10px] px-1.5 py-0.2 rounded font-mono font-bold border ${
@@ -114,19 +108,19 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                   ? 'bg-[#ffd54f22] text-[#ffd54f] border-[#ffd54f55]'
                   : 'bg-[#78909c22] text-[#90a4ae] border-[#78909c44]'
               }`}
-              title="안치 잠금: 최대 3명까지 잠금 설정 시 새로운 전사자가 생겨도 묘지에서 밀려나지 않습니다."
+              title={tr('안치 잠금: 최대 3명까지 잠금 설정 시 새로운 전사자가 생겨도 묘지에서 밀려나지 않습니다.')}
             >
               🔒 {lockedCount}/3
             </span>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <EncyclopediaBadge query="묘지" tab="systems" label="묘지 백과" />
+          <EncyclopediaBadge query="묘지" tab="systems" label={tr('묘지 백과')} />
           <button
             className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg"
             style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
             onClick={onBack}
-            aria-label="닫기"
+            aria-label={tr('닫기')}
           >
             <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
           </button>
@@ -139,18 +133,18 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
         <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-[#141022] border border-[#2d1b44] text-[11px]">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-sm shrink-0">✨</span>
-            <span className="text-[#a48cb6] shrink-0 font-medium">영령 결속 가호:</span>
+            <span className="text-[#a48cb6] shrink-0 font-medium">{tr('영령 결속 가호:')}</span>
             {activeBlessing ? (
               <span className="font-bold text-[#ffd54f] truncate">
                 [{activeBlessing.name}] <span className="text-[#ce93d8] font-normal">({activeBlessing.heroName})</span>
               </span>
             ) : (
-              <span className="text-[#78909c] truncate">미결속 (아래 영웅 선택 후 가호 결속 가능)</span>
+              <span className="text-[#78909c] truncate">{tr('미결속 (아래 영웅 선택 후 가호 결속 가능)')}</span>
             )}
           </div>
           {activeBlessing && (
             <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ba68c833] text-[#f48fb1] border border-[#ba68c866] font-bold shrink-0">
-              다음 1회 원정
+              {tr('다음 1회 원정')}
             </span>
           )}
         </div>
@@ -162,10 +156,10 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center gap-2.5">
             <span className="text-4xl opacity-50 select-none">🕊️</span>
             <div className="text-xs font-bold text-[#cfd8e8]">
-              아직 성채 묘지에 안장된 영웅이 없습니다.
+              {tr('아직 성채 묘지에 안장된 영웅이 없습니다.')}
             </div>
             <div className="text-[11px] text-[#607d8b]">
-              모든 결사대원이 사경을 헤치고 살아남아 성채의 등불을 지켜내고 있습니다.
+              {tr('모든 결사대원이 사경을 헤치고 살아남아 성채의 등불을 지켜내고 있습니다.')}
             </div>
           </div>
         ) : (
@@ -176,11 +170,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
             const cooldownLeft = gm.getHeroOfferingCooldownLeft(h.id);
             const onCooldown = cooldownLeft > 0;
 
-            const customPortrait = CustomAssetService.getInstance().getMercenaryOverride(h.classId)
-              || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
-              || (h.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(h.portraitPromptKey) : undefined)
-              || CustomAssetService.getInstance().getMercenaryOverride(h.id)
-              || CustomAssetService.getInstance().getMercenaryOverride(h.name);
+            const customPortrait = CustomAssetService.getHeroPortrait(h);
 
             return (
               <div
@@ -234,7 +224,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                     </div>
 
                     <div className="text-[11px] text-[#8b9bb4] truncate mt-0.5">
-                      {cls?.name || '결사대원'} · {h.title}
+                      {tr(cls?.name || '결사대원')}
                     </div>
                   </div>
                 </div>
@@ -251,29 +241,29 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                     }`}
                     title={
                       h.isLocked
-                        ? '안치 잠금 해제 (클릭 시 잠금 해제)'
+                        ? tr('안치 잠금 해제 (클릭 시 잠금 해제)')
                         : lockedCount >= 3
-                        ? '최대 3명까지만 잠금할 수 있습니다.'
-                        : '안치 잠금 (새 유해가 들어와도 밀려나지 않음)'
+                        ? tr('최대 3명까지만 잠금할 수 있습니다.')
+                        : tr('안치 잠금 (새 유해가 들어와도 밀려나지 않음)')
                     }
                   >
                     <span>{h.isLocked ? '🔒' : '🔓'}</span>
-                    <span className="text-[10px] font-bold">{h.isLocked ? '잠금' : '잠금'}</span>
+                    <span className="text-[10px] font-bold">{h.isLocked ? tr('잠금') : tr('잠금')}</span>
                   </button>
 
                   {isBound && (
                     <span className="px-2 py-0.5 rounded bg-[#ba68c833] text-[#f48fb1] border border-[#ba68c888] font-bold text-[10px] shadow-[0_0_8px_rgba(186,104,200,0.35)] animate-pulse">
-                      ✨ 결속 중
+                      ✨ {tr('결속 중')}
                     </span>
                   )}
                   {onCooldown && !isBound && (
                     <span className="px-2 py-0.5 rounded bg-[#ff704322] text-[#ff7043] border border-[#ff704344] font-mono text-[10px]">
-                      ⏳ 쿨다운 {formatCooldown(cooldownLeft)}
+                      ⏳ {tr('쿨다운')} {formatCooldownMs(cooldownLeft, lang)}
                     </span>
                   )}
                   {!isBound && !onCooldown && (
                     <span className="text-[11px] text-[#c8aa6e] opacity-80 flex items-center gap-0.5">
-                      <span>상세</span>
+                      <span>{tr('상세')}</span>
                       <span className="text-[9px]">▶</span>
                     </span>
                   )}
@@ -301,15 +291,19 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
               <span className="text-2xl shrink-0">🎬</span>
               <div className="text-left min-w-0">
                 <div className="font-bold flex items-center gap-1.5 flex-wrap">
-                  <span className="truncate">{isAdLoading ? '광고 로딩 중...' : '광고 보고 영령 위령비 헌화하기'}</span>
+                  <span className="truncate">{isAdLoading ? tr('광고 로딩 중...') : tr('광고 보고 영령 위령비 헌화하기')}</span>
                   {isExpBuffActive && (
                     <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] font-mono font-bold border border-[#38ef7d44]">
-                      가호 활성 중 ({formatCooldown(expBuffMsLeft)})
+                      {tr('가호 활성 중')} ({formatCooldownMs(expBuffMsLeft, lang)})
                     </span>
                   )}
                 </div>
                 <div className="text-[10px] text-[#a0aec0] font-normal truncate mt-0.5">
-                  안장된 {heroCount}명의 영령 추모 (기본 10% + 영령당 5%, 최대 30%) ➔ 5분간 전투 EXP +{expBonusPct}% 가호 & 심연 촉매 슬롯 동시 개방!
+                  {lang === 'en'
+                    ? `Memorialize ${heroCount} Enshrined Spirits (Base 10% + 5%/spirit, max 30%) ➔ 5m Combat EXP +${expBonusPct}% Blessing & Catalyst Slots Unlocked!`
+                    : lang === 'ja'
+                    ? `安置された${heroCount}名の英霊追悼 (基本10% + 英霊ごと5%、最大30%) ➔ 5分間戦闘EXP +${expBonusPct}%加護＆深淵触媒スロット同時開放！`
+                    : `안장된 ${heroCount}명의 영령 추모 (기본 10% + 영령당 5%, 최대 30%) ➔ 5분간 전투 EXP +${expBonusPct}% 가호 & 심연 촉매 슬롯 동시 개방!`}
                 </div>
               </div>
             </div>
@@ -321,7 +315,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
               </span>
               {isExpBuffActive && (
                 <span className="text-[10px] text-[#ffd54f] bg-[#ffd54f15] px-1.5 py-1 rounded border border-[#ffd54f33]">
-                  +5분 연장
+                  {tr('+5분 연장')}
                 </span>
               )}
             </div>
@@ -343,11 +337,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
         const currentEther = state.resources.ether || 0;
         const hasEther = currentEther >= ETHER_COST;
 
-        const customPortrait = CustomAssetService.getInstance().getMercenaryOverride(selectedHero.classId)
-          || (cls?.promptKey ? CustomAssetService.getInstance().getMercenaryOverride(cls.promptKey) : undefined)
-          || (selectedHero.portraitPromptKey ? CustomAssetService.getInstance().getMercenaryOverride(selectedHero.portraitPromptKey) : undefined)
-          || CustomAssetService.getInstance().getMercenaryOverride(selectedHero.id)
-          || CustomAssetService.getInstance().getMercenaryOverride(selectedHero.name);
+        const customPortrait = CustomAssetService.getHeroPortrait(selectedHero);
 
         return (
           <Modal
@@ -357,7 +347,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
             footer={
               <div className="flex gap-2 w-full">
                 <ActionButton
-                  label="닫기"
+                  label={tr('닫기')}
                   variant="ghost"
                   className="w-20 shrink-0"
                   onClick={() => setSelectedHero(null)}
@@ -365,8 +355,8 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                 <ActionButton
                   label={
                     selectedHero.isLocked
-                      ? '🔒 안치 잠금 해제'
-                      : `🔒 영구 안치 (${lockedCount}/3)`
+                      ? tr('🔒 안치 잠금 해제')
+                      : `🔒 ${tr('영구 안치')} (${lockedCount}/3)`
                   }
                   variant={selectedHero.isLocked ? 'secondary' : 'ghost'}
                   disabled={!selectedHero.isLocked && lockedCount >= 3}
@@ -376,14 +366,14 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                 <ActionButton
                   label={
                     isBound
-                      ? '✨ 현재 원정에 결속됨 (활성)'
+                      ? tr('✨ 현재 원정에 결속됨 (활성)')
                       : onCooldown
-                      ? `⏳ 영령 안식 쿨다운 (${formatCooldown(cooldownLeft)})`
+                      ? `⏳ ${tr('영령 안식 쿨다운')} (${formatCooldownMs(cooldownLeft, lang)})`
                       : !hasEther
-                      ? `🔮 에테르 부족 (${ETHER_COST}개 필요)`
+                      ? `🔮 ${tr('에테르 부족')} (${ETHER_COST}${tr('개 필요')})`
                       : activeBlessing
-                      ? `⚰️ 기존 가호 교체 & 결속 (에테르 ${ETHER_COST}개)`
-                      : `⚰️ 기도와 공물 바치기 (에테르 ${ETHER_COST}개)`
+                      ? `⚰️ ${tr('기존 가호 교체 & 결속')} (${tr('에테르')} ${ETHER_COST}${tr('개')})`
+                      : `⚰️ ${tr('기도와 공물 바치기')} (${tr('에테르')} ${ETHER_COST}${tr('개')})`
                   }
                   variant={isBound ? 'secondary' : 'primary'}
                   disabled={isBound || onCooldown || !hasEther}
@@ -429,7 +419,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                     </span>
                   </div>
                   <div className="text-xs text-[#8b9bb4] mt-0.5">
-                    {cls?.name || '결사대원'} · {selectedHero.title}
+                    {tr(cls?.name || '결사대원')}
                   </div>
                 </div>
               </div>
@@ -446,9 +436,9 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                     <span className="text-2xl select-none">{blessingConfig.icon}</span>
                     <div>
                       <span className="text-xs font-bold text-[#ba68c8] flex items-center gap-1.5">
-                        <span>영령의 가호: {blessingConfig.name}</span>
+                        <span>{tr('영령의 가호')}: {blessingConfig.name}</span>
                         <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ba68c822] text-[#f48fb1] border border-[#ba68c844]">
-                          다음 원정 1회 적용
+                          {tr('다음 원정 1회 적용')}
                         </span>
                       </span>
                       <div className="text-[10px] text-[#ffd54f] mt-0.5">
@@ -458,15 +448,15 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                   </div>
                   {isBound ? (
                     <span className="px-2 py-0.5 rounded bg-[#ba68c833] text-[#f48fb1] border border-[#ba68c866] font-bold text-[10px] shrink-0">
-                      ✨ 결속 발동 중
+                      ✨ {tr('결속 발동 중')}
                     </span>
                   ) : onCooldown ? (
                     <span className="px-2 py-0.5 rounded bg-[#ff704322] text-[#ff7043] border border-[#ff704344] font-mono text-[10px] shrink-0">
-                      ⏳ 쿨다운 {formatCooldown(cooldownLeft)}
+                      ⏳ {tr('쿨다운')} {formatCooldownMs(cooldownLeft, lang)}
                     </span>
                   ) : (
                     <span className="px-2 py-0.5 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e44] text-[10px] shrink-0">
-                      결속 가능
+                      {tr('결속 가능')}
                     </span>
                   )}
                 </div>
@@ -479,13 +469,13 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                 <div className="p-2.5 rounded-lg bg-[#0e1320] border border-[#232f45] flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1.5">
                     <span className="text-base select-none">🔮</span>
-                    <span className="text-[#8b9bb4]">필요 공물:</span>
-                    <span className="font-bold text-[#c8aa6e]">에테르 {ETHER_COST}개</span>
+                    <span className="text-[#8b9bb4]">{tr('필요 공물:')}</span>
+                    <span className="font-bold text-[#c8aa6e]">{tr('에테르')} {ETHER_COST}{tr('개')}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <span className="text-[11px] text-[#8b9bb4]">현재 보유:</span>
+                    <span className="text-[11px] text-[#8b9bb4]">{tr('현재 보유:')}</span>
                     <span className={`font-bold font-mono ${hasEther ? 'text-[#38ef7d]' : 'text-[#ff5252]'}`}>
-                      {currentEther}개
+                      {currentEther}{tr('개')}
                     </span>
                   </div>
                 </div>
@@ -513,19 +503,33 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                 </div>
               </div>
 
-              {/* 생전 유품 무구 목록 */}
+              {/* 생전 착용 무구 및 회수된 유품 목록 */}
               {selectedHero.equipmentSummary && selectedHero.equipmentSummary.length > 0 && (
                 <div className="p-2.5 rounded-lg bg-[#141a29] border border-[#202c44] text-left text-xs">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] text-[#8b9bb4]">생전 유품 무구</span>
-                    <span className="text-[10px] text-[#c8aa6e]">📦 성채 보관함으로 회수 완료</span>
+                    <span className="text-[10px] text-[#8b9bb4]">{tr('생전 착용 무구')}</span>
+                    <span className="text-[10px] text-[#c8aa6e]">{tr('📦 유품 1점 회수 / 잔여 무구 유실')}</span>
                   </div>
                   <div className="flex gap-1.5 flex-wrap">
-                    {selectedHero.equipmentSummary.map((eq, i) => (
-                      <span key={i} className="text-[11px] px-2 py-0.5 rounded bg-[#1f2a3f] text-[#c8aa6e] border border-[#2e3e5c]">
-                        {eq}
-                      </span>
-                    ))}
+                    {selectedHero.equipmentSummary.map((eq, i) => {
+                      const isRecoveredMemento = selectedHero.mementoItemName
+                        ? selectedHero.mementoItemName === eq
+                        : i === 0;
+                      return (
+                        <span
+                          key={i}
+                          className={`text-[11px] px-2 py-0.5 rounded border flex items-center gap-1 ${
+                            isRecoveredMemento
+                              ? 'bg-[#311b9244] text-[#ce93d8] border-[#7e57c2] font-bold shadow-xs'
+                              : 'bg-[#1f2a3f33] text-[#78909c] border-[#2e3e5c] line-through opacity-60'
+                          }`}
+                          title={isRecoveredMemento ? tr('🪦 성채로 회수된 유품 (영령 가호 시 성능 +10%)') : tr('심연 속으로 영구 유실됨')}
+                        >
+                          {isRecoveredMemento ? tr('🪦 [유품] ') : tr('💀 [유실] ')}
+                          {tr(eq)}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               )}

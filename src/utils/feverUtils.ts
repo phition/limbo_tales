@@ -64,13 +64,13 @@ export const FEVER_BADGE_META: Record<FeverBadgeType, FeverBadgeMeta> = {
   },
   break: {
     type: 'break',
-    label: '차징 붕괴',
+    label: '파쇄',
     shortLabel: 'BREAK',
     icon: '💫',
     color: '#c8aa6e',
     borderColor: '#c8aa6e88',
     bg: '#c8aa6e22',
-    description: '적의 차징 캔슬 및 그로기 유발'
+    description: '적의 방어 분쇄, 실드 관통 및 차징 붕괴'
   },
   evade: {
     type: 'evade',

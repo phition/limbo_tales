@@ -20,6 +20,12 @@ import { resolveCombatVfxAndSfx, getSkillTags, getEffectivePositionBonus, isComb
 import { GameIcon } from '../components/GameIcon';
 import { SkillDetailModal } from '../components/SkillDetailModal';
 import { Modal } from '../components/Modal';
+import { FeverGaugeBar } from '../components/FeverGaugeBar';
+import { FeverBadgeType } from '../types/fever';
+import { evaluateFeverSynergy } from '../utils/feverUtils';
+import { useI18n } from '../hooks/useI18n';
+import { GoogleAdService } from '../services/GoogleAdService';
+import { formatDuration, formatTimeLeft } from '../utils/timeUtils';
 
 // ── 롱프레스 (홀드) 헬퍼 컴포넌트 ──────────────────────────────────────────
 const LongPressBox: React.FC<{
@@ -131,6 +137,10 @@ interface SkillCutInState {
   heroName?: string;
   subText?: string;
   isUltimate?: boolean;
+  bannerType?: 'fever' | 'skill';
+  feverSynergyName?: string;
+  feverColor?: string;
+  feverBorderColor?: string;
 }
 
 // ── 용병 상태 행 (PVE 감성 HeroRow) ────────────────────────────────────────
@@ -140,6 +150,7 @@ const HeroRow: React.FC<{
   isSelected: boolean;
   onClick: () => void;
 }> = ({ hero, isCurrentTurn, isSelected, onClick }) => {
+  const { tr } = useI18n();
   const isAlive = hero.currentHp > 0;
   const hpPct = isAlive ? Math.max(0, Math.min(100, (hero.currentHp / hero.maxHp) * 100)) : 0;
   const mpPct = isAlive ? Math.max(0, Math.min(100, (hero.currentMp / hero.maxMp) * 100)) : 0;
@@ -159,7 +170,7 @@ const HeroRow: React.FC<{
         !isAlive ? 'opacity-35 grayscale bg-[#0c101a] border-[#18202d] shadow-none' : ''
       }`}
       style={{
-        borderColor: !isAlive ? '#18202d' : isCurrentTurn ? '#c8aa6e' : isSelected ? '#38ef7d' : undefined,
+        borderColor: !isAlive ? '#18202d' : isCurrentTurn ? '#38ef7d' : isSelected ? '#38ef7d' : undefined,
       }}
     >
       <div className="flex items-center gap-1.5">
@@ -178,15 +189,19 @@ const HeroRow: React.FC<{
             <span className="font-bold text-xs" style={{ color: !isAlive ? '#607d8b' : undefined, textDecoration: !isAlive ? 'line-through' : undefined }}>
               {hero.name}
             </span>
-            <span className="text-[10px] text-[#c8aa6e] font-medium shrink-0">{hero.className}</span>
+            <span className="text-[10px] text-[#c8aa6e] font-medium shrink-0">{tr(hero.className)}</span>
             <span className="text-[10px] font-mono font-bold" style={{ color: !isAlive ? '#607d8b' : '#ffd54f' }}>Lv.{hero.level}</span>
             <span
               className="text-[9px] px-1 py-0.2 rounded font-bold"
               style={{ color: !isAlive ? '#607d8b' : posMeta.color, background: !isAlive ? '#26323822' : `${posMeta.color}22`, border: `1px solid ${!isAlive ? '#26323844' : `${posMeta.color}44`}` }}
             >
-              [{posMeta.label}]
+              [{tr(posMeta.label)}]
             </span>
-            {isAlive && isCurrentTurn && <span className="text-[9px] bg-[#c8aa6e22] text-[#c8aa6e] px-1 rounded font-bold border border-[#c8aa6e44]">▶ 내 턴</span>}
+            {isAlive && isCurrentTurn && (
+              <span className="text-[9px] bg-[#38ef7d22] text-[#38ef7d] px-1 rounded font-bold border border-[#38ef7d66] shadow-[0_0_6px_rgba(56,239,125,0.35)] animate-pulse">
+                ▶ {tr('내 턴')}
+              </span>
+            )}
             {isAlive && hero.statusEffects && hero.statusEffects.length > 0 && (
               <span className="flex items-center gap-0.5 ml-1">
                 {hero.statusEffects.map((se, sIdx) => {
@@ -205,7 +220,7 @@ const HeroRow: React.FC<{
         </div>
         <div className="text-right text-[10px] text-[#8b9bb4] shrink-0 font-mono flex flex-col items-end">
           <span style={{ color: !isAlive ? '#607d8b' : '#ef5350' }}>
-            {isAlive ? `${Math.round(hero.currentHp)}/${Math.round(hero.maxHp)}` : '💀 전투불능'}
+            {isAlive ? `${Math.round(hero.currentHp)}/${Math.round(hero.maxHp)}` : `💀 ${tr('전투불능')}`}
           </span>
           <span className="text-[#c8aa6e] text-[9px]">
             {isAlive ? `${Math.round(hero.currentMp)}/${Math.round(hero.maxMp)}` : ''}
@@ -219,6 +234,7 @@ const HeroRow: React.FC<{
 type NemesisTab = 'hub' | 'milestones' | 'ranking';
 
 export const NemesisView: React.FC = () => {
+  const { tr, lang } = useI18n();
   const { state, gm, navigateTo } = useGameManager();
   const [, setGdsVersion] = useState(0);
   useEffect(() => {
@@ -230,6 +246,7 @@ export const NemesisView: React.FC = () => {
   const gateLevel = state.buildings['arenaGate']?.level || 0;
   const isGateUnlocked = gm.isMasterAccount || gateLevel >= 3;
   const [nemesisTab, setNemesisTab] = useState<NemesisTab>('hub');
+  const [isAdLoading, setIsAdLoading] = useState(false);
 
   // ── ⚔️ 레이드 전투 상태 ──────────────────────────────────────────────
   const [inBattle, setInBattle] = useState(false);
@@ -268,6 +285,11 @@ export const NemesisView: React.FC = () => {
 
   // 👑 전술 오퍼레이터 상태 (3선발 + 1오퍼레이터 체계)
   const [operatorHero, setOperatorHero] = useState<Mercenary | null>(null);
+
+  // 🔥 파티 공유 전술 모멘텀 FEVER 게이지 상태 (0~5개)
+  const [feverBadges, setFeverBadges] = useState<FeverBadgeType[]>([]);
+  const feverBadgesRef = useRef<FeverBadgeType[]>([]);
+  feverBadgesRef.current = feverBadges;
 
   // 📊 전투 상세 딜미터기 상태
   const [combatMetrics, setCombatMetrics] = useState<CombatantMetrics[]>([]);
@@ -347,6 +369,229 @@ export const NemesisView: React.FC = () => {
     return Math.max(150, Math.round(ms / battleSpeedRef.current));
   }, []);
 
+  // ── 🔥 FEVER 모멘텀 뱃지 적립기 ─────────────────────────────────────
+  const addFeverBadge = useCallback((badge: FeverBadgeType) => {
+    setFeverBadges(prev => {
+      let next: FeverBadgeType[];
+      if (prev.length >= 5) {
+        next = [...prev.slice(1), badge];
+      } else {
+        next = [...prev, badge];
+      }
+      feverBadgesRef.current = next;
+      return next;
+    });
+  }, []);
+
+  // ── 🔥 FEVER BURST 격발기 (5개 충전 시 발동) ─────────────────────────
+  const triggerFeverBurst = useCallback(() => {
+    const currentBadges = [...feverBadgesRef.current];
+    if (currentBadges.length < 5) return;
+
+    // 파티 영웅 목록 (Mercenary 형태)
+    const partyMercs = heroesRef.current.map(h => (h.originalHero || h) as unknown as Mercenary);
+    const synergy = evaluateFeverSynergy(currentBadges, partyMercs);
+
+    // 뱃지 소모 및 게이지 초기화
+    setFeverBadges([]);
+    feverBadgesRef.current = [];
+
+    // 사운드 및 햅틱
+    try {
+      SoundManager.getInstance().play('fever_burst');
+    } catch (_) {}
+
+    // 스킬 컷인 배너 연출
+    setSkillCutIn({
+      id: String(Date.now()),
+      skillName: synergy.name,
+      icon: synergy.icon || '🔥⚡',
+      isEnemy: false,
+      bannerType: 'fever',
+      heroName: '전술 오퍼레이터 연계',
+      subText: `【${synergy.name}】 ${synergy.summary.replace(/\([^)]*\)/g, '').trim()}`,
+      feverSynergyName: synergy.name,
+      feverColor: synergy.color,
+      feverBorderColor: synergy.borderColor,
+      isUltimate: true,
+    });
+
+    addLog(`🔥⚡ [FEVER BURST 폭발] 전술 모멘텀 완충! 【${synergy.name}】 시너지가 격발되었습니다! - ${synergy.summary}`, 'reward');
+
+    // 화면 진동 & 플래시
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 400);
+    setScreenFlash('player');
+    setTimeout(() => setScreenFlash(null), 250);
+
+    // 1. 아군 전체 회복 / 보호막 / 부활 / 정화 효과 적용
+    const liveHeroes = heroesRef.current.filter(h => h.currentHp > 0);
+    const fallenHeroes = heroesRef.current.filter(h => h.currentHp <= 0);
+
+    if (synergy.reviveFallen && fallenHeroes.length > 0) {
+      const revTarget = fallenHeroes[0];
+      const revHp = Math.max(1, Math.floor(revTarget.maxHp * (synergy.reviveHpPct || 0.3)));
+      revTarget.currentHp = revHp;
+      addLog(`🕊️ [기적의 소생] 사망했던 ${revTarget.name}이(가) ${revHp.toLocaleString()} 체력으로 부활했습니다!`, 'reward');
+      triggerVfx('holy_heal', 50, 72, `부활! +${revHp.toLocaleString()}`);
+    }
+
+    if (synergy.partyFullHeal || (synergy.partyHealPct && synergy.partyHealPct > 0)) {
+      heroesRef.current.forEach((h, hIdx) => {
+        if (h.currentHp > 0) {
+          const healRatio = synergy.partyFullHeal ? 1.0 : (synergy.partyHealPct || 0.3);
+          const healAmt = Math.max(1, Math.floor(h.maxHp * healRatio));
+          h.currentHp = Math.min(h.maxHp, h.currentHp + healAmt);
+          triggerVfx('holy_heal_aoe', 30 + hIdx * 20, 72, `+${healAmt.toLocaleString()}`);
+        }
+      });
+      addLog(`💖 [성역 치유] 아군 전원의 체력이 대폭 회복되었습니다!`, 'reward');
+    }
+
+    if (synergy.partyShieldPct && synergy.partyShieldPct > 0) {
+      heroesRef.current.forEach((h, hIdx) => {
+        if (h.currentHp > 0) {
+          const shAmt = Math.max(1, Math.floor(h.maxHp * synergy.partyShieldPct));
+          const ex = h.statusEffects.find(s => s.type === 'shield');
+          if (ex) {
+            ex.turnsLeft = 3;
+            ex.magnitude = (ex.magnitude || 0) + shAmt;
+          } else {
+            h.statusEffects.push({
+              type: 'shield',
+              turnsLeft: 3,
+              totalTurns: 3,
+              magnitude: shAmt,
+              source: `FEVER [${synergy.name}]`
+            });
+          }
+          triggerVfx('shield', 30 + hIdx * 20, 72, `🛡️+${shAmt.toLocaleString()}`);
+        }
+      });
+      addLog(`🛡️ [에테르 방벽] 아군 전원에게 최대 체력 ${Math.round(synergy.partyShieldPct * 100)}% 규모의 보호막이 부여되었습니다!`, 'reward');
+    }
+
+    if (synergy.cleanseDebuffs) {
+      heroesRef.current.forEach(h => {
+        h.statusEffects = (h.statusEffects || []).filter(s =>
+          !['bleed', 'poison', 'burn', 'stun', 'freeze', 'debuff_atk', 'debuff_def'].includes(s.type)
+        );
+      });
+      addLog(`✨ [정화] 아군에게 걸린 모든 해로운 효과가 정화되었습니다!`, 'reward');
+    }
+
+    if (synergy.rechargePartyMp) {
+      heroesRef.current.forEach(h => {
+        if (h.currentHp > 0) {
+          h.currentMp = h.maxMp;
+          h.cooldowns = {};
+        }
+      });
+      addLog(`⚡ [시공 역류] 아군 전원의 MP가 완충되고 모든 스킬 쿨다운이 초기화되었습니다!`, 'reward');
+    }
+
+    // 2. 네메시스 살아있는 모든 부위에 시너지 기반 파멸적 광역 타격 + 차징 대량 파쇄
+    const aliveParts = (['head', 'body', 'tail'] as NemesisPartId[]).filter(
+      k => !bossPartsRef.current[k].isDefeated && bossPartsRef.current[k].currentHp > 0
+    );
+
+    const partPosMap: Record<NemesisPartId, { x: number; y: number }> = {
+      head: { x: 25, y: 32 },
+      body: { x: 50, y: 32 },
+      tail: { x: 75, y: 32 },
+    };
+
+    // 파티 평균 공격력 기반 FEVER 기본 위력 계산
+    const avgAtk = liveHeroes.length > 0
+      ? Math.floor(liveHeroes.reduce((sum, h) => sum + h.atk, 0) / liveHeroes.length)
+      : 3000;
+
+    let burstTotalDmg = 0;
+    const baseMult = (synergy.powerMult || 1.5) * 2.5;
+
+    aliveParts.forEach(pKey => {
+      const part = bossPartsRef.current[pKey];
+      if (!part || part.isDefeated) return;
+
+      let pDef = part.def;
+      const pen = synergy.armorPenetration || 0.3;
+      pDef = Math.max(0, Math.floor(pDef * (1 - pen)));
+
+      const critRate = Math.min(100, Math.max(10, 30 + (synergy.critRateBonus || 0) * 100));
+      const isCrit = Math.random() * 100 < critRate;
+      const critDmgMult = 1.5 + (synergy.critDamageBonus || 0);
+
+      const rawBurst = Math.floor(avgAtk * baseMult);
+      const K = 500;
+      let finalBurst = Math.max(500, Math.round(rawBurst * (K / (pDef + K))));
+      if (isCrit) finalBurst = Math.floor(finalBurst * critDmgMult);
+      if (part.isGroggy) finalBurst = Math.floor(finalBurst * 1.5);
+
+      burstTotalDmg += finalBurst;
+
+      // 차징 대량 저지 (BREAK)
+      if (part.chargingState) {
+        const breakDmg = Math.max(1, Math.floor(finalBurst * 0.8));
+        part.chargingState.remainingBreakDmg -= breakDmg;
+        if (part.chargingState.remainingBreakDmg <= 0) {
+          if (part.chargingState.originalLuck !== undefined) {
+            part.luck = part.chargingState.originalLuck;
+          }
+          part.chargingState = null;
+          part.isGroggy = true;
+          addLog(`💥 [차징 파쇄!] FEVER BURST의 충격으로 [${part.name}]의 차징이 붕괴되어 1턴간 그로기 상태가 되었습니다!`, 'reward');
+        }
+      }
+
+      // 부위 HP 차감
+      part.currentHp = Math.max(0, part.currentHp - finalBurst);
+      if (part.currentHp <= 0) {
+        part.isDefeated = true;
+        if (part.chargingState?.originalLuck !== undefined) {
+          part.luck = part.chargingState.originalLuck;
+        }
+        part.chargingState = null;
+        addLog(`💀 [${part.name} 완전 패퇴!] FEVER BURST로 부위가 완전히 파괴되었습니다!`, 'reward');
+      }
+
+      triggerVfx('boss_cataclysm', partPosMap[pKey].x, partPosMap[pKey].y, `🔥${finalBurst.toLocaleString()}`, isCrit);
+      addLog(`💥 [FEVER BURST] ➔ [${part.name}]에게 ${finalBurst.toLocaleString()} 파멸 피해! ${isCrit ? '💥 치명타!' : ''}`, 'reward');
+    });
+
+    // 보스 총체력 및 누적 피해 갱신
+    setBossParts({ ...bossPartsRef.current });
+    const nextTotal = totalBattleDmgRef.current + burstTotalDmg;
+    setTotalBattleDmg(nextTotal);
+    totalBattleDmgRef.current = nextTotal;
+
+    const totalCurBossHp = Object.values(bossPartsRef.current).reduce((sum, p) => sum + (p.isDefeated ? 0 : p.currentHp), 0);
+    setBossHp(totalCurBossHp);
+    bossHpRef.current = totalCurBossHp;
+
+    // 딜미터기 기록 (오퍼레이터 또는 파티 균등 분배)
+    if (operatorHero && combatMetricsRef.current[operatorHero.id]) {
+      const opMetric = combatMetricsRef.current[operatorHero.id];
+      opMetric.damageDealt += burstTotalDmg;
+      opMetric.critCount += 1;
+      opMetric.combosTriggered += 1;
+    } else if (liveHeroes.length > 0) {
+      const splitDmg = Math.floor(burstTotalDmg / liveHeroes.length);
+      liveHeroes.forEach(h => {
+        const m = combatMetricsRef.current[h.id];
+        if (m) {
+          m.damageDealt += splitDmg;
+          m.combosTriggered += 1;
+        }
+      });
+    }
+
+    setHeroes([...heroesRef.current]);
+
+    setTimeout(() => {
+      setSkillCutIn(null);
+    }, getDelay(800));
+  }, [addLog, getDelay, operatorHero, triggerVfx]);
+
   // ── 레이드 종료 및 정산 처리 ─────────────────────────────────────────
   const finalizeRaidBattle = useCallback(() => {
     isProcessingRef.current = true;
@@ -384,6 +629,15 @@ export const NemesisView: React.FC = () => {
 
   const processNextAction = useCallback(() => {
     if (settlement || !inBattle) return;
+
+    // 🔥 FEVER BURST 자동 체크 (뱃지 5개 완충 시 행동 시작 전 발동)
+    if (feverBadgesRef.current.length >= 5) {
+      triggerFeverBurst();
+      setTimeout(() => {
+        processNextActionRef.current();
+      }, getDelay(700));
+      return;
+    }
 
     // 생존 영웅 및 생존 부위 확인
     const liveHeroes = heroesRef.current.filter(h => h.currentHp > 0);
@@ -495,7 +749,7 @@ export const NemesisView: React.FC = () => {
       }, getDelay(350));
       return () => clearTimeout(timer);
     }
-  }, [addLog, finalizeRaidBattle, getDelay, inBattle, maxTurns, settlement]);
+  }, [addLog, finalizeRaidBattle, getDelay, inBattle, maxTurns, settlement, triggerFeverBurst]);
 
   useEffect(() => {
     processNextActionRef.current = processNextAction;
@@ -606,6 +860,7 @@ export const NemesisView: React.FC = () => {
 
         try { SoundManager.getInstance().play('heal'); } catch (_) { playSfx('cast'); }
         addLog(`✨ [${hero.name}] [${skill.name}] 시전! (${healReports.join(', ')})`, 'reward');
+        addFeverBadge('heal');
       } else if (skill.effectType === 'shield') {
         targetAllies.forEach(ally => {
           const shAmt = Math.max(1, Math.floor(hero.atk * (skill.power || 1.2) + ally.maxHp * 0.10));
@@ -621,6 +876,7 @@ export const NemesisView: React.FC = () => {
         });
         try { SoundManager.getInstance().play('shield'); } catch (_) { playSfx('shield'); }
         addLog(`🛡️ [${hero.name}] [${skill.name}] 시전! 아군 전술 보호막 전개!`, 'reward');
+        addFeverBadge('guard');
       } else if (skill.effectType === 'buff') {
         const isAtk = skill.description?.includes('공격력') || skill.id.includes('atk');
         const bType = isAtk ? 'buff_atk' : 'buff_def';
@@ -636,6 +892,7 @@ export const NemesisView: React.FC = () => {
         });
         try { SoundManager.getInstance().play('spell'); } catch (_) { playSfx('cast'); }
         addLog(`⚔️✨ [${hero.name}] [${skill.name}] 시전! 아군 능력치 강화 부여!`, 'reward');
+        addFeverBadge('assist');
       }
 
       setHeroes([...heroesRef.current]);
@@ -690,7 +947,7 @@ export const NemesisView: React.FC = () => {
       const critChance = Math.min(95, Math.max(5, hero.luck * 0.35 + critBonus + (isUltimate ? 20 : 0)));
       const isCrit = Math.random() * 100 < critChance;
       if (isCrit) anyCrit = true;
-      const critMult = (heroEff?.critDmg || 1.5) + (hero.luck * 0.005);
+      const critMult = (heroEff?.critDmg || 1.5);
 
       // D) 방어력 및 점근형 DR 공식 연산
       let partDef = part.def;
@@ -726,6 +983,7 @@ export const NemesisView: React.FC = () => {
           playSfx('shield_break');
           triggerVfx('boss_cataclysm', partPosMap[pKey].x, partPosMap[pKey].y, 'BREAK!', true);
           addLog(`💥 [차징 저지 성공!] ${hero.name}의 강력한 타격으로 [${part.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다! (행운 정상화)`, 'reward');
+          addFeverBadge('break');
           setSkillCutIn({
             id: String(Date.now()),
             skillName: `💥 [${part.name}] 차징 붕괴!`,
@@ -748,6 +1006,7 @@ export const NemesisView: React.FC = () => {
         part.chargingState = null;
         addLog(`💀 [${part.name} 완전 패퇴!] 부위가 파괴되어 더 이상 재생하거나 행동하지 않습니다!`, 'reward');
         playSfx('shield_break');
+        addFeverBadge('break');
       }
 
       // 🌟 [상태이상 연계 콤보 폭발 (Status Detonation Combo)]
@@ -756,6 +1015,7 @@ export const NemesisView: React.FC = () => {
         const comboDmg = Math.max(100, Math.floor(dmg * 0.45));
         totalActionDmg += comboDmg;
         part.currentHp = Math.max(0, part.currentHp - comboDmg);
+        addFeverBadge('extra');
 
         let comboVfx: VFXType = 'arcane_nova';
         if (combo.comboName.includes('빙결') || combo.comboName.includes('초전도')) comboVfx = 'blizzard_storm';
@@ -780,6 +1040,7 @@ export const NemesisView: React.FC = () => {
             playSfx('shield_break');
             triggerVfx('boss_cataclysm', partPosMap[pKey].x, partPosMap[pKey].y, 'BREAK!', true);
             addLog(`💥 [차징 저지 성공!] ${hero.name}의 연계 콤보로 [${part.name}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다! (행운 정상화)`, 'reward');
+            addFeverBadge('break');
           }
         }
       }
@@ -883,6 +1144,15 @@ export const NemesisView: React.FC = () => {
       if (useSkill) metric.combosTriggered += 1;
     }
 
+    // 🔥 FEVER 뱃지 적립: 치명타 발생 시 'crit', 그 외 스킬 공격 시 'extra', 기본 공격 시 'assist'
+    if (anyCrit) {
+      addFeverBadge('crit');
+    } else if (useSkill) {
+      addFeverBadge('extra');
+    } else {
+      addFeverBadge('assist');
+    }
+
     // 타격 SFX 및 연출
     try {
       SoundManager.getInstance().play(fxInfo.sfx || (anyCrit ? 'crit' : 'hit'));
@@ -901,7 +1171,7 @@ export const NemesisView: React.FC = () => {
       isProcessingRef.current = false;
       processNextActionRef.current();
     }, getDelay(450));
-  }, [addLog, finalizeRaidBattle, getDelay, playSfx, triggerVfx]);
+  }, [addFeverBadge, addLog, finalizeRaidBattle, getDelay, playSfx, triggerVfx]);
 
   // ── 네메시스 부위 행동 실행 ──────────────────────────────────────────
   const executePartCombat = useCallback((part: NemesisCombatPart) => {
@@ -1095,6 +1365,7 @@ export const NemesisView: React.FC = () => {
           sh.magnitude = (sh.magnitude || 0) - absorbed;
           bDmg -= absorbed;
           addLog(`🛡️ [${target.name}] 보호막이 ${absorbed.toLocaleString()} 피해를 흡수했습니다!`, 'normal');
+          addFeverBadge('guard');
         }
         target.currentHp = Math.max(0, target.currentHp - bDmg);
         const m = combatMetricsRef.current[target.id];
@@ -1115,6 +1386,7 @@ export const NemesisView: React.FC = () => {
         if (m) m.dodges += 1;
         triggerVfx('evade', 50, 75, '💨 EVADE');
         addLog(`💨 [${target.name}] [${part.name}]의 [${partSkill.name}] 공격을 신속히 회피했습니다!`, 'reward');
+        addFeverBadge('evade');
       } else {
         let bDmg = Math.max(30, Math.floor(part.atk * partSkill.power * 1.3 - target.def * 0.35));
         const sh = (target.statusEffects || []).find(s => s.type === 'shield');
@@ -1123,6 +1395,7 @@ export const NemesisView: React.FC = () => {
           sh.magnitude = (sh.magnitude || 0) - absorbed;
           bDmg -= absorbed;
           addLog(`🛡️ [${target.name}] 보호막이 ${absorbed.toLocaleString()} 피해를 흡수했습니다!`, 'normal');
+          addFeverBadge('guard');
         }
         target.currentHp = Math.max(0, target.currentHp - bDmg);
         const m = combatMetricsRef.current[target.id];
@@ -1140,7 +1413,7 @@ export const NemesisView: React.FC = () => {
       isProcessingRef.current = false;
       processNextActionRef.current();
     }, getDelay(450));
-  }, [addLog, finalizeRaidBattle, getDelay, playSfx, triggerVfx]);
+  }, [addFeverBadge, addLog, finalizeRaidBattle, getDelay, playSfx, triggerVfx]);
 
   // ── 수동 커맨드 핸들러 (플레이어가 버튼 클릭 시 실행) ───────────────────
   const handleManualAction = (skill: Skill | 'basic') => {
@@ -1166,10 +1439,10 @@ export const NemesisView: React.FC = () => {
   // ── 전투 철수 확인 ──────────────────────────────────────────────────
   const handleRetreat = async () => {
     const confirmed = await gameDialog.confirm({
-      title: '🏃 전투 철수',
-      message: '지금까지 가한 피해를 저장하고 전장에서 안전하게 철수하시겠습니까?',
-      confirmText: '철수하기',
-      cancelText: '계속 전투',
+      title: `🏃 ${tr('전투 철수')}`,
+      message: tr('지금까지 가한 피해를 저장하고 전장에서 안전하게 철수하시겠습니까?'),
+      confirmText: tr('철수하기'),
+      cancelText: tr('계속 전투'),
     });
     if (confirmed) {
       finalizeRaidBattle();
@@ -1179,18 +1452,18 @@ export const NemesisView: React.FC = () => {
   // ── 레이드 전투 개시 ─────────────────────────────────────────────────
   const startRaidBattle = () => {
     if (!isGateUnlocked) {
-      gm.addLog(`🔒 [출격 불가] 차원 네메시스는 차원 앵커 게이트 Lv.3 이상에 개방됩니다. (현재 Lv.${gateLevel})`, 'danger');
+      gm.addLog(`🔒 [${tr('출격 불가')}] ${tr('차원 네메시스는 차원 앵커 게이트 Lv.3 이상에 개방됩니다.')} (${tr('현재')} Lv.${gateLevel})`, 'danger');
       return;
     }
 
     const { status, respawnRemainingMs } = gm.getNemesisCycleInfo();
     if (status !== 'active') {
-      const waitMinutes = Math.ceil(respawnRemainingMs / 60000);
+      const remainingSec = Math.max(0, Math.ceil(respawnRemainingMs / 1000));
       gameDialog.alert({
-        title: '💤 토벌 대기 중',
+        title: `💤 ${tr('토벌 대기 중')}`,
         message: status === 'defeated'
-          ? `네메시스는 이미 이번 주기에 토벌되었습니다. 다음 주기(${waitMinutes}분 후)에 다시 도전할 수 있습니다.`
-          : `현재 네메시스는 심연 재소환 준비 중입니다. (${waitMinutes}분 남음)`
+          ? `${tr('네메시스는 이미 이번 주기에 토벌되었습니다. 다음 주기에 다시 도전할 수 있습니다.')} (${formatTimeLeft(remainingSec, lang)})`
+          : `${tr('현재 네메시스는 심연 재소환 준비 중입니다.')} (${formatTimeLeft(remainingSec, lang)})`
       });
       return;
     }
@@ -1199,8 +1472,8 @@ export const NemesisView: React.FC = () => {
     if (!squadCheck.isReady) {
       SoundManager.getInstance().play('debuff');
       gameDialog.alert({
-        title: '⚔️ 차원 원정대 편성 필요',
-        message: squadCheck.reason || '차원 네메시스 레이드는 선발 3인과 전술 오퍼레이터 1인이 모두 편성되어야 진행할 수 있습니다.'
+        title: `⚔️ ${tr('차원 원정대 편성 필요')}`,
+        message: squadCheck.reason ? tr(squadCheck.reason) : tr('차원 네메시스 레이드는 선발 3인과 전술 오퍼레이터 1인이 모두 편성되어야 출전할 수 있습니다.')
       });
       return;
     }
@@ -1393,11 +1666,14 @@ export const NemesisView: React.FC = () => {
     if (assignedOperator) {
       const opCls = CHARACTER_CLASSES[assignedOperator.classId];
       const opSpecial = opCls?.specialSkill ? gm.resolveSkillData(opCls.specialSkill.id, assignedOperator) || opCls.specialSkill : null;
-      initLogs.push({ id: '4', timestamp: nowStr, text: `📡 [전술 오퍼레이터] ${assignedOperator.name}: 전술 궁극기 [${opSpecial?.name || '차원 지휘'}] 지원 가동!`, type: 'reward' });
+      const cleanSkillName = (opSpecial?.name || '차원 지휘').replace(/^\[(?:궁극기|고유기)\]\s*/, '');
+      initLogs.push({ id: '4', timestamp: nowStr, text: `📡 [전술 오퍼레이터] ${assignedOperator.name}: 전술 궁극기 [${cleanSkillName}] 지원 가동!`, type: 'reward' });
     }
 
     setBattleLogs(initLogs);
     setSettlement(null);
+    setFeverBadges([]);
+    feverBadgesRef.current = [];
     setInBattle(true);
     isProcessingRef.current = false;
 
@@ -1422,6 +1698,33 @@ export const NemesisView: React.FC = () => {
     gm.refillNemesisAttempts();
   };
 
+  const handleRefillAttemptsWithAd = async () => {
+    if (isAdLoading) return;
+    if (nemesisState.dailyAttempts >= 3) {
+      gameDialog.alert({
+        title: tr('차원 네메시스'),
+        message: tr('일일 토벌 도전 횟수가 이미 최대(3회)입니다.'),
+        icon: '⚠️',
+      });
+      return;
+    }
+    setIsAdLoading(true);
+    try {
+      const res = await GoogleAdService.getInstance().showRewardedAd({
+        placement: 'nemesis',
+        title: tr('차원 네메시스 공격 횟수 충전'),
+        description: tr('후원사 영상을 시청하고 네메시스 토벌 공격 횟수를 충전합니다. (최대 3회)'),
+        rewardText: tr('네메시스 공격 횟수 충전 (최대 3회)'),
+      });
+      if (res.rewarded) {
+        gm.refillNemesisAttemptsWithAd();
+        SoundManager.getInstance().play('reward');
+      }
+    } finally {
+      setIsAdLoading(false);
+    }
+  };
+
   const nemesisState = state.nemesisState || {
     totalDamage: 0,
     highestDamage: 0,
@@ -1442,21 +1745,25 @@ export const NemesisView: React.FC = () => {
     const hours = Math.floor((totalSec % 86400) / 3600);
     const minutes = Math.floor((totalSec % 3600) / 60);
     const seconds = totalSec % 60;
-    if (days > 0) return `${days}일 ${hours}시간 ${minutes}분`;
+    if (days > 0) {
+      if (lang === 'en') return `${days}d ${hours}h ${minutes}m`;
+      if (lang === 'ja') return `${days}日 ${hours}時間 ${minutes}分`;
+      return `${days}일 ${hours}시간 ${minutes}분`;
+    }
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
   // ── 스킬 버튼 색상 구분 헬퍼 (PVE 스타일) ───────────────────────────
   const getSkillBtnStyle = (skill: Skill | 'basic') => {
-    if (skill === 'basic') return { borderColor: '#8b9bb4', color: '#e2e8f0', label: '일반 공격' };
+    if (skill === 'basic') return { borderColor: '#8b9bb4', color: '#e2e8f0', label: tr('일반 공격') };
     const isUlt = skill.isSpecial || skill.name.includes('궁극기') || skill.id?.endsWith('_ultimate');
     if (isUlt) {
-      return { borderColor: '#ffd54f', color: '#ffe57f', label: '궁극기', shadow: '0 0 10px #ffd54f55' };
+      return { borderColor: '#ffd54f', color: '#ffe57f', label: tr('궁극기'), shadow: '0 0 10px #ffd54f55' };
     }
     if (['heal', 'shield', 'regen', 'buff'].includes(skill.effectType || '')) {
-      return { borderColor: '#26a69a', color: '#b2dfdb', label: '지원/마법' };
+      return { borderColor: '#26a69a', color: '#b2dfdb', label: tr('지원/마법') };
     }
-    return { borderColor: '#ef5350', color: '#ffcdd2', label: '전투 스킬' };
+    return { borderColor: '#ef5350', color: '#ffcdd2', label: tr('전투 스킬') };
   };
 
   // ── 1. 레이드 전투 진행 중 화면 (PVE 동일 전장) ───────────────────────
@@ -1510,17 +1817,24 @@ export const NemesisView: React.FC = () => {
                 : 'bg-black/40'
             } animate-skill-speedlines`} />
 
-            <div className={`relative w-[130%] py-3 px-6 flex items-center justify-center shadow-2xl border-y-2 transform -rotate-2 animate-skill-banner ${
-              skillCutIn.isEnemy
-                ? 'bg-gradient-to-r from-transparent via-[#200813f5] via-50% to-transparent border-[#ff1744] shadow-[#ff1744aa]'
-                : skillCutIn.isUltimate
-                ? 'bg-gradient-to-r from-transparent via-[#2a1a05f5] via-50% to-transparent border-[#ffd54f] shadow-[0_0_35px_rgba(255,213,79,0.7)]'
-                : 'bg-gradient-to-r from-transparent via-[#09152af5] via-50% to-transparent border-[#c8aa6e] shadow-[#c8aa6eaa]'
-            }`}>
+            <div
+              className={`relative w-[130%] py-3 px-6 flex items-center justify-center shadow-2xl border-y-2 transform -rotate-2 animate-skill-banner ${
+                skillCutIn.isEnemy
+                  ? 'bg-gradient-to-r from-transparent via-[#200813f5] via-50% to-transparent border-[#ff1744] shadow-[#ff1744aa]'
+                  : skillCutIn.bannerType === 'fever'
+                  ? 'bg-gradient-to-r from-transparent via-[#2d1205f5] via-50% to-transparent border-[#ff9100] shadow-[0_0_40px_rgba(255,145,0,0.8)]'
+                  : skillCutIn.isUltimate
+                  ? 'bg-gradient-to-r from-transparent via-[#2a1a05f5] via-50% to-transparent border-[#ffd54f] shadow-[0_0_35px_rgba(255,213,79,0.7)]'
+                  : 'bg-gradient-to-r from-transparent via-[#09152af5] via-50% to-transparent border-[#c8aa6e] shadow-[#c8aa6eaa]'
+              }`}
+              style={skillCutIn.bannerType === 'fever' && skillCutIn.feverBorderColor ? { borderColor: skillCutIn.feverBorderColor } : undefined}
+            >
               <div className="flex items-center gap-3">
                 <div className={`text-2xl p-1.5 rounded-xl border-2 shadow-xl shrink-0 ${
                   skillCutIn.isEnemy
                     ? 'bg-[#2b0c1b] border-[#ff1744] shadow-[#ff1744]'
+                    : skillCutIn.bannerType === 'fever'
+                    ? 'bg-[#3b1708] border-[#ff9100] shadow-[#ff9100] animate-bounce'
                     : skillCutIn.isUltimate
                     ? 'bg-[#3b2408] border-[#ffd54f] shadow-[#ffd54f] animate-bounce'
                     : 'bg-[#0c1f38] border-[#c8aa6e] shadow-[#c8aa6e]'
@@ -1529,8 +1843,10 @@ export const NemesisView: React.FC = () => {
                 </div>
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black tracking-widest uppercase text-[#ffd54f]">
-                      {skillCutIn.isEnemy ? '⚠️ NEMESIS ACTION ⚠️' : skillCutIn.isUltimate ? '🔥 CLASS ULTIMATE 🔥' : '⚔️ HERO ACTION ⚔️'}
+                    <span className={`text-[10px] font-black tracking-widest uppercase ${
+                      skillCutIn.bannerType === 'fever' ? 'text-[#ff9100] animate-pulse' : 'text-[#ffd54f]'
+                    }`}>
+                      {skillCutIn.isEnemy ? '⚠️ NEMESIS ACTION ⚠️' : skillCutIn.bannerType === 'fever' ? '🔥 TACTICAL FEVER BURST 🔥' : skillCutIn.isUltimate ? '🔥 CLASS ULTIMATE 🔥' : '⚔️ HERO ACTION ⚔️'}
                     </span>
                     {skillCutIn.subText && (
                       <span className="text-[9px] text-[#cfd8e8]">
@@ -1555,10 +1871,10 @@ export const NemesisView: React.FC = () => {
               className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#ef535022] hover:bg-[#ef535033] text-[#ef5350] border border-[#ef535055] transition-all flex items-center gap-1 shadow-sm"
             >
               <span>🏃</span>
-              <span>퇴각</span>
+              <span>{tr('퇴각')}</span>
             </button>
             <span className="px-2 py-0.5 rounded font-mono text-xs font-bold bg-[#141d2f] text-[#c8aa6e] border border-[#c8aa6e44]">
-              턴 {Math.min(maxTurns, battleTurn)} / {maxTurns}
+              {tr('턴')} {Math.min(maxTurns, battleTurn)} / {maxTurns}
             </span>
           </div>
 
@@ -1591,7 +1907,7 @@ export const NemesisView: React.FC = () => {
                   : 'bg-[#141d2f] text-[#8b9bb4] border-[#25354e]'
               }`}
             >
-              {isAutoBattle ? '⚡ 자동 ON' : '🎮 자동 OFF'}
+              {isAutoBattle ? `⚡ ${tr('자동 ON')}` : `🎮 ${tr('자동 OFF')}`}
             </button>
           </div>
         </div>
@@ -1632,13 +1948,13 @@ export const NemesisView: React.FC = () => {
               {/* 타겟 부위 오버레이 배지 (괄호 완전 제거) */}
               <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
                 <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10">
-                  <span className="text-[10px] text-[#ffd54f]">🎯 집중 타겟:</span>
+                  <span className="text-[10px] text-[#ffd54f]">🎯 {tr('집중 타겟:')}</span>
                   <span className="text-xs font-bold text-white">
-                    [{posLabel}] {cleanTargetedName}
+                    [{tr(posLabel)}] {tr(cleanTargetedName)}
                   </span>
                 </div>
                 <div className="bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10 text-right">
-                  <span className="text-[10px] text-[#8b9bb4]">보스 잔여: </span>
+                  <span className="text-[10px] text-[#8b9bb4]">{tr('보스 잔여')}: </span>
                   <span className="text-xs font-mono font-bold text-[#ffd54f]">
                     {((bossHp / 12500000) * 100).toFixed(1)}%
                   </span>
@@ -1691,7 +2007,7 @@ export const NemesisView: React.FC = () => {
                             style={{ width: `${breakPct}%` }}
                           />
                           <div className="relative z-10 flex items-center gap-1 text-[8.5px] font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] leading-none">
-                            <span>⚡ 절멸 차징</span>
+                            <span>⚡ {tr('절멸 차징')}</span>
                             <span className="font-mono text-[#fffde7]">BREAK {breakPct}%</span>
                           </div>
                         </div>
@@ -1701,7 +2017,7 @@ export const NemesisView: React.FC = () => {
                     {/* 그로기 배지 */}
                     {isAlive && part.isGroggy && (
                       <div className="absolute -top-3 left-1 z-30 px-1.5 py-0.2 rounded font-bold text-[8.5px] bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44] animate-pulse">
-                        💫 그로기
+                        💫 {tr('그로기')}
                       </div>
                     )}
 
@@ -1732,7 +2048,7 @@ export const NemesisView: React.FC = () => {
                             border: `1px solid ${!isAlive ? '#26323844' : `${posMeta.color}44`}`,
                           }}
                         >
-                          {posMeta.label}
+                          {tr(posMeta.label)}
                         </span>
                         <span
                           className="font-bold text-xs truncate"
@@ -1742,7 +2058,7 @@ export const NemesisView: React.FC = () => {
                             textDecoration: !isAlive ? 'line-through' : undefined,
                           }}
                         >
-                          {cleanName}
+                          {tr(cleanName)}
                         </span>
                       </div>
                       <div className="flex items-center gap-0.5 shrink-0">
@@ -1752,7 +2068,7 @@ export const NemesisView: React.FC = () => {
                             color: !isAlive ? '#607d8b' : hpPct > 50 ? '#38ef7d' : hpPct > 25 ? '#ffd54f' : '#ef5350',
                           }}
                         >
-                          {isAlive ? `${(part.currentHp / 10000).toFixed(0)}만` : '💀 파괴'}
+                          {isAlive ? (lang === 'en' ? `${(part.currentHp / 1000000).toFixed(1)}M` : lang === 'ja' ? `${(part.currentHp / 10000).toFixed(0)}万` : `${(part.currentHp / 10000).toFixed(0)}만`) : `💀 ${tr('파괴')}`}
                         </span>
                       </div>
                     </div>
@@ -1779,15 +2095,15 @@ export const NemesisView: React.FC = () => {
           {/* ── 📜 전투 로그 패널 (로그 영역 확장 및 상세 로그 모달 연동) ── */}
           <div className="px-3 pt-1 flex-1 min-h-[95px] relative z-10">
             <div className="relative h-full">
-              <LogPanel logs={battleLogs} maxHeight={125} isBattle emptyMessage="기록된 전투 로그가 없습니다." />
+              <LogPanel logs={battleLogs} maxHeight={125} isBattle emptyMessage={tr('기록된 전투 로그가 없습니다.')} />
               <button
                 type="button"
                 className="absolute top-1.5 right-2 px-2 py-0.5 rounded text-[11px] font-bold bg-[#141a27e0] hover:bg-[#1e273dee] text-[#c8aa6e] hover:text-white border border-[#c8aa6e44] shadow-md transition-all flex items-center gap-1 z-20"
-                title="전체 전투 상세 기록 모달 열기"
+                title={tr('전체 전투 상세 기록 모달 열기')}
                 onClick={() => setShowFullLogModal(true)}
               >
                 <span>📜</span>
-                <span className="text-[10px]">상세 로그</span>
+                <span className="text-[10px]">{tr('상세 로그')}</span>
               </button>
             </div>
           </div>
@@ -1811,17 +2127,28 @@ export const NemesisView: React.FC = () => {
                     {opSpecial && (
                       <span className="text-[9px] px-2 py-0.5 rounded-full font-bold bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f55] flex items-center gap-1">
                         <span>👑</span>
-                        <span>전술 궁극기: [{opSpecial.name}]</span>
+                        <span>{tr('전술 궁극기')}: {tr((opSpecial.name || '').replace(/^\[(?:궁극기|고유기)\]\s*/, ''))}</span>
                       </span>
                     )}
                     <span className="text-[9px] font-mono text-[#c8aa6e] font-bold">
-                      누적 {totalBattleDmg.toLocaleString()} DMG
+                      {tr('누적')} {totalBattleDmg.toLocaleString()} DMG
                     </span>
                   </div>
                 </div>
               </div>
             );
           })()}
+
+          {/* ── 🔥 파티 공유 전술 모멘텀 FEVER 게이지 바 ── */}
+          <div className="px-3 pt-1 shrink-0 z-10">
+            <FeverGaugeBar
+              badges={feverBadges}
+              party={heroes.map(h => (h.originalHero || h) as unknown as Mercenary)}
+              showEffectDescription={true}
+              label="NEMESIS FEVER"
+              side="player"
+            />
+          </div>
 
           {/* ── 아군 선발 3인 영웅 행 & PVE 2열 스킬 패널 (하단 완벽 밀착) ── */}
           <div className="px-3 pt-1.5 pb-2 shrink-0 z-10 flex flex-col justify-end">
@@ -1894,11 +2221,11 @@ export const NemesisView: React.FC = () => {
                         {activeHeroPortrait ? <img src={activeHeroPortrait} alt={activeHero.name} className="w-full h-full object-cover" /> : '⚔️'}
                       </span>
                       <span>{activeHero.name}</span>
-                      <span className="text-[10px] text-[#c8aa6e] font-medium">{activeHero.className}</span>
+                      <span className="text-[10px] text-[#c8aa6e] font-medium">{tr(activeHero.className)}</span>
                       <span className="text-[10px] text-[#ffd54f] font-mono font-bold">Lv.{activeHero.level}</span>
-                      <span className="text-[10px] font-normal text-[#8b9bb4]">({activeHero.position === 'front' ? '전열' : activeHero.position === 'mid' ? '중열' : '후열'})</span>
+                      <span className="text-[10px] font-normal text-[#8b9bb4]">({tr(activeHero.position === 'front' ? '전열' : activeHero.position === 'mid' ? '중열' : '후열')})</span>
                     </span>
-                    <span className="text-[10px] text-[#ffd54f] font-medium">타겟: [{cleanTargetedName}]</span>
+                    <span className="text-[10px] text-[#ffd54f] font-medium">{tr('타겟')}: [{tr(cleanTargetedName)}]</span>
                   </div>
 
                   {/* 2열 2행 PVE 스킬 버튼 그리드 */}
@@ -1919,10 +2246,10 @@ export const NemesisView: React.FC = () => {
                       {basicReadyCombo && basicComboMatch && (
                         <span
                           className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md flex items-center gap-0.5 animate-bounce z-10"
-                          title={`⚡ [${basicReadyCombo.comboName}] 연계 폭발 가능!`}
+                          title={`⚡ [${basicReadyCombo.comboName}] ${tr('연계!')}`}
                         >
                           <span>⚡</span>
-                          <span>연계!{basicComboMatch.isAoe ? '' : basicComboMatch.isFrontTarget ? '(전열)' : '(후열)'}</span>
+                          <span>{tr('연계!')}{basicComboMatch.isAoe ? '' : basicComboMatch.isFrontTarget ? `(${tr('전열')})` : `(${tr('후열')})`}</span>
                         </span>
                       )}
                       <div className="flex items-center gap-1.5 min-w-0 w-full">
@@ -1930,7 +2257,7 @@ export const NemesisView: React.FC = () => {
                           <GameIcon name={weaponEnchantSkill?.id || 'basic_attack'} icon={basicDisplayIcon} size={20} />
                         </span>
                         <span className="text-xs font-bold truncate flex-1" style={{ color: basicReadyCombo ? '#ffe57f' : hasWeaponSkill ? (basicHasMp ? '#c8aa6e' : '#ffd54f') : '#ffffff' }}>
-                          {basicDisplayName}
+                          {tr(basicDisplayName)}
                         </span>
                         {basicTags.slice(0, 1).map(t => (
                           <span
@@ -1938,12 +2265,12 @@ export const NemesisView: React.FC = () => {
                             className="text-[7.5px] px-1 py-0.1 rounded font-bold shrink-0"
                             style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
                           >
-                            {t.label}
+                            {tr(t.label)}
                           </span>
                         ))}
                       </div>
                       <div className="flex items-center justify-between w-full text-[10px] mt-1 text-[#8b9bb4]">
-                        <span className="truncate mr-1">{basicSubLabel}</span>
+                        <span className="truncate mr-1">{tr(basicSubLabel)}</span>
                         <span className="font-mono font-bold shrink-0 text-[#cfd8dc]">{basicMpCost > 0 ? `${basicMpCost} MP` : '0 MP'}</span>
                       </div>
                     </LongPressBox>
@@ -1976,35 +2303,35 @@ export const NemesisView: React.FC = () => {
                           {ultReadyCombo && ultComboMatch ? (
                             <span
                               className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md flex items-center gap-0.5 animate-bounce z-10"
-                              title={`⚡ [${ultReadyCombo.comboName}] 연계 폭발 가능!`}
+                              title={`⚡ [${ultReadyCombo.comboName}] ${tr('연계!')}`}
                             >
                               <span>⚡</span>
-                              <span>궁극 연계!{ultComboMatch.isAoe ? '' : ultComboMatch.isFrontTarget ? '(전열)' : '(후열)'}</span>
+                              <span>{tr('궁극 연계!')}{ultComboMatch.isAoe ? '' : ultComboMatch.isFrontTarget ? `(${tr('전열')})` : `(${tr('후열')})`}</span>
                             </span>
                           ) : (
                             <span className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md">
-                              궁극기
+                              {tr('궁극기')}
                             </span>
                           )}
                           <div className="flex items-center gap-1.5 w-full min-w-0">
                             <span className="shrink-0 flex items-center justify-center">
                               <GameIcon name={ultSkill.id} icon={ultSkill.icon || '👑'} size={20} />
                             </span>
-                            <span className="text-xs font-bold text-[#ffe57f] truncate flex-1">{ultSkill.name}</span>
+                            <span className="text-xs font-bold text-[#ffe57f] truncate flex-1">{tr(ultSkill.name)}</span>
                             {ultTags.slice(0, 1).map(t => (
                               <span
                                 key={t.id}
                                 className="text-[7.5px] px-1 py-0.1 rounded font-bold shrink-0"
                                 style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
                               >
-                                {t.label}
+                                {tr(t.label)}
                               </span>
                             ))}
                           </div>
                           <div className="flex items-center justify-between w-full text-[10px] mt-1">
-                            <span className="text-[#ffd54f88] truncate mr-1">{targetLabel}</span>
+                            <span className="text-[#ffd54f88] truncate mr-1">{tr(targetLabel)}</span>
                             <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#ffd54f]' : 'text-[#ff5252]'}`}>
-                              {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
+                              {cdLeft > 0 ? `${cdLeft}${tr('턴 대기')}` : `${mpCost} MP`}
                             </span>
                           </div>
                         </LongPressBox>
@@ -2042,31 +2369,31 @@ export const NemesisView: React.FC = () => {
                           {skReadyCombo && skComboMatch && (
                             <span
                               className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md flex items-center gap-0.5 animate-bounce z-10"
-                              title={`⚡ [${skReadyCombo.comboName}] 연계 폭발 가능!`}
+                              title={`⚡ [${skReadyCombo.comboName}] ${tr('연계!')}`}
                             >
                               <span>⚡</span>
-                              <span>연계!{skComboMatch.isAoe ? '' : skComboMatch.isFrontTarget ? '(전열)' : '(후열)'}</span>
+                              <span>{tr('연계!')}{skComboMatch.isAoe ? '' : skComboMatch.isFrontTarget ? `(${tr('전열')})` : `(${tr('후열')})`}</span>
                             </span>
                           )}
                           <div className="flex items-center gap-1.5 w-full min-w-0">
                             <span className="shrink-0 flex items-center justify-center">
                               <GameIcon name={sk.id} icon={sk.icon || '⚡'} size={20} />
                             </span>
-                            <span className="text-xs font-bold truncate flex-1" style={{ color: skReadyCombo ? '#ffe57f' : 'white' }}>{sk.name}</span>
+                            <span className="text-xs font-bold truncate flex-1" style={{ color: skReadyCombo ? '#ffe57f' : 'white' }}>{tr(sk.name)}</span>
                             {skTags.slice(0, 1).map(t => (
                               <span
                                 key={t.id}
                                 className="text-[7.5px] px-1 py-0.1 rounded font-bold shrink-0"
                                 style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
                               >
-                                {t.label}
+                                {tr(t.label)}
                               </span>
                             ))}
                           </div>
                           <div className="flex items-center justify-between w-full text-[10px] mt-1">
-                            <span className="text-[#8b9bb4] truncate mr-1">{targetLabel}</span>
+                            <span className="text-[#8b9bb4] truncate mr-1">{tr(targetLabel)}</span>
                             <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#c8aa6e]' : 'text-[#ff5252]'}`}>
-                              {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
+                              {cdLeft > 0 ? `${cdLeft}${tr('턴 대기')}` : `${mpCost} MP`}
                             </span>
                           </div>
                         </LongPressBox>
@@ -2104,31 +2431,31 @@ export const NemesisView: React.FC = () => {
                           {skReadyCombo && skComboMatch && (
                             <span
                               className="absolute -top-1.5 -right-1 text-[8px] px-1.5 py-0.2 rounded-full font-bold bg-[#ffd54f] text-black shadow-md flex items-center gap-0.5 animate-bounce z-10"
-                              title={`⚡ [${skReadyCombo.comboName}] 연계 폭발 가능!`}
+                              title={`⚡ [${skReadyCombo.comboName}] ${tr('연계!')}`}
                             >
                               <span>⚡</span>
-                              <span>연계!{skComboMatch.isAoe ? '' : skComboMatch.isFrontTarget ? '(전열)' : '(후열)'}</span>
+                              <span>{tr('연계!')}{skComboMatch.isAoe ? '' : skComboMatch.isFrontTarget ? `(${tr('전열')})` : `(${tr('후열')})`}</span>
                             </span>
                           )}
                           <div className="flex items-center gap-1.5 w-full min-w-0">
                             <span className="shrink-0 flex items-center justify-center">
                               <GameIcon name={sk.id} icon={sk.icon || '⚡'} size={20} />
                             </span>
-                            <span className="text-xs font-bold truncate flex-1" style={{ color: skReadyCombo ? '#ffe57f' : 'white' }}>{sk.name}</span>
+                            <span className="text-xs font-bold truncate flex-1" style={{ color: skReadyCombo ? '#ffe57f' : 'white' }}>{tr(sk.name)}</span>
                             {skTags.slice(0, 1).map(t => (
                               <span
                                 key={t.id}
                                 className="text-[7.5px] px-1 py-0.1 rounded font-bold shrink-0"
                                 style={{ backgroundColor: t.bg, color: t.text, border: `1px solid ${t.border}` }}
                               >
-                                {t.label}
+                                {tr(t.label)}
                               </span>
                             ))}
                           </div>
                           <div className="flex items-center justify-between w-full text-[10px] mt-1">
-                            <span className="text-[#8b9bb4] truncate mr-1">{targetLabel}</span>
+                            <span className="text-[#8b9bb4] truncate mr-1">{tr(targetLabel)}</span>
                             <span className={`font-mono font-bold shrink-0 ${hasMp ? 'text-[#c8aa6e]' : 'text-[#ff5252]'}`}>
-                              {cdLeft > 0 ? `${cdLeft}턴 대기` : `${mpCost} MP`}
+                              {cdLeft > 0 ? `${cdLeft}${tr('턴 대기')}` : `${mpCost} MP`}
                             </span>
                           </div>
                         </LongPressBox>
@@ -2147,31 +2474,31 @@ export const NemesisView: React.FC = () => {
             <div className="panel p-4 max-w-md w-full bg-[#0d121f] border border-[#ff416c] shadow-2xl flex flex-col gap-3 rounded-2xl max-h-[90vh] overflow-y-auto">
               <div className="text-center">
                 <span className="text-xs font-bold text-[#ff416c] uppercase tracking-widest">RAID SETTLEMENT</span>
-                <h3 className="text-lg font-black text-white mt-0.5">네메시스 토벌전 정산 리포트</h3>
+                <h3 className="text-lg font-black text-white mt-0.5">{tr('네메시스 토벌전 정산 리포트')}</h3>
               </div>
 
               {settlement.isNewRecord && (
                 <div className="p-2 rounded-xl bg-gradient-to-r from-[#ffd54f33] to-[#ff980033] border border-[#ffd54f] text-center font-bold text-xs text-[#ffd54f] animate-pulse">
-                  🎉 단일 전투 최고 피해 기록 갱신!
+                  {tr('🎉 단일 전투 최고 피해 기록 갱신!')}
                 </div>
               )}
 
               {/* 총 피해량 및 보상 */}
               <div className="grid grid-cols-3 gap-2">
                 <div className="panel p-2 bg-[#141b2d] border border-[#23334d] text-center">
-                  <span className="text-[10px] text-[#8b9bb4]">총 누적 피해</span>
+                  <span className="text-[10px] text-[#8b9bb4]">{tr('총 누적 피해')}</span>
                   <div className="font-mono text-xs font-bold text-[#ffd54f] mt-0.5">
                     {settlement.damage.toLocaleString()} DMG
                   </div>
                 </div>
                 <div className="panel p-2 bg-[#141b2d] border border-[#23334d] text-center">
-                  <span className="text-[10px] text-[#8b9bb4]">획득 골드</span>
+                  <span className="text-[10px] text-[#8b9bb4]">{tr('획득 골드')}</span>
                   <div className="font-mono text-xs font-bold text-[#ffd54f] mt-0.5">
                     🪙 {settlement.coins.toLocaleString()}
                   </div>
                 </div>
                 <div className="panel p-2 bg-[#141b2d] border border-[#23334d] text-center">
-                  <span className="text-[10px] text-[#8b9bb4]">획득 에테르</span>
+                  <span className="text-[10px] text-[#8b9bb4]">{tr('획득 에테르')}</span>
                   <div className="font-mono text-xs font-bold text-[#c8aa6e] mt-0.5">
                     ✨ {settlement.ether.toLocaleString()}
                   </div>
@@ -2181,20 +2508,20 @@ export const NemesisView: React.FC = () => {
               {/* 부위별 가한 피해량 상세 */}
               <div className="panel p-2.5 bg-[#0b101c] border border-[#1f2b42]">
                 <div className="text-xs font-bold text-white mb-2 flex items-center justify-between">
-                  <span>🎯 부위별 타격 피해 정산</span>
-                  <span className="text-[10px] text-[#8b9bb4]">영구 누적 저장</span>
+                  <span>🎯 {tr('부위별 타격 피해 정산')}</span>
+                  <span className="text-[10px] text-[#8b9bb4]">{tr('영구 누적 저장')}</span>
                 </div>
                 <div className="space-y-1.5 text-xs">
                   <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
-                    <span className="text-[#ef5350] font-bold">머리 (전열)</span>
+                    <span className="text-[#ef5350] font-bold">{tr('머리')} ({tr('전열')})</span>
                     <span className="font-mono font-bold text-white">{settlement.partDamages.head.toLocaleString()} DMG</span>
                   </div>
                   <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
-                    <span className="text-[#ce93d8] font-bold">몸통 (중열)</span>
+                    <span className="text-[#ce93d8] font-bold">{tr('몸통')} ({tr('중열')})</span>
                     <span className="font-mono font-bold text-white">{settlement.partDamages.body.toLocaleString()} DMG</span>
                   </div>
                   <div className="flex items-center justify-between p-1.5 rounded bg-[#141c2e]">
-                    <span className="text-[#c8aa6e] font-bold">꼬리 (후열)</span>
+                    <span className="text-[#c8aa6e] font-bold">{tr('꼬리')} ({tr('후열')})</span>
                     <span className="font-mono font-bold text-white">{settlement.partDamages.tail.toLocaleString()} DMG</span>
                   </div>
                 </div>
@@ -2204,8 +2531,8 @@ export const NemesisView: React.FC = () => {
               {combatMetrics.length > 0 && (
                 <div className="panel p-2 bg-[#0a0b10] border border-[#1e2a40]">
                   <div className="text-xs font-bold text-white mb-1.5 flex items-center justify-between">
-                    <span>📊 대원별 피해 및 기여도</span>
-                    <span className="text-[9px] text-[#ffd54f]">전투 리포트</span>
+                    <span>📊 {tr('대원별 피해 및 기여도')}</span>
+                    <span className="text-[9px] text-[#ffd54f]">{tr('전투 리포트')}</span>
                   </div>
                   <CombatMeterTable
                     metrics={combatMetrics}
@@ -2220,10 +2547,10 @@ export const NemesisView: React.FC = () => {
                   onClick={() => setShowFullLogModal(true)}
                 >
                   <span>📜</span>
-                  <span>상세 로그 보기</span>
+                  <span>{tr('상세 로그 보기')}</span>
                 </button>
                 <ActionButton
-                  label="로비로 복귀"
+                  label={tr('로비로 복귀')}
                   variant="primary"
                   size="md"
                   className="flex-1 font-bold shadow-lg shadow-[#c8aa6e33]"
@@ -2264,7 +2591,7 @@ export const NemesisView: React.FC = () => {
         {/* ── 📜 전체 상세 전투 로그 팝업 모달 ── */}
         {showFullLogModal && (
           <Modal
-            title="📜 전투 상세 기록 (전체 로그)"
+            title={`📜 ${tr('전투 상세 기록 (전체 로그)')}`}
             open={showFullLogModal}
             zIndex="z-[70]"
             onClose={() => setShowFullLogModal(false)}
@@ -2273,17 +2600,17 @@ export const NemesisView: React.FC = () => {
                 className="btn btn-ghost text-xs px-4 py-1.5"
                 onClick={() => setShowFullLogModal(false)}
               >
-                닫기
+                {tr('닫기')}
               </button>
             }
           >
             <div className="flex flex-col gap-2">
               <div className="text-xs text-[#8b9bb4] flex items-center justify-between border-b border-[#1f2738] pb-1.5">
-                <span>총 {battleLogs.length}건의 전투 기록</span>
-                <span className="text-[10px] text-[#c8aa6e]">스크롤하여 이전 기록을 확인할 수 있습니다.</span>
+                <span>{`${tr('총')} ${battleLogs.length}${tr('건의 전투 기록')}`}</span>
+                <span className="text-[10px] text-[#c8aa6e]">{tr('스크롤하여 이전 기록을 확인할 수 있습니다.')}</span>
               </div>
               <div className="max-h-[60vh] overflow-y-auto pr-1">
-                <LogPanel logs={battleLogs} isBattle maxHeight={520} emptyMessage="기록된 전투 로그가 없습니다." />
+                <LogPanel logs={battleLogs} isBattle maxHeight={520} emptyMessage={tr('기록된 전투 로그가 없습니다.')} />
               </div>
             </div>
           </Modal>
@@ -2304,20 +2631,20 @@ export const NemesisView: React.FC = () => {
               className="px-2 py-1 rounded bg-[#151c2d] hover:bg-[#1f2a42] text-xs font-bold text-[#8b9bb4] hover:text-white transition-all flex items-center gap-1 border border-[#23334d]"
             >
               <span>🏛️</span>
-              <span>영지 복귀</span>
+              <span>{tr('영지 복귀')}</span>
             </button>
             <div className="flex items-center gap-1">
-              <span className="text-sm font-black text-white tracking-wide">차원 네메시스</span>
+              <span className="text-sm font-black text-white tracking-wide">{tr('차원 네메시스')}</span>
               <span className="text-[10px] text-[#ff416c] font-bold">VOID RAID</span>
             </div>
           </div>
 
           <div className="flex items-center gap-1.5">
             <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${cycleInfo.status === 'active' ? 'bg-[#4caf5022] text-[#4caf50] border-[#4caf5066]' : 'bg-[#ef535022] text-[#ef5350] border-[#ef535066]'}`}>
-              {cycleInfo.status === 'active' ? '🟢 토벌 진행 중' : cycleInfo.status === 'defeated' ? '👑 토벌 완료' : '💤 재소환 대기'}
+              {cycleInfo.status === 'active' ? tr('🟢 토벌 진행 중') : cycleInfo.status === 'defeated' ? tr('👑 토벌 완료') : tr('💤 재소환 대기')}
             </span>
             <span className="text-[10px] text-[#ffd54f] font-mono">
-              주기: {formatRemainingTimeStr(cycleInfo.status === 'active' ? cycleInfo.activeRemainingMs : cycleInfo.respawnRemainingMs)}
+              {tr('주기')}: {formatRemainingTimeStr(cycleInfo.status === 'active' ? cycleInfo.activeRemainingMs : cycleInfo.respawnRemainingMs)}
             </span>
           </div>
         </div>
@@ -2335,21 +2662,21 @@ export const NemesisView: React.FC = () => {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-sm sm:text-base font-bold text-white tracking-tight break-keep leading-tight">
-                  {NEMESIS_BOSS_CONFIG.name}
+                  {tr(NEMESIS_BOSS_CONFIG.name)}
                 </span>
                 <span className="text-[10px] px-1.5 py-0.2 rounded font-bold shrink-0" style={{ backgroundColor: `${currentPhaseCfg.badgeColor}22`, color: currentPhaseCfg.badgeColor, border: `1px solid ${currentPhaseCfg.badgeColor}88` }}>
                   Phase {nemesisState.phase}
                 </span>
                 <span className="text-[9px] px-1.5 py-0.5 rounded font-semibold shrink-0 bg-[#c8aa6e1a] text-[#c8aa6e] border border-[#c8aa6e55] flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#c8aa6e] animate-ping inline-block" />
-                  🌐 전 지휘관 실시간 공유 월드 보스
+                  {tr('🌐 전 지휘관 실시간 공유 월드 보스')}
                 </span>
               </div>
               <div className="text-[10px] sm:text-xs text-[#ce93d8] truncate mt-0.5">
-                {currentPhaseCfg.name}
+                {tr(currentPhaseCfg.name)}
               </div>
               <div className="text-[9px] text-[#8b9bb4] line-clamp-1 mt-0.2">
-                {currentPhaseCfg.desc}
+                {tr(currentPhaseCfg.desc)}
               </div>
             </div>
           </div>
@@ -2358,8 +2685,8 @@ export const NemesisView: React.FC = () => {
           <div className="mt-2.5 pt-2 border-t border-[#ff416c22]">
             <div className="flex items-center justify-between text-xs mb-1">
               <span className="text-[10px] text-[#8b9bb4] flex items-center gap-1">
-                <span>보스 전체 잔여 체력</span>
-                <span className="text-[9px] text-[#c8aa6e]">(전 지휘관 공유)</span>
+                <span>{tr('보스 전체 잔여 체력')}</span>
+                <span className="text-[9px] text-[#c8aa6e]">{tr('(전 지휘관 공유)')}</span>
               </span>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-xs font-bold text-[#ffd54f]">
@@ -2377,53 +2704,64 @@ export const NemesisView: React.FC = () => {
               />
             </div>
 
-            {/* 🎯 24주기 요격 목표치 (6시간 주기 저지 목표) */}
+            {/* 🎯 24주기 요격 목표 체력바 (가득 찬 상태에서 피해로 깎여나가는 체력바 프로그레스) */}
             <div className="mt-2 pt-2 border-t border-[#ff416c1a]">
               {(() => {
                 const targetGoal = Math.round(cycleInfo.requiredWindowDamage);
                 const remainingTarget = Math.max(0, targetGoal - Math.round(cycleInfo.currentWindowDamage));
+                // 100% 가득 찬 체력바에서 피해를 입힐수록 0%로 깎여나감
+                const remainingHpPct = targetGoal > 0 ? Math.max(0, Math.min(100, (remainingTarget / targetGoal) * 100)) : 0;
                 return (
                   <>
                     <div className="flex items-center justify-between text-xs mb-1">
                       <span className="text-[10px] text-[#cfd8e8] font-bold flex items-center gap-1">
                         <span>🎯</span>
-                        <span className="text-[#ffd54f]">전 지휘관 요격 목표치</span>
-                        <span className="text-[9px] text-[#8b9bb4] font-normal">(6시간 체력 1/24 저지)</span>
+                        <span className="text-[#ffd54f]">{tr('전 지휘관 요격 목표 체력')}</span>
+                        <span className="text-[9px] text-[#8b9bb4] font-normal">{tr('(6시간 네메시스 1/24 저지 체력)')}</span>
                       </span>
                       <div className="flex items-center gap-1.5 font-mono">
-                        <span className="text-[10px] text-[#8b9bb4]">잔여 목표:</span>
-                        <span className={`text-[10px] font-bold ${cycleInfo.isWindowDefended ? 'text-[#38ef7d]' : 'text-[#ffd54f]'}`}>
+                        <span className="text-[10px] text-[#8b9bb4]">{tr('잔여 체력:')}</span>
+                        <span className={`text-[10px] font-bold ${cycleInfo.isWindowDefended ? 'text-[#38ef7d]' : 'text-[#ff80ab]'}`}>
                           {remainingTarget.toLocaleString()}
                         </span>
                         <span className="text-[10px] text-[#8b9bb4]">
-                          / {targetGoal.toLocaleString()} DMG
+                          / {targetGoal.toLocaleString()} HP
                         </span>
                         <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
                           cycleInfo.isWindowDefended
                             ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66]'
-                            : 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f66]'
+                            : 'bg-[#ff416c22] text-[#ff80ab] border border-[#ff416c66]'
                         }`}>
-                          {cycleInfo.isWindowDefended ? '✅ 요격 달성' : `${cycleInfo.windowProgressPct.toFixed(1)}% 저지`}
+                          {cycleInfo.isWindowDefended ? tr('✅ 격퇴 달성') : `${tr('잔여')} ${remainingHpPct.toFixed(1)}%`}
                         </span>
                       </div>
                     </div>
 
-                    {/* 요격 진행도 바 */}
-                    <div className="w-full bg-[#120a1c] h-2 rounded-full overflow-hidden border border-white/10">
+                    {/* 요격 목표 체력바 (100%에서 깎여나가는 프로그레스 바) */}
+                    <div className="w-full bg-[#120a1c] h-2.5 rounded-full overflow-hidden border border-white/10 relative">
                       <div
                         className={`h-full transition-all duration-500 ${
-                          cycleInfo.isWindowDefended
-                            ? 'bg-gradient-to-r from-[#38ef7d] to-[#c8aa6e]'
-                            : 'bg-gradient-to-r from-[#ff9800] via-[#ffd54f] to-[#38ef7d]'
+                          cycleInfo.isWindowDefended || remainingTarget === 0
+                            ? 'w-0 opacity-0'
+                            : remainingHpPct > 50
+                            ? 'bg-gradient-to-r from-[#ff416c] via-[#ff7043] to-[#ff007f]'
+                            : remainingHpPct > 20
+                            ? 'bg-gradient-to-r from-[#ff7043] via-[#ffd54f] to-[#ff9800]'
+                            : 'bg-gradient-to-r from-[#ffd54f] via-[#38ef7d] to-[#00e676]'
                         }`}
-                        style={{ width: `${Math.min(100, Math.max(0, cycleInfo.windowProgressPct))}%` }}
+                        style={{ width: `${cycleInfo.isWindowDefended ? 0 : remainingHpPct}%` }}
                       />
+                      {cycleInfo.isWindowDefended && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#38ef7d44] to-[#c8aa6e44] flex items-center justify-center text-[8px] font-bold text-[#38ef7d] tracking-wider animate-pulse">
+                          {tr('⚡ 요격 방어 목표 완전 격퇴 달성 (0 HP)')}
+                        </div>
+                      )}
                     </div>
 
                     <div className="text-[9px] text-[#8b9bb4] flex items-center justify-between mt-1">
-                      <span>⏱️ 다음 요격 주기 갱신: {formatRemainingTimeStr(cycleInfo.nextPlunderRemainingMs)}</span>
+                      <span>⏱️ {tr('다음 요격 주기 갱신')}: {formatRemainingTimeStr(cycleInfo.nextPlunderRemainingMs)}</span>
                       <span className="text-[#8b9bb4]">
-                        전 지휘관 누적 피해: {Math.round(cycleInfo.currentWindowDamage).toLocaleString()} DMG {cycleInfo.isWindowDefended ? '(방어 성공)' : ''}
+                        {tr('전 지휘관 타격 피해')}: {Math.round(cycleInfo.currentWindowDamage).toLocaleString()} DMG {cycleInfo.isWindowDefended ? tr('(방어 성공)') : `(${cycleInfo.windowProgressPct.toFixed(1)}% ${tr('저지')})`}
                       </span>
                     </div>
                   </>
@@ -2453,8 +2791,8 @@ export const NemesisView: React.FC = () => {
                       }`}
                     >
                       <div className="flex items-center justify-between text-[9px] font-bold" style={{ color: isDefeated ? '#78909c' : theme }}>
-                        <span>{pCfg.icon} {cleanName}</span>
-                        <span>{isDefeated ? '💀패퇴' : `${pct.toFixed(0)}%`}</span>
+                        <span>{pCfg.icon} {tr(cleanName)}</span>
+                        <span>{isDefeated ? tr('💀패퇴') : `${pct.toFixed(0)}%`}</span>
                       </div>
                       <div className="w-full bg-[#0a0710] h-1.5 rounded-full overflow-hidden mt-1 border border-white/5">
                         <div
@@ -2466,7 +2804,7 @@ export const NemesisView: React.FC = () => {
                         />
                       </div>
                       <div className="text-[8px] text-[#8b9bb4] font-mono mt-0.5">
-                        {isDefeated ? '회복 불가' : `${(curHp / 10000).toFixed(0)}만 / ${(maxHp / 10000).toFixed(0)}만`}
+                        {isDefeated ? tr('회복 불가') : (lang === 'en' ? `${(curHp / 1000000).toFixed(1)}M / ${(maxHp / 1000000).toFixed(1)}M` : lang === 'ja' ? `${(curHp / 10000).toFixed(0)}万 / ${(maxHp / 10000).toFixed(0)}万` : `${(curHp / 10000).toFixed(0)}만 / ${(maxHp / 10000).toFixed(0)}만`)}
                       </div>
                     </div>
                   );
@@ -2480,32 +2818,45 @@ export const NemesisView: React.FC = () => {
       {/* 실시간 레이드 상태 및 지휘관 통계 */}
       <div className="px-3 pt-2 grid grid-cols-3 gap-1.5 shrink-0">
         <div className="panel p-2 flex flex-col items-center text-center bg-[#0d1322] border border-[#1e2a40]">
-          <span className="text-[10px] text-[#8b9bb4]">나의 누적 피해량</span>
+          <span className="text-[10px] text-[#8b9bb4]">{tr('나의 누적 피해량')}</span>
           <span className="font-mono text-xs font-bold text-white mt-0.5">
             {nemesisState.totalDamage.toLocaleString()}
           </span>
         </div>
         <div className="panel p-2 flex flex-col items-center text-center bg-[#0d1322] border border-[#1e2a40]">
-          <span className="text-[10px] text-[#8b9bb4]">단일 최고 기록</span>
+          <span className="text-[10px] text-[#8b9bb4]">{tr('단일 최고 기록')}</span>
           <span className="font-mono text-xs font-bold text-[#ffd54f] mt-0.5">
             {nemesisState.highestDamage.toLocaleString()}
           </span>
         </div>
         <div className="panel p-2 flex flex-col items-center text-center bg-[#0d1322] border border-[#1e2a40]">
           <div className="flex items-center justify-between w-full">
-            <span className="text-[10px] text-[#8b9bb4]">일일 도전 횟수</span>
-            {nemesisState.dailyAttempts === 0 && (
-              <button
-                className="text-[9px] text-[#ffd54f] hover:underline"
-                onClick={handleRefillAttempts}
-                title="에테르 50개로 +1회 충전"
-              >
-                +충전
-              </button>
+            <span className="text-[10px] text-[#8b9bb4]">{tr('일일 도전 횟수')}</span>
+            {nemesisState.dailyAttempts < 3 && (
+              <div className="flex items-center gap-1.5">
+                <button
+                  className="text-[9px] text-[#00e5ff] hover:underline flex items-center gap-0.5 font-bold"
+                  onClick={handleRefillAttemptsWithAd}
+                  disabled={isAdLoading}
+                  title={tr('광고 시청 시 공격 횟수 충전 (최대 3회)')}
+                >
+                  <span>📺</span>
+                  <span>+{tr('광고 충전')}</span>
+                </button>
+                {nemesisState.dailyAttempts === 0 && (
+                  <button
+                    className="text-[9px] text-[#ffd54f] hover:underline"
+                    onClick={handleRefillAttempts}
+                    title={tr('에테르 50개로 +1회 충전')}
+                  >
+                    +{tr('에테르')}
+                  </button>
+                )}
+              </div>
             )}
           </div>
           <span className="font-mono text-xs font-bold text-[#ff416c] mt-0.5">
-            🔥 {nemesisState.dailyAttempts} / 3회
+            🔥 {nemesisState.dailyAttempts} / 3{tr('회')}
           </span>
         </div>
       </div>
@@ -2513,9 +2864,9 @@ export const NemesisView: React.FC = () => {
       {/* 서브 탭 */}
       <div className="px-3 pt-2 flex gap-1.5 shrink-0">
         {[
-          { key: 'hub', label: '⚔️ 토벌전 출격' },
-          { key: 'milestones', label: `🎁 마일스톤 (${nemesisState.claimedMilestones.length}/${NEMESIS_MILESTONES.length})` },
-          { key: 'ranking', label: '🏆 토벌 랭킹' },
+          { key: 'hub', label: tr('⚔️ 토벌전 출격') },
+          { key: 'milestones', label: `${tr('🎁 마일스톤')} (${nemesisState.claimedMilestones.length}/${NEMESIS_MILESTONES.length})` },
+          { key: 'ranking', label: tr('🏆 토벌 랭킹') },
         ].map(t => (
           <button
             key={t.key}
@@ -2545,13 +2896,13 @@ export const NemesisView: React.FC = () => {
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-bold text-xs text-white">차원 원정대 편성 필요</span>
+                          <span className="font-bold text-xs text-white">{tr('차원 원정대 편성 필요')}</span>
                           <span className="text-[10px] text-[#ef5350] font-mono font-bold">
-                            ({squadCheck.count}/4인 편성됨)
+                            ({squadCheck.count}/4{tr('인 편성됨')})
                           </span>
                         </div>
                         <div className="text-[10px] text-[#cfd8dc] mt-0.5 leading-relaxed">
-                          차원 네메시스 레이드는 선발 3인과 전술 오퍼레이터 1인이 모두 편성되어야 출전할 수 있습니다.
+                          {tr('차원 네메시스 레이드는 선발 3인과 전술 오퍼레이터 1인이 모두 편성되어야 출전할 수 있습니다.')}
                         </div>
                       </div>
                     </div>
@@ -2565,7 +2916,7 @@ export const NemesisView: React.FC = () => {
                           }}
                         >
                           <span>⚡</span>
-                          <span>부대 자동 편성</span>
+                          <span>{tr('부대 자동 편성')}</span>
                         </button>
                       ) : (
                         <button
@@ -2575,7 +2926,7 @@ export const NemesisView: React.FC = () => {
                             gm.emit('openTavernDrawer');
                           }}
                         >
-                          🍻 주점에서 영입
+                          {tr('🍻 주점에서 영입')}
                         </button>
                       )}
                       <button
@@ -2585,7 +2936,7 @@ export const NemesisView: React.FC = () => {
                           gm.emit('openDimensionalBarracks');
                         }}
                       >
-                        🏛️ 직접 편성
+                        {tr('🏛️ 직접 편성')}
                       </button>
                     </div>
                   </div>
@@ -2599,10 +2950,10 @@ export const NemesisView: React.FC = () => {
               <div className="flex items-center justify-between text-xs mb-2">
                 <span className="font-bold text-white flex items-center gap-1">
                   <span>🛡️</span>
-                  <span>출전 원정대 (3선발 + 1오퍼레이터)</span>
+                  <span>{tr('출전 원정대 (3선발 + 1오퍼레이터)')}</span>
                 </span>
                 <span className="text-[10px] text-[#c8aa6e] font-mono">
-                  차원 덱 연동
+                  {tr('차원 덱 연동')}
                 </span>
               </div>
 
@@ -2621,28 +2972,35 @@ export const NemesisView: React.FC = () => {
                             className="p-1.5 sm:p-2 rounded-xl border border-dashed border-[#23334d] bg-[#0c121f]/50 flex flex-col items-center justify-center text-center min-h-[72px]"
                           >
                             <span className="text-sm opacity-40">➕</span>
-                            <span className="text-[9px] text-[#556987] mt-1 font-mono">선발 {idx + 1}</span>
+                            <span className="text-[9px] text-[#556987] mt-1 font-mono">{tr('선발')} {idx + 1}</span>
                           </div>
                         );
                       }
                       const cls = CHARACTER_CLASSES[h.classId];
                       const posLabel = idx === 0 ? '전열' : idx === 1 ? '중열' : '후열';
+                      const customPortrait = CustomAssetService.getHeroPortrait(h);
                       return (
                         <div
                           key={h.id}
                           className="p-1.5 sm:p-2 rounded-xl bg-[#141c2e] border border-[#23334d] flex flex-col items-center text-center min-w-0"
                         >
-                          <span className="text-[8px] font-bold text-[#c8aa6e]">선발{idx + 1}</span>
-                          <div className="text-base sm:text-xl">{cls?.skills[0]?.icon || '⚔️'}</div>
+                          <span className="text-[8px] font-bold text-[#c8aa6e]">{tr('선발')}{idx + 1}</span>
+                          {customPortrait ? (
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#c8aa6e55] overflow-hidden my-0.5 shrink-0 bg-[#0c121f]">
+                              <img src={customPortrait} alt={h.name} className="w-full h-full object-cover" />
+                            </div>
+                          ) : (
+                            <div className="text-base sm:text-xl">{cls?.skills[0]?.icon || '⚔️'}</div>
+                          )}
                           <span className="text-[10px] sm:text-xs font-bold text-white truncate w-full mt-0.5" title={h.name}>
                             {h.name}
                           </span>
                           <span className="text-[8.5px] sm:text-[10px] text-[#c8aa6e] truncate w-full">
-                            {cls?.name || h.classId}
+                            {tr(cls?.name || h.classId)}
                           </span>
                           <div className="flex items-center gap-1 text-[8px] text-[#8b9bb4] font-mono mt-0.5">
                             <span>Lv.{h.level}</span>
-                            <span className="text-[#ffd54f]">[{posLabel}]</span>
+                            <span className="text-[#ffd54f]">[{tr(posLabel)}]</span>
                           </div>
                         </div>
                       );
@@ -2653,24 +3011,36 @@ export const NemesisView: React.FC = () => {
                       (() => {
                         const opCls = CHARACTER_CLASSES[leaderHero.classId];
                         const opUlt = opCls?.specialSkill || (leaderHero as any)?.specialSkill || opCls?.skills?.[0] || null;
+                        const opPortrait = CustomAssetService.getHeroPortrait(leaderHero);
                         return (
                           <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-b from-[#2a1b0a] to-[#161009] border border-[#ffd54f55] flex flex-col items-center text-center min-w-0 shadow-sm shadow-[#ffd54f22]">
-                            <span className="text-[8px] font-bold text-[#ffd54f]">오퍼레이터</span>
-                            <div className="text-base sm:text-xl">👑</div>
+                            <span className="text-[8px] font-bold text-[#ffd54f]">{tr('오퍼레이터')}</span>
+                            {opPortrait ? (
+                              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#ffd54f88] overflow-hidden my-0.5 shrink-0 bg-[#161009] shadow-sm shadow-[#ffd54f33]">
+                                <img src={opPortrait} alt={leaderHero.name} className="w-full h-full object-cover" />
+                              </div>
+                            ) : (
+                              <div className="text-base sm:text-xl">👑</div>
+                            )}
                             <span className="text-[10px] sm:text-xs font-bold text-[#ffd54f] truncate w-full mt-0.5" title={leaderHero.name}>
                               {leaderHero.name}
                             </span>
                             <span className="text-[8.5px] sm:text-[10px] text-[#ffecb3] truncate w-full">
-                              {opCls?.name || leaderHero.classId}
+                              {tr(opCls?.name || leaderHero.classId)}
                             </span>
                             {opUlt ? (
-                              <div className="text-[7.5px] sm:text-[8px] text-[#ffd54f] font-bold truncate w-full mt-0.5 flex items-center justify-center gap-0.5" title={`궁극기: ${opUlt.name}`}>
-                                <span>⚡</span>
-                                <span className="truncate">{opUlt.name}</span>
-                              </div>
+                              (() => {
+                                const cleanUltName = (opUlt.name || '').replace(/^\[(?:궁극기|고유기)\]\s*/, '');
+                                return (
+                                  <div className="text-[7.5px] sm:text-[8px] text-[#ffd54f] font-bold truncate w-full mt-0.5 flex items-center justify-center gap-0.5" title={`${tr('궁극기')}: ${tr(cleanUltName)}`}>
+                                    <span>⚡</span>
+                                    <span className="truncate">{tr(cleanUltName)}</span>
+                                  </div>
+                                );
+                              })()
                             ) : (
                               <div className="text-[8px] text-[#ffd54f] font-mono mt-0.5">
-                                지휘 가호
+                                {tr('지휘 가호')}
                               </div>
                             )}
                           </div>
@@ -2679,7 +3049,7 @@ export const NemesisView: React.FC = () => {
                     ) : (
                       <div className="p-1.5 sm:p-2 rounded-xl border border-dashed border-[#ffd54f33] bg-[#1a140a]/40 flex flex-col items-center justify-center text-center min-h-[72px]">
                         <span className="text-sm opacity-40">👑</span>
-                        <span className="text-[9px] text-[#ffd54f88] mt-1 font-mono">오퍼레이터</span>
+                        <span className="text-[9px] text-[#ffd54f88] mt-1 font-mono">{tr('오퍼레이터')}</span>
                       </div>
                     )}
                   </div>
@@ -2687,7 +3057,7 @@ export const NemesisView: React.FC = () => {
               })()}
 
               <div className="mt-2.5 pt-2 border-t border-[#1f2b42] flex items-center justify-between text-[10px] text-[#8b9bb4]">
-                <span>선발 3인이 전투에 직접 참전하며, 오퍼레이터가 파티 전체에 전술 지휘를 제공합니다.</span>
+                <span>{tr('선발 3인이 전투에 직접 참전하며, 오퍼레이터가 파티 전체에 전술 지휘를 제공합니다.')}</span>
                 <button
                   className="text-[#c8aa6e] hover:underline font-bold shrink-0 ml-2"
                   onClick={() => {
@@ -2695,7 +3065,7 @@ export const NemesisView: React.FC = () => {
                     gm.emit('openDimensionalBarracks');
                   }}
                 >
-                  원정대 변경 ➔
+                  {tr('원정대 변경 ➔')}
                 </button>
               </div>
             </div>
@@ -2704,14 +3074,14 @@ export const NemesisView: React.FC = () => {
             <div className="panel p-3 bg-[#110c1c] border border-[#ff416c44] flex flex-col gap-1.5 text-xs text-[#cfd8e8]">
               <div className="font-bold text-[#ff416c] flex items-center gap-1 text-sm">
                 <span>⚠️</span>
-                <span>차원 네메시스 침식 & 약탈 규칙</span>
+                <span>{tr('⚠️ 차원 네메시스 침식 & 약탈 규칙')}</span>
               </div>
               <p className="text-[11px] leading-relaxed text-[#8b9bb4]">
-                • <strong className="text-white">차원 앵커 연동 침공</strong>: 차원 앵커 게이트(Lv.3+)가 개방되어 활성화된 상태에서만 침식과 약탈이 발생합니다. 차원 앵커가 닫혀 있는 동안에는 네메시스 침공과 자원 약탈이 전면 중단되어 영지 자원이 100% 안전하게 보호됩니다.<br />
-                • <strong className="text-white">6일 활동 & 1일 재소환 주기</strong>: 6일 동안 활동하며 완전 토벌 시 다음 7일차 재소환 주기까지 평화 상태가 유지됩니다.<br />
-                • <strong className="text-white">6시간 주기 20% 약탈</strong>: 침공 활성화 중 6시간마다 네메시스 체력의 1/24({(Math.round(cycleInfo.requiredWindowDamage)).toLocaleString()} DMG) 이상을 깎지 못하면 영지 전 자원의 20%를 약탈당합니다.<br />
-                • <strong className="text-white">체력 자연 회복</strong>: 네메시스는 활동 중 매 분마다 생존 부위 체력을 지속 회복합니다. (파괴된 부위는 영구 회복 불가)<br />
-                • <strong className="text-white">최대 15턴 전투 & 마일스톤</strong>: 매 전투마다 피해량을 누적하여 마일스톤 장비와 대량의 인장을 수령하십시오.
+                • <strong className="text-white">{tr('차원 앵커 연동 침공')}</strong>: {tr('차원 앵커 게이트(Lv.3+)가 개방되어 활성화된 상태에서만 침식과 약탈이 발생합니다. 차원 앵커가 닫혀 있는 동안에는 네메시스 침공과 자원 약탈이 전면 중단되어 영지 자원이 100% 안전하게 보호됩니다.')}<br />
+                • <strong className="text-white">{tr('6일 활동 & 1일 재소환 주기')}</strong>: {tr('6일 동안 활동하며 완전 토벌 시 다음 7일차 재소환 주기까지 평화 상태가 유지됩니다.')}<br />
+                • <strong className="text-white">{tr('6시간 주기 20% 약탈')}</strong>: {tr('침공 활성화 중 6시간마다 네메시스 체력의 1/24 이상을 깎지 못하면 영지 전 자원의 20%를 약탈당합니다.')} ({(Math.round(cycleInfo.requiredWindowDamage)).toLocaleString()} DMG)<br />
+                • <strong className="text-white">{tr('체력 자연 회복')}</strong>: {tr('네메시스는 활동 중 매 분마다 생존 부위 체력을 지속 회복합니다. (파괴된 부위는 영구 회복 불가)')}<br />
+                • <strong className="text-white">{tr('최대 15턴 전투 & 마일스톤')}</strong>: {tr('매 전투마다 피해량을 누적하여 마일스톤 장비와 대량의 인장을 수령하십시오.')}
               </p>
             </div>
 
@@ -2723,16 +3093,16 @@ export const NemesisView: React.FC = () => {
                 <ActionButton
                   label={
                     cycleInfo.status === 'defeated'
-                      ? `👑 이번 주기 토벌 완료 (재소환 대기 중: ${formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})`
+                      ? `👑 ${tr('이번 주기 토벌 완료')} (${tr('재소환 대기 중')}: ${formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})`
                       : cycleInfo.status === 'cooldown'
-                      ? `💤 1일 재소환 대기 기간 (재소환까지: ${formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})`
+                      ? `💤 ${tr('1일 재소환 대기 기간')} (${tr('재소환까지')}: ${formatRemainingTimeStr(cycleInfo.respawnRemainingMs)})`
                       : !isGateUnlocked
-                      ? `🔒 차원 앵커 게이트 Lv.3 필요 (현재 Lv.${gateLevel})`
+                      ? `🔒 ${tr('차원 앵커 게이트 Lv.3 필요')} (${tr('현재')} Lv.${gateLevel})`
                       : !squadCheck.isReady
-                      ? `⚠️ 차원 원정대 미편성 (출격 불가: ${squadCheck.count}/4인)`
+                      ? `⚠️ ${tr('차원 원정대 미편성')} (${tr('출격 불가')}: ${squadCheck.count}/4${tr('인')})`
                       : nemesisState.dailyAttempts > 0
-                      ? '🌌 네메시스 토벌전 출격 (전투 시작)'
-                      : '🔒 일일 도전 횟수 소진 (에테르 충전 필요)'
+                      ? `🌌 ${tr('네메시스 토벌전 출격 (전투 시작)')}`
+                      : `🔒 ${tr('일일 도전 횟수 소진 (광고 시청으로 3회 충전 가능)')}`
                   }
                   variant={canFight ? 'danger' : 'ghost'}
                   size="lg"
@@ -2742,6 +3112,18 @@ export const NemesisView: React.FC = () => {
                 />
               );
             })()}
+
+            {/* 📺 공격 횟수 0회 소진 시 광고 시청 +3회 즉시 충전 버튼 */}
+            {nemesisState.dailyAttempts <= 0 && isGateUnlocked && cycleInfo.status === 'active' && (
+              <button
+                className="btn btn-primary w-full py-3 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 bg-gradient-to-r from-[#00b4db] to-[#0083b0] text-white border border-[#00e5ff66] shadow-lg shadow-[#00e5ff22] hover:brightness-110 transition-all animate-pulse"
+                onClick={handleRefillAttemptsWithAd}
+                disabled={isAdLoading}
+              >
+                <span>📺</span>
+                <span>{isAdLoading ? tr('광고 준비 중...') : tr('광고 시청하고 토벌 공격 횟수 3회 충전 (+3회)')}</span>
+              </button>
+            )}
           </div>
         )}
 
@@ -2749,8 +3131,8 @@ export const NemesisView: React.FC = () => {
         {nemesisTab === 'milestones' && (
           <div className="flex flex-col gap-2 w-full max-w-full">
             <div className="text-xs text-[#8b9bb4] px-1 flex items-center justify-between">
-              <span>네메시스에게 누적 피해를 입혀 단계별 특별 무구와 마도석을 획득하십시오.</span>
-              <span className="font-mono text-[#c8aa6e] font-bold">누적: {nemesisState.totalDamage.toLocaleString()}</span>
+              <span>{tr('네메시스에게 누적 피해를 입혀 단계별 특별 무구와 마도석을 획득하십시오.')}</span>
+              <span className="font-mono text-[#c8aa6e] font-bold">{tr('누적')}: {nemesisState.totalDamage.toLocaleString()}</span>
             </div>
 
             {NEMESIS_MILESTONES.map(ms => {
@@ -2769,16 +3151,16 @@ export const NemesisView: React.FC = () => {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-xs text-white truncate">{ms.title}</span>
+                        <span className="font-bold text-xs text-white truncate">{tr(ms.title)}</span>
                         {isClaimed ? (
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#4caf5022] text-[#4caf50] font-bold">수령 완료</span>
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#4caf5022] text-[#4caf50] font-bold">{tr('수령 완료')}</span>
                         ) : isUnlocked ? (
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold animate-pulse">수령 가능!</span>
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold animate-pulse">{tr('수령 가능!')}</span>
                         ) : (
                           <span className="text-[9px] text-[#8b9bb4] font-mono">{progressPct.toFixed(0)}%</span>
                         )}
                       </div>
-                      <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">{ms.desc}</div>
+                      <div className="text-[10px] text-[#8b9bb4] truncate mt-0.5">{tr(ms.desc)}</div>
 
                       {!isUnlocked && !isClaimed && (
                         <div className="w-full bg-[#151c2e] h-1.5 rounded-full overflow-hidden mt-1.5">
@@ -2790,7 +3172,7 @@ export const NemesisView: React.FC = () => {
 
                   <div className="shrink-0">
                     <ActionButton
-                      label={isClaimed ? '완료' : isUnlocked ? '수령' : '잠김'}
+                      label={isClaimed ? tr('완료') : isUnlocked ? tr('수령') : tr('잠김')}
                       variant={isClaimed ? 'ghost' : isUnlocked ? 'success' : 'ghost'}
                       size="sm"
                       disabled={isClaimed || !isUnlocked}
@@ -2808,8 +3190,8 @@ export const NemesisView: React.FC = () => {
         {nemesisTab === 'ranking' && (
           <div className="flex flex-col gap-2 w-full max-w-full">
             <div className="text-xs text-[#8b9bb4] px-1 flex items-center justify-between">
-              <span>전 서버 지휘관 토벌 랭킹 (시즌 누적)</span>
-              <span className="text-[10px] text-[#ffd54f]">나의 순위: #14 ({nemesisState.totalDamage.toLocaleString()} DMG)</span>
+              <span>{tr('전 서버 지휘관 토벌 랭킹 (시즌 누적)')}</span>
+              <span className="text-[10px] text-[#ffd54f]">{tr('나의 순위')}: #14 ({nemesisState.totalDamage.toLocaleString()} DMG)</span>
             </div>
 
             {NEMESIS_LEADERBOARD_MOCK.map(entry => (
@@ -2822,8 +3204,8 @@ export const NemesisView: React.FC = () => {
                     {entry.rank <= 3 ? entry.badge : `#${entry.rank}`}
                   </div>
                   <div className="min-w-0">
-                    <div className="text-xs font-bold text-white truncate">{entry.name}</div>
-                    <div className="text-[10px] text-[#8b9bb4] truncate">{entry.guild}</div>
+                    <div className="text-xs font-bold text-white truncate">{tr(entry.name)}</div>
+                    <div className="text-[10px] text-[#8b9bb4] truncate">{tr(entry.guild)}</div>
                   </div>
                 </div>
 
@@ -2831,7 +3213,7 @@ export const NemesisView: React.FC = () => {
                   <div className="font-mono text-xs font-bold text-[#ffd54f]">
                     {entry.damage.toLocaleString()} DMG
                   </div>
-                  <div className="text-[9px] text-[#c8aa6e]">기여도 보상 획득</div>
+                  <div className="text-[9px] text-[#c8aa6e]">{tr('기여도 보상 획득')}</div>
                 </div>
               </div>
             ))}

@@ -33,16 +33,24 @@ export const ActionButton: React.FC<Props> = ({
     onClick?.(e);
   };
 
+  // 🌐 긴 번역 텍스트에 따른 적응형 폰트 축소 및 줄바꿈 지원
+  const length = label ? label.length : 0;
+  const adaptiveTextClass = length > 28
+    ? 'text-[10px] sm:text-xs leading-tight'
+    : length > 18
+      ? (size === 'sm' ? 'text-[10px] leading-tight' : 'text-xs sm:text-sm leading-tight')
+      : '';
+
   return (
     <button
-      className={`btn ${variantClass} ${sizeClass} min-w-0 max-w-full leading-tight text-center break-words ${className}`}
+      className={`btn ${variantClass} ${sizeClass} ${adaptiveTextClass} min-w-0 max-w-full leading-tight text-center break-words hyphens-auto ${className}`}
       disabled={disabled}
       onClick={handleClick}
       style={style}
       data-tutorial-target={dataTutorialTarget}
     >
       {icon && <span className="mr-1 shrink-0">{icon}</span>}
-      <span className="min-w-0 break-words">{label}</span>
+      <span className="min-w-0 break-words hyphens-auto inline-block">{label}</span>
     </button>
   );
 };

@@ -1,0 +1,346 @@
+{
+  "프리시즌 AI 전술 훈련 리그 진행 중": {
+    "en": "Pre-Season AI Tactical Training League in Progress",
+    "ja": "プレシーズンAI戦術訓練リーグ進行中"
+  },
+  "브론즈부터 마스터까지 전 등급 AI 봇이 균등 배치되어 3인 홀덤 & 피버 전략을 연습할 수 있습니다.": {
+    "en": "AI bots from Bronze to Master are evenly distributed, allowing you to practice 3-hero hold'em & fever tactics.",
+    "ja": "ブロンズからマスターまでの全ランクAIボットが均等に配置され、3人ホールデム＆フィーバー戦略を練習できます。"
+  },
+  "이번 주의 차원 칙령:": {
+    "en": "This Week's Dimensional Edict:",
+    "ja": "今週の次元勅令："
+  },
+  "회피 금지의 칙령": {
+    "en": "Edict of Evade Prohibition",
+    "ja": "回避禁止の勅令"
+  },
+  "블러핑 앤 쇼다운 (2 공개 + 1 히든 실루엣)": {
+    "en": "Bluffing & Showdown (2 Revealed + 1 Hidden Silhouette)",
+    "ja": "ブラッフィング＆ショーダウン（2人公開＋1人ヒドゥンシルエット）"
+  },
+  "부대 편성": {
+    "en": "Squad Setup",
+    "ja": "部隊編成"
+  },
+  "성채 병영의 차원 결투 부대 편성 화면으로 이동": {
+    "en": "Go to Citadel Barracks to set up Dimensional Duel squad",
+    "ja": "城塞兵舎の次元決闘部隊編成画面へ移動"
+  },
+  "족보 도감 열람": {
+    "en": "View Hand Codex",
+    "ja": "役図鑑を閲覧"
+  },
+  "🚫 금지 배지 없음": {
+    "en": "🚫 No Banned Badges",
+    "ja": "🚫 禁止バッジなし"
+  },
+  "💨 EVADE (회피 뱃지 획득 불가)": {
+    "en": "💨 EVADE (Evade Badges Disabled)",
+    "ja": "💨 EVADE（回避バッジ獲得不可）"
+  },
+  "💥 CRIT (치명 뱃지 획득 불가)": {
+    "en": "💥 CRIT (Crit Badges Disabled)",
+    "ja": "💥 CRIT（会心バッジ獲得不可）"
+  },
+  "🛡️ GUARD (수호 뱃지 획득 불가)": {
+    "en": "🛡️ GUARD (Guard Badges Disabled)",
+    "ja": "🛡️ GUARD（守護バッジ獲得不可）"
+  },
+  "✨ HEAL (치유 뱃지 획득 불가)": {
+    "en": "✨ HEAL (Heal Badges Disabled)",
+    "ja": "✨ HEAL（治癒バッジ獲得不可）"
+  },
+  "도전 가능한 AI 봇 대진표": {
+    "en": "Available AI Bot Opponents",
+    "ja": "挑戦可能なAIボット対戦表"
+  },
+  "새로고침": {
+    "en": "Refresh",
+    "ja": "更新"
+  },
+  "피버 3선승": {
+    "en": "Fever Best of 3",
+    "ja": "フィーバー3先取"
+  },
+  "아군 피버": {
+    "en": "Allied Fever",
+    "ja": "味方フィーバー"
+  },
+  "상대 피버": {
+    "en": "Enemy Fever",
+    "ja": "相手フィーバー"
+  },
+  "피버 콜 격돌 리포트": {
+    "en": "Fever Call Clash Report",
+    "ja": "フィーバーコール激突レポート"
+  },
+  "클릭하여 리포트 접기": {
+    "en": "Click to collapse report",
+    "ja": "クリックしてレポートを折りたたむ"
+  },
+  "클릭하여 리포트 펼치기": {
+    "en": "Click to expand report",
+    "ja": "クリックしてレポートを展開"
+  },
+  "▲ 접기": {
+    "en": "▲ Collapse",
+    "ja": "▲ 折りたたむ"
+  },
+  "▼ 펼치기": {
+    "en": "▼ Expand",
+    "ja": "▼ 展開"
+  },
+  "총": {
+    "en": "Total",
+    "ja": "合計"
+  },
+  "회 격돌": {
+    "en": "Clashes",
+    "ja": "回激突"
+  },
+  "아군": {
+    "en": "Allies",
+    "ja": "味方"
+  },
+  "상대": {
+    "en": "Enemy",
+    "ja": "相手"
+  },
+  "승": {
+    "en": "W",
+    "ja": "勝"
+  },
+  "차 피버콜 격돌": {
+    "en": "th Fever Clash",
+    "ja": "回目フィーバーコール激突"
+  },
+  "3턴 유예 타임아웃": {
+    "en": "3-Turn Timeout",
+    "ja": "3ターン猶予タイムアウト"
+  },
+  "👑 아군 승리": {
+    "en": "👑 Allied Victory",
+    "ja": "👑 味方の勝利"
+  },
+  "💀 상대 승리": {
+    "en": "💀 Enemy Victory",
+    "ja": "💀 相手の勝利"
+  },
+  "⚡ 전술 무승부": {
+    "en": "⚡ Tactical Draw",
+    "ja": "⚡ 戦術引き分け"
+  },
+  "이번 결투에서는 피버 완충 전 승패가 결정되어 피버콜이 발생하지 않았습니다.": {
+    "en": "In this duel, the outcome was decided before Fever filled, so no Fever Call occurred.",
+    "ja": "この決闘ではフィーバー満充前に勝敗が決したため、フィーバーコールは発生しませんでした。"
+  },
+  "상대 레이팅": {
+    "en": "Opponent Rating",
+    "ja": "相手レーティング"
+  },
+  "랭킹": {
+    "en": "Rank",
+    "ja": "ランキング"
+  },
+  "(차원 허상 AI)": {
+    "en": "(Dimensional Phantom AI)",
+    "ja": "(次元虚像AI)"
+  },
+  "(방주 사령관)": {
+    "en": "(Ark Commander)",
+    "ja": "(方舟司令官)"
+  },
+  "차원 아레나 3v3 랭킹 결투 개시!": {
+    "en": "Dimensional Arena 3v3 Ranked Duel Commences!",
+    "ja": "次元アリーナ3v3ランキング決闘開始！"
+  },
+  "3인 결사대 + 1인 리더 + 1인 서포터 전술 편성 완료 · 결투장 진입 중": {
+    "en": "3 Heroes + 1 Leader + 1 Supporter Tactical Deployment Complete · Entering Arena",
+    "ja": "3人決死隊＋1人リーダー＋1人サポーター戦術編成完了・決闘場進入中"
+  },
+  "라운드 · 속도(SPD) 턴제 교전": {
+    "en": "Round · Speed (SPD) Turn-based Combat",
+    "ja": "ラウンド・速度(SPD)ターン制交戦"
+  },
+  "3v3 차원 아레나": {
+    "en": "3v3 Dimensional Arena",
+    "ja": "3v3次元アリーナ"
+  },
+  "차원 아레나 칙령 & 룰 셋팅 마스터": {
+    "en": "Dimensional Arena Edict & Rule Settings Master",
+    "ja": "次元アリーナ勅令＆ルール設定マスター"
+  },
+  "차원 결투장의 이번 주 차원 칙령, 금지 피버 뱃지, 조커 및 블러핑 룰을 실시간으로 설정하고 배포합니다.": {
+    "en": "Configure and deploy this week's Dimensional Edict, banned fever badges, and joker/bluffing rules in real time.",
+    "ja": "次元決闘場の今週の次元勅令、禁止フィーバーバッジ、ジョーカーおよびブラッフィングルールをリアルタイムで設定・配信します。"
+  },
+  "이번 주 차원 칙령 명칭": {
+    "en": "This Week's Dimensional Edict Name",
+    "ja": "今週の次元勅令の名称"
+  },
+  "조커 & 기본 룰 표기": {
+    "en": "Joker & Base Rule Display",
+    "ja": "ジョーカー＆基本ルール表記"
+  },
+  "이번 주 금지 피버 뱃지 선택 (금기 룰)": {
+    "en": "Select This Week's Banned Fever Badge (Taboo Rule)",
+    "ja": "今週の禁止フィーバーバッジ選択（禁忌ルール）"
+  },
+  "차원 칙령 세부 설명": {
+    "en": "Dimensional Edict Detailed Description",
+    "ja": "次元勅令の詳細説明"
+  },
+  "견습 수녀 릴리": {
+    "en": "Novice Sister Lily",
+    "ja": "見習い修道女リリー"
+  },
+  "훈련병 한스": {
+    "en": "Trainee Hans",
+    "ja": "訓練兵ハンス"
+  },
+  "마도 실습생 핀": {
+    "en": "Mage Apprentice Finn",
+    "ja": "魔導実習生フィン"
+  },
+  "길거리 격투가 잭": {
+    "en": "Street Brawler Jack",
+    "ja": "路地裏の格闘家ジャック"
+  },
+  "정찰병 로빈": {
+    "en": "Scout Robin",
+    "ja": "斥候ロビン"
+  },
+  "수호기사 롤랑": {
+    "en": "Guardian Knight Roland",
+    "ja": "守護騎士ローラン"
+  },
+  "치유사 소피아": {
+    "en": "Healer Sophia",
+    "ja": "治癒師ソフィア"
+  },
+  "마도사 올리버": {
+    "en": "Mage Oliver",
+    "ja": "魔導士オリバー"
+  },
+  "암살자 섀도우": {
+    "en": "Assassin Shadow",
+    "ja": "暗殺者シャドウ"
+  },
+  "철벽수호 발터": {
+    "en": "Iron Wall Walter",
+    "ja": "鉄壁守護ヴァルター"
+  },
+  "신비학자 카일": {
+    "en": "Occultist Kyle",
+    "ja": "神秘学者カイル"
+  },
+  "그림자단 레이븐": {
+    "en": "Shadowguild Raven",
+    "ja": "影の団レイヴン"
+  },
+  "원소술사 에레나": {
+    "en": "Elementalist Elena",
+    "ja": "元素術士エレーナ"
+  },
+  "무도가 진": {
+    "en": "Martial Artist Jin",
+    "ja": "武道家ジン"
+  },
+  "사신 크로우": {
+    "en": "Reaper Crow",
+    "ja": "死神クロウ"
+  },
+  "성기사단장 베른": {
+    "en": "Paladin Commander Bern",
+    "ja": "聖騎士団長ベルン"
+  },
+  "요새수호자 가디언": {
+    "en": "Fortress Warden Guardian",
+    "ja": "要塞守護者ガーディアン"
+  },
+  "시공술사 크로노": {
+    "en": "Chronomancer Chrono",
+    "ja": "時空術士クロノ"
+  },
+  "대주교 헬레나": {
+    "en": "Archbishop Helena",
+    "ja": "大司教ヘレナ"
+  },
+  "발키리 브륀힐트": {
+    "en": "Valkyrie Brynhild",
+    "ja": "ワルキューレ・ブリュンヒルド"
+  },
+  "흡혈귀 카밀라": {
+    "en": "Vampire Camilla",
+    "ja": "吸血鬼カミラ"
+  },
+  "투신 아레스": {
+    "en": "War God Ares",
+    "ja": "闘神アレス"
+  },
+  "성녀 베아트리체": {
+    "en": "Saint Beatrice",
+    "ja": "聖女ベアトリーチェ"
+  },
+  "공허의 사제 말자하": {
+    "en": "Void Priest Malzahar",
+    "ja": "虚空の司祭マルザハ"
+  },
+  "빛의 수호자 루시안": {
+    "en": "Light Warden Lucian",
+    "ja": "光の守護者ルシアン"
+  },
+  "칼날폭풍 류": {
+    "en": "Bladestorm Ryu",
+    "ja": "刃嵐のリュウ"
+  },
+  "대마도사 멀린": {
+    "en": "Archmage Merlin",
+    "ja": "大魔導士マーリン"
+  },
+  "무간의 지배자 아자젤": {
+    "en": "Lord of Avici Azazel",
+    "ja": "無間の支配者アザゼル"
+  },
+  "그랜드 마에스트로 솔": {
+    "en": "Grand Maestro Sol",
+    "ja": "グランドマエストロ・ソル"
+  },
+  "용기사단장 이그니스": {
+    "en": "Dragon Knight Commander Ignis",
+    "ja": "竜騎士団長イグニス"
+  },
+  "공허의 군주 오리온": {
+    "en": "Void Overlord Orion",
+    "ja": "虚空の君主オリオン"
+  },
+  "모험가 초보자단": {
+    "en": "Adventurer Novice Guild",
+    "ja": "冒険者初心者団"
+  },
+  "신록의 기도원": {
+    "en": "Verdant Sanctuary",
+    "ja": "新緑の祈祷院"
+  },
+  "성채 방위대 훈련소": {
+    "en": "Citadel Guard Camp",
+    "ja": "城塞防衛隊訓練所"
+  },
+  "마법 학술원 초급반": {
+    "en": "Magic Academy Beginners",
+    "ja": "魔法学術院初級クラス"
+  },
+  "뒷골목 자경단": {
+    "en": "Backstreet Vigilantes",
+    "ja": "裏通りの自警団"
+  },
+  "🚫 이번 주 금기 배지": {
+    "en": "🚫 This Week's Taboo Badge",
+    "ja": "🚫 今週の禁忌バッジ"
+  },
+  "💫 BREAK (파쇄 뱃지 획득 불가)": {
+    "en": "💫 BREAK (Break Badges Disabled)",
+    "ja": "💫 BREAK（破砕バッジ獲得不可）"
+  }
+}

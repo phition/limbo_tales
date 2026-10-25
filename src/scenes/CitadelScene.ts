@@ -256,7 +256,15 @@ export class CitadelScene extends Phaser.Scene {
     const r = this.gm.resources;
     
     const fmt = (key: keyof GameResources) => {
-      if (key === 'gold') return `${r[key]}`;
+      if (key === 'gold') {
+        const g = r[key] || 0;
+        if (g >= 1_000_000_000) return `${(g / 1_000_000_000).toFixed(2)}B`;
+        if (g >= 1_000_000) {
+          const inM = g / 1_000_000;
+          return `${inM >= 10 ? inM.toFixed(1) : inM.toFixed(2)}M`;
+        }
+        return `${g}`;
+      }
       const max = this.gm.getMaxResourceCapacity(key);
       return `${r[key]}/${max}`;
     };
@@ -443,7 +451,8 @@ export class CitadelScene extends Phaser.Scene {
 
   private updateLogs(): void {
     if (!this.logLines || this.logLines.length === 0) return;
-    const recent = this.gm.logs.slice(-7);
+    const cLogs = (this.gm.citadelLogs && this.gm.citadelLogs.length > 0 ? this.gm.citadelLogs : this.gm.logs).filter(l => !GameManager.isAnchorGateLog(l.text));
+    const recent = cLogs.slice(-7);
     for (let i = 0; i < 7; i++) {
       const line = this.logLines[i];
       if (!line || !line.scene || !line.active) continue;
@@ -474,8 +483,8 @@ export class CitadelScene extends Phaser.Scene {
       }
     }
 
-    if (this.gm.logs.length > 0 && this.singleLogText && this.singleLogText.scene && this.singleLogText.active) {
-      const latest = this.gm.logs[this.gm.logs.length - 1];
+    if (cLogs.length > 0 && this.singleLogText && this.singleLogText.scene && this.singleLogText.active) {
+      const latest = cLogs[cLogs.length - 1];
       let color = '#38ef7d';
       let prefix = '📢 [피드백] ';
       if (latest.type === 'danger') { color = '#ff416c'; prefix = '⚠️ [경고] '; }
@@ -920,10 +929,7 @@ export class CitadelScene extends Phaser.Scene {
       const descW = hasDrawer ? w - 180 : w - 130;
       
       const formatCost = (costObj: Partial<GameResources>) => {
-        const names: Record<string, string> = {
-          wood: '목재', stone: '석재', iron: '철광', gold: '골드', ether: '에테르', herb: '약초', bone: '짐승 뼈', void_shard: '공허파편'
-        };
-        return Object.entries(costObj).map(([k, v]) => `${names[k] || k} ${v}`).join(', ');
+        return Object.entries(costObj).map(([k, v]) => `${GameManager.getResourceMeta(k as keyof GameResources)?.name || k} ${v}`).join(', ');
       };
       const costObj = this.gm.getBuildingUpgradeCost(item.id, b.level);
       const costStr = formatCost(costObj);

@@ -4,4 +4,7 @@
     <string name="title_activity_main">Project: Limbo Tales</string>
     <string name="package_name">com.limbo.tales</string>
     <string name="custom_url_scheme">com.limbo.tales</string>
+    <string name="admob_app_id">ca-app-pub-6764468741905727~8384969973</string>
+    <!-- 🎮 Google Play Games Services 프로젝트 ID (Google Play Console > Play 게임즈 서비스 > 설정 및 관리 > 구성에서 발급된 숫자 ID) -->
+    <string translatable="false" name="game_services_project_id">994199040524</string>
 </resources>

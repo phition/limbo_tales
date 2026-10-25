@@ -4,6 +4,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { App as CapApp } from '@capacitor/app';
 import { SoundManager } from '../managers/SoundManager';
 import { GameManager } from '../managers/GameManager';
+import { PlayGamesService } from '../services/PlayGamesService';
 
 type BackButtonCallback = () => boolean | Promise<boolean>;
 
@@ -90,6 +91,12 @@ export const checkPendingBackgroundTimeout = (gm: GameManager): boolean => {
           gm.dungeonFloor = dungeonSession.dungeonFloor || gm.dungeonFloor || 1;
           gm.dungeonDangerLevel = dungeonSession.dungeonDangerLevel || 0;
           gm.isOvercharged = !!dungeonSession.isOvercharged;
+          if (dungeonSession.isEmergencyEscapeBattle !== undefined) {
+            gm.isEmergencyEscapeBattle = !!dungeonSession.isEmergencyEscapeBattle;
+          }
+          if (dungeonSession.pendingEventBattleId !== undefined) {
+            gm.pendingEventBattleId = dungeonSession.pendingEventBattleId || null;
+          }
           if (Array.isArray(dungeonSession.dungeonInventory)) {
             gm.dungeonInventory = dungeonSession.dungeonInventory;
           }
@@ -197,6 +204,31 @@ const onAppResumeForeground = () => {
  * 1. 상단 상태표시줄(StatusBar) 다크 테마 일체화
  * 2. 화면 세로 모드(Portrait) 고정
  * 3. 하드웨어 뒤로가기 버튼 리스너 등록
+/**
+ * 📱 뒤로가기 버튼 이벤트 전역 디스패처 (모바일 하드웨어 / 브라우저 popstate 공용)
+ */
+export const triggerBackButton = async (): Promise<boolean> => {
+  for (let i = backButtonHandlers.length - 1; i >= 0; i--) {
+    const handler = backButtonHandlers[i];
+    try {
+      const consumed = await handler();
+      if (consumed) {
+        return true;
+      }
+    } catch (e) {
+      console.warn('[NativeBridge] BackButton 핸들러 실행 중 에러:', e);
+    }
+  }
+  return false;
+};
+
+let isPopstateInitialized = false;
+
+/**
+ * 🚀 모바일 네이티브 브릿지 초기화
+ * 1. 상태바 스타일 적용
+ * 2. 화면 세로 방향 고정
+ * 3. 하드웨어/브라우저 뒤로가기 버튼 이벤트 리스너 연결
  * 4. 백그라운드 3분 타이머 감지 및 BGM 정지, 3분 경과 시 앱 종료 & 던전 전멸 판정
  */
 export const initNativeBridge = async (onDefaultExit?: () => void): Promise<void> => {
@@ -214,6 +246,26 @@ export const initNativeBridge = async (onDefaultExit?: () => void): Promise<void
     });
   }
 
+  // 🌐 웹 브라우저 뒤로가기(popstate) 감지 및 페이지 이탈 방지 (웹/네이티브 공통)
+  if (!isPopstateInitialized && typeof window !== 'undefined') {
+    isPopstateInitialized = true;
+    try {
+      window.history.pushState({ limboArk: true }, '', window.location.href);
+
+      window.addEventListener('popstate', async () => {
+        // 뒤로가기 시 페이지를 벗어나지 않도록 즉시 복구
+        window.history.pushState({ limboArk: true }, '', window.location.href);
+
+        const consumed = await triggerBackButton();
+        if (!consumed && onDefaultExit) {
+          onDefaultExit();
+        }
+      });
+    } catch (err) {
+      console.warn('[NativeBridge] popstate 리스너 등록 실패:', err);
+    }
+  }
+
   if (!Capacitor.isNativePlatform()) {
     console.log('[NativeBridge] 웹 브라우저 환경에서 실행 중입니다.');
     return;
@@ -221,11 +273,10 @@ export const initNativeBridge = async (onDefaultExit?: () => void): Promise<void
 
   console.log('[NativeBridge] 안드로이드/모바일 네이티브 환경 초기화 시작...');
 
-  // 1. 상태바 스타일 적용
+  // 1. 상태바 스타일 적용 (상단 알림줄 다크 테마 일체화 및 표시 유지)
   try {
     await StatusBar.setStyle({ style: Style.Dark });
     await StatusBar.setBackgroundColor({ color: '#0b0d13' });
-    await StatusBar.setOverlaysWebView({ overlay: false });
     await StatusBar.show();
   } catch (err) {
     console.warn('[NativeBridge] StatusBar 설정 실패:', err);
@@ -238,22 +289,14 @@ export const initNativeBridge = async (onDefaultExit?: () => void): Promise<void
     console.warn('[NativeBridge] ScreenOrientation 고정 실패:', err);
   }
 
-  // 3. 하드웨어 뒤로가기 버튼 처리
+  // 3. 모바일 하드웨어 뒤로가기 버튼 처리 (Capacitor)
   try {
     CapApp.addListener('backButton', async () => {
-      for (let i = backButtonHandlers.length - 1; i >= 0; i--) {
-        const handler = backButtonHandlers[i];
-        const consumed = await handler();
-        if (consumed) {
-          return;
-        }
-      }
-
-      if (onDefaultExit) {
-        onDefaultExit();
-      } else {
-        const exitConfirmed = window.confirm('게임을 종료하시겠습니까?');
-        if (exitConfirmed) {
+      const consumed = await triggerBackButton();
+      if (!consumed) {
+        if (onDefaultExit) {
+          onDefaultExit();
+        } else if (Capacitor.isNativePlatform()) {
           CapApp.exitApp();
         }
       }
@@ -274,5 +317,18 @@ export const initNativeBridge = async (onDefaultExit?: () => void): Promise<void
     });
   } catch (err) {
     console.warn('[NativeBridge] appStateChange 리스너 등록 실패:', err);
+  }
+
+  // 5. Google Play Games Services v2 자동 인증 확인
+  try {
+    PlayGamesService.getInstance().initialize().then(res => {
+      if (res.isAuthenticated) {
+        console.log(`[NativeBridge] Google Play Games 자동 인증 완료: ${res.displayName} (${res.playerId})`);
+      }
+    }).catch(err => {
+      console.warn('[NativeBridge] PlayGamesService 초기화 실패:', err);
+    });
+  } catch (err) {
+    console.warn('[NativeBridge] PlayGamesService 호출 예외:', err);
   }
 };
