@@ -30,17 +30,12 @@
     "relic_floor_4": "assets/custom_uploaded/icons/relic_floor_4.png",
     "relic_floor_5": "assets/custom_uploaded/icons/relic_floor_5.png",
     "relic_floor_6": "assets/custom_uploaded/icons/relic_floor_6.png",
-    "relic_floor_7": "assets/icons/resources/relic_floor_7.png",
     "relic_floor_8": "assets/custom_uploaded/icons/relic_floor_8.png",
     "relic_floor_9": "assets/custom_uploaded/icons/relic_floor_9.png",
     "silk": "assets/custom_uploaded/icons/silk.png",
     "suffix_stone": "assets/custom_uploaded/icons/suffix_stone.png",
     "void_shard": "assets/custom_uploaded/icons/void_shard.png",
-    "bleed": "assets/icons/status/bleed.png",
-    "blind": "assets/icons/status/blind.png",
-    "freeze": "assets/icons/status/freeze.png",
     "immunity": "assets/custom_uploaded/icons/immunity.png",
-    "poison": "assets/icons/status/poison.png",
     "regen": "assets/custom_uploaded/icons/regen.png",
     "bandage": "assets/custom_uploaded/icons/bandage.png",
     "compass": "assets/custom_uploaded/icons/compass.png",
@@ -332,8 +327,6 @@
     "weapon_staff": "assets/custom_uploaded/icons/weapon_staff.png",
     "weapon_sword": "assets/custom_uploaded/icons/weapon_sword.png",
     "wood": "assets/custom_uploaded/icons/wood.png",
-    "burn": "assets/icons/status/burn.png",
-    "stun": "assets/icons/status/stun.png",
     "craft_grimoire": "assets/custom_uploaded/icons/craft_grimoire.png",
     "enhance_equipment": "assets/custom_uploaded/icons/enhance_equipment.png",
     "enhance_skill": "assets/custom_uploaded/icons/enhance_skill.png",
@@ -1006,5 +999,5 @@
     "npc_asmodeus": "assets/custom_uploaded/npcs/npc_asmodeus.png",
     "심연의 군주 아스모데우스": "assets/custom_uploaded/npcs/npc_asmodeus.png"
   },
-  "version": 830
+  "version": 832
 }

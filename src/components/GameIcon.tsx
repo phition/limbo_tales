@@ -3,6 +3,27 @@ import { getIconMeta, ICON_MAP } from '../utils/iconMap';
 import { CustomAssetService } from '../services/CustomAssetService';
 import { getRarityBorderStyle } from '../utils/rarity';
 
+/**
+ * 🌟 에셋 경로 정규화 (Web / Capacitor Android WebView / 서브경로 호환)
+ * - data:, http:, https:, blob: 등은 그대로 반환
+ * - assets/... 또는 /assets/... 경로는 안전한 상대 경로('./assets/...')로 통일하여
+ *   모바일 앱(file:/// 또는 https://localhost)에서 404 및 엑박 방지
+ */
+export function normalizeAssetPath(src?: string): string | undefined {
+  if (!src || src === 'emoji') return src;
+  if (src.startsWith('data:') || src.startsWith('http://') || src.startsWith('https://') || src.startsWith('blob:')) {
+    return src;
+  }
+  const clean = src.replace(/^\/+/, '');
+  if (!clean.startsWith('assets/')) {
+    return src;
+  }
+  const base = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL)
+    ? import.meta.env.BASE_URL.replace(/\/$/, '') + '/'
+    : './';
+  return `${base}${clean}`;
+}
+
 interface GameIconProps {
   /** 아이콘 식별 키 (예: 'wood', 'torch', 'bleed', 'bonfire') 또는 이모지/이미지 URL */
   name?: string;
@@ -72,21 +93,18 @@ export const GameIcon: React.FC<GameIconProps> = ({
     }
   }
 
-  // customSrc 상대경로 정규화 (assets/... -> /assets/...)
-  let normalizedCustomSrc = customSrc;
-  if (normalizedCustomSrc && normalizedCustomSrc !== 'emoji') {
-    if (normalizedCustomSrc.startsWith('assets/')) {
-      normalizedCustomSrc = `/${normalizedCustomSrc}`;
-    }
-  }
+  // customSrc 상대경로 정규화 (assets/... 및 /assets/... -> ./assets/...)
+  const normalizedCustomSrc = normalizeAssetPath(customSrc);
 
   const isImageSource = (src?: string) => {
     if (!src || src === 'emoji') return false;
     return (
+      src.startsWith('./') ||
       src.startsWith('/') ||
       src.startsWith('assets/') ||
       src.startsWith('http') ||
       src.startsWith('data:') ||
+      src.startsWith('blob:') ||
       src.includes('.png') ||
       src.includes('.jpg') ||
       src.includes('.svg') ||
@@ -101,7 +119,7 @@ export const GameIcon: React.FC<GameIconProps> = ({
   const effectiveImgSrc = (normalizedCustomSrc && normalizedCustomSrc !== 'emoji')
     ? normalizedCustomSrc
     : (!service.isPureEmojiMode() && normalizedCustomSrc !== 'emoji' && meta?.src)
-    ? meta.src
+    ? normalizeAssetPath(meta.src)
     : undefined;
 
   // 2. 렌더링 노드 생성
@@ -137,8 +155,8 @@ export const GameIcon: React.FC<GameIconProps> = ({
         }}
       />
     );
-  } else if (icon && (icon.startsWith('/') || icon.startsWith('assets/') || icon.startsWith('http') || icon.startsWith('data:')) && !imgError) {
-    const cleanSrc = icon.startsWith('assets/') ? `/${icon}` : icon;
+  } else if (icon && isImageSource(icon) && !imgError) {
+    const cleanSrc = normalizeAssetPath(icon) || icon;
     node = (
       <img
         src={cleanSrc}

@@ -426,8 +426,15 @@ export class CustomAssetService {
             res = await fetch(url + cacheBustQuery, { cache: 'no-cache' });
           } catch (_) {
             // 폴백: 쿼리스트링 미지원 환경(일부 로컬 파일 스킴 등)
-            res = await fetch(url);
           }
+
+          // 🛡️ 모바일 WebView 등에서 쿼리스트링이 404를 반환하거나 실패할 경우 순수 URL로 재시도
+          if (!res || !res.ok) {
+            try {
+              res = await fetch(url);
+            } catch (_) {}
+          }
+
           if (res && res.ok) {
             const data = await res.json();
             if (data && typeof data === 'object') {
@@ -452,14 +459,19 @@ export class CustomAssetService {
           : { ...staticMap, ...savedMap };
 
         // 🛡️ 레거시 base64('data:...')만 실제 파일 경로('assets/...')로 보정
-        // ⚠️ 사용자가 명시적으로 선택한 'emoji' 또는 유니코드 이모지 문자열은 절대 파일 경로로 강제 덮어쓰지 않음!
-        for (const [key, staticVal] of Object.entries(staticMap)) {
-          if (staticVal && staticVal.startsWith('assets/') && (!result[key] || result[key].startsWith('data:'))) {
-            result[key] = staticVal;
+        // ⚠️ 단, 최신 배포 버전이 우선(preferStatic: true)일 때만 정적 파일이 base64를 대체하도록 제한!
+        // 📱 모바일 기기에서 사용자가 직접 등록한 커스텀 에셋(base64)은 절대 기본 정적 경로로 강제 덮어쓰지 않고 온전히 보존합니다.
+        if (preferStatic) {
+          for (const [key, staticVal] of Object.entries(staticMap)) {
+            if (staticVal && staticVal.startsWith('assets/') && (!result[key] || result[key].startsWith('data:'))) {
+              result[key] = staticVal;
+            }
           }
         }
+
+        // 로컬 저장 데이터(savedMap)의 유효한 파일 경로 및 커스텀 base64 에셋 보장
         for (const [key, savedVal] of Object.entries(savedMap)) {
-          if (savedVal && savedVal.startsWith('assets/') && (!result[key] || result[key].startsWith('data:'))) {
+          if (savedVal && !result[key]) {
             result[key] = savedVal;
           }
         }

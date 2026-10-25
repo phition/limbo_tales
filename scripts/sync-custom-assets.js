@@ -250,6 +250,22 @@ for (const bvk of BOSS_VFX_KEYS) {
   }
 }
 
+// 🛡️ 존재하지 않는 레거시 경로('assets/icons/...') 자동 정화
+const checkCategories = ['iconOverrides', 'vfxOverrides', 'dungeonFloorOverrides', 'monsterOverrides', 'mercenaryOverrides', 'npcOverrides'];
+for (const cat of checkCategories) {
+  if (existingPreset[cat] && typeof existingPreset[cat] === 'object') {
+    for (const [k, v] of Object.entries(existingPreset[cat])) {
+      if (typeof v === 'string' && v.startsWith('assets/')) {
+        const checkPath = path.join(PUBLIC_ASSETS_DIR, v.replace(/^assets\//, ''));
+        if (!fs.existsSync(checkPath)) {
+          console.log(`🧹 [sync-custom-assets] Removing obsolete missing asset path: ${cat}.${k} -> ${v}`);
+          delete existingPreset[cat][k];
+        }
+      }
+    }
+  }
+}
+
 // Save preset to public and backup to custom_assets
 fs.writeFileSync(PRESET_PATH, JSON.stringify(existingPreset, null, 2), 'utf-8');
 if (fs.existsSync(CUSTOM_DIR)) {
