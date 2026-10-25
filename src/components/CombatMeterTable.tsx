@@ -158,9 +158,9 @@ export const CombatMeterTable: React.FC<Props> = ({
               <th className="w-[24%] py-1.5 px-1 text-right font-bold text-[#ff80ab] truncate">💥 {tr('딜량')}</th>
               <th className="w-[13%] py-1.5 px-1 text-right font-bold text-[#38ef7d] truncate">💚 {tr('치유')}</th>
               <th className="w-[13%] py-1.5 px-1 text-right font-bold text-[#90caf9] truncate">🛡️ {tr('피해')}</th>
-              <th className="w-[7.3%] py-1.5 px-0.5 text-center font-bold text-[#ffd54f]">💨</th>
-              <th className="w-[7.3%] py-1.5 px-0.5 text-center font-bold text-[#ce93d8]">⚡</th>
-              <th className="w-[7.3%] py-1.5 px-0.5 text-center font-bold text-[#ffb74d]">🎯</th>
+              <th className="w-[7.3%] py-1.5 px-0.5 text-center font-bold text-[#ffd54f]" title={tr('회피')}>💨</th>
+              <th className="w-[7.3%] py-1.5 px-0.5 text-center font-bold text-[#ce93d8]" title={tr('상태이상 연계')}>⚡</th>
+              <th className="w-[7.3%] py-1.5 px-0.5 text-center font-bold text-[#ffb74d]" title={tr('치명타')}>🎯</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#151e30]">

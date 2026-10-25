@@ -4391,7 +4391,7 @@ export const ArenaScreen: React.FC = () => {
                     {!isShowdownEvaluated ? (
                       <span className="text-[#c8aa6e] font-bold animate-pulse flex items-center gap-1">
                         <span>🃏</span>
-                        <span>{tr(`배지 오픈 ${showdownRevealIndex}/5`)}</span>
+                        <span>{tr('배지 오픈')} {showdownRevealIndex}/5</span>
                       </span>
                     ) : (
                       <span className={`font-extrabold px-2 py-0.5 rounded-full ${
@@ -4422,7 +4422,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
                     {isShowdownEvaluated && (
                       <span className="text-[10px] font-mono text-[#ff80ab]">
-                        {tr(`점수 ${showdownResult.oppScore} P`)}
+                        {tr('점수')} {showdownResult.oppScore} P
                       </span>
                     )}
                   </div>
@@ -4489,7 +4489,7 @@ export const ArenaScreen: React.FC = () => {
                   <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-[#ffd54f55] shadow-md">
                     <span className="text-xs">⚖️</span>
                     <span className="text-[10px] font-mono font-bold text-[#ffd54f] tracking-tight">
-                      {showdownResult.bannerTitle}
+                      {tr(showdownResult.bannerTitle)}
                     </span>
                   </div>
                   <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-[#ffd54f66]" />
@@ -4510,7 +4510,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
                     {isShowdownEvaluated && (
                       <span className="text-[10px] font-mono text-[#80d8ff]">
-                        {tr(`점수 ${showdownResult.playerScore} P`)}
+                        {tr('점수')} {showdownResult.playerScore} P
                       </span>
                     )}
                   </div>
@@ -4600,7 +4600,7 @@ export const ArenaScreen: React.FC = () => {
                   <span className="text-4xl animate-spin">👑</span>
                   <div>
                     <div className="text-xs font-bold text-[#ffe082]">TACTICAL OPERATOR ULTIMATE</div>
-                    <div className="text-lg font-black text-white">{tr(`${playerLeader?.name || '전술 오퍼레이터'}의 궁극기 폭발!`)}</div>
+                    <div className="text-lg font-black text-white">{playerLeader?.name ? `${tr(playerLeader.name)}${tr('의 궁극기 폭발!')}` : tr('전술 오퍼레이터의 궁극기 폭발!')}</div>
                   </div>
                 </div>
               </div>
@@ -4615,7 +4615,7 @@ export const ArenaScreen: React.FC = () => {
                   <span className="text-4xl animate-spin">💀</span>
                   <div>
                     <div className="text-xs font-bold text-[#ff80ab]">ENEMY OPERATOR ULTIMATE</div>
-                    <div className="text-lg font-black text-white">{tr(`${oppLeader?.name || '상대 오퍼레이터'}의 심연 궁극기 발동!`)}</div>
+                    <div className="text-lg font-black text-white">{oppLeader?.name ? `${tr(oppLeader.name)}${tr('의 심연 궁극기 발동!')}` : tr('상대 오퍼레이터의 심연 궁극기 발동!')}</div>
                   </div>
                 </div>
               </div>
@@ -4780,22 +4780,22 @@ export const ArenaScreen: React.FC = () => {
               {actionBanner ? (
                 <div className="px-4 py-1 rounded-full bg-[#0d1527ee] border border-[#c8aa6e66] shadow-xl animate-scale-up text-center max-w-[90%] z-20">
                   <span className="text-xs font-bold block" style={{ color: actionBanner.color }}>
-                    {actionBanner.text}
+                    {tr(actionBanner.text)}
                   </span>
                   <span className="text-[10px] text-[#ffdd88] font-bold block mt-0.5">
-                    {actionBanner.sub}
+                    {tr(actionBanner.sub)}
                   </span>
                 </div>
               ) : feverCallLead === 'player' ? (
                 <div className="px-3 py-1 rounded-full bg-[#ffd54f15] border border-[#ffd54f55] text-center z-10 animate-pulse">
                   <span className="text-[10px] font-bold text-[#ffd54f]">
-                    {tr(`⚡ 아군 [피버 콜!] (상대 유예: ${feverCallCountdown}턴 남음)`)}
+                    ⚡ {tr('아군 [피버 콜!]')} ({tr('상대 유예:')} {feverCallCountdown}{tr('턴 남음')})
                   </span>
                 </div>
               ) : feverCallLead === 'opp' ? (
                 <div className="px-3 py-1 rounded-full bg-[#ff416c15] border border-[#ff416c55] text-center z-10 animate-pulse">
                   <span className="text-[10px] font-bold text-[#ff80ab]">
-                    {tr(`⚠️ 상대 [피버 콜!] (아군 유예: ${feverCallCountdown}턴 남음)`)}
+                    ⚠️ {tr('상대 [피버 콜!]')} ({tr('아군 유예:')} {feverCallCountdown}{tr('턴 남음')})
                   </span>
                 </div>
               ) : null}
@@ -4955,7 +4955,7 @@ export const ArenaScreen: React.FC = () => {
                 <div className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1.5">
                     <span className="text-sm">{activeAttacker?.icon}</span>
-                    <span className="font-bold text-[#c8aa6e]">{tr(`${activeAttacker?.name || ''}의 행동 선택`)}</span>
+                    <span className="font-bold text-[#c8aa6e]">{activeAttacker?.name ? `${tr(activeAttacker.name)}${tr('의 행동 선택')}` : tr('행동 선택')}</span>
                     <span className="text-[10px] text-[#8b9bb4] font-mono">({activeAttacker?.currentMp} MP)</span>
                   </div>
                   <span className="text-[10px] text-[#ffd54f]">{tr('타겟')}: {tr(oppTeam.find(c => c.id === targetEnemyId)?.name || '상대')}</span>
@@ -4982,7 +4982,7 @@ export const ArenaScreen: React.FC = () => {
                           <span className="text-base">{skill.icon || '⚔️'}</span>
                           <span className="text-xs font-bold truncate max-w-full">{tr(skill.name)}</span>
                           <span className="text-[9px] font-mono text-[#64b5f6]">
-                            {cd > 0 ? tr(`${cd}턴 대기`) : skill.manaCost > 0 ? `${skill.manaCost} MP` : '0 MP'}
+                            {cd > 0 ? `${cd} ${tr('턴 대기')}` : skill.manaCost > 0 ? `${skill.manaCost} MP` : '0 MP'}
                           </span>
                         </button>
                         {/* 스킬 정보 상세 보기 버튼 (PVE 통일성) */}

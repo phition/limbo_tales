@@ -5169,6 +5169,67 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "🤝 원호 공격": "🤝 ASSIST ATTACK",
     "🎯 약점 추격 원호 ⚡": "🎯 WEAKNESS PURSUIT ASSIST ⚡",
     "★ 원호 공격 ★": "★ ASSIST ATTACK ★",
+    // ── ⚡ Dimensional Arena & Fever Showdown Exact Entries ──
+    "배지 오픈": "Badge Open",
+    "점수": "Score",
+    "전술 무승부": "Tactical Draw",
+    "상대 유예:": "Opponent Grace:",
+    "아군 유예:": "Allied Grace:",
+    "아군 [피버 콜!]": "Allied [Fever Call!]",
+    "상대 [피버 콜!]": "Enemy [Fever Call!]",
+    "의 궁극기 폭발!": "'s Ultimate Burst!",
+    "의 심연 궁극기 발동!": "'s Abyssal Ultimate Activated!",
+    "의 행동 선택": "'s Action Selection",
+    "행동 선택": "Action Selection",
+    "회피": "Dodge",
+    "상태이상 연계": "Status Synergy",
+    "파쇄": "Shatter",
+    "⚔️ FEVER SHOWDOWN!": "⚔️ FEVER SHOWDOWN!",
+    "🌐 DOUBLE GRAND MAESTRO!": "🌐 DOUBLE GRAND MAESTRO!",
+    "👑 GRAND MAESTRO OVERRIDE!": "👑 GRAND MAESTRO OVERRIDE!",
+    "👑 GRAND MAESTRO DOMINATION!": "👑 GRAND MAESTRO DOMINATION!",
+    "💀 OPPONENT GRAND MAESTRO!": "💀 OPPONENT GRAND MAESTRO!",
+    "💀 GRAND MAESTRO OVERWHELMED!": "💀 GRAND MAESTRO OVERWHELMED!",
+    "⚡ TACTICAL HIGH CARD!": "⚡ TACTICAL HIGH CARD!",
+    "💀 OPPONENT HIGH CARD!": "💀 OPPONENT HIGH CARD!",
+    "⚔️ TACTICAL CLASH!": "⚔️ TACTICAL CLASH!",
+    "💀 SHATTERED FORMATION!": "💀 SHATTERED FORMATION!",
+    "🏆 FLAWLESS STRIKE!": "🏆 FLAWLESS STRIKE!",
+    "🛡️ COUNTER BREAK!!": "🛡️ COUNTER BREAK!!",
+    "💥 FATAL COUNTER BREAK!!": "💥 FATAL COUNTER BREAK!!",
+    "💀 COUNTERED BY OPPONENT!": "💀 COUNTERED BY OPPONENT!",
+    "🏆 SUPERIOR HAND!": "🏆 SUPERIOR HAND!",
+    "💀 INFERIOR HAND!": "💀 INFERIOR HAND!",
+    "⚡ POWER OVERWHELMING!": "⚡ POWER OVERWHELMING!",
+    "💀 OVERPOWERED!": "💀 OVERPOWERED!",
+    "⚡ HIGH SCORE TIEBREAKER!": "⚡ HIGH SCORE TIEBREAKER!",
+    "💀 OPPONENT HIGH SCORE!": "💀 OPPONENT HIGH SCORE!",
+    "⚔️ FEVER PUSH (CLASH)!": "⚔️ FEVER PUSH (CLASH)!",
+    "⚔️ EQUAL HIGH COMBO CLASH!": "⚔️ EQUAL HIGH COMBO CLASH!",
+    "🔥 MOMENTUM COMBO CRUSH!": "🔥 MOMENTUM COMBO CRUSH!",
+    "💥 OVERPOWERED BY COMBO!": "💥 OVERPOWERED BY COMBO!",
+    "🛡️ DOUBLE FORTRESS STANDOFF!": "🛡️ DOUBLE FORTRESS STANDOFF!",
+    "🛡️ FORTRESS ENDURANCE WIN!": "🛡️ FORTRESS ENDURANCE WIN!",
+    "⛓️ CRUSHED BY FORTRESS WALL!": "⛓️ CRUSHED BY FORTRESS WALL!",
+    "⚡ TACTICAL SYNERGY SUPERIORITY!": "⚡ TACTICAL SYNERGY SUPERIORITY!",
+    "⚠️ TACTICAL WEAKNESS EXPLOITED!": "⚠️ TACTICAL WEAKNESS EXPLOITED!",
+    "⚖️ PERFECT BALANCE CLASH!": "⚖️ PERFECT BALANCE CLASH!",
+    "⚡ TACTICAL EDGE!": "⚡ TACTICAL EDGE!",
+    "💀 TACTICAL GAP!": "💀 TACTICAL GAP!",
+    "🔥 TOTAL FEVER OVERWHELM!": "🔥 TOTAL FEVER OVERWHELM!",
+    "⚠️ FEVER DOMINATED!": "⚠️ FEVER DOMINATED!",
+    "상대 피버콜 시간 초과 (3턴 미완성) - 아군 부전승!": "Opponent Fever Call Timeout (3 turns incomplete) - Allied Win by Forfeit!",
+    "아군 피버콜 시간 초과 (3턴 미완성) - 상대 부전승!": "Allied Fever Call Timeout (3 turns incomplete) - Enemy Win by Forfeit!",
+    "상대가 3턴 내에 피버를 완성하지 못해 실격 처리되었습니다.": "The opponent was disqualified for failing to complete Fever within 3 turns.",
+    "아군이 3턴 내에 피버를 완성하지 못해 실격 처리되었습니다.": "Allies were disqualified for failing to complete Fever within 3 turns.",
+    "🏆 [피버 전술 압도 (FEVER DOMINATION)]": "🏆 [FEVER DOMINATION]",
+    "💀 [적군 피버 전술 압도]": "💀 [Enemy Fever Domination]",
+    "적의 피버콜 3회 성공으로 결투에서 패배했습니다.": "Lost the duel due to the enemy completing 3 Fever Calls.",
+    "아군 전원 올스탯 40% 폭발적 강화 & SP 100% 즉시 충전!": "All allies' stats boosted +40% & SP instantly recharged to 100%!",
+    "적군 전원 올스탯 40% 폭발적 강화 & 상대 SP 100% 충전!": "All enemies' stats boosted +40% & enemy SP recharged to 100%!",
+    "상대 3턴 타임아웃 판정승 (FEVER TIMEOUT VICTORY)": "Won by opponent's 3-turn timeout (FEVER TIMEOUT VICTORY)",
+    "아군 3턴 타임아웃 판정패 (FEVER TIMEOUT DEFEAT)": "Lost by 3-turn timeout (FEVER TIMEOUT DEFEAT)",
+    "❤️ 회복!": "❤️ Recovery!",
   },
   ja: {
     // ⚔️ 戦闘フローティング＆状態テキスト
@@ -10339,6 +10400,67 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "🤝 원호 공격": "🤝 援護攻撃",
     "🎯 약점 추격 원호 ⚡": "🎯 弱点追撃援護 ⚡",
     "★ 원호 공격 ★": "★ 援護攻撃 ★",
+    // ── ⚡ 次元アリーナ＆フィーバーショーダウン 翻訳 ──
+    "배지 오픈": "バッジオープン",
+    "점수": "スコア",
+    "전술 무승부": "戦術的引き分け",
+    "상대 유예:": "相手猶予:",
+    "아군 유예:": "味方猶予:",
+    "아군 [피버 콜!]": "味方 [フィーバーコール!]",
+    "상대 [피버 콜!]": "相手 [フィーバーコール!]",
+    "의 궁극기 폭발!": "の究極技爆発！",
+    "의 심연 궁극기 발동!": "の深淵究極技発動！",
+    "의 행동 선택": "の行動選択",
+    "행동 선택": "行動選択",
+    "회피": "回避",
+    "상태이상 연계": "状態異常連携",
+    "파쇄": "破砕",
+    "⚔️ FEVER SHOWDOWN!": "⚔️ フィーバー対決！",
+    "🌐 DOUBLE GRAND MAESTRO!": "🌐 ダブル・グランドマエストロ！",
+    "👑 GRAND MAESTRO OVERRIDE!": "👑 グランドマエストロ無効化！",
+    "👑 GRAND MAESTRO DOMINATION!": "👑 グランドマエストロ制圧！",
+    "💀 OPPONENT GRAND MAESTRO!": "💀 相手グランドマエストロ！",
+    "💀 GRAND MAESTRO OVERWHELMED!": "💀 グランドマエストロ圧倒！",
+    "⚡ TACTICAL HIGH CARD!": "⚡ 戦術ハイカード！",
+    "💀 OPPONENT HIGH CARD!": "💀 相手ハイカード！",
+    "⚔️ TACTICAL CLASH!": "⚔️ 戦術激突！",
+    "💀 SHATTERED FORMATION!": "💀 陣形崩壊！",
+    "🏆 FLAWLESS STRIKE!": "🏆 完全撃破！",
+    "🛡️ COUNTER BREAK!!": "🛡️ カウンターブレイク！！",
+    "💥 FATAL COUNTER BREAK!!": "💥 フェイタルカウンターブレイク！！",
+    "💀 COUNTERED BY OPPONENT!": "💀 相手のカウンター迎撃！",
+    "🏆 SUPERIOR HAND!": "🏆 上位役制圧！",
+    "💀 INFERIOR HAND!": "💀 下位役劣勢！",
+    "⚡ POWER OVERWHELMING!": "⚡ 圧倒的威力！",
+    "💀 OVERPOWERED!": "💀 威力圧倒！",
+    "⚡ HIGH SCORE TIEBREAKER!": "⚡ 得点優位勝利！",
+    "💀 OPPONENT HIGH SCORE!": "💀 相手得点優位！",
+    "⚔️ FEVER PUSH (CLASH)!": "⚔️ 同時激突相殺！",
+    "⚔️ EQUAL HIGH COMBO CLASH!": "⚔️ 同格ハイコンボ激突！",
+    "🔥 MOMENTUM COMBO CRUSH!": "🔥 モメンタムコンボクラッシュ！",
+    "💥 OVERPOWERED BY COMBO!": "💥 コンボに圧倒！",
+    "🛡️ DOUBLE FORTRESS STANDOFF!": "🛡️ ダブル要塞にらみ合い！",
+    "🛡️ FORTRESS ENDURANCE WIN!": "🛡️ 要塞耐久勝利！",
+    "⛓️ CRUSHED BY FORTRESS WALL!": "⛓️ 要塞壁に撃沈！",
+    "⚡ TACTICAL SYNERGY SUPERIORITY!": "⚡ 戦術シナジー優位！",
+    "⚠️ TACTICAL WEAKNESS EXPLOITED!": "⚠️ 戦術弱点を突かれる！",
+    "⚖️ PERFECT BALANCE CLASH!": "⚖️ 完璧な拮抗衝突！",
+    "⚡ TACTICAL EDGE!": "⚡ 戦術的リード！",
+    "💀 TACTICAL GAP!": "💀 戦術的劣勢！",
+    "🔥 TOTAL FEVER OVERWHELM!": "🔥 フィーバー完全圧倒！",
+    "⚠️ FEVER DOMINATED!": "⚠️ フィーバー圧倒！",
+    "상대 피버콜 시간 초과 (3턴 미완성) - 아군 부전승!": "相手フィーバーコール時間切れ(3ターン未完成) - 味方不戦勝！",
+    "아군 피버콜 시간 초과 (3턴 미완성) - 상대 부전승!": "味方フィーバーコール時間切れ(3ターン未完成) - 相手不戦勝！",
+    "상대가 3턴 내에 피버를 완성하지 못해 실격 처리되었습니다.": "相手が3ターン以内にフィーバーを完成できず失格となりました。",
+    "아군이 3턴 내에 피버를 완성하지 못해 실격 처리되었습니다.": "味方が3ターン以内にフィーバーを完成できず失格となりました。",
+    "🏆 [피버 전술 압도 (FEVER DOMINATION)]": "🏆 [フィーバー戦術制圧 (FEVER DOMINATION)]",
+    "💀 [적군 피버 전술 압도]": "💀 [敵軍フィーバー戦術制圧]",
+    "적의 피버콜 3회 성공으로 결투에서 패배했습니다.": "敵のフィーバーコール3回成功により敗北しました。",
+    "아군 전원 올스탯 40% 폭발적 강화 & SP 100% 즉시 충전!": "味方全員の全ステータスが40%爆発的強化＆SPが100%即時回復！",
+    "적군 전원 올스탯 40% 폭발적 강화 & 상대 SP 100% 충전!": "敵全員の全ステータスが40%爆発的強化＆敵SPが100%即時回復！",
+    "상대 3턴 타임아웃 판정승 (FEVER TIMEOUT VICTORY)": "相手3ターンタイムアウト判定勝ち (FEVER TIMEOUT VICTORY)",
+    "아군 3턴 타임아웃 판정패 (FEVER TIMEOUT DEFEAT)": "味方3ターンタイムアウト判定負け (FEVER TIMEOUT DEFEAT)",
+    "❤️ 회복!": "❤️ 回復！",
   }};
 
 // ============================================================================
@@ -14479,5 +14601,217 @@ export const LOG_PATTERNS: LogPatternDef[] = [
     pattern: /^💀\s*\[사경 위기\]\s*엄호 중 치명상을 입은\s*(.+?)\s*대원이 사경을 헤맵니다!\s*\(유예\s*(\d+)턴\)$/,
     en: m => `💀 [Death's Door] Suffering a fatal wound while covering an ally, ${trEntity(m[1], 'en')} is at Death's Door! (${m[2]} turns grace)`,
     ja: m => `💀 [死線の危機] 援護中に致命傷を負った${trEntity(m[1], 'ja')}隊員が死線を彷徨っています！(猶予${m[2]}ターン)`
+  },
+  // ── ⚡ Dimensional Arena Combat Logs & Fever Showdown Patterns ──
+  // 1. 공격 액션 배너 (공격자 ➔ 스킬 [광역])
+  {
+    pattern: /^(.+?)s*➔s*(.+?)(s*\[광역 전체기\])?$/i,
+    en: m => `${trEntity(m[1].trim(), 'en')} ➔ ${trEntity(m[2].trim(), 'en')}${m[3] ? ' [AOE All]' : ''}`,
+    ja: m => `${trEntity(m[1].trim(), 'ja')} ➔ ${trEntity(m[2].trim(), 'ja')}${m[3] ? ' [全体攻撃]' : ''}`
+  },
+  // 2. 아군 회복 배너
+  {
+    pattern: /^❤️\s*(.+?)\s*회복!$/i,
+    en: m => `❤️ Restored ${trEntity(m[1].trim(), 'en')}!`,
+    ja: m => `❤️ ${trEntity(m[1].trim(), 'ja')} 回復！`
+  },
+  // 3. 다인 피해 배너
+  {
+    pattern: /^💥\s*(\d+)인에게\s*총\s*-(\d+)\s*피해(\s*\[CRIT!\])?$/i,
+    en: m => `💥 -${m[2]} DMG to ${m[1]} targets${m[3] ? ' [CRIT!]' : ''}`,
+    ja: m => `💥 ${m[1]}体に合計 -${m[2]} ダメージ${m[3] ? ' [会心!]' : ''}`
+  },
+  // 4. 단일 피해 배너
+  {
+    pattern: /^💥\s*(.+?)에게\s*-(\d+)\s*피해(\s*\[CRIT!\])?$/i,
+    en: m => `💥 -${m[2]} DMG to ${trEntity(m[1].trim(), 'en')}${m[3] ? ' [CRIT!]' : ''}`,
+    ja: m => `💥 ${trEntity(m[1].trim(), 'ja')}に -${m[2]} ダメージ${m[3] ? ' [会心!]' : ''}`
+  },
+  {
+    pattern: /^💥\s*총\s*-(\d+)\s*피해(\s*\[CRIT!\])?$/i,
+    en: m => `💥 Total -${m[1]} DMG${m[2] ? ' [CRIT!]' : ''}`,
+    ja: m => `💥 合計 -${m[1]} ダメージ${m[2] ? ' [会心!]' : ''}`
+  },
+  {
+    pattern: /^💥\s*-(\d+)\s*피해(\s*\[CRIT!\])?$/i,
+    en: m => `💥 -${m[1]} DMG${m[2] ? ' [CRIT!]' : ''}`,
+    ja: m => `💥 -${m[1]} ダメージ${m[2] ? ' [会心!]' : ''}`
+  },
+  {
+    pattern: /^❤️\s*회복!\s*\+(\d+)\s*\(HP\s*(\d+)\/(\d+)\)$/i,
+    en: m => `❤️ Recovery! +${m[1]} (HP ${m[2]}/${m[3]})`,
+    ja: m => `❤️ 回復！ +${m[1]} (HP ${m[2]}/${m[3]})`
+  },
+  // 5. 피버콜 3회 승리 압도 배너 서브
+  {
+    pattern: /^피버콜\s*3회\s*승리\s*달성!\s*오퍼레이터\s*\[(.+?)\]의\s*전술\s*폭격으로\s*적\s*결투\s*부대를\s*완전히\s*제압했습니다!$/i,
+    en: m => `3 Fever Call victories achieved! Operator [${trEntity(m[1].trim(), 'en')}]'s tactical strike completely suppressed the enemy squad!`,
+    ja: m => `フィーバーコール3勝達成！オペレーター【${trEntity(m[1].trim(), 'ja')}】の戦術爆撃で敵決闘部隊を完全に制圧しました！`
+  },
+  // 6. 오퍼레이터 궁극기 배너 서브
+  {
+    pattern: /^\[오퍼레이터 궁극기\]\s*(.+?)의\s*\[(.+?)\]\s*전탄 발사!\s*\((.+?)\)$/i,
+    en: m => `[Operator Ultimate] ${trEntity(m[1].trim(), 'en')}'s [${trEntity(m[2].trim(), 'en')}] All Guns Firing! (${trEntity(m[3].trim(), 'en')})`,
+    ja: m => `[オペレーター究極技] ${trEntity(m[1].trim(), 'ja')}の【${trEntity(m[2].trim(), 'ja')}】全弾発射！(${trEntity(m[3].trim(), 'ja')})`
+  },
+  // 7. 쇼다운 대조 배너 서브
+  {
+    pattern: /^(.+?)\s*\((.+?)\s*vs\s*(.+?)\)$/i,
+    en: m => `${trEntity(m[1].trim(), 'en')} (${trEntity(m[2].trim(), 'en')} vs ${trEntity(m[3].trim(), 'en')})`,
+    ja: m => `${trEntity(m[1].trim(), 'ja')} (${trEntity(m[2].trim(), 'ja')} vs ${trEntity(m[3].trim(), 'ja')})`
+  },
+  // 8. 피버콜 대기 현황 (아군 / 상대)
+  {
+    pattern: /^⚡\s*아군\s*\[피버 콜!\]\s*\(상대 유예:\s*(\d+)턴\s*남음\)$/i,
+    en: m => `⚡ Allied [FEVER CALL!] (Opponent Grace: ${m[1]} turns left)`,
+    ja: m => `⚡ 味方【フィーバーコール！】(相手猶予: ${m[1]}ターン残り)`
+  },
+  {
+    pattern: /^⚠️\s*상대\s*\[피버 콜!\]\s*\(아군 유예:\s*(\d+)턴\s*남음\)$/i,
+    en: m => `⚠️ Enemy [FEVER CALL!] (Allied Grace: ${m[1]} turns left)`,
+    ja: m => `⚠️ 相手【フィーバーコール！】(味方猶予: ${m[1]}ターン残り)`
+  },
+  // 9. 쇼다운 동적 배너서브
+  {
+    pattern: /^\[전술 파동 총점 우세\]\s*아군 뱃지\s*(\d+)점\s*vs\s*적군\s*(\d+)점!$/i,
+    en: m => `[Tactical Burst High Score] Player Badges ${m[1]} pts vs Enemy ${m[2]} pts!`,
+    ja: m => `[戦術波動総点優勢] 味方バッジ ${m[1]}点 vs 敵軍 ${m[2]}点！`
+  },
+  {
+    pattern: /^\[전술 파동 총점 열세\]\s*적군 뱃지\s*(\d+)점\s*vs\s*아군\s*(\d+)점!$/i,
+    en: m => `[Tactical Burst Score Deficit] Enemy Badges ${m[1]} pts vs Player ${m[2]} pts!`,
+    ja: m => `[戦術波動総点劣勢] 敵軍バッジ ${m[1]}点 vs 味方 ${m[2]}点！`
+  },
+  {
+    pattern: /^\[전술 파동 동점\]\s*양측 뱃지 총점이\s*(\d+)점으로\s*동일합니다!$/i,
+    en: m => `[Tactical Burst Tie] Both sides have equal badge total of ${m[1]} pts!`,
+    ja: m => `[戦術波動同点] 両陣営のバッジ総点が${m[1]}点で同点です！`
+  },
+  {
+    pattern: /^적의 유효 족보\s*\[(.+?)\]에\s*아군의 기본 전술이 압도당했습니다!$/i,
+    en: m => `Player's basic tactics were overwhelmed by enemy's [${trEntity(m[1].trim(), 'en')}]!`,
+    ja: m => `敵の有効役【${trEntity(m[1].trim(), 'ja')}】に味方の基本戦術が圧倒されました！`
+  },
+  {
+    pattern: /^아군의 유효 족보\s*\[(.+?)\]이\s*적의 어설픈 진형을 분쇄했습니다!$/i,
+    en: m => `Player's [${trEntity(m[1].trim(), 'en')}] crushed the enemy's unformed ranks!`,
+    ja: m => `味方の有効役【${trEntity(m[1].trim(), 'ja')}】が敵の不完全な陣形を粉砕しました！`
+  },
+  {
+    pattern: /^동일 계열 대결에서 아군의 상위 족보\s*\[(.+?)\]이\s*적의\s*\[(.+?)\]을\s*제압했습니다!$/i,
+    en: m => `In same affinity clash, player's higher hand [${trEntity(m[1].trim(), 'en')}] suppressed enemy's [${trEntity(m[2].trim(), 'en')}]!`,
+    ja: m => `同系統の対決で味方の上位役【${trEntity(m[1].trim(), 'ja')}】が敵の【${trEntity(m[2].trim(), 'ja')}】を制圧しました！`
+  },
+  {
+    pattern: /^동일 계열 대결에서 적군의 상위 족보\s*\[(.+?)\]에\s*밀렸습니다!$/i,
+    en: m => `Lost to enemy's higher hand [${trEntity(m[1].trim(), 'en')}] in the same affinity clash!`,
+    ja: m => `同系統の対決で敵軍の上位役【${trEntity(m[1].trim(), 'ja')}】に押し切られました！`
+  },
+  {
+    pattern: /^동급 족보 격돌!\s*아군의 위력\((\d+)%\)이\s*적\((\d+)%\)을\s*압도했습니다!$/i,
+    en: m => `Equal rank clash! Player's potency (${m[1]}%) overpowered enemy (${m[2]}%)!`,
+    ja: m => `同格役の激突！味方の威力(${m[1]}%)が敵(${m[2]}%)を圧倒しました！`
+  },
+  {
+    pattern: /^동급 족보 격돌에서 적군의 위력\((\d+)%\)에\s*밀렸습니다!$/i,
+    en: m => `Overpowered by enemy's potency (${m[1]}%) in equal rank clash!`,
+    ja: m => `同格役の激突で敵軍の威力(${m[1]}%)に押し切られました！`
+  },
+  {
+    pattern: /^동급 족보 대결!\s*아군의 뱃지 총점\((\d+)점\)이\s*적군\((\d+)점\)을\s*제치고 우위를 점했습니다!$/i,
+    en: m => `Equal rank clash! Player badge total (${m[1]} pts) outscored enemy (${m[2]} pts)!`,
+    ja: m => `同格役対決！味方のバッジ総点(${m[1]}点)が敵軍(${m[2]}点)を上回り優位を獲得！`
+  },
+  {
+    pattern: /^동급 족보 대결에서 적군의 뱃지 총점\((\d+)점\)에\s*밀렸습니다!$/i,
+    en: m => `Outscored by enemy's badge total (${m[1]} pts) in equal rank clash!`,
+    ja: m => `同格役対決で敵軍のバッジ総点(${m[1]}点)に押し切られました！`
+  },
+  // 10. 쇼다운 서사 (Narrative)
+  {
+    pattern: /^아군의 5색 스트레이트 전술이 적의\s*\[(.+?)\]을\s*완벽히 간파하여 적 전체를 기절시킵니다!$/i,
+    en: m => `Player's 5-color Straight penetrated enemy's [${trEntity(m[1].trim(), 'en')}], stunning all enemies!`,
+    ja: m => `味方の5色ストレート戦術が敵の【${trEntity(m[1].trim(), 'ja')}】を完全に見破り、敵全体を気絶させます！`
+  },
+  {
+    pattern: /^적의 5색 스트레이트 전술에 아군의\s*\[(.+?)\]이\s*무력화되었습니다!$/i,
+    en: m => `Player's [${trEntity(m[1].trim(), 'en')}] was neutralized by enemy's 5-color Straight!`,
+    ja: m => `敵の5色ストレート戦術に味方の【${trEntity(m[1].trim(), 'ja')}】が無力化されました！`
+  },
+  {
+    pattern: /^아군이 족보를 완성하지 못한 틈을 타 적의\s*\[(.+?)\]이\s*작렬합니다!\s*\(적군\s*(\d+)점\s*vs\s*아군\s*(\d+)점\)$/i,
+    en: m => `While player lacked a hand, enemy's [${trEntity(m[1].trim(), 'en')}] detonates! (Enemy ${m[2]} pts vs Player ${m[3]} pts)`,
+    ja: m => `味方が役を完成できなかった隙を突き、敵の【${trEntity(m[1].trim(), 'ja')}】が炸裂します！（敵軍${m[2]}点 vs 味方${m[3]}点）`
+  },
+  {
+    pattern: /^적군이 족보를 갖추지 못한 사이 아군의\s*\[(.+?)\]이\s*일방적으로 전장을 장악합니다!\s*\(아군\s*(\d+)점\s*vs\s*적군\s*(\d+)점\)$/i,
+    en: m => `While enemy lacked a hand, player's [${trEntity(m[1].trim(), 'en')}] seized the field unilaterally! (Player ${m[2]} pts vs Enemy ${m[3]} pts)`,
+    ja: m => `敵軍が役を揃えられぬ間に味方の【${trEntity(m[1].trim(), 'ja')}】が一方的に戦場を掌握します！（味方${m[2]}点 vs 敵軍${m[3]}点）`
+  },
+  {
+    pattern: /^아군의 핸드 파워\((\d+)등급\s*vs\s*(\d+)등급\)가\s*우세하여 적의 피버를 억누르고 선제타를 날립니다!$/i,
+    en: m => `Player's hand power (Tier ${m[1]} vs ${m[2]}) overpowered enemy's Fever to strike first!`,
+    ja: m => `味方の役ランク(★${m[1]} vs ★${m[2]})が優勢となり、敵のフィーバーを抑え込んで先制打を放ちます！`
+  },
+  {
+    pattern: /^적군의 핸드 파워\((\d+)등급\s*vs\s*(\d+)등급\)에\s*밀려 아군 피버가 상쇄당했습니다\.$/i,
+    en: m => `Player's Fever was canceled due to inferior hand power (Tier ${m[2]} vs ${m[1]}).`,
+    ja: m => `敵軍の役ランク(★${m[1]} vs ★${m[2]})に押され、味方フィーバーが相殺されました。`
+  },
+  {
+    pattern: /^동일한\s*\[(.+?)\]\s*격돌에서 아군의 완성도가 더 높아 우세를 점합니다!$/i,
+    en: m => `In the [${trEntity(m[1].trim(), 'en')}] clash, player's higher potency prevailed!`,
+    ja: m => `同一の【${trEntity(m[1].trim(), 'ja')}】激突で、味方の完成度が高く優勢を確保！`
+  },
+  {
+    pattern: /^적군의\s*\[(.+?)\]\s*위력에 밀려 아군이 충격을 흡수해야 합니다\.$/i,
+    en: m => `Overwhelmed by enemy's [${trEntity(m[1].trim(), 'en')}] potency, player must absorb the shock.`,
+    ja: m => `敵軍の【${trEntity(m[1].trim(), 'ja')}】威力に押され、味方が衝撃を吸収しなければなりません。`
+  },
+  {
+    pattern: /^동일한\s*\[(.+?)\]\s*대결에서 아군의 뱃지 가중치가 앞서 승리합니다!$/i,
+    en: m => `In the [${trEntity(m[1].trim(), 'en')}] clash, player's badge weight broke the tie for victory!`,
+    ja: m => `同一の【${trEntity(m[1].trim(), 'ja')}】対決で、味方のバッジ加重得点が上回り勝利します！`
+  },
+  {
+    pattern: /^적군의 뱃지 가중치 점수가 더 높아 아군 피버가 상쇄당했습니다\.$/i,
+    en: () => `Enemy's higher badge weight canceled player's Fever.`,
+    ja: () => `敵軍のバッジ加重得点が高く、味方フィーバーが相殺されました。`
+  },
+  {
+    pattern: /^\[(.+?)\]\s*vs\s*\[(.+?)\]!\s*양측의 피버 위력이 절반으로 감쇄되어 동시 작렬합니다\.$/i,
+    en: m => `[${trEntity(m[1].trim(), 'en')}] vs [${trEntity(m[2].trim(), 'en')}]! Both Fever powers halved and struck simultaneously.`,
+    ja: m => `【${trEntity(m[1].trim(), 'ja')}】vs【${trEntity(m[2].trim(), 'ja')}】！両者のフィーバー威力が半減し同時炸裂します。`
+  },
+  {
+    pattern: /^상대가 3턴 내에 피버를 완성하지 못해 시간 초과로 실격 패배했습니다! 아군\s*\[(.+?)\]\s*피버콜 완성에 따른 완승!$/i,
+    en: m => `Opponent failed to complete Fever within 3 turns and was disqualified! Complete victory with player [${trEntity(m[1].trim(), 'en')}]!`,
+    ja: m => `相手が3ターン以内にフィーバーを完成できず時間切れ失格！味方【${trEntity(m[1].trim(), 'ja')}】完成による完勝！`
+  },
+  {
+    pattern: /^3턴 내에 아군 피버를 완성하지 못해 시간 초과로 실격 처리되었습니다\.\s*상대\s*\[(.+?)\]\s*피버콜 완성에 따른 패배\.\.\.$/i,
+    en: m => `Failed to complete player Fever within 3 turns and was disqualified. Defeat against enemy [${trEntity(m[1].trim(), 'en')}]...`,
+    ja: m => `3ターン以内に味方フィーバーを完成できず時間切れ失格。相手【${trEntity(m[1].trim(), 'ja')}】完成による敗北…`
+  },
+  // 11. 주간 룰 요격 서사
+  {
+    pattern: /^\[(.+?)\]\s*아군의\s*(.+?)가\s*적의\s*(.+?)를\s*요격했습니다!$/i,
+    en: m => `[${trEntity(m[1].trim(), 'en')}] Player's ${trEntity(m[2].trim(), 'en')} intercepted enemy's ${trEntity(m[3].trim(), 'en')}!`,
+    ja: m => `【${trEntity(m[1].trim(), 'ja')}】味方の${trEntity(m[2].trim(), 'ja')}が敵の${trEntity(m[3].trim(), 'ja')}を迎撃しました！`
+  },
+  {
+    pattern: /^\[(.+?)\]\s*적군의\s*(.+?)가\s*아군의\s*(.+?)를\s*요격했습니다!$/i,
+    en: m => `[${trEntity(m[1].trim(), 'en')}] Enemy's ${trEntity(m[2].trim(), 'en')} intercepted player's ${trEntity(m[3].trim(), 'en')}!`,
+    ja: m => `【${trEntity(m[1].trim(), 'ja')}】敵軍の${trEntity(m[2].trim(), 'ja')}が味方の${trEntity(m[3].trim(), 'ja')}を迎撃しました！`
+  },
+  {
+    pattern: /^이번 주의 차원율\s*\((.+?)\)에\s*따라\s*아군의\s*\[(.+?)\]이\s*적의 피버를 상쇄하고 작렬합니다!$/i,
+    en: m => `Per this week's Dimensional Law (${m[1]}), player's [${trEntity(m[2].trim(), 'en')}] neutralized enemy Fever and detonates!`,
+    ja: m => `今週の次元律(${m[1]})に従い、味方の【${trEntity(m[2].trim(), 'ja')}】が敵のフィーバーを相殺して炸裂します！`
+  },
+  {
+    pattern: /^이번 주의 차원율\s*\((.+?)\)에\s*따라\s*아군의\s*\[(.+?)\]이\s*상쇄당했습니다\.$/i,
+    en: m => `Per this week's Dimensional Law (${m[1]}), player's [${trEntity(m[2].trim(), 'en')}] was neutralized.`,
+    ja: m => `今週の次元律(${m[1]})に従い、味方の【${trEntity(m[2].trim(), 'ja')}】が相殺されました。`
   },
 ];
