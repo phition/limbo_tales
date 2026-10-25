@@ -924,13 +924,13 @@ const HeroRow: React.FC<{
                 )}
                 {isDying && (
                   <span className="text-[10px] text-white bg-[#d50000] border border-[#ff1744] px-2 py-0.5 rounded-full font-black animate-pulse shadow-[0_0_8px_#ff1744] flex items-center gap-1">
-                    <span>⚠️ 사경 위기</span>
-                    <span className="font-mono bg-black/40 px-1.5 py-0.2 rounded text-[#ffeb3b]">{hero.deathCountdown ?? 3}턴</span>
+                    <span>⚠️ {tr('사경 위기')}</span>
+                    <span className="font-mono bg-black/40 px-1.5 py-0.2 rounded text-[#ffeb3b]">{hero.deathCountdown ?? 3}{tr('턴')}</span>
                   </span>
                 )}
                 {hero.isPermanentlyDead && (
                   <span className="text-[9px] text-[#b0bec5] bg-[#37474f44] border border-[#546e7a] px-1 rounded font-bold">
-                    ⚰️ 영구 사망
+                    ⚰️ {tr('영구 사망')}
                   </span>
                 )}
               </div>
@@ -942,11 +942,11 @@ const HeroRow: React.FC<{
             <div className="w-full bg-[#3e0a11] h-4 rounded px-1.5 flex items-center justify-between border border-[#ff174488] my-0.5 shadow-inner">
               <span className="text-[10px] text-[#ff8a80] font-bold flex items-center gap-1">
                 <span>💀</span>
-                <span>완전 사망 카운트다운</span>
+                <span>{tr('완전 사망 카운트다운')}</span>
               </span>
               <div className="flex items-center gap-1 font-mono text-[10px] font-black">
                 <span className="text-[#ff1744] animate-pulse">● ● ●</span>
-                <span className="bg-[#ff1744] px-1.5 py-0.2 rounded text-white font-bold tracking-wider">{hero.deathCountdown ?? 3}턴 남음</span>
+                <span className="bg-[#ff1744] px-1.5 py-0.2 rounded text-white font-bold tracking-wider">{hero.deathCountdown ?? 3}{tr('턴 남음')}</span>
               </div>
             </div>
           ) : (
@@ -959,7 +959,7 @@ const HeroRow: React.FC<{
         <div className="text-right text-[10px] text-[#8b9bb4] shrink-0 font-mono flex flex-col items-end">
           <div className="flex items-center gap-1">
             <span style={{ color: hero.isPermanentlyDead ? '#607d8b' : isDying ? '#ff1744' : '#ef5350', fontWeight: isDying ? 'bold' : 'normal' }}>
-              {isDying ? `사경 (${hero.deathCountdown ?? 3}턴)` : `${Math.round(hero.currentHp)}/${Math.round(stats.maxHp)}`}
+              {isDying ? `${tr('사경')} (${hero.deathCountdown ?? 3}${tr('턴')})` : `${Math.round(hero.currentHp)}/${Math.round(stats.maxHp)}`}
             </span>
             <button
               className="text-[10px] text-[#8b9bb4] hover:text-[#c8aa6e] px-0.5"
@@ -2394,12 +2394,12 @@ export const BattleScreen: React.FC = () => {
             logs.push(`⚰️ [영면] 차가운 심연의 바닥에서 ${hero.name} 대원의 맥박이 완전히 멎었습니다... 동료의 영혼이 영겁의 어둠 속으로 흩어집니다.`);
             setSkillCutIn({
               id: String(Date.now()),
-              skillName: `[영면] ${hero.name}`,
+              skillName: `[${tr('영면')}] ${tr(hero.name)}`,
               icon: '⚰️',
               isEnemy: false,
               bannerType: 'skill',
               heroName: hero.name,
-              subText: '3턴간의 사경 끝에 완전히 전사했습니다...'
+              subText: tr('3턴간의 사경 끝에 완전히 전사했습니다...')
             });
             SoundManager.getInstance().play('defeat');
             triggerVFX({
@@ -2407,19 +2407,19 @@ export const BattleScreen: React.FC = () => {
               x: heroPos.x,
               y: heroPos.y,
               statusEffect: 'stun',
-              text: '⚰️ 완전 사망'
+              text: tr('⚰️ 완전 사망')
             });
             shouldSkipTurn = true;
           } else {
             logs.push(`💀 [사경 헤맴] ${hero.name} 대원이 위독한 상태로 사경을 헤매고 있습니다! (완전 사망까지 남은 유예: ${remaining}턴)`);
             setSkillCutIn({
               id: String(Date.now()),
-              skillName: `[사경 헤맴] ${hero.name}`,
+              skillName: `[${tr('사경 헤맴')}] ${tr(hero.name)}`,
               icon: '💀',
               isEnemy: false,
               bannerType: 'skill',
               heroName: hero.name,
-              subText: `완전 사망까지 남은 유예: ${remaining}턴!`
+              subText: `${tr('완전 사망까지 남은 유예')}: ${remaining}${tr('턴')}!`
             });
             SoundManager.getInstance().play('hero_hurt');
             triggerVFX({
@@ -2427,7 +2427,7 @@ export const BattleScreen: React.FC = () => {
               x: heroPos.x,
               y: heroPos.y,
               statusEffect: 'bleed',
-              text: `💀 사경 (${remaining}턴 남음)`
+              text: `💀 ${tr('사경')} (${remaining}${tr('턴 남음')})`
             });
 
             // 발할라 워로드만 사경 중에도 불굴의 투지로 직접 행동 가능
@@ -3087,7 +3087,7 @@ export const BattleScreen: React.FC = () => {
               x: missPos.x,
               y: missPos.y,
               damage: 0,
-              text: '💨 MISS',
+              text: tr('💨 MISS'),
             });
             SoundManager.getInstance().play('evade');
             logs.push(`💨 [빗나감 / MISS] 실명 상태인 ${hero.name}의 시야가 가려져 [${skillName}] 공격이 빗나갔습니다!`);
@@ -3231,7 +3231,7 @@ export const BattleScreen: React.FC = () => {
               x: monPos.x,
               y: monPos.y,
               damage: 0,
-              text: '💨 EVADE',
+              text: tr('💨 EVADE'),
             });
             SoundManager.getInstance().play('evade');
             logs.push(`💨 [회피 / EVADE] ${m.data.name}이(가) 높은 행운(🍀${m.luck})으로 ${hero.name}의 [${skillName}] 공격을 회피했습니다!`);
@@ -3471,7 +3471,7 @@ export const BattleScreen: React.FC = () => {
               y: monPos.y,
               damage: 0,
               isCrit: false,
-              text: '🩸출혈!'
+              text: tr('🩸출혈!')
             });
             SoundManager.getInstance().play('bleed');
           }
@@ -3501,7 +3501,7 @@ export const BattleScreen: React.FC = () => {
                 y: monPos.y - 10,
                 damage: burstDmg,
                 isCrit: false,
-                text: '🔫점사!'
+                text: tr('🔫점사!')
               });
               SoundManager.getInstance().play('gunshot');
             }
@@ -3571,7 +3571,7 @@ export const BattleScreen: React.FC = () => {
                 x: monPos.x,
                 y: monPos.y,
                 damage: 0,
-                text: 'BREAK!',
+                text: tr('BREAK!'),
                 isCrit: true,
               });
               logs.push(`💥⚡ [차징 파쇄] ${hero.name}의 맹공으로 ${m.data.name}의 차징이 분쇄되었습니다! (1턴간 받는 피해 +50% 그로기 돌입 & 행운 정상화)`);
@@ -3607,7 +3607,7 @@ export const BattleScreen: React.FC = () => {
                     y: monPos.y + 10,
                     damage: allOutDmg,
                     isCrit: true,
-                    text: '💥총공격!',
+                    text: tr('💥총공격!'),
                   });
                 }, getBattleDelay(300));
 
@@ -3671,7 +3671,7 @@ export const BattleScreen: React.FC = () => {
                     y: oPos.y,
                     damage: shockwaveDmg,
                     isCrit: true,
-                    text: '연쇄충격!',
+                    text: tr('연쇄충격!'),
                   });
                 }, getBattleDelay(200 + oIdx * 60));
               });
@@ -3724,7 +3724,7 @@ export const BattleScreen: React.FC = () => {
             damage: actualDamage,
             isCrit: targetIsCrit && !isBlock,
             isBlock,
-            text: isBlock ? 'Block!' : undefined,
+            text: isBlock ? tr('🛡️ Block!') : undefined,
             tier: skillTier,
             sourceType: 'hero',
             statusEffect: appliedStatus,
@@ -4451,7 +4451,7 @@ export const BattleScreen: React.FC = () => {
                   y: omPos.y,
                   damage: orbDmg,
                   isCrit: isOrbCrit,
-                  text: '궤도폭격!',
+                  text: tr('궤도폭격!'),
                 });
               }, getBattleDelay(250 + oIdx * 70));
             });
@@ -4505,7 +4505,7 @@ export const BattleScreen: React.FC = () => {
                   x: hPos.x,
                   y: hPos.y,
                   damage: revHp,
-                  text: `부활! +${revHp} 🕊️`
+                  text: `${tr('부활!')} +${revHp} 🕊️`
                 });
                 SoundManager.getInstance().play('heal');
 
@@ -4525,7 +4525,7 @@ export const BattleScreen: React.FC = () => {
                         y: mPos.y,
                         damage: holyDmg,
                         isCrit: true,
-                        text: `신성심판! ✨`
+                        text: `${tr('신성심판!')} ✨`
                       });
                     }, getBattleDelay(200 + mIdx * 60));
                   });
@@ -4571,7 +4571,7 @@ export const BattleScreen: React.FC = () => {
                         y: mPos.y,
                         damage: avgHealDmg,
                         isCrit: true,
-                        text: `신성심판! ✨`
+                        text: `${tr('신성심판!')} ✨`
                       });
                     }, getBattleDelay(200 + mIdx * 60));
                   });
@@ -4815,7 +4815,7 @@ export const BattleScreen: React.FC = () => {
                 y: heroPos.y,
                 damage: reviveHp,
                 isHeal: true,
-                text: 'REVIVE!',
+                text: tr('REVIVE!'),
               });
             } else if (!wasDead) {
               // 💖 생존 중인 아군 치유
@@ -4997,7 +4997,7 @@ export const BattleScreen: React.FC = () => {
                     y: wPos.y,
                     damage: smiteDmg,
                     isCrit: true,
-                    text: '성마강타!',
+                    text: tr('성마강타!'),
                   });
                 }, getBattleDelay(200));
                 logs.push(`⚖️✨ [성마일체·강타] ${hero.name}의 치유 에너지가 공명하여 ${weakestMon.data.name}에게 ${smiteDmg} 신성 심판 강타를 가했습니다!`);
@@ -5339,7 +5339,7 @@ export const BattleScreen: React.FC = () => {
                 x: hPos.x,
                 y: hPos.y,
                 damage: revHp,
-                text: `부활! +${revHp} 🕊️`
+                text: `${tr('부활!')} +${revHp} 🕊️`
               });
               SoundManager.getInstance().play('heal');
 
@@ -5824,7 +5824,7 @@ export const BattleScreen: React.FC = () => {
                           damage: actualDamage,
                           isCrit: !isBlock,
                           isBlock,
-                          text: isBlock ? 'Block!' : `🎯약점 원호: ${weaknessAssistDef.skillName}`
+                          text: isBlock ? tr('🛡️ Block!') : `🎯${tr('약점 원호')}: ${tr(weaknessAssistDef.skillName)}`
                         });
 
                         let logSuffix = '';
@@ -5891,7 +5891,7 @@ export const BattleScreen: React.FC = () => {
                             x: monPos.x,
                             y: monPos.y,
                             damage: 0,
-                            text: '💨 EVADE',
+                            text: tr('💨 EVADE'),
                           });
                           SoundManager.getInstance().play('evade');
                           if (assistHero.id === hero.id && assistHero.classId === 'assassin') {
@@ -6144,7 +6144,7 @@ export const BattleScreen: React.FC = () => {
           x: selfMonPos.x,
           y: selfMonPos.y,
           damage: 0,
-          text: 'CHARGING!',
+          text: tr('CHARGING!'),
         });
 
         // 💨 [아이디어 5: 적 특수 차징 시전 시 아군의 '시전 요격 추가타 (Intercept Assist)']
@@ -6177,7 +6177,7 @@ export const BattleScreen: React.FC = () => {
               y: selfMonPos.y - 15,
               damage: interceptBaseDmg,
               isCrit: true,
-              text: '🎯INTERCEPT!',
+              text: tr('🎯INTERCEPT!'),
             });
             gm.addLog(`▶ 💨🎯 [시전 요격 추가타!] ${interceptor.name}: "차징을 끊어라! 선제 사격!" ${monster.data.name}에게 ${interceptBaseDmg} 요격 피해 및 브레이크 요구치 -${breakCut} 선제 파쇄!`, 'reward');
           }, getBattleDelay(350));
@@ -6366,7 +6366,7 @@ export const BattleScreen: React.FC = () => {
                 x: heroPos.x,
                 y: heroPos.y,
                 damage: 0,
-                text: '💨 MISS'
+                text: tr('💨 MISS')
               });
               SoundManager.getInstance().play('evade');
               hitReports.push(`[${target.name}] 💨빗나감(MISS)`);
@@ -6972,7 +6972,7 @@ export const BattleScreen: React.FC = () => {
                 damage: frontFinalDmg,
                 isCrit: false,
                 isBlock: frontCalc.isBlock,
-                text: frontCalc.isBlock ? 'Block!' : `-${frontFinalDmg} 🛡️엄호 분담`,
+                text: frontCalc.isBlock ? tr('🛡️ Block!') : `-${frontFinalDmg} 🛡️${tr('엄호 분담')}`,
               });
             }, 120);
 
@@ -6993,7 +6993,7 @@ export const BattleScreen: React.FC = () => {
                 y: selfMonPos.y,
                 damage: holyReflectDmg,
                 isCrit: false,
-                text: `✨반사 -${holyReflectDmg}`,
+                text: `✨${tr('반사')} -${holyReflectDmg}`,
               });
               SoundManager.getInstance().play('holy_spell');
               hitReports.push(`[${guardedFrontHero.name}] ✨[영원의 방벽 엄호 반사!] -${holyReflectDmg}`);
@@ -7175,7 +7175,7 @@ export const BattleScreen: React.FC = () => {
               y: selfMonPos.y,
               damage: holyReflectDmg,
               isCrit: false,
-              text: `✨반사 -${holyReflectDmg}`,
+              text: `✨${tr('반사')} -${holyReflectDmg}`,
             });
             SoundManager.getInstance().play('holy_spell');
             hitReports.push(`[${target.name}] ✨[영원의 방벽 신성 반사!] -${holyReflectDmg}`);
@@ -7634,7 +7634,7 @@ export const BattleScreen: React.FC = () => {
                 {skillCutIn.bannerType === 'assist' && (
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] sm:text-xs font-black text-[#ffd54f] tracking-widest uppercase animate-pulse">
-                      {skillCutIn.isWeaknessPursuit ? '🎯 WEAKNESS PURSUIT ASSIST ⚡' : '★ ASSIST ATTACK ★'}
+                      {skillCutIn.isWeaknessPursuit ? (lang === 'ko' ? '🎯 약점 추격 원호 ⚡' : lang === 'ja' ? '🎯 弱点追撃援護 ⚡' : '🎯 WEAKNESS PURSUIT ASSIST ⚡') : (lang === 'ko' ? '★ 원호 공격 ★' : lang === 'ja' ? '★ 援護攻撃 ★' : '★ ASSIST ATTACK ★')}
                     </span>
                     {skillCutIn.subText && (
                       <span className="text-[9px] sm:text-[10px] text-[#a7ffeb] font-semibold">
@@ -7679,7 +7679,7 @@ export const BattleScreen: React.FC = () => {
                       ? 'bg-[#ffd54f] shadow-[0_0_16px_#ffd54f] animate-pulse'
                       : 'bg-[#ffd54f] shadow-[0_0_12px_#ffd54f]'
                   }`}>
-                    {skillCutIn.bannerType === 'fever' ? '🔥 TACTICAL FEVER' : skillCutIn.isWeaknessPursuit ? '🎯 WEAKNESS PURSUIT' : '🤝 ASSIST'}
+                    {skillCutIn.bannerType === 'fever' ? tr('🔥 전술 파동 FEVER') : skillCutIn.isWeaknessPursuit ? tr('🎯 약점 추격') : tr('🤝 원호 공격')}
                   </span>
                   {skillCutIn.heroName && (
                     <span className="text-xs sm:text-sm font-black text-[#80d8ff] drop-shadow-[0_0_8px_rgba(128,216,255,0.8)]">

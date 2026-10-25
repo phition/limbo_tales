@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useI18n } from '../hooks/useI18n';
 import { CustomAssetService, SpriteSheetConfig } from '../services/CustomAssetService';
 
 export type VFXType =
@@ -327,6 +328,7 @@ const VFXInstance: React.FC<{
   vfxConfigs?: Record<string, SpriteSheetConfig>;
   onFinish: () => void;
 }> = ({ vfx, overrideMap, vfxConfigs, onFinish }) => {
+  const { tr, lang } = useI18n();
   const isBossVfx = vfx.sourceType === 'boss' || vfx.tier === 3 || vfx.type.startsWith('boss_');
   const explicitConfig = (vfxConfigs && vfxConfigs[vfx.type])
     || CustomAssetService.getInstance().getVfxConfig(vfx.type);
@@ -771,16 +773,24 @@ const VFXInstance: React.FC<{
               : '0 0 8px rgba(0,0,0,0.8)'
           }}
         >
-          {vfx.isCrit && <span className="block text-[10px] text-[#ff3d00] font-bold text-center -mb-1 animate-pulse">CRITICAL!</span>}
-          {(vfx.isBlock || vfx.text === 'Block!') && <span className="block text-[10px] text-[#90caf9] font-bold text-center -mb-1">🛡️ BLOCK!</span>}
+          {vfx.isCrit && (
+            <span className="block text-[10px] text-[#ff3d00] font-bold text-center -mb-1 animate-pulse">
+              {lang === 'ko' ? '💥 치명타!' : lang === 'ja' ? '💥 会心の一撃!' : 'CRITICAL!'}
+            </span>
+          )}
+          {(vfx.isBlock || vfx.text === 'Block!' || vfx.text === '방어!' || vfx.text === 'ガード!') && (
+            <span className="block text-[10px] text-[#90caf9] font-bold text-center -mb-1">
+              {lang === 'ko' ? '🛡️ 방어!' : lang === 'ja' ? '🛡️ ガード!' : '🛡️ BLOCK!'}
+            </span>
+          )}
           {(() => {
-            if (vfx.text) return vfx.text;
-            if (vfx.isBlock) return 'Block!';
+            if (vfx.text) return tr(vfx.text);
+            if (vfx.isBlock) return lang === 'ko' ? '방어!' : lang === 'ja' ? 'ガード!' : 'Block!';
             if (vfx.damage !== undefined) {
               if (vfx.isHeal) return `+${vfx.damage} HP`;
               if (vfx.isShield) return `+${vfx.damage} SHIELD`;
               if (vfx.damage > 0) return `-${vfx.damage}`;
-              return 'Block!';
+              return lang === 'ko' ? '방어!' : lang === 'ja' ? 'ガード!' : 'Block!';
             }
             return '';
           })()}

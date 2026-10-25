@@ -1,0 +1,170 @@
+{
+  "사경 위기": {
+    "en": "Crisis: Death's Door",
+    "ja": "瀕死の危機"
+  },
+  "사경 헤맴": {
+    "en": "Wandering Death's Door",
+    "ja": "死線彷徨"
+  },
+  "완전 사망 카운트다운": {
+    "en": "Final Demise Countdown",
+    "ja": "完全死亡カウントダウン"
+  },
+  "완전 사망까지 남은 유예": {
+    "en": "Grace before Perishing",
+    "ja": "完全死亡までの猶予"
+  },
+  "⚰️ 완전 사망": {
+    "en": "⚰️ Perished",
+    "ja": "⚰️ 完全死亡"
+  },
+  "영구 사망": {
+    "en": "Permanently Dead",
+    "ja": "永久死亡"
+  },
+  "영면": {
+    "en": "Eternal Rest",
+    "ja": "永眠"
+  },
+  "턴 남음": {
+    "en": "T left",
+    "ja": "ターン残り"
+  },
+  "3턴간의 사경 끝에 완전히 전사했습니다...": {
+    "en": "Succumbed to fatal wounds and perished after 3 turns...",
+    "ja": "3ターンの死闘の末、完全に戦死しました..."
+  },
+  "치명타!": {
+    "en": "CRITICAL!",
+    "ja": "会心の一撃!"
+  },
+  "💥 치명타!": {
+    "en": "💥 CRITICAL!",
+    "ja": "💥 会心の一撃!"
+  },
+  "방어!": {
+    "en": "BLOCK!",
+    "ja": "ガード!"
+  },
+  "🛡️ 방어!": {
+    "en": "🛡️ BLOCK!",
+    "ja": "🛡️ ガード!"
+  },
+  "🛡️ Block!": {
+    "en": "🛡️ BLOCK!",
+    "ja": "🛡️ ガード!"
+  },
+  "💨 MISS": {
+    "en": "💨 MISS",
+    "ja": "💨 ミス"
+  },
+  "💨 EVADE": {
+    "en": "💨 EVADE",
+    "ja": "💨 回避"
+  },
+  "🩸출혈!": {
+    "en": "🩸 Bleed!",
+    "ja": "🩸 出血!"
+  },
+  "🔫점사!": {
+    "en": "🔫 Burst Shot!",
+    "ja": "🔫 連射!"
+  },
+  "💥총공격!": {
+    "en": "💥 All-Out Attack!",
+    "ja": "💥 総攻撃!"
+  },
+  "연쇄충격!": {
+    "en": "Chain Shock!",
+    "ja": "連鎖衝撃!"
+  },
+  "궤도폭격!": {
+    "en": "Orbital Strike!",
+    "ja": "軌道爆撃!"
+  },
+  "부활!": {
+    "en": "Revived!",
+    "ja": "復活!"
+  },
+  "신성심판!": {
+    "en": "Divine Judgment!",
+    "ja": "神聖審判!"
+  },
+  "성마강타!": {
+    "en": "Sacred Smite!",
+    "ja": "聖魔強打!"
+  },
+  "약점 원호": {
+    "en": "Weakness Assist",
+    "ja": "弱点援護"
+  },
+  "엄호 분담": {
+    "en": "Cover Guard",
+    "ja": "援護分担"
+  },
+  "반사": {
+    "en": "Reflect",
+    "ja": "反射"
+  },
+  "차징 붕괴!": {
+    "en": "Charge Shattered!",
+    "ja": "チャージ崩壊!"
+  },
+  "1턴간 그로기 (받는 피해 +50%)": {
+    "en": "Groggy for 1 Turn (+50% DMG taken)",
+    "ja": "1ターン行動不能（被ダメージ+50%）"
+  },
+  "불멸의 수호": {
+    "en": "Immortal Guardian",
+    "ja": "不滅の守護"
+  },
+  "기사회생!": {
+    "en": "Miraculous Revival!",
+    "ja": "起死回生!"
+  },
+  "파티 전원 체력 100% 회복 및 자동 부활": {
+    "en": "Party 100% HP Restoration & Auto Revive",
+    "ja": "パーティ全員HP 100%回復＆自動復活"
+  },
+  "영혼 등대의 불사의 등불로 1회 즉시 부활!": {
+    "en": "Instantly revived once by Soul Lighthouse lantern!",
+    "ja": "魂の灯台の不死の灯火で1回即時復活！"
+  },
+  "의 수호의 결속!": {
+    "en": "'s Guardian Bond!",
+    "ja": "の守護の結束！"
+  },
+  "의 환영 반격!": {
+    "en": "'s Phantom Riposte!",
+    "ja": "の幻影反撃！"
+  },
+  "약점 집중 사격": {
+    "en": "Focused Weakness Fire",
+    "ja": "弱点集中射撃"
+  },
+  "💥 치명타 작열!": {
+    "en": "💥 Critical Blast!",
+    "ja": "💥 会心炸裂！"
+  },
+  "🔥 전술 파동 FEVER": {
+    "en": "🔥 TACTICAL FEVER",
+    "ja": "🔥 戦術波動FEVER"
+  },
+  "🎯 약점 추격": {
+    "en": "🎯 WEAKNESS PURSUIT",
+    "ja": "🎯 弱点追撃"
+  },
+  "🤝 원호 공격": {
+    "en": "🤝 ASSIST ATTACK",
+    "ja": "🤝 援護攻撃"
+  },
+  "🎯 약점 추격 원호 ⚡": {
+    "en": "🎯 WEAKNESS PURSUIT ASSIST ⚡",
+    "ja": "🎯 弱点追撃援護 ⚡"
+  },
+  "★ 원호 공격 ★": {
+    "en": "★ ASSIST ATTACK ★",
+    "ja": "★ 援護攻撃 ★"
+  }
+}
