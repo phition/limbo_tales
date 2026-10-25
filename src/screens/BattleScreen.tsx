@@ -1193,7 +1193,9 @@ export const BattleScreen: React.FC = () => {
     isGroggy = false,
     trueDamageRate = 0
   ) => {
-    let def = Math.max(0, baseDef);
+    // 🛡️ [NaN 완전 차단]: 공격력 또는 대상 방어력이 NaN/undefined일 경우 안전 기본값으로 자동 교정
+    const safeRawDmg = isNaN(rawDmg) || rawDmg <= 0 ? 1 : rawDmg;
+    let def = Math.max(0, isNaN(baseDef) ? 0 : baseDef);
     if (piercePct > 0) {
       def = Math.round(def * (1 - Math.min(100, Math.max(0, piercePct)) / 100));
     }
@@ -1222,8 +1224,8 @@ export const BattleScreen: React.FC = () => {
       def = Math.round(def * (1 + totalDefBuff));
     }
     
-    const extraCritDmg = isCrit ? Math.max(0, Math.round(rawDmg * (critMultiplier - 1))) : 0;
-    let totalAttack = rawDmg + extraCritDmg;
+    const extraCritDmg = isCrit ? Math.max(0, Math.round(safeRawDmg * (critMultiplier - 1))) : 0;
+    let totalAttack = safeRawDmg + extraCritDmg;
 
     // 💫 그로기 상태: 받는 피해 +50% 증폭!
     if (isGroggy) {
@@ -1237,14 +1239,19 @@ export const BattleScreen: React.FC = () => {
     const baseDR = GameDataService.getInstance().getBalanceConfig().drConstant || 300;
     const currentFloor = gm?.dungeonFloor || 1;
     const K = currentFloor >= 11 ? Math.round(baseDR * (800 / 300)) : (currentFloor >= 6 ? Math.round(baseDR * (500 / 300)) : baseDR);
-    const mitigatedDmg = Math.round(totalAttack * (K / (def + K)));
+    const safeK = isNaN(K) || K <= 0 ? 300 : K;
+    const mitigatedDmg = Math.round(totalAttack * (safeK / Math.max(1, (def + safeK))));
 
     // 🗡️ [아이디어 4: 무기 강화 단계 비례 순수 피해 (True Damage)]
     // 1강당 1%, 10강이면 10%의 순수 피해가 방어력을 완전 무시하고 직격
     const trueDamage = trueDamageRate > 0 ? Math.round(totalAttack * Math.min(0.5, trueDamageRate)) : 0;
 
-    // 최종 산출 피해 (최소 1 보장)
-    let dmg = Math.max(1, mitigatedDmg + trueDamage);
+    // 최종 산출 피해 (최소 1 보장 및 NaN 완전 차단)
+    const safeMitigated = isNaN(mitigatedDmg) ? Math.round(totalAttack) : mitigatedDmg;
+    const safeTrue = isNaN(trueDamage) ? 0 : trueDamage;
+    let dmg = Math.max(1, safeMitigated + safeTrue);
+    if (isNaN(dmg) || dmg <= 0) dmg = 1;
+
     const isBlockedByDef = def >= totalAttack * 2.5;
 
     let absorbed = 0;
@@ -1262,8 +1269,9 @@ export const BattleScreen: React.FC = () => {
       }
     }
     // 보호막으로 인해 피해가 완전히 흡수된 경우에만 Block (0 피해)
-    const isBlock = Math.round(dmg) <= 0 && absorbed > 0;
-    return { actualDamage: Math.round(dmg), absorbed: Math.round(absorbed), isBlock, isBlockedByDef, trueDamage };
+    const finalActual = isNaN(dmg) ? 1 : Math.round(dmg);
+    const isBlock = finalActual <= 0 && absorbed > 0;
+    return { actualDamage: Math.max(0, finalActual), absorbed: Math.round(absorbed), isBlock, isBlockedByDef, trueDamage: safeTrue };
   };
 
   // ── 💥 6대 상태이상 폭발 콤보 체인 (Status Detonation Combo Chain) 판별 ──
@@ -1826,15 +1834,28 @@ export const BattleScreen: React.FC = () => {
         .replace(/\[\s*정예\s*\]/g, '')
         .trim();
 
+      const rawMaxHp = Number(md.maxHp || (md as any).hp || 100);
+      const safeMaxHp = Math.max(1, Math.floor((isNaN(rawMaxHp) ? 100 : rawMaxHp) * mult));
+      const rawCurrentHp = Number((md as any).currentHp || (md as any).hp || md.maxHp || 100);
+      const safeCurrentHp = Math.max(1, Math.floor((isNaN(rawCurrentHp) ? safeMaxHp : rawCurrentHp) * mult));
+      const rawAtk = Number(md.atk ?? 10);
+      const safeAtk = Math.max(1, Math.floor((isNaN(rawAtk) ? 10 : rawAtk) * mult));
+      const rawDef = Number(md.def ?? 0);
+      const safeDef = Math.max(0, Math.floor((isNaN(rawDef) ? 0 : rawDef) * mult));
+      const rawSpd = Number(md.spd ?? 10);
+      const safeSpd = Math.max(1, Math.floor((isNaN(rawSpd) ? 10 : rawSpd) * mult));
+      const rawLuck = Number(md.luck ?? 10);
+      const safeLuck = Math.max(0, Math.floor((isNaN(rawLuck) ? 10 : rawLuck) * (isOvc ? 1.2 : 1.0)));
+
       return {
         id: `mon_${idx}_${Date.now()}`,
         data: { ...md, name: cleanName },
-        maxHp: Math.floor(md.maxHp * mult),
-        currentHp: Math.floor(md.maxHp * mult),
-        atk: Math.floor(md.atk * mult),
-        def: Math.floor(md.def * mult),
-        spd: Math.floor(md.spd * mult),
-        luck: Math.floor((md.luck || 10) * (isOvc ? 1.2 : 1.0)),
+        maxHp: safeMaxHp,
+        currentHp: safeCurrentHp,
+        atk: safeAtk,
+        def: safeDef,
+        spd: safeSpd,
+        luck: safeLuck,
         statusEffects: [],
         isEnraged: isOvc,
       };

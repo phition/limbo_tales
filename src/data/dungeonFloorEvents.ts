@@ -1860,6 +1860,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
             // 👥 플레이어 원정대 복제본 생성 (상단 몬스터 일러스트: 프리즘 방직사 monster_prism_weaver 기본 적용)
             const doppelgangers: MonsterData[] = gm.party.map((hero, idx) => {
+              const heroStats = gm.getHeroEffectiveStats(hero);
+              const maxHpVal = Math.round(heroStats.maxHp * 1.2);
               const baseSkills = (hero.equippedSkills && hero.equippedSkills.length > 0)
                 ? hero.equippedSkills.map(sid => gm.resolveSkillData(sid, hero.level)).filter(Boolean)
                 : [];
@@ -1882,7 +1884,9 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                   description: '자신의 원본을 겨누는 암영의 일격',
                   power: 1.1,
                   effectType: 'damage',
-                  isCharge: false
+                  isCharge: false,
+                  piercePct: 0,
+                  drainPct: 0
                 });
               }
 
@@ -1892,12 +1896,12 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 type: 'elite',
                 faction: 'corrupt',
                 level: Math.max(30, hero.level),
-                hp: Math.round(hero.maxHp * 1.2),
-                maxHp: Math.round(hero.maxHp * 1.2),
-                atk: Math.round(hero.atk * 1.05),
-                def: hero.def,
-                spd: hero.spd,
-                luck: hero.luck,
+                hp: maxHpVal,
+                maxHp: maxHpVal,
+                atk: Math.max(1, Math.round(heroStats.atk * 1.05)),
+                def: Math.max(10, Math.round(heroStats.def)),
+                spd: Math.max(5, Math.round(heroStats.spd)),
+                luck: Math.max(5, Math.round(heroStats.luck)),
                 promptKey: 'monster_prism_weaver',
                 imagePath: 'assets/monster_prism_weaver.jpg',
                 skills: sanitizedSkills,
@@ -2482,34 +2486,39 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
           action: () => {
             SoundManager.getInstance().play('heavy_hit');
             // 파티원 기반 도플갱어 편대 생성
-            const doppelgangers: MonsterData[] = gm.party.map((hero, idx) => ({
-              id: `doppelganger_${hero.id || idx}_${Date.now()}`,
-              name: `타락한 도플갱어 [${hero.name}]`,
-              type: 'elite',
-              faction: 'corrupt',
-              level: Math.max(50, hero.level),
-              maxHp: Math.round(hero.maxHp * 1.5),
-              atk: Math.round(hero.atk * 1.1),
-              def: Math.round(hero.def * 1.0),
-              spd: hero.spd,
-              luck: hero.luck,
-              skills: [
-                {
-                  id: `mirror_strike_${idx}`,
-                  name: '거울의 암영격',
-                  type: 'attack',
-                  power: 1.2,
-                  target: 'single',
-                  cooldown: 0,
-                  description: '자신의 원본을 겨누는 암영의 일격'
+            const doppelgangers: MonsterData[] = gm.party.map((hero, idx) => {
+              const heroStats = gm.getHeroEffectiveStats(hero);
+              const maxHpVal = Math.round(heroStats.maxHp * 1.5);
+              return {
+                id: `doppelganger_${hero.id || idx}_${Date.now()}`,
+                name: `타락한 도플갱어 [${hero.name}]`,
+                type: 'elite',
+                faction: 'corrupt',
+                level: Math.max(50, hero.level),
+                hp: maxHpVal,
+                maxHp: maxHpVal,
+                atk: Math.max(1, Math.round(heroStats.atk * 1.1)),
+                def: Math.max(10, Math.round(heroStats.def * 1.0)),
+                spd: Math.max(5, Math.round(heroStats.spd)),
+                luck: Math.max(5, Math.round(heroStats.luck)),
+                skills: [
+                  {
+                    id: `mirror_strike_${idx}`,
+                    name: '거울의 암영격',
+                    type: 'attack',
+                    power: 1.2,
+                    target: 'single',
+                    cooldown: 0,
+                    description: '자신의 원본을 겨누는 암영의 일격'
+                  }
+                ],
+                rewards: {
+                  gold: 500,
+                  ether: 150,
+                  exp: 3000
                 }
-              ],
-              rewards: {
-                gold: 500,
-                ether: 150,
-                exp: 3000
-              }
-            }));
+              };
+            });
 
             gm.isDoppelgangerBattle = true;
             gm.currentMonsters = doppelgangers;

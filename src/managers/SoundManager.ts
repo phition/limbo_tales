@@ -41,6 +41,7 @@ export type SoundEffectType =
   | 'drain'           // 흡혈 / 에테르 착취
   | 'bleed'           // 출혈 / 열상
   | 'evade'           // 회피 / 바람을 가르는 날렵한 회피 풍절음 (Dodge Whoosh)
+  | 'combat_start'    // 전투 개시 / 조우 돌입 효과음
   // 👾 피격 및 전투 흐름
   | 'monster_hit'     // 몬스터 피격 / 갑각 파쇄
   | 'hero_hurt'       // 아군 피격
@@ -401,6 +402,7 @@ export class SoundManager {
           this.synthSlash(ctx);
           break;
         case 'heavy_hit':
+        case 'combat_start':
           this.synthHeavyHit(ctx);
           break;
         case 'crit':
