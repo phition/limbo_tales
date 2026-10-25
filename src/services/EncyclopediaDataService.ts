@@ -111,7 +111,11 @@ export class EncyclopediaDataService {
           }
         },
         error => {
-          console.warn('[EncyclopediaDataService] Firebase 실시간 동기화 오류:', error);
+          if ((error as any)?.code === 'PERMISSION_DENIED' || error?.message?.includes('permission_denied')) {
+            console.info('[EncyclopediaDataService] ℹ️ Firebase 클라우드 백과사전 동기화 미연결 (로컬 기본 백과사전 데이터 사용)');
+          } else {
+            console.warn('[EncyclopediaDataService] Firebase 실시간 동기화 오류:', error);
+          }
         }
       );
     } catch (e) {

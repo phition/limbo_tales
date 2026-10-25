@@ -30,6 +30,10 @@
       ".write": true,
       ".indexOn": ["rating"]
     },
+    "arena_edict": {
+      ".read": true,
+      ".write": true
+    },
     "world_boss": {
       ".read": true,
       ".write": true,
@@ -38,7 +42,15 @@
         ".write": true
       }
     },
+    "dungeon_recent_visits": {
+      ".read": true,
+      ".write": true
+    },
     "game_data": {
+      ".read": true,
+      ".write": true
+    },
+    "encyclopedia_data": {
       ".read": true,
       ".write": true
     }
