@@ -5382,7 +5382,7 @@ export const BattleScreen: React.FC = () => {
                       y: mPos.y,
                       damage: holyDmg,
                       isCrit: true,
-                      text: `신성심판! ✨`
+                      text: `${tr('신성심판!')} ✨`
                     });
                   }, getBattleDelay(200 + mIdx * 60));
                 });
@@ -5430,7 +5430,7 @@ export const BattleScreen: React.FC = () => {
                       y: mPos.y,
                       damage: avgHealDmg,
                       isCrit: true,
-                      text: `신성심판! ✨`
+                      text: `${tr('신성심판!')} ✨`
                     });
                   }, getBattleDelay(200 + mIdx * 60));
                 });

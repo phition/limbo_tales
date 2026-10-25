@@ -6,6 +6,92 @@ import { CLASS_NAMES, RESOURCE_NAMES, BUILDING_NAMES } from './dataLocales';
 // ============================================================================
 export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
   en: {
+    // ⚔️ 전투 플로팅 및 상태 텍스트
+    "사경": "Death's Door",
+    "사경 헤맴": "Death's Door",
+    "사경 위기": "Death's Door",
+    "사경의 위기": "Crisis at Death's Door",
+    "완전 사망": "Permanent Death",
+    "턴": "T",
+    "턴 남음": "T left",
+    "신성심판!": "Divine Judgment!",
+    "신성심판! ✨": "Divine Judgment! ✨",
+
+    // 🛡️ 클래스명 (Classes)
+    "성기사": "Paladin",
+    "암살자": "Assassin",
+    "그림자 망령": "Shadow Wraith",
+
+    // 📖 스킬북 및 클래스 계열
+    "기사·용병 계열": "Knight & Mercenary Line",
+    "마총·암살 계열": "Gunner & Assassin Line",
+    "사제·마법 계열": "Priest & Mage Line",
+    "전 클래스 공용": "All Classes Universal",
+
+    // 👑 보스 세트 명칭 (Boss Sets)
+    "1F 침묵의 감시자 세트": "1F Silent Watcher Set",
+    "2F 망령의 군주 세트": "2F Lord of Specters Set",
+    "3F 원초의 골렘 세트": "3F Primal Golem Set",
+    "4F 심연 시공왜곡 세트": "4F Abyssal Distortion Set",
+    "5F 공허의 지배자 세트": "5F Void Sovereign Set",
+    "6F 핏빛 성역 세트": "6F Crimson Sanctuary Set",
+    "7F 망각의 묘지기 세트": "7F Graveyard Keeper of Oblivion Set",
+    "8F 단죄의 성기사 세트": "8F Paladin of Condemnation Set",
+    "9F 거울 미궁 세트": "9F Mirror Labyrinth Set",
+    "10F 종말의 심연군주 세트": "10F Abyssal Sovereign of the End Set",
+
+    // 🗡️ 장비 및 접두/접미사 (Equipment & Affixes)
+    "수호 기사의 결전 방패": "Guardian Knight's Decisive Shield",
+    "성기사의 영광 판금갑": "Paladin's Glorious Plate",
+    "그림자 암살자의 비수": "Shadow Assassin's Dagger",
+    "사신의 밤안개 비도": "Reaper's Nightfog Flying Daggers",
+    "원소 학도의 마법봉": "Elemental Scholar's Wand",
+    "아크 메이지의 재앙 지팡이": "Archmage's Calamity Staff",
+    "성직자의 축복 로브": "Priest's Blessed Robe",
+    "대성녀의 기적 성홀": "High Saintess's Miracle Scepter",
+    "용병 검사의 처형도끼": "Mercenary Slayer's Execution Axe",
+    "발할라 블레이드의 학살검": "Valhalla Blade's Carnage Greatsword",
+    "마총사의 전술 리볼버": "Gunner's Tactical Revolver",
+    "하이퍼 레인저의 레일 버스터": "Hyper Ranger's Rail Buster",
+    "불패의": "Undefeated",
+    "날렵한": "Agile",
+    "암영의": "Shadowy",
+    "치명": "Lethal",
+    "마도": "Sorcerous",
+    "은총의": "Graceful",
+    "성령의": "Holy Spirit's",
+    "생명": "Life",
+    "맹공의": "Onslaught",
+    "광란의": "Frenzy",
+    "혈풍": "Bloodstorm",
+    "궤도의": "Orbital",
+    "베기": "Slash",
+    "방어 파쇄": "Armor Crush",
+    "급소 사격": "Vital Shot",
+    "연사": "Rapid Fire",
+    "암습": "Sneak Attack",
+    "마력 공명": "Mana Resonance",
+
+    // ✨ 사제 / 회복 / 버프 / 전술 스킬 명칭
+    "생명의 샘": "Font of Life",
+    "축복의 은혜": "Blessing of Grace",
+    "전투 신앙 기적": "Miracle of Combat Faith",
+    "성마일체": "Sacred Harmony",
+    "빛과 징벌의 조화": "Harmony of Light and Retribution",
+    "시간 초월": "Time Transcendence",
+    "불멸의 투지": "Undying Fighting Spirit",
+    "특이점 가속": "Singularity Acceleration",
+    "차원 단절": "Dimensional Severance",
+    "궤도 섬멸 폭격": "Orbital Annihilation Bombardment",
+    "망령의 결속": "Specter's Bond",
+    "차징 파쇄": "Charge Shattered",
+    "연쇄 궤도 충격파": "Chain Orbital Shockwave",
+    "추격전 탈출 성공!": "Pursuit Escape Success!",
+    "추격 마물 격파 후 귀환!": "Defeated Pursuers & Returned!",
+    "상대 FEVER 폭발!": "Opponent FEVER Burst!",
+    "차징 완료!": "Charging Complete!",
+    "위기 경고": "Crisis Alert",
+
     // 🌌 11층 무간도 고유 이벤트 (Floor 11 Avici Unique Events)
     "🕯️ 영혼 등대와 망령의 제단": "🕯️ Soul Lighthouse & Wraith Altar",
     "🪞 차원 거울의 환영": "🪞 Phantom of the Dimensional Mirror",
@@ -5084,6 +5170,92 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "★ 원호 공격 ★": "★ ASSIST ATTACK ★",
   },
   ja: {
+    // ⚔️ 戦闘フローティング＆状態テキスト
+    "사경": "死線",
+    "사경 헤맴": "死線を彷徨う",
+    "사경 위기": "死線の危機",
+    "사경의 위기": "死線の危機",
+    "완전 사망": "完全死亡",
+    "턴": "ターン",
+    "턴 남음": "ターン残り",
+    "신성심판!": "神聖審判!",
+    "신성심판! ✨": "神聖審判! ✨",
+
+    // 🛡️ クラス名 (Classes)
+    "성기사": "聖騎士",
+    "암살자": "アサシン",
+    "그림자 망령": "影のレイス",
+
+    // 📖 スキルブック＆クラス系統
+    "기사·용병 계열": "騎士・傭兵系列",
+    "마총·암살 계열": "魔銃・暗殺系列",
+    "사제·마법 계열": "司祭・魔法系列",
+    "전 클래스 공용": "全クラス共通",
+
+    // 👑 ボスセット名称 (Boss Sets)
+    "1F 침묵의 감시자 세트": "1F 沈黙の監視者セット",
+    "2F 망령의 군주 세트": "2F 亡霊の君主セット",
+    "3F 원초의 골렘 세트": "3F 原初のゴーレムセット",
+    "4F 심연 시공왜곡 세트": "4F 深淵時空歪曲セット",
+    "5F 공허의 지배자 세트": "5F 虚無の支配者セット",
+    "6F 핏빛 성역 세트": "6F 血塗られた聖域セット",
+    "7F 망각의 묘지기 세트": "7F 忘却の墓守セット",
+    "8F 단죄의 성기사 세트": "8F 断罪の聖騎士セット",
+    "9F 거울 미궁 세트": "9F 鏡の迷宮セット",
+    "10F 종말의 심연군주 세트": "10F 終末の深淵君主セット",
+
+    // 🗡️ 装備＆接頭・接尾辞 (Equipment & Affixes)
+    "수호 기사의 결전 방패": "守護騎士の決戦盾",
+    "성기사의 영광 판금갑": "聖騎士の栄光の板金甲",
+    "그림자 암살자의 비수": "影の暗殺者のダガー",
+    "사신의 밤안개 비도": "死神の夜霧飛刀",
+    "원소 학도의 마법봉": "元素学徒の魔法杖",
+    "아크 메이지의 재앙 지팡이": "アークメイジの災厄杖",
+    "성직자의 축복 로브": "聖職者の祝福ローブ",
+    "대성녀의 기적 성홀": "大聖女の奇跡の笏",
+    "용병 검사의 처형도끼": "傭兵剣士の処刑斧",
+    "발할라 블레이드의 학살검": "ヴァルハラブレイドの虐殺剣",
+    "마총사의 전술 리볼버": "魔銃士の戦術リボルバー",
+    "하이퍼 레인저의 레일 버스터": "ハイパーレンジャーのレールバスター",
+    "불패의": "不敗の",
+    "날렵한": "敏捷な",
+    "암영의": "暗影の",
+    "치명": "致命",
+    "마도": "魔導",
+    "은총의": "恩寵の",
+    "성령의": "聖霊の",
+    "생명": "生命",
+    "맹공의": "猛攻の",
+    "광란의": "狂乱の",
+    "혈풍": "血風",
+    "궤도의": "軌道の",
+    "베기": "斬撃",
+    "방어 파쇄": "防御粉砕",
+    "급소 사격": "急所射撃",
+    "연사": "連射",
+    "암습": "奇襲",
+    "마력 공명": "魔力共鳴",
+
+    // ✨ 司祭 / 回復 / バフ / 戦術スキル名称
+    "생명의 샘": "生命の泉",
+    "축복의 은혜": "祝福の恩恵",
+    "전투 신앙 기적": "戦闘信仰の奇跡",
+    "성마일체": "聖魔一体",
+    "빛과 징벌의 조화": "光と懲罰の調和",
+    "시간 초월": "時間超越",
+    "불멸의 투지": "不滅の闘志",
+    "특이점 가속": "特異点加速",
+    "차원 단절": "次元断絶",
+    "궤도 섬멸 폭격": "軌道殲滅爆撃",
+    "망령의 결속": "亡霊の結束",
+    "차징 파쇄": "チャージ粉砕",
+    "연쇄 궤도 충격파": "連鎖軌道衝撃波",
+    "추격전 탈출 성공!": "追撃戦脱出成功！",
+    "추격 마물 격파 후 귀환!": "追撃魔物撃破後帰還！",
+    "상대 FEVER 폭발!": "相手FEVER爆発！",
+    "차징 완료!": "チャージ完了！",
+    "위기 경고": "危機警告",
+
     // 🌌 11층 무간도 고유 이벤트 (Floor 11 Avici Unique Events)
     "🕯️ 영혼 등대와 망령의 제단": "🕯️ 魂の灯台と亡霊の祭壇",
     "🪞 차원 거울의 환영": "🪞 次元鏡の幻影",
@@ -10222,6 +10394,11 @@ export const trEntity = (name: string, lang: 'en' | 'ja' | string): string => {
     return lang === 'ja' ? `「${str}」` : `"${str}"`;
   };
 
+  // 0.05 쉼표로 연결된 다중 항목 분리 번역 (예: "신성 성기사단, 빛의 성역", "엘리시아, 카엘")
+  if (trimmed.includes(', ')) {
+    return wrapQuote(trimmed.split(', ').map(part => trEntity(part, lang)).join(', '));
+  }
+
   // 0.1 중첩 대괄호 정리: "[[궁극기] ...]" -> "[궁극기] ...", "[[침식된] 흑철 검]" -> "[침식된] 흑철 검"
   if (trimmed.startsWith('[[') && trimmed.endsWith(']')) {
     trimmed = trimmed.slice(1, -1).trim();
@@ -10547,6 +10724,286 @@ export function translateQuestRewards(rewardsStr: string, lang: 'en' | 'ja' | st
 }
 
 export const LOG_PATTERNS: LogPatternDef[] = [
+  // 👑 [보스세트] 심연 군주 권능 발현
+  {
+    pattern: /^👑\s*\[(.+?)\]\s*(.+?)에게\s*종말의\s*심연\s*군주\s*권능\(올스탯\s*\+(\d+)%\)\s*발현!/i,
+    en: m => `👑 [${trEntity(m[1].trim(), 'en')}] Awakened the Authority of the Abyssal Lord (All Stats +${m[3]}%) for ${trEntity(m[2].trim(), 'en')}!`,
+    ja: m => `👑 [${trEntity(m[1].trim(), 'ja')}] ${trEntity(m[2].trim(), 'ja')}に終末の深淵君主の権能(全ステータス+${m[3]}%)が発現！`
+  },
+
+  // 👑 [보스세트] 거암 결계 보호막
+  {
+    pattern: /^👑\s*\[(.+?)\]\s*(.+?)에게\s*최대\s*HP의\s*(\d+)%\((?:🛡️?\s*)?([\d,]+)\)\s*거암\s*결계\s*보호막\s*전개!/i,
+    en: m => `👑 [${trEntity(m[1].trim(), 'en')}] Deployed Megalith Barrier (${m[3]}% Max HP, 🛡️${m[4]}) for ${trEntity(m[2].trim(), 'en')}!`,
+    ja: m => `👑 [${trEntity(m[1].trim(), 'ja')}] ${trEntity(m[2].trim(), 'ja')}に最大HPの${m[3]}%(🛡️${m[4]})の巨岩結界シールドを展開！`
+  },
+
+  // 💀⚡ [리더보드 보너스] 광폭화 진 최종 보스
+  {
+    pattern: /^💀⚡\s*\[리더보드 보너스\]\s*광폭화 진 최종 보스\s*(.+?)\s*격파!\s*\[(.+?)\]\s*리더보드\s*\+([\d,]+)점 획득!/i,
+    en: m => `💀⚡ [Leaderboard Bonus] Defeated Enraged True Final Boss ${trEntity(m[1].trim(), 'en')}! Acquired +${m[3]} pts on [${trEntity(m[2].trim(), 'en')}] leaderboard!`,
+    ja: m => `💀⚡ [リーダーボードボーナス] 狂暴化・真最終ボス${trEntity(m[1].trim(), 'ja')}撃破！[${trEntity(m[2].trim(), 'ja')}]リーダーボード+${m[3]}点獲得！`
+  },
+
+  // ⚡ [타임어택 보너스]
+  {
+    pattern: /^⚡\s*\[타임어택 보너스\]\s*위험도\s*([\d,]+)\s*진입 후\s*(\d+)초 만에 광폭화 보스 격파!\s*리더보드 보너스\s*\+([\d,]+)점 가산!/i,
+    en: m => `⚡ [Time Attack Bonus] Defeated Enraged Boss in ${m[2]}s after entering Threat Lv.${m[1]}! Added +${m[3]} pts to leaderboard!`,
+    ja: m => `⚡ [タイムアタックボーナス] 危険度${m[1]}突入後${m[2]}秒で狂暴化ボス撃破！リーダーボードボーナス+${m[3]}点加算！`
+  },
+
+  // 👑 [리더보드 보너스] 진 최종 보스
+  {
+    pattern: /^👑\s*\[리더보드 보너스\]\s*진 최종 보스\s*(.+?)\s*격파!\s*\[(.+?)\]\s*리더보드\s*\+([\d,]+)점 획득!/i,
+    en: m => `👑 [Leaderboard Bonus] Defeated True Final Boss ${trEntity(m[1].trim(), 'en')}! Acquired +${m[3]} pts on [${trEntity(m[2].trim(), 'en')}] leaderboard!`,
+    ja: m => `👑 [リーダーボードボーナス] 真最終ボス${trEntity(m[1].trim(), 'ja')}撃破！[${trEntity(m[2].trim(), 'ja')}]リーダーボード+${m[3]}点獲得！`
+  },
+
+  // 🏆⚔️ [습격 승리!]
+  {
+    pattern: /^🏆⚔️\s*\[습격 승리!\]\s*\[(.+?)\]\s*지휘관의 원정대와의 혈투에서 승리했습니다!\s*\(⚔️ 경험치 2배:\s*\+([\d,]+)\s*EXP,\s*전리품 획득 없음\)/i,
+    en: m => `🏆⚔️ [Raid Victory!] Won the fierce battle against Commander [${trEntity(m[1].trim(), 'en')}]'s Expedition! (⚔️ Double EXP: +${m[2]} EXP, No Loot Acquired)`,
+    ja: m => `🏆⚔️ [襲撃勝利！] [${trEntity(m[1].trim(), 'ja')}]指揮官の遠征隊との激闘に勝利しました！（⚔️ 経験値2倍: +${m[2]} EXP、戦利品獲得なし）`
+  },
+
+  // 💀⚔️ [습격 패배...]
+  {
+    pattern: /^💀⚔️\s*\[습격 패배\.\.\.\]\s*\[(.+?)\]\s*지휘관의 원정대를 기습했으나 격퇴당했습니다\.\.\./i,
+    en: m => `💀⚔️ [Raid Defeat...] Ambushed Commander [${trEntity(m[1].trim(), 'en')}]'s Expedition but was repelled...`,
+    ja: m => `💀⚔️ [襲撃敗北…] [${trEntity(m[1].trim(), 'ja')}]指揮官の遠征隊を奇襲しましたが撃退されました…`
+  },
+
+  // 💀 [사경 헤맴]
+  {
+    pattern: /^💀\s*\[사경 헤맴\]\s*(.+?)\s*대원이 위독한 상태로 사경을 헤매고 있습니다!\s*\(완전 사망까지 남은 유예:\s*(\d+)턴\)/i,
+    en: m => `💀 [Death's Door] ${trEntity(m[1].trim(), 'en')} is in critical condition hovering at Death's Door! (${m[2]} turns until permanent death)`,
+    ja: m => `💀 [死線彷徨] ${trEntity(m[1].trim(), 'ja')}隊員が危篤状態で死線を彷徨っています！(完全死亡まで残り猶予: ${m[2]}ターン)`
+  },
+
+  // 💀 [사경 위기] DoT
+  {
+    pattern: /^💀\s*\[사경 위기\]\s*(.+?)\s*대원이 지속 피해를 견디지 못하고 쓰러져 사경을 헤맵니다!\s*\(유예\s*(\d+)턴\)/i,
+    en: m => `💀 [Death's Door] ${trEntity(m[1].trim(), 'en')} collapsed unable to withstand damage over time and is at Death's Door! (${m[2]} turns grace)`,
+    ja: m => `💀 [死線の危機] ${trEntity(m[1].trim(), 'ja')}隊員が持続ダメージに耐えきれず倒れ、死線を彷徨っています！(猶予${m[2]}ターン)`
+  },
+
+  // 💀 [사경 위기] 엄호 중
+  {
+    pattern: /^💀\s*\[사경 위기\]\s*엄호 중 치명상을 입은\s*(.+?)\s*대원이 사경을 헤맵니다!\s*\(유예\s*(\d+)턴\)/i,
+    en: m => `💀 [Death's Door] Suffering a fatal wound while covering an ally, ${trEntity(m[1].trim(), 'en')} is at Death's Door! (${m[2]} turns grace)`,
+    ja: m => `💀 [死線の危機] 援護中に致命傷を負った${trEntity(m[1].trim(), 'ja')}隊員が死線を彷徨っています！(猶予${m[2]}ターン)`
+  },
+
+  // ⏳🌀 [시간 초월]
+  {
+    pattern: /^⏳🌀\s*\[시간 초월\]\s*(.+?)의\s*시공 조율로 파티 전원 스킬 쿨다운\s*(\d+)턴 단축 및 마나\s*\+(\d+)\s*MP 회복!/i,
+    en: m => `⏳🌀 [Time Transcendence] Through ${trEntity(m[1].trim(), 'en')}'s spacetime tuning, party skill cooldowns reduced by ${m[2]} turn and restored +${m[3]} MP!`,
+    ja: m => `⏳🌀 [時間超越] ${trEntity(m[1].trim(), 'ja')}の時空調律によりパーティ全員のスキルクールダウン${m[2]}ターン短縮およびマナ+${m[3]} MP回復！`
+  },
+
+  // 🩸💀 [불멸의 투지]
+  {
+    pattern: /^🩸💀\s*\[불멸의 투지\]\s*(.+?)\s*대원이 멎어가는 심장 박동 속에서도 불굴의 투혼으로 적을 향해 돌진합니다!/i,
+    en: m => `🩸💀 [Undying Fighting Spirit] Even as their pulse fades, ${trEntity(m[1].trim(), 'en')} charges toward the enemy with indomitable fighting spirit!`,
+    ja: m => `🩸💀 [不滅の闘志] 止まりかける鼓動の中でも、${trEntity(m[1].trim(), 'ja')}隊員は不屈の闘魂で敵に向かって突撃します！`
+  },
+
+  // ⏳🌀 [특이점 가속]
+  {
+    pattern: /^⏳🌀\s*\[특이점 가속\]\s*시공의 특이점이 폭주하여\s*(.+?)의\s*\[(.+?)\](?:이\(가\)|이|가)\s*즉시 연속 재발동합니다!/i,
+    en: m => `⏳🌀 [Singularity Acceleration] Spacetime singularity surged, causing ${trEntity(m[1].trim(), 'en')}'s [${trEntity(m[2].trim(), 'en')}] to trigger again immediately!`,
+    ja: m => `⏳🌀 [特異点加速] 時空の特異点が暴走し、${trEntity(m[1].trim(), 'ja')}の[${trEntity(m[2].trim(), 'ja')}]が即座に連続再発動しました！`
+  },
+
+  // 🛡️ [저항(RESIST)]
+  {
+    pattern: /^🛡️\s*\[저항\(RESIST\)\]\s*(.+?)(?:이\(가\)|이|가)\s*높은 행운\(🍀(\d+)\)으로 원혼의 속박\(빙결\)을 저항했습니다!/i,
+    en: m => `🛡️ [RESIST] ${trEntity(m[1].trim(), 'en')} resisted Wraith's Binding (Freeze) with high Luck (🍀${m[2]})!`,
+    ja: m => `🛡️ [抵抗(RESIST)] ${trEntity(m[1].trim(), 'ja')}が高い幸運(🍀${m[2]})で怨魂の束縛(氷結)を抵抗しました！`
+  },
+
+  // 💥⚡ [차징 파쇄]
+  {
+    pattern: /^💥⚡\s*\[차징 파쇄\]\s*(.+?)의\s*맹공으로\s*(.+?)의\s*차징이 분쇄되었습니다!\s*\((\d+)턴간 받는 피해\s*\+(\d+)%\s*그로기 돌입 & 행운 정상화\)/i,
+    en: m => `💥⚡ [Charge Shattered] ${trEntity(m[1].trim(), 'en')}'s onslaught shattered ${trEntity(m[2].trim(), 'en')}'s charging! (Entered Groggy with +${m[4]}% damage taken for ${m[3]}T & Luck normalized)`,
+    ja: m => `💥⚡ [チャージ粉砕] ${trEntity(m[1].trim(), 'ja')}の猛攻により${trEntity(m[2].trim(), 'ja')}のチャージが粉砕されました！（${m[3]}ターン被ダメージ+${m[4]}%グロッキー突入＆幸運正常化）`
+  },
+
+  // 📡💥 [연쇄 궤도 충격파]
+  {
+    pattern: /^📡💥\s*\[연쇄 궤도 충격파\]\s*(.+?)의\s*저격 탄환이 폭발하여 주변 적 전체\((\d+)체\)에\s*([\d,]+)\s*추가 연쇄 피해를 가했습니다!/i,
+    en: m => `📡💥 [Chain Orbital Shockwave] ${trEntity(m[1].trim(), 'en')}'s sniper round exploded, dealing ${m[3]} chain damage to all surrounding enemies (${m[2]} targets)!`,
+    ja: m => `📡💥 [連鎖軌道衝撃波] ${trEntity(m[1].trim(), 'ja')}の狙撃弾が爆発し、周囲の敵全体(${m[2]}体)に${m[3]}の追加連鎖ダメージを与えました！`
+  },
+
+  // 🌌👤 [심연 환영검무]
+  {
+    pattern: /^🌌👤\s*\[심연 환영검무\]\s*(.+?)의\s*심연 환영이 적 전체의 공격력을\s*(\d+)턴간\s*(\d+)%\s*약화시켰습니다!/i,
+    en: m => `🌌👤 [Abyssal Phantom Dance] ${trEntity(m[1].trim(), 'en')}'s abyssal phantoms weakened all enemies' ATK by ${m[3]}% for ${m[2]} turns!`,
+    ja: m => `🌌👤 [深淵幻影剣舞] ${trEntity(m[1].trim(), 'ja')}の深淵幻影が敵全体の攻撃力を${m[2]}ターンの間${m[3]}%弱体化させました！`
+  },
+
+  // 🪓🩸 [혈겁의 대검풍]
+  {
+    pattern: /^🪓🩸\s*\[혈겁의 대검풍\]\s*적의 공격력을\s*(\d+)%\s*분쇄하고 체력\s*\+([\d,]+)\((\d+)%\)를\s*흡혈했습니다!/i,
+    en: m => `🪓🩸 [Bloodstorm Greatsword] Crushed enemy ATK by ${m[1]}% and drained +${m[2]} (${m[3]}%) HP!`,
+    ja: m => `🪓🩸 [血劫の大剣風] 敵の攻撃力を${m[1]}%粉砕し、HP +${m[2]}(${m[3]}%)を吸血回復しました！`
+  },
+
+  // ⚡💥 [오메가 펄스포]
+  {
+    pattern: /^⚡💥\s*\[오메가 펄스포\]\s*고압 플라즈마 파동으로 적 전체에\s*(\d+)턴간 취약\(받는 피해\s*(\d+)%\s*증폭\)을 부여했습니다!/i,
+    en: m => `⚡💥 [Omega Pulse Cannon] High-voltage plasma pulse inflicted Vulnerable (+${m[2]}% damage taken) on all enemies for ${m[1]} turns!`,
+    ja: m => `⚡💥 [オメガパルス砲] 高圧プラズマ波動により敵全体に${m[1]}ターンの間脆弱(被ダメージ${m[2]}%増幅)を付与しました！`
+  },
+
+  // ⚖️✨ [성스러운 단죄]
+  {
+    pattern: /^⚖️✨\s*\[성스러운 단죄\]\s*가한 피해\(([\d,]+)\)의\s*100%를\s*(.+?)에게\s*즉시 신성 치유로 부여했습니다!/i,
+    en: m => `⚖️✨ [Sacred Condemnation] Granted 100% of damage dealt (${m[1]}) to ${trEntity(m[2].trim(), 'en')} as instant holy healing!`,
+    ja: m => `⚖️✨ [聖なる断罪] 与えたダメージ(${m[1]})の100%を${trEntity(m[2].trim(), 'ja')}に即座に神聖治癒として付与しました！`
+  },
+
+  // 🌀🗡️ [차원 단절]
+  {
+    pattern: /^🌀🗡️\s*\[차원 단절\]\s*공허의 차원 참격이 모든 방어를 관통하며 적 전체에\s*(\d+)턴간 치명적 출혈을 새겼습니다!/i,
+    en: m => `🌀🗡️ [Dimensional Severance] Void dimension slash penetrated all defenses, inflicting deadly Bleed on all enemies for ${m[1]} turns!`,
+    ja: m => `🌀🗡️ [次元断絶] 虚無の次元斬撃がすべての防御を貫通し、敵全体に${m[1]}ターンの間致命的な出血を刻みました！`
+  },
+
+  // 🪐💥 [빅뱅 크로노스]
+  {
+    pattern: /^🪐💥\s*\[빅뱅 크로노스\]\s*시공간의 특이점 폭발로 적 전체에\s*(\d+)턴간 화상과 절대 기절\(행동 불능\)을 부여했습니다!/i,
+    en: m => `🪐💥 [Big Bang Chronos] Spacetime singularity explosion inflicted Burn and Absolute Stun (Incapacitated) on all enemies for ${m[1]} turns!`,
+    ja: m => `🪐💥 [ビッグバン・クロノス] 時空間の特異点爆発により、敵全体に${m[1]}ターンの間火傷と絶対気絶(行動不能)を付与しました！`
+  },
+
+  // 🕊️⚡ [창공의 대심판]
+  {
+    pattern: /^🕊️⚡\s*\[창공의 대심판\]\s*신성 심판의 빛이 방출되어 쓰러진 아군을 소생시키고 가한 피해\(([\d,]+)\)만큼 전원을 치유했습니다!/i,
+    en: m => `🕊️⚡ [Sky's Grand Judgment] Holy judgment light erupted, reviving fallen allies and healing everyone for damage dealt (${m[1]})!`,
+    ja: m => `🕊️⚡ [蒼空の大審判] 神聖審判の光が放たれ、倒れた味方を蘇生し与えたダメージ(${m[1]})分全員を治癒しました！`
+  },
+
+  // 🩸🚩 [피의 전술]
+  {
+    pattern: /^🩸🚩\s*\[피의 전술\]\s*적 전체 방어력을\s*(\d+)턴간\s*(\d+)%\s*분쇄하고\s*(\d+)턴간 파티 전원에게\s*(\d+)%\s*흡혈 태세를 부여했습니다!/i,
+    en: m => `🩸🚩 [Blood Tactics] Crushed all enemies' DEF by ${m[2]}% for ${m[1]}T and granted ${m[4]}% Life Steal stance to party for ${m[3]}T!`,
+    ja: m => `🩸🚩 [血の戦術] 敵全体の防御力を${m[1]}ターン${m[2]}%粉砕し、${m[3]}ターンの間パーティ全員に${m[4]}%吸血態勢を付与しました！`
+  },
+
+  // 🛰️💥 [궤도 섬멸 폭격]
+  {
+    pattern: /^🛰️💥\s*\[궤도 섬멸 폭격\]\s*정밀 저격에 이어 궤도 함포 융단 폭격이 전장을 강타하여 적 전체에 궤멸적 폭발을 일으켰습니다!/i,
+    en: () => `🛰️💥 [Orbital Annihilation Bombardment] Precision sniping followed by orbital battery carpet bombing struck the battlefield, causing catastrophic devastation to all enemies!`,
+    ja: () => `🛰️💥 [軌道殲滅爆撃] 精密狙撃に続き軌道艦砲の絨毯爆撃が戦場を直撃し、敵全体に壊滅的な爆発を引き起こしました！`
+  },
+
+  // 🩸🕊️ [기적의 소생]
+  {
+    pattern: /^🩸🕊️\s*\[기적의 소생\]\s*쓰러졌던\s*(.+?)(?:이\(가\)|이|가)\s*기적처럼\s*HP\s*([\d,]+)\s*\((\d+)%\)로\s*부활했습니다!/i,
+    en: m => `🩸🕊️ [Miraculous Revival] Fallen ${trEntity(m[1].trim(), 'en')} miraculously revived with HP ${m[2]} (${m[3]}%)!`,
+    ja: m => `🩸🕊️ [奇跡の蘇生] 倒れていた${trEntity(m[1].trim(), 'ja')}が奇跡のようにHP ${m[2]} (${m[3]}%)で蘇生しました！`
+  },
+
+  // ✨⚔️ [기적의 소생: 신성 심판] 개인
+  {
+    pattern: /^✨⚔️\s*\[기적의 소생:\s*신성 심판\]\s*(.+?)의\s*소생 체력\(\+([\d,]+)\)만큼 성스러운 빛이 폭발하여 적 전체에게\s*([\d,]+)의 신성 피해를 입혔습니다!/i,
+    en: m => `✨⚔️ [Miraculous Revival: Divine Judgment] Holy light exploded equal to ${trEntity(m[1].trim(), 'en')}'s revived HP (+${m[2]}), dealing ${m[3]} holy damage to all enemies!`,
+    ja: m => `✨⚔️ [奇跡の蘇生: 神聖審判] ${trEntity(m[1].trim(), 'ja')}の蘇生HP(+${m[2]})と同等の聖なる光が炸裂し、敵全体に${m[3]}の神聖ダメージを与えました！`
+  },
+
+  // ✨⚔️ [기적의 소생: 신성 심판] 파티 평균
+  {
+    pattern: /^✨⚔️\s*\[기적의 소생:\s*신성 심판\]\s*파티 평균 치유량\(\+([\d,]+)\)에 상응하는 신성한 성광이 방출되어 적 전체에게\s*([\d,]+)의 신성 피해를 입혔습니다!/i,
+    en: m => `✨⚔️ [Miraculous Revival: Divine Judgment] Holy light radiating equal to party average healing (+${m[1]}) dealt ${m[2]} holy damage to all enemies!`,
+    ja: m => `✨⚔️ [奇跡の蘇生: 神聖審判] パーティ平均治癒量(+${m[1]})に相当する神聖な光が放たれ、敵全体に${m[2]}の神聖ダメージを与えました！`
+  },
+
+  // 🛡️✨ [세라핌의 가호]
+  {
+    pattern: /^🛡️✨\s*\[세라핌의 가호\]\s*(\d+)턴간 아군 전체의 방어력이\s*\+(\d+)%\s*증폭되었습니다!/i,
+    en: m => `🛡️✨ [Seraphim's Protection] All allies' DEF amplified by +${m[2]}% for ${m[1]} turns!`,
+    ja: m => `🛡️✨ [セラフィムの加護] ${m[1]}ターンの間味方全体の防御力が+${m[2]}%増幅されました！`
+  },
+
+  // 🛡️⚔️ [아발론]
+  {
+    pattern: /^🛡️⚔️\s*\[아발론\]\s*(.+?)(?:이\(가\)|이|가)\s*파티 전체에 전설의 성벽\(최대 HP\s*(\d+)%\s*보호막\)을 치고\s*(\d+)턴간\s*(\d+)%\s*상시 반격 태세를 전개했습니다!/i,
+    en: m => `🛡️⚔️ [Avalon] ${trEntity(m[1].trim(), 'en')} raised legendary ramparts (Max HP ${m[2]}% barrier) for the entire party and engaged in ${m[3]} turns of ${m[4]}% counter stance!`,
+    ja: m => `🛡️⚔️ [アヴァロン] ${trEntity(m[1].trim(), 'ja')}がパーティ全体に伝説の城壁(最大HP ${m[2]}%シールド)を展開し、${m[3]}ターンの間${m[4]}%常時反撃態勢を展開しました！`
+  },
+
+  // ⏳🌌 [시간 가속 왜곡]
+  {
+    pattern: /^⏳🌌\s*\[시간 가속 왜곡\]\s*아군 전체 마나\s*\+([\d,]+)\s*MP 회복 및 모든 스킬 쿨다운을\s*(\d+)턴 즉시 단축했습니다!/i,
+    en: m => `⏳🌌 [Time Acceleration Warp] Restored +${m[1]} MP to all allies and reduced all skill cooldowns by ${m[2]} turns immediately!`,
+    ja: m => `⏳🌌 [時間加速歪曲] 味方全員のマナ+${m[1]} MP回復および全スキルクールダウンを${m[2]}ターン即時短縮しました！`
+  },
+
+  // 🛡️✨ [신성 수호진]
+  {
+    pattern: /^🛡️✨\s*\[신성 수호진\]\s*(.+?)에게\s*최대\s*체력\s*(\d+)%\s*\((?:🛡️?\s*)?([\d,]+)\)\s*보호막을\s*전개했습니다!/i,
+    en: m => `🛡️✨ [Divine Ward Array] Deployed a ${m[2]}% max HP (🛡️${m[3]}) barrier to ${trEntity(m[1].trim(), 'en')}!`,
+    ja: m => `🛡️✨ [神聖守護陣] ${trEntity(m[1].trim(), 'ja')}に最大HP ${m[2]}% (🛡️${m[3]})の障壁を展開しました！`
+  },
+
+  // ✝️✨ [빛과 징벌의 조화]
+  {
+    pattern: /^✝️✨\s*\[빛과 징벌의 조화\]\s*(.+?)의\s*심판의 빛이 파티 전체에 닿아 각각 체력\s*\+(\d+)\s*회복!/i,
+    en: m => `✝️✨ [Harmony of Light & Retribution] ${trEntity(m[1].trim(), 'en')}'s radiant judgment reached the entire party, restoring +${m[2]} HP each!`,
+    ja: m => `✝️✨ [光と懲罰の調和] ${trEntity(m[1].trim(), 'ja')}の審判の光がパーティ全体に届き、それぞれHP+${m[2]}回復！`
+  },
+
+  // 🔥⚡ [상대 FEVER 폭발!]
+  {
+    pattern: /^🔥⚡\s*\[상대 FEVER 폭발!\]\s*(.+?)(?:이\(가\)|이|가)\s*적 전술 모멘텀 FEVER를 방출하여 극대 피해를 가합니다!/i,
+    en: m => `🔥⚡ [Opponent FEVER Burst!] ${trEntity(m[1].trim(), 'en')} unleashed Tactical Momentum FEVER, dealing massive damage!`,
+    ja: m => `🔥⚡ [相手FEVER爆発！] ${trEntity(m[1].trim(), 'ja')}が戦術モメンタムFEVERを放出し極大ダメージを与えます！`
+  },
+
+  // 💥⚠️ [차징 완료!]
+  {
+    pattern: /^💥⚠️\s*\[차징 완료!\]\s*(.+?)(?:이\(가\)|이|가)\s*응축된 힘을 폭발시키며\s*\[(.+?)\](?:을\(를\)|을|를)\s*방출합니다!\s*\(확정 치명타 & 방어 관통\s*(\d+)%,\s*행운 정상화\)/i,
+    en: m => `💥⚠️ [Charging Complete!] ${trEntity(m[1].trim(), 'en')} unleashed condensed power, releasing [${trEntity(m[2].trim(), 'en')}]! (Guaranteed Critical & ${m[3]}% DEF Pierce, Luck normalized)`,
+    ja: m => `💥⚠️ [チャージ完了！] ${trEntity(m[1].trim(), 'ja')}が凝縮された力を爆発させ[${trEntity(m[2].trim(), 'ja')}]を放ちます！（確定会心＆防御貫通${m[3]}%、幸運正常化）`
+  },
+
+  // ⚠️ [위기 경고]
+  {
+    pattern: /^⚠️\s*\[위기 경고\]\s*(.+?)(?:이\(가\)|이|가)\s*강력한 일격\s*\[(.+?)\]\s*시전을 위해 힘을 모으기 시작합니다!\s*\(행운\s*\+(\d+)%\s*상승으로 상태이상 저항력 강화:\s*🍀(\d+)→(\d+),\s*차징 게이지는 받는 피해의\s*(\d+)%만 적용\)/i,
+    en: m => `⚠️ [Crisis Alert] ${trEntity(m[1].trim(), 'en')} gathers strength to unleash a devastating blow [${trEntity(m[2].trim(), 'en')}]! (Luck +${m[3]}% enhances status resistance: 🍀${m[4]}→${m[5]}, Charge gauge takes only ${m[6]}% damage)`,
+    ja: m => `⚠️ [危機警告] ${trEntity(m[1].trim(), 'ja')}が強力な一撃[${trEntity(m[2].trim(), 'ja')}]の詠唱のため力を溜め始めます！（幸運+${m[3]}%で状態異常耐性強化: 🍀${m[4]}→${m[5]}、チャージゲージは被ダメージの${m[6]}%のみ適用）`
+  },
+
+  // 🕯️✨ [망령의 결속]
+  {
+    pattern: /^🕯️✨\s*\[망령의 결속\]\s*영혼 등대의 불사의 등불이 반응하여 사경에 빠진\s*(.+?)\s*대원을 즉시 소생시켰습니다!\s*\(HP\s*(\d+)%\s*회복\)/i,
+    en: m => `🕯️✨ [Specter's Bond] Soul Lighthouse's Immortal Lantern reacted, instantly reviving fallen ${trEntity(m[1].trim(), 'en')}! (Restored ${m[2]}% HP)`,
+    ja: m => `🕯️✨ [亡霊の結束] 魂の灯台の不死の灯火が反応し、死線に陥った${trEntity(m[1].trim(), 'ja')}隊員を即座に蘇生させました！（HP ${m[2]}%回復）`
+  },
+
+  // 🏃💨 [추격전 탈출 성공!]
+  {
+    pattern: /^🏃💨\s*\[추격전 탈출 성공!\]\s*추격해온 마물들을 뿌리치고 성채로 안전하게 탈출했습니다!\s*\(전리품\s*\[(\d+)개\]\s*유실,\s*\[(\d+)개\]\s*보존\)/i,
+    en: m => `🏃💨 [Pursuit Escape Success!] Shook off pursuing monsters and safely escaped to Citadel! (Loot: [${m[1]}] lost, [${m[2]}] preserved)`,
+    ja: m => `🏃💨 [追撃戦脱出成功！] 追撃してきた魔物を振り切り城塞へ安全に脱出しました！（戦利品 [${m[1]}個] 遺失、[${m[2]}個] 保存）`
+  },
+
+  // 🏃⚔️ [추격 마물 격파 후 귀환!]
+  {
+    pattern: /^🏃⚔️\s*\[추격 마물 격파 후 귀환!\]\s*도주로를 막아서던 추격대를 사투 끝에 물리치고 성채로 안전하게 귀환했습니다!\s*\(긴급 도주 중 전리품\s*\[(\d+)개\]\s*유실,\s*\[(\d+)개\]\s*보존\)/i,
+    en: m => `🏃⚔️ [Pursuer Defeated & Returned!] Fought through the pursuers blocking the escape route and safely returned to Citadel! (Emergency escape loot: [${m[1]}] lost, [${m[2]}] preserved)`,
+    ja: m => `🏃⚔️ [追撃魔物撃破後帰還！] 退路を塞ぐ追撃隊を死闘の末に打ち破り、城塞へ無事帰還しました！（緊急逃走中 戦利品 [${m[1]}個] 遺失、[${m[2]}個] 保存）`
+  },
+
+  // ⚠️ [계열 부조화]
+  {
+    pattern: /^⚠️\s*\[계열 부조화\]\s*(.+?)의\s*클래스와 맞지 않는\s*\[(.+?)\]\s*스킬로 인해\s*(?:지원\/치유 효율이|위력이)\s*(\d+)%\s*반감됩니다!/i,
+    en: m => `⚠️ [Affinic Dissonance] Due to [${trEntity(m[2].trim(), 'en')}] not matching ${trEntity(m[1].trim(), 'en')}'s class, support/healing efficiency is halved by ${m[3]}%!`,
+    ja: m => `⚠️ [系列不調和] ${trEntity(m[1].trim(), 'ja')}のクラスと一致しない[${trEntity(m[2].trim(), 'ja')}]スキルのため、支援/治癒効率が${m[3]}%半減します！`
+  },
+
   // ⭐ 경험치 획득 및 제단/추모 헌화 보너스 패턴 (전투/이벤트 후)
   {
     pattern: /^⭐\s*\[EXP\]\s*(.+?)\s*\+(\d+(?:,\d+)?)\s*EXP((?:\s*\([^)]+\))*)\s*\((\d+)\/(\d+|Infinity)\)/i,

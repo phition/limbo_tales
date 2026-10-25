@@ -123,7 +123,18 @@ function copyRecursive(srcDir, destDir) {
       fs.mkdirSync(destPath, { recursive: true });
       copyRecursive(srcPath, destPath);
     } else if (entry.isFile()) {
-      fs.copyFileSync(srcPath, destPath);
+      try {
+        if (fs.existsSync(destPath)) {
+          const srcStat = fs.statSync(srcPath);
+          const destStat = fs.statSync(destPath);
+          if (srcStat.size === destStat.size && Math.abs(srcStat.mtimeMs - destStat.mtimeMs) < 1000) {
+            continue; // Already identical, avoid locked overwrite in OneDrive
+          }
+        }
+        fs.copyFileSync(srcPath, destPath);
+      } catch (err) {
+        console.warn(`[sync-custom-assets] Warning: Could not copy ${srcPath} -> ${destPath}:`, err.message);
+      }
     }
   }
 }
