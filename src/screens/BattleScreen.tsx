@@ -8167,9 +8167,9 @@ export const BattleScreen: React.FC = () => {
             <div className={`text-2xl font-bold font-cinzel mb-2 ${battleResult === 'win' ? (isBossBattle ? 'text-[#e0b0ff]' : 'text-[#66bb6a]') : 'text-[#ef5350]'}`}>
               {battleResult === 'win'
                 ? (gm.isEmergencyEscapeBattle
-                    ? '🏃💥 추격대 격파 대승리!'
-                    : (isBossBattle ? (dict.battle.boss_victory || '👑 보스 토벌 대승리!') : (dict.battle.victory || '🎉 전투 승리!')))
-                : (dict.battle.defeat || '💀 전투 패배...')}
+                    ? tr('🏃💥 추격대 격파 대승리!')
+                    : (isBossBattle ? (dict.battle.boss_victory || tr('👑 보스 토벌 대승리!')) : (dict.battle.victory || tr('🎉 전투 승리!'))))
+                : (dict.battle.defeat || tr('💀 전투 패배...'))}
             </div>
             {battleResult === 'win' && (
               <div className="flex flex-col gap-2 my-2.5 text-left">
@@ -8309,11 +8309,11 @@ export const BattleScreen: React.FC = () => {
                 label={
                   battleResult === 'win'
                     ? (gm.isEmergencyEscapeBattle
-                        ? (gm.pendingLoot.length > 0 ? `📦 전리품 정리 (${gm.pendingLoot.length})` : '🏃 추격대 격파 후 성채로 귀환')
+                        ? (gm.pendingLoot.length > 0 ? tr(`📦 전리품 정리 (${gm.pendingLoot.length})`) : tr('🏃 추격대 격파 후 성채로 귀환'))
                         : (gm.pendingLoot.length > 0
-                            ? `📦 전리품 정리 (${gm.pendingLoot.length})`
-                            : (isBossBattle ? '🌀 포탈을 타고 계속 탐험' : '탐험 계속하기')))
-                    : '성채로 귀환'
+                            ? tr(`📦 전리품 정리 (${gm.pendingLoot.length})`)
+                            : (isBossBattle ? tr('🌀 포탈을 타고 계속 탐험') : tr('탐험 계속하기'))))
+                    : tr('성채로 귀환')
                 } 
                 size="lg" 
                 variant={battleResult === 'win' && gm.pendingLoot.length > 0 ? 'success' : (isBossBattle ? 'primary' : 'primary')}
