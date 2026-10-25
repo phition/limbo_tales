@@ -1736,7 +1736,7 @@ export const BattleScreen: React.FC = () => {
       if (!Array.isArray(h.statusEffects)) h.statusEffects = [];
     });
 
-    // 🌀 전투 스냅샷 복원 체크 (3분 이내 복귀 하이브리드 세션)
+    // 🌀 전투 스냅샷 복원 체크 (10분 이내 복귀 하이브리드 세션)
     const battleSnap = gm.getBattleSnapshot();
     if (
       battleSnap &&

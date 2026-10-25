@@ -22,16 +22,16 @@ export const registerBackButtonHandler = (handler: BackButtonCallback): (() => v
 
 export const BACKGROUND_TIMESTAMP_KEY = 'limbo_bg_timestamp';
 export const BACKGROUND_IN_DUNGEON_KEY = 'limbo_bg_in_dungeon';
-export const BACKGROUND_TIMEOUT_MS = 3 * 60 * 1000; // 3분 (180,000ms)
+export const BACKGROUND_TIMEOUT_MS = 10 * 60 * 1000; // 10분 (600,000ms)
 
 let bgTimerId: ReturnType<typeof setTimeout> | null = null;
 let isInitialized = false;
 
 /**
- * ⏱️ 백그라운드 3분 초과 시 앱 종료 및 던전 전멸 처리 핸들러
+ * ⏱️ 백그라운드 10분 초과 시 앱 종료 및 던전 전멸 처리 핸들러
  */
 export const handleBackgroundTimeout = (gm: GameManager): void => {
-  console.log('[NativeBridge] 백그라운드 3분 초과: 앱 자동 종료 및 던전 전멸 처리 실행');
+  console.log('[NativeBridge] 백그라운드 10분 초과: 앱 자동 종료 및 던전 전멸 처리 실행');
   const dungeonSession = gm.getDungeonSession();
   const wasInDungeon =
     localStorage.getItem(BACKGROUND_IN_DUNGEON_KEY) === 'true' ||
@@ -40,7 +40,7 @@ export const handleBackgroundTimeout = (gm: GameManager): void => {
     gm.currentScreen === 'battle';
 
   if (wasInDungeon) {
-    gm.resolvePartyWipeout('심연 백그라운드 장기 이탈 (3분 초과 전멸)');
+    gm.resolvePartyWipeout('심연 백그라운드 장기 이탈 (10분 초과 전멸)');
   }
 
   gm.clearDungeonSession();
@@ -53,7 +53,7 @@ export const handleBackgroundTimeout = (gm: GameManager): void => {
 };
 
 /**
- * 🌟 앱 구동 또는 포그라운드 복귀 시 이전 백그라운드 3분 초과 방치 세션 감지 및 하이브리드 복원/전멸 처리
+ * 🌟 앱 구동 또는 포그라운드 복귀 시 이전 백그라운드 10분 초과 방치 세션 감지 및 하이브리드 복원/전멸 처리
  * @returns true if restored to dungeon/battle, false otherwise
  */
 export const checkPendingBackgroundTimeout = (gm: GameManager): boolean => {
@@ -75,15 +75,15 @@ export const checkPendingBackgroundTimeout = (gm: GameManager): boolean => {
     if (bgTime > 0) {
       const elapsed = now - bgTime;
       if (elapsed >= BACKGROUND_TIMEOUT_MS) {
-        console.log(`[NativeBridge] 이전 백그라운드 3분 초과 방치 감지 (${Math.round(elapsed / 1000)}초 경과) -> 전멸 처리`);
-        gm.resolvePartyWipeout('심연 백그라운드 장기 이탈 (3분 초과 전멸)');
+        console.log(`[NativeBridge] 이전 백그라운드 10분 초과 방치 감지 (${Math.round(elapsed / 1000)}초 경과) -> 전멸 처리`);
+        gm.resolvePartyWipeout('심연 백그라운드 장기 이탈 (10분 초과 전멸)');
         gm.clearDungeonSession();
         localStorage.removeItem(BACKGROUND_TIMESTAMP_KEY);
         localStorage.removeItem(BACKGROUND_IN_DUNGEON_KEY);
         return false;
       } else {
-        // 3분 이내 복귀: 던전/전투 세션 스냅샷 복원!
-        console.log(`[NativeBridge] 3분 이내 복귀 감지 (${Math.round(elapsed / 1000)}초 경과) -> 던전/전투 하이브리드 세션 복원`);
+        // 10분 이내 복귀: 던전/전투 세션 스냅샷 복원!
+        console.log(`[NativeBridge] 10분 이내 복귀 감지 (${Math.round(elapsed / 1000)}초 경과) -> 던전/전투 하이브리드 세션 복원`);
         localStorage.removeItem(BACKGROUND_TIMESTAMP_KEY);
         localStorage.removeItem(BACKGROUND_IN_DUNGEON_KEY);
 
@@ -177,9 +177,9 @@ const onAppResumeForeground = () => {
     const bgTime = Number(bgTimeStr);
     const elapsed = Date.now() - bgTime;
     if (elapsed >= BACKGROUND_TIMEOUT_MS) {
-      console.log(`[NativeBridge] 백그라운드 복귀 감지: ${Math.round(elapsed / 1000)}초 경과 (3분 초과) -> 전멸 처리 및 종료`);
+      console.log(`[NativeBridge] 백그라운드 복귀 감지: ${Math.round(elapsed / 1000)}초 경과 (10분 초과) -> 전멸 처리 및 종료`);
       if (wasInDungeon) {
-        gm.resolvePartyWipeout('심연 백그라운드 장기 이탈 (3분 초과 전멸)');
+        gm.resolvePartyWipeout('심연 백그라운드 장기 이탈 (10분 초과 전멸)');
       }
       gm.clearDungeonSession();
       localStorage.removeItem(BACKGROUND_TIMESTAMP_KEY);
@@ -190,7 +190,7 @@ const onAppResumeForeground = () => {
         return;
       }
     } else {
-      console.log(`[NativeBridge] 3분 이내 복귀 (${Math.round(elapsed / 1000)}초) -> 세션 유지`);
+      console.log(`[NativeBridge] 10분 이내 복귀 (${Math.round(elapsed / 1000)}초) -> 세션 유지`);
       localStorage.removeItem(BACKGROUND_TIMESTAMP_KEY);
       localStorage.removeItem(BACKGROUND_IN_DUNGEON_KEY);
     }
@@ -229,7 +229,7 @@ let isPopstateInitialized = false;
  * 1. 상태바 스타일 적용
  * 2. 화면 세로 방향 고정
  * 3. 하드웨어/브라우저 뒤로가기 버튼 이벤트 리스너 연결
- * 4. 백그라운드 3분 타이머 감지 및 BGM 정지, 3분 경과 시 앱 종료 & 던전 전멸 판정
+ * 4. 백그라운드 10분 타이머 감지 및 BGM 정지, 10분 경과 시 앱 종료 & 던전 전멸 판정
  */
 export const initNativeBridge = async (onDefaultExit?: () => void): Promise<void> => {
   if (isInitialized) return;
