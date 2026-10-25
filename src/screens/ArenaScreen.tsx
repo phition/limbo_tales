@@ -5369,99 +5369,13 @@ export const ArenaScreen: React.FC = () => {
                 )}
               </div>
 
-              {/* 🛡️ 3인 파티 + 1인 오퍼레이터 전술 편성 칩 (총 4인 구성) */}
-              <div className="relative z-10 my-3 w-full max-w-md px-2 animate-fade-in">
-                <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-                  {/* 1. 전열 */}
-                  {playerTeam[0] ? (
-                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/90 border border-[#3b82f6]/40 shadow-sm text-center">
-                      <span className="text-[9px] font-bold text-[#60a5fa] px-1.5 py-0.2 rounded bg-[#1e293b] mb-1">
-                        🛡️ {tr('전열')}
-                      </span>
-                      <span className="text-xl my-0.5">
-                        {CHARACTER_CLASSES[playerTeam[0].classId]?.skills?.[0]?.icon || '🛡️'}
-                      </span>
-                      <span className="text-[11px] font-bold text-white truncate max-w-full">
-                        {tr(playerTeam[0].name)}
-                      </span>
-                      <span className="text-[9px] font-mono text-[#ffd54f]">
-                        Lv.{playerTeam[0].level}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/60 border border-dashed border-[#3b82f6]/30 text-center text-[#8b9bb4] text-[10px]">
-                      🛡️ {tr('전열')}
-                    </div>
-                  )}
-
-                  {/* 2. 중열 */}
-                  {playerTeam[1] ? (
-                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/90 border border-[#10b981]/40 shadow-sm text-center">
-                      <span className="text-[9px] font-bold text-[#34d399] px-1.5 py-0.2 rounded bg-[#1e293b] mb-1">
-                        ⚔️ {tr('중열')}
-                      </span>
-                      <span className="text-xl my-0.5">
-                        {CHARACTER_CLASSES[playerTeam[1].classId]?.skills?.[0]?.icon || '⚔️'}
-                      </span>
-                      <span className="text-[11px] font-bold text-white truncate max-w-full">
-                        {tr(playerTeam[1].name)}
-                      </span>
-                      <span className="text-[9px] font-mono text-[#ffd54f]">
-                        Lv.{playerTeam[1].level}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/60 border border-dashed border-[#10b981]/30 text-center text-[#8b9bb4] text-[10px]">
-                      ⚔️ {tr('중열')}
-                    </div>
-                  )}
-
-                  {/* 3. 후열 */}
-                  {playerTeam[2] ? (
-                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/90 border border-[#a855f7]/40 shadow-sm text-center">
-                      <span className="text-[9px] font-bold text-[#c084fc] px-1.5 py-0.2 rounded bg-[#1e293b] mb-1">
-                        🏹 {tr('후열')}
-                      </span>
-                      <span className="text-xl my-0.5">
-                        {CHARACTER_CLASSES[playerTeam[2].classId]?.skills?.[0]?.icon || '🏹'}
-                      </span>
-                      <span className="text-[11px] font-bold text-white truncate max-w-full">
-                        {tr(playerTeam[2].name)}
-                      </span>
-                      <span className="text-[9px] font-mono text-[#ffd54f]">
-                        Lv.{playerTeam[2].level}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#0c1220]/60 border border-dashed border-[#a855f7]/30 text-center text-[#8b9bb4] text-[10px]">
-                      🏹 {tr('후열')}
-                    </div>
-                  )}
-
-                  {/* 4. 오퍼레이터 */}
-                  <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#1c1328]/95 border border-[#ffd54f]/60 shadow-[0_0_12px_rgba(255,213,79,0.2)] text-center ring-1 ring-[#ffd54f]/30">
-                    <span className="text-[9px] font-black text-[#ffd54f] px-1.5 py-0.2 rounded bg-[#3b2a1a] mb-1">
-                      ⚡ {tr('오퍼레이터')}
-                    </span>
-                    <span className="text-xl my-0.5">
-                      {playerLeader ? (CHARACTER_CLASSES[playerLeader.classId]?.skills?.[0]?.icon || '👑') : '👑'}
-                    </span>
-                    <span className="text-[11px] font-black text-[#ffd54f] truncate max-w-full">
-                      {playerLeader?.name ? tr(playerLeader.name) : tr('지휘관')}
-                    </span>
-                    <span className="text-[9px] font-mono text-[#ffd54f]">
-                      {playerLeader?.level ? `Lv.${playerLeader.level}` : 'Commander'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="relative z-10 mt-2 flex flex-col items-center gap-2 text-center">
+              {/* 결투장 진입 프로그레스 바 */}
+              <div className="relative z-10 mt-6 flex flex-col items-center gap-2.5 text-center animate-fade-in">
                 <div className="text-xs font-mono text-[#cbd5e1] font-bold flex items-center gap-1.5">
                   <span className="text-[#38ef7d]">✓</span>
-                  <span>{tr('3인 파티 + 1인 오퍼레이터 전술 편성 완료 · 결투장 진입 중')}</span>
+                  <span>{tr('결투 준비 완료 · 차원 결투장 진입 중...')}</span>
                 </div>
-                <div className="w-60 h-2 bg-[#141d2e] rounded-full overflow-hidden border border-[#23334d]">
+                <div className="w-64 h-2 bg-[#141d2e] rounded-full overflow-hidden border border-[#23334d] shadow-[0_0_12px_rgba(0,210,255,0.2)]">
                   <div
                     className="h-full bg-gradient-to-r from-[#00d2ff] via-[#ffd54f] to-[#ff416c] transition-all duration-700"
                     style={{
