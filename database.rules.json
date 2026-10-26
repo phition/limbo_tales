@@ -53,6 +53,14 @@
     "encyclopedia_data": {
       ".read": true,
       ".write": true
+    },
+    "app_version": {
+      ".read": true,
+      ".write": true
+    },
+    "system_config": {
+      ".read": true,
+      ".write": true
     }
   }
 }

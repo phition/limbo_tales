@@ -107,8 +107,12 @@ export class AppVersionService {
           const val = snapshot2.val();
           return this.normalizeRemoteInfo(val);
         }
-      } catch (err) {
-        console.warn('[AppVersionService] Firebase version check skipped or failed:', err);
+      } catch (err: any) {
+        if (err?.code === 'PERMISSION_DENIED' || err?.message?.includes('permission_denied') || err?.message?.includes('Permission denied')) {
+          console.info('[AppVersionService] ℹ️ Firebase app_version 미연결 또는 권한 제한 -> 정적 version.json fallback 사용');
+        } else {
+          console.warn('[AppVersionService] Firebase version check skipped or failed:', err);
+        }
       }
     }
 
