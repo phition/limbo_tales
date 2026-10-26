@@ -20,6 +20,8 @@ import { BattleScreen } from './screens/BattleScreen';
 import { ArenaScreen } from './screens/ArenaScreen';
 import { GameDialogModal } from './components/GameDialogModal';
 import { GoogleAdModal } from './components/GoogleAdModal';
+import { AppUpdateModal } from './components/AppUpdateModal';
+import { AppVersionService, VersionCheckResult } from './services/AppVersionService';
 import { gameConfirm } from './services/DialogService';
 import { I18nService } from './i18n/I18nService';
 
@@ -106,6 +108,58 @@ export const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
+
+  // 📱 모바일/클라이언트 앱 버전 체크 및 업데이트 모달 상태
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [updateCheckResult, setUpdateCheckResult] = useState<VersionCheckResult | null>(null);
+
+  // 📱 앱 구동 시 최신 버전 확인 (자동)
+  useEffect(() => {
+    let isMounted = true;
+    const checkAppVersion = async () => {
+      try {
+        const vs = AppVersionService.getInstance();
+        const res = await vs.checkUpdate();
+        if (!isMounted) return;
+        setUpdateCheckResult(res);
+
+        if (res.hasUpdate) {
+          // 강제 업데이트이거나 오늘 하루 건너뛰기가 설정되지 않은 경우 모달 팝업
+          if (res.isForceUpdate || !vs.isDismissedForToday()) {
+            setUpdateModalOpen(true);
+          }
+        }
+      } catch (err) {
+        console.warn('[App] App version check failed:', err);
+      }
+    };
+
+    // UI 및 Auth 안정화 후 1.5초 뒤 백그라운드 체크
+    const timer = setTimeout(checkAppVersion, 1500);
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
+  }, []);
+
+  // 📱 시스템 메뉴 또는 인게임 수동 버전 확인 이벤트 구독
+  useEffect(() => {
+    const handleManualVersionCheck = async () => {
+      const vs = AppVersionService.getInstance();
+      vs.resetDismiss();
+      const res = await vs.checkUpdate();
+      setUpdateCheckResult(res);
+      if (res.hasUpdate) {
+        setUpdateModalOpen(true);
+      } else {
+        gm.addLog(`[버전 확인] 현재 최신 버전(v${res.currentVersion})을 이용 중입니다.`, 'system');
+      }
+    };
+    gm.on('checkAppVersion', handleManualVersionCheck);
+    return () => {
+      gm.off('checkAppVersion', handleManualVersionCheck);
+    };
+  }, [gm]);
 
   // 🌐 전역 다국어 DOM 번역 엔진 초기화
   useEffect(() => {
@@ -610,6 +664,15 @@ export const App: React.FC = () => {
 
       {/* 🎬 전역 Google AdMob / 보상형 광고 재생 모달 */}
       <GoogleAdModal />
+
+      {/* 📱 모바일 앱 구글 플레이 스토어 버전 업데이트 알림 모달 */}
+      <AppUpdateModal
+        open={updateModalOpen}
+        isForceUpdate={updateCheckResult?.isForceUpdate || false}
+        currentVersion={updateCheckResult?.currentVersion || '1.1.2'}
+        remoteInfo={updateCheckResult?.remoteInfo || null}
+        onClose={() => setUpdateModalOpen(false)}
+      />
     </div>
   );
 };

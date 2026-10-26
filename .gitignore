@@ -48,3 +48,10 @@ Thumbs.db
 *.zip
 *.tar.gz
 *.rar
+
+# Android Release build artifacts
+android/app/release/
+*.aab
+scripts/patch-fixes.cjs
+scripts/dedupe-i18n.cjs
+scripts/check-dups.cjs

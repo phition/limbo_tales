@@ -1,0 +1,12 @@
+{
+  "latestVersion": "1.1.2",
+  "latestVersionCode": 24,
+  "minVersion": "1.1.0",
+  "minVersionCode": 22,
+  "releaseDate": "2026-10-26",
+  "title": "Project: Limbo Tales 정식 업데이트",
+  "releaseNotes": "• 탐험 & 이벤트 시스템 대폭 개편 (도플갱어, 추격전, 이전 지휘관 조우)\n• 전투 메커니즘 & 치명타 밸런스 정밀 조정\n• 마물 드랍 마도서 및 스킬 에셋 100% 매핑 완료\n• 모바일 성능 최적화 및 안정성 개선",
+  "forceUpdate": false,
+  "marketUrl": "market://details?id=com.limbo.tales",
+  "webUrl": "https://play.google.com/store/apps/details?id=com.limbo.tales"
+}

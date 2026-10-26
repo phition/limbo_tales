@@ -13,6 +13,7 @@
  */
 
 import { NPC_NAME_TO_ID, NPC_ID_TO_NAME } from '../data/npcs';
+import { BOSS_BOOK_ALIAS_MAP } from '../utils/iconMap';
 
 export const CLASS_GENDER_PORTRAITS: Record<string, { male: string; female: string }> = {
   squire: {
@@ -640,7 +641,12 @@ export class CustomAssetService {
     // 1. 직접 키 일치
     if (this.config.iconOverrides[key]) return this.config.iconOverrides[key];
 
-    // 1-0. 촉매/보급품 묶음 팩 키 자동 호환 (e.g. 'enhanced_torch_pack_10' -> 'enhanced_torch', 'prefix_stone_pack_10' -> 'prefix_stone')
+    // 1-0. 보스 마도서/스킬 별칭 매핑 (e.g. book_boss_colossus_core <-> book_m_boss_floor_1)
+    if (BOSS_BOOK_ALIAS_MAP[key] && this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[key]]) {
+      return this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[key]];
+    }
+
+    // 1-0-1. 촉매/보급품 묶음 팩 키 자동 호환 (e.g. 'enhanced_torch_pack_10' -> 'enhanced_torch', 'prefix_stone_pack_10' -> 'prefix_stone')
     const packBaseKey = key.replace(/_pack(?:_\d+)?$/, '');
     if (packBaseKey !== key) {
       if (this.config.iconOverrides[packBaseKey]) return this.config.iconOverrides[packBaseKey];
@@ -662,17 +668,31 @@ export class CustomAssetService {
     if (key.startsWith('skill_')) {
       const bookKey = key.replace(/^skill_/, 'book_');
       if (this.config.iconOverrides[bookKey]) return this.config.iconOverrides[bookKey];
+      if (BOSS_BOOK_ALIAS_MAP[bookKey] && this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[bookKey]]) {
+        return this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[bookKey]];
+      }
       const bareKey = key.replace(/^skill_/, '');
       if (this.config.iconOverrides[bareKey]) return this.config.iconOverrides[bareKey];
     } else if (key.startsWith('book_')) {
       const skillKey = key.replace(/^book_/, 'skill_');
       if (this.config.iconOverrides[skillKey]) return this.config.iconOverrides[skillKey];
+      if (BOSS_BOOK_ALIAS_MAP[skillKey] && this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[skillKey]]) {
+        return this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[skillKey]];
+      }
       const bareKey = key.replace(/^book_/, '');
       if (this.config.iconOverrides[bareKey]) return this.config.iconOverrides[bareKey];
     } else {
       // 접두사 없는 스킬 ID (e.g. 'squire_strike') -> 'skill_' / 'book_' 매핑도 탐색
       if (this.config.iconOverrides[`skill_${key}`]) return this.config.iconOverrides[`skill_${key}`];
       if (this.config.iconOverrides[`book_${key}`]) return this.config.iconOverrides[`book_${key}`];
+      const bossSkillKey = `skill_${key}`;
+      if (BOSS_BOOK_ALIAS_MAP[bossSkillKey] && this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[bossSkillKey]]) {
+        return this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[bossSkillKey]];
+      }
+      const bossBookKey = `book_${key}`;
+      if (BOSS_BOOK_ALIAS_MAP[bossBookKey] && this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[bossBookKey]]) {
+        return this.config.iconOverrides[BOSS_BOOK_ALIAS_MAP[bossBookKey]];
+      }
     }
 
     // 3. 프리픽스 제거 키 일치 (e.g. 'weapon_sword' -> 'sword')

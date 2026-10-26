@@ -249,7 +249,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
   const filteredMonsters = useMemo(() => {
     return Object.values(MONSTERS).filter((mon: MonsterData) => {
       if (!cleanSearch) return true;
-      const str = (mon.id + ' ' + mon.name + ' ' + tr(mon.name) + ' ' + mon.type + ' ' + mon.description + ' ' + tr(mon.description) + ' ' + mon.skills.map(s => s.name + ' ' + tr(s.name) + ' ' + s.description + ' ' + tr(s.description)).join(' ')).toLowerCase();
+      const str = (mon.id + ' ' + mon.name + ' ' + tr(mon.name) + ' ' + mon.type + ' ' + (mon.description || '') + ' ' + tr(mon.description || '') + ' ' + mon.skills.map(s => s.name + ' ' + tr(s.name) + ' ' + (s.description || '') + ' ' + tr(s.description || '')).join(' ')).toLowerCase();
       return str.includes(cleanSearch);
     });
   }, [cleanSearch, dataRevision]);
@@ -1370,7 +1370,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                       key={mon.id}
                       onClick={() => setDetailData({
                         title: tr(mon.name),
-                        subtitle: `Lv.${mon.level} • [${tr(MONSTER_FACTION_META[mon.faction]?.label || '마물')}] ${tr(mon.description)}`,
+                        subtitle: `Lv.${mon.level} • [${tr(MONSTER_FACTION_META[mon.faction]?.label || '마물')}] ${tr(mon.description || '')}`,
                         categoryBadge: { label: tr(badge.label), bg: badge.bg, color: badge.color, border: badge.border },
                         icon: <span className="text-3xl">{mon.type === 'boss' ? '👑' : mon.type === 'elite' ? '⭐' : '👾'}</span>,
                         content: (
@@ -1452,7 +1452,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               )}
                             </div>
                             <div className="text-[10px] text-[#8b9bb4]">
-                              Lv.{mon.level} • {tr(mon.description)}
+                              Lv.{mon.level} • {tr(mon.description || '')}
                             </div>
                           </div>
                         </div>

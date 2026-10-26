@@ -431,7 +431,6 @@ export const ICON_MAP: Record<string, IconMeta> = {
 
   // 📖 기본/전직 클래스 비전 마도서 스킬 매핑
   squire_shield_slam: { src: '/assets/custom_uploaded/icons/guard_shield_slam.png', fallback: '🛡️', label: '방패 강타' },
-  squire_strike: { src: '/assets/custom_uploaded/icons/squire_strike.png', fallback: '⚔️', label: '단련된 일격' },
   rogue_shadow_strike: { src: '/assets/custom_uploaded/icons/book_shadow_ambush.png', fallback: '🗡️', label: '그림자 베기' },
   van_charge: { src: '/assets/custom_uploaded/icons/charge.png', fallback: '💥', label: '돌파 돌격' },
   gun_quickshot: { src: '/assets/custom_uploaded/icons/book_epic_arrow_storm.png', fallback: '🔫', label: '속사' },
@@ -768,6 +767,60 @@ function getMonsterSkillFallbackIcon(skillName: string, effectType?: string): st
   return '📖';
 }
 
+export const BOSS_BOOK_ALIAS_MAP: Record<string, string> = {
+  book_boss_colossus_core: 'book_m_boss_floor_1',
+  book_m_boss_floor_1: 'book_boss_colossus_core',
+  skill_boss_colossus_core: 'skill_m_boss_floor_1',
+  skill_m_boss_floor_1: 'skill_boss_colossus_core',
+
+  book_boss_deathknight_reap: 'book_m_boss_floor_2',
+  book_m_boss_floor_2: 'book_boss_deathknight_reap',
+  skill_boss_deathknight_reap: 'skill_m_boss_floor_2',
+  skill_m_boss_floor_2: 'skill_boss_deathknight_reap',
+
+  book_boss_behemoth_eruption: 'book_m_boss_floor_3',
+  book_m_boss_floor_3: 'book_boss_behemoth_eruption',
+  skill_boss_behemoth_eruption: 'skill_m_boss_floor_3',
+  skill_m_boss_floor_3: 'skill_boss_behemoth_eruption',
+
+  book_boss_chrono_warp: 'book_m_boss_floor_4',
+  book_m_boss_floor_4: 'book_boss_chrono_warp',
+  skill_boss_chrono_warp: 'skill_m_boss_floor_4',
+  skill_m_boss_floor_4: 'skill_boss_chrono_warp',
+
+  book_boss_void_cataclysm: 'book_m_boss_floor_5',
+  book_m_boss_floor_5: 'book_boss_void_cataclysm',
+  book_m_monster_void_overlord: 'book_boss_void_cataclysm',
+  skill_boss_void_cataclysm: 'skill_m_boss_floor_5',
+  skill_m_boss_floor_5: 'skill_boss_void_cataclysm',
+  skill_m_monster_void_overlord: 'skill_boss_void_cataclysm',
+
+  book_boss_blood_monarch: 'book_m_boss_floor_6',
+  book_m_boss_floor_6: 'book_boss_blood_monarch',
+  skill_boss_blood_monarch: 'skill_m_boss_floor_6',
+  skill_m_boss_floor_6: 'skill_boss_blood_monarch',
+
+  book_boss_oblivion_scythe: 'book_m_boss_floor_7',
+  book_m_boss_floor_7: 'book_boss_oblivion_scythe',
+  skill_boss_oblivion_scythe: 'skill_m_boss_floor_7',
+  skill_m_boss_floor_7: 'skill_boss_oblivion_scythe',
+
+  book_boss_judgment_sanctum: 'book_m_boss_floor_8',
+  book_m_boss_floor_8: 'book_boss_judgment_sanctum',
+  skill_boss_judgment_sanctum: 'skill_m_boss_floor_8',
+  skill_m_boss_floor_8: 'skill_boss_judgment_sanctum',
+
+  book_boss_mirror_kaleidoscope: 'book_m_boss_floor_9',
+  book_m_boss_floor_9: 'book_boss_mirror_kaleidoscope',
+  skill_boss_mirror_kaleidoscope: 'skill_m_boss_floor_9',
+  skill_m_boss_floor_9: 'skill_boss_mirror_kaleidoscope',
+
+  book_boss_asmodeus_armageddon: 'book_m_boss_floor_10',
+  book_m_boss_floor_10: 'book_boss_asmodeus_armageddon',
+  skill_boss_asmodeus_armageddon: 'skill_m_boss_floor_10',
+  skill_m_boss_floor_10: 'skill_boss_asmodeus_armageddon',
+};
+
 Object.values(MONSTERS).forEach(m => {
   if (!m.skills || m.skills.length === 0) return;
   const cleanMonName = m.name.replace(/^\[(광폭화|호위|정예|무간의 광폭 보스)\]\s*/g, '').replace(/\s+[A-Z]$/g, '').replace(/\s+\([A-Z0-9]+\)$/g, '').trim();
@@ -794,6 +847,11 @@ Object.values(MONSTERS).forEach(m => {
     label: `[마물 스킬] ${sigSkillName} (${cleanMonName})`,
   };
 
+  // 대표 스킬 이름(한글)으로도 매핑하여 전투 컷인 및 툴팁에서 즉시 인식
+  if (!ICON_MAP[sigSkillName]) {
+    ICON_MAP[sigSkillName] = ICON_MAP[skillKey];
+  }
+
   // 2) 마물의 모든 개별 스킬 등록
   m.skills.forEach((sk, idx) => {
     const sName = (sk.name || `기술 ${idx + 1}`).trim();
@@ -801,12 +859,27 @@ Object.values(MONSTERS).forEach(m => {
     const fb = getMonsterSkillFallbackIcon(sName, sk.effectType);
     if (!ICON_MAP[indSkillKey]) {
       ICON_MAP[indSkillKey] = {
-        src: `/assets/custom_uploaded/icons/${indSkillKey}.png`,
+        src: `/assets/custom_uploaded/icons/${bookKey}.png`,
         fallback: fb,
         label: `[마물 스킬] ${cleanMonName} - ${sName}`,
       };
     }
+    if (!ICON_MAP[sName]) {
+      ICON_MAP[sName] = ICON_MAP[indSkillKey];
+    }
   });
+
+  // 3) 보스 고유 비전서 ID와 층별 보스 마도서 키 상호 호환 보장
+  if (m.rewards?.dropSkillBookId) {
+    const dBookKey = m.rewards.dropSkillBookId;
+    const dSkillKey = dBookKey.replace(/^book_/, 'skill_');
+    if (ICON_MAP[dBookKey] && !ICON_MAP[bookKey]) {
+      ICON_MAP[bookKey] = ICON_MAP[dBookKey];
+    }
+    if (ICON_MAP[dSkillKey] && !ICON_MAP[skillKey]) {
+      ICON_MAP[skillKey] = ICON_MAP[dSkillKey];
+    }
+  }
 });
 
 // 이모지 역방향 매핑 테이블

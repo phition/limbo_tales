@@ -363,7 +363,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                         {skill ? (
                           <div>
                             <div className="flex items-center gap-1.5 font-bold text-xs text-white mb-0.5">
-                              <span>{skill.icon || '⚔️'}</span>
+                              <GameIcon name={skill.id} icon={skill.icon} size={16} />
                               <span className="truncate">{tr(skill.name)}</span>
                             </div>
                             <div className="text-[10px] text-[#8b9bb4] line-clamp-2 leading-relaxed">
@@ -430,7 +430,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                             <div>
                               <div className="flex items-center justify-between mb-1">
                                 <div className="flex items-center gap-1.5 font-bold text-xs text-white">
-                                  <span>{sk.icon || '⚔️'}</span>
+                                  <GameIcon name={sk.id} icon={sk.icon} size={16} />
                                   <span>{tr(sk.name)}</span>
                                 </div>
                                 <span className="text-[10px] text-[#64b5f6] font-mono font-bold">

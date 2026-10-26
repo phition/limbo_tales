@@ -2401,7 +2401,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               icon: '🕯️',
               category: 'ancestral',
               description: '처음 사경(HP 0)에 도달한 아군 1회 즉시 50% HP로 부활',
-              conditionText: '원정 1회 한정'
+              conditionText: '원정 1회 한정',
+              buffs: {}
             });
             gm.addLog('🕯️ [망령의 결속] 망령의 불꽃과 영혼을 결속했습니다! 처음 사경에 도달한 아군이 1회 즉시 50% 생명력으로 부활합니다. (위험도 +100 증가)', 'reward');
             setEventCard(null);
@@ -2495,6 +2496,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 type: 'elite',
                 faction: 'corrupt',
                 level: Math.max(50, hero.level),
+                promptKey: 'monster_mirror_phantom',
+                imagePath: 'assets/monster_mirror_phantom.jpg',
                 hp: maxHpVal,
                 maxHp: maxHpVal,
                 atk: Math.max(1, Math.round(heroStats.atk * 1.1)),
@@ -2543,6 +2546,9 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               if (hero.studyingSkills && hero.studyingSkills.length > 0) {
                 const studying = [...hero.studyingSkills];
                 studying.forEach(sid => {
+                  if (!hero.skillMastery) hero.skillMastery = {};
+                  if (!hero.learnedSkills) hero.learnedSkills = [];
+                  if (!hero.skillLevels) hero.skillLevels = {};
                   hero.skillMastery[sid] = 100;
                   if (!hero.learnedSkills.includes(sid)) {
                     if (hero.learnedSkills.length < 6) {
@@ -2675,6 +2681,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               eligibleHeroes.forEach(hero => {
                 const learned = hero.learnedSkills || [];
                 learned.forEach(sacSid => {
+                  if (!hero.skillLevels) hero.skillLevels = {};
+                  if (!hero.skillMastery) hero.skillMastery = {};
                   const targetSid = (hero.equippedSkills || []).find(sid => sid !== sacSid) ||
                                     learned.find(sid => sid !== sacSid) ||
                                     hero.classId;
@@ -2688,8 +2696,9 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                     action: () => {
                       hero.learnedSkills = (hero.learnedSkills || []).filter(s => s !== sacSid);
                       hero.equippedSkills = (hero.equippedSkills || []).filter(s => s !== sacSid);
-                      delete hero.skillLevels[sacSid];
-                      delete hero.skillMastery[sacSid];
+                      if (hero.skillLevels) delete hero.skillLevels[sacSid];
+                      if (hero.skillMastery) delete hero.skillMastery[sacSid];
+                      if (!hero.skillLevels) hero.skillLevels = {};
                       hero.skillLevels[targetSid] = curTargetLv + 1;
 
                       SoundManager.getInstance().play('forge_success');

@@ -386,7 +386,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
   // 6-2-5. 🏆 네메시스 마일스톤 정벌 장비 기본 스탯 변경
   const handleNemesisEquipStatChange = (tier: 'pendant' | 'core' | 'crown', statKey: 'atk' | 'def' | 'spd' | 'luck' | 'hp' | 'mp', val: number) => {
     setOverrides(prev => {
-      const curEquips = prev.nemesisEquipments || {};
+      const curEquips = prev.nemesisEquipments || { pendant: {}, core: {}, crown: {} };
       const curTierStats = curEquips[tier] || {};
       return {
         ...prev,

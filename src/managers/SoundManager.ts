@@ -34,6 +34,7 @@ export type SoundEffectType =
   | 'poison'          // 맹독 분무 / 산성액 부식
   // 🛡️ 지원 및 상태이상
   | 'shield_break'    // 방패 / 방어구 파쇄 파편음
+  | 'buff'            // 아군 가호/강화 버프음
   | 'heal'            // 성스러운 치유 / 솔페지오 528Hz 하모니
   | 'shield'          // 철벽 방벽 / 마도 보호막 전개
   | 'debuff'          // 디버프 / 심연의 저주

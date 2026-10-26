@@ -6054,31 +6054,7 @@ export const BattleScreen: React.FC = () => {
     // 동상/결빙 또는 기절 상태인 경우 행동 완전 차단 (차징 중이었다면 차징 해제)
     const ccEffects = (monster.statusEffects || []).filter(se => se.type === 'freeze' || se.type === 'stun');
     if (ccEffects.length > 0 || turnSkippedRef.current) {
-      // ⚔️ [지휘관 습격 원정대 전투 AI]: 차징 절대 없음, 자동전투 알고리즘 기반 스킬/행동 선택 & 적 피버 게이지 축적
-      if (gm.isEncounterPvP) {
-        // 1) 적 피버 뱃지 적립
-        addEnemyFeverBadge(Math.random() < 0.5 ? 'crit' : 'extra');
-
-        // 2) 피버 게이지 5개 이상 시 피버 방출
-        if (enemyFeverBadgesRef.current.length >= 5) {
-          setEnemyFeverBadges([]);
-          enemyFeverBadgesRef.current = [];
-          gm.addLog(`🔥⚡ [상대 FEVER 폭발!] ${monster.data.name}이(가) 적 전술 모멘텀 FEVER를 방출하여 극대 피해를 가합니다!`, 'danger');
-          SoundManager.getInstance().play('fever_burst');
-        }
-
-        // 3) 자동전투 AI: 차징 스킬 제외, 일반 공격 및 즉발 스킬 최우선 고려
-        const pvpSkills = skillList.filter(s => !s.isCharge);
-        // 딸피 아군(영웅)이 있으면 마무리 타격 우선, 아니면 계수 높은 스킬 시전
-        const killableHero = gm.party.find(h => h.currentHp > 0 && h.currentHp <= (monster.atk || 30) * 1.5);
-        if (killableHero && pvpSkills.length > 0) {
-          selectedSkill = pvpSkills[0];
-        } else if (pvpSkills.length > 0 && Math.random() < 0.7) {
-          selectedSkill = pvpSkills[Math.floor(Math.random() * pvpSkills.length)];
-        } else {
-          selectedSkill = null; // 일반 공격
-        }
-      } else if (monster.chargingState) {
+      if (monster.chargingState) {
         if (monster.chargingState.originalLuck !== undefined) {
           monster.luck = monster.chargingState.originalLuck;
         }
@@ -6112,7 +6088,31 @@ export const BattleScreen: React.FC = () => {
       let selectedSkill: MonsterSkill | null = null;
       let isReleasingCharge = false;
 
-      if (monster.chargingState) {
+      // ⚔️ [지휘관 습격 원정대 전투 AI]: 차징 절대 없음, 자동전투 알고리즘 기반 스킬/행동 선택 & 적 피버 게이지 축적
+      if (gm.isEncounterPvP) {
+        // 1) 적 피버 뱃지 적립
+        addEnemyFeverBadge(Math.random() < 0.5 ? 'crit' : 'extra');
+
+        // 2) 피버 게이지 5개 이상 시 피버 방출
+        if (enemyFeverBadgesRef.current.length >= 5) {
+          setEnemyFeverBadges([]);
+          enemyFeverBadgesRef.current = [];
+          gm.addLog(`🔥⚡ [상대 FEVER 폭발!] ${monster.data.name}이(가) 적 전술 모멘텀 FEVER를 방출하여 극대 피해를 가합니다!`, 'danger');
+          SoundManager.getInstance().play('fever_burst');
+        }
+
+        // 3) 자동전투 AI: 차징 스킬 제외, 일반 공격 및 즉발 스킬 최우선 고려
+        const pvpSkills = skillList.filter(s => !s.isCharge);
+        // 딸피 아군(영웅)이 있으면 마무리 타격 우선, 아니면 계수 높은 스킬 시전
+        const killableHero = gm.party.find(h => h.currentHp > 0 && h.currentHp <= (monster.atk || 30) * 1.5);
+        if (killableHero && pvpSkills.length > 0) {
+          selectedSkill = pvpSkills[0];
+        } else if (pvpSkills.length > 0 && Math.random() < 0.7) {
+          selectedSkill = pvpSkills[Math.floor(Math.random() * pvpSkills.length)];
+        } else {
+          selectedSkill = null; // 일반 공격
+        }
+      } else if (monster.chargingState) {
         selectedSkill = monster.chargingState.skill;
         if (monster.chargingState.originalLuck !== undefined) {
           monster.luck = monster.chargingState.originalLuck;

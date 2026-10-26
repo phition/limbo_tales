@@ -6,14 +6,7 @@ import { resolveSiegeTactic, SiegeTacticDefinition } from '../data/siegeTactics'
 import { SoundManager } from '../managers/SoundManager';
 import { CustomAssetService } from '../services/CustomAssetService';
 import { I18nService } from '../i18n/I18nService';
-
-const DEFAULT_CLASS_IMAGES: Record<string, string> = {
-  aegis_valkyrie: 'assets/valkyrie_saintess.jpg',
-  paladin: 'assets/valkyrie_saintess.jpg',
-  high_saintess: 'assets/valkyrie_saintess.jpg',
-  valhalla_blade: 'assets/valkyrie_saintess.jpg',
-  tactical_tower: 'assets/citadel_bonfire.jpg',
-};
+import { GameIcon } from './GameIcon';
 
 interface DefenseSettingsViewProps {
   onNavigateToTowerResearch?: () => void;
@@ -1124,7 +1117,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                       <div key={`${sk.id}_${idx}`} className="p-2 rounded-lg bg-[#070b14] border border-[#162238] flex flex-col gap-0.5">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-white text-[11px] flex items-center gap-1">
-                            <span>{sk.icon || '⚔️'}</span>
+                            <GameIcon name={sk.id} icon={sk.icon} size={14} />
                             <span>{tr(sk.name)}</span>
                           </span>
                           <span className="text-[9px] font-mono text-[#64b5f6]">{sk.manaCost} MP</span>

@@ -837,7 +837,7 @@ export class GameDataService {
         const dataRef = ref(db, 'game_data');
         const payload = {
           updatedAt: Date.now(),
-          updatedBy: currentUser.email || currentUser.uid,
+          updatedBy: currentUser ? (currentUser.email || currentUser.uid) : 'master_admin',
           monsters: MONSTERS,
           buildings: INITIAL_BUILDINGS,
           recipes: EQUIPMENT_RECIPES,

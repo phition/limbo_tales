@@ -33,6 +33,40 @@ if (fs.existsSync(obsoleteCustomIcons)) {
   } catch (_) {}
 }
 
+// 🧹 배포 및 빌드에 불필요한 마케팅 배너 및 미참조 파일 정리
+const obsoleteFiles = [
+  'feature_graphic_1024x500.png',
+  'feature_graphic_1024x500.jpg',
+  'feature_graphic_medieval_1024x500.png',
+  'feature_graphic_medieval_1024x500.jpg',
+  'feature_graphic_new_1024x500.png',
+  'feature_graphic_new_1024x500.jpg',
+  'feature_graphic_cinzel_1024x500.png',
+  'feature_graphic_cinzel_1024x500.jpg',
+  'feature_graphic_blackletter_1024x500.png',
+  'feature_graphic_blackletter_1024x500.jpg',
+  'feature_graphic_final_cinzel.png',
+  'feature_graphic_final_cinzel.jpg',
+  'feature_graphic_final_blackletter.png',
+  'feature_graphic_final_blackletter.jpg',
+  'store_cover_1024x500.png',
+  'store_cover_1024x500.jpg',
+  'valkyrie_saintess.jpg',
+  'boss_f.jpg',
+  'boss_floor_11.png',
+];
+for (const ofile of obsoleteFiles) {
+  for (const base of [PUBLIC_ASSETS_DIR, CUSTOM_DIR]) {
+    const fPath = path.join(base, ofile);
+    if (fs.existsSync(fPath)) {
+      try {
+        fs.unlinkSync(fPath);
+        console.log(`🧹 [sync-custom-assets] Removed obsolete unreferenced asset: ${ofile}`);
+      } catch (_) {}
+    }
+  }
+}
+
 let existingPreset = {
   pureEmojiMode: false,
   syntheticAudioOnly: false,
@@ -249,6 +283,81 @@ if (fs.existsSync(iconsDir)) {
   }
 }
 
+// 🛡️ 보스 마도서/스킬 별칭 매핑 (book_boss_* <-> book_m_boss_floor_*, skill_boss_* <-> skill_m_boss_floor_*)
+const BOSS_BOOK_ALIAS_MAP = {
+  book_boss_colossus_core: 'book_m_boss_floor_1',
+  book_m_boss_floor_1: 'book_boss_colossus_core',
+  skill_boss_colossus_core: 'skill_m_boss_floor_1',
+  skill_m_boss_floor_1: 'skill_boss_colossus_core',
+
+  book_boss_deathknight_reap: 'book_m_boss_floor_2',
+  book_m_boss_floor_2: 'book_boss_deathknight_reap',
+  skill_boss_deathknight_reap: 'skill_m_boss_floor_2',
+  skill_m_boss_floor_2: 'skill_boss_deathknight_reap',
+
+  book_boss_behemoth_eruption: 'book_m_boss_floor_3',
+  book_m_boss_floor_3: 'book_boss_behemoth_eruption',
+  skill_boss_behemoth_eruption: 'skill_m_boss_floor_3',
+  skill_m_boss_floor_3: 'skill_boss_behemoth_eruption',
+
+  book_boss_chrono_warp: 'book_m_boss_floor_4',
+  book_m_boss_floor_4: 'book_boss_chrono_warp',
+  skill_boss_chrono_warp: 'skill_m_boss_floor_4',
+  skill_m_boss_floor_4: 'skill_boss_chrono_warp',
+
+  book_boss_void_cataclysm: 'book_m_boss_floor_5',
+  book_m_boss_floor_5: 'book_boss_void_cataclysm',
+  book_m_monster_void_overlord: 'book_boss_void_cataclysm',
+  skill_boss_void_cataclysm: 'skill_m_boss_floor_5',
+  skill_m_boss_floor_5: 'skill_boss_void_cataclysm',
+  skill_m_monster_void_overlord: 'skill_boss_void_cataclysm',
+
+  book_boss_blood_monarch: 'book_m_boss_floor_6',
+  book_m_boss_floor_6: 'book_boss_blood_monarch',
+  skill_boss_blood_monarch: 'skill_m_boss_floor_6',
+  skill_m_boss_floor_6: 'skill_boss_blood_monarch',
+
+  book_boss_oblivion_scythe: 'book_m_boss_floor_7',
+  book_m_boss_floor_7: 'book_boss_oblivion_scythe',
+  skill_boss_oblivion_scythe: 'skill_m_boss_floor_7',
+  skill_m_boss_floor_7: 'skill_boss_oblivion_scythe',
+
+  book_boss_judgment_sanctum: 'book_m_boss_floor_8',
+  book_m_boss_floor_8: 'book_boss_judgment_sanctum',
+  skill_boss_judgment_sanctum: 'skill_m_boss_floor_8',
+  skill_m_boss_floor_8: 'skill_boss_judgment_sanctum',
+
+  book_boss_mirror_kaleidoscope: 'book_m_boss_floor_9',
+  book_m_boss_floor_9: 'book_boss_mirror_kaleidoscope',
+  skill_boss_mirror_kaleidoscope: 'skill_m_boss_floor_9',
+  skill_m_boss_floor_9: 'skill_boss_mirror_kaleidoscope',
+
+  book_boss_asmodeus_armageddon: 'book_m_boss_floor_10',
+  book_m_boss_floor_10: 'book_boss_asmodeus_armageddon',
+  skill_boss_asmodeus_armageddon: 'skill_m_boss_floor_10',
+  skill_m_boss_floor_10: 'skill_boss_asmodeus_armageddon',
+};
+for (const [k, alias] of Object.entries(BOSS_BOOK_ALIAS_MAP)) {
+  if (existingPreset.iconOverrides[k] && !existingPreset.iconOverrides[alias]) {
+    existingPreset.iconOverrides[alias] = existingPreset.iconOverrides[k];
+  }
+}
+
+// 🛡️ 마도서(book_) <-> 스킬(skill_) 상호 보완 자동 매핑
+for (const [k, v] of Object.entries({ ...existingPreset.iconOverrides })) {
+  if (k.startsWith('book_')) {
+    const skillKey = k.replace(/^book_/, 'skill_');
+    if (!existingPreset.iconOverrides[skillKey]) {
+      existingPreset.iconOverrides[skillKey] = v;
+    }
+  } else if (k.startsWith('skill_')) {
+    const bookKey = k.replace(/^skill_/, 'book_');
+    if (!existingPreset.iconOverrides[bookKey]) {
+      existingPreset.iconOverrides[bookKey] = v;
+    }
+  }
+}
+
 // 🛡️ 보스 결전기 VFX 키가 monsterOverrides에 잔류하지 않도록 완전 정화 및 vfxOverrides 보장
 const BOSS_VFX_KEYS = ['boss_apocalypse', 'boss_cataclysm', 'boss_dragon_breath', 'boss_abyss_vortex'];
 for (const bvk of BOSS_VFX_KEYS) {
@@ -277,16 +386,39 @@ for (const cat of checkCategories) {
   }
 }
 
+// Safe write function with retries for OneDrive file locks
+function safeWriteFileSync(filePath, content, retries = 10, delayMs = 300) {
+  if (fs.existsSync(filePath)) {
+    try {
+      const existing = fs.readFileSync(filePath, 'utf-8');
+      if (existing === content) return; // 동일하면 쓰지 않음 (OneDrive 락 회피)
+    } catch (_) {}
+  }
+  for (let i = 0; i < retries; i++) {
+    try {
+      fs.writeFileSync(filePath, content, 'utf-8');
+      return;
+    } catch (err) {
+      if (i === retries - 1) {
+        console.warn(`[sync-custom-assets] Warning: Could not write ${filePath} (OneDrive lock):`, err.message);
+        return;
+      }
+      const start = Date.now();
+      while (Date.now() - start < delayMs) {} // synchronous wait
+    }
+  }
+}
+
 // Save preset to public and backup to custom_assets
-fs.writeFileSync(PRESET_PATH, JSON.stringify(existingPreset, null, 2), 'utf-8');
+safeWriteFileSync(PRESET_PATH, JSON.stringify(existingPreset, null, 2));
 if (fs.existsSync(CUSTOM_DIR)) {
-  fs.writeFileSync(BACKUP_PRESET_PATH, JSON.stringify(existingPreset, null, 2), 'utf-8');
+  safeWriteFileSync(BACKUP_PRESET_PATH, JSON.stringify(existingPreset, null, 2));
 }
 
 // 빌드 산출물 폴더가 있는 경우 함께 동기화 (배포 보장)
 const distAssetsDir = path.join(ROOT_DIR, 'dist', 'assets');
 if (fs.existsSync(distAssetsDir)) {
-  fs.writeFileSync(path.join(distAssetsDir, 'custom_assets_preset.json'), JSON.stringify(existingPreset, null, 2), 'utf-8');
+  safeWriteFileSync(path.join(distAssetsDir, 'custom_assets_preset.json'), JSON.stringify(existingPreset, null, 2));
 }
 
 console.log('✅ [sync-custom-assets] Asset preset generated at public/assets/custom_assets_preset.json and custom_assets/custom_assets_preset.json');

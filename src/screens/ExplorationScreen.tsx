@@ -2084,15 +2084,17 @@ export const ExplorationScreen: React.FC = () => {
                           description: '무구를 휘둘러 가하는 강력한 물리 타격',
                           power: 1.1,
                           effectType: 'damage',
-                          isCharge: false
+                          isCharge: false,
+                          piercePct: 0,
+                          drainPct: 0
                         });
                       }
 
                       return {
                         id: `encounter_enemy_${sIdx}_${h.id}`,
                         name: `[${visitor.callsign}] ${h.name}`,
-                        type: 'elite',
-                        faction: 'corrupted',
+                        type: 'elite' as const,
+                        faction: 'corrupted' as const,
                         level: h.level || 1,
                         hp: h.stats.maxHp || 150,
                         maxHp: h.stats.maxHp || 150,
@@ -2101,7 +2103,11 @@ export const ExplorationScreen: React.FC = () => {
                         spd: h.stats.spd || 12,
                         luck: h.stats.luck || 10,
                         skills: sanitizedSkills,
-                        rewards: { gold: 0, ether: 0, exp: 0 }
+                        rewards: { gold: 0, ether: 0, exp: 0 },
+                        promptKey: 'mercenary',
+                        imagePath: 'assets/valkyrie_saintess.jpg',
+                        themeColor: 0x90caf9,
+                        description: `[${visitor.callsign}] 지휘관의 원정 대원`
                       };
                     });
 

@@ -31,7 +31,7 @@ import {
 } from '../utils/feverUtils';
 import { CombatMeterTable, CombatantMetrics } from '../components/CombatMeterTable';
 import { CustomAssetService } from '../services/CustomAssetService';
-import { GameDataService } from '../services/GameDataService';
+import { GameDataService, ArenaEdictConfig } from '../services/GameDataService';
 import { gameDialog } from '../services/DialogService';
 import { getSkillMagicSchool, getElementalSubtype, resolveCombatVfxAndSfx } from '../utils/skillComboUtils';
 import { SkillDetailModal } from '../components/SkillDetailModal';
@@ -4979,7 +4979,7 @@ export const ArenaScreen: React.FC = () => {
                           }`}
                           onClick={() => handleManualSkillClick(skill)}
                         >
-                          <span className="text-base">{skill.icon || '⚔️'}</span>
+                          <GameIcon name={skill.id} icon={skill.icon} size={20} />
                           <span className="text-xs font-bold truncate max-w-full">{tr(skill.name)}</span>
                           <span className="text-[9px] font-mono text-[#64b5f6]">
                             {cd > 0 ? `${cd} ${tr('턴 대기')}` : skill.manaCost > 0 ? `${skill.manaCost} MP` : '0 MP'}

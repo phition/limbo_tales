@@ -141,6 +141,7 @@ export interface EquipmentItem {
     luck?: number;             // 🍀 행운
     crit?: number;             // 하위 호환용
     critRate?: number;         // 치명타율 별칭
+    critDmg?: number;
   };
   baseStats?: {
     atk?: number;
@@ -151,6 +152,7 @@ export interface EquipmentItem {
     luck?: number;
     crit?: number;
     critRate?: number;
+    critDmg?: number;
   };
   description: string;
   icon: string;
@@ -510,7 +512,7 @@ export interface CodexCollectionItem {
 
 export interface PartySynergy {
   id: string;
-  category?: 'role' | 'formation' | 'tier' | 'special' | 'ancestral';
+  category?: 'role' | 'formation' | 'tier' | 'special' | 'ancestral' | 'curse';
   name: string;
   icon: string;
   conditionText?: string;
@@ -569,13 +571,16 @@ export interface MonsterSkill {
   disruptPosition?: 'knockback' | 'pull' | 'shuffle'; // 진형 붕괴
 }
 
-export type MonsterFaction = 'beast' | 'construct' | 'undead' | 'corrupted';
+export type MonsterFaction = 'beast' | 'construct' | 'undead' | 'corrupted' | 'cultist' | 'demon' | 'corrupt';
 
 export const MONSTER_FACTION_META: Record<MonsterFaction, { label: string; icon: string; color: string; desc: string }> = {
   beast: { label: '마물', icon: '🐾', color: '#ff7043', desc: '야수 및 변이 괴수 계열 마물' },
   construct: { label: '구조체', icon: '⚙️', color: '#90a4ae', desc: '골렘, 석상 및 마도 기계 구조체' },
   undead: { label: '언데드', icon: '💀', color: '#ba68c8', desc: '해골, 구울, 원혼 등 언데드 사령체' },
   corrupted: { label: '타락', icon: '👁️', color: '#f06292', desc: '심연의 존재, 광신도, 타락 기사 및 악마' },
+  cultist: { label: '광신도', icon: '👁️', color: '#f06292', desc: '심연의 존재, 광신도' },
+  demon: { label: '악마', icon: '😈', color: '#e91e63', desc: '심연의 악마 및 마신' },
+  corrupt: { label: '타락', icon: '👁️', color: '#f06292', desc: '심연의 존재, 타락 계열' },
 };
 
 export interface MonsterData {
@@ -585,6 +590,7 @@ export interface MonsterData {
   faction: MonsterFaction; // 몬스터 팩션: 마물 | 구조체 | 언데드 | 타락
   level: number;
   maxHp: number;
+  hp?: number;
   atk: number;
   def: number;
   spd: number;
@@ -605,8 +611,8 @@ export interface MonsterData {
   };
   promptKey: string;
   imagePath: string;
-  themeColor: number;
-  description: string;
+  themeColor?: number;
+  description?: string;
   imagePrompt?: string;
 }
 

@@ -626,7 +626,21 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         title="📜 버전 정보 & 패치노트"
         open={patchModal}
         onClose={() => setPatchModal(false)}
-        footer={<ActionButton label="닫기" variant="primary" size="sm" onClick={() => setPatchModal(false)} />}
+        footer={
+          <div className="flex items-center justify-between w-full gap-2">
+            <button
+              onClick={() => {
+                setPatchModal(false);
+                gm.emit('checkAppVersion');
+              }}
+              className="py-1.5 px-3 rounded-lg bg-[#14233c] hover:bg-[#1a3154] border border-[#2b4c7e] text-[#64b5f6] text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95"
+            >
+              <span>🔄</span>
+              <span>최신 버전 확인</span>
+            </button>
+            <ActionButton label="닫기" variant="primary" size="sm" onClick={() => setPatchModal(false)} />
+          </div>
+        }
       >
         <div className="flex flex-col gap-3 text-xs text-[#cfd8dc] leading-relaxed max-h-[60vh] overflow-y-auto pr-1">
           {/* V.1.1.2 최신 패치노트 */}
