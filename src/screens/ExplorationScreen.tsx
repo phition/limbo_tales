@@ -2368,11 +2368,11 @@ export const ExplorationScreen: React.FC = () => {
   return (
     <div className="flex-1 min-h-0 w-full flex flex-col bg-transparent overflow-hidden relative">
 
-      {/* ── 던전 이미지 창 ── */}
+      {/* ── 던전 이미지 창 (큰 화면에서 시원하고 웅장하게 확장되는 반응형 비율) ── */}
       <div className="px-3 pt-2 shrink-0">
         <div 
-          className="relative w-full panel overflow-hidden flex items-center justify-center border transition-all duration-300"
-          style={{ height: 'clamp(140px, 22vh, 220px)', borderColor: floorColor, background: 'linear-gradient(135deg, #0d1525 0%, #1a0a2e 50%, #0d1525 100%)' }}
+          className="relative w-full panel overflow-hidden flex items-center justify-center border transition-all duration-300 h-[clamp(145px,22vh,210px)] md:h-[clamp(210px,28vh,320px)] lg:h-[clamp(250px,32vh,360px)]"
+          style={{ borderColor: floorColor, background: 'linear-gradient(135deg, #0d1525 0%, #1a0a2e 50%, #0d1525 100%)' }}
         >
           {/* 배경 효과 */}
           <div className="absolute inset-0 opacity-20" style={{ background: `radial-gradient(circle, ${floorColor}44 0%, transparent 70%)` }} />
@@ -2429,15 +2429,15 @@ export const ExplorationScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* ── 파티 상태 & 로그 창 (남은 공간 분할) ── */}
-      <div className="px-3 pt-2 flex-1 min-h-0 flex flex-col gap-2">
-        {/* 로그 창 (상단) */}
-        <div className="min-h-0 relative flex flex-col" style={{ flex: '1 1 calc(50% - 20px)', maxHeight: 'calc(50% - 20px)' }}>
+      {/* ── 파티 상태 & 로그 창 (로그 넓은 뷰포트 확보 및 원정대 현황 여백 분리) ── */}
+      <div className="px-3 pt-2 flex-1 min-h-0 flex flex-col gap-2.5 sm:gap-3.5 pb-1">
+        {/* 로그 창 (상단: 큰 화면에서 시원하게 확장되어 로그 열람성 극대화) */}
+        <div className="flex-1 min-h-[140px] md:min-h-[200px] relative flex flex-col">
            <LogPanel logs={state.dungeonLogs || []} maxHeight={9999} emptyMessage="기록된 던전 탐험 로그가 없습니다." />
         </div>
 
-        {/* 파티 요약 창 (하단) */}
-        <div className="min-h-0 panel p-2.5 flex flex-col bg-[#0b0d13ee] border border-[#1f2738] rounded-xl" style={{ flex: '1 1 calc(50% + 20px)' }}>
+        {/* 파티 요약 창 (하단: 과도하게 높아져 로그와 맞닿지 않도록 컴팩트하고 단정하게 유지) */}
+        <div className="shrink-0 h-auto panel p-2 sm:p-2.5 flex flex-col bg-[#0b0d13ee] border border-[#1f2738] rounded-xl shadow-md max-h-[210px] md:max-h-none overflow-hidden">
           <div className="flex items-center justify-between text-xs text-[#c8aa6e] font-bold mb-1.5 border-b border-[#c8aa6e22] pb-1">
             <div className="flex items-center gap-1.5">
               <span>🛡️ 원정대 현황</span>
@@ -2506,7 +2506,7 @@ export const ExplorationScreen: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 flex flex-col md:grid md:grid-cols-3 gap-1.5">
+          <div className="overflow-y-auto pr-0.5 flex flex-col md:grid md:grid-cols-3 gap-1.5 custom-scrollbar">
             {gm.party.map(hero => {
               const cls = Object.values(CHARACTER_CLASSES).find(c => c.id === hero.classId);
               const classIcon = cls?.skills[0]?.icon ?? '⚔️';

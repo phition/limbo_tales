@@ -188,12 +188,12 @@ const MonsterImagePanel: React.FC<{ targetMonster?: MonsterState; totalCount: nu
   return (
     <div className={`px-3 pt-2 shrink-0 relative ${isAttacking ? 'z-40' : 'z-10'}`}>
       <div
-        className={`relative w-full panel flex items-center justify-center transition-all duration-300 shadow-xl ${
+        className={`relative w-full panel flex items-center justify-center transition-all duration-300 shadow-xl h-[clamp(145px,20vh,185px)] md:h-[clamp(185px,25vh,250px)] lg:h-[clamp(210px,28vh,290px)] ${
           isAttacking
             ? 'overflow-visible border-[#ff1744] shadow-[0_0_35px_rgba(255,23,68,0.6)] ring-1 ring-[#ff174488]'
             : 'overflow-hidden'
         }`}
-        style={{ height: 'min(170px, 22vh)', background: 'linear-gradient(135deg, #0d1525 0%, #1a0a2e 50%, #0d1525 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #0d1525 0%, #1a0a2e 50%, #0d1525 100%)' }}
       >
         <div className="absolute inset-0 opacity-10 rounded-xl overflow-hidden pointer-events-none"
           style={{ backgroundImage: 'repeating-linear-gradient(0deg,#a742f5 0,#a742f5 1px,transparent 0,transparent 50%),repeating-linear-gradient(90deg,#a742f5 0,#a742f5 1px,transparent 0,transparent 50%)', backgroundSize: '40px 40px' }} />
@@ -7952,7 +7952,7 @@ export const BattleScreen: React.FC = () => {
       )}
       <div className="px-3 pt-1 flex-1 min-h-0 relative">
         <div className="relative">
-          <LogPanel logs={state.battleLogs || []} isBattle maxHeight={148} emptyMessage="기록된 전투 로그가 없습니다." />
+          <LogPanel logs={state.battleLogs || []} isBattle maxHeight={battleScreenWidth >= 768 ? 220 : 148} emptyMessage="기록된 전투 로그가 없습니다." />
           <button
             type="button"
             className="absolute top-1.5 right-2 px-2 py-0.5 rounded text-[11px] font-bold bg-[#141a27e0] hover:bg-[#1e273dee] text-[#c8aa6e] hover:text-white border border-[#c8aa6e44] shadow-md transition-all flex items-center gap-1 z-10"

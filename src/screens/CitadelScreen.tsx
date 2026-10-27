@@ -14997,8 +14997,7 @@ export const CitadelScreen: React.FC = () => {
         }}
       >
         <div 
-          className="relative w-full panel overflow-hidden transition-all duration-300 shadow-xl" 
-          style={{ height: 'clamp(140px, 22vh, 220px)' }}
+          className="relative w-full panel overflow-hidden transition-all duration-300 shadow-xl h-[clamp(145px,22vh,210px)] md:h-[clamp(210px,28vh,320px)] lg:h-[clamp(250px,32vh,360px)]" 
         >
           {/* 메인 일러스트 및 루프 애니메이션 비디오 (MP4 / WebM / GIF / WebP 자동 지원) */}
           <video
@@ -15125,10 +15124,10 @@ export const CitadelScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* 로그 패널 (드로어가 닫혀 있을 때만 렌더링하여 드로어에 85% 이상 화면 확보) */}
+      {/* 로그 패널 (드로어가 닫혀 있을 때만 렌더링하며 큰 화면에서 시원하게 확장) */}
       {!openDrawer && (
         <div className="px-3 pt-2 transition-all duration-300 flex-1 min-h-0">
-          <LogPanel logs={state.citadelLogs || []} maxHeight={175} emptyMessage={'기록된 영지 로그가 없습니다.'} />
+          <LogPanel logs={state.citadelLogs || []} maxHeight={navScreenWidth >= 768 ? 260 : 175} emptyMessage={'기록된 영지 로그가 없습니다.'} />
         </div>
       )}
 
