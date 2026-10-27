@@ -166,6 +166,9 @@ const OperatorCard: React.FC<OperatorCardProps> = ({
 
   return (
     <div
+      data-vfx-operator={side}
+      data-vfx-target={isPlayer ? (hero?.id || 'player_operator') : (hero?.id || 'enemy_operator')}
+      data-vfx-player={isPlayer ? (hero?.id || 'player_operator') : undefined}
       className={`w-full p-2 rounded-2xl border transition-all relative overflow-hidden shadow-lg ${
         isPlayer
           ? 'bg-gradient-to-r from-[#0d0f14]/95 via-[#12141a]/95 to-[#090a0d]/95 border-[#c8aa6e55] shadow-[#c8aa6e15]'
@@ -412,6 +415,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   const [isClashZoomed, setIsClashZoomed] = useState(false);
   const [activeTargetDefenderId, setActiveTargetDefenderId] = useState<string | null>(null);
 
+  const invasionBoardRef = useRef<HTMLDivElement>(null);
   const isProcessingRef = useRef(false);
   const playerTeamRef = useRef<InvasionCombatant[]>([]);
   const oppTeamRef = useRef<InvasionCombatant[]>([]);
@@ -835,8 +839,41 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     });
   }, []);
 
-  // 🎯 좌표 계산 헬퍼
+  // 🎯 DOM 실시간 좌표 추적 기반 VFX 위치 계산 헬퍼 (반응형 1:1 완벽 정렬)
   const getCombatantCardPos = useCallback((id: string, isPlayerSide: boolean) => {
+    if (typeof document !== 'undefined' && invasionBoardRef.current) {
+      // 1. 타겟 DOM 요소 정밀 검색 (data-vfx-target, data-vfx-player, data-vfx-hero 등)
+      let targetEl = document.querySelector(`[data-vfx-target="${id}"]`) as HTMLElement;
+      if (!targetEl) {
+        targetEl = document.querySelector(`[data-vfx-player="${id}"]`) as HTMLElement;
+      }
+      if (!targetEl && isPlayerSide) {
+        const idx = playerTeamRef.current.findIndex(c => c.id === id);
+        if (idx !== -1) {
+          targetEl = document.querySelector(`[data-vfx-hero="${idx}"]`) as HTMLElement;
+        }
+      }
+
+      if (targetEl) {
+        const elRect = targetEl.getBoundingClientRect();
+        const boardRect = invasionBoardRef.current.getBoundingClientRect();
+        if (boardRect.width > 0 && boardRect.height > 0) {
+          const scrollLeft = invasionBoardRef.current.scrollLeft || 0;
+          const scrollTop = invasionBoardRef.current.scrollTop || 0;
+          const boardWidth = Math.max(boardRect.width, invasionBoardRef.current.scrollWidth);
+          const boardHeight = Math.max(boardRect.height, invasionBoardRef.current.scrollHeight);
+
+          const x = ((elRect.left + elRect.width / 2 - boardRect.left + scrollLeft) / boardWidth) * 100;
+          const y = ((elRect.top + elRect.height / 2 - boardRect.top + scrollTop) / boardHeight) * 100;
+          return {
+            x: Math.max(3, Math.min(97, Number(x.toFixed(2)))),
+            y: Math.max(3, Math.min(97, Number(y.toFixed(2)))),
+          };
+        }
+      }
+    }
+
+    // 🌟 Fallback (DOM 쿼리 전 또는 비상 시 비율 계산)
     if (isPlayerSide) {
       const idx = playerTeamRef.current.findIndex(c => c.id === id);
       const colX = idx === 0 ? 20 : idx === 1 ? 50 : 80;
@@ -915,6 +952,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     setIsBarrierHit(true);
     setTimeout(() => setIsBarrierHit(false), 500);
 
+    const barrierPos = getCombatantCardPos('dimensional_barrier', false);
     setVfxList(prev => [
       ...prev,
       {
@@ -922,12 +960,12 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         type: 'fire',
         damage: barrierDefDmg,
         isCrit: isSiegeCrit,
-        x: 50,
-        y: 38,
+        x: barrierPos.x,
+        y: barrierPos.y,
         duration: 700,
       },
     ]);
-    gm.emit('battleHitEffect', { x: 50, y: 38, color: 0xc8aa6e, isCrit: isSiegeCrit, type: 'fire' });
+    gm.emit('battleHitEffect', { x: barrierPos.x, y: barrierPos.y, color: 0xc8aa6e, isCrit: isSiegeCrit, type: 'fire' });
 
     setBattleLogs(prev => [
       ...prev.slice(-30),
@@ -966,6 +1004,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       barrierStateRef.current = curBarrier;
       setBarrierState(curBarrier);
 
+      const barrierPos = getCombatantCardPos('dimensional_barrier', false);
       setVfxList(prev => [
         ...prev,
         {
@@ -974,8 +1013,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           text: `+${repairAmt.toLocaleString()} 🛡️ 결계 수복`,
           damage: 0,
           isHeal: true,
-          x: 50,
-          y: 38,
+          x: barrierPos.x,
+          y: barrierPos.y,
           duration: 600,
         },
       ]);
@@ -2603,12 +2642,15 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       </div>
 
       {/* ── 2. 중앙 공성 전장 아레나 (반응형 풀와이드 차원 보호막 & 2개 타워 & 수비대) ── */}
-      <div className="relative z-10 flex-1 min-h-0 w-full max-w-[560px] md:max-w-3xl lg:max-w-4xl my-auto p-1 flex flex-col justify-between gap-1 overflow-y-auto custom-scrollbar">
+      <div
+        ref={invasionBoardRef}
+        className="relative z-10 flex-1 min-h-0 w-full max-w-[560px] md:max-w-3xl lg:max-w-4xl my-auto p-1 flex flex-col justify-between gap-1 overflow-y-auto custom-scrollbar"
+      >
         {/* 💥 공성 전장 보드 카드 위 1:1 정확한 위치 오버레이 */}
         <BattleVFXOverlay
           vfxList={vfxList}
           onFinish={(id) => setVfxList(prev => prev.filter(v => v.id !== id))}
-          className="absolute inset-0 pointer-events-none z-50"
+          className="absolute inset-0 min-h-full min-w-full pointer-events-none z-50"
         />
 
         {/* ════════ 🛡️ 수성측 영역 (오퍼레이터 + 2대 포탑 + 가로지르는 차원 보호막) ════════ */}
@@ -2625,6 +2667,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           <div className="grid grid-cols-2 gap-1.5 w-full">
             {/* 좌측 전술 타워 (공격 지원 / 기본 공격 버프) */}
             <div
+              data-vfx-target="turret_left"
               onClick={() => setSelectedFocusTargetId('turret_left')}
               className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col gap-1 ${
                 turretLeft.isDestroyed
@@ -2707,6 +2750,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
             {/* 우측 전술 타워 (방호 지원 / 스킬 전술 버프) */}
             <div
+              data-vfx-target="turret_right"
               onClick={() => setSelectedFocusTargetId('turret_right')}
               className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col gap-1 ${
                 turretRight.isDestroyed
@@ -2790,6 +2834,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
           {/* 🛡️ [핵심] 수비대 앞을 가로질러 전장 전체 너비로 최대로 뻗어 있는 차원 보호막 + 결속 수호자 */}
           <div
+            data-vfx-target="dimensional_barrier"
             onClick={() => setSelectedFocusTargetId('dimensional_barrier')}
             className={`w-full p-2 sm:p-2.5 rounded-2xl border-2 transition-all duration-300 cursor-pointer relative overflow-hidden shadow-2xl flex flex-col gap-1.5 ${
               barrierState.isDestroyed
@@ -2923,7 +2968,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         <div className="flex flex-col gap-1 w-full">
           {/* 아군 3인 결사대 카드 그리드 (포트레이트 교체 및 모바일 최적화) */}
           <div className="grid grid-cols-3 gap-1.5 w-full">
-            {playerTeam.map(h => {
+            {playerTeam.map((h, i) => {
               const hpPct = Math.max(0, (h.currentHp / h.maxHp) * 100);
               const mpPct = Math.max(0, (h.currentMp / h.maxMp) * 100);
               const isDead = h.currentHp <= 0;
@@ -2934,6 +2979,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               return (
                 <div
                   key={h.id}
+                  data-vfx-player={h.id}
+                  data-vfx-hero={i}
                   className={`p-1.5 flex flex-col gap-1 rounded-xl transition-all duration-300 ease-out transform relative border ${
                     isDead
                       ? 'bg-[#10141d]/50 border-[#1f2533] opacity-40 grayscale'
