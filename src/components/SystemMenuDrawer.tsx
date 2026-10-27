@@ -643,14 +643,67 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         }
       >
         <div className="flex flex-col gap-3 text-xs text-[#cfd8dc] leading-relaxed max-h-[60vh] overflow-y-auto pr-1">
-          {/* V.1.1.2 최신 패치노트 */}
+          {/* V.1.1.3 최신 패치노트 */}
           <div className="p-3 rounded-xl bg-[#0f172a] border border-[#c8aa6e] shadow-lg">
             <div className="font-bold text-sm text-[#c8aa6e] mb-2 flex items-center justify-between border-b border-[#c8aa6e44] pb-1.5">
               <span className="flex items-center gap-1.5">
                 <span>🔥</span>
-                <span>V.1.1.2 정식 업데이트 패치노트</span>
+                <span>V.1.1.3 정식 업데이트 패치노트</span>
               </span>
               <span className="text-[10px] font-mono text-[#c8aa6e] bg-[#c8aa6e22] px-2 py-0.5 rounded font-bold border border-[#c8aa6e55]">
+                v1.1.3
+              </span>
+            </div>
+            <ul className="space-y-2.5 text-xs text-[#cfd8e8]">
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#ffd54f] flex items-center gap-1">
+                  <span>🍖</span> 보급품 체계 개편 &amp; 던전 보급 드랍 도입
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>영지 자원 '식량'과 채비 보급품 '던전 식량' 완전 분리</strong>: 탐험 중 획득하는 영지 식량 자원(resource, 최대 스택 30)과 채비실/야영 전용 보급품(supply, 최대 스택 3)을 분리하여, 던전 귀환 시 획득한 식량 자원이 방주 창고로 안전하게 영구 귀속됩니다.
+                  <br />• <strong>심연 내 비상 식량 드랍</strong>: 마물 토벌 및 보물 상자/고대 석관 탐색 시 일정 확률로 긴급 야영에 쓰일 [던전 식량]을 노획할 수 있습니다.
+                  <br />• <strong>6층 이상 특수 보급 [던전 도시락] 드랍 해금</strong>: 심연 6계층 이상 구역에서 마물 및 상자 개방 시 상위 보급품 [던전 도시락]이 드랍됩니다. (야영 시 HP/MP 45% 회복 및 마물 기습 위험 50% 억제, 보스 처치 시 100% 확정 지급)
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#ff7043] flex items-center gap-1">
+                  <span>🏰</span> 영지 침공전(Invasion) 엔진 &amp; 밸런스 정밀화
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>PvE 던전 공식 일원화 &amp; 10층 DR(K=500) 적용</strong>: 비정상적인 전타 크리티컬 현상을 수정하고 정밀 치명타 확률·회피율 및 심연 10층 기준 피해 감소율(DR)을 적용하여 긴장감 있는 수성 전투로 완성했습니다.
+                  <br />• <strong>전투 배속 전환 지원 (1x / 1.5x / 2x)</strong>: 영지 침공전 진행 속도를 1배속, 1.5배속, 2배속으로 자유롭게 스위칭할 수 있습니다.
+                  <br />• <strong>침공전 전용 실시간 반응형 VFX</strong>: 아군 방어 진형과 적 침공군의 실제 위치를 추적하여 타격 이펙트가 정밀하게 투사됩니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#80deea] flex items-center gap-1">
+                  <span>✨</span> 반응형 전투 연출 &amp; 사운드 최적화
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>화면 크기별 최적 비율 레이아웃</strong>: 큰 화면 및 태블릿 환경에서 던전 탐험 및 네메시스(Nemesis) 토벌 시 상단 일러스트와 전투 로그의 비율을 최적화하고, 원정대 현황 패널의 불필요한 늘어남을 방지했습니다.
+                  <br />• <strong>전투 VFX 타겟 DOM 자동 추적</strong>: 마물 슬롯 및 아군 위치를 DOM 실좌표 기반으로 추적하여 어떤 해상도에서도 스킬 이펙트가 정확한 위치에 적중합니다.
+                  <br />• <strong>차원 아레나 SFX 및 BGM 사운드 강화</strong>: 아레나 및 주요 전투 모드에서 사운드 효과음과 배경음악의 밸런스를 개선하여 타격감을 강화했습니다.
+                </span>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="font-bold text-[#69f0ae] flex items-center gap-1">
+                  <span>⚙️</span> 마스터 데이터 스튜디오 클라우드 배포 강화
+                </span>
+                <span className="text-[11px] text-[#90a4ae] pl-4">
+                  • <strong>차원 칙령(Arena Edict) 실시간 배포</strong>: 데이터 스튜디오에서 편집한 아레나 칙령의 저장 및 Firebase 클라우드 실시간 배포가 원활하게 동기화되도록 수정했습니다.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* V.1.1.2 이전 패치노트 */}
+          <div className="p-3 rounded-xl bg-[#0b101d] border border-[#1f2b42] shadow-sm opacity-90">
+            <div className="font-bold text-xs text-[#8b9bb4] mb-2 flex items-center justify-between border-b border-[#1f2b42] pb-1.5">
+              <span className="flex items-center gap-1.5">
+                <span>📜</span>
+                <span>V.1.1.2 업데이트 내역</span>
+              </span>
+              <span className="text-[10px] font-mono text-[#8b9bb4] bg-[#15171d] px-2 py-0.5 rounded font-bold border border-[#2a364f]">
                 v1.1.2
               </span>
             </div>

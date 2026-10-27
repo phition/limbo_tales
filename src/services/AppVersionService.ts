@@ -39,8 +39,8 @@ export interface VersionCheckResult {
 const PACKAGE_NAME = 'com.limbo.tales';
 const DEFAULT_MARKET_URL = `market://details?id=${PACKAGE_NAME}`;
 const DEFAULT_WEB_URL = `https://play.google.com/store/apps/details?id=${PACKAGE_NAME}`;
-const LOCAL_FALLBACK_VERSION = '1.1.2';
-const LOCAL_FALLBACK_VERSION_CODE = 24;
+const LOCAL_FALLBACK_VERSION = '1.1.3';
+const LOCAL_FALLBACK_VERSION_CODE = 25;
 const DISMISS_STORAGE_KEY = 'limbo_app_update_dismissed_until';
 
 export class AppVersionService {
