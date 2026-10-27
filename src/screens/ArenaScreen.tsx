@@ -910,7 +910,19 @@ export const ArenaScreen: React.FC = () => {
     const unsub = GameDataService.getInstance().onUpdate(() => {
       setArenaEdict(GameDataService.getInstance().getArenaEdict());
     });
-    return () => unsub();
+    const handleEdictUpdated = (newEdict?: ArenaEdictConfig) => {
+      if (newEdict) {
+        setArenaEdict(newEdict);
+      } else {
+        setArenaEdict(GameDataService.getInstance().getArenaEdict());
+      }
+    };
+    gm.on('arena_edict_updated', handleEdictUpdated);
+
+    return () => {
+      unsub();
+      gm.off('arena_edict_updated', handleEdictUpdated);
+    };
   }, []);
   const bannedBadgeLabel = useMemo(() => {
     switch (arenaEdict.bannedBadge) {

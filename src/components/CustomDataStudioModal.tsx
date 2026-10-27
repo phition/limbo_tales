@@ -131,6 +131,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isEdictDeploying, setIsEdictDeploying] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [selectedBuildingId, setSelectedBuildingId] = useState<BuildingId>('cabin');
   const [showBaseCostFormulas, setShowBaseCostFormulas] = useState(false);
@@ -2698,6 +2699,43 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     placeholder="칙령에 관한 추가 설명"
                     className="w-full bg-[#0b0f19] border border-[#233148] rounded px-2.5 py-1.5 text-xs text-white focus:border-[#c8aa6e] focus:outline-none resize-none"
                   />
+                </div>
+
+                {/* 5. 🚀 이번 주 차원 칙령 즉시 저장 & 실시간 배포 액션 패널 */}
+                <div className="p-4 bg-gradient-to-r from-[#170e28] via-[#23153c] to-[#120a21] border border-[#ffd54f66] rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_4px_20px_rgba(126,87,194,0.25)]">
+                  <div className="space-y-1 text-left w-full sm:w-auto flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">⚔️</span>
+                      <span className="font-black text-sm text-[#ffd54f]">
+                        차원 칙령 즉시 저장 & Firebase 실시간 배포
+                      </span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44] font-bold">
+                        REALTIME BROADCAST
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#b0bec5] leading-relaxed">
+                      현재 설정된 칙령 <strong className="text-white">【{curEdict.edictName}】</strong> 및 금지 뱃지 <strong className="text-[#ff8a80]">[{BADGE_OPTIONS.find(b => b.id === curEdict.bannedBadge)?.label || curEdict.bannedBadge}]</strong>를 로컬 배포 파일과 Firebase 클라우드(/arena_edict)에 즉각 배포하여 모든 접속자에게 실시간 적용합니다.
+                    </p>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      setIsEdictDeploying(true);
+                      try {
+                        const res = await gds.saveAndDeployArenaEdict(curEdict);
+                        setHasChanges(false);
+                        showToast(res.message);
+                      } catch (err: any) {
+                        showToast(`❌ 칙령 배포 중 오류 발생: ${err?.message || err}`);
+                      } finally {
+                        setIsEdictDeploying(false);
+                      }
+                    }}
+                    disabled={isEdictDeploying}
+                    className="w-full sm:w-auto px-5 py-3 rounded-xl font-black text-xs bg-gradient-to-r from-[#ffd54f] via-[#ffb300] to-[#ffa000] text-[#120a21] hover:brightness-110 active:scale-95 shadow-[0_0_15px_rgba(255,213,79,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0 disabled:opacity-50"
+                  >
+                    <span>{isEdictDeploying ? '⏳' : '🚀'}</span>
+                    <span>{isEdictDeploying ? '실시간 배포 중...' : '칙령 즉시 저장 & 실시간 배포'}</span>
+                  </button>
                 </div>
               </div>
             );

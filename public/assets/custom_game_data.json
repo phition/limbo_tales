@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 58,
-  "updatedAt": 1793101529169,
+  "version": 60,
+  "updatedAt": 1793104398899,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -3071,11 +3071,11 @@
     }
   },
   "arenaEdict": {
-    "edictName": "치명 금지의 칙령",
-    "bannedBadge": "crit",
+    "edictName": "자유 결투의 칙령",
+    "bannedBadge": "none",
     "jokerRule": "블러핑 앤 쇼다운 (2 공개 + 1 히든 실루엣)",
-    "description": "차원 결투장 전역에 치명타 불가 결계가 가동됩니다. (💥 CRIT 뱃지 획득 불가)",
-    "updatedAt": 1793101498220,
+    "description": "모든 피버 뱃지 획득이 자유롭게 허용되는 전술 칙령입니다. (🚫 금지 배지 없음)",
+    "updatedAt": 1793101529548,
     "updatedBy": "bumpcat@bumpcat.net"
   }
 }

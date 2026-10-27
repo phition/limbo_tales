@@ -8,7 +8,7 @@ import { INITIAL_HEROES_CONFIG } from '../data/mercenaries';
 import { NEMESIS_BOSS_CONFIG, NemesisBossConfig } from '../data/nemesis';
 import { MonsterData, EquipmentItem, BuildingState, BuildingId, Quest, CharacterClass, Mercenary, Skill, GameResources } from '../types/game';
 import { ref, get, set, onValue, Unsubscribe } from 'firebase/database';
-import { db } from './firebaseConfig';
+import { db, auth } from './firebaseConfig';
 import { FirebaseService } from './FirebaseService';
 
 export interface GameBalanceConfig {
@@ -27,6 +27,8 @@ export interface ArenaEdictConfig {
   bannedBadge: BannedFeverBadge; // 금지 뱃지 (기본: 'evade')
   jokerRule: string; // 조커 및 기본 룰 (기본: '블러핑 앤 쇼다운 (2 공개 + 1 히든 실루엣)')
   description: string; // 칙령 설명
+  updatedAt?: number;
+  updatedBy?: string;
 }
 
 export const DEFAULT_ARENA_EDICT: ArenaEdictConfig = {
@@ -738,7 +740,20 @@ export class GameDataService {
             if (snapshot.exists()) {
               const edictData = snapshot.val();
               if (edictData && typeof edictData === 'object') {
+                const localEdictTime = this.customOverrides.arenaEdict?.updatedAt || 0;
+                const remoteEdictTime = edictData.updatedAt || 0;
+                if (localEdictTime > 0 && remoteEdictTime > 0 && remoteEdictTime < localEdictTime) {
+                  console.log(`[GameDataService] ⏭️ Skipping older arena_edict from Firebase (remote: ${remoteEdictTime} < local: ${localEdictTime})`);
+                  return;
+                }
                 this.applyCustomPackage({ arenaEdict: edictData }, true);
+                try {
+                  import('../managers/GameManager').then(({ GameManager }) => {
+                    const gm = GameManager.getInstance();
+                    gm.emit('arena_edict_updated', this.getArenaEdict());
+                    gm.emit('update');
+                  }).catch(() => {});
+                } catch (_) {}
                 console.log('[GameDataService] 🔮 Dimensional Arena Edict updated in real-time from Firebase:', edictData.edictName);
               }
             }
@@ -777,9 +792,22 @@ export class GameDataService {
       if (edictSnap.exists()) {
         const edictData = edictSnap.val();
         if (edictData && typeof edictData === 'object') {
-          this.applyCustomPackage({ arenaEdict: edictData }, true);
-          anyUpdated = true;
-          console.log('[GameDataService] 🔮 Synced arena_edict on startup:', edictData.edictName);
+          const localEdictTime = this.customOverrides.arenaEdict?.updatedAt || 0;
+          const remoteEdictTime = edictData.updatedAt || 0;
+          if (localEdictTime > 0 && remoteEdictTime > 0 && remoteEdictTime < localEdictTime) {
+            console.log(`[GameDataService] ⏭️ Skipping older arena_edict get() from Firebase (remote: ${remoteEdictTime} < local: ${localEdictTime})`);
+          } else {
+            this.applyCustomPackage({ arenaEdict: edictData }, true);
+            anyUpdated = true;
+            try {
+              import('../managers/GameManager').then(({ GameManager }) => {
+                const gm = GameManager.getInstance();
+                gm.emit('arena_edict_updated', this.getArenaEdict());
+                gm.emit('update');
+              }).catch(() => {});
+            } catch (_) {}
+            console.log('[GameDataService] 🔮 Synced arena_edict on startup:', edictData.edictName);
+          }
         }
       }
     } catch (_) {}
@@ -822,22 +850,35 @@ export class GameDataService {
     let cloudSynced = false;
     let cloudMessage = '';
     const fb = FirebaseService.getInstance();
-    const currentUser = fb.getCurrentUser();
-    // 👑 마스터 권한 판별 (bumpcat.net 이메일 또는 마스터 UID 또는 인게임 마스터 플래그 활성화)
-    let isMaster = false;
+    const currentUser = fb.getCurrentUser() || (typeof auth !== 'undefined' ? auth.currentUser : null);
+    const userIdentifier = currentUser ? (currentUser.email || currentUser.uid) : 'master_admin';
+
+    // 🔮 (A) 차원 칙령 전용 노드 독립 실시간 배포 (/arena_edict)
+    // game_data 페이로드 성공 여부와 상관없이 무조건 독립 배포
     try {
-      const { GameManager } = await import('../managers/GameManager');
-      isMaster = fb.isMasterUser() || GameManager.getInstance().isMasterAccount;
-    } catch (_) {
-      isMaster = fb.isMasterUser();
+      if (db) {
+        const edictRef = ref(db, 'arena_edict');
+        const cleanEdictPayload = JSON.parse(JSON.stringify({
+          ...this.getArenaEdict(),
+          updatedAt: Date.now(),
+          updatedBy: userIdentifier,
+        }));
+        await set(edictRef, cleanEdictPayload);
+        cloudSynced = true;
+        cloudMessage = '차원 칙령 Firebase 실시간 배포 완료';
+        console.log('[GameDataService] 🔮 Dimensional Arena Edict deployed to /arena_edict successfully.');
+      }
+    } catch (edictErr: any) {
+      console.warn('[GameDataService] Failed to set /arena_edict:', edictErr);
     }
 
-    if (currentUser || isMaster) {
-      try {
+    // (B) /game_data 마스터 데이터 패키지 배포
+    try {
+      if (db) {
         const dataRef = ref(db, 'game_data');
-        const payload = {
+        const rawPayload = {
           updatedAt: Date.now(),
-          updatedBy: currentUser ? (currentUser.email || currentUser.uid) : 'master_admin',
+          updatedBy: userIdentifier,
           monsters: MONSTERS,
           buildings: INITIAL_BUILDINGS,
           recipes: EQUIPMENT_RECIPES,
@@ -849,31 +890,24 @@ export class GameDataService {
           balance: this.balanceConfig,
           nemesis: NEMESIS_BOSS_CONFIG,
         };
+        const payload = JSON.parse(JSON.stringify(rawPayload));
         await set(dataRef, payload);
-        // 🔮 차원 칙령 전용 노드 동시 동기화 (/arena_edict)
-        try {
-          const edictRef = ref(db, 'arena_edict');
-          await set(edictRef, {
-            ...this.getArenaEdict(),
-            updatedAt: Date.now(),
-            updatedBy: currentUser?.email || currentUser?.uid || 'master'
-          });
-        } catch (_) {}
         cloudSynced = true;
         cloudMessage = 'Firebase 클라우드 배포 완료';
         console.log('[GameDataService] ✅ Master game data synced to Firebase /game_data successfully.');
-      } catch (fbErr: any) {
-        console.warn('[GameDataService] Firebase seed failed:', fbErr);
+      }
+    } catch (fbErr: any) {
+      console.warn('[GameDataService] Firebase seed failed:', fbErr);
+      if (!cloudSynced) {
         cloudMessage = `Firebase 배포 실패: ${fbErr?.message || fbErr}`;
       }
-    } else {
-      cloudMessage = currentUser ? '마스터 권한 부족 (@bumpcat.net 필요)' : '미로그인 상태 (클라우드 미배포)';
     }
 
     // 3. 인게임 UI 및 매니저에 즉각 반영 통지
     try {
       import('../managers/GameManager').then(({ GameManager }) => {
         const gm = GameManager.getInstance();
+        gm.emit('arena_edict_updated', this.getArenaEdict());
         gm.emit('buildingUpdated');
         gm.emit('update');
         gm.emit('resourcesChanged');
@@ -893,6 +927,106 @@ export class GameDataService {
       finalMessage = `📁 로컬 정적 배포 파일(custom_game_data.json)에 저장되었습니다. (${cloudMessage})`;
     } else {
       finalMessage = '💾 브라우저 로컬 저장소 및 인게임에 즉시 적용되었습니다. (정적 파일 및 클라우드 미연결)';
+    }
+
+    return {
+      success: overallSuccess,
+      localSaved,
+      cloudSynced,
+      message: finalMessage,
+    };
+  }
+
+  /**
+   * ⚔️ 차원 아레나 칙령 단독 저장 및 로컬/클라우드 실시간 배포
+   */
+  public async saveAndDeployArenaEdict(edict: Partial<ArenaEdictConfig>): Promise<{
+    success: boolean;
+    localSaved: boolean;
+    cloudSynced: boolean;
+    message: string;
+  }> {
+    const now = Date.now();
+    const fb = FirebaseService.getInstance();
+    const currentUser = fb.getCurrentUser() || (typeof auth !== 'undefined' ? auth.currentUser : null);
+    const userIdentifier = currentUser ? (currentUser.email || currentUser.uid) : 'master_admin';
+
+    const mergedEdict: ArenaEdictConfig = {
+      ...DEFAULT_ARENA_EDICT,
+      ...(this.customOverrides.arenaEdict || {}),
+      ...edict,
+      updatedAt: now,
+      updatedBy: userIdentifier,
+    };
+
+    // 1. 메모리 및 customOverrides 즉시 반영
+    this.customOverrides.arenaEdict = mergedEdict;
+    this.customOverrides.updatedAt = now;
+
+    // 2. localStorage 저장
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(IDB_DATA_KEY, JSON.stringify(this.customOverrides));
+      } catch (_) {}
+    }
+
+    // 3. 로컬 정적 배포 파일(/api/custom-data/save) 저장 시도
+    let localSaved = false;
+    let localMessage = '';
+    try {
+      const localRes = await this.saveCustomDataToServer();
+      localSaved = localRes.success;
+      localMessage = localRes.message;
+    } catch (e: any) {
+      localMessage = e?.message || '로컬 서버 미응답';
+    }
+
+    // 4. Firebase 실시간 데이터베이스 배포
+    let cloudSynced = false;
+    let cloudMessage = '';
+    const cleanPayload = JSON.parse(JSON.stringify(mergedEdict));
+
+    // (A) /arena_edict 전용 노드 저장 (가장 중요: 아레나 전용 실시간 리스너가 바로 수신)
+    try {
+      if (db) {
+        const edictRef = ref(db, 'arena_edict');
+        await set(edictRef, cleanPayload);
+        cloudSynced = true;
+        cloudMessage = 'Firebase 실시간 배포 완료';
+        console.log('[GameDataService] 🔮 Dimensional Arena Edict deployed to Firebase /arena_edict successfully:', mergedEdict.edictName);
+      }
+    } catch (fbErr: any) {
+      console.warn('[GameDataService] Failed to set /arena_edict:', fbErr);
+      cloudMessage = `Firebase 배포 실패: ${fbErr?.message || fbErr}`;
+    }
+
+    // (B) /game_data/customOverrides/arenaEdict 에도 백업 저장
+    try {
+      if (db) {
+        const gameDataEdictRef = ref(db, 'game_data/customOverrides/arenaEdict');
+        await set(gameDataEdictRef, cleanPayload);
+      }
+    } catch (_) {}
+
+    // 5. 인게임 UI 및 이벤트 즉각 반영 통지
+    this.notifyListeners();
+    try {
+      const { GameManager } = await import('../managers/GameManager');
+      const gm = GameManager.getInstance();
+      gm.emit('arena_edict_updated', mergedEdict);
+      gm.emit('update');
+    } catch (_) {}
+
+    const overallSuccess = localSaved || cloudSynced;
+    let finalMessage = '';
+    if (localSaved && cloudSynced) {
+      finalMessage = `🚀 【${mergedEdict.edictName}】 칙령이 로컬 파일 및 Firebase 실시간 클라우드에 성공적으로 배포되었습니다!`;
+    } else if (cloudSynced && !localSaved) {
+      finalMessage = `☁️ 【${mergedEdict.edictName}】 칙령이 Firebase 실시간 클라우드에 즉시 배포되었습니다!`;
+    } else if (localSaved && !cloudSynced) {
+      finalMessage = `💾 【${mergedEdict.edictName}】 칙령이 로컬에 저장되었습니다. (${cloudMessage})`;
+    } else {
+      finalMessage = `⚠️ 칙령 배포 결과: 로컬(${localMessage}) / 클라우드(${cloudMessage})`;
     }
 
     return {
