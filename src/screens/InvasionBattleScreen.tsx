@@ -358,7 +358,15 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
   // 전투 및 연출 상태
   const [activeCombatantId, setActiveCombatantId] = useState<string | null>(null);
-  const [battleSpeed, setBattleSpeed] = useState<2 | 2.5>(2);
+  const [battleSpeed, setBattleSpeed] = useState<1 | 1.5 | 2>(() => {
+    try {
+      const saved = localStorage.getItem('invasion_battle_speed');
+      if (saved === '1' || saved === '1.5' || saved === '2') {
+        return Number(saved) as 1 | 1.5 | 2;
+      }
+    } catch {}
+    return 1;
+  });
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [vfxList, setVfxList] = useState<VFXEvent[]>([]);
   const [isBarrierHit, setIsBarrierHit] = useState(false);
@@ -1209,7 +1217,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       setTimeout(() => {
         setActiveCombatantId(null);
         isProcessingRef.current = false;
-      }, 300);
+      }, Math.round(300 / battleSpeed));
       return;
     }
 
@@ -1226,7 +1234,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         setActiveCombatantId(null);
         isProcessingRef.current = false;
         setCurrentRoundNumber(r => Number((r + 0.1).toFixed(2)));
-      }, battleSpeed === 2 ? 300 : 450);
+      }, Math.round(300 / battleSpeed));
       return;
     }
 
@@ -1690,7 +1698,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               isCrit,
               x: targetPos.x,
               y: targetPos.y,
-              duration: battleSpeed === 2 ? 350 : 500,
+              duration: Math.round(350 / battleSpeed),
             },
           ]);
           gm.emit('battleHitEffect', {
@@ -1954,7 +1962,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               isCrit,
               x: defPos.x,
               y: defPos.y,
-              duration: battleSpeed === 2 ? 350 : 500,
+              duration: Math.round(350 / battleSpeed),
             },
           ]);
           gm.emit('battleHitEffect', {
@@ -2046,7 +2054,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                 isCrit,
                 x: defPos.x,
                 y: defPos.y,
-                duration: battleSpeed === 2 ? 350 : 500,
+                duration: Math.round(350 / battleSpeed),
               },
             ]);
             gm.emit('battleHitEffect', {
@@ -2217,7 +2225,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                 isCrit: isTactCrit,
                 x: defPos.x,
                 y: defPos.y,
-                duration: battleSpeed === 2 ? 350 : 500,
+                duration: Math.round(350 / battleSpeed),
               },
             ]);
             gm.emit('battleHitEffect', {
@@ -2278,7 +2286,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               isCrit: isTactCrit,
               x: defPos.x,
               y: defPos.y,
-              duration: battleSpeed === 2 ? 350 : 500,
+              duration: Math.round(350 / battleSpeed),
             },
           ]);
           SoundManager.getInstance().play('spell');
@@ -2382,14 +2390,14 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
     // 피버 만충 시 전술 스킬 발동 검사
     if (feverBadgesRef.current.length >= 5) {
-      setTimeout(() => triggerPlayerSiegeTactic(), 350);
+      setTimeout(() => triggerPlayerSiegeTactic(), Math.round(350 / battleSpeed));
     }
     if (oppFeverBadgesRef.current.length >= 5) {
-      setTimeout(() => triggerEnemyDefenseTactic(), 350);
+      setTimeout(() => triggerEnemyDefenseTactic(), Math.round(350 / battleSpeed));
     }
 
     // 턴 종료 및 라운드 증가
-    const zoomDuration = battleSpeed === 2 ? 350 : 520;
+    const zoomDuration = Math.round(350 / battleSpeed);
     setTimeout(() => {
       setIsClashZoomed(false);
       setActiveTargetDefenderId(null);
@@ -2418,9 +2426,10 @@ export const InvasionBattleScreen: React.FC<Props> = ({
   // 3. 자동 전투 인터벌
   useEffect(() => {
     if (battleResult || countdown !== null) return;
+    const intervalTime = Math.round(450 / battleSpeed);
     const interval = setInterval(() => {
       executeSingleTurn();
-    }, battleSpeed === 2.5 ? 320 : 450);
+    }, intervalTime);
 
     return () => clearInterval(interval);
   }, [battleSpeed, battleResult, countdown, executeSingleTurn]);
@@ -2494,12 +2503,22 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
           <button
             className={`px-2 py-1 rounded text-xs font-bold border transition-all cursor-pointer flex items-center gap-1 ${
-              battleSpeed === 2.5
+              battleSpeed === 2
                 ? 'bg-[#ff704322] border-[#ff7043] text-[#ff7043] shadow-[0_0_10px_rgba(255,112,67,0.4)]'
-                : 'bg-[#14161c] border-[#212e48] text-[#ffd54f] hover:border-[#ffd54f]/50'
+                : battleSpeed === 1.5
+                ? 'bg-[#ffd54f22] border-[#ffd54f] text-[#ffd54f] shadow-[0_0_8px_rgba(255,213,79,0.35)]'
+                : 'bg-[#14161c] border-[#212e48] text-[#8b9bb4] hover:border-[#ffd54f]/50 hover:text-white'
             }`}
-            onClick={() => setBattleSpeed(s => (s === 2 ? 2.5 : 2))}
-            title="전투 속도 전환"
+            onClick={() => {
+              setBattleSpeed(prev => {
+                const next = prev === 1 ? 1.5 : prev === 1.5 ? 2 : 1;
+                try {
+                  localStorage.setItem('invasion_battle_speed', String(next));
+                } catch {}
+                return next;
+              });
+            }}
+            title="전투 속도 전환 (1x / 1.5x / 2x)"
           >
             <span>⚡{battleSpeed}x</span>
           </button>
