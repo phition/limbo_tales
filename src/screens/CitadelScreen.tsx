@@ -14812,6 +14812,30 @@ export const CitadelScreen: React.FC = () => {
     }
   };
 
+  // 🌟 화면 크기에 따른 하단 네비게이션 패널 개수 반응형 확장 (모바일: 3개 -> 태블릿: 5개 -> 데스크탑: 7개 -> 대형 데스크탑: 9개)
+  const [navScreenWidth, setNavScreenWidth] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 480));
+  useEffect(() => {
+    const handleNavResize = () => setNavScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleNavResize);
+    return () => window.removeEventListener('resize', handleNavResize);
+  }, []);
+
+  const navVisibleCount = useMemo(() => {
+    if (navScreenWidth >= 1280) return 9;
+    if (navScreenWidth >= 960) return 7;
+    if (navScreenWidth >= 640) return 5;
+    return 3;
+  }, [navScreenWidth]);
+
+  const navPanelOffsets = useMemo(() => {
+    const half = Math.floor(navVisibleCount / 2);
+    const arr: number[] = [];
+    for (let i = -half; i <= half; i++) {
+      arr.push(i);
+    }
+    return arr;
+  }, [navVisibleCount]);
+
   const safeWheelIdx = selectedWheelIdx % activeWheelItems.length;
   const selectedItem = activeWheelItems[safeWheelIdx];
 
@@ -15189,20 +15213,27 @@ export const CitadelScreen: React.FC = () => {
             onMouseLeave={handleWheelDragEnd}
           >
             <div className="flex items-center justify-between text-[11px] text-[#ffd54f] mb-2 px-1">
-              <span className="font-medium">🎡 {'좌우 드래그로 빠른 메뉴 탐색'}</span>
+              <span className="font-medium flex items-center gap-1.5">
+                <span>🎡</span>
+                <span>{'좌우 드래그로 빠른 메뉴 탐색'}</span>
+                <span className="text-[9.5px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#c8aa6e20] text-[#c8aa6e] border border-[#c8aa6e40]">
+                  {navVisibleCount} {tr('패널 뷰')}
+                </span>
+              </span>
               <span className="text-[#8b9bb4] font-mono font-bold text-[10px]">
                 {safeWheelIdx + 1} / {activeWheelItems.length}
               </span>
             </div>
 
             <div 
-              className="flex items-center justify-center gap-1.5 transition-transform duration-75"
+              className="flex items-center justify-center gap-1.5 sm:gap-2 transition-transform duration-75 overflow-visible"
               style={{ transform: `translateX(${wheelDragOffset}px)` }}
             >
               <button 
-                className="text-[#8b9bb4] text-xl p-1 hover:text-white transition-colors active:scale-90"
+                className="text-[#8b9bb4] text-xl p-1.5 hover:text-white transition-colors active:scale-90 shrink-0 cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
+                  SoundManager.getInstance().play('click', { x: 25 });
                   setSelectedWheelIdx((selectedWheelIdx - 1 + activeWheelItems.length) % activeWheelItems.length);
                 }}
                 aria-label={'이전 메뉴'}
@@ -15210,26 +15241,45 @@ export const CitadelScreen: React.FC = () => {
                 ◀
               </button>
 
-              {[-1, 0, 1].map(offset => {
-                const idx = (selectedWheelIdx + offset + activeWheelItems.length) % activeWheelItems.length;
+              {navPanelOffsets.map(offset => {
+                const idx = (((selectedWheelIdx + offset) % activeWheelItems.length) + activeWheelItems.length) % activeWheelItems.length;
                 const item = activeWheelItems[idx];
                 const isCenter = offset === 0;
+                const absOffset = Math.abs(offset);
+
+                // 패널 총 개수별 반응형 폭 및 최소 높이
+                const cardWidth = isCenter
+                  ? (navVisibleCount === 9 ? 'clamp(82px, 8.5vw, 110px)' : navVisibleCount === 7 ? 'clamp(90px, 11vw, 120px)' : navVisibleCount === 5 ? 'clamp(100px, 15vw, 126px)' : 'clamp(112px, 32vw, 130px)')
+                  : (navVisibleCount === 9 ? 'clamp(62px, 6.8vw, 84px)' : navVisibleCount === 7 ? 'clamp(68px, 8.6vw, 90px)' : navVisibleCount === 5 ? 'clamp(74px, 11.5vw, 96px)' : 'clamp(84px, 24vw, 96px)');
+
+                const cardMinHeight = isCenter ? (navVisibleCount >= 7 ? 104 : 110) : (navVisibleCount >= 7 ? 82 : 88);
+
+                // 중앙에서 멀어질수록 부드러운 투명도 및 스케일 원근 감쇄
+                const cardOpacity = isCenter ? 1 : Math.max(0.35, 0.88 - absOffset * 0.13);
+                const cardScale = isCenter ? 1.04 : Math.max(0.78, 0.98 - absOffset * 0.05);
+
+                // 클릭 시 입체 SFX 사운드 패닝 위치 계산 (offset에 따라 좌/중/우 실시간 정렬)
+                const clickXPercent = 50 + (offset / (navVisibleCount / 2)) * 38;
+
                 return (
                   <div
-                    key={item.key}
+                    key={`${item.key}_${offset}`}
                     className={`relative flex flex-col items-center justify-center rounded-xl cursor-pointer transition-all ${
-                      isCenter ? 'hover:scale-105 active:scale-95 shadow-lg' : 'hover:opacity-80 active:scale-90'
+                      isCenter ? 'hover:scale-105 active:scale-95 shadow-lg' : 'hover:opacity-85 active:scale-90'
                     }`}
                     style={{
-                      width: isCenter ? 'clamp(112px, 32vw, 130px)' : 'clamp(84px, 24vw, 96px)',
-                      minHeight: isCenter ? 110 : 88,
+                      width: cardWidth,
+                      minHeight: cardMinHeight,
+                      transform: `scale(${cardScale})`,
                       background: isCenter ? `${item.color}25` : '#141822',
                       border: `${isCenter ? 2 : 1}px solid ${isCenter ? item.color : '#2c384d'}`,
-                      opacity: isCenter ? 1 : 0.6,
-                      boxShadow: isCenter ? `0 0 15px ${item.color}33` : 'none'
+                      opacity: cardOpacity,
+                      boxShadow: isCenter ? `0 0 16px ${item.color}40` : 'none',
+                      zIndex: 10 - absOffset,
                     }}
                     onClick={() => {
                       if (wheelHasSwipedRef.current) return;
+                      SoundManager.getInstance().play('click', { x: clickXPercent });
                       if (isCenter) {
                         handleWheelSelect(item);
                       } else {
@@ -15262,7 +15312,7 @@ export const CitadelScreen: React.FC = () => {
                     </div>
                     <div 
                       className="font-bold mt-0.5 text-center px-1 line-clamp-2 leading-tight break-words max-w-full" 
-                      style={{ fontSize: isCenter ? 11.5 : 9.5, color: isCenter ? '#fff' : '#8b9bb4' }}
+                      style={{ fontSize: isCenter ? 11.5 : (navVisibleCount >= 7 ? 8.5 : 9.5), color: isCenter ? '#fff' : '#8b9bb4' }}
                     >
                       {item.label}
                     </div>
@@ -15276,9 +15326,10 @@ export const CitadelScreen: React.FC = () => {
               })}
 
               <button 
-                className="text-[#8b9bb4] text-xl p-1 hover:text-white transition-colors active:scale-90"
+                className="text-[#8b9bb4] text-xl p-1.5 hover:text-white transition-colors active:scale-90 shrink-0 cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
+                  SoundManager.getInstance().play('click', { x: 75 });
                   setSelectedWheelIdx((selectedWheelIdx + 1) % activeWheelItems.length);
                 }}
                 aria-label={'다음 메뉴'}
@@ -15297,6 +15348,8 @@ export const CitadelScreen: React.FC = () => {
                   }`}
                   onClick={(e) => {
                     e.stopPropagation();
+                    const dotX = 50 + ((i - safeWheelIdx) / Math.max(1, activeWheelItems.length)) * 40;
+                    SoundManager.getInstance().play('click', { x: Math.max(10, Math.min(90, dotX)) });
                     setSelectedWheelIdx(i);
                   }}
                   title={item.label}

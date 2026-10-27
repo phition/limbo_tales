@@ -1621,8 +1621,8 @@ export const ArenaScreen: React.FC = () => {
         }, i * 70);
       });
       try {
-        if (opVfxPair.sfx) SoundManager.getInstance().play(opVfxPair.sfx);
-        else SoundManager.getInstance().play('crit');
+        if (opVfxPair.sfx) SoundManager.getInstance().play(opVfxPair.sfx, { x: 50 });
+        else SoundManager.getInstance().play('crit', { x: 50 });
       } catch (_) {}
 
       // 아군 부활 / 회복 효과 적용
@@ -1713,8 +1713,8 @@ export const ArenaScreen: React.FC = () => {
         }, i * 70);
       });
       try {
-        if (oppOpVfxPair.sfx) SoundManager.getInstance().play(oppOpVfxPair.sfx);
-        else SoundManager.getInstance().play('crit');
+        if (oppOpVfxPair.sfx) SoundManager.getInstance().play(oppOpVfxPair.sfx, { x: 50 });
+        else SoundManager.getInstance().play('crit', { x: 50 });
       } catch (_) {}
 
       playerTeamRef.current = updatedP;
@@ -2350,17 +2350,20 @@ export const ArenaScreen: React.FC = () => {
     });
 
     try {
+      const firstTargetSlot = targetUnits[0] ? (attacker.isPlayer ? oppCombatants : playerCombatants).findIndex(c => c.id === targetUnits[0].id) : 1;
+      const sfxX = firstTargetSlot === 0 ? 20 : firstTargetSlot === 1 ? 50 : 80;
+
       if (isHealing) {
-        SoundManager.getInstance().play('heal');
+        SoundManager.getInstance().play('heal', { x: sfxX });
       } else if (isShield) {
-        SoundManager.getInstance().play('shield');
+        SoundManager.getInstance().play('shield', { x: sfxX });
       } else {
         if (anyCrit && resolvedCombatPair.sfx === 'slash') {
-          SoundManager.getInstance().play('crit');
+          SoundManager.getInstance().play('crit', { x: sfxX });
         } else if (resolvedCombatPair.sfx) {
-          SoundManager.getInstance().play(resolvedCombatPair.sfx);
+          SoundManager.getInstance().play(resolvedCombatPair.sfx, { x: sfxX });
         } else {
-          SoundManager.getInstance().play(anyCrit ? 'crit' : 'slash');
+          SoundManager.getInstance().play(anyCrit ? 'crit' : 'slash', { x: sfxX });
         }
       }
     } catch (_) {}

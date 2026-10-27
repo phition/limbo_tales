@@ -1660,6 +1660,14 @@ export const BattleScreen: React.FC = () => {
     setTimeout(() => setIsShaking(false), 400);
   }, []);
 
+  // 🌟 반응형 뷰포트 크기 변경 실시간 추적 (태블릿/데스크탑 UI 재배치에 맞춘 VFX 및 SFX 입체 좌표 보정)
+  const [battleScreenWidth, setBattleScreenWidth] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 480));
+  useEffect(() => {
+    const onResize = () => setBattleScreenWidth(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
   const triggerVFX = useCallback((event: Omit<VFXEvent, 'id'>) => {
     const id = `vfx_${Date.now()}_${Math.random()}`;
     const newVfx: VFXEvent = { ...event, id };
@@ -1671,9 +1679,14 @@ export const BattleScreen: React.FC = () => {
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 400);
     }
+    // 🎧 반응형 UI 상의 VFX 위치에 맞추어 SFX 공간 사운드 패닝 실시간 동기화
+    if (event.x !== undefined) {
+      const pan = ((event.x - 50) / 50) * 0.85;
+      SoundManager.getInstance().setSfxPan(pan);
+    }
   }, []);
 
-  // ── 🎯 피아 타겟별 체력 바 상단 VFX 위치 계산 헬퍼 ────────────────────────
+  // ── 🎯 피아 타겟별 체력 바 상단 VFX/SFX 위치 계산 헬퍼 ────────────────────────
   const getMonsterVfxPos = useCallback((monsterIdx: number, totalMonsters?: number, isSingleTarget = false) => {
     // 🌟 단일 타겟 공격(기본 공격, 단일 스킬)의 경우 화면 중앙의 몬스터 일러스트 패널 중심(X: 50%, Y: 16%)을 정타겟
     if (isSingleTarget || totalMonsters === 1) {
@@ -1694,16 +1707,25 @@ export const BattleScreen: React.FC = () => {
   const getHeroVfxPos = useCallback((heroIdx: number, isEnemyTurn = false, totalHeroes?: number) => {
     const total = Math.max(1, totalHeroes ?? gm.party.length ?? 1);
     const safeIdx = Math.max(0, Math.min(heroIdx, total - 1));
-    // 아군 영웅 행(HeroRow) 체력 바 중심 X% (약 50%)
+
+    // 🌟 반응형 뷰포트 너비(태블릿/데스크탑 >= 768px): md:grid-cols-3 가로 3열 배치 위치 연동
+    const isWide = typeof window !== 'undefined' && window.innerWidth >= 768;
+    if (isWide) {
+      const padPct = 2.5;
+      const slotWidth = (100 - padPct * 2) / total;
+      const x = padPct + slotWidth * (safeIdx + 0.5);
+      // 가로 1열 정렬이므로 3인 모두 동일한 수평 라인선상 위치
+      const y = isEnemyTurn ? 76 : 58;
+      return { x, y };
+    }
+
+    // 🌟 모바일 뷰포트 (< 768px): 세로 3행 배치
     const x = 50;
-    // 🌟 스킬 패널 개폐 여부에 따른 Y 좌표 보정:
-    // - 적군 턴(isEnemyTurn=true): 아군 스킬 패널이 닫혀서 파티 영역이 최하단으로 내려감 (Y: 79% ~ 91%)
-    // - 아군 턴(isEnemyTurn=false): 하단에 스킬 패널이 열려 있어서 파티 영역이 중간에 위치 (Y: 62% ~ 74%)
     const baseY = isEnemyTurn ? 79 : 62;
     const gapY = isEnemyTurn ? 5.8 : 5.2;
     const y = baseY + (safeIdx * gapY);
     return { x, y };
-  }, [gm.party.length]);
+  }, [gm.party.length, battleScreenWidth]);
 
   const handleFinishVFX = useCallback((id: string) => {
     setVfxList(prev => prev.filter(v => v.id !== id));

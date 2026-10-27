@@ -75,12 +75,19 @@ export type SoundEffectType =
 
 export type BgmTrack = 'citadel' | 'dungeon' | 'battle' | 'boss' | 'none';
 
+export interface PlaySoundOptions {
+  x?: number; // 0 ~ 100% (화면 수평 백분율 좌표, 50%가 중앙)
+  pan?: number; // -1.0 (좌측) ~ +1.0 (우측) 스테레오 패닝
+  volume?: number;
+}
+
 export class SoundManager {
   private static instance: SoundManager | null = null;
 
   private ctx: AudioContext | null = null;
   private masterGain: GainNode | null = null;
   private sfxGain: GainNode | null = null;
+  private sfxPanner: StereoPannerNode | null = null;
   private bgmGain: GainNode | null = null;
   private compressor: DynamicsCompressorNode | null = null;
 
@@ -205,7 +212,20 @@ export class SoundManager {
         this.sfxGain = this.ctx.createGain();
         this.bgmGain = this.ctx.createGain();
 
-        this.sfxGain.connect(this.compressor);
+        // 🎧 공간 음향 입체 스테레오 패너 (반응형 UI 위치에 따른 좌우 사운드 정렬)
+        if (typeof this.ctx.createStereoPanner === 'function') {
+          try {
+            this.sfxPanner = this.ctx.createStereoPanner();
+            this.sfxGain.connect(this.sfxPanner);
+            this.sfxPanner.connect(this.compressor);
+          } catch (_) {
+            this.sfxPanner = null;
+            this.sfxGain.connect(this.compressor);
+          }
+        } else {
+          this.sfxPanner = null;
+          this.sfxGain.connect(this.compressor);
+        }
         this.bgmGain.connect(this.compressor);
         this.compressor.connect(this.masterGain);
         this.masterGain.connect(this.ctx.destination);
@@ -344,18 +364,39 @@ export class SoundManager {
   }
 
   // ─────────────────────────────────────────────────────────────
-  //  ⚔️ 효과음 재생 (타격감 & 웅장함 대폭 강화 신디사이저)
+  //  ⚔️ 효과음 재생 (타격감 & 웅장함 대폭 강화 신디사이저 & 공간 패닝)
   // ─────────────────────────────────────────────────────────────
 
-  public playSfx(type: string): void {
-    if (type === 'ui_click' || type === 'button_click') {
-      this.play('click');
-    } else {
-      this.play(type as SoundEffectType);
+  /** UI 수평 백분율 좌표(0~100%) 또는 스테레오 패닝(-1~+1)에 따라 사운드 출력 위치 실시간 보정 */
+  public setSfxPan(panVal: number): void {
+    if (this.sfxPanner && this.ctx) {
+      const clamped = Math.max(-0.85, Math.min(0.85, panVal));
+      try {
+        this.sfxPanner.pan.cancelScheduledValues(this.ctx.currentTime);
+        this.sfxPanner.pan.setValueAtTime(clamped, this.ctx.currentTime);
+      } catch (_) {}
     }
   }
 
-  public play(type: SoundEffectType): void {
+  public playSfx(type: string, options?: PlaySoundOptions): void {
+    if (type === 'ui_click' || type === 'button_click') {
+      this.play('click', options);
+    } else {
+      this.play(type as SoundEffectType, options);
+    }
+  }
+
+  public play(type: SoundEffectType, options?: PlaySoundOptions): void {
+    // 🎧 반응형 UI 위치 기반 입체 스테레오 패닝 적용 (x: 0~100% -> pan: -0.85~+0.85)
+    if (options?.x !== undefined) {
+      const pan = ((options.x - 50) / 50) * 0.85;
+      this.setSfxPan(pan);
+    } else if (options?.pan !== undefined) {
+      this.setSfxPan(options.pan);
+    } else {
+      this.setSfxPan(0);
+    }
+
     if (type === 'crit') {
       triggerHaptic('critical');
     } else if (type === 'defeat') {
