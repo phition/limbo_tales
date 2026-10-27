@@ -2234,7 +2234,7 @@ const EquipmentOverlay: React.FC<{
             {/* 액션 버튼 그룹 */}
             <div className="flex flex-col gap-2 pt-2 border-t border-[#1f2738]">
               {/* 강화 & 인챈트 버튼 그리드 */}
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
                 {/* 강화 버튼: 병기창 Lv.3 이상 해금 시에만 활성화, 미달 시 잠김 처리 */}
                 {isEnhanceUnlocked ? (
                   <button
@@ -3050,13 +3050,13 @@ const CitadelDrawer: React.FC<{
           <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
         </button>
       </div>
-      <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
+      <div className="flex-1 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 content-start">
         {/* 방주의 성화 */}
         {(() => {
           const reqWood = gm.getRequiredStokeWood();
           const isFullyLit = gm.bonfireWarmthTime > 0 && gm.bonfireStacks >= 5;
           return (
-            <div id="building-card-bonfire" className="panel p-3 bg-[#131926] border border-[#222d42] flex flex-col gap-2 rounded-xl">
+            <div id="building-card-bonfire" className="panel p-3 bg-[#131926] border border-[#222d42] flex flex-col gap-2 rounded-xl col-span-1 md:col-span-2 lg:col-span-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-[#ffb347] font-bold flex items-center gap-1.5">
                   <GameIcon name="bonfire" icon="🔥" size={20} />
@@ -3857,9 +3857,9 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
+      <div className="flex-1 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 gap-2.5 content-start">
         {state.tavernCandidates.length === 0 && (
-          <div className="panel p-8 text-center text-[#8b9bb4] text-sm">
+          <div className="panel p-8 text-center text-[#8b9bb4] text-sm col-span-full">
             주점에 용병이 없습니다. [갱신] 버튼을 눌러보세요.
           </div>
         )}
@@ -8113,7 +8113,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
 
           {/* 레시피 카드 목록 */}
-          <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
+          <div className="flex-1 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 gap-2.5 content-start">
             {filteredRecipes.map(recipe => {
               const suitableText = getSuitableClassesText(recipe.id, recipe.slot);
               const recipeName = recipe.name;
@@ -8251,7 +8251,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2.5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                 {[
                   {
                     key: 'enhanced_torch', label: '에테르 횃불', icon: '✨🔥', desc: '이벤트 발견율 +20%, 기습 억제 -20%, 위험도 축적 2배 (심연 고속 돌파)',
@@ -8388,7 +8388,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </span>
               </div>
 
-              <div className="flex flex-col gap-2.5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                 {[
                   {
                     key: 'torch', label: '탐험 횃불', icon: '🔥', desc: '심연 시야 확보 & 기습 방지',
@@ -9621,7 +9621,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <span className="text-xs font-bold text-[#c8aa6e]">{group.title}</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
                 {group.items.map(item => {
                   const current = (state.resources as Record<string, number>)[item.key] || 0;
                   const maxCap = gm.getMaxResourceCapacity(item.key as any);
@@ -9713,7 +9713,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {SUPPLY_ITEMS.map(item => {
               const currentStock = gm.citadelSupplies?.[item.key] || 0;
               const locSupply = item;
@@ -9783,9 +9783,9 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
 
           {/* 장비 목록 */}
-          <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
+          <div className="flex-1 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 content-start">
             {filteredEquipment.length === 0 ? (
-              <div className="panel p-8 text-center text-sm text-[#8b9bb4] flex flex-col items-center gap-2">
+              <div className="panel p-8 text-center text-sm text-[#8b9bb4] flex flex-col items-center gap-2 col-span-full">
                 <span className="text-3xl">🛡️</span>
                 <span>{'보관 중인 미착용 장비가 없습니다.'}</span>
                 <span className="text-xs text-[#607d8b]">
@@ -10857,7 +10857,7 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       </div>
 
       {/* 시장 아이템 목록 */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-2.5">
+      <div className="flex-1 min-h-0 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 content-start">
         {filteredItems.map(item => {
           const isUnlocked = marketLv >= item.reqLv;
           const cur = res[item.key] || 0;
@@ -12262,10 +12262,10 @@ const QuestsDrawer: React.FC<{
       </div>
 
       {/* 퀘스트 목록 */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-3">
+      <div className="flex-1 min-h-0 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 gap-3 content-start">
         {/* 서브 퀘스트 잠금 안내 */}
         {catTab === 'sub' && !hasTavern && (
-          <div className="panel p-6 text-center flex flex-col items-center gap-2 bg-[#121722] border border-[#222d42] rounded-xl">
+          <div className="panel p-6 text-center flex flex-col items-center gap-2 bg-[#121722] border border-[#222d42] rounded-xl col-span-full">
             <span className="text-4xl p-2 rounded-2xl bg-[#1e293b] border border-[#334155]">🍺🔒</span>
             <span className="font-bold text-sm text-[#ffd54f]">방랑자의 라운지 (주점) 건설 필요</span>
             <span className="text-xs text-[#8b9bb4] max-w-[280px] leading-relaxed">
@@ -12286,7 +12286,7 @@ const QuestsDrawer: React.FC<{
 
         {/* 10분 쿨다운 안내 카드 (주점 건설 완료 후 서브 슬롯 비었을 때) */}
         {catTab === 'sub' && hasTavern && subActive.length < 3 && state.subQuestCooldownUntil > 0 && (
-          <div className="panel p-3 bg-[#11192e] border border-[#c8aa6e44] rounded-xl flex items-center justify-between gap-2">
+          <div className="panel p-3 bg-[#11192e] border border-[#c8aa6e44] rounded-xl flex items-center justify-between gap-2 col-span-full">
             <div className="flex items-center gap-2">
               <span className="text-xl p-1.5 rounded-lg bg-[#16233d] border border-[#c8aa6e33] animate-spin">⏳</span>
               <div>
@@ -12312,7 +12312,7 @@ const QuestsDrawer: React.FC<{
 
         {/* 에픽 퀘스트 잠금 안내 */}
         {catTab === 'epic' && !hasEpicUnlocked && (
-          <div className="panel p-6 text-center flex flex-col items-center gap-2 bg-[#190e28] border border-[#e040fb44] rounded-xl">
+          <div className="panel p-6 text-center flex flex-col items-center gap-2 bg-[#190e28] border border-[#e040fb44] rounded-xl col-span-full">
             <span className="text-4xl p-2 rounded-2xl bg-[#2a133d] border border-[#e040fb66]">👑🔒</span>
             <span className="font-bold text-sm text-[#e040fb]">영혼의 제단 건설 필요</span>
             <span className="text-xs text-[#cfd8e8] max-w-[280px] leading-relaxed">
@@ -12332,7 +12332,7 @@ const QuestsDrawer: React.FC<{
         )}
 
         {displayedQuests.length === 0 && !(catTab === 'sub' && !hasTavern) && !(catTab === 'epic' && !hasEpicUnlocked) && (
-          <div className="panel p-8 text-center text-sm text-[#8b9bb4]">
+          <div className="panel p-8 text-center text-sm text-[#8b9bb4] col-span-full">
             {catTab === 'completed'
               ? '아직 완료된 퀘스트가 없습니다.' : '현재 해당 탭의 진행 가능한 퀘스트가 없습니다.'}<br />
             <span className="text-xs text-[#607d8b] mt-1 block">
@@ -13529,7 +13529,7 @@ export const ExploreDrawer: React.FC<{
             )}
 
             {/* 촉매 4종 카드 그리드 (항상 표시되어 효과 확인 가능) */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
               {CATALYSTS.map((cat) => {
                 const isSelected = selectedCatalysts.includes(cat.key);
                 const catLabel = tr(cat.label);

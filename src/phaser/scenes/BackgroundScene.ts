@@ -22,7 +22,14 @@ export class BackgroundScene extends Phaser.Scene {
     };
     gm.on('screenChanged', onScreenChanged);
 
+    const onResize = () => {
+      if (!this.sys || !this.sys.settings || !this.sys.settings.active || !this.add) return;
+      this.createBackground();
+    };
+    this.scale.on('resize', onResize);
+
     const cleanup = () => {
+      this.scale.off('resize', onResize);
       gm.off('screenChanged', onScreenChanged);
     };
     this.events.once('shutdown', cleanup);

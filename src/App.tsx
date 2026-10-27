@@ -603,8 +603,8 @@ export const App: React.FC = () => {
           inset: 0,
           zIndex: 10,
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          alignItems: 'stretch',
+          justifyContent: 'stretch',
           paddingTop: 'env(safe-area-inset-top, 0px)',
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
           paddingLeft: 'env(safe-area-inset-left, 0px)',
@@ -612,7 +612,7 @@ export const App: React.FC = () => {
           boxSizing: 'border-box',
         }}
       >
-        <div className="game-column flex flex-col h-full overflow-hidden">
+        <div className="game-column w-full flex flex-col h-full overflow-hidden">
           {/* 전역 최상단 자원 바: 모닥불 표시 + 햄버거 메뉴 버튼 */}
           <ResourceBar
             resources={state.resources}

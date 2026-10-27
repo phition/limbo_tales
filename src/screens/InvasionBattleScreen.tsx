@@ -2451,7 +2451,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       <BattleVFXOverlay vfxList={vfxList} onFinish={(id) => setVfxList(prev => prev.filter(v => v.id !== id))} />
 
       {/* ── 1. 상단 전장 헤더 ── */}
-      <div className="w-full max-w-[560px] px-3 py-2 bg-[#0e1526]/95 backdrop-blur-md border border-[#1c2944] rounded-xl shadow-lg flex items-center justify-between shrink-0 z-10">
+      <div className="w-full max-w-[560px] md:max-w-3xl lg:max-w-4xl px-3 py-2 bg-[#0e1526]/95 backdrop-blur-md border border-[#1c2944] rounded-xl shadow-lg flex items-center justify-between shrink-0 z-10">
         <div className="flex items-center gap-2">
           <span className="text-xl p-1 bg-[#ff416c22] border border-[#ff416c44] rounded-lg">🏰</span>
           <div>
@@ -2513,7 +2513,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       </div>
 
       {/* ── 2. 중앙 공성 전장 아레나 (반응형 풀와이드 차원 보호막 & 2개 타워 & 수비대) ── */}
-      <div className="relative z-10 flex-1 min-h-0 w-full max-w-[560px] my-auto p-1 flex flex-col justify-between gap-1 overflow-y-auto custom-scrollbar">
+      <div className="relative z-10 flex-1 min-h-0 w-full max-w-[560px] md:max-w-3xl lg:max-w-4xl my-auto p-1 flex flex-col justify-between gap-1 overflow-y-auto custom-scrollbar">
 
         {/* ════════ 🛡️ 수성측 영역 (오퍼레이터 + 2대 포탑 + 가로지르는 차원 보호막) ════════ */}
         <div className="flex flex-col gap-1.5 w-full">
@@ -2934,7 +2934,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       {/* ── 3. 🏆 침공 결과 & 30% 자원 약탈 모달 ── */}
       {battleResult && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/85 backdrop-blur-md animate-fade-in">
-          <div className="relative w-full max-w-[520px] max-h-[90vh] overflow-y-auto bg-[#0f1626] border border-[#243756] rounded-2xl p-4 flex flex-col items-center text-center gap-3.5 shadow-2xl animate-scale-up custom-scrollbar">
+          <div className="relative w-full max-w-[520px] md:max-w-xl max-h-[90vh] overflow-y-auto bg-[#0f1626] border border-[#243756] rounded-2xl p-4 flex flex-col items-center text-center gap-3.5 shadow-2xl animate-scale-up custom-scrollbar">
             <div className={`text-4xl p-3 rounded-2xl border ${battleResult.win ? 'bg-[#38ef7d22] border-[#38ef7d66] text-[#38ef7d]' : 'bg-[#ff416c22] border-[#ff416c66] text-[#ff416c]'}`}>
               {battleResult.win ? '🏰💥' : '🛡️'}
             </div>

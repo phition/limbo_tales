@@ -2506,7 +2506,7 @@ export const ExplorationScreen: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 flex flex-col gap-1.5">
+          <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 flex flex-col md:grid md:grid-cols-3 gap-1.5">
             {gm.party.map(hero => {
               const cls = Object.values(CHARACTER_CLASSES).find(c => c.id === hero.classId);
               const classIcon = cls?.skills[0]?.icon ?? '⚔️';
@@ -2689,7 +2689,7 @@ export const ExplorationScreen: React.FC = () => {
           </div>
         )}
         {state.dungeonInventory.length > 0 ? (
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1.5">
             {state.dungeonInventory.map((slot, i) => {
               const isFull = slot.qty >= slot.maxStack;
               const typeColor = slot.itemType === 'supply' ? '#66bb6a' : slot.itemType === 'equipment' ? '#ffd54f' : slot.itemType === 'skillBook' ? '#ce93d8' : '#c8aa6e';

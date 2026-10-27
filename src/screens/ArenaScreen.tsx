@@ -3956,86 +3956,88 @@ export const ArenaScreen: React.FC = () => {
               </button>
             </div>
 
-            {opponents.map(opp => {
-              const oppBadge = getRankBadge(opp.rating);
-              const ratingGainDelta = Math.max(15, Math.floor((opp.rating - state.currentArenaRating) / 25 + 30));
-              return (
-                <div key={opp.id} className="panel p-3 flex flex-col gap-2.5 border border-[#1f2738] hover:border-[#c8aa6e44] transition-all bg-[#0e1320] rounded-xl w-full max-w-full overflow-hidden">
-                  
-                  {/* 카드 상단: 지휘관 정보 & 레이팅 & 도전 버튼 */}
-                  <div className="flex items-center justify-between gap-2 w-full">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-sm text-white truncate">{tr(opp.name)}</span>
-                        {opp.isBot ? (
-                          <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff704325] text-[#ff7043] border border-[#ff704355] shrink-0 font-mono flex items-center gap-0.5">
-                            🤖 BOT
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 w-full">
+              {opponents.map(opp => {
+                const oppBadge = getRankBadge(opp.rating);
+                const ratingGainDelta = Math.max(15, Math.floor((opp.rating - state.currentArenaRating) / 25 + 30));
+                return (
+                  <div key={opp.id} className="panel p-3 flex flex-col gap-2.5 border border-[#1f2738] hover:border-[#c8aa6e44] transition-all bg-[#0e1320] rounded-xl w-full max-w-full overflow-hidden">
+                    
+                    {/* 카드 상단: 지휘관 정보 & 레이팅 & 도전 버튼 */}
+                    <div className="flex items-center justify-between gap-2 w-full">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-bold text-sm text-white truncate">{tr(opp.name)}</span>
+                          {opp.isBot ? (
+                            <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff704325] text-[#ff7043] border border-[#ff704355] shrink-0 font-mono flex items-center gap-0.5">
+                              🤖 BOT
+                            </span>
+                          ) : (
+                            <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] shrink-0 font-mono flex items-center gap-0.5">
+                              🌐 {tr('지휘관')}
+                            </span>
+                          )}
+                          <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold shrink-0 flex items-center gap-1" style={{ background: oppBadge.bg, color: oppBadge.color, border: `1px solid ${oppBadge.border}` }}>
+                            <GameIcon name={oppBadge.iconKey} icon={oppBadge.icon} size={12} inline={false} />
+                            {tr(oppBadge.label)}
                           </span>
-                        ) : (
-                          <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#c8aa6e25] text-[#c8aa6e] border border-[#c8aa6e55] shrink-0 font-mono flex items-center gap-0.5">
-                            🌐 {tr('지휘관')}
-                          </span>
-                        )}
-                        <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold shrink-0 flex items-center gap-1" style={{ background: oppBadge.bg, color: oppBadge.color, border: `1px solid ${oppBadge.border}` }}>
-                          <GameIcon name={oppBadge.iconKey} icon={oppBadge.icon} size={12} inline={false} />
-                          {tr(oppBadge.label)}
-                        </span>
-                        {opp.isPromotion && (
-                          <span className="text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff980025] text-[#ffd54f] border border-[#ff980066] shrink-0 font-mono flex items-center gap-0.5 animate-pulse">
-                            🔥 {tr('승급 도전')}
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-[11px] text-[#8b9bb4] mt-0.5 truncate">{tr(opp.guild)} · Rank #{opp.rank}</div>
-                    </div>
-
-                    <div className="flex items-center gap-2 shrink-0">
-                      <div className="text-right">
-                        <div className="font-mono text-xs font-bold text-[#ffd54f]">{opp.rating} P</div>
-                        <span className="text-[9px] text-[#38ef7d] font-mono block">+{ratingGainDelta} P</span>
-                      </div>
-                      <ActionButton
-                        label={tr('⚔️ 결투 시작')}
-                        variant={squadCheck.isReady ? 'primary' : 'ghost'}
-                        size="sm"
-                        className={`px-3 py-1.5 text-xs font-bold shrink-0 ${
-                          squadCheck.isReady ? 'shadow-md shadow-[#c8aa6e22]' : 'opacity-80 border border-[#ef535044] text-[#ff8a80]'
-                        }`}
-                        onClick={() => startPvpSimulation(opp)}
-                      />
-                    </div>
-                  </div>
-
-                  {/* 카드 하단: 방어 진형 3인 덱 칩 (홀덤 실루엣: 2 공개 + 1 히든) */}
-                  <div className="grid grid-cols-3 gap-1.5 p-1.5 rounded-lg bg-[#141b2b] border border-[#222d42] w-full">
-                    {opp.defenseDeck.slice(0, 3).map((hero, idx) => {
-                      const isHidden = idx === 2; // 후열 블라인드
-                      return (
-                        <div
-                          key={idx}
-                          className={`flex flex-col items-center justify-center gap-0.5 text-[9px] px-1 py-1.5 rounded border min-w-0 text-center ${
-                            isHidden
-                              ? 'bg-gradient-to-br from-[#211233] to-[#120a1c] border-[#7e57c266] text-[#ce93d8]'
-                              : 'bg-[#1a2338] border-[#2c3b59] text-[#cfd8dc]'
-                          }`}
-                        >
-                          <span className="text-[9px] font-bold text-[#c8aa6e] shrink-0">
-                            {idx === 0 ? tr('전열') : idx === 1 ? tr('중열') : `${tr('후열')} ❓`}
-                          </span>
-                          <span className="font-semibold truncate w-full">
-                            {isHidden ? tr('❓ [비공개]') : tr(hero.title)}
-                          </span>
-                          <span className="text-[8px] font-mono shrink-0 text-[#8b9bb4]">
-                            {isHidden ? tr('히든 실루엣') : `Lv.${hero.level}`}
-                          </span>
+                          {opp.isPromotion && (
+                            <span className="text-[9.5px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff980025] text-[#ffd54f] border border-[#ff980066] shrink-0 font-mono flex items-center gap-0.5 animate-pulse">
+                              🔥 {tr('승급 도전')}
+                            </span>
+                          )}
                         </div>
-                      );
-                    })}
-                  </div>
+                        <div className="text-[11px] text-[#8b9bb4] mt-0.5 truncate">{tr(opp.guild)} · Rank #{opp.rank}</div>
+                      </div>
 
-                </div>
-              );
-            })}
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className="text-right">
+                          <div className="font-mono text-xs font-bold text-[#ffd54f]">{opp.rating} P</div>
+                          <span className="text-[9px] text-[#38ef7d] font-mono block">+{ratingGainDelta} P</span>
+                        </div>
+                        <ActionButton
+                          label={tr('⚔️ 결투 시작')}
+                          variant={squadCheck.isReady ? 'primary' : 'ghost'}
+                          size="sm"
+                          className={`px-3 py-1.5 text-xs font-bold shrink-0 ${
+                            squadCheck.isReady ? 'shadow-md shadow-[#c8aa6e22]' : 'opacity-80 border border-[#ef535044] text-[#ff8a80]'
+                          }`}
+                          onClick={() => startPvpSimulation(opp)}
+                        />
+                      </div>
+                    </div>
+
+                    {/* 카드 하단: 방어 진형 3인 덱 칩 (홀덤 실루엣: 2 공개 + 1 히든) */}
+                    <div className="grid grid-cols-3 gap-1.5 p-1.5 rounded-lg bg-[#141b2b] border border-[#222d42] w-full">
+                      {opp.defenseDeck.slice(0, 3).map((hero, idx) => {
+                        const isHidden = idx === 2; // 후열 블라인드
+                        return (
+                          <div
+                            key={idx}
+                            className={`flex flex-col items-center justify-center gap-0.5 text-[9px] px-1 py-1.5 rounded border min-w-0 text-center ${
+                              isHidden
+                                ? 'bg-gradient-to-br from-[#211233] to-[#120a1c] border-[#7e57c266] text-[#ce93d8]'
+                                : 'bg-[#1a2338] border-[#2c3b59] text-[#cfd8dc]'
+                            }`}
+                          >
+                            <span className="text-[9px] font-bold text-[#c8aa6e] shrink-0">
+                              {idx === 0 ? tr('전열') : idx === 1 ? tr('중열') : `${tr('후열')} ❓`}
+                            </span>
+                            <span className="font-semibold truncate w-full">
+                              {isHidden ? tr('❓ [비공개]') : tr(hero.title)}
+                            </span>
+                            <span className="text-[8px] font-mono shrink-0 text-[#8b9bb4]">
+                              {isHidden ? tr('히든 실루엣') : `Lv.${hero.level}`}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 
@@ -4258,7 +4260,7 @@ export const ArenaScreen: React.FC = () => {
           />
 
           {/* 전장 헤더 */}
-          <div className="w-full max-w-[500px] flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#0e1016] border border-[#1e2d48] shadow-lg shrink-0 z-10">
+          <div className="w-full max-w-[500px] md:max-w-2xl lg:max-w-4xl flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#0e1016] border border-[#1e2d48] shadow-lg shrink-0 z-10">
             <div className="flex items-center gap-2 min-w-0">
               <span className="text-base">⚔️</span>
               <div className="min-w-0">
@@ -4299,7 +4301,7 @@ export const ArenaScreen: React.FC = () => {
           </div>
 
           {/* 🏆 피버콜 3승 선착 스코어보드 (Fever 3-Win Domination) */}
-          <div className="w-full max-w-[500px] flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#090d19]/90 border border-amber-500/40 shadow-lg text-xs mt-1 z-10 backdrop-blur-sm">
+          <div className="w-full max-w-[500px] md:max-w-2xl lg:max-w-4xl flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#090d19]/90 border border-amber-500/40 shadow-lg text-xs mt-1 z-10 backdrop-blur-sm">
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-[#c8aa6e] text-[11px] flex items-center gap-1">
                 <span>🛡️</span>
@@ -4628,7 +4630,7 @@ export const ArenaScreen: React.FC = () => {
           )}
 
           {/* ── 1. 적 진영 (적 리더/서포터 + 적 공격자 이미지창 + 3인 필드 카드) ── */}
-          <div className="w-full max-w-[500px] my-auto flex flex-col gap-1.5 relative">
+          <div className="w-full max-w-[500px] md:max-w-2xl lg:max-w-4xl my-auto flex flex-col gap-1.5 relative">
             {/* 상단 적 리더 & 서포터 정보 패널 */}
             <LeaderInfoCard
               leader={oppLeader}
@@ -4954,7 +4956,7 @@ export const ArenaScreen: React.FC = () => {
           </div>
 
           {/* ── 4. 하단 액션 커맨드 바 (수동 플레이 시 스킬 직접 조작) ── */}
-          <div className="w-full max-w-[500px] shrink-0">
+          <div className="w-full max-w-[500px] md:max-w-2xl lg:max-w-4xl shrink-0">
             {isMyTurn && !isAuto ? (
               <div className="panel p-2.5 rounded-xl bg-[#0a1220] border border-[#c8aa6e55] flex flex-col gap-2 animate-fade-in shadow-2xl">
                 <div className="flex items-center justify-between text-xs">
@@ -5047,7 +5049,7 @@ export const ArenaScreen: React.FC = () => {
           {/* ════════════════════════════════════════════════════════════════ */}
           {finalReward && (
             <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 animate-fade-in">
-              <div className="relative panel-accent w-full max-w-[520px] max-h-[90vh] overflow-y-auto p-4 bg-[#0e1117] border border-[#333d4e] rounded-2xl shadow-2xl flex flex-col gap-3 text-center animate-scale-up custom-scrollbar">
+              <div className="relative panel-accent w-full max-w-[520px] md:max-w-xl max-h-[90vh] overflow-y-auto p-4 bg-[#0e1117] border border-[#333d4e] rounded-2xl shadow-2xl flex flex-col gap-3 text-center animate-scale-up custom-scrollbar">
                 
                 {/* 헤더 승패 배너 */}
                 <div className={`py-2 px-3 rounded-xl border-2 ${finalReward.win ? 'bg-[#38ef7d18] border-[#38ef7d] text-[#38ef7d]' : 'bg-[#ef535018] border-[#ef5350] text-[#ef5350]'}`}>

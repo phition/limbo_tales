@@ -7926,7 +7926,7 @@ export const BattleScreen: React.FC = () => {
           <FeverGaugeBar badges={feverBadges} party={gm.party} showEffectDescription={true} />
         </div>
 
-        <div className="flex flex-col gap-1 mb-2">
+        <div className="flex flex-col md:grid md:grid-cols-3 gap-1 mb-2">
           {gm.party.map((hero, i) => (
             <HeroRow
               key={hero.id} hero={hero} gm={gm}
@@ -7961,7 +7961,7 @@ export const BattleScreen: React.FC = () => {
               </span>
               <span className="text-[10px] text-[#c8aa6e] font-medium">(길게 눌러 스킬 상세)</span>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {/* 기본 공격 또는 무기 접두사 인챈트 대체 스킬 */}
               {(() => {
                 const weaponEnchantSkill = selectedHero.equipment?.weapon?.prefix?.grantedSkill;

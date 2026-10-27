@@ -20,7 +20,7 @@ export const Modal: React.FC<Props> = ({
   children,
   footer,
   zIndex = 'z-50',
-  maxWidth = 'max-w-[440px]',
+  maxWidth = 'max-w-[95vw] sm:max-w-[560px] md:max-w-[680px]',
   maxHeight = 'max-h-[90dvh]',
   className = ''
 }) => {
