@@ -2105,7 +2105,7 @@ export const ExplorationScreen: React.FC = () => {
                         skills: sanitizedSkills,
                         rewards: { gold: 0, ether: 0, exp: 0 },
                         promptKey: 'mercenary',
-                        imagePath: 'assets/valkyrie_saintess.jpg',
+                        imagePath: 'assets/portraits/portrait_paladin.png',
                         themeColor: 0x90caf9,
                         description: `[${visitor.callsign}] 지휘관의 원정 대원`
                       };

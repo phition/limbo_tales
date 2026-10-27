@@ -3,7 +3,7 @@ export type ResourceType =
   | 'wood' | 'stone' | 'iron' | 'food' | 'gold' | 'ether'
   | 'herb' | 'leather' | 'silk' | 'coal' | 'bone'
   | 'crystal' | 'void_shard'
-  | 'prefix_stone' | 'suffix_stone' | 'pure_prefix_stone' | 'pure_suffix_stone'
+  | 'prefix_stone' | 'suffix_stone' | 'pure_prefix_stone' | 'pure_suffix_stone' | 'pure_mana_stone'
   | 'relic_floor_1' | 'relic_floor_2' | 'relic_floor_3' | 'relic_floor_4' | 'relic_floor_5' 
   | 'relic_floor_6' | 'relic_floor_7' | 'relic_floor_8' | 'relic_floor_9' | 'relic_floor_10';
 
@@ -24,11 +24,12 @@ export interface GameResources {
   // 🔮 심연 희귀 유물 (2종)
   crystal: number;      // 마력 수정 — 마법 장비 및 나침반 촉매
   void_shard: number;   // 공허의 파편 — 대용량 배낭 및 2차 승급
-  // ✨ 인챈트 마도석 (4종)
+  // ✨ 인챈트 및 고위 강화 마도석
   prefix_stone: number;       // 일반 접두석 (1~2층 드롭)
   suffix_stone: number;       // 일반 접미석 (1~2층 드롭)
   pure_prefix_stone: number;  // 순수 접두석 (3~5층/보스 드롭)
   pure_suffix_stone: number;  // 순수 접미석 (3~5층/보스 드롭)
+  pure_mana_stone?: number;   // 순수 마도석 (10~11층 드롭, 7강 이상 강화 및 에픽 이상 장비/인챈트 촉매)
   // 👑 광폭화 보스 전용 신화 유물 (10종)
   relic_floor_1: number; // 침묵의 흑핵 (1F)
   relic_floor_2: number; // 망령의 영혼수정 (2F)

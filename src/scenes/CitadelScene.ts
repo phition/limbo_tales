@@ -385,8 +385,8 @@ export class CitadelScene extends Phaser.Scene {
     // 실제 이미지 텍스처 바인딩
     if (promptKey === 'citadel_bonfire' && this.textures.exists('art_citadel_bonfire')) {
       this.cardArtImage.setTexture('art_citadel_bonfire').setVisible(!this.isPromptMode);
-    } else if ((promptKey === 'hero_valkyrie' || promptKey === 'hero_paladin') && this.textures.exists('art_valkyrie_saintess')) {
-      this.cardArtImage.setTexture('art_valkyrie_saintess').setVisible(!this.isPromptMode);
+    } else if ((promptKey === 'hero_valkyrie' || promptKey === 'hero_paladin') && this.textures.exists('art_citadel_bonfire')) {
+      this.cardArtImage.setTexture('art_citadel_bonfire').setVisible(!this.isPromptMode);
     } else if (promptKey.includes('boss') && this.textures.exists('art_void_overlord')) {
       this.cardArtImage.setTexture('art_void_overlord').setVisible(!this.isPromptMode);
     } else if (this.textures.exists('art_citadel_bonfire')) {

@@ -1,0 +1,350 @@
+{
+ "수련자의 차원 주둔지": {
+  "en": "Trainee's Dimensional Outpost",
+  "ja": "修練者の次元駐屯地"
+ },
+ "교관 카일": {
+  "en": "Instructor Kyle",
+  "ja": "教官カイル"
+ },
+ "초심자 원탁회": {
+  "en": "Novice Round Table",
+  "ja": "初心者円卓会"
+ },
+ "🔰 입문 훈련 (기본 검증)": {
+  "en": "🔰 Intro Training (Basic Trial)",
+  "ja": "🔰 入門訓練（基本検証）"
+ },
+ "황금 실크로드 보급성채": {
+  "en": "Golden Silk Road Supply Fortress",
+  "ja": "黄金シルクロード補給城塞"
+ },
+ "대상인 골드마이어": {
+  "en": "Grand Merchant Goldmeyer",
+  "ja": "大商人ゴールドマイヤー"
+ },
+ "번영의 황금상단": {
+  "en": "Golden Caravan of Prosperity",
+  "ja": "繁栄の黄金商団"
+ },
+ "💰 부유한 상단 (약탈 자원 대량)": {
+  "en": "💰 Wealthy Caravan (Large plunder resources)",
+  "ja": "💰 裕福な商団（略奪資源大量）"
+ },
+ "금고 수호": {
+  "en": "Vault Guard",
+  "ja": "金庫守護"
+ },
+ "용병 경호": {
+  "en": "Mercenary Escort",
+  "ja": "傭兵護衛"
+ },
+ "치유 기도": {
+  "en": "Healing Prayer",
+  "ja": "癒しの祈り"
+ },
+ "재력의 전술": {
+  "en": "Tactics of Wealth",
+  "ja": "財力の戦術"
+ },
+ "상인": {
+  "en": "Merchant",
+  "ja": "商人"
+ },
+ "발할라 기사단 주둔지": {
+  "en": "Valhalla Knights Garrison",
+  "ja": "ヴァルハラ騎士団駐屯地"
+ },
+ "기사단장 지그문트": {
+  "en": "Knight Commander Sigmund",
+  "ja": "騎士団長ジークムント"
+ },
+ "발할라의 방패": {
+  "en": "Shield of Valhalla",
+  "ja": "ヴァルハラの盾"
+ },
+ "🏰 표준 균형 (공/방/유틸 밸런스)": {
+  "en": "🏰 Standard Balance (ATK/DEF/Utility)",
+  "ja": "🏰 標準バランス（攻/防/ユーティリティ）"
+ },
+ "진형 엄호": {
+  "en": "Formation Cover",
+  "ja": "陣形援護"
+ },
+ "돌격 검격": {
+  "en": "Charging Slash",
+  "ja": "突撃剣撃"
+ },
+ "정석 전술": {
+  "en": "Orthodox Tactics",
+  "ja": "定石戦術"
+ },
+ "용맹": {
+  "en": "Valor",
+  "ja": "勇猛"
+ },
+ "섀도우 리퍼 암영 기지": {
+  "en": "Shadow Reaper Dark Base",
+  "ja": "シャドウリーパー暗影基地"
+ },
+ "암영 제이드": {
+  "en": "Shade Jade",
+  "ja": "暗影ジェイド"
+ },
+ "⚡ 초고속 급습 (감속 & 치명타 저격)": {
+  "en": "⚡ Ultra-Fast Raid (Slow & Critical Snipe)",
+  "ja": "⚡ 超高速急襲（減速＆会心狙撃）"
+ },
+ "암영의 은신": {
+  "en": "Shadow Stealth",
+  "ja": "暗影の隠密"
+ },
+ "치명적 암살": {
+  "en": "Deadly Assassination",
+  "ja": "致命的暗殺"
+ },
+ "신속의 칼날": {
+  "en": "Blade of Swiftness",
+  "ja": "神速の刃"
+ },
+ "그림자 전술": {
+  "en": "Shadow Tactics",
+  "ja": "影の戦術"
+ },
+ "독사 군단 역병 요새": {
+  "en": "Viper Legion Plague Fortress",
+  "ja": "毒蛇軍団疫病要塞"
+ },
+ "독주술사 베놈": {
+  "en": "Poison Sorcerer Venom",
+  "ja": "毒呪術師ヴェノム"
+ },
+ "부식의 만드라고라": {
+  "en": "Mandrake of Corrosion",
+  "ja": "腐食のマンドラゴラ"
+ },
+ "🧪 맹독 부식 (14% DoT 지속 피해)": {
+  "en": "🧪 Deadly Corrosion (14% DoT damage)",
+  "ja": "🧪 猛毒腐食（14%継続ダメージ）"
+ },
+ "독기 저항": {
+  "en": "Miasma Resistance",
+  "ja": "毒気耐性"
+ },
+ "맹독의 저격": {
+  "en": "Snipe of Deadly Poison",
+  "ja": "猛毒の狙撃"
+ },
+ "부식 전염": {
+  "en": "Corrosion Contagion",
+  "ja": "腐食感染"
+ },
+ "역병 전술": {
+  "en": "Plague Tactics",
+  "ja": "疫病戦術"
+ },
+ "서리꽃 혹한 연구소": {
+  "en": "Frostbloom Bitter Cold Lab",
+  "ja": "霜華酷寒研究所"
+ },
+ "빙결사 프로스트": {
+  "en": "Freezer Frost",
+  "ja": "氷結師フロスト"
+ },
+ "혹한의 탐구자": {
+  "en": "Seekers of the Bitter Cold",
+  "ja": "酷寒の探究者"
+ },
+ "❄️ 결빙 CC (동결 & 기절 교란)": {
+  "en": "❄️ Freeze CC (Freeze & Stun disruption)",
+  "ja": "❄️ 凍結CC（凍結＆気絶撹乱）"
+ },
+ "냉혹의 수호": {
+  "en": "Ruthless Guard",
+  "ja": "冷酷の守護"
+ },
+ "약점 관통": {
+  "en": "Weakness Pierce",
+  "ja": "弱点貫通"
+ },
+ "절대영도 결빙": {
+  "en": "Absolute Zero Freeze",
+  "ja": "絶対零度凍結"
+ },
+ "지성의 전술": {
+  "en": "Tactics of Intellect",
+  "ja": "知性の戦術"
+ },
+ "신비": {
+  "en": "Mystic",
+  "ja": "神秘"
+ },
+ "아이언팽 철벽 요새": {
+  "en": "Ironfang Bulwark Fortress",
+  "ja": "アイアンファング鉄壁要塞"
+ },
+ "🛡️ 성벽 극방어 (내구&방어 증폭)": {
+  "en": "🛡️ Extreme Wall Defense (Durability & DEF boost)",
+  "ja": "🛡️ 城壁極防御（耐久＆防御増幅）"
+ },
+ "철벽의 금강": {
+  "en": "Adamant of the Iron Wall",
+  "ja": "鉄壁の金剛"
+ },
+ "투사의 요격": {
+  "en": "Fighter's Intercept",
+  "ja": "闘士の迎撃"
+ },
+ "성스러운 수복": {
+  "en": "Holy Restoration",
+  "ja": "聖なる修復"
+ },
+ "불굴의 지휘": {
+  "en": "Indomitable Command",
+  "ja": "不屈の指揮"
+ },
+ "진홍의 화룡 포병대": {
+  "en": "Crimson Fire Dragon Artillery",
+  "ja": "真紅の火竜砲兵隊"
+ },
+ "포병단장 이그니스": {
+  "en": "Artillery Commander Ignis",
+  "ja": "砲兵団長イグニス"
+ },
+ "홍련의 학살자들": {
+  "en": "Slaughterers of the Crimson Lotus",
+  "ja": "紅蓮の虐殺者たち"
+ },
+ "🔥 작열 포격 (화상 DoT & 집중 포격)": {
+  "en": "🔥 Blazing Bombardment (Burn DoT & Focused Fire)",
+  "ja": "🔥 灼熱砲撃（火傷DoT＆集中砲撃）"
+ },
+ "불굴의 돌파": {
+  "en": "Indomitable Breakthrough",
+  "ja": "不屈の突破"
+ },
+ "치명적 폭격": {
+  "en": "Deadly Bombardment",
+  "ja": "致命的爆撃"
+ },
+ "작열의 마탄": {
+  "en": "Blazing Magic Bullet",
+  "ja": "灼熱の魔弾"
+ },
+ "공허의 틈새 관측탑": {
+  "en": "Void Rift Observation Tower",
+  "ja": "虚空の裂け目観測塔"
+ },
+ "차원학자 노바": {
+  "en": "Dimensionologist Nova",
+  "ja": "次元学者ノヴァ"
+ },
+ "공허의 관측자": {
+  "en": "Observers of the Void",
+  "ja": "虚空の観測者"
+ },
+ "🌌 마나 세금 (공허 파편 & MP소모 증가)": {
+  "en": "🌌 Mana Tax (Void Shards & increased MP cost)",
+  "ja": "🌌 マナ税（虚空の破片＆MP消費増加）"
+ },
+ "공허 왜곡": {
+  "en": "Void Distortion",
+  "ja": "虚空歪曲"
+ },
+ "마나 붕괴": {
+  "en": "Mana Collapse",
+  "ja": "マナ崩壊"
+ },
+ "시공간 전술": {
+  "en": "Spacetime Tactics",
+  "ja": "時空戦術"
+ },
+ "성스러운 빛의 대성채": {
+  "en": "Grand Citadel of Holy Light",
+  "ja": "聖なる光の大城塞"
+ },
+ "대주교 발렌타인": {
+  "en": "Archbishop Valentine",
+  "ja": "大司教ヴァレンタイン"
+ },
+ "👑 성역 수호전 (Gate Lv.10 상급 난도)": {
+  "en": "👑 Sanctuary Defense War (Gate Lv.10 High Difficulty)",
+  "ja": "👑 聖域守護戦（ゲート Lv.10 上級難度）"
+ },
+ "신성한 심판": {
+  "en": "Divine Judgment",
+  "ja": "神聖なる審判"
+ },
+ "성전의 총지휘": {
+  "en": "Supreme Command of the Holy War",
+  "ja": "聖戦の総指揮"
+ },
+ "크로노스 시공간 성역": {
+  "en": "Chronos Spacetime Sanctuary",
+  "ja": "クロノス時空聖域"
+ },
+ "시공집행관 아르카나": {
+  "en": "Spacetime Enforcer Arcana",
+  "ja": "時空執行官アルカナ"
+ },
+ "영겁의 파수꾼": {
+  "en": "Sentinels of Eternity",
+  "ja": "永劫の番人"
+ },
+ "⏳ 시공간 결박 (극한 감속 & 마력 붕괴)": {
+  "en": "⏳ Spacetime Binding (Extreme Slow & Mana Collapse)",
+  "ja": "⏳ 時空拘束（極限減速＆魔力崩壊）"
+ },
+ "인과율 왜곡": {
+  "en": "Causality Distortion",
+  "ja": "因果律歪曲"
+ },
+ "성광 파쇄": {
+  "en": "Holy Light Shatter",
+  "ja": "聖光破砕"
+ },
+ "초정밀 저격": {
+  "en": "Ultra-Precision Snipe",
+  "ja": "超精密狙撃"
+ },
+ "초월": {
+  "en": "Transcendence",
+  "ja": "超越"
+ },
+ "무간도 심연 왕좌 요새": {
+  "en": "Avici Abyssal Throne Fortress",
+  "ja": "無間道深淵王座要塞"
+ },
+ "심연군주 말렉": {
+  "en": "Abyss Lord Malek",
+  "ja": "深淵君主マレク"
+ },
+ "종언의 왕좌": {
+  "en": "Throne of the End",
+  "ja": "終焉の王座"
+ },
+ "🌌 종언의 총력전 (Gate Lv.10 최고 난도)": {
+  "en": "🌌 All-Out War of the End (Gate Lv.10 Max Difficulty)",
+  "ja": "🌌 終焉の総力戦（ゲート Lv.10 最高難度）"
+ },
+ "심연의 지배": {
+  "en": "Dominion of the Abyss",
+  "ja": "深淵の支配"
+ },
+ "파멸의 참격": {
+  "en": "Slash of Ruin",
+  "ja": "破滅の斬撃"
+ },
+ "종언의 마력": {
+  "en": "Mana of the End",
+  "ja": "終焉の魔力"
+ },
+ "영혼의 속박": {
+  "en": "Soul Bondage",
+  "ja": "魂の束縛"
+ },
+ "절대자": {
+  "en": "The Absolute",
+  "ja": "絶対者"
+ }
+}

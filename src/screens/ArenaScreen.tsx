@@ -37,10 +37,10 @@ import { getSkillMagicSchool, getElementalSubtype, resolveCombatVfxAndSfx } from
 import { SkillDetailModal } from '../components/SkillDetailModal';
 
 const DEFAULT_CLASS_IMAGES: Record<string, string> = {
-  aegis_valkyrie: 'assets/valkyrie_saintess.jpg',
-  paladin: 'assets/valkyrie_saintess.jpg',
-  high_saintess: 'assets/valkyrie_saintess.jpg',
-  valhalla_blade: 'assets/valkyrie_saintess.jpg',
+  aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.png',
+  paladin: 'assets/portraits/portrait_paladin_female.png',
+  high_saintess: 'assets/portraits/portrait_t2_high_saintess.png',
+  valhalla_blade: 'assets/portraits/portrait_t2_valhalla_blade.png',
   tactical_tower: 'assets/citadel_bonfire.jpg',
 };
 
@@ -835,6 +835,9 @@ interface CombatLogItem {
 
 export const ArenaScreen: React.FC = () => {
   const { tr } = useI18n();
+  /** 한국어 템플릿({0},{1}…)을 번역한 뒤 값을 끼워 넣는 헬퍼 (값은 호출 측에서 미리 번역) */
+  const fmtTr = (tpl: string, ...args: Array<string | number>) =>
+    tr(tpl).replace(/\{(\d+)\}/g, (_m, i) => String(args[Number(i)] ?? ''));
   const { state, gm, navigateTo } = useGameManager();
   const gateLevel = gm.isMasterAccount ? 10 : (state.buildings['arenaGate']?.level || 0);
   const isGateBuilt = gateLevel >= 1;
@@ -1526,7 +1529,7 @@ export const ArenaScreen: React.FC = () => {
     if (isPlayerDomination) {
       setActionBanner({
         text: '🏆 [피버 전술 압도 (FEVER DOMINATION)]',
-        sub: `피버콜 3회 승리 달성! 오퍼레이터 [${activeOperator?.name || '지휘관'}]의 전술 폭격으로 적 결투 부대를 완전히 제압했습니다!`,
+        sub: fmtTr('피버콜 3회 승리 달성! 오퍼레이터 [{0}]의 전술 폭격으로 적 결투 부대를 완전히 제압했습니다!', tr(activeOperator?.name || '지휘관')),
         color: '#ffd54f'
       });
     } else if (isOppDomination) {
@@ -1539,8 +1542,8 @@ export const ArenaScreen: React.FC = () => {
       setActionBanner({
         text: `${showdown.icon} ${showdown.bannerTitle}`,
         sub: isPlayerWin && opSpecialSkill
-          ? `[오퍼레이터 궁극기] ${activeOperator?.name}의 [${opSpecialSkill.name}] 전탄 발사! (${showdown.playerSynergy.name})`
-          : `${showdown.bannerSub} (${showdown.playerSynergy.name} vs ${showdown.oppSynergy.name})`,
+          ? fmtTr('[오퍼레이터 궁극기] {0}의 [{1}] 전탄 발사! ({2})', tr(activeOperator?.name || ''), tr(opSpecialSkill.name), tr(showdown.playerSynergy.name))
+          : `${tr(showdown.bannerSub)} (${tr(showdown.playerSynergy.name)} vs ${tr(showdown.oppSynergy.name)})`,
         color: isPlayerWin ? '#c8aa6e' : isOppWin ? '#ff416c' : '#ffd54f'
       });
     }
@@ -2375,11 +2378,13 @@ export const ArenaScreen: React.FC = () => {
     };
     setBattleLogs(prev => [logItem, ...prev.slice(0, 19)]);
 
+    // 중계창 배너: 봇/대원 이름과 스킬명을 각각 번역한 뒤 문장에 끼워 넣음 (이름 번역 누락 방지)
+    const trTargetNames = targetUnits.map(u => tr(u.name)).join(', ');
     setActionBanner({
-      text: `${attacker.name} ➔ ${skill.name} ${isAoe ? '[광역 전체기]' : ''}`,
+      text: `${tr(attacker.name)} ➔ ${tr(skill.name)} ${isAoe ? tr('[광역 전체기]') : ''}`,
       sub: isHealing
-        ? `❤️ ${targetNames} 회복!`
-        : `💥 ${isAoe ? `${targetUnits.length}인에게 총 -${totalDamageDealt} 피해` : `${target.name}에게 -${totalDamageDealt} 피해`} ${anyCrit ? '[CRIT!]' : ''}`,
+        ? `❤️ ${fmtTr('{0} 회복!', trTargetNames)}`
+        : `💥 ${isAoe ? fmtTr('{0}인에게 총 -{1} 피해', targetUnits.length, totalDamageDealt) : fmtTr('{0}에게 -{1} 피해', tr(target.name), totalDamageDealt)} ${anyCrit ? '[CRIT!]' : ''}`,
       color: attacker.isPlayer ? '#c8aa6e' : '#ff416c',
     });
 

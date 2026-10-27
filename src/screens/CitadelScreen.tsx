@@ -19,6 +19,7 @@ import {
   SUFFIX_ENCHANT_OPTIONS,
   getEnchantSuccessRate,
   getEnchantStoneCost,
+  getEnchantPureManaStoneCost,
   getEnchantResourceCosts,
   getEnchantCandidates,
   recalculateEquipmentStats,
@@ -853,6 +854,7 @@ const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
   const wearer = item.equippedHeroId ? (gm.barracks || []).find(h => h.id === item.equippedHeroId) : null;
   const successRate = getEnchantSuccessRate(alchemyLv, isPure);
   const stoneCost = getEnchantStoneCost(item, isPure);
+  const pureManaStoneCost = getEnchantPureManaStoneCost(item, isPure);
   const { gold: goldCost, ether: etherCost } = getEnchantResourceCosts(isPure, mult);
 
   const locItem = item;
@@ -863,9 +865,10 @@ const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
     : (enchantType === 'prefix' ? 'prefix_stone' : 'suffix_stone');
 
   const stoneCount = (resources as unknown as Record<string, number>)[stoneKey] || 0;
+  const pureManaStoneCount = (resources.pure_mana_stone || 0);
 
   const canEnchantSlot = enchantType === 'prefix' ? canPrefix : canSuffix;
-  const canAfford = stoneCount >= stoneCost && (resources.gold || 0) >= goldCost && (resources.ether || 0) >= etherCost;
+  const canAfford = stoneCount >= stoneCost && (pureManaStoneCost === 0 || pureManaStoneCount >= pureManaStoneCost) && (resources.gold || 0) >= goldCost && (resources.ether || 0) >= etherCost;
   const canExecute = canEnchantSlot && canAfford;
 
   const handleStartEnchant = () => {
@@ -1153,6 +1156,13 @@ const EquipmentEnchantModal: React.FC<EquipmentEnchantModalProps> = ({
               <span>{stoneMeta[stoneKey]?.name}:</span>
               <span>{stoneCost}/{stoneCount}개</span>
             </span>
+            {pureManaStoneCost > 0 && (
+              <span className={`px-2.5 py-1 rounded-md border font-bold flex items-center gap-1 ${pureManaStoneCount >= pureManaStoneCost ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'}`}>
+                <span>💠</span>
+                <span>순수 마도석:</span>
+                <span>{pureManaStoneCost}/{pureManaStoneCount}개</span>
+              </span>
+            )}
             <span className={`px-2.5 py-1 rounded-md border font-bold flex items-center gap-1 ${(resources.gold || 0) >= goldCost ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'}`}>
               <span>🪙</span>
               <span>골드:</span>
@@ -9515,11 +9525,11 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           key: 'pure_mana_stone',
           label: '순수 마도석',
           icon: '💠',
-          category: '마도 인챈트석',
-          desc: '신화급 각성 및 차원 왜곡',
-          detailDesc: '고순도의 순수 마력이 응집된 심연의 결정체입니다. 장비의 잠재력을 극한으로 각성시키고 신화급 마도를 부여합니다.',
-          sources: ['심연 4~10층 보물상자 및 보스 토벌', '블랙 마켓(Lv.9)'],
-          usages: ['신화급 각성 및 고급 거래']
+          category: '마도 촉매석',
+          desc: '10~11층 심연 마도 결정 (고난도 강화 및 인챈트 촉매)',
+          detailDesc: '심연 10층과 11층(무간도)에서만 산출되는 고순도 마력의 결정체입니다. 장비와 스킬이 +7강 이상으로 진입할 때 필수적으로 요구되며, 에픽 이상 등급 장비의 강화 및 인챈트 시 반드시 소모되는 핵심 촉매입니다.',
+          sources: ['심연 10층 마물 및 보스 토벌', '심연 11층(무간도) 전투 전리품', '블랙 마켓(Lv.9)'],
+          usages: ['장비 및 스킬 7강 이상 강화', '에픽 이상 등급 장비 강화', '에픽 이상 등급 장비 인챈트', '전설/신화 마도서 연성']
         },
       ]
     }
@@ -10775,7 +10785,7 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     { key: 'void_shard',        name: '공허 파편',   icon: '🌌', category: 'rare',    reqLv: 7, baseBuy: 135, baseSell: 45,  tierName: '심연 재료',   desc: '에픽 장비 및 2차 전설 승급 (+50% 매입가)' },
     { key: 'pure_prefix_stone', name: '순수 접두석', icon: '⭐', category: 'rare',    reqLv: 8, baseBuy: 300, baseSell: 100, tierName: '심연 재료',   desc: '+10강 전용 최고급 접두 옵션 (+50% 매입가)' },
     { key: 'pure_suffix_stone', name: '순수 접미석', icon: '🌌', category: 'rare',    reqLv: 8, baseBuy: 300, baseSell: 100, tierName: '심연 재료',   desc: '+10강 전용 최고급 접미 옵션 (+50% 매입가)' },
-    { key: 'pure_mana_stone',   name: '순수 마도석', icon: '💠', category: 'rare',    reqLv: 9, baseBuy: 525, baseSell: 175, tierName: '심연 재료',   desc: '신화급 각성 및 차원 왜곡 (+50% 매입가)' },
+    { key: 'pure_mana_stone',   name: '순수 마도석', icon: '💠', category: 'rare',    reqLv: 9, baseBuy: 525, baseSell: 175, tierName: '심연 재료',   desc: '10~11층 심연 결정 · 7강+ 및 에픽+ 강화/인챈트 핵심 촉매' },
   ];
 
   const filteredItems = ALL_MARKET_ITEMS.filter(item => {
@@ -15101,7 +15111,7 @@ export const CitadelScreen: React.FC = () => {
       {/* 🎡 모바일 스와이프/드래그 지원 회전 휠 내비게이션 & 상단 방명록 티커 */}
       {!openDrawer ? (
         <div className="px-3 pt-1 pb-2 shrink-0 select-none flex flex-col gap-1.5">
-          {/* 📢 [D.M] 최신 글 1개 전체 내용 좌측 연속 흐름 티커 (하단 네비 메뉴 상단) */}
+          {/* 📢 [D.M] 최근 메시지 3개 전체 내용 좌측 연속 흐름 티커 (하단 네비 메뉴 상단) */}
           <div
             className="w-full px-2.5 py-1.5 rounded-xl bg-[#0e1117]/90 border border-[#c8aa6e33] hover:border-[#c8aa6e88] cursor-pointer flex items-center justify-between transition-all backdrop-blur-xs shadow-md group active:scale-[0.99] overflow-hidden"
             onClick={() => gm.emit('openGuestbook')}
@@ -15123,25 +15133,38 @@ export const CitadelScreen: React.FC = () => {
                 {guestbookMessages.length === 0 ? (
                   <span className="text-[11px] text-[#8b9bb4]">첫 번째 차원 메세지를 전송해 보세요!</span>
                 ) : (() => {
-                  const latestMsg = guestbookMessages[0];
-                  // 글자 수에 비례하여 부드럽고 천천히 일정한 속도로 흐르도록 애니메이션 지속 시간 산출 (최소 16초 ~ 최대 38초)
-                  const textLen = (latestMsg.authorName + latestMsg.content).length;
-                  const durSeconds = Math.max(16, Math.min(38, Math.round(textLen * 0.32 + 12)));
+                  const recentMsgs = guestbookMessages.slice(0, 3);
+                  // 3개 메시지의 총 글자 수에 비례하여 부드럽고 천천히 일정한 속도로 흐르도록 애니메이션 지속 시간 산출 (최소 18초 ~ 최대 65초)
+                  const totalTextLen = recentMsgs.reduce(
+                    (acc, msg) => acc + (msg.authorName || '').length + (msg.content || '').length + 8,
+                    0
+                  );
+                  const durSeconds = Math.max(18, Math.min(65, Math.round(totalTextLen * 0.28 + 12)));
+
+                  const renderMessageList = (keyPrefix: string) => (
+                    <div className="flex items-center shrink-0 pr-8">
+                      {recentMsgs.map((msg, idx) => (
+                        <div
+                          key={`${keyPrefix}_${msg.id || idx}`}
+                          className="flex items-center gap-1.5 shrink-0 text-[11px] pr-6"
+                        >
+                          <strong className="text-[#c8aa6e] font-bold shrink-0">[{msg.authorName}]</strong>
+                          <span className="text-[#e2e8f0] font-medium">{msg.content}</span>
+                          <span className="text-[#c8aa6e44] pl-5 font-bold select-none text-xs">✦</span>
+                        </div>
+                      ))}
+                    </div>
+                  );
+
                   return (
                     <div
                       className="animate-ticker-marquee flex items-center"
                       style={{ '--marquee-dur': `${durSeconds}s` } as React.CSSProperties}
                     >
-                      {/* 복사본 1 (원문) */}
-                      <div className="flex items-center gap-2 pr-12 shrink-0 text-[11px]">
-                        <strong className="text-[#c8aa6e] font-bold shrink-0">[{latestMsg.authorName}]</strong>
-                        <span className="text-[#e2e8f0] font-medium">{latestMsg.content}</span>
-                      </div>
-                      {/* 복사본 2 (무한 루프 이음새 없는 연속 스크롤용) */}
-                      <div className="flex items-center gap-2 pr-12 shrink-0 text-[11px]">
-                        <strong className="text-[#c8aa6e] font-bold shrink-0">[{latestMsg.authorName}]</strong>
-                        <span className="text-[#e2e8f0] font-medium">{latestMsg.content}</span>
-                      </div>
+                      {/* 복사본 1 (원문 최근 3개 세트) */}
+                      {renderMessageList('set1')}
+                      {/* 복사본 2 (무한 루프 이음새 없는 연속 스크롤용 3개 세트) */}
+                      {renderMessageList('set2')}
                     </div>
                   );
                 })()}

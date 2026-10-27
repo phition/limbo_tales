@@ -1,0 +1,1266 @@
+{
+ "좌측 포탑 화력 +{0}% (포탑 기본 ATK +{1})": {
+  "en": "Left turret firepower +{0}% (Turret base ATK +{1})",
+  "ja": "左砲塔の火力 +{0}%（砲塔基本ATK +{1}）"
+ },
+ "포격 시 {0}% 확률로 2턴간 화상 부여 (방어력 -50%, 턴당 최대 HP 8% 화염 피해)": {
+  "en": "{0}% chance on bombardment to inflict Burn for 2 turns (DEF -50%, 8% max HP fire damage per turn)",
+  "ja": "砲撃時{0}%の確率で2ターン火傷を付与（防御力-50%、毎ターン最大HPの8%の火炎ダメージ）"
+ },
+ "포격 시 {0}% 확률로 3턴간 맹독 부여 (턴당 대상 최대 HP 14% 치명적 독 피해)": {
+  "en": "{0}% chance on bombardment to inflict Deadly Poison for 3 turns (14% of target's max HP as lethal poison damage per turn)",
+  "ja": "砲撃時{0}%の確率で3ターン猛毒を付与（毎ターン対象の最大HPの14%の致命的な毒ダメージ）"
+ },
+ "성벽 및 포탑 수복량 +{0}% (매 턴 차원 보호막 기본 재생 +{1} HP)": {
+  "en": "Wall & turret repair +{0}% (Dimensional Barrier base regen +{1} HP per turn)",
+  "ja": "城壁・砲塔の修復量 +{0}%（毎ターン次元バリアの基本再生 +{1} HP）"
+ },
+ "전술 지원 발동 시 {0}% 확률로 침입자 1인 기절 (1턴간 행동 불가)": {
+  "en": "{0}% chance on Tactical Support to Stun 1 intruder (cannot act for 1 turn)",
+  "ja": "戦術支援発動時{0}%の確率で侵入者1人を気絶（1ターン行動不能）"
+ },
+ "전술 지원 시 {0}% 확률로 냉각 부여 (행동 불가, 방어력 +40%, 턴당 최대 HP 4% 동상 피해)": {
+  "en": "{0}% chance on Tactical Support to inflict Chill (cannot act, DEF +40%, 4% max HP frostbite damage per turn)",
+  "ja": "戦術支援時{0}%の確率で冷却を付与（行動不能、防御力+40%、毎ターン最大HPの4%の凍傷ダメージ）"
+ },
+ "침입자 전원 속도(SPD) -{0}% 감소": {
+  "en": "All intruders' SPD -{0}%",
+  "ja": "侵入者全員の速度(SPD) -{0}%"
+ },
+ "침입자 스킬 MP 소모량 +{0}% 증가": {
+  "en": "Intruder skill MP cost +{0}%",
+  "ja": "侵入者のスキルMP消費量 +{0}%"
+ },
+ "침입자 전원 행운(LUCK) -{0}% 감소": {
+  "en": "All intruders' LUCK -{0}%",
+  "ja": "侵入者全員の幸運(LUCK) -{0}%"
+ },
+ "🛡️ 차원 왜곡 평화 보호막": {
+  "en": "🛡️ Dimensional Warp Peace Barrier",
+  "ja": "🛡️ 次元歪曲平和バリア"
+ },
+ "차원 왜곡 평화 보호막 충전": {
+  "en": "Recharge Dimensional Warp Peace Barrier",
+  "ja": "次元歪曲平和バリアをチャージ"
+ },
+ "후원사 영상을 시청하고 평화 보호막 시간 6시간(21,600초)을 충전합니다.": {
+  "en": "Watch a sponsor video to recharge 6 hours (21,600 sec) of Peace Barrier time.",
+  "ja": "スポンサー動画を視聴して、平和バリア時間を6時間（21,600秒）チャージします。"
+ },
+ "평화 보호막 +6시간 충전": {
+  "en": "Peace Barrier +6 hrs recharged",
+  "ja": "平和バリア +6時間チャージ"
+ },
+ "🛡️ 차원 왜곡 평화 보호막 가동 중": {
+  "en": "🛡️ Dimensional Warp Peace Barrier Active",
+  "ja": "🛡️ 次元歪曲平和バリア稼働中"
+ },
+ "차원 왜곡 평화 보호막이 켜져 있는 동안에는 다른 영지를 공격할 수 없습니다. 보호막을 해제한 후 공격해 주세요.": {
+  "en": "You cannot attack other territories while the Dimensional Warp Peace Barrier is active. Disable the barrier before attacking.",
+  "ja": "次元歪曲平和バリアが起動している間は、他の領地を攻撃できません。バリアを解除してから攻撃してください。"
+ },
+ "이상으로 증축하면, 3인 결사대 + 1인 오퍼레이터 차원 공성 부대를 결성하여 다른 사령관의 영지를 침공하고 차원 보호막을 돌파하여 영지 자원의": {
+  "en": "or higher, you can form a dimensional siege force of a 3-member strike squad + 1 operator to invade other Commanders' territories, break through the dimensional barrier, and plunder the territory's resources:",
+  "ja": "以上に増築すると、3人の決死隊＋オペレーター1人の次元攻城部隊を結成して他の指揮官の領地を侵攻し、次元バリアを突破して領地資源を"
+ },
+ "광고 준비 중...": {
+  "en": "Preparing ad...",
+  "ja": "広告を準備中..."
+ },
+ "침공자: {0}": {
+  "en": "Invader: {0}",
+  "ja": "侵攻者: {0}"
+ },
+ "약탈 손실: -{0} {1}": {
+  "en": "Plunder loss: -{0} {1}",
+  "ja": "略奪損失: -{0} {1}"
+ },
+ "🔮 {0}개": {
+  "en": "🔮 {0}",
+  "ja": "🔮 {0}個"
+ },
+ "🌌 {0}개": {
+  "en": "🌌 {0}",
+  "ja": "🌌 {0}個"
+ },
+ "{0}차": {
+  "en": "Tier {0}",
+  "ja": "{0}次"
+ },
+ "🔒 선행 {0}차 Lv.1 필요": {
+  "en": "🔒 Requires Tier {0} Lv.1",
+  "ja": "🔒 先行{0}次 Lv.1が必要"
+ },
+ "수비대 {0}": {
+  "en": "Garrison {0}",
+  "ja": "守備隊 {0}"
+ },
+ "예상 내구도 {0} HP": {
+  "en": "Est. durability {0} HP",
+  "ja": "予想耐久度 {0} HP"
+ },
+ "총 Lv.{0} / 27": {
+  "en": "Total Lv.{0} / 27",
+  "ja": "合計 Lv.{0} / 27"
+ },
+ "{0} · {1}차 테크": {
+  "en": "{0} · Tier {1} Tech",
+  "ja": "{0} · {1}次テック"
+ },
+ "다음 레벨 (Lv.{0}):": {
+  "en": "Next Level (Lv.{0}):",
+  "ja": "次のレベル (Lv.{0}):"
+ },
+ "선행 기술인 {0}차 테크를 1레벨 이상 먼저 연구해야 활성화됩니다.": {
+  "en": "You must first research the prerequisite Tier {0} Tech to Lv.1 or higher to activate this.",
+  "ja": "先行技術である{0}次テックをLv.1以上まず研究する必要があります。"
+ },
+ "연구 진행 (Lv.{0} 달성)": {
+  "en": "Start Research (reach Lv.{0})",
+  "ja": "研究を進める（Lv.{0}達成）"
+ },
+ "{0}라운드 내에 적 영지의 차원 보호막을 돌파하십시오!": {
+  "en": "Break through the enemy territory's dimensional barrier within {0} rounds!",
+  "ja": "{0}ラウンド以内に敵領地の次元バリアを突破せよ！"
+ },
+ "게이트 Lv.{0} | 결속 수호자: {1} (+{2} HP)": {
+  "en": "Gate Lv.{0} | Bound Guardian: {1} (+{2} HP)",
+  "ja": "ゲート Lv.{0} | 結束守護者: {1} (+{2} HP)"
+ },
+ "게이트 Lv.{0} 에너지 공급 역장": {
+  "en": "Gate Lv.{0} Energy Supply Field",
+  "ja": "ゲート Lv.{0} エネルギー供給力場"
+ },
+ "사수: {0} | 화력 복합 지원 (포탑+용병 공격력 합산)": {
+  "en": "Gunner: {0} | Combined Firepower Support (Turret + Mercenary ATK)",
+  "ja": "射手: {0} | 火力複合支援（砲塔＋傭兵の攻撃力合算）"
+ },
+ "자동 요격 포탑": {
+  "en": "Auto-Intercept Turret",
+  "ja": "自動迎撃砲塔"
+ },
+ "사수: {0} | 전술 증폭 지원 (마나·행운 기반 전술 지원)": {
+  "en": "Gunner: {0} | Tactical Amplification Support (MP/LUCK-based tactical support)",
+  "ja": "射手: {0} | 戦術増幅支援（マナ・幸運ベースの戦術支援）"
+ },
+ "성역 결계 포탑": {
+  "en": "Sanctuary Ward Turret",
+  "ja": "聖域結界砲塔"
+ },
+ "적 구조물 및 방어선 물리/마법 타격": {
+  "en": "Physical/magic strikes on enemy structures and defensive lines",
+  "ja": "敵の構造物と防衛線への物理／魔法攻撃"
+ },
+ "좌측 타워 기본 사격 (화력 버프 적용)": {
+  "en": "Left tower basic fire (firepower buff applied)",
+  "ja": "左タワー基本射撃（火力バフ適用）"
+ },
+ "좌측 타워 기본 사격": {
+  "en": "Left tower basic fire",
+  "ja": "左タワー基本射撃"
+ },
+ "좌측 포탑 [{0}]": {
+  "en": "Left Turret [{0}]",
+  "ja": "左砲塔 [{0}]"
+ },
+ "우측 타워 기본 사격": {
+  "en": "Right tower basic fire",
+  "ja": "右タワー基本射撃"
+ },
+ "우측 포탑 [{0}]": {
+  "en": "Right Turret [{0}]",
+  "ja": "右砲塔 [{0}]"
+ },
+ "{0} (📡오퍼레이터)": {
+  "en": "{0} (📡Operator)",
+  "ja": "{0} (📡オペレーター)"
+ },
+ "{0} (🛡️성벽 결속 수호자)": {
+  "en": "{0} (🛡️Wall-Bound Guardian)",
+  "ja": "{0} (🛡️城壁結束守護者)"
+ },
+ "{0} (🛡️수성 오퍼레이터)": {
+  "en": "{0} (🛡️Defense Operator)",
+  "ja": "{0} (🛡️守城オペレーター)"
+ },
+ "🎯 [공성 전술 발동] {0} ➔ {1}!": {
+  "en": "🎯 [Siege Tactic Activated] {0} ➔ {1}!",
+  "ja": "🎯 [攻城戦術発動] {0} ➔ {1}！"
+ },
+ "{0} (공성 파괴력 {1}%)": {
+  "en": "{0} (Siege power {1}%)",
+  "ja": "{0} (攻城破壊力 {1}%)"
+ },
+ "🛡️ [수성 전술 발동] {0} ➔ {1}!": {
+  "en": "🛡️ [Defense Tactic Activated] {0} ➔ {1}!",
+  "ja": "🛡️ [守城戦術発動] {0} ➔ {1}！"
+ },
+ "+{0} 🛡️ 결계 수복": {
+  "en": "+{0} 🛡️ Ward Repair",
+  "ja": "+{0} 🛡️ 結界修復"
+ },
+ "제한 라운드({0}R) 동안 차원 보호막이 방어에 성공하여 침공이 격퇴되었습니다.": {
+  "en": "The dimensional barrier held for the round limit ({0}R) and the invasion was repelled.",
+  "ja": "制限ラウンド({0}R)の間、次元バリアが防衛に成功し、侵攻は撃退されました。"
+ },
+ "💀 [지속 피해 격멸] {0}!": {
+  "en": "💀 [Killed by Damage over Time] {0}!",
+  "ja": "💀 [継続ダメージで撃破] {0}！"
+ },
+ "⚠️ [행동 불가] {0}!": {
+  "en": "⚠️ [Cannot Act] {0}!",
+  "ja": "⚠️ [行動不能] {0}！"
+ },
+ "[{0}] 상태로 인해 이번 턴 아무 행동도 하지 못하고 턴을 넘깁니다!": {
+  "en": "Due to [{0}], it cannot act and skips this turn!",
+  "ja": "[{0}]状態のため、このターンは何も行動できず、ターンを飛ばします！"
+ },
+ "증가": {
+  "en": "increase",
+  "ja": "増加"
+ },
+ "✨ [전술 지원] {0}의 {1}!": {
+  "en": "✨ [Tactical Support] {0}'s {1}!",
+  "ja": "✨ [戦術支援] {0}の{1}！"
+ },
+ "{0}에게 아군 전술 지원 효과 전개!": {
+  "en": "Allied tactical support effect deployed on {0}!",
+  "ja": "{0}に味方戦術支援効果を展開！"
+ },
+ "모든": {
+  "en": "all",
+  "ja": "すべての"
+ },
+ "전열 분쇄(+25%)": {
+  "en": "Front Row Crush (+25%)",
+  "ja": "前衛粉砕(+25%)"
+ },
+ "후열 저격(+20%)": {
+  "en": "Back Row Snipe (+20%)",
+  "ja": "後衛狙撃(+20%)"
+ },
+ "전열 타워 엄호(-25%)": {
+  "en": "Front Tower Cover (-25%)",
+  "ja": "前衛タワー援護(-25%)"
+ },
+ "🛡️화상저항": {
+  "en": "🛡️Burn Resist",
+  "ja": "🛡️火傷耐性"
+ },
+ "🔥화상": {
+  "en": "🔥Burn",
+  "ja": "🔥火傷"
+ },
+ "🛡️중독저항": {
+  "en": "🛡️Poison Resist",
+  "ja": "🛡️中毒耐性"
+ },
+ "☠️중독": {
+  "en": "☠️Poison",
+  "ja": "☠️中毒"
+ },
+ "🛡️결빙저항": {
+  "en": "🛡️Freeze Resist",
+  "ja": "🛡️凍結耐性"
+ },
+ "❄️결빙": {
+  "en": "❄️Freeze",
+  "ja": "❄️凍結"
+ },
+ "🛡️기절저항": {
+  "en": "🛡️Stun Resist",
+  "ja": "🛡️気絶耐性"
+ },
+ "💫기절": {
+  "en": "💫Stun",
+  "ja": "💫気絶"
+ },
+ "🛡️방어저항": {
+  "en": "🛡️DEF Break Resist",
+  "ja": "🛡️防御耐性"
+ },
+ "🛡️방어분쇄": {
+  "en": "🛡️DEF Break",
+  "ja": "🛡️防御粉砕"
+ },
+ "🛡️공격저항": {
+  "en": "🛡️ATK Down Resist",
+  "ja": "🛡️攻撃耐性"
+ },
+ "⚔️공격감소": {
+  "en": "⚔️ATK Down",
+  "ja": "⚔️攻撃低下"
+ },
+ "🛡️출혈저항": {
+  "en": "🛡️Bleed Resist",
+  "ja": "🛡️出血耐性"
+ },
+ "🩸출혈": {
+  "en": "🩸Bleed",
+  "ja": "🩸出血"
+ },
+ "후열 마나환급(+{0})": {
+  "en": "Back Row Mana Refund (+{0})",
+  "ja": "後衛マナ還元(+{0})"
+ },
+ "🛡️ 차원 보호막(후열)": {
+  "en": "🛡️ Dimensional Barrier (Back Row)",
+  "ja": "🛡️ 次元バリア(後衛)"
+ },
+ "🗼 {0}(전열)": {
+  "en": "🗼 {0} (Front Row)",
+  "ja": "🗼 {0}(前衛)"
+ },
+ "[디버프: {0}]": {
+  "en": "[Debuff: {0}]",
+  "ja": "[デバフ: {0}]"
+ },
+ "⚔️ [공성 돌격] {0}의 {1}!": {
+  "en": "⚔️ [Siege Charge] {0}'s {1}!",
+  "ja": "⚔️ [攻城突撃] {0}の{1}！"
+ },
+ "{0}에 총 {1}의 공성 타격! {2}{3}{4}": {
+  "en": "Siege strike on {0} for a total of {1}! {2}{3}{4}",
+  "ja": "{0}に合計{1}の攻城打撃！ {2}{3}{4}"
+ },
+ "투사": {
+  "en": "Fighter",
+  "ja": "闘士"
+ },
+ "혈통": {
+  "en": "Bloodline",
+  "ja": "血統"
+ },
+ "냉혹": {
+  "en": "Ruthless",
+  "ja": "冷酷"
+ },
+ "집중": {
+  "en": "Focus",
+  "ja": "集中"
+ },
+ "[🛡️화상저항(🍀{0})]": {
+  "en": "[🛡️Burn Resist(🍀{0})]",
+  "ja": "[🛡️火傷耐性(🍀{0})]"
+ },
+ "[🔥화상]": {
+  "en": "[🔥Burn]",
+  "ja": "[🔥火傷]"
+ },
+ "[🛡️맹독저항(🍀{0})]": {
+  "en": "[🛡️Deadly Poison Resist(🍀{0})]",
+  "ja": "[🛡️猛毒耐性(🍀{0})]"
+ },
+ "[☠️중독]": {
+  "en": "[☠️Poison]",
+  "ja": "[☠️中毒]"
+ },
+ "🎯 [약점 집중 사격{0}] {1}!": {
+  "en": "🎯 [Weak Point Focus Fire{0}] {1}!",
+  "ja": "🎯 [弱点集中射撃{0}] {1}！"
+ },
+ "· 치명타!": {
+  "en": "· Critical!",
+  "ja": "· 会心！"
+ },
+ "가장 취약한 [{0}]에게 집중 화력 포화 ({1} 피해){2}!": {
+  "en": "Concentrated firepower saturates the weakest [{0}] ({1} damage){2}!",
+  "ja": "最も脆弱な[{0}]に集中火力を浴びせる（{1}ダメージ）{2}！"
+ },
+ "약점 집중 사격{0}": {
+  "en": "Weak Point Focus Fire{0}",
+  "ja": "弱点集中射撃{0}"
+ },
+ "[🛡️화상저항]": {
+  "en": "[🛡️Burn Resist]",
+  "ja": "[🛡️火傷耐性]"
+ },
+ "[🧪중독]": {
+  "en": "[🧪Poison]",
+  "ja": "[🧪中毒]"
+ },
+ "[🛡️중독저항]": {
+  "en": "[🛡️Poison Resist]",
+  "ja": "[🛡️中毒耐性]"
+ },
+ "🚀 [전탄 광역 폭격{0}] {1}!": {
+  "en": "🚀 [Full-Salvo AoE Bombardment{0}] {1}!",
+  "ja": "🚀 [全弾範囲爆撃{0}] {1}！"
+ },
+ "· 융단폭격!": {
+  "en": "· Carpet Bombing!",
+  "ja": "· 絨毯爆撃！"
+ },
+ "침공 결사대 3인 전원에게 일제 폭격 (총 {0} 피해){1}!": {
+  "en": "Salvo bombardment on all 3 members of the invasion squad (total {0} damage){1}!",
+  "ja": "侵攻決死隊3人全員に一斉爆撃（合計{0}ダメージ）{1}！"
+ },
+ "전탄 광역 폭격{0}": {
+  "en": "Full-Salvo AoE Bombardment{0}",
+  "ja": "全弾範囲爆撃{0}"
+ },
+ "가디언": {
+  "en": "Guardian",
+  "ja": "ガーディアン"
+ },
+ "제압": {
+  "en": "Suppression",
+  "ja": "制圧"
+ },
+ "간섭": {
+  "en": "Interference",
+  "ja": "干渉"
+ },
+ "& 좌측포탑(+{0} HP)": {
+  "en": "& Left Turret (+{0} HP)",
+  "ja": "＆ 左砲塔(+{0} HP)"
+ },
+ "🔧 [긴급 전술 수복{0}] {1}!": {
+  "en": "🔧 [Emergency Tactical Repair{0}] {1}!",
+  "ja": "🔧 [緊急戦術修復{0}] {1}！"
+ },
+ "· 대성공": {
+  "en": "· Great Success",
+  "ja": "· 大成功"
+ },
+ "차원 보호막(+{0} HP){1} 수복 복원!": {
+  "en": "Dimensional Barrier (+{0} HP){1} repaired and restored!",
+  "ja": "次元バリア(+{0} HP){1}を修復・復元！"
+ },
+ "🛡️ [결계 굴절 방호막{0}] {1}!": {
+  "en": "🛡️ [Ward Refraction Shield{0}] {1}!",
+  "ja": "🛡️ [結界屈折防護膜{0}] {1}！"
+ },
+ "· 극대화": {
+  "en": "· Maximized",
+  "ja": "· 極大化"
+ },
+ "차원 결계에 고밀도 위상 굴절막 전개 (방어력 +{0} 상승)!": {
+  "en": "High-density phase refraction membrane deployed on the dimensional ward (DEF +{0})!",
+  "ja": "次元結界に高密度位相屈折膜を展開（防御力+{0}上昇）！"
+ },
+ "차원 보호막": {
+  "en": "Dimensional Barrier",
+  "ja": "次元バリア"
+ },
+ "⚡ [전자기 위상 간섭{0}] {1}!": {
+  "en": "⚡ [Electromagnetic Phase Interference{0}] {1}!",
+  "ja": "⚡ [電磁位相干渉{0}] {1}！"
+ },
+ "· 과부하": {
+  "en": "· Overload",
+  "ja": "· 過負荷"
+ },
+ "침공 결사대 전원에게 EMP 펄스 방출 (총 {0} 충격 피해)!": {
+  "en": "EMP pulse emitted at the entire invasion squad (total {0} shock damage)!",
+  "ja": "侵攻決死隊全員にEMPパルスを放出（合計{0}の衝撃ダメージ）！"
+ },
+ "🌀 [차원 왜곡 기만] {0}!": {
+  "en": "🌀 [Dimensional Warp Deception] {0}!",
+  "ja": "🌀 [次元歪曲欺瞞] {0}！"
+ },
+ "홀로그램 미끼로 조준 센서 교란 & [{0}]에게 {1} 견제!": {
+  "en": "Hologram decoy jams targeting sensors & harasses [{0}] for {1}!",
+  "ja": "ホログラムの囮で照準センサーを撹乱＆[{0}]に{1}の牽制！"
+ },
+ "{0} · 🛡️ [기절 저항!]": {
+  "en": "{0} · 🛡️ [Stun Resisted!]",
+  "ja": "{0} · 🛡️ [気絶耐性！]"
+ },
+ "{0} | [{1}]이(가) 높은 행운(🍀{2})으로 충격 전자기파(기절)를 완전히 저항해냈습니다!": {
+  "en": "{0} | [{1}] completely resisted the shock EM wave (Stun) thanks to high LUCK (🍀{2})!",
+  "ja": "{0} | [{1}]は高い幸運(🍀{2})で衝撃電磁波（気絶）を完全に耐え抜いた！"
+ },
+ "{0} · 💫 [기절 유발!]": {
+  "en": "{0} · 💫 [Stun Inflicted!]",
+  "ja": "{0} · 💫 [気絶発生！]"
+ },
+ "{0} | [{1}]의 신경계가 마비되어 1턴간 완전 행동 불능에 빠집니다!": {
+  "en": "{0} | [{1}]'s nervous system is paralyzed, leaving it completely incapacitated for 1 turn!",
+  "ja": "{0} | [{1}]の神経系が麻痺し、1ターン完全に行動不能に陥る！"
+ },
+ "[{0}] 동결 구속": {
+  "en": "[{0}] Frozen Restraint",
+  "ja": "[{0}] 凍結拘束"
+ },
+ "🛡️[{0}] 행운 저항!": {
+  "en": "🛡️[{0}] LUCK Resist!",
+  "ja": "🛡️[{0}] 幸運耐性！"
+ },
+ "{0} · ❄️ [극저온 동결!]": {
+  "en": "{0} · ❄️ [Cryo Freeze!]",
+  "ja": "{0} · ❄️ [極低温凍結！]"
+ },
+ "영주:": {
+  "en": "Lord:",
+  "ja": "領主:"
+ },
+ "사수:": {
+  "en": "Gunner:",
+  "ja": "射手:"
+ },
+ "결속 (+": {
+  "en": "Bound (+",
+  "ja": "結束 (+"
+ },
+ "DEF 반영 · 비전투": {
+  "en": "DEF applied · Non-combat",
+  "ja": "DEF反映 · 非戦闘"
+ },
+ "잔여 내구도:": {
+  "en": "Remaining durability:",
+  "ja": "残り耐久度:"
+ },
+ "% (돌파 시 즉시 공성 승리!)": {
+  "en": "% (Instant siege victory on breakthrough!)",
+  "ja": "%（突破で即座に攻城勝利！）"
+ },
+ "· 차원 게이트 Lv.": {
+  "en": "· Dimensional Gate Lv.",
+  "ja": "· 次元ゲート Lv."
+ },
+ "라운드 차원 보호막 돌파 작전 개시! 🔥": {
+  "en": "rounds — Operation Barrier Breakthrough begins! 🔥",
+  "ja": "ラウンド 次元バリア突破作戦開始！🔥"
+ },
+ "{0}턴": {
+  "en": "{0} turn(s)",
+  "ja": "{0}ターン"
+ },
+ "전술 오퍼레이터 연계": {
+  "en": "Tactical Operator Link",
+  "ja": "戦術オペレーター連携"
+ },
+ "🔥⚡ [FEVER BURST 폭발] 전술 모멘텀 완충! 【{0}】 시너지가 격발되었습니다! - {1}": {
+  "en": "🔥⚡ [FEVER BURST Explosion] Tactical Momentum fully charged! 【{0}】 synergy unleashed! - {1}",
+  "ja": "🔥⚡ [FEVER BURST爆発] 戦術モメンタム満充填！【{0}】シナジーが発動した！ - {1}"
+ },
+ "🕊️ [기적의 소생] 사망했던 {0}이(가) {1} 체력으로 부활했습니다!": {
+  "en": "🕊️ [Miraculous Revival] The fallen {0} has revived with {1} HP!",
+  "ja": "🕊️ [奇跡の蘇生] 死亡した{0}がHP{1}で復活した！"
+ },
+ "부활! +{0}": {
+  "en": "Revived! +{0}",
+  "ja": "復活！ +{0}"
+ },
+ "💖 [성역 치유] 아군 전원의 체력이 대폭 회복되었습니다!": {
+  "en": "💖 [Sanctuary Heal] All allies' HP was greatly restored!",
+  "ja": "💖 [聖域治癒] 味方全員のHPが大幅に回復した！"
+ },
+ "🛡️ [에테르 방벽] 아군 전원에게 최대 체력 {0}% 규모의 보호막이 부여되었습니다!": {
+  "en": "🛡️ [Ether Bulwark] All allies gained a shield worth {0}% of max HP!",
+  "ja": "🛡️ [エーテル防壁] 味方全員に最大HPの{0}%規模のシールドが付与された！"
+ },
+ "✨ [정화] 아군에게 걸린 모든 해로운 효과가 정화되었습니다!": {
+  "en": "✨ [Purify] All harmful effects on allies have been cleansed!",
+  "ja": "✨ [浄化] 味方にかかっていたすべての有害効果が浄化された！"
+ },
+ "⚡ [시공 역류] 아군 전원의 MP가 완충되고 모든 스킬 쿨다운이 초기화되었습니다!": {
+  "en": "⚡ [Spacetime Backflow] All allies' MP is fully restored and all skill cooldowns are reset!",
+  "ja": "⚡ [時空逆流] 味方全員のMPが満タンになり、すべてのスキルのクールダウンがリセットされた！"
+ },
+ "💥 [차징 파쇄!] FEVER BURST의 충격으로 [{0}]의 차징이 붕괴되어 1턴간 그로기 상태가 되었습니다!": {
+  "en": "💥 [Charge Shattered!] The shock of FEVER BURST collapsed [{0}]'s charging, leaving it Groggy for 1 turn!",
+  "ja": "💥 [チャージ粉砕！] FEVER BURSTの衝撃で[{0}]のチャージが崩壊し、1ターンの間グロッキー状態になった！"
+ },
+ "💀 [{0} 완전 패퇴!] FEVER BURST로 부위가 완전히 파괴되었습니다!": {
+  "en": "💀 [{0} Utterly Defeated!] The part was completely destroyed by FEVER BURST!",
+  "ja": "💀 [{0} 完全敗退！] FEVER BURSTで部位が完全に破壊された！"
+ },
+ "💥 [FEVER BURST] ➔ [{0}]에게 {1} 파멸 피해! {2}": {
+  "en": "💥 [FEVER BURST] ➔ {1} ruinous damage to [{0}]! {2}",
+  "ja": "💥 [FEVER BURST] ➔ [{0}]に{1}の破滅ダメージ！ {2}"
+ },
+ "{0} 전술 스킬": {
+  "en": "{0} Tactical Skill",
+  "ja": "{0} 戦術スキル"
+ },
+ "✨ [{0}] [{1}] 시전! ({2})": {
+  "en": "✨ [{0}] casts [{1}]! ({2})",
+  "ja": "✨ [{0}] [{1}]を発動！（{2}）"
+ },
+ "🛡️ [{0}] [{1}] 시전! 아군 전술 보호막 전개!": {
+  "en": "🛡️ [{0}] casts [{1}]! Allied tactical shield deployed!",
+  "ja": "🛡️ [{0}] [{1}]を発動！味方戦術シールド展開！"
+ },
+ "⚔️✨ [{0}] [{1}] 시전! 아군 능력치 강화 부여!": {
+  "en": "⚔️✨ [{0}] casts [{1}]! Allied stat boost granted!",
+  "ja": "⚔️✨ [{0}] [{1}]を発動！味方の能力値強化を付与！"
+ },
+ "💥 [차징 저지 성공!] {0}의 강력한 타격으로 [{1}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다! (행운 정상화)": {
+  "en": "💥 [Charge Interrupted!] {0}'s powerful strike shattered [{1}]'s annihilation charge, leaving it Groggy for 1 turn! (LUCK normalized)",
+  "ja": "💥 [チャージ阻止成功！] {0}の強力な一撃で[{1}]の絶滅技チャージが粉砕され、1ターンの間グロッキー状態に陥った！（幸運正常化）"
+ },
+ "⚡ [차징 저지 중] [{0}] 남은 브레이크 요구치: {1}": {
+  "en": "⚡ [Interrupting Charge] [{0}] Remaining break threshold: {1}",
+  "ja": "⚡ [チャージ阻止中] [{0}] 残りブレイク要求値: {1}"
+ },
+ "💀 [{0} 완전 패퇴!] 부위가 파괴되어 더 이상 재생하거나 행동하지 않습니다!": {
+  "en": "💀 [{0} Utterly Defeated!] The part is destroyed and can no longer regenerate or act!",
+  "ja": "💀 [{0} 完全敗退！] 部位が破壊され、もう再生も行動もしない！"
+ },
+ "💥⚡ [연계 콤보 폭발!] {0} [{1}] 발동! [{2}]에게 추가 {3} 콤보 피해!": {
+  "en": "💥⚡ [Chain Combo Explosion!] {0} activates [{1}]! Extra {3} combo damage to [{2}]!",
+  "ja": "💥⚡ [連携コンボ爆発！] {0} [{1}]発動！[{2}]に追加{3}のコンボダメージ！"
+ },
+ "💥 [차징 저지 성공!] {0}의 연계 콤보로 [{1}]의 절멸기 차징이 파쇄되어 1턴간 그로기 상태에 빠졌습니다! (행운 정상화)": {
+  "en": "💥 [Charge Interrupted!] {0}'s chain combo shattered [{1}]'s annihilation charge, leaving it Groggy for 1 turn! (LUCK normalized)",
+  "ja": "💥 [チャージ阻止成功！] {0}の連携コンボで[{1}]の絶滅技チャージが粉砕され、1ターンの間グロッキー状態に陥った！（幸運正常化）"
+ },
+ "🛡️ [저항(RESIST)] [{0}]이(가) 높은 행운(🍀{1})으로 [{2}] 효과를 저항했습니다!": {
+  "en": "🛡️ [RESIST] [{0}] resisted the [{2}] effect thanks to high LUCK (🍀{1})!",
+  "ja": "🛡️ [抵抗(RESIST)] [{0}]は高い幸運(🍀{1})で[{2}]効果に抵抗した！"
+ },
+ "🩸 [출혈] [{0}]에게 {1}턴간 출혈 상태를 부여했습니다.": {
+  "en": "🩸 [Bleed] Inflicted Bleed on [{0}] for {1} turn(s).",
+  "ja": "🩸 [出血] [{0}]に{1}ターンの間、出血状態を付与した。"
+ },
+ "☠️ [중독] [{0}]에게 {1}턴간 맹독을 주입했습니다.": {
+  "en": "☠️ [Poison] Injected Deadly Poison into [{0}] for {1} turn(s).",
+  "ja": "☠️ [中毒] [{0}]に{1}ターンの間、猛毒を注入した。"
+ },
+ "🔥 [화상] [{0}]에게 {1}턴간 화상을 부여했습니다 (방어력 50% 분쇄).": {
+  "en": "🔥 [Burn] Inflicted Burn on [{0}] for {1} turn(s) (DEF -50%).",
+  "ja": "🔥 [火傷] [{0}]に{1}ターンの間、火傷を付与した（防御力50%粉砕）。"
+ },
+ "❄️ [빙결] [{0}]에게 1턴간 빙결(행동 불가)을 부여했습니다!": {
+  "en": "❄️ [Freeze] Inflicted Freeze (cannot act) on [{0}] for 1 turn!",
+  "ja": "❄️ [凍結] [{0}]に1ターンの間、凍結（行動不能）を付与した！"
+ },
+ "💫 [기절] [{0}]에게 1턴간 기절을 부여했습니다!": {
+  "en": "💫 [Stun] Inflicted Stun on [{0}] for 1 turn!",
+  "ja": "💫 [気絶] [{0}]に1ターンの間、気絶を付与した！"
+ },
+ "🛡️⬇️ [방어 분쇄] [{0}]의 방어력을 {1}턴간 25% 감소시켰습니다.": {
+  "en": "🛡️⬇️ [DEF Break] Reduced [{0}]'s DEF by 25% for {1} turn(s).",
+  "ja": "🛡️⬇️ [防御粉砕] [{0}]の防御力を{1}ターンの間25%低下させた。"
+ },
+ "⚔️⬇️ [공격력 약화] [{0}]의 공격력을 {1}턴간 25% 감소시켰습니다.": {
+  "en": "⚔️⬇️ [ATK Down] Reduced [{0}]'s ATK by 25% for {1} turn(s).",
+  "ja": "⚔️⬇️ [攻撃力弱化] [{0}]の攻撃力を{1}ターンの間25%低下させた。"
+ },
+ "🩸 [생명력 흡수] {0}이(가) 가한 피해의 {1}%를 흡혈하여 체력 +{2} 회복!": {
+  "en": "🩸 [Life Drain] {0} drained {1}% of the damage dealt, restoring +{2} HP!",
+  "ja": "🩸 [生命力吸収] {0}が与えたダメージの{1}%を吸血し、HP+{2}回復！"
+ },
+ "▶ [{0}] [{1}] ➔ [{2}]에게 {3} 피해! {4}": {
+  "en": "▶ [{0}] [{1}] ➔ {3} damage to [{2}]! {4}",
+  "ja": "▶ [{0}] [{1}] ➔ [{2}]に{3}ダメージ！ {4}"
+ },
+ "🩸🔥 [지속 피해] [{0}] 상태이상 지속 피해로 {1} 피해!": {
+  "en": "🩸🔥 [Damage over Time] [{0}] takes {1} damage from status ailments!",
+  "ja": "🩸🔥 [継続ダメージ] [{0}]は状態異常の継続ダメージで{1}ダメージ！"
+ },
+ "💀 [{0} 완전 패퇴!] 지속 피해로 부위가 파괴되었습니다!": {
+  "en": "💀 [{0} Utterly Defeated!] The part was destroyed by damage over time!",
+  "ja": "💀 [{0} 完全敗退！] 継続ダメージで部位が破壊された！"
+ },
+ "💥 [차징 취소] 결빙/기절로 인해 [{0}]의 차징이 붕괴되었습니다! (행운 정상화)": {
+  "en": "💥 [Charge Canceled] [{0}]'s charging collapsed due to Freeze/Stun! (LUCK normalized)",
+  "ja": "💥 [チャージ中断] 凍結／気絶により[{0}]のチャージが崩壊した！（幸運正常化）"
+ },
+ "💫 [행동 불가] [{0}]이(가) {1} 상태로 이번 턴 행동할 수 없습니다!": {
+  "en": "💫 [Cannot Act] [{0}] cannot act this turn due to {1}!",
+  "ja": "💫 [行動不能] [{0}]は{1}状態のため、このターンは行動できない！"
+ },
+ "💫 [{0}] 그로기 상태에서 정신을 차리고 있습니다. (이번 턴 행동 불가)": {
+  "en": "💫 [{0}] is recovering from the Groggy state. (cannot act this turn)",
+  "ja": "💫 [{0}]はグロッキー状態から立ち直ろうとしている。（このターンは行動不能）"
+ },
+ "💥⚠️ [절멸기 방출] {0}": {
+  "en": "💥⚠️ [Annihilation Unleashed] {0}",
+  "ja": "💥⚠️ [絶滅技放出] {0}"
+ },
+ "{0}의 시공간 차원 절멸기 폭발!": {
+  "en": "{0}'s spacetime dimensional annihilation blast!",
+  "ja": "{0}の時空次元絶滅技が炸裂！"
+ },
+ "🛡️ [{0}] 보호막이 {1} 피해를 흡수했습니다!": {
+  "en": "🛡️ [{0}]'s shield absorbed {1} damage!",
+  "ja": "🛡️ [{0}]のシールドが{1}ダメージを吸収した！"
+ },
+ "💥⚠️ [{0}] 절멸기 [{1}] 방출! 파티 전원에게 궤멸적 피해가 쏟아졌습니다! (행운 정상화)": {
+  "en": "💥⚠️ [{0}] unleashes annihilation skill [{1}]! Devastating damage rained down on the entire party! (LUCK normalized)",
+  "ja": "💥⚠️ [{0}]が絶滅技[{1}]を放出！パーティ全員に壊滅的ダメージが降り注いだ！（幸運正常化）"
+ },
+ "⚡ [차원 절멸기 차징] {0}": {
+  "en": "⚡ [Dimensional Annihilation Charging] {0}",
+  "ja": "⚡ [次元絶滅技チャージ] {0}"
+ },
+ "{0} 차징 돌입! 저지 요구치: {1} (피해 50% 반영 & 행운 +30%)": {
+  "en": "{0} begins charging! Interrupt threshold: {1} (50% of damage counted & LUCK +30%)",
+  "ja": "{0}がチャージ開始！阻止要求値: {1}（ダメージ50%反映＆幸運+30%）"
+ },
+ "⚠️ [{0}] 차원 절멸기 [{1}] 차징 돌입! (행운 +30% 상승으로 상태이상 저항력 강화: 🍀{2}→{3}, 차징 게이지는 받는 피해의 50%만 적용)": {
+  "en": "⚠️ [{0}] begins charging Dimensional Annihilation [{1}]! (LUCK +30% boosts status resistance: 🍀{2}→{3}; charge gauge counts only 50% of damage taken)",
+  "ja": "⚠️ [{0}]が次元絶滅技[{1}]のチャージを開始！（幸運+30%上昇で状態異常耐性強化: 🍀{2}→{3}、チャージゲージは受けたダメージの50%のみ適用）"
+ },
+ "🌀 [{0}] [{1}] 광역 강타! 아군 전체가 피해를 입었습니다!": {
+  "en": "🌀 [{0}] [{1}] AoE smash! The entire allied team took damage!",
+  "ja": "🌀 [{0}] [{1}] 範囲強打！味方全体がダメージを受けた！"
+ },
+ "💨 [{0}] [{1}]의 [{2}] 공격을 신속히 회피했습니다!": {
+  "en": "💨 [{0}] swiftly dodged [{1}]'s [{2}] attack!",
+  "ja": "💨 [{0}]は[{1}]の[{2}]攻撃を素早く回避した！"
+ },
+ "👁️ [{0}] [{1}] ➔ [{2}]에게 {3} 피해!": {
+  "en": "👁️ [{0}] [{1}] ➔ {3} damage to [{2}]!",
+  "ja": "👁️ [{0}] [{1}] ➔ [{2}]に{3}ダメージ！"
+ },
+ "마나(MP)가 부족하여 스킬을 시전할 수 없습니다!": {
+  "en": "Not enough MP to cast the skill!",
+  "ja": "マナ(MP)が不足しているためスキルを発動できません！"
+ },
+ "쿨다운 대기 중입니다! ({0}턴 남음)": {
+  "en": "On cooldown! ({0} turn(s) left)",
+  "ja": "クールダウン待機中です！（残り{0}ターン）"
+ },
+ "{0} (오퍼레이터)": {
+  "en": "{0} (Operator)",
+  "ja": "{0} (オペレーター)"
+ },
+ "⚡ 선발 3인(전열/중열/후열) + 전술 오퍼레이터 1인이 전장에 배치되었습니다.": {
+  "en": "⚡ 3 selected members (front/mid/back row) + 1 Tactical Operator have been deployed to the battlefield.",
+  "ja": "⚡ 選抜3人（前衛/中衛/後衛）＋戦術オペレーター1人が戦場に配置された。"
+ },
+ "🎯 네메시스의 3대 부위(머리·전열 / 몸통·중열 / 꼬리·후열)를 선택하여 타겟팅할 수 있습니다.": {
+  "en": "🎯 You can target Nemesis's 3 main parts (Head·Front / Body·Mid / Tail·Back) by selecting them.",
+  "ja": "🎯 ネメシスの3大部位（頭·前衛 / 胴体·中衛 / 尾·後衛）を選択してターゲットできる。"
+ },
+ "차원 지휘": {
+  "en": "Dimensional Command",
+  "ja": "次元指揮"
+ },
+ "📡 [전술 오퍼레이터] {0}: 전술 궁극기 [{1}] 지원 가동!": {
+  "en": "📡 [Tactical Operator] {0}: Tactical Ultimate [{1}] support activated!",
+  "ja": "📡 [戦術オペレーター] {0}: 戦術究極技[{1}]の支援を起動！"
+ },
+ "적 1체에 일반 물리 피해를 입힙니다. 마나를 소모하지 않으며 쿨다운이 없습니다.": {
+  "en": "Deals normal physical damage to 1 enemy. Costs no MP and has no cooldown.",
+  "ja": "敵1体に通常の物理ダメージを与える。マナを消費せず、クールダウンもない。"
+ },
+ "고유 강타": {
+  "en": "Signature Strike",
+  "ja": "固有強打"
+ },
+ "아군 치유": {
+  "en": "Ally Heal",
+  "ja": "味方治癒"
+ },
+ "잔여": {
+  "en": "Remaining",
+  "ja": "残り"
+ },
+ "{0}만 / {1}만": {
+  "en": "{0}×10K / {1}×10K",
+  "ja": "{0}万 / {1}万"
+ },
+ "광고 시청 시 공격 횟수 충전 (최대 3회)": {
+  "en": "Watch an ad to recharge attacks (max 3)",
+  "ja": "広告視聴で攻撃回数をチャージ（最大3回）"
+ },
+ "기본 돌격 및 연계 기초": {
+  "en": "Basic Charge & Combo Fundamentals",
+  "ja": "基本突撃と連携の基礎"
+ },
+ "수호 방어 및 지속 치유": {
+  "en": "Guardian Defense & Sustained Healing",
+  "ja": "守護防御と持続治癒"
+ },
+ "전열 방벽 & 견제 사격": {
+  "en": "Front Row Bulwark & Harassing Fire",
+  "ja": "前衛防壁＆牽制射撃"
+ },
+ "마력 탄환 기초 연계": {
+  "en": "Mana Bullet Basic Combo",
+  "ja": "魔力弾基礎連携"
+ },
+ "연속 급소 찌르기": {
+  "en": "Consecutive Vital Strikes",
+  "ja": "連続急所突き"
+ },
+ "원거리 저격 및 전열 견제": {
+  "en": "Ranged Sniping & Front Row Harassment",
+  "ja": "遠距離狙撃と前衛牽制"
+ },
+ "회피 기동 및 치명타 노림수": {
+  "en": "Evasive Maneuvers & Critical Gambit",
+  "ja": "回避機動と会心狙い"
+ },
+ "신성 방벽 & 철벽 수호": {
+  "en": "Holy Bulwark & Ironclad Guard",
+  "ja": "神聖防壁＆鉄壁守護"
+ },
+ "이중 치유 & 성스러운 오라": {
+  "en": "Dual Healing & Holy Aura",
+  "ja": "二重治癒＆聖なるオーラ"
+ },
+ "정밀 조준 관통 저격": {
+  "en": "Precision Piercing Snipe",
+  "ja": "精密照準貫通狙撃"
+ },
+ "철벽 수호 & 원거리 화력 투사": {
+  "en": "Ironclad Guard & Ranged Firepower Projection",
+  "ja": "鉄壁守護＆遠距離火力投射"
+ },
+ "마법 변칙계 & 에테르 증폭": {
+  "en": "Magic Anomaly & Ether Amplification",
+  "ja": "魔法変則系＆エーテル増幅"
+ },
+ "은신 기습 & 즉사 저격": {
+  "en": "Stealth Ambush & Instant-Kill Snipe",
+  "ja": "隠密奇襲＆即死狙撃"
+ },
+ "원소 폭풍 & 마력 연쇄": {
+  "en": "Elemental Storm & Mana Chain",
+  "ja": "元素の嵐＆魔力連鎖"
+ },
+ "연속 난무 & 치명 반격": {
+  "en": "Flurry & Lethal Counter",
+  "ja": "連続乱舞＆致命反撃"
+ },
+ "극딜 암살 & 돌파계 포카드": {
+  "en": "Burst Assassination & Breakthrough Four of a Kind",
+  "ja": "極大火力暗殺＆突破系フォーカード"
+ },
+ "연격 폭풍 & 성기사 가호 지속전": {
+  "en": "Barrage Storm & Paladin's Blessing War of Attrition",
+  "ja": "連撃の嵐＆聖騎士の加護持久戦"
+ },
+ "난공불락 요새 & 기적의 치유": {
+  "en": "Impregnable Fortress & Miraculous Healing",
+  "ja": "難攻不落の要塞＆奇跡の治癒"
+ },
+ "시공 탄환 난사 & 왜곡 결계": {
+  "en": "Spacetime Bullet Barrage & Warp Ward",
+  "ja": "時空弾乱射＆歪曲結界"
+ },
+ "신성 축복 풀하우스 연계": {
+  "en": "Holy Blessing Full House Combo",
+  "ja": "神聖祝福フルハウス連携"
+ },
+ "불멸의 방진 & 결계 반사": {
+  "en": "Immortal Phalanx & Ward Reflection",
+  "ja": "不滅の方陣＆結界反射"
+ },
+ "변칙계 환영 회피 & 흡혈 진혼곡": {
+  "en": "Anomaly Illusion Dodge & Vampiric Requiem",
+  "ja": "変則系幻影回避＆吸血鎮魂歌"
+ },
+ "투신 강림 & 파쇄 스트레이트": {
+  "en": "War God's Descent & Shattering Straight",
+  "ja": "闘神降臨＆粉砕ストレート"
+ },
+ "영원한 부활 & 성스러운 기적": {
+  "en": "Eternal Resurrection & Holy Miracle",
+  "ja": "永遠の復活＆聖なる奇跡"
+ },
+ "암흑 탄환 탄막 & 파멸 광역기": {
+  "en": "Dark Bullet Barrage & Ruinous AoE",
+  "ja": "暗黒弾幕＆破滅範囲技"
+ },
+ "성역 결계 & 기적의 소생 풀하우스": {
+  "en": "Sanctuary Ward & Miraculous Revival Full House",
+  "ja": "聖域結界＆奇跡の蘇生フルハウス"
+ },
+ "치명 타격 & 파쇄 스트레이트 극의": {
+  "en": "Lethal Strike & Shattering Straight Mastery",
+  "ja": "致命打撃＆粉砕ストレート極意"
+ },
+ "무한의 검막 & 신속 섬격": {
+  "en": "Infinite Blade Curtain & Swift Flash Strike",
+  "ja": "無限の剣幕＆神速閃撃"
+ },
+ "블랙홀 왜곡 & 심연 압살": {
+  "en": "Black Hole Distortion & Abyssal Crush",
+  "ja": "ブラックホール歪曲＆深淵圧殺"
+ },
+ "5색 무지개 전술의 극의 (Grand Maestro)": {
+  "en": "Mastery of the 5-Color Rainbow Tactic (Grand Maestro)",
+  "ja": "5色虹戦術の極意 (Grand Maestro)"
+ },
+ "절대 무적의 용린 결계": {
+  "en": "Invincible Dragon-Scale Ward",
+  "ja": "絶対無敵の竜鱗結界"
+ },
+ "초신성 폭발 & 영혼 흡수": {
+  "en": "Supernova Explosion & Soul Absorption",
+  "ja": "超新星爆発＆魂吸収"
+ },
+ "[OP] {0}의 {1}": {
+  "en": "[OP] {0}'s {1}",
+  "ja": "[OP] {0}の{1}"
+ },
+ "⚔️ 차원 3인 부대 편성 필요": {
+  "en": "⚔️ Dimensional 3-Member Squad Required",
+  "ja": "⚔️ 次元3人部隊の編成が必要"
+ },
+ "차원 아레나 결투는 3인 부대(전열/중열/후열)가 모두 편성되어야 진행할 수 있습니다.": {
+  "en": "Dimensional Arena duels require a full 3-member squad (front/mid/back row) to proceed.",
+  "ja": "次元アリーナの決闘は、3人部隊（前衛/中衛/後衛）がすべて編成されていないと進行できません。"
+ },
+ "단일 대상에게 100% 위력의 물리 기본 공격을 가합니다. (마나 소모 없음)": {
+  "en": "Deals a basic physical attack at 100% power to a single target. (No MP cost)",
+  "ja": "単体の対象に威力100%の物理基本攻撃を行う。（マナ消費なし）"
+ },
+ "{0} (⚡오퍼레이터)": {
+  "en": "{0} (⚡Operator)",
+  "ja": "{0} (⚡オペレーター)"
+ },
+ "{0} (⚡상대 오퍼레이터)": {
+  "en": "{0} (⚡Enemy Operator)",
+  "ja": "{0} (⚡相手オペレーター)"
+ },
+ "피버콜 3회 승리 달성! 오퍼레이터 [{0}]의 전술 폭격으로 적 결투 부대를 완전히 제압했습니다!": {
+  "en": "3 Fever Call wins achieved! Operator [{0}]'s tactical bombardment completely subdued the enemy duel squad!",
+  "ja": "フィーバーコール3回勝利達成！オペレーター[{0}]の戦術爆撃で敵の決闘部隊を完全に制圧した！"
+ },
+ "[오퍼레이터 궁극기] {0}의 [{1}] 전탄 발사! ({2})": {
+  "en": "[Operator Ultimate] {0}'s [{1}] full salvo fired! ({2})",
+  "ja": "[オペレーター究極技] {0}の[{1}]全弾発射！（{2}）"
+ },
+ "오퍼레이터 {0}": {
+  "en": "Operator {0}",
+  "ja": "オペレーター {0}"
+ },
+ "아군 리더": {
+  "en": "Allied Leader",
+  "ja": "味方リーダー"
+ },
+ "🏆 피버 3승 즉시 제압 (Domination)": {
+  "en": "🏆 Instant Domination by 3 Fever Wins",
+  "ja": "🏆 フィーバー3勝で即時制圧 (Domination)"
+ },
+ "피버 연계 [{0} + {1}]": {
+  "en": "Fever Link [{0} + {1}]",
+  "ja": "フィーバー連携 [{0} + {1}]"
+ },
+ "상대가 3턴 내에 피버를 완성하지 못해 시간 초과로 실격 패배했습니다! 아군 [{0}] 피버콜 완성에 따른 완승!": {
+  "en": "The opponent failed to complete a Fever within 3 turns and was disqualified by timeout! Complete victory via ally [{0}]'s Fever Call!",
+  "ja": "相手が3ターン以内にフィーバーを完成できず、時間切れで失格負けとなった！味方[{0}]のフィーバーコール完成による完全勝利！"
+ },
+ "3턴 내에 아군 피버를 완성하지 못해 시간 초과로 실격 처리되었습니다. 상대 [{0}] 피버콜 완성에 따른 패배...": {
+  "en": "Your team failed to complete a Fever within 3 turns and was disqualified by timeout. Defeat via opponent [{0}]'s Fever Call...",
+  "ja": "3ターン以内に味方のフィーバーを完成できず、時間切れで失格となった。相手[{0}]のフィーバーコール完成による敗北..."
+ },
+ "🛡️ 원호 방어": {
+  "en": "🛡️ Assist Defense",
+  "ja": "🛡️ 援護防御"
+ },
+ "💀 [사경 위기] 아군 {0} 대원이 치명상을 입고 쓰러져 사경을 헤맵니다! (3턴 유예)": {
+  "en": "💀 [Near-Death Crisis] Allied member {0} is fatally wounded and hovering between life and death! (3-turn grace)",
+  "ja": "💀 [瀕死の危機] 味方の{0}隊員が致命傷を負って倒れ、生死の境をさまよう！（3ターン猶予）"
+ },
+ "💀 [사경 위기] 적군 {0}이(가) 치명상을 입고 쓰러져 사경을 헤맵니다! (3턴 유예)": {
+  "en": "💀 [Near-Death Crisis] Enemy {0} is fatally wounded and hovering between life and death! (3-turn grace)",
+  "ja": "💀 [瀕死の危機] 敵の{0}が致命傷を負って倒れ、生死の境をさまよう！（3ターン猶予）"
+ },
+ "⚰️ [영면] {0}이(가) 3턴간의 사경 끝에 완전히 전사했습니다...": {
+  "en": "⚰️ [Eternal Rest] {0} has fallen completely after 3 turns on the brink of death...",
+  "ja": "⚰️ [永眠] {0}は3ターンの瀕死の末、完全に戦死した..."
+ },
+ "💀 [사경 헤맴] {0}이(가) 위독한 상태로 사경을 헤매고 있습니다! (완전 사망까지 {1}턴)": {
+  "en": "💀 [Near Death] {0} is critically wounded and hovering near death! ({1} turn(s) until death)",
+  "ja": "💀 [瀕死状態] {0}は危篤状態で生死の境をさまよっている！（完全死亡まで{1}ターン）"
+ },
+ "공격력 +9, 행운 +5": {
+  "en": "ATK +9, LUCK +5",
+  "ja": "攻撃力 +9、幸運 +5"
+ },
+ "공격력 +9, 속도 +3": {
+  "en": "ATK +9, SPD +3",
+  "ja": "攻撃力 +9、速度 +3"
+ },
+ "방어력 +12, HP +63": {
+  "en": "DEF +12, HP +63",
+  "ja": "防御力 +12、HP +63"
+ },
+ "🎖️ [명예 상점] 일반 접두석 10개를 획득했습니다!": {
+  "en": "🎖️ [Honor Shop] Obtained 10 Common Prefix Stones!",
+  "ja": "🎖️ [名誉ショップ] 通常接頭石を10個獲得しました！"
+ },
+ "🎖️ [명예 상점] 일반 접미석 10개를 획득했습니다!": {
+  "en": "🎖️ [Honor Shop] Obtained 10 Common Suffix Stones!",
+  "ja": "🎖️ [名誉ショップ] 通常接尾石を10個獲得しました！"
+ },
+ "🎖️ [명예 상점] 순수 접두 마도석 10개를 획득했습니다!": {
+  "en": "🎖️ [Honor Shop] Obtained 10 Pure Prefix Magestones!",
+  "ja": "🎖️ [名誉ショップ] 純粋接頭魔導石を10個獲得しました！"
+ },
+ "🎖️ [명예 상점] 순수 접미 마도석 10개를 획득했습니다!": {
+  "en": "🎖️ [Honor Shop] Obtained 10 Pure Suffix Magestones!",
+  "ja": "🎖️ [名誉ショップ] 純粋接尾魔導石を10個獲得しました！"
+ },
+ "🎖️ [명예 상점] 순수 마도석 5개를 획득했습니다!": {
+  "en": "🎖️ [Honor Shop] Obtained 5 Pure Magestones!",
+  "ja": "🎖️ [名誉ショップ] 純粋魔導石を5個獲得しました！"
+ },
+ "🎖️ [명예 상점] 공허 파편 5개를 획득했습니다!": {
+  "en": "🎖️ [Honor Shop] Obtained 5 Void Shards!",
+  "ja": "🎖️ [名誉ショップ] 虚空の破片を5個獲得しました！"
+ },
+ "🎖️ [명예 상점] [{0}]을(를) 구매하여 성채 창고에 보관했습니다! (+{1}개)": {
+  "en": "🎖️ [Honor Shop] Purchased [{0}] and stored it in the Citadel warehouse! (+{1})",
+  "ja": "🎖️ [名誉ショップ] [{0}]を購入して城塞の倉庫に保管しました！（+{1}個）"
+ },
+ "공격력 +15, 행운 +9": {
+  "en": "ATK +15, LUCK +9",
+  "ja": "攻撃力 +15、幸運 +9"
+ },
+ "공격력 +32, 행운 +15": {
+  "en": "ATK +32, LUCK +15",
+  "ja": "攻撃力 +32、幸運 +15"
+ },
+ "방어력 +27, 최대 HP +158": {
+  "en": "DEF +27, Max HP +158",
+  "ja": "防御力 +27、最大HP +158"
+ },
+ "일반 접두석 묶음 세트 (10개)": {
+  "en": "Common Prefix Stone Bundle (10)",
+  "ja": "通常接頭石まとめセット（10個）"
+ },
+ "장비에 일반 접두어 마법을 부여할 수 있는 접두석 10개 묶음": {
+  "en": "A bundle of 10 Prefix Stones that can enchant equipment with common prefixes",
+  "ja": "装備に通常の接頭辞魔法を付与できる接頭石10個セット"
+ },
+ "접두석 x10": {
+  "en": "Prefix Stone x10",
+  "ja": "接頭石 x10"
+ },
+ "일반 접미석 묶음 세트 (10개)": {
+  "en": "Common Suffix Stone Bundle (10)",
+  "ja": "通常接尾石まとめセット（10個）"
+ },
+ "장비에 일반 접미어 마법을 부여할 수 있는 접미석 10개 묶음": {
+  "en": "A bundle of 10 Suffix Stones that can enchant equipment with common suffixes",
+  "ja": "装備に通常の接尾辞魔法を付与できる接尾石10個セット"
+ },
+ "접미석 x10": {
+  "en": "Suffix Stone x10",
+  "ja": "接尾石 x10"
+ },
+ "순수 접두석 묶음 세트 (10개)": {
+  "en": "Pure Prefix Stone Bundle (10)",
+  "ja": "純粋接頭石まとめセット（10個）"
+ },
+ "+7강 이상 장비에 파괴적 상위 접두어를 부여하는 순수 접두 마도석 10개 묶음": {
+  "en": "A bundle of 10 Pure Prefix Magestones that grant destructive high-tier prefixes to +7 or higher equipment",
+  "ja": "+7強化以上の装備に破壊的な上位接頭辞を付与する純粋接頭魔導石10個セット"
+ },
+ "순수접두 x10": {
+  "en": "Pure Prefix x10",
+  "ja": "純粋接頭 x10"
+ },
+ "순수 접미석 묶음 세트 (10개)": {
+  "en": "Pure Suffix Stone Bundle (10)",
+  "ja": "純粋接尾石まとめセット（10個）"
+ },
+ "+7강 이상 장비에 수호/생명 상위 접미어를 부여하는 순수 접미 마도석 10개 묶음": {
+  "en": "A bundle of 10 Pure Suffix Magestones that grant guardian/life high-tier suffixes to +7 or higher equipment",
+  "ja": "+7強化以上の装備に守護／生命の上位接尾辞を付与する純粋接尾魔導石10個セット"
+ },
+ "순수접미 x10": {
+  "en": "Pure Suffix x10",
+  "ja": "純粋接尾 x10"
+ },
+ "순수 마도석 세트 (5개)": {
+  "en": "Pure Magestone Set (5)",
+  "ja": "純粋魔導石セット（5個）"
+ },
+ "고농축 순수 에테르가 응축된 순수 마도석 5개 묶음": {
+  "en": "A bundle of 5 Pure Magestones condensed from highly concentrated pure Ether",
+  "ja": "高濃度の純粋エーテルが凝縮された純粋魔導石5個セット"
+ },
+ "순수마도석 x5": {
+  "en": "Pure Magestone x5",
+  "ja": "純粋魔導石 x5"
+ },
+ "공허 파편 세트 (5개)": {
+  "en": "Void Shard Set (5)",
+  "ja": "虚空の破片セット（5個）"
+ },
+ "차원의 틈새에서 추출된 신비로운 공허 파편 5개 묶음": {
+  "en": "A bundle of 5 mysterious Void Shards extracted from dimensional rifts",
+  "ja": "次元の裂け目から抽出された神秘的な虚空の破片5個セット"
+ },
+ "공허파편 x5": {
+  "en": "Void Shard x5",
+  "ja": "虚空の破片 x5"
+ },
+ "에테르 횃불 세트 (5개)": {
+  "en": "Ether Torch Set (5)",
+  "ja": "エーテル松明セット（5個）"
+ },
+ "심연의 어둠 피해를 무효화하는 에테르 횃불 5개 묶음": {
+  "en": "A bundle of 5 Ether Torches that negate Abyssal darkness damage",
+  "ja": "深淵の闇ダメージを無効化するエーテル松明5個セット"
+ },
+ "강화보급 x5": {
+  "en": "Boost Supplies x5",
+  "ja": "強化補給 x5"
+ },
+ "에테르 횃불 대형 세트 (10개)": {
+  "en": "Ether Torch Large Set (10)",
+  "ja": "エーテル松明大型セット（10個）"
+ },
+ "심연의 어둠 피해를 무효화하는 에테르 횃불 10개 대용량 묶음": {
+  "en": "A large bundle of 10 Ether Torches that negate Abyssal darkness damage",
+  "ja": "深淵の闇ダメージを無効化するエーテル松明10個の大容量セット"
+ },
+ "강화보급 x10": {
+  "en": "Boost Supplies x10",
+  "ja": "強化補給 x10"
+ },
+ "던전 도시락 세트 (5개)": {
+  "en": "Dungeon Lunchbox Set (5)",
+  "ja": "ダンジョン弁当セット（5個）"
+ },
+ "파티 허기 회복 및 사기를 진작시키는 던전 도시락 5개 묶음": {
+  "en": "A bundle of 5 Dungeon Lunchboxes that restore party hunger and boost morale",
+  "ja": "パーティの空腹を回復し士気を高めるダンジョン弁当5個セット"
+ },
+ "던전 도시락 대형 세트 (10개)": {
+  "en": "Dungeon Lunchbox Large Set (10)",
+  "ja": "ダンジョン弁当大型セット（10個）"
+ },
+ "파티 허기 회복 및 사기를 진작시키는 던전 도시락 10개 대용량 묶음": {
+  "en": "A large bundle of 10 Dungeon Lunchboxes that restore party hunger and boost morale",
+  "ja": "パーティの空腹を回復し士気を高めるダンジョン弁当10個の大容量セット"
+ },
+ "심연 곡괭이 세트 (5개)": {
+  "en": "Abyssal Pickaxe Set (5)",
+  "ja": "深淵のツルハシセット（5個）"
+ },
+ "희귀 광맥을 파괴 없이 온전히 채굴하는 심연 곡괭이 5개 묶음": {
+  "en": "A bundle of 5 Abyssal Pickaxes that mine rare veins intact without destroying them",
+  "ja": "希少な鉱脈を破壊せずに丸ごと採掘できる深淵のツルハシ5個セット"
+ },
+ "심연 곡괭이 대형 세트 (10개)": {
+  "en": "Abyssal Pickaxe Large Set (10)",
+  "ja": "深淵のツルハシ大型セット（10個）"
+ },
+ "희귀 광맥을 파괴 없이 온전히 채굴하는 심연 곡괭이 10개 대용량 묶음": {
+  "en": "A large bundle of 10 Abyssal Pickaxes that mine rare veins intact without destroying them",
+  "ja": "希少な鉱脈を破壊せずに丸ごと採掘できる深淵のツルハシ10個の大容量セット"
+ },
+ "성유 붕대 세트 (5개)": {
+  "en": "Holy Oil Bandage Set (5)",
+  "ja": "聖油包帯セット（5個）"
+ },
+ "출혈과 중상을 즉시 치료하는 성유 붕대 5개 묶음": {
+  "en": "A bundle of 5 Holy Oil Bandages that instantly treat bleeding and serious wounds",
+  "ja": "出血と重傷を即座に治療する聖油包帯5個セット"
+ },
+ "성유 붕대 대형 세트 (10개)": {
+  "en": "Holy Oil Bandage Large Set (10)",
+  "ja": "聖油包帯大型セット（10個）"
+ },
+ "출혈과 중상을 즉시 치료하는 성유 붕대 10개 대용량 묶음": {
+  "en": "A large bundle of 10 Holy Oil Bandages that instantly treat bleeding and serious wounds",
+  "ja": "出血と重傷を即座に治療する聖油包帯10個の大容量セット"
+ },
+ "여신의 성수 세트 (5개)": {
+  "en": "Goddess's Holy Water Set (5)",
+  "ja": "女神の聖水セット（5個）"
+ },
+ "심연의 저주와 악성 상태이상을 정화하는 성수 5개 묶음": {
+  "en": "A bundle of 5 Holy Waters that purify Abyssal curses and malignant status ailments",
+  "ja": "深淵の呪いと悪性の状態異常を浄化する聖水5個セット"
+ },
+ "여신의 성수 대형 세트 (10개)": {
+  "en": "Goddess's Holy Water Large Set (10)",
+  "ja": "女神の聖水大型セット（10個）"
+ },
+ "심연의 저주와 악성 상태이상을 정화하는 성수 10개 대용량 묶음": {
+  "en": "A large bundle of 10 Holy Waters that purify Abyssal curses and malignant status ailments",
+  "ja": "深淵の呪いと悪性の状態異常を浄化する聖水10個の大容量セット"
+ },
+ "황금 열쇠 세트 (5개)": {
+  "en": "Golden Key Set (5)",
+  "ja": "黄金の鍵セット（5個）"
+ },
+ "심연의 모든 고대 황금 보물상자를 해제하는 황금 열쇠 5개 묶음": {
+  "en": "A bundle of 5 Golden Keys that unlock every ancient golden treasure chest in the Abyss",
+  "ja": "深淵のあらゆる古代の黄金の宝箱を解錠する黄金の鍵5個セット"
+ },
+ "황금 열쇠 대형 세트 (10개)": {
+  "en": "Golden Key Large Set (10)",
+  "ja": "黄金の鍵大型セット（10個）"
+ },
+ "심연의 모든 고대 황금 보물상자를 해제하는 황금 열쇠 10개 대용량 묶음": {
+  "en": "A large bundle of 10 Golden Keys that unlock every ancient golden treasure chest in the Abyss",
+  "ja": "深淵のあらゆる古代の黄金の宝箱を解錠する黄金の鍵10個の大容量セット"
+ },
+ "심연의 닻 세트 (5개)": {
+  "en": "Abyssal Anchor Set (5)",
+  "ja": "深淵の錨セット（5個）"
+ },
+ "심연 어디서든 즉시 안전 귀환 균열을 여는 심연의 닻 5개 묶음": {
+  "en": "A bundle of 5 Abyssal Anchors that open an instant safe-return rift anywhere in the Abyss",
+  "ja": "深淵のどこでも即座に安全帰還の裂け目を開く深淵の錨5個セット"
+ },
+ "심연의 닻 대형 세트 (10개)": {
+  "en": "Abyssal Anchor Large Set (10)",
+  "ja": "深淵の錨大型セット（10個）"
+ },
+ "심연 어디서든 즉시 안전 귀환 균열을 여는 심연의 닻 10개 대용량 묶음": {
+  "en": "A large bundle of 10 Abyssal Anchors that open an instant safe-return rift anywhere in the Abyss",
+  "ja": "深淵のどこでも即座に安全帰還の裂け目を開く深淵の錨10個の大容量セット"
+ },
+ "차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다.": {
+  "en": "The Dimensional Nemesis World Raid unlocks at Dimensional Gate Lv.3 or higher.",
+  "ja": "次元ネメシス・ワールドレイドは、次元アンカーゲート Lv.3以上で開放されます。"
+ },
+ "현재 게이트 레벨": {
+  "en": "Current Gate Level",
+  "ja": "現在のゲートレベル"
+ },
+ "성채에서 차원 앵커 게이트를 증축해주세요.": {
+  "en": "Please upgrade the Dimensional Gate in the Citadel.",
+  "ja": "城塞で次元アンカーゲートを増築してください。"
+ },
+ "차원 영지 침공(5인 원정대 약탈전)은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.": {
+  "en": "Dimensional Territory Invasion (5-member expedition plunder battle) unlocks at Dimensional Gate Lv.6 or higher.",
+  "ja": "次元領地侵攻（5人遠征隊の略奪戦）は、次元アンカーゲート Lv.6以上で開放されます。"
+ },
+ "랭크 아이콘: {0}": {
+  "en": "Rank Icon: {0}",
+  "ja": "ランクアイコン: {0}"
+ },
+ "인 배치": {
+  "en": "-member deployment",
+  "ja": "人配置"
+ },
+ "Google Play Games 차원의 무법자 리더보드 열기": {
+  "en": "Open the Google Play Games Dimensional Outlaw leaderboard",
+  "ja": "Google Play Games 次元の無法者リーダーボードを開く"
+ },
+ "PGS 순위표": {
+  "en": "PGS Leaderboard",
+  "ja": "PGS ランキング"
+ },
+ "화면을 터치하면 궁극기 연출로 즉시 스킵됩니다": {
+  "en": "Touch the screen to skip straight to the ultimate cutscene",
+  "ja": "画面をタッチすると究極技演出に即スキップされます"
+ },
+ "ENEMY FEVER [피버 콜!]": {
+  "en": "ENEMY FEVER [Fever Call!]",
+  "ja": "ENEMY FEVER [フィーバーコール！]"
+ },
+ "PLAYER FEVER [피버 콜!]": {
+  "en": "PLAYER FEVER [Fever Call!]",
+  "ja": "PLAYER FEVER [フィーバーコール！]"
+ },
+ "결투 준비 완료 · 차원 결투장 진입 중...": {
+  "en": "Duel ready · Entering the Dimensional Duel Arena...",
+  "ja": "決闘準備完了 · 次元決闘場に突入中..."
+ },
+ "DEF 반영 · 비전투)": {
+  "en": "DEF applied · Non-combat)",
+  "ja": "DEF反映 · 非戦闘）"
+ },
+ "극딜 암살 & 돌파계 포카드 노림수": {
+  "en": "Burst Assassination & Breakthrough Four of a Kind Gambit",
+  "ja": "極大火力暗殺＆突破系フォーカード狙い"
+ }
+}

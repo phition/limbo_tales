@@ -73,6 +73,7 @@ import {
   sanitizeEquipmentEnchantSkills,
   getEnchantSuccessRate,
   getEnchantStoneCost,
+  getEnchantPureManaStoneCost,
   getEnchantResourceCosts,
   getEnchantCandidates,
   recalculateEquipmentStats,
@@ -113,13 +114,13 @@ export class GameManager {
 
   public resources: GameResources = {
     // 🪵 기본 원자재
-    wood: 100,  stone: 100, iron: 50,
+    wood: 80,   stone: 100, iron: 50,
     food: 50,   gold: 250,  ether: 50,
     // 🌿 특수 파밍 재료
     herb: 15,   leather: 15, silk: 10, coal: 15, bone: 15,
     crystal: 5, void_shard: 2,
-    // ✨ 인챈트 마도석
-    prefix_stone: 3, suffix_stone: 2, pure_prefix_stone: 1, pure_suffix_stone: 0,
+    // ✨ 인챈트 및 촉매 마도석
+    prefix_stone: 3, suffix_stone: 2, pure_prefix_stone: 1, pure_suffix_stone: 0, pure_mana_stone: 0,
     // 👑 광폭화 보스 전용 신화 유물
     relic_floor_1: 0, relic_floor_2: 0, relic_floor_3: 0, relic_floor_4: 0, relic_floor_5: 0,
     relic_floor_6: 0, relic_floor_7: 0, relic_floor_8: 0, relic_floor_9: 0, relic_floor_10: 0
@@ -680,11 +681,11 @@ export class GameManager {
 
     // 3. 자원 초기화
     this.resources = {
-      wood: 100,  stone: 100, iron: 50,
+      wood: 80,   stone: 100, iron: 50,
       food: 50,   gold: 250,  ether: 50,
       herb: 15,   leather: 15, silk: 10, coal: 15, bone: 15,
       crystal: 5, void_shard: 2,
-      prefix_stone: 3, suffix_stone: 2, pure_prefix_stone: 1, pure_suffix_stone: 0,
+      prefix_stone: 3, suffix_stone: 2, pure_prefix_stone: 1, pure_suffix_stone: 0, pure_mana_stone: 0,
       relic_floor_1: 0, relic_floor_2: 0, relic_floor_3: 0, relic_floor_4: 0, relic_floor_5: 0,
       relic_floor_6: 0, relic_floor_7: 0, relic_floor_8: 0, relic_floor_9: 0, relic_floor_10: 0
     };
@@ -842,11 +843,11 @@ export class GameManager {
 
       if (options.resources) {
         this.resources = {
-          wood: 100,  stone: 100, iron: 50,
+          wood: 80,   stone: 100, iron: 50,
           food: 50,   gold: 250,  ether: 50,
           herb: 15,   leather: 15, silk: 10, coal: 15, bone: 15,
           crystal: 5, void_shard: 2,
-          prefix_stone: 3, suffix_stone: 2, pure_prefix_stone: 1, pure_suffix_stone: 0,
+          prefix_stone: 3, suffix_stone: 2, pure_prefix_stone: 1, pure_suffix_stone: 0, pure_mana_stone: 0,
           relic_floor_1: 0, relic_floor_2: 0, relic_floor_3: 0, relic_floor_4: 0, relic_floor_5: 0,
           relic_floor_6: 0, relic_floor_7: 0, relic_floor_8: 0, relic_floor_9: 0, relic_floor_10: 0
         };
@@ -3468,35 +3469,31 @@ export class GameManager {
       }
     }
 
-    // 4. 고유/에픽/전설 장비 및 상위 강화 단계 시 순수 인챈트석 (Pure Stones - 2배 상향)
-    if (isUnique) {
-      if (nextLevel >= 5) {
-        cost.pure_prefix_stone = 2;
-      }
-      if (nextLevel >= 8) {
-        cost.pure_suffix_stone = 2;
-      }
+    // 4. 순수 마도석 (Pure Mana Stone) - 7강 이상 강화 또는 에픽 이상 등급 장비 강화 시 소모 (접두/접미석 제거)
+    if (isUnique || rarity === 'legendary') {
       if (nextLevel >= 10) {
-        cost.pure_prefix_stone = 4;
-        cost.pure_suffix_stone = 4;
-      }
-    } else if (rarity === 'legendary') {
-      if (nextLevel >= 5) {
-        cost.pure_prefix_stone = 2;
-      }
-      if (nextLevel >= 8) {
-        cost.pure_suffix_stone = 2;
-      }
-      if (nextLevel >= 10) {
-        cost.pure_prefix_stone = 4;
-        cost.pure_suffix_stone = 4;
+        cost.pure_mana_stone = 4;
+      } else if (nextLevel >= 8) {
+        cost.pure_mana_stone = 3;
+      } else if (nextLevel >= 7) {
+        cost.pure_mana_stone = 2;
+      } else {
+        cost.pure_mana_stone = 1;
       }
     } else if (rarity === 'epic') {
-      if (nextLevel >= 7) {
-        cost.pure_prefix_stone = 2;
-      }
       if (nextLevel >= 10) {
-        cost.pure_suffix_stone = 2;
+        cost.pure_mana_stone = 3;
+      } else if (nextLevel >= 7) {
+        cost.pure_mana_stone = 2;
+      } else {
+        cost.pure_mana_stone = 1;
+      }
+    } else {
+      // 일반 / 희귀 (common / rare)
+      if (nextLevel >= 10) {
+        cost.pure_mana_stone = 2;
+      } else if (nextLevel >= 7) {
+        cost.pure_mana_stone = 1;
       }
     }
 
@@ -3773,6 +3770,7 @@ export class GameManager {
 
     const mult = this.getAlchemyDiscountMultiplier();
     const stoneCost = getEnchantStoneCost(item, isPure);
+    const pureManaStoneCost = getEnchantPureManaStoneCost(item, isPure);
     const { gold: goldCost, ether: etherCost } = getEnchantResourceCosts(isPure, mult);
 
     const stoneKey = type === 'prefix'
@@ -3786,6 +3784,10 @@ export class GameManager {
       this.addLog(`인챈트 실패: [${stoneName}]이(가) 부족합니다! (${this.resources[stoneKey] || 0}/${stoneCost}개 필요)`, 'danger');
       return false;
     }
+    if (pureManaStoneCost > 0 && (this.resources.pure_mana_stone || 0) < pureManaStoneCost) {
+      this.addLog(`인챈트 실패: [순수 마도석]이(가) 부족합니다! (${this.resources.pure_mana_stone || 0}/${pureManaStoneCost}개 필요)`, 'danger');
+      return false;
+    }
     if (this.resources.gold < goldCost || this.resources.ether < etherCost) {
       this.addLog(`인챈트 실패: 골드(${goldCost}) 또는 에테르(${etherCost})가 부족합니다!`, 'danger');
       return false;
@@ -3793,6 +3795,9 @@ export class GameManager {
 
     // 재화 및 인챈트석 소모
     this.modifyResource(stoneKey, -stoneCost);
+    if (pureManaStoneCost > 0) {
+      this.modifyResource('pure_mana_stone', -pureManaStoneCost);
+    }
     this.modifyResource('gold', -goldCost);
     this.modifyResource('ether', -etherCost);
 
@@ -4741,12 +4746,12 @@ export class GameManager {
       3: { ether: 70, gold: 500, crystal: 10 },
       4: { ether: 110, gold: 800, crystal: 18 },
       5: { ether: 160, gold: 1300, crystal: 28 },
-      6: { ether: 230, gold: 2000, crystal: 20, void_shard: 12 },
-      7: { ether: 320, gold: 3200, crystal: 30, void_shard: 20 },
-      8: { ether: 450, gold: 5000, void_shard: 30, pure_prefix_stone: 12 },
-      9: { ether: 650, gold: 8000, void_shard: 45, pure_prefix_stone: 24, pure_suffix_stone: 12 },
+      6: { ether: 230, gold: 2000, crystal: 20, void_shard: 12, pure_mana_stone: 1 },
+      7: { ether: 320, gold: 3200, crystal: 30, void_shard: 20, pure_mana_stone: 2 },
+      8: { ether: 450, gold: 5000, crystal: 40, void_shard: 30, pure_mana_stone: 3 },
+      9: { ether: 650, gold: 8000, crystal: 50, void_shard: 45, pure_mana_stone: 4 },
     };
-    return costs[currentLevel] || { ether: 800, gold: 10000, void_shard: 50, pure_prefix_stone: 30 };
+    return costs[currentLevel] || { ether: 800, gold: 10000, crystal: 60, void_shard: 50, pure_mana_stone: 4 };
   }
 
   /** 🧪 에테르 연금 공방: 마도서 강화 (최고 10레벨) */
@@ -5924,9 +5929,10 @@ export class GameManager {
             7: ['void_shard', 'crystal', 'bone'],
             8: ['void_shard', 'crystal', 'bone'],
             9: ['void_shard', 'crystal', 'bone'],
-            10: ['void_shard', 'crystal', 'bone'],
+            10: ['pure_mana_stone', 'void_shard', 'crystal', 'bone'],
+            11: ['pure_mana_stone', 'void_shard', 'crystal'],
           };
-          const pool = highPools[floor] || ['crystal', 'void_shard', 'bone'];
+          const pool = highPools[floor] || (floor >= 10 ? ['pure_mana_stone', 'void_shard', 'crystal'] : ['crystal', 'void_shard', 'bone']);
           const picked = pool[Math.floor(Math.random() * pool.length)];
           const qty = Math.ceil((Math.floor(Math.random() * 2) + 1) * lootMult);
           rawResources[picked] = (rawResources[picked] || 0) + qty;
@@ -5935,6 +5941,11 @@ export class GameManager {
           if (Math.random() < 0.15) {
             const rareItem = Math.random() < 0.5 ? 'crystal' : 'void_shard';
             rawResources[rareItem] = (rawResources[rareItem] || 0) + 1;
+          }
+
+          // 🌟 10층 및 11층(무간도) 일반 마물 토벌 시 순수 마도석 파밍 (30% 확률)
+          if (floor >= 10 && Math.random() < 0.30) {
+            rawResources['pure_mana_stone'] = (rawResources['pure_mana_stone'] || 0) + 1;
           }
         }
       } else if (m.type === 'elite') {
@@ -5948,10 +5959,16 @@ export class GameManager {
           rawResources[pureStone] = (rawResources[pureStone] || 0) + 1;
           this.addLog(`⭐ [정예 마물 전리품] [${pureStone === 'pure_prefix_stone' ? '순수한 접두석' : '순수한 접미석'}] 1개를 획득했습니다!`, 'reward');
         }
+        // 🌟 10층 및 11층 정예 마물: 순수 마도석 확정 드랍
+        if (floor >= 10) {
+          const pmsQty = Math.ceil(1 * lootMult);
+          rawResources['pure_mana_stone'] = (rawResources['pure_mana_stone'] || 0) + pmsQty;
+          this.addLog(`⭐ [정예 마물 전리품] [순수 마도석] ${pmsQty}개를 획득했습니다!`, 'reward');
+        }
         rawResources['crystal'] = (rawResources['crystal'] || 0) + Math.ceil(2 * lootMult);
         rawResources['void_shard'] = (rawResources['void_shard'] || 0) + Math.ceil(1 * lootMult);
       } else if (m.type === 'boss') {
-        const curFloor = Math.min(10, Math.max(1, this.dungeonFloor));
+        const curFloor = Math.min(11, Math.max(1, this.dungeonFloor));
         // 👑 [보스 토벌]: 접두석/접미석 + 층별 고유 유물 + 심연 유물 확정 드랍
         if (curFloor <= 5) {
           rawResources['prefix_stone'] = (rawResources['prefix_stone'] || 0) + 1;
@@ -5959,6 +5976,12 @@ export class GameManager {
         } else {
           rawResources['pure_prefix_stone'] = (rawResources['pure_prefix_stone'] || 0) + 1;
           rawResources['pure_suffix_stone'] = (rawResources['pure_suffix_stone'] || 0) + 1;
+        }
+        // 🌟 10층 및 11층 보스 토벌: 순수 마도석 대량 확정 드랍 (일반 2개, 광폭화 3개)
+        if (curFloor >= 10) {
+          const bossPmsQty = isOvc ? 3 : 2;
+          rawResources['pure_mana_stone'] = (rawResources['pure_mana_stone'] || 0) + bossPmsQty;
+          this.addLog(`👑 [보스 토벌 전리품] [순수 마도석] ${bossPmsQty}개를 획득했습니다!`, 'reward');
         }
 
         // 🌟 [보스 고유 장비 드랍율]: 1층 30%에서 시작하여 10층에서 15%까지 점진적 감소 (비호환 클래스 착용 시 스탯 50% 반감)
@@ -6224,6 +6247,7 @@ export class GameManager {
     const priorityWeight: Record<string, number> = {
       relic_floor_1: 100, relic_floor_2: 100, relic_floor_3: 100, relic_floor_4: 100, relic_floor_5: 100,
       relic_floor_6: 100, relic_floor_7: 100, relic_floor_8: 100, relic_floor_9: 100, relic_floor_10: 100,
+      pure_mana_stone: 96,
       pure_prefix_stone: 95, pure_suffix_stone: 95,
       ooparts_1_1: 93, ooparts_1_2: 93, ooparts_2_1: 93, ooparts_2_2: 93,
       ooparts_3_1: 93, ooparts_3_2: 93, ooparts_4_1: 93, ooparts_4_2: 93,
@@ -6490,6 +6514,7 @@ export class GameManager {
       suffix_stone: { name: '일반 접미석', icon: '🔮' },
       pure_prefix_stone: { name: '순수 접두석', icon: '🌟' },
       pure_suffix_stone: { name: '순수 접미석', icon: '🪐' },
+      pure_mana_stone: { name: '순수 마도석', icon: '💠' },
       relic_floor_1: { name: '침묵의 흑핵', icon: '🔮' },
       relic_floor_2: { name: '망령의 영혼수정', icon: '💠' },
       relic_floor_3: { name: '원초의 광맥 심장', icon: '🫀' },
@@ -11099,7 +11124,7 @@ export class GameManager {
       'wood', 'stone', 'iron', 'ether',
       'herb', 'leather', 'silk', 'coal', 'bone',
       'crystal', 'void_shard',
-      'prefix_stone', 'suffix_stone', 'pure_prefix_stone', 'pure_suffix_stone'
+      'prefix_stone', 'suffix_stone', 'pure_prefix_stone', 'pure_suffix_stone', 'pure_mana_stone'
     ];
 
     const SUPPLY_KEYS = [

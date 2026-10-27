@@ -24,7 +24,6 @@ export class BootScene extends Phaser.Scene {
 
     // 고품질 일러스트 에셋 로드
     this.load.image('art_citadel_bonfire', 'assets/citadel_bonfire.jpg');
-    this.load.image('art_valkyrie_saintess', 'assets/valkyrie_saintess.jpg');
     this.load.image('art_void_overlord', 'assets/void_overlord.jpg');
 
     this.createProceduralTextures();

@@ -1100,18 +1100,19 @@ export function getEnchantSuccessRate(workshopLv: number = 1, isPure: boolean = 
 }
 
 /**
- * 📦 장비 등급별 인챈트석(접두석/접미석) 소모 수량 계산
- * - 일반(Common): 1개
- * - 희귀(Rare): 2개
- * - 에픽(Epic): 3개
- * - 고유(Unique): 4개
- * - 전설(Legendary): 5개
+ * 📦 장비 등급별 인챈트석(접두석/접미석) 소모 수량 계산 (기존 대비 2배 상향)
+ * - 일반(Common): 2개
+ * - 고급(Uncommon): 4개
+ * - 희귀(Rare): 4개
+ * - 에픽(Epic): 6개
+ * - 고유(Unique): 8개
+ * - 전설(Legendary): 10개
  */
 export function getEnchantStoneCost(
   itemOrRarity: EquipmentItem | EquipmentItem['rarity'] | string = 'common',
   isPure: boolean = false
 ): number {
-  let baseCost = 1;
+  let baseCost = 2;
   const rarityStr = typeof itemOrRarity === 'string' ? itemOrRarity : itemOrRarity?.rarity || 'common';
   const isBossOrUnique = typeof itemOrRarity === 'object' && itemOrRarity !== null && (
     itemOrRarity.templateId?.startsWith('boss_') ||
@@ -1122,27 +1123,27 @@ export function getEnchantStoneCost(
   );
 
   if (isBossOrUnique || rarityStr === 'unique' || rarityStr === 'boss') {
-    baseCost = 4;
+    baseCost = 8;
   } else {
     switch (rarityStr) {
       case 'common':
-        baseCost = 1;
+        baseCost = 2;
         break;
       case 'uncommon':
-        baseCost = 2;
+        baseCost = 4;
         break;
       case 'rare':
-        baseCost = 2;
+        baseCost = 4;
         break;
       case 'epic':
-        baseCost = 3;
+        baseCost = 6;
         break;
       case 'legendary':
       case 'mythic':
-        baseCost = 5;
+        baseCost = 10;
         break;
       default:
-        baseCost = 1;
+        baseCost = 2;
         break;
     }
   }
@@ -1151,6 +1152,37 @@ export function getEnchantStoneCost(
     return Math.round(baseCost * 1.5);
   }
   return baseCost;
+}
+
+/**
+ * 💠 에픽 이상 등급 장비 인챈트 시 소모되는 순수 마도석(pure_mana_stone) 수량 계산
+ * - 에픽(Epic): 일반석 1개, 순수석 2개
+ * - 고유(Unique/Boss) & 전설(Legendary/Mythic): 일반석 2개, 순수석 3개
+ * - 그 외(Common, Rare): 0개
+ */
+export function getEnchantPureManaStoneCost(
+  itemOrRarity: EquipmentItem | EquipmentItem['rarity'] | string = 'common',
+  isPure: boolean = false
+): number {
+  const rarityStr = typeof itemOrRarity === 'string' ? itemOrRarity : itemOrRarity?.rarity || 'common';
+  const isBossOrUnique = typeof itemOrRarity === 'object' && itemOrRarity !== null && (
+    itemOrRarity.templateId?.startsWith('boss_') ||
+    itemOrRarity.id?.startsWith('boss_') ||
+    itemOrRarity.setId?.startsWith('boss_') ||
+    itemOrRarity.rarity === 'unique' ||
+    (itemOrRarity.rarity as string) === 'boss'
+  );
+
+  if (isBossOrUnique || rarityStr === 'unique' || rarityStr === 'boss') {
+    return isPure ? 3 : 2;
+  }
+  if (rarityStr === 'legendary' || rarityStr === 'mythic') {
+    return isPure ? 3 : 2;
+  }
+  if (rarityStr === 'epic') {
+    return isPure ? 2 : 1;
+  }
+  return 0;
 }
 
 /**

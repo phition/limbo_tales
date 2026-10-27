@@ -385,6 +385,29 @@ export class I18nService {
       }
     }
 
+    // 2.45 소유격 합성 이름 분리 번역 (예: "수습 검사 루키의 스콰이어" → "Novice Swordsman Rookie's Squire")
+    // 봇/NPC 이름 + 직업명처럼 "{이름}의 {대상}" 으로 합쳐진 짧은 문자열은 양쪽이 모두 완전히 번역될 때만 처리
+    if (!trimmed.includes('\n') && trimmed.length <= 40) {
+      const hangulRe = /[\uac00-\ud7af]/;
+      let searchFrom = 1;
+      while (searchFrom < trimmed.length) {
+        const idx = trimmed.indexOf('의 ', searchFrom);
+        if (idx < 0) break;
+        searchFrom = idx + 1;
+        const owner = trimmed.slice(0, idx + 0).trim();
+        const target = trimmed.slice(idx + 2).trim();
+        if (!owner || !target) continue;
+        const trOwner = this.tr(owner, lang);
+        const trTarget = this.tr(target, lang);
+        if (trOwner && trTarget && !hangulRe.test(trOwner) && !hangulRe.test(trTarget)) {
+          const joined = tLang === 'ja' ? `${trOwner}の${trTarget}` : `${trOwner}'s ${trTarget}`;
+          const res = text.replace(trimmed, joined);
+          this.translationCache.set(cacheKey, res);
+          return res;
+        }
+      }
+    }
+
     // 2.5 전투 로그 전용 지능형 시맨틱 폴백 (미등록/동적 로그 전수 번역)
     const fallbackBattleLog = this.translateBattleLogFallback(text, tLang);
     if (fallbackBattleLog && !/[\uac00-\ud7af]/.test(fallbackBattleLog)) {

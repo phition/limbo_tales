@@ -13,10 +13,10 @@ import { getSkillMagicSchool, getEffectivePositionBonus } from '../utils/skillCo
 import { resolveSiegeTactic, SiegeTacticDefinition } from '../data/siegeTactics';
 
 const DEFAULT_CLASS_IMAGES: Record<string, string> = {
-  aegis_valkyrie: 'assets/valkyrie_saintess.jpg',
-  paladin: 'assets/valkyrie_saintess.jpg',
-  high_saintess: 'assets/valkyrie_saintess.jpg',
-  valhalla_blade: 'assets/valkyrie_saintess.jpg',
+  aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.png',
+  paladin: 'assets/portraits/portrait_paladin_female.png',
+  high_saintess: 'assets/portraits/portrait_t2_high_saintess.png',
+  valhalla_blade: 'assets/portraits/portrait_t2_valhalla_blade.png',
   tactical_tower: 'assets/citadel_bonfire.jpg',
 };
 

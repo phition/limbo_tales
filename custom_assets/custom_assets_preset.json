@@ -979,7 +979,18 @@
     "chronomancer_female": "assets/custom_uploaded/mercenaries/chronomancer_female.png",
     "aether_gun_meister_male": "assets/custom_uploaded/mercenaries/aether_gun_meister_male.png",
     "tactical_gunner_male": "assets/custom_uploaded/mercenaries/tactical_gunner_male.png",
-    "tactical_gunner_female": "assets/custom_uploaded/mercenaries/tactical_gunner_female.png"
+    "tactical_gunner_female": "assets/custom_uploaded/mercenaries/tactical_gunner_female.png",
+    "rogue_female": "assets/custom_uploaded/mercenaries/rogue_female.png",
+    "vanguard_female": "assets/custom_uploaded/mercenaries/vanguard_female.png",
+    "valhalla_blade_female": "assets/custom_uploaded/mercenaries/valhalla_blade_female.png",
+    "valhalla_blade_male": "assets/custom_uploaded/mercenaries/valhalla_blade_male.png",
+    "warlord_female": "assets/custom_uploaded/mercenaries/warlord_female.png",
+    "warlord_male": "assets/custom_uploaded/mercenaries/warlord_male.png",
+    "sharpshooter_female": "assets/custom_uploaded/mercenaries/sharpshooter_female.png",
+    "fortress_male": "assets/custom_uploaded/mercenaries/fortress_male.png",
+    "fortress_female": "assets/custom_uploaded/mercenaries/fortress_female.png",
+    "berserker_male": "assets/custom_uploaded/mercenaries/berserker_male.png",
+    "berserker_female": "assets/custom_uploaded/mercenaries/berserker_female.png"
   },
   "npcOverrides": {
     "npc_bernhard": "assets/custom_uploaded/npcs/npc_bernhard.png",
@@ -1009,5 +1020,5 @@
     "npc_asmodeus": "assets/custom_uploaded/npcs/npc_asmodeus.png",
     "심연의 군주 아스모데우스": "assets/custom_uploaded/npcs/npc_asmodeus.png"
   },
-  "version": 856
+  "version": 862
 }
