@@ -11,6 +11,7 @@ import { FeverGaugeBar } from '../components/FeverGaugeBar';
 import { CombatMeterTable, CombatantMetrics } from '../components/CombatMeterTable';
 import { getSkillMagicSchool, getEffectivePositionBonus } from '../utils/skillComboUtils';
 import { resolveSiegeTactic, SiegeTacticDefinition } from '../data/siegeTactics';
+import { GameDataService } from '../services/GameDataService';
 
 const DEFAULT_CLASS_IMAGES: Record<string, string> = {
   aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.png',
@@ -23,6 +24,12 @@ const DEFAULT_CLASS_IMAGES: Record<string, string> = {
 export const getHeroPortraitUrl = (classId?: string) => {
   if (!classId) return '';
   return CustomAssetService.getInstance().getMercenaryOverride(classId) || DEFAULT_CLASS_IMAGES[classId] || '';
+};
+
+// 🛡️ 차원 영지 침공전 DR(피해 감소) 상수 K - 던전 10층 규격 연동 (K = 500, DEF 500일 때 50% 경감)
+export const getInvasionDRConstant = (): number => {
+  const baseDR = GameDataService.getInstance().getBalanceConfig().drConstant || 300;
+  return Math.round(baseDR * (500 / 300)); // 던전 10층(6~10층 구간): K = 500
 };
 
 // 🛡️ 차원 영지 침공 방어력 스케일
@@ -862,9 +869,10 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     const isSiegeCrit = Math.random() * 100 < Math.min(80, Math.max(15, gm.getCritChance(avgLuck, 1) + 20));
     const siegeDmg = Math.max(120, Math.round(avgAtk * tactic.siegePower * (isSiegeCrit ? 2.2 : 1.6)));
 
-    // 차원 보호막에 대규모 피해 가함 (PVE 규격 DR 상수 300 연동)
+    // 차원 보호막에 대규모 피해 가함 (PVE 던전 10층 규격 DR 상수 연동)
+    const invasionDR = getInvasionDRConstant();
     const curBarrier = { ...barrierStateRef.current };
-    const barrierDefDmg = Math.max(80, Math.round(siegeDmg * (300 / (curBarrier.def + 300))));
+    const barrierDefDmg = Math.max(80, Math.round(siegeDmg * (invasionDR / (curBarrier.def + invasionDR))));
     curBarrier.currentHp = Math.max(0, curBarrier.currentHp - barrierDefDmg);
     if (curBarrier.currentHp <= 0) curBarrier.isDestroyed = true;
     barrierStateRef.current = curBarrier;
@@ -997,12 +1005,13 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     // 침입자 아군에게 충격파 반격
     const aliveP = playerTeamRef.current.filter(c => c.currentHp > 0);
     const counterDmg = Math.max(15, Math.round(50 * (tactic.defensePower + 1)));
+    const invasionDR = getInvasionDRConstant();
     const updatedP = playerTeamRef.current.map(c => {
       if (c.currentHp <= 0) return c;
       let effectiveDef = c.def;
       if ((c.statusEffects || []).some(e => e.id === 'burn')) effectiveDef = Math.round(effectiveDef * 0.5);
       if ((c.statusEffects || []).some(e => e.id === 'freeze')) effectiveDef = Math.round(effectiveDef * 1.4);
-      const finalD = Math.max(10, Math.round(counterDmg * (300 / (effectiveDef + 300))));
+      const finalD = Math.max(10, Math.round(counterDmg * (invasionDR / (effectiveDef + invasionDR))));
       if (combatMetricsRef.current[c.id]) combatMetricsRef.current[c.id].damageTaken += finalD;
       return { ...c, currentHp: Math.max(0, c.currentHp - finalD) };
     });
@@ -1135,6 +1144,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
     setActiveCombatantId(attacker.id);
     const isAttackerPlayer = attacker.isPlayer;
+    const invasionDR = getInvasionDRConstant();
 
     let shouldSkipTurn = false;
     const skipReasons: string[] = [];
@@ -1579,8 +1589,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             if (!positionBonusLogs.includes('전열 타워 엄호(-25%)')) positionBonusLogs.push('전열 타워 엄호(-25%)');
           }
 
-          // 🌟 [PVE 규격 방어력 데미지 감소 DR 공식 연동 - K=300]
-          let finalDmg = Math.max(15, Math.round(rawDmg * (300 / (targetDef + 300))));
+          // 🌟 [PVE 던전 10층 규격 방어력 데미지 감소 DR 공식 연동 - K=500]
+          let finalDmg = Math.max(15, Math.round(rawDmg * (invasionDR / (targetDef + invasionDR))));
 
           // 보호막(shield) 버프 흡수 연산
           const shieldEff = targetEffects.find(e => e.id === 'shield');
@@ -1942,7 +1952,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           let effectiveDef = targetDefender.def;
           if ((targetDefender.statusEffects || []).some(e => e.id === 'burn')) effectiveDef = Math.round(effectiveDef * 0.5);
           if ((targetDefender.statusEffects || []).some(e => e.id === 'freeze')) effectiveDef = Math.round(effectiveDef * 1.4);
-          const finalDmg = Math.max(15, Math.round(rawDmg * (300 / (effectiveDef + 300))));
+          const finalDmg = Math.max(15, Math.round(rawDmg * (invasionDR / (effectiveDef + invasionDR))));
           targetDefender.currentHp = Math.max(0, targetDefender.currentHp - finalDmg);
 
           // 🔥 작열 화상 (공격 2차 테크) 부여 판정: PvE 규격 2턴 지속, 8% 화염 DoT & 방어력 50% 분쇄 (행운 저항 연동)
@@ -2058,7 +2068,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             let def = defender.def;
             if ((defender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
             if ((defender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
-            const finalDmg = Math.max(10, Math.round(rawDmg * (300 / (def + 300))));
+            const finalDmg = Math.max(10, Math.round(rawDmg * (invasionDR / (def + invasionDR))));
             defender.currentHp = Math.max(0, defender.currentHp - finalDmg);
             totalDmg += finalDmg;
 
@@ -2269,7 +2279,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             let def = defender.def;
             if ((defender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
             if ((defender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
-            const shockDmg = Math.max(10, Math.round((140 + attacker.luck * 7 + (attacker.currentMp || 0) * 0.3) * tactPowerMult * (300 / (def + 300))));
+            const shockDmg = Math.max(10, Math.round((140 + attacker.luck * 7 + (attacker.currentMp || 0) * 0.3) * tactPowerMult * (invasionDR / (def + invasionDR))));
             defender.currentHp = Math.max(0, defender.currentHp - shockDmg);
             totalDmg += shockDmg;
 
@@ -2325,7 +2335,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           let def = targetDefender.def;
           if ((targetDefender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
           if ((targetDefender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
-          const tacticDmg = Math.max(10, Math.round((160 + attacker.luck * 9 + effectiveTurretAtk * 0.6) * tactPowerMult * (300 / (def + 300))));
+          const tacticDmg = Math.max(10, Math.round((160 + attacker.luck * 9 + effectiveTurretAtk * 0.6) * tactPowerMult * (invasionDR / (def + invasionDR))));
           targetDefender.currentHp = Math.max(0, targetDefender.currentHp - tacticDmg);
 
           const mDefender = combatMetricsRef.current[targetDefender.id];
