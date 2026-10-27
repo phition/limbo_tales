@@ -6243,6 +6243,29 @@ export class GameManager {
       this.addLog(`🏛️✨ [멸망 이전 유물 발굴] 구세계의 오파츠 [${oMeta.name}]을(를) 발굴했습니다! (심연의 백과 등록용)`, 'reward');
     }
 
+    // 🍖🍱 [심연 보급 식량 드랍 판정]
+    // 상당히 낮은 확률로 원정 보급용 '던전 식량' 드랍 (일반 마물 4%, 정예 12%, 보스 30% / 광폭화 1.5배)
+    // 6층 이상(floor >= 6)에서만 '던전 도시락' 드랍 가능! (1~5층은 무조건 던전 식량만 드랍)
+    const foodSupplyBaseRate = hasBoss ? 0.30 : (hasElite ? 0.12 : 0.04);
+    const foodSupplyDropRate = foodSupplyBaseRate * lootMult;
+    if (Math.random() < foodSupplyDropRate) {
+      if (floor >= 6) {
+        // 🍱 6층 이상: 보스는 확정 도시락, 정예 50%, 일반 35% 확률로 도시락 / 나머지 던전 식량
+        const lunchboxChance = hasBoss ? 1.0 : (hasElite ? 0.50 : 0.35);
+        if (Math.random() < lunchboxChance) {
+          this.addToDungeonInventory('enhanced_food', '던전 도시락', '🍱', 1, undefined, undefined, 'supply');
+          this.addLog(`🍱✨ [특수 보급품 노획] ${floor}구역 심연 마물에게서 귀중한 [던전 도시락]을 노획했습니다! (야영 시 HP/MP 45% 회복 & 기습 억제)`, 'reward');
+        } else {
+          this.addToDungeonInventory('dungeon_food', '던전 식량', '🍖', 1, undefined, undefined, 'supply');
+          this.addLog(`🍖 [보급품 노획] 마물에게서 긴급 야영에 사용할 수 있는 [던전 식량] 1개를 노획했습니다!`, 'reward');
+        }
+      } else {
+        // 1~5층: 100% '던전 식량'만 드랍 (도시락 불가)
+        this.addToDungeonInventory('dungeon_food', '던전 식량', '🍖', 1, undefined, undefined, 'supply');
+        this.addLog(`🍖 [보급품 노획] 마물에게서 긴급 야영에 사용할 수 있는 [던전 식량] 1개를 노획했습니다!`, 'reward');
+      }
+    }
+
     // 🌟 [핵심] 전투 보상 획득 자원 종류를 최대 4가지로 엄격 제한 (가장 희귀/고가치 자원 우선)
     const priorityWeight: Record<string, number> = {
       relic_floor_1: 100, relic_floor_2: 100, relic_floor_3: 100, relic_floor_4: 100, relic_floor_5: 100,
@@ -11026,6 +11049,14 @@ export class GameManager {
         slot.itemType = 'resource';
       }
 
+      // 🍖 던전 식량(보급품) vs 영지 식량(자원) 키 표준화 (레거시 세이브 호환)
+      if (slot.key === 'food' && slot.itemType === 'supply') {
+        slot.key = 'dungeon_food';
+        slot.label = '던전 식량';
+        slot.icon = '🍖';
+        slot.maxStack = ((this.backpackCapacity || 16) >= 30 || this.lastSelectedBagId === 'wagon') ? 99 : 3;
+      }
+
       if (slot.maxStack > 1 && slot.itemType !== 'equipment') {
         let remainingQty = slot.qty;
         for (const target of consolidated) {
@@ -11120,15 +11151,22 @@ export class GameManager {
       }
     }
 
+    // 🌟 던전 식량(보급품) vs 영지 식량(자원) 명확한 분리
+    if (key === 'food' && itemTypeParam === 'supply') {
+      key = 'dungeon_food';
+      label = '던전 식량';
+      icon = '🍖';
+    }
+
     const RESOURCE_KEYS = [
-      'wood', 'stone', 'iron', 'ether',
+      'wood', 'stone', 'iron', 'ether', 'food',
       'herb', 'leather', 'silk', 'coal', 'bone',
       'crystal', 'void_shard',
       'prefix_stone', 'suffix_stone', 'pure_prefix_stone', 'pure_suffix_stone', 'pure_mana_stone'
     ];
 
     const SUPPLY_KEYS = [
-      'torch', 'food', 'pickaxe', 'bandage', 'holy_water', 'key', 'skeleton_key', 'rift_anchor', 'potion',
+      'torch', 'dungeon_food', 'food', 'pickaxe', 'bandage', 'holy_water', 'key', 'skeleton_key', 'rift_anchor', 'potion',
       'enhanced_torch', 'enhanced_food', 'enhanced_pickaxe', 'enhanced_bandage', 'enhanced_holy_water', 'enhanced_key', 'enhanced_rift_anchor'
     ];
 
@@ -11137,10 +11175,18 @@ export class GameManager {
 
     // 🌟 한글 명칭 및 아이콘 표준화 (자연스러운 서술형 명칭이 전달되어도 인벤토리에는 게임 공식 자원명으로 자동 정규화)
     if (!equipmentData && !skillBookData && !key.startsWith('cursed_') && !key.startsWith('equip_') && !key.startsWith('book_')) {
-      const resMeta = GameManager.getResourceMeta(key);
-      if (resMeta && resMeta.name) {
-        label = resMeta.name;
-        icon = resMeta.icon;
+      if (key === 'dungeon_food') {
+        label = '던전 식량';
+        icon = '🍖';
+      } else if (key === 'enhanced_food') {
+        label = '던전 도시락';
+        icon = '🍱';
+      } else {
+        const resMeta = GameManager.getResourceMeta(key);
+        if (resMeta && resMeta.name) {
+          label = resMeta.name;
+          icon = resMeta.icon;
+        }
       }
     }
 
@@ -11162,9 +11208,21 @@ export class GameManager {
     } else if (key.startsWith('relic_')) {
       maxStack = 1; // 👑 고유 신화 유물: 슬롯당 1개 (비중첩)
       itemType = 'resource';
-    } else if (key === 'food') {
-      maxStack = isWagon ? 99 : 3; // 🍖 식량: 일반 3개, 짐수레 99개
+    } else if (key === 'dungeon_food') {
+      maxStack = isWagon ? 99 : 3; // 🍖 던전 식량 (보급품): 3개 (짐수레 99)
       itemType = 'supply';
+      label = '던전 식량';
+      icon = '🍖';
+    } else if (key === 'enhanced_food') {
+      maxStack = isWagon ? 99 : 3; // 🍱 던전 도시락 (강화 보급품): 3개 (짐수레 99)
+      itemType = 'supply';
+      label = '던전 도시락';
+      icon = '🍱';
+    } else if (key === 'food') {
+      maxStack = defaultResourceMaxStack; // 🍖 영지 식량 (자원): 일반 30개, 짐수레 99개
+      itemType = 'resource';
+      label = '식량';
+      icon = '🍖';
     } else if (key === 'gold_bag' || key === 'gold') {
       maxStack = 1000; // 🪙 골드: 슬롯당 최대 1,000 골드 스택
       itemType = 'resource';
@@ -11257,7 +11315,9 @@ export class GameManager {
 
     for (let i = this.dungeonInventory.length - 1; i >= 0; i--) {
       const slot = this.dungeonInventory[i];
-      const isMatch = slot.key === targetKey || (targetKey === 'gold' && (slot.key === 'gold' || slot.key === 'gold_bag'));
+      const isMatch = (targetKey === 'dungeon_food' || targetKey === 'food_supply')
+        ? (slot.key === 'dungeon_food' || (slot.key === 'food' && slot.itemType === 'supply'))
+        : (slot.key === targetKey || (targetKey === 'gold' && (slot.key === 'gold' || slot.key === 'gold_bag')));
       if (isMatch) {
         if (slot.qty <= needed) {
           needed -= slot.qty;
@@ -11298,6 +11358,16 @@ export class GameManager {
   /** 배낭 내 특정 아이템 총 보유량 조회 */
   public getDungeonItemCount(key: string): number {
     const targetKey = key === 'gold_bag' ? 'gold' : key;
+    if (targetKey === 'dungeon_food' || targetKey === 'food_supply') {
+      return this.dungeonInventory
+        .filter(s => s.key === 'dungeon_food' || (s.key === 'food' && s.itemType === 'supply'))
+        .reduce((sum, s) => sum + s.qty, 0);
+    }
+    if (targetKey === 'food') {
+      return this.dungeonInventory
+        .filter(s => s.key === 'food' && s.itemType !== 'supply')
+        .reduce((sum, s) => sum + s.qty, 0);
+    }
     return this.dungeonInventory
       .filter(s => s.key === targetKey || (targetKey === 'gold' && (s.key === 'gold' || s.key === 'gold_bag')))
       .reduce((sum, s) => sum + s.qty, 0);
@@ -11366,11 +11436,20 @@ export class GameManager {
   }
 
   // 📦 성채 창고 보급품 입고 및 출출 헬퍼
+  public getCitadelSupplyCount(key: string): number {
+    if (!this.citadelSupplies) return 0;
+    if (key === 'dungeon_food' || key === 'food') {
+      return (this.citadelSupplies['dungeon_food'] || 0) + (this.citadelSupplies['food'] || 0);
+    }
+    return this.citadelSupplies[key] || 0;
+  }
+
   public addCitadelSupply(key: string, qty: number): void {
     if (!this.citadelSupplies) {
-      this.citadelSupplies = { torch: 3, food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3 };
+      this.citadelSupplies = { torch: 3, food: 3, dungeon_food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3 };
     }
-    this.citadelSupplies[key] = (this.citadelSupplies[key] || 0) + qty;
+    const targetKey = (key === 'food') ? 'dungeon_food' : key;
+    this.citadelSupplies[targetKey] = (this.citadelSupplies[targetKey] || 0) + qty;
     if (key === 'enhanced_torch' && qty > 0) {
       this.updateQuestObjective('Q_ENHANCED_SUPPLY_TORCH', 0, 1);
     }
@@ -11380,7 +11459,21 @@ export class GameManager {
 
   public consumeCitadelSupply(key: string, qty: number): boolean {
     if (!this.citadelSupplies) {
-      this.citadelSupplies = { torch: 3, food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3 };
+      this.citadelSupplies = { torch: 3, food: 3, dungeon_food: 3, pickaxe: 3, bandage: 3, holy_water: 3, key: 3, rift_anchor: 3 };
+    }
+    if (key === 'dungeon_food' || key === 'food') {
+      const dStock = this.citadelSupplies['dungeon_food'] || 0;
+      const fStock = this.citadelSupplies['food'] || 0;
+      if (dStock + fStock < qty) return false;
+      const takeFromD = Math.min(qty, dStock);
+      this.citadelSupplies['dungeon_food'] = dStock - takeFromD;
+      const rem = qty - takeFromD;
+      if (rem > 0) {
+        this.citadelSupplies['food'] = Math.max(0, fStock - rem);
+      }
+      this.saveGame();
+      this.emit('suppliesUpdated', this.citadelSupplies);
+      return true;
     }
     const current = this.citadelSupplies[key] || 0;
     if (current < qty) return false;
@@ -11523,8 +11616,8 @@ export class GameManager {
       } else if (slot.itemType === 'skillBook' && slot.skillBookData) {
         this.addSkillBook(slot.skillBookData, slot.qty);
         settledSkillBooks.push({ ...slot.skillBookData, count: slot.qty });
-      } else if (slot.key === 'torch' || slot.key === 'food' || slot.key === 'enhanced_torch' || slot.key === 'enhanced_food') {
-        // 🗑️ 횃불과 던전 식량은 휘발/소모되어 귀환 시 자동 소멸 (반환되지 않음)
+      } else if (slot.key === 'torch' || slot.key === 'dungeon_food' || slot.key === 'enhanced_torch' || slot.key === 'enhanced_food' || (slot.key === 'food' && slot.itemType === 'supply')) {
+        // 🗑️ 횃불과 던전 식량/도시락은 휘발/소모되어 귀환 시 자동 소멸 (반환되지 않음)
       } else if (['pickaxe', 'bandage', 'holy_water', 'key', 'rift_anchor', 'enhanced_pickaxe', 'enhanced_bandage', 'enhanced_holy_water', 'enhanced_key', 'enhanced_rift_anchor'].includes(slot.key)) {
         // 📦 곡괭이, 붕대, 성수, 열쇠 등 재사용 소모품은 성채 창고(citadelSupplies)에 안전 적재!
         this.addCitadelSupply(slot.key, slot.qty);
@@ -11533,10 +11626,10 @@ export class GameManager {
         this.modifyResource('gold', slot.qty);
         settled['gold'] = (settled['gold'] || 0) + slot.qty;
         settledItems.push({ key: 'gold', label: slot.label || '골드', icon: slot.icon || '🪙', qty: slot.qty, itemType: 'gold' });
-      } else if (slot.key.startsWith('ooparts_') || slot.key.startsWith('memoir_note_') || this.resources[slot.key as keyof GameResources] !== undefined) {
+      } else if (slot.key === 'food' || slot.key.startsWith('ooparts_') || slot.key.startsWith('memoir_note_') || this.resources[slot.key as keyof GameResources] !== undefined) {
         this.modifyResource(slot.key as keyof GameResources, slot.qty);
         settled[slot.key] = (settled[slot.key] || 0) + slot.qty;
-        settledItems.push({ key: slot.key, label: slot.label, icon: slot.icon, qty: slot.qty, itemType: slot.itemType || 'resource' });
+        settledItems.push({ key: slot.key, label: slot.label || '식량', icon: slot.icon || '🍖', qty: slot.qty, itemType: slot.itemType || 'resource' });
       } else {
         // 기타 던전 자원/소모품
         settledItems.push({ key: slot.key, label: slot.label, icon: slot.icon, qty: slot.qty, itemType: slot.itemType });

@@ -84,6 +84,7 @@ export const ICON_MAP: Record<string, IconMeta> = {
 
   // 🔥 8대 보급품 및 강화 보급품
   torch: { src: '/assets/custom_uploaded/icons/torch.png', fallback: '🔥', label: '탐험 횃불' },
+  dungeon_food: { src: '/assets/custom_uploaded/icons/food.png', fallback: '🍖', label: '던전 식량' },
   pickaxe: { src: '/assets/custom_uploaded/icons/pickaxe.png', fallback: '⛏️', label: '단단한 곡괭이' },
   bandage: { src: '/assets/custom_uploaded/icons/bandage.png', fallback: '🩹', label: '치유 붕대' },
   holy_water: { src: '/assets/custom_uploaded/icons/holy_water.png', fallback: '💧', label: '정화 성수' },

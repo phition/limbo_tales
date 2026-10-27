@@ -1102,6 +1102,18 @@ export const ExplorationScreen: React.FC = () => {
             }
           };
 
+          const checkDungeonFoodDrop = (chance = 0.12) => {
+            if (Math.random() < chance) {
+              if (floor >= 6 && Math.random() < 0.35) {
+                gm.addToDungeonInventory('enhanced_food', '던전 도시락', '🍱', 1, undefined, undefined, 'supply');
+                gm.addLog(`🍱✨ [특수 보급품 발견] 상자 틈새에서 보존 상태가 완벽한 [던전 도시락]을 발견했습니다! (야영 시 HP/MP 45% 회복 & 기습 -50%)`, 'reward');
+              } else {
+                gm.addToDungeonInventory('dungeon_food', '던전 식량', '🍖', 1, undefined, undefined, 'supply');
+                gm.addLog(`🍖 [보급품 발견] 상자 안에서 비상용 [던전 식량] 1개를 획득했습니다!`, 'reward');
+              }
+            }
+          };
+
           setEventCard({
             title: isBlood ? '🎁 대형 보물 상자 (피의 서약)' : '🎁 버려진 고대 보물 상자',
             desc: '심연의 어둠 속에서 마도 결계로 잠긴 보물 상자를 발견했습니다.\n어떻게 개방하시겠습니까?',
@@ -1140,6 +1152,7 @@ export const ExplorationScreen: React.FC = () => {
                   checkForgeEquipDrop(1.0); // 100% 확률로 병기창 장비 드랍
                   checkCursedDrop();
                   checkOopartsDrop(0.35);
+                  checkDungeonFoodDrop(0.20);
                   gm.addLog(`🗝️ [${usedEnhanced ? '황금 열쇠' : '열쇠'} 개방 대성공] 열쇠로 마도 잠금을 해제하여 골드 ${goldAmt * 2}G, [${dropItem.name} ×${dropItem.qty * 2}], ✨에테르 +${etherAmt}를 완벽히 획득했습니다!${usedEnhanced ? ' (저주장비 확률 +50%)' : ''}`, 'reward');
                   setEventCard(null);
                 }
@@ -1160,6 +1173,7 @@ export const ExplorationScreen: React.FC = () => {
                   checkForgeEquipDrop(0.50); // 50% 확률로 병기창 장비 드랍
                   checkCursedDrop();
                   checkOopartsDrop(0.18);
+                  checkDungeonFoodDrop(0.08);
                   gm.addLog(`🪙 [보물 획득] 골드 ${goldAmt}G 및 [${dropItem.name} ×${dropItem.qty}] 획득!`, 'reward');
                   setEventCard(null);
                 }
@@ -1184,6 +1198,7 @@ export const ExplorationScreen: React.FC = () => {
                     checkForgeEquipDrop(0.70); // 70% 확률로 병기창 장비 드랍
                     checkCursedDrop();
                     checkOopartsDrop(0.25);
+                    checkDungeonFoodDrop(0.12);
                     gm.addLog(`✨ [심층 수색 대성공] 골드 ${goldAmt}G, [${dropItem.name} ×${dropItem.qty}], ✨ 에테르 +${extraEther} 추가 발굴!`, 'reward');
                   } else {
                     SoundManager.getInstance().play('hero_hurt');
@@ -1343,6 +1358,18 @@ export const ExplorationScreen: React.FC = () => {
             }
           };
 
+          const checkDungeonFoodDrop = (chance = 0.15) => {
+            if (Math.random() < chance) {
+              if (floor >= 6 && Math.random() < 0.35) {
+                gm.addToDungeonInventory('enhanced_food', '던전 도시락', '🍱', 1, undefined, undefined, 'supply');
+                gm.addLog(`🍱✨ [부장품 발굴] 석관 틈새에서 마도 보존된 [던전 도시락]을 수습했습니다! (야영 시 HP/MP 45% 회복 & 기습 -50%)`, 'reward');
+              } else {
+                gm.addToDungeonInventory('dungeon_food', '던전 식량', '🍖', 1, undefined, undefined, 'supply');
+                gm.addLog(`🍖 [부장품 발굴] 석관 안에서 비상 보급용 [던전 식량] 1개를 수습했습니다!`, 'reward');
+              }
+            }
+          };
+
           setEventCard({
             title: '⚰️ 잠긴 고대 영웅의 석관',
             desc: '심연의 결계 룬으로 단단히 잠긴 석관이 안치되어 있습니다.\n어떻게 개방하시겠습니까?',
@@ -1381,6 +1408,7 @@ export const ExplorationScreen: React.FC = () => {
                   checkForgeEquipDrop(1.0); // 100% 확률로 병기창 장비 드랍
                   checkCursedDrop();
                   checkOopartsDrop(0.40);
+                  checkDungeonFoodDrop(0.20);
                   gm.addLog(`🗝️ [${usedEnhanced ? '황금 열쇠' : '석관 열쇠'} 개방 대성공] 열쇠로 심연의 봉인을 해제하여 골드 ${goldAmt * 2}G, [${dropItem.name} ×${dropItem.qty * 2}], ✨에테르 +${etherAmt}를 안전하게 회수했습니다!${usedEnhanced ? ' (저주장비 확률 +50%)' : ''}`, 'reward');
                   setEventCard(null);
                 }
@@ -1403,6 +1431,7 @@ export const ExplorationScreen: React.FC = () => {
                     checkForgeEquipDrop(0.70); // 70% 확률로 병기창 장비 드랍
                     checkCursedDrop();
                     checkOopartsDrop(0.20);
+                    checkDungeonFoodDrop(0.10);
                     gm.addLog(`🗝️ [석관 강제 개방] 골드 ${goldAmt}G 및 [${dropItem.name} ×${dropItem.qty}] 획득!`, 'reward');
                   } else {
                     SoundManager.getInstance().play('hero_hurt');
@@ -2262,20 +2291,20 @@ export const ExplorationScreen: React.FC = () => {
       return;
     }
 
-    if (tutorialStepId === 'TUTORIAL_EXPLORE_CAMP' && gm.getDungeonItemCount('food') === 0 && gm.getDungeonItemCount('enhanced_food') === 0) {
-      gm.addToDungeonInventory('food', '식량', '🍖', 1, undefined, undefined, 'supply');
+    if (tutorialStepId === 'TUTORIAL_EXPLORE_CAMP' && gm.getDungeonItemCount('dungeon_food') === 0 && gm.getDungeonItemCount('enhanced_food') === 0) {
+      gm.addToDungeonInventory('dungeon_food', '던전 식량', '🍖', 1, undefined, undefined, 'supply');
     }
 
     const hasEnhancedFood = gm.getDungeonItemCount('enhanced_food') > 0;
-    const hasNormalFood = gm.getDungeonItemCount('food') > 0;
+    const hasNormalFood = gm.getDungeonItemCount('dungeon_food') > 0;
 
     let isEnhancedFood = false;
     if (hasEnhancedFood && gm.consumeDungeonItem('enhanced_food', 1)) {
       isEnhancedFood = true;
-    } else if (hasNormalFood && gm.consumeDungeonItem('food', 1)) {
+    } else if (hasNormalFood && gm.consumeDungeonItem('dungeon_food', 1)) {
       isEnhancedFood = false;
     } else {
-      gm.addLog('🏕️ 식량이 없어 야영을 할 수 없습니다! 채비실에서 식량을 준비해야 합니다.', 'danger');
+      gm.addLog('🏕️ 던전 식량이 없어 야영을 할 수 없습니다! 채비실에서 던전 식량을 준비해야 합니다.', 'danger');
       return;
     }
 
@@ -2316,7 +2345,7 @@ export const ExplorationScreen: React.FC = () => {
       if (isEnhancedFood) {
         gm.addLog('🍱✨ [던전 도시락 안전 야영] 영양 가득한 던전 도시락을 섭취하며 안전하게 휴식했습니다! (생존 대원 HP/MP 45% 회복 [추가 회복 +10%], 기습 위협 50% 억제)', 'reward');
       } else {
-        gm.addLog('🏕️ [안전 야영] 모닥불 주위에서 식량을 섭취하며 휴식을 취했습니다. (생존 대원 HP/MP 35% 회복)', 'reward');
+        gm.addLog('🏕️ [안전 야영] 모닥불 주위에서 던전 식량을 섭취하며 휴식을 취했습니다. (생존 대원 HP/MP 35% 회복)', 'reward');
       }
     }
 
@@ -2980,7 +3009,7 @@ export const ExplorationScreen: React.FC = () => {
           <div className="col-span-1 flex flex-col gap-2">
             {(() => {
               const enhancedFoodCount = gm.getDungeonItemCount('enhanced_food');
-              const normalFoodCount = gm.getDungeonItemCount('food');
+              const normalFoodCount = gm.getDungeonItemCount('dungeon_food');
               return (
                 <button 
                    data-tutorial-target="btn-camp"
@@ -2992,10 +3021,10 @@ export const ExplorationScreen: React.FC = () => {
                            : 'border-[#38ef7d66] text-[#38ef7d] bg-[#131f18] hover:bg-[#1a2d22]')
                    }`}
                    onClick={doCamp}
-                   title={campCooldown > 0 ? `던전 탐색 ${campCooldown}회 후 야영 가능` : (enhancedFoodCount > 0 ? `던전 도시락으로 야영 (HP/MP 45% 회복, 기습 -50%)` : '야영하여 체력/마나 회복 (식량 1개 소모)')}
+                   title={campCooldown > 0 ? `던전 탐색 ${campCooldown}회 후 야영 가능` : (enhancedFoodCount > 0 ? `던전 도시락으로 야영 (HP/MP 45% 회복, 기습 -50%)` : '야영하여 체력/마나 회복 (던전 식량 1개 소모)')}
                 >
                    <span className="mb-0.5 flex items-center justify-center">
-                     <GameIcon name={enhancedFoodCount > 0 ? 'enhanced_food' : 'food'} icon={enhancedFoodCount > 0 ? '🍱✨' : '🏕️'} size={20} />
+                     <GameIcon name={enhancedFoodCount > 0 ? 'enhanced_food' : 'dungeon_food'} icon={enhancedFoodCount > 0 ? '🍱✨' : '🏕️'} size={20} />
                    </span>
                    <span className="font-bold">
                      {campCooldown > 0 

@@ -8282,7 +8282,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     baseCosts: { gold: 720, stone: 12, ether: 50 }
                   },
                 ].map(sup => {
-                  const inStock = gm.citadelSupplies?.[sup.key] || 0;
+                  const inStock = gm.getCitadelSupplyCount(sup.key);
                   const cost1: Record<string, number> = {};
                   const cost5: Record<string, number> = {};
                   Object.entries(sup.baseCosts).forEach(([r, c]) => {
@@ -8395,7 +8395,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     baseCosts: { gold: 40, wood: 2, coal: 2 }
                   },
                   {
-                    key: 'food', label: '던전 식량', icon: '🍖', desc: '야영 시 파티 체력/마나 회복',
+                    key: 'dungeon_food', label: '던전 식량', icon: '🍖', desc: '야영 시 파티 체력/마나 회복',
                     baseCosts: { gold: 40, food: 4 }
                   },
                   {
@@ -8419,7 +8419,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     baseCosts: { gold: 120, stone: 4, ether: 5 }
                   },
                 ].map(sup => {
-                  const inStock = gm.citadelSupplies?.[sup.key] || 0;
+                  const inStock = gm.getCitadelSupplyCount(sup.key);
                   const cost1: Record<string, number> = {};
                   const cost5: Record<string, number> = {};
                   Object.entries(sup.baseCosts).forEach(([r, c]) => {
@@ -8960,7 +8960,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       usages: ['던전 탐험 중 횃불 점등 (시야 100% 확보)', '던전 기습 확률 0% 무력화 및 오브젝트 발견율 상승']
     },
     {
-      key: 'food',
+      key: 'dungeon_food',
       label: '던전 식량',
       icon: '🍖',
       category: '원정 보급품',
@@ -9715,7 +9715,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {SUPPLY_ITEMS.map(item => {
-              const currentStock = gm.citadelSupplies?.[item.key] || 0;
+              const currentStock = gm.getCitadelSupplyCount(item.key);
               const locSupply = item;
               const label = locSupply?.label || item.label;
               const desc = locSupply?.desc || item.desc;
@@ -10224,7 +10224,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <>
                       보관 수량:{' '}
                       <span className="font-bold text-white font-mono">
-                        {(gm.citadelSupplies?.[item.key] || 0).toLocaleString()}개
+                        {(gm.getCitadelSupplyCount(item.key) || 0).toLocaleString()}개
                       </span>
                     </>
                   ) : isQuestItem || maxCap <= 0 ? (
@@ -12722,7 +12722,7 @@ const SUPPLIES: ItemCostDef[] = [
     costs: { gold: 40, wood: 2, coal: 2 }
   },
   {
-    key: 'food', label: '식량', icon: '🍖',
+    key: 'dungeon_food', label: '던전 식량', icon: '🍖',
     desc: '야영 시 HP/MP 35% 회복',
     detailDesc: '휴식 중 원정대의 허기를 채워줍니다. 야영(Camp)을 진행할 때 1개를 소모하여 파티원 전원의 HP와 MP를 35% 회복합니다. (방주 식량 4개 소모)',
     costs: { gold: 40, food: 4 }
@@ -12761,6 +12761,7 @@ const SUPPLIES: ItemCostDef[] = [
 
 const ENHANCED_SUPPLY_MAP: Record<string, { enhancedKey: string; enhancedLabel: string; enhancedIcon: string }> = {
   torch:       { enhancedKey: 'enhanced_torch',       enhancedLabel: '에테르 횃불', enhancedIcon: '✨🔥' },
+  dungeon_food:{ enhancedKey: 'enhanced_food',        enhancedLabel: '던전 도시락', enhancedIcon: '🍱' },
   food:        { enhancedKey: 'enhanced_food',        enhancedLabel: '던전 도시락', enhancedIcon: '🍱' },
   pickaxe:     { enhancedKey: 'enhanced_pickaxe',     enhancedLabel: '심연 곡괭이', enhancedIcon: '⛏️✨' },
   bandage:     { enhancedKey: 'enhanced_bandage',     enhancedLabel: '성유 붕대',   enhancedIcon: '🩹✨' },
@@ -12854,12 +12855,12 @@ export const ExploreDrawer: React.FC<{
   const [supplyCounts, setSupplyCounts] = useState<Record<string, number>>(() => {
     // 튜토리얼 채비실 단계에서는 보급품을 1개씩 직접 담아보도록 0개로 시작
     if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_PREP')) {
-      return { torch: 0, food: 0, pickaxe: 0, rift_anchor: 0, key: 0, bandage: 0, holy_water: 0 };
+      return { torch: 0, dungeon_food: 0, pickaxe: 0, rift_anchor: 0, key: 0, bandage: 0, holy_water: 0 };
     }
-    return { torch: 1, food: 1, pickaxe: 1, rift_anchor: 1, key: 0, bandage: 0, holy_water: 0 };
+    return { torch: 1, dungeon_food: 1, pickaxe: 1, rift_anchor: 1, key: 0, bandage: 0, holy_water: 0 };
   });
   const [selectedCatalysts, setSelectedCatalysts] = useState<string[]>([]);
-  const hasEssentialSupplies = (supplyCounts.torch || 0) >= 1 && (supplyCounts.food || 0) >= 1 && (supplyCounts.pickaxe || 0) >= 1 && (supplyCounts.rift_anchor || 0) >= 1;
+  const hasEssentialSupplies = (supplyCounts.torch || 0) >= 1 && ((supplyCounts.dungeon_food || 0) + (supplyCounts.food || 0)) >= 1 && (supplyCounts.pickaxe || 0) >= 1 && (supplyCounts.rift_anchor || 0) >= 1;
 
   // 상세 확인 팝업 모달 상태
   const [inspectItem, setInspectItem] = useState<{ item: ItemCostDef; type: 'supply' | 'catalyst' } | null>(null);
@@ -12939,7 +12940,7 @@ export const ExploreDrawer: React.FC<{
         const fromEnh = Math.min(count, enhInStock);
         const remainAfterEnh = count - fromEnh;
 
-        const normalInStock = gm.citadelSupplies?.[key] || 0;
+        const normalInStock = gm.getCitadelSupplyCount(key);
         const fromNormal = Math.min(remainAfterEnh, normalInStock);
         const needToBuy = Math.max(0, remainAfterEnh - fromNormal);
 
@@ -13045,7 +13046,7 @@ export const ExploreDrawer: React.FC<{
 
           // 2) 초과분은 일반 보급품으로 다른 스택에 불출
           if (remainQty > 0) {
-            const normalInStock = gm.citadelSupplies?.[k] || 0;
+            const normalInStock = gm.getCitadelSupplyCount(k);
             const fromNormal = Math.min(remainQty, normalInStock);
             if (fromNormal > 0) {
               gm.consumeCitadelSupply(k, fromNormal);
@@ -13342,7 +13343,7 @@ export const ExploreDrawer: React.FC<{
               <div className="flex items-center gap-1.5">
                 <button
                   className="text-[10px] px-2 py-0.5 rounded bg-[#e74c3c22] text-[#ff7675] hover:bg-[#e74c3c44] border border-[#e74c3c44] transition-colors"
-                  onClick={() => setSupplyCounts({ torch: 0, food: 0, pickaxe: 0, bandage: 0, holy_water: 0, key: 0, rift_anchor: 0 })}
+                  onClick={() => setSupplyCounts({ torch: 0, dungeon_food: 0, pickaxe: 0, bandage: 0, holy_water: 0, key: 0, rift_anchor: 0 })}
                   title={'모든 소모품 0개로 설정'}
                 >
                   {'비우기 (0개)'}
@@ -13354,15 +13355,15 @@ export const ExploreDrawer: React.FC<{
                       ? 'bg-gradient-to-r from-[#ffd54f] to-[#ffb300] text-black border-2 border-white animate-pulse shadow-[0_0_20px_rgba(255,213,79,0.9)] scale-105'
                       : 'bg-[#1f2738] text-[#8b9bb4] hover:text-white'
                   }`}
-                  onClick={() => setSupplyCounts({ torch: 1, food: 1, pickaxe: 1, rift_anchor: 1, key: 0, bandage: 0, holy_water: 0 })}
-                  title={'기본 프리셋 (횃불 1, 식량 1, 곡괭이 1, 균열의 닻 1)'}
+                  onClick={() => setSupplyCounts({ torch: 1, dungeon_food: 1, pickaxe: 1, rift_anchor: 1, key: 0, bandage: 0, holy_water: 0 })}
+                  title={'기본 프리셋 (횃불 1, 던전 식량 1, 곡괭이 1, 균열의 닻 1)'}
                 >
                   {'기본 (1,1,1,닻1)'}
                 </button>
                 <button
                   className="text-[10px] px-2 py-0.5 rounded bg-[#5c452433] text-[#f3e5c8] hover:bg-[#5c452455] font-bold border border-[#87673966] transition-colors"
-                  onClick={() => setSupplyCounts({ torch: 3, food: 3, pickaxe: 1, bandage: 1, holy_water: 1, key: 1, rift_anchor: 1 })}
-                  title={'완전 탐사 프리셋 (횃불 3, 식량 3, 나머지 각 1개)'}
+                  onClick={() => setSupplyCounts({ torch: 3, dungeon_food: 3, pickaxe: 1, bandage: 1, holy_water: 1, key: 1, rift_anchor: 1 })}
+                  title={'완전 탐사 프리셋 (횃불 3, 던전 식량 3, 나머지 각 1개)'}
                 >
                   {'완전 탐사 (3,3,올1)'}
                 </button>
@@ -13398,7 +13399,7 @@ export const ExploreDrawer: React.FC<{
                     {(() => {
                       const enhInfo = ENHANCED_SUPPLY_MAP[item.key];
                       const enhInStock = enhInfo ? (gm.citadelSupplies?.[enhInfo.enhancedKey] || 0) : 0;
-                      const normInStock = gm.citadelSupplies?.[item.key] || 0;
+                      const normInStock = gm.getCitadelSupplyCount(item.key);
                       const activeKey = enhInStock > 0 && enhInfo ? enhInfo.enhancedKey : item.key;
                       const activeIcon = enhInStock > 0 && enhInfo ? enhInfo.enhancedIcon : item.icon;
 

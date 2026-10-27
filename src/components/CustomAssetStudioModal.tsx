@@ -648,7 +648,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
     if (iconCategory === 'honor_equip' && !key.startsWith('glory_') && !key.startsWith('equip_arena_') && key !== 'overlord_crown') return false;
     if (iconCategory === 'nemesis_equip' && !key.includes('nemesis')) return false;
     if (iconCategory === 'buildings' && !['bonfire', 'cabin', 'lumberCamp', 'quarry', 'tavern', 'blacksmith', 'forge', 'sanctuary', 'alchemy', 'arenaGate', 'arena', 'infirmary', 'market', 'storage', 'butchery', 'quests', 'codex', 'citadel', 'barracks', 'cemetery', 'explore'].includes(key)) return false;
-    if (iconCategory === 'supplies' && !['torch', 'food', 'pickaxe', 'bandage', 'holy_water', 'key', 'skeleton_key', 'rift_anchor', 'compass', 'golden_toad', 'blood_contract', 'dimensional_whistle', 'enhanced_torch', 'enhanced_food', 'enhanced_pickaxe', 'enhanced_bandage', 'enhanced_holy_water', 'enhanced_key', 'enhanced_rift_anchor'].includes(key)) return false;
+    if (iconCategory === 'supplies' && !['torch', 'dungeon_food', 'food', 'pickaxe', 'bandage', 'holy_water', 'key', 'skeleton_key', 'rift_anchor', 'compass', 'golden_toad', 'blood_contract', 'dimensional_whistle', 'enhanced_torch', 'enhanced_food', 'enhanced_pickaxe', 'enhanced_bandage', 'enhanced_holy_water', 'enhanced_key', 'enhanced_rift_anchor'].includes(key)) return false;
     if (iconCategory === 'events' && !key.startsWith('event_') && !key.startsWith('trap_')) return false;
     if (iconCategory === 'badges' && !key.startsWith('badge_') && !key.startsWith('fever_') && !key.startsWith('rank_') && key !== 'battle_victory') return false;
     if (iconCategory === 'rank' && !key.startsWith('rank_')) return false;

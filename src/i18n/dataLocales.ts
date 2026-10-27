@@ -184,6 +184,7 @@ export const RESOURCE_NAMES: Record<string, Record<SupportedLanguage, string>> =
   stone: { ko: '석재', en: 'Stone', ja: '石材' },
   iron: { ko: '철광석', en: 'Iron Ore', ja: '鉄鉱石' },
   food: { ko: '식량', en: 'Food', ja: '食糧' },
+  dungeon_food: { ko: '던전 식량', en: 'Dungeon Food', ja: 'ダンジョン食糧' },
   ether: { ko: '에테르', en: 'Ether', ja: 'エーテル' },
   leather: { ko: '가죽', en: 'Leather', ja: '革' },
   herb: { ko: '약초', en: 'Herb', ja: '薬草' },
