@@ -858,11 +858,13 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
     const aliveP = playerTeamRef.current.filter(c => c.currentHp > 0);
     const avgAtk = aliveP.length > 0 ? aliveP.reduce((s, h) => s + h.atk, 0) / aliveP.length : 150;
-    const siegeDmg = Math.max(120, Math.round(avgAtk * tactic.siegePower * 1.8));
+    const avgLuck = aliveP.length > 0 ? aliveP.reduce((s, h) => s + h.luck, 0) / aliveP.length : 30;
+    const isSiegeCrit = Math.random() * 100 < Math.min(80, Math.max(15, gm.getCritChance(avgLuck, 1) + 20));
+    const siegeDmg = Math.max(120, Math.round(avgAtk * tactic.siegePower * (isSiegeCrit ? 2.2 : 1.6)));
 
-    // 차원 보호막에 대규모 피해 가함
+    // 차원 보호막에 대규모 피해 가함 (PVE 규격 DR 상수 300 연동)
     const curBarrier = { ...barrierStateRef.current };
-    const barrierDefDmg = Math.max(80, Math.round(siegeDmg * (100 / (100 + curBarrier.def * INVASION_DEF_SCALE))));
+    const barrierDefDmg = Math.max(80, Math.round(siegeDmg * (300 / (curBarrier.def + 300))));
     curBarrier.currentHp = Math.max(0, curBarrier.currentHp - barrierDefDmg);
     if (curBarrier.currentHp <= 0) curBarrier.isDestroyed = true;
     barrierStateRef.current = curBarrier;
@@ -897,7 +899,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       if (opMetric) {
         opMetric.damageDealt += barrierDefDmg + turretSplash * 2;
         opMetric.actionsCount = (opMetric.actionsCount || 0) + 1;
-        opMetric.critCount += 1;
+        if (isSiegeCrit) opMetric.critCount += 1;
       }
     }
 
@@ -911,13 +913,13 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         id: `tactic_siege_vfx_${Date.now()}`,
         type: 'fire',
         damage: barrierDefDmg,
-        isCrit: true,
+        isCrit: isSiegeCrit,
         x: 50,
         y: 38,
         duration: 700,
       },
     ]);
-    gm.emit('battleHitEffect', { x: 50, y: 38, color: 0xc8aa6e, isCrit: true, type: 'fire' });
+    gm.emit('battleHitEffect', { x: 50, y: 38, color: 0xc8aa6e, isCrit: isSiegeCrit, type: 'fire' });
 
     setBattleLogs(prev => [
       ...prev.slice(-30),
@@ -926,7 +928,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         attacker: `🎯 ${op ? op.name : '오퍼레이터'}`,
         defender: '차원 왜곡 보호막',
         damage: barrierDefDmg,
-        isCrit: true,
+        isCrit: isSiegeCrit,
         skillName: tactic.siegeSkillName,
         side: 'player',
       },
@@ -1000,7 +1002,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       let effectiveDef = c.def;
       if ((c.statusEffects || []).some(e => e.id === 'burn')) effectiveDef = Math.round(effectiveDef * 0.5);
       if ((c.statusEffects || []).some(e => e.id === 'freeze')) effectiveDef = Math.round(effectiveDef * 1.4);
-      const finalD = Math.max(10, Math.round(counterDmg * (100 / (100 + effectiveDef * INVASION_DEF_SCALE))));
+      const finalD = Math.max(10, Math.round(counterDmg * (300 / (effectiveDef + 300))));
       if (combatMetricsRef.current[c.id]) combatMetricsRef.current[c.id].damageTaken += finalD;
       return { ...c, currentHp: Math.max(0, c.currentHp - finalD) };
     });
@@ -1471,18 +1473,72 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         const atkDebuff = (attacker.statusEffects || []).find(e => e.id === 'debuff_atk');
         if (atkDebuff) effectiveAtk = Math.max(10, Math.round(effectiveAtk * (1 - (atkDebuff.value || 0.30))));
 
-        // 기본 치명타 확률 + 후열 저격 치명타율 보너스 (+20%)
-        let critChance = attacker.luck * 0.008 + 0.12;
-        if (posBonus === 'back') {
-          critChance += 0.20;
+        // 🌟 [기본 치명타 확률 및 적중 버프 - PVE 규격 GameManager 연동]
+        const magicSchool = chosenSkill.id === 'basic_attack' ? undefined : getSkillMagicSchool(chosenSkill);
+        let baseCritRate = gm.getCritChance(attacker.luck, 1); // 0~90 (%)
+        if (magicSchool === 'holy') {
+          baseCritRate += 30; // ✨ 신성 마법 치명타율 +30%
         }
-        const isCrit = Math.random() < critChance;
-        if (isCrit) anyCrit = true;
+        if (attacker.classId === 'rogue' && Math.floor(currentRoundNumber) === 1) {
+          baseCritRate = 100; // 🎯 도적 1라운드 확정 치명타
+        }
+        if (attacker.classId === 'gunner' && attacker.position === 'back') {
+          baseCritRate += 15;
+        }
+        if (attacker.classId === 'ghost_sniper' && attacker.position === 'back') {
+          baseCritRate += 25;
+        }
+
+        const attackerHitBuff = (attacker.statusEffects || []).find(s => s.id === 'buff_hit' || s.type === 'buff_hit');
+        const attackerHitBonus = attackerHitBuff ? (attackerHitBuff.value || attackerHitBuff.magnitude || 10) : 0;
 
         targetsToHit.forEach((targetObj, tIdx) => {
           const isTargetFront = targetObj.id === 'turret_left' || targetObj.id === 'turret_right';
           const isTargetBack = targetObj.id === 'dimensional_barrier';
           const hasAliveFront = aliveFrontTargets.length > 0;
+
+          // 🌟 [적중 / 회피 판정 - PVE 규격]
+          // 차원 왜곡 보호막(성벽)은 거점 고정 건축물이므로 회피 불가 (100% 적중)
+          // 타워 및 수비 유닛은 행운 기반 회피 연산
+          const isStructure = targetObj.id === 'dimensional_barrier';
+          let isEvaded = false;
+          if (!isStructure) {
+            const targetEvadeBonus = Math.min(70, ((targetObj.luck || 10) * 0.3));
+            const hitChance = Math.min(99, Math.max(30, 90 + (attacker.luck * 0.2) + attackerHitBonus - targetEvadeBonus));
+            if (Math.random() * 100 > hitChance) {
+              isEvaded = true;
+            }
+          }
+
+          if (isEvaded) {
+            const targetPos = getCombatantCardPos(targetObj.id, false);
+            setVfxList(prev => [
+              ...prev,
+              {
+                id: `vfx_evade_${Date.now()}_${tIdx}`,
+                type: 'evade',
+                damage: 0,
+                text: '💨 EVADE',
+                x: targetPos.x,
+                y: targetPos.y,
+                duration: Math.round(350 / battleSpeed),
+              },
+            ]);
+            SoundManager.getInstance().play('evade');
+            return;
+          }
+
+          // 🌟 [타겟 개별 치명타 롤링 - PVE 규격]
+          let targetCritRate = baseCritRate;
+          if (posBonus === 'back' && isTargetBack) {
+            targetCritRate += 20; // 후열 저격 치명타율 보너스 (+20%)
+          }
+          if (chosenSkill.id === 'sharp_headshot') targetCritRate += 60;
+          if (chosenSkill.id === 'sniper_death_sentence') targetCritRate += 70;
+          targetCritRate = Math.min(100, Math.max(5, targetCritRate));
+
+          const isCrit = Math.random() * 100 < targetCritRate;
+          if (isCrit) anyCrit = true;
 
           // 타겟 방어력 연산 (화상 50% 분쇄, 결빙 +40%, 방어 분쇄)
           let targetDef = targetObj.def;
@@ -1499,7 +1555,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           }
 
           const aoeMultiplier = targetsToHit.length > 1 ? 0.75 : 1.0;
-          let rawDmg = effectiveAtk * (chosenSkill.power || 1.0) * (isCrit ? 1.6 : 1.0) * aoeMultiplier;
+          const critMultiplier = isCrit ? (attacker.classId === 'ghost_sniper' ? 2.0 : attacker.classId === 'shadow_phantom' ? 2.3 : 1.5) : 1.0;
+          let rawDmg = effectiveAtk * (chosenSkill.power || 1.0) * critMultiplier * aoeMultiplier;
 
           // 🌟 [포지션 판정 보너스 및 페널티 연산 - PvE 규격 동일]
           // 1) 전열 특화 스킬: 전열 거점(좌/우 타워) 타격 시 +25% 피해 증폭
@@ -1522,7 +1579,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             if (!positionBonusLogs.includes('전열 타워 엄호(-25%)')) positionBonusLogs.push('전열 타워 엄호(-25%)');
           }
 
-          let finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + targetDef * INVASION_DEF_SCALE))));
+          // 🌟 [PVE 규격 방어력 데미지 감소 DR 공식 연동 - K=300]
+          let finalDmg = Math.max(15, Math.round(rawDmg * (300 / (targetDef + 300))));
 
           // 보호막(shield) 버프 흡수 연산
           const shieldEff = targetEffects.find(e => e.id === 'shield');
@@ -1871,8 +1929,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         const poisonTier = oppTowerRef.current?.attack?.tier3 || 0;
         const poisonChance = poisonTier * 0.20;
 
-        const critChance = attacker.luck * 0.008 + 0.12;
-        const isCrit = Math.random() < critChance;
+        // 🌟 [방어 타워 치명타율 - PVE 규격 연동]
+        const turretCritRate = Math.min(50, Math.max(5, gm.getCritChance(attacker.luck, 1)));
+        const isCrit = Math.random() * 100 < turretCritRate;
 
         if (isFocusFire) {
           // [약점 집중 사격] 가장 생명력 비율이 낮거나 위협적인 대상 1인 집중 타격!
@@ -1883,7 +1942,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           let effectiveDef = targetDefender.def;
           if ((targetDefender.statusEffects || []).some(e => e.id === 'burn')) effectiveDef = Math.round(effectiveDef * 0.5);
           if ((targetDefender.statusEffects || []).some(e => e.id === 'freeze')) effectiveDef = Math.round(effectiveDef * 1.4);
-          const finalDmg = Math.max(15, Math.round(rawDmg * (100 / (100 + effectiveDef * INVASION_DEF_SCALE))));
+          const finalDmg = Math.max(15, Math.round(rawDmg * (300 / (effectiveDef + 300))));
           targetDefender.currentHp = Math.max(0, targetDefender.currentHp - finalDmg);
 
           // 🔥 작열 화상 (공격 2차 테크) 부여 판정: PvE 규격 2턴 지속, 8% 화염 DoT & 방어력 50% 분쇄 (행운 저항 연동)
@@ -1999,7 +2058,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             let def = defender.def;
             if ((defender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
             if ((defender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
-            const finalDmg = Math.max(10, Math.round(rawDmg * (100 / (100 + def * INVASION_DEF_SCALE))));
+            const finalDmg = Math.max(10, Math.round(rawDmg * (300 / (def + 300))));
             defender.currentHp = Math.max(0, defender.currentHp - finalDmg);
             totalDmg += finalDmg;
 
@@ -2116,7 +2175,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           attacker.currentMp = Math.min(attacker.maxMp || 120, currentMp + 45);
         }
 
-        const isTactCrit = Math.random() < (attacker.luck * 0.008 + 0.15);
+        // 🌟 [수성 전술 치명타율 - PVE 규격]
+        const tactCritRate = Math.min(60, Math.max(5, gm.getCritChance(attacker.luck, 1) + 10));
+        const isTactCrit = Math.random() * 100 < tactCritRate;
         const tactPowerMult = (isTactCrit ? 1.35 : 1.0) * (isMpSufficient ? 1.0 : 0.6);
 
         let effectiveTurretAtk = attacker.atk;
@@ -2208,7 +2269,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             let def = defender.def;
             if ((defender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
             if ((defender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
-            const shockDmg = Math.max(10, Math.round((140 + attacker.luck * 7 + (attacker.currentMp || 0) * 0.3) * tactPowerMult * (100 / (100 + def * INVASION_DEF_SCALE))));
+            const shockDmg = Math.max(10, Math.round((140 + attacker.luck * 7 + (attacker.currentMp || 0) * 0.3) * tactPowerMult * (300 / (def + 300))));
             defender.currentHp = Math.max(0, defender.currentHp - shockDmg);
             totalDmg += shockDmg;
 
@@ -2264,7 +2325,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           let def = targetDefender.def;
           if ((targetDefender.statusEffects || []).some(e => e.id === 'burn')) def = Math.round(def * 0.5);
           if ((targetDefender.statusEffects || []).some(e => e.id === 'freeze')) def = Math.round(def * 1.4);
-          const tacticDmg = Math.max(10, Math.round((160 + attacker.luck * 9 + effectiveTurretAtk * 0.6) * tactPowerMult * (100 / (100 + def * INVASION_DEF_SCALE))));
+          const tacticDmg = Math.max(10, Math.round((160 + attacker.luck * 9 + effectiveTurretAtk * 0.6) * tactPowerMult * (300 / (def + 300))));
           targetDefender.currentHp = Math.max(0, targetDefender.currentHp - tacticDmg);
 
           const mDefender = combatMetricsRef.current[targetDefender.id];
