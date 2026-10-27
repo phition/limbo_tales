@@ -1687,12 +1687,13 @@ export const BattleScreen: React.FC = () => {
     }
   }, []);
 
-  // ── 🎯 피아 타겟별 체력 바 상단 VFX/SFX 위치 계산 헬퍼 (실제 렌더링된 DOM 위치 1:1 절대 정밀 추적) ────────────────────────
+  // ── 🎯 피아 타겟별 체력 바 상단 VFX/SFX 위치 계산 헬퍼 (적군 패널 DOM 1:1 정밀 추적) ────────────────────────
   const getMonsterVfxPos = useCallback((monsterIdx: number, totalMonsters?: number, isSingleTarget = false) => {
     if (typeof document !== 'undefined' && battleContainerRef.current) {
-      const targetEl = (isSingleTarget || totalMonsters === 1)
-        ? (document.querySelector('[data-vfx-monster-main="true"]') as HTMLElement || document.querySelector(`[data-vfx-monster="${monsterIdx}"]`) as HTMLElement)
-        : (document.querySelector(`[data-vfx-monster="${monsterIdx}"]`) as HTMLElement || document.querySelector('[data-vfx-monster-main="true"]') as HTMLElement);
+      // 🌟 언제나 타겟팅된 적군 슬롯 패널(data-vfx-monster)을 1순위 최우선으로 정확히 추적!
+      const targetEl = (document.querySelector(`[data-vfx-monster="${monsterIdx}"]`) as HTMLElement)
+        || (document.querySelector('[data-vfx-monster]') as HTMLElement)
+        || (document.querySelector('[data-vfx-monster-main="true"]') as HTMLElement);
 
       if (targetEl) {
         const elRect = targetEl.getBoundingClientRect();
@@ -1705,10 +1706,7 @@ export const BattleScreen: React.FC = () => {
       }
     }
 
-    // 🌟 Fallback
-    if (isSingleTarget || totalMonsters === 1) {
-      return { x: 50, y: 14 };
-    }
+    // 🌟 Fallback (DOM 쿼리 전 또는 비상 시 적군 슬롯 기준 위치)
     const total = Math.max(1, totalMonsters ?? monstersRef.current.length ?? 1);
     const safeIdx = Math.max(0, Math.min(monsterIdx, total - 1));
     const x = ((safeIdx + 0.5) / total) * 100;
@@ -7802,28 +7800,28 @@ export const BattleScreen: React.FC = () => {
             const hpPct = isAlive ? clamp((m.currentHp / m.maxHp) * 100, 0, 100) : 0;
 
             return (
-              <LongPressBox
-                key={m.id}
-                data-vfx-monster={idx}
-                data-tutorial-target={`monster-card-${idx}`}
-                onLongPress={() => isAlive && setInspectedMonster(m)}
-                onClick={() => {
-                  if (!isAlive) return;
-                  setTargetedMonsterIdx(idx);
-                  if (tutorialStepId === 'TUTORIAL_BATTLE_TARGET' && idx === 1) {
-                    handleAdvanceTutorial('TUTORIAL_BATTLE_COMBO');
-                  }
-                }}
-                className={`relative p-1.5 sm:p-2 rounded-lg transition-all border flex flex-col justify-center h-[38px] sm:h-[40px] min-w-0 select-none ${
-                  !isAlive
-                    ? 'border-[#18202d] bg-[#0c101a] opacity-30 grayscale cursor-not-allowed shadow-none'
-                    : isTargeted
-                    ? 'border-[#ff4444] bg-[#ff444425] shadow-[0_0_12px_rgba(255,68,68,0.4)] scale-[1.02] cursor-pointer'
-                    : (m.statusEffects || []).some(s => s.type === 'freeze')
-                    ? 'border-[#80d8ff] bg-[#80d8ff18] shadow-[0_0_8px_rgba(128,216,255,0.35)] cursor-pointer'
-                    : 'border-[#24334a] bg-[#111726dd] hover:border-[#3d5378] cursor-pointer'
-                }`}
-              >
+              <div key={m.id} data-vfx-monster={idx} className="w-full">
+                <LongPressBox
+                  data-vfx-monster={idx}
+                  data-tutorial-target={`monster-card-${idx}`}
+                  onLongPress={() => isAlive && setInspectedMonster(m)}
+                  onClick={() => {
+                    if (!isAlive) return;
+                    setTargetedMonsterIdx(idx);
+                    if (tutorialStepId === 'TUTORIAL_BATTLE_TARGET' && idx === 1) {
+                      handleAdvanceTutorial('TUTORIAL_BATTLE_COMBO');
+                    }
+                  }}
+                  className={`relative p-1.5 sm:p-2 rounded-lg transition-all border flex flex-col justify-center h-[38px] sm:h-[40px] min-w-0 select-none ${
+                    !isAlive
+                      ? 'border-[#18202d] bg-[#0c101a] opacity-30 grayscale cursor-not-allowed shadow-none'
+                      : isTargeted
+                      ? 'border-[#ff4444] bg-[#ff444425] shadow-[0_0_12px_rgba(255,68,68,0.4)] scale-[1.02] cursor-pointer'
+                      : (m.statusEffects || []).some(s => s.type === 'freeze')
+                      ? 'border-[#80d8ff] bg-[#80d8ff18] shadow-[0_0_8px_rgba(128,216,255,0.35)] cursor-pointer'
+                      : 'border-[#24334a] bg-[#111726dd] hover:border-[#3d5378] cursor-pointer'
+                  }`}
+                >
                 {/* 💫 패널 위, 상단 이미지 쪽으로 쌓여 올라가는 버프 / 디버프 및 상태이상 (생존 시) */}
                 {isAlive && (m.isGroggy || m.statusEffects.length > 0) && (
                   <div className="absolute bottom-full left-0 right-0 mb-1 z-20 flex gap-0.5 flex-wrap items-center pointer-events-none">
@@ -7933,7 +7931,8 @@ export const BattleScreen: React.FC = () => {
                   </div>
                 </div>
               </LongPressBox>
-            );
+            </div>
+          );
           })}
         </div>
       </div>
