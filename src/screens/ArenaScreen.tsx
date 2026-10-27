@@ -1174,6 +1174,9 @@ export const ArenaScreen: React.FC = () => {
     setIsOppLeaderUltCutin(false);
     gm.emit('arenaBattleStateChanged', true);
     gm.emit('phaserSceneChange', 'arena_battle');
+    try {
+      SoundManager.getInstance().playBgm('battle');
+    } catch (_) {}
 
     // 1. 아군 3+1 덱 파싱 (3인 선발 + 1인 전술 오퍼레이터)
     const { mainHeroes, operatorHero, leaderHero } = gm.getDimensionalDeck();
@@ -2288,7 +2291,7 @@ export const ArenaScreen: React.FC = () => {
             y: rowY,
             duration: 450,
           }]);
-          SoundManager.getInstance().play('evade');
+          SoundManager.getInstance().play('evade', { x: colX });
         } else if (res.isHeal) {
           setVfxList(prev => [...prev, {
             id: vfxId,
@@ -2300,6 +2303,7 @@ export const ArenaScreen: React.FC = () => {
             y: rowY,
             duration: 550,
           }]);
+          SoundManager.getInstance().play('heal', { x: colX });
         } else if (res.isShield) {
           setVfxList(prev => [...prev, {
             id: vfxId,
@@ -2310,6 +2314,7 @@ export const ArenaScreen: React.FC = () => {
             y: rowY,
             duration: 550,
           }]);
+          SoundManager.getInstance().play('shield', { x: colX });
         } else if ((res as any).isAssistGuarded) {
           setVfxList(prev => [...prev, {
             id: vfxId,
@@ -2321,7 +2326,7 @@ export const ArenaScreen: React.FC = () => {
             y: rowY,
             duration: 550,
           }]);
-          SoundManager.getInstance().play('shield');
+          SoundManager.getInstance().play('shield', { x: colX });
         } else {
           let targetVfx: VFXType = resolvedCombatPair.vfx;
           if (res.isCrit && targetVfx === 'slash') {
@@ -2345,28 +2350,12 @@ export const ArenaScreen: React.FC = () => {
             isCrit: res.isCrit,
             type: targetVfx,
           });
+          // 💥 피격 타이밍에 맞춘 묵직하고 강렬한 타격 SFX 출력
+          const hitSfx = res.isCrit ? 'crit' : (resolvedCombatPair.sfx || 'heavy_hit');
+          SoundManager.getInstance().play(hitSfx, { x: colX });
         }
       }, isAoe ? i * 70 : 0);
     });
-
-    try {
-      const firstTargetSlot = targetUnits[0] ? (attacker.isPlayer ? oppCombatants : playerCombatants).findIndex(c => c.id === targetUnits[0].id) : 1;
-      const sfxX = firstTargetSlot === 0 ? 20 : firstTargetSlot === 1 ? 50 : 80;
-
-      if (isHealing) {
-        SoundManager.getInstance().play('heal', { x: sfxX });
-      } else if (isShield) {
-        SoundManager.getInstance().play('shield', { x: sfxX });
-      } else {
-        if (anyCrit && resolvedCombatPair.sfx === 'slash') {
-          SoundManager.getInstance().play('crit', { x: sfxX });
-        } else if (resolvedCombatPair.sfx) {
-          SoundManager.getInstance().play(resolvedCombatPair.sfx, { x: sfxX });
-        } else {
-          SoundManager.getInstance().play(anyCrit ? 'crit' : 'slash', { x: sfxX });
-        }
-      }
-    } catch (_) {}
 
     // 6. 전투 로그 및 배너 기록
     const targetNames = targetUnits.map(u => u.name).join(', ');
@@ -4255,13 +4244,6 @@ export const ArenaScreen: React.FC = () => {
       {/* ══════════════════════════════════════════════════════════════════════ */}
       {activeBattleOpp && (
         <div className="fixed inset-0 z-50 bg-[#070a14]/85 backdrop-blur-[2px] flex flex-col items-center justify-between p-2 sm:p-3 animate-fade-in select-none">
-          {/* 💥 최상위 VFX 오버레이 (패널과 카드 위에 완전히 노출) */}
-          <BattleVFXOverlay
-            vfxList={vfxList}
-            onFinish={(id) => setVfxList(prev => prev.filter(v => v.id !== id))}
-            className="fixed inset-0 pointer-events-none z-50"
-          />
-
           {/* 전장 헤더 */}
           <div className="w-full max-w-[500px] md:max-w-2xl lg:max-w-4xl flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#0e1016] border border-[#1e2d48] shadow-lg shrink-0 z-10">
             <div className="flex items-center gap-2 min-w-0">
@@ -4634,6 +4616,12 @@ export const ArenaScreen: React.FC = () => {
 
           {/* ── 1. 적 진영 (적 리더/서포터 + 적 공격자 이미지창 + 3인 필드 카드) ── */}
           <div className="w-full max-w-[500px] md:max-w-2xl lg:max-w-4xl my-auto flex flex-col gap-1.5 relative">
+            {/* 💥 전장 보드 카드 위 1:1 정확한 위치 오버레이 */}
+            <BattleVFXOverlay
+              vfxList={vfxList}
+              onFinish={(id) => setVfxList(prev => prev.filter(v => v.id !== id))}
+              className="absolute inset-0 pointer-events-none z-50"
+            />
             {/* 상단 적 리더 & 서포터 정보 패널 */}
             <LeaderInfoCard
               leader={oppLeader}
@@ -5279,6 +5267,7 @@ export const ArenaScreen: React.FC = () => {
                       setFinalReward(null);
                       gm.emit('arenaBattleStateChanged', false);
                       gm.emit('phaserSceneChange', 'arena');
+                      SoundManager.getInstance().playBgm('citadel');
                       setTab('shop');
                     }}
                   >
@@ -5306,6 +5295,7 @@ export const ArenaScreen: React.FC = () => {
                     setFinalReward(null);
                     gm.emit('arenaBattleStateChanged', false);
                     gm.emit('phaserSceneChange', 'arena');
+                    SoundManager.getInstance().playBgm('citadel');
                   }}
                 />
               </div>

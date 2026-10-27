@@ -2448,7 +2448,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     >
       {/* 배경 시각 효과 */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0e1526]/50 via-transparent to-[#0e1526]/70 pointer-events-none" />
-      <BattleVFXOverlay vfxList={vfxList} onFinish={(id) => setVfxList(prev => prev.filter(v => v.id !== id))} />
+
 
       {/* ── 1. 상단 전장 헤더 ── */}
       <div className="w-full max-w-[560px] md:max-w-3xl lg:max-w-4xl px-3 py-2 bg-[#0e1526]/95 backdrop-blur-md border border-[#1c2944] rounded-xl shadow-lg flex items-center justify-between shrink-0 z-10">
@@ -2514,6 +2514,12 @@ export const InvasionBattleScreen: React.FC<Props> = ({
 
       {/* ── 2. 중앙 공성 전장 아레나 (반응형 풀와이드 차원 보호막 & 2개 타워 & 수비대) ── */}
       <div className="relative z-10 flex-1 min-h-0 w-full max-w-[560px] md:max-w-3xl lg:max-w-4xl my-auto p-1 flex flex-col justify-between gap-1 overflow-y-auto custom-scrollbar">
+        {/* 💥 공성 전장 보드 카드 위 1:1 정확한 위치 오버레이 */}
+        <BattleVFXOverlay
+          vfxList={vfxList}
+          onFinish={(id) => setVfxList(prev => prev.filter(v => v.id !== id))}
+          className="absolute inset-0 pointer-events-none z-50"
+        />
 
         {/* ════════ 🛡️ 수성측 영역 (오퍼레이터 + 2대 포탑 + 가로지르는 차원 보호막) ════════ */}
         <div className="flex flex-col gap-1.5 w-full">

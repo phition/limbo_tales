@@ -200,11 +200,11 @@ export class SoundManager {
       try {
         this.ctx = new AudioCtx();
 
-        // 🎛️ 마스터 다이내믹 컴프레서 (웅장한 사운드 시 왜곡 방지 및 펀치력 강화)
+        // 🎛️ 마스터 다이내믹 컴프레서 (웅장한 사운드 시 왜곡 방지 및 타격감 극대화)
         this.compressor = this.ctx.createDynamicsCompressor();
-        this.compressor.threshold.setValueAtTime(-14, this.ctx.currentTime);
-        this.compressor.knee.setValueAtTime(30, this.ctx.currentTime);
-        this.compressor.ratio.setValueAtTime(8, this.ctx.currentTime);
+        this.compressor.threshold.setValueAtTime(-6, this.ctx.currentTime);
+        this.compressor.knee.setValueAtTime(24, this.ctx.currentTime);
+        this.compressor.ratio.setValueAtTime(3.2, this.ctx.currentTime);
         this.compressor.attack.setValueAtTime(0.003, this.ctx.currentTime);
         this.compressor.release.setValueAtTime(0.20, this.ctx.currentTime);
 
@@ -240,7 +240,7 @@ export class SoundManager {
     if (!this.ctx || this.ctx.state === 'closed') {
       this.initContext();
     }
-    if (this.ctx && this.ctx.state === 'suspended' && this.isUnlocked) {
+    if (this.ctx && this.ctx.state === 'suspended') {
       try {
         const p = this.ctx.resume();
         if (p && typeof p.catch === 'function') {
@@ -256,7 +256,8 @@ export class SoundManager {
     if (!this.ctx || !this.sfxGain || !this.bgmGain) return;
     const now = this.ctx.currentTime;
     this.sfxGain.gain.cancelScheduledValues(now);
-    this.sfxGain.gain.setValueAtTime(this.sfxMuted ? 0 : this.sfxVolume, now);
+    // 🔊 효과음 출력 게인 부스트 (사운드가 명확하고 또렷하게 들리도록 1.25배 부스트)
+    this.sfxGain.gain.setValueAtTime(this.sfxMuted ? 0 : Math.min(1.5, this.sfxVolume * 1.25), now);
     this.bgmGain.gain.cancelScheduledValues(now);
     this.bgmGain.gain.setValueAtTime(this.bgmMuted ? 0 : this.bgmVolume, now);
     this.activeAudios.forEach(audio => {

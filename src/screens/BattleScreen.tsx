@@ -1630,6 +1630,7 @@ export const BattleScreen: React.FC = () => {
   };
 
   const [isBossBattle, setIsBossBattle] = useState(false);
+  const battleContainerRef = useRef<HTMLDivElement>(null);
   const [vfxList, setVfxList] = useState<VFXEvent[]>([]);
   const [isShaking, setIsShaking] = useState(false);
   const [skillCutIn, setSkillCutIn] = useState<{
@@ -1686,43 +1687,62 @@ export const BattleScreen: React.FC = () => {
     }
   }, []);
 
-  // ── 🎯 피아 타겟별 체력 바 상단 VFX/SFX 위치 계산 헬퍼 ────────────────────────
+  // ── 🎯 피아 타겟별 체력 바 상단 VFX/SFX 위치 계산 헬퍼 (실제 렌더링된 DOM 위치 1:1 절대 정밀 추적) ────────────────────────
   const getMonsterVfxPos = useCallback((monsterIdx: number, totalMonsters?: number, isSingleTarget = false) => {
-    // 🌟 단일 타겟 공격(기본 공격, 단일 스킬)의 경우 화면 중앙의 몬스터 일러스트 패널 중심(X: 50%, Y: 16%)을 정타겟
+    if (typeof document !== 'undefined' && battleContainerRef.current) {
+      const targetEl = (isSingleTarget || totalMonsters === 1)
+        ? (document.querySelector('[data-vfx-monster-main="true"]') as HTMLElement || document.querySelector(`[data-vfx-monster="${monsterIdx}"]`) as HTMLElement)
+        : (document.querySelector(`[data-vfx-monster="${monsterIdx}"]`) as HTMLElement || document.querySelector('[data-vfx-monster-main="true"]') as HTMLElement);
+
+      if (targetEl) {
+        const elRect = targetEl.getBoundingClientRect();
+        const conRect = battleContainerRef.current.getBoundingClientRect();
+        if (conRect.width > 0 && conRect.height > 0) {
+          const x = ((elRect.left + elRect.width / 2 - conRect.left) / conRect.width) * 100;
+          const y = ((elRect.top + elRect.height / 2 - conRect.top) / conRect.height) * 100;
+          return { x: Math.max(3, Math.min(97, x)), y: Math.max(3, Math.min(97, y)) };
+        }
+      }
+    }
+
+    // 🌟 Fallback
     if (isSingleTarget || totalMonsters === 1) {
-      return { x: 50, y: 16 };
+      return { x: 50, y: 14 };
     }
     const total = Math.max(1, totalMonsters ?? monstersRef.current.length ?? 1);
     const safeIdx = Math.max(0, Math.min(monsterIdx, total - 1));
-    const padPct = 3.5;
-    const availableWidth = 100 - (padPct * 2);
-    const slotWidth = availableWidth / total;
-    // 각 몬스터 슬롯의 정확한 수평 중심 X%
-    const x = padPct + slotWidth * (safeIdx + 0.5);
-    // 몬스터 체력 게이지 및 카드 상단 Y% (약 26%)
-    const y = 26;
+    const x = ((safeIdx + 0.5) / total) * 100;
+    const y = 24;
     return { x, y };
   }, []);
 
   const getHeroVfxPos = useCallback((heroIdx: number, isEnemyTurn = false, totalHeroes?: number) => {
-    const total = Math.max(1, totalHeroes ?? gm.party.length ?? 1);
-    const safeIdx = Math.max(0, Math.min(heroIdx, total - 1));
+    if (typeof document !== 'undefined' && battleContainerRef.current) {
+      const heroEl = document.querySelector(`[data-vfx-hero="${heroIdx}"]`) as HTMLElement;
+      if (heroEl) {
+        const elRect = heroEl.getBoundingClientRect();
+        const conRect = battleContainerRef.current.getBoundingClientRect();
+        if (conRect.width > 0 && conRect.height > 0) {
+          const x = ((elRect.left + elRect.width / 2 - conRect.left) / conRect.width) * 100;
+          const y = ((elRect.top + elRect.height / 2 - conRect.top) / conRect.height) * 100;
+          return { x: Math.max(3, Math.min(97, x)), y: Math.max(3, Math.min(97, y)) };
+        }
+      }
+    }
 
-    // 🌟 반응형 뷰포트 너비(태블릿/데스크탑 >= 768px): md:grid-cols-3 가로 3열 배치 위치 연동
+    // 🌟 Fallback (반응형 뷰포트에 따른 정렬)
     const isWide = typeof window !== 'undefined' && window.innerWidth >= 768;
+    const total = Math.max(1, totalHeroes ?? gm.party.length ?? 3);
+    const safeIdx = Math.max(0, Math.min(heroIdx, total - 1));
     if (isWide) {
-      const padPct = 2.5;
-      const slotWidth = (100 - padPct * 2) / total;
-      const x = padPct + slotWidth * (safeIdx + 0.5);
-      // 가로 1열 정렬이므로 3인 모두 동일한 수평 라인선상 위치
+      const x = ((safeIdx + 0.5) / total) * 100;
       const y = isEnemyTurn ? 76 : 58;
       return { x, y };
     }
 
-    // 🌟 모바일 뷰포트 (< 768px): 세로 3행 배치
     const x = 50;
-    const baseY = isEnemyTurn ? 79 : 62;
-    const gapY = isEnemyTurn ? 5.8 : 5.2;
+    const baseY = isEnemyTurn ? 76 : 60;
+    const gapY = isEnemyTurn ? 6.5 : 5.8;
     const y = baseY + (safeIdx * gapY);
     return { x, y };
   }, [gm.party.length, battleScreenWidth]);
@@ -7603,7 +7623,7 @@ export const BattleScreen: React.FC = () => {
   };
 
   return (
-    <div className={`flex-1 min-h-0 w-full flex flex-col relative bg-transparent overflow-hidden ${isShaking ? 'animate-screen-shake' : ''}`}>
+    <div ref={battleContainerRef} className={`flex-1 min-h-0 w-full flex flex-col relative bg-transparent overflow-hidden ${isShaking ? 'animate-screen-shake' : ''}`}>
       {/* ── ⚔️ 전투 오버레이 시각 이펙트 & 플로팅 텍스트 ── */}
       <BattleVFXOverlay vfxList={vfxList} onFinish={handleFinishVFX} isShaking={isShaking} />
 
@@ -7756,11 +7776,13 @@ export const BattleScreen: React.FC = () => {
         const currentTargetMon = monsters[targetedMonsterIdx] || monsters.find(m => m.currentHp > 0) || monsters[0];
         const displayMon = attackingMon || currentTargetMon;
         return (
-          <MonsterImagePanel 
-            targetMonster={displayMon} 
-            totalCount={monsters.length}
-            isAttacking={Boolean(attackingMon && attackingMon.id === displayMon?.id)}
-          />
+          <div data-vfx-monster-main="true" className="w-full">
+            <MonsterImagePanel 
+              targetMonster={displayMon} 
+              totalCount={monsters.length}
+              isAttacking={Boolean(attackingMon && attackingMon.id === displayMon?.id)}
+            />
+          </div>
         );
       })()}
 
@@ -7782,6 +7804,7 @@ export const BattleScreen: React.FC = () => {
             return (
               <LongPressBox
                 key={m.id}
+                data-vfx-monster={idx}
                 data-tutorial-target={`monster-card-${idx}`}
                 onLongPress={() => isAlive && setInspectedMonster(m)}
                 onClick={() => {
@@ -7950,13 +7973,15 @@ export const BattleScreen: React.FC = () => {
 
         <div className="flex flex-col md:grid md:grid-cols-3 gap-1 mb-2">
           {gm.party.map((hero, i) => (
-            <HeroRow
-              key={hero.id} hero={hero} gm={gm}
-              isCurrentTurn={currentHeroPartyIdx === i}
-              isSelected={selectedHeroIdx === i}
-              onClick={() => setSelectedHeroIdx(i)}
-              onInspect={(h) => setInspectedHero(h)}
-            />
+            <div key={hero.id} data-vfx-hero={i} className="w-full">
+              <HeroRow
+                hero={hero} gm={gm}
+                isCurrentTurn={currentHeroPartyIdx === i}
+                isSelected={selectedHeroIdx === i}
+                onClick={() => setSelectedHeroIdx(i)}
+                onInspect={(h) => setInspectedHero(h)}
+              />
+            </div>
           ))}
         </div>
 
