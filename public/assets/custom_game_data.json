@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 55,
-  "updatedAt": 1792891784764,
+  "version": 58,
+  "updatedAt": 1793101529169,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -162,6 +162,18 @@
     },
     "marshal_ultimate": {
       "power": 2
+    },
+    "apprentice_bolt": {
+      "power": 1.15
+    },
+    "sharp_abyssal_bullet": {
+      "power": 1.8
+    },
+    "crusader_judgment_hammer": {
+      "power": 2
+    },
+    "marshal_phalanx_crush": {
+      "power": 1.64
     }
   },
   "classBaseStats": {
@@ -3059,9 +3071,11 @@
     }
   },
   "arenaEdict": {
-    "edictName": "수호 금지의 칙령",
-    "bannedBadge": "guard",
+    "edictName": "치명 금지의 칙령",
+    "bannedBadge": "crit",
     "jokerRule": "블러핑 앤 쇼다운 (2 공개 + 1 히든 실루엣)",
-    "description": "차원 결투장 전역에 수호 개입 불가 결계가 가동됩니다. (🛡️ GUARD 뱃지 획득 불가)"
+    "description": "차원 결투장 전역에 치명타 불가 결계가 가동됩니다. (💥 CRIT 뱃지 획득 불가)",
+    "updatedAt": 1793101498220,
+    "updatedBy": "bumpcat@bumpcat.net"
   }
 }

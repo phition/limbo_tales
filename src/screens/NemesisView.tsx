@@ -295,6 +295,14 @@ export const NemesisView: React.FC = () => {
   const [combatMetrics, setCombatMetrics] = useState<CombatantMetrics[]>([]);
   const combatMetricsRef = useRef<Record<string, CombatantMetrics>>({});
 
+  // 📱 반응형 화면 너비 상태
+  const [screenWidth, setScreenWidth] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 480));
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // ── 정산 모달 ────────────────────────────────────────────────────────
   const [settlement, setSettlement] = useState<{
     damage: number;
@@ -1917,12 +1925,12 @@ export const NemesisView: React.FC = () => {
           {/* ── 몬스터 일러스트 패널 (선택된 부위 실시간 연동 & 괄호 제거 클린 표기) ── */}
           <div className={`px-3 pt-1.5 shrink-0 relative ${attackingPartId ? 'z-40' : 'z-10'}`}>
             <div
-              className={`relative w-full panel flex items-center justify-center transition-all duration-300 shadow-xl overflow-hidden ${
+              className={`relative w-full panel flex items-center justify-center transition-all duration-300 shadow-xl overflow-hidden h-[clamp(145px,20vh,185px)] md:h-[clamp(185px,25vh,250px)] lg:h-[clamp(210px,28vh,290px)] ${
                 attackingPartId
                   ? 'border-[#ff1744] shadow-[0_0_35px_rgba(255,23,68,0.6)] ring-1 ring-[#ff174488]'
                   : 'border-[#2c1d3b]'
               }`}
-              style={{ height: 'min(135px, 17vh)', background: 'linear-gradient(135deg, #0d1525 0%, #1a0a2e 50%, #0d1525 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #0d1525 0%, #1a0a2e 50%, #0d1525 100%)' }}
             >
               <div
                 className="absolute inset-0 opacity-10 rounded-xl overflow-hidden pointer-events-none"
@@ -1948,14 +1956,14 @@ export const NemesisView: React.FC = () => {
               {/* 타겟 부위 오버레이 배지 (괄호 완전 제거) */}
               <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
                 <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10">
-                  <span className="text-[10px] text-[#ffd54f]">🎯 {tr('집중 타겟:')}</span>
-                  <span className="text-xs font-bold text-white">
+                  <span className="text-[10px] sm:text-xs text-[#ffd54f]">🎯 {tr('집중 타겟:')}</span>
+                  <span className="text-xs sm:text-sm font-bold text-white">
                     [{tr(posLabel)}] {tr(cleanTargetedName)}
                   </span>
                 </div>
                 <div className="bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/10 text-right">
-                  <span className="text-[10px] text-[#8b9bb4]">{tr('보스 잔여')}: </span>
-                  <span className="text-xs font-mono font-bold text-[#ffd54f]">
+                  <span className="text-[10px] sm:text-xs text-[#8b9bb4]">{tr('보스 잔여')}: </span>
+                  <span className="text-xs sm:text-sm font-mono font-bold text-[#ffd54f]">
                     {((bossHp / 12500000) * 100).toFixed(1)}%
                   </span>
                 </div>
@@ -1965,7 +1973,7 @@ export const NemesisView: React.FC = () => {
 
           {/* ── 👾 적군 슬롯 그리드: 네메시스 3대 부위 (머리·전열 / 몸통·중열 / 꼬리·후열) ── */}
           <div className="px-3 pt-1.5 shrink-0 relative z-20">
-            <div className="grid grid-cols-3 gap-1.5 w-full">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 w-full">
               {(['head', 'body', 'tail'] as const).map(partKey => {
                 const part = bossParts[partKey];
                 const isAlive = !part.isDefeated && part.currentHp > 0;
@@ -1989,7 +1997,7 @@ export const NemesisView: React.FC = () => {
                       }
                     }}
                     onLongPress={() => {}}
-                    className={`relative p-1.5 sm:p-2 rounded-lg transition-all border flex flex-col justify-center h-[42px] sm:h-[46px] min-w-0 select-none ${
+                    className={`relative p-1.5 sm:p-2 rounded-lg transition-all border flex flex-col justify-center h-[42px] sm:h-[46px] md:h-[50px] min-w-0 select-none ${
                       !isAlive
                         ? 'border-[#18202d] bg-[#0c101a] opacity-35 grayscale cursor-not-allowed shadow-none'
                         : isTargeted
@@ -2093,9 +2101,14 @@ export const NemesisView: React.FC = () => {
           </div>
 
           {/* ── 📜 전투 로그 패널 (로그 영역 확장 및 상세 로그 모달 연동) ── */}
-          <div className="px-3 pt-1 flex-1 min-h-[95px] relative z-10">
+          <div className="px-3 pt-1 flex-1 min-h-[95px] md:min-h-[140px] relative z-10">
             <div className="relative h-full">
-              <LogPanel logs={battleLogs} maxHeight={125} isBattle emptyMessage={tr('기록된 전투 로그가 없습니다.')} />
+              <LogPanel
+                logs={battleLogs}
+                maxHeight={screenWidth >= 768 ? 220 : 135}
+                isBattle
+                emptyMessage={tr('기록된 전투 로그가 없습니다.')}
+              />
               <button
                 type="button"
                 className="absolute top-1.5 right-2 px-2 py-0.5 rounded text-[11px] font-bold bg-[#141a27e0] hover:bg-[#1e273dee] text-[#c8aa6e] hover:text-white border border-[#c8aa6e44] shadow-md transition-all flex items-center gap-1 z-20"
