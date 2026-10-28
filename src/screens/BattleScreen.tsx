@@ -7943,7 +7943,7 @@ export const BattleScreen: React.FC = () => {
           <FeverGaugeBar
             badges={enemyFeverBadges}
             party={monsters.map(m => ({ classId: 'assassin' } as any))}
-            label={tr(`[${gm.encounterVisitorRecord?.callsign || '적 지휘관'}] ENEMY FEVER`)}
+            label={`[${gm.encounterVisitorRecord?.callsign || '적 지휘관'}] ${tr('ENEMY FEVER')}`}
             side="enemy"
             showEffectDescription={false}
           />

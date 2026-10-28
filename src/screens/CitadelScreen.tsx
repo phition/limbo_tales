@@ -15172,7 +15172,7 @@ export const CitadelScreen: React.FC = () => {
                           key={`${keyPrefix}_${msg.id || idx}`}
                           className="flex items-center gap-1.5 shrink-0 text-[11px] pr-6"
                         >
-                          <strong className="text-[#c8aa6e] font-bold shrink-0">[{msg.authorName}]</strong>
+                          <strong className="text-[#c8aa6e] font-bold shrink-0 notranslate" translate="no" data-no-translate="true">[{msg.authorName}]</strong>
                           <span className="text-[#e2e8f0] font-medium">{msg.content}</span>
                           <span className="text-[#c8aa6e44] pl-5 font-bold select-none text-xs">✦</span>
                         </div>

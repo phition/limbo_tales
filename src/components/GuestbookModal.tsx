@@ -77,7 +77,9 @@ const AutoFitAuthorName: React.FC<{ name: string }> = ({ name }) => {
   return (
     <span
       ref={ref}
-      className="flex-1 min-w-0 overflow-hidden text-xs sm:text-sm font-bold text-[#c8aa6e] leading-tight block"
+      className="flex-1 min-w-0 overflow-hidden text-xs sm:text-sm font-bold text-[#c8aa6e] leading-tight block notranslate"
+      translate="no"
+      data-no-translate="true"
       title={name}
     >
       {name}
@@ -337,7 +339,7 @@ export const GuestbookModal: React.FC<Props> = ({
                 >
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) - 낮은 채도의 금색 */}
-                    <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px]">
+                    <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px] notranslate" translate="no" data-no-translate="true">
                       <span className="text-xs">🎖️</span>
                       <AutoFitAuthorName name={msg.authorName} />
                     </div>
@@ -434,7 +436,7 @@ export const GuestbookModal: React.FC<Props> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <span className="text-xs">🎖️</span>
-                <span className="text-xs sm:text-sm font-bold text-[#c8aa6e] truncate max-w-[200px]">
+                <span className="text-xs sm:text-sm font-bold text-[#c8aa6e] truncate max-w-[200px] notranslate" translate="no" data-no-translate="true">
                   {currentNick}
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">{tr('지휘관님의 차원 메세지')}</span>

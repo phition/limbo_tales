@@ -167,7 +167,7 @@ export const CallsignChangeModal: React.FC<Props> = ({
         <div className="p-2.5 rounded-xl bg-[#0d1424] border border-[#1e2a3e] flex items-center justify-between">
           <span className="text-[#8b9bb4]">현재 지휘관 콜사인:</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-[#c8aa6e] font-bold text-sm">🎖️ [{currentNick}]</span>
+            <span className="text-[#c8aa6e] font-bold text-sm notranslate" translate="no" data-no-translate="true">🎖️ [{currentNick}]</span>
             {hasAlreadyChanged && (
               <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ef535022] text-[#ef5350] border border-[#ef535044] font-bold">
                 1회 변경 소진됨

@@ -139,7 +139,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <span className="text-sm">🎖️</span>
-                <span className="font-bold text-xs text-[#c8aa6e]">{profile?.nickname || '지휘관 정보'}</span>
+                <span className="font-bold text-xs text-[#c8aa6e] notranslate" translate="no" data-no-translate="true">{profile?.nickname || '지휘관'}</span>
               </div>
               <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${!isMobilePlatform && fb.isMasterUser() ? 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]' : 'bg-[#38ef7d22] text-[#38ef7d]'}`}>
                 {!isMobilePlatform && fb.isMasterUser() ? '👑 마스터 계정' : user?.isAnonymous ? '게스트 계정' : '인증된 지휘관'}
@@ -152,7 +152,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             {/* 🎖️ 지휘관 콜사인 1회 수정 버튼 & 상태 */}
             <div className="flex items-center justify-between pt-1 border-t border-[#1f2738]/60 mt-0.5">
               <span className="text-[10px] text-[#8b9bb4]">
-                호출부호: <strong className="text-[#c8aa6e]">[{profile?.nickname || '지휘관'}]</strong>
+                호출부호: <strong className="text-[#c8aa6e] notranslate" translate="no" data-no-translate="true">[{profile?.nickname || '지휘관'}]</strong>
               </span>
               {!profile?.callsignChanged ? (
                 <button

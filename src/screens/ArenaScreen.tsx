@@ -4113,7 +4113,7 @@ export const ArenaScreen: React.FC = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-xs text-white truncate">{tr(entry.nickname)}</span>
+                        <span className="font-bold text-xs text-white truncate notranslate" translate="no" data-no-translate="true">{entry.nickname}</span>
                         {entry.isPlayer ? (
                           <span className="text-[8.5px] px-1.5 py-0.2 rounded font-bold bg-[#c8aa6e22] text-[#c8aa6e] font-mono shrink-0">
                             ME

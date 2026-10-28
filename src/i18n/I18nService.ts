@@ -684,11 +684,54 @@ export class I18nService {
   private static readonly ATTRS = ['placeholder', 'title', 'alt', 'aria-label'];
   private static readonly SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'CODE']);
 
+  /** 🚫 번역을 건너뛰어야 하는 요소(고유 콜사인, 코드 태그, translate="no" 등)인지 판별 */
+  private static shouldSkipElement(el: Element): boolean {
+    if (I18nService.SKIP_TAGS.has(el.tagName)) return true;
+    if (el.getAttribute('translate') === 'no') return true;
+    if (el.classList && el.classList.contains('notranslate')) return true;
+    if (el.hasAttribute('data-no-translate')) return true;
+    return false;
+  }
+
+  /** 🚫 no-translate 요소 내부의 텍스트가 과거 번역된 적이 있다면 원문(지휘관 고유 콜사인 등)으로 안전하게 복구 */
+  private restoreNoTranslateSubtree(el: Element): void {
+    if (typeof document === 'undefined') return;
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let currentNode = walker.nextNode();
+    while (currentNode) {
+      const n = currentNode as any;
+      if (n.__origKo !== undefined) {
+        currentNode.nodeValue = n.__origKo;
+        delete n.__origKo;
+        delete n.__lastTr;
+      }
+      currentNode = walker.nextNode();
+    }
+  }
+
   /** 텍스트 노드 하나를 현재 언어에 맞춰 번역/복원 (원문은 __origKo 에 보존) */
   private syncTextNode(textNode: Text, fromMutation: boolean): void {
     const n = textNode as any;
     const val = textNode.nodeValue || '';
     if (fromMutation && n.__lastTr !== undefined && val === n.__lastTr) return; // 우리가 쓴 값
+
+    const parent = textNode.parentElement;
+    const isNoTranslate = parent && (
+      parent.closest('[translate="no"]') !== null ||
+      parent.closest('.notranslate') !== null ||
+      parent.closest('[data-no-translate]') !== null
+    );
+
+    if (isNoTranslate) {
+      // 고유 콜사인 등 no-translate 요소는 번역을 금지하고, 기존에 임의 번역된 적이 있다면 원문으로 복구
+      if (n.__origKo !== undefined) {
+        textNode.nodeValue = n.__origKo;
+        delete n.__origKo;
+        delete n.__lastTr;
+      }
+      return;
+    }
+
     if (this.currentLanguage === 'ko') {
       if (n.__origKo !== undefined && !fromMutation) {
         textNode.nodeValue = n.__origKo;
@@ -713,6 +756,7 @@ export class I18nService {
 
   /** 요소의 번역 대상 속성(placeholder/title/alt/aria-label) 처리 */
   private syncAttrs(el: Element, onlyAttr?: string): void {
+    if (I18nService.shouldSkipElement(el)) return;
     const e = el as any;
     for (const a of I18nService.ATTRS) {
       if (onlyAttr && onlyAttr !== a) continue;
@@ -740,7 +784,10 @@ export class I18nService {
       this.syncTextNode(node as Text, false);
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       const el = node as Element;
-      if (I18nService.SKIP_TAGS.has(el.tagName)) return;
+      if (I18nService.shouldSkipElement(el)) {
+        this.restoreNoTranslateSubtree(el);
+        return;
+      }
       this.syncAttrs(el);
       for (let c = el.firstChild; c; c = c.nextSibling) this.walkDom(c);
     }

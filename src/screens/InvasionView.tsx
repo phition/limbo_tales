@@ -482,8 +482,8 @@ export const InvasionView: React.FC = () => {
                   </div>
                   <div className="min-w-0 truncate">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-xs sm:text-sm text-white group-hover:text-[#c8aa6e] transition-colors truncate">
-                        {tr(t.ownerNickname)}
+                      <span className="font-bold text-xs sm:text-sm text-white group-hover:text-[#c8aa6e] transition-colors truncate notranslate" translate="no" data-no-translate="true">
+                        {t.ownerNickname}
                       </span>
                       {t.isBot ? (
                         <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-[#ff704322] text-[#ff7043] border border-[#ff704344] font-mono shrink-0">
@@ -848,7 +848,7 @@ export const InvasionView: React.FC = () => {
                     )}
                   </div>
                   <div className="text-[11px] text-[#8b9bb4]">
-                    {tr('사령관:')} <span className="text-white font-bold">{tr(inspectTarget.ownerNickname)}</span>
+                    {tr('사령관:')} <span className="text-white font-bold notranslate" translate="no" data-no-translate="true">{inspectTarget.ownerNickname}</span>
                     {inspectTarget.guildName ? ` (${tr(inspectTarget.guildName)})` : ''}
                   </div>
                 </div>
