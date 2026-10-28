@@ -2465,9 +2465,10 @@ export const ExplorationScreen: React.FC = () => {
            <LogPanel logs={state.dungeonLogs || []} maxHeight={9999} emptyMessage="기록된 던전 탐험 로그가 없습니다." />
         </div>
 
-        {/* 파티 요약 창 (하단: 과도하게 높아져 로그와 맞닿지 않도록 컴팩트하고 단정하게 유지) */}
-        <div className="shrink-0 h-auto panel p-2 sm:p-2.5 flex flex-col bg-[#0b0d13ee] border border-[#1f2738] rounded-xl shadow-md max-h-[210px] md:max-h-none overflow-hidden">
-          <div className="flex items-center justify-between text-xs text-[#c8aa6e] font-bold mb-1.5 border-b border-[#c8aa6e22] pb-1">
+        {/* 파티 요약 영역 (상단 버프/디버프 여유 공간 확보 & 하단 정렬: 기본 상태에서는 탐색 버튼 높이(약 50px)의 여백을 유지하고, 버프/디버프 추가 시 상단 여백으로 자연스럽게 확장) */}
+        <div className="shrink-0 flex flex-col justify-end min-h-[clamp(215px,28vh,250px)] md:min-h-[clamp(135px,17vh,155px)] transition-all duration-200">
+          <div className="panel p-2 sm:p-2.5 flex flex-col bg-[#0b0d13ee] border border-[#1f2738] rounded-xl shadow-md max-h-[275px] md:max-h-none overflow-hidden">
+            <div className="flex items-center justify-between text-xs text-[#c8aa6e] font-bold mb-1.5 border-b border-[#c8aa6e22] pb-1 shrink-0">
             <div className="flex items-center gap-1.5">
               <span>🛡️ 원정대 현황</span>
               <span className="text-[10px] text-[#8b9bb4] font-normal">({gm.party.length}/3명)</span>
@@ -2535,7 +2536,7 @@ export const ExplorationScreen: React.FC = () => {
             </div>
           </div>
 
-          <div className="overflow-y-auto pr-0.5 flex flex-col md:grid md:grid-cols-3 gap-1.5 custom-scrollbar">
+          <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 flex flex-col md:grid md:grid-cols-3 gap-1.5 custom-scrollbar">
             {gm.party.map(hero => {
               const cls = Object.values(CHARACTER_CLASSES).find(c => c.id === hero.classId);
               const classIcon = cls?.skills[0]?.icon ?? '⚔️';
@@ -2686,6 +2687,7 @@ export const ExplorationScreen: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
 
       {/* ── 🎒 던전 배낭 슬라이드 패널 (토글형) ── */}
       <div 
