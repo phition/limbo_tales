@@ -1141,9 +1141,26 @@ export class BattleScene extends Phaser.Scene {
       );
 
       const isBoss = this.monsters.some(m => m.data.type === 'boss');
-      if (isBoss && this.gm.dungeonFloor < 5) {
-        this.gm.portalAppeared = true;
-        this.addLog('🌀 [포탈 생성] 보스를 쓰러뜨린 공간에 차원의 문이 열렸습니다!', 'reward');
+      if (isBoss) {
+        if (this.gm.dungeonFloor === 11) {
+          let healedAny = false;
+          this.gm.party.forEach(h => {
+            if (h.currentHp > 0 && !h.isPermanentlyDead) {
+              const hpGain = Math.max(1, Math.floor(h.maxHp * 0.5));
+              const mpGain = Math.max(1, Math.floor(h.maxMp * 0.5));
+              h.currentHp = Math.min(h.maxHp, h.currentHp + hpGain);
+              h.currentMp = Math.min(h.maxMp, (h.currentMp || 0) + mpGain);
+              healedAny = true;
+            }
+          });
+          if (healedAny) {
+            this.gm.emit('partyUpdated', this.gm.party);
+            this.addLog('💖✨ [중간 보스 격파] 무간도 중간 보스를 처치하여 원정대 전원의 체력과 마나가 50% 회복되었습니다!', 'reward');
+          }
+        } else if (this.gm.dungeonFloor < 5) {
+          this.gm.portalAppeared = true;
+          this.addLog('🌀 [포탈 생성] 보스를 쓰러뜨린 공간에 차원의 문이 열렸습니다!', 'reward');
+        }
       }
 
       // 승리 시 결과 카드 표시 후 탐험씬 귀환

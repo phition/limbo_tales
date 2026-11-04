@@ -1865,8 +1865,11 @@ export const BattleScreen: React.FC = () => {
     });
 
     const initMonsters: MonsterState[] = sortedMonsters.map((md, idx) => {
+      const isBoss = md.type === 'boss';
       const isOvc = gm.isOvercharged || md.name.includes('광폭화') || md.name.includes('광폭');
       const mult = isOvc ? 1.3 : 1.0;
+      const alreadyWeakened = Boolean((md as any).isWeakened);
+      const weakMult = (isBoss && !alreadyWeakened && gm.hasBossWeakeningForFloor(gm.dungeonFloor)) ? 0.90 : 1.0;
       // 🌟 이름 정제: [광폭화], [정예] 태그를 텍스트에서 완전히 제거 (상단 ELITE / 광폭화 뱃지로 표시)
       let cleanName = md.name
         .replace(/\[\s*(정예\s*)?광폭화?\s*\]/g, '')
@@ -1875,17 +1878,17 @@ export const BattleScreen: React.FC = () => {
         .trim();
 
       const rawMaxHp = Number(md.maxHp || (md as any).hp || 100);
-      const safeMaxHp = Math.max(1, Math.floor((isNaN(rawMaxHp) ? 100 : rawMaxHp) * mult));
+      const safeMaxHp = Math.max(1, Math.floor((isNaN(rawMaxHp) ? 100 : rawMaxHp) * mult * weakMult));
       const rawCurrentHp = Number((md as any).currentHp || (md as any).hp || md.maxHp || 100);
-      const safeCurrentHp = Math.max(1, Math.floor((isNaN(rawCurrentHp) ? safeMaxHp : rawCurrentHp) * mult));
+      const safeCurrentHp = Math.max(1, Math.floor((isNaN(rawCurrentHp) ? safeMaxHp : rawCurrentHp) * mult * weakMult));
       const rawAtk = Number(md.atk ?? 10);
-      const safeAtk = Math.max(1, Math.floor((isNaN(rawAtk) ? 10 : rawAtk) * mult));
+      const safeAtk = Math.max(1, Math.floor((isNaN(rawAtk) ? 10 : rawAtk) * mult * weakMult));
       const rawDef = Number(md.def ?? 0);
-      const safeDef = Math.max(0, Math.floor((isNaN(rawDef) ? 0 : rawDef) * mult));
+      const safeDef = Math.max(0, Math.floor((isNaN(rawDef) ? 0 : rawDef) * mult * weakMult));
       const rawSpd = Number(md.spd ?? 10);
-      const safeSpd = Math.max(1, Math.floor((isNaN(rawSpd) ? 10 : rawSpd) * mult));
+      const safeSpd = Math.max(1, Math.floor((isNaN(rawSpd) ? 10 : rawSpd) * mult * weakMult));
       const rawLuck = Number(md.luck ?? 10);
-      const safeLuck = Math.max(0, Math.floor((isNaN(rawLuck) ? 10 : rawLuck) * (isOvc ? 1.2 : 1.0)));
+      const safeLuck = Math.max(0, Math.floor((isNaN(rawLuck) ? 10 : rawLuck) * (isOvc ? 1.2 : 1.0) * weakMult));
 
       return {
         id: `mon_${idx}_${Date.now()}`,
@@ -2032,6 +2035,9 @@ export const BattleScreen: React.FC = () => {
     if (gm.isOvercharged) {
       gm.addLog('💀⚡ [심연 오버차지] 광폭화 결계 발동! 결전 중 철수할 수 없습니다! (EXP +30%, 전리품 +50%)', 'danger');
     }
+    if (isBossBattle && gm.hasBossWeakeningForFloor(gm.dungeonFloor)) {
+      gm.addLog('📜 [유물 공명] 봉인 유물의 힘으로 보스의 모든 능력치가 10% 감소한 상태로 결전이 시작됩니다!', 'reward');
+    }
     
     // 👑 보스 몬스터 조우 시 시네마틱 오버레이 컷씬 재생 후 턴 진행, 일반 전투는 즉시 턴 시작
     const mainBossData = sortedMonsters.find(m => m.type === 'boss');
@@ -2110,6 +2116,22 @@ export const BattleScreen: React.FC = () => {
             }
             gm.submitAbyssPurifierLeaderboard();
           } else if (gm.dungeonFloor === 11) {
+            // 💖 [무간도 중간 보스 처치 보상] 원정대 전원 체력과 마나 50% 회복
+            let healedAny = false;
+            gm.party.forEach(h => {
+              if (h.currentHp > 0 && !h.isPermanentlyDead) {
+                const hpGain = Math.max(1, Math.floor(h.maxHp * 0.5));
+                const mpGain = Math.max(1, Math.floor(h.maxMp * 0.5));
+                h.currentHp = Math.min(h.maxHp, h.currentHp + hpGain);
+                h.currentMp = Math.min(h.maxMp, (h.currentMp || 0) + mpGain);
+                healedAny = true;
+              }
+            });
+            if (healedAny) {
+              gm.emit('partyUpdated', gm.party);
+              gm.addLog('💖✨ [중간 보스 격파] 무간도 중간 보스를 처치하여 원정대 전원의 체력과 마나가 50% 회복되었습니다!', 'reward');
+            }
+
             // 🎮 PGS 리더보드: 무저갱의 방랑자 (11층 진 최종 보스 & 광폭화 보스)
             const archeosMon = currentMonsters.find(m => m.data.id === 'boss_avici_final' || (m.data.name && m.data.name.includes('아르케오스')));
             if (archeosMon) {

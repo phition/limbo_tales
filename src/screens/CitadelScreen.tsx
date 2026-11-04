@@ -13638,7 +13638,7 @@ export const ExploreDrawer: React.FC<{
                       </div>
                       <div className="text-[10px] text-[#cfd8dc] mt-0.5">
                         {isUnlocked
-                          ? `초월 엔드 컨텐츠: 1,000 위험도 단위 세부 진입로 개방 (현재 해금: 무간도 1~${gm.unlockedAviciTier || 1}계층 / 몹 Lv.50~600)`
+                          ? `초월 엔드 컨텐츠: 1,000 위험도 단위 세부 진입로 개방 (현재 해금: 무간도 1~${gm.unlockedAviciTier || 1}계층 / 몹 Lv.40~499)`
                           : ('10층 보스 아스모데우스를 토벌해야 무간도 진입로가 영구 해금됩니다.')}
                       </div>
                     </div>
@@ -13658,7 +13658,8 @@ export const ExploreDrawer: React.FC<{
                           const tierUnlocked = tier <= (gm.unlockedAviciTier || 1);
                           const startDanger = tier === 1 ? 0 : (tier - 1) * 1000 + 1;
                           const reqDanger = (tier - 1) * 1000;
-                          const startLv = Math.min(600, Math.round(50 + Math.floor(startDanger / 100) * 5.5));
+                          const startDangerClamped = Math.max(1, Math.min(10000, startDanger));
+                          const startLv = Math.min(499, Math.max(40, Math.round(40 + ((startDangerClamped - 1) / 9999) * (499 - 40))));
                           return (
                             <button
                               key={tier}

@@ -151,10 +151,11 @@ const DUNGEON_TRAPS: DungeonTrapDef[] = [
 /** 층별 1~5인 마물 편대 생성기 */
 function generateMonsterSquad(floor: number, isOvercharged: boolean = false, currentDanger: number = 0): MonsterData[] {
   if (floor === 11) {
-    // 🌌 무간도: 1~10층의 모든 몬스터가 정예 + 광폭화 상태로 출현, 시작 레벨 50, 100위험도마다 레벨 +5.5 (최대 Lv.600)
+    // 🌌 무간도: 1~10층의 모든 몬스터가 정예 + 광폭화 상태로 출현, 시작 레벨 40(위험도 1)에서 10,000에 도달할 때까지 점진적으로 Lv.499
     const pool = FLOOR_MONSTER_POOL[11] || FLOOR_MONSTER_POOL[10];
     const dangerBracket = Math.floor(currentDanger / 100);
-    const scaledLevel = Math.min(600, Math.round(50 + dangerBracket * 5.5));
+    const dangerClamped = Math.max(1, Math.min(10000, currentDanger));
+    const scaledLevel = Math.min(499, Math.max(40, Math.round(40 + ((dangerClamped - 1) / 9999) * (499 - 40))));
     const statMult = 2.4 * (1 + dangerBracket * 0.05);
     const count = Math.floor(Math.random() * 3) + 3; // 3~5마리
 
@@ -324,19 +325,28 @@ function generateBossSquad(floor: number, isOvercharged: boolean = false, curren
     const baseBoss = MONSTERS[bossKey] || MONSTERS['boss_floor_10'];
     const bossData: MonsterData = JSON.parse(JSON.stringify(baseBoss));
     bossData.type = 'boss';
-    bossData.level = isTrueFinalBoss ? 600 : Math.min(600, Math.round(50 + dangerBracket * 5.5));
+    const dangerClamped = Math.max(1, Math.min(10000, currentDanger));
+    const scaledLevel = Math.min(499, Math.max(40, Math.round(40 + ((dangerClamped - 1) / 9999) * (499 - 40))));
+    bossData.level = isTrueFinalBoss ? 499 : scaledLevel;
     const bossStatMult = isTrueFinalBoss ? (isOvercharged ? 2.0 : 1.0) : (2.8 * (1 + dangerBracket * 0.06));
     const floorStatMult = 1 + (11 - 1) * 0.20; // 🌟 B안: 11층 3.0x 누적 가산
 
     // 🌟 보스 이름에서 광폭화 텍스트 중복 방지 (광폭화는 전투 화면에서 뱃지로 표시)
     bossData.name = baseBoss.name.replace(/\[\s*(광폭화?|무간의\s*광폭\s*보스)\s*\]/g, '').trim();
 
+    // 🌟 보스 스탯 10% 약화 유물 적용
+    const isWeakened = gmInstance.hasBossWeakeningForFloor(11);
+    const bossWeakMult = isWeakened ? 0.90 : 1.0;
+
     // 11층 심연의 연무: 모든 스탯(HP, ATK, DEF, SPD, LUCK)에 연무 강화 배율 전면 적용
-    bossData.maxHp = Math.round(bossData.maxHp * bossStatMult * floorStatMult * miasmaMult);
-    bossData.atk = Math.round(bossData.atk * bossStatMult * floorStatMult * miasmaMult);
-    bossData.def = Math.round(bossData.def * bossStatMult * floorStatMult * miasmaMult);
-    bossData.spd = Math.round((bossData.spd || 10) * floorStatMult * miasmaMult);
-    bossData.luck = Math.round((bossData.luck || 10) * floorStatMult * miasmaMult);
+    bossData.maxHp = Math.max(100, Math.round(bossData.maxHp * bossStatMult * floorStatMult * miasmaMult * bossWeakMult));
+    bossData.atk = Math.max(10, Math.round(bossData.atk * bossStatMult * floorStatMult * miasmaMult * bossWeakMult));
+    bossData.def = Math.max(0, Math.round(bossData.def * bossStatMult * floorStatMult * miasmaMult * bossWeakMult));
+    bossData.spd = Math.max(1, Math.round((bossData.spd || 10) * floorStatMult * miasmaMult * bossWeakMult));
+    bossData.luck = Math.max(0, Math.round((bossData.luck || 10) * floorStatMult * miasmaMult * bossWeakMult));
+    if (isWeakened) {
+      (bossData as any).isWeakened = true;
+    }
 
     const pool = FLOOR_MONSTER_POOL[11] || FLOOR_MONSTER_POOL[10];
     const minions: MonsterData[] = [];
@@ -388,11 +398,18 @@ function generateBossSquad(floor: number, isOvercharged: boolean = false, curren
 
   const floorStatMult = 1 + (f - 1) * 0.20; // 🌟 B안: 층당 20% 누적 가산
 
-  bossData.maxHp = Math.round(baseBoss.maxHp * floorStatMult);
-  bossData.atk = Math.round(baseBoss.atk * floorStatMult * miasmaMult);
-  bossData.def = Math.round(baseBoss.def * floorStatMult * miasmaMult);
-  bossData.spd = Math.round((baseBoss.spd || 10) * floorStatMult);
-  bossData.luck = Math.round((baseBoss.luck || 10) * floorStatMult);
+  // 🌟 보스 스탯 10% 약화 유물 적용
+  const isWeakened = gmInstance.hasBossWeakeningForFloor(f);
+  const bossWeakMult = isWeakened ? 0.90 : 1.0;
+
+  bossData.maxHp = Math.max(100, Math.round(baseBoss.maxHp * floorStatMult * bossWeakMult));
+  bossData.atk = Math.max(10, Math.round(baseBoss.atk * floorStatMult * miasmaMult * bossWeakMult));
+  bossData.def = Math.max(0, Math.round(baseBoss.def * floorStatMult * miasmaMult * bossWeakMult));
+  bossData.spd = Math.max(1, Math.round((baseBoss.spd || 10) * floorStatMult * bossWeakMult));
+  bossData.luck = Math.max(0, Math.round((baseBoss.luck || 10) * floorStatMult * bossWeakMult));
+  if (isWeakened) {
+    (bossData as any).isWeakened = true;
+  }
 
   if (f >= 6 && f <= 10) {
     bossData.rewards = {
@@ -954,13 +971,30 @@ export const ExplorationScreen: React.FC = () => {
       gm.addLog(omenMsg, 'danger');
     }
 
-    // 👑 보스 출현 트리거 (무간도는 100 단위 및 10,000 최종 도달, 일반층은 maxDanger 도달)
+    // 👑 보스 출현 트리거 (무간도는 위험도 350, 700 중간 보스 및 1,000 계층 수호군주 / 10,000 최종 도달, 일반층은 maxDanger 도달)
     const isAvici = floor === 11;
-    const isAviciMilestoneBoss = isAvici && (Math.floor(newDanger / 100) > Math.floor(danger / 100) || newDanger >= 10000);
+    const AVICI_MILESTONES = [
+      350, 700, 1000,
+      1350, 1700, 2000,
+      2350, 2700, 3000,
+      3350, 3700, 4000,
+      4350, 4700, 5000,
+      5350, 5700, 6000,
+      6350, 6700, 7000,
+      7350, 7700, 8000,
+      8350, 8700, 9000,
+      9350, 9700, 10000
+    ];
+    const crossedAviciMilestone = isAvici ? AVICI_MILESTONES.find(m => danger < m && newDanger >= m) : undefined;
+    const isAviciMilestoneBoss = isAvici && (crossedAviciMilestone !== undefined || (danger < 10000 && newDanger >= 10000));
     const isStandardBoss = !isAvici && newDanger >= maxDanger;
 
     if ((isAviciMilestoneBoss || isStandardBoss) && !gm.isOvercharged) {
-      const isTrueFinal = isAvici && newDanger >= 10000;
+      const milestoneReached = crossedAviciMilestone || (newDanger >= 10000 ? 10000 : Math.round(newDanger));
+      const isTrueFinal = isAvici && (milestoneReached >= 10000 || newDanger >= 10000);
+      const isTierBoss = isAvici && !isTrueFinal && milestoneReached % 1000 === 0;
+      const isMidBoss = isAvici && !isTrueFinal && !isTierBoss;
+
       const bossSquad = generateBossSquad(floor, isAvici && !isTrueFinal, newDanger);
       const mainBoss = bossSquad.find(m => m.type === 'boss') || bossSquad[bossSquad.length - 1];
 
@@ -969,9 +1003,13 @@ export const ExplorationScreen: React.FC = () => {
       setBossWarning(mainBoss.name);
 
       if (isTrueFinal) {
-        gm.addLog(`👑 [위험도 10,000 극한 도달!] 무간도의 심연 속에서 진 최종 보스 [${mainBoss.name}]이(가) 강림했습니다! (Lv.600)`, 'danger');
+        gm.addLog(`👑 [위험도 10,000 극한 도달!] 무간도의 심연 속에서 진 최종 보스 [${mainBoss.name}]이(가) 강림했습니다! (Lv.${mainBoss.level || 499})`, 'danger');
+      } else if (isMidBoss) {
+        gm.addLog(`💀 [무간도 위험도 ${milestoneReached.toLocaleString()} 돌파!] 심연의 중간 군주 [${mainBoss.name}] 편대가 출현했습니다! (몬스터 Lv.${mainBoss.level})`, 'danger');
+      } else if (isTierBoss) {
+        gm.addLog(`👑 [무간도 ${milestoneReached / 1000}계층 돌파!] 심연의 수호 군주 [${mainBoss.name}] 편대가 출현했습니다! (몬스터 Lv.${mainBoss.level})`, 'danger');
       } else if (isAvici) {
-        gm.addLog(`💀 [무간도 위험도 ${Math.floor(newDanger / 100) * 100} 돌파!] 심연의 억겁이 심화되며 [${mainBoss.name}] 편대가 출현했습니다! (몬스터 Lv.${Math.min(600, Math.round(50 + Math.floor(newDanger / 100) * 5.5))})`, 'danger');
+        gm.addLog(`💀 [무간도 위험도 ${milestoneReached.toLocaleString()} 돌파!] 심연의 억겁이 심화되며 [${mainBoss.name}] 편대가 출현했습니다! (몬스터 Lv.${mainBoss.level})`, 'danger');
       } else {
         gm.addLog(`💀 [위험도 100.00%] 심연의 위기가 극한에 달했습니다! [${mainBoss.name}]과 호위군 출현!`, 'danger');
       }
@@ -980,15 +1018,28 @@ export const ExplorationScreen: React.FC = () => {
         setBossWarning(null);
         setIsAnimating(false);
 
+        let eventTitle = `👑 ${mainBoss.name} 편대 출현!`;
+        let eventDesc = '';
+        if (isTrueFinal) {
+          eventTitle = `👑 진 최종 보스 [${mainBoss.name}] 강림!`;
+          eventDesc = '태초의 공허를 다스리는 무간의 절대자 [아르케오스]가 강림했습니다! 모든 심연을 닫기 위한 최후의 결전입니다!';
+        } else if (isMidBoss) {
+          eventTitle = `💀 중간 군주 [${mainBoss.name}] 편대 출현!`;
+          eventDesc = `무간도 위험도 ${milestoneReached.toLocaleString()} 돌파! 심연의 중간 군주 [${mainBoss.name}]와 정예 호위대가 길을 가로막습니다!`;
+        } else if (isTierBoss) {
+          eventTitle = `👑 ${milestoneReached / 1000}계층 수호 군주 [${mainBoss.name}] 편대 출현!`;
+          eventDesc = `무간도 ${milestoneReached / 1000}계층(위험도 ${milestoneReached.toLocaleString()}) 돌파! 심연의 수호 군주 [${mainBoss.name}]와 정예 호위대가 길을 가로막습니다!`;
+        } else if (isAvici) {
+          eventDesc = `무간도 위험도 ${milestoneReached.toLocaleString()} 돌파! 광폭화 군주 [${mainBoss.name}]와 정예 호위대가 길을 가로막습니다!`;
+        } else if (floor === 5 || floor === 10) {
+          eventDesc = '심연의 근원 [공허의 침식자]와 공허의 군단이 모습을 드러냈습니다! 최후의 결전이 시작됩니다!';
+        } else {
+          eventDesc = `심연 ${floor}층의 수호 군주 [${mainBoss.name}]와 호위대가 앞을 가로막습니다!`;
+        }
+
         setEventCard({
-          title: `👑 ${mainBoss.name} 편대 출현!`,
-          desc: isTrueFinal
-            ? '태초의 공허를 다스리는 무간의 절대자 [아르케오스]가 강림했습니다! 모든 심연을 닫기 위한 최후의 결전입니다!'
-            : isAvici
-            ? `무간도 위험도 ${Math.floor(newDanger / 100) * 100} 돌파! 광폭화 군주 [${mainBoss.name}]와 정예 호위대가 길을 가로막습니다!`
-            : (floor === 5 || floor === 10) 
-            ? '심연의 근원 [공허의 침식자]와 공허의 군단이 모습을 드러냈습니다! 최후의 결전이 시작됩니다!'
-            : `심연 ${floor}층의 수호 군주 [${mainBoss.name}]와 호위대가 앞을 가로막습니다!`,
+          title: eventTitle,
+          desc: eventDesc,
           icon: '💀',
           iconKey: 'event_boss_encounter',
           options: [
