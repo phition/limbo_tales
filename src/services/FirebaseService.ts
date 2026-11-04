@@ -134,6 +134,32 @@ export class FirebaseService {
   private guestbookListeners: Array<(messages: GuestbookMessage[]) => void> = [];
   private guestbookSubscribed: boolean = false;
 
+  /**
+   * 💾 로컬 스토리지에 프로필 캐시 영구 저장
+   */
+  public saveLocalCachedProfile(profile: UserProfile): void {
+    try {
+      if (!profile || !profile.uid) return;
+      localStorage.setItem(`limbo_profile_${profile.uid}`, JSON.stringify(profile));
+      localStorage.setItem('limbo_profile_last', JSON.stringify(profile));
+    } catch (_) {}
+  }
+
+  /**
+   * 📂 로컬 스토리지에서 캐시된 프로필 복원
+   */
+  public loadLocalCachedProfile(uid?: string): UserProfile | null {
+    try {
+      if (uid) {
+        const raw = localStorage.getItem(`limbo_profile_${uid}`);
+        if (raw) return JSON.parse(raw) as UserProfile;
+      }
+      const lastRaw = localStorage.getItem('limbo_profile_last');
+      if (lastRaw) return JSON.parse(lastRaw) as UserProfile;
+    } catch (_) {}
+    return null;
+  }
+
   private mockLeaderboard: LeaderboardEntry[] = [
     { rank: 1, nickname: '아스트라', rating: 2150, level: 45, leaderTitle: '발키리' },
     { rank: 2, nickname: '그림자군주', rating: 2040, level: 42, leaderTitle: '그림자 망령' },
@@ -184,16 +210,33 @@ export class FirebaseService {
             try {
               localStorage.setItem('limbo_has_session', 'true');
               localStorage.removeItem('auth_explicitly_logged_out');
+              if (user.providerData?.some(p => p.providerId === 'password')) {
+                localStorage.setItem('auth_provider', 'email');
+              } else if (user.providerData?.some(p => p.providerId === 'google.com') || user.email?.startsWith('playgames:')) {
+                localStorage.setItem('auth_provider', 'google');
+              }
             } catch (_) {}
+
+            // 기존 로컬 캐시가 있으면 먼저 즉시 로드하여 UI 깜빡임 방지
+            const localSaved = this.loadLocalCachedProfile(user.uid);
+            if (localSaved) {
+              this.cachedProfile = localSaved;
+            }
             
-            // 프로필 로딩에 3초 타임아웃 적용 (네트워크 지연 시 블로킹 방지)
+            // 프로필 원격 동기화 (네트워크 지연 시 로컬 캐시 안전 보존)
             try {
               const profilePromise = this.fetchUserProfile(user.uid, user.email, user.displayName);
-              const timeoutPromise = new Promise<UserProfile | null>((res) => setTimeout(() => res(null), 3000));
-              this.cachedProfile = await Promise.race([profilePromise, timeoutPromise]);
+              const timeoutPromise = new Promise<UserProfile | null>((res) => setTimeout(() => res(null), 4000));
+              const fetched = await Promise.race([profilePromise, timeoutPromise]);
+              if (fetched) {
+                this.cachedProfile = fetched;
+                this.saveLocalCachedProfile(fetched);
+              }
             } catch (err) {
               console.warn('⚠️ [FirebaseService] 사용자 프로필 로딩 예외:', err);
-              this.cachedProfile = null;
+              if (!this.cachedProfile && localSaved) {
+                this.cachedProfile = localSaved;
+              }
             }
           } else {
             this.cachedProfile = null;
@@ -329,6 +372,28 @@ export class FirebaseService {
     return false;
   }
 
+  /** 🌐 현재 로그인한 계정이 구글 계정(OAuth 또는 Play Games)인지 여부 판별 */
+  public isGoogleUser(): boolean {
+    const user = this.currentUser || auth.currentUser;
+    if (!user || user.isAnonymous) return false;
+    const hasGoogleProvider = user.providerData?.some(p => p.providerId === 'google.com');
+    const hasPlayGamesId = Boolean(this.cachedProfile?.playGamesPlayerId);
+    const hasPlayGamesEmail = Boolean(user.email?.startsWith('playgames:'));
+    const isGoogleAuth = localStorage.getItem('auth_provider') === 'google';
+    return Boolean(hasGoogleProvider || hasPlayGamesId || hasPlayGamesEmail || isGoogleAuth);
+  }
+
+  /** 📧 현재 로그인한 계정이 이메일/비밀번호 기반 계정인지 여부 판별 */
+  public isEmailPasswordUser(): boolean {
+    const user = this.currentUser || auth.currentUser;
+    if (!user || user.isAnonymous) return false;
+    if (this.isGoogleUser()) return false;
+    const isPasswordProvider = user.providerData?.some(p => p.providerId === 'password');
+    const hasRegularEmail = Boolean(user.email && !user.email.startsWith('playgames:') && user.email.includes('@'));
+    const isEmailAuth = localStorage.getItem('auth_provider') === 'email';
+    return Boolean(isPasswordProvider || hasRegularEmail || isEmailAuth);
+  }
+
   /** Firebase Auth 에러 코드를 친절한 한국어 안내문으로 변환 */
   public getFriendlyErrorMessage(err: any): string {
     if (typeof err === 'string' && err.trim().length > 0) {
@@ -372,6 +437,8 @@ export class FirebaseService {
    * 🔑 이메일/비밀번호 직접 로그인
    */
   public async signInWithEmail(email: string, pass: string): Promise<{ success: boolean; error?: string }> {
+    this.currentUser = null;
+    this.cachedProfile = null;
     const cleanEmail = email.trim();
     const cleanPass = pass.trim();
     if (!cleanEmail || !cleanPass) {
@@ -379,6 +446,7 @@ export class FirebaseService {
     }
 
     localStorage.removeItem('auth_explicitly_logged_out');
+    localStorage.setItem('auth_provider', 'email');
     try {
       const cred = await this.withTimeout(
         signInWithEmailAndPassword(auth, cleanEmail, cleanPass),
@@ -396,10 +464,11 @@ export class FirebaseService {
       };
       this.cachedProfile = await this.withTimeoutFallback(
         this.fetchUserProfile(cred.user.uid, cred.user.email, cred.user.displayName || '지휘관'),
-        3000,
+        4000,
         fallbackProfile,
         '로그인 프로필 조회'
       );
+      this.saveLocalCachedProfile(this.cachedProfile);
       this.notifyAuthListeners();
       return { success: true };
     } catch (err: any) {
@@ -423,6 +492,7 @@ export class FirebaseService {
     }
 
     localStorage.removeItem('auth_explicitly_logged_out');
+    localStorage.setItem('auth_provider', 'email');
     try {
       const cred = await this.withTimeout(
         createUserWithEmailAndPassword(auth, cleanEmail, cleanPass),
@@ -448,6 +518,7 @@ export class FirebaseService {
         isAnonymous: false,
         createdAt: Date.now(),
         lastLoginAt: Date.now(),
+        callsignChanged: false,
       };
 
       await this.withTimeoutFallback(
@@ -458,6 +529,7 @@ export class FirebaseService {
       );
 
       this.cachedProfile = profileData;
+      this.saveLocalCachedProfile(profileData);
       this.notifyAuthListeners();
       return { success: true };
     } catch (err: any) {
@@ -471,6 +543,7 @@ export class FirebaseService {
    */
   public async signInWithPlayGames(customNickname?: string): Promise<{ success: boolean; isNewUser: boolean; error?: string }> {
     localStorage.removeItem('auth_explicitly_logged_out');
+    localStorage.setItem('auth_provider', 'google');
     const pgs = PlayGamesService.getInstance();
     if (!pgs.isAvailable()) {
       return { success: false, isNewUser: false, error: 'Google Play 게임즈 서비스는 Android 기기에서만 지원됩니다.' };
@@ -520,19 +593,30 @@ export class FirebaseService {
       this.currentUser = fbUser;
 
       let isNewUser = false;
-      const snapshot = await this.withTimeoutFallback(
-        get(child(ref(db), `users/${fbUser.uid}/profile`)),
-        2500,
-        null,
-        'PlayGames 프로필 조회'
-      );
-      if (snapshot && snapshot.exists()) {
+      let snapshot: any = null;
+      let querySuccess = false;
+      try {
+        snapshot = await this.withTimeoutFallback(
+          get(child(ref(db), `users/${fbUser.uid}/profile`)),
+          4000,
+          null,
+          'PlayGames 프로필 조회'
+        );
+        if (snapshot !== null) querySuccess = true;
+      } catch (_) {}
+
+      if (querySuccess && snapshot && snapshot.exists()) {
         const existingProfile = snapshot.val() as UserProfile;
-        const nick = (!existingProfile.nickname || existingProfile.nickname === '지휘관')
-          ? resolveCommanderNickname(pgResult.displayName || '지휘관', fbUser.uid)
-          : existingProfile.nickname;
+        // 기존 닉네임이 존재하면 절대 덮어쓰지 않고 유지 (단, 콜사인 변경 이력이 없고 기본 '지휘관'인 경우만 보정)
+        let nick = existingProfile.nickname;
+        if (!nick) {
+          nick = resolveCommanderNickname(pgResult.displayName || '지휘관', fbUser.uid);
+        } else if (nick === '지휘관' && !existingProfile.callsignChanged) {
+          nick = resolveCommanderNickname('지휘관', fbUser.uid);
+        }
         const updatedProfile: UserProfile = {
           ...existingProfile,
+          uid: existingProfile.uid || fbUser.uid,
           nickname: nick,
           isAnonymous: false,
           playGamesPlayerId: pgResult.playerId,
@@ -550,7 +634,28 @@ export class FirebaseService {
           'PlayGames 프로필 업데이트'
         );
         this.cachedProfile = updatedProfile;
+        this.saveLocalCachedProfile(updatedProfile);
+      } else if (!querySuccess || snapshot === null) {
+        // 통신 타임아웃/오류 시 기존 로컬 캐시 유지 (DB 덮어쓰기 금지)
+        const localSaved = this.loadLocalCachedProfile(fbUser.uid);
+        if (localSaved) {
+          this.cachedProfile = localSaved;
+        } else {
+          const nick = resolveCommanderNickname(customNickname?.trim() || pgResult.displayName || '지휘관', fbUser.uid);
+          this.cachedProfile = {
+            uid: fbUser.uid,
+            email: fbUser.email || `playgames:${pgResult.playerId}`,
+            nickname: nick,
+            isAnonymous: false,
+            playGamesPlayerId: pgResult.playerId,
+            createdAt: Date.now(),
+            lastLoginAt: Date.now(),
+            callsignChanged: false
+          };
+          this.saveLocalCachedProfile(this.cachedProfile);
+        }
       } else {
+        // snapshot !== null && !snapshot.exists(): 확정된 신규 유저 생성
         isNewUser = true;
         const candidate = (customNickname && customNickname.trim())
           || pgResult.displayName?.trim()
@@ -571,6 +676,7 @@ export class FirebaseService {
           playGamesPlayerId: pgResult.playerId,
           createdAt: Date.now(),
           lastLoginAt: Date.now(),
+          callsignChanged: false
         };
         await this.withTimeoutFallback(
           set(ref(db, `users/${fbUser.uid}/profile`), profileData),
@@ -579,6 +685,7 @@ export class FirebaseService {
           'PlayGames 신규 프로필 저장'
         );
         this.cachedProfile = profileData;
+        this.saveLocalCachedProfile(profileData);
       }
 
       this.notifyAuthListeners();
@@ -595,6 +702,7 @@ export class FirebaseService {
    */
   public async signInWithGoogle(customNickname?: string): Promise<{ success: boolean; isNewUser: boolean; error?: string }> {
     localStorage.removeItem('auth_explicitly_logged_out');
+    localStorage.setItem('auth_provider', 'google');
     // Android 네이티브 앱에서는 WebView 팝업 제한을 피하고 공식 Google Play 게임즈 서비스 v2 SDK를 통해 인증 수행
     if (PlayGamesService.getInstance().isAvailable()) {
       return this.signInWithPlayGames(customNickname);
@@ -605,36 +713,66 @@ export class FirebaseService {
       const cred = await signInWithPopup(auth, provider);
       this.currentUser = cred.user;
 
-      // Realtime Database에서 기존 프로필 확인 (2.5초 타임아웃)
+      // Realtime Database에서 기존 프로필 확인 (4초 타임아웃)
       let isNewUser = false;
-      const snapshot = await this.withTimeoutFallback(
-        get(child(ref(db), `users/${cred.user.uid}/profile`)),
-        2500,
-        null,
-        'Google 프로필 조회'
-      );
+      let snapshot: any = null;
+      let querySuccess = false;
+      try {
+        snapshot = await this.withTimeoutFallback(
+          get(child(ref(db), `users/${cred.user.uid}/profile`)),
+          4000,
+          null,
+          'Google 프로필 조회'
+        );
+        if (snapshot !== null) querySuccess = true;
+      } catch (_) {}
 
-      if (snapshot && snapshot.exists()) {
+      if (querySuccess && snapshot && snapshot.exists()) {
         const existingProfile = snapshot.val() as UserProfile;
         let nick = existingProfile.nickname;
-        // 만약 기존 프로필이 '지휘관' 기본명으로 되어 있었다면 순번 숫자로 보정
-        if (!nick || nick === '지휘관') {
+        // 콜사인이 이미 변경된 계정은 절대 닉네임을 변경하지 않음
+        if (!nick) {
           nick = resolveCommanderNickname('지휘관', cred.user.uid);
-          await this.withTimeoutFallback(
-            update(ref(db, `users/${cred.user.uid}/profile`), { nickname: nick }),
-            2000,
-            undefined,
-            'Google 닉네임 보정'
-          );
+        } else if (nick === '지휘관' && !existingProfile.callsignChanged) {
+          nick = resolveCommanderNickname('지휘관', cred.user.uid);
         }
         await this.withTimeoutFallback(
-          update(ref(db, `users/${cred.user.uid}/profile`), { lastLoginAt: Date.now() }),
+          update(ref(db, `users/${cred.user.uid}/profile`), {
+            nickname: nick,
+            lastLoginAt: Date.now()
+          }),
           2000,
           undefined,
           'Google 로그인 시간 갱신'
         );
-        this.cachedProfile = { ...existingProfile, nickname: nick, lastLoginAt: Date.now() };
+        const updatedProfile: UserProfile = {
+          ...existingProfile,
+          uid: existingProfile.uid || cred.user.uid,
+          nickname: nick,
+          lastLoginAt: Date.now()
+        };
+        this.cachedProfile = updatedProfile;
+        this.saveLocalCachedProfile(updatedProfile);
+      } else if (!querySuccess || snapshot === null) {
+        // 통신 타임아웃/오류 시 기존 로컬 캐시 유지
+        const localSaved = this.loadLocalCachedProfile(cred.user.uid);
+        if (localSaved) {
+          this.cachedProfile = localSaved;
+        } else {
+          const candidate = (customNickname && customNickname.trim()) || cred.user.displayName?.trim() || '지휘관';
+          this.cachedProfile = {
+            uid: cred.user.uid,
+            email: cred.user.email,
+            nickname: resolveCommanderNickname(candidate, cred.user.uid),
+            isAnonymous: false,
+            createdAt: Date.now(),
+            lastLoginAt: Date.now(),
+            callsignChanged: false
+          };
+          this.saveLocalCachedProfile(this.cachedProfile);
+        }
       } else {
+        // snapshot !== null && !snapshot.exists(): 확정된 신규 유저 생성
         isNewUser = true;
         // 신규 유저 생성: 전달받은 닉네임이 있으면 사용, 없으면 Google displayName, 없으면 '지휘관'
         const candidate = (customNickname && customNickname.trim())
@@ -656,6 +794,7 @@ export class FirebaseService {
           isAnonymous: false,
           createdAt: Date.now(),
           lastLoginAt: Date.now(),
+          callsignChanged: false
         };
 
         await this.withTimeoutFallback(
@@ -666,6 +805,7 @@ export class FirebaseService {
         );
 
         this.cachedProfile = profileData;
+        this.saveLocalCachedProfile(profileData);
       }
 
       this.notifyAuthListeners();
@@ -800,6 +940,7 @@ export class FirebaseService {
    */
   public async signInGuest(): Promise<{ success: boolean; error?: string }> {
     localStorage.removeItem('auth_explicitly_logged_out');
+    localStorage.setItem('auth_provider', 'guest');
     try {
       const cred = await this.withTimeout(
         signInAnonymously(auth),
@@ -807,28 +948,28 @@ export class FirebaseService {
         '익명 인증 서버 응답 시간 초과'
       );
       this.currentUser = cred.user;
-      this.cachedProfile = {
-        uid: cred.user.uid,
-        email: null,
-        nickname: `방랑 지휘관_${cred.user.uid.slice(0, 5)}`,
-        isAnonymous: true,
-        createdAt: Date.now(),
-        lastLoginAt: Date.now()
-      };
+      // 익명 유저라도 기존에 변경한 콜사인이 있는지 RTDB 조회
+      const defaultNick = `방랑 지휘관_${cred.user.uid.slice(0, 5)}`;
+      const profile = await this.fetchUserProfile(cred.user.uid, null, defaultNick);
+      this.cachedProfile = profile;
+      this.saveLocalCachedProfile(profile);
       this.notifyAuthListeners();
       return { success: true };
     } catch (err: any) {
       console.warn('[Firebase Auth] 온라인 익명 인증 지연/실패 -> 오프라인 로컬 게스트 세션으로 즉시 진입합니다:', err);
       const localGuestUid = 'guest';
       this.currentUser = { uid: localGuestUid, email: null, isAnonymous: true } as User;
-      this.cachedProfile = {
+      const localSaved = this.loadLocalCachedProfile(localGuestUid);
+      this.cachedProfile = localSaved || {
         uid: localGuestUid,
         email: null,
         nickname: '방랑 지휘관_로컬',
         isAnonymous: true,
         createdAt: Date.now(),
-        lastLoginAt: Date.now()
+        lastLoginAt: Date.now(),
+        callsignChanged: false
       };
+      this.saveLocalCachedProfile(this.cachedProfile);
       this.notifyAuthListeners();
       return { success: true };
     }
@@ -840,6 +981,7 @@ export class FirebaseService {
   public async logout(): Promise<void> {
     localStorage.setItem('auth_explicitly_logged_out', 'true');
     localStorage.removeItem('limbo_has_session');
+    localStorage.removeItem('auth_provider');
     this.currentUser = null;
     this.cachedProfile = null;
     await this.withTimeoutFallback(signOut(auth), 2000, undefined, 'signOut');
@@ -847,26 +989,73 @@ export class FirebaseService {
   }
 
   /**
-   * Realtime Database에서 사용자 프로필 불러오기/생성 (각 단계 2.5초 안전 타임아웃 적용)
+   * Realtime Database에서 사용자 프로필 불러오기/생성 (각 단계 4초 안전 타임아웃 적용)
    */
   private async fetchUserProfile(uid: string, email: string | null, fallbackNickname?: string | null): Promise<UserProfile> {
+    const localSaved = this.loadLocalCachedProfile(uid);
+
+    let snapshot: any = null;
+    let fetchSuccess = false;
     try {
-      const snapshot = await this.withTimeoutFallback(
+      snapshot = await this.withTimeoutFallback(
         get(child(ref(db), `users/${uid}/profile`)),
-        2500,
+        4000,
         null,
         'fetchUserProfile 조회'
       );
-      if (snapshot && snapshot.exists()) {
-        const val = snapshot.val() as UserProfile;
-        // 마지막 로그인 갱신 (비동기 논블로킹)
-        update(ref(db, `users/${uid}/profile`), { lastLoginAt: Date.now() }).catch(() => {});
-        return val;
+      if (snapshot !== null) {
+        fetchSuccess = true;
       }
     } catch (err) {
       console.warn('[Firebase DB] fetchUserProfile error:', err);
     }
 
+    if (fetchSuccess && snapshot && snapshot.exists()) {
+      const val = snapshot.val() as UserProfile;
+      if (val) {
+        const profile: UserProfile = {
+          ...val,
+          uid: val.uid || uid,
+          email: val.email !== undefined ? val.email : email,
+          nickname: (localSaved?.callsignChanged && localSaved.nickname) ? localSaved.nickname : (val.nickname || resolveCommanderNickname(fallbackNickname, uid)),
+          callsignChanged: Boolean(val.callsignChanged || localSaved?.callsignChanged),
+          callsignChangedAt: val.callsignChangedAt || localSaved?.callsignChangedAt,
+          isAnonymous: val.isAnonymous ?? !email,
+          lastLoginAt: Date.now()
+        };
+
+        // 마지막 로그인 및 콜사인 상태 안전 동기화
+        update(ref(db, `users/${uid}/profile`), {
+          nickname: profile.nickname,
+          callsignChanged: profile.callsignChanged,
+          lastLoginAt: Date.now()
+        }).catch(() => {});
+
+        this.saveLocalCachedProfile(profile);
+        return profile;
+      }
+    }
+
+    // 🛡️ [네트워크 오류/타임아웃 방어]: DB 조회가 지연/실패한 경우 절대 set()으로 덮어쓰지 않고 로컬 프로필 유지
+    if (!fetchSuccess || snapshot === null) {
+      if (localSaved && localSaved.nickname) {
+        console.log('🛡️ [Firebase DB] 통신 지연으로 로컬 캐시 프로필 유지:', localSaved.nickname);
+        return localSaved;
+      }
+      const candidate = fallbackNickname || (email ? email.split('@')[0] : '지휘관');
+      const tempProfile: UserProfile = {
+        uid,
+        email,
+        nickname: resolveCommanderNickname(candidate, uid),
+        isAnonymous: !email,
+        createdAt: Date.now(),
+        lastLoginAt: Date.now(),
+        callsignChanged: false
+      };
+      return tempProfile;
+    }
+
+    // snapshot !== null && !snapshot.exists(): DB에서 해당 노드가 전혀 없는 신규 계정임이 확인된 경우에만 기본 프로필 생성
     const candidate = fallbackNickname || (email ? email.split('@')[0] : '지휘관');
     const finalNick = resolveCommanderNickname(candidate, uid);
 
@@ -876,16 +1065,18 @@ export class FirebaseService {
       nickname: finalNick,
       isAnonymous: !email,
       createdAt: Date.now(),
-      lastLoginAt: Date.now()
+      lastLoginAt: Date.now(),
+      callsignChanged: false
     };
 
     await this.withTimeoutFallback(
       set(ref(db, `users/${uid}/profile`), defaultProfile),
-      2000,
+      2500,
       undefined,
-      'fetchUserProfile 기본 프로필 저장'
+      'fetchUserProfile 신규 프로필 생성'
     );
 
+    this.saveLocalCachedProfile(defaultProfile);
     return defaultProfile;
   }
 
@@ -1702,7 +1893,7 @@ export class FirebaseService {
     }
 
     const uid = this.currentUser.uid;
-    const profile = this.cachedProfile;
+    const profile = this.cachedProfile || this.loadLocalCachedProfile(uid);
 
     if (profile?.callsignChanged) {
       return { success: false, error: '지휘관 콜사인은 계정당 1회만 변경할 수 있습니다.' };
@@ -1717,14 +1908,19 @@ export class FirebaseService {
     const oldNick = profile?.nickname;
 
     try {
-      // 1. callsigns 노드 등록 (개별 노드 직접 쓰기)
-      await set(ref(db, `callsigns/${trimmed}`), uid);
-      if (oldNick && oldNick !== trimmed) {
-        await set(ref(db, `callsigns/${oldNick}`), null).catch(() => {});
+      // 1. callsigns 노드 등록 (개별 노드 직접 쓰기 - 실패해도 프로필 저장은 계속)
+      try {
+        await set(ref(db, `callsigns/${trimmed}`), uid);
+        if (oldNick && oldNick !== trimmed) {
+          await set(ref(db, `callsigns/${oldNick}`), null).catch(() => {});
+        }
+      } catch (cErr) {
+        console.warn('⚠️ [callsigns] 인덱스 노드 쓰기 경고:', cErr);
       }
 
-      // 2. users/{uid}/profile 업데이트
+      // 2. users/{uid}/profile 업데이트 (핵심 데이터)
       await update(ref(db, `users/${uid}/profile`), {
+        uid,
         nickname: trimmed,
         callsignChanged: true,
         callsignChangedAt: Date.now()
@@ -1742,12 +1938,28 @@ export class FirebaseService {
         }
       } catch (_) {}
 
-      // 5. 로컬 캐시 갱신
-      if (this.cachedProfile) {
-        this.cachedProfile.nickname = trimmed;
-        this.cachedProfile.callsignChanged = true;
-        this.cachedProfile.callsignChangedAt = Date.now();
-      }
+      // 5. 로컬 캐시 갱신 및 localStorage 즉시 영구 저장
+      const updatedProfile: UserProfile = {
+        ...(this.cachedProfile || {
+          uid,
+          email: this.currentUser.email,
+          isAnonymous: this.currentUser.isAnonymous,
+          createdAt: Date.now(),
+          lastLoginAt: Date.now()
+        }),
+        uid,
+        nickname: trimmed,
+        callsignChanged: true,
+        callsignChangedAt: Date.now()
+      };
+      this.cachedProfile = updatedProfile;
+      this.saveLocalCachedProfile(updatedProfile);
+
+      // 6. GameManager 세이브에도 즉시 동기화
+      try {
+        const gm = GameManager.getInstance();
+        gm.saveGame();
+      } catch (_) {}
 
       this.notifyAuthListeners();
       return { success: true };

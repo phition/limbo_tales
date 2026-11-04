@@ -35,8 +35,10 @@ export const CallsignChangeModal: React.FC<Props> = ({
 
   if (!open) return null;
 
-  const currentNick = currentProfile?.nickname || '지휘관';
-  const hasAlreadyChanged = !!currentProfile?.callsignChanged;
+  const fb = FirebaseService.getInstance();
+  const effectiveProfile = currentProfile || fb.getCachedProfile() || fb.loadLocalCachedProfile();
+  const currentNick = effectiveProfile?.nickname || '지휘관';
+  const hasAlreadyChanged = Boolean(effectiveProfile?.callsignChanged);
 
   const handleCandidateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;

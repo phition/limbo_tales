@@ -24,7 +24,7 @@ interface Props {
 export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, onOpenGuestbook }) => {
   const isMobilePlatform = Capacitor.isNativePlatform();
   const { gm } = useGameManager();
-  const { lang, setLanguage, dict } = useI18n();
+  const { lang, setLanguage, dict, tr } = useI18n();
   const [resetModal, setResetModal] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [patchModal, setPatchModal] = useState(false);
@@ -55,8 +55,16 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
   const [sfxMuted, setSfxMuted] = useState(sm.isSfxMuted());
 
   const fb = FirebaseService.getInstance();
-  const user = fb.getCurrentUser();
-  const profile = fb.getCachedProfile();
+  const [user, setUser] = useState<User | null>(() => fb.getCurrentUser());
+  const [profile, setProfile] = useState<UserProfile | null>(() => fb.getCachedProfile() || fb.loadLocalCachedProfile());
+
+  useEffect(() => {
+    const unsub = fb.onAuthChange((u, p) => {
+      setUser(u);
+      setProfile(p || fb.loadLocalCachedProfile(u?.uid));
+    });
+    return unsub;
+  }, [fb]);
 
   if (!open) return null;
 
@@ -91,21 +99,18 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
   const handleLogout = async () => {
     setIsSyncing(true);
     try {
-      // 1. 현재 계정의 진행 상태를 클라우드에 최종 안전 동기화
+      // 1. 대기 중인 디바운스 클라우드 저장 취소 후 즉시 최종 안전 동기화
+      gm.cancelPendingCloudSave();
       await gm.saveToCloud().catch(() => {});
-      // 2. Firebase 로그아웃 수행 (로컬 세이브는 절대 삭제하지 않고 보존)
+      // 2. Firebase 로그아웃 수행 (로컬 세이브는 사용자 고유 UID 키로 보존)
       await fb.logout();
     } finally {
       setIsSyncing(false);
       onClose();
     }
-    // 3. 현재 지휘관 세션을 게스트로 안전하게 전환 (이전 유저 세이브 보존)
-    gm.setCurrentUser('guest');
-    const hasGuestSave = gm.loadGame();
-    if (!hasGuestSave) {
-      gm.initDefaultData();
-    }
-    gm.addLog('[지휘관 로그아웃] 안전하게 로그아웃되었습니다. 로컬 및 클라우드 세이브가 안전하게 보존되었습니다.', 'system');
+    // 3. 이전 계정의 메모리 잔여 데이터 완전 제거 및 초기화
+    gm.clearForLogout();
+    gm.addLog('[지휘관 로그아웃] 안전하게 로그아웃되었습니다.', 'system');
   };
 
   return (
@@ -180,7 +185,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             )}
 
             {/* 🎮 Google Play 게임즈 서비스 연동 패널 (Android 전용) */}
-            {pgs.isAvailable() && (
+            {pgs.isAvailable() && !fb.isEmailPasswordUser() && (
               <div className="pt-1.5 mt-0.5 border-t border-[#1f2738]/70 flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-[#66bb6a] flex items-center gap-1">
@@ -244,6 +249,19 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                     </button>
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* ☁️ 이메일 기반 로그인 지휘관: 기기 간 클라우드 세이브 연동 안내 */}
+            {fb.isEmailPasswordUser() && (
+              <div className="pt-2 mt-0.5 border-t border-[#1f2738]/70 flex items-center justify-between text-[10px]">
+                <span className="flex items-center gap-1.5 font-bold text-[#38ef7d]">
+                  <span>☁️</span>
+                  <span>이메일 클라우드 동기화 활성</span>
+                </span>
+                <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-[#38ef7d15] text-[#38ef7d] border border-[#38ef7d33] font-mono">
+                  크로스 플랫폼 공유됨
+                </span>
               </div>
             )}
           </div>
@@ -789,6 +807,9 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         open={callsignModal}
         onClose={() => setCallsignModal(false)}
         currentProfile={profile}
+        onSuccess={(newNick) => {
+          setProfile(prev => prev ? { ...prev, nickname: newNick, callsignChanged: true } : null);
+        }}
       />
     </div>
   );
