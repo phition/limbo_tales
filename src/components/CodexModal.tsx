@@ -332,7 +332,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
                     isCompleted ? (
                       <button
                         onClick={() => setInspectedStory(item)}
-                        className="px-2.5 py-1 rounded bg-[#ab47bc22] hover:bg-[#ab47bc44] text-[#ce93d8] border border-[#ab47bc66] text-[10px] font-bold shrink-0 transition-all flex items-center gap-1 shadow-sm cursor-pointer"
+                        className="px-2.5 py-1 rounded bg-[#ab47bc22] hover:bg-[#ab47bc44] text-[#ce93d8] border border-[#ab47bc66] text-[10px] sm:text-xs font-bold shrink-0 transition-all flex items-center gap-1 shadow-sm cursor-pointer"
                       >
                         <span>{item.category === 'artifact' ? '🏛️' : '📖'}</span>
                         <span>{item.category === 'artifact' ? tr('구세계 기록') : tr('회고록 열람')}</span>
@@ -438,24 +438,26 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
             title={inspectedStory.category === 'artifact' ? `🏛️ [${tr(inspectedStory.name)}] ${tr('구세계 발굴 기록')}` : `📖 [${tr(inspectedStory.name)}] ${tr('회고록')}`}
             open={!!inspectedStory}
             onClose={() => setInspectedStory(null)}
+            zIndex="z-[60]"
+            maxWidth="max-w-[95vw] sm:max-w-[620px] md:max-w-[720px]"
             footer={
               <ActionButton
                 label={tr('닫기')}
                 variant="ghost"
-                className="w-full"
+                className="w-full text-sm sm:text-base py-2"
                 onClick={() => setInspectedStory(null)}
               />
             }
           >
-            <div className="flex flex-col gap-3 py-2">
-              <div className="text-3xl text-center">{inspectedStory.category === 'artifact' ? '🏛️' : '📜'}</div>
-              <div className="text-sm font-bold text-[#ffd54f] text-center">
+            <div className="flex flex-col gap-3.5 py-2">
+              <div className="text-4xl text-center drop-shadow">{inspectedStory.category === 'artifact' ? '🏛️' : '📜'}</div>
+              <div className="text-base sm:text-lg font-bold text-[#ffd54f] text-center tracking-tight">
                 {tr(inspectedStory.name)}
               </div>
-              <div className="p-3.5 rounded-xl bg-[#0a0b10] border border-[#233550] text-xs text-[#cfd8e8] leading-relaxed italic whitespace-pre-line">
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#0a0b10] border border-[#233550] shadow-inner text-sm sm:text-base text-[#e2ecf8] leading-relaxed sm:leading-loose whitespace-pre-line max-h-[55vh] overflow-y-auto tg-scrollbar select-text font-normal">
                 "{tr(inspectedStory.story || '')}"
               </div>
-              <div className="p-2.5 rounded-lg bg-[#101826] border border-[#1e2e48] text-xs text-[#38ef7d] font-bold text-center">
+              <div className="p-3 rounded-xl bg-[#101826] border border-[#1e2e48] text-xs sm:text-sm text-[#38ef7d] font-bold text-center">
                 {tr('✨ 컬렉션 활성화 효과')}: {tr(inspectedStory.bonus.label)}
               </div>
             </div>
