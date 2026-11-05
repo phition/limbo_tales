@@ -10559,8 +10559,9 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 //  🏥 생체 복원 병동 (병실 슬롯 인터랙티브 배치 & 용병 선택 입원 UI)
 // ─────────────────────────────────────────────────────────────
 const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+  const { tr, lang } = useI18n();
   const { state, gm } = useGameManager();
-    const [selectedBedIdx, setSelectedBedIdx] = useState<number | null>(null);
+  const [selectedBedIdx, setSelectedBedIdx] = useState<number | null>(null);
   
   const infirmaryB = state.buildings['infirmary'];
   const infirmaryLv = infirmaryB?.level || 1;
