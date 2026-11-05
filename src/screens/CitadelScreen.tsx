@@ -10970,64 +10970,53 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   });
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0e17] text-[#cfd8e8]">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1f2738] bg-[#070a10] shrink-0">
-        <div className="flex items-center gap-2">
-          <span className="text-base">🕵️‍♂️</span>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-[#66bb6a]">{'블랙 마켓'}</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#66bb6a22] text-[#66bb6a] font-bold">
-                Lv.{marketLv}
-              </span>
-              <EncyclopediaBadge query="블랙 마켓" tab="buildings" label="마켓 백과" />
-            </div>
-            <div className="text-[10px] text-[#ffd54f]">
-              {'금화'}: <span className="font-mono font-bold">🪙 {state.resources.gold.toLocaleString()}G</span>
-              <span className="text-[#38ef7d] ml-2 font-bold">⏱️ {tr('유지비 주기')}: {formatDuration(20 + marketLv, lang)}</span>
-            </div>
-          </div>
+    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+      {/* ── 🕵️‍♂️ 블랙 마켓 서브 툴바 ── */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-[#242732] bg-[#0c0e14] shrink-0 flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#161a24] text-[#ffd54f] font-mono font-bold border border-[#3d372e]">
+            🪙 {state.resources.gold.toLocaleString()}G
+          </span>
+          <span className="text-[10px] text-[#81c784] font-bold font-mono">
+            ⏱️ {tr('유지비 주기')}: {formatDuration(20 + marketLv, lang)}
+          </span>
         </div>
-        <button
-          className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
-          style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-          onClick={onBack}
-          aria-label="닫기"
-        >
-          <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <EncyclopediaBadge query="블랙 마켓" tab="buildings" label="마켓 백과" />
+        </div>
       </div>
 
       {/* 특전 안내 배너 */}
-      <div className="px-3 py-1.5 bg-[#121926] border-b border-[#1f2738] text-[10px] text-[#8b9bb4] flex items-center justify-between shrink-0">
+      <div className="px-3 py-1.5 bg-[#0c0e14] border-b border-[#242732] text-[10px] text-[#8b9bb4] flex items-center justify-between shrink-0">
         <span>
           {marketLv >= 8 ? (
-            <span className="text-[#38ef7d] font-bold">✨ Lv.8 특전 활성: 매입가 -10% 할인 | 매각가 +15% 우대 환율</span>
+            <span className="text-[#81c784] font-bold">✨ {tr('Lv.8 특전 활성: 매입가 -10% 할인 | 매각가 +15% 우대 환율')}</span>
           ) : (
-            <span>💡 블랙 마켓 Lv.8 달성 시: 매입가 -10% / 매각가 +15% 환율 우대</span>
+            <span>💡 {tr('블랙 마켓 Lv.8 달성 시: 매입가 -10% / 매각가 +15% 환율 우대')}</span>
           )}
         </span>
-        <span className="text-[#607d8b]">{`총 ${ALL_MARKET_ITEMS.length}종 품목`}</span>
+        <span className="text-[#8b9bb4]/70 font-mono">{tr(`총 ${ALL_MARKET_ITEMS.length}종 품목`)}</span>
       </div>
 
       {/* 카테고리 칩 바 */}
-      <div className="flex items-center gap-1 px-3 py-2 bg-[#0e121d] border-b border-[#1f2738] shrink-0">
+      <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0a0d14] border-b border-[#242732] shrink-0 overflow-x-auto">
         {[
           { key: 'all', label: `전체 (${ALL_MARKET_ITEMS.length})` },
-          { key: 'basic', label: `🏰 ${'영지 생산품'}` },
-          { key: 'farming', label: `🌿 ${'파밍 재료'}` },
-          { key: 'rare', label: `🔮 ${'심연 재료'}` },
+          { key: 'basic', label: `🏰 ${tr('영지 생산품')}` },
+          { key: 'farming', label: `🌿 ${tr('파밍 재료')}` },
+          { key: 'rare', label: `🔮 ${tr('심연 재료')}` },
         ].map(cat => (
           <button
             key={cat.key}
-            className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all ${
+            type="button"
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
               filterCat === cat.key
-                ? 'bg-[#66bb6a] text-[#000] shadow' : 'bg-[#182030] text-[#8b9bb4] border border-[#26334a]'
+                ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+                : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
             }`}
             onClick={() => setFilterCat(cat.key as any)}
           >
-            {cat.label}
+            {tr(cat.label)}
           </button>
         ))}
       </div>
@@ -11052,9 +11041,10 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           return (
             <div
               key={item.key}
-              className={`panel p-3 bg-[#131926] border rounded-xl transition-all cursor-pointer ${
+              className={`p-3 bg-[#10131a] border rounded-xl transition-all cursor-pointer shadow-sm group ${
                 isUnlocked
-                  ? 'border-[#222d42] hover:border-[#c8aa6e88] hover:bg-[#161f30]' : 'border-[#1f2738] bg-[#0e121a] opacity-60 cursor-not-allowed'
+                  ? 'border-[#3d372e] hover:border-[#b89758]/70 hover:bg-[#141822]'
+                  : 'border-[#242732] bg-[#08090b]/80 opacity-60 cursor-not-allowed'
               }`}
               onClick={() => {
                 if (isUnlocked) {
@@ -11066,13 +11056,13 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             >
               <div className="flex items-start justify-between gap-2 mb-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl p-1.5 rounded-lg bg-[#323d4e] border border-[#4a576d] flex items-center justify-center shadow-sm">
+                  <span className="text-2xl p-1.5 rounded-lg bg-[#161a24] border border-[#3d372e] flex items-center justify-center shadow-sm group-hover:border-[#b89758]/40 transition-colors">
                     <GameIcon name={item.key} icon={item.icon} size={24} />
                   </span>
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-sm text-white">{tr(item.name)}</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#1e293b] text-[#8b9bb4]">
+                      <span className="font-bold text-sm text-white group-hover:text-[#dcc496] transition-colors">{tr(item.name)}</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#161a24] text-[#8b9bb4] border border-[#242732]">
                         {tr(item.tierName)}
                       </span>
                     </div>
@@ -11083,41 +11073,43 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="shrink-0 text-right">
                   {isUnlocked ? (
                     isSoldOut ? (
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef535022] text-[#ef5350] font-bold border border-[#ef535044] animate-pulse">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef5350]/15 text-[#ef5350] font-bold border border-[#ef5350]/30 animate-pulse">
                         ⏳ {tr('매진')} ({formatRestockTime(stockInfo.restockRemainingSec)})
                       </span>
                     ) : (
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-[#ffd54f18] text-[#ffd54f] font-mono font-bold border border-[#ffd54f33]">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-[#ffd54f]/15 text-[#ffd54f] font-mono font-bold border border-[#ffd54f]/30">
                         {tr('매입 재고')}: {stockInfo.current}/{stockInfo.max}
                       </span>
                     )
                   ) : (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef535018] text-[#ef5350] font-bold border border-[#ef535033]">
-                      마켓 Lv.{item.reqLv} 필요
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef5350]/15 text-[#ef5350] font-bold border border-[#ef5350]/30">
+                      {tr(`마켓 Lv.${item.reqLv} 필요`)}
                     </span>
                   )}
                 </div>
               </div>
 
               {isUnlocked ? (
-                <div className="pt-2 border-t border-[#1f2738] flex items-center justify-between gap-2">
+                <div className="pt-2 border-t border-[#242732] flex items-center justify-between gap-2">
                   <div className="text-xs font-mono">
-                    <span className="text-[#8b9bb4]">보유: </span>
+                    <span className="text-[#8b9bb4]">{tr('보유')}: </span>
                     <span className={`font-bold ${isFull ? 'text-[#ef5350]' : 'text-white'}`}>{cur.toLocaleString()}</span>
-                    <span className="text-[#607d8b]">/{maxCap.toLocaleString()}</span>
+                    <span className="text-[#8b9bb4]/70">/{maxCap.toLocaleString()}</span>
                     {isFull && <span className="text-[9px] text-[#ef5350] ml-1 font-bold">[FULL]</span>}
                   </div>
 
                   <div className="flex items-center gap-1.5">
                     {isSoldOut ? (
                       <button
+                        type="button"
                         disabled
-                        className="btn btn-ghost text-xs px-2.5 py-1 font-bold opacity-50 cursor-not-allowed text-[#ef5350] border border-[#ef535044]"
+                        className="btn btn-ghost text-xs px-2.5 py-1 font-bold opacity-50 cursor-not-allowed text-[#ef5350] border border-[#ef5350]/30"
                       >
-                        ⏳ 매진 ({formatRestockTime(stockInfo.restockRemainingSec)})
+                        ⏳ {tr('매진')} ({formatRestockTime(stockInfo.restockRemainingSec)})
                       </button>
                     ) : (
                       <button
+                        type="button"
                         className="btn btn-primary text-xs px-2.5 py-1 font-bold"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -11126,10 +11118,11 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           setTradeQty(1);
                         }}
                       >
-                        📦 매입 <span className="text-[10px] opacity-80">🪙{finalBuy}G</span>
+                        📦 {tr('매입')} <span className="text-[10px] opacity-80">🪙{finalBuy}G</span>
                       </button>
                     )}
                     <button
+                      type="button"
                       className="btn btn-success text-xs px-2.5 py-1 font-bold"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -11138,14 +11131,14 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         setTradeQty(Math.max(1, Math.min(cur, 1)));
                       }}
                     >
-                      🪙 매각 <span className="text-[10px] opacity-80">🪙+{finalSell}G</span>
+                      🪙 {tr('매각')} <span className="text-[10px] opacity-80">🪙+{finalSell}G</span>
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="pt-2 border-t border-[#1f2738] text-[11px] text-[#505c73] flex items-center gap-1">
+                <div className="pt-2 border-t border-[#242732] text-[11px] text-[#8b9bb4]/60 flex items-center gap-1">
                   <span>🔒</span>
-                  <span>블랙 마켓을 레벨 {item.reqLv}(으)로 증축하면 거래가 해금됩니다.</span>
+                  <span>{tr(`블랙 마켓을 레벨 ${item.reqLv}(으)로 증축하면 거래가 해금됩니다.`)}</span>
                 </div>
               )}
             </div>
@@ -11201,22 +11194,22 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           >
             <div className="flex flex-col gap-3">
               {/* 아이템 요약 정보 */}
-              <div className="flex items-center gap-3 p-2.5 rounded-xl bg-[#131926] border border-[#1f2738]">
-                <span className="text-3xl p-2 rounded-xl bg-[#323d4e] border border-[#4a576d] flex items-center justify-center shadow-md">
+              <div className="flex items-center gap-3 p-2.5 rounded-xl bg-[#10131a] border border-[#3d372e]">
+                <span className="text-3xl p-2 rounded-xl bg-[#161a24] border border-[#3d372e] flex items-center justify-center shadow-md">
                   <GameIcon name={item.key} icon={item.icon} size={28} />
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-sm text-white">{tr(item.name)}</span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#1e293b] text-[#8b9bb4] font-bold">
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#161a24] text-[#8b9bb4] font-bold border border-[#242732]">
                       {tr(item.tierName)}
                     </span>
                   </div>
                   <div className="text-[11px] text-[#8b9bb4] mt-0.5">{tr(item.desc)}</div>
                   <div className="text-xs font-mono mt-1 flex items-center gap-2 flex-wrap">
                     <span className="text-[#ffd54f]">{tr('창고')}: <span className="font-bold text-white">{cur.toLocaleString()}</span>/{maxCap.toLocaleString()}{tr('개')}</span>
-                    <span className="text-[#64748b]">|</span>
-                    <span className={stockInfo.isSoldOut ? 'text-[#ef5350] font-bold' : 'text-[#38ef7d]'}>
+                    <span className="text-[#242732]">|</span>
+                    <span className={stockInfo.isSoldOut ? 'text-[#ef5350] font-bold' : 'text-[#81c784]'}>
                       {tr('상점 재고')}: <span className="font-bold">{stockInfo.current}</span>/{stockInfo.max}{tr('개')}
                       {stockInfo.isSoldOut && ` (${tr('매진')}: ${formatRestockTime(stockInfo.restockRemainingSec)})`}
                     </span>
@@ -11226,18 +11219,20 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               {/* 매진 시 안내 경고창 */}
               {tradeMode === 'buy' && stockInfo.isSoldOut && (
-                <div className="p-2.5 rounded-xl bg-[#ef535018] border border-[#ef535033] text-center text-xs text-[#ef5350] font-bold">
+                <div className="p-2.5 rounded-xl bg-[#ef5350]/15 border border-[#ef5350]/30 text-center text-xs text-[#ef5350] font-bold">
                   ⏳ {tr('상점의 매입 물량이 전량 매진되었습니다.')}
                   <div className="font-mono text-sm text-white mt-1">{tr('재입고까지')} {formatRestockTime(stockInfo.restockRemainingSec)}</div>
                 </div>
               )}
 
               {/* 매입 vs 매각 탭 선택 */}
-              <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#0e121d] border border-[#1f2738]">
+              <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#0a0d14] border border-[#242732]">
                 <button
-                  className={`py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                  type="button"
+                  className={`py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                     tradeMode === 'buy'
-                      ? 'bg-[#5c4524] text-[#f3e5c8] border border-[#876739] shadow-md shadow-[#42321955]' : 'text-[#8b9bb4] hover:text-white'
+                      ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+                      : 'text-[#8b9bb4] hover:text-white'
                   }`}
                   onClick={() => {
                     setTradeMode('buy');
@@ -11245,13 +11240,15 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   }}
                 >
                   <span>📦</span>
-                  <span>대량 매입 (구매)</span>
-                  <span className="text-[10px] opacity-80">🪙 {finalBuy}G/개</span>
+                  <span>{tr('대량 매입 (구매)')}</span>
+                  <span className="text-[10px] opacity-80">🪙 {finalBuy}G/{tr('개')}</span>
                 </button>
                 <button
-                  className={`py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                  type="button"
+                  className={`py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                     tradeMode === 'sell'
-                      ? 'bg-[#38ef7d] text-black shadow-lg shadow-[#38ef7d33]' : 'text-[#8b9bb4] hover:text-white'
+                      ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784] shadow-[0_0_10px_rgba(129,199,132,0.25)]'
+                      : 'text-[#8b9bb4] hover:text-white'
                   }`}
                   onClick={() => {
                     setTradeMode('sell');
@@ -11259,28 +11256,28 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   }}
                 >
                   <span>🪙</span>
-                  <span>대량 매각 (판매)</span>
-                  <span className="text-[10px] opacity-80">🪙 +{finalSell}G/개</span>
+                  <span>{tr('대량 매각 (판매)')}</span>
+                  <span className="text-[10px] opacity-80">🪙 +{finalSell}G/{tr('개')}</span>
                 </button>
               </div>
 
               {/* 수량 선택기 및 슬라이더 */}
-              <div className="panel p-3.5 bg-[#101522] border border-[#1f2738] rounded-xl flex flex-col gap-3">
+              <div className="p-3.5 bg-[#10131a] border border-[#3d372e] rounded-xl flex flex-col gap-3 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#8b9bb4] font-bold">거래 수량 선택</span>
+                  <span className="text-xs text-[#8b9bb4] font-bold">{tr('거래 수량 선택')}</span>
                   <div className="text-xs font-mono">
                     {tradeMode === 'buy' ? (
                       <span className="text-[#8b9bb4]">
-                        최대 매입 가능: <span className="text-[#c8aa6e] font-bold">{maxPossible.toLocaleString()}개</span>
+                        {tr('최대 매입 가능')}: <span className="text-[#dcc496] font-bold">{maxPossible.toLocaleString()}개</span>
                         {stockInfo.isSoldOut ? (
-                          <span className="text-[#ef5350] ml-1 font-bold">({formatRestockTime(stockInfo.restockRemainingSec)} 후 입고)</span>
+                          <span className="text-[#ef5350] ml-1 font-bold">({formatRestockTime(stockInfo.restockRemainingSec)} {tr('후 입고')})</span>
                         ) : (
-                          <span className="text-[#ffd54f] ml-1">(재고: {stockInfo.current}개)</span>
+                          <span className="text-[#ffd54f] ml-1">({tr('재고')}: {stockInfo.current}개)</span>
                         )}
                       </span>
                     ) : (
                       <span className="text-[#8b9bb4]">
-                        보유량(무제한 판매 가능): <span className="text-[#38ef7d] font-bold">{maxPossible.toLocaleString()}개</span>
+                        {tr('보유량(무제한 판매 가능)')}: <span className="text-[#81c784] font-bold">{maxPossible.toLocaleString()}개</span>
                       </span>
                     )}
                   </div>
@@ -11289,13 +11286,14 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 {/* 수량 입력 & +/- 증감 버튼 */}
                 <div className="flex items-center justify-center gap-3">
                   <button
-                    className="btn btn-ghost px-3 py-1.5 text-base font-bold rounded-lg border border-[#222d42]"
+                    type="button"
+                    className="btn btn-ghost px-3 py-1.5 text-base font-bold rounded-lg border border-[#3d372e]"
                     disabled={tradeQty <= 1}
                     onClick={() => setTradeQty(Math.max(1, tradeQty - 1))}
                   >
                     -1
                   </button>
-                  <div className="flex items-center justify-center gap-1 min-w-[120px] px-3 py-1.5 rounded-xl bg-[#080b12] border border-[#222d42]">
+                  <div className="flex items-center justify-center gap-1 min-w-[120px] px-3 py-1.5 rounded-xl bg-[#0c0e14] border border-[#3d372e]">
                     <input
                       type="number"
                       min={1}
@@ -11311,7 +11309,8 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <span className="text-xs text-[#8b9bb4]">개</span>
                   </div>
                   <button
-                    className="btn btn-ghost px-3 py-1.5 text-base font-bold rounded-lg border border-[#222d42]"
+                    type="button"
+                    className="btn btn-ghost px-3 py-1.5 text-base font-bold rounded-lg border border-[#3d372e]"
                     disabled={tradeQty >= maxPossible || maxPossible <= 0}
                     onClick={() => setTradeQty(Math.min(maxPossible, tradeQty + 1))}
                   >
@@ -11328,9 +11327,9 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     value={maxPossible <= 0 ? 1 : Math.min(maxPossible, tradeQty)}
                     disabled={maxPossible <= 0}
                     onChange={(e) => setTradeQty(parseInt(e.target.value, 10))}
-                    className="w-full h-2 rounded-lg cursor-pointer bg-[#1a2234] accent-[#c8aa6e]"
+                    className="w-full h-2 rounded-lg cursor-pointer bg-[#161a24] accent-[#b89758]"
                   />
-                  <div className="flex justify-between text-[10px] font-mono text-[#505c73]">
+                  <div className="flex justify-between text-[10px] font-mono text-[#8b9bb4]/70">
                     <span>1개</span>
                     <span>{Math.floor(maxPossible / 2) || 1}개</span>
                     <span>{maxPossible}개 (최대)</span>
@@ -11347,7 +11346,8 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   ].map((p, idx) => (
                     <button
                       key={idx}
-                      className="btn btn-ghost py-1 text-[11px] font-bold rounded-lg bg-[#151c2c] border border-[#222d42] hover:border-[#c8aa6e66]"
+                      type="button"
+                      className="btn btn-ghost py-1 text-[11px] font-bold rounded-lg bg-[#161a24] border border-[#3d372e] hover:border-[#b89758]/60"
                       disabled={maxPossible <= 0}
                       onClick={() => setTradeQty(Math.max(1, Math.min(maxPossible, p.val)))}
                     >
@@ -11358,20 +11358,20 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               </div>
 
               {/* 정산 요약 및 변동 미리보기 */}
-              <div className="p-3 rounded-xl bg-[#0c101a] border border-[#1f2738] text-xs flex flex-col gap-1.5">
+              <div className="p-3 rounded-xl bg-[#0c0e14] border border-[#242732] text-xs flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b9bb4]">
-                    {tradeMode === 'buy' ? '총 필요 골드:' : '총 획득 골드:'}
+                    {tradeMode === 'buy' ? tr('총 필요 골드:') : tr('총 획득 골드:')}
                   </span>
-                  <span className={`font-mono font-bold text-sm ${tradeMode === 'buy' ? 'text-[#ffd54f]' : 'text-[#38ef7d]'}`}>
+                  <span className={`font-mono font-bold text-sm ${tradeMode === 'buy' ? 'text-[#ffd54f]' : 'text-[#81c784]'}`}>
                     {tradeMode === 'buy' ? `🪙 ${totalGoldAmount.toLocaleString()}G` : `🪙 +${totalGoldAmount.toLocaleString()}G`}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-[#8b9bb4]">보유 골드 변동:</span>
+                  <span className="text-[#8b9bb4]">{tr('보유 골드 변동:')}</span>
                   <span className="font-mono">
                     {state.resources.gold.toLocaleString()}G ➔{' '}
-                    <span className={tradeMode === 'buy' ? 'text-[#ffd54f] font-bold' : 'text-[#38ef7d] font-bold'}>
+                    <span className={tradeMode === 'buy' ? 'text-[#ffd54f] font-bold' : 'text-[#81c784] font-bold'}>
                       {tradeMode === 'buy'
                         ? `${Math.max(0, state.resources.gold - totalGoldAmount).toLocaleString()}G`
                         : `${(state.resources.gold + totalGoldAmount).toLocaleString()}G`}
@@ -11379,13 +11379,13 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-[#8b9bb4]">창고 재고 변동:</span>
+                  <span className="text-[#8b9bb4]">{tr('창고 재고 변동:')}</span>
                   <span className="font-mono">
                     {cur.toLocaleString()}개 ➔{' '}
                     <span className="text-white font-bold">
                       {tradeMode === 'buy' ? `${cur + tradeQty}개` : `${cur - tradeQty}개`}
                     </span>
-                    <span className="text-[#505c73]"> / {maxCap}개</span>
+                    <span className="text-[#8b9bb4]/70"> / {maxCap}개</span>
                   </span>
                 </div>
               </div>
@@ -11393,12 +11393,14 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               {/* 실행 버튼 */}
               <div className="flex gap-2 pt-1">
                 <button
+                  type="button"
                   className="btn btn-ghost flex-1 py-2 text-xs font-bold"
                   onClick={() => setTradeModalItem(null)}
                 >
-                  취소
+                  {tr('취소')}
                 </button>
                 <button
+                  type="button"
                   className={`btn flex-[2] py-2 text-xs font-bold ${
                     tradeMode === 'buy' ? 'btn-primary' : 'btn-success'
                   }`}
@@ -11407,9 +11409,9 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 >
                   {tradeMode === 'buy'
                     ? (stockInfo.isSoldOut
-                        ? `⏳ 매진 (${formatRestockTime(stockInfo.restockRemainingSec)} 후 입고)`
-                        : `🪙 ${totalGoldAmount.toLocaleString()}G 지불하고 ${tradeQty}개 매입`)
-                    : `🪙 +${totalGoldAmount.toLocaleString()}G 획득하고 ${tradeQty}개 매각`}
+                        ? `⏳ ${tr('매진')} (${formatRestockTime(stockInfo.restockRemainingSec)} ${tr('후 입고')})`
+                        : `🪙 ${totalGoldAmount.toLocaleString()}G ${tr('지불하고')} ${tradeQty}${tr('개 매입')}`)
+                    : `🪙 +${totalGoldAmount.toLocaleString()}G ${tr('획득하고')} ${tradeQty}${tr('개 매각')}`}
                 </button>
               </div>
             </div>
