@@ -5,6 +5,9 @@ import { SoundManager } from '../../managers/SoundManager';
 import { formatTimeLeft, formatDuration } from '../../utils/timeUtils';
 import { BuildingId } from '../../types/game';
 import { GameIcon } from '../GameIcon';
+import { EncyclopediaBadge } from '../EncyclopediaBadge';
+import { getBuildingLore, getBuildingStatusInfo, RES_NAMES_AND_ICONS } from '../../utils/buildingStatusUtils';
+import { GameManager } from '../../managers/GameManager';
 
 interface ArkCitadelHubDrawerProps {
   onClose: () => void;
@@ -116,6 +119,15 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   const selectedIsMax = selectedBuildingData ? (selectedBuildingData.maxLevel || selectedBuildingData.level) >= 10 : false;
   const selectedPrereq = selectedBuildingId && selectedBuildingData ? gm.checkBuildingPrerequisites(selectedBuildingId, (selectedBuildingData.maxLevel || selectedBuildingData.level) + 1) : { allowed: true };
   const selectedDrawerKey = selectedBuildingId ? buildingsList.find(b => b.id === selectedBuildingId)?.drawerKey : undefined;
+
+  const selectedIsConstructing = !!selectedBuildingData?.construction;
+  const selectedRemainSec = selectedIsConstructing ? Math.max(1, Math.ceil((selectedBuildingData!.construction!.startedAt + selectedBuildingData!.construction!.durationMs - now) / 1000)) : 0;
+  const selectedProgressPct = selectedIsConstructing ? Math.min(100, Math.max(0, Math.floor(((now - selectedBuildingData!.construction!.startedAt) / selectedBuildingData!.construction!.durationMs) * 100))) : 0;
+  const selectedStatusInfo = selectedBuildingId && selectedBuildingData ? getBuildingStatusInfo(selectedBuildingId, selectedBuildingData.level, hasWarmth) : null;
+  const selectedLore = selectedBuildingId && selectedBuildingData ? getBuildingLore(selectedBuildingId, selectedBuildingData.level) : '';
+  const selectedNextLevel = selectedBuildingData ? Math.min(10, selectedBuildingData.level + 1) : 1;
+  const selectedNextUpkeep = selectedBuildingId ? gm.getBuildingUpkeep(selectedBuildingId, selectedNextLevel) : { amount: 0, resName: '', resIcon: '', isDiscounted: false, originalAmount: 0 };
+  const upkeepSec = gm.getUpkeepIntervalSeconds();
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-stretch md:justify-end select-none">
@@ -374,6 +386,78 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             ═════════════════════════════════════════════════════════════ */}
         {activeView === 'facilities' && (
           <div className="flex flex-col gap-2 max-w-2xl mx-auto w-full">
+            {/* 🏛️ 방주 3대 핵심 인프라 시너지 현황 위젯 */}
+            {(() => {
+              const syn = gm.getInfraSynergies();
+              const butcheryLv = state.buildings['butchery']?.level || 0;
+              const marketLv = state.buildings['market']?.level || 0;
+              const alchemyLv = state.buildings['alchemy']?.level || 0;
+
+              return (
+                <div className="p-3 bg-[#0e1422]/90 border border-[#202c42] rounded-xl flex flex-col gap-2 shadow-sm backdrop-blur-md">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-[#c8aa6e] font-bold flex items-center gap-1.5">
+                      <span>🏛️</span>
+                      <span>{tr('핵심 인프라 테크 시너지')}</span>
+                      <EncyclopediaBadge query="인프라" tab="systems" label={tr('시너지 백과')} compact />
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5 pt-0.5">
+                    {/* 🥩 대량 배급제 */}
+                    <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-all ${
+                      syn.foodSynergy
+                        ? 'bg-[#1b2b22]/90 border-[#38ef7d66] text-[#38ef7d]' : 'bg-[#141822]/80 border-[#222b3d] text-[#8b9bb4] opacity-70'
+                    }`}>
+                      <div className="flex items-center gap-1 text-[11px] font-bold">
+                        <span>🥩</span>
+                        <span>{tr('대량 배급제')}</span>
+                      </div>
+                      <div className="text-[9px] mt-0.5">
+                        {syn.foodSynergy ? tr('식량 유지비 -30%') : `${tr('정제소 Lv.5 필요')} (${butcheryLv}/5)`}
+                      </div>
+                      <div className="text-[8px] font-mono mt-0.5 font-bold">
+                        {syn.foodSynergy ? `● ${tr('활성화됨')}` : `○ ${tr('미달성')}`}
+                      </div>
+                    </div>
+
+                    {/* ⚖️ 상업 네트워크 */}
+                    <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-all ${
+                      syn.goldSynergy
+                        ? 'bg-[#2b2716]/90 border-[#ffd54f66] text-[#ffd54f]' : 'bg-[#141822]/80 border-[#222b3d] text-[#8b9bb4] opacity-70'
+                    }`}>
+                      <div className="flex items-center gap-1 text-[11px] font-bold">
+                        <span>⚖️</span>
+                        <span>{tr('상업 네트워크')}</span>
+                      </div>
+                      <div className="text-[9px] mt-0.5">
+                        {syn.goldSynergy ? tr('골드 유지비 -25%') : `${tr('블랙마켓 Lv.5 필요')} (${marketLv}/5)`}
+                      </div>
+                      <div className="text-[8px] font-mono mt-0.5 font-bold">
+                        {syn.goldSynergy ? `● ${tr('활성화됨')}` : `○ ${tr('미달성')}`}
+                      </div>
+                    </div>
+
+                    {/* 🧪 에테르 환류관 */}
+                    <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-all ${
+                      syn.etherSynergy
+                        ? 'bg-[#171920]/90 border-[#c8aa6e66] text-[#c8aa6e]' : 'bg-[#141822]/80 border-[#222b3d] text-[#8b9bb4] opacity-70'
+                    }`}>
+                      <div className="flex items-center gap-1 text-[11px] font-bold">
+                        <span>🧪</span>
+                        <span>{tr('에테르 환류관')}</span>
+                      </div>
+                      <div className="text-[9px] mt-0.5">
+                        {syn.etherSynergy ? tr('마도 에테르 -25%') : `${tr('연금공방 Lv.6 필요')} (${alchemyLv}/6)`}
+                      </div>
+                      <div className="text-[8px] font-mono mt-0.5 font-bold">
+                        {syn.etherSynergy ? `● ${tr('활성화됨')}` : `○ ${tr('미달성')}`}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
             <div className="px-1 py-0.5 text-[11px] text-[#9da3af] flex items-center justify-between">
               <span>{tr('시설을 터치하면 상세 효과 확인 및 건설/증축/입장이 가능합니다.')}</span>
               <span className="font-bold text-[#b89758]">{totalBuiltCount}/13 완공</span>
@@ -519,32 +603,34 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
 
       {/* ═════════════════════════════════════════════════════════════
           【건설·증축·입장 통합 모달】 (리스트 아이템 터치 시 오픈)
+          기존 상세 모달의 모든 구성(공사진행, 테크선행, 로어, 가동효과, 다음특전, 커스텀자원) 완비
           ═════════════════════════════════════════════════════════════ */}
       {selectedBuildingId && selectedBuildingData && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs select-none"
-          onClick={() => setSelectedBuildingId(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-xs select-none"
+          onClick={() => {
+            handlePlayClick();
+            setSelectedBuildingId(null);
+            onClearHighlight?.();
+          }}
         >
           <div
-            className="relative w-full max-w-md bg-[#161820] border border-[#b89758] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.9)] p-4 overflow-hidden"
+            className="relative w-full max-w-lg max-h-[90vh] flex flex-col bg-[#141720] border border-[#b89758] rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.95)] overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
-            {/* 모달 헤더 */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#262933] mb-3">
+            {/* 1. 모달 헤더 바 */}
+            <div className="flex items-center justify-between px-4 py-3 bg-[#0a0d14] border-b border-[#262933] shrink-0">
               <div className="flex items-center gap-2.5">
-                <span className="text-2xl">
+                <span className="text-2xl drop-shadow">
                   <GameIcon name={selectedBuildingData.id} icon={selectedBuildingData.icon} size={26} />
                 </span>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <h3 className="text-sm font-bold text-[#ededed]">
-                      {selectedBuildingData.name}
-                    </h3>
-                    <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-[#b89758]/20 text-[#dcc496]">
-                      Lv.{selectedBuildingData.level}
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-[#87724d]">{selectedBuildingData.description}</p>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <h3 className="text-sm md:text-base font-bold text-[#ededed]">
+                    {selectedBuildingData.name}
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40">
+                    Lv.{selectedBuildingData.level}/10
+                  </span>
                 </div>
               </div>
               <button
@@ -554,47 +640,155 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   setSelectedBuildingId(null);
                   onClearHighlight?.();
                 }}
-                className="text-[#9da3af] hover:text-white text-base"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#1a1c24] border border-[#3d4252] text-[#9da3af] hover:text-[#dcc496] hover:border-[#b89758] transition-colors cursor-pointer text-sm"
               >
                 ✕
               </button>
             </div>
 
-            {/* 증축 필요 재화 목록 (여기서만 자세히 확인!) */}
-            {!selectedIsMax && (
-              <div className="mb-4 p-3 rounded-lg bg-[#101216] border border-[#242732]">
-                <div className="text-[11px] font-bold text-[#dcc496] mb-2 flex items-center justify-between">
-                  <span>{tr('다음 단계 증축 소모 비용')} (Lv.{selectedBuildingData.level + 1})</span>
-                  <span>{selectedCanAfford ? tr('재화 충족') : tr('재화 부족')}</span>
+            {/* 2. 모달 스크롤 본문 */}
+            <div className="flex-1 overflow-y-auto tg-scrollbar p-3.5 sm:p-4 space-y-3 text-xs">
+              
+              {/* 🔨 공사 진행 중 안내 배너 */}
+              {selectedIsConstructing && (
+                <div className="p-3 rounded-xl bg-[#0a1424] border border-[#c8aa6e66] flex flex-col gap-2 shadow-md">
+                  <div className="flex items-center justify-between text-xs font-bold text-[#c8aa6e]">
+                    <span className="flex items-center gap-1.5">
+                      <span className="animate-spin">⚙️</span>
+                      <span>Lv.{selectedBuildingData.construction!.targetLevel} {tr('증축 공사 진행 중...')}</span>
+                    </span>
+                    <span className="font-mono">{formatTimeLeft(selectedRemainSec, lang)} ({selectedProgressPct}%)</span>
+                  </div>
+                  <div className="w-full bg-[#050c18] rounded-full h-2 overflow-hidden border border-[#c8aa6e33]">
+                    <div
+                      className="bg-gradient-to-r from-[#c8aa6e] to-[#00f2fe] h-full transition-all duration-300 shadow-[0_0_8px_#c8aa6e]"
+                      style={{ width: `${selectedProgressPct}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  {Object.entries(selectedCost).map(([resKey, reqAmt]) => {
-                    const curAmt = (state.resources as unknown as Record<string, number>)[resKey] || 0;
-                    const isEnough = curAmt >= (reqAmt as number);
-                    return (
-                      <div key={resKey} className="flex items-center justify-between p-1.5 rounded bg-[#161820] border border-[#1f222b]">
-                        <span className="text-[#9da3af] capitalize">{resKey}</span>
-                        <span className={`font-mono font-bold ${isEnough ? 'text-[#9cd494]' : 'text-[#ff8585]'}`}>
-                          {curAmt.toLocaleString()} / {(reqAmt as number).toLocaleString()}
-                        </span>
-                      </div>
-                    );
-                  })}
+              )}
+
+              {/* 🔒 테크트리 선행 미달 경고 배너 */}
+              {!selectedPrereq.allowed && !selectedIsMax && (
+                <div className="p-3 rounded-xl bg-[#2a1412] border border-[#ef535066] text-xs text-[#ff8a80] flex items-center gap-2.5 shadow-sm">
+                  <span className="text-xl">🔒</span>
+                  <div>
+                    <div className="font-bold text-[#ef5350]">{tr('테크트리 선행 조건 미달')}</div>
+                    <div className="text-[11px] text-[#cfd8dc] mt-0.5">{selectedPrereq.reason}</div>
+                  </div>
+                </div>
+              )}
+
+              {/* 📜 상단: 시설 서사 및 배경 로어 */}
+              <div className="p-3 rounded-xl bg-[#0d121c]/90 border border-[#202738] flex flex-col gap-1.5 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-[#c8aa6e] font-bold">📜 {tr('시설 서사 및 배경')}</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e]">
+                    {selectedBuildingData.level > 0 ? `현재 Lv.${selectedBuildingData.level}` : tr('미건설 시설')}
+                  </span>
+                </div>
+                <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
+                  {selectedLore}
                 </div>
               </div>
-            )}
 
-            {/* 선행 조건 경고 */}
-            {!selectedPrereq.allowed && (
-              <div className="mb-3 p-2 rounded bg-[#8c2d2d]/20 border border-[#8c2d2d] text-[#ff8585] text-xs">
-                ⚠️ {selectedPrereq.reason || tr('선행 시설 조건 미충족')}
-              </div>
-            )}
+              {/* ✨ 중단 1: 현재 가동 효과 */}
+              {selectedStatusInfo && (
+                <div className="p-3 rounded-xl bg-[#0a1816]/80 border border-[#1e3e34] flex flex-col gap-1 shadow-xs">
+                  <div className="flex items-center justify-between text-[#9cd494] font-bold text-xs">
+                    <span>✨ {tr('현재 가동 효과')} (Lv.{selectedBuildingData.level})</span>
+                    {selectedStatusInfo.badge && (
+                      <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]">
+                        {selectedStatusInfo.badge}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-[#e0e6ed] mt-0.5 font-medium leading-relaxed">
+                    {selectedStatusInfo.currentText}
+                  </div>
+                </div>
+              )}
 
-            {/* 하단 액션 버튼 그룹 */}
-            <div className="flex gap-2 pt-1">
-              {/* 시설 입장 버튼 (해당 건물이 입장 가능한 경우) */}
-              {selectedDrawerKey && selectedBuildingData.level > 0 && (
+              {/* 🔮 중단 2: 다음 단계 승급 프리뷰 & 유지비 표기 */}
+              {selectedStatusInfo && (
+                <div className="p-3 rounded-xl bg-[#181326]/80 border border-[#2d2244] flex flex-col gap-1 shadow-xs">
+                  <div className="text-[#ffd54f] font-bold text-xs flex items-center justify-between">
+                    <span>🔮 {tr('다음 레벨 특전')} (Lv.{selectedNextLevel})</span>
+                    {selectedIsMax ? (
+                      <span className="text-[10px] text-[#8b9bb4]">MAX</span>
+                    ) : (selectedNextUpkeep.amount > 0 || (selectedNextUpkeep.secondaryAmount && selectedNextUpkeep.secondaryAmount > 0)) ? (
+                      <span className="text-[10px] font-mono text-[#ff8a80]">
+                        ({[
+                          selectedNextUpkeep.amount > 0 ? `${selectedNextUpkeep.resIcon} -${selectedNextUpkeep.amount}` : '',
+                          selectedNextUpkeep.secondaryAmount && selectedNextUpkeep.secondaryAmount > 0 ? `${selectedNextUpkeep.secondaryIcon} -${selectedNextUpkeep.secondaryAmount}` : ''
+                        ].filter(Boolean).join(', ')}/{upkeepSec}초)
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="text-[11px] text-[#ffd54f] mt-0.5 leading-relaxed font-medium">
+                    {selectedStatusInfo.nextText}
+                    {!selectedIsMax && selectedNextUpkeep.amount > 0 && selectedBuildingData.level < 4 && (
+                      <span className="text-[10px] text-[#ff8a80] block mt-0.5">
+                        * 4레벨부터 {upkeepSec}초마다 {selectedNextUpkeep.resIcon} {selectedNextUpkeep.resName} {selectedNextUpkeep.amount}개 유지비 소모 (Lv.1~3 무료 유지)
+                      </span>
+                    )}
+                    {!selectedIsMax && (selectedBuildingId === 'lumberCamp' || selectedBuildingId === 'quarry') && selectedNextLevel >= 5 && (
+                      <span className="text-[10px] text-[#c8aa6e] block mt-0.5 font-mono">
+                        ⚙️ 시설 특화: 골드 유지비 -{Math.min(42, (selectedNextLevel - 4) * 7)}% 고유 감면 적용{selectedBuildingId === 'quarry' && selectedNextLevel >= 7 ? ' (30% 식량 분담)' : ''}
+                      </span>
+                    )}
+                    {!selectedIsMax && selectedNextUpkeep.isDiscounted && (
+                      <span className="text-[10px] text-[#38ef7d] block mt-0.5">
+                        ✓ 인프라 시너지 감면 적용 중 (정가: {selectedNextUpkeep.originalAmount} ➔ 할인가: {selectedNextUpkeep.amount})
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* ⚡ / 🔨 하단: 강화 소모 자원 (커스텀 에셋 아이콘 & 충족 녹색 / 부족 적색 뱃지) */}
+              {!selectedIsMax && (
+                <div className="p-3 rounded-xl bg-[#0e1118] border border-[#222d42] flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#ededed]">
+                      {selectedBuildingData.level > 0 ? tr('⚡ 증축 필요 자원') : tr('🔨 신축 필요 자원')}
+                    </span>
+                    <span className={selectedCanAfford ? 'text-[10px] text-[#9cd494] font-bold' : 'text-[10px] text-[#ff8585] font-bold animate-pulse'}>
+                      {selectedCanAfford ? tr('✅ 모든 재료 보유') : tr('⚠️ 일부 자원 부족')}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {Object.entries(selectedCost).map(([resKey, reqAmt]) => {
+                      const curAmt = (state.resources as unknown as Record<string, number>)[resKey] || 0;
+                      const isEnough = curAmt >= (reqAmt as number);
+                      const gmMeta = GameManager.getResourceMeta(resKey as any);
+                      const meta = RES_NAMES_AND_ICONS[resKey] || (gmMeta?.name ? { label: gmMeta.name, icon: gmMeta.icon } : { label: resKey, icon: '📦' });
+
+                      return (
+                        <div
+                          key={resKey}
+                          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border font-mono text-xs font-bold transition-all ${
+                            isEnough
+                              ? 'bg-[#1b2b20]/90 border-[#38ef7d66] text-[#9cd494]'
+                              : 'bg-[#2b1719]/90 border-[#ef535066] text-[#ff8585] animate-pulse'
+                          }`}
+                        >
+                          <GameIcon name={resKey} icon={meta.icon} size={16} />
+                          <span className="font-sans text-[11px]">{tr(meta.label)}</span>
+                          <span>{curAmt.toLocaleString()}/{(reqAmt as number).toLocaleString()}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* 3. 모달 하단 액션 버튼 바 */}
+            <div className="flex items-center justify-between px-4 py-3 bg-[#0a0d14] border-t border-[#262933] shrink-0 gap-2">
+              {/* 좌측: 시설 입장 버튼 (해당 건물이 입장 가능한 경우) */}
+              {selectedDrawerKey && selectedBuildingData.level > 0 ? (
                 <button
                   type="button"
                   onClick={() => {
@@ -604,26 +798,62 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     if (selectedDrawerKey === 'arena') navigateTo('arena');
                     else onEnterDrawer(selectedDrawerKey);
                   }}
-                  className="flex-1 py-2.5 px-3 rounded-lg bg-[#2a1e35] border border-[#a875d4] text-[#e0b8ff] font-bold text-xs hover:bg-[#352545] transition-all cursor-pointer"
+                  className="py-2 px-3 rounded-xl bg-[#2a1e35] border border-[#a875d4] text-[#e0b8ff] font-bold text-xs hover:bg-[#352545] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
                 >
-                  🚪 {tr('시설 내부 입장')}
+                  <span>🚪</span>
+                  <span>{tr('시설 바로 입장')}</span>
                 </button>
-              )}
+              ) : <div />}
 
-              {/* 건설 / 증축 실행 버튼 */}
-              <button
-                type="button"
-                disabled={selectedIsMax || !selectedPrereq.allowed || !selectedCanAfford}
-                onClick={() => {
-                  handlePlayClick();
-                  gm.buildBuilding(selectedBuildingId);
-                  setSelectedBuildingId(null);
-                }}
-                className="flex-1 py-2.5 px-3 rounded-lg tg-btn-gold text-xs font-bold cursor-pointer"
-              >
-                {selectedIsMax ? tr('최고 레벨 도달') : selectedBuildingData.level > 0 ? tr('⬆ 시설 증축 실행') : tr('🔨 시설 신축 실행')}
-              </button>
+              {/* 우측: 닫기 & 건설/증축 실행 버튼 */}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    handlePlayClick();
+                    setSelectedBuildingId(null);
+                    onClearHighlight?.();
+                  }}
+                  className="py-2 px-3 rounded-xl bg-[#1a1c24] border border-[#3d4252] text-[#9da3af] hover:text-white font-bold text-xs transition-colors cursor-pointer"
+                >
+                  {tr('닫기')}
+                </button>
+
+                {selectedIsConstructing ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="py-2 px-4 rounded-xl bg-[#c8aa6e1a] border border-[#c8aa6e88] text-[#c8aa6e] font-bold text-xs opacity-75 cursor-not-allowed animate-pulse"
+                  >
+                    🔨 {tr('공사 진행 중')} ({formatDuration(selectedRemainSec, lang)})
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={selectedIsMax || !selectedPrereq.allowed || !selectedCanAfford}
+                    onClick={() => {
+                      handlePlayClick();
+                      if (!selectedIsMax && selectedPrereq.allowed && gm.buildBuilding(selectedBuildingId)) {
+                        setSelectedBuildingId(null);
+                        onClearHighlight?.();
+                      }
+                    }}
+                    className={`py-2 px-4 rounded-xl text-xs font-bold transition-all shadow-md ${
+                      selectedCanAfford && !selectedIsMax && selectedPrereq.allowed
+                        ? 'tg-btn-gold cursor-pointer hover:brightness-110 active:scale-95'
+                        : 'bg-[#1b1e28] border border-[#2e3344] text-[#616a7d] cursor-not-allowed opacity-60'
+                    }`}
+                  >
+                    {selectedIsMax
+                      ? tr('★ 최고 레벨')
+                      : (!selectedPrereq.allowed
+                        ? tr('선행 조건 필요')
+                        : (selectedBuildingData.level > 0 ? tr('⚡ 레벨업 공사 시작') : tr('🔨 건설 시작')))}
+                  </button>
+                )}
+              </div>
             </div>
+
           </div>
         </div>
       )}

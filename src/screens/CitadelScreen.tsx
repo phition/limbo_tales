@@ -2,7 +2,6 @@ import { TutorialGuideOverlay } from '../components/TutorialGuideOverlay';
 import { TUTORIAL_STEPS } from '../data/tutorialSteps';
 import { useGameManager } from '../hooks/useGameManager';
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { TerritoryHeader } from '../components/territory/TerritoryHeader';
 import { QuickFacilityDock } from '../components/territory/QuickFacilityDock';
 import { FacilityWorkstationModal } from '../components/territory/FacilityWorkstationModal';
 import { TerritoryDioramaView } from '../components/territory/TerritoryDioramaView';
@@ -15130,14 +15129,6 @@ export const CitadelScreen: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* ── 🏰 새로운 영지 전용 다크 & 앤티크 골드 슬림 헤더 ── */}
-      <TerritoryHeader
-        onOpenCitadel={() => handleTryOpenDrawer('citadel')}
-        onOpenBonfire={() => handleTryOpenDrawer('bonfire')}
-        onOpenStorage={() => handleTryOpenDrawer('storage')}
-        onOpenSettings={() => setResetModal(true)}
-      />
 
       {/* ── 🏰 메인 영지 뷰포트 영역 (디오라마 vs 시네마틱 워크스테이션) ── */}
       <div className="flex-1 min-h-0 relative flex flex-col overflow-hidden">
