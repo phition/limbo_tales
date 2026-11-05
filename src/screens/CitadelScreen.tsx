@@ -9708,79 +9708,88 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0e17] text-[#cfd8e8]">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1f2738] bg-[#070a10] shrink-0">
-        <div className="flex items-center gap-2">
-          <span className="text-base">📦</span>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-[#ffd54f]">방주 보관함</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold">
-                Lv.{storageLv}
-              </span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-mono border border-[#c8aa6e33]">
-                {'유지비 완전 면제'}
-              </span>
-              <EncyclopediaBadge query="창고" tab="buildings" label="창고 백과" />
-            </div>
-            <div className="text-[10px] text-[#8b9bb4]">
-              🏰 {'성채'}: <span className="text-white font-mono font-bold">{gm.getMaxResourceCapacity('wood').toLocaleString()}</span> | 
-              🌿 {'파밍'}: <span className="text-[#66bb6a] font-mono font-bold">{gm.getMaxResourceCapacity('iron').toLocaleString()}</span> | 
-              🔮 {'심연'}: <span className="text-[#c8aa6e] font-mono font-bold">{gm.getMaxResourceCapacity('crystal').toLocaleString()}</span> | 
-              {'금화'}: <span className="text-[#ffd54f] font-mono font-bold">{gm.getMaxResourceCapacity('gold').toLocaleString()}</span>G
-            </div>
+    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+      {/* ── 📦 창고 서브 툴바 (적재 한도 요약 & 백과사전) ── */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-[#242732] bg-[#0c0e14] shrink-0 flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#161a24] text-[#dcc496] font-mono font-bold border border-[#3d372e]">
+            {tr('유지비 면제')}
+          </span>
+          <div className="text-[10px] text-[#8b9bb4] flex items-center gap-2 font-mono flex-wrap">
+            <span>🏰 <span className="text-white font-bold">{gm.getMaxResourceCapacity('wood').toLocaleString()}</span></span>
+            <span>🌿 <span className="text-[#81c784] font-bold">{gm.getMaxResourceCapacity('iron').toLocaleString()}</span></span>
+            <span>🔮 <span className="text-[#dcc496] font-bold">{gm.getMaxResourceCapacity('crystal').toLocaleString()}</span></span>
+            <span>🪙 <span className="text-[#ffd54f] font-bold">{gm.getMaxResourceCapacity('gold').toLocaleString()}</span>G</span>
           </div>
         </div>
-        <button
-          className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
-          style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-          onClick={onBack}
-          aria-label="닫기"
-        >
-          <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <EncyclopediaBadge query="창고" tab="buildings" label="창고 백과" />
+        </div>
       </div>
 
-      {/* ── 창고 메인 탭 (기본 자원 / 원정 보급품 / 미착용 장비 / 퀘스트·오파츠) ── */}
-      <div className="grid grid-cols-4 gap-1 p-2 bg-[#0e121d] border-b border-[#1f2738] shrink-0">
+      {/* ── 📦 창고 메인 탭 (기본 자원 / 원정 보급품 / 미착용 장비 / 퀘스트·오파츠) ── */}
+      <div className="grid grid-cols-4 gap-1 p-2 bg-[#0a0d14] border-b border-[#242732] shrink-0">
         <button
-          className={`btn py-1.5 text-xs font-bold transition-all ${storageTab === 'resources' ? 'btn-primary' : 'btn-ghost'}`}
+          type="button"
+          className={`py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+            storageTab === 'resources'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+          }`}
           onClick={() => setStorageTab('resources')}
         >
-          🪵 {'자원 (16)'}
+          <span>🪵</span>
+          <span>{tr('자원 (16)')}</span>
         </button>
         <button
-          className={`btn py-1.5 text-xs font-bold transition-all ${storageTab === 'supplies' ? 'btn-primary' : 'btn-ghost'}`}
+          type="button"
+          className={`py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+            storageTab === 'supplies'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+          }`}
           onClick={() => setStorageTab('supplies')}
         >
-          🎒 {`보급품 (${SUPPLY_ITEMS.length})`}
+          <span>🎒</span>
+          <span>{tr(`보급품 (${SUPPLY_ITEMS.length})`)}</span>
         </button>
         <button
-          className={`btn py-1.5 text-xs font-bold transition-all ${storageTab === 'equipment' ? 'btn-primary' : 'btn-ghost'}`}
+          type="button"
+          className={`py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+            storageTab === 'equipment'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+          }`}
           onClick={() => setStorageTab('equipment')}
         >
-          ⚔️ {`장비 (${unequippedList.length})`}
+          <span>⚔️</span>
+          <span>{tr(`장비 (${unequippedList.length})`)}</span>
         </button>
         <button
-          className={`btn py-1.5 text-xs font-bold transition-all ${storageTab === 'quest' ? 'btn-primary' : 'btn-ghost'}`}
+          type="button"
+          className={`py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+            storageTab === 'quest'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+          }`}
           onClick={() => setStorageTab('quest')}
         >
-          📜 {`퀘스트 (${QUEST_ITEMS.filter(q => (state.resources[q.key] || 0) > 0 || q.subCategory === 'catalyst').length})`}
+          <span>📜</span>
+          <span>{tr(`퀘스트 (${QUEST_ITEMS.filter(q => (state.resources[q.key] || 0) > 0 || q.subCategory === 'catalyst').length})`)}</span>
         </button>
       </div>
 
       {/* 안내 툴팁 바 */}
-      <div className="px-3 py-1.5 bg-[#121926] border-b border-[#1f2738] text-[10px] text-[#8b9bb4] flex items-center justify-between shrink-0">
-        <span>💡 항목 탭 시 상세 설명 및 옵션 확인</span>
-        <span className="text-[#607d8b]">
+      <div className="px-3 py-1.5 bg-[#0c0e14] border-b border-[#242732] text-[10px] text-[#8b9bb4] flex items-center justify-between shrink-0">
+        <span>💡 {tr('항목 탭 시 상세 설명 및 옵션 확인')}</span>
+        <span className="text-[#8b9bb4]/70 font-mono">
           {storageTab === 'resources' 
-            ? ('16종 자원 보관') 
+            ? tr('16종 자원 보관') 
             : storageTab === 'supplies' 
-              ? ('6종 보급품 재고') 
+              ? tr('6종 보급품 재고') 
               : storageTab === 'equipment'
-                ? (`${unequippedList.length}개 장비 보관`)
-                : ('오파츠·회고록·신화 유물·촉매')}
+                ? tr(`${unequippedList.length}개 장비 보관`)
+                : tr('오파츠·회고록·신화 유물·촉매')}
         </span>
       </div>
 
@@ -9790,7 +9799,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           {RESOURCE_GROUPS.map(group => (
             <div key={group.title} className="flex flex-col gap-1.5">
               <div className="flex items-center gap-1.5 px-1">
-                <span className="text-xs font-bold text-[#c8aa6e]">{group.title}</span>
+                <span className="text-xs font-bold text-[#dcc496]">{group.title}</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
@@ -9805,31 +9814,31 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   return (
                     <div
                       key={item.key}
-                      className="panel p-2.5 bg-[#131926] border border-[#222d42] hover:border-[#c8aa6e88] hover:bg-[#172033] rounded-xl flex flex-col justify-between cursor-pointer transition-all active:scale-[0.98]"
+                      className="p-2.5 bg-[#10131a] border border-[#3d372e] hover:border-[#b89758]/70 hover:bg-[#141822] rounded-xl flex flex-col justify-between cursor-pointer transition-all active:scale-[0.98] shadow-sm group"
                       onClick={() => setSelectedItemDetail(item)}
-                      title="탭하여 상세 정보 확인"
+                      title={tr('탭하여 상세 정보 확인')}
                     >
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
                           <div className="flex items-center gap-1.5 min-w-0">
-                            <span className="text-base shrink-0 p-1 rounded-lg bg-[#323d4e] border border-[#4a576d] flex items-center justify-center">
+                            <span className="text-base shrink-0 p-1 rounded-lg bg-[#161a24] border border-[#3d372e] flex items-center justify-center group-hover:border-[#b89758]/40 transition-colors">
                               <GameIcon name={item.key} icon={item.icon} size={18} />
                             </span>
-                            <span className="font-bold text-xs text-white truncate hover:text-[#c8aa6e]">{item.label}</span>
+                            <span className="font-bold text-xs text-white truncate group-hover:text-[#dcc496] transition-colors">{item.label}</span>
                           </div>
                           <div className="flex items-center gap-1 shrink-0">
                             {netInfo.trend === 'up' && (
-                              <span className="text-[9px] px-1 py-0.2 rounded bg-[#38ef7d18] text-[#38ef7d] font-mono font-bold flex items-center gap-0.5 border border-[#38ef7d33]" title={`실시간 순생산: ${netInfo.text}`}>
+                              <span className="text-[9px] px-1 py-0.2 rounded bg-[#81c784]/15 text-[#81c784] font-mono font-bold flex items-center gap-0.5 border border-[#81c784]/30" title={`실시간 순생산: ${netInfo.text}`}>
                                 ▲ {netInfo.text}
                               </span>
                             )}
                             {netInfo.trend === 'down' && (
-                              <span className="text-[9px] px-1 py-0.2 rounded bg-[#ef535018] text-[#ef5350] font-mono font-bold flex items-center gap-0.5 border border-[#ef535033]" title={`실시간 순감소(유지비 등): ${netInfo.text}`}>
+                              <span className="text-[9px] px-1 py-0.2 rounded bg-[#ef5350]/15 text-[#ef5350] font-mono font-bold flex items-center gap-0.5 border border-[#ef5350]/30" title={`실시간 순감소(유지비 등): ${netInfo.text}`}>
                                 ▼ {netInfo.text}
                               </span>
                             )}
                             {netInfo.trend === 'stable' && (
-                              <span className="text-[9px] px-1 py-0.2 rounded bg-[#607d8b15] text-[#8b9bb4] font-mono flex items-center gap-0.5">
+                              <span className="text-[9px] px-1 py-0.2 rounded bg-[#161a24] text-[#8b9bb4] font-mono flex items-center gap-0.5 border border-[#242732]">
                                 {isFull ? 'FULL' : '—'}
                               </span>
                             )}
@@ -9844,16 +9853,16 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       {/* 수량 / 최대 적재량 게이지 */}
                       <div>
                         <div className="flex items-center justify-between text-[11px] font-mono mb-1">
-                          <span className={`font-bold ${isFull ? 'text-[#ef5350]' : isNear ? 'text-[#ffd54f]' : 'text-[#38ef7d]'}`}>
+                          <span className={`font-bold ${isFull ? 'text-[#ef5350]' : isNear ? 'text-[#ffd54f]' : 'text-[#81c784]'}`}>
                             {current.toLocaleString()}
                           </span>
-                          <span className="text-[#607d8b]">/ {maxCap.toLocaleString()}</span>
+                          <span className="text-[#8b9bb4]/70">/ {maxCap.toLocaleString()}</span>
                         </div>
 
-                        <div className="w-full h-1.5 bg-[#1a2234] rounded-full overflow-hidden">
+                        <div className="w-full h-1.5 bg-[#161a24] rounded-full overflow-hidden border border-[#242732]">
                           <div
                             className={`h-full transition-all duration-300 ${
-                              isFull ? 'bg-[#ef5350]' : isNear ? 'bg-[#ffd54f]' : 'bg-[#38ef7d]'
+                              isFull ? 'bg-[#ef5350]' : isNear ? 'bg-[#ffd54f]' : 'bg-[#81c784]'
                             }`}
                             style={{ width: `${pct}%` }}
                           />
@@ -9871,17 +9880,17 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       {/* ── 2. 🎒 원정 보급품 탭 ── */}
       {storageTab === 'supplies' && (
         <div className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-2.5">
-          <div className="p-3 rounded-xl bg-[#121826] border border-[#1f2738] flex items-center justify-between">
+          <div className="p-3 rounded-xl bg-[#10131a] border border-[#3d372e] flex items-center justify-between shadow-sm">
             <div>
-              <div className="text-xs font-bold text-[#ffd54f]">
-                📦 {'원정 보급품 창고 재고 현황'}
+              <div className="text-xs font-bold text-[#dcc496]">
+                📦 {tr('원정 보급품 창고 재고 현황')}
               </div>
               <div className="text-[10px] text-[#8b9bb4] mt-0.5">
-                {'대장간 제작 및 퀘스트 보상으로 획득한 소모품이 안전하게 적재됩니다.'}
+                {tr('대장간 제작 및 퀘스트 보상으로 획득한 소모품이 안전하게 적재됩니다.')}
               </div>
             </div>
-            <span className="text-xs text-[#38ef7d] font-bold px-2 py-0.5 rounded bg-[#38ef7d15] border border-[#38ef7d33]">
-              {'채비실 무료 불출'}
+            <span className="text-xs text-[#81c784] font-bold px-2 py-0.5 rounded bg-[#81c784]/15 border border-[#81c784]/30">
+              {tr('채비실 무료 불출')}
             </span>
           </div>
 
@@ -9894,19 +9903,19 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               return (
                 <div
                   key={item.key}
-                  className="panel p-3 bg-[#131926] border border-[#222d42] hover:border-[#ffd54f88] hover:bg-[#172033] rounded-xl flex flex-col justify-between cursor-pointer transition-all active:scale-[0.98]"
+                  className="p-3 bg-[#10131a] border border-[#3d372e] hover:border-[#b89758]/70 hover:bg-[#141822] rounded-xl flex flex-col justify-between cursor-pointer transition-all active:scale-[0.98] shadow-sm group"
                   onClick={() => setSelectedItemDetail(item)}
-                  title="탭하여 상세 설명 확인"
+                  title={tr('탭하여 상세 설명 확인')}
                 >
                   <div>
                     <div className="flex items-center justify-between gap-1 mb-1">
                       <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="text-lg shrink-0 p-1 rounded-lg bg-[#323d4e] border border-[#4a576d] flex items-center justify-center">
+                        <span className="text-lg shrink-0 p-1 rounded-lg bg-[#161a24] border border-[#3d372e] flex items-center justify-center group-hover:border-[#b89758]/40 transition-colors">
                           <GameIcon name={item.key} icon={item.icon} size={20} />
                         </span>
-                        <span className="font-bold text-xs text-white truncate hover:text-[#ffd54f]">{label}</span>
+                        <span className="font-bold text-xs text-white truncate group-hover:text-[#dcc496] transition-colors">{label}</span>
                       </div>
-                      <span className="text-[9px] text-[#ffd54f] opacity-80">🔍</span>
+                      <span className="text-[9px] text-[#dcc496] opacity-80">🔍</span>
                     </div>
 
                     <div className="text-[9px] text-[#8b9bb4] line-clamp-2 mb-2">
@@ -9914,12 +9923,12 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-1.5 border-t border-[#1f2738]">
+                  <div className="flex items-center justify-between pt-1.5 border-t border-[#242732]">
                     <span className="text-[10px] text-[#8b9bb4]">
-                      {'보유 재고'}
+                      {tr('보유 재고')}
                     </span>
-                    <span className={`font-mono font-bold text-sm ${currentStock > 0 ? 'text-[#38ef7d]' : 'text-[#607d8b]'}`}>
-                      currentStock.toLocaleString() + '개'
+                    <span className={`font-mono font-bold text-sm ${currentStock > 0 ? 'text-[#81c784]' : 'text-[#8b9bb4]/50'}`}>
+                      {currentStock.toLocaleString()}개
                     </span>
                   </div>
                 </div>
@@ -9933,18 +9942,20 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       {storageTab === 'equipment' && (
         <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
           {/* 소분류 칩 바 */}
-          <div className="flex items-center gap-1.5 px-3 py-2 bg-[#121724] border-b border-[#1f2738] shrink-0">
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0c0e14] border-b border-[#242732] shrink-0">
             {[
-              { key: 'all', label: `전체 (${unequippedList.length})`, icon: '📦' },
-              { key: 'weapon', label: `무기 (${unequippedList.filter(i => i.slot === 'weapon').length})`, icon: '🗡️' },
-              { key: 'armor', label: `방어구 (${unequippedList.filter(i => i.slot === 'armor').length})`, icon: '🛡️' },
-              { key: 'accessory', label: `장신구 (${unequippedList.filter(i => i.slot === 'accessory').length})`, icon: '💍' },
+              { key: 'all', label: tr(`전체 (${unequippedList.length})`), icon: '📦' },
+              { key: 'weapon', label: tr(`무기 (${unequippedList.filter(i => i.slot === 'weapon').length})`), icon: '🗡️' },
+              { key: 'armor', label: tr(`방어구 (${unequippedList.filter(i => i.slot === 'armor').length})`), icon: '🛡️' },
+              { key: 'accessory', label: tr(`장신구 (${unequippedList.filter(i => i.slot === 'accessory').length})`), icon: '💍' },
             ].map(cat => (
               <button
                 key={cat.key}
-                className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 ${
+                type="button"
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                   equipCategory === cat.key
-                    ? 'bg-[#5c4524] text-[#f3e5c8] border border-[#876739] shadow-md shadow-[#42321955]' : 'bg-[#182030] text-[#8b9bb4] hover:text-white border border-[#26334a]'
+                    ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-sm'
+                    : 'bg-[#10131a] text-[#8b9bb4] hover:text-white border border-[#242732] hover:border-[#3d372e]'
                 }`}
                 onClick={() => setEquipCategory(cat.key as any)}
               >
@@ -9957,18 +9968,18 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           {/* 장비 목록 */}
           <div className="flex-1 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 content-start">
             {filteredEquipment.length === 0 ? (
-              <div className="panel p-8 text-center text-sm text-[#8b9bb4] flex flex-col items-center gap-2 col-span-full">
+              <div className="p-8 text-center text-sm text-[#8b9bb4] flex flex-col items-center gap-2 col-span-full bg-[#10131a] border border-[#3d372e] rounded-xl">
                 <span className="text-3xl">🛡️</span>
-                <span>{'보관 중인 미착용 장비가 없습니다.'}</span>
-                <span className="text-xs text-[#607d8b]">
-                  {'대장간에서 단조하거나 던전 탐험을 통해 획득할 수 있습니다.'}
+                <span>{tr('보관 중인 미착용 장비가 없습니다.')}</span>
+                <span className="text-xs text-[#8b9bb4]/70">
+                  {tr('대장간에서 단조하거나 던전 탐험을 통해 획득할 수 있습니다.')}
                 </span>
               </div>
             ) : (
               filteredEquipment.map(item => {
                 const RARITY_COLORS: Record<string, string> = {
                   common: '#cfd8dc',
-                  rare: '#c8aa6e',
+                  rare: '#dcc496',
                   unique: '#ff9100',
                   epic: '#ce93d8',
                   legendary: '#ffd54f',
@@ -9985,25 +9996,25 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 return (
                   <div
                     key={item.id}
-                    className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl hover:border-[#c8aa6e88] hover:bg-[#172033] cursor-pointer transition-all active:scale-[0.99] flex flex-col gap-2"
+                    className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl hover:border-[#b89758]/70 hover:bg-[#141822] cursor-pointer transition-all active:scale-[0.99] flex flex-col gap-2 shadow-sm group"
                     onClick={() => setSelectedEquipDetail(item)}
-                    title="탭하여 장비 상세 스탯 확인"
+                    title={tr('탭하여 장비 상세 스탯 확인')}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="p-1.5 rounded-lg bg-[#323d4e] border border-[#4a576d] shrink-0 flex items-center justify-center shadow-sm">
+                        <span className="p-1.5 rounded-lg bg-[#161a24] border border-[#3d372e] shrink-0 flex items-center justify-center shadow-sm group-hover:border-[#b89758]/40 transition-colors">
                           <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={28} />
                         </span>
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5 flex-wrap">
                             <span className="font-bold text-sm truncate" style={{ color }}>{itemName}</span>
                             {item.level > 0 && (
-                              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
+                              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#b89758]/15 text-[#dcc496] font-bold border border-[#b89758]/30">
                                 +{item.level}
                               </span>
                             )}
-                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#1f2738] text-[#8b9bb4] font-bold">
-                              {slotName}
+                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#161a24] text-[#8b9bb4] font-bold border border-[#242732]">
+                              {tr(slotName)}
                             </span>
                             {item.slot === 'weapon' && (() => {
                               const wt = item.weaponTrait || getWeaponTrait(item);
@@ -10019,8 +10030,8 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               );
                             })()}
                             {item.isCursed && (
-                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535022] text-[#ef5350] font-bold">
-                                {'저주'}
+                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef5350]/15 text-[#ef5350] font-bold border border-[#ef5350]/30">
+                                {tr('저주')}
                               </span>
                             )}
                           </div>
@@ -10030,13 +10041,13 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         </div>
                       </div>
 
-                      <span className="text-xs text-[#c8aa6e] font-bold shrink-0 bg-[#c8aa6e15] px-2 py-1 rounded border border-[#c8aa6e33]">
-                        {'🔍 상세보기'}
+                      <span className="text-xs text-[#dcc496] font-bold shrink-0 bg-[#b89758]/15 px-2 py-1 rounded border border-[#b89758]/30">
+                        {tr('🔍 상세보기')}
                       </span>
                     </div>
 
                     {(item.prefix || item.suffix) && (
-                      <div className="text-[10px] text-[#ce93d8] bg-[#1a1228] px-2 py-1 rounded flex items-center gap-2">
+                      <div className="text-[10px] text-[#ce93d8] bg-[#161320] border border-[#ce93d8]/20 px-2 py-1 rounded flex items-center gap-2">
                         {item.prefix && <span>✨ [{item.prefix.name}]</span>}
                         {item.suffix && <span>🔮 [{item.suffix.name}]</span>}
                       </div>
@@ -10053,20 +10064,21 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       {storageTab === 'quest' && (
         <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
           {/* 소분류 칩 바 */}
-          <div className="flex items-center gap-1.5 px-3 py-2 bg-[#121724] border-b border-[#1f2738] shrink-0 overflow-x-auto">
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0c0e14] border-b border-[#242732] shrink-0 overflow-x-auto">
             {[
-              { key: 'all', label: `전체 (${QUEST_ITEMS.length})`, icon: '📜' },
-              { key: 'ooparts', label: `🏛️ 오파츠 (${QUEST_ITEMS.filter(q => q.subCategory === 'ooparts').length})`, icon: '📱' },
-              { key: 'memoir', label: `📜 회고록 (${QUEST_ITEMS.filter(q => q.subCategory === 'memoir').length})`, icon: '📜' },
-              { key: 'relic', label: `👑 보스 유물 (${QUEST_ITEMS.filter(q => q.subCategory === 'relic').length})`, icon: '🖤' },
-              { key: 'catalyst', label: `🔮 심연 촉매 (${QUEST_ITEMS.filter(q => q.subCategory === 'catalyst').length})`, icon: '🧭' },
+              { key: 'all', label: tr(`전체 (${QUEST_ITEMS.length})`), icon: '📜' },
+              { key: 'ooparts', label: tr(`🏛️ 오파츠 (${QUEST_ITEMS.filter(q => q.subCategory === 'ooparts').length})`), icon: '📱' },
+              { key: 'memoir', label: tr(`📜 회고록 (${QUEST_ITEMS.filter(q => q.subCategory === 'memoir').length})`), icon: '📜' },
+              { key: 'relic', label: tr(`👑 보스 유물 (${QUEST_ITEMS.filter(q => q.subCategory === 'relic').length})`), icon: '🖤' },
+              { key: 'catalyst', label: tr(`🔮 심연 촉매 (${QUEST_ITEMS.filter(q => q.subCategory === 'catalyst').length})`), icon: '🧭' },
             ].map(cat => (
               <button
                 key={cat.key}
-                className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all shrink-0 flex items-center gap-1 ${
+                type="button"
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 flex items-center gap-1 cursor-pointer ${
                   questCategory === cat.key
-                    ? 'bg-[#3b2d54] text-[#e9d5ff] border border-[#7c3aed] shadow-md shadow-[#7c3aed33]'
-                    : 'bg-[#182030] text-[#8b9bb4] hover:text-white border border-[#26334a]'
+                    ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-sm'
+                    : 'bg-[#10131a] text-[#8b9bb4] hover:text-white border border-[#242732] hover:border-[#3d372e]'
                 }`}
                 onClick={() => setQuestCategory(cat.key as any)}
               >
@@ -10087,17 +10099,17 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               return (
                 <div
                   key={item.key}
-                  className={`panel p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2.5 ${
+                  className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2.5 ${
                     hasItem 
-                      ? 'bg-[#131926] border-[#25354e] hover:border-[#7c3aed88] hover:bg-[#182033]' 
-                      : 'bg-[#0f141f] border-[#15171d] opacity-60 hover:opacity-90'
+                      ? 'bg-[#10131a] border-[#3d372e] hover:border-[#b89758]/70 hover:bg-[#141822] shadow-sm' 
+                      : 'bg-[#0a0c10] border-[#1a1e28] opacity-60 hover:opacity-90'
                   }`}
                   onClick={() => setSelectedItemDetail(item)}
-                  title="탭하여 상세 설명 및 획득처 확인"
+                  title={tr('탭하여 상세 설명 및 획득처 확인')}
                 >
                   <div className="flex items-center gap-2.5 min-w-0 flex-1">
                     <span className={`p-2 rounded-xl border shrink-0 flex items-center justify-center shadow-sm ${
-                      hasItem ? 'bg-[#251e36] border-[#7c3aed55]' : 'bg-[#161c28] border-[#253247]'
+                      hasItem ? 'bg-[#161a24] border-[#3d372e]' : 'bg-[#10131a] border-[#1a1e28]'
                     }`}>
                       <GameIcon name={item.key} icon={item.icon} size={28} />
                     </span>
@@ -10106,7 +10118,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <span className={`font-bold text-xs truncate ${hasItem ? 'text-white' : 'text-[#8b9bb4]'}`}>
                           {item.label}
                         </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#1e2738] text-[#93c5fd] border border-[#2d3e58]">
+                        <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#161a24] text-[#dcc496] border border-[#3d372e]">
                           {item.category}
                         </span>
                       </div>
@@ -10120,20 +10132,20 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     {isCatalyst ? (
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
                         isCatalystActive 
-                          ? 'bg-[#38ef7d22] text-[#38ef7d] border-[#38ef7d55]' 
-                          : 'bg-[#c8aa6e15] text-[#c8aa6e] border-[#c8aa6e33]'
+                          ? 'bg-[#81c784]/15 text-[#81c784] border-[#81c784]/30' 
+                          : 'bg-[#b89758]/15 text-[#dcc496] border-[#b89758]/30'
                       }`}>
-                        {isCatalystActive ? '출격 활성' : '채비 가능'}
+                        {isCatalystActive ? tr('출격 활성') : tr('채비 가능')}
                       </span>
                     ) : (
                       <div className="font-mono text-xs">
-                        <span className={`font-bold ${current > 0 ? 'text-[#ffd54f]' : 'text-[#546e7a]'}`}>
-                          {current > 0 ? `×${current.toLocaleString()}` : '미보유'}
+                        <span className={`font-bold ${current > 0 ? 'text-[#ffd54f]' : 'text-[#8b9bb4]/40'}`}>
+                          {current > 0 ? `×${current.toLocaleString()}` : tr('미보유')}
                         </span>
                       </div>
                     )}
-                    <span className="text-[10px] text-[#c8aa6e] font-bold hover:underline">
-                      상세보기 ➔
+                    <span className="text-[10px] text-[#dcc496] font-bold hover:underline">
+                      {tr('상세보기')} ➔
                     </span>
                   </div>
                 </div>
@@ -10234,11 +10246,11 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <div className="flex flex-col gap-3 text-xs leading-relaxed">
               {/* 상단 헤더 */}
               <div
-                className="panel p-3 bg-[#131926] rounded-xl flex items-center gap-3 border"
+                className="p-3 bg-[#10131a] rounded-xl flex items-center gap-3 border"
                 style={{ borderColor: `${color}44` }}
               >
                 <span
-                  className="p-2 rounded-xl bg-[#323d4e] border shrink-0 flex items-center justify-center shadow-lg"
+                  className="p-2 rounded-xl bg-[#161a24] border shrink-0 flex items-center justify-center shadow-lg"
                   style={{ borderColor: `${color}66` }}
                 >
                   <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={48} />
@@ -10247,7 +10259,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="font-bold text-sm" style={{ color }}>{equipName}</span>
                     {item.level > 0 && (
-                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e44]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#b89758]/15 text-[#dcc496] font-bold border border-[#b89758]/30">
                         +{item.level}
                       </span>
                     )}
@@ -10258,8 +10270,8 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       {rName} {slotName}
                     </span>
                     {item.isCursed && (
-                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535022] text-[#ef5350] font-bold border border-[#ef535044]">
-                        {'저주받음'}
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef5350]/15 text-[#ef5350] font-bold border border-[#ef5350]/30">
+                        {tr('저주받음')}
                       </span>
                     )}
                   </div>
@@ -10268,14 +10280,14 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               </div>
 
               {/* 기본 스탯 리스트 */}
-              <div className="p-3 rounded-xl bg-[#0e131f] border border-[#1f2738] flex flex-col gap-1.5">
-                <div className="text-[10px] text-[#c8aa6e] font-bold flex items-center gap-1">
+              <div className="p-3 rounded-xl bg-[#0c0e14] border border-[#242732] flex flex-col gap-1.5">
+                <div className="text-[10px] text-[#dcc496] font-bold flex items-center gap-1">
                   <span>📊</span>
-                  <span>{'장비 스탯 옵션'}</span>
+                  <span>{tr('장비 스탯 옵션')}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                   {Object.entries(item.stats).map(([st, val]) => (
-                    <div key={st} className="p-1.5 rounded bg-[#141a29] border border-[#222d42] flex items-center justify-between">
+                    <div key={st} className="p-1.5 rounded bg-[#161a24] border border-[#3d372e] flex items-center justify-between">
                       <span className="text-[#8b9bb4]">{st.toUpperCase()}</span>
                       <span className="text-[#ffd54f] font-bold">+{val}</span>
                     </div>
@@ -10300,15 +10312,15 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         className="text-[9px] px-2 py-0.5 rounded font-bold shadow-sm"
                         style={{ backgroundColor: wt.bgColor, color: wt.color, border: `1px solid ${wt.color}55` }}
                       >
-                        무기 고유 특성
+                        {tr('무기 고유 특성')}
                       </span>
                     </div>
                     <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
                       {wt.description}
                     </div>
-                    <div className="text-[10px] text-[#90a4ae] flex items-center gap-1 pt-1.5 border-t border-[#ffffff15]">
+                    <div className="text-[10px] text-[#8b9bb4] flex items-center gap-1 pt-1.5 border-t border-[#ffffff15]">
                       <span>💡</span>
-                      <span><strong>효과 요약:</strong> {wt.shortDesc}</span>
+                      <span><strong>{tr('효과 요약:')}</strong> {wt.shortDesc}</span>
                     </div>
                   </div>
                 );
@@ -10324,19 +10336,19 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 const sufDesc = locSuf?.description || item.suffix?.description;
 
                 return (
-                  <div className="p-3 rounded-xl bg-[#161224] border border-[#ce93d833] flex flex-col gap-1.5">
+                  <div className="p-3 rounded-xl bg-[#141220] border border-[#ce93d8]/30 flex flex-col gap-1.5">
                     <div className="text-[10px] text-[#ce93d8] font-bold flex items-center gap-1">
                       <span>✨</span>
-                      <span>{'마도 인챈트 옵션'}</span>
+                      <span>{tr('마도 인챈트 옵션')}</span>
                     </div>
                     {item.prefix && (
-                      <div className="text-[11px] text-[#ffd54f] bg-[#0c0915] p-2 rounded border border-[#ffd54f33]">
-                        ✨ [{'접두'}: {preName}] {preDesc}
+                      <div className="text-[11px] text-[#ffd54f] bg-[#0c0a14] p-2 rounded border border-[#ffd54f]/25">
+                        ✨ [{tr('접두')}: {preName}] {preDesc}
                       </div>
                     )}
                     {item.suffix && (
-                      <div className="text-[11px] text-[#c8aa6e] bg-[#0c0915] p-2 rounded border border-[#c8aa6e33]">
-                        🔮 [{'접미'}: {sufName}] {sufDesc}
+                      <div className="text-[11px] text-[#dcc496] bg-[#0c0a14] p-2 rounded border border-[#dcc496]/25">
+                        🔮 [{tr('접미')}: {sufName}] {sufDesc}
                       </div>
                     )}
                   </div>
@@ -10345,11 +10357,11 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               {/* 저주 페널티 안내 */}
               {item.isCursed && (
-                <div className="p-3 rounded-xl bg-[#1a0f14] border border-[#ef535044] text-[11px] text-[#ef5350]">
+                <div className="p-3 rounded-xl bg-[#1c0d12] border border-[#ef5350]/40 text-[11px] text-[#ef5350]">
                   <div className="font-bold text-[10px] mb-0.5">
-                    {'⚠️ 심연의 저주 페널티'}
+                    {tr('⚠️ 심연의 저주 페널티')}
                   </div>
-                  {item.curseDesc || ('착용 시 어둠의 페널티가 부여됩니다. 대장간 Lv.9에서 신성 정화할 수 있습니다.')}
+                  {item.curseDesc || tr('착용 시 어둠의 페널티가 부여됩니다. 대장간 Lv.9에서 신성 정화할 수 있습니다.')}
                 </div>
               )}
             </div>
@@ -10380,41 +10392,42 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
         return (
           <Modal
-            title={`${'자원 도감 — '}${displayLabel}`}
+            title={`${tr('자원 도감 — ')}${displayLabel}`}
             open={true}
             onClose={() => setSelectedItemDetail(null)}
             footer={
               <div className="flex items-center justify-between w-full">
                 <button
+                  type="button"
                   className="btn btn-ghost text-xs px-3 py-1.5"
                   onClick={() => setSelectedItemDetail(null)}
                 >
-                  ✕ 닫기
+                  ✕ {tr('닫기')}
                 </button>
                 <div className="text-[11px] text-[#8b9bb4]">
                   {item.category === '원정 보급품' ? (
                     <>
-                      보관 수량:{' '}
+                      {tr('보관 수량:')}{' '}
                       <span className="font-bold text-white font-mono">
                         {(gm.getCitadelSupplyCount(item.key) || 0).toLocaleString()}개
                       </span>
                     </>
                   ) : isQuestItem || maxCap <= 0 ? (
                     isCatalyst ? (
-                      <span className="text-[#38ef7d] font-bold">
-                        {gm.activeCatalysts.includes(item.key) ? '🟢 탐험 출격 활성 상태' : '⚪ 채비실 선택 가능'}
+                      <span className="text-[#81c784] font-bold">
+                        {gm.activeCatalysts.includes(item.key) ? '🟢 ' + tr('탐험 출격 활성 상태') : '⚪ ' + tr('채비실 선택 가능')}
                       </span>
                     ) : (
                       <>
-                        보유 수량:{' '}
+                        {tr('보유 수량:')}{' '}
                         <span className="font-bold text-[#ffd54f] font-mono">
-                          {current > 0 ? `${current.toLocaleString()}개` : '미보유'}
+                          {current > 0 ? `${current.toLocaleString()}개` : tr('미보유')}
                         </span>
                       </>
                     )
                   ) : (
                     <>
-                      중앙 창고 적재량:{' '}
+                      {tr('중앙 창고 적재량:')}{' '}
                       <span className="font-bold text-white font-mono">
                         {current.toLocaleString()}/{maxCap.toLocaleString()}
                       </span>
@@ -10426,19 +10439,19 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           >
             <div className="flex flex-col gap-3 text-xs leading-relaxed">
               {/* 상단: 아이템 헤더 */}
-              <div className="panel p-3 bg-[#131926] border border-[#c8aa6e44] rounded-xl flex items-center gap-3">
-                <span className="text-3xl p-2.5 rounded-xl bg-[#323d4e] border border-[#4a576d] shrink-0 flex items-center justify-center shadow-md">
+              <div className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl flex items-center gap-3">
+                <span className="text-3xl p-2.5 rounded-xl bg-[#161a24] border border-[#3d372e] shrink-0 flex items-center justify-center shadow-md">
                   <GameIcon name={item.key || (item as any).id} icon={item.icon} size={28} />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="font-bold text-sm text-white">{displayLabel}</span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e33]">
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#b89758]/15 text-[#dcc496] font-bold border border-[#b89758]/30">
                       {displayCategory}
                     </span>
                     {isFull && (
-                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535022] text-[#ef5350] font-bold">
-                        {'적재 한도 도달'}
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef5350]/15 text-[#ef5350] font-bold border border-[#ef5350]/30">
+                        {tr('적재 한도 도달')}
                       </span>
                     )}
                   </div>
@@ -10447,10 +10460,10 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               </div>
 
               {/* 상세 배경 & 설정 설명 */}
-              <div className="p-3 rounded-xl bg-[#0e131f] border border-[#1f2738] text-[11px] text-[#cfd8dc] leading-relaxed">
-                <div className="text-[10px] text-[#ffd54f] font-bold mb-1 flex items-center gap-1">
+              <div className="p-3 rounded-xl bg-[#0c0e14] border border-[#242732] text-[11px] text-[#cfd8dc] leading-relaxed">
+                <div className="text-[10px] text-[#dcc496] font-bold mb-1 flex items-center gap-1">
                   <span>📖</span>
-                  <span>{'자원 상세 설명'}</span>
+                  <span>{tr('자원 상세 설명')}</span>
                 </div>
                 {displayDetailDesc}
               </div>
@@ -10458,15 +10471,15 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               {/* 획득처 & 주요 활용처 2열 카드 */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {/* 획득처 */}
-                <div className="p-2.5 rounded-xl bg-[#0f1726] border border-[#24334a] flex flex-col gap-1">
-                  <div className="text-[11px] font-bold text-[#38ef7d] flex items-center gap-1">
+                <div className="p-2.5 rounded-xl bg-[#10131a] border border-[#3d372e] flex flex-col gap-1">
+                  <div className="text-[11px] font-bold text-[#81c784] flex items-center gap-1">
                     <span>📥</span>
-                    <span>{'주요 획득처'}</span>
+                    <span>{tr('주요 획득처')}</span>
                   </div>
                   <ul className="flex flex-col gap-1 mt-0.5">
                     {displaySources.map((src, i) => (
                       <li key={i} className="text-[10px] text-[#cfd8dc] flex items-start gap-1">
-                        <span className="text-[#38ef7d] shrink-0">•</span>
+                        <span className="text-[#81c784] shrink-0">•</span>
                         <span>{tr(src)}</span>
                       </li>
                     ))}
@@ -10474,7 +10487,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </div>
 
                 {/* 사용처 */}
-                <div className="p-2.5 rounded-xl bg-[#0f1726] border border-[#24334a] flex flex-col gap-1">
+                <div className="p-2.5 rounded-xl bg-[#10131a] border border-[#3d372e] flex flex-col gap-1">
                   <div className="text-[11px] font-bold text-[#ffd54f] flex items-center gap-1">
                     <span>📤</span>
                     <span>{tr('주요 활용처')}</span>
@@ -10492,44 +10505,44 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               {/* 창고 적재 현황 게이지 바 또는 퀘스트/유물 상태 배너 */}
               {maxCap > 0 ? (
-                <div className="p-3 rounded-xl bg-[#0a0d14] border border-[#1f2738] flex flex-col gap-1.5 font-mono">
+                <div className="p-3 rounded-xl bg-[#0c0e14] border border-[#242732] flex flex-col gap-1.5 font-mono">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-[#8b9bb4]">
-                      {'현재 적재량 / 최대 한도'}
+                      {tr('현재 적재량 / 최대 한도')}
                     </span>
                     <span className="font-bold text-white">
                       {current.toLocaleString()} / {maxCap.toLocaleString()} ({pct}%)
                     </span>
                   </div>
-                  <div className="w-full h-2 bg-[#1a2234] rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-[#161a24] rounded-full overflow-hidden border border-[#242732]">
                     <div
                       className={`h-full transition-all duration-300 ${
-                        isFull ? 'bg-[#ef5350]' : pct >= 80 ? 'bg-[#ffd54f]' : 'bg-[#38ef7d]'
+                        isFull ? 'bg-[#ef5350]' : pct >= 80 ? 'bg-[#ffd54f]' : 'bg-[#81c784]'
                       }`}
                       style={{ width: `${pct}%` }}
                     />
                   </div>
-                  <div className="text-[10px] text-[#607d8b] font-sans mt-0.5">
-                    {'💡 방주 영지에서 [중앙 창고]를 증축하면 모든 자원의 보관 한도가 대폭 증가합니다.'}
+                  <div className="text-[10px] text-[#8b9bb4]/70 font-sans mt-0.5">
+                    💡 {tr('방주 영지에서 [중앙 창고]를 증축하면 모든 자원의 보관 한도가 대폭 증가합니다.')}
                   </div>
                 </div>
               ) : (
-                <div className="p-3 rounded-xl bg-[#121622] border border-[#2b3952] flex items-center justify-between">
+                <div className="p-3 rounded-xl bg-[#10131a] border border-[#3d372e] flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{isCatalyst ? '🧭' : '📜'}</span>
                     <div>
                       <div className="text-xs font-bold text-white">
-                        {isCatalyst ? '심연 원정대 특수 촉매' : '영구 보관 및 도감 수집 아이템'}
+                        {isCatalyst ? tr('심연 원정대 특수 촉매') : tr('영구 보관 및 도감 수집 아이템')}
                       </div>
                       <div className="text-[10px] text-[#8b9bb4]">
                         {isCatalyst 
-                          ? '던전 출격 전 채비실에서 활성화하여 고유 탐험 보너스를 받습니다.' 
-                          : '창고 적재 용량을 차지하지 않으며 영구적으로 보존됩니다.'}
+                          ? tr('던전 출격 전 채비실에서 활성화하여 고유 탐험 보너스를 받습니다.') 
+                          : tr('창고 적재 용량을 차지하지 않으며 영구적으로 보존됩니다.')}
                       </div>
                     </div>
                   </div>
-                  <span className="text-xs font-mono font-bold text-[#ffd54f] px-2.5 py-1 rounded bg-[#251e36] border border-[#7c3aed44]">
-                    {isCatalyst ? (gm.activeCatalysts.includes(item.key) ? '활성화 중' : '비활성') : (current > 0 ? `소지: ${current}개` : '미보유')}
+                  <span className="text-xs font-mono font-bold text-[#dcc496] px-2.5 py-1 rounded bg-[#161a24] border border-[#3d372e]">
+                    {isCatalyst ? (gm.activeCatalysts.includes(item.key) ? tr('활성화 중') : tr('비활성')) : (current > 0 ? `${tr('소지:')} ${current}개` : tr('미보유'))}
                   </span>
                 </div>
               )}
