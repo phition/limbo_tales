@@ -4378,18 +4378,37 @@ const BarracksDrawer: React.FC<{
       <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-[#242732] bg-[#0c0e14] shrink-0 flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#161a24] text-[#dcc496] font-bold border border-[#3d372e] font-mono">
-            {I18nService.getInstance().tr(`보유 ${state.barracks.length}/7명`)}
+            {tr(`보유 ${state.barracks.length}/7명`)}
+          </span>
+          <span className={`text-[11px] px-2 py-0.5 rounded-md font-bold border font-mono transition-colors ${
+            state.party.length >= 3
+              ? 'bg-[#b89758]/20 text-[#f5ecd7] border-[#b89758]'
+              : 'bg-[#161a24] text-[#8b9bb4] border-[#3d372e]'
+          }`}>
+            {tr(`원정대 ${state.party.length}/3명`)}
           </span>
           <EncyclopediaBadge tab="classes" label="병영 백과" />
         </div>
         <div className="flex items-center gap-1.5">
+          {state.party.length >= 3 && onNavigateDrawer && (
+            <button
+              type="button"
+              className="text-[11px] px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#b89758] to-[#937538] text-[#08090b] font-black hover:brightness-110 active:scale-95 transition-all cursor-pointer shrink-0 shadow-[0_0_10px_rgba(184,151,88,0.35)] flex items-center gap-1 border border-[#e6c88b] animate-fade-in"
+              onClick={() => onNavigateDrawer('explore')}
+              title={tr('원정대 3인 편성 완료 - 심연 출정 채비실로 이동')}
+            >
+              <span>🎒</span>
+              <span>{tr('채비실 바로가기')}</span>
+              <span className="text-[10px]">▶</span>
+            </button>
+          )}
           <button
             type="button"
             className="text-[11px] px-2.5 py-1 rounded-lg bg-[#ff416c]/15 text-[#ff8099] border border-[#ff416c]/40 font-bold hover:bg-[#ff416c]/25 transition-all cursor-pointer shrink-0 shadow-sm flex items-center gap-1"
             onClick={() => setShowBondModal(true)}
           >
             <span>💞</span>
-            <span>{I18nService.getInstance().tr('유대 관계도')}</span>
+            <span>{tr('유대 관계도')}</span>
           </button>
         </div>
       </div>
@@ -4436,23 +4455,29 @@ const BarracksDrawer: React.FC<{
         </button>
       </div>
 
-      {/* 🎒 3인 편성 완료 시 출정 채비실 바로가기 안내 배너 */}
+      {/* 🎒 3인 편성 완료 시 출정 채비실 바로가기 안내 배너 (Dark Gothic & Antique Gold) */}
       {state.party.length >= 3 && onNavigateDrawer && barracksCategory === 'dungeon' && (
-        <div className="bg-gradient-to-r from-[#1a103c] via-[#2a1758] to-[#1a103c] border-b border-[#a855f788] px-3 py-2 flex items-center justify-between gap-2 shrink-0 animate-fade-in shadow-md">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="text-lg shrink-0">🎒</span>
+        <div className="bg-gradient-to-r from-[#1c1810] via-[#2a2214] to-[#1c1810] border-b border-[#b89758]/60 px-3.5 py-2.5 flex items-center justify-between gap-3 shrink-0 animate-fade-in shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-[#b89758]/20 border border-[#b89758]/60 flex items-center justify-center text-lg shrink-0 shadow-[0_0_8px_rgba(184,151,88,0.3)]">
+              🎒
+            </div>
             <div className="min-w-0">
-              <div className="text-xs font-bold text-[#e9d5ff]">{I18nService.getInstance().tr('3인 원정대 편성 완료!')}</div>
-              <div className="text-[10px] text-[#c084fc] truncate">{I18nService.getInstance().tr('출정 채비실로 이동하여 진형과 보급품을 점검하세요.')}</div>
+              <div className="text-xs font-black text-[#f5ecd7] flex items-center gap-1.5">
+                <span>{tr('3인 원정대 편성 완료!')}</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d]/20 text-[#38ef7d] border border-[#38ef7d]/40 font-mono font-bold">READY (3/3)</span>
+              </div>
+              <div className="text-[11px] text-[#c8aa6e] truncate">{tr('출정 채비실로 이동하여 진형 배치 및 보급품을 점검하세요.')}</div>
             </div>
           </div>
           <button
             data-tutorial-target="open-explore-drawer"
-            className="btn btn-primary text-xs px-3 py-1 font-bold shrink-0 flex items-center gap-1 shadow bg-[#7e22ce] hover:bg-[#9333ea] border border-[#c084fc] text-white"
+            type="button"
+            className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#b89758] to-[#937538] hover:brightness-110 active:scale-95 text-[#08090b] text-xs font-black shrink-0 flex items-center gap-1.5 shadow-[0_0_12px_rgba(184,151,88,0.4)] border border-[#e6c88b] transition-all cursor-pointer"
             onClick={() => onNavigateDrawer('explore')}
           >
-            <span>{I18nService.getInstance().tr('출정 채비실로 이동')}</span>
-            <span>▶</span>
+            <span>{tr('출정 채비실로 이동')}</span>
+            <span className="text-[10px]">▶</span>
           </button>
         </div>
       )}
@@ -5362,7 +5387,7 @@ const BarracksDrawer: React.FC<{
                 const inParty = state.party.some(p => p.id === hero.id);
 
                 return (
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-1.5">
                     <div className="flex gap-2">
                       <ActionButton
                         label={isAdmitted ? '🏥 입원 중' : inParty ? `🔄 파티에서 제외` : `⚔️ 파티에 출전`}
@@ -5391,6 +5416,24 @@ const BarracksDrawer: React.FC<{
                         {state.barracks.length <= 3 ? '🔒 해고(최소 3명)' : '👋 해고'}
                       </button>
                     </div>
+
+                    {/* 🎒 3인 파티가 편성되었을 때 즉시 출정 채비실 바로가기 버튼 */}
+                    {state.party.length >= 3 && onNavigateDrawer && (
+                      <button
+                        type="button"
+                        onClick={() => onNavigateDrawer('explore')}
+                        className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#241c12] via-[#382b17] to-[#241c12] border border-[#b89758] hover:border-[#f3d99e] text-[#f5ecd7] text-xs font-black flex items-center justify-between gap-2 shadow-[0_0_14px_rgba(184,151,88,0.3)] hover:shadow-[0_0_20px_rgba(184,151,88,0.5)] transition-all cursor-pointer group active:scale-[0.98] animate-fade-in"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-base group-hover:scale-110 transition-transform">🎒</span>
+                          <span>{tr('3인 원정대 편성 완료! 채비실로 이동')}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-[11px] text-[#ffd54f] font-bold">
+                          <span>채비실 이동</span>
+                          <span className="group-hover:translate-x-1 transition-transform">▶</span>
+                        </div>
+                      </button>
+                    )}
                   </div>
                 );
               })()}
@@ -6202,6 +6245,34 @@ const BarracksDrawer: React.FC<{
             onClose={() => setShowSynergyModal(false)}
             party={state.party}
           />
+
+          {/* ── 🎒 3인 원정대 편성 완료 시 하단 고정 채비실 바로가기 바 ── */}
+          {state.party.length >= 3 && onNavigateDrawer && (
+            <div className="shrink-0 p-2.5 sm:px-4 py-2 bg-gradient-to-r from-[#120f09] via-[#20180d] to-[#120f09] border-t border-[#b89758]/60 shadow-[0_-4px_16px_rgba(0,0,0,0.8)] flex items-center justify-between gap-3 z-10 animate-fade-in">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-[#b89758]/20 border border-[#b89758]/60 flex items-center justify-center text-lg shrink-0 shadow-[0_0_10px_rgba(184,151,88,0.3)]">
+                  🎒
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-black text-[#f5ecd7] flex items-center gap-2">
+                    <span>{tr('3인 원정대 편성 완료')}</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d]/20 text-[#38ef7d] border border-[#38ef7d]/40 font-mono font-bold">READY (3/3)</span>
+                  </div>
+                  <div className="text-[10.5px] text-[#c8aa6e] truncate">
+                    {state.party.map(p => p.name).join(' · ')}
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#b89758] to-[#937538] hover:brightness-110 active:scale-95 text-[#08090b] text-xs font-black shrink-0 flex items-center gap-1.5 shadow-[0_0_14px_rgba(184,151,88,0.4)] border border-[#e6c88b] transition-all cursor-pointer"
+                onClick={() => onNavigateDrawer('explore')}
+              >
+                <span>{tr('출정 채비실로 이동')}</span>
+                <span className="text-xs">▶</span>
+              </button>
+            </div>
+          )}
 
         </>
       ))}
