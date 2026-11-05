@@ -38,7 +38,6 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
   children,
 }) => {
   const { tr } = useI18n();
-  const [sheetHeight, setSheetHeight] = useState<'standard' | 'expanded'>('standard');
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -60,25 +59,21 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end md:items-stretch md:justify-end select-none">
+    <div className="absolute inset-0 z-40 flex items-end md:items-stretch md:justify-end select-none">
       {/* ── 배경 어둡고 깊은 섀도우 딤드 (클릭 시 닫기) ── */}
       <div
-        className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity animate-fade-in"
         onClick={handleClose}
       />
 
       {/* ── 모바일 바텀시트 / PC 스플릿 패널 본체 ── */}
       <div
-        className={`relative z-10 flex flex-col w-full md:w-[580px] lg:w-[640px] bg-[#121418] border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] transition-all duration-300 ${
-          sheetHeight === 'expanded' ? 'h-[94vh]' : 'h-[85vh] md:h-full'
-        } rounded-t-2xl md:rounded-none overflow-hidden`}
+        className="relative z-10 flex flex-col w-full md:w-[580px] lg:w-[640px] h-full bg-[#121418] border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden animate-drawer-enter"
         onClick={e => e.stopPropagation()}
       >
         {/* 모바일 상단 드래그 핸들 */}
         <div 
-          onClick={() => setSheetHeight(h => (h === 'standard' ? 'expanded' : 'standard'))}
-          className="md:hidden flex items-center justify-center py-2 bg-[#0d0f14] cursor-pointer hover:bg-[#15171f]"
-          title={tr('높이 조절')}
+          className="md:hidden flex items-center justify-center py-2 bg-[#0d0f14] shrink-0"
         >
           <div className="w-10 h-1 rounded-full bg-[#3d372e]" />
         </div>

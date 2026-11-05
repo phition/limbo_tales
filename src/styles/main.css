@@ -361,14 +361,31 @@ html[data-lang="ja"] .badge {
   to   { transform: translateY(0); }
 }
 
+@keyframes slideLeft {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 6px 2px rgba(0, 210, 255, 0.3); }
   50%       { box-shadow: 0 0 16px 6px rgba(0, 210, 255, 0.6); }
 }
 
-.animate-fade-in  { animation: fadeIn 0.25s ease-out; }
-.animate-slide-up { animation: slideUp 0.3s ease-out; }
-.animate-glow     { animation: pulse-glow 2s infinite; }
+.animate-fade-in    { animation: fadeIn 0.25s ease-out; }
+.animate-slide-up   { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-slide-left { animation: slideLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-glow       { animation: pulse-glow 2s infinite; }
+
+/* 📱 모바일: 아래에서 위로(slideUp) / 🖥️ 데스크탑(768px 이상): 오른쪽에서 왼쪽으로(slideLeft) */
+.animate-drawer-enter {
+  animation: slideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (min-width: 768px) {
+  .animate-drawer-enter {
+    animation: slideLeft 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
 
 
 /* ─── 전투 이펙트 애니메이션 (Battle VFX) ───────────────── */

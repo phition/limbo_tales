@@ -130,10 +130,10 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   const upkeepSec = gm.getUpkeepIntervalSeconds();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end md:items-stretch md:justify-end select-none">
+    <div className="absolute inset-0 z-40 flex items-end md:items-stretch md:justify-end select-none">
       {/* ── 배경 어두운 백드롭 (클릭 시 닫기) ── */}
       <div
-        className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity animate-fade-in"
         onClick={() => {
           handlePlayClick();
           onClose();
@@ -142,7 +142,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
 
       {/* ── 슬라이드업 바텀시트(모바일) / 사이드 드로어(PC) ── */}
       <div
-        className="relative z-10 flex flex-col w-full md:w-[600px] lg:w-[660px] h-[88vh] md:h-full border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden"
+        className="relative z-10 flex flex-col w-full md:w-[600px] lg:w-[660px] h-full border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden animate-drawer-enter"
         style={{
           backgroundImage: "linear-gradient(rgba(18, 20, 24, 0.92), rgba(12, 14, 18, 0.97)), url('assets/citadel_bonfire.jpg')",
           backgroundSize: 'cover',
@@ -152,7 +152,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
       >
         {/* 모바일 상단 드래그 핸들 */}
         <div 
-          className="md:hidden flex items-center justify-center py-2 bg-[#0d0f14]/80 cursor-pointer"
+          className="md:hidden flex items-center justify-center py-2 bg-[#0d0f14]/80 shrink-0"
         >
           <div className="w-10 h-1 rounded-full bg-[#3d372e]" />
         </div>

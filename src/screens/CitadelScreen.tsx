@@ -15288,75 +15288,6 @@ export const CitadelScreen: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* 2. 방주 성채 허브 드로어 (openDrawer === 'citadel') */}
-        {openDrawer === 'citadel' && (
-          <ArkCitadelHubDrawer 
-            onClose={handleCloseDrawer} 
-            onEnterDrawer={handleEnterBuildingFromCitadel}
-            initialView={citadelInitialView}
-            highlightedBuildingId={highlightedBuildingId}
-            onClearHighlight={() => setHighlightedBuildingId(null)}
-          />
-        )}
-
-        {/* 3. 개별 시네마틱 워크스테이션 모달 / 바텀시트 컨테이너 (그 외 시설 진입 시) */}
-        {openDrawer && openDrawer !== 'citadel' && (
-          <FacilityWorkstationModal
-            open={Boolean(openDrawer)}
-            onClose={handleCloseDrawer}
-            title={tr(artInfo.title)}
-            subtitle={tr(artInfo.subtitle)}
-            icon={artInfo.icon}
-            bgImage={artInfo.img}
-          >
-            {openDrawer === 'barracks'  && (
-              <BarracksDrawer 
-                onClose={handleCloseDrawer} 
-                onNavigateDrawer={(k) => handleTryOpenDrawer(k)} 
-                initialCategory={barracksInitialCat} 
-                tutorialStepId={tutorialStepId}
-                onAdvanceTutorial={handleAdvanceTutorial}
-              />
-            )}
-            {openDrawer === 'quests'    && (
-              <QuestsDrawer 
-                onClose={handleCloseDrawer} 
-                onNavigateDrawer={(k) => {
-                  if (k === 'barracks') setBarracksInitialCat('dungeon');
-                  handleTryOpenDrawer(k);
-                }} 
-                onNavigateBuilding={handleNavigateBuilding}
-              />
-            )}
-            {openDrawer === 'explore'   && (
-              <ExploreDrawer 
-                onClose={handleCloseDrawer} 
-                onNavigateDrawer={(k) => {
-                  if (k === 'barracks') setBarracksInitialCat('dungeon');
-                  handleTryOpenDrawer(k);
-                }} 
-                tutorialStepId={tutorialStepId}
-                onAdvanceTutorial={handleAdvanceTutorial}
-              />
-            )}
-            {openDrawer === 'tavern'    && (
-              <TavernDrawer 
-                onBack={handleCloseDrawer} 
-                onNavigateDrawer={(k) => {
-                  if (k === 'barracks') setBarracksInitialCat('dungeon');
-                  handleTryOpenDrawer(k);
-                }} 
-              />
-            )}
-            {openDrawer === 'forge'     && <ForgeDrawer onBack={handleCloseDrawer} />}
-            {openDrawer === 'storage'   && <StorageDrawer onBack={handleCloseDrawer} />}
-            {openDrawer === 'infirmary' && <InfirmaryDrawer onBack={handleCloseDrawer} />}
-            {openDrawer === 'alchemy'   && <AlchemyDrawer onBack={handleCloseDrawer} />}
-            {openDrawer === 'market'    && <MarketDrawer onBack={handleCloseDrawer} />}
-            {openDrawer === 'cemetery'  && <CemeteryDrawer onBack={handleCloseDrawer} />}
-          </FacilityWorkstationModal>
-        )}
       </div>
 
       {/* ── 3. 앤티크 골드 림 퀵 독 (Quick Facility Dock) ── */}
@@ -15364,6 +15295,75 @@ export const CitadelScreen: React.FC = () => {
         activeKey={openDrawer}
         onSelectFacility={(key) => handleTryOpenDrawer(key)}
       />
+
+      {/* 2. 방주 성채 허브 드로어 (openDrawer === 'citadel') */}
+      {openDrawer === 'citadel' && (
+        <ArkCitadelHubDrawer 
+          onClose={handleCloseDrawer} 
+          onEnterDrawer={handleEnterBuildingFromCitadel}
+          initialView={citadelInitialView}
+          highlightedBuildingId={highlightedBuildingId}
+          onClearHighlight={() => setHighlightedBuildingId(null)}
+        />
+      )}
+
+      {/* 3. 개별 시네마틱 워크스테이션 모달 / 바텀시트 컨테이너 (그 외 시설 진입 시) */}
+      {openDrawer && openDrawer !== 'citadel' && (
+        <FacilityWorkstationModal
+          open={Boolean(openDrawer)}
+          onClose={handleCloseDrawer}
+          title={tr(artInfo.title)}
+          subtitle={tr(artInfo.subtitle)}
+          icon={artInfo.icon}
+          bgImage={artInfo.img}
+        >
+          {openDrawer === 'barracks'  && (
+            <BarracksDrawer 
+              onClose={handleCloseDrawer} 
+              onNavigateDrawer={(k) => handleTryOpenDrawer(k)} 
+              initialCategory={barracksInitialCat} 
+              tutorialStepId={tutorialStepId}
+              onAdvanceTutorial={handleAdvanceTutorial}
+            />
+          )}
+          {openDrawer === 'quests'    && (
+            <QuestsDrawer 
+              onClose={handleCloseDrawer} 
+              onNavigateDrawer={(k) => {
+                if (k === 'barracks') setBarracksInitialCat('dungeon');
+                handleTryOpenDrawer(k);
+              }} 
+              onNavigateBuilding={handleNavigateBuilding}
+            />
+          )}
+          {openDrawer === 'explore'   && (
+            <ExploreDrawer 
+              onClose={handleCloseDrawer} 
+              onNavigateDrawer={(k) => {
+                if (k === 'barracks') setBarracksInitialCat('dungeon');
+                handleTryOpenDrawer(k);
+              }} 
+              tutorialStepId={tutorialStepId}
+              onAdvanceTutorial={handleAdvanceTutorial}
+            />
+          )}
+          {openDrawer === 'tavern'    && (
+            <TavernDrawer 
+              onBack={handleCloseDrawer} 
+              onNavigateDrawer={(k) => {
+                if (k === 'barracks') setBarracksInitialCat('dungeon');
+                handleTryOpenDrawer(k);
+              }} 
+            />
+          )}
+          {openDrawer === 'forge'     && <ForgeDrawer onBack={handleCloseDrawer} />}
+          {openDrawer === 'storage'   && <StorageDrawer onBack={handleCloseDrawer} />}
+          {openDrawer === 'infirmary' && <InfirmaryDrawer onBack={handleCloseDrawer} />}
+          {openDrawer === 'alchemy'   && <AlchemyDrawer onBack={handleCloseDrawer} />}
+          {openDrawer === 'market'    && <MarketDrawer onBack={handleCloseDrawer} />}
+          {openDrawer === 'cemetery'  && <CemeteryDrawer onBack={handleCloseDrawer} />}
+        </FacilityWorkstationModal>
+      )}
 
       {/* ── 🏰 던전 원정 귀환 전리품 정산 보고서 모달 ── */}
       {expeditionReport && (
