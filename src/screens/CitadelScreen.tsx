@@ -12380,7 +12380,7 @@ const QuestsDrawer: React.FC<{
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+    <div className="flex-1 min-h-0 flex flex-col h-full bg-[#08090b] text-[#cfd8e8] overflow-hidden">
       {/* ── 상단 정보 툴바 (중복 헤더 제거 및 다크 고딕 서브바) ── */}
       <div className="flex items-center justify-between px-4 py-2 bg-[#0c0e14] border-b border-[#3d372e]/60 shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
@@ -12458,10 +12458,10 @@ const QuestsDrawer: React.FC<{
       </div>
 
       {/* 퀘스트 목록 */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 gap-3 content-start">
+      <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 flex flex-col gap-3 content-start tg-scrollbar">
         {/* 서브 퀘스트 잠금 안내 */}
         {catTab === 'sub' && !hasTavern && (
-          <div className="p-6 text-center flex flex-col items-center gap-2 bg-[#10131a] border border-[#3d372e] rounded-xl col-span-full shadow-lg">
+          <div className="w-full p-6 text-center flex flex-col items-center gap-2 bg-[#10131a] border border-[#3d372e] rounded-xl shadow-lg">
             <span className="text-4xl p-2.5 rounded-2xl bg-[#1a1510] border border-[#b89758]/40 shadow-inner">🍺🔒</span>
             <span className="font-serif font-bold text-sm text-[#dcc496]">{tr('방랑자의 라운지 (주점) 건설 필요')}</span>
             <span className="text-xs text-[#8a95a5] max-w-[280px] leading-relaxed">
@@ -12482,7 +12482,7 @@ const QuestsDrawer: React.FC<{
 
         {/* 10분 쿨다운 안내 카드 (주점 건설 완료 후 서브 슬롯 비었을 때) */}
         {catTab === 'sub' && hasTavern && subActive.length < 3 && state.subQuestCooldownUntil > 0 && (
-          <div className="p-3 bg-[#10131a] border border-[#b89758]/30 rounded-xl flex items-center justify-between gap-2 col-span-full shadow-sm">
+          <div className="w-full p-3 bg-[#10131a] border border-[#b89758]/30 rounded-xl flex items-center justify-between gap-2 shadow-sm">
             <div className="flex items-center gap-2">
               <span className="text-xl p-1.5 rounded-lg bg-[#1a1710] border border-[#b89758]/40 animate-spin">⏳</span>
               <div>
@@ -12508,7 +12508,7 @@ const QuestsDrawer: React.FC<{
 
         {/* 에픽 퀘스트 잠금 안내 */}
         {catTab === 'epic' && !hasEpicUnlocked && (
-          <div className="p-6 text-center flex flex-col items-center gap-2 bg-[#120f18] border border-[#7a4891]/50 rounded-xl col-span-full shadow-lg">
+          <div className="w-full p-6 text-center flex flex-col items-center gap-2 bg-[#120f18] border border-[#7a4891]/50 rounded-xl shadow-lg">
             <span className="text-4xl p-2.5 rounded-2xl bg-[#1e1329] border border-[#ba68c8]/40 shadow-inner">👑🔒</span>
             <span className="font-serif font-bold text-sm text-[#ba68c8]">{tr('영혼의 제단 건설 필요')}</span>
             <span className="text-xs text-[#cfd8e8] max-w-[280px] leading-relaxed">
@@ -12528,7 +12528,7 @@ const QuestsDrawer: React.FC<{
         )}
 
         {displayedQuests.length === 0 && !(catTab === 'sub' && !hasTavern) && !(catTab === 'epic' && !hasEpicUnlocked) && (
-          <div className="p-8 text-center text-sm text-[#8a95a5] col-span-full bg-[#10131a]/60 border border-[#222733] rounded-xl">
+          <div className="w-full p-8 text-center text-sm text-[#8a95a5] bg-[#10131a]/60 border border-[#222733] rounded-xl">
             {catTab === 'completed'
               ? tr('아직 완료된 퀘스트가 없습니다.') : tr('현재 해당 탭의 진행 가능한 퀘스트가 없습니다.')}<br />
             <span className="text-xs text-[#5a6578] mt-1 block">
@@ -12555,7 +12555,7 @@ const QuestsDrawer: React.FC<{
           return (
             <div
               key={q.id}
-              className={`p-3.5 rounded-xl transition-all flex flex-col gap-2.5 relative overflow-hidden backdrop-blur-sm ${
+              className={`w-full p-3.5 rounded-xl transition-all flex flex-col gap-2.5 relative overflow-hidden backdrop-blur-sm ${
                 isClaimable
                   ? 'border border-[#b89758] bg-gradient-to-br from-[#1c1810] via-[#14120d] to-[#0c0e14] shadow-[0_0_15px_rgba(184,151,88,0.25)] ring-1 ring-[#dcc496]/40'
                   : isCompleted

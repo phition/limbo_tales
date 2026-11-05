@@ -95,15 +95,23 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
     return count;
   }, [state.buildings, state.resources, gm, buildingsList]);
 
-  // 성채 활동 시설 8종
+  // 완료되어 보상 수령 가능한 퀘스트 건수 집계
+  const claimableQuestCount = useMemo(() => {
+    return (state.quests || []).filter(
+      q => q.status === 'active' && q.objectives.length > 0 && q.objectives.every(o => o.isCompleted)
+    ).length;
+  }, [state.quests]);
+
+  // 성채 활동 시설 9종
   const WORKSTATION_ITEMS = [
+    { key: 'quests',    name: tr('지휘관 집무실 & 의뢰소'), sub: tr('방주 재건 현상금 의뢰 및 대서사 에픽 퀘스트 수락'), icon: '📜', isBuilt: true, badge: claimableQuestCount > 0 ? `${claimableQuestCount}건 완료` : null },
+    { key: 'barracks',  name: tr('원정단 병영 & 작전실'), sub: tr('4인 파티 편성, 진형 배치, 전직 관리'), icon: '⚔️', isBuilt: true },
     { key: 'forge',     name: tr('심연의 병기창'), sub: tr('무기·방어구 단조, 장비 강화, 침식 정화'), icon: '⚒️', isBuilt: (state.buildings['blacksmith']?.level || 0) >= 1 },
     { key: 'tavern',    name: tr('방랑자의 라운지'), sub: tr('방랑 용병 모집 계약 및 고용 풀 갱신'), icon: '🍺', isBuilt: (state.buildings['tavern']?.level || 0) >= 1, badge: (state.tavernCandidates || []).length > 0 ? 'NEW' : null },
     { key: 'infirmary', name: tr('생체 복원 병동'), sub: tr('전투 부상 대원 입원 치료 및 완치'), icon: '🏥', isBuilt: (state.buildings['infirmary']?.level || 0) >= 1, badge: (state.infirmaryPatients || []).length > 0 ? `${state.infirmaryPatients.length}인` : null },
     { key: 'storage',   name: tr('방주 중앙 병참고'), sub: tr('전 군수 물자 및 장비·보급품 보관함'), icon: '🏛️', isBuilt: true },
     { key: 'alchemy',   name: tr('에테르 연금 공방'), sub: tr('마도 스킬 비전서 강화 및 장비 룬 인챈트'), icon: '🧪', isBuilt: (state.buildings['alchemy']?.level || 0) >= 1 },
     { key: 'market',    name: tr('황혼의 블랙 마켓'), sub: tr('17종 군수물자 거래 및 유지비 주기 연장'), icon: '⚖️', isBuilt: (state.buildings['market']?.level || 0) >= 1 },
-    { key: 'barracks',  name: tr('원정단 병영 & 작전실'), sub: tr('4인 파티 편성, 진형 배치, 전직 관리'), icon: '⚔️', isBuilt: true },
     { key: 'cemetery',  name: tr('성채 묘지'), sub: tr('전사한 영령 안치, 추모 EXP 버프 및 가호'), icon: '🪦', isBuilt: true, badge: (state.cemetery || []).length > 0 ? `${state.cemetery.length}위` : null },
   ];
 
@@ -195,7 +203,8 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             handlePlayClick();
             onClose();
           }}
-          className="w-8 h-8 flex items-center justify-center rounded-md bg-[#1a1c22] border border-[#2c303b] text-[#9da3af] hover:text-[#dcc496] hover:border-[#b89758] transition-colors cursor-pointer"
+          className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-xs active:scale-95"
+          title={tr('닫기 (Esc)')}
         >
           ✕
         </button>
@@ -299,14 +308,14 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   </h3>
                 </div>
                 <span className="px-2 py-0.5 rounded bg-[#2a1e35] text-[#ce93d8] font-bold text-[11px] border border-[#5c377d]">
-                  {tr('활동 거점 8종')}
+                  {tr('활동 거점 9종')}
                 </span>
               </div>
               <p className="text-[11px] text-[#9da3af] leading-relaxed">
-                {tr('대장간, 주점, 병동, 연금공방 등 실제 내부 패널 진입이 가능한 시설로 즉시 입장합니다.')}
+                {tr('의뢰소, 병영, 대장간, 주점, 병동 등 실제 내부 패널 진입이 가능한 시설로 즉시 입장합니다.')}
               </p>
               <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#292233] text-[11px] text-[#ce93d8] font-bold">
-                <span>{tr('병기창·주점·병동·연금·마켓')}</span>
+                <span>{tr('의뢰소·병영·병기창·주점·병동')}</span>
                 <span>거점 입장 ▶</span>
               </div>
             </div>
@@ -586,7 +595,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         )}
 
         {/* ═════════════════════════════════════════════════════════════
-            VIEW 4: 성채 활동 시설 8종 목록 (Step 3-C)
+            VIEW 4: 성채 활동 시설 9종 목록 (Step 3-C)
             ═════════════════════════════════════════════════════════════ */}
         {activeView === 'workstations' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto w-full">
@@ -671,7 +680,8 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   setSelectedBuildingId(null);
                   onClearHighlight?.();
                 }}
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#1a1c24] border border-[#3d4252] text-[#9da3af] hover:text-[#dcc496] hover:border-[#b89758] transition-colors cursor-pointer text-sm"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-xs active:scale-95 text-sm"
+                title={tr('닫기 (Esc)')}
               >
                 ✕
               </button>

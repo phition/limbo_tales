@@ -58,7 +58,8 @@ export const OfflineSettlementModal: React.FC<OfflineSettlementModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="text-[#9da3af] hover:text-white text-base"
+            className="w-7 h-7 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-xs active:scale-95 text-xs"
+            title={tr('닫기')}
           >
             ✕
           </button>

@@ -104,7 +104,7 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
             <button
               type="button"
               onClick={handleClose}
-              className="w-8 h-8 flex items-center justify-center rounded-md bg-[#1a1c22] border border-[#2c303b] text-[#9da3af] hover:text-[#dcc496] hover:border-[#b89758] transition-colors cursor-pointer"
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-xs active:scale-95"
               title={tr('닫기 (Esc)')}
             >
               ✕
@@ -156,8 +156,8 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
           )}
         </div>
 
-        {/* ── 3. 하단 상세 워크벤치 & 액션 덱 영역 (스크롤 지원) ── */}
-        <div className="flex-1 overflow-y-auto tg-scrollbar p-3 md:p-4 bg-[#121418]">
+        {/* ── 3. 하단 상세 워크벤치 & 액션 덱 영역 (내부 드로어가 온전히 스크롤 및 탭을 관리하도록 flex 컨테이너 제공) ── */}
+        <div className="flex-1 min-h-0 flex flex-col overflow-hidden bg-[#08090b]">
           {children}
         </div>
       </div>
