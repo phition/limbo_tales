@@ -232,8 +232,12 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
     }
 
     // 🔨 건설 단계인 경우 즉시 넘기지 않고, 완공될 때까지 대기 상태로 전이
+    // (모달 내부의 '건설 시작' 확인 버튼을 눌렀을 때만 대기 상태로 전이, 시설 목록 row 클릭 시에는 모달을 열고 타깃을 확인 버튼으로 유지)
     if (currentStep.id === 'TUTORIAL_BUILD_REFINERY' || currentStep.id === 'TUTORIAL_BUILD_TAVERN') {
-      onAdvanceStep('WAITING_CONSTRUCTION_' + currentStep.id);
+      const isConfirmBtn = clickable.getAttribute('data-tutorial-confirm-build') === 'true' || clickable.tagName === 'BUTTON';
+      if (isConfirmBtn) {
+        onAdvanceStep('WAITING_CONSTRUCTION_' + currentStep.id);
+      }
       return;
     }
 

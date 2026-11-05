@@ -16,6 +16,7 @@ interface ArkCitadelHubDrawerProps {
   initialView?: 'banners' | 'bonfire' | 'facilities' | 'workstations';
   highlightedBuildingId?: string | null;
   onClearHighlight?: () => void;
+  tutorialStepId?: string;
 }
 
 export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
@@ -25,6 +26,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   initialView = 'banners',
   highlightedBuildingId,
   onClearHighlight,
+  tutorialStepId,
 }) => {
   const { state, gm, navigateTo } = useGameManager();
   const { tr, lang } = useI18n();
@@ -41,6 +43,15 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
       setActiveView(initialView);
     }
   }, [initialView]);
+
+  // 튜토리얼 스텝 전환 시 해당 전용 뷰 자동 동기화
+  useEffect(() => {
+    if (tutorialStepId === 'TUTORIAL_BUILD_REFINERY' || tutorialStepId === 'TUTORIAL_BUILD_TAVERN') {
+      setActiveView('facilities');
+    } else if (tutorialStepId === 'TUTORIAL_ENTER_TAVERN') {
+      setActiveView('workstations');
+    }
+  }, [tutorialStepId]);
 
   // 외부 강조 건물 지정 시 시설 목록으로 전환 후 해당 건물 모달 즉시 노출
   useEffect(() => {
@@ -286,6 +297,11 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 handlePlayClick();
                 setActiveView('facilities');
               }}
+              data-tutorial-target={
+                activeView === 'banners' && (tutorialStepId === 'TUTORIAL_BUILD_REFINERY' || tutorialStepId === 'TUTORIAL_BUILD_TAVERN')
+                  ? (tutorialStepId === 'TUTORIAL_BUILD_REFINERY' ? 'build-refinery' : 'build-tavern')
+                  : undefined
+              }
               className="p-3.5 rounded-xl bg-gradient-to-r from-[#171a22] via-[#14161d] to-[#121418] border border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1e28] cursor-pointer transition-all shadow-md group"
             >
               <div className="flex items-center justify-between mb-1.5">
@@ -321,6 +337,11 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 handlePlayClick();
                 setActiveView('workstations');
               }}
+              data-tutorial-target={
+                activeView === 'banners' && tutorialStepId === 'TUTORIAL_ENTER_TAVERN'
+                  ? 'enter-tavern'
+                  : undefined
+              }
               className="p-3.5 rounded-xl bg-gradient-to-r from-[#1a1622] via-[#15131b] to-[#121418] border border-[#3d372e] hover:border-[#a875d4] hover:bg-[#1c1626] cursor-pointer transition-all shadow-md group"
             >
               <div className="flex items-center justify-between mb-1.5">
@@ -517,6 +538,11 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 <div
                   key={item.id}
                   id={`citadel-building-row-${item.id}`}
+                  data-tutorial-target={
+                    selectedBuildingId !== item.id
+                      ? (item.id === 'butchery' && !isBuilt ? 'build-refinery' : item.id === 'tavern' && !isBuilt ? 'build-tavern' : undefined)
+                      : undefined
+                  }
                   onClick={() => {
                     handlePlayClick();
                     setSelectedBuildingId(item.id);
@@ -625,6 +651,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             {WORKSTATION_ITEMS.map(item => (
               <div
                 key={item.key}
+                data-tutorial-target={item.key === 'tavern' ? 'enter-tavern' : undefined}
                 onClick={() => {
                   handlePlayClick();
                   if (item.key === 'arena') navigateTo('arena');
@@ -898,6 +925,14 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 ) : (
                   <button
                     type="button"
+                    data-tutorial-target={
+                      selectedBuildingId === 'butchery' && selectedBuildingData.level === 0
+                        ? 'build-refinery'
+                        : selectedBuildingId === 'tavern' && selectedBuildingData.level === 0
+                        ? 'build-tavern'
+                        : undefined
+                    }
+                    data-tutorial-confirm-build="true"
                     disabled={selectedIsMax || !selectedPrereq.allowed || !selectedCanAfford}
                     onClick={() => {
                       handlePlayClick();

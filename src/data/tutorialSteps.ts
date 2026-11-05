@@ -40,8 +40,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     title: '자원 생산 기지 복원',
     speaker: '수석 오퍼레이터 일레인',
     message: [
-      '화면 좌측의 퀘스트를 확인해 주십시오. 첫 번째 과업은 마물의 잔해를 자원으로 환원할 [심연 생체 정제소]의 복원입니다.',
-      '지정된 건설 구역을 선택하여 정제소를 완공하십시오.'
+      '첫 번째 과업은 마물의 잔해를 생체 자원으로 환원할 [심연 생체 정제소]의 복원입니다.',
+      '영지 시설 관리 목록에서 [심연 생체 정제소]를 선택하고 [건설 시작]을 눌러 시설을 복원하십시오.'
     ],
     targetSelector: '[data-tutorial-target="build-refinery"]',
     pointerPosition: 'bottom',
@@ -73,7 +73,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     speaker: '수석 오퍼레이터 일레인',
     message: [
       '사령관님, 방주의 기초 인프라가 훌륭하게 복원되었습니다! 이제 마물을 조사하고 심연을 정찰할 탐사대를 모집할 때입니다.',
-      '외곽의 유능한 방랑자들을 영입할 수 있도록 성채 영지에 [방랑자의 라운지]를 건설해 주십시오.'
+      '영지 시설 목록에서 [방랑자의 라운지]를 선택하고 건설하여 외곽의 유능한 방랑자들을 영입할 거점을 마련해 주십시오.'
     ],
     targetSelector: '[data-tutorial-target="build-tavern"]',
     pointerPosition: 'bottom',
@@ -88,7 +88,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     title: '방랑자의 라운지 방문',
     speaker: '수석 오퍼레이터 일레인',
     message: [
-      '라운지가 완공되었습니다! 안으로 들어가 대기 중인 용병들을 살펴보겠습니다.'
+      '라운지가 완공되었습니다! 성채 활동 시설 목록에서 [방랑자의 라운지]로 입장하여 대기 중인 용병들을 살펴보겠습니다.'
     ],
     targetSelector: '[data-tutorial-target="enter-tavern"]',
     pointerPosition: 'bottom',
@@ -272,7 +272,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     speaker: '수석 오퍼레이터 일레인',
     message: [
       '전방에 마물 무리가 나타났습니다! 전열의 [부패 슬라임] 뒤에 숨어있는 후열의 [그림자 임프]를 주목하십시오.',
-      '후열의 적은 강력한 기습과 광역 공격을 가해오므로 최우선으로 제압해야 합니다. 상단의 [그림자 임프] 카드를 탭하여 [타깃]을 지정하십시오!'
+      '마물 카드를 탭하여 [타깃]을 지정할 수 있으며, 카드를 길게 누르면(홀드) 상세 스탯과 스킬, 약점을 분석할 수 있습니다.',
+      '후열의 적은 강력한 기습과 마법을 구사하므로 최우선 제압 대상입니다. [그림자 임프] 카드를 탭하여 아군의 공격을 집중시키십시오!'
     ],
     targetSelector: '[data-tutorial-target="monster-card-1"]',
     pointerPosition: 'bottom',

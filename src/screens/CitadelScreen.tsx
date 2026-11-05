@@ -14441,10 +14441,12 @@ export const CitadelScreen: React.FC = () => {
     // 스텝 전환에 따른 자동 드로어 오픈 연계
     setReturnToCitadelOnClose(false);
     if (nextId === 'TUTORIAL_BUILD_REFINERY' || nextId === 'TUTORIAL_BUILD_TAVERN') {
+      setCitadelInitialView('facilities');
       setOpenDrawer('citadel');
     } else if (nextId === 'TUTORIAL_CLAIM_REWARD') {
       setOpenDrawer('quests');
     } else if (nextId === 'TUTORIAL_ENTER_TAVERN') {
+      setCitadelInitialView('workstations');
       setOpenDrawer('citadel');
     } else if (nextId === 'TUTORIAL_DEPLOY_HERO') {
       setOpenDrawer('barracks');
@@ -14484,41 +14486,68 @@ export const CitadelScreen: React.FC = () => {
     };
   }, [gm]);
 
-  // 🔨 건설 완료 후 일레인 재등장 감시 (실제 완공 시점까지 대기 후 일레인 복귀)
+  // 🔨 건설 시작 및 완료 후 일레인 재등장 감시 (실제 완공 시점까지 대기 후 일레인 복귀)
   useEffect(() => {
-    if (tutorialStepId === 'WAITING_CONSTRUCTION_TUTORIAL_BUILD_REFINERY') {
+    if (tutorialStepId === 'TUTORIAL_BUILD_REFINERY') {
+      const butchery = state.buildings['butchery'];
+      if (butchery?.construction || (butchery?.level || 0) >= 1) {
+        setTutorialStepId('WAITING_CONSTRUCTION_TUTORIAL_BUILD_REFINERY');
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'WAITING_CONSTRUCTION_TUTORIAL_BUILD_REFINERY', isCompleted: false, isSkipped: false, hasStarted: true }));
+        } catch {}
+      }
+    } else if (tutorialStepId === 'WAITING_CONSTRUCTION_TUTORIAL_BUILD_REFINERY') {
       const butchery = state.buildings['butchery'];
       if (butchery && butchery.level >= 1 && !butchery.construction) {
         setTutorialStepId('TUTORIAL_CLAIM_REWARD');
         setOpenDrawer('quests');
         try {
-          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_CLAIM_REWARD', isCompleted: false, isSkipped: false }));
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_CLAIM_REWARD', isCompleted: false, isSkipped: false, hasStarted: true }));
+        } catch {}
+      }
+    } else if (tutorialStepId === 'TUTORIAL_CLAIM_REWARD') {
+      const isRefineryQuestClaimed = state.quests?.find(q => q.id === 'Q_MAIN_01')?.status === 'completed';
+      if (isRefineryQuestClaimed) {
+        setTutorialStepId('WAITING_TAVERN_UNLOCK');
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'WAITING_TAVERN_UNLOCK', isCompleted: false, isSkipped: false, hasStarted: true }));
+        } catch {}
+      }
+    } else if (tutorialStepId === 'TUTORIAL_BUILD_TAVERN') {
+      const tavern = state.buildings['tavern'];
+      if (tavern?.construction || (tavern?.level || 0) >= 1) {
+        setTutorialStepId('WAITING_CONSTRUCTION_TUTORIAL_BUILD_TAVERN');
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'WAITING_CONSTRUCTION_TUTORIAL_BUILD_TAVERN', isCompleted: false, isSkipped: false, hasStarted: true }));
         } catch {}
       }
     } else if (tutorialStepId === 'WAITING_CONSTRUCTION_TUTORIAL_BUILD_TAVERN') {
       const tavern = state.buildings['tavern'];
       if (tavern && tavern.level >= 1 && !tavern.construction) {
+        setCitadelInitialView('workstations');
         setTutorialStepId('TUTORIAL_ENTER_TAVERN');
         setOpenDrawer('citadel');
         try {
-          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_ENTER_TAVERN', isCompleted: false, isSkipped: false }));
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_ENTER_TAVERN', isCompleted: false, isSkipped: false, hasStarted: true }));
         } catch {}
       }
     } else if (tutorialStepId === 'WAITING_TAVERN_UNLOCK') {
       // 퀘스트 라인을 따라 영지 시설을 건설하여 광맥 시추소 보상까지 수령 완료하고,
       // '방랑자의 라운지 건설하러 가기' 등을 눌러 영지 시설(citadel)로 진입했을 때 일레인 재등장!
-      const isQuarryRewardClaimed = state.quests.find(q => q.id === 'Q_BUILD_QUARRY')?.status === 'completed';
+      const isQuarryRewardClaimed = state.quests?.find(q => q.id === 'Q_BUILD_QUARRY')?.status === 'completed';
       const isTavernUnlocked = Boolean(state.buildings['tavern']?.unlocked);
       const isTavernNotBuilt = (state.buildings['tavern']?.level || 0) === 0;
       if (isQuarryRewardClaimed && openDrawer === 'citadel' && isTavernUnlocked && isTavernNotBuilt) {
+        setCitadelInitialView('facilities');
         setTutorialStepId('TUTORIAL_BUILD_TAVERN');
         try {
-          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_BUILD_TAVERN', isCompleted: false, isSkipped: false }));
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_BUILD_TAVERN', isCompleted: false, isSkipped: false, hasStarted: true }));
         } catch {}
       } else if (isQuarryRewardClaimed && openDrawer === 'citadel' && (state.buildings['tavern']?.level || 0) >= 1) {
+        setCitadelInitialView('workstations');
         setTutorialStepId('TUTORIAL_ENTER_TAVERN');
         try {
-          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_ENTER_TAVERN', isCompleted: false, isSkipped: false }));
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_ENTER_TAVERN', isCompleted: false, isSkipped: false, hasStarted: true }));
         } catch {}
       }
     } else if (tutorialStepId === 'TUTORIAL_RECRUIT_MERCENARY') {
@@ -14526,7 +14555,7 @@ export const CitadelScreen: React.FC = () => {
       if (state.barracks.length >= 3) {
         setTutorialStepId('TUTORIAL_NAVIGATE_BARRACKS');
         try {
-          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_NAVIGATE_BARRACKS', isCompleted: false, isSkipped: false }));
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_NAVIGATE_BARRACKS', isCompleted: false, isSkipped: false, hasStarted: true }));
         } catch {}
       }
     }
@@ -15467,6 +15496,7 @@ export const CitadelScreen: React.FC = () => {
           initialView={citadelInitialView}
           highlightedBuildingId={highlightedBuildingId}
           onClearHighlight={() => setHighlightedBuildingId(null)}
+          tutorialStepId={tutorialStepId}
         />
       )}
 
