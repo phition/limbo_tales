@@ -121,25 +121,25 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
       }
     >
       <div className="flex flex-col gap-3 py-1">
-        {/* 상단 일러스트 배너 */}
-        <div className="relative w-full h-24 sm:h-32 rounded-xl overflow-hidden border border-[#233550] shadow-md shrink-0">
+        {/* 상단 일러스트 배너 (높이 상향 및 선명하고 쨍한 색감) */}
+        <div className="relative w-full h-28 sm:h-36 rounded-xl overflow-hidden border border-[#233550] shadow-md shrink-0">
           <img
             src="assets/menu_codex.jpg"
             alt="Abyssal Codex"
             className="w-full h-full object-cover"
-            style={{ filter: 'brightness(0.92) contrast(1.05)' }}
+            style={{ filter: 'brightness(1.02) contrast(1.05) saturate(1.08)' }}
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.display = 'none';
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0c101c] via-[#0c101c]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0c101c] via-[#0c101c]/30 to-transparent" />
           <div className="absolute bottom-2 left-3 right-3 flex items-end justify-between">
             <div>
               <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-[#c8aa6e33] text-[#f5d491] border border-[#c8aa6e55] font-bold">
                 {tr('ABYSSAL ARCHIVES')}
               </span>
               <h3 className="text-xs sm:text-sm font-extrabold text-white mt-0.5 drop-shadow-md">
-                {tr('심연의 서고 & 고대 비전 컬렉션')}
+                {tr('심연의 백과 & 회고록')}
               </h3>
             </div>
             <span className="text-xs font-mono font-extrabold text-[#ffd54f] bg-[#ffd54f22] px-2 py-0.5 rounded-lg border border-[#ffd54f44] backdrop-blur-sm">

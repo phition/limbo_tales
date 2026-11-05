@@ -112,14 +112,14 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
           </div>
         </div>
 
-        {/* ── 2. 시네마틱 무대 프레임 (Cinematic Stage, 상단 35%) ── */}
-        <div className="relative w-full h-44 md:h-48 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden">
-          {/* 배경 이미지 */}
+        {/* ── 2. 시네마틱 무대 프레임 (Cinematic Stage, 상단 뷰포트 높이 상향 및 선명하고 쨍한 색감) ── */}
+        <div className="relative w-full h-52 sm:h-60 md:h-64 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden">
+          {/* 배경 이미지 (탁한 딤 제거 및 쨍하고 밝은 색감 복원) */}
           {bgImage ? (
             <img
               src={bgImage}
               alt={title}
-              className="absolute inset-0 w-full h-full object-cover filter brightness-75 contrast-110"
+              className="absolute inset-0 w-full h-full object-cover filter brightness-100 contrast-105 saturate-110"
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-b from-[#161820] to-[#0a0b0e] flex items-center justify-center opacity-60">
@@ -127,12 +127,12 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
             </div>
           )}
 
-          {/* 스모키 비네팅 & 하단 그라데이션 */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#121418] via-transparent to-black/40 pointer-events-none" />
+          {/* 하단 연결 은은한 그라데이션 (상단 틴트 제거로 쨍한 선명도 확보) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#121418] via-transparent to-transparent pointer-events-none" />
 
           {/* NPC 스탠딩 (우측) */}
           {npcImage && (
-            <div className="absolute bottom-0 right-4 h-40 md:h-44 pointer-events-none">
+            <div className="absolute bottom-0 right-4 h-48 sm:h-56 md:h-60 pointer-events-none">
               <img
                 src={npcImage}
                 alt={npcName || 'NPC'}

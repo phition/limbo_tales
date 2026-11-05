@@ -104,7 +104,7 @@ const DRAWER_ART_META: Record<string, { img: string; title: string; subtitle: st
   explore:   { img: 'assets/menu_explore.jpg',     title: '심연 강하 차원 관문', subtitle: '침묵의 회랑 5층 탐험 채비 및 전술 보급품 편성', icon: '🌌' },
   arena:     { img: 'assets/menu_arena.jpg',       title: '차원 게이트 (Dimensional Gate)', subtitle: '차원 아레나 & 네메시스 침공의 문', icon: '🏆' },
   cemetery:  { img: 'assets/menu_cemetery.jpg',    title: '성채 묘지 (Citadel Cemetery)', subtitle: '전사한 영령들의 안식처 & 조상의 가호 결속', icon: '🪦' },
-  codex:     { img: 'assets/menu_codex.jpg',       title: '심연의 백과 & 서고 (Abyssal Codex)', subtitle: '고대 컬렉션 수집 및 영구적 패시브 연구', icon: '📜' },
+  codex:     { img: 'assets/menu_codex.jpg',       title: '심연의 백과 & 회고록 (Abyssal Codex)', subtitle: '고대 컬렉션 수집 및 영구적 패시브 연구', icon: '📜' },
   tavern:    { img: 'assets/menu_tavern.jpg',      title: '방랑자의 라운지 (Wanderer\'s Lounge)', subtitle: '실력파 용병 모집 및 방랑 모험가 계약 영입', icon: '🍸' },
   forge:     { img: 'assets/menu_forge.jpg',       title: '심연의 병기창 (Abyssal Armory)', subtitle: '에테르 룬 장비 단조, 강화 및 침식 장비 정화', icon: '⚒️' },
   alchemy:   { img: 'assets/menu_alchemy.jpg',     title: '에테르 연금 공방 (Aether Alchemy Workshop)', subtitle: '스킬 비전 강화 및 장비 마도 인챈트', icon: '🧪' },
@@ -12385,7 +12385,7 @@ const QuestsDrawer: React.FC<{
       <div className="flex items-center justify-between px-4 py-2 bg-[#0c0e14] border-b border-[#3d372e]/60 shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs font-bold text-[#dcc496]">{tr('현상금 및 서사 의뢰소')}</span>
+            <span className="text-xs font-bold text-[#dcc496]">{tr('지휘관 퀘스트 & 작전 현황')}</span>
             {totalClaimable > 0 && (
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#b89758]/20 text-[#dcc496] font-bold border border-[#b89758]/50 shadow-[0_0_10px_rgba(184,151,88,0.25)] animate-pulse">
                 🎁 {`${totalClaimable}개 수령 가능`}

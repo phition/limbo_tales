@@ -121,8 +121,8 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
 
   // 성채 활동 시설 10종
   const WORKSTATION_ITEMS = [
-    { key: 'quests',    name: tr('지휘관 집무실 & 의뢰소'), sub: tr('방주 재건 현상금 의뢰 및 대서사 에픽 퀘스트 수락'), icon: '📜', isBuilt: true, badge: claimableQuestCount > 0 ? `${claimableQuestCount}건 완료` : null },
-    { key: 'codex',     name: tr('심연의 도감 & 고대 서고'), sub: tr('오파츠·서사 회고록·신화 유물 컬렉션 및 영구 패시브 연구'), icon: '📖', isBuilt: true, badge: codexBadge },
+    { key: 'quests',    name: tr('지휘관 퀘스트 & 작전 지도'), sub: tr('메인 스토리 임무 완수 및 단계별 시설 연계'), icon: '📜', isBuilt: true, badge: claimableQuestCount > 0 ? `${claimableQuestCount}건 완료` : null },
+    { key: 'codex',     name: tr('심연의 백과 & 회고록'), sub: tr('오파츠·서사 일지·신화 유물 컬렉션 및 영구 패시브 연구'), icon: '📜', isBuilt: true, badge: codexBadge },
     { key: 'barracks',  name: tr('원정단 병영 & 작전실'), sub: tr('4인 파티 편성, 진형 배치, 전직 관리'), icon: '⚔️', isBuilt: true },
     { key: 'forge',     name: tr('심연의 병기창'), sub: tr('무기·방어구 단조, 장비 강화, 침식 정화'), icon: '⚒️', isBuilt: (state.buildings['blacksmith']?.level || 0) >= 1 },
     { key: 'tavern',    name: tr('방랑자의 라운지'), sub: tr('방랑 용병 모집 계약 및 고용 풀 갱신'), icon: '🍺', isBuilt: (state.buildings['tavern']?.level || 0) >= 1, badge: (state.tavernCandidates || []).length > 0 ? 'NEW' : null },
@@ -335,10 +335,10 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 </span>
               </div>
               <p className="text-[11px] text-[#9da3af] leading-relaxed">
-                {tr('의뢰소, 도감, 병영, 대장간, 주점 등 실제 내부 패널 진입이 가능한 시설로 즉시 입장합니다.')}
+                {tr('퀘스트, 백과, 병영, 대장간, 주점 등 실제 내부 패널 진입이 가능한 시설로 즉시 입장합니다.')}
               </p>
               <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#292233] text-[11px] text-[#ce93d8] font-bold">
-                <span>{tr('의뢰소·도감·병영·병기창·주점')}</span>
+                <span>{tr('퀘스트·백과·병영·병기창·주점')}</span>
                 <span>거점 입장 ▶</span>
               </div>
             </div>
