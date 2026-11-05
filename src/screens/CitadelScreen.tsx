@@ -7948,6 +7948,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const [selectedCraftRecipe, setSelectedCraftRecipe] = useState<EquipmentRecipe | null>(null);
   const [cleanseOutcome, setCleanseOutcome] = useState<{ type: 'success' | 'fail'; message: string; item?: EquipmentItem } | null>(null);
   const [selectedEnhanceItemId, setSelectedEnhanceItemId] = useState<string | null>(null);
+  const [inspectItem, setInspectItem] = useState<{ item: EquipmentItem; isPurified?: boolean } | null>(null);
 
   // ✨ 침식 장비 신성 정화 연출 모달 상태
   const [isPurifying, setIsPurifying] = useState(false);
@@ -8717,91 +8718,74 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   </div>
                   <div className="text-xs text-white leading-relaxed">{cleanseOutcome.message}</div>
                   {cleanseOutcome.item && (
-                    <div className="p-2.5 rounded-lg bg-black/50 border border-[#38ef7d44] flex flex-col gap-1.5 mt-1">
-                      <div className="flex items-center gap-2">
-                        <GameIcon name={cleanseOutcome.item.templateId || getEquipmentTemplateId(cleanseOutcome.item) || cleanseOutcome.item.id} icon={cleanseOutcome.item.icon} size={24} />
-                        <span className="font-bold text-white text-xs">{cleanseOutcome.item.name}</span>
-                        <span className="text-[10px] px-1.5 py-0.2 rounded font-bold" style={{ color: getRarityColor(cleanseOutcome.item.rarity), backgroundColor: `${getRarityColor(cleanseOutcome.item.rarity)}22` }}>
-                          [{getRarityLabel(cleanseOutcome.item.rarity)}]
+                    <div
+                      className="p-2.5 rounded-lg bg-black/50 border border-[#38ef7d44] hover:border-[#38ef7d88] hover:bg-black/70 flex items-center justify-between gap-2 mt-1 cursor-pointer transition-all group"
+                      onClick={() => setInspectItem({ item: cleanseOutcome.item!, isPurified: true })}
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="p-1 rounded-md bg-[#12241b] border border-[#38ef7d44] shrink-0 group-hover:scale-105 transition-transform">
+                          <GameIcon name={cleanseOutcome.item.templateId || getEquipmentTemplateId(cleanseOutcome.item) || cleanseOutcome.item.id} icon={cleanseOutcome.item.icon} size={24} />
                         </span>
-                      </div>
-                      <div className="flex flex-wrap gap-1 font-mono text-[11px]">
-                        {Object.entries(cleanseOutcome.item.stats).map(([k, v]) => {
-                          const baseV = (cleanseOutcome.item?.baseStats as Record<string, number>)?.[k] || 0;
-                          const diff = baseV > 0 ? (v as number) - baseV : 0;
-                          const diffPct = baseV > 0 ? Math.round((diff / baseV) * 100) : 0;
-                          const sign = diff >= 0 ? `+${diff}` : `${diff}`;
-                          const pctSign = diffPct >= 0 ? `+${diffPct}` : `${diffPct}`;
-                          return (
-                            <span key={k} className="px-1.5 py-0.5 bg-white/10 rounded font-bold text-[#ffd54f]">
-                              {k.toUpperCase()} {v} ({sign} / {pctSign}%)
+                        <div className="min-w-0">
+                          <div className="font-bold text-white text-xs flex items-center gap-1.5 flex-wrap">
+                            <span className="truncate">{cleanseOutcome.item.name}</span>
+                            <span className="text-[10px] px-1.5 py-0.2 rounded font-bold shrink-0" style={{ color: getRarityColor(cleanseOutcome.item.rarity), backgroundColor: `${getRarityColor(cleanseOutcome.item.rarity)}22` }}>
+                              [{getRarityLabel(cleanseOutcome.item.rarity)}]
                             </span>
-                          );
-                        })}
+                          </div>
+                          <div className="text-[10px] text-[#81c784]">{cleanseOutcome.item.slot === 'weapon' ? '무기' : cleanseOutcome.item.slot === 'armor' ? '방어구' : '장신구'}</div>
+                        </div>
                       </div>
+                      <span className="text-[10px] text-[#38ef7d] px-2 py-1 rounded bg-[#38ef7d15] border border-[#38ef7d33] font-bold shrink-0 flex items-center gap-1 group-hover:bg-[#38ef7d33] transition-colors">
+                        <span>🔍</span>
+                        <span>{tr('상세 보기')}</span>
+                      </span>
                     </div>
                   )}
                 </div>
               )}
 
-              {/* ✨ 5분간 유지되는 최근 정화 완료 장비 목록 */}
+              {/* ✨ 최근 정화 완료 장비 목록 (내부적으로 5분 후 만료) */}
               {purifiedHistory.length > 0 && (
                 <div className="p-3 rounded-xl bg-[#0e1f18] border border-[#10b98166] flex flex-col gap-2.5 animate-fade-in">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-[#38ef7d] flex items-center gap-1.5">
                       <span>✨</span>
-                      <span>최근 정화 완료 장비 ({purifiedHistory.length}개)</span>
+                      <span>{tr('최근 정화 완료 장비')} ({purifiedHistory.length}개)</span>
                     </span>
-                    <span className="text-[10px] text-[#a7f3d0] bg-[#10b98122] px-2 py-0.5 rounded border border-[#10b98144] font-mono">
-                      정화 후 5분간 유지
+                    <span className="text-[10px] text-[#6ee7b7] flex items-center gap-0.5 font-medium">
+                      🔍 {tr('클릭하여 복원 스탯 확인')}
                     </span>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    {purifiedHistory.map(({ item, remainingSec }) => {
-                      const m = Math.floor(remainingSec / 60);
-                      const s = remainingSec % 60;
-                      const timeStr = `${m}:${s < 10 ? '0' : ''}${s}`;
+                  <div className="flex flex-col gap-1.5">
+                    {purifiedHistory.map(({ item }) => {
                       const rarityColor = getRarityColor(item.rarity);
                       const isUnique = item.rarity === 'unique' || item.id.startsWith('boss_') || item.id.includes('unique');
 
                       return (
-                        <div key={item.id} className="p-2.5 rounded-lg bg-[#08140f] border border-[#10b98133] flex flex-col gap-1.5">
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <span className="p-1 rounded-md bg-[#12241b] border border-[#10b98144] shrink-0">
-                                <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={22} />
-                              </span>
-                              <div>
-                                <div className="font-bold text-xs text-white flex items-center gap-1.5 flex-wrap">
-                                  <span>{item.name}</span>
-                                  <span className="text-[9px] px-1.5 py-0.2 rounded font-bold" style={{ color: isUnique ? '#ffb74d' : rarityColor, backgroundColor: `${isUnique ? '#ff9800' : rarityColor}22` }}>
-                                    [{getRarityLabel(item.rarity)}]
-                                  </span>
-                                </div>
-                                <div className="text-[10px] text-[#6ee7b7]">{item.slot === 'weapon' ? '무기' : item.slot === 'armor' ? '방어구' : '장신구'}</div>
-                              </div>
-                            </div>
-                            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#10b98125] text-[#34d399] border border-[#10b98144] shrink-0 flex items-center gap-1">
-                              <span>⏱️</span>
-                              <span>{timeStr} 남음</span>
+                        <div
+                          key={item.id}
+                          className="p-2.5 rounded-lg bg-[#08140f] border border-[#10b98133] hover:border-[#10b98188] hover:bg-[#0c1f17] flex items-center justify-between gap-2 cursor-pointer transition-all group"
+                          onClick={() => setInspectItem({ item, isPurified: true })}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="p-1 rounded-md bg-[#12241b] border border-[#10b98144] shrink-0 group-hover:scale-105 transition-transform">
+                              <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={24} />
                             </span>
-                          </div>
-
-                          {/* 정화 복원 스탯 배너 */}
-                          <div className="flex flex-wrap gap-1 font-mono text-[10px]">
-                            {Object.entries(item.stats || {}).map(([k, v]) => {
-                              const baseV = (item.baseStats as Record<string, number>)?.[k] || 0;
-                              const diff = baseV > 0 ? (v as number) - baseV : 0;
-                              const diffPct = baseV > 0 ? Math.round((diff / baseV) * 100) : 0;
-                              const sign = diff >= 0 ? `+${diff}` : `${diff}`;
-                              const pctSign = diffPct >= 0 ? `+${diffPct}` : `${diffPct}`;
-                              return (
-                                <span key={k} className="px-1.5 py-0.5 bg-black/50 rounded font-bold text-[#ffd54f] border border-[#ffd54f33]">
-                                  {k.toUpperCase()} {v} {baseV > 0 && `(${sign} / ${pctSign}%)`}
+                            <div className="min-w-0">
+                              <div className="font-bold text-xs text-white flex items-center gap-1.5 flex-wrap">
+                                <span className="truncate">{item.name}</span>
+                                <span className="text-[9px] px-1.5 py-0.2 rounded font-bold shrink-0" style={{ color: isUnique ? '#ffb74d' : rarityColor, backgroundColor: `${isUnique ? '#ff9800' : rarityColor}22` }}>
+                                  [{getRarityLabel(item.rarity)}]
                                 </span>
-                              );
-                            })}
+                              </div>
+                              <div className="text-[10px] text-[#6ee7b7]">{item.slot === 'weapon' ? '무기' : item.slot === 'armor' ? '방어구' : '장신구'}</div>
+                            </div>
                           </div>
+                          <span className="text-[10px] text-[#38ef7d] px-2 py-1 rounded bg-[#10b98115] border border-[#10b98133] font-bold shrink-0 flex items-center gap-1 group-hover:bg-[#10b98133] transition-colors">
+                            <span>🔍</span>
+                            <span>{tr('상세 보기')}</span>
+                          </span>
                         </div>
                       );
                     })}
@@ -8811,8 +8795,8 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               {cursedItems.length === 0 ? (
                 <div className="panel p-8 text-center text-sm text-[#8b9bb4]">
-                  보유 중인 [침식된] 장비가 없습니다.<br />
-                  <span className="text-xs text-[#607d8b] mt-1 block">던전 탐험, 보물상자 및 마물 토벌 시 드랍되는 장비를 수집하세요.</span>
+                  {tr('보유 중인 [침식된] 장비가 없습니다.')}<br />
+                  <span className="text-xs text-[#607d8b] mt-1 block">{tr('던전 탐험, 보물상자 및 마물 토벌 시 드랍되는 장비를 수집하세요.')}</span>
                 </div>
               ) : (
                 cursedItems.map(item => {
@@ -8821,28 +8805,36 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     (state.resources.ether || 0) >= purifyCost.ether &&
                     (purifyCost.crystal <= 0 || (state.resources.crystal || 0) >= purifyCost.crystal) &&
                     (purifyCost.void_shard <= 0 || (state.resources.void_shard || 0) >= purifyCost.void_shard);
-                  const baseStats = item.baseStats && Object.keys(item.baseStats).length > 0 ? item.baseStats : item.stats;
                   const purifyRate = gm.getPurifySuccessRate();
 
                   return (
-                    <div key={item.id} className="panel p-3 border border-[#ef535066] bg-[#14121a] rounded-xl flex flex-col gap-2">
+                    <div
+                      key={item.id}
+                      className="panel p-3 border border-[#ef535055] bg-[#14121a] rounded-xl flex flex-col gap-2.5 cursor-pointer hover:border-[#ef5350aa] hover:bg-[#181320] transition-all group"
+                      onClick={() => setInspectItem({ item, isPurified: false })}
+                    >
                       <div className="flex items-start justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <span className="p-1.5 rounded-lg bg-[#241316] border border-[#ef535044] flex items-center justify-center shrink-0">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span className="p-1.5 rounded-lg bg-[#241316] border border-[#ef535044] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                             <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={28} />
                           </span>
-                          <div>
+                          <div className="min-w-0">
                             <div className="font-bold text-sm text-[#ef5350] flex items-center gap-1.5 flex-wrap">
-                              <span>{item.name}</span>
-                              <span className="text-[10px] px-1.5 py-0.2 rounded font-bold" style={{ color: getRarityColor(item.rarity), backgroundColor: `${getRarityColor(item.rarity)}22` }}>
+                              <span className="truncate">{item.name}</span>
+                              <span className="text-[10px] px-1.5 py-0.2 rounded font-bold shrink-0" style={{ color: getRarityColor(item.rarity), backgroundColor: `${getRarityColor(item.rarity)}22` }}>
                                 [{getRarityLabel(item.rarity)}]
                               </span>
                             </div>
-                            <div className="text-[10px] text-[#8b9bb4]">{item.slot === 'weapon' ? '무기' : item.slot === 'armor' ? '방어구' : '장신구'}</div>
+                            <div className="text-[10px] text-[#8b9bb4] flex items-center gap-2 mt-0.5">
+                              <span>{item.slot === 'weapon' ? '무기' : item.slot === 'armor' ? '방어구' : '장신구'}</span>
+                              <span className="text-[#81c784] font-medium flex items-center gap-0.5 group-hover:text-[#ffd54f] transition-colors">
+                                🔍 {tr('클릭하여 상세 정보 및 스탯 범위 확인')}
+                              </span>
+                            </div>
                           </div>
                         </div>
                         <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef535022] text-[#ef5350] font-bold border border-[#ef535044] shrink-0">
-                          💀 착용 불가 (침식 상태)
+                          💀 {tr('착용 불가')}
                         </span>
                       </div>
 
@@ -8850,28 +8842,8 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         ⚠️ {item.description || item.curseDesc}
                       </div>
 
-                      {/* 🎯 정화 시 베이스 ±30% 예상 스탯 미리보기 */}
-                      <div className="text-[10px] bg-[#00000044] p-2 rounded-lg border border-[#ffffff10] flex flex-col gap-1 font-mono">
-                        <div className="text-[#8b9bb4] font-sans text-[10px] font-bold flex items-center justify-between">
-                          <span>🎯 정화 시 기본 베이스 스탯 ±30% 변동 범위:</span>
-                          <span className="text-[#38ef7d]">성공률 {purifyRate}%</span>
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {Object.entries(baseStats).map(([k, v]) => {
-                            if (typeof v !== 'number' || v <= 0) return null;
-                            const minVal = Math.max(1, Math.round(v * 0.7));
-                            const maxVal = Math.round(v * 1.3);
-                            return (
-                              <span key={k} className="px-1.5 py-0.5 rounded bg-[#38ef7d15] text-[#38ef7d] border border-[#38ef7d33]">
-                                {k.toUpperCase()} {minVal} ~ {maxVal} (기준 {v})
-                              </span>
-                            );
-                          })}
-                        </div>
-                      </div>
-
                       {/* 필요 정화 재화 목록 뱃지 */}
-                      <div className="flex items-center gap-1.5 flex-wrap text-[10px] font-mono">
+                      <div className="flex items-center gap-1.5 flex-wrap text-[10px] font-mono pt-0.5" onClick={(e) => e.stopPropagation()}>
                         <span className="text-[#8b9bb4] font-sans">{tr('소모 재화')}:</span>
                         <span className={`px-1.5 py-0.2 rounded border ${(state.resources.gold || 0) >= purifyCost.gold ? 'bg-[#ffd54f15] text-[#ffd54f] border-[#ffd54f33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
                           🪙 {purifyCost.gold}G
@@ -8891,19 +8863,22 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         )}
                       </div>
 
-                      <ActionButton
-                        label={canCleanse ? `✨ ${tr('신성 정화 시작')} (${tr('성공률')} ${purifyRate}%)` : tr('정화 재화 부족')}
-                        variant={canCleanse ? 'success' : 'ghost'}
-                        size="sm"
-                        className="w-full font-bold shadow"
-                        disabled={!canCleanse}
-                        onClick={() => {
-                          const willSucceed = (Math.random() * 100) < purifyRate;
-                          setPurifyingItem(item);
-                          setPendingPurifyOutcome(willSucceed ? 'success' : 'drop');
-                          setIsPurifying(true);
-                        }}
-                      />
+                      {/* 정화 버튼 (높이 적절하게 늘림: h-11 / py-3) */}
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <ActionButton
+                          label={canCleanse ? `✨ ${tr('신성 정화 시작')} (${tr('성공률')} ${purifyRate}%)` : tr('정화 재화 부족')}
+                          variant={canCleanse ? 'success' : 'ghost'}
+                          size="md"
+                          className="w-full h-11 py-3 text-xs sm:text-sm font-bold shadow-md rounded-xl flex items-center justify-center transition-all"
+                          disabled={!canCleanse}
+                          onClick={() => {
+                            const willSucceed = (Math.random() * 100) < purifyRate;
+                            setPurifyingItem(item);
+                            setPendingPurifyOutcome(willSucceed ? 'success' : 'drop');
+                            setIsPurifying(true);
+                          }}
+                        />
+                      </div>
                     </div>
                   );
                 })
@@ -8958,6 +8933,202 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             setPurifyingItem(null);
           }}
         />
+      )}
+
+      {/* ── 🔍 침식/정화 장비 상세 정보 모달 ── */}
+      {inspectItem && (
+        <Modal
+          title={inspectItem.isPurified ? `✨ ${tr('정화 완료 장비')} — ${inspectItem.item.name}` : `💀 ${tr('침식 장비 상세')} — ${inspectItem.item.name}`}
+          open={true}
+          onClose={() => setInspectItem(null)}
+        >
+          <div className="flex flex-col gap-3">
+            {/* 장비 헤더 요약 */}
+            <div className="p-3 bg-[#131926] border border-[#222d42] rounded-xl flex items-center gap-3">
+              <span 
+                className="p-2 rounded-xl bg-[#1e2636] border shrink-0 flex items-center justify-center shadow-lg"
+                style={getRarityBorderStyle(inspectItem.item.rarity)}
+              >
+                <GameIcon
+                  name={inspectItem.item.templateId || getEquipmentTemplateId(inspectItem.item) || inspectItem.item.id}
+                  icon={inspectItem.item.icon}
+                  size={44}
+                />
+              </span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="font-bold text-sm text-white">{inspectItem.item.name}</span>
+                  <span
+                    className="text-[10px] px-1.5 py-0.5 rounded font-bold"
+                    style={{
+                      backgroundColor: `${getRarityColor(inspectItem.item.rarity)}22`,
+                      color: getRarityColor(inspectItem.item.rarity),
+                      border: `1px solid ${getRarityColor(inspectItem.item.rarity)}44`
+                    }}
+                  >
+                    [{getRarityLabel(inspectItem.item.rarity)}]
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
+                    {{ weapon: '🗡️ 무기', armor: '🛡️ 방어구', accessory: '💍 장신구' }[inspectItem.item.slot] || '장비'}
+                  </span>
+                </div>
+                <div className="text-[11px] text-[#8b9bb4] mt-1">
+                  {inspectItem.isPurified ? (
+                    <span className="text-[#38ef7d] font-bold">✨ {tr('순정 복원 완료 (착용 가능)')}</span>
+                  ) : (
+                    <span className="text-[#ef5350] font-bold">💀 {tr('착용 불가 (침식 상태)')}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* 장비 설명 / 침식 문구 */}
+            <div className="text-xs text-[#cfd8dc] bg-[#0c101a] p-2.5 rounded-lg border border-[#1a2234] leading-relaxed">
+              {inspectItem.item.description || inspectItem.item.curseDesc}
+            </div>
+
+            {/* 스탯 정보: 정화 완료 템인 경우 실제 복원 스탯 리스트, 침식 템인 경우 기본 스탯 및 ±30% 변동 범위 리스트 */}
+            {inspectItem.isPurified ? (
+              <div className="p-3 bg-[#0d121c] border border-[#10b98144] rounded-xl flex flex-col gap-2">
+                <div className="text-xs font-bold text-[#38ef7d]">
+                  📊 {tr('복원된 종합 능력치')}:
+                </div>
+                <div className="flex flex-col gap-1.5 divide-y divide-[#ffffff0a]">
+                  {Object.entries(inspectItem.item.stats || {}).map(([k, v]) => {
+                    if (typeof v !== 'number' || v <= 0) return null;
+                    const baseV = (inspectItem.item.baseStats as Record<string, number>)?.[k] || 0;
+                    const diff = baseV > 0 ? (v as number) - baseV : 0;
+                    const diffPct = baseV > 0 ? Math.round((diff / baseV) * 100) : 0;
+                    const sign = diff >= 0 ? `+${diff}` : `${diff}`;
+                    const pctSign = diffPct >= 0 ? `+${diffPct}` : `${diffPct}`;
+                    return (
+                      <div key={k} className="pt-1.5 first:pt-0 flex items-center justify-between text-xs font-mono">
+                        <span className="text-[#cfd8e8] font-bold uppercase">{k}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-white font-bold">{v}</span>
+                          {baseV > 0 && (
+                            <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${diff >= 0 ? 'bg-[#38ef7d18] text-[#38ef7d]' : 'bg-[#ef535018] text-[#ef5350]'}`}>
+                              {sign} ({pctSign}%)
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className="p-3 bg-[#0d121c] border border-[#ef535033] rounded-xl flex flex-col gap-2">
+                <div className="text-xs font-bold text-[#ffd54f] flex items-center justify-between">
+                  <span>🎯 {tr('정화 시 기본 베이스 스탯 ±30% 변동 범위')}:</span>
+                  <span className="text-[#38ef7d] font-mono text-[11px]">{tr('성공률')} {gm.getPurifySuccessRate()}%</span>
+                </div>
+                <div className="flex flex-col gap-1.5 divide-y divide-[#ffffff0a]">
+                  {Object.entries(inspectItem.item.baseStats && Object.keys(inspectItem.item.baseStats).length > 0 ? inspectItem.item.baseStats : inspectItem.item.stats).map(([k, v]) => {
+                    if (typeof v !== 'number' || v <= 0) return null;
+                    const minVal = Math.max(1, Math.round(v * 0.7));
+                    const maxVal = Math.round(v * 1.3);
+                    return (
+                      <div key={k} className="pt-1.5 first:pt-0 flex items-center justify-between text-xs font-mono">
+                        <span className="text-[#cfd8e8] font-bold uppercase">{k}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#8b9bb4] text-[11px]">{tr('기준')} {v}</span>
+                          <span className="text-[#ffd54f] font-bold">➔</span>
+                          <span className="px-2 py-0.5 rounded bg-[#38ef7d18] text-[#38ef7d] font-bold border border-[#38ef7d33]">
+                            {minVal} ~ {maxVal}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* 무기 고유 특성 상세 */}
+            {inspectItem.item.slot === 'weapon' && (() => {
+              const wt = inspectItem.item.weaponTrait || getWeaponTrait(inspectItem.item);
+              if (!wt) return null;
+              return (
+                <div className="p-2.5 rounded-xl border flex flex-col gap-1 shadow-md" style={{ backgroundColor: `${wt.color}10`, borderColor: `${wt.color}55` }}>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs" style={{ color: wt.color }}>{wt.badge}</span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded font-bold" style={{ backgroundColor: wt.bgColor, color: wt.color, border: `1px solid ${wt.color}55` }}>
+                      {tr('무기 고유 특성')}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-[#cfd8dc] leading-relaxed">{wt.description}</div>
+                </div>
+              );
+            })()}
+
+            {/* 인챈트 상세 정보 */}
+            {(inspectItem.item.prefix || inspectItem.item.suffix) && (
+              <div className="flex flex-col gap-1.5">
+                {inspectItem.item.prefix && renderEnchantBadge(inspectItem.item.prefix, inspectItem.item.slot)}
+                {inspectItem.item.suffix && renderEnchantBadge(inspectItem.item.suffix, inspectItem.item.slot)}
+              </div>
+            )}
+
+            {/* 침식 장비인 경우 모달 안에서도 원클릭 신성 정화 가능 */}
+            {!inspectItem.isPurified && (() => {
+              const item = inspectItem.item;
+              const canCleanse = 
+                (state.resources.gold || 0) >= purifyCost.gold &&
+                (state.resources.ether || 0) >= purifyCost.ether &&
+                (purifyCost.crystal <= 0 || (state.resources.crystal || 0) >= purifyCost.crystal) &&
+                (purifyCost.void_shard <= 0 || (state.resources.void_shard || 0) >= purifyCost.void_shard);
+              const purifyRate = gm.getPurifySuccessRate();
+
+              return (
+                <div className="flex flex-col gap-2 pt-2 border-t border-[#ffffff15]">
+                  <div className="flex items-center gap-1.5 flex-wrap text-[10px] font-mono">
+                    <span className="text-[#8b9bb4] font-sans">{tr('소모 재화')}:</span>
+                    <span className={`px-1.5 py-0.2 rounded border ${(state.resources.gold || 0) >= purifyCost.gold ? 'bg-[#ffd54f15] text-[#ffd54f] border-[#ffd54f33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                      🪙 {purifyCost.gold}G
+                    </span>
+                    <span className={`px-1.5 py-0.2 rounded border ${(state.resources.ether || 0) >= purifyCost.ether ? 'bg-[#64b5f615] text-[#64b5f6] border-[#64b5f633]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                      ✨ {purifyCost.ether}
+                    </span>
+                    {purifyCost.crystal > 0 && (
+                      <span className={`px-1.5 py-0.2 rounded border ${(state.resources.crystal || 0) >= purifyCost.crystal ? 'bg-[#80d8ff15] text-[#80d8ff] border-[#80d8ff33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                        💎 {purifyCost.crystal}
+                      </span>
+                    )}
+                    {purifyCost.void_shard > 0 && (
+                      <span className={`px-1.5 py-0.2 rounded border ${(state.resources.void_shard || 0) >= purifyCost.void_shard ? 'bg-[#b388ff15] text-[#b388ff] border-[#b388ff33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                        🌀 {purifyCost.void_shard}
+                      </span>
+                    )}
+                  </div>
+                  <ActionButton
+                    label={canCleanse ? `✨ ${tr('신성 정화 시작')} (${tr('성공률')} ${purifyRate}%)` : tr('정화 재화 부족')}
+                    variant={canCleanse ? 'success' : 'ghost'}
+                    size="md"
+                    className="w-full h-11 py-3 text-xs sm:text-sm font-bold shadow-md rounded-xl flex items-center justify-center transition-all"
+                    disabled={!canCleanse}
+                    onClick={() => {
+                      setInspectItem(null);
+                      const willSucceed = (Math.random() * 100) < purifyRate;
+                      setPurifyingItem(item);
+                      setPendingPurifyOutcome(willSucceed ? 'success' : 'drop');
+                      setIsPurifying(true);
+                    }}
+                  />
+                </div>
+              );
+            })()}
+
+            {/* 닫기 버튼 */}
+            <button
+              className="btn btn-ghost w-full py-2.5 font-bold text-xs rounded-xl hover:bg-white/10"
+              style={{ borderColor: '#4a5568', borderWidth: '1px', borderStyle: 'solid' }}
+              onClick={() => setInspectItem(null)}
+            >
+              ✕ {tr('닫기')}
+            </button>
+          </div>
+        </Modal>
       )}
 
     </div>
