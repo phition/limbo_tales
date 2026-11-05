@@ -15134,7 +15134,7 @@ export const CitadelScreen: React.FC = () => {
       {/* ── 🏰 메인 영지 뷰포트 영역 (디오라마 vs 시네마틱 워크스테이션) ── */}
       <div className="flex-1 min-h-0 relative flex flex-col overflow-hidden">
         {/* 1. 영지 2.5D 디오라마 메인 전경 (상시 노출) */}
-        <div className="flex-1 min-h-0 relative flex flex-col">
+        <div className="flex-1 min-h-0 relative flex flex-col justify-end overflow-hidden">
           <TerritoryDioramaView
             onOpenFacility={(key) => handleTryOpenDrawer(key)}
             onOpenExplore={() => handleTryOpenDrawer('explore')}
@@ -15244,8 +15244,8 @@ export const CitadelScreen: React.FC = () => {
 
           {/* 📜 반투명 영지 활동 & 생산 로그 패널 (배경 디오라마가 은은하게 비치도록 구성) */}
           <div className="w-full px-3 py-1.5 z-10 shrink-0">
-            <div className="w-full max-w-4xl mx-auto rounded-xl border border-[#3d372e]/60 bg-[#080a10]/60 backdrop-blur-sm shadow-[0_4px_20px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col h-28 sm:h-32 transition-all">
-              <div className="px-3 py-1 bg-[#0a0d14]/70 border-b border-[#242732]/60 flex items-center justify-between text-[10px] text-[#9da3af] shrink-0">
+            <div className="w-full max-w-4xl mx-auto rounded-xl border border-[#3d372e]/40 bg-[#080a10]/35 backdrop-blur-[2px] shadow-[0_4px_24px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col h-40 sm:h-48 md:h-52 transition-all">
+              <div className="px-3 py-1.5 bg-[#0a0d14]/45 border-b border-[#242732]/40 flex items-center justify-between text-[10px] text-[#9da3af] shrink-0">
                 <span className="flex items-center gap-1.5 font-bold text-[#dcc496]">
                   <span>📜</span>
                   <span>{tr('영지 활동 & 생산 로그')}</span>
@@ -15255,10 +15255,10 @@ export const CitadelScreen: React.FC = () => {
                   <span>LIVE FEED</span>
                 </span>
               </div>
-              <div className="flex-1 min-h-0 overflow-hidden">
+              <div className="flex-1 min-h-0 overflow-hidden [text-shadow:_0_1px_2px_rgba(0,0,0,0.85)]">
                 <LogPanel
                   logs={state.citadelLogs || gm.citadelLogs || []}
-                  maxHeight={110}
+                  maxHeight={180}
                   emptyMessage={tr('기록된 영지 로그가 없습니다.')}
                   transparent={true}
                 />
