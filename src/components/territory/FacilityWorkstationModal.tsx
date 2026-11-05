@@ -59,16 +59,16 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
   };
 
   return (
-    <div className="absolute inset-0 z-40 flex items-end md:items-stretch md:justify-end select-none">
-      {/* ── 배경 어둡고 깊은 섀도우 딤드 (클릭 시 닫기) ── */}
+    <div className="absolute inset-0 z-40 flex items-end md:relative md:inset-auto md:w-[540px] lg:w-[600px] xl:w-[660px] md:h-full md:shrink-0 md:z-20 select-none">
+      {/* ── 배경 어둡고 깊은 섀도우 딤드 (모바일 전용 백드롭, 데스크탑은 좌측 뷰가 노출되도록 숨김) ── */}
       <div
-        className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity animate-fade-in"
+        className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity animate-fade-in md:hidden"
         onClick={handleClose}
       />
 
       {/* ── 모바일 바텀시트 / PC 스플릿 패널 본체 ── */}
       <div
-        className="relative z-10 flex flex-col w-full md:w-[580px] lg:w-[640px] h-full bg-[#121418] border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden animate-drawer-enter"
+        className="relative z-10 flex flex-col w-full h-full bg-[#121418] border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden animate-drawer-enter"
         onClick={e => e.stopPropagation()}
       >
         {/* 모바일 상단 드래그 핸들 */}

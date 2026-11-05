@@ -15168,7 +15168,7 @@ export const CitadelScreen: React.FC = () => {
     : state.bonfireStacks > 0 ? `🔥 ${state.bonfireStacks}/5` : '';
 
   return (
-    <div className="flex-1 min-h-0 w-full flex flex-col relative bg-transparent overflow-hidden">
+    <div className="flex-1 min-h-0 w-full flex flex-col md:flex-row relative bg-transparent overflow-hidden">
       {/* 👑 방주 수석 오퍼레이터 일레인의 SRPG식 온보딩 튜토리얼 가이드 (프롤로그 종료 후 및 대기 상태가 아닐 때만 노출) */}
       {tutorialStepId && !showIntroStory && !tutorialStepId.startsWith('WAITING_') && (
         <TutorialGuideOverlay
@@ -15227,8 +15227,8 @@ export const CitadelScreen: React.FC = () => {
         </div>
       )}
 
-      {/* ── 🏰 메인 영지 뷰포트 영역 (디오라마 vs 시네마틱 워크스테이션) ── */}
-      <div className="flex-1 min-h-0 relative flex flex-col overflow-hidden">
+      {/* ── 🏰 메인 영지 뷰포트 영역 (좌측 뷰: 디오라마, 알림, 영지로그, DM티커) ── */}
+      <div className="flex-1 min-h-0 w-full md:w-auto relative flex flex-col justify-end overflow-hidden transition-all duration-300 ease-in-out">
         {/* 1. 영지 2.5D 디오라마 메인 전경 (상시 노출) */}
         <div className="flex-1 min-h-0 relative flex flex-col justify-end overflow-hidden">
           <TerritoryDioramaView
@@ -15384,13 +15384,16 @@ export const CitadelScreen: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* ── 3. 앤티크 골드 림 퀵 독 (Quick Facility Dock) ── */}
-      <QuickFacilityDock
-        activeKey={openDrawer}
-        onSelectFacility={(key) => handleTryOpenDrawer(key)}
-      />
+        {/* ── 3. 앤티크 골드 림 퀵 독 (Quick Facility Dock) ── */}
+        {/* 패널이 열려있지 않을 때만 노출 (패널이 열렸을 때는 DM 티커까지만 보이도록 정리) */}
+        <div className={openDrawer ? 'hidden' : 'block shrink-0'}>
+          <QuickFacilityDock
+            activeKey={openDrawer}
+            onSelectFacility={(key) => handleTryOpenDrawer(key)}
+          />
+        </div>
+      </div>
 
       {/* 2. 방주 성채 허브 드로어 (openDrawer === 'citadel') */}
       {openDrawer === 'citadel' && (
