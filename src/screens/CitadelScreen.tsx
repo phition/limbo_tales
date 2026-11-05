@@ -4443,25 +4443,25 @@ const BarracksDrawer: React.FC<{
         </button>
       </div>
 
-      {/* 🎒 3인 편성 완료 시 출정 채비실 바로가기 안내 배너 (Dark Gothic & Antique Gold) */}
+      {/* 🎒 3인 편성 완료 시 출정 채비실 바로가기 안내 배너 (기존 보라색 계열 복원) */}
       {state.party.length >= 3 && onNavigateDrawer && barracksCategory === 'dungeon' && (
-        <div className="bg-gradient-to-r from-[#1c1810] via-[#2a2214] to-[#1c1810] border-b border-[#b89758]/60 px-3.5 py-2.5 flex items-center justify-between gap-3 shrink-0 animate-fade-in shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
+        <div className="bg-gradient-to-r from-[#1c1224] via-[#2a1738] to-[#1c1224] border-b border-[#ab47bc]/60 px-3.5 py-2.5 flex items-center justify-between gap-3 shrink-0 animate-fade-in shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-[#b89758]/20 border border-[#b89758]/60 flex items-center justify-center text-lg shrink-0 shadow-[0_0_8px_rgba(184,151,88,0.3)]">
+            <div className="w-8 h-8 rounded-lg bg-[#ab47bc]/20 border border-[#ab47bc]/60 flex items-center justify-center text-lg shrink-0 shadow-[0_0_8px_rgba(171,71,188,0.3)]">
               🎒
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-black text-[#f5ecd7] flex items-center gap-1.5">
+              <div className="text-xs font-black text-[#f3e5f5] flex items-center gap-1.5">
                 <span>{tr('3인 원정대 편성 완료!')}</span>
                 <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d]/20 text-[#38ef7d] border border-[#38ef7d]/40 font-mono font-bold">READY (3/3)</span>
               </div>
-              <div className="text-[11px] text-[#c8aa6e] truncate">{tr('출정 채비실로 이동하여 진형 배치 및 보급품을 점검하세요.')}</div>
+              <div className="text-[11px] text-[#ce93d8] truncate">{tr('출정 채비실로 이동하여 진형 배치 및 보급품을 점검하세요.')}</div>
             </div>
           </div>
           <button
             data-tutorial-target="open-explore-drawer"
             type="button"
-            className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#b89758] to-[#937538] hover:brightness-110 active:scale-95 text-[#08090b] text-xs font-black shrink-0 flex items-center gap-1.5 shadow-[0_0_12px_rgba(184,151,88,0.4)] border border-[#e6c88b] transition-all cursor-pointer"
+            className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#ab47bc] to-[#7b1fa2] hover:brightness-110 active:scale-95 text-white text-xs font-black shrink-0 flex items-center gap-1.5 shadow-[0_0_12px_rgba(171,71,188,0.4)] border border-[#ce93d8] transition-all cursor-pointer"
             onClick={() => onNavigateDrawer('explore')}
           >
             <span>{tr('출정 채비실로 이동')}</span>
@@ -13965,10 +13965,10 @@ export const ExploreDrawer: React.FC<{
                     style={{
                       background: isPurified 
                         ? 'linear-gradient(135deg, #064e3b 0%, #065f46 100%)' 
-                        : 'linear-gradient(135deg, #b89758 0%, #8a6e34 100%)',
-                      color: isPurified ? '#a7f3d0' : '#08090b',
-                      border: isPurified ? '1px solid #059669' : '1px solid #dcc496',
-                      boxShadow: isPurified ? '0 2px 10px rgba(5, 150, 105, 0.4)' : '0 2px 10px rgba(184, 151, 88, 0.35)'
+                        : 'linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%)',
+                      color: isPurified ? '#a7f3d0' : '#f3e5f5',
+                      border: isPurified ? '1px solid #059669' : '1px solid #ab47bc',
+                      boxShadow: isPurified ? '0 2px 10px rgba(5, 150, 105, 0.4)' : '0 2px 10px rgba(171, 71, 188, 0.45)'
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -14227,8 +14227,8 @@ export const ExploreDrawer: React.FC<{
             className={`px-5 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition-all ${
               canAfford && !gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id)) 
                 ? (tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && selectedBagId === 'small' && hasEssentialSupplies
-                    ? 'bg-gradient-to-r from-[#b89758] to-[#8a6e34] text-[#08090b] font-black border-2 border-[#dcc496] shadow-[0_0_20px_rgba(184,151,88,0.8)] animate-pulse'
-                    : 'bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] font-black shadow-[0_0_12px_rgba(184,151,88,0.4)] active:scale-95')
+                    ? 'bg-gradient-to-r from-[#ab47bc] to-[#7b1fa2] text-white font-black border-2 border-[#ce93d8] shadow-[0_0_20px_rgba(171,71,188,0.8)] animate-pulse'
+                    : 'bg-gradient-to-r from-[#ab47bc] to-[#7b1fa2] hover:from-[#ba68c8] hover:to-[#8e24aa] text-white font-black border border-[#ce93d8]/60 shadow-[0_0_14px_rgba(171,71,188,0.45)] active:scale-95')
                 : 'bg-[#1a1c24] text-[#6b7588] border border-[#2a261f] cursor-not-allowed opacity-60'
             }`}
             disabled={!canAfford || gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id))}

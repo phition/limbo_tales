@@ -1,6 +1,7 @@
 import React from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import { SoundManager } from '../../managers/SoundManager';
+import { GameIcon } from '../GameIcon';
 
 interface QuickFacilityDockProps {
   activeKey: string | null;
@@ -69,7 +70,7 @@ export const QuickFacilityDock: React.FC<QuickFacilityDockProps> = ({
           </div>
         </button>
 
-        {/* [우측]: 🌀 차원 게이트 (Arena) */}
+        {/* [우측]: 🌀 차원 게이트 (Arena - 커스텀 에셋 연동) */}
         <button
           type="button"
           onClick={() => handleClick('arena')}
@@ -80,7 +81,7 @@ export const QuickFacilityDock: React.FC<QuickFacilityDockProps> = ({
           }`}
           title={tr('차원 아레나 & 침공전')}
         >
-          <span className="text-2xl sm:text-3xl leading-none drop-shadow">🌀</span>
+          <GameIcon name="arena" icon="🌀" size={32} className="w-8 h-8 sm:w-9 sm:h-9 object-contain drop-shadow shrink-0" />
           <div className="text-left min-w-0">
             <div className="text-xs sm:text-sm font-black leading-tight text-white tracking-tight">
               {tr('차원 게이트')}
