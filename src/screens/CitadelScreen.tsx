@@ -7977,63 +7977,74 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   }, [state.equipmentInventory, enhanceCategory, sortEquipByEquippedAndAcquisition]);
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0e17] text-[#cfd8e8]">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-[#1f2738] bg-[#070a10] shrink-0">
+    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+      {/* ── ⚒️ 병기창 서브 툴바 (건물 특전 & 백과사전) ── */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-[#242732] bg-[#0c0e14] shrink-0 flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-base">⚒️</span>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-[#c8aa6e]">{'병기창 대장간'}</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
-                Lv.{forgeLv}
-              </span>
-              <EncyclopediaBadge tab="equipment" label="병기창 백과" />
-            </div>
-            <div className="text-[10px] text-[#38ef7d]">
-              ✨ {`건물 특전: 소모 자원/가격 -${discountPct}% 할인 적용중`}
-            </div>
-          </div>
+          <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#161a24] text-[#81c784] font-bold border border-[#3d372e] flex items-center gap-1">
+            <span>✨</span>
+            <span>{tr(`특전: 소모 자원 -${discountPct}% 할인`)}</span>
+          </span>
+          <EncyclopediaBadge tab="equipment" label="병기창 백과" />
         </div>
-        <button
-          className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
-          style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-          onClick={onBack}
-          aria-label="닫기"
-        >
-          <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-        </button>
+        <div className="text-[10px] text-[#dcc496] font-mono font-bold">
+          {tr('마도 대장간')} Lv.{forgeLv}
+        </div>
       </div>
 
-      {/* 대분류 탭 (4개 탭 연동) */}
-      <div className="grid grid-cols-4 gap-1 p-2 bg-[#0e121d] border-b border-[#1f2738] shrink-0">
+      {/* ── ⚒️ 대분류 탭 (단조 / 보급품 / 강화 / 정화) ── */}
+      <div className="grid grid-cols-4 gap-1 p-2 bg-[#0a0d14] border-b border-[#242732] shrink-0">
         <button
-          className={`btn py-1.5 text-[11px] font-bold transition-all ${mainTab === 'craft' ? 'btn-primary' : 'btn-ghost'}`}
+          type="button"
+          className={`py-1.5 text-[11px] font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+            mainTab === 'craft'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+          }`}
           onClick={() => setMainTab('craft')}
         >
-          ⚒️ {'단조'}
+          <span>⚒️</span>
+          <span>{tr('단조')}</span>
         </button>
         <button
-          className={`btn py-1.5 text-[11px] font-bold transition-all ${mainTab === 'supplies' ? 'btn-primary' : 'btn-ghost'}`}
+          type="button"
+          className={`py-1.5 text-[11px] font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+            mainTab === 'supplies'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+          }`}
           onClick={() => setMainTab('supplies')}
         >
-          📦 {'보급품'}
+          <span>📦</span>
+          <span>{tr('보급품')}</span>
         </button>
         <button
-          className={`btn py-1.5 text-[11px] font-bold transition-all ${
-            mainTab === 'enhance' ? 'btn-primary' : unlocks.enhance.unlocked ? 'btn-ghost' : 'btn-ghost opacity-50'
+          type="button"
+          className={`py-1.5 text-[11px] font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+            mainTab === 'enhance'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : unlocks.enhance.unlocked
+              ? 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+              : 'bg-[#10131a]/50 text-[#8b9bb4]/50 border border-[#242732]/50 cursor-not-allowed'
           }`}
           onClick={() => setMainTab('enhance')}
         >
-          {unlocks.enhance.unlocked ? ('⚡ 강화') : '🔒 Lv.3'}
+          <span>⚡</span>
+          <span>{unlocks.enhance.unlocked ? tr('강화') : '🔒 Lv.3'}</span>
         </button>
         <button
-          className={`btn py-1.5 text-[11px] font-bold transition-all relative ${
-            mainTab === 'curse' ? 'btn-primary' : unlocks.curse.unlocked ? 'btn-ghost' : 'btn-ghost opacity-50'
+          type="button"
+          className={`py-1.5 text-[11px] font-bold rounded-lg transition-all relative flex items-center justify-center gap-1 cursor-pointer ${
+            mainTab === 'curse'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : unlocks.curse.unlocked
+              ? 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+              : 'bg-[#10131a]/50 text-[#8b9bb4]/50 border border-[#242732]/50 cursor-not-allowed'
           }`}
           onClick={() => setMainTab('curse')}
         >
-          {unlocks.curse.unlocked ? ('✨ 정화') : '🔒 Lv.1'}
+          <span>✨</span>
+          <span>{unlocks.curse.unlocked ? tr('정화') : '🔒 Lv.1'}</span>
           {unlocks.curse.unlocked && cursedItems.length > 0 && (
             <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[8px] font-extrabold shadow-sm animate-pulse">
               {cursedItems.length}
@@ -8046,18 +8057,20 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       {mainTab === 'craft' && (
         <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
           {/* 소분류 카테고리 칩 바 */}
-          <div className="flex items-center gap-1.5 px-3 py-2 bg-[#121724] border-b border-[#1f2738] shrink-0">
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0c0e14] border-b border-[#242732] shrink-0">
             {[
-              { key: 'all', label: '전체 (12)', icon: '📦' },
-              { key: 'weapon', label: '무기 (6)', icon: '🗡️' },
-              { key: 'armor', label: '방어구 (3)', icon: '🛡️' },
-              { key: 'accessory', label: '장신구 (3)', icon: '💍' },
+              { key: 'all', label: tr('전체 (12)'), icon: '📦' },
+              { key: 'weapon', label: tr('무기 (6)'), icon: '🗡️' },
+              { key: 'armor', label: tr('방어구 (3)'), icon: '🛡️' },
+              { key: 'accessory', label: tr('장신구 (3)'), icon: '💍' },
             ].map(cat => (
               <button
                 key={cat.key}
-                className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 ${
+                type="button"
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                   craftCategory === cat.key
-                    ? 'bg-[#5c4524] text-[#f3e5c8] border border-[#876739] shadow-md shadow-[#42321955]' : 'bg-[#182030] text-[#8b9bb4] hover:text-white border border-[#26334a]'
+                    ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-sm'
+                    : 'bg-[#10131a] text-[#8b9bb4] hover:text-white border border-[#242732] hover:border-[#3d372e]'
                 }`}
                 onClick={() => setCraftCategory(cat.key as any)}
               >
@@ -8082,12 +8095,12 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               return (
                 <div
                   key={recipe.id}
-                  className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl hover:border-[#c8aa6e66] transition-all flex flex-col gap-2 cursor-pointer"
+                  className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl hover:border-[#b89758]/70 hover:shadow-[0_0_12px_rgba(184,151,88,0.15)] transition-all flex flex-col gap-2 cursor-pointer group"
                   onClick={() => setSelectedCraftRecipe(recipe)}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="p-2 rounded-xl bg-[#323d4e] border border-[#4a576d] shrink-0 flex items-center justify-center shadow-md">
+                      <span className="p-2 rounded-xl bg-[#161a24] border border-[#3d372e] shrink-0 flex items-center justify-center shadow-md group-hover:border-[#b89758]/50 transition-colors">
                         <GameIcon name={recipe.templateId || getEquipmentTemplateId(recipe as any) || recipe.id} icon={recipe.icon} size={32} />
                       </span>
                       <div className="min-w-0">
@@ -8103,10 +8116,10 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           >
                             [{getRarityLabel(recipe.rarity)}]
                           </span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#161a24] text-[#dcc496] border border-[#3d372e] font-bold shrink-0">
                             {slotBadge}
                           </span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f15] text-[#ffd54f] font-mono border border-[#ffd54f33] shrink-0">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f]/10 text-[#ffd54f] font-mono border border-[#ffd54f]/30 shrink-0">
                             최대: {rates.maxRarity === 'legendary' ? '전설' : rates.maxRarity === 'epic' ? '영웅' : rates.maxRarity === 'rare' ? '희귀' : '일반'}
                           </span>
                           {recipe.slot === 'weapon' && (() => {
@@ -8127,7 +8140,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             );
                           })()}
                         </div>
-                        <div className="text-[10px] text-[#38ef7d] mt-0.5 font-medium truncate">
+                        <div className="text-[10px] text-[#81c784] mt-0.5 font-medium truncate">
                           🎯 {suitableText}
                         </div>
                       </div>
@@ -8184,24 +8197,24 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           {forgeLv >= 6 ? (
             /* 🌟 병기창 Lv.6+ : 강화 보급품 7종이 일반 보급품을 완전히 대체 */
             <>
-              <div className="p-3 rounded-xl bg-gradient-to-r from-[#171f33] to-[#251833] border border-[#ffd54f55] flex items-center justify-between">
+              <div className="p-3 rounded-xl bg-[#10131a] border border-[#b89758]/40 flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-[#ffd54f] flex items-center gap-1.5">
+                  <div className="text-xs font-bold text-[#dcc496] flex items-center gap-1.5">
                     <span>✨📦</span>
-                    <span>성채 특수 강화 보급품 제작소 (병기창 Lv.6+ 전면 대체)</span>
+                    <span>{tr('성채 특수 강화 보급품 제작소 (병기창 Lv.6+ 전면 대체)')}</span>
                     <EncyclopediaBadge query="보급품" tab="systems" label="보급품 백과" compact />
                   </div>
                   <div className="text-[11px] text-[#cfd8e8] mt-0.5 leading-relaxed">
-                    병기창 Lv.6 특화로 일반 보급품이 <strong className="text-[#38ef7d]">7종의 강화 보급품으로 전면 대체</strong>되었습니다! 제작된 강화품은 창고에 적재되며 채비 시 최우선 불출됩니다.
-                    <span className="text-[#ffd54f] block text-[10px] mt-0.5">※ 채비실에서 즉석 추가하는 보급품은 일반 보급품이므로 항상 미리 생산해두어야 합니다.</span>
+                    {tr('병기창 Lv.6 특화로 일반 보급품이')} <strong className="text-[#81c784]">{tr('7종의 강화 보급품으로 전면 대체')}</strong>{tr('되었습니다! 제작된 강화품은 창고에 적재되며 채비 시 최우선 불출됩니다.')}
+                    <span className="text-[#ffd54f] block text-[10px] mt-0.5">※ {tr('채비실에서 즉석 추가하는 보급품은 일반 보급품이므로 항상 미리 생산해두어야 합니다.')}</span>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
-                  <span className="text-xs text-[#38ef7d] font-bold px-2 py-0.5 rounded bg-[#38ef7d15] border border-[#38ef7d33]">
-                    대장간 특전 -{discountPct}%
+                  <span className="text-xs text-[#81c784] font-bold px-2 py-0.5 rounded bg-[#81c784]/15 border border-[#81c784]/30">
+                    {tr('대장간 특전')} -{discountPct}%
                   </span>
-                  <span className="text-[10px] text-[#ffd54f] font-mono font-bold px-1.5 py-0.2 rounded bg-[#ffd54f22] border border-[#ffd54f44]">
-                    강화 보급품 전면 가동
+                  <span className="text-[10px] text-[#ffd54f] font-mono font-bold px-1.5 py-0.2 rounded bg-[#ffd54f]/15 border border-[#ffd54f]/30">
+                    {tr('강화 보급품 전면 가동')}
                   </span>
                 </div>
               </div>
@@ -8261,26 +8274,26 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   };
 
                   return (
-                    <div key={sup.key} className="panel p-3 bg-[#161426] border border-[#ffd54f33] rounded-xl hover:border-[#ffd54f88] transition-all">
+                    <div key={sup.key} className="p-3 bg-[#10131a] border border-[#b89758]/30 rounded-xl hover:border-[#b89758]/70 transition-all shadow-sm">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2.5">
-                          <span className="p-1 rounded-lg bg-[#241a38] border border-[#3f2e5a] flex items-center justify-center shrink-0 w-10 h-10">
+                          <span className="p-1 rounded-lg bg-[#161a24] border border-[#3d372e] flex items-center justify-center shrink-0 w-10 h-10">
                             <GameIcon name={sup.key} icon={sup.icon} size={26} />
                           </span>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="font-bold text-sm text-[#ffd54f]">{sup.label}</span>
-                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
-                                창고 재고 {inStock}개
+                              <span className="font-bold text-sm text-[#dcc496]">{sup.label}</span>
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#b89758]/15 text-[#dcc496] font-bold border border-[#b89758]/30">
+                                {tr('창고 재고')} {inStock}개
                               </span>
                             </div>
-                            <div className="text-[10px] text-[#cfd8e8] mt-0.5">{sup.desc}</div>
+                            <div className="text-[10px] text-[#8b9bb4] mt-0.5">{sup.desc}</div>
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-2 border-t border-[#2a223d] flex-wrap gap-2">
-                        <div className="text-xs text-[#ffd54f] flex items-center gap-1.5 flex-wrap">
+                      <div className="flex items-center justify-between pt-2 border-t border-[#242732] flex-wrap gap-2">
+                        <div className="text-xs text-[#dcc496] flex items-center gap-1.5 flex-wrap">
                           <span className="text-[#8b9bb4]">{tr('소모/재고:')}</span>
                           {Object.entries(cost1).map(([r, c]) => {
                             const cur = res[r] || 0;
@@ -8291,7 +8304,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               <span
                                 key={r}
                                 className={`font-mono text-xs px-2 py-0.5 rounded-md border font-bold flex items-center gap-1 ${
-                                  ok ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'
+                                  ok ? 'bg-[#81c784]/15 text-[#81c784] border-[#81c784]/30' : 'bg-[#ef5350]/15 text-[#ef5350] border-[#ef5350]/30'
                                 }`}
                               >
                                 <span>{meta.icon}</span>
@@ -8304,6 +8317,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                         <div className="flex items-center gap-1.5">
                           <button
+                            type="button"
                             className={`btn text-xs px-3 py-1 font-bold ${canAfford1 ? 'btn-primary' : 'btn-ghost opacity-40'}`}
                             disabled={!canAfford1}
                             onClick={() => handleCraft(1, cost1)}
@@ -8311,6 +8325,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             1개 제작
                           </button>
                           <button
+                            type="button"
                             className={`btn text-xs px-3 py-1 font-bold ${canAfford5 ? 'btn-success' : 'btn-ghost opacity-40'}`}
                             disabled={!canAfford5}
                             onClick={() => handleCraft(5, cost5)}
@@ -8327,19 +8342,19 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           ) : (
             /* 📦 병기창 Lv.1~5 : 일반 보급품 7종 제작 + 하단에 강화 보급품 잠금 안내 */
             <>
-              <div className="p-3 rounded-xl bg-[#121826] border border-[#1f2738] flex items-center justify-between">
+              <div className="p-3 rounded-xl bg-[#10131a] border border-[#3d372e] flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-[#c8aa6e] flex items-center gap-1.5">
+                  <div className="text-xs font-bold text-[#dcc496] flex items-center gap-1.5">
                     <span>📦</span>
-                    <span>성채 원정 보급품 사전 제작소</span>
+                    <span>{tr('성채 원정 보급품 사전 제작소')}</span>
                     <EncyclopediaBadge query="보급품" tab="systems" label="보급품 백과" compact />
                   </div>
                   <div className="text-[11px] text-[#8b9bb4] mt-0.5">
-                    제작된 소모품은 창고에 적재되며, 탐험 채비 시 무료로 우선 불출됩니다.
+                    {tr('제작된 소모품은 창고에 적재되며, 탐험 채비 시 무료로 우선 불출됩니다.')}
                   </div>
                 </div>
-                <span className="text-xs text-[#38ef7d] font-bold px-2 py-1 rounded bg-[#38ef7d15] border border-[#38ef7d33]">
-                  대장간 특전 -{discountPct}%
+                <span className="text-xs text-[#81c784] font-bold px-2 py-1 rounded bg-[#81c784]/15 border border-[#81c784]/30">
+                  {tr('대장간 특전')} -{discountPct}%
                 </span>
               </div>
 
@@ -8395,17 +8410,17 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   };
 
                   return (
-                    <div key={sup.key} className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl hover:border-[#c8aa6e66] transition-all">
+                    <div key={sup.key} className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl hover:border-[#b89758]/60 transition-all shadow-sm">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2.5">
-                          <span className="p-1 rounded-lg bg-[#1a2234] border border-[#2b3952] flex items-center justify-center shrink-0 w-10 h-10">
+                          <span className="p-1 rounded-lg bg-[#161a24] border border-[#3d372e] flex items-center justify-center shrink-0 w-10 h-10">
                             <GameIcon name={sup.key} icon={sup.icon} size={26} />
                           </span>
                           <div>
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-sm text-white">{sup.label}</span>
-                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d44]">
-                                창고 재고 {inStock}개
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#81c784]/15 text-[#81c784] font-bold border border-[#81c784]/30">
+                                {tr('창고 재고')} {inStock}개
                               </span>
                             </div>
                             <div className="text-[10px] text-[#8b9bb4] mt-0.5">{sup.desc}</div>
@@ -8413,8 +8428,8 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-2 border-t border-[#1f2738] flex-wrap gap-2">
-                        <div className="text-xs text-[#ffd54f] flex items-center gap-1.5 flex-wrap">
+                      <div className="flex items-center justify-between pt-2 border-t border-[#242732] flex-wrap gap-2">
+                        <div className="text-xs text-[#dcc496] flex items-center gap-1.5 flex-wrap">
                           <span className="text-[#8b9bb4]">{tr('소모/재고:')}</span>
                           {Object.entries(cost1).map(([r, c]) => {
                             const cur = res[r] || 0;
@@ -8425,7 +8440,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               <span
                                 key={r}
                                 className={`font-mono text-xs px-2 py-0.5 rounded-md border font-bold flex items-center gap-1 ${
-                                  ok ? 'bg-[#38ef7d15] text-[#38ef7d] border-[#38ef7d33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535033]'
+                                  ok ? 'bg-[#81c784]/15 text-[#81c784] border-[#81c784]/30' : 'bg-[#ef5350]/15 text-[#ef5350] border-[#ef5350]/30'
                                 }`}
                               >
                                 <span>{meta.icon}</span>
@@ -8438,6 +8453,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                         <div className="flex items-center gap-1.5">
                           <button
+                            type="button"
                             className={`btn text-xs px-3 py-1 font-bold ${canAfford1 ? 'btn-primary' : 'btn-ghost opacity-40'}`}
                             disabled={!canAfford1}
                             onClick={() => handleCraft(1, cost1)}
@@ -8445,6 +8461,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             1개 제작
                           </button>
                           <button
+                            type="button"
                             className={`btn text-xs px-3 py-1 font-bold ${canAfford5 ? 'btn-success' : 'btn-ghost opacity-40'}`}
                             disabled={!canAfford5}
                             onClick={() => handleCraft(5, cost5)}
@@ -8459,18 +8476,18 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               </div>
 
               {/* 강화된 특수 보급품 잠금 배너 */}
-              <div className="p-3.5 rounded-xl border border-[#2a3854] bg-[#0c101a] flex items-center justify-between mt-2">
+              <div className="p-3.5 rounded-xl border border-[#3d372e] bg-[#0c0e14] flex items-center justify-between mt-2">
                 <div className="flex items-center gap-3">
-                  <span className="text-3xl p-2 rounded-lg bg-[#141b2b] border border-[#232f48]">🔒</span>
+                  <span className="text-3xl p-2 rounded-lg bg-[#161a24] border border-[#3d372e]">🔒</span>
                   <div>
-                    <div className="font-bold text-xs text-[#ffd54f]">강화된 특수 보급품 (7종) 잠금</div>
+                    <div className="font-bold text-xs text-[#dcc496]">{tr('강화된 특수 보급품 (7종) 잠금')}</div>
                     <div className="text-[10px] text-[#8b9bb4] mt-0.5 leading-relaxed">
-                      병기창을 <strong className="text-[#c8aa6e]">Lv.6</strong> 이상으로 증축하면 일반 보급품이 7종의 강화 보급품(에테르 횃불, 던전 도시락, 심연 곡괭이 등)으로 <strong className="text-[#ffd54f]">전면 대체 제작</strong>됩니다.
+                      {tr('병기창을')} <strong className="text-[#dcc496]">Lv.6</strong> {tr('이상으로 증축하면 일반 보급품이 7종의 강화 보급품(에테르 횃불, 던전 도시락, 심연 곡괭이 등)으로')} <strong className="text-[#ffd54f]">{tr('전면 대체 제작')}</strong>{tr('됩니다.')}
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-1 rounded bg-[#2a1b10] text-[#ffd54f] border border-[#ffd54f44] shrink-0 font-bold">
-                  현재 Lv.{forgeLv}/6
+                <span className="text-[10px] font-mono px-2 py-1 rounded bg-[#161a24] text-[#dcc496] border border-[#3d372e] shrink-0 font-bold">
+                  {tr('현재')} Lv.{forgeLv}/6
                 </span>
               </div>
             </>
@@ -8484,25 +8501,25 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           {!unlocks.enhance.unlocked ? (
             <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-3">
               <span className="text-5xl">🔒</span>
-              <div className="font-bold text-base text-[#ffd54f]">마도 대장간 Lv.3 필요</div>
+              <div className="font-bold text-base text-[#dcc496]">{tr('마도 대장간 Lv.3 필요')}</div>
               <div className="text-xs text-[#8b9bb4] max-w-[280px] leading-relaxed">
-                장비 강화 시설은 대장간을 <span className="text-[#c8aa6e] font-bold">Lv.3</span> 이상으로 증축하면 해금됩니다.
-                <br />(현재 대장간: Lv.{forgeLv})
+                {tr('장비 강화 시설은 대장간을')} <span className="text-[#dcc496] font-bold">Lv.3</span> {tr('이상으로 증축하면 해금됩니다.')}
+                <br />({tr('현재 대장간')}: Lv.{forgeLv})
               </div>
             </div>
           ) : (
             <>
               {/* 강화 안내 배너 */}
-              <div className="px-3 py-1.5 bg-[#161224] border-b border-[#1f2738] text-[10px] text-[#cfd8dc] flex items-center justify-between shrink-0">
+              <div className="px-3 py-1.5 bg-[#0c0e14] border-b border-[#242732] text-[10px] text-[#cfd8dc] flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-1.5">
-                  <span>💡 <span className="text-[#38ef7d] font-bold">+0~+3강</span>: 안전 | <span className="text-[#c8aa6e] font-bold">최대 +{GameManager.getForgeMaxEnhanceLevel(forgeLv)}강</span></span>
+                  <span>💡 <span className="text-[#81c784] font-bold">+0~+3강</span>: 안전 | <span className="text-[#dcc496] font-bold">최대 +{GameManager.getForgeMaxEnhanceLevel(forgeLv)}강</span></span>
                   <EncyclopediaBadge query="강화" tab="systems" label="강화 백과" compact />
                 </div>
-                <span className="text-[#ffd54f] font-bold">특전 -{discountPct}%</span>
+                <span className="text-[#dcc496] font-bold">특전 -{discountPct}%</span>
               </div>
 
               {/* 분류 칩 바 */}
-              <div className="flex items-center gap-1.5 px-3 py-2 bg-[#121724] border-b border-[#1f2738] shrink-0">
+              <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0c0e14] border-b border-[#242732] shrink-0">
                 {[
                   { key: 'all', label: '전체' },
                   { key: 'weapon', label: '🗡️ 무기' },
@@ -8511,22 +8528,24 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 ].map(cat => (
                   <button
                     key={cat.key}
-                    className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all ${
+                    type="button"
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       enhanceCategory === cat.key
-                        ? 'bg-[#ffd54f] text-[#000] shadow' : 'bg-[#182030] text-[#8b9bb4] border border-[#26334a]'
+                        ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-sm'
+                        : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
                     }`}
                     onClick={() => setEnhanceCategory(cat.key as any)}
                   >
-                    {cat.label}
+                    {tr(cat.label)}
                   </button>
                 ))}
               </div>
 
               <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
                 {filteredInventory.length === 0 ? (
-                  <div className="panel p-8 text-center text-sm text-[#8b9bb4]">
-                    보유 중인 해당 분류의 장비가 없습니다.<br />
-                    <span className="text-xs text-[#607d8b] mt-1 block">[단조] 탭에서 새로운 장비를 제작하세요.</span>
+                  <div className="p-8 text-center text-sm text-[#8b9bb4] bg-[#10131a] border border-[#3d372e] rounded-xl">
+                    {tr('보유 중인 해당 분류의 장비가 없습니다.')}<br />
+                    <span className="text-xs text-[#8b9bb4]/70 mt-1 block">{tr('[단조] 탭에서 새로운 장비를 제작하세요.')}</span>
                   </div>
                 ) : (
                   filteredInventory.map(item => {
@@ -8543,13 +8562,13 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     return (
                       <div
                         key={item.id}
-                        className="panel p-2.5 flex flex-col gap-1.5 cursor-pointer transition-all hover:border-[#ffd54f88] hover:bg-[#162032] border-[#222d42] bg-[#131926]"
+                        className="p-2.5 flex flex-col gap-1.5 cursor-pointer transition-all hover:border-[#b89758]/60 hover:bg-[#131620] border border-[#3d372e] bg-[#10131a] rounded-xl shadow-sm"
                         onClick={() => setSelectedEnhanceItemId(item.id)}
                       >
                         {/* 1행: 아이콘 + 이름 + (+강화강) + [등급 뱃지] + [인챈트 아이콘] + [착용자 뱃지] */}
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-                            <span className="p-1 rounded-md bg-[#323d4e] border border-[#4a576d] shrink-0 flex items-center justify-center">
+                            <span className="p-1 rounded-md bg-[#161a24] border border-[#3d372e] shrink-0 flex items-center justify-center">
                               <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={22} />
                             </span>
                             <span
@@ -8579,12 +8598,12 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                           <div className="flex items-center gap-1 shrink-0">
                             {wearer ? (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#b89758]/15 text-[#dcc496] font-bold border border-[#b89758]/30">
                                 👤 {wearer.name}
                               </span>
                             ) : (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#607d8b22] text-[#8b9bb4]">
-                                보관함
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#161a24] text-[#8b9bb4] border border-[#3d372e]">
+                                {tr('보관함')}
                               </span>
                             )}
                           </div>
@@ -8610,29 +8629,29 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           {!unlocks.curse.unlocked ? (
             <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-3">
               <span className="text-5xl">🔒</span>
-              <div className="font-bold text-base text-[#ef5350]">병기창 건설 필요</div>
+              <div className="font-bold text-base text-[#ef5350]">{tr('병기창 건설 필요')}</div>
               <div className="text-xs text-[#8b9bb4] max-w-[280px] leading-relaxed">
-                심연의 침식 장비 정화 제단은 대장간(병기창)을 건설하면 즉시 이용할 수 있습니다.
-                <br />(현재 대장간: Lv.{forgeLv})
+                {tr('심연의 침식 장비 정화 제단은 대장간(병기창)을 건설하면 즉시 이용할 수 있습니다.')}
+                <br />({tr('현재 대장간')}: Lv.{forgeLv})
               </div>
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
-              <div className="panel-accent p-3 bg-[#131b26] border border-[#c8aa6e44] rounded-xl flex flex-col gap-1.5">
+              <div className="p-3 bg-[#10131a] border border-[#b89758]/40 rounded-xl flex flex-col gap-1.5 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#c8aa6e] font-bold flex items-center gap-1.5">
+                  <span className="text-xs text-[#dcc496] font-bold flex items-center gap-1.5">
                     <span>✨</span>
-                    <span>심연 침식 장비 정화 제단</span>
+                    <span>{tr('심연 침식 장비 정화 제단')}</span>
                     <EncyclopediaBadge query="정화" tab="systems" label="정화 백과" compact />
                   </span>
-                  <span className="text-[10px] text-[#38ef7d] bg-[#38ef7d1f] px-2 py-0.5 rounded font-bold border border-[#38ef7d44]">
-                    성공률 {gm.getPurifySuccessRate()}% (기본 30% + Lv.{forgeLv} 효과 +{forgeLv * 5}%)
+                  <span className="text-[10px] text-[#81c784] bg-[#81c784]/15 px-2 py-0.5 rounded font-bold border border-[#81c784]/30">
+                    {tr('성공률')} {gm.getPurifySuccessRate()}% (기본 30% + Lv.{forgeLv} 효과 +{forgeLv * 5}%)
                   </span>
                 </div>
                 <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
-                  던전에서 발굴된 [침식된] 장비의 마기를 정화하여 순정 상태로 복원합니다. 정화 시 단조 공정과 동일하게 기본 베이스 스탯의 <strong className="text-[#38ef7d]">±30% 랜덤 스탯 조정</strong>이 적용됩니다.
+                  {tr('던전에서 발굴된 [침식된] 장비의 마기를 정화하여 순정 상태로 복원합니다. 정화 시 단조 공정과 동일하게 기본 베이스 스탯의')} <strong className="text-[#81c784]">±30% {tr('랜덤 스탯 조정')}</strong>{tr('이 적용됩니다.')}
                 </div>
-                <div className="text-[10px] text-[#8b9bb4] pt-1 border-t border-[#c8aa6e22] flex items-center justify-between flex-wrap gap-1">
+                <div className="text-[10px] text-[#8b9bb4] pt-1 border-t border-[#242732] flex items-center justify-between flex-wrap gap-1">
                   <span>{tr('정화 1회 비용')} (-{discountPct}% {tr('할인 적용')})</span>
                   <span className="font-mono text-white flex items-center gap-2 flex-wrap">
                     <span>🪙 {purifyCost.gold}/{state.resources.gold || 0}G</span>
@@ -8655,24 +8674,24 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               {cleanseOutcome && (
                 <div className={`p-3 rounded-xl border flex flex-col gap-2 animate-fade-in ${
                   cleanseOutcome.type === 'success' 
-                    ? 'bg-[#122416] border-[#38ef7d88] text-[#38ef7d]' 
-                    : 'bg-[#261316] border-[#ef535088] text-[#ef5350]'
+                    ? 'bg-[#122416] border-[#81c784]/50 text-[#81c784]' 
+                    : 'bg-[#261316] border-[#ef5350]/50 text-[#ef5350]'
                 }`}>
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-xs flex items-center gap-1">
                       <span>{cleanseOutcome.type === 'success' ? '🎉' : '💀'}</span>
-                      <span>{cleanseOutcome.type === 'success' ? '신성 정화 성공! (순정 복원 완료)' : '정화 실패 (침식 폭주로 장비 파괴)'}</span>
+                      <span>{cleanseOutcome.type === 'success' ? tr('신성 정화 성공! (순정 복원 완료)') : tr('정화 실패 (침식 폭주로 장비 파괴)')}</span>
                     </span>
-                    <button className="text-xs px-1.5 py-0.5 rounded hover:bg-white/10 text-white cursor-pointer" onClick={() => setCleanseOutcome(null)}>✕</button>
+                    <button type="button" className="text-xs px-1.5 py-0.5 rounded hover:bg-white/10 text-white cursor-pointer" onClick={() => setCleanseOutcome(null)}>✕</button>
                   </div>
                   <div className="text-xs text-white leading-relaxed">{cleanseOutcome.message}</div>
                   {cleanseOutcome.item && (
                     <div
-                      className="p-2.5 rounded-lg bg-black/50 border border-[#38ef7d44] hover:border-[#38ef7d88] hover:bg-black/70 flex items-center justify-between gap-2 mt-1 cursor-pointer transition-all group"
+                      className="p-2.5 rounded-lg bg-black/50 border border-[#81c784]/40 hover:border-[#81c784]/80 hover:bg-black/70 flex items-center justify-between gap-2 mt-1 cursor-pointer transition-all group"
                       onClick={() => setInspectItem({ item: cleanseOutcome.item!, isPurified: true })}
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="p-1 rounded-md bg-[#12241b] border border-[#38ef7d44] shrink-0 group-hover:scale-105 transition-transform">
+                        <span className="p-1 rounded-md bg-[#161a24] border border-[#81c784]/40 shrink-0 group-hover:scale-105 transition-transform">
                           <GameIcon name={cleanseOutcome.item.templateId || getEquipmentTemplateId(cleanseOutcome.item) || cleanseOutcome.item.id} icon={cleanseOutcome.item.icon} size={24} />
                         </span>
                         <div className="min-w-0">
@@ -8685,7 +8704,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           <div className="text-[10px] text-[#81c784]">{cleanseOutcome.item.slot === 'weapon' ? '무기' : cleanseOutcome.item.slot === 'armor' ? '방어구' : '장신구'}</div>
                         </div>
                       </div>
-                      <span className="text-[10px] text-[#38ef7d] px-2 py-1 rounded bg-[#38ef7d15] border border-[#38ef7d33] font-bold shrink-0 flex items-center gap-1 group-hover:bg-[#38ef7d33] transition-colors">
+                      <span className="text-[10px] text-[#81c784] px-2 py-1 rounded bg-[#81c784]/15 border border-[#81c784]/30 font-bold shrink-0 flex items-center gap-1 group-hover:bg-[#81c784]/30 transition-colors">
                         <span>🔍</span>
                         <span>{tr('상세 보기')}</span>
                       </span>
@@ -8696,9 +8715,9 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
               {/* ✨ 최근 정화 완료 장비 목록 (내부적으로 5분 후 만료) */}
               {purifiedHistory.length > 0 && (
-                <div className="p-3 rounded-xl bg-[#0e1f18] border border-[#10b98166] flex flex-col gap-2.5 animate-fade-in">
+                <div className="p-3 rounded-xl bg-[#0c1612] border border-[#10b981]/40 flex flex-col gap-2.5 animate-fade-in shadow-sm">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#38ef7d] flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-[#81c784] flex items-center gap-1.5">
                       <span>✨</span>
                       <span>{tr('최근 정화 완료 장비')} ({purifiedHistory.length}개)</span>
                     </span>
@@ -8714,11 +8733,11 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       return (
                         <div
                           key={item.id}
-                          className="p-2.5 rounded-lg bg-[#08140f] border border-[#10b98133] hover:border-[#10b98188] hover:bg-[#0c1f17] flex items-center justify-between gap-2 cursor-pointer transition-all group"
+                          className="p-2.5 rounded-lg bg-[#08140f] border border-[#10b981]/30 hover:border-[#10b981]/70 hover:bg-[#0c1f17] flex items-center justify-between gap-2 cursor-pointer transition-all group"
                           onClick={() => setInspectItem({ item, isPurified: true })}
                         >
                           <div className="flex items-center gap-2 min-w-0">
-                            <span className="p-1 rounded-md bg-[#12241b] border border-[#10b98144] shrink-0 group-hover:scale-105 transition-transform">
+                            <span className="p-1 rounded-md bg-[#12241b] border border-[#10b981]/40 shrink-0 group-hover:scale-105 transition-transform">
                               <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={24} />
                             </span>
                             <div className="min-w-0">
@@ -8731,7 +8750,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               <div className="text-[10px] text-[#6ee7b7]">{item.slot === 'weapon' ? '무기' : item.slot === 'armor' ? '방어구' : '장신구'}</div>
                             </div>
                           </div>
-                          <span className="text-[10px] text-[#38ef7d] px-2 py-1 rounded bg-[#10b98115] border border-[#10b98133] font-bold shrink-0 flex items-center gap-1 group-hover:bg-[#10b98133] transition-colors">
+                          <span className="text-[10px] text-[#81c784] px-2 py-1 rounded bg-[#10b981]/15 border border-[#10b981]/30 font-bold shrink-0 flex items-center gap-1 group-hover:bg-[#10b981]/30 transition-colors">
                             <span>🔍</span>
                             <span>{tr('상세 보기')}</span>
                           </span>
@@ -8743,9 +8762,9 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               )}
 
               {cursedItems.length === 0 ? (
-                <div className="panel p-8 text-center text-sm text-[#8b9bb4]">
+                <div className="p-8 text-center text-sm text-[#8b9bb4] bg-[#10131a] border border-[#3d372e] rounded-xl">
                   {tr('보유 중인 [침식된] 장비가 없습니다.')}<br />
-                  <span className="text-xs text-[#607d8b] mt-1 block">{tr('던전 탐험, 보물상자 및 마물 토벌 시 드랍되는 장비를 수집하세요.')}</span>
+                  <span className="text-xs text-[#8b9bb4]/70 mt-1 block">{tr('던전 탐험, 보물상자 및 마물 토벌 시 드랍되는 장비를 수집하세요.')}</span>
                 </div>
               ) : (
                 cursedItems.map(item => {
@@ -8755,12 +8774,12 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   return (
                     <div
                       key={item.id}
-                      className="panel p-3 border border-[#ef535055] bg-[#14121a] rounded-xl flex flex-col gap-2.5 cursor-pointer hover:border-[#ef5350aa] hover:bg-[#181320] transition-all group"
+                      className="p-3 border border-[#ef5350]/40 bg-[#120f14] rounded-xl flex flex-col gap-2.5 cursor-pointer hover:border-[#ef5350]/80 hover:bg-[#181116] transition-all group shadow-sm"
                       onClick={() => setInspectItem({ item, isPurified: false })}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <span className="p-1.5 rounded-lg bg-[#241316] border border-[#ef535044] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <span className="p-1.5 rounded-lg bg-[#201013] border border-[#ef5350]/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                             <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={28} />
                           </span>
                           <div className="min-w-0">
@@ -8778,31 +8797,31 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             </div>
                           </div>
                         </div>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef535022] text-[#ef5350] font-bold border border-[#ef535044] shrink-0">
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef5350]/20 text-[#ef5350] font-bold border border-[#ef5350]/40 shrink-0">
                           💀 {tr('착용 불가')}
                         </span>
                       </div>
 
-                      <div className="text-[11px] text-[#ef5350] bg-[#ef535015] p-2 rounded-lg border border-[#ef535022]">
+                      <div className="text-[11px] text-[#ef5350] bg-[#ef5350]/10 p-2 rounded-lg border border-[#ef5350]/20">
                         ⚠️ {item.description || item.curseDesc}
                       </div>
 
                       {/* 필요 정화 재화 목록 뱃지 */}
                       <div className="flex items-center gap-1.5 flex-wrap text-[10px] font-mono pt-0.5" onClick={(e) => e.stopPropagation()}>
                         <span className="text-[#8b9bb4] font-sans">{tr('소모 재화')}:</span>
-                        <span className={`px-1.5 py-0.2 rounded border ${(state.resources.gold || 0) >= purifyCost.gold ? 'bg-[#ffd54f15] text-[#ffd54f] border-[#ffd54f33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                        <span className={`px-1.5 py-0.2 rounded border ${(state.resources.gold || 0) >= purifyCost.gold ? 'bg-[#ffd54f]/15 text-[#ffd54f] border-[#ffd54f]/30' : 'bg-[#ef5350]/15 text-[#ef5350] border-[#ef5350]/40'}`}>
                           🪙 {purifyCost.gold}G
                         </span>
-                        <span className={`px-1.5 py-0.2 rounded border ${(state.resources.ether || 0) >= purifyCost.ether ? 'bg-[#64b5f615] text-[#64b5f6] border-[#64b5f633]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                        <span className={`px-1.5 py-0.2 rounded border ${(state.resources.ether || 0) >= purifyCost.ether ? 'bg-[#64b5f6]/15 text-[#64b5f6] border-[#64b5f6]/30' : 'bg-[#ef5350]/15 text-[#ef5350] border-[#ef5350]/40'}`}>
                           ✨ {purifyCost.ether}
                         </span>
                         {purifyCost.crystal > 0 && (
-                          <span className={`px-1.5 py-0.2 rounded border ${(state.resources.crystal || 0) >= purifyCost.crystal ? 'bg-[#80d8ff15] text-[#80d8ff] border-[#80d8ff33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                          <span className={`px-1.5 py-0.2 rounded border ${(state.resources.crystal || 0) >= purifyCost.crystal ? 'bg-[#80d8ff]/15 text-[#80d8ff] border-[#80d8ff]/30' : 'bg-[#ef5350]/15 text-[#ef5350] border-[#ef5350]/40'}`}>
                             💎 {purifyCost.crystal}
                           </span>
                         )}
                         {purifyCost.void_shard > 0 && (
-                          <span className={`px-1.5 py-0.2 rounded border ${(state.resources.void_shard || 0) >= purifyCost.void_shard ? 'bg-[#b388ff15] text-[#b388ff] border-[#b388ff33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                          <span className={`px-1.5 py-0.2 rounded border ${(state.resources.void_shard || 0) >= purifyCost.void_shard ? 'bg-[#b388ff]/15 text-[#b388ff] border-[#b388ff]/30' : 'bg-[#ef5350]/15 text-[#ef5350] border-[#ef5350]/40'}`}>
                             🌀 {purifyCost.void_shard}
                           </span>
                         )}
@@ -8889,9 +8908,9 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         >
           <div className="flex flex-col gap-3">
             {/* 장비 헤더 요약 */}
-            <div className="p-3 bg-[#131926] border border-[#222d42] rounded-xl flex items-center gap-3">
+            <div className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl flex items-center gap-3">
               <span 
-                className="p-2 rounded-xl bg-[#1e2636] border shrink-0 flex items-center justify-center shadow-lg"
+                className="p-2 rounded-xl bg-[#161a24] border shrink-0 flex items-center justify-center shadow-lg"
                 style={getRarityBorderStyle(inspectItem.item.rarity)}
               >
                 <GameIcon
@@ -8913,13 +8932,13 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   >
                     [{getRarityLabel(inspectItem.item.rarity)}]
                   </span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#161a24] text-[#dcc496] border border-[#3d372e] font-bold">
                     {{ weapon: '🗡️ 무기', armor: '🛡️ 방어구', accessory: '💍 장신구' }[inspectItem.item.slot] || '장비'}
                   </span>
                 </div>
                 <div className="text-[11px] text-[#8b9bb4] mt-1">
                   {inspectItem.isPurified ? (
-                    <span className="text-[#38ef7d] font-bold">✨ {tr('순정 복원 완료 (착용 가능)')}</span>
+                    <span className="text-[#81c784] font-bold">✨ {tr('순정 복원 완료 (착용 가능)')}</span>
                   ) : (
                     <span className="text-[#ef5350] font-bold">💀 {tr('착용 불가 (침식 상태)')}</span>
                   )}
@@ -8928,14 +8947,14 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
 
             {/* 장비 설명 / 침식 문구 */}
-            <div className="text-xs text-[#cfd8dc] bg-[#0c101a] p-2.5 rounded-lg border border-[#1a2234] leading-relaxed">
+            <div className="text-xs text-[#cfd8dc] bg-[#0c0e14] p-2.5 rounded-lg border border-[#242732] leading-relaxed">
               {inspectItem.item.description || inspectItem.item.curseDesc}
             </div>
 
             {/* 스탯 정보: 정화 완료 템인 경우 실제 복원 스탯 리스트, 침식 템인 경우 기본 스탯 및 ±30% 변동 범위 리스트 */}
             {inspectItem.isPurified ? (
-              <div className="p-3 bg-[#0d121c] border border-[#10b98144] rounded-xl flex flex-col gap-2">
-                <div className="text-xs font-bold text-[#38ef7d]">
+              <div className="p-3 bg-[#0c1612] border border-[#10b981]/40 rounded-xl flex flex-col gap-2">
+                <div className="text-xs font-bold text-[#81c784]">
                   📊 {tr('복원된 종합 능력치')}:
                 </div>
                 <div className="flex flex-col gap-1.5 divide-y divide-[#ffffff0a]">
@@ -8952,7 +8971,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <div className="flex items-center gap-2">
                           <span className="text-white font-bold">{v}</span>
                           {baseV > 0 && (
-                            <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${diff >= 0 ? 'bg-[#38ef7d18] text-[#38ef7d]' : 'bg-[#ef535018] text-[#ef5350]'}`}>
+                            <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${diff >= 0 ? 'bg-[#81c784]/15 text-[#81c784]' : 'bg-[#ef5350]/15 text-[#ef5350]'}`}>
                               {sign} ({pctSign}%)
                             </span>
                           )}
@@ -8963,10 +8982,10 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </div>
               </div>
             ) : (
-              <div className="p-3 bg-[#0d121c] border border-[#ef535033] rounded-xl flex flex-col gap-2">
-                <div className="text-xs font-bold text-[#ffd54f] flex items-center justify-between">
+              <div className="p-3 bg-[#10131a] border border-[#ef5350]/30 rounded-xl flex flex-col gap-2">
+                <div className="text-xs font-bold text-[#dcc496] flex items-center justify-between">
                   <span>🎯 {tr('정화 시 기본 베이스 스탯 ±30% 변동 범위')}:</span>
-                  <span className="text-[#38ef7d] font-mono text-[11px]">{tr('성공률')} {gm.getPurifySuccessRate()}%</span>
+                  <span className="text-[#81c784] font-mono text-[11px]">{tr('성공률')} {gm.getPurifySuccessRate()}%</span>
                 </div>
                 <div className="flex flex-col gap-1.5 divide-y divide-[#ffffff0a]">
                   {Object.entries(inspectItem.item.baseStats && Object.keys(inspectItem.item.baseStats).length > 0 ? inspectItem.item.baseStats : inspectItem.item.stats).map(([k, v]) => {
@@ -8978,8 +8997,8 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <span className="text-[#cfd8e8] font-bold uppercase">{k}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-[#8b9bb4] text-[11px]">{tr('기준')} {v}</span>
-                          <span className="text-[#ffd54f] font-bold">➔</span>
-                          <span className="px-2 py-0.5 rounded bg-[#38ef7d18] text-[#38ef7d] font-bold border border-[#38ef7d33]">
+                          <span className="text-[#dcc496] font-bold">➔</span>
+                          <span className="px-2 py-0.5 rounded bg-[#81c784]/15 text-[#81c784] font-bold border border-[#81c784]/30">
                             {minVal} ~ {maxVal}
                           </span>
                         </div>
