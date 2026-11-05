@@ -575,3 +575,35 @@ export function calculatePartySynergies(party: Mercenary[]): PartySynergy[] {
 
   return activeSynergies;
 }
+
+/** 🛡️ 활성 시너지 목록에서 특정 숫자형 버프 값의 합산 반환 (안전한 null/undefined 가드 포함) */
+export function getSynergyBuffSum(
+  synergies: (PartySynergy | undefined | null)[],
+  key: keyof PartySynergy['buffs']
+): number {
+  if (!synergies || !Array.isArray(synergies) || synergies.length === 0) return 0;
+  let sum = 0;
+  for (const s of synergies) {
+    const val = s?.buffs?.[key];
+    if (typeof val === 'number' && !isNaN(val)) {
+      sum += val;
+    }
+  }
+  return sum;
+}
+
+/** 🛡️ 활성 시너지 목록에서 특정 숫자형 버프 값의 최댓값 반환 (안전한 null/undefined 가드 포함) */
+export function getSynergyBuffMax(
+  synergies: (PartySynergy | undefined | null)[],
+  key: keyof PartySynergy['buffs']
+): number {
+  if (!synergies || !Array.isArray(synergies) || synergies.length === 0) return 0;
+  let max = 0;
+  for (const s of synergies) {
+    const val = s?.buffs?.[key];
+    if (typeof val === 'number' && !isNaN(val)) {
+      max = Math.max(max, val);
+    }
+  }
+  return max;
+}

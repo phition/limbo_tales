@@ -154,15 +154,13 @@ function generateMonsterSquad(floor: number, isOvercharged: boolean = false, cur
     // 🌌 무간도: 1~10층의 모든 몬스터가 정예 + 광폭화 상태로 출현, 시작 레벨 40(위험도 1)에서 10,000에 도달할 때까지 점진적으로 Lv.499
     const pool = FLOOR_MONSTER_POOL[11] || FLOOR_MONSTER_POOL[10];
     const dangerBracket = Math.floor(currentDanger / 100);
-    const dangerClamped = Math.max(1, Math.min(10000, currentDanger));
-    const scaledLevel = Math.min(499, Math.max(40, Math.round(40 + ((dangerClamped - 1) / 9999) * (499 - 40))));
+    const gmInstance = GameManager.getInstance();
+    const scaledLevel = gmInstance.getAviciMonsterLevel(currentDanger);
     const statMult = 2.4 * (1 + dangerBracket * 0.05);
     const count = Math.floor(Math.random() * 3) + 3; // 3~5마리
 
     const squad: MonsterData[] = [];
     const nameCountMap: Record<string, number> = {};
-
-    const gmInstance = GameManager.getInstance();
     const isPurified = gmInstance.isFloorPurified(11);
     const miasmaMult = isPurified ? 1.0 : (1 + 10 * 0.05); // 🌫️ 심연의 연무 강화 (공/방 +50%)
 
@@ -325,8 +323,7 @@ function generateBossSquad(floor: number, isOvercharged: boolean = false, curren
     const baseBoss = MONSTERS[bossKey] || MONSTERS['boss_floor_10'];
     const bossData: MonsterData = JSON.parse(JSON.stringify(baseBoss));
     bossData.type = 'boss';
-    const dangerClamped = Math.max(1, Math.min(10000, currentDanger));
-    const scaledLevel = Math.min(499, Math.max(40, Math.round(40 + ((dangerClamped - 1) / 9999) * (499 - 40))));
+    const scaledLevel = gmInstance.getAviciMonsterLevel(currentDanger);
     bossData.level = isTrueFinalBoss ? 499 : scaledLevel;
     const bossStatMult = isTrueFinalBoss ? (isOvercharged ? 2.0 : 1.0) : (2.8 * (1 + dangerBracket * 0.06));
     const floorStatMult = 1 + (11 - 1) * 0.20; // 🌟 B안: 11층 3.0x 누적 가산

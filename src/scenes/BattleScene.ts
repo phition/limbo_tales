@@ -896,7 +896,7 @@ export class BattleScene extends Phaser.Scene {
     if (isCrit) {
       let critMult = 1.75;
       for (const syn of synergies) {
-        if (syn.buffs.critDmgBonus) critMult += syn.buffs.critDmgBonus;
+        if (syn?.buffs?.critDmgBonus) critMult += syn.buffs.critDmgBonus;
       }
       dmg = Math.floor(dmg * critMult);
     }
@@ -1030,7 +1030,7 @@ export class BattleScene extends Phaser.Scene {
     const synergies = this.gm.getActiveSynergies();
     let dmgReduction = 1.0;
     for (const syn of synergies) {
-      if (syn.buffs.damageReductionPct) {
+      if (syn?.buffs?.damageReductionPct) {
         dmgReduction *= (1.0 - syn.buffs.damageReductionPct);
       }
     }
@@ -1087,7 +1087,7 @@ export class BattleScene extends Phaser.Scene {
     let totalRegenPct = 0;
     let regenSynergyNames = [];
     for (const syn of synergies) {
-      if (syn.buffs.hpRegenPct) {
+      if (syn?.buffs?.hpRegenPct) {
         totalRegenPct += syn.buffs.hpRegenPct;
         regenSynergyNames.push(syn.name);
       }

@@ -1,5 +1,6 @@
 import { FirebaseService } from '../services/FirebaseService';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { getSynergyBuffSum, getSynergyBuffMax } from '../data/synergies';
 import { ResourceBar } from '../components/ResourceBar';
 import { useGameManager } from '../hooks/useGameManager';
 import { useI18n } from '../hooks/useI18n';
@@ -2117,20 +2118,7 @@ export const BattleScreen: React.FC = () => {
             gm.submitAbyssPurifierLeaderboard();
           } else if (gm.dungeonFloor === 11) {
             // 💖 [무간도 중간 보스 처치 보상] 원정대 전원 체력과 마나 50% 회복
-            let healedAny = false;
-            gm.party.forEach(h => {
-              if (h.currentHp > 0 && !h.isPermanentlyDead) {
-                const hpGain = Math.max(1, Math.floor(h.maxHp * 0.5));
-                const mpGain = Math.max(1, Math.floor(h.maxMp * 0.5));
-                h.currentHp = Math.min(h.maxHp, h.currentHp + hpGain);
-                h.currentMp = Math.min(h.maxMp, (h.currentMp || 0) + mpGain);
-                healedAny = true;
-              }
-            });
-            if (healedAny) {
-              gm.emit('partyUpdated', gm.party);
-              gm.addLog('💖✨ [중간 보스 격파] 무간도 중간 보스를 처치하여 원정대 전원의 체력과 마나가 50% 회복되었습니다!', 'reward');
-            }
+            gm.recoverPartyAfterMidBoss();
 
             // 🎮 PGS 리더보드: 무저갱의 방랑자 (11층 진 최종 보스 & 광폭화 보스)
             const archeosMon = currentMonsters.find(m => m.data.id === 'boss_avici_final' || (m.data.name && m.data.name.includes('아르케오스')));
@@ -3405,10 +3393,7 @@ export const BattleScreen: React.FC = () => {
           // 🌟 [원정대 시너지] 빈사(HP <= 30%) 마물 처형 피해 증폭 (lowHpExecuteBonus)
           if (m.currentHp / m.maxHp <= 0.30) {
             const activeSyns = gm.getActiveSynergies();
-            let executeBonus = 0;
-            activeSyns.forEach(syn => {
-              if (syn?.buffs?.lowHpExecuteBonus) executeBonus += syn.buffs.lowHpExecuteBonus;
-            });
+            const executeBonus = getSynergyBuffSum(activeSyns, 'lowHpExecuteBonus');
             if (executeBonus > 0) {
               targetRawDmg = Math.floor(targetRawDmg * (1 + executeBonus));
               logs.push(`🩸 [처형 일격] 빈사의 ${m.data.name}에게 +${Math.round(executeBonus * 100)}% 처형 증폭 피해!`);
@@ -6459,12 +6444,7 @@ export const BattleScreen: React.FC = () => {
 
           // 🌟 [원정대 시너지] 중열 회피율 보너스(midRowEvasionBonus)
           const activeSyns = gm.getActiveSynergies();
-          let extraEvadePct = 0;
-          if (target.position === 'mid') {
-            activeSyns.forEach(syn => {
-              if (syn?.buffs?.midRowEvasionBonus) extraEvadePct += syn.buffs.midRowEvasionBonus;
-            });
-          }
+          const extraEvadePct = target.position === 'mid' ? getSynergyBuffSum(activeSyns, 'midRowEvasionBonus') : 0;
 
           // 🌟 [환영의 반격 (Riposte) 버프 확인: 회피율 +60%]
           const riposteBuff = (target.statusEffects || []).find(s => s.type === 'riposte');
@@ -6587,16 +6567,11 @@ export const BattleScreen: React.FC = () => {
           if (shouldCheckGuard) {
             const aliveFrontHero = gm.party.find(p => (p.classId === 'aegis_bastion' || p.position === 'front') && p.currentHp > 0 && p.id !== target.id);
             if (aliveFrontHero) {
-              let guardPct = 0;
-              activeSyns.forEach(syn => {
-                if (syn?.buffs?.frontlineGuardPct) {
-                  guardPct = Math.max(guardPct, syn.buffs.frontlineGuardPct);
-                }
-              });
+              const guardPct = getSynergyBuffMax(activeSyns, 'frontlineGuardPct');
               // 이지스 바스티온이거나 엄호 가능 시 분담 비율 50%
               if (guardPct > 0 || aliveFrontHero) {
-                guardPct = 0.50;
-                guardSharedRawDmg = Math.max(1, Math.floor(rawDmg * guardPct));
+                const effectiveGuardPct = 0.50;
+                guardSharedRawDmg = Math.max(1, Math.floor(rawDmg * effectiveGuardPct));
                 rawDmg = Math.max(1, rawDmg - guardSharedRawDmg);
                 guardedFrontHero = aliveFrontHero;
 
@@ -6615,10 +6590,7 @@ export const BattleScreen: React.FC = () => {
           }
 
           // 🌟 [원정대 시너지 & 심연의 백과 & 클래스 방어 패시브] 받는 피해 감소(damageReductionPct) 적용
-          let totalDmgRed = 0;
-          activeSyns.forEach(syn => {
-            if (syn?.buffs?.damageReductionPct) totalDmgRed += syn.buffs.damageReductionPct;
-          });
+          let totalDmgRed = getSynergyBuffSum(activeSyns, 'damageReductionPct');
           const codexRed = gm.getCodexBonus().dmgReduction;
           if (codexRed > 0) {
             totalDmgRed += (codexRed / 100);
@@ -6975,10 +6947,7 @@ export const BattleScreen: React.FC = () => {
 
           // 🛡️ [전열 엄호 분담 피해 처리] 엄호로 나눠받은 50% 데미지를 엄호 영웅 본인이 받은 데미지로 계산하여 처리
           if (guardedFrontHero && guardSharedRawDmg > 0 && guardedFrontHero.currentHp > 0) {
-            let frontDmgRed = 0;
-            activeSyns.forEach(syn => {
-              if (syn?.buffs?.damageReductionPct) frontDmgRed += syn.buffs.damageReductionPct;
-            });
+            let frontDmgRed = getSynergyBuffSum(activeSyns, 'damageReductionPct');
             if (codexRed > 0) frontDmgRed += (codexRed / 100);
             if (gm.party.some(p => p.classId === 'paladin' && p.currentHp > 0)) frontDmgRed += 0.15;
             if (gm.party.some(p => p.classId === 'warlord' && p.currentHp > 0 && (p.position === 'front' || (p.position as string) === 'vanguard'))) frontDmgRed += 0.12;

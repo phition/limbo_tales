@@ -6889,6 +6889,36 @@ export class GameManager {
     return hasBuff || hasItem;
   }
 
+  /**
+   * 🌌 무간도(11층) 몬스터 레벨 계산
+   * 위험도 1에서 Lv.40부터 시작하여 최종 위험도 10,000에서 Lv.499까지 점진적으로 스케일링
+   */
+  public getAviciMonsterLevel(danger: number): number {
+    const dangerClamped = Math.max(1, Math.min(10000, danger));
+    return Math.min(499, Math.max(40, Math.round(40 + ((dangerClamped - 1) / 9999) * (499 - 40))));
+  }
+
+  /**
+   * 💖 무간도 중간 보스 격파 시 원정대 전원 HP/MP 50% 회복
+   */
+  public recoverPartyAfterMidBoss(): boolean {
+    let healedAny = false;
+    this.party.forEach(h => {
+      if (h.currentHp > 0 && !h.isPermanentlyDead) {
+        const hpGain = Math.max(1, Math.floor(h.maxHp * 0.5));
+        const mpGain = Math.max(1, Math.floor(h.maxMp * 0.5));
+        h.currentHp = Math.min(h.maxHp, h.currentHp + hpGain);
+        h.currentMp = Math.min(h.maxMp, (h.currentMp || 0) + mpGain);
+        healedAny = true;
+      }
+    });
+    if (healedAny) {
+      this.emit('partyUpdated', this.party);
+      this.addLog('💖✨ [중간 보스 격파] 무간도 중간 보스를 처치하여 원정대 전원의 체력과 마나가 50% 회복되었습니다!', 'reward');
+    }
+    return healedAny;
+  }
+
   public promoteMercenary(
     heroId: string,
     targetClassId: string,
@@ -10958,6 +10988,16 @@ export class GameManager {
     const lv = forgeLevel ?? (this.buildings['blacksmith']?.level || 1);
     const mult = applyDiscount ? this.getForgeDiscountMultiplier() : 1;
     return calculatePurifyCost(lv, mult);
+  }
+
+  /** ✨ 정화 비용 지불 가능 여부 판별 */
+  public canAffordPurify(cost: PurifyCost): boolean {
+    return (
+      (this.resources.gold || 0) >= cost.gold &&
+      (this.resources.ether || 0) >= cost.ether &&
+      (cost.crystal <= 0 || (this.resources.crystal || 0) >= cost.crystal) &&
+      (cost.void_shard <= 0 || (this.resources.void_shard || 0) >= cost.void_shard)
+    );
   }
 
   /** ✨ 5분이 지난 정화 이력 자동 만료 정리 */

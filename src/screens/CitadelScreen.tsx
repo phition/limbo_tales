@@ -36,7 +36,7 @@ import {
 import { SoundManager } from '../managers/SoundManager';
 import { HERO_TRAITS, GameManager } from '../managers/GameManager';
 import { SynergyGuideModal } from '../components/SynergyGuideModal';
-import { getRarityBorderStyle } from '../utils/rarity';
+import { getRarityColor, getRarityLabel, getRarityBorderStyle } from '../utils/rarity';
 import { PartySynergyPanel } from '../components/PartySynergyPanel';
 import { EpicQuestDialogueModal } from '../components/EpicQuestDialogueModal';
 import { IntroStoryModal } from '../components/IntroStoryModal';
@@ -186,57 +186,6 @@ function formatCost(costObj: Record<string, number>): string {
 // ─────────────────────────────────────────────────────────────
 //  장비 스탯 & 인챈트 상세 헬퍼
 // ─────────────────────────────────────────────────────────────
-const getRarityColor = (rarity?: string) => {
-  switch (rarity) {
-    case 'rare': return '#42a5f5';
-    case 'unique': return '#ab47bc';
-    case 'epic': return '#ce93d8';
-    case 'legendary':
-    case 'legend': return '#ffd54f';
-    default: return '#90a4ae';
-  }
-};
-
-const getRarityLabel = (rarity?: string, lang?: 'ko' | 'en' | 'ja') => {
-  const currentLang = lang || I18nService.getInstance().getLanguage();
-  if (currentLang === 'en') {
-    switch (rarity) {
-      case 'rare': return 'Rare';
-      case 'unique': return 'Unique';
-      case 'epic': return 'Epic';
-      case 'legendary':
-      case 'legend': return 'Legend';
-      case 'mythic': return 'Mythic';
-      case 'ancient': return 'Ancient';
-      case 'relic': return 'Relic';
-      default: return 'Common';
-    }
-  } else if (currentLang === 'ja') {
-    switch (rarity) {
-      case 'rare': return '希少';
-      case 'unique': return '固有';
-      case 'epic': return '英雄';
-      case 'legendary':
-      case 'legend': return '伝説';
-      case 'mythic': return '神話';
-      case 'ancient': return '古代';
-      case 'relic': return '遺物';
-      default: return '一般';
-    }
-  }
-  switch (rarity) {
-    case 'rare': return '희귀';
-    case 'unique': return '고유';
-    case 'epic': return '영웅';
-    case 'legendary':
-    case 'legend': return '전설';
-    case 'mythic': return '신화';
-    case 'ancient': return '고대';
-    case 'relic': return '유물';
-    default: return '일반';
-  }
-};
-
 const formatEnchantStatList = (stats?: EnchantOption['stats']) => {
   if (!stats) return [];
   const list: { label: string; value: string; color?: string }[] = [];
@@ -8809,11 +8758,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </div>
               ) : (
                 cursedItems.map(item => {
-                  const canCleanse = 
-                    (state.resources.gold || 0) >= purifyCost.gold &&
-                    (state.resources.ether || 0) >= purifyCost.ether &&
-                    (purifyCost.crystal <= 0 || (state.resources.crystal || 0) >= purifyCost.crystal) &&
-                    (purifyCost.void_shard <= 0 || (state.resources.void_shard || 0) >= purifyCost.void_shard);
+                  const canCleanse = gm.canAffordPurify(purifyCost);
                   const purifyRate = gm.getPurifySuccessRate();
 
                   return (
@@ -9082,11 +9027,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             {/* 침식 장비인 경우 모달 안에서도 원클릭 신성 정화 가능 */}
             {!inspectItem.isPurified && (() => {
               const item = inspectItem.item;
-              const canCleanse = 
-                (state.resources.gold || 0) >= purifyCost.gold &&
-                (state.resources.ether || 0) >= purifyCost.ether &&
-                (purifyCost.crystal <= 0 || (state.resources.crystal || 0) >= purifyCost.crystal) &&
-                (purifyCost.void_shard <= 0 || (state.resources.void_shard || 0) >= purifyCost.void_shard);
+              const canCleanse = gm.canAffordPurify(purifyCost);
               const purifyRate = gm.getPurifySuccessRate();
 
               return (
@@ -13879,8 +13820,7 @@ export const ExploreDrawer: React.FC<{
                           const tierUnlocked = tier <= (gm.unlockedAviciTier || 1);
                           const startDanger = tier === 1 ? 0 : (tier - 1) * 1000 + 1;
                           const reqDanger = (tier - 1) * 1000;
-                          const startDangerClamped = Math.max(1, Math.min(10000, startDanger));
-                          const startLv = Math.min(499, Math.max(40, Math.round(40 + ((startDangerClamped - 1) / 9999) * (499 - 40))));
+                          const startLv = gm.getAviciMonsterLevel(startDanger);
                           return (
                             <button
                               key={tier}
