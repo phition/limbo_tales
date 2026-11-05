@@ -4373,44 +4373,35 @@ const BarracksDrawer: React.FC<{
   const learnedCount = hero?.learnedSkills?.length || 0;
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0e17] text-[#cfd8e8]">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-[#1f2738] bg-[#070a10] shrink-0">
+    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+      {/* ── ⚔️ 병영 서브 툴바 (대원 현황 & 유대 관계도) ── */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-[#242732] bg-[#0c0e14] shrink-0 flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-base">⚔️</span>
-          <div className="flex items-center gap-1.5">
-            <span className="text-sm font-bold text-[#c8aa6e]">{I18nService.getInstance().tr('병영')}</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
-              {I18nService.getInstance().tr(`보유 ${state.barracks.length}/7명`)}
-            </span>
-            <EncyclopediaBadge tab="classes" label="병영 백과" />
-          </div>
+          <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#161a24] text-[#dcc496] font-bold border border-[#3d372e] font-mono">
+            {I18nService.getInstance().tr(`보유 ${state.barracks.length}/7명`)}
+          </span>
+          <EncyclopediaBadge tab="classes" label="병영 백과" />
         </div>
         <div className="flex items-center gap-1.5">
           <button
-            className="text-[10px] px-2 py-1 rounded-lg bg-[#ff416c18] text-[#ff416c] border border-[#ff416c33] font-bold hover:bg-[#ff416c28] transition-all cursor-pointer shrink-0"
+            type="button"
+            className="text-[11px] px-2.5 py-1 rounded-lg bg-[#ff416c]/15 text-[#ff8099] border border-[#ff416c]/40 font-bold hover:bg-[#ff416c]/25 transition-all cursor-pointer shrink-0 shadow-sm flex items-center gap-1"
             onClick={() => setShowBondModal(true)}
           >
-            {I18nService.getInstance().tr('💞 유대 관계도')}
-          </button>
-          <button
-            className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
-            style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-            onClick={onClose}
-            aria-label="닫기"
-          >
-            <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
+            <span>💞</span>
+            <span>{I18nService.getInstance().tr('유대 관계도')}</span>
           </button>
         </div>
       </div>
 
       {/* ── ⚔️ / 🌌 / 🛡️ 카테고리 탭 (3인 던전 원정대 vs 3+1 차원 부대 vs 영지 수비 부대) ── */}
-      <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0a0d16] border-b border-[#1f2738] shrink-0 overflow-x-auto">
+      <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0a0d14] border-b border-[#242732] shrink-0 overflow-x-auto">
         <button
+          type="button"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
             barracksCategory === 'dungeon'
-              ? 'bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e66] shadow-sm'
-              : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
           }`}
           onClick={() => setBarracksCategory('dungeon')}
         >
@@ -4418,10 +4409,11 @@ const BarracksDrawer: React.FC<{
           <span>{I18nService.getInstance().tr('던전 원정대')}</span>
         </button>
         <button
+          type="button"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
             barracksCategory === 'dimensional'
-              ? 'bg-[#ff416c22] text-[#ff416c] border border-[#ff416c66] shadow-sm'
-              : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
+              ? 'bg-[#ff416c]/20 text-[#ff8099] border border-[#ff416c] shadow-[0_0_10px_rgba(255,65,108,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
           }`}
           onClick={() => setBarracksCategory('dimensional')}
         >
@@ -4431,10 +4423,11 @@ const BarracksDrawer: React.FC<{
 
         {/* 🛡️ 영지 수비부대 탭 (차원 앵커 게이트 Lv.6 해금) */}
         <button
+          type="button"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
             barracksCategory === 'defense'
-              ? 'bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d66] shadow-sm'
-              : 'bg-[#121724] text-[#8b9bb4] border border-[#20293d] hover:text-white'
+              ? 'bg-[#38ef7d]/20 text-[#38ef7d] border border-[#38ef7d] shadow-[0_0_10px_rgba(56,239,125,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
           }`}
           onClick={() => setBarracksCategory('defense')}
         >
@@ -5047,29 +5040,31 @@ const BarracksDrawer: React.FC<{
               return (
                 <button
                   key={h.id}
-                  className={`btn min-w-[80px] text-xs py-1.5 flex-col transition-all rounded-lg relative ${
-                    isSelected ? 'btn-primary shadow-md' : 'btn-ghost border border-[#222d42]'
+                  className={`min-w-[84px] text-xs py-1.5 px-2 flex flex-col items-center transition-all rounded-xl relative cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#221c14] border-2 border-[#b89758] text-[#dcc496] shadow-[0_0_12px_rgba(184,151,88,0.35)] scale-[1.02]'
+                      : 'bg-[#10131a] border border-[#3d372e] text-[#9da3af] hover:text-white hover:border-[#b89758]/60'
                   }`}
                   onClick={() => setSelectedIdx(i)}
                 >
                   {canPromoteHero && (
-                    <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#ffd54f] text-black font-bold animate-pulse shadow-sm shadow-[#ffd54f]">
-                      ✨전직
+                    <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#ffd54f] text-black font-extrabold animate-pulse shadow-sm shadow-[#ffd54f]/50">
+                      ✨{tr('전직')}
                     </span>
                   )}
                   {canAwakenHero && (
-                    <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#c8aa6e] text-black font-bold animate-pulse shadow-sm shadow-[#c8aa6e]">
-                      🔮각성
+                    <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#dcc496] text-black font-extrabold animate-pulse shadow-sm shadow-[#dcc496]/50">
+                      🔮{tr('각성')}
                     </span>
                   )}
                   <div className="flex items-center gap-1">
-                    <span className="font-bold truncate max-w-[48px]">{h.name}</span>
+                    <span className="font-bold truncate max-w-[52px]">{h.name}</span>
                     <span className="text-[9px] font-bold font-mono text-[#ffd54f]">
                       Lv.{h.level}
                     </span>
                   </div>
-                  <div className={`text-[10px] font-bold mt-0.5 ${isAdmitted ? 'text-[#ff7043]' : canAwakenHero ? 'text-[#c8aa6e]' : canPromoteHero ? 'text-[#ffd54f]' : inParty ? 'text-[#38ef7d]' : 'text-[#8b9bb4]'}`}>
-                    {isAdmitted ? '🏥입원중' : canAwakenHero ? '🔮각성가능' : canPromoteHero ? '✨전직가능' : inParty ? '★ 파티원' : '대기중'}
+                  <div className={`text-[10px] font-bold mt-0.5 ${isAdmitted ? 'text-[#ef5350]' : canAwakenHero ? 'text-[#dcc496]' : canPromoteHero ? 'text-[#ffd54f]' : inParty ? 'text-[#81c784]' : 'text-[#8b9bb4]'}`}>
+                    {isAdmitted ? tr('🏥입원중') : canAwakenHero ? tr('🔮각성가능') : canPromoteHero ? tr('✨전직가능') : inParty ? tr('★ 파티원') : tr('대기중')}
                   </div>
                 </button>
               );
@@ -5085,7 +5080,7 @@ const BarracksDrawer: React.FC<{
                 const inParty = state.party.some(p => p.id === hero.id);
 
                 return (
-                  <div className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl flex flex-col gap-1.5">
+                  <div className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl flex flex-col gap-2 shadow-sm">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="font-bold text-base text-white">{hero.name}</span>
