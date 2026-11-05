@@ -2212,7 +2212,7 @@ export function corruptEquipment(item: EquipmentItem): EquipmentItem {
  * - 단조 시와 같이 기본 베이스 템의 ±30% 랜덤 스탯 조정
  * - 착용 가능 상태로 전환 (isCorrupted = false, isUnpurified = false)
  */
-export function purifyCorruptedEquipment(item: EquipmentItem): EquipmentItem {
+export function purifyCorruptedEquipment(item: EquipmentItem, forgeLevel?: number): EquipmentItem {
   if (!item) return item;
 
   // 무기 고유 특성 보존 및 자동 감지 부여
@@ -2222,12 +2222,21 @@ export function purifyCorruptedEquipment(item: EquipmentItem): EquipmentItem {
   // 1. [침식된], [저주받은] 등 접두어 완벽 제거하여 순정 명칭으로 복원
   const pureName = item.name.replace(/^\[(침식된|저주받은|정화된)\]\s*/, '').trim();
 
-  // 2. 기본 베이스 템 스탯 기준치 확보
+  // 2. 3레벨 이상 병기창에서 일반 등급 장비 정화 시 정화의 축복으로 희귀 등급 승격 기회 제공
+  let finalRarity = item.rarity;
+  if (forgeLevel && forgeLevel >= 3 && finalRarity === 'common') {
+    const rates = getForgeRarityRates(forgeLevel);
+    if (Math.random() < rates.rare * 0.5) {
+      finalRarity = 'rare';
+    }
+  }
+
+  // 3. 기본 베이스 템 스탯 기준치 확보
   const baseStatSource = item.baseStats && Object.keys(item.baseStats).length > 0 
     ? item.baseStats 
     : item.stats;
 
-  // 3. 기본 베이스 템의 ±30% (70% ~ 130%) 랜덤 스탯 조정
+  // 4. 기본 베이스 템의 ±30% (70% ~ 130%) 랜덤 스탯 조정
   const rolledStats: EquipmentItem['stats'] = {};
   for (const [sKey, sVal] of Object.entries(baseStatSource)) {
     if (typeof sVal === 'number' && sVal > 0) {
@@ -2237,7 +2246,7 @@ export function purifyCorruptedEquipment(item: EquipmentItem): EquipmentItem {
     }
   }
 
-  // 4. 기존 접두사(prefix)나 접미사(suffix) 인챈트가 있다면 인챈트 보너스 합산
+  // 5. 기존 접두사(prefix)나 접미사(suffix) 인챈트가 있다면 인챈트 보너스 합산
   if (item.prefix?.stats) {
     Object.entries(item.prefix.stats).forEach(([k, v]) => {
       const key = k as keyof EquipmentItem['stats'];
@@ -2251,7 +2260,7 @@ export function purifyCorruptedEquipment(item: EquipmentItem): EquipmentItem {
     });
   }
 
-  // 5. 설명 복원 (침식 경고문 제거)
+  // 6. 설명 복원 (침식 경고문 제거)
   let cleanDesc = item.description || '';
   cleanDesc = cleanDesc.replace(/\[(심연의 저주에 침식된 장비|심연에 침식된 장비|침식 상태)\].*?(\.|$)/g, '').trim();
   if (!cleanDesc) {
@@ -2261,6 +2270,7 @@ export function purifyCorruptedEquipment(item: EquipmentItem): EquipmentItem {
   return {
     ...item,
     name: pureName,
+    rarity: finalRarity,
     weaponType: wType,
     weaponTrait: wTrait,
     isCorrupted: false,
@@ -2280,15 +2290,62 @@ export function purifyCorruptedEquipment(item: EquipmentItem): EquipmentItem {
 /**
  * 🩸 저주받은 장비 정화 시 모든 등급 풀에서 결정 및 최상급 스탯 부여 (호환성 유지)
  */
-export function createPurifiedEquipmentFromCursed(cursedItem: EquipmentItem): EquipmentItem {
-  return purifyCorruptedEquipment(cursedItem);
+export function createPurifiedEquipmentFromCursed(cursedItem: EquipmentItem, forgeLevel?: number): EquipmentItem {
+  return purifyCorruptedEquipment(cursedItem, forgeLevel);
+}
+
+/**
+ * 🪙 병기창 침식 장비 정화 비용 인터페이스
+ */
+export interface PurifyCost {
+  gold: number;
+  ether: number;
+  crystal: number;
+  void_shard: number;
+}
+
+/**
+ * ✨ 병기창 침식 장비 정화 비용 계산
+ * - 1레벨 기본 100G, 에테르 50개 -> 레벨업마다 증가하여 10레벨에서 10,000G, 에테르 200개 소모
+ * - 5레벨 이후: 마력 수정(crystal) 일정량 소모 (Lv5: 1개, Lv6: 2개, Lv7: 3개, Lv8: 4개, Lv9: 5개, Lv10: 6개)
+ * - 7레벨 이후: 공허 파편(void_shard) 일정량 소모 (Lv7: 1개, Lv8~9: 2개, Lv10: 3개)
+ * - 병기창 할인율(mult) 적용
+ */
+export function calculatePurifyCost(forgeLevel: number, mult: number = 1): PurifyCost {
+  const lv = Math.max(1, Math.min(10, forgeLevel));
+
+  // 🪙 골드: 1레벨 100G -> 10레벨 10,000G (레벨당 +1,100G)
+  const rawGold = 100 + (lv - 1) * 1100;
+  const gold = Math.max(1, Math.floor(rawGold * mult));
+
+  // ✨ 에테르: 1레벨 50개 -> 10레벨 200개 (점진적 증가)
+  const etherTable = [0, 50, 65, 80, 95, 115, 130, 150, 165, 180, 200];
+  const rawEther = etherTable[lv] ?? 200;
+  const ether = Math.max(1, Math.floor(rawEther * mult));
+
+  // 💎 마력 수정: 5레벨 이후 일정량 소모
+  let crystal = 0;
+  if (lv >= 5) {
+    const rawCrystal = lv - 4;
+    crystal = Math.max(1, Math.round(rawCrystal * mult));
+  }
+
+  // 🌀 공허 파편: 7레벨 이후 일정량 소모
+  let void_shard = 0;
+  if (lv >= 7) {
+    const rawVoid = lv >= 10 ? 3 : lv >= 8 ? 2 : 1;
+    void_shard = Math.max(1, Math.round(rawVoid * mult));
+  }
+
+  return { gold, ether, crystal, void_shard };
 }
 
 /**
  * 🎲 병기창 레벨에 따른 단조 등급 확률 정의
- * - Lv 1~5: 기본 일반(Common), 확률적으로 희귀(Rare) 제작 (+보너스 스탯)
- * - Lv 6~9: 기본 일반(Common), 확률적으로 희귀(Rare) 및 영웅(Epic) 등급까지 제작 가능
- * - Lv 10: 전설(Legendary) 등급까지 낮은 확률로 제작 가능
+ * - Lv 1~2: 기본 일반(Common), 희귀 0%
+ * - Lv 3~5: 희귀(Rare) 등급 확률 상향 (Lv3: 30%, Lv4: 38%, Lv5: 46%)
+ * - Lv 6~9: 희귀 및 영웅(Epic) 등급 확률 상향
+ * - Lv 10: 전설(Legendary) 등급 10% 포함 최상위 등급 확률 대폭 강화
  */
 export interface ForgeRarityRates {
   common: number;
@@ -2310,8 +2367,8 @@ export function getForgeRarityRates(forgeLevel: number): ForgeRarityRates {
       maxRarity: 'common'
     };
   } else if (lv <= 5) {
-    // 3~5레벨: 기본 일반, 확률적 희귀 (Lv3: 20%, Lv4: 28%, Lv5: 35%)
-    const rareRate = 0.20 + (lv - 3) * 0.075;
+    // 3~5레벨: 기본 일반, 확률적 희귀 (Lv3: 30%, Lv4: 38%, Lv5: 46% - 기존 대비 상향)
+    const rareRate = 0.30 + (lv - 3) * 0.08;
     return {
       common: Math.round((1 - rareRate) * 100) / 100,
       rare: Math.round(rareRate * 100) / 100,
@@ -2320,9 +2377,9 @@ export function getForgeRarityRates(forgeLevel: number): ForgeRarityRates {
       maxRarity: 'rare'
     };
   } else if (lv <= 9) {
-    // 6~9레벨: 일반 기본, 희귀 및 영웅 확률
-    const epicRate = 0.10 + (lv - 6) * 0.05; // Lv6: 10%, Lv7: 15%, Lv8: 20%, Lv9: 25%
-    const rareRate = 0.35 + (lv - 6) * 0.02; // Lv6: 35%, Lv7: 37%, Lv8: 39%, Lv9: 41%
+    // 6~9레벨: 일반 기본, 희귀 및 영웅 확률 상향
+    const epicRate = 0.14 + (lv - 6) * 0.05; // Lv6: 14%, Lv7: 19%, Lv8: 24%, Lv9: 29%
+    const rareRate = 0.40 + (lv - 6) * 0.02; // Lv6: 40%, Lv7: 42%, Lv8: 44%, Lv9: 46%
     const commonRate = Math.max(0, 1 - epicRate - rareRate);
     return {
       common: Math.round(commonRate * 100) / 100,
@@ -2332,12 +2389,12 @@ export function getForgeRarityRates(forgeLevel: number): ForgeRarityRates {
       maxRarity: 'epic'
     };
   } else {
-    // Lv 10: 전설 7% 낮은 확률
+    // Lv 10: 희귀 이상 88% (전설 10%, 영웅 32%, 희귀 46%, 일반 12%)
     return {
-      common: 0.20,
-      rare: 0.45,
-      epic: 0.28,
-      legendary: 0.07,
+      common: 0.12,
+      rare: 0.46,
+      epic: 0.32,
+      legendary: 0.10,
       maxRarity: 'legendary'
     };
   }

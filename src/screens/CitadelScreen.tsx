@@ -8004,6 +8004,7 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const mult = gm.getForgeDiscountMultiplier();
   const unlocks = gm.getForgeFeatureUnlocks();
   const rates = getForgeRarityRates(forgeLv);
+  const purifyCost = gm.getPurifyCost(forgeLv, true);
 
   // 단조 레시피 카테고리 필터링 (병기창 레벨별 동적 레시피 반영)
   const currentRecipes = gm.getForgeRecipes();
@@ -8681,9 +8682,22 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
                   던전에서 발굴된 [침식된] 장비의 마기를 정화하여 순정 상태로 복원합니다. 정화 시 단조 공정과 동일하게 기본 베이스 스탯의 <strong className="text-[#38ef7d]">±30% 랜덤 스탯 조정</strong>이 적용됩니다.
                 </div>
-                <div className="text-[10px] text-[#8b9bb4] pt-1 border-t border-[#c8aa6e22] flex items-center justify-between">
-                  <span>정화 1회 비용 (-{discountPct}% 할인 적용)</span>
-                  <span className="font-mono text-white">🪙 {Math.max(1, Math.floor(100 * mult))}/{state.resources.gold || 0}G + ✨ {Math.max(1, Math.floor(5 * mult))}/{state.resources.ether || 0}</span>
+                <div className="text-[10px] text-[#8b9bb4] pt-1 border-t border-[#c8aa6e22] flex items-center justify-between flex-wrap gap-1">
+                  <span>{tr('정화 1회 비용')} (-{discountPct}% {tr('할인 적용')})</span>
+                  <span className="font-mono text-white flex items-center gap-2 flex-wrap">
+                    <span>🪙 {purifyCost.gold}/{state.resources.gold || 0}G</span>
+                    <span>✨ {purifyCost.ether}/{state.resources.ether || 0}</span>
+                    {purifyCost.crystal > 0 && (
+                      <span className={(state.resources.crystal || 0) >= purifyCost.crystal ? 'text-[#80d8ff]' : 'text-[#ef5350]'}>
+                        💎 {purifyCost.crystal}/{state.resources.crystal || 0}
+                      </span>
+                    )}
+                    {purifyCost.void_shard > 0 && (
+                      <span className={(state.resources.void_shard || 0) >= purifyCost.void_shard ? 'text-[#b388ff]' : 'text-[#ef5350]'}>
+                        🌀 {purifyCost.void_shard}/{state.resources.void_shard || 0}
+                      </span>
+                    )}
+                  </span>
                 </div>
               </div>
 
@@ -8802,9 +8816,11 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </div>
               ) : (
                 cursedItems.map(item => {
-                  const reqGold = Math.max(1, Math.floor(100 * mult));
-                  const reqEther = Math.max(1, Math.floor(5 * mult));
-                  const canCleanse = (state.resources.gold || 0) >= reqGold && (state.resources.ether || 0) >= reqEther;
+                  const canCleanse = 
+                    (state.resources.gold || 0) >= purifyCost.gold &&
+                    (state.resources.ether || 0) >= purifyCost.ether &&
+                    (purifyCost.crystal <= 0 || (state.resources.crystal || 0) >= purifyCost.crystal) &&
+                    (purifyCost.void_shard <= 0 || (state.resources.void_shard || 0) >= purifyCost.void_shard);
                   const baseStats = item.baseStats && Object.keys(item.baseStats).length > 0 ? item.baseStats : item.stats;
                   const purifyRate = gm.getPurifySuccessRate();
 
@@ -8854,8 +8870,29 @@ const ForgeDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         </div>
                       </div>
 
+                      {/* 필요 정화 재화 목록 뱃지 */}
+                      <div className="flex items-center gap-1.5 flex-wrap text-[10px] font-mono">
+                        <span className="text-[#8b9bb4] font-sans">{tr('소모 재화')}:</span>
+                        <span className={`px-1.5 py-0.2 rounded border ${(state.resources.gold || 0) >= purifyCost.gold ? 'bg-[#ffd54f15] text-[#ffd54f] border-[#ffd54f33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                          🪙 {purifyCost.gold}G
+                        </span>
+                        <span className={`px-1.5 py-0.2 rounded border ${(state.resources.ether || 0) >= purifyCost.ether ? 'bg-[#64b5f615] text-[#64b5f6] border-[#64b5f633]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                          ✨ {purifyCost.ether}
+                        </span>
+                        {purifyCost.crystal > 0 && (
+                          <span className={`px-1.5 py-0.2 rounded border ${(state.resources.crystal || 0) >= purifyCost.crystal ? 'bg-[#80d8ff15] text-[#80d8ff] border-[#80d8ff33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                            💎 {purifyCost.crystal}
+                          </span>
+                        )}
+                        {purifyCost.void_shard > 0 && (
+                          <span className={`px-1.5 py-0.2 rounded border ${(state.resources.void_shard || 0) >= purifyCost.void_shard ? 'bg-[#b388ff15] text-[#b388ff] border-[#b388ff33]' : 'bg-[#ef535015] text-[#ef5350] border-[#ef535044]'}`}>
+                            🌀 {purifyCost.void_shard}
+                          </span>
+                        )}
+                      </div>
+
                       <ActionButton
-                        label={canCleanse ? `✨ 신성 정화 시작 (성공률 ${purifyRate}%)` : '정화 재화 부족'}
+                        label={canCleanse ? `✨ ${tr('신성 정화 시작')} (${tr('성공률')} ${purifyRate}%)` : tr('정화 재화 부족')}
                         variant={canCleanse ? 'success' : 'ghost'}
                         size="sm"
                         className="w-full font-bold shadow"

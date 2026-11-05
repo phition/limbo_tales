@@ -82,6 +82,8 @@ import {
   createPurifiedEquipmentFromCursed,
   corruptEquipment,
   purifyCorruptedEquipment,
+  calculatePurifyCost,
+  PurifyCost,
   getHeroEquippedBossSet,
   detectWeaponType,
   getWeaponTrait,
@@ -343,6 +345,10 @@ export class GameManager {
 
   public getSaveKey(): string {
     return `${BASE_SAVE_KEY}_${this.currentUserId || 'guest'}`;
+  }
+
+  public getSaveKeyForUid(uid: string): string {
+    return `${BASE_SAVE_KEY}_${uid || 'guest'}`;
   }
 
   private tickerInterval: ReturnType<typeof setInterval> | null = null;
@@ -6866,6 +6872,15 @@ export class GameManager {
     this.emit('partyUpdated', this.party);
   }
 
+  /** 👑 해당 층 보스(광폭화 보스 포함) 모든 능력치 10% 약화 유물/버프 보유 여부 확인 */
+  public hasBossWeakeningForFloor(floor: number): boolean {
+    const buffId = `expedition_boss_seal_${floor}`;
+    const relicKey = `boss_seal_floor_${floor}`;
+    const hasBuff = Boolean(this.expeditionBuffs?.some(b => b.id === buffId || b.id === `boss_weakening_${floor}`));
+    const hasItem = Boolean(this.dungeonInventory?.some(item => item.key === relicKey || item.key === `boss_weakening_relic_${floor}`));
+    return hasBuff || hasItem;
+  }
+
   public promoteMercenary(
     heroId: string,
     targetClassId: string,
@@ -10930,6 +10945,13 @@ export class GameManager {
     return Math.min(95, 30 + forgeLv * 5);
   }
 
+  /** ✨ 병기창 침식 장비 정화 비용 조회 (할인율 적용 가능) */
+  public getPurifyCost(forgeLevel?: number, applyDiscount: boolean = true): PurifyCost {
+    const lv = forgeLevel ?? (this.buildings['blacksmith']?.level || 1);
+    const mult = applyDiscount ? this.getForgeDiscountMultiplier() : 1;
+    return calculatePurifyCost(lv, mult);
+  }
+
   /** ✨ 5분이 지난 정화 이력 자동 만료 정리 */
   public cleanExpiredPurifiedItems(): void {
     const now = Date.now();
@@ -10967,21 +10989,35 @@ export class GameManager {
       return { success: false, destroyed: false, message: msg };
     }
 
-    const mult = this.getForgeDiscountMultiplier();
-    const goldCost = Math.max(1, Math.floor(100 * mult));
-    const etherCost = Math.max(1, Math.floor(5 * mult));
+    const forgeLv = this.buildings['blacksmith']?.level || 1;
+    const cost = this.getPurifyCost(forgeLv, true);
 
-    if (this.resources.gold < goldCost || this.resources.ether < etherCost) {
-      const msg = `정화 비용 부족: 골드(${goldCost}G) 또는 에테르(${etherCost}개)가 부족합니다.`;
+    const missing: string[] = [];
+    if ((this.resources.gold || 0) < cost.gold) {
+      missing.push(`골드 ${cost.gold}G (보유: ${this.resources.gold || 0}G)`);
+    }
+    if ((this.resources.ether || 0) < cost.ether) {
+      missing.push(`에테르 ${cost.ether}개 (보유: ${this.resources.ether || 0}개)`);
+    }
+    if (cost.crystal > 0 && (this.resources.crystal || 0) < cost.crystal) {
+      missing.push(`마력 수정 ${cost.crystal}개 (보유: ${this.resources.crystal || 0}개)`);
+    }
+    if (cost.void_shard > 0 && (this.resources.void_shard || 0) < cost.void_shard) {
+      missing.push(`공허 파편 ${cost.void_shard}개 (보유: ${this.resources.void_shard || 0}개)`);
+    }
+
+    if (missing.length > 0) {
+      const msg = `정화 비용 부족: ${missing.join(', ')}`;
       this.addLog(msg, 'danger');
       return { success: false, destroyed: false, message: msg };
     }
 
-    this.modifyResource('gold', -goldCost);
-    this.modifyResource('ether', -etherCost);
+    this.modifyResource('gold', -cost.gold);
+    this.modifyResource('ether', -cost.ether);
+    if (cost.crystal > 0) this.modifyResource('crystal', -cost.crystal);
+    if (cost.void_shard > 0) this.modifyResource('void_shard', -cost.void_shard);
 
     const oldName = item.name;
-    const forgeLv = this.buildings['blacksmith']?.level || 1;
     const successRate = this.getPurifySuccessRate();
     const isSuccess = typeof forcedSuccess === 'boolean' ? forcedSuccess : ((Math.random() * 100) < successRate);
 
@@ -10997,8 +11033,8 @@ export class GameManager {
       return { success: false, destroyed: true, message: failMsg };
     }
 
-    // ✨ 정화 성공: 기본 베이스 템의 +-30% 랜덤 스탯 조정 및 [침식된] 접두어 제거된 순정 템 복원
-    const purified = purifyCorruptedEquipment(item);
+    // ✨ 정화 성공: 기본 베이스 템의 +-30% 랜덤 스탯 조정 및 [침식된] 접두어 제거된 순정 템 복원 (3레벨 이상 희귀 승격 가능)
+    const purified = purifyCorruptedEquipment(item, forgeLv);
     this.equipmentInventory[itemIdx] = purified;
 
     // ✨ 5분간 유지되는 정화 이력 목록에 등록
@@ -12776,6 +12812,71 @@ export class GameManager {
     try {
       localStorage.removeItem('limbo_dungeon_session');
     } catch (_) {}
+  }
+
+  /** 대기 중인 클라우드 저장 디바운스 타이머 취소 (로그아웃 또는 계정 전환 시 이전 계정 덮어쓰기 방지) */
+  public cancelPendingCloudSave(): void {
+    if (this.cloudSaveDebounceTimer) {
+      clearTimeout(this.cloudSaveDebounceTimer);
+      this.cloudSaveDebounceTimer = null;
+    }
+  }
+
+  /**
+   * 🧹 로그아웃 및 계정 전환 시 메모리 상태 완전 초기화
+   * - 대기 중인 클라우드 저장 타이머 취소
+   * - 이전 계정의 인벤토리, 용병, 자원, 퀘스트 등 모든 상태를 신규 디폴트로 리셋
+   * - 진행 중이던 던전 세션 로컬 캐시 삭제
+   */
+  public clearForLogout(): void {
+    this.cancelPendingCloudSave();
+    this.currentUserId = 'guest';
+    try {
+      localStorage.removeItem('limbo_dungeon_session');
+    } catch (_) {}
+    this.initDefaultData();
+    this.party = [];
+    this.cemetery = [];
+    this.skillBookInventory = [];
+    this.equipmentInventory = [];
+    this.infirmaryPatients = [];
+    this.tavernCandidates = [];
+    this.customSkills = {};
+    this.logs = [];
+    this.bossClearTimes = {};
+    this.bestAbyss10FClearTime = null;
+    this.maxAviciDangerReached = 0;
+    this.aviciBossBonusClaimed = false;
+    this.bestAviciTimeAttackBonus = 0;
+    this.pgsPurificationQuestsClaimed = [];
+    this.pgsAviciTiersClaimed = 0;
+    this.pveBuffActive = false;
+    this.bonfireStacks = 0;
+    this.bonfireWarmthTime = 0;
+    this.dungeonFloor = 1;
+    this.dungeonDangerLevel = 0;
+    this.isOvercharged = false;
+    this.unlockedDungeonFloor = 1;
+    this.unlockedAviciTier = 0;
+    this.bonds = {};
+    this.citadelSupplies = 0;
+    this.backpackCapacity = 20;
+    this.lastSelectedBagId = 'bag_basic';
+    this.tavernArrivalSecondsLeft = 0;
+    this.tavernRefreshCount = 0;
+    this.cemetery = [];
+    this.memorialExpBuffUntil = 0;
+    this.activeAncestralBlessing = null;
+    this.expeditionBuffs = [];
+    this.codexUnlockedItems = {};
+    this.codexUnlockOrder = [];
+    this.codexUnlockedTimestamps = {};
+    this.isMasterAccount = false;
+    this.emit('resourcesChanged');
+    this.emit('buildingUpdated');
+    this.emit('partyUpdated', this.party);
+    this.emit('questUpdated');
+    this.emit('update');
   }
 
   /** 실시간 클라우드 자동 저장 (Firebase Realtime DB 즉시 동기화) */
