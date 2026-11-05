@@ -4064,7 +4064,7 @@ export const ArenaScreen: React.FC = () => {
                 >
                   {isLoadingLb ? tr('동기화 중...') : tr('🔄 갱신')}
                 </button>
-                {PlayGamesService.getInstance().isAvailable() && (
+                {PlayGamesService.getInstance().isAvailable() && !fb.isEmailPasswordUser() && (
                   <button
                     type="button"
                     className="text-[11px] text-[#38ef7d] hover:underline flex items-center gap-1 cursor-pointer font-bold"

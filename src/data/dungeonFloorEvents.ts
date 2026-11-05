@@ -905,19 +905,27 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
           }
         },
         {
-          label: '🛡️ [안전 파밍] 성수로 피 웅덩이 중화 정화 (위험도 -30 감소 / 5층 보스 방어력 -20% 약화 서판)',
+          label: '🛡️ [안전 파밍] 성수로 피 웅덩이 중화 정화 (위험도 -30 감소 / 5층 보스 모든 능력치 10% 약화 서판 획득)',
           variant: 'primary',
           action: () => {
             SoundManager.getInstance().play('heal');
             const nextD = Math.max(0, danger - 30);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.addToDungeonInventory('relic_floor_5', '원초의 제단 서판', '📜', 1);
+            gm.addToDungeonInventory('boss_seal_floor_5', '원초의 약화 서판', '📜', 1);
+            gm.addExpeditionBuff({
+              id: 'expedition_boss_seal_5',
+              name: '원초의 제단 봉인',
+              icon: '📜',
+              category: 'ancestral',
+              description: '이번 원정 동안 5층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
+              conditionText: '이번 원정 동안'
+            });
             const q4 = gm.quests.find(q => q.id === 'Q_SCENARIO_04');
             if (q4 && q4.status === 'active' && q4.objectives[0]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_04', 1, 1);
             }
-            gm.addLog('🛡️ [안전 파밍] 성수로 피의 갈증을 씻어내어 거신의 분노를 가라앉혔습니다! (위험도 -30 대폭 감소, 5층 보스 약화 서판 획득)', 'reward');
+            gm.addLog('🛡️ [안전 파밍] 성수로 피의 갈증을 씻어내어 거신의 힘을 봉인했습니다! (위험도 -30 대폭 감소, 5층 보스 모든 능력치 10% 약화 유물 획득)', 'reward');
             setEventCard(null);
           }
         }
@@ -1384,7 +1392,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
           }
         },
         {
-          label: '🛡️ [안전 파밍] 성화 불씨로 안개 소산 (위험도 -30 / 온기 버프 충전 / 영혼 나침반의 바늘)',
+          label: '🛡️ [안전 파밍] 성화 불씨로 안개 소산 (위험도 -30 / 온기 버프 충전 / 7층 보스 모든 능력치 10% 약화 나침반 바늘 획득)',
           variant: 'primary',
           action: () => {
             SoundManager.getInstance().play('fire');
@@ -1392,12 +1400,20 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
             gm.bonfireWarmthTime = (gm.bonfireWarmthTime || 0) + 180;
-            gm.addToDungeonInventory('relic_floor_7', '영혼 나침반 바늘', '🧭', 1);
+            gm.addToDungeonInventory('boss_seal_floor_7', '영혼 나침반의 바늘', '🧭', 1);
+            gm.addExpeditionBuff({
+              id: 'expedition_boss_seal_7',
+              name: '망각의 등불 봉인',
+              icon: '🧭',
+              category: 'ancestral',
+              description: '이번 원정 동안 7층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
+              conditionText: '이번 원정 동안'
+            });
             const q3 = gm.quests.find(q => q.id === 'Q_SCENARIO_03');
             if (q3 && q3.status === 'active' && q3.objectives[0]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_03', 1, 1);
             }
-            gm.addLog('🛡️ [안전 파밍] 성화의 온기로 망각의 안개를 완전히 몰아냈습니다! (위험도 -30 대폭 감소, 7층 안전 파밍 연장)', 'reward');
+            gm.addLog('🛡️ [안전 파밍] 성화의 온기로 망각의 안개를 완전히 몰아냈습니다! (위험도 -30 대폭 감소, 7층 보스 모든 능력치 10% 약화 유물 획득, 온기 충전)', 'reward');
             setEventCard(null);
           }
         }
@@ -1761,19 +1777,27 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 거울을 박살내어 미궁 결계 파괴 (위험도 +35 급상승 / 🪞 거울 파편 유물 선취)',
+          label: '⚡ [진척도 가속] 거울을 박살내어 미궁 결계 파괴 (위험도 +35 급상승 / 🪞 9층 보스 모든 능력치 10% 약화 거울 파편 획득)',
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('heavy_hit');
             const nextD = Math.min(maxDanger, danger + 35);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.addToDungeonInventory('relic_floor_9', '만화경 거울 파편', '🪞', 1);
+            gm.addToDungeonInventory('boss_seal_floor_9', '만화경 거울 파편', '🪞', 1);
+            gm.addExpeditionBuff({
+              id: 'expedition_boss_seal_9',
+              name: '만화경 왜곡 봉인',
+              icon: '🪞',
+              category: 'ancestral',
+              description: '이번 원정 동안 9층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
+              conditionText: '이번 원정 동안'
+            });
             const q2 = gm.quests.find(q => q.id === 'Q_SCENARIO_02');
             if (q2 && q2.status === 'active' && q2.objectives[1]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_02', 2, 1);
             }
-            gm.addLog('⚡ [진척도 급가속] 거울 결계가 깨지며 미궁 중심부 직통로가 열렸습니다! (위험도 +35 급상승, 거울 파편 유물 선취)', 'reward');
+            gm.addLog('⚡ [진척도 급가속] 거울 결계가 깨지며 미궁 중심부 직통로가 열렸습니다! (위험도 +35 급상승, 9층 보스 모든 능력치 10% 약화 유물 획득)', 'reward');
             setEventCard(null);
           }
         },
@@ -1798,7 +1822,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       if (mageHero) {
         options.unshift({
-          label: `🌟 [${mageHero.name} 특기] 만화경 굴절 제어 (위험도 -35 감소 / 이번 원정 동안 전원 올스탯 +5 가호)`,
+          label: `🌟 [${mageHero.name} 특기] 만화경 굴절 제어 (위험도 -35 감소 / 이번 원정 동안 전원 올스탯 +5 & 9층 보스 능력치 10% 약화)`,
           variant: 'success',
           action: () => {
             SoundManager.getInstance().play('level_up');
@@ -1814,12 +1838,20 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               conditionText: '이번 원정 동안',
               buffs: { allStatsBonus: 5 }
             });
-            gm.addToDungeonInventory('relic_floor_9', '만화경 거울 파편', '🪞', 1);
+            gm.addToDungeonInventory('boss_seal_floor_9', '만화경 거울 파편', '🪞', 1);
+            gm.addExpeditionBuff({
+              id: 'expedition_boss_seal_9',
+              name: '만화경 왜곡 봉인',
+              icon: '🪞',
+              category: 'ancestral',
+              description: '이번 원정 동안 9층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
+              conditionText: '이번 원정 동안'
+            });
             const q2 = gm.quests.find(q => q.id === 'Q_SCENARIO_02');
             if (q2 && q2.status === 'active' && q2.objectives[1]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_02', 2, 1);
             }
-            gm.addLog(`🌟 [아크메이지 특기] [${mageHero.name}]이(가) 환영의 굴절을 흡수하여 이번 원정 동안 파티 전원 올스탯 +5 가호를 얻었습니다! (위험도 -35)`, 'reward');
+            gm.addLog(`🌟 [아크메이지 특기] [${mageHero.name}]이(가) 환영의 굴절을 흡수하여 이번 원정 동안 파티 전원 올스탯 +5 가호 및 9층 보스 능력치 10% 약화 효과를 얻었습니다! (위험도 -35)`, 'reward');
             setEventCard(null);
           }
         });
@@ -1991,7 +2023,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       const options: EventCardOption[] = [
         {
-          label: '⚡ [진척도 가속] 마핵 액체 강제 추출 (위험도 +40 폭증 / 🖤 심연 군주 마핵 유물 선취 / HP -100)',
+          label: '⚡ [진척도 가속] 마핵 액체 강제 추출 (위험도 +40 폭증 / 🖤 10층 보스 모든 능력치 10% 약화 마핵 파편 획득 / HP -100)',
           variant: 'danger',
           action: () => {
             SoundManager.getInstance().play('heavy_hit');
@@ -1999,29 +2031,45 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
             gm.party.forEach(h => { h.currentHp = Math.max(1, h.currentHp - 100); });
-            gm.addToDungeonInventory('relic_floor_10', '심연 군주의 마핵', '🖤', 1);
+            gm.addToDungeonInventory('boss_seal_floor_10', '심연 군주의 마핵 파편', '🖤', 1);
+            gm.addExpeditionBuff({
+              id: 'expedition_boss_seal_10',
+              name: '심연 심장 억제',
+              icon: '🖤',
+              category: 'ancestral',
+              description: '이번 원정 동안 10층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
+              conditionText: '이번 원정 동안'
+            });
             const q3 = gm.quests.find(q => q.id === 'Q_SCENARIO_03');
             if (q3 && q3.status === 'active' && q3.objectives[1]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_03', 2, 1);
             }
-            gm.addLog('⚡ [진척도 급가속] 심연의 핵을 강탈하여 최종 군주의 격노를 샀습니다! (위험도 +40 폭증, 보스 강림 임박, 마핵 유물 획득)', 'reward');
+            gm.addLog('⚡ [진척도 급가속] 심연의 핵을 강탈하여 보스의 힘을 억제했습니다! (위험도 +40 폭증, 보스 강림 임박, 10층 보스 모든 능력치 10% 약화 마핵 파편 획득)', 'reward');
             setEventCard(null);
           }
         },
         {
-          label: '🛡️ [안전 파밍] 성수 살포로 심장 진정 (위험도 -35 대폭 감소 / 이번 원정 최종 보스 공·방 20% 약화)',
+          label: '🛡️ [안전 파밍] 성수 살포로 심장 진정 (위험도 -35 대폭 감소 / 이번 원정 10층 보스 모든 능력치 10% 약화 마핵 파편 획득)',
           variant: 'primary',
           action: () => {
             SoundManager.getInstance().play('heal');
             const nextD = Math.max(0, danger - 35);
             setDanger(nextD);
             gm.dungeonDangerLevel = nextD;
-            gm.addToDungeonInventory('relic_floor_10', '심연 군주의 마핵', '🖤', 1);
+            gm.addToDungeonInventory('boss_seal_floor_10', '심연 군주의 마핵 파편', '🖤', 1);
+            gm.addExpeditionBuff({
+              id: 'expedition_boss_seal_10',
+              name: '심연 심장 억제',
+              icon: '🖤',
+              category: 'ancestral',
+              description: '이번 원정 동안 10층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
+              conditionText: '이번 원정 동안'
+            });
             const q3 = gm.quests.find(q => q.id === 'Q_SCENARIO_03');
             if (q3 && q3.status === 'active' && q3.objectives[1]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_03', 2, 1);
             }
-            gm.addLog('🛡️ [안전 파밍] 정화의 성수로 심장의 맥동을 억제하여 최종 군주의 힘을 크게 약화시켰습니다! (위험도 -35 대폭 감소, 보스 약화)', 'reward');
+            gm.addLog('🛡️ [안전 파밍] 정화의 성수로 심장의 맥동을 억제하여 최종 군주의 힘을 약화시켰습니다! (위험도 -35 대폭 감소, 10층 보스 모든 능력치 10% 약화 유물 획득)', 'reward');
             setEventCard(null);
           }
         }
@@ -2029,7 +2077,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 
       if (valkHero) {
         options.unshift({
-          label: `🌟 [${valkHero.name} 특기] 영원의 성역 봉인 (위험도 -40 대폭 감소 / 결전 1회 무적 방벽 부여)`,
+          label: `🌟 [${valkHero.name} 특기] 영원의 성역 봉인 (위험도 -40 대폭 감소 / 10층 보스 능력치 10% 약화 및 결전 1회 무적 방벽 부여)`,
           variant: 'success',
           action: () => {
             SoundManager.getInstance().play('heal');
@@ -2039,12 +2087,20 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
             gm.party.forEach(h => {
               gm.applyStatusEffectToHero(h, { type: 'immunity', turnsLeft: 99, totalTurns: 99, magnitude: 1, source: '발키리의 결계' });
             });
-            gm.addToDungeonInventory('relic_floor_10', '심연 군주의 마핵', '🖤', 1);
+            gm.addToDungeonInventory('boss_seal_floor_10', '심연 군주의 마핵 파편', '🖤', 1);
+            gm.addExpeditionBuff({
+              id: 'expedition_boss_seal_10',
+              name: '심연 심장 억제',
+              icon: '🖤',
+              category: 'ancestral',
+              description: '이번 원정 동안 10층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
+              conditionText: '이번 원정 동안'
+            });
             const q3 = gm.quests.find(q => q.id === 'Q_SCENARIO_03');
             if (q3 && q3.status === 'active' && q3.objectives[1]?.isCompleted) {
               gm.updateQuestObjective('Q_SCENARIO_03', 2, 1);
             }
-            gm.addLog(`🌟 [발키리 특기] [${valkHero.name}]이(가) 심연의 심장을 신성 결계로 봉인했습니다! (위험도 -40 감소, 최종 결전 1회 무적)`, 'reward');
+            gm.addLog(`🌟 [발키리 특기] [${valkHero.name}]이(가) 심연의 심장을 신성 결계로 봉인했습니다! (위험도 -40 감소, 최종 결전 1회 무적, 10층 보스 모든 능력치 10% 약화)`, 'reward');
             setEventCard(null);
           }
         });
@@ -2775,40 +2831,38 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
 const FALLBACK_FLOOR_EVENT: FloorEventDefinition = {
   id: 'floor_fallback_sanctuary',
   floor: 0,
-  title: '✨ 정화된 심연의 고대 안식처',
-  desc: '에픽 서사의 결말 이후 평온을 되찾은 심연의 성소입니다. 따뜻한 에테르 빛이 원정대의 피로를 씻어내고 고대의 보물 상자가 놓여 있습니다.',
+  title: '✨ 에픽 퀘스트가 마무리된 자리',
+  desc: '대형 연계 에픽 퀘스트가 마무리되어 고요와 평온을 되찾은 자리입니다. 주변에 희미한 잔류 에테르와 작은 마력 수정의 흔적이 남아 있습니다.',
   icon: '✨',
   iconKey: 'event_sanctuary',
   generateOptions: (ctx) => {
-    const { gm, setDanger, danger, setEventCard } = ctx;
+    const { gm, setEventCard } = ctx;
     return [
       {
-        label: '🎁 [보물 수습] 고대의 보물 상자 개봉 (🪙 150G, ✨ 에테르 50, 순수 인챈트석 1개)',
-        variant: 'success',
+        label: '✨ [에테르 수습] 잔류 에테르 채취 (✨ 에테르 +25 획득)',
+        variant: 'primary',
         action: () => {
           SoundManager.getInstance().play('loot_open');
-          gm.addToDungeonInventory('gold', '골드', '🪙', 150);
-          gm.addToDungeonInventory('ether', '에테르', '✨', 50);
-          const stoneKey = Math.random() < 0.5 ? 'pure_prefix_stone' : 'pure_suffix_stone';
-          const stoneName = stoneKey === 'pure_prefix_stone' ? '순수한 접두석' : '순수한 접미석';
-          gm.addToDungeonInventory(stoneKey, stoneName, '💎', 1);
-          gm.addLog('✨ [안식처] 고대의 보물 상자에서 150G, 에테르 50, 순수 인챈트석을 수습했습니다!', 'reward');
+          gm.addToDungeonInventory('ether', '에테르', '✨', 25);
+          gm.addLog('✨ [잔류 자원] 흩어져 있던 잔류 에테르 25를 수습했습니다.', 'reward');
           setEventCard(null);
         }
       },
       {
-        label: '🕯️ [원정 휴식] 성소에서 원정대 회복 (전원 HP/MP 40% 회복, 위험도 -30)',
+        label: '💎 [마력 수정 수습] 마력 수정 조각 채굴 (💎 마력 수정 1개 획득)',
         variant: 'primary',
         action: () => {
-          SoundManager.getInstance().play('heal');
-          gm.party.forEach(h => {
-            h.currentHp = Math.min(h.maxHp, Math.floor(h.currentHp + h.maxHp * 0.4));
-            h.currentMp = Math.min(h.maxMp, Math.floor(h.currentMp + h.maxMp * 0.4));
-          });
-          const nextD = Math.max(0, danger - 30);
-          setDanger(nextD);
-          gm.dungeonDangerLevel = nextD;
-          gm.addLog('🕯️ [안식처 휴식] 성소의 빛으로 전원 HP/MP를 40% 회복하고 위험도가 30 감소했습니다.', 'reward');
+          SoundManager.getInstance().play('loot_open');
+          gm.addToDungeonInventory('crystal', '마력 수정', '💎', 1);
+          gm.addLog('💎 [잔류 자원] 바위 틈에 맺힌 마력 수정 1개를 수습했습니다.', 'reward');
+          setEventCard(null);
+        }
+      },
+      {
+        label: '🚶 조용히 지나친다',
+        variant: 'ghost',
+        action: () => {
+          gm.addLog('고요해진 자리를 뒤로하고 탐험을 이어갑니다.', 'normal');
           setEventCard(null);
         }
       }

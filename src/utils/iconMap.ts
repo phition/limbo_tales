@@ -48,6 +48,12 @@ export const ICON_MAP: Record<string, IconMeta> = {
   relic_floor_9: { src: '/assets/custom_uploaded/icons/relic_floor_9.png', fallback: '🪞', label: '거울 파편' },
   relic_floor_10: { src: '/assets/custom_uploaded/icons/relic_floor_10.png', fallback: '👑', label: '심연 군주의 마핵' },
 
+  // 🛡️ 보스 스탯 약화 봉인 유물 (던전 탐험 조우 획득)
+  boss_seal_floor_5: { src: '/assets/custom_uploaded/icons/relic_floor_5.png', fallback: '📜', label: '원초의 약화 서판' },
+  boss_seal_floor_7: { src: '/assets/custom_uploaded/icons/relic_floor_7.png', fallback: '🧭', label: '영혼 나침반의 바늘' },
+  boss_seal_floor_9: { src: '/assets/custom_uploaded/icons/relic_floor_9.png', fallback: '🪞', label: '만화경 거울 파편' },
+  boss_seal_floor_10: { src: '/assets/custom_uploaded/icons/relic_floor_10.png', fallback: '🖤', label: '심연 군주의 마핵 파편' },
+
   // 📜 심연 회고록 쪽지 (10종)
   memoir_note_1: { src: '/assets/custom_uploaded/icons/memoir_note.png', fallback: '📜', label: '1층 회고록 쪽지' },
   memoir_note_2: { src: '/assets/custom_uploaded/icons/memoir_note.png', fallback: '📜', label: '2층 회고록 쪽지' },

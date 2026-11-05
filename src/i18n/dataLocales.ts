@@ -232,6 +232,12 @@ export const RESOURCE_NAMES: Record<string, Record<SupportedLanguage, string>> =
   relic_floor_9: { ko: '미궁 지배자의 진실 거울 파편', en: 'Mirror Shard of Truth', ja: '真実の鏡の破片' },
   relic_floor_10: { ko: '심연 군주의 옥새', en: 'Abyssal Overlord Seal', ja: '深淵覇王の玉璽' },
 
+  // 🛡️ 보스 스탯 약화 봉인 유물
+  boss_seal_floor_5: { ko: '원초의 약화 서판', en: 'Primal Weakening Tablet', ja: '原初の弱体化石板' },
+  boss_seal_floor_7: { ko: '영혼 나침반의 바늘', en: 'Soul Compass Needle', ja: '魂の羅針盤の針' },
+  boss_seal_floor_9: { ko: '만화경 거울 파편', en: 'Kaleidoscope Mirror Shard', ja: '万華鏡の鏡破片' },
+  boss_seal_floor_10: { ko: '심연 군주의 마핵 파편', en: 'Abyssal Lord Core Shard', ja: '深淵君主の魔核破片' },
+
   // 📜 1F~10F 회고록 쪽지
   memoir_note_1: { ko: '1층 회고록 쪽지', en: '1F Memoir Note', ja: '1層の回顧録メモ' },
   memoir_note_2: { ko: '2층 회고록 쪽지', en: '2F Memoir Note', ja: '2層の回顧録メモ' },

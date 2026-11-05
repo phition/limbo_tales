@@ -233,6 +233,9 @@ export const App: React.FC = () => {
         setCurrentUser(user);
         setUserProfile(profile);
 
+        // 🛡️ 이전 계정 잔여 메모리 및 비동기 저장 타이머 완전 초기화
+        gm.cancelPendingCloudSave();
+        gm.clearForLogout();
         gm.setCurrentUser(user.uid);
 
         // 1. 로컬 저장소 세이브 확인
@@ -256,8 +259,9 @@ export const App: React.FC = () => {
           cloudLoadFailed = true;
         }
 
-        // 3. 이전 게스트 플레이 세이브 확인 (신규 가입/첫 로그인 시 데이터 승계용)
-        const guestRaw = localStorage.getItem('limbo_save_v1_guest');
+        // 3. 게스트 데이터 승계는 오직 [최초 게스트 플레이 후 첫 회원가입 전환] 시에만 허용 (로그아웃 후 다른 계정 로그인 시 혼합 원천 차단)
+        const wasExplicitlyLoggedOut = localStorage.getItem('auth_explicitly_logged_out') === 'true';
+        const guestRaw = !wasExplicitlyLoggedOut ? (localStorage.getItem('limbo_save_v1_guest') || localStorage.getItem(gm.getSaveKeyForUid('guest'))) : null;
         let guestData: Record<string, unknown> | null = null;
         if (guestRaw) {
           try {
@@ -321,11 +325,17 @@ export const App: React.FC = () => {
           gm.loadGame();
           gm.saveToCloud();
         } else if (guestData && guestScore > 14000) {
-          // 🚀 신규 계정 첫 로그인인데 이전 게스트 세이브가 존재하는 경우 -> 자동 승계(Migration)
-          console.log(`🚀 [게스트 데이터 마이그레이션] 이전 게스트 진행 데이터(점수: ${guestScore})를 새 지휘관 계정(${user.uid})으로 승계합니다.`);
+          // 🚀 신규 계정 첫 로그인인데 이전 게스트 세이브가 존재하는 경우 -> 1회 자동 승계 후 게스트 세이브 소거
+          console.log(`🚀 [게스트 데이터 마이그레이션] 이전 게스트 진행 데이터(점수: ${guestScore})를 새 지휘관 계정(${user.uid})으로 1회 승계합니다.`);
+          gm.clearForLogout();
+          gm.setCurrentUser(user.uid);
           gm.applyCloudProgress(guestData);
-          gm.saveGame(); // limbo_save_v1_${user.uid}에 저장
-          gm.saveToCloud(); // users/${user.uid}/progress에 백업
+          gm.saveGame();
+          gm.saveToCloud();
+          try {
+            localStorage.removeItem('limbo_save_v1_guest');
+            localStorage.removeItem(gm.getSaveKeyForUid('guest'));
+          } catch (_) {}
           gm.addLog('[원정대 인계 완료] 이전 게스트로 탐험하던 방주 기록이 지휘관 계정에 안전하게 귀속되었습니다!', 'reward');
         } else {
           // 진짜 신규 사용자
@@ -365,11 +375,10 @@ export const App: React.FC = () => {
         setIsVerifyingCommander(false);
         setAuthChecked(true);
 
+        // 🛡️ 로그아웃 시 지휘관 메모리 및 타이머 완전 클리어
+        gm.cancelPendingCloudSave();
+        gm.clearForLogout();
         gm.setCurrentUser('guest');
-        const hasLocal = gm.loadGame();
-        if (!hasLocal) {
-          gm.initDefaultData();
-        }
         checkPendingBackgroundTimeout(gm);
         if (!Capacitor.isNativePlatform()) {
           (window as any).__applyCommanderMaxUpgrade = () => {

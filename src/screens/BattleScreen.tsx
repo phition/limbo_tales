@@ -257,10 +257,10 @@ const MonsterImagePanel: React.FC<{ targetMonster?: MonsterState; totalCount: nu
                   }}
                   title={MONSTER_FACTION_META[mon.data.faction].desc}
                 >
-                  {MONSTER_FACTION_META[mon.data.faction].icon} {MONSTER_FACTION_META[mon.data.faction].label}
+                  {MONSTER_FACTION_META[mon.data.faction].icon} {tr(MONSTER_FACTION_META[mon.data.faction].label)}
                 </span>
               )}
-              <span className="font-bold text-white text-sm truncate" style={{ color: !isAlive ? '#607d8b' : undefined, textDecoration: !isAlive ? 'line-through' : undefined }}>{mon.data.name}</span>
+              <span className="font-bold text-white text-sm truncate" style={{ color: !isAlive ? '#607d8b' : undefined, textDecoration: !isAlive ? 'line-through' : undefined }}>{tr(mon.data.name)}</span>
               {isAlive && mon.isEnraged && (
                 <span
                   className="text-[9px] px-1.5 py-0.2 rounded font-bold font-mono flex items-center gap-0.5 animate-pulse shrink-0 shadow-sm"
@@ -274,7 +274,7 @@ const MonsterImagePanel: React.FC<{ targetMonster?: MonsterState; totalCount: nu
                   title="심연 오버차지 광폭화 상태"
                 >
                   <span className="text-[10px]">⚡</span>
-                  <span>광폭화</span>
+                  <span>{tr('광폭화')}</span>
                 </span>
               )}
               {isAlive && (
@@ -8389,7 +8389,7 @@ export const BattleScreen: React.FC = () => {
             )}
             <div className="flex flex-col gap-2">
               <ActionButton 
-                label="📜 전투 상세 기록 확인 (전체 로그)"
+                label={tr("📜 전투 상세 기록 확인 (전체 로그)")}
                 variant="ghost"
                 size="md"
                 onClick={() => setShowFullLogModal(true)}

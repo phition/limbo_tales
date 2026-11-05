@@ -9,6 +9,7 @@ import { SoundManager } from '../managers/SoundManager';
 import { GameDataService } from '../services/GameDataService';
 import { CustomAssetStudioModal } from './CustomAssetStudioModal';
 import { CustomDataStudioModal } from './CustomDataStudioModal';
+import { I18nStudioModal } from './I18nStudioModal';
 import { CallsignChangeModal } from './CallsignChangeModal';
 import { useI18n } from '../hooks/useI18n';
 import { SupportedLanguage } from '../i18n/types';
@@ -30,6 +31,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
   const [patchModal, setPatchModal] = useState(false);
   const [assetStudioModal, setAssetStudioModal] = useState(false);
   const [dataStudioModal, setDataStudioModal] = useState(false);
+  const [i18nStudioModal, setI18nStudioModal] = useState(false);
   const [callsignModal, setCallsignModal] = useState(false);
   const [cloudStatus, setCloudStatus] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -499,6 +501,26 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             </button>
           )}
 
+          {/* 4-3. 🌐 i18n 사전 편집 & 번역 감수 스튜디오 (마스터 계정 전용, 모바일 빌드 제외) */}
+          {!isMobilePlatform && (fb.isMasterUser() || gm.isMasterAccount) && (
+            <button
+              className="w-full p-2.5 rounded-xl bg-[#0d1d2b] border border-[#00bcd444] hover:border-[#00bcd4] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
+              onClick={() => setI18nStudioModal(true)}
+            >
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-xl p-1 rounded-lg bg-[#00bcd422] text-[#00e5ff] shrink-0">🌐</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-white group-hover:text-[#00e5ff] transition-colors flex items-center gap-1.5 flex-wrap">
+                    <span className="break-words">i18n 사전 편집 스튜디오</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00bcd422] text-[#00e5ff] font-bold shrink-0">MASTER</span>
+                  </div>
+                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">특수 문자열·몬스터명·로그 번역 직접 감수 및 실시간 편집·저장</div>
+                </div>
+              </div>
+              <span className="text-xs text-[#00e5ff] shrink-0 ml-1.5">▶</span>
+            </button>
+          )}
+
           {/* 5. 버전 정보 & 패치노트 */}
           <button
             className="w-full p-2.5 rounded-xl bg-[#131926] border border-[#222d42] hover:border-[#66bb6a66] text-left flex items-center justify-between transition-all cursor-pointer"
@@ -799,6 +821,14 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         <CustomDataStudioModal
           open={dataStudioModal}
           onClose={() => setDataStudioModal(false)}
+        />
+      )}
+
+      {/* 🌐 i18n 감수 사전 편집 스튜디오 모달 (모바일 빌드 제외) */}
+      {!isMobilePlatform && (
+        <I18nStudioModal
+          open={i18nStudioModal}
+          onClose={() => setI18nStudioModal(false)}
         />
       )}
 

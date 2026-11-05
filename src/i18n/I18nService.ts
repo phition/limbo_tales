@@ -2,7 +2,7 @@ import { SupportedLanguage, TranslationDictionary } from './types';
 import { koDictionary } from './locales/ko';
 import { enDictionary } from './locales/en';
 import { jaDictionary } from './locales/ja';
-import { EXACT_TRANSLATIONS, LOG_PATTERNS } from './translationDictionary';
+import { EXACT_TRANSLATIONS, LOG_PATTERNS, setCustomOverrideLookup } from './translationDictionary';
 import { RESOURCE_NAMES, BUILDING_NAMES, CLASS_NAMES } from './dataLocales';
 
 export class I18nService {
@@ -23,6 +23,12 @@ export class I18nService {
   private generated: Partial<Record<'en' | 'ja', Record<string, string>>> = {};
   private patterns: Partial<Record<'en' | 'ja', { re: RegExp; frag: string; tpl: string }[]>> = {};
   private loading: Partial<Record<'en' | 'ja', Promise<void>>> = {};
+
+  /** 마스터 계정에서 실시간으로 감수 및 수정한 커스텀 사전 오버라이드 (영구 저장) */
+  private customOverrides: { en: Record<string, string>; ja: Record<string, string> } = {
+    en: {},
+    ja: {},
+  };
 
   /** 부분 어휘 치환 시 긴 단어 우선 치환(접두사 파괴 방지)을 위한 정렬 캐시 */
   private sortedExactEntries: Partial<Record<'en' | 'ja', [string, string][]>> = {};
@@ -45,6 +51,21 @@ export class I18nService {
   }
 
   private constructor() {
+    try {
+      const savedOverrides = localStorage.getItem('limbo_i18n_custom_overrides');
+      if (savedOverrides) {
+        const parsed = JSON.parse(savedOverrides);
+        if (parsed && typeof parsed === 'object') {
+          this.customOverrides = {
+            en: parsed.en && typeof parsed.en === 'object' ? parsed.en : {},
+            ja: parsed.ja && typeof parsed.ja === 'object' ? parsed.ja : {},
+          };
+        }
+      }
+    } catch (_) {}
+
+    setCustomOverrideLookup((key, lang) => this.getCustomOverrideFor(key, lang));
+
     try {
       const savedLang = localStorage.getItem('limbo_language') as SupportedLanguage;
       if (savedLang && (savedLang === 'ko' || savedLang === 'en' || savedLang === 'ja')) {
@@ -208,6 +229,89 @@ export class I18nService {
     return value;
   }
 
+  // ── 마스터 전용 i18n 커스텀 사전 관리 API ──
+  public getCustomOverrides(): { en: Record<string, string>; ja: Record<string, string> } {
+    return {
+      en: { ...this.customOverrides.en },
+      ja: { ...this.customOverrides.ja },
+    };
+  }
+
+  public getCustomOverrideFor(key: string, lang: 'en' | 'ja' | string): string | null {
+    if (lang !== 'en' && lang !== 'ja') return null;
+    const k = key.trim();
+    return this.customOverrides[lang]?.[k] ?? this.customOverrides[lang]?.[key] ?? null;
+  }
+
+  public setCustomOverride(key: string, translations: { en?: string; ja?: string }): void {
+    const trimmedKey = key.trim();
+    if (!trimmedKey) return;
+    if (translations.en !== undefined) {
+      if (translations.en.trim()) {
+        this.customOverrides.en[trimmedKey] = translations.en.trim();
+      } else {
+        delete this.customOverrides.en[trimmedKey];
+      }
+    }
+    if (translations.ja !== undefined) {
+      if (translations.ja.trim()) {
+        this.customOverrides.ja[trimmedKey] = translations.ja.trim();
+      } else {
+        delete this.customOverrides.ja[trimmedKey];
+      }
+    }
+    this.saveCustomOverrides();
+  }
+
+  public deleteCustomOverride(key: string, lang?: 'en' | 'ja'): void {
+    const trimmedKey = key.trim();
+    if (lang) {
+      delete this.customOverrides[lang][trimmedKey];
+      delete this.customOverrides[lang][key];
+    } else {
+      delete this.customOverrides.en[trimmedKey];
+      delete this.customOverrides.en[key];
+      delete this.customOverrides.ja[trimmedKey];
+      delete this.customOverrides.ja[key];
+    }
+    this.saveCustomOverrides();
+  }
+
+  public clearAllCustomOverrides(): void {
+    this.customOverrides = { en: {}, ja: {} };
+    this.saveCustomOverrides();
+  }
+
+  public exportCustomOverridesJson(): string {
+    return JSON.stringify(this.customOverrides, null, 2);
+  }
+
+  public importCustomOverridesJson(jsonStr: string): { success: boolean; count: number; error?: string } {
+    try {
+      const parsed = JSON.parse(jsonStr);
+      if (!parsed || typeof parsed !== 'object') {
+        return { success: false, count: 0, error: '유효한 JSON 객체가 아닙니다.' };
+      }
+      const newEn = { ...(this.customOverrides.en || {}), ...(parsed.en || {}) };
+      const newJa = { ...(this.customOverrides.ja || {}), ...(parsed.ja || {}) };
+      this.customOverrides = { en: newEn, ja: newJa };
+      this.saveCustomOverrides();
+      const count = Object.keys(newEn).length + Object.keys(newJa).length;
+      return { success: true, count };
+    } catch (e: any) {
+      return { success: false, count: 0, error: e?.message || 'JSON 파싱 오류' };
+    }
+  }
+
+  private saveCustomOverrides(): void {
+    try {
+      localStorage.setItem('limbo_i18n_custom_overrides', JSON.stringify(this.customOverrides));
+    } catch (_) {}
+    this.translationCache.clear();
+    this.retranslateWholeDom();
+    this.listeners.forEach((fn) => fn(this.currentLanguage));
+  }
+
   public getDict(): TranslationDictionary {
     return this.dictionaries[this.currentLanguage] || koDictionary;
   }
@@ -238,6 +342,15 @@ export class I18nService {
 
     const hasHangul = /[\uac00-\ud7af]/.test(text);
     const trimmed = text.trim();
+
+    // 0.4 마스터 감수 커스텀 오버라이드 최우선 적용 (Custom Overrides)
+    const custom = this.customOverrides[tLang]?.[trimmed] ?? this.customOverrides[tLang]?.[text];
+    if (custom !== undefined) {
+      const res = text.replace(trimmed, custom);
+      this.translationCache.set(cacheKey, res);
+      return res;
+    }
+
     if (!hasHangul && !EXACT_TRANSLATIONS[tLang]?.[trimmed] && !EXACT_TRANSLATIONS[tLang]?.[text] && !this.lookupGeneratedExact(text, tLang)) {
       this.translationCache.set(cacheKey, text);
       return text;

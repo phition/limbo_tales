@@ -45,7 +45,12 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
       // localStorage 접근 불가 환경 대비
     }
 
-    if (isPlayGamesAvailable) {
+    // 💡 이메일 기반 클라우드 세이브 사용자를 위해: 이메일 로그인 이력이 있거나 선호되는 경우 PlayGames 자동 가로채기 방지
+    const savedEmail = localStorage.getItem('limbo_saved_email');
+    const authProvider = localStorage.getItem('auth_provider');
+    const isEmailPreferred = authProvider === 'email' || Boolean(savedEmail);
+
+    if (isPlayGamesAvailable && !isEmailPreferred) {
       let explicitlyLoggedOut = false;
       try {
         explicitlyLoggedOut = localStorage.getItem('auth_explicitly_logged_out') === 'true';
@@ -390,6 +395,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
         )}
 
         {/* 인증 입력 폼 */}
+
         <form onSubmit={handleAuthSubmit} className="flex flex-col gap-3">
           {mode === 'signup' && (
             <div className="animate-fade-in flex flex-col gap-1">

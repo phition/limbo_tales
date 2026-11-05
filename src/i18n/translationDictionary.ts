@@ -6,6 +6,65 @@ import { CLASS_NAMES, RESOURCE_NAMES, BUILDING_NAMES } from './dataLocales';
 // ============================================================================
 export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
   en: {
+    // 🌐 특별 및 핵심 시스템 번역 (Special & Core System Translations)
+    "시너지": "Synergy",
+    "시너지 효과": "Synergy Effect",
+    "파티 시너지": "Party Synergy",
+    "원정대 시너지": "Expedition Synergy",
+    "원정대 활성 시너지": "Active Expedition Synergies",
+    "시너지 도감": "Synergy Codex",
+    "시너지 상세": "Synergy Details",
+    "시너지 조합": "Synergy Combinations",
+    "발동 시너지": "Triggered Synergy",
+    "활성 시너지": "Active Synergies",
+    "시너지 목록": "Synergy List",
+    "mp환급": "MP Refund",
+    "MP환급": "MP Refund",
+    "MP 환급": "MP Refund",
+    "후열 MP환급": "Back Row MP Refund",
+    "후열 MP 환급": "Back Row MP Refund",
+    "후열 마나환급": "Back Row Mana Refund",
+    "후열 마나 환급": "Back Row Mana Refund",
+    "마나 환급": "Mana Refund",
+    "마나환급": "Mana Refund",
+    "환급": "Refund",
+    "로그": "Log",
+    "전체 로그": "All Logs",
+    "전체 로그 보기": "View All Logs",
+    "로그 보기": "View Logs",
+    "최신 로그": "Latest Log",
+    "최신 로그 보기": "View Latest Logs",
+    "상세 로그": "Detailed Log",
+    "상세 로그 보기": "View Detailed Logs",
+    "전투 로그": "Combat Log",
+    "원정 로그": "Expedition Log",
+    "영지 로그": "Citadel Log",
+    "시스템 로그": "System Log",
+    "📜 전투 상세 기록 확인 (전체 로그)": "📜 View Detailed Combat Record (All Logs)",
+    "전투 상세 기록 확인 (전체 로그)": "View Detailed Combat Record (All Logs)",
+    "피격": "Hit",
+    "피격!": "Hit!",
+    "피격됨": "Hit",
+    "피격자": "Target",
+    "피격 시": "when hit",
+    "피격 즉시": "immediately upon hit",
+    "함정 피격": "Trap Hit",
+    "함정 피격!": "Trap Hit!",
+    "💥 [함정 피격]": "💥 [Trap Sprung]",
+    "⚠️ [함정 피격]": "⚠️ [Trap Sprung]",
+    "💥 [전원 피격 — 긴급 상태이상 부여]": "💥 [All Hit — Emergency Status Inflicted]",
+    "전원 피격 — 긴급 상태이상 부여": "All Hit — Emergency Status Inflicted",
+    "피격 환영 반격!": "Hit Phantom Counter!",
+    "⚔️⚡[피격 환영 반격!]": "⚔️⚡[Hit Phantom Counter!]",
+    "[피격 환영 반격!]": "[Hit Phantom Counter!]",
+    "광폭화": "Enraged",
+    "광폭": "Enraged",
+    "광폭화 진 최종 보스 도전": "Challenge Enraged True Final Boss",
+    "광폭화 보스 토벌 도전": "Challenge Enraged Boss Subjugation",
+    "광폭화 결계": "Enraged Barrier",
+    "호위": "Escort",
+    "정예": "Elite",
+    "우두머리": "Leader",
     "고요해진 자리를 뒤로하고 탐험을 이어갑니다.": "Leaving the quiet site behind to continue the expedition.",
     "💎 [잔류 자원] 바위 틈에 맺힌 마력 수정 1개를 수습했습니다.": "💎 [Residual Resource] Gathered 1 mana crystal condensed in the rock crevices.",
     "✨ [잔류 자원] 흩어져 있던 잔류 에테르 25를 수습했습니다.": "✨ [Residual Resource] Gathered 25 residual ether scattered nearby.",
@@ -5883,6 +5942,65 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "최신 로그 보기": "Scroll to Latest Log",
   },
   ja: {
+    // 🌐 特別・主要システム翻訳 (Special & Core System Translations)
+    "시너지": "シナジー",
+    "시너지 효과": "シナジー効果",
+    "파티 시너지": "パーティシナジー",
+    "원정대 시너지": "遠征隊シナジー",
+    "원정대 활성 시너지": "遠征隊有効シナジー",
+    "시너지 도감": "シナジー図鑑",
+    "시너지 상세": "シナジー詳細",
+    "시너지 조합": "シナジー組み合わせ",
+    "발동 시너지": "発動シナジー",
+    "활성 시너지": "有効シナジー",
+    "시너지 목록": "シナジー一覧",
+    "mp환급": "MP還元",
+    "MP환급": "MP還元",
+    "MP 환급": "MP還元",
+    "후열 MP환급": "後列MP還元",
+    "후열 MP 환급": "後列MP還元",
+    "후열 마나환급": "後列マナ還元",
+    "후열 마나 환급": "後列マナ還元",
+    "마나 환급": "マナ還元",
+    "마나환급": "マナ還元",
+    "환급": "還元",
+    "로그": "ログ",
+    "전체 로그": "全体ログ",
+    "전체 로그 보기": "全体ログを見る",
+    "로그 보기": "ログを見る",
+    "최신 로그": "最新ログ",
+    "최신 로그 보기": "最新ログを見る",
+    "상세 로그": "詳細ログ",
+    "상세 로그 보기": "詳細ログを見る",
+    "전투 로그": "戦闘ログ",
+    "원정 로그": "遠征ログ",
+    "영지 로그": "領地ログ",
+    "시스템 로그": "システムログ",
+    "📜 전투 상세 기록 확인 (전체 로그)": "📜 戦闘詳細記録確認（全体ログ）",
+    "전투 상세 기록 확인 (전체 로그)": "戦闘詳細記録確認（全体ログ）",
+    "피격": "被弾",
+    "피격!": "被弾！",
+    "피격됨": "被弾",
+    "피격자": "被弾者",
+    "피격 시": "被弾時",
+    "피격 즉시": "被弾直後",
+    "함정 피격": "罠被弾",
+    "함정 피격!": "罠被弾！",
+    "💥 [함정 피격]": "💥 [罠被弾]",
+    "⚠️ [함정 피격]": "⚠️ [罠被弾]",
+    "💥 [전원 피격 — 긴급 상태이상 부여]": "💥 [全員被弾 — 緊急状態異常付与]",
+    "전원 피격 — 긴급 상태이상 부여": "全員被弾 — 緊急状態異常付与",
+    "피격 환영 반격!": "被弾幻影反撃！",
+    "⚔️⚡[피격 환영 반격!]": "⚔️⚡[被弾幻影反撃！]",
+    "[피격 환영 반격!]": "[被弾幻影反撃！]",
+    "광폭화": "狂暴化",
+    "광폭": "狂暴",
+    "광폭화 진 최종 보스 도전": "狂暴化真最終ボス挑戦",
+    "광폭화 보스 토벌 도전": "狂暴化ボストーバツ挑戦",
+    "광폭화 결계": "狂暴化結界",
+    "호위": "護衛",
+    "정예": "精鋭",
+    "우두머리": "頭目",
     "고요해진 자리를 뒤로하고 탐험을 이어갑니다.": "静寂を取り戻した場所を後にして探検を続けます。",
     "💎 [잔류 자원] 바위 틈에 맺힌 마력 수정 1개를 수습했습니다.": "💎 [残留資源] 岩の隙間に宿っていた魔力水晶1個を回収しました。",
     "✨ [잔류 자원] 흩어져 있던 잔류 에테르 25를 수습했습니다.": "✨ [残留資源] 散らばっていた残留エーテル25を回収しました。",
@@ -11791,6 +11909,12 @@ function findInClassOrBuilding(name: string, lang: 'en' | 'ja'): string | null {
   return null;
 }
 
+// ── 마스터 커스텀 사전 오버라이드 룩업 훅 (순환 참조 방지용 콜백) ──
+let customOverrideLookup: ((key: string, lang: 'en' | 'ja' | string) => string | null) | null = null;
+export function setCustomOverrideLookup(fn: (key: string, lang: 'en' | 'ja' | string) => string | null): void {
+  customOverrideLookup = fn;
+}
+
 export const trEntity = (name: string, lang: 'en' | 'ja' | string): string => {
   if (!name) return '';
   let trimmed = String(name).trim();
@@ -11816,6 +11940,11 @@ export const trEntity = (name: string, lang: 'en' | 'ja' | string): string => {
     if (!hasOuterQuotes) return str;
     return lang === 'ja' ? `「${str}」` : `"${str}"`;
   };
+  // 0.01 마스터 커스텀 오버라이드 최우선 검사
+  if (customOverrideLookup) {
+    const customHit = customOverrideLookup(trimmed, lang);
+    if (customHit) return wrapQuote(customHit);
+  }
 
   // 0.05 쉼표로 연결된 다중 항목 분리 번역 (예: "신성 성기사단, 빛의 성역", "엘리시아, 카엘")
   if (trimmed.includes(', ')) {
@@ -11828,6 +11957,23 @@ export const trEntity = (name: string, lang: 'en' | 'ja' | string): string => {
   }
   if (trimmed.startsWith('[[') && trimmed.endsWith(']]')) {
     trimmed = trimmed.slice(1, -1).trim();
+  }
+  // 0.15 몬스터 역할/상태 접두사 분리 번역 (예: "[호위] 망각의 유령 A", "[정예] 망각의 유령", "[광폭화] 서리거인 파괴자", "[우두머리] 화염 군주 이그니스")
+  const monsterPrefixMatch = trimmed.match(/^(\[(?:호위|정예|광폭화|광폭|우두머리|보스)\])\s*(.+)$/);
+  if (monsterPrefixMatch) {
+    const rawTag = monsterPrefixMatch[1].trim();
+    const rest = monsterPrefixMatch[2].trim();
+    const monTagMap: Record<string, { en: string; ja: string }> = {
+      '[호위]': { en: '[Escort]', ja: '[護衛]' },
+      '[정예]': { en: '[Elite]', ja: '[精鋭]' },
+      '[광폭화]': { en: '[Enraged]', ja: '[狂暴化]' },
+      '[광폭]': { en: '[Enraged]', ja: '[狂暴化]' },
+      '[우두머리]': { en: '[Leader]', ja: '[頭目]' },
+      '[보스]': { en: '[Boss]', ja: '[ボス]' },
+    };
+    const trPrefix = monTagMap[rawTag]?.[lang === 'ja' ? 'ja' : 'en'] || rawTag;
+    const trRest = trEntity(rest, lang);
+    return wrapQuote(`${trPrefix} ${trRest}`);
   }
 
   // 0.2 강화 접두사 분리 번역 (예: "+3 흑철 검", "✨+5 명품 대검")
@@ -12147,6 +12293,17 @@ export function translateQuestRewards(rewardsStr: string, lang: 'en' | 'ja' | st
 }
 
 export const LOG_PATTERNS: LogPatternDef[] = [
+  // 💥 [함정 피격] / ⚠️ [피격 X명 / 회피 Y명]
+  {
+    pattern: /^(?:💥|⚠️)\s*\[함정 피격\]\s*(.+?)\s*발동!\s*(\d+)명\s*피격\s*\[(.+?)\](?:,\s*(\d+)명\s*회피)?/i,
+    en: m => `💥 [Trap Sprung] ${trEntity(m[1], 'en')} triggered! ${m[2]} hit [${trEntity(m[3], 'en')}]${m[4] !== undefined ? `, ${m[4]} evaded` : ''}`,
+    ja: m => `💥 [罠被弾] ${trEntity(m[1], 'ja')}発動！${m[2]}人被弾［${trEntity(m[3], 'ja')}］${m[4] !== undefined ? `、${m[4]}人回避` : ''}`
+  },
+  {
+    pattern: /^⚠️\s*\[피격\s*(\d+)명\s*\/\s*회피\s*(\d+)명\]/i,
+    en: m => `⚠️ [Hit: ${m[1]} / Evaded: ${m[2]}]`,
+    ja: m => `⚠️ [被弾 ${m[1]}名 / 回避 ${m[2]}名]`
+  },
   // 🍖 보급품 / 식량 노획 & 발견
   {
     pattern: /^🍖\s*\[보급품\s*노획\]\s*마물의\s*짐에서\s*\[(.+?)\]\s*(\d+)개를\s*노획했습니다!/i,
