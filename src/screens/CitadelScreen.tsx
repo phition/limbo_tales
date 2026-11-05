@@ -12367,81 +12367,80 @@ const QuestsDrawer: React.FC<{
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0e17] text-[#cfd8e8]">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1f2738] bg-[#070a10] shrink-0">
-        <div className="flex items-center gap-2">
-          <GameIcon name="quests" icon="📜" size={18} />
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-[#38ef7d]">{'의뢰소'}</span>
-              {totalClaimable > 0 && (
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold animate-pulse border border-[#38ef7d44]">
-                  🎁 {`${totalClaimable}개 수령 가능`}
-                </span>
-              )}
-              <EncyclopediaBadge query="퀘스트" tab="all" label="의뢰소 백과" />
-            </div>
-            <div className="text-[10px] text-[#8b9bb4]">
-              '현상금 및 서사 의뢰소'
-            </div>
+    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+      {/* ── 상단 정보 툴바 (중복 헤더 제거 및 다크 고딕 서브바) ── */}
+      <div className="flex items-center justify-between px-4 py-2 bg-[#0c0e14] border-b border-[#3d372e]/60 shrink-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-serif font-bold text-[#dcc496]">{tr('현상금 및 서사 의뢰소')}</span>
+            {totalClaimable > 0 && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#b89758]/20 text-[#dcc496] font-serif font-bold border border-[#b89758]/50 shadow-[0_0_10px_rgba(184,151,88,0.25)] animate-pulse">
+                🎁 {`${totalClaimable}개 수령 가능`}
+              </span>
+            )}
           </div>
+          <span className="text-[10px] text-[#8a95a5]">
+            {tr('진행 중')} {activeQuests.length} | {tr('완료')} {completedQuests.length}
+          </span>
         </div>
-        <button
-          className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
-          style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-          onClick={onClose}
-          aria-label="닫기"
-        >
-          <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <EncyclopediaBadge query="퀘스트" tab="all" label="의뢰소 백과" />
+        </div>
       </div>
 
-      {/* ── 4종 카테고리 탭 바 (연계 / 서브 / 에픽 / 완료) ── */}
-      <div className="grid grid-cols-4 gap-1 p-2 bg-[#0e121d] border-b border-[#1f2738] shrink-0">
+      {/* ── 4종 카테고리 탭 바 (연계 / 서브 / 에픽 / 완료 - Gothic Stone 탭) ── */}
+      <div className="grid grid-cols-4 gap-1.5 p-2 bg-[#08090b] border-b border-[#3d372e]/60 shrink-0">
         <button
-          className={`btn py-1.5 px-0.5 text-xs font-bold transition-all flex items-center justify-center gap-1 ${
-            catTab === 'chain' ? 'btn-primary' : 'btn-ghost'
+          className={`py-1.5 px-1 rounded-lg text-xs font-serif font-bold transition-all flex items-center justify-center gap-1 ${
+            catTab === 'chain'
+              ? 'bg-gradient-to-r from-[#2a2215] to-[#1c160e] text-[#dcc496] border border-[#b89758]/60 shadow-[0_2px_8px_rgba(0,0,0,0.5)]'
+              : 'bg-[#10131a]/80 text-[#8a95a5] border border-[#222733] hover:text-[#dcc496] hover:border-[#3d372e]'
           }`}
           onClick={() => setCatTab('chain')}
         >
-          <span>📜 {'연계'} ({chainActive.length})</span>
+          <span>📜 {tr('연계')} ({chainActive.length})</span>
           {chainClaimable > 0 && (
-            <span className="text-[9px] bg-[#38ef7d] text-black px-1 rounded-full font-bold">●</span>
+            <span className="w-2 h-2 rounded-full bg-[#b89758] shadow-[0_0_6px_#b89758] animate-pulse" />
           )}
         </button>
 
         <button
-          className={`btn py-1.5 px-0.5 text-xs font-bold transition-all flex items-center justify-center gap-1 ${
-            catTab === 'sub' ? 'btn-primary' : 'btn-ghost'
+          className={`py-1.5 px-1 rounded-lg text-xs font-serif font-bold transition-all flex items-center justify-center gap-1 ${
+            catTab === 'sub'
+              ? 'bg-gradient-to-r from-[#2a2215] to-[#1c160e] text-[#dcc496] border border-[#b89758]/60 shadow-[0_2px_8px_rgba(0,0,0,0.5)]'
+              : 'bg-[#10131a]/80 text-[#8a95a5] border border-[#222733] hover:text-[#dcc496] hover:border-[#3d372e]'
           }`}
           onClick={() => setCatTab('sub')}
         >
-          <span>🔄 {'서브'} ({hasTavern ? subActive.length : '🔒'})</span>
+          <span>🔄 {tr('서브')} ({hasTavern ? subActive.length : '🔒'})</span>
           {subClaimable > 0 && (
-            <span className="text-[9px] bg-[#38ef7d] text-black px-1 rounded-full font-bold">●</span>
+            <span className="w-2 h-2 rounded-full bg-[#b89758] shadow-[0_0_6px_#b89758] animate-pulse" />
           )}
         </button>
 
         <button
-          className={`btn py-1.5 px-0.5 text-xs font-bold transition-all flex items-center justify-center gap-1 ${
-            catTab === 'epic' ? 'btn-primary' : 'btn-ghost'
+          className={`py-1.5 px-1 rounded-lg text-xs font-serif font-bold transition-all flex items-center justify-center gap-1 ${
+            catTab === 'epic'
+              ? 'bg-gradient-to-r from-[#2a2215] to-[#1c160e] text-[#dcc496] border border-[#b89758]/60 shadow-[0_2px_8px_rgba(0,0,0,0.5)]'
+              : 'bg-[#10131a]/80 text-[#8a95a5] border border-[#222733] hover:text-[#dcc496] hover:border-[#3d372e]'
           }`}
           onClick={() => setCatTab('epic')}
         >
-          <span>👑 {'에픽'} ({hasEpicUnlocked ? epicActive.length : '🔒'})</span>
+          <span>👑 {tr('에픽')} ({hasEpicUnlocked ? epicActive.length : '🔒'})</span>
           {epicClaimable > 0 && (
-            <span className="text-[9px] bg-[#38ef7d] text-black px-1 rounded-full font-bold">●</span>
+            <span className="w-2 h-2 rounded-full bg-[#b89758] shadow-[0_0_6px_#b89758] animate-pulse" />
           )}
         </button>
 
         <button
-          className={`btn py-1.5 px-0.5 text-xs font-bold transition-all flex items-center justify-center gap-1 ${
-            catTab === 'completed' ? 'btn-primary' : 'btn-ghost'
+          className={`py-1.5 px-1 rounded-lg text-xs font-serif font-bold transition-all flex items-center justify-center gap-1 ${
+            catTab === 'completed'
+              ? 'bg-gradient-to-r from-[#2a2215] to-[#1c160e] text-[#dcc496] border border-[#b89758]/60 shadow-[0_2px_8px_rgba(0,0,0,0.5)]'
+              : 'bg-[#10131a]/80 text-[#8a95a5] border border-[#222733] hover:text-[#dcc496] hover:border-[#3d372e]'
           }`}
           onClick={() => setCatTab('completed')}
         >
-          <span>✅ {'완료'} ({completedQuests.length})</span>
+          <span>✅ {tr('완료')} ({completedQuests.length})</span>
         </button>
       </div>
 
@@ -12449,38 +12448,38 @@ const QuestsDrawer: React.FC<{
       <div className="flex-1 min-h-0 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 gap-3 content-start">
         {/* 서브 퀘스트 잠금 안내 */}
         {catTab === 'sub' && !hasTavern && (
-          <div className="panel p-6 text-center flex flex-col items-center gap-2 bg-[#121722] border border-[#222d42] rounded-xl col-span-full">
-            <span className="text-4xl p-2 rounded-2xl bg-[#1e293b] border border-[#334155]">🍺🔒</span>
-            <span className="font-bold text-sm text-[#ffd54f]">방랑자의 라운지 (주점) 건설 필요</span>
-            <span className="text-xs text-[#8b9bb4] max-w-[280px] leading-relaxed">
-              영지에 <strong>방랑자의 라운지</strong>를 건설하면 방주 생존자들의 구호 의뢰 및 마물 토벌 서브 퀘스트가 해금됩니다.
+          <div className="p-6 text-center flex flex-col items-center gap-2 bg-[#10131a] border border-[#3d372e] rounded-xl col-span-full shadow-lg">
+            <span className="text-4xl p-2.5 rounded-2xl bg-[#1a1510] border border-[#b89758]/40 shadow-inner">🍺🔒</span>
+            <span className="font-serif font-bold text-sm text-[#dcc496]">{tr('방랑자의 라운지 (주점) 건설 필요')}</span>
+            <span className="text-xs text-[#8a95a5] max-w-[280px] leading-relaxed">
+              영지에 <strong className="text-[#dcc496]">방랑자의 라운지</strong>를 건설하면 방주 생존자들의 구호 의뢰 및 마물 토벌 서브 퀘스트가 해금됩니다.
             </span>
-            <div className="text-[11px] text-[#607d8b] mt-1 bg-[#090c14] px-3 py-1.5 rounded-lg border border-[#1b2334]">
+            <div className="text-[11px] text-[#8a95a5] mt-1 bg-[#08090b] px-3 py-1.5 rounded-lg border border-[#2a261f]">
               건설 비용: 🪵 목재 80, 🪨 석재 50, 🪙 300G
             </div>
             <button
-              className="btn btn-primary text-xs px-4 py-2 mt-2 font-bold shadow-md flex items-center gap-1.5 active:scale-95"
+              className="text-xs px-4 py-2 mt-2 font-serif font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b]"
               onClick={() => onNavigateDrawer ? onNavigateDrawer('citadel') : onClose()}
             >
               <span>🏛️</span>
-              <span>영지에서 주점 건설하러 가기 ▶</span>
+              <span>{tr('영지에서 주점 건설하러 가기')} ▶</span>
             </button>
           </div>
         )}
 
         {/* 10분 쿨다운 안내 카드 (주점 건설 완료 후 서브 슬롯 비었을 때) */}
         {catTab === 'sub' && hasTavern && subActive.length < 3 && state.subQuestCooldownUntil > 0 && (
-          <div className="panel p-3 bg-[#11192e] border border-[#c8aa6e44] rounded-xl flex items-center justify-between gap-2 col-span-full">
+          <div className="p-3 bg-[#10131a] border border-[#b89758]/30 rounded-xl flex items-center justify-between gap-2 col-span-full shadow-sm">
             <div className="flex items-center gap-2">
-              <span className="text-xl p-1.5 rounded-lg bg-[#16233d] border border-[#c8aa6e33] animate-spin">⏳</span>
+              <span className="text-xl p-1.5 rounded-lg bg-[#1a1710] border border-[#b89758]/40 animate-spin">⏳</span>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-[#c8aa6e]">{tr('신규 의뢰 접수 대기 중')}</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-mono font-bold">
+                  <span className="text-xs font-serif font-bold text-[#dcc496]">{tr('신규 의뢰 접수 대기 중')}</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#b89758]/20 text-[#dcc496] font-mono font-bold border border-[#b89758]/40">
                     {tr('10분 쿨타임')}
                   </span>
                 </div>
-                <div className="text-[10px] text-[#8b9bb4] mt-0.5">
+                <div className="text-[10px] text-[#8a95a5] mt-0.5">
                   {(() => {
                     const diffSec = Math.max(0, Math.ceil((state.subQuestCooldownUntil - Date.now()) / 1000));
                     return `${tr('다음 주민/길드 의뢰 도착까지')}: ${formatDuration(diffSec, lang, true)}`;
@@ -12488,7 +12487,7 @@ const QuestsDrawer: React.FC<{
                 </div>
               </div>
             </div>
-            <div className="text-[10px] text-[#ffd54f] font-mono font-bold shrink-0">
+            <div className="text-[10px] text-[#dcc496] font-mono font-bold shrink-0">
               슬롯 {subActive.length}/3
             </div>
           </div>
@@ -12496,31 +12495,31 @@ const QuestsDrawer: React.FC<{
 
         {/* 에픽 퀘스트 잠금 안내 */}
         {catTab === 'epic' && !hasEpicUnlocked && (
-          <div className="panel p-6 text-center flex flex-col items-center gap-2 bg-[#190e28] border border-[#e040fb44] rounded-xl col-span-full">
-            <span className="text-4xl p-2 rounded-2xl bg-[#2a133d] border border-[#e040fb66]">👑🔒</span>
-            <span className="font-bold text-sm text-[#e040fb]">영혼의 제단 건설 필요</span>
+          <div className="p-6 text-center flex flex-col items-center gap-2 bg-[#120f18] border border-[#7a4891]/50 rounded-xl col-span-full shadow-lg">
+            <span className="text-4xl p-2.5 rounded-2xl bg-[#1e1329] border border-[#ba68c8]/40 shadow-inner">👑🔒</span>
+            <span className="font-serif font-bold text-sm text-[#ba68c8]">{tr('영혼의 제단 건설 필요')}</span>
             <span className="text-xs text-[#cfd8e8] max-w-[280px] leading-relaxed">
-              영지에 <strong>영혼의 제단</strong>을 완공하면 각 층 광폭화 보스 토벌 및 고대 방주의 기원을 추적하는 <strong>3부작 에픽 시나리오</strong>가 해금됩니다.
+              영지에 <strong className="text-[#ba68c8]">영혼의 제단</strong>을 완공하면 각 층 광폭화 보스 토벌 및 고대 방주의 기원을 추적하는 <strong className="text-[#dcc496]">3부작 에픽 시나리오</strong>가 해금됩니다.
             </span>
-            <div className="text-[11px] text-[#8b9bb4] mt-1 bg-[#090c14] px-3 py-1.5 rounded-lg border border-[#1b2334]">
+            <div className="text-[11px] text-[#8a95a5] mt-1 bg-[#08090b] px-3 py-1.5 rounded-lg border border-[#2a261f]">
               건설 비용: 🪨 석재 120, ⚙️ 철광 50, ✨ 에테르 30, 🪙 1,000G
             </div>
             <button
-              className="btn btn-primary text-xs px-4 py-2 mt-2 font-bold shadow-md flex items-center gap-1.5 active:scale-95"
+              className="text-xs px-4 py-2 mt-2 font-serif font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#7a4891] to-[#4a2861] hover:brightness-110 text-[#f5e6ff]"
               onClick={() => onNavigateDrawer ? onNavigateDrawer('citadel') : onClose()}
             >
               <span>🏛️</span>
-              <span>영지에서 제단 건설하러 가기 ▶</span>
+              <span>{tr('영지에서 제단 건설하러 가기')} ▶</span>
             </button>
           </div>
         )}
 
         {displayedQuests.length === 0 && !(catTab === 'sub' && !hasTavern) && !(catTab === 'epic' && !hasEpicUnlocked) && (
-          <div className="panel p-8 text-center text-sm text-[#8b9bb4] col-span-full">
+          <div className="p-8 text-center text-sm text-[#8a95a5] col-span-full bg-[#10131a]/60 border border-[#222733] rounded-xl">
             {catTab === 'completed'
-              ? '아직 완료된 퀘스트가 없습니다.' : '현재 해당 탭의 진행 가능한 퀘스트가 없습니다.'}<br />
-            <span className="text-xs text-[#607d8b] mt-1 block">
-              {catTab === 'sub' ? '서브 퀘스트는 해결 시 새로운 의뢰가 계속 생성됩니다.' : '영지 시설을 확장하거나 심연을 탐험하세요.'}
+              ? tr('아직 완료된 퀘스트가 없습니다.') : tr('현재 해당 탭의 진행 가능한 퀘스트가 없습니다.')}<br />
+            <span className="text-xs text-[#5a6578] mt-1 block">
+              {catTab === 'sub' ? tr('서브 퀘스트는 해결 시 새로운 의뢰가 계속 생성됩니다.') : tr('영지 시설을 확장하거나 심연을 탐험하세요.')}
             </span>
           </div>
         )}
@@ -12543,13 +12542,14 @@ const QuestsDrawer: React.FC<{
           return (
             <div
               key={q.id}
-              className={`panel p-3 rounded-xl transition-all flex flex-col gap-2.5 ${
+              className={`p-3.5 rounded-xl transition-all flex flex-col gap-2.5 relative overflow-hidden backdrop-blur-sm ${
                 isClaimable
-                  ? 'border-2 border-[#38ef7d] bg-[#0e1f18] shadow-lg shadow-[#38ef7d15]'
+                  ? 'border border-[#b89758] bg-gradient-to-br from-[#1c1810] via-[#14120d] to-[#0c0e14] shadow-[0_0_15px_rgba(184,151,88,0.25)] ring-1 ring-[#dcc496]/40'
                   : isCompleted
-                  ? 'border-[#222d42] bg-[#0e121a] opacity-80'
+                  ? 'border border-[#222733] bg-[#0c0e14]/80 opacity-70'
                   : q.type === 'epic'
-                  ? 'border-2 border-[#e040fb55] bg-[#170e24] shadow-md shadow-[#e040fb15]' : 'border-[#26334a] bg-[#131926]'
+                  ? 'border border-[#7a4891]/60 bg-gradient-to-br from-[#181126] via-[#120c1d] to-[#0c0e14] shadow-[0_0_12px_rgba(122,72,145,0.2)]'
+                  : 'border border-[#2a261f] hover:border-[#3d372e] bg-gradient-to-b from-[#131722] to-[#0e111a]'
               }`}
             >
               {/* 상단: 분류 뱃지 + 제목 + 상태 */}
@@ -12562,22 +12562,22 @@ const QuestsDrawer: React.FC<{
                     >
                       {typeTag.label}
                     </span>
-                    <span className="font-bold text-sm text-white">{tr(q.title)}</span>
+                    <span className="font-serif font-bold text-sm text-[#e2ecf8]">{tr(q.title)}</span>
                   </div>
-                  <div className="text-[11px] text-[#cfd8dc] mt-1 leading-relaxed">{tr(q.summary)}</div>
+                  <div className="text-[11px] text-[#8a95a5] mt-1 leading-relaxed">{tr(q.summary)}</div>
                 </div>
 
                 <div className="shrink-0">
                   {isCompleted ? (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#607d8b22] text-[#8b9bb4] font-bold">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#222733] text-[#8a95a5] font-bold border border-[#2a261f]">
                       {tr('완료됨')}
                     </span>
                   ) : isClaimable ? (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d44] animate-pulse">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#b89758]/20 text-[#dcc496] font-serif font-bold border border-[#b89758]/50 shadow-[0_0_8px_rgba(184,151,88,0.3)] animate-pulse">
                       {tr('🎁 완료! 수령 대기')}
                     </span>
                   ) : (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#2a2417] text-[#dcc496] font-serif font-medium border border-[#3d372e]">
                       {tr('진행 중')}
                     </span>
                   )}
@@ -12585,23 +12585,23 @@ const QuestsDrawer: React.FC<{
               </div>
 
               {/* 목표 달성 게이지 목록 */}
-              <div className="flex flex-col gap-1.5 bg-[#090c14] p-2 rounded-lg border border-[#1b2334]">
+              <div className="flex flex-col gap-1.5 bg-[#08090b]/90 p-2.5 rounded-lg border border-[#2a261f]">
                 {q.objectives.map((obj, idx) => {
                   const pct = Math.min(100, Math.round((obj.current / obj.required) * 100));
                   return (
                     <div key={idx} className="flex flex-col gap-0.5">
                       <div className="flex items-center justify-between text-[11px]">
-                        <span className={`flex items-center gap-1 ${obj.isCompleted ? 'text-[#38ef7d] line-through' : 'text-[#cfd8dc]'}`}>
+                        <span className={`flex items-center gap-1 ${obj.isCompleted ? 'text-[#34d399] line-through' : 'text-[#cfd8e8]'}`}>
                           <span>{obj.isCompleted ? '✅' : '⏳'}</span>
                           <span>{tr(obj.description)}</span>
                         </span>
-                        <span className="font-mono text-xs font-bold text-[#ffd54f]">
+                        <span className="font-mono text-xs font-bold text-[#dcc496]">
                           {obj.current}/{obj.required}
                         </span>
                       </div>
-                      <div className="w-full h-1 bg-[#1a2234] rounded-full overflow-hidden">
+                      <div className="w-full h-1 bg-[#151821] rounded-full overflow-hidden">
                         <div
-                          className={`h-full transition-all duration-300 ${obj.isCompleted ? 'bg-[#38ef7d]' : 'bg-[#c8aa6e]'}`}
+                          className={`h-full transition-all duration-300 ${obj.isCompleted ? 'bg-[#34d399]' : 'bg-gradient-to-r from-[#b89758] to-[#dcc496]'}`}
                           style={{ width: `${pct}%` }}
                         />
                       </div>
@@ -12611,8 +12611,8 @@ const QuestsDrawer: React.FC<{
               </div>
 
               {/* 보상 미리보기 뱃지 바 */}
-              <div className="pt-2 border-t border-[#1f2738] flex flex-col gap-1.5">
-                <span className="text-[10px] text-[#8b9bb4]">
+              <div className="pt-2 border-t border-[#2a261f] flex flex-col gap-1.5">
+                <span className="text-[10px] text-[#8a95a5]">
                   {q.epicStory ? tr('달성 시나리오 & 분기 선택 보상:') : tr('달성 보상:')}
                 </span>
                 <div className="flex items-center gap-1.5 flex-wrap">
@@ -12699,7 +12699,7 @@ const QuestsDrawer: React.FC<{
                           {tr(book.name)}
                         </span>
                       ))}
-                      {/* 🏛️ 신규 시설 건설 해금 (개별 시설마다 고유 커스텀 건물 아이콘 및 명칭 표시) */}
+                      {/* 🏛️ 신규 시설 건설 해금 */}
                       {(() => {
                         const unlockIds: string[] = [];
                         if (q.rewards.unlockBuildingId) unlockIds.push(q.rewards.unlockBuildingId);
@@ -12749,7 +12749,8 @@ const QuestsDrawer: React.FC<{
               {/* 보상 수령 버튼 */}
               {isClaimable && (
                 <button
-                  data-tutorial-target="quest-reward" className="btn btn-success w-full py-2 text-xs font-bold shadow-lg mt-1 flex items-center justify-center gap-1.5 animate-pulse"
+                  data-tutorial-target="quest-reward"
+                  className="w-full py-2.5 text-xs font-serif font-black rounded-lg shadow-lg mt-1 flex items-center justify-center gap-1.5 transition-all active:scale-95 bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] shadow-[0_0_14px_rgba(184,151,88,0.4)] animate-pulse"
                   onClick={() => {
                     if (q.epicStory) {
                       setEpicQuestForModal(q);
