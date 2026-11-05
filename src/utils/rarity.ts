@@ -1,4 +1,5 @@
 import React from 'react';
+import { I18nService } from '../i18n/I18nService';
 
 export type ItemRarity = 'common' | 'rare' | 'unique' | 'epic' | 'legendary' | 'legend' | 'mythic' | string;
 
@@ -17,7 +18,33 @@ export const getRarityColor = (rarity?: string): string => {
   return RARITY_COLORS[rarity.toLowerCase()] || '#90a4ae';
 };
 
-export const getRarityLabel = (rarity?: string): string => {
+export const getRarityLabel = (rarity?: string, lang?: string): string => {
+  const currentLang = lang || I18nService.getInstance().getLanguage();
+  if (currentLang === 'en') {
+    switch (rarity?.toLowerCase()) {
+      case 'rare': return 'Rare';
+      case 'unique': return 'Unique';
+      case 'epic': return 'Epic';
+      case 'legendary':
+      case 'legend': return 'Legendary';
+      case 'mythic': return 'Mythic';
+      case 'ancient': return 'Ancient';
+      case 'relic': return 'Relic';
+      default: return 'Common';
+    }
+  } else if (currentLang === 'ja') {
+    switch (rarity?.toLowerCase()) {
+      case 'rare': return '希少';
+      case 'unique': return '固有';
+      case 'epic': return '英雄';
+      case 'legendary':
+      case 'legend': return '伝説';
+      case 'mythic': return '神話';
+      case 'ancient': return '古代';
+      case 'relic': return '遺物';
+      default: return '一般';
+    }
+  }
   switch (rarity?.toLowerCase()) {
     case 'rare': return '희귀';
     case 'unique': return '고유';
@@ -25,6 +52,8 @@ export const getRarityLabel = (rarity?: string): string => {
     case 'legendary':
     case 'legend': return '전설';
     case 'mythic': return '신화';
+    case 'ancient': return '고대';
+    case 'relic': return '유물';
     default: return '일반';
   }
 };

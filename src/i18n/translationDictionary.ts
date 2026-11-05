@@ -78,6 +78,241 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "완전 사망": "Permanent Death",
     "신성심판! ✨": "Divine Judgment! ✨",
 
+    // 🛡️ 1~10티어 전술 무구 명칭 (Forge Tier Items)
+    "수습 대장장이의 철검": "Apprentice Smith's Iron Sword",
+    "수습 대장장이의 창": "Apprentice Smith's Spear",
+    "기본 마총": "Basic Magun",
+    "수습 목재 장궁": "Apprentice Wooden Longbow",
+    "수습 원목 지팡이": "Apprentice Wooden Staff",
+    "수습 단검": "Apprentice Dagger",
+    "수습 가죽 갑옷": "Apprentice Leather Armor",
+    "수습 판금 갑옷": "Apprentice Plate Armor",
+    "수습 마나 로브": "Apprentice Mana Robe",
+    "은빛 반지": "Silver Ring",
+    "수호석 목걸이": "Guardian Stone Necklace",
+    "비전 부적": "Arcane Amulet",
+    "단련된 강철 장검": "Tempered Steel Longsword",
+    "강철 기병창": "Steel Cavalry Lance",
+    "정밀 강화 마총": "Precision Reinforced Magun",
+    "탄성 강화 강궁": "Elastic Reinforced Strongbow",
+    "정제 마력 지팡이": "Refined Mana Staff",
+    "예리한 강철 비수": "Keen Steel Dagger",
+    "강화 가죽 갑옷": "Reinforced Leather Armor",
+    "정련 강철 판금갑": "Refined Steel Plate Armor",
+    "정제 마나 로브": "Refined Mana Robe",
+    "광채 은빛 반지": "Radiant Silver Ring",
+    "수호 결계 목걸이": "Guardian Barrier Necklace",
+    "정화의 비전 부적": "Purifying Arcane Amulet",
+    "마도 룬 각인 명검": "Runic Arcane Blade",
+    "룬 새김 장창": "Rune-Carved Pike",
+    "마도 속사 마총": "Arcane Rapid Magun",
+    "룬 마력 합성궁": "Runic Mana Composite Bow",
+    "원소 마도 지팡이": "Elemental Arcane Staff",
+    "그림자 암살 비수": "Shadow Assassin Dagger",
+    "마도 룬 가죽갑": "Arcane Runic Leather Armor",
+    "마도 수호 판금갑": "Arcane Guardian Plate Armor",
+    "원소 공명 로브": "Elemental Resonance Robe",
+    "마력 응축 반지": "Mana Condensation Ring",
+    "성스러운 가호 목걸이": "Holy Blessing Necklace",
+    "영혼 공명 부적": "Soul Resonance Amulet",
+    "흑요석 정예 기사검": "Obsidian Elite Knight Sword",
+    "흑요석 관통 월도": "Obsidian Piercing Glaive",
+    "에테르 중화 마총": "Aether Neutralizing Magun",
+    "흑요석 관통 대궁": "Obsidian Piercing Greatbow",
+    "대마도사의 성운 지팡이": "Archmage's Nebula Staff",
+    "환영 흑요석 단검": "Phantom Obsidian Dagger",
+    "흑요석 정예 경갑": "Obsidian Elite Light Armor",
+    "흑요석 철벽 중갑": "Obsidian Ironclad Heavy Armor",
+    "비전 성운 로브": "Arcane Nebula Robe",
+    "에테르 심장 반지": "Aether Heart Ring",
+    "기사단 영웅 목걸이": "Knighthood Hero Necklace",
+    "심연 억제 부적": "Abyss Suppression Amulet",
+    "심연 파멸의 신화검": "Abyssal Ruin Mythic Sword",
+    "공허 분쇄 파성창": "Void Crushing Siege Lance",
+    "모노리스 파멸포": "Monolith Ruin Cannon",
+    "심연 차원 성운궁": "Abyssal Dimensional Nebula Bow",
+    "태고 현자의 지팡이": "Ancient Sage's Staff",
+    "심연 그림자 사령검": "Abyssal Shadow Necroblade",
+    "심연 수호 가죽갑": "Abyssal Guardian Leather Armor",
+    "공허 지배 수호갑": "Void Sovereign Guardian Plate",
+    "공허 지배 성의": "Void Sovereign Vestment",
+    "공허 인장 반지": "Void Seal Ring",
+    "지배자의 심연 목걸이": "Sovereign's Abyssal Necklace",
+    "차원 왜곡 부적": "Spacetime Distortion Amulet",
+    "진홍 혈염의 결전검": "Crimson Bloodflame Decisive Sword",
+    "선혈 섬광 창": "Bloodflash Spear",
+    "진홍 흡혈 마총": "Crimson Vampiric Magun",
+    "혈염 환영궁": "Bloodflame Phantom Bow",
+    "진홍 천상봉": "Crimson Celestial Rod",
+    "선혈 유령도": "Blood Phantom Blade",
+    "진홍 혈염 경갑": "Crimson Bloodflame Light Armor",
+    "진홍 혈염 판금갑": "Crimson Bloodflame Plate Armor",
+    "진홍 선혈 로브": "Crimson Blood Robe",
+    "혈옥의 인장 반지": "Blood Jade Seal Ring",
+    "불멸 선혈 목걸이": "Immortal Blood Necklace",
+    "혈계 계약 부적": "Bloodline Pact Amulet",
+    "망각 사신의 영혼검": "Oblivion Reaper's Soul Sword",
+    "사령 절단 극창": "Necro Severing Halberd",
+    "망각 저격 마총": "Oblivion Sniper Magun",
+    "영혼 포식 대궁": "Soul Devourer Greatbow",
+    "망각 사령 마도봉": "Oblivion Necro Wand",
+    "영혼 수확 암살검": "Soul Harvesting Assassin Blade",
+    "망각 사령 경갑": "Oblivion Necro Light Armor",
+    "망각 철벽 사령갑": "Oblivion Ironclad Necro Plate",
+    "망각 사령 로브": "Oblivion Necro Robe",
+    "사령 속박 반지": "Necro Binding Ring",
+    "영혼 해방 목걸이": "Soul Liberation Necklace",
+    "망각 사신 부적": "Oblivion Reaper Amulet",
+    "단죄 칠흑의 심판검": "Judgment Condemnation Darkblade",
+    "단죄 성역 장창": "Condemnation Sanctuary Pike",
+    "심판 단죄 마총": "Judgment Condemnation Magun",
+    "성역 심판궁": "Sanctuary Judgment Bow",
+    "단죄 성역 대지팡이": "Condemnation Sanctuary Greatstaff",
+    "칠흑 심판 단도": "Dark Judgment Dagger",
+    "단죄 성역 가죽갑": "Condemnation Sanctuary Leather Armor",
+    "단죄 불패 성역갑": "Condemnation Invincible Sanctuary Plate",
+    "칠흑 단죄 성의": "Dark Condemnation Vestment",
+    "단죄 수호 반지": "Condemnation Guardian Ring",
+    "불패 성역 목걸이": "Invincible Sanctuary Necklace",
+    "단죄 심판 부적": "Condemnation Judgment Amulet",
+    "만화경 환영 명검": "Kaleidoscopic Phantom Blade",
+    "거울 차원 극창": "Mirror Dimension Halberd",
+    "환영 굴절 마총": "Phantom Refraction Magun",
+    "만화경 환영궁": "Kaleidoscopic Phantom Bow",
+    "거울 미궁 마도봉": "Mirror Labyrinth Arcane Wand",
+    "환영 굴절 비수": "Phantom Refraction Dagger",
+    "만화경 환영 경갑": "Kaleidoscopic Phantom Light Armor",
+    "거울 굴절 판금갑": "Mirror Refraction Plate Armor",
+    "만화경 차원 로브": "Kaleidoscopic Dimension Robe",
+    "환영 거울 반지": "Phantom Mirror Ring",
+    "미궁 진실 목걸이": "Labyrinth Truth Necklace",
+    "만화경 환영 부적": "Kaleidoscopic Phantom Amulet",
+    "절대 종말의 심연검": "Absolute Doomsday Abyssal Sword",
+    "종말 멸망 신창": "Doomsday Ruin Divine Lance",
+    "심연 종말 파멸포": "Abyssal Doomsday Cataclysm Cannon",
+    "종말 심연 대궁": "Doomsday Abyssal Greatbow",
+    "아스모데우스 마도봉": "Asmodeus Arcane Staff",
+    "종말 암흑 절멸도": "Doomsday Dark Annihilation Dagger",
+    "종말 심연 극갑": "Doomsday Abyssal Apex Armor",
+    "아스모데우스 절대갑": "Asmodeus Absolute Plate",
+    "종말 절대 성의": "Doomsday Absolute Vestment",
+    "절대 종말 반지": "Absolute Doomsday Ring",
+    "아스모데우스 왕관 목걸이": "Asmodeus Crown Necklace",
+    "종말 절대 부적": "Doomsday Absolute Amulet",
+    "무기": "Weapon",
+    "갑옷": "Armor",
+    "방어구": "Armor",
+    "장신구": "Accessory",
+    "베이스 스탯 대폭 증가": "Base stats greatly increased",
+    "추가 스탯 획득": "Bonus stats obtained",
+    "희귀 등급 승격": "Promoted to Rare tier",
+    "영웅 등급 승격": "Promoted to Epic tier",
+    "전설 등급 승격": "Promoted to Legendary tier",
+    "엘리시아": "Elysia",
+    "카엘": "Kael",
+    "로웰": "Lowell",
+    "아이리스": "Iris",
+    "루카스": "Lucas",
+    "레온": "Leon",
+    "세레나": "Serena",
+    "미라": "Mira",
+
+    // ⚔️ 스탯 & 증폭 및 장비 등급 시스템 번역
+    "스탯": "Stat",
+    "스탯들": "Stats",
+    "기본 스탯": "Base Stats",
+    "기본 스탯들": "Base Stats",
+    "베이스 스탯": "Base Stats",
+    "장비 스탯": "Equipment Stats",
+    "인챈트 스탯": "Enchant Stats",
+    "추가 스탯": "Bonus Stats",
+    "보조 스탯": "Secondary Stats",
+    "전투 스탯": "Combat Stats",
+    "전술 스탯": "Tactical Stats",
+    "주요 스탯": "Primary Stats",
+    "올스탯": "All Stats",
+    "모든 스탯": "All Stats",
+    "스탯 재조정": "Stat Respec",
+    "스탯 변경": "Stat Change",
+    "스탯 초기화": "Stat Reset",
+    "스탯 합산": "Total Stats",
+    "베이스 ±30% 스탯 재조정": "Base ±30% Stat Reroll",
+    "스탯 50% 반감": "Stats reduced by 50%",
+    "스탯 페널티": "Stat Penalty",
+    "증폭": "Amp",
+    "증폭!": "Amp!",
+    "피해 증폭": "Damage Amp",
+    "피해량 증폭": "Damage Amp",
+    "대미지 증폭": "Damage Amp",
+    "공격력 증폭": "ATK Amp",
+    "방어력 증폭": "DEF Amp",
+    "치유량 증폭": "Healing Amp",
+    "위력 증폭": "Power Amp",
+    "배율 증폭": "Multiplier Amp",
+    "마력 증폭": "Magic Amp",
+    "성능 증폭": "Power Amp",
+    "효과 증폭": "Effect Amp",
+    "파동 증폭": "Wave Amp",
+    "증폭되었습니다!": "amplified!",
+    "증폭됩니다!": "is amplified!",
+    "증폭됩니다": "is amplified",
+    "증폭되며": "is amplified and",
+    "증폭시킵니다": "amplifies",
+    "희귀": "Rare",
+    "영웅": "Hero",
+    "전설": "Legendary",
+    "신화": "Mythic",
+    "고대": "Ancient",
+    "일반": "Common",
+    "고급": "Uncommon",
+    "유물": "Relic",
+    "고유": "Unique",
+    "희귀 등급": "Rare Grade",
+    "영웅 등급": "Epic Grade",
+    "전설 등급": "Legendary Grade",
+    "신화 등급": "Mythic Grade",
+    "고대 등급": "Ancient Grade",
+    "일반 등급": "Common Grade",
+    "고급 등급": "Uncommon Grade",
+    "유물 등급": "Relic Grade",
+    "고유 등급": "Unique Grade",
+    "[희귀]": "[Rare]",
+    "[영웅]": "[Epic]",
+    "[전설]": "[Legendary]",
+    "[신화]": "[Mythic]",
+    "[고대]": "[Ancient]",
+    "[일반]": "[Common]",
+    "[고급]": "[Uncommon]",
+    "[유물]": "[Relic]",
+    "[고유]": "[Unique]",
+    "👑 [전설]": "👑 [Legendary]",
+    "🌟 [영웅]": "🌟 [Epic]",
+    "✨ [희귀]": "✨ [Rare]",
+    "👑 [신화]": "👑 [Mythic]",
+    "👑 [고대]": "👑 [Ancient]",
+    "👑 [유물]": "👑 [Relic]",
+    "👑 [고유]": "👑 [Unique]",
+    "👑 고유/보스": "👑 Unique/Boss",
+    "👑 [고유/보스]": "👑 [Unique/Boss]",
+    "COMMON": "Common",
+    "UNCOMMON": "Uncommon",
+    "RARE": "Rare",
+    "EPIC": "Epic",
+    "LEGENDARY": "Legendary",
+    "MYTHIC": "Mythic",
+    "ANCIENT": "Ancient",
+    "RELIC": "Relic",
+    "UNIQUE": "Unique",
+    "[COMMON]": "[Common]",
+    "[UNCOMMON]": "[Uncommon]",
+    "[RARE]": "[Rare]",
+    "[EPIC]": "[Epic]",
+    "[LEGENDARY]": "[Legendary]",
+    "[MYTHIC]": "[Mythic]",
+    "[ANCIENT]": "[Ancient]",
+    "[RELIC]": "[Relic]",
+    "[UNIQUE]": "[Unique]",
+
     // 🛡️ 클래스명 (Classes)
     "성기사": "Paladin",
     "암살자": "Assassin",
@@ -6025,6 +6260,241 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "완전 사망": "完全死亡",
     "신성심판! ✨": "神聖審判! ✨",
 
+    // 🛡️ 1~10티어 전술 무구 명칭 (Forge Tier Items)
+    "수습 대장장이의 철검": "見習い鍛冶屋の鉄剣",
+    "수습 대장장이의 창": "見習い鍛冶屋の槍",
+    "기본 마총": "基本魔銃",
+    "수습 목재 장궁": "見習い木製長弓",
+    "수습 원목 지팡이": "見習い原木杖",
+    "수습 단검": "見習い短剣",
+    "수습 가죽 갑옷": "見習い革鎧",
+    "수습 판금 갑옷": "見習い板金鎧",
+    "수습 마나 로브": "見習いマナローブ",
+    "은빛 반지": "銀の指輪",
+    "수호석 목걸이": "守護石のネックレス",
+    "비전 부적": "秘術のアミュレット",
+    "단련된 강철 장검": "鍛錬された鋼鉄長剣",
+    "강철 기병창": "鋼鉄騎兵槍",
+    "정밀 강화 마총": "精密強化魔銃",
+    "탄성 강화 강궁": "弾性強化強弓",
+    "정제 마력 지팡이": "精製魔力杖",
+    "예리한 강철 비수": "鋭利な鋼鉄短刀",
+    "강화 가죽 갑옷": "強化革鎧",
+    "정련 강철 판금갑": "精錬鋼鉄板金鎧",
+    "정제 마나 로브": "精製マナローブ",
+    "광채 은빛 반지": "光輝く銀の指輪",
+    "수호 결계 목걸이": "守護結界のネックレス",
+    "정화의 비전 부적": "浄化の秘術アミュレット",
+    "마도 룬 각인 명검": "魔導ルーン刻印名剣",
+    "룬 새김 장창": "ルーン刻み長槍",
+    "마도 속사 마총": "魔導速射魔銃",
+    "룬 마력 합성궁": "ルーン魔力合成弓",
+    "원소 마도 지팡이": "元素魔導杖",
+    "그림자 암살 비수": "影の暗殺短刀",
+    "마도 룬 가죽갑": "魔導ルーン革鎧",
+    "마도 수호 판금갑": "魔導守護板金鎧",
+    "원소 공명 로브": "元素共鳴ローブ",
+    "마력 응축 반지": "魔力凝縮の指輪",
+    "성스러운 가호 목걸이": "聖なる加護のネックレス",
+    "영혼 공명 부적": "魂の共鳴アミュレット",
+    "흑요석 정예 기사검": "黒曜石精鋭騎士剣",
+    "흑요석 관통 월도": "黒曜石貫通月刀",
+    "에테르 중화 마총": "エーテル中和魔銃",
+    "흑요석 관통 대궁": "黒曜石貫通大弓",
+    "대마도사의 성운 지팡이": "大魔導士の星雲杖",
+    "환영 흑요석 단검": "幻影黒曜石短剣",
+    "흑요석 정예 경갑": "黒曜石精鋭軽鎧",
+    "흑요석 철벽 중갑": "黒曜石鉄壁重鎧",
+    "비전 성운 로브": "秘術星雲ローブ",
+    "에테르 심장 반지": "エーテルハートの指輪",
+    "기사단 영웅 목걸이": "騎士団英雄のネックレス",
+    "심연 억제 부적": "深淵抑制アミュレット",
+    "심연 파멸의 신화검": "深淵破滅の神話剣",
+    "공허 분쇄 파성창": "虚無粉砕破城槍",
+    "모노리스 파멸포": "モノリス破滅砲",
+    "심연 차원 성운궁": "深淵次元星雲弓",
+    "태고 현자의 지팡이": "太古賢者の杖",
+    "심연 그림자 사령검": "深淵影の死霊剣",
+    "심연 수호 가죽갑": "深淵守護革鎧",
+    "공허 지배 수호갑": "虚無支配守護鎧",
+    "공허 지배 성의": "虚無支配聖衣",
+    "공허 인장 반지": "虚無印章の指輪",
+    "지배자의 심연 목걸이": "支配者の深淵ネックレス",
+    "차원 왜곡 부적": "次元歪曲アミュレット",
+    "진홍 혈염의 결전검": "深紅血炎の決戦剣",
+    "선혈 섬광 창": "鮮血閃光槍",
+    "진홍 흡혈 마총": "深紅吸血魔銃",
+    "혈염 환영궁": "血炎幻影弓",
+    "진홍 천상봉": "深紅天上棒",
+    "선혈 유령도": "鮮血幽霊刀",
+    "진홍 혈염 경갑": "深紅血炎軽鎧",
+    "진홍 혈염 판금갑": "深紅血炎板金鎧",
+    "진홍 선혈 로브": "深紅鮮血ローブ",
+    "혈옥의 인장 반지": "血玉の印章指輪",
+    "불멸 선혈 목걸이": "不滅鮮血ネックレス",
+    "혈계 계약 부적": "血契契約アミュレット",
+    "망각 사신의 영혼검": "忘却死神の魂剣",
+    "사령 절단 극창": "死霊切断極槍",
+    "망각 저격 마총": "忘却狙撃魔銃",
+    "영혼 포식 대궁": "魂捕食大弓",
+    "망각 사령 마도봉": "忘却死霊魔導棒",
+    "영혼 수확 암살검": "魂収穫暗殺剣",
+    "망각 사령 경갑": "忘却死霊軽鎧",
+    "망각 철벽 사령갑": "忘却鉄壁死霊鎧",
+    "망각 사령 로브": "忘却死霊ローブ",
+    "사령 속박 반지": "死霊束縛の指輪",
+    "영혼 해방 목걸이": "魂解放のネックレス",
+    "망각 사신 부적": "忘却死神アミュレット",
+    "단죄 칠흑의 심판검": "断罪漆黒の審判剣",
+    "단죄 성역 장창": "断罪聖域長槍",
+    "심판 단죄 마총": "審判断罪魔銃",
+    "성역 심판궁": "聖域審判弓",
+    "단죄 성역 대지팡이": "断罪聖域大杖",
+    "칠흑 심판 단도": "漆黒審判短刀",
+    "단죄 성역 가죽갑": "断罪聖域革鎧",
+    "단죄 불패 성역갑": "断罪不敗聖域鎧",
+    "칠흑 단죄 성의": "漆黒断罪聖衣",
+    "단죄 수호 반지": "断罪守護の指輪",
+    "불패 성역 목걸이": "不敗聖域のネックレス",
+    "단죄 심판 부적": "断罪審判アミュレット",
+    "만화경 환영 명검": "万華鏡幻影名剣",
+    "거울 차원 극창": "鏡次元極槍",
+    "환영 굴절 마총": "幻影屈折魔銃",
+    "만화경 환영궁": "万華鏡幻影弓",
+    "거울 미궁 마도봉": "鏡迷宮魔導棒",
+    "환영 굴절 비수": "幻影屈折短刀",
+    "만화경 환영 경갑": "万華鏡幻影軽鎧",
+    "거울 굴절 판금갑": "鏡屈折板金鎧",
+    "만화경 차원 로브": "万華鏡次元ローブ",
+    "환영 거울 반지": "幻影の鏡指輪",
+    "미궁 진실 목걸이": "迷宮真実のネックレス",
+    "만화경 환영 부적": "万華鏡幻影アミュレット",
+    "절대 종말의 심연검": "絶対終末の深淵剣",
+    "종말 멸망 신창": "終末滅亡神槍",
+    "심연 종말 파멸포": "深淵終末破滅砲",
+    "종말 심연 대궁": "終末深淵大弓",
+    "아스모데우스 마도봉": "アスモデウス魔導棒",
+    "종말 암흑 절멸도": "終末暗黒絶滅刀",
+    "종말 심연 극갑": "終末深淵極鎧",
+    "아스모데우스 절대갑": "アスモデウス絶対鎧",
+    "종말 절대 성의": "終末絶対聖衣",
+    "절대 종말 반지": "絶対終末の指輪",
+    "아스모데우스 왕관 목걸이": "アスモデウス冠ネックレス",
+    "종말 절대 부적": "終末絶対アミュレット",
+    "무기": "武器",
+    "갑옷": "鎧",
+    "방어구": "防具",
+    "장신구": "装飾品",
+    "베이스 스탯 대폭 증가": "ベースステータス大幅増加",
+    "추가 스탯 획득": "追加ステータス獲得",
+    "희귀 등급 승격": "希少等級へ昇格",
+    "영웅 등급 승격": "英雄等級へ昇格",
+    "전설 등급 승격": "伝説等級へ昇格",
+    "엘리시아": "エリシア",
+    "카엘": "カエル",
+    "로웰": "ローウェル",
+    "아이리스": "アイリス",
+    "루카스": "ルーカス",
+    "레온": "レオン",
+    "세레나": "セレナ",
+    "미라": "ミラ",
+
+    // ⚔️ ステータス・増幅および等級システム翻訳
+    "스탯": "ステータス",
+    "스탯들": "ステータス",
+    "기본 스탯": "基本ステータス",
+    "기본 스탯들": "基本ステータス",
+    "베이스 스탯": "ベースステータス",
+    "장비 스탯": "装備ステータス",
+    "인챈트 스탯": "エンチャントステータス",
+    "추가 스탯": "追加ステータス",
+    "보조 스탯": "補助ステータス",
+    "전투 스탯": "戦闘ステータス",
+    "전술 스탯": "戦術ステータス",
+    "주요 스탯": "主要ステータス",
+    "올스탯": "全ステータス",
+    "모든 스탯": "全ステータス",
+    "스탯 재조정": "ステータス再調整",
+    "스탯 변경": "ステータス変更",
+    "스탯 초기화": "ステータス初期化",
+    "스탯 합산": "ステータス合算",
+    "베이스 ±30% 스탯 재조정": "ベース±30%ステータス再調整",
+    "스탯 50% 반감": "ステータス50%半減",
+    "스탯 페널티": "ステータスペナルティ",
+    "증폭": "増幅",
+    "증폭!": "増幅！",
+    "피해 증폭": "ダメージ増幅",
+    "피해량 증폭": "ダメージ量増幅",
+    "대미지 증폭": "ダメージ増幅",
+    "공격력 증폭": "攻撃力増幅",
+    "방어력 증폭": "防御力増幅",
+    "치유량 증폭": "回復量増幅",
+    "위력 증폭": "威力増幅",
+    "배율 증폭": "倍率増幅",
+    "마력 증폭": "魔力増幅",
+    "성능 증폭": "性能増幅",
+    "효과 증폭": "効果増幅",
+    "파동 증폭": "波動増幅",
+    "증폭되었습니다!": "増幅されました！",
+    "증폭됩니다!": "増幅されます！",
+    "증폭됩니다": "増幅されます",
+    "증폭되며": "増幅され、",
+    "증폭시킵니다": "増幅させます",
+    "희귀": "希少",
+    "영웅": "英雄",
+    "전설": "伝説",
+    "신화": "神話",
+    "고대": "古代",
+    "일반": "一般",
+    "고급": "高級",
+    "유물": "遺物",
+    "고유": "固有",
+    "희귀 등급": "希少等級",
+    "영웅 등급": "英雄等級",
+    "전설 등급": "伝説等級",
+    "신화 등급": "神話等級",
+    "고대 등급": "古代等級",
+    "일반 등급": "一般等級",
+    "고급 등급": "高級等級",
+    "유물 등급": "遺物等級",
+    "고유 등급": "固有等級",
+    "[희귀]": "[希少]",
+    "[영웅]": "[英雄]",
+    "[전설]": "[伝説]",
+    "[신화]": "[神話]",
+    "[고대]": "[古代]",
+    "[일반]": "[一般]",
+    "[고급]": "[高級]",
+    "[유물]": "[遺物]",
+    "[고유]": "[固有]",
+    "👑 [전설]": "👑 [伝説]",
+    "🌟 [영웅]": "🌟 [英雄]",
+    "✨ [희귀]": "✨ [希少]",
+    "👑 [신화]": "👑 [神話]",
+    "👑 [고대]": "👑 [古代]",
+    "👑 [유물]": "👑 [遺物]",
+    "👑 [고유]": "👑 [固有]",
+    "👑 고유/보스": "👑 固有/ボス",
+    "👑 [고유/보스]": "👑 [固有/ボス]",
+    "COMMON": "一般",
+    "UNCOMMON": "高級",
+    "RARE": "希少",
+    "EPIC": "英雄",
+    "LEGENDARY": "伝説",
+    "MYTHIC": "神話",
+    "ANCIENT": "古代",
+    "RELIC": "遺物",
+    "UNIQUE": "固有",
+    "[COMMON]": "[一般]",
+    "[UNCOMMON]": "[高級]",
+    "[RARE]": "[希少]",
+    "[EPIC]": "[英雄]",
+    "[LEGENDARY]": "[伝説]",
+    "[MYTHIC]": "[神話]",
+    "[ANCIENT]": "[古代]",
+    "[RELIC]": "[遺物]",
+    "[UNIQUE]": "[固有]",
+
     // 🛡️ クラス名 (Classes)
     "성기사": "聖騎士",
     "암살자": "アサシン",
@@ -11951,13 +12421,49 @@ export const trEntity = (name: string, lang: 'en' | 'ja' | string): string => {
     return wrapQuote(trimmed.split(', ').map(part => trEntity(part, lang)).join(', '));
   }
 
-  // 0.1 중첩 대괄호 정리: "[[궁극기] ...]" -> "[궁극기] ...", "[[침식된] 흑철 검]" -> "[침식된] 흑철 검"
+  // 0.1 중첩 대괄호 정리: "[[궁극기] ...]" -> "[궁극기] ...", "[[침식된] 흑철 검]" -> "[침식된] 흑철 검", "[👑 [전설] 흑철 검]" -> "[👑 [Legendary] Dark Iron Sword]"
   if (trimmed.startsWith('[[') && trimmed.endsWith(']')) {
     trimmed = trimmed.slice(1, -1).trim();
   }
   if (trimmed.startsWith('[[') && trimmed.endsWith(']]')) {
     trimmed = trimmed.slice(1, -1).trim();
   }
+  if (trimmed.startsWith('[') && trimmed.endsWith(']') && trimmed.slice(1, -1).includes('[')) {
+    return wrapQuote(`[${trEntity(trimmed.slice(1, -1).trim(), lang)}]`);
+  }
+
+  // 0.12 장비 강화/각성/티어 접미사 분리 번역 (예: "흑철 검 +3", "명품 대검 ★2", "흑철 검 (T1, [RARE])")
+  const trailingPlusMatch = trimmed.match(/^(.+?)\s*(\+\d+)$/);
+  if (trailingPlusMatch) {
+    const trBase = trEntity(trailingPlusMatch[1].trim(), lang);
+    return wrapQuote(`${trBase} ${trailingPlusMatch[2]}`);
+  }
+  const trailingStarMatch = trimmed.match(/^(.+?)\s*(★\d+(?:단계\s*각성)?)$/);
+  if (trailingStarMatch) {
+    const trBase = trEntity(trailingStarMatch[1].trim(), lang);
+    const sfx = lang === 'ja'
+      ? trailingStarMatch[2].replace('단계 각성', '段階覚醒')
+      : trailingStarMatch[2].replace('단계 각성', ' Tier Awakening');
+    return wrapQuote(`${trBase} ${sfx}`);
+  }
+  const trailingTierMatch = trimmed.match(/^(.+?)\s*\(T(\d+)(?:,\s*\[?([A-Za-z가-힣]+)\]?)?\)$/);
+  if (trailingTierMatch) {
+    const trBase = trEntity(trailingTierMatch[1].trim(), lang);
+    const rawR = trailingTierMatch[3];
+    const trR = rawR ? (EXACT_TRANSLATIONS[lang]?.[rawR] || EXACT_TRANSLATIONS[lang]?.[`[${rawR}]`]?.replace(/\[|\]/g, '') || rawR) : '';
+    return wrapQuote(`${trBase} (T${trailingTierMatch[2]}${trR ? `, [${trR}]` : ''})`);
+  }
+
+  // 0.14 등급/희귀도 접두사 분리 번역 (예: "👑 [전설] 흑철 검", "🌟 [영웅] 흑철 갑옷", "✨ [희귀] 단검", "[신화] 대검", "[RARE] 지팡이")
+  const rarityPrefixMatch = trimmed.match(/^((?:👑|🌟|✨)?\s*\[?(?:전설|영웅|희귀|신화|고대|일반|고급|유물|고유|고유\/보스|LEGENDARY|EPIC|RARE|COMMON|UNCOMMON|MYTHIC|ANCIENT|RELIC|UNIQUE)\]?)\s+(.+)$/i);
+  if (rarityPrefixMatch) {
+    const rawRarity = rarityPrefixMatch[1].trim();
+    const rest = rarityPrefixMatch[2].trim();
+    const trRarity = EXACT_TRANSLATIONS[lang]?.[rawRarity] || rawRarity;
+    const trRest = trEntity(rest, lang);
+    return wrapQuote(`${trRarity} ${trRest}`);
+  }
+
   // 0.15 몬스터 역할/상태 접두사 분리 번역 (예: "[호위] 망각의 유령 A", "[정예] 망각의 유령", "[광폭화] 서리거인 파괴자", "[우두머리] 화염 군주 이그니스")
   const monsterPrefixMatch = trimmed.match(/^(\[(?:호위|정예|광폭화|광폭|우두머리|보스)\])\s*(.+)$/);
   if (monsterPrefixMatch) {
@@ -11985,8 +12491,8 @@ export const trEntity = (name: string, lang: 'en' | 'ja' | string): string => {
     return wrapQuote(`${pfx} ${trRest}`);
   }
 
-  // 0.3 장비 상태 접두사 분리 번역 (예: "[침식된] 흑철 검", "침식된 흑철 검", "[저주받은] 단검")
-  const statusPrefixMatch = trimmed.match(/^(\[(?:침식된|저주받은|순정|봉인된|각성한|정화된)\]|(?:침식된|저주받은|순정|봉인된|각성한|정화된))\s*(.+)$/);
+  // 0.3 장비 상태 접두사 분리 번역 (예: "[침식된] 흑철 검", "침식된 흑철 검", "[저주받은] 단검", "순정 흑철 검", "✨인챈트 [흑철 검]")
+  const statusPrefixMatch = trimmed.match(/^(\[(?:침식된|저주받은|순정|봉인된|각성한|정화된|인챈트)\]|(?:침식된|저주받은|순정|봉인된|각성한|정화된|✨인챈트|인챈트))\s*(.+)$/);
   if (statusPrefixMatch) {
     const rawTag = statusPrefixMatch[1].trim();
     const rest = statusPrefixMatch[2].trim();
@@ -11995,14 +12501,17 @@ export const trEntity = (name: string, lang: 'en' | 'ja' | string): string => {
       '침식된': { en: 'Corrupted', ja: '侵蝕された' },
       '[저주받은]': { en: '[Cursed]', ja: '[呪われた]' },
       '저주받은': { en: 'Cursed', ja: '呪われた' },
-      '[순정]': { en: '[Purified]', ja: '[純正]' },
-      '순정': { en: 'Purified', ja: '純正' },
+      '[순정]': { en: '[Pure]', ja: '[純正]' },
+      '순정': { en: 'Pure', ja: '純正' },
       '[봉인된]': { en: '[Sealed]', ja: '[封印された]' },
       '봉인된': { en: 'Sealed', ja: '封印された' },
       '[각성한]': { en: '[Awakened]', ja: '[覚醒した]' },
       '각성한': { en: 'Awakened', ja: '覚醒した' },
       '[정화된]': { en: '[Purified]', ja: '[浄化された]' },
       '정화된': { en: 'Purified', ja: '浄化された' },
+      '✨인챈트': { en: '✨Enchanted', ja: '✨エンチャント' },
+      '[인챈트]': { en: '[Enchant]', ja: '[エンチャント]' },
+      '인챈트': { en: 'Enchant', ja: 'エンチャント' },
     };
     const trPrefix = statusMap[rawTag]?.[lang === 'ja' ? 'ja' : 'en'] || rawTag;
     const trRest = trEntity(rest, lang);
@@ -12660,74 +13169,147 @@ export const LOG_PATTERNS: LogPatternDef[] = [
     }
   },
 
+  // ⚡ [심연 오버차지]
+  {
+    pattern: /^⚡\s*\[심연 오버차지\]\s*심연의 마력이 증폭되며\s*(?:광폭화된|광폭)\s*보스가 소환되었습니다!\s*\(철수 불가\)/i,
+    en: () => "⚡ [Abyssal Overcharge] Abyssal magic was amplified and an Enraged Boss was summoned! (Cannot Retreat)",
+    ja: () => "⚡ [深淵オーバーチャージ] 深淵の魔力が増幅され狂暴化したボスが召喚されました！（撤退不可）"
+  },
   // 📦 제식 장비 발굴
   {
-    pattern: /^📦\s*\[제식 장비 발굴\]\s*상자에서\s*(✨\+\d+\s+)?\[(.+?)\]\s*\(T(\d+),\s*\[([A-Z]+)\]\)(?:을\(를\)|\s*을|\s*를)?\s*획득했습니다!\s*\(도감 등록 가능\)/i,
+    pattern: /^📦\s*\[제식 장비 발굴\]\s*상자에서\s*(?:(✨인챈트|✨\+\d+)\s+)?\[(.+?)\]\s*\(T(\d+),\s*\[([A-Za-z가-힣]+)\]\)(?:을\(를\)|\s*을|\s*를)?\s*획득했습니다!\s*\(도감 등록 가능\)/i,
     en: m => {
-      const badge = m[1] ? m[1].trim() + ' ' : '';
+      const badge = m[1] ? (m[1].includes('인챈트') ? '✨Enchanted ' : m[1].trim() + ' ') : '';
       const equip = trEntity(m[2].trim(), 'en');
-      return `📦 [Standard Gear Excavated] Obtained ${badge}[${equip}] (T${m[3]}, [${m[4]}]) from the chest! (Codex registerable)`;
+      const r = EXACT_TRANSLATIONS.en[m[4]] || m[4];
+      return `📦 [Standard Gear Excavated] Obtained ${badge}[${equip}] (T${m[3]}, [${r}]) from the chest! (Codex registerable)`;
     },
     ja: m => {
-      const badge = m[1] ? m[1].trim() + ' ' : '';
+      const badge = m[1] ? (m[1].includes('인챈트') ? '✨エンチャント ' : m[1].trim() + ' ') : '';
       const equip = trEntity(m[2].trim(), 'ja');
-      return `📦 [制式装備発掘] 宝箱から${badge}[${equip}] (T${m[3]}, [${m[4]}])を獲得しました！（図鑑登録可能）`;
+      const r = EXACT_TRANSLATIONS.ja[m[4]] || m[4];
+      return `📦 [制式装備発掘] 宝箱から${badge}[${equip}] (T${m[3]}, [${r}])を獲得しました！（図鑑登録可能）`;
     }
   },
 
-  // 💀 저주받은 보구 발견 (황금 열쇠 / 고대 석관 / 보물 상자)
+  // ⚰️ [고대 석관 무구 안치]
   {
-    pattern: /^(💀✨?)\s*\[저주받은 보구 발견\]\s*(.+?)\s*저주에\s*(?:침식된|잠식된)\s*\[(.+?)\](?:을\(를\)|\s*을|\s*를)?\s*발굴했습니다!\s*\(정화 전 착용 불가\)/i,
+    pattern: /^⚰️\s*\[고대 석관 무구 안치\]\s*석관 속에서\s*(?:(✨인챈트|✨\+\d+)\s+)?\[(.+?)\]\s*\(T(\d+),\s*\[([A-Za-z가-힣]+)\]\)(?:을\(를\)|\s*을|\s*를)?\s*발굴했습니다!\s*\(도감 등록 가능\)/i,
     en: m => {
-      const icon = m[1];
-      const origin = m[2].includes('황금 열쇠') ? 'with the golden key resonance' : m[2].includes('보물 상자') ? 'from the treasure chest' : 'from the ancient sarcophagus pedestal';
-      const equip = trEntity(m[3].trim(), 'en');
-      return `${icon} [Cursed Relic Found] Excavated cursed [${equip}] ${origin}! (Cannot equip before purification)`;
+      const badge = m[1] ? (m[1].includes('인챈트') ? '✨Enchanted ' : m[1].trim() + ' ') : '';
+      const equip = trEntity(m[2].trim(), 'en');
+      const r = EXACT_TRANSLATIONS.en[m[4]] || m[4];
+      return `⚰️ [Ancient Sarcophagus Armament] Unearthed ${badge}[${equip}] (T${m[3]}, [${r}]) from the sarcophagus! (Codex registerable)`;
     },
     ja: m => {
-      const icon = m[1];
-      const origin = m[2].includes('황금 열쇠') ? '黄金の鍵の神秘的な共鳴により' : m[2].includes('보물 상자') ? '宝箱の中から' : '古代の石棺安置台から';
-      const equip = trEntity(m[3].trim(), 'ja');
-      return `${icon} [呪われた宝具発見] ${origin}呪いに侵蝕された[${equip}]を発掘しました！（浄化前装備不可）`;
+      const badge = m[1] ? (m[1].includes('인챈트') ? '✨エンチャント ' : m[1].trim() + ' ') : '';
+      const equip = trEntity(m[2].trim(), 'ja');
+      const r = EXACT_TRANSLATIONS.ja[m[4]] || m[4];
+      return `⚰️ [古代石棺武具安置] 石棺の中から${badge}[${equip}] (T${m[3]}, [${r}])を発掘しました！（図鑑登録可能）`;
     }
   },
 
-  // 👑 보스 고유 장비 획득
+  // 👑 [전설 신화 단조 대성공]
   {
-    pattern: /^👑\s*\[보스 고유 장비 획득!\]\s*(\d+)층\s*보스\s*세트\s*비보\s*\[(.+?)\](?:을\(를\)|\s*을|\s*를)?\s*획득했습니다!\s*\(드랍율:\s*([0-9.]+)%\)/i,
-    en: m => `👑 [Boss Unique Gear Dropped!] Acquired ${m[1]}F Boss set treasure [${trEntity(m[2].trim(), 'en')}]! (Drop rate: ${m[3]}%)`,
-    ja: m => `👑 [ボス固有装備獲得！] ${m[1]}層ボスセット秘宝[${trEntity(m[2].trim(), 'ja')}]を獲得しました！（ドロップ率: ${m[3]}%）`
+    pattern: /^👑\s*\[전설 신화 단조 대성공!+\]\s*\[(.+?)\]\s*(?:\((.+?)\))?\s*단조 완료!(.*)$/i,
+    en: m => `👑 [Legendary Mythic Forge Great Success!] [${trEntity(m[1].trim(), 'en')}]${m[2] ? ` (${m[2]})` : ''} forged!${m[3] ? ' ' + trEntity(m[3].trim(), 'en') : ''}`,
+    ja: m => `👑 [伝説神話鍛造大成功！] [${trEntity(m[1].trim(), 'ja')}]${m[2] ? ` (${m[2]})` : ''} 鍛造完了！${m[3] ? ' ' + trEntity(m[3].trim(), 'ja') : ''}`
   },
 
-  // 📖 마도서 드랍
+  // 🌟 [영웅 대박 단조]
   {
-    pattern: /^📖\s*\[(보스 대표 마도서 드랍!|마도서 드랍!)\]\s*\[(.+?)\]에게서\s*(?:대표 비전서|대표 마도서)\s*\[(.+?)\]\s*\((.+?)\)(?:을\(를\)|\s*을|\s*를)?\s*획득했습니다!/i,
-    en: m => {
-      const isBoss = m[1].includes('보스');
-      const tag = isBoss ? 'Boss Signature Grimoire Dropped!' : 'Grimoire Dropped!';
-      const mon = trEntity(m[2].trim(), 'en');
-      const book = trEntity(m[3].trim(), 'en');
-      return `📖 [${tag}] Obtained signature grimoire [${book}] (${m[4]}) from [${mon}]!`;
-    },
-    ja: m => {
-      const isBoss = m[1].includes('보스');
-      const tag = isBoss ? 'ボス代表魔導書ドロップ！' : '魔導書ドロップ！';
-      const mon = trEntity(m[2].trim(), 'ja');
-      const book = trEntity(m[3].trim(), 'ja');
-      return `📖 [${tag}] [${mon}]から代表魔導書[${book}] (${m[4]})を獲得しました！`;
-    }
+    pattern: /^🌟\s*\[영웅 대박 단조!+\]\s*\[(.+?)\]\s*(?:\((.+?)\))?\s*단조 완료!(.*)$/i,
+    en: m => `🌟 [Heroic Jackpot Forge!] [${trEntity(m[1].trim(), 'en')}]${m[2] ? ` (${m[2]})` : ''} forged!${m[3] ? ' ' + trEntity(m[3].trim(), 'en') : ''}`,
+    ja: m => `🌟 [英雄大当たり鍛造！] [${trEntity(m[1].trim(), 'ja')}]${m[2] ? ` (${m[2]})` : ''} 鍛造完了！${m[3] ? ' ' + trEntity(m[3].trim(), 'ja') : ''}`
   },
 
-  // 🏛️✨ 멸망 이전 유물 발굴 (오파츠)
+  // ✨ [희귀 단조 성공]
   {
-    pattern: /^🏛️✨\s*\[멸망 이전 유물 발굴\]\s*상자 밑바닥에서\s*구세계의\s*오파츠\s*\[(.+?)\](?:을\(를\)|\s*을|\s*를)?\s*발굴했습니다!\s*\(심연의 백과 등록용\)/i,
-    en: m => `🏛️✨ [Pre-Collapse Relic Excavated] Excavated ancient ooparts [${trEntity(m[1].trim(), 'en')}] from the chest bottom! (For Abyssal Encyclopedia)`,
-    ja: m => `🏛️✨ [滅亡以前の遺物発掘] 箱の底から旧世界のオーパーツ[${trEntity(m[1].trim(), 'ja')}]を発掘しました！（深淵の百科登録用）`
+    pattern: /^✨\s*\[희귀 단조 성공!+\]\s*\[(.+?)\]\s*(?:\((.+?)\))?\s*단조 완료!(.*)$/i,
+    en: m => `✨ [Rare Forge Success!] [${trEntity(m[1].trim(), 'en')}]${m[2] ? ` (${m[2]})` : ''} forged!${m[3] ? ' ' + trEntity(m[3].trim(), 'en') : ''}`,
+    ja: m => `✨ [希少鍛造成功！] [${trEntity(m[1].trim(), 'ja')}]${m[2] ? ` (${m[2]})` : ''} 鍛造完了！${m[3] ? ' ' + trEntity(m[3].trim(), 'ja') : ''}`
+  },
+
+  // ⚒️ [대장간 단조 완성]
+  {
+    pattern: /^⚒️\s*\[대장간 단조 완성\]\s*\[(.+?)\]\s*(?:\((.+?)\))?\s*단조 완료!(.*)$/i,
+    en: m => `⚒️ [Blacksmith Forge Complete] [${trEntity(m[1].trim(), 'en')}]${m[2] ? ` (${m[2]})` : ''} forged!${m[3] ? ' ' + trEntity(m[3].trim(), 'en') : ''}`,
+    ja: m => `⚒️ [鍛冶屋鍛造完成] [${trEntity(m[1].trim(), 'ja')}]${m[2] ? ` (${m[2]})` : ''} 鍛造完了！${m[3] ? ' ' + trEntity(m[3].trim(), 'ja') : ''}`
+  },
+
+  // 🪙 [장비 매각]
+  {
+    pattern: /^🪙\s*\[장비 매각\]\s*\[(.+?)\](?:을\(를\)|\s*을|\s*를)?\s*판매하여\s*🪙\s*([0-9,]+)\s*G?를\s*획득했습니다\./i,
+    en: m => `🪙 [Equipment Sold] Sold [${trEntity(m[1].trim(), 'en')}] and obtained 🪙 ${m[2]}G.`,
+    ja: m => `🪙 [装備売却] [${trEntity(m[1].trim(), 'ja')}]を売却して🪙 ${m[2]}Gを獲得しました。`
+  },
+
+  // 🪙 [장비 일괄 매각]
+  {
+    pattern: /^🪙\s*\[장비 일괄 매각\]\s*([0-9,]+)개의\s*장비를\s*매각하여\s*총\s*🪙\s*([0-9,]+)\s*G?를\s*획득했습니다\./i,
+    en: m => `🪙 [Bulk Gear Sold] Sold ${m[1]} gears and obtained a total of 🪙 ${m[2]}G.`,
+    ja: m => `🪙 [装備一括売却] ${m[1]}個の装備を一括売却し、合計🪙 ${m[2]}Gを獲得しました。`
+  },
+
+  // 🔄 [장비 인계]
+  {
+    pattern: /^🔄\s*\[장비 인계\]\s*(.+?)(?:이\(가\)|이|가)\s*착용 중이던\s*\[(.+?)\](?:을\(를\)|\s*을|\s*를)?\s*(.+?)에게\s*인계했습니다\./i,
+    en: m => `🔄 [Gear Transfer] Transferred [${trEntity(m[2].trim(), 'en')}] from ${trEntity(m[1].trim(), 'en')} to ${trEntity(m[3].trim(), 'en')}.`,
+    ja: m => `🔄 [装備引継ぎ] ${trEntity(m[1].trim(), 'ja')}が装備中だった[${trEntity(m[2].trim(), 'ja')}]を${trEntity(m[3].trim(), 'ja')}に引き継ぎました。`
+  },
+
+  // ⚠️ [비호환 장비]
+  {
+    pattern: /^⚠️\s*\[비호환 장비\]\s*(.+?)의\s*클래스에 맞지 않는 장비입니다!\s*\(장비 스탯\s*(\d+)%\s*반감\s*및\s*SPD\s*([+-]?\d+)\s*페널티 적용\)/i,
+    en: m => `⚠️ [Incompatible Gear] This equipment does not match ${trEntity(m[1].trim(), 'en')}'s class! (Equipment stats reduced by ${m[2]}% and SPD ${m[3]} penalty applied)`,
+    ja: m => `⚠️ [非互換装備] ${trEntity(m[1].trim(), 'ja')}のクラスに合わない装備です！（装備ステータス${m[2]}%半減およびSPD ${m[3]}ペナルティ適用）`
+  },
+
+  // ⚠️ [착용 불가]
+  {
+    pattern: /^⚠️\s*\[착용 불가\]\s*\[(.+?)\](?:은\(는\)|\s*은|\s*는)?\s*심연에 침식된 장비입니다\.\s*병기창에서 정화 과정을 거쳐야 착용할 수 있습니다!/i,
+    en: m => `⚠️ [Cannot Equip] [${trEntity(m[1].trim(), 'en')}] is corrupted by the abyss. Purify it at the Armory to equip!`,
+    ja: m => `⚠️ [装備不可] [${trEntity(m[1].trim(), 'ja')}]は深淵に侵蝕された装備です。兵器廠で浄化を行ってから装備してください！`
+  },
+
+  // 🌟 [마도 인챈트 대성공!]
+  {
+    pattern: /^🌟\s*\[마도 인챈트 대성공!\]\s*\(성공 확률:\s*(\d+)%\)\s*\[(.+?)\](?:에|에게)\s*\[(.+?)\]\s*부여!\s*(.*)$/i,
+    en: m => `🌟 [Arcane Enchant Great Success!] (Success: ${m[1]}%) Imbued [${trEntity(m[3].trim(), 'en')}] onto [${trEntity(m[2].trim(), 'en')}]! ${m[4]}`,
+    ja: m => `🌟 [魔導エンチャント大成功！] (成功確率: ${m[1]}%) [${trEntity(m[2].trim(), 'ja')}]に[${trEntity(m[3].trim(), 'ja')}]を付与！ ${m[4]}`
+  },
+
+  // 💨 [마도 인챈트 실패]
+  {
+    pattern: /^💨\s*\[마도 인챈트 실패\]\s*마력 주입이 흩어져 인챈트에 실패했습니다\.\s*\(성공 확률:\s*(\d+)%,\s*장비 손상 없음\)/i,
+    en: m => `💨 [Arcane Enchant Failed] Magic dissipation caused the enchant to fail. (Success: ${m[1]}%, no gear damage)`,
+    ja: m => `💨 [魔導エンチャント失敗] 魔力注入が霧散し付呪に失敗しました。(成功確率: ${m[1]}%、装備損傷なし)`
+  },
+
+  // ✨ [인챈트 초기화 완료]
+  {
+    pattern: /^✨\s*\[인챈트 초기화 완료\]\s*\[(.+?)\]의 모든 인챈트가 초기화되었습니다\./i,
+    en: m => `✨ [Enchant Reset Complete] All enchants on [${trEntity(m[1].trim(), 'en')}] have been reset.`,
+    ja: m => `✨ [エンチャント初期化完了] [${trEntity(m[1].trim(), 'ja')}]のすべての付呪が初期化されました。`
+  },
+
+  // 📜 [장비 도안 획득]
+  {
+    pattern: /^📜\s*\[장비 도안 획득\]\s*\[(.+?)\]\s*단조 레시피를 해금했습니다!/i,
+    en: m => `📜 [Gear Blueprint Acquired] Unlocked forge recipe for [${trEntity(m[1].trim(), 'en')}]!`,
+    ja: m => `📜 [装備図面獲得] [${trEntity(m[1].trim(), 'ja')}]の鍛造レシピを解放しました！`
+  },
+
+  // [해제 완료]
+  {
+    pattern: /^\[해제 완료\]\s*(.+?)의\s*(.+?)\s*장비를 해제했습니다\./i,
+    en: m => `[Unequip Complete] Unequipped ${trEntity(m[2].trim(), 'en')} gear from ${trEntity(m[1].trim(), 'en')}.`,
+    ja: m => `[解除完了] ${trEntity(m[1].trim(), 'ja')}の${trEntity(m[2].trim(), 'ja')}装備を解除しました。`
   },
 
   // ✨ 장비 정화 대성공
   {
-    pattern: /^✨\s*\[정화 대성공\]\s*심연의 침식을 온전히 씻어내고\s*순정\s*\[(.+?)\]\s*장비로 복원했습니다!\s*\(병기창 Lv\.(\d+)\s*성공률\s*(\d+)%\s*\/\s*베이스\s*±30%\s*스탯 재조정\)/i,
+    pattern: /^✨\s*\[정화 대성공\]\s*심연의 침식을 온전히 씻어내고\s*순정\s*\[(.+?)\]\s*장비로 복원했습니다!\s*\(병기창 Lv\.(\d+)\s*성공률\s*(\d+)%(?:\s*\/\s*베이스\s*±30%\s*스탯 재조정)?\)/i,
     en: m => `✨ [Purification Success] Cleansed abyssal corruption and restored pure [${trEntity(m[1].trim(), 'en')}] gear! (Armory Lv.${m[2]} Success ${m[3]}% / Base ±30% Stat Reroll)`,
     ja: m => `✨ [浄化大成功] 深淵の侵蝕を洗い流し、純正[${trEntity(m[1].trim(), 'ja')}]装備に復元しました！（兵器廠Lv.${m[2]} 成功率${m[3]}% / ベース±30%ステータス再調整）`
   },
@@ -15795,7 +16377,7 @@ export const LOG_PATTERNS: LogPatternDef[] = [
     ja: m => `⚔️ ${trEntity(m[1], 'ja')}の${trEntity(m[2], 'ja')}！`
   },
   {
-    pattern: /^✨\s*(.+)$/,
+    pattern: /^✨\s*([^\[\n\r]{1,40}|\[[^\]\n\r]{1,40}\])$/,
     en: m => `✨ ${trEntity(m[1], 'en')}`,
     ja: m => `✨ ${trEntity(m[1], 'ja')}`
   },

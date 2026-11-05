@@ -206,6 +206,9 @@ const getRarityLabel = (rarity?: string, lang?: 'ko' | 'en' | 'ja') => {
       case 'epic': return 'Epic';
       case 'legendary':
       case 'legend': return 'Legend';
+      case 'mythic': return 'Mythic';
+      case 'ancient': return 'Ancient';
+      case 'relic': return 'Relic';
       default: return 'Common';
     }
   } else if (currentLang === 'ja') {
@@ -215,6 +218,9 @@ const getRarityLabel = (rarity?: string, lang?: 'ko' | 'en' | 'ja') => {
       case 'epic': return '英雄';
       case 'legendary':
       case 'legend': return '伝説';
+      case 'mythic': return '神話';
+      case 'ancient': return '古代';
+      case 'relic': return '遺物';
       default: return '一般';
     }
   }
@@ -224,6 +230,9 @@ const getRarityLabel = (rarity?: string, lang?: 'ko' | 'en' | 'ja') => {
     case 'epic': return '영웅';
     case 'legendary':
     case 'legend': return '전설';
+    case 'mythic': return '신화';
+    case 'ancient': return '고대';
+    case 'relic': return '유물';
     default: return '일반';
   }
 };

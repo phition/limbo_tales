@@ -471,8 +471,20 @@ export class I18nService {
       return res;
     }
 
-    // 2.35 대괄호 상태/장비 접두 태그 분리 번역 (예: "[침식된] 수습 대장장이의 철검", "[저주받은] 단검", "[전설] 흑철 검")
-    const bracketPrefixMatch = trimmed.match(/^(\[[^\]]+\])\s*(.+)$/);
+    // 2.34 중첩 대괄호 장비명 분리 번역 (예: "[👑 [전설] 흑철 검]", "[🌟 [영웅] 흑철 갑옷]")
+    const nestedBracketMatch = trimmed.match(/^\[((?:👑|🌟|✨)?\s*\[[^\]]+\]\s*.+)\]$/);
+    if (nestedBracketMatch) {
+      const inner = nestedBracketMatch[1].trim();
+      const trInner = this.tr(inner, lang);
+      if (trInner && trInner !== inner) {
+        const res = text.replace(trimmed, `[${trInner}]`);
+        this.translationCache.set(cacheKey, res);
+        return res;
+      }
+    }
+
+    // 2.35 대괄호 상태/장비 접두 태그 분리 번역 (예: "[침식된] 수습 대장장이의 철검", "[저주받은] 단검", "[전설] 흑철 검", "👑 [전설] 흑철 검")
+    const bracketPrefixMatch = trimmed.match(/^((?:👑|🌟|✨)?\s*\[[^\]]+\])\s*(.+)$/);
     if (bracketPrefixMatch) {
       const prefix = bracketPrefixMatch[1].trim();
       const restText = bracketPrefixMatch[2].trim();
@@ -485,6 +497,22 @@ export class I18nService {
           this.translationCache.set(cacheKey, res);
           return res;
         }
+      }
+    }
+
+    // 2.36 장비 강화/각성 접미사 분리 번역 (예: "흑철 검 +3", "명품 대검 ★2", "👑 [전설] 흑철 검 +5")
+    const trailingEnhanceMatch = trimmed.match(/^(.+?)\s*(\+\d+|★\d+(?:단계\s*각성)?)$/);
+    if (trailingEnhanceMatch && trailingEnhanceMatch[1].length <= 50 && !trailingEnhanceMatch[1].includes('\n')) {
+      const baseName = trailingEnhanceMatch[1].trim();
+      const sfx = trailingEnhanceMatch[2].trim();
+      const trBase = this.tr(baseName, lang);
+      if (trBase && trBase !== baseName) {
+        const trSfx = tLang === 'ja'
+          ? sfx.replace('단계 각성', '段階覚醒')
+          : sfx.replace('단계 각성', ' Tier Awakening');
+        const res = text.replace(trimmed, `${trBase} ${trSfx}`);
+        this.translationCache.set(cacheKey, res);
+        return res;
       }
     }
 
