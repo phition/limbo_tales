@@ -6846,11 +6846,19 @@ export class GameManager {
     if (this.expeditionBuffs && this.expeditionBuffs.length > 0) {
       list.push(...this.expeditionBuffs);
     }
-    return list;
+    // 🛡️ 안전 가드: buffs가 누락되었거나 undefined인 항목이 있어도 오류가 발생하지 않도록 빈 객체 보장
+    return list.filter(Boolean).map(syn => ({
+      ...syn,
+      buffs: syn.buffs || {}
+    }));
   }
 
   /** ✨ 이번 원정 동안 유지되는 가호/버프 시너지 부여 */
   public addExpeditionBuff(buff: PartySynergy): void {
+    if (!buff) return;
+    if (!buff.buffs) {
+      buff.buffs = {};
+    }
     if (!this.expeditionBuffs) {
       this.expeditionBuffs = [];
     }
@@ -13259,7 +13267,10 @@ export class GameManager {
       }
     }
     if (parsed.expeditionBuffs && Array.isArray(parsed.expeditionBuffs)) {
-      this.expeditionBuffs = parsed.expeditionBuffs as PartySynergy[];
+      this.expeditionBuffs = (parsed.expeditionBuffs as PartySynergy[]).map(b => ({
+        ...b,
+        buffs: b.buffs || {}
+      }));
     }
     if (parsed.codexUnlockedItems) {
       this.codexUnlockedItems = parsed.codexUnlockedItems as Record<string, boolean>;
@@ -13967,7 +13978,10 @@ export class GameManager {
           }
         }
         if (parsed.expeditionBuffs && Array.isArray(parsed.expeditionBuffs)) {
-          this.expeditionBuffs = parsed.expeditionBuffs as PartySynergy[];
+          this.expeditionBuffs = (parsed.expeditionBuffs as PartySynergy[]).map(b => ({
+            ...b,
+            buffs: b.buffs || {}
+          }));
         }
         if (parsed.marketStock && typeof parsed.marketStock === 'object') {
           this.marketStock = parsed.marketStock as Record<string, { current: number; restockAt?: number }>;

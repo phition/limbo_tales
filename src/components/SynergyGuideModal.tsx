@@ -42,6 +42,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
   });
 
   const getBuffBadges = (buffs: typeof ALL_PARTY_SYNERGIES[0]['buffs']) => {
+    if (!buffs) return [];
     const badges: { text: string; color: string }[] = [];
     if (buffs.allStatsBonus) {
       const pct = Math.round((buffs.allStatsBonus - 1) * 100);

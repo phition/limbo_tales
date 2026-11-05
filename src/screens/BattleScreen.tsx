@@ -1964,7 +1964,7 @@ export const BattleScreen: React.FC = () => {
     // 🌟 [원정대 시너지] 전투 개시 시 보호막(startBattleShieldPct) 적용
     const activeSynergies = gm.getActiveSynergies();
     activeSynergies.forEach(syn => {
-      if (syn.buffs.startBattleShieldPct) {
+      if (syn?.buffs?.startBattleShieldPct) {
         const shieldPct = syn.buffs.startBattleShieldPct;
         const shieldTurns = syn.buffs.startBattleShieldTurns || 3;
         party.forEach(h => {
@@ -2615,11 +2615,11 @@ export const BattleScreen: React.FC = () => {
         const regenSynNames: string[] = [];
         const mpRegenSynNames: string[] = [];
         activeSynergies.forEach(syn => {
-          if (syn.buffs.hpRegenPct) {
+          if (syn?.buffs?.hpRegenPct) {
             totalSynergyRegen += syn.buffs.hpRegenPct;
             regenSynNames.push(syn.name);
           }
-          if (syn.buffs.mpRegenPerTurn) {
+          if (syn?.buffs?.mpRegenPerTurn) {
             totalSynergyMpRegen += syn.buffs.mpRegenPerTurn;
             mpRegenSynNames.push(syn.name);
           }
@@ -3407,7 +3407,7 @@ export const BattleScreen: React.FC = () => {
             const activeSyns = gm.getActiveSynergies();
             let executeBonus = 0;
             activeSyns.forEach(syn => {
-              if (syn.buffs.lowHpExecuteBonus) executeBonus += syn.buffs.lowHpExecuteBonus;
+              if (syn?.buffs?.lowHpExecuteBonus) executeBonus += syn.buffs.lowHpExecuteBonus;
             });
             if (executeBonus > 0) {
               targetRawDmg = Math.floor(targetRawDmg * (1 + executeBonus));
@@ -6462,7 +6462,7 @@ export const BattleScreen: React.FC = () => {
           let extraEvadePct = 0;
           if (target.position === 'mid') {
             activeSyns.forEach(syn => {
-              if (syn.buffs.midRowEvasionBonus) extraEvadePct += syn.buffs.midRowEvasionBonus;
+              if (syn?.buffs?.midRowEvasionBonus) extraEvadePct += syn.buffs.midRowEvasionBonus;
             });
           }
 
@@ -6589,7 +6589,7 @@ export const BattleScreen: React.FC = () => {
             if (aliveFrontHero) {
               let guardPct = 0;
               activeSyns.forEach(syn => {
-                if (syn.buffs.frontlineGuardPct) {
+                if (syn?.buffs?.frontlineGuardPct) {
                   guardPct = Math.max(guardPct, syn.buffs.frontlineGuardPct);
                 }
               });
@@ -6617,7 +6617,7 @@ export const BattleScreen: React.FC = () => {
           // 🌟 [원정대 시너지 & 심연의 백과 & 클래스 방어 패시브] 받는 피해 감소(damageReductionPct) 적용
           let totalDmgRed = 0;
           activeSyns.forEach(syn => {
-            if (syn.buffs.damageReductionPct) totalDmgRed += syn.buffs.damageReductionPct;
+            if (syn?.buffs?.damageReductionPct) totalDmgRed += syn.buffs.damageReductionPct;
           });
           const codexRed = gm.getCodexBonus().dmgReduction;
           if (codexRed > 0) {
@@ -6977,7 +6977,7 @@ export const BattleScreen: React.FC = () => {
           if (guardedFrontHero && guardSharedRawDmg > 0 && guardedFrontHero.currentHp > 0) {
             let frontDmgRed = 0;
             activeSyns.forEach(syn => {
-              if (syn.buffs.damageReductionPct) frontDmgRed += syn.buffs.damageReductionPct;
+              if (syn?.buffs?.damageReductionPct) frontDmgRed += syn.buffs.damageReductionPct;
             });
             if (codexRed > 0) frontDmgRed += (codexRed / 100);
             if (gm.party.some(p => p.classId === 'paladin' && p.currentHp > 0)) frontDmgRed += 0.15;

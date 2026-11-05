@@ -919,7 +919,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               icon: '📜',
               category: 'ancestral',
               description: '이번 원정 동안 5층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
-              conditionText: '이번 원정 동안'
+              conditionText: '이번 원정 동안',
+              buffs: {}
             });
             const q4 = gm.quests.find(q => q.id === 'Q_SCENARIO_04');
             if (q4 && q4.status === 'active' && q4.objectives[0]?.isCompleted) {
@@ -1407,7 +1408,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               icon: '🧭',
               category: 'ancestral',
               description: '이번 원정 동안 7층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
-              conditionText: '이번 원정 동안'
+              conditionText: '이번 원정 동안',
+              buffs: {}
             });
             const q3 = gm.quests.find(q => q.id === 'Q_SCENARIO_03');
             if (q3 && q3.status === 'active' && q3.objectives[0]?.isCompleted) {
@@ -1791,7 +1793,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               icon: '🪞',
               category: 'ancestral',
               description: '이번 원정 동안 9층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
-              conditionText: '이번 원정 동안'
+              conditionText: '이번 원정 동안',
+              buffs: {}
             });
             const q2 = gm.quests.find(q => q.id === 'Q_SCENARIO_02');
             if (q2 && q2.status === 'active' && q2.objectives[1]?.isCompleted) {
@@ -1845,7 +1848,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               icon: '🪞',
               category: 'ancestral',
               description: '이번 원정 동안 9층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
-              conditionText: '이번 원정 동안'
+              conditionText: '이번 원정 동안',
+              buffs: {}
             });
             const q2 = gm.quests.find(q => q.id === 'Q_SCENARIO_02');
             if (q2 && q2.status === 'active' && q2.objectives[1]?.isCompleted) {
@@ -2038,7 +2042,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               icon: '🖤',
               category: 'ancestral',
               description: '이번 원정 동안 10층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
-              conditionText: '이번 원정 동안'
+              conditionText: '이번 원정 동안',
+              buffs: {}
             });
             const q3 = gm.quests.find(q => q.id === 'Q_SCENARIO_03');
             if (q3 && q3.status === 'active' && q3.objectives[1]?.isCompleted) {
@@ -2063,7 +2068,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               icon: '🖤',
               category: 'ancestral',
               description: '이번 원정 동안 10층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
-              conditionText: '이번 원정 동안'
+              conditionText: '이번 원정 동안',
+              buffs: {}
             });
             const q3 = gm.quests.find(q => q.id === 'Q_SCENARIO_03');
             if (q3 && q3.status === 'active' && q3.objectives[1]?.isCompleted) {
@@ -2094,7 +2100,8 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
               icon: '🖤',
               category: 'ancestral',
               description: '이번 원정 동안 10층 보스(광폭화 보스 포함)의 모든 능력치 10% 약화',
-              conditionText: '이번 원정 동안'
+              conditionText: '이번 원정 동안',
+              buffs: {}
             });
             const q3 = gm.quests.find(q => q.id === 'Q_SCENARIO_03');
             if (q3 && q3.status === 'active' && q3.objectives[1]?.isCompleted) {
