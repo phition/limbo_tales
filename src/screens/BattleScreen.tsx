@@ -161,6 +161,7 @@ export function applyStatusEffect(
 
 // ── 몬스터 일러스트 패널 (현재 타겟팅된 적의 배경 일러스트 실시간 연동) ────────────────
 const MonsterImagePanel: React.FC<{ targetMonster?: MonsterState; totalCount: number; isAttacking?: boolean }> = ({ targetMonster, isAttacking }) => {
+  const { tr } = useI18n();
   const gm = GameManager.getInstance();
   const [imgError, setImgError] = useState(false);
   const mon = targetMonster;

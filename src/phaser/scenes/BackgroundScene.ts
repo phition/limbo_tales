@@ -8,7 +8,6 @@ export class BackgroundScene extends Phaser.Scene {
 
   preload(): void {
     this.load.image('art_citadel_bonfire', 'assets/citadel_bonfire.jpg');
-    this.load.image('art_valkyrie_saintess', 'assets/valkyrie_saintess.jpg');
     this.load.image('art_void_overlord', 'assets/void_overlord.jpg');
   }
 
