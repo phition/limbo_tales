@@ -9814,7 +9814,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <span className="text-xs font-bold text-[#dcc496]">{group.title}</span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {group.items.map(item => {
                   const current = (state.resources as Record<string, number>)[item.key] || 0;
                   const maxCap = gm.getMaxResourceCapacity(item.key as any);
@@ -9906,7 +9906,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {SUPPLY_ITEMS.map(item => {
               const currentStock = gm.getCitadelSupplyCount(item.key);
               const locSupply = item;
@@ -9978,7 +9978,7 @@ const StorageDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
 
           {/* 장비 목록 */}
-          <div className="flex-1 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 content-start">
+          <div className="flex-1 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 gap-2.5 content-start">
             {filteredEquipment.length === 0 ? (
               <div className="p-8 text-center text-sm text-[#8b9bb4] flex flex-col items-center gap-2 col-span-full bg-[#10131a] border border-[#3d372e] rounded-xl">
                 <span className="text-3xl">🛡️</span>
@@ -11034,8 +11034,8 @@ const MarketDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         ))}
       </div>
 
-      {/* 시장 아이템 목록 */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 content-start">
+      {/* 시장 아이템 목록 (큰 화면에서도 한 줄 최대 2개로 정돈) */}
+      <div className="flex-1 min-h-0 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 gap-2.5 content-start">
         {filteredItems.map(item => {
           const isUnlocked = marketLv >= item.reqLv;
           const cur = res[item.key] || 0;
@@ -12001,16 +12001,23 @@ const QuestsDrawer: React.FC<{
     });
   };
 
-  // 현재 탭에 노출할 퀘스트 목록 결정
-  const displayedQuests = (() => {
+  // 현재 탭에 노출할 퀘스트 목록 결정 (중복 ID 필터링으로 렌더링 충돌/겹침 방지)
+  const displayedQuests = useMemo(() => {
+    let list: Quest[] = [];
     switch (catTab) {
-      case 'chain': return sortQuestsByCompletion(chainActive);
-      case 'sub': return sortQuestsByCompletion(subActive);
-      case 'epic': return sortQuestsByCompletion(epicActive);
-      case 'completed': return [...completedQuests].reverse();
-      default: return sortQuestsByCompletion(chainActive);
+      case 'chain': list = sortQuestsByCompletion(chainActive); break;
+      case 'sub': list = sortQuestsByCompletion(subActive); break;
+      case 'epic': list = sortQuestsByCompletion(epicActive); break;
+      case 'completed': list = [...completedQuests].reverse(); break;
+      default: list = sortQuestsByCompletion(chainActive); break;
     }
-  })();
+    const seen = new Set<string>();
+    return list.filter(q => {
+      if (!q || !q.id || seen.has(q.id)) return false;
+      seen.add(q.id);
+      return true;
+    });
+  }, [catTab, chainActive, subActive, epicActive, completedQuests]);
 
   const RN: Record<string, string> = {
     wood: '목재', stone: '석재', iron: '철광석', food: '식량',
@@ -12380,7 +12387,7 @@ const QuestsDrawer: React.FC<{
   };
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col h-full bg-[#08090b] text-[#cfd8e8] overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col w-full bg-[#08090b] text-[#cfd8e8] overflow-hidden">
       {/* ── 상단 정보 툴바 (중복 헤더 제거 및 다크 고딕 서브바) ── */}
       <div className="flex items-center justify-between px-4 py-2 bg-[#0c0e14] border-b border-[#3d372e]/60 shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
@@ -12457,11 +12464,11 @@ const QuestsDrawer: React.FC<{
         </button>
       </div>
 
-      {/* 퀘스트 목록 */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 flex flex-col gap-3 content-start tg-scrollbar">
+      {/* 퀘스트 목록 (shrink-0 및 단일 flex-col 스크롤 컨테이너로 카드가 겹치거나 축소되는 현상 완전 방지) */}
+      <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 flex flex-col gap-3 tg-scrollbar">
         {/* 서브 퀘스트 잠금 안내 */}
         {catTab === 'sub' && !hasTavern && (
-          <div className="w-full p-6 text-center flex flex-col items-center gap-2 bg-[#10131a] border border-[#3d372e] rounded-xl shadow-lg">
+          <div className="w-full shrink-0 min-h-fit p-6 text-center flex flex-col items-center gap-2 bg-[#10131a] border border-[#3d372e] rounded-xl shadow-lg">
             <span className="text-4xl p-2.5 rounded-2xl bg-[#1a1510] border border-[#b89758]/40 shadow-inner">🍺🔒</span>
             <span className="font-bold text-sm text-[#dcc496]">{tr('방랑자의 라운지 (주점) 건설 필요')}</span>
             <span className="text-xs text-[#8a95a5] max-w-[280px] leading-relaxed">
@@ -12471,7 +12478,7 @@ const QuestsDrawer: React.FC<{
               건설 비용: 🪵 목재 80, 🪨 석재 50, 🪙 300G
             </div>
             <button
-              className="text-xs px-4 py-2 mt-2 font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b]"
+              className="text-xs px-4 py-2 mt-2 font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] cursor-pointer"
               onClick={() => onNavigateDrawer ? onNavigateDrawer('citadel') : onClose()}
             >
               <span>🏛️</span>
@@ -12482,7 +12489,7 @@ const QuestsDrawer: React.FC<{
 
         {/* 10분 쿨다운 안내 카드 (주점 건설 완료 후 서브 슬롯 비었을 때) */}
         {catTab === 'sub' && hasTavern && subActive.length < 3 && state.subQuestCooldownUntil > 0 && (
-          <div className="w-full p-3 bg-[#10131a] border border-[#b89758]/30 rounded-xl flex items-center justify-between gap-2 shadow-sm">
+          <div className="w-full shrink-0 min-h-fit p-3 bg-[#10131a] border border-[#b89758]/30 rounded-xl flex items-center justify-between gap-2 shadow-sm">
             <div className="flex items-center gap-2">
               <span className="text-xl p-1.5 rounded-lg bg-[#1a1710] border border-[#b89758]/40 animate-spin">⏳</span>
               <div>
@@ -12508,7 +12515,7 @@ const QuestsDrawer: React.FC<{
 
         {/* 에픽 퀘스트 잠금 안내 */}
         {catTab === 'epic' && !hasEpicUnlocked && (
-          <div className="w-full p-6 text-center flex flex-col items-center gap-2 bg-[#120f18] border border-[#7a4891]/50 rounded-xl shadow-lg">
+          <div className="w-full shrink-0 min-h-fit p-6 text-center flex flex-col items-center gap-2 bg-[#120f18] border border-[#7a4891]/50 rounded-xl shadow-lg">
             <span className="text-4xl p-2.5 rounded-2xl bg-[#1e1329] border border-[#ba68c8]/40 shadow-inner">👑🔒</span>
             <span className="font-bold text-sm text-[#ba68c8]">{tr('영혼의 제단 건설 필요')}</span>
             <span className="text-xs text-[#cfd8e8] max-w-[280px] leading-relaxed">
@@ -12518,7 +12525,7 @@ const QuestsDrawer: React.FC<{
               건설 비용: 🪨 석재 120, ⚙️ 철광 50, ✨ 에테르 30, 🪙 1,000G
             </div>
             <button
-              className="text-xs px-4 py-2 mt-2 font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#7a4891] to-[#4a2861] hover:brightness-110 text-[#f5e6ff]"
+              className="text-xs px-4 py-2 mt-2 font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#7a4891] to-[#4a2861] hover:brightness-110 text-[#f5e6ff] cursor-pointer"
               onClick={() => onNavigateDrawer ? onNavigateDrawer('citadel') : onClose()}
             >
               <span>🏛️</span>
@@ -12528,7 +12535,7 @@ const QuestsDrawer: React.FC<{
         )}
 
         {displayedQuests.length === 0 && !(catTab === 'sub' && !hasTavern) && !(catTab === 'epic' && !hasEpicUnlocked) && (
-          <div className="w-full p-8 text-center text-sm text-[#8a95a5] bg-[#10131a]/60 border border-[#222733] rounded-xl">
+          <div className="w-full shrink-0 min-h-fit p-8 text-center text-sm text-[#8a95a5] bg-[#10131a]/60 border border-[#222733] rounded-xl">
             {catTab === 'completed'
               ? tr('아직 완료된 퀘스트가 없습니다.') : tr('현재 해당 탭의 진행 가능한 퀘스트가 없습니다.')}<br />
             <span className="text-xs text-[#5a6578] mt-1 block">
@@ -12555,7 +12562,7 @@ const QuestsDrawer: React.FC<{
           return (
             <div
               key={q.id}
-              className={`w-full p-3.5 rounded-xl transition-all flex flex-col gap-2.5 relative overflow-hidden backdrop-blur-sm ${
+              className={`w-full shrink-0 min-h-fit p-3.5 rounded-xl transition-all flex flex-col gap-2.5 relative z-0 hover:z-10 pointer-events-auto overflow-hidden backdrop-blur-sm ${
                 isClaimable
                   ? 'border border-[#b89758] bg-gradient-to-br from-[#1c1810] via-[#14120d] to-[#0c0e14] shadow-[0_0_15px_rgba(184,151,88,0.25)] ring-1 ring-[#dcc496]/40'
                   : isCompleted
@@ -12754,7 +12761,7 @@ const QuestsDrawer: React.FC<{
 
               {/* 바로가기 링크 (진행 중인 퀘스트의 경우 해당 화면으로 즉시 이동) */}
               {!isCompleted && !isClaimable && (
-                <div className="flex justify-end pt-1">
+                <div className="flex justify-end pt-1 relative z-10 pointer-events-auto">
                   {getQuestShortcut(q)}
                 </div>
               )}
@@ -12763,7 +12770,7 @@ const QuestsDrawer: React.FC<{
               {isClaimable && (
                 <button
                   data-tutorial-target="quest-reward"
-                  className="w-full py-2.5 text-xs font-black rounded-lg shadow-lg mt-1 flex items-center justify-center gap-1.5 transition-all active:scale-95 bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] shadow-[0_0_14px_rgba(184,151,88,0.4)] animate-pulse"
+                  className="w-full py-2.5 text-xs font-black rounded-lg shadow-lg mt-1 flex items-center justify-center gap-1.5 transition-all active:scale-95 bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] shadow-[0_0_14px_rgba(184,151,88,0.4)] animate-pulse relative z-10 pointer-events-auto cursor-pointer"
                   onClick={() => {
                     if (q.epicStory) {
                       setEpicQuestForModal(q);
