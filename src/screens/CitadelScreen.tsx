@@ -3695,11 +3695,11 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
 
   const GRADE_META: Record<string, { label: string; tag: string; color: string }> = {
     rookie:  { label: 'N', tag: 'N', color: '#9e9e9e' },
-    veteran: { label: 'V', tag: 'V', color: '#66bb6a' },
-    hero:    { label: 'H', tag: 'H', color: '#00d2ff' },
-    elite:   { label: 'H', tag: 'H', color: '#00d2ff' },
-    epic:    { label: 'E', tag: 'E', color: '#ce93d8' },
-    legend:  { label: 'E', tag: 'E', color: '#ce93d8' },
+    veteran: { label: 'V', tag: 'V', color: '#81c784' },
+    hero:    { label: 'H', tag: 'H', color: '#dcc496' },
+    elite:   { label: 'H', tag: 'H', color: '#dcc496' },
+    epic:    { label: 'E', tag: 'E', color: '#ba68c8' },
+    legend:  { label: 'E', tag: 'E', color: '#ffd54f' },
   };
 
   const timerText = formatDuration(state.tavernArrivalSecondsLeft || 0, lang, true);
@@ -3707,65 +3707,49 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
   const refreshStage = (state.tavernRefreshCount || 0) + 1;
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0e17] text-[#cfd8e8]">
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1f2738] bg-[#070a10] shrink-0">
+    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+      {/* ── 🍺 방랑 라운지 서브 툴바 (대원 현황 & 갱신 조작계) ── */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-[#242732] bg-[#0c0e14] shrink-0 flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-base">🍺</span>
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-sm font-bold text-[#ffb74d]">{tr('방랑자의 라운지')}</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold border border-[#c8aa6e44]">
-              Lv.{tavernLv}
-            </span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ffb74d22] text-[#ffb74d] font-bold">
-              {`대원 ${state.barracks.length}/7명`}
-            </span>
-            <EncyclopediaBadge query="고용" tab="all" label="주점 백과" />
-          </div>
+          <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#161a24] text-[#dcc496] font-bold border border-[#3d372e] font-mono">
+            {tr(`대원 ${state.barracks.length}/7명`)}
+          </span>
+          <EncyclopediaBadge query="고용" tab="all" label="주점 백과" />
         </div>
         <div className="flex items-center gap-2">
           <ActionButton
             label={`🔄 갱신 (🪙${refreshCost}G)`}
             size="sm"
             variant="ghost"
-            className="border-[#ffd54f66] text-[#ffd54f] hover:bg-[#ffd54f15]"
+            className="border-[#b89758]/50 text-[#dcc496] hover:bg-[#b89758]/20 hover:border-[#b89758]"
             disabled={state.resources.gold < refreshCost}
             onClick={() => gm.manualRefreshTavern()}
           />
-          <button
-            className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
-            style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-            onClick={onBack}
-            aria-label="닫기"
-          >
-            <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-          </button>
         </div>
       </div>
 
       {/* 🎒 [연계 퀘스트 바로가기] 용병 영입 완료 시 편성화면(인원 부족 시) 또는 심연 채비실로 이동 배너 */}
       {isReadyForExpedition && (
-        <div className="bg-gradient-to-r from-[#0d1e33] via-[#122e4c] to-[#0d1e33] border-b border-[#c8aa6e88] px-4 py-2.5 flex items-center justify-between gap-2 shadow-lg shrink-0 animate-pulse">
+        <div className="bg-gradient-to-r from-[#1c1810] via-[#2a2215] to-[#1c1810] border-b border-[#b89758]/50 px-4 py-2.5 flex items-center justify-between gap-2 shadow-lg shrink-0 animate-pulse">
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-xl shrink-0">{state.party.length < 3 ? '⚔️' : '🎒'}</span>
             <div className="min-w-0">
-              <div className="text-xs font-bold text-[#b8e2ff] flex items-center gap-1.5 flex-wrap">
-                <span>용병 영입 완료!</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e33] text-[#c8aa6e] font-extrabold border border-[#c8aa6e55]">연계 퀘스트</span>
+              <div className="text-xs font-bold text-[#f3e5c8] flex items-center gap-1.5 flex-wrap">
+                <span>{tr('용병 영입 완료!')}</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#b89758]/30 text-[#ffd54f] font-extrabold border border-[#b89758]/60 font-mono">
+                  {tr('연계 퀘스트')}
+                </span>
               </div>
-              <div className="text-[11px] text-[#80d8ff] truncate mt-0.5">
+              <div className="text-[11px] text-[#dcc496] truncate mt-0.5">
                 {state.party.length < 3
-                  ? '영입한 용병을 [원정단 편성]에서 출전시켜 3인 원정대를 완성하세요!'
-                  : '원정대 3인 편성 완료! 채비실에서 보급품을 챙기고 침식 회랑 1층 강하를 시작하세요!'}
+                  ? tr('영입한 용병을 [원정단 편성]에서 출전시켜 3인 원정대를 완성하세요!')
+                  : tr('원정대 3인 편성 완료! 채비실에서 보급품을 챙기고 침식 회랑 1층 강하를 시작하세요!')}
               </div>
             </div>
           </div>
           <button
             data-tutorial-target={state.party.length < 3 ? "open-barracks-btn" : "open-explore-drawer"}
-            className={`text-xs px-3 py-1.5 rounded-lg font-bold shrink-0 active:scale-95 shadow-md flex items-center gap-1 cursor-pointer transition-all ${
-              state.party.length < 3
-                ? 'bg-[#0088cc] hover:bg-[#00a2f5] text-white border border-[#c8aa6e]'
-                : 'bg-[#5c2b8a] hover:bg-[#7236aa] text-white border border-[#9c4dcc]'
-            }`}
+            className="text-xs px-3 py-1.5 rounded-lg font-bold shrink-0 active:scale-95 shadow-md flex items-center gap-1 cursor-pointer transition-all bg-[#876739] hover:bg-[#a67c38] text-white border border-[#dcc496]/50"
             onClick={() => {
               if (onNavigateDrawer) {
                 if (state.party.length < 3) {
@@ -3778,44 +3762,44 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
               }
             }}
           >
-            <span>{state.party.length < 3 ? '원정단 편성 이동' : '채비실 이동'}</span>
+            <span>{state.party.length < 3 ? tr('원정단 편성 이동') : tr('채비실 이동')}</span>
             <span>▶</span>
           </button>
         </div>
       )}
 
       {/* ⏳ 10분 모험가 자동 도착 및 새로고침 비용 초기화 정보 바 */}
-      <div className="bg-[#12141a] border-b border-[#1f2d42] px-4 py-2 flex items-center justify-between text-xs flex-wrap gap-2 shrink-0">
+      <div className="bg-[#0e1117] border-b border-[#242732] px-3.5 py-2 flex items-center justify-between text-xs flex-wrap gap-2 shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[#ffd54f] font-medium flex items-center gap-1">
+          <span className="text-[#dcc496] font-medium flex items-center gap-1">
             <span>⏳</span>
             <span>{tr('다음 모험가 도착:')}</span>
           </span>
-          <span className="font-mono font-bold text-white px-2 py-0.5 rounded bg-[#0b101c] border border-[#233552] text-xs">
+          <span className="font-mono font-bold text-white px-2 py-0.5 rounded-md bg-[#161a24] border border-[#3d372e] text-xs">
             {timerText}
           </span>
           <button
             type="button"
             disabled={isAdLoading}
             onClick={() => setShowAdConfirm(true)}
-            className="px-2.5 py-0.5 rounded-lg bg-gradient-to-r from-[#ffd54f22] to-[#ffb30033] hover:from-[#ffd54f33] hover:to-[#ffb30044] border border-[#ffd54f66] text-[#ffd54f] hover:text-white font-bold text-[11px] flex items-center gap-1 shadow-sm active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+            className="px-2.5 py-0.5 rounded-md bg-[#b89758]/15 hover:bg-[#b89758]/25 border border-[#b89758]/50 text-[#dcc496] hover:text-white font-bold text-[11px] flex items-center gap-1 shadow-sm active:scale-95 transition-all cursor-pointer disabled:opacity-50"
             title={tr('광고 시청 후 대기 시간 및 갱신 비용 즉시 초기화')}
           >
             <span>📺</span>
             <span>{isAdLoading ? tr('광고 준비 중...') : tr('광고 시청 후 초기화')}</span>
           </button>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] text-[#8b9bb4]">
+        <div className="flex items-center gap-1.5 text-[11px] text-[#9da3af]">
           <span>{tr('현재 갱신비:')}</span>
-          <span className={`font-mono font-bold ${refreshStage === 1 ? 'text-[#66bb6a]' : refreshStage === 2 ? 'text-[#ffd54f]' : 'text-[#ff7043]'}`}>
-            {refreshStage === 1 ? '1단계 100G' : refreshStage === 2 ? '2단계 400G' : `${refreshStage}단계 ${refreshCost.toLocaleString()}G`}
+          <span className={`font-mono font-bold ${refreshStage === 1 ? 'text-[#81c784]' : refreshStage === 2 ? 'text-[#ffd54f]' : 'text-[#ff8a65]'}`}>
+            {refreshStage === 1 ? tr('1단계 100G') : refreshStage === 2 ? tr('2단계 400G') : `${refreshStage}${tr('단계')} ${refreshCost.toLocaleString()}G`}
           </span>
         </div>
       </div>
 
       {isFull && (
-        <div className="bg-[#ef535015] border-b border-[#ef535033] px-3 py-1.5 text-center text-xs text-[#ef5350] font-bold shrink-0">
-          ⚠️ 용병단 정원 초과 (7/7명). 새 용병을 영입하려면 기존 용병을 해고해야 합니다.
+        <div className="bg-[#ef5350]/15 border-b border-[#ef5350]/30 px-3 py-1.5 text-center text-xs text-[#ef5350] font-bold shrink-0">
+          ⚠️ {tr('용병단 정원 초과 (7/7명). 새 용병을 영입하려면 기존 용병을 해고해야 합니다.')}
         </div>
       )}
 
@@ -3835,12 +3819,12 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
           return (
             <div
               key={cand.id}
-              className="panel p-3 bg-[#131926] border border-[#222d42] hover:border-[#c8aa6e55] rounded-xl flex flex-col gap-2.5 transition-all cursor-pointer"
+              className="p-3 bg-[#10131a] border border-[#3d372e] hover:border-[#b89758] rounded-xl flex flex-col gap-2.5 transition-all cursor-pointer shadow-sm hover:shadow-[0_4px_16px_rgba(184,151,88,0.15)] group"
               onClick={() => setDetailCandidate(cand)}
             >
               <div className="flex items-start justify-between gap-2">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-12 h-12 rounded-xl bg-[#1a2234] border border-[#2b3952] shrink-0 overflow-hidden flex items-center justify-center shadow-inner">
+                <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                  <div className="w-12 h-12 rounded-xl bg-[#181b24] border border-[#3d372e] group-hover:border-[#b89758]/60 shrink-0 overflow-hidden flex items-center justify-center shadow-inner transition-colors">
                     {customPortrait ? (
                       <img
                         src={customPortrait}
@@ -3854,71 +3838,79 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                       </span>
                     )}
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-sm text-white">{cand.name}</span>
+                      <span className="font-bold text-sm text-[#ededed] group-hover:text-white transition-colors">{cand.name}</span>
                       <span
-                        className="text-[9px] px-1.5 py-0.2 rounded font-bold"
-                        style={{ color: gMeta.color, background: `${gMeta.color}22`, border: `1px solid ${gMeta.color}44` }}
+                        className="text-[9px] px-1.5 py-0.2 rounded font-bold font-mono"
+                        style={{ color: gMeta.color, background: `${gMeta.color}15`, border: `1px solid ${gMeta.color}40` }}
                       >
                         [{gMeta.tag}]
                       </span>
-                      <span className="text-xs text-[#c8aa6e] font-medium">{cls.name}</span>
+                      <span className="text-xs text-[#b89758] font-semibold">{cls.name}</span>
                       {cand.trait && (
-                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ffd54f15] text-[#ffd54f] border border-[#ffd54f33] font-bold">
+                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#b89758]/15 text-[#ffd54f] border border-[#b89758]/30 font-bold">
                           ✨ {cand.trait}
                         </span>
                       )}
                     </div>
-                    <div className="text-[11px] text-[#cfd8dc] mt-0.5">
-                      고유기: <strong className="text-[#ffd54f]">[{cls.specialSkill.name}]</strong>
+                    <div className="text-[11px] text-[#9da3af] mt-0.5 truncate">
+                      {tr('고유기')}: <strong className="text-[#dcc496]">[{cls.specialSkill.name}]</strong>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-1.5 shrink-0" onClick={e => e.stopPropagation()}>
-                  <ActionButton
-                    label="🔍 상세"
-                    variant="ghost"
-                    size="sm"
+                  <button
+                    type="button"
+                    className="px-2 py-1 rounded-lg border border-[#3d372e] hover:border-[#b89758] bg-[#161a24] text-[#cfd8e8] text-xs font-bold transition-all cursor-pointer"
                     onClick={() => setDetailCandidate(cand)}
-                  />
+                  >
+                    🔍 {tr('상세')}
+                  </button>
                   <div data-tutorial-target="recruit-mercenary">
-                    <ActionButton
-                      label={isFull ? '정원 초과' : canAfford ? `🤝 고용 (🪙${cand.hiringCost}G)` : '골드 부족'}
-                      variant={isFull ? 'ghost' : canAfford ? 'primary' : 'ghost'}
-                      size="sm"
+                    <button
+                      type="button"
                       disabled={isFull || !canAfford}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        isFull
+                          ? 'bg-[#242732] text-[#8b9bb4] border border-[#3d372e] opacity-60 cursor-not-allowed'
+                          : canAfford
+                          ? 'tg-btn-gold shadow-sm hover:brightness-110 active:scale-95'
+                          : 'bg-[#1e1416] text-[#ef5350] border border-[#ef5350]/40 opacity-70 cursor-not-allowed'
+                      }`}
                       onClick={() => gm.hireMercenary(cand.id)}
-                    />
+                    >
+                      {isFull ? tr('정원 초과') : canAfford ? `🤝 ${tr('고용')} (🪙${cand.hiringCost}G)` : tr('골드 부족')}
+                    </button>
                   </div>
                 </div>
               </div>
 
               {/* 표준 RPG 이니셜 기반 스탯 바 */}
-              <div className="pt-2 border-t border-[#1f2738] grid grid-cols-6 gap-1 text-center font-mono">
-                <div className="bg-[#0b101c] p-1 rounded border border-[#1e293b]">
+              <div className="pt-2 border-t border-[#242732] grid grid-cols-6 gap-1 text-center font-mono">
+                <div className="bg-[#08090b] p-1 rounded-lg border border-[#1f2430]">
                   <span className="text-[9px] text-[#ef5350] block font-bold">HP</span>
                   <span className="text-xs text-white font-bold">{cand.stats.hp}</span>
                 </div>
-                <div className="bg-[#0b101c] p-1 rounded border border-[#1e293b]">
-                  <span className="text-[9px] text-[#42a5f5] block font-bold">MP</span>
+                <div className="bg-[#08090b] p-1 rounded-lg border border-[#1f2430]">
+                  <span className="text-[9px] text-[#7986cb] block font-bold">MP</span>
                   <span className="text-xs text-white font-bold">{cand.stats.mp}</span>
                 </div>
-                <div className="bg-[#0b101c] p-1 rounded border border-[#1e293b]">
-                  <span className="text-[9px] text-[#ff7043] block font-bold">ATK</span>
+                <div className="bg-[#08090b] p-1 rounded-lg border border-[#1f2430]">
+                  <span className="text-[9px] text-[#ff8a65] block font-bold">ATK</span>
                   <span className="text-xs text-white font-bold">{cand.stats.atk}</span>
                 </div>
-                <div className="bg-[#0b101c] p-1 rounded border border-[#1e293b]">
-                  <span className="text-[9px] text-[#66bb6a] block font-bold">DEF</span>
+                <div className="bg-[#08090b] p-1 rounded-lg border border-[#1f2430]">
+                  <span className="text-[9px] text-[#81c784] block font-bold">DEF</span>
                   <span className="text-xs text-white font-bold">{cand.stats.def}</span>
                 </div>
-                <div className="bg-[#0b101c] p-1 rounded border border-[#1e293b]">
+                <div className="bg-[#08090b] p-1 rounded-lg border border-[#1f2430]">
                   <span className="text-[9px] text-[#ffd54f] block font-bold">SPD</span>
                   <span className="text-xs text-white font-bold">{cand.stats.spd}</span>
                 </div>
-                <div className="bg-[#0b101c] p-1 rounded border border-[#1e293b]">
-                  <span className="text-[9px] text-[#ce93d8] block font-bold">LUK</span>
+                <div className="bg-[#08090b] p-1 rounded-lg border border-[#1f2430]">
+                  <span className="text-[9px] text-[#ba68c8] block font-bold">LUK</span>
                   <span className="text-xs text-white font-bold">{cand.stats.luck}</span>
                 </div>
               </div>
@@ -3968,8 +3960,8 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
           >
             <div className="flex flex-col gap-3 text-xs">
               {/* 상단: 기본 인적 사항 & 클래스 배경 */}
-              <div className="panel p-3 bg-[#131926] border border-[#27354d] rounded-xl flex items-start gap-3">
-                <div className="w-16 h-16 rounded-xl bg-[#1a2234] border border-[#2b3952] shrink-0 overflow-hidden flex items-center justify-center shadow-md">
+              <div className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl flex items-start gap-3">
+                <div className="w-16 h-16 rounded-xl bg-[#161a24] border border-[#3d372e] shrink-0 overflow-hidden flex items-center justify-center shadow-md">
                   {detailPortrait ? (
                     <img
                       src={detailPortrait}
@@ -3987,33 +3979,33 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="font-bold text-base text-white">{detailCandidate.name}</span>
                     <span
-                      className="text-[10px] px-1.5 py-0.2 rounded font-bold"
-                      style={{ color: gMeta.color, background: `${gMeta.color}22`, border: `1px solid ${gMeta.color}44` }}
+                      className="text-[10px] px-1.5 py-0.2 rounded font-bold font-mono"
+                      style={{ color: gMeta.color, background: `${gMeta.color}15`, border: `1px solid ${gMeta.color}40` }}
                     >
                       [{gMeta.tag}]
                     </span>
-                    <span className="text-xs text-[#c8aa6e] font-bold">{cls.name}</span>
+                    <span className="text-xs text-[#b89758] font-bold">{cls.name}</span>
                   </div>
                   {detailCandidate.trait && (() => {
                     const tInfo = HERO_TRAITS[detailCandidate.trait];
                     return (
-                      <div className="mt-2 p-2.5 rounded-lg bg-[#ffd54f10] border border-[#ffd54f33] flex flex-col gap-1">
+                      <div className="mt-2 p-2.5 rounded-lg bg-[#b89758]/10 border border-[#b89758]/30 flex flex-col gap-1">
                         <div className="flex items-center justify-between text-[11px]">
                           <span className="font-bold text-[#ffd54f] flex items-center gap-1">
-                            <span>✨ 개인 성향:</span>
+                            <span>✨ {tr('개인 성향')}:</span>
                             <span className="text-white font-mono">[{detailCandidate.trait}]</span>
                           </span>
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d44]">
-                            스탯 영구 반영
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#38ef7d]/20 text-[#38ef7d] font-bold border border-[#38ef7d]/40">
+                            {tr('스탯 영구 반영')}
                           </span>
                         </div>
                         {tInfo && (
-                          <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
-                            💡 <strong className="text-[#ffd54f]">효과:</strong> {tInfo.desc}
+                          <div className="text-[11px] text-[#d1d5db] leading-relaxed">
+                            💡 <strong className="text-[#ffd54f]">{tr('효과')}:</strong> {tInfo.desc}
                           </div>
                         )}
                         <div className="text-[10px] text-[#8b9bb4]">
-                          * 위 성향 효과는 고용 시 용병의 기본 능력치에 영구 합산되어 적용됩니다.
+                          * {tr('위 성향 효과는 고용 시 용병의 기본 능력치에 영구 합산되어 적용됩니다.')}
                         </div>
                       </div>
                     );
@@ -4022,69 +4014,69 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
               </div>
 
               {/* 중단: 스탯 종합 분석 (RPG Initials) */}
-              <div className="panel p-3 bg-[#0d1424] border border-[#1e293b] rounded-xl flex flex-col gap-2">
-                <span className="text-xs font-bold text-[#c8aa6e]">📊 개별 능력치 (RPG Stat Profile)</span>
+              <div className="p-3 bg-[#0a0d14] border border-[#242732] rounded-xl flex flex-col gap-2">
+                <span className="text-xs font-bold text-[#dcc496]">📊 {tr('개별 능력치')} (RPG Stat Profile)</span>
                 <div className="grid grid-cols-3 gap-2 font-mono">
-                  <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f] flex flex-col items-center">
-                    <span className="text-[10px] text-[#ef5350] font-bold">HP (생명력)</span>
+                  <div className="bg-[#12151e] p-2 rounded-lg border border-[#222938] flex flex-col items-center">
+                    <span className="text-[10px] text-[#ef5350] font-bold">HP ({tr('생명력')})</span>
                     <span className="text-sm font-bold text-white mt-0.5">{detailCandidate.stats.hp}</span>
                   </div>
-                  <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f] flex flex-col items-center">
-                    <span className="text-[10px] text-[#42a5f5] font-bold">MP (마나)</span>
+                  <div className="bg-[#12151e] p-2 rounded-lg border border-[#222938] flex flex-col items-center">
+                    <span className="text-[10px] text-[#7986cb] font-bold">MP ({tr('마나')})</span>
                     <span className="text-sm font-bold text-white mt-0.5">{detailCandidate.stats.mp}</span>
                   </div>
-                  <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f] flex flex-col items-center">
-                    <span className="text-[10px] text-[#ff7043] font-bold">ATK (공격력)</span>
+                  <div className="bg-[#12151e] p-2 rounded-lg border border-[#222938] flex flex-col items-center">
+                    <span className="text-[10px] text-[#ff8a65] font-bold">ATK ({tr('공격력')})</span>
                     <span className="text-sm font-bold text-white mt-0.5">{detailCandidate.stats.atk}</span>
                   </div>
-                  <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f] flex flex-col items-center">
-                    <span className="text-[10px] text-[#66bb6a] font-bold">DEF (방어력)</span>
+                  <div className="bg-[#12151e] p-2 rounded-lg border border-[#222938] flex flex-col items-center">
+                    <span className="text-[10px] text-[#81c784] font-bold">DEF ({tr('방어력')})</span>
                     <span className="text-sm font-bold text-white mt-0.5">{detailCandidate.stats.def}</span>
                   </div>
-                  <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f] flex flex-col items-center">
-                    <span className="text-[10px] text-[#ffd54f] font-bold">SPD (행동속도)</span>
+                  <div className="bg-[#12151e] p-2 rounded-lg border border-[#222938] flex flex-col items-center">
+                    <span className="text-[10px] text-[#ffd54f] font-bold">SPD ({tr('행동속도')})</span>
                     <span className="text-sm font-bold text-white mt-0.5">{detailCandidate.stats.spd}</span>
                   </div>
-                  <div className="bg-[#11192e] p-2 rounded-lg border border-[#22324f] flex flex-col items-center">
-                    <span className="text-[10px] text-[#ce93d8] font-bold">LUK (행운)</span>
+                  <div className="bg-[#12151e] p-2 rounded-lg border border-[#222938] flex flex-col items-center">
+                    <span className="text-[10px] text-[#ba68c8] font-bold">LUK ({tr('행운')})</span>
                     <span className="text-sm font-bold text-white mt-0.5">{detailCandidate.stats.luck}</span>
                   </div>
                 </div>
               </div>
 
               {/* 하단: 보유 전투 기술 (고유기 + 기본 스킬 2종) */}
-              <div className="panel p-3 bg-[#0c101c] border border-[#1f2b40] rounded-xl flex flex-col gap-2">
-                <span className="text-xs font-bold text-[#ffd54f]">⚔️ 습득 전투 스킬</span>
+              <div className="p-3 bg-[#0a0d14] border border-[#242732] rounded-xl flex flex-col gap-2">
+                <span className="text-xs font-bold text-[#dcc496]">⚔️ {tr('습득 전투 스킬')}</span>
                 
                 {/* 고유기 */}
-                <div className="p-2 rounded-lg bg-[#1a1711] border border-[#ffd54f44] flex items-center justify-between">
+                <div className="p-2.5 rounded-lg bg-[#14120c] border border-[#b89758]/40 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <GameIcon name={cls.specialSkill.id} icon={cls.specialSkill.icon} size={24} />
                     <div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-[9px] px-1 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold">고유기</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[9px] px-1 py-0.2 rounded bg-[#b89758]/20 text-[#ffd54f] font-bold font-mono">{tr('고유기')}</span>
                         <span className="font-bold text-xs text-white">{cls.specialSkill.name}</span>
                       </div>
-                      <div className="text-[10px] text-[#8b9bb4] mt-0.5">{cls.specialSkill.description}</div>
+                      <div className="text-[10px] text-[#9da3af] mt-0.5">{cls.specialSkill.description}</div>
                     </div>
                   </div>
-                  <span className="text-xs text-[#64b5f6] font-mono shrink-0 ml-1">{cls.specialSkill.manaCost}MP</span>
+                  <span className="text-xs text-[#7986cb] font-mono shrink-0 ml-1 font-bold">{cls.specialSkill.manaCost}MP</span>
                 </div>
 
                 {/* 기본기 2종 */}
                 {cls.skills.slice(0, 2).map(sk => (
-                  <div key={sk.id} className="p-2 rounded-lg bg-[#111726] border border-[#1f2b40] flex items-center justify-between">
+                  <div key={sk.id} className="p-2.5 rounded-lg bg-[#10131a] border border-[#242732] flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <GameIcon name={sk.id} icon={sk.icon} size={24} />
                       <div>
-                        <div className="flex items-center gap-1">
-                          <span className="text-[9px] px-1 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">기본기</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[9px] px-1 py-0.2 rounded bg-[#242732] text-[#dcc496] font-bold font-mono">{tr('기본기')}</span>
                           <span className="font-bold text-xs text-white">{sk.name}</span>
                         </div>
-                        <div className="text-[10px] text-[#8b9bb4] mt-0.5">{sk.description}</div>
+                        <div className="text-[10px] text-[#9da3af] mt-0.5">{sk.description}</div>
                       </div>
                     </div>
-                    <span className="text-xs text-[#64b5f6] font-mono shrink-0 ml-1">{sk.manaCost}MP</span>
+                    <span className="text-xs text-[#7986cb] font-mono shrink-0 ml-1 font-bold">{sk.manaCost}MP</span>
                   </div>
                 ))}
               </div>
@@ -4109,7 +4101,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
               <button
                 type="button"
                 onClick={handleConfirmWatchAd}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#ffd54f] to-[#ffb300] hover:brightness-110 text-black font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-[#ffd54f33] cursor-pointer active:scale-95 transition-transform"
+                className="px-4 py-2 rounded-xl tg-btn-gold text-xs font-bold flex items-center justify-center gap-1.5 shadow-md cursor-pointer active:scale-95 transition-all"
               >
                 <span>📺</span>
                 <span>{tr('광고 시청 후 즉시 도착')}</span>
@@ -4118,18 +4110,18 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
           }
         >
           <div className="space-y-3 py-1 text-xs">
-            <div className="p-3 rounded-xl bg-[#15171d] border border-[#2d3a4f] text-[#cfd8e8] leading-relaxed flex items-start gap-2.5">
+            <div className="p-3.5 rounded-xl bg-[#10131a] border border-[#3d372e] text-[#cfd8e8] leading-relaxed flex items-start gap-3">
               <span className="text-2xl shrink-0">🍺</span>
               <div>
-                <p className="font-bold text-[#ffd54f] mb-1">
+                <p className="font-bold text-[#ffd54f] mb-1 text-sm">
                   {tr('모험가 도착 쿨타임 및 갱신 비용 즉시 초기화')}
                 </p>
-                <p className="text-[#8b9bb4]">
+                <p className="text-[#9da3af] leading-relaxed">
                   {tr('광고를 시청하시면 남은 대기 시간(')}
                   <span className="text-white font-mono font-bold">{timerText}</span>
                   {tr(')이 즉시 초기화되며, 새로운 방랑 모험가 후보가 라운지에 즉시 도착합니다.')}
                 </p>
-                <p className="text-[11px] text-[#c8aa6e] mt-1.5 flex items-center gap-1">
+                <p className="text-[11px] text-[#dcc496] mt-2 flex items-center gap-1 font-medium">
                   <span>✨</span>
                   <span>{tr('골드 새로고침 비용도 1단계(100G)로 함께 초기화됩니다.')}</span>
                 </p>
@@ -15316,6 +15308,7 @@ export const CitadelScreen: React.FC = () => {
           subtitle={tr(artInfo.subtitle)}
           icon={artInfo.icon}
           bgImage={artInfo.img}
+          levelBadge={DRAWER_TO_BUILDING_ID[openDrawer || ''] ? (state.buildings[DRAWER_TO_BUILDING_ID[openDrawer || '']]?.level || 1) : undefined}
         >
           {openDrawer === 'barracks'  && (
             <BarracksDrawer 
