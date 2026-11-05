@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./theme-dark-gold.css";
 
 /* ─── 전역 CSS 변수 (다크 테마) ────────────────────── */
 :root {

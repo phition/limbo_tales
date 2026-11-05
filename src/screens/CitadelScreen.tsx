@@ -2,6 +2,11 @@ import { TutorialGuideOverlay } from '../components/TutorialGuideOverlay';
 import { TUTORIAL_STEPS } from '../data/tutorialSteps';
 import { useGameManager } from '../hooks/useGameManager';
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { TerritoryHeader } from '../components/territory/TerritoryHeader';
+import { QuickFacilityDock } from '../components/territory/QuickFacilityDock';
+import { FacilityWorkstationModal } from '../components/territory/FacilityWorkstationModal';
+import { TerritoryDioramaView } from '../components/territory/TerritoryDioramaView';
+import { ArkCitadelHubDrawer } from '../components/territory/ArkCitadelHubDrawer';
 import { ResourceBar } from '../components/ResourceBar';
 import { LogPanel } from '../components/LogPanel';
 import { ActionButton } from '../components/ActionButton';
@@ -14340,6 +14345,7 @@ export const ExploreDrawer: React.FC<{
 // ─────────────────────────────────────────────────────────────
 export const CitadelScreen: React.FC = () => {
   const [openDrawer, setOpenDrawer] = useState<string | null>(null);
+  const [citadelInitialView, setCitadelInitialView] = useState<'banners' | 'bonfire' | 'facilities' | 'workstations'>('banners');
   // 영지('citadel') 패널에서 개별 건물 패널로 진입한 경우에만 닫기 시 영지로 복귀, 그 외(바로가기 등)는 즉시 완전 닫기
   const [returnToCitadelOnClose, setReturnToCitadelOnClose] = useState<boolean>(false);
 
@@ -14581,9 +14587,10 @@ export const CitadelScreen: React.FC = () => {
   const handleNavigateBuilding = useCallback((buildingId: string) => {
     setHighlightedBuildingId(buildingId);
     setReturnToCitadelOnClose(false);
+    setCitadelInitialView('facilities');
     setOpenDrawer('citadel');
     setTimeout(() => {
-      const el = document.getElementById(`building-card-${buildingId}`);
+      const el = document.getElementById(`citadel-building-row-${buildingId}`) || document.getElementById(`building-card-${buildingId}`);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
@@ -14876,7 +14883,13 @@ export const CitadelScreen: React.FC = () => {
   // 일반 드로어 열기 (네비게이션 휠, 바로가기 등: 닫기 시 즉시 완전 닫기)
   const handleTryOpenDrawer = useCallback((key: string) => {
     setReturnToCitadelOnClose(false);
-    if (key === 'codex') {
+    if (key === 'bonfire') {
+      setCitadelInitialView('bonfire');
+      setOpenDrawer('citadel');
+    } else if (key === 'citadel') {
+      setCitadelInitialView('banners');
+      setOpenDrawer('citadel');
+    } else if (key === 'codex') {
       setShowCodexModal(true);
     } else if (key === 'arena') {
       navigateTo('arena');
@@ -14903,6 +14916,7 @@ export const CitadelScreen: React.FC = () => {
   const handleCloseDrawer = useCallback(() => {
     if (returnToCitadelOnClose && openDrawer !== 'citadel') {
       setReturnToCitadelOnClose(false);
+      setCitadelInitialView('workstations');
       setOpenDrawer('citadel');
       return;
     }
@@ -15117,83 +15131,30 @@ export const CitadelScreen: React.FC = () => {
         </div>
       )}
 
-      {!openDrawer && (
-        <div className="absolute top-2 right-3 z-20 flex items-center gap-1.5">
-          <button
-            className="px-2 py-0.5 rounded bg-[#ffd54f15] hover:bg-[#ffd54f33] text-[#ffd54f] border border-[#ffd54f44] text-[10px] font-bold shadow-sm flex items-center gap-1 transition-all"
-            onClick={() => setShowCodexModal(true)}
-            title={tr('심연의 백과 & 고대 컬렉션 열기')}
-          >
-            <GameIcon name="codex" icon="📜" size={13} />
-            <span>{tr('백과')}</span>
-            {registerableCodexCount > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-sm animate-pulse">
-                {registerableCodexCount}
-              </span>
-            )}
-          </button>
-          <button
-            className="px-2 py-0.5 rounded bg-[#78909c15] hover:bg-[#78909c33] text-[#cfd8dc] border border-[#78909c44] text-[10px] font-bold shadow-sm flex items-center gap-1 transition-all"
-            onClick={() => handleTryOpenDrawer('cemetery')}
-            title={tr('성채 묘지 & 영령의 가호')}
-          >
-            <span>🪦</span>
-            <span>{tr('묘지')}</span>
-            {gm.cemetery && gm.cemetery.length > 0 && (
-              <span className="text-[9px] text-[#ff7043] font-mono font-bold">
-                {gm.cemetery.length}/5
-              </span>
-            )}
-            {gm.activeAncestralBlessing && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ba68c8] animate-pulse" title={`${tr('영령 결속')}: ${tr(gm.activeAncestralBlessing.name)}`} />
-            )}
-          </button>
-          <button className="text-[11px] text-[#ff4444] opacity-50 hover:opacity-100 ml-1" onClick={() => setResetModal(true)}>{tr('초기화')}</button>
-        </div>
-      )}
+      {/* ── 🏰 새로운 영지 전용 다크 & 앤티크 골드 슬림 헤더 ── */}
+      <TerritoryHeader
+        onOpenCitadel={() => handleTryOpenDrawer('citadel')}
+        onOpenBonfire={() => handleTryOpenDrawer('bonfire')}
+        onOpenStorage={() => handleTryOpenDrawer('storage')}
+        onOpenSettings={() => setResetModal(true)}
+      />
 
-      {/* 메인 일러스트 카드 & 퀘스트 마커 (상단 고정 이미지창) */}
-      <div 
-        className={`px-3 pt-2 shrink-0 relative z-20 ${openDrawer ? 'cursor-pointer' : ''}`}
-        onClick={() => {
-          if (openDrawer) handleCloseAllDrawers();
-        }}
-      >
-        <div 
-          className="relative w-full panel overflow-hidden transition-all duration-300 shadow-xl h-[clamp(145px,22vh,210px)] md:h-[clamp(210px,28vh,320px)] lg:h-[clamp(250px,32vh,360px)]" 
-        >
-          {/* 메인 일러스트 및 루프 애니메이션 비디오 (MP4 / WebM / GIF / WebP 자동 지원) */}
-          <video
-            key={artInfo.img}
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster={artInfo.img}
-            className="w-full h-full object-cover animate-fade-in transition-all duration-300"
-            style={{ filter: 'brightness(0.96) contrast(1.05)' }}
-          >
-            <source src={artInfo.img.replace(/\.[^/.]+$/, ".webm")} type="video/webm" />
-            <source src={artInfo.img.replace(/\.[^/.]+$/, ".mp4")} type="video/mp4" />
-            <img
-              src={artInfo.img}
-              alt={tr(artInfo.title)}
-              className="w-full h-full object-cover animate-fade-in transition-all duration-300"
-              style={{ filter: 'brightness(0.96) contrast(1.05)' }}
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = 'assets/citadel_bonfire.jpg';
-              }}
-            />
-          </video>
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 35%, #0b0d13cc 85%, #0b0d13 100%)' }} />
+      {/* ── 🏰 메인 영지 뷰포트 영역 (디오라마 vs 시네마틱 워크스테이션) ── */}
+      <div className="flex-1 min-h-0 relative flex flex-col overflow-hidden">
+        {/* 1. 영지 2.5D 디오라마 메인 전경 (상시 노출) */}
+        <div className="flex-1 min-h-0 relative flex flex-col">
+          <TerritoryDioramaView
+            onOpenFacility={(key) => handleTryOpenDrawer(key)}
+            onOpenExplore={() => handleTryOpenDrawer('explore')}
+          />
 
-          {/* 퀘스트 & 오프라인 결산 알림 마커 컨테이너 (드로어가 열려 있어도 보상 수령 대기 또는 미확인 오프라인 정산 시 상단 일러스트 위에 표시) */}
+          {/* 퀘스트 & 오프라인 결산 알림 마커 오버레이 (디오라마 좌측 상단) */}
           {(!openDrawer || claimableQuestCount > 0 || Boolean(activeOfflineReport) || isEpicRebuildReady || registerableCodexCount > 0) && (
-            <div className="absolute top-2.5 left-2.5 z-30 flex flex-col gap-1.5 items-start">
+            <div className="absolute top-2.5 left-2.5 z-20 flex flex-col gap-1.5 items-start">
               {/* 👑 1차 영지 재건 완성 대서사 에픽 퀘스트 알림 마커 */}
               {isEpicRebuildReady && (
                 <button
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#ffd700] via-[#ffb300] to-[#ff8f00] text-black text-xs font-black shadow-[0_0_20px_rgba(255,215,0,0.85)] border-2 border-white hover:scale-105 transition-all cursor-pointer animate-pulse"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#b89758] via-[#ffd54f] to-[#b89758] text-black text-xs font-black shadow-[0_0_20px_rgba(184,151,88,0.85)] border border-white hover:scale-105 transition-all cursor-pointer animate-pulse"
                   onClick={() => handleTryOpenDrawer('quests')}
                   title="모든 시설이 Lv.1 이상으로 완공되었습니다! 1차 영지 재건 서사와 향후 전개 인사이트를 확인하세요."
                 >
@@ -15201,7 +15162,7 @@ export const CitadelScreen: React.FC = () => {
                   <span className="text-[11px] font-extrabold tracking-wide">
                     1차 영지 재건 완성! (대서사 확인)
                   </span>
-                  <span className="px-1.5 py-0.2 rounded-full bg-black text-[#ffd700] text-[9px] font-black shadow-sm">
+                  <span className="px-1.5 py-0.2 rounded-full bg-black text-[#dcc496] text-[9px] font-black shadow-sm">
                     EPIC
                   </span>
                 </button>
@@ -15231,24 +15192,24 @@ export const CitadelScreen: React.FC = () => {
               {/* 퀘스트 알림 마커 */}
               {hasQuestAlert && (
                 <button
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#ffd54f] text-[#ffd54f] text-xs font-bold shadow-lg shadow-[#ffd54f33] hover:scale-105 transition-all cursor-pointer animate-fade-in"
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#b89758] text-[#dcc496] text-xs font-bold shadow-lg shadow-[#b8975833] hover:scale-105 transition-all cursor-pointer animate-fade-in"
                   onClick={() => handleTryOpenDrawer('quests')}
                 >
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffd54f] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ffd54f]"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#b89758] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#b89758]"></span>
                   </span>
                   <span className="animate-bounce text-sm">❗</span>
                   <span className="text-[11px] font-bold tracking-wide">
-                    {claimableQuestCount > 0 ? `${'보상 수령'} (${claimableQuestCount})` : '퀘스트 확인'}
+                    {claimableQuestCount > 0 ? `${tr('보상 수령')} (${claimableQuestCount})` : tr('퀘스트 확인')}
                   </span>
                 </button>
               )}
 
-              {/* 오프라인 결산 알림 마커 (퀘스트 알림 아래에 표시) */}
+              {/* 오프라인 결산 알림 마커 */}
               {activeOfflineReport && (
                 <button
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#c8aa6e] text-[#c8aa6e] text-xs font-bold shadow-lg shadow-[#c8aa6e33] hover:scale-105 transition-all cursor-pointer animate-fade-in"
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#b89758] text-[#dcc496] text-xs font-bold shadow-lg shadow-[#b8975833] hover:scale-105 transition-all cursor-pointer animate-fade-in"
                   onClick={(e) => {
                     e.stopPropagation();
                     setOfflineReportModal(activeOfflineReport);
@@ -15256,8 +15217,8 @@ export const CitadelScreen: React.FC = () => {
                   title={tr('오프라인 영지 수익 정산 보고서 열기')}
                 >
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c8aa6e] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#c8aa6e]"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#b89758] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#b89758]"></span>
                   </span>
                   <span className="text-sm">🌙</span>
                   <span className="text-[10px] sm:text-[11px] font-bold tracking-wide break-words max-w-[200px] sm:max-w-none truncate sm:whitespace-normal">
@@ -15268,282 +15229,47 @@ export const CitadelScreen: React.FC = () => {
             </div>
           )}
 
-          {/* 하단 동적 타이틀 및 서브타이틀 */}
-          <div className="absolute inset-x-0 bottom-0 p-2.5 sm:p-3 flex items-center justify-between">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="text-base shrink-0">{artInfo.icon}</span>
-              <div className="min-w-0">
-                <span className="font-cinzel text-sm sm:text-base font-bold text-[#c8aa6e] tracking-wide truncate block">{tr(artInfo.title)}</span>
-                <div className="text-[11px] text-[#cfd8e8] mt-0.5 font-medium line-clamp-1">
-                  {tr(artInfo.subtitle)}
-                </div>
-              </div>
-            </div>
-
-            <div className="text-[10px] text-[#8b9bb4] mt-0.5 shrink-0">
-              {`${tr('아레나')} ${state.currentArenaRank}${tr('위')}`} ({state.currentArenaRating}P){warmthLabel && ` | ${warmthLabel}`}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 로그 패널 (드로어가 닫혀 있을 때만 렌더링하며 큰 화면에서 시원하게 확장) */}
-      {!openDrawer && (
-        <div className="px-3 pt-2 transition-all duration-300 flex-1 min-h-0">
-          <LogPanel logs={state.citadelLogs || []} maxHeight={navScreenWidth >= 768 ? 260 : 175} emptyMessage={'기록된 영지 로그가 없습니다.'} />
-        </div>
-      )}
-
-      {/* 🎡 모바일 스와이프/드래그 지원 회전 휠 내비게이션 & 상단 방명록 티커 */}
-      {!openDrawer ? (
-        <div className="px-3 pt-1 pb-2 shrink-0 select-none flex flex-col gap-1.5">
-          {/* 📢 [D.M] 최근 메시지 3개 전체 내용 좌측 연속 흐름 티커 (하단 네비 메뉴 상단) */}
-          <div
-            className="w-full px-2.5 py-1.5 rounded-xl bg-[#0e1117]/90 border border-[#c8aa6e33] hover:border-[#c8aa6e88] cursor-pointer flex items-center justify-between transition-all backdrop-blur-xs shadow-md group active:scale-[0.99] overflow-hidden"
-            onClick={() => gm.emit('openGuestbook')}
-            title="D.M (Dimension Message)"
-          >
-            <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold shrink-0 flex items-center gap-1 border border-[#c8aa6e44] z-10 shadow-xs font-mono tracking-wider">
-                <span className="text-xs">📢</span>
-                <span>D.M</span>
-              </span>
-
-              <div
-                className="flex-1 overflow-hidden relative select-none"
-                style={{
-                  maskImage: 'linear-gradient(to right, transparent 0%, black 14px, black calc(100% - 14px), transparent 100%)',
-                  WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 14px, black calc(100% - 14px), transparent 100%)'
-                }}
-              >
-                {guestbookMessages.length === 0 ? (
-                  <span className="text-[11px] text-[#8b9bb4]">첫 번째 차원 메세지를 전송해 보세요!</span>
-                ) : (() => {
-                  const recentMsgs = guestbookMessages.slice(0, 3);
-                  // 3개 메시지의 총 글자 수에 비례하여 부드럽고 천천히 일정한 속도로 흐르도록 애니메이션 지속 시간 산출 (최소 18초 ~ 최대 65초)
-                  const totalTextLen = recentMsgs.reduce(
-                    (acc, msg) => acc + (msg.authorName || '').length + (msg.content || '').length + 8,
-                    0
-                  );
-                  const durSeconds = Math.max(18, Math.min(65, Math.round(totalTextLen * 0.28 + 12)));
-
-                  const renderMessageList = (keyPrefix: string) => (
-                    <div className="flex items-center shrink-0 pr-8">
-                      {recentMsgs.map((msg, idx) => (
-                        <div
-                          key={`${keyPrefix}_${msg.id || idx}`}
-                          className="flex items-center gap-1.5 shrink-0 text-[11px] pr-6"
-                        >
-                          <strong className="text-[#c8aa6e] font-bold shrink-0 notranslate" translate="no" data-no-translate="true">[{msg.authorName}]</strong>
-                          <span className="text-[#e2e8f0] font-medium">{msg.content}</span>
-                          <span className="text-[#c8aa6e44] pl-5 font-bold select-none text-xs">✦</span>
-                        </div>
-                      ))}
-                    </div>
-                  );
-
-                  return (
-                    <div
-                      className="animate-ticker-marquee flex items-center"
-                      style={{ '--marquee-dur': `${durSeconds}s` } as React.CSSProperties}
-                    >
-                      {/* 복사본 1 (원문 최근 3개 세트) */}
-                      {renderMessageList('set1')}
-                      {/* 복사본 2 (무한 루프 이음새 없는 연속 스크롤용 3개 세트) */}
-                      {renderMessageList('set2')}
-                    </div>
-                  );
-                })()}
-              </div>
-            </div>
-            <span className="text-[10px] text-[#c8aa6e] group-hover:text-white group-hover:translate-x-0.5 transition-all shrink-0 ml-1.5 font-bold flex items-center gap-0.5 z-10">
-              <span>💬</span>
-              <span>열기 ▶</span>
-            </span>
-          </div>
-
-          <div 
-            className="panel p-3 touch-pan-y"
-            onWheel={handleWheelScroll}
-            onTouchStart={(e) => handleWheelDragStart(e.touches[0].clientX)}
-            onTouchMove={(e) => handleWheelDragMove(e.touches[0].clientX)}
-            onTouchEnd={handleWheelDragEnd}
-            onTouchCancel={handleWheelDragEnd}
-            onMouseDown={(e) => handleWheelDragStart(e.clientX)}
-            onMouseMove={(e) => handleWheelDragMove(e.clientX)}
-            onMouseUp={handleWheelDragEnd}
-            onMouseLeave={handleWheelDragEnd}
-          >
-            <div className="flex items-center justify-between text-[11px] text-[#ffd54f] mb-2 px-1">
-              <span className="font-medium flex items-center gap-1.5">
-                <span>🎡</span>
-                <span>{'좌우 드래그로 빠른 메뉴 탐색'}</span>
-                <span className="text-[9.5px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#c8aa6e20] text-[#c8aa6e] border border-[#c8aa6e40]">
-                  {navVisibleCount} {tr('패널 뷰')}
-                </span>
-              </span>
-              <span className="text-[#8b9bb4] font-mono font-bold text-[10px]">
-                {safeWheelIdx + 1} / {activeWheelItems.length}
-              </span>
-            </div>
-
-            <div 
-              className="flex items-center justify-center gap-1.5 sm:gap-2 transition-transform duration-75 overflow-visible"
-              style={{ transform: `translateX(${wheelDragOffset}px)` }}
+          {/* D.M 티커 (영지 하단 슬림 바) */}
+          <div className="px-3 py-1 bg-[#08090b]/90 border-t border-[#242732] shrink-0">
+            <div
+              className="w-full px-2.5 py-1 rounded-lg bg-[#101216] border border-[#3d372e] hover:border-[#b89758] cursor-pointer flex items-center justify-between transition-all shadow-sm"
+              onClick={() => gm.emit('openGuestbook')}
+              title="D.M (Dimension Message)"
             >
-              <button 
-                className="text-[#8b9bb4] text-xl p-1.5 hover:text-white transition-colors active:scale-90 shrink-0 cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  SoundManager.getInstance().play('click', { x: 25 });
-                  setSelectedWheelIdx((selectedWheelIdx - 1 + activeWheelItems.length) % activeWheelItems.length);
-                }}
-                aria-label={'이전 메뉴'}
-              >
-                ◀
-              </button>
-
-              {navPanelOffsets.map(offset => {
-                const idx = (((selectedWheelIdx + offset) % activeWheelItems.length) + activeWheelItems.length) % activeWheelItems.length;
-                const item = activeWheelItems[idx];
-                const isCenter = offset === 0;
-                const absOffset = Math.abs(offset);
-
-                // 패널 총 개수별 반응형 폭 및 최소 높이
-                const cardWidth = isCenter
-                  ? (navVisibleCount === 9 ? 'clamp(82px, 8.5vw, 110px)' : navVisibleCount === 7 ? 'clamp(90px, 11vw, 120px)' : navVisibleCount === 5 ? 'clamp(100px, 15vw, 126px)' : 'clamp(112px, 32vw, 130px)')
-                  : (navVisibleCount === 9 ? 'clamp(62px, 6.8vw, 84px)' : navVisibleCount === 7 ? 'clamp(68px, 8.6vw, 90px)' : navVisibleCount === 5 ? 'clamp(74px, 11.5vw, 96px)' : 'clamp(84px, 24vw, 96px)');
-
-                const cardMinHeight = isCenter ? (navVisibleCount >= 7 ? 104 : 110) : (navVisibleCount >= 7 ? 82 : 88);
-
-                // 중앙에서 멀어질수록 부드러운 투명도 및 스케일 원근 감쇄
-                const cardOpacity = isCenter ? 1 : Math.max(0.35, 0.88 - absOffset * 0.13);
-                const cardScale = isCenter ? 1.04 : Math.max(0.78, 0.98 - absOffset * 0.05);
-
-                // 클릭 시 입체 SFX 사운드 패닝 위치 계산 (offset에 따라 좌/중/우 실시간 정렬)
-                const clickXPercent = 50 + (offset / (navVisibleCount / 2)) * 38;
-
-                return (
-                  <div
-                    key={`${item.key}_${offset}`}
-                    className={`relative flex flex-col items-center justify-center rounded-xl cursor-pointer transition-all ${
-                      isCenter ? 'hover:scale-105 active:scale-95 shadow-lg' : 'hover:opacity-85 active:scale-90'
-                    }`}
-                    style={{
-                      width: cardWidth,
-                      minHeight: cardMinHeight,
-                      transform: `scale(${cardScale})`,
-                      background: isCenter ? `${item.color}25` : '#141822',
-                      border: `${isCenter ? 2 : 1}px solid ${isCenter ? item.color : '#2c384d'}`,
-                      opacity: cardOpacity,
-                      boxShadow: isCenter ? `0 0 16px ${item.color}40` : 'none',
-                      zIndex: 10 - absOffset,
-                    }}
-                    onClick={() => {
-                      if (wheelHasSwipedRef.current) return;
-                      SoundManager.getInstance().play('click', { x: clickXPercent });
-                      if (isCenter) {
-                        handleWheelSelect(item);
-                      } else {
-                        setSelectedWheelIdx(idx);
-                      }
-                    }}
-                  >
-                    {item.key === 'codex' && registerableCodexCount > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-md animate-pulse">
-                        {registerableCodexCount}
-                      </span>
-                    )}
-                    {item.key === 'quests' && claimableQuestCount > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-md animate-pulse">
-                        {claimableQuestCount}
-                      </span>
-                    )}
-                    {item.key === 'barracks' && promotableHeroCount > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ffd54f] text-black text-[9px] font-extrabold shadow-md animate-pulse whitespace-nowrap">
-                        ✨ {tr('전직 가능')}
-                      </span>
-                    )}
-                    {item.key === 'forge' && unpurifiedEquipCount > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-md animate-pulse">
-                        {unpurifiedEquipCount}
-                      </span>
-                    )}
-                    <div className="flex items-center justify-center shrink-0" style={{ minHeight: isCenter ? 28 : 22 }}>
-                      <GameIcon name={item.key} icon={item.icon} size={isCenter ? 24 : 18} />
-                    </div>
-                    <div 
-                      className="font-bold mt-0.5 text-center px-1 line-clamp-2 leading-tight break-words max-w-full" 
-                      style={{ fontSize: isCenter ? 11.5 : (navVisibleCount >= 7 ? 8.5 : 9.5), color: isCenter ? '#fff' : '#8b9bb4' }}
-                    >
-                      {item.label}
-                    </div>
-                    {isCenter && (
-                      <div className="text-[8.5px] text-[#8b9bb4] mt-0.5 text-center px-1 line-clamp-2 leading-tight break-words max-w-full">
-                        {item.sub}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-
-              <button 
-                className="text-[#8b9bb4] text-xl p-1.5 hover:text-white transition-colors active:scale-90 shrink-0 cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  SoundManager.getInstance().play('click', { x: 75 });
-                  setSelectedWheelIdx((selectedWheelIdx + 1) % activeWheelItems.length);
-                }}
-                aria-label={'다음 메뉴'}
-              >
-                ▶
-              </button>
-            </div>
-
-            {/* 미니 페이지네이션 인디케이터 점 */}
-            <div className="flex items-center justify-center gap-1.5 mt-2.5">
-              {activeWheelItems.map((item, i) => (
-                <button
-                  key={item.key}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === safeWheelIdx ? 'w-4 bg-[#ffd54f] shadow-[0_0_8px_rgba(255,213,79,0.6)]' : 'w-1.5 bg-[#2c384d] hover:bg-[#4a5a75]'
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const dotX = 50 + ((i - safeWheelIdx) / Math.max(1, activeWheelItems.length)) * 40;
-                    SoundManager.getInstance().play('click', { x: Math.max(10, Math.min(90, dotX)) });
-                    setSelectedWheelIdx(i);
-                  }}
-                  title={item.label}
-                />
-              ))}
+              <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#b89758]/20 text-[#dcc496] font-bold shrink-0 border border-[#b89758]/40 font-mono">
+                  📢 D.M
+                </span>
+                <span className="text-[11px] text-[#9da3af] truncate">
+                  {guestbookMessages.length > 0 ? `${guestbookMessages[0].authorName}: ${guestbookMessages[0].content}` : tr('첫 번째 차원 메세지를 전송해 보세요!')}
+                </span>
+              </div>
+              <span className="text-[10px] text-[#b89758] font-bold shrink-0 ml-1">열기 ▶</span>
             </div>
           </div>
         </div>
-      ) : (
-        <>
-          {/* 바깥 영역 클릭/터치 닫기용 백드롭 오버레이 (성채 화면 상단 이미지 및 패널 외 영역만 덮어 터치 시 닫힘, 상단 자원바는 제외) */}
-          <div 
-            className="absolute inset-0 z-25 bg-black/40 backdrop-blur-[1px] cursor-pointer transition-opacity animate-fade-in" 
-            onClick={handleCloseAllDrawers}
-            onTouchEnd={handleCloseAllDrawers}
+
+        {/* 2. 방주 성채 허브 드로어 (openDrawer === 'citadel') */}
+        {openDrawer === 'citadel' && (
+          <ArkCitadelHubDrawer 
+            onClose={handleCloseDrawer} 
+            onEnterDrawer={handleEnterBuildingFromCitadel}
+            initialView={citadelInitialView}
+            highlightedBuildingId={highlightedBuildingId}
+            onClearHighlight={() => setHighlightedBuildingId(null)}
           />
-          
-          {/* 플렉스로 남은 공간을 모두 차지하는 드로어 컨테이너 (상단 이미지창 바로 아래까지 슬라이드 업) */}
-          <div 
-            className="panel-accent w-full flex-1 min-h-0 overflow-hidden flex flex-col z-30 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] mt-1.5 animate-slide-up" 
-            style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
-            onClick={e => e.stopPropagation()}
-            onPointerDown={e => e.stopPropagation()}
+        )}
+
+        {/* 3. 개별 시네마틱 워크스테이션 모달 / 바텀시트 컨테이너 (그 외 시설 진입 시) */}
+        {openDrawer && openDrawer !== 'citadel' && (
+          <FacilityWorkstationModal
+            open={Boolean(openDrawer)}
+            onClose={handleCloseDrawer}
+            title={tr(artInfo.title)}
+            subtitle={tr(artInfo.subtitle)}
+            icon={artInfo.icon}
+            bgImage={artInfo.img}
           >
-            {openDrawer === 'citadel'   && (
-              <CitadelDrawer 
-                onClose={handleCloseDrawer} 
-                onEnterDrawer={handleEnterBuildingFromCitadel}
-                highlightedBuildingId={highlightedBuildingId}
-                onClearHighlight={() => setHighlightedBuildingId(null)}
-              />
-            )}
             {openDrawer === 'barracks'  && (
               <BarracksDrawer 
                 onClose={handleCloseDrawer} 
@@ -15589,9 +15315,15 @@ export const CitadelScreen: React.FC = () => {
             {openDrawer === 'alchemy'   && <AlchemyDrawer onBack={handleCloseDrawer} />}
             {openDrawer === 'market'    && <MarketDrawer onBack={handleCloseDrawer} />}
             {openDrawer === 'cemetery'  && <CemeteryDrawer onBack={handleCloseDrawer} />}
-          </div>
-        </>
-      )}
+          </FacilityWorkstationModal>
+        )}
+      </div>
+
+      {/* ── 3. 앤티크 골드 림 퀵 독 (Quick Facility Dock) ── */}
+      <QuickFacilityDock
+        activeKey={openDrawer}
+        onSelectFacility={(key) => handleTryOpenDrawer(key)}
+      />
 
       {/* ── 🏰 던전 원정 귀환 전리품 정산 보고서 모달 ── */}
       {expeditionReport && (

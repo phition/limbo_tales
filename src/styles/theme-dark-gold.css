@@ -1,0 +1,156 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   🏰 Project Limbo Tales - Dark Gothic & Antique Gold Design Tokens
+   (다크 고딕 & 앤티크 골드 테마 시스템)
+   - 네온 발광 배제, 흑요석/흑연 음영과 채도 낮은 골드 베벨 라인
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── 🖤 배경 & 베이스 톤 (Deep Monotone & Obsidian) ── */
+  --tg-bg-abyss:           #08090b; /* 최심연 블랙 (뷰포트 외곽 및 딤드) */
+  --tg-bg-surface-dark:    #101216; /* 거점 디오라마 배경 및 메인 패널 */
+  --tg-bg-surface-elevated:#161820; /* 바텀시트 / 모듈러 카드 배경 */
+  --tg-bg-surface-card:    #1c1f29; /* 서브 카드 / 액션 덱 배경 */
+  --tg-bg-card-hover:      #232733; /* 상호작용 호버 배경 */
+
+  /* ── 🛡️ 보더 & 헤어라인 (Weathered Steel & Bronze) ── */
+  --tg-border-steel:       #242732; /* 무채색 스틸 라인 */
+  --tg-border-bronze:      #3d372e; /* 앤티크 브론즈 기본 테두리 */
+  --tg-border-gold-subtle: #5a4b35; /* 은은한 골드 헤어라인 */
+  --tg-border-gold-main:   #b89758; /* 활성 앤티크 골드 테두리 */
+  --tg-border-gold-bright: #dcc496; /* 샴페인 골드 하이라이트 */
+
+  /* ── ✨ 앤티크 골드 액센트 (Low-Saturation Gold) ── */
+  --tg-gold-deep:          #5e4b2c; /* 깊은 골드 음각/섀도우 */
+  --tg-gold-main:          #b89758; /* 테마 메인 앤티크 골드 */
+  --tg-gold-bright:        #dcc496; /* 샴페인 골드 (강조 텍스트) */
+  --tg-gold-muted:         #87724d; /* 차분한 골드 서브 */
+  --tg-gold-bg-tint:       rgba(184, 151, 88, 0.08); /* 미세한 골드 틴트 */
+
+  /* ── 📜 텍스트 타이포그래피 (High Contrast Monotone) ── */
+  --tg-text-primary:       #ededed; /* 오프화이트 주 텍스트 */
+  --tg-text-secondary:     #9da3af; /* 애쉬 그레이 설명 텍스트 */
+  --tg-text-muted:         #5c6270; /* 다크 그레이 주석/비활성 */
+  --tg-text-gold:          #dcc496; /* 샴페인 골드 강조 */
+
+  /* ── ⚠️ 상태 경고 (Low-Saturation Semantic) ── */
+  --tg-status-danger:      #8c2d2d; /* 체납/부상/사망 버건디 레드 */
+  --tg-status-warning:     #a67c38; /* 주의/대기 머스타드 골드 */
+  --tg-status-success:     #52784c; /* 완치/정상 올리브 그린 */
+}
+
+/* ── 🖤 다크 고딕 공통 유틸리티 클래스 ── */
+
+/* 1. 스모키 비네팅 오버레이 */
+.tg-vignette {
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(8, 9, 11, 0.85) 100%);
+  pointer-events: none;
+}
+
+/* 2. 앤티크 골드 베벨 프레임 (네온 없는 클래식 금박 테두리) */
+.tg-frame-gold {
+  border: 1px solid var(--tg-border-bronze);
+  box-shadow: inset 0 0 0 1px rgba(184, 151, 88, 0.15), 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.tg-frame-gold-active {
+  border: 1px solid var(--tg-border-gold-main);
+  box-shadow: inset 0 0 0 1px rgba(220, 196, 150, 0.25), 0 6px 20px rgba(0, 0, 0, 0.7);
+}
+
+/* 3. 앤티크 골드 버튼 */
+.tg-btn-gold {
+  background: linear-gradient(180deg, #2a251c 0%, #171511 100%);
+  border: 1px solid var(--tg-border-gold-subtle);
+  color: var(--tg-gold-bright);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 0 rgba(220, 196, 150, 0.2), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.tg-btn-gold:hover:not(:disabled) {
+  border-color: var(--tg-border-gold-main);
+  background: linear-gradient(180deg, #383022 0%, #211c15 100%);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.tg-btn-gold:active:not(:disabled) {
+  transform: translateY(0);
+  background: #14120e;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.tg-btn-gold:disabled {
+  opacity: 0.45;
+  border-color: var(--tg-border-steel);
+  background: #121418;
+  color: var(--tg-text-muted);
+  cursor: not-allowed;
+}
+
+/* 4. 고딕 액션 타로 카드 (Action Deck Card) */
+.tg-action-card {
+  background: linear-gradient(180deg, #1b1e27 0%, #13151b 100%);
+  border: 1px solid var(--tg-border-bronze);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tg-action-card:hover:not(.disabled) {
+  border-color: var(--tg-border-gold-subtle);
+  background: linear-gradient(180deg, #222632 0%, #171a22 100%);
+  transform: translateY(-2px);
+}
+
+.tg-action-card.active {
+  border-color: var(--tg-gold-main);
+  background: linear-gradient(180deg, #2a261c 0%, #1a1712 100%);
+  box-shadow: inset 0 0 0 1px rgba(184, 151, 88, 0.3), 0 6px 18px rgba(0, 0, 0, 0.7);
+}
+
+/* 5. 상태 뱃지 (State Badge) */
+.tg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.tg-badge-gold {
+  background: rgba(184, 151, 88, 0.12);
+  border: 1px solid var(--tg-gold-deep);
+  color: var(--tg-gold-bright);
+}
+
+.tg-badge-danger {
+  background: rgba(140, 45, 45, 0.15);
+  border: 1px solid var(--tg-status-danger);
+  color: #ff8585;
+}
+
+.tg-badge-success {
+  background: rgba(82, 120, 76, 0.15);
+  border: 1px solid var(--tg-status-success);
+  color: #9cd494;
+}
+
+/* 6. 스크롤바 커스텀 (다크 슬림) */
+.tg-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.tg-scrollbar::-webkit-scrollbar-track {
+  background: rgba(8, 9, 11, 0.5);
+}
+.tg-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--tg-border-bronze);
+  border-radius: 3px;
+}
+.tg-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--tg-gold-deep);
+}
