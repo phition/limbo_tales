@@ -10601,40 +10601,28 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   });
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0d14]">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-[#0e1320] border-b border-[#1f2738] shrink-0">
-        <div className="flex items-center gap-2">
-          <span className="text-base">💉</span>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-white">생체 복원 병동</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ef535022] text-[#ef5350] font-bold border border-[#ef535044]">
-                Lv.{infirmaryLv} ({state.infirmaryPatients.length}/{capacity}인)
-              </span>
-              <EncyclopediaBadge query="생체 복원" tab="systems" label="병동 백과" />
-            </div>
-            <div className="text-[11px] text-[#8b9bb4]">
-              {`${healPeriod}초당 HP+5 회복 (🍖${infirmaryLv <= 3 ? 2 : 3})`}
-              {infirmaryLv >= 4 ? ` · ${mpPeriod}초당 MP+4 충전 (✨1)` : ''}
-            </div>
-          </div>
+    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+      {/* ── 🏥 생체 복원 병동 서브 툴바 ── */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-[#242732] bg-[#0c0e14] shrink-0 flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#161a24] text-[#81c784] font-mono font-bold border border-[#3d372e]">
+            {healPeriod}s당 HP+5 (🍖{infirmaryLv <= 3 ? 2 : 3})
+            {infirmaryLv >= 4 ? ` · ${mpPeriod}s당 MP+4 (✨1)` : ''}
+          </span>
+          <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#ef5350]/15 text-[#ef5350] font-bold border border-[#ef5350]/30 font-mono">
+            {state.infirmaryPatients.length}/{capacity}인 수용
+          </span>
         </div>
-        <button
-          className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
-          style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-          onClick={onBack}
-          aria-label="닫기"
-        >
-          <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <EncyclopediaBadge query="생체 복원" tab="systems" label="병동 백과" />
+        </div>
       </div>
 
       {/* 메인 병실 슬롯 목록 */}
       <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
         <div className="text-xs font-bold text-[#8b9bb4] flex items-center justify-between px-1">
-          <span>🛏️ {'집중 치료 병실 슬롯 (최대 7병상)'}</span>
-          <span className="text-[11px] text-[#c8aa6e]">{'빈 병상 클릭 시 입원'}</span>
+          <span>🛏️ {tr('집중 치료 병실 슬롯 (최대 7병상)')}</span>
+          <span className="text-[11px] text-[#dcc496]">{tr('빈 병상 클릭 시 입원')}</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -10655,25 +10643,25 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               return (
                 <div
                   key={`bed_${bedIdx}`}
-                  className="relative panel-accent p-3 rounded-xl border border-[#ef535044] bg-[#121724] flex flex-col justify-between gap-2 shadow-lg transition-all"
+                  className="relative p-3 rounded-xl border border-[#3d372e] bg-[#10131a] flex flex-col justify-between gap-2.5 shadow-sm transition-all hover:border-[#b89758]/50"
                 >
-                  <div className="flex items-center justify-between border-b border-[#1f2738] pb-1.5">
+                  <div className="flex items-center justify-between border-b border-[#242732] pb-1.5">
                     <span className="text-xs font-bold text-[#ef5350] flex items-center gap-1">
-                      <span>🛏️</span> {`제 ${bedIdx + 1}병상`}
+                      <span>🛏️</span> {tr(`제 ${bedIdx + 1}병상`)}
                     </span>
                     {isFullyRecovered ? (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d55] animate-pulse">
-                        {'✨ 완치 및 충전 완료'}
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#81c784]/15 text-[#81c784] border border-[#81c784]/30 animate-pulse">
+                        {tr('✨ 완치 및 충전 완료')}
                       </span>
                     ) : (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44]">
-                        {`💉 생체 치료 중 (${healPeriod}s HP${infirmaryLv >= 4 ? ` / ${mpPeriod}s MP` : ''})`}
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#b89758]/15 text-[#dcc496] border border-[#b89758]/30">
+                        {`💉 ${tr('생체 치료 중')} (${healPeriod}s HP${infirmaryLv >= 4 ? ` / ${mpPeriod}s MP` : ''})`}
                       </span>
                     )}
                   </div>
 
                   <div className="flex items-center gap-2.5">
-                    <div className="w-11 h-11 rounded-lg bg-[#182030] border border-[#24334a] overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
+                    <div className="w-11 h-11 rounded-lg bg-[#161a24] border border-[#3d372e] overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
                       {heroPortrait ? (
                         <img
                           src={heroPortrait}
@@ -10699,15 +10687,15 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   {/* 체력 게이지 */}
                   <div>
                     <div className="flex justify-between text-[11px] mb-1">
-                      <span className="text-[#8b9bb4]">체력 회복도</span>
-                      <span className={`font-mono font-bold ${isFullHp ? 'text-[#38ef7d]' : 'text-[#ffb74d]'}`}>
+                      <span className="text-[#8b9bb4]">{tr('체력 회복도')}</span>
+                      <span className={`font-mono font-bold ${isFullHp ? 'text-[#81c784]' : 'text-[#ffd54f]'}`}>
                         {Math.round(hero.currentHp)} / {Math.round(eff.maxHp)} ({hpPct}%)
                       </span>
                     </div>
-                    <div className="h-2 rounded-full bg-[#182030] overflow-hidden border border-[#24334a]">
+                    <div className="h-2 rounded-full bg-[#161a24] overflow-hidden border border-[#242732]">
                       <div
                         className={`h-full transition-all duration-300 ${
-                          isFullHp ? 'bg-gradient-to-r from-[#11998e] to-[#38ef7d]' : 'bg-gradient-to-r from-[#f2994a] to-[#f2c94c]'
+                          isFullHp ? 'bg-[#81c784]' : 'bg-[#ffd54f]'
                         }`}
                         style={{ width: `${hpPct}%` }}
                       />
@@ -10719,35 +10707,36 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <div>
                       <div className="flex justify-between text-[11px] mb-1">
                         <span className="text-[#8b9bb4] flex items-center gap-1">
-                          <span>✨ 마나 충전도</span>
-                          <span className="text-[9px] text-[#c8aa6e] font-mono">({mpPeriod}s당 +4 MP)</span>
+                          <span>✨ {tr('마나 충전도')}</span>
+                          <span className="text-[9px] text-[#dcc496] font-mono">({mpPeriod}s당 +4 MP)</span>
                         </span>
-                        <span className={`font-mono font-bold ${hero.currentMp >= eff.maxMp ? 'text-[#c8aa6e]' : 'text-[#81d4fa]'}`}>
+                        <span className={`font-mono font-bold ${hero.currentMp >= eff.maxMp ? 'text-[#dcc496]' : 'text-[#64b5f6]'}`}>
                           {Math.round(hero.currentMp)} / {Math.round(eff.maxMp)} ({mpPct}%)
                         </span>
                       </div>
-                      <div className="h-1.5 rounded-full bg-[#182030] overflow-hidden border border-[#24334a]">
+                      <div className="h-1.5 rounded-full bg-[#161a24] overflow-hidden border border-[#242732]">
                         <div
-                          className="h-full bg-gradient-to-r from-[#0288d1] to-[#c8aa6e] transition-all duration-300"
+                          className="h-full bg-gradient-to-r from-[#1976d2] to-[#dcc496] transition-all duration-300"
                           style={{ width: `${mpPct}%` }}
                         />
                       </div>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between pt-1 border-t border-[#1f2738]">
+                  <div className="flex items-center justify-between pt-1 border-t border-[#242732]">
                     <span className="text-[10px] text-[#8b9bb4]">
                       {isFullyRecovered 
-                        ? ('원정대 복귀 준비 완료')
-                        : ('자동 치료 및 충전 중...')}
+                        ? tr('원정대 복귀 준비 완료')
+                        : tr('자동 치료 및 충전 중...')}
                     </span>
                     <button
+                      type="button"
                       className={`btn text-xs px-3 py-1 ${
-                        isFullyRecovered ? 'btn-success font-bold' : 'btn-ghost text-[#ef5350] hover:bg-[#ef535022]'
+                        isFullyRecovered ? 'btn-success font-bold' : 'btn-ghost text-[#ef5350] hover:bg-[#ef5350]/20'
                       }`}
                       onClick={() => handleDischarge(hero.id)}
                     >
-                      🚪 {'퇴원 조치'}
+                      🚪 {tr('퇴원 조치')}
                     </button>
                   </div>
                 </div>
@@ -10759,24 +10748,24 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               <div
                 key={`bed_${bedIdx}`}
                 onClick={() => setSelectedBedIdx(bedIdx)}
-                className="panel p-3.5 rounded-xl border border-dashed border-[#2a3b5c] bg-[#0e142288] hover:bg-[#141d30] hover:border-[#c8aa6e] cursor-pointer flex flex-col items-center justify-center gap-2 min-h-[140px] transition-all group"
+                className="p-3.5 rounded-xl border border-dashed border-[#3d372e] bg-[#0c0e14]/60 hover:bg-[#141822] hover:border-[#b89758] cursor-pointer flex flex-col items-center justify-center gap-2 min-h-[140px] transition-all group shadow-sm"
               >
                 <div className="w-full flex items-center justify-between text-xs text-[#8b9bb4]">
                   <span className="font-bold flex items-center gap-1">
-                    <span>🛏️</span> {`제 ${bedIdx + 1}병상`}
+                    <span>🛏️</span> {tr(`제 ${bedIdx + 1}병상`)}
                   </span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d15] text-[#38ef7d]">
-                    {'빈 병상'}
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#81c784]/15 text-[#81c784] border border-[#81c784]/30">
+                    {tr('빈 병상')}
                   </span>
                 </div>
-                <div className="text-3xl text-[#c8aa6e] group-hover:scale-110 transition-transform">
+                <div className="text-3xl text-[#dcc496] group-hover:scale-110 transition-transform">
                   ➕
                 </div>
-                <div className="text-xs font-bold text-[#cfd8dc] group-hover:text-[#c8aa6e]">
-                  {'용병 입원시키기'}
+                <div className="text-xs font-bold text-[#cfd8dc] group-hover:text-[#dcc496]">
+                  {tr('용병 입원시키기')}
                 </div>
                 <div className="text-[10px] text-[#8b9bb4]">
-                  {'클릭하여 치료/충전할 용병을 선택하세요'}
+                  {tr('클릭하여 치료/충전할 용병을 선택하세요')}
                 </div>
               </div>
             );
@@ -10784,13 +10773,13 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
           {/* 다음 레벨 잠금 병상 미리보기 */}
           {nextLockedBedCount > 0 && nextUnlockLv !== null && (
-            <div className="panel p-3 rounded-xl border border-dashed border-[#1f2738] bg-[#0a0d1488] opacity-50 flex flex-col items-center justify-center gap-1.5 min-h-[120px]">
+            <div className="p-3 rounded-xl border border-dashed border-[#242732] bg-[#08090b]/80 opacity-50 flex flex-col items-center justify-center gap-1.5 min-h-[120px]">
               <span className="text-xl">🔒</span>
               <span className="text-xs font-bold text-[#8b9bb4]">
-                {`제 ${capacity + 1}병상 (잠김)`}
+                {tr(`제 ${capacity + 1}병상 (잠김)`)}
               </span>
-              <span className="text-[10px] text-[#607d8b]">
-                {`병동 증축(Lv.${nextUnlockLv}) 시 해금`}
+              <span className="text-[10px] text-[#8b9bb4]/70">
+                {tr(`병동 증축(Lv.${nextUnlockLv}) 시 해금`)}
               </span>
             </div>
           )}
@@ -10800,13 +10789,13 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       {/* ── 🏥 용병 입원 선택 모달 ── */}
       {selectedBedIdx !== null && (
         <Modal
-          title={`🏥 ${`제 ${selectedBedIdx + 1}병상 입원 - 용병 선택`}`}
+          title={`🏥 ${tr(`제 ${selectedBedIdx + 1}병상 입원 - 용병 선택`)}`}
           open={true}
           onClose={() => setSelectedBedIdx(null)}
         >
           <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto pr-1">
             <div className="text-xs text-[#8b9bb4] mb-1">
-              {'치료/충전이 필요한 용병을 선택하세요. (파티 편성 중인 용병은 입원 시 파티에서 자동 제외됩니다)'}
+              {tr('치료/충전이 필요한 용병을 선택하세요. (파티 편성 중인 용병은 입원 시 파티에서 자동 제외됩니다)')}
             </div>
 
             {sortedBarracks.map(hero => {
@@ -10824,15 +10813,16 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               return (
                 <div
                   key={hero.id}
-                  className={`panel p-2.5 flex items-center justify-between gap-2 transition-all ${
+                  className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 transition-all ${
                     isAdmitted
-                      ? 'opacity-40 border-[#1f2738]'
+                      ? 'opacity-40 border-[#242732] bg-[#0c0e14]'
                       : isFullyHealthy
-                      ? 'border-[#24334a] bg-[#0c101a]' : 'border-[#ef535044] bg-[#141b2b] hover:border-[#c8aa6e]'
+                      ? 'border-[#3d372e] bg-[#0c0e14]' 
+                      : 'border-[#3d372e] bg-[#10131a] hover:border-[#b89758]/60 shadow-sm'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                    <div className="w-8 h-8 rounded-lg bg-[#182030] border border-[#24334a] overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
+                    <div className="w-8 h-8 rounded-lg bg-[#161a24] border border-[#3d372e] overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
                       {heroPortrait ? (
                         <img
                           src={heroPortrait}
@@ -10849,28 +10839,28 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <span className="font-bold text-xs text-white truncate">{hero.name}</span>
                         <span className="text-[10px] text-[#8b9bb4]">Lv.{hero.level}</span>
                         {inParty && (
-                          <span className="text-[9px] px-1 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
-                            원정대
+                          <span className="text-[9px] px-1 rounded bg-[#b89758]/15 text-[#dcc496] font-bold border border-[#b89758]/30">
+                            {tr('원정대')}
                           </span>
                         )}
                       </div>
                       <div className="flex items-center gap-2 text-[10px] text-[#8b9bb4]">
                         <span>HP {Math.round(hero.currentHp)}/{Math.round(eff.maxHp)}</span>
                         {infirmaryLv >= 4 && (
-                          <span className="text-[#c8aa6e]">MP {Math.round(hero.currentMp)}/{Math.round(eff.maxMp)}</span>
+                          <span className="text-[#dcc496]">MP {Math.round(hero.currentMp)}/{Math.round(eff.maxMp)}</span>
                         )}
                       </div>
                       <div className="flex items-center gap-1.5 mt-1 max-w-[140px]">
-                        <div className="h-1.5 rounded-full bg-[#182030] overflow-hidden flex-1">
+                        <div className="h-1.5 rounded-full bg-[#161a24] overflow-hidden flex-1 border border-[#242732]">
                           <div
-                            className={`h-full ${isFullHp ? 'bg-[#38ef7d]' : 'bg-[#f2994a]'}`}
+                            className={`h-full ${isFullHp ? 'bg-[#81c784]' : 'bg-[#ffd54f]'}`}
                             style={{ width: `${hpPct}%` }}
                           />
                         </div>
                         {infirmaryLv >= 4 && (
-                          <div className="h-1.5 rounded-full bg-[#182030] overflow-hidden flex-1">
+                          <div className="h-1.5 rounded-full bg-[#161a24] overflow-hidden flex-1 border border-[#242732]">
                             <div
-                              className={`h-full ${isFullMp ? 'bg-[#c8aa6e]' : 'bg-[#0288d1]'}`}
+                              className={`h-full ${isFullMp ? 'bg-[#dcc496]' : 'bg-[#64b5f6]'}`}
                               style={{ width: `${mpPct}%` }}
                             />
                           </div>
@@ -10881,15 +10871,16 @@ const InfirmaryDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                   <div>
                     {isAdmitted ? (
-                      <span className="text-xs text-[#8b9bb4] px-2 py-1">입원 중</span>
+                      <span className="text-xs text-[#8b9bb4] px-2 py-1">{tr('입원 중')}</span>
                     ) : isFullyHealthy ? (
-                      <span className="text-xs text-[#38ef7d] px-2 py-1">완전 회복 (100%)</span>
+                      <span className="text-xs text-[#81c784] px-2 py-1">{tr('완전 회복 (100%)')}</span>
                     ) : (
                       <button
+                        type="button"
                         className="btn btn-primary text-xs px-3 py-1 font-bold"
                         onClick={() => handleSelectHeroToAdmit(hero.id)}
                       >
-                        💉 입원
+                        💉 {tr('입원')}
                       </button>
                     )}
                   </div>
