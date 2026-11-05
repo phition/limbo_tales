@@ -3707,7 +3707,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
   const refreshStage = (state.tavernRefreshCount || 0) + 1;
 
   return (
-    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+    <div className="flex-1 min-h-0 flex flex-col h-full bg-[#08090b] text-[#cfd8e8] overflow-hidden">
       {/* ── 🍺 방랑 라운지 서브 툴바 (대원 현황 & 갱신 조작계) ── */}
       <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-[#242732] bg-[#0c0e14] shrink-0 flex-wrap gap-2">
         <div className="flex items-center gap-2">
@@ -3803,9 +3803,9 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto p-3 grid grid-cols-1 md:grid-cols-2 gap-2.5 content-start">
+      <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 flex flex-col gap-2.5 content-start tg-scrollbar">
         {state.tavernCandidates.length === 0 && (
-          <div className="panel p-8 text-center text-[#8b9bb4] text-sm col-span-full">
+          <div className="panel p-8 text-center text-[#8b9bb4] text-sm w-full">
             주점에 용병이 없습니다. [갱신] 버튼을 눌러보세요.
           </div>
         )}
@@ -3819,7 +3819,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
           return (
             <div
               key={cand.id}
-              className="p-3 bg-[#10131a] border border-[#3d372e] hover:border-[#b89758] rounded-xl flex flex-col gap-2.5 transition-all cursor-pointer shadow-sm hover:shadow-[0_4px_16px_rgba(184,151,88,0.15)] group"
+              className="w-full p-3 bg-[#10131a] border border-[#3d372e] hover:border-[#b89758] rounded-xl flex flex-col gap-2.5 transition-all cursor-pointer shadow-sm hover:shadow-[0_4px_16px_rgba(184,151,88,0.15)] group"
               onClick={() => setDetailCandidate(cand)}
             >
               <div className="flex items-start justify-between gap-2">
@@ -12385,9 +12385,9 @@ const QuestsDrawer: React.FC<{
       <div className="flex items-center justify-between px-4 py-2 bg-[#0c0e14] border-b border-[#3d372e]/60 shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs font-serif font-bold text-[#dcc496]">{tr('현상금 및 서사 의뢰소')}</span>
+            <span className="text-xs font-bold text-[#dcc496]">{tr('현상금 및 서사 의뢰소')}</span>
             {totalClaimable > 0 && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#b89758]/20 text-[#dcc496] font-serif font-bold border border-[#b89758]/50 shadow-[0_0_10px_rgba(184,151,88,0.25)] animate-pulse">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#b89758]/20 text-[#dcc496] font-bold border border-[#b89758]/50 shadow-[0_0_10px_rgba(184,151,88,0.25)] animate-pulse">
                 🎁 {`${totalClaimable}개 수령 가능`}
               </span>
             )}
@@ -12404,7 +12404,7 @@ const QuestsDrawer: React.FC<{
       {/* ── 4종 카테고리 탭 바 (연계 / 서브 / 에픽 / 완료 - Gothic Stone 탭) ── */}
       <div className="grid grid-cols-4 gap-1.5 p-2 bg-[#08090b] border-b border-[#3d372e]/60 shrink-0">
         <button
-          className={`py-1.5 px-1 rounded-lg text-xs font-serif font-bold transition-all flex items-center justify-center gap-1 ${
+          className={`py-1.5 px-1 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1 ${
             catTab === 'chain'
               ? 'bg-gradient-to-r from-[#2a2215] to-[#1c160e] text-[#dcc496] border border-[#b89758]/60 shadow-[0_2px_8px_rgba(0,0,0,0.5)]'
               : 'bg-[#10131a]/80 text-[#8a95a5] border border-[#222733] hover:text-[#dcc496] hover:border-[#3d372e]'
@@ -12418,7 +12418,7 @@ const QuestsDrawer: React.FC<{
         </button>
 
         <button
-          className={`py-1.5 px-1 rounded-lg text-xs font-serif font-bold transition-all flex items-center justify-center gap-1 ${
+          className={`py-1.5 px-1 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1 ${
             catTab === 'sub'
               ? 'bg-gradient-to-r from-[#2a2215] to-[#1c160e] text-[#dcc496] border border-[#b89758]/60 shadow-[0_2px_8px_rgba(0,0,0,0.5)]'
               : 'bg-[#10131a]/80 text-[#8a95a5] border border-[#222733] hover:text-[#dcc496] hover:border-[#3d372e]'
@@ -12432,7 +12432,7 @@ const QuestsDrawer: React.FC<{
         </button>
 
         <button
-          className={`py-1.5 px-1 rounded-lg text-xs font-serif font-bold transition-all flex items-center justify-center gap-1 ${
+          className={`py-1.5 px-1 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1 ${
             catTab === 'epic'
               ? 'bg-gradient-to-r from-[#2a2215] to-[#1c160e] text-[#dcc496] border border-[#b89758]/60 shadow-[0_2px_8px_rgba(0,0,0,0.5)]'
               : 'bg-[#10131a]/80 text-[#8a95a5] border border-[#222733] hover:text-[#dcc496] hover:border-[#3d372e]'
@@ -12446,7 +12446,7 @@ const QuestsDrawer: React.FC<{
         </button>
 
         <button
-          className={`py-1.5 px-1 rounded-lg text-xs font-serif font-bold transition-all flex items-center justify-center gap-1 ${
+          className={`py-1.5 px-1 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1 ${
             catTab === 'completed'
               ? 'bg-gradient-to-r from-[#2a2215] to-[#1c160e] text-[#dcc496] border border-[#b89758]/60 shadow-[0_2px_8px_rgba(0,0,0,0.5)]'
               : 'bg-[#10131a]/80 text-[#8a95a5] border border-[#222733] hover:text-[#dcc496] hover:border-[#3d372e]'
@@ -12463,7 +12463,7 @@ const QuestsDrawer: React.FC<{
         {catTab === 'sub' && !hasTavern && (
           <div className="w-full p-6 text-center flex flex-col items-center gap-2 bg-[#10131a] border border-[#3d372e] rounded-xl shadow-lg">
             <span className="text-4xl p-2.5 rounded-2xl bg-[#1a1510] border border-[#b89758]/40 shadow-inner">🍺🔒</span>
-            <span className="font-serif font-bold text-sm text-[#dcc496]">{tr('방랑자의 라운지 (주점) 건설 필요')}</span>
+            <span className="font-bold text-sm text-[#dcc496]">{tr('방랑자의 라운지 (주점) 건설 필요')}</span>
             <span className="text-xs text-[#8a95a5] max-w-[280px] leading-relaxed">
               영지에 <strong className="text-[#dcc496]">방랑자의 라운지</strong>를 건설하면 방주 생존자들의 구호 의뢰 및 마물 토벌 서브 퀘스트가 해금됩니다.
             </span>
@@ -12471,7 +12471,7 @@ const QuestsDrawer: React.FC<{
               건설 비용: 🪵 목재 80, 🪨 석재 50, 🪙 300G
             </div>
             <button
-              className="text-xs px-4 py-2 mt-2 font-serif font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b]"
+              className="text-xs px-4 py-2 mt-2 font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b]"
               onClick={() => onNavigateDrawer ? onNavigateDrawer('citadel') : onClose()}
             >
               <span>🏛️</span>
@@ -12487,7 +12487,7 @@ const QuestsDrawer: React.FC<{
               <span className="text-xl p-1.5 rounded-lg bg-[#1a1710] border border-[#b89758]/40 animate-spin">⏳</span>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-serif font-bold text-[#dcc496]">{tr('신규 의뢰 접수 대기 중')}</span>
+                  <span className="text-xs font-bold text-[#dcc496]">{tr('신규 의뢰 접수 대기 중')}</span>
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#b89758]/20 text-[#dcc496] font-mono font-bold border border-[#b89758]/40">
                     {tr('10분 쿨타임')}
                   </span>
@@ -12510,7 +12510,7 @@ const QuestsDrawer: React.FC<{
         {catTab === 'epic' && !hasEpicUnlocked && (
           <div className="w-full p-6 text-center flex flex-col items-center gap-2 bg-[#120f18] border border-[#7a4891]/50 rounded-xl shadow-lg">
             <span className="text-4xl p-2.5 rounded-2xl bg-[#1e1329] border border-[#ba68c8]/40 shadow-inner">👑🔒</span>
-            <span className="font-serif font-bold text-sm text-[#ba68c8]">{tr('영혼의 제단 건설 필요')}</span>
+            <span className="font-bold text-sm text-[#ba68c8]">{tr('영혼의 제단 건설 필요')}</span>
             <span className="text-xs text-[#cfd8e8] max-w-[280px] leading-relaxed">
               영지에 <strong className="text-[#ba68c8]">영혼의 제단</strong>을 완공하면 각 층 광폭화 보스 토벌 및 고대 방주의 기원을 추적하는 <strong className="text-[#dcc496]">3부작 에픽 시나리오</strong>가 해금됩니다.
             </span>
@@ -12518,7 +12518,7 @@ const QuestsDrawer: React.FC<{
               건설 비용: 🪨 석재 120, ⚙️ 철광 50, ✨ 에테르 30, 🪙 1,000G
             </div>
             <button
-              className="text-xs px-4 py-2 mt-2 font-serif font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#7a4891] to-[#4a2861] hover:brightness-110 text-[#f5e6ff]"
+              className="text-xs px-4 py-2 mt-2 font-bold rounded-lg shadow-md flex items-center gap-1.5 active:scale-95 transition-all bg-gradient-to-r from-[#7a4891] to-[#4a2861] hover:brightness-110 text-[#f5e6ff]"
               onClick={() => onNavigateDrawer ? onNavigateDrawer('citadel') : onClose()}
             >
               <span>🏛️</span>
@@ -12575,7 +12575,7 @@ const QuestsDrawer: React.FC<{
                     >
                       {typeTag.label}
                     </span>
-                    <span className="font-serif font-bold text-sm text-[#e2ecf8]">{tr(q.title)}</span>
+                    <span className="font-bold text-sm text-[#e2ecf8]">{tr(q.title)}</span>
                   </div>
                   <div className="text-[11px] text-[#8a95a5] mt-1 leading-relaxed">{tr(q.summary)}</div>
                 </div>
@@ -12586,11 +12586,11 @@ const QuestsDrawer: React.FC<{
                       {tr('완료됨')}
                     </span>
                   ) : isClaimable ? (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#b89758]/20 text-[#dcc496] font-serif font-bold border border-[#b89758]/50 shadow-[0_0_8px_rgba(184,151,88,0.3)] animate-pulse">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#b89758]/20 text-[#dcc496] font-bold border border-[#b89758]/50 shadow-[0_0_8px_rgba(184,151,88,0.3)] animate-pulse">
                       {tr('🎁 완료! 수령 대기')}
                     </span>
                   ) : (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#2a2417] text-[#dcc496] font-serif font-medium border border-[#3d372e]">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#2a2417] text-[#dcc496] font-medium border border-[#3d372e]">
                       {tr('진행 중')}
                     </span>
                   )}
@@ -12763,7 +12763,7 @@ const QuestsDrawer: React.FC<{
               {isClaimable && (
                 <button
                   data-tutorial-target="quest-reward"
-                  className="w-full py-2.5 text-xs font-serif font-black rounded-lg shadow-lg mt-1 flex items-center justify-center gap-1.5 transition-all active:scale-95 bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] shadow-[0_0_14px_rgba(184,151,88,0.4)] animate-pulse"
+                  className="w-full py-2.5 text-xs font-black rounded-lg shadow-lg mt-1 flex items-center justify-center gap-1.5 transition-all active:scale-95 bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] shadow-[0_0_14px_rgba(184,151,88,0.4)] animate-pulse"
                   onClick={() => {
                     if (q.epicStory) {
                       setEpicQuestForModal(q);
@@ -13296,10 +13296,10 @@ export const ExploreDrawer: React.FC<{
       <div className="flex items-center justify-between px-4 py-2 bg-[#0c0e14] border-b border-[#3d372e]/60 shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className={`text-xs font-serif font-bold ${step === 'prep' ? 'text-[#dcc496]' : 'text-[#c4a5e6]'}`}>
+            <span className={`text-xs font-bold ${step === 'prep' ? 'text-[#dcc496]' : 'text-[#c4a5e6]'}`}>
               {step === 'prep' ? tr('🏕️ 심연 강하: 탐험 채비실') : tr('🌀 강하 구역(층) 선택')}
             </span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full font-serif font-bold border ${step === 'prep' ? 'bg-[#b89758]/20 text-[#dcc496] border-[#b89758]/40' : 'bg-[#7a4891]/20 text-[#ce93d8] border-[#7a4891]/40'}`}>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${step === 'prep' ? 'bg-[#b89758]/20 text-[#dcc496] border-[#b89758]/40' : 'bg-[#7a4891]/20 text-[#ce93d8] border-[#7a4891]/40'}`}>
               {step === 'prep' ? tr('1단계: 채비') : tr('2단계: 진입')}
             </span>
           </div>
@@ -13323,7 +13323,7 @@ export const ExploreDrawer: React.FC<{
           <div className="p-3 rounded-xl bg-[#10131a] border border-[#2a261f] shadow-sm">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-serif font-bold text-[#dcc496]">🛡️ 1. {tr('원정대 포지션 배치')}</span>
+                <span className="text-xs font-bold text-[#dcc496]">🛡️ 1. {tr('원정대 포지션 배치')}</span>
                 <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded font-mono ${partyCount === 3 ? 'bg-[#34d399]/20 text-[#34d399]' : 'bg-[#ef5350]/20 text-[#ef5350]'}`}>
                   ({partyCount}/3명)
                 </span>
@@ -13466,11 +13466,11 @@ export const ExploreDrawer: React.FC<{
           {/* 2. 배낭 규격 선택 (다크 고딕 & 앤틱 골드 스타일) */}
           <div data-tutorial-target="backpack-section" className="p-3 rounded-xl bg-[#10131a] border border-[#2a261f] shadow-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-serif font-bold text-[#dcc496]">
+              <span className="text-xs font-bold text-[#dcc496]">
                 🎒 2. {tr('배낭 규격 선택')}
               </span>
               <span className="text-[10px] text-[#8a95a5]">
-                {tr('현재 선택:')} <strong className="text-[#dcc496] font-serif">{tr(selectedBag.name)}</strong>
+                {tr('현재 선택:')} <strong className="text-[#dcc496] font-bold">{tr(selectedBag.name)}</strong>
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -13495,7 +13495,7 @@ export const ExploreDrawer: React.FC<{
                   >
                     {/* 선택 체크 뱃지 */}
                     {isSelected && (
-                      <div className="absolute -top-2 -right-2 bg-[#b89758] text-[#08090b] border border-[#dcc496] font-serif font-black rounded-full w-4 h-4 flex items-center justify-center text-[10px] shadow">
+                      <div className="absolute -top-2 -right-2 bg-[#b89758] text-[#08090b] border border-[#dcc496] font-black rounded-full w-4 h-4 flex items-center justify-center text-[10px] shadow">
                         ✓
                       </div>
                     )}
@@ -13504,7 +13504,7 @@ export const ExploreDrawer: React.FC<{
                         👉 {tr('무료 배낭 선택')}
                       </div>
                     )}
-                    <div className={`text-xs font-serif font-bold ${isSelected ? 'text-[#dcc496]' : 'text-[#cfd8e8]'}`}>{tr(bName)}</div>
+                    <div className={`text-xs font-bold ${isSelected ? 'text-[#dcc496]' : 'text-[#cfd8e8]'}`}>{tr(bName)}</div>
                     <div className={`text-base font-mono font-bold my-0.5 ${isSelected ? 'text-[#dcc496]' : 'text-[#8a95a5]'}`}>
                       {bag.slots}{tr('칸')}
                     </div>
@@ -13534,7 +13534,7 @@ export const ExploreDrawer: React.FC<{
           <div className="p-3 rounded-xl bg-[#10131a] border border-[#2a261f] shadow-sm">
             <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
               <div>
-                <span className="text-xs font-serif font-bold text-[#dcc496]">
+                <span className="text-xs font-bold text-[#dcc496]">
                   🍖 3. {tr('필수 소모품 보급')}
                 </span>
                 <span className="text-[10px] text-[#8a95a5] ml-2">
@@ -13551,7 +13551,7 @@ export const ExploreDrawer: React.FC<{
                 </button>
                 <button
                   data-tutorial-target="supplies-preset-btn"
-                  className={`text-[10px] px-2.5 py-1 rounded transition-all font-serif font-bold ${
+                  className={`text-[10px] px-2.5 py-1 rounded transition-all font-bold ${
                     tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && selectedBagId === 'small' && !hasEssentialSupplies
                       ? 'bg-gradient-to-r from-[#ffd54f] to-[#ffb300] text-black border-2 border-white animate-pulse shadow-[0_0_20px_rgba(255,213,79,0.9)] scale-105'
                       : 'bg-[#1a1712] text-[#dcc496] hover:bg-[#252018] border border-[#b89758]/40'
@@ -13562,7 +13562,7 @@ export const ExploreDrawer: React.FC<{
                   {tr('기본 (1,1,1,닻1)')}
                 </button>
                 <button
-                  className="text-[10px] px-2 py-0.5 rounded bg-[#2a2215] text-[#dcc496] hover:bg-[#3d321f] font-serif font-bold border border-[#b89758]/60 transition-colors shadow-sm"
+                  className="text-[10px] px-2 py-0.5 rounded bg-[#2a2215] text-[#dcc496] hover:bg-[#3d321f] font-bold border border-[#b89758]/60 transition-colors shadow-sm"
                   onClick={() => setSupplyCounts({ torch: 3, dungeon_food: 3, pickaxe: 1, bandage: 1, holy_water: 1, key: 1, rift_anchor: 1 })}
                   title={'완전 탐사 프리셋 (횃불 3, 던전 식량 3, 나머지 각 1개)'}
                 >
@@ -13576,7 +13576,7 @@ export const ExploreDrawer: React.FC<{
               <div className="p-2.5 rounded-lg bg-[#0c0e14] border border-[#b89758]/30 text-[10px] text-[#cfd8e8] mb-2.5 leading-relaxed flex items-start gap-2">
                 <span className="text-base shrink-0">💡</span>
                 <div>
-                  <div className="text-[#dcc496] font-serif font-bold text-[11px] mb-0.5">{tr('병기창 Lv.6+ 보급품 운용 안내')}</div>
+                  <div className="text-[#dcc496] font-bold text-[11px] mb-0.5">{tr('병기창 Lv.6+ 보급품 운용 안내')}</div>
                   <div>
                     {tr('채비실에서 즉시 추가(구매)하는 보급품은')} <strong className="text-[#ffd54f]">{tr('일반 보급품')}</strong>{tr('입니다.')}{' '}
                     {tr('월등한 효과의')} <strong className="text-[#34d399]">{tr('강화 보급품(에테르 횃불 등)')}</strong>{tr('을 지참하려면')}{' '}
@@ -13615,7 +13615,7 @@ export const ExploreDrawer: React.FC<{
                           </span>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="text-xs font-serif font-bold text-white hover:text-[#dcc496]">{sLabel}</span>
+                              <span className="text-xs font-bold text-white hover:text-[#dcc496]">{sLabel}</span>
                               <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#1a1710] text-[#dcc496] font-bold border border-[#b89758]/30 flex items-center gap-1">
                                 {enhInStock > 0 ? (
                                   <>
@@ -13684,7 +13684,7 @@ export const ExploreDrawer: React.FC<{
           }`}>
             <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-serif font-bold text-[#ce93d8]">
+                <span className="text-xs font-bold text-[#ce93d8]">
                   🔮 {tr('4. 심연 촉매 & 특수 유물')}
                 </span>
                 {gm.hasCatalystCharge ? (
@@ -13710,7 +13710,7 @@ export const ExploreDrawer: React.FC<{
                 <div className="flex items-center gap-2.5 min-w-0">
                   <span className="text-2xl select-none shrink-0">🔮</span>
                   <div className="min-w-0">
-                    <div className="text-xs font-serif font-bold text-[#e1bee7]">
+                    <div className="text-xs font-bold text-[#e1bee7]">
                       {tr('광고를 시청하면 촉매 선택 슬롯이 0/2로 개방됩니다!')}
                     </div>
                     <div className="text-[10px] text-[#8a95a5] mt-0.5 leading-tight">
@@ -13722,7 +13722,7 @@ export const ExploreDrawer: React.FC<{
                 <button
                   type="button"
                   disabled={isCatalystAdLoading}
-                  className="px-3.5 py-2 rounded-lg font-serif font-bold text-xs shrink-0 bg-gradient-to-r from-[#7a4891] to-[#4a2861] hover:brightness-110 text-[#f5e6ff] flex items-center gap-1.5 shadow-md shadow-[#7a4891]/30 cursor-pointer whitespace-nowrap active:scale-95 transition-all"
+                  className="px-3.5 py-2 rounded-lg font-bold text-xs shrink-0 bg-gradient-to-r from-[#7a4891] to-[#4a2861] hover:brightness-110 text-[#f5e6ff] flex items-center gap-1.5 shadow-md shadow-[#7a4891]/30 cursor-pointer whitespace-nowrap active:scale-95 transition-all"
                   onClick={handleWatchAdForCatalyst}
                 >
                   <span>🎬</span>
@@ -13762,7 +13762,7 @@ export const ExploreDrawer: React.FC<{
                           </span>
                         )}
                       </div>
-                      <div className={`text-xs font-serif font-bold ${isSelected ? 'text-[#ce93d8]' : 'text-[#cfd8e8]'}`}>{catLabel}</div>
+                      <div className={`text-xs font-bold ${isSelected ? 'text-[#ce93d8]' : 'text-[#cfd8e8]'}`}>{catLabel}</div>
                       <div className="text-[9px] text-[#8a95a5] mt-0.5 line-clamp-2 leading-tight">{catDesc}</div>
                     </div>
                     <div className="mt-2 flex items-center justify-between">
@@ -13822,7 +13822,7 @@ export const ExploreDrawer: React.FC<{
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-serif font-bold text-sm text-[#ce93d8]">
+                        <span className="font-bold text-sm text-[#ce93d8]">
                           {isUnlocked ? `🌌 ★ ${floorNames[10]}` : '🔒 심연 11층: 무간도 (미해금)'}
                         </span>
                         {isUnlocked && (
@@ -13926,7 +13926,7 @@ export const ExploreDrawer: React.FC<{
               >
                 <div className="flex-1 pr-2">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-serif font-bold text-sm" style={{ color: isUnlocked ? (isPurified ? '#34d399' : '#dcc496') : '#8a95a5' }}>
+                    <span className="font-bold text-sm" style={{ color: isUnlocked ? (isPurified ? '#34d399' : '#dcc496') : '#8a95a5' }}>
                       {isUnlocked ? `🌀 ${floorNames[f - 1]}` : (`🔒 심연 ${f}층 (미해금)`)}
                     </span>
                     {isUnlocked && (
@@ -13961,7 +13961,7 @@ export const ExploreDrawer: React.FC<{
                 {isUnlocked && (
                   <button 
                     data-tutorial-target={f === 1 ? 'btn-descent-floor-1' : undefined}
-                    className="text-xs px-3.5 py-1.5 font-serif font-bold rounded-lg transition-all active:scale-95 shadow-md flex items-center gap-1 hover:brightness-110 shrink-0"
+                    className="text-xs px-3.5 py-1.5 font-bold rounded-lg transition-all active:scale-95 shadow-md flex items-center gap-1 hover:brightness-110 shrink-0"
                     style={{
                       background: isPurified 
                         ? 'linear-gradient(135deg, #064e3b 0%, #065f46 100%)' 
@@ -14224,7 +14224,7 @@ export const ExploreDrawer: React.FC<{
         {step === 'prep' ? (
           <button
             data-tutorial-target="btn-select-zone"
-            className={`px-5 py-2.5 rounded-lg text-xs sm:text-sm font-serif font-bold transition-all ${
+            className={`px-5 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition-all ${
               canAfford && !gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id)) 
                 ? (tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && selectedBagId === 'small' && hasEssentialSupplies
                     ? 'bg-gradient-to-r from-[#b89758] to-[#8a6e34] text-[#08090b] font-black border-2 border-[#dcc496] shadow-[0_0_20px_rgba(184,151,88,0.8)] animate-pulse'
@@ -14255,7 +14255,7 @@ export const ExploreDrawer: React.FC<{
           </button>
         ) : (
           <button
-            className="px-4 py-2 rounded-lg text-xs font-serif font-bold text-[#dcc496] bg-[#10131a] hover:bg-[#181d29] border border-[#3d372e] transition-all"
+            className="px-4 py-2 rounded-lg text-xs font-bold text-[#dcc496] bg-[#10131a] hover:bg-[#181d29] border border-[#3d372e] transition-all"
             onClick={() => {
               setStep('prep');
               if (scrollContainerRef.current) {
@@ -14384,6 +14384,8 @@ export const CitadelScreen: React.FC = () => {
   const [citadelInitialView, setCitadelInitialView] = useState<'banners' | 'bonfire' | 'facilities' | 'workstations'>('banners');
   // 영지('citadel') 패널에서 개별 건물 패널로 진입한 경우에만 닫기 시 영지로 복귀, 그 외(바로가기 등)는 즉시 완전 닫기
   const [returnToCitadelOnClose, setReturnToCitadelOnClose] = useState<boolean>(false);
+  // 🔥 상단 뷰포트 성화 조작 반투명 모달 오픈 상태
+  const [showBonfireModal, setShowBonfireModal] = useState<boolean>(false);
 
   // 📋 방명록(게시판) 실시간 메시지 상태 (하단 네비 상단 2개 미리보기용)
   const [guestbookMessages, setGuestbookMessages] = useState<GuestbookMessage[]>(() => {
@@ -14920,8 +14922,8 @@ export const CitadelScreen: React.FC = () => {
   const handleTryOpenDrawer = useCallback((key: string) => {
     setReturnToCitadelOnClose(false);
     if (key === 'bonfire') {
-      setCitadelInitialView('bonfire');
-      setOpenDrawer('citadel');
+      setShowBonfireModal(true);
+      return true;
     } else if (key === 'citadel') {
       setCitadelInitialView('banners');
       setOpenDrawer('citadel');
@@ -15279,6 +15281,119 @@ export const CitadelScreen: React.FC = () => {
             </div>
           )}
 
+          {/* 🔥 신성한 방주의 성화 상단 뷰포트 반투명 모달 */}
+          {showBonfireModal && (
+            <div
+              className="absolute inset-0 z-30 flex items-center justify-center p-3 sm:p-4 bg-black/40 backdrop-blur-[2px] animate-fade-in select-none"
+              onClick={() => setShowBonfireModal(false)}
+            >
+              <div
+                className="relative w-full max-w-sm sm:max-w-md bg-[#0a0d14]/85 border border-[#b89758]/60 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-[0_8px_32px_rgba(0,0,0,0.85)] flex flex-col gap-3.5 select-none"
+                style={{
+                  backgroundImage: "radial-gradient(ellipse at top, rgba(184, 151, 88, 0.12), transparent 70%)"
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                {/* 1. 모달 헤더 바 */}
+                <div className="flex items-center justify-between border-b border-[#3d372e]/60 pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl drop-shadow-[0_0_12px_rgba(255,140,0,0.6)]">🔥</span>
+                    <div>
+                      <h3 className="text-sm sm:text-base font-bold text-[#ededed] tracking-tight">
+                        {tr('방주의 성화')}
+                      </h3>
+                      <p className="text-[11px] text-[#9da3af]">
+                        {tr('신성한 불씨를 지펴 전 거점 생산 +15% 및 온기 3대 버프를 유지합니다.')}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowBonfireModal(false)}
+                    className="w-7 h-7 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-xs active:scale-95 text-xs"
+                    title={tr('닫기')}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* 2. 본문: 거대 불씨 + 상태 + 5스택 게이지 + 액션 버튼 */}
+                <div className="flex flex-col items-center text-center gap-2.5">
+                  <div className="flex flex-col items-center">
+                    <div className="relative my-1">
+                      <span className="text-5xl drop-shadow-[0_0_24px_rgba(255,123,37,0.7)]">🔥</span>
+                      {hasWarmth && (
+                        <span className="absolute -inset-1 rounded-full bg-[#b89758]/20 blur-md -z-10 animate-pulse" />
+                      )}
+                    </div>
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold mt-1 ${
+                      hasWarmth
+                        ? 'bg-[#b89758]/25 text-[#dcc496] border border-[#b89758]/60 shadow-[0_0_10px_rgba(184,151,88,0.3)] animate-pulse'
+                        : 'bg-[#242732] text-[#9da3af] border border-[#3d4252]'
+                    }`}>
+                      {hasWarmth ? `${tr('온기 가동 중')} (${warmthLabel})` : `${tr('성화 꺼짐')} (${state.bonfireStacks || gm.bonfireStacks || 0}/5)`}
+                    </span>
+                  </div>
+
+                  {/* 5단계 불씨 스택 블록 */}
+                  <div className="flex items-center gap-2 my-1">
+                    {[1, 2, 3, 4, 5].map(step => (
+                      <div
+                        key={step}
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold font-mono text-xs border transition-all ${
+                          step <= (gm.bonfireStacks || 0)
+                            ? 'bg-gradient-to-b from-[#dcc496] to-[#b89758] text-[#08090b] border-[#ffd54f] shadow-[0_0_10px_rgba(184,151,88,0.6)] font-black scale-105'
+                            : 'bg-[#0f121a]/80 text-[#585e6b] border-[#242732]'
+                        }`}
+                      >
+                        {step}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 버프 안내 설명 */}
+                  <p className="text-[11.5px] text-[#cfd8e8] bg-[#080a10]/60 border border-[#2a2d3a]/60 rounded-xl p-2.5 leading-relaxed max-w-sm">
+                    {hasWarmth
+                      ? tr('✨ 전 거점 생산량 +15%, 전투 EXP +20%, 용병 지속 재생 온기 버프 활성화 중')
+                      : tr('영목(목재)을 단계별로 바쳐 성화를 완충하면 5분간 온기 3대 버프가 지속됩니다.')}
+                  </p>
+
+                  {/* 조작 버튼 그룹: 영목 줍기 & 불씨 지피기 */}
+                  <div className="flex flex-col sm:flex-row gap-2 w-full pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        try { SoundManager.getInstance().play('click'); } catch {}
+                        gm.gatherWood();
+                      }}
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-[#161a24]/90 border border-[#3d4252] text-[#ededed] font-bold text-xs hover:border-[#b89758] hover:text-[#dcc496] active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                    >
+                      <span>🪵</span>
+                      <span>{tr('영목 줍기')} (+1~3)</span>
+                      <span className="text-[10px] text-[#9da3af] font-mono">({state.resources?.wood || 0})</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        try { SoundManager.getInstance().play('click'); } catch {}
+                        gm.stokeFire();
+                      }}
+                      disabled={(state.resources?.wood || 0) < ([5, 10, 15, 20, 25][state.bonfireStacks] || 5)}
+                      className="flex-1 py-2.5 px-3 rounded-xl tg-btn-gold text-xs font-bold cursor-pointer active:scale-95 transition-all shadow-md flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <span>🔥</span>
+                      <span>{hasWarmth ? tr('온기 시간 연장 (+30초)') : tr('불씨 지피기')}</span>
+                      <span className="text-[10px] opacity-80 font-mono">
+                        ({([5, 10, 15, 20, 25][state.bonfireStacks] || 5)}🪵)
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* 📜 반투명 영지 활동 & 생산 로그 패널 (배경 디오라마가 은은하게 비치도록 구성) */}
           <div className="w-full px-3 py-1.5 z-10 shrink-0">
             <div className="w-full max-w-4xl mx-auto rounded-xl border border-[#3d372e]/40 bg-[#080a10]/35 backdrop-blur-[2px] shadow-[0_4px_24px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col h-40 sm:h-48 md:h-52 transition-all">
@@ -15341,6 +15456,7 @@ export const CitadelScreen: React.FC = () => {
         <ArkCitadelHubDrawer 
           onClose={handleCloseDrawer} 
           onEnterDrawer={handleEnterBuildingFromCitadel}
+          onOpenBonfireModal={() => setShowBonfireModal(true)}
           initialView={citadelInitialView}
           highlightedBuildingId={highlightedBuildingId}
           onClearHighlight={() => setHighlightedBuildingId(null)}

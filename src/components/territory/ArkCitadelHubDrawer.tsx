@@ -12,6 +12,7 @@ import { GameManager } from '../../managers/GameManager';
 interface ArkCitadelHubDrawerProps {
   onClose: () => void;
   onEnterDrawer: (drawerKey: string) => void;
+  onOpenBonfireModal?: () => void;
   initialView?: 'banners' | 'bonfire' | 'facilities' | 'workstations';
   highlightedBuildingId?: string | null;
   onClearHighlight?: () => void;
@@ -20,6 +21,7 @@ interface ArkCitadelHubDrawerProps {
 export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   onClose,
   onEnterDrawer,
+  onOpenBonfireModal,
   initialView = 'banners',
   highlightedBuildingId,
   onClearHighlight,
@@ -183,7 +185,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
           <span className="text-xl">🏰</span>
           <div>
             <h2 className="text-sm md:text-base font-bold text-[#ededed] tracking-tight">
-              {activeView === 'bonfire' && tr('방주의 성화 (온기 관리)')}
+              {activeView === 'bonfire' && tr('방주의 성화')}
               {activeView === 'facilities' && tr('영지 시설 관리 (건설 & 증축)')}
               {activeView === 'workstations' && tr('성채 활동 거점 진입')}
               {activeView === 'banners' && tr('방주 성채 사령부 (Citadel Command)')}
@@ -223,7 +225,12 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             <div
               onClick={() => {
                 handlePlayClick();
-                setActiveView('bonfire');
+                if (onOpenBonfireModal) {
+                  onClose();
+                  onOpenBonfireModal();
+                } else {
+                  setActiveView('bonfire');
+                }
               }}
               className={`p-3.5 rounded-xl cursor-pointer transition-all border ${
                 hasWarmth
@@ -253,7 +260,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               </p>
               <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#2a2720] text-[11px] text-[#b89758] font-bold">
                 <span>{tr('영목 줍기 & 불씨 지피기')}</span>
-                <span>온기 관리 바로가기 ▶</span>
+                <span>{tr('성화 관리 바로가기')} ▶</span>
               </div>
             </div>
 

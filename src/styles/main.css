@@ -182,6 +182,11 @@ html.native-app .game-column {
 .font-noto     { font-family: 'Noto Sans KR', sans-serif; }
 .font-mono     { font-family: 'JetBrains Mono', monospace; }
 
+/* ─── 전역 폰트 통일: 한국어 궁서체/바탕체(Serif) 방지 및 Noto Sans KR 통일 ─── */
+.font-serif, [class*="font-serif"] {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
 /* ─── 카드/패널 공통 ─────────────────────────────── */
 .panel {
   background: var(--color-surface);

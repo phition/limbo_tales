@@ -569,7 +569,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
             <span>•</span>
             <span className="font-mono">v1.1.2</span>
           </div>
-          <div className="text-[10px] text-[#475569] italic font-serif">
+          <div className="text-[10px] text-[#475569] italic">
             &ldquo;어둠이 깊을수록, 성화의 불꽃은 더욱 찬란히 타오른다.&rdquo;
           </div>
         </div>

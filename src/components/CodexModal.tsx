@@ -452,7 +452,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
               <div className="text-sm font-bold text-[#ffd54f] text-center">
                 {tr(inspectedStory.name)}
               </div>
-              <div className="p-3.5 rounded-xl bg-[#0a0b10] border border-[#233550] text-xs text-[#cfd8e8] leading-relaxed italic whitespace-pre-line font-serif">
+              <div className="p-3.5 rounded-xl bg-[#0a0b10] border border-[#233550] text-xs text-[#cfd8e8] leading-relaxed italic whitespace-pre-line">
                 "{tr(inspectedStory.story || '')}"
               </div>
               <div className="p-2.5 rounded-lg bg-[#101826] border border-[#1e2e48] text-xs text-[#38ef7d] font-bold text-center">

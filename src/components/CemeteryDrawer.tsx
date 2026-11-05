@@ -96,7 +96,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
       <div className="flex items-center justify-between px-4 py-2 bg-[#0c0e14] border-b border-[#3d372e]/60 shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs font-serif font-bold text-[#dcc496]">{tr('영령의 안식처')}</span>
+            <span className="text-xs font-bold text-[#dcc496]">{tr('영령의 안식처')}</span>
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#1a1710] text-[#dcc496] font-mono font-bold border border-[#b89758]/30">
               {cemetery.length}/5{tr('명')}
             </span>
@@ -123,9 +123,9 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
         <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-gradient-to-r from-[#1a1226] to-[#0e0c18] border border-[#7a4891]/50 text-xs">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-sm shrink-0">✨</span>
-            <span className="text-[#a48cb6] shrink-0 font-serif font-medium">{tr('영령 결속 가호:')}</span>
+            <span className="text-[#a48cb6] shrink-0 font-medium">{tr('영령 결속 가호:')}</span>
             {activeBlessing ? (
-              <span className="font-serif font-bold text-[#dcc496] truncate">
+              <span className="font-bold text-[#dcc496] truncate">
                 [{activeBlessing.name}] <span className="text-[#ce93d8] font-normal">({activeBlessing.heroName})</span>
               </span>
             ) : (
@@ -133,7 +133,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
             )}
           </div>
           {activeBlessing && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ba68c8]/25 text-[#f48fb1] border border-[#ba68c8]/50 font-serif font-bold shrink-0 shadow-sm">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ba68c8]/25 text-[#f48fb1] border border-[#ba68c8]/50 font-bold shrink-0 shadow-sm">
               {tr('다음 1회 원정')}
             </span>
           )}
@@ -145,7 +145,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
         {cemetery.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center gap-2.5 bg-[#10131a]/60 border border-[#222733] rounded-xl">
             <span className="text-4xl opacity-50 select-none">🕊️</span>
-            <div className="text-xs font-serif font-bold text-[#dcc496]">
+            <div className="text-xs font-bold text-[#dcc496]">
               {tr('아직 성채 묘지에 안장된 영웅이 없습니다.')}
             </div>
             <div className="text-[11px] text-[#8a95a5]">
@@ -195,7 +195,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                   {/* 영웅 정보 */}
                   <div className="flex flex-col min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-xs font-serif font-bold text-white truncate max-w-[120px]">
+                      <span className="text-xs font-bold text-white truncate max-w-[120px]">
                         {h.name}
                       </span>
                       <span className="text-[11px] font-mono font-bold text-[#dcc496]">
@@ -226,7 +226,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                     onClick={(e) => handleToggleLock(e, h.id)}
                     className={`px-2 py-1 rounded text-xs transition-all border flex items-center gap-1 ${
                       h.isLocked
-                        ? 'bg-[#b89758]/20 text-[#dcc496] border-[#b89758]/60 hover:bg-[#b89758]/30 font-serif font-bold'
+                        ? 'bg-[#b89758]/20 text-[#dcc496] border-[#b89758]/60 hover:bg-[#b89758]/30 font-bold'
                         : 'bg-[#1a1c24] text-[#8a95a5] border border-[#2a261f] hover:text-[#dcc496] hover:border-[#3d372e]'
                     }`}
                     title={
@@ -242,7 +242,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                   </button>
 
                   {isBound && (
-                    <span className="px-2 py-0.5 rounded bg-[#ba68c8]/25 text-[#f48fb1] border border-[#ba68c8]/60 font-serif font-bold text-[10px] shadow-[0_0_10px_rgba(186,104,200,0.35)] animate-pulse">
+                    <span className="px-2 py-0.5 rounded bg-[#ba68c8]/25 text-[#f48fb1] border border-[#ba68c8]/60 font-bold text-[10px] shadow-[0_0_10px_rgba(186,104,200,0.35)] animate-pulse">
                       ✨ {tr('결속 중')}
                     </span>
                   )}
@@ -252,7 +252,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                     </span>
                   )}
                   {!isBound && !onCooldown && (
-                    <span className="text-[11px] text-[#dcc496] opacity-90 flex items-center gap-0.5 font-serif">
+                    <span className="text-[11px] text-[#dcc496] opacity-90 flex items-center gap-0.5">
                       <span>{tr('상세')}</span>
                       <span className="text-[9px]">▶</span>
                     </span>
@@ -271,7 +271,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
             type="button"
             onClick={handlePayRespectAll}
             disabled={heroCount === 0 || isAdLoading}
-            className={`w-full py-3 px-4 rounded-xl border font-serif font-bold text-sm flex items-center justify-between transition-all select-none shadow-md ${
+            className={`w-full py-3 px-4 rounded-xl border font-bold text-sm flex items-center justify-between transition-all select-none shadow-md ${
               heroCount > 0
                 ? 'bg-gradient-to-r from-[#2a2215] via-[#1c160e] to-[#2a2215] hover:from-[#3d321f] hover:to-[#2a2215] text-[#dcc496] border border-[#b89758]/60 shadow-[#b89758]/15 hover:shadow-[0_0_18px_rgba(184,151,88,0.25)] cursor-pointer active:scale-[0.98]'
                 : 'bg-[#10131a] text-[#5a6578] border-[#222733] cursor-not-allowed opacity-60'
@@ -391,7 +391,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-serif font-bold text-base text-white">
+                    <span className="font-bold text-base text-white">
                       {selectedHero.name}
                     </span>
                     <span className="text-xs text-[#dcc496] font-mono font-bold">
@@ -425,7 +425,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                   <div className="flex items-center gap-2">
                     <span className="text-2xl select-none">{blessingConfig.icon}</span>
                     <div>
-                      <span className="text-xs font-serif font-bold text-[#ba68c8] flex items-center gap-1.5">
+                      <span className="text-xs font-bold text-[#ba68c8] flex items-center gap-1.5">
                         <span>{tr('영령의 가호')}: {blessingConfig.name}</span>
                         <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ba68c8]/25 text-[#f48fb1] border border-[#ba68c8]/50">
                           {tr('다음 원정 1회 적용')}
@@ -437,7 +437,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                     </div>
                   </div>
                   {isBound ? (
-                    <span className="px-2 py-0.5 rounded bg-[#ba68c8]/25 text-[#f48fb1] border border-[#ba68c8]/60 font-serif font-bold text-[10px] shrink-0 shadow-sm animate-pulse">
+                    <span className="px-2 py-0.5 rounded bg-[#ba68c8]/25 text-[#f48fb1] border border-[#ba68c8]/60 font-bold text-[10px] shrink-0 shadow-sm animate-pulse">
                       ✨ {tr('결속 발동 중')}
                     </span>
                   ) : onCooldown ? (
@@ -445,7 +445,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                       ⏳ {tr('쿨다운')} {formatCooldownMs(cooldownLeft, lang)}
                     </span>
                   ) : (
-                    <span className="px-2 py-0.5 rounded bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40 text-[10px] font-serif shrink-0">
+                    <span className="px-2 py-0.5 rounded bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40 text-[10px] shrink-0">
                       {tr('결속 가능')}
                     </span>
                   )}
@@ -460,7 +460,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                   <div className="flex items-center gap-1.5">
                     <span className="text-base select-none">🔮</span>
                     <span className="text-[#8a95a5]">{tr('필요 공물:')}</span>
-                    <span className="font-bold text-[#dcc496] font-serif">{tr('에테르')} {ETHER_COST}{tr('개')}</span>
+                    <span className="font-bold text-[#dcc496]">{tr('에테르')} {ETHER_COST}{tr('개')}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-[11px] text-[#8a95a5]">{tr('현재 보유:')}</span>
@@ -498,7 +498,7 @@ export const CemeteryDrawer: React.FC<Props> = ({ onBack }) => {
                 <div className="p-2.5 rounded-lg bg-[#0c0e14] border border-[#2a261f] text-left text-xs">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] text-[#8a95a5]">{tr('생전 착용 무구')}</span>
-                    <span className="text-[10px] text-[#dcc496] font-serif">{tr('📦 유품 1점 회수 / 잔여 무구 유실')}</span>
+                    <span className="text-[10px] text-[#dcc496]">{tr('📦 유품 1점 회수 / 잔여 무구 유실')}</span>
                   </div>
                   <div className="flex gap-1.5 flex-wrap">
                     {selectedHero.equipmentSummary.map((eq, i) => {
