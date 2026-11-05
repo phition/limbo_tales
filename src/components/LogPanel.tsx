@@ -83,6 +83,8 @@ interface Props {
   maxHeight?: number;
   emptyMessage?: string;
   isBattle?: boolean;
+  transparent?: boolean;
+  className?: string;
 }
 
 export const LogPanel: React.FC<Props> = ({
@@ -90,6 +92,8 @@ export const LogPanel: React.FC<Props> = ({
   maxHeight = 270,
   emptyMessage = '기록된 로그가 없습니다.',
   isBattle = false,
+  transparent = false,
+  className = '',
 }) => {
   const { tr, lang } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -434,12 +438,14 @@ export const LogPanel: React.FC<Props> = ({
   };
 
   return (
-    <div className="relative w-full h-full flex flex-col min-h-0">
+    <div className={`relative w-full h-full flex flex-col min-h-0 ${className}`}>
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="panel overflow-y-auto px-3 py-2 text-sm leading-relaxed flex-1 min-h-0"
-        style={{ maxHeight, minHeight: 90 }}
+        className={`overflow-y-auto px-3 py-2 text-sm leading-relaxed flex-1 min-h-0 tg-scrollbar ${
+          transparent ? 'bg-transparent border-0' : 'panel'
+        }`}
+        style={{ maxHeight, minHeight: 60 }}
       >
         {logs.length === 0 ? (
           <div className="text-xs text-[#8b9bb4] italic py-2 text-center">

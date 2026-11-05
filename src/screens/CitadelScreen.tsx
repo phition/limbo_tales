@@ -15066,6 +15066,7 @@ export const CitadelScreen: React.FC = () => {
 
   const currentArtKey = openDrawer || selectedItem?.key || 'citadel';
   const artInfo = DRAWER_ART_META[currentArtKey] || DRAWER_ART_META.citadel;
+  const hasWarmth = (state.bonfireWarmthTime > 0 && state.bonfireStacks >= 5) || (gm.bonfireWarmthTime > 0 && gm.bonfireStacks >= 5);
   const warmthLabel = state.bonfireWarmthTime > 0
     ? `🔥 ${Math.floor(state.bonfireWarmthTime / 60)}m${String(state.bonfireWarmthTime % 60).padStart(2, '0')}s`
     : state.bonfireStacks > 0 ? `🔥 ${state.bonfireStacks}/5` : '';
@@ -15140,7 +15141,7 @@ export const CitadelScreen: React.FC = () => {
           />
 
           {/* 퀘스트 & 오프라인 결산 알림 마커 오버레이 (디오라마 좌측 상단) */}
-          {(!openDrawer || claimableQuestCount > 0 || Boolean(activeOfflineReport) || isEpicRebuildReady || registerableCodexCount > 0) && (
+          {(!openDrawer || claimableQuestCount > 0 || Boolean(activeOfflineReport) || isEpicRebuildReady || registerableCodexCount > 0 || !hasWarmth) && (
             <div className="absolute top-2.5 left-2.5 z-20 flex flex-col gap-1.5 items-start">
               {/* 👑 1차 영지 재건 완성 대서사 에픽 퀘스트 알림 마커 */}
               {isEpicRebuildReady && (
@@ -15197,6 +15198,27 @@ export const CitadelScreen: React.FC = () => {
                 </button>
               )}
 
+              {/* 🔥 성화 꺼짐 / 점화 필요 알림 마커 */}
+              {!hasWarmth && (
+                <button
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#ff7043] text-[#ff8a80] text-xs font-bold shadow-lg shadow-[#ff704344] hover:scale-105 transition-all cursor-pointer animate-fade-in"
+                  onClick={() => handleTryOpenDrawer('bonfire')}
+                  title={tr('성화가 꺼져 있습니다! 클릭하여 불씨를 지피고 온기 버프를 활성화하세요.')}
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff7043] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff7043]"></span>
+                  </span>
+                  <span className="text-sm">🔥</span>
+                  <span className="text-[11px] font-bold tracking-wide">
+                    {(state.bonfireStacks || 0) > 0 ? tr('성화 약화') : tr('성화 꺼짐')}
+                  </span>
+                  <span className="px-1.5 py-0.2 rounded-full bg-[#ff7043]/20 border border-[#ff7043]/50 text-[#ffab91] text-[10px] font-mono font-bold">
+                    {state.bonfireStacks || gm.bonfireStacks || 0}/5
+                  </span>
+                </button>
+              )}
+
               {/* 오프라인 결산 알림 마커 */}
               {activeOfflineReport && (
                 <button
@@ -15220,22 +15242,49 @@ export const CitadelScreen: React.FC = () => {
             </div>
           )}
 
-          {/* D.M 티커 (영지 하단 슬림 바) */}
-          <div className="px-3 py-1 bg-[#08090b]/90 border-t border-[#242732] shrink-0">
+          {/* 📜 반투명 영지 활동 & 생산 로그 패널 (배경 디오라마가 은은하게 비치도록 구성) */}
+          <div className="w-full px-3 py-1.5 z-10 shrink-0">
+            <div className="w-full max-w-4xl mx-auto rounded-xl border border-[#3d372e]/60 bg-[#080a10]/60 backdrop-blur-sm shadow-[0_4px_20px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col h-28 sm:h-32 transition-all">
+              <div className="px-3 py-1 bg-[#0a0d14]/70 border-b border-[#242732]/60 flex items-center justify-between text-[10px] text-[#9da3af] shrink-0">
+                <span className="flex items-center gap-1.5 font-bold text-[#dcc496]">
+                  <span>📜</span>
+                  <span>{tr('영지 활동 & 생산 로그')}</span>
+                </span>
+                <span className="font-mono text-[9px] text-[#b89758]/70 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#38ef7d] animate-pulse"></span>
+                  <span>LIVE FEED</span>
+                </span>
+              </div>
+              <div className="flex-1 min-h-0 overflow-hidden">
+                <LogPanel
+                  logs={state.citadelLogs || gm.citadelLogs || []}
+                  maxHeight={110}
+                  emptyMessage={tr('기록된 영지 로그가 없습니다.')}
+                  transparent={true}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* D.M 티커 (영지 하단 바 - 크기 및 시인성 확대) */}
+          <div className="px-3 py-2 bg-[#08090b]/85 border-t border-[#242732]/80 shrink-0 z-10 backdrop-blur-xs">
             <div
-              className="w-full px-2.5 py-1 rounded-lg bg-[#101216] border border-[#3d372e] hover:border-[#b89758] cursor-pointer flex items-center justify-between transition-all shadow-sm"
+              className="w-full max-w-4xl mx-auto px-3.5 py-2 rounded-xl bg-[#10131a]/90 border border-[#3d372e] hover:border-[#b89758] cursor-pointer flex items-center justify-between transition-all shadow-md group"
               onClick={() => gm.emit('openGuestbook')}
               title="D.M (Dimension Message)"
             >
-              <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#b89758]/20 text-[#dcc496] font-bold shrink-0 border border-[#b89758]/40 font-mono">
+              <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
+                <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#b89758]/20 text-[#ffd54f] font-bold shrink-0 border border-[#b89758]/50 font-mono tracking-wide shadow-xs">
                   📢 D.M
                 </span>
-                <span className="text-[11px] text-[#9da3af] truncate">
+                <span className="text-xs text-[#cfd8e8] group-hover:text-white transition-colors truncate">
                   {guestbookMessages.length > 0 ? `${guestbookMessages[0].authorName}: ${guestbookMessages[0].content}` : tr('첫 번째 차원 메세지를 전송해 보세요!')}
                 </span>
               </div>
-              <span className="text-[10px] text-[#b89758] font-bold shrink-0 ml-1">열기 ▶</span>
+              <span className="text-xs text-[#b89758] group-hover:text-[#ffd54f] font-bold shrink-0 ml-2 transition-colors flex items-center gap-0.5">
+                <span>열기</span>
+                <span>▶</span>
+              </span>
             </div>
           </div>
         </div>
