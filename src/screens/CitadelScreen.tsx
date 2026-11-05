@@ -6991,6 +6991,10 @@ const SkillManagerOverlay: React.FC<{
     }))
     .filter((item): item is { skill: Skill; mastery: number } => !!item.skill && !item.skill.isSpecial);
 
+  const bookTypesCount = useMemo(() => {
+    return new Set((skillBooks || []).map(b => b.bookId || b.skill?.id || b.id)).size;
+  }, [skillBooks]);
+
   return (
     <div className="absolute inset-0 z-40 flex flex-col bg-[#0b0e17] animate-slide-up">
       {/* 상단 헤더 */}
@@ -7028,7 +7032,7 @@ const SkillManagerOverlay: React.FC<{
           className={`btn flex-1 py-1.5 text-xs font-bold transition-all ${tab === 'books' ? 'btn-primary' : 'btn-ghost'}`}
           onClick={() => setTab('books')}
         >
-          📚 {tr('보유 마도서')} ({skillBooks.reduce((sum, b) => sum + (b.count || 1), 0)}{tr('권')})
+          📚 {tr('보유 마도서')} ({bookTypesCount}{tr('종')})
         </button>
       </div>
 
