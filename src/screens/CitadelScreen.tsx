@@ -13278,41 +13278,44 @@ export const ExploreDrawer: React.FC<{
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#0d111a] text-[#cfd8e8] relative">
-      {/* 상단 헤더 */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1f2738] shrink-0 bg-[#080b11]">
+    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8] relative">
+      {/* ── 상단 툴바 (중복 헤더 제거 및 다크 고딕 서브바) ── */}
+      <div className="flex items-center justify-between px-4 py-2 bg-[#0c0e14] border-b border-[#3d372e]/60 shrink-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <span className={`text-xs font-serif font-bold ${step === 'prep' ? 'text-[#dcc496]' : 'text-[#c4a5e6]'}`}>
+              {step === 'prep' ? tr('🏕️ 심연 강하: 탐험 채비실') : tr('🌀 강하 구역(층) 선택')}
+            </span>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-serif font-bold border ${step === 'prep' ? 'bg-[#b89758]/20 text-[#dcc496] border-[#b89758]/40' : 'bg-[#7a4891]/20 text-[#ce93d8] border-[#7a4891]/40'}`}>
+              {step === 'prep' ? tr('1단계: 채비') : tr('2단계: 진입')}
+            </span>
+          </div>
+          <span className={`text-[10px] px-2 py-0.2 rounded font-mono font-bold border ${
+            partyCount === 3
+              ? 'bg-[#34d399]/20 text-[#34d399] border-[#34d399]/40'
+              : 'bg-[#ef5350]/20 text-[#ef5350] border-[#ef5350]/40'
+          }`}>
+            {partyCount === 3 ? tr('정예 3인 편성 완료') : `${partyCount}/3${tr('인 편성 필요')}`}
+          </span>
+        </div>
         <div className="flex items-center gap-2">
-          <span className={`text-sm font-bold ${step === 'prep' ? 'text-[#f3e5c8]' : 'text-[#c4a5e6]'}`}>
-            {step === 'prep' ? '🏕️ 심연 강하: 탐험 채비실' : '🌀 강하 구역(층) 선택'}
-          </span>
-          <span className={`text-[10px] px-1.5 py-0.5 rounded border ${step === 'prep' ? 'bg-[#5c452444] text-[#f3e5c8] border-[#87673955]' : 'bg-[#2a113d55] text-[#c4a5e6] border-[#5c2b8a66]'}`}>
-            {step === 'prep' ? '1단계: 채비' : '2단계: 진입'}
-          </span>
           {!tutorialStepId && <EncyclopediaBadge tab="all" label="탐험 백과" />}
         </div>
-        <button
-          className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
-          style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-          onClick={onClose}
-          aria-label="닫기"
-        >
-          <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-        </button>
       </div>
 
       {/* ── 1단계: 탐험 채비 ── */}
       {step === 'prep' ? (
         <div key="step-prep" ref={scrollContainerRef} className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-4">
           {/* 1. 원정대 진형 배치 */}
-          <div className="panel p-3 bg-[#111622]">
+          <div className="p-3 rounded-xl bg-[#10131a] border border-[#2a261f] shadow-sm">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-[#ffd54f]">🛡️ 1. 원정대 포지션 배치</span>
-                <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded font-mono ${partyCount === 3 ? 'bg-[#38ef7d22] text-[#38ef7d]' : 'bg-[#ef535022] text-[#ef5350]'}`}>
+                <span className="text-xs font-serif font-bold text-[#dcc496]">🛡️ 1. {tr('원정대 포지션 배치')}</span>
+                <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded font-mono ${partyCount === 3 ? 'bg-[#34d399]/20 text-[#34d399]' : 'bg-[#ef5350]/20 text-[#ef5350]'}`}>
                   ({partyCount}/3명)
                 </span>
               </div>
-              <span className="text-[10px] text-[#8b9bb4]">버튼을 탭하여 위치 변경</span>
+              <span className="text-[10px] text-[#8a95a5]">{tr('버튼을 탭하여 위치 변경')}</span>
             </div>
 
             {/* 파티원 3인 미달 시 경고 배너 */}
@@ -13447,14 +13450,14 @@ export const ExploreDrawer: React.FC<{
             />
           </div>
 
-          {/* 2. 배낭 규격 선택 (테두리 가시성 강화) */}
-          <div data-tutorial-target="backpack-section" className="panel p-3 bg-[#111622]">
+          {/* 2. 배낭 규격 선택 (다크 고딕 & 앤틱 골드 스타일) */}
+          <div data-tutorial-target="backpack-section" className="p-3 rounded-xl bg-[#10131a] border border-[#2a261f] shadow-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#c8aa6e]">
-                🎒 2. {'배낭 규격 선택'}
+              <span className="text-xs font-serif font-bold text-[#dcc496]">
+                🎒 2. {tr('배낭 규격 선택')}
               </span>
-              <span className="text-[10px] text-[#c8aa6e]">
-                {tr('현재 선택:')} {tr(selectedBag.name)}
+              <span className="text-[10px] text-[#8a95a5]">
+                {tr('현재 선택:')} <strong className="text-[#dcc496] font-serif">{tr(selectedBag.name)}</strong>
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -13468,18 +13471,18 @@ export const ExploreDrawer: React.FC<{
                   <div
                     key={bag.id}
                     data-tutorial-target={bag.id === 'small' ? 'backpack-small' : undefined}
-                    className={`relative panel p-2.5 flex flex-col items-center justify-between text-center cursor-pointer transition-all ${
+                    className={`relative p-2.5 rounded-xl flex flex-col items-center justify-between text-center cursor-pointer transition-all ${
                       isSelected 
-                        ? 'border-2 border-[#876739] bg-[#42321944] shadow-[0_0_12px_rgba(135,103,57,0.35)] scale-[1.02]' 
+                        ? 'border-2 border-[#b89758] bg-gradient-to-br from-[#2a2215] to-[#141009] shadow-[0_0_12px_rgba(184,151,88,0.35)] scale-[1.02]' 
                         : isSmallTutorialTarget
                         ? 'border-2 border-[#c8aa6e] bg-[#c8aa6e18] shadow-[0_0_20px_rgba(200, 170, 110,0.7)] animate-pulse scale-[1.02]'
-                        : 'border border-[#27354d] bg-[#141a29] hover:border-[#415473]'
+                        : 'border border-[#222733] bg-[#0c0e14] hover:border-[#3d372e]'
                     }`}
                     onClick={() => handleSelectBag(bag.id)}
                   >
                     {/* 선택 체크 뱃지 */}
                     {isSelected && (
-                      <div className="absolute -top-2 -right-2 bg-[#5c4524] text-[#f3e5c8] border border-[#876739] font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px] shadow">
+                      <div className="absolute -top-2 -right-2 bg-[#b89758] text-[#08090b] border border-[#dcc496] font-serif font-black rounded-full w-4 h-4 flex items-center justify-center text-[10px] shadow">
                         ✓
                       </div>
                     )}
@@ -13488,23 +13491,23 @@ export const ExploreDrawer: React.FC<{
                         👉 {tr('무료 배낭 선택')}
                       </div>
                     )}
-                    <div className={`text-xs font-bold ${isSelected ? 'text-[#f3e5c8]' : 'text-white'}`}>{tr(bName)}</div>
-                    <div className={`text-base font-mono font-bold my-0.5 ${isSelected ? 'text-[#f3e5c8]' : 'text-[#8b9bb4]'}`}>
+                    <div className={`text-xs font-serif font-bold ${isSelected ? 'text-[#dcc496]' : 'text-[#cfd8e8]'}`}>{tr(bName)}</div>
+                    <div className={`text-base font-mono font-bold my-0.5 ${isSelected ? 'text-[#dcc496]' : 'text-[#8a95a5]'}`}>
                       {bag.slots}{tr('칸')}
                     </div>
-                    <div className="text-[9px] text-[#8b9bb4] mb-1">{tr(bPerk)}</div>
+                    <div className="text-[9px] text-[#8a95a5] mb-1">{tr(bPerk)}</div>
                     <div className="text-[10px] font-mono flex flex-wrap justify-center gap-1">
                       {bag.id === 'wagon' ? (
                         (gm.wagonAdCharges ?? 0) > 0 ? (
-                          <span className="text-[#38ef7d] font-bold">{tr('인증 완료')}</span>
+                          <span className="text-[#34d399] font-bold">{tr('인증 완료')}</span>
                         ) : (
-                          <span className="text-[#ffd54f] font-bold flex items-center gap-0.5">🎬 {tr('광고 시청')}</span>
+                          <span className="text-[#dcc496] font-bold flex items-center gap-0.5">🎬 {tr('광고 시청')}</span>
                         )
                       ) : Object.keys(bag.costs).length === 0 ? (
-                        <span className="text-[#66bb6a]">{tr('무료')}</span>
+                        <span className="text-[#34d399]">{tr('무료')}</span>
                       ) : (
                         Object.entries(bag.costs).map(([r, c]) => (
-                          <span key={r} className="text-[#ffd54f]">{RES_META[r]?.icon || '📦'}{c}</span>
+                          <span key={r} className="text-[#dcc496]">{RES_META[r]?.icon || '📦'}{c}</span>
                         ))
                       )}
                     </div>
@@ -13515,55 +13518,56 @@ export const ExploreDrawer: React.FC<{
           </div>
 
           {/* 3. 소모품 보급 (탭하면 상세 팝업) */}
-          <div className="panel p-3 bg-[#111622]">
+          <div className="p-3 rounded-xl bg-[#10131a] border border-[#2a261f] shadow-sm">
             <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
               <div>
-                <span className="text-xs font-bold text-[#66bb6a]">
-                  🍖 {'3. 필수 소모품 보급'}
+                <span className="text-xs font-serif font-bold text-[#dcc496]">
+                  🍖 3. {tr('필수 소모품 보급')}
                 </span>
-                <span className="text-[10px] text-[#8b9bb4] ml-2">
-                  {'(항목 탭 시 상세/재료 확인)'}
+                <span className="text-[10px] text-[#8a95a5] ml-2">
+                  {tr('(항목 탭 시 상세/재료 확인)')}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <button
-                  className="text-[10px] px-2 py-0.5 rounded bg-[#e74c3c22] text-[#ff7675] hover:bg-[#e74c3c44] border border-[#e74c3c44] transition-colors"
+                  className="text-[10px] px-2 py-0.5 rounded bg-[#ef5350]/15 text-[#ef5350] hover:bg-[#ef5350]/25 border border-[#ef5350]/30 transition-colors"
                   onClick={() => setSupplyCounts({ torch: 0, dungeon_food: 0, pickaxe: 0, bandage: 0, holy_water: 0, key: 0, rift_anchor: 0 })}
                   title={'모든 소모품 0개로 설정'}
                 >
-                  {'비우기 (0개)'}
+                  {tr('비우기 (0개)')}
                 </button>
                 <button
                   data-tutorial-target="supplies-preset-btn"
-                  className={`text-[10px] px-2.5 py-1 rounded transition-all font-bold ${
+                  className={`text-[10px] px-2.5 py-1 rounded transition-all font-serif font-bold ${
                     tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && selectedBagId === 'small' && !hasEssentialSupplies
                       ? 'bg-gradient-to-r from-[#ffd54f] to-[#ffb300] text-black border-2 border-white animate-pulse shadow-[0_0_20px_rgba(255,213,79,0.9)] scale-105'
-                      : 'bg-[#1f2738] text-[#8b9bb4] hover:text-white'
+                      : 'bg-[#1a1712] text-[#dcc496] hover:bg-[#252018] border border-[#b89758]/40'
                   }`}
                   onClick={() => setSupplyCounts({ torch: 1, dungeon_food: 1, pickaxe: 1, rift_anchor: 1, key: 0, bandage: 0, holy_water: 0 })}
                   title={'기본 프리셋 (횃불 1, 던전 식량 1, 곡괭이 1, 균열의 닻 1)'}
                 >
-                  {'기본 (1,1,1,닻1)'}
+                  {tr('기본 (1,1,1,닻1)')}
                 </button>
                 <button
-                  className="text-[10px] px-2 py-0.5 rounded bg-[#5c452433] text-[#f3e5c8] hover:bg-[#5c452455] font-bold border border-[#87673966] transition-colors"
+                  className="text-[10px] px-2 py-0.5 rounded bg-[#2a2215] text-[#dcc496] hover:bg-[#3d321f] font-serif font-bold border border-[#b89758]/60 transition-colors shadow-sm"
                   onClick={() => setSupplyCounts({ torch: 3, dungeon_food: 3, pickaxe: 1, bandage: 1, holy_water: 1, key: 1, rift_anchor: 1 })}
                   title={'완전 탐사 프리셋 (횃불 3, 던전 식량 3, 나머지 각 1개)'}
                 >
-                  {'완전 탐사 (3,3,올1)'}
+                  {tr('완전 탐사 (3,3,올1)')}
                 </button>
               </div>
             </div>
 
             {/* 💡 병기창 Lv.6+ 보급품 운용 규칙 안내 배너 */}
             {forgeLv >= 6 && (
-              <div className="p-2.5 rounded-lg bg-[#141b2d] border border-[#c8aa6e44] text-[10px] text-[#cfd8e8] mb-2.5 leading-relaxed flex items-start gap-2">
+              <div className="p-2.5 rounded-lg bg-[#0c0e14] border border-[#b89758]/30 text-[10px] text-[#cfd8e8] mb-2.5 leading-relaxed flex items-start gap-2">
                 <span className="text-base shrink-0">💡</span>
                 <div>
-                  <div className="text-[#c8aa6e] font-bold text-[11px] mb-0.5">병기창 Lv.6+ 보급품 운용 안내</div>
+                  <div className="text-[#dcc496] font-serif font-bold text-[11px] mb-0.5">{tr('병기창 Lv.6+ 보급품 운용 안내')}</div>
                   <div>
-                    채비실에서 즉시 추가(구매)하는 보급품은 <strong className="text-[#ffd54f]">일반 보급품</strong>입니다.
-                    월등한 효과의 <strong className="text-[#38ef7d]">강화 보급품(에테르 횃불 등)</strong>을 지참하려면 <strong className="text-white underline">병기창에서 미리 생산</strong>해두어야 하며, 창고 재고가 채비 시 최우선 불출됩니다!
+                    {tr('채비실에서 즉시 추가(구매)하는 보급품은')} <strong className="text-[#ffd54f]">{tr('일반 보급품')}</strong>{tr('입니다.')}{' '}
+                    {tr('월등한 효과의')} <strong className="text-[#34d399]">{tr('강화 보급품(에테르 횃불 등)')}</strong>{tr('을 지참하려면')}{' '}
+                    <strong className="text-[#dcc496] underline">{tr('병기창에서 미리 생산')}</strong>{tr('해두어야 하며, 창고 재고가 채비 시 최우선 불출됩니다!')}
                   </div>
                 </div>
               </div>
@@ -13578,7 +13582,7 @@ export const ExploreDrawer: React.FC<{
                 return (
                   <div
                     key={item.key}
-                    className="flex items-center justify-between p-2 rounded bg-[#182030] border border-[#27354d] hover:border-[#3d5070] transition-colors"
+                    className="flex items-center justify-between p-2 rounded-lg bg-[#0c0e14] border border-[#222733] hover:border-[#3d372e] transition-colors"
                   >
                     {/* 클릭 시 상세 팝업 열기 */}
                     {(() => {
@@ -13598,12 +13602,12 @@ export const ExploreDrawer: React.FC<{
                           </span>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="text-xs font-bold text-white hover:text-[#c8aa6e]">{sLabel}</span>
-                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d33] flex items-center gap-1">
+                              <span className="text-xs font-serif font-bold text-white hover:text-[#dcc496]">{sLabel}</span>
+                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#1a1710] text-[#dcc496] font-bold border border-[#b89758]/30 flex items-center gap-1">
                                 {enhInStock > 0 ? (
                                   <>
                                     <span className="text-[#ffd54f]">✨강화 {enhInStock}개</span>
-                                    <span className="text-[#8b9bb4]">|</span>
+                                    <span className="text-[#8a95a5]">|</span>
                                     <span>일반 {normInStock}개</span>
                                   </>
                                 ) : (
@@ -13618,7 +13622,7 @@ export const ExploreDrawer: React.FC<{
                                   const needBuy = Math.max(0, remain - fromNorm);
 
                                   return (fromEnh > 0 || fromNorm > 0) ? (
-                                    <span className="text-[9px] text-[#38ef7d] font-mono">
+                                    <span className="text-[9px] text-[#34d399] font-mono">
                                       ({fromEnh > 0 ? `✨${fromEnh}개 강화품 우선` : ''}{fromNorm > 0 ? `${fromEnh > 0 ? ', ' : ''}${fromNorm}개 일반재고` : ''}{needBuy > 0 ? `, ${needBuy}개 구매` : ''})
                                     </span>
                                   ) : (
@@ -13631,7 +13635,7 @@ export const ExploreDrawer: React.FC<{
                                 })()
                               )}
                             </div>
-                            <div className="text-[9px] text-[#8b9bb4] truncate">{sDesc}</div>
+                            <div className="text-[9px] text-[#8a95a5] truncate">{sDesc}</div>
                           </div>
                         </div>
                       );
@@ -13640,14 +13644,14 @@ export const ExploreDrawer: React.FC<{
                     {/* 수량 증감 버튼 */}
                     <div className="flex items-center gap-2 shrink-0 ml-2">
                       <button
-                        className="btn btn-ghost px-2 py-0.5 text-xs text-[#8b9bb4]"
+                        className="px-2 py-0.5 text-xs text-[#8a95a5] hover:text-[#dcc496] hover:bg-[#181d29] rounded border border-transparent hover:border-[#3d372e] transition-all font-mono"
                         onClick={() => setSupplyCounts({ ...supplyCounts, [item.key]: Math.max(0, cnt - 1) })}
                       >
                         -
                       </button>
-                      <span className="w-5 text-center font-mono font-bold text-sm text-[#c8aa6e]">{cnt}</span>
+                      <span className="w-5 text-center font-mono font-bold text-sm text-[#dcc496]">{cnt}</span>
                       <button
-                        className="btn btn-ghost px-2 py-0.5 text-xs text-[#c8aa6e]"
+                        className="px-2 py-0.5 text-xs text-[#dcc496] hover:bg-[#181d29] rounded border border-transparent hover:border-[#3d372e] transition-all font-mono"
                         onClick={() => setSupplyCounts({ ...supplyCounts, [item.key]: Math.min(10, cnt + 1) })}
                       >
                         +
@@ -13660,23 +13664,23 @@ export const ExploreDrawer: React.FC<{
           </div>
 
           {/* 4. 심연 촉매 & 특수 유물 (상시 표시: 미시청 시 0/0 선택 잠김, 광고 시청 시 0/2 개방) */}
-          <div className={`panel p-3 transition-all ${
+          <div className={`p-3 rounded-xl transition-all ${
             gm.hasCatalystCharge
-              ? 'bg-[#111622] border border-[#ce93d866] shadow-[0_0_15px_rgba(206,147,216,0.15)]'
-              : 'bg-[#10141f] border border-[#27354d]'
+              ? 'bg-[#120f18] border border-[#7a4891]/60 shadow-[0_0_15px_rgba(122,72,145,0.15)]'
+              : 'bg-[#10131a] border border-[#2a261f]'
           }`}>
             <div className="flex items-center justify-between mb-2 flex-wrap gap-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-[#ce93d8]">
+                <span className="text-xs font-serif font-bold text-[#ce93d8]">
                   🔮 {tr('4. 심연 촉매 & 특수 유물')}
                 </span>
                 {gm.hasCatalystCharge ? (
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d44] flex items-center gap-0.5">
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#34d399]/20 text-[#34d399] font-bold border border-[#34d399]/40 flex items-center gap-0.5">
                     <span>✨</span>
                     <span>{tr('슬롯 개방됨 (0/2)')}</span>
                   </span>
                 ) : (
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ef535015] text-[#ef5350] font-bold border border-[#ef535033] flex items-center gap-0.5">
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#ef5350]/15 text-[#ef5350] font-bold border border-[#ef5350]/30 flex items-center gap-0.5">
                     <span>🔒</span>
                     <span>{tr('슬롯 잠김 (0/0)')}</span>
                   </span>
@@ -13689,15 +13693,15 @@ export const ExploreDrawer: React.FC<{
 
             {/* 광고 미시청 시 슬롯 개방 안내 및 시청 버튼 배너 */}
             {!gm.hasCatalystCharge && (
-              <div className="mb-2.5 p-2.5 rounded-xl bg-gradient-to-r from-[#181126] to-[#120d1c] border border-[#8e24aa44] flex flex-col sm:flex-row items-center justify-between gap-2.5 shadow-sm">
+              <div className="mb-2.5 p-2.5 rounded-xl bg-gradient-to-r from-[#1c1228] to-[#100a18] border border-[#7a4891]/40 flex flex-col sm:flex-row items-center justify-between gap-2.5 shadow-sm">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <span className="text-2xl select-none shrink-0">🔮</span>
                   <div className="min-w-0">
-                    <div className="text-xs font-bold text-[#e1bee7]">
+                    <div className="text-xs font-serif font-bold text-[#e1bee7]">
                       {tr('광고를 시청하면 촉매 선택 슬롯이 0/2로 개방됩니다!')}
                     </div>
-                    <div className="text-[10px] text-[#9e9e9e] mt-0.5 leading-tight">
-                      {tr('원정 1회 동안 촉매 4종 중 최대 2개 무료 장착')} <span className="text-[#38ef7d]">({tr('묘지·성화·짐수레 광고로도 동시 개방')})</span>
+                    <div className="text-[10px] text-[#8a95a5] mt-0.5 leading-tight">
+                      {tr('원정 1회 동안 촉매 4종 중 최대 2개 무료 장착')} <span className="text-[#34d399]">({tr('묘지·성화·짐수레 광고로도 동시 개방')})</span>
                     </div>
                   </div>
                 </div>
@@ -13705,7 +13709,7 @@ export const ExploreDrawer: React.FC<{
                 <button
                   type="button"
                   disabled={isCatalystAdLoading}
-                  className="btn btn-primary text-xs px-3.5 py-2 font-bold shrink-0 bg-gradient-to-r from-[#ab47bc] to-[#7b1fa2] hover:brightness-110 border-0 flex items-center gap-1.5 shadow-lg shadow-[#ab47bc33] cursor-pointer whitespace-nowrap"
+                  className="px-3.5 py-2 rounded-lg font-serif font-bold text-xs shrink-0 bg-gradient-to-r from-[#7a4891] to-[#4a2861] hover:brightness-110 text-[#f5e6ff] flex items-center gap-1.5 shadow-md shadow-[#7a4891]/30 cursor-pointer whitespace-nowrap active:scale-95 transition-all"
                   onClick={handleWatchAdForCatalyst}
                 >
                   <span>🎬</span>
@@ -13723,12 +13727,12 @@ export const ExploreDrawer: React.FC<{
                 return (
                   <div
                     key={cat.key}
-                    className={`panel p-2 flex flex-col justify-between cursor-pointer transition-all ${
+                    className={`p-2.5 rounded-xl flex flex-col justify-between cursor-pointer transition-all ${
                       isSelected 
-                        ? 'border-2 border-[#ce93d8] bg-[#ce93d822] shadow-[0_0_12px_rgba(206,147,216,0.3)]' 
+                        ? 'border-2 border-[#ba68c8] bg-[#1a0f26] shadow-[0_0_12px_rgba(186,104,200,0.3)]' 
                         : gm.hasCatalystCharge
-                          ? 'border border-[#27354d] bg-[#141a29] hover:border-[#3d5070]'
-                          : 'border border-[#222a3d] bg-[#101522] opacity-90 hover:border-[#3d5070]'
+                          ? 'border border-[#222733] bg-[#0c0e14] hover:border-[#3d372e]'
+                          : 'border border-[#1e1b24] bg-[#0a080f] opacity-90 hover:border-[#3d372e]'
                     }`}
                     onClick={() => setInspectItem({ item: cat, type: 'catalyst' })}
                   >
@@ -13736,26 +13740,26 @@ export const ExploreDrawer: React.FC<{
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-sm">{cat.icon}</span>
                         {gm.hasCatalystCharge ? (
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#38ef7d15] text-[#38ef7d] font-bold border border-[#38ef7d33]">
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#34d399]/15 text-[#34d399] font-bold border border-[#34d399]/30">
                             {tr('무료 장착')}
                           </span>
                         ) : (
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535015] text-[#ef5350] font-bold border border-[#ef535033]">
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef5350]/15 text-[#ef5350] font-bold border border-[#ef5350]/30">
                             {tr('0/0 잠김')}
                           </span>
                         )}
                       </div>
-                      <div className={`text-xs font-bold ${isSelected ? 'text-[#ce93d8]' : 'text-white'}`}>{catLabel}</div>
-                      <div className="text-[9px] text-[#8b9bb4] mt-0.5 line-clamp-2 leading-tight">{catDesc}</div>
+                      <div className={`text-xs font-serif font-bold ${isSelected ? 'text-[#ce93d8]' : 'text-[#cfd8e8]'}`}>{catLabel}</div>
+                      <div className="text-[9px] text-[#8a95a5] mt-0.5 line-clamp-2 leading-tight">{catDesc}</div>
                     </div>
                     <div className="mt-2 flex items-center justify-between">
-                      <span className="text-[9px] text-[#c8aa6e] underline">
+                      <span className="text-[9px] text-[#dcc496] underline">
                         {tr('상세보기')}
                       </span>
                       {gm.hasCatalystCharge ? (
                         <button
                           className={`text-[9px] px-2 py-0.5 rounded font-bold transition-all ${
-                            isSelected ? 'bg-[#ce93d8] text-black' : 'bg-[#27354d] text-[#cfd8e8] hover:bg-[#3d5070]'
+                            isSelected ? 'bg-[#ce93d8] text-black' : 'bg-[#222733] text-[#cfd8e8] hover:bg-[#3d372e]'
                           }`}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -13766,7 +13770,7 @@ export const ExploreDrawer: React.FC<{
                         </button>
                       ) : (
                         <button
-                          className="text-[9px] px-2 py-0.5 rounded font-bold bg-[#8e24aa28] text-[#e1bee7] border border-[#8e24aa55] hover:bg-[#8e24aa55] flex items-center gap-0.5 transition-all"
+                          className="text-[9px] px-2 py-0.5 rounded font-bold bg-[#7a4891]/25 text-[#e1bee7] border border-[#7a4891]/50 hover:bg-[#7a4891]/40 flex items-center gap-0.5 transition-all"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleWatchAdForCatalyst();
@@ -13798,15 +13802,14 @@ export const ExploreDrawer: React.FC<{
               return (
                 <div
                   key={f}
-                  className={`panel p-3 flex flex-col gap-2.5 transition-all ${
-                    isUnlocked ? 'bg-[#181126] border-[#a742f5]' : 'opacity-40 bg-[#0a0e17] cursor-not-allowed border-[#27354d]'
+                  className={`p-3.5 rounded-xl flex flex-col gap-2.5 transition-all shadow-md ${
+                    isUnlocked ? 'bg-gradient-to-br from-[#1c1228] to-[#0c0814] border border-[#7a4891]/60' : 'opacity-40 bg-[#08090b] cursor-not-allowed border border-[#222733]'
                   }`}
-                  style={{ border: isUnlocked ? '1.5px solid #a742f5' : '1px solid #27354d' }}
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-sm text-[#ce93d8]">
+                        <span className="font-serif font-bold text-sm text-[#ce93d8]">
                           {isUnlocked ? `🌌 ★ ${floorNames[10]}` : '🔒 심연 11층: 무간도 (미해금)'}
                         </span>
                         {isUnlocked && (
@@ -13821,7 +13824,7 @@ export const ExploreDrawer: React.FC<{
                           )
                         )}
                       </div>
-                      <div className="text-[10px] text-[#cfd8dc] mt-0.5">
+                      <div className="text-[10px] text-[#8a95a5] mt-0.5">
                         {isUnlocked
                           ? `초월 엔드 컨텐츠: 1,000 위험도 단위 세부 진입로 개방 (현재 해금: 무간도 1~${gm.unlockedAviciTier || 1}계층 / 몹 Lv.40~499)`
                           : ('10층 보스 아스모데우스를 토벌해야 무간도 진입로가 영구 해금됩니다.')}
@@ -13893,10 +13896,13 @@ export const ExploreDrawer: React.FC<{
             return (
               <div
                 key={f}
-                className={`panel p-3 flex items-center justify-between cursor-pointer transition-all ${
-                  isUnlocked ? 'hover:border-[#7c3aed88] bg-gradient-to-r from-[#0f0e18] to-[#140e1f]' : 'opacity-40 bg-[#0a0e17] cursor-not-allowed'
+                className={`p-3.5 rounded-xl flex items-center justify-between cursor-pointer transition-all ${
+                  isUnlocked 
+                    ? isPurified
+                      ? 'border border-[#34d399]/40 hover:border-[#34d399]/70 bg-gradient-to-r from-[#0c1a14] to-[#08090b] shadow-[0_0_8px_rgba(52,211,153,0.15)]'
+                      : 'border border-[#3d372e] hover:border-[#b89758]/60 bg-gradient-to-r from-[#14111d] to-[#0c0e14] shadow-sm'
+                    : 'opacity-40 bg-[#08090b] cursor-not-allowed border border-[#222733]'
                 }`}
-                style={{ borderColor: isUnlocked ? (isPurified ? '#10b98166' : '#5c2b8a66') : '#27354d' }}
                 onClick={() => {
                   if (!isUnlocked) return;
                   if (f === 1 && tutorialStepId === 'TUTORIAL_DESCENT_START') {
@@ -13907,7 +13913,7 @@ export const ExploreDrawer: React.FC<{
               >
                 <div className="flex-1 pr-2">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-sm" style={{ color: isUnlocked ? '#c4a5e6' : '#8b9bb4' }}>
+                    <span className="font-serif font-bold text-sm" style={{ color: isUnlocked ? (isPurified ? '#34d399' : '#dcc496') : '#8a95a5' }}>
                       {isUnlocked ? `🌀 ${floorNames[f - 1]}` : (`🔒 심연 ${f}층 (미해금)`)}
                     </span>
                     {isUnlocked && (
@@ -13922,7 +13928,7 @@ export const ExploreDrawer: React.FC<{
                       )
                     )}
                   </div>
-                  <div className="text-[10px] text-[#8b9bb4] mt-0.5">
+                  <div className="text-[10px] text-[#8a95a5] mt-0.5">
                     {isUnlocked ? floorDescs[f - 1] : ('이전 층의 정예 마물이나 보스를 토벌하고 다음 층으로 이동해야 영구 해금됩니다.')}
                   </div>
                   {isUnlocked && (
@@ -13942,14 +13948,14 @@ export const ExploreDrawer: React.FC<{
                 {isUnlocked && (
                   <button 
                     data-tutorial-target={f === 1 ? 'btn-descent-floor-1' : undefined}
-                    className="btn text-xs px-3.5 py-1.5 font-bold rounded-lg transition-all active:scale-95 shadow-md flex items-center gap-1 hover:brightness-110 shrink-0"
+                    className="text-xs px-3.5 py-1.5 font-serif font-bold rounded-lg transition-all active:scale-95 shadow-md flex items-center gap-1 hover:brightness-110 shrink-0"
                     style={{
                       background: isPurified 
                         ? 'linear-gradient(135deg, #064e3b 0%, #065f46 100%)' 
-                        : 'linear-gradient(135deg, #13081c 0%, #220b32 100%)',
-                      color: isPurified ? '#a7f3d0' : '#cfbddf',
-                      border: isPurified ? '1px solid #059669' : '1px solid #431d66',
-                      boxShadow: isPurified ? '0 2px 66px rgba(5, 150, 105, 0.4)' : '0 2px 6px rgba(25, 8, 38, 0.5)'
+                        : 'linear-gradient(135deg, #b89758 0%, #8a6e34 100%)',
+                      color: isPurified ? '#a7f3d0' : '#08090b',
+                      border: isPurified ? '1px solid #059669' : '1px solid #dcc496',
+                      boxShadow: isPurified ? '0 2px 10px rgba(5, 150, 105, 0.4)' : '0 2px 10px rgba(184, 151, 88, 0.35)'
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -14173,12 +14179,12 @@ export const ExploreDrawer: React.FC<{
       )}
 
       {/* 하단 비용 바 & 네비게이션 */}
-      <div className="p-3 bg-[#080b11] border-t border-[#1f2738] shrink-0 flex items-center justify-between">
+      <div className="p-3 bg-[#0c0e14] border-t border-[#3d372e]/60 shrink-0 flex items-center justify-between">
         <div>
-          <div className="text-[11px] text-[#8b9bb4]">{tr('총 채비 소모 자원')}</div>
+          <div className="text-[11px] text-[#8a95a5]">{tr('총 채비 소모 자원')}</div>
           <div className="text-xs font-bold font-mono flex flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
             {Object.entries(totalCosts).length === 0 ? (
-              <span className="text-[#66bb6a]">{tr('소모 자원 없음')}</span>
+              <span className="text-[#34d399]">{tr('소모 자원 없음')}</span>
             ) : (
               Object.entries(totalCosts).map(([r, amt]) => {
                 const cur = resState[r] || 0;
@@ -14186,7 +14192,7 @@ export const ExploreDrawer: React.FC<{
                 const meta = RES_META[r] || GameManager.getResourceMeta(r);
                 const rLabel = ('label' in meta ? meta.label : (meta as any)?.name) || r;
                 return (
-                  <span key={r} className={`flex items-center gap-0.5 ${isShort ? 'text-[#ef5350]' : 'text-[#ffd54f]'}`} title={`${rLabel} ${amt}개 필요 (보유: ${cur})`}>
+                  <span key={r} className={`flex items-center gap-0.5 ${isShort ? 'text-[#ef5350]' : 'text-[#dcc496]'}`} title={`${rLabel} ${amt}개 필요 (보유: ${cur})`}>
                     <span>{meta?.icon || '📦'}</span>
                     <span>{rLabel}</span>
                     <span>{amt}</span>
@@ -14205,12 +14211,12 @@ export const ExploreDrawer: React.FC<{
         {step === 'prep' ? (
           <button
             data-tutorial-target="btn-select-zone"
-            className={`btn px-5 py-2.5 text-sm font-bold ${
+            className={`px-5 py-2.5 rounded-lg text-xs sm:text-sm font-serif font-bold transition-all ${
               canAfford && !gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id)) 
                 ? (tutorialStepId === 'TUTORIAL_PREP_SUPPLIES' && selectedBagId === 'small' && hasEssentialSupplies
-                    ? 'btn-primary animate-pulse border-2 border-[#ffd54f] shadow-[0_0_20px_rgba(255,213,79,0.8)]'
-                    : 'btn-primary')
-                : 'btn-ghost opacity-40'
+                    ? 'bg-gradient-to-r from-[#b89758] to-[#8a6e34] text-[#08090b] font-black border-2 border-[#dcc496] shadow-[0_0_20px_rgba(184,151,88,0.8)] animate-pulse'
+                    : 'bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] font-black shadow-[0_0_12px_rgba(184,151,88,0.4)] active:scale-95')
+                : 'bg-[#1a1c24] text-[#6b7588] border border-[#2a261f] cursor-not-allowed opacity-60'
             }`}
             disabled={!canAfford || gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id))}
             onClick={() => {
@@ -14229,7 +14235,6 @@ export const ExploreDrawer: React.FC<{
                 scrollContainerRef.current.scrollTop = 0;
               }
             }}
-            style={canAfford ? { background: 'linear-gradient(135deg, #1e0d2d 0%, #34144b 100%)', color: '#e2d4f0', border: '1px solid #5c2b8a', boxShadow: '0 3px 12px rgba(45, 15, 65, 0.4)' } : {}}
           >
             {gm.party.some((p: Mercenary) => state.infirmaryPatients.includes(p.id))
               ? tr('⚠️ 입원 환자 출전 불가')
@@ -14237,7 +14242,7 @@ export const ExploreDrawer: React.FC<{
           </button>
         ) : (
           <button
-            className="btn btn-ghost px-4 py-2 text-xs text-[#8b9bb4]"
+            className="px-4 py-2 rounded-lg text-xs font-serif font-bold text-[#dcc496] bg-[#10131a] hover:bg-[#181d29] border border-[#3d372e] transition-all"
             onClick={() => {
               setStep('prep');
               if (scrollContainerRef.current) {
