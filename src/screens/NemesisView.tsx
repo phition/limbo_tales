@@ -46,7 +46,7 @@ const LongPressBox: React.FC<{
         try { navigator.vibrate(30); } catch (_) {}
       }
       onLongPress();
-    }, 350);
+    }, 455); // 기존 350ms -> 30% 증가하여 455ms
   };
 
   const handleEnd = (shouldClick: boolean) => {

@@ -330,7 +330,7 @@ const LongPressBox: React.FC<{
         try { navigator.vibrate(30); } catch (_) {}
       }
       onLongPress();
-    }, 350);
+    }, 455); // 기존 350ms -> 30% 증가하여 455ms
   };
 
   const handleEnd = (shouldClick: boolean) => {
@@ -7804,6 +7804,7 @@ export const BattleScreen: React.FC = () => {
                       handleAdvanceTutorial('TUTORIAL_BATTLE_COMBO');
                     }
                   }}
+                  title={isAlive ? tr('탭: 타겟팅 / 길게 누름: 상세 정보') : undefined}
                   className={`relative p-1.5 sm:p-2 rounded-lg transition-all border flex flex-col justify-center h-[38px] sm:h-[40px] min-w-0 select-none ${
                     !isAlive
                       ? 'border-[#18202d] bg-[#0c101a] opacity-30 grayscale cursor-not-allowed shadow-none'
@@ -7898,7 +7899,7 @@ export const BattleScreen: React.FC = () => {
                       {tr(m.data.name)}
                     </span>
                   </div>
-                  <div className="flex items-center gap-0.5 shrink-0">
+                  <div className="flex items-center shrink-0">
                     <span
                       className="text-[10px] font-mono font-bold"
                       style={{
@@ -7907,19 +7908,6 @@ export const BattleScreen: React.FC = () => {
                     >
                       {isAlive ? `${Math.round(m.currentHp)}` : `💀 ${tr('사망')}`}
                     </span>
-                    {isAlive && (
-                      <button
-                        type="button"
-                        className="text-[10px] text-[#8b9bb4] hover:text-[#c8aa6e] p-0.5"
-                        title={tr('몬스터 정보 (홀드로도 확인 가능)')}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setInspectedMonster(m);
-                        }}
-                      >
-                        ℹ️
-                      </button>
-                    )}
                   </div>
                 </div>
               </LongPressBox>
