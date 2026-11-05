@@ -130,7 +130,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   const upkeepSec = gm.getUpkeepIntervalSeconds();
 
   return (
-    <div className="absolute inset-0 z-40 flex items-end md:relative md:inset-auto md:w-[540px] lg:w-[600px] xl:w-[660px] md:h-full md:shrink-0 md:z-20 select-none">
+    <div className="absolute inset-0 z-40 flex items-end md:relative md:inset-auto md:w-[620px] lg:w-[700px] xl:w-[780px] md:h-full md:shrink-0 md:z-20 select-none">
       {/* ── 배경 어두운 백드롭 (모바일 전용 백드롭, 데스크탑은 좌측 뷰가 노출되도록 숨김) ── */}
       <div
         className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity animate-fade-in md:hidden"
@@ -385,7 +385,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             - 건설 재료 나열을 배제한 깔끔한 리스트
             ═════════════════════════════════════════════════════════════ */}
         {activeView === 'facilities' && (
-          <div className="flex flex-col gap-2 max-w-2xl mx-auto w-full">
+          <div className="flex flex-col gap-2.5 max-w-3xl mx-auto w-full">
             {/* 🏛️ 방주 3대 핵심 인프라 시너지 현황 위젯 */}
             {(() => {
               const syn = gm.getInfraSynergies();
@@ -470,6 +470,9 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               const curLv = b.maxLevel || b.level;
               const isMax = curLv >= 10;
               const isConstructing = !!b.construction;
+              const remainSec = isConstructing ? Math.max(1, Math.ceil((b.construction!.startedAt + b.construction!.durationMs - now) / 1000)) : 0;
+              const progressPct = isConstructing ? Math.min(100, Math.max(0, Math.floor(((now - b.construction!.startedAt) / b.construction!.durationMs) * 100))) : 0;
+              const targetLv = b.construction?.targetLevel || b.level + 1;
               const cost = gm.getBuildingUpgradeCost(item.id, curLv);
               const canAfford = Object.entries(cost).every(
                 ([k, v]) => (state.resources as unknown as Record<string, number>)[k] >= (v as number)
@@ -486,69 +489,96 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     handlePlayClick();
                     setSelectedBuildingId(item.id);
                   }}
-                  className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer backdrop-blur-md ${
+                  className={`flex flex-col justify-center p-3.5 sm:p-4 min-h-[76px] sm:min-h-[82px] rounded-xl border transition-all cursor-pointer backdrop-blur-md ${
                     isHighlighted ? 'ring-2 ring-[#b89758] shadow-[0_0_12px_rgba(184,151,88,0.5)]' : ''
                   } ${
-                    isBuilt
+                    isConstructing
+                      ? 'bg-[#181510]/90 border-[#b89758]/60 shadow-[0_0_12px_rgba(184,151,88,0.2)]'
+                      : isBuilt
                       ? 'bg-[#151821]/80 border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1f2b]/90'
                       : 'bg-[#101216]/50 border-[#242732] opacity-60 hover:opacity-100'
                   }`}
                 >
-                  <div className="flex items-center gap-3 min-w-0 pr-2">
-                    <span className="text-2xl shrink-0 w-8 flex items-center justify-center">
-                      <GameIcon name={b.id} icon={b.icon} size={22} />
-                    </span>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-xs text-[#ededed] truncate">
-                          {b.name}
-                        </span>
-                        {isBuilt ? (
-                          <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-[#b89758]/15 text-[#dcc496] border border-[#b89758]/30">
-                            Lv.{b.level}
-                          </span>
-                        ) : (
-                          <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#262933] text-[#9da3af]">
-                            미건설
-                          </span>
-                        )}
-                        {item.drawerKey && isBuilt && (
-                          <span className="px-1 py-0.2 rounded text-[9px] font-bold bg-[#2a1e35] text-[#ce93d8]">
-                            입장가능
-                          </span>
-                        )}
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-3 min-w-0 pr-2">
+                      <div className="w-10 h-10 rounded-xl bg-[#0a0d14] border border-[#3d372e] flex items-center justify-center shrink-0 shadow-inner">
+                        <GameIcon name={b.id} icon={b.icon} size={24} />
                       </div>
-                      <p className="text-[11px] text-[#87724d] truncate mt-0.5">
-                        {b.description || tr('방주 거점 필수 인프라 시설')}
-                      </p>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-bold text-xs sm:text-sm text-[#ededed] truncate">
+                            {b.name}
+                          </span>
+                          {isBuilt ? (
+                            <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-[#b89758]/15 text-[#dcc496] border border-[#b89758]/30">
+                              Lv.{b.level}
+                            </span>
+                          ) : (
+                            <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#262933] text-[#9da3af]">
+                              미건설
+                            </span>
+                          )}
+                          {item.drawerKey && isBuilt && (
+                            <span className="px-1.5 py-0.2 rounded text-[9.5px] font-bold bg-[#2a1e35] text-[#ce93d8] border border-[#ce93d8]/30">
+                              입장가능
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11.5px] text-[#9da3af] truncate mt-0.5">
+                          {b.description || tr('방주 거점 필수 인프라 시설')}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 우측 간결 상태 뱃지 */}
+                    <div className="flex items-center gap-2 shrink-0">
+                      {isConstructing ? (
+                        <span className="px-2.5 py-1 rounded-lg text-[10.5px] font-bold font-mono bg-[#b89758]/20 text-[#ffd54f] border border-[#b89758]/50 animate-pulse flex items-center gap-1">
+                          <span>🔨</span>
+                          <span>{progressPct}% ({formatTimeLeft(remainSec, lang)})</span>
+                        </span>
+                      ) : isMax ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#262933] text-[#9da3af]">
+                          최고 레벨
+                        </span>
+                      ) : !prereq.allowed ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#1e222d] text-[#78889e]">
+                          선행 필요
+                        </span>
+                      ) : canAfford ? (
+                        <span className="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-[#52784c]/20 text-[#9cd494] border border-[#52784c]/40 flex items-center gap-1">
+                          <span>⬆</span>
+                          <span>증축 가능</span>
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded text-[10px] text-[#585e6b]">
+                          재료 부족
+                        </span>
+                      )}
+                      <span className="text-[#b89758] text-xs font-bold">▶</span>
                     </div>
                   </div>
 
-                  {/* 우측 간결 상태 뱃지 */}
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    {isConstructing ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40 animate-pulse">
-                        🔨 건설중
-                      </span>
-                    ) : isMax ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#262933] text-[#9da3af]">
-                        최고 레벨
-                      </span>
-                    ) : !prereq.allowed ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#1e222d] text-[#78889e]">
-                        선행 필요
-                      </span>
-                    ) : canAfford ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#52784c]/20 text-[#9cd494] border border-[#52784c]/40">
-                        ⬆ 증축 가능
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] text-[#585e6b]">
-                        재료 부족
-                      </span>
-                    )}
-                    <span className="text-[#87724d] text-xs">▶</span>
-                  </div>
+                  {/* 🔨 공사 진행 중일 때 하단 실시간 진행 프로그래스바 */}
+                  {isConstructing && (
+                    <div className="w-full mt-2.5 pt-2 border-t border-[#b89758]/30 flex flex-col gap-1.5 animate-fade-in">
+                      <div className="flex items-center justify-between text-[11px] font-mono">
+                        <span className="text-[#ffd54f] font-bold flex items-center gap-1.5">
+                          <span className="animate-spin text-xs">⚙️</span>
+                          <span>{tr('공사 진행 중')} (Lv.{b.level} ➔ Lv.{targetLv})</span>
+                        </span>
+                        <span className="text-[#f5ecd7] font-bold">
+                          ⏳ {formatTimeLeft(remainSec, lang)} ({progressPct}%)
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-[#08090b] rounded-full overflow-hidden border border-[#b89758]/40 p-0.5">
+                        <div
+                          className="h-full bg-gradient-to-r from-[#b89758] via-[#ffd54f] to-[#e6c88b] rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(255,213,79,0.5)]"
+                          style={{ width: `${progressPct}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -559,7 +589,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             VIEW 4: 성채 활동 시설 8종 목록 (Step 3-C)
             ═════════════════════════════════════════════════════════════ */}
         {activeView === 'workstations' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-2xl mx-auto w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto w-full">
             {WORKSTATION_ITEMS.map(item => (
               <div
                 key={item.key}
@@ -568,32 +598,33 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   if (item.key === 'arena') navigateTo('arena');
                   else onEnterDrawer(item.key);
                 }}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#151821]/95 border border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1f2b] transition-all cursor-pointer shadow-md select-none active:scale-[0.98]"
+                className="flex items-center justify-between p-4 sm:p-4.5 min-h-[96px] sm:min-h-[104px] rounded-2xl bg-gradient-to-r from-[#141822]/95 via-[#181d2a]/90 to-[#10131c]/95 border border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1f2b] hover:shadow-[0_0_18px_rgba(184,151,88,0.25)] transition-all cursor-pointer shadow-md select-none group active:scale-[0.98]"
               >
-                <div className="flex items-center gap-3 min-w-0 pr-2">
-                  <span className="text-2xl shrink-0 leading-none drop-shadow">
-                    {item.icon}
-                  </span>
+                <div className="flex items-center gap-3.5 min-w-0 pr-2">
+                  <div className="w-12 h-12 rounded-xl bg-[#0a0d14] border border-[#3d372e] group-hover:border-[#b89758] flex items-center justify-center text-3xl shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                    <span className="leading-none drop-shadow">{item.icon}</span>
+                  </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <h4 className="text-xs font-bold text-[#ededed] tracking-tight truncate">
+                      <h4 className="text-sm font-extrabold text-[#ededed] group-hover:text-[#ffd54f] tracking-tight truncate transition-colors">
                         {item.name}
                       </h4>
                       {item.badge && (
-                        <span className="px-1.5 py-0.2 rounded text-[10px] font-black bg-[#b89758] text-[#08090b]">
+                        <span className="px-1.5 py-0.2 rounded text-[10px] font-black bg-gradient-to-r from-[#b89758] to-[#937538] text-[#08090b] shadow-xs">
                           {item.badge}
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-[#9da3af] line-clamp-1 mt-0.5">
+                    <p className="text-xs text-[#9da3af] group-hover:text-[#cfd8e8] line-clamp-2 mt-1 leading-relaxed transition-colors">
                       {item.sub}
                     </p>
                   </div>
                 </div>
 
-                <span className="text-xs text-[#b89758] font-bold shrink-0">
-                  입장 ▶
-                </span>
+                <div className="px-3 py-1.5 rounded-lg bg-[#b89758]/15 border border-[#b89758]/40 group-hover:bg-[#b89758] text-[#dcc496] group-hover:text-[#08090b] text-xs font-black shrink-0 transition-all shadow-sm flex items-center gap-1">
+                  <span>{tr('입장')}</span>
+                  <span className="text-[10px]">▶</span>
+                </div>
               </div>
             ))}
           </div>

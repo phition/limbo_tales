@@ -4390,18 +4390,6 @@ const BarracksDrawer: React.FC<{
           <EncyclopediaBadge tab="classes" label="병영 백과" />
         </div>
         <div className="flex items-center gap-1.5">
-          {state.party.length >= 3 && onNavigateDrawer && (
-            <button
-              type="button"
-              className="text-[11px] px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#b89758] to-[#937538] text-[#08090b] font-black hover:brightness-110 active:scale-95 transition-all cursor-pointer shrink-0 shadow-[0_0_10px_rgba(184,151,88,0.35)] flex items-center gap-1 border border-[#e6c88b] animate-fade-in"
-              onClick={() => onNavigateDrawer('explore')}
-              title={tr('원정대 3인 편성 완료 - 심연 출정 채비실로 이동')}
-            >
-              <span>🎒</span>
-              <span>{tr('채비실 바로가기')}</span>
-              <span className="text-[10px]">▶</span>
-            </button>
-          )}
           <button
             type="button"
             className="text-[11px] px-2.5 py-1 rounded-lg bg-[#ff416c]/15 text-[#ff8099] border border-[#ff416c]/40 font-bold hover:bg-[#ff416c]/25 transition-all cursor-pointer shrink-0 shadow-sm flex items-center gap-1"
@@ -5416,24 +5404,6 @@ const BarracksDrawer: React.FC<{
                         {state.barracks.length <= 3 ? '🔒 해고(최소 3명)' : '👋 해고'}
                       </button>
                     </div>
-
-                    {/* 🎒 3인 파티가 편성되었을 때 즉시 출정 채비실 바로가기 버튼 */}
-                    {state.party.length >= 3 && onNavigateDrawer && (
-                      <button
-                        type="button"
-                        onClick={() => onNavigateDrawer('explore')}
-                        className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#241c12] via-[#382b17] to-[#241c12] border border-[#b89758] hover:border-[#f3d99e] text-[#f5ecd7] text-xs font-black flex items-center justify-between gap-2 shadow-[0_0_14px_rgba(184,151,88,0.3)] hover:shadow-[0_0_20px_rgba(184,151,88,0.5)] transition-all cursor-pointer group active:scale-[0.98] animate-fade-in"
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="text-base group-hover:scale-110 transition-transform">🎒</span>
-                          <span>{tr('3인 원정대 편성 완료! 채비실로 이동')}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-[11px] text-[#ffd54f] font-bold">
-                          <span>채비실 이동</span>
-                          <span className="group-hover:translate-x-1 transition-transform">▶</span>
-                        </div>
-                      </button>
-                    )}
                   </div>
                 );
               })()}
@@ -6245,35 +6215,6 @@ const BarracksDrawer: React.FC<{
             onClose={() => setShowSynergyModal(false)}
             party={state.party}
           />
-
-          {/* ── 🎒 3인 원정대 편성 완료 시 하단 고정 채비실 바로가기 바 ── */}
-          {state.party.length >= 3 && onNavigateDrawer && (
-            <div className="shrink-0 p-2.5 sm:px-4 py-2 bg-gradient-to-r from-[#120f09] via-[#20180d] to-[#120f09] border-t border-[#b89758]/60 shadow-[0_-4px_16px_rgba(0,0,0,0.8)] flex items-center justify-between gap-3 z-10 animate-fade-in">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-lg bg-[#b89758]/20 border border-[#b89758]/60 flex items-center justify-center text-lg shrink-0 shadow-[0_0_10px_rgba(184,151,88,0.3)]">
-                  🎒
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-black text-[#f5ecd7] flex items-center gap-2">
-                    <span>{tr('3인 원정대 편성 완료')}</span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d]/20 text-[#38ef7d] border border-[#38ef7d]/40 font-mono font-bold">READY (3/3)</span>
-                  </div>
-                  <div className="text-[10.5px] text-[#c8aa6e] truncate">
-                    {state.party.map(p => p.name).join(' · ')}
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#b89758] to-[#937538] hover:brightness-110 active:scale-95 text-[#08090b] text-xs font-black shrink-0 flex items-center gap-1.5 shadow-[0_0_14px_rgba(184,151,88,0.4)] border border-[#e6c88b] transition-all cursor-pointer"
-                onClick={() => onNavigateDrawer('explore')}
-              >
-                <span>{tr('출정 채비실로 이동')}</span>
-                <span className="text-xs">▶</span>
-              </button>
-            </div>
-          )}
-
         </>
       ))}
 

@@ -59,7 +59,7 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
   };
 
   return (
-    <div className="absolute inset-0 z-40 flex items-end md:relative md:inset-auto md:w-[540px] lg:w-[600px] xl:w-[660px] md:h-full md:shrink-0 md:z-20 select-none">
+    <div className="absolute inset-0 z-40 flex items-end md:relative md:inset-auto md:w-[620px] lg:w-[700px] xl:w-[780px] md:h-full md:shrink-0 md:z-20 select-none">
       {/* ── 배경 어둡고 깊은 섀도우 딤드 (모바일 전용 백드롭, 데스크탑은 좌측 뷰가 노출되도록 숨김) ── */}
       <div
         className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity animate-fade-in md:hidden"
