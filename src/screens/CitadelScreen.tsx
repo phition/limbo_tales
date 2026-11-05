@@ -11528,57 +11528,57 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   }, [allAvailableHeroes, selectedHeroFilter]);
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0e17] text-[#cfd8e8]">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1f2738] bg-[#070a10] shrink-0">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">🧪</span>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-[#26a69a]">{'에테르 연금 공방'}</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#26a69a22] text-[#26a69a] font-bold">
-                Lv.{alchemyLv}
-              </span>
-              {isPaused && (
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535022] text-[#ef5350] font-bold">
-                  [가동 중단됨]
-                </span>
-              )}
-              <EncyclopediaBadge tab="skills" label="연금 백과" />
-            </div>
-            <div className="text-[10px] text-[#80cbc4]">
-              {'에테르'}: <span className="font-mono font-bold">✨ {state.resources.ether.toLocaleString()}</span>
-              <span className="text-[#ffd54f] ml-2 font-bold">🪙 {state.resources.gold.toLocaleString()}G</span>
-              <span className="text-[#8b9bb4] ml-2 font-mono">최대 강화 한도: Lv.{maxEnhanceAllowed}</span>
-              <span className="text-[#38ef7d] ml-2 font-bold">✨ 특전: 인챈트 -{discountPct}%</span>
-            </div>
-          </div>
+    <div className="flex flex-col h-full bg-[#08090b] text-[#cfd8e8]">
+      {/* ── 🧪 에테르 연금 공방 서브 툴바 ── */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-[#242732] bg-[#0c0e14] shrink-0 flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#161a24] text-[#64b5f6] font-mono font-bold border border-[#3d372e]">
+            ✨ {state.resources.ether.toLocaleString()}
+          </span>
+          <span className="text-[10px] text-[#dcc496] font-mono font-bold">
+            최대 Lv.{maxEnhanceAllowed}
+          </span>
+          <span className="text-[10px] text-[#81c784] font-bold">
+            ✨ 특전: 인챈트 -{discountPct}%
+          </span>
+          {isPaused && (
+            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef5350]/15 text-[#ef5350] font-bold border border-[#ef5350]/30">
+              [{tr('가동 중단됨')}]
+            </span>
+          )}
         </div>
-        <button
-          className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
-          style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
-          onClick={onBack}
-          aria-label="닫기"
-        >
-          <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <EncyclopediaBadge tab="skills" label="연금 백과" />
+        </div>
       </div>
 
-      {/* 탭 전환 바 */}
-      <div className="flex gap-1 p-2 bg-[#0e121d] border-b border-[#1f2738] shrink-0">
+      {/* ── 🧪 탭 전환 바 ── */}
+      <div className="grid grid-cols-2 gap-1 p-2 bg-[#0a0d14] border-b border-[#242732] shrink-0">
         <button
-          className={`btn flex-1 py-1.5 text-xs font-bold transition-all ${activeTab === 'enhance' ? 'btn-primary' : 'btn-ghost'}`}
+          type="button"
+          className={`py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            activeTab === 'enhance'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+          }`}
           onClick={() => setActiveTab('enhance')}
         >
-          ✨ {`습득 스킬 강화 (${allLearnedSkills.length}개)`}
+          <span>✨</span>
+          <span>{tr(`습득 스킬 강화 (${allLearnedSkills.length}개)`)}</span>
         </button>
         <button
-          className={`btn flex-1 py-1.5 text-xs font-bold transition-all ${
-            activeTab === 'enchant' ? 'btn-primary' : isEnchantUnlocked ? 'btn-ghost' : 'btn-ghost opacity-50'
+          type="button"
+          className={`py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            activeTab === 'enchant'
+              ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.25)]'
+              : isEnchantUnlocked
+              ? 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
+              : 'bg-[#10131a]/50 text-[#8b9bb4]/50 border border-[#242732]/50 cursor-not-allowed'
           }`}
           onClick={() => setActiveTab('enchant')}
         >
-          {isEnchantUnlocked ? '🔮 마도 인챈트' : '🔒 Lv.3 인챈트'}
+          <span>🔮</span>
+          <span>{isEnchantUnlocked ? tr('마도 인챈트') : '🔒 Lv.3 인챈트'}</span>
         </button>
       </div>
 
@@ -11587,18 +11587,19 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <div className="flex-1 min-h-0 flex flex-col">
           {/* ── 영웅 필터 탭 바 (상단 고정 shrink-0) ── */}
           {allAvailableHeroes.length > 0 && (
-            <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0a0d16] border-b border-[#1f2738] overflow-x-auto shrink-0 scrollbar-none shadow-inner">
+            <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0c0e14] border-b border-[#242732] overflow-x-auto shrink-0 scrollbar-none shadow-inner">
               <button
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all flex items-center gap-1.5 ${
+                type="button"
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all flex items-center gap-1.5 cursor-pointer ${
                   selectedHeroFilter === 'all'
-                    ? 'bg-[#26a69a] text-black font-extrabold shadow-sm'
-                    : 'bg-[#14161c] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#222d42]'
+                    ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-sm'
+                    : 'bg-[#10131a] text-[#8b9bb4] hover:text-white border border-[#242732] hover:border-[#3d372e]'
                 }`}
                 onClick={() => setSelectedHeroFilter('all')}
               >
-                <span>전체 용병</span>
+                <span>{tr('전체 용병')}</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
-                  selectedHeroFilter === 'all' ? 'bg-black/30 text-black font-black' : 'bg-[#0a0d14] text-[#80cbc4]'
+                  selectedHeroFilter === 'all' ? 'bg-[#b89758]/30 text-[#dcc496]' : 'bg-[#161a24] text-[#8b9bb4]'
                 }`}>
                   {allLearnedSkills.length}
                 </span>
@@ -11610,10 +11611,11 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 return (
                   <button
                     key={h.id}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all flex items-center gap-1.5 ${
+                    type="button"
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all flex items-center gap-1.5 cursor-pointer ${
                       isSelected
-                        ? 'bg-[#26a69a] text-black font-extrabold shadow-sm'
-                        : 'bg-[#14161c] text-[#8b9bb4] hover:text-white hover:bg-[#1a2338] border border-[#222d42]'
+                        ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-sm'
+                        : 'bg-[#10131a] text-[#8b9bb4] hover:text-white border border-[#242732] hover:border-[#3d372e]'
                     }`}
                     onClick={() => setSelectedHeroFilter(h.id)}
                   >
@@ -11621,8 +11623,8 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <span>{h.name}</span>
                     <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
                       isSelected
-                        ? 'bg-black/30 text-black font-black'
-                        : count > 0 ? 'bg-[#26a69a22] text-[#26a69a]' : 'bg-[#0a0d14] text-[#55657e]'
+                        ? 'bg-[#b89758]/30 text-[#dcc496]'
+                        : count > 0 ? 'bg-[#161a24] text-[#81c784]' : 'bg-[#161a24] text-[#55657e]'
                     }`}>
                       {count}
                     </span>
@@ -11635,42 +11637,43 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <div className="flex-1 min-h-0 overflow-y-auto p-3 flex flex-col gap-2.5">
             {/* 가동 중단 알림 */}
             {isPaused && (
-              <div className="p-2.5 rounded-lg bg-[#2a1215] border border-[#ef535055] text-xs text-[#ef5350] flex items-center gap-2">
+              <div className="p-2.5 rounded-lg bg-[#201013] border border-[#ef5350]/40 text-xs text-[#ef5350] flex items-center gap-2">
                 <span>⚠️</span>
                 <span>{tr('식량 부족으로 공방 가동이 중단되었습니다. 식량을 보충하여 공방을 재가동하세요.')}</span>
               </div>
             )}
 
             {/* 안내 배너 */}
-            <div className="p-3 bg-[#121926] border border-[#26a69a44] rounded-xl text-[11px] text-[#cfd8dc] flex items-center justify-between">
+            <div className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl text-[11px] text-[#cfd8dc] flex items-center justify-between shadow-sm">
               <div>
-                <div className="font-bold text-[#26a69a] text-xs">✨ 용병 습득 스킬 비전 강화</div>
-                <div>용병들이 습득한 스킬을 강화합니다. 강화 시 위력(+12%)과 소모 MP(+25%)가 증가합니다.</div>
+                <div className="font-bold text-[#dcc496] text-xs">✨ {tr('용병 습득 스킬 비전 강화')}</div>
+                <div className="text-[#8b9bb4]">{tr('용병들이 습득한 스킬을 강화합니다. 강화 시 위력(+12%)과 소모 MP(+25%)가 증가합니다.')}</div>
               </div>
-              <div className="text-right text-[10px] text-[#80cbc4]">
-                <div>최대 강화 한도: <span className="font-bold text-white">Lv.{maxEnhanceAllowed}</span></div>
-                <div className="text-[#8b9bb4]">표시 중: {filteredSkills.length}개 / 총 {allLearnedSkills.length}개</div>
+              <div className="text-right text-[10px] text-[#dcc496] font-mono">
+                <div>{tr('최대 강화 한도')}: <span className="font-bold text-white">Lv.{maxEnhanceAllowed}</span></div>
+                <div className="text-[#8b9bb4]">{tr('표시 중')}: {filteredSkills.length}개 / 총 {allLearnedSkills.length}개</div>
               </div>
             </div>
 
             {filteredSkills.length === 0 ? (
-              <div className="p-8 text-center text-xs text-[#8b9bb4] bg-[#131926] rounded-xl border border-[#222d42] flex flex-col items-center gap-2">
+              <div className="p-8 text-center text-xs text-[#8b9bb4] bg-[#10131a] rounded-xl border border-[#3d372e] flex flex-col items-center gap-2">
                 <span className="text-3xl">📖</span>
                 <span className="font-bold text-white">
                   {selectedHeroObj
-                    ? `[${selectedHeroObj.name}]은(는) 아직 습득한 마도서 스킬이 없습니다.`
-                    : '아직 스킬을 습득한 용병이 없습니다.'}
+                    ? `[${selectedHeroObj.name}]${tr('은(는) 아직 습득한 마도서 스킬이 없습니다.')}`
+                    : tr('아직 스킬을 습득한 용병이 없습니다.')}
                 </span>
                 <p className="text-[11px] text-[#8b9bb4] max-w-sm leading-relaxed">
-                  [원정단 병영]에서 용병을 선택하고 [서고]를 열어 마도서를 연독하세요.<br />
-                  연구 습득률 100%를 달성하여 습득된 스킬은 이곳 에테르 공방에서 연금 재료를 바쳐 최대 Lv.10까지 비전 강화할 수 있습니다!
+                  {tr('[원정단 병영]에서 용병을 선택하고 [서고]를 열어 마도서를 연독하세요.')}<br />
+                  {tr('연구 습득률 100%를 달성하여 습득된 스킬은 이곳 에테르 공방에서 연금 재료를 바쳐 최대 Lv.10까지 비전 강화할 수 있습니다!')}
                 </p>
                 {selectedHeroFilter !== 'all' && (
                   <button
-                    className="btn btn-ghost text-xs text-[#26a69a] border border-[#26a69a44] px-3 py-1 mt-2"
+                    type="button"
+                    className="btn btn-ghost text-xs text-[#dcc496] border border-[#b89758]/40 px-3 py-1 mt-2"
                     onClick={() => setSelectedHeroFilter('all')}
                   >
-                    ◀ 전체 용병 스킬 보기
+                    ◀ {tr('전체 용병 스킬 보기')}
                   </button>
                 )}
               </div>
@@ -11692,15 +11695,15 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <div
                     key={`${item.hero.id}_${sk.id}_${idx}`}
                     onClick={() => setEnhanceModalTarget({ hero: item.hero, skill: sk })}
-                    className="panel p-3 bg-[#131926] border border-[#222d42] hover:border-[#26a69a88] rounded-xl flex items-center justify-between gap-3 cursor-pointer group transition-all"
+                    className="p-3 bg-[#10131a] border border-[#3d372e] hover:border-[#b89758]/70 rounded-xl flex items-center justify-between gap-3 cursor-pointer group transition-all shadow-sm"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="text-2xl p-1.5 rounded-lg bg-[#323d4e] border border-[#4a576d] group-hover:scale-105 transition-transform shrink-0 shadow-sm">
+                      <span className="text-2xl p-1.5 rounded-lg bg-[#161a24] border border-[#3d372e] group-hover:scale-105 transition-transform shrink-0 shadow-sm">
                         <GameIcon name={sk.id} icon={sk.icon || '📖'} size={24} />
                       </span>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-bold text-sm text-white group-hover:text-[#26a69a] transition-colors truncate">
+                          <span className="font-bold text-sm text-white group-hover:text-[#dcc496] transition-colors truncate">
                             {sk.name}
                           </span>
                           <span
@@ -11712,21 +11715,21 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           <span className="text-[10px] font-mono font-bold text-[#ffd54f] shrink-0">
                             Lv.{bookLv}/10
                           </span>
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e15] text-[#c8aa6e] font-bold border border-[#c8aa6e33] shrink-0">
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#b89758]/15 text-[#dcc496] font-bold border border-[#b89758]/30 shrink-0">
                             👤 {item.hero.name}
                           </span>
                         </div>
                         <div className="text-[11px] text-[#8b9bb4] mt-0.5 flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[#64b5f6] font-mono font-bold">위력 {curPower}%</span>
+                          <span className="text-[#64b5f6] font-mono font-bold">{tr('위력')} {curPower}%</span>
                           {bookLv > 1 && curPower !== basePowerPct && (
-                            <span className="text-[10px] text-[#ffd54f] font-mono">(초기 {basePowerPct}%)</span>
+                            <span className="text-[10px] text-[#ffd54f] font-mono">({tr('초기')} {basePowerPct}%)</span>
                           )}
                           <span>•</span>
-                          <span className="text-[#81d4fa] font-mono font-bold">소모 {curMp} MP</span>
+                          <span className="text-[#81d4fa] font-mono font-bold">{tr('소모')} {curMp} MP</span>
                           {!isMax && (
                             <>
                               <span>•</span>
-                              <span className="text-[#38ef7d] font-bold">성공률 {rateInfo.successRate}%</span>
+                              <span className="text-[#81c784] font-bold">{tr('성공률')} {rateInfo.successRate}%</span>
                             </>
                           )}
                         </div>
@@ -11735,12 +11738,13 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                     <div className="flex items-center gap-2 shrink-0" onClick={(e) => e.stopPropagation()}>
                       <button
+                        type="button"
                         className={`btn text-xs px-3 py-1.5 font-bold flex items-center gap-1 ${
-                          isMax ? 'btn-ghost text-[#ffd54f] border border-[#ffd54f44]' : 'btn-primary'
+                          isMax ? 'btn-ghost text-[#ffd54f] border border-[#ffd54f]/40' : 'btn-primary'
                         }`}
                         onClick={() => setEnhanceModalTarget({ hero: item.hero, skill: sk })}
                       >
-                        <span>{isMax ? '★ MAX' : '⚡ 강화'}</span>
+                        <span>{isMax ? '★ MAX' : `⚡ ${tr('강화')}`}</span>
                       </button>
                     </div>
                   </div>
@@ -11758,16 +11762,16 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           {!isEnchantUnlocked ? (
             <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-3">
               <span className="text-5xl">🔒</span>
-              <div className="font-bold text-base text-[#ce93d8]">에테르 공방 Lv.3 필요</div>
+              <div className="font-bold text-base text-[#dcc496]">{tr('에테르 공방 Lv.3 필요')}</div>
               <div className="text-xs text-[#8b9bb4] max-w-[280px] leading-relaxed">
-                고급 마도 인챈트 공방은 에테르 공방을 <span className="text-[#ce93d8] font-bold">Lv.3</span> 이상으로 증축하면 해금됩니다.
-                <br />(현재 공방: Lv.{alchemyLv})
+                {tr('고급 마도 인챈트 공방은 에테르 공방을')} <span className="text-[#dcc496] font-bold">Lv.3</span> {tr('이상으로 증축하면 해금됩니다.')}
+                <br />({tr('현재 공방')}: Lv.{alchemyLv})
               </div>
             </div>
           ) : (
             <>
               {/* 분류 칩 바 */}
-              <div className="flex items-center gap-1.5 px-3 py-2 bg-[#121724] border-b border-[#1f2738] shrink-0">
+              <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0c0e14] border-b border-[#242732] shrink-0">
                 {[
                   { key: 'all', label: '전체' },
                   { key: 'weapon', label: '🗡️ 무기' },
@@ -11776,28 +11780,30 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 ].map(cat => (
                   <button
                     key={cat.key}
-                    className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all ${
+                    type="button"
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       enchantCategory === cat.key
-                        ? 'bg-[#ce93d8] text-[#000] shadow' : 'bg-[#182030] text-[#8b9bb4] border border-[#26334a]'
+                        ? 'bg-[#b89758]/20 text-[#dcc496] border border-[#b89758] shadow-sm'
+                        : 'bg-[#10131a] text-[#8b9bb4] border border-[#242732] hover:text-white hover:border-[#3d372e]'
                     }`}
                     onClick={() => setEnchantCategory(cat.key as any)}
                   >
-                    {cat.label}
+                    {tr(cat.label)}
                   </button>
                 ))}
               </div>
 
               <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
-                <div className="panel-accent p-3 bg-[#161224] border border-[#ce93d844]">
+                <div className="p-3 bg-[#10131a] border border-[#b89758]/40 rounded-xl shadow-sm">
                   <div className="text-xs text-[#ffd54f] font-bold">✨ {tr('접두석')}: {res.prefix_stone || 0}{tr('개')} | 🔮 {tr('접미석')}: {res.suffix_stone || 0}{tr('개')}</div>
-                  <div className="text-[11px] text-[#ce93d8] mt-0.5">⭐ {tr('순수 접두석')}: {res.pure_prefix_stone || 0}{tr('개')} | 🌌 {tr('순수 접미석')}: {res.pure_suffix_stone || 0}{tr('개')}</div>
-                  <div className="text-[10px] text-[#8b9bb4] mt-1">💡 +3강 이상 접두어 인챈트 / +7강 이상 접미어 인챈트 해금 (인챈트 비용 -{discountPct}% 할인)</div>
+                  <div className="text-[11px] text-[#dcc496] mt-0.5">⭐ {tr('순수 접두석')}: {res.pure_prefix_stone || 0}{tr('개')} | 🌌 {tr('순수 접미석')}: {res.pure_suffix_stone || 0}{tr('개')}</div>
+                  <div className="text-[10px] text-[#8b9bb4] mt-1">💡 {tr('+3강 이상 접두어 인챈트 / +7강 이상 접미어 인챈트 해금 (인챈트 비용 -')}{discountPct}% {tr('할인)')}</div>
                 </div>
 
                 {filteredEnchantInventory.length === 0 ? (
-                  <div className="panel p-8 text-center text-sm text-[#8b9bb4]">
-                    보유 중인 해당 분류의 장비가 없습니다.<br />
-                    <span className="text-xs text-[#607d8b] mt-1 block">대장간에서 새로운 장비를 제작하거나 던전에서 획득하세요.</span>
+                  <div className="p-8 text-center text-sm text-[#8b9bb4] bg-[#10131a] border border-[#3d372e] rounded-xl">
+                    {tr('보유 중인 해당 분류의 장비가 없습니다.')}<br />
+                    <span className="text-xs text-[#8b9bb4]/70 mt-1 block">{tr('대장간에서 새로운 장비를 제작하거나 던전에서 획득하세요.')}</span>
                   </div>
                 ) : (
                   filteredEnchantInventory.map(item => {
@@ -11816,13 +11822,13 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     return (
                       <div
                         key={item.id}
-                        className="panel p-2.5 flex flex-col gap-1.5 cursor-pointer transition-all hover:border-[#ce93d888] hover:bg-[#1a1528] border-[#222d42] bg-[#131926]"
+                        className="p-2.5 flex flex-col gap-1.5 cursor-pointer transition-all hover:border-[#b89758]/60 hover:bg-[#141822] border border-[#3d372e] bg-[#10131a] rounded-xl shadow-sm"
                         onClick={() => setSelectedEnchantItemId(item.id)}
                       >
                         {/* 1행: 아이콘 + 이름 + (+강화강) + [등급 뱃지] + [인챈트 아이콘] + [착용자 뱃지] */}
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-                            <span className="p-1 rounded-md bg-[#323d4e] border border-[#4a576d] shrink-0 flex items-center justify-center">
+                            <span className="p-1 rounded-md bg-[#161a24] border border-[#3d372e] shrink-0 flex items-center justify-center">
                               <GameIcon name={item.templateId || getEquipmentTemplateId(item) || item.id} icon={item.icon} size={22} />
                             </span>
                             <span
@@ -11852,12 +11858,12 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                           <div className="flex items-center gap-1 shrink-0">
                             {wearer ? (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#b89758]/15 text-[#dcc496] font-bold border border-[#b89758]/30">
                                 👤 {wearer.name}
                               </span>
                             ) : (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#607d8b22] text-[#8b9bb4]">
-                                보관함
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#161a24] text-[#8b9bb4] border border-[#242732]">
+                                {tr('보관함')}
                               </span>
                             )}
                           </div>
@@ -11867,10 +11873,10 @@ const AlchemyDrawer: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <div className="pt-0.5 flex items-center justify-between gap-1 flex-wrap">
                           {renderTotalStats(item.stats)}
                           <div className="text-[9px] font-mono flex items-center gap-1.5">
-                            <span className={item.prefix ? 'text-[#ffd54f] font-bold' : canPrefix ? 'text-[#38ef7d]' : 'text-[#607d8b]'}>
+                            <span className={item.prefix ? 'text-[#ffd54f] font-bold' : canPrefix ? 'text-[#81c784]' : 'text-[#8b9bb4]/50'}>
                               {item.prefix ? `✨${item.prefix.name}` : canPrefix ? '✨접두가능' : '🔒+3강'}
                             </span>
-                            <span className={item.suffix ? 'text-[#c8aa6e] font-bold' : canSuffix ? 'text-[#38ef7d]' : 'text-[#607d8b]'}>
+                            <span className={item.suffix ? 'text-[#dcc496] font-bold' : canSuffix ? 'text-[#81c784]' : 'text-[#8b9bb4]/50'}>
                               {item.suffix ? `🔮${item.suffix.name}` : canSuffix ? '🔮접미가능' : '🔒+7강'}
                             </span>
                           </div>
