@@ -78,41 +78,7 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
           <div className="w-10 h-1 rounded-full bg-[#3d372e]" />
         </div>
 
-        {/* ── 1. 시설 헤더 바 ── */}
-        <div className="flex items-center justify-between px-4 py-2.5 bg-[#0a0b0e] border-b border-[#242732] shrink-0">
-          <div className="flex items-center gap-2">
-            {icon && <span className="text-xl drop-shadow">{icon}</span>}
-            <div>
-              <div className="flex items-center gap-1.5">
-                <h2 className="text-sm md:text-base font-bold text-[#ededed] tracking-tight">
-                  {title}
-                </h2>
-                {levelBadge !== undefined && (
-                  <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#b89758]/15 text-[#dcc496] border border-[#b89758]/40">
-                    Lv.{levelBadge}
-                  </span>
-                )}
-              </div>
-              {subtitle && (
-                <p className="text-[11px] text-[#9da3af] line-clamp-1">{subtitle}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {headerExtra}
-            <button
-              type="button"
-              onClick={handleClose}
-              className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-xs active:scale-95"
-              title={tr('닫기 (Esc)')}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-
-        {/* ── 2. 시네마틱 무대 프레임 (Cinematic Stage, 상단 뷰포트 높이 상향 및 선명하고 쨍한 색감) ── */}
+        {/* ── 시네마틱 무대 프레임 (이미지 내부 좌측 상단 타이틀 & 우측 상단 닫기 컨트롤) ── */}
         <div className="relative w-full h-52 sm:h-60 md:h-64 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden">
           {/* 배경 이미지 (탁한 딤 제거 및 쨍하고 밝은 색감 복원) */}
           {bgImage ? (
@@ -123,12 +89,47 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-b from-[#161820] to-[#0a0b0e] flex items-center justify-center opacity-60">
-              <span className="text-5xl opacity-20 filter grayscale">{icon || '🏰'}</span>
+              <span className="text-5xl opacity-20 filter grayscale">🏰</span>
             </div>
           )}
 
-          {/* 하단 연결 은은한 그라데이션 (상단 틴트 제거로 쨍한 선명도 확보) */}
+          {/* 상단 은은한 비네팅 (타이틀 및 닫기 버튼 가독성 확보, 중앙 딤 없음) */}
+          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#08090b]/70 via-[#08090b]/25 to-transparent pointer-events-none" />
+
+          {/* 하단 연결 은은한 그라데이션 */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#121418] via-transparent to-transparent pointer-events-none" />
+
+          {/* ── 이미지 내부 좌측 상단 시설 타이틀 (아이콘 제외) ── */}
+          <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 max-w-[calc(100%-80px)] pointer-events-auto">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-sm sm:text-base font-extrabold text-[#ededed] tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+                {title}
+              </h2>
+              {levelBadge !== undefined && (
+                <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#b89758]/25 text-[#ffd54f] border border-[#b89758]/60 backdrop-blur-md shadow-sm">
+                  Lv.{levelBadge}
+                </span>
+              )}
+            </div>
+            {subtitle && (
+              <p className="text-[11px] text-[#cfd8e8] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)] line-clamp-1 mt-0.5 font-medium">
+                {subtitle}
+              </p>
+            )}
+          </div>
+
+          {/* ── 이미지 내부 우측 상단 닫기 및 옵션 액션 ── */}
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center gap-2 pointer-events-auto">
+            {headerExtra}
+            <button
+              type="button"
+              onClick={handleClose}
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#08090b]/80 hover:bg-[#2a1618] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-lg backdrop-blur-sm active:scale-95"
+              title={tr('닫기 (Esc)')}
+            >
+              ✕
+            </button>
+          </div>
 
           {/* NPC 스탠딩 (우측) */}
           {npcImage && (
