@@ -15,8 +15,8 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
   const videoRefB = useRef<HTMLVideoElement>(null);
   const [activeVideo, setActiveVideo] = useState<'A' | 'B'>('A');
 
-  // 끊김 없는 크로스페이드 시간 (초 단위)
-  const FADE_SEC = 1.6;
+  // 10초 영상 길이에 최적화된 매끄러운 크로스오버 페이드 시간 (2.4초 오버랩)
+  const FADE_SEC = 2.4;
   const isTransitioningRef = useRef(false);
 
   // 성화 점화(isLit) 상태에 따른 비디오 재생 및 정지 제어
@@ -107,12 +107,13 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
           muted
           playsInline
           poster="assets/citadel_bonfire.jpg"
-          className={`absolute inset-0 w-full h-full object-cover object-center filter contrast-110 brightness-105 saturate-110 transition-opacity duration-1500 ease-in-out ${
-            isLit && activeVideo === 'A' ? 'opacity-95 z-[2]' : 'opacity-0 z-0'
+          style={{ transitionDuration: `${FADE_SEC}s` }}
+          className={`absolute inset-0 w-full h-full object-cover object-center filter contrast-110 brightness-105 saturate-110 transition-opacity ease-in-out ${
+            isLit && activeVideo === 'A' ? 'opacity-95 z-[2]' : 'opacity-0 z-[1]'
           }`}
         >
-          <source src="assets/citadel_territory.mp4" type="video/mp4" />
           <source src="assets/citadel_bonfire.mp4" type="video/mp4" />
+          <source src="assets/citadel_territory.mp4" type="video/mp4" />
         </video>
 
         {/* 비디오 레이어 B (교차 페이드용) */}
@@ -121,12 +122,13 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
           muted
           playsInline
           poster="assets/citadel_bonfire.jpg"
-          className={`absolute inset-0 w-full h-full object-cover object-center filter contrast-110 brightness-105 saturate-110 transition-opacity duration-1500 ease-in-out ${
-            isLit && activeVideo === 'B' ? 'opacity-95 z-[2]' : 'opacity-0 z-0'
+          style={{ transitionDuration: `${FADE_SEC}s` }}
+          className={`absolute inset-0 w-full h-full object-cover object-center filter contrast-110 brightness-105 saturate-110 transition-opacity ease-in-out ${
+            isLit && activeVideo === 'B' ? 'opacity-95 z-[2]' : 'opacity-0 z-[1]'
           }`}
         >
-          <source src="assets/citadel_territory.mp4" type="video/mp4" />
           <source src="assets/citadel_bonfire.mp4" type="video/mp4" />
+          <source src="assets/citadel_territory.mp4" type="video/mp4" />
         </video>
 
         {/* 가장자리 은은한 비네팅 */}
