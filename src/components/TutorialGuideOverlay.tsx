@@ -229,9 +229,9 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
     }
 
     // 🎁 정제소 보상 수령 스텝인 경우:
-    // 보상 수령 후 생산 시설 순차 재건 지침 안내 스텝(TUTORIAL_EXPAND_PRODUCTION)으로 전이
+    // 상단 토스트(보상 확인)를 눌러 퀘스트 창을 열기만 한 시점에는 넘기지 않고,
+    // 퀘스트 패널 내부에서 실제 [보상 수령하기] 버튼을 눌러 상태가 변경될 때까지 대기
     if (currentStep.id === 'TUTORIAL_CLAIM_REWARD') {
-      onAdvanceStep('TUTORIAL_EXPAND_PRODUCTION');
       return;
     }
 

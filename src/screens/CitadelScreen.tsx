@@ -2998,7 +2998,7 @@ const CitadelDrawer: React.FC<{
               title="달성된 퀘스트 보상을 수령하세요!"
             >
               <GameIcon name="quests" icon="📜" size={13} />
-              <span>보상 수령 ({claimableQuestCount})</span>
+              <span>{tr('보상 확인')} ({claimableQuestCount})</span>
             </button>
           )}
           <EncyclopediaBadge tab="buildings" label="영지 백과" />
@@ -12769,9 +12769,10 @@ const QuestsDrawer: React.FC<{
               {/* 보상 수령 버튼 */}
               {isClaimable && (
                 <button
-                  data-tutorial-target="quest-reward"
+                  data-tutorial-target={openDrawer === 'quests' ? 'quest-reward' : undefined}
                   className="w-full py-2.5 text-xs font-black rounded-lg shadow-lg mt-1 flex items-center justify-center gap-1.5 transition-all active:scale-95 bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] shadow-[0_0_14px_rgba(184,151,88,0.4)] animate-pulse relative z-10 pointer-events-auto cursor-pointer"
                   onClick={() => {
+                    try { SoundManager.getInstance().play('click'); } catch {}
                     if (q.epicStory) {
                       setEpicQuestForModal(q);
                     } else {
@@ -15216,17 +15217,22 @@ export const CitadelScreen: React.FC = () => {
               <button
                 className="btn btn-primary text-xs px-2.5 py-1.5 font-bold flex items-center gap-1 shadow-md active:scale-95 cursor-pointer"
                 onClick={() => {
+                  try { SoundManager.getInstance().play('click'); } catch {}
                   setQuestCompleteToast(null);
                   setOpenDrawer('quests');
                 }}
-                data-tutorial-target="quest-reward" title="퀘스트 창으로 이동하여 보상과 다음 연계 퀘스트를 확인합니다"
+                data-tutorial-target={openDrawer !== 'quests' ? 'quest-reward' : undefined}
+                title={tr('퀘스트 창으로 이동하여 보상과 다음 연계 퀘스트를 확인합니다')}
               >
                 <span>🎁</span>
-                <span>보상 수령 ▶</span>
+                <span>{tr('보상 확인 ▶')}</span>
               </button>
               <button
-                className="text-xs text-[#8b9bb4] hover:text-white px-1.5 py-1"
-                onClick={() => setQuestCompleteToast(null)}
+                className="text-xs text-[#8b9bb4] hover:text-white px-1.5 py-1 cursor-pointer"
+                onClick={() => {
+                  try { SoundManager.getInstance().play('click'); } catch {}
+                  setQuestCompleteToast(null);
+                }}
                 aria-label="닫기"
               >
                 ✕
@@ -15298,7 +15304,7 @@ export const CitadelScreen: React.FC = () => {
                   </span>
                   <span className="animate-bounce text-sm">❗</span>
                   <span className="text-[11px] font-bold tracking-wide">
-                    {claimableQuestCount > 0 ? `${tr('보상 수령')} (${claimableQuestCount})` : tr('퀘스트 확인')}
+                    {claimableQuestCount > 0 ? `${tr('보상 확인')} (${claimableQuestCount})` : tr('퀘스트 확인')}
                   </span>
                 </button>
               )}

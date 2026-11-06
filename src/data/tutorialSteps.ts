@@ -224,11 +224,11 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     title: '보상 수령 체득',
     speaker: '수석 오퍼레이터 일레인',
     message: [
-      '정제소가 성공적으로 복원되어 퀘스트를 완수했습니다! 공적에 대한 [보상]을 수령하십시오.'
+      '정제소가 성공적으로 복원되어 퀘스트를 완수했습니다! [보상 확인]을 눌러 공적에 대한 보상을 수령하십시오.'
     ],
     targetSelector: '[data-tutorial-target="quest-reward"]',
     pointerPosition: 'right',
-    targetLabel: '퀘스트 보상 받기'
+    targetLabel: '퀘스트 보상 확인 및 수령'
   },
 
   // ── Step 4: 주요 생산 시설 순차 재건 지침 ──
