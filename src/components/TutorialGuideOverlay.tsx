@@ -181,6 +181,10 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
       // 대사 확인 후 대화창을 숨기고 타깃 스포트라이트만 강조 유지
       setIsDialogueDismissed(true);
     } else if (currentStep.allowOverlayClickNext) {
+      if (currentStep.id === 'TUTORIAL_EXPAND_PRODUCTION') {
+        onAdvanceStep('WAITING_TAVERN_UNLOCK');
+        return;
+      }
       const currentIndex = TUTORIAL_STEPS.findIndex(s => s.id === currentStepId);
       const nextStep = TUTORIAL_STEPS[currentIndex + 1];
       onAdvanceStep(nextStep?.id);
@@ -225,8 +229,14 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
     }
 
     // 🎁 정제소 보상 수령 스텝인 경우:
-    // 유저가 영지 시설들(안식처, 벌채소, 시추소)을 자유롭게 건설하며 라운지 건설 조건이 될 때까지 일레인이 잠시 화면에서 퇴장
+    // 보상 수령 후 생산 시설 순차 재건 지침 안내 스텝(TUTORIAL_EXPAND_PRODUCTION)으로 전이
     if (currentStep.id === 'TUTORIAL_CLAIM_REWARD') {
+      onAdvanceStep('TUTORIAL_EXPAND_PRODUCTION');
+      return;
+    }
+
+    // 🏗️ 주요 생산 시설 순차 재건 안내 스텝: 라운지 해금 대기 상태로 전이
+    if (currentStep.id === 'TUTORIAL_EXPAND_PRODUCTION') {
       onAdvanceStep('WAITING_TAVERN_UNLOCK');
       return;
     }

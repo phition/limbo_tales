@@ -8,6 +8,7 @@ import { GameIcon } from '../GameIcon';
 import { EncyclopediaBadge } from '../EncyclopediaBadge';
 import { getBuildingLore, getBuildingStatusInfo, RES_NAMES_AND_ICONS } from '../../utils/buildingStatusUtils';
 import { GameManager } from '../../managers/GameManager';
+import { getTutorialProductionTarget, checkTutorialBuildingRestriction } from '../../data/tutorialSteps';
 
 interface ArkCitadelHubDrawerProps {
   onClose: () => void;
@@ -148,7 +149,23 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
     try { SoundManager.getInstance().play('click'); } catch {}
   };
 
+  // 🛡️ 튜토리얼 중 생산 시설 복원 단계 목표 및 제한 검사
+  const tutorialProdTarget = useMemo(() => {
+    return getTutorialProductionTarget(state.buildings, state.quests);
+  }, [state.buildings, state.quests]);
+
   const selectedBuildingData = selectedBuildingId ? state.buildings[selectedBuildingId] : null;
+
+  const tutorialRestriction = useMemo(() => {
+    if (!selectedBuildingId || !selectedBuildingData) return { isRestricted: false };
+    return checkTutorialBuildingRestriction(
+      tutorialStepId || '',
+      selectedBuildingId,
+      selectedBuildingData.level,
+      state.buildings,
+      state.quests
+    );
+  }, [tutorialStepId, selectedBuildingId, selectedBuildingData, state.buildings, state.quests]);
   const selectedCost = selectedBuildingId && selectedBuildingData ? gm.getBuildingUpgradeCost(selectedBuildingId, selectedBuildingData.level) : {};
   const selectedCanAfford = selectedBuildingData ? Object.entries(selectedCost).every(
     ([k, v]) => (state.resources as unknown as Record<string, number>)[k] >= (v as number)
@@ -533,6 +550,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               const prereq = gm.checkBuildingPrerequisites(item.id, curLv + 1);
 
               const isHighlighted = highlightedBuildingId === item.id;
+              const isTutorialTarget = Boolean(tutorialProdTarget && tutorialProdTarget.targetId === item.id && !isBuilt);
 
               return (
                 <div
@@ -540,7 +558,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   id={`citadel-building-row-${item.id}`}
                   data-tutorial-target={
                     selectedBuildingId !== item.id
-                      ? (item.id === 'butchery' && !isBuilt ? 'build-refinery' : item.id === 'tavern' && !isBuilt ? 'build-tavern' : undefined)
+                      ? (item.id === 'butchery' && !isBuilt ? 'build-refinery' : item.id === 'tavern' && !isBuilt ? 'build-tavern' : isTutorialTarget ? 'tutorial-production-target' : undefined)
                       : undefined
                   }
                   onClick={() => {
@@ -548,7 +566,9 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     setSelectedBuildingId(item.id);
                   }}
                   className={`flex flex-col justify-center p-3.5 sm:p-4 min-h-[76px] sm:min-h-[82px] rounded-xl border transition-all cursor-pointer backdrop-blur-md ${
-                    isHighlighted ? 'ring-2 ring-[#b89758] shadow-[0_0_12px_rgba(184,151,88,0.5)]' : ''
+                    isTutorialTarget
+                      ? 'ring-2 ring-[#ffd54f] border-[#ffd54f] shadow-[0_0_16px_rgba(255,213,79,0.35)] bg-[#1e1c16]/90'
+                      : isHighlighted ? 'ring-2 ring-[#b89758] shadow-[0_0_12px_rgba(184,151,88,0.5)]' : ''
                   } ${
                     isConstructing
                       ? 'bg-[#181510]/90 border-[#b89758]/60 shadow-[0_0_12px_rgba(184,151,88,0.2)]'
@@ -567,6 +587,11 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                           <span className="font-bold text-xs sm:text-sm text-[#ededed] truncate">
                             {b.name}
                           </span>
+                          {isTutorialTarget && (
+                            <span className="px-1.5 py-0.2 rounded text-[10px] font-black bg-gradient-to-r from-[#ffd54f] to-[#b89758] text-[#08090b] shadow-xs animate-pulse">
+                              ⭐ {tr('튜토리얼 목표')}
+                            </span>
+                          )}
                           {isBuilt ? (
                             <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-[#b89758]/15 text-[#dcc496] border border-[#b89758]/30">
                               Lv.{b.level}
@@ -590,6 +615,12 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
 
                     {/* 우측 간결 상태 뱃지 */}
                     <div className="flex items-center gap-2 shrink-0">
+                      {isTutorialTarget && !isConstructing && (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#ffd54f]/20 text-[#ffd54f] border border-[#ffd54f]/40 flex items-center gap-1 animate-pulse">
+                          <span>🔨</span>
+                          <span>{tr('필수 건설')}</span>
+                        </span>
+                      )}
                       {isConstructing ? (
                         <span className="px-2.5 py-1 rounded-lg text-[10.5px] font-bold font-mono bg-[#b89758]/20 text-[#ffd54f] border border-[#b89758]/50 animate-pulse flex items-center gap-1">
                           <span>🔨</span>
@@ -744,6 +775,39 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             {/* 2. 모달 스크롤 본문 */}
             <div className="flex-1 overflow-y-auto tg-scrollbar p-3.5 sm:p-4 space-y-3 text-xs">
               
+              {/* 🔒 튜토리얼 생산 시설 우선 복원 지침 배너 */}
+              {tutorialRestriction.isRestricted && (
+                <div className="p-3 rounded-xl bg-gradient-to-r from-[#2a1714] to-[#1c1214] border border-[#ff7043]/70 flex items-start gap-2.5 shadow-md animate-fade-in">
+                  <span className="text-xl shrink-0 drop-shadow">🛡️</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-xs font-bold text-[#ff8a65]">
+                        {tr('방주 통제실 튜토리얼 지침')}
+                      </span>
+                      <span className="px-1.5 py-0.2 rounded text-[9.5px] font-black bg-[#ff7043]/25 text-[#ffab91] border border-[#ff7043]/40">
+                        {tr('진행 필수')}
+                      </span>
+                    </div>
+                    <p className="text-[11.5px] text-[#ffd0c2] leading-relaxed mt-1">
+                      {tr(tutorialRestriction.message || '우선 나머지 생산 시설 건설을 완료해 주십시오.')}
+                    </p>
+                    {tutorialRestriction.target && tutorialRestriction.target.targetId !== selectedBuildingId && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handlePlayClick();
+                          setSelectedBuildingId(tutorialRestriction.target!.targetId);
+                        }}
+                        className="mt-2 py-1.5 px-3 rounded-lg bg-gradient-to-r from-[#ff7043] to-[#e64a19] text-[#08090b] font-black text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 hover:brightness-110"
+                      >
+                        <span>{tr(`목표 시설 [${tutorialRestriction.target.targetName}] 건설로 이동`)}</span>
+                        <span>➔</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* 🔨 공사 진행 중 안내 배너 */}
               {selectedIsConstructing && (
                 <div className="p-3 rounded-xl bg-[#0a1424] border border-[#c8aa6e66] flex flex-col gap-2 shadow-md">
@@ -922,6 +986,19 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   >
                     🔨 {tr('공사 진행 중')} ({formatDuration(selectedRemainSec, lang)})
                   </button>
+                ) : tutorialRestriction.isRestricted ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handlePlayClick();
+                      gm.addLog(`⚠️ [튜토리얼 지침] ${tutorialRestriction.message}`, 'warning');
+                    }}
+                    className="py-2 px-4 rounded-xl bg-[#2a1714] border border-[#ff7043]/60 text-[#ffab91] font-extrabold text-xs cursor-not-allowed opacity-90 flex items-center gap-1.5 shadow-inner"
+                    title={tutorialRestriction.message}
+                  >
+                    <span>🔒</span>
+                    <span>{tr('생산 시설 우선 복원 필요')}</span>
+                  </button>
                 ) : (
                   <button
                     type="button"
@@ -930,6 +1007,8 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                         ? 'build-refinery'
                         : selectedBuildingId === 'tavern' && selectedBuildingData.level === 0
                         ? 'build-tavern'
+                        : tutorialProdTarget && selectedBuildingId === tutorialProdTarget.targetId && selectedBuildingData.level === 0
+                        ? 'tutorial-confirm-build'
                         : undefined
                     }
                     data-tutorial-confirm-build="true"

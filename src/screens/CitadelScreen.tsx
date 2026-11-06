@@ -14445,6 +14445,11 @@ export const CitadelScreen: React.FC = () => {
       setOpenDrawer('citadel');
     } else if (nextId === 'TUTORIAL_CLAIM_REWARD') {
       setOpenDrawer('quests');
+    } else if (nextId === 'TUTORIAL_EXPAND_PRODUCTION') {
+      // 보상 수령 직후 생산 시설 순차 재건 브리핑 노출
+    } else if (nextId === 'WAITING_TAVERN_UNLOCK') {
+      setCitadelInitialView('facilities');
+      setOpenDrawer('citadel');
     } else if (nextId === 'TUTORIAL_ENTER_TAVERN') {
       setCitadelInitialView('workstations');
       setOpenDrawer('citadel');
@@ -14508,9 +14513,9 @@ export const CitadelScreen: React.FC = () => {
     } else if (tutorialStepId === 'TUTORIAL_CLAIM_REWARD') {
       const isRefineryQuestClaimed = state.quests?.find(q => q.id === 'Q_MAIN_01')?.status === 'completed';
       if (isRefineryQuestClaimed) {
-        setTutorialStepId('WAITING_TAVERN_UNLOCK');
+        setTutorialStepId('TUTORIAL_EXPAND_PRODUCTION');
         try {
-          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'WAITING_TAVERN_UNLOCK', isCompleted: false, isSkipped: false, hasStarted: true }));
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_EXPAND_PRODUCTION', isCompleted: false, isSkipped: false, hasStarted: true }));
         } catch {}
       }
     } else if (tutorialStepId === 'TUTORIAL_BUILD_TAVERN') {

@@ -1,3 +1,5 @@
+import { BuildingId } from '../types/game';
+
 export type ElaineEmotion = 'normal' | 'serious' | 'smile' | 'worry';
 
 export interface TutorialStep {
@@ -15,6 +17,118 @@ export interface TutorialStep {
   hideDialogueOnAcknowledge?: boolean; // 대화 확인 시 대화창을 숨기고 타깃 스포트라이트만 강조
   acknowledgeButtonLabel?: string;    // 대화 확인/닫기 버튼 커스텀 라벨
   nextButtonLabel?: string;           // 다음 단계 버튼 커스텀 라벨
+}
+
+export interface TutorialProductionTarget {
+  targetId: BuildingId;
+  targetName: string;
+  stepName: string;
+  isUnlocked: boolean;
+}
+
+/**
+ * 튜토리얼 중 정제소 보상 수령 후 ~ 방랑자의 라운지 완공 전까지
+ * 현재 건설해야 할 필수 생산 시설 목표를 판별합니다.
+ */
+export function getTutorialProductionTarget(
+  buildings: Record<string, { level: number; unlocked?: boolean }>,
+  quests?: { id: string; status: string }[]
+): TutorialProductionTarget | null {
+  if (!buildings) return null;
+  // 1. 피난민/생존자 안식처 (cabin) Lv.0인 경우
+  if ((buildings['cabin']?.level || 0) < 1) {
+    return {
+      targetId: 'cabin',
+      targetName: '생존자 안식처',
+      stepName: '1단계: 생존자 안식처',
+      isUnlocked: Boolean(buildings['cabin']?.unlocked)
+    };
+  }
+  // 2. 성채 벌목소 (lumberCamp) Lv.0인 경우
+  if ((buildings['lumberCamp']?.level || 0) < 1) {
+    return {
+      targetId: 'lumberCamp',
+      targetName: '영목 벌채소',
+      stepName: '2단계: 영목 벌채소',
+      isUnlocked: Boolean(buildings['lumberCamp']?.unlocked)
+    };
+  }
+  // 3. 에테르 광맥 시추소 (quarry) Lv.0인 경우
+  if ((buildings['quarry']?.level || 0) < 1) {
+    return {
+      targetId: 'quarry',
+      targetName: '에테르 광맥 시추소',
+      stepName: '3단계: 에테르 광맥 시추소',
+      isUnlocked: Boolean(buildings['quarry']?.unlocked)
+    };
+  }
+  // 4. 방랑자의 라운지 (tavern) Lv.0인 경우
+  if ((buildings['tavern']?.level || 0) < 1) {
+    return {
+      targetId: 'tavern',
+      targetName: '방랑자의 라운지',
+      stepName: '최종 단계: 방랑자의 라운지',
+      isUnlocked: Boolean(buildings['tavern']?.unlocked)
+    };
+  }
+  return null;
+}
+
+/**
+ * 튜토리얼 생산 시설 재건 단계에서 특정 건물의 건설/증축이 제한되는지 검사합니다.
+ */
+export function checkTutorialBuildingRestriction(
+  tutorialStepId: string,
+  buildingId: BuildingId,
+  currentLevel: number,
+  buildings: Record<string, { level: number; unlocked?: boolean }>,
+  quests?: { id: string; status: string }[]
+): {
+  isRestricted: boolean;
+  target?: TutorialProductionTarget;
+  message?: string;
+} {
+  const isProductionPhase = [
+    'TUTORIAL_EXPAND_PRODUCTION',
+    'WAITING_TAVERN_UNLOCK',
+    'TUTORIAL_BUILD_TAVERN',
+    'WAITING_CONSTRUCTION_TUTORIAL_BUILD_TAVERN'
+  ].includes(tutorialStepId);
+
+  const isRefineryPhase = [
+    'TUTORIAL_BUILD_REFINERY',
+    'WAITING_CONSTRUCTION_TUTORIAL_BUILD_REFINERY'
+  ].includes(tutorialStepId);
+
+  if (isRefineryPhase) {
+    if (buildingId !== 'butchery' || currentLevel >= 1) {
+      return {
+        isRestricted: true,
+        message: '사령관님, 방주 거점 재건을 위해 첫 번째 과업인 [심연 생체 정제소] 건설을 먼저 완료해 주십시오.'
+      };
+    }
+    return { isRestricted: false };
+  }
+
+  if (!isProductionPhase) {
+    return { isRestricted: false };
+  }
+
+  const target = getTutorialProductionTarget(buildings, quests);
+  if (!target) {
+    return { isRestricted: false };
+  }
+
+  // 대상 건물이 현재 튜토리얼 목표 시설이 아니거나, 이미 Lv.1 이상인데 추가 증축(레벨업)하려는 경우 제한
+  if (buildingId !== target.targetId || currentLevel >= 1) {
+    return {
+      isRestricted: true,
+      target,
+      message: `사령관님, 방주의 생존 및 원정대 구성을 위해 우선 나머지 생산 시설인 [${target.targetName}] 건설을 먼저 완료해 주십시오.`
+    };
+  }
+
+  return { isRestricted: false, target };
 }
 
 export const TUTORIAL_STEPS: TutorialStep[] = [
@@ -48,26 +162,42 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     targetLabel: '심연 생체 정제소 건설'
   },
 
-  // ── Step 3: 퀘스트 보상 수령 체득 및 거점 확장 안내 ──
+  // ── Step 3: 퀘스트 보상 수령 체득 ──
   {
     id: 'TUTORIAL_CLAIM_REWARD',
     order: 3,
     emotion: 'smile',
-    title: '보상 수령 및 거점 확장 안내',
+    title: '보상 수령 체득',
     speaker: '수석 오퍼레이터 일레인',
     message: [
-      '정제소가 성공적으로 복원되어 퀘스트를 완수했습니다! 공적에 대한 [보상]을 수령하십시오.',
-      '수령하신 보상 자재로 퀘스트 라인을 따라 생존자 안식처, 벌채소, 광석 시추소를 순서대로 복원해 주십시오. 광석 시추소까지 완공하고 [방랑자의 라운지] 건설로 이어질 때 다시 찾아뵙겠습니다!'
+      '정제소가 성공적으로 복원되어 퀘스트를 완수했습니다! 공적에 대한 [보상]을 수령하십시오.'
     ],
     targetSelector: '[data-tutorial-target="quest-reward"]',
     pointerPosition: 'right',
     targetLabel: '퀘스트 보상 받기'
   },
 
-  // ── Step 4: 방랑자의 라운지 건설 ──
+  // ── Step 4: 주요 생산 시설 순차 재건 지침 ──
+  {
+    id: 'TUTORIAL_EXPAND_PRODUCTION',
+    order: 4,
+    emotion: 'serious',
+    title: '주요 생산 시설 순차 재건 지침',
+    speaker: '수석 오퍼레이터 일레인',
+    message: [
+      '정제소 복원 보상을 성공적으로 수령하셨습니다, 사령관님!',
+      '원정대를 모집할 [방랑자의 라운지]를 개방하려면 방주의 기초 생산 라인이 우선 확보되어야 합니다.',
+      '화면의 퀘스트 라인을 따라 [생존자 안식처] ➔ [영목 벌채소] ➔ [에테르 광맥 시추소] 순서대로 주요 생산 시설들을 차례대로 완공해 주십시오.',
+      '다른 건물의 건설이나 증축은 원정대 출격 준비 후 진행하실 수 있으니, 지금은 생산 시설 복원에 집중해 주시기 바랍니다. 시추소까지 완공되면 다시 찾아뵙겠습니다!'
+    ],
+    allowOverlayClickNext: true,
+    nextButtonLabel: '생산 시설 복원 시작 ▶'
+  },
+
+  // ── Step 5: 방랑자의 라운지 건설 ──
   {
     id: 'TUTORIAL_BUILD_TAVERN',
-    order: 4,
+    order: 5,
     emotion: 'serious',
     title: '방랑자의 라운지 건설 승인',
     speaker: '수석 오퍼레이터 일레인',
@@ -80,10 +210,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     targetLabel: '방랑자의 라운지 건설'
   },
 
-  // ── Step 5: 방랑자의 라운지 입장 ──
+  // ── Step 6: 방랑자의 라운지 입장 ──
   {
     id: 'TUTORIAL_ENTER_TAVERN',
-    order: 5,
+    order: 6,
     emotion: 'normal',
     title: '방랑자의 라운지 방문',
     speaker: '수석 오퍼레이터 일레인',
@@ -95,10 +225,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     targetLabel: '방랑자의 라운지 입장'
   },
 
-  // ── Step 6: 첫 용병 후보 점검 및 영입 ──
+  // ── Step 7: 첫 용병 후보 점검 및 영입 ──
   {
     id: 'TUTORIAL_RECRUIT_MERCENARY',
-    order: 6,
+    order: 7,
     emotion: 'smile',
     title: '용병 후보 상세 점검 및 영입',
     speaker: '수석 오퍼레이터 일레인',
@@ -111,10 +241,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     hideDialogueOnAcknowledge: true
   },
 
-  // ── Step 7: 원정단 편성으로 이동 ──
+  // ── Step 8: 원정단 편성으로 이동 ──
   {
     id: 'TUTORIAL_NAVIGATE_BARRACKS',
-    order: 7,
+    order: 8,
     emotion: 'smile',
     title: '원정단 편성 이동',
     speaker: '수석 오퍼레이터 일레인',
@@ -127,10 +257,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     targetLabel: '원정단 편성 이동 ▶'
   },
 
-  // ── Step 8: 원정대 출전 배치 ──
+  // ── Step 9: 원정대 출전 배치 ──
   {
     id: 'TUTORIAL_DEPLOY_HERO',
-    order: 8,
+    order: 9,
     emotion: 'serious',
     title: '원정대 출전 배치',
     speaker: '수석 오퍼레이터 일레인',
@@ -144,10 +274,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     hideDialogueOnAcknowledge: true
   },
 
-  // ── Step 9: 무구 부족 상황 고지 & 채비실 이동 권유 ──
+  // ── Step 10: 무구 부족 상황 고지 & 채비실 이동 권유 ──
   {
     id: 'TUTORIAL_WEAPON_SHORTAGE',
-    order: 9,
+    order: 10,
     emotion: 'worry',
     title: '전술 무구 부족 현황 보고',
     speaker: '수석 오퍼레이터 일레인',
@@ -161,10 +291,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     targetLabel: '출정 채비실로 이동 ▶'
   },
 
-  // ── Step 10: 채비실 - 포지션 배치 설명 및 자유 설정 ──
+  // ── Step 11: 채비실 - 포지션 배치 설명 및 자유 설정 ──
   {
     id: 'TUTORIAL_PREP_POSITION',
-    order: 10,
+    order: 11,
     emotion: 'serious',
     title: '원정대 진형 및 포지션 설정',
     speaker: '수석 오퍼레이터 일레인',
@@ -177,10 +307,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     acknowledgeButtonLabel: '포지션 설정하기 (대화창 닫기) ▶'
   },
 
-  // ── Step 11: 채비실 - 파티 시너지 확인 ──
+  // ── Step 12: 채비실 - 파티 시너지 확인 ──
   {
     id: 'TUTORIAL_PREP_SYNERGY',
-    order: 11,
+    order: 12,
     emotion: 'normal',
     title: '파티 시너지 효과 확인',
     speaker: '수석 오퍼레이터 일레인',
@@ -195,10 +325,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     nextButtonLabel: '다음: 배낭 확인 ▶'
   },
 
-  // ── Step 12: 채비실 - 배낭 규격 확인 ──
+  // ── Step 13: 채비실 - 배낭 규격 확인 ──
   {
     id: 'TUTORIAL_PREP_BACKPACK',
-    order: 12,
+    order: 13,
     emotion: 'normal',
     title: '원정 배낭 규격 확인',
     speaker: '수석 오퍼레이터 일레인',
@@ -213,10 +343,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     nextButtonLabel: '다음: 보급품 점검 ▶'
   },
 
-  // ── Step 13: 채비실 - 필수 보급품 및 균열의 닻 설명 & 무료 배낭 및 보급품 1개씩 담기 ──
+  // ── Step 14: 채비실 - 필수 보급품 및 균열의 닻 설명 & 무료 배낭 및 보급품 1개씩 담기 ──
   {
     id: 'TUTORIAL_PREP_SUPPLIES',
-    order: 13,
+    order: 14,
     emotion: 'serious',
     title: '필수 생존 보급품 및 균열의 닻 점검',
     speaker: '수석 오퍼레이터 일레인',
@@ -229,10 +359,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     acknowledgeButtonLabel: '배낭 및 보급품 채비하기 ▶'
   },
 
-  // ── Step 14: 심연 1계층 강하 개시 ──
+  // ── Step 15: 심연 1계층 강하 개시 ──
   {
     id: 'TUTORIAL_DESCENT_START',
-    order: 14,
+    order: 15,
     emotion: 'serious',
     title: '침묵의 회랑 1구역 강하 개시',
     speaker: '수석 오퍼레이터 일레인',
@@ -245,10 +375,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     targetLabel: '강하 개시 ⚔️'
   },
 
-  // ── Step 15: 심연 1계층 탐색 및 마물 수색 ──
+  // ── Step 16: 심연 1계층 탐색 및 마물 수색 ──
   {
     id: 'TUTORIAL_EXPLORE_SCOUT',
-    order: 15,
+    order: 16,
     emotion: 'normal',
     title: '심연 1구역 탐색 개시',
     speaker: '수석 오퍼레이터 일레인',
@@ -263,10 +393,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     acknowledgeButtonLabel: '탐색 시작하기 (대화창 닫기) ▶'
   },
 
-  // ── Step 16: 전투 - 위험 적 타깃 지정 ──
+  // ── Step 17: 전투 - 위험 적 타깃 지정 ──
   {
     id: 'TUTORIAL_BATTLE_TARGET',
-    order: 16,
+    order: 17,
     emotion: 'serious',
     title: '적 전력 분석 및 타깃 지정',
     speaker: '수석 오퍼레이터 일레인',
@@ -282,10 +412,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     acknowledgeButtonLabel: '타깃 지정하기 (대화창 닫기) ▶'
   },
 
-  // ── Step 17: 전투 - 스킬 연계 및 FEVER 게이지 충전 ──
+  // ── Step 18: 전투 - 스킬 연계 및 FEVER 게이지 충전 ──
   {
     id: 'TUTORIAL_BATTLE_COMBO',
-    order: 17,
+    order: 18,
     emotion: 'smile',
     title: '스킬 연계와 FEVER 게이지 충전',
     speaker: '수석 오퍼레이터 일레인',
@@ -301,10 +431,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     acknowledgeButtonLabel: '작전 개시 (전투 진행) ▶'
   },
 
-  // ── Step 18: 전투 - FEVER 시너지 효과 확인 및 적절한 타이밍에 궁극기 발동 ──
+  // ── Step 19: 전투 - FEVER 시너지 효과 확인 및 적절한 타이밍에 궁극기 발동 ──
   {
     id: 'TUTORIAL_BATTLE_FEVER_GUIDE',
-    order: 18,
+    order: 19,
     emotion: 'serious',
     title: 'FEVER 시너지 활성화 및 궁극기 전술 지휘',
     speaker: '수석 오퍼레이터 일레인',
@@ -320,10 +450,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     acknowledgeButtonLabel: '전황 살피기 (대화창 닫기) ▶'
   },
 
-  // ── Step 19: 전투 - 궁극기 시너지 폭발 칭찬 및 전투 속개 ──
+  // ── Step 20: 전투 - 궁극기 시너지 폭발 칭찬 및 전투 속개 ──
   {
     id: 'TUTORIAL_BATTLE_FEVER_PRAISE',
-    order: 19,
+    order: 20,
     emotion: 'smile',
     title: '전술 시너지 폭발!',
     speaker: '수석 오퍼레이터 일레인',
@@ -335,10 +465,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     acknowledgeButtonLabel: '전투 속개 (마물 소탕하기) ▶'
   },
 
-  // ── Step 20: 탐험 - 전투 후 야영 및 대원 간 유대감 확인 ──
+  // ── Step 21: 탐험 - 전투 후 야영 및 대원 간 유대감 확인 ──
   {
     id: 'TUTORIAL_EXPLORE_CAMP',
-    order: 20,
+    order: 21,
     emotion: 'smile',
     title: '전투 후 모닥불 야영과 유대감 다지기',
     speaker: '수석 오퍼레이터 일레인',
@@ -351,10 +481,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     targetLabel: '야영 (체력 회복 & 유대감 상승)'
   },
 
-  // ── Step 21: 탐험 - 횃불 점등 및 심연 위험도 가속 ──
+  // ── Step 22: 탐험 - 횃불 점등 및 심연 위험도 가속 ──
   {
     id: 'TUTORIAL_EXPLORE_TORCH',
-    order: 21,
+    order: 22,
     emotion: 'normal',
     title: '횃불 점등과 심연 위험도 가속',
     speaker: '수석 오퍼레이터 일레인',
@@ -368,10 +498,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     targetLabel: '횃불 점등 🔥'
   },
 
-  // ── Step 22: 탐험 - 용병 관리 설명 및 방주 안전 귀환 ──
+  // ── Step 23: 탐험 - 용병 관리 설명 및 방주 안전 귀환 ──
   {
     id: 'TUTORIAL_EXPLORE_RETURN',
-    order: 22,
+    order: 23,
     emotion: 'serious',
     title: '원정대 관리 및 안전 귀환 지휘',
     speaker: '수석 오퍼레이터 일레인',
@@ -385,10 +515,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     targetLabel: '귀환 ⚓ (방주로 안전 귀환)'
   },
 
-  // ── Step 23: 성채 - 첫 원정 정찰 완수 및 방주 지휘 개시 ──
+  // ── Step 24: 성채 - 첫 원정 정찰 완수 및 방주 지휘 개시 ──
   {
     id: 'TUTORIAL_CITADEL_FINISH',
-    order: 23,
+    order: 24,
     emotion: 'smile',
     title: '첫 원정 정찰 완수 및 방주 지휘 개시',
     speaker: '수석 오퍼레이터 일레인',

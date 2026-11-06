@@ -99,6 +99,7 @@ import { ALL_SKILL_BOOKS, ALL_SKILLS_MAP, getSkillBookRarity, GRIMOIRE_RARITY_ME
 import { getIconMeta } from '../utils/iconMap';
 import { GRIMOIRE_CRAFT_RECIPES, GRIMOIRE_CRAFT_SUCCESS_RATES, GrimoireRecipe } from '../data/classSkillRecipes';
 import { BUILDING_TECH_TREE, BUILDING_MILESTONE_TIERS, getBuildingConstructionDurationSec } from '../data/buildings';
+import { checkTutorialBuildingRestriction } from '../data/tutorialSteps';
 import { FirebaseService, WorldBossNemesisData } from '../services/FirebaseService';
 import { GameDataService } from '../services/GameDataService';
 import { CustomAssetService } from '../services/CustomAssetService';
@@ -2958,6 +2959,23 @@ export class GameManager {
       return { allowed: true };
     }
 
+    // 🛡️ 튜토리얼 생산 시설 재건 단계 검증 (이탈 방지)
+    try {
+      const tutState = typeof localStorage !== 'undefined' ? localStorage.getItem('ark_tutorial_state') : null;
+      if (tutState) {
+        const parsed = JSON.parse(tutState);
+        if (parsed.hasStarted && !parsed.isCompleted && !parsed.isSkipped && parsed.currentStepId) {
+          const check = checkTutorialBuildingRestriction(parsed.currentStepId, id, (this.buildings[id]?.level || 0), this.buildings, this.quests);
+          if (check.isRestricted) {
+            return {
+              allowed: false,
+              reason: check.message || '튜토리얼: 우선 나머지 생산 시설 건설을 먼저 완료해 주십시오.'
+            };
+          }
+        }
+      }
+    } catch {}
+
     // 1. 기본 선행 건물 체인 검증 (최초 Lv.1 건설 시에만 선행 건물 Lv.1 이상 요구)
     if (targetLevel === 1) {
       const rule = BUILDING_TECH_TREE[id];
@@ -3023,6 +3041,21 @@ export class GameManager {
       this.addLog(`건설 불가: ${prereq.reason}`, 'danger');
       return false;
     }
+
+    // 🛡️ 튜토리얼 중 생산 시설 재건 단계 이탈 방지 검증 (2차 방어)
+    try {
+      const tutState = typeof localStorage !== 'undefined' ? localStorage.getItem('ark_tutorial_state') : null;
+      if (tutState) {
+        const parsed = JSON.parse(tutState);
+        if (parsed.hasStarted && !parsed.isCompleted && !parsed.isSkipped && parsed.currentStepId) {
+          const check = checkTutorialBuildingRestriction(parsed.currentStepId, id, b.level, this.buildings, this.quests);
+          if (check.isRestricted) {
+            this.addLog(`⚠️ [튜토리얼 지침] ${check.message}`, 'warning');
+            return false;
+          }
+        }
+      }
+    } catch {}
 
     const cost = this.getBuildingUpgradeCost(id, b.level);
     for (const [res, amt] of Object.entries(cost)) {
