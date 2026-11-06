@@ -207,7 +207,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
       <div
         className="relative z-10 flex flex-col w-full h-full border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden animate-drawer-enter"
         style={{
-          backgroundImage: "linear-gradient(rgba(18, 20, 24, 0.92), rgba(12, 14, 18, 0.97)), url('assets/citadel_bonfire.jpg')",
+          backgroundImage: "linear-gradient(rgba(10, 12, 16, 0.40), rgba(6, 8, 12, 0.60)), url('assets/ark_citadel_hub.jpg')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -221,7 +221,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         </div>
 
         {/* ── 상단 사령부 헤더 ── */}
-        <div className="flex items-center justify-between px-4 py-3 bg-[#0a0b0e]/90 border-b border-[#242732] shrink-0 backdrop-blur-md">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#0a0b0e]/80 border-b border-[#242732]/70 shrink-0 backdrop-blur-md">
         <div className="flex items-center gap-2">
           {activeView !== 'banners' && (
             <button
@@ -285,10 +285,10 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   setActiveView('bonfire');
                 }
               }}
-              className={`p-3.5 rounded-xl cursor-pointer transition-all border ${
+              className={`p-3.5 rounded-xl cursor-pointer transition-all border backdrop-blur-md ${
                 hasWarmth
-                  ? 'bg-gradient-to-r from-[#241a12] via-[#1a1612] to-[#121418] border-[#b89758] shadow-[0_0_16px_rgba(184,151,88,0.25)] hover:border-[#dcc496]'
-                  : 'bg-[#151821] border-[#3d372e] hover:border-[#5a4b35] hover:bg-[#1a1e2a]'
+                  ? 'bg-gradient-to-r from-[#241a12]/75 via-[#1a1612]/65 to-[#121418]/75 border-[#b89758]/70 shadow-[0_0_16px_rgba(184,151,88,0.25)] hover:border-[#dcc496] hover:bg-[#241a12]/85'
+                  : 'bg-[#12151e]/65 border-[#3d372e]/65 hover:border-[#5a4b35] hover:bg-[#181d28]/75'
               }`}
             >
               <div className="flex items-center justify-between mb-1.5">
@@ -301,7 +301,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 <span className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold ${
                   hasWarmth
                     ? 'bg-[#b89758]/25 text-[#dcc496] border border-[#b89758]/50 animate-pulse'
-                    : 'bg-[#242732] text-[#9da3af] border border-[#3d4252]'
+                    : 'bg-[#242732]/80 text-[#9da3af] border border-[#3d4252]/70'
                 }`}>
                   {hasWarmth ? `온기 가동 중 (${warmthTimeStr})` : `성화 꺼짐 (${warmthTimeStr})`}
                 </span>
@@ -311,7 +311,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   ? tr('✨ 전 영지 생산량 +15%, 전투 EXP +20%, 용병 지속 재생 온기 버프 활성화 중')
                   : tr('영목(목재)을 공헌하여 거점의 불씨를 지피고 온기 3대 버프를 활성화하십시오.')}
               </p>
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#2a2720] text-[11px] text-[#b89758] font-bold">
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#2a2720]/70 text-[11px] text-[#b89758] font-bold">
                 <span>{tr('영목 줍기 & 불씨 지피기')}</span>
                 <span>{tr('성화 관리 바로가기')} ▶</span>
               </div>
@@ -328,7 +328,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   ? (tutorialStepId === 'TUTORIAL_BUILD_REFINERY' ? 'build-refinery' : 'build-tavern')
                   : undefined
               }
-              className="p-3.5 rounded-xl bg-gradient-to-r from-[#171a22] via-[#14161d] to-[#121418] border border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1e28] cursor-pointer transition-all shadow-md group"
+              className="p-3.5 rounded-xl bg-gradient-to-r from-[#171a22]/65 via-[#14161d]/55 to-[#121418]/65 backdrop-blur-md border border-[#3d372e]/65 hover:border-[#b89758] hover:bg-[#1a1e28]/75 cursor-pointer transition-all shadow-md group"
             >
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2.5">
@@ -338,7 +338,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   </h3>
                 </div>
                 <div className="flex items-center gap-1.5 text-[11px]">
-                  <span className="px-2 py-0.5 rounded bg-[#1f2330] text-[#9da3af] border border-[#2c3245]">
+                  <span className="px-2 py-0.5 rounded bg-[#1f2330]/80 text-[#9da3af] border border-[#2c3245]/70">
                     {tr('완공')} {totalBuiltCount}/13
                   </span>
                   {upgradeableCount > 0 && (
@@ -351,7 +351,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               <p className="text-[11px] text-[#9da3af] leading-relaxed">
                 {tr('13종 거점 건물의 단계적 건설 및 증축 현황을 초간결 목록으로 확인하고 관리합니다.')}
               </p>
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933] text-[11px] text-[#b89758] font-bold">
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#b89758] font-bold">
                 <span>{tr('전체 시설 건설 & 증축 목록')}</span>
                 <span>목록 열기 ▶</span>
               </div>
@@ -368,7 +368,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   ? 'enter-tavern'
                   : undefined
               }
-              className="p-3.5 rounded-xl bg-gradient-to-r from-[#1a1622] via-[#15131b] to-[#121418] border border-[#3d372e] hover:border-[#a875d4] hover:bg-[#1c1626] cursor-pointer transition-all shadow-md group"
+              className="p-3.5 rounded-xl bg-gradient-to-r from-[#1a1622]/65 via-[#15131b]/55 to-[#121418]/65 backdrop-blur-md border border-[#3d372e]/65 hover:border-[#a875d4] hover:bg-[#1c1626]/75 cursor-pointer transition-all shadow-md group"
             >
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2.5">
@@ -377,14 +377,14 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     {tr('【성채 시설 진입】')}
                   </h3>
                 </div>
-                <span className="px-2 py-0.5 rounded bg-[#2a1e35] text-[#ce93d8] font-bold text-[11px] border border-[#5c377d]">
+                <span className="px-2 py-0.5 rounded bg-[#2a1e35]/80 text-[#ce93d8] font-bold text-[11px] border border-[#5c377d]/70">
                   {tr('활동 거점 10종')}
                 </span>
               </div>
               <p className="text-[11px] text-[#9da3af] leading-relaxed">
                 {tr('퀘스트, 백과, 병영, 대장간, 주점 등 실제 내부 패널 진입이 가능한 시설로 즉시 입장합니다.')}
               </p>
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#292233] text-[11px] text-[#ce93d8] font-bold">
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#292233]/70 text-[11px] text-[#ce93d8] font-bold">
                 <span>{tr('퀘스트·백과·병영·병기창·주점')}</span>
                 <span>거점 입장 ▶</span>
               </div>
@@ -399,7 +399,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         {activeView === 'bonfire' && (
           <div className="flex flex-col gap-3.5 max-w-lg mx-auto w-full pt-1">
             {/* 성화 게이지 카드 */}
-            <div className="p-4 rounded-xl bg-[#161820] border border-[#3d372e] flex flex-col items-center text-center">
+            <div className="p-4 rounded-xl bg-[#161820]/70 border border-[#3d372e]/65 backdrop-blur-md flex flex-col items-center text-center">
               <span className="text-4xl mb-2 drop-shadow-[0_0_16px_rgba(255,123,37,0.5)]">🔥</span>
               <h3 className="text-base font-bold text-[#dcc496] mb-1">
                 {tr('신성한 방주의 성화')}
@@ -473,7 +473,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               const alchemyLv = state.buildings['alchemy']?.level || 0;
 
               return (
-                <div className="p-3 bg-[#0e1422]/90 border border-[#202c42] rounded-xl flex flex-col gap-2 shadow-sm backdrop-blur-md">
+                <div className="p-3 bg-[#0e1422]/75 border border-[#202c42]/70 rounded-xl flex flex-col gap-2 shadow-sm backdrop-blur-md">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#c8aa6e] font-bold flex items-center gap-1.5">
                       <span>🏛️</span>
@@ -628,19 +628,19 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   }}
                   className={`flex flex-col justify-center p-3.5 sm:p-4 min-h-[76px] sm:min-h-[82px] rounded-xl border transition-all cursor-pointer backdrop-blur-md ${
                     isTutorialTarget
-                      ? 'ring-2 ring-[#ffd54f] border-[#ffd54f] shadow-[0_0_16px_rgba(255,213,79,0.35)] bg-[#1e1c16]/90'
+                      ? 'ring-2 ring-[#ffd54f] border-[#ffd54f] shadow-[0_0_16px_rgba(255,213,79,0.35)] bg-[#1e1c16]/75'
                       : isHighlighted ? 'ring-2 ring-[#b89758] shadow-[0_0_12px_rgba(184,151,88,0.5)]' : ''
                   } ${
                     isConstructing
-                      ? 'bg-[#181510]/90 border-[#b89758]/60 shadow-[0_0_12px_rgba(184,151,88,0.2)]'
+                      ? 'bg-[#181510]/75 border-[#b89758]/60 shadow-[0_0_12px_rgba(184,151,88,0.2)]'
                       : isBuilt
-                      ? 'bg-[#151821]/80 border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1f2b]/90'
-                      : 'bg-[#101216]/50 border-[#242732] opacity-60 hover:opacity-100'
+                      ? 'bg-[#12151e]/65 border-[#3d372e]/60 hover:border-[#b89758] hover:bg-[#181d2a]/80'
+                      : 'bg-[#0a0d14]/45 border-[#202738]/50 opacity-60 hover:opacity-100 hover:bg-[#101420]/60'
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-3 min-w-0 pr-2">
-                      <div className="w-10 h-10 rounded-xl bg-[#0a0d14] border border-[#3d372e] flex items-center justify-center shrink-0 shadow-inner">
+                      <div className="w-10 h-10 rounded-xl bg-[#0a0d14]/70 border border-[#3d372e]/60 flex items-center justify-center shrink-0 shadow-inner">
                         <GameIcon name={b.id} icon={b.icon} size={24} />
                       </div>
                       <div className="min-w-0">
@@ -768,17 +768,17 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     handlePlayClick();
                     onEnterDrawer(item.key);
                   }}
-                  className={`flex items-center justify-between p-4 sm:p-4.5 min-h-[96px] sm:min-h-[104px] rounded-2xl transition-all shadow-md select-none ${
+                  className={`flex items-center justify-between p-4 sm:p-4.5 min-h-[96px] sm:min-h-[104px] rounded-2xl transition-all shadow-md select-none backdrop-blur-md ${
                     isLocked
-                      ? 'bg-[#0d1017]/80 border border-[#202738] opacity-60 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-[#141822]/95 via-[#181d2a]/90 to-[#10131c]/95 border border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1f2b] hover:shadow-[0_0_18px_rgba(184,151,88,0.25)] cursor-pointer group active:scale-[0.98]'
+                      ? 'bg-[#0d1017]/50 border border-[#202738]/50 opacity-60 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-[#141822]/65 via-[#181d2a]/55 to-[#10131c]/65 border border-[#3d372e]/60 hover:border-[#b89758] hover:bg-[#1a1f2b]/80 hover:shadow-[0_0_18px_rgba(184,151,88,0.25)] cursor-pointer group active:scale-[0.98]'
                   }`}
                 >
                   <div className="flex items-center gap-3.5 min-w-0 pr-2">
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-3xl shrink-0 shadow-inner transition-transform ${
                       isLocked
-                        ? 'bg-[#090b10] border border-[#1a2130] opacity-40 grayscale'
-                        : 'bg-[#0a0d14] border border-[#3d372e] group-hover:border-[#b89758] group-hover:scale-105'
+                        ? 'bg-[#090b10]/60 border border-[#1a2130]/60 opacity-40 grayscale'
+                        : 'bg-[#0a0d14]/70 border border-[#3d372e]/60 group-hover:border-[#b89758] group-hover:scale-105'
                     }`}>
                       <span className="leading-none drop-shadow">{item.icon}</span>
                     </div>
