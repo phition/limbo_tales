@@ -11,6 +11,7 @@ import { SoundManager } from '../managers/SoundManager';
 import { GameManager } from '../managers/GameManager';
 import { BattleVFXOverlay, VFXEvent, VFXType } from '../components/BattleVFXOverlay';
 import { generateArenaRewardEquipment, CLASS_HONOR_SHOP_DEFINITIONS, createClassHonorEquipment, recalculateEquipmentStats } from '../data/equipment';
+import { NEMESIS_BOSS_CONFIG } from '../data/nemesis';
 import { NemesisView } from './NemesisView';
 import { InvasionView } from './InvasionView';
 import { AttackerVisualBox } from '../components/AttackerVisualBox';
@@ -844,7 +845,7 @@ export const ArenaScreen: React.FC = () => {
   const isNemesisUnlocked = gateLevel >= 3;
   const isInvasionUnlocked = gateLevel >= 6;
 
-  const [gateMode, setGateMode] = useState<'arena' | 'nemesis' | 'invasion'>('arena');
+  const [gateMode, setGateMode] = useState<'hub' | 'arena' | 'nemesis' | 'invasion'>('hub');
   const [tab, setTab] = useState<Tab>('match');
   const [opponents, setOpponents] = useState<ArenaOpponent[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
@@ -853,9 +854,9 @@ export const ArenaScreen: React.FC = () => {
   // 게이트 레벨에 따른 개방 모드 자동 보정
   useEffect(() => {
     if (gateMode === 'invasion' && !isInvasionUnlocked) {
-      setGateMode(isNemesisUnlocked ? 'nemesis' : 'arena');
+      setGateMode('hub');
     } else if (gateMode === 'nemesis' && !isNemesisUnlocked) {
-      setGateMode('arena');
+      setGateMode('hub');
     }
   }, [gateMode, isNemesisUnlocked, isInvasionUnlocked]);
 
@@ -1062,6 +1063,86 @@ export const ArenaScreen: React.FC = () => {
     const living = playerTeam.filter(c => c.currentHp > 0);
     return calculatePartySynergies(living.map(c => ({ classId: c.classId, position: c.position } as any)));
   }, [playerTeam]);
+
+  // ⚔️ 영웅 개별 전투력 계산 헬퍼 (공격력 x 3 + 방어력 x 2 + 체력 / 5)
+  const getHeroCombatPower = useCallback((m?: Mercenary | null): number => {
+    if (!m) return 0;
+    const atk = m.stats?.atk || 10;
+    const def = m.stats?.def || 10;
+    const hp = m.maxHp || m.stats?.hp || 100;
+    return Math.round(atk * 3 + def * 2 + hp / 5);
+  }, []);
+
+  // 🏆 1. 아레나 대표 결투 용병 (리더 우선 > 오퍼레이터 > 1번 메인 > 첫번째 영웅)
+  const arenaRepHero = useMemo(() => {
+    if (playerLeader) return playerLeader;
+    if (dimDeck.operatorHero) return dimDeck.operatorHero;
+    if (dimDeck.mainHeroes[0]) return dimDeck.mainHeroes[0];
+    return state.barracks[0] || state.party?.[0] || null;
+  }, [playerLeader, dimDeck, state.barracks, state.party]);
+
+  const arenaRepCp = useMemo(() => getHeroCombatPower(arenaRepHero), [arenaRepHero, getHeroCombatPower]);
+
+  // 🌌 2. 네메시스 4인 토벌대
+  const nemesisSquad = useMemo(() => {
+    const heroes: Mercenary[] = [];
+    if (dimDeck.mainHeroes && dimDeck.mainHeroes.length > 0) {
+      heroes.push(...dimDeck.mainHeroes);
+    }
+    if (dimDeck.operatorHero && !heroes.some(h => h.id === dimDeck.operatorHero!.id)) {
+      heroes.push(dimDeck.operatorHero);
+    }
+    const all = [...state.barracks, ...state.party];
+    for (const h of all) {
+      if (heroes.length >= 4) break;
+      if (!heroes.some(x => x.id === h.id)) {
+        heroes.push(h);
+      }
+    }
+    return heroes.slice(0, 4);
+  }, [dimDeck, state.barracks, state.party]);
+
+  const nemesisSquadCp = useMemo(() => {
+    return nemesisSquad.reduce((sum, h) => sum + getHeroCombatPower(h), 0);
+  }, [nemesisSquad, getHeroCombatPower]);
+
+  // 🏰 3. 영지 침공 5인 수성/공성 정예군
+  const invasionSquad = useMemo(() => {
+    const heroes: Mercenary[] = [];
+    if (dimDeck.mainHeroes && dimDeck.mainHeroes.length > 0) {
+      heroes.push(...dimDeck.mainHeroes);
+    }
+    if (dimDeck.operatorHero && !heroes.some(h => h.id === dimDeck.operatorHero!.id)) {
+      heroes.push(dimDeck.operatorHero);
+    }
+    if (dimDeck.supporterHero && !heroes.some(h => h.id === dimDeck.supporterHero!.id)) {
+      heroes.push(dimDeck.supporterHero);
+    }
+    const all = [...state.barracks, ...state.party];
+    for (const h of all) {
+      if (heroes.length >= 5) break;
+      if (!heroes.some(x => x.id === h.id)) {
+        heroes.push(h);
+      }
+    }
+    return heroes.slice(0, 5);
+  }, [dimDeck, state.barracks, state.party]);
+
+  const invasionSquadCp = useMemo(() => {
+    return invasionSquad.reduce((sum, h) => sum + getHeroCombatPower(h), 0);
+  }, [invasionSquad, getHeroCombatPower]);
+
+  const nemesisState = state.nemesisState || gm.nemesisState;
+  const bossMaxHp = nemesisState?.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp;
+  const bossCurrentHp = nemesisState?.currentBossHp ?? bossMaxHp;
+  const bossHpPercent = Math.max(0, Math.min(100, (bossCurrentHp / bossMaxHp) * 100));
+  const nemesisDailyAttempts = nemesisState?.dailyAttempts ?? 3;
+  const nemesisTotalDamage = nemesisState?.totalDamage || 0;
+
+  const tacticalTower = useMemo(() => gm.getTacticalTower(), [gm, state.invasionState, turnTick]);
+  const isPeaceShieldActive = Boolean(state.invasionState?.peaceShieldActive);
+  const invasionWins = state.invasionState?.totalWins || 0;
+  const totalInvasions = state.invasionState?.totalInvasions || 0;
 
   // 상대 풀 로드 (차원 앵커 게이트 레벨 반영 + 실제 유저 데이터 우선 매칭 + 부족 시 봇 보충)
   // ── 🛡️ [프리시즌 고정] 유저풀 집계 전까지 전 등급 AI 봇 대진표 매칭 ──
@@ -3613,111 +3694,615 @@ export const ArenaScreen: React.FC = () => {
   return (
     <div className="flex-1 min-h-0 w-full max-w-full flex flex-col bg-transparent overflow-hidden overflow-x-hidden relative">
 
-      {/* 🌌 차원 관문 게이트 전환 바 (PvP 결투장 <-> 차원 네메시스 월드 레이드 <-> 차원 영지 침공) */}
-      <div className="px-3 pt-2 shrink-0 w-full max-w-full z-10">
-        <div className="p-1 rounded-xl bg-[#090e1a] border border-[#1a2538] flex items-center gap-1.5 shadow-lg">
-          {/* 1. 차원 아레나 (Lv.1 이상) */}
-          <button
-            className={`flex-1 min-w-0 py-2 px-1 sm:px-2 rounded-lg text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1 ${
-              gateMode === 'arena'
-                ? 'bg-gradient-to-r from-[#ff416c] to-[#ff4b2b] text-white shadow-md shadow-[#ff416c33]'
-                : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
-            }`}
-            onClick={() => {
-              setGateMode('arena');
-              gm.emit('phaserSceneChange', 'arena');
-            }}
-          >
-            <span className="shrink-0">⚔️</span>
-            <span className="truncate">{tr('차원 아레나')}</span>
-            <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded bg-black/40 text-[#ffd54f] font-mono shrink-0">PvP</span>
-          </button>
+      {/* ── 🌌 차원 게이트 상단 시네마틱 이미지 창 (assets/menu_arena.jpg) ── */}
+      <div className="relative w-full h-36 sm:h-44 md:h-48 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden select-none">
+        <img
+          src="assets/menu_arena.jpg"
+          alt={tr('차원 게이트')}
+          className="absolute inset-0 w-full h-full object-cover filter brightness-100 contrast-105 saturate-110"
+        />
+        {/* 상단 텍스트 가독성 확보용 소프트 비네팅 */}
+        <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#08090b]/85 via-[#08090b]/35 to-transparent pointer-events-none" />
+        {/* 하단 연결 은은한 그라데이션 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-transparent to-transparent pointer-events-none" />
 
-          {/* 2. 네메시스 월드 레이드 (Lv.3 이상) */}
-          <button
-            className={`flex-1 min-w-0 py-2 px-1 sm:px-2 rounded-lg text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1 relative overflow-hidden ${
-              !isNemesisUnlocked
-                ? 'text-[#506078] hover:bg-[#0d0f14] opacity-65 cursor-pointer'
-                : gateMode === 'nemesis'
-                ? 'bg-gradient-to-r from-[#8a2be2] to-[#4a0e78] text-white shadow-md shadow-[#8a2be244] border border-[#a855f766]'
-                : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
-            }`}
-            onClick={() => {
-              if (!isNemesisUnlocked) {
-                gameDialog.alert({
-                  title: tr('차원 관문 미개방'),
-                  message: `${tr('차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})\n\n${tr('성채에서 차원 앵커 게이트를 증축해주세요.')}`,
-                  icon: '🔒',
-                });
-                return;
-              }
-              setGateMode('nemesis');
-              gm.emit('phaserSceneChange', 'arena');
-            }}
-          >
-            <span className={`shrink-0 ${isNemesisUnlocked ? 'animate-pulse' : ''}`}>🌌</span>
-            <span className="truncate">{tr('네메시스')}</span>
-            {isNemesisUnlocked ? (
-              <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded bg-purple-950/80 border border-purple-500/50 text-[#e0aaff] font-mono shrink-0">
-                RAID
-              </span>
-            ) : (
-              <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded bg-[#1e2538] border border-[#2d3a54] text-[#90a4ae] font-mono shrink-0">
-                🔒Lv.3
-              </span>
-            )}
-            {isNemesisUnlocked && (state.nemesisState?.dailyAttempts ?? 3) > 0 && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#38ef7d] animate-ping ml-0.5 shrink-0" />
-            )}
-          </button>
+        {/* 좌측 상단 시설 타이틀 & 레벨 뱃지 */}
+        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 max-w-[calc(100%-140px)] pointer-events-auto">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h2 className="text-sm sm:text-base md:text-lg font-black text-[#ededed] tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] flex items-center gap-1.5">
+              <span className="text-[#ffd54f]">🏆</span>
+              <span>{tr('차원 앵커 게이트')}</span>
+              <span className="text-[11px] sm:text-xs font-normal text-[#a0aec0] font-sans hidden sm:inline">(Dimensional Gate)</span>
+            </h2>
+            <span className="px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-bold bg-[#b89758]/30 text-[#ffd54f] border border-[#b89758]/70 backdrop-blur-md shadow-sm font-mono">
+              Lv.{gateLevel}
+            </span>
+          </div>
+          <p className="text-[10px] sm:text-xs text-[#cfd8e8] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)] line-clamp-1 mt-0.5 font-medium">
+            {tr('차원 아레나(1v1) · 네메시스 월드 보스 · 5v5 영지 침공 작전 사령부')}
+          </p>
+        </div>
 
-          {/* 3. 영지 침공 (Lv.6 이상) */}
+        {/* 우측 상단 액션 버튼 */}
+        <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center gap-2 pointer-events-auto">
+          {gateMode !== 'hub' && (
+            <button
+              onClick={() => {
+                try { SoundManager.getInstance().play('click'); } catch {}
+                setGateMode('hub');
+              }}
+              className="px-2.5 py-1.5 rounded-lg bg-black/75 hover:bg-black/90 border border-[#ffd54f]/70 hover:border-[#ffd54f] text-[#ffd54f] text-xs font-bold transition-all shadow-md flex items-center gap-1 cursor-pointer active:scale-95"
+            >
+              <span>←</span>
+              <span className="hidden sm:inline">{tr('게이트 허브')}</span>
+              <span className="sm:hidden">{tr('허브')}</span>
+            </button>
+          )}
           <button
-            className={`flex-1 min-w-0 py-2 px-1 sm:px-2 rounded-lg text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1 relative overflow-hidden ${
-              !isInvasionUnlocked
-                ? 'text-[#506078] hover:bg-[#0d0f14] opacity-65 cursor-pointer'
-                : gateMode === 'invasion'
-                ? 'bg-gradient-to-r from-[#e53e3e] via-[#dd6b20] to-[#d69e2e] text-white shadow-md shadow-[#e53e3e44] border border-[#f6ad5566]'
-                : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
-            }`}
             onClick={() => {
-              if (!isInvasionUnlocked) {
-                gameDialog.alert({
-                  title: tr('차원 관문 미개방'),
-                  message: `${tr('차원 영지 침공(5인 원정대 약탈전)은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})\n\n${tr('성채에서 차원 앵커 게이트를 증축해주세요.')}`,
-                  icon: '🔒',
-                });
-                return;
-              }
-              setGateMode('invasion');
-              gm.emit('phaserSceneChange', 'invasion');
+              try { SoundManager.getInstance().play('click'); } catch {}
+              navigateTo('citadel');
             }}
+            className="px-2.5 py-1.5 rounded-lg bg-black/75 hover:bg-black/90 border border-[#b89758]/60 hover:border-[#b89758] text-[#e0e0e0] hover:text-white text-xs font-bold transition-all shadow-md flex items-center gap-1 cursor-pointer active:scale-95"
+            title={tr('방주 성채로 귀환')}
           >
-            <span className={`shrink-0 ${isInvasionUnlocked ? 'animate-bounce' : ''}`}>🏰</span>
-            <span className="truncate">{tr('영지 침공')}</span>
-            {isInvasionUnlocked ? (
-              <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded bg-amber-950/80 border border-amber-500/50 text-[#ffd54f] font-mono shrink-0">
-                5v5
-              </span>
-            ) : (
-              <span className="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-[#1e2538] border border-[#2d3a54] text-[#90a4ae] font-mono shrink-0">
-                🔒Lv.6
-              </span>
-            )}
+            <span>🏰</span>
+            <span className="hidden sm:inline">{tr('성채 귀환')}</span>
           </button>
         </div>
       </div>
 
-      {gateMode === 'invasion' ? (
+      {/* ── 게이트 세부 뷰(아레나, 네메시스, 침공) 진입 시 상단 서브 네비게이션 바 ── */}
+      {gateMode !== 'hub' && (
+        <div className="px-3 py-1.5 shrink-0 w-full max-w-full z-10 bg-[#090d16] border-b border-[#1a2538] flex items-center justify-between gap-2 shadow-sm">
+          <button
+            onClick={() => {
+              try { SoundManager.getInstance().play('click'); } catch {}
+              setGateMode('hub');
+            }}
+            className="px-2.5 py-1 rounded-lg bg-[#141b2d] hover:bg-[#1f2942] border border-[#ffd54f]/50 hover:border-[#ffd54f] text-xs font-bold text-[#ffd54f] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer active:scale-95 shadow-sm"
+          >
+            <span>←</span>
+            <span>{tr('차원 게이트 허브로')}</span>
+          </button>
+
+          <div className="p-0.5 rounded-lg bg-[#070a12] border border-[#1a2538] flex items-center gap-1">
+            {/* 아레나 탭 */}
+            <button
+              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
+                gateMode === 'arena'
+                  ? 'bg-gradient-to-r from-[#ff416c] to-[#ff4b2b] text-white shadow-sm'
+                  : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
+              }`}
+              onClick={() => {
+                try { SoundManager.getInstance().play('click'); } catch {}
+                setGateMode('arena');
+                gm.emit('phaserSceneChange', 'arena');
+              }}
+            >
+              <span>⚔️</span>
+              <span className="hidden sm:inline">{tr('차원 아레나')}</span>
+              <span className="sm:hidden">{tr('아레나')}</span>
+            </button>
+
+            {/* 네메시스 탭 */}
+            <button
+              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
+                !isNemesisUnlocked
+                  ? 'text-[#506078] opacity-60'
+                  : gateMode === 'nemesis'
+                  ? 'bg-gradient-to-r from-[#8a2be2] to-[#4a0e78] text-white shadow-sm'
+                  : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
+              }`}
+              onClick={() => {
+                if (!isNemesisUnlocked) {
+                  gameDialog.alert({
+                    title: tr('차원 관문 미개방'),
+                    message: `${tr('차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})`,
+                    icon: '🔒',
+                  });
+                  return;
+                }
+                try { SoundManager.getInstance().play('click'); } catch {}
+                setGateMode('nemesis');
+                gm.emit('phaserSceneChange', 'arena');
+              }}
+            >
+              <span>🌌</span>
+              <span>{tr('네메시스')}</span>
+              {!isNemesisUnlocked && <span className="text-[9px] text-[#90a4ae]">🔒Lv.3</span>}
+            </button>
+
+            {/* 영지 침공 탭 */}
+            <button
+              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
+                !isInvasionUnlocked
+                  ? 'text-[#506078] opacity-60'
+                  : gateMode === 'invasion'
+                  ? 'bg-gradient-to-r from-[#e53e3e] via-[#dd6b20] to-[#d69e2e] text-white shadow-sm'
+                  : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
+              }`}
+              onClick={() => {
+                if (!isInvasionUnlocked) {
+                  gameDialog.alert({
+                    title: tr('차원 관문 미개방'),
+                    message: `${tr('차원 영지 침공은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})`,
+                    icon: '🔒',
+                  });
+                  return;
+                }
+                try { SoundManager.getInstance().play('click'); } catch {}
+                setGateMode('invasion');
+                gm.emit('phaserSceneChange', 'invasion');
+              }}
+            >
+              <span>🏰</span>
+              <span className="hidden sm:inline">{tr('영지 침공')}</span>
+              <span className="sm:hidden">{tr('침공')}</span>
+              {!isInvasionUnlocked && <span className="text-[9px] text-[#90a4ae]">🔒Lv.6</span>}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── 🌀 1. 차원 게이트 허브 화면 (gateMode === 'hub') ── */}
+      {gateMode === 'hub' ? (
+        <div className="flex-1 min-h-0 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4 bg-[#0a0d14] flex flex-col gap-4">
+          {/* 가이드 배너 */}
+          <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[#141b2d] via-[#101420] to-[#141b2d] border border-[#23334d] shadow-sm shrink-0">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="text-xl">🌀</span>
+              <div className="min-w-0">
+                <div className="text-xs sm:text-sm font-bold text-white tracking-wide">
+                  {tr('차원 관문 작전 허브')}
+                </div>
+                <div className="text-[11px] text-[#8b9bb4] truncate">
+                  {tr('다차원의 균열 너머 전장을 선택하여 출격하십시오. 편성 부대와 전황이 실시간 연동됩니다.')}
+                </div>
+              </div>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 shrink-0">
+              <span className="text-xs text-[#ffd54f] font-mono font-bold">
+                {tr('게이트 상태')}: 🟢 ACTIVE
+              </span>
+            </div>
+          </div>
+
+          {/* 3대 콘텐츠 선택 카드 그리드 */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4 items-stretch">
+            {/* ── 🏆 카드 1: 차원 아레나 (1v1 PVP) ── */}
+            <div
+              onClick={() => {
+                try { SoundManager.getInstance().play('click'); } catch {}
+                setGateMode('arena');
+                gm.emit('phaserSceneChange', 'arena');
+              }}
+              className="group relative rounded-2xl bg-gradient-to-b from-[#18131d] via-[#120f18] to-[#0d0a12] border border-[#ff416c44] hover:border-[#ff416c] transition-all duration-300 shadow-lg hover:shadow-[0_0_24px_rgba(255,65,108,0.25)] flex flex-col justify-between overflow-hidden cursor-pointer p-4"
+            >
+              <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#ff416c]/15 rounded-full blur-2xl group-hover:bg-[#ff416c]/25 transition-all pointer-events-none" />
+
+              <div>
+                {/* 헤더 */}
+                <div className="flex items-center justify-between gap-1.5 mb-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#ff416c25] text-[#ff416c] border border-[#ff416c55] font-mono">
+                      🏆 1v1 PVP
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1f1929] text-[#ffd54f] border border-[#ffd54f33] font-mono truncate max-w-[130px]">
+                      📜 {arenaEdict.name || tr('자유 결투')}
+                    </span>
+                  </div>
+                  <span className="text-xs text-[#ff8a80] group-hover:translate-x-0.5 transition-transform font-bold">
+                    ▶
+                  </span>
+                </div>
+
+                <h3 className="text-base font-black text-white group-hover:text-[#ffd54f] transition-colors flex items-center gap-1.5">
+                  <span>⚔️ {tr('차원 아레나')}</span>
+                </h3>
+                <p className="text-[11px] text-[#8b9bb4] mt-0.5">
+                  {tr('1v1 실시간 턴제 결투 및 피버 쇼다운 대결')}
+                </p>
+
+                {/* 대표 결투 용병 정보 슬롯 */}
+                <div className="my-3 p-3 rounded-xl bg-black/40 border border-[#ff416c22] group-hover:border-[#ff416c44] transition-all">
+                  <div className="text-[10px] text-[#ff8a80] font-bold uppercase tracking-wider mb-2 flex items-center justify-between">
+                    <span>👤 {tr('출전 대표 결투 용병')}</span>
+                    <span className="text-[#ffd54f] font-mono font-bold">CP ⚡ {arenaRepCp.toLocaleString()}</span>
+                  </div>
+                  {arenaRepHero ? (
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-13 h-13 rounded-xl overflow-hidden border-2 border-[#b89758] shadow-md shrink-0 bg-[#0c0d12]">
+                        <img
+                          src={getCombatantPortrait(arenaRepHero)}
+                          alt={arenaRepHero.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute bottom-0 right-0 px-1 py-0.2 bg-black/80 text-[9px] font-bold text-[#ffd54f] font-mono rounded-tl">
+                          Lv.{arenaRepHero.level}
+                        </span>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-xs sm:text-sm font-bold text-white truncate">{arenaRepHero.name}</span>
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ff416c22] text-[#ff8a80] border border-[#ff416c44] font-mono">
+                            T{arenaRepHero.tier || 1}
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-[#a0aec0] mt-0.5 truncate">
+                          {CHARACTER_CLASSES[arenaRepHero.classId]?.name || arenaRepHero.classId}
+                        </div>
+                        <div className="text-[10px] text-[#38ef7d] mt-1 flex items-center gap-1 font-medium">
+                          <span>⚡</span>
+                          <span>{tr('피버 결투 출전 준비 완료')}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-xs text-[#8b9bb4] py-2 text-center">{tr('편성된 용병이 없습니다')}</div>
+                  )}
+                </div>
+
+                {/* 콘텐츠 현황 정보 */}
+                <div className="space-y-1.5 text-xs text-[#cfd8e8] py-1 border-t border-[#ff416c15]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[#8b9bb4] flex items-center gap-1">
+                      <span>{badge.icon}</span>
+                      <span>{tr('랭크')}</span>
+                    </span>
+                    <span className="font-bold font-mono" style={{ color: badge.color }}>
+                      {badge.label} (#{state.currentArenaRank}) · {state.currentArenaRating}P
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[#8b9bb4] flex items-center gap-1">
+                      <span>🎟️</span>
+                      <span>{tr('일일 결투 티켓')}</span>
+                    </span>
+                    <span className="font-mono font-bold text-[#ffd54f]">
+                      {state.arenaTickets ?? 3} / 3
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[#8b9bb4] flex items-center gap-1">
+                      <span>🔥</span>
+                      <span>{tr('전적 현황')}</span>
+                    </span>
+                    <span className="font-mono text-[11px] text-[#e0e0e0]">
+                      {streak > 0 ? (
+                        <span className="text-[#ff7043] font-bold">{streak}{tr('연승 질주 중')}</span>
+                      ) : (
+                        tr('결투 준비 완료')
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 하단 진입 버튼 */}
+              <div className="mt-4 pt-2">
+                <button
+                  className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#ff416c] to-[#ff4b2b] hover:from-[#ff527b] hover:to-[#ff5c3e] text-white font-bold text-xs shadow-md shadow-[#ff416c33] transition-all flex items-center justify-center gap-1.5 active:scale-95"
+                >
+                  <span>⚔️</span>
+                  <span>{tr('상대 매칭 목록 확인 ▶')}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* ── 🌌 카드 2: 네메시스 월드 보스 (Lv.3 이상) ── */}
+            <div
+              onClick={() => {
+                if (!isNemesisUnlocked) {
+                  gameDialog.alert({
+                    title: tr('차원 관문 미개방'),
+                    message: `${tr('차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})\n\n${tr('성채에서 차원 앵커 게이트를 증축해주세요.')}`,
+                    icon: '🔒',
+                  });
+                  return;
+                }
+                try { SoundManager.getInstance().play('click'); } catch {}
+                setGateMode('nemesis');
+                gm.emit('phaserSceneChange', 'arena');
+              }}
+              className={`group relative rounded-2xl bg-gradient-to-b from-[#181024] via-[#120b1b] to-[#0d0714] border transition-all duration-300 shadow-lg flex flex-col justify-between overflow-hidden p-4 ${
+                !isNemesisUnlocked
+                  ? 'border-[#3d2b5244] opacity-80 cursor-pointer'
+                  : 'border-[#8a2be244] hover:border-[#8a2be2] hover:shadow-[0_0_24px_rgba(138,43,226,0.25)] cursor-pointer'
+              }`}
+            >
+              <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#8a2be2]/15 rounded-full blur-2xl group-hover:bg-[#8a2be2]/25 transition-all pointer-events-none" />
+
+              <div>
+                {/* 헤더 */}
+                <div className="flex items-center justify-between gap-1.5 mb-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#8a2be225] text-[#e0aaff] border border-[#8a2be255] font-mono">
+                      🌌 협동 RAID
+                    </span>
+                    {isNemesisUnlocked ? (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-950/80 text-[#d8b4fe] border border-purple-500/40 font-mono">
+                        VOID BOSS
+                      </span>
+                    ) : (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1e2538] text-[#90a4ae] border border-[#2d3a54] font-mono">
+                        🔒 Lv.3 해금
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs text-[#c084fc] group-hover:translate-x-0.5 transition-transform font-bold">
+                    {isNemesisUnlocked ? '▶' : '🔒'}
+                  </span>
+                </div>
+
+                <h3 className="text-base font-black text-white group-hover:text-[#e0aaff] transition-colors flex items-center gap-1.5">
+                  <span>🌌 {tr('차원 네메시스')}</span>
+                </h3>
+                <p className="text-[11px] text-[#8b9bb4] mt-0.5">
+                  {tr('전 지휘관 협동 고대 차원 균열 괴수 토벌')}
+                </p>
+
+                {/* 4인 토벌대 프리뷰 */}
+                <div className="my-3 p-3 rounded-xl bg-black/40 border border-[#8a2be222] group-hover:border-[#8a2be244] transition-all">
+                  <div className="text-[10px] text-[#e0aaff] font-bold uppercase tracking-wider mb-2 flex items-center justify-between">
+                    <span>👥 {tr('4인 보스 토벌 원정대')}</span>
+                    <span className="text-[#ffd54f] font-mono font-bold">CP ⚡ {nemesisSquadCp.toLocaleString()}</span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {nemesisSquad.map((m, idx) => (
+                      <div key={m?.id || idx} className="relative flex flex-col items-center">
+                        <div className="relative w-11 h-11 rounded-lg overflow-hidden border border-[#8a2be266] bg-[#0c0d12]">
+                          {m ? (
+                            <img src={getCombatantPortrait(m)} alt={m.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-xs text-[#506078]">+</div>
+                          )}
+                          {m && (
+                            <span className="absolute bottom-0 right-0 px-1 py-0.2 bg-black/80 text-[8px] font-bold text-[#ffd54f] font-mono rounded-tl">
+                              {m.level}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[9px] text-[#cfd8e8] truncate w-full text-center mt-0.5">
+                          {m?.name || tr('미편성')}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 보스 상태 및 인포그래픽 */}
+                <div className="space-y-1.5 text-xs text-[#cfd8e8] py-1 border-t border-[#8a2be215]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[#8b9bb4] flex items-center gap-1">
+                      <span>👾</span>
+                      <span>{tr('출현 보스')}</span>
+                    </span>
+                    <span className="font-bold text-white text-[11px] truncate max-w-[150px]">
+                      {tr(NEMESIS_BOSS_CONFIG.name)} (P{nemesisState?.phase || 1})
+                    </span>
+                  </div>
+
+                  {/* 보스 잔여 체력바 */}
+                  <div className="w-full">
+                    <div className="flex items-center justify-between text-[10px] mb-1">
+                      <span className="text-[#a0aec0]">{tr('보스 잔여 체력')}</span>
+                      <span className="font-mono font-bold text-[#e0aaff]">
+                        {bossHpPercent.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-[#161224] border border-[#3b2752] overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-[#8a2be2] via-[#c084fc] to-[#f472b6] transition-all duration-500 rounded-full"
+                        style={{ width: `${bossHpPercent}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[11px] text-[#8b9bb4] flex items-center gap-1">
+                      <span>🔥</span>
+                      <span>{tr('오늘 잔여 도전')}</span>
+                    </span>
+                    <span className="font-mono font-bold text-[#38ef7d]">
+                      {nemesisDailyAttempts} / 3{tr('회')}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[#8b9bb4] flex items-center gap-1">
+                      <span>💥</span>
+                      <span>{tr('나의 누적 딜량')}</span>
+                    </span>
+                    <span className="font-mono text-[#ffd54f] font-bold text-[11px]">
+                      {nemesisTotalDamage.toLocaleString()} DMG
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 하단 진입 버튼 */}
+              <div className="mt-4 pt-2">
+                {isNemesisUnlocked ? (
+                  <button
+                    className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#8a2be2] to-[#6b21a8] hover:from-[#9d3bf0] hover:to-[#7e22ce] text-white font-bold text-xs shadow-md shadow-[#8a2be233] transition-all flex items-center justify-center gap-1.5 active:scale-95"
+                  >
+                    <span>🌌</span>
+                    <span>{tr('월드 보스 토벌실 입장 ▶')}</span>
+                  </button>
+                ) : (
+                  <button
+                    className="w-full py-2.5 px-3 rounded-xl bg-[#1b1726] border border-[#392b4d] text-[#8e859f] font-bold text-xs transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <span>🔒</span>
+                    <span>{tr('게이트 Lv.3 증축 필요')}</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* ── 🏰 카드 3: 영지 침공전 (Lv.6 이상) ── */}
+            <div
+              onClick={() => {
+                if (!isInvasionUnlocked) {
+                  gameDialog.alert({
+                    title: tr('차원 관문 미개방'),
+                    message: `${tr('차원 영지 침공(5인 원정대 약탈전)은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})\n\n${tr('성채에서 차원 앵커 게이트를 증축해주세요.')}`,
+                    icon: '🔒',
+                  });
+                  return;
+                }
+                try { SoundManager.getInstance().play('click'); } catch {}
+                setGateMode('invasion');
+                gm.emit('phaserSceneChange', 'invasion');
+              }}
+              className={`group relative rounded-2xl bg-gradient-to-b from-[#1c140e] via-[#140e0a] to-[#0e0a07] border transition-all duration-300 shadow-lg flex flex-col justify-between overflow-hidden p-4 ${
+                !isInvasionUnlocked
+                  ? 'border-[#4a352044] opacity-80 cursor-pointer'
+                  : 'border-[#dd6b2044] hover:border-[#dd6b20] hover:shadow-[0_0_24px_rgba(221,107,32,0.25)] cursor-pointer'
+              }`}
+            >
+              <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#dd6b20]/15 rounded-full blur-2xl group-hover:bg-[#dd6b20]/25 transition-all pointer-events-none" />
+
+              <div>
+                {/* 헤더 */}
+                <div className="flex items-center justify-between gap-1.5 mb-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#dd6b2025] text-[#fbd38d] border border-[#dd6b2055] font-mono">
+                      🏰 5v5 공성·수성
+                    </span>
+                    {isInvasionUnlocked ? (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-950/80 text-[#ffd54f] border border-amber-500/40 font-mono">
+                        SIEGE
+                      </span>
+                    ) : (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1e2538] text-[#90a4ae] border border-[#2d3a54] font-mono">
+                        🔒 Lv.6 해금
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs text-[#f6ad55] group-hover:translate-x-0.5 transition-transform font-bold">
+                    {isInvasionUnlocked ? '▶' : '🔒'}
+                  </span>
+                </div>
+
+                <h3 className="text-base font-black text-white group-hover:text-[#ffd54f] transition-colors flex items-center gap-1.5">
+                  <span>🏰 {tr('영지 침공전')}</span>
+                </h3>
+                <p className="text-[11px] text-[#8b9bb4] mt-0.5">
+                  {tr('적 거점 요새 공성 약탈 및 아군 성채 방어전')}
+                </p>
+
+                {/* 5인 수성/공성 부대 프리뷰 */}
+                <div className="my-3 p-3 rounded-xl bg-black/40 border border-[#dd6b2022] group-hover:border-[#dd6b2044] transition-all">
+                  <div className="text-[10px] text-[#fbd38d] font-bold uppercase tracking-wider mb-2 flex items-center justify-between">
+                    <span>🛡️ {tr('5인 수성/공성 정예군')}</span>
+                    <span className="text-[#ffd54f] font-mono font-bold">CP ⚡ {invasionSquadCp.toLocaleString()}</span>
+                  </div>
+                  <div className="grid grid-cols-5 gap-1">
+                    {invasionSquad.map((m, idx) => (
+                      <div key={m?.id || idx} className="relative flex flex-col items-center">
+                        <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-lg overflow-hidden border border-[#dd6b2066] bg-[#0c0d12]">
+                          {m ? (
+                            <img src={getCombatantPortrait(m)} alt={m.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-[10px] text-[#506078]">+</div>
+                          )}
+                          {m && (
+                            <span className="absolute bottom-0 right-0 px-0.5 py-0.2 bg-black/80 text-[7px] font-bold text-[#ffd54f] font-mono rounded-tl">
+                              {m.level}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[8px] text-[#cfd8e8] truncate w-full text-center mt-0.5">
+                          {m?.name || tr('미편성')}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 방어 및 침공 현황 */}
+                <div className="space-y-1.5 text-xs text-[#cfd8e8] py-1 border-t border-[#dd6b2015]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[#8b9bb4] flex items-center gap-1">
+                      <span>🗼</span>
+                      <span>{tr('전술 방어 타워')}</span>
+                    </span>
+                    <span className="font-bold font-mono text-[#ffd54f]">
+                      Lv.{tacticalTower?.level || gateLevel}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[#8b9bb4] flex items-center gap-1">
+                      <span>🛡️</span>
+                      <span>{tr('방어 태세')}</span>
+                    </span>
+                    <span className={`text-[11px] font-bold ${isPeaceShieldActive ? 'text-[#38ef7d]' : 'text-[#ffd54f]'}`}>
+                      {isPeaceShieldActive ? tr('평화 보호막 가동 중') : tr('정상 방어 태세')}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[#8b9bb4] flex items-center gap-1">
+                      <span>⚔️</span>
+                      <span>{tr('침공 전적')}</span>
+                    </span>
+                    <span className="font-mono text-[11px] text-[#e0e0e0]">
+                      {invasionWins}{tr('승')} / {totalInvasions}{tr('전')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 하단 진입 버튼 */}
+              <div className="mt-4 pt-2">
+                {isInvasionUnlocked ? (
+                  <button
+                    className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#dd6b20] to-[#b7791f] hover:from-[#ed8936] hover:to-[#d69e2e] text-white font-bold text-xs shadow-md shadow-[#dd6b2033] transition-all flex items-center justify-center gap-1.5 active:scale-95"
+                  >
+                    <span>🏰</span>
+                    <span>{tr('침공 및 방어 작전실 입장 ▶')}</span>
+                  </button>
+                ) : (
+                  <button
+                    className="w-full py-2.5 px-3 rounded-xl bg-[#211a14] border border-[#4d3826] text-[#9f8c79] font-bold text-xs transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <span>🔒</span>
+                    <span>{tr('게이트 Lv.6 증축 필요')}</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* 성채 복귀 버튼 */}
+          <div className="pt-2 pb-4">
+            <ActionButton
+              label={tr('🏰 방주 성채로 귀환')}
+              variant="ghost"
+              className="w-full py-2.5 text-xs font-bold"
+              onClick={() => navigateTo('citadel')}
+            />
+          </div>
+        </div>
+      ) : gateMode === 'invasion' ? (
         <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
           <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
             <InvasionView />
           </div>
-          <div className="px-3 py-1.5 shrink-0 w-full max-w-full border-t border-[#15171d] bg-[#090e18]">
+          <div className="px-3 py-1.5 shrink-0 w-full max-w-full border-t border-[#15171d] bg-[#090e18] flex items-center gap-2">
             <ActionButton
-              label="🏰 방주 성채로 귀환"
+              label={tr('← 차원 게이트 허브')}
+              variant="secondary"
+              className="flex-1 py-1.5 text-xs font-bold"
+              onClick={() => {
+                try { SoundManager.getInstance().play('click'); } catch {}
+                setGateMode('hub');
+              }}
+            />
+            <ActionButton
+              label={tr('🏰 방주 성채로 귀환')}
               variant="ghost"
-              className="w-full py-1.5 text-xs"
+              className="flex-1 py-1.5 text-xs"
               onClick={() => navigateTo('citadel')}
             />
           </div>
@@ -3725,6 +4310,23 @@ export const ArenaScreen: React.FC = () => {
       ) : gateMode === 'nemesis' ? (
         <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
           <NemesisView />
+          <div className="px-3 py-1.5 shrink-0 w-full max-w-full border-t border-[#15171d] bg-[#090e18] flex items-center gap-2">
+            <ActionButton
+              label={tr('← 차원 게이트 허브')}
+              variant="secondary"
+              className="flex-1 py-1.5 text-xs font-bold"
+              onClick={() => {
+                try { SoundManager.getInstance().play('click'); } catch {}
+                setGateMode('hub');
+              }}
+            />
+            <ActionButton
+              label={tr('🏰 방주 성채로 귀환')}
+              variant="ghost"
+              className="flex-1 py-1.5 text-xs"
+              onClick={() => navigateTo('citadel')}
+            />
+          </div>
         </div>
       ) : (
         <>
@@ -4239,12 +4841,21 @@ export const ArenaScreen: React.FC = () => {
         )}
       </div>
 
-      {/* 성채 복귀 버튼 */}
-      <div className="px-3 py-2 shrink-0 w-full max-w-full">
+      {/* 성채 복귀 및 허브 복귀 버튼 바 */}
+      <div className="px-3 py-2 shrink-0 w-full max-w-full flex items-center gap-2">
+        <ActionButton
+          label={tr('← 차원 게이트 허브')}
+          variant="secondary"
+          className="flex-1 py-2 text-xs font-bold"
+          onClick={() => {
+            try { SoundManager.getInstance().play('click'); } catch {}
+            setGateMode('hub');
+          }}
+        />
         <ActionButton
           label={tr('🏰 방주 성채로 귀환')}
           variant="ghost"
-          className="w-full py-2 text-xs"
+          className="flex-1 py-2 text-xs font-bold"
           onClick={() => navigateTo('citadel')}
         />
       </div>
