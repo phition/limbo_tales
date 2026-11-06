@@ -89,15 +89,15 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
   }, [isLit]);
 
   return (
-    <div className={`absolute inset-0 w-full h-full bg-[#08090b] overflow-hidden select-none pointer-events-none ${className}`}>
+    <div className={`absolute inset-0 w-full h-full bg-[#08090b] overflow-hidden select-none pointer-events-none z-0 ${className}`}>
       {/* ── 1. 다크 고딕 부유 성채 2.5D 전경 배경 (점화 시 비디오 루프 / 소멸 시 기존 정적 이미지) ── */}
-      <div className="absolute inset-0 bg-[#08090b]">
+      <div className="absolute inset-0 bg-[#08090b] z-0">
         {/* 기존 정적 이미지 (성화 꺼짐 시 표시) */}
         <img
           src="assets/citadel_bonfire.jpg"
           alt="Ark Citadel Extinguished"
           className={`absolute inset-0 w-full h-full object-cover object-center filter contrast-110 brightness-105 saturate-110 transition-opacity duration-1000 ease-in-out ${
-            isLit ? 'opacity-0 z-0' : 'opacity-95 z-10'
+            isLit ? 'opacity-0 z-0' : 'opacity-95 z-[1]'
           }`}
         />
 
@@ -108,7 +108,7 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
           playsInline
           poster="assets/citadel_bonfire.jpg"
           className={`absolute inset-0 w-full h-full object-cover object-center filter contrast-110 brightness-105 saturate-110 transition-opacity duration-1500 ease-in-out ${
-            isLit && activeVideo === 'A' ? 'opacity-95 z-20' : 'opacity-0 z-0'
+            isLit && activeVideo === 'A' ? 'opacity-95 z-[2]' : 'opacity-0 z-0'
           }`}
         >
           <source src="assets/citadel_territory.mp4" type="video/mp4" />
@@ -122,7 +122,7 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
           playsInline
           poster="assets/citadel_bonfire.jpg"
           className={`absolute inset-0 w-full h-full object-cover object-center filter contrast-110 brightness-105 saturate-110 transition-opacity duration-1500 ease-in-out ${
-            isLit && activeVideo === 'B' ? 'opacity-95 z-20' : 'opacity-0 z-0'
+            isLit && activeVideo === 'B' ? 'opacity-95 z-[2]' : 'opacity-0 z-0'
           }`}
         >
           <source src="assets/citadel_territory.mp4" type="video/mp4" />
@@ -130,8 +130,8 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
         </video>
 
         {/* 가장자리 은은한 비네팅 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#08090b]/60 via-transparent to-transparent pointer-events-none z-30" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#08090b]/40 via-transparent to-transparent pointer-events-none z-30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#08090b]/60 via-transparent to-transparent pointer-events-none z-[3]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#08090b]/40 via-transparent to-transparent pointer-events-none z-[3]" />
       </div>
     </div>
   );

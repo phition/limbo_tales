@@ -15467,10 +15467,10 @@ export const CitadelScreen: React.FC = () => {
             </div>
           )}
 
-          {/* 📜 반투명 영지 활동 & 생산 로그 패널 (배경 디오라마가 은은하게 비치도록 구성) */}
-          <div className="w-full px-3 py-1.5 z-10 shrink-0">
-            <div className="w-full max-w-4xl mx-auto rounded-xl border border-[#3d372e]/40 bg-[#080a10]/35 backdrop-blur-[2px] shadow-[0_4px_24px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col h-40 sm:h-48 md:h-52 transition-all">
-              <div className="px-3 py-1.5 bg-[#0a0d14]/45 border-b border-[#242732]/40 flex items-center justify-between text-[10px] text-[#9da3af] shrink-0">
+          {/* 📜 반투명 영지 활동 & 생산 로그 패널 (배경 디오라마 및 비디오 전면에 안정적으로 노출) */}
+          <div className="w-full px-3 py-1.5 relative z-20 shrink-0">
+            <div className="w-full max-w-4xl mx-auto rounded-xl border border-[#3d372e]/60 bg-[#080a10]/60 backdrop-blur-[4px] shadow-[0_4px_28px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col h-40 sm:h-48 md:h-52 transition-all">
+              <div className="px-3 py-1.5 bg-[#0a0d14]/70 border-b border-[#242732]/60 flex items-center justify-between text-[10px] text-[#9da3af] shrink-0">
                 <span className="flex items-center gap-1.5 font-bold text-[#dcc496]">
                   <span>📜</span>
                   <span>{tr('영지 활동 & 생산 로그')}</span>
@@ -15491,10 +15491,10 @@ export const CitadelScreen: React.FC = () => {
             </div>
           </div>
 
-          {/* D.M 티커 (영지 하단 바 - 크기 및 시인성 확대) */}
-          <div className="px-3 py-2 bg-[#08090b]/85 border-t border-[#242732]/80 shrink-0 z-10 backdrop-blur-xs">
+          {/* D.M 티커 (영지 하단 바 - 크기 및 시인성 확대, 비디오 전면 유지) */}
+          <div className="px-3 py-2 bg-[#08090b]/90 border-t border-[#242732]/80 shrink-0 relative z-20 backdrop-blur-sm">
             <div
-              className="w-full max-w-4xl mx-auto px-3.5 py-2 rounded-xl bg-[#10131a]/90 border border-[#3d372e] hover:border-[#b89758] cursor-pointer flex items-center justify-between transition-all shadow-md group"
+              className="w-full max-w-4xl mx-auto px-3.5 py-2 rounded-xl bg-[#10131a]/95 border border-[#3d372e] hover:border-[#b89758] cursor-pointer flex items-center justify-between transition-all shadow-md group"
               onClick={() => gm.emit('openGuestbook')}
               title="D.M (Dimension Message)"
             >
