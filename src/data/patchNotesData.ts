@@ -70,28 +70,16 @@ export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = 
               desc: '방주 영지 성화 점화 시 재생되는 뷰포트 영상을 10초 분량의 웅장한 신규 시네마틱으로 업그레이드하고, 2.4초 듀얼 플레이어 무봉제 크로스페이드(Seamless Crossfade) 편집점을 최적화하여 영구적이고 매끄러운 다크 판타지 분위기를 선사합니다.'
             },
             {
-              title: '시네마틱 영상 AI 생성 워터마크 완벽 제거',
-              desc: '영상 우측 하단에 위치하던 인공지능 생성 워터마크를 정밀 베지어 마스크 및 배경 채도/휘도 복원 알고리즘을 통해 등불, 석조 바닥 및 붉은 스카프 주름 질감 손상 없이 100% 무결점으로 제거했습니다.'
-            },
-            {
               title: '오프라인 방치 보상 팝업 최소 조건(1시간) 설정',
               desc: '짧은 재접속 시에도 수시로 노출되던 방치 정산 모달을 1시간(60분) 이상 미접속 시에만 등장하도록 최적화하여 불필요한 UI 팝업 피로도를 제거하고 쾌적한 플레이 동선을 확보했습니다.'
-            },
-            {
-              title: '성채 퀘스트 드로어 안정성 크래시 픽스',
-              desc: '성채 화면 내 퀘스트 드로어 진입 시 특정 경로에서 발생하던 런타임 참조 에러(openDrawer is not defined)를 완전히 해결하여 끊김 없는 퀘스트 확인이 가능하도록 수정했습니다.'
             }
           ]
         },
         {
           icon: '✨',
-          title: '스킬 툴팁 계수 정밀화 & 에픽 접미사 인챈트',
+          title: '전 장비 공용 에픽 특수 접미사 인챈트',
           color: '#69f0ae',
           bullets: [
-            {
-              title: '스킬 툴팁 계수 전수 조사 & 동기화',
-              desc: "‘라그나로크 슬러시’를 비롯한 전 직업 스킬의 강화 단계별 실제 피해 공식과 안내 툴팁 계수를 전수 조사하여 정확한 수치로 100% 일치시켰습니다."
-            },
             {
               title: '전 장비 공용 에픽 등급 특수 접미사 인챈트 6종 도입',
               desc: '[흡혈](피해의 10% 흡혈), [집중](마나 소모 10% 감소), [관통](방어력 추가 관통 20%), [저항](상태이상 저항 +10%), [재생](매 턴 최대 체력 5% 회복), [무자비](치명타 확률 +10%) 특수 접미사 체계를 도입했습니다.'
@@ -440,28 +428,16 @@ export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = 
               desc: 'Upgraded the Ark Citadel bonfire viewport to an awe-inspiring 10-second high-definition cinematic with an optimized 2.4-second dual-player crossfade crossover, delivering an uninterrupted dark fantasy ambiance.'
             },
             {
-              title: 'Complete Generative AI Watermark Removal',
-              desc: 'Perfectly eliminated the generative AI sparkle watermark in the bottom-right corner using precision Bezier masking and localized chroma/luminance restoration, preserving 100% of the lantern, stonework, and scarf textures.'
-            },
-            {
               title: '1-Hour Minimum Offline Settlement Trigger',
               desc: 'Optimized offline reward settlements to trigger only after at least 1 hour (60 minutes) of absence, eliminating popup fatigue upon frequent reconnections.'
-            },
-            {
-              title: 'Quests Drawer Stability Crash Fix',
-              desc: 'Completely resolved a runtime crash (openDrawer is not defined) when accessing the Quests Drawer from the Citadel screen, ensuring seamless objective tracking.'
             }
           ]
         },
         {
           icon: '✨',
-          title: 'Skill Tooltip Audit & Epic Suffix Enchants',
+          title: 'Universal Epic Suffix Enchants',
           color: '#69f0ae',
           bullets: [
-            {
-              title: 'Full Skill Tooltip Scaling Audit & Sync',
-              desc: "Comprehensively audited all skill upgrade scaling against real combat damage formulas including 'Ragnarok Slush', aligning all guide tooltips with 100% accuracy."
-            },
             {
               title: '6 Universal Epic Suffix Enchants',
               desc: 'Introduced 6 universal epic suffix enchants for all gear: [Vampirism] (10% Lifesteal), [Focus] (-10% MP Cost), [Piercing] (+20% Armor Pierce), [Resistance] (+10% Status Resist), [Regeneration] (Heal 5% Max HP/turn), and [Merciless] (+10% Crit Chance).'
@@ -795,28 +771,16 @@ export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = 
               desc: '方舟領地の聖火点火時に再生されるビューポート映像を10秒尺の壮大な新規シネマティックへ刷新し、2.4秒デュアルプレイヤー・シームレスクロスフェードの編集点を最適化して、途切れのないダークファンタジーの臨場感を提供します。'
             },
             {
-              title: 'シネマティック映像 AI生成ウォーターマーク完全除去',
-              desc: '映像右下に存在していたAI生成ウォーターマークを精密ベジェマスクおよび局所彩度・輝度復元アルゴリズムにより、ランタン、石畳の床、赤いスカーフの織り目テクスチャを一切損なうことなく100%美しく除去しました。'
-            },
-            {
               title: '放置清算モーダル最小条件（1時間）設定',
               desc: '短時間の再接続時に頻繁に表示されていた放置清算モーダルを、1時間（60分）以上の未接続時のみ出現するよう最適化し、不要なUIポップアップ疲労を解消しました。'
-            },
-            {
-              title: '城塞クエストドロワー安定性クラッシュ修正',
-              desc: '城塞画面のクエストドロワー進入時に特定条件下で発生していたランタイム参照エラー（openDrawer is not defined）を完全に解消し、安定したクエスト確認を可能にしました。'
             }
           ]
         },
         {
           icon: '✨',
-          title: 'スキル説明文係数精緻化 & エピック接尾辞エンチャント',
+          title: '全装備共通エピック接尾辞エンチャント',
           color: '#69f0ae',
           bullets: [
-            {
-              title: 'スキルツールチップ係数 全数調査 & 同期',
-              desc: '「ラグナロクスラッシュ」をはじめとする全職業スキルの強化段階ごとの実発動ダメージ計算式と説明文の係数を全数調査し、100%一致するよう正確に同期しました。'
-            },
             {
               title: '全装備共通エピック等級特殊接尾辞エンチャント6種導入',
               desc: '【吸血】（与ダメの10%HP吸収）、【集中】（マナ消費10%減少）、【貫通】（防御力追加貫通20%）、【抵抗】（状態異常耐性+10%）、【再生】（毎ターン最大HP5%回復）、【無慈悲】（クリティカル率+10%）の特殊接尾辞体系を導入しました。'
