@@ -15491,14 +15491,14 @@ export const CitadelScreen: React.FC = () => {
             </div>
           </div>
 
-          {/* D.M 티커 (영지 하단 바 - 크기 및 시인성 확대, 비디오 전면 유지) */}
-          <div className="px-3 py-2 bg-[#08090b]/90 border-t border-[#242732]/80 shrink-0 relative z-20 backdrop-blur-sm">
+          {/* D.M 티커 (영지 하단 바 - 크기 및 시인성 확대, 은은한 반투명 블러 효과 적용) */}
+          <div className="px-3 py-2 bg-[#08090b]/60 border-t border-[#242732]/60 shrink-0 relative z-20 backdrop-blur-md">
             <div
-              className="w-full max-w-4xl mx-auto px-3.5 py-2 rounded-xl bg-[#10131a]/95 border border-[#3d372e] hover:border-[#b89758] cursor-pointer flex items-center justify-between transition-all shadow-md group"
+              className="w-full max-w-4xl mx-auto px-3.5 py-2 rounded-xl bg-[#10131a]/75 border border-[#3d372e]/80 hover:border-[#b89758] cursor-pointer flex items-center justify-between transition-all shadow-md group backdrop-blur-sm"
               onClick={() => gm.emit('openGuestbook')}
               title="D.M (Dimension Message)"
             >
-              <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
+              <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden [text-shadow:_0_1px_2px_rgba(0,0,0,0.85)]">
                 <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#b89758]/20 text-[#ffd54f] font-bold shrink-0 border border-[#b89758]/50 font-mono tracking-wide shadow-xs">
                   📢 D.M
                 </span>
@@ -15506,7 +15506,7 @@ export const CitadelScreen: React.FC = () => {
                   {guestbookMessages.length > 0 ? `${guestbookMessages[0].authorName}: ${guestbookMessages[0].content}` : tr('첫 번째 차원 메세지를 전송해 보세요!')}
                 </span>
               </div>
-              <span className="text-xs text-[#b89758] group-hover:text-[#ffd54f] font-bold shrink-0 ml-2 transition-colors flex items-center gap-0.5">
+              <span className="text-xs text-[#b89758] group-hover:text-[#ffd54f] font-bold shrink-0 ml-2 transition-colors flex items-center gap-0.5 [text-shadow:_0_1px_2px_rgba(0,0,0,0.85)]">
                 <span>열기</span>
                 <span>▶</span>
               </span>
