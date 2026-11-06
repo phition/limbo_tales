@@ -14433,29 +14433,41 @@ export const CitadelScreen: React.FC = () => {
       gm.addLog('👑 [튜토리얼 완수] 첫 심연 정찰을 완벽히 마치고 정식 지휘관으로 임명되었습니다! 영지 시설을 발전시켜 심연을 정복하십시오!', 'reward');
       return;
     }
-    setTutorialStepId(nextId);
+
+    let targetStep = nextId;
+    // 🛡️ 만약 다음 스텝이 라운지 건설인데 아직 시추소 보상까지 완료되지 않았거나 라운지가 미해금인 경우,
+    // 중간 단계를 건너뛰지 못하도록 WAITING_TAVERN_UNLOCK 상태를 유지하고 생산 시설 뷰를 열어줍니다.
+    if (targetStep === 'TUTORIAL_BUILD_TAVERN') {
+      const isQuarryRewardClaimed = state.quests?.find(q => q.id === 'Q_BUILD_QUARRY')?.status === 'completed';
+      const isTavernUnlocked = Boolean(state.buildings['tavern']?.unlocked);
+      if (!isQuarryRewardClaimed || !isTavernUnlocked) {
+        targetStep = 'WAITING_TAVERN_UNLOCK';
+      }
+    }
+
+    setTutorialStepId(targetStep);
     try {
-      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: nextId, isCompleted: false, isSkipped: false, hasStarted: true }));
+      localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: targetStep, isCompleted: false, isSkipped: false, hasStarted: true }));
     } catch {}
 
     // 스텝 전환에 따른 자동 드로어 오픈 연계
     setReturnToCitadelOnClose(false);
-    if (nextId === 'TUTORIAL_BUILD_REFINERY' || nextId === 'TUTORIAL_BUILD_TAVERN') {
+    if (targetStep === 'TUTORIAL_BUILD_REFINERY' || targetStep === 'TUTORIAL_BUILD_TAVERN') {
       setCitadelInitialView('facilities');
       setOpenDrawer('citadel');
-    } else if (nextId === 'TUTORIAL_CLAIM_REWARD') {
+    } else if (targetStep === 'TUTORIAL_CLAIM_REWARD') {
       setOpenDrawer('quests');
-    } else if (nextId === 'TUTORIAL_EXPAND_PRODUCTION') {
+    } else if (targetStep === 'TUTORIAL_EXPAND_PRODUCTION') {
       // 보상 수령 직후 생산 시설 순차 재건 브리핑 노출
-    } else if (nextId === 'WAITING_TAVERN_UNLOCK') {
+    } else if (targetStep === 'WAITING_TAVERN_UNLOCK') {
       setCitadelInitialView('facilities');
       setOpenDrawer('citadel');
-    } else if (nextId === 'TUTORIAL_ENTER_TAVERN') {
+    } else if (targetStep === 'TUTORIAL_ENTER_TAVERN') {
       setCitadelInitialView('workstations');
       setOpenDrawer('citadel');
-    } else if (nextId === 'TUTORIAL_DEPLOY_HERO') {
+    } else if (targetStep === 'TUTORIAL_DEPLOY_HERO') {
       setOpenDrawer('barracks');
-    } else if (nextId === 'TUTORIAL_PREP_POSITION') {
+    } else if (targetStep === 'TUTORIAL_PREP_POSITION') {
       setOpenDrawer('explore');
     }
   };
@@ -14519,6 +14531,17 @@ export const CitadelScreen: React.FC = () => {
         } catch {}
       }
     } else if (tutorialStepId === 'TUTORIAL_BUILD_TAVERN') {
+      const isQuarryRewardClaimed = state.quests?.find(q => q.id === 'Q_BUILD_QUARRY')?.status === 'completed';
+      const isTavernUnlocked = Boolean(state.buildings['tavern']?.unlocked);
+      // 아직 시추소 보상 미수령 혹은 라운지 미해금 상태인데 이 스텝에 머물러 있는 경우 대기 상태로 강제 복원
+      if (!isQuarryRewardClaimed || !isTavernUnlocked) {
+        setCitadelInitialView('facilities');
+        setTutorialStepId('WAITING_TAVERN_UNLOCK');
+        try {
+          localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'WAITING_TAVERN_UNLOCK', isCompleted: false, isSkipped: false, hasStarted: true }));
+        } catch {}
+        return;
+      }
       const tavern = state.buildings['tavern'];
       if (tavern?.construction || (tavern?.level || 0) >= 1) {
         setTutorialStepId('WAITING_CONSTRUCTION_TUTORIAL_BUILD_TAVERN');
@@ -14538,18 +14561,20 @@ export const CitadelScreen: React.FC = () => {
       }
     } else if (tutorialStepId === 'WAITING_TAVERN_UNLOCK') {
       // 퀘스트 라인을 따라 영지 시설을 건설하여 광맥 시추소 보상까지 수령 완료하고,
-      // '방랑자의 라운지 건설하러 가기' 등을 눌러 영지 시설(citadel)로 진입했을 때 일레인 재등장!
+      // 라운지가 해금되면 자동으로 성채 시설 목록을 열고 일레인 재등장!
       const isQuarryRewardClaimed = state.quests?.find(q => q.id === 'Q_BUILD_QUARRY')?.status === 'completed';
       const isTavernUnlocked = Boolean(state.buildings['tavern']?.unlocked);
       const isTavernNotBuilt = (state.buildings['tavern']?.level || 0) === 0;
-      if (isQuarryRewardClaimed && openDrawer === 'citadel' && isTavernUnlocked && isTavernNotBuilt) {
+      if (isQuarryRewardClaimed && isTavernUnlocked && isTavernNotBuilt) {
         setCitadelInitialView('facilities');
+        setOpenDrawer('citadel');
         setTutorialStepId('TUTORIAL_BUILD_TAVERN');
         try {
           localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_BUILD_TAVERN', isCompleted: false, isSkipped: false, hasStarted: true }));
         } catch {}
-      } else if (isQuarryRewardClaimed && openDrawer === 'citadel' && (state.buildings['tavern']?.level || 0) >= 1) {
+      } else if (isQuarryRewardClaimed && (state.buildings['tavern']?.level || 0) >= 1) {
         setCitadelInitialView('workstations');
+        setOpenDrawer('citadel');
         setTutorialStepId('TUTORIAL_ENTER_TAVERN');
         try {
           localStorage.setItem('ark_tutorial_state', JSON.stringify({ currentStepId: 'TUTORIAL_ENTER_TAVERN', isCompleted: false, isSkipped: false, hasStarted: true }));

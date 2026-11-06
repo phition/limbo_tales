@@ -151,8 +151,8 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
 
   // 🛡️ 튜토리얼 중 생산 시설 복원 단계 목표 및 제한 검사
   const tutorialProdTarget = useMemo(() => {
-    return getTutorialProductionTarget(state.buildings, state.quests);
-  }, [state.buildings, state.quests]);
+    return getTutorialProductionTarget(tutorialStepId || '', state.buildings, state.quests);
+  }, [tutorialStepId, state.buildings, state.quests]);
 
   const selectedBuildingData = selectedBuildingId ? state.buildings[selectedBuildingId] : null;
 
@@ -533,6 +533,52 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               <span className="font-bold text-[#b89758]">{totalBuiltCount}/13 완공</span>
             </div>
 
+            {/* 📜 튜토리얼 주요 생산 시설 순차 재건 진행 배너 */}
+            {tutorialProdTarget && (
+              <div className="p-3 sm:p-3.5 rounded-xl bg-gradient-to-r from-[#1c1a14] via-[#242018] to-[#1a1c24] border border-[#ffd54f]/50 shadow-lg flex flex-col gap-2 animate-fade-in">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">📜</span>
+                    <span className="text-xs font-bold text-[#ffd54f]">{tr('튜토리얼 생산 시설 재건 지침')}</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-black bg-[#ffd54f]/20 text-[#ffd54f] border border-[#ffd54f]/30">
+                    {tutorialProdTarget.stepName}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-2 text-xs text-[#d8e3f5]">
+                  <span className="min-w-0 truncate">
+                    {tr('현재 복원 목표')}: <strong className="text-[#ffd54f]">[{tutorialProdTarget.targetName}]</strong>
+                    {!tutorialProdTarget.isUnlocked && (
+                      <span className="text-[#ff7043] ml-1.5 font-bold">({tr('퀘스트 보상 수령 필요')})</span>
+                    )}
+                  </span>
+                  {tutorialProdTarget.isUnlocked ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handlePlayClick();
+                        setSelectedBuildingId(tutorialProdTarget.targetId);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#ffd54f] to-[#ffb300] text-black font-extrabold text-[11px] shadow hover:brightness-110 active:scale-95 cursor-pointer shrink-0"
+                    >
+                      {tr('목표 시설 선택')} ➔
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handlePlayClick();
+                        onEnterDrawer('quests');
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-[#2a1714] border border-[#ff7043] text-[#ffab91] font-extrabold text-[11px] shadow hover:brightness-110 active:scale-95 cursor-pointer shrink-0"
+                    >
+                      {tr('퀘스트 확인')} ➔
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
             {buildingsList.map(item => {
               const b = state.buildings[item.id];
               if (!b) return null;
@@ -558,7 +604,13 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   id={`citadel-building-row-${item.id}`}
                   data-tutorial-target={
                     selectedBuildingId !== item.id
-                      ? (item.id === 'butchery' && !isBuilt ? 'build-refinery' : item.id === 'tavern' && !isBuilt ? 'build-tavern' : isTutorialTarget ? 'tutorial-production-target' : undefined)
+                      ? (item.id === 'butchery' && !isBuilt && (tutorialStepId === 'TUTORIAL_BUILD_REFINERY' || !tutorialStepId)
+                        ? 'build-refinery'
+                        : item.id === 'tavern' && !isBuilt && tutorialStepId === 'TUTORIAL_BUILD_TAVERN'
+                        ? 'build-tavern'
+                        : isTutorialTarget
+                        ? 'tutorial-production-target'
+                        : undefined)
                       : undefined
                   }
                   onClick={() => {
@@ -804,6 +856,19 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                         <span>➔</span>
                       </button>
                     )}
+                    {tutorialRestriction.target && !tutorialRestriction.target.isUnlocked && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handlePlayClick();
+                          onEnterDrawer('quests');
+                        }}
+                        className="mt-2 py-1.5 px-3 rounded-lg bg-[#2a1714] border border-[#ff7043] text-[#ffab91] font-black text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 hover:brightness-110"
+                      >
+                        <span>{tr('지휘관 퀘스트 보상 수령하러 가기')}</span>
+                        <span>➔</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
@@ -1003,9 +1068,9 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   <button
                     type="button"
                     data-tutorial-target={
-                      selectedBuildingId === 'butchery' && selectedBuildingData.level === 0
+                      selectedBuildingId === 'butchery' && selectedBuildingData.level === 0 && (tutorialStepId === 'TUTORIAL_BUILD_REFINERY' || !tutorialStepId)
                         ? 'build-refinery'
-                        : selectedBuildingId === 'tavern' && selectedBuildingData.level === 0
+                        : selectedBuildingId === 'tavern' && selectedBuildingData.level === 0 && tutorialStepId === 'TUTORIAL_BUILD_TAVERN'
                         ? 'build-tavern'
                         : tutorialProdTarget && selectedBuildingId === tutorialProdTarget.targetId && selectedBuildingData.level === 0
                         ? 'tutorial-confirm-build'

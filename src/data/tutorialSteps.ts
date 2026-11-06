@@ -31,11 +31,54 @@ export interface TutorialProductionTarget {
  * 현재 건설해야 할 필수 생산 시설 목표를 판별합니다.
  */
 export function getTutorialProductionTarget(
-  buildings: Record<string, { level: number; unlocked?: boolean }>,
-  quests?: { id: string; status: string }[]
+  tutorialStepIdOrBuildings: string | Record<string, { level: number; unlocked?: boolean }>,
+  buildingsOrQuests?: Record<string, { level: number; unlocked?: boolean }> | { id: string; status: string }[],
+  _quests?: { id: string; status: string }[]
 ): TutorialProductionTarget | null {
+  let tutorialStepId = '';
+  let buildings: Record<string, { level: number; unlocked?: boolean }> | undefined;
+
+  if (typeof tutorialStepIdOrBuildings === 'string') {
+    tutorialStepId = tutorialStepIdOrBuildings;
+    buildings = buildingsOrQuests as Record<string, { level: number; unlocked?: boolean }>;
+  } else {
+    tutorialStepId = '';
+    buildings = tutorialStepIdOrBuildings;
+  }
+
   if (!buildings) return null;
-  // 1. 피난민/생존자 안식처 (cabin) Lv.0인 경우
+
+  // 1. 심연 생체 정제소 단계인 경우: butchery만 타깃으로 판별하며 절대 cabin을 반환하지 않음
+  const isRefineryPhase = [
+    'TUTORIAL_BUILD_REFINERY',
+    'WAITING_CONSTRUCTION_TUTORIAL_BUILD_REFINERY'
+  ].includes(tutorialStepId);
+
+  if (isRefineryPhase) {
+    if ((buildings['butchery']?.level || 0) < 1) {
+      return {
+        targetId: 'butchery',
+        targetName: '심연 생체 정제소',
+        stepName: '선행 단계: 심연 생체 정제소',
+        isUnlocked: Boolean(buildings['butchery']?.unlocked)
+      };
+    }
+    return null;
+  }
+
+  // 2. 주요 생산 시설 순차 재건 단계인 경우
+  const isProductionPhase = [
+    'TUTORIAL_EXPAND_PRODUCTION',
+    'WAITING_TAVERN_UNLOCK',
+    'TUTORIAL_BUILD_TAVERN',
+    'WAITING_CONSTRUCTION_TUTORIAL_BUILD_TAVERN'
+  ].includes(tutorialStepId);
+
+  if (!isProductionPhase) {
+    return null;
+  }
+
+  // 1단계: 피난민/생존자 안식처 (cabin) Lv.0인 경우
   if ((buildings['cabin']?.level || 0) < 1) {
     return {
       targetId: 'cabin',
@@ -44,7 +87,7 @@ export function getTutorialProductionTarget(
       isUnlocked: Boolean(buildings['cabin']?.unlocked)
     };
   }
-  // 2. 성채 벌목소 (lumberCamp) Lv.0인 경우
+  // 2단계: 성채 벌목소 (lumberCamp) Lv.0인 경우
   if ((buildings['lumberCamp']?.level || 0) < 1) {
     return {
       targetId: 'lumberCamp',
@@ -53,7 +96,7 @@ export function getTutorialProductionTarget(
       isUnlocked: Boolean(buildings['lumberCamp']?.unlocked)
     };
   }
-  // 3. 에테르 광맥 시추소 (quarry) Lv.0인 경우
+  // 3단계: 에테르 광맥 시추소 (quarry) Lv.0인 경우
   if ((buildings['quarry']?.level || 0) < 1) {
     return {
       targetId: 'quarry',
@@ -62,7 +105,7 @@ export function getTutorialProductionTarget(
       isUnlocked: Boolean(buildings['quarry']?.unlocked)
     };
   }
-  // 4. 방랑자의 라운지 (tavern) Lv.0인 경우
+  // 최종 단계: 방랑자의 라운지 (tavern) Lv.0인 경우
   if ((buildings['tavern']?.level || 0) < 1) {
     return {
       targetId: 'tavern',
@@ -88,13 +131,6 @@ export function checkTutorialBuildingRestriction(
   target?: TutorialProductionTarget;
   message?: string;
 } {
-  const isProductionPhase = [
-    'TUTORIAL_EXPAND_PRODUCTION',
-    'WAITING_TAVERN_UNLOCK',
-    'TUTORIAL_BUILD_TAVERN',
-    'WAITING_CONSTRUCTION_TUTORIAL_BUILD_TAVERN'
-  ].includes(tutorialStepId);
-
   const isRefineryPhase = [
     'TUTORIAL_BUILD_REFINERY',
     'WAITING_CONSTRUCTION_TUTORIAL_BUILD_REFINERY'
@@ -110,13 +146,31 @@ export function checkTutorialBuildingRestriction(
     return { isRestricted: false };
   }
 
+  const isProductionPhase = [
+    'TUTORIAL_EXPAND_PRODUCTION',
+    'WAITING_TAVERN_UNLOCK',
+    'TUTORIAL_BUILD_TAVERN',
+    'WAITING_CONSTRUCTION_TUTORIAL_BUILD_TAVERN'
+  ].includes(tutorialStepId);
+
   if (!isProductionPhase) {
     return { isRestricted: false };
   }
 
-  const target = getTutorialProductionTarget(buildings, quests);
+  const target = getTutorialProductionTarget(tutorialStepId, buildings, quests);
   if (!target) {
     return { isRestricted: false };
+  }
+
+  // 아직 선행 퀘스트 보상을 수령하지 않아 해금되지 않은 경우
+  if (!target.isUnlocked) {
+    if (buildingId === target.targetId) {
+      return {
+        isRestricted: true,
+        target,
+        message: `사령관님, [${target.targetName}] 건설 자격을 획득하려면 먼저 퀘스트 목록에서 이전 과업의 보상을 수령해 주십시오.`
+      };
+    }
   }
 
   // 대상 건물이 현재 튜토리얼 목표 시설이 아니거나, 이미 Lv.1 이상인데 추가 증축(레벨업)하려는 경우 제한

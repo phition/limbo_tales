@@ -518,6 +518,10 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
+                        if (currentStep.id === 'TUTORIAL_EXPAND_PRODUCTION') {
+                          onAdvanceStep('WAITING_TAVERN_UNLOCK');
+                          return;
+                        }
                         const currentIndex = TUTORIAL_STEPS.findIndex(s => s.id === currentStepId);
                         const nextStep = TUTORIAL_STEPS[currentIndex + 1];
                         onAdvanceStep(nextStep?.id);
