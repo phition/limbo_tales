@@ -400,7 +400,7 @@ export function getSkillTags(skill: Skill | 'basic'): SkillTag[] {
   if (eff === 'freeze' || sDesc.includes('빙결') || sDesc.includes('냉각') || sId.includes('freeze') || sId.includes('frost')) {
     tags.push({ id: 'freeze', label: '빙결', bg: '#80d8ff1a', text: '#80d8ff', border: '#80d8ff44', icon: '❄️' });
   }
-  if (eff === 'burn' || sDesc.includes('화상') || sName.includes('화상') || sDesc.includes('화염') || sName.includes('화염') || sDesc.includes('불꽃') || sDesc.includes('작열') || sId.includes('burn') || sId.includes('flame') || sId.includes('ragnarok')) {
+  if (eff === 'burn' || sDesc.includes('화상') || sName.includes('화상') || sDesc.includes('화염') || sName.includes('화염') || sDesc.includes('불꽃') || sDesc.includes('작열') || sId.includes('burn') || sId.includes('flame') || sId === 'skill_craft_ragnarok' || sId === 'craft_ragnarok') {
     tags.push({ id: 'burn', label: '화상', bg: '#ff6d001a', text: '#ff6d00', border: '#ff6d0044', icon: '🔥' });
   }
 

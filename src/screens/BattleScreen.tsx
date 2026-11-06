@@ -3417,7 +3417,7 @@ export const BattleScreen: React.FC = () => {
           if (skill !== 'basic' && skill.piercePct) {
             heroPiercePct += skill.piercePct;
           }
-          if (skill !== 'basic' && (skill.id === 'void_dimension_slash' || skill.id === 'omega_orbital_annihilation')) {
+          if (skill !== 'basic' && (skill.id === 'void_dimension_slash' || skill.id === 'omega_orbital_annihilation' || skill.id === 'val_ragnarok_slash' || skill.id === 'phantom_clone' || skill.id === 'sniper_death_sentence')) {
             heroPiercePct = 100;
           }
           if (hero.classId === 'omega_deadeye') {

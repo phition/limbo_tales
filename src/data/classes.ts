@@ -66,7 +66,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     role: 'tank',
     baseStats: { hp: 1040, mp: 120, atk: 56, def: 56, spd: 16, luck: 25 },
     skills: [
-      { id: 'valk_spear', name: '심판의 빛창', description: '[전열 특화] 전열 적 1체에게 350% 신성 관통 피해 및 방어력 50% 분쇄', manaCost: 30, cooldown: 2, targetType: 'single_enemy', power: 3.5, effectType: 'damage', positionBonus: 'front', icon: '✨' },
+      { id: 'valk_spear', name: '심판의 빛창', description: '[전열 특화] 전열 적 1체에게 350% 신성 관통 피해 및 방어력 50% 분쇄', manaCost: 30, cooldown: 2, targetType: 'single_enemy', power: 3.5, effectType: 'damage', positionBonus: 'front', piercePct: 50, icon: '✨' },
       { id: 'valk_divine_shield', name: '신의 가호', description: '아군 전체에 체력 40% 보호막 및 지속 치유 부여', manaCost: 40, cooldown: 3, targetType: 'all_allies', power: 0.4, effectType: 'shield', icon: '🛡️' }
     ],
     specialSkill: { id: 'valk_ultimate', name: '[궁극기] 영원의 성역', description: '모든 아군에게 최대 HP 80% 무적 결계를 전개하고 모든 디버프를 즉시 정화합니다.', manaCost: 55, cooldown: 5, targetType: 'all_allies', power: 0.8, effectType: 'shield', icon: '👑', isSpecial: true },
@@ -104,7 +104,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     role: 'dealer_phy',
     baseStats: { hp: 350, mp: 60, atk: 40, def: 14, spd: 22, luck: 38 },
     skills: [
-      { id: 'assassin_strike', name: '암영 연격', description: '[후열 저격] 적의 방어력을 80% 무시하고 150% 관통 피해', manaCost: 36, cooldown: 2, targetType: 'single_enemy', power: 1.5, effectType: 'damage', positionBonus: 'back', icon: '🗡️' },
+      { id: 'assassin_strike', name: '암영 연격', description: '[후열 저격] 적의 방어력을 80% 무시하고 150% 관통 피해', manaCost: 36, cooldown: 2, targetType: 'single_enemy', power: 1.5, effectType: 'damage', positionBonus: 'back', piercePct: 80, icon: '🗡️' },
       { id: 'assassin_poison', name: '독무 연격', description: '적 전체에 80% 대미지 + 3턴간 중독(누적 지속 피해)', manaCost: 44, cooldown: 3, targetType: 'all_enemies', power: 0.8, effectType: 'poison', icon: '☠️' }
     ],
     specialSkill: { id: 'assassin_execution', name: '심장 꿰뚫기', description: '[후열 저격] 후열 적에게 220%의 치명적인 처형 피해를 입힙니다. (체력 50% 이하 시 1.5배 증폭)', manaCost: 56, cooldown: 3, targetType: 'single_enemy', power: 2.2, effectType: 'damage', positionBonus: 'back', icon: '🩸', isSpecial: true },
@@ -123,7 +123,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     baseStats: { hp: 680, mp: 120, atk: 86, def: 25, spd: 32, luck: 58 },
     skills: [
       { id: 'phantom_teleport', name: '심연의 도약', description: '[후열 저격] 적 후열에 380% 치명타 일격을 가하고 은신', manaCost: 28, cooldown: 3, targetType: 'single_enemy', power: 3.8, effectType: 'damage', positionBonus: 'back', icon: '👤' },
-      { id: 'phantom_clone', name: '분신 난무', description: '적 전체에 120% 방어무시 참격 피해', manaCost: 50, cooldown: 3, targetType: 'all_enemies', power: 1.2, effectType: 'damage', icon: '👥' }
+      { id: 'phantom_clone', name: '분신 난무', description: '적 전체에 120% 방어무시 참격 피해', manaCost: 50, cooldown: 3, targetType: 'all_enemies', power: 1.2, effectType: 'damage', piercePct: 100, icon: '👥' }
     ],
     specialSkill: { id: 'phantom_ultimate', name: '[궁극기] 무간암영참', description: '전장을 시공간 분신으로 가득 채워 적 전체를 6연속 난무(총 200% 광역 피해)합니다.', manaCost: 75, cooldown: 4, targetType: 'all_enemies', power: 2.0, effectType: 'damage', icon: '⚡', isSpecial: true },
     passiveDesc: '사신의 징표: 치명타 피해량이 기본 200%에서 280%로 증폭.',
@@ -291,7 +291,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
     role: 'berserker',
     baseStats: { hp: 980, mp: 100, atk: 92, def: 30, spd: 22, luck: 44 },
     skills: [
-      { id: 'val_ragnarok_slash', name: '라그나로크 슬래시', description: '[전열 특화] 적 1체에게 방어력을 완전 무시하는 320% 파괴 일격', manaCost: 35, cooldown: 2, targetType: 'single_enemy', power: 3.2, effectType: 'damage', positionBonus: 'front', icon: '⚔️' },
+      { id: 'val_ragnarok_slash', name: '라그나로크 슬래시', description: '[전열 특화] 적 1체에게 방어력을 완전 무시하는 320% 파괴 일격', manaCost: 35, cooldown: 2, targetType: 'single_enemy', power: 3.2, effectType: 'damage', positionBonus: 'front', piercePct: 100, icon: '⚔️' },
       { id: 'val_immortal_roar', name: '불멸의 포효', description: '3턴간 사망에 이르는 피해를 받아도 체력 1로 생존 및 공격력 100% 강화', manaCost: 40, cooldown: 5, targetType: 'self', power: 1.0, effectType: 'buff', positionBonus: 'front', icon: '👑' }
     ],
     specialSkill: { id: 'val_ultimate', name: '[궁극기] 불멸의 결전분노', description: '자신의 잃은 체력에 비례하여 최대 450%의 행성 파괴급 일격을 적 전체에 퍼붓습니다.', manaCost: 80, cooldown: 5, targetType: 'all_enemies', power: 4.5, effectType: 'damage', icon: '💥', isSpecial: true },
@@ -677,7 +677,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
       { id: 'warlord_blood_cleave', name: '혈겁의 대검풍', description: '[전열 특화] 전열 적에게 280% 물리 참격을 가하고 2턴간 적의 공격력을 35% 감소시키며 가한 피해의 30%를 흡혈합니다.', manaCost: 40, cooldown: 2, targetType: 'single_enemy', power: 2.8, effectType: 'damage', positionBonus: 'front', icon: '🪓' },
       { id: 'warlord_immortal_vanguard', name: '불멸의 진격', description: '파티 전원의 공격력과 치명타율을 3턴간 50% 증폭하고 자신의 체력이 낮을수록 최대 100%까지 공격력이 추가 증폭됩니다.', manaCost: 50, cooldown: 3, targetType: 'all_allies', power: 0.5, effectType: 'buff', icon: '🚩' }
     ],
-    specialSkill: { id: 'warlord_blood_tactics', name: '[초월기] 피의 전술', description: '적 전체 방어력을 40% 분쇄 (3턴 지속)하고, 2턴간 파티 전원에게 15% 흡혈 버프를 부여합니다.', manaCost: 110, cooldown: 5, targetType: 'all_enemies', power: 2.2, effectType: 'damage', statusDuration: 3, icon: '🩸', isSpecial: true },
+    specialSkill: { id: 'warlord_blood_tactics', name: '[초월기] 피의 전술', description: '적 전체에 220% 파멸의 일격을 가하고 방어력을 40% 분쇄 (3턴 지속)하며, 2턴간 파티 전원에게 15% 흡혈 버프를 부여합니다.', manaCost: 110, cooldown: 5, targetType: 'all_enemies', power: 2.2, effectType: 'damage', statusDuration: 3, icon: '🩸', isSpecial: true },
     passiveDesc: '만마도서 & 불멸의 발할라: 전 마도서 페널티 0% 해금. 모든 공격 시 가한 피해의 10% 상시 체력 흡혈, 체력이 0이 되어 사경(Death Door)에 빠져도 쓰러지지 않고 행동 가능.',
     promptKey: 'hero_valhalla_blade',
     themeColor: 0xff1744

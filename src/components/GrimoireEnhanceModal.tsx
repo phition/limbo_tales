@@ -52,6 +52,8 @@ export const GrimoireEnhanceModal: React.FC<Props> = ({ open, hero, skill, onClo
 
   const nextPower = Math.round(baseP * (1 + curLv * 0.12) * 100);
   const nextMp = Math.max(1, Math.round(baseMp * (1 + curLv * 0.25)));
+  const powerDelta = nextPower - curPower;
+  const mpDelta = nextMp - curMp;
 
   // 현재 레벨 및 다음 레벨 스킬 데이터 (복합 효과 수치 계산 반영)
   const curSkillResolved = gm.resolveSkillData(skill.id, curLv) || skill;
@@ -222,7 +224,7 @@ export const GrimoireEnhanceModal: React.FC<Props> = ({ open, hero, skill, onClo
                 </span>
               )}
             </span>
-            <span className="text-[10px] text-[#ffd54f]">강화 시 전체 계수 +12% / 소모 MP +25%</span>
+            <span className="text-[10px] text-[#ffd54f]">강화 시 기본 위력의 12% 증폭 (+{powerDelta}%) / 소모 MP +{mpDelta}</span>
           </div>
           <div className="grid grid-cols-2 gap-2 p-2.5 rounded-lg bg-[#0a0d16] border border-[#1b263b]">
             <div className="flex flex-col gap-0.5">
@@ -237,7 +239,7 @@ export const GrimoireEnhanceModal: React.FC<Props> = ({ open, hero, skill, onClo
                 <span className="text-[10px] text-[#38ef7d]">강화 후 (Lv.{curLv + 1})</span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold font-mono text-[#38ef7d]">
-                    {nextPower}% <span className="text-[10px] text-[#81c784] font-normal">(+12%)</span>
+                    {nextPower}% <span className="text-[10px] text-[#81c784] font-normal">(+{powerDelta}%)</span>
                   </span>
                   <span className="text-xs font-mono text-[#ffd54f]">({nextMp} MP)</span>
                 </div>
@@ -264,7 +266,7 @@ export const GrimoireEnhanceModal: React.FC<Props> = ({ open, hero, skill, onClo
                 <div className="flex items-center justify-between text-[#81c784] text-[10px] font-bold">
                   <span>✨ 다음 레벨 강화 시 [Lv.{curLv + 1}]</span>
                   <span className="text-[9px] text-[#38ef7d] font-normal">
-                    {isCompositeSkill ? '주요 계수 및 부가 효과 동반 상승 (+12%)' : '위력 계수 +12% 성장'}
+                    {isCompositeSkill ? `주요 계수 및 부가 효과 +${powerDelta}% 동반 성장 (기본의 12%)` : `위력 계수 +${powerDelta}% 성장 (기본의 12%)`}
                   </span>
                 </div>
                 <div className="text-[#80cbc4] leading-relaxed pl-1 font-medium">

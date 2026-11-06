@@ -4882,9 +4882,13 @@ export class GameManager {
     if (determinedOutcome === 'success') {
       const newLv = curLv + 1;
       hero.skillLevels[skillId] = newLv;
+      const baseSkill = this.resolveSkillData(skillId, 1);
+      const baseP = baseSkill?.power || 1.0;
+      const powerDelta = Math.round(baseP * 0.12 * 100);
+      const newPowerPct = Math.round(baseP * (1 + (newLv - 1) * 0.12) * 100);
       SoundManager.getInstance().play('forge_success');
       this.addLog(
-        `✨ [스킬 비전 강화 성공!] (성공률 ${rateInfo.successRate}%) [${hero.name}]의 [${skillName}] 스킬이 Lv.${newLv}로 승급했습니다! (위력 +12% / 소모 MP +25% 증가)`,
+        `✨ [스킬 비전 강화 성공!] (성공률 ${rateInfo.successRate}%) [${hero.name}]의 [${skillName}] 스킬이 Lv.${newLv}로 승급했습니다! (위력 ${newPowerPct}% [기본의 +12%, +${powerDelta}% 증가])`,
         'reward'
       );
       this.hasEnhancedSkill = true;
