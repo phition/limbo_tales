@@ -4601,7 +4601,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full">
               {opponents.map(opp => {
                 const oppBadge = getRankBadge(opp.rating);
                 const ratingGainDelta = Math.max(15, Math.floor((opp.rating - state.currentArenaRating) / 25 + 30));
