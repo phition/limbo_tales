@@ -2621,6 +2621,16 @@ export const BattleScreen: React.FC = () => {
           hero.currentHp = Math.min(effectiveMaxHp, hero.currentHp + synHeal);
           logs.push(`✨ [${regenSynNames.join(', ')}] ${hero.name} 시너지 체력 회복 (+${synHeal})`);
         }
+        // 🌿 [접미사 인챈트: 재생] 매 턴 전체 최대 체력 비례 지속 회복
+        if (heroEffStats.hpRegenPercent > 0 && hero.currentHp > 0 && hero.currentHp < effectiveMaxHp) {
+          const regenHeal = Math.max(1, Math.round(effectiveMaxHp * (heroEffStats.hpRegenPercent / 100)));
+          const actualHealed = Math.min(effectiveMaxHp - hero.currentHp, regenHeal);
+          if (actualHealed > 0) {
+            hero.currentHp = Math.min(effectiveMaxHp, hero.currentHp + actualHealed);
+            logs.push(`🌿 [재생] ${hero.name}이(가) [재생] 접미사 효과로 체력 +${actualHealed} HP(${heroEffStats.hpRegenPercent}%)를 지속 회복했습니다!`);
+            triggerVFX({ type: 'holy_heal', x: heroPos.x, y: heroPos.y, damage: actualHealed, isHeal: true });
+          }
+        }
         if (totalSynergyMpRegen > 0 && hero.currentHp > 0 && hero.currentMp < effectiveMaxMp) {
           const actualGained = Math.min(effectiveMaxMp - hero.currentMp, totalSynergyMpRegen);
           if (actualGained > 0) {
@@ -7064,9 +7074,10 @@ export const BattleScreen: React.FC = () => {
               setTimeout(() => gm.addLog(`✨🛡️ [면역 결계] ${target.name}의 성스러운 정화 결계가 [${effectName}] 효과를 완전히 차단했습니다!`, 'reward'), 0);
               return true;
             }
-            const resistChance = Math.min(50, heroStats.luck * 0.35);
+            const resistChance = Math.min(80, (heroStats.luck * 0.35) + (heroStats.statusResist || 0));
             if (Math.random() * 100 < resistChance) {
-              setTimeout(() => gm.addLog(`🛡️ [저항(RESIST)] ${target.name}이(가) 높은 행운(🍀${heroStats.luck})으로 [${effectName}] 효과를 완전히 저항해냈습니다!`, 'reward'), 0);
+              const resistDesc = (heroStats.statusResist || 0) > 0 ? `상태이상 저항(+${heroStats.statusResist}%)` : `행운(🍀${heroStats.luck})`;
+              setTimeout(() => gm.addLog(`🛡️ [저항(RESIST)] ${target.name}이(가) ${resistDesc}으로 [${effectName}] 효과를 완전히 저항해냈습니다!`, 'reward'), 0);
               return true;
             }
             return false;

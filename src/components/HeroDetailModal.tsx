@@ -162,11 +162,14 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
           </div>
         </div>
 
-        {/* 보조 전투 스탯 (치명타/저항/명중/회피/흡혈) */}
+        {/* 보조 전투 스탯 (치명타/저항/명중/회피/흡혈/관통/집중/재생) */}
         <div className="px-2.5 py-1.5 rounded-lg bg-[#0d0f14] border border-[#1e2d45] text-[10px] text-[#8b9bb4] flex justify-between font-mono flex-wrap gap-1">
           <span>치명타: <strong className="text-[#ce93d8]">{(gm.getCritChance(stats.luck) + (stats.critRateBonus || 0)).toFixed(1)}%</strong></span>
           {stats.drainPercent > 0 && <span>흡혈: <strong className="text-[#e91e63]">+{stats.drainPercent}%</strong></span>}
-          <span>저항: <strong className="text-[#38ef7d]">{Math.min(50, stats.luck * 0.35).toFixed(1)}%</strong></span>
+          <span>저항: <strong className="text-[#38ef7d]">{(Math.min(80, (stats.luck * 0.35) + (stats.statusResist || 0))).toFixed(1)}%</strong></span>
+          {stats.defPenetration > 0 && <span>관통: <strong className="text-[#ff9800]">+{stats.defPenetration}%</strong></span>}
+          {stats.manaCostReduction > 0 && <span>집중: <strong className="text-[#00e5ff]">-{stats.manaCostReduction}% MP</strong></span>}
+          {stats.hpRegenPercent > 0 && <span>재생: <strong className="text-[#69f0ae]">+{stats.hpRegenPercent}% HP/턴</strong></span>}
           <span>명중: <strong className="text-[#c8aa6e]">+{ (stats.luck * 0.2).toFixed(1)}%</strong></span>
           <span>회피: <strong className="text-[#ffd54f]">+{Math.min(70, stats.luck * 0.3).toFixed(1)}%</strong></span>
         </div>

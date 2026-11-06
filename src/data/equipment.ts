@@ -818,25 +818,63 @@ export const PREFIX_ENCHANT_OPTIONS: Record<string, EnchantOption> = {
 // 🌟 접미어 (Suffix) 풀 — 무기 / 방어구 / 장신구 카테고리별 분화
 // ═══════════════════════════════════════════════════════════════════════
 export const SUFFIX_ENCHANT_OPTIONS: Record<string, EnchantOption> = {
-  // ── 🗡️ 무기 전용 접미사 (피해증폭 / 흡혈 / 관통 / 맹공) ──
+  // ── 🌟 전 부위 공용 에픽 순수 접미사 (흡혈 / 집중 / 관통 / 저항 / 재생 / 무자비) ──
   'suf_vampirism': {
     id: 'suf_vampirism',
     name: '흡혈',
     type: 'suffix',
-    targetSlot: 'weapon',
-    rarity: 'rare',
-    stats: { atk: 15, drainPercent: 12 },
-    description: '공격력 +15, 피해의 12% 체력 흡수'
+    targetSlot: 'all',
+    rarity: 'epic',
+    stats: { atk: 22, def: 18, drainPercent: 10 },
+    description: '공격력 +22, 방어력 +18, 가한 피해의 10% 체력 흡수'
+  },
+  'suf_focus': {
+    id: 'suf_focus',
+    name: '집중',
+    type: 'suffix',
+    targetSlot: 'all',
+    rarity: 'epic',
+    stats: { mp: 160, spd: 6, manaCostReduction: 10 },
+    description: '마나 +160, 속도 +6, 모든 스킬 마나 소모 10% 감소'
   },
   'suf_pierce': {
     id: 'suf_pierce',
     name: '관통',
     type: 'suffix',
-    targetSlot: 'weapon',
-    rarity: 'rare',
-    stats: { atk: 18, defPenetration: 15 },
-    description: '공격력 +18, 방어 관통 15%'
+    targetSlot: 'all',
+    rarity: 'epic',
+    stats: { atk: 24, luck: 6, defPenetration: 20 },
+    description: '공격력 +24, 행운 +6, 방어력 추가 관통 20%'
   },
+  'suf_resistance': {
+    id: 'suf_resistance',
+    name: '저항',
+    type: 'suffix',
+    targetSlot: 'all',
+    rarity: 'epic',
+    stats: { def: 25, hp: 220, statusResist: 10 },
+    description: '방어력 +25, 최대 체력 +220, 상태이상 저항 +10%'
+  },
+  'suf_regen': {
+    id: 'suf_regen',
+    name: '재생',
+    type: 'suffix',
+    targetSlot: 'all',
+    rarity: 'epic',
+    stats: { hp: 320, def: 20, hpRegenPercent: 5 },
+    description: '최대 체력 +320, 방어력 +20, 매 턴 최대 체력의 5% 지속 회복'
+  },
+  'suf_merciless': {
+    id: 'suf_merciless',
+    name: '무자비',
+    type: 'suffix',
+    targetSlot: 'all',
+    rarity: 'epic',
+    stats: { atk: 25, luck: 10, critRateBonus: 10 },
+    description: '공격력 +25, 행운 +10, 치명타 확률 +10%'
+  },
+
+  // ── 🗡️ 무기 전용 접미사 (피해증폭 / 맹공 / 추적) ──
   'suf_rupture': {
     id: 'suf_rupture',
     name: '파열',
@@ -973,15 +1011,6 @@ export const SUFFIX_ENCHANT_OPTIONS: Record<string, EnchantOption> = {
     rarity: 'epic',
     stats: { def: 35, hp: 250 },
     description: '방어력 +35, 최대 체력 +250'
-  },
-  'suf_regen': {
-    id: 'suf_regen',
-    name: '재생',
-    type: 'suffix',
-    targetSlot: 'armor',
-    rarity: 'epic',
-    stats: { hp: 300, def: 20 },
-    description: '최대 체력 +300, 방어력 +20'
   },
   'suf_grace': {
     id: 'suf_grace',

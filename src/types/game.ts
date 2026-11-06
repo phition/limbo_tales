@@ -97,9 +97,13 @@ export interface EnchantOption {
     spd?: number;
     luck?: number;             // 🍀 행운 (치명타/저항/적중/회피 종합 보정)
     crit?: number;             // 하위 호환용
+    critRateBonus?: number;    // 치명타율 보너스 %
     damageBonus?: number;      // 피해량 증폭 %
     defPenetration?: number;   // 방어 관통 %
     drainPercent?: number;     // 흡혈 %
+    manaCostReduction?: number; // 마나 소모 감소 %
+    hpRegenPercent?: number;   // 매 턴 최대 체력 비례 지속 회복 %
+    statusResist?: number;     // 추가 상태 이상 저항 %
   };
   grantedSkill?: Skill;        // 인챈트로 획득하는 고유 전투 스킬
   targetSlot?: EquipmentSlot | 'all'; // 인챈트 적용 대상 장비 슬롯 (무기/방어구/장신구/공용)
@@ -142,7 +146,14 @@ export interface EquipmentItem {
     luck?: number;             // 🍀 행운
     crit?: number;             // 하위 호환용
     critRate?: number;         // 치명타율 별칭
+    critRateBonus?: number;    // 치명타율 보너스 %
     critDmg?: number;
+    damageBonus?: number;
+    defPenetration?: number;
+    drainPercent?: number;
+    manaCostReduction?: number;
+    hpRegenPercent?: number;
+    statusResist?: number;
   };
   baseStats?: {
     atk?: number;

@@ -751,7 +751,7 @@ export class BattleScene extends Phaser.Scene {
   private executeSkill(hero: Mercenary, skill: Skill): void {
     if (this.battleEnded) return;
 
-    let mpCost = this.gm.getSkillManaCost(skill.manaCost);
+    let mpCost = this.gm.getSkillManaCost(skill.manaCost, undefined, hero);
     if (hero.position === 'back') mpCost = Math.max(0, Math.floor(mpCost * 0.85));
 
     if (hero.currentMp < mpCost) {
@@ -889,7 +889,7 @@ export class BattleScene extends Phaser.Scene {
 
     let dmg = Math.max(1, Math.floor(totalAtk * skillPower * dmgMult - effectiveDef * 0.6));
 
-    let critRate = eff.crit;
+    let critRate = this.gm.getCritChance(eff.luck) + (eff.critRateBonus || 0);
     if (hero.position === 'mid') critRate += 8;
 
     const isCrit = Math.random() * 100 < critRate;
@@ -1215,10 +1215,10 @@ export class BattleScene extends Phaser.Scene {
     if (!hero || hero.currentHp <= 0) { this.advanceTurn(); return; }
 
     const heroClass = CHARACTER_CLASSES[hero.classId];
-    if (hero.currentMp >= this.gm.getSkillManaCost(heroClass.specialSkill.manaCost)) {
+    if (hero.currentMp >= this.gm.getSkillManaCost(heroClass.specialSkill.manaCost, undefined, hero)) {
       this.executeSkill(hero, heroClass.specialSkill);
     } else {
-      const usable = heroClass.skills.find(s => hero.currentMp >= this.gm.getSkillManaCost(s.manaCost));
+      const usable = heroClass.skills.find(s => hero.currentMp >= this.gm.getSkillManaCost(s.manaCost, undefined, hero));
       if (usable) this.executeSkill(hero, usable);
       else this.executeBasicAttack(hero);
     }

@@ -3926,6 +3926,9 @@ export class GameManager {
     drainPercent: number;
     critDmg: number;
     critRateBonus: number;
+    manaCostReduction: number;
+    hpRegenPercent: number;
+    statusResist: number;
   } {
     // 🌟 베이스 스탯은 calcHeroStatsForClassAndLevel로부터 순수하게 산출 (중복 가산 방지)
     const base = GameManager.calcHeroStatsForClassAndLevel(
@@ -3947,6 +3950,9 @@ export class GameManager {
     let drainPercent = 0;
     let critDmg = 1.5; // 기본 치명타 배율 150%
     let critRateBonus = 0; // 치명타율 추가 보너스 (%)
+    let manaCostReduction = 0; // 마나 소모 감소 % (접미사 [집중] 등)
+    let hpRegenPercent = 0; // 매 턴 최대 체력 비례 회복 % (접미사 [재생] 등)
+    let statusResist = 0; // 추가 상태이상 저항 % (접미사 [저항] 등)
 
     // 1. 장비 스탯 & 인챈트 스탯 가산 (클래스 호환성 검증)
     Object.values(hero.equipment || {}).forEach(eq => {
@@ -3981,6 +3987,11 @@ export class GameManager {
         if (eq.prefix.stats.damageBonus) damageBonus += eq.prefix.stats.damageBonus * mult;
         if (eq.prefix.stats.defPenetration) defPenetration += eq.prefix.stats.defPenetration * mult;
         if (eq.prefix.stats.drainPercent) drainPercent += eq.prefix.stats.drainPercent * mult;
+        if (eq.prefix.stats.critRateBonus) critRateBonus += eq.prefix.stats.critRateBonus * mult;
+        if (eq.prefix.stats.crit) critRateBonus += eq.prefix.stats.crit * mult;
+        if (eq.prefix.stats.manaCostReduction) manaCostReduction += eq.prefix.stats.manaCostReduction * mult;
+        if (eq.prefix.stats.hpRegenPercent) hpRegenPercent += eq.prefix.stats.hpRegenPercent * mult;
+        if (eq.prefix.stats.statusResist) statusResist += eq.prefix.stats.statusResist * mult;
       }
 
       if (eq.suffix?.stats) {
@@ -3993,6 +4004,11 @@ export class GameManager {
         if (eq.suffix.stats.damageBonus) damageBonus += eq.suffix.stats.damageBonus * mult;
         if (eq.suffix.stats.defPenetration) defPenetration += eq.suffix.stats.defPenetration * mult;
         if (eq.suffix.stats.drainPercent) drainPercent += eq.suffix.stats.drainPercent * mult;
+        if (eq.suffix.stats.critRateBonus) critRateBonus += eq.suffix.stats.critRateBonus * mult;
+        if (eq.suffix.stats.crit) critRateBonus += eq.suffix.stats.crit * mult;
+        if (eq.suffix.stats.manaCostReduction) manaCostReduction += eq.suffix.stats.manaCostReduction * mult;
+        if (eq.suffix.stats.hpRegenPercent) hpRegenPercent += eq.suffix.stats.hpRegenPercent * mult;
+        if (eq.suffix.stats.statusResist) statusResist += eq.suffix.stats.statusResist * mult;
       }
     });
 
@@ -4143,7 +4159,10 @@ export class GameManager {
       defPenetration: Math.round(defPenetration * 10) / 10,
       drainPercent: Math.round(drainPercent * 10) / 10,
       critDmg: Math.round(critDmg * 100) / 100,
-      critRateBonus: Math.round(critRateBonus * 10) / 10
+      critRateBonus: Math.round(critRateBonus * 10) / 10,
+      manaCostReduction: Math.round(manaCostReduction * 10) / 10,
+      hpRegenPercent: Math.round(hpRegenPercent * 10) / 10,
+      statusResist: Math.round(statusResist * 10) / 10
     };
   }
 
@@ -4723,6 +4742,13 @@ export class GameManager {
           const ringDiscount = 1 - Math.min(0.25, ringEnhance * 0.01);
           cost = Math.max(1, Math.round(cost * ringDiscount));
         }
+      }
+
+      // 🌀 [인챈트: 집중 등] 마나 소모 감소 효과 적용
+      const effStats = this.getHeroEffectiveStats(hero);
+      if (effStats.manaCostReduction > 0) {
+        const focusDiscount = 1 - Math.min(0.80, effStats.manaCostReduction / 100);
+        cost = Math.max(1, Math.round(cost * focusDiscount));
       }
     }
 
