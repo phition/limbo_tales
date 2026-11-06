@@ -1096,64 +1096,62 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     return Math.round(atk * 3 + def * 2 + hp / 5);
   }, []);
 
-  // 🏆 1. 아레나 대표 결투 용병 (리더 우선 > 오퍼레이터 > 1번 메인 > 첫번째 영웅)
-  const arenaRepHero = useMemo(() => {
-    if (playerLeader) return playerLeader;
-    if (dimDeck.operatorHero) return dimDeck.operatorHero;
-    if (dimDeck.mainHeroes[0]) return dimDeck.mainHeroes[0];
-    return state.barracks[0] || state.party?.[0] || null;
-  }, [playerLeader, dimDeck, state.barracks, state.party]);
+  // 👥 4인 차원 부대 편성 (3인 선발 + 1인 전술 오퍼레이터/리더)
+  const dimensionalSquad = useMemo(() => {
+    const all = [...state.barracks, ...state.party].filter((h, idx, arr) => h && h.id && arr.findIndex(x => x.id === h.id) === idx);
 
-  const arenaRepCp = useMemo(() => getHeroCombatPower(arenaRepHero), [arenaRepHero, getHeroCombatPower]);
+    // 1. 오퍼레이터 확정 (지정된 operatorHero > leaderHero > playerLeader > 4번째 영웅)
+    let opHero = dimDeck.operatorHero || dimDeck.leaderHero || null;
+    if (!opHero && playerLeader && all.some(h => h.id === playerLeader.id)) {
+      opHero = playerLeader;
+    }
 
-  // 🌌 2. 네메시스 4인 토벌대
-  const nemesisSquad = useMemo(() => {
-    const heroes: Mercenary[] = [];
+    // 2. 선발 3인 확정 (지정된 mainHeroes > 미지정 시 op 제외한 영웅들)
+    const mains: (Mercenary | null)[] = [];
     if (dimDeck.mainHeroes && dimDeck.mainHeroes.length > 0) {
-      heroes.push(...dimDeck.mainHeroes);
-    }
-    if (dimDeck.operatorHero && !heroes.some(h => h.id === dimDeck.operatorHero!.id)) {
-      heroes.push(dimDeck.operatorHero);
-    }
-    const all = [...state.barracks, ...state.party];
-    for (const h of all) {
-      if (heroes.length >= 4) break;
-      if (!heroes.some(x => x.id === h.id)) {
-        heroes.push(h);
+      for (const h of dimDeck.mainHeroes) {
+        if (mains.length < 3 && (!opHero || h.id !== opHero.id)) {
+          mains.push(h);
+        }
       }
     }
-    return heroes.slice(0, 4);
-  }, [dimDeck, state.barracks, state.party]);
 
-  const nemesisSquadCp = useMemo(() => {
-    return nemesisSquad.reduce((sum, h) => sum + getHeroCombatPower(h), 0);
-  }, [nemesisSquad, getHeroCombatPower]);
+    // 3. 만약 opHero가 아직 없으면 남은 영웅 중에서 선발
+    if (!opHero) {
+      const candidate = all.find(h => !mains.some(m => m && m.id === h.id));
+      if (candidate) opHero = candidate;
+    }
 
-  // 🏰 3. 영지 침공 5인 수성/공성 정예군
-  const invasionSquad = useMemo(() => {
-    const heroes: Mercenary[] = [];
-    if (dimDeck.mainHeroes && dimDeck.mainHeroes.length > 0) {
-      heroes.push(...dimDeck.mainHeroes);
-    }
-    if (dimDeck.operatorHero && !heroes.some(h => h.id === dimDeck.operatorHero!.id)) {
-      heroes.push(dimDeck.operatorHero);
-    }
-    if (dimDeck.supporterHero && !heroes.some(h => h.id === dimDeck.supporterHero!.id)) {
-      heroes.push(dimDeck.supporterHero);
-    }
-    const all = [...state.barracks, ...state.party];
+    // 4. 선발 3인이 부족하면 opHero를 제외한 남은 영웅으로 채움
     for (const h of all) {
-      if (heroes.length >= 5) break;
-      if (!heroes.some(x => x.id === h.id)) {
-        heroes.push(h);
+      if (mains.length >= 3) break;
+      if (h.id !== opHero?.id && !mains.some(m => m && m.id === h.id)) {
+        mains.push(h);
       }
     }
-    return heroes.slice(0, 5);
-  }, [dimDeck, state.barracks, state.party]);
 
-  const invasionSquadCp = useMemo(() => {
-    return invasionSquad.reduce((sum, h) => sum + getHeroCombatPower(h), 0);
-  }, [invasionSquad, getHeroCombatPower]);
+    while (mains.length < 3) {
+      mains.push(null);
+    }
+
+    const slots: Array<{ hero: Mercenary | null; role: 'main' | 'operator'; slotIndex: number; label: string }> = [
+      { hero: mains[0], role: 'main', slotIndex: 0, label: tr('선발 1') },
+      { hero: mains[1], role: 'main', slotIndex: 1, label: tr('선발 2') },
+      { hero: mains[2], role: 'main', slotIndex: 2, label: tr('선발 3') },
+      { hero: opHero, role: 'operator', slotIndex: 3, label: tr('오퍼레이터') },
+    ];
+
+    const heroes = [mains[0], mains[1], mains[2], opHero].filter((h): h is Mercenary => Boolean(h));
+    const totalCp = heroes.reduce((sum, h) => sum + getHeroCombatPower(h), 0);
+
+    return {
+      mains,
+      operator: opHero,
+      slots,
+      heroes,
+      totalCp,
+    };
+  }, [dimDeck, playerLeader, state.barracks, state.party, getHeroCombatPower]);
 
   const nemesisState = state.nemesisState || gm.nemesisState;
   const bossMaxHp = nemesisState?.maxBossHp || NEMESIS_BOSS_CONFIG.maxHp;
@@ -3714,6 +3712,79 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     );
   }
 
+  // 👥 차원 부대 4인 슬롯 렌더러 (3선발 + 1오퍼레이터 / 오퍼레이터 금빛 프레임 특화)
+  const renderSquadSlots = useCallback((theme: {
+    accent: string;
+    border: string;
+    badgeBg: string;
+    badgeText: string;
+  }) => (
+    <div className="grid grid-cols-4 gap-1.5 w-full">
+      {dimensionalSquad.slots.map((slot) => {
+        const m = slot.hero;
+        const isOp = slot.role === 'operator';
+        return (
+          <div key={slot.slotIndex} className="relative flex flex-col items-center min-w-0">
+            {/* 상단 역할 뱃지 */}
+            <span
+              className={`text-[8px] font-mono px-1 py-0.2 rounded font-bold mb-1 truncate max-w-full ${
+                isOp
+                  ? 'bg-gradient-to-r from-[#ffd54f33] to-[#b8975833] text-[#ffd54f] border border-[#ffd54f88] shadow-xs shadow-[#ffd54f33]'
+                  : `${theme.badgeBg} ${theme.badgeText} border ${theme.border}`
+              }`}
+            >
+              {isOp ? '👑 OP' : slot.label}
+            </span>
+
+            {/* 초상화 프레임 (오퍼레이터: 찬란한 금빛 프레임) */}
+            <div
+              className={`relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden shrink-0 transition-all ${
+                isOp
+                  ? 'border-2 border-[#ffd54f] shadow-[0_0_12px_rgba(255,213,79,0.55)] ring-2 ring-[#ffd54f44] bg-gradient-to-b from-[#2a1e0d] to-[#140e06]'
+                  : `border ${theme.border} bg-[#0c0d12]`
+              }`}
+            >
+              {m ? (
+                <img
+                  src={getCombatantPortrait(m)}
+                  alt={m.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-xs text-[#506078] bg-[#0c0d12]">
+                  {isOp ? <span className="text-[#ffd54f]/50 text-sm">👑</span> : <span>+</span>}
+                </div>
+              )}
+
+              {m && (
+                <span
+                  className={`absolute bottom-0 right-0 px-1 py-0.2 text-[8px] font-bold font-mono rounded-tl ${
+                    isOp ? 'bg-black/90 text-[#ffd54f]' : 'bg-black/80 text-[#ffd54f]'
+                  }`}
+                >
+                  Lv.{m.level}
+                </span>
+              )}
+            </div>
+
+            {/* 용병 이름 및 클래스 */}
+            <span
+              className={`text-[9.5px] truncate w-full text-center mt-1 ${
+                isOp ? 'text-[#ffd54f] font-bold' : 'text-[#cfd8e8] font-medium'
+              }`}
+              title={m ? tr(m.name) : tr('미편성')}
+            >
+              {m ? tr(m.name) : tr('미편성')}
+            </span>
+            <span className="text-[8px] text-[#8b9bb4] truncate w-full text-center">
+              {m ? tr(CHARACTER_CLASSES[m.classId]?.name || m.classId) : '-'}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  ), [dimensionalSquad, getCombatantPortrait]);
+
   return (
     <div className="flex-1 min-h-0 w-full max-w-full flex flex-col bg-transparent overflow-hidden overflow-x-hidden relative">
 
@@ -3743,7 +3814,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
               </span>
             </div>
             <p className="text-[10px] sm:text-xs text-[#cfd8e8] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)] line-clamp-1 mt-0.5 font-medium">
-              {tr('차원 아레나(1v1) · 네메시스 월드 보스 · 5v5 영지 침공 작전 사령부')}
+              {tr('차원 아레나 · 네메시스 월드 레이드 · 영지 침공전 종합 관제실')}
             </p>
           </div>
 
@@ -3909,7 +3980,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
 
           {/* 3대 콘텐츠 선택 카드 그리드 */}
           <div className={`gap-3.5 sm:gap-4 items-stretch ${isDrawer ? 'flex flex-col' : 'grid grid-cols-1 md:grid-cols-3'}`}>
-            {/* ── 🏆 카드 1: 차원 아레나 (1v1 PVP) ── */}
+            {/* ── 🏆 카드 1: 차원 아레나 (4인 결투) ── */}
             <div
               onClick={() => {
                 try { SoundManager.getInstance().play('click'); } catch {}
@@ -3925,7 +3996,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                 <div className="flex items-center justify-between gap-1.5 mb-2.5">
                   <div className="flex items-center gap-1.5">
                     <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#ff416c25] text-[#ff416c] border border-[#ff416c55] font-mono">
-                      🏆 1v1 PVP
+                      🏆 4인 차원 결투
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1f1929] text-[#ffd54f] border border-[#ffd54f33] font-mono truncate max-w-[130px]">
                       📜 {arenaEdict.name || tr('자유 결투')}
@@ -3940,46 +4011,21 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                   <span>⚔️ {tr('차원 아레나')}</span>
                 </h3>
                 <p className="text-[11px] text-[#8b9bb4] mt-0.5">
-                  {tr('1v1 실시간 턴제 결투 및 피버 쇼다운 대결')}
+                  {tr('3인 선발 결투 및 오퍼레이터 피버 쇼다운 대결')}
                 </p>
 
-                {/* 대표 결투 용병 정보 슬롯 */}
+                {/* 4인 출전 정예 부대 슬롯 */}
                 <div className="my-3 p-3 rounded-xl bg-black/40 border border-[#ff416c22] group-hover:border-[#ff416c44] transition-all">
                   <div className="text-[10px] text-[#ff8a80] font-bold uppercase tracking-wider mb-2 flex items-center justify-between">
-                    <span>👤 {tr('출전 대표 결투 용병')}</span>
-                    <span className="text-[#ffd54f] font-mono font-bold">CP ⚡ {arenaRepCp.toLocaleString()}</span>
+                    <span>👥 {tr('4인 출전 정예 부대')}</span>
+                    <span className="text-[#ffd54f] font-mono font-bold">CP ⚡ {dimensionalSquad.totalCp.toLocaleString()}</span>
                   </div>
-                  {arenaRepHero ? (
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-13 h-13 rounded-xl overflow-hidden border-2 border-[#b89758] shadow-md shrink-0 bg-[#0c0d12]">
-                        <img
-                          src={getCombatantPortrait(arenaRepHero)}
-                          alt={arenaRepHero.name}
-                          className="w-full h-full object-cover"
-                        />
-                        <span className="absolute bottom-0 right-0 px-1 py-0.2 bg-black/80 text-[9px] font-bold text-[#ffd54f] font-mono rounded-tl">
-                          Lv.{arenaRepHero.level}
-                        </span>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-xs sm:text-sm font-bold text-white truncate">{arenaRepHero.name}</span>
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ff416c22] text-[#ff8a80] border border-[#ff416c44] font-mono">
-                            T{arenaRepHero.tier || 1}
-                          </span>
-                        </div>
-                        <div className="text-[11px] text-[#a0aec0] mt-0.5 truncate">
-                          {CHARACTER_CLASSES[arenaRepHero.classId]?.name || arenaRepHero.classId}
-                        </div>
-                        <div className="text-[10px] text-[#38ef7d] mt-1 flex items-center gap-1 font-medium">
-                          <span>⚡</span>
-                          <span>{tr('피버 결투 출전 준비 완료')}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-xs text-[#8b9bb4] py-2 text-center">{tr('편성된 용병이 없습니다')}</div>
-                  )}
+                  {renderSquadSlots({
+                    accent: '#ff416c',
+                    border: 'border-[#ff416c44]',
+                    badgeBg: 'bg-[#ff416c20]',
+                    badgeText: 'text-[#ff8a80]',
+                  })}
                 </div>
 
                 {/* 콘텐츠 현황 정보 */}
@@ -4085,29 +4131,14 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                 <div className="my-3 p-3 rounded-xl bg-black/40 border border-[#8a2be222] group-hover:border-[#8a2be244] transition-all">
                   <div className="text-[10px] text-[#e0aaff] font-bold uppercase tracking-wider mb-2 flex items-center justify-between">
                     <span>👥 {tr('4인 보스 토벌 원정대')}</span>
-                    <span className="text-[#ffd54f] font-mono font-bold">CP ⚡ {nemesisSquadCp.toLocaleString()}</span>
+                    <span className="text-[#ffd54f] font-mono font-bold">CP ⚡ {dimensionalSquad.totalCp.toLocaleString()}</span>
                   </div>
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {nemesisSquad.map((m, idx) => (
-                      <div key={m?.id || idx} className="relative flex flex-col items-center">
-                        <div className="relative w-11 h-11 rounded-lg overflow-hidden border border-[#8a2be266] bg-[#0c0d12]">
-                          {m ? (
-                            <img src={getCombatantPortrait(m)} alt={m.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-xs text-[#506078]">+</div>
-                          )}
-                          {m && (
-                            <span className="absolute bottom-0 right-0 px-1 py-0.2 bg-black/80 text-[8px] font-bold text-[#ffd54f] font-mono rounded-tl">
-                              {m.level}
-                            </span>
-                          )}
-                        </div>
-                        <span className="text-[9px] text-[#cfd8e8] truncate w-full text-center mt-0.5">
-                          {m?.name || tr('미편성')}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                  {renderSquadSlots({
+                    accent: '#8a2be2',
+                    border: 'border-[#8a2be255]',
+                    badgeBg: 'bg-[#8a2be220]',
+                    badgeText: 'text-[#d8b4fe]',
+                  })}
                 </div>
 
                 {/* 보스 상태 및 인포그래픽 */}
@@ -4185,7 +4216,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                 if (!isInvasionUnlocked) {
                   gameDialog.alert({
                     title: tr('차원 관문 미개방'),
-                    message: `${tr('차원 영지 침공(5인 원정대 약탈전)은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})\n\n${tr('성채에서 차원 앵커 게이트를 증축해주세요.')}`,
+                    message: `${tr('차원 영지 침공(4인 원정대 약탈전)은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})\n\n${tr('성채에서 차원 앵커 게이트를 증축해주세요.')}`,
                     icon: '🔒',
                   });
                   return;
@@ -4207,7 +4238,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                 <div className="flex items-center justify-between gap-1.5 mb-2.5">
                   <div className="flex items-center gap-1.5">
                     <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#dd6b2025] text-[#fbd38d] border border-[#dd6b2055] font-mono">
-                      🏰 5v5 공성·수성
+                      🏰 4인 공성·수성
                     </span>
                     {isInvasionUnlocked ? (
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-950/80 text-[#ffd54f] border border-amber-500/40 font-mono">
@@ -4231,33 +4262,18 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                   {tr('적 거점 요새 공성 약탈 및 아군 성채 방어전')}
                 </p>
 
-                {/* 5인 수성/공성 부대 프리뷰 */}
+                {/* 4인 수성/공성 부대 프리뷰 */}
                 <div className="my-3 p-3 rounded-xl bg-black/40 border border-[#dd6b2022] group-hover:border-[#dd6b2044] transition-all">
                   <div className="text-[10px] text-[#fbd38d] font-bold uppercase tracking-wider mb-2 flex items-center justify-between">
-                    <span>🛡️ {tr('5인 수성/공성 정예군')}</span>
-                    <span className="text-[#ffd54f] font-mono font-bold">CP ⚡ {invasionSquadCp.toLocaleString()}</span>
+                    <span>🛡️ {tr('4인 수성/공성 정예군')}</span>
+                    <span className="text-[#ffd54f] font-mono font-bold">CP ⚡ {dimensionalSquad.totalCp.toLocaleString()}</span>
                   </div>
-                  <div className="grid grid-cols-5 gap-1">
-                    {invasionSquad.map((m, idx) => (
-                      <div key={m?.id || idx} className="relative flex flex-col items-center">
-                        <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-lg overflow-hidden border border-[#dd6b2066] bg-[#0c0d12]">
-                          {m ? (
-                            <img src={getCombatantPortrait(m)} alt={m.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[10px] text-[#506078]">+</div>
-                          )}
-                          {m && (
-                            <span className="absolute bottom-0 right-0 px-0.5 py-0.2 bg-black/80 text-[7px] font-bold text-[#ffd54f] font-mono rounded-tl">
-                              {m.level}
-                            </span>
-                          )}
-                        </div>
-                        <span className="text-[8px] text-[#cfd8e8] truncate w-full text-center mt-0.5">
-                          {m?.name || tr('미편성')}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                  {renderSquadSlots({
+                    accent: '#dd6b20',
+                    border: 'border-[#dd6b2055]',
+                    badgeBg: 'bg-[#dd6b2020]',
+                    badgeText: 'text-[#fbd38d]',
+                  })}
                 </div>
 
                 {/* 방어 및 침공 현황 */}
