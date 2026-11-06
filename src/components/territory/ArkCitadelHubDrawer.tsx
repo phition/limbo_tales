@@ -9,6 +9,7 @@ import { EncyclopediaBadge } from '../EncyclopediaBadge';
 import { getBuildingLore, getBuildingStatusInfo, RES_NAMES_AND_ICONS } from '../../utils/buildingStatusUtils';
 import { GameManager } from '../../managers/GameManager';
 import { getTutorialProductionTarget, checkTutorialBuildingRestriction } from '../../data/tutorialSteps';
+import { gameDialog } from '../../services/DialogService';
 
 interface ArkCitadelHubDrawerProps {
   onClose: () => void;
@@ -132,16 +133,24 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         : null);
 
   // 성채 활동 시설 10종
-  const WORKSTATION_ITEMS = [
+  const WORKSTATION_ITEMS: Array<{
+    key: string;
+    name: string;
+    sub: string;
+    icon: string;
+    isBuilt: boolean;
+    buildingId?: BuildingId;
+    badge?: string | null;
+  }> = [
     { key: 'quests',    name: tr('지휘관 퀘스트 & 작전 지도'), sub: tr('메인 스토리 임무 완수 및 단계별 시설 연계'), icon: '📜', isBuilt: true, badge: claimableQuestCount > 0 ? `${claimableQuestCount}건 완료` : null },
     { key: 'codex',     name: tr('심연의 백과 & 회고록'), sub: tr('오파츠·서사 일지·신화 유물 컬렉션 및 영구 패시브 연구'), icon: '📜', isBuilt: true, badge: codexBadge },
     { key: 'barracks',  name: tr('원정단 병영 & 작전실'), sub: tr('4인 파티 편성, 진형 배치, 전직 관리'), icon: '⚔️', isBuilt: true },
-    { key: 'forge',     name: tr('심연의 병기창'), sub: tr('무기·방어구 단조, 장비 강화, 침식 정화'), icon: '⚒️', isBuilt: (state.buildings['blacksmith']?.level || 0) >= 1 },
-    { key: 'tavern',    name: tr('방랑자의 라운지'), sub: tr('방랑 용병 모집 계약 및 고용 풀 갱신'), icon: '🍺', isBuilt: (state.buildings['tavern']?.level || 0) >= 1, badge: (state.tavernCandidates || []).length > 0 ? 'NEW' : null },
-    { key: 'infirmary', name: tr('생체 복원 병동'), sub: tr('전투 부상 대원 입원 치료 및 완치'), icon: '🏥', isBuilt: (state.buildings['infirmary']?.level || 0) >= 1, badge: (state.infirmaryPatients || []).length > 0 ? `${state.infirmaryPatients.length}인` : null },
-    { key: 'storage',   name: tr('방주 중앙 병참고'), sub: tr('전 군수 물자 및 장비·보급품 보관함'), icon: '🏛️', isBuilt: true },
-    { key: 'alchemy',   name: tr('에테르 연금 공방'), sub: tr('마도 스킬 비전서 강화 및 장비 룬 인챈트'), icon: '🧪', isBuilt: (state.buildings['alchemy']?.level || 0) >= 1 },
-    { key: 'market',    name: tr('황혼의 블랙 마켓'), sub: tr('17종 군수물자 거래 및 유지비 주기 연장'), icon: '⚖️', isBuilt: (state.buildings['market']?.level || 0) >= 1 },
+    { key: 'forge',     name: tr('심연의 병기창'), sub: tr('무기·방어구 단조, 장비 강화, 침식 정화'), icon: '⚒️', isBuilt: (state.buildings['blacksmith']?.level || 0) >= 1, buildingId: 'blacksmith' },
+    { key: 'tavern',    name: tr('방랑자의 라운지'), sub: tr('방랑 용병 모집 계약 및 고용 풀 갱신'), icon: '🍺', isBuilt: (state.buildings['tavern']?.level || 0) >= 1, buildingId: 'tavern', badge: (state.tavernCandidates || []).length > 0 ? 'NEW' : null },
+    { key: 'infirmary', name: tr('생체 복원 병동'), sub: tr('전투 부상 대원 입원 치료 및 완치'), icon: '🏥', isBuilt: (state.buildings['infirmary']?.level || 0) >= 1, buildingId: 'infirmary', badge: (state.infirmaryPatients || []).length > 0 ? `${state.infirmaryPatients.length}인` : null },
+    { key: 'storage',   name: tr('방주 중앙 병참고'), sub: tr('전 군수 물자 및 장비·보급품 보관함'), icon: '🏛️', isBuilt: (state.buildings['storage']?.level || 0) >= 1, buildingId: 'storage' },
+    { key: 'alchemy',   name: tr('에테르 연금 공방'), sub: tr('마도 스킬 비전서 강화 및 장비 룬 인챈트'), icon: '🧪', isBuilt: (state.buildings['alchemy']?.level || 0) >= 1, buildingId: 'alchemy' },
+    { key: 'market',    name: tr('황혼의 블랙 마켓'), sub: tr('17종 군수물자 거래 및 유지비 주기 연장'), icon: '⚖️', isBuilt: (state.buildings['market']?.level || 0) >= 1, buildingId: 'market' },
     { key: 'cemetery',  name: tr('성채 묘지'), sub: tr('전사한 영령 안치, 추모 EXP 버프 및 가호'), icon: '🪦', isBuilt: true, badge: (state.cemetery || []).length > 0 ? `${state.cemetery.length}위` : null },
   ];
 
@@ -731,47 +740,91 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             ═════════════════════════════════════════════════════════════ */}
         {activeView === 'workstations' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto w-full">
-            {WORKSTATION_ITEMS.map(item => (
-              <div
-                key={item.key}
-                data-tutorial-target={item.key === 'tavern' ? 'enter-tavern' : undefined}
-                onClick={() => {
-                  handlePlayClick();
-                  onEnterDrawer(item.key);
-                }}
-                className="flex items-center justify-between p-4 sm:p-4.5 min-h-[96px] sm:min-h-[104px] rounded-2xl bg-gradient-to-r from-[#141822]/95 via-[#181d2a]/90 to-[#10131c]/95 border border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1f2b] hover:shadow-[0_0_18px_rgba(184,151,88,0.25)] transition-all cursor-pointer shadow-md select-none group active:scale-[0.98]"
-              >
-                <div className="flex items-center gap-3.5 min-w-0 pr-2">
-                  <div className="w-12 h-12 rounded-xl bg-[#0a0d14] border border-[#3d372e] group-hover:border-[#b89758] flex items-center justify-center text-3xl shrink-0 shadow-inner group-hover:scale-105 transition-transform">
-                    <span className="leading-none drop-shadow">{item.icon}</span>
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <h4 className="text-sm font-extrabold text-[#ededed] group-hover:text-[#ffd54f] tracking-tight truncate transition-colors">
-                        {item.name}
-                      </h4>
-                      {item.badge && (
-                        <span className={`px-1.5 py-0.2 rounded text-[10px] font-black shadow-xs ${
-                          item.key === 'codex' && registerableCodexCount > 0
-                            ? 'bg-[#ef5350] text-white animate-pulse'
-                            : 'bg-gradient-to-r from-[#b89758] to-[#937538] text-[#08090b]'
-                        }`}>
-                          {item.badge}
-                        </span>
-                      )}
+            {WORKSTATION_ITEMS.map(item => {
+              const isLocked = !item.isBuilt;
+              return (
+                <div
+                  key={item.key}
+                  data-tutorial-target={item.key === 'tavern' && !isLocked ? 'enter-tavern' : undefined}
+                  onClick={() => {
+                    if (isLocked) {
+                      try { SoundManager.getInstance().play('error'); } catch {}
+                      gameDialog.confirm({
+                        title: tr('시설 미건설'),
+                        message: `${item.name} ${tr('시설은 아직 건설되지 않았습니다.')}\n\n${tr('영지 시설 관리 화면으로 이동하여 건설하시겠습니까?')}`,
+                        confirmLabel: tr('건설하러 가기'),
+                        cancelLabel: tr('닫기'),
+                        icon: '🔒',
+                      }).then(confirmed => {
+                        if (confirmed) {
+                          setActiveView('facilities');
+                          if (item.buildingId) {
+                            setSelectedBuildingId(item.buildingId);
+                          }
+                        }
+                      });
+                      return;
+                    }
+                    handlePlayClick();
+                    onEnterDrawer(item.key);
+                  }}
+                  className={`flex items-center justify-between p-4 sm:p-4.5 min-h-[96px] sm:min-h-[104px] rounded-2xl transition-all shadow-md select-none ${
+                    isLocked
+                      ? 'bg-[#0d1017]/80 border border-[#202738] opacity-60 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-[#141822]/95 via-[#181d2a]/90 to-[#10131c]/95 border border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1f2b] hover:shadow-[0_0_18px_rgba(184,151,88,0.25)] cursor-pointer group active:scale-[0.98]'
+                  }`}
+                >
+                  <div className="flex items-center gap-3.5 min-w-0 pr-2">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-3xl shrink-0 shadow-inner transition-transform ${
+                      isLocked
+                        ? 'bg-[#090b10] border border-[#1a2130] opacity-40 grayscale'
+                        : 'bg-[#0a0d14] border border-[#3d372e] group-hover:border-[#b89758] group-hover:scale-105'
+                    }`}>
+                      <span className="leading-none drop-shadow">{item.icon}</span>
                     </div>
-                    <p className="text-xs text-[#9da3af] group-hover:text-[#cfd8e8] line-clamp-2 mt-1 leading-relaxed transition-colors">
-                      {item.sub}
-                    </p>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <h4 className={`text-sm font-extrabold tracking-tight truncate transition-colors ${
+                          isLocked ? 'text-[#6f7b8e]' : 'text-[#ededed] group-hover:text-[#ffd54f]'
+                        }`}>
+                          {item.name}
+                        </h4>
+                        {isLocked ? (
+                          <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#141924] text-[#718096] border border-[#222c3d] font-mono">
+                            🔒 {tr('미건설')}
+                          </span>
+                        ) : item.badge ? (
+                          <span className={`px-1.5 py-0.2 rounded text-[10px] font-black shadow-xs ${
+                            item.key === 'codex' && registerableCodexCount > 0
+                              ? 'bg-[#ef5350] text-white animate-pulse'
+                              : 'bg-gradient-to-r from-[#b89758] to-[#937538] text-[#08090b]'
+                          }`}>
+                            {item.badge}
+                          </span>
+                        ) : null}
+                      </div>
+                      <p className={`text-xs line-clamp-2 mt-1 leading-relaxed transition-colors ${
+                        isLocked ? 'text-[#4e5868]' : 'text-[#9da3af] group-hover:text-[#cfd8e8]'
+                      }`}>
+                        {isLocked ? tr('영지 시설 관리에서 건설 후 이용할 수 있습니다.') : item.sub}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="px-3 py-1.5 rounded-lg bg-[#b89758]/15 border border-[#b89758]/40 group-hover:bg-[#b89758] text-[#dcc496] group-hover:text-[#08090b] text-xs font-black shrink-0 transition-all shadow-sm flex items-center gap-1">
-                  <span>{tr('입장')}</span>
-                  <span className="text-[10px]">▶</span>
+                  {isLocked ? (
+                    <div className="px-2.5 py-1.5 rounded-lg bg-[#141824] border border-[#222d42] text-[#718096] text-xs font-bold shrink-0 flex items-center gap-1">
+                      <span>🔒</span>
+                      <span>{tr('미해금')}</span>
+                    </div>
+                  ) : (
+                    <div className="px-3 py-1.5 rounded-lg bg-[#b89758]/15 border border-[#b89758]/40 group-hover:bg-[#b89758] text-[#dcc496] group-hover:text-[#08090b] text-xs font-black shrink-0 transition-all shadow-sm flex items-center gap-1">
+                      <span>{tr('입장')}</span>
+                      <span className="text-[10px]">▶</span>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 

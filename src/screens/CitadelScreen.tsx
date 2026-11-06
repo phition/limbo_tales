@@ -15002,6 +15002,16 @@ export const CitadelScreen: React.FC = () => {
 
   // 일반 드로어 열기 (네비게이션 휠, 바로가기 등: 닫기 시 즉시 완전 닫기)
   const handleTryOpenDrawer = useCallback((key: string) => {
+    const bId = DRAWER_TO_BUILDING_ID[key];
+    if (bId && bId !== 'arenaGate' && (state.buildings[bId]?.level || 0) < 1) {
+      try { SoundManager.getInstance().play('error'); } catch {}
+      gameDialog.alert({
+        title: tr('시설 미건설'),
+        message: `${tr('해당 시설은 아직 건설되지 않았습니다.')}\n${tr('영지 시설 관리에서 먼저 건설하십시오.')}`,
+        icon: '🔒',
+      });
+      return false;
+    }
     setReturnToCitadelOnClose(false);
     if (key === 'arena') setArenaGateMode('hub');
     if (key === 'bonfire') {
@@ -15016,10 +15026,20 @@ export const CitadelScreen: React.FC = () => {
       setOpenDrawer(key);
     }
     return true;
-  }, []);
+  }, [state.buildings, tr]);
 
   // 영지('citadel') 패널 내부에서 건물 선택 입장 시 (닫기 시 영지 패널로 복귀)
   const handleEnterBuildingFromCitadel = useCallback((key: string) => {
+    const bId = DRAWER_TO_BUILDING_ID[key];
+    if (bId && bId !== 'arenaGate' && (state.buildings[bId]?.level || 0) < 1) {
+      try { SoundManager.getInstance().play('error'); } catch {}
+      gameDialog.alert({
+        title: tr('시설 미건설'),
+        message: `${tr('해당 시설은 아직 건설되지 않았습니다.')}\n${tr('영지 시설 관리에서 먼저 건설하십시오.')}`,
+        icon: '🔒',
+      });
+      return false;
+    }
     if (key === 'arena') setArenaGateMode('hub');
     if (key === 'codex') {
       setShowCodexModal(true);
@@ -15028,7 +15048,7 @@ export const CitadelScreen: React.FC = () => {
       setOpenDrawer(key);
     }
     return true;
-  }, []);
+  }, [state.buildings, tr]);
 
   // 드로어 닫기 핸들러 (영지에서 건물로 들어간 경우에만 영지로 복귀, 그 외 모든 경우 즉시 패널 닫기)
   const handleCloseDrawer = useCallback(() => {
