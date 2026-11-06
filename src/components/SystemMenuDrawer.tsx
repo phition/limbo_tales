@@ -10,6 +10,7 @@ import { GameDataService } from '../services/GameDataService';
 import { CustomAssetStudioModal } from './CustomAssetStudioModal';
 import { CustomDataStudioModal } from './CustomDataStudioModal';
 import { I18nStudioModal } from './I18nStudioModal';
+import { VideoWatermarkStudioModal } from './VideoWatermarkStudioModal';
 import { CallsignChangeModal } from './CallsignChangeModal';
 import { useI18n } from '../hooks/useI18n';
 import { SupportedLanguage } from '../i18n/types';
@@ -32,6 +33,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
   const [assetStudioModal, setAssetStudioModal] = useState(false);
   const [dataStudioModal, setDataStudioModal] = useState(false);
   const [i18nStudioModal, setI18nStudioModal] = useState(false);
+  const [watermarkStudioModal, setWatermarkStudioModal] = useState(false);
   const [callsignModal, setCallsignModal] = useState(false);
   const [cloudStatus, setCloudStatus] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -521,6 +523,26 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             </button>
           )}
 
+          {/* 4-4. 🎬 AI 영상 워터마크 제거 스튜디오 (모바일 빌드 제외) */}
+          {!isMobilePlatform && (fb.isMasterUser() || gm.isMasterAccount) && (
+            <button
+              className="w-full p-2.5 rounded-xl bg-[#0f1524] border border-[#00d2ff44] hover:border-[#00d2ff] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
+              onClick={() => setWatermarkStudioModal(true)}
+            >
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-xl p-1 rounded-lg bg-[#00d2ff22] text-[#00d2ff] shrink-0">🎬</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors flex items-center gap-1.5 flex-wrap">
+                    <span className="break-words">AI 영상 워터마크 제거 스튜디오</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">STUDIO</span>
+                  </div>
+                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">오른쪽 하단 AI 워터마크 실시간 패치·제거 및 클린 비디오 내보내기</div>
+                </div>
+              </div>
+              <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
+            </button>
+          )}
+
           {/* 5. 버전 정보 & 패치노트 */}
           <button
             className="w-full p-2.5 rounded-xl bg-[#131926] border border-[#222d42] hover:border-[#66bb6a66] text-left flex items-center justify-between transition-all cursor-pointer"
@@ -829,6 +851,14 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         <I18nStudioModal
           open={i18nStudioModal}
           onClose={() => setI18nStudioModal(false)}
+        />
+      )}
+
+      {/* 🎬 AI 영상 워터마크 제거 스튜디오 모달 (모바일 빌드 제외) */}
+      {!isMobilePlatform && (
+        <VideoWatermarkStudioModal
+          open={watermarkStudioModal}
+          onClose={() => setWatermarkStudioModal(false)}
         />
       )}
 

@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Limbo Tales — AI 영상 워터마크 제거 스튜디오 (Video Delogo Studio)</title>
+  <link rel="icon" href="../favicon.ico">
+  <style>
+    :root {
+      --bg: #07080d;
+      --card-bg: #0e1422;
+      --card-border: #1f2d45;
+      --accent-gold: #c8aa6e;
+      --accent-gold-bright: #ffd54f;
+      --accent-cyan: #00d2ff;
+      --text-main: #f0f4fc;
+      --text-muted: #8b9bb4;
+      --danger: #ef5350;
+      --success: #66bb6a;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Pretendard, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    header {
+      background: #090d16cc;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--accent-gold-bright);
+    }
+    .header-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(200, 170, 110, 0.2);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold-bright);
+      font-mono: monospace;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+    }
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .viewport-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .canvas-container {
+      position: relative;
+      background: #040508;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      overflow: hidden;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    canvas {
+      max-width: 100%;
+      max-height: 68vh;
+      object-fit: contain;
+      display: block;
+    }
+    .drop-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: rgba(7, 8, 13, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .drop-overlay:hover {
+      background: rgba(14, 20, 34, 0.9);
+      border-color: var(--accent-cyan);
+    }
+    .drop-icon {
+      font-size: 44px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: #141f33;
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn:hover:not(:disabled) {
+      background: #1c2b47;
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+    .btn-gold {
+      background: rgba(200, 170, 110, 0.15);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold-bright);
+    }
+    .btn-gold:hover:not(:disabled) {
+      background: var(--accent-gold);
+      color: #07080d;
+    }
+    .btn-cyan {
+      background: rgba(0, 210, 255, 0.15);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+    .btn-cyan:hover:not(:disabled) {
+      background: var(--accent-cyan);
+      color: #07080d;
+    }
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .seek-slider {
+      flex: 1;
+      min-width: 140px;
+      height: 6px;
+      accent-color: var(--accent-gold);
+      cursor: pointer;
+    }
+    .time-display {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 8px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+    .form-label span.val {
+      color: var(--accent-gold-bright);
+      font-family: monospace;
+      font-weight: bold;
+    }
+    .slider {
+      width: 100%;
+      height: 6px;
+      accent-color: var(--accent-cyan);
+      cursor: pointer;
+    }
+    select, input[type="text"] {
+      background: #090e18;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      outline: none;
+    }
+    select:focus, input[type="text"]:focus {
+      border-color: var(--accent-cyan);
+    }
+    .radio-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .radio-btn {
+      padding: 8px 10px;
+      font-size: 11px;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      background: #090e18;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .radio-btn.active {
+      background: rgba(0, 210, 255, 0.15);
+      border-color: var(--accent-cyan);
+      color: #fff;
+      font-weight: bold;
+    }
+    .progress-bar-wrap {
+      width: 100%;
+      background: #05070a;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      height: 12px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00d2ff, #ffd54f);
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    .code-box {
+      background: #05070b;
+      border: 1px solid #142033;
+      border-radius: 8px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 11px;
+      color: #79c0ff;
+      word-break: break-all;
+      position: relative;
+    }
+    .preset-pill {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #121c2e;
+      border: 1px solid #1e304d;
+      color: #90caf9;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .preset-pill:hover {
+      background: #1b2a47;
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-title">
+      <span>🎬</span>
+      <span>AI 영상 워터마크 제거 스튜디오</span>
+      <span class="header-badge">DELOGO STUDIO</span>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <a href="../index.html" class="btn" style="text-decoration: none;">
+        <span>🏰 성채 게임으로 돌아가기</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- 왼쪽 뷰포트 영역 -->
+    <div class="viewport-panel">
+      <!-- 캔버스 및 드롭 오버레이 -->
+      <div class="canvas-container" id="canvasContainer">
+        <canvas id="mainCanvas"></canvas>
+        <div class="drop-overlay" id="dropOverlay">
+          <div class="drop-icon">📁</div>
+          <div style="font-weight: bold; font-size: 15px;">워터마크를 제거할 비디오 파일을 드래그하거나 선택하세요</div>
+          <div style="font-size: 12px; color: var(--text-muted);">지원 포맷: MP4, WebM, MOV</div>
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button class="btn btn-gold" onclick="document.getElementById('fileInput').click()">
+              📂 로컬 비디오 선택
+            </button>
+            <button class="btn btn-cyan" onclick="loadPreset('../assets/citadel_bonfire.mp4')">
+              🔥 방주 성채 10s 영상
+            </button>
+            <button class="btn btn-cyan" onclick="loadPreset('../assets/citadel_9x16_mobile.mp4')">
+              📱 모바일 9:16 성화 영상
+            </button>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="fileInput" accept="video/*" style="display: none;">
+
+      <!-- 플레이어 컨트롤 바 -->
+      <div class="controls-bar">
+        <button class="btn" id="playBtn" disabled>▶ 재생</button>
+        <button class="btn" id="loopBtn">🔁 루프 ON</button>
+        <input type="range" id="seekSlider" class="seek-slider" min="0" max="100" value="0" step="0.1" disabled>
+        <div class="time-display" id="timeDisplay">00:00 / 00:00</div>
+        
+        <div style="border-left: 1px solid var(--card-border); height: 20px; margin: 0 4px;"></div>
+        
+        <span style="font-size: 11px; color: var(--text-muted);">비교:</span>
+        <button class="btn btn-cyan" id="viewModeBtn" style="padding: 5px 10px;">⚡ 실시간 제거 뷰</button>
+        <button class="btn" id="toggleBoxBtn" style="padding: 5px 10px;">🔲 박스 표시</button>
+      </div>
+
+      <!-- 내보내기 및 렌더링 상태 바 -->
+      <div class="card" style="padding: 12px 16px;">
+        <div style="display: flex; items-center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 13px; font-weight: bold; color: #fff;">클린 비디오 내보내기 (Export Clean Video)</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+              워터마크가 완전히 제거된 고화질 비디오를 인코딩하여 저장합니다.
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-gold" id="captureFrameBtn" disabled>
+              📸 현재 프레임 PNG 저장
+            </button>
+            <button class="btn btn-cyan" id="exportVideoBtn" style="font-size: 13px; padding: 8px 18px;" disabled>
+              💾 워터마크 제거 영상 내보내기 (.webm/.mp4)
+            </button>
+          </div>
+        </div>
+        <div id="exportStatusWrap" style="display: none; margin-top: 8px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11px;">
+            <span id="exportStatusText" style="color: var(--accent-cyan); font-weight: bold;">렌더링 중...</span>
+            <span id="exportStatusPct" style="font-family: monospace;">0%</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="exportProgressFill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오른쪽 설정 패널 -->
+    <div class="side-panel">
+      <!-- 1. 제거 알고리즘 선택 -->
+      <div class="card">
+        <div class="card-title">
+          <span>🧠 제거 알고리즘 (Algorithm)</span>
+        </div>
+        <div class="form-group">
+          <select id="algoSelect">
+            <option value="patch" selected>🌟 스마트 배경 패치 클론 (추천 - 가장 자연스러움)</option>
+            <option value="blur">💧 가우시안 디로고 블러 (텍스트 뭉개기)</option>
+            <option value="interpolate">📐 4방향 경계선 픽셀 보간</option>
+            <option value="vignette">🕶️ 시네마틱 다크 코너 비네트</option>
+          </select>
+          <div id="algoDesc" style="font-size: 10.5px; color: #90caf9; line-height: 1.4; padding: 4px 2px;">
+            워터마크 윗부분/옆부분의 깨끗한 지형 텍스처를 샘플링하여 가장자리를 부드러운 페더로 녹여냅니다.
+          </div>
+        </div>
+
+        <div class="form-group" id="patchDirGroup">
+          <div class="form-label">
+            <span>패치 복제 방향</span>
+          </div>
+          <div class="radio-group">
+            <button type="button" class="radio-btn active" data-dir="top" onclick="setPatchDir('top')">위쪽 배경 복제</button>
+            <button type="button" class="radio-btn" data-dir="left" onclick="setPatchDir('left')">왼쪽 배경 복제</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 워터마크 영역 세부 조정 -->
+      <div class="card">
+        <div class="card-title">
+          <span>📍 워터마크 영역 조정 (Bounding Box)</span>
+          <span style="font-size: 10px; color: var(--accent-cyan);" id="resInfo">0 x 0</span>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>위치 프리셋</span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button class="preset-pill" onclick="applyPresetPos('br')">↘️ 오른쪽 하단 (표준)</button>
+            <button class="preset-pill" onclick="applyPresetPos('tr')">↗️ 오른쪽 상단</button>
+            <button class="preset-pill" onclick="applyPresetPos('bl')">↙️ 왼쪽 하단</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>가로 너비 (Width)</span>
+            <span class="val" id="valWidth">16%</span>
+          </div>
+          <input type="range" class="slider" id="sliderWidth" min="5" max="35" step="0.5" value="16">
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>세로 높이 (Height)</span>
+            <span class="val" id="valHeight">8%</span>
+          </div>
+          <input type="range" class="slider" id="sliderHeight" min="3" max="25" step="0.5" value="8">
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>우측 여백 (Margin Right)</span>
+            <span class="val" id="valMarginR">2%</span>
+          </div>
+          <input type="range" class="slider" id="sliderMarginR" min="0" max="20" step="0.5" value="2">
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>하단 여백 (Margin Bottom)</span>
+            <span class="val" id="valMarginB">2%</span>
+          </div>
+          <input type="range" class="slider" id="sliderMarginB" min="0" max="20" step="0.5" value="2">
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>가장자리 페더 / 블러 반경</span>
+            <span class="val" id="valFeather">14px</span>
+          </div>
+          <input type="range" class="slider" id="sliderFeather" min="2" max="35" step="1" value="14">
+        </div>
+      </div>
+
+      <!-- 3. CLI & Python 스크립트 복사 -->
+      <div class="card">
+        <div class="card-title">
+          <span>💻 CLI 스크립트 명령어</span>
+          <button class="btn" style="padding: 3px 8px; font-size: 10px;" onclick="copyCliCommand()">복사</button>
+        </div>
+        <div class="code-box" id="cliCommandBox">
+          python scripts/remove_watermark.py video.mp4 --w 16.0 --h 8.0 --mr 2.0 --mb 2.0
+        </div>
+        <div style="font-size: 10px; color: var(--text-muted);">
+          터미널에서 직접 일괄 고품질 처리 시 위 명령어를 그대로 복사하여 실행할 수 있습니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 비디오 백그라운드 소스 요소 -->
+  <video id="hiddenVideo" playsinline muted crossOrigin="anonymous" style="display: none;"></video>
+
+  <script>
+    const video = document.getElementById('hiddenVideo');
+    const canvas = document.getElementById('mainCanvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const dropOverlay = document.getElementById('dropOverlay');
+    const fileInput = document.getElementById('fileInput');
+
+    const playBtn = document.getElementById('playBtn');
+    const loopBtn = document.getElementById('loopBtn');
+    const seekSlider = document.getElementById('seekSlider');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const viewModeBtn = document.getElementById('viewModeBtn');
+    const toggleBoxBtn = document.getElementById('toggleBoxBtn');
+    const captureFrameBtn = document.getElementById('captureFrameBtn');
+    const exportVideoBtn = document.getElementById('exportVideoBtn');
+
+    const sliderWidth = document.getElementById('sliderWidth');
+    const sliderHeight = document.getElementById('sliderHeight');
+    const sliderMarginR = document.getElementById('sliderMarginR');
+    const sliderMarginB = document.getElementById('sliderMarginB');
+    const sliderFeather = document.getElementById('sliderFeather');
+    const algoSelect = document.getElementById('algoSelect');
+
+    let isPlaying = false;
+    let isLooping = true;
+    let showBoundingBox = true;
+    let viewMode = 'processed'; // 'processed' | 'split' | 'original'
+    let patchDirection = 'top'; // 'top' | 'left'
+    let animFrameId = null;
+
+    // 드래그 앤 드롭
+    const container = document.getElementById('canvasContainer');
+    container.addEventListener('dragover', (e) => { e.preventDefault(); dropOverlay.style.background = 'rgba(0, 210, 255, 0.2)'; });
+    container.addEventListener('dragleave', () => { dropOverlay.style.background = ''; });
+    container.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropOverlay.style.background = '';
+      if (e.dataTransfer.files.length > 0) {
+        loadFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        loadFile(e.target.files[0]);
+      }
+    });
+
+    function loadFile(file) {
+      const url = URL.createObjectURL(file);
+      loadVideoUrl(url, file.name);
+    }
+
+    function loadPreset(presetPath) {
+      loadVideoUrl(presetPath, presetPath.split('/').pop());
+    }
+
+    function loadVideoUrl(url, name) {
+      dropOverlay.style.display = 'none';
+      video.src = url;
+      video.load();
+      video.onloadedmetadata = () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        document.getElementById('resInfo').textContent = `${video.videoWidth} x ${video.videoHeight}`;
+        seekSlider.disabled = false;
+        playBtn.disabled = false;
+        captureFrameBtn.disabled = false;
+        exportVideoBtn.disabled = false;
+        video.currentTime = 0.05;
+        updateCliBox();
+        renderFrame();
+      };
+    }
+
+    function updateCliBox() {
+      const w = parseFloat(sliderWidth.value);
+      const h = parseFloat(sliderHeight.value);
+      const mr = parseFloat(sliderMarginR.value);
+      const mb = parseFloat(sliderMarginB.value);
+      const feather = parseInt(sliderFeather.value);
+      const mode = algoSelect.value;
+      const cmd = `python scripts/remove_watermark.py video.mp4 --mode ${mode} --w ${w} --h ${h} --mr ${mr} --mb ${mb} --feather ${feather}`;
+      document.getElementById('cliCommandBox').textContent = cmd;
+    }
+
+    // 슬라이더 이벤트
+    sliderWidth.oninput = (e) => { document.getElementById('valWidth').textContent = e.target.value + '%'; updateCliBox(); renderFrame(); };
+    sliderHeight.oninput = (e) => { document.getElementById('valHeight').textContent = e.target.value + '%'; updateCliBox(); renderFrame(); };
+    sliderMarginR.oninput = (e) => { document.getElementById('valMarginR').textContent = e.target.value + '%'; updateCliBox(); renderFrame(); };
+    sliderMarginB.oninput = (e) => { document.getElementById('valMarginB').textContent = e.target.value + '%'; updateCliBox(); renderFrame(); };
+    sliderFeather.oninput = (e) => { document.getElementById('valFeather').textContent = e.target.value + 'px'; updateCliBox(); renderFrame(); };
+    algoSelect.onchange = () => {
+      updateAlgoDesc();
+      updateCliBox();
+      renderFrame();
+    };
+
+    function updateAlgoDesc() {
+      const val = algoSelect.value;
+      const descEl = document.getElementById('algoDesc');
+      const patchGrp = document.getElementById('patchDirGroup');
+      if (val === 'patch') {
+        descEl.textContent = '워터마크 윗부분/옆부분의 깨끗한 지형 텍스처를 샘플링하여 가장자리를 부드러운 페더로 녹여냅니다.';
+        patchGrp.style.display = 'flex';
+      } else if (val === 'blur') {
+        descEl.textContent = '워터마크 영역의 텍스트 글자를 다방향 가우시안 블러로 뭉개어 은은하게 지웁니다.';
+        patchGrp.style.display = 'none';
+      } else if (val === 'interpolate') {
+        descEl.textContent = '박스 사방 외곽선 픽셀의 컬러를 안쪽으로 보간하여 메웁니다 (ffmpeg delogo 필터 방식).';
+        patchGrp.style.display = 'none';
+      } else if (val === 'vignette') {
+        descEl.textContent = '모서리에 자연스러운 렌즈 비네팅 그라데이션을 적용하여 밝은 워터마크를 가립니다.';
+        patchGrp.style.display = 'none';
+      }
+    }
+
+    function setPatchDir(dir) {
+      patchDirection = dir;
+      document.querySelectorAll('#patchDirGroup .radio-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.dir === dir);
+      });
+      renderFrame();
+    }
+
+    function applyPresetPos(pos) {
+      if (pos === 'br') { // 우측 하단
+        sliderMarginR.value = 2;
+        sliderMarginB.value = 2;
+      } else if (pos === 'tr') { // 우측 상단
+        sliderMarginR.value = 2;
+        sliderMarginB.value = 88;
+      } else if (pos === 'bl') { // 좌측 하단
+        sliderMarginR.value = 80;
+        sliderMarginB.value = 2;
+      }
+      sliderMarginR.oninput({ target: sliderMarginR });
+      sliderMarginB.oninput({ target: sliderMarginB });
+    }
+
+    // 재생 / 일시정지 제어
+    playBtn.onclick = () => {
+      if (video.paused) {
+        video.play();
+        isPlaying = true;
+        playBtn.textContent = '⏸ 일시정지';
+        loopRender();
+      } else {
+        video.pause();
+        isPlaying = false;
+        playBtn.textContent = '▶ 재생';
+        cancelAnimationFrame(animFrameId);
+      }
+    };
+
+    loopBtn.onclick = () => {
+      isLooping = !isLooping;
+      video.loop = isLooping;
+      loopBtn.textContent = isLooping ? '🔁 루프 ON' : '➡️ 루프 OFF';
+    };
+
+    seekSlider.oninput = (e) => {
+      if (video.duration) {
+        video.currentTime = (e.target.value / 100) * video.duration;
+        renderFrame();
+      }
+    };
+
+    viewModeBtn.onclick = () => {
+      if (viewMode === 'processed') {
+        viewMode = 'split';
+        viewModeBtn.textContent = '⚖️ 분할 비교 뷰 (좌:원본 / 우:제거)';
+      } else if (viewMode === 'split') {
+        viewMode = 'original';
+        viewModeBtn.textContent = '👁️ 원본 비디오 뷰';
+      } else {
+        viewMode = 'processed';
+        viewModeBtn.textContent = '⚡ 실시간 제거 뷰';
+      }
+      renderFrame();
+    };
+
+    toggleBoxBtn.onclick = () => {
+      showBoundingBox = !showBoundingBox;
+      toggleBoxBtn.textContent = showBoundingBox ? '🔲 박스 표시' : '⬜ 박스 숨김';
+      renderFrame();
+    };
+
+    function loopRender() {
+      if (!video.paused && !video.ended) {
+        renderFrame();
+        updateTime();
+        animFrameId = requestAnimationFrame(loopRender);
+      }
+    }
+
+    function updateTime() {
+      if (!video.duration) return;
+      seekSlider.value = (video.currentTime / video.duration) * 100;
+      timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+    }
+
+    function formatTime(s) {
+      const mins = Math.floor(s / 60);
+      const secs = Math.floor(s % 60);
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // ── 워터마크 영역 계산 ──
+    function getBoxCoords() {
+      const W = canvas.width;
+      const H = canvas.height;
+      const bw = Math.round(W * (parseFloat(sliderWidth.value) / 100));
+      const bh = Math.round(H * (parseFloat(sliderHeight.value) / 100));
+      const mr = Math.round(W * (parseFloat(sliderMarginR.value) / 100));
+      const mb = Math.round(H * (parseFloat(sliderMarginB.value) / 100));
+      const bx = W - bw - mr;
+      const by = H - bh - mb;
+      const feather = parseInt(sliderFeather.value);
+      return { x: bx, y: by, w: bw, h: bh, feather };
+    }
+
+    // ── 핵심 프레임 렌더링 함수 ──
+    function renderFrame() {
+      if (!canvas.width || !canvas.height) return;
+      const W = canvas.width;
+      const H = canvas.height;
+      const box = getBoxCoords();
+
+      // 1. 원본 비디오 그리기
+      ctx.save();
+      ctx.drawImage(video, 0, 0, W, H);
+
+      // 2. 워터마크 제거 알고리즘 적용 (viewMode !== 'original' 일 때)
+      if (viewMode !== 'original') {
+        applyDelogoToCanvas(ctx, video, W, H, box, algoSelect.value, patchDirection);
+      }
+
+      // 3. 분할 비교 뷰 처리
+      if (viewMode === 'split') {
+        const splitX = Math.round(W / 2);
+        // 좌측 절반을 원본으로 덮어쓰기
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, splitX, H);
+        ctx.clip();
+        ctx.drawImage(video, 0, 0, W, H);
+        ctx.restore();
+
+        // 분할 경계선
+        ctx.strokeStyle = '#ffd54f';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(splitX, 0);
+        ctx.lineTo(splitX, H);
+        ctx.stroke();
+
+        ctx.font = 'bold 16px sans-serif';
+        ctx.fillStyle = '#ffd54f';
+        ctx.fillText('◀ 원본', splitX - 70, 30);
+        ctx.fillStyle = '#00d2ff';
+        ctx.fillText('제거 후 ▶', splitX + 20, 30);
+      }
+
+      // 4. 바운딩 박스 표시 (showBoundingBox 일 때)
+      if (showBoundingBox) {
+        ctx.save();
+        ctx.strokeStyle = '#00d2ff';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 4]);
+        ctx.strokeRect(box.x, box.y, box.w, box.h);
+
+        // 모서리 앵커
+        ctx.fillStyle = '#ffd54f';
+        ctx.fillRect(box.x - 3, box.y - 3, 6, 6);
+        ctx.fillRect(box.x + box.w - 3, box.y - 3, 6, 6);
+        ctx.fillRect(box.x - 3, box.y + box.h - 3, 6, 6);
+        ctx.fillRect(box.x + box.w - 3, box.y + box.h - 3, 6, 6);
+
+        // 라벨
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillStyle = '#00d2ff';
+        ctx.fillText('Watermark Mask', box.x, Math.max(16, box.y - 6));
+        ctx.restore();
+      }
+
+      ctx.restore();
+    }
+
+    // ── 워터마크 제거 인페인팅/블러 합성 ──
+    function applyDelogoToCanvas(targetCtx, videoEl, W, H, box, algo, dir) {
+      const { x, y, w, h, feather } = box;
+      if (w <= 0 || h <= 0) return;
+
+      if (algo === 'patch') {
+        // 스마트 배경 복제 인페인팅
+        const patchCanvas = document.createElement('canvas');
+        patchCanvas.width = w;
+        patchCanvas.height = h;
+        const pCtx = patchCanvas.getContext('2d');
+
+        // 샘플 영역 계산 (위쪽 or 왼쪽)
+        const sx = dir === 'left' ? Math.max(0, x - w) : x;
+        const sy = dir === 'top' ? Math.max(0, y - h) : y;
+
+        // 샘플 텍스처 그리기
+        pCtx.drawImage(videoEl, sx, sy, w, h, 0, 0, w, h);
+
+        // 약간의 텍스처 평활화
+        if (feather > 4) {
+          pCtx.filter = `blur(${Math.min(3, feather * 0.2)}px)`;
+          pCtx.drawImage(patchCanvas, 0, 0);
+          pCtx.filter = 'none';
+        }
+
+        // 가장자리 부드러운 페더 알파 마스킹
+        pCtx.globalCompositeOperation = 'destination-in';
+        const grad = pCtx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.1, w / 2, h / 2, Math.max(w, h) * 0.55);
+        grad.addColorStop(0, 'rgba(0,0,0,1)');
+        grad.addColorStop(0.7, 'rgba(0,0,0,0.9)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        pCtx.fillStyle = grad;
+        pCtx.fillRect(0, 0, w, h);
+
+        targetCtx.save();
+        targetCtx.drawImage(patchCanvas, x, y);
+        targetCtx.restore();
+
+      } else if (algo === 'blur') {
+        // 가우시안 디로고 블러
+        targetCtx.save();
+        targetCtx.beginPath();
+        targetCtx.rect(x, y, w, h);
+        targetCtx.clip();
+        targetCtx.filter = `blur(${Math.max(6, feather)}px)`;
+        targetCtx.drawImage(videoEl, 0, 0, W, H);
+        targetCtx.restore();
+
+      } else if (algo === 'interpolate') {
+        // 경계선 픽셀 샘플링 보간
+        try {
+          const imgData = targetCtx.getImageData(x, y, w, h);
+          const data = imgData.data;
+          // 상단 경계선과 좌측 경계선 컬러로 내부 채우기
+          const topPixels = targetCtx.getImageData(x, Math.max(0, y - 2), w, 1).data;
+          const leftPixels = targetCtx.getImageData(Math.max(0, x - 2), y, 1, h).data;
+
+          for (let row = 0; row < h; row++) {
+            const ty = row / h;
+            const lr = leftPixels[row * 4];
+            const lg = leftPixels[row * 4 + 1];
+            const lb = leftPixels[row * 4 + 2];
+
+            for (let col = 0; col < w; col++) {
+              const tx = col / w;
+              const tr = topPixels[col * 4];
+              const tg = topPixels[col * 4 + 1];
+              const tb = topPixels[col * 4 + 2];
+
+              const idx = (row * w + col) * 4;
+              data[idx]     = Math.round(lr * (1 - tx) + tr * tx);
+              data[idx + 1] = Math.round(lg * (1 - tx) + tg * tx);
+              data[idx + 2] = Math.round(lb * (1 - tx) + tb * tx);
+            }
+          }
+          targetCtx.putImageData(imgData, x, y);
+        } catch (_) {}
+
+      } else if (algo === 'vignette') {
+        // 모서리 딥 비네팅
+        targetCtx.save();
+        const grad = targetCtx.createRadialGradient(x + w, y + h, 5, x + w, y + h, Math.max(w, h) * 1.5);
+        grad.addColorStop(0, 'rgba(7, 8, 13, 0.95)');
+        grad.addColorStop(0.5, 'rgba(7, 8, 13, 0.7)');
+        grad.addColorStop(1, 'rgba(7, 8, 13, 0)');
+        targetCtx.fillStyle = grad;
+        targetCtx.fillRect(x - feather, y - feather, w + feather * 2, h + feather * 2);
+        targetCtx.restore();
+      }
+    }
+
+    // ── 현재 프레임 PNG 캡처 ──
+    captureFrameBtn.onclick = () => {
+      // 바운딩 박스를 잠시 숨기고 클린 캡처
+      const prevBox = showBoundingBox;
+      const prevMode = viewMode;
+      showBoundingBox = false;
+      viewMode = 'processed';
+      renderFrame();
+
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = `citadel_delogo_frame_${Math.round(video.currentTime * 1000)}.png`;
+      a.click();
+
+      showBoundingBox = prevBox;
+      viewMode = prevMode;
+      renderFrame();
+    };
+
+    // ── 클린 비디오 인코딩 및 내보내기 (MediaRecorder) ──
+    exportVideoBtn.onclick = async () => {
+      if (!video.duration) return;
+      const prevBox = showBoundingBox;
+      const prevMode = viewMode;
+      showBoundingBox = false;
+      viewMode = 'processed';
+
+      exportVideoBtn.disabled = true;
+      playBtn.disabled = true;
+      document.getElementById('exportStatusWrap').style.display = 'block';
+
+      video.pause();
+      video.currentTime = 0;
+
+      const stream = canvas.captureStream(30);
+      let mimeType = 'video/webm;codecs=vp9';
+      if (!MediaRecorder.isTypeSupported(mimeType)) {
+        mimeType = 'video/webm';
+      }
+      if (MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')) {
+        mimeType = 'video/mp4;codecs=avc1';
+      }
+
+      const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 10000000 });
+      const chunks = [];
+      recorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
+
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: mimeType });
+        const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `citadel_delogo_clean.${ext}`;
+        a.click();
+
+        exportVideoBtn.disabled = false;
+        playBtn.disabled = false;
+        document.getElementById('exportStatusText').textContent = '✅ 내보내기 완료!';
+        showBoundingBox = prevBox;
+        viewMode = prevMode;
+        renderFrame();
+      };
+
+      recorder.start();
+
+      // 프레임별 렌더링
+      const duration = video.duration;
+      const fps = 30;
+      const totalSteps = Math.ceil(duration * fps);
+      const stepTime = 1 / fps;
+
+      for (let i = 0; i < totalSteps; i++) {
+        video.currentTime = i * stepTime;
+        await new Promise(r => { video.onseeked = r; });
+        renderFrame();
+
+        const pct = Math.round((i / totalSteps) * 100);
+        document.getElementById('exportProgressFill').style.width = pct + '%';
+        document.getElementById('exportStatusPct').textContent = pct + '%';
+        document.getElementById('exportStatusText').textContent = `렌더링 중 (${i}/${totalSteps} 프레임)...`;
+        // 양보하여 UI 렌더링 유지
+        await new Promise(r => setTimeout(r, 10));
+      }
+
+      recorder.stop();
+    };
+
+    function copyCliCommand() {
+      const text = document.getElementById('cliCommandBox').textContent.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        alert('📋 CLI 명령어가 클립보드에 복사되었습니다!\n\n' + text);
+      });
+    }
+  </script>
+</body>
+</html>
