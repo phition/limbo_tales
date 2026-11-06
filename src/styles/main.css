@@ -894,4 +894,69 @@ html[data-lang="ja"] .badge {
   animation-play-state: paused;
 }
 
+/* ─── 퀵 독 3대 버튼 반응형 타이포그래피 & 부가 설명 제어 ──────────── */
+.dock-btn-subtext {
+  display: none;
+}
+@media (min-width: 440px) {
+  .dock-btn-subtext {
+    display: block;
+    font-size: 9px;
+    line-height: 1.15;
+  }
+}
+@media (min-width: 640px) {
+  .dock-btn-subtext {
+    font-size: 10px;
+    line-height: 1.25;
+  }
+}
+@media (min-width: 768px) {
+  .dock-btn-subtext {
+    font-size: 11px;
+  }
+}
+
+.dock-btn-title {
+  font-size: 11px;
+  line-height: 1.15;
+}
+@media (min-width: 380px) {
+  .dock-btn-title {
+    font-size: 12px;
+  }
+}
+@media (min-width: 640px) {
+  .dock-btn-title {
+    font-size: 13px;
+    line-height: 1.25;
+  }
+}
+@media (min-width: 768px) {
+  .dock-btn-title {
+    font-size: 14px;
+  }
+}
+
+.dock-btn-center-title {
+  font-size: 12px;
+  line-height: 1.15;
+}
+@media (min-width: 380px) {
+  .dock-btn-center-title {
+    font-size: 13px;
+  }
+}
+@media (min-width: 640px) {
+  .dock-btn-center-title {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+}
+@media (min-width: 768px) {
+  .dock-btn-center-title {
+    font-size: 16px;
+  }
+}
+
 
