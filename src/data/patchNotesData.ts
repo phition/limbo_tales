@@ -21,10 +21,89 @@ export interface PatchNoteRelease {
 export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = {
   ko: [
     {
+      version: 'v1.1.4',
+      title: 'V.1.1.4 정식 업데이트 패치노트',
+      badge: 'v1.1.4',
+      isLatest: true,
+      categories: [
+        {
+          icon: '🏰',
+          title: '방주 성채 & 영지 인터페이스 시각 혁신',
+          color: '#80deea',
+          bullets: [
+            {
+              title: '방주 성채 중앙 광장 배경 & 글래스모피즘 UI 도입',
+              desc: '방주 성채 진입 허브에 고품격 다크 판타지 고딕 지하 광장 배경 일러스트를 전면 적용하고, 시설 진입 카드의 투명도를 미려하게 조정하여 웅장한 대성당과 열차, 군중의 배경이 은은하게 투과되는 프리미엄 글래스모피즘 인터페이스를 구축했습니다.'
+            },
+            {
+              title: '미해금 시설 접근 제어 & 직관적 잠금 비주얼',
+              desc: '아직 건설 또는 해금되지 않은 영지 시설에 자물쇠 아이콘 및 딤(Dim) 반투명 처리, 해금 안내 툴팁을 적용하여 불필요한 터치 오작동을 방지하고 명확한 개발 목표를 제시합니다.'
+            },
+            {
+              title: '반응형 하단 내비게이션 타이포그래피',
+              desc: '모바일 및 좁은 화면 폭 환경에서 영지 하단 3대 내비게이션 버튼의 폰트 크기가 화면 비율에 맞춰 자연스럽게 축소되며, 극소형 화면에서는 부가 설명 텍스트를 자동으로 숨겨 텍스트가 버튼 밖으로 벗어나거나 겹치는 현상을 원천 차단했습니다.'
+            }
+          ]
+        },
+        {
+          icon: '⚔️',
+          title: '차원 전장 & 편성 인터페이스 정밀화',
+          color: '#ffd54f',
+          bullets: [
+            {
+              title: '차원 게이트 허브 & 영지 침공전 4인 정예 편성 일원화',
+              desc: '차원 게이트 허브의 편성 현황과 영지 침공전 수비대 편성 슬롯에서 실제 배치된 4인의 정예 용병이 오차 없이 정확하게 표시되도록 일원화했습니다.'
+            },
+            {
+              title: '리더 / 오퍼레이터 전용 금빛 프레임 & 아우라 연출',
+              desc: '차원 게이트 허브 및 영지 수비대 편성에서 원정대를 이끄는 리더(오퍼레이터) 슬롯에 화려하고 품격 있는 금빛 프레임(Gold Frame)과 은은한 황금빛 아우라를 부여하여 지휘관 식별성을 극대화했습니다.'
+            }
+          ]
+        },
+        {
+          icon: '🎬',
+          title: '뷰포트 시네마틱 & 편의성 시스템 최적화',
+          color: '#ff7043',
+          bullets: [
+            {
+              title: '성화 점화 10초 고화질 시네마틱 루프 & 무봉제 크로스오버',
+              desc: '방주 영지 성화 점화 시 재생되는 뷰포트 영상을 10초 분량의 웅장한 신규 시네마틱으로 업그레이드하고, 2.4초 듀얼 플레이어 무봉제 크로스페이드(Seamless Crossfade) 편집점을 최적화하여 영구적이고 매끄러운 다크 판타지 분위기를 선사합니다.'
+            },
+            {
+              title: '시네마틱 영상 AI 생성 워터마크 완벽 제거',
+              desc: '영상 우측 하단에 위치하던 인공지능 생성 워터마크를 정밀 베지어 마스크 및 배경 채도/휘도 복원 알고리즘을 통해 등불, 석조 바닥 및 붉은 스카프 주름 질감 손상 없이 100% 무결점으로 제거했습니다.'
+            },
+            {
+              title: '오프라인 방치 보상 팝업 최소 조건(1시간) 설정',
+              desc: '짧은 재접속 시에도 수시로 노출되던 방치 정산 모달을 1시간(60분) 이상 미접속 시에만 등장하도록 최적화하여 불필요한 UI 팝업 피로도를 제거하고 쾌적한 플레이 동선을 확보했습니다.'
+            },
+            {
+              title: '성채 퀘스트 드로어 안정성 크래시 픽스',
+              desc: '성채 화면 내 퀘스트 드로어 진입 시 특정 경로에서 발생하던 런타임 참조 에러(openDrawer is not defined)를 완전히 해결하여 끊김 없는 퀘스트 확인이 가능하도록 수정했습니다.'
+            }
+          ]
+        },
+        {
+          icon: '✨',
+          title: '스킬 툴팁 계수 정밀화 & 에픽 접미사 인챈트',
+          color: '#69f0ae',
+          bullets: [
+            {
+              title: '스킬 툴팁 계수 전수 조사 & 동기화',
+              desc: "‘라그나로크 슬러시’를 비롯한 전 직업 스킬의 강화 단계별 실제 피해 공식과 안내 툴팁 계수를 전수 조사하여 정확한 수치로 100% 일치시켰습니다."
+            },
+            {
+              title: '전 장비 공용 에픽 등급 특수 접미사 인챈트 6종 도입',
+              desc: '[흡혈](피해의 10% 흡혈), [집중](마나 소모 10% 감소), [관통](방어력 추가 관통 20%), [저항](상태이상 저항 +10%), [재생](매 턴 최대 체력 5% 회복), [무자비](치명타 확률 +10%) 특수 접미사 체계를 도입했습니다.'
+            }
+          ]
+        }
+      ]
+    },
+    {
       version: 'v1.1.3',
       title: 'V.1.1.3 정식 업데이트 패치노트',
       badge: 'v1.1.3',
-      isLatest: true,
       categories: [
         {
           icon: '🍖',
@@ -312,10 +391,89 @@ export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = 
   ],
   en: [
     {
+      version: 'v1.1.4',
+      title: 'V.1.1.4 Official Update Patch Notes',
+      badge: 'v1.1.4',
+      isLatest: true,
+      categories: [
+        {
+          icon: '🏰',
+          title: 'Territory & Citadel Visual Interface Overhaul',
+          color: '#80deea',
+          bullets: [
+            {
+              title: 'Ark Citadel Central Plaza Background & Glassmorphism UI',
+              desc: 'Introduced a high-fidelity dark fantasy gothic underground plaza illustration to the Ark Citadel entrance hub, paired with polished card transparency for a sophisticated glassmorphism interface revealing majestic cathedrals, trains, and lively crowds.'
+            },
+            {
+              title: 'Locked Facility Visual & Access Control',
+              desc: 'Applied padlock icons, dim overlays, and requirement tooltips to unbuilt or locked facilities, preventing accidental misclicks and providing clear infrastructure progression goals.'
+            },
+            {
+              title: 'Responsive Territory Navigation Typography',
+              desc: 'Implemented responsive font scaling on the 3 primary bottom territory navigation buttons; secondary descriptions automatically hide on compact mobile viewports to prevent text overflow or overlap.'
+            }
+          ]
+        },
+        {
+          icon: '⚔️',
+          title: 'Dimensional Battlefield & Squad Interface',
+          color: '#ffd54f',
+          bullets: [
+            {
+              title: 'Standardized 4-Hero Elite Squad Displays',
+              desc: 'Unified squad rendering across the Dimensional Gate Hub and Invasion Garrison to accurately reflect the 4 deployed elite mercenaries without discrepancies.'
+            },
+            {
+              title: 'Gold Leader Frame & Golden Aura Visuals',
+              desc: 'Adorned the squad Leader (Operator) slot with a luxurious gilded frame and golden radiance across Gate Hub and Invasion rosters, dramatically enhancing commander identification.'
+            }
+          ]
+        },
+        {
+          icon: '🎬',
+          title: 'Viewport Cinematic & QoL Optimization',
+          color: '#ff7043',
+          bullets: [
+            {
+              title: '10s Bonfire Viewport Loop & Seamless Crossover',
+              desc: 'Upgraded the Ark Citadel bonfire viewport to an awe-inspiring 10-second high-definition cinematic with an optimized 2.4-second dual-player crossfade crossover, delivering an uninterrupted dark fantasy ambiance.'
+            },
+            {
+              title: 'Complete Generative AI Watermark Removal',
+              desc: 'Perfectly eliminated the generative AI sparkle watermark in the bottom-right corner using precision Bezier masking and localized chroma/luminance restoration, preserving 100% of the lantern, stonework, and scarf textures.'
+            },
+            {
+              title: '1-Hour Minimum Offline Settlement Trigger',
+              desc: 'Optimized offline reward settlements to trigger only after at least 1 hour (60 minutes) of absence, eliminating popup fatigue upon frequent reconnections.'
+            },
+            {
+              title: 'Quests Drawer Stability Crash Fix',
+              desc: 'Completely resolved a runtime crash (openDrawer is not defined) when accessing the Quests Drawer from the Citadel screen, ensuring seamless objective tracking.'
+            }
+          ]
+        },
+        {
+          icon: '✨',
+          title: 'Skill Tooltip Audit & Epic Suffix Enchants',
+          color: '#69f0ae',
+          bullets: [
+            {
+              title: 'Full Skill Tooltip Scaling Audit & Sync',
+              desc: "Comprehensively audited all skill upgrade scaling against real combat damage formulas including 'Ragnarok Slush', aligning all guide tooltips with 100% accuracy."
+            },
+            {
+              title: '6 Universal Epic Suffix Enchants',
+              desc: 'Introduced 6 universal epic suffix enchants for all gear: [Vampirism] (10% Lifesteal), [Focus] (-10% MP Cost), [Piercing] (+20% Armor Pierce), [Resistance] (+10% Status Resist), [Regeneration] (Heal 5% Max HP/turn), and [Merciless] (+10% Crit Chance).'
+            }
+          ]
+        }
+      ]
+    },
+    {
       version: 'v1.1.3',
       title: 'V.1.1.3 Official Update Patch Notes',
       badge: 'v1.1.3',
-      isLatest: true,
       categories: [
         {
           icon: '🍖',
@@ -588,10 +746,89 @@ export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = 
   ],
   ja: [
     {
+      version: 'v1.1.4',
+      title: 'V.1.1.4 正式アップデート パッチノート',
+      badge: 'v1.1.4',
+      isLatest: true,
+      categories: [
+        {
+          icon: '🏰',
+          title: '方舟城塞 & 領地インターフェース視覚革新',
+          color: '#80deea',
+          bullets: [
+            {
+              title: '方舟城塞中央広場背景 & グラスモフィズムUI導入',
+              desc: '方舟城塞の進入ハブに高品位なダークファンタジー・ゴシック地下広場のイラストを全面適用し、各施設カードの透明度を洗練されたグラスモフィズムUIに調整して、雄大な大聖堂と列車、群衆の背景が美しく透けて見える演出を構築しました。'
+            },
+            {
+              title: '未開放施設アクセス制御 & 直感的な施錠ビジュアル',
+              desc: '未建設・未開放の領地施設に南京錠アイコン、半透明ディム効果、開放条件ガイドツールチップを適用し、誤操作を防止するとともに明確なインフラ開発目標を提示します。'
+            },
+            {
+              title: 'レスポンシブ領地下部ナビゲーションタイポグラフィ',
+              desc: 'モバイル端末や狭小画面に合わせて領地下部3大ナビゲーションボタンのフォントサイズを動的に縮小し、超小型ビューポートでは付加説明テキストを自動で非表示にしてテキストの枠外はみ出しや重なりを根本から防止しました。'
+            }
+          ]
+        },
+        {
+          icon: '⚔️',
+          title: '次元戦場 & 編成インターフェース精密化',
+          color: '#ffd54f',
+          bullets: [
+            {
+              title: '次元ゲートハブ & 領地侵攻戦 4名精鋭編成一元化',
+              desc: '次元ゲートハブの編成現況および領地侵攻戦の守備隊スロットにおいて、実際に配置された4名の精鋭傭兵が狂いなく正確に表示されるよう一元化しました。'
+            },
+            {
+              title: 'リーダー / オペレーター専用 黄金フレーム & オーラ演出',
+              desc: '次元ゲートハブおよび領地守備隊編成において、遠征隊を率いるリーダー（オペレーター）スロットに華麗な黄金フレームと金色のオーラエフェクトを適用し、指揮官の識別性を大幅に向上させました。'
+            }
+          ]
+        },
+        {
+          icon: '🎬',
+          title: 'ビューポートシネマティック & 利便性システム最適化',
+          color: '#ff7043',
+          bullets: [
+            {
+              title: '聖火点火 10秒高画質シネマティックループ & シームレスクロスオーバー',
+              desc: '方舟領地の聖火点火時に再生されるビューポート映像を10秒尺の壮大な新規シネマティックへ刷新し、2.4秒デュアルプレイヤー・シームレスクロスフェードの編集点を最適化して、途切れのないダークファンタジーの臨場感を提供します。'
+            },
+            {
+              title: 'シネマティック映像 AI生成ウォーターマーク完全除去',
+              desc: '映像右下に存在していたAI生成ウォーターマークを精密ベジェマスクおよび局所彩度・輝度復元アルゴリズムにより、ランタン、石畳の床、赤いスカーフの織り目テクスチャを一切損なうことなく100%美しく除去しました。'
+            },
+            {
+              title: '放置清算モーダル最小条件（1時間）設定',
+              desc: '短時間の再接続時に頻繁に表示されていた放置清算モーダルを、1時間（60分）以上の未接続時のみ出現するよう最適化し、不要なUIポップアップ疲労を解消しました。'
+            },
+            {
+              title: '城塞クエストドロワー安定性クラッシュ修正',
+              desc: '城塞画面のクエストドロワー進入時に特定条件下で発生していたランタイム参照エラー（openDrawer is not defined）を完全に解消し、安定したクエスト確認を可能にしました。'
+            }
+          ]
+        },
+        {
+          icon: '✨',
+          title: 'スキル説明文係数精緻化 & エピック接尾辞エンチャント',
+          color: '#69f0ae',
+          bullets: [
+            {
+              title: 'スキルツールチップ係数 全数調査 & 同期',
+              desc: '「ラグナロクスラッシュ」をはじめとする全職業スキルの強化段階ごとの実発動ダメージ計算式と説明文の係数を全数調査し、100%一致するよう正確に同期しました。'
+            },
+            {
+              title: '全装備共通エピック等級特殊接尾辞エンチャント6種導入',
+              desc: '【吸血】（与ダメの10%HP吸収）、【集中】（マナ消費10%減少）、【貫通】（防御力追加貫通20%）、【抵抗】（状態異常耐性+10%）、【再生】（毎ターン最大HP5%回復）、【無慈悲】（クリティカル率+10%）の特殊接尾辞体系を導入しました。'
+            }
+          ]
+        }
+      ]
+    },
+    {
       version: 'v1.1.3',
       title: 'V.1.1.3 正式アップデート パッチノート',
       badge: 'v1.1.3',
-      isLatest: true,
       categories: [
         {
           icon: '🍖',

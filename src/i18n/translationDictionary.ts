@@ -6174,6 +6174,26 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "(보호막 흡수)": "(Shield Absorbed)",
     "치명타!": "CRITICAL!",
     "최신 로그 보기": "Scroll to Latest Log",
+
+    // === 🔥 1.1.4 NEW LOCALIZATIONS ===
+    "미건설": "Unbuilt",
+    "미해금": "Locked",
+    "영지 시설 관리에서 건설 후 이용할 수 있습니다.": "Available after construction in Territory Management.",
+    "시설 미건설 안내": "Facility Not Built",
+    "지금 건설 화면으로 이동하시겠습니까?": "Would you like to go to the construction screen now?",
+    "리더": "Leader",
+    "집중": "Focus",
+    "저항": "Resistance",
+    "무자비": "Merciless",
+    "[흡혈]": "[Vampirism]",
+    "[집중]": "[Focus]",
+    "[관통]": "[Piercing]",
+    "[저항]": "[Resistance]",
+    "[재생]": "[Regeneration]",
+    "[무자비]": "[Merciless]",
+    "방주 성채 중앙 광장": "Ark Citadel Central Plaza",
+    "방주 성채": "Ark Citadel",
+    "중앙 광장": "Central Plaza",
   },
   ja: {
     // 🌐 特別・主要システム翻訳 (Special & Core System Translations)
@@ -12346,6 +12366,26 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "(보호막 흡수)": "(シールド吸収)",
     "치명타!": "会心の一撃！",
     "최신 로그 보기": "最新ログを見る",
+
+    // === 🔥 1.1.4 NEW LOCALIZATIONS ===
+    "미건설": "未建設",
+    "미해금": "未開放",
+    "영지 시설 관리에서 건설 후 이용할 수 있습니다.": "領地施設管理で建設後に利用できます。",
+    "시설 미건설 안내": "施設未建設の案内",
+    "지금 건설 화면으로 이동하시겠습니까?": "今すぐ建設画面へ移動しますか？",
+    "리더": "リーダー",
+    "집중": "集中",
+    "저항": "抵抗",
+    "무자비": "無慈悲",
+    "[흡혈]": "【吸血】",
+    "[집중]": "【集中】",
+    "[관통]": "【貫通】",
+    "[저항]": "【抵抗】",
+    "[재생]": "【再生】",
+    "[무자비]": "【無慈悲】",
+    "방주 성채 중앙 광장": "方舟城塞中央広場",
+    "방주 성채": "方舟城塞",
+    "중앙 광장": "中央広場",
   }};
 
 // ============================================================================

@@ -54,7 +54,7 @@ export const jaDictionary: TranslationDictionary = {
     encyclopedia: '方舟大百科 & 総合図鑑',
     encyclopedia_desc: '職業・魔物・施設・装備・スキル・システム検索',
     patch_notes: 'バージョン & パッチノート',
-    patch_notes_desc: 'V.0.9.7 (深淵亀裂 & 領地インフラ調整)',
+    patch_notes_desc: 'V.1.1.4 (領地UI全面改修 & ビジュアルインターフェース高度化)',
     logout: '指揮官ログアウト',
     logout_desc: 'アカウント切り替え・ログイン画面へ',
     reset_data: 'データ初期化 (最初から始める)',

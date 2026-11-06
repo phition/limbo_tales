@@ -54,7 +54,7 @@ export const enDictionary: TranslationDictionary = {
     encyclopedia: 'Ark Encyclopedia & Compendium',
     encyclopedia_desc: 'Classes, Monsters, Facilities, Gear, Skills & Systems',
     patch_notes: 'Version & Patch Notes',
-    patch_notes_desc: 'V.0.9.7 (Abyssal Rift & Ark Infrastructure Rebalance)',
+    patch_notes_desc: 'V.1.1.4 (Territory UI Overhaul & Visual Interface Modernization)',
     logout: 'Commander Logout',
     logout_desc: 'Switch account & return to login screen',
     reset_data: 'Reset Game Data (Start Fresh)',
