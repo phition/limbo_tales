@@ -837,9 +837,10 @@ interface CombatLogItem {
 export interface ArenaScreenProps {
   isDrawer?: boolean;
   onClose?: () => void;
+  onModeChange?: (mode: 'hub' | 'arena' | 'nemesis' | 'invasion') => void;
 }
 
-export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onClose }) => {
+export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onClose, onModeChange }) => {
   const { tr } = useI18n();
   /** 한국어 템플릿({0},{1}…)을 번역한 뒤 값을 끼워 넣는 헬퍼 (값은 호출 측에서 미리 번역) */
   const fmtTr = (tpl: string, ...args: Array<string | number>) =>
@@ -864,14 +865,23 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [isLoadingLb, setIsLoadingLb] = useState(false);
 
+  const handleSetGateMode = useCallback((newMode: 'hub' | 'arena' | 'nemesis' | 'invasion') => {
+    setGateMode(newMode);
+    if (onModeChange) onModeChange(newMode);
+  }, [onModeChange]);
+
+  useEffect(() => {
+    if (onModeChange) onModeChange('hub');
+  }, [onModeChange]);
+
   // 게이트 레벨에 따른 개방 모드 자동 보정
   useEffect(() => {
     if (gateMode === 'invasion' && !isInvasionUnlocked) {
-      setGateMode('hub');
+      handleSetGateMode('hub');
     } else if (gateMode === 'nemesis' && !isNemesisUnlocked) {
-      setGateMode('hub');
+      handleSetGateMode('hub');
     }
-  }, [gateMode, isNemesisUnlocked, isInvasionUnlocked]);
+  }, [gateMode, isNemesisUnlocked, isInvasionUnlocked, handleSetGateMode]);
 
   // ── ⚔️ 3v3+1+1 차원 아레나 몰입형 인터랙티브 전장 상태 ──
   const [activeBattleOpp, setActiveBattleOpp] = useState<ArenaOpponent | null>(null);
@@ -3743,7 +3753,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
               <button
                 onClick={() => {
                   try { SoundManager.getInstance().play('click'); } catch {}
-                  setGateMode('hub');
+                  handleSetGateMode('hub');
                 }}
                 className="px-2.5 py-1.5 rounded-lg bg-black/75 hover:bg-black/90 border border-[#ffd54f]/70 hover:border-[#ffd54f] text-[#ffd54f] text-xs font-bold transition-all shadow-md flex items-center gap-1 cursor-pointer active:scale-95"
               >
@@ -3769,11 +3779,11 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
 
       {/* ── 게이트 세부 뷰(아레나, 네메시스, 침공) 진입 시 상단 서브 네비게이션 바 ── */}
       {gateMode !== 'hub' && (
-        <div className="px-3 py-1.5 shrink-0 w-full max-w-full z-10 bg-[#090d16] border-b border-[#1a2538] flex items-center justify-between gap-2 shadow-sm">
+        <div className="px-3 py-1.5 shrink-0 w-full max-w-full z-10 bg-[#090d16] border-b border-[#1a2538] flex items-center justify-between gap-2 shadow-sm animate-fade-in">
           <button
             onClick={() => {
               try { SoundManager.getInstance().play('click'); } catch {}
-              setGateMode('hub');
+              handleSetGateMode('hub');
             }}
             className="px-2.5 py-1 rounded-lg bg-[#141b2d] hover:bg-[#1f2942] border border-[#ffd54f]/50 hover:border-[#ffd54f] text-xs font-bold text-[#ffd54f] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer active:scale-95 shadow-sm"
           >
@@ -3781,81 +3791,95 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
             <span>{tr('차원 게이트 허브로')}</span>
           </button>
 
-          <div className="p-0.5 rounded-lg bg-[#070a12] border border-[#1a2538] flex items-center gap-1">
-            {/* 아레나 탭 */}
-            <button
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
-                gateMode === 'arena'
-                  ? 'bg-gradient-to-r from-[#ff416c] to-[#ff4b2b] text-white shadow-sm'
-                  : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
-              }`}
-              onClick={() => {
-                try { SoundManager.getInstance().play('click'); } catch {}
-                setGateMode('arena');
-                gm.emit('phaserSceneChange', 'arena');
-              }}
-            >
-              <span>⚔️</span>
-              <span className="hidden sm:inline">{tr('차원 아레나')}</span>
-              <span className="sm:hidden">{tr('아레나')}</span>
-            </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <div className="p-0.5 rounded-lg bg-[#070a12] border border-[#1a2538] flex items-center gap-1">
+              {/* 아레나 탭 */}
+              <button
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
+                  gateMode === 'arena'
+                    ? 'bg-gradient-to-r from-[#ff416c] to-[#ff4b2b] text-white shadow-sm'
+                    : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
+                }`}
+                onClick={() => {
+                  try { SoundManager.getInstance().play('click'); } catch {}
+                  handleSetGateMode('arena');
+                  gm.emit('phaserSceneChange', 'arena');
+                }}
+              >
+                <span>⚔️</span>
+                <span className="hidden sm:inline">{tr('차원 아레나')}</span>
+                <span className="sm:hidden">{tr('아레나')}</span>
+              </button>
 
-            {/* 네메시스 탭 */}
-            <button
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
-                !isNemesisUnlocked
-                  ? 'text-[#506078] opacity-60'
-                  : gateMode === 'nemesis'
-                  ? 'bg-gradient-to-r from-[#8a2be2] to-[#4a0e78] text-white shadow-sm'
-                  : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
-              }`}
-              onClick={() => {
-                if (!isNemesisUnlocked) {
-                  gameDialog.alert({
-                    title: tr('차원 관문 미개방'),
-                    message: `${tr('차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})`,
-                    icon: '🔒',
-                  });
-                  return;
-                }
-                try { SoundManager.getInstance().play('click'); } catch {}
-                setGateMode('nemesis');
-                gm.emit('phaserSceneChange', 'arena');
-              }}
-            >
-              <span>🌌</span>
-              <span>{tr('네메시스')}</span>
-              {!isNemesisUnlocked && <span className="text-[9px] text-[#90a4ae]">🔒Lv.3</span>}
-            </button>
+              {/* 네메시스 탭 */}
+              <button
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
+                  !isNemesisUnlocked
+                    ? 'text-[#506078] opacity-60'
+                    : gateMode === 'nemesis'
+                    ? 'bg-gradient-to-r from-[#8a2be2] to-[#4a0e78] text-white shadow-sm'
+                    : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
+                }`}
+                onClick={() => {
+                  if (!isNemesisUnlocked) {
+                    gameDialog.alert({
+                      title: tr('차원 관문 미개방'),
+                      message: `${tr('차원 네메시스 월드 레이드는 차원 앵커 게이트 Lv.3 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})`,
+                      icon: '🔒',
+                    });
+                    return;
+                  }
+                  try { SoundManager.getInstance().play('click'); } catch {}
+                  handleSetGateMode('nemesis');
+                  gm.emit('phaserSceneChange', 'arena');
+                }}
+              >
+                <span>🌌</span>
+                <span>{tr('네메시스')}</span>
+                {!isNemesisUnlocked && <span className="text-[9px] text-[#90a4ae]">🔒Lv.3</span>}
+              </button>
 
-            {/* 영지 침공 탭 */}
-            <button
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
-                !isInvasionUnlocked
-                  ? 'text-[#506078] opacity-60'
-                  : gateMode === 'invasion'
-                  ? 'bg-gradient-to-r from-[#e53e3e] via-[#dd6b20] to-[#d69e2e] text-white shadow-sm'
-                  : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
-              }`}
-              onClick={() => {
-                if (!isInvasionUnlocked) {
-                  gameDialog.alert({
-                    title: tr('차원 관문 미개방'),
-                    message: `${tr('차원 영지 침공은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})`,
-                    icon: '🔒',
-                  });
-                  return;
-                }
-                try { SoundManager.getInstance().play('click'); } catch {}
-                setGateMode('invasion');
-                gm.emit('phaserSceneChange', 'invasion');
-              }}
-            >
-              <span>🏰</span>
-              <span className="hidden sm:inline">{tr('영지 침공')}</span>
-              <span className="sm:hidden">{tr('침공')}</span>
-              {!isInvasionUnlocked && <span className="text-[9px] text-[#90a4ae]">🔒Lv.6</span>}
-            </button>
+              {/* 영지 침공 탭 */}
+              <button
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
+                  !isInvasionUnlocked
+                    ? 'text-[#506078] opacity-60'
+                    : gateMode === 'invasion'
+                    ? 'bg-gradient-to-r from-[#e53e3e] via-[#dd6b20] to-[#d69e2e] text-white shadow-sm'
+                    : 'text-[#8b9bb4] hover:text-white hover:bg-[#131d30]'
+                }`}
+                onClick={() => {
+                  if (!isInvasionUnlocked) {
+                    gameDialog.alert({
+                      title: tr('차원 관문 미개방'),
+                      message: `${tr('차원 영지 침공은 차원 앵커 게이트 Lv.6 이상부터 개방됩니다.')}\n(${tr('현재 게이트 레벨')}: Lv.${gateLevel})`,
+                      icon: '🔒',
+                    });
+                    return;
+                  }
+                  try { SoundManager.getInstance().play('click'); } catch {}
+                  handleSetGateMode('invasion');
+                  gm.emit('phaserSceneChange', 'invasion');
+                }}
+              >
+                <span>🏰</span>
+                <span className="hidden sm:inline">{tr('영지 침공')}</span>
+                <span className="sm:hidden">{tr('침공')}</span>
+                {!isInvasionUnlocked && <span className="text-[9px] text-[#90a4ae]">🔒Lv.6</span>}
+              </button>
+            </div>
+
+            {/* ✕ 닫기 버튼 */}
+            {isDrawer && (
+              <button
+                type="button"
+                onClick={handleClose}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-[#08090b]/80 hover:bg-[#2a1618] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-sm active:scale-95 text-xs shrink-0"
+                title={tr('성채로 닫기')}
+              >
+                ✕
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -3889,7 +3913,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
             <div
               onClick={() => {
                 try { SoundManager.getInstance().play('click'); } catch {}
-                setGateMode('arena');
+                handleSetGateMode('arena');
                 gm.emit('phaserSceneChange', 'arena');
               }}
               className="group relative rounded-2xl bg-gradient-to-b from-[#18131d] via-[#120f18] to-[#0d0a12] border border-[#ff416c44] hover:border-[#ff416c] transition-all duration-300 shadow-lg hover:shadow-[0_0_24px_rgba(255,65,108,0.25)] flex flex-col justify-between overflow-hidden cursor-pointer p-4"
@@ -4017,7 +4041,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                   return;
                 }
                 try { SoundManager.getInstance().play('click'); } catch {}
-                setGateMode('nemesis');
+                handleSetGateMode('nemesis');
                 gm.emit('phaserSceneChange', 'arena');
               }}
               className={`group relative rounded-2xl bg-gradient-to-b from-[#181024] via-[#120b1b] to-[#0d0714] border transition-all duration-300 shadow-lg flex flex-col justify-between overflow-hidden p-4 ${
@@ -4167,7 +4191,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                   return;
                 }
                 try { SoundManager.getInstance().play('click'); } catch {}
-                setGateMode('invasion');
+                handleSetGateMode('invasion');
                 gm.emit('phaserSceneChange', 'invasion');
               }}
               className={`group relative rounded-2xl bg-gradient-to-b from-[#1c140e] via-[#140e0a] to-[#0e0a07] border transition-all duration-300 shadow-lg flex flex-col justify-between overflow-hidden p-4 ${
@@ -4311,7 +4335,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
               className="flex-1 py-1.5 text-xs font-bold"
               onClick={() => {
                 try { SoundManager.getInstance().play('click'); } catch {}
-                setGateMode('hub');
+                handleSetGateMode('hub');
               }}
             />
             <ActionButton
@@ -4332,7 +4356,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
               className="flex-1 py-1.5 text-xs font-bold"
               onClick={() => {
                 try { SoundManager.getInstance().play('click'); } catch {}
-                setGateMode('hub');
+                handleSetGateMode('hub');
               }}
             />
             <ActionButton
@@ -4864,7 +4888,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
           className="flex-1 py-2 text-xs font-bold"
           onClick={() => {
             try { SoundManager.getInstance().play('click'); } catch {}
-            setGateMode('hub');
+            handleSetGateMode('hub');
           }}
         />
         <ActionButton

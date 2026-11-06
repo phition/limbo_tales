@@ -14389,6 +14389,7 @@ export const ExploreDrawer: React.FC<{
 // ─────────────────────────────────────────────────────────────
 export const CitadelScreen: React.FC = () => {
   const [openDrawer, setOpenDrawer] = useState<string | null>(null);
+  const [arenaGateMode, setArenaGateMode] = useState<'hub' | 'arena' | 'nemesis' | 'invasion'>('hub');
   const [citadelInitialView, setCitadelInitialView] = useState<'banners' | 'bonfire' | 'facilities' | 'workstations'>('banners');
   // 영지('citadel') 패널에서 개별 건물 패널로 진입한 경우에만 닫기 시 영지로 복귀, 그 외(바로가기 등)는 즉시 완전 닫기
   const [returnToCitadelOnClose, setReturnToCitadelOnClose] = useState<boolean>(false);
@@ -14988,6 +14989,7 @@ export const CitadelScreen: React.FC = () => {
   // 일반 드로어 열기 (네비게이션 휠, 바로가기 등: 닫기 시 즉시 완전 닫기)
   const handleTryOpenDrawer = useCallback((key: string) => {
     setReturnToCitadelOnClose(false);
+    if (key === 'arena') setArenaGateMode('hub');
     if (key === 'bonfire') {
       setShowBonfireModal(true);
       return true;
@@ -15004,6 +15006,7 @@ export const CitadelScreen: React.FC = () => {
 
   // 영지('citadel') 패널 내부에서 건물 선택 입장 시 (닫기 시 영지 패널로 복귀)
   const handleEnterBuildingFromCitadel = useCallback((key: string) => {
+    if (key === 'arena') setArenaGateMode('hub');
     if (key === 'codex') {
       setShowCodexModal(true);
     } else {
@@ -15015,6 +15018,7 @@ export const CitadelScreen: React.FC = () => {
 
   // 드로어 닫기 핸들러 (영지에서 건물로 들어간 경우에만 영지로 복귀, 그 외 모든 경우 즉시 패널 닫기)
   const handleCloseDrawer = useCallback(() => {
+    setArenaGateMode('hub');
     if (returnToCitadelOnClose && openDrawer !== 'citadel') {
       setReturnToCitadelOnClose(false);
       setCitadelInitialView('workstations');
@@ -15543,6 +15547,7 @@ export const CitadelScreen: React.FC = () => {
           icon={artInfo.icon}
           bgImage={artInfo.img}
           levelBadge={DRAWER_TO_BUILDING_ID[openDrawer || ''] ? (state.buildings[DRAWER_TO_BUILDING_ID[openDrawer || '']]?.level || 1) : undefined}
+          hideHeader={openDrawer === 'arena' && arenaGateMode !== 'hub'}
         >
           {openDrawer === 'barracks'  && (
             <BarracksDrawer 
@@ -15589,7 +15594,13 @@ export const CitadelScreen: React.FC = () => {
           {openDrawer === 'alchemy'   && <AlchemyDrawer onBack={handleCloseDrawer} />}
           {openDrawer === 'market'    && <MarketDrawer onBack={handleCloseDrawer} />}
           {openDrawer === 'cemetery'  && <CemeteryDrawer onBack={handleCloseDrawer} />}
-          {openDrawer === 'arena'     && <ArenaScreen isDrawer onClose={handleCloseDrawer} />}
+          {openDrawer === 'arena'     && (
+            <ArenaScreen
+              isDrawer
+              onClose={handleCloseDrawer}
+              onModeChange={setArenaGateMode}
+            />
+          )}
         </FacilityWorkstationModal>
       )}
 
