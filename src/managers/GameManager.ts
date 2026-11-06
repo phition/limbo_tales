@@ -9772,15 +9772,15 @@ export class GameManager {
     const myGateLv = this.buildings['arenaGate']?.level || 0;
     const myRating = this.currentArenaRating || 1200;
     const targets: InvasionTarget[] = [];
-    const limit = 5;
+    const limit = 7;
 
-    // 1. Firebase 리더보드 기반 실제 유저 영지 우선 매칭 (최대 3개)
+    // 1. Firebase 리더보드 기반 실제 유저 영지 우선 매칭 (최대 4개)
     // 영지 침공 해금 조건: 차원 앵커 게이트 Lv.6 이상인 실제 유저만 침공 매칭 타겟으로 등장
     try {
       const fb = FirebaseService.getInstance();
       const lb = await fb.getLeaderboard();
       const realEntries = lb.filter(e => e && !e.isPlayer && (e.gateLevel ?? 0) >= 6);
-      for (const entry of realEntries.slice(0, 3)) {
+      for (const entry of realEntries.slice(0, 4)) {
         const oppRating = entry.rating || myRating;
         const gateLv = entry.gateLevel && entry.gateLevel >= 6 ? entry.gateLevel : Math.max(6, Math.min(10, Math.floor(oppRating / 200)));
         const defaultClasses = ['paladin', 'warlord', 'berserker', 'tactical_gunner', 'high_saintess'];

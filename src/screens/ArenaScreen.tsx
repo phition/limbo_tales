@@ -718,30 +718,30 @@ function generateOpponents(myRank: number, myRating: number, gateLevel: number =
   let selectedBots: PreseasonBotConfig[] = [];
 
   if (userTier === 'bronze') {
-    // 🥉 브론즈: 동급 브론즈 3명 + 상위 실버 승급 도전 2명
-    const bronzeBots = pickUnique(curPool, 3, pickedIds);
-    const silverChallenges = pickUnique(nextPool, 2, pickedIds);
+    // 🥉 브론즈: 동급 브론즈 4명 + 상위 실버 승급 도전 3명 (총 7명)
+    const bronzeBots = pickUnique(curPool, 4, pickedIds);
+    const silverChallenges = pickUnique(nextPool, 3, pickedIds);
     selectedBots = [...bronzeBots, ...silverChallenges];
   } else if (userTier === 'grandmaster') {
-    // 👑 그랜드마스터: 마스터 2명 + 그랜드마스터 3명
-    const masterBots = pickUnique(prevPool, 2, pickedIds);
+    // 👑 그랜드마스터: 마스터 4명 + 그랜드마스터 3명 (총 7명)
+    const masterBots = pickUnique(prevPool, 4, pickedIds);
     const grandBots = pickUnique(curPool, 3, pickedIds);
     selectedBots = [...masterBots, ...grandBots];
   } else {
-    // 🥈~💎 실버~마스터: 워밍업 1명 + 동급 2명 + 상위 티어 승급 도전 2명
-    const warmupBots = pickUnique(prevPool.length > 0 ? prevPool : curPool, 1, pickedIds);
-    const peerBots = pickUnique(curPool, 2, pickedIds);
+    // 🥈~💎 실버~마스터: 워밍업 2명 + 동급 3명 + 상위 티어 승급 도전 2명 (총 7명)
+    const warmupBots = pickUnique(prevPool.length > 0 ? prevPool : curPool, 2, pickedIds);
+    const peerBots = pickUnique(curPool, 3, pickedIds);
     const promotionChallenges = pickUnique(nextPool, 2, pickedIds);
     selectedBots = [...warmupBots, ...peerBots, ...promotionChallenges];
   }
 
-  // 예외 방어: 5명이 안 채워졌을 경우 전체 로스터에서 추가 보충
-  if (selectedBots.length < 5) {
-    const remaining = pickUnique(PRESEASON_BOT_ROSTER, 5 - selectedBots.length, pickedIds);
+  // 예외 방어: 7명이 안 채워졌을 경우 전체 로스터에서 추가 보충
+  if (selectedBots.length < 7) {
+    const remaining = pickUnique(PRESEASON_BOT_ROSTER, 7 - selectedBots.length, pickedIds);
     selectedBots = [...selectedBots, ...remaining];
   }
 
-  // 레이팅 오름차순 정렬 (1번: 가장 만만한/워밍업 상대 ~ 5번: 최고 승급 도전전)
+  // 레이팅 오름차순 정렬 (1번: 가장 만만한/워밍업 상대 ~ 7번: 최고 승급 도전전)
   selectedBots.sort((a, b) => a.rating - b.rating);
 
   return selectedBots.map((cfg, i) => {
