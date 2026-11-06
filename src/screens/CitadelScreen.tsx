@@ -15249,6 +15249,7 @@ export const CitadelScreen: React.FC = () => {
           <TerritoryDioramaView
             onOpenFacility={(key) => handleTryOpenDrawer(key)}
             onOpenExplore={() => handleTryOpenDrawer('explore')}
+            isLit={hasWarmth}
           />
 
           {/* 퀘스트 & 오프라인 결산 알림 마커 오버레이 (디오라마 좌측 상단) */}
