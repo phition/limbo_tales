@@ -15499,12 +15499,51 @@ export const CitadelScreen: React.FC = () => {
               title="D.M (Dimension Message)"
             >
               <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden [text-shadow:_0_1px_2px_rgba(0,0,0,0.85)]">
-                <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#b89758]/20 text-[#ffd54f] font-bold shrink-0 border border-[#b89758]/50 font-mono tracking-wide shadow-xs">
+                <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#b89758]/20 text-[#ffd54f] font-bold shrink-0 border border-[#b89758]/50 font-mono tracking-wide shadow-xs z-10">
                   📢 D.M
                 </span>
-                <span className="text-xs text-[#cfd8e8] group-hover:text-white transition-colors truncate">
-                  {guestbookMessages.length > 0 ? `${guestbookMessages[0].authorName}: ${guestbookMessages[0].content}` : tr('첫 번째 차원 메세지를 전송해 보세요!')}
-                </span>
+                <div
+                  className="flex-1 overflow-hidden relative select-none"
+                  style={{
+                    maskImage: 'linear-gradient(to right, transparent 0%, black 14px, black calc(100% - 14px), transparent 100%)',
+                    WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 14px, black calc(100% - 14px), transparent 100%)'
+                  }}
+                >
+                  {guestbookMessages.length === 0 ? (
+                    <span className="text-xs text-[#cfd8e8]/70">
+                      {tr('첫 번째 차원 메세지를 전송해 보세요!')}
+                    </span>
+                  ) : (() => {
+                    const recentMsgs = guestbookMessages.slice(0, 3);
+                    const totalLen = recentMsgs.reduce((acc, m) => acc + (m.authorName || '').length + (m.content || '').length, 0);
+                    // 글자 수에 비례하여 부드럽고 여유롭게 흘러가도록 시간 설정 (최소 24초 ~ 최대 48초)
+                    const durSeconds = Math.max(24, Math.min(48, Math.round(totalLen * 0.35 + 18)));
+
+                    const renderMessageGroup = (prefix: string) => (
+                      <div className="flex items-center shrink-0 pr-8">
+                        {recentMsgs.map((msg, idx) => (
+                          <div key={`${prefix}-${msg.id || idx}`} className="flex items-center gap-1.5 shrink-0 pr-8 text-xs">
+                            <strong className="text-[#ffd54f] font-bold shrink-0">[{msg.authorName}]</strong>
+                            <span className="text-[#e2e8f0] font-medium">{msg.content}</span>
+                            <span className="text-[#b89758]/40 ml-3">◆</span>
+                          </div>
+                        ))}
+                      </div>
+                    );
+
+                    return (
+                      <div
+                        className="animate-ticker-marquee flex items-center"
+                        style={{ '--marquee-dur': `${durSeconds}s` } as React.CSSProperties}
+                      >
+                        {/* 원본 그룹 (50%) */}
+                        {renderMessageGroup('a')}
+                        {/* 끊김 없는 무한 루프용 복사본 그룹 (50%) */}
+                        {renderMessageGroup('b')}
+                      </div>
+                    );
+                  })()}
+                </div>
               </div>
               <span className="text-xs text-[#b89758] group-hover:text-[#ffd54f] font-bold shrink-0 ml-2 transition-colors flex items-center gap-0.5 [text-shadow:_0_1px_2px_rgba(0,0,0,0.85)]">
                 <span>열기</span>
