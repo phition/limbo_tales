@@ -834,12 +834,25 @@ interface CombatLogItem {
   side: 'player' | 'enemy';
 }
 
-export const ArenaScreen: React.FC = () => {
+export interface ArenaScreenProps {
+  isDrawer?: boolean;
+  onClose?: () => void;
+}
+
+export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onClose }) => {
   const { tr } = useI18n();
   /** 한국어 템플릿({0},{1}…)을 번역한 뒤 값을 끼워 넣는 헬퍼 (값은 호출 측에서 미리 번역) */
   const fmtTr = (tpl: string, ...args: Array<string | number>) =>
     tr(tpl).replace(/\{(\d+)\}/g, (_m, i) => String(args[Number(i)] ?? ''));
   const { state, gm, navigateTo } = useGameManager();
+
+  const handleClose = useCallback(() => {
+    try { SoundManager.getInstance().play('click'); } catch {}
+    gm.emit('phaserSceneChange', 'citadel');
+    if (onClose) onClose();
+    else navigateTo('citadel');
+  }, [onClose, navigateTo, gm]);
+
   const gateLevel = gm.isMasterAccount ? 10 : (state.buildings['arenaGate']?.level || 0);
   const isGateBuilt = gateLevel >= 1;
   const isNemesisUnlocked = gateLevel >= 3;
@@ -3681,11 +3694,11 @@ export const ArenaScreen: React.FC = () => {
           </div>
         </div>
         <ActionButton
-          label={tr('🏰 방주 성채로 돌아가기')}
+          label={isDrawer ? tr('✕ 닫기') : tr('🏰 방주 성채로 돌아가기')}
           variant="primary"
           size="md"
           className="px-6 font-bold"
-          onClick={() => navigateTo('citadel')}
+          onClick={handleClose}
         />
       </div>
     );
@@ -3694,63 +3707,65 @@ export const ArenaScreen: React.FC = () => {
   return (
     <div className="flex-1 min-h-0 w-full max-w-full flex flex-col bg-transparent overflow-hidden overflow-x-hidden relative">
 
-      {/* ── 🌌 차원 게이트 상단 시네마틱 이미지 창 (assets/menu_arena.jpg) ── */}
-      <div className="relative w-full h-36 sm:h-44 md:h-48 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden select-none">
-        <img
-          src="assets/menu_arena.jpg"
-          alt={tr('차원 게이트')}
-          className="absolute inset-0 w-full h-full object-cover filter brightness-100 contrast-105 saturate-110"
-        />
-        {/* 상단 텍스트 가독성 확보용 소프트 비네팅 */}
-        <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#08090b]/85 via-[#08090b]/35 to-transparent pointer-events-none" />
-        {/* 하단 연결 은은한 그라데이션 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-transparent to-transparent pointer-events-none" />
+      {/* ── 🌌 차원 게이트 상단 시네마틱 이미지 창 (드로어 모드가 아닐 때만 렌더링) ── */}
+      {!isDrawer && (
+        <div className="relative w-full h-36 sm:h-44 md:h-48 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden select-none">
+          <img
+            src="assets/menu_arena.jpg"
+            alt={tr('차원 게이트')}
+            className="absolute inset-0 w-full h-full object-cover filter brightness-100 contrast-105 saturate-110"
+          />
+          {/* 상단 텍스트 가독성 확보용 소프트 비네팅 */}
+          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#08090b]/85 via-[#08090b]/35 to-transparent pointer-events-none" />
+          {/* 하단 연결 은은한 그라데이션 */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-transparent to-transparent pointer-events-none" />
 
-        {/* 좌측 상단 시설 타이틀 & 레벨 뱃지 */}
-        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 max-w-[calc(100%-140px)] pointer-events-auto">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-sm sm:text-base md:text-lg font-black text-[#ededed] tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] flex items-center gap-1.5">
-              <span className="text-[#ffd54f]">🏆</span>
-              <span>{tr('차원 앵커 게이트')}</span>
-              <span className="text-[11px] sm:text-xs font-normal text-[#a0aec0] font-sans hidden sm:inline">(Dimensional Gate)</span>
-            </h2>
-            <span className="px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-bold bg-[#b89758]/30 text-[#ffd54f] border border-[#b89758]/70 backdrop-blur-md shadow-sm font-mono">
-              Lv.{gateLevel}
-            </span>
+          {/* 좌측 상단 시설 타이틀 & 레벨 뱃지 */}
+          <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 max-w-[calc(100%-140px)] pointer-events-auto">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-sm sm:text-base md:text-lg font-black text-[#ededed] tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] flex items-center gap-1.5">
+                <span className="text-[#ffd54f]">🏆</span>
+                <span>{tr('차원 앵커 게이트')}</span>
+                <span className="text-[11px] sm:text-xs font-normal text-[#a0aec0] font-sans hidden sm:inline">(Dimensional Gate)</span>
+              </h2>
+              <span className="px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-bold bg-[#b89758]/30 text-[#ffd54f] border border-[#b89758]/70 backdrop-blur-md shadow-sm font-mono">
+                Lv.{gateLevel}
+              </span>
+            </div>
+            <p className="text-[10px] sm:text-xs text-[#cfd8e8] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)] line-clamp-1 mt-0.5 font-medium">
+              {tr('차원 아레나(1v1) · 네메시스 월드 보스 · 5v5 영지 침공 작전 사령부')}
+            </p>
           </div>
-          <p className="text-[10px] sm:text-xs text-[#cfd8e8] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)] line-clamp-1 mt-0.5 font-medium">
-            {tr('차원 아레나(1v1) · 네메시스 월드 보스 · 5v5 영지 침공 작전 사령부')}
-          </p>
-        </div>
 
-        {/* 우측 상단 액션 버튼 */}
-        <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center gap-2 pointer-events-auto">
-          {gateMode !== 'hub' && (
+          {/* 우측 상단 액션 버튼 */}
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center gap-2 pointer-events-auto">
+            {gateMode !== 'hub' && (
+              <button
+                onClick={() => {
+                  try { SoundManager.getInstance().play('click'); } catch {}
+                  setGateMode('hub');
+                }}
+                className="px-2.5 py-1.5 rounded-lg bg-black/75 hover:bg-black/90 border border-[#ffd54f]/70 hover:border-[#ffd54f] text-[#ffd54f] text-xs font-bold transition-all shadow-md flex items-center gap-1 cursor-pointer active:scale-95"
+              >
+                <span>←</span>
+                <span className="hidden sm:inline">{tr('게이트 허브')}</span>
+                <span className="sm:hidden">{tr('허브')}</span>
+              </button>
+            )}
             <button
               onClick={() => {
                 try { SoundManager.getInstance().play('click'); } catch {}
-                setGateMode('hub');
+                handleClose();
               }}
-              className="px-2.5 py-1.5 rounded-lg bg-black/75 hover:bg-black/90 border border-[#ffd54f]/70 hover:border-[#ffd54f] text-[#ffd54f] text-xs font-bold transition-all shadow-md flex items-center gap-1 cursor-pointer active:scale-95"
+              className="px-2.5 py-1.5 rounded-lg bg-black/75 hover:bg-black/90 border border-[#b89758]/60 hover:border-[#b89758] text-[#e0e0e0] hover:text-white text-xs font-bold transition-all shadow-md flex items-center gap-1 cursor-pointer active:scale-95"
+              title={tr('방주 성채로 귀환')}
             >
-              <span>←</span>
-              <span className="hidden sm:inline">{tr('게이트 허브')}</span>
-              <span className="sm:hidden">{tr('허브')}</span>
+              <span>🏰</span>
+              <span className="hidden sm:inline">{tr('성채 귀환')}</span>
             </button>
-          )}
-          <button
-            onClick={() => {
-              try { SoundManager.getInstance().play('click'); } catch {}
-              navigateTo('citadel');
-            }}
-            className="px-2.5 py-1.5 rounded-lg bg-black/75 hover:bg-black/90 border border-[#b89758]/60 hover:border-[#b89758] text-[#e0e0e0] hover:text-white text-xs font-bold transition-all shadow-md flex items-center gap-1 cursor-pointer active:scale-95"
-            title={tr('방주 성채로 귀환')}
-          >
-            <span>🏰</span>
-            <span className="hidden sm:inline">{tr('성채 귀환')}</span>
-          </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── 게이트 세부 뷰(아레나, 네메시스, 침공) 진입 시 상단 서브 네비게이션 바 ── */}
       {gateMode !== 'hub' && (
@@ -3869,7 +3884,7 @@ export const ArenaScreen: React.FC = () => {
           </div>
 
           {/* 3대 콘텐츠 선택 카드 그리드 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4 items-stretch">
+          <div className={`gap-3.5 sm:gap-4 items-stretch ${isDrawer ? 'flex flex-col' : 'grid grid-cols-1 md:grid-cols-3'}`}>
             {/* ── 🏆 카드 1: 차원 아레나 (1v1 PVP) ── */}
             <div
               onClick={() => {
@@ -4277,10 +4292,10 @@ export const ArenaScreen: React.FC = () => {
           {/* 성채 복귀 버튼 */}
           <div className="pt-2 pb-4">
             <ActionButton
-              label={tr('🏰 방주 성채로 귀환')}
+              label={isDrawer ? tr('✕ 닫기 (성채 복귀)') : tr('🏰 방주 성채로 귀환')}
               variant="ghost"
               className="w-full py-2.5 text-xs font-bold"
-              onClick={() => navigateTo('citadel')}
+              onClick={handleClose}
             />
           </div>
         </div>
@@ -4300,10 +4315,10 @@ export const ArenaScreen: React.FC = () => {
               }}
             />
             <ActionButton
-              label={tr('🏰 방주 성채로 귀환')}
+              label={isDrawer ? tr('✕ 닫기 (성채 복귀)') : tr('🏰 방주 성채로 귀환')}
               variant="ghost"
-              className="flex-1 py-1.5 text-xs"
-              onClick={() => navigateTo('citadel')}
+              className="flex-1 py-1.5 text-xs font-bold"
+              onClick={handleClose}
             />
           </div>
         </div>
@@ -4321,10 +4336,10 @@ export const ArenaScreen: React.FC = () => {
               }}
             />
             <ActionButton
-              label={tr('🏰 방주 성채로 귀환')}
+              label={isDrawer ? tr('✕ 닫기 (성채 복귀)') : tr('🏰 방주 성채로 귀환')}
               variant="ghost"
-              className="flex-1 py-1.5 text-xs"
-              onClick={() => navigateTo('citadel')}
+              className="flex-1 py-1.5 text-xs font-bold"
+              onClick={handleClose}
             />
           </div>
         </div>
@@ -4853,10 +4868,10 @@ export const ArenaScreen: React.FC = () => {
           }}
         />
         <ActionButton
-          label={tr('🏰 방주 성채로 귀환')}
+          label={isDrawer ? tr('✕ 닫기 (성채 복귀)') : tr('🏰 방주 성채로 귀환')}
           variant="ghost"
           className="flex-1 py-2 text-xs font-bold"
-          onClick={() => navigateTo('citadel')}
+          onClick={handleClose}
         />
       </div>
         </>

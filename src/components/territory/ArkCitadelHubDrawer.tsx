@@ -737,8 +737,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 data-tutorial-target={item.key === 'tavern' ? 'enter-tavern' : undefined}
                 onClick={() => {
                   handlePlayClick();
-                  if (item.key === 'arena') navigateTo('arena');
-                  else onEnterDrawer(item.key);
+                  onEnterDrawer(item.key);
                 }}
                 className="flex items-center justify-between p-4 sm:p-4.5 min-h-[96px] sm:min-h-[104px] rounded-2xl bg-gradient-to-r from-[#141822]/95 via-[#181d2a]/90 to-[#10131c]/95 border border-[#3d372e] hover:border-[#b89758] hover:bg-[#1a1f2b] hover:shadow-[0_0_18px_rgba(184,151,88,0.25)] transition-all cursor-pointer shadow-md select-none group active:scale-[0.98]"
               >
@@ -1019,8 +1018,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     handlePlayClick();
                     setSelectedBuildingId(null);
                     onClose();
-                    if (selectedDrawerKey === 'arena') navigateTo('arena');
-                    else onEnterDrawer(selectedDrawerKey);
+                    onEnterDrawer(selectedDrawerKey);
                   }}
                   className="py-2 px-3 rounded-xl bg-[#2a1e35] border border-[#a875d4] text-[#e0b8ff] font-bold text-xs hover:bg-[#352545] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
                 >

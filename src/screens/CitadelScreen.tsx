@@ -6,6 +6,7 @@ import { QuickFacilityDock } from '../components/territory/QuickFacilityDock';
 import { FacilityWorkstationModal } from '../components/territory/FacilityWorkstationModal';
 import { TerritoryDioramaView } from '../components/territory/TerritoryDioramaView';
 import { ArkCitadelHubDrawer } from '../components/territory/ArkCitadelHubDrawer';
+import { ArenaScreen } from './ArenaScreen';
 import { ResourceBar } from '../components/ResourceBar';
 import { LogPanel } from '../components/LogPanel';
 import { ActionButton } from '../components/ActionButton';
@@ -3306,10 +3307,7 @@ const CitadelDrawer: React.FC<{
                         variant="success"
                         size="sm"
                         className="px-2.5 font-bold"
-                        onClick={() => {
-                          if (item.id === 'arenaGate') navigateTo('arena');
-                          else onEnterDrawer(item.drawerKey!);
-                        }}
+                        onClick={() => onEnterDrawer(item.drawerKey!)}
                       />
                       {item.id === 'blacksmith' && unpurifiedEquipCount > 0 && (
                         <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#ef5350] text-white text-[9px] font-extrabold shadow-md animate-pulse pointer-events-none">
@@ -3412,8 +3410,7 @@ const CitadelDrawer: React.FC<{
                     className="btn btn-success text-xs px-3 py-1.5 font-bold flex items-center gap-1"
                     onClick={() => {
                       setDetailBuildingId(null);
-                      if (selectedBuildingItem.id === 'arenaGate') navigateTo('arena');
-                      else onEnterDrawer(selectedBuildingItem.drawerKey!);
+                      onEnterDrawer(selectedBuildingItem.drawerKey!);
                     }}
                   >
                     <span>🚪</span>
@@ -3598,8 +3595,7 @@ const CitadelDrawer: React.FC<{
                   setPausedNoticeBuilding(null);
                   const drawerKey = BUILDING_TO_DRAWER_KEY[bId];
                   if (drawerKey) {
-                    if (bId === 'arenaGate') navigateTo('arena');
-                    else onEnterDrawer(drawerKey);
+                    onEnterDrawer(drawerKey);
                   }
                 }}
               >
@@ -12357,8 +12353,12 @@ const QuestsDrawer: React.FC<{
         <button
           className="text-xs px-3 py-1.5 rounded-lg bg-[#2b101e] hover:bg-[#3d152a] text-[#ff80ab] font-bold border border-[#882d5a] flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
           onClick={() => {
-            onClose();
-            navigateTo('arena');
+            if (onNavigateDrawer) {
+              onNavigateDrawer('arena');
+            } else {
+              onClose();
+              navigateTo('arena');
+            }
           }}
         >
           <span>🏆</span>
@@ -14996,26 +14996,22 @@ export const CitadelScreen: React.FC = () => {
       setOpenDrawer('citadel');
     } else if (key === 'codex') {
       setShowCodexModal(true);
-    } else if (key === 'arena') {
-      navigateTo('arena');
     } else {
       setOpenDrawer(key);
     }
     return true;
-  }, [navigateTo]);
+  }, []);
 
   // 영지('citadel') 패널 내부에서 건물 선택 입장 시 (닫기 시 영지 패널로 복귀)
   const handleEnterBuildingFromCitadel = useCallback((key: string) => {
     if (key === 'codex') {
       setShowCodexModal(true);
-    } else if (key === 'arena') {
-      navigateTo('arena');
     } else {
       setReturnToCitadelOnClose(true);
       setOpenDrawer(key);
     }
     return true;
-  }, [navigateTo]);
+  }, []);
 
   // 드로어 닫기 핸들러 (영지에서 건물로 들어간 경우에만 영지로 복귀, 그 외 모든 경우 즉시 패널 닫기)
   const handleCloseDrawer = useCallback(() => {
@@ -15593,6 +15589,7 @@ export const CitadelScreen: React.FC = () => {
           {openDrawer === 'alchemy'   && <AlchemyDrawer onBack={handleCloseDrawer} />}
           {openDrawer === 'market'    && <MarketDrawer onBack={handleCloseDrawer} />}
           {openDrawer === 'cemetery'  && <CemeteryDrawer onBack={handleCloseDrawer} />}
+          {openDrawer === 'arena'     && <ArenaScreen isDrawer onClose={handleCloseDrawer} />}
         </FacilityWorkstationModal>
       )}
 
@@ -15791,8 +15788,7 @@ export const CitadelScreen: React.FC = () => {
                   setPausedNoticeBuilding(null);
                   const drawerKey = BUILDING_TO_DRAWER_KEY[bId];
                   if (drawerKey) {
-                    if (bId === 'arenaGate') navigateTo('arena');
-                    else handleTryOpenDrawer(drawerKey);
+                    handleTryOpenDrawer(drawerKey);
                   }
                 }}
               >
