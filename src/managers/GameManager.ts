@@ -1404,11 +1404,20 @@ export class GameManager {
       encounterAttacks: prevReport?.encounterAttacks ? [...prevReport.encounterAttacks] : []
     };
 
-    this.offlineReport = report;
-    this.lastOfflineReport = report;
+    // 1시간(3,600초) 이상 오프라인 상태였을 때만 오프라인 정산 보고서 및 알림 모달 활성화
+    const ONE_HOUR_SEC = 60 * 60; // 3,600초
+    if (finalElapsedSec >= ONE_HOUR_SEC) {
+      this.offlineReport = report;
+      this.lastOfflineReport = report;
+      this.emit('offlineProgressSettled', report);
+    } else {
+      this.offlineReport = null;
+      this.lastOfflineReport = null;
+      this.emit('offlineProgressSettled', null);
+    }
+
     this.processBuildingUpkeep(); // 부재 중 모인 자원으로 체납 시설 자동 복구 및 상태 동기화
     this.saveGame();
-    this.emit('offlineProgressSettled', report);
     this.emit('update');
     return report;
   }
@@ -14088,8 +14097,14 @@ export class GameManager {
           this.cleanExpiredPurifiedItems();
         }
         if (parsed.offlineReport && typeof parsed.offlineReport === 'object') {
-          this.offlineReport = parsed.offlineReport as any;
-          this.lastOfflineReport = parsed.offlineReport as any;
+          // 1시간(3,600초) 이상 정산 보고서만 로드, 1시간 미만 잔여 데이터는 자동 초기화
+          if ((parsed.offlineReport.elapsedSeconds || 0) >= 3600) {
+            this.offlineReport = parsed.offlineReport as any;
+            this.lastOfflineReport = parsed.offlineReport as any;
+          } else {
+            this.offlineReport = null;
+            this.lastOfflineReport = null;
+          }
         }
         this.checkNemesisDailyReset();
         if (Array.isArray(parsed.logs) && parsed.logs.length > 0) {

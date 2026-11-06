@@ -12769,7 +12769,7 @@ const QuestsDrawer: React.FC<{
               {/* 보상 수령 버튼 */}
               {isClaimable && (
                 <button
-                  data-tutorial-target={openDrawer === 'quests' ? 'quest-reward' : undefined}
+                  data-tutorial-target="quest-reward"
                   className="w-full py-2.5 text-xs font-black rounded-lg shadow-lg mt-1 flex items-center justify-center gap-1.5 transition-all active:scale-95 bg-gradient-to-r from-[#b89758] to-[#8a6e34] hover:from-[#dcc496] hover:to-[#a08040] text-[#08090b] shadow-[0_0_14px_rgba(184,151,88,0.4)] animate-pulse relative z-10 pointer-events-auto cursor-pointer"
                   onClick={() => {
                     try { SoundManager.getInstance().play('click'); } catch {}
@@ -14634,8 +14634,12 @@ export const CitadelScreen: React.FC = () => {
   };
   const [pausedNoticeBuilding, setPausedNoticeBuilding] = useState<BuildingState | null>(null);
   const [offlineReportModal, setOfflineReportModal] = useState<any>(null);
-  const [latestOfflineReport, setLatestOfflineReport] = useState<any>(gm.offlineReport || null);
-  const activeOfflineReport = latestOfflineReport || gm.offlineReport;
+  const [latestOfflineReport, setLatestOfflineReport] = useState<any>(
+    (gm.offlineReport && (gm.offlineReport.elapsedSeconds || 0) >= 3600) ? gm.offlineReport : null
+  );
+  // 오프라인 정산은 1시간(3,600초) 이상 경과한 경우에만 표시
+  const rawReport = latestOfflineReport || gm.offlineReport;
+  const activeOfflineReport = (rawReport && (rawReport.elapsedSeconds || 0) >= 3600) ? rawReport : null;
   const [showIntroStory, setShowIntroStory] = useState<boolean>(() => {
     try {
       const uid = gm.getCurrentUserId();
@@ -14746,20 +14750,30 @@ export const CitadelScreen: React.FC = () => {
       }
     }).catch(() => {});
 
-    if (gm.offlineReport) {
+    if (gm.offlineReport && (gm.offlineReport.elapsedSeconds || 0) >= 3600) {
       setLatestOfflineReport(gm.offlineReport);
+    } else {
+      setLatestOfflineReport(null);
     }
     const handleOfflineSettled = (report: any) => {
-      setLatestOfflineReport(report);
+      if (report && (report.elapsedSeconds || 0) >= 3600) {
+        setLatestOfflineReport(report);
+      } else {
+        setLatestOfflineReport(null);
+      }
     };
     const handleUpdate = () => {
-      if (gm.offlineReport !== latestOfflineReport) {
-        setLatestOfflineReport(gm.offlineReport);
+      if (gm.offlineReport && (gm.offlineReport.elapsedSeconds || 0) >= 3600) {
+        if (gm.offlineReport !== latestOfflineReport) {
+          setLatestOfflineReport(gm.offlineReport);
+        }
+      } else if (latestOfflineReport) {
+        setLatestOfflineReport(null);
       }
     };
     const handleOpenOfflineReport = () => {
       const rep = gm.offlineReport || latestOfflineReport;
-      if (rep) {
+      if (rep && (rep.elapsedSeconds || 0) >= 3600) {
         setOfflineReportModal(rep);
       }
     };
