@@ -1271,3 +1271,31 @@ export function getVfxAssociatedSfx(vfxType: VFXType): SoundEffectType {
       return 'slash';
   }
 }
+
+/**
+ * 직업 고유 패시브 설명 문자열을 이름과 상세 설명으로 안전하게 파싱합니다.
+ * "패시브이름: 패시브상세설명" 형태 또는 번역된 문자열 대응
+ */
+export function parsePassiveSkill(
+  passiveDesc: string | undefined,
+  fallbackName = '직업 고유 패시브',
+  translateFn: (key: string) => string = (k) => k
+): { name: string; desc: string } {
+  if (!passiveDesc) {
+    return { name: translateFn(fallbackName), desc: '' };
+  }
+  const translated = translateFn(passiveDesc);
+  const colonMatch = translated.match(/[:：]/);
+  const colonIdx = colonMatch ? translated.indexOf(colonMatch[0]) : -1;
+  if (colonIdx > 0) {
+    return {
+      name: translated.slice(0, colonIdx).trim(),
+      desc: translated.slice(colonIdx + 1).trim(),
+    };
+  }
+  return {
+    name: translateFn(fallbackName),
+    desc: translated,
+  };
+}
+

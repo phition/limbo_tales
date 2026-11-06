@@ -7,6 +7,7 @@ import { CustomAssetService } from '../services/CustomAssetService';
 import { getHeroEquippedBossSet, getWeaponTrait, getEquipmentTemplateId } from '../data/equipment';
 import { getRarityBorderStyle } from '../utils/rarity';
 import { useI18n } from '../hooks/useI18n';
+import { PassiveSkillCard } from './PassiveSkillCard';
 
 interface Props {
   hero: Mercenary | null;
@@ -339,6 +340,9 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
               </div>
             );
           })()}
+          {cls?.passiveDesc && (
+            <PassiveSkillCard passiveDesc={cls.passiveDesc} className="mt-1 mb-1" />
+          )}
           <div className="text-[11px] text-[#8b9bb4] mt-0.5 flex flex-col gap-0.5">
             <div>
               장착 스킬: {(hero.equippedSkills || []).length > 0 ? (hero.equippedSkills || []).map(sid => gm.resolveSkillData(sid, hero)?.name || sid).join(', ') : '기본 직업 스킬'}

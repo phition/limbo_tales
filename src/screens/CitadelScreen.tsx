@@ -43,6 +43,7 @@ import { HERO_TRAITS, GameManager } from '../managers/GameManager';
 import { SynergyGuideModal } from '../components/SynergyGuideModal';
 import { getRarityColor, getRarityLabel, getRarityBorderStyle } from '../utils/rarity';
 import { PartySynergyPanel } from '../components/PartySynergyPanel';
+import { PassiveSkillCard } from '../components/PassiveSkillCard';
 import { EpicQuestDialogueModal } from '../components/EpicQuestDialogueModal';
 import { IntroStoryModal } from '../components/IntroStoryModal';
 import { CemeteryDrawer } from '../components/CemeteryDrawer';
@@ -3695,7 +3696,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
     hero:    { label: 'H', tag: 'H', color: '#dcc496' },
     elite:   { label: 'H', tag: 'H', color: '#dcc496' },
     epic:    { label: 'E', tag: 'E', color: '#ba68c8' },
-    legend:  { label: 'E', tag: 'E', color: '#ffd54f' },
+    legend:  { label: 'L', tag: 'L', color: '#ffd54f' },
   };
 
   const timerText = formatDuration(state.tavernArrivalSecondsLeft || 0, lang, true);
@@ -3836,22 +3837,29 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-sm text-[#ededed] group-hover:text-white transition-colors">{cand.name}</span>
+                      <span className="font-bold text-sm text-[#ededed] group-hover:text-white transition-colors">{tr(cand.name)}</span>
                       <span
                         className="text-[9px] px-1.5 py-0.2 rounded font-bold font-mono"
                         style={{ color: gMeta.color, background: `${gMeta.color}15`, border: `1px solid ${gMeta.color}40` }}
                       >
                         [{gMeta.tag}]
                       </span>
-                      <span className="text-xs text-[#b89758] font-semibold">{cls.name}</span>
+                      <span className="text-xs text-[#b89758] font-semibold">{tr(cls.name)}</span>
                       {cand.trait && (
                         <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#b89758]/15 text-[#ffd54f] border border-[#b89758]/30 font-bold">
-                          ✨ {cand.trait}
+                          ✨ {tr(cand.trait)}
                         </span>
                       )}
                     </div>
-                    <div className="text-[11px] text-[#9da3af] mt-0.5 truncate">
-                      {tr('고유기')}: <strong className="text-[#dcc496]">[{cls.specialSkill.name}]</strong>
+                    {/* 🌟 직업 고유 패시브 스킬 */}
+                    {cls.passiveDesc && (
+                      <PassiveSkillCard passiveDesc={cls.passiveDesc} compact />
+                    )}
+                    <div className="text-[11px] text-[#9da3af] mt-0.5 truncate flex items-center gap-1.5">
+                      <span className="text-[8.5px] px-1 py-0.2 rounded bg-[#b89758]/20 text-[#ffd54f] font-bold border border-[#b89758]/40 shrink-0 font-mono">
+                        {tr('고유기')}
+                      </span>
+                      <strong className="text-[#dcc496] truncate">[{tr(cls.specialSkill.name)}]</strong>
                     </div>
                   </div>
                 </div>
@@ -3925,23 +3933,23 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
 
         return (
           <Modal
-            title={`📜 용병 영입 계약서 — [${detailCandidate.name}]`}
+            title={`📜 ${tr('용병 영입 계약서')} — [${tr(detailCandidate.name)}]`}
             open={!!detailCandidate}
             onClose={() => setDetailCandidate(null)}
             footer={
               <div className="flex items-center justify-between w-full">
                 <div className="text-xs font-mono">
-                  <span className="text-[#8b9bb4]">보유 골드: </span>
+                  <span className="text-[#8b9bb4]">{tr('보유 골드')}: </span>
                   <span className={canAfford ? 'text-[#38ef7d] font-bold' : 'text-[#ef5350] font-bold'}>
                     🪙 {state.resources.gold}G
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <button className="btn btn-ghost text-xs px-3 py-1.5" onClick={() => setDetailCandidate(null)}>
-                    취소
+                    {tr('취소')}
                   </button>
                   <ActionButton
-                    label={isFull ? '정원 초과' : canAfford ? `🤝 고용 체결 (🪙${detailCandidate.hiringCost}G)` : '골드 부족'}
+                    label={isFull ? tr('정원 초과') : canAfford ? `🤝 ${tr('고용 체결')} (🪙${detailCandidate.hiringCost}G)` : tr('골드 부족')}
                     variant={isFull ? 'ghost' : canAfford ? 'primary' : 'ghost'}
                     size="sm"
                     disabled={isFull || !canAfford}
@@ -3973,14 +3981,14 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="font-bold text-base text-white">{detailCandidate.name}</span>
+                    <span className="font-bold text-base text-white">{tr(detailCandidate.name)}</span>
                     <span
                       className="text-[10px] px-1.5 py-0.2 rounded font-bold font-mono"
                       style={{ color: gMeta.color, background: `${gMeta.color}15`, border: `1px solid ${gMeta.color}40` }}
                     >
                       [{gMeta.tag}]
                     </span>
-                    <span className="text-xs text-[#b89758] font-bold">{cls.name}</span>
+                    <span className="text-xs text-[#b89758] font-bold">{tr(cls.name)}</span>
                   </div>
                   {detailCandidate.trait && (() => {
                     const tInfo = HERO_TRAITS[detailCandidate.trait];
@@ -3989,7 +3997,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                         <div className="flex items-center justify-between text-[11px]">
                           <span className="font-bold text-[#ffd54f] flex items-center gap-1">
                             <span>✨ {tr('개인 성향')}:</span>
-                            <span className="text-white font-mono">[{detailCandidate.trait}]</span>
+                            <span className="text-white font-mono">[{tr(detailCandidate.trait)}]</span>
                           </span>
                           <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#38ef7d]/20 text-[#38ef7d] font-bold border border-[#38ef7d]/40">
                             {tr('스탯 영구 반영')}
@@ -3997,7 +4005,7 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                         </div>
                         {tInfo && (
                           <div className="text-[11px] text-[#d1d5db] leading-relaxed">
-                            💡 <strong className="text-[#ffd54f]">{tr('효과')}:</strong> {tInfo.desc}
+                            💡 <strong className="text-[#ffd54f]">{tr('효과')}:</strong> {tr(tInfo.desc)}
                           </div>
                         )}
                         <div className="text-[10px] text-[#8b9bb4]">
@@ -4040,9 +4048,14 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                 </div>
               </div>
 
-              {/* 하단: 보유 전투 기술 (고유기 + 기본 스킬 2종) */}
+              {/* 하단: 보유 전투 기술 (패시브 + 고유기 + 기본 스킬 2종) */}
               <div className="p-3 bg-[#0a0d14] border border-[#242732] rounded-xl flex flex-col gap-2">
-                <span className="text-xs font-bold text-[#dcc496]">⚔️ {tr('습득 전투 스킬')}</span>
+                <span className="text-xs font-bold text-[#dcc496]">⚔️ {tr('습득 전투 스킬 (패시브 1 + 액티브 3)')}</span>
+
+                {/* 🌟 직업 고유 패시브 스킬 (상시 적용) */}
+                {cls.passiveDesc && (
+                  <PassiveSkillCard passiveDesc={cls.passiveDesc} />
+                )}
                 
                 {/* 고유기 */}
                 <div className="p-2.5 rounded-lg bg-[#14120c] border border-[#b89758]/40 flex items-center justify-between">
@@ -4051,9 +4064,9 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                     <div>
                       <div className="flex items-center gap-1.5">
                         <span className="text-[9px] px-1 py-0.2 rounded bg-[#b89758]/20 text-[#ffd54f] font-bold font-mono">{tr('고유기')}</span>
-                        <span className="font-bold text-xs text-white">{cls.specialSkill.name}</span>
+                        <span className="font-bold text-xs text-white">{tr(cls.specialSkill.name)}</span>
                       </div>
-                      <div className="text-[10px] text-[#9da3af] mt-0.5">{cls.specialSkill.description}</div>
+                      <div className="text-[10px] text-[#9da3af] mt-0.5">{tr(cls.specialSkill.description)}</div>
                     </div>
                   </div>
                   <span className="text-xs text-[#7986cb] font-mono shrink-0 ml-1 font-bold">{cls.specialSkill.manaCost}MP</span>
@@ -4067,9 +4080,9 @@ const TavernDrawer: React.FC<{ onBack: () => void; onNavigateDrawer?: (key: stri
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="text-[9px] px-1 py-0.2 rounded bg-[#242732] text-[#dcc496] font-bold font-mono">{tr('기본기')}</span>
-                          <span className="font-bold text-xs text-white">{sk.name}</span>
+                          <span className="font-bold text-xs text-white">{tr(sk.name)}</span>
                         </div>
-                        <div className="text-[10px] text-[#9da3af] mt-0.5">{sk.description}</div>
+                        <div className="text-[10px] text-[#9da3af] mt-0.5">{tr(sk.description)}</div>
                       </div>
                     </div>
                     <span className="text-xs text-[#7986cb] font-mono shrink-0 ml-1 font-bold">{sk.manaCost}MP</span>
@@ -4327,7 +4340,7 @@ const BarracksDrawer: React.FC<{
     hero:    { label: 'H', tag: 'H', color: '#00d2ff' },
     elite:   { label: 'H', tag: 'H', color: '#00d2ff' },
     epic:    { label: 'E', tag: 'E', color: '#ce93d8' },
-    legend:  { label: 'E', tag: 'E', color: '#ce93d8' },
+    legend:  { label: 'L', tag: 'L', color: '#ffd54f' },
   };
 
   const EQ_SLOTS: { slot: EquipmentSlot; label: string; icon: string }[] = [
@@ -5092,14 +5105,14 @@ const BarracksDrawer: React.FC<{
                   <div className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl flex flex-col gap-2 shadow-sm">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-base text-white">{hero.name}</span>
+                        <span className="font-bold text-base text-white">{tr(hero.name)}</span>
                         <span
                           className="text-[10px] px-1.5 py-0.2 rounded font-bold"
                           style={{ color: gMeta.color, background: `${gMeta.color}22`, border: `1px solid ${gMeta.color}44` }}
                         >
                           [{gMeta.tag}]
                         </span>
-                        <span className="text-xs text-[#c8aa6e] font-medium">{cls.name}</span>
+                        <span className="text-xs text-[#c8aa6e] font-medium">{tr(cls.name)}</span>
                         <span className="text-xs font-bold font-mono text-[#ffd54f] bg-[#ffd54f18] px-2 py-0.5 rounded border border-[#ffd54f44] shadow-sm">
                           Lv.{hero.level}
                         </span>
@@ -5290,7 +5303,7 @@ const BarracksDrawer: React.FC<{
                 <div className="text-xs text-[#c8aa6e] font-bold mb-2 flex items-center justify-between">
                   <span className="flex items-center gap-1">
                     <span>📖</span>
-                    <span>전투 스킬 슬롯 (고유기 1 + 장착 2)</span>
+                    <span>{tr('전투 스킬 (패시브 1 + 액티브 3)')}</span>
                   </span>
                   <button
                     className="text-[10px] px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] font-bold hover:bg-[#c8aa6e33]"
@@ -5301,6 +5314,11 @@ const BarracksDrawer: React.FC<{
                 </div>
 
                 <div className="flex flex-col gap-1.5">
+                  {/* 🌟 고유 패시브 스킬 (액티브 스킬 상단 표시) */}
+                  {cls.passiveDesc && (
+                    <PassiveSkillCard passiveDesc={cls.passiveDesc} />
+                  )}
+
                   {/* 고유기 (고정) */}
                   <div className="p-2 rounded-lg bg-[#1a1711] border border-[#ffd54f44] flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -5308,11 +5326,11 @@ const BarracksDrawer: React.FC<{
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="text-[9px] px-1 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
-                            {cls.specialSkill.name.includes('[궁극기]') ? '궁극기' : '고유기'}
+                            {cls.specialSkill.name.includes('[궁극기]') ? tr('궁극기') : tr('고유기')}
                           </span>
-                          <span className="font-bold text-xs text-white">{cls.specialSkill.name}</span>
+                          <span className="font-bold text-xs text-white">{tr(cls.specialSkill.name)}</span>
                         </div>
-                        <div className="text-[10px] text-[#8b9bb4] mt-0.5">{cls.specialSkill.description}</div>
+                        <div className="text-[10px] text-[#8b9bb4] mt-0.5">{tr(cls.specialSkill.description)}</div>
                       </div>
                     </div>
                     <span className="text-xs text-[#64b5f6] font-mono shrink-0 ml-1">{cls.specialSkill.manaCost}MP</span>
@@ -5326,7 +5344,7 @@ const BarracksDrawer: React.FC<{
                       onClick={() => setSkillOverlayHero(hero)}
                     >
                       <div className="flex items-center justify-between w-full mb-1">
-                        <span className="text-[9px] text-[#c8aa6e] font-bold">전술 스킬 1</span>
+                        <span className="text-[9px] text-[#c8aa6e] font-bold">{tr('전술 스킬 1')}</span>
                         {equippedSkill1 && <span className="text-[9px] text-[#64b5f6] font-mono">{equippedSkill1.manaCost}MP</span>}
                       </div>
                       <div className="flex items-center gap-1.5">
@@ -5336,7 +5354,7 @@ const BarracksDrawer: React.FC<{
                           <span className="text-lg">➕</span>
                         )}
                         <span className="font-bold text-xs text-white truncate">
-                          {equippedSkill1 ? equippedSkill1.name : '스킬 장착'}
+                          {equippedSkill1 ? tr(equippedSkill1.name) : tr('스킬 장착')}
                         </span>
                       </div>
                     </button>
@@ -5347,7 +5365,7 @@ const BarracksDrawer: React.FC<{
                       onClick={() => setSkillOverlayHero(hero)}
                     >
                       <div className="flex items-center justify-between w-full mb-1">
-                        <span className="text-[9px] text-[#c8aa6e] font-bold">전술 스킬 2</span>
+                        <span className="text-[9px] text-[#c8aa6e] font-bold">{tr('전술 스킬 2')}</span>
                         {equippedSkill2 && <span className="text-[9px] text-[#64b5f6] font-mono">{equippedSkill2.manaCost}MP</span>}
                       </div>
                       <div className="flex items-center gap-1.5">
@@ -5357,7 +5375,7 @@ const BarracksDrawer: React.FC<{
                           <span className="text-lg">➕</span>
                         )}
                         <span className="font-bold text-xs text-white truncate">
-                          {equippedSkill2 ? equippedSkill2.name : '스킬 장착'}
+                          {equippedSkill2 ? tr(equippedSkill2.name) : tr('스킬 장착')}
                         </span>
                       </div>
                     </button>
@@ -5863,13 +5881,9 @@ const BarracksDrawer: React.FC<{
                   </div>
 
                   {/* 패시브 특성 */}
-                  <div className="panel p-2.5 bg-[#0f172a] border border-[#1e293b] rounded-xl flex items-center gap-2">
-                    <span className="text-base">🛡️</span>
-                    <div>
-                      <div className="text-[10px] text-[#38ef7d] font-bold">클래스 고유 패시브</div>
-                      <div className="text-[11px] text-[#cfd8dc] mt-0.5">{targetClass.passiveDesc}</div>
-                    </div>
-                  </div>
+                  {targetClass.passiveDesc && (
+                    <PassiveSkillCard passiveDesc={targetClass.passiveDesc} />
+                  )}
 
                   {/* 전직 비용 및 요구 조건 안내 바 */}
                   <div className="p-2.5 rounded-xl bg-[#090c14] border border-[#1f2738] flex items-center justify-between">
@@ -7011,6 +7025,11 @@ const SkillManagerOverlay: React.FC<{
                   {tr('최대 6개 습득 · 2개 장착')}
                 </span>
               </div>
+
+              {/* 🌟 고유 패시브 스킬 (상시 적용) */}
+              {cClass?.passiveDesc && (
+                <PassiveSkillCard passiveDesc={cClass.passiveDesc} className="mb-0.5" />
+              )}
 
               {learnedSkills.length === 0 ? (
                 <div className="panel p-4 text-center text-[#8b9bb4] text-xs bg-[#0f1420]">

@@ -7,6 +7,7 @@ import { CustomAssetService } from '../services/CustomAssetService';
 import { PartySynergyPanel } from './PartySynergyPanel';
 import { GameIcon } from './GameIcon';
 import { useI18n } from '../hooks/useI18n';
+import { PassiveSkillCard } from './PassiveSkillCard';
 
 interface Props {
   open: boolean;
@@ -279,6 +280,7 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
           {/* ════════ 2. 스킬 교체 탭 ════════ */}
           {activeTab === 'skills' && currentSelectedHero && (() => {
             const isSelectedHeroDead = currentSelectedHero.currentHp <= 0;
+            const heroClass = CHARACTER_CLASSES[currentSelectedHero.classId];
             return (
               <div className="space-y-3">
                 {/* 파티원 선택 셀렉터 */}
@@ -330,6 +332,11 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                   </div>
                 ) : (
                   <>
+                    {/* 🌟 직업 고유 패시브 스킬 (액티브 슬롯 상단 표시) */}
+                    {heroClass?.passiveDesc && (
+                      <PassiveSkillCard passiveDesc={heroClass.passiveDesc} />
+                    )}
+
                     {/* 현재 장착 중인 스킬 2개 슬롯 */}
                     <div className="bg-[#121927] p-2.5 rounded-xl border border-[#1f2d45]">
                       <div className="text-xs font-bold text-[#ce93d8] mb-2 flex items-center justify-between">

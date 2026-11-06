@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 import { FirebaseService, UserProfile } from '../services/FirebaseService';
 import { PlayGamesService } from '../services/PlayGamesService';
 import { useGameManager } from '../hooks/useGameManager';
@@ -13,6 +14,7 @@ interface Props {
 type AuthMode = 'login' | 'signup';
 
 export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
+  const isMobile = useIsMobile();
   const { gm } = useGameManager();
   const { lang, setLanguage, tr } = useI18n();
   const [mode, setMode] = useState<AuthMode>('login');
@@ -243,14 +245,15 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
       {/* ── 1. 시네마틱 성화 비디오 & 배경 일러스트 ── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <video
+          key={isMobile ? 'mobile' : 'desktop'}
           autoPlay
           loop
           muted
           playsInline
-          poster="assets/citadel_bonfire.jpg"
+          poster={isMobile ? 'assets/citadel_9x16_mobile.jpg' : 'assets/citadel_bonfire.jpg'}
           className="w-full h-full object-cover scale-105 opacity-35 filter brightness-75 contrast-125 transition-transform duration-1000"
         >
-          <source src="assets/citadel_bonfire.mp4" type="video/mp4" />
+          <source src={isMobile ? 'assets/citadel_9x16_mobile.mp4' : 'assets/citadel_bonfire.mp4'} type="video/mp4" />
         </video>
         {/* 심연의 다크 비네트 & 그라데이션 오버레이 */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#07080d] via-[#07080d]/85 to-[#07080d]/70" />

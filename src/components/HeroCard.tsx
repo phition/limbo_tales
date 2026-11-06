@@ -18,7 +18,7 @@ const GRADE_META: Record<string, { label: string; tag: string; color: string }> 
   hero:    { label: 'H', tag: 'H', color: '#00d2ff' },
   elite:   { label: 'H', tag: 'H', color: '#00d2ff' },
   epic:    { label: 'E', tag: 'E', color: '#ce93d8' },
-  legend:  { label: 'E', tag: 'E', color: '#ce93d8' },
+  legend:  { label: 'L', tag: 'L', color: '#ffd54f' },
 };
 
 export const HeroCard: React.FC<Props> = ({ hero, selected, onClick, compact }) => {

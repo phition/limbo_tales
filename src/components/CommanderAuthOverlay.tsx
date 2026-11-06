@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 interface Props {
   statusMessage?: string;
@@ -10,6 +11,7 @@ export const CommanderAuthOverlay: React.FC<Props> = ({
   subMessage = '방주 원정대 세션 및 성채 기록 동기화 중...',
   isCompleted = false,
 }) => {
+  const isMobile = useIsMobile();
   const [dotCount, setDotCount] = useState(4);
 
   // '....' 애니메이션 틱 효과
@@ -24,19 +26,23 @@ export const CommanderAuthOverlay: React.FC<Props> = ({
     ? '지휘관 인증 확인 완료'
     : `지휘관 확인 중${'.'.repeat(dotCount)}`;
 
+  const videoSrc = isMobile ? 'assets/citadel_9x16_mobile.mp4' : 'assets/citadel_bonfire.mp4';
+  const posterSrc = isMobile ? 'assets/citadel_9x16_mobile.jpg' : 'assets/citadel_bonfire.jpg';
+
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#07080d] select-none overflow-hidden animate-fade-in">
       {/* ── 1. 시네마틱 성화 비디오 & 배경 ── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <video
+          key={videoSrc}
           autoPlay
           loop
           muted
           playsInline
-          poster="assets/citadel_bonfire.jpg"
+          poster={posterSrc}
           className="w-full h-full object-cover scale-105 opacity-30 filter brightness-75 contrast-125 transition-transform duration-1000"
         >
-          <source src="assets/citadel_bonfire.mp4" type="video/mp4" />
+          <source src={videoSrc} type="video/mp4" />
         </video>
         {/* 심연의 다크 비네트 & 그라데이션 */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#07080d] via-[#07080d]/85 to-[#07080d]/75" />
