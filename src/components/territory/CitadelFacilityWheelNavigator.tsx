@@ -62,6 +62,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
   }, []);
 
   // 드래그/터치 인터랙션 추적
+  const isPointerDownRef = useRef<boolean>(false);
   const isDraggingRef = useRef<boolean>(false);
   const hasDraggedRef = useRef<boolean>(false);
   const dragStartYRef = useRef<number>(0);
@@ -209,7 +210,8 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
     // 버튼 클릭 등 명시적 터치 방해 금지
     if ((e.target as HTMLElement).closest('button')) return;
 
-    isDraggingRef.current = true;
+    isPointerDownRef.current = true;
+    isDraggingRef.current = false;
     hasDraggedRef.current = false;
     isInertiaRef.current = false;
     velocityRef.current = 0;
@@ -218,28 +220,34 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
     lastYRef.current = e.clientY;
     lastTimeRef.current = performance.now();
     velocityHistoryRef.current = [];
-
-    // 포인터 캡처
-    try {
-      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    } catch {}
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDraggingRef.current) return;
+    if (!isPointerDownRef.current) return;
 
     const currentY = e.clientY;
+    const dyTotal = currentY - dragStartYRef.current;
+
+    // 8px 이상 이동 시에만 드래그로 판정하고 포인터 캡처 활성화
+    if (!isDraggingRef.current) {
+      if (Math.abs(dyTotal) > 8) {
+        isDraggingRef.current = true;
+        hasDraggedRef.current = true;
+        try {
+          (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        } catch {}
+      } else {
+        return;
+      }
+    }
+
     const now = performance.now();
     const dt = now - lastTimeRef.current;
     const dy = currentY - lastYRef.current;
 
-    if (Math.abs(currentY - dragStartYRef.current) > 7) {
-      hasDraggedRef.current = true;
-    }
-
     // 감도: 화면 높이에 따라 적절한 픽셀-대-카드 비율 (모바일 ~155px, 대형화면 ~240px)
     const cardSpacing = isLargeScreen ? 240 : 155;
-    const posDelta = -((currentY - dragStartYRef.current) / cardSpacing);
+    const posDelta = -(dyTotal / cardSpacing);
     posRef.current = dragStartPosRef.current + posDelta;
 
     // 속도 계산 및 이력 보존 (최근 50ms)
@@ -259,38 +267,43 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDraggingRef.current) return;
-    isDraggingRef.current = false;
+    if (!isPointerDownRef.current) return;
+    isPointerDownRef.current = false;
 
-    try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch {}
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {}
 
-    // 🚀 플릭(Flick) 속도 계산 (가속 가미)
-    let avgVelocity = 0;
-    if (velocityHistoryRef.current.length > 0) {
-      const totalDy = velocityHistoryRef.current.reduce((s, p) => s + p.dy, 0);
-      const totalDt = velocityHistoryRef.current.reduce((s, p) => s + p.dt, 0);
-      avgVelocity = totalDt > 0 ? totalDy / totalDt : 0;
-    }
+      // 🚀 플릭(Flick) 속도 계산 (가속 가미)
+      let avgVelocity = 0;
+      if (velocityHistoryRef.current.length > 0) {
+        const totalDy = velocityHistoryRef.current.reduce((s, p) => s + p.dy, 0);
+        const totalDt = velocityHistoryRef.current.reduce((s, p) => s + p.dt, 0);
+        avgVelocity = totalDt > 0 ? totalDy / totalDt : 0;
+      }
 
-    const flickThreshold = 0.35; // 튕기기 제스처 기준 속도
-    if (Math.abs(avgVelocity) > flickThreshold) {
-      // ⚡ "튕기듯이 돌렸을 때 살짝 가속되면서 돌아가는 느낌" - 가속 부스트 계수 1.35x 적용
-      const flickBoost = 1.35;
-      const initialV = avgVelocity * 0.024 * flickBoost;
-      velocityRef.current = Math.max(-0.55, Math.min(0.55, initialV));
-      isInertiaRef.current = true;
+      const flickThreshold = 0.35; // 튕기기 제스처 기준 속도
+      if (Math.abs(avgVelocity) > flickThreshold) {
+        // ⚡ "튕기듯이 돌렸을 때 살짝 가속되면서 돌아가는 느낌" - 가속 부스트 계수 1.35x 적용
+        const flickBoost = 1.35;
+        const initialV = avgVelocity * 0.024 * flickBoost;
+        velocityRef.current = Math.max(-0.55, Math.min(0.55, initialV));
+        isInertiaRef.current = true;
+      } else {
+        // 일반 드래그 종료: 가장 가까운 정수 인덱스로 스냅
+        isInertiaRef.current = false;
+        targetPosRef.current = Math.round(posRef.current);
+      }
+
+      // 드래그 종료 직후 onClick 차단 보호 (80ms 뒤 리셋)
+      setTimeout(() => {
+        hasDraggedRef.current = false;
+      }, 80);
     } else {
-      // 일반 드래그 종료: 가장 가까운 정수 인덱스로 스냅
-      isInertiaRef.current = false;
-      targetPosRef.current = Math.round(posRef.current);
-    }
-
-    // 드래그 종료 직후 onClick 차단 보호 (50ms 뒤 리셋)
-    setTimeout(() => {
       hasDraggedRef.current = false;
-    }, 60);
+    }
   };
 
   // ⌨️ 키보드 상/하 화살표 지원
@@ -388,7 +401,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                 pointerEvents: 'auto',
                 willChange: 'transform, opacity',
               }}
-              className={`absolute w-[92%] sm:w-[520px] md:w-[580px] rounded-2xl overflow-hidden border transition-shadow duration-200 cursor-pointer shadow-2xl flex flex-col ${
+              className={`workstation-wheel-card absolute w-[92%] sm:w-[520px] md:w-[580px] rounded-2xl overflow-hidden border transition-shadow duration-200 cursor-pointer shadow-2xl flex flex-col ${
                 isCenter
                   ? isLocked
                     ? 'bg-[#10141f] border-[#4a5568] shadow-[0_0_25px_rgba(0,0,0,0.85)]'
@@ -512,21 +525,35 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                   </span>
 
                   {isLocked ? (
-                    <div className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-[#141924] border border-[#26334a] text-[#8896ab] text-[11px] sm:text-xs font-bold flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const card = (e.currentTarget.closest('.workstation-wheel-card') as HTMLElement) || e.currentTarget;
+                        onSelect(item, card);
+                      }}
+                      className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-[#141924] hover:bg-[#202738] border border-[#26334a] hover:border-[#b89758] text-[#8896ab] hover:text-[#dcc496] text-[11px] sm:text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors active:scale-95"
+                    >
                       <span>{tr('건설하러 가기')}</span>
                       <span>➔</span>
-                    </div>
+                    </button>
                   ) : (
-                    <div
-                      className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-xl text-xs sm:text-[13px] font-black transition-all shadow-xs flex items-center gap-1 ${
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const card = (e.currentTarget.closest('.workstation-wheel-card') as HTMLElement) || e.currentTarget;
+                        onSelect(item, card);
+                      }}
+                      className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-xl text-xs sm:text-[13px] font-black transition-all shadow-xs flex items-center gap-1 cursor-pointer active:scale-95 ${
                         isCenter
-                          ? 'bg-gradient-to-r from-[#b89758] to-[#ffd54f] text-[#08090b] shadow-[0_0_12px_rgba(184,151,88,0.5)] scale-102'
-                          : 'bg-[#181f2c] border border-[#2e3b52] text-[#8b9bb4]'
+                          ? 'bg-gradient-to-r from-[#b89758] to-[#ffd54f] text-[#08090b] shadow-[0_0_12px_rgba(184,151,88,0.5)] scale-102 hover:brightness-110'
+                          : 'bg-[#181f2c] border border-[#2e3b52] text-[#8b9bb4] hover:border-[#b89758] hover:text-white'
                       }`}
                     >
                       <span>{tr('입장하기')}</span>
                       <span className="text-[10px] sm:text-xs">▶</span>
-                    </div>
+                    </button>
                   )}
                 </div>
               </div>
