@@ -8,11 +8,13 @@
   <style>
     :root {
       --bg-dark: #0a0c14;
-      --bg-card: rgba(18, 22, 36, 0.92);
+      --bg-card: rgba(18, 22, 36, 0.94);
       --border-gold: #c8aa6e;
       --border-epic: #ce93d8;
       --epic-glow: rgba(206, 147, 216, 0.45);
       --epic-purple: #ba68c8;
+      --fever-fire: #ff9100;
+      --fever-glow: rgba(255, 145, 0, 0.75);
       --hp-color: #ef5350;
       --mp-color: #42a5f5;
       --shield-color: #26c6da;
@@ -52,6 +54,16 @@
       display: flex;
       flex-direction: column;
       box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(200, 170, 110, 0.3);
+      transition: border 0.3s;
+    }
+
+    #game-container.fever-active {
+      box-shadow: 0 0 40px rgba(255, 145, 0, 0.8), 0 0 4px 2px #ff9100;
+      animation: feverFramePulse 1.2s infinite alternate ease-in-out;
+    }
+    @keyframes feverFramePulse {
+      0% { box-shadow: 0 0 30px rgba(255, 145, 0, 0.6), 0 0 2px 1px #ff9100; }
+      100% { box-shadow: 0 0 50px rgba(255, 61, 0, 0.95), 0 0 6px 3px #ffd600; }
     }
 
     /* Background image & atmosphere */
@@ -63,9 +75,9 @@
       height: 100%;
       background: url('../assets/dungeon_5.jpg') center center / cover no-repeat,
                   radial-gradient(circle at 50% 30%, #201a35 0%, #080910 85%);
-      opacity: 0.42;
-      filter: brightness(0.7) contrast(1.15);
-      transition: filter 0.6s ease;
+      opacity: 0.45;
+      filter: brightness(0.68) contrast(1.15);
+      transition: filter 0.6s ease, transform 0.6s ease;
       z-index: 1;
     }
 
@@ -92,8 +104,8 @@
     header {
       position: relative;
       z-index: 10;
-      height: 52px;
-      background: rgba(10, 12, 20, 0.92);
+      height: 50px;
+      background: rgba(10, 12, 20, 0.94);
       border-bottom: 1px solid rgba(200, 170, 110, 0.35);
       display: flex;
       align-items: center;
@@ -111,7 +123,7 @@
     .floor-pill {
       background: linear-gradient(135deg, #7b1fa2, #4a148c);
       color: #fff;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       padding: 3px 8px;
       border-radius: 4px;
@@ -178,46 +190,45 @@
       overflow: hidden;
     }
 
-    /* Phase 1: Dungeon Exploration View */
+    /* =========================================================================
+       Phase 1: Interactive Dungeon Exploration & Event Progression
+       ========================================================================= */
     #explore-phase {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 16px 14px;
+      padding: 14px;
       z-index: 6;
+      overflow-y: auto;
     }
 
-    .explore-hero-banner {
-      background: linear-gradient(180deg, rgba(30, 24, 46, 0.85) 0%, rgba(15, 17, 28, 0.95) 100%);
+    .explore-party-card {
+      background: linear-gradient(180deg, rgba(28, 22, 44, 0.9) 0%, rgba(14, 16, 26, 0.95) 100%);
       border: 1px solid rgba(206, 147, 216, 0.4);
       border-radius: 10px;
-      padding: 12px;
+      padding: 10px 12px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
     }
 
-    .explore-party-header {
+    .party-header-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 6px;
+      padding-bottom: 5px;
     }
 
-    .party-tag {
-      font-size: 12px;
+    .party-title {
+      font-size: 11.5px;
       font-weight: 800;
       color: var(--epic-purple);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .gear-notice {
-      font-size: 10.5px;
+    .party-gear-tag {
+      font-size: 10px;
       color: #ffd54f;
       background: rgba(255, 213, 79, 0.15);
       padding: 2px 6px;
@@ -226,190 +237,239 @@
       font-weight: 700;
     }
 
-    .party-cards-grid {
+    .party-grid-preview {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 6px;
     }
 
-    .explore-hero-card {
-      background: rgba(25, 28, 42, 0.9);
-      border: 1px solid rgba(206, 147, 216, 0.5);
-      border-radius: 8px;
-      padding: 8px 6px;
+    .mini-hero-item {
+      background: rgba(22, 26, 38, 0.9);
+      border: 1px solid rgba(206, 147, 216, 0.4);
+      border-radius: 6px;
+      padding: 6px 4px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      position: relative;
       cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
     }
-    .explore-hero-card:hover {
-      transform: translateY(-2px);
-      border-color: #ffd54f;
-    }
-
-    .hero-avatar-box {
-      width: 48px;
-      height: 48px;
-      border-radius: 8px;
-      border: 2px solid var(--epic-purple);
+    .mini-hero-thumb {
+      width: 42px;
+      height: 42px;
+      border-radius: 6px;
+      border: 1.5px solid var(--epic-purple);
       overflow: hidden;
-      position: relative;
-      background: #111;
-      margin-bottom: 5px;
-      box-shadow: 0 0 10px var(--epic-glow);
+      margin-bottom: 4px;
     }
-    .hero-avatar-box img {
+    .mini-hero-thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
-    .hero-badge-epic {
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      background: var(--epic-purple);
+    .mini-hero-name {
+      font-size: 10.5px;
+      font-weight: 800;
       color: #fff;
-      font-size: 8px;
-      font-weight: 900;
-      padding: 1px 3px;
-      border-radius: 2px;
     }
-
-    .explore-hero-name {
-      font-size: 11px;
-      font-weight: 700;
-      color: #fff;
-      white-space: nowrap;
-    }
-
-    .explore-hero-role {
-      font-size: 9px;
-      color: #bbb;
-      margin-bottom: 4px;
-    }
-
-    .explore-hero-stats {
-      font-size: 9px;
+    .mini-hero-tag {
+      font-size: 8.5px;
       color: #8bc34a;
       font-weight: 700;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 2px 4px;
-      border-radius: 3px;
+    }
+
+    /* Exploration Map Corridor & Step Tracker */
+    .dungeon-track-container {
+      background: rgba(16, 20, 32, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .track-step-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 800;
+      color: #bbb;
+    }
+    .track-step-labels .active-step {
+      color: #ffd54f;
+    }
+
+    .track-progress-bar {
       width: 100%;
-      margin-top: 2px;
-    }
-
-    .explore-gear-pill {
-      font-size: 8.5px;
-      color: #ffe082;
-      background: rgba(255, 193, 7, 0.15);
-      border: 1px solid rgba(255, 213, 79, 0.3);
+      height: 6px;
+      background: rgba(0, 0, 0, 0.6);
       border-radius: 3px;
-      padding: 1px 3px;
-      margin-top: 4px;
-      font-weight: 700;
+      overflow: hidden;
+      position: relative;
+    }
+    .track-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #7b1fa2, #ffd54f);
+      width: 25%;
+      transition: width 0.4s ease;
     }
 
-    /* Atmosphere Corridor Showcase */
-    .corridor-center {
+    .corridor-interactive-center {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 24px 10px;
+      padding: 16px 8px;
     }
 
-    .corridor-rune {
-      width: 80px;
-      height: 80px;
+    .corridor-icon-box {
+      width: 74px;
+      height: 74px;
       border-radius: 50%;
-      border: 2px dashed rgba(206, 147, 216, 0.5);
+      border: 2px dashed rgba(206, 147, 216, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
+      font-size: 32px;
       color: #ce93d8;
-      margin-bottom: 16px;
-      animation: runeRotate 16s linear infinite;
+      margin-bottom: 12px;
       box-shadow: 0 0 25px rgba(186, 104, 200, 0.35);
-      background: radial-gradient(circle, rgba(123, 31, 162, 0.2) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(123, 31, 162, 0.25) 0%, transparent 70%);
+      animation: pulseRune 2s infinite ease-in-out;
     }
-    @keyframes runeRotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes pulseRune {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); box-shadow: 0 0 35px rgba(255, 213, 79, 0.5); }
     }
 
-    .corridor-title {
-      font-size: 20px;
+    .corridor-stage-title {
+      font-size: 18px;
       font-weight: 900;
       color: #fff;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-      margin-bottom: 6px;
+      text-shadow: 0 2px 8px #000;
+      margin-bottom: 4px;
     }
 
-    .corridor-desc {
-      font-size: 12px;
+    .corridor-stage-desc {
+      font-size: 11.5px;
       color: #cfd8dc;
       line-height: 1.5;
       max-width: 320px;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
-    .corridor-modifier-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(76, 175, 80, 0.15);
-      border: 1px solid rgba(129, 199, 132, 0.5);
-      color: #a5d6a7;
-      font-size: 10.5px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 12px;
-    }
-
-    /* Start Button */
-    .explore-action-area {
+    /* Event Dialog Box */
+    .event-card-box {
+      background: linear-gradient(180deg, rgba(34, 30, 52, 0.95) 0%, rgba(18, 20, 32, 0.98) 100%);
+      border: 1.5px solid #ffd54f;
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 0 25px rgba(255, 213, 79, 0.3);
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 10px;
+      animation: eventPop 0.3s ease-out;
+    }
+    @keyframes eventPop {
+      0% { opacity: 0; transform: scale(0.94); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
-    .btn-enter-dungeon {
+    .event-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 213, 79, 0.3);
+      padding-bottom: 6px;
+    }
+    .event-badge {
+      font-size: 10px;
+      background: #ff8f00;
+      color: #000;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .event-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffd54f;
+    }
+
+    .event-story {
+      font-size: 11px;
+      color: #e0e0e0;
+      line-height: 1.45;
+    }
+
+    .event-choice-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-event-choice {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(206, 147, 216, 0.4);
+      color: #fff;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 10px 12px;
+      border-radius: 6px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    }
+    .btn-event-choice:hover {
+      background: rgba(255, 213, 79, 0.2);
+      border-color: #ffd54f;
+      transform: translateY(-1px);
+    }
+    .btn-event-choice .choice-icon {
+      font-size: 18px;
+    }
+    .btn-event-choice .choice-text {
+      flex: 1;
+    }
+    .btn-event-choice .choice-reward {
+      font-size: 9.5px;
+      color: #8bc34a;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Primary advance action */
+    .btn-primary-advance {
       background: linear-gradient(135deg, #ffd54f 0%, #ff8f00 50%, #e65100 100%);
       color: #1a0f00;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 900;
       border: none;
-      padding: 16px 20px;
+      padding: 15px 20px;
       border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(255, 143, 0, 0.6), 0 0 10px rgba(255, 213, 79, 0.4);
+      box-shadow: 0 4px 20px rgba(255, 143, 0, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
       animation: pulseBtn 1.8s infinite ease-in-out;
-      transition: transform 0.15s;
-    }
-    .btn-enter-dungeon:active {
-      transform: scale(0.97);
+      text-transform: uppercase;
     }
     @keyframes pulseBtn {
       0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(255, 143, 0, 0.5); }
-      50% { transform: scale(1.03); box-shadow: 0 6px 28px rgba(255, 143, 0, 0.85), 0 0 16px rgba(255, 235, 59, 0.6); }
+      50% { transform: scale(1.03); box-shadow: 0 6px 28px rgba(255, 143, 0, 0.85); }
     }
 
-    /* Phase 2: Combat View */
+    /* =========================================================================
+       Phase 2: Combat Screen (3 Waves & FEVER Flow)
+       ========================================================================= */
     #battle-phase {
       display: none;
       flex: 1;
@@ -419,13 +479,13 @@
       position: relative;
     }
 
-    /* Wave / Stage Header */
+    /* Wave Header & Auto Button */
     .battle-header-info {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 6px 12px;
-      background: rgba(15, 18, 30, 0.85);
+      background: rgba(15, 18, 30, 0.9);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
@@ -442,7 +502,7 @@
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 213, 79, 0.4);
       color: #fff;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 4px;
@@ -455,14 +515,97 @@
       box-shadow: 0 0 10px rgba(255, 143, 0, 0.6);
     }
 
-    /* Monster Arena Area */
-    .arena-enemies {
-      flex: 0 0 160px;
+    /* =========================================================================
+       FEVER GAUGE BAR (5 Momentum Badges Slot Machine)
+       ========================================================================= */
+    .fever-bar-wrap {
+      background: linear-gradient(90deg, rgba(20, 16, 30, 0.95), rgba(35, 20, 15, 0.95));
+      border-bottom: 1.5px solid rgba(255, 145, 0, 0.5);
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .fever-bar-wrap.full {
+      border-bottom-color: #ffd600;
+      background: linear-gradient(90deg, rgba(60, 25, 0, 0.95), rgba(120, 45, 0, 0.95));
+      animation: feverBannerGlow 1.2s infinite alternate ease-in-out;
+    }
+    @keyframes feverBannerGlow {
+      0% { box-shadow: 0 0 10px rgba(255, 145, 0, 0.5); }
+      100% { box-shadow: 0 0 25px rgba(255, 214, 0, 0.85); }
+    }
+
+    .fever-title-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .fever-flame-icon {
+      font-size: 16px;
+      animation: flameFlicker 0.8s infinite alternate ease-in-out;
+    }
+    @keyframes flameFlicker {
+      0% { transform: scale(1) rotate(-3deg); }
+      100% { transform: scale(1.15) rotate(4deg); }
+    }
+    .fever-title-text {
+      font-size: 11px;
+      font-weight: 900;
+      color: #ff9100;
+      letter-spacing: 0.5px;
+    }
+    .fever-bar-wrap.full .fever-title-text {
+      color: #ffd600;
+    }
+
+    .fever-slots-deck {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .fever-slot {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1.5px dashed rgba(255, 255, 255, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
-      padding: 10px 14px;
+      font-size: 13px;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .fever-slot.filled {
+      border-style: solid;
+      border-color: #ffd54f;
+      background: rgba(255, 145, 0, 0.25);
+      box-shadow: 0 0 8px rgba(255, 145, 0, 0.5);
+      animation: badgeSlotIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes badgeSlotIn {
+      0% { transform: scale(0.4); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .fever-subtext {
+      font-size: 9px;
+      color: #ffe082;
+      font-weight: 700;
+    }
+
+    /* Monster Arena Area */
+    .arena-enemies {
+      flex: 0 0 155px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 8px 12px;
       position: relative;
     }
 
@@ -480,8 +623,8 @@
     .enemy-card.selected::before {
       content: '▼ TARGET';
       position: absolute;
-      top: -18px;
-      font-size: 9px;
+      top: -16px;
+      font-size: 8.5px;
       font-weight: 900;
       color: #ff5252;
       background: rgba(0, 0, 0, 0.7);
@@ -492,18 +635,18 @@
     }
 
     .enemy-avatar-wrap {
-      width: 76px;
-      height: 76px;
-      border-radius: 10px;
+      width: 70px;
+      height: 70px;
+      border-radius: 8px;
       border: 2px solid #ff5252;
       overflow: hidden;
       position: relative;
       background: #111;
-      box-shadow: 0 0 14px rgba(255, 82, 82, 0.4);
+      box-shadow: 0 0 12px rgba(255, 82, 82, 0.4);
     }
     .enemy-card.boss .enemy-avatar-wrap {
-      width: 104px;
-      height: 104px;
+      width: 98px;
+      height: 98px;
       border-color: #ffd54f;
       box-shadow: 0 0 20px rgba(255, 213, 79, 0.6);
     }
@@ -515,10 +658,10 @@
     }
 
     .enemy-name-label {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       color: #fff;
-      margin-top: 4px;
+      margin-top: 3px;
       text-shadow: 0 1px 3px #000;
     }
     .enemy-card.boss .enemy-name-label {
@@ -527,18 +670,18 @@
     }
 
     .hp-bar-container {
-      width: 80px;
-      height: 7px;
+      width: 72px;
+      height: 6px;
       background: rgba(0, 0, 0, 0.7);
-      border-radius: 4px;
+      border-radius: 3px;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      margin-top: 3px;
+      margin-top: 2px;
       position: relative;
     }
     .enemy-card.boss .hp-bar-container {
-      width: 110px;
-      height: 9px;
+      width: 100px;
+      height: 8px;
     }
 
     .hp-bar-fill {
@@ -551,13 +694,13 @@
     .enemy-status-row {
       display: flex;
       gap: 3px;
-      margin-top: 3px;
+      margin-top: 2px;
       min-height: 14px;
     }
     .status-pill {
-      font-size: 8px;
+      font-size: 7.5px;
       font-weight: 800;
-      padding: 1px 4px;
+      padding: 1px 3px;
       border-radius: 3px;
       background: rgba(0,0,0,0.6);
       border: 1px solid #fff;
@@ -565,14 +708,14 @@
 
     /* Combat Log Ticker */
     .combat-log-bar {
-      height: 28px;
-      background: rgba(10, 12, 18, 0.88);
+      height: 26px;
+      background: rgba(10, 12, 18, 0.9);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: center;
       padding: 0 12px;
-      font-size: 10.5px;
+      font-size: 10px;
       color: #cfd8dc;
       overflow: hidden;
       white-space: nowrap;
@@ -587,16 +730,16 @@
     .arena-heroes {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      padding: 8px 12px;
-      background: rgba(14, 18, 28, 0.75);
+      gap: 6px;
+      padding: 6px 10px;
+      background: rgba(14, 18, 28, 0.8);
     }
 
     .hero-combat-card {
-      background: rgba(22, 26, 40, 0.9);
+      background: rgba(22, 26, 40, 0.92);
       border: 1px solid rgba(206, 147, 216, 0.4);
-      border-radius: 8px;
-      padding: 6px;
+      border-radius: 6px;
+      padding: 5px;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -605,33 +748,33 @@
     }
     .hero-combat-card.active-turn {
       border-color: #ffd54f;
-      box-shadow: 0 0 14px rgba(255, 213, 79, 0.6);
+      box-shadow: 0 0 12px rgba(255, 213, 79, 0.6);
       transform: translateY(-2px);
     }
     .hero-combat-card.active-turn::after {
-      content: 'ACTION';
+      content: 'TURN';
       position: absolute;
-      top: -8px;
-      right: 4px;
-      font-size: 8px;
+      top: -7px;
+      right: 3px;
+      font-size: 7.5px;
       font-weight: 900;
       color: #000;
       background: #ffd54f;
-      padding: 1px 4px;
-      border-radius: 3px;
+      padding: 1px 3px;
+      border-radius: 2px;
     }
 
     .hero-combat-top {
       display: flex;
       align-items: center;
-      gap: 6px;
-      margin-bottom: 4px;
+      gap: 5px;
+      margin-bottom: 3px;
     }
 
     .hero-combat-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
       border: 1px solid var(--epic-purple);
       overflow: hidden;
       background: #111;
@@ -649,16 +792,14 @@
     }
 
     .hero-combat-name {
-      font-size: 10.5px;
-      font-weight: 700;
+      font-size: 10px;
+      font-weight: 800;
       color: #fff;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .hero-combat-lvl {
-      font-size: 8.5px;
+      font-size: 8px;
       color: var(--epic-purple);
       font-weight: 800;
     }
@@ -667,11 +808,11 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
-      margin-top: 2px;
+      margin-top: 1px;
     }
 
     .mini-bar {
-      height: 5px;
+      height: 4px;
       background: rgba(0, 0, 0, 0.6);
       border-radius: 2px;
       overflow: hidden;
@@ -694,20 +835,22 @@
     }
 
     .stat-text-line {
-      font-size: 8px;
+      font-size: 7.5px;
       color: #bbb;
       display: flex;
       justify-content: space-between;
       margin-top: 1px;
     }
 
-    /* Action Control Deck */
+    /* =========================================================================
+       Action Command Deck: 1 기본기, 1 고유기, 2 스킬 (4 Buttons)
+       ========================================================================= */
     .action-panel {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 8px 12px 14px 12px;
-      background: linear-gradient(180deg, rgba(16, 20, 32, 0.95) 0%, rgba(10, 12, 20, 1) 100%);
+      padding: 6px 10px 10px 10px;
+      background: linear-gradient(180deg, rgba(16, 20, 32, 0.98) 0%, rgba(10, 12, 20, 1) 100%);
       border-top: 1px solid rgba(200, 170, 110, 0.3);
       justify-content: space-between;
     }
@@ -716,7 +859,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .current-turn-label {
@@ -729,32 +872,32 @@
     }
 
     .action-hint {
-      font-size: 9.5px;
+      font-size: 9px;
       color: #a4b3c6;
     }
 
-    .skills-grid {
+    .skills-grid-4 {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
       flex: 1;
       align-items: center;
     }
 
     .skill-btn {
       background: linear-gradient(180deg, rgba(32, 38, 58, 0.95) 0%, rgba(18, 22, 36, 0.95) 100%);
-      border: 1px solid rgba(206, 147, 216, 0.5);
-      border-radius: 8px;
-      padding: 8px 6px;
+      border: 1px solid rgba(206, 147, 216, 0.4);
+      border-radius: 6px;
+      padding: 6px 3px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 2px;
       color: #fff;
       cursor: pointer;
       position: relative;
-      height: 74px;
+      height: 78px;
       transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
     }
     .skill-btn:hover {
@@ -764,6 +907,29 @@
     .skill-btn:active {
       transform: scale(0.96);
     }
+
+    /* Skill Category Badges */
+    .skill-category-tag {
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      font-size: 7px;
+      font-weight: 900;
+      padding: 0 3px;
+      border-radius: 2px;
+      background: rgba(0, 0, 0, 0.7);
+    }
+    .cat-basic { color: #81c784; border: 1px solid #81c784; }
+    .cat-skill { color: #64b5f6; border: 1px solid #64b5f6; }
+    .cat-unique { color: #ffd54f; border: 1px solid #ffd54f; }
+
+    .skill-badge-give {
+      position: absolute;
+      top: 2px;
+      right: 3px;
+      font-size: 8px;
+    }
+
     .skill-btn.special-skill {
       border-color: #ffd54f;
       background: linear-gradient(180deg, rgba(58, 42, 24, 0.95) 0%, rgba(28, 20, 14, 0.95) 100%);
@@ -773,8 +939,18 @@
       animation: specialGlow 1.8s infinite ease-in-out;
     }
     @keyframes specialGlow {
-      0%, 100% { box-shadow: 0 0 8px rgba(255, 213, 79, 0.3); border-color: #ffd54f; }
-      50% { box-shadow: 0 0 16px rgba(255, 213, 79, 0.7); border-color: #fff; }
+      0%, 100% { box-shadow: 0 0 6px rgba(255, 213, 79, 0.3); border-color: #ffd54f; }
+      50% { box-shadow: 0 0 14px rgba(255, 213, 79, 0.7); border-color: #fff; }
+    }
+
+    .skill-btn.fever-free {
+      border-color: #ff9100 !important;
+      background: linear-gradient(180deg, rgba(70, 30, 0, 0.95) 0%, rgba(35, 12, 0, 0.95) 100%) !important;
+      animation: feverSkillPulse 1s infinite alternate;
+    }
+    @keyframes feverSkillPulse {
+      0% { box-shadow: 0 0 6px rgba(255, 145, 0, 0.5); }
+      100% { box-shadow: 0 0 14px rgba(255, 214, 0, 0.9); }
     }
 
     .skill-btn.disabled {
@@ -784,34 +960,32 @@
     }
 
     .skill-icon {
-      font-size: 20px;
+      font-size: 18px;
+      margin-top: 6px;
     }
 
     .skill-name {
-      font-size: 10.5px;
+      font-size: 9.5px;
       font-weight: 800;
       color: #fff;
       white-space: nowrap;
+      text-align: center;
     }
 
     .skill-cost {
-      font-size: 8.5px;
+      font-size: 8px;
       color: #90caf9;
       font-weight: 700;
     }
-
-    .skill-type-tag {
-      font-size: 7.5px;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 1px 4px;
-      border-radius: 3px;
+    .skill-cost.free {
       color: #ffd54f;
+      font-weight: 900;
     }
 
     /* Floating combat numbers */
     .floating-num {
       position: absolute;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 900;
       pointer-events: none;
       z-index: 100;
@@ -819,9 +993,14 @@
       text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
     }
     .floating-num.crit {
-      font-size: 22px;
+      font-size: 20px;
       color: #ff1744;
       text-shadow: 0 0 10px rgba(255, 23, 68, 0.8), 0 2px 4px #000;
+    }
+    .floating-num.fever-hit {
+      font-size: 23px;
+      color: #ffd600;
+      text-shadow: 0 0 14px rgba(255, 145, 0, 0.9), 0 2px 4px #000;
     }
     .floating-num.dmg { color: #fff; }
     .floating-num.heal { color: #69f0ae; }
@@ -833,7 +1012,7 @@
       100% { opacity: 0; transform: translateY(-40px) scale(0.9); }
     }
 
-    /* Visual effect overlay (Slashes, Lightning, Blizzard, Supernova) */
+    /* Visual effect overlay */
     .vfx-layer {
       position: absolute;
       inset: 0;
@@ -876,13 +1055,13 @@
       display: none;
       position: absolute;
       inset: 0;
-      background: rgba(5, 7, 12, 0.94);
+      background: rgba(5, 7, 12, 0.95);
       backdrop-filter: blur(8px);
       z-index: 200;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
       animation: fadeIn 0.4s ease-out forwards;
     }
     @keyframes fadeIn {
@@ -891,8 +1070,8 @@
     }
 
     .victory-badge-crown {
-      font-size: 46px;
-      margin-bottom: 6px;
+      font-size: 42px;
+      margin-bottom: 4px;
       animation: bounceCrown 1.5s infinite ease-in-out;
     }
     @keyframes bounceCrown {
@@ -901,35 +1080,34 @@
     }
 
     .victory-title {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 900;
       background: linear-gradient(135deg, #fff, #ffd54f, #ff8f00);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .victory-subtitle {
-      font-size: 12px;
+      font-size: 11.5px;
       color: #ce93d8;
       font-weight: 700;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .loot-reward-card {
       background: rgba(24, 28, 44, 0.9);
       border: 1px solid rgba(255, 213, 79, 0.5);
-      border-radius: 10px;
-      padding: 12px 18px;
+      border-radius: 8px;
+      padding: 10px 14px;
       width: 100%;
       max-width: 320px;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+      gap: 6px;
     }
 
     .loot-item-row {
@@ -939,11 +1117,11 @@
     }
 
     .loot-icon {
-      font-size: 24px;
+      font-size: 22px;
       background: rgba(255, 255, 255, 0.08);
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -955,12 +1133,12 @@
       text-align: left;
     }
     .loot-name {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       color: #ffd54f;
     }
     .loot-desc {
-      font-size: 10px;
+      font-size: 9.5px;
       color: #bbb;
     }
 
@@ -970,30 +1148,30 @@
       max-width: 320px;
       background: linear-gradient(180deg, rgba(32, 36, 56, 0.9) 0%, rgba(18, 20, 32, 0.95) 100%);
       border: 1px solid rgba(206, 147, 216, 0.6);
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: 10px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       box-shadow: 0 0 25px rgba(206, 147, 216, 0.35);
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
     .app-header-flex {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .app-icon-img {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
       border: 2px solid #ffd54f;
       background: #111;
-      box-shadow: 0 0 12px rgba(255, 213, 79, 0.5);
+      box-shadow: 0 0 10px rgba(255, 213, 79, 0.5);
       object-fit: cover;
     }
 
@@ -1003,38 +1181,38 @@
     }
 
     .app-name {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 900;
       color: #fff;
     }
 
     .app-stars {
       color: #ffd54f;
-      font-size: 11px;
-      margin: 2px 0;
+      font-size: 10px;
+      margin: 1px 0;
     }
 
     .app-genre {
-      font-size: 10px;
+      font-size: 9.5px;
       color: #a4b3c6;
     }
 
     .app-pitch {
-      font-size: 11px;
+      font-size: 10.5px;
       color: #cfd8dc;
       line-height: 1.4;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .btn-cta-download {
       width: 100%;
       background: linear-gradient(135deg, #00c853 0%, #009624 100%);
       color: #fff;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 900;
       border: none;
-      padding: 14px 16px;
+      padding: 12px 14px;
       border-radius: 8px;
       cursor: pointer;
       display: flex;
@@ -1055,10 +1233,9 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: #a4b3c6;
       font-size: 11px;
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 4px;
       cursor: pointer;
-      margin-top: 6px;
     }
 
     /* Hero Inspect Modal */
@@ -1077,9 +1254,9 @@
       background: #141724;
       border: 1px solid var(--border-epic);
       border-radius: 10px;
-      padding: 16px;
+      padding: 14px;
       width: 100%;
-      max-width: 340px;
+      max-width: 330px;
       color: #fff;
     }
   </style>
@@ -1108,80 +1285,178 @@
 
     <!-- Main Content Area -->
     <main>
-      <!-- Phase 1: Dungeon Exploration Screen -->
+      <!-- =====================================================================
+           Phase 1: Dungeon Exploration & Interactive Events
+           ===================================================================== -->
       <section id="explore-phase">
-        <div class="explore-hero-banner">
-          <div class="explore-party-header">
-            <div class="party-tag">👑 20레벨 에픽 원정대</div>
-            <div class="gear-notice">5레벨 병기창 에픽 장비 전원 +6강</div>
+        <!-- Party Summary -->
+        <div class="explore-party-card">
+          <div class="party-header-bar">
+            <div class="party-title">👑 20레벨 에픽 원정대</div>
+            <div class="party-gear-tag">5Lv 병기창 에픽 전원 +6강</div>
           </div>
-          <div class="party-cards-grid">
-            <!-- Paladin -->
-            <div class="explore-hero-card" onclick="openHeroModal('paladin')">
-              <div class="hero-avatar-box">
+          <div class="party-grid-preview">
+            <div class="mini-hero-item" onclick="openHeroModal('paladin')">
+              <div class="mini-hero-thumb">
                 <img src="../assets/portraits/portrait_paladin.png" alt="성기사" onerror="this.onerror=null;this.src='../assets/portrait_paladin.jpg';">
-                <span class="hero-badge-epic">E</span>
               </div>
-              <div class="explore-hero-name">성기사</div>
-              <div class="explore-hero-role">수호 탱커 (Lv.20)</div>
-              <div class="explore-hero-stats">HP 2,249 · DEF 217</div>
-              <div class="explore-gear-pill">⚔️ +6 신화검 셋</div>
+              <div class="mini-hero-name">성기사</div>
+              <div class="mini-hero-tag">HP 2,249 · 방벽</div>
             </div>
-
-            <!-- Assassin -->
-            <div class="explore-hero-card" onclick="openHeroModal('assassin')">
-              <div class="hero-avatar-box">
+            <div class="mini-hero-item" onclick="openHeroModal('assassin')">
+              <div class="mini-hero-thumb">
                 <img src="../assets/portraits/portrait_rogue.png" alt="암살자" onerror="this.onerror=null;this.src='../assets/portrait_rogue.jpg';">
-                <span class="hero-badge-epic">E</span>
               </div>
-              <div class="explore-hero-name">암살자</div>
-              <div class="explore-hero-role">물리 딜러 (Lv.20)</div>
-              <div class="explore-hero-stats">ATK 240 · SPD 100</div>
-              <div class="explore-gear-pill">🗡️ +6 사령검 셋</div>
+              <div class="mini-hero-name">암살자</div>
+              <div class="mini-hero-tag">ATK 240 · 처형</div>
             </div>
-
-            <!-- Archmage (대마도사) -->
-            <div class="explore-hero-card" onclick="openHeroModal('mage')">
-              <div class="hero-avatar-box">
+            <div class="mini-hero-item" onclick="openHeroModal('elementalist')">
+              <div class="mini-hero-thumb">
                 <img src="../assets/portraits/portrait_mage.png" alt="대마도사" onerror="this.onerror=null;this.src='../assets/portrait_mage.jpg';">
-                <span class="hero-badge-epic">E</span>
               </div>
-              <div class="explore-hero-name">대마도사</div>
-              <div class="explore-hero-role">광역 마법 (Lv.20)</div>
-              <div class="explore-hero-stats">ATK 264 · MP 1,038</div>
-              <div class="explore-gear-pill">🔮 +6 성현 지팡이</div>
+              <div class="mini-hero-name">대마도사</div>
+              <div class="mini-hero-tag">ATK 264 · 초신성</div>
             </div>
           </div>
         </div>
 
-        <!-- Dungeon Corridor Center -->
-        <div class="corridor-center">
-          <div class="corridor-rune">⚡</div>
-          <h2 class="corridor-title">5층 침식된 성소 진입</h2>
-          <p class="corridor-desc">
-            심연의 공허 군주가 잠식한 고대 제단입니다. 전원 6강 에픽 무장 파티의 압도적인 힘으로 마물들을 정복하세요!
-          </p>
-          <div class="corridor-modifier-tag">
-            🛡️ 아군 원정대 적응 버프: 적 마물 공격력 50% 약화 적용
+        <!-- Exploration Map Progress Track -->
+        <div class="dungeon-track-container">
+          <div class="track-step-labels">
+            <span class="active-step" id="step-lbl-1">1. 성소 진입</span>
+            <span id="step-lbl-2">2. 공허의 제단</span>
+            <span id="step-lbl-3">3. 차원의 균열</span>
+            <span id="step-lbl-4">4. 심연의 핵</span>
+          </div>
+          <div class="track-progress-bar">
+            <div class="track-progress-fill" id="track-fill"></div>
           </div>
         </div>
 
-        <!-- Enter Dungeon Action -->
-        <div class="explore-action-area">
-          <button class="btn-enter-dungeon" id="btn-enter" onclick="startDungeonBattle()">
-            <span>⚔️</span> 심연 성소 탐험 시작 <span>➔</span>
-          </button>
+        <!-- Stage Center / Event Display Area -->
+        <div id="explore-center-content">
+          <!-- Step 1: Default Entry View -->
+          <div class="corridor-interactive-center" id="entry-view">
+            <div class="corridor-icon-box">⚡</div>
+            <h2 class="corridor-stage-title">5층 성소 진입로</h2>
+            <p class="corridor-stage-desc">
+              심연의 어둠이 짙게 깔린 복도입니다. 영원의 성화 불빛을 밝히며 심연 제단으로 전진하세요!
+            </p>
+            <button class="btn-primary-advance" onclick="advanceDungeonStep(1)">
+              <span>🧭</span> 복도 탐험 전진 <span>➔</span>
+            </button>
+          </div>
+
+          <!-- Event 1: Corrupted Altar -->
+          <div class="event-card-box" id="event-1-view" style="display: none;">
+            <div class="event-header">
+              <span class="event-badge">EVENT 01</span>
+              <span class="event-title">공허에 잠식된 신성 제단</span>
+            </div>
+            <p class="event-story">
+              중앙에 버려진 고대 제단이 검은 덩굴에 뒤덮여 신음하고 있습니다. 제단 주변에서 희미한 신성 에너지와 보물 상자가 감지됩니다.
+            </p>
+            <div class="event-choice-grid">
+              <button class="btn-event-choice" onclick="resolveEvent1('paladin')">
+                <span class="choice-icon">🛡️</span>
+                <span class="choice-text">
+                  [성기사] 성스러운 기도로 제단 정화
+                  <span class="choice-reward">✦ 효과: 파티 전원 350 신성 보호막 & 공격력 +15% 버프</span>
+                </span>
+              </button>
+              <button class="btn-event-choice" onclick="resolveEvent1('assassin')">
+                <span class="choice-icon">🗡️</span>
+                <span class="choice-text">
+                  [암살자] 제단 아래 숨겨진 심연 궤짝 강탈
+                  <span class="choice-reward">✦ 효과: 골드 +800 & 파티 MP 100% 완충 포션 획득</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Intermediate Corridor Walk -->
+          <div class="corridor-interactive-center" id="corridor-mid-view" style="display: none;">
+            <div class="corridor-icon-box" style="border-color:#ffd54f; color:#ffd54f;">🔮</div>
+            <h2 class="corridor-stage-title">차원의 균열 감지</h2>
+            <p class="corridor-stage-desc" id="corridor-mid-desc">
+              제단을 돌파한 원정대 앞에 시공간이 일그러진 차원의 균열이 나타났습니다.
+            </p>
+            <button class="btn-primary-advance" onclick="advanceDungeonStep(2)">
+              <span>🧭</span> 차원 균열 조사 <span>➔</span>
+            </button>
+          </div>
+
+          <!-- Event 2: Dimensional Rift Rune -->
+          <div class="event-card-box" id="event-2-view" style="display: none;">
+            <div class="event-header">
+              <span class="event-badge" style="background:#ba68c8; color:#fff;">EVENT 02</span>
+              <span class="event-title">고대 차원 룬의 공명</span>
+            </div>
+            <p class="event-story">
+              차원의 균열 속에서 거대한 태고의 룬 문자가 회전하고 있습니다. 이 마력을 어떻게 운용하시겠습니까?
+            </p>
+            <div class="event-choice-grid">
+              <button class="btn-event-choice" onclick="resolveEvent2('mage')">
+                <span class="choice-icon">🔮</span>
+                <span class="choice-text">
+                  [대마도사] 룬의 비전 에테르 마력 흡수
+                  <span class="choice-reward">✦ 효과: 전투 개시 시 FEVER 모멘텀 뱃지 +2개(⚡/💫) 즉시 충전</span>
+                </span>
+              </button>
+              <button class="btn-event-choice" onclick="resolveEvent2('party')">
+                <span class="choice-icon">⚔️</span>
+                <span class="choice-text">
+                  [원정대] 전투 태세 전열 정비
+                  <span class="choice-reward">✦ 효과: 파티 전원 치명타율 +25% & 행동속도(SPD) +15 증가</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 4: Ambush / Boss Chamber Alert -->
+          <div class="corridor-interactive-center" id="boss-door-view" style="display: none;">
+            <div class="corridor-icon-box" style="border-color:#ff5252; color:#ff5252; animation:pulseRune 1.2s infinite;">💀</div>
+            <h2 class="corridor-stage-title" style="color:#ff5252;">심연 마물 무리 기습!</h2>
+            <p class="corridor-stage-desc">
+              성소 깊은 곳에서 공허의 마물들이 3개 웨이브로 몰려옵니다! 20레벨 원정대의 피버(FEVER) 연계로 모두 소탕하세요!
+            </p>
+            <button class="btn-primary-advance" style="background:linear-gradient(135deg, #ff5252, #d32f2f); color:#fff;" onclick="startCombatPhase()">
+              <span>⚔️</span> 결전 전투 돌입 (3 Waves) <span>➔</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="text-align: center; font-size: 10px; color: #8bc34a; margin-top: 6px;">
+          🛡️ 원정대 특권: 적 마물 공격력 50% 약화 & 영원의 성화 100% 유지
         </div>
       </section>
 
-      <!-- Phase 2: Combat Screen -->
+      <!-- =====================================================================
+           Phase 2: 3-Wave Combat & FEVER Showdown System
+           ===================================================================== -->
       <section id="battle-phase">
         <!-- Stage & auto header -->
         <div class="battle-header-info">
           <div class="wave-badge" id="wave-badge">
-            <span>🔥</span> <span id="wave-title">Wave 1/2: 침식의 선봉대</span>
+            <span>🔥</span> <span id="wave-title">Wave 1/3: 침식의 척후대</span>
           </div>
           <button class="auto-toggle-btn" id="auto-btn" onclick="toggleAutoBattle()">⚡ 자동전투 OFF</button>
+        </div>
+
+        <!-- FEVER GAUGE BAR (5 Momentum Badges Slot Machine) -->
+        <div class="fever-bar-wrap" id="fever-bar-wrap">
+          <div class="fever-title-box">
+            <span class="fever-flame-icon">🔥</span>
+            <span class="fever-title-text" id="fever-state-label">FEVER MOMENTUM</span>
+          </div>
+          <div class="fever-slots-deck">
+            <div class="fever-slot" id="fever-slot-0"></div>
+            <div class="fever-slot" id="fever-slot-1"></div>
+            <div class="fever-slot" id="fever-slot-2"></div>
+            <div class="fever-slot" id="fever-slot-3"></div>
+            <div class="fever-slot" id="fever-slot-4"></div>
+          </div>
+          <div class="fever-subtext" id="fever-synergy-name">5개 완충 시 피버 타임!</div>
         </div>
 
         <!-- Monster Zone -->
@@ -1199,7 +1474,7 @@
           <!-- Populated by JS -->
         </div>
 
-        <!-- Action Command Panel -->
+        <!-- Action Command Panel: 1 기본기, 1 고유기, 2 스킬 (4 Buttons) -->
         <div class="action-panel">
           <div class="action-panel-header">
             <div class="current-turn-label" id="turn-label">
@@ -1208,7 +1483,7 @@
             <div class="action-hint" id="action-hint">적을 선택하거나 스킬을 시전하세요!</div>
           </div>
 
-          <div class="skills-grid" id="skills-grid">
+          <div class="skills-grid-4" id="skills-grid">
             <!-- Populated by JS according to active turn hero -->
           </div>
         </div>
@@ -1218,18 +1493,20 @@
     <!-- Visual Effects Layer -->
     <div class="vfx-layer" id="vfx-layer"></div>
 
-    <!-- Phase 3: Victory & Google Play CTA Overlay -->
+    <!-- =====================================================================
+         Phase 3: Victory & Google Play CTA Overlay
+         ===================================================================== -->
     <div id="victory-overlay">
       <div class="victory-badge-crown">👑</div>
-      <h1 class="victory-title">성소 정복 성공!</h1>
-      <div class="victory-subtitle">5F 침식된 성소의 모든 마물을 소탕했습니다!</div>
+      <h1 class="victory-title">성소 제패 대승리!</h1>
+      <div class="victory-subtitle">5층 보스 [공허의 침식자] 및 3개 웨이브 마물 전멸!</div>
 
       <div class="loot-reward-card">
         <div class="loot-item-row">
           <div class="loot-icon">💍</div>
           <div class="loot-details">
             <div class="loot-name">[전설] 공허의 지배자 반지 (+6강)</div>
-            <div class="loot-desc">공격력 +40 · 행운 +19 · 1강당 흡혈 1% 증폭</div>
+            <div class="loot-desc">공격력 +40 · 행운 +19 · 강화당 흡혈 1% 증폭</div>
           </div>
         </div>
       </div>
@@ -1244,7 +1521,7 @@
           </div>
         </div>
         <p class="app-pitch">
-          100종의 고유 전직과 클래스, 심연의 보스 레이드!<br>
+          100종의 직업과 스킬, 짜릿한 피버(FEVER) 콤보 결투!<br>
           지금 구글 플레이에서 즉시 무료로 다운로드하세요.
         </p>
         <button class="btn-cta-download" onclick="onAdClick()">
@@ -1258,11 +1535,11 @@
     <!-- Hero Inspect Modal -->
     <div id="hero-modal" onclick="closeHeroModal()">
       <div class="hero-modal-content" onclick="event.stopPropagation()">
-        <h3 id="modal-hero-name" style="color:#ffd54f; margin-bottom:6px;">영웅 정보</h3>
-        <p id="modal-hero-role" style="font-size:12px; color:#ce93d8; margin-bottom:10px;">역할군</p>
-        <div id="modal-hero-stats" style="font-size:11px; line-height:1.6; margin-bottom:10px; background:rgba(0,0,0,0.4); padding:8px; border-radius:6px;"></div>
-        <div id="modal-hero-gear" style="font-size:11px; line-height:1.6; color:#ffe082;"></div>
-        <button style="margin-top:12px; width:100%; padding:8px; background:#333; color:#fff; border:none; border-radius:4px; cursor:pointer;" onclick="closeHeroModal()">닫기</button>
+        <h3 id="modal-hero-name" style="color:#ffd54f; margin-bottom:4px;">영웅 정보</h3>
+        <p id="modal-hero-role" style="font-size:11px; color:#ce93d8; margin-bottom:8px;">역할군</p>
+        <div id="modal-hero-stats" style="font-size:10.5px; line-height:1.5; margin-bottom:8px; background:rgba(0,0,0,0.4); padding:6px; border-radius:4px;"></div>
+        <div id="modal-hero-gear" style="font-size:10.5px; line-height:1.5; color:#ffe082;"></div>
+        <button style="margin-top:10px; width:100%; padding:6px; background:#333; color:#fff; border:none; border-radius:4px; cursor:pointer;" onclick="closeHeroModal()">닫기</button>
       </div>
     </div>
   </div>
@@ -1308,61 +1585,71 @@
       const now = audioCtx.currentTime;
 
       if (type === 'slash') {
-        // Crisp weapon swing/slash
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(480, now);
-        osc.frequency.exponentialRampToValueAtTime(80, now + 0.15);
-        gain.gain.setValueAtTime(0.3, now);
+        osc.frequency.setValueAtTime(450, now);
+        osc.frequency.exponentialRampToValueAtTime(70, now + 0.15);
+        gain.gain.setValueAtTime(0.28, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start(now);
         osc.stop(now + 0.15);
       } else if (type === 'magic') {
-        // Lightning/Magic bolt
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(950, now);
-        osc.frequency.exponentialRampToValueAtTime(220, now + 0.28);
-        gain.gain.setValueAtTime(0.35, now);
+        osc.frequency.setValueAtTime(900, now);
+        osc.frequency.exponentialRampToValueAtTime(200, now + 0.28);
+        gain.gain.setValueAtTime(0.3, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start(now);
         osc.stop(now + 0.28);
       } else if (type === 'shield') {
-        // Holy barrier / chime
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(350, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.35);
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(840, now + 0.35);
         gain.gain.setValueAtTime(0.25, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start(now);
         osc.stop(now + 0.35);
-      } else if (type === 'supernova') {
-        // Deep explosion
+      } else if (type === 'fever_burst') {
+        // Dramatic Fever Blast chord
+        [220, 330, 440, 554, 660].forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + idx * 0.04 + 0.45);
+          gain.gain.setValueAtTime(0.25, now + idx * 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.04 + 0.5);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + idx * 0.04);
+          osc.stop(now + idx * 0.04 + 0.5);
+        });
+      } else if (type === 'badge') {
+        // Badge slot chime
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(240, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.6);
-        gain.gain.setValueAtTime(0.45, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(700, now);
+        osc.frequency.exponentialRampToValueAtTime(1100, now + 0.12);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start(now);
-        osc.stop(now + 0.6);
+        osc.stop(now + 0.12);
       } else if (type === 'victory') {
-        // Victory chime progression C - E - G - C
-        const notes = [523.25, 659.25, 783.99, 1046.50];
-        notes.forEach((freq, idx) => {
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'triangle';
@@ -1378,8 +1665,8 @@
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, now);
-        gain.gain.setValueAtTime(0.15, now);
+        osc.frequency.setValueAtTime(620, now);
+        gain.gain.setValueAtTime(0.12, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -1395,11 +1682,8 @@
     });
 
     // =========================================================================
-    // 3. Game Data & Party Configuration (Faithful to Engine & User Prompts)
+    // 3. Class Data: 1 기본기, 1 고유기, 2 스킬 (4 Skills Each)
     // =========================================================================
-    // Party: Paladin (성기사), Assassin (암살자), Archmage (대마도사)
-    // Grade: Epic, Level: 20
-    // Gear: Tier 5 Armory Epic +6 enhanced
     const party = [
       {
         id: 'paladin',
@@ -1426,35 +1710,57 @@
         passive: '성스러운 오라: 파티 전체 피격 마법 피해 15% 경감',
         skills: [
           {
+            id: 'paladin_basic',
+            name: '심연 베기',
+            category: 'basic',
+            badge: '🛡️',
+            badgeType: 'guard',
+            icon: '🗡️',
+            type: 'single',
+            mana: 0,
+            power: 1.0,
+            effect: 'damage',
+            desc: '[기본기] 적 1체 100% 피해 (MP 0)'
+          },
+          {
             id: 'paladin_judgment',
             name: '단죄의 일격',
+            category: 'skill',
+            badge: '💫',
+            badgeType: 'break',
             icon: '🔨',
             type: 'single',
             mana: 30,
-            power: 1.3,
+            power: 1.35,
             effect: 'damage',
-            desc: '단일 대상 130% 신성 피해 및 방어력 분쇄'
+            desc: '[스킬 1] 135% 신성 피해 및 방어 분쇄'
           },
           {
             id: 'paladin_aegis',
             name: '신성 방벽',
+            category: 'skill',
+            badge: '🛡️',
+            badgeType: 'guard',
             icon: '🛡️',
             type: 'party',
             mana: 50,
             power: 0.25,
             effect: 'shield',
-            desc: '아군 전체에 최대 HP 25% 신성 보호막 부여'
+            desc: '[스킬 2] 아군 전체 최대 HP 25% 방벽'
           },
           {
             id: 'paladin_sanctuary',
             name: '홀리 오라',
+            category: 'unique',
+            badge: '💖',
+            badgeType: 'heal',
             icon: '✨',
             type: 'party',
             mana: 70,
             power: 0.25,
             effect: 'heal',
             isSpecial: true,
-            desc: '[필살기] 아군 전체 HP 25% 회복 및 디버프 정화'
+            desc: '[고유기] 아군 전체 HP 25% 회복 & 정화'
           }
         ]
       },
@@ -1480,39 +1786,61 @@
           armor: '[에픽] 심연 수호 가죽갑 +6강',
           accessory: '[에픽] 공허 인장 반지 +6강'
         },
-        passive: '치명적 본능: 치명타 시 30% 확률로 즉시 추가 연격',
+        passive: '치명적 본능: 치명타 시 30% 확률 즉시 추가 공격',
         skills: [
+          {
+            id: 'assassin_basic',
+            name: '기습 암습',
+            category: 'basic',
+            badge: '💥',
+            badgeType: 'crit',
+            icon: '🗡️',
+            type: 'single',
+            mana: 0,
+            power: 1.1,
+            effect: 'damage',
+            desc: '[기본기] 속도 비례 110% 관통 피해 (MP 0)'
+          },
           {
             id: 'assassin_strike',
             name: '암영 연격',
+            category: 'skill',
+            badge: '💥',
+            badgeType: 'crit',
             icon: '🗡️',
             type: 'single',
             mana: 36,
             power: 1.5,
             pierce: 0.8,
             effect: 'damage',
-            desc: '적의 방어 80%를 관통하고 150% 치명 피해'
+            desc: '[스킬 1] 방어 80% 무시 150% 관통타'
           },
           {
             id: 'assassin_poison',
             name: '독무 연격',
+            category: 'skill',
+            badge: '⚡',
+            badgeType: 'extra',
             icon: '☠️',
             type: 'all',
             mana: 44,
-            power: 0.8,
+            power: 0.85,
             effect: 'poison',
-            desc: '적 전체에 80% 피해 + 3턴간 암흑 중독 부여'
+            desc: '[스킬 2] 적 전체 85% 피해 + 중독'
           },
           {
             id: 'assassin_execution',
             name: '심장 꿰뚫기',
+            category: 'unique',
+            badge: '🎯',
+            badgeType: 'assist',
             icon: '🩸',
             type: 'single',
             mana: 56,
             power: 2.2,
             effect: 'damage',
             isSpecial: true,
-            desc: '[필살기] 단일 적에게 220% 처형 피해 (체력 50% 이하 1.5배)'
+            desc: '[고유기] 단일 적 220% 처형 (체력 50% 이하 1.5배)'
           }
         ]
       },
@@ -1541,46 +1869,115 @@
         passive: '원소 과부하: 3연속 마법 시전 시 다음 대미지 100% 증폭',
         skills: [
           {
+            id: 'elem_basic',
+            name: '비전 마력탄',
+            category: 'basic',
+            badge: '⚡',
+            badgeType: 'extra',
+            icon: '🔮',
+            type: 'single',
+            mana: 0,
+            power: 1.0,
+            effect: 'damage',
+            desc: '[기본기] 단일 적 100% 마법 피해 + MP 15 회복'
+          },
+          {
             id: 'elem_lightning',
             name: '연쇄 번개',
+            category: 'skill',
+            badge: '💫',
+            badgeType: 'break',
             icon: '⚡',
             type: 'all',
             mana: 72,
-            power: 1.04,
+            power: 1.05,
             effect: 'stun',
-            desc: '적 전체에 104% 전격 마법 피해 + 60% 기절'
+            desc: '[스킬 1] 적 전체 105% 전격 마법 + 기절'
           },
           {
             id: 'elem_blizzard',
             name: '혹한 눈보라',
+            category: 'skill',
+            badge: '⚡',
+            badgeType: 'extra',
             icon: '❄️',
             type: 'all',
             mana: 65,
-            power: 0.81,
+            power: 0.85,
             effect: 'freeze',
-            desc: '적 전체에 81% 빙결 피해 및 동상 상태 부여'
+            desc: '[스킬 2] 적 전체 85% 빙결 피해 + 동상'
           },
           {
             id: 'elem_supernova',
             name: '원소 초신성',
+            category: 'unique',
+            badge: '🔥',
+            badgeType: 'fever',
             icon: '💥',
             type: 'all',
             mana: 91,
-            power: 1.5,
+            power: 1.6,
             effect: 'damage',
             isSpecial: true,
-            desc: '[필살기] 화염과 냉기 융합, 적 전체 150% 대폭발'
+            desc: '[고유기] 화염과 냉기 융합 160% 광역 대폭발'
           }
         ]
       }
     ];
 
-    // Floor 5 Monsters: Enemy ATK intentionally scaled down by 50%
+    // =========================================================================
+    // 4. 3-Wave Encounters (Enemy ATK reduced by 50%)
+    // =========================================================================
     const encounters = [
       {
         wave: 1,
-        title: 'Wave 1/2: 침식의 선봉대',
+        title: 'Wave 1/3: 침식의 척후대',
         enemies: [
+          {
+            id: 'monster_rift_stalker',
+            name: '차원 추적자',
+            image: '../assets/monster_rift_stalker.jpg',
+            fallback: '../assets/monsters/monster_rift_stalker.jpg',
+            isBoss: false,
+            maxHp: 230,
+            hp: 230,
+            atk: 32, // Base 64 * 0.5 = 32 (-50% scaling)
+            def: 22,
+            spd: 38,
+            statuses: []
+          },
+          {
+            id: 'monster_void_beast',
+            name: '공허의 하수인',
+            image: '../assets/monster_void_beast.jpg',
+            fallback: '../assets/monsters/monster_void_beast.jpg',
+            isBoss: false,
+            maxHp: 300,
+            hp: 300,
+            atk: 30, // Base 59 * 0.5 = 30 (-50% scaling)
+            def: 29,
+            spd: 18,
+            statuses: []
+          }
+        ]
+      },
+      {
+        wave: 2,
+        title: 'Wave 2/3: 성소 정예 결사대',
+        enemies: [
+          {
+            id: 'monster_monolith_guardian',
+            name: '모노리스 수호병',
+            image: '../assets/monster_monolith_guardian.jpg',
+            fallback: '../assets/monsters/monster_monolith_guardian.jpg',
+            isBoss: false,
+            maxHp: 440,
+            hp: 440,
+            atk: 36, // Base 72 * 0.5 = 36 (-50% scaling)
+            def: 45,
+            spd: 22,
+            statuses: []
+          },
           {
             id: 'monster_primordial_shaman',
             name: '원초의 주술사',
@@ -1593,25 +1990,12 @@
             def: 36,
             spd: 42,
             statuses: []
-          },
-          {
-            id: 'monster_void_beast',
-            name: '공허의 하수인',
-            image: '../assets/monster_void_beast.jpg',
-            fallback: '../assets/monsters/monster_void_beast.jpg',
-            isBoss: false,
-            maxHp: 302,
-            hp: 302,
-            atk: 30, // Base 59 * 0.5 = 30 (-50% scaling)
-            def: 29,
-            spd: 18,
-            statuses: []
           }
         ]
       },
       {
-        wave: 2,
-        title: 'Wave 2/2: 👑 5F 보스 [공허의 침식자]',
+        wave: 3,
+        title: 'Wave 3/3: 👑 5F 보스 [공허의 침식자]',
         enemies: [
           {
             id: 'boss_floor_5',
@@ -1619,8 +2003,8 @@
             image: '../assets/boss_floor_5.jpg',
             fallback: '../assets/void_overlord.jpg',
             isBoss: true,
-            maxHp: 950,
-            hp: 950,
+            maxHp: 1180,
+            hp: 1180,
             atk: 44, // Base 88 * 0.5 = 44 (-50% scaling)
             def: 41,
             spd: 28,
@@ -1630,30 +2014,116 @@
       }
     ];
 
-    // State Variables
+    // =========================================================================
+    // 5. State Variables
+    // =========================================================================
     let currentWaveIndex = 0;
     let currentEnemies = [];
     let selectedEnemyIndex = 0;
-    let currentTurnHeroIndex = 0; // Paladin (0) -> Assassin (1) -> Mage (2)
+    let currentTurnHeroIndex = 0;
     let autoBattle = false;
     let isActing = false;
 
+    // FEVER State
+    let feverBadges = []; // Max 5 badges
+    let isFeverMode = false;
+    let feverTurnsLeft = 0;
+
     // =========================================================================
-    // 4. Exploration Phase Functions
+    // 6. Dungeon Exploration & Interactive Event Progression
     // =========================================================================
-    function startDungeonBattle() {
+    function advanceDungeonStep(step) {
       playSfx('click');
+      if (step === 1) {
+        // Step 1 -> Event 1
+        document.getElementById('entry-view').style.display = 'none';
+        document.getElementById('event-1-view').style.display = 'flex';
+        document.getElementById('track-fill').style.width = '50%';
+        document.getElementById('step-lbl-1').classList.remove('active-step');
+        document.getElementById('step-lbl-2').classList.add('active-step');
+      } else if (step === 2) {
+        // Step 2 -> Event 2
+        document.getElementById('corridor-mid-view').style.display = 'none';
+        document.getElementById('event-2-view').style.display = 'flex';
+        document.getElementById('track-fill').style.width = '75%';
+        document.getElementById('step-lbl-2').classList.remove('active-step');
+        document.getElementById('step-lbl-3').classList.add('active-step');
+      }
+    }
+
+    function resolveEvent1(choice) {
+      playSfx('shield');
+      if (choice === 'paladin') {
+        party.forEach(h => {
+          h.shield = 350;
+          h.atk = Math.round(h.atk * 1.15);
+        });
+        showFloatingNotice('🛡️ 파티 전원 350 보호막 & 공격력 +15% 축복!');
+      } else {
+        party.forEach(h => {
+          h.mp = h.maxMp;
+        });
+        showFloatingNotice('✨ 골드 +800 & 마나 100% 완전 회복!');
+      }
+
+      document.getElementById('event-1-view').style.display = 'none';
+      document.getElementById('corridor-mid-view').style.display = 'flex';
+    }
+
+    function resolveEvent2(choice) {
+      playSfx('magic');
+      if (choice === 'mage') {
+        addFeverBadge('⚡');
+        addFeverBadge('💫');
+        showFloatingNotice('⚡ 룬 공명: 시작 FEVER 뱃지 2개 즉시 충전!');
+      } else {
+        party.forEach(h => {
+          h.luck += 35;
+          h.spd += 15;
+        });
+        showFloatingNotice('⚔️ 전투 대형: 치명타율 +25% & 속도 +15 증가!');
+      }
+
+      document.getElementById('event-2-view').style.display = 'none';
+      document.getElementById('boss-door-view').style.display = 'flex';
+      document.getElementById('track-fill').style.width = '100%';
+      document.getElementById('step-lbl-3').classList.remove('active-step');
+      document.getElementById('step-lbl-4').classList.add('active-step');
+    }
+
+    function startCombatPhase() {
+      playSfx('fever_burst');
       document.getElementById('explore-phase').style.display = 'none';
       document.getElementById('battle-phase').style.display = 'flex';
       loadWave(0);
     }
 
+    function showFloatingNotice(text) {
+      const el = document.createElement('div');
+      el.style.position = 'absolute';
+      el.style.top = '30%';
+      el.style.left = '50%';
+      el.style.transform = 'translate(-50%, -50%)';
+      el.style.background = 'rgba(20, 24, 38, 0.95)';
+      el.style.border = '1.5px solid #ffd54f';
+      el.style.color = '#ffd54f';
+      el.style.fontSize = '12px';
+      el.style.fontWeight = '800';
+      el.style.padding = '8px 16px';
+      el.style.borderRadius = '8px';
+      el.style.zIndex = '300';
+      el.style.boxShadow = '0 0 20px rgba(255, 213, 79, 0.6)';
+      el.innerText = text;
+      document.getElementById('game-container').appendChild(el);
+      setTimeout(() => el.remove(), 1600);
+    }
+
     function openHeroModal(heroKey) {
       playSfx('click');
-      const hero = party.find(h => h.id.includes(heroKey) || (heroKey === 'mage' && h.id === 'elementalist'));
+      const hero = party.find(h => h.id.includes(heroKey));
       if (!hero) return;
       document.getElementById('modal-hero-name').innerText = `[${hero.grade.toUpperCase()}] ${hero.name} (Lv.${hero.level})`;
-      document.getElementById('modal-hero-role').innerText = `${hero.role} · 패시브: ${hero.passive}`;
+      document.getElementById('modal-hero-role').innerText = `${hero.role} · ${hero.passive}`;
       document.getElementById('modal-hero-stats').innerHTML = `
         <strong>체력(HP):</strong> ${hero.hp} / ${hero.maxHp}<br>
         <strong>마나(MP):</strong> ${hero.mp} / ${hero.maxMp}<br>
@@ -1674,21 +2144,99 @@
     }
 
     // =========================================================================
-    // 5. Combat Engine Implementation
+    // 7. FEVER Momentum System
+    // =========================================================================
+    function addFeverBadge(badgeIcon) {
+      if (isFeverMode) return; // Already in fever burst
+
+      if (feverBadges.length < 5) {
+        feverBadges.push(badgeIcon);
+        playSfx('badge');
+        renderFeverBar();
+
+        if (feverBadges.length === 5) {
+          triggerFeverBurst();
+        }
+      }
+    }
+
+    function renderFeverBar() {
+      for (let i = 0; i < 5; i++) {
+        const slot = document.getElementById(`fever-slot-${i}`);
+        if (i < feverBadges.length) {
+          slot.innerText = feverBadges[i];
+          slot.className = 'fever-slot filled';
+        } else {
+          slot.innerText = '';
+          slot.className = 'fever-slot';
+        }
+      }
+
+      const barWrap = document.getElementById('fever-bar-wrap');
+      const stateLbl = document.getElementById('fever-state-label');
+      const synergyLbl = document.getElementById('fever-synergy-name');
+
+      if (isFeverMode) {
+        barWrap.className = 'fever-bar-wrap full';
+        stateLbl.innerText = '🔥 FEVER BURST!';
+        synergyLbl.innerText = `총력 섬멸 극의 (${feverTurnsLeft}턴 잔여, 전 스킬 MP 0!)`;
+      } else {
+        barWrap.className = 'fever-bar-wrap';
+        stateLbl.innerText = 'FEVER MOMENTUM';
+        const remain = 5 - feverBadges.length;
+        synergyLbl.innerText = remain === 0 ? 'FEVER 완충 완료!' : `${remain}개 뱃지 추가 시 FEVER 폭발!`;
+      }
+    }
+
+    function triggerFeverBurst() {
+      isFeverMode = true;
+      feverTurnsLeft = 4; // 4 actions in fever mode
+      playSfx('fever_burst');
+      triggerScreenShake();
+      triggerScreenFlash('rgba(255, 145, 0, 0.55)');
+
+      document.getElementById('game-container').classList.add('fever-active');
+      renderFeverBar();
+
+      addLog(`<strong>🔥 [FEVER BURST 발동!]</strong> 전술 모멘텀 완충! 전 스킬 MP 0 & 확정 치명타 폭주!`);
+      showFloatingNotice('🔥 FEVER TIME! 전 스킬 마나 소모 0!');
+
+      // Update skill panel
+      const currentHero = party[currentTurnHeroIndex];
+      if (currentHero) renderActionPanel(currentHero);
+    }
+
+    function onTurnActionTaken() {
+      if (isFeverMode) {
+        feverTurnsLeft--;
+        if (feverTurnsLeft <= 0) {
+          isFeverMode = false;
+          feverBadges = [];
+          document.getElementById('game-container').classList.remove('fever-active');
+          renderFeverBar();
+          addLog(`[FEVER 종료] 피버 폭주 상태가 진정되었습니다.`);
+        } else {
+          renderFeverBar();
+        }
+      }
+    }
+
+    // =========================================================================
+    // 8. 3-Wave Combat Loop
     // =========================================================================
     function loadWave(index) {
       currentWaveIndex = index;
       const waveData = encounters[index];
       document.getElementById('wave-title').innerText = waveData.title;
 
-      // Deep copy enemies for this wave
       currentEnemies = waveData.enemies.map(e => ({ ...e, statuses: [] }));
       selectedEnemyIndex = 0;
 
-      addLog(`<strong>[웨이브 돌입]</strong> ${waveData.title} 마물들이 모습을 드러냈습니다!`);
+      addLog(`<strong>[웨이브 진입]</strong> ${waveData.title} 마물들이 접근합니다!`);
 
       renderEnemies();
       renderHeroes();
+      renderFeverBar();
       startTurn(0);
     }
 
@@ -1771,9 +2319,7 @@
     }
 
     function startTurn(heroIdx) {
-      // Find alive hero
       if (heroIdx >= party.length) {
-        // All heroes acted -> Enemy turn
         triggerEnemyTurn();
         return;
       }
@@ -1789,7 +2335,6 @@
       renderHeroes();
       renderActionPanel(hero);
 
-      // Verify selected enemy is still alive
       if (!currentEnemies[selectedEnemyIndex] || currentEnemies[selectedEnemyIndex].hp <= 0) {
         const nextTarget = currentEnemies.findIndex(e => e.hp > 0);
         if (nextTarget !== -1) selectedEnemyIndex = nextTarget;
@@ -1801,6 +2346,7 @@
       }
     }
 
+    // Render 4 Skills: 1 기본기, 1 고유기, 2 스킬
     function renderActionPanel(hero) {
       document.getElementById('turn-label').innerHTML = `<span>⚔️</span> ${hero.name}의 턴`;
 
@@ -1808,43 +2354,62 @@
       grid.innerHTML = '';
 
       hero.skills.forEach(skill => {
-        const canUse = hero.mp >= skill.mana;
+        const actualCost = isFeverMode ? 0 : skill.mana;
+        const canUse = hero.mp >= actualCost;
+
         const btn = document.createElement('button');
-        btn.className = `skill-btn ${skill.isSpecial ? 'special-skill ready' : ''} ${!canUse ? 'disabled' : ''}`;
+        let catClass = 'cat-skill';
+        let catText = '스킬';
+        if (skill.category === 'basic') { catClass = 'cat-basic'; catText = '기본기'; }
+        else if (skill.category === 'unique') { catClass = 'cat-unique'; catText = '고유기'; }
+
+        btn.className = `skill-btn ${skill.isSpecial ? 'special-skill ready' : ''} ${isFeverMode ? 'fever-free' : ''} ${!canUse ? 'disabled' : ''}`;
         btn.onclick = () => castHeroSkill(hero, skill);
 
         btn.innerHTML = `
+          <span class="skill-category-tag ${catClass}">${catText}</span>
+          <span class="skill-badge-give" title="피버 뱃지 적립">${skill.badge}</span>
           <div class="skill-icon">${skill.icon}</div>
           <div class="skill-name">${skill.name}</div>
-          <div class="skill-cost">MP ${skill.mana}</div>
-          <div class="skill-type-tag">${skill.type === 'party' ? '아군 전체' : (skill.type === 'all' ? '적 전체' : '단일 공격')}</div>
+          <div class="skill-cost ${isFeverMode ? 'free' : ''}">${isFeverMode ? 'FREE!' : (skill.mana === 0 ? 'MP 0' : `MP ${skill.mana}`)}</div>
         `;
         grid.appendChild(btn);
       });
 
       // Update action hint
       if (hero.id === 'paladin') {
-        document.getElementById('action-hint').innerText = '🛡️ [신성 방벽]으로 전체 보호막을 두르거나 [단죄의 일격]으로 강타하세요!';
+        document.getElementById('action-hint').innerText = '🛡️ [기본기] 심연 베기 | [스킬] 신성 방벽 | [고유기] 홀리 오라';
       } else if (hero.id === 'assassin') {
-        document.getElementById('action-hint').innerText = '🗡️ [심장 꿰뚫기]로 치명적인 처형 피해를 입히세요!';
+        document.getElementById('action-hint').innerText = '🗡️ [기본기] 기습 암습 | [스킬] 암영 연격 | [고유기] 심장 꿰뚫기';
       } else {
-        document.getElementById('action-hint').innerText = '⚡ [원소 초신성] 또는 [연쇄 번개]로 적 전체를 섬멸하세요!';
+        document.getElementById('action-hint').innerText = '⚡ [기본기] 마력탄 | [스킬] 혹한 눈보라 | [고유기] 원소 초신성';
       }
     }
 
     function castHeroSkill(hero, skill) {
       if (isActing) return;
-      if (hero.mp < skill.mana) {
+      const actualCost = isFeverMode ? 0 : skill.mana;
+      if (hero.mp < actualCost) {
         addLog(`⚠️ 마나가 부족합니다! (필요 MP: ${skill.mana})`);
         return;
       }
 
       isActing = true;
-      hero.mp = Math.max(0, hero.mp - skill.mana);
+      if (!isFeverMode && skill.mana > 0) {
+        hero.mp = Math.max(0, hero.mp - skill.mana);
+      }
+      if (skill.id === 'elem_basic') {
+        hero.mp = Math.min(hero.maxMp, hero.mp + 15);
+      }
+
+      // Add Fever Momentum Badge!
+      if (!isFeverMode) {
+        addFeverBadge(skill.badge);
+      }
 
       // Play Sound
       if (skill.isSpecial) {
-        playSfx(hero.id === 'elementalist' ? 'supernova' : (hero.id === 'paladin' ? 'shield' : 'slash'));
+        playSfx(hero.id === 'elementalist' ? 'magic' : (hero.id === 'paladin' ? 'shield' : 'slash'));
       } else if (skill.effect === 'damage' || skill.effect === 'poison') {
         playSfx('slash');
       } else if (skill.effect === 'shield' || skill.effect === 'heal') {
@@ -1855,25 +2420,22 @@
 
       // Execute skill logic
       if (skill.effect === 'shield') {
-        // Paladin party shield
-        const shieldAmt = Math.round(hero.maxHp * skill.power);
+        const shieldAmt = Math.round(hero.maxHp * skill.power * (isFeverMode ? 1.4 : 1.0));
         party.forEach(h => {
           h.shield = shieldAmt;
           showFloatingText(`+${shieldAmt} 🛡️`, 'shield', h.id);
         });
-        addLog(`<strong>[${hero.name}]</strong> <span style="color:#26c6da;">${skill.name}!</span> 아군 전체에 ${shieldAmt}의 신성 방벽 전개!`);
+        addLog(`<strong>[${hero.name}]</strong> <span style="color:#26c6da;">${skill.name}!</span> 아군 전체에 ${shieldAmt} 신성 방벽 전개!`);
         triggerScreenFlash('rgba(38, 198, 218, 0.3)');
       } else if (skill.effect === 'heal') {
-        // Paladin Holy aura
+        const healAmt = Math.round(hero.maxHp * skill.power * (isFeverMode ? 1.4 : 1.0));
         party.forEach(h => {
-          const healAmt = Math.round(h.maxHp * skill.power);
           h.hp = Math.min(h.maxHp, h.hp + healAmt);
           showFloatingText(`+${healAmt} ✨`, 'heal', h.id);
         });
         addLog(`<strong>[${hero.name}]</strong> <span style="color:#ffd54f;">${skill.name}!</span> 아군 전체 체력 대량 회복!`);
         triggerScreenFlash('rgba(255, 213, 79, 0.3)');
       } else if (skill.type === 'all') {
-        // AoE damage to all enemies (Archmage / Assassin poison)
         triggerScreenShake();
         if (skill.id === 'elem_supernova') {
           triggerScreenFlash('rgba(255, 87, 34, 0.45)');
@@ -1884,31 +2446,30 @@
 
         currentEnemies.forEach((target, eIdx) => {
           if (target.hp <= 0) return;
-          const isCrit = Math.random() * 100 < (hero.luck * 0.3);
-          const mult = isCrit ? 1.7 : 1.0;
+          const isCrit = isFeverMode || (Math.random() * 100 < (hero.luck * 0.35));
+          const mult = isFeverMode ? 2.0 : (isCrit ? 1.7 : 1.0);
           const baseDmg = Math.max(10, (hero.atk * skill.power) - (target.def * 0.4));
           const dmg = Math.round(baseDmg * mult);
 
           target.hp = Math.max(0, target.hp - dmg);
-          showFloatingText(`-${dmg}${isCrit ? ' CRIT!' : ''}`, isCrit ? 'crit' : 'dmg', `enemy-${eIdx}`);
+          showFloatingText(`-${dmg}${isFeverMode ? ' FEVER!' : (isCrit ? ' CRIT!' : '')}`, isFeverMode ? 'fever-hit' : (isCrit ? 'crit' : 'dmg'), `enemy-${eIdx}`);
 
-          if (skill.effect === 'stun' && Math.random() < 0.6) {
+          if (skill.effect === 'stun' && Math.random() < 0.7) {
             target.statuses.push({ name: '기절', icon: '⚡', color: '#ffd54f' });
           }
         });
 
-        addLog(`<strong>[${hero.name}]</strong> <span style="color:#ba68c8;">${skill.name}!</span> 적 전체에 치명적인 광역 강타!`);
+        addLog(`<strong>[${hero.name}]</strong> <span style="color:#ba68c8;">${skill.name}!</span> 적 전체에 광역 타격!`);
       } else {
-        // Single target damage
         const target = currentEnemies[selectedEnemyIndex];
         if (target && target.hp > 0) {
           triggerScreenShake();
           spawnVfxSlash();
 
-          const isCrit = Math.random() * 100 < (hero.luck * 0.35);
-          let mult = isCrit ? 1.8 : 1.0;
+          const isCrit = isFeverMode || (Math.random() * 100 < (hero.luck * 0.4));
+          let mult = isFeverMode ? 2.2 : (isCrit ? 1.8 : 1.0);
           if (skill.isSpecial && target.hp < target.maxHp * 0.5) {
-            mult *= 1.5; // Assassin execute amp!
+            mult *= 1.5;
           }
 
           const targetDef = skill.pierce ? target.def * (1 - skill.pierce) : target.def;
@@ -1916,16 +2477,16 @@
           const dmg = Math.round(baseDmg * mult);
 
           target.hp = Math.max(0, target.hp - dmg);
-          showFloatingText(`-${dmg}${isCrit ? ' CRITICAL!' : ''}`, isCrit ? 'crit' : 'dmg', `enemy-${selectedEnemyIndex}`);
+          showFloatingText(`-${dmg}${isFeverMode ? ' FEVER!' : (isCrit ? ' CRIT!' : '')}`, isFeverMode ? 'fever-hit' : (isCrit ? 'crit' : 'dmg'), `enemy-${selectedEnemyIndex}`);
 
           addLog(`<strong>[${hero.name}]</strong> ${skill.name} 적중! <strong>${target.name}</strong>에게 ${dmg} 피해!`);
         }
       }
 
+      onTurnActionTaken();
       renderHeroes();
       renderEnemies();
 
-      // Check wave win
       setTimeout(() => {
         checkWaveCondition();
       }, 700);
@@ -1935,17 +2496,16 @@
       const allDead = currentEnemies.every(e => e.hp <= 0);
       if (allDead) {
         if (currentWaveIndex < encounters.length - 1) {
-          addLog(`🎉 <strong>[웨이브 돌파]</strong> 선봉대를 소탕했습니다! 심연의 핵으로 전진합니다...`);
+          addLog(`🎉 <strong>[웨이브 돌파]</strong> 마물들을 소탕했습니다! 다음 웨이브 돌입...`);
           playSfx('victory');
           setTimeout(() => {
             loadWave(currentWaveIndex + 1);
           }, 1100);
         } else {
-          // Boss Cleared -> Ad Victory Screen
+          // 3-Wave Cleared!
           onAllDungeonsCleared();
         }
       } else {
-        // Proceed to next hero turn
         startTurn(currentTurnHeroIndex + 1);
       }
     }
@@ -1958,7 +2518,6 @@
         currentEnemies.forEach((enemy, idx) => {
           if (enemy.hp <= 0) return;
 
-          // Check stun
           const stunIdx = enemy.statuses.findIndex(s => s.name === '기절');
           if (stunIdx !== -1) {
             enemy.statuses.splice(stunIdx, 1);
@@ -1966,15 +2525,13 @@
             return;
           }
 
-          // Pick target (Paladin has highest aggro)
           const targetHero = (party[0].hp > 0 && Math.random() < 0.7) ? party[0] : (party[1].hp > 0 ? party[1] : party[2]);
           if (!targetHero || targetHero.hp <= 0) return;
 
-          // Enemy ATK is already reduced by 50%!
+          // Enemy ATK reduced by 50%
           const baseDmg = Math.max(5, enemy.atk - (targetHero.def * 0.3));
           let dmg = Math.round(baseDmg * (0.85 + Math.random() * 0.3));
 
-          // Shield absorption
           if (targetHero.shield > 0) {
             const absorb = Math.min(targetHero.shield, dmg);
             targetHero.shield -= absorb;
@@ -1988,13 +2545,12 @@
           }
 
           playSfx('slash');
-          addLog(`💥 <strong>${enemy.name}</strong>의 공격! <strong>${targetHero.name}</strong>이(가) 가볍게 막아내었습니다!`);
+          addLog(`💥 <strong>${enemy.name}</strong>의 공격! <strong>${targetHero.name}</strong>이(가) 견고히 방어했습니다!`);
         });
 
         renderHeroes();
         renderEnemies();
 
-        // End of enemy turn -> Back to Hero Turn 0
         setTimeout(() => {
           startTurn(0);
         }, 800);
@@ -2006,19 +2562,21 @@
       const hero = party[currentTurnHeroIndex];
       if (!hero || hero.hp <= 0) return;
 
-      // Smart AI for playable ad:
-      // Paladin casts shield if not active, or judgment
-      // Assassin casts execute or strike
-      // Mage casts supernova or chain lightning
-      let chosenSkill = hero.skills[0];
-      if (hero.id === 'paladin' && hero.shield <= 0 && hero.mp >= 50) {
-        chosenSkill = hero.skills[1]; // 신성 방벽
-      } else if (hero.id === 'assassin' && hero.skills[2] && hero.mp >= 56) {
-        chosenSkill = hero.skills[2]; // 심장 꿰뚫기
-      } else if (hero.id === 'elementalist' && hero.skills[2] && hero.mp >= 91) {
-        chosenSkill = hero.skills[2]; // 원소 초신성
-      } else if (hero.mp >= hero.skills[1].mana) {
-        chosenSkill = hero.skills[1];
+      // Smart auto-action picking unique/special or active
+      let chosenSkill = hero.skills[0]; // 기본기
+      if (isFeverMode) {
+        // In fever, always cast strongest skill / unique!
+        chosenSkill = hero.skills[3] || hero.skills[2] || hero.skills[1];
+      } else {
+        if (hero.id === 'paladin' && hero.shield <= 0 && hero.mp >= 50) {
+          chosenSkill = hero.skills[2]; // 신성 방벽
+        } else if (hero.id === 'assassin' && hero.skills[3] && hero.mp >= 56) {
+          chosenSkill = hero.skills[3]; // 심장 꿰뚫기
+        } else if (hero.id === 'elementalist' && hero.skills[3] && hero.mp >= 91) {
+          chosenSkill = hero.skills[3]; // 원소 초신성
+        } else if (hero.mp >= hero.skills[1].mana) {
+          chosenSkill = hero.skills[1];
+        }
       }
 
       castHeroSkill(hero, chosenSkill);
@@ -2048,26 +2606,42 @@
       document.getElementById('battle-phase').style.display = 'none';
       document.getElementById('explore-phase').style.display = 'flex';
 
-      // Reset party HP & MP
+      // Reset exploration views
+      document.getElementById('entry-view').style.display = 'flex';
+      document.getElementById('event-1-view').style.display = 'none';
+      document.getElementById('corridor-mid-view').style.display = 'none';
+      document.getElementById('event-2-view').style.display = 'none';
+      document.getElementById('boss-door-view').style.display = 'none';
+      document.getElementById('track-fill').style.width = '25%';
+
+      document.getElementById('step-lbl-1').className = 'active-step';
+      document.getElementById('step-lbl-2').className = '';
+      document.getElementById('step-lbl-3').className = '';
+      document.getElementById('step-lbl-4').className = '';
+
+      // Reset party
       party.forEach(h => {
         h.hp = h.maxHp;
         h.mp = h.maxMp;
         h.shield = 0;
       });
+      feverBadges = [];
+      isFeverMode = false;
+      document.getElementById('game-container').classList.remove('fever-active');
+
       autoBattle = false;
       document.getElementById('auto-btn').className = 'auto-toggle-btn';
       document.getElementById('auto-btn').innerText = '⚡ 자동전투 OFF';
     }
 
     // =========================================================================
-    // 6. Visual Effects & Floating Numbers Helpers
+    // 9. Floating Text & VFX Helpers
     // =========================================================================
     function showFloatingText(text, type, targetId) {
       const el = document.createElement('div');
       el.className = `floating-num ${type}`;
       el.innerText = text;
 
-      // Position relative to target
       let top = 40 + Math.random() * 20;
       let left = 35 + Math.random() * 30;
 
@@ -2085,7 +2659,7 @@
     function triggerScreenShake() {
       const container = document.getElementById('game-container');
       container.classList.remove('shake');
-      void container.offsetWidth; // reflow
+      void container.offsetWidth;
       container.classList.add('shake');
       setTimeout(() => container.classList.remove('shake'), 350);
     }
@@ -2127,9 +2701,7 @@
       logBar.innerHTML = htmlText;
     }
 
-    // Auto-init on page load
     window.addEventListener('DOMContentLoaded', () => {
-      // Warm up audio context on first user tap
       window.addEventListener('click', initAudio, { once: true });
       window.addEventListener('touchstart', initAudio, { once: true });
     });
