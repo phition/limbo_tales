@@ -4190,6 +4190,28 @@ const SKILL_RANK_COLORS: Record<string, { label: string; color: string; bg: stri
   mythic:   { label: '신화', color: '#ffd54f', bg: '#ffd54f22' },
 };
 
+// 🛡️ 장비 기본 스탯 + 접두어 스탯 + 접미어 스탯 총합 계산 헬퍼
+const getHeroTotalGearBonus = (
+  hero: Mercenary,
+  statKey: 'hp' | 'mp' | 'atk' | 'def' | 'spd' | 'luck',
+  gm: any
+): number => {
+  let total = 0;
+  Object.values(hero.equipment || {}).forEach(eq => {
+    if (!eq) return;
+    const isComp = gm.isEquipmentCompatible ? gm.isEquipmentCompatible(hero.classId, eq) : true;
+    let mult = isComp ? 1.0 : 0.5;
+    if (gm.isMementoResonated && gm.isMementoResonated(eq)) {
+      mult *= 1.10;
+    }
+    const baseStatVal = (eq.stats as any)?.[statKey] || 0;
+    const prefixStatVal = (eq.prefix?.stats as any)?.[statKey] || 0;
+    const suffixStatVal = (eq.suffix?.stats as any)?.[statKey] || 0;
+    total += Math.floor((baseStatVal + prefixStatVal + suffixStatVal) * mult);
+  });
+  return total;
+};
+
 // 📊 6대 실효 스탯 상세 분석 모달 (기획안 1)
 const StatDetailModal: React.FC<{
   hero: Mercenary;
@@ -4210,12 +4232,12 @@ const StatDetailModal: React.FC<{
   );
 
   const STATS_DATA = [
-    { key: 'hp',   label: tr('체력 (HP)'),     color: '#ef5350', base: Math.round(baseStats.maxHp),     eff: Math.round(eff.maxHp),     gear: (hero.equipment?.armor?.stats?.hp || 0) + (hero.equipment?.accessory?.stats?.hp || 0) },
-    { key: 'mp',   label: tr('마나 (MP)'),     color: '#42a5f5', base: baseStats.maxMp,                 eff: eff.maxMp,                 gear: (hero.equipment?.weapon?.stats?.mp || 0) + (hero.equipment?.accessory?.stats?.mp || 0) },
-    { key: 'atk',  label: tr('공격력 (ATK)'),  color: '#ff7043', base: baseStats.stats.atk,             eff: eff.atk,                   gear: (hero.equipment?.weapon?.stats?.atk || 0) + (hero.equipment?.accessory?.stats?.atk || 0) },
-    { key: 'def',  label: tr('방어력 (DEF)'),  color: '#66bb6a', base: baseStats.stats.def,             eff: eff.def,                   gear: (hero.equipment?.armor?.stats?.def || 0) + (hero.equipment?.accessory?.stats?.def || 0) },
-    { key: 'spd',  label: tr('이동속도 (SPD)'), color: '#ffd54f', base: baseStats.stats.spd,             eff: eff.spd,                   gear: (hero.equipment?.weapon?.stats?.spd || 0) + (hero.equipment?.accessory?.stats?.spd || 0) },
-    { key: 'luck', label: tr('행운 (LUK)'),     color: '#ce93d8', base: baseStats.stats.luck,            eff: eff.luck,                  gear: (hero.equipment?.accessory?.stats?.luck || 0) },
+    { key: 'hp',   label: tr('체력 (HP)'),     color: '#ef5350', base: Math.round(baseStats.maxHp),     eff: Math.round(eff.maxHp),     gear: getHeroTotalGearBonus(hero, 'hp', gm) },
+    { key: 'mp',   label: tr('마나 (MP)'),     color: '#42a5f5', base: baseStats.maxMp,                 eff: eff.maxMp,                 gear: getHeroTotalGearBonus(hero, 'mp', gm) },
+    { key: 'atk',  label: tr('공격력 (ATK)'),  color: '#ff7043', base: baseStats.stats.atk,             eff: eff.atk,                   gear: getHeroTotalGearBonus(hero, 'atk', gm) },
+    { key: 'def',  label: tr('방어력 (DEF)'),  color: '#66bb6a', base: baseStats.stats.def,             eff: eff.def,                   gear: getHeroTotalGearBonus(hero, 'def', gm) },
+    { key: 'spd',  label: tr('이동속도 (SPD)'), color: '#ffd54f', base: baseStats.stats.spd,             eff: eff.spd,                   gear: getHeroTotalGearBonus(hero, 'spd', gm) },
+    { key: 'luck', label: tr('행운 (LUK)'),     color: '#ce93d8', base: baseStats.stats.luck,            eff: eff.luck,                  gear: getHeroTotalGearBonus(hero, 'luck', gm) },
   ];
 
   return (
@@ -4319,7 +4341,7 @@ const BarracksDrawer: React.FC<{
   const [showBondModal, setShowBondModal] = useState(false);
   const [showSynergyModal, setShowSynergyModal] = useState(false);
   const [showStatDetailModal, setShowStatDetailModal] = useState(false);
-  const [dungeonAssignSlot, setDungeonAssignSlot] = useState<PositionSlot | null>(null);
+  const [dungeonAssignSlotIdx, setDungeonAssignSlotIdx] = useState<number | null>(null);
 
   const [barracksCategory, setBarracksCategory] = useState<'dungeon' | 'dimensional' | 'defense'>(initialCategory);
   useEffect(() => {
@@ -4438,7 +4460,7 @@ const BarracksDrawer: React.FC<{
   };
 
   // ⚔️ 던전 3인 원정대 슬롯 배치 / 스왑 핸들러
-  const handleAssignHeroToDungeonSlot = (heroId: string, slot: PositionSlot) => {
+  const handleAssignHeroToDungeonSlot = (heroId: string, slotIdx: number) => {
     const heroToAssign = state.barracks.find(h => h.id === heroId);
     if (!heroToAssign) return;
 
@@ -4456,43 +4478,40 @@ const BarracksDrawer: React.FC<{
     const existingIdx = currentParty.findIndex(p => p.id === heroId);
 
     if (existingIdx !== -1) {
-      const existingInSlot = currentParty.find(p => p.position === slot);
-      if (existingInSlot && existingInSlot.id !== heroId) {
-        existingInSlot.position = currentParty[existingIdx].position;
+      if (slotIdx < currentParty.length) {
+        const temp = currentParty[slotIdx];
+        currentParty[slotIdx] = currentParty[existingIdx];
+        currentParty[existingIdx] = temp;
+      } else {
+        currentParty.splice(existingIdx, 1);
+        currentParty.push(heroToAssign);
       }
-      currentParty[existingIdx].position = slot;
     } else {
-      const existingInSlotIdx = currentParty.findIndex(p => p.position === slot);
-      if (existingInSlotIdx !== -1) {
-        currentParty.splice(existingInSlotIdx, 1);
-      } else if (currentParty.length >= 3) {
-        currentParty.shift();
+      if (slotIdx < currentParty.length) {
+        currentParty[slotIdx] = heroToAssign;
+      } else {
+        currentParty.push(heroToAssign);
       }
-      heroToAssign.position = slot;
-      currentParty.push(heroToAssign);
+      if (currentParty.length > 3) currentParty.length = 3;
     }
 
     gm.party = currentParty;
-    gm.sortPartyByPosition();
+    gm.reconcileParty();
     gm.emit('partyUpdated', gm.party);
     gm.emit('update');
     gm.saveGame();
     SoundManager.getInstance().play('equip');
-    setDungeonAssignSlot(null);
+    setDungeonAssignSlotIdx(null);
   };
 
   // ⚔️ 던전 슬롯에서 용병 제거
   const handleRemoveFromDungeonSlot = (heroId: string) => {
-    if (gm.party.length <= 1) {
-      SoundManager.getInstance().play('debuff');
-      gameDialog.alert({
-        title: tr('파티 편성'),
-        message: tr('원정대에는 최소 1명의 용병이 출전해야 합니다.'),
-        icon: '⚠️',
-      });
-      return;
-    }
-    gm.togglePartyMember(heroId);
+    const currentParty = gm.party.filter(p => p.id !== heroId);
+    gm.party = currentParty;
+    gm.reconcileParty();
+    gm.emit('partyUpdated', gm.party);
+    gm.emit('update');
+    gm.saveGame();
     SoundManager.getInstance().play('click');
   };
 
@@ -5267,13 +5286,13 @@ const BarracksDrawer: React.FC<{
           </div>
         ) : (
           <>
-            {/* 1. 상단 3인 진형 앵커 슬롯 바 (하단 로스터처럼 낮고 길게 가로 슬림형) */}
+            {/* 1. 상단 3인 편성 앵커 슬롯 바 (하단 로스터처럼 낮고 길게 가로 슬림형) */}
             <div className="p-1.5 sm:p-2 bg-[#0a0d14] border-b border-[#241c10] flex flex-col gap-1 shrink-0">
               <div className="flex items-center justify-between text-[11px] px-0.5">
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <span className="font-extrabold text-[#dcc496] flex items-center gap-1">
                     <span>⚔️</span>
-                    <span>{tr('원정대 진형')}</span>
+                    <span>{tr('원정대 편성')}</span>
                   </span>
                   <span className="text-[9.5px] font-mono px-1.5 py-0.2 rounded bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40 font-bold">
                     {state.party.length}/3
@@ -5307,20 +5326,16 @@ const BarracksDrawer: React.FC<{
                 </div>
               </div>
 
-              {/* 3 Positions Grid: 낮고 길게 가로 슬림형 */}
+              {/* 3 Slots Grid: 낮고 길게 가로 슬림형 (1번, 2번, 3번 슬롯 - 전후열 구분 없이 채비실과 1:1 동기화) */}
               <div className="grid grid-cols-3 gap-1.5">
-                {[
-                  { slot: 'front' as PositionSlot, name: tr('전열'), role: tr('방어'), icon: '🛡️', color: '#ff5252', bg: '#ff525215', border: '#ff525244' },
-                  { slot: 'mid' as PositionSlot,   name: tr('중열'), role: tr('공격'), icon: '⚔️', color: '#ff9800', bg: '#ff980015', border: '#ff980044' },
-                  { slot: 'back' as PositionSlot,  name: tr('후열'), role: tr('지원'), icon: '🏹', color: '#00e676', bg: '#00e67615', border: '#00e67644' },
-                ].map((posInfo, pIdx) => {
-                  const pHero = state.party.find(p => p.position === posInfo.slot) || (state.party.length > pIdx && !state.party.some(p => p.position) ? state.party[pIdx] : null);
+                {[0, 1, 2].map((slotIdx) => {
+                  const pHero = state.party[slotIdx] || null;
                   const isSelectedHero = hero && pHero && hero.id === pHero.id;
                   const pCls = pHero ? CHARACTER_CLASSES[pHero.classId] : null;
 
                   return (
                     <div
-                      key={posInfo.slot}
+                      key={slotIdx}
                       className={`h-9 sm:h-10 px-2 rounded-lg border flex items-center justify-between gap-1.5 transition-all cursor-pointer relative ${
                         isSelectedHero
                           ? 'bg-[#221c14] border-2 border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.4)] scale-[1.01]'
@@ -5333,17 +5348,13 @@ const BarracksDrawer: React.FC<{
                           const bIdx = state.barracks.findIndex(b => b.id === pHero.id);
                           if (bIdx >= 0) setSelectedIdx(bIdx);
                         } else {
-                          setDungeonAssignSlot(posInfo.slot);
+                          setDungeonAssignSlotIdx(slotIdx);
                         }
                       }}
                     >
-                      {/* Left: Role Badge */}
-                      <span
-                        className="text-[8.5px] font-extrabold px-1 py-0.2 rounded border shrink-0 flex items-center gap-0.5"
-                        style={{ color: posInfo.color, background: posInfo.bg, borderColor: posInfo.border }}
-                      >
-                        <span>{posInfo.icon}</span>
-                        <span>{posInfo.name}</span>
+                      {/* Left: Slot Badge */}
+                      <span className="text-[8.5px] font-extrabold px-1.5 py-0.2 rounded border shrink-0 bg-[#b89758]/15 text-[#ffd54f] border-[#b89758]/40">
+                        {tr('{0}번').replace('{0}', String(slotIdx + 1))}
                       </span>
 
                       {/* Middle: Hero Info (or Empty Prompt) */}
@@ -5424,7 +5435,7 @@ const BarracksDrawer: React.FC<{
                           </span>
                           {inParty && (
                             <span className="absolute top-0.5 left-0.5 text-[7.5px] font-bold px-1 rounded bg-[#38ef7d] text-black">
-                              {hero.position === 'front' ? tr('전열') : hero.position === 'back' ? tr('후열') : tr('중열')}
+                              {tr('출전 중')}
                             </span>
                           )}
                         </div>
@@ -5562,7 +5573,7 @@ const BarracksDrawer: React.FC<{
                           onClick={() => setShowStatDetailModal(true)}
                           className="text-[10px] text-[#ffd54f] hover:text-white flex items-center gap-1 font-bold cursor-pointer transition-colors"
                         >
-                          <span>🔍 {tr('스탯 상세 / 보너스 분배')}</span>
+                          <span>🔍 {tr('스탯 상세')}</span>
                           <span>›</span>
                         </button>
                       </div>
@@ -5589,7 +5600,7 @@ const BarracksDrawer: React.FC<{
                           <span className="text-[10px] text-[#ff7043] font-bold">ATK</span>
                           <span className="text-xs font-bold text-white">{eff.atk}</span>
                           <span className="text-[9px] text-[#38ef7d]">
-                            {hero.equipment?.weapon ? `(+${hero.equipment.weapon.stats?.atk || 0})` : ''}
+                            {getHeroTotalGearBonus(hero, 'atk', gm) > 0 ? `(+${getHeroTotalGearBonus(hero, 'atk', gm)})` : ''}
                           </span>
                         </div>
                         {/* DEF */}
@@ -5597,7 +5608,7 @@ const BarracksDrawer: React.FC<{
                           <span className="text-[10px] text-[#66bb6a] font-bold">DEF</span>
                           <span className="text-xs font-bold text-white">{eff.def}</span>
                           <span className="text-[9px] text-[#38ef7d]">
-                            {hero.equipment?.armor ? `(+${hero.equipment.armor.stats?.def || 0})` : ''}
+                            {getHeroTotalGearBonus(hero, 'def', gm) > 0 ? `(+${getHeroTotalGearBonus(hero, 'def', gm)})` : ''}
                           </span>
                         </div>
                         {/* SPD */}
@@ -5949,22 +5960,16 @@ const BarracksDrawer: React.FC<{
             )}
 
             {/* ── ⚔️ 던전 슬롯 출전 용병 배치 모달 ── */}
-            {dungeonAssignSlot && (
+            {dungeonAssignSlotIdx !== null && (
               <Modal
-                title={
-                  dungeonAssignSlot === 'front'
-                    ? tr('1. 전열 (방어/탱커) 출전 용병 배치')
-                    : dungeonAssignSlot === 'mid'
-                    ? tr('2. 중열 (공격/딜러) 출전 용병 배치')
-                    : tr('3. 후열 (지원/힐러) 출전 용병 배치')
-                }
-                open={Boolean(dungeonAssignSlot)}
-                onClose={() => setDungeonAssignSlot(null)}
+                title={tr('{0}번 슬롯 출전 용병 배치').replace('{0}', String((dungeonAssignSlotIdx ?? 0) + 1))}
+                open={dungeonAssignSlotIdx !== null}
+                onClose={() => setDungeonAssignSlotIdx(null)}
                 footer={
                   <button
                     type="button"
                     className="btn btn-ghost text-xs px-4 py-2 w-full font-bold cursor-pointer"
-                    onClick={() => setDungeonAssignSlot(null)}
+                    onClick={() => setDungeonAssignSlotIdx(null)}
                   >
                     {tr('닫기')}
                   </button>
@@ -5979,7 +5984,7 @@ const BarracksDrawer: React.FC<{
                     const isAdmitted = state.infirmaryPatients.includes(cand.id);
                     const candCls = CHARACTER_CLASSES[cand.classId];
                     const effCand = gm.getHeroEffectiveStats(cand);
-                    const isCurrentSlot = cand.position === dungeonAssignSlot;
+                    const isCurrentSlot = dungeonAssignSlotIdx !== null && state.party[dungeonAssignSlotIdx]?.id === cand.id;
                     const gMeta = GRADE_META[cand.grade] || GRADE_META.rookie;
 
                     return (
@@ -6024,7 +6029,7 @@ const BarracksDrawer: React.FC<{
                               type="button"
                               onClick={() => {
                                 handleRemoveFromDungeonSlot(cand.id);
-                                setDungeonAssignSlot(null);
+                                setDungeonAssignSlotIdx(null);
                               }}
                               className="btn btn-danger text-xs px-3 py-1 font-bold cursor-pointer"
                             >
@@ -6034,7 +6039,7 @@ const BarracksDrawer: React.FC<{
                             <button
                               type="button"
                               disabled={isAdmitted}
-                              onClick={() => handleAssignHeroToDungeonSlot(cand.id, dungeonAssignSlot)}
+                              onClick={() => handleAssignHeroToDungeonSlot(cand.id, dungeonAssignSlotIdx!)}
                               className={`text-xs px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                                 isAdmitted
                                   ? 'bg-[#1e2738] text-[#556987] cursor-not-allowed'

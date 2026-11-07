@@ -6856,10 +6856,6 @@ export class GameManager {
 
     const inPartyIdx = this.party.findIndex(p => p.id === heroId);
     if (inPartyIdx !== -1) {
-      if (this.party.length <= 1) {
-        this.addLog('파티에는 최소 1명의 용병이 출전해야 합니다.', 'danger');
-        return;
-      }
       this.party.splice(inPartyIdx, 1);
       this.addLog(`[파티 제외] ${hero.name} 용병이 원정대에서 대기 상태로 전환되었습니다.`, 'system');
     } else {
