@@ -10,6 +10,7 @@ import { getBuildingLore, getBuildingStatusInfo, RES_NAMES_AND_ICONS } from '../
 import { GameManager } from '../../managers/GameManager';
 import { getTutorialProductionTarget, checkTutorialBuildingRestriction } from '../../data/tutorialSteps';
 import { gameDialog } from '../../services/DialogService';
+import { CitadelFacilityWheelNavigator } from './CitadelFacilityWheelNavigator';
 
 // 🏛️ 시설별 내부 헤더 배너 이미지 매핑
 const BUILDING_IMAGE_MAP: Record<string, string> = {
@@ -385,8 +386,12 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         </button>
       </div>
 
-      {/* ── 본문 콘텐츠 영역 (스크롤 지원) ── */}
-      <div className="flex-1 overflow-y-auto tg-scrollbar p-3.5 md:p-4 space-y-3.5">
+      {/* ── 본문 콘텐츠 영역 ── */}
+      <div className={`flex-1 ${
+        activeView === 'workstations'
+          ? 'overflow-hidden flex flex-col p-1 sm:p-2'
+          : 'overflow-y-auto tg-scrollbar p-3.5 md:p-4 space-y-3.5'
+      }`}>
         
         {/* ═════════════════════════════════════════════════════════════
             VIEW 1: 3대 마스터 배너 메인 화면 (Step 2)
@@ -886,132 +891,19 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         )}
 
         {/* ═════════════════════════════════════════════════════════════
-            VIEW 4: 성채 활동 시설 12종 목록 (Step 3-C) - 상단 배너 카드 뷰
+            VIEW 4: 성채 활동 시설 12종 세로 3D 휠 네비게이터 (중앙 배치 & 가속 휠)
             ═════════════════════════════════════════════════════════════ */}
         {activeView === 'workstations' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-3xl mx-auto w-full">
-            {WORKSTATION_ITEMS.map(item => {
-              const isLocked = !item.isBuilt;
-              const buildingLevel = item.buildingId ? state.buildings[item.buildingId]?.level : undefined;
-
-              return (
-                <div
-                  key={item.key}
-                  id={`workstation-card-${item.key}`}
-                  data-tutorial-target={item.key === 'tavern' && !isLocked ? 'enter-tavern' : undefined}
-                  onClick={(e) => handleWorkstationClick(item, e.currentTarget)}
-                  className={`group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 select-none shadow-lg ${
-                    isLocked
-                      ? 'bg-[#0d1017]/80 border-[#222b3d]/70 opacity-80 cursor-pointer hover:border-[#384863]'
-                      : 'bg-[#10141d] border-[#3d372e]/80 hover:border-[#b89758] hover:shadow-[0_8px_24px_rgba(184,151,88,0.22)] cursor-pointer active:scale-[0.985]'
-                  }`}
-                >
-                  {/* ── 시설 내부 상단 배너 이미지 프레임 ── */}
-                  <div className="relative w-full h-32 sm:h-36 overflow-hidden bg-[#07090e] border-b border-[#242b3b]">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className={`facility-banner-img w-full h-full object-cover transition-all duration-700 ease-out ${
-                        isLocked
-                          ? 'grayscale brightness-[0.52] contrast-110'
-                          : 'grayscale-0 brightness-100 contrast-105 saturate-110 group-hover:scale-105 group-hover:brightness-110'
-                      }`}
-                      style={{
-                        transition: 'filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-                      }}
-                    />
-
-                    {/* 상단 비네팅 (타이틀 가독성 확보) */}
-                    <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#08090b]/85 via-[#08090b]/40 to-transparent pointer-events-none" />
-
-                    {/* 하단 자연스러운 그라데이션 블렌드 */}
-                    <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#10141d] via-[#10141d]/60 to-transparent pointer-events-none" />
-
-                    {/* 좌측 상단: 아이콘 + 시설 타이틀 */}
-                    <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10 flex items-center gap-2 max-w-[calc(100%-80px)]">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg shrink-0 shadow-md backdrop-blur-xs transition-colors ${
-                        isLocked
-                          ? 'bg-black/60 border border-[#2a3447]/60 text-[#718096]'
-                          : 'bg-black/70 border border-[#b89758]/60 text-white group-hover:border-[#ffd54f]'
-                      }`}>
-                        <span className="leading-none drop-shadow">{item.icon}</span>
-                      </div>
-                      <h4 className={`text-xs sm:text-sm font-extrabold tracking-tight truncate drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] transition-colors ${
-                        isLocked ? 'text-[#8896ab]' : 'text-[#ededed] group-hover:text-[#ffd54f]'
-                      }`}>
-                        {item.name}
-                      </h4>
-                    </div>
-
-                    {/* 우측 상단: 레벨 뱃지 및 상태 태그 */}
-                    <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-10 flex items-center gap-1.5">
-                      {isLocked ? (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-black/80 text-[#8896ab] border border-[#374154] backdrop-blur-xs shadow-md flex items-center gap-1">
-                          <span>🔒</span>
-                          <span>{tr('미해금')}</span>
-                        </span>
-                      ) : (
-                        <>
-                          {buildingLevel !== undefined && (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#b89758]/30 text-[#ffd54f] border border-[#b89758]/70 backdrop-blur-xs shadow-md">
-                              Lv.{buildingLevel}
-                            </span>
-                          )}
-                          {item.badge && (
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black shadow-md backdrop-blur-xs ${
-                              item.key === 'codex' && registerableCodexCount > 0
-                                ? 'bg-[#ef5350] text-white animate-pulse'
-                                : 'bg-gradient-to-r from-[#ffd54f] to-[#b89758] text-[#08090b]'
-                            }`}>
-                              {item.badge}
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </div>
-
-                    {/* 미해금 중앙 락 오버레이 및 건설 안내 */}
-                    {isLocked && (
-                      <div className="absolute inset-0 bg-black/35 backdrop-blur-[0.5px] flex items-center justify-center pointer-events-none">
-                        <div className="px-3 py-1.5 rounded-xl bg-[#090b10]/90 border border-[#3b475e]/80 text-[#cfd8e8] text-xs font-bold shadow-2xl flex items-center gap-1.5">
-                          <span className="text-sm">🔒</span>
-                          <span>{tr('시설 미건설 (터치하여 건설하기)')}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* ── 하단 설명 및 입장 액션 바 ── */}
-                  <div className="p-3 sm:p-3.5 flex flex-col justify-between flex-1 gap-2.5 bg-[#10141d]">
-                    <p className={`text-xs line-clamp-2 leading-relaxed transition-colors ${
-                      isLocked ? 'text-[#5a6578]' : 'text-[#9da3af] group-hover:text-[#d1d7e3]'
-                    }`}>
-                      {isLocked ? tr('성채 시설 관리에서 해당 시설을 건설하면 즉시 이용할 수 있습니다.') : item.sub}
-                    </p>
-
-                    <div className="flex items-center justify-between pt-1 border-t border-[#1e2330]/80">
-                      <span className={`text-[11px] font-bold ${
-                        isLocked ? 'text-[#7d8ba1]' : 'text-[#b89758]'
-                      }`}>
-                        {isLocked ? `🔨 ${tr('건설 필요')}` : `✨ ${tr('성채 핵심 거점')}`}
-                      </span>
-
-                      {isLocked ? (
-                        <div className="px-2.5 py-1 rounded-lg bg-[#141924] border border-[#26334a] text-[#8896ab] hover:text-[#dcc496] hover:border-[#b89758] text-xs font-bold flex items-center gap-1 transition-colors">
-                          <span>{tr('건설하러 가기')}</span>
-                          <span>➔</span>
-                        </div>
-                      ) : (
-                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#b89758]/20 to-[#ffd54f]/15 border border-[#b89758]/60 group-hover:from-[#b89758] group-hover:to-[#ffd54f] text-[#dcc496] group-hover:text-[#08090b] text-xs font-black transition-all shadow-xs flex items-center gap-1">
-                          <span>{tr('입장하기')}</span>
-                          <span className="text-[10px] group-hover:translate-x-0.5 transition-transform">▶</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="flex-1 w-full h-full relative overflow-hidden flex items-center justify-center min-h-[360px]">
+            <CitadelFacilityWheelNavigator
+              items={WORKSTATION_ITEMS}
+              onSelect={handleWorkstationClick}
+              tutorialStepId={tutorialStepId}
+              buildingLevels={Object.fromEntries(
+                Object.entries(state.buildings || {}).map(([k, v]) => [k, v?.level])
+              )}
+              registerableCodexCount={registerableCodexCount}
+            />
           </div>
         )}
 
