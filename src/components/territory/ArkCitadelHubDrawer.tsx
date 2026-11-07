@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useGameManager } from '../../hooks/useGameManager';
 import { useI18n } from '../../hooks/useI18n';
 import { SoundManager } from '../../managers/SoundManager';
@@ -10,6 +10,22 @@ import { getBuildingLore, getBuildingStatusInfo, RES_NAMES_AND_ICONS } from '../
 import { GameManager } from '../../managers/GameManager';
 import { getTutorialProductionTarget, checkTutorialBuildingRestriction } from '../../data/tutorialSteps';
 import { gameDialog } from '../../services/DialogService';
+
+// 🏛️ 시설별 내부 헤더 배너 이미지 매핑
+const BUILDING_IMAGE_MAP: Record<string, string> = {
+  blacksmith: 'assets/menu_forge.jpg',
+  tavern: 'assets/menu_tavern.jpg',
+  infirmary: 'assets/menu_infirmary.jpg',
+  storage: 'assets/menu_storage.jpg',
+  alchemy: 'assets/menu_alchemy.jpg',
+  market: 'assets/menu_market.jpg',
+  arenaGate: 'assets/menu_arena.jpg',
+  quests: 'assets/menu_quests.jpg',
+  codex: 'assets/menu_codex.jpg',
+  barracks: 'assets/menu_barracks.jpg',
+  cemetery: 'assets/menu_cemetery.jpg',
+  citadel: 'assets/citadel_bonfire.jpg',
+};
 
 interface ArkCitadelHubDrawerProps {
   onClose: () => void;
@@ -132,30 +148,104 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         ? `${unlockedCodexCount}종 수집` 
         : null);
 
-  // 성채 활동 시설 10종
+  // 성채 활동 시설 11종 (상단 배너 아트 에셋 매핑)
   const WORKSTATION_ITEMS: Array<{
     key: string;
     name: string;
     sub: string;
     icon: string;
+    image: string;
     isBuilt: boolean;
     buildingId?: BuildingId;
     badge?: string | null;
   }> = [
-    { key: 'quests',    name: tr('지휘관 퀘스트 & 작전 지도'), sub: tr('메인 스토리 임무 완수 및 단계별 시설 연계'), icon: '📜', isBuilt: true, badge: claimableQuestCount > 0 ? `${claimableQuestCount}건 완료` : null },
-    { key: 'codex',     name: tr('심연의 백과 & 회고록'), sub: tr('오파츠·서사 일지·신화 유물 컬렉션 및 영구 패시브 연구'), icon: '📜', isBuilt: true, badge: codexBadge },
-    { key: 'barracks',  name: tr('원정단 병영 & 작전실'), sub: tr('4인 파티 편성, 진형 배치, 전직 관리'), icon: '⚔️', isBuilt: true },
-    { key: 'forge',     name: tr('심연의 병기창'), sub: tr('무기·방어구 단조, 장비 강화, 침식 정화'), icon: '⚒️', isBuilt: (state.buildings['blacksmith']?.level || 0) >= 1, buildingId: 'blacksmith' },
-    { key: 'tavern',    name: tr('방랑자의 라운지'), sub: tr('방랑 용병 모집 계약 및 고용 풀 갱신'), icon: '🍺', isBuilt: (state.buildings['tavern']?.level || 0) >= 1, buildingId: 'tavern', badge: (state.tavernCandidates || []).length > 0 ? 'NEW' : null },
-    { key: 'infirmary', name: tr('생체 복원 병동'), sub: tr('전투 부상 대원 입원 치료 및 완치'), icon: '🏥', isBuilt: (state.buildings['infirmary']?.level || 0) >= 1, buildingId: 'infirmary', badge: (state.infirmaryPatients || []).length > 0 ? `${state.infirmaryPatients.length}인` : null },
-    { key: 'storage',   name: tr('방주 중앙 병참고'), sub: tr('전 군수 물자 및 장비·보급품 보관함'), icon: '🏛️', isBuilt: (state.buildings['storage']?.level || 0) >= 1, buildingId: 'storage' },
-    { key: 'alchemy',   name: tr('에테르 연금 공방'), sub: tr('마도 스킬 비전서 강화 및 장비 룬 인챈트'), icon: '🧪', isBuilt: (state.buildings['alchemy']?.level || 0) >= 1, buildingId: 'alchemy' },
-    { key: 'market',    name: tr('황혼의 블랙 마켓'), sub: tr('17종 군수물자 거래 및 유지비 주기 연장'), icon: '⚖️', isBuilt: (state.buildings['market']?.level || 0) >= 1, buildingId: 'market' },
-    { key: 'cemetery',  name: tr('성채 묘지'), sub: tr('전사한 영령 안치, 추모 EXP 버프 및 가호'), icon: '🪦', isBuilt: true, badge: (state.cemetery || []).length > 0 ? `${state.cemetery.length}위` : null },
+    { key: 'quests',    name: tr('지휘관 퀘스트 & 작전 지도'), sub: tr('메인 스토리 임무 완수 및 단계별 시설 연계'), icon: '📜', image: 'assets/menu_quests.jpg', isBuilt: true, badge: claimableQuestCount > 0 ? `${claimableQuestCount}건 완료` : null },
+    { key: 'codex',     name: tr('심연의 백과 & 회고록'), sub: tr('오파츠·서사 일지·신화 유물 컬렉션 및 영구 패시브 연구'), icon: '📜', image: 'assets/menu_codex.jpg', isBuilt: true, badge: codexBadge },
+    { key: 'barracks',  name: tr('원정단 병영 & 작전실'), sub: tr('4인 파티 편성, 진형 배치, 전직 관리'), icon: '⚔️', image: 'assets/menu_barracks.jpg', isBuilt: true },
+    { key: 'forge',     name: tr('심연의 병기창'), sub: tr('무기·방어구 단조, 장비 강화, 침식 정화'), icon: '⚒️', image: 'assets/menu_forge.jpg', isBuilt: (state.buildings['blacksmith']?.level || 0) >= 1, buildingId: 'blacksmith' },
+    { key: 'tavern',    name: tr('방랑자의 라운지'), sub: tr('방랑 용병 모집 계약 및 고용 풀 갱신'), icon: '🍺', image: 'assets/menu_tavern.jpg', isBuilt: (state.buildings['tavern']?.level || 0) >= 1, buildingId: 'tavern', badge: (state.tavernCandidates || []).length > 0 ? 'NEW' : null },
+    { key: 'infirmary', name: tr('생체 복원 병동'), sub: tr('전투 부상 대원 입원 치료 및 완치'), icon: '🏥', image: 'assets/menu_infirmary.jpg', isBuilt: (state.buildings['infirmary']?.level || 0) >= 1, buildingId: 'infirmary', badge: (state.infirmaryPatients || []).length > 0 ? `${state.infirmaryPatients.length}인` : null },
+    { key: 'storage',   name: tr('방주 중앙 병참고'), sub: tr('전 군수 물자 및 장비·보급품 보관함'), icon: '🏛️', image: 'assets/menu_storage.jpg', isBuilt: (state.buildings['storage']?.level || 0) >= 1, buildingId: 'storage' },
+    { key: 'alchemy',   name: tr('에테르 연금 공방'), sub: tr('마도 스킬 비전서 강화 및 장비 룬 인챈트'), icon: '🧪', image: 'assets/menu_alchemy.jpg', isBuilt: (state.buildings['alchemy']?.level || 0) >= 1, buildingId: 'alchemy' },
+    { key: 'market',    name: tr('황혼의 블랙 마켓'), sub: tr('17종 군수물자 거래 및 유지비 주기 연장'), icon: '⚖️', image: 'assets/menu_market.jpg', isBuilt: (state.buildings['market']?.level || 0) >= 1, buildingId: 'market' },
+    { key: 'cemetery',  name: tr('성채 묘지'), sub: tr('전사한 영령 안치, 추모 EXP 버프 및 가호'), icon: '🪦', image: 'assets/menu_cemetery.jpg', isBuilt: true, badge: (state.cemetery || []).length > 0 ? `${state.cemetery.length}위` : null },
+    { key: 'arena',     name: tr('차원 아레나 & 게이트'), sub: tr('차원 아레나 결투 및 네메시스 침공전'), icon: '🏆', image: 'assets/menu_arena.jpg', isBuilt: (state.buildings['arenaGate']?.level || 0) >= 1, buildingId: 'arenaGate' },
   ];
+
+  interface TransitionBannerInfo {
+    key: string;
+    title: string;
+    image: string;
+    rect: { top: number; left: number; width: number; height: number };
+    animating: boolean;
+  }
+  const [transitionBanner, setTransitionBanner] = useState<TransitionBannerInfo | null>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   const handlePlayClick = () => {
     try { SoundManager.getInstance().play('click'); } catch {}
+  };
+
+  const handleWorkstationClick = (
+    item: typeof WORKSTATION_ITEMS[0],
+    cardEl: HTMLElement
+  ) => {
+    const isLocked = !item.isBuilt;
+    if (isLocked) {
+      try { SoundManager.getInstance().play('error'); } catch {}
+      gameDialog.confirm({
+        title: tr('시설 미건설'),
+        message: `${item.name} ${tr('시설은 아직 건설되지 않았습니다.')}\n\n${tr('영지 시설 관리 화면으로 이동하여 건설하시겠습니까?')}`,
+        confirmLabel: tr('건설하러 가기'),
+        cancelLabel: tr('닫기'),
+        icon: '🔒',
+      }).then(confirmed => {
+        if (confirmed) {
+          setActiveView('facilities');
+          if (item.buildingId) {
+            setSelectedBuildingId(item.buildingId);
+          }
+        }
+      });
+      return;
+    }
+
+    handlePlayClick();
+
+    // 🚀 카드 상단 배너 이미지가 상단 모달 헤더 위치로 승강하는 전환 애니메이션 구동
+    if (drawerRef.current && cardEl) {
+      const bannerImg = cardEl.querySelector('.facility-banner-img') as HTMLElement | null;
+      const targetRect = (bannerImg || cardEl).getBoundingClientRect();
+      const containerRect = drawerRef.current.getBoundingClientRect();
+
+      setTransitionBanner({
+        key: item.key,
+        title: item.name,
+        image: item.image,
+        rect: {
+          top: targetRect.top - containerRect.top,
+          left: targetRect.left - containerRect.left,
+          width: targetRect.width,
+          height: targetRect.height,
+        },
+        animating: false,
+      });
+
+      // 다음 프레임에서 상단 헤더 위치(top: 0, w: 100%, h: 220px)로 트랜지션 발동
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTransitionBanner(prev => prev ? { ...prev, animating: true } : null);
+        });
+      });
+
+      // 260ms 후 실제 시설 진입 (모달 오픈)
+      setTimeout(() => {
+        setTransitionBanner(null);
+        onEnterDrawer(item.key);
+      }, 260);
+    } else {
+      onEnterDrawer(item.key);
+    }
   };
 
   // 🛡️ 튜토리얼 중 생산 시설 복원 단계 목표 및 제한 검사
@@ -205,6 +295,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
 
       {/* ── 슬라이드업 바텀시트(모바일) / 사이드 드로어(PC) ── */}
       <div
+        ref={drawerRef}
         className="relative z-10 flex flex-col w-full h-full border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden animate-drawer-enter"
         style={{
           backgroundImage: "linear-gradient(rgba(10, 12, 16, 0.40), rgba(6, 8, 12, 0.60)), url('assets/ark_citadel_hub.jpg')",
@@ -213,6 +304,33 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         }}
         onClick={e => e.stopPropagation()}
       >
+        {/* 🚀 시설 카드 클릭 시 상단 워크스테이션 모달 헤더로 승강하는 전환 배너 */}
+        {transitionBanner && (
+          <div
+            className="absolute z-50 overflow-hidden pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] border-b border-[#b89758] shadow-[0_16px_40px_rgba(0,0,0,0.95)]"
+            style={{
+              top: transitionBanner.animating ? 0 : transitionBanner.rect.top,
+              left: transitionBanner.animating ? 0 : transitionBanner.rect.left,
+              width: transitionBanner.animating ? '100%' : transitionBanner.rect.width,
+              height: transitionBanner.animating ? (window.innerWidth >= 768 ? 256 : 208) : transitionBanner.rect.height,
+              borderRadius: transitionBanner.animating ? '0px' : '16px',
+            }}
+          >
+            <img
+              src={transitionBanner.image}
+              alt={transitionBanner.title}
+              className="w-full h-full object-cover filter brightness-100 contrast-105 saturate-110"
+            />
+            {/* 상단 및 하단 그라데이션 */}
+            <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#08090b]/80 via-[#08090b]/30 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#121418] via-transparent to-transparent pointer-events-none" />
+            <div className="absolute top-4 left-4 z-20">
+              <h2 className="text-sm sm:text-base font-extrabold text-[#ededed] drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+                {transitionBanner.title}
+              </h2>
+            </div>
+          </div>
+        )}
         {/* 모바일 상단 드래그 핸들 */}
         <div 
           className="md:hidden flex items-center justify-center py-2 bg-[#0d0f14]/80 shrink-0"
@@ -285,35 +403,45 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   setActiveView('bonfire');
                 }
               }}
-              className={`p-3.5 rounded-xl cursor-pointer transition-all border backdrop-blur-md ${
+              className={`relative overflow-hidden p-3.5 rounded-xl cursor-pointer transition-all border backdrop-blur-md group ${
                 hasWarmth
-                  ? 'bg-gradient-to-r from-[#241a12]/75 via-[#1a1612]/65 to-[#121418]/75 border-[#b89758]/70 shadow-[0_0_16px_rgba(184,151,88,0.25)] hover:border-[#dcc496] hover:bg-[#241a12]/85'
-                  : 'bg-[#12151e]/65 border-[#3d372e]/65 hover:border-[#5a4b35] hover:bg-[#181d28]/75'
+                  ? 'border-[#b89758]/70 shadow-[0_0_16px_rgba(184,151,88,0.25)] hover:border-[#dcc496]'
+                  : 'border-[#3d372e]/65 hover:border-[#5a4b35]'
               }`}
             >
-              <div className="flex items-center justify-between mb-1.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-2xl leading-none drop-shadow">🔥</span>
-                  <h3 className="text-sm font-bold text-[#dcc496] tracking-tight">
-                    {tr('【방주의 성화】')}
-                  </h3>
+              <div 
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
+                style={{
+                  backgroundImage: "url('assets/citadel_bonfire.jpg')",
+                  filter: hasWarmth ? 'brightness(0.35) contrast(1.15)' : 'brightness(0.2) grayscale(0.8)',
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0d0f14]/90 via-[#0d0f14]/75 to-[#0d0f14]/50 pointer-events-none" />
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-2xl leading-none drop-shadow">🔥</span>
+                    <h3 className="text-sm font-bold text-[#dcc496] tracking-tight">
+                      {tr('【방주의 성화】')}
+                    </h3>
+                  </div>
+                  <span className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold ${
+                    hasWarmth
+                      ? 'bg-[#b89758]/25 text-[#dcc496] border border-[#b89758]/50 animate-pulse'
+                      : 'bg-[#242732]/80 text-[#9da3af] border border-[#3d4252]/70'
+                  }`}>
+                    {hasWarmth ? `온기 가동 중 (${warmthTimeStr})` : `성화 꺼짐 (${warmthTimeStr})`}
+                  </span>
                 </div>
-                <span className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold ${
-                  hasWarmth
-                    ? 'bg-[#b89758]/25 text-[#dcc496] border border-[#b89758]/50 animate-pulse'
-                    : 'bg-[#242732]/80 text-[#9da3af] border border-[#3d4252]/70'
-                }`}>
-                  {hasWarmth ? `온기 가동 중 (${warmthTimeStr})` : `성화 꺼짐 (${warmthTimeStr})`}
-                </span>
-              </div>
-              <p className="text-[11px] text-[#9da3af] leading-relaxed">
-                {hasWarmth
-                  ? tr('✨ 전 영지 생산량 +15%, 전투 EXP +20%, 용병 지속 재생 온기 버프 활성화 중')
-                  : tr('영목(목재)을 공헌하여 거점의 불씨를 지피고 온기 3대 버프를 활성화하십시오.')}
-              </p>
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#2a2720]/70 text-[11px] text-[#b89758] font-bold">
-                <span>{tr('영목 줍기 & 불씨 지피기')}</span>
-                <span>{tr('성화 관리 바로가기')} ▶</span>
+                <p className="text-[11px] text-[#9da3af] leading-relaxed">
+                  {hasWarmth
+                    ? tr('✨ 전 영지 생산량 +15%, 전투 EXP +20%, 용병 지속 재생 온기 버프 활성화 중')
+                    : tr('영목(목재)을 공헌하여 거점의 불씨를 지피고 온기 3대 버프를 활성화하십시오.')}
+                </p>
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#2a2720]/70 text-[11px] text-[#b89758] font-bold">
+                  <span>{tr('영목 줍기 & 불씨 지피기')}</span>
+                  <span>{tr('성화 관리 바로가기')} ▶</span>
+                </div>
               </div>
             </div>
 
@@ -328,32 +456,42 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   ? (tutorialStepId === 'TUTORIAL_BUILD_REFINERY' ? 'build-refinery' : 'build-tavern')
                   : undefined
               }
-              className="p-3.5 rounded-xl bg-gradient-to-r from-[#171a22]/65 via-[#14161d]/55 to-[#121418]/65 backdrop-blur-md border border-[#3d372e]/65 hover:border-[#b89758] hover:bg-[#1a1e28]/75 cursor-pointer transition-all shadow-md group"
+              className="relative overflow-hidden p-3.5 rounded-xl border border-[#3d372e]/65 hover:border-[#b89758] cursor-pointer transition-all shadow-md group"
             >
-              <div className="flex items-center justify-between mb-1.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-2xl leading-none drop-shadow">🏛️</span>
-                  <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#dcc496] tracking-tight">
-                    {tr('【영지 시설 관리】')}
-                  </h3>
-                </div>
-                <div className="flex items-center gap-1.5 text-[11px]">
-                  <span className="px-2 py-0.5 rounded bg-[#1f2330]/80 text-[#9da3af] border border-[#2c3245]/70">
-                    {tr('완공')} {totalBuiltCount}/13
-                  </span>
-                  {upgradeableCount > 0 && (
-                    <span className="px-2 py-0.5 rounded bg-[#b89758]/20 text-[#dcc496] font-bold border border-[#b89758]/40 animate-pulse">
-                      {tr('증축 가능')} {upgradeableCount}
+              <div 
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
+                style={{
+                  backgroundImage: "url('assets/ark_citadel_hub.jpg')",
+                  filter: 'brightness(0.25) contrast(1.15)',
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0d0f14]/90 via-[#0d0f14]/75 to-[#0d0f14]/50 pointer-events-none" />
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-2xl leading-none drop-shadow">🏛️</span>
+                    <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#dcc496] tracking-tight">
+                      {tr('【영지 시설 관리】')}
+                    </h3>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[11px]">
+                    <span className="px-2 py-0.5 rounded bg-[#1f2330]/80 text-[#9da3af] border border-[#2c3245]/70">
+                      {tr('완공')} {totalBuiltCount}/13
                     </span>
-                  )}
+                    {upgradeableCount > 0 && (
+                      <span className="px-2 py-0.5 rounded bg-[#b89758]/20 text-[#dcc496] font-bold border border-[#b89758]/40 animate-pulse">
+                        {tr('증축 가능')} {upgradeableCount}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <p className="text-[11px] text-[#9da3af] leading-relaxed">
-                {tr('13종 거점 건물의 단계적 건설 및 증축 현황을 초간결 목록으로 확인하고 관리합니다.')}
-              </p>
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#b89758] font-bold">
-                <span>{tr('전체 시설 건설 & 증축 목록')}</span>
-                <span>목록 열기 ▶</span>
+                <p className="text-[11px] text-[#9da3af] leading-relaxed">
+                  {tr('13종 거점 건물의 단계적 건설 및 증축 현황을 초간결 목록으로 확인하고 관리합니다.')}
+                </p>
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#b89758] font-bold">
+                  <span>{tr('전체 시설 건설 & 증축 목록')}</span>
+                  <span>목록 열기 ▶</span>
+                </div>
               </div>
             </div>
 
@@ -368,25 +506,35 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   ? 'enter-tavern'
                   : undefined
               }
-              className="p-3.5 rounded-xl bg-gradient-to-r from-[#1a1622]/65 via-[#15131b]/55 to-[#121418]/65 backdrop-blur-md border border-[#3d372e]/65 hover:border-[#a875d4] hover:bg-[#1c1626]/75 cursor-pointer transition-all shadow-md group"
+              className="relative overflow-hidden p-3.5 rounded-xl border border-[#3d372e]/65 hover:border-[#a875d4] cursor-pointer transition-all shadow-md group"
             >
-              <div className="flex items-center justify-between mb-1.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-2xl leading-none drop-shadow">🏰</span>
-                  <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#e0b8ff] tracking-tight">
-                    {tr('【성채 시설 진입】')}
-                  </h3>
+              <div 
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
+                style={{
+                  backgroundImage: "url('assets/menu_barracks.jpg')",
+                  filter: 'brightness(0.28) contrast(1.15)',
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0d0f14]/90 via-[#0d0f14]/75 to-[#0d0f14]/50 pointer-events-none" />
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-2xl leading-none drop-shadow">🏰</span>
+                    <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#e0b8ff] tracking-tight">
+                      {tr('【성채 시설 진입】')}
+                    </h3>
+                  </div>
+                  <span className="px-2 py-0.5 rounded bg-[#2a1e35]/80 text-[#ce93d8] font-bold text-[11px] border border-[#5c377d]/70">
+                    {tr('활동 거점 11종')}
+                  </span>
                 </div>
-                <span className="px-2 py-0.5 rounded bg-[#2a1e35]/80 text-[#ce93d8] font-bold text-[11px] border border-[#5c377d]/70">
-                  {tr('활동 거점 10종')}
-                </span>
-              </div>
-              <p className="text-[11px] text-[#9da3af] leading-relaxed">
-                {tr('퀘스트, 백과, 병영, 대장간, 주점 등 실제 내부 패널 진입이 가능한 시설로 즉시 입장합니다.')}
-              </p>
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#292233]/70 text-[11px] text-[#ce93d8] font-bold">
-                <span>{tr('퀘스트·백과·병영·병기창·주점')}</span>
-                <span>거점 입장 ▶</span>
+                <p className="text-[11px] text-[#9da3af] leading-relaxed">
+                  {tr('퀘스트, 백과, 병영, 대장간, 주점 등 실제 내부 패널 진입이 가능한 시설로 즉시 입장합니다.')}
+                </p>
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#292233]/70 text-[11px] text-[#ce93d8] font-bold">
+                  <span>{tr('퀘스트·백과·병영·병기창·주점')}</span>
+                  <span>거점 입장 ▶</span>
+                </div>
               </div>
             </div>
 
@@ -640,8 +788,24 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 >
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-3 min-w-0 pr-2">
-                      <div className="w-10 h-10 rounded-xl bg-[#0a0d14]/70 border border-[#3d372e]/60 flex items-center justify-center shrink-0 shadow-inner">
-                        <GameIcon name={b.id} icon={b.icon} size={24} />
+                      <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden border border-[#3d372e]/60 flex items-center justify-center shrink-0 shadow-inner bg-[#0a0d14]">
+                        {BUILDING_IMAGE_MAP[item.id] ? (
+                          <img
+                            src={BUILDING_IMAGE_MAP[item.id]}
+                            alt={b.name}
+                            className={`w-full h-full object-cover transition-all duration-700 ease-out ${
+                              !isBuilt
+                                ? 'grayscale brightness-[0.5] contrast-110'
+                                : 'grayscale-0 brightness-100 contrast-105 saturate-110'
+                            }`}
+                            style={{
+                              transition: 'filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s ease',
+                            }}
+                          />
+                        ) : null}
+                        <div className={`absolute inset-0 ${BUILDING_IMAGE_MAP[item.id] ? 'bg-black/35 backdrop-blur-[0.5px]' : ''} flex items-center justify-center`}>
+                          <GameIcon name={b.id} icon={b.icon} size={22} className="drop-shadow" />
+                        </div>
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
@@ -736,92 +900,129 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         )}
 
         {/* ═════════════════════════════════════════════════════════════
-            VIEW 4: 성채 활동 시설 10종 목록 (Step 3-C)
+            VIEW 4: 성채 활동 시설 11종 목록 (Step 3-C) - 상단 배너 카드 뷰
             ═════════════════════════════════════════════════════════════ */}
         {activeView === 'workstations' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-3xl mx-auto w-full">
             {WORKSTATION_ITEMS.map(item => {
               const isLocked = !item.isBuilt;
+              const buildingLevel = item.buildingId ? state.buildings[item.buildingId]?.level : undefined;
+
               return (
                 <div
                   key={item.key}
+                  id={`workstation-card-${item.key}`}
                   data-tutorial-target={item.key === 'tavern' && !isLocked ? 'enter-tavern' : undefined}
-                  onClick={() => {
-                    if (isLocked) {
-                      try { SoundManager.getInstance().play('error'); } catch {}
-                      gameDialog.confirm({
-                        title: tr('시설 미건설'),
-                        message: `${item.name} ${tr('시설은 아직 건설되지 않았습니다.')}\n\n${tr('영지 시설 관리 화면으로 이동하여 건설하시겠습니까?')}`,
-                        confirmLabel: tr('건설하러 가기'),
-                        cancelLabel: tr('닫기'),
-                        icon: '🔒',
-                      }).then(confirmed => {
-                        if (confirmed) {
-                          setActiveView('facilities');
-                          if (item.buildingId) {
-                            setSelectedBuildingId(item.buildingId);
-                          }
-                        }
-                      });
-                      return;
-                    }
-                    handlePlayClick();
-                    onEnterDrawer(item.key);
-                  }}
-                  className={`flex items-center justify-between p-4 sm:p-4.5 min-h-[96px] sm:min-h-[104px] rounded-2xl transition-all shadow-md select-none backdrop-blur-md ${
+                  onClick={(e) => handleWorkstationClick(item, e.currentTarget)}
+                  className={`group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 select-none shadow-lg ${
                     isLocked
-                      ? 'bg-[#0d1017]/50 border border-[#202738]/50 opacity-60 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-[#141822]/65 via-[#181d2a]/55 to-[#10131c]/65 border border-[#3d372e]/60 hover:border-[#b89758] hover:bg-[#1a1f2b]/80 hover:shadow-[0_0_18px_rgba(184,151,88,0.25)] cursor-pointer group active:scale-[0.98]'
+                      ? 'bg-[#0d1017]/80 border-[#222b3d]/70 opacity-80 cursor-pointer hover:border-[#384863]'
+                      : 'bg-[#10141d] border-[#3d372e]/80 hover:border-[#b89758] hover:shadow-[0_8px_24px_rgba(184,151,88,0.22)] cursor-pointer active:scale-[0.985]'
                   }`}
                 >
-                  <div className="flex items-center gap-3.5 min-w-0 pr-2">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-3xl shrink-0 shadow-inner transition-transform ${
-                      isLocked
-                        ? 'bg-[#090b10]/60 border border-[#1a2130]/60 opacity-40 grayscale'
-                        : 'bg-[#0a0d14]/70 border border-[#3d372e]/60 group-hover:border-[#b89758] group-hover:scale-105'
-                    }`}>
-                      <span className="leading-none drop-shadow">{item.icon}</span>
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <h4 className={`text-sm font-extrabold tracking-tight truncate transition-colors ${
-                          isLocked ? 'text-[#6f7b8e]' : 'text-[#ededed] group-hover:text-[#ffd54f]'
-                        }`}>
-                          {item.name}
-                        </h4>
-                        {isLocked ? (
-                          <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#141924] text-[#718096] border border-[#222c3d] font-mono">
-                            🔒 {tr('미건설')}
-                          </span>
-                        ) : item.badge ? (
-                          <span className={`px-1.5 py-0.2 rounded text-[10px] font-black shadow-xs ${
-                            item.key === 'codex' && registerableCodexCount > 0
-                              ? 'bg-[#ef5350] text-white animate-pulse'
-                              : 'bg-gradient-to-r from-[#b89758] to-[#937538] text-[#08090b]'
-                          }`}>
-                            {item.badge}
-                          </span>
-                        ) : null}
-                      </div>
-                      <p className={`text-xs line-clamp-2 mt-1 leading-relaxed transition-colors ${
-                        isLocked ? 'text-[#4e5868]' : 'text-[#9da3af] group-hover:text-[#cfd8e8]'
+                  {/* ── 시설 내부 상단 배너 이미지 프레임 ── */}
+                  <div className="relative w-full h-32 sm:h-36 overflow-hidden bg-[#07090e] border-b border-[#242b3b]">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className={`facility-banner-img w-full h-full object-cover transition-all duration-700 ease-out ${
+                        isLocked
+                          ? 'grayscale brightness-[0.52] contrast-110'
+                          : 'grayscale-0 brightness-100 contrast-105 saturate-110 group-hover:scale-105 group-hover:brightness-110'
+                      }`}
+                      style={{
+                        transition: 'filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                      }}
+                    />
+
+                    {/* 상단 비네팅 (타이틀 가독성 확보) */}
+                    <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#08090b]/85 via-[#08090b]/40 to-transparent pointer-events-none" />
+
+                    {/* 하단 자연스러운 그라데이션 블렌드 */}
+                    <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#10141d] via-[#10141d]/60 to-transparent pointer-events-none" />
+
+                    {/* 좌측 상단: 아이콘 + 시설 타이틀 */}
+                    <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10 flex items-center gap-2 max-w-[calc(100%-80px)]">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg shrink-0 shadow-md backdrop-blur-xs transition-colors ${
+                        isLocked
+                          ? 'bg-black/60 border border-[#2a3447]/60 text-[#718096]'
+                          : 'bg-black/70 border border-[#b89758]/60 text-white group-hover:border-[#ffd54f]'
                       }`}>
-                        {isLocked ? tr('영지 시설 관리에서 건설 후 이용할 수 있습니다.') : item.sub}
-                      </p>
+                        <span className="leading-none drop-shadow">{item.icon}</span>
+                      </div>
+                      <h4 className={`text-xs sm:text-sm font-extrabold tracking-tight truncate drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] transition-colors ${
+                        isLocked ? 'text-[#8896ab]' : 'text-[#ededed] group-hover:text-[#ffd54f]'
+                      }`}>
+                        {item.name}
+                      </h4>
                     </div>
+
+                    {/* 우측 상단: 레벨 뱃지 및 상태 태그 */}
+                    <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-10 flex items-center gap-1.5">
+                      {isLocked ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-black/80 text-[#8896ab] border border-[#374154] backdrop-blur-xs shadow-md flex items-center gap-1">
+                          <span>🔒</span>
+                          <span>{tr('미해금')}</span>
+                        </span>
+                      ) : (
+                        <>
+                          {buildingLevel !== undefined && (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#b89758]/30 text-[#ffd54f] border border-[#b89758]/70 backdrop-blur-xs shadow-md">
+                              Lv.{buildingLevel}
+                            </span>
+                          )}
+                          {item.badge && (
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black shadow-md backdrop-blur-xs ${
+                              item.key === 'codex' && registerableCodexCount > 0
+                                ? 'bg-[#ef5350] text-white animate-pulse'
+                                : 'bg-gradient-to-r from-[#ffd54f] to-[#b89758] text-[#08090b]'
+                            }`}>
+                              {item.badge}
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+
+                    {/* 미해금 중앙 락 오버레이 및 건설 안내 */}
+                    {isLocked && (
+                      <div className="absolute inset-0 bg-black/35 backdrop-blur-[0.5px] flex items-center justify-center pointer-events-none">
+                        <div className="px-3 py-1.5 rounded-xl bg-[#090b10]/90 border border-[#3b475e]/80 text-[#cfd8e8] text-xs font-bold shadow-2xl flex items-center gap-1.5">
+                          <span className="text-sm">🔒</span>
+                          <span>{tr('시설 미건설 (터치하여 건설하기)')}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {isLocked ? (
-                    <div className="px-2.5 py-1.5 rounded-lg bg-[#141824] border border-[#222d42] text-[#718096] text-xs font-bold shrink-0 flex items-center gap-1">
-                      <span>🔒</span>
-                      <span>{tr('미해금')}</span>
+                  {/* ── 하단 설명 및 입장 액션 바 ── */}
+                  <div className="p-3 sm:p-3.5 flex flex-col justify-between flex-1 gap-2.5 bg-[#10141d]">
+                    <p className={`text-xs line-clamp-2 leading-relaxed transition-colors ${
+                      isLocked ? 'text-[#5a6578]' : 'text-[#9da3af] group-hover:text-[#d1d7e3]'
+                    }`}>
+                      {isLocked ? tr('영지 시설 관리에서 해당 시설을 건설하면 즉시 이용할 수 있습니다.') : item.sub}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-1 border-t border-[#1e2330]/80">
+                      <span className={`text-[11px] font-bold ${
+                        isLocked ? 'text-[#7d8ba1]' : 'text-[#b89758]'
+                      }`}>
+                        {isLocked ? `🔨 ${tr('건설 필요')}` : `✨ ${tr('성채 핵심 거점')}`}
+                      </span>
+
+                      {isLocked ? (
+                        <div className="px-2.5 py-1 rounded-lg bg-[#141924] border border-[#26334a] text-[#8896ab] hover:text-[#dcc496] hover:border-[#b89758] text-xs font-bold flex items-center gap-1 transition-colors">
+                          <span>{tr('건설하러 가기')}</span>
+                          <span>➔</span>
+                        </div>
+                      ) : (
+                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#b89758]/20 to-[#ffd54f]/15 border border-[#b89758]/60 group-hover:from-[#b89758] group-hover:to-[#ffd54f] text-[#dcc496] group-hover:text-[#08090b] text-xs font-black transition-all shadow-xs flex items-center gap-1">
+                          <span>{tr('입장하기')}</span>
+                          <span className="text-[10px] group-hover:translate-x-0.5 transition-transform">▶</span>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="px-3 py-1.5 rounded-lg bg-[#b89758]/15 border border-[#b89758]/40 group-hover:bg-[#b89758] text-[#dcc496] group-hover:text-[#08090b] text-xs font-black shrink-0 transition-all shadow-sm flex items-center gap-1">
-                      <span>{tr('입장')}</span>
-                      <span className="text-[10px]">▶</span>
-                    </div>
-                  )}
+                  </div>
                 </div>
               );
             })}
@@ -847,21 +1048,44 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             className="relative w-full max-w-lg max-h-[90vh] flex flex-col bg-[#141720] border border-[#b89758] rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.95)] overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
-            {/* 1. 모달 헤더 바 */}
-            <div className="flex items-center justify-between px-4 py-3 bg-[#0a0d14] border-b border-[#262933] shrink-0">
-              <div className="flex items-center gap-2.5">
-                <span className="text-2xl drop-shadow">
-                  <GameIcon name={selectedBuildingData.id} icon={selectedBuildingData.icon} size={26} />
-                </span>
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <h3 className="text-sm md:text-base font-bold text-[#ededed]">
-                    {selectedBuildingData.name}
-                  </h3>
-                  <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40">
-                    Lv.{selectedBuildingData.level}/10
-                  </span>
+            {/* 1. 모달 헤더 바 (시네마틱 배너 헤더) */}
+            <div className="relative w-full h-32 sm:h-38 bg-[#0a0d14] border-b border-[#b89758]/60 shrink-0 overflow-hidden">
+              {BUILDING_IMAGE_MAP[selectedBuildingData.id] ? (
+                <img
+                  src={BUILDING_IMAGE_MAP[selectedBuildingData.id]}
+                  alt={selectedBuildingData.name}
+                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${
+                    selectedBuildingData.level === 0 ? 'grayscale brightness-[0.52] contrast-110' : 'brightness-100 contrast-105 saturate-110'
+                  }`}
+                  style={{
+                    transition: 'filter 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                />
+              ) : null}
+              {/* 상단 및 하단 그라데이션 */}
+              <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/85 via-black/40 to-transparent pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#141720] via-[#141720]/80 to-transparent pointer-events-none" />
+
+              {/* 헤더 콘텐츠 */}
+              <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 flex items-center gap-2.5 max-w-[calc(100%-60px)]">
+                <div className="w-10 h-10 rounded-xl bg-black/75 border border-[#b89758]/60 flex items-center justify-center text-2xl drop-shadow shadow-md">
+                  <GameIcon name={selectedBuildingData.id} icon={selectedBuildingData.icon} size={24} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <h3 className="text-sm sm:text-base font-extrabold text-[#ededed] drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+                      {selectedBuildingData.name}
+                    </h3>
+                    <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#b89758]/30 text-[#ffd54f] border border-[#b89758]/60 shadow-xs">
+                      Lv.{selectedBuildingData.level}/10
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#cfd8e8] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)] line-clamp-1 mt-0.5">
+                    {selectedBuildingData.description}
+                  </p>
                 </div>
               </div>
+
               <button
                 type="button"
                 onClick={() => {
@@ -869,7 +1093,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   setSelectedBuildingId(null);
                   onClearHighlight?.();
                 }}
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-xs active:scale-95 text-sm"
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-8 h-8 flex items-center justify-center rounded-lg bg-black/70 hover:bg-[#2a1618] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-md active:scale-95 text-sm"
                 title={tr('닫기 (Esc)')}
               >
                 ✕

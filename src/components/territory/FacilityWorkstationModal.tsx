@@ -84,13 +84,13 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
 
         {/* ── 시네마틱 무대 프레임 (이미지 내부 좌측 상단 타이틀 & 우측 상단 닫기 컨트롤) ── */}
         {!hideHeader && (
-          <div className="relative w-full h-52 sm:h-60 md:h-64 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden animate-fade-in">
+          <div className="relative w-full h-52 sm:h-60 md:h-64 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden animate-facility-banner-rise">
             {/* 배경 이미지 (탁한 딤 제거 및 쨍하고 밝은 색감 복원) */}
             {bgImage ? (
               <img
                 src={bgImage}
                 alt={title}
-                className="absolute inset-0 w-full h-full object-cover filter brightness-100 contrast-105 saturate-110"
+                className="absolute inset-0 w-full h-full object-cover filter brightness-100 contrast-105 saturate-110 transition-transform duration-500 ease-out"
               />
             ) : (
               <div className="absolute inset-0 bg-gradient-to-b from-[#161820] to-[#0a0b0e] flex items-center justify-center opacity-60">
