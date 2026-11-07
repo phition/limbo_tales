@@ -100,7 +100,7 @@ const BUILDING_TO_DRAWER_KEY: Partial<Record<BuildingId, string>> = {
 };
 
 const DRAWER_ART_META: Record<string, { img: string; title: string; subtitle: string; icon: string }> = {
-  citadel:   { img: 'assets/citadel_bonfire.jpg', title: '방주 성채 (Ark Citadel)', subtitle: '심연의 어둠 속 최후의 부유 요새 & 영지 시설 관리', icon: '🏰' },
+  citadel:   { img: 'assets/citadel_bonfire.jpg', title: '방주 성채 (Ark Citadel)', subtitle: '심연의 어둠 속 최후의 부유 요새 & 성채 시설 관리', icon: '🏰' },
   barracks:  { img: 'assets/menu_barracks.jpg',    title: '원정단 병영 & 전략 작전실', subtitle: '대원 진형 편성, 전직 각성 및 마도 비전서 스킬 전수', icon: '⚔️' },
   quests:    { img: 'assets/menu_quests.jpg',      title: '지휘관 퀘스트 & 작전 지도', subtitle: '메인 스토리 임무 완수 및 단계별 시설 연계', icon: '📜' },
   explore:   { img: 'assets/menu_explore.jpg',     title: '심연 강하 차원 관문', subtitle: '침묵의 회랑 5층 탐험 채비 및 전술 보급품 편성', icon: '🌌' },
@@ -116,7 +116,7 @@ const DRAWER_ART_META: Record<string, { img: string; title: string; subtitle: st
 };
 
 const WHEEL_ITEMS = [
-  { key: 'citadel',  label: '방주 영지',     sub: '건설 & 자원 관리',         icon: '🏰', color: '#ff7b25' },
+  { key: 'citadel',  label: '방주 성채',     sub: '건설 & 자원 관리',         icon: '🏰', color: '#ff7b25' },
   { key: 'barracks', label: '원정단 편성',   sub: '진형 & 전직 & 장비 관리',  icon: '⚔️', color: '#c8aa6e' },
   { key: 'quests',   label: '퀘스트 & 연계', sub: '메인 스토리 & 시설',       icon: '📜', color: '#38ef7d' },
   { key: 'explore',  label: '심연 탐험',     sub: 'MUD 던전 5층',             icon: '🌌', color: '#5c6bc0' },
@@ -2989,7 +2989,7 @@ const CitadelDrawer: React.FC<{
     <div className="flex flex-col h-full relative">
       <div className="flex items-center justify-between px-4 py-2 border-b border-[#1f2738] shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-bold text-[#ff7b25]">{'영지 시설 관리'}</span>
+          <span className="text-sm font-bold text-[#ff7b25]">{'성채 시설 관리'}</span>
           <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-bold">
             {'시설 보유 현황'}
           </span>
@@ -3003,13 +3003,13 @@ const CitadelDrawer: React.FC<{
               <span>{tr('보상 확인')} ({claimableQuestCount})</span>
             </button>
           )}
-          <EncyclopediaBadge tab="buildings" label="영지 백과" />
+          <EncyclopediaBadge tab="buildings" label="성채 백과" />
         </div>
         <button
           className="btn btn-ghost text-xs px-2.5 py-1 hover:bg-[#c560601f] font-bold rounded-lg flex items-center justify-center"
           style={{ borderColor: '#c56060', borderWidth: '1.5px', borderStyle: 'solid', color: '#c56060' }}
           onClick={onClose}
-          aria-label="영지 메뉴 닫기"
+          aria-label="성채 메뉴 닫기"
         >
           <span className="font-extrabold text-sm" style={{ color: '#c56060' }}>✕</span>
         </button>
@@ -3036,7 +3036,7 @@ const CitadelDrawer: React.FC<{
               <div className="text-[11px] text-[#cfd8e8] leading-relaxed">
                 {isFullyLit ? (
                   <span className="text-[#38ef7d]">
-                    ✨ 성화 가동 중: 영지 생산 +15%, 전투 EXP +20%, 영지 용병 지속 회복
+                    ✨ 성화 가동 중: 성채 생산 +15%, 전투 EXP +20%, 성채 용병 지속 회복
                   </span>
                 ) : (
                   <span>
@@ -15026,7 +15026,7 @@ export const CitadelScreen: React.FC = () => {
       try { SoundManager.getInstance().play('error'); } catch {}
       gameDialog.alert({
         title: tr('시설 미건설'),
-        message: `${tr('해당 시설은 아직 건설되지 않았습니다.')}\n${tr('영지 시설 관리에서 먼저 건설하십시오.')}`,
+        message: `${tr('해당 시설은 아직 건설되지 않았습니다.')}\n${tr('성채 시설 관리에서 먼저 건설하십시오.')}`,
         icon: '🔒',
       });
       return false;
@@ -15047,14 +15047,14 @@ export const CitadelScreen: React.FC = () => {
     return true;
   }, [state.buildings, tr]);
 
-  // 영지('citadel') 패널 내부에서 건물 선택 입장 시 (닫기 시 영지 패널로 복귀)
+  // 성채('citadel') 패널 내부에서 건물 선택 입장 시 (닫기 시 성채 패널로 복귀)
   const handleEnterBuildingFromCitadel = useCallback((key: string) => {
     const bId = DRAWER_TO_BUILDING_ID[key];
     if (bId && bId !== 'arenaGate' && (state.buildings[bId]?.level || 0) < 1) {
       try { SoundManager.getInstance().play('error'); } catch {}
       gameDialog.alert({
         title: tr('시설 미건설'),
-        message: `${tr('해당 시설은 아직 건설되지 않았습니다.')}\n${tr('영지 시설 관리에서 먼저 건설하십시오.')}`,
+        message: `${tr('해당 시설은 아직 건설되지 않았습니다.')}\n${tr('성채 시설 관리에서 먼저 건설하십시오.')}`,
         icon: '🔒',
       });
       return false;
@@ -15069,7 +15069,7 @@ export const CitadelScreen: React.FC = () => {
     return true;
   }, [state.buildings, tr]);
 
-  // 드로어 닫기 핸들러 (영지에서 건물로 들어간 경우에만 영지로 복귀, 그 외 모든 경우 즉시 패널 닫기)
+  // 드로어 닫기 핸들러 (성채에서 건물로 들어간 경우에만 성채로 복귀, 그 외 모든 경우 즉시 패널 닫기)
   const handleCloseDrawer = useCallback(() => {
     setArenaGateMode('hub');
     if (returnToCitadelOnClose && openDrawer !== 'citadel') {
@@ -15392,7 +15392,7 @@ export const CitadelScreen: React.FC = () => {
                     e.stopPropagation();
                     setOfflineReportModal(activeOfflineReport);
                   }}
-                  title={tr('오프라인 영지 수익 정산 보고서 열기')}
+                  title={tr('오프라인 성채 수익 정산 보고서 열기')}
                 >
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#b89758] opacity-75"></span>
@@ -15400,7 +15400,7 @@ export const CitadelScreen: React.FC = () => {
                   </span>
                   <span className="text-sm">🌙</span>
                   <span className="text-[10px] sm:text-[11px] font-bold tracking-wide break-words max-w-[200px] sm:max-w-none truncate sm:whitespace-normal">
-                    {tr('오프라인 영지 수익 정산')} ({tr(activeOfflineReport.formattedTime)})
+                    {tr('오프라인 성채 수익 정산')} ({tr(activeOfflineReport.formattedTime)})
                   </span>
                 </button>
               )}
@@ -15526,7 +15526,7 @@ export const CitadelScreen: React.FC = () => {
               <div className="px-3 py-1.5 bg-[#0a0d14]/70 border-b border-[#242732]/60 flex items-center justify-between text-[10px] text-[#9da3af] shrink-0">
                 <span className="flex items-center gap-1.5 font-bold text-[#dcc496]">
                   <span>📜</span>
-                  <span>{tr('영지 활동 & 생산 로그')}</span>
+                  <span>{tr('성채 활동 & 생산 로그')}</span>
                 </span>
                 <span className="font-mono text-[9px] text-[#b89758]/70 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#38ef7d] animate-pulse"></span>
@@ -15537,7 +15537,7 @@ export const CitadelScreen: React.FC = () => {
                 <LogPanel
                   logs={state.citadelLogs || gm.citadelLogs || []}
                   maxHeight={180}
-                  emptyMessage={tr('기록된 영지 로그가 없습니다.')}
+                  emptyMessage={tr('기록된 성채 로그가 없습니다.')}
                   transparent={true}
                 />
               </div>

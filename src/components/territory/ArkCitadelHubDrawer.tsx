@@ -197,7 +197,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
       try { SoundManager.getInstance().play('error'); } catch {}
       gameDialog.confirm({
         title: tr('시설 미건설'),
-        message: `${item.name} ${tr('시설은 아직 건설되지 않았습니다.')}\n\n${tr('영지 시설 관리 화면으로 이동하여 건설하시겠습니까?')}`,
+        message: `${item.name} ${tr('시설은 아직 건설되지 않았습니다.')}\n\n${tr('성채 시설 관리 화면으로 이동하여 건설하시겠습니까?')}`,
         confirmLabel: tr('건설하러 가기'),
         cancelLabel: tr('닫기'),
         icon: '🔒',
@@ -359,15 +359,15 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
           <div>
             <h2 className="text-sm md:text-base font-bold text-[#ededed] tracking-tight">
               {activeView === 'bonfire' && tr('방주의 성화')}
-              {activeView === 'facilities' && tr('영지 시설 관리 (건설 & 증축)')}
-              {activeView === 'workstations' && tr('성채 활동 거점 진입')}
+              {activeView === 'facilities' && tr('방주 시설 관리 (건설 & 증축)')}
+              {activeView === 'workstations' && tr('성채 시설 진입')}
               {activeView === 'banners' && tr('방주 성채 사령부 (Citadel Command)')}
             </h2>
             <p className="text-[11px] text-[#9da3af]">
-              {activeView === 'banners' && tr('거점의 신성한 성화, 13종 인프라 및 핵심 활동 관리')}
-              {activeView === 'bonfire' && tr('목재를 공헌하여 전 거점 생산 +15% 및 버프를 활성화합니다.')}
-              {activeView === 'facilities' && tr('거점 건물의 단계적 건설 및 증축 현황을 확인합니다.')}
-              {activeView === 'workstations' && tr('입장 가능한 실제 활동 거점으로 즉시 진입합니다.')}
+              {activeView === 'banners' && tr('성채의 신성한 성화, 13종 인프라 및 핵심 활동 관리')}
+              {activeView === 'bonfire' && tr('목재를 공헌하여 전 성채 생산 +15% 및 버프를 활성화합니다.')}
+              {activeView === 'facilities' && tr('성채 건물의 단계적 건설 및 증축 현황을 확인합니다.')}
+              {activeView === 'workstations' && tr('입장 가능한 실제 활동 시설로 즉시 진입합니다.')}
             </p>
           </div>
         </div>
@@ -437,7 +437,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 </div>
                 <p className="text-[11px] text-[#9da3af] leading-relaxed">
                   {hasWarmth
-                    ? tr('✨ 전 영지 생산량 +15%, 전투 EXP +20%, 용병 지속 재생 온기 버프 활성화 중')
+                    ? tr('✨ 전 성채 생산량 +15%, 전투 EXP +20%, 성채 용병 지속 재생 온기 버프 활성화 중')
                     : tr('영목(목재)을 공헌하여 거점의 불씨를 지피고 온기 3대 버프를 활성화하십시오.')}
                 </p>
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#2a2720]/70 text-[11px] text-[#b89758] font-bold">
@@ -447,7 +447,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               </div>
             </div>
 
-            {/* 🏛️ 【배너 2】 영지 시설 관리 카드 */}
+            {/* 🏛️ 【배너 2】 방주 시설 관리 카드 */}
             <div
               onClick={() => {
                 handlePlayClick();
@@ -473,7 +473,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   <div className="flex items-center gap-2.5">
                     <span className="text-2xl leading-none drop-shadow">🏛️</span>
                     <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#dcc496] tracking-tight">
-                      {tr('【영지 시설 관리】')}
+                      {tr('【방주 시설 관리】')}
                     </h3>
                   </div>
                   <div className="flex items-center gap-1.5 text-[11px]">
@@ -488,10 +488,10 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   </div>
                 </div>
                 <p className="text-[11px] text-[#9da3af] leading-relaxed">
-                  {tr('13종 거점 건물의 단계적 건설 및 증축 현황을 초간결 목록으로 확인하고 관리합니다.')}
+                  {tr('13종 성채 건물의 단계적 건설 및 증축 현황을 초간결 목록으로 확인하고 관리합니다.')}
                 </p>
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#b89758] font-bold">
-                  <span>{tr('전체 시설 건설 & 증축 목록')}</span>
+                  <span>{tr('전체 성채 시설 건설 & 증축 목록')}</span>
                   <span>목록 열기 ▶</span>
                 </div>
               </div>
@@ -556,7 +556,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               </h3>
               <p className="text-xs text-[#9da3af] max-w-md leading-relaxed mb-3">
                 {hasWarmth
-                  ? tr('신성한 온기가 방주 거점 전역을 보호하고 있습니다. (전 시설 생산량 +15%, 전투 EXP +20%, 영지 용병 지속 회복)')
+                  ? tr('신성한 온기가 방주 거점 전역을 보호하고 있습니다. (전 성채 생산량 +15%, 전투 EXP +20%, 성채 용병 지속 회복)')
                   : tr('영목(목재)을 단계별로 바쳐 성화를 완충하면 5분간 온기 3대 버프가 지속됩니다.')}
               </p>
 
@@ -986,7 +986,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     <p className={`text-xs line-clamp-2 leading-relaxed transition-colors ${
                       isLocked ? 'text-[#5a6578]' : 'text-[#9da3af] group-hover:text-[#d1d7e3]'
                     }`}>
-                      {isLocked ? tr('영지 시설 관리에서 해당 시설을 건설하면 즉시 이용할 수 있습니다.') : item.sub}
+                      {isLocked ? tr('성채 시설 관리에서 해당 시설을 건설하면 즉시 이용할 수 있습니다.') : item.sub}
                     </p>
 
                     <div className="flex items-center justify-between pt-1 border-t border-[#1e2330]/80">

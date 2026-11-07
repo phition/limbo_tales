@@ -48,7 +48,7 @@ export const QuickFacilityDock: React.FC<QuickFacilityDockProps> = ({
           </div>
         </button>
 
-        {/* [중심]: 🏰 방주 영지 (Citadel - 가장 돋보이는 센터 랜드마크 버튼) */}
+        {/* [중심]: 🏰 방주 성채 (Citadel - 가장 돋보이는 센터 랜드마크 버튼) */}
         <button
           type="button"
           onClick={() => handleClick('citadel')}
@@ -57,12 +57,12 @@ export const QuickFacilityDock: React.FC<QuickFacilityDockProps> = ({
               ? 'bg-gradient-to-b from-[#3d3220] via-[#2a2215] to-[#18130c] border-2 border-[#dcc496] shadow-[0_0_24px_rgba(184,151,88,0.6)] scale-[1.02]'
               : 'bg-gradient-to-b from-[#262015] via-[#1a160e] to-[#110e09] border-2 border-[#b89758] shadow-[0_4px_18px_rgba(0,0,0,0.85)] hover:brightness-115 active:scale-95'
           }`}
-          title={tr('전체 시설 건설 및 증축 관리')}
+          title={tr('성채 시설 건설 및 증축 관리')}
         >
           <span className="text-2xl sm:text-3xl md:text-4xl leading-none drop-shadow shrink-0">🏰</span>
           <div className="text-left min-w-0 flex flex-col justify-center">
             <div className="dock-btn-center-title font-black tracking-tight text-white truncate">
-              {tr('방주 영지')}
+              {tr('방주 성채')}
             </div>
             <div className="dock-btn-subtext font-bold text-[#dcc496] mt-0.5 truncate">
               {tr('건설 & 증축')}
