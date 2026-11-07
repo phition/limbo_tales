@@ -20,6 +20,7 @@ const BUILDING_IMAGE_MAP: Record<string, string> = {
   alchemy: 'assets/menu_alchemy.jpg',
   market: 'assets/menu_market.jpg',
   arenaGate: 'assets/menu_arena.jpg',
+  explore: 'assets/menu_explore.jpg',
   quests: 'assets/menu_quests.jpg',
   codex: 'assets/menu_codex.jpg',
   barracks: 'assets/menu_barracks.jpg',
@@ -148,7 +149,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         ? `${unlockedCodexCount}종 수집` 
         : null);
 
-  // 성채 활동 시설 11종 (상단 배너 아트 에셋 매핑)
+  // 성채 활동 시설 12종 (상단 배너 아트 에셋 매핑)
   const WORKSTATION_ITEMS: Array<{
     key: string;
     name: string;
@@ -160,8 +161,9 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
     badge?: string | null;
   }> = [
     { key: 'quests',    name: tr('지휘관 퀘스트 & 작전 지도'), sub: tr('메인 스토리 임무 완수 및 단계별 시설 연계'), icon: '📜', image: 'assets/menu_quests.jpg', isBuilt: true, badge: claimableQuestCount > 0 ? `${claimableQuestCount}건 완료` : null },
-    { key: 'codex',     name: tr('심연의 백과 & 회고록'), sub: tr('오파츠·서사 일지·신화 유물 컬렉션 및 영구 패시브 연구'), icon: '📜', image: 'assets/menu_codex.jpg', isBuilt: true, badge: codexBadge },
+    { key: 'explore',   name: tr('심연 강하 차원 관문'), sub: tr('침묵의 회랑 1~5층 MUD 던전 출격 및 전술 보급품 편성'), icon: '🌌', image: 'assets/menu_explore.jpg', isBuilt: true, badge: tr('출격 가능') },
     { key: 'barracks',  name: tr('원정단 병영 & 작전실'), sub: tr('4인 파티 편성, 진형 배치, 전직 관리'), icon: '⚔️', image: 'assets/menu_barracks.jpg', isBuilt: true },
+    { key: 'codex',     name: tr('심연의 백과 & 회고록'), sub: tr('오파츠·서사 일지·신화 유물 컬렉션 및 영구 패시브 연구'), icon: '📜', image: 'assets/menu_codex.jpg', isBuilt: true, badge: codexBadge },
     { key: 'forge',     name: tr('심연의 병기창'), sub: tr('무기·방어구 단조, 장비 강화, 침식 정화'), icon: '⚒️', image: 'assets/menu_forge.jpg', isBuilt: (state.buildings['blacksmith']?.level || 0) >= 1, buildingId: 'blacksmith' },
     { key: 'tavern',    name: tr('방랑자의 라운지'), sub: tr('방랑 용병 모집 계약 및 고용 풀 갱신'), icon: '🍺', image: 'assets/menu_tavern.jpg', isBuilt: (state.buildings['tavern']?.level || 0) >= 1, buildingId: 'tavern', badge: (state.tavernCandidates || []).length > 0 ? 'NEW' : null },
     { key: 'infirmary', name: tr('생체 복원 병동'), sub: tr('전투 부상 대원 입원 치료 및 완치'), icon: '🏥', image: 'assets/menu_infirmary.jpg', isBuilt: (state.buildings['infirmary']?.level || 0) >= 1, buildingId: 'infirmary', badge: (state.infirmaryPatients || []).length > 0 ? `${state.infirmaryPatients.length}인` : null },
@@ -525,14 +527,14 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     </h3>
                   </div>
                   <span className="px-2 py-0.5 rounded bg-[#2a1e35]/80 text-[#ce93d8] font-bold text-[11px] border border-[#5c377d]/70">
-                    {tr('활동 거점 11종')}
+                    {tr('활동 거점 12종')}
                   </span>
                 </div>
                 <p className="text-[11px] text-[#9da3af] leading-relaxed">
-                  {tr('퀘스트, 백과, 병영, 대장간, 주점 등 실제 내부 패널 진입이 가능한 시설로 즉시 입장합니다.')}
+                  {tr('퀘스트, 심연 강하, 병영, 대장간, 주점, 차원 게이트 등 실제 내부 패널 진입이 가능한 시설로 즉시 입장합니다.')}
                 </p>
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#292233]/70 text-[11px] text-[#ce93d8] font-bold">
-                  <span>{tr('퀘스트·백과·병영·병기창·주점')}</span>
+                  <span>{tr('퀘스트·심연강하·병영·차원게이트')}</span>
                   <span>거점 입장 ▶</span>
                 </div>
               </div>
@@ -900,7 +902,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         )}
 
         {/* ═════════════════════════════════════════════════════════════
-            VIEW 4: 성채 활동 시설 11종 목록 (Step 3-C) - 상단 배너 카드 뷰
+            VIEW 4: 성채 활동 시설 12종 목록 (Step 3-C) - 상단 배너 카드 뷰
             ═════════════════════════════════════════════════════════════ */}
         {activeView === 'workstations' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-3xl mx-auto w-full">
