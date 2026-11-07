@@ -5267,18 +5267,18 @@ const BarracksDrawer: React.FC<{
           </div>
         ) : (
           <>
-            {/* 1. 상단 3인 진형 앵커 슬롯 바 */}
-            <div className="p-3 bg-[#0a0d14] border-b border-[#241c10] flex flex-col gap-2 shrink-0">
-              <div className="flex items-center justify-between text-xs flex-wrap gap-1.5">
-                <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-[#dcc496] flex items-center gap-1.5 text-xs sm:text-sm">
+            {/* 1. 상단 3인 진형 앵커 슬롯 바 (하단 로스터처럼 낮고 길게 가로 슬림형) */}
+            <div className="p-1.5 sm:p-2 bg-[#0a0d14] border-b border-[#241c10] flex flex-col gap-1 shrink-0">
+              <div className="flex items-center justify-between text-[11px] px-0.5">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="font-extrabold text-[#dcc496] flex items-center gap-1">
                     <span>⚔️</span>
-                    <span>{tr('던전 원정대 3인 진형')}</span>
+                    <span>{tr('원정대 진형')}</span>
                   </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40 font-bold">
-                    {state.party.length}/3 {tr('출전')}
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.2 rounded bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40 font-bold">
+                    {state.party.length}/3
                   </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161a24] text-[#8b9bb4] border border-[#2a3447]">
+                  <span className="text-[9.5px] font-mono text-[#8b9bb4]">
                     {tr('전투력')}: {Math.round(state.party.reduce((sum, p) => {
                       const effP = gm.getHeroEffectiveStats(p);
                       return sum + (effP.atk * 3 + effP.def * 2 + effP.maxHp / 5);
@@ -5286,33 +5286,33 @@ const BarracksDrawer: React.FC<{
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1">
                   <button
                     type="button"
                     onClick={() => setShowSynergyModal(true)}
-                    className="text-[10px] px-2 py-0.5 rounded bg-[#b89758]/15 hover:bg-[#b89758]/30 text-[#dcc496] border border-[#b89758]/40 font-bold cursor-pointer transition-colors flex items-center gap-1"
+                    className="text-[9.5px] px-1.5 py-0.5 rounded bg-[#b89758]/15 hover:bg-[#b89758]/30 text-[#dcc496] border border-[#b89758]/40 font-bold cursor-pointer transition-colors flex items-center gap-0.5"
                     title={tr('파티 시너지 효과 확인')}
                   >
                     <span>🌀</span>
-                    <span>{tr('시너지')} ({synergies.length})</span>
+                    <span>{tr('시너지')}</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleAutoAssignDungeonParty}
-                    className="text-[10px] px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#b89758] to-[#8c6d37] hover:brightness-110 active:scale-95 text-white font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1"
+                    className="text-[9.5px] px-2 py-0.5 rounded bg-gradient-to-r from-[#b89758] to-[#8c6d37] hover:brightness-110 active:scale-95 text-white font-bold cursor-pointer transition-all shadow-sm flex items-center gap-0.5"
                   >
                     <span>⚡</span>
-                    <span>{tr('최적 자동 편성')}</span>
+                    <span>{tr('자동 편성')}</span>
                   </button>
                 </div>
               </div>
 
-              {/* 3 Positions Grid: Front, Mid, Back */}
-              <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+              {/* 3 Positions Grid: 낮고 길게 가로 슬림형 */}
+              <div className="grid grid-cols-3 gap-1.5">
                 {[
-                  { slot: 'front' as PositionSlot, name: tr('1. 전열'), role: tr('방어'), icon: '🛡️', color: '#ff5252', bg: '#ff525215', border: '#ff525244' },
-                  { slot: 'mid' as PositionSlot,   name: tr('2. 중열'), role: tr('공격'), icon: '⚔️', color: '#ff9800', bg: '#ff980015', border: '#ff980044' },
-                  { slot: 'back' as PositionSlot,  name: tr('3. 후열'), role: tr('지원'), icon: '🏹', color: '#00e676', bg: '#00e67615', border: '#00e67644' },
+                  { slot: 'front' as PositionSlot, name: tr('전열'), role: tr('방어'), icon: '🛡️', color: '#ff5252', bg: '#ff525215', border: '#ff525244' },
+                  { slot: 'mid' as PositionSlot,   name: tr('중열'), role: tr('공격'), icon: '⚔️', color: '#ff9800', bg: '#ff980015', border: '#ff980044' },
+                  { slot: 'back' as PositionSlot,  name: tr('후열'), role: tr('지원'), icon: '🏹', color: '#00e676', bg: '#00e67615', border: '#00e67644' },
                 ].map((posInfo, pIdx) => {
                   const pHero = state.party.find(p => p.position === posInfo.slot) || (state.party.length > pIdx && !state.party.some(p => p.position) ? state.party[pIdx] : null);
                   const isSelectedHero = hero && pHero && hero.id === pHero.id;
@@ -5321,9 +5321,9 @@ const BarracksDrawer: React.FC<{
                   return (
                     <div
                       key={posInfo.slot}
-                      className={`p-1.5 sm:p-2 rounded-xl border flex flex-col justify-between gap-1 transition-all cursor-pointer relative min-h-[52px] sm:min-h-[66px] ${
+                      className={`h-9 sm:h-10 px-2 rounded-lg border flex items-center justify-between gap-1.5 transition-all cursor-pointer relative ${
                         isSelectedHero
-                          ? 'bg-[#221c14] border-2 border-[#b89758] shadow-[0_0_12px_rgba(184,151,88,0.4)] scale-[1.01]'
+                          ? 'bg-[#221c14] border-2 border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.4)] scale-[1.01]'
                           : pHero
                           ? 'bg-[#10141f] border-[#253246] hover:border-[#b89758]/60 hover:bg-[#151c2a]'
                           : 'bg-[#0b0e16] border border-dashed border-[#26334a] hover:border-[#b89758]/50'
@@ -5337,58 +5337,47 @@ const BarracksDrawer: React.FC<{
                         }
                       }}
                     >
-                      {/* Slot Header */}
-                      <div className="flex items-center justify-between text-[8.5px] sm:text-[9px]">
-                        <span
-                          className="font-bold px-1.5 py-0.2 rounded border flex items-center gap-0.5"
-                          style={{ color: posInfo.color, background: posInfo.bg, borderColor: posInfo.border }}
-                        >
-                          <span>{posInfo.icon}</span>
-                          <span>{posInfo.name}</span>
-                        </span>
-                        {pHero && (
-                          <button
-                            type="button"
-                            className="text-[#ef5350] hover:text-white px-1 text-xs font-bold leading-none cursor-pointer"
-                            title={tr('파티에서 제외')}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRemoveFromDungeonSlot(pHero.id);
-                            }}
-                          >
-                            ✕
-                          </button>
-                        )}
-                      </div>
+                      {/* Left: Role Badge */}
+                      <span
+                        className="text-[8.5px] font-extrabold px-1 py-0.2 rounded border shrink-0 flex items-center gap-0.5"
+                        style={{ color: posInfo.color, background: posInfo.bg, borderColor: posInfo.border }}
+                      >
+                        <span>{posInfo.icon}</span>
+                        <span>{posInfo.name}</span>
+                      </span>
 
+                      {/* Middle: Hero Info (or Empty Prompt) */}
                       {pHero ? (
-                        <div className="flex items-center sm:flex-col justify-center text-center gap-1.5 py-0.5">
-                          <div
-                            className="relative w-7 h-7 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border bg-[#090d18] flex items-center justify-center shadow-sm"
-                            style={{ borderColor: posInfo.color }}
-                          >
-                            {getHeroPortraitUrl(pHero) ? (
-                              <img src={getHeroPortraitUrl(pHero)} alt={pHero.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <span className="text-sm sm:text-base">{pCls?.skills[0]?.icon || '⚔️'}</span>
-                            )}
-                            <span className="absolute bottom-0 right-0 text-[6.5px] font-mono font-black bg-black/85 px-0.5 rounded text-[#ffd54f]">
-                              {pHero.level}
-                            </span>
-                          </div>
-                          <div className="flex flex-col text-left sm:text-center min-w-0 flex-1">
-                            <div className="font-bold text-[11px] sm:text-xs text-white truncate">{pHero.name}</div>
-                            <div className="text-[9px] font-medium truncate text-[#c8aa6e]">
+                        <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#38ef7d] shrink-0 shadow-[0_0_4px_#38ef7d]" />
+                          <div className="flex flex-col min-w-0 leading-tight">
+                            <span className="font-bold text-[11px] text-white truncate">{pHero.name}</span>
+                            <span className="text-[8.5px] text-[#c8aa6e] truncate">
                               {pCls ? tr(pCls.name) : ''}
-                            </div>
+                            </span>
                           </div>
                         </div>
                       ) : (
-                        <div className="flex flex-col items-center justify-center flex-1 text-center py-1">
-                          <span className="text-xs sm:text-sm font-bold leading-none" style={{ color: posInfo.color }}>
+                        <div className="flex items-center justify-center flex-1 min-w-0">
+                          <span className="text-[9.5px] font-bold text-[#8b9bb4] hover:text-[#ffd54f]">
                             + {tr('배치')}
                           </span>
                         </div>
+                      )}
+
+                      {/* Right: Quick Remove Button (if occupied) */}
+                      {pHero && (
+                        <button
+                          type="button"
+                          className="text-[#ef5350] hover:text-white px-1 text-xs font-bold leading-none cursor-pointer shrink-0"
+                          title={tr('파티에서 제외')}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveFromDungeonSlot(pHero.id);
+                          }}
+                        >
+                          ✕
+                        </button>
                       )}
                     </div>
                   );
