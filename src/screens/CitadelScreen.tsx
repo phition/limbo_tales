@@ -4190,6 +4190,112 @@ const SKILL_RANK_COLORS: Record<string, { label: string; color: string; bg: stri
   mythic:   { label: '신화', color: '#ffd54f', bg: '#ffd54f22' },
 };
 
+// 📊 6대 실효 스탯 상세 분석 모달 (기획안 1)
+const StatDetailModal: React.FC<{
+  hero: Mercenary;
+  onClose: () => void;
+}> = ({ hero, onClose }) => {
+  const { tr } = useI18n();
+  const { gm } = useGameManager();
+  const eff = gm.getHeroEffectiveStats(hero);
+  const cls = CHARACTER_CLASSES[hero.classId];
+
+  const baseStats = GameManager.calcHeroStatsForClassAndLevel(
+    hero.classId,
+    hero.level,
+    hero.grade,
+    hero.trait || hero.title,
+    [],
+    []
+  );
+
+  const STATS_DATA = [
+    { key: 'hp',   label: tr('체력 (HP)'),     color: '#ef5350', base: Math.round(baseStats.maxHp),     eff: Math.round(eff.maxHp),     gear: (hero.equipment?.armor?.stats?.hp || 0) + (hero.equipment?.accessory?.stats?.hp || 0) },
+    { key: 'mp',   label: tr('마나 (MP)'),     color: '#42a5f5', base: baseStats.maxMp,                 eff: eff.maxMp,                 gear: (hero.equipment?.weapon?.stats?.mp || 0) + (hero.equipment?.accessory?.stats?.mp || 0) },
+    { key: 'atk',  label: tr('공격력 (ATK)'),  color: '#ff7043', base: baseStats.stats.atk,             eff: eff.atk,                   gear: (hero.equipment?.weapon?.stats?.atk || 0) + (hero.equipment?.accessory?.stats?.atk || 0) },
+    { key: 'def',  label: tr('방어력 (DEF)'),  color: '#66bb6a', base: baseStats.stats.def,             eff: eff.def,                   gear: (hero.equipment?.armor?.stats?.def || 0) + (hero.equipment?.accessory?.stats?.def || 0) },
+    { key: 'spd',  label: tr('이동속도 (SPD)'), color: '#ffd54f', base: baseStats.stats.spd,             eff: eff.spd,                   gear: (hero.equipment?.weapon?.stats?.spd || 0) + (hero.equipment?.accessory?.stats?.spd || 0) },
+    { key: 'luck', label: tr('행운 (LUK)'),     color: '#ce93d8', base: baseStats.stats.luck,            eff: eff.luck,                  gear: (hero.equipment?.accessory?.stats?.luck || 0) },
+  ];
+
+  return (
+    <Modal
+      title={`📊 [${hero.name}] ${tr('6대 실효 스탯 상세 분석')}`}
+      open={true}
+      onClose={onClose}
+      footer={
+        <button type="button" className="btn btn-primary w-full text-xs font-bold py-2 cursor-pointer" onClick={onClose}>
+          {tr('확인')}
+        </button>
+      }
+    >
+      <div className="flex flex-col gap-3 text-xs leading-relaxed">
+        <div className="p-3 rounded-xl bg-[#0d121c] border border-[#222d42] flex items-center justify-between">
+          <div>
+            <div className="text-white font-bold text-sm">{hero.name}</div>
+            <div className="text-[#c8aa6e] text-xs">{cls ? tr(cls.name) : ''} (Lv.{hero.level})</div>
+          </div>
+          <div className="text-right">
+            <span className="text-[10px] text-[#8b9bb4]">{tr('전투력')}</span>
+            <div className="text-sm font-black font-mono text-[#ffd54f]">
+              {Math.round(eff.atk * 3 + eff.def * 2 + eff.maxHp / 5).toLocaleString()}
+            </div>
+          </div>
+        </div>
+
+        {/* 6 Stats Table */}
+        <div className="flex flex-col gap-1.5 bg-[#090d16] p-2 rounded-xl border border-[#1b2334]">
+          <div className="grid grid-cols-5 text-[10px] text-[#8b9bb4] font-bold pb-1 border-b border-[#1b2334] px-1">
+            <span>{tr('스탯')}</span>
+            <span className="text-center">{tr('기본')}</span>
+            <span className="text-center">{tr('장비 가산')}</span>
+            <span className="text-center">{tr('전직/각성')}</span>
+            <span className="text-right">{tr('최종 실효')}</span>
+          </div>
+          {STATS_DATA.map(st => {
+            const hasPromoBonus = (hero.promotionBonuses || []).includes(st.key as any);
+            const hasAwakenBonus = (hero.awakeningBonuses || []).includes(st.key as any);
+            const promoText = hasPromoBonus && hasAwakenBonus ? '+45%' : hasPromoBonus ? '+30%' : hasAwakenBonus ? '+15%' : '-';
+
+            return (
+              <div key={st.key} className="grid grid-cols-5 items-center text-xs font-mono py-1 px-1 hover:bg-[#121824] rounded transition-colors">
+                <span className="font-bold text-[11px]" style={{ color: st.color }}>{st.label}</span>
+                <span className="text-center text-[#8b9bb4]">{st.base}</span>
+                <span className={`text-center ${st.gear > 0 ? 'text-[#38ef7d] font-bold' : 'text-[#506075]'}`}>
+                  {st.gear > 0 ? `+${st.gear}` : '0'}
+                </span>
+                <span className={`text-center text-[10px] ${promoText !== '-' ? 'text-[#ffd54f] font-bold' : 'text-[#506075]'}`}>
+                  {promoText}
+                </span>
+                <span className="text-right font-black text-white">{st.eff}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Chosen bonuses list */}
+        {((hero.promotionBonuses && hero.promotionBonuses.length > 0) || (hero.awakeningBonuses && hero.awakeningBonuses.length > 0)) && (
+          <div className="p-2.5 rounded-xl bg-[#141a29] border border-[#233554] flex flex-col gap-1.5">
+            <span className="text-[11px] font-bold text-[#c8aa6e]">🌟 {tr('보너스 강화 내역')}</span>
+            <div className="flex flex-wrap gap-1">
+              {(hero.promotionBonuses || []).map((b, idx) => (
+                <span key={`p_${idx}`} className="text-[9.5px] px-2 py-0.5 rounded bg-[#ffd54f]/15 text-[#ffd54f] border border-[#ffd54f]/30 font-bold">
+                  ⚡ {tr('전직')} +30% [{b.toUpperCase()}]
+                </span>
+              ))}
+              {(hero.awakeningBonuses || []).map((b, idx) => (
+                <span key={`a_${idx}`} className="text-[9.5px] px-2 py-0.5 rounded bg-[#00d2ff]/15 text-[#00d2ff] border border-[#00d2ff]/30 font-bold">
+                  🌟 {tr('각성')} +15% [{b.toUpperCase()}]
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </Modal>
+  );
+};
+
 const BarracksDrawer: React.FC<{
   onClose: () => void;
   onNavigateDrawer?: (drawerKey: string) => void;
@@ -4212,6 +4318,8 @@ const BarracksDrawer: React.FC<{
   const [selectedAwakenStat, setSelectedAwakenStat] = useState<'hp' | 'mp' | 'atk' | 'def' | 'spd' | 'luck'>('atk');
   const [showBondModal, setShowBondModal] = useState(false);
   const [showSynergyModal, setShowSynergyModal] = useState(false);
+  const [showStatDetailModal, setShowStatDetailModal] = useState(false);
+  const [dungeonAssignSlot, setDungeonAssignSlot] = useState<PositionSlot | null>(null);
 
   const [barracksCategory, setBarracksCategory] = useState<'dungeon' | 'dimensional' | 'defense'>(initialCategory);
   useEffect(() => {
@@ -4328,6 +4436,120 @@ const BarracksDrawer: React.FC<{
     gm.setDimensionalDeck(currentDeck);
     SoundManager.getInstance().play('click');
   };
+
+  // ⚔️ 던전 3인 원정대 슬롯 배치 / 스왑 핸들러
+  const handleAssignHeroToDungeonSlot = (heroId: string, slot: PositionSlot) => {
+    const heroToAssign = state.barracks.find(h => h.id === heroId);
+    if (!heroToAssign) return;
+
+    if (state.infirmaryPatients.includes(heroId)) {
+      SoundManager.getInstance().play('debuff');
+      gameDialog.alert({
+        title: tr('출전 불가'),
+        message: tr('{0} 용병은 현재 치료 병동에 입원 중입니다.').replace('{0}', heroToAssign.name),
+        icon: '🏥',
+      });
+      return;
+    }
+
+    const currentParty = [...gm.party];
+    const existingIdx = currentParty.findIndex(p => p.id === heroId);
+
+    if (existingIdx !== -1) {
+      const existingInSlot = currentParty.find(p => p.position === slot);
+      if (existingInSlot && existingInSlot.id !== heroId) {
+        existingInSlot.position = currentParty[existingIdx].position;
+      }
+      currentParty[existingIdx].position = slot;
+    } else {
+      const existingInSlotIdx = currentParty.findIndex(p => p.position === slot);
+      if (existingInSlotIdx !== -1) {
+        currentParty.splice(existingInSlotIdx, 1);
+      } else if (currentParty.length >= 3) {
+        currentParty.shift();
+      }
+      heroToAssign.position = slot;
+      currentParty.push(heroToAssign);
+    }
+
+    gm.party = currentParty;
+    gm.sortPartyByPosition();
+    gm.emit('partyUpdated', gm.party);
+    gm.emit('update');
+    gm.saveGame();
+    SoundManager.getInstance().play('equip');
+    setDungeonAssignSlot(null);
+  };
+
+  // ⚔️ 던전 슬롯에서 용병 제거
+  const handleRemoveFromDungeonSlot = (heroId: string) => {
+    if (gm.party.length <= 1) {
+      SoundManager.getInstance().play('debuff');
+      gameDialog.alert({
+        title: tr('파티 편성'),
+        message: tr('원정대에는 최소 1명의 용병이 출전해야 합니다.'),
+        icon: '⚠️',
+      });
+      return;
+    }
+    gm.togglePartyMember(heroId);
+    SoundManager.getInstance().play('click');
+  };
+
+  // ⚡ 던전 원정대 3인 최적 자동 편성
+  const handleAutoAssignDungeonParty = useCallback(() => {
+    const available = state.barracks.filter(h => !state.infirmaryPatients.includes(h.id));
+    if (available.length === 0) {
+      SoundManager.getInstance().play('debuff');
+      return;
+    }
+
+    const partyHeroIds = new Set<string>();
+
+    // 1. 전열: 탱커/방어 우선
+    const tank = [...available].sort((a, b) => {
+      const roleA = CHARACTER_CLASSES[a.classId]?.role === 'tank' ? 10000 : 0;
+      const roleB = CHARACTER_CLASSES[b.classId]?.role === 'tank' ? 10000 : 0;
+      return (roleB + b.stats.def * 2 + b.maxHp) - (roleA + a.stats.def * 2 + a.maxHp);
+    })[0];
+    if (tank) partyHeroIds.add(tank.id);
+
+    // 2. 중열: 딜러/공격 우선
+    const dealer = [...available].filter(h => !partyHeroIds.has(h.id)).sort((a, b) => {
+      const roleA = (CHARACTER_CLASSES[a.classId]?.role || '').startsWith('dealer') ? 10000 : 0;
+      const roleB = (CHARACTER_CLASSES[b.classId]?.role || '').startsWith('dealer') ? 10000 : 0;
+      return (roleB + b.stats.atk * 3) - (roleA + a.stats.atk * 3);
+    })[0];
+    if (dealer) partyHeroIds.add(dealer.id);
+
+    // 3. 후열: 힐러/원거리/지원 우선
+    const support = [...available].filter(h => !partyHeroIds.has(h.id)).sort((a, b) => {
+      const roleA = (CHARACTER_CLASSES[a.classId]?.role === 'healer' || CHARACTER_CLASSES[a.classId]?.role === 'ranger') ? 10000 : 0;
+      const roleB = (CHARACTER_CLASSES[b.classId]?.role === 'healer' || CHARACTER_CLASSES[b.classId]?.role === 'ranger') ? 10000 : 0;
+      return (roleB + b.stats.spd * 2 + b.stats.luck) - (roleA + a.stats.spd * 2 + a.stats.luck);
+    })[0];
+    if (support) partyHeroIds.add(support.id);
+
+    const newParty: Mercenary[] = [];
+    if (tank) {
+      tank.position = 'front';
+      newParty.push(tank);
+    }
+    if (dealer) {
+      dealer.position = 'mid';
+      newParty.push(dealer);
+    }
+    if (support) {
+      support.position = 'back';
+      newParty.push(support);
+    }
+
+    gm.party = newParty;
+    gm.emit('partyUpdated', gm.party);
+    gm.emit('update');
+    gm.saveGame();
+    SoundManager.getInstance().play('equip');
+  }, [state.barracks, state.infirmaryPatients, gm]);
 
   const safeIdx = Math.min(selectedIdx, Math.max(0, state.barracks.length - 1));
   const hero = state.barracks[safeIdx];
@@ -5038,610 +5260,820 @@ const BarracksDrawer: React.FC<{
           </div>
         )
       ) : (
-        /* ── ⚔️ 기존 3인 던전 원정대 관리 뷰 ── */
+        /* ── ⚔️ 던전 원정대 3인 진형 & 선택 영웅 전술 시트 (기획안 1) ── */
         state.barracks.length === 0 ? (
           <div className="flex-1 flex items-center justify-center text-sm text-[#8b9bb4]">
-            보관소에 용병이 없습니다. 주점에서 새 용병을 영입하세요.
+            {tr('보관소에 용병이 없습니다. 주점에서 새 용병을 영입하세요.')}
           </div>
         ) : (
           <>
-            {/* 상단 용병 선택 탭 바 */}
-            <div className="flex gap-1.5 px-3 py-2 overflow-x-auto shrink-0 bg-[#0e121d] border-b border-[#1f2738]">
-            {state.barracks.map((h, i) => {
-              const inParty = state.party.some(p => p.id === h.id);
-              const isAdmitted = state.infirmaryPatients.includes(h.id);
-              const gMeta = GRADE_META[h.grade] || GRADE_META.rookie;
-              const isSelected = safeIdx === i;
+            {/* 1. 상단 3인 진형 앵커 슬롯 바 */}
+            <div className="p-3 bg-[#0a0d14] border-b border-[#241c10] flex flex-col gap-2 shrink-0">
+              <div className="flex items-center justify-between text-xs flex-wrap gap-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold text-[#dcc496] flex items-center gap-1.5 text-xs sm:text-sm">
+                    <span>⚔️</span>
+                    <span>{tr('던전 원정대 3인 진형')}</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40 font-bold">
+                    {state.party.length}/3 {tr('출전')}
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161a24] text-[#8b9bb4] border border-[#2a3447]">
+                    {tr('전투력')}: {Math.round(state.party.reduce((sum, p) => {
+                      const effP = gm.getHeroEffectiveStats(p);
+                      return sum + (effP.atk * 3 + effP.def * 2 + effP.maxHp / 5);
+                    }, 0)).toLocaleString()}
+                  </span>
+                </div>
 
-              const hCls = CHARACTER_CLASSES[h.classId];
-              const hTier = hCls?.tier || 0;
-              const hReqLv = hTier === 0 ? 10 : (hTier === 1 ? 30 : 60);
-              const canPromoteHero = h.level >= hReqLv && (PROMOTE_MAP[h.classId]?.length || 0) > 0;
-              const canAwakenHero = hTier >= 3 && h.level >= (60 + ((h.awakeningCount || 0) + 1) * 10);
-
-              return (
-                <button
-                  key={h.id}
-                  className={`min-w-[84px] text-xs py-1.5 px-2 flex flex-col items-center transition-all rounded-xl relative cursor-pointer ${
-                    isSelected
-                      ? 'bg-[#221c14] border-2 border-[#b89758] text-[#dcc496] shadow-[0_0_12px_rgba(184,151,88,0.35)] scale-[1.02]'
-                      : 'bg-[#10131a] border border-[#3d372e] text-[#9da3af] hover:text-white hover:border-[#b89758]/60'
-                  }`}
-                  onClick={() => setSelectedIdx(i)}
-                >
-                  {canPromoteHero && (
-                    <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#ffd54f] text-black font-extrabold animate-pulse shadow-sm shadow-[#ffd54f]/50">
-                      ✨{tr('전직')}
-                    </span>
-                  )}
-                  {canAwakenHero && (
-                    <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#dcc496] text-black font-extrabold animate-pulse shadow-sm shadow-[#dcc496]/50">
-                      🔮{tr('각성')}
-                    </span>
-                  )}
-                  <div className="flex items-center gap-1">
-                    <span className="font-bold truncate max-w-[52px]">{h.name}</span>
-                    <span className="text-[9px] font-bold font-mono text-[#ffd54f]">
-                      Lv.{h.level}
-                    </span>
-                  </div>
-                  <div className={`text-[10px] font-bold mt-0.5 ${isAdmitted ? 'text-[#ef5350]' : canAwakenHero ? 'text-[#dcc496]' : canPromoteHero ? 'text-[#ffd54f]' : inParty ? 'text-[#81c784]' : 'text-[#8b9bb4]'}`}>
-                    {isAdmitted ? tr('🏥입원중') : canAwakenHero ? tr('🔮각성가능') : canPromoteHero ? tr('✨전직가능') : inParty ? tr('★ 파티원') : tr('대기중')}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* 선택된 용병 상세 정보 */}
-          {hero && cls && (
-            <div className="flex-1 overflow-y-auto p-3 relative flex flex-col gap-2.5">
-              {/* 용병 기본 상태 카드 */}
-              {(() => {
-                const gMeta = GRADE_META[hero.grade] || GRADE_META.rookie;
-                const inParty = state.party.some(p => p.id === hero.id);
-
-                return (
-                  <div className="p-3 bg-[#10131a] border border-[#3d372e] rounded-xl flex flex-col gap-2 shadow-sm">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-base text-white">{tr(hero.name)}</span>
-                        <span
-                          className="text-[10px] px-1.5 py-0.2 rounded font-bold"
-                          style={{ color: gMeta.color, background: `${gMeta.color}22`, border: `1px solid ${gMeta.color}44` }}
-                        >
-                          [{gMeta.tag}]
-                        </span>
-                        <span className="text-xs text-[#c8aa6e] font-medium">{tr(cls.name)}</span>
-                        <span className="text-xs font-bold font-mono text-[#ffd54f] bg-[#ffd54f18] px-2 py-0.5 rounded border border-[#ffd54f44] shadow-sm">
-                          Lv.{hero.level}
-                        </span>
-                      </div>
-                      {(() => {
-                        const isAdmitted = state.infirmaryPatients.includes(hero.id);
-                        if (isAdmitted) {
-                          return (
-                            <button
-                              className="text-[10px] px-2 py-0.5 rounded bg-[#ff704322] hover:bg-[#ff70433d] text-[#ff7043] font-bold border border-[#ff704355] hover:border-[#ff7043aa] flex items-center gap-1 transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95"
-                              onClick={() => onNavigateDrawer?.('infirmary')}
-                              title="생체 복원 병동으로 즉시 이동"
-                            >
-                              <span>🏥 입원 중</span>
-                            </button>
-                          );
-                        }
-                        if (inParty) {
-                          return (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d44]">
-                              ★ 출전 중
-                            </span>
-                          );
-                        }
-                        return (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#8b9bb422] text-[#8b9bb4]">
-                            대기중
-                          </span>
-                        );
-                      })()}
-                    </div>
-
-                    {(() => {
-                      const traitKey = hero.trait || hero.title || '';
-                      const traitInfo = HERO_TRAITS[traitKey];
-                      if (!traitInfo) return null;
-                      return (
-                        <div className="mt-1 px-2.5 py-1 rounded-lg bg-[#ffd54f10] border border-[#ffd54f28] text-[11px] flex items-center gap-2 flex-wrap">
-                          <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]">
-                            ✨ {traitInfo.name}
-                          </span>
-                          <span className="text-[#cfd8dc] font-mono text-[10px]">{traitInfo.desc}</span>
-                        </div>
-                      );
-                    })()}
-
-                    {(() => {
-                      const eff = gm.getHeroEffectiveStats(hero);
-                      return (
-                        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 mt-2 text-xs font-mono">
-                          <div className="flex flex-col items-center bg-[#0d1424] p-1.5 rounded-lg border border-[#1f2b40]">
-                            <span className="text-[10px] text-[#ef5350] font-bold">HP</span>
-                            <span className="font-bold text-white">{Math.round(hero.currentHp)}/{Math.round(eff.maxHp)}</span>
-                          </div>
-                          <div className="flex flex-col items-center bg-[#0d1424] p-1.5 rounded-lg border border-[#1f2b40]">
-                            <span className="text-[10px] text-[#42a5f5] font-bold">MP</span>
-                            <span className="font-bold text-white">{hero.currentMp}/{eff.maxMp}</span>
-                          </div>
-                          <div className="flex flex-col items-center bg-[#0d1424] p-1.5 rounded-lg border border-[#1f2b40]">
-                            <span className="text-[10px] text-[#ff7043] font-bold">ATK</span>
-                            <span className="font-bold text-white">{eff.atk}</span>
-                          </div>
-                          <div className="flex flex-col items-center bg-[#0d1424] p-1.5 rounded-lg border border-[#1f2b40]">
-                            <span className="text-[10px] text-[#66bb6a] font-bold">DEF</span>
-                            <span className="font-bold text-white">{eff.def}</span>
-                          </div>
-                          <div className="flex flex-col items-center bg-[#0d1424] p-1.5 rounded-lg border border-[#1f2b40]">
-                            <span className="text-[10px] text-[#ffd54f] font-bold">SPD</span>
-                            <span className="font-bold text-white">{eff.spd}</span>
-                          </div>
-                          <div className="flex flex-col items-center bg-[#0d1424] p-1.5 rounded-lg border border-[#1f2b40]">
-                            <span className="text-[10px] text-[#ce93d8] font-bold">LUK</span>
-                            <span className="font-bold text-white">{eff.luck}</span>
-                          </div>
-                        </div>
-                      );
-                    })()}
-                  </div>
-                );
-              })()}
-
-              {/* 🛡️ 장착 장비 슬롯 */}
-              <div className="panel p-3 bg-[#131926] border border-[#222d42] rounded-xl">
-                <div className="text-xs text-[#38ef7d] font-bold mb-2 flex items-center justify-between flex-wrap gap-1.5">
-                  <span>🛡️ {tr('장착 장비')}</span>
+                <div className="flex items-center gap-1.5">
                   <button
                     type="button"
-                    onClick={handleAutoEquipBest}
-                    className="px-2.5 py-1 text-[11px] bg-[#38ef7d1a] hover:bg-[#38ef7d33] text-[#38ef7d] border border-[#38ef7d44] hover:border-[#38ef7d88] rounded-lg transition-all font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-sm"
-                    title={tr('보관함의 미장착 장비 중 클래스 최적 장비를 일괄 장착합니다')}
+                    onClick={() => setShowSynergyModal(true)}
+                    className="text-[10px] px-2 py-0.5 rounded bg-[#b89758]/15 hover:bg-[#b89758]/30 text-[#dcc496] border border-[#b89758]/40 font-bold cursor-pointer transition-colors flex items-center gap-1"
+                    title={tr('파티 시너지 효과 확인')}
+                  >
+                    <span>🌀</span>
+                    <span>{tr('시너지')} ({synergies.length})</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAutoAssignDungeonParty}
+                    className="text-[10px] px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#b89758] to-[#8c6d37] hover:brightness-110 active:scale-95 text-white font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1"
                   >
                     <span>⚡</span>
-                    <span>{tr('탭하여 일괄 장착')}</span>
+                    <span>{tr('최적 자동 편성')}</span>
                   </button>
-                </div>
-                <div className="grid grid-cols-3 gap-2 w-full">
-                  {EQ_SLOTS.map(({ slot, label, icon }) => {
-                    const eq = hero.equipment?.[slot];
-                    const hasPrefix = !!eq?.prefix;
-                    const hasSuffix = !!eq?.suffix;
-                    const nameLen = eq ? eq.name.length : label.length;
-                    // 이름 길이에 따른 단계적 폰트 축소 (긴 이름 깨짐 방지)
-                    const nameFontSizeClass = nameLen >= 15
-                      ? 'text-[8px] tracking-tighter'
-                      : nameLen >= 10
-                      ? 'text-[8px] tracking-tight' : 'text-[10px]';
-
-                    return (
-                      <button
-                        key={slot}
-                        className="w-full min-w-0 overflow-hidden panel p-2 text-center flex flex-col items-center justify-between gap-1 rounded-lg transition-all hover:border-[#c8aa6e66] select-none cursor-pointer"
-                        style={{
-                          borderColor: eq ? (gm.isMementoResonated(eq) ? '#ba68c8' : '#38ef7d') : '#222d42',
-                          background: eq ? (gm.isMementoResonated(eq) ? '#1c1026' : '#0d1f18') : '#141a29',
-                          minHeight: '84px',
-                          boxShadow: gm.isMementoResonated(eq) ? '0 0 8px #ba68c833' : undefined
-                        }}
-                        onClick={() => setEquipOverlay({ hero, slot })}
-                        title={
-                          eq
-                            ? `${eq.name} (+${eq.level}${tr('강')})${eq.isMemento ? ` [🪦 ${eq.mementoHeroName || tr('영웅')}${tr('의 유품')}]` : ''}${gm.isMementoResonated(eq) ? ` ✨ ${tr('영령 가호 공명 중 (+10% 성능 증폭)')}` : ''}`
-                            : `[${tr(label)}] ${tr('슬롯 (미장착)')}`
-                        }
-                      >
-                        {/* 아이콘 및 인챈트 인디케이터 */}
-                        <div className="text-xl flex items-center justify-center gap-0.5 shrink-0">
-                          {eq ? (
-                            <span 
-                              className="p-1 rounded-md bg-[#1e2738] border shrink-0 flex items-center justify-center transition-all"
-                              style={getRarityBorderStyle(eq.rarity)}
-                            >
-                              <GameIcon name={eq.templateId || getEquipmentTemplateId(eq) || eq.id || eq.baseName} icon={eq.icon} size={22} />
-                            </span>
-                          ) : (
-                            <span>{icon}</span>
-                          )}
-                          {(hasPrefix || hasSuffix || eq?.isMemento) && (
-                            <span className="text-[10px] flex gap-0.5 ml-0.5">
-                              {hasPrefix && <span title={`${tr('접두사')}: ${eq.prefix?.name}`}>✨</span>}
-                              {hasSuffix && <span title={`${tr('접미사')}: ${eq.suffix?.name}`}>🔮</span>}
-                              {eq?.isMemento && (
-                                <span
-                                  className={gm.isMementoResonated(eq) ? 'animate-bounce' : ''}
-                                  title={
-                                    gm.isMementoResonated(eq)
-                                      ? tr('🪦 [전사자의 유품] 영령의 가호 공명 활성화! 성능 +10% 증폭 중!')
-                                      : tr('🪦 [전사자의 유품] 묘지에서 해당 영웅의 가호를 받으면 성능 +10% 증폭')
-                                  }
-                                >
-                                  🪦
-                                </span>
-                              )}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* 장비 이름: 고정 폭 내에서 길이에 따른 폰트 축소 및 말줄임표(...) 생략 */}
-                        <div className="w-full min-w-0 px-0.5">
-                          <div
-                            className={`w-full min-w-0 font-bold truncate text-center text-white ${nameFontSizeClass}`}
-                            title={eq ? eq.name : `[${label}]`}
-                          >
-                            {eq ? eq.name : `[${label}]`}
-                          </div>
-                        </div>
-
-                        {/* 강화 수치 및 등급 배지 (고정 높이로 버튼 정렬 유지) */}
-                        <div className="w-full min-w-0 flex items-center justify-center gap-1 shrink-0 h-3.5">
-                          {eq ? (
-                            <>
-                              <span className="text-[9px] text-[#ffd54f] font-mono shrink-0">+{eq.level}강</span>
-                              <span className="text-[8px] font-bold truncate shrink-0" style={{ color: getRarityColor(eq.rarity) }}>
-                                [{getRarityLabel(eq.rarity)}]
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-[9px] text-[#607d8b]">비어있음</span>
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
                 </div>
               </div>
 
-              {/* 📖 전술 스킬 슬롯 (고유기 + 장착 스킬 2개) */}
-              <div className="panel p-3 bg-[#131926] border border-[#c8aa6e44] rounded-xl">
-                <div className="text-xs text-[#c8aa6e] font-bold mb-2 flex items-center justify-between">
-                  <span className="flex items-center gap-1">
-                    <span>📖</span>
-                    <span>{tr('전투 스킬 (패시브 1 + 액티브 3)')}</span>
-                  </span>
-                  <button
-                    className="text-[10px] px-2 py-0.5 rounded bg-[#c8aa6e22] text-[#c8aa6e] border border-[#c8aa6e44] font-bold hover:bg-[#c8aa6e33]"
-                    onClick={() => setSkillOverlayHero(hero)}
-                  >
-                    ⚙️ 스킬 관리 (습득: {learnedCount}/4)
-                  </button>
+              {/* 3 Positions Grid: Front, Mid, Back */}
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { slot: 'front' as PositionSlot, name: tr('1. 전열'), role: tr('방어 / 탱커'), icon: '🛡️', color: '#ff5252', bg: '#ff525215', border: '#ff525244' },
+                  { slot: 'mid' as PositionSlot,   name: tr('2. 중열'), role: tr('공격 / 딜러'), icon: '⚔️', color: '#ff9800', bg: '#ff980015', border: '#ff980044' },
+                  { slot: 'back' as PositionSlot,  name: tr('3. 후열'), role: tr('지원 / 힐러'), icon: '🏹', color: '#00e676', bg: '#00e67615', border: '#00e67644' },
+                ].map((posInfo, pIdx) => {
+                  const pHero = state.party.find(p => p.position === posInfo.slot) || (state.party.length > pIdx && !state.party.some(p => p.position) ? state.party[pIdx] : null);
+                  const isSelectedHero = hero && pHero && hero.id === pHero.id;
+                  const pEff = pHero ? gm.getHeroEffectiveStats(pHero) : null;
+                  const pCls = pHero ? CHARACTER_CLASSES[pHero.classId] : null;
+
+                  return (
+                    <div
+                      key={posInfo.slot}
+                      className={`p-2 rounded-xl border flex flex-col justify-between gap-1.5 transition-all cursor-pointer relative min-h-[114px] ${
+                        isSelectedHero
+                          ? 'bg-[#221c14] border-2 border-[#b89758] shadow-[0_0_12px_rgba(184,151,88,0.4)] scale-[1.01]'
+                          : pHero
+                          ? 'bg-[#10141f] border-[#253246] hover:border-[#b89758]/60 hover:bg-[#151c2a]'
+                          : 'bg-[#0b0e16] border border-dashed border-[#26334a] hover:border-[#b89758]/50'
+                      }`}
+                      onClick={() => {
+                        if (pHero) {
+                          const bIdx = state.barracks.findIndex(b => b.id === pHero.id);
+                          if (bIdx >= 0) setSelectedIdx(bIdx);
+                        } else {
+                          setDungeonAssignSlot(posInfo.slot);
+                        }
+                      }}
+                    >
+                      {/* Slot Header */}
+                      <div className="flex items-center justify-between text-[9px]">
+                        <span
+                          className="font-bold px-1.5 py-0.2 rounded border flex items-center gap-0.5"
+                          style={{ color: posInfo.color, background: posInfo.bg, borderColor: posInfo.border }}
+                        >
+                          <span>{posInfo.icon}</span>
+                          <span>{posInfo.name}</span>
+                        </span>
+                        {pHero && (
+                          <button
+                            type="button"
+                            className="text-[#ef5350] hover:text-white px-1 text-xs font-bold leading-none cursor-pointer"
+                            title={tr('파티에서 제외')}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveFromDungeonSlot(pHero.id);
+                            }}
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </div>
+
+                      {pHero && pEff ? (
+                        <div className="flex flex-col items-center text-center gap-1">
+                          <div
+                            className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden shrink-0 border-2 bg-[#090d18] flex items-center justify-center shadow-md"
+                            style={{ borderColor: posInfo.color }}
+                          >
+                            {getHeroPortraitUrl(pHero) ? (
+                              <img src={getHeroPortraitUrl(pHero)} alt={pHero.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-xl">{pCls?.skills[0]?.icon || '⚔️'}</span>
+                            )}
+                            <span className="absolute bottom-0.5 right-0.5 text-[7px] font-mono font-black bg-black/85 px-1 rounded text-[#ffd54f]">
+                              Lv.{pHero.level}
+                            </span>
+                          </div>
+                          <div className="font-bold text-xs text-white truncate w-full">{pHero.name}</div>
+                          <div className="text-[9px] font-medium truncate w-full text-[#c8aa6e]">
+                            {pCls ? tr(pCls.name) : ''}
+                          </div>
+                          {/* HP Bar */}
+                          <div className="w-full bg-[#1b2333] h-1 rounded-full overflow-hidden mt-0.5">
+                            <div
+                              className="bg-[#ef5350] h-full rounded-full transition-all"
+                              style={{ width: `${Math.min(100, (pHero.currentHp / pEff.maxHp) * 100)}%` }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center flex-1 text-center py-2">
+                          <span className="text-2xl mb-0.5" style={{ color: posInfo.color }}>+</span>
+                          <span className="text-[10px] font-bold" style={{ color: posInfo.color }}>
+                            {tr('용병 배치')}
+                          </span>
+                          <span className="text-[8.5px] text-[#8b9bb4] mt-0.5">{posInfo.role}</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 2. 중앙 선택 영웅 구조적 전술 시트 (기획안 1: 모듈러 전술 시트) */}
+            {hero && cls && (
+              <div className="flex-1 overflow-y-auto p-3 relative flex flex-col gap-2.5 custom-scrollbar">
+                {/* 모듈 A: 포트레이트 & 전직/각성 카드 */}
+                {(() => {
+                  const gMeta = GRADE_META[hero.grade] || GRADE_META.rookie;
+                  const inParty = state.party.some(p => p.id === hero.id);
+                  const isAdmitted = state.infirmaryPatients.includes(hero.id);
+                  const traitKey = hero.trait || hero.title || '';
+                  const traitInfo = HERO_TRAITS[traitKey];
+                  const branches = PROMOTE_MAP[hero.classId] || [];
+                  const hTier = cls.tier || 0;
+                  const hReqLv = hTier === 0 ? 10 : (hTier === 1 ? 30 : 60);
+                  const meetsLevel = hero.level >= hReqLv;
+                  const sanctuaryLv = state.buildings['sanctuary']?.level || 0;
+                  const reqSanct = hTier === 0 ? 1 : (hTier === 1 ? 5 : 8);
+                  const hasSanctuary = sanctuaryLv >= reqSanct;
+                  const canPromoteHero = meetsLevel && hasSanctuary && branches.length > 0;
+                  const canAwakenHero = hTier >= 3 && hero.level >= (60 + ((hero.awakeningCount || 0) + 1) * 10) && sanctuaryLv >= 5;
+
+                  return (
+                    <div className="p-3 sm:p-3.5 bg-gradient-to-b from-[#131620] to-[#0c0e15] border border-[#3d3220] rounded-xl flex flex-col gap-2.5 shadow-md">
+                      <div className="flex items-start gap-3">
+                        {/* Portrait */}
+                        <div
+                          className="relative w-18 h-18 sm:w-22 sm:h-22 rounded-xl overflow-hidden shrink-0 border-2 bg-[#090d18] flex items-center justify-center shadow-lg"
+                          style={{ borderColor: gMeta.color }}
+                        >
+                          {getHeroPortraitUrl(hero) ? (
+                            <img src={getHeroPortraitUrl(hero)} alt={hero.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-3xl">{cls.skills[0]?.icon || '⚔️'}</span>
+                          )}
+                          <span className="absolute bottom-1 right-1 text-[8.5px] font-mono font-black bg-black/85 px-1.5 py-0.5 rounded text-[#ffd54f] border border-[#ffd54f44]">
+                            Lv.{hero.level}
+                          </span>
+                          {inParty && (
+                            <span className="absolute top-1 left-1 text-[8px] font-bold px-1 rounded bg-[#38ef7d] text-black">
+                              {hero.position === 'front' ? tr('전열') : hero.position === 'back' ? tr('후열') : tr('중열')}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Details */}
+                        <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                          <div>
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="font-extrabold text-base text-white truncate">{tr(hero.name)}</span>
+                              <span
+                                className="text-[10px] px-1.5 py-0.5 rounded font-black tracking-wide"
+                                style={{ color: gMeta.color, background: `${gMeta.color}22`, border: `1px solid ${gMeta.color}55` }}
+                              >
+                                [{gMeta.label}]
+                              </span>
+                              <span className="text-xs text-[#c8aa6e] font-bold">
+                                {tr(cls.name)} {cls.tier > 0 ? `(${cls.tier}차)` : ''}
+                              </span>
+                            </div>
+
+                            {/* Trait Badge */}
+                            {traitInfo && (
+                              <div className="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#ffd54f]/10 border border-[#ffd54f]/30 text-[10.5px]">
+                                <span className="text-[#ffd54f] font-bold">✨ {traitInfo.name}</span>
+                                <span className="text-[#8b9bb4] truncate max-w-[160px] sm:max-w-[240px]">{traitInfo.desc}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Action Buttons: Class Promotion, Awakening, Bond, Dismiss, Deploy */}
+                          <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                            {/* Promotion */}
+                            {branches.length > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => setPreviewClassTarget({ targetHero: hero, classId: branches[0].id })}
+                                className={`text-[10.5px] px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition-all cursor-pointer ${
+                                  canPromoteHero
+                                    ? 'bg-gradient-to-r from-[#ffd54f] to-[#ffb300] text-black shadow-[0_0_10px_rgba(255,213,79,0.5)] animate-pulse'
+                                    : 'bg-[#181d2a] text-[#ffd54f] border border-[#ffd54f]/30 hover:border-[#ffd54f]/60'
+                                }`}
+                              >
+                                <span>⚡</span>
+                                <span>{canPromoteHero ? tr('전직 가능!') : tr('전직 정보')}</span>
+                              </button>
+                            )}
+
+                            {/* Awakening */}
+                            {cls.tier >= 3 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedAwakenStat('atk');
+                                  setAwakeningTargetHero(hero);
+                                }}
+                                className={`text-[10.5px] px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition-all cursor-pointer ${
+                                  canAwakenHero
+                                    ? 'bg-gradient-to-r from-[#00d2ff] to-[#0077ff] text-white shadow-[0_0_10px_rgba(0,210,255,0.5)] animate-pulse'
+                                    : 'bg-[#181d2a] text-[#00d2ff] border border-[#00d2ff]/30 hover:border-[#00d2ff]/60'
+                                }`}
+                              >
+                                <span>🌟</span>
+                                <span>{canAwakenHero ? tr('초월 각성 가능!') : tr('각성 정보')}</span>
+                              </button>
+                            )}
+
+                            {/* Bond */}
+                            <button
+                              type="button"
+                              onClick={() => setShowBondModal(true)}
+                              className="text-[10.5px] px-2 py-1 rounded-lg bg-[#ff416c]/15 text-[#ff8099] border border-[#ff416c]/40 font-bold hover:bg-[#ff416c]/25 transition-all cursor-pointer flex items-center gap-1"
+                            >
+                              <span>❤️</span>
+                              <span>{tr('결속')}</span>
+                            </button>
+
+                            {/* Deploy / Remove Toggle in Dungeon */}
+                            <button
+                              type="button"
+                              data-tutorial-target={!inParty ? "hero-deploy-btn" : undefined}
+                              onClick={() => {
+                                if (isAdmitted) {
+                                  onNavigateDrawer?.('infirmary');
+                                } else {
+                                  gm.togglePartyMember(hero.id);
+                                  if (tutorialStepId === 'TUTORIAL_DEPLOY_HERO') {
+                                    onAdvanceTutorial?.('TUTORIAL_WEAPON_SHORTAGE');
+                                  }
+                                }
+                              }}
+                              className={`text-[10.5px] px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                                isAdmitted
+                                  ? 'bg-[#ff7043]/20 text-[#ff7043] border border-[#ff7043]/50'
+                                  : inParty
+                                  ? 'bg-[#ef5350]/20 text-[#ef5350] border border-[#ef5350]/50 hover:bg-[#ef5350]/30'
+                                  : 'bg-[#38ef7d]/20 text-[#38ef7d] border border-[#38ef7d]/50 hover:bg-[#38ef7d]/30'
+                              }`}
+                            >
+                              <span>{isAdmitted ? '🏥' : inParty ? '✕' : '⚔️'}</span>
+                              <span>{isAdmitted ? tr('입원 치료 중') : inParty ? tr('파티 제외') : tr('파티 출전')}</span>
+                            </button>
+
+                            {/* Dismiss */}
+                            <button
+                              type="button"
+                              disabled={state.barracks.length <= 3 || isAdmitted}
+                              onClick={() => setDismissConfirmHero(hero)}
+                              className="text-[10px] px-2 py-1 rounded-lg text-[#607d8b] hover:text-[#ef5350] border border-[#26334a] hover:border-[#ef5350]/50 transition-all cursor-pointer ml-auto disabled:opacity-30"
+                              title={tr('용병 해고')}
+                            >
+                              🚪 {tr('해고')}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* 모듈 B: 6대 핵심 실효 스탯 요약 & 분배 */}
+                {(() => {
+                  const eff = gm.getHeroEffectiveStats(hero);
+                  return (
+                    <div className="p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="font-extrabold text-[#c8aa6e] flex items-center gap-1.5">
+                          <span>📊</span>
+                          <span>{tr('6대 핵심 실효 스탯')}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowStatDetailModal(true)}
+                          className="text-[10px] text-[#ffd54f] hover:text-white flex items-center gap-1 font-bold cursor-pointer transition-colors"
+                        >
+                          <span>🔍 {tr('스탯 상세 / 보너스 분배')}</span>
+                          <span>›</span>
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 font-mono">
+                        {/* HP */}
+                        <div className="bg-[#090e18] p-2 rounded-lg border border-[#1a2335] flex flex-col items-center">
+                          <span className="text-[10px] text-[#ef5350] font-bold">HP</span>
+                          <span className="text-xs font-bold text-white">{Math.round(hero.currentHp)}/{Math.round(eff.maxHp)}</span>
+                          <div className="w-full bg-[#1e2738] h-1 rounded-full mt-1 overflow-hidden">
+                            <div className="bg-[#ef5350] h-full rounded-full" style={{ width: `${Math.min(100, (hero.currentHp / eff.maxHp) * 100)}%` }} />
+                          </div>
+                        </div>
+                        {/* MP */}
+                        <div className="bg-[#090e18] p-2 rounded-lg border border-[#1a2335] flex flex-col items-center">
+                          <span className="text-[10px] text-[#42a5f5] font-bold">MP</span>
+                          <span className="text-xs font-bold text-white">{hero.currentMp}/{eff.maxMp}</span>
+                          <div className="w-full bg-[#1e2738] h-1 rounded-full mt-1 overflow-hidden">
+                            <div className="bg-[#42a5f5] h-full rounded-full" style={{ width: `${Math.min(100, (hero.currentMp / eff.maxMp) * 100)}%` }} />
+                          </div>
+                        </div>
+                        {/* ATK */}
+                        <div className="bg-[#090e18] p-2 rounded-lg border border-[#1a2335] flex flex-col items-center">
+                          <span className="text-[10px] text-[#ff7043] font-bold">ATK</span>
+                          <span className="text-xs font-bold text-white">{eff.atk}</span>
+                          <span className="text-[9px] text-[#38ef7d]">
+                            {hero.equipment?.weapon ? `(+${hero.equipment.weapon.stats?.atk || 0})` : ''}
+                          </span>
+                        </div>
+                        {/* DEF */}
+                        <div className="bg-[#090e18] p-2 rounded-lg border border-[#1a2335] flex flex-col items-center">
+                          <span className="text-[10px] text-[#66bb6a] font-bold">DEF</span>
+                          <span className="text-xs font-bold text-white">{eff.def}</span>
+                          <span className="text-[9px] text-[#38ef7d]">
+                            {hero.equipment?.armor ? `(+${hero.equipment.armor.stats?.def || 0})` : ''}
+                          </span>
+                        </div>
+                        {/* SPD */}
+                        <div className="bg-[#090e18] p-2 rounded-lg border border-[#1a2335] flex flex-col items-center">
+                          <span className="text-[10px] text-[#ffd54f] font-bold">SPD</span>
+                          <span className="text-xs font-bold text-white">{eff.spd}</span>
+                        </div>
+                        {/* LUK */}
+                        <div className="bg-[#090e18] p-2 rounded-lg border border-[#1a2335] flex flex-col items-center">
+                          <span className="text-[10px] text-[#ce93d8] font-bold">LUK</span>
+                          <span className="text-xs font-bold text-white">{eff.luck}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* 모듈 C: 3대 장비 슬롯 (무기 / 방어구 / 장신구) */}
+                <div className="p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
+                  <div className="flex items-center justify-between text-xs flex-wrap gap-1">
+                    <div className="font-extrabold text-[#38ef7d] flex items-center gap-1.5">
+                      <span>⚔️</span>
+                      <span>{tr('착용 장비 (3슬롯: 무기 / 방어구 / 장신구)')}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAutoEquipBest}
+                      className="px-2.5 py-1 text-[10.5px] bg-[#38ef7d]/15 hover:bg-[#38ef7d]/30 text-[#38ef7d] border border-[#38ef7d]/40 rounded-lg transition-all font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-sm"
+                      title={tr('보유 중인 미장착 장비 중 최적 장비를 일괄 장착합니다.')}
+                    >
+                      <span>🎒</span>
+                      <span>{tr('최강 장비 일괄 장착')}</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 w-full">
+                    {EQ_SLOTS.map(({ slot, label, icon }) => {
+                      const eq = hero.equipment?.[slot];
+                      const isMementoResonated = eq ? gm.isMementoResonated(eq) : false;
+
+                      return (
+                        <button
+                          key={slot}
+                          type="button"
+                          onClick={() => setEquipOverlay({ hero, slot })}
+                          className={`w-full min-w-0 p-2.5 rounded-xl border flex flex-col items-center justify-between gap-1 transition-all cursor-pointer group hover:scale-[1.02] text-center select-none ${
+                            eq
+                              ? isMementoResonated
+                                ? 'bg-[#1a1024] border-[#ba68c8] shadow-[0_0_8px_rgba(186,104,200,0.3)]'
+                                : 'bg-[#0d1712] border-[#38ef7d]/60 shadow-[0_0_8px_rgba(56,239,125,0.15)]'
+                              : 'bg-[#0f1420] border-dashed border-[#253246] hover:border-[#c8aa6e]/60'
+                          }`}
+                          style={{ minHeight: '92px' }}
+                        >
+                          {/* Slot Type Header */}
+                          <div className="flex items-center justify-between w-full text-[9px] text-[#8b9bb4] px-0.5">
+                            <span className="font-bold flex items-center gap-1 text-[#dcc496]">
+                              <span>{icon}</span>
+                              <span>{tr(label)}</span>
+                            </span>
+                            {eq && (
+                              <span className="text-[8.5px] font-mono font-bold text-[#ffd54f]">
+                                +{eq.level}강
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Item Icon */}
+                          <div className="my-0.5">
+                            {eq ? (
+                              <span
+                                className="p-1 rounded-lg bg-[#1e2738] border shrink-0 flex items-center justify-center transition-all group-hover:scale-105"
+                                style={getRarityBorderStyle(eq.rarity)}
+                              >
+                                <GameIcon name={eq.templateId || getEquipmentTemplateId(eq) || eq.id || eq.baseName} icon={eq.icon} size={24} />
+                              </span>
+                            ) : (
+                              <div className="w-7 h-7 rounded-lg bg-[#161c28] border border-dashed border-[#2b3a52] flex items-center justify-center text-sm text-[#506075] group-hover:text-[#ffd54f]">
+                                +
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Item Name / Stat */}
+                          <div className="w-full min-w-0">
+                            {eq ? (
+                              <>
+                                <div
+                                  className="w-full truncate font-bold text-[10px] text-white"
+                                  style={{ color: getRarityColor(eq.rarity) }}
+                                  title={eq.name}
+                                >
+                                  {eq.name}
+                                </div>
+                                <div className="text-[8.5px] font-mono text-[#8b9bb4] truncate">
+                                  {slot === 'weapon' ? `ATK +${eq.stats?.atk || 0}` : slot === 'armor' ? `DEF +${eq.stats?.def || 0}` : `HP +${eq.stats?.hp || 0}`}
+                                </div>
+                              </>
+                            ) : (
+                              <div className="text-[9px] text-[#506075] group-hover:text-[#8b9bb4]">
+                                {tr('미장착')}
+                              </div>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  {/* 🌟 고유 패시브 스킬 (액티브 스킬 상단 표시) */}
+                {/* 모듈 D: 4대 전투 스킬 덱 */}
+                <div className="p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
+                  <div className="flex items-center justify-between text-xs">
+                    <div className="font-extrabold text-[#c8aa6e] flex items-center gap-1.5">
+                      <span>📖</span>
+                      <span>{tr('전투 스킬 (기본기 + 고유기 + 비전서 2종)')}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSkillOverlayHero(hero)}
+                      className="text-[10.5px] px-2.5 py-1 rounded-lg bg-[#c8aa6e]/15 hover:bg-[#c8aa6e]/30 text-[#c8aa6e] border border-[#c8aa6e]/40 font-bold transition-all cursor-pointer flex items-center gap-1"
+                    >
+                      <span>📚</span>
+                      <span>{tr('스킬 관리')} ({learnedCount}/4)</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {/* 1. Base Class Skill */}
+                    <div
+                      onClick={() => setSkillOverlayHero(hero)}
+                      className="p-2 rounded-xl bg-[#0e131e] border border-[#232f44] hover:border-[#c8aa6e]/60 flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[76px]"
+                    >
+                      <div className="flex items-center justify-between text-[9px]">
+                        <span className="px-1.5 py-0.2 rounded bg-[#9e9e9e]/15 text-[#9e9e9e] font-bold border border-[#9e9e9e]/30">
+                          {tr('기본기')}
+                        </span>
+                        <span className="text-[8.5px] font-mono text-[#64b5f6]">
+                          {cls.skills[0]?.manaCost || 0}MP
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="shrink-0 p-0.5 rounded bg-[#161c28]">
+                          <GameIcon name={cls.skills[0]?.id || 'strike'} icon={cls.skills[0]?.icon} size={20} />
+                        </span>
+                        <span className="text-xs font-bold text-white truncate">
+                          {cls.skills[0] ? tr(cls.skills[0].name) : tr('기본 공격')}
+                        </span>
+                      </div>
+                      <span className="text-[8.5px] text-[#8b9bb4] truncate">
+                        {cls.skills[0] ? tr(cls.skills[0].description) : ''}
+                      </span>
+                    </div>
+
+                    {/* 2. Class Special / Ultimate */}
+                    <div
+                      onClick={() => setSkillOverlayHero(hero)}
+                      className="p-2 rounded-xl bg-[#18130b] border border-[#ffd54f]/40 hover:border-[#ffd54f] flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[76px]"
+                    >
+                      <div className="flex items-center justify-between text-[9px]">
+                        <span className="px-1.5 py-0.2 rounded bg-[#ffd54f]/15 text-[#ffd54f] font-bold border border-[#ffd54f]/30">
+                          {cls.specialSkill.name.includes('[궁극기') ? tr('궁극기') : tr('고유기')}
+                        </span>
+                        <span className="text-[8.5px] font-mono text-[#64b5f6]">
+                          {cls.specialSkill.manaCost}MP
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="shrink-0 p-0.5 rounded bg-[#241a0d]">
+                          <GameIcon name={cls.specialSkill.id} icon={cls.specialSkill.icon} size={20} />
+                        </span>
+                        <span className="text-xs font-bold text-[#ffd54f] truncate">
+                          {tr(cls.specialSkill.name)}
+                        </span>
+                      </div>
+                      <span className="text-[8.5px] text-[#cfd8dc] truncate">
+                        {tr(cls.specialSkill.description)}
+                      </span>
+                    </div>
+
+                    {/* 3. Grimoire Skill 1 */}
+                    <div
+                      onClick={() => setSkillOverlayHero(hero)}
+                      className="p-2 rounded-xl bg-[#0e131e] border border-[#232f44] hover:border-[#c8aa6e]/60 flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[76px]"
+                    >
+                      <div className="flex items-center justify-between text-[9px]">
+                        <span className="px-1.5 py-0.2 rounded bg-[#c8aa6e]/15 text-[#c8aa6e] font-bold border border-[#c8aa6e]/30">
+                          {tr('비전서 1')}
+                        </span>
+                        {equippedSkill1 && (
+                          <span className="text-[8.5px] font-mono text-[#64b5f6]">
+                            {equippedSkill1.manaCost}MP
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        {equippedSkill1 ? (
+                          <>
+                            <span className="shrink-0 p-0.5 rounded bg-[#161c28]">
+                              <GameIcon name={equippedSkill1.id} icon={equippedSkill1.icon} size={20} />
+                            </span>
+                            <span className="text-xs font-bold text-white truncate">
+                              {tr(equippedSkill1.name)}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-xs text-[#506075] flex items-center gap-1">
+                            <span>+</span>
+                            <span>{tr('스킬 장착')}</span>
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[8.5px] text-[#8b9bb4] truncate">
+                        {equippedSkill1 ? tr(equippedSkill1.description) : tr('비전서 연구 후 장착')}
+                      </span>
+                    </div>
+
+                    {/* 4. Grimoire Skill 2 */}
+                    <div
+                      onClick={() => setSkillOverlayHero(hero)}
+                      className="p-2 rounded-xl bg-[#0e131e] border border-[#232f44] hover:border-[#c8aa6e]/60 flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[76px]"
+                    >
+                      <div className="flex items-center justify-between text-[9px]">
+                        <span className="px-1.5 py-0.2 rounded bg-[#c8aa6e]/15 text-[#c8aa6e] font-bold border border-[#c8aa6e]/30">
+                          {tr('비전서 2')}
+                        </span>
+                        {equippedSkill2 && (
+                          <span className="text-[8.5px] font-mono text-[#64b5f6]">
+                            {equippedSkill2.manaCost}MP
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        {equippedSkill2 ? (
+                          <>
+                            <span className="shrink-0 p-0.5 rounded bg-[#161c28]">
+                              <GameIcon name={equippedSkill2.id} icon={equippedSkill2.icon} size={20} />
+                            </span>
+                            <span className="text-xs font-bold text-white truncate">
+                              {tr(equippedSkill2.name)}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-xs text-[#506075] flex items-center gap-1">
+                            <span>+</span>
+                            <span>{tr('스킬 장착')}</span>
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[8.5px] text-[#8b9bb4] truncate">
+                        {equippedSkill2 ? tr(equippedSkill2.description) : tr('비전서 연구 후 장착')}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Passive Skill Pill */}
                   {cls.passiveDesc && (
                     <PassiveSkillCard passiveDesc={cls.passiveDesc} />
                   )}
-
-                  {/* 고유기 (고정) */}
-                  <div className="p-2 rounded-lg bg-[#1a1711] border border-[#ffd54f44] flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <GameIcon name={cls.specialSkill.id} icon={cls.specialSkill.icon} size={24} />
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[9px] px-1 py-0.2 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
-                            {cls.specialSkill.name.includes('[궁극기]') ? tr('궁극기') : tr('고유기')}
-                          </span>
-                          <span className="font-bold text-xs text-white">{tr(cls.specialSkill.name)}</span>
-                        </div>
-                        <div className="text-[10px] text-[#8b9bb4] mt-0.5">{tr(cls.specialSkill.description)}</div>
-                      </div>
-                    </div>
-                    <span className="text-xs text-[#64b5f6] font-mono shrink-0 ml-1">{cls.specialSkill.manaCost}MP</span>
-                  </div>
-
-                  {/* 장착 전술 스킬 슬롯 1 & 2 */}
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {/* 슬롯 1 */}
-                    <button
-                      className="p-2 rounded-lg bg-[#141a29] border border-[#26334a] hover:border-[#c8aa6e66] text-left flex flex-col justify-between transition-all"
-                      onClick={() => setSkillOverlayHero(hero)}
-                    >
-                      <div className="flex items-center justify-between w-full mb-1">
-                        <span className="text-[9px] text-[#c8aa6e] font-bold">{tr('전술 스킬 1')}</span>
-                        {equippedSkill1 && <span className="text-[9px] text-[#64b5f6] font-mono">{equippedSkill1.manaCost}MP</span>}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        {equippedSkill1 ? (
-                          <GameIcon name={equippedSkill1.id} icon={equippedSkill1.icon} size={20} />
-                        ) : (
-                          <span className="text-lg">➕</span>
-                        )}
-                        <span className="font-bold text-xs text-white truncate">
-                          {equippedSkill1 ? tr(equippedSkill1.name) : tr('스킬 장착')}
-                        </span>
-                      </div>
-                    </button>
-
-                    {/* 슬롯 2 */}
-                    <button
-                      className="p-2 rounded-lg bg-[#141a29] border border-[#26334a] hover:border-[#c8aa6e66] text-left flex flex-col justify-between transition-all"
-                      onClick={() => setSkillOverlayHero(hero)}
-                    >
-                      <div className="flex items-center justify-between w-full mb-1">
-                        <span className="text-[9px] text-[#c8aa6e] font-bold">{tr('전술 스킬 2')}</span>
-                        {equippedSkill2 && <span className="text-[9px] text-[#64b5f6] font-mono">{equippedSkill2.manaCost}MP</span>}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        {equippedSkill2 ? (
-                          <GameIcon name={equippedSkill2.id} icon={equippedSkill2.icon} size={20} />
-                        ) : (
-                          <span className="text-lg">➕</span>
-                        )}
-                        <span className="font-bold text-xs text-white truncate">
-                          {equippedSkill2 ? tr(equippedSkill2.name) : tr('스킬 장착')}
-                        </span>
-                      </div>
-                    </button>
-                  </div>
                 </div>
               </div>
+            )}
 
-              {/* 파티 출전 / 제외 토글 & 용병 해고 버튼 */}
-              {(() => {
-                const isAdmitted = state.infirmaryPatients.includes(hero.id);
-                const inParty = state.party.some(p => p.id === hero.id);
+            {/* 3. 하단 대기 용병 로스터 */}
+            <div className="p-3 bg-[#0a0d15] border-t border-[#1f2738] flex flex-col gap-2 shrink-0 mt-auto">
+              <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold text-[#cfd8e8] flex items-center gap-1.5">
+                    <span>👥</span>
+                    <span>{tr('대기 용병 로스터')}</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161a24] text-[#8b9bb4] border border-[#2a3447]">
+                    {state.barracks.length}{tr('명 보유')}
+                  </span>
+                </div>
+                <span className="text-[10px] text-[#8b9bb4]">
+                  {tr('용병 카드를 터치하여 전술 시트 확인 및 교체')}
+                </span>
+              </div>
 
-                return (
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex gap-2">
-                      <ActionButton
-                        label={isAdmitted ? '🏥 입원 중' : inParty ? `🔄 파티에서 제외` : `⚔️ 파티에 출전`}
-                        variant={isAdmitted ? 'danger' : inParty ? 'danger' : 'primary'}
-                        disabled={false}
-                        className={`flex-1 font-bold ${isAdmitted ? 'bg-[#ff704325] border border-[#ff704388] text-[#ff7043] hover:bg-[#ff704344] hover:text-white cursor-pointer' : ''}`}
-                        data-tutorial-target={!inParty ? "hero-deploy-btn" : undefined}
-                        onClick={() => {
-                          if (isAdmitted) {
-                            onNavigateDrawer?.('infirmary');
-                          } else {
-                            gm.togglePartyMember(hero.id);
-                            if (tutorialStepId === 'TUTORIAL_DEPLOY_HERO') {
-                              onAdvanceTutorial?.('TUTORIAL_WEAPON_SHORTAGE');
-                            }
-                          }
-                        }}
-                      />
-                      <button
-                        className="btn btn-ghost text-xs px-3 hover:bg-[#c560601f] disabled:opacity-30 disabled:border-[#1f2738] disabled:text-[#607d8b]"
-                        style={{ borderColor: '#c56060', borderWidth: '1px', borderStyle: 'solid', color: '#c56060' }}
-                        disabled={state.barracks.length <= 3 || isAdmitted}
-                        title={state.barracks.length <= 3 ? '파티 유지를 위해 최소 3명의 용병이 필요합니다' : isAdmitted ? '입원 중인 용병은 해고할 수 없습니다' : '용병 해고'}
-                        onClick={() => setDismissConfirmHero(hero)}
-                      >
-                        {state.barracks.length <= 3 ? '🔒 해고(최소 3명)' : '👋 해고'}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })()}
+              <div className="flex gap-2 overflow-x-auto py-1 custom-scrollbar">
+                {state.barracks.map((h, i) => {
+                  const inParty = state.party.some(p => p.id === h.id);
+                  const isAdmitted = state.infirmaryPatients.includes(h.id);
+                  const isSelected = safeIdx === i;
+                  const hCls = CHARACTER_CLASSES[h.classId];
+                  const hTier = hCls?.tier || 0;
+                  const hReqLv = hTier === 0 ? 10 : (hTier === 1 ? 30 : 60);
+                  const canPromoteHero = h.level >= hReqLv && (PROMOTE_MAP[h.classId]?.length || 0) > 0;
+                  const canAwakenHero = hTier >= 3 && h.level >= (60 + ((h.awakeningCount || 0) + 1) * 10);
+                  const gMeta = GRADE_META[h.grade] || GRADE_META.rookie;
 
-              {/* 🔮 전직 섹션 (상시 표시하여 요구 조건 및 분기 안내) */}
-              {(() => {
-                const branches = PROMOTE_MAP[hero.classId] || [];
-                if (branches.length === 0) return null;
-                const targetTier = (cls.tier || 0) + 1;
-                const reqLevel = cls.tier === 0 ? 10 : (cls.tier === 1 ? 30 : 60);
-                const meetsLevel = hero.level >= reqLevel;
-                const sanctuaryLv = state.buildings['sanctuary']?.level || 0;
-                const reqSanct = cls.tier === 0 ? 1 : (cls.tier === 1 ? 5 : 8);
-                const hasSanctuary = sanctuaryLv >= reqSanct;
-                const canPromote = meetsLevel && hasSanctuary;
-
-                return (
-                  <div className={`panel p-3 rounded-xl mt-1 border transition-all ${
-                    canPromote
-                      ? 'border-[#ffd54f] bg-[#1c160e] shadow-lg shadow-[#ffd54f15]' : 'border-[#26334a] bg-[#10141f]'
-                  }`}>
-                    {/* 상단: 타이틀 + 상태 뱃지 + 등급 승급 확률 */}
-                    <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
-                      <div className="text-xs font-bold text-[#ffd54f] flex items-center gap-1.5">
-                        <span className="text-base">{canPromote ? '✨' : '🔮'}</span>
-                        <span>{targetTier}차 상위 직업 각성 승급 (전직)</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
-                          🎲 등급 승격률: {Math.min(100, (sanctuaryLv || 1) * 3)}% (제단 Lv당 +3%)
+                  return (
+                    <button
+                      key={h.id}
+                      type="button"
+                      onClick={() => setSelectedIdx(i)}
+                      className={`min-w-[96px] max-w-[115px] p-2 rounded-xl border flex flex-col items-center gap-1 transition-all cursor-pointer shrink-0 relative ${
+                        isSelected
+                          ? 'bg-[#221c14] border-2 border-[#b89758] text-[#dcc496] shadow-[0_0_12px_rgba(184,151,88,0.35)] scale-[1.02]'
+                          : 'bg-[#10141f] border border-[#222d42] text-[#9da3af] hover:text-white hover:border-[#b89758]/60'
+                      }`}
+                    >
+                      {canPromoteHero && (
+                        <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#ffd54f] text-black font-extrabold animate-pulse shadow-sm shadow-[#ffd54f]/50">
+                          ⚡{tr('전직')}
                         </span>
-                        {canPromote ? (
-                          <span className="text-[10px] px-2 py-0.5 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d44] animate-pulse">
-                            ✨ 전직 가능
+                      )}
+                      {canAwakenHero && (
+                        <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#00d2ff] text-black font-extrabold animate-pulse shadow-sm shadow-[#00d2ff]/50">
+                          🌟{tr('각성')}
+                        </span>
+                      )}
+
+                      <div
+                        className="w-10 h-10 rounded-lg overflow-hidden border border-[#3d372e] bg-[#090d18] flex items-center justify-center shrink-0"
+                        style={{ borderColor: gMeta.color }}
+                      >
+                        {getHeroPortraitUrl(h) ? (
+                          <img src={getHeroPortraitUrl(h)} alt={h.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <span>{hCls?.skills[0]?.icon || '⚔️'}</span>
+                        )}
+                      </div>
+
+                      <div className="font-bold text-xs truncate w-full text-center">{h.name}</div>
+                      <div className="text-[9px] font-mono text-[#ffd54f]">Lv.{h.level} {hCls ? tr(hCls.name) : ''}</div>
+
+                      {/* Status Tag */}
+                      <div className="mt-0.5">
+                        {isAdmitted ? (
+                          <span className="text-[8.5px] px-1.5 py-0.2 rounded bg-[#ef5350]/20 text-[#ef5350] font-bold border border-[#ef5350]/30">
+                            {tr('입원치료')}
+                          </span>
+                        ) : inParty ? (
+                          <span className="text-[8.5px] px-1.5 py-0.2 rounded bg-[#38ef7d]/20 text-[#38ef7d] font-bold border border-[#38ef7d]/30">
+                            {h.position === 'front' ? tr('전열') : h.position === 'back' ? tr('후열') : tr('중열')} {tr('출전')}
                           </span>
                         ) : (
-                          <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef535022] text-[#ef5350] font-bold border border-[#ef535033]">
-                            🔒 전직 조건 확인
+                          <span className="text-[8.5px] px-1.5 py-0.2 rounded bg-[#1e2738] text-[#8b9bb4]">
+                            {tr('대기중')}
                           </span>
                         )}
                       </div>
-                    </div>
-
-                    {/* 전직 조건 체크리스트 (레벨 + 제단) */}
-                    <div className="grid grid-cols-2 gap-1.5 p-2 rounded-lg bg-[#090c14] border border-[#1b2334] mb-2 text-[11px]">
-                      <div className="flex items-center gap-1.5">
-                        <span>{meetsLevel ? '✅' : '⏳'}</span>
-                        <span className={meetsLevel ? 'text-[#38ef7d] font-bold' : 'text-[#8b9bb4]'}>
-                          용병 Lv.{reqLevel} ({hero.level}/{reqLevel})
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span>{hasSanctuary ? '✅' : '🔒'}</span>
-                        <span className={hasSanctuary ? 'text-[#38ef7d] font-bold' : 'text-[#ff8a80]'}>
-                          영혼 승격 제단 Lv.{reqSanct} ({sanctuaryLv}/{reqSanct})
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* 제단 미건설 시 친절한 안내 */}
-                    {!hasSanctuary && (
-                      <div className="p-2 rounded bg-[#24131b] border border-[#e040fb44] text-[10px] text-[#ff80ab] mb-2 leading-relaxed flex items-center gap-1.5">
-                        <span>⚠️</span>
-                        <span>영지에서 <strong>[영혼의 제단]</strong>을 건설(Lv.{reqSanct})해야 전직 의식을 거행할 수 있습니다.</span>
-                      </div>
-                    )}
-
-                    {/* 전직 분기 목록 (탭하여 상세 정보 확인) */}
-                    <div className="flex flex-col gap-1.5">
-                      {branches.map(br => {
-                        const etherCost = cls.tier === 0 ? 20 : (cls.tier === 1 ? 100 : 300);
-                        const goldCost = cls.tier === 0 ? 500 : (cls.tier === 1 ? 3000 : 10000);
-                        const canAfford = state.resources.ether >= etherCost && state.resources.gold >= goldCost;
-                        const isButtonActive = canPromote && canAfford;
-
-                        return (
-                          <div
-                            key={br.id}
-                            className={`flex items-center justify-between p-2.5 rounded-lg border transition-all cursor-pointer ${
-                              canPromote
-                                ? 'bg-[#241a0d] border-[#ffd54f44] hover:border-[#ffd54f] hover:bg-[#2e2110]' : 'bg-[#141a29] border-[#1e293b] hover:border-[#c8aa6e44] opacity-90'
-                            }`}
-                            onClick={() => setPreviewClassTarget({ targetHero: hero, classId: br.id })}
-                          >
-                            <div className="flex-1 pr-2">
-                              <div className="flex items-center gap-1.5">
-                                <span className="font-bold text-xs text-[#ffd54f]">{br.name}</span>
-                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] font-bold border border-[#c8aa6e33]">
-                                  🔍 상세 정보
-                                </span>
-                              </div>
-                              <div className="text-[10px] text-[#cfd8dc] mt-0.5 leading-relaxed">{br.desc}</div>
-                              <div className="text-[10px] font-mono mt-1 flex items-center gap-2">
-                                <span className={state.resources.ether >= etherCost ? 'text-[#c8aa6e]' : 'text-[#ef5350]'}>
-                                  ✨ 에테르 {etherCost}
-                                </span>
-                                <span className={state.resources.gold >= goldCost ? 'text-[#ffd54f]' : 'text-[#ef5350]'}>
-                                  🪙 골드 {goldCost}G
-                                </span>
-                              </div>
-                            </div>
-
-                            <button
-                              className={`btn text-xs px-3 py-1.5 font-bold transition-all shrink-0 ${
-                                isButtonActive
-                                  ? 'btn-primary shadow-md shadow-[#ffd54f22] animate-bounce' : 'btn-ghost opacity-60'
-                              }`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setPreviewClassTarget({ targetHero: hero, classId: br.id });
-                              }}
-                            >
-                              {isButtonActive ? '✨ 전직/상세' : '🔍 상세 보기'}
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })()}
-
-              {/* 🔮 3차 전직 이후 10레벨마다 거행하는 초월 각성 섹션 */}
-              {cls.tier >= 3 && (() => {
-                const currentCount = hero.awakeningCount || 0;
-                const targetStep = currentCount + 1;
-                const reqLevel = 60 + targetStep * 10;
-                const meetsLevel = hero.level >= reqLevel;
-                const sanctuaryLv = state.buildings['sanctuary']?.level || 0;
-                const reqSanct = 5;
-                const hasSanctuary = sanctuaryLv >= reqSanct;
-
-                const etherCost = 50 + currentCount * 25;
-                const goldCost = 1500 + currentCount * 1000;
-                const canAfford = state.resources.ether >= etherCost && state.resources.gold >= goldCost;
-                const canAwaken = meetsLevel && hasSanctuary && canAfford;
-
-                const stepBonus = targetStep * 10;
-                const upgradeChance = Math.min(100, (sanctuaryLv * 3) + stepBonus);
-                const GRADE_ORDER: MercenaryGrade[] = ['rookie', 'veteran', 'hero', 'epic', 'legend'];
-                const GRADE_NAMES: Record<string, string> = {
-                  rookie: '노비스(N)', veteran: '베테랑(V)', hero: '히어로(H)', elite: '히어로(H)', epic: '에픽(E)', legend: '레전드(L)'
-                };
-                const curGradeIdx = GRADE_ORDER.indexOf(hero.grade === 'elite' ? 'hero' : hero.grade);
-                const nextGrade = curGradeIdx !== -1 && curGradeIdx < GRADE_ORDER.length - 1 ? GRADE_ORDER[curGradeIdx + 1] : null;
-
-                return (
-                  <div className={`panel p-3 rounded-xl mt-1 border transition-all ${
-                    canAwaken
-                      ? 'border-[#c8aa6e] bg-[#0c1829] shadow-lg shadow-[#c8aa6e22]' : 'border-[#26334a] bg-[#10141f]'
-                  }`}>
-                    {/* 상단 헤더: 타이틀 + 각성 차수 + 등급 진화 확률 */}
-                    <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
-                      <div className="text-xs font-bold text-[#c8aa6e] flex items-center gap-1.5">
-                        <span className="text-base">{canAwaken ? '🔮' : '🔒'}</span>
-                        <span>초월 각성 ({currentCount > 0 ? `${currentCount}단계 완료` : '미각성'})</span>
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e] font-mono font-bold">
-                          {targetStep}단계 의식
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] font-bold border border-[#ffd54f44]">
-                          🎲 등급 진화율: {upgradeChance}% (제단+{sanctuaryLv * 3}%, {targetStep}단계+{stepBonus}%)
-                        </span>
-                        {canAwaken ? (
-                          <span className="text-[10px] px-2 py-0.5 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold border border-[#38ef7d44] animate-pulse">
-                            ✨ 각성 가능
-                          </span>
-                        ) : (
-                          <span className="text-[10px] px-2 py-0.5 rounded bg-[#ef535022] text-[#ef5350] font-bold border border-[#ef535033]">
-                            🔒 각성 조건 확인
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="text-[11px] text-[#cfd8dc] mb-2 leading-relaxed">
-                      3차 전직 이후 10레벨마다 영혼을 초월하여 <strong>스탯 1종 +15% 추가 영구 상향</strong> 및 <strong>상위 등급({nextGrade ? GRADE_NAMES[nextGrade] : '최고등급'})으로 진화</strong>할 수 있습니다.
-                    </div>
-
-                    {/* 조건 체크리스트 */}
-                    <div className="grid grid-cols-2 gap-1.5 p-2 rounded-lg bg-[#090c14] border border-[#1b2334] mb-2 text-[11px]">
-                      <div className="flex items-center gap-1.5">
-                        <span>{meetsLevel ? '✅' : '⏳'}</span>
-                        <span className={meetsLevel ? 'text-[#38ef7d] font-bold' : 'text-[#8b9bb4]'}>
-                          용병 Lv.{reqLevel} ({hero.level}/{reqLevel})
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span>{hasSanctuary ? '✅' : '🔒'}</span>
-                        <span className={hasSanctuary ? 'text-[#38ef7d] font-bold' : 'text-[#ff8a80]'}>
-                          영혼 승격 제단 Lv.{reqSanct} ({sanctuaryLv}/{reqSanct})
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* 비용 및 각성 실행 버튼 */}
-                    <div className="flex items-center justify-between p-2.5 rounded-lg border border-[#1e293b] bg-[#141a29]">
-                      <div className="flex items-center gap-2 text-[11px] font-mono">
-                        <span className={state.resources.ether >= etherCost ? 'text-[#c8aa6e]' : 'text-[#ef5350]'}>
-                          ✨ 에테르 {etherCost}
-                        </span>
-                        <span className={state.resources.gold >= goldCost ? 'text-[#ffd54f]' : 'text-[#ef5350]'}>
-                          🪙 골드 {goldCost}G
-                        </span>
-                      </div>
-                      <button
-                        className={`btn text-xs px-3.5 py-1.5 font-bold transition-all ${
-                          canAwaken
-                            ? 'btn-primary shadow-md shadow-[#c8aa6e33] animate-bounce' : 'btn-ghost opacity-60'
-                        }`}
-                        onClick={() => {
-                          setSelectedAwakenStat('atk');
-                          setAwakeningTargetHero(hero);
-                        }}
-                      >
-                        {canAwaken ? `🔮 ${targetStep}단계 초월 각성 거행` : '🔍 각성 상세 정보'}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })()}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          )}
+
+            {/* ── 🔍 6대 스탯 상세 & 전직/각성 보너스 모달 ── */}
+            {showStatDetailModal && hero && (
+              <StatDetailModal
+                hero={hero}
+                onClose={() => setShowStatDetailModal(false)}
+              />
+            )}
+
+            {/* ── ⚔️ 던전 슬롯 출전 용병 배치 모달 ── */}
+            {dungeonAssignSlot && (
+              <Modal
+                title={
+                  dungeonAssignSlot === 'front'
+                    ? tr('1. 전열 (방어/탱커) 출전 용병 배치')
+                    : dungeonAssignSlot === 'mid'
+                    ? tr('2. 중열 (공격/딜러) 출전 용병 배치')
+                    : tr('3. 후열 (지원/힐러) 출전 용병 배치')
+                }
+                open={Boolean(dungeonAssignSlot)}
+                onClose={() => setDungeonAssignSlot(null)}
+                footer={
+                  <button
+                    type="button"
+                    className="btn btn-ghost text-xs px-4 py-2 w-full font-bold cursor-pointer"
+                    onClick={() => setDungeonAssignSlot(null)}
+                  >
+                    {tr('닫기')}
+                  </button>
+                }
+              >
+                <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto custom-scrollbar pr-1">
+                  <div className="text-xs text-[#8b9bb4]">
+                    {tr('원정대에 배치할 용병을 선택하세요. 기존 파티원은 해당 슬롯으로 재배치됩니다.')}
+                  </div>
+                  {state.barracks.map((cand) => {
+                    const inParty = state.party.some(p => p.id === cand.id);
+                    const isAdmitted = state.infirmaryPatients.includes(cand.id);
+                    const candCls = CHARACTER_CLASSES[cand.classId];
+                    const effCand = gm.getHeroEffectiveStats(cand);
+                    const isCurrentSlot = cand.position === dungeonAssignSlot;
+                    const gMeta = GRADE_META[cand.grade] || GRADE_META.rookie;
+
+                    return (
+                      <div
+                        key={cand.id}
+                        className={`p-2.5 rounded-xl border flex items-center justify-between gap-3 transition-all ${
+                          isCurrentSlot
+                            ? 'bg-[#221c14] border-[#ffd54f] shadow-md shadow-[#ffd54f]/10'
+                            : 'bg-[#10141f] border-[#1e2738] hover:border-[#b89758]/50'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div
+                            className="w-10 h-10 rounded-lg overflow-hidden border bg-[#090d18] flex items-center justify-center shrink-0"
+                            style={{ borderColor: gMeta.color }}
+                          >
+                            {getHeroPortraitUrl(cand) ? (
+                              <img src={getHeroPortraitUrl(cand)} alt={cand.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <span>{candCls?.skills[0]?.icon || '⚔️'}</span>
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="font-bold text-xs text-white truncate">{cand.name}</span>
+                              <span className="text-[9px] px-1 rounded font-mono font-bold" style={{ color: gMeta.color, background: `${gMeta.color}22` }}>
+                                [{gMeta.label}]
+                              </span>
+                              <span className="text-[10px] text-[#ffd54f] font-mono">Lv.{cand.level} {candCls ? tr(candCls.name) : ''}</span>
+                            </div>
+                            <div className="text-[10px] text-[#8b9bb4] flex items-center gap-2 mt-0.5">
+                              <span>ATK {effCand.atk}</span>
+                              <span>DEF {effCand.def}</span>
+                              <span>HP {effCand.maxHp}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="shrink-0 flex items-center gap-1.5">
+                          {isCurrentSlot ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleRemoveFromDungeonSlot(cand.id);
+                                setDungeonAssignSlot(null);
+                              }}
+                              className="btn btn-danger text-xs px-3 py-1 font-bold cursor-pointer"
+                            >
+                              {tr('출전 해제')}
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              disabled={isAdmitted}
+                              onClick={() => handleAssignHeroToDungeonSlot(cand.id, dungeonAssignSlot)}
+                              className={`text-xs px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                                isAdmitted
+                                  ? 'bg-[#1e2738] text-[#556987] cursor-not-allowed'
+                                  : 'bg-gradient-to-r from-[#b89758] to-[#8c6d37] hover:brightness-110 text-white shadow-sm'
+                              }`}
+                            >
+                              {isAdmitted ? tr('입원치료중') : inParty ? tr('위치 이동') : tr('슬롯 배치')}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </Modal>
+            )}
 
           {/* ── 🛡️ 장비 선택 오버레이 ── */}
           {equipOverlay && (
