@@ -312,7 +312,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               top: transitionBanner.animating ? 0 : transitionBanner.rect.top,
               left: transitionBanner.animating ? 0 : transitionBanner.rect.left,
               width: transitionBanner.animating ? '100%' : transitionBanner.rect.width,
-              height: transitionBanner.animating ? (window.innerWidth >= 768 ? 256 : 208) : transitionBanner.rect.height,
+              height: transitionBanner.animating ? (window.innerWidth >= 768 ? 224 : 128) : transitionBanner.rect.height,
               borderRadius: transitionBanner.animating ? '0px' : '16px',
             }}
           >
