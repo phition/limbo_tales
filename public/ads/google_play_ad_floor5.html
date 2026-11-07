@@ -7,20 +7,17 @@
   <title>림보 테일즈: 5F 침식된 성소 원정대 플레이어블</title>
   <style>
     :root {
-      --bg-dark: #0a0c14;
-      --bg-card: rgba(18, 22, 36, 0.94);
+      --bg-dark: #080a10;
+      --bg-panel: rgba(15, 19, 29, 0.96);
+      --border-panel: #24334a;
       --border-gold: #c8aa6e;
       --border-epic: #ce93d8;
-      --epic-glow: rgba(206, 147, 216, 0.45);
       --epic-purple: #ba68c8;
+      --gold-bright: #ffd54f;
       --fever-fire: #ff9100;
-      --fever-glow: rgba(255, 145, 0, 0.75);
       --hp-color: #ef5350;
       --mp-color: #42a5f5;
       --shield-color: #26c6da;
-      --gold-color: #ffd54f;
-      --text-main: #f0f3f8;
-      --text-sub: #a4b3c6;
     }
 
     * {
@@ -53,20 +50,19 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(200, 170, 110, 0.3);
-      transition: border 0.3s;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.95), 0 0 1px 1px rgba(200, 170, 110, 0.35);
+      transition: box-shadow 0.3s;
     }
 
     #game-container.fever-active {
-      box-shadow: 0 0 40px rgba(255, 145, 0, 0.8), 0 0 4px 2px #ff9100;
+      box-shadow: 0 0 50px rgba(255, 145, 0, 0.85), 0 0 4px 2px #ff9100;
       animation: feverFramePulse 1.2s infinite alternate ease-in-out;
     }
     @keyframes feverFramePulse {
-      0% { box-shadow: 0 0 30px rgba(255, 145, 0, 0.6), 0 0 2px 1px #ff9100; }
-      100% { box-shadow: 0 0 50px rgba(255, 61, 0, 0.95), 0 0 6px 3px #ffd600; }
+      0% { box-shadow: 0 0 35px rgba(255, 145, 0, 0.65), 0 0 2px 1px #ff9100; }
+      100% { box-shadow: 0 0 60px rgba(255, 61, 0, 0.95), 0 0 6px 3px #ffd600; }
     }
 
-    /* Background image & atmosphere */
     .bg-layer {
       position: absolute;
       top: 0;
@@ -75,43 +71,41 @@
       height: 100%;
       background: url('../assets/dungeon_5.jpg') center center / cover no-repeat,
                   radial-gradient(circle at 50% 30%, #201a35 0%, #080910 85%);
-      opacity: 0.45;
-      filter: brightness(0.68) contrast(1.15);
-      transition: filter 0.6s ease, transform 0.6s ease;
+      opacity: 0.38;
+      filter: brightness(0.65) contrast(1.15);
       z-index: 1;
     }
 
     .bg-overlay {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(20, 15, 35, 0.3) 0%, rgba(5, 7, 12, 0.95) 100%);
+      background: radial-gradient(circle at 50% 50%, rgba(15, 12, 28, 0.25) 0%, rgba(5, 7, 12, 0.95) 100%);
       pointer-events: none;
       z-index: 2;
     }
 
-    /* Screen shake */
     .shake {
       animation: screenShake 0.32s cubic-bezier(.36,.07,.19,.97) both;
     }
     @keyframes screenShake {
-      10%, 90% { transform: translate3d(-2px, 2px, 0); }
-      20%, 80% { transform: translate3d(3px, -3px, 0); }
-      30%, 50%, 70% { transform: translate3d(-5px, 4px, 0); }
-      40%, 60% { transform: translate3d(5px, -4px, 0); }
+      10%, 90% { transform: translate3d(-3px, 2px, 0); }
+      20%, 80% { transform: translate3d(4px, -3px, 0); }
+      30%, 50%, 70% { transform: translate3d(-6px, 5px, 0); }
+      40%, 60% { transform: translate3d(6px, -4px, 0); }
     }
 
-    /* Top Navigation Bar */
+    /* ── Header Bar ── */
     header {
       position: relative;
-      z-index: 10;
-      height: 50px;
-      background: rgba(10, 12, 20, 0.94);
+      z-index: 20;
+      height: 48px;
+      background: rgba(10, 14, 22, 0.95);
       border-bottom: 1px solid rgba(200, 170, 110, 0.35);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 12px;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
     }
 
     .dungeon-badge {
@@ -123,64 +117,55 @@
     .floor-pill {
       background: linear-gradient(135deg, #7b1fa2, #4a148c);
       color: #fff;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 800;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 4px;
       border: 1px solid #ba68c8;
       box-shadow: 0 0 8px rgba(186, 104, 200, 0.4);
-      letter-spacing: 0.5px;
     }
 
     .dungeon-title {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: #fff;
       letter-spacing: -0.3px;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
-    /* Permanent Torch Badge */
     .torch-badge {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       background: rgba(255, 112, 67, 0.15);
       border: 1px solid rgba(255, 138, 101, 0.6);
-      padding: 3px 8px;
+      padding: 2px 8px;
       border-radius: 12px;
-      font-size: 11px;
+      font-size: 10.5px;
       color: #ffcc80;
       font-weight: 700;
-      box-shadow: 0 0 10px rgba(255, 112, 67, 0.3);
-      animation: torchGlow 2.4s infinite ease-in-out;
-    }
-    @keyframes torchGlow {
-      0%, 100% { box-shadow: 0 0 8px rgba(255, 112, 67, 0.3); }
-      50% { box-shadow: 0 0 16px rgba(255, 167, 38, 0.65); border-color: rgba(255, 183, 77, 0.9); }
+      box-shadow: 0 0 10px rgba(255, 112, 67, 0.35);
     }
 
     .sound-btn {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: #fff;
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
     }
 
-    /* Main Viewport */
     main {
       position: relative;
       z-index: 5;
@@ -191,60 +176,59 @@
     }
 
     /* =========================================================================
-       Phase 1: Interactive Dungeon Exploration & Event Progression
+       Phase 1: Exploration & 2 Interactive Events
        ========================================================================= */
     #explore-phase {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 14px;
+      padding: 12px;
       z-index: 6;
       overflow-y: auto;
     }
 
-    .explore-party-card {
-      background: linear-gradient(180deg, rgba(28, 22, 44, 0.9) 0%, rgba(14, 16, 26, 0.95) 100%);
+    .party-preview-box {
+      background: linear-gradient(180deg, rgba(24, 18, 38, 0.92) 0%, rgba(12, 14, 22, 0.95) 100%);
       border: 1px solid rgba(206, 147, 216, 0.4);
-      border-radius: 10px;
-      padding: 10px 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      padding: 10px;
     }
 
-    .party-header-bar {
+    .party-preview-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 5px;
+      padding-bottom: 4px;
     }
 
-    .party-title {
-      font-size: 11.5px;
+    .party-preview-title {
+      font-size: 11px;
       font-weight: 800;
       color: var(--epic-purple);
       letter-spacing: 0.5px;
     }
 
-    .party-gear-tag {
-      font-size: 10px;
+    .party-gear-pill {
+      font-size: 9.5px;
       color: #ffd54f;
       background: rgba(255, 213, 79, 0.15);
-      padding: 2px 6px;
+      padding: 1px 6px;
       border-radius: 4px;
       border: 1px solid rgba(255, 213, 79, 0.4);
       font-weight: 700;
     }
 
-    .party-grid-preview {
+    .party-thumbs-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
     }
 
-    .mini-hero-item {
-      background: rgba(22, 26, 38, 0.9);
+    .hero-thumb-card {
+      background: rgba(20, 24, 36, 0.9);
       border: 1px solid rgba(206, 147, 216, 0.4);
       border-radius: 6px;
       padding: 6px 4px;
@@ -254,221 +238,125 @@
       text-align: center;
       cursor: pointer;
     }
-    .mini-hero-thumb {
+    .hero-thumb-avatar {
       width: 42px;
       height: 42px;
       border-radius: 6px;
       border: 1.5px solid var(--epic-purple);
       overflow: hidden;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
-    .mini-hero-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .mini-hero-name {
-      font-size: 10.5px;
-      font-weight: 800;
-      color: #fff;
-    }
-    .mini-hero-tag {
-      font-size: 8.5px;
-      color: #8bc34a;
-      font-weight: 700;
-    }
+    .hero-thumb-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-thumb-name { font-size: 10.5px; font-weight: 800; color: #fff; }
+    .hero-thumb-stat { font-size: 8.5px; color: #8bc34a; font-weight: 700; }
 
-    /* Exploration Map Corridor & Step Tracker */
-    .dungeon-track-container {
-      background: rgba(16, 20, 32, 0.88);
+    .track-container {
+      background: rgba(14, 18, 28, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
-      padding: 12px;
-      margin: 12px 0;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
-
-    .track-step-labels {
+    .track-labels {
       display: flex;
       justify-content: space-between;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 800;
-      color: #bbb;
+      color: #8b9bb4;
     }
-    .track-step-labels .active-step {
-      color: #ffd54f;
-    }
-
-    .track-progress-bar {
+    .track-labels .active-step { color: #ffd54f; }
+    .track-bar {
       width: 100%;
-      height: 6px;
+      height: 5px;
       background: rgba(0, 0, 0, 0.6);
       border-radius: 3px;
       overflow: hidden;
-      position: relative;
     }
-    .track-progress-fill {
+    .track-fill {
       height: 100%;
       background: linear-gradient(90deg, #7b1fa2, #ffd54f);
       width: 25%;
       transition: width 0.4s ease;
     }
 
-    .corridor-interactive-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 16px 8px;
-    }
-
-    .corridor-icon-box {
-      width: 74px;
-      height: 74px;
-      border-radius: 50%;
-      border: 2px dashed rgba(206, 147, 216, 0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      color: #ce93d8;
-      margin-bottom: 12px;
-      box-shadow: 0 0 25px rgba(186, 104, 200, 0.35);
-      background: radial-gradient(circle, rgba(123, 31, 162, 0.25) 0%, transparent 70%);
-      animation: pulseRune 2s infinite ease-in-out;
-    }
-    @keyframes pulseRune {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.06); box-shadow: 0 0 35px rgba(255, 213, 79, 0.5); }
-    }
-
-    .corridor-stage-title {
-      font-size: 18px;
-      font-weight: 900;
-      color: #fff;
-      text-shadow: 0 2px 8px #000;
-      margin-bottom: 4px;
-    }
-
-    .corridor-stage-desc {
-      font-size: 11.5px;
-      color: #cfd8dc;
-      line-height: 1.5;
-      max-width: 320px;
-      margin-bottom: 10px;
-    }
-
-    /* Event Dialog Box */
-    .event-card-box {
-      background: linear-gradient(180deg, rgba(34, 30, 52, 0.95) 0%, rgba(18, 20, 32, 0.98) 100%);
+    .event-card {
+      background: linear-gradient(180deg, rgba(30, 26, 46, 0.96) 0%, rgba(16, 18, 28, 0.98) 100%);
       border: 1.5px solid #ffd54f;
       border-radius: 10px;
-      padding: 14px;
-      box-shadow: 0 0 25px rgba(255, 213, 79, 0.3);
+      padding: 12px;
+      box-shadow: 0 0 25px rgba(255, 213, 79, 0.25);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       animation: eventPop 0.3s ease-out;
     }
     @keyframes eventPop {
-      0% { opacity: 0; transform: scale(0.94); }
+      0% { opacity: 0; transform: scale(0.95); }
       100% { opacity: 1; transform: scale(1); }
     }
-
-    .event-header {
+    .event-title-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       border-bottom: 1px solid rgba(255, 213, 79, 0.3);
-      padding-bottom: 6px;
+      padding-bottom: 5px;
     }
     .event-badge {
-      font-size: 10px;
+      font-size: 9px;
       background: #ff8f00;
       color: #000;
       font-weight: 900;
-      padding: 2px 6px;
-      border-radius: 4px;
+      padding: 1px 5px;
+      border-radius: 3px;
     }
-    .event-title {
-      font-size: 13px;
-      font-weight: 800;
-      color: #ffd54f;
-    }
-
-    .event-story {
-      font-size: 11px;
-      color: #e0e0e0;
-      line-height: 1.45;
-    }
-
-    .event-choice-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .btn-event-choice {
+    .event-title { font-size: 12.5px; font-weight: 800; color: #ffd54f; }
+    .event-story { font-size: 11px; color: #ddd; line-height: 1.45; }
+    .btn-event-option {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(206, 147, 216, 0.4);
       color: #fff;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 10px 12px;
+      padding: 9px 10px;
       border-radius: 6px;
       text-align: left;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: background 0.15s, border-color 0.15s, transform 0.15s;
     }
-    .btn-event-choice:hover {
+    .btn-event-option:hover {
       background: rgba(255, 213, 79, 0.2);
       border-color: #ffd54f;
-      transform: translateY(-1px);
     }
-    .btn-event-choice .choice-icon {
-      font-size: 18px;
-    }
-    .btn-event-choice .choice-text {
-      flex: 1;
-    }
-    .btn-event-choice .choice-reward {
-      font-size: 9.5px;
+    .btn-event-option .opt-reward {
+      font-size: 9px;
       color: #8bc34a;
       display: block;
-      margin-top: 2px;
+      margin-top: 1px;
     }
 
-    /* Primary advance action */
-    .btn-primary-advance {
+    .btn-primary-action {
       background: linear-gradient(135deg, #ffd54f 0%, #ff8f00 50%, #e65100 100%);
       color: #1a0f00;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 900;
       border: none;
-      padding: 15px 20px;
-      border-radius: 10px;
+      padding: 14px 18px;
+      border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(255, 143, 0, 0.6);
+      box-shadow: 0 4px 18px rgba(255, 143, 0, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      animation: pulseBtn 1.8s infinite ease-in-out;
-      text-transform: uppercase;
-    }
-    @keyframes pulseBtn {
-      0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(255, 143, 0, 0.5); }
-      50% { transform: scale(1.03); box-shadow: 0 6px 28px rgba(255, 143, 0, 0.85); }
+      gap: 8px;
     }
 
     /* =========================================================================
-       Phase 2: Combat Screen (3 Waves & FEVER Flow)
+       Phase 2: Combat Screen — Authentic Real-Game BattleScreen UI
        ========================================================================= */
     #battle-phase {
       display: none;
@@ -479,463 +367,451 @@
       position: relative;
     }
 
-    /* Wave Header & Auto Button */
-    .battle-header-info {
+    /* ── MonsterImagePanel: Authentic Large Target Visualizer ── */
+    .monster-image-panel {
+      position: relative;
+      width: 100%;
+      height: 112px;
+      background: #0d111a;
+      border-bottom: 1px solid rgba(200, 170, 110, 0.3);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .monster-image-panel-bg {
+      position: absolute;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      filter: blur(14px) brightness(0.4);
+      opacity: 0.65;
+    }
+    .monster-image-center-art {
+      position: relative;
+      z-index: 5;
+      height: 98px;
+      width: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1.5px solid #ff4444;
+      box-shadow: 0 0 16px rgba(255, 68, 68, 0.45);
+      background: #000;
+    }
+    .monster-image-center-art.boss {
+      border-color: #ffd54f;
+      box-shadow: 0 0 24px rgba(255, 213, 79, 0.7);
+    }
+    .monster-image-center-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .monster-image-info-bar {
+      position: absolute;
+      bottom: 4px;
+      left: 8px;
+      right: 8px;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 12px;
-      background: rgba(15, 18, 30, 0.9);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      text-shadow: 0 1px 4px #000;
     }
-
-    .wave-badge {
+    .target-name-badge {
       font-size: 11px;
       font-weight: 800;
-      color: #ffd54f;
+      color: #fff;
       display: flex;
       align-items: center;
+      gap: 4px;
+    }
+    .target-hp-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      font-family: monospace;
+      color: #ffd54f;
+    }
+
+    /* ── Monsters Grid: Authentic 1 to 5 Monster Slots ── */
+    .monsters-slots-grid {
+      display: grid;
       gap: 5px;
+      width: 100%;
+      padding: 6px 10px;
+      background: rgba(10, 13, 20, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
     }
 
-    .auto-toggle-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 213, 79, 0.4);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
+    .monster-slot-card {
+      position: relative;
+      height: 38px;
+      border-radius: 6px;
+      border: 1px solid var(--border-panel);
+      background: rgba(17, 23, 38, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2px 5px;
       cursor: pointer;
+      overflow: hidden;
+      transition: border-color 0.15s, transform 0.15s;
     }
-    .auto-toggle-btn.active {
-      background: #ff8f00;
-      color: #000;
+    .monster-slot-card.selected {
+      border-color: #ff4444;
+      background: rgba(255, 68, 68, 0.16);
+      box-shadow: 0 0 10px rgba(255, 68, 68, 0.4);
+      transform: scale(1.02);
+    }
+    .monster-slot-card.dead {
+      opacity: 0.3;
+      border-color: #1a202c;
+      background: #0a0d14;
+      pointer-events: none;
+    }
+    .monster-slot-card.boss {
+      border-color: #c8aa6e;
+    }
+    .monster-slot-card.selected.boss {
       border-color: #ffd54f;
-      box-shadow: 0 0 10px rgba(255, 143, 0, 0.6);
+      box-shadow: 0 0 12px rgba(255, 213, 79, 0.5);
     }
 
-    /* =========================================================================
-       FEVER GAUGE BAR (5 Momentum Badges Slot Machine)
-       ========================================================================= */
-    .fever-bar-wrap {
-      background: linear-gradient(90deg, rgba(20, 16, 30, 0.95), rgba(35, 20, 15, 0.95));
-      border-bottom: 1.5px solid rgba(255, 145, 0, 0.5);
-      padding: 6px 12px;
+    .monster-slot-hp-bg {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(90deg, #11998e, #38ef7d);
+      opacity: 0.28;
+      pointer-events: none;
+      transition: width 0.3s ease-out;
+    }
+    .monster-slot-hp-bg.low {
+      background: linear-gradient(90deg, #cb2d3e, #ef473a);
+    }
+
+    .monster-slot-inner {
+      position: relative;
+      z-index: 2;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
-      overflow: hidden;
+      gap: 3px;
     }
-    .fever-bar-wrap.full {
+    .slot-pos-tag {
+      font-size: 8px;
+      font-weight: 800;
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+    .pos-front { background: rgba(239, 83, 80, 0.2); color: #ef5350; border: 1px solid rgba(239, 83, 80, 0.4); }
+    .pos-back { background: rgba(66, 165, 245, 0.2); color: #42a5f5; border: 1px solid rgba(66, 165, 245, 0.4); }
+    .slot-name {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #cfd8dc;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+    .monster-slot-card.selected .slot-name { color: #fff; }
+    .slot-hp-text {
+      font-size: 8.5px;
+      font-family: monospace;
+      font-weight: 800;
+      color: #38ef7d;
+    }
+    .monster-slot-card.dead .slot-hp-text { color: #888; }
+
+    /* ── Combat Log Panel ── */
+    .combat-log-row {
+      height: 25px;
+      background: rgba(10, 13, 20, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      font-size: 9.5px;
+      color: #bbb;
+      flex-shrink: 0;
+    }
+    .combat-log-row strong { color: #ffd54f; }
+    .log-wave-indicator {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #ff9100;
+    }
+
+    /* ── Authentic FeverGaugeBar Component ── */
+    .fever-bar-component {
+      background: linear-gradient(90deg, rgba(16, 20, 32, 0.98), rgba(28, 18, 14, 0.98));
+      border-bottom: 1.5px solid rgba(255, 145, 0, 0.5);
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .fever-bar-component.full {
       border-bottom-color: #ffd600;
-      background: linear-gradient(90deg, rgba(60, 25, 0, 0.95), rgba(120, 45, 0, 0.95));
+      background: linear-gradient(90deg, rgba(50, 20, 0, 0.98), rgba(90, 35, 0, 0.98));
       animation: feverBannerGlow 1.2s infinite alternate ease-in-out;
     }
     @keyframes feverBannerGlow {
       0% { box-shadow: 0 0 10px rgba(255, 145, 0, 0.5); }
       100% { box-shadow: 0 0 25px rgba(255, 214, 0, 0.85); }
     }
-
-    .fever-title-box {
+    .fever-left-title {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
     .fever-flame-icon {
-      font-size: 16px;
+      font-size: 15px;
       animation: flameFlicker 0.8s infinite alternate ease-in-out;
     }
     @keyframes flameFlicker {
       0% { transform: scale(1) rotate(-3deg); }
       100% { transform: scale(1.15) rotate(4deg); }
     }
-    .fever-title-text {
-      font-size: 11px;
+    .fever-text-label {
+      font-size: 10px;
       font-weight: 900;
       color: #ff9100;
       letter-spacing: 0.5px;
     }
-    .fever-bar-wrap.full .fever-title-text {
-      color: #ffd600;
-    }
+    .fever-bar-component.full .fever-text-label { color: #ffd600; }
 
-    .fever-slots-deck {
+    .fever-badge-slots {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
-
-    .fever-slot {
-      width: 26px;
-      height: 26px;
-      border-radius: 6px;
+    .fever-slot-box {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
       background: rgba(0, 0, 0, 0.6);
       border: 1.5px dashed rgba(255, 255, 255, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
-      position: relative;
-      transition: all 0.25s ease;
+      font-size: 12px;
+      transition: all 0.2s ease;
     }
-    .fever-slot.filled {
+    .fever-slot-box.filled {
       border-style: solid;
       border-color: #ffd54f;
       background: rgba(255, 145, 0, 0.25);
-      box-shadow: 0 0 8px rgba(255, 145, 0, 0.5);
-      animation: badgeSlotIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 8px rgba(255, 145, 0, 0.6);
     }
-    @keyframes badgeSlotIn {
-      0% { transform: scale(0.4); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    .fever-subtext {
-      font-size: 9px;
+    .fever-status-tag {
+      font-size: 8.5px;
       color: #ffe082;
       font-weight: 700;
     }
 
-    /* Monster Arena Area */
-    .arena-enemies {
-      flex: 0 0 155px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      padding: 8px 12px;
-      position: relative;
-    }
-
-    .enemy-card {
+    /* ── HeroRow: Authentic Party Display Cards ── */
+    .party-heroes-area {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      position: relative;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .enemy-card.selected {
-      transform: scale(1.06);
-    }
-    .enemy-card.selected::before {
-      content: '▼ TARGET';
-      position: absolute;
-      top: -16px;
-      font-size: 8.5px;
-      font-weight: 900;
-      color: #ff5252;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 1px 4px;
-      border-radius: 3px;
-      border: 1px solid #ff5252;
-      letter-spacing: 0.5px;
-    }
-
-    .enemy-avatar-wrap {
-      width: 70px;
-      height: 70px;
-      border-radius: 8px;
-      border: 2px solid #ff5252;
-      overflow: hidden;
-      position: relative;
-      background: #111;
-      box-shadow: 0 0 12px rgba(255, 82, 82, 0.4);
-    }
-    .enemy-card.boss .enemy-avatar-wrap {
-      width: 98px;
-      height: 98px;
-      border-color: #ffd54f;
-      box-shadow: 0 0 20px rgba(255, 213, 79, 0.6);
-    }
-
-    .enemy-avatar-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .enemy-name-label {
-      font-size: 10.5px;
-      font-weight: 800;
-      color: #fff;
-      margin-top: 3px;
-      text-shadow: 0 1px 3px #000;
-    }
-    .enemy-card.boss .enemy-name-label {
-      font-size: 12px;
-      color: #ffd54f;
-    }
-
-    .hp-bar-container {
-      width: 72px;
-      height: 6px;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 3px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      margin-top: 2px;
-      position: relative;
-    }
-    .enemy-card.boss .hp-bar-container {
-      width: 100px;
-      height: 8px;
-    }
-
-    .hp-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #d32f2f, #f44336);
-      width: 100%;
-      transition: width 0.3s ease-out;
-    }
-
-    .enemy-status-row {
-      display: flex;
-      gap: 3px;
-      margin-top: 2px;
-      min-height: 14px;
-    }
-    .status-pill {
-      font-size: 7.5px;
-      font-weight: 800;
-      padding: 1px 3px;
-      border-radius: 3px;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid #fff;
-    }
-
-    /* Combat Log Ticker */
-    .combat-log-bar {
-      height: 26px;
-      background: rgba(10, 12, 18, 0.9);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
-      font-size: 10px;
-      color: #cfd8dc;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    .combat-log-bar strong {
-      color: #ffd54f;
-      margin-right: 4px;
-    }
-
-    /* Party Row in Combat */
-    .arena-heroes {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
+      gap: 4px;
       padding: 6px 10px;
-      background: rgba(14, 18, 28, 0.8);
+      flex-shrink: 0;
+      background: rgba(12, 16, 24, 0.7);
     }
 
-    .hero-combat-card {
-      background: rgba(22, 26, 40, 0.92);
-      border: 1px solid rgba(206, 147, 216, 0.4);
+    .hero-row-card {
+      background: rgba(20, 26, 40, 0.92);
+      border: 1px solid var(--border-panel);
       border-radius: 6px;
-      padding: 5px;
+      padding: 4px 8px;
       display: flex;
-      flex-direction: column;
-      position: relative;
+      align-items: center;
+      gap: 8px;
       cursor: pointer;
-      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .hero-combat-card.active-turn {
+    .hero-row-card.active-turn {
       border-color: #ffd54f;
-      box-shadow: 0 0 12px rgba(255, 213, 79, 0.6);
-      transform: translateY(-2px);
+      box-shadow: 0 0 12px rgba(255, 213, 79, 0.5);
+      background: rgba(26, 34, 52, 0.96);
     }
-    .hero-combat-card.active-turn::after {
-      content: 'TURN';
+    .hero-row-card.active-turn::after {
+      content: 'ACTION';
       position: absolute;
-      top: -7px;
-      right: 3px;
+      top: -6px;
+      right: 6px;
       font-size: 7.5px;
       font-weight: 900;
       color: #000;
       background: #ffd54f;
-      padding: 1px 3px;
+      padding: 1px 4px;
       border-radius: 2px;
     }
 
-    .hero-combat-top {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-bottom: 3px;
-    }
-
-    .hero-combat-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 4px;
-      border: 1px solid var(--epic-purple);
+    .hero-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--epic-purple);
       overflow: hidden;
       background: #111;
       flex-shrink: 0;
     }
-    .hero-combat-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .hero-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
-    .hero-combat-info {
+    .hero-row-info {
       flex: 1;
       min-width: 0;
-    }
-
-    .hero-combat-name {
-      font-size: 10px;
-      font-weight: 800;
-      color: #fff;
-      white-space: nowrap;
-    }
-
-    .hero-combat-lvl {
-      font-size: 8px;
-      color: var(--epic-purple);
-      font-weight: 800;
-    }
-
-    .bar-row {
       display: flex;
       flex-direction: column;
       gap: 2px;
-      margin-top: 1px;
+    }
+    .hero-meta-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hero-name-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .hero-class-tag {
+      font-size: 8px;
+      color: var(--epic-purple);
+      font-weight: 700;
+    }
+    .hero-pos-pill {
+      font-size: 7.5px;
+      color: #a4b3c6;
     }
 
-    .mini-bar {
-      height: 4px;
+    .hero-bars-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stat-bar-track {
+      height: 5px;
       background: rgba(0, 0, 0, 0.6);
       border-radius: 2px;
       overflow: hidden;
       position: relative;
     }
-    .mini-bar-fill {
+    .stat-bar-fill {
       height: 100%;
       transition: width 0.25s ease;
     }
-    .hp-fill { background: linear-gradient(90deg, #e53935, #ef5350); }
-    .mp-fill { background: linear-gradient(90deg, #1e88e5, #42a5f5); }
-    .shield-overlay {
+    .hp-bar-fill { background: linear-gradient(90deg, #e53935, #ef5350); }
+    .mp-bar-fill { background: linear-gradient(90deg, #1e88e5, #42a5f5); }
+    .shield-overlay-bar {
       position: absolute;
       top: 0;
       left: 0;
       height: 100%;
-      background: rgba(38, 198, 218, 0.7);
+      background: rgba(38, 198, 218, 0.75);
       width: 0%;
       transition: width 0.25s ease;
     }
-
-    .stat-text-line {
+    .hero-num-line {
       font-size: 7.5px;
       color: #bbb;
       display: flex;
       justify-content: space-between;
-      margin-top: 1px;
+      font-family: monospace;
     }
 
-    /* =========================================================================
-       Action Command Deck: 1 기본기, 1 고유기, 2 스킬 (4 Buttons)
-       ========================================================================= */
-    .action-panel {
+    /* ── Action Deck: 4 Distinct Buttons (Basic, Skill 1, Skill 2, Unique Special) ── */
+    .action-deck-panel {
       flex: 1;
+      min-height: 0;
       display: flex;
       flex-direction: column;
-      padding: 6px 10px 10px 10px;
-      background: linear-gradient(180deg, rgba(16, 20, 32, 0.98) 0%, rgba(10, 12, 20, 1) 100%);
-      border-top: 1px solid rgba(200, 170, 110, 0.3);
+      padding: 6px 10px 8px 10px;
+      background: linear-gradient(180deg, rgba(14, 18, 28, 0.98) 0%, rgba(8, 10, 16, 1) 100%);
+      border-top: 1px solid rgba(200, 170, 110, 0.35);
       justify-content: space-between;
     }
 
-    .action-panel-header {
+    .deck-header-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 4px;
+      border-bottom: 1px solid rgba(200, 170, 110, 0.2);
+      padding-bottom: 3px;
     }
-
-    .current-turn-label {
-      font-size: 11px;
+    .deck-hero-title {
+      font-size: 10.5px;
       font-weight: 800;
-      color: #ffd54f;
+      color: #c8aa6e;
       display: flex;
       align-items: center;
       gap: 5px;
     }
-
-    .action-hint {
-      font-size: 9px;
-      color: #a4b3c6;
+    .deck-tip {
+      font-size: 8.5px;
+      color: #8b9bb4;
     }
 
-    .skills-grid-4 {
+    .action-buttons-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      gap: 5px;
+      align-items: stretch;
       flex: 1;
-      align-items: center;
     }
 
-    .skill-btn {
-      background: linear-gradient(180deg, rgba(32, 38, 58, 0.95) 0%, rgba(18, 22, 36, 0.95) 100%);
-      border: 1px solid rgba(206, 147, 216, 0.4);
-      border-radius: 6px;
-      padding: 6px 3px;
+    .action-btn {
+      background: rgba(22, 28, 44, 0.95);
+      border: 1px solid var(--border-panel);
+      border-radius: 8px;
+      padding: 5px 3px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 2px;
-      color: #fff;
+      justify-content: space-between;
       cursor: pointer;
       position: relative;
-      height: 78px;
       transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
     }
-    .skill-btn:hover {
+    .action-btn:hover {
       border-color: #ffd54f;
       transform: translateY(-2px);
     }
-    .skill-btn:active {
+    .action-btn:active {
       transform: scale(0.96);
     }
 
-    /* Skill Category Badges */
-    .skill-category-tag {
-      position: absolute;
-      top: 2px;
-      left: 3px;
+    .btn-cat-badge {
       font-size: 7px;
       font-weight: 900;
-      padding: 0 3px;
+      padding: 1px 3px;
       border-radius: 2px;
-      background: rgba(0, 0, 0, 0.7);
+      align-self: flex-start;
+      margin-bottom: 1px;
     }
-    .cat-basic { color: #81c784; border: 1px solid #81c784; }
-    .cat-skill { color: #64b5f6; border: 1px solid #64b5f6; }
-    .cat-unique { color: #ffd54f; border: 1px solid #ffd54f; }
+    .cat-basic { background: rgba(76, 175, 80, 0.2); color: #81c784; border: 1px solid rgba(76, 175, 80, 0.4); }
+    .cat-skill { background: rgba(33, 150, 243, 0.2); color: #64b5f6; border: 1px solid rgba(33, 150, 243, 0.4); }
+    .cat-unique { background: rgba(255, 213, 79, 0.25); color: #ffd54f; border: 1px solid #ffd54f; }
 
-    .skill-badge-give {
-      position: absolute;
-      top: 2px;
-      right: 3px;
-      font-size: 8px;
-    }
-
-    .skill-btn.special-skill {
+    .action-btn.special-btn {
       border-color: #ffd54f;
-      background: linear-gradient(180deg, rgba(58, 42, 24, 0.95) 0%, rgba(28, 20, 14, 0.95) 100%);
+      background: linear-gradient(180deg, rgba(46, 32, 16, 0.95) 0%, rgba(22, 15, 10, 0.95) 100%);
       box-shadow: 0 0 10px rgba(255, 213, 79, 0.25);
     }
-    .skill-btn.special-skill.ready {
+    .action-btn.special-btn.ready {
       animation: specialGlow 1.8s infinite ease-in-out;
     }
     @keyframes specialGlow {
@@ -943,114 +819,163 @@
       50% { box-shadow: 0 0 14px rgba(255, 213, 79, 0.7); border-color: #fff; }
     }
 
-    .skill-btn.fever-free {
+    .action-btn.fever-free {
       border-color: #ff9100 !important;
-      background: linear-gradient(180deg, rgba(70, 30, 0, 0.95) 0%, rgba(35, 12, 0, 0.95) 100%) !important;
-      animation: feverSkillPulse 1s infinite alternate;
+      background: linear-gradient(180deg, rgba(65, 25, 0, 0.95) 0%, rgba(30, 10, 0, 0.95) 100%) !important;
+      animation: feverBtnPulse 1s infinite alternate;
     }
-    @keyframes feverSkillPulse {
+    @keyframes feverBtnPulse {
       0% { box-shadow: 0 0 6px rgba(255, 145, 0, 0.5); }
-      100% { box-shadow: 0 0 14px rgba(255, 214, 0, 0.9); }
+      100% { box-shadow: 0 0 14px rgba(255, 214, 0, 0.85); }
     }
 
-    .skill-btn.disabled {
-      opacity: 0.45;
-      pointer-events: none;
-      filter: grayscale(0.8);
-    }
-
-    .skill-icon {
-      font-size: 18px;
-      margin-top: 6px;
-    }
-
-    .skill-name {
+    .btn-icon-wrap { font-size: 19px; margin: 2px 0; }
+    .btn-name-label {
       font-size: 9.5px;
       font-weight: 800;
       color: #fff;
       white-space: nowrap;
       text-align: center;
     }
-
-    .skill-cost {
+    .btn-cost-tag {
       font-size: 8px;
+      font-weight: 800;
       color: #90caf9;
-      font-weight: 700;
+      font-family: monospace;
     }
-    .skill-cost.free {
-      color: #ffd54f;
+    .btn-cost-tag.free { color: #ffd54f; }
+
+    /* ── Skill Cut-In Banner: Authentic Slash & Speedline Overlay ── */
+    #cutin-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .cutin-speedlines {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.8) 100%);
+      opacity: 0.8;
+    }
+    .cutin-banner-bar {
+      position: relative;
+      width: 140%;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transform: rotate(-3deg);
+      border-top: 2px solid #ffd54f;
+      border-bottom: 2px solid #ffd54f;
+      background: linear-gradient(90deg, transparent 0%, rgba(20, 12, 32, 0.96) 20%, rgba(35, 20, 5, 0.96) 80%, transparent 100%);
+      box-shadow: 0 0 30px rgba(255, 213, 79, 0.6);
+      animation: cutinSlide 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes cutinSlide {
+      0% { transform: rotate(-3deg) scaleX(0.4); opacity: 0; }
+      100% { transform: rotate(-3deg) scaleX(1); opacity: 1; }
+    }
+    .cutin-icon-box {
+      font-size: 28px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1.5px solid #ffd54f;
+    }
+    .cutin-texts {
+      display: flex;
+      flex-direction: column;
+    }
+    .cutin-subtag {
+      font-size: 10px;
       font-weight: 900;
+      color: #ffd54f;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .cutin-main-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.9);
+      letter-spacing: 0.5px;
     }
 
-    /* Floating combat numbers */
-    .floating-num {
+    /* ── Floating Damage & Hit Text ── */
+    .floating-dmg {
       position: absolute;
       font-size: 15px;
       font-weight: 900;
       pointer-events: none;
-      z-index: 100;
-      animation: floatUp 0.85s ease-out forwards;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+      z-index: 120;
+      animation: floatDamage 0.9s ease-out forwards;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
     }
-    .floating-num.crit {
-      font-size: 20px;
+    .floating-dmg.crit {
+      font-size: 21px;
       color: #ff1744;
-      text-shadow: 0 0 10px rgba(255, 23, 68, 0.8), 0 2px 4px #000;
+      text-shadow: 0 0 12px rgba(255, 23, 68, 0.9), 0 2px 4px #000;
     }
-    .floating-num.fever-hit {
-      font-size: 23px;
+    .floating-dmg.fever-crit {
+      font-size: 24px;
       color: #ffd600;
-      text-shadow: 0 0 14px rgba(255, 145, 0, 0.9), 0 2px 4px #000;
+      text-shadow: 0 0 16px rgba(255, 145, 0, 0.95), 0 2px 4px #000;
     }
-    .floating-num.dmg { color: #fff; }
-    .floating-num.heal { color: #69f0ae; }
-    .floating-num.shield { color: #00e5ff; }
-    @keyframes floatUp {
+    .floating-dmg.normal { color: #fff; }
+    .floating-dmg.shield { color: #00e5ff; }
+    .floating-dmg.heal { color: #69f0ae; }
+    @keyframes floatDamage {
       0% { opacity: 0; transform: translateY(0) scale(0.6); }
-      20% { opacity: 1; transform: translateY(-10px) scale(1.15); }
-      80% { opacity: 1; transform: translateY(-28px) scale(1); }
-      100% { opacity: 0; transform: translateY(-40px) scale(0.9); }
+      20% { opacity: 1; transform: translateY(-12px) scale(1.15); }
+      80% { opacity: 1; transform: translateY(-32px) scale(1); }
+      100% { opacity: 0; transform: translateY(-44px) scale(0.9); }
     }
 
-    /* Visual effect overlay */
+    /* ── VFX Slashes & Explosions ── */
     .vfx-layer {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      z-index: 50;
+      z-index: 70;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
     .vfx-slash {
-      width: 140px;
+      width: 150px;
       height: 4px;
       background: #fff;
-      box-shadow: 0 0 18px #ffeb3b, 0 0 30px #ff5722;
+      box-shadow: 0 0 18px #ffeb3b, 0 0 35px #ff5722;
       transform: rotate(-35deg) scaleX(0);
       animation: slashAnim 0.3s ease-out forwards;
     }
     @keyframes slashAnim {
       0% { transform: rotate(-35deg) scaleX(0); opacity: 1; }
       50% { transform: rotate(-35deg) scaleX(1.4); opacity: 1; }
-      100% { transform: rotate(-35deg) scaleX(1.8); opacity: 0; }
+      100% { transform: rotate(-35deg) scaleX(1.9); opacity: 0; }
     }
-
-    .vfx-explosion {
-      width: 80px;
-      height: 80px;
+    .vfx-burst {
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
-      background: radial-gradient(circle, #fff 0%, #ff9800 40%, #f44336 70%, transparent 100%);
+      background: radial-gradient(circle, #fff 0%, #ff9800 40%, #f44336 75%, transparent 100%);
       animation: explodeAnim 0.45s ease-out forwards;
     }
     @keyframes explodeAnim {
       0% { transform: scale(0.2); opacity: 1; }
-      60% { transform: scale(2.2); opacity: 0.9; }
-      100% { transform: scale(3.2); opacity: 0; }
+      60% { transform: scale(2.4); opacity: 0.95; }
+      100% { transform: scale(3.5); opacity: 0; }
     }
 
-    /* Phase 3: Victory & Google Play CTA Overlay */
+    /* =========================================================================
+       Phase 3: Victory & Google Play CTA
+       ========================================================================= */
     #victory-overlay {
       display: none;
       position: absolute;
@@ -1064,37 +989,24 @@
       padding: 16px;
       animation: fadeIn 0.4s ease-out forwards;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    .victory-badge-crown {
-      font-size: 42px;
-      margin-bottom: 4px;
-      animation: bounceCrown 1.5s infinite ease-in-out;
-    }
-    @keyframes bounceCrown {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
+    .victory-badge-crown { font-size: 40px; margin-bottom: 4px; }
     .victory-title {
-      font-size: 24px;
+      font-size: 23px;
       font-weight: 900;
       background: linear-gradient(135deg, #fff, #ffd54f, #ff8f00);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
-
     .victory-subtitle {
-      font-size: 11.5px;
+      font-size: 11px;
       color: #ce93d8;
       font-weight: 700;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .loot-reward-card {
@@ -1103,50 +1015,31 @@
       border-radius: 8px;
       padding: 10px 14px;
       width: 100%;
-      max-width: 320px;
-      margin-bottom: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .loot-item-row {
+      max-width: 310px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .loot-icon {
       font-size: 22px;
       background: rgba(255, 255, 255, 0.08);
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 1px solid #ffd54f;
     }
+    .loot-details { flex: 1; text-align: left; }
+    .loot-name { font-size: 11px; font-weight: 800; color: #ffd54f; }
+    .loot-desc { font-size: 9px; color: #bbb; }
 
-    .loot-details {
-      flex: 1;
-      text-align: left;
-    }
-    .loot-name {
-      font-size: 11.5px;
-      font-weight: 800;
-      color: #ffd54f;
-    }
-    .loot-desc {
-      font-size: 9.5px;
-      color: #bbb;
-    }
-
-    /* Google Play App CTA Card */
     .app-cta-box {
       width: 100%;
-      max-width: 320px;
-      background: linear-gradient(180deg, rgba(32, 36, 56, 0.9) 0%, rgba(18, 20, 32, 0.95) 100%);
+      max-width: 310px;
+      background: linear-gradient(180deg, rgba(32, 36, 56, 0.92) 0%, rgba(18, 20, 32, 0.96) 100%);
       border: 1px solid rgba(206, 147, 216, 0.6);
       border-radius: 10px;
       padding: 12px;
@@ -1156,60 +1049,35 @@
       box-shadow: 0 0 25px rgba(206, 147, 216, 0.35);
       margin-bottom: 10px;
     }
-
     .app-header-flex {
       display: flex;
       align-items: center;
       gap: 10px;
       width: 100%;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-
     .app-icon-img {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       border-radius: 10px;
       border: 2px solid #ffd54f;
-      background: #111;
-      box-shadow: 0 0 10px rgba(255, 213, 79, 0.5);
       object-fit: cover;
     }
-
-    .app-meta {
-      flex: 1;
-      text-align: left;
-    }
-
-    .app-name {
-      font-size: 14px;
-      font-weight: 900;
-      color: #fff;
-    }
-
-    .app-stars {
-      color: #ffd54f;
-      font-size: 10px;
-      margin: 1px 0;
-    }
-
-    .app-genre {
-      font-size: 9.5px;
-      color: #a4b3c6;
-    }
-
+    .app-name { font-size: 13.5px; font-weight: 900; color: #fff; }
+    .app-stars { color: #ffd54f; font-size: 10px; margin: 1px 0; }
+    .app-genre { font-size: 9px; color: #a4b3c6; }
     .app-pitch {
-      font-size: 10.5px;
+      font-size: 10px;
       color: #cfd8dc;
       line-height: 1.4;
       text-align: center;
       margin-bottom: 10px;
     }
-
     .btn-cta-download {
       width: 100%;
       background: linear-gradient(135deg, #00c853 0%, #009624 100%);
       color: #fff;
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 900;
       border: none;
       padding: 12px 14px;
@@ -1218,27 +1086,24 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       box-shadow: 0 4px 18px rgba(0, 200, 83, 0.6);
       animation: pulseGreen 1.8s infinite ease-in-out;
-      text-decoration: none;
     }
     @keyframes pulseGreen {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.03); box-shadow: 0 6px 26px rgba(0, 200, 83, 0.85); }
     }
-
     .btn-replay {
       background: transparent;
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: #a4b3c6;
-      font-size: 11px;
-      padding: 5px 12px;
+      font-size: 10.5px;
+      padding: 4px 12px;
       border-radius: 4px;
       cursor: pointer;
     }
 
-    /* Hero Inspect Modal */
     #hero-modal {
       display: none;
       position: absolute;
@@ -1264,7 +1129,6 @@
 <body>
 
   <div id="game-container">
-    <!-- Ambient background layer -->
     <div class="bg-layer" id="bg-layer"></div>
     <div class="bg-overlay"></div>
 
@@ -1283,212 +1147,217 @@
       </div>
     </header>
 
-    <!-- Main Content Area -->
     <main>
       <!-- =====================================================================
-           Phase 1: Dungeon Exploration & Interactive Events
+           Phase 1: Exploration with 2 Interactive Events
            ===================================================================== -->
       <section id="explore-phase">
-        <!-- Party Summary -->
-        <div class="explore-party-card">
-          <div class="party-header-bar">
-            <div class="party-title">👑 20레벨 에픽 원정대</div>
-            <div class="party-gear-tag">5Lv 병기창 에픽 전원 +6강</div>
+        <div class="party-preview-box">
+          <div class="party-preview-header">
+            <span class="party-preview-title">👑 20레벨 에픽 원정대</span>
+            <span class="party-gear-pill">5Lv 병기창 에픽 전원 +6강</span>
           </div>
-          <div class="party-grid-preview">
-            <div class="mini-hero-item" onclick="openHeroModal('paladin')">
-              <div class="mini-hero-thumb">
+          <div class="party-thumbs-grid">
+            <div class="hero-thumb-card" onclick="openHeroModal('paladin')">
+              <div class="hero-thumb-avatar">
                 <img src="../assets/portraits/portrait_paladin.png" alt="성기사" onerror="this.onerror=null;this.src='../assets/portrait_paladin.jpg';">
               </div>
-              <div class="mini-hero-name">성기사</div>
-              <div class="mini-hero-tag">HP 2,249 · 방벽</div>
+              <div class="hero-thumb-name">성기사</div>
+              <div class="hero-thumb-stat">HP 2,249 · 전열</div>
             </div>
-            <div class="mini-hero-item" onclick="openHeroModal('assassin')">
-              <div class="mini-hero-thumb">
+            <div class="hero-thumb-card" onclick="openHeroModal('assassin')">
+              <div class="hero-thumb-avatar">
                 <img src="../assets/portraits/portrait_rogue.png" alt="암살자" onerror="this.onerror=null;this.src='../assets/portrait_rogue.jpg';">
               </div>
-              <div class="mini-hero-name">암살자</div>
-              <div class="mini-hero-tag">ATK 240 · 처형</div>
+              <div class="hero-thumb-name">암살자</div>
+              <div class="hero-thumb-stat">ATK 240 · 중열</div>
             </div>
-            <div class="mini-hero-item" onclick="openHeroModal('elementalist')">
-              <div class="mini-hero-thumb">
+            <div class="hero-thumb-card" onclick="openHeroModal('elementalist')">
+              <div class="hero-thumb-avatar">
                 <img src="../assets/portraits/portrait_mage.png" alt="대마도사" onerror="this.onerror=null;this.src='../assets/portrait_mage.jpg';">
               </div>
-              <div class="mini-hero-name">대마도사</div>
-              <div class="mini-hero-tag">ATK 264 · 초신성</div>
+              <div class="hero-thumb-name">대마도사</div>
+              <div class="hero-thumb-stat">ATK 264 · 후열</div>
             </div>
           </div>
         </div>
 
-        <!-- Exploration Map Progress Track -->
-        <div class="dungeon-track-container">
-          <div class="track-step-labels">
+        <div class="track-container">
+          <div class="track-labels">
             <span class="active-step" id="step-lbl-1">1. 성소 진입</span>
             <span id="step-lbl-2">2. 공허의 제단</span>
             <span id="step-lbl-3">3. 차원의 균열</span>
             <span id="step-lbl-4">4. 심연의 핵</span>
           </div>
-          <div class="track-progress-bar">
-            <div class="track-progress-fill" id="track-fill"></div>
+          <div class="track-bar">
+            <div class="track-fill" id="track-fill"></div>
           </div>
         </div>
 
-        <!-- Stage Center / Event Display Area -->
+        <!-- Center Interactive Area -->
         <div id="explore-center-content">
-          <!-- Step 1: Default Entry View -->
-          <div class="corridor-interactive-center" id="entry-view">
-            <div class="corridor-icon-box">⚡</div>
-            <h2 class="corridor-stage-title">5층 성소 진입로</h2>
-            <p class="corridor-stage-desc">
-              심연의 어둠이 짙게 깔린 복도입니다. 영원의 성화 불빛을 밝히며 심연 제단으로 전진하세요!
+          <div id="entry-view" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 16px 8px;">
+            <div style="font-size:32px; width:64px; height:64px; border-radius:50%; border:2px dashed #ce93d8; display:flex; align-items:center; justify-content:center; margin-bottom:10px; color:#ffd54f;">⚡</div>
+            <h2 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:4px;">5층 성소 진입로</h2>
+            <p style="font-size:11.5px; color:#cfd8dc; line-height:1.45; margin-bottom:12px; max-width:300px;">
+              강화된 심연 마물들이 도사리는 위험한 성소입니다. 영원의 성화를 밝히며 고대 제단으로 진입하세요!
             </p>
-            <button class="btn-primary-advance" onclick="advanceDungeonStep(1)">
+            <button class="btn-primary-action" onclick="advanceDungeonStep(1)">
               <span>🧭</span> 복도 탐험 전진 <span>➔</span>
             </button>
           </div>
 
-          <!-- Event 1: Corrupted Altar -->
-          <div class="event-card-box" id="event-1-view" style="display: none;">
-            <div class="event-header">
+          <!-- Event 1 -->
+          <div class="event-card" id="event-1-view" style="display: none;">
+            <div class="event-title-row">
               <span class="event-badge">EVENT 01</span>
               <span class="event-title">공허에 잠식된 신성 제단</span>
             </div>
             <p class="event-story">
-              중앙에 버려진 고대 제단이 검은 덩굴에 뒤덮여 신음하고 있습니다. 제단 주변에서 희미한 신성 에너지와 보물 상자가 감지됩니다.
+              중앙의 고대 제단이 검은 덩굴에 짓눌려 있습니다. 신성한 에너지가 뿜어져 나오는 동시에 아래쪽에 숨겨진 보물 궤짝이 보입니다.
             </p>
-            <div class="event-choice-grid">
-              <button class="btn-event-choice" onclick="resolveEvent1('paladin')">
-                <span class="choice-icon">🛡️</span>
-                <span class="choice-text">
-                  [성기사] 성스러운 기도로 제단 정화
-                  <span class="choice-reward">✦ 효과: 파티 전원 350 신성 보호막 & 공격력 +15% 버프</span>
-                </span>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <button class="btn-event-option" onclick="resolveEvent1('paladin')">
+                <span>🛡️</span>
+                <span>[성기사] 성스러운 기도로 제단 정화<span class="opt-reward">✦ 효과: 파티 전원 400 신성 보호막 & 공격력 +15% 축복</span></span>
               </button>
-              <button class="btn-event-choice" onclick="resolveEvent1('assassin')">
-                <span class="choice-icon">🗡️</span>
-                <span class="choice-text">
-                  [암살자] 제단 아래 숨겨진 심연 궤짝 강탈
-                  <span class="choice-reward">✦ 효과: 골드 +800 & 파티 MP 100% 완충 포션 획득</span>
-                </span>
+              <button class="btn-event-option" onclick="resolveEvent1('assassin')">
+                <span>🗡️</span>
+                <span>[암살자] 제단 아래 숨겨진 심연 궤짝 강탈<span class="opt-reward">✦ 효과: 골드 +800 & 파티 마나(MP) 100% 완충 포션</span></span>
               </button>
             </div>
           </div>
 
-          <!-- Intermediate Corridor Walk -->
-          <div class="corridor-interactive-center" id="corridor-mid-view" style="display: none;">
-            <div class="corridor-icon-box" style="border-color:#ffd54f; color:#ffd54f;">🔮</div>
-            <h2 class="corridor-stage-title">차원의 균열 감지</h2>
-            <p class="corridor-stage-desc" id="corridor-mid-desc">
-              제단을 돌파한 원정대 앞에 시공간이 일그러진 차원의 균열이 나타났습니다.
+          <!-- Mid Corridor -->
+          <div id="corridor-mid-view" style="display: none; flex-direction: column; align-items: center; text-align: center; padding: 16px 8px;">
+            <div style="font-size:32px; width:64px; height:64px; border-radius:50%; border:2px dashed #ffd54f; display:flex; align-items:center; justify-content:center; margin-bottom:10px; color:#ffd54f;">🔮</div>
+            <h2 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:4px;">차원의 균열 감지</h2>
+            <p style="font-size:11.5px; color:#cfd8dc; line-height:1.45; margin-bottom:12px; max-width:300px;">
+              제단을 정화한 원정대 앞에 일그러진 시공간의 차원 룬이 소용돌이칩니다.
             </p>
-            <button class="btn-primary-advance" onclick="advanceDungeonStep(2)">
+            <button class="btn-primary-action" onclick="advanceDungeonStep(2)">
               <span>🧭</span> 차원 균열 조사 <span>➔</span>
             </button>
           </div>
 
-          <!-- Event 2: Dimensional Rift Rune -->
-          <div class="event-card-box" id="event-2-view" style="display: none;">
-            <div class="event-header">
+          <!-- Event 2 -->
+          <div class="event-card" id="event-2-view" style="display: none;">
+            <div class="event-title-row">
               <span class="event-badge" style="background:#ba68c8; color:#fff;">EVENT 02</span>
               <span class="event-title">고대 차원 룬의 공명</span>
             </div>
             <p class="event-story">
-              차원의 균열 속에서 거대한 태고의 룬 문자가 회전하고 있습니다. 이 마력을 어떻게 운용하시겠습니까?
+              차원 균열 내부에서 고대 마력이 맹렬히 회전하고 있습니다. 이 마력을 어떻게 활용하시겠습니까?
             </p>
-            <div class="event-choice-grid">
-              <button class="btn-event-choice" onclick="resolveEvent2('mage')">
-                <span class="choice-icon">🔮</span>
-                <span class="choice-text">
-                  [대마도사] 룬의 비전 에테르 마력 흡수
-                  <span class="choice-reward">✦ 효과: 전투 개시 시 FEVER 모멘텀 뱃지 +2개(⚡/💫) 즉시 충전</span>
-                </span>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <button class="btn-event-option" onclick="resolveEvent2('mage')">
+                <span>🔮</span>
+                <span>[대마도사] 룬의 비전 에테르 마력 흡수<span class="opt-reward">✦ 효과: 전투 개시 시 FEVER 모멘텀 뱃지 2개(⚡/💫) 즉시 충전</span></span>
               </button>
-              <button class="btn-event-choice" onclick="resolveEvent2('party')">
-                <span class="choice-icon">⚔️</span>
-                <span class="choice-text">
-                  [원정대] 전투 태세 전열 정비
-                  <span class="choice-reward">✦ 효과: 파티 전원 치명타율 +25% & 행동속도(SPD) +15 증가</span>
-                </span>
+              <button class="btn-event-option" onclick="resolveEvent2('party')">
+                <span>⚔️</span>
+                <span>[원정대] 전투 태세 전열 정비<span class="opt-reward">✦ 효과: 파티 전원 치명타율 +30% & 행동속도(SPD) +20 증가</span></span>
               </button>
             </div>
           </div>
 
-          <!-- Step 4: Ambush / Boss Chamber Alert -->
-          <div class="corridor-interactive-center" id="boss-door-view" style="display: none;">
-            <div class="corridor-icon-box" style="border-color:#ff5252; color:#ff5252; animation:pulseRune 1.2s infinite;">💀</div>
-            <h2 class="corridor-stage-title" style="color:#ff5252;">심연 마물 무리 기습!</h2>
-            <p class="corridor-stage-desc">
-              성소 깊은 곳에서 공허의 마물들이 3개 웨이브로 몰려옵니다! 20레벨 원정대의 피버(FEVER) 연계로 모두 소탕하세요!
+          <!-- Ambush -->
+          <div id="boss-door-view" style="display: none; flex-direction: column; align-items: center; text-align: center; padding: 16px 8px;">
+            <div style="font-size:32px; width:64px; height:64px; border-radius:50%; border:2px dashed #ff5252; display:flex; align-items:center; justify-content:center; margin-bottom:10px; color:#ff5252;">💀</div>
+            <h2 style="font-size:18px; font-weight:900; color:#ff5252; margin-bottom:4px;">심연 마물 대군단 기습!</h2>
+            <p style="font-size:11.5px; color:#cfd8dc; line-height:1.45; margin-bottom:12px; max-width:300px;">
+              적들의 체력과 공격력이 100% 증강된 상태로 3개 웨이브에 걸쳐 몰려옵니다! 3웨이브에서는 보스 포함 5마리의 마물이 출현합니다!
             </p>
-            <button class="btn-primary-advance" style="background:linear-gradient(135deg, #ff5252, #d32f2f); color:#fff;" onclick="startCombatPhase()">
-              <span>⚔️</span> 결전 전투 돌입 (3 Waves) <span>➔</span>
+            <button class="btn-primary-action" style="background:linear-gradient(135deg, #ff5252, #d32f2f); color:#fff;" onclick="startCombatPhase()">
+              <span>⚔️</span> 전면 결전 돌입 (3 Waves) <span>➔</span>
             </button>
           </div>
         </div>
 
-        <div style="text-align: center; font-size: 10px; color: #8bc34a; margin-top: 6px;">
-          🛡️ 원정대 특권: 적 마물 공격력 50% 약화 & 영원의 성화 100% 유지
+        <div style="text-align: center; font-size: 9.5px; color: #8bc34a; margin-top: 4px;">
+          ⚔️ 몹 체력/공격력 100% 강화 · 3웨이브 보스전 5마리 출현 대결투
         </div>
       </section>
 
       <!-- =====================================================================
-           Phase 2: 3-Wave Combat & FEVER Showdown System
+           Phase 2: Combat Screen — Authentic Real-Game BattleScreen UI
            ===================================================================== -->
       <section id="battle-phase">
-        <!-- Stage & auto header -->
-        <div class="battle-header-info">
-          <div class="wave-badge" id="wave-badge">
-            <span>🔥</span> <span id="wave-title">Wave 1/3: 침식의 척후대</span>
+        <!-- ── 1. MonsterImagePanel (Target Visualizer) ── -->
+        <div class="monster-image-panel" id="monster-image-panel">
+          <div class="monster-image-panel-bg" id="target-image-bg"></div>
+          <div class="monster-image-center-art" id="target-art-box">
+            <img id="target-main-img" src="" alt="Target">
           </div>
-          <button class="auto-toggle-btn" id="auto-btn" onclick="toggleAutoBattle()">⚡ 자동전투 OFF</button>
-        </div>
-
-        <!-- FEVER GAUGE BAR (5 Momentum Badges Slot Machine) -->
-        <div class="fever-bar-wrap" id="fever-bar-wrap">
-          <div class="fever-title-box">
-            <span class="fever-flame-icon">🔥</span>
-            <span class="fever-title-text" id="fever-state-label">FEVER MOMENTUM</span>
-          </div>
-          <div class="fever-slots-deck">
-            <div class="fever-slot" id="fever-slot-0"></div>
-            <div class="fever-slot" id="fever-slot-1"></div>
-            <div class="fever-slot" id="fever-slot-2"></div>
-            <div class="fever-slot" id="fever-slot-3"></div>
-            <div class="fever-slot" id="fever-slot-4"></div>
-          </div>
-          <div class="fever-subtext" id="fever-synergy-name">5개 완충 시 피버 타임!</div>
-        </div>
-
-        <!-- Monster Zone -->
-        <div class="arena-enemies" id="enemies-container">
-          <!-- Populated by JS -->
-        </div>
-
-        <!-- Combat Log -->
-        <div class="combat-log-bar" id="combat-log">
-          <strong>[전투 개시]</strong> 20레벨 에픽 원정대가 전투 태세를 갖췄습니다!
-        </div>
-
-        <!-- Heroes Zone -->
-        <div class="arena-heroes" id="heroes-container">
-          <!-- Populated by JS -->
-        </div>
-
-        <!-- Action Command Panel: 1 기본기, 1 고유기, 2 스킬 (4 Buttons) -->
-        <div class="action-panel">
-          <div class="action-panel-header">
-            <div class="current-turn-label" id="turn-label">
-              <span>⚔️</span> 성기사의 턴
+          <div class="monster-image-info-bar">
+            <div class="target-name-badge">
+              <span>🎯</span>
+              <span id="target-main-name">마물 이름</span>
             </div>
-            <div class="action-hint" id="action-hint">적을 선택하거나 스킬을 시전하세요!</div>
+            <div class="target-hp-label" id="target-main-hp">HP 0 / 0</div>
           </div>
+        </div>
 
-          <div class="skills-grid-4" id="skills-grid">
-            <!-- Populated by JS according to active turn hero -->
+        <!-- ── 2. Monsters Formation Grid (1 to 5 Columns) ── -->
+        <div class="monsters-slots-grid" id="monsters-grid">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- ── 3. Combat Log Bar ── -->
+        <div class="combat-log-row">
+          <div id="combat-log-text" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1;">
+            <strong>[전투 개시]</strong> 20레벨 에픽 원정대가 전투 태세를 갖췄습니다!
+          </div>
+          <div class="log-wave-indicator" id="wave-indicator-text">Wave 1/3</div>
+        </div>
+
+        <!-- ── 4. FeverGaugeBar (5 Momentum Badges Slot Machine) ── -->
+        <div class="fever-bar-component" id="fever-bar-component">
+          <div class="fever-left-title">
+            <span class="fever-flame-icon">🔥</span>
+            <span class="fever-text-label" id="fever-title-label">FEVER MOMENTUM</span>
+          </div>
+          <div class="fever-badge-slots">
+            <div class="fever-slot-box" id="fever-slot-0"></div>
+            <div class="fever-slot-box" id="fever-slot-1"></div>
+            <div class="fever-slot-box" id="fever-slot-2"></div>
+            <div class="fever-slot-box" id="fever-slot-3"></div>
+            <div class="fever-slot-box" id="fever-slot-4"></div>
+          </div>
+          <div class="fever-status-tag" id="fever-status-tag">5개 완충 시 피버 타임!</div>
+        </div>
+
+        <!-- ── 5. HeroRow: Authentic 3-Hero Party Cards ── -->
+        <div class="party-heroes-area" id="party-heroes-area">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- ── 6. Action Deck: Authentic Command Panel (4 Buttons) ── -->
+        <div class="action-deck-panel">
+          <div class="deck-header-row">
+            <div class="deck-hero-title" id="deck-hero-title">
+              <span>⚔️</span> 성기사 (Lv.20)
+            </div>
+            <div class="deck-tip" id="deck-tip">(스킬 탭하여 시전)</div>
+          </div>
+          <div class="action-buttons-grid" id="action-buttons-grid">
+            <!-- 4 Skill Buttons dynamically injected -->
           </div>
         </div>
       </section>
     </main>
+
+    <!-- ── Skill Cut-In Banner (Speedlines + Angled Slash Banner) ── -->
+    <div id="cutin-overlay">
+      <div class="cutin-speedlines"></div>
+      <div class="cutin-banner-bar" id="cutin-bar">
+        <div class="cutin-icon-box" id="cutin-icon">⚔️</div>
+        <div class="cutin-texts">
+          <span class="cutin-subtag" id="cutin-subtag">TACTICAL SKILL</span>
+          <span class="cutin-main-title" id="cutin-title">스킬 이름</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Visual Effects Layer -->
     <div class="vfx-layer" id="vfx-layer"></div>
@@ -1498,23 +1367,21 @@
          ===================================================================== -->
     <div id="victory-overlay">
       <div class="victory-badge-crown">👑</div>
-      <h1 class="victory-title">성소 제패 대승리!</h1>
+      <h1 class="victory-title">성소 정복 대승리!</h1>
       <div class="victory-subtitle">5층 보스 [공허의 침식자] 및 3개 웨이브 마물 전멸!</div>
 
       <div class="loot-reward-card">
-        <div class="loot-item-row">
-          <div class="loot-icon">💍</div>
-          <div class="loot-details">
-            <div class="loot-name">[전설] 공허의 지배자 반지 (+6강)</div>
-            <div class="loot-desc">공격력 +40 · 행운 +19 · 강화당 흡혈 1% 증폭</div>
-          </div>
+        <div class="loot-icon">💍</div>
+        <div class="loot-details">
+          <div class="loot-name">[전설] 공허의 지배자 반지 (+6강)</div>
+          <div class="loot-desc">공격력 +40 · 행운 +19 · 강화당 흡혈 1% 증폭</div>
         </div>
       </div>
 
       <div class="app-cta-box">
         <div class="app-header-flex">
           <img src="../assets/icon_app.png" alt="앱 아이콘" class="app-icon-img" onerror="this.onerror=null;this.src='../assets/citadel_9x16_mobile.jpg';">
-          <div class="app-meta">
+          <div style="flex:1; text-align:left;">
             <div class="app-name">림보 테일즈 (Limbo Tales)</div>
             <div class="app-stars">★★★★★ 4.9 (12.8만 개 평가)</div>
             <div class="app-genre">다크 판타지 로그라이크 RPG</div>
@@ -1562,7 +1429,7 @@
     }
 
     // =========================================================================
-    // 2. Web Audio Synthesizer (Zero External Dependencies)
+    // 2. High-Fidelity Web Audio Synthesizer (Faithful to SoundManager.ts)
     // =========================================================================
     let audioCtx = null;
     let soundEnabled = true;
@@ -1584,94 +1451,192 @@
 
       const now = audioCtx.currentTime;
 
-      if (type === 'slash') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(450, now);
-        osc.frequency.exponentialRampToValueAtTime(70, now + 0.15);
-        gain.gain.setValueAtTime(0.28, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.15);
-      } else if (type === 'magic') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(900, now);
-        osc.frequency.exponentialRampToValueAtTime(200, now + 0.28);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.28);
-      } else if (type === 'shield') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(320, now);
-        osc.frequency.exponentialRampToValueAtTime(840, now + 0.35);
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.35);
-      } else if (type === 'fever_burst') {
-        // Dramatic Fever Blast chord
-        [220, 330, 440, 554, 660].forEach((freq, idx) => {
-          const osc = audioCtx.createOscillator();
+      switch (type) {
+        case 'slash': {
+          // Dual metal friction + blade trajectory pitch drop (650Hz -> 110Hz)
+          const bufferSize = Math.floor(audioCtx.sampleRate * 0.16);
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.25));
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(4500, now);
+          filter.frequency.exponentialRampToValueAtTime(800, now + 0.16);
           const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.8, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+          noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+          noise.start(now);
+
+          const osc = audioCtx.createOscillator();
           osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.04);
-          osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + idx * 0.04 + 0.45);
-          gain.gain.setValueAtTime(0.25, now + idx * 0.04);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.04 + 0.5);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now + idx * 0.04);
-          osc.stop(now + idx * 0.04 + 0.5);
-        });
-      } else if (type === 'badge') {
-        // Badge slot chime
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(700, now);
-        osc.frequency.exponentialRampToValueAtTime(1100, now + 0.12);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.12);
-      } else if (type === 'victory') {
-        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+          osc.frequency.setValueAtTime(650, now);
+          osc.frequency.exponentialRampToValueAtTime(110, now + 0.14);
+          const oscGain = audioCtx.createGain();
+          oscGain.gain.setValueAtTime(0.5, now);
+          oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.14);
+          osc.connect(oscGain); oscGain.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.15);
+          break;
+        }
+
+        case 'heavy_hit': {
+          // Sub punch (180Hz -> 38Hz) + lowpass noise crunch
           const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.12);
-          gain.gain.setValueAtTime(0.3, now + idx * 0.12);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.35);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now + idx * 0.12);
-          osc.stop(now + idx * 0.12 + 0.35);
-        });
-      } else if (type === 'click') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(620, now);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.05);
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.exponentialRampToValueAtTime(38, now + 0.25);
+          const oscGain = audioCtx.createGain();
+          oscGain.gain.setValueAtTime(0.9, now);
+          oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.connect(oscGain); oscGain.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.25);
+          break;
+        }
+
+        case 'crit': {
+          // Sub drop (260Hz -> 28Hz) + metallic impact crunch
+          const sub = audioCtx.createOscillator();
+          sub.type = 'sine';
+          sub.frequency.setValueAtTime(260, now);
+          sub.frequency.exponentialRampToValueAtTime(28, now + 0.4);
+          const subGain = audioCtx.createGain();
+          subGain.gain.setValueAtTime(1.0, now);
+          subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+          sub.connect(subGain); subGain.connect(audioCtx.destination);
+          sub.start(now); sub.stop(now + 0.4);
+
+          const ring = audioCtx.createOscillator();
+          ring.type = 'sine';
+          ring.frequency.setValueAtTime(540, now);
+          ring.frequency.exponentialRampToValueAtTime(140, now + 0.28);
+          const ringGain = audioCtx.createGain();
+          ringGain.gain.setValueAtTime(0.35, now);
+          ringGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+          ring.connect(ringGain); ringGain.connect(audioCtx.destination);
+          ring.start(now); ring.stop(now + 0.28);
+          break;
+        }
+
+        case 'shield': {
+          // Holy barrier / dual harmonic shimmer
+          const osc = audioCtx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(840, now + 0.35);
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.35, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.35);
+          break;
+        }
+
+        case 'heal': {
+          // Solfeggio 528Hz Sacred Chime
+          [528, 660, 792].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.28, now + idx * 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.4);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.04); osc.stop(now + idx * 0.04 + 0.4);
+          });
+          break;
+        }
+
+        case 'lightning': {
+          // High-voltage electric crackle + sub drop
+          const bufferSize = Math.floor(audioCtx.sampleRate * 0.25);
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'highpass';
+          filter.frequency.setValueAtTime(1800, now);
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.7, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+          noise.start(now);
+          break;
+        }
+
+        case 'fire':
+        case 'supernova': {
+          // Low roar burn + sub explosion
+          const osc = audioCtx.createOscillator();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.exponentialRampToValueAtTime(32, now + 0.5);
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.8, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.5);
+          break;
+        }
+
+        case 'fever_burst': {
+          // 5-tone power chord fanfare
+          [220, 330, 440, 554, 660].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+            osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + idx * 0.04 + 0.45);
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.28, now + idx * 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.04 + 0.5);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.04); osc.stop(now + idx * 0.04 + 0.5);
+          });
+          break;
+        }
+
+        case 'badge': {
+          const osc = audioCtx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(680, now);
+          osc.frequency.exponentialRampToValueAtTime(1150, now + 0.12);
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.12);
+          break;
+        }
+
+        case 'victory': {
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.3, now + idx * 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.35);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.12); osc.stop(now + idx * 0.12 + 0.35);
+          });
+          break;
+        }
+
+        case 'click': {
+          const osc = audioCtx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.05);
+          break;
+        }
       }
     }
 
@@ -1689,6 +1654,8 @@
         id: 'paladin',
         name: '성기사',
         role: '수호 탱커',
+        position: 'front',
+        posLabel: '전열',
         portrait: '../assets/portraits/portrait_paladin.png',
         fallback: '../assets/portrait_paladin.jpg',
         level: 20,
@@ -1702,6 +1669,7 @@
         def: 217,
         spd: 38,
         luck: 86,
+        quote: '신성한 빛이여, 이 성소의 어둠을 정화하라!',
         equipment: {
           weapon: '[에픽] 심연 파멸의 신화검 +6강',
           armor: '[에픽] 공허 지배 수호갑 +6강',
@@ -1720,7 +1688,7 @@
             mana: 0,
             power: 1.0,
             effect: 'damage',
-            desc: '[기본기] 적 1체 100% 피해 (MP 0)'
+            desc: '[기본기] 적 1체 100% 물리 피해 (MP 0)'
           },
           {
             id: 'paladin_judgment',
@@ -1768,6 +1736,8 @@
         id: 'assassin',
         name: '암살자',
         role: '물리 딜러',
+        position: 'mid',
+        posLabel: '중열',
         portrait: '../assets/portraits/portrait_rogue.png',
         fallback: '../assets/portrait_rogue.jpg',
         level: 20,
@@ -1781,6 +1751,7 @@
         def: 105,
         spd: 100,
         luck: 148,
+        quote: '어둠 속에서 네 심장을 꿰뚫겠다.',
         equipment: {
           weapon: '[에픽] 심연 그림자 사령검 +6강',
           armor: '[에픽] 심연 수호 가죽갑 +6강',
@@ -1848,6 +1819,8 @@
         id: 'elementalist',
         name: '대마도사',
         role: '마법 딜러',
+        position: 'back',
+        posLabel: '후열',
         portrait: '../assets/portraits/portrait_mage.png',
         fallback: '../assets/portrait_mage.jpg',
         level: 20,
@@ -1861,6 +1834,7 @@
         def: 141,
         spd: 69,
         luck: 77,
+        quote: '모든 원소의 힘이여, 초신성으로 폭발하라!',
         equipment: {
           weapon: '[에픽] 태고 현자의 지팡이 +6강',
           armor: '[에픽] 공허 지배 성의 +6강',
@@ -1879,7 +1853,7 @@
             mana: 0,
             power: 1.0,
             effect: 'damage',
-            desc: '[기본기] 단일 적 100% 마법 피해 + MP 15 회복'
+            desc: '[기본기] 단일 적 100% 마법 + MP 15 회복'
           },
           {
             id: 'elem_lightning',
@@ -1892,7 +1866,7 @@
             mana: 72,
             power: 1.05,
             effect: 'stun',
-            desc: '[스킬 1] 적 전체 105% 전격 마법 + 기절'
+            desc: '[스킬 1] 적 전체 105% 전격 + 기절'
           },
           {
             id: 'elem_blizzard',
@@ -1919,74 +1893,109 @@
             power: 1.6,
             effect: 'damage',
             isSpecial: true,
-            desc: '[고유기] 화염과 냉기 융합 160% 광역 대폭발'
+            desc: '[고유기] 화염·냉기 융합 160% 광역 대폭발'
           }
         ]
       }
     ];
 
     // =========================================================================
-    // 4. 3-Wave Encounters (Enemy ATK reduced by 50%)
+    // 4. 3-Wave Combat Encounters:
+    // Wave 1: 3 Monsters (HP/ATK +100%)
+    // Wave 2: 3 Monsters (HP/ATK +100%)
+    // Wave 3: 5 Monsters including Boss (HP/ATK +100%)
     // =========================================================================
     const encounters = [
       {
         wave: 1,
-        title: 'Wave 1/3: 침식의 척후대',
+        title: 'Wave 1/3: 침식의 선봉 편대 (3마리)',
         enemies: [
           {
-            id: 'monster_rift_stalker',
-            name: '차원 추적자',
+            id: 'w1_stalker_1',
+            name: '차원 추적자 A',
+            position: 'front',
             image: '../assets/monster_rift_stalker.jpg',
             fallback: '../assets/monsters/monster_rift_stalker.jpg',
             isBoss: false,
-            maxHp: 230,
-            hp: 230,
-            atk: 32, // Base 64 * 0.5 = 32 (-50% scaling)
-            def: 22,
+            maxHp: 460, // +100% increased HP
+            hp: 460,
+            atk: 64,    // +100% increased ATK
+            def: 24,
             spd: 38,
             statuses: []
           },
           {
-            id: 'monster_void_beast',
-            name: '공허의 하수인',
+            id: 'w1_beast_1',
+            name: '공허 하수인',
+            position: 'front',
             image: '../assets/monster_void_beast.jpg',
             fallback: '../assets/monsters/monster_void_beast.jpg',
             isBoss: false,
-            maxHp: 300,
-            hp: 300,
-            atk: 30, // Base 59 * 0.5 = 30 (-50% scaling)
-            def: 29,
-            spd: 18,
+            maxHp: 600, // +100% increased HP
+            hp: 600,
+            atk: 60,    // +100% increased ATK
+            def: 30,
+            spd: 20,
+            statuses: []
+          },
+          {
+            id: 'w1_stalker_2',
+            name: '차원 추적자 B',
+            position: 'back',
+            image: '../assets/monster_rift_stalker.jpg',
+            fallback: '../assets/monsters/monster_rift_stalker.jpg',
+            isBoss: false,
+            maxHp: 460,
+            hp: 460,
+            atk: 64,
+            def: 24,
+            spd: 40,
             statuses: []
           }
         ]
       },
       {
         wave: 2,
-        title: 'Wave 2/3: 성소 정예 결사대',
+        title: 'Wave 2/3: 성소 정예 결사대 (3마리)',
         enemies: [
           {
-            id: 'monster_monolith_guardian',
+            id: 'w2_guardian_1',
             name: '모노리스 수호병',
+            position: 'front',
             image: '../assets/monster_monolith_guardian.jpg',
             fallback: '../assets/monsters/monster_monolith_guardian.jpg',
             isBoss: false,
-            maxHp: 440,
-            hp: 440,
-            atk: 36, // Base 72 * 0.5 = 36 (-50% scaling)
+            maxHp: 880, // +100% increased HP
+            hp: 880,
+            atk: 72,    // +100% increased ATK
             def: 45,
             spd: 22,
             statuses: []
           },
           {
-            id: 'monster_primordial_shaman',
+            id: 'w2_beast_1',
+            name: '공허 하수인',
+            position: 'front',
+            image: '../assets/monster_void_beast.jpg',
+            fallback: '../assets/monsters/monster_void_beast.jpg',
+            isBoss: false,
+            maxHp: 600,
+            hp: 600,
+            atk: 60,
+            def: 30,
+            spd: 22,
+            statuses: []
+          },
+          {
+            id: 'w2_shaman_1',
             name: '원초의 주술사',
+            position: 'back',
             image: '../assets/monster_primordial_shaman.jpg',
             fallback: '../assets/monsters/monster_primordial_shaman.jpg',
             isBoss: false,
-            maxHp: 390,
-            hp: 390,
-            atk: 46, // Base 92 * 0.5 = 46 (-50% scaling)
+            maxHp: 780, // +100% increased HP
+            hp: 780,
+            atk: 92,    // +100% increased ATK
             def: 36,
             spd: 42,
             statuses: []
@@ -1995,19 +2004,76 @@
       },
       {
         wave: 3,
-        title: 'Wave 3/3: 👑 5F 보스 [공허의 침식자]',
+        title: 'Wave 3/3: 👑 5F 보스 [공허의 침식자] 총력전 (5마리)',
         enemies: [
           {
-            id: 'boss_floor_5',
-            name: '공허의 침식자',
+            id: 'w3_guardian_front',
+            name: '모노리스 수호병',
+            position: 'front',
+            image: '../assets/monster_monolith_guardian.jpg',
+            fallback: '../assets/monsters/monster_monolith_guardian.jpg',
+            isBoss: false,
+            maxHp: 880,
+            hp: 880,
+            atk: 72,
+            def: 45,
+            spd: 22,
+            statuses: []
+          },
+          {
+            id: 'w3_boss',
+            name: '👑 공허의 침식자',
+            position: 'front',
             image: '../assets/boss_floor_5.jpg',
             fallback: '../assets/void_overlord.jpg',
             isBoss: true,
-            maxHp: 1180,
-            hp: 1180,
-            atk: 44, // Base 88 * 0.5 = 44 (-50% scaling)
-            def: 41,
-            spd: 28,
+            maxHp: 2360, // +100% increased Boss HP
+            hp: 2360,
+            atk: 88,     // +100% increased Boss ATK
+            def: 42,
+            spd: 32,
+            statuses: []
+          },
+          {
+            id: 'w3_beast_front',
+            name: '공허 하수인',
+            position: 'front',
+            image: '../assets/monster_void_beast.jpg',
+            fallback: '../assets/monsters/monster_void_beast.jpg',
+            isBoss: false,
+            maxHp: 600,
+            hp: 600,
+            atk: 60,
+            def: 30,
+            spd: 20,
+            statuses: []
+          },
+          {
+            id: 'w3_shaman_back',
+            name: '원초 주술사',
+            position: 'back',
+            image: '../assets/monster_primordial_shaman.jpg',
+            fallback: '../assets/monsters/monster_primordial_shaman.jpg',
+            isBoss: false,
+            maxHp: 780,
+            hp: 780,
+            atk: 92,
+            def: 36,
+            spd: 42,
+            statuses: []
+          },
+          {
+            id: 'w3_stalker_back',
+            name: '차원 추적자',
+            position: 'back',
+            image: '../assets/monster_rift_stalker.jpg',
+            fallback: '../assets/monsters/monster_rift_stalker.jpg',
+            isBoss: false,
+            maxHp: 460,
+            hp: 460,
+            atk: 64,
+            def: 24,
+            spd: 44,
             statuses: []
           }
         ]
@@ -2015,13 +2081,12 @@
     ];
 
     // =========================================================================
-    // 5. State Variables
+    // 5. Game State
     // =========================================================================
     let currentWaveIndex = 0;
     let currentEnemies = [];
     let selectedEnemyIndex = 0;
     let currentTurnHeroIndex = 0;
-    let autoBattle = false;
     let isActing = false;
 
     // FEVER State
@@ -2030,19 +2095,17 @@
     let feverTurnsLeft = 0;
 
     // =========================================================================
-    // 6. Dungeon Exploration & Interactive Event Progression
+    // 6. Exploration & Event Progression
     // =========================================================================
     function advanceDungeonStep(step) {
       playSfx('click');
       if (step === 1) {
-        // Step 1 -> Event 1
         document.getElementById('entry-view').style.display = 'none';
         document.getElementById('event-1-view').style.display = 'flex';
         document.getElementById('track-fill').style.width = '50%';
         document.getElementById('step-lbl-1').classList.remove('active-step');
         document.getElementById('step-lbl-2').classList.add('active-step');
       } else if (step === 2) {
-        // Step 2 -> Event 2
         document.getElementById('corridor-mid-view').style.display = 'none';
         document.getElementById('event-2-view').style.display = 'flex';
         document.getElementById('track-fill').style.width = '75%';
@@ -2055,17 +2118,16 @@
       playSfx('shield');
       if (choice === 'paladin') {
         party.forEach(h => {
-          h.shield = 350;
+          h.shield = 400;
           h.atk = Math.round(h.atk * 1.15);
         });
-        showFloatingNotice('🛡️ 파티 전원 350 보호막 & 공격력 +15% 축복!');
+        showFloatingNotice('🛡️ 파티 전원 400 신성 보호막 & 공격력 +15% 축복!');
       } else {
         party.forEach(h => {
           h.mp = h.maxMp;
         });
         showFloatingNotice('✨ 골드 +800 & 마나 100% 완전 회복!');
       }
-
       document.getElementById('event-1-view').style.display = 'none';
       document.getElementById('corridor-mid-view').style.display = 'flex';
     }
@@ -2079,11 +2141,10 @@
       } else {
         party.forEach(h => {
           h.luck += 35;
-          h.spd += 15;
+          h.spd += 20;
         });
-        showFloatingNotice('⚔️ 전투 대형: 치명타율 +25% & 속도 +15 증가!');
+        showFloatingNotice('⚔️ 전투 대형: 치명타율 +30% & 속도 +20 증가!');
       }
-
       document.getElementById('event-2-view').style.display = 'none';
       document.getElementById('boss-door-view').style.display = 'flex';
       document.getElementById('track-fill').style.width = '100%';
@@ -2101,10 +2162,10 @@
     function showFloatingNotice(text) {
       const el = document.createElement('div');
       el.style.position = 'absolute';
-      el.style.top = '30%';
+      el.style.top = '32%';
       el.style.left = '50%';
       el.style.transform = 'translate(-50%, -50%)';
-      el.style.background = 'rgba(20, 24, 38, 0.95)';
+      el.style.background = 'rgba(16, 22, 36, 0.96)';
       el.style.border = '1.5px solid #ffd54f';
       el.style.color = '#ffd54f';
       el.style.fontSize = '12px';
@@ -2123,7 +2184,7 @@
       const hero = party.find(h => h.id.includes(heroKey));
       if (!hero) return;
       document.getElementById('modal-hero-name').innerText = `[${hero.grade.toUpperCase()}] ${hero.name} (Lv.${hero.level})`;
-      document.getElementById('modal-hero-role').innerText = `${hero.role} · ${hero.passive}`;
+      document.getElementById('modal-hero-role').innerText = `${hero.role} (${hero.posLabel}) · ${hero.passive}`;
       document.getElementById('modal-hero-stats').innerHTML = `
         <strong>체력(HP):</strong> ${hero.hp} / ${hero.maxHp}<br>
         <strong>마나(MP):</strong> ${hero.mp} / ${hero.maxMp}<br>
@@ -2147,13 +2208,11 @@
     // 7. FEVER Momentum System
     // =========================================================================
     function addFeverBadge(badgeIcon) {
-      if (isFeverMode) return; // Already in fever burst
-
+      if (isFeverMode) return;
       if (feverBadges.length < 5) {
         feverBadges.push(badgeIcon);
         playSfx('badge');
         renderFeverBar();
-
         if (feverBadges.length === 5) {
           triggerFeverBurst();
         }
@@ -2165,32 +2224,32 @@
         const slot = document.getElementById(`fever-slot-${i}`);
         if (i < feverBadges.length) {
           slot.innerText = feverBadges[i];
-          slot.className = 'fever-slot filled';
+          slot.className = 'fever-slot-box filled';
         } else {
           slot.innerText = '';
-          slot.className = 'fever-slot';
+          slot.className = 'fever-slot-box';
         }
       }
 
-      const barWrap = document.getElementById('fever-bar-wrap');
-      const stateLbl = document.getElementById('fever-state-label');
-      const synergyLbl = document.getElementById('fever-synergy-name');
+      const barWrap = document.getElementById('fever-bar-component');
+      const titleLbl = document.getElementById('fever-title-label');
+      const tagLbl = document.getElementById('fever-status-tag');
 
       if (isFeverMode) {
-        barWrap.className = 'fever-bar-wrap full';
-        stateLbl.innerText = '🔥 FEVER BURST!';
-        synergyLbl.innerText = `총력 섬멸 극의 (${feverTurnsLeft}턴 잔여, 전 스킬 MP 0!)`;
+        barWrap.className = 'fever-bar-component full';
+        titleLbl.innerText = '🔥 FEVER BURST!';
+        tagLbl.innerText = `총력 섬멸 (${feverTurnsLeft}턴 잔여, 전 스킬 MP 0!)`;
       } else {
-        barWrap.className = 'fever-bar-wrap';
-        stateLbl.innerText = 'FEVER MOMENTUM';
-        const remain = 5 - feverBadges.length;
-        synergyLbl.innerText = remain === 0 ? 'FEVER 완충 완료!' : `${remain}개 뱃지 추가 시 FEVER 폭발!`;
+        barWrap.className = 'fever-bar-component';
+        titleLbl.innerText = 'FEVER MOMENTUM';
+        const rem = 5 - feverBadges.length;
+        tagLbl.innerText = rem === 0 ? 'FEVER 완충 완료!' : `${rem}개 뱃지 추가 시 FEVER 완충`;
       }
     }
 
     function triggerFeverBurst() {
       isFeverMode = true;
-      feverTurnsLeft = 4; // 4 actions in fever mode
+      feverTurnsLeft = 5; // 5 actions in fever mode
       playSfx('fever_burst');
       triggerScreenShake();
       triggerScreenFlash('rgba(255, 145, 0, 0.55)');
@@ -2198,12 +2257,17 @@
       document.getElementById('game-container').classList.add('fever-active');
       renderFeverBar();
 
-      addLog(`<strong>🔥 [FEVER BURST 발동!]</strong> 전술 모멘텀 완충! 전 스킬 MP 0 & 확정 치명타 폭주!`);
-      showFloatingNotice('🔥 FEVER TIME! 전 스킬 마나 소모 0!');
+      triggerSkillCutIn({
+        name: '🔥 TACTICAL FEVER BURST 🔥',
+        sub: '전술 모멘텀 완충! 총력 섬멸 발동!',
+        icon: '🔥',
+        quote: '전투의 흐름이 완전히 우리에게 넘어왔다!'
+      });
 
-      // Update skill panel
+      addLog(`<strong>🔥 [FEVER BURST 발동!]</strong> 전 스킬 MP 소모 0 & 확정 치명타 폭주!`);
+
       const currentHero = party[currentTurnHeroIndex];
-      if (currentHero) renderActionPanel(currentHero);
+      if (currentHero) renderActionDeck(currentHero);
     }
 
     function onTurnActionTaken() {
@@ -2222,68 +2286,94 @@
     }
 
     // =========================================================================
-    // 8. 3-Wave Combat Loop
+    // 8. 3-Wave Combat Loop (With 3, 3, and 5 Monsters!)
     // =========================================================================
     function loadWave(index) {
       currentWaveIndex = index;
       const waveData = encounters[index];
-      document.getElementById('wave-title').innerText = waveData.title;
+      document.getElementById('wave-indicator-text').innerText = `Wave ${index + 1}/3`;
 
       currentEnemies = waveData.enemies.map(e => ({ ...e, statuses: [] }));
-      selectedEnemyIndex = 0;
+      // Select the first alive monster (or boss in wave 3)
+      selectedEnemyIndex = waveData.enemies.findIndex(e => e.isBoss) !== -1 
+        ? waveData.enemies.findIndex(e => e.isBoss) 
+        : 0;
 
       addLog(`<strong>[웨이브 진입]</strong> ${waveData.title} 마물들이 접근합니다!`);
 
-      renderEnemies();
-      renderHeroes();
+      renderMonsterImagePanel();
+      renderMonstersGrid();
+      renderHeroesArea();
       renderFeverBar();
       startTurn(0);
     }
 
-    function renderEnemies() {
-      const container = document.getElementById('enemies-container');
-      container.innerHTML = '';
+    function renderMonsterImagePanel() {
+      const target = currentEnemies[selectedEnemyIndex] || currentEnemies.find(e => e.hp > 0) || currentEnemies[0];
+      if (!target) return;
 
-      currentEnemies.forEach((enemy, idx) => {
-        if (enemy.hp <= 0) return;
+      const mainImg = document.getElementById('target-main-img');
+      const bgImg = document.getElementById('target-image-bg');
+      const nameLbl = document.getElementById('target-main-name');
+      const hpLbl = document.getElementById('target-main-hp');
+      const artBox = document.getElementById('target-art-box');
 
-        const card = document.createElement('div');
-        card.className = `enemy-card ${enemy.isBoss ? 'boss' : ''} ${idx === selectedEnemyIndex ? 'selected' : ''}`;
-        card.onclick = () => selectEnemy(idx);
+      mainImg.src = target.image;
+      mainImg.onerror = () => { mainImg.src = target.fallback; };
+      bgImg.style.backgroundImage = `url('${target.image}')`;
 
-        const hpPct = Math.max(0, Math.min(100, Math.round((enemy.hp / enemy.maxHp) * 100)));
+      nameLbl.innerText = `${target.name} [${target.position === 'front' ? '전열' : '후열'}]`;
+      hpLbl.innerText = target.hp > 0 ? `HP ${target.hp} / ${target.maxHp}` : '💀 처치됨';
 
-        card.innerHTML = `
-          <div class="enemy-avatar-wrap">
-            <img src="${enemy.image}" alt="${enemy.name}" onerror="this.onerror=null;this.src='${enemy.fallback}';">
-          </div>
-          <div class="enemy-name-label">${enemy.name}</div>
-          <div class="hp-bar-container">
-            <div class="hp-bar-fill" style="width: ${hpPct}%;"></div>
-          </div>
-          <div class="enemy-status-row">
-            ${enemy.statuses.map(st => `<span class="status-pill" style="border-color:${st.color}; color:${st.color};">${st.icon} ${st.name}</span>`).join('')}
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function selectEnemy(index) {
-      if (currentEnemies[index] && currentEnemies[index].hp > 0) {
-        selectedEnemyIndex = index;
-        renderEnemies();
-        playSfx('click');
+      if (target.isBoss) {
+        artBox.className = 'monster-image-center-art boss';
+      } else {
+        artBox.className = 'monster-image-center-art';
       }
     }
 
-    function renderHeroes() {
-      const container = document.getElementById('heroes-container');
-      container.innerHTML = '';
+    function renderMonstersGrid() {
+      const grid = document.getElementById('monsters-grid');
+      grid.style.gridTemplateColumns = `repeat(${currentEnemies.length}, minmax(0, 1fr))`;
+      grid.innerHTML = '';
+
+      currentEnemies.forEach((m, idx) => {
+        const card = document.createElement('div');
+        const isDead = m.hp <= 0;
+        const isSel = idx === selectedEnemyIndex;
+        const hpPct = Math.max(0, Math.min(100, Math.round((m.hp / m.maxHp) * 100)));
+
+        card.className = `monster-slot-card ${isDead ? 'dead' : ''} ${isSel ? 'selected' : ''} ${m.isBoss ? 'boss' : ''}`;
+        card.onclick = () => {
+          if (!isDead) {
+            selectedEnemyIndex = idx;
+            playSfx('click');
+            renderMonstersGrid();
+            renderMonsterImagePanel();
+          }
+        };
+
+        card.innerHTML = `
+          <div class="monster-slot-hp-bg ${hpPct <= 25 ? 'low' : ''}" style="width:${hpPct}%;"></div>
+          <div class="monster-slot-inner">
+            <span class="slot-pos-tag ${m.position === 'front' ? 'pos-front' : 'pos-back'}">
+              ${m.position === 'front' ? '전' : '후'}
+            </span>
+            <span class="slot-name">${m.name}</span>
+            <span class="slot-hp-text">${isDead ? '💀' : m.hp}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderHeroesArea() {
+      const area = document.getElementById('party-heroes-area');
+      area.innerHTML = '';
 
       party.forEach((hero, idx) => {
         const card = document.createElement('div');
-        card.className = `hero-combat-card ${idx === currentTurnHeroIndex ? 'active-turn' : ''}`;
+        card.className = `hero-row-card ${idx === currentTurnHeroIndex ? 'active-turn' : ''}`;
         card.onclick = () => openHeroModal(hero.id);
 
         const hpPct = Math.max(0, Math.min(100, Math.round((hero.hp / hero.maxHp) * 100)));
@@ -2291,36 +2381,39 @@
         const shieldPct = Math.min(100, Math.round((hero.shield / hero.maxHp) * 100));
 
         card.innerHTML = `
-          <div class="hero-combat-top">
-            <div class="hero-combat-avatar">
-              <img src="${hero.portrait}" alt="${hero.name}" onerror="this.onerror=null;this.src='${hero.fallback}';">
-            </div>
-            <div class="hero-combat-info">
-              <div class="hero-combat-name">${hero.name}</div>
-              <div class="hero-combat-lvl">Lv.${hero.level} [에픽 +6강]</div>
-            </div>
+          <div class="hero-avatar-circle">
+            <img src="${hero.portrait}" alt="${hero.name}" onerror="this.onerror=null;this.src='${hero.fallback}';">
           </div>
-          <div class="bar-row">
-            <div class="mini-bar">
-              <div class="mini-bar-fill hp-fill" style="width: ${hpPct}%;"></div>
-              <div class="shield-overlay" style="width: ${shieldPct}%;"></div>
+          <div class="hero-row-info">
+            <div class="hero-meta-line">
+              <span class="hero-name-label">
+                ${hero.name}
+                <span class="hero-class-tag">${hero.role}</span>
+              </span>
+              <span class="hero-pos-pill">(${hero.posLabel}) Lv.${hero.level} [에픽 +6강]</span>
             </div>
-            <div class="mini-bar">
-              <div class="mini-bar-fill mp-fill" style="width: ${mpPct}%;"></div>
+            <div class="hero-bars-wrap">
+              <div class="stat-bar-track">
+                <div class="stat-bar-fill hp-bar-fill" style="width:${hpPct}%;"></div>
+                <div class="shield-overlay-bar" style="width:${shieldPct}%;"></div>
+              </div>
+              <div class="stat-bar-track">
+                <div class="stat-bar-fill mp-bar-fill" style="width:${mpPct}%;"></div>
+              </div>
             </div>
-          </div>
-          <div class="stat-text-line">
-            <span>HP ${hero.hp}${hero.shield > 0 ? ` (+${hero.shield})` : ''}</span>
-            <span>MP ${hero.mp}</span>
+            <div class="hero-num-line">
+              <span>HP ${hero.hp}${hero.shield > 0 ? ` (+${hero.shield}🛡️)` : ''} / ${hero.maxHp}</span>
+              <span>MP ${hero.mp} / ${hero.maxMp}</span>
+            </div>
           </div>
         `;
-        container.appendChild(card);
+        area.appendChild(card);
       });
     }
 
     function startTurn(heroIdx) {
       if (heroIdx >= party.length) {
-        triggerEnemyTurn();
+        triggerEnemiesAttack();
         return;
       }
 
@@ -2332,25 +2425,25 @@
 
       currentTurnHeroIndex = heroIdx;
       isActing = false;
-      renderHeroes();
-      renderActionPanel(hero);
+      renderHeroesArea();
+      renderActionDeck(hero);
 
+      // Verify selected enemy is alive
       if (!currentEnemies[selectedEnemyIndex] || currentEnemies[selectedEnemyIndex].hp <= 0) {
-        const nextTarget = currentEnemies.findIndex(e => e.hp > 0);
-        if (nextTarget !== -1) selectedEnemyIndex = nextTarget;
-        renderEnemies();
-      }
-
-      if (autoBattle) {
-        setTimeout(executeAutoHeroAction, 650);
+        const nextAlive = currentEnemies.findIndex(e => e.hp > 0);
+        if (nextAlive !== -1) selectedEnemyIndex = nextAlive;
+        renderMonstersGrid();
+        renderMonsterImagePanel();
       }
     }
 
-    // Render 4 Skills: 1 기본기, 1 고유기, 2 스킬
-    function renderActionPanel(hero) {
-      document.getElementById('turn-label').innerHTML = `<span>⚔️</span> ${hero.name}의 턴`;
+    function renderActionDeck(hero) {
+      document.getElementById('deck-hero-title').innerHTML = `
+        <span>⚔️</span> ${hero.name}
+        <span style="font-size:9px; color:#ce93d8; font-weight:normal;">(${hero.posLabel})</span>
+      `;
 
-      const grid = document.getElementById('skills-grid');
+      const grid = document.getElementById('action-buttons-grid');
       grid.innerHTML = '';
 
       hero.skills.forEach(skill => {
@@ -2363,30 +2456,49 @@
         if (skill.category === 'basic') { catClass = 'cat-basic'; catText = '기본기'; }
         else if (skill.category === 'unique') { catClass = 'cat-unique'; catText = '고유기'; }
 
-        btn.className = `skill-btn ${skill.isSpecial ? 'special-skill ready' : ''} ${isFeverMode ? 'fever-free' : ''} ${!canUse ? 'disabled' : ''}`;
-        btn.onclick = () => castHeroSkill(hero, skill);
+        btn.className = `action-btn ${skill.isSpecial ? 'special-btn ready' : ''} ${isFeverMode ? 'fever-free' : ''} ${!canUse ? 'disabled' : ''}`;
+        btn.onclick = () => executeSkillAction(hero, skill);
 
         btn.innerHTML = `
-          <span class="skill-category-tag ${catClass}">${catText}</span>
-          <span class="skill-badge-give" title="피버 뱃지 적립">${skill.badge}</span>
-          <div class="skill-icon">${skill.icon}</div>
-          <div class="skill-name">${skill.name}</div>
-          <div class="skill-cost ${isFeverMode ? 'free' : ''}">${isFeverMode ? 'FREE!' : (skill.mana === 0 ? 'MP 0' : `MP ${skill.mana}`)}</div>
+          <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span class="btn-cat-badge ${catClass}">${catText}</span>
+            <span style="font-size:8px;">${skill.badge}</span>
+          </div>
+          <div class="btn-icon-wrap">${skill.icon}</div>
+          <div class="btn-name-label">${skill.name}</div>
+          <div class="btn-cost-tag ${isFeverMode ? 'free' : ''}">
+            ${isFeverMode ? 'FREE!' : (skill.mana === 0 ? '0 MP' : `${skill.mana} MP`)}
+          </div>
         `;
         grid.appendChild(btn);
       });
 
-      // Update action hint
       if (hero.id === 'paladin') {
-        document.getElementById('action-hint').innerText = '🛡️ [기본기] 심연 베기 | [스킬] 신성 방벽 | [고유기] 홀리 오라';
+        document.getElementById('deck-tip').innerText = '🛡️ [신성 방벽]으로 파티 보호막 전개!';
       } else if (hero.id === 'assassin') {
-        document.getElementById('action-hint').innerText = '🗡️ [기본기] 기습 암습 | [스킬] 암영 연격 | [고유기] 심장 꿰뚫기';
+        document.getElementById('deck-tip').innerText = '🗡️ [심장 꿰뚫기]로 치명 처형 일격!';
       } else {
-        document.getElementById('action-hint').innerText = '⚡ [기본기] 마력탄 | [스킬] 혹한 눈보라 | [고유기] 원소 초신성';
+        document.getElementById('deck-tip').innerText = '⚡ [원소 초신성] 또는 [연쇄 번개]로 광역 섬멸!';
       }
     }
 
-    function castHeroSkill(hero, skill) {
+    function triggerSkillCutIn(info) {
+      const overlay = document.getElementById('cutin-overlay');
+      const icon = document.getElementById('cutin-icon');
+      const subtag = document.getElementById('cutin-subtag');
+      const title = document.getElementById('cutin-title');
+
+      icon.innerText = info.icon;
+      subtag.innerText = info.sub;
+      title.innerText = info.name;
+
+      overlay.style.display = 'flex';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 550);
+    }
+
+    function executeSkillAction(hero, skill) {
       if (isActing) return;
       const actualCost = isFeverMode ? 0 : skill.mana;
       if (hero.mp < actualCost) {
@@ -2402,30 +2514,37 @@
         hero.mp = Math.min(hero.maxMp, hero.mp + 15);
       }
 
-      // Add Fever Momentum Badge!
+      // Add FEVER badge if not in fever mode
       if (!isFeverMode) {
         addFeverBadge(skill.badge);
       }
 
-      // Play Sound
-      if (skill.isSpecial) {
-        playSfx(hero.id === 'elementalist' ? 'magic' : (hero.id === 'paladin' ? 'shield' : 'slash'));
-      } else if (skill.effect === 'damage' || skill.effect === 'poison') {
-        playSfx('slash');
-      } else if (skill.effect === 'shield' || skill.effect === 'heal') {
-        playSfx('shield');
-      } else {
-        playSfx('magic');
+      // Skill Cut-in banner
+      if (skill.isSpecial || isFeverMode) {
+        triggerSkillCutIn({
+          name: skill.name,
+          sub: skill.isSpecial ? '★ HERO UNIQUE ULTIMATE ★' : '🔥 FEVER OVERDRIVE ★',
+          icon: skill.icon,
+          quote: hero.quote
+        });
       }
 
-      // Execute skill logic
+      // Sound play
+      if (skill.id === 'elem_supernova') playSfx('supernova');
+      else if (skill.id === 'elem_lightning') playSfx('lightning');
+      else if (skill.effect === 'shield') playSfx('shield');
+      else if (skill.effect === 'heal') playSfx('heal');
+      else if (skill.isSpecial) playSfx('crit');
+      else playSfx('slash');
+
+      // Effect execution
       if (skill.effect === 'shield') {
         const shieldAmt = Math.round(hero.maxHp * skill.power * (isFeverMode ? 1.4 : 1.0));
         party.forEach(h => {
           h.shield = shieldAmt;
           showFloatingText(`+${shieldAmt} 🛡️`, 'shield', h.id);
         });
-        addLog(`<strong>[${hero.name}]</strong> <span style="color:#26c6da;">${skill.name}!</span> 아군 전체에 ${shieldAmt} 신성 방벽 전개!`);
+        addLog(`<strong>[${hero.name}]</strong> <span style="color:#26c6da;">${skill.name}!</span> 아군 전체 ${shieldAmt} 방벽 전개!`);
         triggerScreenFlash('rgba(38, 198, 218, 0.3)');
       } else if (skill.effect === 'heal') {
         const healAmt = Math.round(hero.maxHp * skill.power * (isFeverMode ? 1.4 : 1.0));
@@ -2447,15 +2566,15 @@
         currentEnemies.forEach((target, eIdx) => {
           if (target.hp <= 0) return;
           const isCrit = isFeverMode || (Math.random() * 100 < (hero.luck * 0.35));
-          const mult = isFeverMode ? 2.0 : (isCrit ? 1.7 : 1.0);
-          const baseDmg = Math.max(10, (hero.atk * skill.power) - (target.def * 0.4));
+          const mult = isFeverMode ? 2.1 : (isCrit ? 1.7 : 1.0);
+          const baseDmg = Math.max(25, (hero.atk * skill.power) - (target.def * 0.35));
           const dmg = Math.round(baseDmg * mult);
 
           target.hp = Math.max(0, target.hp - dmg);
-          showFloatingText(`-${dmg}${isFeverMode ? ' FEVER!' : (isCrit ? ' CRIT!' : '')}`, isFeverMode ? 'fever-hit' : (isCrit ? 'crit' : 'dmg'), `enemy-${eIdx}`);
+          showFloatingText(`-${dmg}${isFeverMode ? ' FEVER!' : (isCrit ? ' CRIT!' : '')}`, isFeverMode ? 'fever-crit' : (isCrit ? 'crit' : 'normal'), `enemy-${eIdx}`);
 
-          if (skill.effect === 'stun' && Math.random() < 0.7) {
-            target.statuses.push({ name: '기절', icon: '⚡', color: '#ffd54f' });
+          if (skill.effect === 'stun' && Math.random() < 0.65) {
+            target.statuses.push({ name: '기절', icon: '⚡' });
           }
         });
 
@@ -2473,19 +2592,20 @@
           }
 
           const targetDef = skill.pierce ? target.def * (1 - skill.pierce) : target.def;
-          const baseDmg = Math.max(20, (hero.atk * skill.power) - (targetDef * 0.4));
+          const baseDmg = Math.max(30, (hero.atk * skill.power) - (targetDef * 0.35));
           const dmg = Math.round(baseDmg * mult);
 
           target.hp = Math.max(0, target.hp - dmg);
-          showFloatingText(`-${dmg}${isFeverMode ? ' FEVER!' : (isCrit ? ' CRIT!' : '')}`, isFeverMode ? 'fever-hit' : (isCrit ? 'crit' : 'dmg'), `enemy-${selectedEnemyIndex}`);
+          showFloatingText(`-${dmg}${isFeverMode ? ' FEVER!' : (isCrit ? ' CRIT!' : '')}`, isFeverMode ? 'fever-crit' : (isCrit ? 'crit' : 'normal'), `enemy-${selectedEnemyIndex}`);
 
           addLog(`<strong>[${hero.name}]</strong> ${skill.name} 적중! <strong>${target.name}</strong>에게 ${dmg} 피해!`);
         }
       }
 
       onTurnActionTaken();
-      renderHeroes();
-      renderEnemies();
+      renderMonstersGrid();
+      renderMonsterImagePanel();
+      renderHeroesArea();
 
       setTimeout(() => {
         checkWaveCondition();
@@ -2502,7 +2622,6 @@
             loadWave(currentWaveIndex + 1);
           }, 1100);
         } else {
-          // 3-Wave Cleared!
           onAllDungeonsCleared();
         }
       } else {
@@ -2510,92 +2629,64 @@
       }
     }
 
-    function triggerEnemyTurn() {
-      addLog(`<strong>[마물의 턴]</strong> 마물들이 반격을 개시합니다!`);
-      document.getElementById('turn-label').innerHTML = `<span style="color:#ef5350;">⚠️</span> 적 마물의 반격`;
+    // ── Enemies Attack Phase (Real Back-and-Forth Offense/Defense) ──
+    function triggerEnemiesAttack() {
+      addLog(`<strong>[마물 대군의 반격]</strong> 마물들이 일제히 맹공을 개시합니다!`);
+      document.getElementById('deck-hero-title').innerHTML = `<span style="color:#ef5350;">⚠️</span> 적 마물들의 공격 턴`;
 
       setTimeout(() => {
-        currentEnemies.forEach((enemy, idx) => {
+        currentEnemies.forEach((enemy) => {
           if (enemy.hp <= 0) return;
 
           const stunIdx = enemy.statuses.findIndex(s => s.name === '기절');
           if (stunIdx !== -1) {
             enemy.statuses.splice(stunIdx, 1);
-            addLog(`⚡ <strong>${enemy.name}</strong>은(는) 기절하여 행동하지 못합니다!`);
+            addLog(`⚡ <strong>${enemy.name}</strong>은(는) 기절하여 공격하지 못했습니다!`);
             return;
           }
 
-          const targetHero = (party[0].hp > 0 && Math.random() < 0.7) ? party[0] : (party[1].hp > 0 ? party[1] : party[2]);
-          if (!targetHero || targetHero.hp <= 0) return;
+          // Aggro targeting: Paladin takes 60%, Assassin takes 25%, Mage takes 15%
+          const roll = Math.random();
+          let target = (roll < 0.60 && party[0].hp > 0) ? party[0] 
+                     : (roll < 0.85 && party[1].hp > 0) ? party[1] 
+                     : (party[2].hp > 0 ? party[2] : party[0]);
 
-          // Enemy ATK reduced by 50%
-          const baseDmg = Math.max(5, enemy.atk - (targetHero.def * 0.3));
-          let dmg = Math.round(baseDmg * (0.85 + Math.random() * 0.3));
+          if (!target || target.hp <= 0) return;
 
-          if (targetHero.shield > 0) {
-            const absorb = Math.min(targetHero.shield, dmg);
-            targetHero.shield -= absorb;
+          // Monsters have +100% ATK! Real combat damage!
+          const rawDmg = Math.max(15, enemy.atk - (target.def * 0.28));
+          let dmg = Math.round(rawDmg * (0.85 + Math.random() * 0.3));
+
+          // Shield absorption
+          if (target.shield > 0) {
+            const absorb = Math.min(target.shield, dmg);
+            target.shield -= absorb;
             dmg -= absorb;
-            showFloatingText(`🛡️ 흡수 (-${absorb})`, 'shield', targetHero.id);
+            showFloatingText(`🛡️ 흡수 (-${absorb})`, 'shield', target.id);
           }
 
           if (dmg > 0) {
-            targetHero.hp = Math.max(1, targetHero.hp - dmg);
-            showFloatingText(`-${dmg}`, 'dmg', targetHero.id);
+            target.hp = Math.max(1, target.hp - dmg);
+            showFloatingText(`-${dmg}`, 'normal', target.id);
           }
 
-          playSfx('slash');
-          addLog(`💥 <strong>${enemy.name}</strong>의 공격! <strong>${targetHero.name}</strong>이(가) 견고히 방어했습니다!`);
+          playSfx('heavy_hit');
+          addLog(`💥 <strong>${enemy.name}</strong>의 맹타! <strong>${target.name}</strong>에게 ${dmg} 피해!`);
         });
 
-        renderHeroes();
-        renderEnemies();
+        renderHeroesArea();
+        renderMonstersGrid();
+        renderMonsterImagePanel();
 
         setTimeout(() => {
           startTurn(0);
-        }, 800);
-      }, 600);
-    }
-
-    function executeAutoHeroAction() {
-      if (!autoBattle || isActing) return;
-      const hero = party[currentTurnHeroIndex];
-      if (!hero || hero.hp <= 0) return;
-
-      // Smart auto-action picking unique/special or active
-      let chosenSkill = hero.skills[0]; // 기본기
-      if (isFeverMode) {
-        // In fever, always cast strongest skill / unique!
-        chosenSkill = hero.skills[3] || hero.skills[2] || hero.skills[1];
-      } else {
-        if (hero.id === 'paladin' && hero.shield <= 0 && hero.mp >= 50) {
-          chosenSkill = hero.skills[2]; // 신성 방벽
-        } else if (hero.id === 'assassin' && hero.skills[3] && hero.mp >= 56) {
-          chosenSkill = hero.skills[3]; // 심장 꿰뚫기
-        } else if (hero.id === 'elementalist' && hero.skills[3] && hero.mp >= 91) {
-          chosenSkill = hero.skills[3]; // 원소 초신성
-        } else if (hero.mp >= hero.skills[1].mana) {
-          chosenSkill = hero.skills[1];
-        }
-      }
-
-      castHeroSkill(hero, chosenSkill);
-    }
-
-    function toggleAutoBattle() {
-      autoBattle = !autoBattle;
-      playSfx('click');
-      const btn = document.getElementById('auto-btn');
-      btn.className = `auto-toggle-btn ${autoBattle ? 'active' : ''}`;
-      btn.innerText = autoBattle ? '⚡ 자동전투 ON' : '⚡ 자동전투 OFF';
-      if (autoBattle && !isActing) {
-        executeAutoHeroAction();
-      }
+        }, 850);
+      }, 650);
     }
 
     function onAllDungeonsCleared() {
       playSfx('victory');
-      triggerScreenFlash('rgba(255, 213, 79, 0.5)');
+      triggerScreenFlash('rgba(255, 213, 79, 0.55)');
       triggerScreenShake();
       document.getElementById('victory-overlay').style.display = 'flex';
     }
@@ -2606,7 +2697,6 @@
       document.getElementById('battle-phase').style.display = 'none';
       document.getElementById('explore-phase').style.display = 'flex';
 
-      // Reset exploration views
       document.getElementById('entry-view').style.display = 'flex';
       document.getElementById('event-1-view').style.display = 'none';
       document.getElementById('corridor-mid-view').style.display = 'none';
@@ -2619,7 +2709,6 @@
       document.getElementById('step-lbl-3').className = '';
       document.getElementById('step-lbl-4').className = '';
 
-      // Reset party
       party.forEach(h => {
         h.hp = h.maxHp;
         h.mp = h.maxMp;
@@ -2628,25 +2717,21 @@
       feverBadges = [];
       isFeverMode = false;
       document.getElementById('game-container').classList.remove('fever-active');
-
-      autoBattle = false;
-      document.getElementById('auto-btn').className = 'auto-toggle-btn';
-      document.getElementById('auto-btn').innerText = '⚡ 자동전투 OFF';
     }
 
     // =========================================================================
-    // 9. Floating Text & VFX Helpers
+    // 9. VFX & Floating Numbers
     // =========================================================================
     function showFloatingText(text, type, targetId) {
       const el = document.createElement('div');
-      el.className = `floating-num ${type}`;
+      el.className = `floating-dmg ${type}`;
       el.innerText = text;
 
-      let top = 40 + Math.random() * 20;
-      let left = 35 + Math.random() * 30;
+      let top = 48 + Math.random() * 15;
+      let left = 32 + Math.random() * 36;
 
       if (targetId.startsWith('enemy')) {
-        top = 22 + Math.random() * 10;
+        top = 18 + Math.random() * 8;
       }
 
       el.style.top = `${top}%`;
@@ -2670,7 +2755,7 @@
       overlay.style.inset = '0';
       overlay.style.backgroundColor = color;
       overlay.style.pointerEvents = 'none';
-      overlay.style.zIndex = '90';
+      overlay.style.zIndex = '95';
       overlay.style.transition = 'opacity 0.4s ease-out';
       document.getElementById('game-container').appendChild(overlay);
 
@@ -2691,14 +2776,13 @@
     function spawnVfxExplosion() {
       const layer = document.getElementById('vfx-layer');
       const exp = document.createElement('div');
-      exp.className = 'vfx-explosion';
+      exp.className = 'vfx-burst';
       layer.appendChild(exp);
       setTimeout(() => exp.remove(), 500);
     }
 
     function addLog(htmlText) {
-      const logBar = document.getElementById('combat-log');
-      logBar.innerHTML = htmlText;
+      document.getElementById('combat-log-text').innerHTML = htmlText;
     }
 
     window.addEventListener('DOMContentLoaded', () => {
