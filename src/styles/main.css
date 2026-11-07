@@ -381,14 +381,14 @@ html[data-lang="ja"] .badge {
 .animate-slide-left { animation: slideLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 .animate-glow       { animation: pulse-glow 2s infinite; }
 
-/* 📱 모바일: 아래에서 위로(slideUp) / 🖥️ 데스크탑(768px 이상): 오른쪽에서 왼쪽으로(slideLeft) */
+/* 📱 모바일 & 🖥️ 대형 화면 공통: 이미지가 상단으로 승강하는 연출에 맞춰 아래에서 위로(slideUp) 부드럽게 등장 */
 .animate-drawer-enter {
   animation: slideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @media (min-width: 768px) {
   .animate-drawer-enter {
-    animation: slideLeft 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 }
 
