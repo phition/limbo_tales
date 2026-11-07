@@ -104,7 +104,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm, isDrawer = fals
   if (!open && !isDrawer) return null;
 
   const innerContent = (
-    <div className={`flex flex-col gap-3 py-1 ${isDrawer ? 'p-3.5 sm:p-4 flex-1 overflow-y-auto tg-scrollbar' : ''}`}>
+    <div className={`flex flex-col ${isDrawer ? 'h-full p-3 sm:p-4 gap-2.5 overflow-hidden' : 'gap-3 py-1'}`}>
       {/* 상단 일러스트 배너 (모달 팝업일 때만 노출, 드로어 패널일 때는 헤더 배너와 중복 방지) */}
       {!isDrawer && (
         <div className="relative w-full h-28 sm:h-36 rounded-xl overflow-hidden border border-[#233550] shadow-md shrink-0">
@@ -135,7 +135,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm, isDrawer = fals
       )}
 
         {/* 상단 컬렉션 진행도 및 총 누적 패시브 헤더 */}
-        <div className="p-3 rounded-2xl bg-gradient-to-r from-[#12192a] to-[#0c101c] border border-[#233550] shadow-md flex flex-col gap-2.5">
+        <div className="p-3 rounded-2xl bg-gradient-to-r from-[#12192a] to-[#0c101c] border border-[#233550] shadow-md flex flex-col gap-2 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <GameIcon name="codex" icon="📜" size={24} />
@@ -160,7 +160,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm, isDrawer = fals
 
           {/* 활성화된 종합 패시브 배지 요약 */}
           <div className="pt-2 border-t border-[#1c283f] flex items-center justify-between flex-wrap gap-2 text-[10px]">
-            <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
+            <div className="flex flex-wrap gap-1.5 flex-1 min-w-0 max-h-16 sm:max-h-20 overflow-y-auto tg-scrollbar">
             {totalBonus.allStatsBonus && totalBonus.allStatsBonus > 0 && <span className="px-1.5 py-0.5 rounded bg-[#c8aa6e18] border border-[#c8aa6e44] text-[#c8aa6e] font-bold">{tr('전능력치')} +{totalBonus.allStatsBonus}</span>}
             {totalBonus.atk > 0 && <span className="px-1.5 py-0.5 rounded bg-[#ef535018] border border-[#ef535044] text-[#ef5350] font-bold">{tr('공격력')} +{totalBonus.atk}</span>}
             {totalBonus.def > 0 && <span className="px-1.5 py-0.5 rounded bg-[#42a5f518] border border-[#42a5f544] text-[#42a5f5] font-bold">{tr('방어력')} +{totalBonus.def}</span>}
@@ -183,7 +183,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm, isDrawer = fals
         </div>
 
         {/* 카테고리 탭 네비게이션 */}
-        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 shrink-0">
           {categories.map((cat) => {
             const readyCount = gm.getRegisterableCodexCount(cat.id);
             return (
@@ -209,7 +209,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm, isDrawer = fals
         </div>
 
         {/* 컬렉션 항목 카드 리스트 */}
-        <div className="flex flex-col gap-2 max-h-[360px] overflow-y-auto no-scrollbar pr-0.5">
+        <div className={`flex flex-col gap-2 ${isDrawer ? 'flex-1 min-h-0 overflow-y-auto tg-scrollbar pr-1 pb-8' : 'max-h-[55vh] overflow-y-auto tg-scrollbar pr-0.5'}`}>
           {sortedItems.map((item) => {
             const isCompleted = !!completedMap[item.id];
             
