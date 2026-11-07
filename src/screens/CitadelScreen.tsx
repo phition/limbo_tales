@@ -5308,21 +5308,20 @@ const BarracksDrawer: React.FC<{
               </div>
 
               {/* 3 Positions Grid: Front, Mid, Back */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                 {[
-                  { slot: 'front' as PositionSlot, name: tr('1. 전열'), role: tr('방어 / 탱커'), icon: '🛡️', color: '#ff5252', bg: '#ff525215', border: '#ff525244' },
-                  { slot: 'mid' as PositionSlot,   name: tr('2. 중열'), role: tr('공격 / 딜러'), icon: '⚔️', color: '#ff9800', bg: '#ff980015', border: '#ff980044' },
-                  { slot: 'back' as PositionSlot,  name: tr('3. 후열'), role: tr('지원 / 힐러'), icon: '🏹', color: '#00e676', bg: '#00e67615', border: '#00e67644' },
+                  { slot: 'front' as PositionSlot, name: tr('1. 전열'), role: tr('방어'), icon: '🛡️', color: '#ff5252', bg: '#ff525215', border: '#ff525244' },
+                  { slot: 'mid' as PositionSlot,   name: tr('2. 중열'), role: tr('공격'), icon: '⚔️', color: '#ff9800', bg: '#ff980015', border: '#ff980044' },
+                  { slot: 'back' as PositionSlot,  name: tr('3. 후열'), role: tr('지원'), icon: '🏹', color: '#00e676', bg: '#00e67615', border: '#00e67644' },
                 ].map((posInfo, pIdx) => {
                   const pHero = state.party.find(p => p.position === posInfo.slot) || (state.party.length > pIdx && !state.party.some(p => p.position) ? state.party[pIdx] : null);
                   const isSelectedHero = hero && pHero && hero.id === pHero.id;
-                  const pEff = pHero ? gm.getHeroEffectiveStats(pHero) : null;
                   const pCls = pHero ? CHARACTER_CLASSES[pHero.classId] : null;
 
                   return (
                     <div
                       key={posInfo.slot}
-                      className={`p-2 rounded-xl border flex flex-col justify-between gap-1.5 transition-all cursor-pointer relative min-h-[114px] ${
+                      className={`p-1.5 sm:p-2 rounded-xl border flex flex-col justify-between gap-1 transition-all cursor-pointer relative min-h-[52px] sm:min-h-[66px] ${
                         isSelectedHero
                           ? 'bg-[#221c14] border-2 border-[#b89758] shadow-[0_0_12px_rgba(184,151,88,0.4)] scale-[1.01]'
                           : pHero
@@ -5339,7 +5338,7 @@ const BarracksDrawer: React.FC<{
                       }}
                     >
                       {/* Slot Header */}
-                      <div className="flex items-center justify-between text-[9px]">
+                      <div className="flex items-center justify-between text-[8.5px] sm:text-[9px]">
                         <span
                           className="font-bold px-1.5 py-0.2 rounded border flex items-center gap-0.5"
                           style={{ color: posInfo.color, background: posInfo.bg, borderColor: posInfo.border }}
@@ -5362,40 +5361,33 @@ const BarracksDrawer: React.FC<{
                         )}
                       </div>
 
-                      {pHero && pEff ? (
-                        <div className="flex flex-col items-center text-center gap-1">
+                      {pHero ? (
+                        <div className="flex items-center sm:flex-col justify-center text-center gap-1.5 py-0.5">
                           <div
-                            className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden shrink-0 border-2 bg-[#090d18] flex items-center justify-center shadow-md"
+                            className="relative w-7 h-7 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border bg-[#090d18] flex items-center justify-center shadow-sm"
                             style={{ borderColor: posInfo.color }}
                           >
                             {getHeroPortraitUrl(pHero) ? (
                               <img src={getHeroPortraitUrl(pHero)} alt={pHero.name} className="w-full h-full object-cover" />
                             ) : (
-                              <span className="text-xl">{pCls?.skills[0]?.icon || '⚔️'}</span>
+                              <span className="text-sm sm:text-base">{pCls?.skills[0]?.icon || '⚔️'}</span>
                             )}
-                            <span className="absolute bottom-0.5 right-0.5 text-[7px] font-mono font-black bg-black/85 px-1 rounded text-[#ffd54f]">
-                              Lv.{pHero.level}
+                            <span className="absolute bottom-0 right-0 text-[6.5px] font-mono font-black bg-black/85 px-0.5 rounded text-[#ffd54f]">
+                              {pHero.level}
                             </span>
                           </div>
-                          <div className="font-bold text-xs text-white truncate w-full">{pHero.name}</div>
-                          <div className="text-[9px] font-medium truncate w-full text-[#c8aa6e]">
-                            {pCls ? tr(pCls.name) : ''}
-                          </div>
-                          {/* HP Bar */}
-                          <div className="w-full bg-[#1b2333] h-1 rounded-full overflow-hidden mt-0.5">
-                            <div
-                              className="bg-[#ef5350] h-full rounded-full transition-all"
-                              style={{ width: `${Math.min(100, (pHero.currentHp / pEff.maxHp) * 100)}%` }}
-                            />
+                          <div className="flex flex-col text-left sm:text-center min-w-0 flex-1">
+                            <div className="font-bold text-[11px] sm:text-xs text-white truncate">{pHero.name}</div>
+                            <div className="text-[9px] font-medium truncate text-[#c8aa6e]">
+                              {pCls ? tr(pCls.name) : ''}
+                            </div>
                           </div>
                         </div>
                       ) : (
-                        <div className="flex flex-col items-center justify-center flex-1 text-center py-2">
-                          <span className="text-2xl mb-0.5" style={{ color: posInfo.color }}>+</span>
-                          <span className="text-[10px] font-bold" style={{ color: posInfo.color }}>
-                            {tr('용병 배치')}
+                        <div className="flex flex-col items-center justify-center flex-1 text-center py-1">
+                          <span className="text-xs sm:text-sm font-bold leading-none" style={{ color: posInfo.color }}>
+                            + {tr('배치')}
                           </span>
-                          <span className="text-[8.5px] text-[#8b9bb4] mt-0.5">{posInfo.role}</span>
                         </div>
                       )}
                     </div>
@@ -5425,23 +5417,24 @@ const BarracksDrawer: React.FC<{
                   const canAwakenHero = hTier >= 3 && hero.level >= (60 + ((hero.awakeningCount || 0) + 1) * 10) && sanctuaryLv >= 5;
 
                   return (
-                    <div className="p-3 sm:p-3.5 bg-gradient-to-b from-[#131620] to-[#0c0e15] border border-[#3d3220] rounded-xl flex flex-col gap-2.5 shadow-md">
-                      <div className="flex items-start gap-3">
+                    <div className="p-2.5 sm:p-3 bg-gradient-to-b from-[#131620] to-[#0c0e15] border border-[#3d3220] rounded-xl flex items-center justify-between gap-2.5 shadow-md">
+                      {/* Left: Portrait + Info */}
+                      <div className="flex items-start gap-2.5 min-w-0 flex-1">
                         {/* Portrait */}
                         <div
-                          className="relative w-18 h-18 sm:w-22 sm:h-22 rounded-xl overflow-hidden shrink-0 border-2 bg-[#090d18] flex items-center justify-center shadow-lg"
+                          className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 border-2 bg-[#090d18] flex items-center justify-center shadow-lg"
                           style={{ borderColor: gMeta.color }}
                         >
                           {getHeroPortraitUrl(hero) ? (
                             <img src={getHeroPortraitUrl(hero)} alt={hero.name} className="w-full h-full object-cover" />
                           ) : (
-                            <span className="text-3xl">{cls.skills[0]?.icon || '⚔️'}</span>
+                            <span className="text-2xl sm:text-3xl">{cls.skills[0]?.icon || '⚔️'}</span>
                           )}
-                          <span className="absolute bottom-1 right-1 text-[8.5px] font-mono font-black bg-black/85 px-1.5 py-0.5 rounded text-[#ffd54f] border border-[#ffd54f44]">
+                          <span className="absolute bottom-0.5 right-0.5 text-[7.5px] sm:text-[8px] font-mono font-black bg-black/85 px-1 py-0.2 rounded text-[#ffd54f] border border-[#ffd54f44]">
                             Lv.{hero.level}
                           </span>
                           {inParty && (
-                            <span className="absolute top-1 left-1 text-[8px] font-bold px-1 rounded bg-[#38ef7d] text-black">
+                            <span className="absolute top-0.5 left-0.5 text-[7.5px] font-bold px-1 rounded bg-[#38ef7d] text-black">
                               {hero.position === 'front' ? tr('전열') : hero.position === 'back' ? tr('후열') : tr('중열')}
                             </span>
                           )}
@@ -5451,9 +5444,9 @@ const BarracksDrawer: React.FC<{
                         <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
                           <div>
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="font-extrabold text-base text-white truncate">{tr(hero.name)}</span>
+                              <span className="font-extrabold text-sm sm:text-base text-white truncate">{tr(hero.name)}</span>
                               <span
-                                className="text-[10px] px-1.5 py-0.5 rounded font-black tracking-wide"
+                                className="text-[9.5px] px-1.5 py-0.2 rounded font-black tracking-wide"
                                 style={{ color: gMeta.color, background: `${gMeta.color}22`, border: `1px solid ${gMeta.color}55` }}
                               >
                                 [{gMeta.label}]
@@ -5465,21 +5458,21 @@ const BarracksDrawer: React.FC<{
 
                             {/* Trait Badge */}
                             {traitInfo && (
-                              <div className="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#ffd54f]/10 border border-[#ffd54f]/30 text-[10.5px]">
+                              <div className="mt-0.5 inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-[#ffd54f]/10 border border-[#ffd54f]/30 text-[10px]">
                                 <span className="text-[#ffd54f] font-bold">✨ {traitInfo.name}</span>
-                                <span className="text-[#8b9bb4] truncate max-w-[160px] sm:max-w-[240px]">{traitInfo.desc}</span>
+                                <span className="text-[#8b9bb4] truncate max-w-[120px] sm:max-w-[220px]">{traitInfo.desc}</span>
                               </div>
                             )}
                           </div>
 
-                          {/* Action Buttons: Class Promotion, Awakening, Bond, Dismiss, Deploy */}
-                          <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                          {/* Action Badges: Promotion, Awakening, Bond */}
+                          <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
                             {/* Promotion */}
                             {branches.length > 0 && (
                               <button
                                 type="button"
                                 onClick={() => setPreviewClassTarget({ targetHero: hero, classId: branches[0].id })}
-                                className={`text-[10.5px] px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition-all cursor-pointer ${
+                                className={`text-[10px] px-2 py-0.5 rounded-lg font-bold flex items-center gap-1 transition-all cursor-pointer ${
                                   canPromoteHero
                                     ? 'bg-gradient-to-r from-[#ffd54f] to-[#ffb300] text-black shadow-[0_0_10px_rgba(255,213,79,0.5)] animate-pulse'
                                     : 'bg-[#181d2a] text-[#ffd54f] border border-[#ffd54f]/30 hover:border-[#ffd54f]/60'
@@ -5498,14 +5491,14 @@ const BarracksDrawer: React.FC<{
                                   setSelectedAwakenStat('atk');
                                   setAwakeningTargetHero(hero);
                                 }}
-                                className={`text-[10.5px] px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition-all cursor-pointer ${
+                                className={`text-[10px] px-2 py-0.5 rounded-lg font-bold flex items-center gap-1 transition-all cursor-pointer ${
                                   canAwakenHero
                                     ? 'bg-gradient-to-r from-[#00d2ff] to-[#0077ff] text-white shadow-[0_0_10px_rgba(0,210,255,0.5)] animate-pulse'
                                     : 'bg-[#181d2a] text-[#00d2ff] border border-[#00d2ff]/30 hover:border-[#00d2ff]/60'
                                 }`}
                               >
                                 <span>🌟</span>
-                                <span>{canAwakenHero ? tr('초월 각성 가능!') : tr('각성 정보')}</span>
+                                <span>{canAwakenHero ? tr('초월 각성!') : tr('각성 정보')}</span>
                               </button>
                             )}
 
@@ -5513,64 +5506,67 @@ const BarracksDrawer: React.FC<{
                             <button
                               type="button"
                               onClick={() => setShowBondModal(true)}
-                              className="text-[10.5px] px-2 py-1 rounded-lg bg-[#ff416c]/15 text-[#ff8099] border border-[#ff416c]/40 font-bold hover:bg-[#ff416c]/25 transition-all cursor-pointer flex items-center gap-1"
+                              className="text-[10px] px-2 py-0.5 rounded-lg bg-[#ff416c]/15 text-[#ff8099] border border-[#ff416c]/40 font-bold hover:bg-[#ff416c]/25 transition-all cursor-pointer flex items-center gap-1"
                             >
                               <span>❤️</span>
                               <span>{tr('결속')}</span>
                             </button>
-
-                            {/* Deploy / Remove Toggle in Dungeon */}
-                            <button
-                              type="button"
-                              data-tutorial-target={!inParty ? "hero-deploy-btn" : undefined}
-                              onClick={() => {
-                                if (isAdmitted) {
-                                  onNavigateDrawer?.('infirmary');
-                                } else {
-                                  gm.togglePartyMember(hero.id);
-                                  if (tutorialStepId === 'TUTORIAL_DEPLOY_HERO') {
-                                    onAdvanceTutorial?.('TUTORIAL_WEAPON_SHORTAGE');
-                                  }
-                                }
-                              }}
-                              className={`text-[10.5px] px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                                isAdmitted
-                                  ? 'bg-[#ff7043]/20 text-[#ff7043] border border-[#ff7043]/50'
-                                  : inParty
-                                  ? 'bg-[#ef5350]/20 text-[#ef5350] border border-[#ef5350]/50 hover:bg-[#ef5350]/30'
-                                  : 'bg-[#38ef7d]/20 text-[#38ef7d] border border-[#38ef7d]/50 hover:bg-[#38ef7d]/30'
-                              }`}
-                            >
-                              <span>{isAdmitted ? '🏥' : inParty ? '✕' : '⚔️'}</span>
-                              <span>{isAdmitted ? tr('입원 치료 중') : inParty ? tr('파티 제외') : tr('파티 출전')}</span>
-                            </button>
-
-                            {/* Dismiss */}
-                            <button
-                              type="button"
-                              disabled={state.barracks.length <= 3 || isAdmitted}
-                              onClick={() => setDismissConfirmHero(hero)}
-                              className="text-[10px] px-2 py-1 rounded-lg text-[#607d8b] hover:text-[#ef5350] border border-[#26334a] hover:border-[#ef5350]/50 transition-all cursor-pointer ml-auto disabled:opacity-30"
-                              title={tr('용병 해고')}
-                            >
-                              🚪 {tr('해고')}
-                            </button>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Right: Dedicated Large Deploy / Remove & Dismiss Controls */}
+                      <div className="flex flex-col items-center gap-1.5 shrink-0 pl-1">
+                        <button
+                          type="button"
+                          data-tutorial-target={!inParty ? "hero-deploy-btn" : undefined}
+                          onClick={() => {
+                            if (isAdmitted) {
+                              onNavigateDrawer?.('infirmary');
+                            } else {
+                              gm.togglePartyMember(hero.id);
+                              if (tutorialStepId === 'TUTORIAL_DEPLOY_HERO') {
+                                onAdvanceTutorial?.('TUTORIAL_WEAPON_SHORTAGE');
+                              }
+                            }
+                          }}
+                          className={`w-18 sm:w-22 h-10 sm:h-12 rounded-xl font-black text-xs transition-all cursor-pointer flex flex-col items-center justify-center shadow-md active:scale-95 ${
+                            isAdmitted
+                              ? 'bg-[#ff7043]/20 text-[#ff7043] border border-[#ff7043]/60'
+                              : inParty
+                              ? 'bg-[#ef5350]/20 text-[#ef5350] border-2 border-[#ef5350]/80 hover:bg-[#ef5350]/30'
+                              : 'bg-gradient-to-b from-[#38ef7d] to-[#11998e] text-black hover:brightness-110 shadow-[#38ef7d]/30'
+                          }`}
+                        >
+                          <span className="text-sm leading-none">{isAdmitted ? '🏥' : inParty ? '✕' : '⚔️'}</span>
+                          <span className="text-[10.5px] mt-0.5 font-extrabold tracking-tight">
+                            {isAdmitted ? tr('입원 치료') : inParty ? tr('파티 제외') : tr('파티 출전')}
+                          </span>
+                        </button>
+
+                        <button
+                          type="button"
+                          disabled={state.barracks.length <= 3 || isAdmitted}
+                          onClick={() => setDismissConfirmHero(hero)}
+                          className="w-18 sm:w-22 py-0.5 text-[9.5px] rounded-lg text-[#8b9bb4] hover:text-[#ef5350] border border-[#26334a] hover:border-[#ef5350]/50 transition-all cursor-pointer text-center disabled:opacity-30 disabled:cursor-not-allowed"
+                          title={tr('용병 해고')}
+                        >
+                          🚪 {tr('해고')}
+                        </button>
                       </div>
                     </div>
                   );
                 })()}
 
-                {/* 모듈 B: 6대 핵심 실효 스탯 요약 & 분배 */}
+                {/* 모듈 B: 스탯 */}
                 {(() => {
                   const eff = gm.getHeroEffectiveStats(hero);
                   return (
-                    <div className="p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
+                    <div className="p-2.5 sm:p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
                       <div className="flex items-center justify-between text-xs">
                         <div className="font-extrabold text-[#c8aa6e] flex items-center gap-1.5">
                           <span>📊</span>
-                          <span>{tr('6대 핵심 실효 스탯')}</span>
+                          <span>{tr('스탯')}</span>
                         </div>
                         <button
                           type="button"
@@ -5630,17 +5626,17 @@ const BarracksDrawer: React.FC<{
                   );
                 })()}
 
-                {/* 모듈 C: 3대 장비 슬롯 (무기 / 방어구 / 장신구) */}
-                <div className="p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
+                {/* 모듈 C: 착용 장비 */}
+                <div className="p-2.5 sm:p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
                   <div className="flex items-center justify-between text-xs flex-wrap gap-1">
                     <div className="font-extrabold text-[#38ef7d] flex items-center gap-1.5">
                       <span>⚔️</span>
-                      <span>{tr('착용 장비 (3슬롯: 무기 / 방어구 / 장신구)')}</span>
+                      <span>{tr('착용 장비')}</span>
                     </div>
                     <button
                       type="button"
                       onClick={handleAutoEquipBest}
-                      className="px-2.5 py-1 text-[10.5px] bg-[#38ef7d]/15 hover:bg-[#38ef7d]/30 text-[#38ef7d] border border-[#38ef7d]/40 rounded-lg transition-all font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-sm"
+                      className="px-2.5 py-1 text-[10px] sm:text-[10.5px] bg-[#38ef7d]/15 hover:bg-[#38ef7d]/30 text-[#38ef7d] border border-[#38ef7d]/40 rounded-lg transition-all font-bold flex items-center gap-1 cursor-pointer active:scale-95 shadow-sm"
                       title={tr('보유 중인 미장착 장비 중 최적 장비를 일괄 장착합니다.')}
                     >
                       <span>🎒</span>
@@ -5658,14 +5654,14 @@ const BarracksDrawer: React.FC<{
                           key={slot}
                           type="button"
                           onClick={() => setEquipOverlay({ hero, slot })}
-                          className={`w-full min-w-0 p-2.5 rounded-xl border flex flex-col items-center justify-between gap-1 transition-all cursor-pointer group hover:scale-[1.02] text-center select-none ${
+                          className={`w-full min-w-0 p-2 sm:p-2.5 rounded-xl border flex flex-col items-center justify-between gap-1 transition-all cursor-pointer group hover:scale-[1.02] text-center select-none ${
                             eq
                               ? isMementoResonated
                                 ? 'bg-[#1a1024] border-[#ba68c8] shadow-[0_0_8px_rgba(186,104,200,0.3)]'
                                 : 'bg-[#0d1712] border-[#38ef7d]/60 shadow-[0_0_8px_rgba(56,239,125,0.15)]'
                               : 'bg-[#0f1420] border-dashed border-[#253246] hover:border-[#c8aa6e]/60'
                           }`}
-                          style={{ minHeight: '92px' }}
+                          style={{ minHeight: '84px' }}
                         >
                           {/* Slot Type Header */}
                           <div className="flex items-center justify-between w-full text-[9px] text-[#8b9bb4] px-0.5">
@@ -5687,10 +5683,10 @@ const BarracksDrawer: React.FC<{
                                 className="p-1 rounded-lg bg-[#1e2738] border shrink-0 flex items-center justify-center transition-all group-hover:scale-105"
                                 style={getRarityBorderStyle(eq.rarity)}
                               >
-                                <GameIcon name={eq.templateId || getEquipmentTemplateId(eq) || eq.id || eq.baseName} icon={eq.icon} size={24} />
+                                <GameIcon name={eq.templateId || getEquipmentTemplateId(eq) || eq.id || eq.baseName} icon={eq.icon} size={22} />
                               </span>
                             ) : (
-                              <div className="w-7 h-7 rounded-lg bg-[#161c28] border border-dashed border-[#2b3a52] flex items-center justify-center text-sm text-[#506075] group-hover:text-[#ffd54f]">
+                              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[#161c28] border border-dashed border-[#2b3a52] flex items-center justify-center text-xs text-[#506075] group-hover:text-[#ffd54f]">
                                 +
                               </div>
                             )}
@@ -5701,18 +5697,18 @@ const BarracksDrawer: React.FC<{
                             {eq ? (
                               <>
                                 <div
-                                  className="w-full truncate font-bold text-[10px] text-white"
+                                  className="w-full truncate font-bold text-[9.5px] sm:text-[10px] text-white"
                                   style={{ color: getRarityColor(eq.rarity) }}
                                   title={eq.name}
                                 >
                                   {eq.name}
                                 </div>
-                                <div className="text-[8.5px] font-mono text-[#8b9bb4] truncate">
+                                <div className="text-[8px] sm:text-[8.5px] font-mono text-[#8b9bb4] truncate">
                                   {slot === 'weapon' ? `ATK +${eq.stats?.atk || 0}` : slot === 'armor' ? `DEF +${eq.stats?.def || 0}` : `HP +${eq.stats?.hp || 0}`}
                                 </div>
                               </>
                             ) : (
-                              <div className="text-[9px] text-[#506075] group-hover:text-[#8b9bb4]">
+                              <div className="text-[8.5px] sm:text-[9px] text-[#506075] group-hover:text-[#8b9bb4]">
                                 {tr('미장착')}
                               </div>
                             )}
@@ -5723,80 +5719,77 @@ const BarracksDrawer: React.FC<{
                   </div>
                 </div>
 
-                {/* 모듈 D: 4대 전투 스킬 덱 */}
-                <div className="p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
+                {/* 모듈 D: 전투 스킬 (가장 상단에 패시브, 고유기, 그 아래 스킬 2개 양쪽 배치) */}
+                <div className="p-2.5 sm:p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
                   <div className="flex items-center justify-between text-xs">
                     <div className="font-extrabold text-[#c8aa6e] flex items-center gap-1.5">
                       <span>📖</span>
-                      <span>{tr('전투 스킬 (기본기 + 고유기 + 비전서 2종)')}</span>
+                      <span>{tr('전투 스킬')}</span>
                     </div>
                     <button
                       type="button"
                       onClick={() => setSkillOverlayHero(hero)}
-                      className="text-[10.5px] px-2.5 py-1 rounded-lg bg-[#c8aa6e]/15 hover:bg-[#c8aa6e]/30 text-[#c8aa6e] border border-[#c8aa6e]/40 font-bold transition-all cursor-pointer flex items-center gap-1"
+                      className="text-[10px] px-2 py-0.5 rounded-lg bg-[#c8aa6e]/15 hover:bg-[#c8aa6e]/30 text-[#c8aa6e] border border-[#c8aa6e]/40 font-bold transition-all cursor-pointer flex items-center gap-1"
                     >
                       <span>📚</span>
-                      <span>{tr('스킬 관리')} ({learnedCount}/4)</span>
+                      <span>{tr('스킬 관리')}</span>
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {/* 1. Base Class Skill */}
-                    <div
-                      onClick={() => setSkillOverlayHero(hero)}
-                      className="p-2 rounded-xl bg-[#0e131e] border border-[#232f44] hover:border-[#c8aa6e]/60 flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[76px]"
-                    >
-                      <div className="flex items-center justify-between text-[9px]">
-                        <span className="px-1.5 py-0.2 rounded bg-[#9e9e9e]/15 text-[#9e9e9e] font-bold border border-[#9e9e9e]/30">
-                          {tr('기본기')}
-                        </span>
-                        <span className="text-[8.5px] font-mono text-[#64b5f6]">
-                          {cls.skills[0]?.manaCost || 0}MP
-                        </span>
+                  {/* 1. 가장 상단: 패시브 스킬 */}
+                  {cls.passiveDesc ? (
+                    <div className="p-2 rounded-xl bg-[#141b2b] border border-[#3b82f6]/40 flex items-start gap-2">
+                      <span className="shrink-0 p-1 rounded-lg bg-[#1e293b] text-base">🛡️</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-xs text-[#60a5fa]">
+                            {typeof cls.passiveDesc === 'object' && (cls.passiveDesc as any).title ? (cls.passiveDesc as any).title : tr('고유 지속 효과 (패시브)')}
+                          </span>
+                          <span className="text-[8.5px] px-1 rounded bg-[#3b82f6]/20 text-[#93c5fd] font-mono">{tr('패시브')}</span>
+                        </div>
+                        <div className="text-[10px] sm:text-[10.5px] text-[#cbd5e1] mt-0.5 leading-relaxed">
+                          {typeof cls.passiveDesc === 'object' && (cls.passiveDesc as any).description ? (cls.passiveDesc as any).description : String(cls.passiveDesc)}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="shrink-0 p-0.5 rounded bg-[#161c28]">
-                          <GameIcon name={cls.skills[0]?.id || 'strike'} icon={cls.skills[0]?.icon} size={20} />
-                        </span>
-                        <span className="text-xs font-bold text-white truncate">
-                          {cls.skills[0] ? tr(cls.skills[0].name) : tr('기본 공격')}
-                        </span>
-                      </div>
-                      <span className="text-[8.5px] text-[#8b9bb4] truncate">
-                        {cls.skills[0] ? tr(cls.skills[0].description) : ''}
-                      </span>
                     </div>
+                  ) : (
+                    <div className="p-1.5 rounded-lg bg-[#0e131e] border border-[#1e2638] text-[9.5px] text-[#8b9bb4] text-center">
+                      {tr('기본 패시브 효과 없음')}
+                    </div>
+                  )}
 
-                    {/* 2. Class Special / Ultimate */}
-                    <div
-                      onClick={() => setSkillOverlayHero(hero)}
-                      className="p-2 rounded-xl bg-[#18130b] border border-[#ffd54f]/40 hover:border-[#ffd54f] flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[76px]"
-                    >
-                      <div className="flex items-center justify-between text-[9px]">
-                        <span className="px-1.5 py-0.2 rounded bg-[#ffd54f]/15 text-[#ffd54f] font-bold border border-[#ffd54f]/30">
-                          {cls.specialSkill.name.includes('[궁극기') ? tr('궁극기') : tr('고유기')}
-                        </span>
-                        <span className="text-[8.5px] font-mono text-[#64b5f6]">
-                          {cls.specialSkill.manaCost}MP
+                  {/* 2. 그 다음: 고유기 / 궁극기 (가운데 풀 와이드 카드) */}
+                  <div
+                    onClick={() => setSkillOverlayHero(hero)}
+                    className="p-2 sm:p-2.5 rounded-xl bg-gradient-to-r from-[#1c160e] to-[#121017] border border-[#ffd54f]/50 hover:border-[#ffd54f] flex items-start gap-2.5 transition-all cursor-pointer shadow-sm"
+                  >
+                    <div className="shrink-0 p-1.5 rounded-xl bg-[#2b1f0c] border border-[#ffd54f]/40 flex items-center justify-center">
+                      <GameIcon name={cls.specialSkill.id} icon={cls.specialSkill.icon} size={26} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between flex-wrap gap-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-xs text-[#ffd54f]">{tr(cls.specialSkill.name)}</span>
+                          <span className="text-[8.5px] px-1.5 py-0.2 rounded bg-[#ffd54f]/20 text-[#ffd54f] font-bold border border-[#ffd54f]/40">
+                            {cls.specialSkill.name.includes('[궁극기') ? tr('궁극기') : tr('고유기')}
+                          </span>
+                        </div>
+                        <span className="text-[9.5px] font-mono text-[#64b5f6]">
+                          {cls.specialSkill.manaCost} MP / {tr('쿨')} {cls.specialSkill.cooldown || 0}{tr('턴')}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="shrink-0 p-0.5 rounded bg-[#241a0d]">
-                          <GameIcon name={cls.specialSkill.id} icon={cls.specialSkill.icon} size={20} />
-                        </span>
-                        <span className="text-xs font-bold text-[#ffd54f] truncate">
-                          {tr(cls.specialSkill.name)}
-                        </span>
-                      </div>
-                      <span className="text-[8.5px] text-[#cfd8dc] truncate">
+                      <div className="text-[10px] sm:text-[10.5px] text-[#cfd8dc] mt-1 leading-relaxed">
                         {tr(cls.specialSkill.description)}
-                      </span>
+                      </div>
                     </div>
+                  </div>
 
-                    {/* 3. Grimoire Skill 1 */}
+                  {/* 3. 그 아래: 스킬 두 개를 양쪽에 배치 (비전서 1 & 비전서 2) */}
+                  <div className="grid grid-cols-2 gap-2">
+                    {/* Left: Grimoire Skill 1 */}
                     <div
                       onClick={() => setSkillOverlayHero(hero)}
-                      className="p-2 rounded-xl bg-[#0e131e] border border-[#232f44] hover:border-[#c8aa6e]/60 flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[76px]"
+                      className="p-2 rounded-xl bg-[#0e131e] border border-[#232f44] hover:border-[#c8aa6e]/60 flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[68px]"
                     >
                       <div className="flex items-center justify-between text-[9px]">
                         <span className="px-1.5 py-0.2 rounded bg-[#c8aa6e]/15 text-[#c8aa6e] font-bold border border-[#c8aa6e]/30">
@@ -5812,7 +5805,7 @@ const BarracksDrawer: React.FC<{
                         {equippedSkill1 ? (
                           <>
                             <span className="shrink-0 p-0.5 rounded bg-[#161c28]">
-                              <GameIcon name={equippedSkill1.id} icon={equippedSkill1.icon} size={20} />
+                              <GameIcon name={equippedSkill1.id} icon={equippedSkill1.icon} size={18} />
                             </span>
                             <span className="text-xs font-bold text-white truncate">
                               {tr(equippedSkill1.name)}
@@ -5830,10 +5823,10 @@ const BarracksDrawer: React.FC<{
                       </span>
                     </div>
 
-                    {/* 4. Grimoire Skill 2 */}
+                    {/* Right: Grimoire Skill 2 */}
                     <div
                       onClick={() => setSkillOverlayHero(hero)}
-                      className="p-2 rounded-xl bg-[#0e131e] border border-[#232f44] hover:border-[#c8aa6e]/60 flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[76px]"
+                      className="p-2 rounded-xl bg-[#0e131e] border border-[#232f44] hover:border-[#c8aa6e]/60 flex flex-col justify-between gap-1 transition-all cursor-pointer min-h-[68px]"
                     >
                       <div className="flex items-center justify-between text-[9px]">
                         <span className="px-1.5 py-0.2 rounded bg-[#c8aa6e]/15 text-[#c8aa6e] font-bold border border-[#c8aa6e]/30">
@@ -5849,7 +5842,7 @@ const BarracksDrawer: React.FC<{
                         {equippedSkill2 ? (
                           <>
                             <span className="shrink-0 p-0.5 rounded bg-[#161c28]">
-                              <GameIcon name={equippedSkill2.id} icon={equippedSkill2.icon} size={20} />
+                              <GameIcon name={equippedSkill2.id} icon={equippedSkill2.icon} size={18} />
                             </span>
                             <span className="text-xs font-bold text-white truncate">
                               {tr(equippedSkill2.name)}
@@ -5867,33 +5860,35 @@ const BarracksDrawer: React.FC<{
                       </span>
                     </div>
                   </div>
-
-                  {/* Passive Skill Pill */}
-                  {cls.passiveDesc && (
-                    <PassiveSkillCard passiveDesc={cls.passiveDesc} />
-                  )}
                 </div>
               </div>
             )}
 
-            {/* 3. 하단 대기 용병 로스터 */}
-            <div className="p-3 bg-[#0a0d15] border-t border-[#1f2738] flex flex-col gap-2 shrink-0 mt-auto">
-              <div className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-[#cfd8e8] flex items-center gap-1.5">
+            {/* 3. 하단 대기 용병 로스터 (모바일 반응형: 포트레이트 숨김, 출전/대기 점 표시로 공간 극대화) */}
+            <div className="p-1.5 sm:p-2.5 bg-[#0a0d15] border-t border-[#1f2738] flex flex-col gap-1 shrink-0 mt-auto">
+              <div className="flex items-center justify-between text-[11px] px-0.5">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-extrabold text-[#cfd8e8] flex items-center gap-1">
                     <span>👥</span>
-                    <span>{tr('대기 용병 로스터')}</span>
+                    <span>{tr('용병 로스터')}</span>
                   </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161a24] text-[#8b9bb4] border border-[#2a3447]">
-                    {state.barracks.length}{tr('명 보유')}
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.2 rounded bg-[#161a24] text-[#8b9bb4] border border-[#2a3447]">
+                    {state.barracks.length}
                   </span>
                 </div>
-                <span className="text-[10px] text-[#8b9bb4]">
-                  {tr('용병 카드를 터치하여 전술 시트 확인 및 교체')}
-                </span>
+                <div className="flex items-center gap-2 text-[9px] text-[#8b9bb4]">
+                  <span className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-[#38ef7d] inline-block" />
+                    <span>{tr('출전')}</span>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-[#78909c] inline-block" />
+                    <span>{tr('대기')}</span>
+                  </span>
+                </div>
               </div>
 
-              <div className="flex gap-2 overflow-x-auto py-1 custom-scrollbar">
+              <div className="flex gap-1.5 overflow-x-auto py-0.5 custom-scrollbar">
                 {state.barracks.map((h, i) => {
                   const inParty = state.party.some(p => p.id === h.id);
                   const isAdmitted = state.infirmaryPatients.includes(h.id);
@@ -5910,25 +5905,26 @@ const BarracksDrawer: React.FC<{
                       key={h.id}
                       type="button"
                       onClick={() => setSelectedIdx(i)}
-                      className={`min-w-[96px] max-w-[115px] p-2 rounded-xl border flex flex-col items-center gap-1 transition-all cursor-pointer shrink-0 relative ${
+                      className={`px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg border flex items-center gap-2 transition-all cursor-pointer shrink-0 relative ${
                         isSelected
-                          ? 'bg-[#221c14] border-2 border-[#b89758] text-[#dcc496] shadow-[0_0_12px_rgba(184,151,88,0.35)] scale-[1.02]'
+                          ? 'bg-[#221c14] border-2 border-[#b89758] text-[#dcc496] shadow-[0_0_10px_rgba(184,151,88,0.35)] scale-[1.02]'
                           : 'bg-[#10141f] border border-[#222d42] text-[#9da3af] hover:text-white hover:border-[#b89758]/60'
                       }`}
                     >
-                      {canPromoteHero && (
-                        <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#ffd54f] text-black font-extrabold animate-pulse shadow-sm shadow-[#ffd54f]/50">
-                          ⚡{tr('전직')}
-                        </span>
-                      )}
-                      {canAwakenHero && (
-                        <span className="absolute -top-1 -right-1 text-[8px] px-1 py-0.2 rounded-full bg-[#00d2ff] text-black font-extrabold animate-pulse shadow-sm shadow-[#00d2ff]/50">
-                          🌟{tr('각성')}
-                        </span>
-                      )}
+                      {/* Status Dot: 출전 중 = 녹색 점, 대기 중 = 회색 점, 입원 = 붉은 점 */}
+                      <span
+                        className={`w-2 h-2 rounded-full shrink-0 ${
+                          isAdmitted
+                            ? 'bg-[#ef5350]'
+                            : inParty
+                            ? 'bg-[#38ef7d] shadow-[0_0_5px_#38ef7d]'
+                            : 'bg-[#78909c]'
+                        }`}
+                      />
 
+                      {/* Portrait: 모바일에서는 숨김 (반응형: hidden sm:flex) */}
                       <div
-                        className="w-10 h-10 rounded-lg overflow-hidden border border-[#3d372e] bg-[#090d18] flex items-center justify-center shrink-0"
+                        className="hidden sm:flex w-7 h-7 rounded overflow-hidden border border-[#3d372e] bg-[#090d18] items-center justify-center shrink-0"
                         style={{ borderColor: gMeta.color }}
                       >
                         {getHeroPortraitUrl(h) ? (
@@ -5938,24 +5934,16 @@ const BarracksDrawer: React.FC<{
                         )}
                       </div>
 
-                      <div className="font-bold text-xs truncate w-full text-center">{h.name}</div>
-                      <div className="text-[9px] font-mono text-[#ffd54f]">Lv.{h.level} {hCls ? tr(hCls.name) : ''}</div>
-
-                      {/* Status Tag */}
-                      <div className="mt-0.5">
-                        {isAdmitted ? (
-                          <span className="text-[8.5px] px-1.5 py-0.2 rounded bg-[#ef5350]/20 text-[#ef5350] font-bold border border-[#ef5350]/30">
-                            {tr('입원치료')}
-                          </span>
-                        ) : inParty ? (
-                          <span className="text-[8.5px] px-1.5 py-0.2 rounded bg-[#38ef7d]/20 text-[#38ef7d] font-bold border border-[#38ef7d]/30">
-                            {h.position === 'front' ? tr('전열') : h.position === 'back' ? tr('후열') : tr('중열')} {tr('출전')}
-                          </span>
-                        ) : (
-                          <span className="text-[8.5px] px-1.5 py-0.2 rounded bg-[#1e2738] text-[#8b9bb4]">
-                            {tr('대기중')}
-                          </span>
-                        )}
+                      {/* Name & Class info */}
+                      <div className="flex flex-col text-left min-w-0">
+                        <div className="flex items-center gap-1">
+                          <span className="font-bold text-[11px] truncate max-w-[65px] sm:max-w-[85px]">{h.name}</span>
+                          {canPromoteHero && <span className="text-[8px] text-[#ffd54f]">⚡</span>}
+                          {canAwakenHero && <span className="text-[8px] text-[#00d2ff]">🌟</span>}
+                        </div>
+                        <div className="text-[9px] text-[#8b9bb4] truncate max-w-[65px] sm:max-w-[85px]">
+                          {hCls ? tr(hCls.name) : ''}
+                        </div>
                       </div>
                     </button>
                   );
@@ -6186,6 +6174,36 @@ const BarracksDrawer: React.FC<{
                 }
               >
                 <div className="flex flex-col gap-3 text-xs leading-relaxed">
+                  {/* 🔀 전직 분기 탭 (1차 전직 2갈래 분기 선택 탭) */}
+                  {(() => {
+                    const heroBranches = PROMOTE_MAP[targetHero.classId] || [];
+                    if (heroBranches.length <= 1) return null;
+
+                    return (
+                      <div className="flex gap-2 p-1 bg-[#090d18] rounded-xl border border-[#222d42]">
+                        {heroBranches.map((br) => {
+                          const isSelected = previewClassTarget.classId === br.id;
+                          return (
+                            <button
+                              key={br.id}
+                              type="button"
+                              onClick={() => setPreviewClassTarget({ targetHero, classId: br.id })}
+                              className={`flex-1 py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                                isSelected
+                                  ? 'bg-gradient-to-r from-[#ffd54f]/25 to-[#c8aa6e]/25 text-[#ffd54f] border border-[#ffd54f] shadow-md shadow-[#ffd54f]/15'
+                                  : 'text-[#8b9bb4] hover:text-white hover:bg-[#141a29]'
+                              }`}
+                            >
+                              <span>{br.id.includes('paladin') || br.id.includes('knight') || br.id.includes('guardian') ? '🛡️' : br.id.includes('berserker') || br.id.includes('blade') ? '🪓' : '⚡'}</span>
+                              <span>{br.name}</span>
+                              {isSelected && <span className="text-[9px] px-1 rounded bg-[#ffd54f]/20 text-[#ffd54f] font-mono">✓</span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
+
                   {/* 상단: 클래스 헤더 및 테마 */}
                   <div className="panel p-3 bg-[#131926] border border-[#ffd54f55] rounded-xl flex items-center justify-between">
                     <div>
