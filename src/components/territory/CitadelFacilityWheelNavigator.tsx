@@ -224,8 +224,8 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
       hasDraggedRef.current = true;
     }
 
-    // 감도: 화면 높이에 따라 적절한 픽셀-대-카드 비율 (모바일 ~155px, 데스크탑 ~190px)
-    const cardSpacing = window.innerWidth >= 640 ? 190 : 155;
+    // 감도: 화면 높이에 따라 적절한 픽셀-대-카드 비율 (모바일 ~155px, 대형화면 ~230px)
+    const cardSpacing = window.innerWidth >= 640 ? 230 : 155;
     const posDelta = -((currentY - dragStartYRef.current) / cardSpacing);
     posRef.current = dragStartPosRef.current + posDelta;
 
@@ -328,7 +328,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
 
       {/* 🎡 3D 세로 휠 실린더 컨테이너 */}
       <div
-        className="relative w-full max-w-md sm:max-w-xl h-full flex items-center justify-center pointer-events-none"
+        className="relative w-full max-w-md sm:max-w-xl md:max-w-2xl h-full flex items-center justify-center pointer-events-none"
         style={{ transformStyle: 'preserve-3d' }}
       >
         {items.map((item, i) => {
@@ -348,10 +348,10 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
           // 3D 원통형 변환 계산
           // offset에 따라 Y이동, Z깊이, X축 회전각도, 스케일, 불투명도 부여
           const isSm = typeof window !== 'undefined' && window.innerWidth >= 640;
-          const yStep = isSm ? 130 : 105;
+          const yStep = isSm ? 190 : 105;
           const translateY = offset * yStep;
-          const rotateX = -offset * 24; // 원통형 굽힘 각도 (위는 뒤로, 아래는 앞으로)
-          const translateZ = -Math.pow(absOffset, 1.35) * (isSm ? 85 : 70); // 뒤로 밀림
+          const rotateX = -offset * 22; // 원통형 굽힘 각도 (위는 뒤로, 아래는 앞으로)
+          const translateZ = -Math.pow(absOffset, 1.35) * (isSm ? 100 : 70); // 뒤로 밀림
           const scale = Math.max(0.68, 1 - absOffset * 0.13);
           const opacity = Math.max(0, 1 - Math.pow(absOffset / 2.6, 1.6));
           const zIndex = Math.round(100 - absOffset * 20);
@@ -376,7 +376,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                 pointerEvents: 'auto',
                 willChange: 'transform, opacity',
               }}
-              className={`absolute w-[92%] sm:w-[500px] rounded-2xl overflow-hidden border transition-shadow duration-200 cursor-pointer shadow-2xl flex flex-col ${
+              className={`absolute w-[92%] sm:w-[480px] md:w-[540px] rounded-2xl overflow-hidden border transition-shadow duration-200 cursor-pointer shadow-2xl flex flex-col ${
                 isCenter
                   ? isLocked
                     ? 'bg-[#10141f] border-[#4a5568] shadow-[0_0_25px_rgba(0,0,0,0.85)]'
@@ -384,8 +384,8 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                   : 'bg-[#0d1017]/90 border-[#222b3d]/80 hover:border-[#b89758]/50 filter brightness-90 hover:brightness-105'
               }`}
             >
-              {/* ── 시설 내부 배너 이미지 ── */}
-              <div className="relative w-full h-24 sm:h-32 overflow-hidden bg-[#07090e] border-b border-[#242b3b]">
+              {/* ── 시설 내부 배너 이미지 (큰 화면: 1376x768 16:9 기준 이미지 전체 온전히 표시, 작은 화면: 컴팩트 h-24 유지) ── */}
+              <div className="relative w-full h-24 sm:aspect-[1376/768] overflow-hidden bg-[#07090e] border-b border-[#242b3b]">
                 <img
                   src={item.image}
                   alt={item.name}
@@ -399,8 +399,8 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                 />
 
                 {/* 상단 비네팅 & 블렌드 */}
-                <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-[#08090b]/85 via-[#08090b]/40 to-transparent pointer-events-none" />
-                <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#10141d] via-[#10141d]/60 to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 top-0 h-12 sm:h-14 bg-gradient-to-b from-[#08090b]/80 via-[#08090b]/25 to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-10 sm:h-12 bg-gradient-to-t from-[#10141d] via-[#10141d]/40 to-transparent pointer-events-none" />
 
                 {/* 좌측 상단: 아이콘 + 시설 타이틀 */}
                 <div className="absolute top-2 left-2.5 sm:top-2.5 sm:left-3 z-10 flex items-center gap-2 max-w-[calc(100%-80px)]">
