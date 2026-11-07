@@ -5445,11 +5445,11 @@ const BarracksDrawer: React.FC<{
                               </span>
                             </div>
 
-                            {/* Trait Badge */}
+                            {/* Trait Badge (모바일에서는 스탯 보너스를 성향 아래로 밀어 내용 온전히 표시) */}
                             {traitInfo && (
-                              <div className="mt-0.5 inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-[#ffd54f]/10 border border-[#ffd54f]/30 text-[10px]">
-                                <span className="text-[#ffd54f] font-bold">✨ {traitInfo.name}</span>
-                                <span className="text-[#8b9bb4] truncate max-w-[120px] sm:max-w-[220px]">{traitInfo.desc}</span>
+                              <div className="mt-1 flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-1.5 px-2 py-1 rounded-lg bg-[#ffd54f]/10 border border-[#ffd54f]/30 text-[10px] leading-tight">
+                                <span className="text-[#ffd54f] font-bold shrink-0">✨ {traitInfo.name}</span>
+                                <span className="text-[#cbd5e1] text-[9.5px] sm:text-[10px] break-words">{traitInfo.desc}</span>
                               </div>
                             )}
                           </div>
@@ -5524,7 +5524,7 @@ const BarracksDrawer: React.FC<{
                               ? 'bg-[#ff7043]/20 text-[#ff7043] border border-[#ff7043]/60'
                               : inParty
                               ? 'bg-[#ef5350]/20 text-[#ef5350] border-2 border-[#ef5350]/80 hover:bg-[#ef5350]/30'
-                              : 'bg-gradient-to-b from-[#38ef7d] to-[#11998e] text-black hover:brightness-110 shadow-[#38ef7d]/30'
+                              : 'bg-gradient-to-b from-[#38a8d6] to-[#1e6f98] text-white border border-[#7dd3fc]/60 hover:brightness-110 shadow-md shadow-[#0284c7]/25'
                           }`}
                         >
                           <span className="text-sm leading-none">{isAdmitted ? '🏥' : inParty ? '✕' : '⚔️'}</span>
