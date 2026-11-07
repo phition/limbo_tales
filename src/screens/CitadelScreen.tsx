@@ -15023,7 +15023,7 @@ export const CitadelScreen: React.FC = () => {
   const handleTryOpenDrawer = useCallback((key: string) => {
     const bId = DRAWER_TO_BUILDING_ID[key];
     if (bId && bId !== 'arenaGate' && (state.buildings[bId]?.level || 0) < 1) {
-      try { SoundManager.getInstance().play('error'); } catch {}
+      try { SoundManager.getInstance().play('debuff'); } catch {}
       gameDialog.alert({
         title: tr('시설 미건설'),
         message: `${tr('해당 시설은 아직 건설되지 않았습니다.')}\n${tr('성채 시설 관리에서 먼저 건설하십시오.')}`,
@@ -15051,7 +15051,7 @@ export const CitadelScreen: React.FC = () => {
   const handleEnterBuildingFromCitadel = useCallback((key: string) => {
     const bId = DRAWER_TO_BUILDING_ID[key];
     if (bId && bId !== 'arenaGate' && (state.buildings[bId]?.level || 0) < 1) {
-      try { SoundManager.getInstance().play('error'); } catch {}
+      try { SoundManager.getInstance().play('debuff'); } catch {}
       gameDialog.alert({
         title: tr('시설 미건설'),
         message: `${tr('해당 시설은 아직 건설되지 않았습니다.')}\n${tr('성채 시설 관리에서 먼저 건설하십시오.')}`,

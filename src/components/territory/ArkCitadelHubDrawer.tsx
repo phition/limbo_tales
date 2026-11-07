@@ -194,12 +194,12 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   ) => {
     const isLocked = !item.isBuilt;
     if (isLocked) {
-      try { SoundManager.getInstance().play('error'); } catch {}
+      try { SoundManager.getInstance().play('debuff'); } catch {}
       gameDialog.confirm({
         title: tr('시설 미건설'),
         message: `${item.name} ${tr('시설은 아직 건설되지 않았습니다.')}\n\n${tr('성채 시설 관리 화면으로 이동하여 건설하시겠습니까?')}`,
-        confirmLabel: tr('건설하러 가기'),
-        cancelLabel: tr('닫기'),
+        confirmText: tr('건설하러 가기'),
+        cancelText: tr('닫기'),
         icon: '🔒',
       }).then(confirmed => {
         if (confirmed) {
