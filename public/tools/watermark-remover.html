@@ -503,7 +503,48 @@
   <!-- 비디오 백그라운드 소스 요소 -->
   <video id="hiddenVideo" playsinline muted crossOrigin="anonymous" style="display: none;"></video>
 
+  <!-- 👑 마스터 계정 전용 잠금 오버레이 -->
+  <div id="masterAuthLockOverlay" style="display: none; position: fixed; inset: 0; background: rgba(7, 8, 13, 0.95); backdrop-filter: blur(16px); z-index: 9999; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #0e1726; border: 1px solid #ef535066; border-radius: 16px; padding: 32px 24px; max-width: 440px; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
+      <span style="font-size: 48px;">👑</span>
+      <div style="font-size: 16px; font-weight: bold; color: #ffd54f;">마스터 계정 전용 스튜디오</div>
+      <div style="font-size: 12px; color: #8b9bb4; line-height: 1.6;">
+        AI 영상 워터마크 제거 스튜디오는 <strong style="color: #fff;">마스터 계정(@bumpcat.net)</strong>으로 인증된 지휘관만 이용할 수 있습니다.<br>
+        먼저 게임 메인 화면에서 마스터 계정으로 로그인해 주십시오.
+      </div>
+      <a href="../index.html" class="btn btn-gold" style="text-decoration: none; padding: 10px 24px; font-size: 13px; margin-top: 8px;">
+        🏰 게임 화면으로 이동하여 로그인
+      </a>
+    </div>
+  </div>
+
   <script>
+    function checkMasterAccess() {
+      try {
+        const lastProfile = localStorage.getItem('limbo_profile_last');
+        if (lastProfile) {
+          const p = JSON.parse(lastProfile);
+          if (p.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423') return true;
+          if (p.email && (p.email.toLowerCase().endsWith('@bumpcat.net') || p.email.toLowerCase().includes('bumpcat.net'))) return true;
+        }
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith('firebase:authUser')) {
+            const u = JSON.parse(localStorage.getItem(k));
+            if (u.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423') return true;
+            if (u.email && (u.email.toLowerCase().endsWith('@bumpcat.net') || u.email.toLowerCase().includes('bumpcat.net'))) return true;
+          }
+        }
+      } catch (_) {}
+      return false;
+    }
+
+    if (!checkMasterAccess()) {
+      document.getElementById('masterAuthLockOverlay').style.display = 'flex';
+      const dropOverlayEl = document.getElementById('dropOverlay');
+      if (dropOverlayEl) dropOverlayEl.style.pointerEvents = 'none';
+    }
+
     const video = document.getElementById('hiddenVideo');
     const canvas = document.getElementById('mainCanvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });

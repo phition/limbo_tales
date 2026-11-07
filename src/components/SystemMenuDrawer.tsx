@@ -504,7 +504,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
           )}
 
           {/* 4-3. 🌐 i18n 사전 편집 & 번역 감수 스튜디오 (마스터 계정 전용, 모바일 빌드 제외) */}
-          {!isMobilePlatform && (fb.isMasterUser() || gm.isMasterAccount) && (
+          {!isMobilePlatform && fb.isMasterUser() && (
             <button
               className="w-full p-2.5 rounded-xl bg-[#0d1d2b] border border-[#00bcd444] hover:border-[#00bcd4] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
               onClick={() => setI18nStudioModal(true)}
@@ -523,8 +523,8 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             </button>
           )}
 
-          {/* 4-4. 🎬 AI 영상 워터마크 제거 스튜디오 (모바일 빌드 제외) */}
-          {!isMobilePlatform && (fb.isMasterUser() || gm.isMasterAccount) && (
+          {/* 4-4. 🎬 AI 영상 워터마크 제거 스튜디오 (마스터 계정 전용, 모바일 빌드 제외) */}
+          {!isMobilePlatform && fb.isMasterUser() && (
             <button
               className="w-full p-2.5 rounded-xl bg-[#0f1524] border border-[#00d2ff44] hover:border-[#00d2ff] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
               onClick={() => setWatermarkStudioModal(true)}
@@ -534,7 +534,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 <div className="min-w-0 flex-1">
                   <div className="font-bold text-xs text-white group-hover:text-[#00d2ff] transition-colors flex items-center gap-1.5 flex-wrap">
                     <span className="break-words">AI 영상 워터마크 제거 스튜디오</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">STUDIO</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#00d2ff22] text-[#00d2ff] font-bold shrink-0">MASTER</span>
                   </div>
                   <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">오른쪽 하단 AI 워터마크 실시간 패치·제거 및 클린 비디오 내보내기</div>
                 </div>
@@ -846,16 +846,16 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         />
       )}
 
-      {/* 🌐 i18n 감수 사전 편집 스튜디오 모달 (모바일 빌드 제외) */}
-      {!isMobilePlatform && (
+      {/* 🌐 i18n 감수 사전 편집 스튜디오 모달 (마스터 계정 전용, 모바일 빌드 제외) */}
+      {!isMobilePlatform && fb.isMasterUser() && (
         <I18nStudioModal
           open={i18nStudioModal}
           onClose={() => setI18nStudioModal(false)}
         />
       )}
 
-      {/* 🎬 AI 영상 워터마크 제거 스튜디오 모달 (모바일 빌드 제외) */}
-      {!isMobilePlatform && (
+      {/* 🎬 AI 영상 워터마크 제거 스튜디오 모달 (마스터 계정 전용, 모바일 빌드 제외) */}
+      {!isMobilePlatform && fb.isMasterUser() && (
         <VideoWatermarkStudioModal
           open={watermarkStudioModal}
           onClose={() => setWatermarkStudioModal(false)}

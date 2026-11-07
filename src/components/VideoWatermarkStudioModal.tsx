@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal } from './Modal';
+import { FirebaseService } from '../services/FirebaseService';
 
 interface Props {
   open: boolean;
@@ -10,6 +11,8 @@ type DelogoAlgo = 'patch' | 'blur' | 'interpolate' | 'vignette';
 type ViewMode = 'processed' | 'split' | 'original';
 
 export const VideoWatermarkStudioModal: React.FC<Props> = ({ open, onClose }) => {
+  const isMaster = FirebaseService.getInstance().isMasterUser();
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -382,6 +385,39 @@ export const VideoWatermarkStudioModal: React.FC<Props> = ({ open, onClose }) =>
   };
 
   const cliCmd = `python scripts/remove_watermark.py ${videoName} --mode ${algo} --w ${wPct} --h ${hPct} --mr ${mrPct} --mb ${mbPct} --feather ${feather}`;
+
+  if (!open) return null;
+
+  if (!isMaster) {
+    return (
+      <Modal
+        title={
+          <div className="flex items-center gap-2 text-[#ef5350] font-bold text-sm">
+            <span>⛔</span>
+            <span>마스터 계정 전용 (Access Denied)</span>
+          </div>
+        }
+        open={open}
+        onClose={onClose}
+      >
+        <div className="p-6 text-center flex flex-col items-center gap-3">
+          <span className="text-4xl">👑</span>
+          <div className="text-sm font-bold text-white">
+            마스터 계정만 접근할 수 있는 스튜디오입니다.
+          </div>
+          <div className="text-xs text-[#8b9bb4]">
+            AI 영상 워터마크 제거 스튜디오는 승인된 마스터(관리자) 계정으로 로그인한 상태에서만 접근할 수 있습니다.
+          </div>
+          <button
+            onClick={onClose}
+            className="mt-2 px-4 py-2 rounded-lg bg-[#142238] border border-[#1f3557] hover:border-[#ffd54f] text-xs font-bold text-white cursor-pointer"
+          >
+            확인
+          </button>
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal

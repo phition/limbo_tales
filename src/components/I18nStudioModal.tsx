@@ -3,6 +3,7 @@ import { Modal } from './Modal';
 import { I18nService } from '../i18n/I18nService';
 import { EXACT_TRANSLATIONS } from '../i18n/translationDictionary';
 import { SupportedLanguage } from '../i18n/types';
+import { FirebaseService } from '../services/FirebaseService';
 
 interface Props {
   open: boolean;
@@ -36,6 +37,7 @@ const CORE_PRESETS: { category: string; keys: string[] }[] = [
 ];
 
 export const I18nStudioModal: React.FC<Props> = ({ open, onClose }) => {
+  const isMaster = FirebaseService.getInstance().isMasterUser();
   const i18n = I18nService.getInstance();
   const currentLang = i18n.getLanguage();
 
@@ -232,6 +234,39 @@ export const I18nStudioModal: React.FC<Props> = ({ open, onClose }) => {
       showStatus(`❌ 복원 실패: ${res.error}`, 'danger');
     }
   };
+
+  if (!open) return null;
+
+  if (!isMaster) {
+    return (
+      <Modal
+        title={
+          <div className="flex items-center gap-2 text-[#ef5350] font-bold text-sm">
+            <span>⛔</span>
+            <span>마스터 계정 전용 (Access Denied)</span>
+          </div>
+        }
+        open={open}
+        onClose={onClose}
+      >
+        <div className="p-6 text-center flex flex-col items-center gap-3">
+          <span className="text-4xl">👑</span>
+          <div className="text-sm font-bold text-white">
+            마스터 계정만 접근할 수 있는 스튜디오입니다.
+          </div>
+          <div className="text-xs text-[#8b9bb4]">
+            i18n 사전 편집 스튜디오는 승인된 마스터(관리자) 계정으로 로그인한 상태에서만 접근할 수 있습니다.
+          </div>
+          <button
+            onClick={onClose}
+            className="mt-2 px-4 py-2 rounded-lg bg-[#142238] border border-[#1f3557] hover:border-[#ffd54f] text-xs font-bold text-white cursor-pointer"
+          >
+            확인
+          </button>
+        </div>
+      </Modal>
+    );
+  }
 
   const totalCustomCount = Object.keys(customOverrides.en).length + Object.keys(customOverrides.ja).length;
 
