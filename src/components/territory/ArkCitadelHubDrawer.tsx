@@ -790,24 +790,8 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 >
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-3 min-w-0 pr-2">
-                      <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden border border-[#3d372e]/60 flex items-center justify-center shrink-0 shadow-inner bg-[#0a0d14]">
-                        {BUILDING_IMAGE_MAP[item.id] ? (
-                          <img
-                            src={BUILDING_IMAGE_MAP[item.id]}
-                            alt={b.name}
-                            className={`w-full h-full object-cover transition-all duration-700 ease-out ${
-                              !isBuilt
-                                ? 'grayscale brightness-[0.5] contrast-110'
-                                : 'grayscale-0 brightness-100 contrast-105 saturate-110'
-                            }`}
-                            style={{
-                              transition: 'filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s ease',
-                            }}
-                          />
-                        ) : null}
-                        <div className={`absolute inset-0 ${BUILDING_IMAGE_MAP[item.id] ? 'bg-black/35 backdrop-blur-[0.5px]' : ''} flex items-center justify-center`}>
-                          <GameIcon name={b.id} icon={b.icon} size={22} className="drop-shadow" />
-                        </div>
+                      <div className="w-10 h-10 rounded-xl bg-[#0a0d14]/70 border border-[#3d372e]/60 flex items-center justify-center shrink-0 shadow-inner">
+                        <GameIcon name={b.id} icon={b.icon} size={24} />
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
