@@ -15504,12 +15504,8 @@ export const CitadelScreen: React.FC = () => {
       return false;
     }
     if (key === 'arena') setArenaGateMode('hub');
-    if (key === 'codex') {
-      setShowCodexModal(true);
-    } else {
-      setReturnToCitadelOnClose(true);
-      setOpenDrawer(key);
-    }
+    setReturnToCitadelOnClose(true);
+    setOpenDrawer(key);
     return true;
   }, [state.buildings, tr]);
 
@@ -16151,6 +16147,14 @@ export const CitadelScreen: React.FC = () => {
           {openDrawer === 'alchemy'   && <AlchemyDrawer onBack={handleCloseDrawer} />}
           {openDrawer === 'market'    && <MarketDrawer onBack={handleCloseDrawer} />}
           {openDrawer === 'cemetery'  && <CemeteryDrawer onBack={handleCloseDrawer} />}
+          {openDrawer === 'codex'     && (
+            <CodexModal
+              isDrawer
+              open={true}
+              onClose={handleCloseDrawer}
+              gm={gm}
+            />
+          )}
           {openDrawer === 'arena'     && (
             <ArenaScreen
               isDrawer

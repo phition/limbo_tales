@@ -12,9 +12,10 @@ interface Props {
   open: boolean;
   onClose: () => void;
   gm: GameManager;
+  isDrawer?: boolean;
 }
 
-export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
+export const CodexModal: React.FC<Props> = ({ open, onClose, gm, isDrawer = false }) => {
   const { tr } = useI18n();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [inspectedStory, setInspectedStory] = useState<CodexCollectionItem | null>(null);
@@ -100,28 +101,12 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
     }
   };
 
-  return (
-    <Modal
-      title={tr('📜 심연의 백과 & 회고록 — 고대 컬렉션 (Abyssal Codex)')}
-      open={open}
-      onClose={() => {
-        setInspectedStory(null);
-        onClose();
-      }}
-      footer={
-        <ActionButton
-          label={tr('닫기')}
-          variant="ghost"
-          className="w-full"
-          onClick={() => {
-            setInspectedStory(null);
-            onClose();
-          }}
-        />
-      }
-    >
-      <div className="flex flex-col gap-3 py-1">
-        {/* 상단 일러스트 배너 (높이 상향 및 선명하고 쨍한 색감) */}
+  if (!open && !isDrawer) return null;
+
+  const innerContent = (
+    <div className={`flex flex-col gap-3 py-1 ${isDrawer ? 'p-3.5 sm:p-4 flex-1 overflow-y-auto tg-scrollbar' : ''}`}>
+      {/* 상단 일러스트 배너 (모달 팝업일 때만 노출, 드로어 패널일 때는 헤더 배너와 중복 방지) */}
+      {!isDrawer && (
         <div className="relative w-full h-28 sm:h-36 rounded-xl overflow-hidden border border-[#233550] shadow-md shrink-0">
           <img
             src="assets/menu_codex.jpg"
@@ -147,6 +132,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
             </span>
           </div>
         </div>
+      )}
 
         {/* 상단 컬렉션 진행도 및 총 누적 패시브 헤더 */}
         <div className="p-3 rounded-2xl bg-gradient-to-r from-[#12192a] to-[#0c101c] border border-[#233550] shadow-md flex flex-col gap-2.5">
@@ -464,6 +450,33 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm }) => {
           </Modal>
         )}
       </div>
-    </Modal>
-  );
-};
+    );
+
+    if (isDrawer) {
+      return innerContent;
+    }
+
+    return (
+      <Modal
+        title={tr('📜 심연의 백과 & 회고록 — 고대 컬렉션 (Abyssal Codex)')}
+        open={open}
+        onClose={() => {
+          setInspectedStory(null);
+          onClose();
+        }}
+        footer={
+          <ActionButton
+            label={tr('닫기')}
+            variant="ghost"
+            className="w-full"
+            onClick={() => {
+              setInspectedStory(null);
+              onClose();
+            }}
+          />
+        }
+      >
+        {innerContent}
+      </Modal>
+    );
+  };
