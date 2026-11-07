@@ -48,6 +48,19 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
   const [displayPos, setDisplayPos] = useState<number>(initialIndex);
   const [activeIdx, setActiveIdx] = useState<number>(initialIndex);
 
+  // 반응형 화면 감지 (리사이즈 동기화)
+  const [isLargeScreen, setIsLargeScreen] = useState<boolean>(() => {
+    return typeof window !== 'undefined' ? window.innerWidth >= 640 : false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 640);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // 드래그/터치 인터랙션 추적
   const isDraggingRef = useRef<boolean>(false);
   const hasDraggedRef = useRef<boolean>(false);
@@ -224,8 +237,8 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
       hasDraggedRef.current = true;
     }
 
-    // 감도: 화면 높이에 따라 적절한 픽셀-대-카드 비율 (모바일 ~155px, 대형화면 ~230px)
-    const cardSpacing = window.innerWidth >= 640 ? 230 : 155;
+    // 감도: 화면 높이에 따라 적절한 픽셀-대-카드 비율 (모바일 ~155px, 대형화면 ~240px)
+    const cardSpacing = isLargeScreen ? 240 : 155;
     const posDelta = -((currentY - dragStartYRef.current) / cardSpacing);
     posRef.current = dragStartPosRef.current + posDelta;
 
@@ -347,11 +360,10 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
 
           // 3D 원통형 변환 계산
           // offset에 따라 Y이동, Z깊이, X축 회전각도, 스케일, 불투명도 부여
-          const isSm = typeof window !== 'undefined' && window.innerWidth >= 640;
-          const yStep = isSm ? 190 : 105;
+          const yStep = isLargeScreen ? 200 : 105;
           const translateY = offset * yStep;
           const rotateX = -offset * 22; // 원통형 굽힘 각도 (위는 뒤로, 아래는 앞으로)
-          const translateZ = -Math.pow(absOffset, 1.35) * (isSm ? 100 : 70); // 뒤로 밀림
+          const translateZ = -Math.pow(absOffset, 1.35) * (isLargeScreen ? 110 : 70); // 뒤로 밀림
           const scale = Math.max(0.68, 1 - absOffset * 0.13);
           const opacity = Math.max(0, 1 - Math.pow(absOffset / 2.6, 1.6));
           const zIndex = Math.round(100 - absOffset * 20);
@@ -376,7 +388,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                 pointerEvents: 'auto',
                 willChange: 'transform, opacity',
               }}
-              className={`absolute w-[92%] sm:w-[480px] md:w-[540px] rounded-2xl overflow-hidden border transition-shadow duration-200 cursor-pointer shadow-2xl flex flex-col ${
+              className={`absolute w-[92%] sm:w-[520px] md:w-[580px] rounded-2xl overflow-hidden border transition-shadow duration-200 cursor-pointer shadow-2xl flex flex-col ${
                 isCenter
                   ? isLocked
                     ? 'bg-[#10141f] border-[#4a5568] shadow-[0_0_25px_rgba(0,0,0,0.85)]'
@@ -384,8 +396,14 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                   : 'bg-[#0d1017]/90 border-[#222b3d]/80 hover:border-[#b89758]/50 filter brightness-90 hover:brightness-105'
               }`}
             >
-              {/* ── 시설 내부 배너 이미지 (큰 화면: 1376x768 16:9 기준 이미지 전체 온전히 표시, 작은 화면: 컴팩트 h-24 유지) ── */}
-              <div className="relative w-full h-24 sm:aspect-[1376/768] overflow-hidden bg-[#07090e] border-b border-[#242b3b]">
+              {/* ── 시설 내부 배너 이미지 (큰 화면: 1376x768 16:9 기준 이미지 전체 온전히 대형 표시, 작은 화면: 컴팩트 96px 유지) ── */}
+              <div 
+                className="relative w-full overflow-hidden bg-[#07090e] border-b border-[#242b3b]"
+                style={{
+                  height: isLargeScreen ? 'auto' : '96px',
+                  aspectRatio: isLargeScreen ? '1376 / 768' : undefined,
+                }}
+              >
                 <img
                   src={item.image}
                   alt={item.name}
@@ -399,13 +417,13 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                 />
 
                 {/* 상단 비네팅 & 블렌드 */}
-                <div className="absolute inset-x-0 top-0 h-12 sm:h-14 bg-gradient-to-b from-[#08090b]/80 via-[#08090b]/25 to-transparent pointer-events-none" />
-                <div className="absolute inset-x-0 bottom-0 h-10 sm:h-12 bg-gradient-to-t from-[#10141d] via-[#10141d]/40 to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 top-0 h-12 sm:h-16 bg-gradient-to-b from-[#08090b]/80 via-[#08090b]/20 to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-10 sm:h-14 bg-gradient-to-t from-[#10141d] via-[#10141d]/40 to-transparent pointer-events-none" />
 
                 {/* 좌측 상단: 아이콘 + 시설 타이틀 */}
-                <div className="absolute top-2 left-2.5 sm:top-2.5 sm:left-3 z-10 flex items-center gap-2 max-w-[calc(100%-80px)]">
+                <div className="absolute top-2 left-2.5 sm:top-3 sm:left-3.5 z-10 flex items-center gap-2 max-w-[calc(100%-80px)]">
                   <div
-                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-base sm:text-lg shrink-0 shadow-md backdrop-blur-xs transition-colors ${
+                    className={`w-7 h-7 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center text-base sm:text-xl shrink-0 shadow-md backdrop-blur-xs transition-colors ${
                       isLocked
                         ? 'bg-black/60 border border-[#2a3447]/60 text-[#718096]'
                         : isCenter
@@ -416,7 +434,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                     <span className="leading-none drop-shadow">{item.icon}</span>
                   </div>
                   <h4
-                    className={`text-xs sm:text-sm font-extrabold tracking-tight truncate drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] ${
+                    className={`text-xs sm:text-base font-extrabold tracking-tight truncate drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] ${
                       isLocked
                         ? 'text-[#8896ab]'
                         : isCenter
@@ -429,22 +447,22 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                 </div>
 
                 {/* 우측 상단: 레벨 뱃지 및 상태 태그 */}
-                <div className="absolute top-2 right-2.5 sm:top-2.5 sm:right-3 z-10 flex items-center gap-1.5">
+                <div className="absolute top-2 right-2.5 sm:top-3 sm:right-3.5 z-10 flex items-center gap-1.5">
                   {isLocked ? (
-                    <span className="px-2 py-0.5 rounded-full text-[9.5px] sm:text-[10px] font-bold font-mono bg-black/80 text-[#8896ab] border border-[#374154] backdrop-blur-xs shadow-md flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded-full text-[9.5px] sm:text-[11px] font-bold font-mono bg-black/80 text-[#8896ab] border border-[#374154] backdrop-blur-xs shadow-md flex items-center gap-1">
                       <span>🔒</span>
                       <span>{tr('미해금')}</span>
                     </span>
                   ) : (
                     <>
                       {buildingLevel !== undefined && (
-                        <span className="px-2 py-0.5 rounded-full text-[9.5px] sm:text-[10px] font-mono font-bold bg-[#b89758]/30 text-[#ffd54f] border border-[#b89758]/70 backdrop-blur-xs shadow-md">
+                        <span className="px-2 py-0.5 rounded-full text-[9.5px] sm:text-[11px] font-mono font-bold bg-[#b89758]/30 text-[#ffd54f] border border-[#b89758]/70 backdrop-blur-xs shadow-md">
                           Lv.{buildingLevel}
                         </span>
                       )}
                       {item.badge && (
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[9.5px] sm:text-[10px] font-black shadow-md backdrop-blur-xs ${
+                          className={`px-2 py-0.5 rounded-full text-[9.5px] sm:text-[11px] font-black shadow-md backdrop-blur-xs ${
                             item.key === 'codex' && registerableCodexCount > 0
                               ? 'bg-[#ef5350] text-white animate-pulse'
                               : 'bg-gradient-to-r from-[#ffd54f] to-[#b89758] text-[#08090b]'
@@ -460,7 +478,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                 {/* 미해금 중앙 락 오버레이 */}
                 {isLocked && isCenter && (
                   <div className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px] flex items-center justify-center pointer-events-none">
-                    <div className="px-2.5 py-1 rounded-xl bg-[#090b10]/90 border border-[#3b475e]/80 text-[#cfd8e8] text-[11px] font-bold shadow-2xl flex items-center gap-1.5">
+                    <div className="px-3 py-1.5 rounded-xl bg-[#090b10]/90 border border-[#3b475e]/80 text-[#cfd8e8] text-xs font-bold shadow-2xl flex items-center gap-1.5">
                       <span>🔒</span>
                       <span>{tr('시설 미건설 (터치하여 건설하기)')}</span>
                     </div>
@@ -486,7 +504,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
 
                 <div className="flex items-center justify-between pt-1 border-t border-[#1e2330]/80">
                   <span
-                    className={`text-[10.5px] font-bold ${
+                    className={`text-[10.5px] sm:text-[11.5px] font-bold ${
                       isLocked ? 'text-[#7d8ba1]' : 'text-[#b89758]'
                     }`}
                   >
@@ -494,20 +512,20 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                   </span>
 
                   {isLocked ? (
-                    <div className="px-2.5 py-1 rounded-lg bg-[#141924] border border-[#26334a] text-[#8896ab] text-[11px] font-bold flex items-center gap-1">
+                    <div className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-[#141924] border border-[#26334a] text-[#8896ab] text-[11px] sm:text-xs font-bold flex items-center gap-1">
                       <span>{tr('건설하러 가기')}</span>
                       <span>➔</span>
                     </div>
                   ) : (
                     <div
-                      className={`px-3 py-1 rounded-xl text-xs font-black transition-all shadow-xs flex items-center gap-1 ${
+                      className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-xl text-xs sm:text-[13px] font-black transition-all shadow-xs flex items-center gap-1 ${
                         isCenter
                           ? 'bg-gradient-to-r from-[#b89758] to-[#ffd54f] text-[#08090b] shadow-[0_0_12px_rgba(184,151,88,0.5)] scale-102'
                           : 'bg-[#181f2c] border border-[#2e3b52] text-[#8b9bb4]'
                       }`}
                     >
                       <span>{tr('입장하기')}</span>
-                      <span className="text-[10px]">▶</span>
+                      <span className="text-[10px] sm:text-xs">▶</span>
                     </div>
                   )}
                 </div>
