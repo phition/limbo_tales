@@ -15887,22 +15887,43 @@ export const CitadelScreen: React.FC = () => {
                   </button>
                 </div>
 
-                {/* 2. 본문: 거대 불씨 + 상태 + 5스택 게이지 + 액션 버튼 */}
+                {/* 2. 본문: 성화 일러스트 배너 (꺼져있을 땐 그레이스케일, 켜지면 색 복원) + 5스택 게이지 + 액션 버튼 */}
                 <div className="flex flex-col items-center text-center gap-2.5">
-                  <div className="flex flex-col items-center">
-                    <div className="relative my-1">
-                      <span className="text-5xl drop-shadow-[0_0_24px_rgba(255,123,37,0.7)]">🔥</span>
-                      {hasWarmth && (
-                        <span className="absolute -inset-1 rounded-full bg-[#b89758]/20 blur-md -z-10 animate-pulse" />
-                      )}
+                  {/* 성화 일러스트 배너 프레임 */}
+                  <div className="relative w-full h-32 sm:h-40 rounded-xl overflow-hidden border border-[#3d372e]/60 bg-[#07090e] shadow-inner">
+                    <img
+                      src="assets/citadel_bonfire.jpg"
+                      alt={tr('방주의 성화')}
+                      className={`w-full h-full object-cover transition-all duration-700 ease-out ${
+                        hasWarmth
+                          ? 'grayscale-0 brightness-110 contrast-105 saturate-125'
+                          : 'grayscale brightness-[0.48] contrast-110'
+                      }`}
+                      style={{
+                        transition: 'filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                      }}
+                    />
+                    {/* 상단 및 하단 그라데이션 블렌드 */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-transparent to-black/40 pointer-events-none" />
+
+                    {/* 중앙 불씨 애니메이션 & 온기 상태 태그 */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                      <div className="relative my-0.5">
+                        <span className={`text-4xl sm:text-5xl drop-shadow-[0_0_24px_rgba(255,123,37,0.7)] transition-all duration-500 ${hasWarmth ? 'scale-110' : 'scale-90 opacity-70 filter grayscale'}`}>
+                          🔥
+                        </span>
+                        {hasWarmth && (
+                          <span className="absolute -inset-2 rounded-full bg-[#ff7b25]/25 blur-lg -z-10 animate-pulse" />
+                        )}
+                      </div>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-mono font-bold mt-1 shadow-md backdrop-blur-xs transition-colors duration-500 ${
+                        hasWarmth
+                          ? 'bg-[#b89758]/35 text-[#ffd54f] border border-[#ffd54f]/70 animate-pulse'
+                          : 'bg-black/75 text-[#8896ab] border border-[#3d4252]'
+                      }`}>
+                        {hasWarmth ? `${tr('온기 가동 중')} (${warmthLabel})` : `${tr('성화 꺼짐')} (${state.bonfireStacks || gm.bonfireStacks || 0}/5)`}
+                      </span>
                     </div>
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold mt-1 ${
-                      hasWarmth
-                        ? 'bg-[#b89758]/25 text-[#dcc496] border border-[#b89758]/60 shadow-[0_0_10px_rgba(184,151,88,0.3)] animate-pulse'
-                        : 'bg-[#242732] text-[#9da3af] border border-[#3d4252]'
-                    }`}>
-                      {hasWarmth ? `${tr('온기 가동 중')} (${warmthLabel})` : `${tr('성화 꺼짐')} (${state.bonfireStacks || gm.bonfireStacks || 0}/5)`}
-                    </span>
                   </div>
 
                   {/* 5단계 불씨 스택 블록 */}

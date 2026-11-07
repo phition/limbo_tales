@@ -554,16 +554,45 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         {activeView === 'bonfire' && (
           <div className="flex flex-col gap-3.5 max-w-lg mx-auto w-full pt-1">
             {/* 성화 게이지 카드 */}
-            <div className="p-4 rounded-xl bg-[#161820]/70 border border-[#3d372e]/65 backdrop-blur-md flex flex-col items-center text-center">
-              <span className="text-4xl mb-2 drop-shadow-[0_0_16px_rgba(255,123,37,0.5)]">🔥</span>
-              <h3 className="text-base font-bold text-[#dcc496] mb-1">
-                {tr('신성한 방주의 성화')}
-              </h3>
-              <p className="text-xs text-[#9da3af] max-w-md leading-relaxed mb-3">
-                {hasWarmth
-                  ? tr('신성한 온기가 방주 거점 전역을 보호하고 있습니다. (전 성채 생산량 +15%, 전투 EXP +20%, 성채 용병 지속 회복)')
-                  : tr('영목(목재)을 단계별로 바쳐 성화를 완충하면 5분간 온기 3대 버프가 지속됩니다.')}
-              </p>
+            <div className="rounded-2xl bg-[#161820]/80 border border-[#3d372e]/80 backdrop-blur-md flex flex-col overflow-hidden shadow-xl">
+              {/* 성화 일러스트 배너 (꺼져있을 땐 그레이스케일, 켜지면 따뜻한 풀컬러 복원) */}
+              <div className="relative w-full h-36 sm:h-44 overflow-hidden bg-[#07090e] border-b border-[#242b3b]">
+                <img
+                  src="assets/citadel_bonfire.jpg"
+                  alt={tr('신성한 방주의 성화')}
+                  className={`w-full h-full object-cover transition-all duration-700 ease-out ${
+                    hasWarmth
+                      ? 'grayscale-0 brightness-110 contrast-105 saturate-125'
+                      : 'grayscale brightness-[0.48] contrast-110'
+                  }`}
+                  style={{
+                    transition: 'filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#161820] via-transparent to-black/40 pointer-events-none" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className={`text-4xl sm:text-5xl drop-shadow-[0_0_24px_rgba(255,123,37,0.7)] transition-all duration-500 ${hasWarmth ? 'scale-110' : 'scale-90 opacity-70 filter grayscale'}`}>
+                    🔥
+                  </span>
+                  <div className={`mt-2 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold shadow-md backdrop-blur-xs transition-colors duration-500 ${
+                    hasWarmth
+                      ? 'bg-[#b89758]/35 text-[#ffd54f] border border-[#ffd54f]/70 animate-pulse'
+                      : 'bg-black/75 text-[#8896ab] border border-[#3d4252]'
+                  }`}>
+                    {hasWarmth ? `${tr('온기 잔여 시간')}: ${warmthTimeStr}` : `${tr('현재 불씨 스택')}: ${gm.bonfireStacks || 0}/5`}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 flex flex-col items-center text-center">
+                <h3 className="text-base font-bold text-[#dcc496] mb-1">
+                  {tr('신성한 방주의 성화')}
+                </h3>
+                <p className="text-xs text-[#9da3af] max-w-md leading-relaxed mb-3">
+                  {hasWarmth
+                    ? tr('신성한 온기가 방주 거점 전역을 보호하고 있습니다. (전 성채 생산량 +15%, 전투 EXP +20%, 성채 용병 지속 회복)')
+                    : tr('영목(목재)을 단계별로 바쳐 성화를 완충하면 5분간 온기 3대 버프가 지속됩니다.')}
+                </p>
 
               {/* 온기 스택 시각화 */}
               <div className="flex items-center gap-2 mb-3">
@@ -612,7 +641,8 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
         {/* ═════════════════════════════════════════════════════════════
             VIEW 3: 초간결 린(Lean) 시설 관리 목록 (Step 3-B)
