@@ -4272,7 +4272,7 @@ const StatDetailModal: React.FC<{
             <span className="text-center">{tr('기본')}</span>
             <span className="text-center">{tr('장비 가산')}</span>
             <span className="text-center">{tr('전직/각성')}</span>
-            <span className="text-right">{tr('최종 실효')}</span>
+            <span className="text-right">{tr('최종 수치')}</span>
           </div>
           {STATS_DATA.map(st => {
             const hasPromoBonus = (hero.promotionBonuses || []).includes(st.key as any);
