@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="ad.size" content="width=320,height=480">
+  <title>림보 테일즈: 5F 침식된 성소 원정대 플레이어블</title>
+  <style>
+    :root {
+      --bg-dark: #0a0c14;
+      --bg-card: rgba(18, 22, 36, 0.92);
+      --border-gold: #c8aa6e;
+      --border-epic: #ce93d8;
+      --epic-glow: rgba(206, 147, 216, 0.45);
+      --epic-purple: #ba68c8;
+      --hp-color: #ef5350;
+      --mp-color: #42a5f5;
+      --shield-color: #26c6da;
+      --gold-color: #ffd54f;
+      --text-main: #f0f3f8;
+      --text-sub: #a4b3c6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #game-container {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      height: 100%;
+      max-height: 920px;
+      background: var(--bg-dark);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(200, 170, 110, 0.3);
+    }
+
+    /* Background image & atmosphere */
+    .bg-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('../assets/dungeon_5.jpg') center center / cover no-repeat,
+                  radial-gradient(circle at 50% 30%, #201a35 0%, #080910 85%);
+      opacity: 0.42;
+      filter: brightness(0.7) contrast(1.15);
+      transition: filter 0.6s ease;
+      z-index: 1;
+    }
+
+    .bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(20, 15, 35, 0.3) 0%, rgba(5, 7, 12, 0.95) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Screen shake */
+    .shake {
+      animation: screenShake 0.32s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    @keyframes screenShake {
+      10%, 90% { transform: translate3d(-2px, 2px, 0); }
+      20%, 80% { transform: translate3d(3px, -3px, 0); }
+      30%, 50%, 70% { transform: translate3d(-5px, 4px, 0); }
+      40%, 60% { transform: translate3d(5px, -4px, 0); }
+    }
+
+    /* Top Navigation Bar */
+    header {
+      position: relative;
+      z-index: 10;
+      height: 52px;
+      background: rgba(10, 12, 20, 0.92);
+      border-bottom: 1px solid rgba(200, 170, 110, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      backdrop-filter: blur(6px);
+    }
+
+    .dungeon-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .floor-pill {
+      background: linear-gradient(135deg, #7b1fa2, #4a148c);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid #ba68c8;
+      box-shadow: 0 0 8px rgba(186, 104, 200, 0.4);
+      letter-spacing: 0.5px;
+    }
+
+    .dungeon-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.3px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Permanent Torch Badge */
+    .torch-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 112, 67, 0.15);
+      border: 1px solid rgba(255, 138, 101, 0.6);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      color: #ffcc80;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(255, 112, 67, 0.3);
+      animation: torchGlow 2.4s infinite ease-in-out;
+    }
+    @keyframes torchGlow {
+      0%, 100% { box-shadow: 0 0 8px rgba(255, 112, 67, 0.3); }
+      50% { box-shadow: 0 0 16px rgba(255, 167, 38, 0.65); border-color: rgba(255, 183, 77, 0.9); }
+    }
+
+    .sound-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* Main Viewport */
+    main {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Phase 1: Dungeon Exploration View */
+    #explore-phase {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px 14px;
+      z-index: 6;
+    }
+
+    .explore-hero-banner {
+      background: linear-gradient(180deg, rgba(30, 24, 46, 0.85) 0%, rgba(15, 17, 28, 0.95) 100%);
+      border: 1px solid rgba(206, 147, 216, 0.4);
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    .explore-party-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 6px;
+    }
+
+    .party-tag {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--epic-purple);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .gear-notice {
+      font-size: 10.5px;
+      color: #ffd54f;
+      background: rgba(255, 213, 79, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 213, 79, 0.4);
+      font-weight: 700;
+    }
+
+    .party-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .explore-hero-card {
+      background: rgba(25, 28, 42, 0.9);
+      border: 1px solid rgba(206, 147, 216, 0.5);
+      border-radius: 8px;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .explore-hero-card:hover {
+      transform: translateY(-2px);
+      border-color: #ffd54f;
+    }
+
+    .hero-avatar-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      border: 2px solid var(--epic-purple);
+      overflow: hidden;
+      position: relative;
+      background: #111;
+      margin-bottom: 5px;
+      box-shadow: 0 0 10px var(--epic-glow);
+    }
+    .hero-avatar-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-badge-epic {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: var(--epic-purple);
+      color: #fff;
+      font-size: 8px;
+      font-weight: 900;
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+
+    .explore-hero-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .explore-hero-role {
+      font-size: 9px;
+      color: #bbb;
+      margin-bottom: 4px;
+    }
+
+    .explore-hero-stats {
+      font-size: 9px;
+      color: #8bc34a;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 4px;
+      border-radius: 3px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .explore-gear-pill {
+      font-size: 8.5px;
+      color: #ffe082;
+      background: rgba(255, 193, 7, 0.15);
+      border: 1px solid rgba(255, 213, 79, 0.3);
+      border-radius: 3px;
+      padding: 1px 3px;
+      margin-top: 4px;
+      font-weight: 700;
+    }
+
+    /* Atmosphere Corridor Showcase */
+    .corridor-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px 10px;
+    }
+
+    .corridor-rune {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px dashed rgba(206, 147, 216, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: #ce93d8;
+      margin-bottom: 16px;
+      animation: runeRotate 16s linear infinite;
+      box-shadow: 0 0 25px rgba(186, 104, 200, 0.35);
+      background: radial-gradient(circle, rgba(123, 31, 162, 0.2) 0%, transparent 70%);
+    }
+    @keyframes runeRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .corridor-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+      margin-bottom: 6px;
+    }
+
+    .corridor-desc {
+      font-size: 12px;
+      color: #cfd8dc;
+      line-height: 1.5;
+      max-width: 320px;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+      margin-bottom: 8px;
+    }
+
+    .corridor-modifier-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(76, 175, 80, 0.15);
+      border: 1px solid rgba(129, 199, 132, 0.5);
+      color: #a5d6a7;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    /* Start Button */
+    .explore-action-area {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-enter-dungeon {
+      background: linear-gradient(135deg, #ffd54f 0%, #ff8f00 50%, #e65100 100%);
+      color: #1a0f00;
+      font-size: 17px;
+      font-weight: 900;
+      border: none;
+      padding: 16px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 143, 0, 0.6), 0 0 10px rgba(255, 213, 79, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      animation: pulseBtn 1.8s infinite ease-in-out;
+      transition: transform 0.15s;
+    }
+    .btn-enter-dungeon:active {
+      transform: scale(0.97);
+    }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(255, 143, 0, 0.5); }
+      50% { transform: scale(1.03); box-shadow: 0 6px 28px rgba(255, 143, 0, 0.85), 0 0 16px rgba(255, 235, 59, 0.6); }
+    }
+
+    /* Phase 2: Combat View */
+    #battle-phase {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 6;
+      position: relative;
+    }
+
+    /* Wave / Stage Header */
+    .battle-header-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px;
+      background: rgba(15, 18, 30, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .wave-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffd54f;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .auto-toggle-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 213, 79, 0.4);
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .auto-toggle-btn.active {
+      background: #ff8f00;
+      color: #000;
+      border-color: #ffd54f;
+      box-shadow: 0 0 10px rgba(255, 143, 0, 0.6);
+    }
+
+    /* Monster Arena Area */
+    .arena-enemies {
+      flex: 0 0 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 10px 14px;
+      position: relative;
+    }
+
+    .enemy-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .enemy-card.selected {
+      transform: scale(1.06);
+    }
+    .enemy-card.selected::before {
+      content: '▼ TARGET';
+      position: absolute;
+      top: -18px;
+      font-size: 9px;
+      font-weight: 900;
+      color: #ff5252;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid #ff5252;
+      letter-spacing: 0.5px;
+    }
+
+    .enemy-avatar-wrap {
+      width: 76px;
+      height: 76px;
+      border-radius: 10px;
+      border: 2px solid #ff5252;
+      overflow: hidden;
+      position: relative;
+      background: #111;
+      box-shadow: 0 0 14px rgba(255, 82, 82, 0.4);
+    }
+    .enemy-card.boss .enemy-avatar-wrap {
+      width: 104px;
+      height: 104px;
+      border-color: #ffd54f;
+      box-shadow: 0 0 20px rgba(255, 213, 79, 0.6);
+    }
+
+    .enemy-avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .enemy-name-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 4px;
+      text-shadow: 0 1px 3px #000;
+    }
+    .enemy-card.boss .enemy-name-label {
+      font-size: 12px;
+      color: #ffd54f;
+    }
+
+    .hp-bar-container {
+      width: 80px;
+      height: 7px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-top: 3px;
+      position: relative;
+    }
+    .enemy-card.boss .hp-bar-container {
+      width: 110px;
+      height: 9px;
+    }
+
+    .hp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #d32f2f, #f44336);
+      width: 100%;
+      transition: width 0.3s ease-out;
+    }
+
+    .enemy-status-row {
+      display: flex;
+      gap: 3px;
+      margin-top: 3px;
+      min-height: 14px;
+    }
+    .status-pill {
+      font-size: 8px;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 3px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid #fff;
+    }
+
+    /* Combat Log Ticker */
+    .combat-log-bar {
+      height: 28px;
+      background: rgba(10, 12, 18, 0.88);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 10.5px;
+      color: #cfd8dc;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .combat-log-bar strong {
+      color: #ffd54f;
+      margin-right: 4px;
+    }
+
+    /* Party Row in Combat */
+    .arena-heroes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(14, 18, 28, 0.75);
+    }
+
+    .hero-combat-card {
+      background: rgba(22, 26, 40, 0.9);
+      border: 1px solid rgba(206, 147, 216, 0.4);
+      border-radius: 8px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .hero-combat-card.active-turn {
+      border-color: #ffd54f;
+      box-shadow: 0 0 14px rgba(255, 213, 79, 0.6);
+      transform: translateY(-2px);
+    }
+    .hero-combat-card.active-turn::after {
+      content: 'ACTION';
+      position: absolute;
+      top: -8px;
+      right: 4px;
+      font-size: 8px;
+      font-weight: 900;
+      color: #000;
+      background: #ffd54f;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    .hero-combat-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .hero-combat-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--epic-purple);
+      overflow: hidden;
+      background: #111;
+      flex-shrink: 0;
+    }
+    .hero-combat-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-combat-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hero-combat-name {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hero-combat-lvl {
+      font-size: 8.5px;
+      color: var(--epic-purple);
+      font-weight: 800;
+    }
+
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 2px;
+    }
+
+    .mini-bar {
+      height: 5px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+    .mini-bar-fill {
+      height: 100%;
+      transition: width 0.25s ease;
+    }
+    .hp-fill { background: linear-gradient(90deg, #e53935, #ef5350); }
+    .mp-fill { background: linear-gradient(90deg, #1e88e5, #42a5f5); }
+    .shield-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: rgba(38, 198, 218, 0.7);
+      width: 0%;
+      transition: width 0.25s ease;
+    }
+
+    .stat-text-line {
+      font-size: 8px;
+      color: #bbb;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1px;
+    }
+
+    /* Action Control Deck */
+    .action-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 8px 12px 14px 12px;
+      background: linear-gradient(180deg, rgba(16, 20, 32, 0.95) 0%, rgba(10, 12, 20, 1) 100%);
+      border-top: 1px solid rgba(200, 170, 110, 0.3);
+      justify-content: space-between;
+    }
+
+    .action-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .current-turn-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffd54f;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .action-hint {
+      font-size: 9.5px;
+      color: #a4b3c6;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      flex: 1;
+      align-items: center;
+    }
+
+    .skill-btn {
+      background: linear-gradient(180deg, rgba(32, 38, 58, 0.95) 0%, rgba(18, 22, 36, 0.95) 100%);
+      border: 1px solid rgba(206, 147, 216, 0.5);
+      border-radius: 8px;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: #fff;
+      cursor: pointer;
+      position: relative;
+      height: 74px;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+    .skill-btn:hover {
+      border-color: #ffd54f;
+      transform: translateY(-2px);
+    }
+    .skill-btn:active {
+      transform: scale(0.96);
+    }
+    .skill-btn.special-skill {
+      border-color: #ffd54f;
+      background: linear-gradient(180deg, rgba(58, 42, 24, 0.95) 0%, rgba(28, 20, 14, 0.95) 100%);
+      box-shadow: 0 0 10px rgba(255, 213, 79, 0.25);
+    }
+    .skill-btn.special-skill.ready {
+      animation: specialGlow 1.8s infinite ease-in-out;
+    }
+    @keyframes specialGlow {
+      0%, 100% { box-shadow: 0 0 8px rgba(255, 213, 79, 0.3); border-color: #ffd54f; }
+      50% { box-shadow: 0 0 16px rgba(255, 213, 79, 0.7); border-color: #fff; }
+    }
+
+    .skill-btn.disabled {
+      opacity: 0.45;
+      pointer-events: none;
+      filter: grayscale(0.8);
+    }
+
+    .skill-icon {
+      font-size: 20px;
+    }
+
+    .skill-name {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .skill-cost {
+      font-size: 8.5px;
+      color: #90caf9;
+      font-weight: 700;
+    }
+
+    .skill-type-tag {
+      font-size: 7.5px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1px 4px;
+      border-radius: 3px;
+      color: #ffd54f;
+    }
+
+    /* Floating combat numbers */
+    .floating-num {
+      position: absolute;
+      font-size: 16px;
+      font-weight: 900;
+      pointer-events: none;
+      z-index: 100;
+      animation: floatUp 0.85s ease-out forwards;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+    }
+    .floating-num.crit {
+      font-size: 22px;
+      color: #ff1744;
+      text-shadow: 0 0 10px rgba(255, 23, 68, 0.8), 0 2px 4px #000;
+    }
+    .floating-num.dmg { color: #fff; }
+    .floating-num.heal { color: #69f0ae; }
+    .floating-num.shield { color: #00e5ff; }
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(0) scale(0.6); }
+      20% { opacity: 1; transform: translateY(-10px) scale(1.15); }
+      80% { opacity: 1; transform: translateY(-28px) scale(1); }
+      100% { opacity: 0; transform: translateY(-40px) scale(0.9); }
+    }
+
+    /* Visual effect overlay (Slashes, Lightning, Blizzard, Supernova) */
+    .vfx-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vfx-slash {
+      width: 140px;
+      height: 4px;
+      background: #fff;
+      box-shadow: 0 0 18px #ffeb3b, 0 0 30px #ff5722;
+      transform: rotate(-35deg) scaleX(0);
+      animation: slashAnim 0.3s ease-out forwards;
+    }
+    @keyframes slashAnim {
+      0% { transform: rotate(-35deg) scaleX(0); opacity: 1; }
+      50% { transform: rotate(-35deg) scaleX(1.4); opacity: 1; }
+      100% { transform: rotate(-35deg) scaleX(1.8); opacity: 0; }
+    }
+
+    .vfx-explosion {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff 0%, #ff9800 40%, #f44336 70%, transparent 100%);
+      animation: explodeAnim 0.45s ease-out forwards;
+    }
+    @keyframes explodeAnim {
+      0% { transform: scale(0.2); opacity: 1; }
+      60% { transform: scale(2.2); opacity: 0.9; }
+      100% { transform: scale(3.2); opacity: 0; }
+    }
+
+    /* Phase 3: Victory & Google Play CTA Overlay */
+    #victory-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 7, 12, 0.94);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .victory-badge-crown {
+      font-size: 46px;
+      margin-bottom: 6px;
+      animation: bounceCrown 1.5s infinite ease-in-out;
+    }
+    @keyframes bounceCrown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .victory-title {
+      font-size: 26px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, #ffd54f, #ff8f00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .victory-subtitle {
+      font-size: 12px;
+      color: #ce93d8;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .loot-reward-card {
+      background: rgba(24, 28, 44, 0.9);
+      border: 1px solid rgba(255, 213, 79, 0.5);
+      border-radius: 10px;
+      padding: 12px 18px;
+      width: 100%;
+      max-width: 320px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+    }
+
+    .loot-item-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .loot-icon {
+      font-size: 24px;
+      background: rgba(255, 255, 255, 0.08);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ffd54f;
+    }
+
+    .loot-details {
+      flex: 1;
+      text-align: left;
+    }
+    .loot-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: #ffd54f;
+    }
+    .loot-desc {
+      font-size: 10px;
+      color: #bbb;
+    }
+
+    /* Google Play App CTA Card */
+    .app-cta-box {
+      width: 100%;
+      max-width: 320px;
+      background: linear-gradient(180deg, rgba(32, 36, 56, 0.9) 0%, rgba(18, 20, 32, 0.95) 100%);
+      border: 1px solid rgba(206, 147, 216, 0.6);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 0 25px rgba(206, 147, 216, 0.35);
+      margin-bottom: 14px;
+    }
+
+    .app-header-flex {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .app-icon-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      border: 2px solid #ffd54f;
+      background: #111;
+      box-shadow: 0 0 12px rgba(255, 213, 79, 0.5);
+      object-fit: cover;
+    }
+
+    .app-meta {
+      flex: 1;
+      text-align: left;
+    }
+
+    .app-name {
+      font-size: 15px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .app-stars {
+      color: #ffd54f;
+      font-size: 11px;
+      margin: 2px 0;
+    }
+
+    .app-genre {
+      font-size: 10px;
+      color: #a4b3c6;
+    }
+
+    .app-pitch {
+      font-size: 11px;
+      color: #cfd8dc;
+      line-height: 1.4;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .btn-cta-download {
+      width: 100%;
+      background: linear-gradient(135deg, #00c853 0%, #009624 100%);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      border: none;
+      padding: 14px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px rgba(0, 200, 83, 0.6);
+      animation: pulseGreen 1.8s infinite ease-in-out;
+      text-decoration: none;
+    }
+    @keyframes pulseGreen {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); box-shadow: 0 6px 26px rgba(0, 200, 83, 0.85); }
+    }
+
+    .btn-replay {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #a4b3c6;
+      font-size: 11px;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    /* Hero Inspect Modal */
+    #hero-modal {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 250;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .hero-modal-content {
+      background: #141724;
+      border: 1px solid var(--border-epic);
+      border-radius: 10px;
+      padding: 16px;
+      width: 100%;
+      max-width: 340px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="game-container">
+    <!-- Ambient background layer -->
+    <div class="bg-layer" id="bg-layer"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- Header bar -->
+    <header>
+      <div class="dungeon-badge">
+        <span class="floor-pill">5F 성소</span>
+        <span class="dungeon-title">침식된 성소 (Abyss Sanctuary)</span>
+      </div>
+      <div class="header-right">
+        <!-- Permanent Torch: Never goes down -->
+        <div class="torch-badge" title="상시 점등된 영원의 성화">
+          🔥 100%
+        </div>
+        <button class="sound-btn" id="sound-btn" title="사운드 토글">🔊</button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+      <!-- Phase 1: Dungeon Exploration Screen -->
+      <section id="explore-phase">
+        <div class="explore-hero-banner">
+          <div class="explore-party-header">
+            <div class="party-tag">👑 20레벨 에픽 원정대</div>
+            <div class="gear-notice">5레벨 병기창 에픽 장비 전원 +6강</div>
+          </div>
+          <div class="party-cards-grid">
+            <!-- Paladin -->
+            <div class="explore-hero-card" onclick="openHeroModal('paladin')">
+              <div class="hero-avatar-box">
+                <img src="../assets/portraits/portrait_paladin.png" alt="성기사" onerror="this.onerror=null;this.src='../assets/portrait_paladin.jpg';">
+                <span class="hero-badge-epic">E</span>
+              </div>
+              <div class="explore-hero-name">성기사</div>
+              <div class="explore-hero-role">수호 탱커 (Lv.20)</div>
+              <div class="explore-hero-stats">HP 2,249 · DEF 217</div>
+              <div class="explore-gear-pill">⚔️ +6 신화검 셋</div>
+            </div>
+
+            <!-- Assassin -->
+            <div class="explore-hero-card" onclick="openHeroModal('assassin')">
+              <div class="hero-avatar-box">
+                <img src="../assets/portraits/portrait_rogue.png" alt="암살자" onerror="this.onerror=null;this.src='../assets/portrait_rogue.jpg';">
+                <span class="hero-badge-epic">E</span>
+              </div>
+              <div class="explore-hero-name">암살자</div>
+              <div class="explore-hero-role">물리 딜러 (Lv.20)</div>
+              <div class="explore-hero-stats">ATK 240 · SPD 100</div>
+              <div class="explore-gear-pill">🗡️ +6 사령검 셋</div>
+            </div>
+
+            <!-- Archmage (대마도사) -->
+            <div class="explore-hero-card" onclick="openHeroModal('mage')">
+              <div class="hero-avatar-box">
+                <img src="../assets/portraits/portrait_mage.png" alt="대마도사" onerror="this.onerror=null;this.src='../assets/portrait_mage.jpg';">
+                <span class="hero-badge-epic">E</span>
+              </div>
+              <div class="explore-hero-name">대마도사</div>
+              <div class="explore-hero-role">광역 마법 (Lv.20)</div>
+              <div class="explore-hero-stats">ATK 264 · MP 1,038</div>
+              <div class="explore-gear-pill">🔮 +6 성현 지팡이</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dungeon Corridor Center -->
+        <div class="corridor-center">
+          <div class="corridor-rune">⚡</div>
+          <h2 class="corridor-title">5층 침식된 성소 진입</h2>
+          <p class="corridor-desc">
+            심연의 공허 군주가 잠식한 고대 제단입니다. 전원 6강 에픽 무장 파티의 압도적인 힘으로 마물들을 정복하세요!
+          </p>
+          <div class="corridor-modifier-tag">
+            🛡️ 아군 원정대 적응 버프: 적 마물 공격력 50% 약화 적용
+          </div>
+        </div>
+
+        <!-- Enter Dungeon Action -->
+        <div class="explore-action-area">
+          <button class="btn-enter-dungeon" id="btn-enter" onclick="startDungeonBattle()">
+            <span>⚔️</span> 심연 성소 탐험 시작 <span>➔</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Phase 2: Combat Screen -->
+      <section id="battle-phase">
+        <!-- Stage & auto header -->
+        <div class="battle-header-info">
+          <div class="wave-badge" id="wave-badge">
+            <span>🔥</span> <span id="wave-title">Wave 1/2: 침식의 선봉대</span>
+          </div>
+          <button class="auto-toggle-btn" id="auto-btn" onclick="toggleAutoBattle()">⚡ 자동전투 OFF</button>
+        </div>
+
+        <!-- Monster Zone -->
+        <div class="arena-enemies" id="enemies-container">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Combat Log -->
+        <div class="combat-log-bar" id="combat-log">
+          <strong>[전투 개시]</strong> 20레벨 에픽 원정대가 전투 태세를 갖췄습니다!
+        </div>
+
+        <!-- Heroes Zone -->
+        <div class="arena-heroes" id="heroes-container">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Action Command Panel -->
+        <div class="action-panel">
+          <div class="action-panel-header">
+            <div class="current-turn-label" id="turn-label">
+              <span>⚔️</span> 성기사의 턴
+            </div>
+            <div class="action-hint" id="action-hint">적을 선택하거나 스킬을 시전하세요!</div>
+          </div>
+
+          <div class="skills-grid" id="skills-grid">
+            <!-- Populated by JS according to active turn hero -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Visual Effects Layer -->
+    <div class="vfx-layer" id="vfx-layer"></div>
+
+    <!-- Phase 3: Victory & Google Play CTA Overlay -->
+    <div id="victory-overlay">
+      <div class="victory-badge-crown">👑</div>
+      <h1 class="victory-title">성소 정복 성공!</h1>
+      <div class="victory-subtitle">5F 침식된 성소의 모든 마물을 소탕했습니다!</div>
+
+      <div class="loot-reward-card">
+        <div class="loot-item-row">
+          <div class="loot-icon">💍</div>
+          <div class="loot-details">
+            <div class="loot-name">[전설] 공허의 지배자 반지 (+6강)</div>
+            <div class="loot-desc">공격력 +40 · 행운 +19 · 1강당 흡혈 1% 증폭</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-cta-box">
+        <div class="app-header-flex">
+          <img src="../assets/icon_app.png" alt="앱 아이콘" class="app-icon-img" onerror="this.onerror=null;this.src='../assets/citadel_9x16_mobile.jpg';">
+          <div class="app-meta">
+            <div class="app-name">림보 테일즈 (Limbo Tales)</div>
+            <div class="app-stars">★★★★★ 4.9 (12.8만 개 평가)</div>
+            <div class="app-genre">다크 판타지 로그라이크 RPG</div>
+          </div>
+        </div>
+        <p class="app-pitch">
+          100종의 고유 전직과 클래스, 심연의 보스 레이드!<br>
+          지금 구글 플레이에서 즉시 무료로 다운로드하세요.
+        </p>
+        <button class="btn-cta-download" onclick="onAdClick()">
+          <span>📲</span> Google Play에서 무료 다운로드
+        </button>
+      </div>
+
+      <button class="btn-replay" onclick="resetAdExperience()">🔄 다시 플레이</button>
+    </div>
+
+    <!-- Hero Inspect Modal -->
+    <div id="hero-modal" onclick="closeHeroModal()">
+      <div class="hero-modal-content" onclick="event.stopPropagation()">
+        <h3 id="modal-hero-name" style="color:#ffd54f; margin-bottom:6px;">영웅 정보</h3>
+        <p id="modal-hero-role" style="font-size:12px; color:#ce93d8; margin-bottom:10px;">역할군</p>
+        <div id="modal-hero-stats" style="font-size:11px; line-height:1.6; margin-bottom:10px; background:rgba(0,0,0,0.4); padding:8px; border-radius:6px;"></div>
+        <div id="modal-hero-gear" style="font-size:11px; line-height:1.6; color:#ffe082;"></div>
+        <button style="margin-top:12px; width:100%; padding:8px; background:#333; color:#fff; border:none; border-radius:4px; cursor:pointer;" onclick="closeHeroModal()">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. Google Ads Exit & Click API Integration
+    // =========================================================================
+    var clickTag = "https://play.google.com/store/apps/details?id=com.limbo.tales";
+
+    function onAdClick() {
+      playSfx('click');
+      if (typeof ExitApi !== 'undefined' && ExitApi.exit) {
+        ExitApi.exit();
+      } else if (typeof mraid !== 'undefined' && mraid.open) {
+        mraid.open(clickTag);
+      } else {
+        window.open(clickTag, '_blank');
+      }
+    }
+
+    // =========================================================================
+    // 2. Web Audio Synthesizer (Zero External Dependencies)
+    // =========================================================================
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSfx(type) {
+      if (!soundEnabled) return;
+      initAudio();
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+
+      if (type === 'slash') {
+        // Crisp weapon swing/slash
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(480, now);
+        osc.frequency.exponentialRampToValueAtTime(80, now + 0.15);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } else if (type === 'magic') {
+        // Lightning/Magic bolt
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(950, now);
+        osc.frequency.exponentialRampToValueAtTime(220, now + 0.28);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.28);
+      } else if (type === 'shield') {
+        // Holy barrier / chime
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(350, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.35);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else if (type === 'supernova') {
+        // Deep explosion
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(240, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.6);
+        gain.gain.setValueAtTime(0.45, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.6);
+      } else if (type === 'victory') {
+        // Victory chime progression C - E - G - C
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+          gain.gain.setValueAtTime(0.3, now + idx * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.35);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + idx * 0.12);
+          osc.stop(now + idx * 0.12 + 0.35);
+        });
+      } else if (type === 'click') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      }
+    }
+
+    document.getElementById('sound-btn').addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-btn').innerText = soundEnabled ? '🔊' : '🔇';
+      if (soundEnabled) playSfx('click');
+    });
+
+    // =========================================================================
+    // 3. Game Data & Party Configuration (Faithful to Engine & User Prompts)
+    // =========================================================================
+    // Party: Paladin (성기사), Assassin (암살자), Archmage (대마도사)
+    // Grade: Epic, Level: 20
+    // Gear: Tier 5 Armory Epic +6 enhanced
+    const party = [
+      {
+        id: 'paladin',
+        name: '성기사',
+        role: '수호 탱커',
+        portrait: '../assets/portraits/portrait_paladin.png',
+        fallback: '../assets/portrait_paladin.jpg',
+        level: 20,
+        grade: 'epic',
+        maxHp: 2249,
+        hp: 2249,
+        maxMp: 333,
+        mp: 333,
+        shield: 0,
+        atk: 196,
+        def: 217,
+        spd: 38,
+        luck: 86,
+        equipment: {
+          weapon: '[에픽] 심연 파멸의 신화검 +6강',
+          armor: '[에픽] 공허 지배 수호갑 +6강',
+          accessory: '[에픽] 지배자의 심연 목걸이 +6강'
+        },
+        passive: '성스러운 오라: 파티 전체 피격 마법 피해 15% 경감',
+        skills: [
+          {
+            id: 'paladin_judgment',
+            name: '단죄의 일격',
+            icon: '🔨',
+            type: 'single',
+            mana: 30,
+            power: 1.3,
+            effect: 'damage',
+            desc: '단일 대상 130% 신성 피해 및 방어력 분쇄'
+          },
+          {
+            id: 'paladin_aegis',
+            name: '신성 방벽',
+            icon: '🛡️',
+            type: 'party',
+            mana: 50,
+            power: 0.25,
+            effect: 'shield',
+            desc: '아군 전체에 최대 HP 25% 신성 보호막 부여'
+          },
+          {
+            id: 'paladin_sanctuary',
+            name: '홀리 오라',
+            icon: '✨',
+            type: 'party',
+            mana: 70,
+            power: 0.25,
+            effect: 'heal',
+            isSpecial: true,
+            desc: '[필살기] 아군 전체 HP 25% 회복 및 디버프 정화'
+          }
+        ]
+      },
+      {
+        id: 'assassin',
+        name: '암살자',
+        role: '물리 딜러',
+        portrait: '../assets/portraits/portrait_rogue.png',
+        fallback: '../assets/portrait_rogue.jpg',
+        level: 20,
+        grade: 'epic',
+        maxHp: 1429,
+        hp: 1429,
+        maxMp: 339,
+        mp: 339,
+        shield: 0,
+        atk: 240,
+        def: 105,
+        spd: 100,
+        luck: 148,
+        equipment: {
+          weapon: '[에픽] 심연 그림자 사령검 +6강',
+          armor: '[에픽] 심연 수호 가죽갑 +6강',
+          accessory: '[에픽] 공허 인장 반지 +6강'
+        },
+        passive: '치명적 본능: 치명타 시 30% 확률로 즉시 추가 연격',
+        skills: [
+          {
+            id: 'assassin_strike',
+            name: '암영 연격',
+            icon: '🗡️',
+            type: 'single',
+            mana: 36,
+            power: 1.5,
+            pierce: 0.8,
+            effect: 'damage',
+            desc: '적의 방어 80%를 관통하고 150% 치명 피해'
+          },
+          {
+            id: 'assassin_poison',
+            name: '독무 연격',
+            icon: '☠️',
+            type: 'all',
+            mana: 44,
+            power: 0.8,
+            effect: 'poison',
+            desc: '적 전체에 80% 피해 + 3턴간 암흑 중독 부여'
+          },
+          {
+            id: 'assassin_execution',
+            name: '심장 꿰뚫기',
+            icon: '🩸',
+            type: 'single',
+            mana: 56,
+            power: 2.2,
+            effect: 'damage',
+            isSpecial: true,
+            desc: '[필살기] 단일 적에게 220% 처형 피해 (체력 50% 이하 1.5배)'
+          }
+        ]
+      },
+      {
+        id: 'elementalist',
+        name: '대마도사',
+        role: '마법 딜러',
+        portrait: '../assets/portraits/portrait_mage.png',
+        fallback: '../assets/portrait_mage.jpg',
+        level: 20,
+        grade: 'epic',
+        maxHp: 791,
+        hp: 791,
+        maxMp: 1038,
+        mp: 1038,
+        shield: 0,
+        atk: 264,
+        def: 141,
+        spd: 69,
+        luck: 77,
+        equipment: {
+          weapon: '[에픽] 태고 현자의 지팡이 +6강',
+          armor: '[에픽] 공허 지배 성의 +6강',
+          accessory: '[에픽] 차원 왜곡 부적 +6강'
+        },
+        passive: '원소 과부하: 3연속 마법 시전 시 다음 대미지 100% 증폭',
+        skills: [
+          {
+            id: 'elem_lightning',
+            name: '연쇄 번개',
+            icon: '⚡',
+            type: 'all',
+            mana: 72,
+            power: 1.04,
+            effect: 'stun',
+            desc: '적 전체에 104% 전격 마법 피해 + 60% 기절'
+          },
+          {
+            id: 'elem_blizzard',
+            name: '혹한 눈보라',
+            icon: '❄️',
+            type: 'all',
+            mana: 65,
+            power: 0.81,
+            effect: 'freeze',
+            desc: '적 전체에 81% 빙결 피해 및 동상 상태 부여'
+          },
+          {
+            id: 'elem_supernova',
+            name: '원소 초신성',
+            icon: '💥',
+            type: 'all',
+            mana: 91,
+            power: 1.5,
+            effect: 'damage',
+            isSpecial: true,
+            desc: '[필살기] 화염과 냉기 융합, 적 전체 150% 대폭발'
+          }
+        ]
+      }
+    ];
+
+    // Floor 5 Monsters: Enemy ATK intentionally scaled down by 50%
+    const encounters = [
+      {
+        wave: 1,
+        title: 'Wave 1/2: 침식의 선봉대',
+        enemies: [
+          {
+            id: 'monster_primordial_shaman',
+            name: '원초의 주술사',
+            image: '../assets/monster_primordial_shaman.jpg',
+            fallback: '../assets/monsters/monster_primordial_shaman.jpg',
+            isBoss: false,
+            maxHp: 390,
+            hp: 390,
+            atk: 46, // Base 92 * 0.5 = 46 (-50% scaling)
+            def: 36,
+            spd: 42,
+            statuses: []
+          },
+          {
+            id: 'monster_void_beast',
+            name: '공허의 하수인',
+            image: '../assets/monster_void_beast.jpg',
+            fallback: '../assets/monsters/monster_void_beast.jpg',
+            isBoss: false,
+            maxHp: 302,
+            hp: 302,
+            atk: 30, // Base 59 * 0.5 = 30 (-50% scaling)
+            def: 29,
+            spd: 18,
+            statuses: []
+          }
+        ]
+      },
+      {
+        wave: 2,
+        title: 'Wave 2/2: 👑 5F 보스 [공허의 침식자]',
+        enemies: [
+          {
+            id: 'boss_floor_5',
+            name: '공허의 침식자',
+            image: '../assets/boss_floor_5.jpg',
+            fallback: '../assets/void_overlord.jpg',
+            isBoss: true,
+            maxHp: 950,
+            hp: 950,
+            atk: 44, // Base 88 * 0.5 = 44 (-50% scaling)
+            def: 41,
+            spd: 28,
+            statuses: []
+          }
+        ]
+      }
+    ];
+
+    // State Variables
+    let currentWaveIndex = 0;
+    let currentEnemies = [];
+    let selectedEnemyIndex = 0;
+    let currentTurnHeroIndex = 0; // Paladin (0) -> Assassin (1) -> Mage (2)
+    let autoBattle = false;
+    let isActing = false;
+
+    // =========================================================================
+    // 4. Exploration Phase Functions
+    // =========================================================================
+    function startDungeonBattle() {
+      playSfx('click');
+      document.getElementById('explore-phase').style.display = 'none';
+      document.getElementById('battle-phase').style.display = 'flex';
+      loadWave(0);
+    }
+
+    function openHeroModal(heroKey) {
+      playSfx('click');
+      const hero = party.find(h => h.id.includes(heroKey) || (heroKey === 'mage' && h.id === 'elementalist'));
+      if (!hero) return;
+      document.getElementById('modal-hero-name').innerText = `[${hero.grade.toUpperCase()}] ${hero.name} (Lv.${hero.level})`;
+      document.getElementById('modal-hero-role').innerText = `${hero.role} · 패시브: ${hero.passive}`;
+      document.getElementById('modal-hero-stats').innerHTML = `
+        <strong>체력(HP):</strong> ${hero.hp} / ${hero.maxHp}<br>
+        <strong>마나(MP):</strong> ${hero.mp} / ${hero.maxMp}<br>
+        <strong>공격력(ATK):</strong> ${hero.atk} · <strong>방어력(DEF):</strong> ${hero.def}<br>
+        <strong>행동속도(SPD):</strong> ${hero.spd} · <strong>행운(LUCK):</strong> ${hero.luck}
+      `;
+      document.getElementById('modal-hero-gear').innerHTML = `
+        <strong>장착 장비 (병기창 5Lv +6강):</strong><br>
+        무기: ${hero.equipment.weapon}<br>
+        갑옷: ${hero.equipment.armor}<br>
+        장신구: ${hero.equipment.accessory}
+      `;
+      document.getElementById('hero-modal').style.display = 'flex';
+    }
+
+    function closeHeroModal() {
+      document.getElementById('hero-modal').style.display = 'none';
+    }
+
+    // =========================================================================
+    // 5. Combat Engine Implementation
+    // =========================================================================
+    function loadWave(index) {
+      currentWaveIndex = index;
+      const waveData = encounters[index];
+      document.getElementById('wave-title').innerText = waveData.title;
+
+      // Deep copy enemies for this wave
+      currentEnemies = waveData.enemies.map(e => ({ ...e, statuses: [] }));
+      selectedEnemyIndex = 0;
+
+      addLog(`<strong>[웨이브 돌입]</strong> ${waveData.title} 마물들이 모습을 드러냈습니다!`);
+
+      renderEnemies();
+      renderHeroes();
+      startTurn(0);
+    }
+
+    function renderEnemies() {
+      const container = document.getElementById('enemies-container');
+      container.innerHTML = '';
+
+      currentEnemies.forEach((enemy, idx) => {
+        if (enemy.hp <= 0) return;
+
+        const card = document.createElement('div');
+        card.className = `enemy-card ${enemy.isBoss ? 'boss' : ''} ${idx === selectedEnemyIndex ? 'selected' : ''}`;
+        card.onclick = () => selectEnemy(idx);
+
+        const hpPct = Math.max(0, Math.min(100, Math.round((enemy.hp / enemy.maxHp) * 100)));
+
+        card.innerHTML = `
+          <div class="enemy-avatar-wrap">
+            <img src="${enemy.image}" alt="${enemy.name}" onerror="this.onerror=null;this.src='${enemy.fallback}';">
+          </div>
+          <div class="enemy-name-label">${enemy.name}</div>
+          <div class="hp-bar-container">
+            <div class="hp-bar-fill" style="width: ${hpPct}%;"></div>
+          </div>
+          <div class="enemy-status-row">
+            ${enemy.statuses.map(st => `<span class="status-pill" style="border-color:${st.color}; color:${st.color};">${st.icon} ${st.name}</span>`).join('')}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function selectEnemy(index) {
+      if (currentEnemies[index] && currentEnemies[index].hp > 0) {
+        selectedEnemyIndex = index;
+        renderEnemies();
+        playSfx('click');
+      }
+    }
+
+    function renderHeroes() {
+      const container = document.getElementById('heroes-container');
+      container.innerHTML = '';
+
+      party.forEach((hero, idx) => {
+        const card = document.createElement('div');
+        card.className = `hero-combat-card ${idx === currentTurnHeroIndex ? 'active-turn' : ''}`;
+        card.onclick = () => openHeroModal(hero.id);
+
+        const hpPct = Math.max(0, Math.min(100, Math.round((hero.hp / hero.maxHp) * 100)));
+        const mpPct = Math.max(0, Math.min(100, Math.round((hero.mp / hero.maxMp) * 100)));
+        const shieldPct = Math.min(100, Math.round((hero.shield / hero.maxHp) * 100));
+
+        card.innerHTML = `
+          <div class="hero-combat-top">
+            <div class="hero-combat-avatar">
+              <img src="${hero.portrait}" alt="${hero.name}" onerror="this.onerror=null;this.src='${hero.fallback}';">
+            </div>
+            <div class="hero-combat-info">
+              <div class="hero-combat-name">${hero.name}</div>
+              <div class="hero-combat-lvl">Lv.${hero.level} [에픽 +6강]</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="mini-bar">
+              <div class="mini-bar-fill hp-fill" style="width: ${hpPct}%;"></div>
+              <div class="shield-overlay" style="width: ${shieldPct}%;"></div>
+            </div>
+            <div class="mini-bar">
+              <div class="mini-bar-fill mp-fill" style="width: ${mpPct}%;"></div>
+            </div>
+          </div>
+          <div class="stat-text-line">
+            <span>HP ${hero.hp}${hero.shield > 0 ? ` (+${hero.shield})` : ''}</span>
+            <span>MP ${hero.mp}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function startTurn(heroIdx) {
+      // Find alive hero
+      if (heroIdx >= party.length) {
+        // All heroes acted -> Enemy turn
+        triggerEnemyTurn();
+        return;
+      }
+
+      const hero = party[heroIdx];
+      if (hero.hp <= 0) {
+        startTurn(heroIdx + 1);
+        return;
+      }
+
+      currentTurnHeroIndex = heroIdx;
+      isActing = false;
+      renderHeroes();
+      renderActionPanel(hero);
+
+      // Verify selected enemy is still alive
+      if (!currentEnemies[selectedEnemyIndex] || currentEnemies[selectedEnemyIndex].hp <= 0) {
+        const nextTarget = currentEnemies.findIndex(e => e.hp > 0);
+        if (nextTarget !== -1) selectedEnemyIndex = nextTarget;
+        renderEnemies();
+      }
+
+      if (autoBattle) {
+        setTimeout(executeAutoHeroAction, 650);
+      }
+    }
+
+    function renderActionPanel(hero) {
+      document.getElementById('turn-label').innerHTML = `<span>⚔️</span> ${hero.name}의 턴`;
+
+      const grid = document.getElementById('skills-grid');
+      grid.innerHTML = '';
+
+      hero.skills.forEach(skill => {
+        const canUse = hero.mp >= skill.mana;
+        const btn = document.createElement('button');
+        btn.className = `skill-btn ${skill.isSpecial ? 'special-skill ready' : ''} ${!canUse ? 'disabled' : ''}`;
+        btn.onclick = () => castHeroSkill(hero, skill);
+
+        btn.innerHTML = `
+          <div class="skill-icon">${skill.icon}</div>
+          <div class="skill-name">${skill.name}</div>
+          <div class="skill-cost">MP ${skill.mana}</div>
+          <div class="skill-type-tag">${skill.type === 'party' ? '아군 전체' : (skill.type === 'all' ? '적 전체' : '단일 공격')}</div>
+        `;
+        grid.appendChild(btn);
+      });
+
+      // Update action hint
+      if (hero.id === 'paladin') {
+        document.getElementById('action-hint').innerText = '🛡️ [신성 방벽]으로 전체 보호막을 두르거나 [단죄의 일격]으로 강타하세요!';
+      } else if (hero.id === 'assassin') {
+        document.getElementById('action-hint').innerText = '🗡️ [심장 꿰뚫기]로 치명적인 처형 피해를 입히세요!';
+      } else {
+        document.getElementById('action-hint').innerText = '⚡ [원소 초신성] 또는 [연쇄 번개]로 적 전체를 섬멸하세요!';
+      }
+    }
+
+    function castHeroSkill(hero, skill) {
+      if (isActing) return;
+      if (hero.mp < skill.mana) {
+        addLog(`⚠️ 마나가 부족합니다! (필요 MP: ${skill.mana})`);
+        return;
+      }
+
+      isActing = true;
+      hero.mp = Math.max(0, hero.mp - skill.mana);
+
+      // Play Sound
+      if (skill.isSpecial) {
+        playSfx(hero.id === 'elementalist' ? 'supernova' : (hero.id === 'paladin' ? 'shield' : 'slash'));
+      } else if (skill.effect === 'damage' || skill.effect === 'poison') {
+        playSfx('slash');
+      } else if (skill.effect === 'shield' || skill.effect === 'heal') {
+        playSfx('shield');
+      } else {
+        playSfx('magic');
+      }
+
+      // Execute skill logic
+      if (skill.effect === 'shield') {
+        // Paladin party shield
+        const shieldAmt = Math.round(hero.maxHp * skill.power);
+        party.forEach(h => {
+          h.shield = shieldAmt;
+          showFloatingText(`+${shieldAmt} 🛡️`, 'shield', h.id);
+        });
+        addLog(`<strong>[${hero.name}]</strong> <span style="color:#26c6da;">${skill.name}!</span> 아군 전체에 ${shieldAmt}의 신성 방벽 전개!`);
+        triggerScreenFlash('rgba(38, 198, 218, 0.3)');
+      } else if (skill.effect === 'heal') {
+        // Paladin Holy aura
+        party.forEach(h => {
+          const healAmt = Math.round(h.maxHp * skill.power);
+          h.hp = Math.min(h.maxHp, h.hp + healAmt);
+          showFloatingText(`+${healAmt} ✨`, 'heal', h.id);
+        });
+        addLog(`<strong>[${hero.name}]</strong> <span style="color:#ffd54f;">${skill.name}!</span> 아군 전체 체력 대량 회복!`);
+        triggerScreenFlash('rgba(255, 213, 79, 0.3)');
+      } else if (skill.type === 'all') {
+        // AoE damage to all enemies (Archmage / Assassin poison)
+        triggerScreenShake();
+        if (skill.id === 'elem_supernova') {
+          triggerScreenFlash('rgba(255, 87, 34, 0.45)');
+          spawnVfxExplosion();
+        } else {
+          spawnVfxSlash();
+        }
+
+        currentEnemies.forEach((target, eIdx) => {
+          if (target.hp <= 0) return;
+          const isCrit = Math.random() * 100 < (hero.luck * 0.3);
+          const mult = isCrit ? 1.7 : 1.0;
+          const baseDmg = Math.max(10, (hero.atk * skill.power) - (target.def * 0.4));
+          const dmg = Math.round(baseDmg * mult);
+
+          target.hp = Math.max(0, target.hp - dmg);
+          showFloatingText(`-${dmg}${isCrit ? ' CRIT!' : ''}`, isCrit ? 'crit' : 'dmg', `enemy-${eIdx}`);
+
+          if (skill.effect === 'stun' && Math.random() < 0.6) {
+            target.statuses.push({ name: '기절', icon: '⚡', color: '#ffd54f' });
+          }
+        });
+
+        addLog(`<strong>[${hero.name}]</strong> <span style="color:#ba68c8;">${skill.name}!</span> 적 전체에 치명적인 광역 강타!`);
+      } else {
+        // Single target damage
+        const target = currentEnemies[selectedEnemyIndex];
+        if (target && target.hp > 0) {
+          triggerScreenShake();
+          spawnVfxSlash();
+
+          const isCrit = Math.random() * 100 < (hero.luck * 0.35);
+          let mult = isCrit ? 1.8 : 1.0;
+          if (skill.isSpecial && target.hp < target.maxHp * 0.5) {
+            mult *= 1.5; // Assassin execute amp!
+          }
+
+          const targetDef = skill.pierce ? target.def * (1 - skill.pierce) : target.def;
+          const baseDmg = Math.max(20, (hero.atk * skill.power) - (targetDef * 0.4));
+          const dmg = Math.round(baseDmg * mult);
+
+          target.hp = Math.max(0, target.hp - dmg);
+          showFloatingText(`-${dmg}${isCrit ? ' CRITICAL!' : ''}`, isCrit ? 'crit' : 'dmg', `enemy-${selectedEnemyIndex}`);
+
+          addLog(`<strong>[${hero.name}]</strong> ${skill.name} 적중! <strong>${target.name}</strong>에게 ${dmg} 피해!`);
+        }
+      }
+
+      renderHeroes();
+      renderEnemies();
+
+      // Check wave win
+      setTimeout(() => {
+        checkWaveCondition();
+      }, 700);
+    }
+
+    function checkWaveCondition() {
+      const allDead = currentEnemies.every(e => e.hp <= 0);
+      if (allDead) {
+        if (currentWaveIndex < encounters.length - 1) {
+          addLog(`🎉 <strong>[웨이브 돌파]</strong> 선봉대를 소탕했습니다! 심연의 핵으로 전진합니다...`);
+          playSfx('victory');
+          setTimeout(() => {
+            loadWave(currentWaveIndex + 1);
+          }, 1100);
+        } else {
+          // Boss Cleared -> Ad Victory Screen
+          onAllDungeonsCleared();
+        }
+      } else {
+        // Proceed to next hero turn
+        startTurn(currentTurnHeroIndex + 1);
+      }
+    }
+
+    function triggerEnemyTurn() {
+      addLog(`<strong>[마물의 턴]</strong> 마물들이 반격을 개시합니다!`);
+      document.getElementById('turn-label').innerHTML = `<span style="color:#ef5350;">⚠️</span> 적 마물의 반격`;
+
+      setTimeout(() => {
+        currentEnemies.forEach((enemy, idx) => {
+          if (enemy.hp <= 0) return;
+
+          // Check stun
+          const stunIdx = enemy.statuses.findIndex(s => s.name === '기절');
+          if (stunIdx !== -1) {
+            enemy.statuses.splice(stunIdx, 1);
+            addLog(`⚡ <strong>${enemy.name}</strong>은(는) 기절하여 행동하지 못합니다!`);
+            return;
+          }
+
+          // Pick target (Paladin has highest aggro)
+          const targetHero = (party[0].hp > 0 && Math.random() < 0.7) ? party[0] : (party[1].hp > 0 ? party[1] : party[2]);
+          if (!targetHero || targetHero.hp <= 0) return;
+
+          // Enemy ATK is already reduced by 50%!
+          const baseDmg = Math.max(5, enemy.atk - (targetHero.def * 0.3));
+          let dmg = Math.round(baseDmg * (0.85 + Math.random() * 0.3));
+
+          // Shield absorption
+          if (targetHero.shield > 0) {
+            const absorb = Math.min(targetHero.shield, dmg);
+            targetHero.shield -= absorb;
+            dmg -= absorb;
+            showFloatingText(`🛡️ 흡수 (-${absorb})`, 'shield', targetHero.id);
+          }
+
+          if (dmg > 0) {
+            targetHero.hp = Math.max(1, targetHero.hp - dmg);
+            showFloatingText(`-${dmg}`, 'dmg', targetHero.id);
+          }
+
+          playSfx('slash');
+          addLog(`💥 <strong>${enemy.name}</strong>의 공격! <strong>${targetHero.name}</strong>이(가) 가볍게 막아내었습니다!`);
+        });
+
+        renderHeroes();
+        renderEnemies();
+
+        // End of enemy turn -> Back to Hero Turn 0
+        setTimeout(() => {
+          startTurn(0);
+        }, 800);
+      }, 600);
+    }
+
+    function executeAutoHeroAction() {
+      if (!autoBattle || isActing) return;
+      const hero = party[currentTurnHeroIndex];
+      if (!hero || hero.hp <= 0) return;
+
+      // Smart AI for playable ad:
+      // Paladin casts shield if not active, or judgment
+      // Assassin casts execute or strike
+      // Mage casts supernova or chain lightning
+      let chosenSkill = hero.skills[0];
+      if (hero.id === 'paladin' && hero.shield <= 0 && hero.mp >= 50) {
+        chosenSkill = hero.skills[1]; // 신성 방벽
+      } else if (hero.id === 'assassin' && hero.skills[2] && hero.mp >= 56) {
+        chosenSkill = hero.skills[2]; // 심장 꿰뚫기
+      } else if (hero.id === 'elementalist' && hero.skills[2] && hero.mp >= 91) {
+        chosenSkill = hero.skills[2]; // 원소 초신성
+      } else if (hero.mp >= hero.skills[1].mana) {
+        chosenSkill = hero.skills[1];
+      }
+
+      castHeroSkill(hero, chosenSkill);
+    }
+
+    function toggleAutoBattle() {
+      autoBattle = !autoBattle;
+      playSfx('click');
+      const btn = document.getElementById('auto-btn');
+      btn.className = `auto-toggle-btn ${autoBattle ? 'active' : ''}`;
+      btn.innerText = autoBattle ? '⚡ 자동전투 ON' : '⚡ 자동전투 OFF';
+      if (autoBattle && !isActing) {
+        executeAutoHeroAction();
+      }
+    }
+
+    function onAllDungeonsCleared() {
+      playSfx('victory');
+      triggerScreenFlash('rgba(255, 213, 79, 0.5)');
+      triggerScreenShake();
+      document.getElementById('victory-overlay').style.display = 'flex';
+    }
+
+    function resetAdExperience() {
+      playSfx('click');
+      document.getElementById('victory-overlay').style.display = 'none';
+      document.getElementById('battle-phase').style.display = 'none';
+      document.getElementById('explore-phase').style.display = 'flex';
+
+      // Reset party HP & MP
+      party.forEach(h => {
+        h.hp = h.maxHp;
+        h.mp = h.maxMp;
+        h.shield = 0;
+      });
+      autoBattle = false;
+      document.getElementById('auto-btn').className = 'auto-toggle-btn';
+      document.getElementById('auto-btn').innerText = '⚡ 자동전투 OFF';
+    }
+
+    // =========================================================================
+    // 6. Visual Effects & Floating Numbers Helpers
+    // =========================================================================
+    function showFloatingText(text, type, targetId) {
+      const el = document.createElement('div');
+      el.className = `floating-num ${type}`;
+      el.innerText = text;
+
+      // Position relative to target
+      let top = 40 + Math.random() * 20;
+      let left = 35 + Math.random() * 30;
+
+      if (targetId.startsWith('enemy')) {
+        top = 22 + Math.random() * 10;
+      }
+
+      el.style.top = `${top}%`;
+      el.style.left = `${left}%`;
+
+      document.getElementById('game-container').appendChild(el);
+      setTimeout(() => el.remove(), 900);
+    }
+
+    function triggerScreenShake() {
+      const container = document.getElementById('game-container');
+      container.classList.remove('shake');
+      void container.offsetWidth; // reflow
+      container.classList.add('shake');
+      setTimeout(() => container.classList.remove('shake'), 350);
+    }
+
+    function triggerScreenFlash(color) {
+      const overlay = document.createElement('div');
+      overlay.style.position = 'absolute';
+      overlay.style.inset = '0';
+      overlay.style.backgroundColor = color;
+      overlay.style.pointerEvents = 'none';
+      overlay.style.zIndex = '90';
+      overlay.style.transition = 'opacity 0.4s ease-out';
+      document.getElementById('game-container').appendChild(overlay);
+
+      setTimeout(() => {
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.remove(), 400);
+      }, 50);
+    }
+
+    function spawnVfxSlash() {
+      const layer = document.getElementById('vfx-layer');
+      const slash = document.createElement('div');
+      slash.className = 'vfx-slash';
+      layer.appendChild(slash);
+      setTimeout(() => slash.remove(), 350);
+    }
+
+    function spawnVfxExplosion() {
+      const layer = document.getElementById('vfx-layer');
+      const exp = document.createElement('div');
+      exp.className = 'vfx-explosion';
+      layer.appendChild(exp);
+      setTimeout(() => exp.remove(), 500);
+    }
+
+    function addLog(htmlText) {
+      const logBar = document.getElementById('combat-log');
+      logBar.innerHTML = htmlText;
+    }
+
+    // Auto-init on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      // Warm up audio context on first user tap
+      window.addEventListener('click', initAudio, { once: true });
+      window.addEventListener('touchstart', initAudio, { once: true });
+    });
+  </script>
+</body>
+</html>
