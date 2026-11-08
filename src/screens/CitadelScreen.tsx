@@ -7,6 +7,10 @@ import { FacilityWorkstationModal } from '../components/territory/FacilityWorkst
 import { TerritoryDioramaView } from '../components/territory/TerritoryDioramaView';
 import { ArkCitadelHubDrawer } from '../components/territory/ArkCitadelHubDrawer';
 import { ArenaScreen } from './ArenaScreen';
+import { ExplorationScreen } from './ExplorationScreen';
+import { BattleScreen } from './BattleScreen';
+import { GuestbookModal } from '../components/GuestbookModal';
+import { useIsMobile } from '../hooks/useIsMobile';
 import { ResourceBar } from '../components/ResourceBar';
 import { LogPanel } from '../components/LogPanel';
 import { ActionButton } from '../components/ActionButton';
@@ -14851,6 +14855,11 @@ export const ExploreDrawer: React.FC<{
 //  메인 CitadelScreen
 // ─────────────────────────────────────────────────────────────
 export const CitadelScreen: React.FC = () => {
+  const { state, gm, navigateTo } = useGameManager();
+  const isMobile = useIsMobile();
+  const isLargeScreen = !isMobile;
+  const isInDungeonOrBattle = isLargeScreen && (state.currentScreen === 'exploration' || state.currentScreen === 'battle');
+
   const [openDrawer, setOpenDrawer] = useState<string | null>(null);
   const [arenaGateMode, setArenaGateMode] = useState<'hub' | 'arena' | 'nemesis' | 'invasion'>('hub');
   const [citadelInitialView, setCitadelInitialView] = useState<'banners' | 'bonfire' | 'facilities' | 'workstations'>('banners');
@@ -14858,6 +14867,21 @@ export const CitadelScreen: React.FC = () => {
   const [returnToCitadelOnClose, setReturnToCitadelOnClose] = useState<boolean>(false);
   // 🔥 상단 뷰포트 성화 조작 반투명 모달 오픈 상태
   const [showBonfireModal, setShowBonfireModal] = useState<boolean>(false);
+  // 💬 대형 화면에서 차원 메세지 클릭 시 인라인(로그 상단) 패널 오픈 상태
+  const [showInlineGuestbook, setShowInlineGuestbook] = useState<boolean>(false);
+
+  // 대형 화면에서 openGuestbook 이벤트 수신 시 인라인 패널 오픈
+  useEffect(() => {
+    const handleOpenDm = () => {
+      if (isLargeScreen) {
+        setShowInlineGuestbook(true);
+      }
+    };
+    gm.on('openGuestbook', handleOpenDm);
+    return () => {
+      gm.off('openGuestbook', handleOpenDm);
+    };
+  }, [gm, isLargeScreen]);
 
   // 📋 방명록(게시판) 실시간 메시지 상태 (하단 네비 상단 2개 미리보기용)
   const [guestbookMessages, setGuestbookMessages] = useState<GuestbookMessage[]>(() => {
@@ -14944,7 +14968,6 @@ export const CitadelScreen: React.FC = () => {
     } catch {}
   };
 
-  const { state, gm, navigateTo } = useGameManager();
   const { lang, dict, tr } = useI18n();
   useCustomAssetVersion();
 
@@ -15463,8 +15486,18 @@ export const CitadelScreen: React.FC = () => {
     return items;
   }, [state.buildings, gm.isMasterAccount, lang]);
 
+  // 던전 탐험이나 전투에 진입하면 기존 열려있던 드로어 닫기
+  useEffect(() => {
+    if (isInDungeonOrBattle && openDrawer) {
+      setOpenDrawer(null);
+    }
+  }, [isInDungeonOrBattle, openDrawer]);
+
   // 일반 드로어 열기 (네비게이션 휠, 바로가기 등: 닫기 시 즉시 완전 닫기)
   const handleTryOpenDrawer = useCallback((key: string) => {
+    if (isInDungeonOrBattle) {
+      return false;
+    }
     const bId = DRAWER_TO_BUILDING_ID[key];
     if (bId && bId !== 'arenaGate' && (state.buildings[bId]?.level || 0) < 1) {
       try { SoundManager.getInstance().play('debuff'); } catch {}
@@ -15489,7 +15522,7 @@ export const CitadelScreen: React.FC = () => {
       setOpenDrawer(key);
     }
     return true;
-  }, [state.buildings, tr]);
+  }, [isInDungeonOrBattle, state.buildings, tr]);
 
   // 성채('citadel') 패널 내부에서 건물 선택 입장 시 (닫기 시 성채 패널로 복귀)
   const handleEnterBuildingFromCitadel = useCallback((key: string) => {
@@ -15743,16 +15776,22 @@ export const CitadelScreen: React.FC = () => {
             onOpenFacility={(key) => handleTryOpenDrawer(key)}
             onOpenExplore={() => handleTryOpenDrawer('explore')}
             isLit={hasWarmth}
+            className={isInDungeonOrBattle ? 'pointer-events-none' : ''}
           />
 
           {/* 퀘스트 & 오프라인 결산 알림 마커 오버레이 (디오라마 좌측 상단) */}
           {(!openDrawer || claimableQuestCount > 0 || Boolean(activeOfflineReport) || isEpicRebuildReady || registerableCodexCount > 0 || !hasWarmth) && (
-            <div className="absolute top-2.5 left-2.5 z-20 flex flex-col gap-1.5 items-start">
+            <div className={`absolute top-2.5 left-2.5 z-20 flex flex-col gap-1.5 items-start transition-all duration-300 ${
+              isInDungeonOrBattle ? 'filter grayscale contrast-75 opacity-40 pointer-events-none select-none cursor-not-allowed' : ''
+            }`}>
               {/* 👑 1차 영지 재건 완성 대서사 에픽 퀘스트 알림 마커 */}
               {isEpicRebuildReady && (
                 <button
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#b89758] via-[#ffd54f] to-[#b89758] text-black text-xs font-black shadow-[0_0_20px_rgba(184,151,88,0.85)] border border-white hover:scale-105 transition-all cursor-pointer animate-pulse"
-                  onClick={() => handleTryOpenDrawer('quests')}
+                  disabled={isInDungeonOrBattle}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#b89758] via-[#ffd54f] to-[#b89758] text-black text-xs font-black shadow-[0_0_20px_rgba(184,151,88,0.85)] border border-white hover:scale-105 transition-all cursor-pointer animate-pulse disabled:cursor-not-allowed"
+                  onClick={() => {
+                    if (!isInDungeonOrBattle) handleTryOpenDrawer('quests');
+                  }}
                   title="모든 시설이 Lv.1 이상으로 완공되었습니다! 1차 영지 재건 서사와 향후 전개 인사이트를 확인하세요."
                 >
                   <span className="text-sm animate-bounce">👑</span>
@@ -15768,8 +15807,11 @@ export const CitadelScreen: React.FC = () => {
               {/* 📜 도감 등록 가능 알림 마커 */}
               {registerableCodexCount > 0 && !tutorialStepId && (
                 <button
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#ef5350] text-[#ff7043] text-xs font-bold shadow-lg shadow-[#ef535044] hover:scale-105 transition-all cursor-pointer animate-fade-in"
-                  onClick={() => setShowCodexModal(true)}
+                  disabled={isInDungeonOrBattle}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#ef5350] text-[#ff7043] text-xs font-bold shadow-lg shadow-[#ef535044] hover:scale-105 transition-all cursor-pointer animate-fade-in disabled:cursor-not-allowed"
+                  onClick={() => {
+                    if (!isInDungeonOrBattle) setShowCodexModal(true);
+                  }}
                   title="등록 가능한 심연의 백과 컬렉션이 있습니다!"
                 >
                   <span className="relative flex h-2 w-2">
@@ -15789,8 +15831,11 @@ export const CitadelScreen: React.FC = () => {
               {/* 퀘스트 알림 마커 */}
               {hasQuestAlert && (
                 <button
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#b89758] text-[#dcc496] text-xs font-bold shadow-lg shadow-[#b8975833] hover:scale-105 transition-all cursor-pointer animate-fade-in"
-                  onClick={() => handleTryOpenDrawer('quests')}
+                  disabled={isInDungeonOrBattle}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#b89758] text-[#dcc496] text-xs font-bold shadow-lg shadow-[#b8975833] hover:scale-105 transition-all cursor-pointer animate-fade-in disabled:cursor-not-allowed"
+                  onClick={() => {
+                    if (!isInDungeonOrBattle) handleTryOpenDrawer('quests');
+                  }}
                 >
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#b89758] opacity-75"></span>
@@ -15806,8 +15851,11 @@ export const CitadelScreen: React.FC = () => {
               {/* 🔥 성화 꺼짐 / 점화 필요 알림 마커 */}
               {!hasWarmth && (
                 <button
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#ff7043] text-[#ff8a80] text-xs font-bold shadow-lg shadow-[#ff704344] hover:scale-105 transition-all cursor-pointer animate-fade-in"
-                  onClick={() => handleTryOpenDrawer('bonfire')}
+                  disabled={isInDungeonOrBattle}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#ff7043] text-[#ff8a80] text-xs font-bold shadow-lg shadow-[#ff704344] hover:scale-105 transition-all cursor-pointer animate-fade-in disabled:cursor-not-allowed"
+                  onClick={() => {
+                    if (!isInDungeonOrBattle) handleTryOpenDrawer('bonfire');
+                  }}
                   title={tr('성화가 꺼져 있습니다! 클릭하여 불씨를 지피고 온기 버프를 활성화하세요.')}
                 >
                   <span className="relative flex h-2 w-2">
@@ -15827,10 +15875,11 @@ export const CitadelScreen: React.FC = () => {
               {/* 오프라인 결산 알림 마커 */}
               {activeOfflineReport && (
                 <button
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#b89758] text-[#dcc496] text-xs font-bold shadow-lg shadow-[#b8975833] hover:scale-105 transition-all cursor-pointer animate-fade-in"
+                  disabled={isInDungeonOrBattle}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 border border-[#b89758] text-[#dcc496] text-xs font-bold shadow-lg shadow-[#b8975833] hover:scale-105 transition-all cursor-pointer animate-fade-in disabled:cursor-not-allowed"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setOfflineReportModal(activeOfflineReport);
+                    if (!isInDungeonOrBattle) setOfflineReportModal(activeOfflineReport);
                   }}
                   title={tr('오프라인 성채 수익 정산 보고서 열기')}
                 >
@@ -15981,6 +16030,19 @@ export const CitadelScreen: React.FC = () => {
             </div>
           )}
 
+          {/* 💬 인라인 차원 메세지 (Guestbook) 패널: 큰 화면에서 D.M 클릭 시 로그 상단 남은 뷰포트 공간을 차지 */}
+          {showInlineGuestbook && (
+            <div className="flex-1 min-h-0 w-full px-3 pt-2 relative z-20 flex flex-col justify-end animate-fade-in pointer-events-auto">
+              <div className="w-full max-w-4xl mx-auto h-full flex flex-col">
+                <GuestbookModal
+                  open={true}
+                  isInline={true}
+                  onClose={() => setShowInlineGuestbook(false)}
+                />
+              </div>
+            </div>
+          )}
+
           {/* 📜 반투명 영지 활동 & 생산 로그 패널 (배경 디오라마 및 비디오 전면에 안정적으로 노출) */}
           <div className="w-full px-3 py-1.5 relative z-20 shrink-0">
             <div className="w-full max-w-4xl mx-auto rounded-xl border border-[#3d372e]/60 bg-[#080a10]/60 backdrop-blur-[4px] shadow-[0_4px_28px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col h-40 sm:h-48 md:h-52 transition-all">
@@ -16009,7 +16071,13 @@ export const CitadelScreen: React.FC = () => {
           <div className="px-3 py-2 bg-[#08090b]/60 border-t border-[#242732]/60 shrink-0 relative z-20 backdrop-blur-md">
             <div
               className="w-full max-w-4xl mx-auto px-3.5 py-2 rounded-xl bg-[#10131a]/75 border border-[#3d372e]/80 hover:border-[#b89758] cursor-pointer flex items-center justify-between transition-all shadow-md group backdrop-blur-sm"
-              onClick={() => gm.emit('openGuestbook')}
+              onClick={() => {
+                if (isLargeScreen) {
+                  setShowInlineGuestbook(prev => !prev);
+                } else {
+                  gm.emit('openGuestbook');
+                }
+              }}
               title="D.M (Dimension Message)"
             >
               <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden [text-shadow:_0_1px_2px_rgba(0,0,0,0.85)]">
@@ -16060,16 +16128,16 @@ export const CitadelScreen: React.FC = () => {
                 </div>
               </div>
               <span className="text-xs text-[#b89758] group-hover:text-[#ffd54f] font-bold shrink-0 ml-2 transition-colors flex items-center gap-0.5 [text-shadow:_0_1px_2px_rgba(0,0,0,0.85)]">
-                <span>열기</span>
-                <span>▶</span>
+                <span>{isLargeScreen && showInlineGuestbook ? tr('닫기') : tr('열기')}</span>
+                <span>{isLargeScreen && showInlineGuestbook ? '▼' : '▶'}</span>
               </span>
             </div>
           </div>
         </div>
 
         {/* ── 3. 앤티크 골드 림 퀵 독 (Quick Facility Dock) ── */}
-        {/* 패널이 열려있지 않을 때만 노출 (패널이 열렸을 때는 DM 티커까지만 보이도록 정리) */}
-        <div className={openDrawer ? 'hidden' : 'block shrink-0'}>
+        {/* 패널이 열려있지 않고 던전/전투 중이 아닐 때만 노출 (패널이 열렸을 때는 DM 티커까지만 보이도록 정리) */}
+        <div className={openDrawer || isInDungeonOrBattle ? 'hidden' : 'block shrink-0'}>
           <QuickFacilityDock
             activeKey={openDrawer}
             onSelectFacility={(key) => handleTryOpenDrawer(key)}
@@ -16078,7 +16146,7 @@ export const CitadelScreen: React.FC = () => {
       </div>
 
       {/* 2. 방주 성채 허브 드로어 (openDrawer === 'citadel') */}
-      {openDrawer === 'citadel' && (
+      {openDrawer === 'citadel' && !isInDungeonOrBattle && (
         <ArkCitadelHubDrawer 
           onClose={handleCloseDrawer} 
           onEnterDrawer={handleEnterBuildingFromCitadel}
@@ -16091,7 +16159,7 @@ export const CitadelScreen: React.FC = () => {
       )}
 
       {/* 3. 개별 시네마틱 워크스테이션 모달 / 바텀시트 컨테이너 (그 외 시설 진입 시) */}
-      {openDrawer && openDrawer !== 'citadel' && (
+      {openDrawer && openDrawer !== 'citadel' && !isInDungeonOrBattle && (
         <FacilityWorkstationModal
           open={Boolean(openDrawer)}
           onClose={handleCloseDrawer}
@@ -16163,6 +16231,16 @@ export const CitadelScreen: React.FC = () => {
             />
           )}
         </FacilityWorkstationModal>
+      )}
+
+      {/* ── ⚔️ 큰 화면 전용 우측 패널: 던전 탐험 및 전투 (Dungeon Exploration & Battle Panel) ── */}
+      {isInDungeonOrBattle && (
+        <div className="absolute inset-0 z-40 flex items-end md:relative md:inset-auto md:w-[620px] lg:w-[720px] xl:w-[800px] md:h-full md:shrink-0 md:z-20 select-none">
+          <div className="relative z-10 flex flex-col w-full h-full bg-[#0a0d14] border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden animate-drawer-enter">
+            {state.currentScreen === 'exploration' && <ExplorationScreen />}
+            {state.currentScreen === 'battle' && <BattleScreen />}
+          </div>
+        </div>
       )}
 
       {/* ── 🏰 던전 원정 귀환 전리품 정산 보고서 모달 ── */}

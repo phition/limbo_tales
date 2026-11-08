@@ -25,6 +25,7 @@ import { VideoWatermarkStudioModal } from './components/VideoWatermarkStudioModa
 import { AppVersionService, VersionCheckResult } from './services/AppVersionService';
 import { gameConfirm } from './services/DialogService';
 import { I18nService } from './i18n/I18nService';
+import { useIsMobile } from './hooks/useIsMobile';
 
 const SCREEN_COMPONENTS: Record<string, React.ComponentType> = {
   citadel: CitadelScreen,
@@ -195,16 +196,22 @@ export const App: React.FC = () => {
     };
   }, [gm]);
 
+  const isMobile = useIsMobile();
+  const isLargeScreen = !isMobile;
+
   // 📋 전역 방명록 (게시판) 모달 오픈 이벤트 구독
   useEffect(() => {
     const handleOpenGuestbook = () => {
-      setGuestbookOpen(true);
+      // 대형 화면에서는 성채 좌측 뷰포트에 인라인으로 열리므로 전역 모달 생략
+      if (isMobile) {
+        setGuestbookOpen(true);
+      }
     };
     gm.on('openGuestbook', handleOpenGuestbook);
     return () => {
       gm.off('openGuestbook', handleOpenGuestbook);
     };
-  }, [gm]);
+  }, [gm, isMobile]);
 
   // 🌟 [지휘관 확인 중....] 오버레이 연출 상태
   const [isVerifyingCommander, setIsVerifyingCommander] = useState(() => checkHasRemainingSession());
@@ -604,7 +611,9 @@ export const App: React.FC = () => {
     );
   }
 
-  const ActiveScreen = SCREEN_COMPONENTS[state.currentScreen] ?? CitadelScreen;
+  // 🏰 큰 화면일 때는 던전 탐험(exploration)과 전투(battle)도 CitadelScreen의 우측 패널 내부에서 렌더링
+  const isDesktopSplitScreen = isLargeScreen && (state.currentScreen === 'exploration' || state.currentScreen === 'battle');
+  const ActiveScreen = isDesktopSplitScreen ? CitadelScreen : (SCREEN_COMPONENTS[state.currentScreen] ?? CitadelScreen);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#0b0d13' }}>
@@ -637,7 +646,7 @@ export const App: React.FC = () => {
             onOpenMenu={() => setMenuOpen(true)}
           />
           <div className="flex-1 min-h-0 relative flex flex-col overflow-hidden">
-            <ActiveScreen key={state.currentScreen} />
+            <ActiveScreen key={isDesktopSplitScreen || state.currentScreen === 'citadel' ? 'citadel-shell' : state.currentScreen} />
           </div>
         </div>
       </div>

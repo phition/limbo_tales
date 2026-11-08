@@ -11,6 +11,7 @@ interface Props {
   open: boolean;
   onClose: () => void;
   currentUserProfile?: UserProfile | null;
+  isInline?: boolean;
 }
 
 const PAGE_SIZE = 10;
@@ -91,6 +92,7 @@ export const GuestbookModal: React.FC<Props> = ({
   open,
   onClose,
   currentUserProfile,
+  isInline = false,
 }) => {
   const { gm } = useGameManager();
   const [messages, setMessages] = useState<GuestbookMessage[]>(() => FirebaseService.getInstance().getCachedGuestbookMessages());
@@ -242,6 +244,268 @@ export const GuestbookModal: React.FC<Props> = ({
     }
   };
 
+  const bodyContent = (
+    <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-hidden">
+      {/* ⚠️ 번역 오류 발생 시 상단 알림 배너 */}
+      {translationError && (
+        <div className="p-2.5 rounded-xl bg-[#261618] border border-[#c5606055] text-xs text-[#ef9a9a] flex items-center justify-between gap-2 shrink-0 animate-fade-in">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="text-sm">⚠️</span>
+            <span className="truncate">{translationError}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setTranslationError(null)}
+            className="text-[10px] text-[#ef9a9a] hover:text-white px-1.5 py-0.5 rounded bg-black/40 cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* 1. 상단: 게시글 목록 (새 글이 항상 위로 올라오도록 정렬, 10개씩 페이징, 상하 확장) */}
+      <div className="flex-1 overflow-y-auto min-h-0 flex flex-col gap-2 pr-1 custom-scrollbar">
+        {pageMessages.length === 0 ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[#8b9bb4] gap-2">
+            <span className="text-3xl">📡</span>
+            <div className="text-xs font-bold text-[#cfd8e8]">{tr('등록된 차원 메세지가 없습니다.')}</div>
+            <div className="text-[11px]">{tr('첫 번째 차원 메세지를 남겨보세요!')}</div>
+          </div>
+        ) : (
+          pageMessages.map((msg) => {
+            const isTranslated = !!translatedMap[msg.id];
+            const isTranslating = translatingIds.has(msg.id);
+            const textToShow = isTranslated ? translatedMap[msg.id] : msg.content;
+
+            return (
+              <div
+                key={msg.id}
+                className="p-3 rounded-xl bg-[#0c121e] border border-[#1b2537] hover:border-[#c8aa6e55] flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3.5 transition-all shadow-xs"
+              >
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) - 낮은 채도의 금색 */}
+                  <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px] notranslate" translate="no" data-no-translate="true">
+                    <span className="text-xs">🎖️</span>
+                    <AutoFitAuthorName name={msg.authorName} />
+                  </div>
+
+                  {/* 2. 중앙: 본문 내용 (최대 100자) 및 번역 태그 */}
+                  <div className="flex-1 min-w-0 text-xs sm:text-[13px] text-[#cfd8dc] break-words whitespace-pre-wrap leading-relaxed">
+                    <span>{textToShow}</span>
+                    {isTranslated && (
+                      <span className="inline-block ml-1.5 text-[9.5px] px-1.5 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e33] font-mono font-bold align-middle">
+                        🌐 {targetLangLabel}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* 3. 글 끝: 번역 버튼 + 등록 날짜와 시간 스탬프 */}
+                <div className="shrink-0 flex items-center justify-end gap-2 ml-auto">
+                  <button
+                    type="button"
+                    onClick={() => handleToggleTranslate(msg)}
+                    disabled={isTranslating}
+                    className={`text-[10.5px] px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+                      isTranslated
+                        ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e66]'
+                        : 'bg-[#14161c] border-[#262830] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e]'
+                    }`}
+                    title={isTranslated ? tr('원문으로 되돌리기') : `${targetLangLabel} ${tr('언어로 번역')}`}
+                  >
+                    <span>{isTranslating ? '⏳' : isTranslated ? '↩️' : '🌐'}</span>
+                    <span>{isTranslating ? '...' : isTranslated ? tr('원문') : tr('번역')}</span>
+                  </button>
+                  <div className="text-[10px] sm:text-[11px] text-[#8b9bb4] font-mono whitespace-nowrap text-right">
+                    {formatTimestamp(msg.createdAt)}
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* 2. 중하단: 페이지네이션 (10개 단위) */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 pt-1 border-t border-[#1e2a3e] shrink-0">
+          <button
+            className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+            disabled={safePage <= 1}
+            onClick={() => {
+              setCurrentPage((p) => Math.max(1, p - 1));
+              SoundManager.getInstance().play('click');
+            }}
+          >
+            {tr('◀ 이전')}
+          </button>
+
+          <span className="text-xs font-mono font-bold text-[#c8aa6e] px-2">
+            {safePage} / {totalPages}
+          </span>
+
+          <button
+            className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+            disabled={safePage >= totalPages}
+            onClick={() => {
+              setCurrentPage((p) => Math.min(totalPages, p + 1));
+              SoundManager.getInstance().play('click');
+            }}
+          >
+            {tr('다음 ▶')}
+          </button>
+        </div>
+      )}
+
+      {/* 3. 하단: 100자 글쓰기 카드 (익명 지휘관은 작성 불가 안내) */}
+      {isAnonymous ? (
+        <div className="p-3 rounded-xl bg-[#1a1424] border border-[#ab47bc44] flex items-center gap-3 shrink-0 shadow-sm animate-fade-in">
+          <span className="text-2xl p-2 rounded-xl bg-[#ab47bc22] text-[#ce93d8] shrink-0">🔒</span>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-bold text-[#ce93d8] flex items-center gap-1.5">
+              <span>{tr('차원 메세지 작성 불가 (익명 지휘관)')}</span>
+              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ab47bc22] text-[#ce93d8] font-mono font-bold">
+                GUEST
+              </span>
+            </div>
+            <div className="text-[11px] text-[#90a4ae] mt-0.5 leading-relaxed">
+              {tr('익명(게스트) 계정은 차원 메세지를 열람할 수만 있으며 글을 작성할 수 없습니다. 소통에 참여하시려면 정식 계정(Google 또는 이메일)으로 로그인해 주세요.')}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <form
+          onSubmit={handleSubmit}
+          className="p-3 rounded-xl bg-[#12141a] border border-[#23324d] flex flex-col gap-2 shrink-0 shadow-sm"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs">🎖️</span>
+              <span className="text-xs sm:text-sm font-bold text-[#c8aa6e] truncate max-w-[200px] notranslate" translate="no" data-no-translate="true">
+                {currentNick}
+              </span>
+              <span className="text-[10px] text-[#8b9bb4]">{tr('지휘관님의 차원 메세지')}</span>
+            </div>
+            <span
+              className={`text-[10px] font-mono ${
+                inputContent.length > 90 ? 'text-[#ff9800] font-bold' : 'text-[#8b9bb4]'
+              }`}
+            >
+              {inputContent.length} / 100자
+            </span>
+          </div>
+
+          <div className="flex gap-2">
+            <textarea
+              rows={2}
+              maxLength={100}
+              value={inputContent}
+              onChange={(e) => {
+                setInputContent(e.target.value);
+                setErrorMessage(null);
+              }}
+              placeholder={tr('다른 차원의 지휘관들에게 남길 교신 메세지를 작성하세요 (최대 100자)')}
+              className="flex-1 p-2 rounded-lg bg-[#090b0e] border border-[#1e2a3e] text-white text-xs placeholder-[#50607d] resize-none focus:border-[#c8aa6e] focus:outline-none transition-colors"
+              disabled={isSubmitting}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit();
+                }
+              }}
+            />
+            <button
+              type="submit"
+              disabled={isSubmitting || !inputContent.trim()}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 flex flex-col items-center justify-center cursor-pointer ${
+                isSubmitting || !inputContent.trim()
+                  ? 'bg-[#15171e] text-[#50607d] cursor-not-allowed border border-transparent'
+                  : 'bg-[#c8aa6e] hover:bg-[#d8bb7f] text-[#1c1408] border border-[#dfc48855] shadow-md shadow-[#c8aa6e22] active:scale-95'
+              }`}
+            >
+              <span>{isSubmitting ? '...' : '✍️'}</span>
+              <span>{tr('전송')}</span>
+            </button>
+          </div>
+
+          {errorMessage && (
+            <div className="text-[10.5px] text-[#ef5350] font-bold flex items-center gap-1 animate-fade-in">
+              <span>⚠️</span>
+              <span>{errorMessage}</span>
+            </div>
+          )}
+        </form>
+      )}
+    </div>
+  );
+
+  if (isInline) {
+    if (!open) return null;
+    return (
+      <div className="flex flex-col h-full w-full bg-[#0a0d14]/95 text-[#cfd8e8] overflow-hidden select-text rounded-2xl border border-[#b89758]/60 backdrop-blur-md shadow-2xl">
+        {/* 인라인 상단 헤더 바 */}
+        <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#0e121a] border-b border-[#3d372e]/60 shrink-0 select-none">
+          <div className="flex items-center gap-2">
+            <span className="text-sm">📢</span>
+            <h3 className="text-xs sm:text-sm font-bold text-[#ffd54f]">
+              {tr('[차원 메세지]')}
+            </h3>
+            <span className="text-[10px] text-[#8b9bb4]">
+              ({messages.length}{tr('개')})
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                fb.fetchGuestbookMessages();
+                SoundManager.getInstance().play('click');
+              }}
+              className="text-[10px] px-2 py-0.5 rounded bg-[#161a24] border border-[#23324d] text-[#8b9bb4] hover:text-[#c8aa6e] transition-all cursor-pointer flex items-center gap-1"
+              title={tr('최신 차원 메세지 새로고침')}
+            >
+              <span>🔄</span>
+              <span>{tr('새로고침')}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleToggleTranslateAll}
+              disabled={isTranslatingAll || pageMessages.length === 0}
+              className={`text-[10px] px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+                pageMessages.length > 0 && pageMessages.every((m) => !!translatedMap[m.id])
+                  ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e66]'
+                  : 'bg-[#12141a] border-[#23324d] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e]'
+              }`}
+              title={tr('현재 페이지의 모든 글을 현재 게임 언어로 번역')}
+            >
+              <span>{isTranslatingAll ? '⏳' : '🌐'}</span>
+              <span>
+                {isTranslatingAll
+                  ? tr('번역 중...')
+                  : pageMessages.length > 0 && pageMessages.every((m) => !!translatedMap[m.id])
+                  ? tr('원문')
+                  : `${tr('전체 번역')} (${targetLangLabel})`}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-6 h-6 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] transition-all cursor-pointer font-bold active:scale-95 text-xs ml-1"
+              title={tr('닫기')}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        {/* 본문 컨텐츠 */}
+        <div className="flex flex-col gap-2.5 flex-1 min-h-0 overflow-hidden p-3">
+          {bodyContent}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Modal
       open={open}
@@ -300,198 +564,7 @@ export const GuestbookModal: React.FC<Props> = ({
         </div>
       }
     >
-      <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-hidden">
-        {/* ⚠️ 번역 오류 발생 시 상단 알림 배너 */}
-        {translationError && (
-          <div className="p-2.5 rounded-xl bg-[#261618] border border-[#c5606055] text-xs text-[#ef9a9a] flex items-center justify-between gap-2 shrink-0 animate-fade-in">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="text-sm">⚠️</span>
-              <span className="truncate">{translationError}</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setTranslationError(null)}
-              className="text-[10px] text-[#ef9a9a] hover:text-white px-1.5 py-0.5 rounded bg-black/40 cursor-pointer"
-            >
-              ✕
-            </button>
-          </div>
-        )}
-
-        {/* 1. 상단: 게시글 목록 (새 글이 항상 위로 올라오도록 정렬, 10개씩 페이징, 상하 확장) */}
-        <div className="flex-1 overflow-y-auto min-h-0 flex flex-col gap-2 pr-1 custom-scrollbar">
-          {pageMessages.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[#8b9bb4] gap-2">
-              <span className="text-3xl">📡</span>
-              <div className="text-xs font-bold text-[#cfd8e8]">{tr('등록된 차원 메세지가 없습니다.')}</div>
-              <div className="text-[11px]">{tr('첫 번째 차원 메세지를 남겨보세요!')}</div>
-            </div>
-          ) : (
-            pageMessages.map((msg) => {
-              const isTranslated = !!translatedMap[msg.id];
-              const isTranslating = translatingIds.has(msg.id);
-              const textToShow = isTranslated ? translatedMap[msg.id] : msg.content;
-
-              return (
-                <div
-                  key={msg.id}
-                  className="p-3 rounded-xl bg-[#0c121e] border border-[#1b2537] hover:border-[#c8aa6e55] flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3.5 transition-all shadow-xs"
-                >
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) - 낮은 채도의 금색 */}
-                    <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px] notranslate" translate="no" data-no-translate="true">
-                      <span className="text-xs">🎖️</span>
-                      <AutoFitAuthorName name={msg.authorName} />
-                    </div>
-
-                    {/* 2. 중앙: 본문 내용 (최대 100자) 및 번역 태그 */}
-                    <div className="flex-1 min-w-0 text-xs sm:text-[13px] text-[#cfd8dc] break-words whitespace-pre-wrap leading-relaxed">
-                      <span>{textToShow}</span>
-                      {isTranslated && (
-                        <span className="inline-block ml-1.5 text-[9.5px] px-1.5 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e33] font-mono font-bold align-middle">
-                          🌐 {targetLangLabel}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 3. 글 끝: 번역 버튼 + 등록 날짜와 시간 스탬프 */}
-                  <div className="shrink-0 flex items-center justify-end gap-2 ml-auto">
-                    <button
-                      type="button"
-                      onClick={() => handleToggleTranslate(msg)}
-                      disabled={isTranslating}
-                      className={`text-[10.5px] px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
-                        isTranslated
-                          ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e66]'
-                          : 'bg-[#14161c] border-[#262830] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e]'
-                      }`}
-                      title={isTranslated ? tr('원문으로 되돌리기') : `${targetLangLabel} ${tr('언어로 번역')}`}
-                    >
-                      <span>{isTranslating ? '⏳' : isTranslated ? '↩️' : '🌐'}</span>
-                      <span>{isTranslating ? '...' : isTranslated ? tr('원문') : tr('번역')}</span>
-                    </button>
-                    <div className="text-[10px] sm:text-[11px] text-[#8b9bb4] font-mono whitespace-nowrap text-right">
-                      {formatTimestamp(msg.createdAt)}
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-
-        {/* 2. 중하단: 페이지네이션 (10개 단위) */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 pt-1 border-t border-[#1e2a3e] shrink-0">
-            <button
-              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
-              disabled={safePage <= 1}
-              onClick={() => {
-                setCurrentPage((p) => Math.max(1, p - 1));
-                SoundManager.getInstance().play('click');
-              }}
-            >
-              {tr('◀ 이전')}
-            </button>
-
-            <span className="text-xs font-mono font-bold text-[#c8aa6e] px-2">
-              {safePage} / {totalPages}
-            </span>
-
-            <button
-              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
-              disabled={safePage >= totalPages}
-              onClick={() => {
-                setCurrentPage((p) => Math.min(totalPages, p + 1));
-                SoundManager.getInstance().play('click');
-              }}
-            >
-              {tr('다음 ▶')}
-            </button>
-          </div>
-        )}
-
-        {/* 3. 하단: 100자 글쓰기 카드 (익명 지휘관은 작성 불가 안내) */}
-        {isAnonymous ? (
-          <div className="p-3 rounded-xl bg-[#1a1424] border border-[#ab47bc44] flex items-center gap-3 shrink-0 shadow-sm animate-fade-in">
-            <span className="text-2xl p-2 rounded-xl bg-[#ab47bc22] text-[#ce93d8] shrink-0">🔒</span>
-            <div className="flex-1 min-w-0">
-              <div className="text-xs font-bold text-[#ce93d8] flex items-center gap-1.5">
-                <span>{tr('차원 메세지 작성 불가 (익명 지휘관)')}</span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ab47bc22] text-[#ce93d8] font-mono font-bold">
-                  GUEST
-                </span>
-              </div>
-              <div className="text-[11px] text-[#90a4ae] mt-0.5 leading-relaxed">
-                {tr('익명(게스트) 계정은 차원 메세지를 열람할 수만 있으며 글을 작성할 수 없습니다. 소통에 참여하시려면 정식 계정(Google 또는 이메일)으로 로그인해 주세요.')}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="p-3 rounded-xl bg-[#12141a] border border-[#23324d] flex flex-col gap-2 shrink-0 shadow-sm"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs">🎖️</span>
-                <span className="text-xs sm:text-sm font-bold text-[#c8aa6e] truncate max-w-[200px] notranslate" translate="no" data-no-translate="true">
-                  {currentNick}
-                </span>
-                <span className="text-[10px] text-[#8b9bb4]">{tr('지휘관님의 차원 메세지')}</span>
-              </div>
-              <span
-                className={`text-[10px] font-mono ${
-                  inputContent.length > 90 ? 'text-[#ff9800] font-bold' : 'text-[#8b9bb4]'
-                }`}
-              >
-                {inputContent.length} / 100자
-              </span>
-            </div>
-
-            <div className="flex gap-2">
-              <textarea
-                rows={2}
-                maxLength={100}
-                value={inputContent}
-                onChange={(e) => {
-                  setInputContent(e.target.value);
-                  setErrorMessage(null);
-                }}
-                placeholder={tr('다른 차원의 지휘관들에게 남길 교신 메세지를 작성하세요 (최대 100자)')}
-                className="flex-1 p-2 rounded-lg bg-[#090b0e] border border-[#1e2a3e] text-white text-xs placeholder-[#50607d] resize-none focus:border-[#c8aa6e] focus:outline-none transition-colors"
-                disabled={isSubmitting}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit();
-                  }
-                }}
-              />
-              <button
-                type="submit"
-                disabled={isSubmitting || !inputContent.trim()}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 flex flex-col items-center justify-center cursor-pointer ${
-                  isSubmitting || !inputContent.trim()
-                    ? 'bg-[#15171e] text-[#50607d] cursor-not-allowed border border-transparent'
-                    : 'bg-[#c8aa6e] hover:bg-[#d8bb7f] text-[#1c1408] border border-[#dfc48855] shadow-md shadow-[#c8aa6e22] active:scale-95'
-                }`}
-              >
-                <span>{isSubmitting ? '...' : '✍️'}</span>
-                <span>{tr('전송')}</span>
-              </button>
-            </div>
-
-            {errorMessage && (
-              <div className="text-[10.5px] text-[#ef5350] font-bold flex items-center gap-1 animate-fade-in">
-                <span>⚠️</span>
-                <span>{errorMessage}</span>
-              </div>
-            )}
-          </form>
-        )}
-      </div>
+      {bodyContent}
     </Modal>
   );
 };
