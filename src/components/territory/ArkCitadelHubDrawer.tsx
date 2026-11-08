@@ -749,17 +749,17 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                       </div>
                     </div>
 
-                    {/* ⚖️ 상업 네트워크 */}
+                    {/* ⚖️ 상인 네트워크 */}
                     <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-all ${
                       syn.goldSynergy
                         ? 'bg-[#2b2716]/90 border-[#ffd54f66] text-[#ffd54f]' : 'bg-[#141822]/80 border-[#222b3d] text-[#8b9bb4] opacity-70'
                     }`}>
                       <div className="flex items-center gap-1 text-[11px] font-bold">
                         <span>⚖️</span>
-                        <span>{tr('상업 네트워크')}</span>
+                        <span>{tr('상인 네트워크')}</span>
                       </div>
                       <div className="text-[9px] mt-0.5">
-                        {syn.goldSynergy ? tr('골드 유지비 -25%') : `${tr('블랙마켓 Lv.5 필요')} (${marketLv}/5)`}
+                        {syn.goldSynergy ? tr('골드 유지비 -25% & 최대 20만G') : `${tr('블랙마켓 Lv.5 필요')} (${marketLv}/5)`}
                       </div>
                       <div className="text-[8px] font-mono mt-0.5 font-bold">
                         {syn.goldSynergy ? `● ${tr('활성화됨')}` : `○ ${tr('미달성')}`}

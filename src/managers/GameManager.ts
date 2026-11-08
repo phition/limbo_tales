@@ -1722,7 +1722,7 @@ export class GameManager {
   /** 🏛️ 3대 핵심 인프라 시너지 상태 반환 */
   public getInfraSynergies(): {
     foodSynergy: boolean;     // 🥩 생체 정제소 Lv.5+ [대량 배급제]: 식량 유지비 -30%
-    goldSynergy: boolean;     // ⚖️ 블랙 마켓 Lv.5+ [상업 네트워크]: 골드 유지비 -25%
+    goldSynergy: boolean;     // ⚖️ 블랙 마켓 Lv.5+ [상인 네트워크]: 골드 유지비 -25% 및 골드 최대 적재량 20만(200,000)G 확장
     etherSynergy: boolean;    // 🧪 에테르 연금 공방 Lv.6+ [에테르 환류관]: 마도 에테르 유지비 -25%
   } {
     const butcheryLv = this.buildings['butchery']?.level || 0;
@@ -2698,7 +2698,10 @@ export class GameManager {
   }
 
   public getMaxResourceCapacity(type: keyof GameResources): number {
-    if (type === 'gold') return 100_000_000;
+    if (type === 'gold') {
+      const { goldSynergy } = this.getInfraSynergies();
+      return goldSynergy ? 200_000 : 100_000;
+    }
     const keyStr = String(type);
     if (keyStr.startsWith('ooparts_') || keyStr.startsWith('memoir_note_')) {
       return 9999;
