@@ -13000,6 +13000,15 @@ export class GameManager {
 
   /** 실시간 클라우드 자동 저장 (Firebase Realtime DB 즉시 동기화) */
   public triggerDebouncedCloudSave(): void {
+    // 🛡️ 게스트 또는 미로그인 상태에서는 클라우드 자동 저장을 수행하지 않음
+    if (!this.currentUserId || this.currentUserId === 'guest') {
+      return;
+    }
+    const fb = FirebaseService.getInstance();
+    if (!fb.getCurrentUser() || fb.isAnonymousUser()) {
+      return;
+    }
+
     if (this.cloudSaveDebounceTimer) clearTimeout(this.cloudSaveDebounceTimer);
     this.cloudSaveDebounceTimer = setTimeout(() => {
       this.saveToCloud().catch((err) => {
@@ -13010,7 +13019,14 @@ export class GameManager {
 
   /** 클라우드 진행 데이터 수동/즉시 저장 */
   public async saveToCloud(): Promise<boolean> {
+    // 🛡️ 게스트 또는 미로그인 상태에서는 클라우드 저장을 조용히 건너뜀
+    if (!this.currentUserId || this.currentUserId === 'guest') {
+      return false;
+    }
     const fb = FirebaseService.getInstance();
+    if (!fb.getCurrentUser() || fb.isAnonymousUser()) {
+      return false;
+    }
 
     const data = JSON.parse(JSON.stringify({
       lastSavedAt: Date.now(),

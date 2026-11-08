@@ -595,6 +595,9 @@ export const App: React.FC = () => {
       <>
         <AuthScreen
           onLoginSuccess={(profile) => {
+            try {
+              localStorage.removeItem('auth_explicitly_logged_out');
+            } catch (_) {}
             setUserProfile(profile);
           }}
         />

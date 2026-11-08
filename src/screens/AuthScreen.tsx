@@ -22,7 +22,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('지휘관');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberEmail, setRememberEmail] = useState(true);
+  const [rememberEmail, setRememberEmail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -34,53 +34,56 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
 
   // 저장된 이메일 및 환경설정 복원 + Android Play 게임즈 자동 인증 연동
   useEffect(() => {
+    let explicitlyLoggedOut = false;
     try {
-      const savedEmail = localStorage.getItem('limbo_saved_email');
-      const savedRemember = localStorage.getItem('limbo_remember_email');
-      if (savedEmail) {
-        setEmail(savedEmail);
-      }
-      if (savedRemember !== null) {
-        setRememberEmail(savedRemember === 'true');
+      explicitlyLoggedOut = localStorage.getItem('auth_explicitly_logged_out') === 'true';
+      if (explicitlyLoggedOut) {
+        // 🛡️ 로그아웃 직후 새 계정 로그인을 시도할 때는 이전 아이디가 자동 입력되지 않도록 완전히 비움
+        setEmail('');
+        setPassword('');
+        setRememberEmail(false);
+        localStorage.removeItem('limbo_saved_email');
+      } else {
+        const savedEmail = localStorage.getItem('limbo_saved_email');
+        const savedRemember = localStorage.getItem('limbo_remember_email');
+        if (savedEmail) {
+          setEmail(savedEmail);
+        }
+        if (savedRemember !== null) {
+          setRememberEmail(savedRemember === 'true');
+        }
       }
     } catch {
       // localStorage 접근 불가 환경 대비
     }
 
     // 💡 이메일 기반 클라우드 세이브 사용자를 위해: 이메일 로그인 이력이 있거나 선호되는 경우 PlayGames 자동 가로채기 방지
-    const savedEmail = localStorage.getItem('limbo_saved_email');
-    const authProvider = localStorage.getItem('auth_provider');
+    const savedEmail = explicitlyLoggedOut ? null : localStorage.getItem('limbo_saved_email');
+    const authProvider = explicitlyLoggedOut ? null : localStorage.getItem('auth_provider');
     const isEmailPreferred = authProvider === 'email' || Boolean(savedEmail);
 
-    if (isPlayGamesAvailable && !isEmailPreferred) {
-      let explicitlyLoggedOut = false;
-      try {
-        explicitlyLoggedOut = localStorage.getItem('auth_explicitly_logged_out') === 'true';
-      } catch {}
-
-      if (!explicitlyLoggedOut) {
-        pgs.initialize().then(async (pgRes) => {
-          if (pgRes.isAuthenticated) {
-            setLoading(true);
-            setStatusMessage('Google Play 게임즈 프로필 동기화 중...');
-            try {
-              const res = await fb.signInWithPlayGames();
-              if (res.success) {
-                onLoginSuccess(fb.getCachedProfile());
-              } else {
-                setLoading(false);
-                setStatusMessage(null);
-              }
-            } catch {
+    if (isPlayGamesAvailable && !isEmailPreferred && !explicitlyLoggedOut) {
+      pgs.initialize().then(async (pgRes) => {
+        if (pgRes.isAuthenticated) {
+          setLoading(true);
+          setStatusMessage('Google Play 게임즈 프로필 동기화 중...');
+          try {
+            const res = await fb.signInWithPlayGames();
+            if (res.success) {
+              onLoginSuccess(fb.getCachedProfile());
+            } else {
               setLoading(false);
               setStatusMessage(null);
             }
+          } catch {
+            setLoading(false);
+            setStatusMessage(null);
           }
-        }).catch(() => {
-          setLoading(false);
-          setStatusMessage(null);
-        });
-      }
+        }
+      }).catch(() => {
+        setLoading(false);
+        setStatusMessage(null);
+      });
     }
   }, [isPlayGamesAvailable, fb, onLoginSuccess, pgs]);
 
@@ -134,6 +137,9 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
         settled = true;
         clearTimeout(uiWatchdog);
         if (res.success) {
+          try {
+            localStorage.removeItem('auth_explicitly_logged_out');
+          } catch (_) {}
           setStatusMessage('인증 완료! 방주 성채로 진입합니다...');
           setTimeout(() => {
             setLoading(false);
@@ -150,6 +156,9 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
         settled = true;
         clearTimeout(uiWatchdog);
         if (res.success) {
+          try {
+            localStorage.removeItem('auth_explicitly_logged_out');
+          } catch (_) {}
           setStatusMessage('서약 완료! 방주 성채로 진입합니다...');
           setTimeout(() => {
             setLoading(false);
@@ -194,6 +203,9 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
       clearTimeout(uiWatchdog);
 
       if (res.success) {
+        try {
+          localStorage.removeItem('auth_explicitly_logged_out');
+        } catch (_) {}
         setStatusMessage(res.isNewUser ? '지휘관 서약 완료! 방주 성채로 진입합니다...' : '인증 완료! 방주 성채로 진입합니다...');
         setTimeout(() => {
           setLoading(false);
@@ -221,6 +233,9 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
 
     const res = await fb.signInGuest();
     if (res.success) {
+      try {
+        localStorage.removeItem('auth_explicitly_logged_out');
+      } catch (_) {}
       setStatusMessage('방주 성채로 진입합니다...');
       setTimeout(() => {
         setLoading(false);
@@ -399,7 +414,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
 
         {/* 인증 입력 폼 */}
 
-        <form onSubmit={handleAuthSubmit} className="flex flex-col gap-3">
+        <form onSubmit={handleAuthSubmit} className="flex flex-col gap-3" autoComplete="off">
           {mode === 'signup' && (
             <div className="animate-fade-in flex flex-col gap-1">
               <div className="flex items-center justify-between">
@@ -413,6 +428,8 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
               </div>
               <input
                 type="text"
+                name="limbo_auth_nickname"
+                autoComplete="off"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 placeholder="지휘관"
@@ -427,15 +444,33 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
               <span>✉️</span>
               <span>지휘관 계정 이메일</span>
             </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="commander@limbo.ark"
-              disabled={loading}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f1422] border border-[#232f44] text-[#f1f5f9] text-xs focus:outline-none focus:border-[#ffd54f] focus:ring-1 focus:ring-[#ffd54f88] transition-all placeholder-[#475569]"
-            />
+            <div className="relative">
+              <input
+                type="email"
+                name="limbo_auth_email"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="commander@limbo.ark"
+                disabled={loading}
+                className="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-[#0f1422] border border-[#232f44] text-[#f1f5f9] text-xs focus:outline-none focus:border-[#ffd54f] focus:ring-1 focus:ring-[#ffd54f88] transition-all placeholder-[#475569]"
+              />
+              {email && !loading && (
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setEmail('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full bg-[#1b2333] text-[10px] text-[#94a3b8] hover:text-[#ffd54f] hover:bg-[#253046] transition-colors cursor-pointer"
+                  title="이메일 입력 지우기"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col gap-1">
@@ -448,6 +483,8 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
+                name="limbo_auth_password"
+                autoComplete="new-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

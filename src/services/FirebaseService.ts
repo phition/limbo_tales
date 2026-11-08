@@ -982,6 +982,9 @@ export class FirebaseService {
     localStorage.setItem('auth_explicitly_logged_out', 'true');
     localStorage.removeItem('limbo_has_session');
     localStorage.removeItem('auth_provider');
+    // 🛡️ 로그아웃 시 이전 계정 이메일 및 기억하기 캐시를 즉시 제거하여 새 계정 로그인을 방해하지 않음
+    localStorage.removeItem('limbo_saved_email');
+    localStorage.removeItem('limbo_remember_email');
     this.currentUser = null;
     this.cachedProfile = null;
     await this.withTimeoutFallback(signOut(auth), 2000, undefined, 'signOut');
@@ -1085,8 +1088,8 @@ export class FirebaseService {
    */
   public async saveProgress(progressData: Record<string, unknown>): Promise<boolean> {
     const user = await this.ensureUser();
-    if (!user || user.uid === 'guest') {
-      console.warn('⚠️ [Firebase RTDB] 클라우드 저장 건너뜀: 로그인되지 않은 게스트 상태입니다.');
+    if (!user || user.uid === 'guest' || this.isAnonymousUser()) {
+      // 🛡️ 로그인되지 않은 게스트 상태이거나 익명 계정이면 조용히 클라우드 저장 건너뜀 (불필요한 콘솔 경고 방지)
       return false;
     }
     const uid = user.uid;
