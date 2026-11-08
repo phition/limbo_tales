@@ -150,6 +150,10 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         ? `${unlockedCodexCount}종 수집` 
         : null);
 
+  // ⚔️ 원정대 편성 인원 수 & 🪦 묘지 안치 영령 수 집계
+  const partyCount = (state.party || []).filter(Boolean).length;
+  const cemeteryCount = (state.cemetery || []).length;
+
   // 성채 활동 시설 12종 (상단 배너 아트 에셋 매핑)
   const WORKSTATION_ITEMS: Array<{
     key: string;
@@ -542,6 +546,67 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   <span>{tr('퀘스트·심연강하·병영·차원게이트')}</span>
                   <span>거점 입장 ▶</span>
                 </div>
+              </div>
+            </div>
+
+            {/* ── 구분선 ── */}
+            <div className="relative py-1 flex items-center justify-center">
+              <div className="w-full border-t border-[#3d372e]/60" />
+            </div>
+
+            {/* ⚔️ 【배너 4】 원정대 편성 카드 (텍스트 전용) */}
+            <div
+              onClick={() => {
+                handlePlayClick();
+                onEnterDrawer('barracks');
+              }}
+              className="relative p-3.5 rounded-xl border border-[#3d372e]/65 hover:border-[#b89758] cursor-pointer transition-all shadow-md bg-[#12141a]/90 backdrop-blur-md group"
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl leading-none drop-shadow">⚔️</span>
+                  <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#dcc496] tracking-tight">
+                    {tr('【원정대 편성】')}
+                  </h3>
+                </div>
+                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#1f2330]/80 text-[#9da3af] border border-[#2c3245]/70">
+                  {partyCount}/4인 편성
+                </span>
+              </div>
+              <p className="text-[11px] text-[#9da3af] leading-relaxed">
+                {tr('4인 원정대 파티 편성, 출격 대원 교체 및 진형 배치를 관리합니다.')}
+              </p>
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#b89758] font-bold">
+                <span>{tr('대원 교체 & 진형 배치')}</span>
+                <span>{tr('원정대 편성 바로가기')} ▶</span>
+              </div>
+            </div>
+
+            {/* 🪦 【배너 5】 성채 묘지 카드 (텍스트 전용) */}
+            <div
+              onClick={() => {
+                handlePlayClick();
+                onEnterDrawer('cemetery');
+              }}
+              className="relative p-3.5 rounded-xl border border-[#3d372e]/65 hover:border-[#9da3af] cursor-pointer transition-all shadow-md bg-[#12141a]/90 backdrop-blur-md group"
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl leading-none drop-shadow">🪦</span>
+                  <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#cfd8e8] tracking-tight">
+                    {tr('【성채 묘지】')}
+                  </h3>
+                </div>
+                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#1f2330]/80 text-[#9da3af] border border-[#2c3245]/70">
+                  {cemeteryCount > 0 ? `${cemeteryCount}위 안치` : tr('안치자 없음')}
+                </span>
+              </div>
+              <p className="text-[11px] text-[#9da3af] leading-relaxed">
+                {tr('전투 중 전사한 영령들의 묘비 안치 현황 및 영령의 가호·추모 버프를 확인합니다.')}
+              </p>
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#9da3af] group-hover:text-[#cfd8e8] font-bold">
+                <span>{tr('전사 영령 안치 & 추모')}</span>
+                <span>{tr('성채 묘지 바로가기')} ▶</span>
               </div>
             </div>
 
