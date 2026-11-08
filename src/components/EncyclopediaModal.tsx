@@ -17,7 +17,7 @@ import { FEVER_BADGE_META, evaluateFeverSynergy, ALL_FEVER_SYNERGIES_CODEX, FEVE
 import { FeverBadgeType, FeverBadgeMeta } from '../types/fever';
 import { GameManager } from '../managers/GameManager';
 import { useI18n } from '../hooks/useI18n';
-import { exportEncyclopediaToHtml, exportEncyclopediaToJson } from '../utils/encyclopediaExporter';
+// encyclopediaExporter is dynamically imported on demand for master accounts
 
 import {
   EncyclopediaCategory,
@@ -2183,36 +2183,37 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
         {/* 하단 닫기 & 다운로드 푸터 */}
         <div className="px-4 py-2.5 sm:px-6 bg-[#111728] border-t border-[#1f2d48] flex items-center justify-between shrink-0 gap-2 flex-wrap">
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            {/* 일반 백과사전 HTML 다운로드 */}
-            <button
-              onClick={() => {
-                try {
-                  const res = exportEncyclopediaToHtml(lang, tr);
-                  if (res.success) {
-                    setDownloadFeedback(tr('다운로드 완료!'));
-                    setTimeout(() => setDownloadFeedback(null), 3000);
-                  } else {
-                    alert(`${tr('다운로드 실패')}: ${res.error || 'Unknown error'}`);
-                  }
-                } catch (e: any) {
-                  console.error('Failed to export encyclopedia HTML:', e);
-                  alert(`${tr('다운로드 중 오류가 발생했습니다.')}: ${e?.message || ''}`);
-                }
-              }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 ${
-                downloadFeedback
-                  ? 'bg-[#10b98144] text-[#a7f3d0] border border-[#10b981]'
-                  : 'bg-gradient-to-r from-[#10b98122] to-[#c8aa6e22] hover:from-[#10b98133] hover:to-[#c8aa6e33] text-[#38ef7d] hover:text-[#5ef599] border border-[#10b98166] hover:shadow-[0_0_12px_rgba(56,239,125,0.25)]'
-              }`}
-              title={tr('현재 설정된 언어의 독립형 HTML 백과사전 문서를 로컬 파일로 다운로드합니다. (마스터 계정 수정/업로드 지원 데이터 내장)')}
-            >
-              <span>{downloadFeedback ? '✓' : '📥'}</span>
-              <span>{downloadFeedback || tr('백과사전 HTML 다운로드')}</span>
-            </button>
-
-            {/* 👑 마스터 계정 전용: 다운받은 백과사전 수정본 업로드 버튼 */}
-            {isMaster && (
+            {/* 👑 마스터 계정 전용 & 데스크톱 전용: 독립형 백과사전 HTML 내보내기 및 사전 편집/업로드 툴바 (모바일 제외) */}
+            {!isMobilePlatform && isMaster && (
               <>
+                {/* 일반 백과사전 HTML 다운로드 */}
+                <button
+                  onClick={async () => {
+                    try {
+                      const { exportEncyclopediaToHtml } = await import('../utils/encyclopediaExporter');
+                      const res = exportEncyclopediaToHtml(lang, tr);
+                      if (res.success) {
+                        setDownloadFeedback(tr('다운로드 완료!'));
+                        setTimeout(() => setDownloadFeedback(null), 3000);
+                      } else {
+                        alert(`${tr('다운로드 실패')}: ${res.error || 'Unknown error'}`);
+                      }
+                    } catch (e: any) {
+                      console.error('Failed to export encyclopedia HTML:', e);
+                      alert(`${tr('다운로드 중 오류가 발생했습니다.')}: ${e?.message || ''}`);
+                    }
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 ${
+                    downloadFeedback
+                      ? 'bg-[#10b98144] text-[#a7f3d0] border border-[#10b981]'
+                      : 'bg-gradient-to-r from-[#10b98122] to-[#c8aa6e22] hover:from-[#10b98133] hover:to-[#c8aa6e33] text-[#38ef7d] hover:text-[#5ef599] border border-[#10b98166] hover:shadow-[0_0_12px_rgba(56,239,125,0.25)]'
+                  }`}
+                  title={tr('현재 설정된 언어의 독립형 HTML 백과사전 문서를 로컬 파일로 다운로드합니다. (마스터 계정 수정/업로드 지원 데이터 내장)')}
+                >
+                  <span>{downloadFeedback ? '✓' : '📥'}</span>
+                  <span>{downloadFeedback || tr('백과사전 HTML 다운로드')}</span>
+                </button>
+
                 <input
                   type="file"
                   ref={fileInputRef}
@@ -2235,8 +2236,9 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                 </button>
 
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     try {
+                      const { exportEncyclopediaToJson } = await import('../utils/encyclopediaExporter');
                       const res = exportEncyclopediaToJson(lang);
                       if (res.success) {
                         setDownloadFeedback(tr('JSON 저장 완료!'));

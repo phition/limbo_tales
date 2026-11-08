@@ -14,7 +14,7 @@
     "sync:assets": "node scripts/sync-custom-assets.js",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
-    "cap:sync": "vite build && cap sync android",
+    "cap:sync": "node scripts/sync-custom-assets.js && vite build && node scripts/clean-mobile-assets.js && cap sync android && node scripts/clean-mobile-assets.js",
     "cap:open": "cap open android"
   },
   "keywords": [

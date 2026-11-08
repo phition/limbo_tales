@@ -7,10 +7,18 @@ import { FirebaseService } from '../services/FirebaseService';
 import { PlayGamesService, PlayGamesPlayer } from '../services/PlayGamesService';
 import { SoundManager } from '../managers/SoundManager';
 import { GameDataService } from '../services/GameDataService';
-import { CustomAssetStudioModal } from './CustomAssetStudioModal';
-import { CustomDataStudioModal } from './CustomDataStudioModal';
-import { I18nStudioModal } from './I18nStudioModal';
-import { VideoWatermarkStudioModal } from './VideoWatermarkStudioModal';
+const CustomAssetStudioModal = React.lazy(() =>
+  import('./CustomAssetStudioModal').then(m => ({ default: m.CustomAssetStudioModal }))
+);
+const CustomDataStudioModal = React.lazy(() =>
+  import('./CustomDataStudioModal').then(m => ({ default: m.CustomDataStudioModal }))
+);
+const I18nStudioModal = React.lazy(() =>
+  import('./I18nStudioModal').then(m => ({ default: m.I18nStudioModal }))
+);
+const VideoWatermarkStudioModal = React.lazy(() =>
+  import('./VideoWatermarkStudioModal').then(m => ({ default: m.VideoWatermarkStudioModal }))
+);
 import { CallsignChangeModal } from './CallsignChangeModal';
 import { useI18n } from '../hooks/useI18n';
 import { SupportedLanguage } from '../i18n/types';
@@ -830,36 +838,44 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         </div>
       </Modal>
 
-      {/* 커스텀 에셋 & 미디어 스튜디오 모달 (모바일 빌드 제외) */}
-      {!isMobilePlatform && (
-        <CustomAssetStudioModal
-          open={assetStudioModal}
-          onClose={() => setAssetStudioModal(false)}
-        />
+      {/* 커스텀 에셋 & 미디어 스튜디오 모달 (마스터 전용, 모바일 빌드 제외) */}
+      {!isMobilePlatform && fb.isMasterUser() && assetStudioModal && (
+        <React.Suspense fallback={null}>
+          <CustomAssetStudioModal
+            open={assetStudioModal}
+            onClose={() => setAssetStudioModal(false)}
+          />
+        </React.Suspense>
       )}
 
-      {/* 마스터 데이터 & 밸런스 스튜디오 모달 (모바일 빌드 제외) */}
-      {!isMobilePlatform && (
-        <CustomDataStudioModal
-          open={dataStudioModal}
-          onClose={() => setDataStudioModal(false)}
-        />
+      {/* 마스터 데이터 & 밸런스 스튜디오 모달 (마스터 전용, 모바일 빌드 제외) */}
+      {!isMobilePlatform && fb.isMasterUser() && dataStudioModal && (
+        <React.Suspense fallback={null}>
+          <CustomDataStudioModal
+            open={dataStudioModal}
+            onClose={() => setDataStudioModal(false)}
+          />
+        </React.Suspense>
       )}
 
       {/* 🌐 i18n 감수 사전 편집 스튜디오 모달 (마스터 계정 전용, 모바일 빌드 제외) */}
-      {!isMobilePlatform && fb.isMasterUser() && (
-        <I18nStudioModal
-          open={i18nStudioModal}
-          onClose={() => setI18nStudioModal(false)}
-        />
+      {!isMobilePlatform && fb.isMasterUser() && i18nStudioModal && (
+        <React.Suspense fallback={null}>
+          <I18nStudioModal
+            open={i18nStudioModal}
+            onClose={() => setI18nStudioModal(false)}
+          />
+        </React.Suspense>
       )}
 
       {/* 🎬 AI 영상 워터마크 제거 스튜디오 모달 (마스터 계정 전용, 모바일 빌드 제외) */}
-      {!isMobilePlatform && fb.isMasterUser() && (
-        <VideoWatermarkStudioModal
-          open={watermarkStudioModal}
-          onClose={() => setWatermarkStudioModal(false)}
-        />
+      {!isMobilePlatform && fb.isMasterUser() && watermarkStudioModal && (
+        <React.Suspense fallback={null}>
+          <VideoWatermarkStudioModal
+            open={watermarkStudioModal}
+            onClose={() => setWatermarkStudioModal(false)}
+          />
+        </React.Suspense>
       )}
 
       {/* 🎖️ 지휘관 콜사인(호출부호) 1회 변경 모달 */}

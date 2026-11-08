@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from 'react';
 import { PhaserGame } from './PhaserGame';
 import { useGameManager } from './hooks/useGameManager';
 import { ResourceBar } from './components/ResourceBar';
@@ -21,7 +21,9 @@ import { ArenaScreen } from './screens/ArenaScreen';
 import { GameDialogModal } from './components/GameDialogModal';
 import { GoogleAdModal } from './components/GoogleAdModal';
 import { AppUpdateModal } from './components/AppUpdateModal';
-import { VideoWatermarkStudioModal } from './components/VideoWatermarkStudioModal';
+const VideoWatermarkStudioModal = lazy(() =>
+  import('./components/VideoWatermarkStudioModal').then(m => ({ default: m.VideoWatermarkStudioModal }))
+);
 import { AppVersionService, VersionCheckResult } from './services/AppVersionService';
 import { gameConfirm } from './services/DialogService';
 import { I18nService } from './i18n/I18nService';
@@ -113,9 +115,9 @@ export const App: React.FC = () => {
 
   // 📱 모바일/클라이언트 앱 버전 체크 및 업데이트 모달 상태
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
-  // 🎬 AI 영상 워터마크 제거 스튜디오 (URL 파라미터 ?tool=watermark, ?studio=delogo 연동)
+  // 🎬 AI 영상 워터마크 제거 스튜디오 (URL 파라미터 ?tool=watermark, ?studio=delogo 연동 - 모바일 빌드 및 일반 계정 제외)
   const [watermarkStudioOpen, setWatermarkStudioOpen] = useState(() => {
-    if (typeof window === 'undefined') return false;
+    if (Capacitor.isNativePlatform() || typeof window === 'undefined') return false;
     const p = new URLSearchParams(window.location.search);
     return p.has('watermark') || p.get('tool') === 'watermark' || p.get('studio') === 'delogo' || p.get('page') === 'watermark-remover';
   });
@@ -693,11 +695,15 @@ export const App: React.FC = () => {
       {/* 🎬 전역 Google AdMob / 보상형 광고 재생 모달 */}
       <GoogleAdModal />
 
-      {/* 🎬 AI 영상 워터마크 제거 스튜디오 모달 (URL 또는 메뉴에서 직접 실행) */}
-      <VideoWatermarkStudioModal
-        open={watermarkStudioOpen}
-        onClose={() => setWatermarkStudioOpen(false)}
-      />
+      {/* 🎬 AI 영상 워터마크 제거 스튜디오 모달 (URL 또는 메뉴에서 직접 실행 - 모바일 빌드 제외) */}
+      {!Capacitor.isNativePlatform() && watermarkStudioOpen && (
+        <Suspense fallback={null}>
+          <VideoWatermarkStudioModal
+            open={watermarkStudioOpen}
+            onClose={() => setWatermarkStudioOpen(false)}
+          />
+        </Suspense>
+      )}
 
       {/* 📱 모바일 앱 구글 플레이 스토어 버전 업데이트 알림 모달 */}
       <AppUpdateModal

@@ -322,6 +322,7 @@ export class GameManager {
   // 👑 마스터 계정 플래그 (차원 앵커 멀티 요소 노출 및 관리자 기능)
   private _isMasterAccount: boolean = false;
   public get isMasterAccount(): boolean {
+    if (Capacitor.isNativePlatform()) return false;
     if (this._isMasterAccount) return true;
     try {
       if (FirebaseService.getInstance().isMasterUser()) return true;
