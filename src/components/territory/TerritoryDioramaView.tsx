@@ -121,6 +121,7 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
         <picture className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
           isLit ? 'opacity-0 z-0' : 'opacity-95 z-[1]'
         }`}>
+          <source media="(min-width: 769px) and (orientation: landscape)" srcSet="assets/citadel_bonfire.jpg" />
           <source media="(max-width: 768px), (orientation: portrait)" srcSet="assets/citadel_9x16_mobile.jpg" />
           <img
             src={imageSrc}
