@@ -2115,14 +2115,15 @@ export class GameManager {
     return stateChanged;
   }
 
-  public on(event: string, callback: (data?: unknown) => void): void {
+  // 이벤트별 페이로드 타입은 구독 측에서 지정 (예: gm.on<LogEntry>('log', ...))
+  public on<T = unknown>(event: string, callback: (data: T) => void): void {
     if (!this.listeners[event]) this.listeners[event] = [];
-    this.listeners[event].push(callback);
+    this.listeners[event].push(callback as (data?: unknown) => void);
   }
 
-  public off(event: string, callback: (data?: unknown) => void): void {
+  public off<T = unknown>(event: string, callback: (data: T) => void): void {
     if (!this.listeners[event]) return;
-    this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
+    this.listeners[event] = this.listeners[event].filter(cb => cb !== (callback as (data?: unknown) => void));
   }
 
   public removeAllListeners(event?: string): void {
@@ -13249,9 +13250,9 @@ export class GameManager {
     this.customSkills = {};
     this.logs = [];
     this.bossClearTimes = {};
-    this.bestAbyss10FClearTime = null;
+    this.bestAbyss10FClearTime = 0;
     this.maxAviciDangerReached = 0;
-    this.aviciBossBonusClaimed = false;
+    this.aviciBossBonusClaimed = { archeosNormal: false, archeosOvercharged: false };
     this.bestAviciTimeAttackBonus = 0;
     this.pgsPurificationQuestsClaimed = [];
     this.pgsAviciTiersClaimed = 0;
@@ -13264,7 +13265,7 @@ export class GameManager {
     this.unlockedDungeonFloor = 1;
     this.unlockedAviciTier = 0;
     this.bonds = {};
-    this.citadelSupplies = 0;
+    this.citadelSupplies = {};
     this.backpackCapacity = 20;
     this.lastSelectedBagId = 'bag_basic';
     this.tavernArrivalSecondsLeft = 0;
@@ -13649,7 +13650,7 @@ export class GameManager {
     if (parsed.lastTickTimestamp) this.lastTickTimestamp = parsed.lastTickTimestamp as number;
     else if (parsed.lastSavedAt) this.lastTickTimestamp = parsed.lastSavedAt as number;
     if (parsed.offlineReport && typeof parsed.offlineReport === 'object') {
-      if ((parsed.offlineReport.elapsedSeconds || 0) >= 1800) {
+      if (((parsed.offlineReport as { elapsedSeconds?: number }).elapsedSeconds || 0) >= 1800) {
         this.offlineReport = parsed.offlineReport as any;
         this.lastOfflineReport = parsed.offlineReport as any;
       }
@@ -13845,7 +13846,7 @@ export class GameManager {
     this.resources = {
       gold: 4500, wood: 900, stone: 800, iron: 600, food: 450, ether: 350,
       herb: 120, leather: 120, silk: 90, coal: 100, bone: 90, crystal: 50, void_shard: 25,
-      prefix_stone: 15, suffix_stone: 12, pure_prefix_stone: 4, pure_suffix_stone: 3,
+      prefix_stone: 15, suffix_stone: 12, pure_prefix_stone: 4, pure_suffix_stone: 3, pure_mana_stone: 0,
       relic_floor_1: 2, relic_floor_2: 2, relic_floor_3: 0, relic_floor_4: 0, relic_floor_5: 0,
       relic_floor_6: 0, relic_floor_7: 0, relic_floor_8: 0, relic_floor_9: 0, relic_floor_10: 0
     };
@@ -14533,7 +14534,7 @@ export class GameManager {
         }
         if (parsed.offlineReport && typeof parsed.offlineReport === 'object') {
           // 최소 30분(1,800초) 이상 정산 보고서만 로드, 30분 미만 잔여 데이터는 자동 초기화
-          if ((parsed.offlineReport.elapsedSeconds || 0) >= 1800) {
+          if (((parsed.offlineReport as { elapsedSeconds?: number }).elapsedSeconds || 0) >= 1800) {
             this.offlineReport = parsed.offlineReport as any;
             this.lastOfflineReport = parsed.offlineReport as any;
           } else {

@@ -1834,7 +1834,7 @@ export const BattleScreen: React.FC = () => {
       // 🚀 복원 전투 참여 몬스터 및 초상화 인메모리 사전 캐싱
       try {
         const combatImages: (string | undefined)[] = [];
-        restoredMonsters.forEach(m => {
+        restoredMonsters.forEach((m: any) => {
           const def = MONSTERS[m.data.id];
           const custom = CustomAssetService.getInstance().getMonsterOverride(m.data.id);
           combatImages.push(custom || def?.imagePath || m.data.imagePath);
@@ -4647,8 +4647,8 @@ export const BattleScreen: React.FC = () => {
           const partyDrainBonus = partyDrainBuff ? Math.round(partyDrainBuff.magnitude * 100) : 0;
           const warlordDrain = hero.classId === 'valhalla_warlord' ? 10 : 0;
           let skillDrainBonus = 0;
-          if (effectType === 'drain' || isDrainSkill || (skill !== 'basic' && (skill as any).drainPct)) {
-            if (skill !== 'basic' && (skill as any).drainPct) {
+          if (effectType === 'drain' || isDrainSkill || (skill as any).drainPct) {
+            if ((skill as any).drainPct) {
               skillDrainBonus = (skill as any).drainPct;
             } else {
               const drainMatch = (skill.description || '').match(/흡혈\s*(\d+)%|피해(?:량)?\s*(\d+)%\s*흡혈/);
@@ -4681,7 +4681,7 @@ export const BattleScreen: React.FC = () => {
           }
 
           // 💧 [마나 강탈 / MP 흡수 스킬 처리 (e.g. 밴시/종언의 제단 광신도/공허의 침식자)]
-          if (skill !== 'basic' && totalActualDamageDealt > 0) {
+          if (totalActualDamageDealt > 0) {
             const sDesc = (skill.description || '').toLowerCase();
             const mpStealMatch = sDesc.match(/mp\s*(\d+)\s*(?:흡수|강탈)|마나\s*(\d+)\s*(?:흡수|강탈)/);
             if (mpStealMatch) {
@@ -5375,9 +5375,9 @@ export const BattleScreen: React.FC = () => {
         } else {
           const sDesc = (skill.description || '').toLowerCase();
           const sid = skill.id || '';
-          const isDefBuff = skill.effectType === 'buff_def' || sDesc.includes('방어') || sDesc.includes('철벽') || sDesc.includes('성역') || sDesc.includes('피해 경감');
+          const isDefBuff = sDesc.includes('방어') || sDesc.includes('철벽') || sDesc.includes('성역') || sDesc.includes('피해 경감');
           const isRegen = skill.effectType === 'regen' || sDesc.includes('재생') || sDesc.includes('지속 치유') || (sDesc.includes('결계') && sDesc.includes('치유'));
-          const isAtkBuff = skill.effectType === 'buff_atk' || sDesc.includes('공격') || sDesc.includes('피해 증폭') || (!isDefBuff && !isRegen);
+          const isAtkBuff = sDesc.includes('공격') || sDesc.includes('피해 증폭') || (!isDefBuff && !isRegen);
           const isStealth = sid.includes('stealth') || sid.includes('camouflage') || sDesc.includes('은신');
           const isTimeOrMp = sid.includes('time') || sid.includes('reload') || sid.includes('mana') || sDesc.includes('쿨다운') || sDesc.includes('마나');
 

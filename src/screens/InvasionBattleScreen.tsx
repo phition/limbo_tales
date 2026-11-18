@@ -21,7 +21,7 @@ const DEFAULT_CLASS_IMAGES: Record<string, string> = {
   tactical_tower: 'assets/citadel_bonfire.jpg',
 };
 
-export const getHeroPortraitUrl = (heroOrClassId?: Mercenary | string) => {
+export const getHeroPortraitUrl = (heroOrClassId?: Parameters<typeof CustomAssetService.getHeroPortrait>[0] | string) => {
   if (!heroOrClassId) return '';
   if (typeof heroOrClassId === 'object') {
     return CustomAssetService.getHeroPortrait(heroOrClassId);
@@ -1613,8 +1613,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
           baseCritRate += 25;
         }
 
-        const attackerHitBuff = (attacker.statusEffects || []).find(s => s.id === 'buff_hit' || s.type === 'buff_hit');
-        const attackerHitBonus = attackerHitBuff ? (attackerHitBuff.value || attackerHitBuff.magnitude || 10) : 0;
+        const attackerHitBuff = (attacker.statusEffects || []).find(s => s.id === 'buff_hit');
+        const attackerHitBonus = attackerHitBuff ? (attackerHitBuff.value || 10) : 0;
 
         targetsToHit.forEach((targetObj, tIdx) => {
           const isTargetFront = targetObj.id === 'turret_left' || targetObj.id === 'turret_right';
@@ -2604,7 +2604,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             ...prev,
             {
               id: `vfx_barrier_heal_${Date.now()}_${Math.random()}`,
-              type: 'heal',
+              type: 'holy_heal',
+              isHeal: true,
               damage: actualHealed > 0 ? actualHealed : wallHealAmount,
               text: actualHealed > 0 ? `+${actualHealed.toLocaleString()} HP 성벽 수복` : `완전 수복 유지 (+${wallHealAmount.toLocaleString()})`,
               x: barrierPos.x || 50,

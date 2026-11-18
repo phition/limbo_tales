@@ -1104,7 +1104,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     if (!m) return 0;
     const atk = m.stats?.atk || 10;
     const def = m.stats?.def || 10;
-    const hp = m.maxHp || m.stats?.hp || 100;
+    const hp = m.maxHp || 100;
     return Math.round(atk * 3 + def * 2 + hp / 5);
   }, []);
 
@@ -4086,7 +4086,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                       🏆 4인 차원 결투
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1f1929] text-[#ffd54f] border border-[#ffd54f33] font-mono truncate max-w-[130px]">
-                      📜 {arenaEdict.name || tr('자유 결투')}
+                      📜 {arenaEdict.edictName || tr('자유 결투')}
                     </span>
                   </div>
                   <span className="text-xs text-[#ff8a80] group-hover:translate-x-0.5 transition-transform font-bold">
@@ -4132,7 +4132,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                       <span>{tr('일일 결투 티켓')}</span>
                     </span>
                     <span className="font-mono font-bold text-[#ffd54f]">
-                      {state.arenaTickets ?? 3} / 3
+                      {/* TODO: 일일 결투 티켓 시스템 미구현 — 현재는 고정 표시 */}3 / 3
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -4371,7 +4371,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                       <span>{tr('전술 방어 타워')}</span>
                     </span>
                     <span className="font-bold font-mono text-[#ffd54f]">
-                      Lv.{tacticalTower?.level || gateLevel}
+                      Lv.{gateLevel}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">

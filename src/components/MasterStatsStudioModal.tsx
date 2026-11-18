@@ -428,7 +428,7 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
             <div className="text-xs">{error}</div>
             <div className="pt-2">
               <button
-                onClick={loadData}
+                onClick={() => loadData()}
                 className="px-3 py-1 bg-[#c56060] text-white rounded text-xs font-bold hover:bg-[#e57373]"
               >
                 다시 시도

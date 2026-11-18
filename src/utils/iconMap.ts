@@ -3,7 +3,7 @@ import { FORGE_TIER_NAMES, BOSS_UNIQUE_DEFINITIONS, CLASS_HONOR_SHOP_DEFINITIONS
 import { MONSTERS } from '../data/monsters';
 
 export interface IconMeta {
-  src: string;
+  src?: string; // 없으면 fallback 이모지로 표시
   fallback: string;
   label?: string;
 }

@@ -29,7 +29,7 @@ export interface GameResources {
   suffix_stone: number;       // 일반 접미석 (1~2층 드롭)
   pure_prefix_stone: number;  // 순수 접두석 (3~5층/보스 드롭)
   pure_suffix_stone: number;  // 순수 접미석 (3~5층/보스 드롭)
-  pure_mana_stone?: number;   // 순수 마도석 (10~11층 드롭, 7강 이상 강화 및 에픽 이상 장비/인챈트 촉매)
+  pure_mana_stone: number;    // 순수 마도석 (10~11층 드롭, 7강 이상 강화 및 에픽 이상 장비/인챈트 촉매)
   // 👑 광폭화 보스 전용 신화 유물 (10종)
   relic_floor_1: number; // 침묵의 흑핵 (1F)
   relic_floor_2: number; // 망령의 영혼수정 (2F)

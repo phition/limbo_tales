@@ -4644,8 +4644,8 @@ const BarracksDrawer: React.FC<{
 
     // 3. 후열: 힐러/원거리/지원 우선
     const support = [...available].filter(h => !partyHeroIds.has(h.id)).sort((a, b) => {
-      const roleA = (CHARACTER_CLASSES[a.classId]?.role === 'healer' || CHARACTER_CLASSES[a.classId]?.role === 'ranger') ? 10000 : 0;
-      const roleB = (CHARACTER_CLASSES[b.classId]?.role === 'healer' || CHARACTER_CLASSES[b.classId]?.role === 'ranger') ? 10000 : 0;
+      const roleA = (CHARACTER_CLASSES[a.classId]?.role === 'healer' || CHARACTER_CLASSES[a.classId]?.role === 'gunner') ? 10000 : 0;
+      const roleB = (CHARACTER_CLASSES[b.classId]?.role === 'healer' || CHARACTER_CLASSES[b.classId]?.role === 'gunner') ? 10000 : 0;
       return (roleB + b.stats.spd * 2 + b.stats.luck) - (roleA + a.stats.spd * 2 + a.stats.luck);
     })[0];
     if (support) partyHeroIds.add(support.id);

@@ -72,9 +72,9 @@ export const NemesisQuickSquadModal: React.FC<Props> = ({
       .filter(h => {
         if (filterClass !== 'all') {
           const cls = CHARACTER_CLASSES[h.classId];
-          const archetype = cls?.role || cls?.archetype || '';
+          const archetype: string = cls?.role || '';
           if (filterClass === 'warrior' && !h.classId.includes('warrior') && !h.classId.includes('knight') && !h.classId.includes('paladin') && !archetype.includes('tank')) return false;
-          if (filterClass === 'mage' && !h.classId.includes('mage') && !h.classId.includes('priest') && !h.classId.includes('cleric') && !archetype.includes('magic')) return false;
+          if (filterClass === 'mage' && !h.classId.includes('mage') && !h.classId.includes('priest') && !h.classId.includes('cleric') && archetype !== 'dealer_mag' && archetype !== 'healer') return false;
           if (filterClass === 'rogue' && !h.classId.includes('rogue') && !h.classId.includes('assassin') && !h.classId.includes('archer') && !h.classId.includes('hunter')) return false;
         }
         if (searchQuery.trim()) {

@@ -1318,6 +1318,9 @@ export const NemesisView: React.FC = () => {
         }
       }
 
+      // 타겟 부위 VFX 좌표 (장비 프록 · 기본 타격 VFX 공용)
+      const pos = partPosMap[pKey];
+
       // J) 마도 인챈트 장비 프록 (checkEquipmentProc)
       if (hero.originalHero && part.currentHp > 0) {
         try {
@@ -1336,7 +1339,6 @@ export const NemesisView: React.FC = () => {
       }
 
       // I) 해당 타겟 부위 좌표에 VFX 격발
-      const pos = partPosMap[pKey];
       const partVfx: VFXType = isCrit ? 'crit_slash' : (fxInfo.vfx || 'slash');
       triggerVfx(partVfx, pos.x, pos.y, `${dmg.toLocaleString()}`, isCrit);
 
@@ -3064,11 +3066,10 @@ export const NemesisView: React.FC = () => {
                               <span className="flex items-center gap-1">
                                 <span>{sk.icon || '⚔️'}</span>
                                 <span>{sk.name}</span>
-                                {sk.isSpecial && <span className="text-[9px] px-1 rounded bg-[#ff1744] text-white">{tr('절멸기')}</span>}
                               </span>
-                              <span className="text-[#8b9bb4] font-mono text-[10px]">{sk.targetType === 'all_allies' ? tr('아군 전체') : tr('단일')}</span>
+                              <span className="text-[#8b9bb4] font-mono text-[10px]">{sk.target === 'all' ? tr('아군 전체') : sk.target === 'front' ? tr('전열') : tr('단일')}</span>
                             </div>
-                            {sk.description && <div className="text-[10px] text-[#8b9bb4] mt-0.5">{sk.description}</div>}
+                            {sk.desc && <div className="text-[10px] text-[#8b9bb4] mt-0.5">{sk.desc}</div>}
                           </div>
                         ))}
                       </div>

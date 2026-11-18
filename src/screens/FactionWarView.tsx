@@ -19,6 +19,7 @@ import {
   hasBridgeheadForNode,
   canJoinFaction,
   GarrisonSquadEntry,
+  FactionWarNodeRuntimeState,
   MarchingOrder,
 } from '../data/factionWar';
 import { CHARACTER_CLASSES } from '../data/classes';
@@ -708,6 +709,121 @@ export const FactionWarView: React.FC = () => {
         tone: 'primary',
       });
     }
+  };
+
+  // 🛡️ 아군 점령 거점에 내 3인 결사대를 수비 분대로 주둔 (+100 성좌의 인장)
+  const GARRISON_SEAL_REWARD = 100;
+  const handleDeployGarrison = async (nodeId: StrongholdId) => {
+    const nDef = FACTION_WAR_NODES[nodeId];
+    const nState = warState.nodes[nodeId];
+    if (!nDef || !nState || nDef.isHq) return;
+
+    if (nState.ownerFaction !== myFaction) {
+      await gameAlert({
+        title: '⚠️ 주둔 불가',
+        message: `[${nDef.name}]은(는) 우리 진영의 거점이 아닙니다. 먼저 공성으로 거점을 함락시켜야 합니다.`,
+        icon: '🛡️',
+        tone: 'warning',
+      });
+      return;
+    }
+
+    if (warState.currentWeek === 4) {
+      await gameAlert({
+        title: '🔒 4주차 시즌 아웃',
+        message: '4주차는 시즌이 종료되어 전장이 동결되었습니다. 새 수비 분대를 주둔시킬 수 없습니다.',
+        icon: '❄️',
+        tone: 'warning',
+      });
+      return;
+    }
+
+    if (!mySquadInfo.isFullyDispatched) {
+      await gameAlert({
+        title: '⚠️ 3인 결사대 미편성',
+        message: '주둔시킬 3인 전담 결사대가 편성되지 않았습니다. 상단 [3인 결사대] 버튼을 눌러 부대를 차출해 주세요.',
+        icon: '⚔️',
+        tone: 'danger',
+      });
+      setIsDispatchModalOpen(true);
+      return;
+    }
+
+    if (warState.marchingOrder && warState.marchingOrder.arrivesAt > Date.now()) {
+      const remainingSec = Math.ceil((warState.marchingOrder.arrivesAt - Date.now()) / 1000);
+      await gameAlert({
+        title: '⏳ 원정 부대 행군 중',
+        message: `3인 결사대가 [${warState.marchingOrder.targetName}]으로 진격 중이라 주둔할 수 없습니다. (남은 시간: ${Math.floor(remainingSec / 60)}분 ${remainingSec % 60}초)`,
+        icon: '⏳',
+        tone: 'warning',
+      });
+      return;
+    }
+
+    const myUid = FirebaseService.getInstance().getCurrentUser()?.uid || 'master_commander';
+    const alreadyStationed = (Object.values(warState.nodes) as FactionWarNodeRuntimeState[]).find((n) =>
+      n.garrisons.some((g) => g.commanderUid === myUid)
+    );
+    if (alreadyStationed) {
+      const stationedName = FACTION_WAR_NODES[alreadyStationed.id]?.name || alreadyStationed.id;
+      await gameAlert({
+        title: '🛡️ 이미 주둔 중',
+        message: `내 결사대는 이미 [${stationedName}]에 주둔하고 있습니다. 한 번에 한 거점에만 주둔할 수 있습니다.`,
+        icon: '🛡️',
+        tone: 'warning',
+      });
+      return;
+    }
+
+    if (nState.garrisons.length >= nDef.maxGarrisons) {
+      await gameAlert({
+        title: '🛡️ 주둔 슬롯 포화',
+        message: `[${nDef.name}]의 수비 분대 슬롯(${nDef.maxGarrisons})이 모두 찼습니다.`,
+        icon: '🛡️',
+        tone: 'warning',
+      });
+      return;
+    }
+
+    SoundManager.getInstance().play('forge_success');
+    const commanderNick = FirebaseService.getInstance().getCommanderCallsign();
+    const leader = mySquadInfo.heroes[0];
+    const newGarrison: GarrisonSquadEntry = {
+      id: `gar_${Date.now()}`,
+      commanderUid: myUid,
+      commanderName: commanderNick,
+      faction: myFaction,
+      combatPower: mySquadInfo.totalCp,
+      fatigue: 0,
+      defendWins: 0,
+      deployedAt: Date.now(),
+      leaderClassId: leader?.classId || 'paladin',
+      leaderName: leader?.name || '결사대 선봉장',
+    };
+
+    setWarState((prev) => {
+      const curNode = prev.nodes[nodeId];
+      return {
+        ...prev,
+        constellationSeals: prev.constellationSeals + GARRISON_SEAL_REWARD,
+        nodes: {
+          ...prev.nodes,
+          [nodeId]: {
+            ...curNode,
+            garrisons: [...curNode.garrisons, newGarrison],
+          },
+        },
+      };
+    });
+
+    appendWarLog(`🛡️ [${commanderNick}]님의 3인 결사대가 [${nDef.name}] 성벽에 수비 분대로 주둔했습니다.`, myFaction);
+
+    await gameAlert({
+      title: '🛡️ 수비 분대 주둔 완료',
+      message: `[${nDef.name}]에 수비 분대를 주둔시켰습니다.\n\n• 획득 보상: 🎖️ 성좌의 인장 +${GARRISON_SEAL_REWARD}`,
+      icon: nDef.icon,
+      tone: 'primary',
+    });
   };
 
   // 🎖️ 성좌 군수 상점 아이템 구매

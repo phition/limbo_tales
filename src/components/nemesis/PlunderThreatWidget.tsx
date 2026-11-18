@@ -4,7 +4,7 @@ import { formatRemainingTimeStr } from '../../utils/timeUtils';
 
 interface Props {
   cycleInfo: {
-    status: 'active' | 'defeated' | 'cooldown';
+    status: 'active' | 'defeated' | 'cooldown' | 'dormant';
     requiredWindowDamage: number;
     currentWindowDamage: number;
     isWindowDefended: boolean;

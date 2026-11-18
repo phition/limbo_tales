@@ -493,7 +493,7 @@ export class FirebaseService {
   /**
    * 🔑 이메일/비밀번호 직접 로그인
    */
-  public async signInWithEmail(email: string, pass: string): Promise<{ success: boolean; error?: string }> {
+  public async signInWithEmail(email: string, pass: string): Promise<{ success: boolean; error?: string; code?: string }> {
     this.currentUser = null;
     this.cachedProfile = null;
     const cleanEmail = email.trim();
