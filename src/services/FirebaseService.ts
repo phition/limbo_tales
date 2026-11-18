@@ -411,7 +411,8 @@ export class FirebaseService {
     const email = user?.email;
     if (!email) return false;
     const cleanEmail = email.toLowerCase().trim();
-    return cleanEmail.endsWith('@bumpcat.net') || cleanEmail.includes('bumpcat.net');
+    // DB 보안 규칙(database.rules.json)과 동일한 조건: 인증된 @bumpcat.net 이메일만 관리자
+    return cleanEmail.endsWith('@bumpcat.net') && user?.emailVerified === true;
   }
 
   /** 👤 익명(게스트) 계정 여부 판별 */

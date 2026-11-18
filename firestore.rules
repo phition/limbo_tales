@@ -1,13 +1,12 @@
 rules_version = '2';
 
+// 클라이언트는 현재 Firestore를 사용하지 않습니다(데이터는 Realtime Database).
+// 명시적으로 허용한 컬렉션 외에는 모두 거부합니다.
 service cloud.firestore {
   match /databases/{database}/documents {
     match /guestbook/{docId} {
       allow read: if true;
       allow write: if request.auth != null && request.auth.token.firebase.sign_in_provider != 'anonymous';
-    }
-    match /{document=**} {
-      allow read, write: if true;
     }
   }
 }

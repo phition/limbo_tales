@@ -1,76 +1,88 @@
 {
   "rules": {
     "users": {
-      ".read": true,
+      ".read": "auth != null && (auth.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423' || (auth.token.email_verified === true && auth.token.email.endsWith('@bumpcat.net')))",
       "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
         "profile": {
-          ".read": true,
-          ".write": true
+          ".write": "auth != null && auth.uid === $uid"
         },
         "progress": {
-          ".read": true,
-          ".write": true
+          ".write": "auth != null && auth.uid === $uid"
         },
         "ping": {
-          ".read": true,
-          ".write": true
+          ".write": "auth != null && auth.uid === $uid"
         }
       }
     },
     "system_stats": {
-      ".read": true,
-      ".write": true
+      ".read": "auth != null",
+      ".write": "auth != null"
     },
     "recent_active_users": {
-      ".read": true,
-      ".write": true,
-      ".indexOn": ["lastActiveAt"]
+      ".read": "auth != null && (auth.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423' || (auth.token.email_verified === true && auth.token.email.endsWith('@bumpcat.net')))",
+      ".indexOn": ["lastActiveAt"],
+      "$uid": {
+        ".write": "auth != null && (auth.uid === $uid || auth.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423' || (auth.token.email_verified === true && auth.token.email.endsWith('@bumpcat.net')))"
+      }
     },
     "callsigns": {
       ".read": true,
-      ".write": true
+      "$callsign": {
+        ".write": "auth != null && ((!data.exists() && newData.val() === auth.uid) || data.val() === auth.uid)"
+      }
     },
     "guestbook": {
       ".read": true,
       ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
       ".indexOn": ["createdAt"]
     },
+    "commander_attack_notices": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "$noticeId": {
+          ".write": "auth != null && !data.exists() && newData.exists()"
+        }
+      }
+    },
     "arena_leaderboard": {
       ".read": true,
-      ".write": true,
-      ".indexOn": ["rating"]
+      ".indexOn": ["rating"],
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
     },
     "arena_edict": {
       ".read": true,
-      ".write": true
+      ".write": "auth != null && (auth.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423' || (auth.token.email_verified === true && auth.token.email.endsWith('@bumpcat.net')))"
     },
     "world_boss": {
       ".read": true,
-      ".write": true,
-      "nemesis": {
-        ".read": true,
-        ".write": true
-      }
+      ".write": "auth != null"
     },
     "dungeon_recent_visits": {
       ".read": true,
-      ".write": true
+      ".indexOn": ["timestamp"],
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
     },
     "game_data": {
       ".read": true,
-      ".write": true
+      ".write": "auth != null && (auth.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423' || (auth.token.email_verified === true && auth.token.email.endsWith('@bumpcat.net')))"
     },
     "encyclopedia_data": {
       ".read": true,
-      ".write": true
+      ".write": "auth != null && (auth.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423' || (auth.token.email_verified === true && auth.token.email.endsWith('@bumpcat.net')))"
     },
     "app_version": {
       ".read": true,
-      ".write": true
+      ".write": "auth != null && (auth.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423' || (auth.token.email_verified === true && auth.token.email.endsWith('@bumpcat.net')))"
     },
     "system_config": {
       ".read": true,
-      ".write": true
+      ".write": "auth != null && (auth.uid === 'oiTgwYUgTBSNsuLo0rNt5jg7d423' || (auth.token.email_verified === true && auth.token.email.endsWith('@bumpcat.net')))"
     }
   }
 }
