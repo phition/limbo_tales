@@ -1,5 +1,8 @@
 package com.limbo.tales;
 
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +30,23 @@ public class MainActivity extends BridgeActivity {
 
         // 🎮 Google Play Games Services v2 SDK 초기화 (앱 구동 시 자동 로그인 확인)
         PlayGamesSdk.initialize(this);
+
+        // 🖥️ Google Play Games on PC 및 태블릿/대형 화면 감지 및 화면 방향 설정
+        PackageManager pm = getPackageManager();
+        boolean isPC = pm != null && pm.hasSystemFeature("com.google.android.play.feature.HPE_EXPERIENCE");
+        boolean isTablet = (getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+
+        if (isPC || isTablet) {
+            // 🖥️ PC 환경 및 대형 화면에서는 와이드 화면(가로/자유)을 지원
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        } else {
+            // 📱 일반 스마트폰에서는 기존과 같이 세로 모드로 고정
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
+        if (isPC && getBridge() != null && getBridge().getWebView() != null) {
+            getBridge().getWebView().evaluateJavascript("window.__IS_PLAY_GAMES_PC__ = true;", null);
+        }
 
         // 📱 화면 엣지투엣지 및 시스템 바(상단 알림줄 유지 + 하단 네비게이션 바 숨김) 정밀 제어
         setupWindowLayoutAndSystemBars();

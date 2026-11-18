@@ -1441,7 +1441,7 @@ export const CustomDataStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 {/* 네메시스 헤더 요약 카드 */}
                 <div className="p-4 bg-gradient-to-r from-[#170e28] via-[#101426] to-[#0d1624] border border-[#9c27b055] rounded-2xl flex flex-col md:flex-row items-center gap-4 shadow-xl">
                   <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-[#ce93d888] shadow-lg shrink-0 relative">
-                    <img src="assets/void_overlord.jpg" alt="Nemesis" className="w-full h-full object-cover scale-110" />
+                    <img src="assets/void_overlord.webp" alt="Nemesis" className="w-full h-full object-cover scale-110" />
                     <span className="absolute bottom-0 inset-x-0 bg-black/75 text-[9px] text-center font-bold text-[#ce93d8] py-0.5">
                       BOSS
                     </span>

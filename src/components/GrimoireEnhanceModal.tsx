@@ -159,7 +159,7 @@ export const GrimoireEnhanceModal: React.FC<Props> = ({ open, hero, skill, onClo
         {/* 상단 에테르 공방 일러스트 배너 */}
         <div className="relative w-full h-24 sm:h-28 rounded-xl overflow-hidden border border-[#26a69a44] shadow-md shrink-0">
           <img
-            src="assets/menu_alchemy.jpg"
+            src="assets/menu_alchemy.webp"
             alt="Aether Alchemy Workshop"
             className="w-full h-full object-cover"
             style={{ filter: 'brightness(0.92) contrast(1.05)' }}

@@ -15,6 +15,7 @@ import { gameDialog } from '../services/DialogService';
 import { useI18n } from '../hooks/useI18n';
 import { GoogleAdService } from '../services/GoogleAdService';
 import { formatDuration } from '../utils/timeUtils';
+import { CustomAssetService } from '../services/CustomAssetService';
 
 type InvasionTab = 'scout' | 'defense' | 'tower';
 
@@ -894,27 +895,49 @@ export const InvasionView: React.FC = () => {
                   {inspectTarget.defenseSquad.slice(0, 4).map((h, i) => {
                     const isOperator = i === 3;
                     const cls = CHARACTER_CLASSES[h.classId];
+                    const portraitUrl = CustomAssetService.getHeroPortrait(h);
+                    const slotTitle = i === 0 ? tr('🛡️ 성벽 결속') : i === 1 ? tr('🗼 좌측 사수') : i === 2 ? tr('🗼 우측 사수') : tr('👑 오퍼레이터');
+                    const slotColor = i === 0 ? '#80deea' : i === 1 ? '#ff7043' : i === 2 ? '#c8aa6e' : '#ff80ab';
+                    const slotBg = i === 0 ? '#102436' : i === 1 ? '#2c1410' : i === 2 ? '#241a10' : '#381428';
+
                     return (
                       <div
                         key={i}
-                        className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-center relative ${
+                        className={`flex flex-col items-center justify-center p-2 rounded-xl border text-center relative ${
                           isOperator
                             ? 'bg-[#1f1220] border-[#ff416c66]'
                             : 'bg-[#12141a] border-[#1e2a40]'
                         }`}
                       >
                         <span
-                          className="text-[9px] font-black px-1.5 py-0.2 rounded mb-1"
+                          className="text-[8.5px] font-black px-1.5 py-0.2 rounded mb-1 truncate max-w-full"
                           style={{
-                            color: isOperator ? '#ff80ab' : '#cfd8e8',
-                            backgroundColor: isOperator ? '#381428' : '#18243c',
+                            color: slotColor,
+                            backgroundColor: slotBg,
                           }}
                         >
-                          {isOperator ? tr('🛡️ 오퍼레이터') : tr(`수비대 ${i + 1}`)}
+                          {slotTitle}
                         </span>
-                        <span className="text-3xl my-1.5">{cls?.skills?.[0]?.icon || '⚔️'}</span>
-                        <span className="text-[11px] font-mono font-black text-[#ffd54f]">
-                          Lv.{h.level}
+
+                        {/* 용병 포트레이트 */}
+                        <div className="relative w-12 h-12 sm:w-13 sm:h-13 rounded-xl overflow-hidden my-1 border border-[#c8aa6e55] bg-[#0c1222] flex items-center justify-center shadow-md">
+                          {portraitUrl ? (
+                            <img
+                              src={portraitUrl}
+                              alt={h.name}
+                              className="w-full h-full object-cover object-center"
+                              onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                            />
+                          ) : (
+                            <span className="text-2xl">{cls?.skills?.[0]?.icon || '⚔️'}</span>
+                          )}
+                          <span className="absolute bottom-0 right-0 text-[7px] font-mono font-black bg-black/85 px-1 py-0.2 rounded text-[#ffd54f] leading-none">
+                            Lv.{h.level}
+                          </span>
+                        </div>
+
+                        <span className="text-[10.5px] font-bold text-white truncate w-full">
+                          {h.name}
                         </span>
                         <span className="text-[9px] text-[#8b9bb4] truncate w-full">
                           {tr(cls?.name || '용병')}
@@ -954,7 +977,7 @@ export const InvasionView: React.FC = () => {
                         <span>{tr('상대 방어 전술 타워 구축 현황')}</span>
                       </div>
                       <span className="text-[10px] font-mono text-[#ffd54f]">
-                        {tr(`총 Lv.${totalTowerLv} / 27`)}
+                        {tr(`총 Lv.${totalTowerLv} / 45`)}
                       </span>
                     </div>
 
@@ -969,15 +992,15 @@ export const InvasionView: React.FC = () => {
                         </div>
                         <div className="flex flex-col gap-1 text-[10px] font-mono">
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">{tr('1차(진지)')}</span>
+                            <span className="text-[#8b9bb4]">{tr('1차(화력증폭)')}</span>
                             <span className="font-bold text-[#ff416c]">Lv.{targetTower.attack.tier1}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">{tr('2차(포격)')}</span>
+                            <span className="text-[#8b9bb4]">{tr('2차(작열화상)')}</span>
                             <span className="font-bold text-[#ff416c]">Lv.{targetTower.attack.tier2}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">{tr('3차(시들음)')}</span>
+                            <span className="text-[#8b9bb4]">{tr('3차(맹독부식)')}</span>
                             <span className="font-bold text-[#ff416c]">Lv.{targetTower.attack.tier3}</span>
                           </div>
                         </div>
@@ -993,15 +1016,15 @@ export const InvasionView: React.FC = () => {
                         </div>
                         <div className="flex flex-col gap-1 text-[10px] font-mono">
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">{tr('1차(결계)')}</span>
+                            <span className="text-[#8b9bb4]">{tr('1차(결계복원)')}</span>
                             <span className="font-bold text-[#c8aa6e]">Lv.{targetTower.defense.tier1}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">{tr('2차(재생)')}</span>
+                            <span className="text-[#8b9bb4]">{tr('2차(충격기절)')}</span>
                             <span className="font-bold text-[#c8aa6e]">Lv.{targetTower.defense.tier2}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">{tr('3차(파쇄)')}</span>
+                            <span className="text-[#8b9bb4]">{tr('3차(동결역장)')}</span>
                             <span className="font-bold text-[#c8aa6e]">Lv.{targetTower.defense.tier3}</span>
                           </div>
                         </div>
@@ -1017,15 +1040,15 @@ export const InvasionView: React.FC = () => {
                         </div>
                         <div className="flex flex-col gap-1 text-[10px] font-mono">
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">{tr('1차(감속)')}</span>
+                            <span className="text-[#8b9bb4]">{tr('1차(속도감속)')}</span>
                             <span className="font-bold text-[#ffd54f]">Lv.{targetTower.utility.tier1}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">{tr('2차(누출)')}</span>
+                            <span className="text-[#8b9bb4]">{tr('2차(마나증가)')}</span>
                             <span className="font-bold text-[#ffd54f]">Lv.{targetTower.utility.tier2}</span>
                           </div>
                           <div className="flex justify-between items-center text-[#cfd8e8]">
-                            <span className="text-[#8b9bb4]">{tr('3차(저주)')}</span>
+                            <span className="text-[#8b9bb4]">{tr('3차(행운저주)')}</span>
                             <span className="font-bold text-[#ffd54f]">Lv.{targetTower.utility.tier3}</span>
                           </div>
                         </div>

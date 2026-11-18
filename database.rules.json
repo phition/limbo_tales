@@ -1,6 +1,7 @@
 {
   "rules": {
     "users": {
+      ".read": true,
       "$uid": {
         "profile": {
           ".read": true,
@@ -15,6 +16,15 @@
           ".write": true
         }
       }
+    },
+    "system_stats": {
+      ".read": true,
+      ".write": true
+    },
+    "recent_active_users": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["lastActiveAt"]
     },
     "callsigns": {
       ".read": true,

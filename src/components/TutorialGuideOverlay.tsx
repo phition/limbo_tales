@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import { TutorialStep, TUTORIAL_STEPS } from '../data/tutorialSteps';
 import { CustomAssetService } from '../services/CustomAssetService';
 import { I18nService } from '../i18n/I18nService';
@@ -79,15 +80,21 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
     }
   }, [currentStep?.targetSelector]);
 
-  // 타깃 요소를 화면 중앙으로 자동 스크롤
+  // 타깃 요소를 내부 스크롤 컨테이너 중앙으로만 안전하게 스크롤 (외부 overflow-hidden 컨테이너 스크롤 흔들림 방지)
   useEffect(() => {
     if (!isOpen || !currentStep?.targetSelector) return;
     const timer = setTimeout(() => {
-      const element = document.querySelector(currentStep.targetSelector!);
+      const element = document.querySelector(currentStep.targetSelector!) as HTMLElement | null;
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const scrollParent = element.closest('.overflow-y-auto') as HTMLElement | null;
+        if (scrollParent) {
+          const elRect = element.getBoundingClientRect();
+          const parentRect = scrollParent.getBoundingClientRect();
+          const offset = (elRect.top - parentRect.top) - (parentRect.height / 2) + (element.offsetHeight / 2);
+          scrollParent.scrollTo({ top: Math.max(0, scrollParent.scrollTop + offset), behavior: 'smooth' });
+        }
       }
-    }, 220);
+    }, 320);
     return () => clearTimeout(timer);
   }, [isOpen, currentStepId, currentStep?.targetSelector]);
 
@@ -95,7 +102,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
   useEffect(() => {
     if (!isOpen || !currentStep) return;
     updateTargetRect();
-    const interval = window.setInterval(updateTargetRect, 250);
+    const interval = window.setInterval(updateTargetRect, 120);
     window.addEventListener('resize', updateTargetRect);
     window.addEventListener('scroll', updateTargetRect, true);
 
@@ -212,9 +219,8 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
     }
 
     const el = document.querySelector(currentStep.targetSelector) as HTMLElement | null;
-    if (el) {
-      // 실제 클릭 가능한 버튼 요소 찾아서 클릭
-      const clickable = (el.tagName === 'BUTTON' ? el : el.querySelector('button') || el) as HTMLElement;
+    const clickable = el ? ((el.tagName === 'BUTTON' ? el : el.querySelector('button') || el) as HTMLElement) : null;
+    if (clickable) {
       try {
         clickable.click();
       } catch (err) {
@@ -244,7 +250,9 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
     // 🔨 건설 단계인 경우 즉시 넘기지 않고, 완공될 때까지 대기 상태로 전이
     // (모달 내부의 '건설 시작' 확인 버튼을 눌렀을 때만 대기 상태로 전이, 시설 목록 row 클릭 시에는 모달을 열고 타깃을 확인 버튼으로 유지)
     if (currentStep.id === 'TUTORIAL_BUILD_REFINERY' || currentStep.id === 'TUTORIAL_BUILD_TAVERN') {
-      const isConfirmBtn = clickable.getAttribute('data-tutorial-confirm-build') === 'true' || clickable.tagName === 'BUTTON';
+      const isConfirmBtn = clickable
+        ? (clickable.getAttribute('data-tutorial-confirm-build') === 'true' || clickable.tagName === 'BUTTON')
+        : false;
       if (isConfirmBtn) {
         onAdvanceStep('WAITING_CONSTRUCTION_' + currentStep.id);
       }
@@ -304,7 +312,7 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
     ? `${resourceBarBottom + 40}px`
     : 'calc(env(safe-area-inset-top, 0px) + 82px)';
 
-  return (
+  const overlayContent = (
     <div className={`fixed inset-0 z-[9999] select-none font-sans overflow-hidden ${
       isDialogueDismissed ? 'pointer-events-none' : 'pointer-events-auto'
     }`}>
@@ -563,4 +571,9 @@ export const TutorialGuideOverlay: React.FC<Props> = ({
       )}
     </div>
   );
+
+  if (typeof document !== 'undefined' && document.body) {
+    return ReactDOM.createPortal(overlayContent, document.body);
+  }
+  return overlayContent;
 };

@@ -27,7 +27,7 @@ export const CommanderAuthOverlay: React.FC<Props> = ({
     : `지휘관 확인 중${'.'.repeat(dotCount)}`;
 
   const videoSrc = isMobile ? 'assets/citadel_9x16_mobile.mp4' : 'assets/citadel_bonfire.mp4';
-  const posterSrc = isMobile ? 'assets/citadel_9x16_mobile.jpg' : 'assets/citadel_bonfire.jpg';
+  const posterSrc = isMobile ? 'assets/citadel_9x16_mobile.webp' : 'assets/citadel_bonfire.webp';
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#07080d] select-none overflow-hidden animate-fade-in">

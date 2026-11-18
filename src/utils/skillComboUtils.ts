@@ -179,8 +179,8 @@ export const COMBO_RULES: ComboRule[] = [
     triggerStatus: '공격 약화',
     triggerStatusTypes: ['debuff_atk'],
     requiredTagIds: ['holy'],
-    summary: '단죄 30% 추가 피해 & 아군 전체 치유/마나',
-    fullDesc: '공격 약화 상태의 적에게 신성 일격 적중 시 단죄 폭발 및 아군 전원 HP 대량 치유 + MP 10 반환',
+    summary: '단죄 35% 추가 피해 & 아군 전체 치유/마나',
+    fullDesc: '공격 약화 상태의 적에게 신성 일격 적중 시 35% 신성 추가 피해 및 아군 전원 HP(시전자 공격력의 25%) 치유 + MP 10 회복',
     bannerColor: '#ffd54f',
   },
   // ── 6. 화염 폭풍 ──
@@ -209,11 +209,11 @@ export const COMBO_RULES: ComboRule[] = [
   {
     comboName: '급소 처형 낙인',
     icon: '🎯🩸',
-    triggerStatus: '출혈/방어약화',
-    triggerStatusTypes: ['bleed', 'debuff_def'],
+    triggerStatus: '실명/표적/출혈/방어약화',
+    triggerStatusTypes: ['blind', 'bleed', 'debuff_def'],
     requiredTagIds: ['snipe', 'pierce'],
-    summary: '방어 100% 무시 확정 치명타 (1.6배)',
-    fullDesc: '상처가 벌어지거나 방어가 무너진 적의 급소를 저격으로 꿰뚫어 방어력을 100% 무시하는 1.6배 확정 치명타를 가합니다.',
+    summary: '약점 저격 +60% 추가 처형 피해',
+    fullDesc: '실명·표적 또는 출혈·방어 약화 상태의 적을 저격/관통으로 타격 시 노출된 급소를 꿰뚫어 +60% 추가 처형 피해를 입힙니다.',
     bannerColor: '#e040fb',
   },
   // ── 9. 암흑 피의 섭취 ──
@@ -223,8 +223,8 @@ export const COMBO_RULES: ComboRule[] = [
     triggerStatus: '출혈',
     triggerStatusTypes: ['bleed'],
     requiredTagIds: ['dark', 'drain'],
-    summary: '피해량 60% 아군 전체 수호 방벽 전환',
-    fullDesc: '출혈 중인 적의 상처에서 피의 마력을 강탈하여 적에게 35% 암흑 피해를 입히고 가한 피해의 60%를 아군 전체 보호막으로 부여',
+    summary: '+35% 암흑 피해 & 아군 전체 체력 즉시 치유',
+    fullDesc: '출혈 중인 적의 상처에서 피의 마력을 강탈하여 35% 암흑 추가 피해를 입히고 추가 피해의 30%만큼 아군 전원 HP를 즉시 치유(흡혈 공명)합니다.',
     bannerColor: '#880e4f',
   },
   // ── 10. 성염 융화 ──
@@ -467,7 +467,9 @@ export function getEffectivePositionBonus(skill: Skill | 'basic'): 'front' | 'ba
     desc.includes('[전열 특화]') ||
     desc.includes('전열 적') ||
     desc.includes('적 전열') ||
-    desc.includes('전열 1체')
+    desc.includes('전열 1체') ||
+    desc.includes('전열 대상') ||
+    desc.includes('전열 영웅')
   ) {
     return 'front';
   }
@@ -976,7 +978,7 @@ export function resolveCombatVfxAndSfx(
       return { vfx: isMultiTarget ? 'bullet_aoe' : 'bullet', sfx: 'bow_shot', primaryTag: 'snipe' };
     }
     if (c.includes('lancer') || c.includes('spear') || c.includes('dragoon') || c.includes('valkyrie')) {
-      return { vfx: isMultiTarget ? 'slash_aoe' : 'crit_slash', sfx: 'pierce', primaryTag: 'pierce' };
+      return { vfx: isMultiTarget ? 'pierce_aoe' : 'pierce', sfx: 'pierce', primaryTag: 'pierce' };
     }
     if (c.includes('crusher') || c.includes('hammer') || c.includes('berserker') || c.includes('mace') || c.includes('brawler') || c.includes('monk') || c.includes('paladin') || c.includes('warlord')) {
       return { vfx: isMultiTarget ? 'heavy_slash_aoe' : 'heavy_slash', sfx: 'crush', primaryTag: 'crush' };
@@ -1038,7 +1040,12 @@ export function resolveCombatVfxAndSfx(
     sName.includes('관통포') || sName.includes('버스터') || sName.includes('폭격') || sDesc.includes('탄환') ||
     c.includes('gun') || c.includes('sniper')
   ) {
-    return { vfx: isMultiTarget ? 'bullet_aoe' : 'bullet', sfx: 'gunshot', primaryTag: 'snipe' };
+    const isFireGun = sid.includes('inferno') || sName.includes('유황') || eff === 'burn' || sDesc.includes('화상');
+    return {
+      vfx: isFireGun ? (isMultiTarget ? 'fire_aoe' : 'fire') : (isMultiTarget ? 'bullet_aoe' : 'bullet'),
+      sfx: isFireGun ? 'fire' : 'gunshot',
+      primaryTag: isFireGun ? 'burn' : 'snipe'
+    };
   }
 
   // 🏹 궁술 / 화살
@@ -1112,7 +1119,12 @@ export function resolveCombatVfxAndSfx(
 
   // F. 폭풍 / 바람 (storm / wind)
   if (tagIds.has('storm') || sName.includes('폭풍') || sName.includes('돌풍') || sName.includes('질풍') || sid.includes('storm') || sid.includes('wind') || sid.includes('gale') || sName.includes('회오리')) {
-    return { vfx: isMultiTarget ? 'blizzard_storm' : 'arcane_nova', sfx: 'wind_storm', primaryTag: 'storm' };
+    return { vfx: isMultiTarget ? 'blizzard_storm' : 'storm_wind', sfx: 'wind_storm', primaryTag: 'storm' };
+  }
+
+  // F-2. 관통 / 찌르기 (pierce / thrust)
+  if (tagIds.has('pierce') || sName.includes('관통') || sDesc.includes('관통') || sName.includes('찌르기') || sDesc.includes('찌르기') || sid.includes('pierce') || sid.includes('puncture') || sid.includes('thrust')) {
+    return { vfx: isMultiTarget ? 'pierce_aoe' : 'pierce', sfx: 'pierce', primaryTag: 'pierce' };
   }
 
   // G. 중독 / 맹독 / 산성 (poison)
@@ -1135,8 +1147,11 @@ export function resolveCombatVfxAndSfx(
     return { vfx: isMultiTarget ? 'heavy_slash_aoe' : 'heavy_slash', sfx: 'shield_break', primaryTag: 'shield_break' };
   }
 
-  // K. 강타 / 기절 / 둔기 / 지진 (crush / stun)
-  if (tagIds.has('crush') || tagIds.has('stun') || eff === 'stun' || sName.includes('강타') || sName.includes('분쇄') || sName.includes('충격') || sid.includes('crush') || sid.includes('smash') || sid.includes('bash') || sid.includes('slam') || sName.includes('해머') || sName.includes('대지분쇄') || sName.includes('지진') || sName.includes('총진격')) {
+  // K. 강타 / 기절 / 둔기 / 지진 (crush / stun / earth)
+  if (sName.includes('지진') || sName.includes('대지') || sDesc.includes('대지') || sDesc.includes('지진') || sName.includes('암석') || sid.includes('earth') || sid.includes('quake')) {
+    return { vfx: 'earth_quake', sfx: 'crush', primaryTag: 'crush' };
+  }
+  if (tagIds.has('crush') || tagIds.has('stun') || eff === 'stun' || sName.includes('강타') || sName.includes('분쇄') || sName.includes('충격') || sid.includes('crush') || sid.includes('smash') || sid.includes('bash') || sid.includes('slam') || sName.includes('해머') || sName.includes('대지분쇄') || sName.includes('총진격')) {
     return { vfx: isMultiTarget ? 'heavy_slash_aoe' : 'heavy_slash', sfx: 'crush', primaryTag: 'crush' };
   }
 
@@ -1171,6 +1186,13 @@ export function getVfxAssociatedSfx(vfxType: VFXType): SoundEffectType {
     case 'phantom_slash':
     case 'sonic':
       return 'slash';
+    case 'pierce':
+    case 'pierce_aoe':
+      return 'pierce';
+    case 'storm_wind':
+      return 'wind_storm';
+    case 'earth_quake':
+      return 'crush';
     case 'heavy_slash':
     case 'heavy_slash_aoe':
       return 'crush';
@@ -1214,6 +1236,7 @@ export function getVfxAssociatedSfx(vfxType: VFXType): SoundEffectType {
     case 'boss_apocalypse':
     case 'boss_abyss_vortex':
     case 'status_curse':
+    case 'status_blind':
       return 'dark_magic';
 
     // ✨ 신성/성광
@@ -1252,6 +1275,7 @@ export function getVfxAssociatedSfx(vfxType: VFXType): SoundEffectType {
     // 💚 치유 & 🛡️ 보호막
     case 'holy_heal':
     case 'holy_heal_aoe':
+    case 'status_regen':
       return 'heal';
     case 'shield':
     case 'status_shield':

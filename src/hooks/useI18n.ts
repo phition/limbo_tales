@@ -20,8 +20,8 @@ export function useI18n() {
     return service.t(path, params);
   }, [lang, service]);
 
-  const tr = useCallback((text: string, targetLang?: SupportedLanguage) => {
-    return service.tr(text, targetLang);
+  const tr = useCallback((text: string, ...args: Array<SupportedLanguage | string | number | undefined | null>) => {
+    return service.tr(text, ...args);
   }, [lang, service]);
 
   const dict = service.getDict();

@@ -9,11 +9,15 @@ import { PlayGamesService } from '../services/PlayGamesService';
 import { CHARACTER_CLASSES } from '../data/classes';
 import { SoundManager } from '../managers/SoundManager';
 import { GameManager } from '../managers/GameManager';
-import { BattleVFXOverlay, VFXEvent, VFXType } from '../components/BattleVFXOverlay';
-import { generateArenaRewardEquipment, CLASS_HONOR_SHOP_DEFINITIONS, createClassHonorEquipment, recalculateEquipmentStats } from '../data/equipment';
+import { BattleVFXOverlay, VFXEvent, VFXType, prewarmVfxSprites } from '../components/BattleVFXOverlay';
+import { generateArenaRewardEquipment, CLASS_HONOR_SHOP_DEFINITIONS, createClassHonorEquipment, recalculateEquipmentStats, getEquipmentTemplateId, WEAPON_TRAITS } from '../data/equipment';
+import { Modal } from '../components/Modal';
+import { getRarityColor, getRarityLabel, getRarityBorderStyle } from '../utils/rarity';
+import { triggerHaptic } from '../utils/haptics';
 import { NEMESIS_BOSS_CONFIG } from '../data/nemesis';
 import { NemesisView } from './NemesisView';
 import { InvasionView } from './InvasionView';
+import { FactionWarView } from './FactionWarView';
 import { AttackerVisualBox } from '../components/AttackerVisualBox';
 import { calculatePartySynergies } from '../data/synergies';
 import { FeverBadgeType, ShowdownResult, FeverShowdownOutcome } from '../types/fever';
@@ -31,77 +35,77 @@ import {
   PredictedSynergy
 } from '../utils/feverUtils';
 import { CombatMeterTable, CombatantMetrics } from '../components/CombatMeterTable';
-import { CustomAssetService } from '../services/CustomAssetService';
+import { CustomAssetService, toWebp } from '../services/CustomAssetService';
 import { GameDataService, ArenaEdictConfig } from '../services/GameDataService';
 import { gameDialog } from '../services/DialogService';
 import { getSkillMagicSchool, getElementalSubtype, resolveCombatVfxAndSfx } from '../utils/skillComboUtils';
 import { SkillDetailModal } from '../components/SkillDetailModal';
 
 const DEFAULT_CLASS_IMAGES: Record<string, string> = {
-  aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.png',
-  paladin: 'assets/portraits/portrait_paladin_female.png',
-  high_saintess: 'assets/portraits/portrait_t2_high_saintess.png',
-  valhalla_blade: 'assets/portraits/portrait_t2_valhalla_blade.png',
-  tactical_tower: 'assets/citadel_bonfire.jpg',
+  aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.webp',
+  paladin: 'assets/portraits/portrait_paladin_female.webp',
+  high_saintess: 'assets/portraits/portrait_t2_high_saintess.webp',
+  valhalla_blade: 'assets/portraits/portrait_t2_valhalla_blade.webp',
+  tactical_tower: 'assets/citadel_bonfire.webp',
 };
 
 export const CLASS_PORTRAIT_MAP: Record<string, string> = {
   // 기본 & 수호/성기사 계열
-  squire: 'assets/portraits/portrait_paladin.png',
-  paladin: 'assets/portraits/portrait_paladin.png',
-  guardian: 'assets/portraits/portrait_t1_guardian.png',
-  aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.png',
-  aegis_bastion: 'assets/portraits/portrait_t3_bastion.png',
-  fortress: 'assets/portraits/portrait_t3_bastion.png',
-  crusader_lord: 'assets/portraits/portrait_t3_bastion.png',
+  squire: 'assets/portraits/portrait_paladin.webp',
+  paladin: 'assets/portraits/portrait_paladin.webp',
+  guardian: 'assets/portraits/portrait_t1_guardian.webp',
+  aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.webp',
+  aegis_bastion: 'assets/portraits/portrait_t3_bastion.webp',
+  fortress: 'assets/portraits/portrait_t3_bastion.webp',
+  crusader_lord: 'assets/portraits/portrait_t3_bastion.webp',
 
   // 도적/암살 계열
-  rogue: 'assets/portraits/portrait_rogue.png',
-  duelist: 'assets/portraits/portrait_t1_duelist.png',
-  assassin: 'assets/portraits/portrait_t2_shadow_phantom.png',
-  shadow_phantom: 'assets/portraits/portrait_t2_shadow_phantom.png',
-  blade_dancer: 'assets/portraits/portrait_t1_duelist.png',
-  void_strider: 'assets/portraits/portrait_t3_void_strider.png',
+  rogue: 'assets/portraits/portrait_rogue.webp',
+  duelist: 'assets/portraits/portrait_t1_duelist.webp',
+  assassin: 'assets/portraits/portrait_t2_shadow_phantom.webp',
+  shadow_phantom: 'assets/portraits/portrait_t2_shadow_phantom.webp',
+  blade_dancer: 'assets/portraits/portrait_t1_duelist.webp',
+  void_strider: 'assets/portraits/portrait_t3_void_strider.webp',
 
   // 마법사 계열
-  apprentice: 'assets/portraits/portrait_mage.png',
-  apprentice_mage: 'assets/portraits/portrait_mage.png',
-  elementalist: 'assets/portraits/portrait_mage.png',
-  arcane_scholar: 'assets/portraits/portrait_t1_scholar.png',
-  scholar: 'assets/portraits/portrait_t1_scholar.png',
-  calamity_mage: 'assets/portraits/portrait_t2_calamity_mage.png',
-  chronomancer: 'assets/portraits/portrait_t3_chrono_archon.png',
-  chrono_archon: 'assets/portraits/portrait_t3_chrono_archon.png',
+  apprentice: 'assets/portraits/portrait_mage.webp',
+  apprentice_mage: 'assets/portraits/portrait_mage.webp',
+  elementalist: 'assets/portraits/portrait_mage.webp',
+  arcane_scholar: 'assets/portraits/portrait_t1_scholar.webp',
+  scholar: 'assets/portraits/portrait_t1_scholar.webp',
+  calamity_mage: 'assets/portraits/portrait_t2_calamity_mage.webp',
+  chronomancer: 'assets/portraits/portrait_t3_chrono_archon.webp',
+  chrono_archon: 'assets/portraits/portrait_t3_chrono_archon.webp',
 
   // 사제/클레릭 계열
-  acolyte: 'assets/portraits/portrait_cleric.png',
-  novice_cleric: 'assets/portraits/portrait_cleric.png',
-  cleric: 'assets/portraits/portrait_cleric.png',
-  war_priest: 'assets/portraits/portrait_t1_war_priest.png',
-  bishop: 'assets/portraits/portrait_t2_high_saintess.png',
-  high_saintess: 'assets/portraits/portrait_t2_high_saintess.png',
-  seraphic_inquisitor: 'assets/portraits/portrait_t3_seraphic_inquisitor.png',
+  acolyte: 'assets/portraits/portrait_cleric.webp',
+  novice_cleric: 'assets/portraits/portrait_cleric.webp',
+  cleric: 'assets/portraits/portrait_cleric.webp',
+  war_priest: 'assets/portraits/portrait_t1_war_priest.webp',
+  bishop: 'assets/portraits/portrait_t2_high_saintess.webp',
+  high_saintess: 'assets/portraits/portrait_t2_high_saintess.webp',
+  seraphic_inquisitor: 'assets/portraits/portrait_t3_seraphic_inquisitor.webp',
 
   // 전사/버서커/전열 딜러 계열
-  vanguard: 'assets/portraits/portrait_t1_warlord.png',
-  warrior: 'assets/portraits/portrait_berserker.png',
-  berserker: 'assets/portraits/portrait_berserker.png',
-  warlord: 'assets/portraits/portrait_t1_warlord.png',
-  valhalla_blade: 'assets/portraits/portrait_t2_valhalla_blade.png',
-  iron_marshal: 'assets/portraits/portrait_t1_warlord.png',
-  valhalla_warlord: 'assets/portraits/portrait_t3_valhalla_warlord.png',
+  vanguard: 'assets/portraits/portrait_t1_warlord.webp',
+  warrior: 'assets/portraits/portrait_berserker.webp',
+  berserker: 'assets/portraits/portrait_berserker.webp',
+  warlord: 'assets/portraits/portrait_t1_warlord.webp',
+  valhalla_blade: 'assets/portraits/portrait_t2_valhalla_blade.webp',
+  iron_marshal: 'assets/portraits/portrait_t1_warlord.webp',
+  valhalla_warlord: 'assets/portraits/portrait_t3_valhalla_warlord.webp',
 
   // 거너/궁수/원거리 딜러 계열
-  gunner: 'assets/portraits/portrait_gunner.png',
-  archer: 'assets/portraits/portrait_gunner.png',
-  tactical_gunner: 'assets/portraits/portrait_gunner.png',
-  sharpshooter: 'assets/portraits/portrait_t1_sharpshooter.png',
-  aether_gun_meister: 'assets/portraits/portrait_t2_gun_meister.png',
-  gun_meister: 'assets/portraits/portrait_t2_gun_meister.png',
-  ghost_sniper: 'assets/portraits/portrait_t3_omega_deadeye.png',
-  omega_deadeye: 'assets/portraits/portrait_t3_omega_deadeye.png',
+  gunner: 'assets/portraits/portrait_gunner.webp',
+  archer: 'assets/portraits/portrait_gunner.webp',
+  tactical_gunner: 'assets/portraits/portrait_gunner.webp',
+  sharpshooter: 'assets/portraits/portrait_t1_sharpshooter.webp',
+  aether_gun_meister: 'assets/portraits/portrait_t2_gun_meister.webp',
+  gun_meister: 'assets/portraits/portrait_t2_gun_meister.webp',
+  ghost_sniper: 'assets/portraits/portrait_t3_omega_deadeye.webp',
+  omega_deadeye: 'assets/portraits/portrait_t3_omega_deadeye.webp',
 
-  tactical_tower: 'assets/citadel_bonfire.jpg',
+  tactical_tower: 'assets/citadel_bonfire.webp',
 };
 
 export const getCombatantPortrait = (c: {
@@ -112,8 +116,8 @@ export const getCombatantPortrait = (c: {
   portraitUrl?: string;
   customPortraitUrl?: string;
 }): string => {
-  if (c.portraitUrl) return c.portraitUrl;
-  if (c.customPortraitUrl) return c.customPortraitUrl;
+  const directUrl = c.portraitUrl || c.customPortraitUrl;
+  if (directUrl) return toWebp(directUrl) || directUrl;
   return CustomAssetService.getHeroPortrait(c);
 };
 
@@ -154,8 +158,8 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
   const customAssetService = CustomAssetService.getInstance();
   const classId = leader?.classId || '';
   const imageUrl =
-    leader?.portraitUrl ||
-    leader?.customPortraitUrl ||
+    (leader?.portraitUrl && toWebp(leader.portraitUrl)) ||
+    (leader?.customPortraitUrl && toWebp(leader.customPortraitUrl)) ||
     customAssetService.getMercenaryOverride(classId) ||
     getCombatantPortrait(leader || { classId });
   const clsInfo = CHARACTER_CLASSES[classId];
@@ -183,6 +187,7 @@ const LeaderInfoCard: React.FC<LeaderInfoCardProps> = ({
             <img
               src={imageUrl}
               alt={leader?.name || 'Operator'}
+              decoding="async"
               className="w-full h-full object-cover object-center"
               onError={(e) => {
                 (e.currentTarget as HTMLElement).style.display = 'none';
@@ -837,7 +842,7 @@ interface CombatLogItem {
 export interface ArenaScreenProps {
   isDrawer?: boolean;
   onClose?: () => void;
-  onModeChange?: (mode: 'hub' | 'arena' | 'nemesis' | 'invasion') => void;
+  onModeChange?: (mode: 'hub' | 'arena' | 'nemesis' | 'invasion' | 'factionWar') => void;
 }
 
 export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onClose, onModeChange }) => {
@@ -859,13 +864,13 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
   const isNemesisUnlocked = gateLevel >= 3;
   const isInvasionUnlocked = gateLevel >= 6;
 
-  const [gateMode, setGateMode] = useState<'hub' | 'arena' | 'nemesis' | 'invasion'>('hub');
+  const [gateMode, setGateMode] = useState<'hub' | 'arena' | 'nemesis' | 'invasion' | 'factionWar'>('hub');
   const [tab, setTab] = useState<Tab>('match');
   const [opponents, setOpponents] = useState<ArenaOpponent[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [isLoadingLb, setIsLoadingLb] = useState(false);
 
-  const handleSetGateMode = useCallback((newMode: 'hub' | 'arena' | 'nemesis' | 'invasion') => {
+  const handleSetGateMode = useCallback((newMode: 'hub' | 'arena' | 'nemesis' | 'invasion' | 'factionWar') => {
     setGateMode(newMode);
     if (onModeChange) onModeChange(newMode);
   }, [onModeChange]);
@@ -874,14 +879,16 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     if (onModeChange) onModeChange('hub');
   }, [onModeChange]);
 
-  // 게이트 레벨에 따른 개방 모드 자동 보정
+  // 게이트 레벨에 따른 개방 모드 자동 보정 (차원 전쟁은 마스터 계정 전용)
   useEffect(() => {
-    if (gateMode === 'invasion' && !isInvasionUnlocked) {
+    if (gateMode === 'factionWar' && !gm.isMasterAccount) {
+      handleSetGateMode('hub');
+    } else if (gateMode === 'invasion' && !isInvasionUnlocked) {
       handleSetGateMode('hub');
     } else if (gateMode === 'nemesis' && !isNemesisUnlocked) {
       handleSetGateMode('hub');
     }
-  }, [gateMode, isNemesisUnlocked, isInvasionUnlocked, handleSetGateMode]);
+  }, [gateMode, isNemesisUnlocked, isInvasionUnlocked, gm.isMasterAccount, handleSetGateMode]);
 
   // ── ⚔️ 3v3+1+1 차원 아레나 몰입형 인터랙티브 전장 상태 ──
   const [activeBattleOpp, setActiveBattleOpp] = useState<ArenaOpponent | null>(null);
@@ -923,6 +930,11 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
   const [isShowdownEvaluated, setIsShowdownEvaluated] = useState(false); // 족보 판정 및 승자 광채 발동
   const [isCodexModalOpen, setIsCodexModalOpen] = useState(false);
   const [selectedSkillForModal, setSelectedSkillForModal] = useState<Skill | null>(null);
+  const [acquiredEquipModal, setAcquiredEquipModal] = useState<{
+    item: EquipmentItem;
+    sourceName: string;
+    isBox: boolean;
+  } | null>(null);
   const weeklyAffinity = useMemo(() => getWeeklyAffinityConfig(), []);
   const [arenaEdict, setArenaEdict] = useState<ArenaEdictConfig>(() => GameDataService.getInstance().getArenaEdict());
 
@@ -1384,7 +1396,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         cooldowns: {},
         statusEffects: [],
         icon: allSkills[1]?.icon || cls.skills[0]?.icon || '⚔️',
-        portraitUrl: (h as any).portraitUrl || (h as any).customPortraitUrl || getCombatantPortrait(h),
+        portraitUrl: getCombatantPortrait(h),
       };
     });
 
@@ -1427,7 +1439,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         cooldowns: {},
         statusEffects: [],
         icon: allSkills[1]?.icon || cls.skills[0]?.icon || '👾',
-        portraitUrl: (h as any).portraitUrl || (h as any).customPortraitUrl || getCombatantPortrait(h),
+        portraitUrl: getCombatantPortrait(h),
       };
     });
 
@@ -1439,6 +1451,17 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     setTargetEnemyId(oCombatants[0]?.id || null);
     if (pCombatants.length > 0) setLastPlayerAttacker(pCombatants[0]);
     if (oCombatants.length > 0) setLastEnemyAttacker(oCombatants[0]);
+
+    // ⚡ [성능 최적화] 전장 돌입 직후 전투원 포트레이트 및 전체 39종 VFX 스프라이트 사전 캐싱 (0ms 지연)
+    try {
+      const combatImages: (string | undefined)[] = [];
+      pCombatants.forEach(c => combatImages.push(toWebp(c.portraitUrl) || getCombatantPortrait(c)));
+      oCombatants.forEach(c => combatImages.push(toWebp(c.portraitUrl) || getCombatantPortrait(c)));
+      if (activePlayerOp) combatImages.push(getCombatantPortrait(activePlayerOp));
+      if (oppOperatorHero) combatImages.push(getCombatantPortrait(oppOperatorHero));
+      CustomAssetService.preloadImages(combatImages);
+      prewarmVfxSprites();
+    } catch (_) {}
 
     // 📊 전투 딜미터기 메트릭스 초기화 (3인 선발 + 1인 오퍼레이터 구성)
     const initMetrics: Record<string, CombatantMetrics> = {};
@@ -2753,7 +2776,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     activeCombatantIdRef.current = nextId;
     setActiveCombatantId(nextId);
     setTurnTick(t => t + 1);
-  }, [battleRound, gm, addFeverBadge, addOppFeverBadge, triggerLeaderUltimate, triggerOppLeaderUltimate, finishBattle]);
+  }, [battleRound, gm, addFeverBadge, addOppFeverBadge, triggerLeaderUltimate, triggerOppLeaderUltimate, finishBattle, battleSpeed]);
 
   // ── 턴 자동 진행 루프 (스킬 연계 최우선 콤보 AI & Auto Battle) ──────────────────────────────
   useEffect(() => {
@@ -2813,7 +2836,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
               text: '⚰️ 완전 사망',
               x: colX,
               y: rowY,
-              duration: 900,
+              duration: 600,
             }]);
             SoundManager.getInstance().play('defeat');
             gm.addLog(`⚰️ [영면] ${me.name}이(가) 3턴간의 사경 끝에 완전히 전사했습니다...`, me.isPlayer ? 'danger' : 'reward');
@@ -3075,6 +3098,32 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     }
   };
 
+  // ── 🎖️ 차원 아레나 명예 암시장 장비 획득 & 영지 로그 연동 & 커스텀 모달 오픈 ──
+  const handleEquipmentAcquired = (equip: EquipmentItem, sourceName: string, isBox: boolean) => {
+    gm.addEquipmentToInventory(equip);
+    const rarityLabel = getRarityLabel(equip.rarity);
+    const rarityUpper = (equip.rarity || 'RARE').toUpperCase();
+
+    if (isBox) {
+      // 🏰 영지 로그 (citadelLogs)
+      gm.addLog(`🎁 [명예 암시장] [${sourceName}] 개봉: [${rarityLabel}] ${equip.name} 획득! (영지 장비함 보관)`, 'reward', 'citadel');
+      // 🌌 아레나 로그 (arenaLogs)
+      gm.addLog(`🎁 [명예 암시장] [${sourceName}]을(를) 개봉하여 [${rarityUpper}] ${equip.name}을(를) 획득했습니다!`, 'reward', 'arena');
+    } else {
+      // 🏰 영지 로그 (citadelLogs)
+      gm.addLog(`🎖️ [명예 암시장] 무구 구매: [${rarityLabel}] ${equip.name} 획득! (영지 장비함 보관)`, 'reward', 'citadel');
+      // 🌌 아레나 로그 (arenaLogs)
+      gm.addLog(`🎖️ [명예 암시장] [${sourceName}] [${rarityUpper}]을(를) 구매하여 장비함에 보관했습니다!`, 'reward', 'arena');
+    }
+
+    // 🔊 사운드 및 진동 피드백
+    SoundManager.getInstance().play('equip');
+    triggerHaptic('heavyHit');
+
+    // 🪟 커스텀 모달 오픈
+    setAcquiredEquipModal({ item: equip, sourceName, isBox });
+  };
+
   // ── 🎖️ 명예 상점 아이템 구매 ──────────────────────────────────────────
   const handleBuyShopItem = (itemKey: string, cost: number, name: string) => {
     if ((state.arenaCoins ?? 0) < cost) {
@@ -3084,37 +3133,31 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
 
     gm.spendArenaCoins(cost);
 
-    // 1. 티어별 장비 보급함
+    // 1. 티어별 장비 보급함 (상자 개봉 -> 커스텀 모달 & 영지 로그 표기)
     if (itemKey === 'glory_chest_silver') {
       const equip = generateArenaRewardEquipment(900, 45, 0);
-      gm.addEquipmentToInventory(equip);
-      gm.addLog(`🎁 [명예 상점] [${name}]을 개봉하여 [${equip.rarity.toUpperCase()}] ${equip.name}을(를) 획득했습니다!`, 'reward');
+      handleEquipmentAcquired(equip, name, true);
     } else if (itemKey === 'glory_chest_gold') {
       const equip = generateArenaRewardEquipment(1150, 30, 0);
-      gm.addEquipmentToInventory(equip);
-      gm.addLog(`🎁 [명예 상점] [${name}]을 개봉하여 [${equip.rarity.toUpperCase()}] ${equip.name}을(를) 획득했습니다!`, 'reward');
+      handleEquipmentAcquired(equip, name, true);
     } else if (itemKey === 'glory_chest_platinum') {
       const equip = generateArenaRewardEquipment(1450, 15, 0);
-      gm.addEquipmentToInventory(equip);
-      gm.addLog(`🎁 [명예 상점] [${name}]을 개봉하여 [${equip.rarity.toUpperCase()}] ${equip.name}을(를) 획득했습니다!`, 'reward');
+      handleEquipmentAcquired(equip, name, true);
     } else if (itemKey === 'glory_chest_diamond') {
       const equip = generateArenaRewardEquipment(1750, 8, 0);
-      gm.addEquipmentToInventory(equip);
-      gm.addLog(`👑 [명예 상점] [${name}]을 개봉하여 [${equip.rarity.toUpperCase()}] ${equip.name}을(를) 획득했습니다!`, 'reward');
+      handleEquipmentAcquired(equip, name, true);
     } else if (itemKey === 'glory_chest_master') {
       const equip = generateArenaRewardEquipment(2050, 3, 0);
-      gm.addEquipmentToInventory(equip);
-      gm.addLog(`🌌 [명예 상점] [${name}]을 개봉하여 신화급 [${equip.rarity.toUpperCase()}] ${equip.name}을(를) 획득했습니다!`, 'reward');
+      handleEquipmentAcquired(equip, name, true);
     }
-    // 2. 클래스별 전용 희귀/에픽 장비
+    // 2. 클래스별 전용 희귀/에픽 장비 (장비 구매 -> 커스텀 모달 & 영지 로그 표기)
     else if (CLASS_HONOR_SHOP_DEFINITIONS[itemKey]) {
       const equip = createClassHonorEquipment(itemKey);
       if (equip) {
-        gm.addEquipmentToInventory(equip);
-        gm.addLog(`🎖️ [명예 상점] [${CLASS_HONOR_SHOP_DEFINITIONS[itemKey].className}] ${equip.rarity.toUpperCase()} [${equip.name}]을(를) 획득하여 장비함에 보관했습니다!`, 'reward');
+        handleEquipmentAcquired(equip, name, false);
       }
     }
-    // 3. 직군별 투사의 무기 & 판금갑 (호환성 유지 및 50% 상향 반영)
+    // 3. 직군별 투사의 무기 & 판금갑 (병기창 5~7레벨 기준 상향 및 '투사' 고유 특성 반영)
     else if (itemKey === 'glory_sword') {
       const hasPrefix = Math.random() < 0.20;
       const prefix = hasPrefix ? {
@@ -3122,8 +3165,8 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         name: '맹렬한',
         type: 'prefix' as const,
         rarity: 'epic' as const,
-        stats: { atk: 9, luck: 5 },
-        description: '공격력 +9, 행운 +5'
+        stats: { atk: 15, luck: 8 },
+        description: '공격력 +15, 행운 +8'
       } : undefined;
       const sword: EquipmentItem = {
         id: `equip_glory_sword_${Date.now()}`,
@@ -3131,17 +3174,18 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         name: prefix ? `[${prefix.name}] 투사의 처형검` : '투사의 처형검',
         baseName: '투사의 처형검',
         slot: 'weapon',
+        weaponType: 'sword',
+        weaponTrait: WEAPON_TRAITS.sword,
         level: 0,
         rarity: 'epic',
-        baseStats: { atk: 33, def: 11, luck: 9 },
-        stats: { atk: 33, def: 11, luck: 9 },
+        baseStats: { atk: 44, def: 12, hp: 110, luck: 8, defPenetration: 30 },
+        stats: { atk: 44, def: 12, hp: 110, luck: 8, defPenetration: 30 },
         prefix,
-        description: '차원 투기장에서 승리를 거듭한 지휘관에게 수여되는 결전 명검.',
+        description: '차원 투기장에서 승리를 거듭한 지휘관에게 수여되는 결전 명검. [투사 특성: 방어 관통 30%]',
         icon: '🗡️'
       };
       sword.stats = recalculateEquipmentStats(sword, 0);
-      gm.addEquipmentToInventory(sword);
-      gm.addLog(`🎖️ [명예 상점] 에픽 무기 [${name}]을(를) 장비함에 보관했습니다!`, 'reward');
+      handleEquipmentAcquired(sword, name, false);
     } else if (itemKey === 'glory_gun') {
       const hasPrefix = Math.random() < 0.20;
       const prefix = hasPrefix ? {
@@ -3149,8 +3193,8 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         name: '정밀한',
         type: 'prefix' as const,
         rarity: 'epic' as const,
-        stats: { atk: 9, spd: 3 },
-        description: '공격력 +9, 속도 +3'
+        stats: { atk: 14, spd: 5, luck: 6 },
+        description: '공격력 +14, 속도 +5, 행운 +6'
       } : undefined;
       const gun: EquipmentItem = {
         id: `equip_glory_gun_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
@@ -3158,17 +3202,18 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         name: prefix ? `[${prefix.name}] 투사의 결전 마총` : '투사의 결전 마총',
         baseName: '투사의 결전 마총',
         slot: 'weapon',
+        weaponType: 'gun',
+        weaponTrait: WEAPON_TRAITS.gun,
         level: 0,
         rarity: 'epic',
-        baseStats: { atk: 23, spd: 6, luck: 6 },
-        stats: { atk: 23, spd: 6, luck: 6 },
+        baseStats: { atk: 34, spd: 8, luck: 9, mp: 34, defPenetration: 30 },
+        stats: { atk: 34, spd: 8, luck: 9, mp: 34, defPenetration: 30 },
         prefix,
-        description: '고열 에테르 탄환을 고속 연사하는 차원 아레나 제식 마총.',
+        description: '고열 에테르 탄환을 고속 연사하는 차원 아레나 제식 마총. [투사 특성: 방어 관통 30%]',
         icon: '🔫'
       };
       gun.stats = recalculateEquipmentStats(gun, 0);
-      gm.addEquipmentToInventory(gun);
-      gm.addLog(`🎖️ [명예 상점] 에픽 무기 [${name}]을(를) 장비함에 보관했습니다!`, 'reward');
+      handleEquipmentAcquired(gun, name, false);
     } else if (itemKey === 'glory_plate') {
       const hasSuffix = Math.random() < 0.20;
       const suffix = hasSuffix ? {
@@ -3176,8 +3221,8 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         name: '수호',
         type: 'suffix' as const,
         rarity: 'epic' as const,
-        stats: { def: 12, hp: 63 },
-        description: '방어력 +12, HP +63'
+        stats: { def: 16, hp: 90 },
+        description: '방어력 +16, HP +90'
       } : undefined;
       const plate: EquipmentItem = {
         id: `equip_glory_plate_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
@@ -3187,15 +3232,14 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         slot: 'armor',
         level: 0,
         rarity: 'epic',
-        baseStats: { def: 41, hp: 147 },
-        stats: { def: 41, hp: 147 },
+        baseStats: { def: 46, hp: 260, atk: 10, luck: 6, statusResist: 10 },
+        stats: { def: 46, hp: 260, atk: 10, luck: 6, statusResist: 10 },
         suffix,
-        description: '어떠한 맹공도 버텨내는 불패의 투사 중장갑주.',
+        description: '어떠한 맹공도 버텨내는 불패의 투사 중장갑주. [투사 특성: 저항 10%]',
         icon: '🛡️'
       };
       plate.stats = recalculateEquipmentStats(plate, 0);
-      gm.addEquipmentToInventory(plate);
-      gm.addLog(`🎖️ [명예 상점] 에픽 방어구 [${name}]을(를) 장비함에 보관했습니다!`, 'reward');
+      handleEquipmentAcquired(plate, name, false);
     }
     // 3. 자원/악세서리/유물 및 인챈트/촉매/보급품 묶음
     else if (itemKey === 'food_pack') {
@@ -3250,14 +3294,13 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         slot: 'accessory',
         level: 0,
         rarity: 'rare',
-        baseStats: { hp: 126, def: 21, luck: 12, spd: 6 },
-        stats: { hp: 126, def: 21, luck: 12, spd: 6 },
-        description: '차원 투기장에서 용맹을 증명한 투사에게 수여되는 펜던트.',
+        baseStats: { hp: 180, def: 18, luck: 9, spd: 6, mp: 32, hpRegenPercent: 5 },
+        stats: { hp: 180, def: 18, luck: 9, spd: 6, mp: 32, hpRegenPercent: 5 },
+        description: '차원 투기장에서 용맹을 증명한 투사에게 수여되는 펜던트. [투사 특성: 턴당 체력 재생 5%]',
         icon: '📿'
       };
       amulet.stats = recalculateEquipmentStats(amulet, 0);
-      gm.addEquipmentToInventory(amulet);
-      gm.addLog(`🎖️ [명예 상점] 희귀 장신구 [${name}]을(를) 장비함에 보관했습니다!`, 'reward');
+      handleEquipmentAcquired(amulet, name, false);
     } else if (itemKey === 'glory_ring') {
       const hasPrefix = Math.random() < 0.20;
       const prefix = hasPrefix ? {
@@ -3276,15 +3319,14 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         slot: 'accessory',
         level: 0,
         rarity: 'legendary',
-        baseStats: { atk: 38, def: 27, luck: 17, spd: 9, mp: 63 },
-        stats: { atk: 38, def: 27, luck: 17, spd: 9, mp: 63 },
+        baseStats: { atk: 28, def: 18, luck: 16, spd: 7, mp: 50, hpRegenPercent: 5 },
+        stats: { atk: 28, def: 18, luck: 16, spd: 7, mp: 50, hpRegenPercent: 5 },
         prefix,
-        description: '차원 투기장에서 승리를 거듭한 지휘관에게 수여되는 전설의 반지.',
+        description: '차원 투기장에서 승리를 거듭한 지휘관에게 수여되는 전설의 반지. [투사 특성: 턴당 체력 재생 5%]',
         icon: '💍'
       };
       ring.stats = recalculateEquipmentStats(ring, 0);
-      gm.addEquipmentToInventory(ring);
-      gm.addLog(`🎖️ [명예 상점] 전설 아티팩트 [${name}]을(를) 획득하여 장비함에 보관했습니다!`, 'reward');
+      handleEquipmentAcquired(ring, name, false);
     } else if (itemKey === 'overlord_crown') {
       const hasPrefix = Math.random() < 0.25;
       const hasSuffix = Math.random() < 0.20;
@@ -3313,16 +3355,15 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         slot: 'accessory',
         level: 0,
         rarity: 'legendary',
-        baseStats: { atk: 63, def: 53, luck: 30, spd: 12, hp: 315, mp: 126 },
-        stats: { atk: 63, def: 53, luck: 30, spd: 12, hp: 315, mp: 126 },
+        baseStats: { atk: 75, def: 60, luck: 30, spd: 14, hp: 380, mp: 160, hpRegenPercent: 5, statusResist: 10, defPenetration: 30 },
+        stats: { atk: 75, def: 60, luck: 30, spd: 14, hp: 380, mp: 160, hpRegenPercent: 5, statusResist: 10, defPenetration: 30 },
         prefix,
         suffix,
-        description: '차원 게이트 10레벨의 극한을 뚫고 모든 차원을 평정한 절대 패왕의 신화 보관.',
+        description: '차원 게이트 10레벨의 극한을 뚫고 모든 차원을 평정한 절대 패왕의 신화 보관. [투사 패왕 특성: 관통 30% / 저항 10% / 체력 재생 5%]',
         icon: '👑'
       };
       crown.stats = recalculateEquipmentStats(crown, 0);
-      gm.addEquipmentToInventory(crown);
-      gm.addLog(`👑 [명예 상점] 최고위 신화 아티팩트 [${name}]을(를) 영구 획득했습니다!`, 'reward');
+      handleEquipmentAcquired(crown, name, false);
     }
 
     gm.saveGame();
@@ -3397,7 +3438,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     {
       key: 'glory_amulet',
       name: '희귀 장신구: 투사의 용맹 목걸이',
-      desc: 'HP+126, DEF+21, CRIT+9%, SPD+6',
+      desc: 'HP+180, DEF+18, LUK+9, SPD+6, [투사] 재생+5%',
       cost: 450,
       icon: '📿',
       tag: '희귀 장신구',
@@ -3407,7 +3448,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     {
       key: 'glory_ring',
       name: '전설 장신구: 투사의 영광 반지',
-      desc: 'ATK+38, DEF+27, CRIT+11%, SPD+9, MP+63',
+      desc: 'ATK+28, DEF+18, LUK+16, SPD+7, MP+50, [투사] 재생+5%',
       cost: 800,
       icon: '💍',
       tag: '전설 장비',
@@ -3417,7 +3458,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
     {
       key: 'overlord_crown',
       name: '신화 아티팩트: 차원 패왕의 주권 관',
-      desc: 'ATK+63, DEF+53, CRIT+30%, SPD+12, HP+315, MP+126',
+      desc: 'ATK+75, DEF+60, CRIT+30%, SPD+14, HP+380, MP+160, 관통+30%, 저항+10%, 재생+5%',
       cost: 3000,
       icon: '👑',
       tag: '신화 장비',
@@ -3748,6 +3789,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                 <img
                   src={getCombatantPortrait(m)}
                   alt={m.name}
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -3792,7 +3834,7 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
       {!isDrawer && (
         <div className="relative w-full h-36 sm:h-44 md:h-48 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden select-none">
           <img
-            src="assets/menu_arena.jpg"
+            src="assets/menu_arena.webp"
             alt={tr('차원 게이트')}
             className="absolute inset-0 w-full h-full object-cover filter brightness-100 contrast-105 saturate-110"
           />
@@ -3820,6 +3862,19 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
 
           {/* 우측 상단 액션 버튼 */}
           <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center gap-2 pointer-events-auto">
+            <button
+              onClick={() => {
+                try { SoundManager.getInstance().play('click'); } catch {}
+                gm.emit('openGuestbook');
+              }}
+              className="px-2.5 py-1.5 rounded-lg bg-black/75 hover:bg-black/90 border border-[#ffd54f]/50 hover:border-[#ffd54f] text-[#ffd54f] text-xs font-bold transition-all shadow-md flex items-center gap-1 cursor-pointer active:scale-95"
+              title={tr('차원 메세지(D.M) 열기')}
+            >
+              <span>📢</span>
+              <span className="hidden sm:inline">{tr('차원 메세지')}</span>
+              <span className="sm:hidden">D.M</span>
+            </button>
+
             {gateMode !== 'hub' && (
               <button
                 onClick={() => {
@@ -3863,6 +3918,19 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
           </button>
 
           <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              onClick={() => {
+                try { SoundManager.getInstance().play('click'); } catch {}
+                gm.emit('openGuestbook');
+              }}
+              className="px-2 py-1 rounded-md text-[11px] font-bold text-[#ffd54f] bg-[#ffd54f15] border border-[#ffd54f44] hover:bg-[#ffd54f33] transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-xs"
+              title={tr('차원 메세지(D.M) 교신')}
+            >
+              <span>📢</span>
+              <span className="hidden sm:inline">{tr('차원 메세지')}</span>
+              <span className="sm:hidden">D.M</span>
+            </button>
+
             <div className="p-0.5 rounded-lg bg-[#070a12] border border-[#1a2538] flex items-center gap-1">
               {/* 아레나 탭 */}
               <button
@@ -3938,6 +4006,25 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                 <span className="sm:hidden">{tr('침공')}</span>
                 {!isInvasionUnlocked && <span className="text-[9px] text-[#90a4ae]">🔒Lv.6</span>}
               </button>
+
+              {gm.isMasterAccount && (
+                <button
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 ${
+                    gateMode === 'factionWar'
+                      ? 'bg-gradient-to-r from-[#ffd54f] via-[#b7791f] to-[#a855f7] text-[#05070e] shadow-sm'
+                      : 'text-[#ffd54f] hover:text-white hover:bg-[#1e182e]'
+                  }`}
+                  onClick={() => {
+                    try { SoundManager.getInstance().play('click'); } catch {}
+                    handleSetGateMode('factionWar');
+                  }}
+                >
+                  <span>🌌</span>
+                  <span className="hidden sm:inline">{tr('성좌 전쟁')}</span>
+                  <span className="sm:hidden">{tr('성좌')}</span>
+                  <span className="text-[8px] px-1 py-0.5 rounded bg-[#ffd54f]/20 text-[#ffd54f] border border-[#ffd54f]/40">M</span>
+                </button>
+              )}
             </div>
 
             {/* ✕ 닫기 버튼 */}
@@ -3978,8 +4065,8 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
             </div>
           </div>
 
-          {/* 3대 콘텐츠 선택 카드 그리드 */}
-          <div className={`gap-3.5 sm:gap-4 items-stretch ${isDrawer ? 'flex flex-col' : 'grid grid-cols-1 md:grid-cols-3'}`}>
+          {/* 콘텐츠 선택 카드 그리드 */}
+          <div className={`gap-3.5 sm:gap-4 items-stretch ${isDrawer ? 'flex flex-col' : gm.isMasterAccount ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4' : 'grid grid-cols-1 md:grid-cols-3'}`}>
             {/* ── 🏆 카드 1: 차원 아레나 (4인 결투) ── */}
             <div
               onClick={() => {
@@ -4327,6 +4414,65 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                 )}
               </div>
             </div>
+
+            {/* ── 🌌 카드 4: 차원 성좌 전쟁: 영토 쟁탈전 (마스터 계정 전용) ── */}
+            {gm.isMasterAccount && (
+              <div
+                onClick={() => {
+                  try { SoundManager.getInstance().play('click'); } catch {}
+                  handleSetGateMode('factionWar');
+                }}
+                className="group relative rounded-2xl bg-gradient-to-b from-[#1a1528] via-[#110e1c] to-[#0a0812] border border-[#ffd54f66] hover:border-[#ffd54f] transition-all duration-300 shadow-lg hover:shadow-[0_0_28px_rgba(255,213,79,0.28)] flex flex-col justify-between overflow-hidden cursor-pointer p-4"
+              >
+                <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-[#ffd54f18] blur-2xl pointer-events-none group-hover:bg-[#ffd54f30] transition-all" />
+
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#ffd54f33] to-[#a855f722] border border-[#ffd54f88] flex items-center justify-center text-xl shadow-inner">
+                        🌌
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f55]">
+                          👑 MASTER ONLY · RvR
+                        </span>
+                        <h3 className="text-base font-extrabold text-white mt-0.5 tracking-tight">
+                          {tr('차원 성좌 전쟁')}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-[#d6c9ef] leading-relaxed mb-3">
+                    {tr('3대 초차원 세력이 6각 성좌 거점과 21개 차원 수호 관문을 돌파하여 중앙 [아카식 크라운 코어]의 패권을 다투는 시즌제 영토 쟁탈전입니다.')}
+                  </p>
+
+                  <div className="space-y-1.5 p-2.5 rounded-xl bg-[#09070f]/90 border border-[#ffd54f33] text-[11px] mb-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#a39bb5]">{tr('작전 구조')}</span>
+                      <span className="font-bold text-[#ffd54f]">{tr('3세력 · 6내곽 거점 · 21관문')}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#a39bb5]">{tr('핵심 규칙')}</span>
+                      <span className="font-bold text-[#38bdf8]">{tr('인접 2거점 교두보 법칙')}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#a39bb5]">{tr('패권 보상')}</span>
+                      <span className="font-bold text-[#ff9a9e]">{tr('각성 확률 +2% · 파괴방지 파편')}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <button
+                    className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#d69e2e] via-[#b7791f] to-[#805ad5] hover:from-[#ecc94b] hover:to-[#9f7aea] text-white font-bold text-xs shadow-md shadow-[#ffd54f33] transition-all flex items-center justify-center gap-1.5 active:scale-95"
+                  >
+                    <span>🌌</span>
+                    <span>{tr('성좌 영토 작전실 입장 ▶')}</span>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* 성채 복귀 버튼 */}
@@ -4335,6 +4481,29 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
               label={isDrawer ? tr('✕ 닫기 (성채 복귀)') : tr('🏰 방주 성채로 귀환')}
               variant="ghost"
               className="w-full py-2.5 text-xs font-bold"
+              onClick={handleClose}
+            />
+          </div>
+        </div>
+      ) : gateMode === 'factionWar' && gm.isMasterAccount ? (
+        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+          <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
+            <FactionWarView />
+          </div>
+          <div className="px-3 py-1.5 shrink-0 w-full max-w-full border-t border-[#15171d] bg-[#090e18] flex items-center gap-2">
+            <ActionButton
+              label={tr('← 차원 게이트 허브')}
+              variant="secondary"
+              className="flex-1 py-1.5 text-xs font-bold"
+              onClick={() => {
+                try { SoundManager.getInstance().play('click'); } catch {}
+                handleSetGateMode('hub');
+              }}
+            />
+            <ActionButton
+              label={isDrawer ? tr('✕ 닫기 (성채 복귀)') : tr('🏰 방주 성채로 귀환')}
+              variant="ghost"
+              className="flex-1 py-1.5 text-xs font-bold"
               onClick={handleClose}
             />
           </div>
@@ -5391,8 +5560,9 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                         } flex items-center justify-center transition-all`}
                       >
                         <img
-                          src={c.portraitUrl || getCombatantPortrait(c)}
+                          src={toWebp(c.portraitUrl) || getCombatantPortrait(c)}
                           alt={c.name}
+                          decoding="async"
                           className={`w-full h-full object-cover object-top ${isDead ? 'grayscale' : ''}`}
                           onError={(e) => {
                             (e.currentTarget as HTMLElement).style.display = 'none';
@@ -5563,8 +5733,9 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                         } flex items-center justify-center transition-all`}
                       >
                         <img
-                          src={c.portraitUrl || getCombatantPortrait(c)}
+                          src={toWebp(c.portraitUrl) || getCombatantPortrait(c)}
                           alt={c.name}
+                          decoding="async"
                           className={`w-full h-full object-cover object-top ${isDead ? 'grayscale' : ''}`}
                           onError={(e) => {
                             (e.currentTarget as HTMLElement).style.display = 'none';
@@ -5983,7 +6154,8 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
           {/* ── ⏱️ 3초 카운트다운 오버레이 (영지 침공과 동일한 아레나 인트로) ── */}
           {countdown !== null && (
             <div
-              className="fixed inset-0 flex flex-col items-center justify-center p-4 select-none overflow-hidden animate-fade-in pointer-events-auto"
+              className="fixed inset-0 flex flex-col items-center justify-center p-4 select-none overflow-hidden animate-fade-in pointer-events-auto cursor-pointer"
+              onClick={() => setCountdown(null)}
               style={{
                 position: 'fixed',
                 top: 0,
@@ -6061,6 +6233,17 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
                     }}
                   />
                 </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCountdown(null);
+                  }}
+                  className="mt-2 px-4 py-1.5 rounded-full bg-[#ffd54f15] hover:bg-[#ffd54f30] border border-[#ffd54f55] text-xs font-bold text-[#ffd54f] transition-all cursor-pointer flex items-center gap-1.5 shadow-lg animate-pulse"
+                >
+                  <span>⚡</span>
+                  <span>{tr('터치하여 결투 바로 시작')}</span>
+                </button>
               </div>
             </div>
           )}
@@ -6240,6 +6423,199 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
             </div>
           </div>
         </div>
+      )}
+
+      {/* 🎖️ 명예 암시장 장비 구매 / 상자 개봉 획득 커스텀 모달 */}
+      {acquiredEquipModal && (
+        <Modal
+          open={!!acquiredEquipModal}
+          onClose={() => setAcquiredEquipModal(null)}
+          zIndex="z-[100]"
+          maxWidth="max-w-[95vw] sm:max-w-[480px]"
+          title={
+            <div className="flex items-center gap-2">
+              <span className="text-base">{acquiredEquipModal.isBox ? '📦' : '🎖️'}</span>
+              <span className="font-bold text-sm text-[#ffd54f]">
+                {acquiredEquipModal.isBox ? '상자 개봉 무구 획득 확인' : '명예 암시장 무구 구매 확인'}
+              </span>
+            </div>
+          }
+          footer={
+            <div className="w-full flex items-center justify-between gap-2">
+              <span className="text-[11px] text-[#38ef7d] flex items-center gap-1 font-medium">
+                <span>🏰</span>
+                <span>영지 로그 및 장비함 등록 완료</span>
+              </span>
+              <ActionButton
+                label="확인 완료"
+                variant="primary"
+                className="px-5 py-1.5 text-xs font-bold shadow-md shadow-[#c8aa6e33]"
+                onClick={() => setAcquiredEquipModal(null)}
+              />
+            </div>
+          }
+        >
+          {(() => {
+            const eq = acquiredEquipModal.item;
+            const rarityColor = getRarityColor(eq.rarity);
+            const rarityKo = getRarityLabel(eq.rarity);
+            const slotName = eq.slot === 'weapon' ? '무기' : eq.slot === 'armor' ? '방어구' : '장신구';
+            const slotEmoji = eq.slot === 'weapon' ? '⚔️' : eq.slot === 'armor' ? '🛡️' : '💍';
+
+            return (
+              <div className="flex flex-col gap-3 py-1 animate-fade-in text-stone-200">
+                {/* 획득 출처 안내 */}
+                <div className="text-center px-3 py-2 rounded-xl bg-[#141b2b] border border-[#23334d]">
+                  <div className="text-xs text-[#8b9bb4]">
+                    {acquiredEquipModal.isBox ? (
+                      <>
+                        [<strong className="text-[#ffd54f]">{acquiredEquipModal.sourceName}</strong>] 개봉 결과
+                      </>
+                    ) : (
+                      <>
+                        명예 암시장 [<strong className="text-[#c8aa6e]">{acquiredEquipModal.sourceName}</strong>] 구매 완료
+                      </>
+                    )}
+                  </div>
+                  <div className="text-[13px] font-bold text-white mt-0.5">
+                    {acquiredEquipModal.isBox
+                      ? '차원의 상자 속에서 미지의 무구가 출현했습니다!'
+                      : '차원 투사의 무구가 성채 장비함으로 인도되었습니다.'}
+                  </div>
+                </div>
+
+                {/* 메인 장비 카드 */}
+                <div
+                  className="relative p-4 rounded-2xl border flex flex-col gap-3 bg-gradient-to-b from-[#151c2e] via-[#0f1422] to-[#0a0d17] shadow-xl overflow-hidden"
+                  style={getRarityBorderStyle(eq.rarity)}
+                >
+                  {/* 상단 뱃지 라인 */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-[#1e293b] text-[#cbd5e1] border border-[#334155] font-semibold flex items-center gap-1">
+                      <span>{slotEmoji}</span>
+                      <span>{slotName}</span>
+                    </span>
+                    <span
+                      className="text-[10.5px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider"
+                      style={{
+                        color: rarityColor,
+                        backgroundColor: `${rarityColor}20`,
+                        border: `1px solid ${rarityColor}60`,
+                      }}
+                    >
+                      ★ {rarityKo} ({eq.rarity.toUpperCase()})
+                    </span>
+                  </div>
+
+                  {/* 장비 아이콘 및 명칭 */}
+                  <div className="flex items-center gap-3.5">
+                    <div
+                      className="w-16 h-16 rounded-xl border-2 flex items-center justify-center shrink-0 shadow-lg relative bg-[#0b0e17]"
+                      style={{ borderColor: rarityColor, boxShadow: `0 0 16px ${rarityColor}44` }}
+                    >
+                      <GameIcon
+                        name={eq.templateId || getEquipmentTemplateId(eq) || eq.id || eq.baseName || 'item_chest'}
+                        icon={eq.icon || slotEmoji}
+                        size={40}
+                      />
+                    </div>
+                    <div className="flex flex-col min-w-0 flex-1">
+                      <div
+                        className="text-base sm:text-lg font-black leading-tight break-words drop-shadow-sm"
+                        style={{ color: rarityColor }}
+                      >
+                        {eq.name}
+                      </div>
+                      <div className="text-[11px] text-[#8b9bb4] mt-0.5">
+                        기본형: {eq.baseName || eq.name}
+                        {eq.level > 0 && <span className="ml-1 text-[#ffd54f] font-bold">+{eq.level}</span>}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 접두 / 접미 인챈트 정보 */}
+                  {(eq.prefix || eq.suffix) && (
+                    <div className="flex flex-col gap-1 p-2 rounded-lg bg-[#0b0f1a]/80 border border-[#1f2b42] text-[11px]">
+                      {eq.prefix && (
+                        <div className="flex items-center gap-1.5 text-[#64b5f6]">
+                          <span className="px-1.5 py-0.2 rounded bg-[#1e3a8a33] border border-[#1e3a8a66] font-bold text-[9.5px]">접두어</span>
+                          <span className="font-bold">{eq.prefix.name}</span>
+                          <span className="text-[#93c5fd] font-mono text-[10px]">
+                            {eq.prefix.description || Object.entries(eq.prefix.stats || {}).map(([k, v]) => `${k.toUpperCase()} +${v}`).join(', ')}
+                          </span>
+                        </div>
+                      )}
+                      {eq.suffix && (
+                        <div className="flex items-center gap-1.5 text-[#ce93d8]">
+                          <span className="px-1.5 py-0.2 rounded bg-[#581c8733] border border-[#581c8766] font-bold text-[9.5px]">접미어</span>
+                          <span className="font-bold">{eq.suffix.name}</span>
+                          <span className="text-[#e9d5ff] font-mono text-[10px]">
+                            {eq.suffix.description || Object.entries(eq.suffix.stats || {}).map(([k, v]) => `${k.toUpperCase()} +${v}`).join(', ')}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* 세부 능력치 그리드 */}
+                  {eq.stats && Object.keys(eq.stats).length > 0 && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 pt-1 border-t border-[#1f2738]/80">
+                      {eq.stats.atk !== undefined && eq.stats.atk > 0 && (
+                        <div className="flex items-center justify-between px-2 py-1 rounded bg-[#182030] text-[11px]">
+                          <span className="text-[#8b9bb4]">공격력</span>
+                          <span className="font-bold text-[#ff7043] font-mono">+{eq.stats.atk}</span>
+                        </div>
+                      )}
+                      {eq.stats.def !== undefined && eq.stats.def > 0 && (
+                        <div className="flex items-center justify-between px-2 py-1 rounded bg-[#182030] text-[11px]">
+                          <span className="text-[#8b9bb4]">방어력</span>
+                          <span className="font-bold text-[#42a5f5] font-mono">+{eq.stats.def}</span>
+                        </div>
+                      )}
+                      {eq.stats.hp !== undefined && eq.stats.hp > 0 && (
+                        <div className="flex items-center justify-between px-2 py-1 rounded bg-[#182030] text-[11px]">
+                          <span className="text-[#8b9bb4]">최대 HP</span>
+                          <span className="font-bold text-[#66bb6a] font-mono">+{eq.stats.hp}</span>
+                        </div>
+                      )}
+                      {eq.stats.mp !== undefined && eq.stats.mp > 0 && (
+                        <div className="flex items-center justify-between px-2 py-1 rounded bg-[#182030] text-[11px]">
+                          <span className="text-[#8b9bb4]">최대 MP</span>
+                          <span className="font-bold text-[#26c6da] font-mono">+{eq.stats.mp}</span>
+                        </div>
+                      )}
+                      {eq.stats.spd !== undefined && eq.stats.spd > 0 && (
+                        <div className="flex items-center justify-between px-2 py-1 rounded bg-[#182030] text-[11px]">
+                          <span className="text-[#8b9bb4]">행동 속도</span>
+                          <span className="font-bold text-[#ffd54f] font-mono">+{eq.stats.spd}</span>
+                        </div>
+                      )}
+                      {eq.stats.luck !== undefined && eq.stats.luck > 0 && (
+                        <div className="flex items-center justify-between px-2 py-1 rounded bg-[#182030] text-[11px]">
+                          <span className="text-[#8b9bb4]">행운(치명타)</span>
+                          <span className="font-bold text-[#ab47bc] font-mono">+{eq.stats.luck}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* 장비 설명 (플레이버 텍스트) */}
+                  {eq.description && (
+                    <div className="text-[10.5px] text-[#94a3b8] italic leading-relaxed pt-1 border-t border-[#1f2738]/60">
+                      "{eq.description}"
+                    </div>
+                  )}
+                </div>
+
+                {/* 하단 시스템 통보 팁 */}
+                <div className="text-[10px] text-[#8b9bb4] flex items-center justify-between px-1">
+                  <span>※ 방주 성채로 귀환 시 즉시 착용 및 강화/인챈트 가능</span>
+                  <span className="text-[#38ef7d]">기록됨 ✓</span>
+                </div>
+              </div>
+            );
+          })()}
+        </Modal>
       )}
 
     </div>

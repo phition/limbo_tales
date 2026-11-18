@@ -171,9 +171,41 @@ export function evaluateFeverSynergy(badges: FeverBadgeType[] = [], party: Merce
     };
   }
 
-  // 3. 🩸🕊️ 【기사회생 (Miracle Revive)】: 가드(GUARD) 3개 이상 또는 힐(HEAL) 3개 이상
+  // 3-A. 💖🕊️ 【신성 성역 (Divine Sanctuary)】: 힐(HEAL) 3개 이상
+  if (counts.heal >= 3) {
+    const hasDead = hasFallenHero || hasDyingHero;
+    return {
+      id: 'divine_sanctuary',
+      name: '신성 성역',
+      subTitle: 'Divine Sanctuary',
+      icon: '💖🕊️',
+      color: '#ff4081',
+      bg: 'linear-gradient(135deg, rgba(255,64,129,0.25), rgba(30,10,25,0.9))',
+      borderColor: '#ff4081aa',
+      summary: '파티 전원 체력 50% 대량 회복 및 1턴간 모든 해로운 효과 면역',
+      powerMult: 1.35,
+      critRateBonus: 0.15,
+      critDamageBonus: 0.25,
+      armorPenetration: 0.15,
+      isForceAoe: false,
+      lifestealPct: 0.2,
+      partyShieldPct: 0.15,
+      reviveFallen: hasDead,
+      reviveHpPct: 0.10,
+      reviveSingle: true,
+      partyFullHeal: false,
+      partyHealPct: 0.50,
+      cleanseDebuffs: true,
+      immunityTurns: 1,
+      riposteTurns: 0,
+      stunTurns: 0,
+      rechargePartyMp: false
+    };
+  }
+
+  // 3-B. 🩸🕊️ 【기사회생 (Miracle Revive)】: 가드(GUARD) 3개 이상 또는 가드+힐 합산 3개 이상
   // (사망 아군 1인 HP 10% 부활, 사망 아군 부재 시 생존 아군 체력 50% 회복)
-  if (counts.guard >= 3 || counts.heal >= 3) {
+  if (counts.guard >= 3 || (counts.guard + counts.heal >= 3)) {
     const hasDead = hasFallenHero || hasDyingHero;
     return {
       id: 'miracle_revive',

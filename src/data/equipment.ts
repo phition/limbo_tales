@@ -21,8 +21,8 @@ export const WEAPON_TRAITS: Record<WeaponType, WeaponTrait> = {
     name: '방어 파쇄',
     color: '#ff9800',
     bgColor: 'rgba(255, 152, 0, 0.15)',
-    shortDesc: '보호막에 50% 추가 피해',
-    description: '단단한 보호막을 분쇄하는 창끝으로 적의 보호막(Shield)에 50%의 추가 피해를 입힙니다.'
+    shortDesc: '기본 공격 시 보호막에 50% 추가 피해',
+    description: '단단한 보호막을 분쇄하는 창끝으로 기본 공격 시 적의 보호막(Shield)에 50%의 추가 피해를 입힙니다.'
   },
   bow: {
     id: 'trait_snipe',
@@ -51,8 +51,8 @@ export const WEAPON_TRAITS: Record<WeaponType, WeaponTrait> = {
     name: '암습',
     color: '#b388ff',
     bgColor: 'rgba(179, 136, 255, 0.15)',
-    shortDesc: '상대보다 속도가 빠를수록 피해량 최대 20% 증폭',
-    description: '민첩한 선제 공격으로 대상 마물보다 속도가 빠를수록 피해량이 최대 20%까지 증폭됩니다.'
+    shortDesc: '기본 공격 시 상대보다 속도가 빠를수록 피해량 최대 20% 증폭',
+    description: '민첩한 선제 공격으로 기본 공격 시 대상 마물보다 속도가 빠를수록 피해량이 최대 20%까지 증폭됩니다.'
   },
   staff: {
     id: 'trait_resonance',
@@ -79,7 +79,31 @@ export function detectWeaponType(itemOrName: { slot?: string; baseName?: string;
   
   const lower = str.toLowerCase();
 
-  // 1. 🔱 창 계열 (Spear): 창, 장창, 극창, 트라이던트, 랜스 + 🔨 [망치/해머/둔기/메이스]
+  // 1. 🪄 지팡이 계열 (Staff): 지팡이, 마도봉, 로드, 완드, 스태프, 성봉, 마법봉, 오브, 성홀, 천상봉, 대지팡이
+  if (
+    lower.includes('staff') || lower.includes('rod') || lower.includes('wand') || lower.includes('orb') || lower.includes('scepter') ||
+    str.includes('지팡이') || str.includes('마도봉') || str.includes('로드') || str.includes('완드') || str.includes('스태프') || str.includes('성봉') || str.includes('마법봉') || str.includes('오브') || str.includes('성홀') || str.includes('천상봉') || str.includes('대지팡이')
+  ) {
+    return 'staff';
+  }
+
+  // 2. 🔫 총 계열 (Gun): 총, 마총, 포, 권총, 라이플, 캐논, 분쇄포, 레일건, 버스터, 리볼버
+  if (
+    lower.includes('gun') || lower.includes('rifle') || lower.includes('cannon') || lower.includes('musket') || lower.includes('railgun') || lower.includes('buster') || lower.includes('revolver') ||
+    str.includes('총') || str.includes('마총') || str.includes('포') || str.includes('권총') || str.includes('라이플') || str.includes('캐논') || str.includes('분쇄포') || str.includes('레일건') || str.includes('버스터') || str.includes('리볼버')
+  ) {
+    return 'gun';
+  }
+
+  // 3. 🏹 활 계열 (Bow): 활, 대궁, 장궁, 궁, 석궁, 크로스보우, 강궁, 합성궁
+  if (
+    lower.includes('bow') || lower.includes('crossbow') ||
+    str.includes('활') || str.includes('대궁') || str.includes('장궁') || str.includes('석궁') || str.includes('강궁') || str.includes('합성궁') || str.includes('성운궁') || str.includes('환영궁') || str.includes('심판궁') || str.includes('결전궁')
+  ) {
+    return 'bow';
+  }
+
+  // 4. 🔱 창 계열 (Spear): 창, 장창, 극창, 트라이던트, 랜스 + 🔨 [망치/해머/둔기/메이스]
   if (
     lower.includes('spear') || lower.includes('lance') || lower.includes('trident') || lower.includes('javelin') ||
     str.includes('창') || str.includes('극창') || str.includes('장창') || str.includes('신창') || str.includes('트라이던트') || str.includes('랜스') || str.includes('자베린') || str.includes('월도') ||
@@ -89,48 +113,24 @@ export function detectWeaponType(itemOrName: { slot?: string; baseName?: string;
     return 'spear';
   }
 
-  // 2. ⚡ 단검 계열 (Dagger): 단검, 비수, 단도, 나이프 + 🌙 [낫/대낫/사신낫/참살낫]
+  // 5. ⚡ 단검 계열 (Dagger): 단검, 비수, 단도, 비도, 나이프 + 🌙 [낫/대낫/사신낫/참살낫]
   if (
     lower.includes('dagger') || lower.includes('knife') || lower.includes('dirk') ||
-    str.includes('단검') || str.includes('비수') || str.includes('단도') || str.includes('나이프') || str.includes('암기') ||
+    str.includes('단검') || str.includes('비수') || str.includes('단도') || str.includes('비도') || str.includes('나이프') || str.includes('암기') ||
     lower.includes('scythe') || lower.includes('kama') ||
     str.includes('낫') || str.includes('대낫') || str.includes('사신 낫') || str.includes('사신낫') || str.includes('참살낫')
   ) {
     return 'dagger';
   }
 
-  // 3. 🗡️ 검 계열 (Sword): 검, 대검, 세이버, 블레이드, 카타나 + 🪓 [도끼/배틀액스/참도끼/전투도끼]
+  // 6. 🗡️ 검 계열 (Sword): 검, 대검, 세이버, 블레이드, 카타나 + 🪓 [도끼/배틀액스/참도끼/전투도끼]
   if (
     lower.includes('sword') || lower.includes('blade') || lower.includes('saber') || lower.includes('katana') || lower.includes('claymore') || lower.includes('rapier') ||
-    str.includes('검') || str.includes('도') || str.includes('대검') || str.includes('세이버') || str.includes('블레이드') || str.includes('카타나') || str.includes('환도') || str.includes('성검') || str.includes('마검') || str.includes('파멸검') || str.includes('처형검') ||
+    str.includes('검') || str.includes('대검') || str.includes('세이버') || str.includes('블레이드') || str.includes('카타나') || str.includes('환도') || str.includes('성검') || str.includes('마검') || str.includes('파멸검') || str.includes('처형검') || str.includes('신화검') || str.includes('결전검') || str.includes('영혼검') || str.includes('심판검') || str.includes('명검') || str.includes('사령검') || str.includes('학살검') || str.includes('태도') || str.includes('대도') || str.includes('일본도') || str.includes('목도') ||
     lower.includes('axe') || lower.includes('battleaxe') ||
     str.includes('도끼') || str.includes('배틀액스') || str.includes('참도끼') || str.includes('전투도끼') || str.includes('도끼창') || str.includes('손도끼')
   ) {
     return 'sword';
-  }
-
-  // 4. 🏹 활 계열 (Bow): 활, 대궁, 장궁, 궁, 석궁, 크로스보우
-  if (
-    lower.includes('bow') || lower.includes('crossbow') ||
-    str.includes('활') || str.includes('대궁') || str.includes('궁') || str.includes('장궁') || str.includes('석궁') || str.includes('강궁')
-  ) {
-    return 'bow';
-  }
-
-  // 5. 🔫 총 계열 (Gun): 총, 마총, 포, 권총, 라이플, 캐논, 분쇄포, 레일건
-  if (
-    lower.includes('gun') || lower.includes('rifle') || lower.includes('cannon') || lower.includes('musket') || lower.includes('railgun') ||
-    str.includes('총') || str.includes('마총') || str.includes('포') || str.includes('권총') || str.includes('라이플') || str.includes('캐논') || str.includes('분쇄포') || str.includes('레일건')
-  ) {
-    return 'gun';
-  }
-
-  // 6. 🪄 지팡이 계열 (Staff): 지팡이, 마도봉, 로드, 완드, 스태프, 성봉, 오브
-  if (
-    lower.includes('staff') || lower.includes('rod') || lower.includes('wand') || lower.includes('orb') || lower.includes('scepter') ||
-    str.includes('지팡이') || str.includes('마도봉') || str.includes('로드') || str.includes('완드') || str.includes('스태프') || str.includes('성봉') || str.includes('마법봉') || str.includes('오브')
-  ) {
-    return 'staff';
   }
 
   // 7. 🏷️ 장착 클래스(affinity)를 고려한 고유 특성 스마트 폴백
@@ -202,7 +202,7 @@ export const EQUIPMENT_RECIPES: EquipmentRecipe[] = [
     rarity: 'common',
     cost: { iron: 35, coal: 6, wood: 10, gold: 200 },
     baseStats: { atk: 4, luck: 1 },
-    description: '단단한 철광석을 석탄 열기로 벼려낸 기본 검. [🗡️ 베기] 특성으로 기본 공격 시 출혈 대상에게 [상처 절개]를 발동합니다.',
+    description: '단단한 철광석을 석탄 열기로 벼려낸 기본 검. [🗡️ 베기] 특성으로 기본 공격 적중 시 대상에게 1턴간 [출혈](최대 체력의 8% 피해)을 부여합니다.',
     icon: '⚔️'
   },
   {
@@ -509,7 +509,7 @@ export const PREFIX_ENCHANT_OPTIONS: Record<string, EnchantOption> = {
       id: 'skill_enc_inferno_gun',
       name: '[인챈트] 유황탄 사격',
       description: '적 1체에게 160% 폭발 관통 피해를 입히고 2턴간 지속 화상을 부여합니다. (총 전용 / 기본 공격 대체)',
-      manaCost: 16,
+      manaCost: 26,
       cooldown: 0,
       targetType: 'single_enemy',
       power: 1.6,
@@ -2972,22 +2972,22 @@ export function generateArenaRewardEquipment(
   // 강화 단계 없이 생성 (0강)
   const finalEnhanceLevel = 0;
 
-  // 장비 베이스 후보 추첨 (기존 대비 약 30% 스탯 하향 조정)
+  // 장비 베이스 후보 추첨 (병기창 5~7레벨 기준 성능 및 '투사' 고유 특성 반영: 무기 관통 30%, 방어구 저항 10%, 장신구 재생 5%)
   const ARENA_BASE_TEMPLATES = [
-    // 무기
-    { templateId: 'equip_arena_sword', baseName: '투사의 처형검', slot: 'weapon' as EquipmentSlot, icon: '🗡️', baseStats: { atk: 33, def: 11, luck: 9 }, desc: '차원 결투장에서 수많은 강자를 쓰러뜨린 투사의 명검.' },
-    { templateId: 'equip_arena_spear', baseName: '투사의 파쇄창', slot: 'weapon' as EquipmentSlot, icon: '🔱', baseStats: { atk: 38, def: 12 }, desc: '적의 전열을 분쇄하는 거대한 투사의 전술 장창.' },
-    { templateId: 'equip_arena_gun', baseName: '투사의 결전 마총', slot: 'weapon' as EquipmentSlot, icon: '🔫', baseStats: { atk: 36, spd: 6, luck: 6 }, desc: '에테르 탄환을 고속 연사하는 차원 아레나 제식 마총.' },
-    { templateId: 'equip_arena_bow', baseName: '투사의 저격궁', slot: 'weapon' as EquipmentSlot, icon: '🏹', baseStats: { atk: 35, luck: 12, spd: 5 }, desc: '후열의 적을 정확히 꿰뚫는 투사의 초장거리 강궁.' },
-    { templateId: 'equip_arena_staff', baseName: '투사의 원소 마도봉', slot: 'weapon' as EquipmentSlot, icon: '🪄', baseStats: { atk: 32, mp: 84, def: 9 }, desc: '차원 마력을 벼려 만든 투사의 비전 지팡이.' },
-    { templateId: 'equip_arena_dagger', baseName: '투사의 암살 비수', slot: 'weapon' as EquipmentSlot, icon: '🗡️', baseStats: { atk: 30, spd: 11, luck: 11 }, desc: '급소를 기습하기 위해 정밀 연마된 투사의 비수.' },
-    // 방어구
-    { templateId: 'equip_arena_plate', baseName: '투사의 불패 판금갑', slot: 'armor' as EquipmentSlot, icon: '🛡️', baseStats: { def: 41, hp: 147 }, desc: '어떠한 맹공도 버텨내는 불패의 투사 중장갑주.' },
-    { templateId: 'equip_arena_leather', baseName: '투사의 신속 경갑주', slot: 'armor' as EquipmentSlot, icon: '🥋', baseStats: { def: 27, spd: 6, hp: 95 }, desc: '민첩한 기동과 회피를 극대화한 투사의 전투 경갑.' },
-    { templateId: 'equip_arena_robe', baseName: '투사의 마나 성의', slot: 'armor' as EquipmentSlot, icon: '🥻', baseStats: { def: 21, mp: 116, hp: 74 }, desc: '마나 순환과 보호 결계를 증폭하는 투사의 마도 로브.' },
-    // 장신구
-    { templateId: 'equip_arena_ring', baseName: '투사의 영광 반지', slot: 'accessory' as EquipmentSlot, icon: '💍', baseStats: { atk: 17, def: 11, luck: 12, spd: 6 }, desc: '차원 투기장 승리자에게 주어지는 영예로운 반지.' },
-    { templateId: 'equip_arena_necklace', baseName: '투사의 결전 목걸이', slot: 'accessory' as EquipmentSlot, icon: '📿', baseStats: { hp: 126, def: 15, mp: 53 }, desc: '위기 순간 착용자의 생체 에너지를 지탱하는 결전 펜던트.' },
+    // 무기 (투사 고유 특성: 방어 관통 30% 고정)
+    { templateId: 'equip_arena_sword', baseName: '투사의 처형검', slot: 'weapon' as EquipmentSlot, weaponType: 'sword' as WeaponType, weaponTrait: WEAPON_TRAITS.sword, icon: '🗡️', baseStats: { atk: 44, def: 12, hp: 110, luck: 8, defPenetration: 30 }, desc: '차원 결투장에서 수많은 강자를 쓰러뜨린 투사의 명검. [투사 특성: 방어 관통 30%]' },
+    { templateId: 'equip_arena_spear', baseName: '투사의 파쇄창', slot: 'weapon' as EquipmentSlot, weaponType: 'spear' as WeaponType, weaponTrait: WEAPON_TRAITS.spear, icon: '🔱', baseStats: { atk: 46, def: 15, hp: 105, luck: 8, defPenetration: 30 }, desc: '적의 전열을 분쇄하는 거대한 투사의 전술 장창. [투사 특성: 방어 관통 30%]' },
+    { templateId: 'equip_arena_gun', baseName: '투사의 결전 마총', slot: 'weapon' as EquipmentSlot, weaponType: 'gun' as WeaponType, weaponTrait: WEAPON_TRAITS.gun, icon: '🔫', baseStats: { atk: 34, spd: 8, luck: 9, mp: 32, defPenetration: 30 }, desc: '에테르 탄환을 고속 연사하는 차원 아레나 제식 마총. [투사 특성: 방어 관통 30%]' },
+    { templateId: 'equip_arena_bow', baseName: '투사의 저격궁', slot: 'weapon' as EquipmentSlot, weaponType: 'bow' as WeaponType, weaponTrait: WEAPON_TRAITS.bow, icon: '🏹', baseStats: { atk: 33, luck: 14, spd: 7, hp: 95, defPenetration: 30 }, desc: '후열의 적을 정확히 꿰뚫는 투사의 초장거리 강궁. [투사 특성: 방어 관통 30%]' },
+    { templateId: 'equip_arena_staff', baseName: '투사의 원소 마도봉', slot: 'weapon' as EquipmentSlot, weaponType: 'staff' as WeaponType, weaponTrait: WEAPON_TRAITS.staff, icon: '🪄', baseStats: { atk: 34, mp: 150, def: 10, luck: 7, defPenetration: 30 }, desc: '차원 마력을 벼려 만든 투사의 비전 지팡이. [투사 특성: 방어 관통 30% / 마력 공명]' },
+    { templateId: 'equip_arena_dagger', baseName: '투사의 암살 비수', slot: 'weapon' as EquipmentSlot, weaponType: 'dagger' as WeaponType, weaponTrait: WEAPON_TRAITS.dagger, icon: '🗡️', baseStats: { atk: 40, spd: 11, luck: 12, hp: 85, defPenetration: 30 }, desc: '급소를 기습하기 위해 정밀 연마된 투사의 비수. [투사 특성: 방어 관통 30%]' },
+    // 방어구 (투사 고유 특성: 저항 10% 고정)
+    { templateId: 'equip_arena_plate', baseName: '투사의 불패 판금갑', slot: 'armor' as EquipmentSlot, icon: '🛡️', baseStats: { def: 46, hp: 260, atk: 10, luck: 6, statusResist: 10 }, desc: '어떠한 맹공도 버텨내는 불패의 투사 중장갑주. [투사 특성: 저항 10%]' },
+    { templateId: 'equip_arena_leather', baseName: '투사의 신속 경갑주', slot: 'armor' as EquipmentSlot, icon: '🥋', baseStats: { def: 34, spd: 8, hp: 150, luck: 7, statusResist: 10 }, desc: '민첩한 기동과 회피를 극대화한 투사의 전투 경갑. [투사 특성: 저항 10%]' },
+    { templateId: 'equip_arena_robe', baseName: '투사의 마나 성의', slot: 'armor' as EquipmentSlot, icon: '🥻', baseStats: { def: 28, mp: 190, atk: 14, spd: 4, statusResist: 10 }, desc: '마나 순환과 보호 결계를 증폭하는 투사의 마도 로브. [투사 특성: 저항 10%]' },
+    // 장신구 (투사 고유 특성: 체력 재생 5% 고정)
+    { templateId: 'equip_arena_ring', baseName: '투사의 영광 반지', slot: 'accessory' as EquipmentSlot, icon: '💍', baseStats: { atk: 22, luck: 13, spd: 6, mp: 30, hpRegenPercent: 5 }, desc: '차원 투기장 승리자에게 주어지는 영예로운 반지. [투사 특성: 턴당 체력 재생 5%]' },
+    { templateId: 'equip_arena_necklace', baseName: '투사의 결전 목걸이', slot: 'accessory' as EquipmentSlot, icon: '📿', baseStats: { def: 22, hp: 205, luck: 8, mp: 34, hpRegenPercent: 5 }, desc: '위기 순간 착용자의 생체 에너지를 지탱하는 결전 펜던트. [투사 특성: 턴당 체력 재생 5%]' },
   ];
 
   const pickedTemplate = ARENA_BASE_TEMPLATES[Math.floor(Math.random() * ARENA_BASE_TEMPLATES.length)];
@@ -3023,13 +3023,40 @@ export function generateArenaRewardEquipment(
   const suffixPart = rolledSuffix ? ` [${rolledSuffix.name}]` : '';
   const fullName = `${prefixPart}${pickedTemplate.baseName}${suffixPart}`;
 
-  const baseStats = { ...pickedTemplate.baseStats };
+  // 등급(희귀/에픽/전설/유니크)에 부합하는 다채로운 스탯 스케일링
+  let statMult = 1.0;
+  if (targetRarity === 'rare') {
+    statMult = 0.85; // 병기창 5레벨 수준
+  } else if (targetRarity === 'epic') {
+    statMult = 1.0;  // 병기창 6~7레벨 기본 수준
+  } else if (targetRarity === 'legendary') {
+    statMult = 1.25; // 병기창 7레벨+ 강화 수준
+  } else if (targetRarity === 'unique') {
+    statMult = 1.4;  // 결전 패왕 최상위 수준
+  }
+
+  const baseStats: NonNullable<EquipmentItem['baseStats']> = { ...pickedTemplate.baseStats };
+  Object.keys(baseStats).forEach(k => {
+    const key = k as keyof typeof baseStats;
+    if (key === 'defPenetration') {
+      baseStats[key] = 30; // '투사' 무기: 방어 관통 30% 고정
+    } else if (key === 'statusResist') {
+      baseStats[key] = 10; // '투사' 방어구: 저항 10% 고정
+    } else if (key === 'hpRegenPercent') {
+      baseStats[key] = 5;  // '투사' 장신구: 체력 재생 5% 고정
+    } else if (typeof baseStats[key] === 'number') {
+      baseStats[key] = Math.round((baseStats[key] as number) * statMult);
+    }
+  });
+
   const rawItem: EquipmentItem = {
     id: `equip_arena_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
     templateId: pickedTemplate.templateId,
     baseName: pickedTemplate.baseName,
     name: fullName,
     slot: pickedTemplate.slot,
+    weaponType: (pickedTemplate as any).weaponType,
+    weaponTrait: (pickedTemplate as any).weaponTrait,
     level: 0,
     rarity: targetRarity,
     baseStats: baseStats,
@@ -3055,6 +3082,8 @@ export interface ClassHonorShopItemDef {
   name: string;
   baseName: string;
   slot: EquipmentSlot;
+  weaponType?: WeaponType;
+  weaponTrait?: WeaponTrait;
   level: number;
   cost: number;
   reqGateLv: number;
@@ -3080,16 +3109,16 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 300,
     reqGateLv: 1,
     icon: '🛡️',
-    desc: 'DEF+15, HP+63, LUCK+2 [기사 특화] 결전 방패',
-    description: '차원 투기장에서 맹활약하는 기사를 위한 결전 방패. 강력한 방어력과 생명력을 제공합니다.',
-    baseStats: { def: 15, hp: 63, luck: 2 },
+    desc: 'DEF+27, HP+150, ATK+6, 저항+10% [기사 특화] 결전 방패',
+    description: '차원 투기장에서 맹활약하는 기사를 위한 결전 방패. [투사 특성: 저항 10%]',
+    baseStats: { def: 27, hp: 150, atk: 6, luck: 4, statusResist: 10 },
     prefix: {
       id: 'pre_glory_sturdy',
       name: '견고한',
       type: 'prefix',
       rarity: 'rare',
-      stats: { def: 9, hp: 42 },
-      description: '방어력 +9, HP +42',
+      stats: { def: 12, hp: 65 },
+      description: '방어력 +12, HP +65',
     },
   },
   glory_knight_epic: {
@@ -3104,24 +3133,24 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 650,
     reqGateLv: 3,
     icon: '🛡️',
-    desc: 'DEF+26, HP+126, ATK+6 [기사 특화] 영광 판금갑',
-    description: '어떠한 맹공도 버텨내는 기사 계열 전용 판금갑. 최전선에서 파티원을 굳건하게 지켜냅니다.',
-    baseStats: { def: 26, hp: 126, atk: 6 },
+    desc: 'DEF+46, HP+260, ATK+10, 저항+10% [기사 특화] 영광 판금갑',
+    description: '어떠한 맹공도 버텨내는 기사 계열 전용 판금갑. 최전선에서 파티원을 굳건하게 지켜냅니다. [투사 특성: 저항 10%]',
+    baseStats: { def: 46, hp: 260, atk: 10, luck: 6, statusResist: 10 },
     prefix: {
       id: 'pre_glory_invincible',
       name: '불패의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { def: 20, hp: 105 },
-      description: '방어력 +20, HP +105',
+      stats: { def: 20, hp: 110 },
+      description: '방어력 +20, HP +110',
     },
     suffix: {
       id: 'suf_glory_protection',
       name: '수호',
       type: 'suffix',
       rarity: 'epic',
-      stats: { def: 12, hp: 63, atk: 6 },
-      description: '방어력 +12, HP +63, 공격력 +6',
+      stats: { def: 14, hp: 70, atk: 8 },
+      description: '방어력 +14, HP +70, 공격력 +8',
     },
   },
 
@@ -3134,20 +3163,22 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     name: '그림자 암살자의 비수',
     baseName: '그림자 암살자의 비수',
     slot: 'weapon',
+    weaponType: 'dagger',
+    weaponTrait: WEAPON_TRAITS.dagger,
     level: 0,
     cost: 300,
     reqGateLv: 1,
     icon: '🗡️',
-    desc: 'ATK+17, SPD+3, LUCK+6 [도적 특화] 기습 단도',
-    description: '도적 계열을 위한 예리한 결전 비수. 빠른 행동 속도와 날카로운 치명타율을 부여합니다.',
-    baseStats: { atk: 17, spd: 3, luck: 6 },
+    desc: 'ATK+24, SPD+7, LUK+7, 관통+30% [도적 특화] 기습 단도',
+    description: '도적 계열을 위한 예리한 결전 비수. 빠른 행동 속도와 날카로운 치명타율을 부여합니다. [투사 특성: 방어 관통 30%]',
+    baseStats: { atk: 24, spd: 7, luck: 7, hp: 45, defPenetration: 30 },
     prefix: {
       id: 'pre_glory_agile',
       name: '날렵한',
       type: 'prefix',
       rarity: 'rare',
-      stats: { atk: 9, spd: 3, luck: 5 },
-      description: '공격력 +9, 속도 +3, 행운 +5',
+      stats: { atk: 11, spd: 4, luck: 6 },
+      description: '공격력 +11, 속도 +4, 행운 +6',
     },
   },
   glory_rogue_epic: {
@@ -3158,28 +3189,30 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     name: '사신의 밤안개 비도',
     baseName: '사신의 밤안개 비도',
     slot: 'weapon',
+    weaponType: 'dagger',
+    weaponTrait: WEAPON_TRAITS.dagger,
     level: 0,
     cost: 650,
     reqGateLv: 3,
     icon: '🗡️',
-    desc: 'ATK+27, SPD+6, LUCK+11 [도적 특화] 사신의 비도',
-    description: '암흑 속에서 적의 심장을 겨누는 도적 계열 최고위 비도. 치명적인 암살 일격을 보장합니다.',
-    baseStats: { atk: 27, spd: 6, luck: 11 },
+    desc: 'ATK+40, SPD+11, LUK+11, HP+95, 관통+30% [도적 특화] 사신의 비도',
+    description: '암흑 속에서 적의 심장을 겨누는 도적 계열 최고위 비도. 치명적인 암살 일격을 보장합니다. [투사 특성: 방어 관통 30%]',
+    baseStats: { atk: 40, spd: 11, luck: 11, hp: 95, defPenetration: 30 },
     prefix: {
       id: 'pre_glory_shadow',
       name: '암영의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 20, spd: 5, luck: 6 },
-      description: '공격력 +20, 속도 +5, 행운 +6',
+      stats: { atk: 22, spd: 6, luck: 7 },
+      description: '공격력 +22, 속도 +6, 행운 +7',
     },
     suffix: {
       id: 'suf_glory_critical',
       name: '치명',
       type: 'suffix',
       rarity: 'epic',
-      stats: { atk: 11, luck: 11 },
-      description: '공격력 +11, 행운 +11',
+      stats: { atk: 14, luck: 12 },
+      description: '공격력 +14, 행운 +12',
     },
   },
 
@@ -3192,20 +3225,22 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     name: '원소 학도의 마법봉',
     baseName: '원소 학도의 마법봉',
     slot: 'weapon',
+    weaponType: 'staff',
+    weaponTrait: WEAPON_TRAITS.staff,
     level: 0,
     cost: 300,
     reqGateLv: 1,
     icon: '🪄',
-    desc: 'ATK+15, MP+38, LUCK+3 [마법사 특화] 원소 완드',
-    description: '마법사 계열을 위해 가공된 에테르 완드. 마법 공격력과 최대 마나를 균형 있게 상승시킵니다.',
-    baseStats: { atk: 15, mp: 38, luck: 3 },
+    desc: 'ATK+22, MP+90, DEF+6, 관통+30% [마법사 특화] 원소 완드',
+    description: '마법사 계열을 위해 가공된 에테르 완드. 마법 공격력과 최대 마나를 균형 있게 상승시킵니다. [투사 특성: 방어 관통 30% / 마력 공명]',
+    baseStats: { atk: 22, mp: 90, def: 6, luck: 4, defPenetration: 30 },
     prefix: {
       id: 'pre_glory_mystic',
       name: '신비로운',
       type: 'prefix',
       rarity: 'rare',
-      stats: { atk: 9, mp: 27 },
-      description: '공격력 +9, 마나 +27',
+      stats: { atk: 10, mp: 35 },
+      description: '공격력 +10, 마나 +35',
     },
   },
   glory_mage_epic: {
@@ -3216,28 +3251,30 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     name: '아크 메이지의 재앙 지팡이',
     baseName: '아크 메이지의 재앙 지팡이',
     slot: 'weapon',
+    weaponType: 'staff',
+    weaponTrait: WEAPON_TRAITS.staff,
     level: 0,
     cost: 650,
     reqGateLv: 3,
     icon: '🔮',
-    desc: 'ATK+27, MP+63, LUCK+6 [마법사 특화] 재앙 지팡이',
-    description: '광범위 마법 폭격에 필요한 압도적인 마력을 품은 마법사 계열의 결전 대지팡이.',
-    baseStats: { atk: 27, mp: 63, luck: 6 },
+    desc: 'ATK+35, MP+160, DEF+10, LUK+7, 관통+30% [마법사 특화] 재앙 지팡이',
+    description: '광범위 마법 폭격에 필요한 압도적인 마력을 품은 마법사 계열의 결전 대지팡이. [투사 특성: 방어 관통 30% / 마력 공명]',
+    baseStats: { atk: 35, mp: 160, def: 10, luck: 7, defPenetration: 30 },
     prefix: {
       id: 'pre_glory_ruin',
       name: '파멸의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 21, mp: 53 },
-      description: '공격력 +21, 마나 +53',
+      stats: { atk: 22, mp: 60 },
+      description: '공격력 +22, 마나 +60',
     },
     suffix: {
       id: 'suf_glory_arcanum',
       name: '마도',
       type: 'suffix',
       rarity: 'epic',
-      stats: { atk: 12, mp: 42, luck: 6 },
-      description: '공격력 +12, 마나 +42, 행운 +6',
+      stats: { atk: 14, mp: 45, luck: 6 },
+      description: '공격력 +14, 마나 +45, 행운 +6',
     },
   },
 
@@ -3254,16 +3291,16 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     cost: 300,
     reqGateLv: 1,
     icon: '🥼',
-    desc: 'DEF+12, HP+48, MP+32, LUCK+3 [사제 특화] 축복 로브',
-    description: '사제 계열의 숭고한 성의. 높은 생존력과 아군 치유를 위한 지속적인 마나 흐름을 제공합니다.',
-    baseStats: { def: 12, hp: 48, mp: 32, luck: 3 },
+    desc: 'DEF+16, HP+80, MP+110, 저항+10% [사제 특화] 축복 로브',
+    description: '사제 계열의 숭고한 성의. 높은 생존력과 아군 치유를 위한 지속적인 마나 흐름을 제공합니다. [투사 특성: 저항 10%]',
+    baseStats: { def: 16, hp: 80, mp: 110, luck: 4, statusResist: 10 },
     prefix: {
       id: 'pre_glory_grace',
       name: '은총의',
       type: 'prefix',
       rarity: 'rare',
-      stats: { def: 6, hp: 38, mp: 21 },
-      description: '방어력 +6, HP +38, 마나 +21',
+      stats: { def: 8, hp: 45, mp: 30 },
+      description: '방어력 +8, HP +45, 마나 +30',
     },
   },
   glory_priest_epic: {
@@ -3274,28 +3311,30 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     name: '대성녀의 기적 성홀',
     baseName: '대성녀의 기적 성홀',
     slot: 'weapon',
+    weaponType: 'staff',
+    weaponTrait: WEAPON_TRAITS.staff,
     level: 0,
     cost: 650,
     reqGateLv: 3,
     icon: '✨',
-    desc: 'ATK+20, DEF+11, HP+74, MP+53 [사제 특화] 기적 성홀',
-    description: '파티원 전체의 생명력을 수호하고 기적의 치유를 베푸는 사제 계열 최고위 성홀.',
-    baseStats: { atk: 20, def: 11, hp: 74, mp: 53 },
+    desc: 'ATK+32, DEF+12, HP+120, MP+140, 관통+30% [사제 특화] 기적 성홀',
+    description: '파티원 전체의 생명력을 수호하고 기적의 치유를 베푸는 사제 계열 최고위 성홀. [투사 특성: 방어 관통 30% / 마력 공명]',
+    baseStats: { atk: 32, def: 12, hp: 120, mp: 140, defPenetration: 30 },
     prefix: {
       id: 'pre_glory_holy_spirit',
       name: '성령의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 12, def: 9, mp: 42 },
-      description: '공격력 +12, 방어력 +9, 마나 +42',
+      stats: { atk: 14, def: 10, mp: 50 },
+      description: '공격력 +14, 방어력 +10, 마나 +50',
     },
     suffix: {
       id: 'suf_glory_vitality',
       name: '생명',
       type: 'suffix',
       rarity: 'epic',
-      stats: { hp: 84, mp: 32 },
-      description: 'HP +84, 마나 +32',
+      stats: { hp: 90, mp: 40 },
+      description: 'HP +90, 마나 +40',
     },
   },
 
@@ -3308,20 +3347,22 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     name: '용병 검사의 처형도끼',
     baseName: '용병 검사의 처형도끼',
     slot: 'weapon',
+    weaponType: 'sword',
+    weaponTrait: WEAPON_TRAITS.sword,
     level: 0,
     cost: 300,
     reqGateLv: 1,
     icon: '🪓',
-    desc: 'ATK+17, HP+42, LUCK+5 [전사 특화] 처형도끼',
-    description: '전열에서 적진을 분쇄하는 전사 계열의 처형도끼. 강력한 타격과 생존 체력을 제공합니다.',
-    baseStats: { atk: 17, hp: 42, luck: 5 },
+    desc: 'ATK+26, HP+65, DEF+7, 관통+30% [전사 특화] 처형도끼',
+    description: '전열에서 적진을 분쇄하는 전사 계열의 처형도끼. 강력한 타격과 생존 체력을 제공합니다. [투사 특성: 방어 관통 30%]',
+    baseStats: { atk: 26, hp: 65, def: 7, luck: 5, defPenetration: 30 },
     prefix: {
       id: 'pre_glory_onslaught',
       name: '맹공의',
       type: 'prefix',
       rarity: 'rare',
-      stats: { atk: 11, hp: 32 },
-      description: '공격력 +11, HP +32',
+      stats: { atk: 12, hp: 40 },
+      description: '공격력 +12, HP +40',
     },
   },
   glory_vanguard_epic: {
@@ -3332,28 +3373,30 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     name: '발할라 블레이드의 학살검',
     baseName: '발할라 블레이드의 학살검',
     slot: 'weapon',
+    weaponType: 'sword',
+    weaponTrait: WEAPON_TRAITS.sword,
     level: 0,
     cost: 650,
     reqGateLv: 3,
     icon: '⚔️',
-    desc: 'ATK+30, HP+74, LUCK+9, SPD+3 [전사 특화] 학살검',
-    description: '피와 전투에 굶주린 전사 계열 최고위 결전 대검. 전열을 일격에 휩쓰는 광란의 공격력을 뿜어냅니다.',
-    baseStats: { atk: 30, hp: 74, luck: 9, spd: 3 },
+    desc: 'ATK+44, HP+130, DEF+12, LUK+7, 관통+30% [전사 특화] 학살검',
+    description: '피와 전투에 굶주린 전사 계열 최고위 결전 대검. 전열을 일격에 휩쓰는 광란의 공격력을 뿜어냅니다. [투사 특성: 방어 관통 30%]',
+    baseStats: { atk: 44, hp: 130, def: 12, luck: 7, defPenetration: 30 },
     prefix: {
       id: 'pre_glory_frenzy',
       name: '광란의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 21, luck: 6 },
-      description: '공격력 +21, 행운 +6',
+      stats: { atk: 22, luck: 7 },
+      description: '공격력 +22, 행운 +7',
     },
     suffix: {
       id: 'suf_glory_bloodwind',
       name: '혈풍',
       type: 'suffix',
       rarity: 'epic',
-      stats: { atk: 11, hp: 74, spd: 3 },
-      description: '공격력 +11, HP +74, 속도 +3',
+      stats: { atk: 12, hp: 80, spd: 3 },
+      description: '공격력 +12, HP +80, 속도 +3',
     },
   },
 
@@ -3366,20 +3409,22 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     name: '마총사의 전술 리볼버',
     baseName: '마총사의 전술 리볼버',
     slot: 'weapon',
+    weaponType: 'gun',
+    weaponTrait: WEAPON_TRAITS.gun,
     level: 0,
     cost: 300,
     reqGateLv: 1,
     icon: '🔫',
-    desc: 'ATK+12, SPD+3, LUCK+6 [마총사 특화] 전술 리볼버',
-    description: '마총사 계열의 전술 기동 사격용 리볼버. 빠른 연사력과 안정적인 치명타를 자랑합니다.',
-    baseStats: { atk: 12, spd: 3, luck: 6 },
+    desc: 'ATK+20, SPD+5, LUK+5, MP+20, 관통+30% [마총사 특화] 전술 리볼버',
+    description: '마총사 계열의 전술 기동 사격용 리볼버. 빠른 연사력과 안정적인 치명타를 자랑합니다. [투사 특성: 방어 관통 30%]',
+    baseStats: { atk: 20, spd: 5, luck: 5, mp: 20, defPenetration: 30 },
     prefix: {
       id: 'pre_glory_precision',
       name: '정밀한',
       type: 'prefix',
       rarity: 'rare',
-      stats: { atk: 9, spd: 3, luck: 5 },
-      description: '공격력 +9, 속도 +3, 행운 +5',
+      stats: { atk: 10, spd: 4, luck: 5 },
+      description: '공격력 +10, 속도 +4, 행운 +5',
     },
   },
   glory_gunner_epic: {
@@ -3390,28 +3435,30 @@ export const CLASS_HONOR_SHOP_DEFINITIONS: Record<string, ClassHonorShopItemDef>
     name: '하이퍼 레인저의 레일 버스터',
     baseName: '하이퍼 레인저의 레일 버스터',
     slot: 'weapon',
+    weaponType: 'gun',
+    weaponTrait: WEAPON_TRAITS.gun,
     level: 0,
     cost: 650,
     reqGateLv: 3,
     icon: '🔫',
-    desc: 'ATK+21, SPD+6, LUCK+9, MP+27 [마총사 특화] 레일 버스터',
-    description: '고출력 에테르 레일을 형성하여 적의 방어선을 일격에 꿰뚫어버리는 마총사 계열의 결전 중화기.',
-    baseStats: { atk: 21, spd: 6, luck: 9, mp: 27 },
+    desc: 'ATK+33, SPD+8, LUK+9, MP+35, 관통+30% [마총사 특화] 레일 버스터',
+    description: '고출력 에테르 레일을 형성하여 적의 방어선을 일격에 꿰뚫어버리는 마총사 계열의 결전 중화기. [투사 특성: 방어 관통 30%]',
+    baseStats: { atk: 33, spd: 8, luck: 9, mp: 35, defPenetration: 30 },
     prefix: {
       id: 'pre_glory_orbital',
       name: '궤도의',
       type: 'prefix',
       rarity: 'epic',
-      stats: { atk: 20, spd: 5, luck: 6 },
-      description: '공격력 +20, 속도 +5, 행운 +6',
+      stats: { atk: 21, spd: 6, luck: 7 },
+      description: '공격력 +21, 속도 +6, 행운 +7',
     },
     suffix: {
       id: 'suf_glory_piercing',
       name: '관통',
       type: 'suffix',
       rarity: 'epic',
-      stats: { atk: 12, mp: 27, luck: 6 },
-      description: '공격력 +12, 마나 +27, 행운 +6',
+      stats: { atk: 14, mp: 30, luck: 7 },
+      description: '공격력 +14, 마나 +30, 행운 +7',
     },
   },
 };
@@ -3435,6 +3482,8 @@ export function createClassHonorEquipment(key: string): EquipmentItem | null {
     baseName: def.baseName,
     name: fullName,
     slot: def.slot,
+    weaponType: def.weaponType || (def.slot === 'weapon' ? detectWeaponType(def.baseName) : undefined),
+    weaponTrait: def.weaponTrait || (def.weaponType ? getWeaponTrait(def.weaponType) : (def.slot === 'weapon' ? getWeaponTrait(detectWeaponType(def.baseName)!) : undefined)),
     level: 0,
     rarity: def.grade,
     baseStats: { ...def.baseStats },

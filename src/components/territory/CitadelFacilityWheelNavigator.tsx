@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BuildingId } from '../../types/game';
 import { SoundManager } from '../../managers/SoundManager';
 import { useI18n } from '../../hooks/useI18n';
+import { preloadImages, afterNextPaint } from '../../utils/imagePreloader';
 
 export interface WorkstationItem {
   key: string;
@@ -20,6 +21,9 @@ interface CitadelFacilityWheelNavigatorProps {
   tutorialStepId?: string;
   buildingLevels: Record<string, number | undefined>;
   registerableCodexCount?: number;
+  shortcutSlots?: (string | null)[];
+  onSaveShortcutSlot?: (slotIdx: number, facilityKey: string) => void;
+  onClearShortcutSlot?: (slotIdx: number) => void;
 }
 
 export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigatorProps> = ({
@@ -28,6 +32,9 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
   tutorialStepId,
   buildingLevels,
   registerableCodexCount = 0,
+  shortcutSlots = ['barracks', 'cemetery', null],
+  onSaveShortcutSlot,
+  onClearShortcutSlot,
 }) => {
   const { tr } = useI18n();
   const N = items.length;
@@ -47,6 +54,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
   const velocityRef = useRef<number>(0);
   const [displayPos, setDisplayPos] = useState<number>(initialIndex);
   const [activeIdx, setActiveIdx] = useState<number>(initialIndex);
+  const safeShortcutSlots = shortcutSlots || ['barracks', 'cemetery', null];
 
   // 반응형 화면 감지 (리사이즈 동기화)
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(() => {
@@ -60,6 +68,19 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // 🖼️ 배너 이미지 사전 디코드 및 GPU 타일 래스터화 누락 방지
+  useEffect(() => {
+    const urls = items.map(it => it.image).filter(Boolean);
+    preloadImages(urls);
+
+    afterNextPaint(() => {
+      if (containerRef.current) {
+        // GPU 합성 강제 리프레시
+        containerRef.current.style.transform = 'translateZ(0)';
+      }
+    });
+  }, [items]);
 
   // 드래그/터치 인터랙션 추적
   const isPointerDownRef = useRef<boolean>(false);
@@ -245,8 +266,8 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
     const dt = now - lastTimeRef.current;
     const dy = currentY - lastYRef.current;
 
-    // 감도: 화면 높이에 따라 적절한 픽셀-대-카드 비율 (모바일 ~155px, 대형화면 ~240px)
-    const cardSpacing = isLargeScreen ? 240 : 155;
+    // 감도: 화면 높이에 따라 적절한 픽셀-대-카드 비율 (모바일 ~180px, 대형화면 ~240px)
+    const cardSpacing = isLargeScreen ? 240 : 180;
     const posDelta = -(dyTotal / cardSpacing);
     posRef.current = dragStartPosRef.current + posDelta;
 
@@ -373,10 +394,10 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
 
           // 3D 원통형 변환 계산
           // offset에 따라 Y이동, Z깊이, X축 회전각도, 스케일, 불투명도 부여
-          const yStep = isLargeScreen ? 200 : 105;
+          const yStep = isLargeScreen ? 200 : 132;
           const translateY = offset * yStep;
           const rotateX = -offset * 22; // 원통형 굽힘 각도 (위는 뒤로, 아래는 앞으로)
-          const translateZ = -Math.pow(absOffset, 1.35) * (isLargeScreen ? 110 : 70); // 뒤로 밀림
+          const translateZ = -Math.pow(absOffset, 1.35) * (isLargeScreen ? 110 : 80); // 뒤로 밀림
           const scale = Math.max(0.68, 1 - absOffset * 0.13);
           const opacity = Math.max(0, 1 - Math.pow(absOffset / 2.6, 1.6));
           const zIndex = Math.round(100 - absOffset * 20);
@@ -399,7 +420,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                 opacity,
                 zIndex,
                 pointerEvents: 'auto',
-                willChange: 'transform, opacity',
+                willChange: (isDraggingRef.current || absOffset < 1.2) ? 'transform, opacity' : 'auto',
               }}
               className={`workstation-wheel-card absolute w-[92%] sm:w-[520px] md:w-[580px] rounded-2xl overflow-hidden border transition-shadow duration-200 cursor-pointer shadow-2xl flex flex-col ${
                 isCenter
@@ -409,24 +430,36 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                   : 'bg-[#0d1017]/90 border-[#222b3d]/80 hover:border-[#b89758]/50 filter brightness-90 hover:brightness-105'
               }`}
             >
-              {/* ── 시설 내부 배너 이미지 (큰 화면: 1376x768 16:9 기준 이미지 전체 온전히 대형 표시, 작은 화면: 컴팩트 96px 유지) ── */}
+              {/* ── 시설 내부 배너 이미지 (큰 화면: 1376x768 16:9 기준 이미지 전체 온전히 대형 표시, 모바일: 시원하게 148px 표시) ── */}
               <div 
                 className="relative w-full overflow-hidden bg-[#07090e] border-b border-[#242b3b]"
                 style={{
-                  height: isLargeScreen ? 'auto' : '96px',
+                  height: isLargeScreen ? 'auto' : '148px',
                   aspectRatio: isLargeScreen ? '1376 / 768' : undefined,
                 }}
               >
+                {/* 🛡️ 웹뷰 타일 지연/누락 방지용 백그라운드 워터마크 폴백 */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#131722] via-[#0c0f16] to-[#07090e] flex items-center justify-center pointer-events-none">
+                  <span className="text-6xl opacity-15 select-none grayscale filter blur-[1px]">
+                    {item.icon}
+                  </span>
+                </div>
+
                 <img
                   src={item.image}
                   alt={item.name}
-                  className={`facility-banner-img w-full h-full object-cover transition-all duration-500 ${
+                  decoding="async"
+                  loading={isCenter ? 'eager' : 'lazy'}
+                  className={`facility-banner-img relative z-1 w-full h-full object-cover transition-all duration-300 ${
                     isLocked
                       ? 'grayscale brightness-[0.45] contrast-110'
                       : isCenter
                       ? 'grayscale-0 brightness-105 contrast-105 saturate-110'
                       : 'grayscale-[0.35] brightness-[0.75]'
                   }`}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLElement).style.opacity = '0';
+                  }}
                 />
 
                 {/* 상단 비네팅 & 블렌드 */}
@@ -481,7 +514,7 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
                               : 'bg-gradient-to-r from-[#ffd54f] to-[#b89758] text-[#08090b]'
                           }`}
                         >
-                          {item.badge}
+                          {tr(item.badge)}
                         </span>
                       )}
                     </>
@@ -562,11 +595,11 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
         })}
       </div>
 
-      {/* 🔽 하단 퀵 스텝 버튼 */}
+      {/* 🔽 하단 퀵 스텝 버튼 (슬롯 바 위로 배치) */}
       <button
         type="button"
         onClick={() => handleStep(1)}
-        className="absolute bottom-2 z-40 px-3 py-1 rounded-full bg-[#161a24]/80 hover:bg-[#b89758]/20 border border-[#2b3548] hover:border-[#b89758]/60 text-[#c8aa6e] text-xs font-bold transition-all shadow-md active:scale-95 flex items-center gap-1 cursor-pointer backdrop-blur-xs"
+        className="absolute bottom-[80px] sm:bottom-[88px] z-40 px-3 py-1 rounded-full bg-[#161a24]/85 hover:bg-[#b89758]/25 border border-[#2b3548] hover:border-[#b89758]/70 text-[#c8aa6e] text-xs font-bold transition-all shadow-md active:scale-95 flex items-center gap-1 cursor-pointer backdrop-blur-xs"
         title={tr('아래로 회전 (ArrowDown)')}
       >
         <span>▼</span>
@@ -594,8 +627,137 @@ export const CitadelFacilityWheelNavigator: React.FC<CitadelFacilityWheelNavigat
       </div>
 
       {/* 🔢 좌측 하단 현재 시설 순서 (예: 1 / 12) */}
-      <div className="absolute left-3 bottom-2 z-40 text-[10.5px] font-mono font-bold px-2 py-0.5 rounded-lg bg-black/70 border border-[#2b3447]/60 text-[#dcc496] backdrop-blur-xs">
+      <div className="absolute left-3 bottom-[80px] sm:bottom-[88px] z-40 text-[10.5px] font-mono font-bold px-2 py-0.5 rounded-lg bg-black/75 border border-[#2b3447]/60 text-[#dcc496] backdrop-blur-xs">
         {activeIdx + 1} / {N}
+      </div>
+
+      {/* ⚡ 하단 바로가기 슬롯 3개 바 (방주 성채 사령부 패널 배너와 1:1 연동) */}
+      <div
+        className="absolute bottom-1.5 sm:bottom-2 inset-x-2 sm:inset-x-3 z-40 p-1.5 sm:p-2 rounded-xl bg-[#0a0d14]/95 border border-[#3d372e]/80 shadow-[0_8px_30px_rgba(0,0,0,0.95)] backdrop-blur-md flex flex-col gap-1"
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between text-[10px] sm:text-[11px] px-1">
+          <div className="flex items-center gap-1.5">
+            <span className="text-[#ffd54f] font-extrabold flex items-center gap-1">
+              <span>⚡</span>
+              <span>{tr('사령부 지름길 슬롯')}</span>
+            </span>
+            <span className="text-[9px] text-[#8b9bb4] hidden xs:inline">
+              {tr('(사령부 패널 지름길 배너로 표시)')}
+            </span>
+          </div>
+
+          {currentItem && (
+            <div className="flex items-center gap-1 text-[9.5px] sm:text-[10.5px] text-[#cfd8e8] font-mono font-medium">
+              <span className="text-[#8b9bb4]">{tr('현재 카드')}:</span>
+              <span className="text-xs">{currentItem.icon}</span>
+              <span className="font-bold text-[#ffd54f] truncate max-w-[120px] sm:max-w-[160px]">
+                {currentItem.name}
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-3 gap-1.5">
+          {[0, 1, 2].map((slotIdx) => {
+            const slotKey = safeShortcutSlots[slotIdx];
+            const slotItem = slotKey ? items.find(it => it.key === slotKey) : null;
+            const isCurrentCard = currentItem && slotKey === currentItem.key;
+
+            if (slotItem) {
+              return (
+                <div
+                  key={slotIdx}
+                  className={`h-11 sm:h-12 px-1.5 sm:px-2 rounded-lg border flex items-center justify-between gap-1 transition-all relative ${
+                    isCurrentCard
+                      ? 'bg-[#221c14] border-2 border-[#b89758] shadow-[0_0_10px_rgba(184,151,88,0.4)] scale-[1.01]'
+                      : 'bg-[#10141f] border-[#253246] hover:border-[#b89758]/60 hover:bg-[#151c2a]'
+                  }`}
+                >
+                  {/* 왼쪽: 클릭 시 해당 시설로 휠 스냅 이동 */}
+                  <div
+                    className="flex items-center gap-1 min-w-0 flex-1 cursor-pointer py-0.5"
+                    onClick={() => {
+                      try { SoundManager.getInstance().play('click'); } catch {}
+                      const idx = items.findIndex(it => it.key === slotKey);
+                      if (idx >= 0) snapToIndex(idx);
+                    }}
+                    title={tr('{0} 카드로 휠 이동').replace('{0}', slotItem.name)}
+                  >
+                    <span className="text-sm sm:text-base shrink-0 leading-none">{slotItem.icon}</span>
+                    <div className="flex flex-col min-w-0 leading-tight">
+                      <div className="flex items-center gap-1">
+                        <span className="text-[8px] font-mono font-black text-[#b89758] shrink-0">
+                          #{slotIdx + 1}
+                        </span>
+                        <span className="font-bold text-[10px] sm:text-[11px] text-white truncate">
+                          {slotItem.name.split(' ')[0]}
+                        </span>
+                      </div>
+                      <span className="text-[7.5px] sm:text-[8px] text-[#8b9bb4] truncate">
+                        {isCurrentCard ? tr('✓ 현재 선택') : tr('클릭 시 이동')}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 오른쪽: 조작 액션 (현재 카드로 덮어쓰기 or 비우기) */}
+                  <div className="flex items-center gap-0.5 shrink-0">
+                    {!isCurrentCard && currentItem && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          try { SoundManager.getInstance().play('click'); } catch {}
+                          onSaveShortcutSlot?.(slotIdx, currentItem.key);
+                        }}
+                        className="px-1 py-0.5 rounded bg-[#b89758]/20 hover:bg-[#b89758]/40 border border-[#b89758]/50 text-[#ffd54f] text-[8.5px] font-bold cursor-pointer transition-colors"
+                        title={tr('현재 표시된 [{0}] 카드로 저장').replace('{0}', currentItem.name)}
+                      >
+                        {tr('저장')}
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        try { SoundManager.getInstance().play('click'); } catch {}
+                        onClearShortcutSlot?.(slotIdx);
+                      }}
+                      className="px-1 py-0.5 rounded hover:bg-[#ef5350]/20 text-[#8b9bb4] hover:text-[#ef5350] text-[9.5px] font-bold cursor-pointer transition-colors"
+                      title={tr('슬롯 비우기')}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              );
+            }
+
+            // 빈 슬롯 상태
+            return (
+              <button
+                key={slotIdx}
+                type="button"
+                onClick={() => {
+                  if (currentItem) {
+                    try { SoundManager.getInstance().play('click'); } catch {}
+                    onSaveShortcutSlot?.(slotIdx, currentItem.key);
+                  }
+                }}
+                className="h-11 sm:h-12 px-1 sm:px-2 rounded-lg border border-dashed border-[#2b3548] hover:border-[#b89758] hover:bg-[#151c2a] transition-all flex items-center justify-center gap-1 text-center cursor-pointer group bg-[#090b10]/60"
+                title={currentItem ? tr('현재 표시된 [{0}] 카드를 #{1} 슬롯에 저장').replace('{0}', currentItem.name).replace('{1}', String(slotIdx + 1)) : tr('빈 슬롯')}
+              >
+                <span className="text-[8.5px] font-mono font-bold text-[#b89758]">
+                  #{slotIdx + 1}
+                </span>
+                <span className="text-[9.5px] sm:text-[10px] font-bold text-[#8b9bb4] group-hover:text-[#ffd54f] transition-colors truncate">
+                  + {tr('현재 카드 저장')}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

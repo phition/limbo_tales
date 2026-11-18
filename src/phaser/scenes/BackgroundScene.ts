@@ -7,8 +7,8 @@ export class BackgroundScene extends Phaser.Scene {
   constructor() { super('BackgroundScene'); }
 
   preload(): void {
-    this.load.image('art_citadel_bonfire', 'assets/citadel_bonfire.jpg');
-    this.load.image('art_void_overlord', 'assets/void_overlord.jpg');
+    this.load.image('art_citadel_bonfire', 'assets/citadel_bonfire.webp');
+    this.load.image('art_void_overlord', 'assets/void_overlord.webp');
   }
 
   create(): void {

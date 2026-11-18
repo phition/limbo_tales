@@ -106,7 +106,7 @@ export const GameIcon: React.FC<GameIconProps> = ({
       src.startsWith('data:') ||
       src.startsWith('blob:') ||
       src.includes('.png') ||
-      src.includes('.jpg') ||
+      src.includes('.webp') ||
       src.includes('.svg') ||
       src.includes('.webp')
     );
@@ -144,6 +144,8 @@ export const GameIcon: React.FC<GameIconProps> = ({
         src={effectiveImgSrc}
         alt={alt || meta?.label || targetKey || 'icon'}
         title={alt || meta?.label}
+        decoding="async"
+        loading="lazy"
         onError={() => setImgError(true)}
         className={`select-none shrink-0 ${inline && !rarity ? 'inline-block align-middle' : ''}`}
         style={{
@@ -161,6 +163,8 @@ export const GameIcon: React.FC<GameIconProps> = ({
       <img
         src={cleanSrc}
         alt={alt || 'icon'}
+        decoding="async"
+        loading="lazy"
         onError={() => setImgError(true)}
         className={`select-none shrink-0 ${inline && !rarity ? 'inline-block align-middle' : ''}`}
         style={{

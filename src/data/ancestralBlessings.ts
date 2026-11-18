@@ -286,6 +286,56 @@ export const ANCESTRAL_BLESSINGS_CONFIG: Record<string, AncestralBlessingConfig>
     icon: '💥',
     baseDescription: '사신 저격수의 암살안: 파티 치명타율 +15%, 치명타 피해 +35%, 방어 관통 +20%',
     baseBuffs: { critRateBonus: 15, critDmgBonus: 0.35, defPenetrationBonus: 20 }
+  },
+
+  // ── 7. 3차 초월 클래스 (Tier 3 Transcendent Classes) ──
+  'aegis_bastion': {
+    id: 'blessing_aegis_bastion',
+    classId: 'aegis_bastion',
+    name: '불멸 성채의 방벽',
+    icon: '🛡️',
+    baseDescription: '이지스 바스티온의 절대 방벽: 파티 방어력 +22%, 받는 피해 15% 감소, 개시 보호막 +20%(3턴), 전열 엄호율 +30%',
+    baseBuffs: { defBonus: 1.22, damageReductionPct: 0.15, startBattleShieldPct: 0.20, startBattleShieldTurns: 3, frontlineGuardPct: 0.30 }
+  },
+  'void_strider': {
+    id: 'blessing_void_strider',
+    classId: 'void_strider',
+    name: '보이드 군주의 잔영',
+    icon: '🌌',
+    baseDescription: '보이드 스트라이더의 극의: 파티 속도 +15%, 중열 회피율 +20%, 치명타율 +12%, 치명타 피해 +35%, 방어 관통 +20%',
+    baseBuffs: { spdBonus: 1.15, midRowEvasionBonus: 0.20, critRateBonus: 12, critDmgBonus: 0.35, defPenetrationBonus: 20 }
+  },
+  'chrono_archon': {
+    id: 'blessing_chrono_archon',
+    classId: 'chrono_archon',
+    name: '크로노 아콘의 섭리',
+    icon: '⏳',
+    baseDescription: '크로노 아콘의 시공 마력핵: 파티 공격력 +18%, 전능력치 +10%, 속도 +12%, 매 턴 마나 +8 MP 회복',
+    baseBuffs: { atkBonus: 1.18, allStatsBonus: 1.10, spdBonus: 1.12, mpRegenPerTurn: 8 }
+  },
+  'seraphic_inquisitor': {
+    id: 'blessing_seraphic_inquisitor',
+    classId: 'seraphic_inquisitor',
+    name: '세라핌의 구원 심판',
+    icon: '👼',
+    baseDescription: '세라픽 인퀴지터의 성광: 전능력치 +10%, 공격력 +15%, 매 턴 체력 4.5% 및 마나 +6 MP 재생, 흡혈 +10%',
+    baseBuffs: { allStatsBonus: 1.10, atkBonus: 1.15, hpRegenPct: 0.045, mpRegenPerTurn: 6, drainBonus: 10 }
+  },
+  'valhalla_warlord': {
+    id: 'blessing_valhalla_warlord',
+    classId: 'valhalla_warlord',
+    name: '발할라 패황의 군세',
+    icon: '🔥',
+    baseDescription: '발할라 워로드의 불멸 투혼: 파티 공격력 +20%, 방어력 +15%, 치명타 피해 +30%, 흡혈 +10%, 받는 피해 10% 감소',
+    baseBuffs: { atkBonus: 1.20, defBonus: 1.15, critDmgBonus: 0.30, drainBonus: 10, damageReductionPct: 0.10 }
+  },
+  'omega_deadeye': {
+    id: 'blessing_omega_deadeye',
+    classId: 'omega_deadeye',
+    name: '오메가 데드아이의 조준',
+    icon: '🎯',
+    baseDescription: '오메가 데드아이의 종말 탄환: 파티 치명타율 +18%, 치명타 피해 +45%, 방어 관통 +25%, 매 턴 마나 +5 MP 회복',
+    baseBuffs: { critRateBonus: 18, critDmgBonus: 0.45, defPenetrationBonus: 25, mpRegenPerTurn: 5 }
   }
 };
 

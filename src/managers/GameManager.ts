@@ -60,6 +60,12 @@ import {
 import { createActiveBlessingForHero, getOfferingEtherCost } from '../data/ancestralBlessings';
 import { CODEX_COLLECTIONS } from '../data/codex';
 import { NEMESIS_BOSS_CONFIG, NEMESIS_MILESTONES, NEMESIS_CYCLE_CONSTANTS } from '../data/nemesis';
+import {
+  WELCOME_DIALOGUE_GENERATORS,
+  FRICTION_DIALOGUE_GENERATORS,
+  TRIO_BANTER_GENERATORS,
+  DUET_BANTER_GENERATORS
+} from '../data/campBanterData';
 import { INITIAL_BUILDINGS, BUILDING_BASE_COSTS } from '../data/buildings';
 import { INITIAL_QUESTS } from '../data/quests';
 import { CHARACTER_CLASSES } from '../data/classes';
@@ -95,7 +101,8 @@ import {
   FORGE_STAT_TABLE
 } from '../data/equipment';
 import { calculatePartySynergies, ALL_PARTY_SYNERGIES } from '../data/synergies';
-import { ALL_SKILL_BOOKS, ALL_SKILLS_MAP, getSkillBookRarity, GRIMOIRE_RARITY_META, getMasteryGainPerBook, cleanMonsterNameForDrop, adjustSkillDescriptionForDrop, normalizeDroppedSkillDescription, determineSkillAffinity, getSkillAffinityMeta } from '../data/skillBooks';
+import { MONSTERS } from '../data/monsters';
+import { ALL_SKILL_BOOKS, ALL_SKILLS_MAP, getSkillBookRarity, GRIMOIRE_RARITY_META, getMasteryGainPerBook, cleanMonsterNameForDrop, adjustSkillDescriptionForDrop, normalizeDroppedSkillDescription, determineSkillAffinity, getSkillAffinityMeta, buildMonsterSkillDefinition } from '../data/skillBooks';
 import { getIconMeta } from '../utils/iconMap';
 import { GRIMOIRE_CRAFT_RECIPES, GRIMOIRE_CRAFT_SUCCESS_RATES, GrimoireRecipe } from '../data/classSkillRecipes';
 import { BUILDING_TECH_TREE, BUILDING_MILESTONE_TIERS, getBuildingConstructionDurationSec } from '../data/buildings';
@@ -764,6 +771,7 @@ export class GameManager {
     this.codexUnlockedItems = {};
     this.codexUnlockOrder = [];
     this.codexUnlockedTimestamps = {};
+    this.restoreAndMergeCodexSafeguard();
 
     this.tavernCandidates = [];
     this.tavernArrivalSecondsLeft = 600;
@@ -985,7 +993,7 @@ export class GameManager {
     }
 
     const elapsedMs = now - this.lastTickTimestamp;
-    let elapsedSec = Math.floor(elapsedMs / 1000);
+    let elapsedSec = Math.max(0, Math.floor(elapsedMs / 1000));
     this.lastTickTimestamp = now;
 
     // 10초 미만의 짧은 새로고침은 실시간 틱 루프에서 처리
@@ -1310,15 +1318,20 @@ export class GameManager {
     if (upkeepFoodPaid > 0) upkeepParts.push(`🍖식량 -${upkeepFoodPaid.toLocaleString()}`);
     if (upkeepEtherPaid > 0) upkeepParts.push(`✨에테르 -${upkeepEtherPaid.toLocaleString()}`);
 
-    this.addLog(`🌙 [오프라인 정산 (${formattedTime} 경과)] 부재 중 영지 활동이 정산되었습니다.`, 'system', 'citadel');
-    this.addLog(this.getCurrentPartyLogText(), 'story', 'citadel');
+    // 최소 30분(1,800초) 이상 오프라인 상태였을 때만 오프라인 정산 보고서 및 알림 모달 활성화
+    const MIN_OFFLINE_SETTLEMENT_SEC = 30 * 60; // 1,800초 (최소 30분)
 
-    if (gainParts.length > 0) {
-      this.addLog(`📦 [자원 총 생산] ${gainParts.join(', ')}`, 'reward');
-    }
+    if (elapsedSec >= MIN_OFFLINE_SETTLEMENT_SEC) {
+      this.addLog(`🌙 [오프라인 정산 (${formattedTime} 경과)] 부재 중 영지 활동이 정산되었습니다.`, 'system', 'citadel');
+      this.addLog(this.getCurrentPartyLogText(), 'story', 'citadel');
 
-    if (upkeepParts.length > 0) {
-      this.addLog(`📉 [시설 유지비] ${upkeepParts.join(', ')} 지출 (생산량으로 지속 충당 및 창고 상한 보전)`, 'normal');
+      if (gainParts.length > 0) {
+        this.addLog(`📦 [자원 총 생산] ${gainParts.join(', ')}`, 'reward');
+      }
+
+      if (upkeepParts.length > 0) {
+        this.addLog(`📉 [시설 유지비] ${upkeepParts.join(', ')} 지출 (생산량으로 지속 충당 및 창고 상한 보전)`, 'normal');
+      }
     }
 
     if (healedHeroes.length > 0) {
@@ -1387,7 +1400,8 @@ export class GameManager {
     let finalFormattedTime = '';
     if (finalHours > 0) finalFormattedTime += `${finalHours}시간 `;
     if (finalMins > 0 || finalHours > 0) finalFormattedTime += `${finalMins}분 `;
-    finalFormattedTime += `${finalSecs}초`;
+    if (finalSecs > 0 || (finalHours === 0 && finalMins === 0)) finalFormattedTime += `${finalSecs}초`;
+    finalFormattedTime = finalFormattedTime.trim();
 
     const report = {
       elapsedSeconds: finalElapsedSec,
@@ -1405,9 +1419,8 @@ export class GameManager {
       encounterAttacks: prevReport?.encounterAttacks ? [...prevReport.encounterAttacks] : []
     };
 
-    // 1시간(3,600초) 이상 오프라인 상태였을 때만 오프라인 정산 보고서 및 알림 모달 활성화
-    const ONE_HOUR_SEC = 60 * 60; // 3,600초
-    if (finalElapsedSec >= ONE_HOUR_SEC) {
+    // 최소 30분(1,800초) 이상 오프라인 상태였을 때만 오프라인 정산 보고서 및 알림 모달 활성화
+    if (finalElapsedSec >= MIN_OFFLINE_SETTLEMENT_SEC) {
       this.offlineReport = report;
       this.lastOfflineReport = report;
       this.emit('offlineProgressSettled', report);
@@ -1723,7 +1736,7 @@ export class GameManager {
   /** 🏛️ 3대 핵심 인프라 시너지 상태 반환 */
   public getInfraSynergies(): {
     foodSynergy: boolean;     // 🥩 생체 정제소 Lv.5+ [대량 배급제]: 식량 유지비 -30%
-    goldSynergy: boolean;     // ⚖️ 블랙 마켓 Lv.5+ [상인 네트워크]: 골드 유지비 -25% 및 골드 최대 적재량 20만(200,000)G 확장
+    goldSynergy: boolean;     // ⚖️ 블랙 마켓 Lv.5+ [상업 네트워크]: 골드 유지비 -25% 및 골드 최대 적재량 50만(500,000)G 확장
     etherSynergy: boolean;    // 🧪 에테르 연금 공방 Lv.6+ [에테르 환류관]: 마도 에테르 유지비 -25%
   } {
     const butcheryLv = this.buildings['butchery']?.level || 0;
@@ -1753,12 +1766,16 @@ export class GameManager {
     const customUp = GameDataService.getInstance().getCustomBuildingUpkeep(id, level);
     const hasCustomUpkeep = customUp && (customUp.amount !== undefined || customUp.secondaryAmount !== undefined);
 
-    if (!hasCustomUpkeep && level < 4 && id !== 'storage') {
+    if (!hasCustomUpkeep && id === 'storage') {
+      return { res: null, amount: 0, resIcon: '✨', resName: '유지비 면제' };
+    }
+
+    if (!hasCustomUpkeep && level < 4) {
       return { res: null, amount: 0, resIcon: '✨', resName: '무료 (Lv.1~3)' };
     }
 
     const lvFactor = this.getUpkeepFactor(level);
-    if (!hasCustomUpkeep && lvFactor <= 0 && id !== 'storage') {
+    if (!hasCustomUpkeep && lvFactor <= 0) {
       return { res: null, amount: 0, resIcon: '✨', resName: '무료 (Lv.1~3)' };
     }
 
@@ -1826,11 +1843,10 @@ export class GameManager {
         break;
       }
 
-      // 3. 생산 및 주점 / 창고 시설 -> 골드 소모
-      case 'storage': {   // 방주 중앙 병참고 (Lv.1: 1G ~ Lv.10: 14G)
-        res = 'gold';
-        const storageUpkeepMap = [0, 1, 2, 3, 4, 6, 8, 9, 11, 12, 14];
-        baseAmount = storageUpkeepMap[level] || (14 + (level - 10) * 2);
+      // 3. 생산 및 주점 / 창고 시설 -> 골드 소모 (병참고는 유지비 면제)
+      case 'storage': {   // 방주 중앙 병참고 (유지비 전면 면제)
+        res = null;
+        baseAmount = 0;
         break;
       }
       case 'tavern':     // 방랑자의 라운지 (유지비 50% 감축: 5G/Lv)
@@ -2351,7 +2367,8 @@ export class GameManager {
 
     // 🌌 차원 앵커 게이트 내의 컨텐츠(차원 아레나, 시공의 네메시스, 차원 침공 등)의 상황 및 로그는
     // 영지 로그(citadelLogs)에 혼입되지 않도록 전용 arena 카테고리로 강제 분류
-    if (GameManager.isAnchorGateLog(text) || (this.currentScreen === 'arena' && targetCategory !== 'battle' && targetCategory !== 'dungeon')) {
+    // (단, 호출자가 명시적으로 category === 'citadel'을 지정한 경우는 영지 로그로 분류 허용)
+    if (category !== 'citadel' && (GameManager.isAnchorGateLog(text) || (this.currentScreen === 'arena' && targetCategory !== 'battle' && targetCategory !== 'dungeon'))) {
       targetCategory = 'arena';
     }
 
@@ -2442,7 +2459,8 @@ export class GameManager {
       const alc = this.buildings['alchemy'];
       if (alc && alc.level >= 4 && !alc.isPaused) {
         let alcFood = this.getUpkeepFactor(alc.level) * 1;
-        if (this.getInfraSynergies().foodSynergy) alcFood = Math.max(1, Math.ceil(alcFood * 0.70));
+        const foodDiscount = alc.level >= 7 ? 0.65 : 0.70;
+        if (this.getInfraSynergies().foodSynergy) alcFood = Math.max(1, Math.ceil(alcFood * foodDiscount));
         consPerSec += alcFood / upkeepSec;
       }
       // 에테르 광맥 시추소 7레벨 이후 보조 식량 유지비
@@ -2701,7 +2719,7 @@ export class GameManager {
   public getMaxResourceCapacity(type: keyof GameResources): number {
     if (type === 'gold') {
       const { goldSynergy } = this.getInfraSynergies();
-      return goldSynergy ? 200_000 : 100_000;
+      return goldSynergy ? 500_000 : 300_000;
     }
     const keyStr = String(type);
     if (keyStr.startsWith('ooparts_') || keyStr.startsWith('memoir_note_')) {
@@ -2800,7 +2818,7 @@ export class GameManager {
     }
 
     // 🕶️ 황혼의 블랙 마켓: 5레벨부터 강화 시(Lv.5+) 석재 필요량 30% 감축
-    if (id === 'market' && currentLevel >= 5 && finalCost.stone) {
+    if (id === 'market' && targetLevel >= 5 && finalCost.stone) {
       finalCost.stone = Math.max(1, Math.floor(finalCost.stone * 0.7));
     }
 
@@ -3063,7 +3081,7 @@ export class GameManager {
         if (parsed.hasStarted && !parsed.isCompleted && !parsed.isSkipped && parsed.currentStepId) {
           const check = checkTutorialBuildingRestriction(parsed.currentStepId, id, b.level, this.buildings, this.quests);
           if (check.isRestricted) {
-            this.addLog(`⚠️ [튜토리얼 지침] ${check.message}`, 'warning');
+            this.addLog(`⚠️ [튜토리얼 지침] ${check.message}`, 'danger');
             return false;
           }
         }
@@ -3659,7 +3677,7 @@ export class GameManager {
   /**
    * 🌟 병기창 10레벨 전용: 장비 각성 (Awakening)
    * - 조건: 병기창 Lv.10, 대상 장비 +10강 도달, 각성 단계 3단계 미만 (최대 3회 각성)
-   * - 성공 확률: 20%
+   * - 성공 확률: 1차 20%, 2차 10%, 3차 5%
    * - 성공 시: 현재 +10강의 모든 능력치(접두/접미 제외 순수 스탯)를 새로운 기본 스탯(baseStats)으로 영구 보존하고 강화 단계를 +0으로 초기화
    * - 실패 시: 무기 영구 파괴 (소멸)
    */
@@ -3717,8 +3735,24 @@ export class GameManager {
     }
 
     const prevAwk = currentAwk;
+    const targetAwk = prevAwk + 1;
+    // 각성 성공 확률: 1차 20%, 2차 10%, 3차 5% (+ 아카식 크라운 코어 점령 시 +2%p 보너스)
+    let baseRate = targetAwk === 1 ? 20 : targetAwk === 2 ? 10 : 5;
+    let hasCoreBuff = false;
+    try {
+      const fwRaw = localStorage.getItem('limbo_faction_war_state_v1');
+      if (fwRaw) {
+        const fwParsed = JSON.parse(fwRaw);
+        const coreOwner = fwParsed?.nodes?.node_core?.ownerFaction || fwParsed?.nodeOwners?.node_core;
+        if (coreOwner && coreOwner === fwParsed.playerFaction) {
+          baseRate += 2;
+          hasCoreBuff = true;
+        }
+      }
+    } catch {}
+    const successRate = baseRate;
     const roll = Math.random() * 100;
-    const isSuccess = roll < 20;
+    const isSuccess = roll < successRate;
 
     if (isSuccess) {
       // 🌟 각성 성공: 현재 스탯을 영구 기본 스탯으로 보존하고 level을 0으로 리셋!
@@ -3747,7 +3781,23 @@ export class GameManager {
       item.name = GameManager.buildEquipmentName(item);
 
       SoundManager.getInstance().play('forge_success');
-      this.addLog(`🌟✨ [장비 각성 대성공!] (확률 20%) [${item.name}]이(가) ★${item.awakeningLevel}단계 각성에 도달했습니다! 누적된 막강한 스탯이 기본 스탯으로 영구 보존되며, 강화 단계가 +0으로 초기화되었습니다! (다시 +10강까지 재강화 가능)`, 'reward');
+      this.addLog(`🌟✨ [장비 각성 대성공!] (확률 ${successRate}%) [${item.name}]이(가) ★${item.awakeningLevel}단계 각성에 도달했습니다! 누적된 막강한 스탯이 기본 스탯으로 영구 보존되며, 강화 단계가 +0으로 초기화되었습니다! (다시 +10강까지 재강화 가능)`, 'reward');
+
+      // 📢 전 차원 시스템 메세지 브로드캐스트: [지휘관]님이 [장비명]의 [N]차 각성에 성공하였습니다.
+      try {
+        const commanderNick = FirebaseService.getInstance().getCommanderCallsign();
+        const cleanEquipName = (item.baseName || item.name).replace(/\s*\[★\d각성\]/g, '').trim();
+        const broadcastMsg = `[${commanderNick}]님이 [${cleanEquipName}]의 [${item.awakeningLevel}]차 각성에 성공하였습니다.`;
+
+        this.addLog(`📢 [시스템 메세지] ${broadcastMsg}`, 'system', 'citadel');
+        this.emit('systemBroadcast', broadcastMsg);
+
+        FirebaseService.getInstance().broadcastSystemMessage(broadcastMsg, '시스템').catch((err) => {
+          console.warn('⚠️ [Firebase] 각성 시스템 메세지 전송 경고:', err);
+        });
+      } catch (bcErr) {
+        console.warn('⚠️ [GameManager] 전 차원 시스템 메세지 방송 처리 예외:', bcErr);
+      }
 
       this.reconcileEquipment();
       this.emit('inventoryUpdated', this.equipmentInventory);
@@ -3762,6 +3812,33 @@ export class GameManager {
         newAwakeningLevel: item.awakeningLevel
       };
     } else {
+      // 🛡️ 성좌 무기고 '아카식 보존 파편' 3개 이상 보유 시 파괴 방지!
+      try {
+        const fwRaw = localStorage.getItem('limbo_faction_war_state_v1');
+        if (fwRaw) {
+          const fwParsed = JSON.parse(fwRaw);
+          if ((fwParsed?.awakeningProtectionShards || 0) >= 3) {
+            fwParsed.awakeningProtectionShards -= 3;
+            localStorage.setItem('limbo_faction_war_state_v1', JSON.stringify(fwParsed));
+            SoundManager.getInstance().play('forge_fail');
+            this.addLog(
+              `🛡️ [아카식 보존 파편 발동!] 각성에는 실패했으나(확률 ${successRate}%${hasCoreBuff ? ', 코어 버프 +2% 포함' : ''}), 성좌 무기고의 [아카식 보존 파편 3개]가 대신 소모되어 [${item.name}]의 영구 파괴를 완벽히 막아냈습니다! (+10강 유지)`,
+              'system'
+            );
+            this.saveGame();
+            return {
+              success: false,
+              destroyed: false,
+              prevLevel: 10,
+              newLevel: 10,
+              prevAwakeningLevel: prevAwk,
+              newAwakeningLevel: prevAwk,
+              error: '보존 파편으로 파괴 방어됨'
+            };
+          }
+        }
+      } catch {}
+
       // 💥 각성 실패: 무기 파괴 (인벤토리 및 장착 목록에서 영구 소멸)
       const destroyedItemName = item.name;
       for (const hero of [...this.party, ...this.barracks]) {
@@ -3776,7 +3853,7 @@ export class GameManager {
       this.equipmentInventory = this.equipmentInventory.filter(e => e.id !== item.id);
 
       SoundManager.getInstance().play('forge_fail');
-      this.addLog(`💥 [장비 각성 실패 - 무기 파괴!] 각성의 강력한 심연 마력을 견디지 못하고 [${destroyedItemName}]이(가) 산산조각나 영구 파괴되었습니다...`, 'danger');
+      this.addLog(`💥 [장비 각성 실패 - 무기 파괴!] 각성의 강력한 심연 마력을 견디지 못하고 [${destroyedItemName}]이(가) 산산조각나 영구 파괴되었습니다... (시도 확률: ${successRate}%)`, 'danger');
 
       this.reconcileEquipment();
       this.emit('inventoryUpdated', this.equipmentInventory);
@@ -3980,6 +4057,14 @@ export class GameManager {
       if (eq.stats.luck) luck += Math.floor(eq.stats.luck * mult);
       if (eq.stats.hp) maxHp += Math.floor(eq.stats.hp * mult);
       if (eq.stats.mp) maxMp += Math.floor(eq.stats.mp * mult);
+      if (eq.stats.damageBonus) damageBonus += eq.stats.damageBonus * mult;
+      if (eq.stats.defPenetration) defPenetration += eq.stats.defPenetration * mult;
+      if (eq.stats.drainPercent) drainPercent += eq.stats.drainPercent * mult;
+      if (eq.stats.critRateBonus) critRateBonus += eq.stats.critRateBonus * mult;
+      if (eq.stats.crit) critRateBonus += eq.stats.crit * mult;
+      if (eq.stats.manaCostReduction) manaCostReduction += eq.stats.manaCostReduction * mult;
+      if (eq.stats.hpRegenPercent) hpRegenPercent += eq.stats.hpRegenPercent * mult;
+      if (eq.stats.statusResist) statusResist += eq.stats.statusResist * mult;
 
       if (eq.prefix?.stats) {
         if (eq.prefix.stats.atk) atk += Math.floor(eq.prefix.stats.atk * mult);
@@ -4413,8 +4498,13 @@ export class GameManager {
 
     cleanItem.equippedHeroId = undefined;
     if (cleanItem.slot === 'weapon') {
-      if (!cleanItem.weaponType) cleanItem.weaponType = detectWeaponType(cleanItem);
-      if (!cleanItem.weaponTrait && cleanItem.weaponType) cleanItem.weaponTrait = getWeaponTrait(cleanItem.weaponType);
+      const detected = detectWeaponType(cleanItem);
+      if (detected && (!cleanItem.weaponType || cleanItem.weaponType !== detected)) {
+        cleanItem.weaponType = detected;
+        cleanItem.weaponTrait = getWeaponTrait(detected);
+      } else if (!cleanItem.weaponTrait && cleanItem.weaponType) {
+        cleanItem.weaponTrait = getWeaponTrait(cleanItem.weaponType);
+      }
     }
     sanitizeEquipmentEnchantSkills(cleanItem);
     this.recalculateItemStats(cleanItem);
@@ -4447,8 +4537,13 @@ export class GameManager {
       if (!item.stats) item.stats = {};
       if (!item.baseStats) item.baseStats = { ...item.stats };
       if (item.slot === 'weapon') {
-        if (!item.weaponType) item.weaponType = detectWeaponType(item);
-        if (!item.weaponTrait && item.weaponType) item.weaponTrait = getWeaponTrait(item.weaponType);
+        const detected = detectWeaponType(item);
+        if (detected && (!item.weaponType || item.weaponType !== detected)) {
+          item.weaponType = detected;
+          item.weaponTrait = getWeaponTrait(detected);
+        } else if (!item.weaponTrait && item.weaponType) {
+          item.weaponTrait = getWeaponTrait(item.weaponType);
+        }
       }
       sanitizeEquipmentEnchantSkills(item);
       this.recalculateItemStats(item);
@@ -4475,8 +4570,13 @@ export class GameManager {
           }
 
           if (eq.slot === 'weapon') {
-            if (!eq.weaponType) eq.weaponType = detectWeaponType(eq);
-            if (!eq.weaponTrait && eq.weaponType) eq.weaponTrait = getWeaponTrait(eq.weaponType);
+            const detected = detectWeaponType(eq);
+            if (detected && (!eq.weaponType || eq.weaponType !== detected)) {
+              eq.weaponType = detected;
+              eq.weaponTrait = getWeaponTrait(detected);
+            } else if (!eq.weaponTrait && eq.weaponType) {
+              eq.weaponTrait = getWeaponTrait(eq.weaponType);
+            }
           }
 
           let invItem = this.equipmentInventory.find(e => e.id === eq.id);
@@ -5543,17 +5643,28 @@ export class GameManager {
       ALL_SKILLS_MAP[skillId] = base;
     }
     if (!base && skillId.startsWith('skill_m_')) {
-      base = {
-        id: skillId,
-        name: '마물의 비기',
-        description: '심연 마물의 정수가 담긴 비전 마도 기술',
-        icon: '📖',
-        manaCost: 15,
-        cooldown: 1,
-        targetType: 'single_enemy',
-        power: 1.2,
-        effectType: 'damage'
-      };
+      const cleanMonId = skillId.replace(/^skill_m_/, '');
+      const foundEntry = Object.entries(MONSTERS).find(([mId, m]) => {
+        const monClean = (mId || m.id || '').replace(/_[A-Z]$/, '').replace(/_mon_\d+.*$/, '');
+        return monClean === cleanMonId || mId === cleanMonId || (m.id && m.id === cleanMonId) || (m.id && m.id.includes(cleanMonId));
+      });
+
+      if (foundEntry) {
+        base = buildMonsterSkillDefinition(foundEntry[0], foundEntry[1]);
+      }
+      if (!base) {
+        base = {
+          id: skillId,
+          name: '마물의 비기',
+          description: '심연 마물의 정수가 담긴 비전 마도 기술',
+          icon: '📖',
+          manaCost: 15,
+          cooldown: 1,
+          targetType: 'single_enemy',
+          power: 1.2,
+          effectType: 'damage'
+        };
+      }
       this.customSkills[skillId] = base;
       ALL_SKILLS_MAP[skillId] = base;
     }
@@ -5730,7 +5841,7 @@ export class GameManager {
         candidateName = `${candGender === 'female' ? '여용병' : '남용병'}_${Math.floor(Math.random() * 900 + 100)}`;
       }
 
-      const candPortraitUrl = CustomAssetService.getGenderPortrait(cId, candGender);
+      const candPortraitUrl = CustomAssetService.getRandomGenderPortrait(cId, candGender);
 
       return {
         id: `cand_${Date.now()}_${idx}`,
@@ -5739,6 +5850,7 @@ export class GameManager {
         portraitUrl: candPortraitUrl,
         classId: cId,
         grade,
+        level: 1,
         trait: traitObj.name,
         hiringCost,
         stats: rolledStats
@@ -5845,7 +5957,7 @@ export class GameManager {
 
     const cClass = CHARACTER_CLASSES[cand.classId];
     const candGender = cand.gender || (Math.random() < 0.5 ? 'male' : 'female');
-    const candPortrait = cand.portraitUrl || CustomAssetService.getGenderPortrait(cand.classId, candGender);
+    const candPortrait = cand.portraitUrl || CustomAssetService.getRandomGenderPortrait(cand.classId, candGender);
 
     const newHero: Mercenary = this.sanitizeHero({
       id: `hero_${Date.now()}`,
@@ -5856,7 +5968,9 @@ export class GameManager {
       trait: cand.trait || '균형잡힌 정예',
       classId: cand.classId,
       grade: cand.grade,
-      level: 1, exp: 0, expToNext: 80,
+      level: 1,
+      exp: 0,
+      expToNext: 80,
       currentHp: cand.stats.hp,
       maxHp: cand.stats.hp,
       currentMp: cand.stats.mp,
@@ -5871,6 +5985,10 @@ export class GameManager {
 
     this.barracks.push(newHero);
     this.tavernCandidates.splice(candIdx, 1);
+    // 🌟 마지막 남은 용병을 고용하여 라운지가 비었을 경우, 대기하지 않고 즉시 새 용병 풀 충원
+    if (this.tavernCandidates.length === 0) {
+      this.refreshTavernPool();
+    }
     this.addLog(`★ [용병 영입] [${newHero.name}] (${cClass.name})을(를) 영입했습니다!`, 'reward');
     this.updateQuestObjective('Q_MAIN_02', 1, 1);
     this.checkAllQuestObjectives();
@@ -6164,41 +6282,37 @@ export class GameManager {
               rarity = floor >= 7 ? 'rare' : 'common';
             }
 
-            // 드랍 시점의 마도서 성능은 몬스터 원본 대비 30% 감소 (0.7배 기본값)
-            const basePwr = mSkill.power || 1.0;
-            const weakenedPower = Number((basePwr * 0.7).toFixed(2));
             const cleanMonName = cleanMonsterNameForDrop(m.name);
             const cleanMonId = (m.id || 'monster').replace(/_[A-Z]$/, '').replace(/_mon_\d+.*$/, '');
-            const cleanSkillName = (mSkill.name || '비기').trim();
             const skillId = `skill_m_${cleanMonId}`;
             const bookId = `book_m_${cleanMonId}`;
-            const isAoe = (mSkill.description || '').includes('전체') || (mSkill.description || '').includes('파티') || (mSkill.name || '').includes('전체');
-            const cleanSkillDesc = adjustSkillDescriptionForDrop(mSkill.description || mSkill.name, basePwr, weakenedPower);
-            const affinity = determineSkillAffinity(mSkill, cleanMonName);
+
+            // buildMonsterSkillDefinition을 활용하여 통합된 고품질 스킬 정의 획득
+            const builtSkill = buildMonsterSkillDefinition(cleanMonId, m, sigIdx);
+            const cleanSkillName = builtSkill?.name || (mSkill.name || '비기').trim();
+            const affinity = builtSkill?.affinity || determineSkillAffinity(mSkill, cleanMonName);
             const affMeta = getSkillAffinityMeta(affinity);
 
             // 🌟 마스터 데이터 스튜디오 오버라이드 실시간 조회 및 적용
             const gds = GameDataService.getInstance();
             const bookOverride = gds.getSkillBookOverride(bookId);
-            const finalPower = bookOverride?.power !== undefined ? bookOverride.power : Math.max(0.2, weakenedPower);
-            const finalMana = bookOverride?.manaCost !== undefined ? bookOverride.manaCost : Math.max(10, Math.round(12 + floor * 1.5));
-            const finalCooldown = bookOverride?.cooldown !== undefined ? bookOverride.cooldown : 1;
-            const finalDesc = bookOverride?.description
-              ? bookOverride.description
-              : `[${affMeta.shortName} 계열] [${cleanMonName}의 대표 비기] ${cleanSkillDesc}`;
 
-            const resolvedSkillIcon = getIconMeta(skillId)?.fallback || getIconMeta(bookId)?.fallback || '📖';
-            const resolvedBookIcon = getIconMeta(bookId)?.fallback || '📖';
-
-            const bookSkill: Skill = {
+            const bookSkill: Skill = builtSkill ? {
+              ...builtSkill,
+              id: skillId,
+              power: bookOverride?.power !== undefined ? bookOverride.power : builtSkill.power,
+              manaCost: bookOverride?.manaCost !== undefined ? bookOverride.manaCost : (builtSkill.manaCost || Math.max(10, Math.round(12 + floor * 1.5))),
+              cooldown: bookOverride?.cooldown !== undefined ? bookOverride.cooldown : (builtSkill.cooldown || 1),
+              description: bookOverride?.description ? bookOverride.description : builtSkill.description,
+            } : {
               id: skillId,
               name: cleanSkillName,
-              description: finalDesc,
-              icon: resolvedSkillIcon,
-              manaCost: finalMana,
-              cooldown: finalCooldown,
-              targetType: isAoe ? 'all_enemies' : 'single_enemy',
-              power: finalPower,
+              description: bookOverride?.description || `[${affMeta.shortName} 계열] [${cleanMonName}의 대표 비기] 마물의 비전 마도 기술`,
+              icon: getIconMeta(skillId)?.fallback || getIconMeta(bookId)?.fallback || '📖',
+              manaCost: bookOverride?.manaCost !== undefined ? bookOverride.manaCost : Math.max(10, Math.round(12 + floor * 1.5)),
+              cooldown: bookOverride?.cooldown !== undefined ? bookOverride.cooldown : 1,
+              targetType: 'single_enemy',
+              power: bookOverride?.power !== undefined ? bookOverride.power : Math.max(0.2, Number(((mSkill.power || 1.0) * 0.7).toFixed(2))),
               effectType: (mSkill.effectType as any) || 'damage',
               statusDuration: mSkill.statusDuration || 2,
               affinity: affinity
@@ -6206,6 +6320,11 @@ export class GameManager {
 
             this.customSkills[skillId] = bookSkill;
             ALL_SKILLS_MAP[skillId] = bookSkill;
+
+            const finalPower = bookSkill.power;
+            const basePwr = mSkill.power || 1.0;
+            const cleanSkillDesc = adjustSkillDescriptionForDrop(mSkill.description || mSkill.name, basePwr, finalPower);
+            const resolvedBookIcon = getIconMeta(bookId)?.fallback || getIconMeta(skillId)?.fallback || '📖';
 
             const bookItem: SkillBookItem = {
               id: `sb_drop_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
@@ -6662,6 +6781,17 @@ export class GameManager {
       memoir_note_8: { name: '8층 회고록 쪽지', icon: '📜' },
       memoir_note_9: { name: '9층 회고록 쪽지', icon: '📜' },
       memoir_note_10: { name: '10층 회고록 쪽지', icon: '📜' },
+      // 📜 1F~10F 서사 회고록 아이템
+      memoir_1: { name: '낡은 척후병의 군번줄', icon: '📜' },
+      memoir_2: { name: '망령의 부서진 로자리오', icon: '📜' },
+      memoir_3: { name: '광부의 채굴 일지', icon: '📜' },
+      memoir_4: { name: '심연 관측 보고서', icon: '📜' },
+      memoir_5: { name: '원초의 제사 수기', icon: '📜' },
+      memoir_6: { name: '피 묻은 귀족 일기장', icon: '📜' },
+      memoir_7: { name: '이름 없는 자의 묘비명', icon: '📜' },
+      memoir_8: { name: '기사단장의 비밀 서신', icon: '📜' },
+      memoir_9: { name: '미궁 탐사 기록서', icon: '📜' },
+      memoir_10: { name: '최초 지휘관의 유서', icon: '📜' },
       // 🏛️ 1F~10F 고대 오파츠 (구세계 유물)
       ooparts_1_1: { name: '금이 간 스마트폰 액정', icon: '📱' },
       ooparts_1_2: { name: '녹슨 스테인리스 텀블러', icon: '🥤' },
@@ -6893,7 +7023,7 @@ export class GameManager {
   }
 
   public setHeroPosition(heroId: string, newPos: PositionSlot): void {
-    const hero = this.party.find(h => h.id === heroId);
+    const hero = this.party.find(h => h.id === heroId) || this.barracks.find(h => h.id === heroId);
     if (hero) {
       hero.position = newPos;
       this.addLog(`[진형 변경] ${hero.name}의 위치가 [${newPos === 'front' ? '전열' : newPos === 'mid' ? '중앙' : '후방'}]으로 배치되었습니다.`, 'normal');
@@ -9278,7 +9408,7 @@ export class GameManager {
 
     // 🌌 전 지휘관 공유 월드 보스: 실시간 DB에 피해량 원자적 반영
     try {
-      const commanderNick = FirebaseService.getInstance().getCachedProfile()?.nickname || '지휘관';
+      const commanderNick = FirebaseService.getInstance().getCommanderCallsign();
       FirebaseService.getInstance().recordNemesisWorldBossDamage(damage, partDamages, commanderNick)
         .then((updatedWorldBoss) => {
           if (updatedWorldBoss) {
@@ -10630,9 +10760,9 @@ export class GameManager {
   }
 
   public getBondLevel(bondValue: number): { level: number; title: string; perk: string } {
-    if (bondValue >= 150) return { level: 5, title: '영혼의 결속', perk: '전투 시작 시 MP 30% 회복 (전원 최대 유대 시 50% 회복) & 공/방 +15%' };
-    if (bondValue >= 120) return { level: 4, title: '사선의 맹세', perk: '치명적 피해 시 1회 체력 1로 생존(불굴) & 스탯 +10%' };
-    if (bondValue >= 90)  return { level: 3, title: '굳건한 신뢰', perk: '치명타율 +8% & 아군 빈사 시 50 HP 수호 보호막 자동 발동' };
+    if (bondValue >= 150) return { level: 5, title: '영혼의 결속', perk: '전투 시작 시 MP 30% 회복 (전원 최대 유대 시 50% 회복) & 공/방 +15% (상위 스탯 교체)' };
+    if (bondValue >= 120) return { level: 4, title: '사선의 맹세', perk: '치명적 피해 시 1회 체력 1로 생존(불굴) & HP/MP/SPD +10% (상위 스탯 교체)' };
+    if (bondValue >= 90)  return { level: 3, title: '굳건한 신뢰', perk: '행운 +8 (치명타/회피/저항 보정) & 아군 빈사 시 50 HP 수호 보호막 자동 발동' };
     if (bondValue >= 60)  return { level: 2, title: '전술적 호흡', perk: '일반 공격 시 25% 확률로 동료의 원호 공격(Assist Attack)' };
     if (bondValue >= 30)  return { level: 1, title: '동료애', perk: '야영 회복량 +5% & 최대 HP +5%' };
     return { level: 0, title: '초면', perk: '효과 없음' };
@@ -10793,23 +10923,8 @@ export class GameManager {
         if (isWelcomingRoll) {
           // 🌟 [30% 특별 환영 이벤트] 기존 대원들이 신입 대원을 따뜻하게 챙겨주며 포용
           newcomerWelcomed = true;
-          const WELCOME_DIALOGUES = [
-            [
-              { speakerName: vet1.name, text: `${isolatedHero.name}, 모닥불 옆으로 더 가까이 와. 여기 따뜻한 스튜 한 그릇 들게.`, icon: '🍲' },
-              { speakerName: isolatedHero.name, text: `아... 감사합니다. 두 분이 워낙 손발이 잘 맞으셔서 제가 방해가 되진 않을까 걱정했어요.`, icon: '😳' },
-              { speakerName: vet2.name, text: `무슨 소릴! 심연에선 한 배를 탄 전우야. 등이 든든해졌으니 이제 우리와 호흡을 맞추면 돼!`, icon: '😄' },
-              { speakerName: '방주 원정대', text: `기존 대원들의 따뜻한 배려로 [${isolatedHero.name}]이(가) 마음의 벽을 허물고 빠르게 녹아듭니다!`, icon: '🤝' }
-            ],
-            [
-              { speakerName: vet2.name, text: `${isolatedHero.name}, 아까 전투에서 뒤를 든든하게 받쳐줘서 고마웠어.`, icon: '✨' },
-              { speakerName: isolatedHero.name, text: `제가 제 몫을 했는지 모르겠네요... 아직 두 분의 움직임에 따라가기가 벅찹니다.`, icon: '🙇' },
-              { speakerName: vet1.name, text: `처음엔 누구나 그래. 우린 서로 지켜주며 여기까지 온 거야. 이제 넌 우리의 소중한 동료야.`, icon: '🛡️' },
-              { speakerName: '방주 원정대', text: `진솔한 격려와 조언 속에서 [${isolatedHero.name}]과의 신뢰와 전우애가 싹틉니다!`, icon: '💖' }
-            ]
-          ];
-
-          const chosenWelcome = WELCOME_DIALOGUES[Math.floor(Math.random() * WELCOME_DIALOGUES.length)];
-          dialogues.push(...chosenWelcome);
+          const chosenWelcomeGen = WELCOME_DIALOGUE_GENERATORS[Math.floor(Math.random() * WELCOME_DIALOGUE_GENERATORS.length)];
+          dialogues.push(...chosenWelcomeGen(vet1, vet2, isolatedHero));
 
           // 신입 대원 대상 유대감 집중 상승 (+4 ~ +6 보너스 캐치업)
           const catchupDelta = Math.floor(Math.random() * 3) + 4; // +4 ~ +6
@@ -10844,25 +10959,9 @@ export class GameManager {
           isFriction = true;
           frictionHeroName = isolatedHero.name;
 
-          if (isolatedIdx === 2) {
-            dialogues.push(
-              { speakerName: party[0].name, text: `${party[1].name}, 아까 전투에서 그 타이밍은 정말 완벽했어. 손발이 척척 맞는군!`, icon: '🗣️' },
-              { speakerName: party[1].name, text: `너와 함께 싸울 땐 등을 맡겨도 안심이 되니까. 하하!`, icon: '😄' },
-              { speakerName: party[2].name, text: `...(둘의 화기애애한 대화에 끼어들지 못하고 조용히 모닥불만 응시한다)`, icon: '😔' }
-            );
-          } else if (isolatedIdx === 1) {
-            dialogues.push(
-              { speakerName: party[0].name, text: `${party[2].name}, 오늘 네 활약이 없었다면 위험했을 거야. 고마워.`, icon: '🗣️' },
-              { speakerName: party[2].name, text: `별말씀을요. 우린 서로를 믿으니까요.`, icon: '✨' },
-              { speakerName: party[1].name, text: `...(어색한 침묵 속에 무기를 손질하며 한숨을 쉰다)`, icon: '😔' }
-            );
-          } else {
-            dialogues.push(
-              { speakerName: party[1].name, text: `${party[2].name}, 심연을 다 건너면 성채 주점에서 맛있는 술이나 한잔하자고!`, icon: '🍻' },
-              { speakerName: party[2].name, text: `좋아요! 그때까지 살아남기만 한다면요!`, icon: '😄' },
-              { speakerName: party[0].name, text: `...(말없이 굳은 표정으로 심연의 어둠을 경계하고 있다)`, icon: '😔' }
-            );
-          }
+          const fList = FRICTION_DIALOGUE_GENERATORS[isolatedIdx] || FRICTION_DIALOGUE_GENERATORS[2];
+          const chosenFrictionGen = fList[Math.floor(Math.random() * fList.length)];
+          dialogues.push(...chosenFrictionGen(vet1, vet2, isolatedHero));
 
           this.increaseBond(vet1.id, isolatedHero.id, -2);
           this.increaseBond(vet2.id, isolatedHero.id, -2);
@@ -10877,30 +10976,21 @@ export class GameManager {
 
     // 소외/배척 또는 환영 이벤트가 발생하지 않은 일반적인 경우 훈훈한 모닥불 대화 발생
     if (!isFriction && !newcomerWelcomed) {
-      const h1 = party[0];
-      const h2 = party[1];
       const delta = Math.floor(Math.random() * 3) + 2; // 기본 +2 ~ +4
 
-      const BANTER_TEMPLATES = [
-        [
-          { speakerName: h1.name, text: `${h2.name}, 오늘 밤은 유난히 한기가 심하군... 따뜻한 수프라도 더 들겠나?`, icon: '🍲' },
-          { speakerName: h2.name, text: `고마워. 네가 곁에 있어 준 덕분에 이 끔찍한 심연에서도 버틸 수 있어.`, icon: '🔥' },
-          { speakerName: '원정대', text: '모닥불의 온기 속에서 동료들과 깊은 교감을 나눕니다.', icon: '💖' }
-        ],
-        [
-          { speakerName: h2.name, text: `심연의 끝에는 정말 구원이 기다리고 있을까? 가끔은 두려워져.`, icon: '💭' },
-          { speakerName: h1.name, text: `우리가 함께하는 한, 어떤 어둠도 우리를 무너뜨릴 수 없어. 내가 널 지킬게.`, icon: '🛡️' },
-          { speakerName: '원정대', text: '굳은 신뢰의 눈빛을 주고받으며 결속을 다집니다.', icon: '✨' }
-        ],
-        [
-          { speakerName: h1.name, text: `상처는 좀 어때? 아까 무리해서 날 감싸지 않아도 됐는데...`, icon: '🩹' },
-          { speakerName: h2.name, text: `동료를 위해 방패가 되는 건 당연한 일이야. 내일도 함께 나아가자.`, icon: '🤝' },
-          { speakerName: '원정대', text: '서로의 상처를 보듬으며 끈끈한 전우애를 형성합니다.', icon: '❤️' }
-        ]
-      ];
-
-      const chosen = BANTER_TEMPLATES[Math.floor(Math.random() * BANTER_TEMPLATES.length)];
-      dialogues.push(...chosen);
+      if (party.length >= 3 && Math.random() < 0.60) {
+        // 👥 3인 파티 앙상블 대화 (60% 확률)
+        const chosenTrioGen = TRIO_BANTER_GENERATORS[Math.floor(Math.random() * TRIO_BANTER_GENERATORS.length)];
+        dialogues.push(...chosenTrioGen(party[0], party[1], party[2]));
+      } else {
+        // 👫 2인 듀엣 대화 (무작위 2명 선정하여 다채로운 관계성 조명)
+        const idx1 = Math.floor(Math.random() * party.length);
+        let idx2 = (idx1 + 1 + Math.floor(Math.random() * (party.length - 1))) % party.length;
+        const h1 = party[idx1];
+        const h2 = party[idx2];
+        const chosenDuetGen = DUET_BANTER_GENERATORS[Math.floor(Math.random() * DUET_BANTER_GENERATORS.length)];
+        dialogues.push(...chosenDuetGen(h1, h2));
+      }
 
       // 모든 파티원 쌍 간의 유대 상승
       for (let i = 0; i < party.length; i++) {
@@ -11339,9 +11429,12 @@ export class GameManager {
         icon = '🍱';
       } else {
         const resMeta = GameManager.getResourceMeta(key);
-        if (resMeta && resMeta.name) {
+        // map에 공식 등록된 명칭이 있을 때만 정규화하고, 미등록 fallback(key 문자열)인 경우 전달된 label/icon 유지
+        if (resMeta && resMeta.name && resMeta.name !== key) {
           label = resMeta.name;
-          icon = resMeta.icon;
+          if (resMeta.icon && resMeta.icon !== '📦') {
+            icon = resMeta.icon;
+          }
         }
       }
     }
@@ -11361,8 +11454,11 @@ export class GameManager {
     } else if (skillBookData || itemTypeParam === 'skillBook' || key.startsWith('book_')) {
       maxStack = 99; // 📜 비전서: 동일 마도서 슬롯당 최대 99권 스택 중첩
       itemType = 'skillBook';
-    } else if (key.startsWith('relic_')) {
-      maxStack = 1; // 👑 고유 신화 유물: 슬롯당 1개 (비중첩)
+    } else if (key.startsWith('memoir_note_')) {
+      maxStack = 99; // 📜 회고록 쪽지: 슬롯당 최대 99장 스택
+      itemType = 'resource';
+    } else if (key.startsWith('memoir_') || key.startsWith('relic_') || key.startsWith('ooparts_')) {
+      maxStack = 1; // 📜 서사 회고록 / 👑 고유 신화 유물 / 🏛️ 오파츠: 슬롯당 1개
       itemType = 'resource';
     } else if (key === 'dungeon_food') {
       maxStack = isWagon ? 99 : 3; // 🍖 던전 식량 (보급품): 3개 (짐수레 99)
@@ -11782,10 +11878,17 @@ export class GameManager {
         this.modifyResource('gold', slot.qty);
         settled['gold'] = (settled['gold'] || 0) + slot.qty;
         settledItems.push({ key: 'gold', label: slot.label || '골드', icon: slot.icon || '🪙', qty: slot.qty, itemType: 'gold' });
-      } else if (slot.key === 'food' || slot.key.startsWith('ooparts_') || slot.key.startsWith('memoir_note_') || this.resources[slot.key as keyof GameResources] !== undefined) {
+      } else if (slot.key === 'food' || slot.key.startsWith('ooparts_') || slot.key.startsWith('memoir_note_') || slot.key.startsWith('memoir_') || this.resources[slot.key as keyof GameResources] !== undefined) {
         this.modifyResource(slot.key as keyof GameResources, slot.qty);
+        // 📜 서사 회고록(memoir_1, memoir_8, memoir_10 등) 획득 시 심연의 백과 도감용 쪽지(memoir_note_X)도 함께 1장 자동 기증
+        if (slot.key.startsWith('memoir_') && !slot.key.startsWith('memoir_note_')) {
+          const floorNum = slot.key.replace(/^memoir_/, '');
+          if (floorNum) {
+            this.modifyResource(`memoir_note_${floorNum}` as keyof GameResources, slot.qty);
+          }
+        }
         settled[slot.key] = (settled[slot.key] || 0) + slot.qty;
-        settledItems.push({ key: slot.key, label: slot.label || '식량', icon: slot.icon || '🍖', qty: slot.qty, itemType: slot.itemType || 'resource' });
+        settledItems.push({ key: slot.key, label: slot.label || '회고록', icon: slot.icon || '📜', qty: slot.qty, itemType: slot.itemType || 'resource' });
       } else {
         // 기타 던전 자원/소모품
         settledItems.push({ key: slot.key, label: slot.label, icon: slot.icon, qty: slot.qty, itemType: slot.itemType });
@@ -12572,8 +12675,160 @@ export class GameManager {
     this.syncAllHeroesStats();
     this.emit('partyUpdated', this.party);
     this.emit('codexUpdated', this.codexUnlockedItems);
+    this.saveCodexBackup();
     this.saveGame();
     return { success: true, message: `[${item.name}] 컬렉션이 완성되었습니다!` };
+  }
+
+  /** 📜 심연의 백과(도감) 전용 영구 백업 저장 */
+  public saveCodexBackup(): void {
+    try {
+      if (!this.codexUnlockedItems || Object.keys(this.codexUnlockedItems).length === 0) return;
+      const uid = this.currentUserId || 'guest';
+      const payload = JSON.stringify({
+        items: this.codexUnlockedItems,
+        order: this.codexUnlockOrder || [],
+        timestamps: this.codexUnlockedTimestamps || {}
+      });
+      localStorage.setItem(`limbo_codex_backup_${uid}`, payload);
+
+      // 브라우저 통합 글로벌 백업 (모든 계정 및 세션의 최대 도감 합집합 영구 보존)
+      const existingGlobalRaw = localStorage.getItem('limbo_codex_backup_global');
+      let mergedItems: Record<string, boolean> = { ...this.codexUnlockedItems };
+      let mergedOrder: string[] = [...(this.codexUnlockOrder || [])];
+      let mergedTimestamps: Record<string, number> = { ...(this.codexUnlockedTimestamps || {}) };
+      if (existingGlobalRaw) {
+        try {
+          const parsed = JSON.parse(existingGlobalRaw);
+          if (parsed && typeof parsed === 'object') {
+            mergedItems = { ...(parsed.items || {}), ...mergedItems };
+            mergedTimestamps = { ...(parsed.timestamps || {}), ...mergedTimestamps };
+            const orderSet = new Set<string>([...(parsed.order || []), ...mergedOrder]);
+            mergedOrder = Array.from(orderSet);
+          }
+        } catch (_) {}
+      }
+      localStorage.setItem('limbo_codex_backup_global', JSON.stringify({
+        items: mergedItems,
+        order: mergedOrder,
+        timestamps: mergedTimestamps
+      }));
+    } catch (e) {
+      console.warn('⚠️ [GameManager] saveCodexBackup 실패:', e);
+    }
+  }
+
+  /** 📜 심연의 백과(도감) 비파괴 병합 및 로컬 스토리지 전수 복구 스캔 */
+  public restoreAndMergeCodexSafeguard(
+    incomingItems?: Record<string, boolean>,
+    incomingOrder?: string[],
+    incomingTimestamps?: Record<string, number>
+  ): void {
+    try {
+      const mergedItems: Record<string, boolean> = { ...this.codexUnlockedItems };
+      const mergedTimestamps: Record<string, number> = { ...(this.codexUnlockedTimestamps || {}) };
+      const orderSet = new Set<string>(this.codexUnlockOrder || []);
+
+      // 1. 인메모리 / 매개변수로 전달된 최신 도감 데이터 병합
+      if (incomingItems && typeof incomingItems === 'object') {
+        Object.entries(incomingItems).forEach(([k, v]) => {
+          if (v) {
+            mergedItems[k] = true;
+            orderSet.add(k);
+          }
+        });
+      }
+      if (incomingTimestamps && typeof incomingTimestamps === 'object') {
+        Object.entries(incomingTimestamps).forEach(([k, v]) => {
+          if (v && typeof v === 'number') mergedTimestamps[k] = v;
+        });
+      }
+      if (Array.isArray(incomingOrder)) {
+        incomingOrder.forEach(id => orderSet.add(id));
+      }
+
+      // 2. 도감 전용 영구 백업(계정별, 게스트, 글로벌)에서 병합
+      const uid = this.currentUserId || 'guest';
+      const backupKeys = [`limbo_codex_backup_${uid}`, 'limbo_codex_backup_global', 'limbo_codex_backup_guest'];
+      for (const bKey of backupKeys) {
+        const raw = localStorage.getItem(bKey);
+        if (raw) {
+          try {
+            const bData = JSON.parse(raw);
+            if (bData && typeof bData === 'object') {
+              if (bData.items && typeof bData.items === 'object') {
+                Object.entries(bData.items).forEach(([k, v]) => {
+                  if (v) {
+                    mergedItems[k] = true;
+                    orderSet.add(k);
+                  }
+                });
+              }
+              if (bData.timestamps && typeof bData.timestamps === 'object') {
+                Object.entries(bData.timestamps).forEach(([k, v]) => {
+                  if (v && typeof v === 'number') mergedTimestamps[k] = v as number;
+                });
+              }
+              if (Array.isArray(bData.order)) {
+                bData.order.forEach((id: string) => orderSet.add(id));
+              }
+            }
+          } catch (_) {}
+        }
+      }
+
+      // 3. 브라우저 localStorage 전수 스캔: 과거 세이브 슬롯에서 도감 데이터 복원
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('limbo_save_') || key.includes('save') || key.includes('limbo_'))) {
+          try {
+            const raw = localStorage.getItem(key);
+            if (raw && raw.includes('codexUnlockedItems')) {
+              const parsed = JSON.parse(raw);
+              if (parsed && parsed.codexUnlockedItems && typeof parsed.codexUnlockedItems === 'object') {
+                Object.entries(parsed.codexUnlockedItems).forEach(([k, v]) => {
+                  if (v) {
+                    mergedItems[k] = true;
+                    orderSet.add(k);
+                  }
+                });
+              }
+              if (parsed && parsed.codexUnlockedTimestamps && typeof parsed.codexUnlockedTimestamps === 'object') {
+                Object.entries(parsed.codexUnlockedTimestamps).forEach(([k, v]) => {
+                  if (v && typeof v === 'number') mergedTimestamps[k] = v as number;
+                });
+              }
+              if (parsed && Array.isArray(parsed.codexUnlockOrder)) {
+                parsed.codexUnlockOrder.forEach((id: string) => orderSet.add(id));
+              }
+            }
+          } catch (_) {}
+        }
+      }
+
+      // 4. 오파츠 하위 호환 매핑 복원
+      for (let f = 1; f <= 10; f++) {
+        if (mergedItems[`codex_ooparts_${f}_1`] || mergedItems[`codex_ooparts_${f}_2`]) {
+          mergedItems[`codex_ooparts_floor_${f}`] = true;
+          orderSet.add(`codex_ooparts_floor_${f}`);
+        }
+      }
+
+      // 5. 확정 해금 조건 자동 검증 복구 (묘지 비문 등)
+      if (this.cemetery && this.cemetery.length > 0) {
+        mergedItems['codex_cemetery_epitaph'] = true;
+        orderSet.add('codex_cemetery_epitaph');
+      }
+
+      this.codexUnlockedItems = mergedItems;
+      this.codexUnlockOrder = Array.from(orderSet);
+      this.codexUnlockedTimestamps = mergedTimestamps;
+
+      // 복구된 통합 데이터 영구 백업 즉시 저장
+      this.saveCodexBackup();
+    } catch (e) {
+      console.warn('⚠️ [GameManager] restoreAndMergeCodexSafeguard 실패:', e);
+    }
   }
 
   /** 📜 심연의 백과 등록 완료 시간/순서 조회 (미등록: -1) */
@@ -12656,22 +12911,27 @@ export class GameManager {
     let lostCount = 0;
     let keptCount = 0;
 
-    this.dungeonInventory = this.dungeonInventory.map(slot => {
-      if (['torch', 'food'].includes(slot.key)) {
-        return slot;
-      }
-      const originalQty = slot.qty;
-      const keptQty = Math.max(1, Math.floor(originalQty * 0.2));
-      const lostQty = originalQty - keptQty;
-      lostCount += lostQty;
-      keptCount += keptQty;
-      return { ...slot, qty: keptQty };
-    });
+    this.dungeonInventory = this.dungeonInventory
+      .map(slot => {
+        if (['torch', 'food', 'dungeon_food', 'enhanced_torch', 'enhanced_food'].includes(slot.key || (slot as any).type)) {
+          return slot;
+        }
+        const originalQty = slot.qty;
+        const keptQty = originalQty === 1
+          ? (Math.random() < 0.2 ? 1 : 0)
+          : Math.floor(originalQty * 0.2);
+        const lostQty = originalQty - keptQty;
+        lostCount += lostQty;
+        keptCount += keptQty;
+        return { ...slot, qty: keptQty };
+      })
+      .filter(slot => slot.qty > 0);
 
     if (this.pendingLoot && this.pendingLoot.length > 0) {
       const originalLootCount = this.pendingLoot.length;
       this.pendingLoot = this.pendingLoot.filter(() => Math.random() < 0.2);
       lostCount += (originalLootCount - this.pendingLoot.length);
+      keptCount += this.pendingLoot.length;
     }
 
     this.emit('dungeonInventoryUpdated', this.dungeonInventory);
@@ -12742,6 +13002,7 @@ export class GameManager {
         lastSelectedBagId: this.lastSelectedBagId,
         tavernArrivalSecondsLeft: this.tavernArrivalSecondsLeft,
         tavernRefreshCount: this.tavernRefreshCount,
+        tavernCandidates: this.tavernCandidates,
         nemesisState: this.nemesisState,
         purifiedEquipmentHistory: this.purifiedEquipmentHistory,
         invasionState: {
@@ -12766,6 +13027,7 @@ export class GameManager {
       };
       const raw = JSON.stringify(data);
       localStorage.setItem(this.getSaveKey(), raw);
+      this.saveCodexBackup();
       const sizeKb = (new Blob([raw]).size / 1024).toFixed(2);
       console.log(`💾 [로컬 저장 완료] 크기: ${sizeKb} KB | 시간: ${new Date(now).toLocaleTimeString()}`);
       this.triggerDebouncedCloudSave();
@@ -12798,6 +13060,7 @@ export class GameManager {
             party: this.party,
             equipmentInventory: this.equipmentInventory,
             skillBookInventory: this.skillBookInventory,
+            customSkills: this.customSkills,
             currentArenaRank: this.currentArenaRank,
             currentArenaRating: this.currentArenaRating,
             arenaCoins: this.arenaCoins,
@@ -12808,6 +13071,7 @@ export class GameManager {
             bossClearTimes: this.bossClearTimes,
             bestAbyss10FClearTime: this.bestAbyss10FClearTime,
             maxAviciDangerReached: this.maxAviciDangerReached,
+            avici9001Timestamp: this.avici9001Timestamp,
             aviciBossBonusClaimed: this.aviciBossBonusClaimed,
             bestAviciTimeAttackBonus: this.bestAviciTimeAttackBonus,
             pgsPurificationQuestsClaimed: this.pgsPurificationQuestsClaimed,
@@ -12824,6 +13088,7 @@ export class GameManager {
             currentScreen: this.currentScreen,
             unlockedDungeonFloor: this.unlockedDungeonFloor,
             unlockedAviciTier: this.unlockedAviciTier,
+            purifiedFloors: this.purifiedFloors,
             infirmaryPatients: this.infirmaryPatients,
             bonds: this.bonds,
             citadelSupplies: this.citadelSupplies,
@@ -12831,11 +13096,31 @@ export class GameManager {
             lastSelectedBagId: this.lastSelectedBagId,
             tavernArrivalSecondsLeft: this.tavernArrivalSecondsLeft,
             tavernRefreshCount: this.tavernRefreshCount,
+            tavernCandidates: this.tavernCandidates,
             nemesisState: this.nemesisState,
-            invasionState: this.invasionState,
-            logs: this.logs.slice(-20)
+            purifiedEquipmentHistory: this.purifiedEquipmentHistory,
+            invasionState: {
+              ...this.invasionState,
+              defenseLogs: (this.invasionState.defenseLogs || []).slice(0, 5),
+            },
+            cemetery: this.cemetery,
+            memorialExpBuffUntil: this.memorialExpBuffUntil,
+            activeAncestralBlessing: this.activeAncestralBlessing,
+            expeditionBuffs: this.expeditionBuffs || [],
+            bonfireAdCharges: this.bonfireAdCharges,
+            wagonAdCharges: this.wagonAdCharges,
+            hasCatalystCharge: this.hasCatalystCharge,
+            lastAdDailyResetDate: this.lastAdDailyResetDate,
+            codexUnlockedItems: this.codexUnlockedItems,
+            codexUnlockOrder: this.codexUnlockOrder,
+            codexUnlockedTimestamps: this.codexUnlockedTimestamps,
+            isMasterAccount: this.isMasterAccount,
+            hasChronoCompass: this.hasChronoCompass,
+            marketStock: this.marketStock,
+            logs: this.logs.slice(-10)
           };
           localStorage.setItem(this.getSaveKey(), JSON.stringify(slimData));
+          this.saveCodexBackup();
           console.warn('⚠️ [세이브 자동 복구] localStorage 용량 부족 감지 -> 슬림화 후 안전 저장 성공');
         } catch (err2) {
           console.error('Critical: Emergency save failed', err2);
@@ -12988,6 +13273,7 @@ export class GameManager {
     this.memorialExpBuffUntil = 0;
     this.activeAncestralBlessing = null;
     this.expeditionBuffs = [];
+    this.saveCodexBackup();
     this.codexUnlockedItems = {};
     this.codexUnlockOrder = [];
     this.codexUnlockedTimestamps = {};
@@ -13067,8 +13353,10 @@ export class GameManager {
       dungeonFloor: this.dungeonFloor,
       dungeonDangerLevel: this.dungeonDangerLevel,
       isOvercharged: this.isOvercharged,
+      dungeonInventory: this.dungeonInventory,
       unlockedDungeonFloor: this.unlockedDungeonFloor,
       unlockedAviciTier: this.unlockedAviciTier,
+      purifiedFloors: this.purifiedFloors,
       infirmaryPatients: this.infirmaryPatients,
       bonds: this.bonds,
       citadelSupplies: this.citadelSupplies,
@@ -13076,7 +13364,9 @@ export class GameManager {
       lastSelectedBagId: this.lastSelectedBagId,
       tavernArrivalSecondsLeft: this.tavernArrivalSecondsLeft,
       tavernRefreshCount: this.tavernRefreshCount,
+      tavernCandidates: this.tavernCandidates,
       nemesisState: this.nemesisState,
+      purifiedEquipmentHistory: this.purifiedEquipmentHistory,
       invasionState: {
         ...this.invasionState,
         defenseLogs: (this.invasionState.defenseLogs || []).slice(0, 20),
@@ -13085,10 +13375,18 @@ export class GameManager {
       memorialExpBuffUntil: this.memorialExpBuffUntil,
       activeAncestralBlessing: this.activeAncestralBlessing,
       expeditionBuffs: this.expeditionBuffs || [],
+      bonfireAdCharges: this.bonfireAdCharges,
+      wagonAdCharges: this.wagonAdCharges,
+      hasCatalystCharge: this.hasCatalystCharge,
+      lastAdDailyResetDate: this.lastAdDailyResetDate,
       codexUnlockedItems: this.codexUnlockedItems,
       codexUnlockOrder: this.codexUnlockOrder,
       codexUnlockedTimestamps: this.codexUnlockedTimestamps,
       isMasterAccount: this.isMasterAccount,
+      hasChronoCompass: this.hasChronoCompass,
+      marketStock: this.marketStock,
+      avici9001Timestamp: this.avici9001Timestamp,
+      customSkills: this.customSkills,
       logs: this.logs.slice(-45)
     }));
 
@@ -13139,20 +13437,36 @@ export class GameManager {
 
     return [...baseQuests, ...dynamicSubs].map(baseQ => {
       const savedQ = loadedQuests.find(q => q.id === baseQ.id);
+      const currentInMemory = (this.quests || []).find(q => q.id === baseQ.id);
+
+      // 이미 인메모리에서 완료된 퀘스트라면 진행도 후퇴 방지
+      if (currentInMemory && currentInMemory.status === 'completed') {
+        baseQ.status = 'completed';
+        baseQ.objectives.forEach(obj => {
+          obj.isCompleted = true;
+          obj.current = obj.required;
+        });
+      }
+
       if (savedQ) {
-        // 진행 상태 및 해금 여부 복원
-        baseQ.status = savedQ.status;
-        // 목표 달성 수치 및 완료 여부 복원 (최신 description과 summary 유지)
+        // 진행 상태 및 해금 여부 복원 (완료된 퀘스트는 active로 강등 방지)
+        if (savedQ.status === 'completed') {
+          baseQ.status = 'completed';
+        } else if (baseQ.status !== 'completed') {
+          baseQ.status = savedQ.status;
+        }
+
+        // 목표 달성 수치 및 완료 여부 복원 (최신 description과 summary 유지, 비파괴 최대치 적용)
         baseQ.objectives = baseQ.objectives.map((baseObj, idx) => {
           const savedObj = savedQ.objectives?.[idx];
-          if (savedObj) {
-            return {
-              ...baseObj,
-              current: savedObj.current,
-              isCompleted: savedObj.isCompleted
-            };
-          }
-          return baseObj;
+          const memObj = currentInMemory?.objectives?.[idx];
+          const isCompleted = baseQ.status === 'completed' || !!savedObj?.isCompleted || !!memObj?.isCompleted;
+          const current = Math.max(savedObj?.current || 0, memObj?.current || 0, isCompleted ? baseObj.required : 0);
+          return {
+            ...baseObj,
+            current,
+            isCompleted: isCompleted || current >= baseObj.required
+          };
         });
         return baseQ;
       }
@@ -13303,7 +13617,15 @@ export class GameManager {
     if (parsed.arenaOutlawScore !== undefined) this.arenaOutlawScore = parsed.arenaOutlawScore as number;
     else this.arenaOutlawScore = Math.max(0, (this.arenaWins || 0) * 3 - (this.arenaLosses || 0) * 1);
     if (parsed.bossClearTimes && typeof parsed.bossClearTimes === 'object') {
-      this.bossClearTimes = parsed.bossClearTimes as Record<number, number>;
+      const incomingTimes = parsed.bossClearTimes as Record<number, number>;
+      const mergedTimes = { ...(this.bossClearTimes || {}) };
+      Object.entries(incomingTimes).forEach(([floor, time]) => {
+        const f = Number(floor);
+        if (!mergedTimes[f] || (time > 0 && time < mergedTimes[f])) {
+          mergedTimes[f] = time;
+        }
+      });
+      this.bossClearTimes = mergedTimes;
     }
     if (parsed.bestAbyss10FClearTime !== undefined) this.bestAbyss10FClearTime = parsed.bestAbyss10FClearTime as number;
     if (parsed.maxAviciDangerReached !== undefined) this.maxAviciDangerReached = parsed.maxAviciDangerReached as number;
@@ -13326,22 +13648,42 @@ export class GameManager {
     if (parsed.bonfireWarmthTime !== undefined) this.bonfireWarmthTime = parsed.bonfireWarmthTime as number;
     if (parsed.lastTickTimestamp) this.lastTickTimestamp = parsed.lastTickTimestamp as number;
     else if (parsed.lastSavedAt) this.lastTickTimestamp = parsed.lastSavedAt as number;
+    if (parsed.offlineReport && typeof parsed.offlineReport === 'object') {
+      if ((parsed.offlineReport.elapsedSeconds || 0) >= 1800) {
+        this.offlineReport = parsed.offlineReport as any;
+        this.lastOfflineReport = parsed.offlineReport as any;
+      }
+    }
     if (parsed.dungeonFloor)       this.dungeonFloor       = parsed.dungeonFloor as number;
     if (parsed.dungeonDangerLevel !== undefined) this.dungeonDangerLevel = parsed.dungeonDangerLevel as number;
     if (parsed.isOvercharged !== undefined) this.isOvercharged = parsed.isOvercharged as boolean;
     if (parsed.dungeonInventory && Array.isArray(parsed.dungeonInventory)) {
-      this.dungeonInventory = parsed.dungeonInventory as DungeonItemSlot[];
+      this.dungeonInventory = (parsed.dungeonInventory as DungeonItemSlot[]).map(slot => {
+        const meta = GameManager.getResourceMeta(slot.key);
+        const isEngOnly = slot.label && /^[a-zA-Z0-9_\-\s]+$/.test(slot.label);
+        if ((!slot.label || isEngOnly) && meta && meta.name && meta.name !== slot.key) {
+          slot.label = meta.name;
+        }
+        if ((!slot.icon || slot.icon === '📦') && meta && meta.icon && meta.icon !== '📦') {
+          slot.icon = meta.icon;
+        }
+        return slot;
+      });
     }
-    if (parsed.unlockedDungeonFloor) this.unlockedDungeonFloor = parsed.unlockedDungeonFloor as number;
+    if (parsed.unlockedDungeonFloor) {
+      this.unlockedDungeonFloor = Math.max(this.unlockedDungeonFloor || 1, Number(parsed.unlockedDungeonFloor || 1));
+    }
     if (parsed.hasEnteredDungeon !== undefined) this.hasEnteredDungeon = parsed.hasEnteredDungeon as boolean;
     if (parsed.hasReturnedFromDungeon !== undefined) this.hasReturnedFromDungeon = parsed.hasReturnedFromDungeon as boolean;
     if (this.unlockedDungeonFloor >= 2) this.hasEnteredDungeon = true;
     if (parsed.hasCraftedEquipment !== undefined) this.hasCraftedEquipment = parsed.hasCraftedEquipment as boolean;
     if (parsed.hasCraftedGrimoire !== undefined) this.hasCraftedGrimoire = parsed.hasCraftedGrimoire as boolean;
     if (parsed.hasEnhancedSkill !== undefined) this.hasEnhancedSkill = parsed.hasEnhancedSkill as boolean;
-    if (parsed.unlockedAviciTier !== undefined) this.unlockedAviciTier = parsed.unlockedAviciTier as number;
+    if (parsed.unlockedAviciTier !== undefined) {
+      this.unlockedAviciTier = Math.max(this.unlockedAviciTier || 0, Number(parsed.unlockedAviciTier || 0));
+    }
     if (parsed.purifiedFloors && Array.isArray(parsed.purifiedFloors)) {
-      this.purifiedFloors = (parsed.purifiedFloors as number[]).map(Number).filter(n => !isNaN(n));
+      this.purifiedFloors = Array.from(new Set([...(this.purifiedFloors || []), ...((parsed.purifiedFloors as number[]) || []).map(Number)])).filter(n => !isNaN(n));
     }
     this.syncPurifiedFloorsFromQuests();
     if (parsed.infirmaryPatients)  this.infirmaryPatients  = parsed.infirmaryPatients as string[];
@@ -13351,6 +13693,12 @@ export class GameManager {
     if (parsed.lastSelectedBagId)  this.lastSelectedBagId  = parsed.lastSelectedBagId as string;
     if (parsed.tavernArrivalSecondsLeft !== undefined) this.tavernArrivalSecondsLeft = parsed.tavernArrivalSecondsLeft as number;
     if (parsed.tavernRefreshCount !== undefined) this.tavernRefreshCount = parsed.tavernRefreshCount as number;
+    if (parsed.tavernCandidates && Array.isArray(parsed.tavernCandidates)) {
+      this.tavernCandidates = parsed.tavernCandidates as TavernCandidate[];
+    }
+    if (this.tavernCandidates.length === 0) {
+      this.refreshTavernPool();
+    }
     if (parsed.nemesisState) {
       this.nemesisState = { ...this.nemesisState, ...(parsed.nemesisState as Partial<NemesisState>) };
       if (this.nemesisState.dailyAttempts > 3) {
@@ -13370,7 +13718,14 @@ export class GameManager {
     }
     this.updatePeaceShieldTime();
     if (parsed.cemetery && Array.isArray(parsed.cemetery)) {
-      this.cemetery = (parsed.cemetery as FallenHero[]).slice(0, 5);
+      const incoming = parsed.cemetery as FallenHero[];
+      const map = new Map((this.cemetery || []).map(h => [h.id, h]));
+      incoming.forEach(h => {
+        if (h && h.id && !map.has(h.id)) {
+          map.set(h.id, h);
+        }
+      });
+      this.cemetery = Array.from(map.values()).slice(0, 10);
     }
     if (parsed.subQuestCooldownUntil !== undefined) {
       this.subQuestCooldownUntil = parsed.subQuestCooldownUntil as number;
@@ -13400,22 +13755,11 @@ export class GameManager {
         buffs: b.buffs || {}
       }));
     }
-    if (parsed.codexUnlockedItems) {
-      this.codexUnlockedItems = parsed.codexUnlockedItems as Record<string, boolean>;
-      for (let f = 1; f <= 10; f++) {
-        if (this.codexUnlockedItems[`codex_ooparts_${f}_1`] || this.codexUnlockedItems[`codex_ooparts_${f}_2`]) {
-          this.codexUnlockedItems[`codex_ooparts_floor_${f}`] = true;
-        }
-      }
-    }
-    if (Array.isArray(parsed.codexUnlockOrder)) {
-      this.codexUnlockOrder = parsed.codexUnlockOrder as string[];
-    } else if (this.codexUnlockedItems) {
-      this.codexUnlockOrder = Object.keys(this.codexUnlockedItems);
-    }
-    if (parsed.codexUnlockedTimestamps && typeof parsed.codexUnlockedTimestamps === 'object') {
-      this.codexUnlockedTimestamps = parsed.codexUnlockedTimestamps as Record<string, number>;
-    }
+    this.restoreAndMergeCodexSafeguard(
+      parsed.codexUnlockedItems as Record<string, boolean> | undefined,
+      parsed.codexUnlockOrder as string[] | undefined,
+      parsed.codexUnlockedTimestamps as Record<string, number> | undefined
+    );
     if (parsed.isMasterAccount !== undefined) {
       this.isMasterAccount = parsed.isMasterAccount as boolean;
     }
@@ -13423,6 +13767,16 @@ export class GameManager {
       this.hasChronoCompass = Boolean(parsed.hasChronoCompass);
     } else if (this.quests.some(q => (q.id === 'Q_SCENARIO_04' || q.id === 'Q_SCENARIO_4_3') && q.status === 'completed')) {
       this.hasChronoCompass = true;
+    }
+    if (parsed.purifiedEquipmentHistory && Array.isArray(parsed.purifiedEquipmentHistory)) {
+      this.purifiedEquipmentHistory = parsed.purifiedEquipmentHistory as { item: EquipmentItem; purifiedAt: number }[];
+      this.cleanExpiredPurifiedItems();
+    }
+    if (parsed.marketStock && typeof parsed.marketStock === 'object') {
+      this.marketStock = parsed.marketStock as Record<string, { current: number; restockAt?: number }>;
+    }
+    if (parsed.avici9001Timestamp !== undefined) {
+      this.avici9001Timestamp = parsed.avici9001Timestamp as number;
     }
     this.checkNemesisDailyReset();
     if (Array.isArray(parsed.logs) && parsed.logs.length > 0) {
@@ -13435,7 +13789,7 @@ export class GameManager {
         }
         return l;
       });
-      this.citadelLogs = this.logs.filter(l => (!l.category || l.category === 'citadel') && !GameManager.isAnchorGateLog(l.text));
+      this.citadelLogs = this.logs.filter(l => l.category === 'citadel' || (!l.category && !GameManager.isAnchorGateLog(l.text)));
       this.dungeonLogs = this.logs.filter(l => l.category === 'dungeon');
       this.battleLogs = this.logs.filter(l => l.category === 'battle');
       this.arenaLogs = this.logs.filter(l => l.category === 'arena' || GameManager.isAnchorGateLog(l.text));
@@ -13450,7 +13804,7 @@ export class GameManager {
         this.addLog('차가운 흑무가 방주 성채를 감싸고 있습니다.', 'normal', 'citadel');
         this.addLog(this.getCurrentPartyLogText(), 'story', 'citadel');
       } else {
-        this.citadelLogs = this.logs.filter(l => (!l.category || l.category === 'citadel') && !GameManager.isAnchorGateLog(l.text));
+        this.citadelLogs = this.logs.filter(l => l.category === 'citadel' || (!l.category && !GameManager.isAnchorGateLog(l.text)));
         this.arenaLogs = this.logs.filter(l => l.category === 'arena' || GameManager.isAnchorGateLog(l.text));
       }
     }
@@ -13937,7 +14291,26 @@ export class GameManager {
     this.saveToCloud().catch(() => {});
   }
 
+  /** 🧹 로컬 스토리지 비대화 방지 및 레거시 대용량 캐시 자동 청소 (IndexedDB 이전 후 잔여물 제거) */
+  public cleanLegacyStorageCaches(): void {
+    if (typeof window === 'undefined') return;
+    try {
+      const keysToClean = [
+        'limbo_custom_game_data',
+        'limbo_custom_game_data_idb',
+        'limbo_custom_encyclopedia_data',
+      ];
+      keysToClean.forEach(k => {
+        if (localStorage.getItem(k)) {
+          localStorage.removeItem(k);
+          console.info(`🧹 [GameManager] 레거시 대용량 캐시(${k}) 제거로 로컬 스토리지 용량 확보 완료`);
+        }
+      });
+    } catch (_) {}
+  }
+
   public loadGame(): boolean {
+    this.cleanLegacyStorageCaches();
     try {
       const raw = localStorage.getItem(this.getSaveKey());
       if (raw) {
@@ -14047,9 +14420,21 @@ export class GameManager {
         if (parsed.dungeonDangerLevel !== undefined) this.dungeonDangerLevel = parsed.dungeonDangerLevel as number;
         if (parsed.isOvercharged !== undefined) this.isOvercharged = parsed.isOvercharged as boolean;
         if (parsed.dungeonInventory && Array.isArray(parsed.dungeonInventory)) {
-          this.dungeonInventory = parsed.dungeonInventory as DungeonItemSlot[];
+          this.dungeonInventory = (parsed.dungeonInventory as DungeonItemSlot[]).map(slot => {
+            const meta = GameManager.getResourceMeta(slot.key);
+            const isEngOnly = slot.label && /^[a-zA-Z0-9_\-\s]+$/.test(slot.label);
+            if ((!slot.label || isEngOnly) && meta && meta.name && meta.name !== slot.key) {
+              slot.label = meta.name;
+            }
+            if ((!slot.icon || slot.icon === '📦') && meta && meta.icon && meta.icon !== '📦') {
+              slot.icon = meta.icon;
+            }
+            return slot;
+          });
         }
-        if (parsed.unlockedDungeonFloor) this.unlockedDungeonFloor = parsed.unlockedDungeonFloor as number;
+        if (parsed.unlockedDungeonFloor) {
+          this.unlockedDungeonFloor = Math.max(this.unlockedDungeonFloor || 1, Number(parsed.unlockedDungeonFloor || 1));
+        }
         if (parsed.hasEnteredDungeon !== undefined) this.hasEnteredDungeon = parsed.hasEnteredDungeon as boolean;
         if (parsed.hasReturnedFromDungeon !== undefined) this.hasReturnedFromDungeon = parsed.hasReturnedFromDungeon as boolean;
         if (this.unlockedDungeonFloor >= 2) this.hasEnteredDungeon = true;
@@ -14058,9 +14443,11 @@ export class GameManager {
         if (parsed.hasEnhancedSkill !== undefined) this.hasEnhancedSkill = parsed.hasEnhancedSkill as boolean;
         if (parsed.subQuestCooldownUntil !== undefined) this.subQuestCooldownUntil = parsed.subQuestCooldownUntil as number;
         if (parsed.hasInitializedSubQuests !== undefined) this.hasInitializedSubQuests = parsed.hasInitializedSubQuests as boolean;
-        if (parsed.unlockedAviciTier !== undefined) this.unlockedAviciTier = parsed.unlockedAviciTier as number;
+        if (parsed.unlockedAviciTier !== undefined) {
+          this.unlockedAviciTier = Math.max(this.unlockedAviciTier || 0, Number(parsed.unlockedAviciTier || 0));
+        }
         if (parsed.purifiedFloors && Array.isArray(parsed.purifiedFloors)) {
-          this.purifiedFloors = (parsed.purifiedFloors as number[]).map(Number).filter(n => !isNaN(n));
+          this.purifiedFloors = Array.from(new Set([...(this.purifiedFloors || []), ...((parsed.purifiedFloors as number[]) || []).map(Number)])).filter(n => !isNaN(n));
         }
         this.syncPurifiedFloorsFromQuests();
         if (parsed.infirmaryPatients)  this.infirmaryPatients  = parsed.infirmaryPatients as string[];
@@ -14070,6 +14457,12 @@ export class GameManager {
         if (parsed.lastSelectedBagId)  this.lastSelectedBagId  = parsed.lastSelectedBagId as string;
         if (parsed.tavernArrivalSecondsLeft !== undefined) this.tavernArrivalSecondsLeft = parsed.tavernArrivalSecondsLeft as number;
         if (parsed.tavernRefreshCount !== undefined) this.tavernRefreshCount = parsed.tavernRefreshCount as number;
+        if (parsed.tavernCandidates && Array.isArray(parsed.tavernCandidates)) {
+          this.tavernCandidates = parsed.tavernCandidates as TavernCandidate[];
+        }
+        if (this.tavernCandidates.length === 0) {
+          this.refreshTavernPool();
+        }
         if (parsed.nemesisState) {
           this.nemesisState = { ...this.nemesisState, ...(parsed.nemesisState as Partial<NemesisState>) };
           if (this.nemesisState.dailyAttempts > 3) {
@@ -14089,7 +14482,14 @@ export class GameManager {
         }
         this.updatePeaceShieldTime();
         if (parsed.cemetery && Array.isArray(parsed.cemetery)) {
-          this.cemetery = (parsed.cemetery as FallenHero[]).slice(0, 5);
+          const incoming = parsed.cemetery as FallenHero[];
+          const map = new Map((this.cemetery || []).map(h => [h.id, h]));
+          incoming.forEach(h => {
+            if (h && h.id && !map.has(h.id)) {
+              map.set(h.id, h);
+            }
+          });
+          this.cemetery = Array.from(map.values()).slice(0, 10);
         }
         if (!this.cemetery || this.cemetery.length === 0) {
           this.cemetery = [this.getInitialFallenHero()];
@@ -14114,22 +14514,11 @@ export class GameManager {
         if (parsed.marketStock && typeof parsed.marketStock === 'object') {
           this.marketStock = parsed.marketStock as Record<string, { current: number; restockAt?: number }>;
         }
-        if (parsed.codexUnlockedItems) {
-          this.codexUnlockedItems = parsed.codexUnlockedItems as Record<string, boolean>;
-          for (let f = 1; f <= 10; f++) {
-            if (this.codexUnlockedItems[`codex_ooparts_${f}_1`] || this.codexUnlockedItems[`codex_ooparts_${f}_2`]) {
-              this.codexUnlockedItems[`codex_ooparts_floor_${f}`] = true;
-            }
-          }
-        }
-        if (Array.isArray(parsed.codexUnlockOrder)) {
-          this.codexUnlockOrder = parsed.codexUnlockOrder as string[];
-        } else if (this.codexUnlockedItems) {
-          this.codexUnlockOrder = Object.keys(this.codexUnlockedItems);
-        }
-        if (parsed.codexUnlockedTimestamps && typeof parsed.codexUnlockedTimestamps === 'object') {
-          this.codexUnlockedTimestamps = parsed.codexUnlockedTimestamps as Record<string, number>;
-        }
+        this.restoreAndMergeCodexSafeguard(
+          parsed.codexUnlockedItems as Record<string, boolean> | undefined,
+          parsed.codexUnlockOrder as string[] | undefined,
+          parsed.codexUnlockedTimestamps as Record<string, number> | undefined
+        );
         if (parsed.isMasterAccount !== undefined) {
           this.isMasterAccount = parsed.isMasterAccount as boolean;
         }
@@ -14143,8 +14532,8 @@ export class GameManager {
           this.cleanExpiredPurifiedItems();
         }
         if (parsed.offlineReport && typeof parsed.offlineReport === 'object') {
-          // 1시간(3,600초) 이상 정산 보고서만 로드, 1시간 미만 잔여 데이터는 자동 초기화
-          if ((parsed.offlineReport.elapsedSeconds || 0) >= 3600) {
+          // 최소 30분(1,800초) 이상 정산 보고서만 로드, 30분 미만 잔여 데이터는 자동 초기화
+          if ((parsed.offlineReport.elapsedSeconds || 0) >= 1800) {
             this.offlineReport = parsed.offlineReport as any;
             this.lastOfflineReport = parsed.offlineReport as any;
           } else {
@@ -14163,7 +14552,7 @@ export class GameManager {
             }
             return l;
           });
-          this.citadelLogs = this.logs.filter(l => (!l.category || l.category === 'citadel') && !GameManager.isAnchorGateLog(l.text));
+          this.citadelLogs = this.logs.filter(l => l.category === 'citadel' || (!l.category && !GameManager.isAnchorGateLog(l.text)));
           this.dungeonLogs = this.logs.filter(l => l.category === 'dungeon');
           this.battleLogs = this.logs.filter(l => l.category === 'battle');
           this.arenaLogs = this.logs.filter(l => l.category === 'arena' || GameManager.isAnchorGateLog(l.text));
@@ -14178,7 +14567,7 @@ export class GameManager {
             this.addLog('차가운 흑무가 방주 성채를 감싸고 있습니다.', 'normal', 'citadel');
             this.addLog(this.getCurrentPartyLogText(), 'story', 'citadel');
           } else {
-            this.citadelLogs = this.logs.filter(l => (!l.category || l.category === 'citadel') && !GameManager.isAnchorGateLog(l.text));
+            this.citadelLogs = this.logs.filter(l => l.category === 'citadel' || (!l.category && !GameManager.isAnchorGateLog(l.text)));
             this.arenaLogs = this.logs.filter(l => l.category === 'arena' || GameManager.isAnchorGateLog(l.text));
           }
         }

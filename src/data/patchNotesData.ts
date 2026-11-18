@@ -21,10 +21,75 @@ export interface PatchNoteRelease {
 export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = {
   ko: [
     {
+      version: 'v1.1.5',
+      title: 'V.1.1.5 정식 업데이트 패치노트',
+      badge: 'v1.1.5',
+      isLatest: true,
+      categories: [
+        {
+          icon: '🖥️',
+          title: '구글 플레이 on PC(Google on PC) 와이드 환경 최적화',
+          color: '#80deea',
+          bullets: [
+            {
+              title: 'PC 환경 감지 & 가로 모드 및 창 크기 자유 조절 지원',
+              desc: '구글 플레이 게임즈 on PC(HPE) 가상화 환경 및 대형 화면을 실시간 감지하여, 기존의 세로 고정 제약을 해제하고 가로 모드 및 자유로운 윈도우 창 크기 조절을 완벽 지원합니다.'
+            },
+            {
+              title: '1280px 표준 가로 폭 반응형 레이아웃 도입',
+              desc: 'PC 대형 모니터 및 윈도우 창에서 가로 1280px를 표준 레이아웃으로 적용하고, 해상도에 따라 1024px부터 1440px(QHD/4K)까지 지능적으로 적응하여 와이드 화면에서도 쾌적한 시야와 조작감을 제공합니다.'
+            },
+            {
+              title: '모바일 세로 풀스크린 무결성 보장',
+              desc: '일반 모바일 스마트폰에서는 기존과 동일하게 100% 꽉 찬 세로 화면으로 구동되어 플랫폼별 최적의 경험을 보장합니다.'
+            }
+          ]
+        },
+        {
+          icon: '⚔️',
+          title: '차원 영지 침공전 & 네메시스 레이드 전투 고도화',
+          color: '#ffd54f',
+          bullets: [
+            {
+              title: '영지 침공 상대 방어 부대 영웅 포트레이트 시각화',
+              desc: '영지 침공전의 상대 수비 부대 미리보기에서 마물 이모지 대신 영웅의 고유 일러스트 포트레이트가 표시되도록 시각 인터페이스를 개선했습니다.'
+            },
+            {
+              title: '성벽 배치 유닛 턴 수복 & 힐 피버 배지 획득',
+              desc: '성벽에 배치된 유닛이 자신의 턴에 공격력의 25%만큼 성벽 내구도를 수복하며, 해당 행위가 치유(Heal)로 판정되어 피버 배지를 획득하도록 프로세스를 강화했습니다.'
+            },
+            {
+              title: '네메시스 월드 보스 상태이상 저항력 & 피버 밸런스 조정',
+              desc: '네메시스 월드 보스의 상태이상 저항력을 90%로 고정하고 지속 피해(DoT) 틱을 10%로 제한하였으며, 피버 발동 시 오퍼레이터의 궁극기 효과가 온전히 적용되도록 전투 엔진을 최적화했습니다.'
+            }
+          ]
+        },
+        {
+          icon: '⚖️',
+          title: '영지 경제 확장 & 시스템 안정성 강화',
+          color: '#69f0ae',
+          bullets: [
+            {
+              title: '기본 골드 보유량 30만G 및 [상업 네트워크] 50만G 확장',
+              desc: '방주 기본 골드 최대 적재량을 300,000G로 상향하고, 황혼의 암시장 Lv.5 달성 시 상업 네트워크 인프라 시너지 효과를 통해 최대 500,000G까지 대폭 확장됩니다.'
+            },
+            {
+              title: '전리품 선별 모달 간소화 (정리 완료 통합)',
+              desc: '배낭 공간 확보 모달에서 기능이 중복되던 [남은 전리품 모두 포기] 버튼을 정리하고, [정리 완료] 버튼으로 일원화하여 조작 편의성을 높였습니다.'
+            },
+            {
+              title: '마도서 드랍 런타임 참조 오류 수정',
+              desc: '마물 토벌 보상 정산 시 대표 비기 마도서 아이템 생성 과정에서 발생하던 참조 오류(finalPower)를 수정하여 원정 안정성을 확보했습니다.'
+            }
+          ]
+        }
+      ]
+    },
+    {
       version: 'v1.1.4',
       title: 'V.1.1.4 정식 업데이트 패치노트',
       badge: 'v1.1.4',
-      isLatest: true,
+      isLatest: false,
       categories: [
         {
           icon: '🏰',
@@ -379,10 +444,75 @@ export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = 
   ],
   en: [
     {
+      version: 'v1.1.5',
+      title: 'V.1.1.5 Official Update Patch Notes',
+      badge: 'v1.1.5',
+      isLatest: true,
+      categories: [
+        {
+          icon: '🖥️',
+          title: 'Google Play on PC Widescreen & 1280px Responsive Layout',
+          color: '#80deea',
+          bullets: [
+            {
+              title: 'PC Environment Detection & Landscape Window Resizing',
+              desc: 'Added runtime detection for Google Play Games on PC (HPE), unlocking portrait-only restrictions and enabling landscape mode with full window resizing support.'
+            },
+            {
+              title: '1280px Standard Responsive Layout',
+              desc: 'Established a 1280px standard layout for PC windows and desktop monitors, intelligently scaling from 1024px to 1440px on QHD/4K displays for a premium widescreen experience.'
+            },
+            {
+              title: 'Mobile Portrait Integrity',
+              desc: 'Maintains the native 100% full-screen vertical layout on mobile devices without any compromises.'
+            }
+          ]
+        },
+        {
+          icon: '⚔️',
+          title: 'Dimensional Invasion & Nemesis Raid Enhancements',
+          color: '#ffd54f',
+          bullets: [
+            {
+              title: 'Invasion Defender Hero Portraits',
+              desc: 'Enhanced the invasion defense squad preview to display unique hero portraits instead of monster emojis.'
+            },
+            {
+              title: 'Rampart Unit Repair & Heal Fever Badge',
+              desc: 'Units stationed on the ramparts now repair the wall by 25% of their ATK on their turn, qualifying as a heal to generate Fever Badges.'
+            },
+            {
+              title: 'Nemesis Resistance & Fever Ultimate Tuning',
+              desc: 'Fixed Nemesis status resistance to 90%, capped dot tick damage to 10%, and tuned Fever ultimate mechanics to deliver full operator potency without unexpected extra scaling.'
+            }
+          ]
+        },
+        {
+          icon: '⚖️',
+          title: 'Territory Economy & Stability Improvements',
+          color: '#69f0ae',
+          bullets: [
+            {
+              title: 'Gold Capacity Expansion (300k Base / 500k Synergy)',
+              desc: 'Increased base gold capacity to 300,000G, expanding up to 500,000G with the Twilight Black Market Lv.5 Commercial Network synergy.'
+            },
+            {
+              title: 'Streamlined Loot Selection Modal',
+              desc: 'Consolidated redundant abandon actions into the complete button for cleaner and faster bag space clearing.'
+            },
+            {
+              title: 'Skill Book Drop Exception Fix',
+              desc: 'Fixed a runtime reference error (finalPower) during monster signature grimoire drops.'
+            }
+          ]
+        }
+      ]
+    },
+    {
       version: 'v1.1.4',
       title: 'V.1.1.4 Official Update Patch Notes',
       badge: 'v1.1.4',
-      isLatest: true,
+      isLatest: false,
       categories: [
         {
           icon: '🏰',
@@ -428,8 +558,8 @@ export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = 
               desc: 'Upgraded the Ark Citadel bonfire viewport to an awe-inspiring 10-second high-definition cinematic with an optimized 2.4-second dual-player crossfade crossover, delivering an uninterrupted dark fantasy ambiance.'
             },
             {
-              title: '1-Hour Minimum Offline Settlement Trigger',
-              desc: 'Optimized offline reward settlements to trigger only after at least 1 hour (60 minutes) of absence, eliminating popup fatigue upon frequent reconnections.'
+              title: '30-Minute Minimum Offline Settlement Trigger',
+              desc: 'Optimized offline reward settlements to trigger accurately after at least 30 minutes of absence, eliminating popup fatigue upon frequent reconnections while ensuring accurate time accounting.'
             }
           ]
         },
@@ -722,10 +852,75 @@ export const PATCH_NOTES_DATA: Record<'ko' | 'en' | 'ja', PatchNoteRelease[]> = 
   ],
   ja: [
     {
+      version: 'v1.1.5',
+      title: 'V.1.1.5 正式アップデート パッチノート',
+      badge: 'v1.1.5',
+      isLatest: true,
+      categories: [
+        {
+          icon: '🖥️',
+          title: 'Google Play on PC ワイド画面 & 1280px レスポンシブ最適化',
+          color: '#80deea',
+          bullets: [
+            {
+              title: 'PC環境検知 & 横画面・自由リサイズ対応',
+              desc: 'Google Play Games on PC (HPE) 環境を自動検知し、縦固定制限を解除して横画面モードおよび自由なウィンドウリサイズに完全対応しました。'
+            },
+            {
+              title: '1280px 基準レスポンシブレイアウト導入',
+              desc: 'PCの大画面向けに横幅1280pxを標準レイアウトとし、解像度に合わせて1024pxから1440px（QHD/4K）まで自然に適応するワイドインターフェースを導入しました。'
+            },
+            {
+              title: 'モバイル縦画面の完全性維持',
+              desc: 'スマートフォンのモバイル環境では従来通り100%全画面の縦レイアウトを維持します。'
+            }
+          ]
+        },
+        {
+          icon: '⚔️',
+          title: '次元領地侵攻戦 & ネメシスレイド戦闘高度化',
+          color: '#ffd54f',
+          bullets: [
+            {
+              title: '侵攻戦守備部隊の英雄ポートレート表示',
+              desc: '領地侵攻戦の相手防衛部隊プレビューにてモンスター絵文字の代わりに英雄ポートレートを表示するよう改善しました。'
+            },
+            {
+              title: '城壁配置ユニットのターン修復 & 回復フィーバーバッジ',
+              desc: '城壁に配置されたユニットがターン進行時に攻撃力の25%分城壁を修復し、回復アクションとしてフィーバーバッジを獲得するよう実装しました。'
+            },
+            {
+              title: 'ネメシスの状態異常耐性 & フィーバー究極技調整',
+              desc: 'ネメシスの状態異常耐性を90%固定、DoTダメージを10%制限とし、フィーバー発動時にオペレーターの究極技効果が十全に発揮されるよう最適化しました。'
+            }
+          ]
+        },
+        {
+          icon: '⚖️',
+          title: '領地経済拡張 & システム安定化',
+          color: '#69f0ae',
+          bullets: [
+            {
+              title: 'ゴールド保有上限拡張 (基本30万G / 商業ネットワーク50万G)',
+              desc: '基本ゴールド積載量を300,000Gに上方修正し、トワイライト・ブラックマーケットLv.5達成で最大500,000Gまで拡張可能になりました。'
+            },
+            {
+              title: '戦利品選別モーダルの簡素化 (整理完了に統合)',
+              desc: 'バッグ整理モーダルで重複していた「残りの戦利品をすべて破棄」ボタンを「整理完了」に一本化しました。'
+            },
+            {
+              title: '魔導書ドロップ時の参照エラー修正',
+              desc: '戦闘精算時の代表魔導書ドロップ処理における参照エラー(finalPower)を修正し、遠征の安定性を向上させました。'
+            }
+          ]
+        }
+      ]
+    },
+    {
       version: 'v1.1.4',
       title: 'V.1.1.4 正式アップデート パッチノート',
       badge: 'v1.1.4',
-      isLatest: true,
+      isLatest: false,
       categories: [
         {
           icon: '🏰',

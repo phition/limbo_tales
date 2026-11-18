@@ -54,7 +54,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
       subTitle: sceneLocales[0].subTitle,
       paragraphs: sceneLocales[0].paragraphs,
       mediaType: 'image',
-      mediaSrc: 'assets/monster_abyssal_harbinger.jpg',
+      mediaSrc: 'assets/monster_abyssal_harbinger.webp',
       ambientSound: 'dark_magic',
       bgmTrack: 'dungeon',
       accentColor: '#b388ff',
@@ -66,7 +66,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
       subTitle: sceneLocales[1].subTitle,
       paragraphs: sceneLocales[1].paragraphs,
       mediaType: 'image',
-      mediaSrc: 'assets/dungeon_1.jpg',
+      mediaSrc: 'assets/dungeon_1.webp',
       ambientSound: 'defeat',
       bgmTrack: 'dungeon',
       accentColor: '#ef5350',
@@ -79,7 +79,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
       paragraphs: sceneLocales[2].paragraphs,
       mediaType: 'video',
       mediaSrc: 'assets/citadel_bonfire.mp4',
-      mediaFallback: 'assets/citadel_bonfire.jpg',
+      mediaFallback: 'assets/citadel_bonfire.webp',
       ambientSound: 'camp_fire',
       bgmTrack: 'citadel',
       accentColor: '#ffd54f',
@@ -91,7 +91,7 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
       subTitle: sceneLocales[3].subTitle,
       paragraphs: sceneLocales[3].paragraphs,
       mediaType: 'image',
-      mediaSrc: 'assets/citadel_bonfire.jpg',
+      mediaSrc: 'assets/citadel_bonfire.webp',
       ambientSound: 'fever_burst',
       bgmTrack: 'citadel',
       accentColor: '#c8aa6e',
@@ -245,17 +245,17 @@ export const PrologueCinematicModal: React.FC<Props> = ({ open, onClose }) => {
             <div className="absolute inset-0 flex items-center justify-end pr-8 sm:pr-16 pointer-events-none opacity-40 mix-blend-screen transition-opacity duration-1000">
               <div className="flex -space-x-12 filter drop-shadow-[0_0_25px_rgba(200, 170, 110,0.4)]">
                 <img
-                  src="assets/portraits/portrait_rogue.png"
+                  src="assets/portraits/portrait_rogue.webp"
                   alt="Rogue"
                   className="w-40 sm:w-56 h-40 sm:h-56 object-contain transform -translate-y-4 filter contrast-125"
                 />
                 <img
-                  src="assets/portraits/portrait_paladin.png"
+                  src="assets/portraits/portrait_paladin.webp"
                   alt="Paladin"
                   className="w-48 sm:w-64 h-48 sm:h-64 object-contain z-10 filter contrast-125 brightness-110"
                 />
                 <img
-                  src="assets/portraits/portrait_mage.png"
+                  src="assets/portraits/portrait_mage.webp"
                   alt="Mage"
                   className="w-40 sm:w-56 h-40 sm:h-56 object-contain transform translate-y-4 filter contrast-125"
                 />

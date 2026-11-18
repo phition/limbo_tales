@@ -99,6 +99,41 @@ const evaluateSaveProgress = (data: Record<string, unknown> | null): number => {
   const ether = Number(resources.ether || 0);
   score += Math.min(gold / 10, 5000) + Math.min(ether, 5000);
 
+  // 5. 📜 심연의 백과(도감) 수집 완성도 (완성 컬렉션당 1,500점 가산 -> 도감 데이터 유실 방지)
+  const codexMap = (data.codexUnlockedItems as Record<string, boolean>) || {};
+  const completedCodexCount = Object.values(codexMap).filter(Boolean).length;
+  score += completedCodexCount * 1500;
+
+  // 6. ⚔️ 아비치 및 층 정화 진행도 (위상 높은 심연 정복 가치 반영)
+  const aviciTier = Number(data.unlockedAviciTier || 0);
+  score += aviciTier * 4000;
+  const purified = (data.purifiedFloors as number[]) || [];
+  score += purified.length * 2500;
+
+  // 7. 📜 완료 퀘스트 (퀘스트당 800점)
+  const quests = (data.quests as Array<{ status?: string }>) || [];
+  const completedQuests = quests.filter(q => q && q.status === 'completed').length;
+  score += completedQuests * 800;
+
+  // 8. 🛡️ 장비 인벤토리, 착용 장비 및 마도서 보유 가치 (개당 100점)
+  const equips = (data.equipmentInventory as unknown[]) || [];
+  const books = (data.skillBookInventory as unknown[]) || [];
+  let equippedCount = 0;
+  allHeroes.forEach(h => {
+    if (h && (h as any).equipment) {
+      Object.values((h as any).equipment).forEach(eq => {
+        if (eq) equippedCount++;
+      });
+    }
+  });
+  score += (equips.length + books.length + equippedCount) * 100;
+
+  // 9. 🏆 결투장 랭킹 평점 반영
+  const arenaRating = Number(data.currentArenaRating || 800);
+  if (arenaRating > 800) {
+    score += Math.min(5000, (arenaRating - 800) * 2);
+  }
+
   return score;
 };
 
@@ -314,22 +349,66 @@ export const App: React.FC = () => {
             }
           }
         } else if (cloudData && localData) {
-          // 양쪽 모두 데이터가 존재할 때: 진행도 가치 우선 비교
-          if (cloudScore > localScore + 5000) {
-            console.log('☁️ [세이브 동기화] 클라우드 진행도가 로컬보다 월등히 높으므로 클라우드 상태를 로컬에 복원합니다.');
+          // 양쪽 모두 데이터가 존재할 때: 진행도 가치(evaluateSaveProgress 점수) 우선 비교 -> 더 많이 진행된 쪽으로 웹/모바일 완전 통일
+          const mergeCloudNonDestructiveIntoLocal = () => {
+            gm.restoreAndMergeCodexSafeguard(
+              cloudData.codexUnlockedItems as any,
+              cloudData.codexUnlockOrder as any,
+              cloudData.codexUnlockedTimestamps as any
+            );
+            if (cloudData.bossClearTimes && typeof cloudData.bossClearTimes === 'object') {
+              const incomingTimes = cloudData.bossClearTimes as Record<number, number>;
+              const mergedTimes = { ...(gm.bossClearTimes || {}) };
+              Object.entries(incomingTimes).forEach(([floor, time]) => {
+                const f = Number(floor);
+                if (!mergedTimes[f] || (time > 0 && time < mergedTimes[f])) {
+                  mergedTimes[f] = time;
+                }
+              });
+              gm.bossClearTimes = mergedTimes;
+            }
+            if (cloudData.purifiedFloors && Array.isArray(cloudData.purifiedFloors)) {
+              gm.purifiedFloors = Array.from(new Set([...(gm.purifiedFloors || []), ...((cloudData.purifiedFloors as number[]) || []).map(Number)])).filter(n => !isNaN(n));
+            }
+            if (cloudData.unlockedDungeonFloor) {
+              gm.unlockedDungeonFloor = Math.max(gm.unlockedDungeonFloor || 1, Number(cloudData.unlockedDungeonFloor || 1));
+            }
+            if (cloudData.unlockedAviciTier !== undefined) {
+              gm.unlockedAviciTier = Math.max(gm.unlockedAviciTier || 0, Number(cloudData.unlockedAviciTier || 0));
+            }
+            if (cloudData.cemetery && Array.isArray(cloudData.cemetery)) {
+              const incoming = cloudData.cemetery as any[];
+              const map = new Map((gm.cemetery || []).map(h => [h.id, h]));
+              incoming.forEach(h => {
+                if (h && h.id && !map.has(h.id)) {
+                  map.set(h.id, h);
+                }
+              });
+              gm.cemetery = Array.from(map.values()).slice(0, 10);
+            }
+          };
+
+          if (cloudScore > localScore) {
+            console.log(`☁️ [세이브 동기화] 클라우드 진행도(${cloudScore}점)가 로컬(${localScore}점)보다 높으므로 더 많이 진행된 클라우드 데이터로 통합 적용합니다.`);
+            gm.loadGame();
             gm.applyCloudProgress(cloudData);
             gm.saveGame();
-          } else if (localScore > cloudScore + 5000) {
-            console.log('💾 [세이브 동기화] 로컬 진행도가 클라우드보다 월등히 높으므로 로컬 상태를 클라우드에 업로드합니다.');
+          } else if (localScore > cloudScore) {
+            console.log(`💾 [세이브 동기화] 로컬 진행도(${localScore}점)가 클라우드(${cloudScore}점)보다 높으므로 더 많이 진행된 로컬 데이터로 통합 적용 및 클라우드 업로드합니다.`);
             gm.loadGame();
+            mergeCloudNonDestructiveIntoLocal();
+            gm.saveGame();
             gm.saveToCloud();
           } else if (cloudTime >= localTime) {
-            console.log('☁️ [세이브 동기화] 진행도가 대등하여 최신 타임스탬프인 클라우드 데이터를 적용합니다.');
+            console.log(`☁️ [세이브 동기화] 진행도 가치가 ${localScore}점으로 대등하므로 최신 타임스탬프인 클라우드 데이터를 적용합니다.`);
+            gm.loadGame();
             gm.applyCloudProgress(cloudData);
             gm.saveGame();
           } else {
-            console.log('💾 [세이브 동기화] 진행도가 대등하여 최신 타임스탬프인 로컬 데이터를 적용합니다.');
+            console.log(`💾 [세이브 동기화] 진행도 가치가 ${localScore}점으로 대등하므로 최신 타임스탬프인 로컬 데이터를 적용하고 클라우드에 동기화합니다.`);
             gm.loadGame();
+            mergeCloudNonDestructiveIntoLocal();
+            gm.saveGame();
             gm.saveToCloud();
           }
         } else if (cloudData) {
@@ -571,6 +650,52 @@ export const App: React.FC = () => {
     };
   }, [gm]);
 
+  // 📢 전 차원 시스템 공지/메시지 토스트 알림 상태
+  const [systemAnnouncement, setSystemAnnouncement] = useState<{ id: string; text: string } | null>(null);
+  const seenSystemMsgIdsRef = useRef<Set<string>>(new Set());
+  const initialMountTimeRef = useRef<number>(Date.now());
+
+  useEffect(() => {
+    // 1. 로컬 GameManager의 systemBroadcast 이벤트 수신 (내가 각성에 성공했을 때 즉시 연출)
+    const handleLocalBroadcast = (text: string) => {
+      const msgId = `local_${Date.now()}_${Math.random()}`;
+      seenSystemMsgIdsRef.current.add(msgId);
+      setSystemAnnouncement({ id: msgId, text });
+    };
+    gm.on('systemBroadcast', handleLocalBroadcast);
+
+    // 2. Firebase RTDB를 통한 실시간 전 차원 시스템 메세지 감지 (타 지휘관 또는 서버 방송)
+    const fb = FirebaseService.getInstance();
+    const unsubscribeFb = fb.listenGuestbookMessages((messages) => {
+      if (!messages || messages.length === 0) return;
+      const now = Date.now();
+      const newSysMsg = messages.find(m => 
+        m.authorName === '시스템' &&
+        !seenSystemMsgIdsRef.current.has(m.id) &&
+        m.createdAt >= Math.max(initialMountTimeRef.current - 5000, now - 15000)
+      );
+
+      if (newSysMsg) {
+        seenSystemMsgIdsRef.current.add(newSysMsg.id);
+        setSystemAnnouncement({ id: newSysMsg.id, text: newSysMsg.content });
+      }
+    });
+
+    return () => {
+      gm.off('systemBroadcast', handleLocalBroadcast);
+      unsubscribeFb();
+    };
+  }, [gm]);
+
+  // 시스템 공지 6초 후 자동 소멸
+  useEffect(() => {
+    if (!systemAnnouncement) return;
+    const timer = setTimeout(() => {
+      setSystemAnnouncement(null);
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, [systemAnnouncement]);
+
   // 🌟 1. 잔여 세션이 존재하여 '지휘관 확인 중....' 오버레이 연출 중인 경우
   if (isVerifyingCommander) {
     return (
@@ -634,7 +759,7 @@ export const App: React.FC = () => {
           zIndex: 10,
           display: 'flex',
           alignItems: 'stretch',
-          justifyContent: 'stretch',
+          justifyContent: 'center',
           paddingTop: 'env(safe-area-inset-top, 0px)',
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
           paddingLeft: 'env(safe-area-inset-left, 0px)',
@@ -685,6 +810,31 @@ export const App: React.FC = () => {
           <div className="px-4 py-2 rounded-full bg-[#0d0f14ee] border border-[#c8aa6e88] text-white text-xs font-bold shadow-[0_4px_25px_rgba(200, 170, 110,0.4)] backdrop-blur-md flex items-center gap-2 tracking-wide">
             <span className="text-sm">{fullscreenToast.icon}</span>
             <span className="text-[#e2e8f0]">{fullscreenToast.text}</span>
+          </div>
+        </div>
+      )}
+
+      {/* 📢 전 차원 시스템 메세지 실시간 플로팅 배너 */}
+      {systemAnnouncement && (
+        <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[99999] max-w-[95vw] w-auto pointer-events-auto animate-slide-down transition-all">
+          <div className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#1c1228]/95 via-[#1a1c29]/95 to-[#1c1228]/95 border-2 border-[#ffd54f88] shadow-[0_8px_32px_rgba(0,0,0,0.85),0_0_20px_rgba(255,213,79,0.35)] backdrop-blur-md flex items-center gap-2.5 text-white">
+            <span className="text-xl animate-bounce shrink-0">📢</span>
+            <div className="flex flex-col min-w-0">
+              <div className="text-[10px] font-bold text-[#ffd54f] tracking-wider uppercase flex items-center gap-1 font-mono">
+                <span>🌌 전 차원 시스템 공지</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ffd54f22] text-[#ffe082] border border-[#ffd54f44]">SYSTEM MESSAGE</span>
+              </div>
+              <div className="text-xs sm:text-sm font-extrabold text-[#f3e5c8] drop-shadow-md truncate">
+                {systemAnnouncement.text}
+              </div>
+            </div>
+            <button
+              onClick={() => setSystemAnnouncement(null)}
+              className="text-[#8b9bb4] hover:text-white text-xs ml-2 cursor-pointer p-1"
+              aria-label="닫기"
+            >
+              ✕
+            </button>
           </div>
         </div>
       )}

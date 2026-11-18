@@ -64,8 +64,8 @@
       "wood": 80
     }
   },
-  "version": 60,
-  "updatedAt": 1793104398899,
+  "version": 61,
+  "updatedAt": 1794754964692,
   "classSkills": {
     "acolyte_heal": {
       "manaCost": 20
@@ -77,7 +77,7 @@
       "manaCost": 15
     },
     "apprentice_flame": {
-      "manaCost": 56
+      "manaCost": 42
     },
     "apprentice_mana_burst": {
       "power": 1.2
@@ -2351,7 +2351,12 @@
           "amount": 24,
           "secondaryAmount": 0
         },
-        "cost": {},
+        "cost": {
+          "ether": 1793,
+          "gold": 52846,
+          "iron": 2346,
+          "stone": 5283
+        },
         "production": {}
       },
       "8": {
@@ -2359,7 +2364,13 @@
           "amount": 28,
           "secondaryAmount": 0
         },
-        "cost": {},
+        "cost": {
+          "ether": 2570,
+          "gold": 84556,
+          "iron": 4714,
+          "leather": 42,
+          "stone": 8454
+        },
         "production": {}
       },
       "9": {
@@ -2367,7 +2378,13 @@
           "amount": 32,
           "secondaryAmount": 0
         },
-        "cost": {},
+        "cost": {
+          "ether": 4592,
+          "gold": 135290,
+          "iron": 2700,
+          "leather": 67,
+          "stone": 13528
+        },
         "production": {}
       },
       "10": {
@@ -2375,7 +2392,14 @@
           "amount": 36,
           "secondaryAmount": 0
         },
-        "cost": {},
+        "cost": {
+          "ether": 7350,
+          "gold": 166465,
+          "iron": 3450,
+          "leather": 107,
+          "stone": 19500,
+          "void_shard": 10
+        },
         "production": {}
       }
     },
@@ -2689,7 +2713,14 @@
           "primaryAmount": 20,
           "secondaryAmount": 0
         },
-        "cost": {},
+        "cost": {
+          "ether": 78,
+          "gold": 124110,
+          "iron": 308,
+          "leather": 63,
+          "stone": 8876,
+          "wood": 6039
+        },
         "upkeep": {}
       },
       "9": {
@@ -2697,7 +2728,14 @@
           "primaryAmount": 24,
           "secondaryAmount": 0
         },
-        "cost": {},
+        "cost": {
+          "ether": 126,
+          "gold": 140576,
+          "iron": 494,
+          "leather": 101,
+          "stone": 14204,
+          "wood": 9663
+        },
         "upkeep": {}
       },
       "10": {
@@ -2705,7 +2743,15 @@
           "primaryAmount": 28,
           "secondaryAmount": 0
         },
-        "cost": {},
+        "cost": {
+          "ether": 204,
+          "gold": 182928,
+          "iron": 791,
+          "leather": 161,
+          "stone": 19725,
+          "void_shard": 15,
+          "wood": 15461
+        },
         "upkeep": {}
       }
     },
@@ -3071,11 +3117,11 @@
     }
   },
   "arenaEdict": {
-    "edictName": "자유 결투의 칙령",
-    "bannedBadge": "none",
+    "edictName": "치명 금지의 칙령",
+    "bannedBadge": "crit",
     "jokerRule": "블러핑 앤 쇼다운 (2 공개 + 1 히든 실루엣)",
-    "description": "모든 피버 뱃지 획득이 자유롭게 허용되는 전술 칙령입니다. (🚫 금지 배지 없음)",
-    "updatedAt": 1793101529548,
+    "description": "차원 결투장 전역에 치명타 불가 결계가 가동됩니다. (💥 CRIT 뱃지 획득 불가)",
+    "updatedAt": 1794754964682,
     "updatedBy": "bumpcat@bumpcat.net"
   }
 }

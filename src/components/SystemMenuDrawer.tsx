@@ -3,10 +3,12 @@ import { Capacitor } from '@capacitor/core';
 import { useGameManager } from '../hooks/useGameManager';
 import { Modal } from './Modal';
 import { ActionButton } from './ActionButton';
-import { FirebaseService } from '../services/FirebaseService';
+import { FirebaseService, UserProfile } from '../services/FirebaseService';
+import type { User } from 'firebase/auth';
 import { PlayGamesService, PlayGamesPlayer } from '../services/PlayGamesService';
 import { SoundManager } from '../managers/SoundManager';
 import { GameDataService } from '../services/GameDataService';
+import { isHapticsEnabled, setHapticsEnabled, triggerHaptic } from '../utils/haptics';
 const CustomAssetStudioModal = React.lazy(() =>
   import('./CustomAssetStudioModal').then(m => ({ default: m.CustomAssetStudioModal }))
 );
@@ -18,6 +20,9 @@ const I18nStudioModal = React.lazy(() =>
 );
 const VideoWatermarkStudioModal = React.lazy(() =>
   import('./VideoWatermarkStudioModal').then(m => ({ default: m.VideoWatermarkStudioModal }))
+);
+const MasterStatsStudioModal = React.lazy(() =>
+  import('./MasterStatsStudioModal').then(m => ({ default: m.MasterStatsStudioModal }))
 );
 import { CallsignChangeModal } from './CallsignChangeModal';
 import { useI18n } from '../hooks/useI18n';
@@ -33,6 +38,8 @@ interface Props {
 
 export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, onOpenGuestbook }) => {
   const isMobilePlatform = Capacitor.isNativePlatform();
+  const isMobile = isMobilePlatform || (typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
+  const [hapticsOn, setHapticsOn] = useState(() => isHapticsEnabled());
   const { gm } = useGameManager();
   const { lang, setLanguage, dict, tr } = useI18n();
   const [resetModal, setResetModal] = useState(false);
@@ -42,6 +49,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
   const [dataStudioModal, setDataStudioModal] = useState(false);
   const [i18nStudioModal, setI18nStudioModal] = useState(false);
   const [watermarkStudioModal, setWatermarkStudioModal] = useState(false);
+  const [statsStudioModal, setStatsStudioModal] = useState(false);
   const [callsignModal, setCallsignModal] = useState(false);
   const [cloudStatus, setCloudStatus] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -114,6 +122,21 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
       // 1. 대기 중인 디바운스 클라우드 저장 취소 후 즉시 최종 안전 동기화
       gm.cancelPendingCloudSave();
       await gm.saveToCloud().catch(() => {});
+
+      // 🛡️ 익명(게스트) 유저의 로그아웃인 경우, 신규 계정 생성 시 플레이 기록 연결(이어받기)을 위해 로컬 세이브 보존
+      const isAnon = fb.isAnonymousUser() || fb.getCachedProfile()?.isAnonymous;
+      const currentUid = fb.getCurrentUser()?.uid || gm.getCurrentUserId();
+      const saveKey = gm.getSaveKey();
+      const rawSave = localStorage.getItem(saveKey) || localStorage.getItem(gm.getSaveKeyForUid(currentUid));
+      if (isAnon && rawSave) {
+        try {
+          localStorage.setItem('limbo_pending_guest_save', rawSave);
+          if (currentUid) {
+            localStorage.setItem('limbo_pending_guest_uid', currentUid);
+          }
+        } catch (_) {}
+      }
+
       // 2. Firebase 로그아웃 수행 (로컬 세이브는 사용자 고유 UID 키로 보존)
       await fb.logout();
     } finally {
@@ -348,6 +371,33 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             </span>
           </div>
 
+          {/* 📳 모바일 환경 진동 (햅틱) 온/오프 스위치 */}
+          {isMobile && (
+            <div className="flex items-center justify-between pt-2 border-t border-[#1f2738]/60 mt-0.5">
+              <span className="text-[10.5px] font-bold text-[#e0e6ed] flex items-center gap-1.5">
+                <span>📳</span>
+                <span>진동 피드백 (햅틱)</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !hapticsOn;
+                  setHapticsEnabled(next);
+                  setHapticsOn(next);
+                  if (next) triggerHaptic('click');
+                }}
+                className={`text-[10px] px-2.5 py-1 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                  hapticsOn
+                    ? 'bg-[#38ef7d22] text-[#38ef7d] border-[#38ef7d55] shadow-xs'
+                    : 'bg-[#ef535022] text-[#ef5350] border-[#ef535055]'
+                }`}
+              >
+                <span className={`inline-block w-2 h-2 rounded-full ${hapticsOn ? 'bg-[#38ef7d] animate-pulse' : 'bg-[#ef5350]'}`} />
+                <span>{hapticsOn ? '진동 켜짐 (ON)' : '진동 꺼짐 (OFF)'}</span>
+              </button>
+            </div>
+          )}
+
           {/* 🌐 다국어 언어 설정 (i18n 엔진: 한국어 / English / 日本語 - 전체 계정 이용 가능) */}
           <div className="pt-2 border-t border-[#1f2738]/60 flex flex-col gap-2">
             <div className="flex items-center justify-between">
@@ -444,33 +494,6 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
             <span className="text-xs text-[#c8aa6e] shrink-0 ml-1.5">▶</span>
           </button>
 
-          {/* 📜 방주 프롤로그 서사 다시 보기 */}
-          <button
-            className="w-full p-2.5 rounded-xl bg-[#14161c] border border-[#23324d] hover:border-[#ffd54f] text-left flex items-center justify-between transition-all group cursor-pointer"
-            onClick={() => {
-              onClose();
-              if (gm.currentScreen !== 'citadel') {
-                gm.navigateTo('citadel');
-                setTimeout(() => {
-                  gm.emit('openIntroStory');
-                }, 200);
-              } else {
-                gm.emit('openIntroStory');
-              }
-            }}
-          >
-            <div className="flex items-center gap-2.5 min-w-0 flex-1">
-              <span className="text-xl p-1 rounded-lg bg-[#ffd54f22] text-[#ffd54f] shrink-0">🎬</span>
-              <div className="min-w-0 flex-1">
-                <div className="font-bold text-xs text-white group-hover:text-[#ffd54f] transition-colors break-words">
-                  방주 프롤로그 시네마틱 영상 다시 보기
-                </div>
-                <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">4막 구성의 세계관 시네마틱 컷씬 감상</div>
-              </div>
-            </div>
-            <span className="text-xs text-[#ffd54f] shrink-0 ml-1.5">▶</span>
-          </button>
-
           {/* 4. 🎨 커스텀 에셋 & 미디어 스튜디오 (마스터 계정 전용, 모바일 빌드 제외) */}
           {!isMobilePlatform && fb.isMasterUser() && (
             <button
@@ -548,6 +571,26 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
                 </div>
               </div>
               <span className="text-xs text-[#00d2ff] shrink-0 ml-1.5">▶</span>
+            </button>
+          )}
+
+          {/* 4-5. 📊 마스터 사용자 통계 스튜디오 (마스터 계정 전용, 모바일 빌드 제외) */}
+          {!isMobilePlatform && fb.isMasterUser() && (
+            <button
+              className="w-full p-2.5 rounded-xl bg-[#141d24] border border-[#38ef7d44] hover:border-[#38ef7d] text-left flex items-center justify-between transition-all group cursor-pointer shadow-sm"
+              onClick={() => setStatsStudioModal(true)}
+            >
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-xl p-1 rounded-lg bg-[#38ef7d22] text-[#38ef7d] shrink-0">📊</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-white group-hover:text-[#38ef7d] transition-colors flex items-center gap-1.5 flex-wrap">
+                    <span className="break-words">마스터 통계 스튜디오</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] font-bold shrink-0">MASTER</span>
+                  </div>
+                  <div className="text-[10px] text-[#8b9bb4] line-clamp-2 break-words">전체 사용자 수, 최근 접속 TOP 10, 3일 접속/미접속, 10층 돌파율, 아레나 등급별 라이브 대시보드</div>
+                </div>
+              </div>
+              <span className="text-xs text-[#38ef7d] shrink-0 ml-1.5">▶</span>
             </button>
           )}
 
@@ -687,7 +730,7 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
         <div className="p-3 bg-[#08090d] border-t border-[#1f293d] text-center text-[10px] text-[#607d8b] flex flex-col items-center gap-0.5">
           <div className="font-medium text-[#8b9bb4]">Limbo: Ark of the Abyss</div>
           <div className="text-[10px] text-[#8b9bb4]">published by BumPCaT.net</div>
-          <div className="font-mono text-[11px] text-[#c8aa6e] font-bold">V.1.1.2</div>
+          <div className="font-mono text-[11px] text-[#c8aa6e] font-bold">V.1.1.5</div>
           <div className="text-[9px] text-[#4a5568]">Firebase Connected</div>
         </div>
       </div>
@@ -874,6 +917,16 @@ export const SystemMenuDrawer: React.FC<Props> = ({ open, onClose, onOpenGuide, 
           <VideoWatermarkStudioModal
             open={watermarkStudioModal}
             onClose={() => setWatermarkStudioModal(false)}
+          />
+        </React.Suspense>
+      )}
+
+      {/* 📊 마스터 사용자 통계 스튜디오 모달 (마스터 계정 전용, 모바일 빌드 제외) */}
+      {!isMobilePlatform && fb.isMasterUser() && statsStudioModal && (
+        <React.Suspense fallback={null}>
+          <MasterStatsStudioModal
+            open={statsStudioModal}
+            onClose={() => setStatsStudioModal(false)}
           />
         </React.Suspense>
       )}

@@ -24,11 +24,11 @@ interface AttackerVisualBoxProps {
 
 // 기본 정적 에셋 매핑
 const DEFAULT_CLASS_IMAGES: Record<string, string> = {
-  aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.png',
-  paladin: 'assets/portraits/portrait_paladin_female.png',
-  high_saintess: 'assets/portraits/portrait_t2_high_saintess.png',
-  valhalla_blade: 'assets/portraits/portrait_t2_valhalla_blade.png',
-  tactical_tower: 'assets/citadel_bonfire.jpg',
+  aegis_valkyrie: 'assets/portraits/portrait_t2_valkyrie.webp',
+  paladin: 'assets/portraits/portrait_paladin_female.webp',
+  high_saintess: 'assets/portraits/portrait_t2_high_saintess.webp',
+  valhalla_blade: 'assets/portraits/portrait_t2_valhalla_blade.webp',
+  tactical_tower: 'assets/citadel_bonfire.webp',
 };
 
 export const AttackerVisualBox: React.FC<AttackerVisualBoxProps> = ({
@@ -63,11 +63,12 @@ export const AttackerVisualBox: React.FC<AttackerVisualBoxProps> = ({
     );
   }
 
-  // 1. 이미지 찾기 (커스텀 오버라이드 -> 기본 정적 에셋)
+  // 1. 이미지 찾기 (전달된 포트레이트 -> 커스텀 오버라이드 -> 영웅 초상화 -> 기본 정적 에셋)
   const classId = attacker.classId || '';
   const customImg = customAssetService.getMercenaryOverride(classId);
+  const heroPortrait = CustomAssetService.getHeroPortrait(attacker as any);
   const staticImg = DEFAULT_CLASS_IMAGES[classId];
-  const imageUrl = customImg || staticImg;
+  const imageUrl = (attacker as any).portraitUrl || (attacker as any).customPortraitUrl || customImg || heroPortrait || staticImg;
 
   // 2. 클래스 정보 및 프롬프트 데이터 찾기
   const clsInfo = CHARACTER_CLASSES[classId];
@@ -122,6 +123,7 @@ export const AttackerVisualBox: React.FC<AttackerVisualBoxProps> = ({
             <img
               src={imageUrl}
               alt={attacker.name}
+              decoding="async"
               className="w-full h-full object-cover object-center"
               onError={(e) => {
                 // 이미지 로드 실패 시 숨김 처리하여 프롬프트 모드로 폴백

@@ -250,6 +250,18 @@ export const RESOURCE_NAMES: Record<string, Record<SupportedLanguage, string>> =
   memoir_note_9: { ko: '9층 회고록 쪽지', en: '9F Memoir Note', ja: '9層の回顧録メモ' },
   memoir_note_10: { ko: '10층 회고록 쪽지', en: '10F Memoir Note', ja: '10層の回顧録メモ' },
 
+  // 📜 1F~10F 서사 회고록 아이템
+  memoir_1: { ko: '낡은 척후병의 군번줄', en: 'Old Scout Dog Tag', ja: '古びた斥候の認識票' },
+  memoir_2: { ko: '망령의 부서진 로자리오', en: 'Phantom Broken Rosary', ja: '亡霊の壊れたロザリオ' },
+  memoir_3: { ko: '광부의 채굴 일지', en: 'Miner Mining Journal', ja: '鉱夫の採掘日誌' },
+  memoir_4: { ko: '심연 관측 보고서', en: 'Abyss Observation Report', ja: '深淵観測報告書' },
+  memoir_5: { ko: '원초의 제사 수기', en: 'Primordial Ritual Manuscript', ja: '原初の祭祀手記' },
+  memoir_6: { ko: '피 묻은 귀족 일기장', en: 'Bloodied Noble Diary', ja: '血塗られた貴族の日記' },
+  memoir_7: { ko: '이름 없는 자의 묘비명', en: 'Nameless Epitaph', ja: '名もなき者の墓碑銘' },
+  memoir_8: { ko: '기사단장의 비밀 서신', en: 'Grand Commander Secret Letter', ja: '騎士団長の秘密書簡' },
+  memoir_9: { ko: '미궁 탐사 기록서', en: 'Labyrinth Exploration Record', ja: '迷宮探査記録書' },
+  memoir_10: { ko: '최초 지휘관의 유서', en: 'First Commander Testament', ja: '初代指揮官の遺書' },
+
   // 🏛️ 1F~10F 고대 오파츠 (구세계 유물)
   ooparts_1_1: { ko: '금이 간 스마트폰 액정', en: 'Cracked Smartphone Screen', ja: 'ヒビ入りのスマホ画面' },
   ooparts_1_2: { ko: '녹슨 스테인리스 텀블러', en: 'Rusted Stainless Tumbler', ja: '錆びたステンレスタンブラー' },

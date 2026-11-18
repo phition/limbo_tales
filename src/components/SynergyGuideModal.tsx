@@ -260,7 +260,7 @@ export const SynergyGuideModal: React.FC<Props> = ({ open, onClose, party }) => 
         {/* 푸터 */}
         <div className="p-3 border-t border-[#1f2738] bg-[#080b11] flex items-center justify-between shrink-0">
           <span className="text-[11px] text-[#8b9bb4]">
-            💡 직업군 및 진형 시너지는 중첩 적용되며, 전직/숙련도 시너지는 가장 상위 1개만 적용됩니다.
+            💡 직업군(최대 2개), 진형(최대 1개), 전직/숙련도(최대 1개) 시너지가 조합되어 최대 4개까지 동시 발동합니다.
           </span>
           <button className="btn btn-primary text-xs px-4 py-1.5 font-bold" onClick={onClose}>
             확인

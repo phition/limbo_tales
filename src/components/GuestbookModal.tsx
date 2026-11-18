@@ -96,10 +96,26 @@ export const GuestbookModal: React.FC<Props> = ({
 }) => {
   const { gm } = useGameManager();
   const [messages, setMessages] = useState<GuestbookMessage[]>(() => FirebaseService.getInstance().getCachedGuestbookMessages());
+  const [activeTab, setActiveTab] = useState<'all' | 'faction'>('all');
   const [inputContent, setInputContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const fb = FirebaseService.getInstance();
+  const [profile, setProfile] = useState<UserProfile | null>(() => {
+    return currentUserProfile || fb.getCachedProfile() || fb.loadLocalCachedProfile();
+  });
+
+  useEffect(() => {
+    if (currentUserProfile) {
+      setProfile(currentUserProfile);
+    }
+    const unsub = fb.onAuthChange((_, p) => {
+      setProfile(p || fb.loadLocalCachedProfile());
+    });
+    return () => unsub();
+  }, [currentUserProfile, fb]);
 
   // 🌐 번역 상태 관리
   const [translatedMap, setTranslatedMap] = useState<Record<string, string>>({});
@@ -124,13 +140,41 @@ export const GuestbookModal: React.FC<Props> = ({
 
   if (!open) return null;
 
-  const fb = FirebaseService.getInstance();
-  const isAnonymous = currentUserProfile?.isAnonymous ?? fb.isAnonymousUser();
-  const currentNick = currentUserProfile?.nickname || '지휘관';
-  const totalPages = Math.max(1, Math.ceil(messages.length / PAGE_SIZE));
+  const isAnonymous = profile?.isAnonymous ?? currentUserProfile?.isAnonymous ?? fb.isAnonymousUser();
+  const currentNick = (profile?.nickname && profile.nickname !== '지휘관' && profile.nickname !== '방주 지휘관' ? profile.nickname : '')
+    || (currentUserProfile?.nickname && currentUserProfile.nickname !== '지휘관' && currentUserProfile.nickname !== '방주 지휘관' ? currentUserProfile.nickname : '')
+    || fb.getCommanderCallsign();
+
+  // 🌌 차원 성좌 전쟁 팩션 소속 확인 (로컬 스토리지 기반)
+  let playerFaction: string | null = null;
+  try {
+    const raw = localStorage.getItem('limbo_faction_war_state_v1');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed?.playerFaction) playerFaction = parsed.playerFaction;
+    }
+  } catch {}
+
+  const factionMeta = playerFaction === 'dawn'
+    ? { name: '창백한 여명회', icon: '☀️', color: '#ffd54f' }
+    : playerFaction === 'arcana'
+    ? { name: '심연 마도 학회', icon: '🔮', color: '#e040fb' }
+    : playerFaction === 'iron'
+    ? { name: '강철 방주 연맹', icon: '⚙️', color: '#00e5ff' }
+    : null;
+
+  // 팩션 탭 선택 시 해당 팩션 관련 글 필터링
+  const filteredMessages = messages.filter((m) => {
+    if (activeTab === 'faction' && playerFaction) {
+      return m.content.includes(`[${factionMeta?.name}]`) || m.authorName.includes(factionMeta?.name || '');
+    }
+    return true;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredMessages.length / PAGE_SIZE));
   const safePage = Math.min(currentPage, totalPages);
   const startIndex = (safePage - 1) * PAGE_SIZE;
-  const pageMessages = messages.slice(startIndex, startIndex + PAGE_SIZE);
+  const pageMessages = filteredMessages.slice(startIndex, startIndex + PAGE_SIZE);
 
   // 🌐 현재 언어 및 타겟 언어 라벨
   const currentLang = I18nService.getInstance().getCurrentLanguage();
@@ -226,7 +270,7 @@ export const GuestbookModal: React.FC<Props> = ({
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
-      const res = await fb.addGuestbookMessage(clean);
+      const res = await fb.addGuestbookMessage(clean, currentNick);
       if (res.success) {
         setInputContent('');
         setCurrentPage(1); // 새 글이 최상단에 있으므로 1페이지로 이동
@@ -246,6 +290,41 @@ export const GuestbookModal: React.FC<Props> = ({
 
   const bodyContent = (
     <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-hidden">
+      {/* 🌌 팩션 가입 시 팩션 전용 탭 필터 바 */}
+      {factionMeta && (
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#0b0e17] border border-[#23304a] shrink-0">
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTab('all');
+              setCurrentPage(1);
+            }}
+            className={`flex-1 py-1 px-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              activeTab === 'all'
+                ? 'bg-[#1b253b] text-white border border-[#486596]'
+                : 'text-[#8b9bb4] hover:text-white'
+            }`}
+          >
+            🌐 {tr('전체 메세지')}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTab('faction');
+              setCurrentPage(1);
+            }}
+            className={`flex-1 py-1 px-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
+              activeTab === 'faction'
+                ? 'bg-[#1f1930] text-[#ffd54f] border border-[#ffd54f66] shadow-sm'
+                : 'text-[#8b9bb4] hover:text-white'
+            }`}
+          >
+            <span>{factionMeta.icon}</span>
+            <span>[{factionMeta.name}] {tr('전용 채널')}</span>
+          </button>
+        </div>
+      )}
+
       {/* ⚠️ 번역 오류 발생 시 상단 알림 배너 */}
       {translationError && (
         <div className="p-2.5 rounded-xl bg-[#261618] border border-[#c5606055] text-xs text-[#ef9a9a] flex items-center justify-between gap-2 shrink-0 animate-fade-in">
@@ -272,28 +351,41 @@ export const GuestbookModal: React.FC<Props> = ({
             <div className="text-[11px]">{tr('첫 번째 차원 메세지를 남겨보세요!')}</div>
           </div>
         ) : (
-          pageMessages.map((msg) => {
-            const isTranslated = !!translatedMap[msg.id];
-            const isTranslating = translatingIds.has(msg.id);
-            const textToShow = isTranslated ? translatedMap[msg.id] : msg.content;
+          (() => {
+            const myUid = fb.getCurrentUser()?.uid || profile?.uid;
+            return pageMessages.map((msg) => {
+              const isTranslated = !!translatedMap[msg.id];
+              const isTranslating = translatingIds.has(msg.id);
+              const textToShow = isTranslated ? translatedMap[msg.id] : msg.content;
+              const isSystem = msg.authorName === '시스템';
+              const isMyMessage = Boolean(msg.uid && myUid && msg.uid === myUid);
+              const displayAuthorName = isSystem
+                ? '시스템'
+                : (isMyMessage && (!msg.authorName || msg.authorName === '지휘관' || msg.authorName === '방주 지휘관'))
+                ? currentNick
+                : (msg.authorName || '방주 지휘관');
 
-            return (
-              <div
-                key={msg.id}
-                className="p-3 rounded-xl bg-[#0c121e] border border-[#1b2537] hover:border-[#c8aa6e55] flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3.5 transition-all shadow-xs"
-              >
-                <div className="flex items-center gap-2 flex-1 min-w-0">
-                  {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) - 낮은 채도의 금색 */}
-                  <div className="flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px] notranslate" translate="no" data-no-translate="true">
-                    <span className="text-xs">🎖️</span>
-                    <AutoFitAuthorName name={msg.authorName} />
-                  </div>
+              return (
+                <div
+                  key={msg.id}
+                  className={`p-3 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3.5 transition-all shadow-[0_2px_12px_rgba(0,0,0,0.5)] backdrop-blur-xs [text-shadow:_0_1px_2px_rgba(0,0,0,0.95)] ${
+                    isSystem
+                      ? 'bg-[#2a131e]/40 hover:bg-[#2a131e]/60 border border-[#ff5252]/40 hover:border-[#ff5252]/80 shadow-[0_0_15px_rgba(255,82,82,0.15)]'
+                      : 'bg-[#0c121e]/20 hover:bg-[#0c121e]/40 border border-[#c8aa6e]/25 hover:border-[#c8aa6e]/60'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    {/* 1. 가장 왼쪽: 지휘관 아이디(콜사인) - 낮은 채도의 금색 혹은 시스템 붉은색 */}
+                    <div className={`flex items-center gap-1 shrink-0 w-[92px] sm:w-[130px] md:w-[150px] notranslate ${isSystem ? 'text-[#ff5252] font-black' : ''}`} translate="no" data-no-translate="true">
+                      <span className="text-xs">{isSystem ? '📢' : '🎖️'}</span>
+                      <AutoFitAuthorName name={displayAuthorName} />
+                    </div>
 
                   {/* 2. 중앙: 본문 내용 (최대 100자) 및 번역 태그 */}
-                  <div className="flex-1 min-w-0 text-xs sm:text-[13px] text-[#cfd8dc] break-words whitespace-pre-wrap leading-relaxed">
+                  <div className={`flex-1 min-w-0 text-xs sm:text-[13px] break-words whitespace-pre-wrap leading-relaxed ${isSystem ? 'text-[#ffd54f] font-bold' : 'text-[#cfd8dc]'}`}>
                     <span>{textToShow}</span>
                     {isTranslated && (
-                      <span className="inline-block ml-1.5 text-[9.5px] px-1.5 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e33] font-mono font-bold align-middle">
+                      <span className="inline-block ml-1.5 text-[9.5px] px-1.5 py-0.2 rounded bg-[#c8aa6e25] text-[#ffd54f] border border-[#c8aa6e44] font-mono font-bold align-middle">
                         🌐 {targetLangLabel}
                       </span>
                     )}
@@ -308,8 +400,8 @@ export const GuestbookModal: React.FC<Props> = ({
                     disabled={isTranslating}
                     className={`text-[10.5px] px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
                       isTranslated
-                        ? 'bg-[#c8aa6e22] text-[#c8aa6e] border-[#c8aa6e66]'
-                        : 'bg-[#14161c] border-[#262830] text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e]'
+                        ? 'bg-[#c8aa6e33] text-[#ffd54f] border-[#c8aa6e77]'
+                        : 'bg-[#14161c]/40 border-[#262830]/70 text-[#8b9bb4] hover:text-[#c8aa6e] hover:border-[#c8aa6e]'
                     }`}
                     title={isTranslated ? tr('원문으로 되돌리기') : `${targetLangLabel} ${tr('언어로 번역')}`}
                   >
@@ -322,15 +414,16 @@ export const GuestbookModal: React.FC<Props> = ({
                 </div>
               </div>
             );
-          })
-        )}
+          });
+        })()
+      )}
       </div>
 
       {/* 2. 중하단: 페이지네이션 (10개 단위) */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-1 border-t border-[#1e2a3e] shrink-0">
+        <div className="flex items-center justify-center gap-2 pt-1 border-t border-[#1e2a3e]/40 shrink-0">
           <button
-            className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+            className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c]/40 hover:bg-[#14161c]/80 border border-[#23324d]/60 text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
             disabled={safePage <= 1}
             onClick={() => {
               setCurrentPage((p) => Math.max(1, p - 1));
@@ -345,7 +438,7 @@ export const GuestbookModal: React.FC<Props> = ({
           </span>
 
           <button
-            className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c] border border-[#23324d] text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+            className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#14161c]/40 hover:bg-[#14161c]/80 border border-[#23324d]/60 text-white hover:border-[#c8aa6e] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
             disabled={safePage >= totalPages}
             onClick={() => {
               setCurrentPage((p) => Math.min(totalPages, p + 1));
@@ -359,7 +452,7 @@ export const GuestbookModal: React.FC<Props> = ({
 
       {/* 3. 하단: 100자 글쓰기 카드 (익명 지휘관은 작성 불가 안내) */}
       {isAnonymous ? (
-        <div className="p-3 rounded-xl bg-[#1a1424] border border-[#ab47bc44] flex items-center gap-3 shrink-0 shadow-sm animate-fade-in">
+        <div className="p-3 rounded-xl bg-[#1a1424]/35 border border-[#ab47bc33] flex items-center gap-3 shrink-0 shadow-sm animate-fade-in backdrop-blur-xs">
           <span className="text-2xl p-2 rounded-xl bg-[#ab47bc22] text-[#ce93d8] shrink-0">🔒</span>
           <div className="flex-1 min-w-0">
             <div className="text-xs font-bold text-[#ce93d8] flex items-center gap-1.5">
@@ -376,7 +469,7 @@ export const GuestbookModal: React.FC<Props> = ({
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="p-3 rounded-xl bg-[#12141a] border border-[#23324d] flex flex-col gap-2 shrink-0 shadow-sm"
+          className="p-3 rounded-xl bg-[#0e1118]/35 border border-[#23324d]/50 flex flex-col gap-2 shrink-0 shadow-sm backdrop-blur-xs"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
@@ -405,7 +498,7 @@ export const GuestbookModal: React.FC<Props> = ({
                 setErrorMessage(null);
               }}
               placeholder={tr('다른 차원의 지휘관들에게 남길 교신 메세지를 작성하세요 (최대 100자)')}
-              className="flex-1 p-2 rounded-lg bg-[#090b0e] border border-[#1e2a3e] text-white text-xs placeholder-[#50607d] resize-none focus:border-[#c8aa6e] focus:outline-none transition-colors"
+              className="flex-1 p-2 rounded-lg bg-[#07090d]/45 border border-[#1e2a3e]/60 text-white text-xs placeholder-[#50607d] resize-none focus:border-[#c8aa6e] focus:outline-none transition-colors"
               disabled={isSubmitting}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -419,7 +512,7 @@ export const GuestbookModal: React.FC<Props> = ({
               disabled={isSubmitting || !inputContent.trim()}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 flex flex-col items-center justify-center cursor-pointer ${
                 isSubmitting || !inputContent.trim()
-                  ? 'bg-[#15171e] text-[#50607d] cursor-not-allowed border border-transparent'
+                  ? 'bg-[#15171e]/50 text-[#50607d] cursor-not-allowed border border-transparent'
                   : 'bg-[#c8aa6e] hover:bg-[#d8bb7f] text-[#1c1408] border border-[#dfc48855] shadow-md shadow-[#c8aa6e22] active:scale-95'
               }`}
             >
@@ -442,9 +535,9 @@ export const GuestbookModal: React.FC<Props> = ({
   if (isInline) {
     if (!open) return null;
     return (
-      <div className="flex flex-col h-full w-full bg-[#0a0d14]/95 text-[#cfd8e8] overflow-hidden select-text rounded-2xl border border-[#b89758]/60 backdrop-blur-md shadow-2xl">
+      <div className="flex flex-col h-full w-full bg-[#080a10]/45 text-[#cfd8e8] overflow-hidden select-text rounded-2xl border border-[#b89758]/50 backdrop-blur-[4px] shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
         {/* 인라인 상단 헤더 바 */}
-        <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#0e121a] border-b border-[#3d372e]/60 shrink-0 select-none">
+        <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#0a0d14]/55 border-b border-[#3d372e]/50 shrink-0 select-none backdrop-blur-xs">
           <div className="flex items-center gap-2">
             <span className="text-sm">📢</span>
             <h3 className="text-xs sm:text-sm font-bold text-[#ffd54f]">
@@ -513,6 +606,7 @@ export const GuestbookModal: React.FC<Props> = ({
       title={tr('[차원 메세지]')}
       maxWidth="w-[96vw] max-w-[560px] sm:max-w-[640px] md:max-w-[740px]"
       maxHeight="h-[88vh] max-h-[88dvh]"
+      className="!bg-[#080a10]/55 backdrop-blur-[6px] border-[#b89758]/50 shadow-[0_8px_32px_rgba(0,0,0,0.7)]"
       footer={
         <div className="flex items-center justify-between w-full flex-wrap gap-2">
           <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">

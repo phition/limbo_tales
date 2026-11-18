@@ -410,7 +410,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
       '이번 1층 정찰에는 추가 자원 소모가 전혀 없는 무료 [가벼운 백팩(12칸)]을 선택하고, 보급품을 각 1개씩 담아주십시오.'
     ],
     hideDialogueOnAcknowledge: true,
-    acknowledgeButtonLabel: '배낭 및 보급품 채비하기 ▶'
+    acknowledgeButtonLabel: '배낭 및 보급품 채비하기 ▶',
+    targetSelector: '[data-tutorial-target="btn-select-zone"]',
+    pointerPosition: 'top',
+    targetLabel: '진입 구역 선택 ▶'
   },
 
   // ── Step 15: 심연 1계층 강하 개시 ──

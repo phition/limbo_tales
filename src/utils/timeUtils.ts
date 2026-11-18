@@ -58,3 +58,18 @@ export function formatPerSec(seconds: number, lang: SupportedLanguage = 'ko'): s
   if (lang === 'ja') return `${seconds}秒ごと`;
   return `${seconds}초마다`;
 }
+
+
+export function formatRemainingTimeStr(ms: number, lang: SupportedLanguage = 'ko'): string {
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+  const days = Math.floor(totalSec / 86400);
+  const hours = Math.floor((totalSec % 86400) / 3600);
+  const minutes = Math.floor((totalSec % 3600) / 60);
+  const seconds = totalSec % 60;
+  if (days > 0) {
+    if (lang === 'en') return `${days}d ${hours}h ${minutes}m`;
+    if (lang === 'ja') return `${days}日 ${hours}時間 ${minutes}分`;
+    return `${days}일 ${hours}시간 ${minutes}분`;
+  }
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}

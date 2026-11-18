@@ -318,8 +318,33 @@ export class I18nService {
 
   /**
    * 임의의 한국어 문자열을 현재(또는 지정된) 언어로 자동 번역하는 범용 번역 엔진
+   * format arguments({0}, {1}, ...) 및 targetLang 지정 지원
    */
-  public tr(text: string, targetLang?: SupportedLanguage): string {
+  public tr(text: string, ...args: Array<SupportedLanguage | string | number | undefined | null>): string {
+    if (!text || typeof text !== 'string') return text;
+
+    let targetLang: SupportedLanguage | undefined;
+    const formatArgs: Array<string | number> = [];
+
+    if (args.length === 1 && (args[0] === 'ko' || args[0] === 'en' || args[0] === 'ja')) {
+      targetLang = args[0] as SupportedLanguage;
+    } else {
+      for (const arg of args) {
+        if (arg !== undefined && arg !== null) {
+          formatArgs.push(arg as string | number);
+        }
+      }
+    }
+
+    const lang = targetLang || this.currentLanguage;
+    let res = this.trRaw(text, lang);
+    if (formatArgs.length > 0) {
+      res = res.replace(/\{(\d+)\}/g, (_m, i) => String(formatArgs[Number(i)] ?? ''));
+    }
+    return res;
+  }
+
+  private trRaw(text: string, targetLang?: SupportedLanguage): string {
     if (!text || typeof text !== 'string') return text;
     const lang = targetLang || this.currentLanguage;
     if (lang === 'ko') return text;

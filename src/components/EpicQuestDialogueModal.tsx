@@ -97,8 +97,8 @@ export const EpicQuestDialogueModal: React.FC<Props> = ({ quest, onClose, onClai
                 customAvatar.startsWith('https://') ||
                 customAvatar.startsWith('/') ||
                 customAvatar.startsWith('assets/') ||
-                customAvatar.includes('.png') ||
-                customAvatar.includes('.jpg') ||
+                customAvatar.includes('.webp') ||
+                customAvatar.includes('.webp') ||
                 customAvatar.includes('.jpeg') ||
                 customAvatar.includes('.webp') ||
                 customAvatar.includes('.gif')

@@ -9,7 +9,7 @@ import {
   signInWithPopup,
   User
 } from 'firebase/auth';
-import { ref, set, get, child, update, query, limitToLast, orderByChild, onValue, runTransaction, push, Unsubscribe } from 'firebase/database';
+import { ref, set, get, child, update, query, limitToLast, orderByChild, startAt, onValue, runTransaction, push, Unsubscribe } from 'firebase/database';
 import { auth, db } from './firebaseConfig';
 import { ArenaOpponent, Mercenary } from '../types/game';
 import { CHARACTER_CLASSES } from '../data/classes';
@@ -17,26 +17,50 @@ import { NEMESIS_BOSS_CONFIG, NEMESIS_CYCLE_CONSTANTS } from '../data/nemesis';
 import { Capacitor } from '@capacitor/core';
 import { PlayGamesService } from './PlayGamesService';
 
+/** 🛡️ Firebase RTDB 노드 키로 안전하게 변환 (., #, $, [, ], / 치환) */
+export function toSafeDbKey(str: string): string {
+  return encodeURIComponent((str || '').trim()).replace(/\./g, '%2E');
+}
+
 /**
- * 🎖️ 지휘관 닉네임 결정 헬퍼 함수
- * 유저가 이름을 그대로 두고('지휘관') 가입하거나 비워둔 경우 '지휘관' 뒤에 UID 순번 숫자를 붙여줍니다.
+ * 🎖️ 기본 지휘관 호출부호(콜사인) 생성 함수
+ * 규칙: [지휘관]+#4자리숫자+알파벳 (예: 지휘관#4829K)
  */
-export function resolveCommanderNickname(rawNickname: string | undefined | null, uid: string): string {
-  const trimmed = (rawNickname || '').trim();
-  if (!trimmed || trimmed === '지휘관') {
-    // UID에서 숫자 추출
+export function generateDefaultCommanderCallsign(uid?: string): string {
+  let numStr: string;
+  let letter: string;
+  if (uid) {
     const digits = uid.replace(/\D/g, '');
-    let seq = digits.slice(-4);
-    if (seq.length < 4) {
-      // UID 내 숫자가 부족할 경우 문자열 해시코드로 4자리 숫자(1000~9999) 생성
+    if (digits.length >= 4) {
+      numStr = digits.slice(-4);
+    } else {
       let hash = 0;
       for (let i = 0; i < uid.length; i++) {
         hash = ((hash << 5) - hash) + uid.charCodeAt(i);
         hash |= 0;
       }
-      seq = String(Math.abs(hash) % 9000 + 1000);
+      numStr = String(Math.abs(hash) % 10000).padStart(4, '0');
     }
-    return `지휘관${seq}`;
+    let charCode = 0;
+    for (let i = 0; i < uid.length; i++) {
+      charCode = (charCode * 31 + uid.charCodeAt(i)) % 26;
+    }
+    letter = String.fromCharCode(65 + Math.abs(charCode));
+  } else {
+    numStr = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    letter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+  }
+  return `지휘관#${numStr}${letter}`;
+}
+
+/**
+ * 🎖️ 지휘관 닉네임 결정 헬퍼 함수
+ * 유저가 이름을 그대로 두고('지휘관') 가입하거나 비워둔 경우 [지휘관]+#4자리숫자+알파벳 순번을 부여합니다.
+ */
+export function resolveCommanderNickname(rawNickname: string | undefined | null, uid: string): string {
+  const trimmed = (rawNickname || '').trim();
+  if (!trimmed || trimmed === '지휘관' || trimmed.startsWith('지휘관_')) {
+    return generateDefaultCommanderCallsign(uid);
   }
   return trimmed;
 }
@@ -273,6 +297,10 @@ export class FirebaseService {
     };
   }
 
+  public onAuthStateChanged(callback: (user: User | null, profile: UserProfile | null) => void): () => void {
+    return this.onAuthChange(callback);
+  }
+
   private notifyAuthListeners(): void {
     this.authListeners.forEach(cb => cb(this.currentUser, this.cachedProfile));
   }
@@ -350,6 +378,29 @@ export class FirebaseService {
     return this.cachedProfile;
   }
 
+  /**
+   * 🎖️ 현재 지휘관 콜사인(호출부호) 획득
+   * 1순위: cachedProfile.nickname
+   * 2순위: loadLocalCachedProfile()?.nickname
+   * 3순위: currentUser?.displayName
+   * 4순위: Firebase UID 기반 순번 '지휘관XXXX'
+   */
+  public getCommanderCallsign(): string {
+    const fromCache = this.cachedProfile?.nickname?.trim();
+    if (fromCache && fromCache !== '지휘관' && fromCache !== '방주 지휘관') return fromCache;
+
+    const fromLocal = (this.loadLocalCachedProfile(this.currentUser?.uid) || this.loadLocalCachedProfile())?.nickname?.trim();
+    if (fromLocal && fromLocal !== '지휘관' && fromLocal !== '방주 지휘관') return fromLocal;
+
+    const fromDisplayName = this.currentUser?.displayName?.trim();
+    if (fromDisplayName && fromDisplayName !== '지휘관' && fromDisplayName !== '방주 지휘관') return fromDisplayName;
+
+    if (this.currentUser?.uid) {
+      return resolveCommanderNickname('지휘관', this.currentUser.uid);
+    }
+    return fromCache || fromLocal || '지휘관';
+  }
+
   /** 👑 마스터(관리자) 권한 판별 (모바일 네이티브 빌드에서는 보안 및 스토어 심사 준수를 위해 완전 비활성화) */
   public isMasterUser(): boolean {
     if (Capacitor.isNativePlatform()) {
@@ -370,6 +421,11 @@ export class FirebaseService {
     if (user.isAnonymous) return true;
     if (this.cachedProfile?.isAnonymous) return true;
     return false;
+  }
+
+  /** 👤 익명(게스트) 계정 여부 판별 (isAnonymousUser 별칭) */
+  public isAnonymous(): boolean {
+    return this.isAnonymousUser();
   }
 
   /** 🌐 현재 로그인한 계정이 구글 계정(OAuth 또는 Play Games)인지 여부 판별 */
@@ -473,14 +529,14 @@ export class FirebaseService {
       return { success: true };
     } catch (err: any) {
       console.error('[Firebase Auth] Sign in failed:', err);
-      return { success: false, error: this.getFriendlyErrorMessage(err) };
+      return { success: false, error: this.getFriendlyErrorMessage(err), code: err?.code };
     }
   }
 
   /**
    * 📝 신규 지휘관 등록 (회원가입)
    */
-  public async signUpWithEmail(email: string, pass: string, nickname: string = '지휘관'): Promise<{ success: boolean; error?: string }> {
+  public async signUpWithEmail(email: string, pass: string, nickname: string = '지휘관'): Promise<{ success: boolean; error?: string; code?: string }> {
     const cleanEmail = email.trim();
     const cleanPass = pass.trim();
 
@@ -501,7 +557,7 @@ export class FirebaseService {
       );
       this.currentUser = cred.user;
 
-      // 🎖️ 유저가 '지휘관'을 그대로 두거나 비워둔 경우 UID 순번 숫자 부여 (예: 지휘관1042)
+      // 🎖️ 유저가 '지휘관'을 그대로 두거나 비워둔 경우 [지휘관]+#4자리숫자+알파벳 순번 부여 (예: 지휘관#4829K)
       const cleanNick = resolveCommanderNickname(nickname, cred.user.uid);
 
       await this.withTimeoutFallback(
@@ -528,13 +584,21 @@ export class FirebaseService {
         'RTDB 신규 프로필 생성'
       );
 
+      // 콜사인 고속 조회 인덱스 등록 (safeKey 인코딩 적용)
+      try {
+        const safeKey = toSafeDbKey(cleanNick);
+        await set(ref(db, `callsigns/${safeKey}`), cred.user.uid).catch(() => {});
+      } catch (_) {}
+
       this.cachedProfile = profileData;
       this.saveLocalCachedProfile(profileData);
+      this.incrementUserAccountCount(false);
+      this.updateRecentActiveUser();
       this.notifyAuthListeners();
       return { success: true };
     } catch (err: any) {
       console.error('[Firebase Auth] Sign up failed:', err);
-      return { success: false, error: this.getFriendlyErrorMessage(err) };
+      return { success: false, error: this.getFriendlyErrorMessage(err), code: err?.code };
     }
   }
 
@@ -686,8 +750,10 @@ export class FirebaseService {
         );
         this.cachedProfile = profileData;
         this.saveLocalCachedProfile(profileData);
+        this.incrementUserAccountCount(false);
       }
 
+      this.updateRecentActiveUser();
       this.notifyAuthListeners();
       return { success: true, isNewUser };
     } catch (err: any) {
@@ -806,8 +872,10 @@ export class FirebaseService {
 
         this.cachedProfile = profileData;
         this.saveLocalCachedProfile(profileData);
+        this.incrementUserAccountCount(false);
       }
 
+      this.updateRecentActiveUser();
       this.notifyAuthListeners();
       return { success: true, isNewUser };
     } catch (err: any) {
@@ -911,6 +979,8 @@ export class FirebaseService {
           );
 
           this.cachedProfile = profileData;
+          this.incrementUserAccountCount(false);
+          this.updateRecentActiveUser();
           this.notifyAuthListeners();
           return { success: true, isNewUser: true };
         } catch (signupErr: any) {
@@ -979,6 +1049,19 @@ export class FirebaseService {
    * 로그아웃
    */
   public async logout(): Promise<void> {
+    // 🛡️ 익명(게스트) 유저의 로그아웃인 경우, 이후 계정 연결을 위해 로컬 세이브 백업 보존
+    const isAnon = this.isAnonymousUser();
+    const currentUid = this.currentUser?.uid;
+    if (isAnon && currentUid) {
+      try {
+        const guestSave = localStorage.getItem(`LIMBO_TALES_SAVE_V08_${currentUid}`) || localStorage.getItem('LIMBO_TALES_SAVE_V08_guest');
+        if (guestSave) {
+          localStorage.setItem('limbo_pending_guest_save', guestSave);
+          localStorage.setItem('limbo_pending_guest_uid', currentUid);
+        }
+      } catch (_) {}
+    }
+
     localStorage.setItem('auth_explicitly_logged_out', 'true');
     localStorage.removeItem('limbo_has_session');
     localStorage.removeItem('auth_provider');
@@ -1034,6 +1117,7 @@ export class FirebaseService {
           lastLoginAt: Date.now()
         }).catch(() => {});
 
+        this.updateRecentActiveUser();
         this.saveLocalCachedProfile(profile);
         return profile;
       }
@@ -1080,6 +1164,8 @@ export class FirebaseService {
     );
 
     this.saveLocalCachedProfile(defaultProfile);
+    this.incrementUserAccountCount(defaultProfile.isAnonymous);
+    this.updateRecentActiveUser();
     return defaultProfile;
   }
 
@@ -1117,6 +1203,16 @@ export class FirebaseService {
       // 프로필 저장 타임스탬프 갱신 (비동기 논블로킹)
       update(ref(db, `users/${uid}/profile`), {
         lastSavedAt: Date.now()
+      }).catch(() => {});
+
+      // 📊 서버단 10층 통계 및 초경량 활동 인덱스 갱신 (비동기 논블로킹)
+      const unlockedFloor = Number((progressData as any).unlockedDungeonFloor || (progressData as any).dungeonFloor || 1);
+      const aviciTier = Number((progressData as any).unlockedAviciTier || 0);
+      this.trackDungeonFloorStats(uid, unlockedFloor, aviciTier).catch(() => {});
+      this.updateRecentActiveUser({
+        dungeonFloor: Number((progressData as any).dungeonFloor || 1),
+        unlockedDungeonFloor: unlockedFloor,
+        unlockedAviciTier: aviciTier,
       }).catch(() => {});
 
       const pingMs = Math.round(performance.now() - startTime);
@@ -1393,6 +1489,13 @@ export class FirebaseService {
         defenseDeck: safeDeck,
         updatedAt: Date.now()
       });
+
+      // 📊 아레나 등급 카운터 및 최근 활동 인덱스 갱신 (비동기 논블로킹)
+      this.trackArenaTierStats(uid, Math.round(rating), gateLevel).catch(() => {});
+      this.updateRecentActiveUser({
+        arenaRating: Math.round(rating),
+        arenaGateLevel: gateLevel
+      }).catch(() => {});
     } catch (err) {
       console.warn('[Firebase RTDB] Arena leaderboard sync warning:', err);
     }
@@ -1845,9 +1948,9 @@ export class FirebaseService {
       return { available: false, reason: '콜사인은 2자 이상, 최대 한글 6자(영문·숫자 12자) 이하로 입력해 주세요.' };
     }
 
-    const validRegex = /^[a-zA-Z0-9가-힣_]+$/;
+    const validRegex = /^[a-zA-Z0-9가-힣_#]+$/;
     if (!validRegex.test(trimmed)) {
-      return { available: false, reason: '콜사인에는 한글, 영문, 숫자, 밑줄(_)만 사용할 수 있습니다.' };
+      return { available: false, reason: '콜사인에는 한글, 영문, 숫자, 밑줄(_), 샵(#)만 사용할 수 있습니다.' };
     }
 
     const currentNick = this.cachedProfile?.nickname;
@@ -1856,8 +1959,9 @@ export class FirebaseService {
     }
 
     try {
-      // 1. callsigns 노드 조회 (고속 검증)
-      const callsignSnap = await get(child(ref(db), `callsigns/${trimmed}`));
+      // 1. callsigns 노드 조회 (safeKey 인코딩을 통해 # 등 특수문자 안전 처리)
+      const safeKey = toSafeDbKey(trimmed);
+      const callsignSnap = await get(child(ref(db), `callsigns/${safeKey}`));
       if (callsignSnap.exists()) {
         const ownerUid = callsignSnap.val();
         if (ownerUid !== this.currentUser?.uid) {
@@ -1911,11 +2015,13 @@ export class FirebaseService {
     const oldNick = profile?.nickname;
 
     try {
-      // 1. callsigns 노드 등록 (개별 노드 직접 쓰기 - 실패해도 프로필 저장은 계속)
+      // 1. callsigns 노드 등록 (safeKey 인코딩 적용)
       try {
-        await set(ref(db, `callsigns/${trimmed}`), uid);
+        const safeKey = toSafeDbKey(trimmed);
+        await set(ref(db, `callsigns/${safeKey}`), uid);
         if (oldNick && oldNick !== trimmed) {
-          await set(ref(db, `callsigns/${oldNick}`), null).catch(() => {});
+          const oldSafeKey = toSafeDbKey(oldNick);
+          await set(ref(db, `callsigns/${oldSafeKey}`), null).catch(() => {});
         }
       } catch (cErr) {
         console.warn('⚠️ [callsigns] 인덱스 노드 쓰기 경고:', cErr);
@@ -1960,6 +2066,7 @@ export class FirebaseService {
 
       // 6. GameManager 세이브에도 즉시 동기화
       try {
+        const { GameManager } = await import('../managers/GameManager');
         const gm = GameManager.getInstance();
         gm.saveGame();
       } catch (_) {}
@@ -1986,7 +2093,8 @@ export class FirebaseService {
   private notifyGuestbookListeners(): void {
     const msgs = this.cachedGuestbookMessages;
     try {
-      localStorage.setItem('limbo_cached_guestbook', JSON.stringify(msgs));
+      // 로컬 스토리지 비대화 방지: 오프라인 미리보기용 최근 10개만 경량 캐싱
+      localStorage.setItem('limbo_cached_guestbook', JSON.stringify(msgs.slice(0, 10)));
     } catch (_) {}
     this.guestbookListeners.forEach((cb) => {
       try {
@@ -2125,7 +2233,7 @@ export class FirebaseService {
   /**
    * ✍️ 방명록 글 등록 (최대 100자, 낙관적 UI 즉시 반영 및 200개 초과 자동 정리)
    */
-  public async addGuestbookMessage(rawContent: string): Promise<{ success: boolean; error?: string }> {
+  public async addGuestbookMessage(rawContent: string, customAuthorName?: string): Promise<{ success: boolean; error?: string }> {
     // 🚫 익명(게스트) 지휘관은 차원 메세지 등록 불가
     if (this.isAnonymousUser()) {
       return {
@@ -2142,7 +2250,10 @@ export class FirebaseService {
       return { success: false, error: '차원 메세지는 최대 100자까지 작성할 수 있습니다.' };
     }
 
-    const authorName = this.cachedProfile?.nickname || this.currentUser?.displayName || '방주 지휘관';
+    const callsign = this.getCommanderCallsign();
+    const authorName = (customAuthorName && customAuthorName.trim() && customAuthorName.trim() !== '지휘관' && customAuthorName.trim() !== '방주 지휘관')
+      ? customAuthorName.trim()
+      : callsign;
     const uid = this.currentUser?.uid || 'anonymous';
 
     try {
@@ -2174,6 +2285,61 @@ export class FirebaseService {
     } catch (err: any) {
       console.error('⚠️ [addGuestbookMessage] 차원 메세지 전송 실패:', err);
       return { success: false, error: err.message || '차원 메세지 전송 중 오류가 발생했습니다.' };
+    }
+  }
+
+  /**
+   * 📢 전 차원 시스템 공지/메세지 브로드캐스트 (장비 각성 성공 등)
+   */
+  public async broadcastSystemMessage(content: string, authorName = '시스템'): Promise<{ success: boolean; error?: string }> {
+    const clean = (content || '').trim();
+    if (!clean) {
+      return { success: false, error: '내용이 없습니다.' };
+    }
+
+    const uid = this.currentUser?.uid || 'system';
+
+    try {
+      const guestbookRef = ref(db, 'guestbook');
+      const newMsgRef = push(guestbookRef);
+      const newMsg: GuestbookMessage = {
+        id: newMsgRef.key!,
+        uid,
+        authorName,
+        content: clean,
+        createdAt: Date.now()
+      };
+
+      await set(newMsgRef, newMsg);
+
+      // ⚡ 낙관적 UI: 작성된 새 글을 캐시 맨 위에 즉시 추가하고 모든 리스너에 통지
+      this.cachedGuestbookMessages = [
+        newMsg,
+        ...this.cachedGuestbookMessages.filter((m) => m.id !== newMsg.id)
+      ].slice(0, 200);
+      this.notifyGuestbookListeners();
+
+      this.cleanupOldGuestbookMessages().catch((e) => {
+        console.warn('⚠️ [cleanupOldGuestbookMessages] 자동 정리 경고:', e);
+      });
+
+      return { success: true };
+    } catch (err: any) {
+      console.warn('⚠️ [broadcastSystemMessage] 차원 시스템 메세지 전송 경고 (로컬 캐시 반영):', err);
+      // 오프라인/게스트 상태에서도 로컬 캐시 및 D.M 티커에 즉시 반영
+      const localMsg: GuestbookMessage = {
+        id: `sys_${Date.now()}`,
+        uid,
+        authorName,
+        content: clean,
+        createdAt: Date.now()
+      };
+      this.cachedGuestbookMessages = [
+        localMsg,
+        ...this.cachedGuestbookMessages.filter((m) => m.id !== localMsg.id)
+      ].slice(0, 200);
+      this.notifyGuestbookListeners();
+      return { success: false, error: err?.message };
     }
   }
 
@@ -2211,6 +2377,648 @@ export class FirebaseService {
       console.warn('⚠️ [cleanupOldGuestbookMessages] 정리 실패:', err);
     }
   }
+
+  /**
+   * 📈 신규 계정 생성 시 system_stats 노드 원자적(Transaction) 증가
+   */
+  public async incrementUserAccountCount(isAnonymous: boolean): Promise<void> {
+    try {
+      runTransaction(ref(db, 'system_stats/totalUsers'), (count) => (count || 0) + 1).catch(() => {});
+      const subKey = isAnonymous ? 'system_stats/anonymousUsers' : 'system_stats/authenticatedUsers';
+      runTransaction(ref(db, subKey), (count) => (count || 0) + 1).catch(() => {});
+    } catch (err) {
+      console.warn('⚠️ [incrementUserAccountCount] 트랜잭션 오류:', err);
+    }
+  }
+
+  /**
+   * 🌀 10층 도달 및 돌파 시 system_stats 서버 카운터 원자적 증가
+   */
+  public async trackDungeonFloorStats(uid: string, unlockedFloor: number, aviciTier: number = 0): Promise<void> {
+    if (!uid || uid === 'guest') return;
+    try {
+      const maxFloor = Math.max(unlockedFloor, aviciTier > 0 ? 11 : 1);
+
+      const reachedKey = `limbo_stat_reached10_${uid}`;
+      if (maxFloor >= 10 && !localStorage.getItem(reachedKey)) {
+        localStorage.setItem(reachedKey, '1');
+        runTransaction(ref(db, 'system_stats/reachedFloor10'), (count) => (count || 0) + 1).catch(() => {});
+      }
+
+      const clearedKey = `limbo_stat_cleared10_${uid}`;
+      if ((maxFloor >= 11 || aviciTier > 0) && !localStorage.getItem(clearedKey)) {
+        localStorage.setItem(clearedKey, '1');
+        runTransaction(ref(db, 'system_stats/clearedFloor10'), (count) => (count || 0) + 1).catch(() => {});
+      }
+    } catch (_) {}
+  }
+
+  /**
+   * ⚔️ 아레나 등급 변동 시 티어별 카운터 트랜잭션 가감
+   */
+  public async trackArenaTierStats(uid: string, rating: number, gateLevel: number): Promise<void> {
+    if (!uid || uid === 'guest' || gateLevel < 1) return;
+    try {
+      const getTierKey = (r: number) => {
+        if (r >= 2500) return 'grandmaster';
+        if (r >= 2200) return 'master';
+        if (r >= 1900) return 'diamond';
+        if (r >= 1600) return 'platinum';
+        if (r >= 1300) return 'gold';
+        if (r >= 1000) return 'silver';
+        return 'bronze';
+      };
+
+      const newTier = getTierKey(rating);
+      const tierCacheKey = `limbo_stat_arenatier_${uid}`;
+      const prevTier = localStorage.getItem(tierCacheKey);
+
+      if (prevTier !== newTier) {
+        localStorage.setItem(tierCacheKey, newTier);
+
+        runTransaction(ref(db, `system_stats/arenaTiers/${newTier}`), (c) => (c || 0) + 1).catch(() => {});
+
+        if (prevTier && prevTier !== 'unranked') {
+          runTransaction(ref(db, `system_stats/arenaTiers/${prevTier}`), (c) => Math.max(0, (c || 1) - 1)).catch(() => {});
+        } else {
+          runTransaction(ref(db, 'system_stats/totalArenaParticipants'), (c) => (c || 0) + 1).catch(() => {});
+        }
+      }
+    } catch (_) {}
+  }
+
+  /**
+   * ⚡ 초경량 최근 활동 인덱스 노드 업데이트 (`recent_active_users/${uid}`)
+   */
+  public async updateRecentActiveUser(summary?: Partial<UserStatsSummary>): Promise<void> {
+    const user = this.currentUser || auth.currentUser;
+    if (!user || user.uid === 'guest') return;
+    const uid = user.uid;
+    try {
+      const profile = this.cachedProfile || this.loadLocalCachedProfile(uid);
+      const nickname = summary?.nickname || profile?.nickname || '지휘관';
+      const isAnonymous = summary?.isAnonymous ?? profile?.isAnonymous ?? this.isAnonymousUser();
+      const now = Date.now();
+
+      const payload = {
+        uid,
+        nickname,
+        email: profile?.email || null,
+        isAnonymous,
+        lastActiveAt: now,
+        dungeonFloor: summary?.dungeonFloor || 1,
+        unlockedDungeonFloor: summary?.unlockedDungeonFloor || 1,
+        unlockedAviciTier: summary?.unlockedAviciTier || 0,
+        arenaRating: summary?.arenaRating || 0,
+        arenaGateLevel: summary?.arenaGateLevel || 0,
+        updatedAt: now
+      };
+
+      update(ref(db, `recent_active_users/${uid}`), JSON.parse(JSON.stringify(payload))).catch(() => {});
+    } catch (_) {}
+  }
+
+  /**
+   * 📊 마스터 전용: Firebase 사용자 통계 집계 대시보드 데이터 조회
+   * 
+   * [최적화 아키텍처 - 자원 절감 모드 선택]:
+   * 1. 초경량 모드 (Server Counter & Index):
+   *    - system_stats 노드 (카운터) + recent_active_users 노드 (상위 10명 및 3일 쿼리)
+   *    - 전송 데이터량: ~2 KB (전체 users 노드 대비 99.9% 절감!)
+   *    - 응답 속도: < 100ms
+   * 
+   * 2. 풀 스캔 & 동기화 모드 (Full Scan & Seeding):
+   *    - system_stats 노드가 없거나 마스터가 forceFullScan(재집계 동기화)을 요청한 경우
+   *    - 전체 users 노드를 1회 전수 조사하여 정확한 수치를 system_stats 및 recent_active_users에 자동 시딩
+   */
+  public async fetchMasterUserStatistics(forceFullScan: boolean = false): Promise<MasterUserStatistics> {
+    if (!this.isMasterUser()) {
+      throw new Error('마스터 계정만 접근할 수 있는 통계 데이터입니다.');
+    }
+
+    const now = Date.now();
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+    const THREE_DAYS_MS = 3 * ONE_DAY_MS;
+    const SEVEN_DAYS_MS = 7 * ONE_DAY_MS;
+
+    // ⚡ 1. 자원 절약형: 서버단 카운터 + 경량 인덱스 모드 시도 (forceFullScan 아닐 때)
+    if (!forceFullScan) {
+      try {
+        const statsSnap = await get(ref(db, 'system_stats'));
+        if (statsSnap.exists()) {
+            const statsVal = statsSnap.val() || {};
+          const authenticatedUsers = Number(statsVal.authenticatedUsers || 0);
+          const anonymousUsers = Number(statsVal.anonymousUsers || 0);
+          const botUsers = Number(statsVal.botUsers || 0);
+          const totalUsers = Math.max(Number(statsVal.totalUsers || 0), authenticatedUsers + anonymousUsers + botUsers);
+
+          if (totalUsers > 0) {
+            // recent_active_users 노드에서 상위 10명만 쿼리 (limitToLast 10)
+            const top10Query = query(ref(db, 'recent_active_users'), orderByChild('lastActiveAt'), limitToLast(10));
+            const top10Snap = await get(top10Query);
+            let top10List: UserStatsSummary[] = [];
+
+            if (top10Snap.exists()) {
+              const topVal = top10Snap.val() as Record<string, any>;
+              top10List = Object.values(topVal)
+                .map((u: any) => {
+                  const isAnon = Boolean(u.isAnonymous);
+                  const isBot = Boolean(u.isSuspectedBot || u.isBot) || isSuspectedGoogleBot({
+                    email: u.email,
+                    nickname: u.nickname,
+                    isAnonymous: isAnon,
+                    createdAt: u.createdAt,
+                    lastActiveAt: u.lastActiveAt,
+                    dungeonFloor: u.dungeonFloor,
+                    unlockedDungeonFloor: u.unlockedDungeonFloor,
+                    arenaRating: u.arenaRating,
+                    hasArenaDeck: u.hasArenaDeck
+                  });
+                  const accountType: 'authenticated' | 'anonymous' | 'bot' = isBot ? 'bot' : (isAnon ? 'anonymous' : 'authenticated');
+
+                  return {
+                    uid: u.uid,
+                    nickname: u.nickname || '지휘관',
+                    email: u.email || null,
+                    isAnonymous: isAnon,
+                    isSuspectedBot: isBot,
+                    accountType,
+                    createdAt: u.createdAt || u.lastActiveAt || 0,
+                    lastActiveAt: u.lastActiveAt || 0,
+                    lastLoginAt: u.lastActiveAt || 0,
+                    lastSavedAt: u.lastActiveAt || 0,
+                    dungeonFloor: Number(u.dungeonFloor || 1),
+                    unlockedDungeonFloor: Number(u.unlockedDungeonFloor || 1),
+                    unlockedAviciTier: Number(u.unlockedAviciTier || 0),
+                    arenaRating: Number(u.arenaRating || 0),
+                    arenaRank: Number(u.arenaRank || 0),
+                    arenaGateLevel: Number(u.arenaGateLevel || 0),
+                    hasArenaDeck: Boolean(u.arenaGateLevel >= 1)
+                  };
+                })
+                .sort((a, b) => b.lastActiveAt - a.lastActiveAt);
+            }
+
+            // 헬퍼: DataSnapshot 자식 개수 안전 계산 (v9 modular의 size 프로퍼티 및 객체 키 폴백)
+            const getChildrenCount = (snap: any): number => {
+              if (!snap || !snap.exists()) return 0;
+              if (typeof snap.size === 'number') return snap.size;
+              if (typeof snap.numChildren === 'function') return snap.numChildren();
+              const val = snap.val();
+              return val && typeof val === 'object' ? Object.keys(val).length : 0;
+            };
+
+            // 최근 3일 이내 활성 유저수 카운트 (startAt 쿼리)
+            const threeDaysAgo = now - THREE_DAYS_MS;
+            const active3dQuery = query(ref(db, 'recent_active_users'), orderByChild('lastActiveAt'), startAt(threeDaysAgo));
+            const active3dSnap = await get(active3dQuery);
+            const activeWithin3Days = getChildrenCount(active3dSnap);
+            const inactiveOver3Days = Math.max(0, totalUsers - activeWithin3Days);
+
+            // 24시간 이내 및 7일 이내 보조 카운트
+            const active24hQuery = query(ref(db, 'recent_active_users'), orderByChild('lastActiveAt'), startAt(now - ONE_DAY_MS));
+            const active24hSnap = await get(active24hQuery);
+            const activeWithin24Hours = getChildrenCount(active24hSnap);
+
+            const active7dQuery = query(ref(db, 'recent_active_users'), orderByChild('lastActiveAt'), startAt(now - SEVEN_DAYS_MS));
+            const active7dSnap = await get(active7dQuery);
+            const activeWithin7Days = getChildrenCount(active7dSnap);
+
+            const arenaTiers = {
+              grandmaster: Number(statsVal.arenaTiers?.grandmaster || 0),
+              master: Number(statsVal.arenaTiers?.master || 0),
+              diamond: Number(statsVal.arenaTiers?.diamond || 0),
+              platinum: Number(statsVal.arenaTiers?.platinum || 0),
+              gold: Number(statsVal.arenaTiers?.gold || 0),
+              silver: Number(statsVal.arenaTiers?.silver || 0),
+              bronze: Number(statsVal.arenaTiers?.bronze || 0),
+              unranked: Number(statsVal.arenaTiers?.unranked || 0)
+            };
+
+            const totalArenaParticipants = Number(statsVal.totalArenaParticipants || (
+              arenaTiers.grandmaster + arenaTiers.master + arenaTiers.diamond +
+              arenaTiers.platinum + arenaTiers.gold + arenaTiers.silver + arenaTiers.bronze
+            ));
+
+            console.log('⚡ [fetchMasterUserStatistics] 초경량 서버 카운터 모드로 즉시 로드 완료 (트래픽 < 2KB)');
+
+            return {
+              totalUsers,
+              authenticatedUsers,
+              anonymousUsers,
+              botUsers,
+              activeWithin3Days,
+              inactiveOver3Days,
+              activeWithin24Hours,
+              activeWithin7Days,
+              clearedFloor10: Number(statsVal.clearedFloor10 || 0),
+              reachedFloor10: Number(statsVal.reachedFloor10 || 0),
+              arenaTiers,
+              totalArenaParticipants,
+              recentTopUsers: top10List,
+              allUsers: top10List,
+              fetchedAt: now,
+              dataSource: 'server_counter'
+            };
+          }
+        }
+      } catch (counterErr) {
+        console.warn('⚠️ [fetchMasterUserStatistics] 서버 카운터 읽기 실패, 풀 스캔으로 전환:', counterErr);
+      }
+    }
+
+    // 🔄 2. 풀 스캔 & 동기화 (Full Scan & Seeding)
+    console.log('🔄 [fetchMasterUserStatistics] 전체 노드 전수 조사 및 서버 카운터 동기화(Seeding) 시작...');
+    return await this.rebuildSystemStats();
+  }
+
+  /**
+   * 🔄 전체 노드 전수 조사 후 system_stats 및 recent_active_users 노드 자동 동기화(Seeding)
+   */
+  public async rebuildSystemStats(): Promise<MasterUserStatistics> {
+    const now = Date.now();
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+    const THREE_DAYS_MS = 3 * ONE_DAY_MS;
+    const SEVEN_DAYS_MS = 7 * ONE_DAY_MS;
+
+    let rawUsers: Record<string, any> = {};
+    let rawArena: Record<string, any> = {};
+    let rawCallsigns: Record<string, string> = {};
+    let isUsersNodeRestricted = false;
+
+    try {
+      const [usersSnap, arenaSnap, callsignsSnap] = await Promise.allSettled([
+        get(ref(db, 'users')),
+        get(ref(db, 'arena_leaderboard')),
+        get(ref(db, 'callsigns'))
+      ]);
+
+      if (usersSnap.status === 'fulfilled' && usersSnap.value.exists()) {
+        rawUsers = usersSnap.value.val() || {};
+      } else if (usersSnap.status === 'rejected') {
+        isUsersNodeRestricted = true;
+        console.warn('⚠️ [rebuildSystemStats] /users 루트 노드 읽기 권한 거부(Permission Denied). Firebase 콘솔의 database.rules.json에서 "users": { ".read": true } 배포가 필요합니다.');
+      }
+      if (arenaSnap.status === 'fulfilled' && arenaSnap.value.exists()) {
+        rawArena = arenaSnap.value.val() || {};
+      }
+      if (callsignsSnap.status === 'fulfilled' && callsignsSnap.value.exists()) {
+        rawCallsigns = callsignsSnap.value.val() || {};
+      }
+    } catch (err) {
+      console.warn('⚠️ [rebuildSystemStats] 초기 노드 조회 예외:', err);
+    }
+
+    const allKnownUids = new Set<string>([
+      ...Object.keys(rawUsers),
+      ...Object.keys(rawArena),
+      ...Object.values(rawCallsigns)
+    ]);
+
+    if (Object.keys(rawUsers).length === 0 && allKnownUids.size > 0) {
+      const fallbackPromises = Array.from(allKnownUids).map(async (uid) => {
+        try {
+          const [pSnap, progSnap] = await Promise.allSettled([
+            get(child(ref(db), `users/${uid}/profile`)),
+            get(child(ref(db), `users/${uid}/progress`))
+          ]);
+          return {
+            uid,
+            profile: pSnap.status === 'fulfilled' && pSnap.value.exists() ? pSnap.value.val() : null,
+            progress: progSnap.status === 'fulfilled' && progSnap.value.exists() ? progSnap.value.val() : null
+          };
+        } catch {
+          return { uid, profile: null, progress: null };
+        }
+      });
+      const results = await Promise.all(fallbackPromises);
+      for (const res of results) {
+        if (res.profile || res.progress) {
+          rawUsers[res.uid] = { profile: res.profile, progress: res.progress };
+        }
+      }
+    }
+
+    const userSummaries: UserStatsSummary[] = [];
+    const combinedUids = new Set<string>([
+      ...Object.keys(rawUsers),
+      ...Object.keys(rawArena),
+      ...Object.values(rawCallsigns)
+    ]);
+
+    const uidToCallsign: Record<string, string> = {};
+    for (const [nick, ownerUid] of Object.entries(rawCallsigns)) {
+      if (ownerUid) uidToCallsign[ownerUid] = nick;
+    }
+
+    let authenticatedUsers = 0;
+    let anonymousUsers = 0;
+    let botUsers = 0;
+    let activeWithin24Hours = 0;
+    let activeWithin3Days = 0;
+    let inactiveOver3Days = 0;
+    let activeWithin7Days = 0;
+    let reachedFloor10 = 0;
+    let clearedFloor10 = 0;
+
+    const arenaTiers = {
+      grandmaster: 0,
+      master: 0,
+      diamond: 0,
+      platinum: 0,
+      gold: 0,
+      silver: 0,
+      bronze: 0,
+      unranked: 0
+    };
+    let totalArenaParticipants = 0;
+
+    const seedingRecentUsers: Record<string, any> = {};
+
+    for (const uid of combinedUids) {
+      if (!uid || uid === 'guest') continue;
+
+      const userNode = rawUsers[uid] || {};
+      const profile = userNode.profile || {};
+      const progress = userNode.progress || {};
+      const arenaEntry = rawArena[uid] || {};
+
+      const nickname = profile.nickname || arenaEntry.nickname || uidToCallsign[uid] || `지휘관_${uid.slice(0, 5)}`;
+      const email = profile.email || null;
+      const isAnonymous = profile.isAnonymous ?? (!email && !profile.playGamesPlayerId);
+
+      const createdAt = profile.createdAt || arenaEntry.updatedAt || 0;
+      const lastLoginAt = profile.lastLoginAt || 0;
+      const lastSavedAt = Math.max(profile.lastSavedAt || 0, progress.lastSavedAt || 0);
+      const arenaUpdatedAt = arenaEntry.updatedAt || 0;
+
+      const lastActiveAt = Math.max(lastLoginAt, lastSavedAt, arenaUpdatedAt, createdAt);
+
+      const unlockedFloor = Number(progress.unlockedDungeonFloor || progress.dungeonFloor || 1);
+      const currentFloor = Number(progress.dungeonFloor || 1);
+      const aviciTier = Number(progress.unlockedAviciTier || 0);
+      const maxFloor = Math.max(unlockedFloor, currentFloor);
+
+      const gateLevel = arenaEntry.gateLevel ?? (progress.buildings?.arenaGate?.level ?? 0);
+      const rating = arenaEntry.rating ?? progress.currentArenaRating ?? 0;
+      const rank = arenaEntry.rank ?? progress.currentArenaRank ?? 0;
+      const hasArenaDeck = Array.isArray(arenaEntry.defenseDeck) && arenaEntry.defenseDeck.length > 0;
+
+      // 🤖 구글 사전 출시 보고서 / 검수봇 계정 판별
+      const isBot = isSuspectedGoogleBot({
+        email,
+        nickname,
+        isAnonymous,
+        createdAt,
+        lastActiveAt,
+        dungeonFloor: currentFloor,
+        unlockedDungeonFloor: unlockedFloor,
+        arenaRating: rating,
+        hasArenaDeck
+      });
+
+      let accountType: 'authenticated' | 'anonymous' | 'bot';
+      if (isBot) {
+        botUsers++;
+        accountType = 'bot';
+      } else if (isAnonymous) {
+        anonymousUsers++;
+        accountType = 'anonymous';
+      } else {
+        authenticatedUsers++;
+        accountType = 'authenticated';
+      }
+
+      const timeSinceActive = now - lastActiveAt;
+      if (lastActiveAt > 0 && timeSinceActive <= ONE_DAY_MS) {
+        activeWithin24Hours++;
+      }
+      if (lastActiveAt > 0 && timeSinceActive <= THREE_DAYS_MS) {
+        activeWithin3Days++;
+      } else {
+        inactiveOver3Days++;
+      }
+      if (lastActiveAt > 0 && timeSinceActive <= SEVEN_DAYS_MS) {
+        activeWithin7Days++;
+      }
+
+      if (maxFloor >= 10) {
+        reachedFloor10++;
+      }
+      if (maxFloor >= 11 || aviciTier > 0) {
+        clearedFloor10++;
+      }
+
+      const isParticipant = gateLevel >= 1 || arenaEntry.rating !== undefined || (progress.currentArenaRating && progress.currentArenaRating > 0);
+
+      if (isParticipant && rating > 0) {
+        totalArenaParticipants++;
+        if (rating >= 2500) arenaTiers.grandmaster++;
+        else if (rating >= 2200) arenaTiers.master++;
+        else if (rating >= 1900) arenaTiers.diamond++;
+        else if (rating >= 1600) arenaTiers.platinum++;
+        else if (rating >= 1300) arenaTiers.gold++;
+        else if (rating >= 1000) arenaTiers.silver++;
+        else arenaTiers.bronze++;
+      } else {
+        arenaTiers.unranked++;
+      }
+
+      const summaryObj: UserStatsSummary = {
+        uid,
+        nickname,
+        email,
+        isAnonymous,
+        isSuspectedBot: isBot,
+        accountType,
+        createdAt,
+        lastActiveAt,
+        lastLoginAt,
+        lastSavedAt,
+        dungeonFloor: currentFloor,
+        unlockedDungeonFloor: unlockedFloor,
+        unlockedAviciTier: aviciTier,
+        arenaRating: rating,
+        arenaRank: rank,
+        arenaGateLevel: gateLevel,
+        hasArenaDeck
+      };
+
+      userSummaries.push(summaryObj);
+
+      seedingRecentUsers[uid] = {
+        uid,
+        nickname,
+        email,
+        isAnonymous,
+        isSuspectedBot: isBot,
+        accountType,
+        lastActiveAt,
+        dungeonFloor: currentFloor,
+        unlockedDungeonFloor: unlockedFloor,
+        unlockedAviciTier: aviciTier,
+        arenaRating: rating,
+        arenaGateLevel: gateLevel,
+        updatedAt: lastActiveAt
+      };
+    }
+
+    const sortedByActive = [...userSummaries].sort((a, b) => b.lastActiveAt - a.lastActiveAt);
+    const recentTopUsers = sortedByActive.slice(0, 10);
+
+    const statsPayload = {
+      totalUsers: userSummaries.length,
+      authenticatedUsers,
+      anonymousUsers,
+      botUsers,
+      clearedFloor10,
+      reachedFloor10,
+      arenaTiers,
+      totalArenaParticipants,
+      lastSyncedAt: now
+    };
+
+    // 🚀 서버단 노드에 동기화 저장 (비동기)
+    try {
+      await update(ref(db, 'system_stats'), statsPayload);
+      if (Object.keys(seedingRecentUsers).length > 0) {
+        await update(ref(db, 'recent_active_users'), seedingRecentUsers);
+      }
+      console.log('✅ [rebuildSystemStats] system_stats 및 recent_active_users 동기화 완료! (구글봇 감지 포함)');
+    } catch (saveErr) {
+      console.warn('⚠️ [rebuildSystemStats] 서버 카운터 노드 저장 경고:', saveErr);
+    }
+
+    return {
+      totalUsers: userSummaries.length,
+      authenticatedUsers,
+      anonymousUsers,
+      botUsers,
+      activeWithin3Days,
+      inactiveOver3Days,
+      activeWithin24Hours,
+      activeWithin7Days,
+      clearedFloor10,
+      reachedFloor10,
+      arenaTiers,
+      totalArenaParticipants,
+      recentTopUsers,
+      allUsers: sortedByActive,
+      fetchedAt: now,
+      dataSource: 'full_scan_synced',
+      isUsersNodeRestricted
+    };
+  }
+}
+
+/**
+ * 🤖 구글 사전 출시 보고서 크롤러 / 검수봇 계정 감지 헬퍼
+ * - Google Play 검수봇 이메일/닉네임 명시적 패턴
+ * - 단발성 크롤러 행동 패턴 (가입 1시간 이상 경과, 체류 3분 미만, 1층 미진행, 아레나 미참여)
+ */
+export function isSuspectedGoogleBot(user: {
+  email?: string | null;
+  nickname?: string;
+  isAnonymous?: boolean;
+  createdAt?: number;
+  lastActiveAt?: number;
+  dungeonFloor?: number;
+  unlockedDungeonFloor?: number;
+  arenaRating?: number;
+  hasArenaDeck?: boolean;
+}): boolean {
+  const email = (user.email || '').toLowerCase();
+  const nick = (user.nickname || '').toLowerCase();
+
+  // 1. 명시적 구글/테스트랩/크롤러 이메일 또는 닉네임
+  if (
+    email.includes('google.com') ||
+    email.includes('testlab') ||
+    email.includes('cloudtest') ||
+    email.includes('firebase') ||
+    email.includes('crawler') ||
+    email.includes('app-test') ||
+    email.includes('googleplay')
+  ) {
+    return true;
+  }
+
+  if (
+    nick.includes('testlab') ||
+    nick.includes('crawler') ||
+    nick.includes('bot_') ||
+    nick.includes('google_test') ||
+    nick.includes('robo_')
+  ) {
+    return true;
+  }
+
+  // 2. 단발성 로보(Robo) 크롤러 특성 분석
+  const cTime = user.createdAt || 0;
+  const aTime = user.lastActiveAt || 0;
+  const durationMs = Math.abs(aTime - cTime);
+  const floor = Math.max(user.dungeonFloor || 1, user.unlockedDungeonFloor || 1);
+  const rating = user.arenaRating || 0;
+  const hasDeck = Boolean(user.hasArenaDeck);
+
+  // 생성된 지 1시간 이상 경과했는데, 총 체류 시간이 3분(180,000ms) 미만이고 1층에 머물러 있으며 아레나도 없는 단발성 계정
+  if (cTime > 0 && aTime > 0 && durationMs < 180000 && floor <= 1 && rating === 0 && !hasDeck) {
+    const ageMs = Date.now() - cTime;
+    if (ageMs > 3600000) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export interface UserStatsSummary {
+  uid: string;
+  nickname: string;
+  email: string | null;
+  isAnonymous: boolean;
+  isSuspectedBot?: boolean;
+  accountType: 'authenticated' | 'anonymous' | 'bot';
+  createdAt: number;
+  lastActiveAt: number;
+  lastLoginAt: number;
+  lastSavedAt: number;
+  dungeonFloor: number;
+  unlockedDungeonFloor: number;
+  unlockedAviciTier: number;
+  arenaRating: number;
+  arenaRank: number;
+  arenaGateLevel: number;
+  hasArenaDeck: boolean;
+}
+
+export interface MasterUserStatistics {
+  totalUsers: number;
+  authenticatedUsers: number;
+  anonymousUsers: number;
+  botUsers: number;
+  activeWithin3Days: number;
+  inactiveOver3Days: number;
+  activeWithin24Hours: number;
+  activeWithin7Days: number;
+  clearedFloor10: number;
+  reachedFloor10: number;
+  arenaTiers: {
+    grandmaster: number;
+    master: number;
+    diamond: number;
+    platinum: number;
+    gold: number;
+    silver: number;
+    bronze: number;
+    unranked: number;
+  };
+  totalArenaParticipants: number;
+  recentTopUsers: UserStatsSummary[];
+  allUsers: UserStatsSummary[];
+  fetchedAt: number;
+  dataSource?: 'server_counter' | 'full_scan_synced';
+  isUsersNodeRestricted?: boolean;
 }
 
 export interface WorldBossNemesisData {

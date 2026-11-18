@@ -215,8 +215,8 @@ function scanAndIndex(dir, baseRel = 'assets') {
           else if (baseName === 'citadel' && existingPreset.iconOverrides['bonfire'] !== 'emoji') existingPreset.iconOverrides['bonfire'] = currentVal;
         }
       }
-      // 2. VFX Sprites
-      else if (relPath.includes('/vfx/') && (ext === '.png' || ext === '.gif' || ext === '.webp' || ext === '.apng')) {
+      // 2. VFX Sprites (렌더링 렉 방지를 위해 .png 우선 적용)
+      else if (relPath.includes('/vfx/') && (ext === '.png' || ext === '.gif' || ext === '.apng')) {
         existingPreset.vfxOverrides[baseName] = relPath;
         if (existingPreset.monsterOverrides && existingPreset.monsterOverrides[baseName]) {
           delete existingPreset.monsterOverrides[baseName];
@@ -410,6 +410,21 @@ function safeWriteFileSync(filePath, content, retries = 10, delayMs = 300) {
 }
 
 // Save preset to public and backup to custom_assets
+// ✅ WebP 우선 승격: 동일한 위치에 webp 에셋이 존재하면 자동으로 webp 경로로 승격
+for (const cat of checkCategories) {
+  if (existingPreset[cat] && typeof existingPreset[cat] === 'object') {
+    for (const [k, v] of Object.entries(existingPreset[cat])) {
+      if (typeof v === 'string' && v.startsWith('assets/') && /\.(png|jpg|jpeg)$/i.test(v)) {
+        const webpRel = v.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+        const webpAbs = path.join(PUBLIC_ASSETS_DIR, webpRel.replace(/^assets\//, ''));
+        if (fs.existsSync(webpAbs)) {
+          existingPreset[cat][k] = webpRel;
+        }
+      }
+    }
+  }
+}
+
 safeWriteFileSync(PRESET_PATH, JSON.stringify(existingPreset, null, 2));
 if (fs.existsSync(CUSTOM_DIR)) {
   safeWriteFileSync(BACKUP_PRESET_PATH, JSON.stringify(existingPreset, null, 2));

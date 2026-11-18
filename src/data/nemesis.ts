@@ -57,7 +57,7 @@ export const NEMESIS_BOSS_CONFIG: NemesisBossConfig = {
   def: 45,
   spd: 15,
   luck: 30,
-  image: 'assets/void_overlord.jpg',
+  image: 'assets/void_overlord.webp',
   phases: [
     {
       phase: 1,

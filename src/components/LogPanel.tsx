@@ -4,15 +4,19 @@ import { useI18n } from '../hooks/useI18n';
 import { GameIcon } from './GameIcon';
 
 const LOG_ICON_MAP: Record<string, string> = {
-  // 6대 기본 자원
+  // 6대 기본 자원 & 영지 생산
   '🪙': 'gold',
   '✨': 'ether',
   '🪵': 'wood',
+  '🌲': 'wood',
   '🪨': 'stone',
   '⚙️': 'iron',
   '⚙': 'iron',
   '🍖': 'food',
+  '🥩': 'food',
+  '🍞': 'food',
   '🌾': 'food',
+  '📖': 'scroll',
   // 던전 파밍 재료 (5종)
   '🌿': 'herb',
   '🥋': 'leather',
@@ -77,6 +81,213 @@ const TOKEN_REGEX = new RegExp(
   `(\\[(?:[^\\[\\]]+|\\[[^\\]]+\\])+\\]|-[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?(?:[a-zA-Z가-힣%]+)?|\\+[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?(?:[a-zA-Z가-힣%]+)?|💨\\s*\\[[^\\]]+\\]\\s*회피(?:\\(EVADE\\))?|💨\\s*회피(?:\\(EVADE\\))?|💨\\s*빗나감(?:\\(MISS\\))?|\\(보호막\\s*[0-9,]+\\s*(?:흡수)?\\)|\\(방어력\\s*차단\\)|\\bEVADE\\b|\\bMISS\\b|\\||➔|→|${EMOJI_REGEX_STR})`,
   'g'
 );
+
+export const renderFormattedLogText = (text: string, iconSize: number = 14): React.ReactNode => {
+  if (!text) return null;
+
+  // Split regex to extract brackets, damages, upkeep costs, status icons, absorbs, separators, and resource emojis
+  const parts = text.split(TOKEN_REGEX);
+
+  return parts.map((part, idx) => {
+    if (!part) return null;
+
+    // 1. Bracketed tags
+    if (part.startsWith('[') && part.endsWith(']')) {
+      const content = part.slice(1, -1);
+
+      // Special System / Quest / Upkeep tags
+      if (content.includes('심연 정화') || content.includes('深淵浄化') || content.includes('Abyssal Purification')) {
+        return (
+          <span key={idx} className="font-bold text-[#38ef7d] bg-[#38ef7d22] px-1.5 py-0.5 rounded border border-[#38ef7d55] text-[11px] sm:text-xs mx-0.5 inline-flex items-center gap-1">
+            <GameIcon name="abyss_purify" icon="✨" size={13} />
+            <span>{part}</span>
+          </span>
+        );
+      }
+      if (content.includes('유지비 체납') || content.includes('Upkeep Arrears') || content.includes('維持費滞納')) {
+        return (
+          <span key={idx} className="font-extrabold text-[#ff4d4f] bg-[#ff4d4f22] px-1.5 py-0.5 rounded border border-[#ff4d4f55] text-[11px] sm:text-xs mx-0.5 inline-block animate-pulse">
+            {part}
+          </span>
+        );
+      }
+      if (content.includes('시설 복구') || content.includes('Facility Restored') || content.includes('施設復旧')) {
+        return (
+          <span key={idx} className="font-bold text-[#38ef7d] bg-[#38ef7d22] px-1.5 py-0.5 rounded border border-[#38ef7d55] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      if (content.includes('퀘스트 보상 수령') || content.includes('Quest Reward Claimed') || content.includes('クエスト報酬受取完了')) {
+        return (
+          <span key={idx} className="font-bold text-[#ffd54f] bg-[#ffd54f22] px-1.5 py-0.5 rounded border border-[#ffd54f55] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+
+      // Block / Guard
+      if (content === 'Block!' || content.includes('Block') || content.includes('Guard') || content.includes('수호') || content.includes('엄호') || content.includes('ガード')) {
+        return (
+          <span key={idx} className="font-bold text-[#60a5fa] bg-[#1e3a8a33] px-1 py-0.5 rounded border border-[#2563eb44] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      // Critical
+      if (content.includes('치명타') || content.includes('치명') || content.includes('CRIT') || content.includes('Critical') || content.includes('会心') || content.includes('クリティカル')) {
+        return (
+          <span key={idx} className="font-extrabold text-[#f87171] bg-[#7f1d1d33] px-1 py-0.5 rounded border border-[#dc262644] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      // Status - Burn
+      if (content.includes('화상') || content.includes('Burn') || content.includes('火傷')) {
+        return (
+          <span key={idx} className="font-bold text-[#fb923c] bg-[#7c2d1233] px-1 py-0.5 rounded border border-[#ea580c44] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      // Status - Bleed
+      if (content.includes('출혈') || content.includes('Bleed') || content.includes('出血')) {
+        return (
+          <span key={idx} className="font-bold text-[#f472b6] bg-[#83184333] px-1 py-0.5 rounded border border-[#db277744] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      // Status - Stun
+      if (content.includes('기절') || content.includes('Stun') || content.includes('気絶')) {
+        return (
+          <span key={idx} className="font-bold text-[#facc15] bg-[#713f1233] px-1 py-0.5 rounded border border-[#ca8a0444] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      // Status - Poison
+      if (content.includes('독') || content.includes('맹독') || content.includes('중독') || content.includes('Poison') || content.includes('毒') || content.includes('猛毒')) {
+        return (
+          <span key={idx} className="font-bold text-[#a3e635] bg-[#36531433] px-1 py-0.5 rounded border border-[#65a30d44] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      // Status - Freeze / Chill / Frostbite
+      if (content.includes('동결') || content.includes('빙결') || content.includes('냉각') || content.includes('동상') || content.includes('결빙') || content.includes('Freeze') || content.includes('Frostbite') || content.includes('Chill') || content.includes('凍結') || content.includes('氷結') || content.includes('凍傷')) {
+        return (
+          <span key={idx} className="font-bold text-[#dfc488] bg-[#0c4a6e33] px-1 py-0.5 rounded border border-[#0284c744] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      // Status - Blind
+      if (content.includes('실명') || content.includes('Blind') || content.includes('暗闇') || content.includes('盲目')) {
+        return (
+          <span key={idx} className="font-bold text-[#c084fc] bg-[#581c8733] px-1 py-0.5 rounded border border-[#9333ea44] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      // Buff / Immunity / Resist
+      if (content.includes('면역') || content.includes('저항') || content.includes('사선의 맹세') || content.includes('Immune') || content.includes('Resist') || content.includes('Oath') || content.includes('免疫') || content.includes('抵抗')) {
+        return (
+          <span key={idx} className="font-bold text-[#34d399] bg-[#064e3b33] px-1 py-0.5 rounded border border-[#05966944] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+      // Counter
+      if (content.includes('반격') || content.includes('Counter') || content.includes('反撃')) {
+        return (
+          <span key={idx} className="font-bold text-[#fde047] bg-[#854d0e33] px-1 py-0.5 rounded border border-[#eab30844] text-[11px] sm:text-xs mx-0.5 inline-block">
+            {part}
+          </span>
+        );
+      }
+
+      // Default Bracket (e.g. [용병이름] or [스킬명])
+      return (
+        <span key={idx} className="font-bold text-[#93c5fd] bg-[#1e293b66] px-1 py-0.2 rounded border border-[#33415566] text-[11px] sm:text-xs mx-0.5 inline-block">
+          {part}
+        </span>
+      );
+    }
+
+    // 2. Evasion / Miss
+    if (part.includes('회피') || part.includes('빗나감') || part === 'EVADE' || part === 'MISS') {
+      return (
+        <span key={idx} className="font-bold text-[#34d399] bg-[#064e3b33] px-1 py-0.5 rounded border border-[#05966944] text-[11px] sm:text-xs mx-0.5 inline-block">
+          {part}
+        </span>
+      );
+    }
+
+    // 3. Shield Absorb / Def Block
+    if (part.startsWith('(') && (part.includes('보호막') || part.includes('방어력 차단'))) {
+      return (
+        <span key={idx} className="font-bold text-[#60a5fa] font-mono text-xs mx-0.5">
+          {part}
+        </span>
+      );
+    }
+
+    // 4. Damage / Cost / Upkeep (-[숫자,콤마])
+    if (/^-[0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?/.test(part)) {
+      return (
+        <span key={idx} className="font-extrabold text-[#f87171] font-mono text-xs sm:text-sm mx-0.5">
+          {part}
+        </span>
+      );
+    }
+
+    // 5. Positive / Healing / Production (+[숫자,콤마])
+    if (/^\+[0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?/.test(part)) {
+      return (
+        <span key={idx} className="font-extrabold text-[#4ade80] font-mono text-xs sm:text-sm mx-0.5">
+          {part}
+        </span>
+      );
+    }
+
+    // 6. Separator (|)
+    if (part === '|') {
+      return (
+        <span key={idx} className="text-[#64748b] font-bold mx-1.5 opacity-80">
+          |
+        </span>
+      );
+    }
+
+    // 7. Arrow (➔, →)
+    if (part === '➔' || part === '→') {
+      return (
+        <span key={idx} className="text-[#64748b] font-bold mx-1">
+          {part}
+        </span>
+      );
+    }
+
+    // 8. Custom GameIcon for resource/currency/supplies/building emojis
+    const cleanPart = part.replace(/\uFE0F/g, '');
+    const iconKey = LOG_ICON_MAP[part] || LOG_ICON_MAP[cleanPart];
+    if (iconKey) {
+      return (
+        <GameIcon
+          key={idx}
+          name={iconKey}
+          icon={part}
+          size={iconSize}
+          inline={true}
+          className="inline-block align-middle mx-0.5 -mt-0.5 shrink-0"
+        />
+      );
+    }
+
+    return <span key={idx}>{part}</span>;
+  });
+};
 
 interface Props {
   logs: LogEntry[];
@@ -231,211 +442,9 @@ export const LogPanel: React.FC<Props> = ({
     return map[type] ?? 'log-normal';
   };
 
-  const renderFormattedLogText = (text: string): React.ReactNode => {
-    if (!text) return null;
+  // renderFormattedLogText is exported at module level
 
-    // Split regex to extract brackets, damages, upkeep costs, status icons, absorbs, separators, and resource emojis
-    const parts = text.split(TOKEN_REGEX);
 
-    return parts.map((part, idx) => {
-      if (!part) return null;
-
-      // 1. Bracketed tags
-      if (part.startsWith('[') && part.endsWith(']')) {
-        const content = part.slice(1, -1);
-
-        // Special System / Quest / Upkeep tags
-        if (content.includes('심연 정화') || content.includes('深淵浄化') || content.includes('Abyssal Purification')) {
-          return (
-            <span key={idx} className="font-bold text-[#38ef7d] bg-[#38ef7d22] px-1.5 py-0.5 rounded border border-[#38ef7d55] text-[11px] sm:text-xs mx-0.5 inline-flex items-center gap-1">
-              <GameIcon name="abyss_purify" icon="✨" size={13} />
-              <span>{part}</span>
-            </span>
-          );
-        }
-        if (content.includes('유지비 체납') || content.includes('Upkeep Arrears') || content.includes('維持費滞納')) {
-          return (
-            <span key={idx} className="font-extrabold text-[#ff4d4f] bg-[#ff4d4f22] px-1.5 py-0.5 rounded border border-[#ff4d4f55] text-[11px] sm:text-xs mx-0.5 inline-block animate-pulse">
-              {part}
-            </span>
-          );
-        }
-        if (content.includes('시설 복구') || content.includes('Facility Restored') || content.includes('施設復旧')) {
-          return (
-            <span key={idx} className="font-bold text-[#38ef7d] bg-[#38ef7d22] px-1.5 py-0.5 rounded border border-[#38ef7d55] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        if (content.includes('퀘스트 보상 수령') || content.includes('Quest Reward Claimed') || content.includes('クエスト報酬受取完了')) {
-          return (
-            <span key={idx} className="font-bold text-[#ffd54f] bg-[#ffd54f22] px-1.5 py-0.5 rounded border border-[#ffd54f55] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-
-        // Block / Guard
-        if (content === 'Block!' || content.includes('Block') || content.includes('Guard') || content.includes('수호') || content.includes('엄호') || content.includes('ガード')) {
-          return (
-            <span key={idx} className="font-bold text-[#60a5fa] bg-[#1e3a8a33] px-1 py-0.5 rounded border border-[#2563eb44] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        // Critical
-        if (content.includes('치명타') || content.includes('치명') || content.includes('CRIT') || content.includes('Critical') || content.includes('会心') || content.includes('クリティカル')) {
-          return (
-            <span key={idx} className="font-extrabold text-[#f87171] bg-[#7f1d1d33] px-1 py-0.5 rounded border border-[#dc262644] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        // Status - Burn
-        if (content.includes('화상') || content.includes('Burn') || content.includes('火傷')) {
-          return (
-            <span key={idx} className="font-bold text-[#fb923c] bg-[#7c2d1233] px-1 py-0.5 rounded border border-[#ea580c44] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        // Status - Bleed
-        if (content.includes('출혈') || content.includes('Bleed') || content.includes('出血')) {
-          return (
-            <span key={idx} className="font-bold text-[#f472b6] bg-[#83184333] px-1 py-0.5 rounded border border-[#db277744] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        // Status - Stun
-        if (content.includes('기절') || content.includes('Stun') || content.includes('気絶')) {
-          return (
-            <span key={idx} className="font-bold text-[#facc15] bg-[#713f1233] px-1 py-0.5 rounded border border-[#ca8a0444] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        // Status - Poison
-        if (content.includes('독') || content.includes('맹독') || content.includes('중독') || content.includes('Poison') || content.includes('毒') || content.includes('猛毒')) {
-          return (
-            <span key={idx} className="font-bold text-[#a3e635] bg-[#36531433] px-1 py-0.5 rounded border border-[#65a30d44] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        // Status - Freeze / Chill / Frostbite
-        if (content.includes('동결') || content.includes('빙결') || content.includes('냉각') || content.includes('동상') || content.includes('결빙') || content.includes('Freeze') || content.includes('Frostbite') || content.includes('Chill') || content.includes('凍結') || content.includes('氷結') || content.includes('凍傷')) {
-          return (
-            <span key={idx} className="font-bold text-[#dfc488] bg-[#0c4a6e33] px-1 py-0.5 rounded border border-[#0284c744] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        // Status - Blind
-        if (content.includes('실명') || content.includes('Blind') || content.includes('暗闇') || content.includes('盲目')) {
-          return (
-            <span key={idx} className="font-bold text-[#c084fc] bg-[#581c8733] px-1 py-0.5 rounded border border-[#9333ea44] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        // Buff / Immunity / Resist
-        if (content.includes('면역') || content.includes('저항') || content.includes('사선의 맹세') || content.includes('Immune') || content.includes('Resist') || content.includes('Oath') || content.includes('免疫') || content.includes('抵抗')) {
-          return (
-            <span key={idx} className="font-bold text-[#34d399] bg-[#064e3b33] px-1 py-0.5 rounded border border-[#05966944] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-        // Counter
-        if (content.includes('반격') || content.includes('Counter') || content.includes('反撃')) {
-          return (
-            <span key={idx} className="font-bold text-[#fde047] bg-[#854d0e33] px-1 py-0.5 rounded border border-[#eab30844] text-[11px] sm:text-xs mx-0.5 inline-block">
-              {part}
-            </span>
-          );
-        }
-
-        // Default Bracket (e.g. [용병이름] or [스킬명])
-        return (
-          <span key={idx} className="font-bold text-[#93c5fd] bg-[#1e293b66] px-1 py-0.2 rounded border border-[#33415566] text-[11px] sm:text-xs mx-0.5 inline-block">
-            {part}
-          </span>
-        );
-      }
-
-      // 2. Evasion / Miss
-      if (part.includes('회피') || part.includes('빗나감') || part === 'EVADE' || part === 'MISS') {
-        return (
-          <span key={idx} className="font-bold text-[#34d399] bg-[#064e3b33] px-1 py-0.5 rounded border border-[#05966944] text-[11px] sm:text-xs mx-0.5 inline-block">
-            {part}
-          </span>
-        );
-      }
-
-      // 3. Shield Absorb / Def Block
-      if (part.startsWith('(') && (part.includes('보호막') || part.includes('방어력 차단'))) {
-        return (
-          <span key={idx} className="font-bold text-[#60a5fa] font-mono text-xs mx-0.5">
-            {part}
-          </span>
-        );
-      }
-
-      // 4. Damage / Cost / Upkeep (-[숫자,콤마])
-      if (/^-[0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?/.test(part)) {
-        return (
-          <span key={idx} className="font-extrabold text-[#f87171] font-mono text-xs sm:text-sm mx-0.5">
-            {part}
-          </span>
-        );
-      }
-
-      // 5. Positive / Healing / Production (+[숫자,콤마])
-      if (/^\+[0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?/.test(part)) {
-        return (
-          <span key={idx} className="font-extrabold text-[#4ade80] font-mono text-xs sm:text-sm mx-0.5">
-            {part}
-          </span>
-        );
-      }
-
-      // 6. Separator (|)
-      if (part === '|') {
-        return (
-          <span key={idx} className="text-[#64748b] font-bold mx-1.5 opacity-80">
-            |
-          </span>
-        );
-      }
-
-      // 7. Arrow (➔, →)
-      if (part === '➔' || part === '→') {
-        return (
-          <span key={idx} className="text-[#64748b] font-bold mx-1">
-            {part}
-          </span>
-        );
-      }
-
-      // 8. Custom GameIcon for resource/currency/supplies/building emojis
-      const cleanPart = part.replace(/\uFE0F/g, '');
-      const iconKey = LOG_ICON_MAP[part] || LOG_ICON_MAP[cleanPart];
-      if (iconKey) {
-        return (
-          <GameIcon
-            key={idx}
-            name={iconKey}
-            icon={part}
-            size={14}
-            className="inline-block align-middle mx-0.5 -mt-0.5 shrink-0"
-          />
-        );
-      }
-
-      return <span key={idx}>{part}</span>;
-    });
-  };
 
   return (
     <div className={`relative w-full h-full flex flex-col min-h-0 ${className}`}>

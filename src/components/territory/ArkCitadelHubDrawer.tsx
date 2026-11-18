@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { INITIAL_BUILDINGS } from '../../data/buildings';
+import { BUILDING_NAMES } from '../../i18n/dataLocales';
 import { useGameManager } from '../../hooks/useGameManager';
 import { useI18n } from '../../hooks/useI18n';
 import { SoundManager } from '../../managers/SoundManager';
@@ -11,38 +13,81 @@ import { GameManager } from '../../managers/GameManager';
 import { getTutorialProductionTarget, checkTutorialBuildingRestriction } from '../../data/tutorialSteps';
 import { gameDialog } from '../../services/DialogService';
 import { CitadelFacilityWheelNavigator } from './CitadelFacilityWheelNavigator';
+import { SheetModal } from '../SheetModal';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 // 🏛️ 시설별 내부 헤더 배너 이미지 매핑
 const BUILDING_IMAGE_MAP: Record<string, string> = {
-  blacksmith: 'assets/menu_forge.jpg',
-  tavern: 'assets/menu_tavern.jpg',
-  infirmary: 'assets/menu_infirmary.jpg',
-  storage: 'assets/menu_storage.jpg',
-  alchemy: 'assets/menu_alchemy.jpg',
-  market: 'assets/menu_market.jpg',
-  arenaGate: 'assets/menu_arena.jpg',
-  explore: 'assets/menu_explore.jpg',
-  quests: 'assets/menu_quests.jpg',
-  codex: 'assets/menu_codex.jpg',
-  barracks: 'assets/menu_barracks.jpg',
-  cemetery: 'assets/menu_cemetery.jpg',
-  citadel: 'assets/citadel_bonfire.jpg',
+  blacksmith: 'assets/menu_forge.webp',
+  tavern: 'assets/menu_tavern.webp',
+  infirmary: 'assets/menu_infirmary.webp',
+  storage: 'assets/menu_storage.webp',
+  alchemy: 'assets/menu_alchemy.webp',
+  market: 'assets/menu_market.webp',
+  arenaGate: 'assets/menu_arena.webp',
+  explore: 'assets/menu_explore.webp',
+  quests: 'assets/menu_quests.webp',
+  codex: 'assets/menu_codex.webp',
+  barracks: 'assets/menu_barracks.webp',
+  cemetery: 'assets/menu_cemetery.webp',
+  citadel: 'assets/citadel_bonfire.webp',
+  lumberCamp: 'assets/menu_lumber_camp.webp',
+  quarry: 'assets/menu_quarry.webp',
+  butchery: 'assets/menu_butchery.webp',
+  cabin: 'assets/menu_cabin.webp',
+  sanctuary: 'assets/menu_sanctuary.webp',
 };
 
 interface ArkCitadelHubDrawerProps {
   onClose: () => void;
   onEnterDrawer: (drawerKey: string) => void;
   onOpenBonfireModal?: () => void;
+  onOpenFacilityModal?: (buildingId: BuildingId) => void;
+  inspectingBuildingId?: BuildingId | null;
   initialView?: 'banners' | 'bonfire' | 'facilities' | 'workstations';
   highlightedBuildingId?: string | null;
   onClearHighlight?: () => void;
   tutorialStepId?: string;
 }
 
+// 13종 건물 목록 상수 정의 (매 렌더 재생성 방지)
+const BUILDINGS_LIST: { id: BuildingId; drawerKey?: string }[] = [
+  { id: 'lumberCamp' },
+  { id: 'quarry' },
+  { id: 'butchery' },
+  { id: 'cabin' },
+  { id: 'blacksmith', drawerKey: 'forge' },
+  { id: 'tavern',     drawerKey: 'tavern' },
+  { id: 'infirmary',  drawerKey: 'infirmary' },
+  { id: 'storage',    drawerKey: 'storage' },
+  { id: 'alchemy',    drawerKey: 'alchemy' },
+  { id: 'market',     drawerKey: 'market' },
+  { id: 'sanctuary' },
+  { id: 'arenaGate',  drawerKey: 'arena' },
+];
+
+const DEFAULT_SHORTCUT_SLOTS: (string | null)[] = ['barracks', 'cemetery', null];
+const SHORTCUT_SLOTS_STORAGE_KEY = 'ark_citadel_shortcut_slots';
+
+const getInitialShortcutSlots = (): (string | null)[] => {
+  if (typeof window === 'undefined') return DEFAULT_SHORTCUT_SLOTS;
+  try {
+    const raw = localStorage.getItem(SHORTCUT_SLOTS_STORAGE_KEY);
+    if (!raw) return DEFAULT_SHORTCUT_SLOTS;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length === 3) {
+      return parsed;
+    }
+  } catch (_) {}
+  return DEFAULT_SHORTCUT_SLOTS;
+};
+
 export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   onClose,
   onEnterDrawer,
   onOpenBonfireModal,
+  onOpenFacilityModal,
+  inspectingBuildingId,
   initialView = 'banners',
   highlightedBuildingId,
   onClearHighlight,
@@ -50,12 +95,54 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
 }) => {
   const { state, gm, navigateTo } = useGameManager();
   const { tr, lang } = useI18n();
+  const isMobile = useIsMobile();
 
   // 뷰 상태: 3대 마스터 배너 ➔ 성화 조작 ➔ 초간결 시설 목록 ➔ 성채 진입 카드 목록
   const [activeView, setActiveView] = useState<'banners' | 'bonfire' | 'facilities' | 'workstations'>(initialView);
+  const bodyScrollRef = useRef<HTMLDivElement>(null);
 
-  // 시설 관리에서 특정 건물을 터치했을 때 열리는 [건설·증축·입장 통합 모달]
+  // ⚡ 성채 시설 진입 카드 휠과 연동되는 사령부 바로가기 슬롯 3개
+  const [shortcutSlots, setShortcutSlots] = useState<(string | null)[]>(getInitialShortcutSlots);
+
+  const handleSaveShortcutSlot = (slotIdx: number, facilityKey: string) => {
+    setShortcutSlots(prev => {
+      const next = [...prev];
+      for (let i = 0; i < next.length; i++) {
+        if (next[i] === facilityKey && i !== slotIdx) {
+          next[i] = null;
+        }
+      }
+      next[slotIdx] = facilityKey;
+      try {
+        localStorage.setItem(SHORTCUT_SLOTS_STORAGE_KEY, JSON.stringify(next));
+      } catch (_) {}
+      return next;
+    });
+  };
+
+  const handleClearShortcutSlot = (slotIdx: number) => {
+    setShortcutSlots(prev => {
+      const next = [...prev];
+      next[slotIdx] = null;
+      try {
+        localStorage.setItem(SHORTCUT_SLOTS_STORAGE_KEY, JSON.stringify(next));
+      } catch (_) {}
+      return next;
+    });
+  };
+
+  // 시설 관리에서 특정 건물을 터치했을 때 열리는 [건설·증축·입장 통합 모달] (onOpenFacilityModal 미제공 시 로컬 폴백)
   const [selectedBuildingId, setSelectedBuildingId] = useState<BuildingId | null>(null);
+
+  // 🏛️ 시설 선택 핸들러 (통합 최상위 포털 모달 호출)
+  const handleSelectBuilding = (buildingId: BuildingId) => {
+    handlePlayClick();
+    if (onOpenFacilityModal) {
+      onOpenFacilityModal(buildingId);
+    } else {
+      setSelectedBuildingId(buildingId);
+    }
+  };
 
   // 외부 initialView 변경 시 동기화
   useEffect(() => {
@@ -63,6 +150,13 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
       setActiveView(initialView);
     }
   }, [initialView]);
+
+  // 뷰 전환 시 스크롤 위치 최상단 초기화 및 레이아웃 안정화
+  useEffect(() => {
+    if (bodyScrollRef.current && activeView !== 'workstations') {
+      bodyScrollRef.current.scrollTop = 0;
+    }
+  }, [activeView]);
 
   // 튜토리얼 스텝 전환 시 해당 전용 뷰 자동 동기화
   useEffect(() => {
@@ -77,37 +171,40 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   useEffect(() => {
     if (highlightedBuildingId) {
       setActiveView('facilities');
-      setSelectedBuildingId(highlightedBuildingId as BuildingId);
+      if (onOpenFacilityModal) {
+        onOpenFacilityModal(highlightedBuildingId as BuildingId);
+      } else {
+        setSelectedBuildingId(highlightedBuildingId as BuildingId);
+      }
     }
-  }, [highlightedBuildingId]);
-
-  // 0.5초 타이머 리프레시 (건설 시간 및 온기 카운트다운)
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const timer = setInterval(() => setNow(Date.now()), 500);
-    return () => clearInterval(timer);
-  }, []);
+  }, [highlightedBuildingId, onOpenFacilityModal]);
 
   const hasWarmth = gm.bonfireWarmthTime > 0 && gm.bonfireStacks >= 5;
   const warmthTimeStr = gm.bonfireWarmthTime > 0
     ? formatTimeLeft(gm.bonfireWarmthTime, lang)
     : `${gm.bonfireStacks || 0}/5`;
 
-  // 13종 건물 목록 정의
-  const buildingsList: { id: BuildingId; drawerKey?: string }[] = [
-    { id: 'lumberCamp' },
-    { id: 'quarry' },
-    { id: 'butchery' },
-    { id: 'cabin' },
-    { id: 'blacksmith', drawerKey: 'forge' },
-    { id: 'tavern',     drawerKey: 'tavern' },
-    { id: 'infirmary',  drawerKey: 'infirmary' },
-    { id: 'storage',    drawerKey: 'storage' },
-    { id: 'alchemy',    drawerKey: 'alchemy' },
-    { id: 'market',     drawerKey: 'market' },
-    { id: 'sanctuary' },
-    { id: 'arenaGate',  drawerKey: 'arena' },
-  ];
+  // 현재 진행 중인 건설/증축 건물이 존재하는지 확인
+  const hasActiveConstruction = useMemo(() => {
+    return Object.values(state.buildings || {}).some(b => Boolean(b && b.construction));
+  }, [state.buildings]);
+
+  // 건설 시작/완료 등 건물 상태 변화 즉시 현재 시각 동기화 (초기 프레임 0% 멈춤 방지)
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    setNow(Date.now());
+  }, [state.buildings]);
+
+  // 실제로 건설 중이거나 성화 온기가 켜진 상태일 때만 타이머 구동 (불필요한 0.5초 전체 리렌더 화면 떨림 방지)
+  useEffect(() => {
+    if (!hasActiveConstruction && !hasWarmth) return;
+    setNow(Date.now());
+    const intervalMs = hasActiveConstruction ? 150 : 1000;
+    const timer = setInterval(() => setNow(Date.now()), intervalMs);
+    return () => clearInterval(timer);
+  }, [hasActiveConstruction, hasWarmth]);
+
+  const buildingsList = BUILDINGS_LIST;
 
   // 완공 시설 수 및 증축 가능 수 계산
   const totalBuiltCount = Object.values(state.buildings || {}).filter(b => b && b.level > 0).length;
@@ -145,9 +242,9 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   }, [state.codexUnlockedItems, gm]);
 
   const codexBadge = registerableCodexCount > 0 
-    ? `${registerableCodexCount}건 등록 가능` 
+    ? tr('{0}건 등록 가능', registerableCodexCount) 
     : (unlockedCodexCount > 0 
-        ? `${unlockedCodexCount}종 수집` 
+        ? tr('{0}종 수집', unlockedCodexCount) 
         : null);
 
   // ⚔️ 원정대 편성 인원 수 & 🪦 묘지 안치 영령 수 집계
@@ -165,18 +262,18 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
     buildingId?: BuildingId;
     badge?: string | null;
   }> = [
-    { key: 'quests',    name: tr('지휘관 퀘스트 & 작전 지도'), sub: tr('메인 스토리 임무 완수 및 단계별 시설 연계'), icon: '📜', image: 'assets/menu_quests.jpg', isBuilt: true, badge: claimableQuestCount > 0 ? `${claimableQuestCount}건 완료` : null },
-    { key: 'explore',   name: tr('심연 강하 차원 관문'), sub: tr('침묵의 회랑 1~5층 MUD 던전 출격 및 전술 보급품 편성'), icon: '🌌', image: 'assets/menu_explore.jpg', isBuilt: true, badge: tr('출격 가능') },
-    { key: 'barracks',  name: tr('원정단 병영 & 작전실'), sub: tr('4인 파티 편성, 진형 배치, 전직 관리'), icon: '⚔️', image: 'assets/menu_barracks.jpg', isBuilt: true },
-    { key: 'codex',     name: tr('심연의 백과 & 회고록'), sub: tr('오파츠·서사 일지·신화 유물 컬렉션 및 영구 패시브 연구'), icon: '📜', image: 'assets/menu_codex.jpg', isBuilt: true, badge: codexBadge },
-    { key: 'forge',     name: tr('심연의 병기창'), sub: tr('무기·방어구 단조, 장비 강화, 침식 정화'), icon: '⚒️', image: 'assets/menu_forge.jpg', isBuilt: (state.buildings['blacksmith']?.level || 0) >= 1, buildingId: 'blacksmith' },
-    { key: 'tavern',    name: tr('방랑자의 라운지'), sub: tr('방랑 용병 모집 계약 및 고용 풀 갱신'), icon: '🍺', image: 'assets/menu_tavern.jpg', isBuilt: (state.buildings['tavern']?.level || 0) >= 1, buildingId: 'tavern', badge: (state.tavernCandidates || []).length > 0 ? 'NEW' : null },
-    { key: 'infirmary', name: tr('생체 복원 병동'), sub: tr('전투 부상 대원 입원 치료 및 완치'), icon: '🏥', image: 'assets/menu_infirmary.jpg', isBuilt: (state.buildings['infirmary']?.level || 0) >= 1, buildingId: 'infirmary', badge: (state.infirmaryPatients || []).length > 0 ? `${state.infirmaryPatients.length}인` : null },
-    { key: 'storage',   name: tr('방주 중앙 병참고'), sub: tr('전 군수 물자 및 장비·보급품 보관함'), icon: '🏛️', image: 'assets/menu_storage.jpg', isBuilt: (state.buildings['storage']?.level || 0) >= 1, buildingId: 'storage' },
-    { key: 'alchemy',   name: tr('에테르 연금 공방'), sub: tr('마도 스킬 비전서 강화 및 장비 룬 인챈트'), icon: '🧪', image: 'assets/menu_alchemy.jpg', isBuilt: (state.buildings['alchemy']?.level || 0) >= 1, buildingId: 'alchemy' },
-    { key: 'market',    name: tr('황혼의 블랙 마켓'), sub: tr('17종 군수물자 거래 및 유지비 주기 연장'), icon: '⚖️', image: 'assets/menu_market.jpg', isBuilt: (state.buildings['market']?.level || 0) >= 1, buildingId: 'market' },
-    { key: 'cemetery',  name: tr('성채 묘지'), sub: tr('전사한 영령 안치, 추모 EXP 버프 및 가호'), icon: '🪦', image: 'assets/menu_cemetery.jpg', isBuilt: true, badge: (state.cemetery || []).length > 0 ? `${state.cemetery.length}위` : null },
-    { key: 'arena',     name: tr('차원 아레나 & 게이트'), sub: tr('차원 아레나 결투 및 네메시스 침공전'), icon: '🏆', image: 'assets/menu_arena.jpg', isBuilt: (state.buildings['arenaGate']?.level || 0) >= 1, buildingId: 'arenaGate' },
+    { key: 'quests',    name: tr('지휘관 퀘스트 & 작전 지도'), sub: tr('메인 스토리 임무 완수 및 단계별 시설 연계'), icon: '📜', image: 'assets/menu_quests.webp', isBuilt: true, badge: claimableQuestCount > 0 ? tr('{0}건 완료', claimableQuestCount) : null },
+    { key: 'explore',   name: tr('심연 강하 차원 관문'), sub: tr('침묵의 회랑 1~5층 MUD 던전 출격 및 전술 보급품 편성'), icon: '🌌', image: 'assets/menu_explore.webp', isBuilt: true, badge: tr('출격 가능') },
+    { key: 'barracks',  name: tr('원정단 병영 & 작전실'), sub: tr('4인 파티 편성, 진형 배치, 전직 관리'), icon: '⚔️', image: 'assets/menu_barracks.webp', isBuilt: true },
+    { key: 'codex',     name: tr('심연의 백과 & 회고록'), sub: tr('오파츠·서사 일지·신화 유물 컬렉션 및 영구 패시브 연구'), icon: '📜', image: 'assets/menu_codex.webp', isBuilt: true, badge: codexBadge },
+    { key: 'forge',     name: tr('심연의 병기창'), sub: tr('무기·방어구 단조, 장비 강화, 침식 정화'), icon: '⚒️', image: 'assets/menu_forge.webp', isBuilt: (state.buildings['blacksmith']?.level || 0) >= 1, buildingId: 'blacksmith' },
+    { key: 'tavern',    name: tr('방랑자의 라운지'), sub: tr('방랑 용병 모집 계약 및 고용 풀 갱신'), icon: '🍺', image: 'assets/menu_tavern.webp', isBuilt: (state.buildings['tavern']?.level || 0) >= 1, buildingId: 'tavern', badge: (state.tavernCandidates || []).length > 0 ? 'NEW' : null },
+    { key: 'infirmary', name: tr('생체 복원 병동'), sub: tr('전투 부상 대원 입원 치료 및 완치'), icon: '🏥', image: 'assets/menu_infirmary.webp', isBuilt: (state.buildings['infirmary']?.level || 0) >= 1, buildingId: 'infirmary', badge: (state.infirmaryPatients || []).length > 0 ? tr('{0}인 치료', state.infirmaryPatients.length) : null },
+    { key: 'storage',   name: tr('방주 중앙 병참고'), sub: tr('전 군수 물자 및 장비·보급품 보관함'), icon: '🏛️', image: 'assets/menu_storage.webp', isBuilt: (state.buildings['storage']?.level || 0) >= 1, buildingId: 'storage' },
+    { key: 'alchemy',   name: tr('에테르 연금 공방'), sub: tr('마도 스킬 비전서 강화 및 장비 룬 인챈트'), icon: '🧪', image: 'assets/menu_alchemy.webp', isBuilt: (state.buildings['alchemy']?.level || 0) >= 1, buildingId: 'alchemy' },
+    { key: 'market',    name: tr('황혼의 블랙 마켓'), sub: tr('17종 군수물자 거래 및 유지비 주기 연장'), icon: '⚖️', image: 'assets/menu_market.webp', isBuilt: (state.buildings['market']?.level || 0) >= 1, buildingId: 'market' },
+    { key: 'cemetery',  name: tr('성채 묘지'), sub: tr('전사한 영령 안치, 추모 EXP 버프 및 가호'), icon: '🪦', image: 'assets/menu_cemetery.webp', isBuilt: true, badge: (state.cemetery || []).length > 0 ? tr('{0}위 안치', state.cemetery.length) : null },
+    { key: 'arena',     name: tr('차원 아레나 & 게이트'), sub: tr('차원 아레나 결투 및 네메시스 침공전'), icon: '🏆', image: 'assets/menu_arena.webp', isBuilt: (state.buildings['arenaGate']?.level || 0) >= 1, buildingId: 'arenaGate' },
   ];
 
   interface TransitionBannerInfo {
@@ -210,7 +307,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         if (confirmed) {
           setActiveView('facilities');
           if (item.buildingId) {
-            setSelectedBuildingId(item.buildingId);
+            handleSelectBuilding(item.buildingId);
           }
         }
       });
@@ -260,7 +357,15 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
     return getTutorialProductionTarget(tutorialStepId || '', state.buildings, state.quests);
   }, [tutorialStepId, state.buildings, state.quests]);
 
-  const selectedBuildingData = selectedBuildingId ? state.buildings[selectedBuildingId] : null;
+  const selectedBuildingData = selectedBuildingId
+    ? (state.buildings?.[selectedBuildingId] || INITIAL_BUILDINGS[selectedBuildingId] || null)
+    : null;
+  // 🏛️ 건물 건설·증축 모달 닫기 핸들러
+  const handleCloseBuildingModal = () => {
+    handlePlayClick();
+    setSelectedBuildingId(null);
+    onClearHighlight?.();
+  };
 
   const tutorialRestriction = useMemo(() => {
     if (!selectedBuildingId || !selectedBuildingData) return { isRestricted: false };
@@ -281,19 +386,26 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
   const selectedDrawerKey = selectedBuildingId ? buildingsList.find(b => b.id === selectedBuildingId)?.drawerKey : undefined;
 
   const selectedIsConstructing = !!selectedBuildingData?.construction;
-  const selectedRemainSec = selectedIsConstructing ? Math.max(1, Math.ceil((selectedBuildingData!.construction!.startedAt + selectedBuildingData!.construction!.durationMs - now) / 1000)) : 0;
-  const selectedProgressPct = selectedIsConstructing ? Math.min(100, Math.max(0, Math.floor(((now - selectedBuildingData!.construction!.startedAt) / selectedBuildingData!.construction!.durationMs) * 100))) : 0;
+  const selectedEffectiveNow = selectedIsConstructing
+    ? Math.max(now, selectedBuildingData!.construction!.startedAt)
+    : now;
+  const selectedRemainSec = selectedIsConstructing
+    ? Math.max(1, Math.ceil((selectedBuildingData!.construction!.startedAt + selectedBuildingData!.construction!.durationMs - selectedEffectiveNow) / 1000))
+    : 0;
+  const selectedProgressPct = selectedIsConstructing
+    ? Math.min(100, Math.max(3, Math.floor(((selectedEffectiveNow - selectedBuildingData!.construction!.startedAt) / Math.max(1, selectedBuildingData!.construction!.durationMs)) * 100)))
+    : 0;
   const selectedStatusInfo = selectedBuildingId && selectedBuildingData ? getBuildingStatusInfo(selectedBuildingId, selectedBuildingData.level, hasWarmth) : null;
   const selectedLore = selectedBuildingId && selectedBuildingData ? getBuildingLore(selectedBuildingId, selectedBuildingData.level) : '';
   const selectedNextLevel = selectedBuildingData ? Math.min(10, selectedBuildingData.level + 1) : 1;
-  const selectedNextUpkeep = selectedBuildingId ? gm.getBuildingUpkeep(selectedBuildingId, selectedNextLevel) : { amount: 0, resName: '', resIcon: '', isDiscounted: false, originalAmount: 0 };
+  const selectedNextUpkeep = selectedBuildingId ? gm.getBuildingUpkeep(selectedBuildingId, selectedNextLevel) : { amount: 0, resName: '', resIcon: '', isDiscounted: false, originalAmount: 0, secondaryAmount: 0, secondaryIcon: '', secondaryName: '' };
   const upkeepSec = gm.getUpkeepIntervalSeconds();
 
   return (
     <div className="absolute inset-0 z-40 flex items-end md:relative md:inset-auto md:w-[620px] lg:w-[700px] xl:w-[780px] md:h-full md:shrink-0 md:z-20 select-none">
       {/* ── 배경 어두운 백드롭 (모바일 전용 백드롭, 데스크탑은 좌측 뷰가 노출되도록 숨김) ── */}
       <div
-        className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity animate-fade-in md:hidden"
+        className="absolute inset-0 bg-[#08090b]/85 md:hidden"
         onClick={() => {
           handlePlayClick();
           onClose();
@@ -303,9 +415,9 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
       {/* ── 슬라이드업 바텀시트(모바일) / 사이드 드로어(PC) ── */}
       <div
         ref={drawerRef}
-        className="relative z-10 flex flex-col w-full h-full border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden animate-drawer-enter"
+        className="relative z-10 flex flex-col w-full h-full bg-[#0a0c10] border-t md:border-t-0 md:border-l border-[#3d372e] shadow-[0_-8px_32px_rgba(0,0,0,0.85)] rounded-t-2xl md:rounded-none overflow-hidden animate-drawer-enter"
         style={{
-          backgroundImage: "linear-gradient(rgba(10, 12, 16, 0.40), rgba(6, 8, 12, 0.60)), url('assets/ark_citadel_hub.jpg')",
+          backgroundImage: "linear-gradient(rgba(10, 12, 16, 0.45), rgba(6, 8, 12, 0.65)), url('assets/ark_citadel_hub.webp')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -340,13 +452,13 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         )}
         {/* 모바일 상단 드래그 핸들 */}
         <div 
-          className="md:hidden flex items-center justify-center py-2 bg-[#0d0f14]/80 shrink-0"
+          className="md:hidden flex items-center justify-center py-2 bg-[#0d0f14] shrink-0"
         >
           <div className="w-10 h-1 rounded-full bg-[#3d372e]" />
         </div>
 
         {/* ── 상단 사령부 헤더 ── */}
-        <div className="flex items-center justify-between px-4 py-3 bg-[#0a0b0e]/80 border-b border-[#242732]/70 shrink-0 backdrop-blur-md">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#0a0b0e]/95 border-b border-[#242732] shrink-0">
         <div className="flex items-center gap-2">
           {activeView !== 'banners' && (
             <button
@@ -383,7 +495,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
             handlePlayClick();
             onClose();
           }}
-          className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-xs active:scale-95"
+          className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#181113] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:bg-[#2a1618] hover:border-[#85383b] transition-colors cursor-pointer font-bold shadow-xs active:scale-95"
           title={tr('닫기 (Esc)')}
         >
           ✕
@@ -391,11 +503,14 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
       </div>
 
       {/* ── 본문 콘텐츠 영역 ── */}
-      <div className={`flex-1 ${
-        activeView === 'workstations'
-          ? 'overflow-hidden flex flex-col p-1 sm:p-2'
-          : 'overflow-y-auto tg-scrollbar p-3.5 md:p-4 space-y-3.5'
-      }`}>
+      <div
+        ref={bodyScrollRef}
+        className={`flex-1 min-h-0 ${
+          activeView === 'workstations'
+            ? 'overflow-hidden flex flex-col p-1 sm:p-2'
+            : 'overflow-y-auto overscroll-contain [scrollbar-gutter:stable] tg-scrollbar p-3.5 md:p-4 space-y-3.5'
+        }`}
+      >
         
         {/* ═════════════════════════════════════════════════════════════
             VIEW 1: 3대 마스터 배너 메인 화면 (Step 2)
@@ -414,7 +529,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   setActiveView('bonfire');
                 }
               }}
-              className={`relative overflow-hidden p-3.5 rounded-xl cursor-pointer transition-all border backdrop-blur-md group ${
+              className={`relative overflow-hidden p-3.5 rounded-xl cursor-pointer transition-colors border bg-[#0d0f14] group ${
                 hasWarmth
                   ? 'border-[#b89758]/70 shadow-[0_0_16px_rgba(184,151,88,0.25)] hover:border-[#dcc496]'
                   : 'border-[#3d372e]/65 hover:border-[#5a4b35]'
@@ -423,7 +538,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
                 style={{
-                  backgroundImage: "url('assets/citadel_bonfire.jpg')",
+                  backgroundImage: "url('assets/citadel_bonfire.webp')",
                   filter: hasWarmth ? 'brightness(0.35) contrast(1.15)' : 'brightness(0.2) grayscale(0.8)',
                 }}
               />
@@ -441,7 +556,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                       ? 'bg-[#b89758]/25 text-[#dcc496] border border-[#b89758]/50 animate-pulse'
                       : 'bg-[#242732]/80 text-[#9da3af] border border-[#3d4252]/70'
                   }`}>
-                    {hasWarmth ? `온기 가동 중 (${warmthTimeStr})` : `성화 꺼짐 (${warmthTimeStr})`}
+                    {hasWarmth ? `${tr('온기 가동 중')} (${warmthTimeStr})` : `${tr('성화 꺼짐')} (${warmthTimeStr})`}
                   </span>
                 </div>
                 <p className="text-[11px] text-[#9da3af] leading-relaxed">
@@ -472,7 +587,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
                 style={{
-                  backgroundImage: "url('assets/ark_citadel_hub.jpg')",
+                  backgroundImage: "url('assets/ark_citadel_hub.webp')",
                   filter: 'brightness(0.25) contrast(1.15)',
                 }}
               />
@@ -501,7 +616,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 </p>
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#b89758] font-bold">
                   <span>{tr('전체 성채 시설 건설 & 증축 목록')}</span>
-                  <span>목록 열기 ▶</span>
+                  <span>{tr('목록 열기 ▶')}</span>
                 </div>
               </div>
             </div>
@@ -522,7 +637,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
                 style={{
-                  backgroundImage: "url('assets/menu_barracks.jpg')",
+                  backgroundImage: "url('assets/menu_barracks.webp')",
                   filter: 'brightness(0.28) contrast(1.15)',
                 }}
               />
@@ -544,7 +659,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 </p>
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#292233]/70 text-[11px] text-[#ce93d8] font-bold">
                   <span>{tr('퀘스트·심연강하·병영·차원게이트')}</span>
-                  <span>거점 입장 ▶</span>
+                  <span>{tr('거점 입장 ▶')}</span>
                 </div>
               </div>
             </div>
@@ -554,61 +669,90 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               <div className="w-full border-t border-[#3d372e]/60" />
             </div>
 
-            {/* ⚔️ 【배너 4】 원정대 편성 카드 (텍스트 전용) */}
-            <div
-              onClick={() => {
-                handlePlayClick();
-                onEnterDrawer('barracks');
-              }}
-              className="relative p-3.5 rounded-xl border border-[#3d372e]/65 hover:border-[#b89758] cursor-pointer transition-all shadow-md bg-[#12141a]/90 backdrop-blur-md group"
-            >
-              <div className="flex items-center justify-between mb-1.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-2xl leading-none drop-shadow">⚔️</span>
-                  <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#dcc496] tracking-tight">
-                    {tr('【원정대 편성】')}
-                  </h3>
-                </div>
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#1f2330]/80 text-[#9da3af] border border-[#2c3245]/70">
-                  {partyCount}/4인 편성
+            {/* ⚡ 지름길 섹션 헤더 (성채 시설 진입 카드 휠에서 등록된 빠른 배너) */}
+            <div className="flex items-center justify-between px-1 pt-1 pb-0.5">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-black text-[#ffd54f] flex items-center gap-1 tracking-tight">
+                  <span>⚡</span>
+                  <span>{tr('지름길')}</span>
+                </span>
+                <span className="text-[10px] text-[#8b9bb4]">
+                  {tr('(시설 진입 휠에서 등록한 빠른 바로가기)')}
                 </span>
               </div>
-              <p className="text-[11px] text-[#9da3af] leading-relaxed">
-                {tr('4인 원정대 파티 편성, 출격 대원 교체 및 진형 배치를 관리합니다.')}
-              </p>
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#b89758] font-bold">
-                <span>{tr('대원 교체 & 진형 배치')}</span>
-                <span>{tr('원정대 편성 바로가기')} ▶</span>
-              </div>
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#b89758]/15 text-[#dcc496] border border-[#b89758]/30">
+                {shortcutSlots.filter(Boolean).length}/3
+              </span>
             </div>
 
-            {/* 🪦 【배너 5】 성채 묘지 카드 (텍스트 전용) */}
-            <div
-              onClick={() => {
-                handlePlayClick();
-                onEnterDrawer('cemetery');
-              }}
-              className="relative p-3.5 rounded-xl border border-[#3d372e]/65 hover:border-[#9da3af] cursor-pointer transition-all shadow-md bg-[#12141a]/90 backdrop-blur-md group"
-            >
-              <div className="flex items-center justify-between mb-1.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-2xl leading-none drop-shadow">🪦</span>
-                  <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#cfd8e8] tracking-tight">
-                    {tr('【성채 묘지】')}
-                  </h3>
+            {/* ⚡ 등록된 지름길 슬롯 배너 목록 (성채 시설 진입 카드 휠과 1:1 연동) */}
+            {shortcutSlots.map((slotKey, slotIdx) => {
+              if (!slotKey) return null;
+              const item = WORKSTATION_ITEMS.find(it => it.key === slotKey);
+              if (!item) return null;
+
+              const isBarracks = item.key === 'barracks';
+              const isCemetery = item.key === 'cemetery';
+
+              const subText = isBarracks
+                ? tr('3인 원정대 파티 편성, 출격 대원 교체 및 진형 배치를 관리합니다.')
+                : isCemetery
+                ? tr('전투 중 전사한 영령들의 묘비 안치 현황 및 영령의 가호·추모 버프를 확인합니다.')
+                : item.sub;
+
+              const badgeText = isBarracks
+                ? tr('{0}/3인 편성', state.party.length)
+                : isCemetery
+                ? (cemeteryCount > 0 ? tr('{0}위 안치', cemeteryCount) : tr('안치자 없음'))
+                : item.badge || (item.buildingId && state.buildings[item.buildingId] ? `Lv.${state.buildings[item.buildingId]?.level}` : null);
+
+              const footerActionText = isBarracks
+                ? tr('대원 교체 & 진형 배치')
+                : isCemetery
+                ? tr('전사 영령 안치 & 추모')
+                : (item.isBuilt ? tr('거점 바로가기') : tr('시설 건설 필요'));
+
+              return (
+                <div
+                  key={`shortcut-banner-${slotIdx}-${item.key}`}
+                  onClick={() => {
+                    handlePlayClick();
+                    if (item.isBuilt) {
+                      onEnterDrawer(item.key);
+                    } else {
+                      handleWorkstationClick(item, document.body);
+                    }
+                  }}
+                  className="relative p-3.5 rounded-xl border border-[#3d372e]/65 hover:border-[#b89758] cursor-pointer transition-colors shadow-md bg-[#12141a]/95 group"
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="text-2xl leading-none drop-shadow shrink-0">{item.icon}</span>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="text-[9.5px] font-mono px-1.5 py-0.2 rounded bg-[#b89758]/20 text-[#dcc496] border border-[#b89758]/40 font-bold shrink-0">
+                          #{slotIdx + 1}
+                        </span>
+                        <h3 className="text-sm font-bold text-[#ededed] group-hover:text-[#dcc496] tracking-tight truncate">
+                          【{item.name}】
+                        </h3>
+                      </div>
+                    </div>
+                    {badgeText && (
+                      <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#1f2330]/80 text-[#9da3af] border border-[#2c3245]/70 shrink-0 ml-2">
+                        {tr(badgeText)}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-[#9da3af] leading-relaxed line-clamp-2">
+                    {subText}
+                  </p>
+                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#b89758] font-bold">
+                    <span>{footerActionText}</span>
+                    <span>{item.name} {tr('바로가기')} ▶</span>
+                  </div>
                 </div>
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#1f2330]/80 text-[#9da3af] border border-[#2c3245]/70">
-                  {cemeteryCount > 0 ? `${cemeteryCount}위 안치` : tr('안치자 없음')}
-                </span>
-              </div>
-              <p className="text-[11px] text-[#9da3af] leading-relaxed">
-                {tr('전투 중 전사한 영령들의 묘비 안치 현황 및 영령의 가호·추모 버프를 확인합니다.')}
-              </p>
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#262933]/70 text-[11px] text-[#9da3af] group-hover:text-[#cfd8e8] font-bold">
-                <span>{tr('전사 영령 안치 & 추모')}</span>
-                <span>{tr('성채 묘지 바로가기')} ▶</span>
-              </div>
-            </div>
+              );
+            })}
 
           </div>
         )}
@@ -619,11 +763,11 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
         {activeView === 'bonfire' && (
           <div className="flex flex-col gap-3.5 max-w-lg mx-auto w-full pt-1">
             {/* 성화 게이지 카드 */}
-            <div className="rounded-2xl bg-[#161820]/80 border border-[#3d372e]/80 backdrop-blur-md flex flex-col overflow-hidden shadow-xl">
+            <div className="rounded-2xl bg-[#161820]/95 border border-[#3d372e]/80 flex flex-col overflow-hidden shadow-xl">
               {/* 성화 일러스트 배너 (꺼져있을 땐 그레이스케일, 켜지면 따뜻한 풀컬러 복원) */}
               <div className="relative w-full h-36 sm:h-44 overflow-hidden bg-[#07090e] border-b border-[#242b3b]">
                 <img
-                  src="assets/citadel_bonfire.jpg"
+                  src="assets/citadel_bonfire.webp"
                   alt={tr('신성한 방주의 성화')}
                   className={`w-full h-full object-cover transition-all duration-700 ease-out ${
                     hasWarmth
@@ -723,7 +867,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               const alchemyLv = state.buildings['alchemy']?.level || 0;
 
               return (
-                <div className="p-3 bg-[#0e1422]/75 border border-[#202c42]/70 rounded-xl flex flex-col gap-2 shadow-sm backdrop-blur-md">
+                <div className="p-3 bg-[#0e1422]/95 border border-[#202c42] rounded-xl flex flex-col gap-2 shadow-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#c8aa6e] font-bold flex items-center gap-1.5">
                       <span>🏛️</span>
@@ -733,9 +877,9 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   </div>
                   <div className="grid grid-cols-3 gap-1.5 pt-0.5">
                     {/* 🥩 대량 배급제 */}
-                    <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-all ${
+                    <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-colors ${
                       syn.foodSynergy
-                        ? 'bg-[#1b2b22]/90 border-[#38ef7d66] text-[#38ef7d]' : 'bg-[#141822]/80 border-[#222b3d] text-[#8b9bb4] opacity-70'
+                        ? 'bg-[#1b2b22]/90 border-[#38ef7d66] text-[#38ef7d]' : 'bg-[#141822]/90 border-[#222b3d] text-[#8b9bb4] opacity-75'
                     }`}>
                       <div className="flex items-center gap-1 text-[11px] font-bold">
                         <span>🥩</span>
@@ -749,17 +893,17 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                       </div>
                     </div>
 
-                    {/* ⚖️ 상인 네트워크 */}
-                    <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-all ${
+                    {/* ⚖️ 상업 네트워크 */}
+                    <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-colors ${
                       syn.goldSynergy
-                        ? 'bg-[#2b2716]/90 border-[#ffd54f66] text-[#ffd54f]' : 'bg-[#141822]/80 border-[#222b3d] text-[#8b9bb4] opacity-70'
+                        ? 'bg-[#2b2716]/90 border-[#ffd54f66] text-[#ffd54f]' : 'bg-[#141822]/90 border-[#222b3d] text-[#8b9bb4] opacity-75'
                     }`}>
                       <div className="flex items-center gap-1 text-[11px] font-bold">
                         <span>⚖️</span>
-                        <span>{tr('상인 네트워크')}</span>
+                        <span>{tr('상업 네트워크')}</span>
                       </div>
                       <div className="text-[9px] mt-0.5">
-                        {syn.goldSynergy ? tr('골드 유지비 -25% & 최대 20만G') : `${tr('블랙마켓 Lv.5 필요')} (${marketLv}/5)`}
+                        {syn.goldSynergy ? tr('골드 유지비 -25% & 최대 50만G') : `${tr('블랙마켓 Lv.5 필요')} (${marketLv}/5)`}
                       </div>
                       <div className="text-[8px] font-mono mt-0.5 font-bold">
                         {syn.goldSynergy ? `● ${tr('활성화됨')}` : `○ ${tr('미달성')}`}
@@ -767,9 +911,9 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     </div>
 
                     {/* 🧪 에테르 환류관 */}
-                    <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-all ${
+                    <div className={`p-2 rounded-lg border text-center flex flex-col items-center justify-center transition-colors ${
                       syn.etherSynergy
-                        ? 'bg-[#171920]/90 border-[#c8aa6e66] text-[#c8aa6e]' : 'bg-[#141822]/80 border-[#222b3d] text-[#8b9bb4] opacity-70'
+                        ? 'bg-[#171920]/90 border-[#c8aa6e66] text-[#c8aa6e]' : 'bg-[#141822]/90 border-[#222b3d] text-[#8b9bb4] opacity-75'
                     }`}>
                       <div className="flex items-center gap-1 text-[11px] font-bold">
                         <span>🧪</span>
@@ -794,7 +938,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
 
             {/* 📜 튜토리얼 주요 생산 시설 순차 재건 진행 배너 */}
             {tutorialProdTarget && (
-              <div className="p-3 sm:p-3.5 rounded-xl bg-gradient-to-r from-[#1c1a14] via-[#242018] to-[#1a1c24] border border-[#ffd54f]/50 shadow-lg flex flex-col gap-2 animate-fade-in">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-gradient-to-r from-[#1c1a14] via-[#242018] to-[#1a1c24] border border-[#ffd54f]/50 shadow-lg flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-base">📜</span>
@@ -815,8 +959,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     <button
                       type="button"
                       onClick={() => {
-                        handlePlayClick();
-                        setSelectedBuildingId(tutorialProdTarget.targetId);
+                        handleSelectBuilding(tutorialProdTarget.targetId);
                       }}
                       className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#ffd54f] to-[#ffb300] text-black font-extrabold text-[11px] shadow hover:brightness-110 active:scale-95 cursor-pointer shrink-0"
                     >
@@ -845,8 +988,13 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               const curLv = b.maxLevel || b.level;
               const isMax = curLv >= 10;
               const isConstructing = !!b.construction;
-              const remainSec = isConstructing ? Math.max(1, Math.ceil((b.construction!.startedAt + b.construction!.durationMs - now) / 1000)) : 0;
-              const progressPct = isConstructing ? Math.min(100, Math.max(0, Math.floor(((now - b.construction!.startedAt) / b.construction!.durationMs) * 100))) : 0;
+              const effectiveNow = isConstructing ? Math.max(now, b.construction!.startedAt) : now;
+              const remainSec = isConstructing
+                ? Math.max(1, Math.ceil((b.construction!.startedAt + b.construction!.durationMs - effectiveNow) / 1000))
+                : 0;
+              const progressPct = isConstructing
+                ? Math.min(100, Math.max(3, Math.floor(((effectiveNow - b.construction!.startedAt) / Math.max(1, b.construction!.durationMs)) * 100)))
+                : 0;
               const targetLv = b.construction?.targetLevel || b.level + 1;
               const cost = gm.getBuildingUpgradeCost(item.id, curLv);
               const canAfford = Object.entries(cost).every(
@@ -856,13 +1004,14 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
 
               const isHighlighted = highlightedBuildingId === item.id;
               const isTutorialTarget = Boolean(tutorialProdTarget && tutorialProdTarget.targetId === item.id && !isBuilt);
+              const isModalOpenForThis = selectedBuildingId === item.id || inspectingBuildingId === item.id;
 
               return (
                 <div
                   key={item.id}
                   id={`citadel-building-row-${item.id}`}
                   data-tutorial-target={
-                    selectedBuildingId !== item.id
+                    !isModalOpenForThis
                       ? (item.id === 'butchery' && !isBuilt && (tutorialStepId === 'TUTORIAL_BUILD_REFINERY' || !tutorialStepId)
                         ? 'build-refinery'
                         : item.id === 'tavern' && !isBuilt && tutorialStepId === 'TUTORIAL_BUILD_TAVERN'
@@ -872,31 +1021,31 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                         : undefined)
                       : undefined
                   }
-                  onClick={() => {
-                    handlePlayClick();
-                    setSelectedBuildingId(item.id);
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelectBuilding(item.id);
                   }}
-                  className={`flex flex-col justify-center p-3.5 sm:p-4 min-h-[76px] sm:min-h-[82px] rounded-xl border transition-all cursor-pointer backdrop-blur-md ${
+                  className={`flex flex-col justify-center p-3.5 sm:p-4 min-h-[76px] sm:min-h-[82px] rounded-xl border transition-colors cursor-pointer ${
                     isTutorialTarget
-                      ? 'ring-2 ring-[#ffd54f] border-[#ffd54f] shadow-[0_0_16px_rgba(255,213,79,0.35)] bg-[#1e1c16]/75'
+                      ? 'ring-2 ring-[#ffd54f] border-[#ffd54f] shadow-[0_0_16px_rgba(255,213,79,0.35)] bg-[#1e1c16]/95'
                       : isHighlighted ? 'ring-2 ring-[#b89758] shadow-[0_0_12px_rgba(184,151,88,0.5)]' : ''
                   } ${
                     isConstructing
-                      ? 'bg-[#181510]/75 border-[#b89758]/60 shadow-[0_0_12px_rgba(184,151,88,0.2)]'
+                      ? 'bg-[#181510]/95 border-[#b89758]/80 shadow-[0_0_12px_rgba(184,151,88,0.2)]'
                       : isBuilt
-                      ? 'bg-[#12151e]/65 border-[#3d372e]/60 hover:border-[#b89758] hover:bg-[#181d2a]/80'
-                      : 'bg-[#0a0d14]/45 border-[#202738]/50 opacity-60 hover:opacity-100 hover:bg-[#101420]/60'
+                      ? 'bg-[#12151e]/95 border-[#3d372e]/80 hover:border-[#b89758] hover:bg-[#181d2a]'
+                      : 'bg-[#0a0d14]/85 border-[#202738]/75 opacity-75 hover:opacity-100 hover:bg-[#101420]'
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-3 min-w-0 pr-2">
-                      <div className="w-10 h-10 rounded-xl bg-[#0a0d14]/70 border border-[#3d372e]/60 flex items-center justify-center shrink-0 shadow-inner">
+                      <div className="w-10 h-10 rounded-xl bg-[#0a0d14] border border-[#3d372e]/70 flex items-center justify-center shrink-0 shadow-inner">
                         <GameIcon name={b.id} icon={b.icon} size={24} />
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <span className="font-bold text-xs sm:text-sm text-[#ededed] truncate">
-                            {b.name}
+                            {(BUILDING_NAMES as any)[item.id]?.[lang]?.name || tr(b.name)}
                           </span>
                           {isTutorialTarget && (
                             <span className="px-1.5 py-0.2 rounded text-[10px] font-black bg-gradient-to-r from-[#ffd54f] to-[#b89758] text-[#08090b] shadow-xs animate-pulse">
@@ -909,17 +1058,17 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                             </span>
                           ) : (
                             <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#262933] text-[#9da3af]">
-                              미건설
+                              {tr('미건설')}
                             </span>
                           )}
                           {item.drawerKey && isBuilt && (
                             <span className="px-1.5 py-0.2 rounded text-[9.5px] font-bold bg-[#2a1e35] text-[#ce93d8] border border-[#ce93d8]/30">
-                              입장가능
+                              {tr('입장 가능')}
                             </span>
                           )}
                         </div>
                         <p className="text-[11.5px] text-[#9da3af] truncate mt-0.5">
-                          {b.description || tr('방주 거점 필수 인프라 시설')}
+                          {(BUILDING_NAMES as any)[item.id]?.[lang]?.desc || tr(b.description || '방주 거점 필수 인프라 시설')}
                         </p>
                       </div>
                     </div>
@@ -933,47 +1082,47 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                         </span>
                       )}
                       {isConstructing ? (
-                        <span className="px-2.5 py-1 rounded-lg text-[10.5px] font-bold font-mono bg-[#b89758]/20 text-[#ffd54f] border border-[#b89758]/50 animate-pulse flex items-center gap-1">
+                        <span className="px-2.5 py-1 rounded-lg text-[10.5px] font-bold font-mono tabular-nums bg-[#b89758]/20 text-[#ffd54f] border border-[#b89758]/50 flex items-center gap-1">
                           <span>🔨</span>
                           <span>{progressPct}% ({formatTimeLeft(remainSec, lang)})</span>
                         </span>
                       ) : isMax ? (
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#262933] text-[#9da3af]">
-                          최고 레벨
+                          {tr('최고 레벨')}
                         </span>
                       ) : !prereq.allowed ? (
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#1e222d] text-[#78889e]">
-                          선행 필요
+                          {tr('선행 필요')}
                         </span>
                       ) : canAfford ? (
                         <span className="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-[#52784c]/20 text-[#9cd494] border border-[#52784c]/40 flex items-center gap-1">
                           <span>⬆</span>
-                          <span>증축 가능</span>
+                          <span>{tr('증축 가능')}</span>
                         </span>
                       ) : (
                         <span className="px-2 py-0.5 rounded text-[10px] text-[#585e6b]">
-                          재료 부족
+                          {tr('재료 부족')}
                         </span>
                       )}
                       <span className="text-[#b89758] text-xs font-bold">▶</span>
                     </div>
                   </div>
 
-                  {/* 🔨 공사 진행 중일 때 하단 실시간 진행 프로그래스바 */}
+                  {/* 🔨 공사 진행 중일 때 하단 실시간 진행 프로그래스바 (모바일 웹뷰 키프레임 락 및 높이 증발 방지) */}
                   {isConstructing && (
-                    <div className="w-full mt-2.5 pt-2 border-t border-[#b89758]/30 flex flex-col gap-1.5 animate-fade-in">
-                      <div className="flex items-center justify-between text-[11px] font-mono">
+                    <div className="w-full mt-2.5 pt-2 border-t border-[#b89758]/35 flex flex-col gap-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-mono tabular-nums">
                         <span className="text-[#ffd54f] font-bold flex items-center gap-1.5">
-                          <span className="animate-spin text-xs">⚙️</span>
+                          <span className="w-4 h-4 inline-flex items-center justify-center shrink-0 leading-none animate-spin text-xs">⚙️</span>
                           <span>{tr('공사 진행 중')} (Lv.{b.level} ➔ Lv.{targetLv})</span>
                         </span>
                         <span className="text-[#f5ecd7] font-bold">
                           ⏳ {formatTimeLeft(remainSec, lang)} ({progressPct}%)
                         </span>
                       </div>
-                      <div className="w-full h-2 bg-[#08090b] rounded-full overflow-hidden border border-[#b89758]/40 p-0.5">
+                      <div className="w-full h-2.5 bg-[#08090b] rounded-full overflow-hidden border border-[#b89758]/50">
                         <div
-                          className="h-full bg-gradient-to-r from-[#b89758] via-[#ffd54f] to-[#e6c88b] rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(255,213,79,0.5)]"
+                          className="h-full bg-gradient-to-r from-[#b89758] via-[#ffd54f] to-[#e6c88b] rounded-full transition-[width] duration-150 ease-linear shadow-[0_0_8px_rgba(255,213,79,0.5)]"
                           style={{ width: `${progressPct}%` }}
                         />
                       </div>
@@ -998,269 +1147,48 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 Object.entries(state.buildings || {}).map(([k, v]) => [k, v?.level])
               )}
               registerableCodexCount={registerableCodexCount}
+              shortcutSlots={shortcutSlots}
+              onSaveShortcutSlot={handleSaveShortcutSlot}
+              onClearShortcutSlot={handleClearShortcutSlot}
             />
           </div>
         )}
 
       </div>
-
       {/* ═════════════════════════════════════════════════════════════
-          【건설·증축·입장 통합 모달】 (리스트 아이템 터치 시 오픈)
-          기존 상세 모달의 모든 구성(공사진행, 테크선행, 로어, 가동효과, 다음특전, 커스텀자원) 완비
+          【건설·증축·입장 전용 커스텀 모달 (SheetModal)】 (리스트 아이템 터치 시 오픈)
+          모바일/폴더블(갤럭시 폴드 커버화면 등)에서 100% 가득 찬 깔끔한 시트 및
+          블러/키프레임 배제로 안드로이드 웹뷰 합성 글리치 원천 방지
           ═════════════════════════════════════════════════════════════ */}
       {selectedBuildingId && selectedBuildingData && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-xs select-none"
-          onClick={() => {
-            handlePlayClick();
-            setSelectedBuildingId(null);
-            onClearHighlight?.();
-          }}
-        >
-          <div
-            className="relative w-full max-w-lg max-h-[90vh] flex flex-col bg-[#141720] border border-[#b89758] rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.95)] overflow-hidden"
-            onClick={e => e.stopPropagation()}
-          >
-            {/* 1. 모달 헤더 바 (시네마틱 배너 헤더) */}
-            <div className="relative w-full h-32 sm:h-38 bg-[#0a0d14] border-b border-[#b89758]/60 shrink-0 overflow-hidden">
-              {BUILDING_IMAGE_MAP[selectedBuildingData.id] ? (
-                <img
-                  src={BUILDING_IMAGE_MAP[selectedBuildingData.id]}
-                  alt={selectedBuildingData.name}
-                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${
-                    selectedBuildingData.level === 0 ? 'grayscale brightness-[0.52] contrast-110' : 'brightness-100 contrast-105 saturate-110'
-                  }`}
-                  style={{
-                    transition: 'filter 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-                  }}
-                />
-              ) : null}
-              {/* 상단 및 하단 그라데이션 */}
-              <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/85 via-black/40 to-transparent pointer-events-none" />
-              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#141720] via-[#141720]/80 to-transparent pointer-events-none" />
-
-              {/* 헤더 콘텐츠 */}
-              <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 flex items-center gap-2.5 max-w-[calc(100%-60px)]">
-                <div className="w-10 h-10 rounded-xl bg-black/75 border border-[#b89758]/60 flex items-center justify-center text-2xl drop-shadow shadow-md">
-                  <GameIcon name={selectedBuildingData.id} icon={selectedBuildingData.icon} size={24} />
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <h3 className="text-sm sm:text-base font-extrabold text-[#ededed] drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-                      {selectedBuildingData.name}
-                    </h3>
-                    <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#b89758]/30 text-[#ffd54f] border border-[#b89758]/60 shadow-xs">
-                      Lv.{selectedBuildingData.level}/10
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-[#cfd8e8] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)] line-clamp-1 mt-0.5">
-                    {selectedBuildingData.description}
-                  </p>
-                </div>
+        <SheetModal
+          open={!!selectedBuildingId}
+          onClose={handleCloseBuildingModal}
+          zIndex="z-[150]"
+          maxWidth="max-w-[92vw] sm:max-w-[480px] md:max-w-[540px]"
+          title={
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-black/60 border border-[#b89758]/50 flex items-center justify-center shrink-0">
+                <GameIcon name={selectedBuildingData.id} icon={selectedBuildingData.icon} size={20} />
               </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  handlePlayClick();
-                  setSelectedBuildingId(null);
-                  onClearHighlight?.();
-                }}
-                className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-8 h-8 flex items-center justify-center rounded-lg bg-black/70 hover:bg-[#2a1618] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-md active:scale-95 text-sm"
-                title={tr('닫기 (Esc)')}
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* 2. 모달 스크롤 본문 */}
-            <div className="flex-1 overflow-y-auto tg-scrollbar p-3.5 sm:p-4 space-y-3 text-xs">
-              
-              {/* 🔒 튜토리얼 생산 시설 우선 복원 지침 배너 */}
-              {tutorialRestriction.isRestricted && (
-                <div className="p-3 rounded-xl bg-gradient-to-r from-[#2a1714] to-[#1c1214] border border-[#ff7043]/70 flex items-start gap-2.5 shadow-md animate-fade-in">
-                  <span className="text-xl shrink-0 drop-shadow">🛡️</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-xs font-bold text-[#ff8a65]">
-                        {tr('방주 통제실 튜토리얼 지침')}
-                      </span>
-                      <span className="px-1.5 py-0.2 rounded text-[9.5px] font-black bg-[#ff7043]/25 text-[#ffab91] border border-[#ff7043]/40">
-                        {tr('진행 필수')}
-                      </span>
-                    </div>
-                    <p className="text-[11.5px] text-[#ffd0c2] leading-relaxed mt-1">
-                      {tr(tutorialRestriction.message || '우선 나머지 생산 시설 건설을 완료해 주십시오.')}
-                    </p>
-                    {tutorialRestriction.target && tutorialRestriction.target.targetId !== selectedBuildingId && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          handlePlayClick();
-                          setSelectedBuildingId(tutorialRestriction.target!.targetId);
-                        }}
-                        className="mt-2 py-1.5 px-3 rounded-lg bg-gradient-to-r from-[#ff7043] to-[#e64a19] text-[#08090b] font-black text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 hover:brightness-110"
-                      >
-                        <span>{tr(`목표 시설 [${tutorialRestriction.target.targetName}] 건설로 이동`)}</span>
-                        <span>➔</span>
-                      </button>
-                    )}
-                    {tutorialRestriction.target && !tutorialRestriction.target.isUnlocked && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          handlePlayClick();
-                          onEnterDrawer('quests');
-                        }}
-                        className="mt-2 py-1.5 px-3 rounded-lg bg-[#2a1714] border border-[#ff7043] text-[#ffab91] font-black text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 hover:brightness-110"
-                      >
-                        <span>{tr('지휘관 퀘스트 보상 수령하러 가기')}</span>
-                        <span>➔</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* 🔨 공사 진행 중 안내 배너 */}
-              {selectedIsConstructing && (
-                <div className="p-3 rounded-xl bg-[#0a1424] border border-[#c8aa6e66] flex flex-col gap-2 shadow-md">
-                  <div className="flex items-center justify-between text-xs font-bold text-[#c8aa6e]">
-                    <span className="flex items-center gap-1.5">
-                      <span className="animate-spin">⚙️</span>
-                      <span>Lv.{selectedBuildingData.construction!.targetLevel} {tr('증축 공사 진행 중...')}</span>
-                    </span>
-                    <span className="font-mono">{formatTimeLeft(selectedRemainSec, lang)} ({selectedProgressPct}%)</span>
-                  </div>
-                  <div className="w-full bg-[#050c18] rounded-full h-2 overflow-hidden border border-[#c8aa6e33]">
-                    <div
-                      className="bg-gradient-to-r from-[#c8aa6e] to-[#00f2fe] h-full transition-all duration-300 shadow-[0_0_8px_#c8aa6e]"
-                      style={{ width: `${selectedProgressPct}%` }}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* 🔒 테크트리 선행 미달 경고 배너 */}
-              {!selectedPrereq.allowed && !selectedIsMax && (
-                <div className="p-3 rounded-xl bg-[#2a1412] border border-[#ef535066] text-xs text-[#ff8a80] flex items-center gap-2.5 shadow-sm">
-                  <span className="text-xl">🔒</span>
-                  <div>
-                    <div className="font-bold text-[#ef5350]">{tr('테크트리 선행 조건 미달')}</div>
-                    <div className="text-[11px] text-[#cfd8dc] mt-0.5">{selectedPrereq.reason}</div>
-                  </div>
-                </div>
-              )}
-
-              {/* 📜 상단: 시설 서사 및 배경 로어 */}
-              <div className="p-3 rounded-xl bg-[#0d121c]/90 border border-[#202738] flex flex-col gap-1.5 shadow-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-[#c8aa6e] font-bold">📜 {tr('시설 서사 및 배경')}</span>
-                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e]">
-                    {selectedBuildingData.level > 0 ? `현재 Lv.${selectedBuildingData.level}` : tr('미건설 시설')}
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-bold text-sm sm:text-base text-[#f3e5c8] truncate">
+                    {tr(selectedBuildingData.name)}
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#b89758]/20 text-[#ffd54f] border border-[#b89758]/40">
+                    Lv.{selectedBuildingData.level}/10
                   </span>
                 </div>
-                <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
-                  {selectedLore}
+                <div className="text-[11px] text-[#cfd8e8]/75 truncate font-normal mt-0.5">
+                  {tr(selectedBuildingData.description)}
                 </div>
               </div>
-
-              {/* ✨ 중단 1: 현재 가동 효과 */}
-              {selectedStatusInfo && (
-                <div className="p-3 rounded-xl bg-[#0a1816]/80 border border-[#1e3e34] flex flex-col gap-1 shadow-xs">
-                  <div className="flex items-center justify-between text-[#9cd494] font-bold text-xs">
-                    <span>✨ {tr('현재 가동 효과')} (Lv.{selectedBuildingData.level})</span>
-                    {selectedStatusInfo.badge && (
-                      <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]">
-                        {selectedStatusInfo.badge}
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-[11px] text-[#e0e6ed] mt-0.5 font-medium leading-relaxed">
-                    {selectedStatusInfo.currentText}
-                  </div>
-                </div>
-              )}
-
-              {/* 🔮 중단 2: 다음 단계 승급 프리뷰 & 유지비 표기 */}
-              {selectedStatusInfo && (
-                <div className="p-3 rounded-xl bg-[#181326]/80 border border-[#2d2244] flex flex-col gap-1 shadow-xs">
-                  <div className="text-[#ffd54f] font-bold text-xs flex items-center justify-between">
-                    <span>🔮 {tr('다음 레벨 특전')} (Lv.{selectedNextLevel})</span>
-                    {selectedIsMax ? (
-                      <span className="text-[10px] text-[#8b9bb4]">MAX</span>
-                    ) : (selectedNextUpkeep.amount > 0 || (selectedNextUpkeep.secondaryAmount && selectedNextUpkeep.secondaryAmount > 0)) ? (
-                      <span className="text-[10px] font-mono text-[#ff8a80]">
-                        ({[
-                          selectedNextUpkeep.amount > 0 ? `${selectedNextUpkeep.resIcon} -${selectedNextUpkeep.amount}` : '',
-                          selectedNextUpkeep.secondaryAmount && selectedNextUpkeep.secondaryAmount > 0 ? `${selectedNextUpkeep.secondaryIcon} -${selectedNextUpkeep.secondaryAmount}` : ''
-                        ].filter(Boolean).join(', ')}/{upkeepSec}초)
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="text-[11px] text-[#ffd54f] mt-0.5 leading-relaxed font-medium">
-                    {selectedStatusInfo.nextText}
-                    {!selectedIsMax && selectedNextUpkeep.amount > 0 && selectedBuildingData.level < 4 && (
-                      <span className="text-[10px] text-[#ff8a80] block mt-0.5">
-                        * 4레벨부터 {upkeepSec}초마다 {selectedNextUpkeep.resIcon} {selectedNextUpkeep.resName} {selectedNextUpkeep.amount}개 유지비 소모 (Lv.1~3 무료 유지)
-                      </span>
-                    )}
-                    {!selectedIsMax && (selectedBuildingId === 'lumberCamp' || selectedBuildingId === 'quarry') && selectedNextLevel >= 5 && (
-                      <span className="text-[10px] text-[#c8aa6e] block mt-0.5 font-mono">
-                        ⚙️ 시설 특화: 골드 유지비 -{Math.min(42, (selectedNextLevel - 4) * 7)}% 고유 감면 적용{selectedBuildingId === 'quarry' && selectedNextLevel >= 7 ? ' (30% 식량 분담)' : ''}
-                      </span>
-                    )}
-                    {!selectedIsMax && selectedNextUpkeep.isDiscounted && (
-                      <span className="text-[10px] text-[#38ef7d] block mt-0.5">
-                        ✓ 인프라 시너지 감면 적용 중 (정가: {selectedNextUpkeep.originalAmount} ➔ 할인가: {selectedNextUpkeep.amount})
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* ⚡ / 🔨 하단: 강화 소모 자원 (커스텀 에셋 아이콘 & 충족 녹색 / 부족 적색 뱃지) */}
-              {!selectedIsMax && (
-                <div className="p-3 rounded-xl bg-[#0e1118] border border-[#222d42] flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#ededed]">
-                      {selectedBuildingData.level > 0 ? tr('⚡ 증축 필요 자원') : tr('🔨 신축 필요 자원')}
-                    </span>
-                    <span className={selectedCanAfford ? 'text-[10px] text-[#9cd494] font-bold' : 'text-[10px] text-[#ff8585] font-bold animate-pulse'}>
-                      {selectedCanAfford ? tr('✅ 모든 재료 보유') : tr('⚠️ 일부 자원 부족')}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    {Object.entries(selectedCost).map(([resKey, reqAmt]) => {
-                      const curAmt = (state.resources as unknown as Record<string, number>)[resKey] || 0;
-                      const isEnough = curAmt >= (reqAmt as number);
-                      const gmMeta = GameManager.getResourceMeta(resKey as any);
-                      const meta = RES_NAMES_AND_ICONS[resKey] || (gmMeta?.name ? { label: gmMeta.name, icon: gmMeta.icon } : { label: resKey, icon: '📦' });
-
-                      return (
-                        <div
-                          key={resKey}
-                          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border font-mono text-xs font-bold transition-all ${
-                            isEnough
-                              ? 'bg-[#1b2b20]/90 border-[#38ef7d66] text-[#9cd494]'
-                              : 'bg-[#2b1719]/90 border-[#ef535066] text-[#ff8585] animate-pulse'
-                          }`}
-                        >
-                          <GameIcon name={resKey} icon={meta.icon} size={16} />
-                          <span className="font-sans text-[11px]">{tr(meta.label)}</span>
-                          <span>{curAmt.toLocaleString()}/{(reqAmt as number).toLocaleString()}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
             </div>
-
-            {/* 3. 모달 하단 액션 버튼 바 */}
-            <div className="flex items-center justify-between px-4 py-3 bg-[#0a0d14] border-t border-[#262933] shrink-0 gap-2">
-              {/* 좌측: 시설 입장 버튼 (해당 건물이 입장 가능한 경우) */}
+          }
+          footer={
+            <div className="flex items-center justify-between w-full gap-2">
+              {/* 좌측: 시설 바로 입장 (해당 건물이 입장 가능한 경우) */}
               {selectedDrawerKey && selectedBuildingData.level > 0 ? (
                 <button
                   type="button"
@@ -1270,7 +1198,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     onClose();
                     onEnterDrawer(selectedDrawerKey);
                   }}
-                  className="py-2 px-3 rounded-xl bg-[#2a1e35] border border-[#a875d4] text-[#e0b8ff] font-bold text-xs hover:bg-[#352545] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+                  className="py-1.5 px-3 rounded-lg bg-[#2a1e35] border border-[#a875d4] text-[#e0b8ff] font-bold text-xs hover:bg-[#352545] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm shrink-0"
                 >
                   <span>🚪</span>
                   <span>{tr('시설 바로 입장')}</span>
@@ -1281,12 +1209,8 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    handlePlayClick();
-                    setSelectedBuildingId(null);
-                    onClearHighlight?.();
-                  }}
-                  className="py-2 px-3 rounded-xl bg-[#1a1c24] border border-[#3d4252] text-[#9da3af] hover:text-white font-bold text-xs transition-colors cursor-pointer"
+                  onClick={handleCloseBuildingModal}
+                  className="py-1.5 px-3 rounded-lg bg-[#1a1c24] border border-[#3d4252] text-[#9da3af] hover:text-white font-bold text-xs transition-colors cursor-pointer"
                 >
                   {tr('닫기')}
                 </button>
@@ -1295,7 +1219,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                   <button
                     type="button"
                     disabled
-                    className="py-2 px-4 rounded-xl bg-[#c8aa6e1a] border border-[#c8aa6e88] text-[#c8aa6e] font-bold text-xs opacity-75 cursor-not-allowed animate-pulse"
+                    className="py-1.5 px-3.5 rounded-lg bg-[#c8aa6e1a] border border-[#c8aa6e88] text-[#c8aa6e] font-bold text-xs opacity-75 cursor-not-allowed animate-pulse"
                   >
                     🔨 {tr('공사 진행 중')} ({formatDuration(selectedRemainSec, lang)})
                   </button>
@@ -1304,9 +1228,9 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                     type="button"
                     onClick={() => {
                       handlePlayClick();
-                      gm.addLog(`⚠️ [튜토리얼 지침] ${tutorialRestriction.message}`, 'warning');
+                      gm.addLog(`⚠️ [튜토리얼 지침] ${tutorialRestriction.message}`, 'system');
                     }}
-                    className="py-2 px-4 rounded-xl bg-[#2a1714] border border-[#ff7043]/60 text-[#ffab91] font-extrabold text-xs cursor-not-allowed opacity-90 flex items-center gap-1.5 shadow-inner"
+                    className="py-1.5 px-3.5 rounded-lg bg-[#2a1714] border border-[#ff7043]/60 text-[#ffab91] font-extrabold text-xs cursor-not-allowed opacity-90 flex items-center gap-1.5 shadow-inner"
                     title={tutorialRestriction.message}
                   >
                     <span>🔒</span>
@@ -1333,7 +1257,7 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                         onClearHighlight?.();
                       }
                     }}
-                    className={`py-2 px-4 rounded-xl text-xs font-bold transition-all shadow-md ${
+                    className={`py-1.5 px-3.5 rounded-lg text-xs font-bold transition-all shadow-md ${
                       selectedCanAfford && !selectedIsMax && selectedPrereq.allowed
                         ? 'tg-btn-gold cursor-pointer hover:brightness-110 active:scale-95'
                         : 'bg-[#1b1e28] border border-[#2e3344] text-[#616a7d] cursor-not-allowed opacity-60'
@@ -1348,9 +1272,207 @@ export const ArkCitadelHubDrawer: React.FC<ArkCitadelHubDrawerProps> = ({
                 )}
               </div>
             </div>
+          }
+        >
+          <div className="flex flex-col gap-3 text-xs">
+            {/* 🖼️ 시설 배너 이미지가 존재하는 시설인 경우에만 렌더링 (미존재 시설은 깔끔하게 생략하여 검은 공백 방지) */}
+            {BUILDING_IMAGE_MAP[selectedBuildingData.id] && (
+              <div className="relative w-full h-24 sm:h-28 rounded-xl overflow-hidden border border-[#3d372e]/60 shrink-0">
+                <img
+                  src={BUILDING_IMAGE_MAP[selectedBuildingData.id]}
+                  alt={selectedBuildingData.name}
+                  className={`w-full h-full object-cover ${
+                    selectedBuildingData.level === 0 ? 'grayscale brightness-75' : 'brightness-95 contrast-105'
+                  }`}
+                  onError={(e) => {
+                    const parent = (e.currentTarget as HTMLElement).parentElement;
+                    if (parent) parent.style.display = 'none';
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#141720] via-transparent to-transparent pointer-events-none" />
+              </div>
+            )}
 
+            {/* 🔒 튜토리얼 생산 시설 우선 복원 지침 배너 */}
+            {tutorialRestriction.isRestricted && (
+              <div className="p-3 rounded-xl bg-[#2a1714] border border-[#ff7043]/70 flex items-start gap-2.5 shadow-md">
+                <span className="text-xl shrink-0">🛡️</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-xs font-bold text-[#ff8a65]">
+                      {tr('방주 통제실 튜토리얼 지침')}
+                    </span>
+                    <span className="px-1.5 py-0.2 rounded text-[9.5px] font-black bg-[#ff7043]/25 text-[#ffab91] border border-[#ff7043]/40">
+                      {tr('진행 필수')}
+                    </span>
+                  </div>
+                  <p className="text-[11.5px] text-[#ffd0c2] leading-relaxed mt-1">
+                    {tr(tutorialRestriction.message || '우선 나머지 생산 시설 건설을 완료해 주십시오.')}
+                  </p>
+                  {tutorialRestriction.target && tutorialRestriction.target.targetId !== selectedBuildingId && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleSelectBuilding(tutorialRestriction.target!.targetId);
+                      }}
+                      className="mt-2 py-1 px-2.5 rounded-lg bg-gradient-to-r from-[#ff7043] to-[#e64a19] text-[#08090b] font-black text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 hover:brightness-110"
+                    >
+                      <span>{tr(`목표 시설 [${tutorialRestriction.target.targetName}] 건설로 이동`)}</span>
+                      <span>➔</span>
+                    </button>
+                  )}
+                  {tutorialRestriction.target && !tutorialRestriction.target.isUnlocked && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handlePlayClick();
+                        onEnterDrawer('quests');
+                      }}
+                      className="mt-2 py-1 px-2.5 rounded-lg bg-[#2a1714] border border-[#ff7043] text-[#ffab91] font-black text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 hover:brightness-110"
+                    >
+                      <span>{tr('지휘관 퀘스트 보상 수령하러 가기')}</span>
+                      <span>➔</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* 🔨 공사 진행 중 안내 배너 */}
+            {selectedIsConstructing && (
+              <div className="p-3 rounded-xl bg-[#0a1424] border border-[#c8aa6e66] flex flex-col gap-2 shadow-md">
+                <div className="flex items-center justify-between text-xs font-bold text-[#c8aa6e] tabular-nums">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-4 h-4 inline-flex items-center justify-center shrink-0 leading-none animate-spin text-xs">⚙️</span>
+                    <span>Lv.{selectedBuildingData.construction!.targetLevel} {selectedBuildingData.level === 0 ? tr('신축 공사 진행 중...') : tr('증축 공사 진행 중...')}</span>
+                  </span>
+                  <span className="font-mono">{formatTimeLeft(selectedRemainSec, lang)} ({selectedProgressPct}%)</span>
+                </div>
+                <div className="w-full bg-[#050c18] rounded-full h-2.5 overflow-hidden border border-[#c8aa6e44]">
+                  <div
+                    className="bg-gradient-to-r from-[#c8aa6e] to-[#00f2fe] h-full transition-[width] duration-150 ease-linear shadow-[0_0_8px_#c8aa6e]"
+                    style={{ width: `${selectedProgressPct}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* 🔒 테크트리 선행 미달 경고 배너 */}
+            {!selectedPrereq.allowed && !selectedIsMax && (
+              <div className="p-3 rounded-xl bg-[#2a1412] border border-[#ef535066] text-xs text-[#ff8a80] flex items-center gap-2.5 shadow-sm">
+                <span className="text-xl">🔒</span>
+                <div>
+                  <div className="font-bold text-[#ef5350]">{tr('테크트리 선행 조건 미달')}</div>
+                  <div className="text-[11px] text-[#cfd8dc] mt-0.5">{selectedPrereq.reason}</div>
+                </div>
+              </div>
+            )}
+
+            {/* 📜 상단: 시설 서사 및 배경 로어 */}
+            <div className="p-3 rounded-xl bg-[#0d121c] border border-[#202738] flex flex-col gap-1.5 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-[#c8aa6e] font-bold">📜 {tr('시설 서사 및 배경')}</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#c8aa6e22] text-[#c8aa6e]">
+                  {selectedBuildingData.level > 0 ? `현재 Lv.${selectedBuildingData.level}` : tr('미건설 시설')}
+                </span>
+              </div>
+              <div className="text-[11px] text-[#cfd8dc] leading-relaxed">
+                {selectedLore}
+              </div>
+            </div>
+
+            {/* ✨ 중단 1: 현재 가동 효과 */}
+            {selectedStatusInfo && (
+              <div className="p-3 rounded-xl bg-[#0a1816] border border-[#1e3e34] flex flex-col gap-1 shadow-xs">
+                <div className="flex items-center justify-between text-[#9cd494] font-bold text-xs">
+                  <span>✨ {tr('현재 가동 효과')} (Lv.{selectedBuildingData.level})</span>
+                  {selectedStatusInfo.badge && (
+                    <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-[#38ef7d22] text-[#38ef7d] border border-[#38ef7d44]">
+                      {selectedStatusInfo.badge}
+                    </span>
+                  )}
+                </div>
+                <div className="text-[11px] text-[#e0e6ed] mt-0.5 font-medium leading-relaxed">
+                  {selectedStatusInfo.currentText}
+                </div>
+              </div>
+            )}
+
+            {/* 🔮 중단 2: 다음 단계 승급 프리뷰 & 유지비 표기 */}
+            {selectedStatusInfo && (
+              <div className="p-3 rounded-xl bg-[#181326] border border-[#2d2244] flex flex-col gap-1 shadow-xs">
+                <div className="text-[#ffd54f] font-bold text-xs flex items-center justify-between">
+                  <span>🔮 {tr('다음 레벨 특전')} (Lv.{selectedNextLevel})</span>
+                  {selectedIsMax ? (
+                    <span className="text-[10px] text-[#8b9bb4]">MAX</span>
+                  ) : (selectedNextUpkeep.amount > 0 || (selectedNextUpkeep.secondaryAmount && selectedNextUpkeep.secondaryAmount > 0)) ? (
+                    <span className="text-[10px] font-mono text-[#ff8a80]">
+                      ({[
+                        selectedNextUpkeep.amount > 0 ? `${selectedNextUpkeep.resIcon} -${selectedNextUpkeep.amount}` : '',
+                        selectedNextUpkeep.secondaryAmount && selectedNextUpkeep.secondaryAmount > 0 ? `${selectedNextUpkeep.secondaryIcon} -${selectedNextUpkeep.secondaryAmount}` : ''
+                      ].filter(Boolean).join(', ')}/{upkeepSec}초)
+                    </span>
+                  ) : null}
+                </div>
+                <div className="text-[11px] text-[#ffd54f] mt-0.5 leading-relaxed font-medium">
+                  {selectedStatusInfo.nextText}
+                  {!selectedIsMax && selectedNextUpkeep.amount > 0 && selectedBuildingData.level < 4 && (
+                    <span className="text-[10px] text-[#ff8a80] block mt-0.5">
+                      * 4레벨부터 {upkeepSec}초마다 {selectedNextUpkeep.resIcon} {selectedNextUpkeep.resName} {selectedNextUpkeep.amount}개 유지비 소모 (Lv.1~3 무료 유지)
+                    </span>
+                  )}
+                  {!selectedIsMax && (selectedBuildingId === 'lumberCamp' || selectedBuildingId === 'quarry') && selectedNextLevel >= 5 && (
+                    <span className="text-[10px] text-[#c8aa6e] block mt-0.5 font-mono">
+                      ⚙️ 시설 특화: 골드 유지비 -{Math.min(42, (selectedNextLevel - 4) * 7)}% 고유 감면 적용{selectedBuildingId === 'quarry' && selectedNextLevel >= 7 ? ' (30% 식량 분담)' : ''}
+                    </span>
+                  )}
+                  {!selectedIsMax && selectedNextUpkeep.isDiscounted && (
+                    <span className="text-[10px] text-[#38ef7d] block mt-0.5">
+                      ✓ 인프라 시너지 감면 적용 중 (정가: {selectedNextUpkeep.originalAmount} ➔ 할인가: {selectedNextUpkeep.amount})
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* ⚡ / 🔨 하단: 강화 소모 자원 (커스텀 에셋 아이콘 & 충족 녹색 / 부족 적색 뱃지) */}
+            {!selectedIsMax && (
+              <div className="p-3 rounded-xl bg-[#0e1118] border border-[#222d42] flex flex-col gap-2 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-[#ededed]">
+                    {selectedBuildingData.level > 0 ? tr('⚡ 증축 필요 자원') : tr('🔨 신축 필요 자원')}
+                  </span>
+                  <span className={selectedCanAfford ? 'text-[10px] text-[#9cd494] font-bold' : 'text-[10px] text-[#ff8585] font-bold animate-pulse'}>
+                    {selectedCanAfford ? tr('✅ 모든 재료 보유') : tr('⚠️ 일부 자원 부족')}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {Object.entries(selectedCost).map(([resKey, reqAmt]) => {
+                    const curAmt = (state.resources as unknown as Record<string, number>)[resKey] || 0;
+                    const isEnough = curAmt >= (reqAmt as number);
+                    const gmMeta = GameManager.getResourceMeta(resKey as any);
+                    const meta = RES_NAMES_AND_ICONS[resKey] || (gmMeta?.name ? { label: gmMeta.name, icon: gmMeta.icon } : { label: resKey, icon: '📦' });
+
+                    return (
+                      <div
+                        key={resKey}
+                        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border font-mono text-xs font-bold transition-all ${
+                          isEnough
+                            ? 'bg-[#1b2b20]/90 border-[#38ef7d66] text-[#9cd494]'
+                            : 'bg-[#2b1719]/90 border-[#ef535066] text-[#ff8585] animate-pulse'
+                        }`}
+                      >
+                        <GameIcon name={resKey} icon={meta.icon} size={16} />
+                        <span className="font-sans text-[11px]">{tr(meta.label)}</span>
+                        <span>{curAmt.toLocaleString()}/{(reqAmt as number).toLocaleString()}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        </SheetModal>
       )}
 
       </div>

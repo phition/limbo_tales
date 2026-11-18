@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { triggerHaptic } from '../utils/haptics';
 import { SoundManager } from '../managers/SoundManager';
 import { GameIcon } from './GameIcon';
@@ -57,9 +58,10 @@ export const CraftProgressModal: React.FC<Props> = ({
       return;
     }
 
-    startRef.current = performance.now();
+    startRef.current = 0;
     hasFinishedRef.current = false;
     setIsFailing(false);
+    setProgress(2);
 
     const currentType = typeRef.current;
     if (currentType === 'forge') {
@@ -80,10 +82,13 @@ export const CraftProgressModal: React.FC<Props> = ({
     triggerHaptic('medium');
 
     const tick = (now: number) => {
+      if (!startRef.current) {
+        startRef.current = now;
+      }
       const totalDuration = Math.max(800, durationRef.current);
       const curType = typeRef.current;
       const curOutcome = outcomeRef.current;
-      const elapsed = now - startRef.current;
+      const elapsed = Math.max(0, now - startRef.current);
       const t = Math.min(1, Math.max(0, elapsed / totalDuration));
 
       let currentPct = 0;
@@ -337,10 +342,12 @@ export const CraftProgressModal: React.FC<Props> = ({
   const cfg = typeConfig[type];
   const activeGlow = isFailing ? '#ef5350' : cfg.glowColor;
 
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in select-none">
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/85 select-none">
       <div
-        className={`relative w-full max-w-[380px] rounded-2xl border bg-gradient-to-b ${cfg.bgGradient} p-6 shadow-[0_10px_40px_rgba(0,0,0,0.9)] flex flex-col items-center text-center overflow-hidden transition-all duration-300`}
+        className={`relative w-full max-w-[380px] rounded-2xl border bg-gradient-to-b ${cfg.bgGradient} p-6 shadow-[0_10px_40px_rgba(0,0,0,0.9)] flex flex-col items-center text-center overflow-hidden transition-colors duration-300`}
         style={{
           borderColor: isFailing ? '#ef535088' : '#2b3a55',
           boxShadow: `0 0 35px ${activeGlow}33, inset 0 0 20px ${activeGlow}22`
@@ -348,7 +355,7 @@ export const CraftProgressModal: React.FC<Props> = ({
       >
         {/* 상단 뱃지 */}
         <div
-          className="text-[10px] font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wider border shadow-sm transition-all duration-300"
+          className="text-[10px] font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wider border shadow-sm transition-colors duration-300"
           style={{
             color: activeGlow,
             borderColor: `${activeGlow}66`,
@@ -374,7 +381,7 @@ export const CraftProgressModal: React.FC<Props> = ({
         <div className="relative w-28 h-28 mb-5 flex items-center justify-center">
           {/* 회전하는 마도진 아우터 링 */}
           <div
-            className="absolute inset-0 rounded-full border-2 border-dashed animate-spin transition-all duration-300"
+            className="absolute inset-0 rounded-full border-2 border-dashed animate-spin"
             style={{
               borderColor: `${activeGlow}66`,
               animationDuration: isFailing ? '1.5s' : '6s'
@@ -383,7 +390,7 @@ export const CraftProgressModal: React.FC<Props> = ({
 
           {/* 역회전하는 인너 링 */}
           <div
-            className="absolute inset-2 rounded-full border border-dotted animate-spin transition-all duration-300"
+            className="absolute inset-2 rounded-full border border-dotted animate-spin"
             style={{
               borderColor: `${activeGlow}44`,
               animationDirection: 'reverse',
@@ -393,7 +400,7 @@ export const CraftProgressModal: React.FC<Props> = ({
 
           {/* 빛의 펄스 후광 */}
           <div
-            className="absolute inset-4 rounded-full animate-ping opacity-25 transition-all duration-300"
+            className="absolute inset-4 rounded-full animate-ping opacity-25"
             style={{ backgroundColor: activeGlow }}
           />
 
@@ -414,34 +421,35 @@ export const CraftProgressModal: React.FC<Props> = ({
 
         {/* 현재 진행 단계 텍스트 */}
         <div
-          className="text-xs font-bold mb-3 h-6 flex items-center justify-center tracking-tight transition-all duration-300 text-center px-2"
+          className="text-xs font-bold mb-3 h-6 flex items-center justify-center tracking-tight transition-colors duration-300 text-center px-2"
           style={{ color: activeGlow }}
         >
           {phaseText}
         </div>
 
         {/* ── 프로그레스 바 ── */}
-        <div className="w-full bg-[#0a0f18] rounded-full h-3.5 p-0.5 border border-[#2b3a55] shadow-inner mb-2 relative overflow-hidden">
+        <div className="w-full bg-[#0a0f18] rounded-full h-3.5 border border-[#2b3a55] shadow-inner mb-2 relative overflow-hidden">
           <div
-            className="h-full rounded-full transition-all duration-75 ease-out relative"
+            className="h-full rounded-full relative"
             style={{
-              width: `${progress}%`,
+              width: `${isFailing ? progress : Math.max(2, progress)}%`,
               backgroundColor: activeGlow,
               boxShadow: `0 0 12px ${activeGlow}`
             }}
           >
             {/* 빛의 줄무늬 흐름 연출 */}
-            <div className="absolute inset-0 bg-white/20 animate-pulse" />
+            <div className="absolute inset-0 bg-white/25 animate-pulse" />
           </div>
         </div>
 
         {/* 퍼센트 & 잔여 초 */}
-        <div className="w-full flex items-center justify-between text-[11px] font-mono text-[#8b9bb4] px-1">
+        <div className="w-full flex items-center justify-between text-[11px] font-mono tabular-nums text-[#8b9bb4] px-1">
           <span>{isFailing ? '붕괴 진행 중...' : '진행 중...'}</span>
           <span className="font-bold text-white text-xs">{progress}%</span>
           <span>{Math.max(0, ((durationRef.current * (100 - progress)) / 100000)).toFixed(1)}s</span>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

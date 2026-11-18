@@ -57,10 +57,14 @@ const VFX_LIST: VfxItemDef[] = [
   { type: 'lightning', label: '낙뢰 전격 (Lightning)', desc: '하늘에서 내리꽂히는 번개 뇌광 단일 타격', icon: '⚡', category: 'single', categoryLabel: '단일 공격', isAoe: false },
   { type: 'dark_curse', label: '심연의 저주 (Dark Curse)', desc: '단일 암흑 촉수와 영혼 침식', icon: '🔮', category: 'single', categoryLabel: '단일 공격', isAoe: false },
   { type: 'divine_smite', label: '신성 심판 (Divine Smite)', desc: '황금 성광 빛기둥 & 십자 룬 단일 타격', icon: '✨', category: 'single', categoryLabel: '단일 공격', isAoe: false },
+  { type: 'pierce', label: '신속 관통 (Pierce)', desc: '빛의 속도로 급소를 꿰뚫는 돌창/레이피어 단일 관통', icon: '🔱', category: 'single', categoryLabel: '단일 공격', isAoe: false },
+  { type: 'earth_quake', label: '대지 진동 (Earthquake)', desc: '대지를 뒤흔들며 솟구치는 지진 암석 파쇄 강타', icon: '🪨', category: 'single', categoryLabel: '단일 공격', isAoe: false },
+  { type: 'storm_wind', label: '질풍 회오리 (Storm Wind)', desc: '전방을 가르는 쾌속 칼바람 질풍 회오리', icon: '🌪️', category: 'single', categoryLabel: '단일 공격', isAoe: false },
 
   // ── 2. 💥 광역 공격 스킬 (AOE / Multi-Target) ──
   { type: 'slash_aoe', label: '회전 폭풍참 (Slash AOE)', desc: '적 전체를 휩쓰는 광역 회전 참격 검풍', icon: '🌀', category: 'aoe', categoryLabel: '광역 공격', isAoe: true },
   { type: 'heavy_slash_aoe', label: '대지 분쇄타 (Heavy AOE)', desc: '지면을 강타하여 파편이 튀는 광역 분쇄 충격파', icon: '🌋', category: 'aoe', categoryLabel: '광역 공격', isAoe: true },
+  { type: 'pierce_aoe', label: '일렬 섬멸 관통포 (Pierce AOE)', desc: '전장의 적들을 일렬로 꿰뚫는 마도 관통 궤적 세례', icon: '🏹', category: 'aoe', categoryLabel: '광역 공격', isAoe: true },
   { type: 'bullet_aoe', label: '탄막 난사 (Bullet Rain)', desc: '전장을 뒤덮는 전방위 무차별 탄막 세례', icon: '🎯', category: 'aoe', categoryLabel: '광역 공격', isAoe: true },
   { type: 'fire_aoe', label: '화염 폭풍 (Fire AOE)', desc: '전장을 불바다로 뒤덮는 광역 폭열 업화', icon: '🔥', category: 'aoe', categoryLabel: '광역 공격', isAoe: true },
   { type: 'ice_aoe', label: '절대영도 빙폭 (Ice AOE)', desc: '전장에 몰아치는 광역 혹한 얼음 폭풍', icon: '❄️', category: 'aoe', categoryLabel: '광역 공격', isAoe: true },
@@ -98,6 +102,10 @@ const VFX_LIST: VfxItemDef[] = [
   { type: 'status_burn', label: '화상 불씨 (Burn)', desc: '소용돌이치는 지옥불 불씨', icon: '🔥', category: 'status', categoryLabel: '상태이상', isAoe: false },
   { type: 'status_freeze', label: '동결 결정 (Freeze)', desc: '산산조각 나는 서리 프랙탈', icon: '🧊', category: 'status', categoryLabel: '상태이상', isAoe: false },
   { type: 'status_stun', label: '기절 별무리 (Stun)', desc: '머리 위를 궤도 회전하는 항성', icon: '💫', category: 'status', categoryLabel: '상태이상', isAoe: false },
+  { type: 'status_shield', label: '수호 방벽 큐 (Shield)', desc: '에테르 육각 방벽 생성 및 피해 흡수 큐', icon: '🛡️', category: 'status', categoryLabel: '상태이상', isAoe: false },
+  { type: 'status_curse', label: '심연 저주 큐 (Curse)', desc: '영혼을 잠식하는 심연 암흑 저주 오라 큐', icon: '🔮', category: 'status', categoryLabel: '상태이상', isAoe: false },
+  { type: 'status_blind', label: '실명/암흑 큐 (Blind)', desc: '시야를 가리는 암흑 안개와 실명 시각 큐', icon: '👁️‍🗨️', category: 'status', categoryLabel: '상태이상', isAoe: false },
+  { type: 'status_regen', label: '생명 재생 큐 (Regen)', desc: '매 턴 체력이 회복되는 생명의 싹과 치유 온기 큐', icon: '🌱', category: 'status', categoryLabel: '상태이상', isAoe: false },
 
   // ── 7. ⚡ 차징 & 제작/단조 연출 (Charge & Crafting) ──
   { type: 'charge', label: '마력 차징 (Charge)', desc: '에테르 에너지 집중 및 기 모으기/주문 영창 차징 연출', icon: '⚡', category: 'craft', categoryLabel: '차징/제작', isAoe: false },
@@ -106,17 +114,17 @@ const VFX_LIST: VfxItemDef[] = [
 ];
 
 const DUNGEON_FLOORS = [
-  { floor: 1, name: '침묵의 회랑', defaultSrc: 'assets/dungeon_1.jpg', desc: '심연의 입구. 차가운 석재 회랑과 핏빛 이끼' },
-  { floor: 2, name: '망령의 납골당', defaultSrc: 'assets/dungeon_2.jpg', desc: '원혼들이 떠도는 납골 묘지' },
-  { floor: 3, name: '에테르 광맥', defaultSrc: 'assets/dungeon_3.jpg', desc: '푸른빛 마나 수정이 자라나는 지하 광산' },
-  { floor: 4, name: '심연의 균열', defaultSrc: 'assets/dungeon_4.jpg', desc: '시공간이 일그러진 차원 틈새' },
-  { floor: 5, name: '원초의 제단', defaultSrc: 'assets/dungeon_5.jpg', desc: '고대 공허 거신이 잠든 결전의 제단' },
-  { floor: 6, name: '핏빛 성역', defaultSrc: 'assets/dungeon_6.jpg', desc: '진홍의 피가 흐르는 고딕 대성당' },
-  { floor: 7, name: '망각의 묘지', defaultSrc: 'assets/dungeon_7.jpg', desc: '사신이 지배하는 영혼의 나락' },
-  { floor: 8, name: '단죄의 성채', defaultSrc: 'assets/dungeon_8.jpg', desc: '타락한 기사단장의 흑철 요새' },
-  { floor: 9, name: '환영의 미궁', defaultSrc: 'assets/dungeon_9.jpg', desc: '거울 파편이 떠다니는 만화경 미로' },
-  { floor: 10, name: '심연의 심장부', defaultSrc: 'assets/dungeon_10.jpg', desc: '종말의 공허 군주가 자리한 옥좌' },
-  { floor: 11, name: '무간도 (Avici)', defaultSrc: 'assets/dungeon_10.jpg', desc: '끝없는 심연의 무한 연옥' },
+  { floor: 1, name: '침묵의 회랑', defaultSrc: 'assets/dungeon_1.webp', desc: '심연의 입구. 차가운 석재 회랑과 핏빛 이끼' },
+  { floor: 2, name: '망령의 납골당', defaultSrc: 'assets/dungeon_2.webp', desc: '원혼들이 떠도는 납골 묘지' },
+  { floor: 3, name: '에테르 광맥', defaultSrc: 'assets/dungeon_3.webp', desc: '푸른빛 마나 수정이 자라나는 지하 광산' },
+  { floor: 4, name: '심연의 균열', defaultSrc: 'assets/dungeon_4.webp', desc: '시공간이 일그러진 차원 틈새' },
+  { floor: 5, name: '원초의 제단', defaultSrc: 'assets/dungeon_5.webp', desc: '고대 공허 거신이 잠든 결전의 제단' },
+  { floor: 6, name: '핏빛 성역', defaultSrc: 'assets/dungeon_6.webp', desc: '진홍의 피가 흐르는 고딕 대성당' },
+  { floor: 7, name: '망각의 묘지', defaultSrc: 'assets/dungeon_7.webp', desc: '사신이 지배하는 영혼의 나락' },
+  { floor: 8, name: '단죄의 성채', defaultSrc: 'assets/dungeon_8.webp', desc: '타락한 기사단장의 흑철 요새' },
+  { floor: 9, name: '환영의 미궁', defaultSrc: 'assets/dungeon_9.webp', desc: '거울 파편이 떠다니는 만화경 미로' },
+  { floor: 10, name: '심연의 심장부', defaultSrc: 'assets/dungeon_10.webp', desc: '종말의 공허 군주가 자리한 옥좌' },
+  { floor: 11, name: '무간도 (Avici)', defaultSrc: 'assets/dungeon_10.webp', desc: '끝없는 심연의 무한 연옥' },
 ];
 
 const BGM_TRACKS: { key: BgmTrack; label: string; desc: string; defaultPath: string }[] = [
@@ -908,7 +916,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-[11px] font-mono text-[#8b9bb4] pt-1">
                     <div className="bg-[#080d16] p-2 rounded border border-[#1b283d]">
                       <span className="text-[#c8aa6e] block font-bold">🖼️ custom_assets/icons/</span>
-                      아이콘 파일 (예: wood.png, torch.png)
+                      아이콘 파일 (예: wood.webp, torch.webp)
                     </div>
                     <div className="bg-[#080d16] p-2 rounded border border-[#1b283d]">
                       <span className="text-[#38ef7d] block font-bold">🌀 custom_assets/dungeons/</span>
@@ -920,7 +928,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     </div>
                     <div className="bg-[#080d16] p-2 rounded border border-[#1b283d]">
                       <span className="text-[#ce93d8] block font-bold">⚔️ custom_assets/mercenaries/</span>
-                      용병 일러스트 (예: hero_squire.png)
+                      용병 일러스트 (예: hero_squire.webp)
                     </div>
                     <div className="bg-[#080d16] p-2 rounded border border-[#1b283d]">
                       <span className="text-[#ff7043] block font-bold">✨ custom_assets/vfx/</span>
@@ -1054,8 +1062,8 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     effectiveOverride.startsWith('assets/') ||
                     effectiveOverride.startsWith('http') ||
                     effectiveOverride.startsWith('data:') ||
-                    effectiveOverride.includes('.png') ||
-                    effectiveOverride.includes('.jpg') ||
+                    effectiveOverride.includes('.webp') ||
+                    effectiveOverride.includes('.webp') ||
                     effectiveOverride.includes('.svg') ||
                     effectiveOverride.includes('.webp')
                   );
@@ -1566,7 +1574,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 {monsterList.map(m => {
                   const overrideImg = config.monsterOverrides?.[m.id] || (m.promptKey ? config.monsterOverrides?.[m.promptKey] : undefined);
                   const overrideVideo = config.monsterVideoOverrides?.[m.id] || (m.promptKey ? config.monsterVideoOverrides?.[m.promptKey] : undefined);
-                  const imgSrc = overrideImg || m.imagePath || `assets/${m.promptKey || m.id}.jpg`;
+                  const imgSrc = overrideImg || m.imagePath || `assets/${m.promptKey || m.id}.webp`;
                   const isBoss = m.type === 'boss';
 
                   return (
@@ -1871,7 +1879,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 {filteredNpcList.map(npc => {
                   const rawAvatar = config.npcOverrides?.[npc.id] || config.npcOverrides?.[npc.name];
                   const overrideAvatar = (rawAvatar && rawAvatar.includes('___')) 
-                    ? (npc.id === 'npc_lloyd' ? 'assets/custom_uploaded/npcs/npc_lloyd.png' : npc.id === 'npc_chief_advisor' ? 'assets/custom_uploaded/npcs/npc_chief_advisor.png' : rawAvatar)
+                    ? (npc.id === 'npc_lloyd' ? 'assets/custom_uploaded/npcs/npc_lloyd.webp' : npc.id === 'npc_chief_advisor' ? 'assets/custom_uploaded/npcs/npc_chief_advisor.webp' : rawAvatar)
                     : rawAvatar;
                   const isImage = overrideAvatar && (
                     overrideAvatar.startsWith('data:') ||
@@ -1879,8 +1887,8 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     overrideAvatar.startsWith('https://') ||
                     overrideAvatar.startsWith('/') ||
                     overrideAvatar.startsWith('assets/') ||
-                    overrideAvatar.includes('.png') ||
-                    overrideAvatar.includes('.jpg') ||
+                    overrideAvatar.includes('.webp') ||
+                    overrideAvatar.includes('.webp') ||
                     overrideAvatar.includes('.jpeg') ||
                     overrideAvatar.includes('.webp') ||
                     overrideAvatar.includes('.gif')
@@ -1936,7 +1944,7 @@ export const CustomAssetStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           onClick={() => {
                             const cur = overrideAvatar || npc.defaultAvatar;
                             const input = window.prompt(
-                              `[${npc.name}] 포트레이트로 사용할 이모지 또는 이미지 URL을 입력하세요:\n(예: 👑, 🛡️, https://.../portrait.png)`,
+                              `[${npc.name}] 포트레이트로 사용할 이모지 또는 이미지 URL을 입력하세요:\n(예: 👑, 🛡️, https://.../portrait.webp)`,
                               cur
                             );
                             if (input !== null) {

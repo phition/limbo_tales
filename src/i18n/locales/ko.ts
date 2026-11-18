@@ -54,7 +54,7 @@ export const koDictionary: TranslationDictionary = {
     encyclopedia: '방주 백과사전 & 종합 도감',
     encyclopedia_desc: '직업·몬스터·시설·장비·스킬·시스템 검색',
     patch_notes: '버전 & 패치노트',
-    patch_notes_desc: 'V.1.1.4 (영지 UI 전면 개편 & 시각 인터페이스 고도화)',
+    patch_notes_desc: 'V.1.1.5 (구글 on PC 와이드 해상도 & 전투 엔진 고도화)',
     logout: '지휘관 로그아웃',
     logout_desc: '계정 전환 및 로그인 화면 복귀',
     reset_data: '게임 데이터 초기화 (처음부터 시작)',

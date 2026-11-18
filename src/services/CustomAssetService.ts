@@ -15,182 +15,376 @@
 import { NPC_NAME_TO_ID, NPC_ID_TO_NAME } from '../data/npcs';
 import { BOSS_BOOK_ALIAS_MAP } from '../utils/iconMap';
 
+/** 🚀 이미지 에셋(PNG/JPG/JPEG) 요청 시 초경량 WebP 포맷으로 자동 우선 치환하는 스마트 리졸버 */
+export function toWebp(path?: string): string | undefined {
+  if (!path || typeof path !== 'string') return path;
+  if (path.startsWith('data:') || path.startsWith('blob:') || path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+  // 🛡️ VFX 스프라이트 에셋은 렌더링 성능과 호환성을 위해 무조건 원본 PNG 포맷 보존
+  if (path.includes('/vfx/') || path.includes('custom_uploaded/vfx')) {
+    return path;
+  }
+  if (/\.(png|jpg|jpeg)$/i.test(path)) {
+    return path.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+  }
+  return path;
+}
+
 export const CLASS_GENDER_PORTRAITS: Record<string, { male: string; female: string }> = {
   squire: {
-    male: 'assets/portraits/portrait_squire_male.png',
-    female: 'assets/portraits/portrait_squire_female.png',
+    male: 'assets/portraits/portrait_squire_male.webp',
+    female: 'assets/portraits/portrait_squire_female.webp',
   },
   paladin: {
-    male: 'assets/portraits/portrait_paladin_male.png',
-    female: 'assets/portraits/portrait_paladin_female.png',
+    male: 'assets/portraits/portrait_paladin_male.webp',
+    female: 'assets/portraits/portrait_paladin_female.webp',
   },
   guardian: {
-    male: 'assets/portraits/portrait_t1_guardian.png',
-    female: 'assets/portraits/portrait_paladin_female.png',
+    male: 'assets/portraits/portrait_t1_guardian.webp',
+    female: 'assets/portraits/portrait_paladin_female.webp',
   },
   aegis_valkyrie: {
-    male: 'assets/portraits/portrait_t2_valkyrie_male.png',
-    female: 'assets/portraits/portrait_t2_valkyrie.png',
+    male: 'assets/portraits/portrait_t2_valkyrie_male.webp',
+    female: 'assets/portraits/portrait_t2_valkyrie.webp',
   },
   aegis_bastion: {
-    male: 'assets/portraits/portrait_t3_bastion.png',
-    female: 'assets/portraits/portrait_t3_bastion_female.png',
+    male: 'assets/portraits/portrait_t3_bastion.webp',
+    female: 'assets/portraits/portrait_t3_bastion_female.webp',
   },
   fortress: {
-    male: 'assets/portraits/portrait_t3_bastion.png',
-    female: 'assets/portraits/portrait_t3_bastion_female.png',
+    male: 'assets/portraits/portrait_t3_bastion.webp',
+    female: 'assets/portraits/portrait_t3_bastion_female.webp',
   },
   crusader_lord: {
-    male: 'assets/portraits/portrait_t3_seraphic_inquisitor.png',
-    female: 'assets/portraits/portrait_t3_seraphic_inquisitor_female.png',
+    male: 'assets/portraits/portrait_t3_seraphic_inquisitor.webp',
+    female: 'assets/portraits/portrait_t3_seraphic_inquisitor_female.webp',
   },
   rogue: {
-    male: 'assets/portraits/portrait_rogue_male.png',
-    female: 'assets/portraits/portrait_rogue_female.png',
+    male: 'assets/portraits/portrait_rogue_male.webp',
+    female: 'assets/portraits/portrait_rogue_female.webp',
   },
   duelist: {
-    male: 'assets/portraits/portrait_t1_duelist.png',
-    female: 'assets/portraits/portrait_rogue_female.png',
+    male: 'assets/portraits/portrait_t1_duelist.webp',
+    female: 'assets/portraits/portrait_rogue_female.webp',
   },
   blade_dancer: {
-    male: 'assets/portraits/portrait_t1_duelist.png',
-    female: 'assets/portraits/portrait_t2_shadow_phantom.png',
+    male: 'assets/portraits/portrait_t1_duelist.webp',
+    female: 'assets/portraits/portrait_t2_shadow_phantom.webp',
   },
   assassin: {
-    male: 'assets/portraits/portrait_t2_shadow_phantom_male.png',
-    female: 'assets/portraits/portrait_t2_shadow_phantom.png',
+    male: 'assets/portraits/portrait_t2_shadow_phantom_male.webp',
+    female: 'assets/portraits/portrait_t2_shadow_phantom.webp',
   },
   shadow_phantom: {
-    male: 'assets/portraits/portrait_t2_shadow_phantom_male.png',
-    female: 'assets/portraits/portrait_t2_shadow_phantom.png',
+    male: 'assets/portraits/portrait_t2_shadow_phantom_male.webp',
+    female: 'assets/portraits/portrait_t2_shadow_phantom.webp',
   },
   void_strider: {
-    male: 'assets/portraits/portrait_t3_void_strider.png',
-    female: 'assets/portraits/portrait_t3_void_strider_female.png',
+    male: 'assets/portraits/portrait_t3_void_strider.webp',
+    female: 'assets/portraits/portrait_t3_void_strider_female.webp',
   },
   apprentice: {
-    male: 'assets/portraits/portrait_apprentice_male.png',
-    female: 'assets/portraits/portrait_apprentice_female.png',
+    male: 'assets/portraits/portrait_apprentice_male.webp',
+    female: 'assets/portraits/portrait_apprentice_female.webp',
   },
   apprentice_mage: {
-    male: 'assets/portraits/portrait_apprentice_male.png',
-    female: 'assets/portraits/portrait_apprentice_female.png',
+    male: 'assets/portraits/portrait_apprentice_male.webp',
+    female: 'assets/portraits/portrait_apprentice_female.webp',
   },
   mage: {
-    male: 'assets/portraits/portrait_mage_male.png',
-    female: 'assets/portraits/portrait_mage_female.png',
+    male: 'assets/portraits/portrait_mage_male.webp',
+    female: 'assets/portraits/portrait_mage_female.webp',
   },
   elementalist: {
-    male: 'assets/portraits/portrait_mage_male.png',
-    female: 'assets/portraits/portrait_mage_female.png',
+    male: 'assets/portraits/portrait_mage_male.webp',
+    female: 'assets/portraits/portrait_mage_female.webp',
   },
   arcane_scholar: {
-    male: 'assets/portraits/portrait_t1_scholar.png',
-    female: 'assets/portraits/portrait_mage_female.png',
+    male: 'assets/portraits/portrait_t1_scholar.webp',
+    female: 'assets/portraits/portrait_mage_female.webp',
   },
   scholar: {
-    male: 'assets/portraits/portrait_t1_scholar.png',
-    female: 'assets/portraits/portrait_mage_female.png',
+    male: 'assets/portraits/portrait_t1_scholar.webp',
+    female: 'assets/portraits/portrait_mage_female.webp',
   },
   calamity_mage: {
-    male: 'assets/portraits/portrait_t2_calamity_mage_male.png',
-    female: 'assets/portraits/portrait_t2_calamity_mage.png',
+    male: 'assets/portraits/portrait_t2_calamity_mage_male.webp',
+    female: 'assets/portraits/portrait_t2_calamity_mage.webp',
   },
   chronomancer: {
-    male: 'assets/portraits/portrait_t3_chrono_archon.png',
-    female: 'assets/portraits/portrait_t3_chrono_archon_female.png',
+    male: 'assets/portraits/portrait_t3_chrono_archon.webp',
+    female: 'assets/portraits/portrait_t3_chrono_archon_female.webp',
   },
   chrono_archon: {
-    male: 'assets/portraits/portrait_t3_chrono_archon.png',
-    female: 'assets/portraits/portrait_t3_chrono_archon_female.png',
+    male: 'assets/portraits/portrait_t3_chrono_archon.webp',
+    female: 'assets/portraits/portrait_t3_chrono_archon_female.webp',
   },
   acolyte: {
-    male: 'assets/portraits/portrait_acolyte_male.png',
-    female: 'assets/portraits/portrait_acolyte_female.png',
+    male: 'assets/portraits/portrait_acolyte_male.webp',
+    female: 'assets/portraits/portrait_acolyte_female.webp',
   },
   novice_cleric: {
-    male: 'assets/portraits/portrait_acolyte_male.png',
-    female: 'assets/portraits/portrait_acolyte_female.png',
+    male: 'assets/portraits/portrait_acolyte_male.webp',
+    female: 'assets/portraits/portrait_acolyte_female.webp',
   },
   cleric: {
-    male: 'assets/portraits/portrait_cleric_male.png',
-    female: 'assets/portraits/portrait_cleric_female.png',
+    male: 'assets/portraits/portrait_cleric_male.webp',
+    female: 'assets/portraits/portrait_cleric_female.webp',
   },
   war_priest: {
-    male: 'assets/portraits/portrait_t1_war_priest.png',
-    female: 'assets/portraits/portrait_cleric_female.png',
+    male: 'assets/portraits/portrait_t1_war_priest.webp',
+    female: 'assets/portraits/portrait_cleric_female.webp',
   },
   bishop: {
-    male: 'assets/portraits/portrait_t2_high_saintess_male.png',
-    female: 'assets/portraits/portrait_t2_high_saintess.png',
+    male: 'assets/portraits/portrait_t2_high_saintess_male.webp',
+    female: 'assets/portraits/portrait_t2_high_saintess.webp',
   },
   high_saintess: {
-    male: 'assets/portraits/portrait_t2_high_saintess_male.png',
-    female: 'assets/portraits/portrait_t2_high_saintess.png',
+    male: 'assets/portraits/portrait_t2_high_saintess_male.webp',
+    female: 'assets/portraits/portrait_t2_high_saintess.webp',
   },
   seraphic_inquisitor: {
-    male: 'assets/portraits/portrait_t3_seraphic_inquisitor.png',
-    female: 'assets/portraits/portrait_t3_seraphic_inquisitor_female.png',
+    male: 'assets/portraits/portrait_t3_seraphic_inquisitor.webp',
+    female: 'assets/portraits/portrait_t3_seraphic_inquisitor_female.webp',
   },
   vanguard: {
-    male: 'assets/portraits/portrait_vanguard_male.png',
-    female: 'assets/portraits/portrait_vanguard_female.png',
+    male: 'assets/portraits/portrait_vanguard_male.webp',
+    female: 'assets/portraits/portrait_vanguard_female.webp',
   },
   warrior: {
-    male: 'assets/portraits/portrait_berserker_male.png',
-    female: 'assets/portraits/portrait_berserker_female.png',
+    male: 'assets/portraits/portrait_berserker_male.webp',
+    female: 'assets/portraits/portrait_berserker_female.webp',
   },
   berserker: {
-    male: 'assets/portraits/portrait_berserker_male.png',
-    female: 'assets/portraits/portrait_berserker_female.png',
+    male: 'assets/portraits/portrait_berserker_male.webp',
+    female: 'assets/portraits/portrait_berserker_female.webp',
   },
   warlord: {
-    male: 'assets/portraits/portrait_t1_warlord.png',
-    female: 'assets/portraits/portrait_berserker_female.png',
+    male: 'assets/portraits/portrait_t1_warlord.webp',
+    female: 'assets/portraits/portrait_berserker_female.webp',
   },
   valhalla_blade: {
-    male: 'assets/portraits/portrait_t2_valhalla_blade_male.png',
-    female: 'assets/portraits/portrait_t2_valhalla_blade.png',
+    male: 'assets/portraits/portrait_t2_valhalla_blade_male.webp',
+    female: 'assets/portraits/portrait_t2_valhalla_blade.webp',
   },
   iron_marshal: {
-    male: 'assets/portraits/portrait_t3_valhalla_warlord.png',
-    female: 'assets/portraits/portrait_t3_valhalla_warlord_female.png',
+    male: 'assets/portraits/portrait_t3_valhalla_warlord.webp',
+    female: 'assets/portraits/portrait_t3_valhalla_warlord_female.webp',
   },
   valhalla_warlord: {
-    male: 'assets/portraits/portrait_t3_valhalla_warlord.png',
-    female: 'assets/portraits/portrait_t3_valhalla_warlord_female.png',
+    male: 'assets/portraits/portrait_t3_valhalla_warlord.webp',
+    female: 'assets/portraits/portrait_t3_valhalla_warlord_female.webp',
   },
   gunner: {
-    male: 'assets/portraits/portrait_gunner_male.png',
-    female: 'assets/portraits/portrait_gunner_female.png',
+    male: 'assets/portraits/portrait_gunner_male.webp',
+    female: 'assets/portraits/portrait_gunner_female.webp',
   },
   archer: {
-    male: 'assets/portraits/portrait_gunner_male.png',
-    female: 'assets/portraits/portrait_gunner_female.png',
+    male: 'assets/portraits/portrait_gunner_male.webp',
+    female: 'assets/portraits/portrait_gunner_female.webp',
   },
   tactical_gunner: {
-    male: 'assets/portraits/portrait_gunner_male.png',
-    female: 'assets/portraits/portrait_gunner_female.png',
+    male: 'assets/portraits/portrait_gunner_male.webp',
+    female: 'assets/portraits/portrait_gunner_female.webp',
   },
   sharpshooter: {
-    male: 'assets/portraits/portrait_gunner_male.png',
-    female: 'assets/portraits/portrait_t1_sharpshooter.png',
+    male: 'assets/portraits/portrait_gunner_male.webp',
+    female: 'assets/portraits/portrait_t1_sharpshooter.webp',
   },
   aether_gun_meister: {
-    male: 'assets/portraits/portrait_t2_gun_meister_male.png',
-    female: 'assets/portraits/portrait_t2_gun_meister.png',
+    male: 'assets/portraits/portrait_t2_gun_meister_male.webp',
+    female: 'assets/portraits/portrait_t2_gun_meister.webp',
   },
   gun_meister: {
-    male: 'assets/portraits/portrait_t2_gun_meister_male.png',
-    female: 'assets/portraits/portrait_t2_gun_meister.png',
+    male: 'assets/portraits/portrait_t2_gun_meister_male.webp',
+    female: 'assets/portraits/portrait_t2_gun_meister.webp',
   },
   ghost_sniper: {
-    male: 'assets/portraits/portrait_t3_omega_deadeye.png',
-    female: 'assets/portraits/portrait_t3_omega_deadeye_female.png',
+    male: 'assets/portraits/portrait_t3_omega_deadeye.webp',
+    female: 'assets/portraits/portrait_t3_omega_deadeye_female.webp',
   },
   omega_deadeye: {
-    male: 'assets/portraits/portrait_t3_omega_deadeye.png',
-    female: 'assets/portraits/portrait_t3_omega_deadeye_female.png',
+    male: 'assets/portraits/portrait_t3_omega_deadeye.webp',
+    female: 'assets/portraits/portrait_t3_omega_deadeye_female.webp',
+  },
+};
+
+/** 🎨 클래스별 남녀 포트레이트 베리에이션 풀 (신규 2번 포트레이트 포함) */
+export const CLASS_PORTRAIT_VARIANTS: Record<string, { male: string[]; female: string[] }> = {
+  squire: {
+    male: ['assets/portraits/portrait_squire_male.webp', 'assets/portraits/portrait_squire_male_02.webp', 'assets/portraits/portrait_squire_male_03.webp'],
+    female: ['assets/portraits/portrait_squire_female.webp', 'assets/portraits/portrait_squire_female_02.webp', 'assets/portraits/portrait_squire_female_03.webp'],
+  },
+  paladin: {
+    male: ['assets/portraits/portrait_paladin_male.webp', 'assets/portraits/portrait_squire_male_02.webp', 'assets/portraits/portrait_squire_male_03.webp'],
+    female: ['assets/portraits/portrait_paladin_female.webp', 'assets/portraits/portrait_squire_female_02.webp', 'assets/portraits/portrait_squire_female_03.webp'],
+  },
+  guardian: {
+    male: ['assets/portraits/portrait_t1_guardian.webp', 'assets/portraits/portrait_squire_male_02.webp', 'assets/portraits/portrait_squire_male_03.webp'],
+    female: ['assets/portraits/portrait_paladin_female.webp', 'assets/portraits/portrait_squire_female_02.webp', 'assets/portraits/portrait_squire_female_03.webp'],
+  },
+  rogue: {
+    male: ['assets/portraits/portrait_rogue_male.webp', 'assets/portraits/portrait_rogue_male_02.webp', 'assets/portraits/portrait_rogue_male_03.webp'],
+    female: ['assets/portraits/portrait_rogue_female.webp', 'assets/portraits/portrait_rogue_female_02.webp', 'assets/portraits/portrait_rogue_female_03.webp'],
+  },
+  duelist: {
+    male: ['assets/portraits/portrait_t1_duelist.webp', 'assets/portraits/portrait_rogue_male_02.webp', 'assets/portraits/portrait_rogue_male_03.webp'],
+    female: ['assets/portraits/portrait_rogue_female.webp', 'assets/portraits/portrait_rogue_female_02.webp', 'assets/portraits/portrait_rogue_female_03.webp'],
+  },
+  assassin: {
+    male: ['assets/portraits/portrait_t2_shadow_phantom_male.webp', 'assets/portraits/portrait_rogue_male_02.webp', 'assets/portraits/portrait_rogue_male_03.webp'],
+    female: ['assets/portraits/portrait_t2_shadow_phantom.webp', 'assets/portraits/portrait_rogue_female_02.webp', 'assets/portraits/portrait_rogue_female_03.webp'],
+  },
+  apprentice: {
+    male: ['assets/portraits/portrait_apprentice_male.webp', 'assets/portraits/portrait_mage_male_02.webp', 'assets/portraits/portrait_mage_male_03.webp'],
+    female: ['assets/portraits/portrait_apprentice_female.webp', 'assets/portraits/portrait_mage_female_02.webp', 'assets/portraits/portrait_mage_female_03.webp'],
+  },
+  apprentice_mage: {
+    male: ['assets/portraits/portrait_apprentice_male.webp', 'assets/portraits/portrait_mage_male_02.webp', 'assets/portraits/portrait_mage_male_03.webp'],
+    female: ['assets/portraits/portrait_apprentice_female.webp', 'assets/portraits/portrait_mage_female_02.webp', 'assets/portraits/portrait_mage_female_03.webp'],
+  },
+  mage: {
+    male: ['assets/portraits/portrait_mage_male.webp', 'assets/portraits/portrait_mage_male_02.webp', 'assets/portraits/portrait_mage_male_03.webp'],
+    female: ['assets/portraits/portrait_mage_female.webp', 'assets/portraits/portrait_mage_female_02.webp', 'assets/portraits/portrait_mage_female_03.webp'],
+  },
+  elementalist: {
+    male: ['assets/portraits/portrait_mage_male.webp', 'assets/portraits/portrait_mage_male_02.webp', 'assets/portraits/portrait_mage_male_03.webp'],
+    female: ['assets/portraits/portrait_mage_female.webp', 'assets/portraits/portrait_mage_female_02.webp', 'assets/portraits/portrait_mage_female_03.webp'],
+  },
+  acolyte: {
+    male: ['assets/portraits/portrait_acolyte_male.webp', 'assets/portraits/portrait_cleric_male_02.webp', 'assets/portraits/portrait_cleric_male_03.webp'],
+    female: ['assets/portraits/portrait_acolyte_female.webp', 'assets/portraits/portrait_cleric_female_02.webp', 'assets/portraits/portrait_cleric_female_03.webp'],
+  },
+  novice_cleric: {
+    male: ['assets/portraits/portrait_acolyte_male.webp', 'assets/portraits/portrait_cleric_male_02.webp', 'assets/portraits/portrait_cleric_male_03.webp'],
+    female: ['assets/portraits/portrait_acolyte_female.webp', 'assets/portraits/portrait_cleric_female_02.webp', 'assets/portraits/portrait_cleric_female_03.webp'],
+  },
+  cleric: {
+    male: ['assets/portraits/portrait_cleric_male.webp', 'assets/portraits/portrait_cleric_male_02.webp', 'assets/portraits/portrait_cleric_male_03.webp'],
+    female: ['assets/portraits/portrait_cleric_female.webp', 'assets/portraits/portrait_cleric_female_02.webp', 'assets/portraits/portrait_cleric_female_03.webp'],
+  },
+  war_priest: {
+    male: ['assets/portraits/portrait_t1_war_priest.webp', 'assets/portraits/portrait_cleric_male_02.webp', 'assets/portraits/portrait_cleric_male_03.webp'],
+    female: ['assets/portraits/portrait_cleric_female.webp', 'assets/portraits/portrait_cleric_female_02.webp', 'assets/portraits/portrait_cleric_female_03.webp'],
+  },
+  vanguard: {
+    male: ['assets/portraits/portrait_vanguard_male.webp', 'assets/portraits/portrait_berserker_male_02.webp', 'assets/portraits/portrait_berserker_male_03.webp'],
+    female: ['assets/portraits/portrait_vanguard_female.webp', 'assets/portraits/portrait_berserker_female_02.webp', 'assets/portraits/portrait_berserker_female_03.webp'],
+  },
+  warrior: {
+    male: ['assets/portraits/portrait_berserker_male.webp', 'assets/portraits/portrait_berserker_male_02.webp', 'assets/portraits/portrait_berserker_male_03.webp'],
+    female: ['assets/portraits/portrait_berserker_female.webp', 'assets/portraits/portrait_berserker_female_02.webp', 'assets/portraits/portrait_berserker_female_03.webp'],
+  },
+  berserker: {
+    male: ['assets/portraits/portrait_berserker_male.webp', 'assets/portraits/portrait_berserker_male_02.webp', 'assets/portraits/portrait_berserker_male_03.webp'],
+    female: ['assets/portraits/portrait_berserker_female.webp', 'assets/portraits/portrait_berserker_female_02.webp', 'assets/portraits/portrait_berserker_female_03.webp'],
+  },
+  warlord: {
+    male: ['assets/portraits/portrait_t1_warlord.webp', 'assets/portraits/portrait_berserker_male_02.webp', 'assets/portraits/portrait_berserker_male_03.webp'],
+    female: ['assets/portraits/portrait_berserker_female.webp', 'assets/portraits/portrait_berserker_female_02.webp', 'assets/portraits/portrait_berserker_female_03.webp'],
+  },
+  gunner: {
+    male: ['assets/portraits/portrait_gunner_male.webp', 'assets/portraits/portrait_gunner_male_02.webp', 'assets/portraits/portrait_gunner_male_03.webp'],
+    female: ['assets/portraits/portrait_gunner_female.webp', 'assets/portraits/portrait_gunner_female_02.webp', 'assets/portraits/portrait_gunner_female_03.webp'],
+  },
+  archer: {
+    male: ['assets/portraits/portrait_gunner_male.webp', 'assets/portraits/portrait_gunner_male_02.webp', 'assets/portraits/portrait_gunner_male_03.webp'],
+    female: ['assets/portraits/portrait_gunner_female.webp', 'assets/portraits/portrait_gunner_female_02.webp', 'assets/portraits/portrait_gunner_female_03.webp'],
+  },
+  tactical_gunner: {
+    male: ['assets/portraits/portrait_gunner_male.webp', 'assets/portraits/portrait_gunner_male_02.webp', 'assets/portraits/portrait_gunner_male_03.webp'],
+    female: ['assets/portraits/portrait_gunner_female.webp', 'assets/portraits/portrait_gunner_female_02.webp', 'assets/portraits/portrait_gunner_female_03.webp'],
+  },
+  sharpshooter: {
+    male: ['assets/portraits/portrait_gunner_male.webp', 'assets/portraits/portrait_gunner_male_02.webp', 'assets/portraits/portrait_gunner_male_03.webp'],
+    female: ['assets/portraits/portrait_t1_sharpshooter.webp', 'assets/portraits/portrait_gunner_female_02.webp', 'assets/portraits/portrait_gunner_female_03.webp'],
+  },
+  // ── 2차 전직 클래스 (Tier 2) 베리에이션 ──
+  aegis_valkyrie: {
+    male: ['assets/portraits/portrait_t2_valkyrie_male.webp', 'assets/portraits/portrait_t2_valkyrie_male_02.webp', 'assets/portraits/portrait_t2_valkyrie_male_03.webp'],
+    female: ['assets/portraits/portrait_t2_valkyrie.webp', 'assets/portraits/portrait_t2_valkyrie_female.webp', 'assets/portraits/portrait_t2_valkyrie_female_02.webp', 'assets/portraits/portrait_t2_valkyrie_female_03.webp'],
+  },
+  valkyrie: {
+    male: ['assets/portraits/portrait_t2_valkyrie_male.webp', 'assets/portraits/portrait_t2_valkyrie_male_02.webp', 'assets/portraits/portrait_t2_valkyrie_male_03.webp'],
+    female: ['assets/portraits/portrait_t2_valkyrie.webp', 'assets/portraits/portrait_t2_valkyrie_female.webp', 'assets/portraits/portrait_t2_valkyrie_female_02.webp', 'assets/portraits/portrait_t2_valkyrie_female_03.webp'],
+  },
+  shadow_phantom: {
+    male: ['assets/portraits/portrait_t2_shadow_phantom_male.webp', 'assets/portraits/portrait_t2_shadow_phantom_male_02.webp', 'assets/portraits/portrait_t2_shadow_phantom_male_03.webp'],
+    female: ['assets/portraits/portrait_t2_shadow_phantom.webp', 'assets/portraits/portrait_t2_shadow_phantom_female.webp', 'assets/portraits/portrait_t2_shadow_phantom_female_02.webp', 'assets/portraits/portrait_t2_shadow_phantom_female_03.webp'],
+  },
+  calamity_mage: {
+    male: ['assets/portraits/portrait_t2_calamity_mage_male.webp', 'assets/portraits/portrait_t2_calamity_mage_male_02.webp'],
+    female: ['assets/portraits/portrait_t2_calamity_mage.webp', 'assets/portraits/portrait_t2_calamity_mage_female.webp', 'assets/portraits/portrait_t2_calamity_mage_female_02.webp'],
+  },
+  high_saintess: {
+    male: ['assets/portraits/portrait_t2_high_saintess_male.webp', 'assets/portraits/portrait_t2_high_saintess_male_02.webp'],
+    female: ['assets/portraits/portrait_t2_high_saintess.webp', 'assets/portraits/portrait_t2_high_saintess_female.webp', 'assets/portraits/portrait_t2_high_saintess_female_02.webp'],
+  },
+  bishop: {
+    male: ['assets/portraits/portrait_t2_high_saintess_male.webp', 'assets/portraits/portrait_t2_high_saintess_male_02.webp'],
+    female: ['assets/portraits/portrait_t2_high_saintess.webp', 'assets/portraits/portrait_t2_high_saintess_female.webp', 'assets/portraits/portrait_t2_high_saintess_female_02.webp'],
+  },
+  valhalla_blade: {
+    male: ['assets/portraits/portrait_t2_valhalla_blade_male.webp', 'assets/portraits/portrait_t2_valhalla_blade_male_02.webp', 'assets/portraits/portrait_t2_valhalla_blade_male_03.webp'],
+    female: ['assets/portraits/portrait_t2_valhalla_blade.webp', 'assets/portraits/portrait_t2_valhalla_blade_female.webp', 'assets/portraits/portrait_t2_valhalla_blade_female_02.webp'],
+  },
+  gun_meister: {
+    male: ['assets/portraits/portrait_t2_gun_meister_male.webp', 'assets/portraits/portrait_t2_gun_meister_male_02.webp'],
+    female: ['assets/portraits/portrait_t2_gun_meister.webp', 'assets/portraits/portrait_t2_gun_meister_female.webp', 'assets/portraits/portrait_t2_gun_meister_female_02.webp'],
+  },
+  aether_gun_meister: {
+    male: ['assets/portraits/portrait_t2_gun_meister_male.webp', 'assets/portraits/portrait_t2_gun_meister_male_02.webp'],
+    female: ['assets/portraits/portrait_t2_gun_meister.webp', 'assets/portraits/portrait_t2_gun_meister_female.webp', 'assets/portraits/portrait_t2_gun_meister_female_02.webp'],
+  },
+  // ── 3차 전직 클래스 (Tier 3) 베리에이션 ──
+  aegis_bastion: {
+    male: ['assets/portraits/portrait_t3_bastion_male.webp', 'assets/portraits/portrait_t3_bastion_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_bastion_female.webp', 'assets/portraits/portrait_t3_bastion_female_02.webp'],
+  },
+  bastion: {
+    male: ['assets/portraits/portrait_t3_bastion_male.webp', 'assets/portraits/portrait_t3_bastion_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_bastion_female.webp', 'assets/portraits/portrait_t3_bastion_female_02.webp'],
+  },
+  fortress: {
+    male: ['assets/portraits/portrait_t3_bastion_male.webp', 'assets/portraits/portrait_t3_bastion_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_bastion_female.webp', 'assets/portraits/portrait_t3_bastion_female_02.webp'],
+  },
+  void_strider: {
+    male: ['assets/portraits/portrait_t3_void_strider_male.webp', 'assets/portraits/portrait_t3_void_strider_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_void_strider_female.webp', 'assets/portraits/portrait_t3_void_strider_female_02.webp'],
+  },
+  chrono_archon: {
+    male: ['assets/portraits/portrait_t3_chrono_archon_male.webp', 'assets/portraits/portrait_t3_chrono_archon_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_chrono_archon_female.webp', 'assets/portraits/portrait_t3_chrono_archon_female_02.webp'],
+  },
+  chronomancer: {
+    male: ['assets/portraits/portrait_t3_chrono_archon_male.webp', 'assets/portraits/portrait_t3_chrono_archon_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_chrono_archon_female.webp', 'assets/portraits/portrait_t3_chrono_archon_female_02.webp'],
+  },
+  seraphic_inquisitor: {
+    male: ['assets/portraits/portrait_t3_seraphic_inquisitor_male.webp', 'assets/portraits/portrait_t3_seraphic_inquisitor_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_seraphic_inquisitor_female.webp', 'assets/portraits/portrait_t3_seraphic_inquisitor_female_02.webp'],
+  },
+  crusader_lord: {
+    male: ['assets/portraits/portrait_t3_seraphic_inquisitor_male.webp', 'assets/portraits/portrait_t3_seraphic_inquisitor_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_seraphic_inquisitor_female.webp', 'assets/portraits/portrait_t3_seraphic_inquisitor_female_02.webp'],
+  },
+  valhalla_warlord: {
+    male: ['assets/portraits/portrait_t3_valhalla_warlord_male.webp', 'assets/portraits/portrait_t3_valhalla_warlord_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_valhalla_warlord_female.webp', 'assets/portraits/portrait_t3_valhalla_warlord_female_02.webp'],
+  },
+  iron_marshal: {
+    male: ['assets/portraits/portrait_t3_valhalla_warlord_male.webp', 'assets/portraits/portrait_t3_valhalla_warlord_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_valhalla_warlord_female.webp', 'assets/portraits/portrait_t3_valhalla_warlord_female_02.webp'],
+  },
+  omega_deadeye: {
+    male: ['assets/portraits/portrait_t3_omega_deadeye_male.webp', 'assets/portraits/portrait_t3_omega_deadeye_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_omega_deadeye_female.webp', 'assets/portraits/portrait_t3_omega_deadeye_female_02.webp'],
+  },
+  ghost_sniper: {
+    male: ['assets/portraits/portrait_t3_omega_deadeye_male.webp', 'assets/portraits/portrait_t3_omega_deadeye_male_02.webp'],
+    female: ['assets/portraits/portrait_t3_omega_deadeye_female.webp', 'assets/portraits/portrait_t3_omega_deadeye_female_02.webp'],
   },
 };
 
@@ -288,6 +482,10 @@ export class CustomAssetService {
     return CustomAssetService.getInstance().getGenderPortrait(classId, gender);
   }
 
+  public static getRandomGenderPortrait(classId: string, gender: 'male' | 'female' = 'male'): string {
+    return CustomAssetService.getInstance().getRandomGenderPortrait(classId, gender);
+  }
+
   public static getHeroPortrait(hero?: {
     id?: string;
     name?: string;
@@ -305,6 +503,50 @@ export class CustomAssetService {
 
   public static getElainePortrait(emotion: 'normal' | 'serious' | 'smile' | 'worry' = 'normal'): string {
     return CustomAssetService.getInstance().getElainePortrait(emotion);
+  }
+
+  // ── 🚀 초고속 대용량 인메모리 이미지 디코딩 캐시 (최대 1,000개 보관) ──
+  private static imageMemoryCache = new Map<string, HTMLImageElement>();
+
+  /**
+   * ⚡ 단일 이미지 백그라운드 비동기 디코딩 및 RAM 영구 캐싱
+   */
+  public static preloadImage(src?: string): Promise<boolean> {
+    if (!src || src.startsWith('data:') || src === 'emoji') return Promise.resolve(false);
+    const resolved = toWebp(src) || src;
+    if (this.imageMemoryCache.has(resolved)) return Promise.resolve(true);
+
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.decoding = 'async';
+      const onDone = () => {
+        this.imageMemoryCache.set(resolved, img);
+        if (this.imageMemoryCache.size > 1000) {
+          const firstKey = this.imageMemoryCache.keys().next().value;
+          if (firstKey) this.imageMemoryCache.delete(firstKey);
+        }
+        if (typeof img.decode === 'function') {
+          img.decode().catch(() => {}).then(() => resolve(true));
+        } else {
+          resolve(true);
+        }
+      };
+      img.onload = onDone;
+      img.onerror = () => resolve(false);
+      img.src = resolved;
+      if (img.complete && img.naturalWidth > 0) {
+        onDone();
+      }
+    });
+  }
+
+  /**
+   * ⚡ 여러 이미지 일괄 비동기 사전 로딩
+   */
+  public static preloadImages(urls: (string | undefined)[]): Promise<void> {
+    const valid = urls.filter((u): u is string => Boolean(u));
+    const unique = [...new Set(valid)];
+    return Promise.all(unique.map(u => this.preloadImage(u))).then(() => {});
   }
 
   // ── 이벤트 리스너 ──────────────────────────────────────────────────────────
@@ -482,10 +724,18 @@ export class CustomAssetService {
       const mergedOverrides = mergeAssetMap(staticPreset.iconOverrides, saved?.iconOverrides, isNewPresetVersion);
       const mergedVfxOverrides = mergeAssetMap(staticPreset.vfxOverrides, saved?.vfxOverrides, isNewPresetVersion);
 
-      // 🛡️ 레거시 고정 저해상도 base64 플레이스홀더 정리 (배포 정적 스프라이트 에셋이 존재하면 우선 적용)
+      // 🛡️ 레거시 고정 저해상도 base64 및 webp 정리 (배포 정적 스프라이트 에셋 우선 적용)
       for (const [k, v] of Object.entries(staticPreset.vfxOverrides || {})) {
-        if (v && !v.startsWith('data:') && (!mergedVfxOverrides[k] || mergedVfxOverrides[k].startsWith('data:image/png;base64,iVBORw0KGgoAAA') || mergedVfxOverrides[k].startsWith('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4'))) {
+        if (v && v.endsWith('.png')) {
           mergedVfxOverrides[k] = v;
+        } else if (v && !v.startsWith('data:') && (!mergedVfxOverrides[k] || mergedVfxOverrides[k].startsWith('data:image/png;base64,iVBORw0KGgoAAA') || mergedVfxOverrides[k].startsWith('data:image/png;base64,iVBORw0KGgoAAAEYAAABgCAYAAADimHc4'))) {
+          mergedVfxOverrides[k] = v;
+        }
+      }
+      // 🛡️ 저장소에 남아있을 수 있는 모든 VFX webp 경로를 png로 강제 정화
+      for (const [k, v] of Object.entries(mergedVfxOverrides)) {
+        if (typeof v === 'string' && v.includes('/vfx/') && v.endsWith('.webp')) {
+          mergedVfxOverrides[k] = v.replace(/\.webp$/i, '.png');
         }
       }
 
@@ -509,9 +759,9 @@ export class CustomAssetService {
       for (const [k, v] of Object.entries(mergedNpcOverrides)) {
         if (typeof v === 'string' && (v.includes('________') || v.includes('___'))) {
           if (k === 'npc_lloyd' || k === '선봉대장 로이드') {
-            mergedNpcOverrides[k] = 'assets/custom_uploaded/npcs/npc_lloyd.png';
+            mergedNpcOverrides[k] = 'assets/custom_uploaded/npcs/npc_lloyd.webp';
           } else if (k === 'npc_chief_advisor' || k === '방주 총괄 참모') {
-            mergedNpcOverrides[k] = 'assets/custom_uploaded/npcs/npc_chief_advisor.png';
+            mergedNpcOverrides[k] = 'assets/custom_uploaded/npcs/npc_chief_advisor.webp';
           } else {
             const mappedId = NPC_NAME_TO_ID[k] || k;
             if (staticPreset.npcOverrides?.[mappedId]) {
@@ -551,6 +801,7 @@ export class CustomAssetService {
     } finally {
       this.isInitialized = true;
       this.emit('changed', this.config);
+      this.prewarmCriticalAssets();
     }
   }
 
@@ -637,6 +888,10 @@ export class CustomAssetService {
   }
 
   public getIconOverride(key: string): string | undefined {
+    return toWebp(this.getRawIconOverride(key));
+  }
+
+  private getRawIconOverride(key: string): string | undefined {
     if (!key) return undefined;
     // 1. 직접 키 일치
     if (this.config.iconOverrides[key]) return this.config.iconOverrides[key];
@@ -716,6 +971,60 @@ export class CustomAssetService {
   }
 
   public getVfxOverride(type: string): string | undefined {
+    const raw = this.getRawVfxOverride(type);
+    if (!raw) return undefined;
+    // 🛡️ 레거시 webp 잔류 경로가 있다면 png로 강제 복구
+    if (typeof raw === 'string' && raw.includes('/vfx/') && raw.endsWith('.webp')) {
+      return raw.replace(/\.webp$/i, '.png');
+    }
+    return raw;
+  }
+
+  public getVfxOverrides(): Record<string, string> {
+    const result: Record<string, string> = {};
+    for (const [k, v] of Object.entries(this.config.vfxOverrides || {})) {
+      if (typeof v === 'string' && v.includes('/vfx/') && v.endsWith('.webp')) {
+        result[k] = v.replace(/\.webp$/i, '.png');
+      } else {
+        result[k] = v;
+      }
+    }
+    return result;
+  }
+
+  /**
+   * 🌟 게임 기동 시 유휴 시간(Idle)을 활용한 핵심 이펙트, 영웅 초상화, UI 아이콘 백그라운드 사전 디코딩
+   */
+  public prewarmCriticalAssets(): void {
+    if (typeof window === 'undefined') return;
+
+    // 1. 등록된 VFX 스프라이트 시트 사전 디코딩 (전투 중 0ms 즉시 재생)
+    const vfxUrls = Object.values(this.config.vfxOverrides || {}).filter(Boolean);
+    // 2. 클래스별 대표 초상화 사전 디코딩
+    const portraitUrls = Object.values(CLASS_GENDER_PORTRAITS)
+      .flatMap(p => [p.male, p.female])
+      .filter(Boolean);
+
+    const allUrls = [...new Set([...vfxUrls, ...portraitUrls])];
+    const pump = () => {
+      if (allUrls.length === 0) return;
+      const url = allUrls.shift();
+      if (url) {
+        CustomAssetService.preloadImage(url).finally(() => {
+          if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+            (window as any).requestIdleCallback(pump, { timeout: 100 });
+          } else {
+            setTimeout(pump, 25);
+          }
+        });
+      }
+    };
+
+    // 4개 파이프라인 가동
+    for (let i = 0; i < 4; i++) pump();
+  }
+
+  private getRawVfxOverride(type: string): string | undefined {
     if (!type) return undefined;
     if (this.config.vfxOverrides[type]) return this.config.vfxOverrides[type];
     // 광역기(_aoe) 커스텀이 없을 경우 기본 단일기 커스텀으로 유연한 fallback
@@ -738,12 +1047,13 @@ export class CustomAssetService {
 
   public getDungeonFloorOverride(floor: number | string): string | undefined {
     const key = String(floor).replace(/^dungeon_/, '');
-    return this.config.dungeonFloorOverrides[`dungeon_${key}`] || this.config.dungeonFloorOverrides[key];
+    const val = this.config.dungeonFloorOverrides[`dungeon_${key}`] || this.config.dungeonFloorOverrides[key];
+    return toWebp(val);
   }
 
   public getMonsterOverride(monsterIdOrKey: string): string | undefined {
     if (!monsterIdOrKey) return undefined;
-    return this.config.monsterOverrides[monsterIdOrKey];
+    return toWebp(this.config.monsterOverrides[monsterIdOrKey]);
   }
 
   public getMonsterVideoOverride(bossIdOrKey: string): string | undefined {
@@ -753,11 +1063,11 @@ export class CustomAssetService {
 
   public getMercenaryOverride(classIdOrKey: string): string | undefined {
     if (!classIdOrKey) return undefined;
-    return this.config.mercenaryOverrides[classIdOrKey];
+    return toWebp(this.config.mercenaryOverrides[classIdOrKey]);
   }
 
   public getGenderPortrait(classId: string, gender: 'male' | 'female' = 'male'): string {
-    if (!classId) return gender === 'female' ? 'assets/portraits/portrait_paladin_female.png' : 'assets/portraits/portrait_paladin_male.png';
+    if (!classId) return gender === 'female' ? 'assets/portraits/portrait_paladin_female.webp' : 'assets/portraits/portrait_paladin_male.webp';
     const norm = classId.toLowerCase().replace(/^hero_/, '');
     const gKey = gender === 'female' ? 'female' : 'male';
 
@@ -769,7 +1079,7 @@ export class CustomAssetService {
     // 2. 클래스 성별 매핑 테이블 조회
     const mapping = CLASS_GENDER_PORTRAITS[norm];
     if (mapping && mapping[gKey]) {
-      return mapping[gKey];
+      return toWebp(mapping[gKey])!;
     }
 
     // 3. 일반 클래스 오버라이드 조회
@@ -777,7 +1087,27 @@ export class CustomAssetService {
     if (generalOverride) return generalOverride;
 
     // 4. 기본 폴백
-    return gKey === 'female' ? 'assets/portraits/portrait_paladin_female.png' : 'assets/portraits/portrait_paladin_male.png';
+    return gKey === 'female' ? 'assets/portraits/portrait_paladin_female.webp' : 'assets/portraits/portrait_paladin_male.webp';
+  }
+
+  public getRandomGenderPortrait(classId: string, gender: 'male' | 'female' = 'male'): string {
+    if (!classId) return this.getGenderPortrait(classId, gender);
+    const norm = classId.toLowerCase().replace(/^hero_/, '');
+    const gKey = gender === 'female' ? 'female' : 'male';
+
+    // 1. 개별 커스텀 오버라이드 확인
+    const specificOverride = this.config.mercenaryOverrides[`${norm}_${gKey}`] 
+      || this.config.mercenaryOverrides[`hero_${norm}_${gKey}`];
+    if (specificOverride) return specificOverride;
+
+    // 2. 포트레이트 베리에이션 풀에서 랜덤 선택
+    const variants = CLASS_PORTRAIT_VARIANTS[norm];
+    if (variants && variants[gKey] && variants[gKey].length > 0) {
+      const list = variants[gKey];
+      return toWebp(list[Math.floor(Math.random() * list.length)])!;
+    }
+
+    return this.getGenderPortrait(classId, gender);
   }
 
   public getHeroPortrait(hero?: {
@@ -788,19 +1118,19 @@ export class CustomAssetService {
     portraitUrl?: string;
     portraitPromptKey?: string;
   }): string {
-    if (!hero) return 'assets/portraits/portrait_paladin_male.png';
+    if (!hero) return 'assets/portraits/portrait_paladin_male.webp';
 
     // 1. 영웅 ID 또는 이름 기준 직접 커스텀 오버라이드 확인
     if (hero.id && this.config.mercenaryOverrides[hero.id]) {
-      return this.config.mercenaryOverrides[hero.id];
+      return toWebp(this.config.mercenaryOverrides[hero.id])!;
     }
     if (hero.name && this.config.mercenaryOverrides[hero.name]) {
-      return this.config.mercenaryOverrides[hero.name];
+      return toWebp(this.config.mercenaryOverrides[hero.name])!;
     }
 
     // 2. hero.portraitUrl 명시되어 있는 경우 (단, 유효한 경로인 경우)
     if (hero.portraitUrl && typeof hero.portraitUrl === 'string' && hero.portraitUrl.trim().length > 0) {
-      return hero.portraitUrl;
+      return toWebp(hero.portraitUrl)!;
     }
 
     // 3. 성별 및 클래스 기반 초상화 조회
@@ -817,11 +1147,11 @@ export class CustomAssetService {
     const sanitize = (val?: string): string | undefined => {
       if (!val) return undefined;
       if (typeof val === 'string' && (val.includes('________') || val.includes('___'))) {
-        if (nameOrId === 'npc_lloyd' || nameOrId === '선봉대장 로이드') return 'assets/custom_uploaded/npcs/npc_lloyd.png';
-        if (nameOrId === 'npc_chief_advisor' || nameOrId === '방주 총괄 참모') return 'assets/custom_uploaded/npcs/npc_chief_advisor.png';
+        if (nameOrId === 'npc_lloyd' || nameOrId === '선봉대장 로이드') return 'assets/custom_uploaded/npcs/npc_lloyd.webp';
+        if (nameOrId === 'npc_chief_advisor' || nameOrId === '방주 총괄 참모') return 'assets/custom_uploaded/npcs/npc_chief_advisor.webp';
         return undefined;
       }
-      return val;
+      return toWebp(val);
     };
 
     // 1. 직접 키 일치 (e.g. 'npc_lloyd' or '선봉대장 로이드')
@@ -860,8 +1190,8 @@ export class CustomAssetService {
     }
 
     // 특별 폴백: 선봉대장 로이드 & 방주 총괄 참모 기본 에셋 경로
-    if (nameOrId === 'npc_lloyd' || nameOrId === '선봉대장 로이드') return 'assets/custom_uploaded/npcs/npc_lloyd.png';
-    if (nameOrId === 'npc_chief_advisor' || nameOrId === '방주 총괄 참모') return 'assets/custom_uploaded/npcs/npc_chief_advisor.png';
+    if (nameOrId === 'npc_lloyd' || nameOrId === '선봉대장 로이드') return 'assets/custom_uploaded/npcs/npc_lloyd.webp';
+    if (nameOrId === 'npc_chief_advisor' || nameOrId === '방주 총괄 참모') return 'assets/custom_uploaded/npcs/npc_chief_advisor.webp';
 
     return undefined;
   }
@@ -872,7 +1202,7 @@ export class CustomAssetService {
     if (specific) return specific;
     const base = this.getNpcOverride('npc_elaine') || this.getNpcOverride('수석 오퍼레이터 일레인');
     if (base) return base;
-    return 'assets/portraits/portrait_t1_scholar.png';
+    return 'assets/portraits/portrait_t1_scholar.webp';
   }
 
   public getAllConfig(): AssetConfigData {

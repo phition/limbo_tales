@@ -81,7 +81,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 11,
                 luck: 10,
                 promptKey: 'monster_cursed_revenant',
-                imagePath: 'assets/monster_cursed_revenant.jpg',
+                imagePath: 'assets/monster_cursed_revenant.webp',
                 skills: [
                   {
                     id: 'revenant_claw',
@@ -106,7 +106,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 14,
                 luck: 12,
                 promptKey: 'monster_shadow_imp',
-                imagePath: 'assets/monster_shadow_imp.jpg',
+                imagePath: 'assets/monster_shadow_imp.webp',
                 skills: [
                   {
                     id: 'shadow_scratch',
@@ -304,7 +304,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 15,
                 luck: 16,
                 promptKey: 'monster_tomb_banshee',
-                imagePath: 'assets/monster_tomb_banshee.jpg',
+                imagePath: 'assets/monster_tomb_banshee.webp',
                 skills: [
                   {
                     id: 'banshee_scream',
@@ -329,7 +329,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 11,
                 luck: 10,
                 promptKey: 'monster_crypt_ghoul',
-                imagePath: 'assets/monster_crypt_ghoul.jpg',
+                imagePath: 'assets/monster_crypt_ghoul.webp',
                 skills: [
                   {
                     id: 'ghoul_bite',
@@ -452,7 +452,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 12,
                 luck: 14,
                 promptKey: 'monster_dread_knight',
-                imagePath: 'assets/monster_dread_knight.jpg',
+                imagePath: 'assets/monster_dread_knight.webp',
                 skills: [
                   {
                     id: 'martyr_strike',
@@ -1008,7 +1008,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 9,
                 luck: 10,
                 promptKey: 'monster_monolith_guardian',
-                imagePath: 'assets/monster_monolith_guardian.jpg',
+                imagePath: 'assets/monster_monolith_guardian.webp',
                 skills: [
                   {
                     id: 'colossus_slam',
@@ -1146,7 +1146,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 16,
                 luck: 20,
                 promptKey: 'monster_crimson_vampire',
-                imagePath: 'assets/monster_crimson_vampire.jpg',
+                imagePath: 'assets/monster_crimson_vampire.webp',
                 skills: [
                   {
                     id: 'vampire_blood_drain',
@@ -1172,7 +1172,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 14,
                 luck: 15,
                 promptKey: 'monster_fallen_priest',
-                imagePath: 'assets/monster_fallen_priest.jpg',
+                imagePath: 'assets/monster_fallen_priest.webp',
                 skills: [
                   {
                     id: 'dark_curse_strike',
@@ -1578,7 +1578,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 13,
                 luck: 10,
                 promptKey: 'monster_iron_torturer',
-                imagePath: 'assets/monster_iron_torturer.jpg',
+                imagePath: 'assets/monster_iron_torturer.webp',
                 skills: [
                   {
                     id: 'torture_cleave',
@@ -1603,7 +1603,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: 15,
                 luck: 12,
                 promptKey: 'monster_inquisitor',
-                imagePath: 'assets/monster_inquisitor.jpg',
+                imagePath: 'assets/monster_inquisitor.webp',
                 skills: [
                   {
                     id: 'inquisition_brand',
@@ -1939,7 +1939,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 spd: Math.max(5, Math.round(heroStats.spd)),
                 luck: Math.max(5, Math.round(heroStats.luck)),
                 promptKey: 'monster_prism_weaver',
-                imagePath: 'assets/monster_prism_weaver.jpg',
+                imagePath: 'assets/monster_prism_weaver.webp',
                 skills: sanitizedSkills,
                 rewards: {
                   gold: 150,
@@ -2560,7 +2560,7 @@ export const FLOOR_UNIQUE_EVENTS: FloorEventDefinition[] = [
                 faction: 'corrupt',
                 level: Math.max(50, hero.level),
                 promptKey: 'monster_mirror_phantom',
-                imagePath: 'assets/monster_mirror_phantom.jpg',
+                imagePath: 'assets/monster_mirror_phantom.webp',
                 hp: maxHpVal,
                 maxHp: maxHpVal,
                 atk: Math.max(1, Math.round(heroStats.atk * 1.1)),

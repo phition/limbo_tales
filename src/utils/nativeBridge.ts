@@ -197,6 +197,17 @@ const onAppResumeForeground = () => {
   }
 
   SoundManager.getInstance().resumeBgm();
+
+  // 🌙 모바일/웹 복귀 시 부재 중 오프라인 성채 활동 정산 즉시 트리거
+  try {
+    const report = gm.processOfflineProgress();
+    if (report) {
+      gm.emit('resourcesChanged');
+      gm.emit('buildingUpdated');
+      gm.emit('partyUpdated', gm.party);
+      gm.emit('update');
+    }
+  } catch (_) {}
 };
 
 /**
@@ -282,11 +293,20 @@ export const initNativeBridge = async (onDefaultExit?: () => void): Promise<void
     console.warn('[NativeBridge] StatusBar 설정 실패:', err);
   }
 
-  // 2. 화면 방향 세로 고정
+  // 2. 화면 방향 제어: 모바일 폰에서는 세로 고정, PC(Google Play Games on PC)/대형 화면/태블릿에서는 와이드 화면 유지
   try {
-    await ScreenOrientation.lock({ orientation: 'portrait' });
+    const isWideOrPC = (typeof window !== 'undefined' && Boolean((window as any).__IS_PLAY_GAMES_PC__)) ||
+      (typeof window !== 'undefined' && window.innerWidth >= 900) ||
+      (typeof window !== 'undefined' && window.screen && window.screen.width >= 900 && window.screen.width > window.screen.height);
+
+    if (isWideOrPC) {
+      console.log('[NativeBridge] 🖥️ PC/대형 화면 감지: ScreenOrientation 세로 잠금을 해제하고 와이드 해상도를 유지합니다.');
+      await ScreenOrientation.unlock();
+    } else {
+      await ScreenOrientation.lock({ orientation: 'portrait' });
+    }
   } catch (err) {
-    console.warn('[NativeBridge] ScreenOrientation 고정 실패:', err);
+    console.warn('[NativeBridge] ScreenOrientation 설정 예외:', err);
   }
 
   // 3. 모바일 하드웨어 뒤로가기 버튼 처리 (Capacitor)

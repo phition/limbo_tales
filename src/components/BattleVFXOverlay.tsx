@@ -17,6 +17,9 @@ export type VFXType =
   | 'lightning'
   | 'dark_curse'
   | 'divine_smite'
+  | 'pierce'
+  | 'earth_quake'
+  | 'storm_wind'
   // ── 2. 광역 공격 계열 (AOE / Multi-Target) ──
   | 'slash_aoe'
   | 'heavy_slash_aoe'
@@ -33,6 +36,7 @@ export type VFXType =
   | 'blizzard_storm'
   | 'phantom_slash'
   | 'arcane_nova'
+  | 'pierce_aoe'
   // ── 3. 회복 & 방어 지원 (Support & Defense) ──
   | 'holy_heal'
   | 'holy_heal_aoe'
@@ -55,6 +59,8 @@ export type VFXType =
   | 'status_stun'
   | 'status_shield'
   | 'status_curse'
+  | 'status_blind'
+  | 'status_regen'
   // ── 7. 차징 & 제작/단조 연출 계열 (Charge & Crafting) ──
   | 'charge'
   | 'forge_spark'
@@ -116,10 +122,94 @@ export const BattleVFXOverlay: React.FC<Props> = ({ vfxList, onFinish, isShaking
 };
 
 // ── 🧠 지능형 다양한 스프라이트 시트 규격 자동 감지 헬퍼 ──
+export interface SpriteSheetDetectionResult {
+  isSheet: boolean;
+  cols: number;
+  rows: number;
+  totalFrames: number;
+}
+
+// ── 🛡️ VFX 경로 정규화 (혹시 모를 .webp 잔류 경로를 무조건 실제 존재하는 .png로 강제 매핑) ──
+export function normalizeVfxSrc(src?: string): string | undefined {
+  if (!src) return undefined;
+  if (typeof src === 'string' && src.includes('/vfx/') && src.endsWith('.webp')) {
+    return src.replace(/\.webp$/i, '.png');
+  }
+  return src;
+}
+
+// ── 🚀 초고속 스프라이트 규격 & 이미지 인메모리 RAM 캐시 (0ms 즉시 프레임 출력) ──
+export const SPRITE_INFO_CACHE = new Map<string, SpriteSheetDetectionResult>();
+export const PRELOADED_IMAGE_ELEMENTS = new Map<string, HTMLImageElement>();
+
+/**
+ * ⚡ 단일 VFX 스프라이트 시트 비동기 디코딩 및 규격 사전 캐싱
+ */
+export function preloadVfxSprite(src: string): Promise<SpriteSheetDetectionResult> {
+  src = normalizeVfxSrc(src) || src;
+  if (!src) return Promise.resolve({ isSheet: false, cols: 1, rows: 1, totalFrames: 1 });
+  if (SPRITE_INFO_CACHE.has(src)) {
+    return Promise.resolve(SPRITE_INFO_CACHE.get(src)!);
+  }
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.decoding = 'async';
+    const onDone = () => {
+      const detected = detectSpriteSheetDimensions(img.naturalWidth, img.naturalHeight);
+      SPRITE_INFO_CACHE.set(src, detected);
+      PRELOADED_IMAGE_ELEMENTS.set(src, img);
+      if (typeof img.decode === 'function') {
+        img.decode().catch(() => {}).then(() => resolve(detected));
+      } else {
+        resolve(detected);
+      }
+    };
+    img.onload = onDone;
+    img.onerror = () => {
+      const fallback = { isSheet: false, cols: 1, rows: 1, totalFrames: 1 };
+      SPRITE_INFO_CACHE.set(src, fallback);
+      resolve(fallback);
+    };
+    img.src = src;
+    if (img.complete && img.naturalWidth > 0) {
+      onDone();
+    }
+  });
+}
+
+/**
+ * 🌟 등록된 모든 VFX 스프라이트를 브라우저 백그라운드 유휴 시간(Idle)에 대용량 사전 디코딩
+ */
+export function prewarmVfxSprites(vfxMap?: Record<string, string>): void {
+  const map = vfxMap || CustomAssetService.getInstance().getVfxOverrides();
+  if (!map) return;
+  const urls = Object.values(map).filter(Boolean);
+  const queue = [...new Set(urls)];
+
+  const pump = () => {
+    if (queue.length === 0) return;
+    const url = queue.shift();
+    if (url) {
+      preloadVfxSprite(url).finally(() => {
+        if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+          (window as any).requestIdleCallback(pump, { timeout: 80 });
+        } else {
+          setTimeout(pump, 20);
+        }
+      });
+    }
+  };
+
+  // 4개 동시 유휴 파이프라인 가동
+  for (let i = 0; i < 4; i++) {
+    pump();
+  }
+}
+
 export function detectSpriteSheetDimensions(
   nw: number,
   nh: number
-): { isSheet: boolean; cols: number; rows: number; totalFrames: number } {
+): SpriteSheetDetectionResult {
   if (nw <= 0 || nh <= 0) {
     return { isSheet: false, cols: 1, rows: 1, totalFrames: 1 };
   }
@@ -203,67 +293,50 @@ export const CustomSpriteVFX: React.FC<{
   type: string;
   duration?: number;
   customConfig?: SpriteSheetConfig;
-}> = ({ src, type, duration = 650, customConfig }) => {
+  onError?: () => void;
+}> = ({ src: propSrc, type, duration = 650, customConfig, onError }) => {
+  const src = normalizeVfxSrc(propSrc) || propSrc;
   const activeConfig = customConfig || CustomAssetService.getInstance().getVfxConfig(type);
 
-  const [spriteInfo, setSpriteInfo] = useState<{
-    isSheet: boolean;
-    cols: number;
-    rows: number;
-    totalFrames: number;
-  } | null>(null);
+  // GIF, APNG 등 브라우저 자체 애니메이션 포맷 판정
+  const isSelfAnimatedFormat = src.startsWith('data:image/gif') 
+    || src.endsWith('.gif') 
+    || src.includes('image/apng');
+
+  // ⚡ 0ms 즉시 프레임 0 출력을 위한 사전 캐시 조회
+  const cachedInfo = SPRITE_INFO_CACHE.get(src);
+  const initialSpriteInfo: SpriteSheetDetectionResult | null = activeConfig && activeConfig.cols > 0 && activeConfig.rows > 0
+    ? {
+        isSheet: (activeConfig.totalFrames || (activeConfig.cols * activeConfig.rows)) > 1,
+        cols: activeConfig.cols,
+        rows: activeConfig.rows,
+        totalFrames: activeConfig.totalFrames || (activeConfig.cols * activeConfig.rows),
+      }
+    : isSelfAnimatedFormat
+    ? { isSheet: false, cols: 1, rows: 1, totalFrames: 1 }
+    : cachedInfo || null;
+
+  const [spriteInfo, setSpriteInfo] = useState<SpriteSheetDetectionResult | null>(initialSpriteInfo);
   const [frameIndex, setFrameIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  // GIF, WebP 애니메이션 등 브라우저 자체 애니메이션 포맷 판정
-  const isAnimatedFormat = src.startsWith('data:image/gif') 
-    || src.endsWith('.gif') 
-    || src.startsWith('data:image/webp') 
-    || src.endsWith('.webp')
-    || src.includes('image/apng');
-
   useEffect(() => {
+    if (spriteInfo) {
+      SPRITE_INFO_CACHE.set(src, spriteInfo);
+      return;
+    }
+
     let isMounted = true;
-    if (isAnimatedFormat) {
-      setSpriteInfo({ isSheet: false, cols: 1, rows: 1, totalFrames: 1 });
-      return;
-    }
-
-    // 명시적 커스텀 규격이 등록되어 있는 경우 최우선 적용
-    if (activeConfig && activeConfig.cols > 0 && activeConfig.rows > 0) {
-      const totalFrames = activeConfig.totalFrames || (activeConfig.cols * activeConfig.rows);
-      setSpriteInfo({
-        isSheet: totalFrames > 1,
-        cols: activeConfig.cols,
-        rows: activeConfig.rows,
-        totalFrames,
-      });
-      return;
-    }
-
-    const img = new Image();
-    const applyDimensions = () => {
-      if (!isMounted) return;
-      const detected = detectSpriteSheetDimensions(img.naturalWidth, img.naturalHeight);
-      setSpriteInfo(detected);
-    };
-
-    img.src = src;
-    if (img.complete && img.naturalWidth > 0) {
-      applyDimensions();
-    } else {
-      img.onload = applyDimensions;
-      img.onerror = () => {
-        if (isMounted) {
-          setSpriteInfo({ isSheet: false, cols: 1, rows: 1, totalFrames: 1 });
-        }
-      };
-    }
+    preloadVfxSprite(src).then((detected) => {
+      if (isMounted) {
+        setSpriteInfo(detected);
+      }
+    });
 
     return () => {
       isMounted = false;
     };
-  }, [src, isAnimatedFormat, activeConfig]);
+  }, [src, spriteInfo]);
 
   const effectiveDuration = activeConfig?.duration || duration;
 
@@ -287,13 +360,19 @@ export const CustomSpriteVFX: React.FC<{
     return () => clearInterval(interval);
   }, [spriteInfo, effectiveDuration]);
 
-  // 측정 대기 중이거나 단일 이미지/GIF인 경우 직접 렌더링 (지연 없이 즉시 표시)
+  // 측정 대기 중이거나 단일 이미지/GIF인 경우
   if (!spriteInfo || !spriteInfo.isSheet) {
+    if (!spriteInfo) {
+      // 측정 중(미캐싱 1회차)에 전체 스프라이트 시트가 왜곡 노출되는 플래시 방지
+      return <div className="relative w-48 h-48 select-none" />;
+    }
     return (
       <div className="relative w-48 h-48 flex items-center justify-center animate-scale-up select-none">
         <img
           src={src}
           alt={type}
+          decoding="async"
+          onError={() => onError?.()}
           className="w-full h-full object-contain filter drop-shadow-[0_0_25px_rgba(200, 170, 110,0.85)]"
         />
       </div>
@@ -316,6 +395,7 @@ export const CustomSpriteVFX: React.FC<{
           backgroundSize: `${spriteInfo.cols * 100}% ${spriteInfo.rows * 100}%`,
           backgroundPosition: `${posX}% ${posY}%`,
           imageRendering: 'pixelated',
+          willChange: 'background-position',
         }}
       />
     </div>
@@ -332,7 +412,9 @@ const VFXInstance: React.FC<{
   const isBossVfx = vfx.sourceType === 'boss' || vfx.tier === 3 || vfx.type.startsWith('boss_');
   const explicitConfig = (vfxConfigs && vfxConfigs[vfx.type])
     || CustomAssetService.getInstance().getVfxConfig(vfx.type);
-  const duration = explicitConfig?.duration || vfx.duration || (isBossVfx ? 950 : vfx.tier === 2 ? 800 : 650);
+  const isStunVfx = vfx.type === 'status_stun' || vfx.statusEffect === 'stun';
+  const duration = explicitConfig?.duration
+    || (isStunVfx ? (vfx.duration && vfx.duration <= 600 ? vfx.duration : 600) : (vfx.duration || (isBossVfx ? 950 : vfx.tier === 2 ? 800 : 650)));
 
   useEffect(() => {
     const timer = setTimeout(onFinish, duration);
@@ -342,8 +424,10 @@ const VFXInstance: React.FC<{
   const x = vfx.fullScreen ? 50 : (vfx.x ?? 50);
   const y = vfx.fullScreen ? 45 : (vfx.y ?? 50);
 
-  const customVfxSrc = (overrideMap && overrideMap[vfx.type])
+  const [hasCustomError, setHasCustomError] = useState(false);
+  const rawCustomVfxSrc = (overrideMap && overrideMap[vfx.type])
     || CustomAssetService.getInstance().getVfxOverride(vfx.type);
+  const customVfxSrc = normalizeVfxSrc(rawCustomVfxSrc);
 
   // 스케일 계산: 명시적 scale > 티어별 기본 scale
   const baseScale = vfx.scale ?? (isBossVfx ? 2.4 : vfx.tier === 2 ? 1.55 : vfx.tier === 1 ? 1.25 : 1.0);
@@ -360,8 +444,14 @@ const VFXInstance: React.FC<{
       }}
     >
       {/* ── 0. 커스텀 스프라이트/GIF 이펙트 오버라이드 (스프라이트 시트 완벽 지원) ── */}
-      {customVfxSrc ? (
-        <CustomSpriteVFX src={customVfxSrc} type={vfx.type} duration={duration} customConfig={explicitConfig} />
+      {customVfxSrc && !hasCustomError ? (
+        <CustomSpriteVFX
+          src={customVfxSrc}
+          type={vfx.type}
+          duration={duration}
+          customConfig={explicitConfig}
+          onError={() => setHasCustomError(true)}
+        />
       ) : (
         <>
           {/* ══════════════════════════════════════════════════════════
@@ -643,6 +733,63 @@ const VFXInstance: React.FC<{
             </div>
           )}
 
+          {(vfx.type === 'pierce' || vfx.type === 'pierce_aoe') && (
+            <div className="relative w-48 h-48 flex items-center justify-center animate-vfx-bullet">
+              {/* 🔱 신속 관통 궤적 / 돌창 고속 섬광 */}
+              <svg className="w-full h-full" viewBox="0 0 120 120">
+                <defs>
+                  <linearGradient id="pierceGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+                    <stop offset="0%" stopColor="#00e5ff" stopOpacity="0.2" />
+                    <stop offset="60%" stopColor="#80d8ff" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+                  </linearGradient>
+                </defs>
+                {/* 메인 관통 빔 */}
+                <line x1="5" y1="60" x2="115" y2="60" stroke="url(#pierceGrad)" strokeWidth={vfx.type === 'pierce_aoe' ? '10' : '6'} strokeLinecap="round" filter="drop-shadow(0 0 12px #00b0ff)" />
+                <line x1="20" y1="60" x2="110" y2="60" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
+                {/* 관통 촉 & 충격 링 */}
+                <polygon points="115,60 85,48 95,60 85,72" fill="#ffffff" filter="drop-shadow(0 0 8px #00e5ff)" />
+                <circle cx="95" cy="60" r="16" fill="none" stroke="#00e5ff" strokeWidth="2.5" opacity="0.8" />
+                {vfx.type === 'pierce_aoe' && (
+                  <>
+                    <line x1="10" y1="42" x2="105" y2="42" stroke="#40c4ff" strokeWidth="3" strokeLinecap="round" opacity="0.7" />
+                    <line x1="10" y1="78" x2="105" y2="78" stroke="#40c4ff" strokeWidth="3" strokeLinecap="round" opacity="0.7" />
+                  </>
+                )}
+              </svg>
+              <div className="absolute right-4 w-12 h-12 rounded-full bg-[#00e5ff] animate-ping opacity-75" />
+            </div>
+          )}
+
+          {vfx.type === 'earth_quake' && (
+            <div className="relative w-48 h-48 flex items-center justify-center animate-vfx-heavy">
+              {/* 🪨 대지 진동 및 파열 암석 쇄도 */}
+              <svg className="w-full h-full" viewBox="0 0 120 120">
+                {/* 지각 파열 균열선 */}
+                <polyline points="10,110 35,70 60,95 85,55 110,105" fill="none" stroke="#ffab00" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" filter="drop-shadow(0 0 10px #ff6d00)" />
+                {/* 솟구치는 암석 첨탑 파편 */}
+                <polygon points="25,110 40,40 55,110" fill="#6d4c41" stroke="#ffa726" strokeWidth="2.5" />
+                <polygon points="50,110 70,25 90,110" fill="#8d6e63" stroke="#ffd54f" strokeWidth="3" />
+                <polygon points="85,110 100,50 115,110" fill="#5d4037" stroke="#ffb74d" strokeWidth="2.5" />
+              </svg>
+              <div className="absolute bottom-2 text-3xl animate-bounce">🌋</div>
+              <div className="absolute inset-0 rounded-full border-4 border-[#ffab00] animate-vfx-shockwave opacity-70" />
+            </div>
+          )}
+
+          {vfx.type === 'storm_wind' && (
+            <div className="relative w-48 h-48 flex items-center justify-center animate-spin" style={{ animationDuration: '1.2s' }}>
+              {/* 🌪️ 질풍 칼바람 회오리 */}
+              <svg className="w-full h-full" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#00e676" strokeWidth="3.5" strokeDasharray="20 10" filter="drop-shadow(0 0 12px #00e676)" />
+                <circle cx="60" cy="60" r="34" fill="none" stroke="#69f0ae" strokeWidth="3" strokeDasharray="14 8" opacity="0.85" />
+                {/* 회전 풍인 칼날 */}
+                <path d="M60 15 Q75 45 105 60 Q75 75 60 105 Q45 75 15 60 Q45 45 60 15 Z" fill="#00e67622" stroke="#b9f6ca" strokeWidth="2.5" />
+              </svg>
+              <div className="absolute text-4xl animate-pulse">🌪️</div>
+            </div>
+          )}
+
           {/* ══════════════════════════════════════════════════════════
               5. 🩸 상태이상 전용 디테일 시각 효과 (Status Effect Detail Cues)
              ══════════════════════════════════════════════════════════ */}
@@ -690,6 +837,21 @@ const VFXInstance: React.FC<{
           {vfx.type === 'status_curse' && (
             <div className="relative w-32 h-32 flex items-center justify-center animate-vfx-dark">
               <div className="text-3xl">🔮</div>
+            </div>
+          )}
+
+          {vfx.type === 'status_blind' && (
+            <div className="relative w-32 h-32 flex flex-col items-center justify-center animate-pulse">
+              <div className="absolute inset-0 bg-[#000000bb] rounded-full blur-xs" />
+              <div className="text-3xl relative z-10" style={{ filter: 'drop-shadow(0 0 10px #7e57c2)' }}>👁️‍🗨️</div>
+              <div className="w-8 h-1 bg-[#b39ddb] rounded-full mt-1 animate-ping opacity-75" />
+            </div>
+          )}
+
+          {vfx.type === 'status_regen' && (
+            <div className="relative w-32 h-32 flex flex-col items-center justify-center animate-vfx-heal">
+              <div className="text-3xl animate-bounce">🌱</div>
+              <div className="text-sm font-bold text-[#69f0ae] animate-pulse">✨</div>
             </div>
           )}
 

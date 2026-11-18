@@ -21,9 +21,12 @@ const DEFAULT_CLASS_IMAGES: Record<string, string> = {
   tactical_tower: 'assets/citadel_bonfire.jpg',
 };
 
-export const getHeroPortraitUrl = (classId?: string) => {
-  if (!classId) return '';
-  return CustomAssetService.getInstance().getMercenaryOverride(classId) || DEFAULT_CLASS_IMAGES[classId] || '';
+export const getHeroPortraitUrl = (heroOrClassId?: Mercenary | string) => {
+  if (!heroOrClassId) return '';
+  if (typeof heroOrClassId === 'object') {
+    return CustomAssetService.getHeroPortrait(heroOrClassId);
+  }
+  return CustomAssetService.getInstance().getMercenaryOverride(heroOrClassId) || DEFAULT_CLASS_IMAGES[heroOrClassId] || CustomAssetService.getGenderPortrait(heroOrClassId, 'male') || '';
 };
 
 // 🛡️ 차원 영지 침공전 DR(피해 감소) 상수 K - 던전 10층 규격 연동 (K = 500, DEF 500일 때 50% 경감)
@@ -594,8 +597,57 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       };
     });
 
-    // 1-3. 수성측 포탑 전투 유닛 (포탑의 체력/방어/속도/행운 + 탑승 사수의 공격력 및 스킬)
+    // 1-3. 수성측 3인 전투 유닛 (성벽 결속 수호자, 좌측 포탑 사수, 우측 포탑 사수)
     const oCombatants: InvasionCombatant[] = [];
+
+    // 성벽 결속 수호자 (성벽 내구도 수복 전담)
+    if (bHero || target.gateLevel) {
+      const cls = (bHero ? CHARACTER_CLASSES[bHero.classId] : undefined) || CHARACTER_CLASSES['crusader'] || CHARACTER_CLASSES['paladin'] || CHARACTER_CLASSES['squire'];
+      const barrierHeroSkills: Skill[] = [
+        {
+          id: 'basic_attack',
+          name: '성벽 긴급 수복',
+          description: '성벽 수호자가 자신의 공격력의 25%만큼 성벽 내구도를 수복 치유합니다.',
+          manaCost: 0,
+          cooldown: 0,
+          targetType: 'single_ally',
+          power: 0.25,
+          effectType: 'heal',
+          icon: '🛡️💖',
+        },
+        ...(cls?.skills || []),
+        ...(cls?.specialSkill ? [cls.specialSkill] : []),
+      ];
+
+      const barrierHeroAtk = bHero ? (bHero.stats?.atk || 100) : 100 + baseGateLv * 10;
+      const barrierHeroSpd = bHero ? (bHero.stats?.spd || 15) : 15 + (oppTowerData.utility?.tier1 || 0) * 2;
+      const barrierHeroLuck = bHero ? (bHero.stats?.luck || 15) : 15;
+
+      oCombatants.push({
+        id: 'barrier_hero',
+        name: bHero ? `성벽 수호 [${bHero.name}]` : '성벽 수호자',
+        classId: bHero?.classId || 'crusader',
+        className: cls?.name || '성벽 수호자',
+        grade: bHero?.grade || 'veteran',
+        level: bHero?.level || baseGateLv,
+        position: 'back',
+        currentHp: calcBarrierHp,
+        maxHp: calcBarrierHp,
+        currentMp: bHero ? bHero.currentMp : 100,
+        maxMp: bHero ? bHero.maxMp : 100,
+        atk: barrierHeroAtk,
+        def: barrierDef,
+        spd: barrierHeroSpd,
+        luck: barrierHeroLuck,
+        skills: barrierHeroSkills,
+        isPlayer: false,
+        cooldowns: {},
+        statusEffects: [],
+        icon: '🛡️',
+        trait: bHero?.trait,
+        role: cls?.role || 'tank',
+      });
+    }
 
     // 좌측 포탑 사수 (물리/사격 화력 지원)
     if (lTurretHero || target.gateLevel) {
@@ -880,6 +932,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       return { x: colX, y: 78 };
     } else {
       if (id === 'dimensional_barrier') return { x: 50, y: 38 };
+      if (id === 'barrier_hero') return { x: 50, y: 38 };
       if (id === 'turret_left') return { x: 18, y: 32 };
       if (id === 'turret_right') return { x: 82, y: 32 };
       const idx = oppTeamRef.current.findIndex(c => c.id === id);
@@ -935,6 +988,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     oppTeamRef.current = oppTeamRef.current.map(c => {
       if (c.id === 'turret_left') return { ...c, currentHp: curL.currentHp };
       if (c.id === 'turret_right') return { ...c, currentHp: curR.currentHp };
+      if (c.id === 'barrier_hero') return { ...c, currentHp: curBarrier.currentHp };
       return c;
     });
     setOppTeam([...oppTeamRef.current]);
@@ -1037,6 +1091,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     oppTeamRef.current = oppTeamRef.current.map(c => {
       if (c.id === 'turret_left') return { ...c, currentHp: curL.currentHp };
       if (c.id === 'turret_right') return { ...c, currentHp: curR.currentHp };
+      if (c.id === 'barrier_hero') return { ...c, currentHp: curBarrier.currentHp };
       return c;
     });
     setOppTeam([...oppTeamRef.current]);
@@ -1120,6 +1175,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     const aliveO = currentO.filter(c => {
       if (c.id === 'turret_left') return !turretLeftRef.current.isDestroyed && turretLeftRef.current.currentHp > 0;
       if (c.id === 'turret_right') return !turretRightRef.current.isDestroyed && turretRightRef.current.currentHp > 0;
+      if (c.id === 'barrier_hero') return !barrierStateRef.current.isDestroyed && barrierStateRef.current.currentHp > 0;
       return c.currentHp > 0;
     });
 
@@ -1231,7 +1287,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         return (se.duration || 0) > 0;
       });
 
-      // 포탑 공격자 상태 실시간 동기화
+      // 포탑 및 성벽 수호자 상태 실시간 동기화
       if (attacker.id === 'turret_left') {
         turretLeftRef.current.statusEffects = [...attacker.statusEffects];
         turretLeftRef.current.currentHp = attacker.currentHp;
@@ -1242,6 +1298,11 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         turretRightRef.current.currentHp = attacker.currentHp;
         if (attacker.currentHp <= 0) turretRightRef.current.isDestroyed = true;
         setTurretRight({ ...turretRightRef.current });
+      } else if (attacker.id === 'barrier_hero') {
+        barrierStateRef.current.statusEffects = [...attacker.statusEffects];
+        barrierStateRef.current.currentHp = attacker.currentHp;
+        if (attacker.currentHp <= 0) barrierStateRef.current.isDestroyed = true;
+        setBarrierState({ ...barrierStateRef.current });
       }
 
       if (attacker.currentHp <= 0) {
@@ -1257,6 +1318,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
       } else if (attacker.id === 'turret_right') {
         turretRightRef.current.isDestroyed = true;
         setTurretRight({ ...turretRightRef.current });
+      } else if (attacker.id === 'barrier_hero') {
+        barrierStateRef.current.isDestroyed = true;
+        setBarrierState({ ...barrierStateRef.current });
       }
       setActionBanner({
         text: `💀 [지속 피해 격멸] ${attacker.name}!`,
@@ -1294,19 +1358,30 @@ export const InvasionBattleScreen: React.FC<Props> = ({
     const manaTaxMult = 1.0 + utilTier2 * 0.15;
 
     // 사용 가능한 스킬 선택
-    const readySkills = attacker.skills.filter(s => {
+    const readySkills = (attacker.skills || []).filter(s => {
       if (s.id === 'basic_attack') return true;
-      const effectiveCost = Math.round(s.manaCost * manaTaxMult);
+      const effectiveCost = Math.round((s.manaCost || 0) * manaTaxMult);
       const cd = attacker.cooldowns[s.id] || 0;
-      return cd === 0 && attacker.currentMp >= effectiveCost;
+      return cd === 0 && (attacker.currentMp || 0) >= effectiveCost;
     });
-    const chosenSkill = readySkills.length > 1 && Math.random() < 0.65
+    const fallbackBasicSkill: Skill = (attacker.skills || []).find(s => s.id === 'basic_attack') || (attacker.skills && attacker.skills[0]) || {
+      id: 'basic_attack',
+      name: '기본 공격',
+      description: '기본 전투 행동',
+      manaCost: 0,
+      cooldown: 0,
+      targetType: 'single_enemy',
+      power: 1.0,
+      effectType: 'damage',
+      icon: '⚔️',
+    };
+    const chosenSkill = (readySkills.length > 1 && Math.random() < 0.65
       ? readySkills[Math.floor(Math.random() * (readySkills.length - 1)) + 1]
-      : readySkills[0];
+      : readySkills[0]) || fallbackBasicSkill;
 
     if (chosenSkill.id !== 'basic_attack') {
-      const effectiveCost = Math.round(chosenSkill.manaCost * manaTaxMult);
-      attacker.currentMp = Math.max(0, attacker.currentMp - effectiveCost);
+      const effectiveCost = Math.round((chosenSkill.manaCost || 0) * manaTaxMult);
+      attacker.currentMp = Math.max(0, (attacker.currentMp || 0) - effectiveCost);
       attacker.cooldowns[chosenSkill.id] = (chosenSkill.cooldown || 2) + 1;
     }
     Object.keys(attacker.cooldowns).forEach(k => {
@@ -1783,6 +1858,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             setBarrierState({ ...targetObj });
             setIsBarrierHit(true);
             setTimeout(() => setIsBarrierHit(false), 350);
+            oppTeamRef.current = oppTeamRef.current.map(c => c.id === 'barrier_hero' ? { ...c, currentHp: targetObj.currentHp, statusEffects: [...targetObj.statusEffects] } : c);
+            setOppTeam([...oppTeamRef.current]);
           } else if (targetObj.id === 'turret_left') {
             turretLeftRef.current = { ...targetObj };
             setTurretLeft({ ...targetObj });
@@ -1943,6 +2020,8 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         }
         barrierStateRef.current = { ...curB };
         setBarrierState({ ...curB });
+        oppTeamRef.current = oppTeamRef.current.map(c => c.id === 'barrier_hero' ? { ...c, currentHp: curB.currentHp } : c);
+        setOppTeam([...oppTeamRef.current]);
         if (bDotTotal > 0) {
           setIsBarrierHit(true);
           setTimeout(() => setIsBarrierHit(false), 300);
@@ -2493,6 +2572,101 @@ export const InvasionBattleScreen: React.FC<Props> = ({
         if (isTactCrit) addOppFeverBadge('crit');
         else addOppFeverBadge('break');
       }
+
+      // ─────────────────────────────────────────────────────────
+      // 3) 🛡️ 성벽 결속 수호자 (성벽 수호자 턴)
+      // 정상 턴을 진행할 때마다 공격력의 25%만큼 성벽(차원 보호막)을 수복 치유하며,
+      // 이는 힐로 인정되어 피버 배지(heal)를 획득합니다.
+      // ─────────────────────────────────────────────────────────
+      else if (attacker.id === 'barrier_hero') {
+        const curBarrier = { ...barrierStateRef.current };
+        if (!curBarrier.isDestroyed) {
+          const wallHealAmount = Math.max(10, Math.round(attacker.atk * 0.25));
+          const prevHp = curBarrier.currentHp;
+          curBarrier.currentHp = Math.min(curBarrier.maxHp, curBarrier.currentHp + wallHealAmount);
+          const actualHealed = curBarrier.currentHp - prevHp;
+          barrierStateRef.current = curBarrier;
+          setBarrierState(curBarrier);
+
+          // 힐량 딜미터기 기록
+          const mHero = combatMetricsRef.current[attacker.id];
+          if (mHero) {
+            mHero.healingDone = (mHero.healingDone || 0) + (actualHealed > 0 ? actualHealed : wallHealAmount);
+            mHero.actionsCount = (mHero.actionsCount || 0) + 1;
+          }
+
+          // 💖 힐 인정 피버 배지(heal) 획득
+          addOppFeverBadge('heal');
+
+          // 성벽 치유 VFX 및 사운드
+          const barrierPos = getCombatantCardPos('dimensional_barrier', false);
+          setVfxList(prev => [
+            ...prev,
+            {
+              id: `vfx_barrier_heal_${Date.now()}_${Math.random()}`,
+              type: 'heal',
+              damage: actualHealed > 0 ? actualHealed : wallHealAmount,
+              text: actualHealed > 0 ? `+${actualHealed.toLocaleString()} HP 성벽 수복` : `완전 수복 유지 (+${wallHealAmount.toLocaleString()})`,
+              x: barrierPos.x || 50,
+              y: barrierPos.y || 40,
+              duration: Math.round(500 / battleSpeed),
+            },
+          ]);
+          SoundManager.getInstance().play('holy_spell');
+
+          // 실시간 교전 정보 패널 업데이트
+          setClashData({
+            attacker: { ...attacker },
+            defender: {
+              name: curBarrier.name,
+              icon: curBarrier.icon,
+              className: '차원 절대 방어막 (후열)',
+              level: target.gateLevel,
+              currentHp: curBarrier.currentHp,
+              maxHp: curBarrier.maxHp,
+              currentMp: 0,
+              maxMp: 0,
+              def: curBarrier.def,
+              classId: 'tactical_tower',
+              position: 'back',
+            },
+            skill: {
+              id: 'basic_attack',
+              name: '성벽 긴급 수복',
+              description: '공격력의 25%만큼 성벽 내구도 수복',
+              manaCost: 0,
+              cooldown: 0,
+              targetType: 'single_ally',
+              power: 0.25,
+              effectType: 'heal',
+              icon: '🛡️💖',
+            },
+            damage: -(actualHealed > 0 ? actualHealed : wallHealAmount),
+            isCrit: false,
+            isPlayerAttacking: false,
+          });
+          setIsClashZoomed(true);
+
+          setActionBanner({
+            text: `💖 [성벽 수복] ${attacker.name}!`,
+            sub: `성벽 수호자의 지원으로 성벽(차원 왜곡 보호막) +${(actualHealed > 0 ? actualHealed : wallHealAmount).toLocaleString()} HP 회복 (공격력의 25% 수복 · 힐 피버 획득!)`,
+            color: '#38ef7d',
+          });
+
+          setBattleLogs(prev => [
+            ...prev.slice(-30),
+            {
+              round: currentRoundNumber,
+              attacker: attacker.name,
+              defender: '차원 왜곡 보호막',
+              damage: -(actualHealed > 0 ? actualHealed : wallHealAmount),
+              isCrit: false,
+              skillName: '성벽 긴급 수복',
+              side: 'enemy',
+            },
+          ]);
+        }
+      }
     }
 
     setPlayerTeam([...currentP]);
@@ -2670,7 +2844,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               data-vfx-target="turret_left"
               onClick={() => setSelectedFocusTargetId('turret_left')}
               className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col gap-1 ${
-                turretLeft.isDestroyed
+                activeCombatantId === 'turret_left'
+                  ? 'bg-gradient-to-r from-[#381510] to-[#220d0a] border-2 border-[#ff7043] shadow-[0_0_20px_rgba(255,112,67,0.8)] ring-2 ring-[#ff7043] scale-[1.02]'
+                  : turretLeft.isDestroyed
                   ? 'bg-[#121216]/60 border-[#262832] opacity-45 grayscale'
                   : selectedFocusTargetId === 'turret_left'
                   ? 'bg-gradient-to-r from-[#2a111a] to-[#1a0a14] border-2 border-[#ff7043] shadow-[0_0_15px_rgba(255,112,67,0.6)] ring-1 ring-[#ff7043]'
@@ -2686,9 +2862,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               {/* 포탑 헤더 & 사수 포트레이트 */}
               <div className="flex items-center gap-1.5">
                 <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-[#ff704355] bg-black/60 flex items-center justify-center">
-                  {leftTurretHero && getHeroPortraitUrl(leftTurretHero.classId) ? (
+                  {leftTurretHero && getHeroPortraitUrl(leftTurretHero) ? (
                     <img
-                      src={getHeroPortraitUrl(leftTurretHero.classId)}
+                      src={getHeroPortraitUrl(leftTurretHero)}
                       alt={leftTurretHero.name}
                       className="w-full h-full object-cover object-center"
                       onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
@@ -2753,7 +2929,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               data-vfx-target="turret_right"
               onClick={() => setSelectedFocusTargetId('turret_right')}
               className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col gap-1 ${
-                turretRight.isDestroyed
+                activeCombatantId === 'turret_right'
+                  ? 'bg-gradient-to-r from-[#222a10] to-[#141c08] border-2 border-[#ffd54f] shadow-[0_0_20px_rgba(255,213,79,0.8)] ring-2 ring-[#ffd54f] scale-[1.02]'
+                  : turretRight.isDestroyed
                   ? 'bg-[#121216]/60 border-[#262832] opacity-45 grayscale'
                   : selectedFocusTargetId === 'turret_right'
                   ? 'bg-gradient-to-r from-[#0c242c] to-[#0a1824] border-2 border-[#c8aa6e] shadow-[0_0_15px_rgba(200, 170, 110,0.6)] ring-1 ring-[#c8aa6e]'
@@ -2769,9 +2947,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               {/* 포탑 헤더 & 사수 포트레이트 */}
               <div className="flex items-center gap-1.5">
                 <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-[#c8aa6e55] bg-black/60 flex items-center justify-center">
-                  {rightTurretHero && getHeroPortraitUrl(rightTurretHero.classId) ? (
+                  {rightTurretHero && getHeroPortraitUrl(rightTurretHero) ? (
                     <img
-                      src={getHeroPortraitUrl(rightTurretHero.classId)}
+                      src={getHeroPortraitUrl(rightTurretHero)}
                       alt={rightTurretHero.name}
                       className="w-full h-full object-cover object-center"
                       onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
@@ -2837,7 +3015,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
             data-vfx-target="dimensional_barrier"
             onClick={() => setSelectedFocusTargetId('dimensional_barrier')}
             className={`w-full p-2 sm:p-2.5 rounded-2xl border-2 transition-all duration-300 cursor-pointer relative overflow-hidden shadow-2xl flex flex-col gap-1.5 ${
-              barrierState.isDestroyed
+              activeCombatantId === 'barrier_hero'
+                ? 'bg-gradient-to-r from-[#0a2f1d]/95 via-[#0d4229]/95 to-[#082b1a]/95 border-[#38ef7d] ring-4 ring-[#38ef7d] shadow-[0_0_35px_rgba(56,239,125,0.8)] scale-[1.01]'
+                : barrierState.isDestroyed
                 ? 'bg-[#10141d]/70 border-[#262f40] opacity-40'
                 : selectedFocusTargetId === 'dimensional_barrier'
                 ? 'bg-gradient-to-r from-[#09223b]/95 via-[#0b3356]/95 to-[#081f36]/95 border-[#c8aa6e] shadow-[0_0_25px_rgba(200, 170, 110,0.7)] ring-2 ring-[#c8aa6e]'
@@ -2857,9 +3037,9 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               <div className="flex items-center gap-2 min-w-0">
                 {/* 결속 수호자 포트레이트 */}
                 <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shrink-0 border-2 border-[#c8aa6e] bg-black/60 flex items-center justify-center shadow-[0_0_8px_rgba(200, 170, 110,0.4)]">
-                  {barrierHero && getHeroPortraitUrl(barrierHero.classId) ? (
+                  {barrierHero && getHeroPortraitUrl(barrierHero) ? (
                     <img
-                      src={getHeroPortraitUrl(barrierHero.classId)}
+                      src={getHeroPortraitUrl(barrierHero)}
                       alt={barrierHero.name}
                       className="w-full h-full object-cover object-center"
                       onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
@@ -2890,7 +3070,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
                   <div className="text-[7.5px] sm:text-[8px] text-[#80deea] truncate mt-0.5">
                     {barrierHero ? (
                       <span>
-                        수호자 <strong className="text-white">{barrierHero.name}</strong> 결속 (+{barrierHeroBonus.hp.toLocaleString()} HP / +{barrierHeroBonus.def} DEF 반영 · 비전투)
+                        수호자 <strong className="text-white">{barrierHero.name}</strong> 결속 (+{barrierHeroBonus.hp.toLocaleString()} HP / +{barrierHeroBonus.def} DEF 반영 · 매 턴 공격력 25% 성벽 수복)
                       </span>
                     ) : (
                       <span>기본 차원 역장 작동 중</span>
@@ -2974,7 +3154,7 @@ export const InvasionBattleScreen: React.FC<Props> = ({
               const isDead = h.currentHp <= 0;
               const isActive = activeCombatantId === h.id;
               const isTargeted = activeTargetDefenderId === h.id && !isDead;
-              const portraitUrl = getHeroPortraitUrl(h.classId);
+              const portraitUrl = getHeroPortraitUrl(h);
 
               return (
                 <div

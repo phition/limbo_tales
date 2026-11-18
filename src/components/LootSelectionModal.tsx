@@ -64,25 +64,6 @@ export const LootSelectionModal: React.FC<LootSelectionModalProps> = ({
     }
   };
 
-  const handleAbandonAll = async () => {
-    const ok = await gameConfirm({
-      title: '전리품 모두 포기',
-      message: '미수령 상태인 모든 전리품을 포기하시겠습니까?',
-      icon: '🗑️',
-      confirmText: '모두 포기',
-      cancelText: '취소',
-      tone: 'danger'
-    });
-    if (ok) {
-      gm.clearPendingLoot();
-      if (onComplete) {
-        onComplete();
-      } else {
-        onClose();
-      }
-    }
-  };
-
   const currentCapacity = state.backpackCapacity || gm.backpackCapacity || 16;
   const currentInv = gm.dungeonInventory;
   const pendingItems = gm.pendingLoot;
@@ -122,8 +103,9 @@ export const LootSelectionModal: React.FC<LootSelectionModalProps> = ({
                 currentInv.map((slot, idx) => {
                   const slotRarity = (slot as any).equipmentData?.rarity;
                   const rMeta = GameManager.getResourceMeta(slot.key);
-                  const displayLabel = slot.label || rMeta?.name || slot.key;
-                  const displayIcon = slot.icon || rMeta?.icon;
+                  const isEngOnly = slot.label && /^[a-zA-Z0-9_\-\s]+$/.test(slot.label);
+                  const displayLabel = (!isEngOnly && slot.label) || (rMeta?.name && rMeta.name !== slot.key ? rMeta.name : slot.label) || slot.key;
+                  const displayIcon = (rMeta?.icon && rMeta.icon !== '📦' ? rMeta.icon : slot.icon) || '📜';
                   return (
                     <div key={slot.slotId || idx} className="flex items-center justify-between p-2 rounded-lg bg-[#182033] border border-[#2a3a59]">
                       <div className="flex items-center gap-2 min-w-0">
@@ -169,8 +151,9 @@ export const LootSelectionModal: React.FC<LootSelectionModalProps> = ({
                   const itemRarity = (item as any).equipmentData?.rarity || (item as any).rarity;
                   const itemKey = item.key || (item as any).id;
                   const rMeta = GameManager.getResourceMeta(itemKey);
-                  const displayLabel = item.label || rMeta?.name || itemKey;
-                  const displayIcon = item.icon || rMeta?.icon;
+                  const isEngOnly = item.label && /^[a-zA-Z0-9_\-\s]+$/.test(item.label);
+                  const displayLabel = (!isEngOnly && item.label) || (rMeta?.name && rMeta.name !== itemKey ? rMeta.name : item.label) || itemKey;
+                  const displayIcon = (rMeta?.icon && rMeta.icon !== '📦' ? rMeta.icon : item.icon) || '📜';
                   return (
                     <div key={item.id} className="flex items-center justify-between p-2 rounded-lg bg-[#241a33] border border-[#4d3266]">
                       <div className="flex items-center gap-2 min-w-0">
@@ -243,14 +226,6 @@ export const LootSelectionModal: React.FC<LootSelectionModalProps> = ({
                 }}
               >
                 📥 가능한 전리품 모두 담기
-              </button>
-            )}
-            {pendingItems.length > 0 && (
-              <button
-                className="btn btn-ghost text-xs px-3 py-1.5 text-red-400 hover:text-red-300"
-                onClick={handleAbandonAll}
-              >
-                🗑️ 남은 전리품 모두 포기
               </button>
             )}
           </div>

@@ -18,7 +18,7 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
 
   // 모바일 / 세로 모드(portrait 9:16) 화면 반응형 감지
   const isMobile = useIsMobile();
-  const imageSrc = isMobile ? 'assets/citadel_9x16_mobile.jpg' : 'assets/citadel_bonfire.jpg';
+  const imageSrc = isMobile ? 'assets/citadel_9x16_mobile.webp' : 'assets/citadel_bonfire.webp';
   const videoSrc = isMobile ? 'assets/citadel_9x16_mobile.mp4' : 'assets/citadel_bonfire.mp4';
 
   // 10초 영상 길이에 최적화된 매끄러운 크로스오버 페이드 시간 (2.4초 오버랩)
@@ -121,8 +121,8 @@ export const TerritoryDioramaView: React.FC<TerritoryDioramaViewProps> = ({
         <picture className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
           isLit ? 'opacity-0 z-0' : 'opacity-95 z-[1]'
         }`}>
-          <source media="(min-width: 769px) and (orientation: landscape)" srcSet="assets/citadel_bonfire.jpg" />
-          <source media="(max-width: 768px), (orientation: portrait)" srcSet="assets/citadel_9x16_mobile.jpg" />
+          <source media="(min-width: 769px) and (orientation: landscape)" srcSet="assets/citadel_bonfire.webp" />
+          <source media="(max-width: 768px), (orientation: portrait)" srcSet="assets/citadel_9x16_mobile.webp" />
           <img
             src={imageSrc}
             alt="Ark Citadel Extinguished"

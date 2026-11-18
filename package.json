@@ -1,20 +1,20 @@
 {
   "name": "project-limbo-tales",
   "private": true,
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Project: Limbo Tales - 세로형 텍스트 MUD + 서브컬쳐 비주얼 다크 RPG",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/sync-custom-assets.js && vite",
-    "prebuild": "node scripts/sync-custom-assets.js",
+    "dev": "python scripts/convert-png-to-webp.py && python scripts/update-preset-to-webp.py && node scripts/sync-custom-assets.js && vite",
+    "prebuild": "python scripts/convert-png-to-webp.py && python scripts/update-preset-to-webp.py && node scripts/sync-custom-assets.js",
     "build": "vite build",
     "deploy": "vite build && firebase deploy --only hosting",
     "package:itch": "node scripts/package-itch.js",
     "build:itch": "vite build && node scripts/package-itch.js",
-    "sync:assets": "node scripts/sync-custom-assets.js",
+    "sync:assets": "python scripts/convert-png-to-webp.py && python scripts/update-preset-to-webp.py && node scripts/sync-custom-assets.js",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
-    "cap:sync": "node scripts/sync-custom-assets.js && vite build && node scripts/clean-mobile-assets.js && cap sync android && node scripts/clean-mobile-assets.js",
+    "cap:sync": "python scripts/convert-png-to-webp.py && python scripts/update-preset-to-webp.py && node scripts/sync-custom-assets.js && vite build && node scripts/clean-mobile-assets.js && cap sync android && node scripts/clean-mobile-assets.js",
     "cap:open": "cap open android"
   },
   "keywords": [

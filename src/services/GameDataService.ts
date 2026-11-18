@@ -10,6 +10,7 @@ import { MonsterData, EquipmentItem, BuildingState, BuildingId, Quest, Character
 import { ref, get, set, onValue, Unsubscribe } from 'firebase/database';
 import { db, auth } from './firebaseConfig';
 import { FirebaseService } from './FirebaseService';
+import { getIdbItem, setIdbItem, removeIdbItem, IDB_STORES } from '../utils/idbStorage';
 
 export interface GameBalanceConfig {
   expMultiplier: number;
@@ -272,18 +273,32 @@ export class GameDataService {
   }
 
   /**
-   * 🌟 로컬 스토리지 및 정적 배포 프리셋(/assets/custom_game_data.json) 자동 로드
+   * 🌟 IndexedDB 및 정적 배포 프리셋(/assets/custom_game_data.json) 자동 로드
+   * (기존 localStorage의 대용량 limbo_custom_game_data는 IndexedDB로 마이그레이션 후 제거하여 localStorage 5MB 한도 확보)
    */
   private async initLocalStorageAndPreset(): Promise<void> {
     if (typeof window === 'undefined') return;
 
     let savedOverrides: CustomGameDataPackage | null = null;
+
+    // 1. 레거시 localStorage 확인 및 IndexedDB 이전 후 localStorage 즉시 삭제 (용량 1~2MB 즉시 확보)
     try {
-      const raw = localStorage.getItem(IDB_DATA_KEY);
-      if (raw) {
-        savedOverrides = JSON.parse(raw);
+      const rawLegacy = localStorage.getItem(IDB_DATA_KEY) || localStorage.getItem('limbo_custom_game_data');
+      if (rawLegacy) {
+        savedOverrides = JSON.parse(rawLegacy);
+        localStorage.removeItem(IDB_DATA_KEY);
+        localStorage.removeItem('limbo_custom_game_data');
+        if (savedOverrides) {
+          await setIdbItem(IDB_STORES.GAME_DATA, 'custom_game_data', savedOverrides);
+          console.info('✨ [GameDataService] 레거시 localStorage 게임 데이터를 IndexedDB로 이전 완료 (localStorage 공간 회수)');
+        }
       }
     } catch (_) {}
+
+    // 2. IndexedDB에서 저장된 오버라이드 로드
+    if (!savedOverrides) {
+      savedOverrides = await getIdbItem<CustomGameDataPackage>(IDB_STORES.GAME_DATA, 'custom_game_data');
+    }
 
     let staticPreset: CustomGameDataPackage | null = null;
     const basePrefix = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL)
@@ -316,9 +331,7 @@ export class GameDataService {
       // 정적 배포 파일이 로컬 스토리지보다 최신이거나 같으면 정적 배포 파일 우선 적용
       if (staticTime >= savedTime) {
         merged = deepMergeCustomPackage(savedOverrides, staticPreset);
-        try {
-          localStorage.setItem(IDB_DATA_KEY, JSON.stringify(merged));
-        } catch (_) {}
+        setIdbItem(IDB_STORES.GAME_DATA, 'custom_game_data', merged).catch(() => {});
       } else {
         merged = deepMergeCustomPackage(staticPreset, savedOverrides);
       }
@@ -334,7 +347,7 @@ export class GameDataService {
   }
 
   /**
-   * 🌟 커스텀 데이터 패키지를 인게임 런타임에 즉각 적용
+   * 🌟 커스텀 데이터 패키지를 인게임 런타임에 즉각 적용 (IndexedDB 비동기 영속화)
    */
   public applyCustomPackage(pkg: CustomGameDataPackage, persist = true): void {
     this.customOverrides = deepMergeCustomPackage(this.customOverrides, pkg);
@@ -498,9 +511,7 @@ export class GameDataService {
     }
 
     if (persist && typeof window !== 'undefined') {
-      try {
-        localStorage.setItem(IDB_DATA_KEY, JSON.stringify(this.customOverrides));
-      } catch (_) {}
+      setIdbItem(IDB_STORES.GAME_DATA, 'custom_game_data', this.customOverrides).catch(() => {});
     }
 
     this.notifyListeners();
@@ -615,6 +626,8 @@ export class GameDataService {
     if (typeof window !== 'undefined') {
       try {
         localStorage.removeItem(IDB_DATA_KEY);
+        localStorage.removeItem('limbo_custom_game_data');
+        removeIdbItem(IDB_STORES.GAME_DATA, 'custom_game_data').catch(() => {});
       } catch (_) {}
     }
     this.notifyListeners();
@@ -830,9 +843,7 @@ export class GameDataService {
 
     this.customOverrides.updatedAt = Date.now();
     if (typeof window !== 'undefined') {
-      try {
-        localStorage.setItem(IDB_DATA_KEY, JSON.stringify(this.customOverrides));
-      } catch (_) {}
+      setIdbItem(IDB_STORES.GAME_DATA, 'custom_game_data', this.customOverrides).catch(() => {});
     }
 
     // 1. 로컬 정적 배포 파일 저장 시도
@@ -963,11 +974,9 @@ export class GameDataService {
     this.customOverrides.arenaEdict = mergedEdict;
     this.customOverrides.updatedAt = now;
 
-    // 2. localStorage 저장
+    // 2. IndexedDB 저장
     if (typeof window !== 'undefined') {
-      try {
-        localStorage.setItem(IDB_DATA_KEY, JSON.stringify(this.customOverrides));
-      } catch (_) {}
+      setIdbItem(IDB_STORES.GAME_DATA, 'custom_game_data', this.customOverrides).catch(() => {});
     }
 
     // 3. 로컬 정적 배포 파일(/api/custom-data/save) 저장 시도

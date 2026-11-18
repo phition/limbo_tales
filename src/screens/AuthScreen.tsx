@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile';
-import { FirebaseService, UserProfile } from '../services/FirebaseService';
+import { FirebaseService, UserProfile, generateDefaultCommanderCallsign } from '../services/FirebaseService';
 import { PlayGamesService } from '../services/PlayGamesService';
 import { useGameManager } from '../hooks/useGameManager';
 import { useI18n } from '../hooks/useI18n';
@@ -13,6 +13,53 @@ interface Props {
 
 type AuthMode = 'login' | 'signup';
 
+interface GuestSaveDetection {
+  hasSave: boolean;
+  raw: string | null;
+  data: Record<string, unknown> | null;
+  summary: string;
+}
+
+/** 🔍 이전 게스트(익명) 플레이 기록 감지 헬퍼 */
+function detectPendingGuestSave(gm: any): GuestSaveDetection {
+  try {
+    let raw = localStorage.getItem('limbo_pending_guest_save');
+    if (!raw) {
+      const pendingUid = localStorage.getItem('limbo_pending_guest_uid');
+      if (pendingUid) {
+        raw = localStorage.getItem(`LIMBO_TALES_SAVE_V08_${pendingUid}`);
+      }
+    }
+    if (!raw) {
+      raw = localStorage.getItem('LIMBO_TALES_SAVE_V08_guest') || localStorage.getItem('limbo_save_v1_guest');
+    }
+
+    if (raw) {
+      const parsed = JSON.parse(raw) as Record<string, unknown>;
+      const floor = Number(parsed.dungeonFloor || parsed.unlockedDungeonFloor || 1);
+      const party = Array.isArray(parsed.party) ? parsed.party : [];
+      const partyCount = party.length;
+      const resources = (parsed.resources as Record<string, number>) || {};
+      const gold = Number(resources.gold || 0);
+      const buildings = (parsed.buildings as Record<string, unknown>) || {};
+      const buildingCount = Object.keys(buildings).length;
+
+      // 튜토리얼을 넘어서거나 파티원이 있거나 던전 1층 이상이거나 금화/건물이 있는 유의미한 플레이 기록인지 검증
+      if (floor > 1 || partyCount > 0 || gold > 0 || buildingCount > 0) {
+        const descParts: string[] = [];
+        if (floor > 1) descParts.push(`심연 ${floor}층`);
+        if (partyCount > 0) descParts.push(`용병 ${partyCount}명`);
+        if (gold > 0) descParts.push(`금화 ${gold.toLocaleString()}G`);
+        const summary = descParts.length > 0 ? descParts.join(' · ') : '기존 탐험 기록';
+        return { hasSave: true, raw, data: parsed, summary };
+      }
+    }
+  } catch (err) {
+    console.warn('⚠️ 게스트 세이브 감지 실패:', err);
+  }
+  return { hasSave: false, raw: null, data: null, summary: '' };
+}
+
 export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
   const isMobile = useIsMobile();
   const { gm } = useGameManager();
@@ -20,13 +67,29 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
   const [mode, setMode] = useState<AuthMode>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [nickname, setNickname] = useState('지휘관');
+  const [nickname, setNickname] = useState(() => generateDefaultCommanderCallsign());
   const [showPassword, setShowPassword] = useState(false);
   const [rememberEmail, setRememberEmail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+
+  // 🏷️ 콜사인 검증 상태
+  const [isCheckingCallsign, setIsCheckingCallsign] = useState(false);
+  const [callsignCheckResult, setCallsignCheckResult] = useState<{ available: boolean; message: string } | null>(null);
+
+  // ⚠️ 이미 존재하는 이메일 모달 상태
+  const [showEmailExistsModal, setShowEmailExistsModal] = useState(false);
+
+  // 📜 이전 게스트 세이브 연동 확인 모달 상태
+  const [showGuestLinkModal, setShowGuestLinkModal] = useState(false);
+  const [guestLinkTarget, setGuestLinkTarget] = useState<{
+    profile: UserProfile | null;
+    data: Record<string, unknown>;
+    raw: string;
+    summary: string;
+  } | null>(null);
 
   const fb = FirebaseService.getInstance();
   const pgs = PlayGamesService.getInstance();
@@ -87,6 +150,89 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
     }
   }, [isPlayGamesAvailable, fb, onLoginSuccess, pgs]);
 
+  // 🏷️ 콜사인 중복 확인 핸들러
+  const handleCallsignCheck = async () => {
+    const clean = nickname.trim();
+    if (!clean) {
+      setCallsignCheckResult({ available: false, message: '콜사인을 입력해 주세요.' });
+      return;
+    }
+    setIsCheckingCallsign(true);
+    try {
+      const res = await fb.checkCallsignAvailable(clean);
+      if (res.available) {
+        setCallsignCheckResult({ available: true, message: '사용 가능한 멋진 콜사인입니다!' });
+      } else {
+        setCallsignCheckResult({ available: false, message: res.reason || '사용할 수 없는 콜사인입니다.' });
+      }
+    } catch {
+      setCallsignCheckResult({ available: true, message: '사용 가능합니다.' });
+    } finally {
+      setIsCheckingCallsign(false);
+    }
+  };
+
+  // 📜 게스트 플레이 기록 연동 수락 핸들러 (기존 기록을 새 계정으로 인계)
+  const handleConfirmLinkGuest = async () => {
+    if (!guestLinkTarget) return;
+    setLoading(true);
+    setStatusMessage('기존 탐험 기록을 새 지휘관 계정으로 연결하는 중...');
+    try {
+      const newUid = guestLinkTarget.profile?.uid || fb.getCurrentUser()?.uid || 'guest';
+      gm.clearForLogout();
+      gm.setCurrentUser(newUid);
+      gm.applyCloudProgress(guestLinkTarget.data);
+      gm.saveGame();
+      await gm.saveToCloud().catch(() => {});
+      try {
+        localStorage.removeItem('limbo_pending_guest_save');
+        localStorage.removeItem('limbo_pending_guest_uid');
+        localStorage.removeItem('limbo_save_v1_guest');
+        localStorage.removeItem(gm.getSaveKeyForUid('guest'));
+        localStorage.removeItem('auth_explicitly_logged_out');
+      } catch (_) {}
+      gm.addLog('[원정대 인계 완료] 이전 게스트로 탐험하던 방주 기록이 지휘관 계정에 안전하게 귀속되었습니다!', 'reward');
+      setShowGuestLinkModal(false);
+      onLoginSuccess(guestLinkTarget.profile);
+    } catch (e: any) {
+      console.error('게스트 세이브 연결 오류:', e);
+      setShowGuestLinkModal(false);
+      onLoginSuccess(guestLinkTarget.profile);
+    } finally {
+      setLoading(false);
+      setStatusMessage(null);
+    }
+  };
+
+  // 📜 게스트 플레이 기록 연동 거절 핸들러 (신규 지휘관으로 완전 초기 시작)
+  const handleRejectLinkGuest = async () => {
+    if (!guestLinkTarget) return;
+    setLoading(true);
+    setStatusMessage('새로운 지휘관 원정을 시작합니다...');
+    try {
+      const newUid = guestLinkTarget.profile?.uid || fb.getCurrentUser()?.uid || 'guest';
+      gm.clearForLogout();
+      gm.setCurrentUser(newUid);
+      gm.initDefaultData();
+      gm.saveGame();
+      await gm.saveToCloud().catch(() => {});
+      try {
+        localStorage.removeItem('limbo_pending_guest_save');
+        localStorage.removeItem('limbo_pending_guest_uid');
+        localStorage.removeItem('auth_explicitly_logged_out');
+      } catch (_) {}
+      setShowGuestLinkModal(false);
+      onLoginSuccess(guestLinkTarget.profile);
+    } catch (e: any) {
+      console.error('신규 시작 오류:', e);
+      setShowGuestLinkModal(false);
+      onLoginSuccess(guestLinkTarget.profile);
+    } finally {
+      setLoading(false);
+      setStatusMessage(null);
+    }
+  };
+
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -102,6 +248,19 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
     if (cleanPass.length < 6) {
       setErrorMessage('비밀번호는 최소 6자리 이상이어야 합니다.');
       return;
+    }
+
+    // 회원가입 모드일 경우 콜사인 유효성 사전 검사
+    if (mode === 'signup') {
+      const cleanNick = nickname.trim();
+      if (cleanNick) {
+        const check = await fb.checkCallsignAvailable(cleanNick);
+        if (!check.available) {
+          setErrorMessage(check.reason || '콜사인을 확인해 주세요.');
+          setCallsignCheckResult({ available: false, message: check.reason || '사용할 수 없는 콜사인입니다.' });
+          return;
+        }
+      }
     }
 
     // 이메일 기억하기 저장 처리
@@ -151,7 +310,8 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
           setStatusMessage(null);
         }
       } else {
-        const res = await fb.signUpWithEmail(cleanEmail, cleanPass, nickname.trim() || '지휘관');
+        const targetNick = nickname.trim() || generateDefaultCommanderCallsign();
+        const res = await fb.signUpWithEmail(cleanEmail, cleanPass, targetNick);
         if (settled) return;
         settled = true;
         clearTimeout(uiWatchdog);
@@ -159,12 +319,43 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
           try {
             localStorage.removeItem('auth_explicitly_logged_out');
           } catch (_) {}
+
+          // 🛡️ 기존 게스트(익명) 플레이 기록 감지
+          const pending = detectPendingGuestSave(gm);
+          if (pending.hasSave && pending.data) {
+            setLoading(false);
+            setStatusMessage(null);
+            setGuestLinkTarget({
+              profile: fb.getCachedProfile(),
+              data: pending.data,
+              raw: pending.raw!,
+              summary: pending.summary
+            });
+            setShowGuestLinkModal(true);
+            return;
+          }
+
           setStatusMessage('서약 완료! 방주 성채로 진입합니다...');
           setTimeout(() => {
             setLoading(false);
             onLoginSuccess(fb.getCachedProfile());
           }, 400);
         } else {
+          // ⚠️ 이미 존재하는 이메일 감지 -> 경고창 표시 및 로그인 화면 전환
+          const isEmailAlreadyInUse = res.code === 'auth/email-already-in-use' ||
+            res.error?.includes('이미 등록된') ||
+            res.error?.includes('already-in-use') ||
+            res.error?.includes('already in use');
+
+          if (isEmailAlreadyInUse) {
+            setLoading(false);
+            setStatusMessage(null);
+            setMode('login');
+            setShowEmailExistsModal(true);
+            setErrorMessage('이미 존재하는 이메일입니다. 로그인 화면으로 전환되었습니다. 보안 암호문을 입력해 주세요.');
+            return;
+          }
+
           setErrorMessage(fb.getFriendlyErrorMessage(res.error || '회원가입에 실패했습니다.'));
           setLoading(false);
           setStatusMessage(null);
@@ -196,7 +387,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
     }, 15000);
 
     try {
-      const targetNickname = mode === 'signup' ? nickname.trim() : undefined;
+      const targetNickname = mode === 'signup' ? (nickname.trim() || generateDefaultCommanderCallsign()) : undefined;
       const res = await fb.signInWithGoogle(targetNickname);
       if (settled) return;
       settled = true;
@@ -206,6 +397,23 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
         try {
           localStorage.removeItem('auth_explicitly_logged_out');
         } catch (_) {}
+
+        if (res.isNewUser) {
+          const pending = detectPendingGuestSave(gm);
+          if (pending.hasSave && pending.data) {
+            setLoading(false);
+            setStatusMessage(null);
+            setGuestLinkTarget({
+              profile: fb.getCachedProfile(),
+              data: pending.data,
+              raw: pending.raw!,
+              summary: pending.summary
+            });
+            setShowGuestLinkModal(true);
+            return;
+          }
+        }
+
         setStatusMessage(res.isNewUser ? '지휘관 서약 완료! 방주 성채로 진입합니다...' : '인증 완료! 방주 성채로 진입합니다...');
         setTimeout(() => {
           setLoading(false);
@@ -265,7 +473,7 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
           loop
           muted
           playsInline
-          poster={isMobile ? 'assets/citadel_9x16_mobile.jpg' : 'assets/citadel_bonfire.jpg'}
+          poster={isMobile ? 'assets/citadel_9x16_mobile.webp' : 'assets/citadel_bonfire.webp'}
           className="w-full h-full object-cover scale-105 opacity-35 filter brightness-75 contrast-125 transition-transform duration-1000"
         >
           <source src={isMobile ? 'assets/citadel_9x16_mobile.mp4' : 'assets/citadel_bonfire.mp4'} type="video/mp4" />
@@ -416,26 +624,66 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
 
         <form onSubmit={handleAuthSubmit} className="flex flex-col gap-3" autoComplete="off">
           {mode === 'signup' && (
-            <div className="animate-fade-in flex flex-col gap-1">
+            <div className="animate-fade-in flex flex-col gap-1.5">
               <div className="flex items-center justify-between">
                 <label className="text-[11px] text-[#94a3b8] font-semibold flex items-center gap-1">
                   <span>🏷️</span>
                   <span>지휘관 성명 (호출부호)</span>
                 </label>
                 <span className="text-[10px] text-[#34d399] font-mono">
-                  (기본명 유지 시 UID 순번 자동 부여)
+                  [지휘관#4자리+알파벳]
                 </span>
               </div>
-              <input
-                type="text"
-                name="limbo_auth_nickname"
-                autoComplete="off"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                placeholder="지휘관"
-                disabled={loading}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f1422] border border-[#232f44] text-[#f1f5f9] text-xs focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d39988] transition-all placeholder-[#475569]"
-              />
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    name="limbo_auth_nickname"
+                    autoComplete="off"
+                    value={nickname}
+                    onChange={(e) => {
+                      setNickname(e.target.value);
+                      setCallsignCheckResult(null);
+                    }}
+                    placeholder="지휘관#0000A"
+                    disabled={loading}
+                    maxLength={12}
+                    className="w-full px-3.5 py-2.5 pr-8 rounded-xl bg-[#0f1422] border border-[#232f44] text-[#f1f5f9] text-xs focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d39988] transition-all placeholder-[#475569]"
+                  />
+                  <button
+                    type="button"
+                    tabIndex={-1}
+                    onClick={() => {
+                      const fresh = generateDefaultCommanderCallsign();
+                      setNickname(fresh);
+                      setCallsignCheckResult(null);
+                    }}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-[#64748b] hover:text-[#ffd54f] transition-colors p-1 cursor-pointer"
+                    title="새 임의 콜사인 추천 생성"
+                  >
+                    🎲
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  disabled={loading || isCheckingCallsign || !nickname.trim()}
+                  onClick={handleCallsignCheck}
+                  className="px-3 py-2.5 rounded-xl bg-[#1a2333] hover:bg-[#253249] border border-[#2e3e5b] hover:border-[#34d399] text-[11px] font-bold text-[#e2e8f0] transition-all shrink-0 cursor-pointer disabled:opacity-50"
+                >
+                  {isCheckingCallsign ? '검사 중...' : '중복 확인'}
+                </button>
+              </div>
+              {/* 실시간 콜사인 검증 안내 */}
+              {callsignCheckResult && (
+                <div
+                  className={`text-[10px] flex items-center gap-1 mt-0.5 font-medium ${
+                    callsignCheckResult.available ? 'text-[#34d399]' : 'text-[#f87171]'
+                  }`}
+                >
+                  <span>{callsignCheckResult.available ? '✅' : '⚠️'}</span>
+                  <span>{callsignCheckResult.message}</span>
+                </div>
+              )}
             </div>
           )}
 
@@ -692,6 +940,92 @@ export const AuthScreen: React.FC<Props> = ({ onLoginSuccess }) => {
               Project: Limbo Tales collects minimal information (email/encrypted password or anonymous UID, game progress, arena rating) to provide cloud saves and rankings via Google Firebase. Data can be permanently wiped anytime via the in-game Settings menu or by contacting phitionv4@gmail.com.
             </p>
           </div>
+        </div>
+      </Modal>
+
+      {/* ⚠️ 이미 존재하는 이메일 안내 모달 */}
+      <Modal
+        title="⚠️ 이미 존재하는 계정 안내"
+        open={showEmailExistsModal}
+        onClose={() => setShowEmailExistsModal(false)}
+        footer={
+          <button
+            type="button"
+            onClick={() => setShowEmailExistsModal(false)}
+            className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#d97706] to-[#f59e0b] text-[#0c0d12] font-bold text-xs cursor-pointer shadow-md hover:brightness-110 transition-all flex items-center justify-center gap-1.5"
+          >
+            <span>⚔️</span>
+            <span>로그인 계속하기</span>
+          </button>
+        }
+      >
+        <div className="text-xs text-[#cbd5e1] leading-relaxed space-y-3 font-sans py-1">
+          <div className="p-3 rounded-xl bg-[#2a1b0c] border border-[#f59e0b55] text-[#fcd34d] flex items-center gap-2.5">
+            <span className="text-2xl shrink-0">⚔️</span>
+            <div className="min-w-0 flex-1">
+              <div className="font-bold text-white text-sm">이미 존재하는 이메일입니다</div>
+              <div className="text-[11px] text-[#cbd5e1] mt-0.5 break-all">
+                <strong className="text-[#ffd54f]">{email}</strong> 지휘관 계정이 이미 존재합니다.
+              </div>
+            </div>
+          </div>
+          <p className="text-[#94a3b8] text-[11px]">
+            회원가입 대신 <strong className="text-[#fcd34d]">지휘관 로그인 화면으로 자동 전환</strong>되었습니다.<br />
+            보안 암호문을 입력하여 방주 성채로 입장해 주세요.
+          </p>
+        </div>
+      </Modal>
+
+      {/* 📜 이전 플레이 기록(게스트) 계정 연결 확인 모달 */}
+      <Modal
+        title="📜 이전 탐험 기록 연동 확인"
+        open={showGuestLinkModal}
+        onClose={() => {}}
+        footer={
+          <div className="flex items-center gap-2.5 w-full">
+            <button
+              type="button"
+              disabled={loading}
+              onClick={handleRejectLinkGuest}
+              className="flex-1 py-2.5 px-3 rounded-xl bg-[#1b2333] hover:bg-[#253249] text-[#94a3b8] hover:text-white border border-[#2b3952] text-xs font-semibold cursor-pointer transition-colors disabled:opacity-50"
+            >
+              🌱 거절 (신규 시작)
+            </button>
+            <button
+              type="button"
+              disabled={loading}
+              onClick={handleConfirmLinkGuest}
+              className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#059669] via-[#10b981] to-[#34d399] text-[#061811] font-bold text-xs cursor-pointer shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
+            >
+              <span>✨</span>
+              <span>계정 연결하기</span>
+            </button>
+          </div>
+        }
+      >
+        <div className="text-xs text-[#cbd5e1] leading-relaxed space-y-3 font-sans py-1">
+          <div className="p-3 rounded-xl bg-[#0d2218] border border-[#10b98166] text-[#6ee7b7] flex items-start gap-2.5">
+            <span className="text-2xl shrink-0">🏰</span>
+            <div className="min-w-0 flex-1">
+              <div className="font-bold text-white text-sm">이미 존재하는 플레이 기록이 있습니다.</div>
+              <div className="text-[12px] text-[#a7f3d0] font-semibold mt-0.5">
+                계정을 연결할까요?
+              </div>
+            </div>
+          </div>
+
+          {guestLinkTarget?.summary && (
+            <div className="p-2.5 rounded-lg bg-[#0f1422] border border-[#232f44] text-[11px] flex items-center justify-between">
+              <span className="text-[#8b9bb4]">감지된 기록:</span>
+              <span className="font-mono font-bold text-[#ffd54f]">{guestLinkTarget.summary}</span>
+            </div>
+          )}
+
+          <p className="text-[#94a3b8] text-[11px] leading-relaxed">
+            이전에 방랑자(게스트)로 탐험하셨던 원정대 진행 기록이 발견되었습니다.<br />
+            <strong className="text-[#34d399]">[계정 연결하기]</strong>를 선택하시면 현재 진행도를 새 지휘관 계정으로 이어받아 안전하게 클라우드에 영구 보존합니다.<br />
+            <strong className="text-[#94a3b8]">[거절 (신규 시작)]</strong>을 선택하시면 이전 기록을 연결하지 않고 완전히 새로운 거점에서 모험을 시작합니다.
+          </p>
         </div>
       </Modal>
     </div>

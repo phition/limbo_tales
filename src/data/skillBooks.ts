@@ -1141,21 +1141,6 @@ export const ALL_SKILL_BOOKS: SkillBookDef[] = [
   }
 ];
 
-export const ALL_SKILLS_MAP: Record<string, Skill> = ALL_SKILL_BOOKS.reduce((acc, b) => {
-  acc[b.skill.id] = b.skill;
-  return acc;
-}, {} as Record<string, Skill>);
-
-/** 🛒 영혼의 블랙 마켓에서 거래 가능한 일반 연구 마도 비전서 (보스 전용 드랍 비전서 제외) */
-export const MARKET_SKILL_BOOKS: SkillBookDef[] = ALL_SKILL_BOOKS.filter(
-  b => !b.isBossExclusive && !b.id.startsWith('book_boss_')
-);
-
-/** 👑 1F~10F 심연 군주 보스 토벌 시에만 드랍되는 고유 비전서 */
-export const BOSS_EXCLUSIVE_SKILL_BOOKS: SkillBookDef[] = ALL_SKILL_BOOKS.filter(
-  b => !!b.isBossExclusive || b.id.startsWith('book_boss_')
-);
-
 export interface DroppableMonsterSkillBookDef {
   bookId: string;
   skillId: string;
@@ -1174,52 +1159,154 @@ export interface DroppableMonsterSkillBookDef {
   icon: string;
 }
 
+/** 👾 마물의 대표 스킬로부터 완전한 전투용 Skill 객체 빌드 (드랍 마도서, 런타임 캐싱, 도감 및 전투 엔진 통합) */
+export function buildMonsterSkillDefinition(monId: string, m: any, sigIdx?: number): Skill | null {
+  if (!m || !m.skills || m.skills.length === 0) return null;
+  const sIdx = (sigIdx !== undefined && sigIdx >= 0 && sigIdx < m.skills.length)
+    ? sigIdx
+    : ((m.signatureSkillIndex !== undefined && m.signatureSkillIndex >= 0 && m.signatureSkillIndex < m.skills.length) ? m.signatureSkillIndex : 0);
+  const mSkill = m.skills[sIdx] || m.skills[0];
+  if (!mSkill) return null;
+
+  const cleanMonName = cleanMonsterNameForDrop(m.name || '마물');
+  const cleanMonId = (monId || m.id || 'monster').replace(/_[A-Z]$/, '').replace(/_mon_\d+.*$/, '');
+  const skillId = `skill_m_${cleanMonId}`;
+  const basePwr = mSkill.power || 1.0;
+  const weakenedPower = Number((basePwr * 0.7).toFixed(2));
+  const cleanSkillName = (mSkill.name || '비기').trim();
+  const cleanSkillDesc = adjustSkillDescriptionForDrop(mSkill.description || mSkill.name, basePwr, weakenedPower);
+  const affinity = determineSkillAffinity(mSkill, cleanMonName);
+  const affMeta = getSkillAffinityMeta(affinity);
+
+  const isOffensiveEffect = ['damage', 'bleed', 'stun', 'debuff', 'debuff_def', 'debuff_atk', 'drain', 'poison', 'burn', 'freeze', 'blind'].includes(mSkill.effectType as string);
+  const isFriendlySkill = !isOffensiveEffect && (
+    ['heal', 'shield', 'buff', 'buff_atk', 'buff_def', 'regen'].includes(mSkill.effectType as string) ||
+    Boolean(mSkill.description && (mSkill.description.includes('치유') || mSkill.description.includes('자신 체력 회복') || mSkill.description.includes('자신의 방어력 증가')))
+  );
+
+  const isAoe = (mSkill.description || '').includes('전체') || (mSkill.description || '').includes('파티') || (mSkill.name || '').includes('전체') || (mSkill.description || '').includes('광역');
+  let targetType: 'all_enemies' | 'single_enemy' | 'all_allies' | 'single_ally' | 'self' = 'single_enemy';
+  if (isFriendlySkill) {
+    if (isAoe) targetType = 'all_allies';
+    else if ((mSkill.description || '').includes('자신') || (mSkill.description || '').includes('자체')) targetType = 'self';
+    else targetType = 'single_ally';
+  } else {
+    targetType = isAoe ? 'all_enemies' : 'single_enemy';
+  }
+
+  const floor = Math.max(1, Math.min(10, Math.ceil((m.level || 1) / 3)));
+  const defaultMana = Math.max(10, Math.round(12 + floor * 1.5));
+  const minPower = isOffensiveEffect ? 0.5 : 0.2;
+
+  let posBonus: 'front' | 'back' | undefined = undefined;
+  if ((mSkill.description || '').includes('전열')) posBonus = 'front';
+  else if ((mSkill.description || '').includes('후열')) posBonus = 'back';
+
+  let drainPct = mSkill.drainPct;
+  if (!drainPct && (mSkill.effectType === 'drain' || (mSkill.description || '').includes('흡혈'))) {
+    const dMatch = (mSkill.description || '').match(/흡혈\s*(\d+)%/);
+    drainPct = dMatch ? parseInt(dMatch[1], 10) / 100 : 0.35;
+  }
+
+  let piercePct = mSkill.piercePct;
+  if (!piercePct && (mSkill.description || '').match(/방어(?:력)?\s*(\d+)%\s*무시|방어\s*관통\s*(\d+)%/)) {
+    const pMatch = (mSkill.description || '').match(/방어(?:력)?\s*(\d+)%\s*무시|방어\s*관통\s*(\d+)%/);
+    piercePct = pMatch ? parseInt(pMatch[1] || pMatch[2], 10) / 100 : undefined;
+  }
+
+  return {
+    id: skillId,
+    name: cleanSkillName,
+    description: `[${affMeta.shortName} 계열] [${cleanMonName}의 대표 비기] ${cleanSkillDesc}`,
+    icon: `book_m_${cleanMonId}`,
+    manaCost: defaultMana,
+    cooldown: 1,
+    targetType,
+    power: Math.max(minPower, weakenedPower),
+    effectType: (mSkill.effectType as any) || 'damage',
+    statusDuration: mSkill.statusDuration || 2,
+    affinity,
+    positionBonus: posBonus,
+    drainPct,
+    piercePct
+  };
+}
+
+export const ALL_SKILLS_MAP: Record<string, Skill> = (() => {
+  const map: Record<string, Skill> = {};
+  // 1. ALL_SKILL_BOOKS 고유 비전서 등록
+  ALL_SKILL_BOOKS.forEach(b => {
+    map[b.skill.id] = b.skill;
+  });
+
+  // 2. MONSTERS 마물 대표 스킬 전체 사전 등록
+  if (typeof MONSTERS === 'object' && MONSTERS !== null) {
+    Object.entries(MONSTERS).forEach(([monId, m]) => {
+      if (m.type === 'boss' && m.rewards?.dropSkillBookId) {
+        // 보스 별칭 매핑: skill_boss_* <-> skill_m_boss_floor_*
+        const dropBook = ALL_SKILL_BOOKS.find(b => b.id === m.rewards?.dropSkillBookId);
+        if (dropBook) {
+          const cleanBossId = monId.replace(/_[A-Z]$/, '').replace(/_mon_\d+.*$/, '');
+          map[`skill_m_${cleanBossId}`] = dropBook.skill;
+        }
+        return;
+      }
+      const built = buildMonsterSkillDefinition(monId, m);
+      if (built) {
+        map[built.id] = built;
+      }
+    });
+  }
+
+  return map;
+})();
+
+/** 🛒 영혼의 블랙 마켓에서 거래 가능한 일반 연구 마도 비전서 (보스 전용 드랍 비전서 제외) */
+export const MARKET_SKILL_BOOKS: SkillBookDef[] = ALL_SKILL_BOOKS.filter(
+  b => !b.isBossExclusive && !b.id.startsWith('book_boss_')
+);
+
+/** 👑 1F~10F 심연 군주 보스 토벌 시에만 드랍되는 고유 비전서 */
+export const BOSS_EXCLUSIVE_SKILL_BOOKS: SkillBookDef[] = ALL_SKILL_BOOKS.filter(
+  b => !!b.isBossExclusive || b.id.startsWith('book_boss_')
+);
+
 /** 👾 게임 내 마물들로부터 드랍되는 대표 마물 마도서 목록 추출 */
 export function getDroppableMonsterSkillBooks(monstersRecord: Record<string, any> = MONSTERS): DroppableMonsterSkillBookDef[] {
   const map = new Map<string, DroppableMonsterSkillBookDef>();
 
-  Object.values(monstersRecord).forEach(m => {
+  Object.entries(monstersRecord).forEach(([monId, m]) => {
     if (!m.skills || m.skills.length === 0) return;
     // 보스 전용 고정 드랍 비전서가 있는 경우는 ALL_SKILL_BOOKS의 고유 보스 비전서로 드랍되므로 제외
     if (m.type === 'boss' && m.rewards?.dropSkillBookId) return;
 
     const cleanMonName = cleanMonsterNameForDrop(m.name);
-    const cleanMonId = (m.id || 'monster').replace(/_[A-Z]$/, '').replace(/_mon_\d+.*$/, '');
+    const cleanMonId = (monId || m.id || 'monster').replace(/_[A-Z]$/, '').replace(/_mon_\d+.*$/, '');
     const bookId = `book_m_${cleanMonId}`;
     const skillId = `skill_m_${cleanMonId}`;
 
     if (map.has(bookId)) return;
 
-    const sigIdx = (m.signatureSkillIndex !== undefined && m.signatureSkillIndex >= 0 && m.signatureSkillIndex < m.skills.length)
-      ? m.signatureSkillIndex
-      : 0;
-    const mSkill = m.skills[sigIdx] || m.skills[0];
-    if (!mSkill) return;
-
-    const basePwr = mSkill.power || 1.0;
-    const weakenedPower = Number((basePwr * 0.7).toFixed(2));
-    const cleanSkillName = (mSkill.name || '비기').trim();
-    const cleanSkillDesc = adjustSkillDescriptionForDrop(mSkill.description || mSkill.name, basePwr, weakenedPower);
-    const affinity = determineSkillAffinity(mSkill, cleanMonName);
-    const affMeta = getSkillAffinityMeta(affinity);
+    const built = buildMonsterSkillDefinition(monId, m);
+    if (!built) return;
 
     const floor = Math.max(1, Math.min(10, Math.ceil((m.level || 1) / 3)));
-    const defaultMana = Math.max(10, Math.round(12 + floor * 1.5));
+    const affMeta = getSkillAffinityMeta(built.affinity);
 
     map.set(bookId, {
       bookId,
       skillId,
-      name: `마도서: ${cleanSkillName}`,
-      skillName: cleanSkillName,
+      name: `마도서: ${built.name}`,
+      skillName: built.name,
       originMonsterName: cleanMonName,
-      monsterId: m.id,
+      monsterId: m.id || monId,
       floor,
       monsterType: m.type || 'normal',
-      defaultPower: Math.max(0.2, weakenedPower),
-      defaultManaCost: defaultMana,
-      defaultCooldown: 1,
-      defaultDescription: `[${affMeta.shortName} 계열] [${cleanMonName}의 대표 비기] ${cleanSkillDesc}`,
-      affinity,
+      defaultPower: built.power,
+      defaultManaCost: built.manaCost,
+      defaultCooldown: built.cooldown || 1,
+      defaultDescription: built.description,
+      affinity: built.affinity || ['dealer_phy'],
       affinityMeta: affMeta,
       icon: bookId
     });

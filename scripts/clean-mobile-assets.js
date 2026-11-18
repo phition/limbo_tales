@@ -4,7 +4,8 @@ import path from 'path';
 /**
  * 📱 clean-mobile-assets.js
  * 모바일(Capacitor Android) 동기화 시 마스터 계정 전용 도구, 워터마크 제거기,
- * 독립형 사전 편집 HTML 및 외부 개발자 유틸리티를 빌드 산출물과 모바일 에셋에서 배제하는 스크립트
+ * 독립형 사전 편집 HTML 및 외부 개발자 유틸리티를 빌드 산출물과 모바일 에셋에서 배제하고,
+ * WebP 포맷 외의 작업용 PNG/JPG/ZIP 등 불필요한 대용량 에셋을 완벽 정화하는 스크립트
  */
 
 const ROOT_DIR = process.cwd();
@@ -13,9 +14,41 @@ const TARGET_DIRS = [
   path.join(ROOT_DIR, 'android', 'app', 'src', 'main', 'assets', 'public'),
 ];
 
-console.log('🧹 [clean-mobile-assets] Sanitizing mobile assets & excluding external master tools...');
+console.log('🧹 [clean-mobile-assets] Sanitizing mobile assets & excluding non-webp/external files...');
 
 let removedCount = 0;
+let freedBytes = 0;
+const WHITELIST_FILES = new Set(['favicon.png', 'icon_app.png']);
+const PURGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.zip', '.psd', '.xcf', '.bmp', '.tiff']);
+
+function purgeNonWebpRecursively(dir) {
+  if (!fs.existsSync(dir)) return;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      purgeNonWebpRecursively(fullPath);
+      try {
+        if (fs.readdirSync(fullPath).length === 0) {
+          fs.rmdirSync(fullPath);
+        }
+      } catch (_) {}
+    } else if (entry.isFile()) {
+      if (WHITELIST_FILES.has(entry.name)) continue;
+      // 🛡️ VFX 스프라이트 시트(.png)는 렌더링 성능을 위해 모바일 에셋에 보존
+      if (fullPath.replace(/\\/g, '/').includes('/vfx/')) continue;
+      const ext = path.extname(entry.name).toLowerCase();
+      if (PURGE_EXTENSIONS.has(ext)) {
+        try {
+          const stat = fs.statSync(fullPath);
+          freedBytes += stat.size;
+          fs.unlinkSync(fullPath);
+          removedCount++;
+        } catch (_) {}
+      }
+    }
+  }
+}
 
 for (const baseDir of TARGET_DIRS) {
   if (!fs.existsSync(baseDir)) continue;
@@ -63,6 +96,10 @@ for (const baseDir of TARGET_DIRS) {
       }
     } catch (_) {}
   }
+
+  // 4. 🚀 WebP 외의 작업용 PNG/JPG/ZIP 대용량 에셋 일괄 제거 (favicon.png, icon_app.png 화이트리스트 유지)
+  purgeNonWebpRecursively(baseDir);
 }
 
-console.log(`✨ [clean-mobile-assets] Mobile asset sanitization finished. (${removedCount} external items excluded)`);
+const freedMB = (freedBytes / (1024 * 1024)).toFixed(2);
+console.log(`✨ [clean-mobile-assets] Mobile asset sanitization finished. (${removedCount} items excluded, ~${freedMB} MB freed)`);

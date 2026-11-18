@@ -254,12 +254,70 @@ function customAssetSyncPlugin(): Plugin {
   };
 }
 
+
+/**
+ * 📦 [vite-plugin-exclude-non-webp-assets]
+ * 빌드 시 public 폴더에 작업용/원본으로 보관 중인 PNG, JPG 및 기타 임시 포맷 에셋을
+ * dist 빌드 산출물에서 완전 배제하고, 최적화된 WebP 및 필수 미디어만 포함하도록 정화하는 플러그인
+ */
+function excludeNonWebpAssetsPlugin(): Plugin {
+  return {
+    name: 'vite-plugin-exclude-non-webp-assets',
+    apply: 'build',
+    closeBundle() {
+      const rootDir = process.cwd();
+      const distDir = path.join(rootDir, 'dist');
+      if (!fs.existsSync(distDir)) return;
+
+      console.log('🧹 [vite-plugin-exclude-non-webp-assets] Purging non-webp working assets from dist...');
+      let removedCount = 0;
+      let freedBytes = 0;
+
+      const WHITELIST_FILES = new Set(['favicon.png', 'icon_app.png']);
+      const PURGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.zip', '.psd', '.xcf', '.bmp', '.tiff']);
+
+      function cleanDir(dir: string) {
+        if (!fs.existsSync(dir)) return;
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+          const fullPath = path.join(dir, entry.name);
+          if (entry.isDirectory()) {
+            cleanDir(fullPath);
+            try {
+              if (fs.readdirSync(fullPath).length === 0) {
+                fs.rmdirSync(fullPath);
+              }
+            } catch (_) {}
+          } else if (entry.isFile()) {
+            if (WHITELIST_FILES.has(entry.name)) continue;
+            // 🛡️ VFX 스프라이트 시트(.png)는 렌더링 성능을 위해 dist에 그대로 보존
+            if (fullPath.replace(/\\/g, '/').includes('/vfx/')) continue;
+            const ext = path.extname(entry.name).toLowerCase();
+            if (PURGE_EXTENSIONS.has(ext)) {
+              try {
+                const stat = fs.statSync(fullPath);
+                freedBytes += stat.size;
+                fs.unlinkSync(fullPath);
+                removedCount++;
+              } catch (_) {}
+            }
+          }
+        }
+      }
+
+      cleanDir(distDir);
+      const freedMB = (freedBytes / (1024 * 1024)).toFixed(2);
+      console.log(`✨ [vite-plugin-exclude-non-webp-assets] Successfully purged ${removedCount} non-webp files (~${freedMB} MB saved in dist)`);
+    }
+  };
+}
 export default defineConfig({
   base: './',
   plugins: [
     react(),
     tailwindcss(),
     customAssetSyncPlugin(),
+    excludeNonWebpAssetsPlugin(),
   ],
   server: {
     port: 3000,

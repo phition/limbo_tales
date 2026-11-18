@@ -107,7 +107,7 @@ export const CemeteryModal: React.FC<Props> = ({ open, onClose, gm }) => {
         {/* 상단 일러스트 배너 */}
         <div className="relative w-full h-24 sm:h-32 rounded-xl overflow-hidden border border-[#2b354d] shadow-md shrink-0">
           <img
-            src="assets/menu_cemetery.jpg"
+            src="assets/menu_cemetery.webp"
             alt="Citadel Cemetery"
             className="w-full h-full object-cover"
             style={{ filter: 'brightness(0.92) contrast(1.05)' }}

@@ -66,7 +66,7 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
     <div className="absolute inset-0 z-40 flex items-end md:relative md:inset-auto md:w-[620px] lg:w-[700px] xl:w-[780px] md:h-full md:shrink-0 md:z-20 select-none">
       {/* ── 배경 어둡고 깊은 섀도우 딤드 (모바일 전용 백드롭, 데스크탑은 좌측 뷰가 노출되도록 숨김) ── */}
       <div
-        className="absolute inset-0 bg-[#08090b]/80 backdrop-blur-sm transition-opacity animate-fade-in md:hidden"
+        className="absolute inset-0 bg-[#08090b]/85 md:hidden"
         onClick={handleClose}
       />
 
@@ -84,7 +84,7 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
 
         {/* ── 시네마틱 무대 프레임 (모바일은 위아래를 크롭하여 본문 작업 영역 확장, PC는 시네마틱 비율 유지) ── */}
         {!hideHeader && (
-          <div className="relative w-full h-32 sm:h-44 md:h-54 lg:h-60 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden animate-facility-banner-rise">
+          <div className="relative w-full h-36 sm:h-44 md:h-54 lg:h-60 bg-[#0a0b0e] border-b border-[#3d372e] shrink-0 overflow-hidden">
             {/* 배경 이미지 (모바일: object-cover object-center로 상하를 자연스럽게 크롭하여 본문 영역 극대화) */}
             {bgImage ? (
               <img
@@ -111,7 +111,7 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
                   {title}
                 </h2>
                 {levelBadge !== undefined && (
-                  <span className="px-1.5 py-0.2 rounded text-[9.5px] sm:text-[10px] font-bold bg-[#b89758]/25 text-[#ffd54f] border border-[#b89758]/60 backdrop-blur-md shadow-sm">
+                  <span className="px-1.5 py-0.2 rounded text-[9.5px] sm:text-[10px] font-bold bg-[#141720]/90 text-[#ffd54f] border border-[#b89758]/60 shadow-sm">
                     Lv.{levelBadge}
                   </span>
                 )}
@@ -129,7 +129,7 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
               <button
                 type="button"
                 onClick={handleClose}
-                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-[#08090b]/80 hover:bg-[#2a1618] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:border-[#85383b] transition-all cursor-pointer font-bold shadow-lg backdrop-blur-sm active:scale-95 text-xs sm:text-sm"
+                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-[#08090b]/90 hover:bg-[#2a1618] border border-[#4a2426] text-[#c56060] hover:text-[#e07b7b] hover:border-[#85383b] transition-colors cursor-pointer font-bold shadow-lg active:scale-95 text-xs sm:text-sm"
                 title={tr('닫기 (Esc)')}
               >
                 ✕
@@ -138,7 +138,7 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
 
             {/* NPC 스탠딩 (우측) */}
             {npcImage && (
-              <div className="absolute bottom-0 right-2 sm:right-4 h-28 sm:h-40 md:h-50 lg:h-56 pointer-events-none">
+              <div className="absolute bottom-0 right-2 sm:right-4 h-32 sm:h-40 md:h-50 lg:h-56 pointer-events-none">
                 <img
                   src={npcImage}
                   alt={npcName || 'NPC'}
@@ -149,7 +149,7 @@ export const FacilityWorkstationModal: React.FC<FacilityWorkstationModalProps> =
 
             {/* NPC MUD 대사창 (하단 좌측 오버레이) */}
             {npcDialogue && (
-              <div className="absolute bottom-1.5 left-2.5 right-14 sm:right-24 md:right-32 py-1 px-2 rounded bg-[#08090b]/85 border border-[#3d372e] backdrop-blur-sm shadow-md">
+              <div className="absolute bottom-1.5 left-2.5 right-14 sm:right-24 md:right-32 py-1 px-2 rounded bg-[#08090b]/95 border border-[#3d372e] shadow-md">
                 {npcName && (
                   <div className="text-[9px] sm:text-[10px] font-bold text-[#b89758] mb-0.5">
                     {npcName}

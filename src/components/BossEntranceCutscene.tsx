@@ -101,7 +101,7 @@ export const BossEntranceCutscene: React.FC<Props> = ({ boss, isOvercharged = fa
 
   const customImg = CustomAssetService.getInstance().getMonsterOverride(boss.id)
     || (boss.promptKey ? CustomAssetService.getInstance().getMonsterOverride(boss.promptKey) : undefined);
-  const rawFallback = customImg || boss.imagePath || `assets/${boss.promptKey || boss.id}.jpg`;
+  const rawFallback = customImg || boss.imagePath || `assets/${boss.promptKey || boss.id}.webp`;
   const fallbackImageSrc = rawFallback.includes('?') || rawFallback.startsWith('data:') ? rawFallback : `${rawFallback}?v=2`;
 
   useEffect(() => {

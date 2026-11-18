@@ -165,6 +165,12 @@ export interface EquipmentItem {
     crit?: number;
     critRate?: number;
     critDmg?: number;
+    damageBonus?: number;
+    defPenetration?: number;
+    drainPercent?: number;
+    manaCostReduction?: number;
+    hpRegenPercent?: number;
+    statusResist?: number;
   };
   description: string;
   icon: string;
@@ -206,6 +212,9 @@ export interface EquipmentRecipe {
     luck?: number;             // 🍀 행운
     crit?: number;
     critRate?: number;
+    defPenetration?: number;
+    statusResist?: number;
+    hpRegenPercent?: number;
   };
   description: string;
   icon: string;
@@ -220,6 +229,7 @@ export interface TavernCandidate {
   classId: string;
   grade: MercenaryGrade;
   trait: string;
+  level?: number;
   hiringCost: number;
   stats: {
     hp: number;
@@ -446,6 +456,8 @@ export interface Mercenary {
   isDead?: boolean;
   /** ⚰️ 3턴 초과 또는 전멸로 인한 영구 사망 플래그 */
   isPermanentlyDead?: boolean;
+  /** 🌌 차원 성좌 전쟁 시즌 전담 3인 부대 차출 여부 (차출 시 타 컨텐츠 출전 불가) */
+  isDispatchedToFactionWar?: boolean;
 }
 
 /** 🪦 성채 묘지에 안장된 전사자 정보 */

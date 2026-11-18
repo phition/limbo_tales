@@ -255,7 +255,7 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
             </div>
 
             <div className="text-[8.5px] sm:text-[9px] text-[#8b9bb4] truncate">
-              {tr('※ 결속 용병은 직접 공격하지 않고 성벽 내구도와 방어력을 대폭 증폭시킵니다.')}
+              {tr('※ 성벽 결속 유닛은 전투 턴을 가지며, 정상 턴마다 공격력의 25%만큼 성벽을 수복 치유합니다 (힐 피버 배지 획득).')}
             </div>
           </div>
         </div>
@@ -551,17 +551,17 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
               <div className="text-xs text-[#9bb0ce] bg-[#070b14] p-3 rounded-xl border border-[#162238] leading-relaxed">
                 {modalType === 'barrier' && (
                   <span>
-                    🛡️ {tr('결속 용병은 직접 공격하지 않고, 자신의 MaxHP와 DEF를 차원 보호막에 100% 가산 합산합니다. 탱커를 배치할수록 보호막이 극적으로 두터워집니다.')}
+                    🛡️ {tr('성벽 결속 유닛은 보호막 내구도와 방어력을 대폭 증폭시키며, 전투 턴을 가져 정상 턴을 진행할 때마다 공격력의 25%만큼 성벽(차원 왜곡 보호막)을 수복 치유합니다. 이 행위는 힐로 인정되어 피버 배지를 획득합니다.')}
                   </span>
                 )}
                 {modalType === 'left_turret' && (
                   <span>
-                    🗼 {tr('좌측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 공격력과 스킬로 공격합니다. 기본 공격 버프(2연타 등)가 발동됩니다.')}
+                    🗼 {tr('좌측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 공격력과 스킬로 공격합니다. 기본 공격 버프가 발동됩니다.')}
                   </span>
                 )}
                 {modalType === 'right_turret' && (
                   <span>
-                    🗼 {tr('우측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 공격력과 스킬로 공격합니다. 전술 스킬 버프(쿨다운/계수)가 발동됩니다.')}
+                    🗼 {tr('우측 타워에 탑승한 사수는 타워의 생존/속도 스탯을 바탕으로 자신의 공격력과 스킬로 공격합니다. 전술 스킬 버프가 발동됩니다.')}
                   </span>
                 )}
                 {modalType === 'operator' && (
@@ -978,6 +978,13 @@ export const DefenseSettingsView: React.FC<DefenseSettingsViewProps> = ({
                           <span className="text-[9.5px] font-bold text-[#38ef7d] font-mono">
                             ▲ +{barrierDefBonus} DEF {tr('증폭!')}
                           </span>
+                        </div>
+                      </div>
+
+                      <div className="p-2 rounded-lg bg-[#0e1726] border border-[#38ef7d33] text-[10px] leading-relaxed">
+                        <strong className="text-[#38ef7d]">💖 {tr('성벽 수복 및 치유 피버')}:</strong>
+                        <div className="text-[#cfd8e8] mt-0.5">
+                          {tr('성벽 결속 유닛은 전투 턴을 가지며, 정상 턴을 진행할 때마다 자신의 공격력의 25%만큼 성벽(차원 왜곡 보호막)을 수복 치유합니다. 이 행위는 힐로 인정되어 피버 배지를 획득합니다.')}
                         </div>
                       </div>
 

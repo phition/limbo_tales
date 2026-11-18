@@ -23,8 +23,8 @@ export class BootScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // 고품질 일러스트 에셋 로드
-    this.load.image('art_citadel_bonfire', 'assets/citadel_bonfire.jpg');
-    this.load.image('art_void_overlord', 'assets/void_overlord.jpg');
+    this.load.image('art_citadel_bonfire', 'assets/citadel_bonfire.webp');
+    this.load.image('art_void_overlord', 'assets/void_overlord.webp');
 
     this.createProceduralTextures();
   }

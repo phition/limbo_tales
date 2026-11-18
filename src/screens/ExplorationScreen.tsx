@@ -638,7 +638,7 @@ export const ExplorationScreen: React.FC = () => {
   const floorPrompt = FLOOR_PROMPTS[floorIdx] || FLOOR_PROMPTS[9];
   const customFloorImg = CustomAssetService.getInstance().getDungeonFloorOverride(floor)
     || CustomAssetService.getInstance().getDungeonFloorOverride(`dungeon_${floor}`);
-  const imageSrc = customFloorImg || (floor === 11 ? 'assets/boss_floor_10.jpg' : `assets/dungeon_${floorIdx + 1}.jpg`);
+  const imageSrc = customFloorImg || (floor === 11 ? 'assets/boss_floor_10.webp' : `assets/dungeon_${floorIdx + 1}.webp`);
   
   // 🌟 [층수 비례 위험도 게이지 확장 시스템]: 1F(100) -> 2F(130) ... 10F(370) -> 11F 무간도(10000)
   const maxDanger = floor === 11 ? 10000 : (100 + (floor - 1) * 30);
@@ -647,7 +647,7 @@ export const ExplorationScreen: React.FC = () => {
   const lastLoggedFloorRef = useRef<number>(-1);
 
   // 성채로 복귀 (닻 종류 및 고위험 시 위험 탈출 페널티, 전리품 자동 정산)
-  const returnToCitadel = useCallback((method?: 'portal' | 'enhanced_rift_anchor' | 'rift_anchor' | 'retreat') => {
+  const returnToCitadel = useCallback((method?: 'portal' | 'enhanced_rift_anchor' | 'rift_anchor' | 'retreat', skipEscapePenalty?: boolean) => {
     if (method === 'enhanced_rift_anchor') {
       // ⚓✨ 심연의 닻: 시공간 왜곡을 제어하여 귀환 시 배낭 물품 분실 확률을 완벽 차단!
     } else if (method === 'rift_anchor') {
@@ -658,7 +658,7 @@ export const ExplorationScreen: React.FC = () => {
         const dropped = gm.dungeonInventory.splice(dropIdx, 1)[0];
         gm.addLog(`⚠️ [차원 균열 귀환 손실] 일반 균열의 닻을 통한 시공간 이동 중 차원 불안정으로 배낭에서 [${dropped.label} ×${dropped.qty}]을(를) 떨어뜨려 분실했습니다! (심연의 닻 사용 시 방지 가능)`, 'danger');
       }
-    } else if (dangerPct >= 60 && Math.random() < 0.40) {
+    } else if (!skipEscapePenalty && dangerPct >= 60 && Math.random() < 0.40) {
       // 위험도가 60% 이상일 때 40% 확률로 험로 탈출 페널티 (배낭 자원 일부 소실)
       if (gm.dungeonInventory.length > 2) {
         const dropIdx = Math.floor(Math.random() * gm.dungeonInventory.length);
@@ -675,7 +675,15 @@ export const ExplorationScreen: React.FC = () => {
     gm.updateQuestObjective('Q_MAIN_02', 2, 1);
     gm.settleDungeonInventory(floor);
     gm.clearDungeonSession();
-    if (tutorialStepId === 'TUTORIAL_EXPLORE_RETURN') {
+    const isDungeonTutorial = Boolean(
+      tutorialStepId && (
+        tutorialStepId.startsWith('TUTORIAL_EXPLORE') ||
+        tutorialStepId.startsWith('TUTORIAL_BATTLE') ||
+        tutorialStepId === 'TUTORIAL_DESCENT_START' ||
+        tutorialStepId === 'TUTORIAL_CITADEL_FINISH'
+      )
+    );
+    if (isDungeonTutorial) {
       handleAdvanceTutorial('TUTORIAL_CITADEL_FINISH');
     }
     navigateTo('citadel');
@@ -691,7 +699,7 @@ export const ExplorationScreen: React.FC = () => {
     if (isSuccess) {
       const { lostCount, keptCount } = gm.settleEmergencyEscapeLoot();
       gm.addLog(`🏃💨 [사투 끝의 비상 탈출 성공!] 마물들의 포위망을 뚫고 가까스로 탈출했습니다! (전리품 80% [${lostCount}개] 유실, ${keptCount}개 보존)`, 'reward');
-      returnToCitadel();
+      returnToCitadel('retreat', true);
     } else {
       SoundManager.getInstance().play('heavy_hit');
       gm.addLog('⚠️💥 [비상 탈출 실패!] 도주로가 차단되고 마물 추격대에게 기습 습격을 당했습니다! (추격전투 승리 시 성채 귀환)', 'danger');
@@ -1588,7 +1596,7 @@ export const ExplorationScreen: React.FC = () => {
               {
                 label: hasHolyWater
                   ? (hasEnhancedHoly
-                    ? '💧✨ [여신의 성수 공양] 성상 축성 (전원 HP 30% / MP 40% 회복 + 모든 디버프 해제 + ✨에테르 +50)'
+                    ? '💧✨ [여신의 성수 공양] 성상 축성 (전원 HP 80% / MP 80% 회복 + 모든 디버프 해제 + 3턴간 디버프 면역 + ✨에테르 +50)'
                     : '💧 [정화의 성수 공양] 성상 완전 축성 (전원 HP 50% / MP 50% 회복 + 모든 디버프 해제 + 3턴간 디버프 면역 + ✨에테르 +30)')
                   : '💧 [성수 필요] 축성 도구 없음 (정화/여신의 성수 필요 - 선택 불가)',
                 variant: hasHolyWater ? 'success' : 'ghost',
@@ -1600,14 +1608,15 @@ export const ExplorationScreen: React.FC = () => {
                     if (gm.consumeDungeonItem('enhanced_holy_water', 1)) {
                       gm.party.forEach(h => {
                         if (h.currentHp > 0) {
-                          h.currentHp = Math.min(h.maxHp, h.currentHp + Math.floor(h.maxHp * 0.30));
-                          h.currentMp = Math.min(h.maxMp, h.currentMp + Math.floor(h.maxMp * 0.40));
+                          h.currentHp = Math.min(h.maxHp, h.currentHp + Math.floor(h.maxHp * 0.80));
+                          h.currentMp = Math.min(h.maxMp, h.currentMp + Math.floor(h.maxMp * 0.80));
                           h.statusEffects = [];
+                          gm.applyStatusEffectToHero(h, { type: 'immunity', turnsLeft: 3, totalTurns: 3, magnitude: 1, source: '여신의 성수' });
                         }
                       });
                       gm.emit('partyUpdated');
                       gm.addToDungeonInventory('ether', '에테르', '✨', 50);
-                      gm.addLog('💧✨ [여신의 성수 축성 성공] 여신의 성수로 성상을 축성하여 생존 대원 전원 HP 30% / MP 40% 회복, 모든 디버프 해제 및 ✨ 에테르 +50 획득!', 'reward');
+                      gm.addLog('💧✨ [여신의 성수 축성 대성공] 여신의 성수로 성상을 축성하여 생존 대원 전원 HP 80% / MP 80% 회복, 모든 디버프 해제, 3턴간 [상태이상 면역] 부여 및 ✨ 에테르 +50 획득!', 'reward');
                     }
                   } else {
                     if (gm.consumeDungeonItem('holy_water', 1)) {
@@ -2103,7 +2112,7 @@ export const ExplorationScreen: React.FC = () => {
             const visitor = visitors[Math.floor(Math.random() * visitors.length)];
             gm.encounterVisitorRecord = visitor;
 
-            const myCallsign = FirebaseService.getInstance().getCachedProfile()?.nickname || '방주 지휘관';
+            const myCallsign = FirebaseService.getInstance().getCommanderCallsign();
             const elapsedMins = Math.max(1, Math.round((Date.now() - visitor.timestamp) / 60000));
             const visitorSquadNames = visitor.squad.map(h => h.name).join(', ');
 
@@ -2182,7 +2191,7 @@ export const ExplorationScreen: React.FC = () => {
                         skills: sanitizedSkills,
                         rewards: { gold: 0, ether: 0, exp: 0 },
                         promptKey: 'mercenary',
-                        imagePath: 'assets/portraits/portrait_paladin.png',
+                        imagePath: 'assets/portraits/portrait_paladin.webp',
                         themeColor: 0x90caf9,
                         description: `[${visitor.callsign}] 지휘관의 원정 대원`
                       };
@@ -2617,70 +2626,80 @@ export const ExplorationScreen: React.FC = () => {
                   onClick={() => setInspectedHero(hero)}
                   title={isPermanentlyDead ? '💀 완전 전사한 대원 (용병 관리에서 긴급 이송 필요)' : '탭하여 영웅 상세 스탯 및 장비 확인'}
                 >
-                  {/* 상단: 영웅 얼굴(초상화), 이름, 클래스 텍스트, 레벨, 포지션, HP/MP 수치 */}
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-[#c8aa6e55] bg-[#15171d] flex items-center justify-center relative shadow-xs">
-                        {heroPortrait ? (
-                          <img
-                            src={heroPortrait}
-                            alt={hero.name}
-                            className={`w-full h-full object-cover ${isDead ? 'grayscale' : ''}`}
-                            onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
-                          />
-                        ) : (
-                          <span className="text-xs">{classIcon}</span>
-                        )}
-                        {isDead && (
-                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-[10px]">
-                            💀
-                          </div>
-                        )}
-                      </div>
-                      <span className={`font-bold truncate ${isDead ? 'line-through text-[#8b9bb4]' : 'text-white'}`}>
-                        {hero.name}
-                      </span>
-                      <span className="text-[10px] text-[#c8aa6e] font-medium shrink-0">
-                        {cls?.name || hero.classId}
-                      </span>
-                      <span className="text-[10px] text-[#ffd54f] font-mono font-bold shrink-0">
-                        Lv.{hero.level}
-                      </span>
-                      <span
-                        className="text-[9px] px-1 py-0.2 rounded font-bold shrink-0"
-                        style={{ color: posMeta.color, background: `${posMeta.color}18`, border: `1px solid ${posMeta.color}44` }}
-                      >
-                        [{posMeta.label}]
-                      </span>
-                      {isPermanentlyDead ? (
-                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535033] text-[#ef5350] font-bold shrink-0 border border-[#ef535066] animate-pulse">
-                          💀 전사 (긴급 이송 필요)
-                        </span>
-                      ) : isDead ? (
-                        <span className="text-[9px] px-1 py-0.2 rounded bg-[#ef535022] text-[#ef5350] font-bold shrink-0 border border-[#ef535044]">
-                          💀 부상
-                        </span>
-                      ) : null}
+                  {/* 상단: 초상화 + (좌: 이름/직업 & 레벨/진형 줄바꿈, 우: HP & MP 수치 줄바꿈) */}
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full overflow-hidden shrink-0 border border-[#c8aa6e55] bg-[#15171d] flex items-center justify-center relative shadow-xs">
+                      {heroPortrait ? (
+                        <img
+                          src={heroPortrait}
+                          alt={hero.name}
+                          className={`w-full h-full object-cover ${isDead ? 'grayscale' : ''}`}
+                          onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                        />
+                      ) : (
+                        <span className="text-xs">{classIcon}</span>
+                      )}
+                      {isDead && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-[10px]">
+                          💀
+                        </div>
+                      )}
                     </div>
 
-                    <div className="text-[10px] font-mono shrink-0 ml-1 flex items-center gap-1">
-                      <span className={hero.currentHp / eff.maxHp < 0.3 ? 'text-[#ef5350] font-bold' : 'text-[#38ef7d]'}>
-                        {Math.round(hero.currentHp)}
-                      </span>
-                      <span className="text-[#607d8b]">/{Math.round(eff.maxHp)}</span>
-                      <span className="text-[#607d8b] mx-0.5">|</span>
-                      <span className="text-[#64b5f6]">{Math.round(hero.currentMp)}</span>
-                      <span className="text-[#607d8b]">/{Math.round(eff.maxMp)}</span>
-                      <span className="text-[#8b9bb4] hover:text-[#c8aa6e] ml-0.5 text-[9px]">ℹ️</span>
+                    <div className="flex-1 min-w-0">
+                      {/* 윗줄: 이름 + 클래스명 | HP 수치 + ℹ️ */}
+                      <div className="flex items-center justify-between gap-1 leading-tight">
+                        <div className="flex items-center gap-1 min-w-0">
+                          <span className={`font-bold text-xs truncate ${isDead ? 'line-through text-[#8b9bb4]' : 'text-white'}`}>
+                            {hero.name}
+                          </span>
+                          <span className="text-[10px] text-[#c8aa6e] font-medium truncate shrink-0">
+                            {cls?.name || hero.classId}
+                          </span>
+                        </div>
+                        <div className="text-[10px] font-mono shrink-0 flex items-center gap-0.5">
+                          <span className={hero.currentHp / eff.maxHp < 0.3 ? 'text-[#ef5350] font-bold' : 'text-[#ef5350]'}>
+                            {Math.round(hero.currentHp)}/{Math.round(eff.maxHp)}
+                          </span>
+                          <span className="text-[#8b9bb4] hover:text-[#c8aa6e] text-[9px] ml-0.5">ℹ️</span>
+                        </div>
+                      </div>
+
+                      {/* 아랫줄: 레벨 + 포지션 배지 | MP 수치 */}
+                      <div className="flex items-center justify-between gap-1 mt-0.5 leading-tight">
+                        <div className="flex items-center gap-1 shrink-0">
+                          <span className="text-[10px] text-[#ffd54f] font-mono font-bold">
+                            Lv.{hero.level}
+                          </span>
+                          <span
+                            className="text-[9px] px-1 py-0.2 rounded font-bold"
+                            style={{ color: posMeta.color, background: `${posMeta.color}18`, border: `1px solid ${posMeta.color}44` }}
+                          >
+                            [{posMeta.label}]
+                          </span>
+                          {isPermanentlyDead ? (
+                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ef535033] text-[#ef5350] font-bold shrink-0 border border-[#ef535066] animate-pulse">
+                              💀 전사
+                            </span>
+                          ) : isDead ? (
+                            <span className="text-[9px] px-1 py-0.2 rounded bg-[#ef535022] text-[#ef5350] font-bold shrink-0 border border-[#ef535044]">
+                              💀 부상
+                            </span>
+                          ) : null}
+                        </div>
+                        <div className="text-[10px] font-mono shrink-0 text-[#64b5f6]">
+                          {Math.round(hero.currentMp)}/{Math.round(eff.maxMp)}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  {/* 중단: HP & MP 게이지 바 */}
-                  <div className="flex gap-1">
-                    <div className="bar-track flex-1" style={{ height: 4 }}>
+                  {/* 중단: HP & MP 게이지 바 (위아래 2단 배치) */}
+                  <div className="flex flex-col gap-0.5 mt-0.5">
+                    <div className="bar-track w-full" style={{ height: 4 }}>
                       <div className="bar-fill-hp h-full transition-all duration-300" style={{ width: `${hpPct}%` }} />
                     </div>
-                    <div className="bar-track flex-1" style={{ height: 4 }}>
+                    <div className="bar-track w-full" style={{ height: 3.5 }}>
                       <div className="bar-fill-mp h-full transition-all duration-300" style={{ width: `${mpPct}%` }} />
                     </div>
                   </div>
@@ -2774,8 +2793,10 @@ export const ExplorationScreen: React.FC = () => {
               const typeColor = slot.itemType === 'supply' ? '#66bb6a' : slot.itemType === 'equipment' ? '#ffd54f' : slot.itemType === 'skillBook' ? '#ce93d8' : '#c8aa6e';
               const rMeta = GameManager.getResourceMeta(slot.key);
               const isEngOnly = slot.label && /^[a-zA-Z0-9_\-\s]+$/.test(slot.label);
-              const displayLabel = lang !== 'ko' ? (rMeta?.name || slot.label || slot.key) : ((!isEngOnly && slot.label) || rMeta?.name || slot.label || slot.key);
-              const displayIcon = rMeta?.icon || slot.icon;
+              const displayLabel = lang !== 'ko'
+                ? (rMeta?.name || slot.label || slot.key)
+                : ((!isEngOnly && slot.label) || (rMeta?.name && rMeta.name !== slot.key ? rMeta.name : slot.label) || slot.key);
+              const displayIcon = (rMeta?.icon && rMeta.icon !== '📦' ? rMeta.icon : slot.icon) || '📜';
               const typeLabel = slot.itemType === 'supply'
                 ? (lang === 'en' ? 'Supply' : lang === 'ja' ? '消耗品' : '소모품')
                 : slot.itemType === 'equipment'
@@ -2959,19 +2980,46 @@ export const ExplorationScreen: React.FC = () => {
           </div>
 
           {/* 대원들 간의 담소 대화창 */}
-          <div className="panel p-2.5 flex flex-col gap-2 max-h-[220px] overflow-y-auto bg-[#08090d] border border-[#1a2338]">
-            {banterResult?.dialogues.map((d, i) => (
-              <div
-                key={i}
-                className="p-2 rounded-lg bg-[#0d1424] border border-[#1e293b] flex items-start gap-2.5 animate-fade-in"
-              >
-                <span className="text-xl shrink-0">{d.icon}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-xs text-[#c8aa6e]">{tr(d.speakerName)}</div>
-                  <div className="text-xs text-[#cfd8e8] mt-0.5 leading-relaxed">{tr(d.text)}</div>
+          <div className="panel p-2.5 flex flex-col gap-2 max-h-[260px] overflow-y-auto bg-[#08090d] border border-[#1a2338]">
+            {banterResult?.dialogues.map((d, i) => {
+              // 대사를 하는 용병 찾기 (파티원 우선, 없으면 대기소 전체 검색)
+              const speakerHero = state.party.find(h => h && (h.name === d.speakerName || tr(h.name) === tr(d.speakerName)))
+                || state.barracks.find(h => h && (h.name === d.speakerName || tr(h.name) === tr(d.speakerName)));
+              const heroPortrait = speakerHero ? CustomAssetService.getHeroPortrait(speakerHero) : null;
+
+              return (
+                <div
+                  key={i}
+                  className="p-2 rounded-lg bg-[#0d1424] border border-[#1e293b] flex items-start gap-2.5 animate-fade-in"
+                >
+                  <div className="shrink-0 flex items-center justify-center pt-0.5">
+                    {heroPortrait ? (
+                      <img
+                        src={heroPortrait}
+                        alt={d.speakerName}
+                        className="w-9 h-9 object-cover rounded-full border border-[#c8aa6e77] shadow-[0_2px_8px_rgba(0,0,0,0.8)] bg-[#141b2d]"
+                        onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                      />
+                    ) : (
+                      <span className="text-xl flex items-center justify-center w-9 h-9 rounded-full bg-[#141b2d] border border-[#1e293b]">
+                        {d.icon}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-xs text-[#c8aa6e] flex items-center gap-1.5">
+                      <span>{tr(d.speakerName)}</span>
+                      {speakerHero && (
+                        <span className="text-[10px] text-[#ffd54f] font-normal opacity-85">
+                          (Lv.{speakerHero.level})
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-xs text-[#cfd8e8] mt-0.5 leading-relaxed">{tr(d.text)}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* 유대도 변동 내역 (수치 은닉 & 캐릭터 간 아이콘 표시) */}

@@ -109,7 +109,7 @@ export const CodexModal: React.FC<Props> = ({ open, onClose, gm, isDrawer = fals
       {!isDrawer && (
         <div className="relative w-full h-28 sm:h-36 rounded-xl overflow-hidden border border-[#233550] shadow-md shrink-0">
           <img
-            src="assets/menu_codex.jpg"
+            src="assets/menu_codex.webp"
             alt="Abyssal Codex"
             className="w-full h-full object-cover"
             style={{ filter: 'brightness(1.02) contrast(1.05) saturate(1.08)' }}

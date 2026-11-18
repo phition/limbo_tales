@@ -14,6 +14,18 @@ export const QuickFacilityDock: React.FC<QuickFacilityDockProps> = ({
 }) => {
   const { tr } = useI18n();
 
+  // 🌌 차원 성좌 전쟁 1시간 원정 완료 여부 확인
+  let hasFactionWarAlert = false;
+  try {
+    const raw = localStorage.getItem('limbo_faction_war_state_v1');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed?.marchingOrder) {
+        hasFactionWarAlert = Date.now() >= parsed.marchingOrder.arrivesAt;
+      }
+    }
+  } catch {}
+
   const handleClick = (key: string) => {
     try {
       SoundManager.getInstance().play('click');
@@ -74,17 +86,24 @@ export const QuickFacilityDock: React.FC<QuickFacilityDockProps> = ({
         <button
           type="button"
           onClick={() => handleClick('arena')}
-          className={`flex items-center justify-center gap-1.5 sm:gap-2 h-13 sm:h-16 px-1.5 sm:px-2.5 rounded-2xl transition-all cursor-pointer min-w-0 overflow-hidden ${
+          className={`relative flex items-center justify-center gap-1.5 sm:gap-2 h-13 sm:h-16 px-1.5 sm:px-2.5 rounded-2xl transition-all cursor-pointer min-w-0 overflow-hidden ${
             activeKey === 'arena'
               ? 'bg-[#2b1b24] border-2 border-[#d45070] text-white shadow-[0_0_16px_rgba(212,80,112,0.5)]'
               : 'bg-[#1c1219] border border-[#442838] hover:border-[#d45070] text-[#e8cfdb] hover:bg-[#231720] active:scale-95'
           }`}
           title={tr('차원 아레나 & 침공전')}
         >
+          {hasFactionWarAlert && (
+            <span className="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 shadow-[0_0_8px_#ef4444]"></span>
+            </span>
+          )}
           <GameIcon name="arena" icon="🌀" size={28} className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 object-contain drop-shadow shrink-0" />
           <div className="text-left min-w-0 flex flex-col justify-center">
-            <div className="dock-btn-title font-black text-white tracking-tight truncate">
-              {tr('차원 게이트')}
+            <div className="dock-btn-title font-black text-white tracking-tight truncate flex items-center gap-1">
+              <span>{tr('차원 게이트')}</span>
+              {hasFactionWarAlert && <span className="text-[10px] text-red-400 font-bold">●</span>}
             </div>
             <div className="dock-btn-subtext text-[#b48b9f] truncate mt-0.5">
               {tr('아레나 PVP')}

@@ -62,7 +62,7 @@ export const GameDialogModal: React.FC = () => {
   const isDanger = dialog.tone === 'danger';
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fade-in select-none">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fade-in select-none">
       <div 
         className="bg-[#0e131f] border border-[#d4af3777] rounded-2xl w-full max-w-[390px] shadow-[0_12px_40px_rgba(0,0,0,0.85),0_0_20px_rgba(212,175,55,0.25)] overflow-hidden animate-scale-up flex flex-col"
         onClick={(e) => e.stopPropagation()}

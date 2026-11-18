@@ -1077,7 +1077,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                         ? tr('★ 2차 각성 (Tier 2)')
                         : tr('👑 3차 초월 (Tier 3)');
                       const parentClass = cls.parentClassId ? CHARACTER_CLASSES[cls.parentClassId] : null;
-                      const parentText = parentClass ? ` • ${tr('상위 전직')} [${tr(parentClass.name)}]` : '';
+                      const parentText = cls.tier === 3 ? ` • ${tr('상위 전직')} [${lineage.classes.filter(c => c.tier === 2).map(p => tr(p.name)).join(' / ')}]` : (parentClass ? ` • ${tr('상위 전직')} [${tr(parentClass.name)}]` : '');
 
                       // 티어별 뱃지 스타일
                       const tierBadgeStyle = cls.tier === 0
@@ -1232,7 +1232,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 <div className="flex items-center gap-1.5 flex-wrap">
                                   <span
                                     className="font-bold text-sm text-white group-hover:underline transition-colors"
-                                    style={{ color: cls.tier === 2 ? '#ffd700' : 'white' }}
+                                    style={{ color: cls.tier >= 2 ? '#ffd700' : 'white' }}
                                   >
                                     {cls.name}
                                   </span>
@@ -1347,7 +1347,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                   <span>{tr('심연 몬스터 & 보스 기믹 도감')} ({filteredMonsters.length}{tr('종')})</span>
                 </span>
                 <span className="text-[10px] text-[#8b9bb4]">
-                  {tr('1층 ~ 10층 심연의 탑 서식 마물')}
+                  {tr('1층 ~ 11층 무간도 및 차원 레이드 마물')}
                 </span>
               </div>
 
@@ -1622,6 +1622,11 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 {eq.baseStats.def ? <div className="p-2 rounded bg-[#0a101d] text-[#ffd54f] font-bold">DEF +{eq.baseStats.def}</div> : null}
                                 {eq.baseStats.hp ? <div className="p-2 rounded bg-[#0a101d] text-[#66bb6a] font-bold">HP +{eq.baseStats.hp}</div> : null}
                                 {eq.baseStats.mp ? <div className="p-2 rounded bg-[#0a101d] text-[#42a5f5] font-bold">MP +{eq.baseStats.mp}</div> : null}
+                                {eq.baseStats.spd ? <div className="p-2 rounded bg-[#0a101d] text-[#ffd54f] font-bold">SPD +{eq.baseStats.spd}</div> : null}
+                                {eq.baseStats.luck ? <div className="p-2 rounded bg-[#0a101d] text-[#a7ffeb] font-bold">LUK +{eq.baseStats.luck}</div> : null}
+                                {eq.baseStats.defPenetration ? <div className="p-2 rounded bg-[#0a101d] text-[#e040fb] font-bold">관통 +{eq.baseStats.defPenetration}%</div> : null}
+                                {eq.baseStats.statusResist ? <div className="p-2 rounded bg-[#0a101d] text-[#81c784] font-bold">저항 +{eq.baseStats.statusResist}%</div> : null}
+                                {eq.baseStats.hpRegenPercent ? <div className="p-2 rounded bg-[#0a101d] text-[#69f0ae] font-bold">재생 +{eq.baseStats.hpRegenPercent}%</div> : null}
                               </div>
                             </div>
                             {/* 단조 소모 재료 */}
@@ -1716,7 +1721,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                                 </div>
                               )}
                               <div className="p-3.5 rounded-xl bg-[#0e1626] border border-[#1e2f4c] text-xs text-[#8b9bb4]">
-                                💡 {tr('병기창에서 마도석을 소비하여 해당 부위의 장비 슬롯에 각인할 수 있습니다.')}
+                                💡 {tr('에테르 연금 공방(Lv.3+)에서 마도석을 소비하여 해당 부위의 장비 슬롯에 각인할 수 있습니다. (슬롯 해금은 병기창 Lv.3/5/7 연동)')}
                               </div>
                             </div>
                           ),
@@ -2030,7 +2035,7 @@ export const EncyclopediaModal: React.FC<Props> = ({ open, onClose, initialTab =
                               </div>
                             </div>
                             <div className="text-xs text-[#8b9bb4] p-3 rounded-lg bg-[#0d0f14] border border-[#1e2c45]">
-                              {tr('💡 성채 용병 관리 창에서 용병에게 전수하여 새로운 액티브 스킬 슬롯을 개방할 수 있습니다.')}
+                              {tr('💡 [원정단 편성] ➔ [스킬 관리/서고]에서 마도서를 연독하여 개인 스킬 풀(최대 6종)에 습득하거나 마스터리(Lv.1~5)를 강화할 수 있습니다.')}
                             </div>
                           </div>
                         ),

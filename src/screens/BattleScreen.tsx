@@ -12,7 +12,7 @@ import { Mercenary, MonsterData, Skill, MonsterSkill, StatusEffect, STATUS_EFFEC
 import { CHARACTER_CLASSES } from '../data/classes';
 import { ALL_SKILL_BOOKS, ALL_SKILLS_MAP, checkSkillAffinityMatch, getSkillAffinityMeta } from '../data/skillBooks';
 import { SoundManager } from '../managers/SoundManager';
-import { BattleVFXOverlay, VFXEvent, VFXType } from '../components/BattleVFXOverlay';
+import { BattleVFXOverlay, VFXEvent, VFXType, prewarmVfxSprites } from '../components/BattleVFXOverlay';
 import { LootSelectionModal } from '../components/LootSelectionModal';
 import { BossEntranceCutscene } from '../components/BossEntranceCutscene';
 import { Modal } from '../components/Modal';
@@ -104,6 +104,17 @@ const RES_NAME_MAP: Record<string, { name: string; icon: string }> = {
   memoir_note_8: { name: '8층 회고록 쪽지', icon: '📜' },
   memoir_note_9: { name: '9층 회고록 쪽지', icon: '📜' },
   memoir_note_10: { name: '10층 회고록 쪽지', icon: '📜' },
+  // 📜 서사 회고록 아이템
+  memoir_1: { name: '낡은 척후병의 군번줄', icon: '📜' },
+  memoir_2: { name: '망령의 부서진 로자리오', icon: '📜' },
+  memoir_3: { name: '광부의 채굴 일지', icon: '📜' },
+  memoir_4: { name: '심연 관측 보고서', icon: '📜' },
+  memoir_5: { name: '원초의 제사 수기', icon: '📜' },
+  memoir_6: { name: '피 묻은 귀족 일기장', icon: '📜' },
+  memoir_7: { name: '이름 없는 자의 묘비명', icon: '📜' },
+  memoir_8: { name: '기사단장의 비밀 서신', icon: '📜' },
+  memoir_9: { name: '미궁 탐사 기록서', icon: '📜' },
+  memoir_10: { name: '최초 지휘관의 유서', icon: '📜' },
   // 🏛️ 고대 오파츠
   ooparts_1_1: { name: '금이 간 스마트폰 액정', icon: '📱' },
   ooparts_1_2: { name: '녹슨 스테인리스 텀블러', icon: '🥤' },
@@ -152,6 +163,7 @@ export function applyStatusEffect(
       }
     }
     if (effect.source) existing.source = effect.source;
+    if ((effect as any).name) (existing as any).name = (effect as any).name;
     return { isNew: false, currentTurns: existing.turnsLeft };
   } else {
     target.statusEffects.push({ ...effect });
@@ -209,6 +221,7 @@ const MonsterImagePanel: React.FC<{ targetMonster?: MonsterState; totalCount: nu
           <img
             key={imageSrc}
             src={imageSrc}
+            decoding="async"
             alt={mon?.data.name}
             className={`transition-all duration-300 pointer-events-none ${
               !isAlive ? 'grayscale opacity-35 brightness-50' : ''
@@ -586,6 +599,7 @@ const MonsterDetailModal: React.FC<{
             {rawImageSrc ? (
               <img
                 src={rawImageSrc}
+                decoding="async"
                 alt={monster.data.name}
                 className="w-11 h-11 object-cover object-top rounded-xl border border-[#ff444455] shadow-md shrink-0"
                 style={{ objectPosition: 'top' }}
@@ -886,6 +900,7 @@ const HeroRow: React.FC<{
           {customPortrait ? (
             <img
               src={customPortrait}
+              decoding="async"
               alt={hero.name}
               className={`w-full h-full object-cover ${!isAlive ? 'grayscale' : ''}`}
               onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
@@ -1360,7 +1375,7 @@ export const BattleScreen: React.FC = () => {
 
     // 3. ☣️💥 [독성 기화 폭발 (Catalytic Venom)]: 중독 + 원소/마법 (magic / elemental)
     const poisonEffect = findEffect('poison');
-    if (poisonEffect && hasTag('magic')) {
+    if (poisonEffect && (hasTag('magic') || hasTag('elemental'))) {
       result.triggered = true;
       result.comboName = '독성 기화 폭발 (Catalytic Venom)';
       result.icon = '☣️💥';
@@ -1478,13 +1493,14 @@ export const BattleScreen: React.FC = () => {
       return result;
     }
 
-    // 8. 🎯🩸 [급소 처형 낙인 (Marked Execution)]: 출혈/방어약화 + 저격/관통 (snipe / pierce)
-    if ((bleedEffect || defDebuff) && (hasTag('snipe') || hasTag('pierce'))) {
+    // 8. 🎯🩸 [급소 처형 낙인 (Marked Execution)]: 실명/표적/출혈/방어약화 + 저격/관통 (snipe / pierce)
+    const blindEffect = findEffect('blind') || findEffect('target' as any);
+    if ((blindEffect || bleedEffect || defDebuff) && (hasTag('snipe') || hasTag('pierce'))) {
       result.triggered = true;
       result.comboName = '급소 처형 낙인 (Marked Execution)';
       result.icon = '🎯🩸';
       result.bannerColor = '#e040fb';
-      result.desc = '약점이 노출된 적의 급소를 정확히 저격하여 100% 방어 무시 치명타를 꽂아넣었습니다!';
+      result.desc = '약점이 노출된 적의 급소를 정확히 저격하여 60% 추가 처형 피해를 꽂아넣었습니다!';
       result.extraDamage = Math.max(1, Math.floor(baseDamageDealt * 0.60));
       return result;
     }
@@ -1495,16 +1511,16 @@ export const BattleScreen: React.FC = () => {
       result.comboName = '암흑 피의 섭취 (Blood Feast)';
       result.icon = '🔮🩸';
       result.bannerColor = '#880e4f';
-      result.desc = '출혈 중인 상처에서 피의 마력을 강탈하여 아군 전체에 수호 방벽을 둘렀습니다!';
+      result.desc = '출혈 중인 상처에서 피의 마력을 강탈하여 아군 전체의 체력을 즉시 회복시켰습니다!';
       result.extraDamage = Math.max(1, Math.floor(baseDamageDealt * 0.35));
 
-      const shieldVal = Math.max(1, Math.floor(result.extraDamage * 0.60));
+      const healVal = Math.max(1, Math.floor(result.extraDamage * 0.30));
       gm.party.forEach(h => {
         if (h.currentHp > 0) {
-          h.currentHp = Math.min(h.maxHp, h.currentHp + Math.floor(shieldVal * 0.5));
+          h.currentHp = Math.min(h.maxHp, h.currentHp + healVal);
         }
       });
-      result.bonusLogs.push(`🛡️ [피의 수호막] 아군 전체에게 활력 회복 파동 전개!`);
+      result.bonusLogs.push(`🩸 [피의 흡혈 공명] 아군 전체 체력 +${healVal} 즉시 치유!`);
       return result;
     }
 
@@ -1592,6 +1608,14 @@ export const BattleScreen: React.FC = () => {
       result.bannerColor = '#673ab7';
       result.desc = '무력화된 틈을 타 암살 일격을 가해 치명적 처형 피해를 입히고 시전자가 은신 태세에 돌입합니다!';
       result.extraDamage = Math.max(1, Math.floor(baseDamageDealt * 0.50));
+      applyStatusEffect(attacker, {
+        type: 'stealth',
+        turnsLeft: 1,
+        totalTurns: 1,
+        magnitude: 0.60,
+        source: '그림자 처형 기습'
+      });
+      result.bonusLogs.push(`👥 [그림자 은신] ${attacker.name}이(가) 1턴간 은신(회피율 +60%) 태세에 돌입했습니다!`);
       return result;
     }
 
@@ -1806,6 +1830,21 @@ export const BattleScreen: React.FC = () => {
       });
       monstersRef.current = restoredMonsters;
       setMonsters(restoredMonsters);
+
+      // 🚀 복원 전투 참여 몬스터 및 초상화 인메모리 사전 캐싱
+      try {
+        const combatImages: (string | undefined)[] = [];
+        restoredMonsters.forEach(m => {
+          const def = MONSTERS[m.data.id];
+          const custom = CustomAssetService.getInstance().getMonsterOverride(m.data.id);
+          combatImages.push(custom || def?.imagePath || m.data.imagePath);
+        });
+        party.forEach(h => {
+          combatImages.push(CustomAssetService.getHeroPortrait(h));
+        });
+        CustomAssetService.preloadImages(combatImages);
+        prewarmVfxSprites();
+      } catch (_) {}
       setTargetedMonsterIdx(battleSnap.targetedMonsterIdx ?? 0);
       turnQueueRef.current = battleSnap.turnQueue;
       setTurnQueue(battleSnap.turnQueue);
@@ -1908,6 +1947,19 @@ export const BattleScreen: React.FC = () => {
 
     monstersRef.current = initMonsters;
     setMonsters(initMonsters);
+    try {
+      const combatImages: (string | undefined)[] = [];
+      initMonsters.forEach(m => {
+        const def = MONSTERS[m.data.id];
+        const custom = CustomAssetService.getInstance().getMonsterOverride(m.data.id);
+        combatImages.push(custom || def?.imagePath || m.data.imagePath);
+      });
+      party.forEach(h => {
+        combatImages.push(CustomAssetService.getHeroPortrait(h));
+      });
+      CustomAssetService.preloadImages(combatImages);
+      prewarmVfxSprites();
+    } catch (_) {}
     setBattleEnded(false);
     setBattleResult(null);
     isProcessingRef.current = false;
@@ -2160,7 +2212,7 @@ export const BattleScreen: React.FC = () => {
         const res = gm.claimSquadBattleRewards(currentMonsters.map(m => m.data));
 
         if (isPvp) {
-          const myCallsign = FirebaseService.getInstance().getCachedProfile()?.nickname || '방주 지휘관';
+          const myCallsign = FirebaseService.getInstance().getCommanderCallsign();
           const oppCallsign = visitorRec?.callsign || '상대 지휘관';
           gm.addLog(`🏆⚔️ [습격 승리!] [${oppCallsign}] 지휘관의 원정대와의 혈투에서 승리했습니다! (⚔️ 경험치 2배: +${res.exp.toLocaleString()} EXP, 전리품 획득 없음)`, 'reward');
           
@@ -2223,7 +2275,7 @@ export const BattleScreen: React.FC = () => {
         const isPvp = !!gm.isEncounterPvP;
         const visitorRec = gm.encounterVisitorRecord;
         if (isPvp) {
-          const myCallsign = FirebaseService.getInstance().getCachedProfile()?.nickname || '방주 지휘관';
+          const myCallsign = FirebaseService.getInstance().getCommanderCallsign();
           const oppCallsign = visitorRec?.callsign || '상대 지휘관';
           gm.addLog(`💀⚔️ [습격 패배...] [${oppCallsign}] 지휘관의 원정대를 기습했으나 격퇴당했습니다...`, 'danger');
           if (visitorRec && visitorRec.uid) {
@@ -2479,6 +2531,7 @@ export const BattleScreen: React.FC = () => {
               x: heroPos.x,
               y: heroPos.y,
               statusEffect: 'stun',
+              duration: 600,
               text: tr('⚰️ 완전 사망')
             });
             shouldSkipTurn = true;
@@ -2526,7 +2579,7 @@ export const BattleScreen: React.FC = () => {
               if (!checkBattleOutcome(monstersRef.current)) {
                 advanceTurn();
               }
-            }, 900);
+            }, 650);
             return () => clearTimeout(skipTimer);
           }
         }
@@ -2570,7 +2623,7 @@ export const BattleScreen: React.FC = () => {
             heroSkipReasons.push('💫 기절');
             shouldSkipTurn = true;
             SoundManager.getInstance().play('stun');
-            triggerVFX({ type: 'status_stun', x: heroPos.x, y: heroPos.y, statusEffect: 'stun' });
+            triggerVFX({ type: 'status_stun', x: heroPos.x, y: heroPos.y, statusEffect: 'stun', duration: 600 });
           }
           // 🚩 돌격 배수진의 1턴 보호막은 영웅 턴 시작 시 즉시 차감 소멸되지 않고 첫 라운드(1턴) 동안 피해를 온전히 흡수 (라운드 1 종료 시 만료)
           if (se.type === 'shield' && se.source?.includes('돌격 배수진')) {
@@ -2821,6 +2874,7 @@ export const BattleScreen: React.FC = () => {
               x: monPos.x,
               y: monPos.y,
               statusEffect: 'stun',
+              duration: 600,
             });
           }
           se.turnsLeft -= 1;
@@ -2874,7 +2928,7 @@ export const BattleScreen: React.FC = () => {
         if (!checkBattleOutcome(monstersRef.current)) {
           advanceTurn();
         }
-      }, 900);
+      }, 650);
       return () => clearTimeout(skipTimer);
     }
   }, [turnIdx, persistBattleSnapshot]);
@@ -3023,8 +3077,8 @@ export const BattleScreen: React.FC = () => {
       skill.targetType === 'all_enemies' || 
       skill.targetType === 'single_enemy' ||
       skill.id === 'duel_blade_waltz' ||
-      ['damage', 'bleed', 'stun', 'debuff', 'drain', 'poison'].includes(skill.effectType || '') ||
-      !['all_allies', 'single_ally', 'self'].includes(skill.targetType || '');
+      ['damage', 'bleed', 'stun', 'debuff', 'debuff_def', 'debuff_atk', 'drain', 'poison', 'burn', 'freeze', 'blind'].includes(skill.effectType || '') ||
+      (!['all_allies', 'single_ally', 'self'].includes(skill.targetType || '') && !['heal', 'shield', 'buff', 'buff_atk', 'buff_def', 'regen'].includes(skill.effectType || ''));
 
     if (isEnemySkill) {
       const isAoeAttack = (skill !== 'basic' && (
@@ -3079,6 +3133,11 @@ export const BattleScreen: React.FC = () => {
             if (first) targetIds.push(first.id);
           }
         }
+      }
+
+      if (targetIds.length === 0 && current.length > 0) {
+        const fallbackMon = current.find(m => m.currentHp > 0);
+        if (fallbackMon) targetIds.push(fallbackMon.id);
       }
     }
 
@@ -3148,12 +3207,27 @@ export const BattleScreen: React.FC = () => {
 
       try {
         // 1. 공격 스킬 / 기본 공격 처리
-      const effectType = skill === 'basic' ? 'damage' : skill.effectType;
+      const isFriendly = ['heal', 'shield', 'buff', 'buff_atk', 'buff_def', 'regen'].includes(skill === 'basic' ? '' : (skill.effectType || '')) ||
+        ['all_allies', 'single_ally', 'self'].includes(skill === 'basic' ? '' : (skill.targetType || ''));
+      const effectType = skill === 'basic' ? 'damage' : (skill.effectType || (isFriendly ? 'buff' : 'damage'));
       let nextMonsters = [...monstersRef.current];
       let anyCritLanded = false;
       let totalActualDamageDealt = 0;
 
-      if (effectType === 'damage' || effectType === 'bleed' || effectType === 'stun' || effectType === 'debuff' || effectType === 'drain' || effectType === 'poison') {
+      if (
+        effectType === 'damage' ||
+        effectType === 'bleed' ||
+        effectType === 'stun' ||
+        effectType === 'debuff' ||
+        effectType === 'debuff_def' ||
+        effectType === 'debuff_atk' ||
+        effectType === 'drain' ||
+        effectType === 'poison' ||
+        effectType === 'burn' ||
+        effectType === 'freeze' ||
+        effectType === 'blind' ||
+        !isFriendly
+      ) {
         const skillName = skill === 'basic' ? '기본 공격' : skill.name;
 
         // 🌟 [실명(Blind) 및 명중률 저하에 따른 아군 공격 빗나감 (MISS) 판정 - 행운으로 완화]
@@ -3228,6 +3302,13 @@ export const BattleScreen: React.FC = () => {
             const affMeta = getSkillAffinityMeta(skillAffinity);
             logs.push(`⚠️ [계열 부조화] ${hero.name}의 클래스와 맞지 않는 [${affMeta.name}] 스킬로 인해 위력이 50% 반감됩니다!`);
           }
+        }
+
+        // 🩸 [HP 소모형 자해 스킬]: e.g. 피의 광란참 (HP 15% 소모)
+        if (skill !== 'basic' && (skill.id === 'skill_epic_blood_rampage' || (skill.description && skill.description.includes('HP 15% 소모')))) {
+          const hpCost = Math.max(1, Math.floor(hero.maxHp * 0.15));
+          hero.currentHp = Math.max(1, hero.currentHp - hpCost);
+          logs.push(`🩸 [피의 대가] ${hero.name}이(가) 자신의 체력 -${hpCost}(15%)를 바쳐 광란의 일격을 가합니다!`);
         }
         
         let rawDmg = Math.floor(finalAtk * powerMultiplier * efficiency);
@@ -3424,8 +3505,15 @@ export const BattleScreen: React.FC = () => {
 
           // 🎯 방어 관통율 계산: 스킬 기본 관통율 + 영웅 스탯 관통율 + 패시브 보너스 + FEVER 시너지 + 암흑 마법
           let heroPiercePct = (stats.defPenetration || 0);
-          if (skill !== 'basic' && skill.piercePct) {
-            heroPiercePct += skill.piercePct;
+          if (skill !== 'basic') {
+            if (skill.piercePct) {
+              heroPiercePct += skill.piercePct;
+            } else {
+              const descPierceMatch = (skill.description || '').match(/방어(?:력)?\s*(\d+)%\s*무시|방어\s*관통\s*(\d+)%|방관\s*(\d+)%/);
+              if (descPierceMatch) {
+                heroPiercePct += parseInt(descPierceMatch[1] || descPierceMatch[2] || descPierceMatch[3], 10);
+              }
+            }
           }
           if (skill !== 'basic' && (skill.id === 'void_dimension_slash' || skill.id === 'omega_orbital_annihilation' || skill.id === 'val_ragnarok_slash' || skill.id === 'phantom_clone' || skill.id === 'sniper_death_sentence')) {
             heroPiercePct = 100;
@@ -3788,8 +3876,8 @@ export const BattleScreen: React.FC = () => {
             if (skill.effectType === 'bleed' || sDesc.includes('출혈')) appliedStatus = 'bleed';
             else if (skill.effectType === 'poison' || sDesc.includes('중독')) appliedStatus = 'poison';
             else if (skill.effectType === 'stun' || sDesc.includes('기절')) appliedStatus = 'stun';
-            else if (sDesc.includes('동상') || sDesc.includes('결빙') || sDesc.includes('냉각')) appliedStatus = 'freeze';
-            else if (sDesc.includes('화상')) appliedStatus = 'burn';
+            else if (skill.effectType === 'freeze' || sDesc.includes('동상') || sDesc.includes('결빙') || sDesc.includes('냉각') || sDesc.includes('빙결')) appliedStatus = 'freeze';
+            else if (skill.effectType === 'burn' || sDesc.includes('화상')) appliedStatus = 'burn';
             else if (sDesc.includes('실명')) appliedStatus = 'blind';
             else if (skill.effectType === 'debuff' || sDesc.includes('약화') || sDesc.includes('분쇄')) appliedStatus = 'debuff_def';
           }
@@ -3830,7 +3918,7 @@ export const BattleScreen: React.FC = () => {
             const skillScale = (skill.power && baseSk.power) ? Math.max(1, skill.power / baseSk.power) : 1;
 
             // 1. 👁️ 실명 / 명중률 저하 (신성 광휘 / 연막탄 / 섬광탄 등)
-            const isBlind = sId === 'acolyte_smite' || sDesc.includes('실명') || sId.includes('smoke') || sName.includes('연막') || sId.includes('flashbang') || sName.includes('섬광');
+            const isBlind = skill.effectType === 'blind' || sId === 'acolyte_smite' || sDesc.includes('실명') || sId.includes('smoke') || sName.includes('연막') || sId.includes('flashbang') || sName.includes('섬광') || sDesc.includes('감속') || sDesc.includes('명중') || sDesc.includes('속도');
             if (isBlind && !checkMonResist('실명/명중저하')) {
               const dur = skill.statusDuration || (sId.includes('smoke') ? 3 : 2);
               const mag = sId.includes('smoke') ? 0.40 : (sId === 'acolyte_smite' ? 0.50 : 0.35);
@@ -3844,8 +3932,8 @@ export const BattleScreen: React.FC = () => {
               logs.push(`👁️‍🗨️ [실명/명중저하] ${m.data.name}에게 ${dur}턴간 명중률 ${Math.round(mag * 100)}% 저하를 부여했습니다!`);
             }
 
-            // 2. 🔥 화상 (화염 / 메테오 / 폭발 등)
-            const isBurn = sId.includes('flame') || sId.includes('burn') || sId.includes('eruption') || sId.includes('meteor') || sName.includes('화염') || sName.includes('화상') || sName.includes('메테오') || sDesc.includes('화염') || sDesc.includes('화상');
+            // 2. 🔥 화상 (화염 / 메테오 / 폭발 / 유황탄 등)
+            const isBurn = skill.effectType === 'burn' || sId.includes('inferno') || sName.includes('유황탄') || sId.includes('flame') || sId.includes('burn') || sId.includes('eruption') || sId.includes('meteor') || sName.includes('화염') || sName.includes('화상') || sName.includes('메테오') || sDesc.includes('화염') || sDesc.includes('화상');
             if (isBurn && !checkMonResist('화상')) {
               const dur = skill.statusDuration || 3;
               const burnMag = Number((0.08 * skillScale).toFixed(2));
@@ -3890,7 +3978,7 @@ export const BattleScreen: React.FC = () => {
             }
 
             // 5. ❄️ 빙결 / 냉각 / 동상
-            const isFreeze = sId.includes('blizzard') || sId.includes('freeze') || sId.includes('colossus_core') || sName.includes('눈보라') || sName.includes('빙결') || sName.includes('혹한') || sName.includes('냉각') || sName.includes('영구동결') || sDesc.includes('빙결') || sDesc.includes('냉각') || sDesc.includes('동상');
+            const isFreeze = skill.effectType === 'freeze' || sId.includes('blizzard') || sId.includes('freeze') || sId.includes('colossus_core') || sName.includes('눈보라') || sName.includes('빙결') || sName.includes('혹한') || sName.includes('냉각') || sName.includes('영구동결') || sDesc.includes('빙결') || sDesc.includes('냉각') || sDesc.includes('동상');
             if (isFreeze && !checkMonResist('빙결/냉각')) {
               applyStatusEffect(m, {
                 type: 'freeze',
@@ -3902,8 +3990,8 @@ export const BattleScreen: React.FC = () => {
               logs.push(`❄️ [빙결/냉각] ${m.data.name}에게 1턴간 빙결(행동 불가 & 4% 동상 피해)을 부여했습니다!`);
             }
 
-            // 6. 💫 기절 / 속박
-            const isStun = skill.effectType === 'stun' || sDesc.includes('기절') || sDesc.includes('속박');
+            // 6. 💫 기절 / 속박 / 시간 정지
+            const isStun = skill.effectType === 'stun' || sDesc.includes('기절') || sDesc.includes('속박') || sDesc.includes('정지') || sDesc.includes('마비');
             if (isStun && !checkMonResist('기절')) {
               const dur = skill.statusDuration || 1;
               applyStatusEffect(m, {
@@ -3913,14 +4001,16 @@ export const BattleScreen: React.FC = () => {
                 magnitude: 0,
                 source: hero.name
               });
-              logs.push(`💫 [기절 부여] ${m.data.name}에게 ${dur}턴간 기절을 부여했습니다!`);
+              logs.push(`💫 [기절/정지 부여] ${m.data.name}에게 ${dur}턴간 기절/정지(행동 불가)를 부여했습니다!`);
             }
 
             // 7. ⚔️⬇️ 공격력 약화
-            const isAtkDebuff = (skill.effectType === 'debuff' || sDesc.includes('감소') || sDesc.includes('약화')) && (sDesc.includes('공격력') || sDesc.includes('공격'));
+            const isAtkDebuff = skill.effectType === 'debuff_atk' || ((skill.effectType === 'debuff' || sDesc.includes('감소') || sDesc.includes('약화')) && (sDesc.includes('공격력') || sDesc.includes('공격')));
             if (isAtkDebuff && !checkMonResist('공격력 약화')) {
               const dur = skill.statusDuration || 2;
-              const atkDebuffMag = Number((0.30 * skillScale).toFixed(2));
+              const atkPctMatch = sDesc.match(/공격(?:력)?\s*(?:-|–)?\s*(\d+)%/);
+              const baseAtkMag = atkPctMatch ? parseInt(atkPctMatch[1], 10) / 100 : 0.30;
+              const atkDebuffMag = Number((baseAtkMag * skillScale).toFixed(2));
               applyStatusEffect(m, {
                 type: 'debuff_atk',
                 turnsLeft: dur,
@@ -3932,10 +4022,12 @@ export const BattleScreen: React.FC = () => {
             }
 
             // 8. 🛡️⬇️ 방어력 분쇄 / 감소
-            const isDefDebuff = (skill.effectType === 'debuff' || sDesc.includes('분쇄') || sDesc.includes('파쇄') || sDesc.includes('감소')) && (sDesc.includes('방어력') || sDesc.includes('방어'));
+            const isDefDebuff = skill.effectType === 'debuff_def' || ((skill.effectType === 'debuff' || sDesc.includes('분쇄') || sDesc.includes('파쇄') || sDesc.includes('감소')) && (sDesc.includes('방어력') || sDesc.includes('방어')));
             if (isDefDebuff && !checkMonResist('방어력 분쇄')) {
               const dur = skill.statusDuration || 3;
-              const defDebuffMag = Number((0.35 * skillScale).toFixed(2));
+              const defPctMatch = sDesc.match(/방어(?:력)?\s*(?:-|–)?\s*(\d+)%/);
+              const baseDefMag = defPctMatch ? parseInt(defPctMatch[1], 10) / 100 : 0.35;
+              const defDebuffMag = Number((baseDefMag * skillScale).toFixed(2));
               applyStatusEffect(m, {
                 type: 'debuff_def',
                 turnsLeft: dur,
@@ -3944,6 +4036,19 @@ export const BattleScreen: React.FC = () => {
                 source: hero.name
               });
               logs.push(`🛡️⬇️ [방어력 분쇄] ${m.data.name}의 방어력을 ${dur}턴간 ${Math.round(defDebuffMag * 100)}% 감소시켰습니다!`);
+            }
+
+            // 8-2. 💫⬇️ [범용 디버프 안전망]
+            if (skill.effectType === 'debuff' && !isAtkDebuff && !isDefDebuff && !isBlind && !isStun && !checkMonResist('약화')) {
+              const dur = skill.statusDuration || 2;
+              applyStatusEffect(m, {
+                type: 'debuff_atk',
+                turnsLeft: dur,
+                totalTurns: dur,
+                magnitude: 0.20,
+                source: hero.name
+              });
+              logs.push(`💫⬇️ [약화] ${m.data.name}에게 ${dur}턴간 전투 능력 약화(공격력 -20%)를 부여했습니다!`);
             }
 
             // 9. 🔮 [원소 마법 고유 효과]: 해당 계열 원소 상태 이상 추가 부여
@@ -4541,7 +4646,20 @@ export const BattleScreen: React.FC = () => {
           const partyDrainBuff = (hero.statusEffects || []).find(s => s.type === 'buff_drain');
           const partyDrainBonus = partyDrainBuff ? Math.round(partyDrainBuff.magnitude * 100) : 0;
           const warlordDrain = hero.classId === 'valhalla_warlord' ? 10 : 0;
-          const heroDrainPct = (stats.drainPercent || 0) + (effectType === 'drain' ? 50 : 0) + partyDrainBonus + warlordDrain;
+          let skillDrainBonus = 0;
+          if (effectType === 'drain' || isDrainSkill || (skill !== 'basic' && (skill as any).drainPct)) {
+            if (skill !== 'basic' && (skill as any).drainPct) {
+              skillDrainBonus = (skill as any).drainPct;
+            } else {
+              const drainMatch = (skill.description || '').match(/흡혈\s*(\d+)%|피해(?:량)?\s*(\d+)%\s*흡혈/);
+              if (drainMatch) {
+                skillDrainBonus = parseInt(drainMatch[1] || drainMatch[2], 10);
+              } else {
+                skillDrainBonus = 35; // 기본 35%
+              }
+            }
+          }
+          const heroDrainPct = (stats.drainPercent || 0) + skillDrainBonus + partyDrainBonus + warlordDrain;
           const effectiveMaxHp = Math.max(hero.maxHp, stats.maxHp);
           if (heroDrainPct > 0 && totalActualDamageDealt > 0 && hero.currentHp > 0 && hero.currentHp < effectiveMaxHp) {
             const drainHeal = Math.max(1, Math.floor(totalActualDamageDealt * (heroDrainPct / 100)));
@@ -4559,6 +4677,35 @@ export const BattleScreen: React.FC = () => {
                 text: `+${actualHealed} 🩸`
               });
               SoundManager.getInstance().play('heal');
+            }
+          }
+
+          // 💧 [마나 강탈 / MP 흡수 스킬 처리 (e.g. 밴시/종언의 제단 광신도/공허의 침식자)]
+          if (skill !== 'basic' && totalActualDamageDealt > 0) {
+            const sDesc = (skill.description || '').toLowerCase();
+            const mpStealMatch = sDesc.match(/mp\s*(\d+)\s*(?:흡수|강탈)|마나\s*(\d+)\s*(?:흡수|강탈)/);
+            if (mpStealMatch) {
+              const rawMp = parseInt(mpStealMatch[1] || mpStealMatch[2], 10);
+              const stolenMp = Math.max(5, rawMp);
+              const actualMpGained = Math.min(hero.maxMp - hero.currentMp, stolenMp);
+              if (actualMpGained > 0) {
+                hero.currentMp = Math.min(hero.maxMp, hero.currentMp + actualMpGained);
+                logs.push(`💧 [마나 강탈] ${hero.name}이(가) 대상의 에테르를 강탈하여 마나 +${actualMpGained} MP를 흡수했습니다!`);
+              }
+            }
+
+            // ⚔️ [타격 후 자가 공격력 증폭 부여형 스킬 (e.g. 암흑 제물 공양: 자신 공격력 30% 증폭)]
+            if (sDesc.includes('자신 공격력') && sDesc.includes('증폭')) {
+              const atkBuffMatch = (skill.description || '').match(/공격력\s*(\d+)%\s*증폭/);
+              const mag = atkBuffMatch ? parseInt(atkBuffMatch[1], 10) / 100 : 0.30;
+              applyStatusEffect(hero, {
+                type: 'buff_atk',
+                turnsLeft: 2,
+                totalTurns: 2,
+                magnitude: mag,
+                source: `${hero.name} (${skill.name})`
+              });
+              logs.push(`⚔️✨ [공격력 증폭] ${hero.name}이(가) 기술 시전 후 2턴간 공격력 +${Math.round(mag * 100)}% 버프를 획득했습니다!`);
             }
           }
 
@@ -4840,6 +4987,10 @@ export const BattleScreen: React.FC = () => {
           targetAllies = [hero];
         }
 
+        if (targetAllies.length === 0) {
+          targetAllies = [hero];
+        }
+
         let efficiency = 1.0;
         let skillAffinity: string[] | undefined = undefined;
         const bookDef = ALL_SKILL_BOOKS.find(sb => sb.skill.id === skill.id || sb.id === skill.id);
@@ -5031,6 +5182,19 @@ export const BattleScreen: React.FC = () => {
             });
             logs.push(`💚✨ [성지 정화 결계] 3턴간 파티 전체에 매 턴 체력 ${Math.round(regenMag * 100)}% 지속 재생을 부여했습니다!`);
           }
+          if (skill.id === 'skill_genesis_halo' || (skill.description && skill.description.includes('창세의 성령')) || (skill.description && skill.description.includes('공격력 버프'))) {
+            const atkMag = Number((0.30 * efficiency * ultMult).toFixed(2));
+            targetAllies.forEach(ally => {
+              applyStatusEffect(ally, {
+                type: 'buff_atk',
+                turnsLeft: 3,
+                totalTurns: 3,
+                magnitude: atkMag,
+                source: '창세의 성령'
+              });
+            });
+            logs.push(`✨⚔️ [창세의 축복] 파티 전원의 공격력이 3턴간 +${Math.round(atkMag * 100)}% 증폭되었습니다!`);
+          }
 
           if (anyRevived) {
             SoundManager.getInstance().play('holy_spell');
@@ -5084,9 +5248,8 @@ export const BattleScreen: React.FC = () => {
             }
           }
 
-          // 💖 [전술 모멘텀 HEAL 뱃지 획득]: 회복이나 재생으로 자신 이외 아군을 치료해주는 경우 획득
-          const healsOtherAlly = targetAllies.some(a => a.id !== hero.id);
-          if (healsOtherAlly) {
+          // 💖 [전술 모멘텀 HEAL 뱃지 획득]: 치유 및 정화 스킬 사용 시 획득
+          if (targetAllies.length > 0) {
             addFeverBadge('heal');
           }
 
@@ -5160,7 +5323,7 @@ export const BattleScreen: React.FC = () => {
             }
 
             // ⚔️ 발할라의 불멸 (공격력 +50% 버프 동시 부여)
-            if (skill.id === 'book_valhalla_aegis' || (skill.description && skill.description.includes('발할라의 불멸'))) {
+            if (skill.id === 'book_valhalla_aegis' || skill.id === 'skill_valhalla_aegis' || (skill.description && skill.description.includes('발할라의 불멸'))) {
               applyStatusEffect(ally, {
                 type: 'buff_atk',
                 turnsLeft: 3,
@@ -5209,12 +5372,12 @@ export const BattleScreen: React.FC = () => {
           } else {
             logs.push(`🛡️ ${hero.name} [${skill.name}] → ${shieldReports.join(', ')} 보호막 부여`);
           }
-        } else if (skill.effectType === 'buff') {
+        } else {
           const sDesc = (skill.description || '').toLowerCase();
           const sid = skill.id || '';
-          const isDefBuff = sDesc.includes('방어') || sDesc.includes('철벽') || sDesc.includes('성역') || sDesc.includes('피해 경감');
-          const isRegen = sDesc.includes('재생') || sDesc.includes('지속 치유') || (sDesc.includes('결계') && sDesc.includes('치유'));
-          const isAtkBuff = sDesc.includes('공격') || sDesc.includes('피해 증폭') || (!isDefBuff && !isRegen);
+          const isDefBuff = skill.effectType === 'buff_def' || sDesc.includes('방어') || sDesc.includes('철벽') || sDesc.includes('성역') || sDesc.includes('피해 경감');
+          const isRegen = skill.effectType === 'regen' || sDesc.includes('재생') || sDesc.includes('지속 치유') || (sDesc.includes('결계') && sDesc.includes('치유'));
+          const isAtkBuff = skill.effectType === 'buff_atk' || sDesc.includes('공격') || sDesc.includes('피해 증폭') || (!isDefBuff && !isRegen);
           const isStealth = sid.includes('stealth') || sid.includes('camouflage') || sDesc.includes('은신');
           const isTimeOrMp = sid.includes('time') || sid.includes('reload') || sid.includes('mana') || sDesc.includes('쿨다운') || sDesc.includes('마나');
 
@@ -5386,6 +5549,9 @@ export const BattleScreen: React.FC = () => {
               });
             }
           });
+          if (isRegen && targetAllies.length > 0) {
+            addFeverBadge('heal');
+          }
           if (targetType === 'all_allies') {
             logs.push(`⚡ ${hero.name} [${skill.name}] → 파티 전원 [${buffSummary}] 증폭 효과 부여!`);
           } else {
@@ -6462,7 +6628,7 @@ export const BattleScreen: React.FC = () => {
           const riposteEvadeBonus = riposteBuff ? (riposteBuff.magnitude || 0.60) : 0;
 
           // 🌌 [보이드 스트라이더 고유 패시브 버프 확인: 공허의 잔영 - 회피율 +10%]
-          const voidBuff = (target.statusEffects || []).find(s => s.name === '공허의 잔영');
+          const voidBuff = (target.statusEffects || []).find(s => s.name === '공허의 잔영' || (s.source && s.source.includes('공허의 잔영')));
           const voidEvadeBonus = voidBuff ? (voidBuff.magnitude || 0.10) : 0;
 
           // 🌟 [행운 기반 아군 회피 판정]: 몬스터 행운(+0.2%) vs 아군 행운(-0.3%) - 중열 회피 보너스 - 반격 회피 보너스 - 공허 잔영 (회피 보정 최대 70% 캡)
@@ -6579,8 +6745,9 @@ export const BattleScreen: React.FC = () => {
             const aliveFrontHero = gm.party.find(p => (p.classId === 'aegis_bastion' || p.position === 'front') && p.currentHp > 0 && p.id !== target.id);
             if (aliveFrontHero) {
               const guardPct = getSynergyBuffMax(activeSyns, 'frontlineGuardPct');
-              // 이지스 바스티온이거나 엄호 가능 시 분담 비율 50%
-              if (guardPct > 0 || aliveFrontHero) {
+              const isAegisGuardian = aliveFrontHero.classId === 'aegis_bastion' || hasAegisCover;
+              // 이지스 바스티온은 고유 패시브로 상시 엄호, 일반 전열 영웅은 시너지의 전열 수호(엄호) 확률(25~50%) 판정
+              if (isAegisGuardian || (guardPct > 0 && Math.random() * 100 < guardPct)) {
                 const effectiveGuardPct = 0.50;
                 guardSharedRawDmg = Math.max(1, Math.floor(rawDmg * effectiveGuardPct));
                 rawDmg = Math.max(1, rawDmg - guardSharedRawDmg);
@@ -7363,6 +7530,9 @@ export const BattleScreen: React.FC = () => {
         gm.settleDungeonInventory(gm.dungeonFloor);
         gm.clearDungeonSession();
         gm.saveGame();
+        if (tutorialStepId && (tutorialStepId.startsWith('TUTORIAL_BATTLE') || tutorialStepId.startsWith('TUTORIAL_EXPLORE'))) {
+          handleAdvanceTutorial('TUTORIAL_CITADEL_FINISH');
+        }
         setTimeout(() => {
           navigateTo('citadel');
         }, 500);
@@ -7453,6 +7623,10 @@ export const BattleScreen: React.FC = () => {
                 allHeroSkills.push(resNormal || s);
               }
             });
+          }
+          const weaponEnchantSkill = hero.equipment?.weapon?.prefix?.grantedSkill;
+          if (weaponEnchantSkill && !allHeroSkills.some(s => s.id === weaponEnchantSkill.id)) {
+            allHeroSkills.push(weaponEnchantSkill);
           }
           const availableSkills = allHeroSkills.filter(s => {
             const cd = heroCooldownsRef.current[`${hero.id}_${s.id}`] || 0;
@@ -7619,7 +7793,7 @@ export const BattleScreen: React.FC = () => {
   const getSkillBtnStyle = (skill: Skill | 'basic') => {
     if (skill === 'basic') return { borderColor: '#8b9bb4', color: '#e2e8f0', label: '일반 공격' };
     if (skill.isSpecial) return { borderColor: '#ffd54f', color: '#ffe57f', label: skill.name.includes('[궁극기]') ? '궁극기' : '고유기', shadow: '0 0 10px #ffd54f55' };
-    if (['heal', 'shield', 'regen', 'buff'].includes(skill.effectType || '')) return { borderColor: '#26a69a', color: '#b2dfdb', label: '지원/마법' };
+    if (['heal', 'shield', 'regen', 'buff', 'buff_atk', 'buff_def'].includes(skill.effectType || '')) return { borderColor: '#26a69a', color: '#b2dfdb', label: '지원/마법' };
     return { borderColor: '#ef5350', color: '#ffcdd2', label: '전투 스킬' };
   };
 
@@ -8421,6 +8595,9 @@ export const BattleScreen: React.FC = () => {
                       gm.settleDungeonInventory(gm.dungeonFloor);
                       gm.clearDungeonSession();
                       gm.saveGame();
+                      if (tutorialStepId && (tutorialStepId.startsWith('TUTORIAL_BATTLE') || tutorialStepId.startsWith('TUTORIAL_EXPLORE'))) {
+                        handleAdvanceTutorial('TUTORIAL_CITADEL_FINISH');
+                      }
                       navigateTo('citadel');
                     };
 
@@ -8464,6 +8641,9 @@ export const BattleScreen: React.FC = () => {
             gm.settleDungeonInventory(gm.dungeonFloor);
             gm.clearDungeonSession();
             gm.saveGame();
+            if (tutorialStepId && (tutorialStepId.startsWith('TUTORIAL_BATTLE') || tutorialStepId.startsWith('TUTORIAL_EXPLORE'))) {
+              handleAdvanceTutorial('TUTORIAL_CITADEL_FINISH');
+            }
             navigateTo('citadel');
           } else {
             if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {
@@ -8485,6 +8665,9 @@ export const BattleScreen: React.FC = () => {
             gm.settleDungeonInventory(gm.dungeonFloor);
             gm.clearDungeonSession();
             gm.saveGame();
+            if (tutorialStepId && (tutorialStepId.startsWith('TUTORIAL_BATTLE') || tutorialStepId.startsWith('TUTORIAL_EXPLORE'))) {
+              handleAdvanceTutorial('TUTORIAL_CITADEL_FINISH');
+            }
             navigateTo('citadel');
           } else {
             if (tutorialStepId && tutorialStepId.startsWith('TUTORIAL_BATTLE')) {

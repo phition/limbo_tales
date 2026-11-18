@@ -24,7 +24,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 40, ether: 2, exp: 30, resources: { leather: 2 } },
     promptKey: 'monster_stalker',
-    imagePath: 'assets/monster_stalker.jpg',
+    imagePath: 'assets/monster_stalker.webp',
     themeColor: 0xef5350,
     description: '공허의 흑무에서 태어난 변이 맹수. 어둠 속에서 불시에 기습합니다.'
   },
@@ -47,7 +47,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 25, ether: 1, exp: 20, resources: { wood: 3 } },
     promptKey: 'monster_cave_bat',
-    imagePath: 'assets/monster_cave_bat.jpg',
+    imagePath: 'assets/monster_cave_bat.webp',
     themeColor: 0x78909c,
     description: '고속으로 날며 음파 충격을 가하는 동굴 군집 몬스터. 속도가 가장 빠르다.'
   },
@@ -70,7 +70,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 35, ether: 2, exp: 27, resources: { herb: 3 } },
     promptKey: 'monster_rot_slime',
-    imagePath: 'assets/monster_rot_slime.jpg',
+    imagePath: 'assets/monster_rot_slime.webp',
     themeColor: 0x8bc34a,
     description: '부패한 에테르에서 태어난 녹색 점액 괴물. 느리지만 체력이 높고 광역 독을 뿌린다.'
   },
@@ -93,7 +93,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 45, ether: 3, exp: 32, resources: { leather: 2, wood: 2 } },
     promptKey: 'monster_cursed_revenant',
-    imagePath: 'assets/monster_cursed_revenant.jpg',
+    imagePath: 'assets/monster_cursed_revenant.webp',
     themeColor: 0xce93d8,
     description: '방주 성채에서 쓰러진 병사의 혼이 공허에 흡수된 언데드. 자신의 HP를 흡수하며 싸운다.'
   },
@@ -117,7 +117,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 55, ether: 2, exp: 42, resources: { wood: 4, leather: 2 } },
     promptKey: 'monster_iron_golem',
-    imagePath: 'assets/monster_iron_golem.jpg',
+    imagePath: 'assets/monster_iron_golem.webp',
     themeColor: 0x90a4ae,
     description: '고대 연금술로 만들어진 철제 자동 병기의 잔해. 방어력이 매우 높고 둔중한 강타로 전열을 부순다.'
   },
@@ -140,7 +140,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 32, ether: 2, exp: 25, resources: { herb: 2 } },
     promptKey: 'monster_shadow_imp',
-    imagePath: 'assets/monster_shadow_imp.jpg',
+    imagePath: 'assets/monster_shadow_imp.webp',
     themeColor: 0x5c6bc0,
     description: '공허에서 분열한 소형 악령. 기절 효과로 아군의 턴을 빼앗는다.'
   },
@@ -168,7 +168,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 75, ether: 5, exp: 65, resources: { silk: 3 } },
     promptKey: 'monster_tomb_banshee',
-    imagePath: 'assets/monster_tomb_banshee.jpg',
+    imagePath: 'assets/monster_tomb_banshee.webp',
     themeColor: 0x80deea,
     description: '납골당의 묘비를 떠도는 원혼. 차가운 비탄의 절규로 대상 파티의 마나를 메마르게 한다.'
   },
@@ -192,7 +192,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 80, ether: 4, exp: 70, resources: { coal: 3, iron: 2 } },
     promptKey: 'monster_crypt_ghoul',
-    imagePath: 'assets/monster_crypt_ghoul.jpg',
+    imagePath: 'assets/monster_crypt_ghoul.webp',
     themeColor: 0x8d6e63,
     description: '어둠 속에서 시체를 파먹고 자란 흉폭한 구울. 강력한 턱과 출혈 공격을 가한다.'
   },
@@ -215,7 +215,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 95, ether: 5, exp: 80, resources: { silk: 4, coal: 2 } },
     promptKey: 'monster_crypt_necromancer',
-    imagePath: 'assets/monster_crypt_necromancer.jpg',
+    imagePath: 'assets/monster_crypt_necromancer.webp',
     themeColor: 0x7e57c2,
     description: '납골당의 원혼들을 부리며 망자를 조종하는 사령술사. 저주와 사령 마법으로 아군을 괴롭힙니다.',
     imagePrompt: 'Dark fantasy anime style, sinister undead crypt necromancer floating above ancient catacomb coffins, draped in tattered obsidian burial robes, skull mask glowing with eerie cyan ghostfire, holding a floating necrotic lantern summoning wailing spectral souls, atmospheric dim crypt lighting, magitech style, clean sharp lineart, 8k'
@@ -243,7 +243,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 120, ether: 8, exp: 110, resources: { crystal: 3, stone: 8 } },
     promptKey: 'monster_crystal_scorpion',
-    imagePath: 'assets/monster_crystal_scorpion.jpg',
+    imagePath: 'assets/monster_crystal_scorpion.webp',
     themeColor: 0x26c6da,
     description: '광맥의 고농도 에테르가 응축된 푸른 수정 외피를 지닌 전갈. 강력한 독침으로 적을 마비시킨다.'
   },
@@ -266,7 +266,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 130, ether: 9, exp: 120, resources: { crystal: 2, iron: 6 } },
     promptKey: 'monster_mana_gargoyle',
-    imagePath: 'assets/monster_mana_gargoyle.jpg',
+    imagePath: 'assets/monster_mana_gargoyle.webp',
     themeColor: 0x4dd0e1,
     description: '석재 조각상에 에테르 마력이 스며들어 깨어난 비행 가고일. 고속으로 급강하하여 후열을 노린다.'
   },
@@ -289,7 +289,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 140, ether: 10, exp: 135, resources: { crystal: 4, stone: 6 } },
     promptKey: 'monster_aether_basilisk',
-    imagePath: 'assets/monster_aether_basilisk.jpg',
+    imagePath: 'assets/monster_aether_basilisk.webp',
     themeColor: 0xc8aa6e,
     description: '에테르 광맥의 결정을 흡수하여 자란 마수. 석화의 시선과 수정 비늘 파편으로 적을 압박합니다.',
     imagePrompt: 'Dark fantasy anime style, serpentine aether basilisk coiled around massive glowing cyan crystal spires, iridescent crystalline reptilian scales reflecting magical light, piercing glowing amber eyes with petrifying glare, subterranean crystal cavern filled with luminous mana fog, sharp cel shading, 8k'
@@ -317,7 +317,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 180, ether: 14, exp: 170, resources: { void_shard: 4, crystal: 2 } },
     promptKey: 'monster_rift_stalker',
-    imagePath: 'assets/monster_rift_stalker.jpg',
+    imagePath: 'assets/monster_rift_stalker.webp',
     themeColor: 0xba68c8,
     description: '시공간의 틈새를 자유자재로 넘나드는 차원 포식자. 방어력을 관통하는 기습 일격을 가한다.'
   },
@@ -340,7 +340,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 200, ether: 16, exp: 185, resources: { void_shard: 5, silk: 3 } },
     promptKey: 'monster_void_beast',
-    imagePath: 'assets/monster_void_beast.jpg',
+    imagePath: 'assets/monster_void_beast.webp',
     themeColor: 0x7e57c2,
     description: '심연의 어둠 속에서 꿈틀거리는 다수의 촉수를 지닌 거대 마물. 광역 출혈과 자가 재생을 구사한다.'
   },
@@ -363,7 +363,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 220, ether: 18, exp: 200, resources: { void_shard: 5, crystal: 3 } },
     promptKey: 'monster_dimension_eater',
-    imagePath: 'assets/monster_dimension_eater.jpg',
+    imagePath: 'assets/monster_dimension_eater.webp',
     themeColor: 0x9c27b0,
     description: '심연의 균열에서 시공간을 집어삼키는 차원 괴수. 공간을 왜곡하여 진형을 붕괴시킵니다.',
     imagePrompt: 'Dark fantasy anime style, cosmic eldritch dimensional devourer floating in shattered purple spacetime rift, floating geometric clockwork plates and dark purple cosmic vortex body, glowing void core pulsing with dimensional anomalies, floating shattered debris, masterpiece, 8k'
@@ -391,7 +391,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 250, ether: 22, exp: 240, resources: { crystal: 4, void_shard: 4 } },
     promptKey: 'monster_altar_cultist',
-    imagePath: 'assets/monster_altar_cultist.jpg',
+    imagePath: 'assets/monster_altar_cultist.webp',
     themeColor: 0xe91e63,
     description: '공허의 침식자를 숭배하며 제단을 수호하는 타락한 사제. 파괴적인 흑염 마법을 퍼붓는다.'
   },
@@ -414,7 +414,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 300, ether: 25, exp: 280, resources: { void_shard: 6, crystal: 5 } },
     promptKey: 'monster_monolith_guardian',
-    imagePath: 'assets/monster_monolith_guardian.jpg',
+    imagePath: 'assets/monster_monolith_guardian.webp',
     themeColor: 0xff7043,
     description: '고대 모노리스의 파편으로 기동하는 거대한 골렘. 철벽의 방패와 무거운 석퇴로 침입자를 짓밟는다.'
   },
@@ -437,7 +437,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 320, ether: 26, exp: 300, resources: { void_shard: 6, crystal: 5 } },
     promptKey: 'monster_primordial_shaman',
-    imagePath: 'assets/monster_primordial_shaman.jpg',
+    imagePath: 'assets/monster_primordial_shaman.webp',
     themeColor: 0xd81b60,
     description: '원초의 제단에서 금단의 의식을 주재하는 고위 주술사. 혈염과 저주로 침입자를 제물로 바칩니다.',
     imagePrompt: 'Dark fantasy anime style, primordial void shaman hovering before an ancient black basalt altar, ritual mask carved from demon bone, draped in crimson ceremonial robes, casting dark blood flame hexes from floating sacrificial totems, starry cosmic void sky background, sharp cel shading, 8k'
@@ -464,7 +464,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 280, ether: 15, exp: 200, resources: { iron: 8, crystal: 3, pure_prefix_stone: 1, pure_suffix_stone: 1 } },
     promptKey: 'monster_dread_knight',
-    imagePath: 'assets/monster_dread_knight.jpg',
+    imagePath: 'assets/monster_dread_knight.webp',
     themeColor: 0xab47bc,
     description: '과거 방주를 수호하다 타락한 영겁의 기사. 단단한 방벽과 저주받은 대검을 휘두른다.'
   },
@@ -496,7 +496,7 @@ export const MONSTERS: Record<string, MonsterData> = {
       dropSkillBookId: 'book_boss_colossus_core'
     },
     promptKey: 'boss_floor_1',
-    imagePath: 'assets/boss_floor_1.jpg',
+    imagePath: 'assets/boss_floor_1.webp',
     themeColor: 0x5c6bc0,
     description: '침묵의 회랑 심부에 잠들어 있던 고대 석조 거신. 가슴의 흑핵에서 뿜어져 나오는 한기로 침입자를 얼어붙게 한다.'
   },
@@ -524,7 +524,7 @@ export const MONSTERS: Record<string, MonsterData> = {
       dropSkillBookId: 'book_boss_deathknight_reap'
     },
     promptKey: 'boss_floor_2',
-    imagePath: 'assets/boss_floor_2.jpg',
+    imagePath: 'assets/boss_floor_2.webp',
     themeColor: 0x78909c,
     description: '납골당의 무수한 원혼을 통솔하는 망령들의 군주. 영혼을 베어넘기는 저주받은 대검을 휘두른다.'
   },
@@ -552,7 +552,7 @@ export const MONSTERS: Record<string, MonsterData> = {
       dropSkillBookId: 'book_boss_behemoth_eruption'
     },
     promptKey: 'boss_floor_3',
-    imagePath: 'assets/boss_floor_3.jpg',
+    imagePath: 'assets/boss_floor_3.webp',
     themeColor: 0x00bcd4,
     description: '에테르 광맥 깊은 곳에서 결정을 먹고 자란 태고의 마도 생명체. 폭발적인 광맥 에너지를 방출한다.'
   },
@@ -580,7 +580,7 @@ export const MONSTERS: Record<string, MonsterData> = {
       dropSkillBookId: 'book_boss_chrono_warp'
     },
     promptKey: 'boss_floor_4',
-    imagePath: 'assets/boss_floor_4.jpg',
+    imagePath: 'assets/boss_floor_4.webp',
     themeColor: 0xab47bc,
     description: '심연의 균열을 조작하여 시공간을 뒤틀어버리는 고대 차원 마도사. 시간의 흐름을 왜곡하여 공격을 무력화한다.'
   },
@@ -620,7 +620,7 @@ export const MONSTERS: Record<string, MonsterData> = {
       }
     },
     promptKey: 'monster_void_overlord',
-    imagePath: 'assets/void_overlord.jpg',
+    imagePath: 'assets/void_overlord.webp',
     themeColor: 0xff416c,
     description: 'Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다.'
   },
@@ -660,7 +660,7 @@ export const MONSTERS: Record<string, MonsterData> = {
       }
     },
     promptKey: 'monster_void_overlord',
-    imagePath: 'assets/void_overlord.jpg',
+    imagePath: 'assets/void_overlord.webp',
     themeColor: 0xff416c,
     description: 'Chapter 1 심연의 근원. HP 40% 이하 시 광폭화, 출혈·흡수 등 복합 상태이상을 동시에 부여한다.'
   },
@@ -685,7 +685,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0xef5350,
     description: '핏빛 성역을 배회하는 흉포한 마수. 피 냄새를 맡으면 무리를 이끌고 광포화합니다.',
     promptKey: 'monster_blood_wolf',
-    imagePath: 'assets/monster_blood_wolf_v2.jpg',
+    imagePath: 'assets/monster_blood_wolf_v2.webp',
     rewards: { exp: 60, gold: 80, ether: 6 }
   },
   'monster_fallen_priest': {
@@ -707,7 +707,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0x7e57c2,
     description: '심연의 어둠에 영혼을 바친 타락한 성직자. 어둠의 권능과 사악한 치유 의식을 행합니다.',
     promptKey: 'monster_fallen_priest',
-    imagePath: 'assets/monster_fallen_priest_v2.jpg',
+    imagePath: 'assets/monster_fallen_priest_v2.webp',
     rewards: { exp: 70, gold: 90, ether: 8 }
   },
   'monster_crimson_vampire': {
@@ -729,7 +729,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0xb71c1c,
     description: '핏빛 성역의 귀족 흡혈귀. 치명적인 흡혈과 박쥐 떼 환영으로 전장을 유린합니다.',
     promptKey: 'monster_crimson_vampire',
-    imagePath: 'assets/monster_crimson_vampire.jpg',
+    imagePath: 'assets/monster_crimson_vampire.webp',
     imagePrompt: 'Dark fantasy anime style, aristocratic crimson vampire noble standing in a gothic cathedral ruin bathed in blood-red moonlight, flowing dark crimson cape, sharp fangs and glowing ruby eyes, holding an ornate blood chalice, fluttering shadow bats in background, magitech style, masterpiece, 8k',
     rewards: { exp: 75, gold: 95, ether: 8 }
   },
@@ -752,7 +752,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     themeColor: 0xd32f2f,
     promptKey: 'boss_floor_6',
-    imagePath: 'assets/boss_floor_6.jpg',
+    imagePath: 'assets/boss_floor_6.webp',
     description: '핏빛 성역의 지배자. 거대한 박쥐 날개와 피의 마법으로 침입자의 생명력을 흡수합니다.',
     rewards: { exp: 350, gold: 450, ether: 30, dropSkillBookId: 'book_boss_blood_monarch' }
   },
@@ -774,7 +774,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0x90caf9,
     description: '망각의 묘지에 갇힌 영혼들의 원념이 뭉쳐진 언데드 유체. 영혼을 얼어붙게 하는 한기를 내뿜습니다.',
     promptKey: 'monster_oblivion_ghost',
-    imagePath: 'assets/monster_oblivion_ghost_v2.jpg',
+    imagePath: 'assets/monster_oblivion_ghost_v2.webp',
     rewards: { exp: 80, gold: 100, ether: 10 }
   },
   'monster_bone_golem': {
@@ -795,7 +795,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0xbcaaa4,
     description: '수천의 유골과 마수의 뼈가 결합되어 탄생한 거대한 뼈의 골렘. 막강한 방어력과 분쇄력을 지닙니다.',
     promptKey: 'monster_bone_golem',
-    imagePath: 'assets/monster_bone_golem_v2.jpg',
+    imagePath: 'assets/monster_bone_golem_v2.webp',
     rewards: { exp: 90, gold: 110, ether: 10, resources: { bone: 3 } }
   },
   'monster_grave_specter': {
@@ -816,7 +816,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0x5c6bc0,
     description: '망각의 묘지를 지키는 유령 기사. 원혼의 한기와 영혼을 베는 녹슨 대검을 휘두릅니다.',
     promptKey: 'monster_grave_specter',
-    imagePath: 'assets/monster_grave_specter.jpg',
+    imagePath: 'assets/monster_grave_specter.webp',
     imagePrompt: 'Dark fantasy anime style, haunting ghostly grave knight encased in rusted gothic plate armor with ethereal cyan flames bursting from visor, wielding a chipped rusted greatsword engulfed in soul fire, ruined foggy cemetery with cracked tombstones, masterpiece, 8k',
     rewards: { exp: 95, gold: 115, ether: 11, resources: { bone: 2 } }
   },
@@ -839,7 +839,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     themeColor: 0x5c6bc0,
     promptKey: 'boss_floor_7',
-    imagePath: 'assets/boss_floor_7.jpg',
+    imagePath: 'assets/boss_floor_7.webp',
     description: '망각의 묘역을 수호하는 죽음의 묘지기. 거대한 영혼의 낫으로 산 자의 생명을 수확합니다.',
     rewards: { exp: 450, gold: 600, ether: 40, dropSkillBookId: 'book_boss_oblivion_scythe' }
   },
@@ -860,7 +860,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0x455a64,
     description: '심연의 저주에 굴복한 고대 성기사. 칠흑의 검과 저주받은 방패로 전열을 압박합니다.',
     promptKey: 'monster_fallen_paladin',
-    imagePath: 'assets/monster_fallen_paladin_v2.jpg',
+    imagePath: 'assets/monster_fallen_paladin_v2.webp',
     rewards: { exp: 100, gold: 130, ether: 12 }
   },
   'monster_inquisitor': {
@@ -881,7 +881,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0xd84315,
     description: '단죄의 성채에서 이단을 심문하던 광기의 집행관. 불타는 사슬과 화형의 불길로 적을 태웁니다.',
     promptKey: 'monster_inquisitor',
-    imagePath: 'assets/monster_inquisitor_v2.jpg',
+    imagePath: 'assets/monster_inquisitor_v2.webp',
     rewards: { exp: 110, gold: 140, ether: 14 }
   },
   'monster_iron_torturer': {
@@ -904,7 +904,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0xd84315,
     description: '단죄의 성채에서 죄인을 처형하던 잔혹한 집행자. 붉게 달아오른 사슬과 철퇴로 적을 파쇄합니다.',
     promptKey: 'monster_iron_torturer',
-    imagePath: 'assets/monster_iron_torturer.jpg',
+    imagePath: 'assets/monster_iron_torturer.webp',
     imagePrompt: 'Dark fantasy anime style, menacing iron torturer executioner clad in spiked black iron armor and iron cage mask, wielding red-hot glowing torture chains and a barbed executioner flail, dark stone fortress torture chamber lit by burning braziers, cinematic lighting, 8k',
     rewards: { exp: 115, gold: 145, ether: 15 }
   },
@@ -927,7 +927,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     themeColor: 0x37474f,
     promptKey: 'boss_floor_8',
-    imagePath: 'assets/boss_floor_8.jpg',
+    imagePath: 'assets/boss_floor_8.webp',
     description: '단죄의 요새를 통솔하던 전설적인 기사단장. 타락한 성역 결계와 무자비한 심판의 검을 휘두릅니다.',
     rewards: { exp: 600, gold: 800, ether: 50, dropSkillBookId: 'book_boss_judgment_sanctum' }
   },
@@ -949,7 +949,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0x29b6f6,
     description: '환영의 미궁에 반사된 다중 차원의 그림자 분신. 실체 없는 공격으로 적의 급소를 유린합니다.',
     promptKey: 'monster_mirror_phantom',
-    imagePath: 'assets/monster_mirror_phantom_v2.jpg',
+    imagePath: 'assets/monster_mirror_phantom_v2.webp',
     rewards: { exp: 130, gold: 160, ether: 16 }
   },
   'monster_prism_weaver': {
@@ -971,7 +971,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0x00bcd4,
     description: '환영의 미궁에서 빛과 거울을 엮어내는 마도 생명체. 굴절된 광선과 만화경 환각을 구사합니다.',
     promptKey: 'monster_prism_weaver',
-    imagePath: 'assets/monster_prism_weaver.jpg',
+    imagePath: 'assets/monster_prism_weaver.webp',
     imagePrompt: 'Dark fantasy anime style, floating geometric prism weaver entity composed of crystalline mirrors and kaleidoscopic light ribbons, spinning sharp glass shards hovering around it, infinite mirrored labyrinth room refracting vibrant spectral light, surreal sci-fi fantasy, masterpiece, 8k',
     rewards: { exp: 140, gold: 170, ether: 18 }
   },
@@ -993,7 +993,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     themeColor: 0x0288d1,
     promptKey: 'boss_floor_9',
-    imagePath: 'assets/boss_floor_9.jpg',
+    imagePath: 'assets/boss_floor_9.webp',
     description: '환영의 미궁 중심에서 차원 공간을 뒤틀어놓는 환각의 대마도사. 수많은 거울 파편으로 전장을 유린합니다.',
     rewards: { exp: 800, gold: 1000, ether: 60, dropSkillBookId: 'book_boss_mirror_kaleidoscope' }
   },
@@ -1017,7 +1017,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0xc62828,
     description: '심연의 가장 깊은 틈새에서 소환된 고위 악마. 치명적인 독과 저주받은 손톱으로 살을 찢습니다.',
     promptKey: 'monster_abyssal_fiend',
-    imagePath: 'assets/monster_abyssal_fiend_v2.jpg',
+    imagePath: 'assets/monster_abyssal_fiend_v2.webp',
     rewards: { exp: 150, gold: 180, ether: 20 }
   },
   'monster_void_stalker': {
@@ -1038,7 +1038,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0x4a148c,
     description: '어둠 속에서 먹잇감을 노리는 공허의 암살자. 기척을 숨기고 다가와 치명적인 일격을 가합니다.',
     promptKey: 'monster_void_stalker',
-    imagePath: 'assets/monster_void_stalker_v2.jpg',
+    imagePath: 'assets/monster_void_stalker_v2.webp',
     rewards: { exp: 170, gold: 200, ether: 25 }
   },
   'monster_abyssal_behemoth': {
@@ -1060,7 +1060,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0x3e2723,
     description: '심연의 밑바닥을 배회하는 거대한 마수. 그 발걸음만으로도 던전 전체가 진동합니다.',
     promptKey: 'monster_abyssal_behemoth',
-    imagePath: 'assets/monster_abyssal_behemoth_v2.jpg',
+    imagePath: 'assets/monster_abyssal_behemoth_v2.webp',
     rewards: { exp: 250, gold: 300, ether: 35 }
   },
   'monster_abyssal_harbinger': {
@@ -1083,7 +1083,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     themeColor: 0x880e4f,
     description: '심연의 심장부에서 종말을 예고하는 고위 악마. 공허의 중력 특이점과 멸망의 파멸인을 펼칩니다.',
     promptKey: 'monster_abyssal_harbinger',
-    imagePath: 'assets/monster_abyssal_harbinger.jpg',
+    imagePath: 'assets/monster_abyssal_harbinger.webp',
     imagePrompt: 'Dark fantasy anime style, colossal abyssal harbinger demon hovering at the core of the abyss, massive obsidian horns crackling with dark lightning, six glowing crimson eyes, surrounded by orbiting black holes and floating dark matter runes, swirling apocalyptic vortex background, masterpiece, 8k',
     rewards: { exp: 180, gold: 220, ether: 26 }
   },
@@ -1108,7 +1108,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     themeColor: 0xb71c1c,
     promptKey: 'boss_floor_10',
-    imagePath: 'assets/boss_floor_10.jpg',
+    imagePath: 'assets/boss_floor_10.webp',
     description: '심연의 심장부에 군림하는 궁극의 공허 군주. 차원 전체를 멸망시킬 종말의 숨결을 내뿜습니다.',
     rewards: { exp: 1500, gold: 2000, ether: 100, dropSkillBookId: 'book_boss_asmodeus_armageddon' }
   },
@@ -1133,7 +1133,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     themeColor: 0x9c27b0,
     promptKey: 'boss_avici_final',
-    imagePath: 'assets/void_overlord.jpg',
+    imagePath: 'assets/void_overlord.webp',
     description: '무간도의 가장 깊은 심연에 도사린 태초의 공허 창조주. 존재 자체로 시공간을 소멸시키는 절대자입니다.',
     rewards: { exp: 8000, gold: 50000, ether: 5000 }
   },
@@ -1158,7 +1158,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 10000, ether: 500, exp: 5000 },
     promptKey: 'nemesis_boss',
-    imagePath: 'assets/void_overlord.jpg',
+    imagePath: 'assets/void_overlord.webp',
     themeColor: 0x9c27b0,
     description: '시공간 균열을 찢고 방주 영지를 침공하는 태초의 공허 지배자.'
   },
@@ -1179,7 +1179,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 3000, ether: 150, exp: 1500 },
     promptKey: 'nemesis_head',
-    imagePath: 'assets/nemesis_head.jpg',
+    imagePath: 'assets/nemesis_head.webp',
     themeColor: 0xef5350,
     description: '공허 군주의 대검을 휘두르며 전열에서 아군을 분쇄하는 워로드 부위.'
   },
@@ -1200,7 +1200,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 4000, ether: 200, exp: 2000 },
     promptKey: 'nemesis_body',
-    imagePath: 'assets/nemesis_body.jpg',
+    imagePath: 'assets/nemesis_body.webp',
     themeColor: 0xce93d8,
     description: '시간 정지장과 마나 엔트로피를 흡수하는 중열 크로노 아콘 부위.'
   },
@@ -1221,7 +1221,7 @@ export const MONSTERS: Record<string, MonsterData> = {
     ],
     rewards: { gold: 3000, ether: 150, exp: 1500 },
     promptKey: 'nemesis_tail',
-    imagePath: 'assets/nemesis_tail.jpg',
+    imagePath: 'assets/nemesis_tail.webp',
     themeColor: 0xc8aa6e,
     description: '치명적인 관통 침과 꼬리 휩쓸기로 후방을 기습하는 레인저 부위.'
   },

@@ -16,6 +16,7 @@ import { SYSTEM_GUIDES, SystemGuideItem } from '../data/systemGuides';
 import { FirebaseService } from './FirebaseService';
 import { db } from './firebaseConfig';
 import { ref, set, onValue, Unsubscribe } from 'firebase/database';
+import { getIdbItem, setIdbItem, removeIdbItem, IDB_STORES } from '../utils/idbStorage';
 
 export interface EncyclopediaPackage {
   version: number;
@@ -71,24 +72,42 @@ export class EncyclopediaDataService {
     });
   }
 
-  /** 로컬 스토리지에서 저장된 백과사전 커스텀 데이터 로드 */
-  private initLocalStorage(): void {
+  /** IndexedDB 및 레거시 로컬 스토리지에서 백과사전 커스텀 데이터 로드 */
+  private async initLocalStorage(): Promise<void> {
     if (typeof window === 'undefined') return;
+
+    // 1. 레거시 localStorage 확인 및 IndexedDB 이전 후 localStorage 즉시 삭제 (용량 절약)
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed && typeof parsed === 'object') {
           this.customOverrides = parsed;
-          console.log('[EncyclopediaDataService] 로컬 커스텀 백과사전 데이터 로드 완료');
+          localStorage.removeItem(STORAGE_KEY);
+          await setIdbItem(IDB_STORES.ENCYCLOPEDIA, 'custom_encyclopedia_data', parsed);
+          console.info('✨ [EncyclopediaDataService] 레거시 백과사전 데이터를 IndexedDB로 이전 완료 (localStorage 공간 회수)');
         }
       }
     } catch (e) {
-      console.warn('[EncyclopediaDataService] 로컬 스토리지 데이터 로드 실패:', e);
+      console.warn('[EncyclopediaDataService] 레거시 마이그레이션 실패:', e);
+    }
+
+    // 2. IndexedDB에서 저장된 데이터 로드
+    if (!this.hasCustomOverrides()) {
+      try {
+        const idbData = await getIdbItem<Partial<EncyclopediaPackage>>(IDB_STORES.ENCYCLOPEDIA, 'custom_encyclopedia_data');
+        if (idbData && typeof idbData === 'object') {
+          this.customOverrides = idbData;
+          console.log('[EncyclopediaDataService] IndexedDB 백과사전 데이터 로드 완료');
+          this.notifyListeners();
+        }
+      } catch (e) {
+        console.warn('[EncyclopediaDataService] IndexedDB 로드 실패:', e);
+      }
     }
   }
 
-  /** Firebase Realtime DB 실시간 동기화 구독 */
+  /** Firebase Realtime DB 실시간 동기화 구독 (IndexedDB 비동기 영속화) */
   private initRealtimeSync(): void {
     if (typeof window === 'undefined' || !db) return;
     try {
@@ -104,9 +123,7 @@ export class EncyclopediaDataService {
               ...this.customOverrides,
               ...remoteData,
             };
-            try {
-              localStorage.setItem(STORAGE_KEY, JSON.stringify(this.customOverrides));
-            } catch (_) {}
+            setIdbItem(IDB_STORES.ENCYCLOPEDIA, 'custom_encyclopedia_data', this.customOverrides).catch(() => {});
             this.notifyListeners();
           }
         },
@@ -268,13 +285,12 @@ export class EncyclopediaDataService {
       classLineages: Array.isArray(parsed.classLineages) ? parsed.classLineages : this.getClassLineages(),
     };
 
-    // 5. 로컬 상태 및 로컬 스토리지에 저장
+    // 5. 로컬 상태 및 IndexedDB에 저장 (localStorage 용량 보호)
     this.customOverrides = newPkg;
+    setIdbItem(IDB_STORES.ENCYCLOPEDIA, 'custom_encyclopedia_data', newPkg).catch(() => {});
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newPkg));
-    } catch (e) {
-      console.warn('[EncyclopediaDataService] localStorage 저장 실패:', e);
-    }
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (_) {}
 
     // 6. Firebase 마스터 계정일 경우 클라우드 실시간 동기화
     let cloudSynced = false;
@@ -307,6 +323,7 @@ export class EncyclopediaDataService {
     this.customOverrides = {};
     try {
       localStorage.removeItem(STORAGE_KEY);
+      await removeIdbItem(IDB_STORES.ENCYCLOPEDIA, 'custom_encyclopedia_data');
     } catch (_) {}
 
     const fb = FirebaseService.getInstance();
