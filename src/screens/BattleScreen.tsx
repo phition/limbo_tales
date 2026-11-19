@@ -1797,9 +1797,14 @@ export const BattleScreen: React.FC = () => {
       origPosSnapshot[h.id] = h.position || 'mid';
     });
     initialPositionsRef.current = origPosSnapshot;
-    // 탐험에서 부여받은 버프/디버프(여신의 가호, 여신의 저주, 출혈 등) 보존
+    // 탐험에서 부여받은 버프/디버프(여신의 가호, 여신의 저주, 출혈 등) 보존 및 정상 생존 대원 사경 플래그 정합성 보장
     party.forEach(h => {
       if (!Array.isArray(h.statusEffects)) h.statusEffects = [];
+      if (h.currentHp > 0) {
+        h.deathCountdown = undefined;
+        h.isDead = false;
+        h.isPermanentlyDead = false;
+      }
     });
 
     // 🌀 전투 스냅샷 복원 체크 (10분 이내 복귀 하이브리드 세션)
@@ -7511,9 +7516,11 @@ export const BattleScreen: React.FC = () => {
         if (h.currentHp > 0) {
           h.isPermanentlyDead = false;
           h.deathCountdown = undefined;
-        } else if (h.deathCountdown !== undefined && h.deathCountdown > 0) {
+          h.isDead = false;
+        } else if (!h.isPermanentlyDead) {
           h.currentHp = 1;
           h.deathCountdown = undefined;
+          h.isDead = false;
         }
         h.statusEffects = [];
       });
@@ -8563,15 +8570,18 @@ export const BattleScreen: React.FC = () => {
                         h.isPermanentlyDead = true;
                         h.currentHp = 0;
                         h.deathCountdown = 0;
+                        h.isDead = true;
                       } else if (h.deathCountdown !== undefined || h.currentHp <= 0) {
                         h.currentHp = 1;
                         h.deathCountdown = undefined;
                         h.isPermanentlyDead = false;
+                        h.isDead = false;
                         survivorsWithTrauma.push(h);
                       } else {
                         // 🛡️ 온전한 생존자: 사경/사망 플래그 완벽 초기화
                         h.deathCountdown = undefined;
                         h.isPermanentlyDead = false;
+                        h.isDead = false;
                       }
                       h.statusEffects = [];
                     });

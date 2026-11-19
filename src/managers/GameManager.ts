@@ -646,6 +646,7 @@ export class GameManager {
     if (hero.currentHp !== undefined && hero.currentHp > 0) {
       hero.isPermanentlyDead = false;
       hero.deathCountdown = undefined;
+      hero.isDead = false;
     } else if (hero.currentHp !== undefined && hero.currentHp <= 0) {
       hero.currentHp = 0;
     }
@@ -1638,6 +1639,11 @@ export class GameManager {
                 if (this.resources.food >= foodCostPerHeal) {
                   this.resources.food -= foodCostPerHeal;
                   hero.currentHp = Math.min(eff.maxHp, hero.currentHp + 5);
+                  if (hero.currentHp > 0) {
+                    hero.deathCountdown = undefined;
+                    hero.isDead = false;
+                    hero.isPermanentlyDead = false;
+                  }
                   healedSomeone = true;
                   
                   if (hero.currentHp >= eff.maxHp) {
@@ -4620,11 +4626,16 @@ export class GameManager {
     // 1. barracks에 실존하고, 입원 환자 목록에 없는 용병만 유지
     this.party = this.party.filter(p => p && p.id && this.barracks.some(b => b.id === p.id) && !this.infirmaryPatients.includes(p.id));
 
-    // 2. barracks의 최신 객체 참조 및 포지션 동기화
+    // 2. barracks의 최신 객체 참조 및 포지션 동기화 (생존 대원 사경/사망 플래그 무결성 복구)
     this.party = this.party.map(p => {
       const live = this.barracks.find(b => b.id === p.id);
       if (live) {
         live.position = p.position || live.position || 'mid';
+        if (live.currentHp > 0) {
+          live.deathCountdown = undefined;
+          live.isDead = false;
+          live.isPermanentlyDead = false;
+        }
         return live;
       }
       return p;
@@ -8552,6 +8563,12 @@ export class GameManager {
 
   public dischargeFromInfirmary(heroId: string): void {
     this.infirmaryPatients = this.infirmaryPatients.filter(id => id !== heroId);
+    const hero = this.barracks.find(h => h.id === heroId);
+    if (hero && hero.currentHp > 0) {
+      hero.deathCountdown = undefined;
+      hero.isDead = false;
+      hero.isPermanentlyDead = false;
+    }
     this.reconcileParty();
     this.addLog(`💉 [생체 복원 병동] 용병이 퇴원했습니다.`, 'system');
     this.emit('partyUpdated', this.party);
@@ -11742,6 +11759,11 @@ export class GameManager {
     if (Array.isArray(this.party)) {
       this.party.forEach(hero => {
         hero.statusEffects = [];
+        if (hero.currentHp > 0) {
+          hero.deathCountdown = undefined;
+          hero.isDead = false;
+          hero.isPermanentlyDead = false;
+        }
       });
     }
     this.emit('partyUpdated');
@@ -11925,6 +11947,8 @@ export class GameManager {
         } else if (hero.currentHp <= 0) {
           hero.currentHp = 1;
           hero.deathCountdown = undefined;
+          hero.isDead = false;
+          hero.isPermanentlyDead = false;
         }
         hero.statusEffects = [];
       });
@@ -12033,6 +12057,8 @@ export class GameManager {
         } else if (hero.currentHp <= 0) {
           hero.currentHp = 1;
           hero.deathCountdown = undefined;
+          hero.isDead = false;
+          hero.isPermanentlyDead = false;
         }
         hero.statusEffects = [];
       });

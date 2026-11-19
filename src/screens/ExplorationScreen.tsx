@@ -2411,6 +2411,7 @@ export const ExplorationScreen: React.FC = () => {
       if (h.currentHp > 0) {
         h.isPermanentlyDead = false;
         h.deathCountdown = undefined;
+        h.isDead = false;
       }
     });
 
