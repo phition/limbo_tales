@@ -1128,7 +1128,9 @@ export class BattleScene extends Phaser.Scene {
       this.time.removeAllEvents();    // ← 모든 지연 타이머 즉시 취소
       this.gm.party.forEach(h => { h.statusEffects = []; });
       
-      this.monsters.forEach(m => this.gm.claimBattleRewards(m.data));
+      if (this.monsters.length > 0) {
+        this.gm.claimSquadBattleRewards(this.monsters.map(m => m.data));
+      }
       
       const goldSum = this.monsters.reduce((acc, m) => acc + (m.data.rewards.gold || 0), 0);
       const expSum = this.monsters.reduce((acc, m) => acc + (m.data.rewards.exp || 0), 0);

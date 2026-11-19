@@ -4630,13 +4630,13 @@ export class GameManager {
       return p;
     });
 
-    // 3. 중복 용병 제거
+    // 3. 중복 용병 제거 (최대 3명 유지)
     const seenIds = new Set<string>();
     this.party = this.party.filter(p => {
-      if (seenIds.has(p.id)) return false;
+      if (!p || !p.id || seenIds.has(p.id)) return false;
       seenIds.add(p.id);
       return true;
-    });
+    }).slice(0, 3);
 
     // 4. 모든 영웅 스탯(파티 시너지 및 장비 유효 스탯) 동기화
     this.syncAllHeroesStats();
@@ -5960,7 +5960,7 @@ export class GameManager {
     const candPortrait = cand.portraitUrl || CustomAssetService.getRandomGenderPortrait(cand.classId, candGender);
 
     const newHero: Mercenary = this.sanitizeHero({
-      id: `hero_${Date.now()}`,
+      id: `hero_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
       name: cand.name,
       gender: candGender,
       portraitUrl: candPortrait,
@@ -6654,14 +6654,19 @@ export class GameManager {
     });
 
     // EXP 파티 분배
-    const partySize = Math.max(this.party.filter(h => h.currentHp > 0).length, 1);
-    const avgMonsterLvl = Math.round(monsters.reduce((acc, m) => acc + m.level, 0) / monsters.length);
+    const activeParty = this.party.filter(h => !h.isPermanentlyDead);
+    const totalPartyCount = Math.max(activeParty.length, 1);
+    const avgMonsterLvl = Math.round(monsters.reduce((acc, m) => acc + m.level, 0) / Math.max(1, monsters.length));
+    const baseShare = Math.floor(baseTotalExp / totalPartyCount);
 
-    this.party.filter(h => h.currentHp > 0).forEach(hero => {
+    activeParty.forEach(hero => {
+      const isAlive = hero.currentHp > 0;
       const prevLvl = hero.level;
       const levelDiff = avgMonsterLvl - hero.level;
       const expMult = Math.max(0.5, Math.min(2.0, 1.0 + levelDiff * 0.15));
-      const heroExp = Math.floor((baseTotalExp / partySize) * expMult);
+      // 🌟 생존 대원은 정상 분배, 사경/빈사 대원도 참전 공헌 인정치(85%)를 분배하여
+      // 특정 단일 생존자에게 경험치가 3배로 몰리거나(300% 독식) 영구 낙오되는 스노우볼 결함 원천 차단
+      const heroExp = Math.floor(baseShare * (isAlive ? 1.0 : 0.85) * expMult);
       this.gainExp(hero, heroExp);
       if (hero.level > prevLvl) {
         levelUps.push(`${hero.name} (Lv.${prevLvl} ➔ Lv.${hero.level})`);
@@ -6669,13 +6674,12 @@ export class GameManager {
     });
 
     // 💖 [전투 승리 전우애] 사선을 함께 넘긴 파티원 간 유대감 증가 (기본 +1, 신규/소외 대원 +2 보너스)
-    const aliveParty = this.party.filter(h => h.currentHp > 0);
-    for (let i = 0; i < aliveParty.length; i++) {
-      for (let j = i + 1; j < aliveParty.length; j++) {
-        const curBond = this.getBond(aliveParty[i].id, aliveParty[j].id);
+    for (let i = 0; i < activeParty.length; i++) {
+      for (let j = i + 1; j < activeParty.length; j++) {
+        const curBond = this.getBond(activeParty[i].id, activeParty[j].id);
         // 유대감이 25 미만인 초면/신규 관계일 때 사선 승리 전우애 보너스로 +2, 일반 +1
         const bondGain = curBond < 25 ? 2 : 1;
-        this.increaseBond(aliveParty[i].id, aliveParty[j].id, bondGain);
+        this.increaseBond(activeParty[i].id, activeParty[j].id, bondGain);
       }
     }
 
@@ -9381,12 +9385,7 @@ export class GameManager {
     // 파티 경험치 분배
     const expGained = Math.min(600, Math.floor(60 + damage / 1200));
     this.party.forEach(hero => {
-      hero.exp = (hero.exp || 0) + expGained;
-      if (hero.exp >= (hero.expToNext || 100)) {
-        hero.level = (hero.level || 1) + 1;
-        hero.exp -= (hero.expToNext || 100);
-        hero.expToNext = Math.floor((hero.expToNext || 100) * 1.3);
-      }
+      this.gainExp(hero, expGained);
     });
 
     this.addLog(`🌌 [네메시스 토벌] 가한 피해량 ${damage.toLocaleString()}! 투사의 인장 🪙+${coinsEarned}, 에테르 ✨+${etherEarned}, 파티 경험치 +${expGained} 획득!`, 'reward');
