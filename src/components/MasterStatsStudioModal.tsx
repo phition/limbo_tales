@@ -32,11 +32,9 @@ function formatFullDate(ts: number): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-/** 🌀 유저의 정확한 최고 도달 층수 안전 계산 (무간도 티어, 해금층수, 진행층수 종합 판별) */
-export function getUserReachedFloor(u: UserStatsSummary | { unlockedDungeonFloor?: number; dungeonFloor?: number; unlockedAviciTier?: number }): number {
+/** 🌀 유저의 최고 도달 층수 안전 계산 (unlockedDungeonFloor 기준 정밀 집계) */
+export function getUserReachedFloor(u: UserStatsSummary | { unlockedDungeonFloor?: number; dungeonFloor?: number }): number {
   if (!u) return 1;
-  const avici = Number(u.unlockedAviciTier || 0);
-  if (avici > 0) return 11;
   const unlocked = Number(u.unlockedDungeonFloor || 0);
   const current = Number(u.dungeonFloor || 0);
   return Math.max(1, unlocked, current);
@@ -44,8 +42,8 @@ export function getUserReachedFloor(u: UserStatsSummary | { unlockedDungeonFloor
 
 /** 🏷️ 층수 표시 뱃지 포맷터 */
 export function formatFloorBadge(floor: number, aviciTier: number = 0): { label: string; isHigh: boolean } {
-  if (floor >= 11 || aviciTier > 0) {
-    return { label: aviciTier > 0 ? `무간도 ${aviciTier}T(11F)` : '무간도(11F)', isHigh: true };
+  if (floor >= 11) {
+    return { label: aviciTier > 1 ? `무간도 ${aviciTier}T(11F)` : '무간도(11F)', isHigh: true };
   }
   if (floor === 10) {
     return { label: '10층', isHigh: true };
@@ -136,8 +134,10 @@ function filterUsersByCardKey(users: UserStatsSummary[], filterKey: CardFilterKe
       if (!matchNick && !matchUid && !matchEmail) return false;
     }
 
+    // 🏕️ building 내 cabin level 1 이하 계정 제외
+    if (u.cabinLevel !== undefined && u.cabinLevel <= 1) return false;
+
     const reachedFloor = getUserReachedFloor(u);
-    const aviciTier = u.unlockedAviciTier || 0;
     const rating = u.arenaRating || 0;
     const hasArena = u.arenaGateLevel >= 1 || rating > 0;
     const isBot = u.accountType === 'bot' || Boolean(u.isSuspectedBot);
@@ -162,33 +162,33 @@ function filterUsersByCardKey(users: UserStatsSummary[], filterKey: CardFilterKe
       case 'active7d':
         return u.lastActiveAt > 0 && (now - u.lastActiveAt <= SEVEN_DAYS);
       case 'floor10_cleared':
-        return reachedFloor >= 11 || aviciTier > 0;
+        return reachedFloor >= 11;
       case 'floor10_reached':
         return reachedFloor >= 10;
       case 'floor10_below':
-        return reachedFloor < 10 && aviciTier === 0;
+        return reachedFloor < 10;
       case 'floor_1':
-        return reachedFloor === 1 && aviciTier === 0;
+        return reachedFloor === 1;
       case 'floor_2':
-        return reachedFloor === 2 && aviciTier === 0;
+        return reachedFloor === 2;
       case 'floor_3':
-        return reachedFloor === 3 && aviciTier === 0;
+        return reachedFloor === 3;
       case 'floor_4':
-        return reachedFloor === 4 && aviciTier === 0;
+        return reachedFloor === 4;
       case 'floor_5':
-        return reachedFloor === 5 && aviciTier === 0;
+        return reachedFloor === 5;
       case 'floor_6':
-        return reachedFloor === 6 && aviciTier === 0;
+        return reachedFloor === 6;
       case 'floor_7':
-        return reachedFloor === 7 && aviciTier === 0;
+        return reachedFloor === 7;
       case 'floor_8':
-        return reachedFloor === 8 && aviciTier === 0;
+        return reachedFloor === 8;
       case 'floor_9':
-        return reachedFloor === 9 && aviciTier === 0;
+        return reachedFloor === 9;
       case 'floor_10':
-        return reachedFloor === 10 && aviciTier === 0;
+        return reachedFloor === 10;
       case 'floor_11':
-        return reachedFloor >= 11 || aviciTier > 0;
+        return reachedFloor >= 11;
       case 'arena_all':
         return hasArena;
       case 'arena_high':
@@ -363,21 +363,24 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
       if (filterType === 'inactive3d') {
         return !isReconnectedWithin3Days(u);
       }
+      // 🏕️ building 내 cabin level 1 이하 계정 제외
+      if (u.cabinLevel !== undefined && u.cabinLevel <= 1) return false;
+
       const floor = getUserReachedFloor(u);
       if (filterType === 'floor11') {
-        return floor >= 11 || (u.unlockedAviciTier || 0) > 0;
+        return floor >= 11;
       }
       if (filterType === 'floor10') {
-        return floor >= 10;
+        return floor === 10;
       }
       if (filterType === 'floor7_9') {
-        return floor >= 7 && floor <= 9 && (u.unlockedAviciTier || 0) === 0;
+        return floor >= 7 && floor <= 9;
       }
       if (filterType === 'floor4_6') {
-        return floor >= 4 && floor <= 6 && (u.unlockedAviciTier || 0) === 0;
+        return floor >= 4 && floor <= 6;
       }
       if (filterType === 'floor1_3') {
-        return floor >= 1 && floor <= 3 && (u.unlockedAviciTier || 0) === 0;
+        return floor >= 1 && floor <= 3;
       }
       if (filterType === 'arena') {
         return u.arenaGateLevel >= 1 || u.arenaRating > 0;
@@ -402,7 +405,9 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
   // 🔥 최근 접속 지휘관 전체 목록 (최근 접속 내림차순, 10명 단위 페이징)
   const recentSortedUsers = useMemo(() => {
     if (!stats?.allUsers) return [];
-    return [...stats.allUsers].sort((a, b) => b.lastActiveAt - a.lastActiveAt);
+    return stats.allUsers
+      .filter(u => u.cabinLevel === undefined || u.cabinLevel > 1)
+      .sort((a, b) => b.lastActiveAt - a.lastActiveAt);
   }, [stats?.allUsers]);
 
   const recentTotalPages = Math.max(1, Math.ceil(recentSortedUsers.length / PAGE_SIZE));
@@ -417,6 +422,7 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
     const dist: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0 };
     if (stats?.allUsers) {
       stats.allUsers.forEach(u => {
+        if (u.cabinLevel !== undefined && u.cabinLevel <= 1) return;
         const floor = Math.min(11, getUserReachedFloor(u));
         dist[floor] = (dist[floor] || 0) + 1;
       });
@@ -470,7 +476,7 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 )}
               </div>
               <div className="text-[11px] text-[#8b9bb4]">
-                Firebase Realtime Database 서버단 원자적(Transaction) 통계 노드 &amp; 인덱스 대시보드
+                Firebase Realtime Database 서버단 원자적(Transaction) 통계 노드 &amp; 대시보드 (오두막 Lv.2+ 실활동 지휘관 기준)
               </div>
             </div>
           </div>
@@ -934,7 +940,7 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     </div>
 
                     <div className="p-2 rounded-lg bg-[#141b2a] border border-[#23324d] text-[11px] text-[#8b9bb4]">
-                      💡 10층 보스를 토벌하면 무간도(Avici) 무한 심연이 열리며 최고 층수 `11`이 기록됩니다.
+                      💡 10층 보스를 토벌하면 unlockedDungeonFloor이 11(무간도)로 상승하며 최고 층수로 정밀 집계됩니다.
                     </div>
 
                     {/* 층별 세부 도달 분포 (1F ~ 11F 무간도) */}
@@ -1179,8 +1185,13 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                               {rankLabel}
                             </td>
                             <td className="py-2.5 px-3">
-                              <div className="font-bold text-white text-xs truncate max-w-[180px] notranslate" translate="no">
-                                {u.nickname}
+                              <div className="font-bold text-white text-xs truncate max-w-[180px] notranslate flex items-center gap-1.5" translate="no">
+                                <span className="truncate">{u.nickname}</span>
+                                {u.cabinLevel && u.cabinLevel >= 2 && (
+                                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e33] shrink-0 font-normal" title="생존자 안식처(오두막) 레벨">
+                                    🛖Lv.{u.cabinLevel}
+                                  </span>
+                                )}
                               </div>
                               <div className="text-[10px] text-[#8b9bb4] font-mono truncate max-w-[180px]">
                                 {u.email || `UID: ${u.uid.slice(0, 10)}...`}
@@ -1422,8 +1433,13 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                         return (
                           <tr key={u.uid} className="hover:bg-[#141b2a] transition-colors">
                             <td className="py-2 px-3">
-                              <div className="font-bold text-white text-xs truncate max-w-[180px] notranslate" translate="no">
-                                {u.nickname}
+                              <div className="font-bold text-white text-xs truncate max-w-[180px] notranslate flex items-center gap-1.5" translate="no">
+                                <span className="truncate">{u.nickname}</span>
+                                {u.cabinLevel && u.cabinLevel >= 2 && (
+                                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e33] shrink-0 font-normal" title="생존자 안식처(오두막) 레벨">
+                                    🛖Lv.{u.cabinLevel}
+                                  </span>
+                                )}
                               </div>
                               <div className="text-[10px] text-[#8b9bb4] font-mono truncate max-w-[180px]">
                                 {u.email || `UID: ${u.uid.slice(0, 10)}...`}
@@ -1614,8 +1630,13 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       #{globalIndex}
                     </td>
                     <td className="py-2 px-3">
-                      <div className="font-bold text-white text-xs truncate max-w-[190px] notranslate" translate="no">
-                        {u.nickname}
+                      <div className="font-bold text-white text-xs truncate max-w-[190px] notranslate flex items-center gap-1.5" translate="no">
+                        <span className="truncate">{u.nickname}</span>
+                        {u.cabinLevel && u.cabinLevel >= 2 && (
+                          <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#c8aa6e18] text-[#c8aa6e] border border-[#c8aa6e33] shrink-0 font-normal" title="생존자 안식처(오두막) 레벨">
+                            🛖Lv.{u.cabinLevel}
+                          </span>
+                        )}
                       </div>
                       <div className="text-[10px] text-[#8b9bb4] font-mono truncate max-w-[190px]">
                         {u.email || `UID: ${u.uid.slice(0, 12)}...`}

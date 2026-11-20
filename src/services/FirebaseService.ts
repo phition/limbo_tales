@@ -1208,11 +1208,14 @@ export class FirebaseService {
       // 📊 서버단 10층 통계 및 초경량 활동 인덱스 갱신 (비동기 논블로킹)
       const unlockedFloor = Number((progressData as any).unlockedDungeonFloor || (progressData as any).dungeonFloor || 1);
       const aviciTier = Number((progressData as any).unlockedAviciTier || 0);
+      const buildings = (progressData as any).buildings || (progressData as any).building || {};
+      const cabinLevel = Number(buildings.cabin?.level ?? (progressData as any).cabinLevel ?? 0);
       this.trackDungeonFloorStats(uid, unlockedFloor, aviciTier).catch(() => {});
       this.updateRecentActiveUser({
         dungeonFloor: Number((progressData as any).dungeonFloor || 1),
         unlockedDungeonFloor: unlockedFloor,
         unlockedAviciTier: aviciTier,
+        cabinLevel: cabinLevel,
       }).catch(() => {});
 
       const pingMs = Math.round(performance.now() - startTime);
@@ -2394,10 +2397,11 @@ export class FirebaseService {
   /**
    * 🌀 10층 도달 및 돌파 시 system_stats 서버 카운터 원자적 증가
    */
-  public async trackDungeonFloorStats(uid: string, unlockedFloor: number, aviciTier: number = 0): Promise<void> {
+  public async trackDungeonFloorStats(uid: string, unlockedFloor: number, _aviciTier: number = 0): Promise<void> {
     if (!uid || uid === 'guest') return;
     try {
-      const maxFloor = Math.max(unlockedFloor, aviciTier > 0 ? 11 : 1);
+      // 🌀 최고 도달 층수는 unlockedFloor 기준으로만 판별 (무간도 티어 기본값 1 왜곡 배제)
+      const maxFloor = unlockedFloor;
 
       const reachedKey = `limbo_stat_reached10_${uid}`;
       if (maxFloor >= 10 && !localStorage.getItem(reachedKey)) {
@@ -2406,7 +2410,7 @@ export class FirebaseService {
       }
 
       const clearedKey = `limbo_stat_cleared10_${uid}`;
-      if ((maxFloor >= 11 || aviciTier > 0) && !localStorage.getItem(clearedKey)) {
+      if (maxFloor >= 11 && !localStorage.getItem(clearedKey)) {
         localStorage.setItem(clearedKey, '1');
         runTransaction(ref(db, 'system_stats/clearedFloor10'), (count) => (count || 0) + 1).catch(() => {});
       }
@@ -2469,6 +2473,7 @@ export class FirebaseService {
         dungeonFloor: summary?.dungeonFloor || 1,
         unlockedDungeonFloor: summary?.unlockedDungeonFloor || 1,
         unlockedAviciTier: summary?.unlockedAviciTier || 0,
+        cabinLevel: summary?.cabinLevel ?? 0,
         arenaRating: summary?.arenaRating || 0,
         arenaGateLevel: summary?.arenaGateLevel || 0,
         updatedAt: now
@@ -2506,7 +2511,12 @@ export class FirebaseService {
       try {
         const statsSnap = await get(ref(db, 'system_stats'));
         if (statsSnap.exists()) {
-            const statsVal = statsSnap.val() || {};
+          const statsVal = statsSnap.val() || {};
+          // 🏕️ 오두막(cabin) Lv.1 이하 제외 및 무간도 티어 왜곡 배제 필터링이 적용되지 않은 구버전 통계인 경우 자동 풀 스캔 갱신
+          if (statsVal.filterVersion !== 'cabin_lv2_plus') {
+            return await this.rebuildSystemStats();
+          }
+
           const authenticatedUsers = Number(statsVal.authenticatedUsers || 0);
           const anonymousUsers = Number(statsVal.anonymousUsers || 0);
           const botUsers = Number(statsVal.botUsers || 0);
@@ -2538,8 +2548,9 @@ export class FirebaseService {
                   const rawUnlocked = Number(u.unlockedDungeonFloor || 0);
                   const rawCurrent = Number(u.dungeonFloor || 0);
                   const avici = Number(u.unlockedAviciTier || 0);
-                  let calculatedFloor = Math.max(1, rawUnlocked, rawCurrent);
-                  if (avici > 0) calculatedFloor = Math.max(calculatedFloor, 11);
+                  const cabinLevel = Number(u.cabinLevel || 0);
+                  // 🌀 최고 도달 층수는 unlockedDungeonFloor 기준으로 정밀 집계 (무간도 티어 기본값 1 왜곡 배제)
+                  const calculatedFloor = Math.max(1, rawUnlocked, rawCurrent);
 
                   return {
                     uid: u.uid,
@@ -2555,12 +2566,14 @@ export class FirebaseService {
                     dungeonFloor: rawCurrent,
                     unlockedDungeonFloor: calculatedFloor,
                     unlockedAviciTier: avici,
+                    cabinLevel,
                     arenaRating: Number(u.arenaRating || 0),
                     arenaRank: Number(u.arenaRank || 0),
                     arenaGateLevel: Number(u.arenaGateLevel || 0),
                     hasArenaDeck: Boolean(u.arenaGateLevel >= 1)
                   };
                 })
+                .filter(u => u.cabinLevel === undefined || u.cabinLevel > 1)
                 .sort((a, b) => b.lastActiveAt - a.lastActiveAt);
             }
 
@@ -2751,6 +2764,13 @@ export class FirebaseService {
       const progress = userNode.progress || {};
       const arenaEntry = rawArena[uid] || {};
 
+      // 🏕️ building 내 cabin 의 level 확인: 1 이하인 계정은 통계에서 완전히 제외
+      const buildings = progress.buildings || progress.building || {};
+      const cabinLevel = Number(buildings.cabin?.level ?? progress.cabinLevel ?? 0);
+      if (cabinLevel <= 1) {
+        continue;
+      }
+
       const nickname = profile.nickname || arenaEntry.nickname || uidToCallsign[uid] || `지휘관_${uid.slice(0, 5)}`;
       const email = profile.email || null;
       const isAnonymous = profile.isAnonymous ?? (!email && !profile.playGamesPlayerId);
@@ -2769,12 +2789,10 @@ export class FirebaseService {
         ? Math.max(...progress.purifiedFloors.map((f: any) => Number(f) || 0))
         : 0;
 
+      // 🌀 최고 도달 층수는 unlockedDungeonFloor 기준으로 정밀 집계 (무간도 티어 기본값 1 왜곡 배제)
       let calculatedFloor = Math.max(1, rawUnlocked, rawCurrent);
       if (maxPurified > 0) {
         calculatedFloor = Math.max(calculatedFloor, maxPurified + 1);
-      }
-      if (aviciTier > 0) {
-        calculatedFloor = Math.max(calculatedFloor, 11);
       }
 
       const gateLevel = arenaEntry.gateLevel ?? (progress.buildings?.arenaGate?.level ?? 0);
@@ -2834,7 +2852,7 @@ export class FirebaseService {
       if (calculatedFloor >= 10) {
         reachedFloor10++;
       }
-      if (calculatedFloor >= 11 || aviciTier > 0) {
+      if (calculatedFloor >= 11) {
         clearedFloor10++;
       }
       const floorBucket = Math.min(11, calculatedFloor);
@@ -2869,6 +2887,7 @@ export class FirebaseService {
         dungeonFloor: rawCurrent,
         unlockedDungeonFloor: calculatedFloor,
         unlockedAviciTier: aviciTier,
+        cabinLevel,
         arenaRating: rating,
         arenaRank: rank,
         arenaGateLevel: gateLevel,
@@ -2888,6 +2907,7 @@ export class FirebaseService {
         dungeonFloor: rawCurrent,
         unlockedDungeonFloor: calculatedFloor,
         unlockedAviciTier: aviciTier,
+        cabinLevel,
         arenaRating: rating,
         arenaGateLevel: gateLevel,
         updatedAt: lastActiveAt
@@ -2898,6 +2918,7 @@ export class FirebaseService {
     const recentTopUsers = sortedByActive.slice(0, 10);
 
     const statsPayload = {
+      filterVersion: 'cabin_lv2_plus',
       totalUsers: userSummaries.length,
       authenticatedUsers,
       anonymousUsers,
@@ -2914,9 +2935,10 @@ export class FirebaseService {
     try {
       await update(ref(db, 'system_stats'), statsPayload);
       if (Object.keys(seedingRecentUsers).length > 0) {
-        await update(ref(db, 'recent_active_users'), seedingRecentUsers);
+        // 기존 cabinLevel <= 1 인 계정을 완전히 제거하기 위해 set으로 덮어씀
+        await set(ref(db, 'recent_active_users'), seedingRecentUsers);
       }
-      console.log('✅ [rebuildSystemStats] system_stats 및 recent_active_users 동기화 완료! (구글봇 감지 포함)');
+      console.log('✅ [rebuildSystemStats] system_stats 및 recent_active_users 동기화 완료! (오두막 Lv.2+ 필터 및 무간도 왜곡 배제)');
     } catch (saveErr) {
       console.warn('⚠️ [rebuildSystemStats] 서버 카운터 노드 저장 경고:', saveErr);
     }
@@ -2939,7 +2961,8 @@ export class FirebaseService {
       allUsers: sortedByActive,
       fetchedAt: now,
       dataSource: 'full_scan_synced',
-      isUsersNodeRestricted
+      isUsersNodeRestricted,
+      filterVersion: 'cabin_lv2_plus'
     };
   }
 }
@@ -3055,6 +3078,7 @@ export interface UserStatsSummary {
   dungeonFloor: number;
   unlockedDungeonFloor: number;
   unlockedAviciTier: number;
+  cabinLevel?: number;
   arenaRating: number;
   arenaRank: number;
   arenaGateLevel: number;
@@ -3089,6 +3113,7 @@ export interface MasterUserStatistics {
   fetchedAt: number;
   dataSource?: 'server_counter' | 'full_scan_synced';
   isUsersNodeRestricted?: boolean;
+  filterVersion?: string;
 }
 
 export interface WorldBossNemesisData {
