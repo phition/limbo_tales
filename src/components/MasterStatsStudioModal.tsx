@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Modal } from './Modal';
-import { FirebaseService, MasterUserStatistics, UserStatsSummary } from '../services/FirebaseService';
+import { FirebaseService, MasterUserStatistics, UserStatsSummary, isReconnectedWithin3Days } from '../services/FirebaseService';
 import { getRankBadge } from '../screens/ArenaScreen';
 
 interface Props {
@@ -30,6 +30,27 @@ function formatFullDate(ts: number): string {
   const d = new Date(ts);
   const pad = (n: number) => n.toString().padStart(2, '0');
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+/** 🌀 유저의 정확한 최고 도달 층수 안전 계산 (무간도 티어, 해금층수, 진행층수 종합 판별) */
+export function getUserReachedFloor(u: UserStatsSummary | { unlockedDungeonFloor?: number; dungeonFloor?: number; unlockedAviciTier?: number }): number {
+  if (!u) return 1;
+  const avici = Number(u.unlockedAviciTier || 0);
+  if (avici > 0) return 11;
+  const unlocked = Number(u.unlockedDungeonFloor || 0);
+  const current = Number(u.dungeonFloor || 0);
+  return Math.max(1, unlocked, current);
+}
+
+/** 🏷️ 층수 표시 뱃지 포맷터 */
+export function formatFloorBadge(floor: number, aviciTier: number = 0): { label: string; isHigh: boolean } {
+  if (floor >= 11 || aviciTier > 0) {
+    return { label: aviciTier > 0 ? `무간도 ${aviciTier}T(11F)` : '무간도(11F)', isHigh: true };
+  }
+  if (floor === 10) {
+    return { label: '10층', isHigh: true };
+  }
+  return { label: `${floor}층`, isHigh: false };
 }
 
 const RECOMMENDED_RULES_PREVIEW = `{
@@ -68,6 +89,17 @@ export type CardFilterKey =
   | 'floor10_cleared'
   | 'floor10_reached'
   | 'floor10_below'
+  | 'floor_1'
+  | 'floor_2'
+  | 'floor_3'
+  | 'floor_4'
+  | 'floor_5'
+  | 'floor_6'
+  | 'floor_7'
+  | 'floor_8'
+  | 'floor_9'
+  | 'floor_10'
+  | 'floor_11'
   | 'arena_all'
   | 'arena_high'
   | 'grandmaster'
@@ -93,7 +125,6 @@ interface CardModalState {
 function filterUsersByCardKey(users: UserStatsSummary[], filterKey: CardFilterKey, term: string): UserStatsSummary[] {
   const now = Date.now();
   const ONE_DAY = 24 * 60 * 60 * 1000;
-  const THREE_DAYS = 3 * ONE_DAY;
   const SEVEN_DAYS = 7 * ONE_DAY;
   const cleanTerm = term.trim().toLowerCase();
 
@@ -105,7 +136,7 @@ function filterUsersByCardKey(users: UserStatsSummary[], filterKey: CardFilterKe
       if (!matchNick && !matchUid && !matchEmail) return false;
     }
 
-    const maxFloor = Math.max(u.unlockedDungeonFloor || 1, u.dungeonFloor || 1);
+    const reachedFloor = getUserReachedFloor(u);
     const aviciTier = u.unlockedAviciTier || 0;
     const rating = u.arenaRating || 0;
     const hasArena = u.arenaGateLevel >= 1 || rating > 0;
@@ -123,19 +154,41 @@ function filterUsersByCardKey(users: UserStatsSummary[], filterKey: CardFilterKe
       case 'bot':
         return isBot;
       case 'active3d':
-        return u.lastActiveAt > 0 && (now - u.lastActiveAt <= THREE_DAYS);
+        return isReconnectedWithin3Days(u);
       case 'inactive3d':
-        return !u.lastActiveAt || (now - u.lastActiveAt > THREE_DAYS);
+        return !isReconnectedWithin3Days(u);
       case 'active24h':
         return u.lastActiveAt > 0 && (now - u.lastActiveAt <= ONE_DAY);
       case 'active7d':
         return u.lastActiveAt > 0 && (now - u.lastActiveAt <= SEVEN_DAYS);
       case 'floor10_cleared':
-        return maxFloor >= 11 || aviciTier > 0;
+        return reachedFloor >= 11 || aviciTier > 0;
       case 'floor10_reached':
-        return maxFloor >= 10;
+        return reachedFloor >= 10;
       case 'floor10_below':
-        return maxFloor < 10 && aviciTier === 0;
+        return reachedFloor < 10 && aviciTier === 0;
+      case 'floor_1':
+        return reachedFloor === 1 && aviciTier === 0;
+      case 'floor_2':
+        return reachedFloor === 2 && aviciTier === 0;
+      case 'floor_3':
+        return reachedFloor === 3 && aviciTier === 0;
+      case 'floor_4':
+        return reachedFloor === 4 && aviciTier === 0;
+      case 'floor_5':
+        return reachedFloor === 5 && aviciTier === 0;
+      case 'floor_6':
+        return reachedFloor === 6 && aviciTier === 0;
+      case 'floor_7':
+        return reachedFloor === 7 && aviciTier === 0;
+      case 'floor_8':
+        return reachedFloor === 8 && aviciTier === 0;
+      case 'floor_9':
+        return reachedFloor === 9 && aviciTier === 0;
+      case 'floor_10':
+        return reachedFloor === 10 && aviciTier === 0;
+      case 'floor_11':
+        return reachedFloor >= 11 || aviciTier > 0;
       case 'arena_all':
         return hasArena;
       case 'arena_high':
@@ -170,10 +223,15 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
   // 전체 지휘관 명부 검색 및 필터 상태 (10명 단위 페이징)
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'authenticated' | 'anonymous' | 'bot' | 'active3d' | 'inactive3d' | 'floor10' | 'arena'>('all');
+  const [filterType, setFilterType] = useState<
+    'all' | 'authenticated' | 'anonymous' | 'bot' | 'active3d' | 'inactive3d' | 'floor11' | 'floor10' | 'floor7_9' | 'floor4_6' | 'floor1_3' | 'arena'
+  >('all');
   const [sortField, setSortField] = useState<'lastActive' | 'dungeonFloor' | 'arenaRating' | 'createdAt'>('lastActive');
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 10; // 🌟 10명씩 전수 리스트 보기
+
+  // 🔥 최근 접속 지휘관 탭 전수 10명 단위 페이징 상태
+  const [recentPage, setRecentPage] = useState(1);
 
   // 🗂️ 카드 클릭 시 열리는 상세 전수 리스트 팝업 상태 (10명 단위 페이징)
   const [cardModal, setCardModal] = useState<CardModalState>({
@@ -300,13 +358,26 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
         return isBot;
       }
       if (filterType === 'active3d') {
-        return u.lastActiveAt > 0 && (now - u.lastActiveAt <= THREE_DAYS);
+        return isReconnectedWithin3Days(u);
       }
       if (filterType === 'inactive3d') {
-        return !u.lastActiveAt || (now - u.lastActiveAt > THREE_DAYS);
+        return !isReconnectedWithin3Days(u);
+      }
+      const floor = getUserReachedFloor(u);
+      if (filterType === 'floor11') {
+        return floor >= 11 || (u.unlockedAviciTier || 0) > 0;
       }
       if (filterType === 'floor10') {
-        return Math.max(u.unlockedDungeonFloor || 1, u.dungeonFloor || 1) >= 10 || u.unlockedAviciTier > 0;
+        return floor >= 10;
+      }
+      if (filterType === 'floor7_9') {
+        return floor >= 7 && floor <= 9 && (u.unlockedAviciTier || 0) === 0;
+      }
+      if (filterType === 'floor4_6') {
+        return floor >= 4 && floor <= 6 && (u.unlockedAviciTier || 0) === 0;
+      }
+      if (filterType === 'floor1_3') {
+        return floor >= 1 && floor <= 3 && (u.unlockedAviciTier || 0) === 0;
       }
       if (filterType === 'arena') {
         return u.arenaGateLevel >= 1 || u.arenaRating > 0;
@@ -314,19 +385,44 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
       return true;
     }).sort((a, b) => {
       if (sortField === 'lastActive') return b.lastActiveAt - a.lastActiveAt;
-      if (sortField === 'dungeonFloor') return Math.max(b.unlockedDungeonFloor, b.dungeonFloor) - Math.max(a.unlockedDungeonFloor, a.dungeonFloor);
+      if (sortField === 'dungeonFloor') return getUserReachedFloor(b) - getUserReachedFloor(a);
       if (sortField === 'arenaRating') return b.arenaRating - a.arenaRating;
       if (sortField === 'createdAt') return b.createdAt - a.createdAt;
       return 0;
     });
   }, [stats?.allUsers, searchTerm, filterType, sortField]);
 
-  // 페이지네이션
+  // 페이지네이션 (전체 지휘관 탭)
   const totalPages = Math.max(1, Math.ceil(filteredUsers.length / PAGE_SIZE));
   const paginatedUsers = useMemo(() => {
     const start = (page - 1) * PAGE_SIZE;
     return filteredUsers.slice(start, start + PAGE_SIZE);
   }, [filteredUsers, page]);
+
+  // 🔥 최근 접속 지휘관 전체 목록 (최근 접속 내림차순, 10명 단위 페이징)
+  const recentSortedUsers = useMemo(() => {
+    if (!stats?.allUsers) return [];
+    return [...stats.allUsers].sort((a, b) => b.lastActiveAt - a.lastActiveAt);
+  }, [stats?.allUsers]);
+
+  const recentTotalPages = Math.max(1, Math.ceil(recentSortedUsers.length / PAGE_SIZE));
+  const recentPaginatedUsers = useMemo(() => {
+    const start = (recentPage - 1) * PAGE_SIZE;
+    return recentSortedUsers.slice(start, start + PAGE_SIZE);
+  }, [recentSortedUsers, recentPage]);
+
+  // 🌀 층별 분포 집계 (1F ~ 11F)
+  const floorDist = useMemo(() => {
+    if (stats?.floorDistribution) return stats.floorDistribution;
+    const dist: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0 };
+    if (stats?.allUsers) {
+      stats.allUsers.forEach(u => {
+        const floor = Math.min(11, getUserReachedFloor(u));
+        dist[floor] = (dist[floor] || 0) + 1;
+      });
+    }
+    return dist;
+  }, [stats]);
 
   // 아레나 티어 메타 데이터
   const arenaTierMeta = useMemo(() => {
@@ -567,14 +663,14 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 </div>
               </div>
 
-              {/* 카드 5: 3일 이내 접속한 계정 */}
+              {/* 카드 5: 3일 이내 재접속한 계정 */}
               <div
-                onClick={() => handleOpenCardList('active3d', '3일 이내 접속 계정', '⚡', '#38ef7d')}
+                onClick={() => handleOpenCardList('active3d', '3일 이내 재접속 계정', '⚡', '#38ef7d')}
                 className="p-2.5 rounded-xl bg-[#10221e] border border-[#1b4d3e] hover:border-[#38ef7d] hover:bg-[#142e29] hover:scale-[1.02] active:scale-[0.98] transition-all flex flex-col gap-1 shadow-sm cursor-pointer group"
-                title="클릭하여 3일 이내 활성 지휘관 전수 명부를 확인합니다."
+                title="클릭하여 3일 이내 재접속(리텐션 복귀) 지휘관 전수 명부를 확인합니다."
               >
                 <div className="flex items-center justify-between text-[10px] text-[#81c784]">
-                  <span className="group-hover:text-white transition-colors">3일내 접속</span>
+                  <span className="group-hover:text-white transition-colors">3일내 재접속</span>
                   <span className="text-xs">⚡</span>
                 </div>
                 <div className="text-lg font-bold font-mono text-[#38ef7d] leading-tight">
@@ -587,14 +683,14 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 </div>
               </div>
 
-              {/* 카드 6: 3일 이상 미접속 계정 */}
+              {/* 카드 6: 3일 이상 미재접속 계정 */}
               <div
-                onClick={() => handleOpenCardList('inactive3d', '3일 이상 미접속 휴면 계정', '💤', '#ef5350')}
+                onClick={() => handleOpenCardList('inactive3d', '3일 이상 미재접속 계정', '💤', '#ef5350')}
                 className="p-2.5 rounded-xl bg-[#221715] border border-[#522b28] hover:border-[#ef5350] hover:bg-[#2e1e1b] hover:scale-[1.02] active:scale-[0.98] transition-all flex flex-col gap-1 shadow-sm cursor-pointer group"
-                title="클릭하여 3일 이상 미접속 휴면 계정 전수 명부를 확인합니다."
+                title="클릭하여 3일 이상 미재접속(단발/휴면) 계정 전수 명부를 확인합니다."
               >
                 <div className="flex items-center justify-between text-[10px] text-[#e57373]">
-                  <span className="group-hover:text-white transition-colors">3일이상 미접속</span>
+                  <span className="group-hover:text-white transition-colors">3일이상 미재접속</span>
                   <span className="text-xs">💤</span>
                 </div>
                 <div className="text-lg font-bold font-mono text-[#ef5350] leading-tight">
@@ -670,9 +766,9 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                 }`}
               >
                 <span>🔥</span>
-                <span>최근 접속자 TOP 10</span>
+                <span>최근 접속 순위 (10명씩 보기)</span>
                 <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-[#c8aa6e33] text-[#c8aa6e] font-mono">
-                  {stats.recentTopUsers.length}
+                  {recentSortedUsers.length}
                 </span>
               </button>
               <button
@@ -716,11 +812,11 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                   </div>
 
                   <div className="flex flex-col gap-2.5">
-                    {/* 3일 이내 활성 */}
+                    {/* 3일 이내 재접속 */}
                     <div>
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-[#38ef7d] font-bold flex items-center gap-1">
-                          <span>🟢</span> 3일 이내 접속 (활성 계정)
+                          <span>🟢</span> 3일 이내 재접속 (리텐션 계정)
                         </span>
                         <span className="font-mono text-white">
                           <strong>{stats.activeWithin3Days}명</strong> ({getPct(stats.activeWithin3Days, stats.totalUsers)})
@@ -734,11 +830,11 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       </div>
                     </div>
 
-                    {/* 3일 이상 미접속 */}
+                    {/* 3일 이상 미재접속 */}
                     <div>
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-[#ef5350] font-bold flex items-center gap-1">
-                          <span>💤</span> 3일 이상 미접속 (휴면 계정)
+                          <span>💤</span> 3일 이상 미재접속 (단발/휴면)
                         </span>
                         <span className="font-mono text-white">
                           <strong>{stats.inactiveOver3Days}명</strong> ({getPct(stats.inactiveOver3Days, stats.totalUsers)})
@@ -839,6 +935,41 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
 
                     <div className="p-2 rounded-lg bg-[#141b2a] border border-[#23324d] text-[11px] text-[#8b9bb4]">
                       💡 10층 보스를 토벌하면 무간도(Avici) 무한 심연이 열리며 최고 층수 `11`이 기록됩니다.
+                    </div>
+
+                    {/* 층별 세부 도달 분포 (1F ~ 11F 무간도) */}
+                    <div className="pt-2 border-t border-[#1f2738]/60 flex flex-col gap-1.5">
+                      <div className="flex items-center justify-between text-[11px] text-[#8b9bb4]">
+                        <span className="font-bold text-gray-300">층별 도달 현황 (클릭 시 10명씩 전수 명부)</span>
+                        <span className="text-[10px] text-[#c8aa6e]">정밀 집계</span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                        {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const).map(f => {
+                          const count = floorDist[f] || 0;
+                          const isMax = f === 11;
+                          const is10 = f === 10;
+                          const label = isMax ? '11F (무간도)' : `${f}층`;
+                          const color = isMax ? '#ffd54f' : is10 ? '#ffb74d' : f >= 7 ? '#64b5f6' : f >= 4 ? '#81c784' : '#90a4ae';
+                          return (
+                            <button
+                              key={f}
+                              type="button"
+                              onClick={() => handleOpenCardList(`floor_${f}` as CardFilterKey, `심연 ${label} 도달 지휘관`, isMax ? '👑' : '🌀', color)}
+                              className="p-1.5 rounded-lg bg-[#141b2a] border hover:bg-[#1a2438] active:scale-95 transition-all text-left flex items-center justify-between cursor-pointer group"
+                              style={{ borderColor: `${color}33` }}
+                            >
+                              <div className="flex items-center gap-1 text-[11px]">
+                                <span style={{ color }}>{isMax ? '👑' : `${f}F`}</span>
+                                <span className="text-gray-300 group-hover:text-white font-medium text-[10px]">{isMax ? '무간도' : `${f}층`}</span>
+                              </div>
+                              <div className="text-right">
+                                <span className="text-[11px] font-bold font-mono text-white mr-1">{count}명</span>
+                                <span className="text-[9px] text-[#8b9bb4] font-mono">({getPct(count, stats.totalUsers)})</span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -969,13 +1100,14 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       onClick={() => setActiveTab('top10')}
                       className="text-xs text-[#c8aa6e] hover:underline cursor-pointer"
                     >
-                      전체 10명 보기 ›
+                      최근 접속 순위 전체 보기 ›
                     </button>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {stats.recentTopUsers.slice(0, 3).map((u, idx) => {
+                    {recentSortedUsers.slice(0, 3).map((u, idx) => {
                       const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉';
                       const badge = getRankBadge(u.arenaRating);
+                      const floorBadge = formatFloorBadge(getUserReachedFloor(u), u.unlockedAviciTier);
                       return (
                         <div key={u.uid} className="p-2.5 rounded-lg bg-[#141b2a] border border-[#23324d] flex flex-col gap-1">
                           <div className="flex items-center justify-between">
@@ -988,7 +1120,7 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             {u.nickname}
                           </div>
                           <div className="text-[10px] text-[#8b9bb4] flex items-center justify-between mt-1">
-                            <span>심연 {u.unlockedDungeonFloor >= 11 ? '무간도' : `${u.unlockedDungeonFloor}F`}</span>
+                            <span>심연 {floorBadge.label}</span>
                             <span style={{ color: badge.color }} className="font-bold font-mono">
                               {badge.icon} {u.arenaRating > 0 ? `${u.arenaRating}P` : '미참여'}
                             </span>
@@ -1001,24 +1133,32 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
               </div>
             )}
 
-            {/* 3-B. 🔥 최근 접속자 상위 10명 탭 */}
+            {/* 3-B. 🔥 최근 접속 지휘관 순위 탭 (10명 단위 페이징 정렬) */}
             {activeTab === 'top10' && (
               <div className="p-4 rounded-xl bg-[#0f1420] border border-[#23324d] flex flex-col gap-3">
                 <div className="flex items-center justify-between border-b border-[#1f2738] pb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-base">🔥</span>
-                    <span className="font-bold text-sm text-white">최근 접속자 상위 10명 (Live Top 10)</span>
+                    <span className="font-bold text-sm text-white">최근 접속 지휘관 순위 (10명씩 정렬)</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-[#c8aa6e22] text-[#c8aa6e] font-mono font-bold border border-[#c8aa6e44]">
+                      총 {recentSortedUsers.length}명
+                    </span>
                   </div>
                   <span className="text-xs text-[#8b9bb4]">
-                    최근 로그인 및 세이브 활동 시점 기준 내림차순 정렬
+                    최근 로그인 및 세이브 활동 시점 기준 내림차순 정렬 (페이지당 10명)
                   </span>
+                </div>
+
+                <div className="text-[11px] text-[#8b9bb4] flex justify-between items-center">
+                  <span>전체 <strong className="text-white">{recentSortedUsers.length}</strong>명 중 <strong>{(recentPage - 1) * PAGE_SIZE + 1} ~ {Math.min(recentPage * PAGE_SIZE, recentSortedUsers.length)}</strong>위 표시</span>
+                  <span className="font-mono">페이지 {recentPage} / {recentTotalPages}</span>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
                       <tr className="border-b border-[#23324d] text-[#8b9bb4] text-[11px]">
-                        <th className="py-2 px-2 text-center w-12">순위</th>
+                        <th className="py-2 px-2 text-center w-14">순위</th>
                         <th className="py-2 px-3">지휘관 호출부호 (닉네임)</th>
                         <th className="py-2 px-2 text-center">계정 유형</th>
                         <th className="py-2 px-3">최근 활동 일시</th>
@@ -1027,10 +1167,12 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#1a2333]">
-                      {stats.recentTopUsers.map((u, idx) => {
-                        const rankLabel = idx === 0 ? '🥇 1위' : idx === 1 ? '🥈 2위' : idx === 2 ? '🥉 3위' : `#${idx + 1}`;
+                      {recentPaginatedUsers.map((u, idx) => {
+                        const globalRank = (recentPage - 1) * PAGE_SIZE + idx + 1;
+                        const rankLabel = globalRank === 1 ? '🥇 1위' : globalRank === 2 ? '🥈 2위' : globalRank === 3 ? '🥉 3위' : `#${globalRank}`;
                         const badge = getRankBadge(u.arenaRating);
-                        const isFloor10Plus = Math.max(u.unlockedDungeonFloor, u.dungeonFloor) >= 10;
+                        const reachedFloor = getUserReachedFloor(u);
+                        const floorBadge = formatFloorBadge(reachedFloor, u.unlockedAviciTier);
                         return (
                           <tr key={u.uid} className="hover:bg-[#141b2a] transition-colors">
                             <td className="py-2.5 px-2 text-center font-bold text-white font-mono">
@@ -1041,7 +1183,7 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                                 {u.nickname}
                               </div>
                               <div className="text-[10px] text-[#8b9bb4] font-mono truncate max-w-[180px]">
-                                UID: {u.uid.slice(0, 10)}...
+                                {u.email || `UID: ${u.uid.slice(0, 10)}...`}
                               </div>
                             </td>
                             <td className="py-2.5 px-2 text-center whitespace-nowrap">
@@ -1057,11 +1199,11 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             </td>
                             <td className="py-2.5 px-2 text-center">
                               <span className={`text-xs font-bold font-mono px-2 py-0.5 rounded ${
-                                isFloor10Plus
+                                floorBadge.isHigh
                                   ? 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]'
                                   : 'bg-[#1b263b] text-gray-300'
                               }`}>
-                                {u.unlockedDungeonFloor >= 11 ? '무간도(11F)' : `${u.unlockedDungeonFloor}층`}
+                                {floorBadge.label}
                               </span>
                             </td>
                             <td className="py-2.5 px-3 text-right">
@@ -1085,7 +1227,7 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                           </tr>
                         );
                       })}
-                      {stats.recentTopUsers.length === 0 && (
+                      {recentPaginatedUsers.length === 0 && (
                         <tr>
                           <td colSpan={6} className="py-8 text-center text-[#8b9bb4]">
                             기록된 최근 접속자 데이터가 없습니다.
@@ -1095,6 +1237,43 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     </tbody>
                   </table>
                 </div>
+
+                {/* 페이지네이션 버튼 */}
+                {recentTotalPages > 1 && (
+                  <div className="flex items-center justify-center gap-1.5 pt-2 border-t border-[#1f2738]/60">
+                    <button
+                      className="px-2 py-1 rounded bg-[#182030] hover:bg-[#202b40] disabled:opacity-40 text-xs cursor-pointer"
+                      disabled={recentPage <= 1}
+                      onClick={() => setRecentPage(1)}
+                    >
+                      «
+                    </button>
+                    <button
+                      className="px-2 py-1 rounded bg-[#182030] hover:bg-[#202b40] disabled:opacity-40 text-xs cursor-pointer"
+                      disabled={recentPage <= 1}
+                      onClick={() => setRecentPage(p => Math.max(1, p - 1))}
+                    >
+                      ‹ 이전
+                    </button>
+                    <span className="px-2 text-xs font-mono text-white">
+                      {recentPage} / {recentTotalPages}
+                    </span>
+                    <button
+                      className="px-2 py-1 rounded bg-[#182030] hover:bg-[#202b40] disabled:opacity-40 text-xs cursor-pointer"
+                      disabled={recentPage >= recentTotalPages}
+                      onClick={() => setRecentPage(p => Math.min(recentTotalPages, p + 1))}
+                    >
+                      다음 ›
+                    </button>
+                    <button
+                      className="px-2 py-1 rounded bg-[#182030] hover:bg-[#202b40] disabled:opacity-40 text-xs cursor-pointer"
+                      disabled={recentPage >= recentTotalPages}
+                      onClick={() => setRecentPage(recentTotalPages)}
+                    >
+                      »
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -1194,9 +1373,13 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                       <option value="authenticated">🛡️ 정식 서약 계정만 ({stats.authenticatedUsers})</option>
                       <option value="anonymous">👤 익명 방랑자만 ({stats.anonymousUsers})</option>
                       <option value="bot">🤖 구글봇(의심)만 ({stats.botUsers || 0})</option>
-                      <option value="active3d">🟢 3일 이내 접속 ({stats.activeWithin3Days})</option>
-                      <option value="inactive3d">💤 3일 이상 미접속 ({stats.inactiveOver3Days})</option>
-                      <option value="floor10">🚩 10층 돌파 ({stats.clearedFloor10})</option>
+                      <option value="active3d">🟢 3일 이내 재접속 ({stats.activeWithin3Days})</option>
+                      <option value="inactive3d">💤 3일 이상 미재접속 ({stats.inactiveOver3Days})</option>
+                      <option value="floor11">👑 11층/무간도 돌파 ({floorDist[11] || 0})</option>
+                      <option value="floor10">🚩 10층 도달 ({stats.reachedFloor10})</option>
+                      <option value="floor7_9">🌀 7~9층 탐험 ({(floorDist[7] || 0) + (floorDist[8] || 0) + (floorDist[9] || 0)})</option>
+                      <option value="floor4_6">🌲 4~6층 탐험 ({(floorDist[4] || 0) + (floorDist[5] || 0) + (floorDist[6] || 0)})</option>
+                      <option value="floor1_3">🌱 1~3층 초반 ({(floorDist[1] || 0) + (floorDist[2] || 0) + (floorDist[3] || 0)})</option>
                       <option value="arena">⚔️ 아레나 등록 ({stats.totalArenaParticipants})</option>
                     </select>
 
@@ -1234,7 +1417,8 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     <tbody className="divide-y divide-[#1a2333]">
                       {paginatedUsers.map(u => {
                         const badge = getRankBadge(u.arenaRating);
-                        const isFloor10 = Math.max(u.unlockedDungeonFloor, u.dungeonFloor) >= 10;
+                        const reachedFloor = getUserReachedFloor(u);
+                        const floorBadge = formatFloorBadge(reachedFloor, u.unlockedAviciTier);
                         return (
                           <tr key={u.uid} className="hover:bg-[#141b2a] transition-colors">
                             <td className="py-2 px-3">
@@ -1258,9 +1442,9 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                             </td>
                             <td className="py-2 px-2 text-center">
                               <span className={`text-xs font-bold font-mono px-1.5 py-0.5 rounded ${
-                                isFloor10 ? 'bg-[#ffd54f22] text-[#ffd54f]' : 'text-gray-300'
+                                floorBadge.isHigh ? 'bg-[#ffd54f22] text-[#ffd54f]' : 'text-gray-300'
                               }`}>
-                                {u.unlockedDungeonFloor >= 11 ? '무간도' : `${u.unlockedDungeonFloor}F`}
+                                {floorBadge.label}
                               </span>
                             </td>
                             <td className="py-2 px-3 text-right">
@@ -1422,7 +1606,8 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
               {cardPaginatedUsers.map((u, idx) => {
                 const globalIndex = (cardModal.page - 1) * CARD_PAGE_SIZE + idx + 1;
                 const badge = getRankBadge(u.arenaRating);
-                const isFloor10 = Math.max(u.unlockedDungeonFloor, u.dungeonFloor) >= 10;
+                const reachedFloor = getUserReachedFloor(u);
+                const floorBadge = formatFloorBadge(reachedFloor, u.unlockedAviciTier);
                 return (
                   <tr key={u.uid} className="hover:bg-[#141b2a] transition-colors">
                     <td className="py-2 px-2 text-center font-mono text-[11px] text-[#8b9bb4]">
@@ -1449,9 +1634,9 @@ export const MasterStatsStudioModal: React.FC<Props> = ({ open, onClose }) => {
                     </td>
                     <td className="py-2 px-2 text-center">
                       <span className={`text-xs font-bold font-mono px-2 py-0.5 rounded ${
-                        isFloor10 ? 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]' : 'bg-[#1b263b] text-gray-300'
+                        floorBadge.isHigh ? 'bg-[#ffd54f22] text-[#ffd54f] border border-[#ffd54f44]' : 'bg-[#1b263b] text-gray-300'
                       }`}>
-                        {u.unlockedDungeonFloor >= 11 ? '무간도(11F)' : `${u.unlockedDungeonFloor}층`}
+                        {floorBadge.label}
                       </span>
                     </td>
                     <td className="py-2 px-3 text-right">

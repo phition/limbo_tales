@@ -2513,14 +2513,13 @@ export class FirebaseService {
           const totalUsers = Math.max(Number(statsVal.totalUsers || 0), authenticatedUsers + anonymousUsers + botUsers);
 
           if (totalUsers > 0) {
-            // recent_active_users 노드에서 상위 10명만 쿼리 (limitToLast 10)
-            const top10Query = query(ref(db, 'recent_active_users'), orderByChild('lastActiveAt'), limitToLast(10));
-            const top10Snap = await get(top10Query);
-            let top10List: UserStatsSummary[] = [];
+            // recent_active_users 노드에서 전체 활성 사용자 쿼리
+            const recentSnap = await get(ref(db, 'recent_active_users'));
+            let allUsersList: UserStatsSummary[] = [];
 
-            if (top10Snap.exists()) {
-              const topVal = top10Snap.val() as Record<string, any>;
-              top10List = Object.values(topVal)
+            if (recentSnap.exists()) {
+              const recentVal = recentSnap.val() as Record<string, any>;
+              allUsersList = Object.values(recentVal)
                 .map((u: any) => {
                   const isAnon = Boolean(u.isAnonymous);
                   const isBot = Boolean(u.isSuspectedBot || u.isBot) || isSuspectedGoogleBot({
@@ -2536,6 +2535,12 @@ export class FirebaseService {
                   });
                   const accountType: 'authenticated' | 'anonymous' | 'bot' = isBot ? 'bot' : (isAnon ? 'anonymous' : 'authenticated');
 
+                  const rawUnlocked = Number(u.unlockedDungeonFloor || 0);
+                  const rawCurrent = Number(u.dungeonFloor || 0);
+                  const avici = Number(u.unlockedAviciTier || 0);
+                  let calculatedFloor = Math.max(1, rawUnlocked, rawCurrent);
+                  if (avici > 0) calculatedFloor = Math.max(calculatedFloor, 11);
+
                   return {
                     uid: u.uid,
                     nickname: u.nickname || '지휘관',
@@ -2547,9 +2552,9 @@ export class FirebaseService {
                     lastActiveAt: u.lastActiveAt || 0,
                     lastLoginAt: u.lastActiveAt || 0,
                     lastSavedAt: u.lastActiveAt || 0,
-                    dungeonFloor: Number(u.dungeonFloor || 1),
-                    unlockedDungeonFloor: Number(u.unlockedDungeonFloor || 1),
-                    unlockedAviciTier: Number(u.unlockedAviciTier || 0),
+                    dungeonFloor: rawCurrent,
+                    unlockedDungeonFloor: calculatedFloor,
+                    unlockedAviciTier: avici,
                     arenaRating: Number(u.arenaRating || 0),
                     arenaRank: Number(u.arenaRank || 0),
                     arenaGateLevel: Number(u.arenaGateLevel || 0),
@@ -2559,30 +2564,31 @@ export class FirebaseService {
                 .sort((a, b) => b.lastActiveAt - a.lastActiveAt);
             }
 
-            // 헬퍼: DataSnapshot 자식 개수 안전 계산 (v9 modular의 size 프로퍼티 및 객체 키 폴백)
-            const getChildrenCount = (snap: any): number => {
-              if (!snap || !snap.exists()) return 0;
-              if (typeof snap.size === 'number') return snap.size;
-              if (typeof snap.numChildren === 'function') return snap.numChildren();
-              const val = snap.val();
-              return val && typeof val === 'object' ? Object.keys(val).length : 0;
-            };
+            // recent_active_users가 비어있거나 전체 사용자의 50% 미만인 경우 전체 풀 스캔 실행
+            if (allUsersList.length === 0 || allUsersList.length < totalUsers * 0.5) {
+              return await this.rebuildSystemStats();
+            }
 
-            // 최근 3일 이내 활성 유저수 카운트 (startAt 쿼리)
-            const threeDaysAgo = now - THREE_DAYS_MS;
-            const active3dQuery = query(ref(db, 'recent_active_users'), orderByChild('lastActiveAt'), startAt(threeDaysAgo));
-            const active3dSnap = await get(active3dQuery);
-            const activeWithin3Days = getChildrenCount(active3dSnap);
+            // 3일 이내 재접속 계정 정밀 집계 및 층수 분포 집계
+            let activeWithin3Days = 0;
+            const floorDistribution: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0 };
+            allUsersList.forEach(u => {
+              if (isReconnectedWithin3Days(u)) {
+                activeWithin3Days++;
+              }
+              const bucket = Math.min(11, u.unlockedDungeonFloor);
+              floorDistribution[bucket] = (floorDistribution[bucket] || 0) + 1;
+            });
             const inactiveOver3Days = Math.max(0, totalUsers - activeWithin3Days);
 
-            // 24시간 이내 및 7일 이내 보조 카운트
-            const active24hQuery = query(ref(db, 'recent_active_users'), orderByChild('lastActiveAt'), startAt(now - ONE_DAY_MS));
-            const active24hSnap = await get(active24hQuery);
-            const activeWithin24Hours = getChildrenCount(active24hSnap);
-
-            const active7dQuery = query(ref(db, 'recent_active_users'), orderByChild('lastActiveAt'), startAt(now - SEVEN_DAYS_MS));
-            const active7dSnap = await get(active7dQuery);
-            const activeWithin7Days = getChildrenCount(active7dSnap);
+            // 24시간 및 7일 활성 집계
+            let activeWithin24Hours = 0;
+            let activeWithin7Days = 0;
+            allUsersList.forEach(u => {
+              const diff = now - u.lastActiveAt;
+              if (u.lastActiveAt > 0 && diff <= ONE_DAY_MS) activeWithin24Hours++;
+              if (u.lastActiveAt > 0 && diff <= SEVEN_DAYS_MS) activeWithin7Days++;
+            });
 
             const arenaTiers = {
               grandmaster: Number(statsVal.arenaTiers?.grandmaster || 0),
@@ -2600,7 +2606,7 @@ export class FirebaseService {
               arenaTiers.platinum + arenaTiers.gold + arenaTiers.silver + arenaTiers.bronze
             ));
 
-            console.log('⚡ [fetchMasterUserStatistics] 초경량 서버 카운터 모드로 즉시 로드 완료 (트래픽 < 2KB)');
+            console.log('⚡ [fetchMasterUserStatistics] 초경량 서버 카운터 모드로 로드 완료 (전체 유저 명부 포함)');
 
             return {
               totalUsers,
@@ -2613,10 +2619,11 @@ export class FirebaseService {
               activeWithin7Days,
               clearedFloor10: Number(statsVal.clearedFloor10 || 0),
               reachedFloor10: Number(statsVal.reachedFloor10 || 0),
+              floorDistribution: statsVal.floorDistribution || floorDistribution,
               arenaTiers,
               totalArenaParticipants,
-              recentTopUsers: top10List,
-              allUsers: top10List,
+              recentTopUsers: allUsersList.slice(0, 10),
+              allUsers: allUsersList,
               fetchedAt: now,
               dataSource: 'server_counter'
             };
@@ -2720,6 +2727,7 @@ export class FirebaseService {
     let activeWithin7Days = 0;
     let reachedFloor10 = 0;
     let clearedFloor10 = 0;
+    const floorDistribution: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0 };
 
     const arenaTiers = {
       grandmaster: 0,
@@ -2754,10 +2762,20 @@ export class FirebaseService {
 
       const lastActiveAt = Math.max(lastLoginAt, lastSavedAt, arenaUpdatedAt, createdAt);
 
-      const unlockedFloor = Number(progress.unlockedDungeonFloor || progress.dungeonFloor || 1);
-      const currentFloor = Number(progress.dungeonFloor || 1);
+      const rawUnlocked = Number(progress.unlockedDungeonFloor || 0);
+      const rawCurrent = Number(progress.dungeonFloor || 0);
       const aviciTier = Number(progress.unlockedAviciTier || 0);
-      const maxFloor = Math.max(unlockedFloor, currentFloor);
+      const maxPurified = Array.isArray(progress.purifiedFloors) && progress.purifiedFloors.length > 0
+        ? Math.max(...progress.purifiedFloors.map((f: any) => Number(f) || 0))
+        : 0;
+
+      let calculatedFloor = Math.max(1, rawUnlocked, rawCurrent);
+      if (maxPurified > 0) {
+        calculatedFloor = Math.max(calculatedFloor, maxPurified + 1);
+      }
+      if (aviciTier > 0) {
+        calculatedFloor = Math.max(calculatedFloor, 11);
+      }
 
       const gateLevel = arenaEntry.gateLevel ?? (progress.buildings?.arenaGate?.level ?? 0);
       const rating = arenaEntry.rating ?? progress.currentArenaRating ?? 0;
@@ -2771,8 +2789,8 @@ export class FirebaseService {
         isAnonymous,
         createdAt,
         lastActiveAt,
-        dungeonFloor: currentFloor,
-        unlockedDungeonFloor: unlockedFloor,
+        dungeonFloor: rawCurrent,
+        unlockedDungeonFloor: calculatedFloor,
         arenaRating: rating,
         hasArenaDeck
       });
@@ -2793,7 +2811,18 @@ export class FirebaseService {
       if (lastActiveAt > 0 && timeSinceActive <= ONE_DAY_MS) {
         activeWithin24Hours++;
       }
-      if (lastActiveAt > 0 && timeSinceActive <= THREE_DAYS_MS) {
+      // 🟢 최근 3일 이내 재접속(리텐션 활성) 계정 정밀 판별
+      if (isReconnectedWithin3Days({
+        createdAt,
+        lastActiveAt,
+        lastLoginAt,
+        lastSavedAt,
+        dungeonFloor: rawCurrent,
+        unlockedDungeonFloor: calculatedFloor,
+        arenaRating: rating,
+        isSuspectedBot: isBot,
+        accountType
+      })) {
         activeWithin3Days++;
       } else {
         inactiveOver3Days++;
@@ -2802,12 +2831,14 @@ export class FirebaseService {
         activeWithin7Days++;
       }
 
-      if (maxFloor >= 10) {
+      if (calculatedFloor >= 10) {
         reachedFloor10++;
       }
-      if (maxFloor >= 11 || aviciTier > 0) {
+      if (calculatedFloor >= 11 || aviciTier > 0) {
         clearedFloor10++;
       }
+      const floorBucket = Math.min(11, calculatedFloor);
+      floorDistribution[floorBucket] = (floorDistribution[floorBucket] || 0) + 1;
 
       const isParticipant = gateLevel >= 1 || arenaEntry.rating !== undefined || (progress.currentArenaRating && progress.currentArenaRating > 0);
 
@@ -2835,8 +2866,8 @@ export class FirebaseService {
         lastActiveAt,
         lastLoginAt,
         lastSavedAt,
-        dungeonFloor: currentFloor,
-        unlockedDungeonFloor: unlockedFloor,
+        dungeonFloor: rawCurrent,
+        unlockedDungeonFloor: calculatedFloor,
         unlockedAviciTier: aviciTier,
         arenaRating: rating,
         arenaRank: rank,
@@ -2854,8 +2885,8 @@ export class FirebaseService {
         isSuspectedBot: isBot,
         accountType,
         lastActiveAt,
-        dungeonFloor: currentFloor,
-        unlockedDungeonFloor: unlockedFloor,
+        dungeonFloor: rawCurrent,
+        unlockedDungeonFloor: calculatedFloor,
         unlockedAviciTier: aviciTier,
         arenaRating: rating,
         arenaGateLevel: gateLevel,
@@ -2873,6 +2904,7 @@ export class FirebaseService {
       botUsers,
       clearedFloor10,
       reachedFloor10,
+      floorDistribution,
       arenaTiers,
       totalArenaParticipants,
       lastSyncedAt: now
@@ -2900,6 +2932,7 @@ export class FirebaseService {
       activeWithin7Days,
       clearedFloor10,
       reachedFloor10,
+      floorDistribution,
       arenaTiers,
       totalArenaParticipants,
       recentTopUsers,
@@ -2909,6 +2942,42 @@ export class FirebaseService {
       isUsersNodeRestricted
     };
   }
+}
+
+/**
+ * 🟢 최근 3일 이내 재접속(리텐션 활성) 계정 감지 헬퍼
+ * - 단순 단발성 크롤러/봇이나 1회성 설치 후 이탈한 계정을 배제
+ * - 가입 후 일정 시간(10분 이상) 경과 후 재방문했거나, 2층 이상 진행/아레나 참여 기록이 있는 실제 복귀 유저
+ */
+export function isReconnectedWithin3Days(user: {
+  createdAt?: number;
+  lastActiveAt?: number;
+  lastLoginAt?: number;
+  lastSavedAt?: number;
+  dungeonFloor?: number;
+  unlockedDungeonFloor?: number;
+  arenaRating?: number;
+  isSuspectedBot?: boolean;
+  accountType?: string;
+}): boolean {
+  if (user.isSuspectedBot || user.accountType === 'bot') return false;
+  const now = Date.now();
+  const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+  const lastActive = user.lastActiveAt || 0;
+  if (lastActive <= 0 || (now - lastActive > THREE_DAYS_MS)) return false;
+
+  const created = user.createdAt || 0;
+  // 생성 시점 정보가 없거나 3일 이전에 생성된 계정인데 최근 3일 이내 활동했다면 확정적 재접속
+  if (!created || (now - created > THREE_DAYS_MS)) return true;
+
+  // 3일 이내에 신규 가입한 계정인 경우:
+  // 가입 시점과 마지막 활동/로그인/세이브 시점 간격이 10분 이상이거나,
+  // 던전 2층 이상 진행 또는 아레나 참여 등 실질적인 재방문 플레이가 확인되는 경우 재접속으로 판별
+  const activeSpan = lastActive - created;
+  const floor = Math.max(user.dungeonFloor || 1, user.unlockedDungeonFloor || 1);
+  const rating = user.arenaRating || 0;
+
+  return activeSpan >= 10 * 60 * 1000 || floor >= 2 || rating > 0;
 }
 
 /**
@@ -3003,6 +3072,7 @@ export interface MasterUserStatistics {
   activeWithin7Days: number;
   clearedFloor10: number;
   reachedFloor10: number;
+  floorDistribution?: Record<number, number>;
   arenaTiers: {
     grandmaster: number;
     master: number;
