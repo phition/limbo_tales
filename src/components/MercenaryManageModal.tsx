@@ -180,6 +180,10 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                     const eff = gm.getHeroEffectiveStats(hero);
                     const hpPct = Math.max(0, Math.min(100, (hero.currentHp / eff.maxHp) * 100));
                     const mpPct = Math.max(0, Math.min(100, (hero.currentMp / eff.maxMp) * 100));
+                    const isMaxLevel = hero.level >= GameManager.MAX_HERO_LEVEL;
+                    const expToNext = isMaxLevel ? 0 : (hero.expToNext && hero.expToNext !== Infinity ? hero.expToNext : GameManager.calcExpToNext(hero.level));
+                    const currentExp = Math.max(0, hero.exp || 0);
+                    const expPct = isMaxLevel ? 100 : Math.min(100, Math.max(0, expToNext > 0 ? (currentExp / expToNext) * 100 : 0));
                     const isDead = hero.currentHp <= 0;
 
                     return (
@@ -218,10 +222,15 @@ export const MercenaryManageModal: React.FC<Props> = ({ open, onClose, charges, 
                             <div className="text-[10px] text-[#ffd54f] font-mono mt-0.5">
                               {isDead ? tr('⚰️ 심연에서 전사 (유해 긴급 이송 필요)') : tr(posMeta.perk)}
                             </div>
-                            {/* HP / MP 미니바 */}
-                            <div className="flex gap-1 mt-1 max-w-[140px]">
-                              <div className="bar-track flex-1 h-1.5"><div className="bar-fill-hp h-full" style={{ width: `${hpPct}%` }} /></div>
-                              <div className="bar-track flex-1 h-1.5"><div className="bar-fill-mp h-full" style={{ width: `${mpPct}%` }} /></div>
+                            {/* HP / MP / EXP 미니바 */}
+                            <div className="flex flex-col gap-0.5 mt-1 max-w-[160px]">
+                              <div className="flex gap-1">
+                                <div className="bar-track flex-1 h-1.5"><div className="bar-fill-hp h-full" style={{ width: `${hpPct}%` }} /></div>
+                                <div className="bar-track flex-1 h-1.5"><div className="bar-fill-mp h-full" style={{ width: `${mpPct}%` }} /></div>
+                              </div>
+                              <div className="w-full bg-[#0d1424] h-1 rounded-full overflow-hidden border border-[#ffd54f22]" title={`EXP: ${isMaxLevel ? 'MAX' : `${currentExp.toLocaleString()}/${expToNext.toLocaleString()} (${expPct.toFixed(1)}%)`}`}>
+                                <div className="h-full bg-gradient-to-r from-[#d97706] to-[#ffd54f]" style={{ width: `${isMaxLevel ? 100 : expPct}%` }} />
+                              </div>
                             </div>
                           </div>
                         </div>

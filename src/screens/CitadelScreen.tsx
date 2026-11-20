@@ -4302,6 +4302,47 @@ const StatDetailModal: React.FC<{
           </div>
         </div>
 
+        {/* ⭐ 경험치 바 (EXP) */}
+        {(() => {
+          const isMaxLevel = hero.level >= GameManager.MAX_HERO_LEVEL;
+          const expToNext = isMaxLevel ? 0 : (hero.expToNext && hero.expToNext !== Infinity ? hero.expToNext : GameManager.calcExpToNext(hero.level));
+          const currentExp = Math.max(0, hero.exp || 0);
+          const expPct = isMaxLevel ? 100 : Math.min(100, Math.max(0, expToNext > 0 ? (currentExp / expToNext) * 100 : 0));
+          const remExp = isMaxLevel ? 0 : Math.max(0, expToNext - currentExp);
+
+          return (
+            <div className="p-2.5 rounded-xl bg-[#090d16] border border-[#1b2334] flex flex-col gap-1 font-mono">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[#c8aa6e] font-bold flex items-center gap-1">
+                  <span>⭐</span>
+                  <span>{tr('경험치 (EXP)')}</span>
+                </span>
+                <span className="font-bold text-[#ffd54f]">
+                  {isMaxLevel ? (
+                    <span>MAX (최대 레벨)</span>
+                  ) : (
+                    <span>{currentExp.toLocaleString()} / {expToNext.toLocaleString()} ({expPct.toFixed(1)}%)</span>
+                  )}
+                </span>
+              </div>
+              <div className="w-full bg-[#161d2d] h-2 rounded-full overflow-hidden border border-[#ffd54f22]">
+                <div
+                  className="bg-gradient-to-r from-[#d97706] via-[#f59e0b] to-[#ffd54f] h-full rounded-full transition-all duration-300 shadow-[0_0_8px_rgba(255,213,79,0.35)]"
+                  style={{ width: `${isMaxLevel ? 100 : expPct}%` }}
+                />
+              </div>
+              {!isMaxLevel && (
+                <div className="flex justify-between text-[10px] text-[#8b9bb4]">
+                  <span>Lv.{hero.level} ➔ Lv.{hero.level + 1}</span>
+                  <span>
+                    {tr('다음 레벨까지')} <strong className="text-[#ffd54f] font-bold">{remExp.toLocaleString()} EXP</strong> {tr('남음')}
+                  </span>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
         {/* 6 Stats Table */}
         <div className="flex flex-col gap-1.5 bg-[#090d16] p-2 rounded-xl border border-[#1b2334]">
           <div className="grid grid-cols-5 text-[10px] text-[#8b9bb4] font-bold pb-1 border-b border-[#1b2334] px-1">
@@ -5868,12 +5909,18 @@ const BarracksDrawer: React.FC<{
                 {/* 모듈 B: 스탯 */}
                 {(() => {
                   const eff = gm.getHeroEffectiveStats(hero);
+                  const isMaxLevel = hero.level >= GameManager.MAX_HERO_LEVEL;
+                  const expToNext = isMaxLevel ? 0 : (hero.expToNext && hero.expToNext !== Infinity ? hero.expToNext : GameManager.calcExpToNext(hero.level));
+                  const currentExp = Math.max(0, hero.exp || 0);
+                  const expPct = isMaxLevel ? 100 : Math.min(100, Math.max(0, expToNext > 0 ? (currentExp / expToNext) * 100 : 0));
+                  const remExp = isMaxLevel ? 0 : Math.max(0, expToNext - currentExp);
+
                   return (
                     <div className="p-2.5 sm:p-3 bg-[#10141f] border border-[#222d42] rounded-xl flex flex-col gap-2 shadow-sm">
                       <div className="flex items-center justify-between text-xs">
                         <div className="font-extrabold text-[#c8aa6e] flex items-center gap-1.5">
                           <span>📊</span>
-                          <span>{tr('스탯')}</span>
+                          <span>{tr('스탯 & 성장')}</span>
                         </div>
                         <button
                           type="button"
@@ -5883,6 +5930,37 @@ const BarracksDrawer: React.FC<{
                           <span>🔍 {tr('스탯 상세')}</span>
                           <span>›</span>
                         </button>
+                      </div>
+
+                      {/* ⭐ 경험치 바 (EXP) */}
+                      <div className="p-2 rounded-lg bg-[#090e18] border border-[#1a2335] flex flex-col gap-1 font-mono">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-[#8b9bb4] flex items-center gap-1">
+                            <span className="text-[#ffd54f]">⭐</span>
+                            <span className="font-bold text-[#c8aa6e]">{tr('경험치 (EXP)')}</span>
+                          </span>
+                          <span className="text-xs font-bold text-[#ffd54f]">
+                            {isMaxLevel ? (
+                              <span>MAX (최대 레벨)</span>
+                            ) : (
+                              <span>{currentExp.toLocaleString()} / {expToNext.toLocaleString()} ({expPct.toFixed(1)}%)</span>
+                            )}
+                          </span>
+                        </div>
+                        <div className="w-full bg-[#1e2738] h-2 rounded-full overflow-hidden border border-[#ffd54f22]">
+                          <div
+                            className="bg-gradient-to-r from-[#d97706] via-[#f59e0b] to-[#ffd54f] h-full rounded-full transition-all duration-300 shadow-[0_0_8px_rgba(255,213,79,0.35)]"
+                            style={{ width: `${isMaxLevel ? 100 : expPct}%` }}
+                          />
+                        </div>
+                        {!isMaxLevel && (
+                          <div className="flex justify-between text-[9.5px] text-[#8b9bb4]">
+                            <span>Lv.{hero.level} ➔ Lv.{hero.level + 1}</span>
+                            <span>
+                              {tr('다음 레벨까지')} <strong className="text-[#ffd54f] font-bold">{remExp.toLocaleString()} EXP</strong> {tr('남음')}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 font-mono">

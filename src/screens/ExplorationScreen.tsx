@@ -2601,6 +2601,10 @@ export const ExplorationScreen: React.FC = () => {
               const eff = gm.getHeroEffectiveStats(hero);
               const hpPct = Math.max(0, Math.min(100, (hero.currentHp / eff.maxHp) * 100));
               const mpPct = Math.max(0, Math.min(100, (hero.currentMp / eff.maxMp) * 100));
+              const isMaxLevel = hero.level >= GameManager.MAX_HERO_LEVEL;
+              const expToNext = isMaxLevel ? 0 : (hero.expToNext && hero.expToNext !== Infinity ? hero.expToNext : GameManager.calcExpToNext(hero.level));
+              const currentExp = Math.max(0, hero.exp || 0);
+              const expPct = isMaxLevel ? 100 : Math.min(100, Math.max(0, expToNext > 0 ? (currentExp / expToNext) * 100 : 0));
               const posMeta = {
                 front: { label: '전열', color: '#ef5350' },
                 mid:   { label: '중열', color: '#ffd54f' },
@@ -2695,13 +2699,16 @@ export const ExplorationScreen: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* 중단: HP & MP 게이지 바 (위아래 2단 배치) */}
+                  {/* 중단: HP, MP & EXP 게이지 바 (위아래 3단 배치) */}
                   <div className="flex flex-col gap-0.5 mt-0.5">
                     <div className="bar-track w-full" style={{ height: 4 }}>
                       <div className="bar-fill-hp h-full transition-all duration-300" style={{ width: `${hpPct}%` }} />
                     </div>
                     <div className="bar-track w-full" style={{ height: 3.5 }}>
                       <div className="bar-fill-mp h-full transition-all duration-300" style={{ width: `${mpPct}%` }} />
+                    </div>
+                    <div className="bar-track w-full bg-[#11192e] rounded-full overflow-hidden" style={{ height: 2.5 }} title={`EXP: ${isMaxLevel ? 'MAX' : `${currentExp.toLocaleString()}/${expToNext.toLocaleString()} (${expPct.toFixed(1)}%)`}`}>
+                      <div className="h-full bg-gradient-to-r from-[#d97706] to-[#ffd54f] transition-all duration-300" style={{ width: `${isMaxLevel ? 100 : expPct}%` }} />
                     </div>
                   </div>
 

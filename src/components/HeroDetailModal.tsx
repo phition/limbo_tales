@@ -28,6 +28,13 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
   const posLabel = hero.position === 'front' ? '전열' : hero.position === 'back' ? '후열' : '중열';
   const posColor = hero.position === 'front' ? '#ef5350' : hero.position === 'back' ? '#42a5f5' : '#ffd54f';
 
+  // ⭐ 경험치 및 레벨업 필요 잔여 경험치 계산
+  const isMaxLevel = hero.level >= GameManager.MAX_HERO_LEVEL;
+  const expToNext = isMaxLevel ? 0 : (hero.expToNext && hero.expToNext !== Infinity ? hero.expToNext : GameManager.calcExpToNext(hero.level));
+  const currentExp = Math.max(0, hero.exp || 0);
+  const expPct = isMaxLevel ? 100 : Math.min(100, Math.max(0, expToNext > 0 ? (currentExp / expToNext) * 100 : 0));
+  const remExp = isMaxLevel ? 0 : Math.max(0, expToNext - currentExp);
+
   const cls = Object.values(CHARACTER_CLASSES).find(c => c.id === hero.classId);
   const portrait = CustomAssetService.getHeroPortrait(hero);
 
@@ -121,11 +128,11 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
           </div>
         )}
 
-        {/* 체력 & 마나 바 */}
-        <div className="flex flex-col gap-1.5 font-mono">
+        {/* 체력, 마나, 경험치 바 */}
+        <div className="flex flex-col gap-2 font-mono">
           <div>
             <div className="flex justify-between text-xs mb-0.5">
-              <span className="text-[#8b9bb4]">체력 (HP)</span>
+              <span className="text-[#8b9bb4]">{tr('체력 (HP)')}</span>
               <span className="font-bold text-[#ef5350]">{Math.round(hero.currentHp)} / {Math.round(stats.maxHp)} ({Math.round(hpPct)}%)</span>
             </div>
             <div className="bar-track h-2 bg-[#11192e] rounded-full overflow-hidden">
@@ -134,12 +141,44 @@ export const HeroDetailModal: React.FC<Props> = ({ hero, gm, onClose }) => {
           </div>
           <div>
             <div className="flex justify-between text-xs mb-0.5">
-              <span className="text-[#8b9bb4]">마나 (MP)</span>
+              <span className="text-[#8b9bb4]">{tr('마나 (MP)')}</span>
               <span className="font-bold text-[#42a5f5]">{Math.round(hero.currentMp)} / {Math.round(stats.maxMp)} ({Math.round(mpPct)}%)</span>
             </div>
             <div className="bar-track h-2 bg-[#11192e] rounded-full overflow-hidden">
               <div className="bar-fill-mp h-full transition-all duration-300" style={{ width: `${mpPct}%` }} />
             </div>
+          </div>
+          {/* ⭐ 경험치 바 (EXP) */}
+          <div>
+            <div className="flex justify-between text-xs mb-0.5">
+              <span className="text-[#8b9bb4] flex items-center gap-1">
+                <span className="text-[#ffd54f]">⭐</span>
+                <span>{tr('경험치 (EXP)')}</span>
+              </span>
+              <span className="font-bold text-[#ffd54f]">
+                {isMaxLevel ? (
+                  <span className="text-[#ffd54f]">MAX (최대 레벨)</span>
+                ) : (
+                  <span>
+                    {currentExp.toLocaleString()} / {expToNext.toLocaleString()} ({expPct.toFixed(1)}%)
+                  </span>
+                )}
+              </span>
+            </div>
+            <div className="bar-track h-2 bg-[#11192e] rounded-full overflow-hidden border border-[#ffd54f22]">
+              <div
+                className="h-full bg-gradient-to-r from-[#d97706] via-[#f59e0b] to-[#ffd54f] transition-all duration-300 shadow-[0_0_8px_rgba(255,213,79,0.35)]"
+                style={{ width: `${isMaxLevel ? 100 : expPct}%` }}
+              />
+            </div>
+            {!isMaxLevel && (
+              <div className="flex justify-between text-[10px] text-[#8b9bb4] mt-0.5">
+                <span>Lv.{hero.level} ➔ Lv.{hero.level + 1}</span>
+                <span>
+                  {tr('다음 레벨까지')} <strong className="text-[#ffd54f] font-bold">{remExp.toLocaleString()} EXP</strong> {tr('남음')}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
