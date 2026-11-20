@@ -6050,12 +6050,12 @@ const BarracksDrawer: React.FC<{
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
                           <span className="font-bold text-xs text-[#60a5fa]">
-                            {typeof cls.passiveDesc === 'object' && (cls.passiveDesc as any).title ? (cls.passiveDesc as any).title : tr('고유 지속 효과 (패시브)')}
+                            {typeof cls.passiveDesc === 'object' && (cls.passiveDesc as any).title ? tr((cls.passiveDesc as any).title) : tr('고유 지속 효과 (패시브)')}
                           </span>
                           <span className="text-[8.5px] px-1 rounded bg-[#3b82f6]/20 text-[#93c5fd] font-mono">{tr('패시브')}</span>
                         </div>
                         <div className="text-[10px] sm:text-[10.5px] text-[#cbd5e1] mt-0.5 leading-relaxed">
-                          {typeof cls.passiveDesc === 'object' && (cls.passiveDesc as any).description ? (cls.passiveDesc as any).description : String(cls.passiveDesc)}
+                          {typeof cls.passiveDesc === 'object' && (cls.passiveDesc as any).description ? tr((cls.passiveDesc as any).description) : tr(String(cls.passiveDesc))}
                         </div>
                       </div>
                     </div>

@@ -2549,6 +2549,14 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "고유 패시브": "Unique Passive",
     "고유 패시브 능력": "Unique Passive Ability",
     "직업 고유 패시브": "Class Unique Passive",
+    "고유 지속 효과 (패시브)": "Unique Passive Effect (Passive)",
+    "고유 지속 효과": "Unique Passive Effect",
+    "고유 지속": "Unique Persistent",
+    "지속 효과": "Persistent Effect",
+    "지속시간": "Duration",
+    "지속 시간": "Duration",
+    "지속 턴": "Duration Turns",
+    "지속": "Persistent",
     "상시 지속": "Permanent",
     "전투 스킬 (패시브 1 + 액티브 3)": "Combat Skills (Passive 1 + Active 3)",
     "적 전체에 220% 파멸의 일격을 가하고 방어력을 40% 분쇄 (3턴 지속)하며, 2턴간 파티 전원에게 15% 흡혈 버프를 부여합니다.": "Deals 220% ruinous damage to all enemies, shatters defense by 40% (3 turns), and grants a 15% lifesteal buff to all allies for 2 turns.",
@@ -9690,6 +9698,14 @@ export const EXACT_TRANSLATIONS: Record<'en' | 'ja', Record<string, string>> = {
     "고유 패시브": "固有パッシブ",
     "고유 패시브 능력": "固有パッシブ能力",
     "직업 고유 패시브": "職業固有パッシブ",
+    "고유 지속 효과 (패시브)": "固有持続効果（パッシブ）",
+    "고유 지속 효과": "固有持続効果",
+    "고유 지속": "固有持続",
+    "지속 효과": "持続効果",
+    "지속시간": "持続時間",
+    "지속 시간": "持続時間",
+    "지속 턴": "持続ターン",
+    "지속": "持続",
     "상시 지속": "常時持続",
     "전투 스킬 (패시브 1 + 액티브 3)": "戦闘スキル (パッシブ1 + アクティブ3)",
     "적 전체에 220% 파멸의 일격을 가하고 방어력을 40% 분쇄 (3턴 지속)하며, 2턴간 파티 전원에게 15% 흡혈 버프를 부여합니다.": "敵全体に220%の破滅の一撃を与え、防御力を40%粉砕(3ターン持続)し、2ターンの間味方全員に15%の吸血バフを付与します。",
@@ -18894,6 +18910,16 @@ export const LOG_PATTERNS: LogPatternDef[] = [
     pattern: /^💀\s*\[사경 위기\]\s*엄호 중 치명상을 입은\s*(.+?)\s*대원이 사경을 헤맵니다!\s*\(유예\s*(\d+)턴\)$/,
     en: m => `💀 [Death's Door] Suffering a fatal wound while covering an ally, ${trEntity(m[1], 'en')} is at Death's Door! (${m[2]} turns grace)`,
     ja: m => `💀 [死線の危機] 援護中に致命傷を負った${trEntity(m[1], 'ja')}隊員が死線を彷徨っています！(猶予${m[2]}ターン)`
+  },
+  {
+    pattern: /\((\d+)턴\s*지속\)/i,
+    en: m => `(${m[1]} Turns Duration)`,
+    ja: m => `（${m[1]}ターン持続）`
+  },
+  {
+    pattern: /(\d+)턴\s*지속/i,
+    en: m => `${m[1]} Turns Duration`,
+    ja: m => `${m[1]}ターン持続`
   },
   // ── ⚡ Dimensional Arena Combat Logs & Fever Showdown Patterns ──
   // 1. 공격 액션 배너 (공격자 ➔ 스킬 [광역])

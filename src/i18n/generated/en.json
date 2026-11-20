@@ -10210,5 +10210,13 @@
   "혁신적인 [상업 네트워크]를 가동하여 방주 전체의 골드 유지비를 25% 영구 감면하고 최대 골드 적재량을 50만G로 확장하며 2티어 고급 비전서를 입고합니다.": "Operates an innovative [Commercial Network], permanently reducing Ark-wide gold upkeep by 25%, expanding max gold capacity to 500k G, and stocking Tier 2 advanced skill books.",
   "골드 최대 적재 한도와 상업 네트워크 인프라는 어떻게 되나요?": "How do the maximum gold capacity and Commercial Network infrastructure work?",
   "방주의 기본 최대 골드 적재량은 30만G입니다. 황혼의 블랙 마켓을 Lv.5로 증축하여 [상업 네트워크] 인프라 시너지를 활성화하면 전 영지 시설의 골드 유지비 25% 감면과 함께 최대 골드 적재 한도가 50만G로 대폭 확장됩니다.": "The Ark's base maximum gold capacity is 300,000 G. By upgrading the Twilight Black Market to Lv.5 and activating the [Commercial Network] infrastructure synergy, gold upkeep across all territory facilities is discounted by 25%, and the maximum gold capacity is greatly expanded to 500,000 G.",
-  "잉여 자원을 골드로 환전하거나, 구하기 힘든 인챈트 접두/접미 마도석을 급히 조달할 수 있는 유동성 교환 창구입니다. Lv.5 증축 시 [상업 네트워크] 인프라가 활성화되어 전 시설 골드 유지비 -25% 감면 및 최대 골드 적재 한도가 기본 30만에서 50만G로 대폭 확장됩니다.": "A liquidity exchange window for converting surplus resources to gold or procuring rare enchant prefix/suffix magic stones. At Lv.5, the [Commercial Network] activates, granting a 25% gold upkeep discount across all facilities and expanding the max gold capacity from 300k to 500k G."
+  "잉여 자원을 골드로 환전하거나, 구하기 힘든 인챈트 접두/접미 마도석을 급히 조달할 수 있는 유동성 교환 창구입니다. Lv.5 증축 시 [상업 네트워크] 인프라가 활성화되어 전 시설 골드 유지비 -25% 감면 및 최대 골드 적재 한도가 기본 30만에서 50만G로 대폭 확장됩니다.": "A liquidity exchange window for converting surplus resources to gold or procuring rare enchant prefix/suffix magic stones. At Lv.5, the [Commercial Network] activates, granting a 25% gold upkeep discount across all facilities and expanding the max gold capacity from 300k to 500k G.",
+  "고유 지속 효과 (패시브)": "Unique Passive Effect (Passive)",
+  "고유 지속 효과": "Unique Passive Effect",
+  "고유 지속": "Unique Persistent",
+  "지속 효과": "Persistent Effect",
+  "지속시간": "Duration",
+  "지속 시간": "Duration",
+  "지속 턴": "Duration Turns",
+  "지속": "Persistent"
 }
