@@ -303,6 +303,11 @@ interface ArenaCombatant {
   statusEffects: StatusEffect[];
   icon: string;
   portraitUrl?: string;
+  drainPercent?: number;
+  defPenetration?: number;
+  damageBonus?: number;
+  critRateBonus?: number;
+  critDmg?: number;
   deathCountdown?: number;
   isDead?: boolean;
   isPermanentlyDead?: boolean;
@@ -1397,6 +1402,11 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         statusEffects: [],
         icon: allSkills[1]?.icon || cls.skills[0]?.icon || '⚔️',
         portraitUrl: getCombatantPortrait(h),
+        drainPercent: eff.drainPercent,
+        defPenetration: eff.defPenetration,
+        damageBonus: eff.damageBonus,
+        critRateBonus: eff.critRateBonus,
+        critDmg: eff.critDmg,
       };
     });
 
@@ -2228,12 +2238,13 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         }
 
         const magicSchool = getSkillMagicSchool(skill);
-        let critChance = Math.min(0.75, (gm.getCritChance(attacker.luck, 1) / 100));
+        let critChance = Math.min(0.75, (gm.getCritChance(attacker.luck, 1) / 100) + ((attacker.critRateBonus || 0) / 100));
         if (magicSchool === 'holy') {
           critChance = Math.min(1.0, critChance + 0.30); // ✨ 신성: 치명타 확률 30% 상승
         }
         const isCrit = Math.random() < critChance;
         if (isCrit) anyCrit = true;
+        const critMultiplier = attacker.critDmg || 1.5;
 
         let effectiveDef = t.def * ARENA_DEF_SCALE; // 🛡️ 방어력 스케일 적용
         if (magicSchool === 'dark') {
@@ -2242,11 +2253,18 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
         if (skill.piercePct) {
           effectiveDef = effectiveDef * Math.max(0, 1 - (skill.piercePct / 100)); // 🎯 스킬 방어 관통 반영
         }
+        if (attacker.defPenetration) {
+          effectiveDef = effectiveDef * Math.max(0, 1 - (attacker.defPenetration / 100)); // 🗡️ 장비 방어 관통 반영
+        }
         if (attacker.classId === 'omega_deadeye') {
           effectiveDef = effectiveDef * 0.50; // 🎯 오메가 데드아이: 상시 방어 관통 50%
         }
         const defFactor = 1 - (effectiveDef / (effectiveDef + getArenaDRConstant()));
-        let rawDmg = effectiveAtk * (skill.power || 1.0) * defFactor * (0.95 + Math.random() * 0.12);
+        let baseAtkPower = effectiveAtk;
+        if (attacker.damageBonus && attacker.damageBonus > 0) {
+          baseAtkPower = baseAtkPower * (1 + attacker.damageBonus / 100); // 💎 장비 피해량 증폭 반영
+        }
+        let rawDmg = baseAtkPower * (skill.power || 1.0) * defFactor * (0.95 + Math.random() * 0.12);
         if (magicSchool === 'dark') {
           rawDmg = rawDmg * 1.20; // 🔮 암흑: 용병(PvP) 대상 20% 추가 데미지
         }
@@ -2257,13 +2275,15 @@ export const ArenaScreen: React.FC<ArenaScreenProps> = ({ isDrawer = false, onCl
           rawDmg *= 1.20;
           critChance = Math.min(1.0, critChance + 0.20);
         }
-        const minDmg = Math.max(15, Math.floor(effectiveAtk * 0.25));
-        let dmg = Math.max(minDmg, Math.floor(rawDmg * (isCrit ? 1.5 : 1.0)));
+        const minDmg = Math.max(15, Math.floor(baseAtkPower * 0.25));
+        let dmg = Math.max(minDmg, Math.floor(rawDmg * (isCrit ? critMultiplier : 1.0)));
 
-        // 🩸 [흡혈 (Life Steal / Drain) 판정] PVE와 동일하게 흡혈 스킬 발동 시 시전자 체력 회복
+        // 🩸 [흡혈 (Life Steal / Drain) 판정] PVE와 동일하게 흡혈 스킬 또는 장비 흡혈 옵션 발동 시 시전자 체력 회복
         const isDrainSkill = skill.effectType === 'drain' || Boolean(skill.description && (skill.description.includes('흡혈') || skill.description.includes('생명력 흡수')));
-        if (isDrainSkill && dmg > 0) {
-          const drainHeal = Math.min(attacker.maxHp - attacker.currentHp, Math.round(dmg * 0.35));
+        const gearDrainPct = attacker.drainPercent || 0;
+        const totalDrainPct = (isDrainSkill ? 35 : 0) + gearDrainPct;
+        if (totalDrainPct > 0 && dmg > 0) {
+          const drainHeal = Math.min(attacker.maxHp - attacker.currentHp, Math.round(dmg * (totalDrainPct / 100)));
           if (drainHeal > 0) {
             attacker.currentHp += drainHeal;
           }

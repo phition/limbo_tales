@@ -1117,10 +1117,14 @@ export const NemesisView: React.FC = () => {
       else if (posBonus === 'back' && pKey === 'tail') posMult = 1.20;
 
       // B) 기본 위력 및 오퍼레이터 화력 보너스 (+10%)
+      const heroEff = hero.originalHero ? gm.getHeroEffectiveStats(hero.originalHero) : null;
       const pwr = useSkill ? (skill.power || 1.0) : 1.0;
       const opBonus = 1.10;
       const aoeMult = isAoe ? 0.85 : 1.0;
       let rawDmg = Math.floor(hero.atk * pwr * 1.5 * posMult * opBonus * aoeMult);
+      if (heroEff?.damageBonus && heroEff.damageBonus > 0) {
+        rawDmg = Math.floor(rawDmg * (1 + heroEff.damageBonus / 100));
+      }
 
       // 영웅 공격력 버프/디버프 반영
       const atkBuff = (hero.statusEffects || []).find(s => s.type === 'buff_atk');
@@ -1129,7 +1133,6 @@ export const NemesisView: React.FC = () => {
       if (atkDebuff) rawDmg = Math.floor(rawDmg * (1 - (atkDebuff.magnitude || 0.25)));
 
       // C) 치명타 판정
-      const heroEff = hero.originalHero ? gm.getHeroEffectiveStats(hero.originalHero) : null;
       const critBonus = heroEff?.critRateBonus || 0;
       const baseCrit = gm.getCritChance(hero.luck, 1);
       const critChance = Math.min(95, Math.max(5, baseCrit + critBonus + (isUltimate ? 20 : 0)));
@@ -1147,7 +1150,9 @@ export const NemesisView: React.FC = () => {
       const totalDefDebuff = defDebuffs.reduce((sum, s) => sum + (s.magnitude || 0), 0);
       if (totalDefDebuff > 0) partDef = Math.max(0, Math.round(partDef * (1 - Math.min(0.9, totalDefDebuff))));
 
-      const piercePct = (useSkill ? (skill.piercePct || 0) : 0) + (isUltimate ? 20 : 0);
+      // 🎯 방어 관통: 스킬 관통 + 궁극기 보너스(20%) + 장비 추가 옵션(defPenetration)
+      const gearPen = heroEff?.defPenetration || 0;
+      const piercePct = Math.min(100, (useSkill ? (skill.piercePct || 0) : 0) + (isUltimate ? 20 : 0) + gearPen);
       if (piercePct > 0) partDef = Math.round(partDef * (1 - Math.min(100, piercePct) / 100));
 
       const extraCrit = isCrit ? Math.round(rawDmg * (critMult - 1)) : 0;
