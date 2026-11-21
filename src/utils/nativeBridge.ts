@@ -28,10 +28,10 @@ let bgTimerId: ReturnType<typeof setTimeout> | null = null;
 let isInitialized = false;
 
 /**
- * ⏱️ 백그라운드 10분 초과 시 앱 종료 및 던전 전멸 처리 핸들러
+ * ⏱️ 백그라운드 10분 초과 시 앱 안전 종료 및 성채 긴급 철수 처리 핸들러
  */
 export const handleBackgroundTimeout = (gm: GameManager): void => {
-  console.log('[NativeBridge] 백그라운드 10분 초과: 앱 자동 종료 및 던전 전멸 처리 실행');
+  console.log('[NativeBridge] 백그라운드 10분 초과: 성채 긴급 철수 및 안전 귀환 처리 실행');
   const dungeonSession = gm.getDungeonSession();
   const wasInDungeon =
     localStorage.getItem(BACKGROUND_IN_DUNGEON_KEY) === 'true' ||
@@ -40,7 +40,8 @@ export const handleBackgroundTimeout = (gm: GameManager): void => {
     gm.currentScreen === 'battle';
 
   if (wasInDungeon) {
-    gm.resolvePartyWipeout('심연 백그라운드 장기 이탈 (10분 초과 전멸)');
+    gm.addLog('⚠️ [긴급 안전 철수] 장기 백그라운드 체류(10분 초과)로 인해 원정대가 획득한 전리품을 수습하여 성채로 안전하게 철수했습니다.', 'system', 'citadel');
+    gm.settleDungeonInventory(gm.dungeonFloor);
   }
 
   gm.clearDungeonSession();
@@ -53,7 +54,7 @@ export const handleBackgroundTimeout = (gm: GameManager): void => {
 };
 
 /**
- * 🌟 앱 구동 또는 포그라운드 복귀 시 이전 백그라운드 10분 초과 방치 세션 감지 및 하이브리드 복원/전멸 처리
+ * 🌟 앱 구동 또는 포그라운드 복귀 시 이전 백그라운드 10분 초과 방치 세션 감지 및 하이브리드 복원/긴급 철수 처리
  * @returns true if restored to dungeon/battle, false otherwise
  */
 export const checkPendingBackgroundTimeout = (gm: GameManager): boolean => {
@@ -75,8 +76,9 @@ export const checkPendingBackgroundTimeout = (gm: GameManager): boolean => {
     if (bgTime > 0) {
       const elapsed = now - bgTime;
       if (elapsed >= BACKGROUND_TIMEOUT_MS) {
-        console.log(`[NativeBridge] 이전 백그라운드 10분 초과 방치 감지 (${Math.round(elapsed / 1000)}초 경과) -> 전멸 처리`);
-        gm.resolvePartyWipeout('심연 백그라운드 장기 이탈 (10분 초과 전멸)');
+        console.log(`[NativeBridge] 이전 백그라운드 10분 초과 방치 감지 (${Math.round(elapsed / 1000)}초 경과) -> 성채 긴급 안전 철수`);
+        gm.addLog('⚠️ [긴급 안전 철수] 장기 백그라운드 체류(10분 초과)로 인해 원정대가 획득한 전리품을 수습하여 성채로 안전하게 철수했습니다.', 'system', 'citadel');
+        gm.settleDungeonInventory(gm.dungeonFloor);
         gm.clearDungeonSession();
         localStorage.removeItem(BACKGROUND_TIMESTAMP_KEY);
         localStorage.removeItem(BACKGROUND_IN_DUNGEON_KEY);
@@ -128,6 +130,13 @@ export const checkPendingBackgroundTimeout = (gm: GameManager): boolean => {
 const onAppEnterBackground = () => {
   SoundManager.getInstance().pauseBgm();
 
+  // 🔔 전투 및 던전 컴포넌트에 백그라운드 이벤트 전파하여 즉각 스냅샷 동기화 유도
+  try {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('limbo:app_background'));
+    }
+  } catch (_) {}
+
   const gm = GameManager.getInstance();
   const now = Date.now();
   const inDungeon = gm.currentScreen === 'exploration' || gm.currentScreen === 'battle';
@@ -177,9 +186,10 @@ const onAppResumeForeground = () => {
     const bgTime = Number(bgTimeStr);
     const elapsed = Date.now() - bgTime;
     if (elapsed >= BACKGROUND_TIMEOUT_MS) {
-      console.log(`[NativeBridge] 백그라운드 복귀 감지: ${Math.round(elapsed / 1000)}초 경과 (10분 초과) -> 전멸 처리 및 종료`);
+      console.log(`[NativeBridge] 백그라운드 복귀 감지: ${Math.round(elapsed / 1000)}초 경과 (10분 초과) -> 성채 긴급 철수 및 안전 귀환`);
       if (wasInDungeon) {
-        gm.resolvePartyWipeout('심연 백그라운드 장기 이탈 (10분 초과 전멸)');
+        gm.addLog('⚠️ [긴급 안전 철수] 장기 백그라운드 체류(10분 초과)로 인해 원정대가 획득한 전리품을 수습하여 성채로 안전하게 철수했습니다.', 'system', 'citadel');
+        gm.settleDungeonInventory(gm.dungeonFloor);
       }
       gm.clearDungeonSession();
       localStorage.removeItem(BACKGROUND_TIMESTAMP_KEY);

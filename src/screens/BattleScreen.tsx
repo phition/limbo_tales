@@ -1900,6 +1900,14 @@ export const BattleScreen: React.FC = () => {
       return;
     }
 
+    // 🛡️ [안전망] 전투 스냅샷이 없고 gm.currentMonsters도 비어있는 비정상 상태 방어 (멈춤 방지 및 탐험 안전 복귀)
+    if (!battleSnap && (!gm.currentMonsters || gm.currentMonsters.length === 0)) {
+      console.warn('[BattleScreen] 교전 몬스터 데이터 누락 감지 -> 던전 탐험 화면으로 안전하게 복귀합니다.');
+      gm.clearBattleSnapshot();
+      gm.navigateTo('exploration');
+      return;
+    }
+
     const hasBoss = gm.currentMonsters.some(m => m.type === 'boss');
     setIsBossBattle(hasBoss);
 
@@ -2331,6 +2339,37 @@ export const BattleScreen: React.FC = () => {
       }))
     });
   }, [gm, targetedMonsterIdx, isBossBattle]);
+
+  // ── 🌀 초기 전투 진입 시 첫 턴 전 스냅샷 즉시 보존 ───────────────────
+  const initialSnapshotPersistedRef = useRef(false);
+  useEffect(() => {
+    if (!initialSnapshotPersistedRef.current && turnQueue.length > 0 && monsters.length > 0) {
+      initialSnapshotPersistedRef.current = true;
+      persistBattleSnapshot(0);
+    }
+  }, [turnQueue, monsters, persistBattleSnapshot]);
+
+  // ── 🌀 백그라운드 전환 / 브라우저 탭 이탈 시 즉시 전투 세션 및 게임 강제 동기화 ──
+  useEffect(() => {
+    const handleBgSync = () => {
+      if (document.visibilityState === 'hidden' || !battleEndedRef.current) {
+        persistBattleSnapshot();
+        try {
+          gm.saveGame();
+        } catch (_) {}
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleBgSync);
+    window.addEventListener('pagehide', handleBgSync);
+    window.addEventListener('limbo:app_background', handleBgSync);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleBgSync);
+      window.removeEventListener('pagehide', handleBgSync);
+      window.removeEventListener('limbo:app_background', handleBgSync);
+    };
+  }, [persistBattleSnapshot, gm]);
 
   // ── 턴 진행 로직 (상태이상 틱 처리 및 라운드 전환 보호막 만료 처리) ─────────
   const advanceTurn = useCallback(() => {

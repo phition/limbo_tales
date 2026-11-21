@@ -13016,6 +13016,7 @@ export class GameManager {
         dungeonDangerLevel: this.dungeonDangerLevel,
         isOvercharged: this.isOvercharged,
         dungeonInventory: this.dungeonInventory,
+        currentMonsters: this.currentMonsters,
         currentScreen: this.currentScreen,
         unlockedDungeonFloor: this.unlockedDungeonFloor,
         unlockedAviciTier: this.unlockedAviciTier,
@@ -14456,6 +14457,21 @@ export class GameManager {
             }
             return slot;
           });
+        }
+        if (parsed.currentMonsters && Array.isArray(parsed.currentMonsters)) {
+          this.currentMonsters = parsed.currentMonsters as MonsterData[];
+        }
+        if (parsed.currentScreen && typeof parsed.currentScreen === 'string') {
+          if (['citadel', 'exploration', 'battle', 'arena'].includes(parsed.currentScreen)) {
+            let targetScreen = parsed.currentScreen as 'citadel' | 'exploration' | 'battle' | 'arena';
+            // 🛡️ [안전망] 전투 화면 복원 시 교전 중이던 몬스터 및 스냅샷이 부재하면 안전하게 던전 탐험으로 롤백
+            if (targetScreen === 'battle' && (!this.currentMonsters || this.currentMonsters.length === 0) && !this.getBattleSnapshot()) {
+              console.warn('[GameManager] 전투 세션 몬스터 부재 감지 -> 탐험(exploration)으로 안전 복원');
+              targetScreen = 'exploration';
+            }
+            this.currentScreen = targetScreen;
+            this.currentSceneContext = targetScreen;
+          }
         }
         if (parsed.unlockedDungeonFloor) {
           this.unlockedDungeonFloor = Math.max(this.unlockedDungeonFloor || 1, Number(parsed.unlockedDungeonFloor || 1));

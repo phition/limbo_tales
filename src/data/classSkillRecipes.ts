@@ -732,6 +732,7 @@ export const GRIMOIRE_CRAFT_RECIPES: GrimoireRecipe[] = [
       targetType: 'all_enemies',
       power: 1.3,
       effectType: 'damage',
+      piercePct: 100,
       icon: '👥'
     }
   },
