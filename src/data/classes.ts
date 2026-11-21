@@ -125,7 +125,7 @@ export const CHARACTER_CLASSES: Record<string, CharacterClass> = {
       { id: 'phantom_teleport', name: '심연의 도약', description: '[후열 저격] 적 후열에 380% 치명타 일격을 가하고 은신', manaCost: 28, cooldown: 3, targetType: 'single_enemy', power: 3.8, effectType: 'damage', positionBonus: 'back', icon: '👤' },
       { id: 'phantom_clone', name: '분신 난무', description: '적 전체에 120% 방어무시 참격 피해', manaCost: 50, cooldown: 3, targetType: 'all_enemies', power: 1.2, effectType: 'damage', piercePct: 100, icon: '👥' }
     ],
-    specialSkill: { id: 'phantom_ultimate', name: '[궁극기] 무간암영참', description: '전장을 시공간 분신으로 가득 채워 적 전체를 6연속 난무(총 200% 광역 피해)합니다.', manaCost: 75, cooldown: 4, targetType: 'all_enemies', power: 2.0, effectType: 'damage', icon: '⚡', isSpecial: true },
+    specialSkill: { id: 'phantom_ultimate', name: '[궁극기] 무간암영참', description: '전장을 시공간 분신으로 가득 채워 적 전체를 6연속 난무(총 200% 방어무시 광역 피해)합니다.', manaCost: 75, cooldown: 4, targetType: 'all_enemies', power: 2.0, effectType: 'damage', piercePct: 100, icon: '⚡', isSpecial: true },
     passiveDesc: '사신의 징표: 치명타 피해량이 기본 200%에서 280%로 증폭.',
     promptKey: 'hero_shadow_phantom',
     themeColor: 0x1de9b6

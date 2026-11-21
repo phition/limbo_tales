@@ -3520,7 +3520,7 @@ export const BattleScreen: React.FC = () => {
               }
             }
           }
-          if (skill !== 'basic' && (skill.id === 'void_dimension_slash' || skill.id === 'omega_orbital_annihilation' || skill.id === 'val_ragnarok_slash' || skill.id === 'phantom_clone' || skill.id === 'sniper_death_sentence')) {
+          if (skill !== 'basic' && (skill.id === 'void_dimension_slash' || skill.id === 'omega_orbital_annihilation' || skill.id === 'val_ragnarok_slash' || skill.id === 'phantom_clone' || skill.id === 'phantom_ultimate' || skill.id === 'sniper_death_sentence')) {
             heroPiercePct = 100;
           }
           if (hero.classId === 'omega_deadeye') {
@@ -4451,7 +4451,7 @@ export const BattleScreen: React.FC = () => {
             logs.push(`🪐💥 [아마게돈 종말] 적 전체 1턴 기절 및 5턴간 공허 침식(공격력/방어력 50% 대폭 감소)을 부여했습니다!`);
           }
           // 👥 그림자 망령 (적 후열 타격 후 은신)
-          if (sid === 'shadow_phantom' || (skill.description && skill.description.includes('은신') && !hero.statusEffects.some(se => se.type === 'stealth'))) {
+          if (sid === 'phantom_teleport' || sid === 'shadow_phantom' || (skill.description && skill.description.includes('은신') && !hero.statusEffects.some(se => se.type === 'stealth'))) {
             applyStatusEffect(hero, {
               type: 'stealth',
               turnsLeft: skill.statusDuration || 2,
