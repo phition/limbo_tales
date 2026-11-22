@@ -350,7 +350,7 @@ export function getSkillTags(skill: Skill | 'basic'): SkillTag[] {
   }
 
   // 6. 베기 (slash)
-  if (comboCat === 'slash' || sName.includes('베기') || sName.includes('참격') || sName.includes('난무') || sName.includes('일격') || sName.includes('왈츠') || sName.includes('암영') || sName.includes('반격') || sDesc.includes('참격') || sDesc.includes('검무') || sDesc.includes('칼날') || sDesc.includes('난무') || sDesc.includes('베어') || sId.includes('slash') || sId.includes('dance') || sId.includes('waltz') || sId.includes('blade') || sId.includes('cleave') || sId.includes('phantom') || sId.includes('riposte')) {
+  if (comboCat === 'slash' || sName.includes('베기') || sName.includes('참격') || sName.includes('참') || sName.includes('난무') || sName.includes('일격') || sName.includes('왈츠') || sName.includes('암영') || sName.includes('반격') || sDesc.includes('참격') || sDesc.includes('검무') || sDesc.includes('칼날') || sDesc.includes('난무') || sDesc.includes('베어') || sDesc.includes('차원 베기') || sId.includes('slash') || sId.includes('dance') || sId.includes('waltz') || sId.includes('blade') || sId.includes('cleave') || sId.includes('phantom') || sId.includes('riposte')) {
     tags.push({ id: 'slash', label: '베기', bg: '#ef53501a', text: '#ef5350', border: '#ef535044', icon: '🗡️' });
   }
 
@@ -1020,11 +1020,12 @@ export function resolveCombatVfxAndSfx(
     return { vfx: 'meteor_strike', sfx: 'fire', primaryTag: 'burn' };
   }
 
-  // 🗡️ 환영 난무 / 왈츠 / 분신 / 검무
+  // 🗡️ 환영 난무 / 왈츠 / 분신 / 검무 / 차원참
   if (
     sid.includes('phantom') || sid.includes('shadow_dance') || sid.includes('waltz') || sid === 'duel_blade_waltz' ||
     sName.includes('환영') || sName.includes('난무') || sName.includes('검무') || sName.includes('분신') ||
-    sid.includes('flurry') || sid.includes('thousand_cuts') || sName.includes('질풍참')
+    sid.includes('flurry') || sid.includes('thousand_cuts') || sName.includes('질풍참') ||
+    sid === 'void_dimension_slash' || sid.includes('dimension_slash') || sName.includes('차원참') || sName.includes('차원 베기')
   ) {
     return { vfx: 'phantom_slash', sfx: 'slash', primaryTag: 'slash' };
   }

@@ -4501,6 +4501,18 @@ export const BattleScreen: React.FC = () => {
             logs.push(`👥 [그림자 은신] ${hero.name}이(가) 공격 직후 그림자 속으로 은신했습니다!`);
           }
 
+          // 🌌⚡ [공허 섬광보: 2턴간 회피율 40% 증가 및 은신 태세]
+          if (sid === 'void_phantom_flicker' || (sDesc.includes('공허 섬광보') && sDesc.includes('회피율'))) {
+            applyStatusEffect(hero, {
+              type: 'riposte',
+              turnsLeft: 2,
+              totalTurns: 2,
+              magnitude: 0.40,
+              source: `${hero.name} (공허 섬광보)`
+            });
+            logs.push(`⚡💨 [공허 섬광보] ${hero.name}이(가) 섬광의 일격 후 2턴간 회피율 +40% 태세에 돌입했습니다!`);
+          }
+
           // ✝️ 전투 사제: 성전 타격 (적 1체 타격 후 자신 체력 23% 회복)
           if (sid === 'warpriest_smite_crusade' || sid === 'war_priest' || (skill.description && skill.description.includes('자신 체력') && skill.description.includes('회복'))) {
             const scale = skill.power ? skill.power / 1.61 : 1;
@@ -5539,6 +5551,34 @@ export const BattleScreen: React.FC = () => {
           // 🚩⚔️ [철혈의 패황: 공격력 45% 증폭]
           if (sid === 'iron_marshal' || sDesc.includes('철혈의 패황')) {
             logs.push(`🚩⚔️ [철혈의 패황] 파티 전체의 공격력을 3턴간 ${Math.round(45 * ultMult)}% 증폭했습니다!`);
+          }
+
+          // 🩸🚩 [불멸의 진격: 체력 비례 공격력 최대 100% 추가 증폭]
+          if (sid === 'warlord_immortal_vanguard' || sDesc.includes('불멸의 진격')) {
+            const missingHpRate = Math.max(0, 1 - (hero.currentHp / hero.maxHp));
+            const selfExtraAtk = Number((missingHpRate * 1.0 * ultMult).toFixed(2));
+            if (selfExtraAtk > 0) {
+              applyStatusEffect(hero, {
+                type: 'buff_atk',
+                turnsLeft: 3,
+                totalTurns: 3,
+                magnitude: selfExtraAtk,
+                source: `${hero.name} (광기 폭발)`
+              });
+              logs.push(`🩸🔥 [불멸의 진격] ${hero.name}의 손실 체력 비례로 자신의 공격력이 추가로 +${Math.round(selfExtraAtk * 100)}% 폭증했습니다!`);
+            }
+          }
+
+          // 🎯👤 [영점 사격 은신: 다음 공격 치명타 피해 80% 추가 증폭]
+          if (sid === 'omega_overclock_stealth' || sDesc.includes('영점 사격')) {
+            applyStatusEffect(hero, {
+              type: 'buff_atk',
+              turnsLeft: 2,
+              totalTurns: 2,
+              magnitude: 0.80,
+              source: `${hero.name} (영점 사격)`
+            });
+            logs.push(`🎯👤 [영점 사격] 2턴간 치명 공격력이 +80% 추가 폭증했습니다!`);
           }
 
           // 범용 마나 회복 보정 (기타 비전서/스킬 설명에 마나/mp 회복이 명시된 경우)
