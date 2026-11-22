@@ -88,9 +88,9 @@ export function getSkillMagicSchool(skill?: Skill | MonsterSkill | any): MagicSc
   if (
     comboCat === 'magic' ||
     eff === 'burn' || eff === 'freeze' ||
-    sId.includes('magic') || sId.includes('elemental') || sId.includes('fire') || sId.includes('flame') || sId.includes('ice') || sId.includes('freeze') || sId.includes('frost') || sId.includes('blizzard') || sId.includes('meteor') || sId.includes('arcane') || sId.includes('lightning') || sId.includes('thunder') || sId.includes('storm') || sId.includes('earthquake') || sId.includes('eruption') ||
-    sName.includes('화염') || sName.includes('불꽃') || sName.includes('빙결') || sName.includes('냉기') || sName.includes('눈보라') || sName.includes('혹한') || sName.includes('번개') || sName.includes('낙뢰') || sName.includes('뇌격') || sName.includes('전격') || sName.includes('폭풍') || sName.includes('원소') || sName.includes('메테오') || sName.includes('비전') || sName.includes('마법') || sName.includes('블리자드') ||
-    sDesc.includes('원소') || sDesc.includes('화염') || sDesc.includes('빙결') || sDesc.includes('냉각') || sDesc.includes('마법 피해') || sDesc.includes('비전') || sDesc.includes('에테르 마법') || sDesc.includes('뇌격')
+    sId.includes('magic') || sId.includes('elemental') || sId.includes('fire') || sId.includes('flame') || sId.includes('ice') || sId.includes('freeze') || sId.includes('frost') || sId.includes('blizzard') || sId.includes('meteor') || sId.includes('arcane') || sId.includes('lightning') || sId.includes('thunder') || sId.includes('storm') || sId.includes('earthquake') || sId.includes('eruption') || sId.includes('chrono') ||
+    sName.includes('화염') || sName.includes('불꽃') || sName.includes('빙결') || sName.includes('냉기') || sName.includes('눈보라') || sName.includes('혹한') || sName.includes('번개') || sName.includes('낙뢰') || sName.includes('뇌격') || sName.includes('전격') || sName.includes('폭풍') || sName.includes('원소') || sName.includes('메테오') || sName.includes('비전') || sName.includes('마법') || sName.includes('블리자드') || sName.includes('시공') || sName.includes('빅뱅') ||
+    sDesc.includes('원소') || sDesc.includes('화염') || sDesc.includes('빙결') || sDesc.includes('냉각') || sDesc.includes('마법 피해') || sDesc.includes('비전') || sDesc.includes('에테르 마법') || sDesc.includes('뇌격') || sDesc.includes('시공')
   ) {
     return 'elemental';
   }
@@ -360,7 +360,12 @@ export function getSkillTags(skill: Skill | 'basic'): SkillTag[] {
   }
 
   // 8. 마법 / 원소 (magic / elemental)
-  if (comboCat === 'magic' || sName.includes('마법') || sName.includes('화염') || sName.includes('빙결') || sName.includes('메테오') || sName.includes('시공') || sDesc.includes('마법') || sDesc.includes('원소') || sDesc.includes('에테르') || sDesc.includes('차원') || sId.includes('magic') || sId.includes('fire') || sId.includes('blizzard') || sId.includes('arcane') || sId.includes('gravity') || sId.includes('meteor') || sId.includes('rift') || sId.includes('time_warp')) {
+  if (
+    comboCat === 'magic' ||
+    sName.includes('마법') || sName.includes('화염') || sName.includes('빙결') || sName.includes('메테오') || sName.includes('시공') || sName.includes('빅뱅') || sName.includes('크로노') ||
+    sDesc.includes('마법') || sDesc.includes('원소') || sDesc.includes('에테르') || sDesc.includes('차원') || sDesc.includes('시공') ||
+    sId.includes('magic') || sId.includes('fire') || sId.includes('blizzard') || sId.includes('arcane') || sId.includes('gravity') || sId.includes('meteor') || sId.includes('rift') || sId.includes('time_warp') || sId.includes('chrono')
+  ) {
     tags.push({ id: 'magic', label: '마법', bg: '#7c4dff1a', text: '#b388ff', border: '#7c4dff44', icon: '✨' });
   }
 
@@ -1057,12 +1062,13 @@ export function resolveCombatVfxAndSfx(
     return { vfx: isMultiTarget ? 'bullet_aoe' : 'bullet', sfx: 'bow_shot', primaryTag: 'snipe' };
   }
 
-  // 🌌 비전 폭발 / 특이점 / 시공 정지 / 중력 붕괴
+  // 🌌 비전 폭발 / 특이점 / 시공 정지 / 중력 붕괴 / 빅뱅 크로노스
   if (
     sid.includes('nova') || sid.includes('singularity') || sName.includes('특이점') ||
     sName.includes('오버로드') || sid.includes('arcane_overload') || sid.includes('time_stop') ||
     sName.includes('시공 정지') || sid.includes('gravity') || sName.includes('중력') ||
-    sid.includes('chrono_warp') || sid.includes('arcane_storm')
+    sid.includes('chrono_warp') || sid.includes('arcane_storm') ||
+    sid === 'chrono_bigbang' || sid.includes('bigbang') || sName.includes('빅뱅') || sName.includes('크로노스')
   ) {
     return { vfx: 'arcane_nova', sfx: 'arcane_magic', primaryTag: 'magic' };
   }

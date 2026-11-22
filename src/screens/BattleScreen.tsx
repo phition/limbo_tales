@@ -5865,8 +5865,8 @@ export const BattleScreen: React.FC = () => {
           let rawCd = (skill.isSpecial || skill.isUnique)
             ? (skill.cooldown || 0)
             : Math.max(0, skill.cooldown ?? 1);
-          // ⏳ [시공의 조율사 패시브: 차원 조율] 파티 전원 스킬 쿨다운 상시 1턴 단축
-          if (gm.party.some(p => (p.classId === 'chronomancer' || p.classId === 'chrono_master') && p.currentHp > 0)) {
+          // ⏳ [시공의 조율사 / 크로노 아콘 패시브: 차원 조율] 파티 전원 스킬 쿨다운 상시 1턴 단축
+          if (gm.party.some(p => (p.classId === 'chronomancer' || p.classId === 'chrono_master' || p.classId === 'chrono_archon') && p.currentHp > 0)) {
             rawCd = Math.max(1, rawCd - 1);
           }
           if (rawCd > 0) {
